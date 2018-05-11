@@ -12,6 +12,8 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
+Run `npm run package` to build the library. The build artifacts will be stored in the `dist/ngx-extended-pdf-viewer` directory.
+
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
 ## Running unit tests
