@@ -25,12 +25,29 @@ There's a minimalistic demo project at https://github.com/stephanrauh/ExploringA
               "node_modules/ngx-extended-pdf-viewer/assets/pdf.worker.js"
             ]
 
-3.  Add "NgxExtendedPdfViewerModule" to the import section of your module file. If you IDE doesn't find
+3.  Copy the images from the assets folder of the library to the assets folder of your project.
+    Modify the "angular.json" (or ".angular-cli.json") file like so:
+
+           "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/ngx-extended-pdf-viewer/assets/images",
+                "output": "./assets/images"
+              }
+            ],
+            ...
+
+    The first two entries of the "assets" key should already be there. You only have
+    to add the Json object beginning with "glob".
+
+4)  Add "NgxExtendedPdfViewerModule" to the import section of your module file. If you IDE doesn't find
     the import automatically, here it is:
 
             import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
-4.  Now you can display the PDF file using "<ngx-extended-pdf-viewer src="'assets/example.pdf'"></ngx-extended-pdf-viewer>".
+5)  Now you can display the PDF file using "<ngx-extended-pdf-viewer src="'assets/example.pdf'"></ngx-extended-pdf-viewer>".
 
 ## Configuration
 

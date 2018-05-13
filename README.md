@@ -29,6 +29,7 @@ And update the files from source and patch them
 * copy viewer.css to ngx-extended-pdf-viewer/assets/viewer.css
 * replace every "html " by "htmlignore " (the trailing space is important!)
 * replace every "body " by "bodyignore " (the trailing space is important!)
+* replace every "url('images" by "url('assets/images"
 
 Run `npm run package` to build the library. The build artifacts will be stored in the `dist/ngx-extended-pdf-viewer` directory.
 
