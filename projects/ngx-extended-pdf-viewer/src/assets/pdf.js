@@ -1,4 +1,3 @@
-console.log("Hallo Welt!");
 /**
  * Copyright (c) 2011-2013 Fabien Cazenave, Mozilla.
  *
