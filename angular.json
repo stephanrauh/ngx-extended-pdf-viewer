@@ -18,7 +18,15 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/ngx-extended-pdf-viewer/assets/images",
+                "output": "./assets/images"
+              }
+            ],
             "styles": ["src/styles.css"],
             "scripts": ["node_modules/ngx-extended-pdf-viewer/assets/pdf.js", "node_modules/ngx-extended-pdf-viewer/assets/pdf.worker.js"]
           },
