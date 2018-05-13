@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'ngx-extended-pdf-viewer';
+  public title = 'ngx-extended-pdf-viewer';
+  public pdf = 'assets/example.pdf';
 }

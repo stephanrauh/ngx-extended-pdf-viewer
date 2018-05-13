@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 declare var PDFJS: any;
 
@@ -8,16 +8,37 @@ declare var PDFJS: any;
   styleUrls: ['../assets/viewer.css', './ngx-extended-pdf-viewer.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class NgxExtendedPdfViewerComponent implements OnInit {
+export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges {
+  private _src: string;
+
+  private initialized = false;
+
+  @Input()
+  public set src(url: string) {
+    this._src = url;
+  }
+
   constructor() {}
 
   ngOnInit() {
-    const file = '/assets/example.pdf';
     // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
     PDFJS.webViewerLoad();
     (<any>window).workerSrc = 'pdf.worker.js';
 
     // open a file in the viewer
-    (<any>window).PDFViewerApplication.open(file);
+    if (!!this._src) {
+      (<any>window).PDFViewerApplication.open(this._src);
+    }
+    this.initialized = true;
+  }
+
+  public ngOnChanges(changes: SimpleChanges) {
+    if (this.initialized) {
+      if ('src' in changes) {
+        if (!!this._src) {
+          (<any>window).PDFViewerApplication.open(this._src);
+        }
+      }
+    }
   }
 }

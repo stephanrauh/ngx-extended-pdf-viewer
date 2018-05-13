@@ -1,6 +1,7 @@
 {
   "name": "ngx-extended-pdf-viewer",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "license": "Apache License V2",
   "repository": {
     "url": "https://github.com/stephanrauh/ngx-extended-pdf-viewer"
   },
