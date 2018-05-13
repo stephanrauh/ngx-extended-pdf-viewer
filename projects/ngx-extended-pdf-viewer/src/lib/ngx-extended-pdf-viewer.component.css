@@ -1,0 +1,23 @@
+html {
+  height: unset;
+  width: unset;
+  font-size: unset;
+}
+body {
+  height: unset;
+  width: unset;
+}
+body {
+  font: unset;
+  outline: unset;
+}
+
+.pdfjs {
+  height: 100%;
+  width: 100%;
+  font-size: 10px;
+  background-color: #404040;
+  background-image: url(../assets/images/texture.png);
+  font: message-box;
+  outline: 0;
+}

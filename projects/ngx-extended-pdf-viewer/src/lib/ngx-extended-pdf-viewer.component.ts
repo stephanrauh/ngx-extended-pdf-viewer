@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 declare var PDFJS: any;
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
   templateUrl: './ngx-extended-pdf-viewer.component.html',
-  styleUrls: [] // '../assets/viewer.css']
+  styleUrls: ['../assets/viewer.css', './ngx-extended-pdf-viewer.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class NgxExtendedPdfViewerComponent implements OnInit {
   constructor() {}

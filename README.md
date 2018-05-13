@@ -12,6 +12,24 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
+Update to the newest version of the core PDF library:
+
+* git clone https://github.com/legalthings/pdf.js.git
+* cd pdf.js
+* npm install
+* gulp generic
+* cd ..
+
+And update the files from source and patch them
+
+* cd pdf.js-viewer
+* npm install
+* ./build.sh ../pdf.js/build/generic/
+
+* copy viewer.css to ngx-extended-pdf-viewer/assets/viewer.css
+* replace every "html " by "htmlignore " (the trailing space is important!)
+* replace every "body " by "bodyignore " (the trailing space is important!)
+
 Run `npm run package` to build the library. The build artifacts will be stored in the `dist/ngx-extended-pdf-viewer` directory.
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.

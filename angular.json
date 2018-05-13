@@ -19,7 +19,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.css", "projects/ngx-extended-pdf-viewer/src/assets/viewer.css"],
+            "styles": ["src/styles.css"],
             "scripts": ["projects/ngx-extended-pdf-viewer/src/assets/pdf.js", "projects/ngx-extended-pdf-viewer/src/assets/pdf.worker.js"]
           },
           "configurations": {

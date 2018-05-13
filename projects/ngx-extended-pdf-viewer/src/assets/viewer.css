@@ -228,18 +228,18 @@
   padding: 0;
   margin: 0;
 }
-html {
+htmlignore {
   height: 100%;
   width: 100%;
   font-size: 10px;
 }
-body {
+bodyignore {
   height: 100%;
   width: 100%;
   background-color: #404040;
   background-image: url(images/texture.png);
 }
-body,
+bodyignore,
 .pdfjs input,
 .pdfjs button,
 .pdfjs select {
@@ -1717,7 +1717,7 @@ html[dir='rtl'] .pdfjs #documentPropertiesOverlay .row > * {
   }
 }
 @media print {
-  body {
+  bodyignore {
     background: transparent none;
   }
   .pdfjs #sidebarContainer,
@@ -1753,10 +1753,10 @@ html[dir='rtl'] .pdfjs #documentPropertiesOverlay .row > * {
   .pdfjs .fileInput {
     display: none;
   }
-  body[data-pdfjsprinting] .pdfjs #outerContainer {
+  bodyignore[data-pdfjsprinting] .pdfjs #outerContainer {
     display: none;
   }
-  body[data-pdfjsprinting] .pdfjs #printContainer {
+  bodyignore[data-pdfjsprinting] .pdfjs #printContainer {
     display: block;
   }
   .pdfjs #printContainer {
