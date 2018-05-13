@@ -20,7 +20,7 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.css"],
-            "scripts": ["projects/ngx-extended-pdf-viewer/src/assets/pdf.js", "projects/ngx-extended-pdf-viewer/src/assets/pdf.worker.js"]
+            "scripts": ["node_modules/ngx-extended-pdf-viewer/assets/pdf.js", "node_modules/ngx-extended-pdf-viewer/assets/pdf.worker.js"]
           },
           "configurations": {
             "production": {
