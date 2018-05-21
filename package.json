@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "package": "ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json",
+    "package": "rm -r dist | ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json",
     "postpackage": "cp -R projects/ngx-extended-pdf-viewer/src/assets dist/ngx-extended-pdf-viewer/assets",
     "xpostpackage": "cp -R projects/ngx-extended-pdf-viewer/src/assets dist/ngx-extended-pdf-viewer/assets && tar -cvzf dist.tgz -C dist .",
     "release": "npm publish dist"

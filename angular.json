@@ -23,7 +23,7 @@
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "./node_modules/ngx-extended-pdf-viewer/assets/images",
+                "input": "node_modules/ngx-extended-pdf-viewer/assets/images",
                 "output": "./assets/images"
               }
             ],

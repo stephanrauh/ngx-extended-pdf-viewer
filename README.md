@@ -26,14 +26,18 @@ And update the files from source and patch them
 * npm install
 * ./build.sh ../pdf.js/build/generic/
 
-* copy viewer.css to ngx-extended-pdf-viewer/assets/viewer.css
+* copy `viewer.css` to `inlineImageFiles/assets/viewer.css`
 * replace every "html " by "htmlignore " (the trailing space is important!)
 * replace every "body " by "bodyignore " (the trailing space is important!)
 * replace every "url('images" by "url('assets/images"
+* run `node.js index.js` from the `inlineImageFiles` folder
+* copy the file `viewer-with-images.css` to the folder `projects/ngx-extended-pdf-viewer/src/lib`
 
-Run `npm run package` to build the library. The build artifacts will be stored in the `dist/ngx-extended-pdf-viewer` directory.
+Run `npm run package` to build the library (from the root directory of the project). The build artifacts will be stored in the `dist/ngx-extended-pdf-viewer` directory.
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+
+Note to the author: to deploy the library on npm, change to the folder `dist/ngx-extended-pdf-viewer` and run `npm publish` from there.
 
 ## Running unit tests
 
