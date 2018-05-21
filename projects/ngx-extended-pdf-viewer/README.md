@@ -28,12 +28,12 @@ There's a minimalistic demo project at https://github.com/stephanrauh/ExploringA
               "node_modules/ngx-extended-pdf-viewer/assets/pdf.worker.js"
             ]
 
-3)  Add "NgxExtendedPdfViewerModule" to the import section of your module file. If you IDE doesn't find
+3.  Add "NgxExtendedPdfViewerModule" to the import section of your module file. If your IDE doesn't find
     the import automatically, here it is:
 
             import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
-4)  Now you can display the PDF file using "&lt;ngx-extended-pdf-viewer src="'assets/example.pdf'"&gt;&lt;/ngx-extended-pdf-viewer&gt;".
+4.  Now you can display the PDF file using "&lt;ngx-extended-pdf-viewer src="'assets/example.pdf'"&gt;&lt;/ngx-extended-pdf-viewer&gt;".
 
 ## Configuration
 
