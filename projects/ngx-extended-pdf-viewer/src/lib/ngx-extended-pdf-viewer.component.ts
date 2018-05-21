@@ -23,6 +23,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges {
   ngOnInit() {
     // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
     PDFJS.webViewerLoad();
+    (<any>window).PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
+    (<any>window).PDFViewerApplication.isViewerEmbedded = true;
     (<any>window).workerSrc = 'pdf.worker.js';
 
     // open a file in the viewer

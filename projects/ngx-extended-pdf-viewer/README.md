@@ -17,7 +17,7 @@ every Angular version since 2.0, but that hasn't been tested yet.
 
 ## How to use the library
 
-There's a minimalistic demo project at https://github.com/stephanrauh/ExploringAngular/embedding-pdf.
+There's a minimalistic demo project at https://github.com/stephanrauh/ExploringAngular/tree/master/embedding-pdf.
 
 1.  Install the library with npm i ngx-extended-pdf-viewer --save
 2.  Open the file "angular.json" (or ".angular-cli.json" if you're using an older version of Angular)
