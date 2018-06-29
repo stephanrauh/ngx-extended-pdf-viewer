@@ -15,6 +15,10 @@ The library has been developed with Angular 6, so probably npm will complain if 
 an older version of Angular. In theory, ngx-extended-pdf-viewer should be compatible with
 every Angular version since 2.0, but that hasn't been tested yet.
 
+## Know bugs
+
+Version 0.2.0 doesn't survive compiling with the "--prod" flag yet.
+
 ## How to use the library
 
 There's a minimalistic demo project at https://github.com/stephanrauh/ExploringAngular/tree/master/embedding-pdf.
