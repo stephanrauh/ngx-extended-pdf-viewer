@@ -1,3 +1,15 @@
+#viewerContainer {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  position: absolute;
+}
+
+@media print {
+  body[data-pdfjsprinting] > * {
+    display: none;
+  }
+}
+
 /**
 html {
   height: unset;

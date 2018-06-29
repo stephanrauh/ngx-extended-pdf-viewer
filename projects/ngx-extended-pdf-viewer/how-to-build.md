@@ -15,12 +15,14 @@
 15. npm install
 16. cd inlineImageFiles
 17. node index.js
-18. cd ..
-19. cp ../mozillas-pdf.js/build/generic/build/pdf.\* ./projects/ngx-extended-pdf-viewer/src/assets
-20. cp ../mozillas-pdf.js/build/generic/build/web/viewer.js ./projects/ngx-extended-pdf-viewer/src/assets
-21. open viewer.js and replace "require('../build/pdf.js')" by "require('./pdf.js')"
-22. In the same file: replace "value: 'compressed.tracemonkey-pldi-09.pdf'" by "value: ''"
-23. In the same file, rougly line 256: replace the lines
+18. open viewer-with-images.css and replace the first "html" by ".html"
+19. in the same file: replace the first "body" by ".body"
+20. cd ..
+21. cp ../mozillas-pdf.js/build/generic/build/pdf.\* ./projects/ngx-extended-pdf-viewer/src/assets
+22. cp ../mozillas-pdf.js/build/generic/build/web/viewer.js ./projects/ngx-extended-pdf-viewer/src/assets
+23. open viewer.js and replace "require('../build/pdf.js')" by "require('./pdf.js')"
+24. In the same file: replace "value: 'compressed.tracemonkey-pldi-09.pdf'" by "value: ''"
+25. In the same file, rougly line 256: replace the lines
     if (document.readyState === 'interactive' || document.readyState === 'complete') {
     webViewerLoad();
     } else {
@@ -31,11 +33,11 @@
 
     window.webViewerLoad = webViewerLoad;
 
-24. open pdf.js and remove these three lines (roughly at line 16234):
+26. open pdf.js and remove these three lines (roughly at line 16234):
     var fs = require('fs');
     var http = require('http');
     var https = require('https');
-25. (not necessary? npm run package )
-26. ng build ngx-extended-pdf-viewer
-27. npm run package
-28. ng serve
+27. (not necessary? npm run package )
+28. ng build ngx-extended-pdf-viewer
+29. npm run package
+30. ng serve

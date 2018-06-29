@@ -22,21 +22,27 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges {
   constructor() {}
 
   ngOnInit() {
+    debugger;
     if (!(<any>window).webViewerLoad) {
       const viewer: any = require('../assets/viewer.js');
     }
     // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
     (<any>window).webViewerLoad();
 
-    // open a file in the viewer
-    if (!!this._src) {
-      (<any>window).PDFViewerApplication.open(this._src);
-    }
+    (<any>window).PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
+    (<any>window).PDFViewerApplication.isViewerEmbedded = true;
 
     const pc = document.getElementById('printContainer');
     if (pc) {
       document.getElementsByTagName('body')[0].appendChild(pc);
     }
+
+    setTimeout(() => {
+      // open a file in the viewer
+      if (!!this._src) {
+        (<any>window).PDFViewerApplication.open(this._src);
+      }
+    });
 
     /**
     // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
