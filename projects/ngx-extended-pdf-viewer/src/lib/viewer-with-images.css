@@ -401,7 +401,7 @@
   --sidebar-width: 200px;
 }
 
-* {
+.html * {
   padding: 0;
   margin: 0;
 }

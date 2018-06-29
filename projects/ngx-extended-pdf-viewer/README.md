@@ -33,7 +33,7 @@ There's a minimalistic demo project at https://github.com/stephanrauh/ExploringA
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              { "glob": "**/*", "input": "dist/ngx-extended-pdf-viewer/assets/locale", "output": "/assets/locale/" }
+              { "glob": "**/*", "input": "node_modules/ngx-extended-pdf-viewer/assets/locale", "output": "/assets/locale/" }
             ]
 
     If you need only one language, you can reduce the list to 'locale-properties' and your language folder.
@@ -56,8 +56,17 @@ src defines the URL of the PDF file to display.
 Pull requests and bug reports are welcome. Please send them to the bug tracker of
 the project page: https://github.com/stephanrauh/ExploringAngular/tree/master/embedding-pdf
 
+## Building the library from scratch (and updating to the latest version of Mozilla's pdf.js)
+
+Have a look at https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/master/README.md
+
 ## License and Kudos
 
 The library is based on https://github.com/mozilla/pdf.js, which has been published under an Apache V2 license.
 
 Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
+
+## Changelog
+
+till 0.1.3: initial version based on the embeddable PDF-Viewer https://github.com/legalthings/pdf.js-viewer
+0.2.0: use Mozilla's pdf.js (https://github.com/mozilla/pdf.js) directly. Update to pdf.js 2.0.641.
