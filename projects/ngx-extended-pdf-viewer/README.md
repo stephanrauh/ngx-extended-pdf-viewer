@@ -28,12 +28,22 @@ There's a minimalistic demo project at https://github.com/stephanrauh/ExploringA
               "node_modules/ngx-extended-pdf-viewer/assets/pdf.worker.js"
             ]
 
-3.  Add "NgxExtendedPdfViewerModule" to the import section of your module file. If your IDE doesn't find
+3.  Add the translations to the assets by adding them to the "assets" section in the angular.json:
+
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              { "glob": "**/*", "input": "dist/ngx-extended-pdf-viewer/assets/locale", "output": "/assets/locale/" }
+            ]
+
+    If you need only one language, you can reduce the list to 'locale-properties' and your language folder.
+
+4.  Add "NgxExtendedPdfViewerModule" to the import section of your module file. If your IDE doesn't find
     the import automatically, here it is:
 
             import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
-4.  Now you can display the PDF file using "&lt;ngx-extended-pdf-viewer src="'assets/example.pdf'"&gt;&lt;/ngx-extended-pdf-viewer&gt;".
+5.  Now you can display the PDF file using "&lt;ngx-extended-pdf-viewer src="'assets/example.pdf'"&gt;&lt;/ngx-extended-pdf-viewer&gt;".
 
 ## Configuration
 
@@ -48,9 +58,6 @@ the project page: https://github.com/stephanrauh/ExploringAngular/tree/master/em
 
 ## License and Kudos
 
-The library is based on:
-
-https://github.com/mozilla/pdf.js, which has been published under an Apache V2 license
-https://github.com/legalthings/pdf.js-viewer, which has also been published under an Apache V2 license.
+The library is based on https://github.com/mozilla/pdf.js, which has been published under an Apache V2 license.
 
 Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.

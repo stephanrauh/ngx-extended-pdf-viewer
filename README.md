@@ -2,51 +2,58 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.0.
 
-## Development server
+## Build and run the demo project
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+1.  ng build ngx-extended-pdf-viewer
+2.  npm run package
+3.  ng serve -o
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Now the (tiny) demo app will automatically reload if you change any of the source files.
 
 ## Build
 
-Update to the newest version of the core PDF library:
+1.  Create a new folder "embedded-pdf".
+2.  cd embedded-pdf
+3.  git clone https://github.com/stephanrauh/pdf.js.git
+4.  mv pdf.js mozillas-pdf.js
+5.  cd mozillas-pdf.js
+6.  npm install -g gulp-cli
+7.  npm install
+8.  gulp server
+9.  open http://localhost:8888/web/viewer.html
+10. stop the server (CTRL+C)
+11. gulp generic
+12. cd ..
+13. git clone https://github.com/stephanrauh/pdf.js.git
+14. cd pdf.js
+15. npm install
+16. cd inlineImageFiles
+17. node index.js
+18. open viewer-with-images.css and replace the first "html" by ".html"
+19. in the same file: replace the first "body" by ".body"
+20. cd ..
+21. cp ../mozillas-pdf.js/build/generic/build/pdf.\* ./projects/ngx-extended-pdf-viewer/src/assets
+22. cp ../mozillas-pdf.js/build/generic/build/web/viewer.js ./projects/ngx-extended-pdf-viewer/src/assets
+23. open viewer.js and replace "require('../build/pdf.js')" by "require('./pdf.js')"
+24. In the same file: replace "value: 'compressed.tracemonkey-pldi-09.pdf'" by "value: ''"
+25. In the same file, rougly line 256: replace the lines
+    if (document.readyState === 'interactive' || document.readyState === 'complete') {
+    webViewerLoad();
+    } else {
+    document.addEventListener('DOMContentLoaded', webViewerLoad, true);
+    }
 
-* git clone https://github.com/legalthings/pdf.js.git
-* cd pdf.js
-* npm install
-* gulp generic
-* cd ..
+    by
 
-And update the files from source and patch them
+    window.webViewerLoad = webViewerLoad;
 
-* cd pdf.js-viewer
-* npm install
-* ./build.sh ../pdf.js/build/generic/
+26. open pdf.js and remove these three lines (roughly at line 16234):
+    var fs = require('fs');
+    var http = require('http');
+    var https = require('https');
+27. (not necessary? npm run package )
+28. ng build ngx-extended-pdf-viewer
+29. npm run package
+30. ng serve
 
-* copy `viewer.css` to `inlineImageFiles/assets/viewer.css`
-* replace every "html " by "htmlignore " (the trailing space is important!)
-* replace every "body " by "bodyignore " (the trailing space is important!)
-* replace every "url('images" by "url('assets/images"
-* run `node.js index.js` from the `inlineImageFiles` folder
-* copy the file `viewer-with-images.css` to the folder `projects/ngx-extended-pdf-viewer/src/lib`
-
-Run `npm run package` to build the library (from the root directory of the project). The build artifacts will be stored in the `dist/ngx-extended-pdf-viewer` directory.
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-Note to the author: to deploy the library on npm, change to the folder `dist/ngx-extended-pdf-viewer` and run `npm publish` from there.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Note to myself: to deploy the library on npm, change to the folder `dist/ngx-extended-pdf-viewer` and run `npm publish` from there.
