@@ -2,7 +2,7 @@ const base64Img = require('base64-img');
 const fs = require('fs');
 
 const lineReader = require('readline').createInterface({
-  input: fs.createReadStream('viewer.css')
+  input: fs.createReadStream('../../mozillas-pdf.js/build/generic/web/viewer.css')
 });
 
 let result = '';
@@ -17,7 +17,11 @@ lineReader
       if (url.startsWith("'")) {
         url = url.substring(1, url.length - 1);
       }
+      if (url.startsWith('"')) {
+        url = url.substring(1, url.length - 1);
+      }
       if (!url.startsWith('data:')) {
+        url = '../../mozillas-pdf.js/build/generic/web/' + url;
         const data = base64Img.base64Sync(url);
         line = line.substring(0, start) + "('" + data + "'" + line.substring(end);
       }
@@ -25,7 +29,7 @@ lineReader
     result += line + '\n';
   })
   .on('close', function() {
-    fs.writeFile('./viewer-with-images.css', result, function(err) {
+    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/lib/viewer-with-images.css', result, function(err) {
       if (err) {
         return console.log(err);
       }

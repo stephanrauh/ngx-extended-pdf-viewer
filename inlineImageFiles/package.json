@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "base64-img": "^1.0.4",
     "css-loader": "^0.28.11",
     "extract-text-webpack-plugin": "^3.0.2",
     "optimize-css-assets-webpack-plugin": "^4.0.1",
@@ -17,7 +18,6 @@
     "webpack-cli": "^2.1.3"
   },
   "dependencies": {
-    "base64-img": "^1.0.4",
     "base64-inline-loader": "^1.1.1",
     "ins": "0.0.0"
   }
