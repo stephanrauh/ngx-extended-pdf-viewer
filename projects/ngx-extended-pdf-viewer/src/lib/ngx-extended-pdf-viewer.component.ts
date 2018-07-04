@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewEncapsulation, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewEncapsulation,
+  Input,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
 
 declare var PDFJS: any;
 declare var require: any;
@@ -6,7 +13,10 @@ declare var require: any;
 @Component({
   selector: 'ngx-extended-pdf-viewer',
   templateUrl: './ngx-extended-pdf-viewer.component.html',
-  styleUrls: ['./viewer-with-images.css', './ngx-extended-pdf-viewer.component.css'],
+  styleUrls: [
+    './viewer-with-images.css',
+    './ngx-extended-pdf-viewer.component.css'
+  ],
   encapsulation: ViewEncapsulation.None
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges {
@@ -41,7 +51,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges {
       if (!!this._src) {
         (<any>window).PDFViewerApplication.open(this._src);
       }
-    });
+    }, 1000);
 
     this.initialized = true;
   }
