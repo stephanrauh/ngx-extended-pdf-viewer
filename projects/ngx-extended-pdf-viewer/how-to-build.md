@@ -16,7 +16,7 @@
 16. cd inlineImageFiles
 17. node index.js
 18. open viewer-with-images.css and replace the first "html" by ".html"
-19. in the same file: replace the first "body" by ".body"
+19. in the same file: replace the first and the second "body" by ".body"
 20. cd ..
 21. cp ../mozillas-pdf.js/build/generic/build/pdf.\* ./projects/ngx-extended-pdf-viewer/src/assets
 22. cp ../mozillas-pdf.js/build/generic/build/web/viewer.js ./projects/ngx-extended-pdf-viewer/src/assets
@@ -37,7 +37,13 @@
     var fs = require('fs');
     var http = require('http');
     var https = require('https');
-27. (not necessary? npm run package )
-28. ng build ngx-extended-pdf-viewer
-29. npm run package
-30. ng serve
+
+27. In the same file: replace the line (roughly at line 15255)
+    var output = require('zlib').deflateSync(input, { level: 9 });
+    by
+    throw Error("zlib not available in the browser");
+
+28. (not necessary? npm run package )
+29. ng build ngx-extended-pdf-viewer
+30. npm run package
+31. ng serve
