@@ -421,9 +421,9 @@
 }
 
 .body,
-input,
-button,
-select {
+.pdf-viewer input,
+.pdf-viewer button,
+.pdf-viewer select {
   font: message-box;
   outline: none;
 }

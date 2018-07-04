@@ -29,7 +29,8 @@ There's a minimalistic demo project at https://github.com/stephanrauh/ExploringA
 
             "scripts": [
               "node_modules/ngx-extended-pdf-viewer/assets/pdf.js",
-              "node_modules/ngx-extended-pdf-viewer/assets/pdf.worker.js"
+              "node_modules/ngx-extended-pdf-viewer/assets/pdf.worker.js",
+              "node_modules/ngx-extended-pdf-viewer/assets/viewer.js"
             ]
 
 3.  Add the translations to the assets by adding them to the "assets" section in the angular.json:
@@ -37,7 +38,11 @@ There's a minimalistic demo project at https://github.com/stephanrauh/ExploringA
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              { "glob": "**/*", "input": "node_modules/ngx-extended-pdf-viewer/assets/locale", "output": "/assets/locale/" }
+              {
+                "glob": "**/*",
+                "input": "node_modules/ngx-extended-pdf-viewer/assets/locale",
+                "output": "/assets/locale/"
+              }
             ]
 
     If you need only one language, you can reduce the list to 'locale-properties' and your language folder.
@@ -53,7 +58,8 @@ There's a minimalistic demo project at https://github.com/stephanrauh/ExploringA
 
 Currently, the library is in a very early stage, so there's almost nothing to configure.
 
-src defines the URL of the PDF file to display.
+- src defines the URL of the PDF file to display.
+- height define the height of the PDF window. By default, it's 80vh (i.e. 80% of the screen height).
 
 ## Feedback, pull requests and bug reports
 
@@ -74,3 +80,5 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 
 till 0.1.3: initial version based on the embeddable PDF-Viewer https://github.com/legalthings/pdf.js-viewer
 0.2.0: use Mozilla's pdf.js (https://github.com/mozilla/pdf.js) directly. Update to pdf.js 2.0.641.
+0.2.1: minor bugfixes
+0.2.2: Make the library compatible to the --prod build; improve the CSS locality

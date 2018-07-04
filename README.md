@@ -32,12 +32,13 @@ Now the (tiny) demo app will automatically reload if you change any of the sourc
 18. open viewer-with-images.css and replace the first "html" by ".html" (roughly at line 409)
 19. in the same file: replace the first "body" by ".body" (roughly at line 416)
 20. in the same file: replace the first "_ {" by ".html _ {" (roughly at line 404)
-21. cd ..
-22. cp ../mozillas-pdf.js/build/generic/build/pdf.\* ./projects/ngx-extended-pdf-viewer/src/assets
-23. cp ../mozillas-pdf.js/build/generic/build/web/viewer.js ./projects/ngx-extended-pdf-viewer/src/assets
-24. open viewer.js and replace "require('../build/pdf.js')" by "require('./pdf.js')"
-25. In the same file: replace "value: 'compressed.tracemonkey-pldi-09.pdf'" by "value: ''"
-26. In the same file, rougly line 256: replace the lines
+21. in the same file: add the prefix .pdf-viewer to the rules of "button", "input", and "select" (roughly at line 423-426)
+22. cd ..
+23. cp ../mozillas-pdf.js/build/generic/build/pdf.\* ./projects/ngx-extended-pdf-viewer/src/assets
+24. cp ../mozillas-pdf.js/build/generic/build/web/viewer.js ./projects/ngx-extended-pdf-viewer/src/assets
+25. open viewer.js and replace "require('../build/pdf.js')" by "require('./pdf.js')"
+26. In the same file: replace "value: 'compressed.tracemonkey-pldi-09.pdf'" by "value: ''"
+27. In the same file, rougly line 256: replace the lines
     if (document.readyState === 'interactive' || document.readyState === 'complete') {
     webViewerLoad();
     } else {
@@ -48,11 +49,10 @@ Now the (tiny) demo app will automatically reload if you change any of the sourc
 
     window.webViewerLoad = webViewerLoad;
 
-27. open pdf.js and remove these three lines (roughly at line 16234):
+28. open pdf.js and remove these three lines (roughly at line 16234):
     var fs = require('fs');
     var http = require('http');
     var https = require('https');
-28. (not necessary? npm run package )
 29. ng build ngx-extended-pdf-viewer --prod
 30. npm run package
 31. ng serve
