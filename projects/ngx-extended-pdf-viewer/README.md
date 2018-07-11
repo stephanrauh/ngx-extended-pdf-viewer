@@ -93,7 +93,7 @@ If you add the translation files to your project as described above in step 3, t
 
 Don't forget to set the attribute `useBrowserLocale="true"` if you follow this approach.
 
-## slow way with custom translation files
+#### slow way with custom translation files
 
 If you want to use the slow way, but prefer to load the language files from a different URL, add a link to your application like so:
 
@@ -103,7 +103,7 @@ If you want to use the slow way, but prefer to load the language files from a di
 
 In this case, don't set `useBrowserLocale` (or set it explicitely to false).
 
-## inlining the language files
+### inlining (aka embedding) the language files
 
 Alternatively, you can provide the translations as a Json file. This Json file has to be part of the HTML page, like so:
 
@@ -120,10 +120,13 @@ If you're using the "inline" approach, don't set `useBrowserLocale` (or set it e
 
 # Troubleshooting
 
-| Error message or description                              |                                                                                                                                                                                                                               Solution                                                                                                                                                                                                                               |
-| --------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| "TypeError: Cannot read property 'setPagesCount' of null" | The language files couldn't be loaded. If you're following the default approach, `useBrowserLocale="true"`. In any case, check whether the language files are part of your project and if they are loaded from the correct path. Note that there's no default translation. You have to load a language file for any language, including English. In rare cases the language files are loaded, just not in time. In this case increase the value of `delayFirstView`. |
-| The browser locale is ignored.                            |                                                                                                            The HTML snippets in the folder `node_modules/ngx-extended-pdf-viewer/assets/inline-locale-files` contain exactly one language. If you want to support multiple language, you have to add the additional languages to the Json data structure.                                                                                                            |
+| Error message or description                                            |                                                                                                                                                                                                                               Solution                                                                                                                                                                                                                               |
+| ----------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| "TypeError: Cannot read property 'setPagesCount' of null"               | The language files couldn't be loaded. If you're following the default approach, `useBrowserLocale="true"`. In any case, check whether the language files are part of your project and if they are loaded from the correct path. Note that there's no default translation. You have to load a language file for any language, including English. In rare cases the language files are loaded, just not in time. In this case increase the value of `delayFirstView`. |
+| "TypeError: Cannot read property 'div' of undefined"                    |                                                      You're using two instances of `<ngx-extended-pdf-viewer>` and switch between them. Unfortunately, pdf.js seems to use a few global variables. These variables are shared between the two instances. Sometimes, this causes error messages. If this happens, hide the `<ngx-extended-pdf-viewer>` for a short time before switching to the second instance.                                                      |
+| The browser locale is ignored.                                          |                                                                                                            The HTML snippets in the folder `node_modules/ngx-extended-pdf-viewer/assets/inline-locale-files` contain exactly one language. If you want to support multiple language, you have to add the additional languages to the Json data structure.                                                                                                            |
+| sticky toolbar (when scrolling, the pdf file appears above the toolbar) |                                                                      This happens if you're using the z-index to position the `<ngx-extended-pdf-viewer>`. If you can't avoid to do so, add the global CSS rule `.body .toolbar { z-index: 0; }`. The PDF viewer works without the z-index of the toolbar. The only difference is that the shadow of the toolbar is hidden by the PDF document.                                                                      |
+| Print also includes UI elements                                         |                                                              Usually, the entire screen is hidden automatically, but sometimes this fails, especially with widgets that are dynamically added, such as error messages, progress bars, and block UI overlays. Use media queries to hide the unwanted UI elements. For example, use something like `@media print { #modal-error-dialog: display none; }`.                                                              |
 
 ## Feedback, pull requests and bug reports
 
@@ -149,3 +152,4 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 | 0.2.1      |                                         minor bugfixes                                          |
 | 0.2.2      |            Make the library compatible to the --prod build; improve the CSS locality            |
 | 0.3.0      |   Solved the timing issue; added options for internationalization; improved the docuemtation    |
+| 0.3.1      |                                    improved the docuemtation                                    |
