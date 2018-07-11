@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
 
 declare var PDFJS: any;
 
@@ -8,10 +8,18 @@ declare var PDFJS: any;
   styleUrls: ['./viewer-with-images.css', './ngx-extended-pdf-viewer.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges {
+export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterViewInit {
   private _src: string;
 
   private initialized = false;
+
+  /**
+   * Number of milliseconds to wait between initializing the PDF viewer and loading the PDF file.
+   * Most users can let this parameter safely at it's default value of zero.
+   * Set this to 1000 or higher if you run into timing problems (typically caused by loading the locale files
+   * after the PDF files, so they are not available when the PDF viewer is initialized).
+   */
+  @Input() delayFirstView = 0;
 
   @Input()
   public set src(url: string) {
@@ -19,6 +27,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges {
   }
 
   @Input() public height = '80vh';
+
+  /**
+   * If this flag is true, this components adds a link to the locale assets. The pdf viewer
+   * sees this link and uses it to load the locale files automatically.
+   * @param useBrowserLocale boolean
+   */
+  @Input() public useBrowserLocale = false;
 
   constructor() {}
 
@@ -33,13 +48,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges {
     if (pc) {
       document.getElementsByTagName('body')[0].appendChild(pc);
     }
+  }
 
+  public ngAfterViewInit() {
     setTimeout(() => {
       // open a file in the viewer
       if (!!this._src) {
         (<any>window).PDFViewerApplication.open(this._src);
       }
-    }, 1000);
+    }, this.delayFirstView);
 
     this.initialized = true;
   }
