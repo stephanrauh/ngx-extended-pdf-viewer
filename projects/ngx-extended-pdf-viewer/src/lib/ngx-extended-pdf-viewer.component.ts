@@ -35,6 +35,25 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
    */
   @Input() public useBrowserLocale = false;
 
+  @Input() public backgroundColor = '#e8e8eb';
+
+  @Input() public showSidebarButton = true;
+  @Input() public showFindButton = true;
+  @Input() public showPagingButtons = true;
+  @Input() public showZoomButtons = true;
+  @Input() public showPresentationModeButton = false;
+  @Input() public showOpenFileButton = true;
+  @Input() public showPrintButton = true;
+  @Input() public showDownloadButton = true;
+  @Input() public showBookmarkButton = true;
+  @Input() public showSecondaryToolbarButton = true;
+  @Input() public showRotateButton = true;
+  @Input() public showSelectToolButton = true;
+  @Input() public showHandToolButton = true;
+  @Input() public showScrollingButton = true;
+  @Input() public showSpreadButton = true;
+  @Input() public showPropertiesButton = true;
+
   constructor() {}
 
   ngOnInit() {
@@ -44,6 +63,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
 
       (<any>window).PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
       (<any>window).PDFViewerApplication.isViewerEmbedded = true;
+      (<any>window).PDFViewerApplication.sidebarViewOnLoad = 1;
 
       const pc = document.getElementById('printContainer');
       if (pc) {
