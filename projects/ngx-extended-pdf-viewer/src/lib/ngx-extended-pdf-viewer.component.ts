@@ -38,16 +38,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   constructor() {}
 
   ngOnInit() {
-    // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
-    (<any>window).webViewerLoad();
+    setTimeout(() => {
+      // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
+      (<any>window).webViewerLoad();
 
-    (<any>window).PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
-    (<any>window).PDFViewerApplication.isViewerEmbedded = true;
+      (<any>window).PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
+      (<any>window).PDFViewerApplication.isViewerEmbedded = true;
 
-    const pc = document.getElementById('printContainer');
-    if (pc) {
-      document.getElementsByTagName('body')[0].appendChild(pc);
-    }
+      const pc = document.getElementById('printContainer');
+      if (pc) {
+        document.getElementsByTagName('body')[0].appendChild(pc);
+      }
+    }, 0);
   }
 
   public ngAfterViewInit() {

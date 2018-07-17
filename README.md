@@ -55,12 +55,6 @@ Now the (tiny) demo app will automatically reload if you change any of the sourc
     \_this.unbindWindowEvents();
     \_this.bindWindowEvents();
 
-29. Still in the viewer.js, look for `backtrackBeforeAllVisibleElements` and add this `if` statement:
-    if (firstVisibleElementInd >= views.length) {
-    firstVisibleElementInd = views.length - 1;
-    }
-    firstVisibleElementInd = backtrackBeforeAllVisibleElements(firstVisibleElementInd, views, top);
-
 29) open pdf.js and remove these three lines (roughly at line 16234):
     var fs = require('fs');
     var http = require('http');

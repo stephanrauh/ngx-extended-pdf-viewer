@@ -392,7 +392,6 @@ var PDFViewerApplication = {
     }).then(function () {
       return _this._initializeViewerComponents();
     }).then(function () {
-      debugger;
       _this.unbindEvents();      
       _this.bindEvents();
       _this.unbindWindowEvents();
@@ -2347,9 +2346,6 @@ function getVisibleElements(scrollEl, views) {
   var percentVisible = void 0;
   var firstVisibleElementInd = views.length === 0 ? 0 : binarySearchFirstItem(views, horizontal ? isElementRightAfterViewLeft : isElementBottomAfterViewTop);
   if (views.length > 0 && !horizontal) {
-    if (firstVisibleElementInd >= views.length) {
-      firstVisibleElementInd = views.length - 1;
-    }
     firstVisibleElementInd = backtrackBeforeAllVisibleElements(firstVisibleElementInd, views, top);
   }
   var lastEdge = horizontal ? right : -1;
