@@ -145,11 +145,12 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 
 ## Changelog
 
-| Version    |                                            Features                                             |
-| ---------- | :---------------------------------------------------------------------------------------------: |
-| till 0.1.3 | initial version based on the embeddable PDF-Viewer https://github.com/legalthings/pdf.js-viewer |
-| 0.2.0      |  use Mozilla's pdf.js (https://github.com/mozilla/pdf.js) directly. Update to pdf.js 2.0.641.   |
-| 0.2.1      |                                         minor bugfixes                                          |
-| 0.2.2      |            Make the library compatible to the --prod build; improve the CSS locality            |
-| 0.3.0      |   Solved the timing issue; added options for internationalization; improved the docuemtation    |
-| 0.3.1      |                                    improved the docuemtation                                    |
+| Version    |                                                                                                                         Features                                                                                                                          |
+| ---------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| till 0.1.3 |                                                                              initial version based on the embeddable PDF-Viewer https://github.com/legalthings/pdf.js-viewer                                                                              |
+| 0.2.0      |                                                                               use Mozilla's pdf.js (https://github.com/mozilla/pdf.js) directly. Update to pdf.js 2.0.641.                                                                                |
+| 0.2.1      |                                                                                                                      minor bugfixes                                                                                                                       |
+| 0.2.2      |                                                                                         Make the library compatible to the --prod build; improve the CSS locality                                                                                         |
+| 0.3.0      |                                                                                Solved the timing issue; added options for internationalization; improved the docuemtation                                                                                 |
+| 0.3.1      |                                                                                                                 improved the docuemtation                                                                                                                 |
+| 0.3.2      | stop registering event listeners multiple times if the component is used multiple times; tentative bugfix that occurred when switching from a file with few thumbnails (i.e. pages) to another instance of the viewer showing a file with many thumbnails |

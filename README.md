@@ -49,12 +49,24 @@ Now the (tiny) demo app will automatically reload if you change any of the sourc
 
     window.webViewerLoad = webViewerLoad;
 
-28. open pdf.js and remove these three lines (roughly at line 16234):
+28. In the same file, find `_this.bindEvents();` and add these "unbind" calls:
+    \_this.unbindEvents();  
+     \_this.bindEvents();
+    \_this.unbindWindowEvents();
+    \_this.bindWindowEvents();
+
+29. Still in the viewer.js, look for `backtrackBeforeAllVisibleElements` and add this `if` statement:
+    if (firstVisibleElementInd >= views.length) {
+    firstVisibleElementInd = views.length - 1;
+    }
+    firstVisibleElementInd = backtrackBeforeAllVisibleElements(firstVisibleElementInd, views, top);
+
+29) open pdf.js and remove these three lines (roughly at line 16234):
     var fs = require('fs');
     var http = require('http');
     var https = require('https');
-29. ng build ngx-extended-pdf-viewer --prod
-30. npm run package
-31. ng serve
+30) ng build ngx-extended-pdf-viewer --prod
+31) npm run package
+32) ng serve
 
 Note to myself: to deploy the library on npm, change to the folder `dist/ngx-extended-pdf-viewer` and run `npm publish` from there.
