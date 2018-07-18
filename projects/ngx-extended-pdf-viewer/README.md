@@ -1,26 +1,30 @@
 # ngx-extended-pdf-viewer
 
 This library provides an embeddable
-PDF viewer component. It's different from other approaches like ng2-pdf-viewer in that it
-shows the full suite of UI widgets. In other words, it looks exactly like the PDF viewer of the browser.
+PDF viewer component. It's different from other approaches like [ng2-pdf-viewer](https://vadimdez.github.io/ng2-pdf-viewer/) in that it shows the full suite of UI widgets. In other words, it looks exactly like the PDF viewer of your browser:
 
 <img src="https://beyondjava.net/blog/images/ngx-extended-pdf-viewer/example-screenshot.png">
 
 ## State of the art
 
-The library is very young, but it _should_ already be useful. Use at own risk. I've managed
-to get it up and running with an Angular 6 project.
+The library is very young, but it already proved be useful. I'm using it in a real-world project on a daily basis. Even so: use at own risk. I'll answer your bug tickets as soon as possible, but there's nothing in the way of warranties.
 
 The library has been developed with Angular 6, so probably npm will complain if you're using
 an older version of Angular. In theory, ngx-extended-pdf-viewer should be compatible with
 every Angular version since 2.0, but I don't support this actively.
 
-The library is using a source-code build of the pdf.js library of Mozilla. As of version 0.3.0,
+The library is using a source-code build of the pdf.js library of Mozilla. As of version 0.9.3,
 this build doesn't use one of the released versions, but the developer version 2.0.641 (which has been pulled directly from "master"). I didn't observe any problems so far, but proceed with care. If you run into problems due to the version of pdf.js, please open an issue on the [project bug tracker](https://github.com/stephanrauh/ExploringAngular/tree/master/embedding-pdf).
 
 ## Known bugs
 
 None.
+
+(Apart from a layout glitch that seems to be intentional: you may need to set the font size of the input field containing the page number explicitely. For some reason unknown, it's a lot larger than the rest of the text of the toolbar in some applications).
+
+## Unknown bugs
+
+If you run into problems using &lt;ngx-extended-pdf-viewer&gt;, please open an issue on the [project bug tracker](https://github.com/stephanrauh/ExploringAngular/tree/master/embedding-pdf).
 
 ## Compatibility to Bootstrap (and other CSS frameworks)
 
@@ -70,12 +74,14 @@ There's a minimalistic demo project at https://github.com/stephanrauh/ExploringA
 5.  Now you can display the PDF file like so:
 
 ```html
-&lt;ngx-extended-pdf-viewer src="'assets/example.pdf'" useBrowserLocale="true"&gt;&lt;/ngx-extended-pdf-viewer&gt;
+<ngx-extended-pdf-viewer src="'assets/example.pdf'"
+                         useBrowserLocale="true">
+</ngx-extended-pdf-viewer>
 ```
 
 ## Configuration
 
-Currently, the library is in a very early stage, so there's almost nothing to configure.
+Do you miss a configuration option? File an issue on the [project bug tracker](https://github.com/stephanrauh/ExploringAngular/tree/master/embedding-pdf). If the base library [pdf.js] supports the requested option, I'll probably add it. BTW, you can speed up the process by providing a code snippet telling me how to implement the feature.
 
 | _Attribute_                | _mandatory?_ | _default value_ |                                                                                                                                                                           _description_                                                                                                                                                                           |
 | -------------------------- | :----------: | :-------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
@@ -102,28 +108,32 @@ Currently, the library is in a very early stage, so there's almost nothing to co
 
 ## Internationalization
 
-### slow default way
+### Slow default way
 
 If you add the translation files to your project as described above in step 3, the PDF viewer uses the browser language setting to determine which language to load. First, it loads the `locale.properties`, scans it for the desired language files, and loads the language file from the corresponding folder. That's two additional (and even consecutive) HTTP calls. That's slow, and it may even lead to errors if the network is already congested loading other resource files.
 
 Don't forget to set the attribute `useBrowserLocale="true"` if you follow this approach.
 
-#### slow way with custom translation files
+### Slow way with custom translation files
 
 If you want to use the slow way, but prefer to load the language files from a different URL, add a link to your application like so:
 
 ```html
-<link rel="resource" type="application/l10n" href="https://www.example.com/locale/locale.properties">
+<link rel="resource"
+      type="application/l10n"
+      href="https://www.example.com/locale/locale.properties">
 ```
 
 In this case, don't set `useBrowserLocale` (or set it explicitely to false).
 
-### inlining (aka embedding) the language files
+### Inlining (aka embedding) the language files
 
 Alternatively, you can provide the translations as a Json file. This Json file has to be part of the HTML page, like so:
 
 ```html
-<script type="application/l10n">{"default_locale":"de","locales":{"de": ... }}</script>
+<script type="application/l10n">
+    {"default_locale":"de","locales":{"de": ... }}
+</script>
 ```
 
 The folder `node_modules/ngx-extended-pdf-viewer/assets/inline-locale-files` contains snippet files you can simply copy into your HTML page.
@@ -133,7 +143,7 @@ _Hint_: Sometimes you need to copy the HTML snippet into the index.html at the r
 
 If you're using the "inline" approach, don't set `useBrowserLocale` (or set it explicitely to false).
 
-# Troubleshooting
+## Troubleshooting
 
 | Error message or description                                            |                                                                                                                                                                                                                               Solution                                                                                                                                                                                                                               |
 | ----------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
@@ -149,7 +159,7 @@ the project page: https://github.com/stephanrauh/ExploringAngular/tree/master/em
 
 ## Building the library from scratch (and updating to the latest version of Mozilla's pdf.js)
 
-Have a look at https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/master/README.md
+Have a look at https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/master/README.md. That's a very long list of steps, but that shouldn't stop you. I've tried to jot down every single action as meticulously as possible. So chances are you can update the library to a newer version of Mozilla's pdf.js but just following all these steps. If you do, please consider going the extra mile and submitting a pull request to this project.
 
 ## License and Kudos
 
@@ -172,4 +182,6 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 | 0.3.4      |                                                                                                                    removed debug code                                                                                                                     |
 | 0.9.0      |                                                                                                      added options to hide every button from the UI                                                                                                       |
 | 0.9.1      |                                                                                                       tried to add a screenshot to the readme file                                                                                                        |
-| 0.9.2      |                                                                                                    still trying to add a screenshot to the readme file                                                                                                    |
+| 0.9.2      |                                                                                                      managed to add a screenshot to the readme file                                                                                                       |
+| 0.9.3      |                                                                                                                    removed debug code                                                                                                                     |
+| 0.9.4      |                                                                                                                improved the documentation                                                                                                                 |
