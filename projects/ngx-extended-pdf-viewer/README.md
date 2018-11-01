@@ -7,20 +7,20 @@ PDF viewer component. It's different from other approaches like [ng2-pdf-viewer]
 
 ## State of the art
 
-The library is very young, but it already proved be useful. I'm using it in a real-world project on a daily basis. Even so: use at own risk. I'll answer your bug tickets as soon as possible, but there's nothing in the way of warranties.
+I'm using the library in a real-world project on a daily basis. I'm positive it's good enough to use it in production. Actually, that's what I'm doing since a couple of months. Even so: use at own risk. I consider the library a professional-grade leisure time project. I'll answer your bug tickets as soon as possible, but there's nothing in the way of warranties.
 
-The library has been developed with Angular 6, so probably npm will complain if you're using
-an older version of Angular. In theory, ngx-extended-pdf-viewer should be compatible with
+The library has been developed with Angular 6. Recently, I've updated it to Angular 7, so npm will complain if you're using
+an older version of Angular (i.e. Angular 2-5). In theory, ngx-extended-pdf-viewer should be compatible with
 every Angular version since 2.0, but I don't support this actively.
 
-The library is using a source-code build of the pdf.js library of Mozilla. As of version 0.9.3,
+The library is using a source-code build of the pdf.js library of Mozilla. As of version 0.9.5,
 this build doesn't use one of the released versions, but the developer version 2.0.641 (which has been pulled directly from "master"). I didn't observe any problems so far, but proceed with care. If you run into problems due to the version of pdf.js, please open an issue on the [project bug tracker](https://github.com/stephanrauh/ExploringAngular/tree/master/embedding-pdf).
 
 ## Known bugs
 
 None.
 
-(Apart from a layout glitch that seems to be intentional: you may need to set the font size of the input field containing the page number explicitely. For some reason unknown, it's a lot larger than the rest of the text of the toolbar in some applications).
+(Apart from a layout glitch that seems to be intentional: you may need to set the font size of the input field containing the page number explicitely. By default, it's a lot larger than the rest of the text of the toolbar in some applications).
 
 ## Unknown bugs
 
@@ -137,7 +137,7 @@ Alternatively, you can provide the translations as a Json file. This Json file h
 ```
 
 The folder `node_modules/ngx-extended-pdf-viewer/assets/inline-locale-files` contains snippet files you can simply copy into your HTML page.
-(As of version 0.3.0, there's only the German translation - other languages are following soon).
+(As of version 0.3.0 - 0.9.5, there's only the German translation - other languages are following soon).
 
 _Hint_: Sometimes you need to copy the HTML snippet into the index.html at the root folder of the Angular project. The bottom line is that the HTML snippet is already part of the DOM when the PDF viewer is initialized. Cluttering the root index file with the translations is an ugly and inflexible hack, but it works.
 
@@ -185,3 +185,4 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 | 0.9.2      |                                                                                                      managed to add a screenshot to the readme file                                                                                                       |
 | 0.9.3      |                                                                                                                    removed debug code                                                                                                                     |
 | 0.9.4      |                                                                                                                improved the documentation                                                                                                                 |
+| 0.9.5      |                                                                              recompiled with Angular 7 and updated the peer dependencies, allowing for both Angular 6 and 7                                                                               |
