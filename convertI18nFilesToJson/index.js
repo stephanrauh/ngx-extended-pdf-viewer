@@ -17,7 +17,7 @@ function convertLanguage(language) {
       }
       s[entry] = properties.get(x);
     } else {
-      result[x] = properties.get(x);
+      result[x] = { textContent: properties.get(x) };
     }
   });
   fs.writeFileSync(

@@ -12928,6 +12928,7 @@ document.webL10n = function (window, document, undefined) {
     if (!gMacros._pluralRules) {
       gMacros._pluralRules = getPluralRules(gLanguage);
     }
+    debugger;
     var index = '[' + gMacros._pluralRules(n) + ']';
     if (n === 0 && key + '[zero]' in gL10nData) {
       str = gL10nData[key + '[zero]'][prop];
