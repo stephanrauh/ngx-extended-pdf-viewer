@@ -19,40 +19,60 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
    * Set this to 1000 or higher if you run into timing problems (typically caused by loading the locale files
    * after the PDF files, so they are not available when the PDF viewer is initialized).
    */
-  @Input() delayFirstView = 0;
+  @Input()
+  delayFirstView = 0;
 
   @Input()
   public set src(url: string) {
     this._src = url;
   }
 
-  @Input() public height = '80vh';
+  @Input()
+  public height = '80vh';
 
   /**
    * If this flag is true, this components adds a link to the locale assets. The pdf viewer
    * sees this link and uses it to load the locale files automatically.
    * @param useBrowserLocale boolean
    */
-  @Input() public useBrowserLocale = false;
+  @Input()
+  public useBrowserLocale = false;
 
-  @Input() public backgroundColor = '#e8e8eb';
+  @Input()
+  public backgroundColor = '#e8e8eb';
 
-  @Input() public showSidebarButton = true;
-  @Input() public showFindButton = true;
-  @Input() public showPagingButtons = true;
-  @Input() public showZoomButtons = true;
-  @Input() public showPresentationModeButton = false;
-  @Input() public showOpenFileButton = true;
-  @Input() public showPrintButton = true;
-  @Input() public showDownloadButton = true;
-  @Input() public showBookmarkButton = true;
-  @Input() public showSecondaryToolbarButton = true;
-  @Input() public showRotateButton = true;
-  @Input() public showSelectToolButton = true;
-  @Input() public showHandToolButton = true;
-  @Input() public showScrollingButton = true;
-  @Input() public showSpreadButton = true;
-  @Input() public showPropertiesButton = true;
+  @Input()
+  public showSidebarButton = true;
+  @Input()
+  public showFindButton = true;
+  @Input()
+  public showPagingButtons = true;
+  @Input()
+  public showZoomButtons = true;
+  @Input()
+  public showPresentationModeButton = false;
+  @Input()
+  public showOpenFileButton = true;
+  @Input()
+  public showPrintButton = true;
+  @Input()
+  public showDownloadButton = true;
+  @Input()
+  public showBookmarkButton = true;
+  @Input()
+  public showSecondaryToolbarButton = true;
+  @Input()
+  public showRotateButton = true;
+  @Input()
+  public showSelectToolButton = true;
+  @Input()
+  public showHandToolButton = true;
+  @Input()
+  public showScrollingButton = true;
+  @Input()
+  public showSpreadButton = true;
+  @Input()
+  public showPropertiesButton = true;
 
   constructor() {}
 

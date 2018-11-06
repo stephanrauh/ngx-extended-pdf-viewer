@@ -28,7 +28,7 @@ If you run into problems using &lt;ngx-extended-pdf-viewer&gt;, please open an i
 
 ## Compatibility to Bootstrap (and other CSS frameworks)
 
-Bootstrap interferes with the printing algorithm of pdf.js. Guard it with the media query to avoid unwanted effects like scaling the print to 65%. For example, if you're using SCSS and Bootstrap 4, include Bootstrap by adding this line to the global `styles.scss` file:
+Bootstrap interferes with the printing algorithm of pdf.js. Guard it with a media query to avoid unwanted effects, such as scaling the print to 65%. For example, if you're using SCSS and Bootstrap 4, include Bootstrap by adding this line to the global `styles.scss` file:
 
 ```css
 @media screen {
@@ -186,3 +186,4 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 | 0.9.3      |                                                                                                                    removed debug code                                                                                                                     |
 | 0.9.4      |                                                                                                                improved the documentation                                                                                                                 |
 | 0.9.5      |                                                                              recompiled with Angular 7 and updated the peer dependencies, allowing for both Angular 6 and 7                                                                               |
+| 0.9.6      |                                  updated to pdf.js 2.0.943; added more language files; fixed a bug preventing loading the language defined in a script tag for many language; repaired the parameter [showSidebarButton]                                  |
