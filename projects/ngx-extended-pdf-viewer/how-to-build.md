@@ -14,21 +14,23 @@
 14. cd ngx-extended-pdf-viewer
 15. cd inlineImageFiles
 16. node index.js
-17. open ngx-extended-pdf-viewer/src/lib/viewer-with-images.css and replace the first "html" by ".html"
-18. in the same file: replace the first and the second "body" by ".body"
-19. cd ..
-20. cp -R ../mozillas-pdf.js/build/generic/web/locale/\* ./projects/ngx-extended-pdf-viewer/src/assets/locale/
-21. cp ../mozillas-pdf.js/build/generic/build/pdf.\* ./projects/ngx-extended-pdf-viewer/src/assets
-22. cp ../mozillas-pdf.js/build/generic/web/viewer.js ./projects/ngx-extended-pdf-viewer/src/assets
-23. cd addBaseLanguages
-24. node index.js
-25. cd ..
-26. cd convertI18nFilesToJson
-27. node index.js
-28. cd ..
-29. open ngx-extended-pdf-viewer/src/assets/viewer.js and replace "require('../build/pdf.js')" by "require('./pdf.js')"
-30. In the same file: replace "value: 'compressed.tracemonkey-pldi-09.pdf'" by "value: ''"
-31. In the same file, rougly line 259: replace the lines
+17. open ngx-extended-pdf-viewer/src/lib/viewer-with-images.css and replace the first "html" by ".html" (roughly line 404)
+18. a few lines above that, add the qualifier ".html" in front of the "\*" selector (roughly line 399)
+19. in the same file: replace the first and the second "body" by ".body"
+20. in the same file: insert ".pdf-viewer" in front of "input", "button", and "select" (roughly line 419-421)
+21. cd ..
+22. cp -R ../mozillas-pdf.js/build/generic/web/locale/\* ./projects/ngx-extended-pdf-viewer/src/assets/locale/
+23. cp ../mozillas-pdf.js/build/generic/build/pdf.\* ./projects/ngx-extended-pdf-viewer/src/assets
+24. cp ../mozillas-pdf.js/build/generic/web/viewer.js ./projects/ngx-extended-pdf-viewer/src/assets
+25. cd addBaseLanguages
+26. node index.js
+27. cd ..
+28. cd convertI18nFilesToJson
+29. node index.js
+30. cd ..
+31. open ngx-extended-pdf-viewer/src/assets/viewer.js and replace "require('../build/pdf.js')" by "require('./pdf.js')"
+32. In the same file: replace "value: 'compressed.tracemonkey-pldi-09.pdf'" by "value: ''"
+33. In the same file, rougly line 259: replace the lines
     if (document.readyState === 'interactive' || document.readyState === 'complete') {
     webViewerLoad();
     } else {
@@ -39,7 +41,7 @@
 
     window.webViewerLoad = webViewerLoad;
 
-32. In the same file: search for "for (var anyCaseLang in dict.locales) {" (roughly at line 12551). Replace the for loop by this version:
+34. In the same file: search for "for (var anyCaseLang in dict.locales) {" (roughly at line 12551). Replace the for loop by this version:
     for (var anyCaseLang in dict.locales) {
     const originalCase = anyCaseLang; // added line
     anyCaseLang = anyCaseLang.toLowerCase();
@@ -51,21 +53,21 @@
     }
     }
 
-33. open ngx-extended-pdf-viewer/src/assets/pdf.js and remove these three lines (roughly at line 17698):
+35. open ngx-extended-pdf-viewer/src/assets/pdf.js and remove these three lines (roughly at line 17698):
     var fs = require('fs');
     var http = require('http');
     var https = require('https');
 
     (the next line, require('url'), does not cause problems. That's because the 'url' dependencies is available in web projects)
 
-34. In the same file: replace the line (roughly at line 16677)
+36. In the same file: replace the line (roughly at line 16677)
     var output = require('zlib').deflateSync(input, { level: 9 });
     by
     throw Error("zlib not available in the browser");
 
-35. (not necessary? npm run package )
-36. ng build ngx-extended-pdf-viewer
-37. npm run package
-38. ng serve
+37. (not necessary? npm run package )
+38. ng build ngx-extended-pdf-viewer
+39. npm run package
+40. ng serve
 
 Note to myself: to deploy the library on npm, change to the folder `dist/ngx-extended-pdf-viewer` and run `npm publish` from there.

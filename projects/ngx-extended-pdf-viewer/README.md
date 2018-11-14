@@ -14,7 +14,7 @@ an older version of Angular (i.e. Angular 2-5). In theory, ngx-extended-pdf-view
 every Angular version since 2.0, but I don't support this actively.
 
 The library is using a source-code build of the pdf.js library of Mozilla. As of version 0.9.5,
-this build doesn't use one of the released versions, but the developer version 2.0.641 (which has been pulled directly from "master"). I didn't observe any problems so far, but proceed with care. If you run into problems due to the version of pdf.js, please open an issue on the [project bug tracker](https://github.com/stephanrauh/ExploringAngular/tree/master/embedding-pdf).
+this build doesn't use one of the released versions, but the developer version 2.0.641 (which has been pulled directly from "master"). I didn't observe any problems so far, but proceed with care. If you run into problems due to the version of pdf.js, please open an issue on the [project bug tracker](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues).
 
 ## Known bugs
 
@@ -74,9 +74,7 @@ There's a minimalistic demo project at https://github.com/stephanrauh/ExploringA
 5.  Now you can display the PDF file like so:
 
 ```html
-<ngx-extended-pdf-viewer src="'assets/example.pdf'"
-                         useBrowserLocale="true">
-</ngx-extended-pdf-viewer>
+<ngx-extended-pdf-viewer src="'assets/example.pdf'" useBrowserLocale="true"> </ngx-extended-pdf-viewer>
 ```
 
 ## Configuration
@@ -119,9 +117,7 @@ Don't forget to set the attribute `useBrowserLocale="true"` if you follow this a
 If you want to use the slow way, but prefer to load the language files from a different URL, add a link to your application like so:
 
 ```html
-<link rel="resource"
-      type="application/l10n"
-      href="https://www.example.com/locale/locale.properties">
+<link rel="resource" type="application/l10n" href="https://www.example.com/locale/locale.properties" />
 ```
 
 In this case, don't set `useBrowserLocale` (or set it explicitely to false).
@@ -132,7 +128,7 @@ Alternatively, you can provide the translations as a Json file. This Json file h
 
 ```html
 <script type="application/l10n">
-    {"default_locale":"de","locales":{"de": ... }}
+  {"default_locale":"de","locales":{"de": ... }}
 </script>
 ```
 
@@ -187,3 +183,4 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 | 0.9.4      |                                                                                                                                                     improved the documentation                                                                                                                                                      |
 | 0.9.5      |                                                                                                                   recompiled with Angular 7 and updated the peer dependencies, allowing for both Angular 6 and 7                                                                                                                    |
 | 0.9.6      | updated to pdf.js 2.0.943; added more language files; fixed a bug preventing loading the language defined in a script tag for many language; repaired the parameter [showSidebarButton]; fixed broken i18n on OSX Chrome 70 by adding several translations for languages without region specifier (such as "es" instead of "es-ES") |
+| 0.9.7      |                                                                                                   fixed the CSS file (font size and margins accidentially spilled to the surrounding page); corrected the link to the bug tracker                                                                                                   |
