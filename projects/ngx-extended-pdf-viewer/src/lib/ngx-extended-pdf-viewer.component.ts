@@ -43,6 +43,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
 
   @Input()
   public showSidebarButton = true;
+
+  /** If [showSideBarButton]="true", do you want the sidebar to be shown by default ([showSidebarOnLoad])="true")
+   * or not? By default, this flag is true.
+   */
+  @Input()
+  public showSidebarOnLoad = true;
+
   @Input()
   public showFindButton = true;
   @Input()
@@ -83,7 +90,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
 
       (<any>window).PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
       (<any>window).PDFViewerApplication.isViewerEmbedded = true;
-      (<any>window).PDFViewerApplication.sidebarViewOnLoad = 1;
+      debugger;
+      if (this.showSidebarButton) {
+        (<any>window).PDFViewerApplication.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
+        (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
+      } else {
+        (<any>window).PDFViewerApplication.sidebarViewOnLoad = 0;
+        (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = 0;
+      }
 
       const pc = document.getElementById('printContainer');
       if (pc) {
