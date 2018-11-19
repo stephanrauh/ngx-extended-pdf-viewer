@@ -65,9 +65,11 @@
     by
     throw Error("zlib not available in the browser");
 
-37. (not necessary? npm run package )
-38. ng build ngx-extended-pdf-viewer
-39. npm run package
-40. ng serve
+37. add 'autocomplete="off"' to the first input field of ngx-extended-pdf-viewer.component.html (i.e. the field with id="findbarInputContainer")
+
+38. (not necessary? npm run package )
+39. ng build ngx-extended-pdf-viewer
+40. npm run package
+41. ng serve
 
 Note to myself: to deploy the library on npm, change to the folder `dist/ngx-extended-pdf-viewer` and run `npm publish` from there.
