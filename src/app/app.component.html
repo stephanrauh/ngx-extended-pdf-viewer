@@ -8,12 +8,15 @@
   <span style="position:absolute;top:40px;left:135px">Welcome to {{ title }}!</span>
 </h1>
 
+<button (click)="hidden = true">Hide the PDF</button>
+
 <ngx-extended-pdf-viewer
   [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"
   backgroundColor="#e8e8ef"
   [showZoomButtons]="true"
-  [showSidebarButton]="true"
+  [showSidebarButton]="false"
   [useBrowserLocale]="false"
-  [showSidebarOnLoad]="true"
+  [showSidebarOnLoad]="false"
+  delayFirstView="5000"
 >
 </ngx-extended-pdf-viewer>
