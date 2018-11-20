@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, OnChanges, SimpleChanges, AfterViewInit, OnDestroy } from '@angular/core';
 
 declare var PDFJS: any;
 
@@ -8,7 +8,7 @@ declare var PDFJS: any;
   styleUrls: ['./viewer-with-images.css', './ngx-extended-pdf-viewer.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterViewInit {
+export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   private _src: string;
 
   private initialized = false;
@@ -21,6 +21,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
    */
   @Input()
   delayFirstView = 0;
+
+  /** store the timeout id so it can be canceled if user leaves the page before the PDF is shown */
+  private initTimeout: any;
 
   @Input()
   public set src(url: string) {
@@ -90,7 +93,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
 
       (<any>window).PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
       (<any>window).PDFViewerApplication.isViewerEmbedded = true;
-      debugger;
       if (this.showSidebarButton) {
         (<any>window).PDFViewerApplication.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
         (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
@@ -107,7 +109,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   }
 
   public ngAfterViewInit() {
-    setTimeout(() => {
+    this.initTimeout = setTimeout(() => {
+      this.initTimeout = null;
       // open a file in the viewer
       if (!!this._src) {
         (<any>window).PDFViewerApplication.open(this._src);
@@ -115,6 +118,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
     }, this.delayFirstView);
 
     this.initialized = true;
+  }
+
+  public ngOnDestroy(): void {
+    if (this.initTimeout) {
+      clearTimeout(this.initTimeout);
+    }
   }
 
   public ngOnChanges(changes: SimpleChanges) {
