@@ -65,11 +65,25 @@
     by
     throw Error("zlib not available in the browser");
 
-37. add 'autocomplete="off"' to the first input field of ngx-extended-pdf-viewer.component.html (i.e. the field with id="findbarInputContainer")
+37. In the same file (roughly line 1155): locate "zoom = \_app_options.AppOptions.get('defaultZoomValue');" and add these lines after this line:
+    // added to solve bug #6 and #11
+    if (PDFViewerApplication.overrideHistory.zoom !== undefined) {
+    zoom = PDFViewerApplication.overrideHistory.zoom;
+    }
+    // end of the bugfix solving #6 and #11
 
-38. (not necessary? npm run package )
-39. ng build ngx-extended-pdf-viewer
-40. npm run package
-41. ng serve
+38. A few lines below (roughly line 1176): find "\_this5.setInitialView(hash, {" and insert these lines before:
+    // added to solve bug #6 and #11
+    if (PDFViewerApplication.overrideHistory.sidebarViewOnLoad !== undefined) {
+    sidebarView = PDFViewerApplication.overrideHistory.sidebarViewOnLoad;
+    }
+    // end of the bugfix solving #6 and #11
+
+39. add 'autocomplete="off"' to the first input field of ngx-extended-pdf-viewer.component.html (i.e. the field with id="findbarInputContainer")
+
+40. (not necessary? npm run package )
+41. ng build ngx-extended-pdf-viewer
+42. npm run package
+43. ng serve
 
 Note to myself: to deploy the library on npm, change to the folder `dist/ngx-extended-pdf-viewer` and run `npm publish` from there.

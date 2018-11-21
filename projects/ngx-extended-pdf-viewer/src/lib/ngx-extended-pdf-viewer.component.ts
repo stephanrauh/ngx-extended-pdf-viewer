@@ -48,10 +48,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   public showSidebarButton = true;
 
   /** If [showSideBarButton]="true", do you want the sidebar to be shown by default ([showSidebarOnLoad])="true")
-   * or not? By default, this flag is true.
+   * or not? By default, this flag is undefined, telling the PDF viewer to use the last setting used with this particular
+   * document, or to hide the sidebar if the document is opened for the first time.
    */
   @Input()
-  public showSidebarOnLoad = true;
+  public showSidebarOnLoad: boolean | undefined = undefined;
 
   @Input()
   public showFindButton = true;
@@ -84,6 +85,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   @Input()
   public showPropertiesButton = true;
 
+  /** Legal values: undefined, 'auto', 'page-actual', 'page_fit', 'page-width', or '50' (or any other percentage) */
+  @Input()
+  public zoom: string | undefined = undefined;
+
   constructor() {}
 
   ngOnInit() {
@@ -93,12 +98,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
 
       (<any>window).PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
       (<any>window).PDFViewerApplication.isViewerEmbedded = true;
+      (<any>window).PDFViewerApplication.overrideHistory = {};
+      if (this.zoom !== undefined) {
+        (<any>window).PDFViewerApplication.overrideHistory.zoom = this.zoom;
+      }
       if (this.showSidebarButton) {
-        (<any>window).PDFViewerApplication.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
-        (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
+        if (this.showSidebarOnLoad !== undefined) {
+          (<any>window).PDFViewerApplication.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
+          (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
+          (<any>window).PDFViewerApplication.overrideHistory.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
+        }
       } else {
         (<any>window).PDFViewerApplication.sidebarViewOnLoad = 0;
         (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = 0;
+        (<any>window).PDFViewerApplication.overrideHistory.sidebarViewOnLoad = 0;
       }
 
       const pc = document.getElementById('printContainer');

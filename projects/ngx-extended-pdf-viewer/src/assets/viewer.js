@@ -1152,6 +1152,11 @@ var PDFViewerApplication = {
                 case 0:
                   initialBookmark = _this5.initialBookmark;
                   zoom = _app_options.AppOptions.get('defaultZoomValue');
+                  // added to solve bug #6 and #11
+                  if (PDFViewerApplication.overrideHistory.zoom !== undefined) {
+                    zoom = PDFViewerApplication.overrideHistory.zoom;
+                  }
+                  // end of the bugfix solving #6 and #11
                   hash = zoom ? 'zoom=' + zoom : null;
                   rotation = null;
                   sidebarView = _app_options.AppOptions.get('sidebarViewOnLoad');
@@ -1168,6 +1173,11 @@ var PDFViewerApplication = {
                   if (pageMode && !_app_options.AppOptions.get('disablePageMode')) {
                     sidebarView = sidebarView || apiPageModeToSidebarView(pageMode);
                   }
+                  // added to solve bug #6 and #11
+                  if (PDFViewerApplication.overrideHistory.sidebarViewOnLoad !== undefined) {
+                    sidebarView = PDFViewerApplication.overrideHistory.sidebarViewOnLoad;
+                  }
+                  // end of the bugfix solving #6 and #11
                   _this5.setInitialView(hash, {
                     rotation: rotation,
                     sidebarView: sidebarView,
