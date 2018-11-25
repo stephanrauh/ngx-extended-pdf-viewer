@@ -1,4 +1,15 @@
-import { Component, OnInit, ViewEncapsulation, Input, OnChanges, SimpleChanges, AfterViewInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewEncapsulation,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  AfterViewInit,
+  OnDestroy,
+  Output,
+  EventEmitter
+} from '@angular/core';
 
 declare var PDFJS: any;
 
@@ -88,6 +99,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   /** Legal values: undefined, 'auto', 'page-actual', 'page_fit', 'page-width', or '50' (or any other percentage) */
   @Input()
   public zoom: string | undefined = undefined;
+
+  @Output()
+  public zoomChange = new EventEmitter();
+
+  /** This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices */
+  @Input() mobileZoom = '100%';
 
   constructor() {}
 
