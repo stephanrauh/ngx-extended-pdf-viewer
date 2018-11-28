@@ -10,4 +10,12 @@ export class AppComponent {
   public pdf = 'assets/example.pdf';
   public hidden = false;
   public zoom = 42;
+  public visible = { 0: true };
+
+  public activateTab(tab: number): void {
+    console.log(tab);
+    setTimeout(() => {
+      this.visible[tab] = true;
+    }, 1000);
+  }
 }
