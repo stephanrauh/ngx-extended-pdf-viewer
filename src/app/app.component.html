@@ -4,7 +4,7 @@
 <button *ngIf="hidden" mat-raised-button color="primary" (click)="hidden = false">Show the PDF</button>
 
 <mat-tab-group (selectedTabChange)="activateTab($event.index)">
-  <mat-tab label="One">
+  <mat-tab label="BootsFAces Deep-Dive PDF">
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[0] && !hidden"
@@ -21,7 +21,7 @@
       </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
-  <mat-tab label="Two">
+  <mat-tab label="Codpaste PDF">
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[1] && !hidden"
@@ -37,8 +37,8 @@
       </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
-  <mat-tab label="Three"> <h1>Tab without a PDF</h1> </mat-tab>
-  <mat-tab label="Four">
+  <mat-tab label="No PDF"> <h1>Tab without a PDF</h1> </mat-tab>
+  <mat-tab label="Another PDF" (click)="hideOtherPDFs()">
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[3] && !hidden"

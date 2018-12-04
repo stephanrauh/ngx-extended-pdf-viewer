@@ -153,7 +153,28 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   public ngOnDestroy(): void {
     if (this.initTimeout) {
       clearTimeout(this.initTimeout);
+      this.initTimeout = undefined;
     }
+    const app = (<any>window).PDFViewerApplication;
+    if (app) {
+      app.cleanup();
+      app.close();
+      if (app._boundEvents) {
+        app.unbindWindowEvents();
+      }
+      const bus = app.eventBus as any;
+      if (bus) {
+        app.unbindEvents();
+        for (const key in bus._listeners) {
+          if (bus._listeners[key]) {
+            bus._listeners[key] = undefined;
+          }
+        }
+      }
+      app.eventBus = null;
+      //      app.PDFViewer = null;
+    }
+    //    (<any>window).PDFViewerApplication = null;
   }
 
   public ngOnChanges(changes: SimpleChanges) {

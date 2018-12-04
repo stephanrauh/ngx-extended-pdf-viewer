@@ -13,9 +13,17 @@ export class AppComponent {
   public visible = { 0: true };
 
   public activateTab(tab: number): void {
-    console.log(tab);
+    this.hideOtherPDFs();
     setTimeout(() => {
       this.visible[tab] = true;
-    }, 1000);
+    }, 100);
+  }
+
+  public hideOtherPDFs(): void {
+    console.log('Hiding');
+    this.visible[0] = false;
+    this.visible[1] = false;
+    this.visible[2] = false;
+    this.visible[3] = false;
   }
 }

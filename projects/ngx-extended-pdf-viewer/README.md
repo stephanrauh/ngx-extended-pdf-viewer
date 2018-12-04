@@ -18,9 +18,9 @@ this build doesn't use one of the released versions, but the developer version 2
 
 ## Known bugs
 
-None.
+Mozilla's PDF viewer suffers from several memory leaks. Currently, ngx-extended-pdf-viewer inherits these leaks (or I didn't find out yet how to remove the viewer from memory properly). If you know how to solve the bug, please leave a message at [the corresponding issue on GitHub](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/12). Any help is appreciated!
 
-(Apart from a layout glitch that seems to be intentional: you may need to set the font size of the input field containing the page number explicitely. By default, it's a lot larger than the rest of the text of the toolbar in some applications).
+There's also a layout glitch that seems to be intentional: you may need to set the font size of the input field containing the page number explicitely. By default, it's a lot larger than the rest of the text of the toolbar in some applications.
 
 ## Unknown bugs
 
@@ -36,9 +36,55 @@ Bootstrap interferes with the printing algorithm of pdf.js. Guard it with a medi
 }
 ```
 
+## Beware of timing problems!
+
+The PDF viewer is very prone to timing problems:
+
+- Hiding and re-displaying a PDF quickly (or vice versa) results in errors. This is because the bulk of pdf.js works asynchronously. It takes some time to initialize the widget. If it's destroyed while still being initialized, you run into problems. The same happens if it's initialized while an earliers instand is still being destroyed.
+- Putting PDFs in tab frequently causes this problem. Switching between tabs often means that the content of one of the tabs is hidden. At the same time, the content of the new tab is shown. I've observed this when using @angular/material. The solution is to hide the first tab and to show the new tab after a timeout, as demonstrated in [the demo project](https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/master/src/app).
+
+```html
+<mat-tab-group (selectedTabChange)="activateTab($event.index)">
+  <mat-tab label="BootsFAces Deep-Dive PDF">
+    <ng-template matTabContent>
+      <ngx-extended-pdf-viewer *ngIf="visible[0]" [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"> </ngx-extended-pdf-viewer>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Codpaste PDF">
+    <ng-template matTabContent>
+      <ngx-extended-pdf-viewer *ngIf="visible[1]" [src]="'assets/pdfs/codpaste-teachingpack.pdf'"> </ngx-extended-pdf-viewer>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
+```
+
+```typescript
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  public visible = { 0: true };
+
+  public activateTab(tab: number): void {
+    this.hideOtherPDFs();
+    setTimeout(() => {
+      this.visible[tab] = true;
+    }, 100);
+  }
+
+  public hideOtherPDFs(): void {
+    console.log('Hiding');
+    this.visible[0] = false;
+    this.visible[1] = false;
+  }
+}
+```
+
 ## How to use the library
 
-There's a minimalistic demo project at https://github.com/stephanrauh/ExploringAngular/tree/master/embedding-pdf.
+There's a minimalistic demo project at https://github.com/stephanrauh/ExploringAngular/tree/master/embedding-pdf. A slightly more advanced demo project is hosted [in the repository of the library](https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/master/src/app).
 
 1.  Install the library with npm i ngx-extended-pdf-viewer --save
 2.  Open the file "angular.json" (or ".angular-cli.json" if you're using an older version of Angular)
@@ -188,4 +234,4 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 | 0.9.6      |                                                                   updated to pdf.js 2.0.943; added more language files; fixed a bug preventing loading the language defined in a script tag for many language; repaired the parameter [showSidebarButton]; fixed broken i18n on OSX Chrome 70 by adding several translations for languages without region specifier (such as "es" instead of "es-ES")                                                                   |
 | 0.9.7      |                                                                                                                                                                     fixed the CSS file (font size and margins accidentially spilled to the surrounding page); corrected the link to the bug tracker                                                                                                                                                                     |
 | 0.9.8      | make the option [showSidebarOnLoad] configurable; plus, don't load a sidebar if [showSidebarButton]="false". Kudos go to GitHub user AlexandrosG. Stop the PDF viewer from crashing if the page is left before the PDF is rendered (issue #9). Kudos go to GitHub user Max Dertcaf. Prevent auto-completion in the search input field because it sometimes shows user names and email addresses (#8). Kudos go to Paul Kocher. Also added the optional property [zoom]. |
-| 0.9.9      |                                                                                                                                                                                                                    added the attribute [mobileZoom]                                                                                                                                                                                                                     |
+| 0.9.9      |                                                                                                                added the attribute [mobileZoom]; repaired the paginator buttons after hiding and re-displaying the PDF viewer; reduced the memory leaks of the pdf.js viewer (work in progress); documented how to use ngx-extended-pdf-viewer with tabs                                                                                                                |
