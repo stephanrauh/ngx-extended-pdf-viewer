@@ -3,7 +3,7 @@
   <div class="html">
     <div tabindex="1" class="loadingInProgress body" [style.height]="height" [style.backgroundColor]="backgroundColor">
       <div id="outerContainer">
-        <div id="sidebarContainer">
+        <div id="sidebarContainer" [style.top]="top">
           <div id="additionalSidebarContainer" [class.hidden]="!showSidebarButton">
             <div id="toolbarSidebar">
               <div class="splitToolbarButton toggled">
@@ -457,7 +457,7 @@
             <menuitem id="contextPageRotateCcw" label="Rotate Counter-Clockwise" data-l10n-id="page_rotate_ccw"> </menuitem>
           </menu>
 
-          <div id="viewerContainer" tabindex="0"><div id="viewer" class="pdfViewer"></div></div>
+          <div id="viewerContainer" tabindex="0"  [style.top]="top"><div id="viewer" class="pdfViewer"></div></div>
 
           <div id="errorWrapper" hidden="true">
             <div id="errorMessageLeft">
