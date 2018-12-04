@@ -106,7 +106,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   /** This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices */
   @Input() mobileZoom = '100%';
 
-  private _top: string = undefined;
+  private _top: string | undefined = undefined;
 
   public get top(): string {
     if (this._top) {

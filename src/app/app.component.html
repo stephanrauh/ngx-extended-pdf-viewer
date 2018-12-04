@@ -5,7 +5,7 @@
     <section class="section">
       <button *ngIf="!hidden" mat-raised-button color="primary" class="margin" (click)="hidden = true">Hide the PDF</button>
       <button *ngIf="hidden" mat-raised-button color="primary" class="margin" (click)="hidden = false">Show the PDF</button>
-      <mat-checkbox class="margin" [(ngModel)]="mobileFriendlyZoom">mobile-friendly zoom 200%</mat-checkbox>
+      <mat-checkbox class="margin" [(ngModel)]="mobileFriendlyZoomPercent">mobile-friendly zoom 200%</mat-checkbox>
       <mat-checkbox class="margin" [(ngModel)]="showSidebar">show sidebar button</mat-checkbox>
     </section>
     <section class="section">

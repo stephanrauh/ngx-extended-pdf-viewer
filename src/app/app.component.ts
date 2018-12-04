@@ -11,10 +11,11 @@ export class AppComponent {
   public hidden = false;
   public zoom = 42;
   public visible = { 0: true };
-  public mobileFriendlyZoom = false;
+  public mobileFriendlyZoomPercent = false;
+  public showSidebar = false;
 
   public get mobileZoom(): string | undefined {
-    if (this.mobileFriendlyZoom) {
+    if (this.mobileFriendlyZoomPercent) {
       return '200%';
     }
     return undefined;
