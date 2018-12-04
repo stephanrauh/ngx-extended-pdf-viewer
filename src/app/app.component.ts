@@ -11,6 +11,14 @@ export class AppComponent {
   public hidden = false;
   public zoom = 42;
   public visible = { 0: true };
+  public mobileFriendlyZoom = false;
+
+  public get mobileZoom(): string | undefined {
+    if (this.mobileFriendlyZoom) {
+      return '200%';
+    }
+    return undefined;
+  }
 
   public activateTab(tab: number): void {
     this.hideOtherPDFs();

@@ -1,17 +1,28 @@
 <h1>Welcome to {{ title }}!</h1>
 
-<button *ngIf="!hidden" mat-raised-button color="primary" (click)="hidden = true">Hide the PDF</button>
-<button *ngIf="hidden" mat-raised-button color="primary" (click)="hidden = false">Show the PDF</button>
-
+<mat-card>
+  <mat-card-content>
+    <section class="section">
+      <button *ngIf="!hidden" mat-raised-button color="primary" class="margin" (click)="hidden = true">Hide the PDF</button>
+      <button *ngIf="hidden" mat-raised-button color="primary" class="margin" (click)="hidden = false">Show the PDF</button>
+      <mat-checkbox class="margin" [(ngModel)]="mobileFriendlyZoom">mobile-friendly zoom 200%</mat-checkbox>
+      <mat-checkbox class="margin" [(ngModel)]="showSidebar">show sidebar button</mat-checkbox>
+    </section>
+    <section class="section">
+      <div class="margin">Zoom: {{ zoom }}</div>
+    </section>
+  </mat-card-content>
+</mat-card>
 <mat-tab-group (selectedTabChange)="activateTab($event.index)">
-  <mat-tab label="BootsFAces Deep-Dive PDF">
+  <mat-tab label="BootsFaces Deep-Dive PDF">
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[0] && !hidden"
         [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"
         backgroundColor="#e8e8ef"
+        [mobileZoom]="mobileZoom"
         [showZoomButtons]="true"
-        [showSidebarButton]="false"
+        [showSidebarButton]="showSidebar"
         [useBrowserLocale]="false"
         [showSidebarOnLoad]="true"
         delayFirstView="50"
@@ -27,8 +38,9 @@
         *ngIf="visible[1] && !hidden"
         [src]="'assets/pdfs/codpaste-teachingpack.pdf'"
         backgroundColor="#e8e8ef"
+        [mobileZoom]="mobileZoom"
         [showZoomButtons]="true"
-        [showSidebarButton]="false"
+        [showSidebarButton]="showSidebar"
         [useBrowserLocale]="false"
         [showSidebarOnLoad]="true"
         delayFirstView="50"
@@ -44,8 +56,9 @@
         *ngIf="visible[3] && !hidden"
         [src]="'assets/pdfs/plf_prob_document.pdf'"
         backgroundColor="#e8e8ef"
+        [mobileZoom]="mobileZoom"
         [showZoomButtons]="true"
-        [showSidebarButton]="false"
+        [showSidebarButton]="showSidebar"
         [useBrowserLocale]="false"
         [showSidebarOnLoad]="true"
         delayFirstView="50"
