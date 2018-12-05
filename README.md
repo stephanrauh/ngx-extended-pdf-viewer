@@ -1,6 +1,6 @@
 # ngx-extended-pdf-viewer
 
-Bringing Mozilla's pdf.js to the Angular world. Well, not just displaying PDFs. If you only need the base functionality, I'll happily pass you to [the project of Vadym Yatsyuk](https://github.com/vadimdez/ng2-pdf-viewer/). Vadym does a great job delivering a no-nonsense PDF viewer. However, if you need something that can easily pass as the native viewer on a gloomy day, mgx-extended-pdf-viewer is your friend.
+Bringing Mozilla's pdf.js to the Angular world. Well, not just displaying PDFs. If you only need the base functionality, I'll happily pass you to [the project of Vadym Yatsyuk](https://github.com/vadimdez/ng2-pdf-viewer/). Vadym does a great job delivering a no-nonsense PDF viewer. However, if you need something that can easily pass as the native viewer on a gloomy day, ngx-extended-pdf-viewer is your friend.
 
 # Features
 
