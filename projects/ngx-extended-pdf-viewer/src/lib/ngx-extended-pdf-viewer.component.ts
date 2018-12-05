@@ -8,7 +8,8 @@ import {
   AfterViewInit,
   OnDestroy,
   Output,
-  EventEmitter
+  EventEmitter,
+  ViewChild
 } from '@angular/core';
 
 declare var PDFJS: any;
@@ -98,13 +99,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
 
   /** Legal values: undefined, 'auto', 'page-actual', 'page_fit', 'page-width', or '50' (or any other percentage) */
   @Input()
-  public zoom: string | undefined = undefined;
+  public zoom: string | number | undefined = undefined;
 
   @Output()
   public zoomChange = new EventEmitter();
 
   /** This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices */
   @Input() mobileZoom = '100%';
+
+  @ViewChild('sizeSelector') sizeSelector;
 
   private _top: string | undefined = undefined;
 
@@ -125,6 +128,24 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   }
 
   constructor() {}
+
+  public emitZoomChange(): void {
+    const s = this.sizeSelector.nativeElement.selectedOptions[0] as HTMLOptionElement;
+    let value: number | string = s.label;
+
+    if (value.endsWith('%')) {
+      value = Number(value.replace('%', ''));
+    } else {
+      value = s.value;
+    }
+    this.zoomChange.emit(value);
+  }
+
+  public emitZoomChangeAfterDelay(): void {
+    setTimeout(() => {
+      this.emitZoomChange();
+    }, 10);
+  }
 
   ngOnInit() {
     setTimeout(() => {
