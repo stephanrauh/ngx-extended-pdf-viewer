@@ -9,7 +9,25 @@
       <mat-checkbox class="margin" [(ngModel)]="showSidebar">show sidebar button</mat-checkbox>
     </section>
     <section class="section">
-      <div class="margin">Zoom: {{ zoom }}</div>
+      <mat-checkbox class="margin" [(ngModel)]="zoom42" matTooltip="Changes apply after switching to another PDF file"
+        >[zoom]="42"</mat-checkbox
+      >
+      <mat-checkbox class="margin" [(ngModel)]="zoom84percent" matTooltip="Changes apply after switching to another PDF file"
+        >[zoom]="'84%''"</mat-checkbox
+      >
+      <mat-checkbox class="margin" [(ngModel)]="zoomAuto" matTooltip="Changes apply after switching to another PDF file"
+        >[zoom]="'auto'"</mat-checkbox
+      >
+      <mat-checkbox class="margin" [(ngModel)]="zoomPageActual" matTooltip="Changes apply after switching to another PDF file"
+        >[zoom]="'page-actual'"</mat-checkbox
+      >
+      <mat-checkbox class="margin" [(ngModel)]="zoomPageFit" matTooltip="Changes apply after switching to another PDF file"
+        >[zoom]="'page-fit'"</mat-checkbox
+      >
+      <mat-checkbox class="margin" [(ngModel)]="zoomPageWidth" matTooltip="Changes apply after switching to another PDF file"
+        >[zoom]="'page-width'"</mat-checkbox
+      >
+      <div class="margin">resulting zoom factor: {{ zoom }}</div>
     </section>
   </mat-card-content>
 </mat-card>

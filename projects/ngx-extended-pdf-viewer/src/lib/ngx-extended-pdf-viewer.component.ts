@@ -155,8 +155,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       (<any>window).PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
       (<any>window).PDFViewerApplication.isViewerEmbedded = true;
       (<any>window).PDFViewerApplication.overrideHistory = {};
-      if (this.zoom !== undefined) {
-        (<any>window).PDFViewerApplication.overrideHistory.zoom = this.zoom;
+      if (this.zoom) {
+        let z = this.zoom;
+        if (typeof z !== 'number') {
+          if (z.endsWith('%')) {
+            z = z.replace('%', '');
+          }
+        }
+        (<any>window).PDFViewerApplication.overrideHistory.zoom = z;
       }
       if (this.showSidebarButton) {
         if (this.showSidebarOnLoad !== undefined) {
