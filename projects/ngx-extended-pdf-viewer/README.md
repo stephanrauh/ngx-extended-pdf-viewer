@@ -9,12 +9,9 @@ PDF viewer component. It's different from other approaches like [ng2-pdf-viewer]
 
 I'm using the library in a real-world project on a daily basis. I'm positive it's good enough to use it in production. Actually, that's what I'm doing since a couple of months. Even so: use at own risk. I consider the library a professional-grade leisure time project. I'll answer your bug tickets as soon as possible, but there's nothing in the way of warranties.
 
-The library has been developed with Angular 6. Recently, I've updated it to Angular 7, so npm will complain if you're using
+The library has been developed with Angular 6. Recently, I've updated it to Angular 7, but I've never tested it with earlier versions of Angular. So I've configure npm to complain complain if you're using
 an older version of Angular (i.e. Angular 2-5). In theory, ngx-extended-pdf-viewer should be compatible with
-every Angular version since 2.0, but I don't support this actively.
-
-The library is using a source-code build of the pdf.js library of Mozilla. As of version 0.9.5,
-this build doesn't use one of the released versions, but the developer version 2.0.641 (which has been pulled directly from "master"). I didn't observe any problems so far, but proceed with care. If you run into problems due to the version of pdf.js, please open an issue on the [project bug tracker](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues).
+every Angular version since 2.0, but I don't support this actively. If you're using such a configuration, please share your experience with me, so the greater Angular community benefits from your success (or failure) story. Thanks in advance!
 
 ## Known bugs
 
