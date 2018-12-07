@@ -17,10 +17,14 @@ declare var PDFJS: any;
 @Component({
   selector: 'ngx-extended-pdf-viewer',
   templateUrl: './ngx-extended-pdf-viewer.component.html',
-  styleUrls: ['./viewer-with-images.css', './ngx-extended-pdf-viewer.component.css'],
+  styleUrls: [
+    './viewer-with-images.css',
+    './ngx-extended-pdf-viewer.component.css'
+  ],
   encapsulation: ViewEncapsulation.None
 })
-export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+export class NgxExtendedPdfViewerComponent
+  implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   private _src: string;
 
   private initialized = false;
@@ -104,24 +108,59 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   @Output()
   public zoomChange = new EventEmitter();
 
-  /** This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices */
-  @Input() mobileZoom = '100%';
+  /** This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
+   * This attribute is a string with a percent character at the end (e.g. "150%").
+   */
+  @Input() mobileFriendlyZoom = '100%';
+
+  /** Deprecated. Please use [mobileFriendlyZoom] instead.
+   * This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
+   * This attribute is a string with a percent character at the end (e.g. "150%").*/
+  @Input()
+  public set mobileZoom(mobileFriendlyZoom: string) {
+    this.mobileFriendlyZoom = mobileFriendlyZoom;
+  }
 
   @ViewChild('sizeSelector') sizeSelector;
 
   private _top: string | undefined = undefined;
 
-  public get top(): string {
+  public get sidebarPositionTop(): string {
     if (this._top) {
       return this._top;
     }
-    if (this.mobileZoom) {
-      if (this.mobileZoom.endsWith('%')) {
-        const zoom = Number(this.mobileZoom.substring(0, this.mobileZoom.length - 1));
+    if (this.mobileFriendlyZoom) {
+      if (this.mobileFriendlyZoom.endsWith('%')) {
+        const zoom = Number(
+          this.mobileFriendlyZoom.substring(
+            0,
+            this.mobileFriendlyZoom.length - 1
+          )
+        );
         return (0.32 * zoom).toString() + 'px';
       }
-      if (this.mobileZoom.endsWith('px')) {
-        return this.mobileZoom;
+      if (this.mobileFriendlyZoom.endsWith('px')) {
+        return this.mobileFriendlyZoom;
+      }
+    }
+    return '32px';
+  }
+  public get viewerPositionTop(): string {
+    if (this._top) {
+      return this._top;
+    }
+    if (this.mobileFriendlyZoom) {
+      if (this.mobileFriendlyZoom.endsWith('%')) {
+        const zoom = Number(
+          this.mobileFriendlyZoom.substring(
+            0,
+            this.mobileFriendlyZoom.length - 1
+          )
+        );
+        return (1 + 0.32 * zoom).toString() + 'px';
+      }
+      if (this.mobileFriendlyZoom.endsWith('px')) {
+        return this.mobileFriendlyZoom;
       }
     }
     return '32px';
@@ -130,7 +169,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   constructor() {}
 
   public emitZoomChange(): void {
-    const s = this.sizeSelector.nativeElement.selectedOptions[0] as HTMLOptionElement;
+    const s = this.sizeSelector.nativeElement
+      .selectedOptions[0] as HTMLOptionElement;
     let value: number | string = s.label;
 
     if (value.endsWith('%')) {
@@ -154,33 +194,48 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
 
       (<any>window).PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
       (<any>window).PDFViewerApplication.isViewerEmbedded = true;
-      (<any>window).PDFViewerApplication.overrideHistory = {};
-      if (this.zoom) {
-        let z = this.zoom;
-        if (typeof z !== 'number') {
-          if (z.endsWith('%')) {
-            z = z.replace('%', '');
-          }
-        }
-        (<any>window).PDFViewerApplication.overrideHistory.zoom = z;
-      }
-      if (this.showSidebarButton) {
-        if (this.showSidebarOnLoad !== undefined) {
-          (<any>window).PDFViewerApplication.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
-          (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
-          (<any>window).PDFViewerApplication.overrideHistory.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
-        }
-      } else {
-        (<any>window).PDFViewerApplication.sidebarViewOnLoad = 0;
-        (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = 0;
-        (<any>window).PDFViewerApplication.overrideHistory.sidebarViewOnLoad = 0;
-      }
+      this.overrideDefaultSettings();
 
       const pc = document.getElementById('printContainer');
       if (pc) {
         document.getElementsByTagName('body')[0].appendChild(pc);
       }
     }, 0);
+  }
+
+  private overrideDefaultSettings() {
+    (<any>window).PDFViewerApplication.overrideHistory = {};
+    if (this.zoom) {
+      let z = this.zoom;
+      if (typeof z !== 'number') {
+        if (z.endsWith('%')) {
+          z = z.replace('%', '');
+        }
+      }
+      (<any>window).PDFViewerApplication.overrideHistory.zoom = z;
+    }
+    if (this.showSidebarButton) {
+      if (this.showSidebarOnLoad !== undefined) {
+        (<any>window).PDFViewerApplication.sidebarViewOnLoad = this
+          .showSidebarOnLoad
+          ? 1
+          : 0;
+        (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = this
+          .showSidebarOnLoad
+          ? 1
+          : 0;
+        (<any>(
+          window
+        )).PDFViewerApplication.overrideHistory.sidebarViewOnLoad = this
+          .showSidebarOnLoad
+          ? 1
+          : 0;
+      }
+    } else {
+      (<any>window).PDFViewerApplication.sidebarViewOnLoad = 0;
+      (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = 0;
+      (<any>window).PDFViewerApplication.overrideHistory.sidebarViewOnLoad = 0;
+    }
   }
 
   public ngAfterViewInit() {
@@ -226,6 +281,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
     if (this.initialized) {
       if ('src' in changes) {
         if (!!this._src) {
+          this.overrideDefaultSettings();
           (<any>window).PDFViewerApplication.open(this._src);
         }
       }

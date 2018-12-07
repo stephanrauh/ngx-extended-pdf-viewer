@@ -19,6 +19,8 @@ Mozilla's PDF viewer suffers from several memory leaks. Currently, ngx-extended-
 
 There's also a layout glitch that seems to be intentional: you may need to set the font size of the input field containing the page number explicitely. By default, it's a lot larger than the rest of the text of the toolbar in some applications.
 
+Under certain circumstances, the progress bar doesn't vanish after loading the document. This results in a 4 pixel high black bar below the toolbar.
+
 ## Unknown bugs
 
 If you run into problems using &lt;ngx-extended-pdf-viewer&gt;, please open an issue on the [project bug tracker](https://github.com/stephanrauh/ExploringAngular/tree/master/embedding-pdf).
@@ -44,12 +46,20 @@ The PDF viewer is very prone to timing problems:
 <mat-tab-group (selectedTabChange)="activateTab($event.index)">
   <mat-tab label="BootsFAces Deep-Dive PDF">
     <ng-template matTabContent>
-      <ngx-extended-pdf-viewer *ngIf="visible[0]" [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"> </ngx-extended-pdf-viewer>
+      <ngx-extended-pdf-viewer
+        *ngIf="visible[0]"
+        [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"
+      >
+      </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
   <mat-tab label="Codpaste PDF">
     <ng-template matTabContent>
-      <ngx-extended-pdf-viewer *ngIf="visible[1]" [src]="'assets/pdfs/codpaste-teachingpack.pdf'"> </ngx-extended-pdf-viewer>
+      <ngx-extended-pdf-viewer
+        *ngIf="visible[1]"
+        [src]="'assets/pdfs/codpaste-teachingpack.pdf'"
+      >
+      </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
 </mat-tab-group>
@@ -117,7 +127,8 @@ There's a minimalistic demo project at https://github.com/stephanrauh/ExploringA
 5.  Now you can display the PDF file like so:
 
 ```html
-<ngx-extended-pdf-viewer src="'assets/example.pdf'" useBrowserLocale="true"> </ngx-extended-pdf-viewer>
+<ngx-extended-pdf-viewer src="'assets/example.pdf'" useBrowserLocale="true">
+</ngx-extended-pdf-viewer>
 ```
 
 ## Configuration
@@ -164,7 +175,11 @@ Don't forget to set the attribute `useBrowserLocale="true"` if you follow this a
 If you want to use the slow way, but prefer to load the language files from a different URL, add a link to your application like so:
 
 ```html
-<link rel="resource" type="application/l10n" href="https://www.example.com/locale/locale.properties" />
+<link
+  rel="resource"
+  type="application/l10n"
+  href="https://www.example.com/locale/locale.properties"
+/>
 ```
 
 In this case, don't set `useBrowserLocale` (or set it explicitely to false).
@@ -234,3 +249,4 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 | 0.9.8      | make the option [showSidebarOnLoad] configurable; plus, don't load a sidebar if [showSidebarButton]="false". Kudos go to GitHub user AlexandrosG. Stop the PDF viewer from crashing if the page is left before the PDF is rendered (issue #9). Kudos go to GitHub user Max Dertcaf. Prevent auto-completion in the search input field because it sometimes shows user names and email addresses (#8). Kudos go to Paul Kocher. Also added the optional property [zoom]. |
 | 0.9.9      |                                                                                                                added the attribute [mobileZoom]; repaired the paginator buttons after hiding and re-displaying the PDF viewer; reduced the memory leaks of the pdf.js viewer (work in progress); documented how to use ngx-extended-pdf-viewer with tabs                                                                                                                |
 | 0.9.10     |                                                                                                                                             adjust the position of the document and the thumbails after increasing the size of the toolbar via [mobileZoom]="200%"; implemented the two-way-binding of the [zoom] attribute                                                                                                                                             |
+| 0.9.11     |                                                                                                                                                                             Now the [zoom] attribute is also regarded when a new document is loaded in the same instance of the PDF viewer                                                                                                                                                                              |
