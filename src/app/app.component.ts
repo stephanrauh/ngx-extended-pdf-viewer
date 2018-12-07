@@ -74,7 +74,7 @@ export class AppComponent {
     }
   }
 
-  public get mobileZoom(): string | undefined {
+  public get mobileFriendlyZoom(): string | undefined {
     if (this.mobileFriendlyZoomPercent) {
       return '200%';
     }
