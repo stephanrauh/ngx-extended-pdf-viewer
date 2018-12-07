@@ -1,12 +1,12 @@
 {
   "name": "ngx-extended-pdf-viewer",
   "version": "0.9.11",
-  "license": "Apache License V2",
+  "license": "Apache-2.0",
   "repository": {
     "url": "https://github.com/stephanrauh/ngx-extended-pdf-viewer"
   },
   "peerDependencies": {
-    "@angular/common": "^6.0.0-rc.0 || ^6.0.0 || ^7.0.0",
-    "@angular/core": "^6.0.0-rc.0 || ^6.0.0 || ^7.0.0"
+    "@angular/common": "^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^7.1.0",
+    "@angular/core": "^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^7.1.0"
   }
 }
