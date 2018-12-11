@@ -17,14 +17,10 @@ declare var PDFJS: any;
 @Component({
   selector: 'ngx-extended-pdf-viewer',
   templateUrl: './ngx-extended-pdf-viewer.component.html',
-  styleUrls: [
-    './viewer-with-images.css',
-    './ngx-extended-pdf-viewer.component.css'
-  ],
+  styleUrls: ['./viewer-with-images.css', './ngx-extended-pdf-viewer.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class NgxExtendedPdfViewerComponent
-  implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   private _src: string;
 
   private initialized = false;
@@ -60,8 +56,26 @@ export class NgxExtendedPdfViewerComponent
   @Input()
   public backgroundColor = '#e8e8eb';
 
+  public _showSidebarButton = true;
+
+  public get showSidebarButton() {
+    return this._showSidebarButton;
+  }
   @Input()
-  public showSidebarButton = true;
+  public set showSidebarButton(show: boolean) {
+    this._showSidebarButton = show;
+    const isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
+    let factor = 1;
+    if (isIE) {
+      factor = Number((this._mobileFriendlyZoom || '100').replace('%', '')) / 100;
+    }
+
+    if (this._showSidebarButton) {
+      this.findbarLeft = (68 * factor).toString() + 'px';
+    } else {
+      this.findbarLeft = '0px';
+    }
+  }
 
   /** If [showSideBarButton]="true", do you want the sidebar to be shown by default ([showSidebarOnLoad])="true")
    * or not? By default, this flag is undefined, telling the PDF viewer to use the last setting used with this particular
@@ -134,11 +148,18 @@ export class NgxExtendedPdfViewerComponent
   public set mobileFriendlyZoom(zoom: string) {
     this._mobileFriendlyZoom = zoom;
     const isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
+    let factor = 1;
+    if (isIE) {
+      factor = Number((zoom || '100').replace('%', '')) / 100;
+    }
+    if (this.showSidebarButton) {
+      this.findbarLeft = (68 * factor).toString() + 'px';
+    } else {
+      this.findbarLeft = '0px';
+    }
     if (isIE) {
       // dirty, temporary hack
-      const factor = Number(zoom.replace('%', '')) / 100;
       this.toolbarWidth = (100 / factor).toString() + '%';
-      this.findbarLeft = (68 * factor).toString() + 'px';
       this.findbarTop = (32 * factor).toString() + 'px';
       this.secondaryToolbarRight = (252 * (factor - 1)).toString() + 'px';
     }
@@ -162,12 +183,7 @@ export class NgxExtendedPdfViewerComponent
     }
     if (this.mobileFriendlyZoom) {
       if (this.mobileFriendlyZoom.endsWith('%')) {
-        const zoom = Number(
-          this.mobileFriendlyZoom.substring(
-            0,
-            this.mobileFriendlyZoom.length - 1
-          )
-        );
+        const zoom = Number(this.mobileFriendlyZoom.substring(0, this.mobileFriendlyZoom.length - 1));
         return (0.32 * zoom).toString() + 'px';
       }
       if (this.mobileFriendlyZoom.endsWith('px')) {
@@ -182,12 +198,7 @@ export class NgxExtendedPdfViewerComponent
     }
     if (this.mobileFriendlyZoom) {
       if (this.mobileFriendlyZoom.endsWith('%')) {
-        const zoom = Number(
-          this.mobileFriendlyZoom.substring(
-            0,
-            this.mobileFriendlyZoom.length - 1
-          )
-        );
+        const zoom = Number(this.mobileFriendlyZoom.substring(0, this.mobileFriendlyZoom.length - 1));
         return (1 + 0.32 * zoom).toString() + 'px';
       }
       if (this.mobileFriendlyZoom.endsWith('px')) {
@@ -200,8 +211,7 @@ export class NgxExtendedPdfViewerComponent
   constructor() {}
 
   public emitZoomChange(): void {
-    const s = this.sizeSelector.nativeElement
-      .selectedOptions[0] as HTMLOptionElement;
+    const s = this.sizeSelector.nativeElement.selectedOptions[0] as HTMLOptionElement;
     let value: number | string = s.label;
 
     if (value.endsWith('%')) {
@@ -247,20 +257,9 @@ export class NgxExtendedPdfViewerComponent
     }
     if (this.showSidebarButton) {
       if (this.showSidebarOnLoad !== undefined) {
-        (<any>window).PDFViewerApplication.sidebarViewOnLoad = this
-          .showSidebarOnLoad
-          ? 1
-          : 0;
-        (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = this
-          .showSidebarOnLoad
-          ? 1
-          : 0;
-        (<any>(
-          window
-        )).PDFViewerApplication.overrideHistory.sidebarViewOnLoad = this
-          .showSidebarOnLoad
-          ? 1
-          : 0;
+        (<any>window).PDFViewerApplication.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
+        (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
+        (<any>window).PDFViewerApplication.overrideHistory.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
       }
     } else {
       (<any>window).PDFViewerApplication.sidebarViewOnLoad = 0;
