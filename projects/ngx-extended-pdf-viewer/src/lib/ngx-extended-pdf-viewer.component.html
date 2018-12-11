@@ -67,6 +67,8 @@
             class="findbar hidden doorHanger"
             id="findbar"
             [style.zoom]="mobileFriendlyZoom"
+            [style.top]="findbarTop"
+            [style.left]="findbarLeft"
           >
             <div id="findbarInputContainer">
               <input
@@ -154,6 +156,8 @@
             id="secondaryToolbar"
             class="secondaryToolbar hidden doorHangerRight"
             [style.zoom]="mobileFriendlyZoom"
+            [style.top]="findbarTop"
+            [style.right]="secondaryToolbarRight"
           >
             <div id="secondaryToolbarButtonContainer">
               <button
@@ -387,7 +391,11 @@
           <!-- secondaryToolbar -->
 
           <div class="toolbar">
-            <div id="toolbarContainer" [style.zoom]="mobileFriendlyZoom">
+            <div
+              id="toolbarContainer"
+              [style.zoom]="mobileFriendlyZoom"
+              [style.width]="toolbarWidth"
+            >
               <div id="toolbarViewer">
                 <div id="toolbarViewerLeft">
                   <button

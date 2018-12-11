@@ -111,7 +111,38 @@ export class NgxExtendedPdfViewerComponent
   /** This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
    * This attribute is a string with a percent character at the end (e.g. "150%").
    */
-  @Input() mobileFriendlyZoom = '100%';
+  @Input() _mobileFriendlyZoom = '100%';
+
+  public toolbarWidth = '100%';
+
+  // dirty IE11 hack - temporary solution
+  public findbarTop: string | undefined = undefined;
+
+  // dirty IE11 hack - temporary solution
+  public findbarLeft: string | undefined = undefined;
+
+  // dirty IE11 hack - temporary solution
+  public secondaryToolbarRight: string | undefined = undefined;
+
+  public get mobileFriendlyZoom() {
+    return this._mobileFriendlyZoom;
+  }
+  /*
+   * This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
+   * This attribute is a string with a percent character at the end (e.g. "150%").*/
+  @Input()
+  public set mobileFriendlyZoom(zoom: string) {
+    this._mobileFriendlyZoom = zoom;
+    const isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
+    if (isIE) {
+      // dirty, temporary hack
+      const factor = Number(zoom.replace('%', '')) / 100;
+      this.toolbarWidth = (100 / factor).toString() + '%';
+      this.findbarLeft = (68 * factor).toString() + 'px';
+      this.findbarTop = (32 * factor).toString() + 'px';
+      this.secondaryToolbarRight = (252 * (factor - 1)).toString() + 'px';
+    }
+  }
 
   /** Deprecated. Please use [mobileFriendlyZoom] instead.
    * This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
