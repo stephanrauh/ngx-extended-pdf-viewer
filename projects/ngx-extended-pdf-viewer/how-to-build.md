@@ -79,11 +79,23 @@
     }
     // end of the bugfix solving #6 and #11
 
-39. add 'autocomplete="off"' to the first input field of ngx-extended-pdf-viewer.component.html (i.e. the field with id="findbarInputContainer")
+39. In the same file, find the class Progressbar by looking for "var ProgressBar = function ()". Continue looking for the method "hide" (roughly line 3464). Modify the implementation like so:
+    value: function hide() {
+    // if (!this.visible) { // commented
+    // return; // commented
+    // } // uncommented
+    this.visible = false;
+    this.div = document.querySelector('.progress'); // always set this new instead of trying to cache this value
+    this.bar = this.div.parentNode; // always set this new instead of trying to cache this value
+    this.bar.classList.add('hidden');
+    document.body.classList.remove('loadingInProgress');
+    }
 
-40. (not necessary? npm run package )
-41. ng build ngx-extended-pdf-viewer
-42. npm run package
-43. ng serve
+39) add 'autocomplete="off"' to the first input field of ngx-extended-pdf-viewer.component.html (i.e. the field with id="findbarInputContainer")
+
+40) (not necessary? npm run package )
+41) ng build ngx-extended-pdf-viewer
+42) npm run package
+43) ng serve
 
 Note to myself: to deploy the library on npm, change to the folder `dist/ngx-extended-pdf-viewer` and run `npm publish` from there.

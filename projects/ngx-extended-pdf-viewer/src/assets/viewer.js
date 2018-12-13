@@ -3462,17 +3462,19 @@ var ProgressBar = function () {
   }, {
     key: 'hide',
     value: function hide() {
-      if (!this.visible) {
-        return;
-      }
+//      if (!this.visible) {
+//        return;
+//      }
       this.visible = false;
+      this.div = document.querySelector('.progress');
+      this.bar = this.div.parentNode;
       this.bar.classList.add('hidden');
       document.body.classList.remove('loadingInProgress');
     }
   }, {
     key: 'show',
     value: function show() {
-      if (this.visible) {
+     if (this.visible) {
         return;
       }
       this.visible = true;
