@@ -211,15 +211,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   constructor() {}
 
   public emitZoomChange(): void {
-    const s = this.sizeSelector.nativeElement.selectedOptions[0] as HTMLOptionElement;
-    let value: number | string = s.label;
+    const selectedIndex = this.sizeSelector.nativeElement.selectedIndex;
+    if (selectedIndex) {
+      const s = this.sizeSelector.nativeElement.options[selectedIndex] as HTMLOptionElement;
+      let value: number | string = s.label;
 
-    if (value.endsWith('%')) {
-      value = Number(value.replace('%', ''));
-    } else {
-      value = s.value;
+      if (value.endsWith('%')) {
+        value = Number(value.replace('%', ''));
+      } else {
+        value = s.value;
+      }
+      this.zoomChange.emit(value);
     }
-    this.zoomChange.emit(value);
   }
 
   public emitZoomChangeAfterDelay(): void {
