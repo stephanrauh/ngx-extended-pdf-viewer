@@ -95,7 +95,7 @@ There's a minimalistic demo project at https://github.com/stephanrauh/ExploringA
 
 1.  Install the library with npm i ngx-extended-pdf-viewer --save
 2.  Open the file "angular.json" (or ".angular-cli.json" if you're using an older version of Angular)
-    and add these two JavaScript files to the "scripts" section:
+    and add these three JavaScript files to the "scripts" section:
 
             "scripts": [
               "node_modules/ngx-extended-pdf-viewer/assets/pdf.js",
