@@ -46,20 +46,12 @@ The PDF viewer is very prone to timing problems:
 <mat-tab-group (selectedTabChange)="activateTab($event.index)">
   <mat-tab label="BootsFAces Deep-Dive PDF">
     <ng-template matTabContent>
-      <ngx-extended-pdf-viewer
-        *ngIf="visible[0]"
-        [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"
-      >
-      </ngx-extended-pdf-viewer>
+      <ngx-extended-pdf-viewer *ngIf="visible[0]" [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"> </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
   <mat-tab label="Codpaste PDF">
     <ng-template matTabContent>
-      <ngx-extended-pdf-viewer
-        *ngIf="visible[1]"
-        [src]="'assets/pdfs/codpaste-teachingpack.pdf'"
-      >
-      </ngx-extended-pdf-viewer>
+      <ngx-extended-pdf-viewer *ngIf="visible[1]" [src]="'assets/pdfs/codpaste-teachingpack.pdf'"> </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
 </mat-tab-group>
@@ -127,8 +119,7 @@ There's a minimalistic demo project at https://github.com/stephanrauh/ExploringA
 5.  Now you can display the PDF file like so:
 
 ```html
-<ngx-extended-pdf-viewer src="'assets/example.pdf'" useBrowserLocale="true">
-</ngx-extended-pdf-viewer>
+<ngx-extended-pdf-viewer src="'assets/example.pdf'" useBrowserLocale="true"> </ngx-extended-pdf-viewer>
 ```
 
 6. If you want to display a PDF file you've downloaded from a server, you probably have a `Blob` instead of an URL. You can simply use `URL.createObjectURL()` to convert this `Blob` into something the PDF viewer can display:
@@ -152,6 +143,7 @@ Do you miss a configuration option? File an issue on the [project bug tracker](h
 | _Attribute_                | _mandatory?_ | _default value_ |                                                                                                                                                                                                                                                                                                                                            _description_                                                                                                                                                                                                                                                                                                                                             |
 | -------------------------- | :----------: | :-------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | src                        |     yes      |                 |                                                                                                                                                                                                                                                                                                                             defines the URL of the PDF file to display.                                                                                                                                                                                                                                                                                                                              |
+| backgroundColor            |      no      |        ?        |                                                                                                                                                                                                                                                                                                                                           background color                                                                                                                                                                                                                                                                                                                                           |
 | height                     |      no      |      80vh       |                                                                                                                                                                                                                                                                                                     define the height of the PDF window. By default, it's 80vh (i.e. 80% of the screen height).                                                                                                                                                                                                                                                                                                      |
 | useBrowserLocale           |      no      |      false      |                                                                                                                                                                                                                                                                             if true, the PDF viewer assumes the locale files are in the assets folder. If false, you are responsible for providing the translated texts.                                                                                                                                                                                                                                                                             |
 | delayFirstView             |      no      |        0        |                                                                                                                                                                  Number of milliseconds to wait between initializing the PDF viewer and loading the PDF file. Most users can let this parameter safely at it's default value of zero. Set this to 1000 or higher if you run into timing problems (typically caused by loading the locale files after the PDF files, so they are not available when the PDF viewer is initialized).                                                                                                                                                                   |
@@ -189,11 +181,7 @@ Don't forget to set the attribute `useBrowserLocale="true"` if you follow this a
 If you want to use the slow way, but prefer to load the language files from a different URL, add a link to your application like so:
 
 ```html
-<link
-  rel="resource"
-  type="application/l10n"
-  href="https://www.example.com/locale/locale.properties"
-/>
+<link rel="resource" type="application/l10n" href="https://www.example.com/locale/locale.properties" />
 ```
 
 In this case, don't set `useBrowserLocale` (or set it explicitely to false).
@@ -267,3 +255,4 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 | 0.9.12     |                                                                                                                                                         fixed the IE11 compatibility of [mobileFriendlyZoom] (dirty hack / temporary solution); correct positioning of the findbar when the sidebar is disabled                                                                                                                                                         |
 | 0.9.13     |                                                                                                                           Added some documentation about how to use a `Blob` (e.g. a PDF file downloaded from the server); fixed #21 (progress bar wouldn't hide on any instance of `<ngx-extended-pdf-viewer>`except for the fist instance)                                                                                                                            |
 | 0.9.14     |                                                                                                                                                                                                               #24 fixed the IE11 compatibility of [zoom]                                                                                                                                                                                                                |
+| 0.9.15     |                                                                                                                                                                                                 #27 removed the "j" hidden in the HTML code; updated to PDF.js 2.1.266                                                                                                                                                                                                  |
