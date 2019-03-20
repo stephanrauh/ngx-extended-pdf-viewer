@@ -42,8 +42,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
     this._src = url;
   }
 
+  private _height = '100%';
+
   @Input()
-  public height = '80vh';
+  public set height(h: string) {
+    if (h) {
+      this._height = h;
+    } else {
+      this.height = '100%';
+    }
+  }
+
+  public get height() {
+    return this._height;
+  }
 
   /**
    * If this flag is true, this components adds a link to the locale assets. The pdf viewer

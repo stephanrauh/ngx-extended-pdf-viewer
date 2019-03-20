@@ -9,6 +9,13 @@
       <mat-checkbox class="margin" [(ngModel)]="showSidebar">show sidebar button</mat-checkbox>
     </section>
     <section class="section">
+      <mat-checkbox class="margin" [(ngModel)]="height50">[height]='50%'</mat-checkbox>
+      <mat-checkbox class="margin" [(ngModel)]="height314">[height]='314px'</mat-checkbox>
+      <mat-checkbox class="margin" [(ngModel)]="height100">[height]='100%'</mat-checkbox>
+      <mat-checkbox class="margin" [(ngModel)]="height80vh">[height]='80vh'</mat-checkbox>
+      {{ height }}
+    </section>
+    <section class="section">
       <mat-checkbox class="margin" [(ngModel)]="zoom42" matTooltip="Changes apply after switching to another PDF file"
         >[zoom]="42"</mat-checkbox
       >
@@ -43,9 +50,10 @@
         [showSidebarButton]="showSidebar"
         [useBrowserLocale]="false"
         [showSidebarOnLoad]="true"
-        delayFirstView="50"
+        [delayFirstView]="50"
         [(zoom)]="zoom"
-        showPresentationModeButton="true"
+        [showPresentationModeButton]="true"
+        [height]="height"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -63,6 +71,7 @@
         [showSidebarOnLoad]="true"
         delayFirstView="50"
         [(zoom)]="zoom"
+        [height]="height"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -81,6 +90,7 @@
         [showSidebarOnLoad]="true"
         delayFirstView="50"
         [(zoom)]="zoom"
+        [height]="height"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>

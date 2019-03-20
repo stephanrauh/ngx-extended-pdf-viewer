@@ -13,6 +13,7 @@ export class AppComponent {
   public visible = { 0: true };
   public mobileFriendlyZoomPercent = false;
   public showSidebar = false;
+  public height: string | undefined = '80vh';
 
   public get zoomAuto(): boolean {
     return this.zoom === 'auto';
@@ -94,5 +95,60 @@ export class AppComponent {
     this.visible[1] = false;
     this.visible[2] = false;
     this.visible[3] = false;
+  }
+
+  public get height50() {
+    return this.height === '50%';
+  }
+
+  public set height50(value: boolean) {
+    if (value) {
+      this.height = '50%';
+    } else {
+      if (this.height === '50%') {
+        this.height = undefined;
+      }
+    }
+  }
+
+  public get height314() {
+    return this.height === '314px';
+  }
+
+  public set height314(value: boolean) {
+    if (value) {
+      this.height = '314px';
+    } else {
+      if (this.height === '314px') {
+        this.height = undefined;
+      }
+    }
+  }
+
+  public get height80vh() {
+    return this.height === '80vh';
+  }
+
+  public set height80vh(value: boolean) {
+    if (value) {
+      this.height = '80vh';
+    } else {
+      if (this.height === '80vh') {
+        this.height = undefined;
+      }
+    }
+  }
+  public get height100() {
+    return this.height === '100%';
+  }
+
+  public set height100(value: boolean) {
+    if (value) {
+      this.height = '100%';
+    } else {
+      if (this.height === '100%') {
+        this.height = undefined;
+      }
+    }
   }
 }
