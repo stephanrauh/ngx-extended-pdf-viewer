@@ -7,6 +7,7 @@
       <button *ngIf="hidden" mat-raised-button color="primary" class="margin" (click)="hidden = false">Show the PDF</button>
       <mat-checkbox class="margin" [(ngModel)]="mobileFriendlyZoomPercent">mobile-friendly zoom 200%</mat-checkbox>
       <mat-checkbox class="margin" [(ngModel)]="showSidebar">show sidebar button</mat-checkbox>
+      <mat-checkbox class="margin" [(ngModel)]="handTool">Hand tool</mat-checkbox>
     </section>
     <section class="section">
       <mat-checkbox class="margin" [(ngModel)]="height50">[height]='50%'</mat-checkbox>
@@ -54,6 +55,7 @@
         [(zoom)]="zoom"
         [showPresentationModeButton]="true"
         [height]="height"
+        [handTool]="handTool"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>

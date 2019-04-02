@@ -15,6 +15,8 @@ export class AppComponent {
   public showSidebar = false;
   public height: string | undefined = '80vh';
 
+  public handTool: boolean | undefined = undefined;
+
   public get zoomAuto(): boolean {
     return this.zoom === 'auto';
   }

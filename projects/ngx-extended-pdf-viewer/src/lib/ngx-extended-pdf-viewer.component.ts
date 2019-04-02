@@ -119,6 +119,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   @Input()
   public showSelectToolButton = true;
   @Input()
+  public handTool = false;
+  @Input()
   public showHandToolButton = true;
   @Input()
   public showScrollingButton = true;
@@ -328,6 +330,29 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
         if (!!this._src) {
           this.overrideDefaultSettings();
           (<any>window).PDFViewerApplication.open(this._src);
+        }
+      }
+      if ('zoom' in changes) {
+        let zoomAsNumber = this.zoom;
+        if (String(zoomAsNumber).endsWith('%')) {
+          zoomAsNumber = Number(String(zoomAsNumber).replace('%', '')) / 100;
+        } else if (!isNaN(Number(zoomAsNumber))) {
+          zoomAsNumber = Number(zoomAsNumber) / 100;
+        }
+        (<any>window).PDFViewerApplication.pdfViewer.currentScaleValue = zoomAsNumber;
+      }
+
+      if ('handTool' in changes) {
+        if (this.handTool) {
+          const menu = document.getElementsByClassName('handTool');
+          if (menu && menu[0]) {
+            (menu[0] as HTMLButtonElement).click();
+          }
+        } else {
+          const menu = document.getElementsByClassName('selectTool');
+          if (menu && menu[0]) {
+            (menu[0] as HTMLButtonElement).click();
+          }
         }
       }
     }
