@@ -1,5 +1,14 @@
 # ngx-extended-pdf-viewer
 
+<p>
+  <a href="https://www.npmjs.com/package/ngx-extended-pdf-viewer">
+    <img src="https://img.shields.io/npm/dm/ngx-extended-pdf-viewer.svg?style=flat" alt="downloads">
+  </a>
+  <a href="https://badge.fury.io/js/ngx-extended-pdf-viewer">
+    <img src="https://badge.fury.io/js/ngx-extended-pdf-viewer.svg" alt="npm version">
+  </a>
+</p>
+
 This library provides an embeddable
 PDF viewer component. It's different from other approaches like [ng2-pdf-viewer](https://vadimdez.github.io/ng2-pdf-viewer/) in that it shows the full suite of UI widgets. In other words, it looks exactly like the PDF viewer of your browser:
 
@@ -50,7 +59,7 @@ If you run into problems using &lt;ngx-extended-pdf-viewer&gt;, please open an i
 
 ## Compatibility to Bootstrap (and other CSS frameworks)
 
-Bootstrap interferes with the printing algorithm of pdf.js. Guard it with a media query to avoid unwanted effects, such as scaling the print to 65%. For example, if you're using SCSS and Bootstrap 4, include Bootstrap by adding this line to the global `styles.scss` file:
+Bootstrap interferes with the printing algorithm of pdf.js. Guard it with a media query to avoid unwanted effects, such as scaling the print to 65%. For example, if you're using SCSS and Bootstrap 4, remove the import of Bootstrap.min.css from the Angular.json file. Instead, import it by including Bootstrap by adding this line to the global `styles.scss` file:
 
 ```css
 @media screen {
