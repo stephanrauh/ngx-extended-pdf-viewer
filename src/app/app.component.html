@@ -8,6 +8,7 @@
       <mat-checkbox class="margin" [(ngModel)]="mobileFriendlyZoomPercent">mobile-friendly zoom 200%</mat-checkbox>
       <mat-checkbox class="margin" [(ngModel)]="showSidebar">show sidebar button</mat-checkbox>
       <mat-checkbox class="margin" [(ngModel)]="handTool">Hand tool</mat-checkbox>
+      <mat-form-field><input matInput type="number" class="margin" [(ngModel)]="page" placeholder="Page number" /> </mat-form-field>
     </section>
     <section class="section">
       <mat-checkbox class="margin" [(ngModel)]="height50">[height]='50%'</mat-checkbox>
@@ -56,6 +57,7 @@
         [showPresentationModeButton]="true"
         [height]="height"
         [handTool]="handTool"
+        [page]="page"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -74,6 +76,8 @@
         delayFirstView="50"
         [(zoom)]="zoom"
         [height]="height"
+        [handTool]="handTool"
+        [page]="page"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -93,6 +97,8 @@
         delayFirstView="50"
         [(zoom)]="zoom"
         [height]="height"
+        [handTool]="handTool"
+        [page]="page"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>

@@ -129,12 +129,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   @Input()
   public showPropertiesButton = true;
 
+  @Input()
+  public page: number | undefined = undefined;
+
+  @Output()
+  public pageChange = new EventEmitter<number | undefined>();
+
   /** Legal values: undefined, 'auto', 'page-actual', 'page_fit', 'page-width', or '50' (or any other percentage) */
   @Input()
   public zoom: string | number | undefined = undefined;
 
   @Output()
-  public zoomChange = new EventEmitter();
+  public zoomChange = new EventEmitter<string | number | undefined>();
 
   /** This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
    * This attribute is a string with a percent character at the end (e.g. "150%").
@@ -261,6 +267,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
     }, 0);
   }
 
+  public onPageChange(event: any): void {
+    const inputField = document.getElementById('pageNumber') as HTMLInputElement;
+    debugger;
+    let page: number | undefined = Number(inputField.value);
+    if (isNaN(page)) {
+      page = undefined;
+    }
+    this.pageChange.emit(page);
+  }
+
   private overrideDefaultSettings() {
     (<any>window).PDFViewerApplication.overrideHistory = {};
     if (this.zoom) {
@@ -292,6 +308,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       if (!!this._src) {
         (<any>window).PDFViewerApplication.open(this._src);
       }
+      setTimeout(() => {
+        (<any>window).PDFViewerApplication.page = 13;
+      }, 2000);
     }, this.delayFirstView);
 
     this.initialized = true;
@@ -354,6 +373,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
             (menu[0] as HTMLButtonElement).click();
           }
         }
+      }
+      if ('page' in changes) {
+        (<any>window).PDFViewerApplication.page = this.page;
       }
     }
   }
