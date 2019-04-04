@@ -2254,6 +2254,11 @@ function webViewerPageChanging(evt) {
       Stats.add(page, pageView.stats);
     }
   }
+  let pageNumberInput = document.getElementById('pageNumber');
+  if (pageNumberInput) {
+    var pageScrollEvent = new CustomEvent('page-change');
+    pageNumberInput.dispatchEvent(pageScrollEvent);
+  }
 }
 
 function webViewerVisibilityChange(evt) {

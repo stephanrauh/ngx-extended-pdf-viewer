@@ -267,14 +267,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
     }, 0);
   }
 
-  public onPageChange(event: any): void {
-    const inputField = document.getElementById('pageNumber') as HTMLInputElement;
-    debugger;
-    let page: number | undefined = Number(inputField.value);
-    if (isNaN(page)) {
-      page = undefined;
-    }
-    this.pageChange.emit(page);
+  public onPageChange(): void {
+    setTimeout(() => {
+      const inputField = document.getElementById('pageNumber') as HTMLInputElement;
+      let page: number | undefined = Number(inputField.value);
+      if (isNaN(page)) {
+        page = undefined;
+      }
+      console.log('Emitting page' + page);
+      this.pageChange.emit(page);
+    });
   }
 
   private overrideDefaultSettings() {

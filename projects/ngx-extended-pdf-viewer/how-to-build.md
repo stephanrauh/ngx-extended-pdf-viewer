@@ -16,12 +16,12 @@
 15. cd inlineImageFiles
 16. node index.js
 17. open projects/ngx-extended-pdf-viewer/src/lib/viewer-with-images.css and replace the first "html" by ".html" (roughly line 404)
-18. a few lines above that, add the qualifier ".html " in front of the "*" selector (roughly line 399)
+18. a few lines above that, add the qualifier ".html " in front of the "\*" selector (roughly line 399)
 19. in the same file: replace the first and the second "body" by ".body"
 20. in the same file: insert ".pdf-viewer " in front of "input", "button", and "select" (roughly line 419-421)
 21. cd ..
-22. cp -R ../mozillas-pdf.js/build/generic/web/locale/* ./projects/ngx-extended-pdf-viewer/src/assets/locale/
-23. cp ../mozillas-pdf.js/build/generic/build/pdf.* ./projects/ngx-extended-pdf-viewer/src/assets
+22. cp -R ../mozillas-pdf.js/build/generic/web/locale/\* ./projects/ngx-extended-pdf-viewer/src/assets/locale/
+23. cp ../mozillas-pdf.js/build/generic/build/pdf.\* ./projects/ngx-extended-pdf-viewer/src/assets
 24. cp ../mozillas-pdf.js/build/generic/web/viewer.js ./projects/ngx-extended-pdf-viewer/src/assets
 25. cd addBaseLanguages
 26. node index.js
@@ -66,14 +66,14 @@
     by
     throw Error("zlib not available in the browser");
 
-37. open ngx-extended-pdf-viewer/src/assets/viewer.js (roughly line 1155): locate "zoom = _app_options.AppOptions.get('defaultZoomValue');" and add these lines after this line:
+37. open ngx-extended-pdf-viewer/src/assets/viewer.js (roughly line 1155): locate "zoom = \_app_options.AppOptions.get('defaultZoomValue');" and add these lines after this line:
     // added to solve bug #6 and #11
     if (PDFViewerApplication.overrideHistory.zoom !== undefined) {
     zoom = PDFViewerApplication.overrideHistory.zoom;
     }
     // end of the bugfix solving #6 and #11
 
-38. A few lines below (roughly line 1176): find "_this5.setInitialView(hash, {" and insert these lines before:
+38. A few lines below (roughly line 1176): find "\_this5.setInitialView(hash, {" and insert these lines before:
     // added to solve bug #6 and #11
     if (PDFViewerApplication.overrideHistory.sidebarViewOnLoad !== undefined) {
     sidebarView = PDFViewerApplication.overrideHistory.sidebarViewOnLoad;
@@ -92,11 +92,18 @@
     document.body.classList.remove('loadingInProgress');
     }
 
-39) examine the history of https://github.com/mozilla/pdf.js/blob/master/web/viewer.html and copy the changes to ngx-extended-pdf-viewer.component.html. Warning: ngx-extended-pdf-viewer.component.html has a lot of additions to the original file. Proceed with care.
+40. In the same file, add these lines to the end of webViewerPageChanging (roughly lines 2258):
+    let pageNumberInput = document.getElementById('pageNumber');
+    if (pageNumberInput) {
+    var pageScrollEvent = new CustomEvent('page-change');
+    pageNumberInput.dispatchEvent(pageScrollEvent);
+    }
 
-40) (not necessary? npm run package )
-41) ng build ngx-extended-pdf-viewer
-42) npm run package
-43) ng serve
+41. examine the history of https://github.com/mozilla/pdf.js/blob/master/web/viewer.html and copy the changes to ngx-extended-pdf-viewer.component.html. Warning: ngx-extended-pdf-viewer.component.html has a lot of additions to the original file. Proceed with care.
+
+42. (not necessary? npm run package )
+43. ng build ngx-extended-pdf-viewer
+44. npm run package
+45. ng serve
 
 Note to myself: to deploy the library on npm, change to the folder `dist/ngx-extended-pdf-viewer` and run `npm publish` from there.
