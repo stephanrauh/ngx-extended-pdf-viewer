@@ -322,7 +322,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       }
 
       setTimeout(() => {
-        (<any>window).PDFViewerApplication.page = this.page;
+        if (this.page) {
+          (<any>window).PDFViewerApplication.page = this.page;
+        }
       }, 100);
     }, this.delayFirstView);
 
