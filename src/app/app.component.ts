@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PagesLoadedEvent } from 'projects/ngx-extended-pdf-viewer/src/lib/pages-loaded-event';
 
 @Component({
   selector: 'app-root',
@@ -95,7 +96,6 @@ export class AppComponent {
   }
 
   public hideOtherPDFs(): void {
-    console.log('Hiding');
     this.visible[0] = false;
     this.visible[1] = false;
     this.visible[2] = false;
@@ -155,5 +155,9 @@ export class AppComponent {
         this.height = undefined;
       }
     }
+  }
+
+  public onPagesLoaded(event: PagesLoadedEvent) {
+    console.log('Document loaded with ' + event.pagesCount + ' pages');
   }
 }

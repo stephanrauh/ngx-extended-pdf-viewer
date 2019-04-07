@@ -11,6 +11,7 @@ import {
   EventEmitter,
   ViewChild
 } from '@angular/core';
+import { PagesLoadedEvent } from './pages-loaded-event';
 
 declare var PDFJS: any;
 
@@ -139,6 +140,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   @Output()
   public pageChange = new EventEmitter<number | undefined>();
 
+  @Output()
+  public pagesLoaded = new EventEmitter<PagesLoadedEvent>();
+
   /** Legal values: undefined, 'auto', 'page-actual', 'page_fit', 'page-width', or '50' (or any other percentage) */
   @Input()
   public zoom: string | number | undefined = undefined;
@@ -259,7 +263,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
     setTimeout(() => {
       // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
       (<any>window).webViewerLoad();
-
       (<any>window).PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
       (<any>window).PDFViewerApplication.isViewerEmbedded = true;
       this.overrideDefaultSettings();
@@ -278,7 +281,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       if (isNaN(page)) {
         page = undefined;
       }
-      console.log('Emitting page' + page);
       this.pageChange.emit(page);
     });
   }
@@ -311,13 +313,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   public ngAfterViewInit() {
     this.initTimeout = setTimeout(() => {
       this.initTimeout = null;
+      (<any>window).PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
+        this.pagesLoaded.emit(x);
+      });
       // open a file in the viewer
       if (!!this._src) {
         (<any>window).PDFViewerApplication.open(this._src);
       }
+
       setTimeout(() => {
-        (<any>window).PDFViewerApplication.page = 13;
-      }, 2000);
+        (<any>window).PDFViewerApplication.page = this.page;
+      }, 100);
     }, this.delayFirstView);
 
     this.initialized = true;
@@ -382,7 +388,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
         }
       }
       if ('page' in changes) {
-        (<any>window).PDFViewerApplication.page = this.page;
+        if (this.page) {
+          (<any>window).PDFViewerApplication.page = this.page;
+        }
       }
       if ('filenameForDownload' in changes) {
         (<any>window).PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
