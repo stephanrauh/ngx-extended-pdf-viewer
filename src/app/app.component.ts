@@ -14,6 +14,7 @@ export class AppComponent {
   public mobileFriendlyZoomPercent = false;
   public showSidebar = false;
   public height: string | undefined = '80vh';
+  public filenameForDownload: string | undefined = undefined;
 
   public page: number | undefined = undefined;
 

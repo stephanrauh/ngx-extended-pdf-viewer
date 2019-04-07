@@ -68,6 +68,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   @Input()
   public backgroundColor = '#e8e8eb';
 
+  /** Allows the user to define the name of the file after clicking "download" */
+  @Input()
+  public filenameForDownload = 'document.pdf';
+
   public _showSidebarButton = true;
 
   public get showSidebarButton() {
@@ -290,6 +294,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       }
       (<any>window).PDFViewerApplication.overrideHistory.zoom = z;
     }
+    (<any>window).PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
     if (this.showSidebarButton) {
       if (this.showSidebarOnLoad !== undefined) {
         (<any>window).PDFViewerApplication.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
@@ -378,6 +383,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       }
       if ('page' in changes) {
         (<any>window).PDFViewerApplication.page = this.page;
+      }
+      if ('filenameForDownload' in changes) {
+        (<any>window).PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
       }
     }
   }

@@ -3863,7 +3863,8 @@ function isDataSchema(url) {
 }
 
 function getPDFFileNameFromURL(url) {
-  var defaultFilename = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'document.pdf';
+  var defaultFilename = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : PDFViewerApplication.appConfig.filenameForDownload;
+  if (PDFViewerApplication.appConfig.filenameForDownload) return PDFViewerApplication.appConfig.filenameForDownload;
 
   if (typeof url !== 'string') {
     return defaultFilename;

@@ -9,6 +9,9 @@
       <mat-checkbox class="margin" [(ngModel)]="showSidebar">show sidebar button</mat-checkbox>
       <mat-checkbox class="margin" [(ngModel)]="handTool">Hand tool</mat-checkbox>
       <mat-form-field><input matInput type="number" class="margin" [(ngModel)]="page" placeholder="Page number" /> </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" class="margin" [(ngModel)]="filenameForDownload" placeholder="Filename for download" />
+      </mat-form-field>
     </section>
     <section class="section">
       <mat-checkbox class="margin" [(ngModel)]="height50">[height]='50%'</mat-checkbox>
@@ -58,6 +61,7 @@
         [height]="height"
         [handTool]="handTool"
         [(page)]="page"
+        [filenameForDownload]="filenameForDownload"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -78,6 +82,7 @@
         [height]="height"
         [handTool]="handTool"
         [page]="page"
+        [filenameForDownload]="filenameForDownload"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -99,6 +104,7 @@
         [height]="height"
         [handTool]="handTool"
         [page]="page"
+        [filenameForDownload]="filenameForDownload"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
