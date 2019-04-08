@@ -73,7 +73,7 @@
         *ngIf="visible[1] && !hidden"
         [src]="'assets/pdfs/codpaste-teachingpack.pdf'"
         backgroundColor="#e8e8ef"
-        [mobileZoom]="mobileZoom"
+        [mobileZoom]="mobileFriendlyZoom"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebar"
         [useBrowserLocale]="false"
@@ -96,7 +96,7 @@
         *ngIf="visible[3] && !hidden"
         [src]="'assets/pdfs/plf_prob_document.pdf'"
         backgroundColor="#e8e8ef"
-        [mobileZoom]="mobileZoom"
+        [mobileZoom]="mobileFriendlyZoom"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebar"
         [useBrowserLocale]="false"
@@ -106,6 +106,64 @@
         [height]="height"
         [handTool]="handTool"
         [page]="page"
+        [filenameForDownload]="filenameForDownload"
+        (pagesLoaded)="onPagesLoaded($event)"
+      >
+      </ngx-extended-pdf-viewer>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="PDF without secondary toolbar">
+    <ng-template matTabContent>
+      <ngx-extended-pdf-viewer
+        *ngIf="visible[4] && !hidden"
+        [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"
+        backgroundColor="#ffffff"
+        [mobileFriendlyZoom]="mobileFriendlyZoom"
+        [showHandToolButton]="false"
+        [showPagingButtons]="false"
+        [showPropertiesButton]="false"
+        [showRotateButton]="false"
+        [showScrollingButton]="false"
+        [showRotateButton]="false"
+        [showSidebarOnLoad]="true"
+        [showSpreadButton]="false"
+        [showSelectToolButton]="false"
+        [useBrowserLocale]="false"
+        [delayFirstView]="50"
+        [(zoom)]="zoom"
+        [height]="height"
+        [handTool]="handTool"
+        [(page)]="page"
+        [filenameForDownload]="filenameForDownload"
+        (pagesLoaded)="onPagesLoaded($event)"
+      >
+      </ngx-extended-pdf-viewer>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="PDF without any toolbar">
+    <ng-template matTabContent>
+      <ngx-extended-pdf-viewer
+        *ngIf="visible[4] && !hidden"
+        [src]="'assets/pdfs/pdf-sample.pdf'"
+        backgroundColor="#fffffe"
+        [mobileFriendlyZoom]="mobileFriendlyZoom"
+        [showBookmarkButton]="false"
+        [showDownloadButton]="false"
+        [showFindButton]="false"
+        [showOpenFileButton]="false"
+        [showPagingButtons]="false"
+        [showPresentationModeButton]="false"
+        [showPrintButton]="false"
+        [showPropertiesButton]="false"
+        [showSidebarButton]="false"
+        [showSecondaryToolbarButton]="false"
+        [showZoomButtons]="false"
+        [useBrowserLocale]="false"
+        [delayFirstView]="50"
+        [(zoom)]="zoom"
+        [height]="height"
+        [handTool]="handTool"
+        [(page)]="page"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
       >

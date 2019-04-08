@@ -8,13 +8,15 @@
   "keywords": [
     "PDF",
     "pdfjs",
+    "PDF viewer",
     "Angular",
     "ng2",
     "Angular 6",
-    "Angular 7"
+    "Angular 7",
+    "Angular 8"
   ],
   "peerDependencies": {
-    "@angular/common": "^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^7.1.0 || ^7.2.0 || ^7.3.0",
-    "@angular/core": "^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^7.1.0 || ^7.2.0 || ^7.3.0"
+    "@angular/common": "^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^7.1.0 || ^7.2.0 || ^7.3.0 || ^8.0.0",
+    "@angular/core": "^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^7.1.0 || ^7.2.0 || ^7.3.0 || ^8.0.0"
   }
 }

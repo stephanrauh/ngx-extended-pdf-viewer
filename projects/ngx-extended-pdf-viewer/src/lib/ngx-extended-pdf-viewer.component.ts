@@ -262,6 +262,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   ngOnInit() {
     setTimeout(() => {
       // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
+      if (!this.isSecondaryMenuVisible()) {
+        this.showSecondaryToolbarButton = false;
+      }
       (<any>window).webViewerLoad();
       (<any>window).PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
       (<any>window).PDFViewerApplication.isViewerEmbedded = true;
@@ -358,6 +361,24 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
     //    (<any>window).PDFViewerApplication = null;
   }
 
+  private isSecondaryMenuVisible(): boolean {
+    console.log('Hey');
+    const visible =
+      this.showHandToolButton &&
+      this.showPagingButtons &&
+      this.showPropertiesButton &&
+      this.showRotateButton &&
+      this.showScrollingButton &&
+      this.showRotateButton &&
+      this.showSidebarOnLoad &&
+      this.showSpreadButton &&
+      this.showSelectToolButton;
+    if (visible) {
+      return true;
+    }
+    return false;
+  }
+
   public ngOnChanges(changes: SimpleChanges) {
     if (this.initialized) {
       if ('src' in changes) {
@@ -396,6 +417,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       }
       if ('filenameForDownload' in changes) {
         (<any>window).PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
+      }
+
+      if (this.isSecondaryMenuVisible()) {
+        this.showSecondaryToolbarButton = false;
       }
     }
   }
