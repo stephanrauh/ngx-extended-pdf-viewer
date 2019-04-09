@@ -38,6 +38,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   /** store the timeout id so it can be canceled if user leaves the page before the PDF is shown */
   private initTimeout: any;
 
+  public primaryMenuVisible = true;
+
   @Input()
   public set src(url: string) {
     this._src = url;
@@ -74,6 +76,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   public filenameForDownload = 'document.pdf';
 
   public _showSidebarButton = true;
+
+  public viewerPositionTop = '32px';
 
   public get showSidebarButton() {
     return this._showSidebarButton;
@@ -220,20 +224,31 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
     }
     return '32px';
   }
-  public get viewerPositionTop(): string {
+  public calcViewerPositionTop(): void {
     if (this._top) {
-      return this._top;
+      this.viewerPositionTop = this._top;
+      return;
     }
     if (this.mobileFriendlyZoom) {
       if (this.mobileFriendlyZoom.endsWith('%')) {
         const zoom = Number(this.mobileFriendlyZoom.substring(0, this.mobileFriendlyZoom.length - 1));
-        return (1 + 0.32 * zoom).toString() + 'px';
+        if (!this.isPrimaryMenuVisible()) {
+          this.viewerPositionTop = '0';
+        } else {
+          this.viewerPositionTop = (1 + 0.32 * zoom).toString() + 'px';
+        }
+        return;
       }
       if (this.mobileFriendlyZoom.endsWith('px')) {
-        return this.mobileFriendlyZoom;
+        this.viewerPositionTop = this.mobileFriendlyZoom;
+        return;
       }
     }
-    return '32px';
+    if (this.isPrimaryMenuVisible()) {
+      this.viewerPositionTop = '32px';
+    } else {
+      this.viewerPositionTop = '0';
+    }
   }
 
   constructor() {}
@@ -262,9 +277,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   ngOnInit() {
     setTimeout(() => {
       // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
+      this.primaryMenuVisible = true;
       if (!this.isSecondaryMenuVisible()) {
         this.showSecondaryToolbarButton = false;
       }
+      if (!this.showSecondaryToolbarButton) {
+        if (!this.isPrimaryMenuVisible()) {
+          this.primaryMenuVisible = false;
+        }
+      }
+      this.calcViewerPositionTop();
       (<any>window).webViewerLoad();
       (<any>window).PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
       (<any>window).PDFViewerApplication.isViewerEmbedded = true;
@@ -356,23 +378,39 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
         }
       }
       app.eventBus = null;
-      //      app.PDFViewer = null;
     }
-    //    (<any>window).PDFViewerApplication = null;
   }
 
   private isSecondaryMenuVisible(): boolean {
-    console.log('Hey');
     const visible =
-      this.showHandToolButton &&
-      this.showPagingButtons &&
-      this.showPropertiesButton &&
-      this.showRotateButton &&
-      this.showScrollingButton &&
-      this.showRotateButton &&
-      this.showSidebarOnLoad &&
-      this.showSpreadButton &&
+      this.showHandToolButton ||
+      this.showPagingButtons ||
+      this.showPropertiesButton ||
+      this.showRotateButton ||
+      this.showScrollingButton ||
+      this.showRotateButton ||
+      this.showSpreadButton ||
       this.showSelectToolButton;
+    if (visible) {
+      return true;
+    }
+    return false;
+  }
+
+  private isPrimaryMenuVisible(): boolean {
+    const visible =
+      this.showBookmarkButton ||
+      this.showDownloadButton ||
+      this.showFindButton ||
+      this.showOpenFileButton ||
+      this.showPagingButtons ||
+      this.showPresentationModeButton ||
+      this.showPrintButton ||
+      this.showPropertiesButton ||
+      this.showSidebarButton ||
+      this.showSecondaryToolbarButton ||
+      this.showZoomButtons;
+
     if (visible) {
       return true;
     }
@@ -419,9 +457,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
         (<any>window).PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
       }
 
-      if (this.isSecondaryMenuVisible()) {
+      this.primaryMenuVisible = true;
+      if (!this.isSecondaryMenuVisible()) {
         this.showSecondaryToolbarButton = false;
       }
+      if (!this.showSecondaryToolbarButton) {
+        if (!this.isPrimaryMenuVisible()) {
+          this.primaryMenuVisible = false;
+        }
+      }
+      this.calcViewerPositionTop();
+      console.log('calc');
     }
   }
 }

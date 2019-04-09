@@ -388,7 +388,7 @@
           </div>
           <!-- secondaryToolbar -->
 
-          <div class="toolbar">
+          <div class="toolbar" [class.hidden]="!primaryMenuVisible">
             <div
               id="toolbarContainer"
               [style.zoom]="mobileFriendlyZoom"
