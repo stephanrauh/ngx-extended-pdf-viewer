@@ -85,6 +85,7 @@
         [page]="page"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
+        [spread]="'even'"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -136,6 +137,7 @@
         [(page)]="page"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
+        [spread]="'odd'"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -166,6 +168,7 @@
         [(page)]="page"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
+        [spread]="'off'"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>

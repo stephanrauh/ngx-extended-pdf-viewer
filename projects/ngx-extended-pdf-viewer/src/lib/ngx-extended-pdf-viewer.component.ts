@@ -142,6 +142,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   public showPropertiesButton = true;
 
   @Input()
+  public spread: 'off' | 'even' | 'odd';
+
+  @Output()
+  public spreadChange = new EventEmitter<'off' | 'even' | 'odd'>();
+
+  @Input()
   public page: number | undefined = undefined;
 
   @Output()
@@ -329,6 +335,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
     });
   }
 
+  public onSpreadChange(newSpread: 'off' | 'even' | 'odd'): void {
+    this.spreadChange.emit(newSpread);
+  }
+
   private overrideDefaultSettings() {
     (<any>window).PDFViewerApplication.overrideHistory = {};
     if (this.zoom) {
@@ -351,6 +361,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       (<any>window).PDFViewerApplication.sidebarViewOnLoad = 0;
       (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = 0;
       (<any>window).PDFViewerApplication.overrideHistory.sidebarViewOnLoad = 0;
+    }
+
+    if (this.spread === 'even') {
+      (<any>window).PDFViewerApplication.spreadModeOnLoad = 2;
+    } else if (this.spread === 'odd') {
+      (<any>window).PDFViewerApplication.spreadModeOnLoad = 1;
+    } else {
+      (<any>window).PDFViewerApplication.spreadModeOnLoad = 0;
     }
   }
 

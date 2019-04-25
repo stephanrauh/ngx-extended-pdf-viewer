@@ -343,6 +343,7 @@
                 title="Do not join page spreads"
                 tabindex="65"
                 data-l10n-id="spread_none"
+                (click)="onSpreadChange('off')"
               >
                 <span data-l10n-id="spread_none_label">No Spreads</span>
               </button>
@@ -353,6 +354,8 @@
                 title="Join page spreads starting with odd-numbered pages"
                 tabindex="66"
                 data-l10n-id="spread_odd"
+                (click)="onSpreadChange('odd')"
+
               >
                 <span data-l10n-id="spread_odd_label">Odd Spreads</span>
               </button>
@@ -363,6 +366,8 @@
                 title="Join page spreads starting with even-numbered pages"
                 tabindex="67"
                 data-l10n-id="spread_even"
+                (click)="onSpreadChange('even')"
+
               >
                 <span data-l10n-id="spread_even_label">Even Spreads</span>
               </button>
