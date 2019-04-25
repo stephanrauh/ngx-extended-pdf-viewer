@@ -54,6 +54,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
     } else {
       this.height = '100%';
     }
+    setTimeout(() => {
+      this.checkHeight();
+    });
   }
 
   public get height() {
@@ -275,6 +278,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   }
 
   ngOnInit() {
+    this.checkHeight();
+
     setTimeout(() => {
       // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
       this.primaryMenuVisible = true;
@@ -297,6 +302,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
         document.getElementsByTagName('body')[0].appendChild(pc);
       }
     }, 0);
+  }
+
+  public checkHeight(): void {
+    const container = document.getElementsByClassName('zoom')[0];
+    if (container.clientHeight === 0) {
+      const available = window.innerHeight;
+      const rect = container.getBoundingClientRect();
+      const top = rect.top;
+      if (available - top > 100) {
+        this._height = available - top + 'px';
+      } else {
+        this._height = '100px';
+      }
+    }
   }
 
   public onPageChange(): void {
