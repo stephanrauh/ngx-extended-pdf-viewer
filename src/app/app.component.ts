@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { PagesLoadedEvent } from 'projects/ngx-extended-pdf-viewer/src/lib/pages-loaded-event';
+import { pdfBase64 } from './pdfBase64';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,8 @@ export class AppComponent {
   public page: number | undefined = undefined;
 
   public handTool: boolean | undefined = undefined;
+
+  public base64 = this.base64ToArrayBuffer(pdfBase64);
 
   public get zoomAuto(): boolean {
     return this.zoom === 'auto';
@@ -159,5 +162,15 @@ export class AppComponent {
 
   public onPagesLoaded(event: PagesLoadedEvent) {
     console.log('Document loaded with ' + event.pagesCount + ' pages');
+  }
+
+  private base64ToArrayBuffer(base64: string) {
+    const binary_string = window.atob(base64);
+    const len = binary_string.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binary_string.charCodeAt(i);
+    }
+    return bytes.buffer;
   }
 }

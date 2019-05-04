@@ -3,14 +3,18 @@
 <mat-card>
   <mat-card-content>
     <section class="section">
-      <button *ngIf="!hidden" mat-raised-button color="primary" class="margin" (click)="hidden = true">Hide the PDF</button>
-      <button *ngIf="hidden" mat-raised-button color="primary" class="margin" (click)="hidden = false">Show the PDF</button>
+      <button *ngIf="!hidden" mat-raised-button color="primary" class="margin" (click)="hidden = true">Hide the
+        PDF</button>
+      <button *ngIf="hidden" mat-raised-button color="primary" class="margin" (click)="hidden = false">Show the
+        PDF</button>
       <mat-checkbox class="margin" [(ngModel)]="mobileFriendlyZoomPercent">mobile-friendly zoom 200%</mat-checkbox>
       <mat-checkbox class="margin" [(ngModel)]="showSidebar">show sidebar button</mat-checkbox>
       <mat-checkbox class="margin" [(ngModel)]="handTool">Hand tool</mat-checkbox>
-      <mat-form-field><input matInput type="number" class="margin" [(ngModel)]="page" placeholder="Page number" /> </mat-form-field>
+      <mat-form-field><input matInput type="number" class="margin" [(ngModel)]="page" placeholder="Page number" />
+      </mat-form-field>
       <mat-form-field>
-        <input matInput type="text" class="margin" [(ngModel)]="filenameForDownload" placeholder="Filename for download" />
+        <input matInput type="text" class="margin" [(ngModel)]="filenameForDownload"
+          placeholder="Filename for download" />
       </mat-form-field>
     </section>
     <section class="section">
@@ -21,24 +25,18 @@
       {{ height }}
     </section>
     <section class="section">
-      <mat-checkbox class="margin" [(ngModel)]="zoom42" matTooltip="Changes apply after switching to another PDF file"
-        >[zoom]="42"</mat-checkbox
-      >
-      <mat-checkbox class="margin" [(ngModel)]="zoom84percent" matTooltip="Changes apply after switching to another PDF file"
-        >[zoom]="'84%''"</mat-checkbox
-      >
-      <mat-checkbox class="margin" [(ngModel)]="zoomAuto" matTooltip="Changes apply after switching to another PDF file"
-        >[zoom]="'auto'"</mat-checkbox
-      >
-      <mat-checkbox class="margin" [(ngModel)]="zoomPageActual" matTooltip="Changes apply after switching to another PDF file"
-        >[zoom]="'page-actual'"</mat-checkbox
-      >
-      <mat-checkbox class="margin" [(ngModel)]="zoomPageFit" matTooltip="Changes apply after switching to another PDF file"
-        >[zoom]="'page-fit'"</mat-checkbox
-      >
-      <mat-checkbox class="margin" [(ngModel)]="zoomPageWidth" matTooltip="Changes apply after switching to another PDF file"
-        >[zoom]="'page-width'"</mat-checkbox
-      >
+      <mat-checkbox class="margin" [(ngModel)]="zoom42" matTooltip="Changes apply after switching to another PDF file">
+        [zoom]="42"</mat-checkbox>
+      <mat-checkbox class="margin" [(ngModel)]="zoom84percent"
+        matTooltip="Changes apply after switching to another PDF file">[zoom]="'84%''"</mat-checkbox>
+      <mat-checkbox class="margin" [(ngModel)]="zoomAuto"
+        matTooltip="Changes apply after switching to another PDF file">[zoom]="'auto'"</mat-checkbox>
+      <mat-checkbox class="margin" [(ngModel)]="zoomPageActual"
+        matTooltip="Changes apply after switching to another PDF file">[zoom]="'page-actual'"</mat-checkbox>
+      <mat-checkbox class="margin" [(ngModel)]="zoomPageFit"
+        matTooltip="Changes apply after switching to another PDF file">[zoom]="'page-fit'"</mat-checkbox>
+      <mat-checkbox class="margin" [(ngModel)]="zoomPageWidth"
+        matTooltip="Changes apply after switching to another PDF file">[zoom]="'page-width'"</mat-checkbox>
       <div class="margin">resulting zoom factor: {{ zoom }}</div>
     </section>
   </mat-card-content>
@@ -46,131 +44,71 @@
 <mat-tab-group (selectedTabChange)="activateTab($event.index)">
   <mat-tab label="BootsFaces Deep-Dive PDF">
     <ng-template matTabContent>
-      <ngx-extended-pdf-viewer
-        *ngIf="visible[0] && !hidden"
-        [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"
-        backgroundColor="#e8e8ef"
-        [mobileFriendlyZoom]="mobileFriendlyZoom"
-        [showZoomButtons]="true"
-        [showSidebarButton]="showSidebar"
-        [useBrowserLocale]="false"
-        [showSidebarOnLoad]="true"
-        [delayFirstView]="50"
-        [(zoom)]="zoom"
-        [showPresentationModeButton]="true"
-        [height]="height"
-        [handTool]="handTool"
-        [(page)]="page"
-        [filenameForDownload]="filenameForDownload"
-        (pagesLoaded)="onPagesLoaded($event)"
-      >
+      <ngx-extended-pdf-viewer *ngIf="visible[0] && !hidden" [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"
+        backgroundColor="#e8e8ef" [mobileFriendlyZoom]="mobileFriendlyZoom" [showZoomButtons]="true"
+        [showSidebarButton]="showSidebar" [useBrowserLocale]="false" [showSidebarOnLoad]="true" [delayFirstView]="50"
+        [(zoom)]="zoom" [showPresentationModeButton]="true" [height]="height" [handTool]="handTool" [(page)]="page"
+        [filenameForDownload]="filenameForDownload" (pagesLoaded)="onPagesLoaded($event)">
       </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
   <mat-tab label="Codpaste PDF">
     <ng-template matTabContent>
-      <ngx-extended-pdf-viewer
-        *ngIf="visible[1] && !hidden"
-        [src]="'assets/pdfs/codpaste-teachingpack.pdf'"
-        backgroundColor="#e8e8ef"
-        [mobileZoom]="mobileFriendlyZoom"
-        [showZoomButtons]="true"
-        [showSidebarButton]="showSidebar"
-        [useBrowserLocale]="false"
-        [showSidebarOnLoad]="true"
-        delayFirstView="50"
-        [(zoom)]="zoom"
-        [height]="height"
-        [handTool]="handTool"
-        [page]="page"
-        [filenameForDownload]="filenameForDownload"
-        (pagesLoaded)="onPagesLoaded($event)"
-        [spread]="'even'"
-      >
+      <ngx-extended-pdf-viewer *ngIf="visible[1] && !hidden" [src]="'assets/pdfs/codpaste-teachingpack.pdf'"
+        backgroundColor="#e8e8ef" [mobileZoom]="mobileFriendlyZoom" [showZoomButtons]="true"
+        [showSidebarButton]="showSidebar" [useBrowserLocale]="false" [showSidebarOnLoad]="true" delayFirstView="50"
+        [(zoom)]="zoom" [height]="height" [handTool]="handTool" [page]="page"
+        [filenameForDownload]="filenameForDownload" (pagesLoaded)="onPagesLoaded($event)" [spread]="'even'">
       </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
-  <mat-tab label="No PDF"> <h1>Tab without a PDF</h1> </mat-tab>
+  <mat-tab label="No PDF">
+    <h1>Tab without a PDF</h1>
+  </mat-tab>
   <mat-tab label="Another PDF" (click)="hideOtherPDFs()">
     <ng-template matTabContent>
-      <ngx-extended-pdf-viewer
-        *ngIf="visible[3] && !hidden"
-        [src]="'assets/pdfs/plf_prob_document.pdf'"
-        backgroundColor="#e8e8ef"
-        [mobileZoom]="mobileFriendlyZoom"
-        [showZoomButtons]="true"
-        [showSidebarButton]="showSidebar"
-        [useBrowserLocale]="false"
-        [showSidebarOnLoad]="true"
-        delayFirstView="50"
-        [(zoom)]="zoom"
-        [height]="height"
-        [handTool]="handTool"
-        [page]="page"
-        [filenameForDownload]="filenameForDownload"
-        (pagesLoaded)="onPagesLoaded($event)"
-      >
+      <ngx-extended-pdf-viewer *ngIf="visible[3] && !hidden" [src]="'assets/pdfs/plf_prob_document.pdf'"
+        backgroundColor="#e8e8ef" [mobileZoom]="mobileFriendlyZoom" [showZoomButtons]="true"
+        [showSidebarButton]="showSidebar" [useBrowserLocale]="false" [showSidebarOnLoad]="true" delayFirstView="50"
+        [(zoom)]="zoom" [height]="height" [handTool]="handTool" [page]="page"
+        [filenameForDownload]="filenameForDownload" (pagesLoaded)="onPagesLoaded($event)">
       </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
   <mat-tab label="PDF without secondary toolbar">
     <ng-template matTabContent>
-      <ngx-extended-pdf-viewer
-        *ngIf="visible[4] && !hidden"
-        [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"
-        backgroundColor="#ffffff"
-        [mobileFriendlyZoom]="mobileFriendlyZoom"
-        [showHandToolButton]="false"
-        [showPagingButtons]="false"
-        [showPropertiesButton]="false"
-        [showRotateButton]="false"
-        [showScrollingButton]="false"
-        [showRotateButton]="false"
-        [showSidebarOnLoad]="true"
-        [showSpreadButton]="false"
-        [showSelectToolButton]="false"
-        [useBrowserLocale]="false"
-        [delayFirstView]="50"
-        [(zoom)]="zoom"
-        [height]="height"
-        [handTool]="handTool"
-        [(page)]="page"
-        [filenameForDownload]="filenameForDownload"
-        (pagesLoaded)="onPagesLoaded($event)"
-        [spread]="'odd'"
-      >
+      <ngx-extended-pdf-viewer *ngIf="visible[4] && !hidden" [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"
+        backgroundColor="#ffffff" [mobileFriendlyZoom]="mobileFriendlyZoom" [showHandToolButton]="false"
+        [showPagingButtons]="false" [showPropertiesButton]="false" [showRotateButton]="false"
+        [showScrollingButton]="false" [showRotateButton]="false" [showSidebarOnLoad]="true" [showSpreadButton]="false"
+        [showSelectToolButton]="false" [useBrowserLocale]="false" [delayFirstView]="50" [(zoom)]="zoom"
+        [height]="height" [handTool]="handTool" [(page)]="page" [filenameForDownload]="filenameForDownload"
+        (pagesLoaded)="onPagesLoaded($event)" [spread]="'odd'">
       </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
   <mat-tab label="PDF without any toolbar">
     <ng-template matTabContent>
-      <ngx-extended-pdf-viewer
-        *ngIf="visible[5] && !hidden"
-        [src]="'assets/pdfs/pdf-sample.pdf'"
-        backgroundColor="#fffffe"
-        [mobileFriendlyZoom]="mobileFriendlyZoom"
-        [showBookmarkButton]="false"
-        [showDownloadButton]="false"
-        [showFindButton]="false"
-        [showOpenFileButton]="false"
-        [showPagingButtons]="false"
-        [showPresentationModeButton]="false"
-        [showPrintButton]="false"
-        [showPropertiesButton]="false"
-        [showSidebarButton]="false"
-        [showSecondaryToolbarButton]="false"
-        [showZoomButtons]="false"
-        [useBrowserLocale]="false"
-        [delayFirstView]="50"
-        [(zoom)]="zoom"
-        [height]="height"
-        [handTool]="handTool"
-        [(page)]="page"
-        [filenameForDownload]="filenameForDownload"
-        (pagesLoaded)="onPagesLoaded($event)"
-        [spread]="'off'"
-      >
+      <ngx-extended-pdf-viewer *ngIf="visible[5] && !hidden" [src]="'assets/pdfs/pdf-sample.pdf'"
+        backgroundColor="#fffffe" [mobileFriendlyZoom]="mobileFriendlyZoom" [showBookmarkButton]="false"
+        [showDownloadButton]="false" [showFindButton]="false" [showOpenFileButton]="false" [showPagingButtons]="false"
+        [showPresentationModeButton]="false" [showPrintButton]="false" [showPropertiesButton]="false"
+        [showSidebarButton]="false" [showSecondaryToolbarButton]="false" [showZoomButtons]="false"
+        [useBrowserLocale]="false" [delayFirstView]="50" [(zoom)]="zoom" [height]="height" [handTool]="handTool"
+        [(page)]="page" [filenameForDownload]="filenameForDownload" (pagesLoaded)="onPagesLoaded($event)"
+        [spread]="'off'">
       </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
+  <mat-tab label="Base64" (click)="hideOtherPDFs()">
+    <ng-template matTabContent>
+      <ngx-extended-pdf-viewer *ngIf="visible[6] && !hidden" [src]="base64" backgroundColor="#e8e8ef"
+        [mobileZoom]="mobileFriendlyZoom" [showZoomButtons]="true" [showSidebarButton]="showSidebar"
+        [useBrowserLocale]="false" [showSidebarOnLoad]="true" delayFirstView="50" [(zoom)]="zoom" [height]="height"
+        [handTool]="handTool" [page]="page" [filenameForDownload]="filenameForDownload"
+        (pagesLoaded)="onPagesLoaded($event)">
+      </ngx-extended-pdf-viewer>
+    </ng-template>
+  </mat-tab>
+
 </mat-tab-group>
