@@ -100,13 +100,13 @@
     }
 
 41. In the same file, find function getPDFFileNameFromURL(url), locate "var defaultFilename" and insert this line after that (roughly line 3867):
-  if (PDFViewerApplication.appConfig.filenameForDownload) return PDFViewerApplication.appConfig.filenameForDownload;
+    if (PDFViewerApplication.appConfig.filenameForDownload) return PDFViewerApplication.appConfig.filenameForDownload;
 
 42. examine the history of https://github.com/mozilla/pdf.js/blob/master/web/viewer.html and copy the changes to ngx-extended-pdf-viewer.component.html. Warning: ngx-extended-pdf-viewer.component.html has a lot of additions to the original file. Proceed with care.
 
-43. (not necessary? npm run package )
+43. npm run win-package (or npm run unix-package, depending on your OS) (this command copies the viewer files to the dist folder so you can run the demo)
 44. ng build ngx-extended-pdf-viewer
-45. npm run package
+45. npm run win-package (or unix-package)
 46. ng serve
 
 Note to myself: to deploy the library on npm, change to the folder `dist/ngx-extended-pdf-viewer` and run `npm publish` from there.
