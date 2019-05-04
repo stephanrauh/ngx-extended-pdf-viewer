@@ -22,7 +22,7 @@ declare var PDFJS: any;
   encapsulation: ViewEncapsulation.None
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-  private _src: string;
+  private _src: string | ArrayBuffer;
 
   private initialized = false;
 
@@ -41,8 +41,37 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   public primaryMenuVisible = true;
 
   @Input()
-  public set src(url: string) {
-    this._src = url;
+  public set src(url: string | ArrayBuffer | Uint8Array) {
+    if (url instanceof Uint8Array) {
+      this._src = (<Uint8Array>url).buffer;
+    } else if (url instanceof Blob) {
+      this._src = URL.createObjectURL(url);
+    } else if (typeof url === 'string') {
+      this._src = url;
+      if (url.length > 980) {
+        // minimal length of a base64 encoded PDF
+        if (url.length % 4 === 0) {
+          if (/^[a-zA-Z\d\/+]+={0,2}$/.test(url)) {
+            console.warn(
+              'The URL looks like a base64 encoded string. If so, please use the attribute base64 instead of src'
+            );
+          }
+        }
+      }
+    } else {
+      this._src = url;
+    }
+  }
+
+  @Input()
+  public set base64Src(base64: string) {
+    const binary_string = window.atob(base64);
+    const len = binary_string.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binary_string.charCodeAt(i);
+    }
+    this.src = bytes.buffer;
   }
 
   private _height = '100%';

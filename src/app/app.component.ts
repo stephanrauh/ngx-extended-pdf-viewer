@@ -22,7 +22,7 @@ export class AppComponent {
 
   public handTool: boolean | undefined = undefined;
 
-  public base64 = this.base64ToArrayBuffer(pdfBase64);
+  public base64 = pdfBase64; // this.base64ToArrayBuffer(pdfBase64);
 
   public get zoomAuto(): boolean {
     return this.zoom === 'auto';

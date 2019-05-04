@@ -102,7 +102,7 @@
   </mat-tab>
   <mat-tab label="Base64" (click)="hideOtherPDFs()">
     <ng-template matTabContent>
-      <ngx-extended-pdf-viewer *ngIf="visible[6] && !hidden" [src]="base64" backgroundColor="#e8e8ef"
+      <ngx-extended-pdf-viewer *ngIf="visible[6] && !hidden" [base64Src]="base64" backgroundColor="#e8e8ef"
         [mobileZoom]="mobileFriendlyZoom" [showZoomButtons]="true" [showSidebarButton]="showSidebar"
         [useBrowserLocale]="false" [showSidebarOnLoad]="true" delayFirstView="50" [(zoom)]="zoom" [height]="height"
         [handTool]="handTool" [page]="page" [filenameForDownload]="filenameForDownload"
@@ -110,5 +110,4 @@
       </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
-
 </mat-tab-group>
