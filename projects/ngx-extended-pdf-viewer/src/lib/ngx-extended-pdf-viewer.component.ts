@@ -394,10 +394,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
 
     if (this.spread === 'even') {
       (<any>window).PDFViewerApplication.spreadModeOnLoad = 2;
+      this.onSpreadChange('even');
     } else if (this.spread === 'odd') {
       (<any>window).PDFViewerApplication.spreadModeOnLoad = 1;
+      this.onSpreadChange('odd');
     } else {
       (<any>window).PDFViewerApplication.spreadModeOnLoad = 0;
+      this.onSpreadChange('off');
     }
   }
 
