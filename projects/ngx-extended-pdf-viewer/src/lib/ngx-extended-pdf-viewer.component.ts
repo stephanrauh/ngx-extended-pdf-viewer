@@ -52,9 +52,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
         // minimal length of a base64 encoded PDF
         if (url.length % 4 === 0) {
           if (/^[a-zA-Z\d\/+]+={0,2}$/.test(url)) {
-            console.warn(
-              'The URL looks like a base64 encoded string. If so, please use the attribute base64 instead of src'
-            );
+            console.warn('The URL looks like a base64 encoded string. If so, please use the attribute base64 instead of src');
           }
         }
       }
@@ -74,10 +72,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
     this.src = bytes.buffer;
   }
 
+  public minHeight: string | undefined = undefined;
+
   private _height = '100%';
 
   @Input()
   public set height(h: string) {
+    this.minHeight = undefined;
     if (h) {
       this._height = h;
     } else {
@@ -313,8 +314,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   }
 
   ngOnInit() {
-    this.checkHeight();
-
     setTimeout(() => {
       // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
       this.primaryMenuVisible = true;
@@ -341,15 +340,19 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
 
   public checkHeight(): void {
     const container = document.getElementsByClassName('zoom')[0];
-    if (container.clientHeight === 0) {
+    if (container.clientHeight === 0 && this._height.includes('%')) {
       const available = window.innerHeight;
       const rect = container.getBoundingClientRect();
       const top = rect.top;
-      if (available - top > 100) {
-        this._height = available - top + 'px';
+      let mh = available - top;
+      const factor = Number(this._height.replace('%', ''));
+      mh = (mh * factor) / 100;
+      if (mh > 100) {
+        this.minHeight = mh + 'px';
       } else {
-        this._height = '100px';
+        this.minHeight = '100px';
       }
+      console.log('Set minimum height to ' + this.minHeight);
     }
   }
 
@@ -410,6 +413,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       (<any>window).PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
         this.pagesLoaded.emit(x);
       });
+      this.checkHeight();
       // open a file in the viewer
       if (!!this._src) {
         (<any>window).PDFViewerApplication.open(this._src);
