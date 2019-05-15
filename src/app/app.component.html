@@ -45,7 +45,7 @@
   <mat-tab label="BootsFaces Deep-Dive PDF">
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer *ngIf="visible[0] && !hidden" [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"
-        backgroundColor="#e8e8ef" [mobileFriendlyZoom]="mobileFriendlyZoom" [showZoomButtons]="true"
+        backgroundColor="#ffffff" [mobileFriendlyZoom]="mobileFriendlyZoom" [showZoomButtons]="true"
         [showSidebarButton]="showSidebar" [useBrowserLocale]="false" [showSidebarOnLoad]="true" [delayFirstView]="50"
         [(zoom)]="zoom" [showPresentationModeButton]="true" [height]="height" [handTool]="handTool" [(page)]="page"
         [filenameForDownload]="filenameForDownload" (pagesLoaded)="onPagesLoaded($event)">
@@ -54,6 +54,9 @@
   </mat-tab>
   <mat-tab label="Codpaste PDF">
     <ng-template matTabContent>
+      <small>Copyright hint: this PDF has been published on <a
+          href="http://peoplelikeus.org/2007/codpaste-podcast-on-wfmu/">http://peoplelikeus.org</a> under
+        a CC-By-NC license</small>
       <ngx-extended-pdf-viewer *ngIf="visible[1] && !hidden" [src]="'assets/pdfs/codpaste-teachingpack.pdf'"
         backgroundColor="#e8e8ef" [mobileZoom]="mobileFriendlyZoom" [showZoomButtons]="true"
         [showSidebarButton]="showSidebar" [useBrowserLocale]="false" [showSidebarOnLoad]="true" delayFirstView="50"
@@ -67,11 +70,11 @@
   </mat-tab>
   <mat-tab label="Another PDF" (click)="hideOtherPDFs()">
     <ng-template matTabContent>
-      <ngx-extended-pdf-viewer *ngIf="visible[3] && !hidden" [src]="'assets/pdfs/plf_prob_document.pdf'"
-        backgroundColor="#e8e8ef" [mobileZoom]="mobileFriendlyZoom" [showZoomButtons]="true"
-        [showSidebarButton]="showSidebar" [useBrowserLocale]="false" [showSidebarOnLoad]="true" delayFirstView="50"
-        [(zoom)]="zoom" [height]="height" [handTool]="handTool" [page]="page"
-        [filenameForDownload]="filenameForDownload" (pagesLoaded)="onPagesLoaded($event)">
+      <ngx-extended-pdf-viewer *ngIf="visible[3] && !hidden" [src]="'assets/pdfs/Math.pdf'" backgroundColor="#e8e8ef"
+        [mobileZoom]="mobileFriendlyZoom" [showZoomButtons]="true" [showSidebarButton]="showSidebar"
+        [useBrowserLocale]="false" [showSidebarOnLoad]="true" delayFirstView="50" [(zoom)]="zoom" [height]="height"
+        [handTool]="handTool" [page]="page" [filenameForDownload]="filenameForDownload"
+        (pagesLoaded)="onPagesLoaded($event)">
       </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
@@ -89,9 +92,9 @@
   </mat-tab>
   <mat-tab label="PDF without any toolbar">
     <ng-template matTabContent>
-      <ngx-extended-pdf-viewer *ngIf="visible[5] && !hidden" [src]="'assets/pdfs/pdf-sample.pdf'"
-        backgroundColor="#fffffe" [mobileFriendlyZoom]="mobileFriendlyZoom" [showBookmarkButton]="false"
-        [showDownloadButton]="false" [showFindButton]="false" [showOpenFileButton]="false" [showPagingButtons]="false"
+      <ngx-extended-pdf-viewer *ngIf="visible[5] && !hidden" [src]="'assets/pdfs/pdf-sample.pdf'" backgroundColor="blue"
+        [mobileFriendlyZoom]="mobileFriendlyZoom" [showBookmarkButton]="false" [showDownloadButton]="false"
+        [showFindButton]="false" [showOpenFileButton]="false" [showPagingButtons]="false"
         [showPresentationModeButton]="false" [showPrintButton]="false" [showPropertiesButton]="false"
         [showSidebarButton]="false" [showSecondaryToolbarButton]="false" [showZoomButtons]="false"
         [useBrowserLocale]="false" [delayFirstView]="50" [(zoom)]="zoom" [height]="height" [handTool]="handTool"

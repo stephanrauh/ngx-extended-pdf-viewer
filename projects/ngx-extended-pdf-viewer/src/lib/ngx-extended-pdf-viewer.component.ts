@@ -536,7 +536,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
         }
       }
       this.calcViewerPositionTop();
-      console.log('calc');
     }
   }
 }
