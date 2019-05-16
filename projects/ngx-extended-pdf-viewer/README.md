@@ -86,14 +86,12 @@ The PDF viewer is very prone to timing problems:
 <mat-tab-group (selectedTabChange)="activateTab($event.index)">
   <mat-tab label="BootsFAces Deep-Dive PDF">
     <ng-template matTabContent>
-      <ngx-extended-pdf-viewer *ngIf="visible[0]" [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'">
-      </ngx-extended-pdf-viewer>
+      <ngx-extended-pdf-viewer *ngIf="visible[0]" [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"> </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
   <mat-tab label="Codpaste PDF">
     <ng-template matTabContent>
-      <ngx-extended-pdf-viewer *ngIf="visible[1]" [src]="'assets/pdfs/codpaste-teachingpack.pdf'">
-      </ngx-extended-pdf-viewer>
+      <ngx-extended-pdf-viewer *ngIf="visible[1]" [src]="'assets/pdfs/codpaste-teachingpack.pdf'"> </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
 </mat-tab-group>
@@ -181,7 +179,7 @@ require('ngx-extended-pdf-viewer/assets/web/viewer.js');
 
 3.f. Open the freshly copied pdf.js file, locate the function `webpackUniversalModuleDefinition()` and replace the first ten lines by this version:
 
-````typescript
+```typescript
 (function webpackUniversalModuleDefinition(root, factory) {
   if(typeof exports === 'object' && typeof module === 'object')
     module.exports = factory();
@@ -192,7 +190,7 @@ require('ngx-extended-pdf-viewer/assets/web/viewer.js');
   // else <-- delete line
   window["pdfjs-dist/build/pdf"] = root["pdfjs-dist/build/pdf"] = root.pdfjsLib = factory(); // <-- modified line
 })(this, function() {
-```typescript
+```
 
 4.  Add "NgxExtendedPdfViewerModule" to the import section of your module file. If your IDE doesn't find
     the import automatically, here it is:
@@ -202,12 +200,12 @@ require('ngx-extended-pdf-viewer/assets/web/viewer.js');
 5.  Now you can display the PDF file like so:
 
 ```html
-<ngx-extended-pdf-viewer [src]="'assets/example.pdf'" useBrowserLocale="true" height="80vh"  delayFirstView="1000"></ngx-extended-pdf-viewer>
+<ngx-extended-pdf-viewer [src]="'assets/example.pdf'" useBrowserLocale="true" height="80vh" delayFirstView="1000"></ngx-extended-pdf-viewer>
 ```
 
-If you're using JHipster, note there's no `assets` folder, so most like the path of the URL is something like `[src]="'content/example.pdf'"`.
+If you are using JHipster, note there's no `assets` folder, so most like the path of the URL is something like `[src]="'content/example.pdf'"`.
 
-6. If you want to display a PDF file you've downloaded from a server, you probably have a `Blob` instead of an URL. Since version 0.9.21, you can pass this Blob directly to the `src` attribute. Until 0.9.20, you can use `URL.createObjectURL()` to convert this `Blob` into something the PDF viewer can display:
+6. If you want to display a PDF file you have downloaded from a server, you probably have a `Blob` instead of an URL. Since version 0.9.21, you can pass this Blob directly to the `src` attribute. Until 0.9.20, you can use `URL.createObjectURL()` to convert this `Blob` into something the PDF viewer can display:
 
 ```html
 <ngx-extended-pdf-viewer [src]="currentPdf"></ngx-extended-pdf-viewer>
@@ -357,5 +355,7 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 | 0.9.19     |                                                                                                      #35 add an option to override the default file name after clicking the "download" button; #34 implemented (pagesLoaded); fixed the [page] attribute which always showed page 13 on startup; reduced the timeout to set the initial [page]; removed debug code                                                                                                      |
 | 0.9.20     |                                                                                                                                 #55 if the setting "height=100%" results in a container with 0 pixels height, the PDF viewer automatically resizes to fill all available space.; #38 initial support for [(spread)] (work in progress!)                                                                                                                                 |
 | 0.9.21     |                                                                                                                                    #56 made the [src] attribute more flexible. Now it also accepts Blobs, Uint8Arrays, and ArrayBuffers. Also added a new attribute, [base64Src], to display PDFs encoded as base64 encoded strings                                                                                                                                     |
-| 0.9.22     |                                                                                                      #29 [backgroundColor] can now be set to "white" or "#ffffff". Until 0.9.21, pdf.js always converted white to off-white. I'm still trying to understand what's going on, so there might be side-effect. However, my tests didn't reveal such side-effects yet.                                                                                                      |
-````
+| 0.9.22     |                                                                                                    #29 [backgroundColor] can now be set to "white" or "#ffffff". Until 0.9.21, pdf.js always converted white to off-white. I am still trying to understand what is going on, so there might be side-effects. However, my tests did not reveal such side-effects yet.                                                                                                    |
+| 0.9.23     |                                                                                                                                                                                             #38 fixed the [spread] attribute, and made the [height] property more reliable                                                                                                                                                                                              |
+| 0.9.24     |                                                                                                                                                                                              #57 added the documentation to get the PDF viewer up and running on JHipster                                                                                                                                                                                               |
+| 0.9.25     |                                                                                                                                                                                                                 fixed the formatting of the README file                                                                                                                                                                                                                 |
