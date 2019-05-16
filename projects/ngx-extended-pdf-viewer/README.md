@@ -160,13 +160,10 @@ Basically, there are (at least) two ways to create an Angular application: you c
 
     _Hint:_ There are two ways to define the language files needed for the labels of the buttons and screen elements of the PDF viewer. The second method is described below in the "internationalization" section.
 
-3.a. (Webpack and JHipster users only) Locate the `CopyWebpackPlugin` in the file `webpack.common.js` (currently line 70) and add these lines:
+3.a. (Webpack and JHipster users only) Locate the `CopyWebpackPlugin` in the file `webpack.common.js` (currently line 70) and add this line:
 
 ```js
     new CopyWebpackPlugin([
-      { from: "./node_modules/ngx-extended-pdf-viewer/assets/pdf.js", to: 'content/assets/pdf.js' },
-      { from: "./node_modules/ngx-extended-pdf-viewer/assets/pdf.worker.js", to: 'content/assets/pdf.worker.js' },
-      { from: "./node_modules/ngx-extended-pdf-viewer/assets/viewer.js", to: 'content/assets/viewer.js' },
       { from: "./node_modules/ngx-extended-pdf-viewer/assets/locale", to: 'content/assets/locale' },
 ```
 
