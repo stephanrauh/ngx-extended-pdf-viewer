@@ -4106,12 +4106,14 @@ function () {
 
     this.visible = true;
     this.div = document.querySelector(id + ' .progress');
-    this.bar = this.div.parentNode;
     this.height = height || 100;
     this.width = width || 100;
     this.units = units || '%';
-    this.div.style.height = this.height + this.units;
     this.percent = 0;
+    if (this.div) {
+      this.bar = this.div.parentNode;
+      this.div.style.height = this.height + this.units;
+    }
   }
 
   _createClass(ProgressBar, [{
@@ -4123,9 +4125,11 @@ function () {
         return;
       }
 
-      this.div.classList.remove('indeterminate');
       var progressSize = this.width * this._percent / 100;
-      this.div.style.width = progressSize + this.units;
+      if (this.div) {
+        this.div.classList.remove('indeterminate');
+        this.div.style.width = progressSize + this.units;
+      }
     }
   }, {
     key: "setWidth",
@@ -4149,8 +4153,10 @@ function () {
       // } // uncommented
       this.visible = false;
       this.div = document.querySelector('.progress'); // always set this new instead of trying to cache this value
-      this.bar = this.div.parentNode; // always set this new instead of trying to cache this value
-      this.bar.classList.add('hidden');
+      if (this.div) {
+        this.bar = this.div.parentNode; // always set this new instead of trying to cache this value
+        this.bar.classList.add('hidden');
+      }
       document.body.classList.remove('loadingInProgress');
     }
   }, {
@@ -12806,23 +12812,25 @@ function () {
             eventName = _this2$buttons$button.eventName,
             close = _this2$buttons$button.close,
             eventDetails = _this2$buttons$button.eventDetails;
-        element.addEventListener('click', function (evt) {
-          if (eventName !== null) {
-            var details = {
-              source: _this2
-            };
-
-            for (var property in eventDetails) {
-              details[property] = eventDetails[property];
+        if (element) {
+          element.addEventListener('click', function (evt) {
+            if (eventName !== null) {
+              var details = {
+                source: _this2
+              };
+  
+              for (var property in eventDetails) {
+                details[property] = eventDetails[property];
+              }
+  
+              _this2.eventBus.dispatch(eventName, details);
             }
-
-            _this2.eventBus.dispatch(eventName, details);
-          }
-
-          if (close) {
-            _this2.close();
-          }
-        });
+  
+            if (close) {
+              _this2.close();
+            }
+          });
+        }
       };
 
       for (var button in this.buttons) {
