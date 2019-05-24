@@ -12801,28 +12801,30 @@ function () {
       this.toggleButton.addEventListener('click', this.toggle.bind(this));
 
       var _loop = function _loop(button) {
-        var _this2$buttons$button = _this2.buttons[button],
-            element = _this2$buttons$button.element,
-            eventName = _this2$buttons$button.eventName,
-            close = _this2$buttons$button.close,
-            eventDetails = _this2$buttons$button.eventDetails;
-        element.addEventListener('click', function (evt) {
-          if (eventName !== null) {
-            var details = {
-              source: _this2
-            };
+        if (!isNaN(button)) {
+          var _this2$buttons$button = _this2.buttons[button],
+              element = _this2$buttons$button.element,
+              eventName = _this2$buttons$button.eventName,
+              close = _this2$buttons$button.close,
+              eventDetails = _this2$buttons$button.eventDetails;
+          element.addEventListener('click', function (evt) {
+            if (eventName !== null) {
+              var details = {
+                source: _this2
+              };
 
-            for (var property in eventDetails) {
-              details[property] = eventDetails[property];
+              for (var property in eventDetails) {
+                details[property] = eventDetails[property];
+              }
+
+              _this2.eventBus.dispatch(eventName, details);
             }
 
-            _this2.eventBus.dispatch(eventName, details);
-          }
-
-          if (close) {
-            _this2.close();
-          }
-        });
+            if (close) {
+              _this2.close();
+            }
+          });
+        }
       };
 
       for (var button in this.buttons) {
