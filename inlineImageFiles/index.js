@@ -26,6 +26,43 @@ lineReader
         line = line.substring(0, start) + "('" + data + "'" + line.substring(end);
       }
     }
+    if (line.includes('z-index: 99;')) {
+      line = line.replace('99', '1');
+    } else if (line.includes('z-index: 100;')) {
+      line = line.replace('100', '2');
+    } else if (line.includes('z-index: 199;')) {
+      line = line.replace('199', '3');
+    } else if (line.includes('z-index: 200;')) {
+      line = line.replace('200', '4');
+    } else if (line.includes('z-index: 1000;')) {
+      line = line.replace('1000', '5');
+    } else if (line.includes('z-index: 10000;')) {
+      line = line.replace('10000', '6');
+    } else if (line.includes('z-index: 30000;')) {
+      line = line.replace('30000', '7');
+    } else if (line.includes('z-index: 40000;')) {
+      line = line.replace('40000', '8');
+    } else if (line.includes('z-index: 50000;')) {
+      line = line.replace('50000', '9');
+    } else if (line.includes('html {')) {
+      line = line.replace('html {', '.html {');
+    } else if (line === '* {') {
+      line = line.replace('* {', '.html * {');
+    } else if (line.includes(' body {')) {
+      // do nothing
+    } else if (line.includes('body {')) {
+      line = line.replace('body {', '.body {');
+    } else if (line.includes('body,')) {
+      line = line.replace('body,', '.body,');
+    } else if (line.includes('-webkit-inner-spin-button')) {
+      // do nothing
+    } else if (line === 'input,') {
+      line = line.replace('input,', '.pdf-viewer input,');
+    } else if (line.includes('button,')) {
+      line = line.replace('button,', '.pdf-viewer button,');
+    } else if (line === 'select {') {
+      line = line.replace('select', '.pdf-viewer select');
+    }
     result += line + '\n';
   })
   .on('close', function() {
