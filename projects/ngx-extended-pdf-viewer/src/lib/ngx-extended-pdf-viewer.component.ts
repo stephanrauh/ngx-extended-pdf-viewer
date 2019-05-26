@@ -108,6 +108,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   @Input()
   public filenameForDownload = 'document.pdf';
 
+  /** allows you to pass a password to read password-protected files */
+  @Input()
+  public password: string | undefined = undefined;
+
   public _showSidebarButton = true;
 
   public viewerPositionTop = '32px';
@@ -416,7 +420,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       this.checkHeight();
       // open a file in the viewer
       if (!!this._src) {
-        (<any>window).PDFViewerApplication.open(this._src);
+        const options = {
+          password: this.password
+        };
+
+        (<any>window).PDFViewerApplication.open(this._src, options);
       }
 
       setTimeout(() => {

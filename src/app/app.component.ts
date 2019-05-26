@@ -103,6 +103,10 @@ export class AppComponent {
     this.visible[1] = false;
     this.visible[2] = false;
     this.visible[3] = false;
+    this.visible[4] = false;
+    this.visible[5] = false;
+    this.visible[6] = false;
+    this.visible[7] = false;
   }
 
   public get height50() {
@@ -162,15 +166,5 @@ export class AppComponent {
 
   public onPagesLoaded(event: PagesLoadedEvent) {
     console.log('Document loaded with ' + event.pagesCount + ' pages');
-  }
-
-  private base64ToArrayBuffer(base64: string) {
-    const binary_string = window.atob(base64);
-    const len = binary_string.length;
-    const bytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-      bytes[i] = binary_string.charCodeAt(i);
-    }
-    return bytes.buffer;
   }
 }
