@@ -18,6 +18,7 @@ export class AppComponent {
   public height: string | undefined = '80vh';
   public filenameForDownload: string | undefined = undefined;
   public nameddest = 'chapter_5';
+  public spread = 'off';
 
   public page: number | undefined = undefined;
 

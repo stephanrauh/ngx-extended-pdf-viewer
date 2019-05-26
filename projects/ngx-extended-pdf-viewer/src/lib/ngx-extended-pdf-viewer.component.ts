@@ -408,13 +408,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
     }
 
     if (this.spread === 'even') {
-      (<any>window).PDFViewerApplication.spreadModeOnLoad = 2;
+      (<any>window).PDFViewerApplicationOptions.set('spreadModeOnLoad', 2);
+      (<any>window).PDFViewerApplication.pdfViewer.spreadMode = 2;
       this.onSpreadChange('even');
     } else if (this.spread === 'odd') {
-      (<any>window).PDFViewerApplication.spreadModeOnLoad = 1;
+      (<any>window).PDFViewerApplicationOptions.set('spreadModeOnLoad', 1);
+      (<any>window).PDFViewerApplication.pdfViewer.spreadMode = 1;
       this.onSpreadChange('odd');
     } else {
-      (<any>window).PDFViewerApplication.spreadModeOnLoad = 0;
+      (<any>window).PDFViewerApplicationOptions.set('spreadModeOnLoad', 0);
+      (<any>window).PDFViewerApplication.pdfViewer.spreadMode = 0;
       this.onSpreadChange('off');
     }
   }
@@ -431,6 +434,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
         if (this.nameddest) {
           (<any>window).PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
         }
+        this.overrideDefaultSettings();
       });
       this.checkHeight();
       // open a file in the viewer
@@ -555,6 +559,22 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       if ('nameddest' in changes) {
         if (this.nameddest) {
           (<any>window).PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
+        }
+      }
+
+      if ('spread' in changes) {
+        if (this.spread === 'even') {
+          (<any>window).PDFViewerApplication.spreadModeOnLoad = 2;
+          (<any>window).PDFViewerApplication.pdfViewer.spreadMode = 2;
+          this.onSpreadChange('even');
+        } else if (this.spread === 'odd') {
+          (<any>window).PDFViewerApplication.spreadModeOnLoad = 1;
+          (<any>window).PDFViewerApplication.pdfViewer.spreadMode = 1;
+          this.onSpreadChange('odd');
+        } else {
+          (<any>window).PDFViewerApplication.spreadModeOnLoad = 0;
+          (<any>window).PDFViewerApplication.pdfViewer.spreadMode = 0;
+          this.onSpreadChange('off');
         }
       }
 

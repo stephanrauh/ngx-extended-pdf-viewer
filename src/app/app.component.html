@@ -33,6 +33,14 @@
       </mat-form-field>
     </section>
     <section class="section">
+      <mat-form-field>
+        <mat-label>spread</mat-label>
+        <mat-select [(value)]="spread" class="margin">
+          <mat-option value="off">off</mat-option>
+          <mat-option value="even">even</mat-option>
+          <mat-option value="odd">odd</mat-option>
+        </mat-select>
+      </mat-form-field>
       <mat-checkbox class="margin" [(ngModel)]="height50">[height]='50%'</mat-checkbox>
       <mat-checkbox class="margin" [(ngModel)]="height314">[height]='314px'</mat-checkbox>
       <mat-checkbox class="margin" [(ngModel)]="height100">[height]='100%'</mat-checkbox>
@@ -85,7 +93,8 @@
         [(page)]="page"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
-      >
+        [(spread)]="spread"
+        >
       </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
@@ -111,7 +120,7 @@
         [page]="page"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
-        [spread]="'even'"
+        [(spread)]="spread"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -137,6 +146,7 @@
         [page]="page"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
+        [(spread)]="spread"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -165,7 +175,7 @@
         [(page)]="page"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
-        [spread]="'odd'"
+        [(spread)]="spread"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -196,7 +206,7 @@
         [(page)]="page"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
-        [spread]="'off'"
+        [(spread)]="spread"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -219,6 +229,7 @@
         [page]="page"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
+        [(spread)]="spread"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -242,6 +253,7 @@
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [password]="'123'"
+        [(spread)]="spread"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -269,6 +281,7 @@
         (pagesLoaded)="onPagesLoaded($event)"
         [nameddest]="nameddest"
         [listenToURL]="true"
+        [(spread)]="spread"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
