@@ -246,7 +246,10 @@
       </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
-  <mat-tab label="[nameddest]='{{ nameddest }}'" (click)="hideOtherPDFs()" title="Demo document found at https://github.com/mozilla/pdf.js/issues/10272">
+  <mat-tab (click)="hideOtherPDFs()">
+    <ng-template mat-tab-label>
+      <div matTooltip="Demo document found at https://github.com/mozilla/pdf.js/issues/10272">[nameddest]='{{ nameddest }}'</div>
+    </ng-template>
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[8] && !hidden"
@@ -265,6 +268,7 @@
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [nameddest]="nameddest"
+        [listenToURL]="true"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>

@@ -108,6 +108,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   @Input()
   public filenameForDownload = 'document.pdf';
 
+  /** By default, listening to the URL is deactivated because often the anchor tag is used for the Angular router */
+  @Input()
+  public listenToURL = false;
+
   /** Navigate to a certain "named destination" */
   @Input()
   public nameddest: string | undefined = undefined;
@@ -417,6 +421,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
 
   public ngAfterViewInit() {
     this.initTimeout = setTimeout(() => {
+      if (!this.listenToURL) {
+        (<any>window).PDFViewerApplication.pdfLinkService.setHash = function() {};
+      }
+
       this.initTimeout = null;
       (<any>window).PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
         this.pagesLoaded.emit(x);
