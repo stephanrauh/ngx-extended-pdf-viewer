@@ -166,11 +166,11 @@ Basically, there are (at least) two ways to create an Angular application: you c
       { from: "./node_modules/ngx-extended-pdf-viewer/assets/locale", to: 'content/assets/locale' },
 ```
 
-3.c. (Webpack and JHipster users only) Copy the files `node_modules/ngx-extended-pdf-viewer/assets/pdf.worker.js` and `node_modules/ngx-extended-pdf-viewer/assets/pdf.js` manually to `src/main/webcontent/app`.
+3.b. (Webpack and JHipster users only) Copy the files `node_modules/ngx-extended-pdf-viewer/assets/pdf.worker.js` and `node_modules/ngx-extended-pdf-viewer/assets/pdf.js` manually to `src/main/webcontent/app`.
 
-3.d. (Webpack and JHipster users only) Copy the file `node_modules/ngx-extended-pdf-viewer/assets/viewer.js` manually to a new folder `src/main/webcontent/app/web`.
+3.c. (Webpack and JHipster users only) Copy the file `node_modules/ngx-extended-pdf-viewer/assets/viewer.js` manually to a new folder `src/main/webcontent/app/web`.
 
-3.e. (Webpack and JHipster users only) Add these lines to the imports section of the `app.main.ts` file:
+3.d. (Webpack and JHipster users only) Add these lines to the imports section of the `app.main.ts` file:
 
 ```typescript
 require('ngx-extended-pdf-viewer/assets/pdf.js');
@@ -178,7 +178,7 @@ require('ngx-extended-pdf-viewer/assets/pdf.worker.js');
 require('ngx-extended-pdf-viewer/assets/web/viewer.js');
 ```
 
-3.f. Open the freshly copied pdf.js file, locate the function `webpackUniversalModuleDefinition()` and replace the first ten lines by this version:
+3.e. Open the freshly copied pdf.js file, locate the function `webpackUniversalModuleDefinition()` and replace the first ten lines by this version:
 
 ```typescript
 (function webpackUniversalModuleDefinition(root, factory) {
