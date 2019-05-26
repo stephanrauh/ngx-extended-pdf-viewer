@@ -17,6 +17,7 @@ export class AppComponent {
   public showSidebar = false;
   public height: string | undefined = '80vh';
   public filenameForDownload: string | undefined = undefined;
+  public nameddest = 'chapter_5';
 
   public page: number | undefined = undefined;
 
@@ -107,6 +108,7 @@ export class AppComponent {
     this.visible[5] = false;
     this.visible[6] = false;
     this.visible[7] = false;
+    this.visible[8] = false;
   }
 
   public get height50() {

@@ -1,7 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatFormFieldModule, MatTooltipModule, MatInputModule } from '@angular/material';
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatFormFieldModule,
+  MatTooltipModule,
+  MatInputModule,
+  MatSelectModule
+} from '@angular/material';
 import { MatTabsModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -20,6 +28,7 @@ import { FormsModule } from '@angular/forms';
     MatCheckboxModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatTabsModule,
     MatTooltipModule
   ],

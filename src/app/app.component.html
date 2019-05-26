@@ -9,8 +9,27 @@
       <mat-checkbox class="margin" [(ngModel)]="showSidebar">show sidebar button</mat-checkbox>
       <mat-checkbox class="margin" [(ngModel)]="handTool">Hand tool</mat-checkbox>
       <mat-form-field><input matInput type="number" class="margin" [(ngModel)]="page" placeholder="Page number" /> </mat-form-field>
-      <mat-form-field>
-        <input matInput type="text" class="margin" [(ngModel)]="filenameForDownload" placeholder="Filename for download" />
+      <mat-form-field *ngIf="visible[8]">
+        <mat-label>Cars</mat-label>
+        <mat-select [(value)]="nameddest" class="margin">
+          <mat-option value="chapter_1">chapter_1</mat-option>
+          <mat-option value="chapter_2">chapter_2</mat-option>
+          <mat-option value="chapter_3">chapter_3</mat-option>
+          <mat-option value="chapter_4">chapter_4</mat-option>
+          <mat-option value="chapter_5">chapter_5</mat-option>
+          <mat-option value="chapter_7">chapter_7</mat-option>
+          <mat-option value="comment_1">comment_1</mat-option>
+          <mat-option value="info_1">info_1</mat-option>
+          <mat-option value="info_2">info_2</mat-option>
+          <mat-option value="info_3">info_3</mat-option>
+          <mat-option value="info_4">info_4</mat-option>
+          <mat-option value="last_reference">last_reference</mat-option>
+          <mat-option value="link_1">link_1</mat-option>
+          <mat-option value="link_2">link_2</mat-option>
+          <mat-option value="link_3">link_3</mat-option>
+          <mat-option value="link_4">link_4</mat-option>
+          <mat-option value="z_comment">z_comment</mat-option>
+        </mat-select>
       </mat-form-field>
     </section>
     <section class="section">
@@ -18,7 +37,10 @@
       <mat-checkbox class="margin" [(ngModel)]="height314">[height]='314px'</mat-checkbox>
       <mat-checkbox class="margin" [(ngModel)]="height100">[height]='100%'</mat-checkbox>
       <mat-checkbox class="margin" [(ngModel)]="height80vh">[height]='80vh'</mat-checkbox>
-      {{ height }}
+      <div class="margin">resulting height: {{ height }}</div>
+      <mat-form-field>
+        <input matInput type="text" class="margin" [(ngModel)]="filenameForDownload" placeholder="Filename for download" />
+      </mat-form-field>
     </section>
     <section class="section">
       <mat-checkbox class="margin" [(ngModel)]="zoom42" matTooltip="Changes apply after switching to another PDF file">
@@ -220,6 +242,29 @@
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [password]="'123'"
+      >
+      </ngx-extended-pdf-viewer>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="[nameddest]='{{ nameddest }}'" (click)="hideOtherPDFs()" title="Demo document found at https://github.com/mozilla/pdf.js/issues/10272">
+    <ng-template matTabContent>
+      <ngx-extended-pdf-viewer
+        *ngIf="visible[8] && !hidden"
+        [src]="'assets/pdfs/ATS_TEST_PVC_2_1.pdf'"
+        backgroundColor="#e8e8ef"
+        [mobileZoom]="mobileFriendlyZoom"
+        [showZoomButtons]="true"
+        [showSidebarButton]="showSidebar"
+        [useBrowserLocale]="false"
+        [showSidebarOnLoad]="true"
+        delayFirstView="50"
+        [(zoom)]="zoom"
+        [height]="height"
+        [handTool]="handTool"
+        [page]="page"
+        [filenameForDownload]="filenameForDownload"
+        (pagesLoaded)="onPagesLoaded($event)"
+        [nameddest]="nameddest"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>

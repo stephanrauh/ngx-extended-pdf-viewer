@@ -108,6 +108,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   @Input()
   public filenameForDownload = 'document.pdf';
 
+  /** Navigate to a certain "named destination" */
+  @Input()
+  public nameddest: string | undefined = undefined;
+
   /** allows you to pass a password to read password-protected files */
   @Input()
   public password: string | undefined = undefined;
@@ -416,6 +420,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       this.initTimeout = null;
       (<any>window).PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
         this.pagesLoaded.emit(x);
+        if (this.nameddest) {
+          (<any>window).PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
+        }
       });
       this.checkHeight();
       // open a file in the viewer
@@ -536,6 +543,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       }
       if ('filenameForDownload' in changes) {
         (<any>window).PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
+      }
+      if ('nameddest' in changes) {
+        if (this.nameddest) {
+          (<any>window).PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
+        }
       }
 
       this.primaryMenuVisible = true;
