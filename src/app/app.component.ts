@@ -17,6 +17,7 @@ export class AppComponent {
   public showSidebar = false;
   public height: string | undefined = '80vh';
   public filenameForDownload: string | undefined = undefined;
+  public language = 'es-ES';
   public nameddest = 'chapter_5';
   public spread = 'off';
 

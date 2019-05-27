@@ -14643,12 +14643,12 @@ document.webL10n = function (window, document, undefined) {
             const originalCase = anyCaseLang; // added line
             anyCaseLang = anyCaseLang.toLowerCase();
             if (anyCaseLang === lang) {
-            gL10nData = dict.locales[lang];
-            break;
+              gL10nData = dict.locales[originalCase];
+              break;
             } else if (anyCaseLang === defaultLocale) {
-            gL10nData = dict.locales[originalCase]; // modified line
+              gL10nData = dict.locales[originalCase]; // modified line
             }
-            }
+          }
         }
 
         callback();

@@ -8,9 +8,19 @@
       <mat-checkbox class="margin" [(ngModel)]="mobileFriendlyZoomPercent">mobile-friendly zoom 200%</mat-checkbox>
       <mat-checkbox class="margin" [(ngModel)]="showSidebar">show sidebar button</mat-checkbox>
       <mat-checkbox class="margin" [(ngModel)]="handTool">Hand tool</mat-checkbox>
-      <mat-form-field><input matInput type="number" class="margin" [(ngModel)]="page" placeholder="Page number" /> </mat-form-field>
+      <mat-form-field>
+        <mat-label>language (requires tab change)</mat-label>
+        <mat-select [(value)]="language" class="margin">
+          <mat-option [value]="undefined">default (Spanish)</mat-option>
+          <mat-option value="es-ES">es-ES (Spanish)</mat-option>
+          <mat-option value="de-DE">de-DE (German)</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="margin">
+        <input matInput type="number" class="margin" [(ngModel)]="page" placeholder="Page number" />
+      </mat-form-field>
       <mat-form-field *ngIf="visible[8]">
-        <mat-label>Cars</mat-label>
+        <mat-label>Named Destination (aka nameddest)</mat-label>
         <mat-select [(value)]="nameddest" class="margin">
           <mat-option value="chapter_1">chapter_1</mat-option>
           <mat-option value="chapter_2">chapter_2</mat-option>
@@ -94,7 +104,8 @@
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [(spread)]="spread"
-        >
+        [language]="language"
+      >
       </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
@@ -121,6 +132,7 @@
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [(spread)]="spread"
+        [language]="language"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -147,6 +159,7 @@
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [(spread)]="spread"
+        [language]="language"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -176,6 +189,7 @@
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [(spread)]="spread"
+        [language]="language"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -207,6 +221,7 @@
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [(spread)]="spread"
+        [language]="language"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -230,6 +245,7 @@
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [(spread)]="spread"
+        [language]="language"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -254,6 +270,7 @@
         (pagesLoaded)="onPagesLoaded($event)"
         [password]="'123'"
         [(spread)]="spread"
+        [language]="language"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -282,6 +299,7 @@
         [nameddest]="nameddest"
         [listenToURL]="true"
         [(spread)]="spread"
+        [language]="language"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>

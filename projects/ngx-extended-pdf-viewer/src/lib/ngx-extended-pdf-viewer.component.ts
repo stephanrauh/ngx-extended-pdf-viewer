@@ -108,6 +108,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   @Input()
   public filenameForDownload = 'document.pdf';
 
+  /** Override the default locale. This must be the complete locale name, such as "es-ES". The string is allowed to be all lowercase.
+   */
+  @Input()
+  public language: string | undefined = undefined;
+
   /** By default, listening to the URL is deactivated because often the anchor tag is used for the Angular router */
   @Input()
   public listenToURL = false;
@@ -340,6 +345,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       this.calcViewerPositionTop();
       (<any>window).webViewerLoad();
       (<any>window).PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
+      (<any>window).PDFViewerApplicationOptions.set('locale', this.language);
+
       (<any>window).PDFViewerApplication.isViewerEmbedded = true;
       this.overrideDefaultSettings();
 
@@ -440,7 +447,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       // open a file in the viewer
       if (!!this._src) {
         const options = {
-          password: this.password
+          password: this.password,
+          locale: 'de-DE'
         };
 
         (<any>window).PDFViewerApplication.open(this._src, options);

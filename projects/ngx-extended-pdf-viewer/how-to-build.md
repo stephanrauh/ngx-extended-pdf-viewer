@@ -47,7 +47,7 @@
     const originalCase = anyCaseLang; // added line
     anyCaseLang = anyCaseLang.toLowerCase();
     if (anyCaseLang === lang) {
-    gL10nData = dict.locales[lang];
+    gL10nData = dict.locales[originalCase];
     break;
     } else if (anyCaseLang === defaultLocale) {
     gL10nData = dict.locales[originalCase]; // modified line
