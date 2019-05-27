@@ -12,6 +12,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { PagesLoadedEvent } from './pages-loaded-event';
+import { PageRenderedEvent } from './page-rendered-event';
 
 declare var PDFJS: any;
 
@@ -202,6 +203,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
 
   @Output()
   public pagesLoaded = new EventEmitter<PagesLoadedEvent>();
+
+  @Output()
+  public pageRendered = new EventEmitter<PageRenderedEvent>();
 
   /** Legal values: undefined, 'auto', 'page-actual', 'page_fit', 'page-width', or '50' (or any other percentage) */
   @Input()
@@ -443,6 +447,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
         }
         this.overrideDefaultSettings();
       });
+      (<any>window).PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
+        this.pageRendered.emit(x);
+      });
+
       this.checkHeight();
       // open a file in the viewer
       if (!!this._src) {

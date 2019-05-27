@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { PagesLoadedEvent } from 'projects/ngx-extended-pdf-viewer/src/lib/pages-loaded-event';
 import { pdfBase64 } from './pdfBase64';
+import { PageRenderedEvent } from '../../projects/ngx-extended-pdf-viewer/src/lib/page-rendered-event';
 
 @Component({
   selector: 'app-root',
@@ -170,5 +171,9 @@ export class AppComponent {
 
   public onPagesLoaded(event: PagesLoadedEvent) {
     console.log('Document loaded with ' + event.pagesCount + ' pages');
+  }
+
+  public onPageRendered(event: PageRenderedEvent) {
+    console.log(event);
   }
 }
