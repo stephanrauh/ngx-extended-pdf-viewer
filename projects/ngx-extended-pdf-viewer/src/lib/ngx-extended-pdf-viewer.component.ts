@@ -335,6 +335,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   }
 
   ngOnInit() {
+    document.addEventListener('webviewerloaded', () => {
+      this.overrideDefaultSettings();
+    });
+
     setTimeout(() => {
       // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
       this.primaryMenuVisible = true;
@@ -375,7 +379,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       } else {
         this.minHeight = '100px';
       }
-      console.log('Set minimum height to ' + this.minHeight);
     }
   }
 
@@ -405,30 +408,44 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       }
       (<any>window).PDFViewerApplication.overrideHistory.zoom = z;
     }
-    (<any>window).PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
+    if ((<any>window).PDFViewerApplication.appConfig) {
+      (<any>window).PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
+    } else {
+      (<any>window).PDFViewerApplicationOptions.set('filenameForDownload', this.filenameForDownload);
+    }
     if (this.showSidebarButton) {
       if (this.showSidebarOnLoad !== undefined) {
         (<any>window).PDFViewerApplication.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
-        (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
+        if ((<any>window).PDFViewerApplication.appConfig) {
+          (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
+        }
         (<any>window).PDFViewerApplication.overrideHistory.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
       }
     } else {
       (<any>window).PDFViewerApplication.sidebarViewOnLoad = 0;
-      (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = 0;
+      if ((<any>window).PDFViewerApplication.appConfig) {
+        (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = 0;
+      }
       (<any>window).PDFViewerApplication.overrideHistory.sidebarViewOnLoad = 0;
     }
 
     if (this.spread === 'even') {
       (<any>window).PDFViewerApplicationOptions.set('spreadModeOnLoad', 2);
-      (<any>window).PDFViewerApplication.pdfViewer.spreadMode = 2;
+      if ((<any>window).PDFViewerApplication.pdfViewer) {
+        (<any>window).PDFViewerApplication.pdfViewer.spreadMode = 2;
+      }
       this.onSpreadChange('even');
     } else if (this.spread === 'odd') {
       (<any>window).PDFViewerApplicationOptions.set('spreadModeOnLoad', 1);
-      (<any>window).PDFViewerApplication.pdfViewer.spreadMode = 1;
+      if ((<any>window).PDFViewerApplication.pdfViewer) {
+        (<any>window).PDFViewerApplication.pdfViewer.spreadMode = 1;
+      }
       this.onSpreadChange('odd');
     } else {
       (<any>window).PDFViewerApplicationOptions.set('spreadModeOnLoad', 0);
-      (<any>window).PDFViewerApplication.pdfViewer.spreadMode = 0;
+      if ((<any>window).PDFViewerApplication.pdfViewer) {
+        (<any>window).PDFViewerApplication.pdfViewer.spreadMode = 0;
+      }
       this.onSpreadChange('off');
     }
   }
@@ -455,8 +472,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       // open a file in the viewer
       if (!!this._src) {
         const options = {
-          password: this.password,
-          locale: 'de-DE'
+          password: this.password
         };
 
         (<any>window).PDFViewerApplication.open(this._src, options);
