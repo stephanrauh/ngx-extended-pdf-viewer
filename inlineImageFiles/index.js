@@ -36,14 +36,16 @@ lineReader
       line = line.replace('200', '4');
     } else if (line.includes('z-index: 1000;')) {
       line = line.replace('1000', '5');
+    } else if (line.includes('z-index: 9999;')) {
+      line = line.replace('9999', '7');
     } else if (line.includes('z-index: 10000;')) {
-      line = line.replace('10000', '6');
+      line = line.replace('10000', '7');
     } else if (line.includes('z-index: 30000;')) {
-      line = line.replace('30000', '7');
+      line = line.replace('30000', '8');
     } else if (line.includes('z-index: 40000;')) {
-      line = line.replace('40000', '8');
+      line = line.replace('40000', '9');
     } else if (line.includes('z-index: 50000;')) {
-      line = line.replace('50000', '9');
+      line = line.replace('50000', '10');
     } else if (line.includes('html {')) {
       line = line.replace('html {', '.html {');
     } else if (line === '* {') {

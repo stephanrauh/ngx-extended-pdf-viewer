@@ -650,7 +650,7 @@ html[dir='rtl'] #outerContainer.sidebarOpen #viewerContainer:not(.pdfPresentatio
   position: relative;
   left: 0;
   right: 0;
-  z-index: 9999;
+  z-index: 7;
   cursor: default;
 }
 
@@ -771,7 +771,7 @@ html[dir='rtl'] #toolbarContainer, .findbar, .secondaryToolbar {
 .findbar, .secondaryToolbar {
   top: 32px;
   position: absolute;
-  z-index: 6;
+  z-index: 7;
   height: auto;
   min-width: 16px;
   padding: 0px 6px 0px 6px;
@@ -836,7 +836,7 @@ html[dir='rtl'] #findInput[data-status="pending"] {
 .secondaryToolbar {
   padding: 6px;
   height: auto;
-  z-index: 7;
+  z-index: 8;
 }
 html[dir='ltr'] .secondaryToolbar {
   right: 4px;
@@ -1829,7 +1829,7 @@ html[dir='rtl'] .outlineItemToggler::before {
   width: 100%;
   height: 100%;
   background-color: hsla(0,0%,0%,.2);
-  z-index: 8;
+  z-index: 9;
 }
 #overlayContainer > * {
   overflow: auto;
@@ -2035,7 +2035,7 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
   right: 0;
   bottom: 0;
   overflow: hidden;
-  z-index: 9; /* should be higher than anything else in PDF.js! */
+  z-index: 10; /* should be higher than anything else in PDF.js! */
 }
 
 @page {
