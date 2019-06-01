@@ -238,6 +238,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
    * This attribute is a string with a percent character at the end (e.g. "150%").*/
   @Input()
   public set mobileFriendlyZoom(zoom: string) {
+    // tslint:disable-next-line:triple-equals - the type conversion is intended
+    if (zoom == 'true') {
+      zoom = '150%';
+      // tslint:disable-next-line:triple-equals - the type conversion is intended
+    } else if (zoom == 'false') {
+      zoom = '100%';
+    }
     this._mobileFriendlyZoom = zoom;
     const isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
     let factor = 1;
