@@ -37,6 +37,7 @@
     "@angular/compiler-cli": "^8.0.0",
     "@angular/language-service": "^8.0.0",
     "@types/node": "^11.13.13",
+    "caniuse-lite": "^1.0.30000971",
     "codelyzer": "~5.0.1",
     "macaddress": ">=0.2.9",
     "ng-packagr": "^5.2.0",
