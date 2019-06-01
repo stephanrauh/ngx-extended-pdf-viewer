@@ -15,7 +15,7 @@
         <div id="sidebarContainer" [style.top]="sidebarPositionTop">
           <div
             id="additionalSidebarContainer"
-            *ngIf="showSidebarButton"
+            [class.hidden]="!showSidebarButton"
           >
             <div id="toolbarSidebar">
               <div class="splitToolbarButton toggled">
@@ -214,7 +214,7 @@
               <div class="horizontalToolbarSeparator visibleLargeView"></div>
 
               <button
-                *ngIf="showPagingButtons"
+                [class.hidden]="!showPagingButtons"
                 id="firstPage"
                 class="secondaryToolbarButton firstPage"
                 title="Go to First Page"
@@ -224,7 +224,7 @@
                 <span data-l10n-id="first_page_label">Go to First Page</span>
               </button>
               <button
-                *ngIf="showPagingButtons"
+                [class.hidden]="!showPagingButtons"
                 id="lastPage"
                 class="secondaryToolbarButton lastPage"
                 title="Go to Last Page"
@@ -235,12 +235,12 @@
               </button>
 
               <div
-                *ngIf="showRotateButton"
+                [class.hidden]="!showRotateButton"
                 class="horizontalToolbarSeparator"
               ></div>
 
               <button
-                *ngIf="showRotateButton"
+                [class.hidden]="!showRotateButton"
                 id="pageRotateCw"
                 class="secondaryToolbarButton rotateCw"
                 title="Rotate Clockwise"
@@ -252,7 +252,7 @@
                 >
               </button>
               <button
-                *ngIf="showRotateButton"
+                [class.hidden]="!showRotateButton"
                 id="pageRotateCcw"
                 class="secondaryToolbarButton rotateCcw"
                 title="Rotate Counterclockwise"
@@ -267,7 +267,7 @@
               <div class="horizontalToolbarSeparator"></div>
 
               <button
-                *ngIf="showSelectToolButton"
+                [class.hidden]="!showSelectToolButton"
                 id="cursorSelectTool"
                 class="secondaryToolbarButton selectTool toggled"
                 title="Enable Text Selection Tool"
@@ -279,7 +279,7 @@
                 >
               </button>
               <button
-                *ngIf="showHandToolButton"
+                [class.hidden]="!showHandToolButton"
                 id="cursorHandTool"
                 class="secondaryToolbarButton handTool"
                 title="Enable Hand Tool"
@@ -290,12 +290,12 @@
               </button>
 
               <div
-                *ngIf="showScrollingButton"
+                [class.hidden]="!showScrollingButton"
                 class="horizontalToolbarSeparator"
               ></div>
 
               <button
-                *ngIf="showScrollingButton"
+                [class.hidden]="!showScrollingButton"
                 id="scrollVertical"
                 class="secondaryToolbarButton scrollVertical toggled"
                 title="Use Vertical Scrolling"
@@ -307,7 +307,7 @@
                 >
               </button>
               <button
-                *ngIf="showScrollingButton"
+                [class.hidden]="!showScrollingButton"
                 id="scrollHorizontal"
                 class="secondaryToolbarButton scrollHorizontal"
                 title="Use Horizontal Scrolling"
@@ -319,7 +319,7 @@
                 >
               </button>
               <button
-                *ngIf="showScrollingButton"
+                [class.hidden]="!showScrollingButton"
                 id="scrollWrapped"
                 class="secondaryToolbarButton scrollWrapped"
                 title="Use Wrapped Scrolling"
@@ -332,12 +332,12 @@
               </button>
 
               <div
-                *ngIf="showSpreadButton"
+                [class.hidden]="!showSpreadButton"
                 class="horizontalToolbarSeparator"
               ></div>
 
               <button
-                *ngIf="showSpreadButton"
+                [class.hidden]="!showSpreadButton"
                 id="spreadNone"
                 class="secondaryToolbarButton spreadNone toggled"
                 title="Do not join page spreads"
@@ -348,7 +348,7 @@
                 <span data-l10n-id="spread_none_label">No Spreads</span>
               </button>
               <button
-                *ngIf="showSpreadButton"
+                [class.hidden]="!showSpreadButton"
                 id="spreadOdd"
                 class="secondaryToolbarButton spreadOdd"
                 title="Join page spreads starting with odd-numbered pages"
@@ -360,7 +360,7 @@
                 <span data-l10n-id="spread_odd_label">Odd Spreads</span>
               </button>
               <button
-                *ngIf="showSpreadButton"
+                [class.hidden]="!showSpreadButton"
                 id="spreadEven"
                 class="secondaryToolbarButton spreadEven"
                 title="Join page spreads starting with even-numbered pages"
@@ -373,12 +373,12 @@
               </button>
 
               <div
-                *ngIf="showPropertiesButton"
+                [class.hidden]="!showPropertiesButton"
                 class="horizontalToolbarSeparator spreadModeButtons"
               ></div>
 
               <button
-                *ngIf="showPropertiesButton"
+                [class.hidden]="!showPropertiesButton"
                 id="documentProperties"
                 class="secondaryToolbarButton documentProperties"
                 title="Document Properties…"
@@ -393,7 +393,7 @@
           </div>
           <!-- secondaryToolbar -->
 
-          <div class="toolbar" *ngIf="primaryMenuVisible">
+          <div class="toolbar" [class.hidden]="!primaryMenuVisible" (window:resize)="onResize()">
             <div
               id="toolbarContainer"
               [style.zoom]="mobileFriendlyZoom"
@@ -402,7 +402,7 @@
               <div id="toolbarViewer">
                 <div id="toolbarViewerLeft">
                   <button
-                    *ngIf="showSidebarButton"
+                    [class.hidden]="!showSidebarButton"
                     id="sidebarToggle"
                     class="toolbarButton"
                     title="Toggle Sidebar"
@@ -414,11 +414,11 @@
                     >
                   </button>
                   <div
-                    *ngIf="showSidebarButton"
+                    [class.hidden]="!showSidebarButton"
                     class="toolbarButtonSpacer"
                   ></div>
                   <button
-                    *ngIf="showFindButton"
+                    [class.hidden]="!showFindButton"
                     id="viewFind"
                     class="toolbarButton"
                     title="Find in Document"
@@ -428,7 +428,7 @@
                     <span data-l10n-id="findbar_label">Find</span>
                   </button>
                   <div
-                    *ngIf="showPagingButtons"
+                    [class.hidden]="!showPagingButtons"
                     class="splitToolbarButton hiddenSmallView"
                   >
                     <button
@@ -454,7 +454,7 @@
                     </button>
                   </div>
                   <input
-                    *ngIf="showPagingButtons"
+                    [class.hidden]="!showPagingButtons"
                     type="number"
                     id="pageNumber"
                     class="toolbarField pageNumber"
@@ -468,14 +468,14 @@
                     (page-change)="onPageChange()"
                   />
                   <span
-                    *ngIf="showPagingButtons"
+                    [class.hidden]="!showPagingButtons"
                     id="numPages"
                     class="toolbarLabel"
                   ></span>
                 </div>
                 <div id="toolbarViewerRight">
                   <button
-                    *ngIf="showPresentationModeButton"
+                    [class.hidden]="!showPresentationModeButton"
                     id="presentationMode"
                     class="toolbarButton presentationMode hiddenLargeView"
                     title="Switch to Presentation Mode"
@@ -488,7 +488,7 @@
                   </button>
 
                   <button
-                    *ngIf="showOpenFileButton"
+                    [class.hidden]="!showOpenFileButton"
                     id="openFile"
                     class="toolbarButton openFile hiddenLargeView"
                     title="Open File"
@@ -499,7 +499,7 @@
                   </button>
 
                   <button
-                    *ngIf="showPrintButton"
+                    [class.hidden]="!showPrintButton"
                     id="print"
                     class="toolbarButton print hiddenMediumView"
                     title="Print"
@@ -510,7 +510,7 @@
                   </button>
 
                   <button
-                    *ngIf="showDownloadButton"
+                    [class.hidden]="!showDownloadButton"
                     id="download"
                     class="toolbarButton download hiddenMediumView"
                     title="Download"
@@ -521,7 +521,7 @@
                   </button>
                   <a
                     href="#"
-                    *ngIf="showBookmarkButton"
+                    [class.hidden]="!showBookmarkButton"
                     id="viewBookmark"
                     class="toolbarButton bookmark hiddenSmallView"
                     title="Current view (copy or open in new window)"
@@ -532,12 +532,12 @@
                   </a>
 
                   <div
-                    *ngIf="showSecondaryToolbarButton"
+                    [class.hidden]="!showSecondaryToolbarButton"
                     class="verticalToolbarSeparator hiddenSmallView"
                   ></div>
 
                   <button
-                    *ngIf="showSecondaryToolbarButton"
+                    [class.hidden]="!showSecondaryToolbarButton"
                     id="secondaryToolbarToggle"
                     class="toolbarButton"
                     title="Tools"
@@ -547,7 +547,7 @@
                     <span data-l10n-id="tools_label">Tools</span>
                   </button>
                 </div>
-                <div *ngIf="showZoomButtons" id="toolbarViewerMiddle">
+                <div [class.hidden]="!showZoomButtons" id="toolbarViewerMiddle">
                   <div class="splitToolbarButton">
                     <button
                       id="zoomOut"
@@ -683,7 +683,7 @@
           </div>
 
           <menu
-            *ngIf="showRotateButton"
+            [class.hidden]="!showRotateButton"
             type="context"
             id="viewerContextMenu"
           >

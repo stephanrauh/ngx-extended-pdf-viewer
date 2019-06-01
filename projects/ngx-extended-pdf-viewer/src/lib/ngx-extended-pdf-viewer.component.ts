@@ -27,6 +27,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
 
   private initialized = false;
 
+  private resizeTimeout: any = null;
+
   /**
    * Number of milliseconds to wait between initializing the PDF viewer and loading the PDF file.
    * Most users can let this parameter safely at it's default value of zero.
@@ -459,6 +461,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
 
   public ngAfterViewInit() {
     this.initTimeout = setTimeout(() => {
+      this.onResize();
       if (!this.listenToURL) {
         (<any>window).PDFViewerApplication.pdfLinkService.setHash = function() {};
       }
@@ -640,6 +643,85 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
         }
       }
       this.calcViewerPositionTop();
+    }
+  }
+
+  public onResize(): void {
+    clearTimeout(this.resizeTimeout);
+    this.resizeTimeout = setTimeout(this.doResize, 100);
+  }
+
+  private doResize(): void {
+    const pdfViewer = document.getElementsByClassName('html');
+    if (pdfViewer && pdfViewer.length > 0) {
+      const toolbar = pdfViewer[0].getElementsByClassName('toolbar');
+      if (toolbar && toolbar.length > 0) {
+        const width = toolbar[0].clientWidth;
+        if (window.innerWidth - width > 50) {
+          const mediumElements = toolbar[0].getElementsByClassName('hiddenMediumView');
+          for (let i = 0; i < mediumElements.length; i++) {
+            const elt = mediumElements[i] as HTMLElement;
+            if (width < 650) {
+              elt.classList.add('hidden');
+            } else {
+              elt.classList.remove('hidden');
+            }
+          }
+          const smallElements = toolbar[0].getElementsByClassName('hiddenSmallView');
+          for (let i = 0; i < smallElements.length; i++) {
+            const elt = smallElements[i] as HTMLElement;
+            if (width < 590) {
+              elt.classList.add('hidden');
+            } else {
+              elt.classList.remove('hidden');
+            }
+          }
+
+          const tinyElement = document.getElementById('scaleSelectContainer');
+          const tiny = tinyElement as HTMLElement;
+          if (width < 485) {
+            // not perfect, but good first approximation
+            tiny.classList.add('hidden');
+          } else {
+            tiny.classList.remove('hidden');
+          }
+        }
+      }
+
+      /* TODO: this is the complete list of items to consider:
+    @media all and (max-width: 700px) {
+      #outerContainer .hiddenMediumView {
+        display: none;
+      }
+      #outerContainer .visibleMediumView {
+        display: inherit;
+      }
+    }
+
+    @media all and (max-width: 640px) {
+      .hiddenSmallView, .hiddenSmallView * {
+        display: none;
+      }
+      .visibleSmallView {
+        display: inherit;
+      }
+      .toolbarButtonSpacer {
+        width: 0;
+      }
+      html[dir='ltr'] .findbar {
+        left: 38px;
+      }
+      html[dir='rtl'] .findbar {
+        right: 38px;
+      }
+    }
+
+    @media all and (max-width: 535px) {
+      #scaleSelectContainer {
+        display: none;
+      }
+    }
+    */
     }
   }
 }
