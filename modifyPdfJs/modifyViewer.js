@@ -7,12 +7,16 @@ const lineReader = require('readline').createInterface({
 let result = '';
 
 let dropLines = 0;
+currentFunction = '';
 lineReader
   .on('line', function(line) {
     if (dropLines > 0) {
       dropLines--;
       console.log('Dropping ' + line);
     } else {
+      if (line.includes('function ')) {
+        currentFunction = line;
+      }
       if (line.includes("require('../build/pdf.js')")) {
         line = line.replace("require('../build/pdf.js')", "require('./pdf.js')");
       } else if (line.includes('compressed.tracemonkey-pldi-09.pdf')) {
@@ -43,10 +47,12 @@ lineReader
           '// end of the bugfix solving #6 and #11\n' +
           line;
       } else if (line.includes("this.bar.classList.add('hidden');")) {
-        line =
-          "this.div = document.querySelector('.progress'); // always set this new instead of trying to cache this value\n" +
-          'this.bar = this.div.parentNode; // always set this new instead of trying to cache this value\n' +
-          line;
+        if (currentFunction.includes('hide')) {
+          line =
+            "this.div = document.querySelector('.progress'); // always set this new instead of trying to cache this value\n" +
+            'this.bar = this.div.parentNode; // always set this new instead of trying to cache this value\n' +
+            line;
+        }
       } else if (line.includes('if (!this.visible) {')) {
         line = line.replace('if (!this.visible) {', 'if (false) { // modified line');
       } else if (line.includes('Stats.add(page, pageView.stats);')) {
