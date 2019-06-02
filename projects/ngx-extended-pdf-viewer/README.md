@@ -7,7 +7,7 @@
   <a href="https://badge.fury.io/js/ngx-extended-pdf-viewer">
     <img src="https://badge.fury.io/js/ngx-extended-pdf-viewer.svg" alt="npm version">
   </a>
-  <a href="https://atapuerca.de">(nucleus of a) Showcase</a>
+  <a href="https://pdfviewer.net">Showcase</a>
 </p>
 
 This library provides an embeddable
@@ -226,9 +226,10 @@ Do you miss a configuration option? File an issue on the [project bug tracker](h
 
 _Legend:_
 
-- [(attribute)] attribute with two-way-binding
-- [attribute] PDF-viewer reacts when the attribute changes
-- attribute attribute is used at load time only (subsequent changes are ignored)
+- [(attribute)] describes an attribute with two-way-binding
+- [attribute] means that PDF-viewer reacts when the attribute changes
+- (attribute) means an event is raised when the user changes a setting
+- attribute (without special characters) means the attribute is used at load time only. Subsequent changes are ignored.
 
 | _Attribute_                  | _mandatory?_ |       _default value_       |                                                                                                                                                                                                                                                                                                                                            _description_                                                                                                                                                                                                                                                                                                                                             |
 | ---------------------------- | :----------: | :-------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
@@ -378,4 +379,4 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 | 0.9.35     |                                                                                                                                                                                         #67 revisited: reduced the z-index of the toolbar to 7. Now every z-index is below 11.                                                                                                                                                                                          |
 | 0.9.36     |                                                                                                                                              [mobileFriendlyZoom] can now also be 'true' (= '150%') or 'false' (= '100%'); #85 now the zoom buttons are hidden if you want them to be hidden, even if you're using an iPad                                                                                                                                              |
 | 0.9.37     |                                                                                                                                                                                                            #85 reverted the bugfix because it's a bug itself                                                                                                                                                                                                            |
-| 0.9.38     |                                                                                                                                                                                                            #85 addressed the real bug: now the pdf viewer toolbar is responsive on small screen even if the pdf viewer covers only part of the screen width                                                                                                                              |
+| 0.9.38     |                                                                                                                                                            #85 addressed the real bug: now the pdf viewer toolbar is responsive on small screen even if the pdf viewer covers only part of the screen width                                                                                                                                                             |
