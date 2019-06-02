@@ -73,6 +73,6 @@ lineReader
         return console.log(err);
       }
 
-      console.log('The file was saved!');
+      console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/lib/viewer-with-images.css!');
     });
   });
