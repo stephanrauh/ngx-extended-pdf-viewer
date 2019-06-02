@@ -22,7 +22,10 @@ lineReader
       } else if (line.includes("var output = require('zlib').deflateSync(input, {")) {
         line = 'throw Error("zlib not available in the browser");';
         dropLines = 2;
+      } else if (line.includes('//# sourceMappingURL=pdf.js.map')) {
+        line = ''; // the file hasn't been minified, so there's not source map
       }
+
       result += line + '\n';
     }
   })

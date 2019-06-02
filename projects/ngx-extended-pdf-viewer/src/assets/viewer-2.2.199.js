@@ -4115,11 +4115,15 @@ function () {
 
     this.visible = true;
     this.div = document.querySelector(id + ' .progress');
-    this.bar = this.div.parentNode;
+    if (this.div) {
+      this.bar = this.div.parentNode;
+    }
     this.height = height || 100;
     this.width = width || 100;
     this.units = units || '%';
-    this.div.style.height = this.height + this.units;
+    if (this.div) {
+      this.div.style.height = this.height + this.units;
+    }
     this.percent = 0;
   }
 
@@ -4132,9 +4136,13 @@ function () {
         return;
       }
 
-      this.div.classList.remove('indeterminate');
+      if (this.div) {
+        this.div.classList.remove('indeterminate');
+      }
       var progressSize = this.width * this._percent / 100;
-      this.div.style.width = progressSize + this.units;
+      if (this.div) {
+        this.div.style.width = progressSize + this.units;
+      }
     }
   }, {
     key: "setWidth",
@@ -4158,8 +4166,10 @@ function () {
       }
 
       this.visible = false;
-this.div = document.querySelector('.progress'); // always set this new instead of trying to cache this value
-this.bar = this.div.parentNode; // always set this new instead of trying to cache this value
+      if (this.div) {
+        this.div = document.querySelector('.progress'); // always set this new instead of trying to cache this value
+        this.bar = this.div.parentNode; // always set this new instead of trying to cache this value
+      }
       this.bar.classList.add('hidden');
       document.body.classList.remove('loadingInProgress');
     }
@@ -12876,6 +12886,7 @@ function () {
       this.toggleButton.addEventListener('click', this.toggle.bind(this));
 
       var _loop = function _loop(button) {
+    if (!isNaN(button)) {
         var _this2$buttons$button = _this2.buttons[button],
             element = _this2$buttons$button.element,
             eventName = _this2$buttons$button.eventName,
@@ -12898,6 +12909,7 @@ function () {
             _this2.close();
           }
         });
+      }
       };
 
       for (var button in this.buttons) {
@@ -15649,4 +15661,4 @@ _app.PDFPrintServiceFactory.instance = {
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=viewer.js.map
+

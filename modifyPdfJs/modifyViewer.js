@@ -49,8 +49,10 @@ lineReader
       } else if (line.includes("this.bar.classList.add('hidden');")) {
         if (currentFunction.includes('hide')) {
           line =
-            "this.div = document.querySelector('.progress'); // always set this new instead of trying to cache this value\n" +
-            'this.bar = this.div.parentNode; // always set this new instead of trying to cache this value\n' +
+            '      if (this.div) {\n' +
+            "        this.div = document.querySelector('.progress'); // always set this new instead of trying to cache this value\n" +
+            '        this.bar = this.div.parentNode; // always set this new instead of trying to cache this value\n' +
+            '      }\n' +
             line;
         }
       } else if (line.includes('if (!this.visible) {')) {
@@ -70,6 +72,21 @@ lineReader
         line = line.replace("'document.pdf'", 'PDFViewerApplication.appConfig.filenameForDownload');
         line =
           line + '\nif (PDFViewerApplication.appConfig.filenameForDownload) return PDFViewerApplication.appConfig.filenameForDownload;';
+      } else if (line.includes('this.bar = this.div.parentNode;') && currentFunction.includes('ProgressBar')) {
+        line = '    if (this.div) {\n  ' + line + '\n    }';
+      } else if (line.includes('this.div.style.height = this.height + this.units;') && currentFunction.includes('ProgressBar')) {
+        line = '    if (this.div) {\n  ' + line + '\n    }';
+      } else if (line.includes("this.div.classList.remove('indeterminate');") && currentFunction.includes('_updateBar')) {
+        line = '      if (this.div) {\n  ' + line + '\n      }';
+      } else if (line.includes('this.div.style.width = progressSize + this.units;') && currentFunction.includes('_updateBar')) {
+        line = '      if (this.div) {\n  ' + line + '\n      }';
+      } else if (line.includes('function _loop(button) {')) {
+        line = line + '\n    if (!isNaN(button)) {';
+      } else if (line.includes('_this2.close();') && currentFunction.includes('click')) {
+        line = line + '\n          }' + '\n        });' + '\n      }';
+        dropLines = 2;
+      } else if (line.includes('//# sourceMappingURL=viewer.js.map')) {
+        line = ''; // the file hasn't been minified, so there's not source map
       }
       result += line + '\n';
     }
