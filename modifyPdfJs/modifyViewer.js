@@ -21,11 +21,13 @@ lineReader
         line = 'window.webViewerLoad = webViewerLoad;';
         dropLines = 4;
       } else if (line.includes('for (var anyCaseLang in dict.locales) {')) {
-        line = line + '\n            const originalCase = anyCaseLang; // added line';
+        line = line + '\n            originalCaseLang = anyCaseLang; // added line';
+      } else if (line.includes('function loadLocale(lang, callback) {')) {
+        line = line + '\nlet originalCaseLang = lang;';
       } else if (line.includes('gL10nData = dict.locales[lang];')) {
-        line = '              gL10nData = dict.locales[originalCase]; // modified line';
+        line = '              gL10nData = dict.locales[originalCaseLang]; // modified line';
       } else if (line.includes('gL10nData = dict.locales[defaultLocale];')) {
-        line = line.replace('gL10nData = dict.locales[defaultLocale];', 'gL10nData = dict.locales[originalCase]; // modified line');
+        line = line.replace('gL10nData = dict.locales[defaultLocale];', 'gL10nData = dict.locales[originalCaseLang]; // modified line');
       } else if (line.includes("zoom = _app_options.AppOptions.get('defaultZoomValue');")) {
         line = line + '\n // added to solve bug #6 and #11';
         line = line + '\n if (PDFViewerApplication.overrideHistory.zoom !== undefined) {';
