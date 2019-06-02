@@ -7,11 +7,15 @@
   <a href="https://badge.fury.io/js/ngx-extended-pdf-viewer">
     <img src="https://badge.fury.io/js/ngx-extended-pdf-viewer.svg" alt="npm version">
   </a>
-  <a href="https://pdfviewer.net">Showcase</a>
+  <span style="background-color:#606060;color:white;border-radius:3px 0px 0px 3px;padding:1px 5px 2px 6px;position:relative;top:-5px">
+  <a href="https://pdfviewer.net" style="color:white">Showcase</a>
+  </span>  
+  <span style="background-color:#4EC729;color:white;border-radius:0px 3px 3px 0px;padding:1px 5px 2px 6px;position:relative;top:-5px">
+  <a href="https://pdfviewer.net" style="color:white">pdfviewer.net</a>
+  </span>
 </p>
 
-This library provides an embeddable
-PDF viewer component. It's different from other approaches like [ng2-pdf-viewer](https://vadimdez.github.io/ng2-pdf-viewer/) in that it shows the full suite of UI widgets. In other words, it looks exactly like the PDF viewer of your browser:
+This library provides an embeddable PDF viewer component. It's different from other approaches like [ng2-pdf-viewer](https://vadimdez.github.io/ng2-pdf-viewer/) in that it shows the full suite of UI widgets. In other words, it looks exactly like the PDF viewer of your browser:
 
 <img src="https://beyondjava.net/blog/images/ngx-extended-pdf-viewer/example-screenshot.png">
 
@@ -38,6 +42,8 @@ If you only need the base functionality, I'll happily pass you to [the project o
 
 There's also a direct counterpart to my library: <a href="https://www.npmjs.com/package/ng2-pdfjs-viewer" target="#">ng2-pdfjs-viewer</a>. As far as I can see, it's also a good library. Recently (May 24, 2019), it has been updated to PDF.js 2.2.171. If wraps the PDF viewer in an iFrame. That's a more reliable approach, but it also offers less options. The list of attributes is shorter, and the PDF viewer can't emit events to your application.
 
+You might also try to use the native PDF viewer of your browser. That's a valid approach. Actually, it's even the preferred approach. The advantages of both ngx-extended-pdf-viewer and ng2-pdfjs-viewer are they also support Internet Explorer 11 (with some help of the polyfills). ngx-extended-pdf-viewer also gives you a wide range of options that aren't available using the native API.
+
 ## State of the art
 
 I'm using the library in production, and it has been downloaded so many times I assume countless other developers are using it in production, too. Even so: use at own risk. I consider the library a professional-grade leisure time project. I'll answer your bug tickets as soon as possible, but there's nothing in the way of warranties.
@@ -51,8 +57,6 @@ every Angular version since 2.0, but I don't support this actively. If you're us
 Mozilla's PDF viewer suffers from several memory leaks. Currently, ngx-extended-pdf-viewer inherits these leaks (or I didn't find out yet how to remove the viewer from memory properly). If you know how to solve the bug, please leave a message at [the corresponding issue on GitHub](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/12). Any help is appreciated!
 
 There's also a layout glitch that seems to be intentional: you may need to set the font size of the input field containing the page number explicitely. By default, it's a lot larger than the rest of the text of the toolbar in some applications.
-
-Under certain circumstances, the progress bar doesn't vanish after loading the document. This results in a 4 pixel high black bar below the toolbar.
 
 ## Unknown bugs
 
@@ -274,7 +278,7 @@ _Legend:_
 | [(page)]                     |      no      |          undefined          |                                                                                                                                                                                                                         two-way binding attribute to determine the page to display; more precisely: [page]="25" makes the PDF viewer show page 25 (at any time - even after load time); (page)="attribute" updates the attribute each time the user scrolls to another page                                                                                                                                                                                                                          |
 | (pagesLoaded)                |      no      |          undefined          |                                                                                                                                                                                          emits the number of pages when a document is loaded; more precisely: emits an instance of PagesLoadedEvent. The attribute "pagesCount" tells how many pages the document has. The source attribute contains a reference to the PDF viewer. You can also use this event to detect when a document has been loaded.                                                                                                                                                                                           |
 | (pageRendered)               |      no      |          undefined          |                                                                                                                                                                                                                                                                            fires each time a page is rendered. Emits an instance of PageRenderedEvent. The "pageNumber" attribute tells you which page has been rendered.                                                                                                                                                                                                                                                                            |
-| spread                       |      no      |             off             |                                                                                                                                                                                                                          determines if you're seeing one page or two pages at once (like a paper book). 'off' means there's only one page. 'odd' is the traditional book-like view, with two pages side-by-side. 'even' is similar, only the first page is displayed alone.                                                                                                                                                                                                                          |
+| [(spread)]                   |      no      |             off             |                                                                                                                                                                                                                          determines if you're seeing one page or two pages at once (like a paper book). 'off' means there's only one page. 'odd' is the traditional book-like view, with two pages side-by-side. 'even' is similar, only the first page is displayed alone.                                                                                                                                                                                                                          |
 | [(zoom)] (two-way binding)   |      no      |          undefined          | [zoom]="undefined" (default value): use the zoom level configured previously by the user, or "auto" if no configuration was found. If not undefined: Set the zoom level of the page, no matter which zoom level was previously configured. Legal values are [zoom]="'auto'", ="'page-actual'", ="'page-fit'", ="'page-width'", or ="50" (or any other percentage). Numbers are always considered percentages; the trailing "%" character is optional. This attribute supports two-way binding. [(zoom)]="zoomAttribute" updates the variable `zoomAttribute` each time the user changes the zoom setting. This is useful to use the same zoom accross multiple PDF viewer instances or PDF document. |
 
 ## Internationalization
