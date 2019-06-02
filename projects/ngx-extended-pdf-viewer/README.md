@@ -143,6 +143,14 @@ Basically, there are (at least) two ways to create an Angular application: you c
                   "node_modules/ngx-extended-pdf-viewer/assets/viewer.js"
                 ]
 
+    If you're the adventurous one, you can also add the next version of pdf.js. Note that this version is a developer snapshat instead of a stable release. It's not intended to be used in production yet. Plus, the version number may change with each release of ngx-extended-pdf-viewer. That said, here's how to have a glimpse of the future:
+
+                "scripts": [
+                  "node_modules/ngx-extended-pdf-viewer/assets/pdf-2.2.199.js",
+                  "node_modules/ngx-extended-pdf-viewer/assets/pdf-2.2.199.worker.js",
+                  "node_modules/ngx-extended-pdf-viewer/assets/viewer-2.2.199.js"
+                ]
+
 2.b. (CLI users only) Add the translations to the assets by adding them to the "assets" section in the angular.json:
 
             "assets": [
@@ -380,3 +388,4 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 | 0.9.36     |                                                                                                                                              [mobileFriendlyZoom] can now also be 'true' (= '150%') or 'false' (= '100%'); #85 now the zoom buttons are hidden if you want them to be hidden, even if you're using an iPad                                                                                                                                              |
 | 0.9.37     |                                                                                                                                                                                                            #85 reverted the bugfix because it's a bug itself                                                                                                                                                                                                            |
 | 0.9.38     |                                                                                                                                                            #85 addressed the real bug: now the pdf viewer toolbar is responsive on small screen even if the pdf viewer covers only part of the screen width                                                                                                                                                             |
+| 0.9.39     |                                                                                                                                                                          fully automated the process to update to a new version of pdf.js; added pdf.js 2.2.199 as an optional preview version                                                                                                                                                                          |

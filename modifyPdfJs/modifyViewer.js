@@ -75,11 +75,11 @@ lineReader
     }
   })
   .on('close', function() {
-    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets/viewer-2.2.197.js', result, function(err) {
+    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets/viewer-2.2.199.js', result, function(err) {
       if (err) {
         return console.log(err);
       }
 
-      console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets/viewer-2.2.197.js!');
+      console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets/viewer-2.2.199.js!');
     });
   });

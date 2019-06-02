@@ -68,11 +68,11 @@ lineReader
     result += line + '\n';
   })
   .on('close', function() {
-    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/lib/viewer-with-images-2.2.197.css', result, function(err) {
+    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/lib/viewer-with-images-2.2.199.css', result, function(err) {
       if (err) {
         return console.log(err);
       }
 
-      console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/lib/viewer-with-images-2.2.197.css!');
+      console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/lib/viewer-with-images-2.2.199.css!');
     });
   });

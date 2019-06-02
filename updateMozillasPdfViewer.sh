@@ -3,7 +3,7 @@ cd inlineImageFiles
 node index.js
 cd ..
 cp -R ../mozillas-pdf.js/build/generic/web/locale/* ./projects/ngx-extended-pdf-viewer/src/assets/locale/
-cp ../mozillas-pdf.js/build/generic/build/pdf.worker.js ./projects/ngx-extended-pdf-viewer/src/assets/pdf.worker-2.2.197.js
+cp ../mozillas-pdf.js/build/generic/build/pdf.worker.js ./projects/ngx-extended-pdf-viewer/src/assets/pdf.worker-2.2.199.js
 cd addBaseLanguages
 node index.js
 cd ..

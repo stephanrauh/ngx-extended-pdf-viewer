@@ -26,9 +26,9 @@
             ],
             "styles": ["src/styles.css"],
             "scripts": [
-              "dist/ngx-extended-pdf-viewer/assets/pdf.js",
-              "dist/ngx-extended-pdf-viewer/assets/pdf.worker.js",
-              "dist/ngx-extended-pdf-viewer/assets/viewer.js"
+              "dist/ngx-extended-pdf-viewer/assets/pdf-2.2.199.js",
+              "dist/ngx-extended-pdf-viewer/assets/pdf.worker-2.2.199.js",
+              "dist/ngx-extended-pdf-viewer/assets/viewer-2.2.199.js"
             ]
           },
           "configurations": {
