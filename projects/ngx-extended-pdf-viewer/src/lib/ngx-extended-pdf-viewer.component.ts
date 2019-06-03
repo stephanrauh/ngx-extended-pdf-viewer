@@ -408,15 +408,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
 
   private overrideDefaultSettings() {
     (<any>window).PDFViewerApplication.overrideHistory = {};
-    if (this.zoom) {
-      let z = this.zoom;
-      if (typeof z !== 'number') {
-        if (z.endsWith('%')) {
-          z = z.replace('%', '');
-        }
-      }
-      (<any>window).PDFViewerApplication.overrideHistory.zoom = z;
-    }
+
     if ((<any>window).PDFViewerApplication.appConfig) {
       (<any>window).PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
     } else {
@@ -473,6 +465,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
           (<any>window).PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
         }
         this.overrideDefaultSettings();
+        this.setZoom();
       });
       (<any>window).PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
         this.pageRendered.emit(x);
@@ -581,13 +574,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
         }
       }
       if ('zoom' in changes) {
-        let zoomAsNumber = this.zoom;
-        if (String(zoomAsNumber).endsWith('%')) {
-          zoomAsNumber = Number(String(zoomAsNumber).replace('%', '')) / 100;
-        } else if (!isNaN(Number(zoomAsNumber))) {
-          zoomAsNumber = Number(zoomAsNumber) / 100;
-        }
-        (<any>window).PDFViewerApplication.pdfViewer.currentScaleValue = zoomAsNumber;
+        this.setZoom();
       }
 
       if ('handTool' in changes) {
@@ -644,6 +631,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       }
       this.calcViewerPositionTop();
     }
+  }
+
+  private setZoom() {
+    let zoomAsNumber = this.zoom;
+    if (String(zoomAsNumber).endsWith('%')) {
+      zoomAsNumber = Number(String(zoomAsNumber).replace('%', '')) / 100;
+    } else if (!isNaN(Number(zoomAsNumber))) {
+      zoomAsNumber = Number(zoomAsNumber) / 100;
+    }
+    (<any>window).PDFViewerApplication.pdfViewer.currentScaleValue = zoomAsNumber;
   }
 
   public onResize(): void {

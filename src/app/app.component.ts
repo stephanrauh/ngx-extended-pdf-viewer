@@ -12,7 +12,7 @@ export class AppComponent {
   public title = 'ngx-extended-pdf-viewer';
   public pdf = 'assets/example.pdf';
   public hidden = false;
-  public zoom: number | string | undefined = 42;
+  public zoom: number | string | undefined = 'page-width';
   public visible = { 0: true };
   public mobileFriendlyZoomPercent = false;
   public showSidebar = false;

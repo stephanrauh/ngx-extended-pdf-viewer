@@ -1256,11 +1256,6 @@ var PDFViewerApplication = {
 
                   initialBookmark = _this5.initialBookmark;
                   zoom = _app_options.AppOptions.get('defaultZoomValue');
- // added to solve bug #6 and #11
- if (PDFViewerApplication.overrideHistory.zoom !== undefined) {
- zoom = PDFViewerApplication.overrideHistory.zoom;
- }
- // end of the bugfix solving #6 and #11
                   hash = zoom ? "zoom=".concat(zoom) : null;
                   rotation = null;
                   sidebarView = _app_options.AppOptions.get('sidebarViewOnLoad');

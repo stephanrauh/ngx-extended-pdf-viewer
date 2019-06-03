@@ -32,12 +32,6 @@ lineReader
         line = '              gL10nData = dict.locales[originalCaseLang]; // modified line';
       } else if (line.includes('gL10nData = dict.locales[defaultLocale];')) {
         line = line.replace('gL10nData = dict.locales[defaultLocale];', 'gL10nData = dict.locales[originalCaseLang]; // modified line');
-      } else if (line.includes("zoom = _app_options.AppOptions.get('defaultZoomValue');")) {
-        line = line + '\n // added to solve bug #6 and #11';
-        line = line + '\n if (PDFViewerApplication.overrideHistory.zoom !== undefined) {';
-        line = line + '\n zoom = PDFViewerApplication.overrideHistory.zoom;';
-        line = line + '\n }';
-        line = line + '\n // end of the bugfix solving #6 and #11';
       } else if (line.includes('_this5.setInitialView(hash, {')) {
         line =
           '// added to solve bug #6 and #11\n' +
