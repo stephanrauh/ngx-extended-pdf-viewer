@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { PagesLoadedEvent } from 'projects/ngx-extended-pdf-viewer/src/lib/pages-loaded-event';
 import { pdfBase64 } from './pdfBase64';
 import { PageRenderedEvent } from '../../projects/ngx-extended-pdf-viewer/src/lib/page-rendered-event';
+import { NgxExtendedPdfViewerService } from '../../projects/ngx-extended-pdf-viewer/src/lib/ngx-extended-pdf-viewer.service';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,7 @@ export class AppComponent {
   public filenameForDownload: string | undefined = undefined;
   public language = 'es-ES';
   public nameddest = 'chapter_5';
+  public _searchtext = '';
   public spread = 'off';
 
   public page: number | undefined = undefined;
@@ -27,6 +29,16 @@ export class AppComponent {
   public handTool: boolean | undefined = undefined;
 
   public base64 = pdfBase64; // this.base64ToArrayBuffer(pdfBase64);
+
+  public get searchtext(): string {
+    return this._searchtext;
+  }
+
+  public set searchtext(text: string) {
+    if (this.ngxExtendedPdfViewerService.find(text)) {
+      this._searchtext = text;
+    }
+  }
 
   public get zoomAuto(): boolean {
     return this.zoom === 'auto';
@@ -169,11 +181,21 @@ export class AppComponent {
     }
   }
 
+  constructor(private ngxExtendedPdfViewerService: NgxExtendedPdfViewerService) {}
+
   public onPagesLoaded(event: PagesLoadedEvent) {
     console.log('Document loaded with ' + event.pagesCount + ' pages');
   }
 
   public onPageRendered(event: PageRenderedEvent) {
     console.log(event);
+  }
+
+  public findNext(): void {
+    this.ngxExtendedPdfViewerService.findNext();
+  }
+
+  public findPrevious(): void {
+    this.ngxExtendedPdfViewerService.findPrevious();
   }
 }

@@ -7,13 +7,13 @@
   <a href="https://badge.fury.io/js/ngx-extended-pdf-viewer">
     <img src="https://badge.fury.io/js/ngx-extended-pdf-viewer.svg" alt="npm version">
   </a>
-  <span style="background-color:#606060;color:white;border-radius:3px 0px 0px 3px;padding:1px 5px 2px 6px;position:relative;top:-5px">
-  <a href="https://pdfviewer.net" style="color:white">Showcase</a>
-  </span>  
-  <span style="background-color:#4EC729;color:white;border-radius:0px 3px 3px 0px;padding:1px 5px 2px 6px;position:relative;top:-5px">
-  <a href="https://pdfviewer.net" style="color:white">pdfviewer.net</a>
-  </span>
-</p>
+ </p>
+
+## Showcase
+
+There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>.
+
+## Bringing PDF to the Angular world
 
 This library provides an embeddable PDF viewer component. It's different from other approaches like [ng2-pdf-viewer](https://vadimdez.github.io/ng2-pdf-viewer/) in that it shows the full suite of UI widgets. In other words, it looks exactly like the PDF viewer of your browser:
 
@@ -21,20 +21,21 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 ## Features
 
-- Searching
+- Searching (even programatically)
 - Printing
 - Sidebar with thumbails, outlines, and attachments
 - Rotating
 - Download and upload
-- Zoom
+- Zoom (with optional two-way binding to an attribute)
 - Full-screen mode
 - various selection tools
 - standard display or even / odd spreads (like a book)
+- several event listeners
 - various approaches to scrolling (vertical, horizontal, "wrapped" scrolling)
 - Internationalization (providing translations to several dozen languages)
 - plus the ability to deactivate each of these features.
 
-Not to mention the ability to display PDF files, running on Mozilla's pdf.js 2.1.266.
+Not to mention the ability to display PDF files, running on Mozilla's pdf.js 2.1.266. Or even pdf.js 2.2.199, if you want to try a developer snapshot of the next version.
 
 ## Alternatives
 
@@ -281,6 +282,16 @@ _Legend:_
 | [(spread)]                   |      no      |             off             |                                                                                                                                                                                                                          determines if you're seeing one page or two pages at once (like a paper book). 'off' means there's only one page. 'odd' is the traditional book-like view, with two pages side-by-side. 'even' is similar, only the first page is displayed alone.                                                                                                                                                                                                                          |
 | [(zoom)] (two-way binding)   |      no      |          undefined          | [zoom]="undefined" (default value): use the zoom level configured previously by the user, or "auto" if no configuration was found. If not undefined: Set the zoom level of the page, no matter which zoom level was previously configured. Legal values are [zoom]="'auto'", ="'page-actual'", ="'page-fit'", ="'page-width'", or ="50" (or any other percentage). Numbers are always considered percentages; the trailing "%" character is optional. This attribute supports two-way binding. [(zoom)]="zoomAttribute" updates the variable `zoomAttribute` each time the user changes the zoom setting. This is useful to use the same zoom accross multiple PDF viewer instances or PDF document. |
 
+## Searching programmatically
+
+The service `NgxExtendedPdfViewerService` allows you to search programmatically. If the PDF viewer hasn't been initialized, or if it has already been destroyed, calling the service results in an error message on the console.
+
+| _method_                   | action                                                                                                                                                                                  |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| find(text: string):boolean | finds a certain text. If the PDF viewer is not initialized, the method returns `false` and prints an error message on the console.                                                      |
+| findNext(): boolean        | finds the next search result. Only call it after calling find() first. If the PDF viewer is not initialized, the method returns `false` and prints an error message on the console.     |
+| findPrevious(): boolean    | finds the previous search result. Only call it after calling find() first. If the PDF viewer is not initialized, the method returns `false` and prints an error message on the console. |
+
 ## Internationalization
 
 ### Slow default way
@@ -394,3 +405,5 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 | 0.9.38     |                                                                                                                                                            #85 addressed the real bug: now the pdf viewer toolbar is responsive on small screen even if the pdf viewer covers only part of the screen width                                                                                                                                                             |
 | 0.9.39     |                                                                                                                                         fully automated the process to update to a new version of pdf.js; added pdf.js 2.2.199 as an optional preview version; added pull request #76 (additional null checks and type checks)                                                                                                                                          |
 | 0.9.40     |                                                                                                                                                                                                               #84 fixed [zoom] (didn't work on page load)                                                                                                                                                                                                               |
+| 0.9.41     |                                                                                                                                                                                        #33 implemented a service to call find(), findNext(), and findPrevious() programatically                                                                                                                                                                                         |
+| 0.9.42     |                                                                                                                                                                         #33 added the documentation for the find() service and published NgxExtendedPdfViewerSerice (possibly work in progress)                                                                                                                                                                         |

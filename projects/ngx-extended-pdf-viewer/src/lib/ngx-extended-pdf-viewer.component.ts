@@ -23,9 +23,9 @@ declare var PDFJS: any;
   encapsulation: ViewEncapsulation.None
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-  private _src: string | ArrayBuffer;
+  public static ngxExtendedPdfViewerInitialized = false;
 
-  private initialized = false;
+  private _src: string | ArrayBuffer;
 
   private resizeTimeout: any = null;
 
@@ -344,6 +344,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   }
 
   ngOnInit() {
+    if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
+      console.error("You're trying to open two instances of the PDF viewer. Most likely, this will result in errors.");
+    }
     document.addEventListener('webviewerloaded', () => {
       this.overrideDefaultSettings();
     });
@@ -488,10 +491,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
       }, 100);
     }, this.delayFirstView);
 
-    this.initialized = true;
+    NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized = true;
   }
 
   public ngOnDestroy(): void {
+    NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized = false;
     if (this.initTimeout) {
       clearTimeout(this.initTimeout);
       this.initTimeout = undefined;
@@ -566,7 +570,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    if (this.initialized) {
+    if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
       if ('src' in changes) {
         if (!!this._src) {
           this.overrideDefaultSettings();
