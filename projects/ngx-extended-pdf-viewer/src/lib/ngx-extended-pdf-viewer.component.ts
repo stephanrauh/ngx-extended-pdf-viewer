@@ -274,7 +274,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
     this.mobileFriendlyZoom = mobileFriendlyZoom;
   }
 
-  @ViewChild('sizeSelector', { static: true }) sizeSelector: any;
+  @ViewChild('sizeSelector') sizeSelector: any;
 
   private _top: string | undefined = undefined;
 
