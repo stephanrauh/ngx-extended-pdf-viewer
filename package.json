@@ -31,21 +31,21 @@
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.800.0",
-    "@angular-devkit/build-ng-packagr": "0.800.0",
+    "@angular-devkit/build-angular": "0.800.1",
+    "@angular-devkit/build-ng-packagr": "0.800.1",
     "@angular/cli": "^8.0.1",
     "@angular/compiler-cli": "^8.0.0",
     "@angular/language-service": "^8.0.0",
     "@types/node": "^11.13.13",
-    "caniuse-lite": "^1.0.30000971",
-    "codelyzer": "~5.0.1",
+    "caniuse-lite": "^1.0.30000973",
+    "codelyzer": "~5.1.0",
     "macaddress": ">=0.2.9",
-    "ng-packagr": "^5.2.0",
+    "ng-packagr": "^5.3.0",
     "properties-reader": "0.0.16",
     "ts-node": "^8.2.0",
     "tsickle": "^0.35.0",
     "tslib": "^1.9.3",
-    "tslint": "~5.16.0",
+    "tslint": "~5.17.0",
     "typescript": "~3.4.5"
   }
 }
