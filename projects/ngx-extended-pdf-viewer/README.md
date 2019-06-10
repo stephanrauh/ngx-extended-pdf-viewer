@@ -152,7 +152,7 @@ Basically, there are (at least) two ways to create an Angular application: you c
 
                 "scripts": [
                   "node_modules/ngx-extended-pdf-viewer/assets/pdf-2.2.199.js",
-                  "node_modules/ngx-extended-pdf-viewer/assets/pdf-2.2.199.worker.js",
+                  "node_modules/ngx-extended-pdf-viewer/assets/pdf.worker-2.2.199.js",
                   "node_modules/ngx-extended-pdf-viewer/assets/viewer-2.2.199.js"
                 ]
 
