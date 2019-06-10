@@ -5,7 +5,6 @@ import {
   Input,
   OnChanges,
   SimpleChanges,
-  AfterViewInit,
   OnDestroy,
   Output,
   EventEmitter,
@@ -22,7 +21,7 @@ declare var PDFJS: any;
   styleUrls: ['./viewer-with-images-2.2.199.css', './ngx-extended-pdf-viewer.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestroy {
   public static ngxExtendedPdfViewerInitialized = false;
 
   private _src: string | ArrayBuffer;
@@ -344,6 +343,37 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
   }
 
   ngOnInit() {
+    const langLinks = document.querySelectorAll('link[type="application/l10n"]');
+    const langCount = langLinks.length;
+
+    if (langCount === 0) {
+      const dict = document.querySelector('script[type="application/l10n"]');
+      if (!dict) {
+        if (!this.useBrowserLocale) {
+          console.error(
+            "If you set the attribute 'useBrowserLocale' to false, you must provide the translations yourself in a script or link tag."
+          );
+          console.error('The easiest way to do this is to add them to the index.html.');
+        }
+      } else if (this.useBrowserLocale) {
+        console.error(
+          "Please set the attribute 'useBrowserLocale' to false if you provide the translations yourself in a script or link tag."
+        );
+      }
+    } else if (this.useBrowserLocale) {
+      console.error(
+        "Please set the attribute 'useBrowserLocale' to false if you provide the translations yourself in a script or link tag."
+      );
+    }
+    const callback = e => {
+      document.removeEventListener('localized', callback);
+      this.initTimeout = setTimeout(() => {
+        this.openPDF();
+      }, this.delayFirstView);
+    };
+
+    document.addEventListener('localized', callback);
+
     if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
       console.error("You're trying to open two instances of the PDF viewer. Most likely, this will result in errors.");
     }
@@ -454,44 +484,37 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, AfterVi
     }
   }
 
-  public ngAfterViewInit() {
-    this.initTimeout = setTimeout(() => {
-      this.onResize();
-      if (!this.listenToURL) {
-        (<any>window).PDFViewerApplication.pdfLinkService.setHash = function() {};
-      }
-
-      this.initTimeout = null;
-      (<any>window).PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
-        this.pagesLoaded.emit(x);
-        if (this.nameddest) {
-          (<any>window).PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
-        }
-        this.overrideDefaultSettings();
-        this.setZoom();
-      });
-      (<any>window).PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
-        this.pageRendered.emit(x);
-      });
-
-      this.checkHeight();
-      // open a file in the viewer
-      if (!!this._src) {
-        const options = {
-          password: this.password
-        };
-
-        (<any>window).PDFViewerApplication.open(this._src, options);
-      }
-
-      setTimeout(() => {
-        if (this.page) {
-          (<any>window).PDFViewerApplication.page = this.page;
-        }
-      }, 100);
-    }, this.delayFirstView);
-
+  private openPDF() {
     NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized = true;
+    this.onResize();
+    if (!this.listenToURL) {
+      (<any>window).PDFViewerApplication.pdfLinkService.setHash = function() {};
+    }
+    this.initTimeout = null;
+    (<any>window).PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
+      this.pagesLoaded.emit(x);
+      if (this.nameddest) {
+        (<any>window).PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
+      }
+      this.overrideDefaultSettings();
+      this.setZoom();
+    });
+    (<any>window).PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
+      this.pageRendered.emit(x);
+    });
+    this.checkHeight();
+    // open a file in the viewer
+    if (!!this._src) {
+      const options = {
+        password: this.password
+      };
+      (<any>window).PDFViewerApplication.open(this._src, options);
+    }
+    setTimeout(() => {
+      if (this.page) {
+        (<any>window).PDFViewerApplication.page = this.page;
+      }
+    }, 100);
   }
 
   public ngOnDestroy(): void {
