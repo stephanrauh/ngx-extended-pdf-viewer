@@ -667,6 +667,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     } else if (!isNaN(Number(zoomAsNumber))) {
       zoomAsNumber = Number(zoomAsNumber) / 100;
     }
+    if (!zoomAsNumber) {
+      zoomAsNumber = 'auto';
+    }
     (<any>window).PDFViewerApplication.pdfViewer.currentScaleValue = zoomAsNumber;
   }
 
