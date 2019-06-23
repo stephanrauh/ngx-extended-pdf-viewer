@@ -179,7 +179,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public handTool = true;
   @Input()
-  public showHandToolButton = true;
+  public showHandToolButton = false;
   @Input()
   public showScrollingButton = true;
   @Input()
