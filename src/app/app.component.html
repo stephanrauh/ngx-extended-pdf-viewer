@@ -111,6 +111,7 @@
         [(spread)]="spread"
         [language]="language"
         (pageRendered)="onPageRendered($event)"
+        [(zoom)]="zoom"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>
@@ -183,16 +184,15 @@
         [showRotateButton]="false"
         [showSidebarOnLoad]="true"
         [showSpreadButton]="false"
-        [showSelectToolButton]="false"
         [useBrowserLocale]="false"
         [(zoom)]="zoom"
         [height]="height"
-        [handTool]="handTool"
         [(page)]="page"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [(spread)]="spread"
         [language]="language"
+        [handTool]="true"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>

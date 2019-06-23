@@ -12,8 +12,7 @@ import {
 } from '@angular/core';
 import { PagesLoadedEvent } from './pages-loaded-event';
 import { PageRenderedEvent } from './page-rendered-event';
-
-declare var PDFJS: any;
+import { defaultOptions } from './default-options';
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
@@ -178,9 +177,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public showRotateButton = true;
   @Input()
-  public showSelectToolButton = true;
-  @Input()
-  public handTool = false;
+  public handTool = true;
   @Input()
   public showHandToolButton = true;
   @Input()
@@ -398,7 +395,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       (<any>window).PDFViewerApplicationOptions.set('locale', this.language);
 
       (<any>window).PDFViewerApplication.isViewerEmbedded = true;
-      this.overrideDefaultSettings();
 
       const pc = document.getElementById('printContainer');
       if (pc) {
@@ -440,43 +436,52 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   private overrideDefaultSettings() {
-    (<any>window).PDFViewerApplication.overrideHistory = {};
+    const options = (<any>window).PDFViewerApplicationOptions;
+    // tslint:disable-next-line:forin
+    for (const key in defaultOptions) {
+      options.set(key, defaultOptions[key]);
+    }
+    options.set('disablePreferences', true);
+    this.setZoom();
 
     if ((<any>window).PDFViewerApplication.appConfig) {
       (<any>window).PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
     } else {
-      (<any>window).PDFViewerApplicationOptions.set('filenameForDownload', this.filenameForDownload);
+      options.set('filenameForDownload', this.filenameForDownload);
     }
+
+    options.set('textLayerMode', this.showHandToolButton ? 1 : 0);
+
     if (this.showSidebarButton) {
       if (this.showSidebarOnLoad !== undefined) {
         (<any>window).PDFViewerApplication.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
         if ((<any>window).PDFViewerApplication.appConfig) {
           (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
         }
-        (<any>window).PDFViewerApplication.overrideHistory.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
+        options.set('sidebarViewOnLoad', this.showSidebarOnLoad ? 1 : 0);
       }
     } else {
       (<any>window).PDFViewerApplication.sidebarViewOnLoad = 0;
+      options.set('sidebarViewOnLoad', 0);
       if ((<any>window).PDFViewerApplication.appConfig) {
         (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = 0;
       }
-      (<any>window).PDFViewerApplication.overrideHistory.sidebarViewOnLoad = 0;
     }
 
     if (this.spread === 'even') {
-      (<any>window).PDFViewerApplicationOptions.set('spreadModeOnLoad', 2);
+      options.set('spreadModeOnLoad', 2);
       if ((<any>window).PDFViewerApplication.pdfViewer) {
         (<any>window).PDFViewerApplication.pdfViewer.spreadMode = 2;
       }
       this.onSpreadChange('even');
     } else if (this.spread === 'odd') {
-      (<any>window).PDFViewerApplicationOptions.set('spreadModeOnLoad', 1);
+      options.set('spreadModeOnLoad', 1);
       if ((<any>window).PDFViewerApplication.pdfViewer) {
         (<any>window).PDFViewerApplication.pdfViewer.spreadMode = 1;
       }
       this.onSpreadChange('odd');
     } else {
-      (<any>window).PDFViewerApplicationOptions.set('spreadModeOnLoad', 0);
+      options.set('spreadModeOnLoad', 0);
       if ((<any>window).PDFViewerApplication.pdfViewer) {
         (<any>window).PDFViewerApplication.pdfViewer.spreadMode = 0;
       }
@@ -491,12 +496,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       (<any>window).PDFViewerApplication.pdfLinkService.setHash = function() {};
     }
     this.initTimeout = null;
+    this.selectCursorTool();
     (<any>window).PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
       this.pagesLoaded.emit(x);
       if (this.nameddest) {
         (<any>window).PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
       }
-      this.overrideDefaultSettings();
       this.setZoom();
     });
     (<any>window).PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
@@ -515,6 +520,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         (<any>window).PDFViewerApplication.page = this.page;
       }
     }, 100);
+  }
+
+  private selectCursorTool() {
+    (<any>window).PDFViewerApplication.eventBus.dispatch('switchcursortool', { tool: this.handTool ? 1 : 0 });
   }
 
   public ngOnDestroy(): void {
@@ -564,8 +573,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       this.showRotateButton ||
       this.showScrollingButton ||
       this.showRotateButton ||
-      this.showSpreadButton ||
-      this.showSelectToolButton;
+      this.showSpreadButton;
     if (visible) {
       return true;
     }
@@ -605,17 +613,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       }
 
       if ('handTool' in changes) {
-        if (this.handTool) {
-          const menu = document.getElementsByClassName('handTool');
-          if (menu && menu[0]) {
-            (menu[0] as HTMLButtonElement).click();
-          }
-        } else {
-          const menu = document.getElementsByClassName('selectTool');
-          if (menu && menu[0]) {
-            (menu[0] as HTMLButtonElement).click();
-          }
-        }
+        this.selectCursorTool();
       }
       if ('page' in changes) {
         if (this.page) {
@@ -670,7 +668,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (!zoomAsNumber) {
       zoomAsNumber = 'auto';
     }
-    (<any>window).PDFViewerApplication.pdfViewer.currentScaleValue = zoomAsNumber;
+    if ((<any>window).PDFViewerApplication) {
+      (<any>window).PDFViewerApplicationOptions.set('defaultZoomValue', zoomAsNumber);
+    }
+    if ((<any>window).PDFViewerApplication.pdfViewer) {
+      (<any>window).PDFViewerApplication.pdfViewer.currentScaleValue = zoomAsNumber;
+    }
   }
 
   public onResize(): void {

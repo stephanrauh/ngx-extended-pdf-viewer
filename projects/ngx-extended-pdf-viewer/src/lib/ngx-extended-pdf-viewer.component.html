@@ -264,10 +264,10 @@
                 >
               </button>
 
-              <div class="horizontalToolbarSeparator"></div>
+              <div class="horizontalToolbarSeparator" [class.hidden]="!showHandToolButton"></div>
 
               <button
-                [class.hidden]="!showSelectToolButton"
+                [class.hidden]="!showHandToolButton"
                 id="cursorSelectTool"
                 class="secondaryToolbarButton selectTool toggled"
                 title="Enable Text Selection Tool"
