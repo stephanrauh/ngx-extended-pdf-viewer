@@ -32,14 +32,6 @@ lineReader
         line = '              gL10nData = dict.locales[originalCaseLang]; // modified line';
       } else if (line.includes('gL10nData = dict.locales[defaultLocale];')) {
         line = line.replace('gL10nData = dict.locales[defaultLocale];', 'gL10nData = dict.locales[originalCaseLang]; // modified line');
-      } else if (line.includes('_this5.setInitialView(hash, {')) {
-        line =
-          '// added to solve bug #6 and #11\n' +
-          'if (PDFViewerApplication.overrideHistory.sidebarViewOnLoad !== undefined) {\n' +
-          'sidebarView = PDFViewerApplication.overrideHistory.sidebarViewOnLoad;\n' +
-          '}\n' +
-          '// end of the bugfix solving #6 and #11\n' +
-          line;
       } else if (line.includes("this.bar.classList.add('hidden');")) {
         if (currentFunction.includes('hide')) {
           line =
