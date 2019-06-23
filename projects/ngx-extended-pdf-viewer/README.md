@@ -13,6 +13,10 @@
 
 There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>.
 
+## Breaking changes
+
+0.9.47 introduces a small breaking change: [showHandTool] now is false by default, while [handTool] is true by default. This allows it to deactivate the CPU-intensive text layer by default.
+
 ## Bringing PDF to the Angular world
 
 This library provides an embeddable PDF viewer component. It's different from other approaches like [ng2-pdf-viewer](https://vadimdez.github.io/ng2-pdf-viewer/) in that it shows the full suite of UI widgets. In other words, it looks exactly like the PDF viewer of your browser:
@@ -214,7 +218,7 @@ require('ngx-extended-pdf-viewer/assets/web/viewer.js');
 5.  Now you can display the PDF file like so:
 
 ```html
-<ngx-extended-pdf-viewer [src]="'assets/example.pdf'" useBrowserLocale="true" height="80vh" delayFirstView="1000"></ngx-extended-pdf-viewer>
+<ngx-extended-pdf-viewer [src]="'assets/example.pdf'" useBrowserLocale="true" height="80vh"></ngx-extended-pdf-viewer>
 ```
 
 If you are using JHipster, note there's no `assets` folder, so most like the path of the URL is something like `[src]="'content/example.pdf'"`.
@@ -411,3 +415,4 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 | 0.9.44     |                                                                                                                                                                                             #87 wait until the localization event has been fired before opening a PDF file                                                                                                                                                                                              |
 | 0.9.45     |                                                                                                                                                                                                   #87 added error messages to make `useBrowserLocale` less confusing                                                                                                                                                                                                    |
 | 0.9.46     |                                                                                                                                                                                                   #90 fixed the default value of [zoom]; corrected the documentation                                                                                                                                                                                                    |
+| 0.9.47     |                                                                                #88 deactivate the text layer by default; it's only active if [showHandToolButton]="true"; removed [showSelectToolButton] in favor of [showHandToolButton]; optimized the way the PDF viewer is configured; breaking change: [showHandTool] now is false by default, while [handTool] is true by default                                                                                 |
