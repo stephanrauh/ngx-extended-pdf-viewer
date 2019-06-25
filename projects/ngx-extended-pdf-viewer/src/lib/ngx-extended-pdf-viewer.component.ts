@@ -358,9 +358,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         );
       }
     } else if (this.useBrowserLocale) {
-      console.error(
-        "Please set the attribute 'useBrowserLocale' to false if you provide the translations yourself in a script or link tag."
-      );
+      const o = langLinks[0].attributes['origin'];
+      if (o && o.value !== 'ngx-extended-pdf-viewer') {
+        console.error(
+          "Please set the attribute 'useBrowserLocale' to false if you provide the translations yourself in a script or link tag."
+        );
+      }
     }
     const callback = e => {
       document.removeEventListener('localized', callback);
