@@ -39,7 +39,7 @@ This library provides an embeddable PDF viewer component. It's different from ot
 - Internationalization (providing translations to several dozen languages)
 - plus the ability to deactivate each of these features.
 
-Not to mention the ability to display PDF files, running on Mozilla's pdf.js 2.1.266. Or even pdf.js 2.2.199, if you want to try a developer snapshot of the next version.
+Not to mention the ability to display PDF files, running on Mozilla's pdf.js 2.1.266. Or even pdf.js 2.2.220, if you want to try a developer snapshot of the next version.
 
 ## Alternatives
 
@@ -53,9 +53,25 @@ You might also try to use the native PDF viewer of your browser. That's a valid 
 
 I'm using the library in production, and it has been downloaded so many times I assume countless other developers are using it in production, too. Even so: use at own risk. I consider the library a professional-grade leisure time project. I'll answer your bug tickets as soon as possible, but there's nothing in the way of warranties.
 
-The library has originally been developed with Angular 6. Recently, I've updated it to Angular 8, but I've never tested it with earlier versions of Angular. So I've configure npm to complain complain if you're using
-an older version of Angular (i.e. Angular 2-5). In theory, ngx-extended-pdf-viewer should be compatible with
-every Angular version since 2.0, but I don't support this actively. If you're using such a configuration, please share your experience with me, so the greater Angular community benefits from your success (or failure) story. Thanks in advance!
+The library has originally been developed with Angular 6. Recently, I've updated it to Angular 8, but I've never tested it with earlier versions of Angular.
+
+## Angular 2, 4, and 5
+
+With a little effort, ngx-extended-pdf-viewer works with Angular 5 and Ionic 3. Thanks to GitHub user @tanzl88 for find out how. They've also provided a running demo projekt: https://github.com/tanzl88/ionic-3-extended-pdf-viewer.
+
+For technical reasons, the binary files of ngx-extended-pdf-viewer are not compatible with Angular 5 or below. So do not run npm install. Instead, copy these files into your local project:
+
+- <a href="https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/master/projects/ngx-extended-pdf-viewer/src/assets/pdf.js">pdf.js</a>
+- <a href="https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/master/projects/ngx-extended-pdf-viewer/src/assets/pdf.worker.js">pdf.worker.js</a>
+- <a href="https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/master/projects/ngx-extended-pdf-viewer/src/assets/viewer.js">viewer.js</a>
+- <a href="https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/master/projects/ngx-extended-pdf-viewer/src/lib">the folder ngx-extended-pdf-viewer</a>
+- <a href="https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/master/projects/ngx-extended-pdf-viewer/src/assets/locale">the locale folder</a>
+
+After that, follow these steps:
+
+1.  Load pdfjs in index.html
+2.  Copy ngx-extended-pdf-viewer into component
+3.  Change ngx-extended-pdf-viewer css file into ionic format (remove styleUrls)
 
 ## Known bugs
 
@@ -155,9 +171,9 @@ Basically, there are (at least) two ways to create an Angular application: you c
     If you're the adventurous one, you can also add the next version of pdf.js. Note that this version is a developer snapshat instead of a stable release. It's not intended to be used in production yet. Plus, the version number may change with each release of ngx-extended-pdf-viewer. That said, here's how to have a glimpse of the future:
 
                 "scripts": [
-                  "node_modules/ngx-extended-pdf-viewer/assets/pdf-2.2.199.js",
-                  "node_modules/ngx-extended-pdf-viewer/assets/pdf.worker-2.2.199.js",
-                  "node_modules/ngx-extended-pdf-viewer/assets/viewer-2.2.199.js"
+                  "node_modules/ngx-extended-pdf-viewer/assets/pdf-2.2.222.js",
+                  "node_modules/ngx-extended-pdf-viewer/assets/pdf.worker-2.2.222.js",
+                  "node_modules/ngx-extended-pdf-viewer/assets/viewer-2.2.222.js"
                 ]
 
 2.b. (CLI users only) Add the translations to the assets by adding them to the "assets" section in the angular.json:
@@ -407,7 +423,7 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 | 0.9.36     |                                                                                                                                              [mobileFriendlyZoom] can now also be 'true' (= '150%') or 'false' (= '100%'); #85 now the zoom buttons are hidden if you want them to be hidden, even if you're using an iPad                                                                                                                                              |
 | 0.9.37     |                                                                                                                                                                                                            #85 reverted the bugfix because it's a bug itself                                                                                                                                                                                                            |
 | 0.9.38     |                                                                                                                                                            #85 addressed the real bug: now the pdf viewer toolbar is responsive on small screen even if the pdf viewer covers only part of the screen width                                                                                                                                                             |
-| 0.9.39     |                                                                                                                                         fully automated the process to update to a new version of pdf.js; added pdf.js 2.2.199 as an optional preview version; added pull request #76 (additional null checks and type checks)                                                                                                                                          |
+| 0.9.39     |                                                                                                                                         fully automated the process to update to a new version of pdf.js; added pdf.js 2.2.222 as an optional preview version; added pull request #76 (additional null checks and type checks)                                                                                                                                          |
 | 0.9.40     |                                                                                                                                                                                                               #84 fixed [zoom] (didn't work on page load)                                                                                                                                                                                                               |
 | 0.9.41     |                                                                                                                                                                                        #33 implemented a service to call find(), findNext(), and findPrevious() programatically                                                                                                                                                                                         |
 | 0.9.42     |                                                                                                                                                                         #33 added the documentation for the find() service and published NgxExtendedPdfViewerSerice (possibly work in progress)                                                                                                                                                                         |
@@ -418,3 +434,4 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 | 0.9.47     |                                                                                #88 deactivate the text layer by default; it's only active if [showHandToolButton]="true"; removed [showSelectToolButton] in favor of [showHandToolButton]; optimized the way the PDF viewer is configured; breaking change: [showHandTool] now is false by default, while [handTool] is true by default                                                                                 |
 | 0.9.48     |                                                                                                                                                               #95 if the user defines a button to be hidden, it should remain hidden even if responsive design indicates there's enough space to show it.                                                                                                                                                               |
 | 0.9.49     |                                                                                                                                                               #91 one of the validation checks introduced with 0.9.45 stumbled over a DOM node added by ngx-extended-pdf-viewer itself; 0.9.49 fixes that                                                                                                                                                               |
+| 0.9.50     |                                                                                                                            ##86 documented how to use ngx-extended-pdf-viewer with Angular 5 / Ionic 3; updated the preview version of pdf.js to 2.2.222 and replaced the ES5 version of these files by the debugger-friendly ES2016 version                                                                                                                            |
