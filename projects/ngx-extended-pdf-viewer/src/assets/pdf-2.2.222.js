@@ -9750,7 +9750,6 @@ let fakeWorkerFilesLoader = null;
     useRequireEnsure = true;
   }
 
-  debugger;
   if (typeof requirejs !== 'undefined' && requirejs.toUrl) {
     fallbackWorkerSrc = requirejs.toUrl('./pdf.worker-2.2.222.js');
   }
