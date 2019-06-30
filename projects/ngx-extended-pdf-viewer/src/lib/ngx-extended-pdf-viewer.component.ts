@@ -17,7 +17,7 @@ import { defaultOptions } from './default-options';
 @Component({
   selector: 'ngx-extended-pdf-viewer',
   templateUrl: './ngx-extended-pdf-viewer.component.html',
-  styleUrls: ['./viewer-with-images-2.2.199.css', './ngx-extended-pdf-viewer.component.css'],
+  styleUrls: ['./viewer-with-images-2.2.222.css', './ngx-extended-pdf-viewer.component.css'],
   encapsulation: ViewEncapsulation.None
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestroy {
