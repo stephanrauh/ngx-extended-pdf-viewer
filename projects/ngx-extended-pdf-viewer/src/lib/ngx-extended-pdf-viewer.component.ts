@@ -8,7 +8,8 @@ import {
   OnDestroy,
   Output,
   EventEmitter,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { PagesLoadedEvent } from './pages-loaded-event';
 import { PageRenderedEvent } from './page-rendered-event';
@@ -18,7 +19,8 @@ import { defaultOptions } from './default-options';
   selector: 'ngx-extended-pdf-viewer',
   templateUrl: './ngx-extended-pdf-viewer.component.html',
   styleUrls: ['./viewer-with-images-2.2.222.css', './ngx-extended-pdf-viewer.component.css'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestroy {
   public static ngxExtendedPdfViewerInitialized = false;
