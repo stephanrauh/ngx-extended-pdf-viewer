@@ -397,6 +397,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       this.calcViewerPositionTop();
       (<any>window).webViewerLoad();
       (<any>window).PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
+      (<any>window).PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
       (<any>window).PDFViewerApplicationOptions.set('locale', this.language);
 
       (<any>window).PDFViewerApplication.isViewerEmbedded = true;
@@ -448,12 +449,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
     options.set('disablePreferences', true);
     this.setZoom();
-
-    if ((<any>window).PDFViewerApplication.appConfig) {
-      (<any>window).PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
-    } else {
-      options.set('filenameForDownload', this.filenameForDownload);
-    }
 
     options.set('textLayerMode', this.showHandToolButton ? 1 : 0);
 
