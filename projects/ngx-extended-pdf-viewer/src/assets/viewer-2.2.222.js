@@ -1158,7 +1158,7 @@ let PDFViewerApplication = {
 
           if (js && regex.test(js)) {
             setTimeout(function () {
-              window.print();
+              window.printPDF();
             });
             return;
           }
@@ -1896,7 +1896,7 @@ function webViewerOpenFile() {
 }
 
 function webViewerPrint() {
-  window.print();
+  window.printPDF();
 }
 
 function webViewerDownload() {
@@ -12663,9 +12663,9 @@ PDFPrintService.prototype = {
 };
 let print = window.print;
 
-window.print = function print() {
+window.printPDF = function printPDF() {
   if (activeService) {
-    console.warn('Ignored window.print() because of a pending print job.');
+    console.warn('Ignored window.printPDF() because of a pending print job.');
     return;
   }
 
@@ -12728,7 +12728,7 @@ function renderProgress(index, total, l10n) {
 let hasAttachEvent = !!document.attachEvent;
 window.addEventListener('keydown', function (event) {
   if (event.keyCode === 80 && (event.ctrlKey || event.metaKey) && !event.altKey && (!event.shiftKey || window.chrome || window.opera)) {
-    window.print();
+    window.printPDF();
 
     if (hasAttachEvent) {
       return;
