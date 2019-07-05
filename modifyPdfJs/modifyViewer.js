@@ -9,6 +9,7 @@ let expectedChanges = 18;
 
 let dropLines = 0;
 currentFunction = '';
+let printKeyDownListener = false;
 lineReader
   .on('line', function(line) {
     if (dropLines > 0) {
@@ -94,7 +95,22 @@ lineReader
       } else if (line.includes('//# sourceMappingURL=viewer.js.map')) {
         line = ''; // the file hasn't been minified, so there's not source map
         expectedChanges--;
+      } else if (line.includes("window.addEventListener('keydown', function (event) {")) {
+        line = 'window.printKeyDownListener = function (event) {';
+        printKeyDownListener = true;
+      } else if (printKeyDownListener && line.includes('}, true);')) {
+        line = "};\nwindow.addEventListener('keydown', window.printKeyDownListener, true);";
+        printKeyDownListener = false;
+      } else if (line.includes('unbindWindowEvents() {')) {
+        line =
+          line +
+          '\nif (window.printKeyDownListener) {' +
+          "\n   window.removeEventListener('keydown', window.printKeyDownListener);" +
+          '\n   window.printKeyDownListener=undefined;\n}';
       }
+      line = line.replace(' print(', ' printPDF(');
+      line = line.replace('.print(', '.printPDF(');
+      line = line.replace('window.print ', 'window.printPDF ');
       result += line + '\n';
     }
   })

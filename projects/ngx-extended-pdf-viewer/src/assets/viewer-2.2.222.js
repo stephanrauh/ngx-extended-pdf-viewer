@@ -1498,6 +1498,10 @@ let PDFViewerApplication = {
   },
 
   unbindWindowEvents() {
+if (window.printKeyDownListener) {
+   window.removeEventListener('keydown', window.printKeyDownListener);
+   window.printKeyDownListener=undefined;
+}
     let {
       _boundEvents
     } = this;
@@ -12726,7 +12730,7 @@ function renderProgress(index, total, l10n) {
 }
 
 let hasAttachEvent = !!document.attachEvent;
-window.addEventListener('keydown', function (event) {
+window.printKeyDownListener = function (event) {
   if (event.keyCode === 80 && (event.ctrlKey || event.metaKey) && !event.altKey && (!event.shiftKey || window.chrome || window.opera)) {
     window.printPDF();
 
@@ -12744,7 +12748,8 @@ window.addEventListener('keydown', function (event) {
 
     return;
   }
-}, true);
+};
+window.addEventListener('keydown', window.printKeyDownListener, true);
 
 if (hasAttachEvent) {
   document.attachEvent('onkeydown', function (event) {
