@@ -46,7 +46,7 @@ Not to mention the ability to display PDF files, running on Mozilla's pdf.js 2.1
 
 If you only need the base functionality, I'll happily pass you to [the project of Vadym Yatsyuk](https://github.com/vadimdez/ng2-pdf-viewer/). Vadym does a great job delivering a no-nonsense PDF viewer. However, if you need something that can easily pass as the native viewer on a gloomy day, ngx-extended-pdf-viewer is your friend.
 
-There's also a direct counterpart to my library: <a href="https://www.npmjs.com/package/ng2-pdfjs-viewer" target="#">ng2-pdfjs-viewer</a>. As far as I can see, it's also a good library. Recently (May 24, 2019), it has been updated to PDF.js 2.2.171. If wraps the PDF viewer in an iFrame. That's a more reliable approach, but it also offers less options. The list of attributes is shorter, and the PDF viewer can't emit events to your application.
+There's also a direct counterpart to my library: <a href="https://www.npmjs.com/package/ng2-pdfjs-viewer" target="#">ng2-pdfjs-viewer</a>. As far as I can see, it's also a good library. Recently (May 24, 2019), it has been updated to PDF.js 2.2.171. It wraps the PDF viewer in an iFrame. That's a more reliable approach, but it also offers less options. The list of attributes is shorter, and the PDF viewer can't emit events to your application.
 
 You might also try to use the native PDF viewer of your browser. That's a valid approach. Actually, it's even the preferred approach. The advantages of both ngx-extended-pdf-viewer and ng2-pdfjs-viewer are they also support Internet Explorer 11 (with some help of the polyfills). ngx-extended-pdf-viewer also gives you a wide range of options that aren't available using the native API.
 
