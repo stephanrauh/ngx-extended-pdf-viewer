@@ -15,7 +15,8 @@ There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>.
 
 ## Breaking changes
 
-0.9.47 introduces a small breaking change: [showHandTool] now is false by default, while [handTool] is true by default. This allows it to deactivate the CPU-intensive text layer by default.
+- 0.9.54 renames the "sneak preview" files pdf-2.2.222.js and pdf.worker-2.2.222.js to pdf._-2.2 (i.e. the minor version 222 is dropped). Also deleted the pdf._-2.2.199.js files in favor of the pdf.\*-2.2.js files.
+- 0.9.47 introduces a small breaking change: [showHandTool] now is false by default, while [handTool] is true by default. This allows it to deactivate the CPU-intensive text layer by default.
 
 ## Bringing PDF to the Angular world
 
@@ -440,3 +441,4 @@ Hence the licence of the ngx-extended-pdf-viewer is the Apache V2 license, too.
 | 0.9.51     |                                                                                                                                             #80 changed the Change detection strategy to "on push" to reduce CPU load. Mentioned that the "find" function become slow in very large documents (above 10 MB and 500 pages).                                                                                                                                              |
 | 0.9.52     |                                                                                                                                                                                 #96 starting with 0.9.47, the attribute `filenameForDownload` was partially broken. 0.9.52 fixes that.                                                                                                                                                                                  |
 | 0.9.53     |                                                                                                      #101 stop overwriting winow.print() by renaming print() to printPDF(). This is an experimental feature, so currently only the preview JS file viewer-2.2.222.js is modified. The 2.1 file is going to be changed after checking for detrimental side-effects.                                                                                                      |
+| 0.9.54     |                                                                                  Updated to pdf.js 2.2.226. #101 now the print service of the PDF viewer is properly deactivated when the `<ngx-extended-pdf-viewer>` widget is detroyed. Standard printing is reactivated. Also see https://github.com/mozilla/pdf.js/issues/10948 and https://github.com/mozilla/pdf.js/issues/10946                                                                                  |
