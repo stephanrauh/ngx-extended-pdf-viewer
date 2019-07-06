@@ -44,15 +44,17 @@ lineReader
       } else if (line.includes("this.bar.classList.add('hidden');")) {
         if (currentFunction.includes('hide') || currentFunction.includes('ProgressBar')) {
           line =
-            '      if (this.div) {\n' +
-            "        this.div = document.querySelector('.progress'); // always set this new instead of trying to cache this value\n" +
-            '        this.bar = this.div.parentNode; // always set this new instead of trying to cache this value\n' +
-            '      }\n' +
-            line;
+            "    this.div = document.querySelector('.progress'); // always set this new instead of trying to cache this value\n" +
+            '    if (this.div) {\n' +
+            '      this.bar = this.div.parentNode; // always set this new instead of trying to cache this value\n' +
+            '  ' +
+            line +
+            '\n    }\n';
         }
         expectedChanges--;
       } else if (line.includes('if (!this.visible) {')) {
-        line = line.replace('if (!this.visible) {', 'if (false) { // modified line');
+        line = null;
+        dropLines = 3;
         expectedChanges--;
       } else if (line.includes('Stats.add(page, pageView.stats);')) {
         dropLines = 2;
@@ -107,10 +109,12 @@ lineReader
         line = "document.body.removeAttribute('data-pdfjsprinting');\n" + line;
         expectedChanges--;
       }
-      line = line.replace(' print(', ' printPDF(');
-      line = line.replace('.print(', '.printPDF(');
-      line = line.replace('window.print ', 'window.printPDF ');
-      result += line + '\n';
+      if (line != null) {
+        line = line.replace(' print(', ' printPDF(');
+        line = line.replace('.print(', '.printPDF(');
+        line = line.replace('window.print ', 'window.printPDF ');
+        result += line + '\n';
+      }
     }
   })
   .on('close', function() {
