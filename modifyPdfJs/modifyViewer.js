@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 18;
+let expectedChanges = 19;
 
 let dropLines = 0;
 currentFunction = '';
@@ -20,7 +20,7 @@ lineReader
         currentFunction = line;
       }
       if (line.includes("require('../build/pdf.js')")) {
-        line = line.replace("require('../build/pdf.js')", "require('./pdf-2.2.222.js')");
+        line = line.replace("require('../build/pdf.js')", "require('./pdf-2.2.js')");
         expectedChanges--;
       } else if (line.includes('compressed.tracemonkey-pldi-09.pdf')) {
         line = line.replace('compressed.tracemonkey-pldi-09.pdf', '');
@@ -98,11 +98,14 @@ lineReader
       } else if (line.includes("window.addEventListener('keydown', function (event) {")) {
         line = '_app.PDFViewerApplication.printKeyDownListener = function (event) {';
         printKeyDownListener = true;
+        expectedChanges--;
       } else if (printKeyDownListener && line.includes('}, true);')) {
         line = '};';
         printKeyDownListener = false;
+        expectedChanges--;
       } else if (line.includes('this.printService.destroy();')) {
         line = "document.body.removeAttribute('data-pdfjsprinting');\n" + line;
+        expectedChanges--;
       }
       line = line.replace(' print(', ' printPDF(');
       line = line.replace('.print(', '.printPDF(');
@@ -111,12 +114,12 @@ lineReader
     }
   })
   .on('close', function() {
-    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets/viewer-2.2.222.js', result, function(err) {
+    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets/viewer-2.2.js', result, function(err) {
       if (err) {
         return console.log(err);
       }
 
-      console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets/viewer-2.2.222.js!');
+      console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets/viewer-2.2.js!');
       if (expectedChanges !== 0) {
         console.error(expectedChanges + " changes couldn't be appied!");
       }

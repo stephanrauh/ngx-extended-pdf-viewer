@@ -3486,7 +3486,7 @@ let pdfjsLib;
 if (typeof window !== 'undefined' && window['pdfjs-dist/build/pdf']) {
   pdfjsLib = window['pdfjs-dist/build/pdf'];
 } else {
-  pdfjsLib = require('./pdf-2.2.222.js');
+  pdfjsLib = require('./pdf-2.2.js');
 }
 
 module.exports = pdfjsLib;

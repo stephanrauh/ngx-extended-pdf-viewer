@@ -31,10 +31,10 @@ lineReader
         line = 'throw Error("zlib not available in the browser");';
         dropLines = 2;
       } else if (line.includes('pdfjs-dist/build/pdf.worker.js')) {
-        line = line.replace('pdfjs-dist/build/pdf.worker.js', './pdf.worker-2.2.222.js');
+        line = line.replace('pdfjs-dist/build/pdf.worker.js', './pdf.worker-2.2.js');
         expectedChanges--;
       } else if (line.includes('pdf.worker.js')) {
-        line = line.replace('pdf.worker.js', 'pdf.worker-2.2.222.js');
+        line = line.replace('pdf.worker.js', 'pdf.worker-2.2.js');
         expectedChanges--;
       } else if (line.includes('//# sourceMappingURL=pdf.js.map')) {
         line = ''; // the file hasn't been minified, so there's no use for a source map
@@ -55,12 +55,12 @@ lineReader
     }
   })
   .on('close', function() {
-    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets/pdf-2.2.222.js', result, function(err) {
+    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets/pdf-2.2.js', result, function(err) {
       if (err) {
         return console.log(err);
       }
 
-      console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets/pdf-2.2.222.js!');
+      console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets/pdf-2.2.js!');
       if (expectedChanges !== 0) {
         console.error(expectedChanges + " changes couldn't be appied!");
       }
