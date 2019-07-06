@@ -401,6 +401,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       (<any>window).PDFViewerApplicationOptions.set('locale', this.language);
 
       (<any>window).PDFViewerApplication.isViewerEmbedded = true;
+      console.log('Added keydownlistener ' + (<any>window).PDFViewerApplication.printKeyDownListener);
+      window.addEventListener('keydown', (<any>window).PDFViewerApplication.printKeyDownListener, true);
 
       const pc = document.getElementById('printContainer');
       if (pc) {
@@ -536,6 +538,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (app) {
       app.cleanup();
       app.close();
+      if ((<any>window).PDFViewerApplication.printKeyDownListener) {
+        console.log('Removing listener');
+        (<any>window).removeEventListener('keydown', (<any>window).PDFViewerApplication.printKeyDownListener, true);
+      }
       if (app._boundEvents) {
         app.unbindWindowEvents();
       }

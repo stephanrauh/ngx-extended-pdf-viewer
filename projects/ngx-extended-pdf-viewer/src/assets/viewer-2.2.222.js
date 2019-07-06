@@ -1334,6 +1334,7 @@ let PDFViewerApplication = {
 
   afterPrint: function pdfViewSetupAfterPrint() {
     if (this.printService) {
+document.body.removeAttribute('data-pdfjsprinting');
       this.printService.destroy();
       this.printService = null;
     }
@@ -1498,10 +1499,6 @@ let PDFViewerApplication = {
   },
 
   unbindWindowEvents() {
-if (window.printKeyDownListener) {
-   window.removeEventListener('keydown', window.printKeyDownListener);
-   window.printKeyDownListener=undefined;
-}
     let {
       _boundEvents
     } = this;
@@ -12730,7 +12727,7 @@ function renderProgress(index, total, l10n) {
 }
 
 let hasAttachEvent = !!document.attachEvent;
-window.printKeyDownListener = function (event) {
+_app.PDFViewerApplication.printKeyDownListener = function (event) {
   if (event.keyCode === 80 && (event.ctrlKey || event.metaKey) && !event.altKey && (!event.shiftKey || window.chrome || window.opera)) {
     window.printPDF();
 
@@ -12749,7 +12746,6 @@ window.printKeyDownListener = function (event) {
     return;
   }
 };
-window.addEventListener('keydown', window.printKeyDownListener, true);
 
 if (hasAttachEvent) {
   document.attachEvent('onkeydown', function (event) {

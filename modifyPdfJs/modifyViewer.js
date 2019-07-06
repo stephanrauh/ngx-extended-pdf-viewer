@@ -96,17 +96,13 @@ lineReader
         line = ''; // the file hasn't been minified, so there's not source map
         expectedChanges--;
       } else if (line.includes("window.addEventListener('keydown', function (event) {")) {
-        line = 'window.printKeyDownListener = function (event) {';
+        line = '_app.PDFViewerApplication.printKeyDownListener = function (event) {';
         printKeyDownListener = true;
       } else if (printKeyDownListener && line.includes('}, true);')) {
-        line = "};\nwindow.addEventListener('keydown', window.printKeyDownListener, true);";
+        line = '};';
         printKeyDownListener = false;
-      } else if (line.includes('unbindWindowEvents() {')) {
-        line =
-          line +
-          '\nif (window.printKeyDownListener) {' +
-          "\n   window.removeEventListener('keydown', window.printKeyDownListener);" +
-          '\n   window.printKeyDownListener=undefined;\n}';
+      } else if (line.includes('this.printService.destroy();')) {
+        line = "document.body.removeAttribute('data-pdfjsprinting');\n" + line;
       }
       line = line.replace(' print(', ' printPDF(');
       line = line.replace('.print(', '.printPDF(');
