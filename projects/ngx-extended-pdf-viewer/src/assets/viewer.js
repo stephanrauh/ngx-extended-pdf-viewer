@@ -1242,7 +1242,7 @@ var PDFViewerApplication = {
 
                   initialBookmark = _this5.initialBookmark;
                   zoom = _app_options.AppOptions.get('defaultZoomValue');
-                   hash = zoom ? "zoom=".concat(zoom) : null;
+                  hash = zoom ? "zoom=".concat(zoom) : null;
                   rotation = null;
                   sidebarView = _app_options.AppOptions.get('sidebarViewOnLoad');
                   scrollMode = _app_options.AppOptions.get('scrollModeOnLoad');
@@ -1384,7 +1384,7 @@ var PDFViewerApplication = {
 
           if (js && regex.test(js)) {
             setTimeout(function () {
-              window.print();
+              window.printPDF();
             });
             return;
           }
@@ -1560,6 +1560,7 @@ var PDFViewerApplication = {
   },
   afterPrint: function pdfViewSetupAfterPrint() {
     if (this.printService) {
+document.body.removeAttribute('data-pdfjsprinting');
       this.printService.destroy();
       this.printService = null;
     }
@@ -2098,7 +2099,7 @@ function webViewerOpenFile() {
 }
 
 function webViewerPrint() {
-  window.print();
+  window.printPDF();
 }
 
 function webViewerDownload() {
@@ -3854,7 +3855,7 @@ function isDataSchema(url) {
 
 function getPDFFileNameFromURL(url) {
   var defaultFilename = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : PDFViewerApplication.appConfig.filenameForDownload;
-  if (PDFViewerApplication.appConfig.filenameForDownload) return PDFViewerApplication.appConfig.filenameForDownload;
+if (PDFViewerApplication.appConfig.filenameForDownload) return PDFViewerApplication.appConfig.filenameForDownload;
 
   if (typeof url !== 'string') {
     return defaultFilename;
@@ -4213,7 +4214,7 @@ var pdfjsLib;
 if (typeof window !== 'undefined' && window['pdfjs-dist/build/pdf']) {
   pdfjsLib = window['pdfjs-dist/build/pdf'];
 } else {
-  pdfjsLib = require('../pdf.js');
+  pdfjsLib = require('./pdf.js');
 }
 
 module.exports = pdfjsLib;
@@ -12801,30 +12802,30 @@ function () {
       this.toggleButton.addEventListener('click', this.toggle.bind(this));
 
       var _loop = function _loop(button) {
-        if (!isNaN(button)) {
-          var _this2$buttons$button = _this2.buttons[button],
-              element = _this2$buttons$button.element,
-              eventName = _this2$buttons$button.eventName,
-              close = _this2$buttons$button.close,
-              eventDetails = _this2$buttons$button.eventDetails;
-          element.addEventListener('click', function (evt) {
-            if (eventName !== null) {
-              var details = {
-                source: _this2
-              };
+    if (!isNaN(button)) {
+        var _this2$buttons$button = _this2.buttons[button],
+            element = _this2$buttons$button.element,
+            eventName = _this2$buttons$button.eventName,
+            close = _this2$buttons$button.close,
+            eventDetails = _this2$buttons$button.eventDetails;
+        element.addEventListener('click', function (evt) {
+          if (eventName !== null) {
+            var details = {
+              source: _this2
+            };
 
-              for (var property in eventDetails) {
-                details[property] = eventDetails[property];
-              }
-
-              _this2.eventBus.dispatch(eventName, details);
+            for (var property in eventDetails) {
+              details[property] = eventDetails[property];
             }
 
-            if (close) {
-              _this2.close();
-            }
-          });
-        }
+            _this2.eventBus.dispatch(eventName, details);
+          }
+
+          if (close) {
+            _this2.close();
+          }
+        });
+      }
       };
 
       for (var button in this.buttons) {
@@ -14620,6 +14621,7 @@ document.webL10n = function (window, document, undefined) {
   }
 
   function loadLocale(lang, callback) {
+let originalCaseLang = lang;
     if (lang) {
       lang = lang.toLowerCase();
     }
@@ -14636,19 +14638,20 @@ document.webL10n = function (window, document, undefined) {
 
       if (dict && dict.locales && dict.default_locale) {
         console.log('using the embedded JSON directory, early way out');
-        gL10nData = dict.locales[lang];
+              gL10nData = dict.locales[originalCaseLang]; // modified line
 
         if (!gL10nData) {
           var defaultLocale = dict.default_locale.toLowerCase();
 
           for (var anyCaseLang in dict.locales) {
-            const originalCase = anyCaseLang; // added line
+            originalCaseLang = anyCaseLang; // added line
             anyCaseLang = anyCaseLang.toLowerCase();
+
             if (anyCaseLang === lang) {
-              gL10nData = dict.locales[originalCase];
+              gL10nData = dict.locales[originalCaseLang]; // modified line
               break;
             } else if (anyCaseLang === defaultLocale) {
-              gL10nData = dict.locales[originalCase]; // modified line
+              gL10nData = dict.locales[originalCaseLang]; // modified line
             }
           }
         }
@@ -15435,9 +15438,9 @@ PDFPrintService.prototype = {
 };
 var print = window.print;
 
-window.print = function print() {
+window.printPDF = function printPDF() {
   if (activeService) {
-    console.warn('Ignored window.print() because of a pending print job.');
+    console.warn('Ignored window.printPDF() because of a pending print job.');
     return;
   }
 
@@ -15498,9 +15501,9 @@ function renderProgress(index, total, l10n) {
 }
 
 var hasAttachEvent = !!document.attachEvent;
-window.addEventListener('keydown', function (event) {
+_app.PDFViewerApplication.printKeyDownListener = function (event) {
   if (event.keyCode === 80 && (event.ctrlKey || event.metaKey) && !event.altKey && (!event.shiftKey || window.chrome || window.opera)) {
-    window.print();
+    window.printPDF();
 
     if (hasAttachEvent) {
       return;
@@ -15516,7 +15519,7 @@ window.addEventListener('keydown', function (event) {
 
     return;
   }
-}, true);
+};
 
 if (hasAttachEvent) {
   document.attachEvent('onkeydown', function (event) {
@@ -15571,4 +15574,4 @@ _app.PDFPrintServiceFactory.instance = {
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=viewer.js.map
+

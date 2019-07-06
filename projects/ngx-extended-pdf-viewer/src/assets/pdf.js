@@ -9925,7 +9925,7 @@ var fakeWorkerFilesLoader = null;
   }
 
   if (typeof requirejs !== 'undefined' && requirejs.toUrl) {
-    fallbackWorkerSrc = requirejs.toUrl('pdfjs-dist/build/pdf.worker.js');
+    fallbackWorkerSrc = requirejs.toUrl('./pdf.worker.js');
   }
 
   var dynamicLoaderSupported = typeof requirejs !== 'undefined' && requirejs.load;
@@ -18909,13 +18909,14 @@ var renderTextLayer = function renderTextLayerClosure() {
       var fontSize = textDiv.style.fontSize;
       var fontFamily = textDiv.style.fontFamily;
 
-      if (fontSize !== this._layoutTextLastFontSize || fontFamily !== this._layoutTextLastFontFamily) {
-        this._layoutTextCtx.font = fontSize + ' ' + fontFamily;
-        this._layoutTextLastFontSize = fontSize;
-        this._layoutTextLastFontFamily = fontFamily;
-      }
-
-      var width = this._layoutTextCtx.measureText(textDiv.textContent).width;
+if (this._layoutTextCtx) {
+if (fontSize !== this._layoutTextLastFontSize || fontFamily !== this._layoutTextLastFontFamily) {
+this._layoutTextCtx.font = fontSize + ' ' + fontFamily;
+this._layoutTextLastFontSize = fontSize;
+this._layoutTextLastFontFamily = fontFamily;
+}
+}
+var width = this._layoutTextCtx?this._layoutTextCtx.measureText(textDiv.textContent).width:0;
 
       var transform = '';
 
@@ -20456,7 +20457,7 @@ exports.SVGGraphics = SVGGraphics;
           input = new Buffer(literals);
         }
 
-        throw Error("zlib not available in the browser");
+throw Error("zlib not available in the browser");
 
         return output instanceof Uint8Array ? output : new Uint8Array(output);
       } catch (e) {
@@ -21645,6 +21646,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+
+
 
 var url = require('url');
 
@@ -23588,4 +23595,4 @@ PDFNetworkStreamRangeRequestReader.prototype = {
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=pdf.js.map
+
