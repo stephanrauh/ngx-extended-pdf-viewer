@@ -15,7 +15,7 @@ There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>.
 
 ## Breaking changes
 
-- 0.9.54 renames the "sneak preview" files pdf-2.2.222.js and pdf.worker-2.2.222.js to pdf._-2.2 (i.e. the minor version 222 is dropped). Also deleted the pdf._-2.2.199.js files in favor of the pdf.\*-2.2.js files.
+- 0.9.54 renames the "sneak preview" files pdf-2.2.222.js and pdf.worker-2.2.222.js to pdf.\*-2.2 (i.e. the minor version 222 is dropped). Also deleted the pdf.\*-2.2.199.js files in favor of the pdf.\*-2.2.js files.
 - 0.9.47 introduces a small breaking change: [showHandTool] now is false by default, while [handTool] is true by default. This allows it to deactivate the CPU-intensive text layer by default.
 
 ## Bringing PDF to the Angular world
@@ -84,7 +84,7 @@ There's also a layout glitch that seems to be intentional: you may need to set t
 
 ## Unknown bugs
 
-If you run into problems using &lt;ngx-extended-pdf-viewer&gt;, please open an issue on the [project bug tracker](https://github.com/stephanrauh/ExploringAngular/tree/master/embedding-pdf).
+If you run into problems using &lt;ngx-extended-pdf-viewer&gt;, please open an issue on the [project bug tracker](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues).
 
 ## Compatibility to Bootstrap (and other CSS frameworks)
 
@@ -362,7 +362,7 @@ If you're using the "inline" approach, don't set `useBrowserLocale` (or set it e
 ## Feedback, pull requests and bug reports
 
 Pull requests and bug reports are welcome. Please send them to the bug tracker of
-the project page: https://github.com/stephanrauh/ExploringAngular/tree/master/embedding-pdf
+the project page: https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues
 
 ## Building the library from scratch (and updating to the latest version of Mozilla's pdf.js)
 
