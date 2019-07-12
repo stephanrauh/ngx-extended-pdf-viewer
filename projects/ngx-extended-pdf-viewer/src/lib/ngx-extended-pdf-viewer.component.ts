@@ -14,20 +14,14 @@ import {
 import { PagesLoadedEvent } from './pages-loaded-event';
 import { PageRenderedEvent } from './page-rendered-event';
 import { defaultOptions } from './default-options';
-
-function rtl(): boolean {
-  let element = document.getElementsByClassName('toolbar')[0] as HTMLElement;
-  while (element) {
-    if (element.dir !== '') {
-      return element.dir === 'rtl';
-    }
-    if (!element.parentElement) {
-      break;
-    }
-    element = element.parentElement;
-  }
-  return false;
-}
+import {
+  resizeUpTo900px,
+  resizeUpTo840px,
+  resizeUpTo770px,
+  resizeUpTo700px,
+  resizeUpTo640px,
+  resizeUpTo535px
+} from './ResponsiveCSSSimulation';
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
@@ -724,138 +718,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       const toolbar = pdfViewer[0].getElementsByClassName('toolbar');
       if (toolbar && toolbar.length > 0) {
         const width = toolbar[0].clientWidth;
-        this.resizeUpTo900px(width);
-        this.resizeUpTo840px(width);
-        this.resizeUpTo770px(toolbar, width);
-        this.resizeUpTo700px(toolbar, width);
-        this.resizeUpTo640px(toolbar, width);
-        this.resizeUpTo535px(width);
-      }
-    }
-  }
-
-  private resizeUpTo535px(width: number) {
-    const tinyElement = document.getElementById('scaleSelectContainer');
-    const tiny = tinyElement as HTMLElement;
-    if (width < 485) {
-      // not perfect, but good first approximation
-      tiny.classList.add('hidden');
-    } else {
-      tiny.classList.remove('hidden');
-    }
-  }
-
-  private resizeUpTo640px(toolbar: HTMLCollectionOf<Element>, width: number) {
-    const smallElements = toolbar[0].getElementsByClassName('hiddenSmallView');
-    for (let i = 0; i < smallElements.length; i++) {
-      const elt = smallElements[i] as HTMLElement;
-      if (width < 640) {
-        elt.classList.add('hidden');
-      } else {
-        elt.classList.remove('hidden');
-      }
-    }
-    const visibleSmallViewElements = toolbar[0].getElementsByClassName('visibleSmallView');
-    for (let i = 0; i < visibleSmallViewElements.length; i++) {
-      const elt = visibleSmallViewElements[i] as HTMLElement;
-      if (width < 640) {
-        elt.classList.remove('hidden');
-      } else {
-        elt.classList.add('hidden');
-      }
-    }
-    const toolbarButtonSpacer = toolbar[0].getElementsByClassName('toolbarButtonSpacer');
-    for (let i = 0; i < toolbarButtonSpacer.length; i++) {
-      const elt = toolbarButtonSpacer[i] as HTMLElement;
-      if (width < 640) {
-        elt.attributes['width'] = '0';
-      } else {
-        elt.attributes['width'] = undefined;
-      }
-    }
-    const isRtl = rtl();
-    const findbar = toolbar[0].getElementsByClassName('findbar');
-    for (let i = 0; i < findbar.length; i++) {
-      const elt = findbar[i] as HTMLElement;
-      if (width < 640 || !isRtl) {
-        elt.attributes['left'] = '';
-        elt.attributes['right'] = '';
-      } else {
-        elt.attributes['left'] = '38px';
-        elt.attributes['right'] = '';
-      }
-      if (width < 640 || isRtl) {
-        elt.attributes['left'] = '';
-        elt.attributes['right'] = '';
-      } else {
-        elt.attributes['left'] = '';
-        elt.attributes['right'] = '38px';
-      }
-    }
-  }
-
-  private resizeUpTo700px(toolbar: HTMLCollectionOf<Element>, width: number) {
-    const mediumElements = toolbar[0].getElementsByClassName('hiddenMediumView');
-    for (let i = 0; i < mediumElements.length; i++) {
-      const elt = mediumElements[i] as HTMLElement;
-      if (width < 700) {
-        elt.classList.add('hidden');
-      } else {
-        elt.classList.remove('hidden');
-      }
-    }
-    // #103
-    const visibleMediumElements = toolbar[0].getElementsByClassName('visibleMediumView');
-    for (let i = 0; i < visibleMediumElements.length; i++) {
-      const elt = visibleMediumElements[i] as HTMLElement;
-      if (width < 700) {
-        elt.classList.remove('hidden');
-      } else {
-        elt.classList.add('hidden');
-      }
-    }
-  }
-
-  private resizeUpTo900px(width: number): void {
-    const elt = document.getElementById('hiddenMediumView');
-    if (elt) {
-      if (width < 900) {
-        elt.classList.add('toolbarViewerMiddleBelow900px');
-      } else {
-        elt.classList.remove('toolbarViewerMiddleBelow900px');
-      }
-    }
-  }
-
-  private resizeUpTo840px(width: number) {
-    const elt = document.getElementsByClassName('zoom')[0];
-    if (elt) {
-      if (width < 840) {
-        elt.classList.add('below840px');
-      } else {
-        elt.classList.remove('below840px');
-      }
-    }
-  }
-
-  private resizeUpTo770px(toolbar: HTMLCollectionOf<Element>, width: number) {
-    const hiddenLargeElements = toolbar[0].getElementsByClassName('hiddenLargeView');
-    for (let i = 0; i < hiddenLargeElements.length; i++) {
-      const elt = hiddenLargeElements[i] as HTMLElement;
-      if (width < 770) {
-        elt.classList.add('hidden');
-      } else {
-        elt.classList.remove('hidden');
-      }
-    }
-
-    const visibleLargeElements = toolbar[0].getElementsByClassName('visibleLargeView');
-    for (let i = 0; i < visibleLargeElements.length; i++) {
-      const elt = visibleLargeElements[i] as HTMLElement;
-      if (width < 770) {
-        elt.classList.remove('hidden');
-      } else {
-        elt.classList.add('hidden');
+        resizeUpTo900px(width);
+        resizeUpTo840px(width);
+        resizeUpTo770px(toolbar, width);
+        resizeUpTo700px(toolbar, width);
+        resizeUpTo640px(toolbar, width);
+        resizeUpTo535px(width);
       }
     }
   }
