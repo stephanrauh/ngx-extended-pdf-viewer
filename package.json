@@ -40,6 +40,7 @@
     "@types/node": "^12.6.1",
     "caniuse-lite": "^1.0.30000981",
     "codelyzer": "~5.1.0",
+    "cypress": "^3.4.0",
     "macaddress": ">=0.2.9",
     "ng-packagr": "^4.7.1",
     "properties-reader": "0.2.0",

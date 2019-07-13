@@ -42,3 +42,13 @@
 .below840px #outerContainer .visibleMediumView {
   display: none;
 }
+
+.toolbarButtonSpacer.below640px {
+  width: 0;
+}
+html[dir='ltr'] .findbar.below640px {
+  left: 38px;
+}
+html[dir='rtl'] .findbar.below640px {
+  right: 38px;
+}

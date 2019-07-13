@@ -46,28 +46,22 @@ export function resizeUpTo640px(toolbar: HTMLCollectionOf<Element>, width: numbe
   for (let i = 0; i < toolbarButtonSpacer.length; i++) {
     const elt = toolbarButtonSpacer[i] as HTMLElement;
     if (width < 640) {
-      elt.attributes['width'] = '0';
+      elt.classList.add('below640px');
     } else {
-      elt.attributes['width'] = undefined;
+      elt.classList.add('below640px');
     }
   }
   const isRtl = rtl();
-  const findbar = toolbar[0].getElementsByClassName('findbar');
+  const findbar = document.getElementsByClassName('findbar');
+  console.log(findbar.length);
   for (let i = 0; i < findbar.length; i++) {
     const elt = findbar[i] as HTMLElement;
-    if (width < 640 || !isRtl) {
-      elt.attributes['left'] = '';
-      elt.attributes['right'] = '';
+    if (width < 640) {
+      elt.classList.add('below640px');
+      console.log('!');
     } else {
-      elt.attributes['left'] = '38px';
-      elt.attributes['right'] = '';
-    }
-    if (width < 640 || isRtl) {
-      elt.attributes['left'] = '';
-      elt.attributes['right'] = '';
-    } else {
-      elt.attributes['left'] = '';
-      elt.attributes['right'] = '38px';
+      elt.classList.add('below640px');
+      console.log('!!');
     }
   }
 }

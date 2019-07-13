@@ -685,6 +685,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       }
       this.calcViewerPositionTop();
     }
+    this.onResize();
   }
 
   private setZoom() {
