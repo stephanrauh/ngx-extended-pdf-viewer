@@ -716,14 +716,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   private doResize(): void {
     const pdfViewer = document.getElementsByClassName('html');
     if (pdfViewer && pdfViewer.length > 0) {
-      const toolbar = pdfViewer[0].getElementsByClassName('toolbar');
-      if (toolbar && toolbar.length > 0) {
-        const width = toolbar[0].clientWidth;
+      const container = document.getElementById('outerContainer');
+      if (container) {
+        const width = container.clientWidth;
         resizeUpTo900px(width);
         resizeUpTo840px(width);
-        resizeUpTo770px(toolbar, width);
-        resizeUpTo700px(toolbar, width);
-        resizeUpTo640px(toolbar, width);
+        resizeUpTo770px(container, width);
+        resizeUpTo700px(container, width);
+        resizeUpTo640px(container, width);
         resizeUpTo535px(width);
       }
     }

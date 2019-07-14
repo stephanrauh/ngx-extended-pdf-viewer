@@ -11,6 +11,7 @@ describe('Issue 103: responsive design, 640px', function() {
     cy.get('.bookmark').should('have.class', 'hidden');
     cy.get('.verticalToolbarSeparator').should('have.class', 'hidden');
     cy.get('.toolbarButtonSpacer').should('not.have.class', 'invisible');
+    cy.get('#viewFind').click(); // show the findbar
     cy.get('.findbar').should('have.class', 'below640px');
 
     cy.contains('Codpaste').click();

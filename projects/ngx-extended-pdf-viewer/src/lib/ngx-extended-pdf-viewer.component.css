@@ -35,12 +35,12 @@
 }
 
 .below840px #outerContainer .hiddenLargeView,
-.below840px #outerContainer .hiddenMediumView {
-  display: inherit;
+.below700px #outerContainer .hiddenMediumView {
+  display: hidden;
 }
 .below840px #outerContainer .visibleLargeView,
-.below840px #outerContainer .visibleMediumView {
-  display: none;
+.below700px #outerContainer .visibleMediumView {
+  display: inherit;
 }
 
 .toolbarButtonSpacer.below640px {
