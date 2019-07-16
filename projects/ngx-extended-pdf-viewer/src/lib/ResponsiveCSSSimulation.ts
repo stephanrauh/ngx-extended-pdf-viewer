@@ -135,3 +135,45 @@ export function resizeUpTo770px(container: HTMLElement, width: number) {
     }
   }
 }
+
+export function removeDynamicCSS() {
+  const classesToRemove = ['toolbarViewerMiddleBelow900px', 'below840px', 'below770px', 'below700px', 'below640px'];
+  const elt = document.getElementsByClassName('zoom')[0];
+  if (elt) {
+    classesToRemove.forEach(c => {
+      const parents = elt.getElementsByClassName(c);
+      if (parents) {
+        for (let i = 0; i < parents.length; i++) {
+          const element = parents.item(i);
+          if (element) {
+            element.classList.remove(c);
+          }
+        }
+      }
+    });
+
+    const tinyElement = document.getElementById('scaleSelectContainer');
+    if (tinyElement) {
+      tinyElement.classList.remove('hidden');
+    }
+    const classesToRemoveHiddenFrom = [
+      'hiddenSmallView',
+      'visibleSmallView',
+      'hiddenMediumView',
+      'visibleMediumView',
+      'hiddenLargeView',
+      'visibleLargeView'
+    ];
+    classesToRemoveHiddenFrom.forEach(c => {
+      const parents = elt.getElementsByClassName(c);
+      if (parents) {
+        for (let i = 0; i < parents.length; i++) {
+          const element = parents.item(i);
+          if (element) {
+            element.classList.remove('hidden');
+          }
+        }
+      }
+    });
+  }
+}

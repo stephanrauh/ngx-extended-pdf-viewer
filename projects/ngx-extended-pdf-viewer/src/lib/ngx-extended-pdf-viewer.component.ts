@@ -20,7 +20,8 @@ import {
   resizeUpTo770px,
   resizeUpTo700px,
   resizeUpTo640px,
-  resizeUpTo535px
+  resizeUpTo535px,
+  removeDynamicCSS
 } from './ResponsiveCSSSimulation';
 
 @Component({
@@ -685,7 +686,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       }
       this.calcViewerPositionTop();
     }
-    this.onResize();
+    if ('ignoreResponsiveCSS' in changes) {
+      if (this.ignoreResponsiveCSS) {
+        this.onResize();
+      } else {
+        removeDynamicCSS();
+      }
+    }
   }
 
   private setZoom() {
