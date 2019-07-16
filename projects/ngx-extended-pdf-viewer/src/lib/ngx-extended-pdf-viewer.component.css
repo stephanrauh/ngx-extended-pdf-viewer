@@ -34,13 +34,17 @@
   right: 0px !important;
 }
 
-.below840px #outerContainer .hiddenLargeView,
+.below840px #outerContainer .visibleLargeView,
+.below770px #outerContainer .visibleMediumView,
+.below640px #outerContainer .visibleSmallView {
+  display: block;
+}
+
 .below700px #outerContainer .hiddenMediumView {
   display: hidden;
 }
-.below840px #outerContainer .visibleLargeView,
 .below700px #outerContainer .visibleMediumView {
-  display: inherit;
+  display: block;
 }
 
 .toolbarButtonSpacer.below640px {

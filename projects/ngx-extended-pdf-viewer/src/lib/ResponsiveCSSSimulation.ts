@@ -110,9 +110,17 @@ export function resizeUpTo840px(width: number) {
 }
 
 export function resizeUpTo770px(container: HTMLElement, width: number) {
+  let elt = document.getElementsByClassName('zoom')[0];
+  if (elt) {
+    if (width < 770) {
+      elt.classList.add('below770px');
+    } else {
+      elt.classList.remove('below770px');
+    }
+  }
   const hiddenLargeElements = container.getElementsByClassName('hiddenLargeView');
   for (let i = 0; i < hiddenLargeElements.length; i++) {
-    const elt = hiddenLargeElements[i] as HTMLElement;
+    elt = hiddenLargeElements[i] as HTMLElement;
     if (width < 770) {
       elt.classList.add('hidden');
     } else {
@@ -122,7 +130,7 @@ export function resizeUpTo770px(container: HTMLElement, width: number) {
 
   const visibleLargeElements = container.getElementsByClassName('visibleLargeView');
   for (let i = 0; i < visibleLargeElements.length; i++) {
-    const elt = visibleLargeElements[i] as HTMLElement;
+    elt = visibleLargeElements[i] as HTMLElement;
     if (width < 770) {
       elt.classList.remove('hidden');
     } else {
