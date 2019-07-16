@@ -52,15 +52,12 @@ export function resizeUpTo640px(container: HTMLElement, width: number) {
     }
   }
   const findbar = document.getElementsByClassName('findbar');
-  console.log(findbar.length);
   for (let i = 0; i < findbar.length; i++) {
     const elt = findbar[i] as HTMLElement;
     if (width < 640) {
       elt.classList.add('below640px');
-      console.log('!');
     } else {
       elt.classList.remove('below640px');
-      console.log('!!');
     }
   }
 }
