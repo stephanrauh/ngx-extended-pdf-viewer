@@ -8764,6 +8764,10 @@ class BaseViewer {
       }
 
       onePageRenderedCapability.promise.then(() => {
+        if (this.findController) {
+          this.findController.setDocument(pdfDocument);
+        }
+
         if (pdfDocument.loadingParams['disableAutoFetch']) {
           pagesCapability.resolve();
           return;
@@ -8796,10 +8800,6 @@ class BaseViewer {
       this.eventBus.dispatch('pagesinit', {
         source: this
       });
-
-      if (this.findController) {
-        this.findController.setDocument(pdfDocument);
-      }
 
       if (this.defaultRenderingQueue) {
         this.update();
