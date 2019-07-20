@@ -92,12 +92,12 @@
   </mat-card-content>
 </mat-card>
 <mat-tab-group (selectedTabChange)="activateTab($event.index)">
-  <mat-tab label="BootsFaces Deep-Dive PDF">
+  <mat-tab label="fancy PDF">
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[0] && !hidden"
         [ignoreResponsiveCSS]="true"
-        [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"
+        [src]="'assets/pdfs/fancy.pdf'"
         backgroundColor="#ffffff"
         [mobileFriendlyZoom]="mobileFriendlyZoom"
         [showZoomButtons]="true"
@@ -179,7 +179,7 @@
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[4] && !hidden"
-        [src]="'assets/pdfs/BootsFaces_Deep_Dive_1.0.pdf'"
+        [src]="'assets/pdfs/somatosensory.pdf'"
         backgroundColor="#ffffff"
         [mobileFriendlyZoom]="mobileFriendlyZoom"
         [showHandToolButton]="false"
