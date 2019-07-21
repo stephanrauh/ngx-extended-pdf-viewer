@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 19;
+let expectedChanges = 21;
 
 let dropLines = 0;
 currentFunction = '';
@@ -108,6 +108,12 @@ lineReader
       } else if (line.includes('this.printService.destroy();')) {
         line = "document.body.removeAttribute('data-pdfjsprinting');\n" + line;
         expectedChanges--;
+      } else if (line.includes("overlayManager.close('printServiceOverlay');")) {
+        expectedChanges--;
+        dropLines = 1;
+        line += "\n      overlayManager.unregister('printServiceOverlay'); // #104";
+        line += '\n    });';
+        line += '\n    overlayPromise = undefined; // #104';
       }
       if (line != null) {
         line = line.replace(' print(', ' printPDF(');
