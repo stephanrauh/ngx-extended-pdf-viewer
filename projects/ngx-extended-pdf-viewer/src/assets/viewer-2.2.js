@@ -12683,9 +12683,7 @@ window.printPDF = function printPDF() {
       ensureOverlay().then(function () {
         if (overlayManager.active === 'printServiceOverlay') {
           overlayManager.close('printServiceOverlay');
-      overlayManager.unregister('printServiceOverlay'); // #104
-    });
-    overlayPromise = undefined; // #104
+        }
       });
       return;
     }

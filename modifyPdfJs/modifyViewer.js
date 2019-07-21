@@ -5,11 +5,12 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 21;
+let expectedChanges = 20;
 
 let dropLines = 0;
 currentFunction = '';
 let printKeyDownListener = false;
+let unregisterPrintOverlayDone = false;
 lineReader
   .on('line', function(line) {
     if (dropLines > 0) {
@@ -108,7 +109,8 @@ lineReader
       } else if (line.includes('this.printService.destroy();')) {
         line = "document.body.removeAttribute('data-pdfjsprinting');\n" + line;
         expectedChanges--;
-      } else if (line.includes("overlayManager.close('printServiceOverlay');")) {
+      } else if (line.includes("overlayManager.close('printServiceOverlay');") && !unregisterPrintOverlayDone) {
+        unregisterPrintOverlayDone = true;
         expectedChanges--;
         dropLines = 1;
         line += "\n      overlayManager.unregister('printServiceOverlay'); // #104";

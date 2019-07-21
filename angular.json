@@ -26,9 +26,9 @@
             ],
             "styles": ["src/styles.css"],
             "scripts": [
-              "dist/ngx-extended-pdf-viewer/assets/pdf-2.2.js",
-              "dist/ngx-extended-pdf-viewer/assets/pdf.worker-2.2.js",
-              "dist/ngx-extended-pdf-viewer/assets/viewer-2.2.js"
+              "dist/ngx-extended-pdf-viewer/assets/pdf.js",
+              "dist/ngx-extended-pdf-viewer/assets/pdf.worker.js",
+              "dist/ngx-extended-pdf-viewer/assets/viewer.js"
             ]
           },
           "configurations": {
@@ -138,10 +138,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "projects/ngx-extended-pdf-viewer/tsconfig.lib.json",
-              "projects/ngx-extended-pdf-viewer/tsconfig.spec.json"
-            ],
+            "tsConfig": ["projects/ngx-extended-pdf-viewer/tsconfig.lib.json", "projects/ngx-extended-pdf-viewer/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**"]
           }
         }
