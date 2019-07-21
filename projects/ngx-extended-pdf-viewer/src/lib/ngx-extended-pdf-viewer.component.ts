@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { PagesLoadedEvent } from './pages-loaded-event';
 import { PageRenderedEvent } from './page-rendered-event';
+import { PdfDownloadedEvent } from './pdf-downloaded-event';
 import { defaultOptions } from './default-options';
 import {
   resizeUpTo900px,
@@ -218,6 +219,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   @Output()
   public pageRendered = new EventEmitter<PageRenderedEvent>();
+
+  @Output()
+  public pdfDownloaded = new EventEmitter<PdfDownloadedEvent>();
 
   /** Legal values: undefined, 'auto', 'page-actual', 'page_fit', 'page-width', or '50' (or any other percentage) */
   @Input()
@@ -533,6 +537,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     });
     (<any>window).PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
       this.pageRendered.emit(x);
+    });
+    (<any>window).PDFViewerApplication.eventBus.on('download', (x: PdfDownloadedEvent) => {
+      this.pdfDownloaded.emit(x);
     });
     this.checkHeight();
     // open a file in the viewer

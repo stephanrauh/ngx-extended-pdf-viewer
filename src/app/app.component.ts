@@ -3,6 +3,7 @@ import { PagesLoadedEvent } from 'projects/ngx-extended-pdf-viewer/src/lib/pages
 import { pdfBase64 } from './pdfBase64';
 import { PageRenderedEvent } from '../../projects/ngx-extended-pdf-viewer/src/lib/page-rendered-event';
 import { NgxExtendedPdfViewerService } from '../../projects/ngx-extended-pdf-viewer/src/lib/ngx-extended-pdf-viewer.service';
+import {PdfDownloadedEvent} from '../../projects/ngx-extended-pdf-viewer/src/lib/pdf-downloaded-event';
 
 @Component({
   selector: 'app-root',
@@ -188,6 +189,10 @@ export class AppComponent {
   }
 
   public onPageRendered(event: PageRenderedEvent) {
+    console.log(event);
+  }
+
+  public onDownload(event: PdfDownloadedEvent) {
     console.log(event);
   }
 
