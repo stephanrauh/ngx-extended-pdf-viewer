@@ -409,9 +409,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
       console.error("You're trying to open two instances of the PDF viewer. Most likely, this will result in errors.");
     }
-    document.addEventListener('webviewerloaded', () => {
+    const onLoaded = () => {
       this.overrideDefaultSettings();
-    });
+      document.removeEventListener('webviewerloaded', onLoaded);
+    };
+    document.addEventListener('webviewerloaded', onLoaded);
 
     setTimeout(() => {
       // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
@@ -582,7 +584,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         for (const key in bus._listeners) {
           if (bus._listeners[key]) {
             const list = bus._listeners[key];
-            // not sure if the for loop is necessary - but 
+            // not sure if the for loop is necessary - but
             // it might improve garbage collection if the "listeners"
             // array is stored somewhere else
             for (let i = 0; i < list.length; i++) {
