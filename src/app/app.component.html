@@ -1,5 +1,3 @@
-<h1>Welcome to {{ title }}!</h1>
-
 <mat-card>
   <mat-card-content>
     <section class="section">
@@ -8,6 +6,7 @@
       <mat-checkbox class="margin" [(ngModel)]="mobileFriendlyZoomPercent">mobile-friendly zoom 200%</mat-checkbox>
       <mat-checkbox class="margin" [(ngModel)]="showSidebar">show sidebar button</mat-checkbox>
       <mat-checkbox class="margin" [(ngModel)]="handTool">Hand tool</mat-checkbox>
+      <mat-checkbox class="margin" [(ngModel)]="contextMenuAllowed">Context menu allowed</mat-checkbox>
       <mat-form-field>
         <mat-label>language (requires tab change)</mat-label>
         <mat-select [(value)]="language" class="margin">
@@ -96,6 +95,7 @@
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[0] && !hidden"
+        [contextMenuAllowed]="contextMenuAllowed"
         [ignoreResponsiveCSS]="true"
         [src]="'assets/pdfs/fancy.pdf'"
         backgroundColor="#ffffff"
@@ -131,6 +131,7 @@
         *ngIf="visible[1] && !hidden"
         [src]="'assets/pdfs/codpaste-teachingpack.pdf'"
         backgroundColor="#e8e8ef"
+        [contextMenuAllowed]="contextMenuAllowed"
         [mobileZoom]="mobileFriendlyZoom"
         [showZoomButtons]="true"
         [showPresentationModeButton]="true"
@@ -159,6 +160,7 @@
         *ngIf="visible[3] && !hidden"
         [src]="'assets/pdfs/Math.pdf'"
         backgroundColor="#e8e8ef"
+        [contextMenuAllowed]="contextMenuAllowed"
         [mobileZoom]="mobileFriendlyZoom"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebar"
@@ -182,6 +184,7 @@
         *ngIf="visible[4] && !hidden"
         [src]="'assets/pdfs/somatosensory.pdf'"
         backgroundColor="#ffffff"
+        [contextMenuAllowed]="contextMenuAllowed"
         [mobileFriendlyZoom]="mobileFriendlyZoom"
         [showHandToolButton]="false"
         [showPagingButtons]="false"
@@ -210,6 +213,7 @@
         *ngIf="visible[5] && !hidden"
         [src]="'assets/pdfs/pdf-sample.pdf'"
         backgroundColor="blue"
+        [contextMenuAllowed]="contextMenuAllowed"
         [mobileFriendlyZoom]="mobileFriendlyZoom"
         [showBookmarkButton]="false"
         [showDownloadButton]="false"
@@ -241,6 +245,7 @@
         *ngIf="visible[6] && !hidden"
         [base64Src]="base64"
         backgroundColor="#e8e8ef"
+        [contextMenuAllowed]="contextMenuAllowed"
         [mobileZoom]="mobileFriendlyZoom"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebar"
@@ -265,6 +270,7 @@
         *ngIf="visible[7] && !hidden"
         [src]="'assets/pdfs/encrypted-sample.pdf'"
         backgroundColor="#e8e8ef"
+        [contextMenuAllowed]="contextMenuAllowed"
         [mobileZoom]="mobileFriendlyZoom"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebar"
@@ -292,6 +298,7 @@
         *ngIf="visible[8] && !hidden"
         [src]="'assets/pdfs/ATS_TEST_PVC_2_1.pdf'"
         backgroundColor="#e8e8ef"
+        [contextMenuAllowed]="contextMenuAllowed"
         [mobileZoom]="mobileFriendlyZoom"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebar"

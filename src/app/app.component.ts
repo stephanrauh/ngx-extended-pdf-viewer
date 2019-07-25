@@ -11,7 +11,6 @@ import { NgxExtendedPdfViewerService } from '../../projects/ngx-extended-pdf-vie
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  public title = 'ngx-extended-pdf-viewer';
   public pdf = 'assets/example.pdf';
   public hidden = false;
   public zoom: number | string | undefined = 'page-width';
@@ -24,6 +23,7 @@ export class AppComponent {
   public nameddest = 'chapter_5';
   public _searchtext = '';
   public spread = 'off';
+  public contextMenuAllowed = true;
 
   public page: number | undefined = undefined;
 

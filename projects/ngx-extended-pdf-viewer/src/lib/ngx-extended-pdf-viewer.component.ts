@@ -9,7 +9,8 @@ import {
   Output,
   EventEmitter,
   ViewChild,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  HostListener
 } from '@angular/core';
 import { PagesLoadedEvent } from './pages-loaded-event';
 import { PageRenderedEvent } from './page-rendered-event';
@@ -38,6 +39,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   private _src: string | ArrayBuffer;
 
   private resizeTimeout: any = null;
+
+  @Input()
+  public contextMenuAllowed = true;
 
   /**
    * Number of milliseconds to wait between initializing the PDF viewer and loading the PDF file.
@@ -750,5 +754,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         resizeUpTo535px(width);
       }
     }
+  }
+
+  @HostListener('contextmenu')
+  public onContextMenu(): boolean {
+    return this.contextMenuAllowed;
   }
 }

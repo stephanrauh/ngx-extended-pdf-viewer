@@ -5,3 +5,11 @@
 body {
   height: 90vh;
 }
+
+mat-card section.section {
+  height: 50px !important;
+}
+
+mat-card {
+  padding-top: 0 !important;
+}
