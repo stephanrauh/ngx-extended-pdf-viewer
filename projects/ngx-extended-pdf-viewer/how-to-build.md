@@ -1,7 +1,7 @@
 1. Create a new folder "embedded-pdf". It must be in the same folder as ngx-extended-pdf-viewer.
 2. cd embedded-pdf
 3. git clone https://github.com/mozilla/pdf.js.git
-4. mv pdf.js mozillas-pdf.js (or rename pdf.js mozilla-pdf.js if you're using Windows)
+4. mv pdf.js mozillas-pdf.js (or rename pdf.js mozillas-pdf.js if you're using Windows)
 5. cd mozillas-pdf.js
 6. npm install -g gulp-cli
 7. npm install
