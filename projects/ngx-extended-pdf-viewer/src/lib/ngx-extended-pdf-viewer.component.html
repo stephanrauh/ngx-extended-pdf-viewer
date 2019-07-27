@@ -65,7 +65,9 @@
           <div
             class="findbar hidden doorHanger"
             id="findbar"
-            [style.zoom]="mobileFriendlyZoom"
+            [style.width]="toolbarWidth"
+            [style.transform]="'scale('+mobileFriendlyZoomScale+')'"
+            [style.transformOrigin]="'left center'"
             [style.top]="findbarTop"
             [style.left]="findbarLeft"
           >
@@ -154,7 +156,9 @@
           <div
             id="secondaryToolbar"
             class="secondaryToolbar hidden doorHangerRight"
-            [style.zoom]="mobileFriendlyZoom"
+            [style.width]="toolbarWidth"
+            [style.transform]="'scale('+mobileFriendlyZoomScale+')'"
+            [style.transformOrigin]="'left center'"
             [style.top]="findbarTop"
             [style.right]="secondaryToolbarRight"
           >
@@ -402,7 +406,8 @@
           <div class="toolbar" [class.invisible]="!primaryMenuVisible" (window:resize)="onResize()">
             <div
               id="toolbarContainer"
-              [style.zoom]="mobileFriendlyZoom"
+              [style.transform]="'scale('+mobileFriendlyZoomScale+')'"
+              [style.transformOrigin]="'left center'"
               [style.width]="toolbarWidth"
             >
               <div id="toolbarViewer">

@@ -239,6 +239,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
    */
   @Input() _mobileFriendlyZoom = '100%';
 
+  public mobileFriendlyZoomScale = 1;
+
   public toolbarWidth = '100%';
 
   // dirty IE11 hack - temporary solution
@@ -253,9 +255,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public get mobileFriendlyZoom() {
     return this._mobileFriendlyZoom;
   }
-  /*
+  /**
    * This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
-   * This attribute is a string with a percent character at the end (e.g. "150%").*/
+   * This attribute is a string with a percent character at the end (e.g. "150%").
+   */
   @Input()
   public set mobileFriendlyZoom(zoom: string) {
     // tslint:disable-next-line:triple-equals - the type conversion is intended
@@ -268,9 +271,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     this._mobileFriendlyZoom = zoom;
     const isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
     let factor = 1;
-    if (isIE) {
-      factor = Number((zoom || '100').replace('%', '')) / 100;
+    if (!String(zoom).includes('%')) {
+      zoom = 100 * Number(zoom) + '%';
     }
+    factor = Number((zoom || '100').replace('%', '')) / 100;
+    this.mobileFriendlyZoomScale = factor;
+    this.toolbarWidth = (100 / factor).toString() + '%';
     if (this.showSidebarButton) {
       this.findbarLeft = (68 * factor).toString() + 'px';
     } else {
@@ -278,7 +284,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
     if (isIE) {
       // dirty, temporary hack
-      this.toolbarWidth = (100 / factor).toString() + '%';
       this.findbarTop = (32 * factor).toString() + 'px';
       this.secondaryToolbarRight = (252 * (factor - 1)).toString() + 'px';
     }
