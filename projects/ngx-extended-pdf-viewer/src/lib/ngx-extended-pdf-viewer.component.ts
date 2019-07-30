@@ -492,7 +492,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     options.set('disablePreferences', true);
     this.setZoom();
 
-    options.set('textLayerMode', this.showHandToolButton ? 1 : 0);
+    if (!this.handTool) {
+      options.set('textLayerMode', 1);
+    } else {
+      options.set('textLayerMode', this.showHandToolButton ? 1 : 0);
+    }
 
     if (this.showSidebarButton) {
       if (this.showSidebarOnLoad !== undefined) {
