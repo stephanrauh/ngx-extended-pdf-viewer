@@ -65,11 +65,10 @@
           <div
             class="findbar hidden doorHanger"
             id="findbar"
-            [style.width]="toolbarWidth"
             [style.transform]="'scale('+mobileFriendlyZoomScale+')'"
             [style.transformOrigin]="'left center'"
-            [style.top]="findbarTop"
             [style.left]="findbarLeft"
+            [style.top]="findbarTop"
           >
             <div id="findbarInputContainer">
               <input
@@ -156,11 +155,9 @@
           <div
             id="secondaryToolbar"
             class="secondaryToolbar hidden doorHangerRight"
-            [style.width]="toolbarWidth"
+            [style.top]="secondaryToolbarTop"
             [style.transform]="'scale('+mobileFriendlyZoomScale+')'"
-            [style.transformOrigin]="'left center'"
-            [style.top]="findbarTop"
-            [style.right]="secondaryToolbarRight"
+            [style.transformOrigin]="'right top'"
           >
             <div id="secondaryToolbarButtonContainer">
               <button

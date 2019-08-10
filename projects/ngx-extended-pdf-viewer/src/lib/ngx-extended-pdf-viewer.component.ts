@@ -243,14 +243,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   public toolbarWidth = '100%';
 
+  public secondaryToolbarTop: string | undefined = undefined;
+
   // dirty IE11 hack - temporary solution
   public findbarTop: string | undefined = undefined;
 
   // dirty IE11 hack - temporary solution
   public findbarLeft: string | undefined = undefined;
-
-  // dirty IE11 hack - temporary solution
-  public secondaryToolbarRight: string | undefined = undefined;
 
   public get mobileFriendlyZoom() {
     return this._mobileFriendlyZoom;
@@ -269,7 +268,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       zoom = '100%';
     }
     this._mobileFriendlyZoom = zoom;
-    const isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
     let factor = 1;
     if (!String(zoom).includes('%')) {
       zoom = 100 * Number(zoom) + '%';
@@ -282,11 +280,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     } else {
       this.findbarLeft = '0px';
     }
-    if (isIE) {
-      // dirty, temporary hack
-      this.findbarTop = (32 * factor).toString() + 'px';
-      this.secondaryToolbarRight = (252 * (factor - 1)).toString() + 'px';
-    }
+    this.secondaryToolbarTop = (12 + 24 * factor).toString() + 'px';
+    this.findbarTop = (-6 + 42 * factor).toString() + 'px';
   }
 
   /** Deprecated. Please use [mobileFriendlyZoom] instead.
@@ -308,11 +303,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (this.mobileFriendlyZoom) {
       if (this.mobileFriendlyZoom.endsWith('%')) {
         const zoom = Number(this.mobileFriendlyZoom.substring(0, this.mobileFriendlyZoom.length - 1));
-        return (0.32 * zoom).toString() + 'px';
+        return (16 + 0.16 * zoom).toString() + 'px';
       }
       if (this.mobileFriendlyZoom.endsWith('px')) {
         return this.mobileFriendlyZoom;
       }
+      return (16 + 0.16 * Number(this.mobileFriendlyZoom)).toString() + 'px';
     }
     return '32px';
   }
