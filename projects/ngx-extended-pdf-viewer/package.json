@@ -1,6 +1,6 @@
 {
   "name": "ngx-extended-pdf-viewer",
-  "version": "1.0.0-rc.6",
+  "version": "1.0.0-rc.8",
   "license": "Apache-2.0",
   "repository": {
     "url": "https://github.com/stephanrauh/ngx-extended-pdf-viewer"
@@ -18,8 +18,5 @@
   "peerDependencies": {
     "@angular/common": "^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^7.1.0 || ^7.2.0 || ^7.3.0 || ^8.0.0 || ^8.1.0",
     "@angular/core": "^6.0.0-rc.0 || ^6.0.0 || ^7.0.0 || ^7.1.0 || ^7.2.0 || ^7.3.0 || ^8.0.0 || ^8.1.0"
-  },
-  "scripts": {
-    "postinstall": "node -e \"breaking change in 0.9.54: pdf-2.2.222 renamed to pdf-2.2, pdf.worker-2.2.222 renamed to pdf.worker-2.2.222. Deleted pdf.*-2.2.199.\""
   }
 }
