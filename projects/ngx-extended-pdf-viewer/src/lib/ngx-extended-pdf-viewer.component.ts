@@ -128,6 +128,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public filenameForDownload = 'document.pdf';
 
+  /** Allows the user to put the viewer's svg images into an arbitrary folder */
+  @Input()
+  public imageResourcesPath = './assets/images/';
+
   /** Override the default locale. This must be the complete locale name, such as "es-ES". The string is allowed to be all lowercase.
    */
   @Input()
@@ -436,6 +440,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       (<any>window).PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
       (<any>window).PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
       (<any>window).PDFViewerApplicationOptions.set('locale', this.language);
+      (<any>window).PDFViewerApplicationOptions.set('imageResourcesPath', this.imageResourcesPath);
 
       (<any>window).PDFViewerApplication.isViewerEmbedded = true;
       window.addEventListener('keydown', (<any>window).PDFViewerApplication.printKeyDownListener, true);

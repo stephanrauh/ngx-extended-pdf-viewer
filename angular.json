@@ -22,7 +22,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              { "glob": "**/*", "input": "dist/ngx-extended-pdf-viewer/assets/locale", "output": "/assets/locale/" }
+              { "glob": "**/*", "input": "dist/ngx-extended-pdf-viewer/assets/locale", "output": "/assets/locale/" },
+              { "glob": "**/*", "input": "dist/ngx-extended-pdf-viewer/assets/images", "output": "/assets/images/" }
             ],
             "styles": ["src/styles.css"],
             "scripts": [
