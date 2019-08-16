@@ -45,7 +45,7 @@ lineReader
       } else if (line.includes("this.bar.classList.add('hidden');")) {
         if (currentFunction.includes('hide') || currentFunction.includes('ProgressBar')) {
           line =
-            "    this.div = document.querySelector('.progress'); // always set this new instead of trying to cache this value\n" +
+            "    this.div = document.querySelector('.body #mainContainer .progress'); // always set this new instead of trying to cache this value\n" +
             '    if (this.div) {\n' +
             '      this.bar = this.div.parentNode; // always set this new instead of trying to cache this value\n' +
             '  ' +

@@ -4153,7 +4153,7 @@ function () {
     key: "hide",
     value: function hide() {
       this.visible = false;
-    this.div = document.querySelector('.progress'); // always set this new instead of trying to cache this value
+    this.div = document.querySelector('.body #mainContainer .progress'); // always set this new instead of trying to cache this value
     if (this.div) {
       this.bar = this.div.parentNode; // always set this new instead of trying to cache this value
         this.bar.classList.add('hidden');
