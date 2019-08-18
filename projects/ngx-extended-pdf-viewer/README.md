@@ -455,3 +455,4 @@ Thanks to the awesome pdf.j team and to all the users you've reported bugs and e
 - 1.0.0-rc.9 #117 added the SVG images to the assets folder; introduced `imageResourcesPath` to allow for even more flexibility 
 - 1.0.0 minor formatting improvements in the README file
 - 1.0.1 #124 made the CSS selector of the progress bar more specific
+- 1.0.2 #120 made [page] more reliable; sometimes the initial setting was ignored when the page loads slow

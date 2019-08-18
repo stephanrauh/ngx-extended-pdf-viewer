@@ -546,9 +546,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     this.selectCursorTool();
     (<any>window).PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
       this.pagesLoaded.emit(x);
-      if (this.nameddest) {
-        (<any>window).PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
-      }
+      setTimeout(() => {
+        if (this.nameddest) {
+          (<any>window).PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
+        } else if (this.page) {
+          (<any>window).PDFViewerApplication.page = this.page;
+        }
+      });
       this.setZoom();
     });
     (<any>window).PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
