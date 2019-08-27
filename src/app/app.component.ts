@@ -16,6 +16,7 @@ export class AppComponent {
   public zoom: number | string | undefined = 'page-width';
   public visible = { 0: true };
   public mobileFriendlyZoomPercent = false;
+  public currentZoomFactor: number;
   public showSidebar = false;
   public height: string | undefined = '80vh';
   public filenameForDownload: string | undefined = undefined;
@@ -202,5 +203,9 @@ export class AppComponent {
 
   public findPrevious(): void {
     this.ngxExtendedPdfViewerService.findPrevious();
+  }
+
+  public updateCurrentZoomFactor(zoom: number) {
+    this.currentZoomFactor = zoom;
   }
 }

@@ -79,7 +79,7 @@
       <mat-checkbox class="margin" [(ngModel)]="zoomPageWidth" matTooltip="Changes apply after switching to another PDF file"
         >[zoom]="'page-width'"</mat-checkbox
       >
-      <div class="margin">resulting zoom factor: {{ zoom }}</div>
+      <div class="margin">resulting zoom factor: {{ zoom }}<br />zoom factor reported from the viewer: {{ currentZoomFactor }}</div>
     </section>
     <section class="section">
       <mat-form-field class="margin">
@@ -95,6 +95,7 @@
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[0] && !hidden"
+        (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [contextMenuAllowed]="contextMenuAllowed"
         [ignoreResponsiveCSS]="true"
         [src]="'assets/pdfs/fancy.pdf'"
@@ -132,6 +133,7 @@
         [src]="'assets/pdfs/codpaste-teachingpack.pdf'"
         backgroundColor="#e8e8ef"
         [contextMenuAllowed]="contextMenuAllowed"
+        (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [mobileZoom]="mobileFriendlyZoom"
         [showZoomButtons]="true"
         [showPresentationModeButton]="true"
@@ -161,6 +163,7 @@
         [src]="'assets/pdfs/Math.pdf'"
         backgroundColor="#e8e8ef"
         [contextMenuAllowed]="contextMenuAllowed"
+        (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [mobileZoom]="mobileFriendlyZoom"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebar"
@@ -185,6 +188,7 @@
         [src]="'assets/pdfs/somatosensory.pdf'"
         backgroundColor="#ffffff"
         [contextMenuAllowed]="contextMenuAllowed"
+        (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [mobileFriendlyZoom]="mobileFriendlyZoom"
         [showHandToolButton]="false"
         [showPagingButtons]="false"
@@ -214,6 +218,7 @@
         [src]="'assets/pdfs/pdf-sample.pdf'"
         backgroundColor="blue"
         [contextMenuAllowed]="contextMenuAllowed"
+        (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [mobileFriendlyZoom]="mobileFriendlyZoom"
         [showBookmarkButton]="false"
         [showDownloadButton]="false"
@@ -246,6 +251,7 @@
         [base64Src]="base64"
         backgroundColor="#e8e8ef"
         [contextMenuAllowed]="contextMenuAllowed"
+        (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [mobileZoom]="mobileFriendlyZoom"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebar"
@@ -271,6 +277,7 @@
         [src]="'assets/pdfs/encrypted-sample.pdf'"
         backgroundColor="#e8e8ef"
         [contextMenuAllowed]="contextMenuAllowed"
+        (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [mobileZoom]="mobileFriendlyZoom"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebar"
@@ -299,6 +306,7 @@
         [src]="'assets/pdfs/ATS_TEST_PVC_2_1.pdf'"
         backgroundColor="#e8e8ef"
         [contextMenuAllowed]="contextMenuAllowed"
+        (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [mobileZoom]="mobileFriendlyZoom"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebar"

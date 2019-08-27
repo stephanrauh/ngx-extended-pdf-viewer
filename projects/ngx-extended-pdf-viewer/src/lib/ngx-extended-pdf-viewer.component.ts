@@ -16,6 +16,7 @@ import { PagesLoadedEvent } from './pages-loaded-event';
 import { PageRenderedEvent } from './page-rendered-event';
 import { PdfDownloadedEvent } from './pdf-downloaded-event';
 import { defaultOptions } from './default-options';
+import { ScaleChangingEvent } from './scale-changing-event';
 import {
   resizeUpTo900px,
   resizeUpTo840px,
@@ -42,6 +43,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   @Input()
   public contextMenuAllowed = true;
+
+  @Output()
+  public currentZoomFactor = new EventEmitter<number>();
 
   /**
    * Number of milliseconds to wait between initializing the PDF viewer and loading the PDF file.
@@ -560,6 +564,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     });
     (<any>window).PDFViewerApplication.eventBus.on('download', (x: PdfDownloadedEvent) => {
       this.pdfDownloaded.emit(x);
+    });
+    (<any>window).PDFViewerApplication.eventBus.on('scalechanging', (x: ScaleChangingEvent) => {
+      this.currentZoomFactor.emit(x.scale);
     });
     this.checkHeight();
     // open a file in the viewer
