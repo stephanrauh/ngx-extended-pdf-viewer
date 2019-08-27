@@ -347,7 +347,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   public emitZoomChange(): void {
     const selectedIndex = this.sizeSelector.nativeElement.selectedIndex;
-    if (selectedIndex) {
+    if (selectedIndex || selectedIndex === 0) {
       const s = this.sizeSelector.nativeElement.options[selectedIndex] as HTMLOptionElement;
       let value: number | string = s.label;
 
