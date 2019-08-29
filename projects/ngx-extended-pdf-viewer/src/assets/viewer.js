@@ -2408,7 +2408,7 @@
       }
     }
   
-    if (!handled && !isViewerInPresentationMode) {
+    if (!handled && !isViewerInPresentationMode && !this.isViewerEmbedded) {
       if (evt.keyCode >= 33 && evt.keyCode <= 40 || evt.keyCode === 32 && curElementTagName !== 'BUTTON') {
         ensureViewerFocused = true;
       }

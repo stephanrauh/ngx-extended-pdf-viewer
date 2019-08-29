@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 20;
+let expectedChanges = 21;
 
 let dropLines = 0;
 currentFunction = '';
@@ -116,7 +116,11 @@ lineReader
         line += "\n      overlayManager.unregister('printServiceOverlay'); // #104";
         line += '\n    });';
         line += '\n    overlayPromise = undefined; // #104';
+      } else if (line.includes('(!handled && !isViewerInPresentationMode)')) {
+        line = '    if (!handled && !isViewerInPresentationMode && !this.isViewerEmbedded) {';
+        expectedChanges--;
       }
+
       if (line != null) {
         line = line.replace(' print(', ' printPDF(');
         line = line.replace('.print(', '.printPDF(');
