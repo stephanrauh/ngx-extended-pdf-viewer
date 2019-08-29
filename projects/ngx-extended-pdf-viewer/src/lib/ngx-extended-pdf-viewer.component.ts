@@ -64,6 +64,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   public primaryMenuVisible = true;
 
+  /** option to increase (or reduce) print resolution. Default is 150 (dpi). Sensible values
+   * are 300, 600, and 1200. Note the increase memory consumption, which may even result in a browser crash. */
+  @Input()
+  public printResolution = null;
+
   @Input()
   public set src(url: string | ArrayBuffer | Uint8Array) {
     if (url instanceof Uint8Array) {
@@ -538,6 +543,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       }
       this.onSpreadChange('off');
     }
+    if (this.printResolution) {
+      options.set('printResolution', this.printResolution);
+    }
   }
 
   private openPDF() {
@@ -733,6 +741,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       } else {
         removeDynamicCSS();
       }
+    }
+    if ('printResolution' in changes) {
+      const options = (<any>window).PDFViewerApplicationOptions;
+      options.set('printResolution', this.printResolution);
     }
   }
 

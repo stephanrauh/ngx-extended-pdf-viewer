@@ -91,10 +91,11 @@
   </mat-card-content>
 </mat-card>
 <mat-tab-group (selectedTabChange)="activateTab($event.index)">
-  <mat-tab label="fancy PDF">
+  <mat-tab label="fancy PDF (low print res)">
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[0] && !hidden"
+        printResolution="20"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [contextMenuAllowed]="contextMenuAllowed"
         [ignoreResponsiveCSS]="true"
@@ -156,7 +157,7 @@
   <mat-tab label="No PDF">
     <h1>Tab without a PDF</h1>
   </mat-tab>
-  <mat-tab label="Another PDF" (click)="hideOtherPDFs()">
+  <mat-tab label="Another PDF (high print res)" (click)="hideOtherPDFs()">
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[3] && !hidden"
@@ -165,6 +166,7 @@
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [mobileZoom]="mobileFriendlyZoom"
+        printResolution="600"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebar"
         [useBrowserLocale]="false"
