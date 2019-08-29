@@ -87,6 +87,9 @@
       </mat-form-field>
       <button (click)="findNext()">next</button>
       <button (click)="findPrevious()">previous</button>
+      <mat-form-field class="margin" *ngIf="visible[6]">
+        <input matInput class="margin" [(ngModel)]="printResolution" placeholder="print resolution (72...900; default: 150)" />
+      </mat-form-field>
     </section>
   </mat-card-content>
 </mat-card>
@@ -246,7 +249,7 @@
       </ngx-extended-pdf-viewer>
     </ng-template>
   </mat-tab>
-  <mat-tab label="Base64" (click)="hideOtherPDFs()">
+  <mat-tab label="Base64 (variable print res)" (click)="hideOtherPDFs()">
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[6] && !hidden"
@@ -255,6 +258,7 @@
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [mobileZoom]="mobileFriendlyZoom"
+        [printResolution]="printResolution"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebar"
         [useBrowserLocale]="false"

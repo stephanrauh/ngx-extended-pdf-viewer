@@ -22,6 +22,7 @@ export class AppComponent {
   public filenameForDownload: string | undefined = undefined;
   public language = 'es-ES';
   public nameddest = 'chapter_5';
+  public printResolution: string | undefined = undefined;
   public _searchtext = '';
   public spread = 'off';
   public contextMenuAllowed = true;
