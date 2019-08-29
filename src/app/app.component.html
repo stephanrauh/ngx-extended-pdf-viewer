@@ -259,6 +259,8 @@
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [mobileZoom]="mobileFriendlyZoom"
         [printResolution]="printResolution"
+        (afterPrint)="afterPrint()"
+        (beforePrint)="beforePrint()"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebar"
         [useBrowserLocale]="false"

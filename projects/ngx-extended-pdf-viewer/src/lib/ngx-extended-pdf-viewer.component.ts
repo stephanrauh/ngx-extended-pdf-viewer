@@ -45,6 +45,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public contextMenuAllowed = true;
 
   @Output()
+  public afterPrint = new EventEmitter<void>();
+
+  @Output()
+  public beforePrint = new EventEmitter<void>();
+
+  @Output()
   public currentZoomFactor = new EventEmitter<number>();
 
   /**
@@ -421,6 +427,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         this.openPDF();
       }, this.delayFirstView);
     };
+
+    window.addEventListener('afterprint', event => {
+      this.afterPrint.emit();
+    });
+
+    window.addEventListener('beforeprint', event => {
+      this.beforePrint.emit();
+    });
 
     document.addEventListener('localized', callback);
 

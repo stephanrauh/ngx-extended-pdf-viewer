@@ -209,4 +209,12 @@ export class AppComponent {
   public updateCurrentZoomFactor(zoom: number) {
     this.currentZoomFactor = zoom;
   }
+
+  public beforePrint(): void {
+    console.log('event "beforePrint" fired');
+  }
+
+  public afterPrint(): void {
+    console.log('event "afterPrint" fired');
+  }
 }
