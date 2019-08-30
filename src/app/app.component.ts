@@ -3,6 +3,7 @@ import { PagesLoadedEvent } from 'projects/ngx-extended-pdf-viewer/src/lib/pages
 import { pdfBase64 } from './pdfBase64';
 import { PageRenderedEvent } from '../../projects/ngx-extended-pdf-viewer/src/lib/page-rendered-event';
 import { PdfDownloadedEvent } from '../../projects/ngx-extended-pdf-viewer/src/lib/pdf-downloaded-event';
+import { PdfLoadedEvent } from '../../projects/ngx-extended-pdf-viewer/src/lib/pdf-loaded-event';
 import { NgxExtendedPdfViewerService } from '../../projects/ngx-extended-pdf-viewer/src/lib/ngx-extended-pdf-viewer.service';
 
 @Component({
@@ -216,5 +217,13 @@ export class AppComponent {
 
   public afterPrint(): void {
     console.log('event "afterPrint" fired');
+  }
+
+  public onPdfLoaded(event: PdfLoadedEvent): void {
+    console.log('PDF loaded with ' + event.pagesCount + ' pages');
+  }
+
+  public onPdfLoadFailed(error: Error): void {
+    console.log(error);
   }
 }

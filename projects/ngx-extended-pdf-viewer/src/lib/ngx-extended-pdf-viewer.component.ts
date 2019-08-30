@@ -15,6 +15,7 @@ import {
 import { PagesLoadedEvent } from './pages-loaded-event';
 import { PageRenderedEvent } from './page-rendered-event';
 import { PdfDownloadedEvent } from './pdf-downloaded-event';
+import { PdfLoadedEvent } from './pdf-loaded-event';
 import { defaultOptions } from './default-options';
 import { ScaleChangingEvent } from './scale-changing-event';
 import {
@@ -245,6 +246,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   @Output()
   public pdfDownloaded = new EventEmitter<PdfDownloadedEvent>();
+
+  @Output()
+  public pdfLoaded = new EventEmitter<PdfLoadedEvent>();
+
+  @Output()
+  public pdfLoadingFailed = new EventEmitter<Error>();
 
   /** Legal values: undefined, 'auto', 'page-actual', 'page_fit', 'page-width', or '50' (or any other percentage) */
   @Input()
@@ -596,7 +603,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       const options = {
         password: this.password
       };
-      (<any>window).PDFViewerApplication.open(this._src, options);
+      (<any>window).PDFViewerApplication.open(this._src, options).then(
+        () => this.pdfLoaded.emit({ pagesCount: (<any>window).PDFViewerApplication.pagesCount }),
+        (error: Error) => this.pdfLoadingFailed.emit(error));
     }
     setTimeout(() => {
       if (this.page) {
@@ -698,7 +707,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       if ('src' in changes) {
         if (!!this._src) {
           this.overrideDefaultSettings();
-          (<any>window).PDFViewerApplication.open(this._src);
+          (<any>window).PDFViewerApplication.open(this._src).then(
+            () => this.pdfLoaded.emit({ pagesCount: (<any>window).PDFViewerApplication.pagesCount }),
+            (error: Error) => this.pdfLoadingFailed.emit(error));
         }
       }
       if ('zoom' in changes) {
