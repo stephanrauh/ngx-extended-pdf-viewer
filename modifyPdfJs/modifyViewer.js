@@ -117,7 +117,7 @@ lineReader
         line += '\n    });';
         line += '\n    overlayPromise = undefined; // #104';
       } else if (line.includes('(!handled && !isViewerInPresentationMode)')) {
-        line = '    if (!handled && !isViewerInPresentationMode && !this.isViewerEmbedded) {';
+        line = '    if (false) {';
         expectedChanges--;
       }
 

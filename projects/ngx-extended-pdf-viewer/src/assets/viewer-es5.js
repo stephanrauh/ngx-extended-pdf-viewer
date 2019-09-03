@@ -2632,7 +2632,7 @@ function webViewerKeyDown(evt) {
     }
   }
 
-  if (!handled && !isViewerInPresentationMode && !this.isViewerEmbedded) {
+  if (false) {
     if (evt.keyCode >= 33 && evt.keyCode <= 40 || evt.keyCode === 32 && curElementTagName !== 'BUTTON') {
       ensureViewerFocused = true;
     }

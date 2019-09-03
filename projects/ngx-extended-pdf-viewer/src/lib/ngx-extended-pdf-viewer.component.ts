@@ -605,7 +605,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       };
       (<any>window).PDFViewerApplication.open(this._src, options).then(
         () => this.pdfLoaded.emit({ pagesCount: (<any>window).PDFViewerApplication.pagesCount }),
-        (error: Error) => this.pdfLoadingFailed.emit(error));
+        (error: Error) => this.pdfLoadingFailed.emit(error)
+      );
     }
     setTimeout(() => {
       if (this.page) {
@@ -704,12 +705,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   public ngOnChanges(changes: SimpleChanges) {
     if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
-      if ('src' in changes) {
+      if ('src' in changes || 'base64Src' in changes) {
         if (!!this._src) {
           this.overrideDefaultSettings();
           (<any>window).PDFViewerApplication.open(this._src).then(
             () => this.pdfLoaded.emit({ pagesCount: (<any>window).PDFViewerApplication.pagesCount }),
-            (error: Error) => this.pdfLoadingFailed.emit(error));
+            (error: Error) => this.pdfLoadingFailed.emit(error)
+          );
         }
       }
       if ('zoom' in changes) {
