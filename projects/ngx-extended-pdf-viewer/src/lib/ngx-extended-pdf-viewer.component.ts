@@ -599,13 +599,19 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       this.setZoom();
     });
     (<any>window).PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
-      this.pageRendered.emit(x);
+      this.ngZone.run(() => {
+        this.pageRendered.emit(x);
+      });
     });
     (<any>window).PDFViewerApplication.eventBus.on('download', (x: PdfDownloadedEvent) => {
-      this.pdfDownloaded.emit(x);
+      this.ngZone.run(() => {
+        this.pdfDownloaded.emit(x);
+      });
     });
     (<any>window).PDFViewerApplication.eventBus.on('scalechanging', (x: ScaleChangingEvent) => {
-      this.currentZoomFactor.emit(x.scale);
+      this.ngZone.run(() => {
+        this.currentZoomFactor.emit(x.scale);
+      });
     });
 
     (<any>window).PDFViewerApplication.eventBus.on('rotationchanging', (x: PagesRotationEvent) => {
