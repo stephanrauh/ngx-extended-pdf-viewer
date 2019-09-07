@@ -10,7 +10,8 @@ import {
   EventEmitter,
   ViewChild,
   ChangeDetectionStrategy,
-  HostListener
+  HostListener,
+  NgZone
 } from '@angular/core';
 import { PagesLoadedEvent } from './pages-loaded-event';
 import { PageRenderedEvent } from './page-rendered-event';
@@ -27,6 +28,7 @@ import {
   resizeUpTo535px,
   removeDynamicCSS
 } from './ResponsiveCSSSimulation';
+import { PagesRotationEvent } from './pages-rotation-event';
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
@@ -75,6 +77,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
    * are 300, 600, and 1200. Note the increase memory consumption, which may even result in a browser crash. */
   @Input()
   public printResolution = null;
+
+  @Input()
+  public rotation: 0 | 90 | 180 | 270;
+
+  @Output()
+  public rotationChange = new EventEmitter<0 | 90 | 180 | 270>();
 
   @Input()
   public set src(url: string | ArrayBuffer | Uint8Array) {
@@ -365,7 +373,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
   }
 
-  constructor() {}
+  constructor(private ngZone: NgZone) {}
 
   public emitZoomChange(): void {
     const selectedIndex = this.sizeSelector.nativeElement.selectedIndex;
@@ -446,6 +454,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     document.addEventListener('localized', callback);
 
     if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
+      // tslint:disable-next-line:quotemark
       console.error("You're trying to open two instances of the PDF viewer. Most likely, this will result in errors.");
     }
     const onLoaded = () => {
@@ -579,6 +588,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     this.selectCursorTool();
     (<any>window).PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
       this.pagesLoaded.emit(x);
+      (<any>window).PDFViewerApplication.pdfViewer.pagesRotation = this.rotation;
       setTimeout(() => {
         if (this.nameddest) {
           (<any>window).PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
@@ -597,6 +607,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     (<any>window).PDFViewerApplication.eventBus.on('scalechanging', (x: ScaleChangingEvent) => {
       this.currentZoomFactor.emit(x.scale);
     });
+
+    (<any>window).PDFViewerApplication.eventBus.on('rotationchanging', (x: PagesRotationEvent) => {
+      this.ngZone.run(() => {
+        this.rotationChange.emit(x.pagesRotation);
+      });
+    });
+
     this.checkHeight();
     // open a file in the viewer
     if (!!this._src) {
@@ -724,6 +741,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       if ('page' in changes) {
         if (this.page) {
           (<any>window).PDFViewerApplication.page = this.page;
+        }
+      }
+
+      if ('rotation' in changes) {
+        if (this.rotation) {
+          const r = Number(this.rotation);
+          if (r === 90 || r === 180 || r === 270) {
+            (<any>window).PDFViewerApplication.pdfViewer.pagesRotation = r;
+          }
+        } else {
+          (<any>window).PDFViewerApplication.pdfViewer.pagesRotation = 0;
         }
       }
       if ('filenameForDownload' in changes) {

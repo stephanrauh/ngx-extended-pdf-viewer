@@ -28,6 +28,8 @@ export class AppComponent {
   public spread = 'off';
   public contextMenuAllowed = true;
 
+  public rotation = 90;
+
   public page: number | undefined = undefined;
 
   public handTool: boolean | undefined = undefined;

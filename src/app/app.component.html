@@ -90,6 +90,9 @@
       <mat-form-field class="margin" *ngIf="visible[6]">
         <input matInput class="margin" [(ngModel)]="printResolution" placeholder="print resolution (72...900; default: 150)" />
       </mat-form-field>
+      <mat-form-field class="margin">
+        <input matInput class="margin" [(ngModel)]="rotation" placeholder="rotation (0, 90, 180, 270)" />
+      </mat-form-field>
     </section>
   </mat-card-content>
 </mat-card>
@@ -105,6 +108,7 @@
         [src]="'assets/pdfs/fancy.pdf'"
         backgroundColor="#ffffff"
         [mobileFriendlyZoom]="mobileFriendlyZoom"
+        [(rotation)]="rotation"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebar"
         [useBrowserLocale]="false"
