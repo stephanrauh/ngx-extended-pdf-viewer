@@ -29,6 +29,7 @@ import {
   removeDynamicCSS
 } from './ResponsiveCSSSimulation';
 import { PagesRotationEvent } from './pages-rotation-event';
+import { FileInputChanged } from './file-input-changed';
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
@@ -41,6 +42,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public static ngxExtendedPdfViewerInitialized = false;
 
   private _src: string | ArrayBuffer;
+
+  @Output()
+  public srcChange = new EventEmitter<string>();
 
   private resizeTimeout: any = null;
 
@@ -617,6 +621,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     (<any>window).PDFViewerApplication.eventBus.on('rotationchanging', (x: PagesRotationEvent) => {
       this.ngZone.run(() => {
         this.rotationChange.emit(x.pagesRotation);
+      });
+    });
+    (<any>window).PDFViewerApplication.eventBus.on('fileinputchange', (x: FileInputChanged) => {
+      this.ngZone.run(() => {
+        const path = x.fileInput.value.replace('C:\\fakepath\\', '');
+        this.srcChange.emit(path);
       });
     });
 

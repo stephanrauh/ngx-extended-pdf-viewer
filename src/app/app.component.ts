@@ -228,4 +228,8 @@ export class AppComponent {
   public onPdfLoadFailed(error: Error): void {
     console.log(error);
   }
+
+  public onSourceChange(event: string) {
+    console.log('Source changed. The new file is ' + event);
+  }
 }
