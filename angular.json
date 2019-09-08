@@ -23,14 +23,11 @@
               "src/favicon.ico",
               "src/assets",
               { "glob": "**/*", "input": "dist/ngx-extended-pdf-viewer/assets/locale", "output": "/assets/locale/" },
-              { "glob": "**/*", "input": "dist/ngx-extended-pdf-viewer/assets/images", "output": "/assets/images/" }
+              { "glob": "**/pdf.worker.js", "input": "dist/ngx-extended-pdf-viewer/assets", "output": "/assets/" },
+              { "glob": "**/*", "input": "dist/ngx-extended-pdf-viewer/assets/locale", "output": "/assets/locale/" }
             ],
             "styles": ["src/styles.css"],
-            "scripts": [
-              "dist/ngx-extended-pdf-viewer/assets/pdf.js",
-              "dist/ngx-extended-pdf-viewer/assets/pdf.worker.js",
-              "dist/ngx-extended-pdf-viewer/assets/viewer.js"
-            ]
+            "scripts": ["dist/ngx-extended-pdf-viewer/assets/pdf.js", "dist/ngx-extended-pdf-viewer/assets/viewer.js"]
           },
           "configurations": {
             "production": {

@@ -2632,7 +2632,7 @@ function webViewerKeyDown(evt) {
     }
   }
 
-  if (false) {
+    if (false) {
     if (evt.keyCode >= 33 && evt.keyCode <= 40 || evt.keyCode === 32 && curElementTagName !== 'BUTTON') {
       ensureViewerFocused = true;
     }
@@ -4384,7 +4384,7 @@ var defaultOptions = {
     kind: OptionKind.WORKER
   },
   workerSrc: {
-    value: '../build/pdf.worker.js',
+    value: './assets/pdf.worker-es5.js',
     kind: OptionKind.WORKER
   }
 };

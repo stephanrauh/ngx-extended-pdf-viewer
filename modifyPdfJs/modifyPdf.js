@@ -6,14 +6,19 @@ const lineReader = require('readline').createInterface({
 
 let result = '';
 
-let expectedChanges = 7;
+let expectedChanges = 9;
 let dropLines = 0;
+let es2015 = false;
 lineReader
   .on('line', function(line) {
     if (dropLines > 0) {
       dropLines--;
-      console.log('Dropping ' + line);
+      //      console.log('Dropping ' + line);
     } else {
+      if (line.includes('let fs')) {
+        if (!es2015) console.log('ES 2015 version');
+        es2015 = true;
+      }
       if (line.includes("var fs = require('fs');") || line.includes("let fs = require('fs');")) {
         line = '';
         expectedChanges--;
@@ -30,16 +35,29 @@ lineReader
         expectedChanges--;
         line = 'throw Error("zlib not available in the browser");';
         dropLines = 2;
+      } else if (line.includes('pdfjs-dist/build/pdf.worker')) {
+        line = line.replace('pdfjs-dist/build/pdf.worker', './assets/pdf.worker.js');
+        expectedChanges--;
       } else if (line.includes('pdfjs-dist/build/pdf.worker.js')) {
+        if (es2015) {
+          line = line.replace('pdfjs-dist/build/pdf.worker.js', './assets/pdf.worker.js');
+        } else {
+          line = line.replace('pdfjs-dist/build/pdf.worker.js', './assets/pdf.worker-es5.js');
+        }
         line = line.replace('pdfjs-dist/build/pdf.worker.js', './pdf.worker-2.2.js');
         expectedChanges--;
-      } else if (line.includes('pdf.worker.js')) {
-        line = line.replace('pdf.worker.js', 'pdf.worker-2.2.js');
+      } else if (line.includes('./pdf.worker.js')) {
+        if (es2015) {
+          line = line.replace('./pdf.worker.js', './assets/pdf.worker.js');
+        } else {
+          line = line.replace('./pdf.worker.js', './assets/pdf.worker-es5.js');
+        }
         expectedChanges--;
       } else if (line.includes('//# sourceMappingURL=pdf.js.map')) {
         line = ''; // the file hasn't been minified, so there's no use for a source map
         expectedChanges--;
       } else if (line.includes('if (fontSize !== this._layoutTextLastFontSize')) {
+        expectedChanges--;
         dropLines = 7;
         line = 'if (this._layoutTextCtx) {\n';
         line += 'if (fontSize !== this._layoutTextLastFontSize || fontFamily !== this._layoutTextLastFontFamily) {\n';
@@ -55,12 +73,16 @@ lineReader
     }
   })
   .on('close', function() {
-    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets/pdf-2.2.js', result, function(err) {
+    let filename = 'pdf-es5.js';
+    if (es2015) {
+      filename = 'pdf.js';
+    }
+    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets/' + filename, result, function(err) {
       if (err) {
         return console.log(err);
       }
 
-      console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets/pdf-2.2.js!');
+      console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets/' + filename);
       if (expectedChanges !== 0) {
         console.error(expectedChanges + " changes couldn't be appied!");
       }

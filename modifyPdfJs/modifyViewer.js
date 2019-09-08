@@ -5,20 +5,28 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 21;
+let expectedChanges = 26;
 
 let dropLines = 0;
 currentFunction = '';
 let printKeyDownListener = false;
 let unregisterPrintOverlayDone = false;
+let es2015 = false;
 lineReader
   .on('line', function(line) {
     if (dropLines > 0) {
       dropLines--;
-      console.log('Dropping ' + line);
+      //      console.log('Dropping ' + line);
     } else {
       if (line.includes('function ') || line.startsWith('class ')) {
         currentFunction = line;
+        if (line.startsWith('class ')) {
+          if (!es2015) {
+            console.log('ES 2015 version');
+            expectedChanges -= 4;
+          }
+          es2015 = true;
+        }
       }
       if (line.includes("require('../build/pdf.js')")) {
         line = line.replace("require('../build/pdf.js')", "require('./pdf-2.2.js')");
@@ -119,6 +127,13 @@ lineReader
       } else if (line.includes('(!handled && !isViewerInPresentationMode)')) {
         line = '    if (false) {';
         expectedChanges--;
+      } else if (line.includes('../build/pdf.worker.js')) {
+        if (es2015) {
+          line = line.replace('../build/pdf.worker.js', './assets/pdf.worker.js');
+        } else {
+          line = line.replace('../build/pdf.worker.js', './assets/pdf.worker-es5.js');
+        }
+        expectedChanges--;
       }
 
       if (line != null) {
@@ -130,12 +145,13 @@ lineReader
     }
   })
   .on('close', function() {
-    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets/viewer-2.2.js', result, function(err) {
+    const filename = es2015 ? 'viewer.js' : 'viewer-es5.js';
+    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets/' + filename, result, function(err) {
       if (err) {
         return console.log(err);
       }
 
-      console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets/viewer-2.2.js!');
+      console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets/' + filename);
       if (expectedChanges !== 0) {
         console.error(expectedChanges + " changes couldn't be appied!");
       }
