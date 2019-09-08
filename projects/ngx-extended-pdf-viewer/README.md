@@ -477,4 +477,4 @@ Thanks to the awesome pdf.j team and to all the users you've reported bugs and e
 - 1.3.0 #130 add the events `pdfLoaded` and `pdfLoadingFailed`. Thanks a lot to Taras Mogilyak for providing this pull request!
 - 1.3.1 #135 `[base64Src]` now redraws the PDF file when the input has changed; #126 up/down keypress shouldn't move the focus away from the current input field (didn't work in all cases);
 - 1.4.0 #134 implemented `[(rotation)]`; #133 implement (src)
-- 1.5.0 #132 added `(handTool)`; #131 added `[(sidebarVisible)]`
+- 1.5.0 #136 fixed the configuration so it's possible to use the service worker thread; #132 added `(handTool)`; #131 added `[(sidebarVisible)]`

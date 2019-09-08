@@ -34,5 +34,5 @@ export const defaultOptions = {
   postMessageTransfers: true,
   verbosity: 1,
   workerPort: null,
-  workerSrc: '../build/pdf.worker.js'
+  workerSrc: './assets/pdf.worker.js'
 };

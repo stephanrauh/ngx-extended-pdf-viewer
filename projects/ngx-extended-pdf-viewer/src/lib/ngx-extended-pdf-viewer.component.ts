@@ -779,7 +779,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       if ('rotation' in changes) {
         if (this.rotation) {
           const r = Number(this.rotation);
-          if (r === 90 || r === 180 || r === 270) {
+          if (r === 0 || r === 90 || r === 180 || r === 270) {
             (<any>window).PDFViewerApplication.pdfViewer.pagesRotation = r;
           }
         } else {
