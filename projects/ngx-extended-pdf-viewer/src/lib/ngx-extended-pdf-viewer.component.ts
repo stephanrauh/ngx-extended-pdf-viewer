@@ -30,6 +30,8 @@ import {
 } from './ResponsiveCSSSimulation';
 import { PagesRotationEvent } from './pages-rotation-event';
 import { FileInputChanged } from './file-input-changed';
+import { SidebarviewChange } from './sidebarview-changed';
+import { HandtoolChanged } from './handtool-changed';
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
@@ -208,6 +210,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public showSidebarOnLoad: boolean | undefined = undefined;
 
   @Input()
+  public sidebarVisible: boolean | undefined = undefined;
+
+  @Output()
+  public sidebarVisibleChange = new EventEmitter<boolean>();
+
+  @Input()
   public showFindButton = true;
   @Input()
   public showPagingButtons = true;
@@ -229,6 +237,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public showRotateButton = true;
   @Input()
   public handTool = true;
+  @Output()
+  public handToolChange = new EventEmitter<boolean>();
   @Input()
   public showHandToolButton = false;
   @Input()
@@ -542,22 +552,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       options.set('textLayerMode', this.showHandToolButton ? 1 : 0);
     }
 
-    if (this.showSidebarButton) {
-      if (this.showSidebarOnLoad !== undefined) {
-        (<any>window).PDFViewerApplication.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
-        if ((<any>window).PDFViewerApplication.appConfig) {
-          (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
-        }
-        options.set('sidebarViewOnLoad', this.showSidebarOnLoad ? 1 : 0);
-      }
-    } else {
-      (<any>window).PDFViewerApplication.sidebarViewOnLoad = 0;
-      options.set('sidebarViewOnLoad', 0);
-      if ((<any>window).PDFViewerApplication.appConfig) {
-        (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = 0;
-      }
+    let sidebarVisible = this.sidebarVisible;
+    if (sidebarVisible === undefined) {
+      sidebarVisible = this.showSidebarOnLoad;
     }
-
+    if (this.sidebarVisible !== undefined) {
+      (<any>window).PDFViewerApplication.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
+      if ((<any>window).PDFViewerApplication.appConfig) {
+        (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
+      }
+      options.set('sidebarViewOnLoad', this.showSidebarOnLoad ? 1 : 0);
+    }
     if (this.spread === 'even') {
       options.set('spreadModeOnLoad', 2);
       if ((<any>window).PDFViewerApplication.pdfViewer) {
@@ -627,6 +632,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       this.ngZone.run(() => {
         const path = x.fileInput.value.replace('C:\\fakepath\\', '');
         this.srcChange.emit(path);
+      });
+    });
+    (<any>window).PDFViewerApplication.eventBus.on('cursortoolchanged', (x: HandtoolChanged) => {
+      this.ngZone.run(() => {
+        this.handToolChange.emit(x.tool === 1);
+      });
+    });
+
+    (<any>window).PDFViewerApplication.eventBus.on('sidebarviewchanged', (x: SidebarviewChange) => {
+      this.ngZone.run(() => {
+        this.sidebarVisibleChange.emit(x.view === 1);
       });
     });
 
@@ -768,6 +784,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           }
         } else {
           (<any>window).PDFViewerApplication.pdfViewer.pagesRotation = 0;
+        }
+      }
+      if ('sidebarVisible' in changes) {
+        if (this.sidebarVisible) {
+          (<any>window).PDFViewerApplication.pdfSidebar.open();
+        } else {
+          (<any>window).PDFViewerApplication.pdfSidebar.close();
         }
       }
       if ('filenameForDownload' in changes) {

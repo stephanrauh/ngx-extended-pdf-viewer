@@ -1,9 +1,18 @@
 {
   "name": "ngx-extended-pdf-viewer",
+  "description": "Embedding PDF files in your Angular application. Highly configurable viewer including the toolbar, sidebar, and all the features you're used to.",
   "version": "1.4.0",
   "license": "Apache-2.0",
   "repository": {
     "url": "https://github.com/stephanrauh/ngx-extended-pdf-viewer"
+  },
+  "author": {
+    "name": "Stephan Rauh",
+    "url": "https://www.beyondjava.net"
+  },
+  "homepage": "https://pdfviewer.net",
+  "bugs": {
+    "url": "https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues"
   },
   "keywords": [
     "PDF",
