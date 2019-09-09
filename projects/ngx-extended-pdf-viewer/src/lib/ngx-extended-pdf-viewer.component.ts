@@ -597,7 +597,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     this.selectCursorTool();
     (<any>window).PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
       this.pagesLoaded.emit(x);
-      (<any>window).PDFViewerApplication.pdfViewer.pagesRotation = this.rotation;
+      if (this.rotation) {
+        const r = Number(this.rotation);
+        if (r === 0 || r === 90 || r === 180 || r === 270) {
+          (<any>window).PDFViewerApplication.pdfViewer.pagesRotation = r;
+        }
+      } else {
+        (<any>window).PDFViewerApplication.pdfViewer.pagesRotation = 0;
+      }
       setTimeout(() => {
         if (this.nameddest) {
           (<any>window).PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
@@ -838,7 +845,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
     if ('printResolution' in changes) {
       const options = (<any>window).PDFViewerApplicationOptions;
-      options.set('printResolution', this.printResolution);
+      if (options) {
+        options.set('printResolution', this.printResolution);
+      }
     }
   }
 
