@@ -20,7 +20,7 @@
           >
             <div id="toolbarSidebar">
               <div class="splitToolbarButton toggled">
-                <button
+                <button type="button" type="button"
                   id="viewThumbnail"
                   class="toolbarButton toggled"
                   title="Show Thumbnails"
@@ -29,7 +29,7 @@
                 >
                   <span data-l10n-id="thumbs_label">Thumbnails</span>
                 </button>
-                <button
+                <button type="button" type="button"
                   id="viewOutline"
                   class="toolbarButton"
                   title="Show Document Outline (double-click to expand/collapse all items)"
@@ -40,7 +40,7 @@
                     >Document Outline</span
                   >
                 </button>
-                <button
+                <button type="button" type="button"
                   id="viewAttachments"
                   class="toolbarButton"
                   title="Show Attachments"
@@ -82,7 +82,7 @@
                 name="search-input-field"
               />
               <div class="splitToolbarButton">
-                <button
+                <button type="button" type="button"
                   id="findPrevious"
                   class="toolbarButton findPrevious"
                   title="Find the previous occurrence of the phrase"
@@ -92,7 +92,7 @@
                   <span data-l10n-id="find_previous_label">Previous</span>
                 </button>
                 <div class="splitToolbarButtonSeparator"></div>
-                <button
+                <button type="button" type="button"
                   id="findNext"
                   class="toolbarButton findNext"
                   title="Find the next occurrence of the phrase"
@@ -160,7 +160,7 @@
             [style.transformOrigin]="'right top'"
           >
             <div id="secondaryToolbarButtonContainer">
-              <button
+              <button type="button" type="button"
                 id="secondaryPresentationMode"
                 [class.invisible]="!showPresentationModeButton"
                 class="secondaryToolbarButton presentationMode visibleLargeView"
@@ -173,7 +173,7 @@
                 >
               </button>
 
-              <button
+              <button type="button" type="button"
                 id="secondaryOpenFile"
                 [class.invisible]="!showOpenFileButton"
                 class="secondaryToolbarButton openFile visibleLargeView"
@@ -184,7 +184,7 @@
                 <span data-l10n-id="open_file_label">Open</span>
               </button>
 
-              <button
+              <button type="button" type="button"
                 id="secondaryPrint"
                 class="secondaryToolbarButton print visibleMediumView"
                 [class.invisible]="!showPrintButton"
@@ -195,7 +195,7 @@
                 <span data-l10n-id="print_label">Print</span>
               </button>
 
-              <button
+              <button type="button" type="button"
                 id="secondaryDownload"
                 class="secondaryToolbarButton download visibleMediumView"
                 [class.invisible]="!showDownloadButton"
@@ -220,7 +220,7 @@
 
               <div class="horizontalToolbarSeparator visibleLargeView"></div>
 
-              <button
+              <button type="button" type="button"
                 [class.invisible]="!showPagingButtons"
                 id="firstPage"
                 class="secondaryToolbarButton firstPage"
@@ -230,7 +230,7 @@
               >
                 <span data-l10n-id="first_page_label">Go to First Page</span>
               </button>
-              <button
+              <button type="button" type="button"
                 [class.invisible]="!showPagingButtons"
                 id="lastPage"
                 class="secondaryToolbarButton lastPage"
@@ -246,7 +246,7 @@
                 class="horizontalToolbarSeparator"
               ></div>
 
-              <button
+              <button type="button" type="button"
                 [class.invisible]="!showRotateButton"
                 id="pageRotateCw"
                 class="secondaryToolbarButton rotateCw"
@@ -258,7 +258,7 @@
                   >Rotate Clockwise</span
                 >
               </button>
-              <button
+              <button type="button" type="button"
                 [class.invisible]="!showRotateButton"
                 id="pageRotateCcw"
                 class="secondaryToolbarButton rotateCcw"
@@ -273,7 +273,7 @@
 
               <div class="horizontalToolbarSeparator" [class.invisible]="!showHandToolButton"></div>
 
-              <button
+              <button type="button" type="button"
                 [class.invisible]="!showHandToolButton"
                 id="cursorSelectTool"
                 class="secondaryToolbarButton selectTool toggled"
@@ -285,7 +285,7 @@
                   >Text Selection Tool</span
                 >
               </button>
-              <button
+              <button type="button" type="button"
                 [class.invisible]="!showHandToolButton"
                 id="cursorHandTool"
                 class="secondaryToolbarButton handTool"
@@ -301,7 +301,7 @@
                 class="horizontalToolbarSeparator"
               ></div>
 
-              <button
+              <button type="button" type="button"
                 [class.invisible]="!showScrollingButton"
                 id="scrollVertical"
                 class="secondaryToolbarButton scrollVertical toggled"
@@ -313,7 +313,7 @@
                   >Vertical Scrolling</span
                 >
               </button>
-              <button
+              <button type="button"
                 [class.invisible]="!showScrollingButton"
                 id="scrollHorizontal"
                 class="secondaryToolbarButton scrollHorizontal"
@@ -325,7 +325,7 @@
                   >Horizontal Scrolling</span
                 >
               </button>
-              <button
+              <button type="button"
                 [class.invisible]="!showScrollingButton"
                 id="scrollWrapped"
                 class="secondaryToolbarButton scrollWrapped"
@@ -343,7 +343,7 @@
                 class="horizontalToolbarSeparator"
               ></div>
 
-              <button
+              <button type="button"
                 [class.invisible]="!showSpreadButton"
                 id="spreadNone"
                 class="secondaryToolbarButton spreadNone toggled"
@@ -354,7 +354,7 @@
               >
                 <span data-l10n-id="spread_none_label">No Spreads</span>
               </button>
-              <button
+              <button type="button"
                 [class.invisible]="!showSpreadButton"
                 id="spreadOdd"
                 class="secondaryToolbarButton spreadOdd"
@@ -366,7 +366,7 @@
               >
                 <span data-l10n-id="spread_odd_label">Odd Spreads</span>
               </button>
-              <button
+              <button type="button"
                 [class.invisible]="!showSpreadButton"
                 id="spreadEven"
                 class="secondaryToolbarButton spreadEven"
@@ -384,7 +384,7 @@
                 class="horizontalToolbarSeparator spreadModeButtons"
               ></div>
 
-              <button
+              <button type="button"
                 [class.invisible]="!showPropertiesButton"
                 id="documentProperties"
                 class="secondaryToolbarButton documentProperties"
@@ -409,7 +409,7 @@
             >
               <div id="toolbarViewer">
                 <div id="toolbarViewerLeft">
-                  <button
+                  <button type="button"
                     [class.invisible]="!showSidebarButton"
                     id="sidebarToggle"
                     class="toolbarButton"
@@ -425,7 +425,7 @@
                     [class.invisible]="!showSidebarButton"
                     class="toolbarButtonSpacer"
                   ></div>
-                  <button
+                  <button type="button"
                     [class.invisible]="!showFindButton"
                     id="viewFind"
                     class="toolbarButton"
@@ -439,7 +439,7 @@
                     [class.invisible]="!showPagingButtons"
                     class="splitToolbarButton hiddenSmallView"
                   >
-                    <button
+                    <button type="button"
                       class="toolbarButton pageUp"
                       title="Previous Page"
                       id="previous"
@@ -450,7 +450,7 @@
                       <span data-l10n-id="previous_label">Previous</span>
                     </button>
                     <div class="splitToolbarButtonSeparator"></div>
-                    <button
+                    <button type="button"
                       class="toolbarButton pageDown"
                       title="Next Page"
                       id="next"
@@ -482,7 +482,7 @@
                   ></span>
                 </div>
                 <div id="toolbarViewerRight">
-                  <button
+                  <button type="button"
                     [class.invisible]="!showPresentationModeButton"
                     id="presentationMode"
                     class="toolbarButton presentationMode hiddenLargeView"
@@ -495,7 +495,7 @@
                     >
                   </button>
 
-                  <button
+                  <button type="button"
                     [class.invisible]="!showOpenFileButton"
                     id="openFile"
                     class="toolbarButton openFile hiddenLargeView"
@@ -505,7 +505,7 @@
                   >
                     <span data-l10n-id="open_file_label">Open</span>
                   </button>
-                  <button
+                  <button type="button"
                     [class.invisible]="!showPrintButton"
                     id="print"
                     class="toolbarButton print hiddenMediumView"
@@ -516,7 +516,7 @@
                     <span data-l10n-id="print_label">Print</span>
                   </button>
 
-                  <button
+                  <button type="button"
                   id="download"
                   class="toolbarButton download hiddenMediumView"
                   [class.invisible]="!showDownloadButton"
@@ -543,7 +543,7 @@
                     class="verticalToolbarSeparator hiddenSmallView"
                   ></div>
 
-                  <button
+                  <button type="button"
                     [class.invisible]="!showSecondaryToolbarButton"
                     id="secondaryToolbarToggle"
                     class="toolbarButton"
@@ -556,7 +556,7 @@
                 </div>
                 <div [class.invisible]="!showZoomButtons" id="toolbarViewerMiddle">
                   <div class="splitToolbarButton">
-                    <button
+                    <button type="button"
                       id="zoomOut"
                       class="toolbarButton zoomOut"
                       title="Zoom Out"
@@ -567,7 +567,7 @@
                       <span data-l10n-id="zoom_out_label">Zoom Out</span>
                     </button>
                     <div class="splitToolbarButtonSeparator"></div>
-                    <button
+                    <button type="button"
                       id="zoomIn"
                       class="toolbarButton zoomIn"
                       title="Zoom In"
@@ -731,10 +731,10 @@
           <div id="errorWrapper" hidden="true">
             <div id="errorMessageLeft">
               <span id="errorMessage"></span>
-              <button id="errorShowMore" data-l10n-id="error_more_info">
+              <button type="button" id="errorShowMore" data-l10n-id="error_more_info">
                 More Information
               </button>
-              <button
+              <button type="button"
                 id="errorShowLess"
                 data-l10n-id="error_less_info"
                 hidden="true"
@@ -743,7 +743,7 @@
               </button>
             </div>
             <div id="errorMessageRight">
-              <button id="errorClose" data-l10n-id="error_close">Close</button>
+              <button type="button" id="errorClose" data-l10n-id="error_close">Close</button>
             </div>
             <div class="clearBoth"></div>
             <textarea
@@ -767,10 +767,10 @@
                 <input type="password" id="password" class="toolbarField" />
               </div>
               <div class="buttonRow">
-                <button id="passwordCancel" class="overlayButton">
+                <button type="button" id="passwordCancel" class="overlayButton">
                   <span data-l10n-id="password_cancel">Cancel</span>
                 </button>
-                <button id="passwordSubmit" class="overlayButton">
+                <button type="button" id="passwordSubmit" class="overlayButton">
                   <span data-l10n-id="password_ok">OK</span>
                 </button>
               </div>
@@ -858,7 +858,7 @@
                 <p id="linearizedField">-</p>
               </div>
               <div class="buttonRow">
-                <button id="documentPropertiesClose" class="overlayButton">
+                <button type="button" id="documentPropertiesClose" class="overlayButton">
                   <span data-l10n-id="document_properties_close">Close</span>
                 </button>
               </div>
@@ -882,7 +882,7 @@
                 >
               </div>
               <div class="buttonRow">
-                <button id="printCancel" class="overlayButton">
+                <button type="button" id="printCancel" class="overlayButton">
                   <span data-l10n-id="print_progress_close">Cancel</span>
                 </button>
               </div>
