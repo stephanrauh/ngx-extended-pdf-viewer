@@ -524,8 +524,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   public onPageChange(): void {
     setTimeout(() => {
-      const inputField = document.getElementById('pageNumber') as HTMLInputElement;
-      let page: number | undefined = Number(inputField.value);
+      let page: number | undefined = Number((<any>window).PDFViewerApplication.page);
       if (isNaN(page)) {
         page = undefined;
       }
