@@ -56,3 +56,13 @@ html[dir='ltr'] .findbar.below640px {
 html[dir='rtl'] .findbar.below640px {
   right: 38px;
 }
+
+@media print {
+  html {
+    overflow-y: visible !important;
+  }
+
+  body {
+    overflow-y: visible !important;
+  }
+}
