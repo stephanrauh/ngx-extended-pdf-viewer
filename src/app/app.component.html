@@ -102,7 +102,7 @@
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[0] && !hidden"
-        printResolution="20"
+        printResolution="50"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [contextMenuAllowed]="contextMenuAllowed"
         [ignoreResponsiveCSS]="true"
@@ -143,6 +143,7 @@
       >
       <ngx-extended-pdf-viewer
         *ngIf="visible[1] && !hidden"
+        printResolution="150"
         [src]="'assets/pdfs/codpaste-teachingpack.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#e8e8ef"
@@ -160,7 +161,7 @@
         [(zoom)]="zoom"
         [height]="height"
         [(handTool)]="handTool"
-        [page]="page"
+        [(page)]="page"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [(spread)]="spread"
@@ -182,7 +183,7 @@
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [mobileZoom]="mobileFriendlyZoom"
-        printResolution="600"
+        printResolution="300"
         [(rotation)]="rotation"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebarButton"
@@ -192,7 +193,7 @@
         [(zoom)]="zoom"
         [height]="height"
         [(handTool)]="handTool"
-        [page]="page"
+        [(page)]="page"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [(spread)]="spread"
@@ -205,6 +206,7 @@
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[4] && !hidden"
+        printResolution="150"
         [src]="'assets/pdfs/somatosensory.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#ffffff"
@@ -239,6 +241,7 @@
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[5] && !hidden"
+        printResolution="150"
         [src]="'assets/pdfs/pdf-sample.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="blue"
@@ -292,7 +295,7 @@
         [(zoom)]="zoom"
         [height]="height"
         [(handTool)]="handTool"
-        [page]="page"
+        [(page)]="page"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [(spread)]="spread"
@@ -306,6 +309,7 @@
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[7] && !hidden"
+        printResolution="150"
         [src]="'assets/pdfs/encrypted-sample.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#e8e8ef"
@@ -321,7 +325,7 @@
         [(zoom)]="zoom"
         [height]="height"
         [(handTool)]="handTool"
-        [page]="page"
+        [(page)]="page"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [password]="'123'"
@@ -338,6 +342,7 @@
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[8] && !hidden"
+        printResolution="150"
         [src]="'assets/pdfs/ATS_TEST_PVC_2_1.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#e8e8ef"
@@ -353,11 +358,45 @@
         [(zoom)]="zoom"
         [height]="height"
         [(handTool)]="handTool"
-        [page]="page"
+        [(page)]="page"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         (pdfLoadingFailed)="onPdfLoadFailed($event)"
         [nameddest]="nameddest"
+        [listenToURL]="true"
+        [(spread)]="spread"
+        [language]="language"
+      >
+      </ngx-extended-pdf-viewer>
+    </ng-template>
+  </mat-tab>
+  <mat-tab (click)="hideOtherPDFs()">
+    <ng-template mat-tab-label>
+      <div matTooltip="Demo document found at http://www.connectedthebook.com/pdf/excerpt.pdf">Roman page numbers</div>
+    </ng-template>
+    <ng-template matTabContent>
+      <ngx-extended-pdf-viewer
+        *ngIf="visible[9] && !hidden"
+        printResolution="150"
+        [src]="'assets/pdfs/excerpt.pdf'"
+        (srcChange)="onSourceChange($event)"
+        backgroundColor="#e8e8ef"
+        [contextMenuAllowed]="contextMenuAllowed"
+        (currentZoomFactor)="updateCurrentZoomFactor($event)"
+        [mobileZoom]="mobileFriendlyZoom"
+        [(rotation)]="rotation"
+        [showZoomButtons]="true"
+        [showSidebarButton]="showSidebarButton"
+        [(sidebarVisible)]="sidebarVisible"
+        [useBrowserLocale]="false"
+        [showSidebarOnLoad]="true"
+        [(zoom)]="zoom"
+        [height]="height"
+        [(handTool)]="handTool"
+        [(page)]="page"
+        [filenameForDownload]="filenameForDownload"
+        (pagesLoaded)="onPagesLoaded($event)"
+        (pdfLoadingFailed)="onPdfLoadFailed($event)"
         [listenToURL]="true"
         [(spread)]="spread"
         [language]="language"
