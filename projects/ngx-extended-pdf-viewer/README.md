@@ -490,4 +490,5 @@ Thanks to the awesome pdf.j team and to all the users you've reported bugs and e
 - 1.5.0 #136 fixed the configuration so it's possible to use the service worker thread; #132 added `(handTool)`; #131 added `[(sidebarVisible)]`
 - 1.5.1 #136 made the `defaultOptions` accessible to IE11 users can configure the worker thread URL; fixed the error message "Invalid pages rotation angle."
 - 1.5.2 #142 now the PDF viewer can be used in a form
-- 1.5.3 #148 override any custom settings of `overflow-y` on `<html>` and `<body>` when printing (because `overflow-y: hidden` used to clip the print output)
+- 1.5.3 #148 override any custom settings of `overflow-y` on `<html>` and `<body>` when printing (because `overflow-y: hidden` used to clip the print output); preliminary fix of #147
+- 1.6.0.rc1 continued fixing #147: modified behaviour of (page); make a difference between [(page)] and  [(pageLabel)]; 

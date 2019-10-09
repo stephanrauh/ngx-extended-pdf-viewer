@@ -32,6 +32,7 @@ import { PagesRotationEvent } from './pages-rotation-event';
 import { FileInputChanged } from './file-input-changed';
 import { SidebarviewChange } from './sidebarview-changed';
 import { HandtoolChanged } from './handtool-changed';
+import { PageNumberChange } from './page-number-change';
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
@@ -259,6 +260,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   @Output()
   public pageChange = new EventEmitter<number | undefined>();
+
+  @Input()
+  public pageLabel: string | undefined = undefined;
+
+  @Output()
+  public pageLabelChange = new EventEmitter<string | undefined>();
 
   @Output()
   public pagesLoaded = new EventEmitter<PagesLoadedEvent>();
@@ -522,16 +529,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
   }
 
-  public onPageChange(): void {
-    setTimeout(() => {
-      let page: number | undefined = Number((<any>window).PDFViewerApplication.page);
-      if (isNaN(page)) {
-        page = undefined;
-      }
-      this.pageChange.emit(page);
-    });
-  }
-
   public onSpreadChange(newSpread: 'off' | 'even' | 'odd'): void {
     this.spreadChange.emit(newSpread);
   }
@@ -609,6 +606,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           (<any>window).PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
         } else if (this.page) {
           (<any>window).PDFViewerApplication.page = this.page;
+        } else if (this.pageLabel) {
+          (<any>window).PDFViewerApplication.pdfViewer.pageLabel = this.pageLabel;
         }
       });
       this.setZoom();
@@ -649,6 +648,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     (<any>window).PDFViewerApplication.eventBus.on('sidebarviewchanged', (x: SidebarviewChange) => {
       this.ngZone.run(() => {
         this.sidebarVisibleChange.emit(x.view === 1);
+      });
+    });
+
+    (<any>window).PDFViewerApplication.eventBus.on('pagechanging', (x: PageNumberChange) => {
+      this.ngZone.run(() => {
+        const currentPage = (<any>window).PDFViewerApplication.pdfViewer.currentPageNumber;
+        const currentPageLabel = (<any>window).PDFViewerApplication.pdfViewer.currentPageLabel;
+
+        this.pageChange.emit(currentPage);
+        this.pageLabelChange.emit(currentPageLabel);
       });
     });
 
@@ -779,6 +788,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       if ('page' in changes) {
         if (this.page) {
           (<any>window).PDFViewerApplication.page = this.page;
+        }
+      }
+      if ('pageLabel' in changes) {
+        if (this.pageLabel) {
+          (<any>window).PDFViewerApplication.pdfViewer.pageLabel = this.pageLabel;
         }
       }
 
