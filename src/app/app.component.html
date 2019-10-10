@@ -20,6 +20,9 @@
       <mat-form-field class="margin">
         <input matInput type="number" class="margin" [(ngModel)]="page" placeholder="Page number" />
       </mat-form-field>
+      <mat-form-field class="margin">
+        <input matInput type="text" class="margin" [(ngModel)]="pageLabel" placeholder="Page label" />
+      </mat-form-field>
       <mat-form-field *ngIf="visible[8]">
         <mat-label>Named Destination (aka nameddest)</mat-label>
         <mat-select [(value)]="nameddest" class="margin">
@@ -121,6 +124,7 @@
         [height]="height"
         [(handTool)]="handTool"
         [(page)]="page"
+        [(pageLabel)]="pageLabel"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         (pdfLoaded)="onPdfLoaded($event)"
@@ -162,6 +166,7 @@
         [height]="height"
         [(handTool)]="handTool"
         [(page)]="page"
+        [(pageLabel)]="pageLabel"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [(spread)]="spread"
@@ -194,6 +199,7 @@
         [height]="height"
         [(handTool)]="handTool"
         [(page)]="page"
+        [(pageLabel)]="pageLabel"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [(spread)]="spread"
@@ -228,6 +234,7 @@
         [(zoom)]="zoom"
         [height]="height"
         [(page)]="page"
+        [(pageLabel)]="pageLabel"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [(spread)]="spread"
@@ -265,6 +272,7 @@
         [height]="height"
         [(handTool)]="handTool"
         [(page)]="page"
+        [(pageLabel)]="pageLabel"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [(spread)]="spread"
@@ -296,6 +304,7 @@
         [height]="height"
         [(handTool)]="handTool"
         [(page)]="page"
+        [(pageLabel)]="pageLabel"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [(spread)]="spread"
@@ -326,6 +335,7 @@
         [height]="height"
         [(handTool)]="handTool"
         [(page)]="page"
+        [(pageLabel)]="pageLabel"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         [password]="'123'"
@@ -359,6 +369,7 @@
         [height]="height"
         [(handTool)]="handTool"
         [(page)]="page"
+        [(pageLabel)]="pageLabel"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         (pdfLoadingFailed)="onPdfLoadFailed($event)"
@@ -394,6 +405,7 @@
         [height]="height"
         [(handTool)]="handTool"
         [(page)]="page"
+        [(pageLabel)]="pageLabel"
         [filenameForDownload]="filenameForDownload"
         (pagesLoaded)="onPagesLoaded($event)"
         (pdfLoadingFailed)="onPdfLoadFailed($event)"

@@ -607,7 +607,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         } else if (this.page) {
           (<any>window).PDFViewerApplication.page = this.page;
         } else if (this.pageLabel) {
-          (<any>window).PDFViewerApplication.pdfViewer.pageLabel = this.pageLabel;
+          (<any>window).PDFViewerApplication.pdfViewer.currentPageLabel = this.pageLabel;
         }
       });
       this.setZoom();
@@ -792,7 +792,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       }
       if ('pageLabel' in changes) {
         if (this.pageLabel) {
-          (<any>window).PDFViewerApplication.pdfViewer.pageLabel = this.pageLabel;
+          (<any>window).PDFViewerApplication.pdfViewer.currentPageLabel = this.pageLabel;
         }
       }
 
