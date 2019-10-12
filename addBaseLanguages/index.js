@@ -18,7 +18,7 @@ for (let i = 0; i < content.length; i++) {
     const lang = key.substring(1, key.length - 1);
     if (lang.includes('-')) {
       const base = lang.substr(0, lang.indexOf('-'));
-      if (lang.toLowerCase() == base + '-' + base)
+      if (lang.toLowerCase() == base + '-' + base || lang === 'en-US')
         if (!languages[base]) {
           languages[base] = true;
           result.push('[' + base + ']');
