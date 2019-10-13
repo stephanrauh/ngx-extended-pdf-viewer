@@ -14635,8 +14635,13 @@ document.webL10n = function (window, document, undefined) {
         var match = '';
 
         function nextEntry() {
+          var genericMatch = undefined; // #150
           while (true) {
-            if (!entries.length) {
+            if ((!entries.length) && genericMatch) { // #150
+              loadImport(genericMatch, nextEntry); // #150
+              return; // #150
+            }// #150
+            else if (!entries.length) { // #150
               parsedRawLinesCallback();
               return;
             }
@@ -14658,8 +14663,12 @@ document.webL10n = function (window, document, undefined) {
               match = reImport.exec(line);
 
               if (match) {
+              if (currentLang === '*' || currentLang === lang) { // #150
                 loadImport(baseURL + match[1], nextEntry);
                 return;
+                } else { // #150
+                  genericMatch = baseURL + match[1]; // #150
+                } // #150
               }
             }
 

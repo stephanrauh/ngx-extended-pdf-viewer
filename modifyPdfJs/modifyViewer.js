@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 26;
+let expectedChanges = 28;
 
 let dropLines = 0;
 currentFunction = '';
@@ -133,6 +133,24 @@ lineReader
         } else {
           line = line.replace('../build/pdf.worker.js', './assets/pdf.worker-es5.js');
         }
+        expectedChanges--;
+      } else if (line.includes('function nextEntry() {')) {
+        dropLines = 2;
+        line += '\n          var genericMatch = undefined; // #150';
+        line += '\n          while (true) {';
+        line += '\n            if ((!entries.length) && genericMatch) { // #150';
+        line += '\n              loadImport(genericMatch, nextEntry); // #150';
+        line += '\n              return; // #150';
+        line += '\n            }// #150';
+        line += '\n            else if (!entries.length) { // #150';
+        expectedChanges--;
+      } else if (line.includes('loadImport(baseURL')) {
+        line = "              if (currentLang === '*' || currentLang === lang) { // #150\n" + line;
+        line += '\n                return;';
+        line += '\n                } else { // #150';
+        line += '\n                  genericMatch = baseURL + match[1]; // #150';
+        line += '\n                } // #150';
+        dropLines = 1;
         expectedChanges--;
       }
 
