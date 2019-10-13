@@ -493,3 +493,4 @@ Thanks to the awesome pdf.j team and to all the users you've reported bugs and e
 - 1.5.2 #142 now the PDF viewer can be used in a form
 - 1.5.3 #148 override any custom settings of `overflow-y` on `<html>` and `<body>` when printing (because `overflow-y: hidden` used to clip the print output); preliminary fix of #147
 - 1.6.0-rc.0 continued fixing #147: modified behaviour of (page); make a difference between [(page)] and  [(pageLabel)]; 
+- 1.6.0-rc.1 #150 stop loading a generic translation file (e.g. "en.properties") if there's a more specific translation file (e.g. "en-GB.properties") 
