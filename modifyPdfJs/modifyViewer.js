@@ -136,20 +136,22 @@ lineReader
         expectedChanges--;
       } else if (line.includes('function nextEntry() {')) {
         dropLines = 2;
+        line = '        var languagefound = false; // #150\n' + line;
         line += '\n          var genericMatch = undefined; // #150';
         line += '\n          while (true) {';
         line += '\n            if ((!entries.length) && genericMatch) { // #150';
-        line += '\n              loadImport(genericMatch, nextEntry); // #150';
+        line += '\n              if (!languagefound) loadImport(genericMatch, nextEntry); else nextEntry(); // #150';
         line += '\n              return; // #150';
         line += '\n            }// #150';
         line += '\n            else if (!entries.length) { // #150';
         expectedChanges--;
       } else if (line.includes('loadImport(baseURL')) {
         line = "              if (currentLang === '*' || currentLang === lang) { // #150\n" + line;
+        line += '\n                languagefound = true;';
         line += '\n                return;';
-        line += '\n                } else { // #150';
-        line += '\n                  genericMatch = baseURL + match[1]; // #150';
-        line += '\n                } // #150';
+        line += '\n              } else { // #150';
+        line += '\n                genericMatch = baseURL + match[1]; // #150';
+        line += '\n              } // #150';
         dropLines = 1;
         expectedChanges--;
       }

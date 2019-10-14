@@ -14634,11 +14634,12 @@ document.webL10n = function (window, document, undefined) {
         var skipLang = false;
         var match = '';
 
+        var languagefound = false; // #150
         function nextEntry() {
           var genericMatch = undefined; // #150
           while (true) {
             if ((!entries.length) && genericMatch) { // #150
-              loadImport(genericMatch, nextEntry); // #150
+              if (!languagefound) loadImport(genericMatch, nextEntry); else nextEntry(); // #150
               return; // #150
             }// #150
             else if (!entries.length) { // #150
@@ -14665,10 +14666,11 @@ document.webL10n = function (window, document, undefined) {
               if (match) {
               if (currentLang === '*' || currentLang === lang) { // #150
                 loadImport(baseURL + match[1], nextEntry);
+                languagefound = true;
                 return;
-                } else { // #150
-                  genericMatch = baseURL + match[1]; // #150
-                } // #150
+              } else { // #150
+                genericMatch = baseURL + match[1]; // #150
+              } // #150
               }
             }
 

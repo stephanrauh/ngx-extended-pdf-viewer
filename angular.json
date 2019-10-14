@@ -22,12 +22,17 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              { "glob": "**/*", "input": "dist/ngx-extended-pdf-viewer/assets/locale", "output": "/assets/locale/" },
+              { "glob": "**/*", "input": "dist/ngx-extended-pdf-viewer/assets/locale/es-MX", "output": "/assets/locale/es-MX" },
               { "glob": "**/pdf.worker.js", "input": "dist/ngx-extended-pdf-viewer/assets", "output": "/assets/" },
-              { "glob": "**/*", "input": "dist/ngx-extended-pdf-viewer/assets/locale", "output": "/assets/locale/" }
+              { "glob": "**/locale.properties", "input": "dist/ngx-extended-pdf-viewer/assets/locale", "output": "/assets/locale/" },
+              {
+                "glob": "**/*",
+                "input": "dist/ngx-extended-pdf-viewer/assets/images",
+                "output": "/assets/images"
+              }
             ],
             "styles": ["src/styles.css"],
-            "scripts": ["dist/ngx-extended-pdf-viewer/assets/pdf.js", "dist/ngx-extended-pdf-viewer/assets/viewer.js"]
+            "scripts": ["dist/ngx-extended-pdf-viewer/assets/pdf-es5.js", "dist/ngx-extended-pdf-viewer/assets/viewer-es5.js"]
           },
           "configurations": {
             "production": {
