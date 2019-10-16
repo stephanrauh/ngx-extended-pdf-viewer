@@ -413,7 +413,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   public emitZoomChangeAfterDelay(): void {
     setTimeout(() => {
-      this.emitZoomChange();
+      this.ngZone.run(() => {
+        this.emitZoomChange();
+      });
     }, 10);
   }
 
@@ -625,6 +627,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     (<any>window).PDFViewerApplication.eventBus.on('scalechanging', (x: ScaleChangingEvent) => {
       this.ngZone.run(() => {
         this.currentZoomFactor.emit(x.scale);
+        this.emitZoomChangeAfterDelay();
       });
     });
 

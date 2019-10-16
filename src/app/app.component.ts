@@ -236,4 +236,8 @@ export class AppComponent {
   public onSourceChange(event: string) {
     console.log('Source changed. The new file is ' + event);
   }
+
+  public onZoomChange(event: any): void {
+    console.log(event);
+  }
 }

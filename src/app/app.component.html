@@ -134,6 +134,7 @@
         (pageRendered)="onPageRendered($event)"
         (pdfDownloaded)="onDownload($event)"
         [(zoom)]="zoom"
+        (zoomChange)="onZoomChange($event)"
         [showHandToolButton]="true"
       >
       </ngx-extended-pdf-viewer>
