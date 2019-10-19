@@ -6,9 +6,9 @@ Bringing Mozilla's pdf.js to the Angular world. That's not only the core PDF vie
 
 ## Build and run the demo project
 
-1.  ng build ngx-extended-pdf-viewer
-2.  npm run package
-3.  ng serve -o
+1.  `npm run unix-package` (or `npm run win-package` if you're running Windows)
+2.  `npm run package`
+3.  `ng serve -o`
 
 Now the (tiny) demo app will automatically reload if you change any of the source files.
 
