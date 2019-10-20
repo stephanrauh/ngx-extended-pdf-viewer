@@ -2297,7 +2297,7 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
     display: none;
   }
   body[data-pdfjsprinting] #printContainer {
-    display: block;
+    display: block !important;
   }
   #printContainer {
     height: 100%;

@@ -10,7 +10,7 @@
 
 @media print {
   body[data-pdfjsprinting] > * {
-    display: none;
+    display: none !important;
   }
 }
 
