@@ -1982,7 +1982,7 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
   background: none repeat scroll 0 0 yellow;
 }
 #PDFBug .stats {
-  font-family: courier;
+  font-family: courier, monospace;
   font-size: 10px;
   white-space: pre;
 }

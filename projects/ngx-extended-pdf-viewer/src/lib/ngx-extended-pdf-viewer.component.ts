@@ -94,7 +94,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public set src(url: string | ArrayBuffer | Uint8Array) {
     if (url instanceof Uint8Array) {
-      this._src = (<Uint8Array>url).buffer;
+      this._src = url.buffer;
     } else if (url instanceof Blob) {
       this._src = URL.createObjectURL(url);
     } else if (typeof url === 'string') {
@@ -554,7 +554,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (sidebarVisible === undefined) {
       sidebarVisible = this.showSidebarOnLoad;
     }
-    if (this.sidebarVisible !== undefined) {
+    if (sidebarVisible !== undefined) {
       (<any>window).PDFViewerApplication.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
       if ((<any>window).PDFViewerApplication.appConfig) {
         (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
@@ -702,7 +702,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       if (app._boundEvents) {
         app.unbindWindowEvents();
       }
-      const bus = app.eventBus as any;
+      const bus = app.eventBus;
       if (bus) {
         app.unbindEvents();
         for (const key in bus._listeners) {
