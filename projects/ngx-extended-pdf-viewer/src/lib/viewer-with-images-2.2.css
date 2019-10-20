@@ -437,10 +437,6 @@
   display: none !important;
 }
 
-#viewerContainer.pdfPresentationMode:-ms-fullscreen {
-  top: 0px !important;
-  overflow: hidden !important;
-}
 
 #viewerContainer.pdfPresentationMode:-ms-fullscreen::-ms-backdrop {
   background-color: #000;
@@ -471,12 +467,12 @@
 }
 
 #viewerContainer.pdfPresentationMode:-ms-fullscreen {
-  top: 0px;
+  top: 0px !important;
+  overflow: hidden !important;
   border-top: 2px solid transparent;
   background-color: #000;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   cursor: none;
   -ms-user-select: none;
       user-select: none;
@@ -1499,7 +1495,6 @@ html[dir='rtl'] .verticalToolbarSeparator {
 .toolbarField {
   padding: 3px 6px;
   margin: 4px 0 4px 0;
-  border: 1px solid transparent;
   border-radius: 2px;
   background-color: hsla(0,0%,100%,.09);
   background-image: linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
