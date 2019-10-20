@@ -92,13 +92,14 @@ Bootstrap interferes with the printing algorithm of `pdf.js`. Guard it with a me
   @import '../node_modules/bootstrap/scss/bootstrap';
 }
 ```
+Caveat: this trick only works with the SCSS version of both `styles.scss` and `bootstrap.scss`. It doesn't work with simple CSS. 
 
 ## Internet Explorer 11 (and old versions of the "evergreen browsers")
 
 `ngx-extended-pdf-viewer` is compatible to Internet Explorer 11:
 
 - add `pdf-es5.js`, `pdf-worker-es5.js`, and `viewer-es5.js` to the `scripts` section of the `angular.json` (instead of the smaller default files `pdf.js`, `pdf-worker.js`, and `viewer.js`).
-- Don't forget to activate your polyfills. Or - even better - use the clever approach of the Angular CLI 7.3+ to import the polyfills automatically if and only if they are needed (see [my article on Angular 7.3 polyfills](https://beyondjava.net/what-happened-to-the-polyfills). Otherwise, you'll end up with an error message like this:
+- Don't forget to activate your polyfills. Or - even better - use the clever approach of the Angular CLI 7.3+ to import the polyfills automatically if and only if they are needed (see [my article on Angular 7.3 polyfills)](https://beyondjava.net/what-happened-to-the-polyfills). Otherwise, you'll end up with an error message like this:
 
 ```
 SCRIPT438: Object doesn't support property or method `fill`
@@ -497,3 +498,4 @@ Thanks to the awesome pdf.j team and to all the users you've reported bugs and e
 - 1.6.0-rc.1 #150 stop loading a generic translation file (e.g. "en.properties") if there's a more specific translation file (e.g. "en-GB.properties") 
 - 1.6.0-rc.2 #150 stop loading a generic translation file (e.g. "en.properties") if there's a more specific translation file (e.g. "en-GB.properties") (this time for real)
 - 1.6.0 #137 Now both `(currentZoomFactor)` and `(zoomChange)` react to the keyboard events CTRL + "+" and CTRL + "-". Caveat:  after selecting one of the text settings of the dropdown menu (i.e. "page fit", "actual page", and so on), the `(zoomChange)` event fires twice. Another caveat: this change might be a breaking change (although I don't think so, but it's a major internal change).
+- 1.6.1 #152 now the viewer can print even if it's embedded in a Bootstrap modal. Most likely, this also fixes problems with other frameworks.
