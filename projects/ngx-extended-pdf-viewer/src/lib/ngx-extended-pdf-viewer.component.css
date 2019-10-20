@@ -23,6 +23,10 @@
   transform: none;
 }
 
+#outerContainer {
+  clip-path: inset(0 0 0 0);
+}
+
 .below840px #sidebarContent {
   background-color: hsla(0, 0%, 0%, 0.7);
 }
