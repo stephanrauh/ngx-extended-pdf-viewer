@@ -69,6 +69,7 @@ After that, follow these steps:
 
 ## Breaking changes
 
+- 1.7.0 I've fixed a few bugs concerning IE11 support. If you rely on the bug, your application may break. Now I recommend to add both the ES2015 version `pdf.worker.js` and the ES5 version `pdf.worker-es5.js` of the service worker to your assets folder.
 - 1.0.0-rc.5 reactivated IE11 support. The default files `pdf.js`, `pdf-worker.js`, and `viewer.js` use a modern ES6 dialect of JavaScript. Your benefit: the files are smaller. My benefit: it's easier to understand and debug your error messages. To support IE11, you must include another set of JavaScript files: `pdf-es5.js`, `pdf-worker-es5.js`, and `viewer-es5.js`.
 - 1.0.0-rc.2 This shouldn't break anything, but just to be sure: the default files `pdf.js`, `pdf-worker.js`, and `viewer.js` have been updated to version 2.2.228. Plus, they are compiled without Babel and without minifiying to make debugging easier. The Angular CLI minifies and transpiles the files, so you shouldn't notice any difference (apart from being able to debug).
 - 0.9.54 renames the "sneak preview" files `pdf-2.2.222.js` and `pdf.worker-2.2.222.js` to `pdf.*-2.2` (i.e. the minor version 222 is dropped). Also deleted the `pdf.*-2.2.199.js` files in favor of the `pdf.*-2.2.js` files.
@@ -98,7 +99,7 @@ Caveat: this trick only works with the SCSS version of both `styles.scss` and `b
 
 `ngx-extended-pdf-viewer` is compatible to Internet Explorer 11:
 
-- add `pdf-es5.js`, `pdf-worker-es5.js`, and `viewer-es5.js` to the `scripts` section of the `angular.json` (instead of the smaller default files `pdf.js`, `pdf-worker.js`, and `viewer.js`).
+- add `pdf-es5.js`, `pdf-worker*.js`, and `viewer-es5.js` to the `scripts` section of the `angular.json` (instead of the smaller default files `pdf.js`, `pdf-worker.js`, and `viewer.js`). As for the `pdf-worker*.js` bit: it adds both the ES2015 version and the ES5 version of the service worker. That's a small performance boost on modern browsers, while still being compatible to IE11.
 - Don't forget to activate your polyfills. Or - even better - use the clever approach of the Angular CLI 7.3+ to import the polyfills automatically if and only if they are needed (see [my article on Angular 7.3 polyfills)](https://beyondjava.net/what-happened-to-the-polyfills). Otherwise, you'll end up with an error message like this:
 
 ```
@@ -198,7 +199,7 @@ If you need to support Internet Exporer 11, use these files instead:
     "output": "/assets/images/"
   },
   { 
-    "glob": "pdf.worker.js", // or pdf.worker-es5.js to support IE11
+    "glob": "pdf.worker.js", // or pdf.worker*.js to support IE11
     "input": "node_modules/ngx-extended-pdf-viewer/assets", 
     "output": "/assets/" 
   }
@@ -215,6 +216,12 @@ export class PdfDisplayComponent {
 constructor() {
     defaultOptions.workerSrc = './assets/pdf.worker-es5.js';
   }
+```
+
+Or - even better, because it gives you a performance boost on evergreen browsers:
+```typescript
+const _isIE11 = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
+defaultOptions.workerSrc: _isIE11 ? './assets/pdf.worker-es5.js' : './assets/pdf.worker.js'
 ```
 
 If you need only one language, you can reduce the list to `locale.properties` and your language folder.
@@ -500,4 +507,4 @@ Thanks to the awesome pdf.j team and to all the users you've reported bugs and e
 - 1.6.0 #137 Now both `(currentZoomFactor)` and `(zoomChange)` react to the keyboard events CTRL + "+" and CTRL + "-". Caveat:  after selecting one of the text settings of the dropdown menu (i.e. "page fit", "actual page", and so on), the `(zoomChange)` event fires twice. Another caveat: this change might be a breaking change (although I don't think so, but it's a major internal change).
 - 1.6.1 #152 now the viewer can print even if it's embedded in a Bootstrap modal. Most likely, this also fixes problems with other frameworks.
 - 1.6.2 #152 improved compatibility with Bootstrap (and many other scenarios). Now the sidebar does show on the left-hand side of the PDF viewer when it's hidden. Plus, the box model of the sidebar now is always the browser default (i.e. "content-box"), even if Bootstrap or another framework tries to modify that.
-- 1.6.3 Announced compatiblity to Angular 9. #154 added a polyfill for IE11.
+- 1.7.0 Announced compatiblity to Angular 9. #154 added a polyfill for IE11.
