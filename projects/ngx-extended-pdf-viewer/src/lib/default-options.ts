@@ -1,3 +1,5 @@
+const _isIE11 = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
+
 export const defaultOptions = {
   cursorToolOnLoad: 0,
   defaultUrl: '',
@@ -34,5 +36,5 @@ export const defaultOptions = {
   postMessageTransfers: true,
   verbosity: 1,
   workerPort: null,
-  workerSrc: './assets/pdf.worker.js'
+  workerSrc: _isIE11 ? './assets/pdf.worker-es5.js' : './assets/pdf.worker.js'
 };
