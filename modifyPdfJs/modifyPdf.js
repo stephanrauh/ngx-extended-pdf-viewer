@@ -10,7 +10,7 @@ let expectedChanges = 9;
 let dropLines = 0;
 let es2015 = false;
 lineReader
-  .on('line', function(line) {
+  .on('line', function (line) {
     if (dropLines > 0) {
       dropLines--;
       //      console.log('Dropping ' + line);
@@ -36,7 +36,11 @@ lineReader
         line = 'throw Error("zlib not available in the browser");';
         dropLines = 2;
       } else if (line.includes('pdfjs-dist/build/pdf.worker')) {
-        line = line.replace('pdfjs-dist/build/pdf.worker', './assets/pdf.worker.js');
+        if (es2015) {
+          line = line.replace('pdfjs-dist/build/pdf.worker', './assets/pdf.worker');
+        } else {
+          line = line.replace('pdfjs-dist/build/pdf.worker', './assets/pdf.worker-es5');
+        }
         expectedChanges--;
       } else if (line.includes('pdfjs-dist/build/pdf.worker.js')) {
         if (es2015) {
@@ -72,12 +76,12 @@ lineReader
       result += line + '\n';
     }
   })
-  .on('close', function() {
+  .on('close', function () {
     let filename = 'pdf-es5.js';
     if (es2015) {
       filename = 'pdf.js';
     }
-    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets/' + filename, result, function(err) {
+    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets/' + filename, result, function (err) {
       if (err) {
         return console.log(err);
       }

@@ -9849,7 +9849,7 @@ var fakeWorkerFilesLoader = null;
   }
 
   if (typeof requirejs !== 'undefined' && requirejs.toUrl) {
-    fallbackWorkerSrc = requirejs.toUrl('./assets/pdf.worker.js.js');
+    fallbackWorkerSrc = requirejs.toUrl('./assets/pdf.worker-es5.js');
   }
 
   var dynamicLoaderSupported = typeof requirejs !== 'undefined' && requirejs.load;
@@ -9867,7 +9867,7 @@ var fakeWorkerFilesLoader = null;
     });
   } : dynamicLoaderSupported ? function () {
     return new Promise(function (resolve, reject) {
-      requirejs(['./assets/pdf.worker.js'], function (worker) {
+      requirejs(['./assets/pdf.worker-es5'], function (worker) {
         try {
           resolve(worker.WorkerMessageHandler);
         } catch (ex) {
