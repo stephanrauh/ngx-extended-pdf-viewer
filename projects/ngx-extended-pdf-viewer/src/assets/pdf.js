@@ -9760,7 +9760,7 @@ let fakeWorkerFilesLoader = null;
       require.ensure([], function () {
         try {
           let worker;
-          worker = require('./assets/pdf.worker-es5.js');
+          worker = require('./assets/pdf.worker.js');
           resolve(worker.WorkerMessageHandler);
         } catch (ex) {
           reject(ex);
