@@ -12,21 +12,63 @@ currentFunction = '';
 let printKeyDownListener = false;
 let unregisterPrintOverlayDone = false;
 let es2015 = false;
+let lines = [];
 lineReader
-  .on('line', function(line) {
+  .on('line', function (line) {
+    lines.push(line);
+    if (line.includes('function ') || line.startsWith('class ')) {
+      if (line.startsWith('class ')) {
+        if (!es2015) {
+          console.log('ES 2015 version');
+          expectedChanges -= 4;
+        }
+        es2015 = true;
+      }
+    }
+
+  })
+  .on('close', function () {
+    addPolyfills();
+    convertLines();
+    const filename = es2015 ? 'viewer.js' : 'viewer-es5.js';
+    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets/' + filename, result, function (err) {
+      if (err) {
+        return console.log(err);
+      }
+
+      console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets/' + filename);
+      if (expectedChanges !== 0) {
+        console.error(expectedChanges + " changes couldn't be appied!");
+      }
+    });
+  });
+
+function addPolyfills() {
+  if (!es2015) {
+    result += "(function () {\n";
+    result += "\n";
+    result += "  if ( typeof window.CustomEvent === 'function' ) return false;\n";
+    result += "\n";
+    result += "  function CustomEvent ( event, params ) {\n";
+    result += "    params = params || { bubbles: false, cancelable: false, detail: null };\n";
+    result += "    var evt = document.createEvent( 'CustomEvent' );\n";
+    result += "    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );\n";
+    result += "    return evt;\n";
+    result += "   }\n";
+    result += "\n";
+    result += "  window.CustomEvent = CustomEvent;\n";
+    result += "})();\n";
+  }
+}
+
+function convertLines() {
+  lines.forEach(line => {
     if (dropLines > 0) {
       dropLines--;
       //      console.log('Dropping ' + line);
     } else {
       if (line.includes('function ') || line.startsWith('class ')) {
         currentFunction = line;
-        if (line.startsWith('class ')) {
-          if (!es2015) {
-            console.log('ES 2015 version');
-            expectedChanges -= 4;
-          }
-          es2015 = true;
-        }
       }
       if (line.includes("require('../build/pdf.js')")) {
         line = line.replace("require('../build/pdf.js')", "require('./pdf-2.2.js')");
@@ -163,17 +205,5 @@ lineReader
         result += line + '\n';
       }
     }
-  })
-  .on('close', function() {
-    const filename = es2015 ? 'viewer.js' : 'viewer-es5.js';
-    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets/' + filename, result, function(err) {
-      if (err) {
-        return console.log(err);
-      }
-
-      console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets/' + filename);
-      if (expectedChanges !== 0) {
-        console.error(expectedChanges + " changes couldn't be appied!");
-      }
-    });
   });
+}
