@@ -508,3 +508,4 @@ Thanks to the awesome pdf.j team and to all the users you've reported bugs and e
 - 1.6.1 #152 now the viewer can print even if it's embedded in a Bootstrap modal. Most likely, this also fixes problems with other frameworks.
 - 1.6.2 #152 improved compatibility with Bootstrap (and many other scenarios). Now the sidebar does show on the left-hand side of the PDF viewer when it's hidden. Plus, the box model of the sidebar now is always the browser default (i.e. "content-box"), even if Bootstrap or another framework tries to modify that.
 - 1.7.0 Announced compatiblity to Angular 9. #154 added a polyfill for IE11.
+- 1.7.1 #143 Prevent Angular Material's MatDialog messing up printing.

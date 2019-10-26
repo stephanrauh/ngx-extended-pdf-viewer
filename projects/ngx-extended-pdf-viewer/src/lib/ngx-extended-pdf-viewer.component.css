@@ -69,4 +69,9 @@ html[dir='rtl'] .findbar.below640px {
   body {
     overflow-y: visible !important;
   }
+
+  html.cdk-global-scrollblock {
+    width: initial;
+    position: initial;
+  }
 }
