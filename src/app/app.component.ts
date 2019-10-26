@@ -5,6 +5,8 @@ import { PageRenderedEvent } from '../../projects/ngx-extended-pdf-viewer/src/li
 import { PdfDownloadedEvent } from '../../projects/ngx-extended-pdf-viewer/src/lib/pdf-downloaded-event';
 import { PdfLoadedEvent } from '../../projects/ngx-extended-pdf-viewer/src/lib/pdf-loaded-event';
 import { NgxExtendedPdfViewerService } from '../../projects/ngx-extended-pdf-viewer/src/lib/ngx-extended-pdf-viewer.service';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -191,7 +193,21 @@ export class AppComponent {
     }
   }
 
-  constructor(private ngxExtendedPdfViewerService: NgxExtendedPdfViewerService) {}
+  constructor(private ngxExtendedPdfViewerService: NgxExtendedPdfViewerService, public dialog: MatDialog) {}
+
+  public openDialog(): void {
+    this.hidden = true;
+    setTimeout(() => {
+      const dialogRef = this.dialog.open(ModalDialogComponent, {
+        width: '750px',
+        data: {}
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+      });
+    });
+  }
 
   public onPagesLoaded(event: PagesLoadedEvent) {
     console.log('Document loaded with ' + event.pagesCount + ' pages');

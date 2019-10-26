@@ -24,8 +24,8 @@
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "dist/ngx-extended-pdf-viewer/assets/locale/es-MX",
-                "output": "/assets/locale/es-MX"
+                "input": "dist/ngx-extended-pdf-viewer/assets/locale",
+                "output": "/assets/locale/"
               },
               { "glob": "**/pdf.worker*.js", "input": "dist/ngx-extended-pdf-viewer/assets", "output": "/assets/" },
               {
@@ -41,8 +41,8 @@
             ],
             "styles": ["src/styles.css"],
             "scripts": [
-              "dist/ngx-extended-pdf-viewer/assets/pdf-es5.js",
-              "dist/ngx-extended-pdf-viewer/assets/viewer-es5.js"
+              "dist/ngx-extended-pdf-viewer/assets/pdf.js",
+              "dist/ngx-extended-pdf-viewer/assets/viewer.js"
             ]
           },
           "configurations": {
