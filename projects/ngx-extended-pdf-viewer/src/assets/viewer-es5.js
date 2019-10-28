@@ -14759,7 +14759,7 @@ let originalCaseLang = lang;
       var dict = getL10nDictionary();
 
       if (dict && dict.locales && dict.default_locale) {
-        console.log('using the embedded JSON directory, early way out');
+        console.log('The PDF viewer uses the pre-compiled language bundle stored in the HTML page.');
               gL10nData = dict.locales[originalCaseLang]; // modified line
 
         if (!gL10nData) {
@@ -14780,7 +14780,7 @@ let originalCaseLang = lang;
 
         callback();
       } else {
-        console.log('no resource to load, early way out');
+        console.log('Could not load the translation files for the PDF viewer. Check the flag useBrowserLocale, check the locales subfolder of the assets folder, or add the locale definition to the index.html');
       }
 
       fireL10nReadyEvent(lang);

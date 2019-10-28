@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 28;
+let expectedChanges = 30;
 
 let dropLines = 0;
 currentFunction = '';
@@ -14,7 +14,7 @@ let unregisterPrintOverlayDone = false;
 let es2015 = false;
 let lines = [];
 lineReader
-  .on('line', function (line) {
+  .on('line', function(line) {
     lines.push(line);
     if (line.includes('function ') || line.startsWith('class ')) {
       if (line.startsWith('class ')) {
@@ -25,13 +25,12 @@ lineReader
         es2015 = true;
       }
     }
-
   })
-  .on('close', function () {
+  .on('close', function() {
     addPolyfills();
     convertLines();
     const filename = es2015 ? 'viewer.js' : 'viewer-es5.js';
-    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets/' + filename, result, function (err) {
+    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets/' + filename, result, function(err) {
       if (err) {
         return console.log(err);
       }
@@ -45,19 +44,19 @@ lineReader
 
 function addPolyfills() {
   if (!es2015) {
-    result += "(function () {\n";
-    result += "\n";
+    result += '(function () {\n';
+    result += '\n';
     result += "  if ( typeof window.CustomEvent === 'function' ) return false;\n";
-    result += "\n";
-    result += "  function CustomEvent ( event, params ) {\n";
-    result += "    params = params || { bubbles: false, cancelable: false, detail: null };\n";
+    result += '\n';
+    result += '  function CustomEvent ( event, params ) {\n';
+    result += '    params = params || { bubbles: false, cancelable: false, detail: null };\n';
     result += "    var evt = document.createEvent( 'CustomEvent' );\n";
-    result += "    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );\n";
-    result += "    return evt;\n";
-    result += "   }\n";
-    result += "\n";
-    result += "  window.CustomEvent = CustomEvent;\n";
-    result += "})();\n";
+    result += '    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );\n';
+    result += '    return evt;\n';
+    result += '   }\n';
+    result += '\n';
+    result += '  window.CustomEvent = CustomEvent;\n';
+    result += '})();\n';
   }
 }
 
@@ -196,6 +195,18 @@ function convertLines() {
         line += '\n              } // #150';
         dropLines = 1;
         expectedChanges--;
+      } else if (line.includes('no resource to load, early way out')) {
+        expectedChanges--;
+        line = line.replace(
+          'no resource to load, early way out',
+          "Could not load the translation files for the PDF viewer. Check the flag useBrowserLocale, check the locales subfolder of the assets folder, or add the locale definition to the index.html"
+        );
+      } else if (line.includes('using the embedded JSON directory, early way out')) {
+        expectedChanges--;
+        line = line.replace(
+          'using the embedded JSON directory, early way out',
+          "The PDF viewer uses the pre-compiled language bundle that stored in the HTML page."
+        );
       }
 
       if (line != null) {
