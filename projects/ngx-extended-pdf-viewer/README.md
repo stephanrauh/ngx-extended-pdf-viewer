@@ -510,3 +510,4 @@ Thanks to the awesome pdf.j team and to all the users you've reported bugs and e
 - 1.7.0 Announced compatiblity to Angular 9. #154 added a polyfill for IE11.
 - 1.7.1 #143 Prevent Angular Material's MatDialog messing up printing.
 - 1.7.2 #160 improved the confusing message "no resource to load, early way out"
+- 1.7.3 #149 implement `[ignoreKeyboard]`, `[ignoreKeys]`, and `[acceptKeys]`

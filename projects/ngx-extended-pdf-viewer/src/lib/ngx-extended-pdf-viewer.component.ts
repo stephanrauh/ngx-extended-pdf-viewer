@@ -159,6 +159,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public filenameForDownload = 'document.pdf';
 
+  /** Allows the user to disable the keyboard bindings completely */
+  @Input()
+  public ignoreKeyboard = false;
+
+  /** Allows the user to disable a list of key bindings. */
+  @Input()
+  public ignoreKeys: Array<string> = [];
+
+  /** Allows the user to explicitely enable a list of key bindings. If this property is set, every other key binding is ignored. */
+  @Input()
+  public acceptKeys: Array<string>  = [];
+
   /** Allows the user to put the viewer's svg images into an arbitrary folder */
   @Input()
   public imageResourcesPath = './assets/images/';
@@ -543,6 +555,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
     options.set('disablePreferences', true);
     this.setZoom();
+
+    options.set('ignoreKeyboard', this.ignoreKeyboard);
+    options.set('ignoreKeys', this.ignoreKeys);
+    options.set('acceptKeys', this.acceptKeys);
 
     if (!this.handTool) {
       options.set('textLayerMode', 1);

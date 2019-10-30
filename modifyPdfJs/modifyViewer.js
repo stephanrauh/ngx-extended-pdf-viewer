@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 30;
+let expectedChanges = 31;
 
 let dropLines = 0;
 currentFunction = '';
@@ -207,6 +207,13 @@ function convertLines() {
           'using the embedded JSON directory, early way out',
           "The PDF viewer uses the pre-compiled language bundle that stored in the HTML page."
         );
+      } else if (line.includes('cmd === 1 || cmd === 8 || cmd === 5 || cmd === 12')) {
+        expectedChanges--;
+        let addition="  const options = window.PDFViewerApplicationOptions;\n";
+        addition+="  const ignoreKeyboard = options.set('ignoreKeyboard');\n";
+        addition+="  if (!!ignoreKeyboard) {\n";
+        addition+="    return;\n";
+        line=addition+"  }\n"+line;
       }
 
       if (line != null) {

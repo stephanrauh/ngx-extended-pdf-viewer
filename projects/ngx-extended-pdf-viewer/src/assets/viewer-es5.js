@@ -2378,6 +2378,11 @@ function webViewerKeyDown(evt) {
   var pdfViewer = PDFViewerApplication.pdfViewer;
   var isViewerInPresentationMode = pdfViewer && pdfViewer.isInPresentationMode;
 
+  const options = window.PDFViewerApplicationOptions;
+  const ignoreKeyboard = options.set('ignoreKeyboard');
+  if (!!ignoreKeyboard) {
+    return;
+  }
   if (cmd === 1 || cmd === 8 || cmd === 5 || cmd === 12) {
     switch (evt.keyCode) {
       case 70:
@@ -14759,7 +14764,7 @@ let originalCaseLang = lang;
       var dict = getL10nDictionary();
 
       if (dict && dict.locales && dict.default_locale) {
-        console.log('The PDF viewer uses the pre-compiled language bundle stored in the HTML page.');
+        console.log('The PDF viewer uses the pre-compiled language bundle that stored in the HTML page.');
               gL10nData = dict.locales[originalCaseLang]; // modified line
 
         if (!gL10nData) {
