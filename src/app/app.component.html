@@ -97,6 +97,9 @@
       <mat-form-field class="margin">
         <input matInput class="margin" [(ngModel)]="rotation" placeholder="rotation (0, 90, 180, 270)" />
       </mat-form-field>
+      <mat-checkbox class="margin" [(ngModel)]="ignoreKeyboard" matTooltip="Ignore every keyboard event" [disabled]="visible[0]"
+      >[ignoreKeyboard]="true"</mat-checkbox>
+
       <button mat-raised-button color="primary" class="margin" (click)="openDialog()">Modal</button>
     </section>
   </mat-card-content>
@@ -109,6 +112,7 @@
         printResolution="50"
         language="es-MX"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
+        [ignoreKeyboard]="ignoreKeyboard"
         [contextMenuAllowed]="contextMenuAllowed"
         [ignoreResponsiveCSS]="true"
         [src]="'assets/pdfs/fancy.pdf'"
@@ -155,6 +159,8 @@
         backgroundColor="#e8e8ef"
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
+        [ignoreKeyboard]="ignoreKeyboard"
+        [acceptKeys]="['J','K']"
         [mobileZoom]="mobileFriendlyZoom"
         [(rotation)]="rotation"
         [showZoomButtons]="true"
@@ -189,6 +195,8 @@
         backgroundColor="#e8e8ef"
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
+        [ignoreKeyboard]="ignoreKeyboard"
+        [ignoreKeys]="['j','k']"
         [mobileZoom]="mobileFriendlyZoom"
         printResolution="300"
         [(rotation)]="rotation"
@@ -220,6 +228,7 @@
         backgroundColor="#ffffff"
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
+        [ignoreKeyboard]="ignoreKeyboard"
         [mobileFriendlyZoom]="mobileFriendlyZoom"
         [(rotation)]="rotation"
         [showSidebarButton]="showSidebarButton"
@@ -256,6 +265,7 @@
         backgroundColor="blue"
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
+        [ignoreKeyboard]="ignoreKeyboard"
         [mobileFriendlyZoom]="mobileFriendlyZoom"
         [(rotation)]="rotation"
         [showBookmarkButton]="false"
@@ -292,6 +302,7 @@
         backgroundColor="#e8e8ef"
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
+        [ignoreKeyboard]="ignoreKeyboard"
         [mobileZoom]="mobileFriendlyZoom"
         [printResolution]="printResolution"
         (afterPrint)="afterPrint()"
@@ -326,6 +337,7 @@
         backgroundColor="#e8e8ef"
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
+        [ignoreKeyboard]="ignoreKeyboard"
         [mobileZoom]="mobileFriendlyZoom"
         [(rotation)]="rotation"
         [showZoomButtons]="true"
@@ -360,6 +372,7 @@
         backgroundColor="#e8e8ef"
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
+        [ignoreKeyboard]="ignoreKeyboard"
         [mobileZoom]="mobileFriendlyZoom"
         [(rotation)]="rotation"
         [showZoomButtons]="true"
@@ -396,6 +409,7 @@
         backgroundColor="#e8e8ef"
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
+        [ignoreKeyboard]="ignoreKeyboard"
         [mobileZoom]="mobileFriendlyZoom"
         [(rotation)]="rotation"
         [showZoomButtons]="true"

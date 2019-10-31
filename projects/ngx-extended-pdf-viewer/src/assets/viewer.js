@@ -2141,9 +2141,7 @@ function webViewerKeyDown(evt) {
   let pdfViewer = PDFViewerApplication.pdfViewer;
   let isViewerInPresentationMode = pdfViewer && pdfViewer.isInPresentationMode;
 
-  const options = window.PDFViewerApplicationOptions;
-  const ignoreKeyboard = options.set('ignoreKeyboard');
-  if (!!ignoreKeyboard) {
+  if (isKeyIgnored(cmd, evt.keyCode)) {
     return;
   }
   if (cmd === 1 || cmd === 8 || cmd === 5 || cmd === 12) {

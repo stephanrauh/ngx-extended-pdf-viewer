@@ -423,14 +423,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
   }
 
-  public emitZoomChangeAfterDelay(): void {
-    setTimeout(() => {
-      this.ngZone.run(() => {
-        this.emitZoomChange();
-      });
-    }, 10);
-  }
-
   ngOnInit() {
     if (this.ignoreResponsiveCSS === undefined) {
       const pdfViewer = document.getElementsByClassName('html');
@@ -454,12 +446,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       if (!dict) {
         if (!this.useBrowserLocale) {
           console.error(
+            // tslint:disable-next-line:quotemark
             "If you set the attribute 'useBrowserLocale' to false, you must provide the translations yourself in a script or link tag."
           );
           console.error('The easiest way to do this is to add them to the index.html.');
         }
       } else if (this.useBrowserLocale) {
         console.error(
+          // tslint:disable-next-line:quotemark
           "Please set the attribute 'useBrowserLocale' to false if you provide the translations yourself in a script or link tag."
         );
       }
@@ -467,6 +461,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       const o = langLinks[0].attributes['origin'];
       if (o && o.value !== 'ngx-extended-pdf-viewer') {
         console.error(
+          // tslint:disable-next-line:quotemark
           "Please set the attribute 'useBrowserLocale' to false if you provide the translations yourself in a script or link tag."
         );
       }
@@ -642,8 +637,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     });
     (<any>window).PDFViewerApplication.eventBus.on('scalechanging', (x: ScaleChangingEvent) => {
       this.ngZone.run(() => {
-        this.currentZoomFactor.emit(x.scale);
-        this.emitZoomChangeAfterDelay();
+        setTimeout(() => {
+          this.ngZone.run(() => {
+            this.currentZoomFactor.emit(x.scale);
+            this.emitZoomChange();
+          });
+        });
       });
     });
 
@@ -879,6 +878,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       const options = (<any>window).PDFViewerApplicationOptions;
       if (options) {
         options.set('printResolution', this.printResolution);
+      }
+    }
+    if ('ignoreKeyboard' in changes) {
+      const options = (<any>window).PDFViewerApplicationOptions;
+      if (options) {
+        this.overrideDefaultSettings();
       }
     }
   }

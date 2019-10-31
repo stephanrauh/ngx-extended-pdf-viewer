@@ -199,21 +199,20 @@ function convertLines() {
         expectedChanges--;
         line = line.replace(
           'no resource to load, early way out',
-          "Could not load the translation files for the PDF viewer. Check the flag useBrowserLocale, check the locales subfolder of the assets folder, or add the locale definition to the index.html"
+          'Could not load the translation files for the PDF viewer. Check the flag useBrowserLocale, check the locales subfolder of the assets folder, or add the locale definition to the index.html'
         );
       } else if (line.includes('using the embedded JSON directory, early way out')) {
         expectedChanges--;
         line = line.replace(
           'using the embedded JSON directory, early way out',
-          "The PDF viewer uses the pre-compiled language bundle that stored in the HTML page."
+          'The PDF viewer uses the pre-compiled language bundle that stored in the HTML page.'
         );
       } else if (line.includes('cmd === 1 || cmd === 8 || cmd === 5 || cmd === 12')) {
         expectedChanges--;
-        let addition="  const options = window.PDFViewerApplicationOptions;\n";
-        addition+="  const ignoreKeyboard = options.set('ignoreKeyboard');\n";
-        addition+="  if (!!ignoreKeyboard) {\n";
-        addition+="    return;\n";
-        line=addition+"  }\n"+line;
+
+        let addition = '  if (isKeyIgnored(cmd, evt.keyCode)) {\n';
+        addition += '    return;\n';
+        line = addition + '  }\n' + line;
       }
 
       if (line != null) {

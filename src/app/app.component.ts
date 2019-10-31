@@ -34,6 +34,8 @@ export class AppComponent {
 
   public rotation = 0;
 
+  public ignoreKeyboard = false;
+
   public page: number | undefined = undefined;
 
   public pageLabel: string | undefined = undefined;
@@ -121,6 +123,7 @@ export class AppComponent {
 
   public activateTab(tab: number): void {
     this.hideOtherPDFs();
+    this.ignoreKeyboard = this.ignoreKeyboard || tab === 0;
     setTimeout(() => {
       this.visible[tab] = true;
     }, 100);
