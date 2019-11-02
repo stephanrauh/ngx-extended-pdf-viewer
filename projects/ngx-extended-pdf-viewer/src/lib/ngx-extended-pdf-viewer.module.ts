@@ -4,6 +4,10 @@ import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.compone
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 
 function isKeyIgnored(cmd: number, keycode: number): boolean {
+  if (keycode === 16 || keycode === 17 || keycode === 18 || keycode === 224) {
+    // ignore solitary SHIFT, ALT, CMD, and CTRL because they only make sense as two-key-combinations
+    return true;
+  }
   // cmd is a bit-array:
   // 1 == CTRL
   // 2 == ALT
@@ -58,7 +62,35 @@ function isKey(keyDef: string, cmd: number, keycode: number): boolean {
     cmdDef = 8;
     keyDef = keyDef.substring(5);
   }
-  key = keyDef.charCodeAt(0);
+  if (keyDef.toLowerCase() === 'up') {
+    key = 38;
+  } else if (keyDef.toLowerCase() === 'down') {
+    key = 40;
+  } else if (keyDef.toLowerCase() === '+' || keyDef.toLowerCase() === '"+"') {
+    key = 171;
+  } else if (keyDef.toLowerCase() === '-' || keyDef.toLowerCase() === '"-"') {
+    key = 173;
+  } else if (keyDef.toLowerCase() === 'esc') {
+    key = 27;
+  } else if (keyDef.toLowerCase() === 'enter') {
+    key = 13;
+  } else if (keyDef.toLowerCase() === 'space') {
+    key = 32;
+  } else if (keyDef.toLowerCase() === 'f4') {
+    key = 115;
+  } else if (keyDef.toLowerCase() === 'backspace') {
+    key = 8;
+  } else if (keyDef.toLowerCase() === 'home') {
+    key = 36;
+  } else if (keyDef.toLowerCase() === 'end') {
+    key = 35;
+  } else if (keyDef.toLowerCase() === 'left') {
+    key = 37;
+  } else if (keyDef.toLowerCase() === 'right') {
+    key = 39;
+  } else {
+    key = keyDef.charCodeAt(0);
+  }
   return key === keycode && cmd === cmdDef;
 }
 

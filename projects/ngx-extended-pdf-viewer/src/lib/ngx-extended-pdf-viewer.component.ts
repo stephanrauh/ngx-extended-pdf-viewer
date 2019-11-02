@@ -886,6 +886,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         this.overrideDefaultSettings();
       }
     }
+    if ('ignoreKeys' in changes) {
+      const options = (<any>window).PDFViewerApplicationOptions;
+      if (options) {
+        this.overrideDefaultSettings();
+      }
+    }
+    if ('acceptKeys' in changes) {
+      const options = (<any>window).PDFViewerApplicationOptions;
+      if (options) {
+        this.overrideDefaultSettings();
+      }
+    }
   }
 
   private setZoom() {
