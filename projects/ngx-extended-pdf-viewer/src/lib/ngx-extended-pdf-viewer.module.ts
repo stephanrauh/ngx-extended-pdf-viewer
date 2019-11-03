@@ -41,55 +41,61 @@ function isKeyInList(settings: Array<string>, cmd: number, keycode: number): boo
 function isKey(keyDef: string, cmd: number, keycode: number): boolean {
   let cmdDef = 0;
   let key = 0;
-  keyDef = keyDef.toUpperCase();
-  if (keyDef.startsWith('CTRL+')) {
-    cmdDef = 1;
-    keyDef = keyDef.substring(5);
+  keyDef = keyDef.toLowerCase();
+  // tslint:disable: no-bitwise
+  if (keyDef.includes('ctrl+')) {
+    cmdDef |= 1;
+    keyDef = keyDef.replace('ctrl+', '');
   }
-  if (keyDef.startsWith('CMD+')) {
-    cmdDef = 1;
-    keyDef = keyDef.substring(4);
+  if (keyDef.includes('cmd+')) {
+    cmdDef |= 8;
+    keyDef = keyDef.replace('cmd+', '');
   }
-  if (keyDef.startsWith('ALT+')) {
-    cmdDef = 2;
-    keyDef = keyDef.substring(4);
+  if (keyDef.includes('alt+')) {
+    cmdDef |= 2;
+    keyDef = keyDef.replace('alt+', '');
   }
-  if (keyDef.startsWith('SHIFT+')) {
-    cmdDef = 4;
-    keyDef = keyDef.substring(6);
+  if (keyDef.includes('shift+')) {
+    cmdDef |= 4;
+    keyDef = keyDef.replace('shift+', '');
   }
-  if (keyDef.startsWith('META+')) {
-    cmdDef = 8;
-    keyDef = keyDef.substring(5);
+  if (keyDef.includes('meta+')) {
+    cmdDef |= 8;
+    keyDef = keyDef.replace('meta+', '');
   }
-  if (keyDef.toLowerCase() === 'up') {
+
+  if (keyDef === 'up') {
     key = 38;
-  } else if (keyDef.toLowerCase() === 'down') {
+  } else if (keyDef === 'down') {
     key = 40;
-  } else if (keyDef.toLowerCase() === '+' || keyDef.toLowerCase() === '"+"') {
+  } else if (keyDef === '+' || keyDef === '"+"') {
     key = 171;
-  } else if (keyDef.toLowerCase() === '-' || keyDef.toLowerCase() === '"-"') {
+  } else if (keyDef === '-' || keyDef === '"-"') {
     key = 173;
-  } else if (keyDef.toLowerCase() === 'esc') {
+  } else if (keyDef === 'esc') {
     key = 27;
-  } else if (keyDef.toLowerCase() === 'enter') {
+  } else if (keyDef === 'enter') {
     key = 13;
-  } else if (keyDef.toLowerCase() === 'space') {
+  } else if (keyDef === 'space') {
     key = 32;
-  } else if (keyDef.toLowerCase() === 'f4') {
+  } else if (keyDef === 'f4') {
     key = 115;
-  } else if (keyDef.toLowerCase() === 'backspace') {
+  } else if (keyDef === 'backspace') {
     key = 8;
-  } else if (keyDef.toLowerCase() === 'home') {
+  } else if (keyDef === 'home') {
     key = 36;
-  } else if (keyDef.toLowerCase() === 'end') {
+  } else if (keyDef === 'end') {
     key = 35;
-  } else if (keyDef.toLowerCase() === 'left') {
+  } else if (keyDef === 'left') {
     key = 37;
-  } else if (keyDef.toLowerCase() === 'right') {
+  } else if (keyDef === 'right') {
     key = 39;
+  } else if (keyDef === 'pagedown') {
+    key = 34;
+  } else if (keyDef === 'pageup') {
+    key = 33;
   } else {
-    key = keyDef.charCodeAt(0);
+    key = keyDef.toUpperCase().charCodeAt(0);
   }
   return key === keycode && cmd === cmdDef;
 }

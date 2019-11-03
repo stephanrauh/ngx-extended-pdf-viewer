@@ -515,3 +515,4 @@ Thanks to the awesome pdf.j team and to all the users you've reported bugs and e
 - 1.7.2 #160 improved the confusing message "no resource to load, early way out"
 - 1.7.3 #149 implement `[ignoreKeyboard]`, `[ignoreKeys]`, and `[acceptKeys]`; #165 prevent the `ExpressionChangedAfterItHasBeenCheckedError` when the page width changes
 - 1.7.4 #149 improved `[ignoreKeyboard]`, `[ignoreKeys]`, and `[acceptKeys]` with more key bindings; started to document the feature at https://pdfviewer.net/keyboard
+- 1.7.5 #149 improved `[ignoreKeys]` and `[acceptKeys]` with more key bindings and with multiple modifiers (such as CTRL+ALT+G)
