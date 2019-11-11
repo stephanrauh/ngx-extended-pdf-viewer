@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 31;
+let expectedChanges = 32;
 
 let dropLines = 0;
 currentFunction = '';
@@ -213,6 +213,11 @@ function convertLines() {
         let addition = '  if (isKeyIgnored(cmd, evt.keyCode)) {\n';
         addition += '    return;\n';
         line = addition + '  }\n' + line;
+
+      } else if (line.includes("fileInput.setAttribute('type', 'file');")) {
+        expectedChanges--;
+        let addition = "  fileInput.setAttribute('accept', '.pdf,application/pdf');";
+        line = addition + '\n' + line;
       }
 
       if (line != null) {

@@ -1824,6 +1824,7 @@ function webViewerInitialized() {
   var fileInput = document.createElement('input');
   fileInput.id = appConfig.openFileInputName;
   fileInput.className = 'fileInput';
+  fileInput.setAttribute('accept', '.pdf,application/pdf');
   fileInput.setAttribute('type', 'file');
   fileInput.oncontextmenu = _ui_utils.noContextMenuHandler;
   document.body.appendChild(fileInput);
@@ -2381,7 +2382,6 @@ function webViewerKeyDown(evt) {
   if (isKeyIgnored(cmd, evt.keyCode)) {
     return;
   }
-
   if (cmd === 1 || cmd === 8 || cmd === 5 || cmd === 12) {
     switch (evt.keyCode) {
       case 70:

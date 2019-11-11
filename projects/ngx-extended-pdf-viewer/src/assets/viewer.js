@@ -1583,6 +1583,7 @@ function webViewerInitialized() {
   let fileInput = document.createElement('input');
   fileInput.id = appConfig.openFileInputName;
   fileInput.className = 'fileInput';
+  fileInput.setAttribute('accept', '.pdf,application/pdf');
   fileInput.setAttribute('type', 'file');
   fileInput.oncontextmenu = _ui_utils.noContextMenuHandler;
   document.body.appendChild(fileInput);
