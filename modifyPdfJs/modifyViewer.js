@@ -205,7 +205,7 @@ function convertLines() {
         expectedChanges--;
         line = line.replace(
           'using the embedded JSON directory, early way out',
-          'The PDF viewer uses the pre-compiled language bundle that stored in the HTML page.'
+          'The PDF viewer uses the pre-compiled language bundle stored in the HTML page.'
         );
       } else if (line.includes('cmd === 1 || cmd === 8 || cmd === 5 || cmd === 12')) {
         expectedChanges--;
