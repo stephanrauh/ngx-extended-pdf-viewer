@@ -437,6 +437,10 @@
   display: none !important;
 }
 
+#viewerContainer.pdfPresentationMode:-ms-fullscreen {
+  top: 0px !important;
+  overflow: hidden !important;
+}
 
 #viewerContainer.pdfPresentationMode:-ms-fullscreen::-ms-backdrop {
   background-color: #000;
@@ -467,12 +471,12 @@
 }
 
 #viewerContainer.pdfPresentationMode:-ms-fullscreen {
-  top: 0px !important;
-  overflow: hidden !important;
+  top: 0px;
   border-top: 2px solid transparent;
   background-color: #000;
   width: 100%;
   height: 100%;
+  overflow: hidden;
   cursor: none;
   -ms-user-select: none;
       user-select: none;
@@ -1495,6 +1499,7 @@ html[dir='rtl'] .verticalToolbarSeparator {
 .toolbarField {
   padding: 3px 6px;
   margin: 4px 0 4px 0;
+  border: 1px solid transparent;
   border-radius: 2px;
   background-color: hsla(0,0%,100%,.09);
   background-image: linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
@@ -1977,7 +1982,7 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
   background: none repeat scroll 0 0 yellow;
 }
 #PDFBug .stats {
-  font-family: courier, monospace;
+  font-family: courier;
   font-size: 10px;
   white-space: pre;
 }
@@ -2292,7 +2297,7 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
     display: none;
   }
   body[data-pdfjsprinting] #printContainer {
-    display: block !important;
+    display: block;
   }
   #printContainer {
     height: 100%;

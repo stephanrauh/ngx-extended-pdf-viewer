@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 32;
+let expectedChanges = 35;
 
 let dropLines = 0;
 currentFunction = '';
@@ -218,6 +218,21 @@ function convertLines() {
         expectedChanges--;
         let addition = "  fileInput.setAttribute('accept', '.pdf,application/pdf');";
         line = addition + '\n' + line;
+      } else if (line.includes("function xhrLoadText(url, onSuccess, onFailure) {")) {
+        // breaking change in pdf.js 2.2 -> 2.3.200
+        let before = "function fireL10nReadyEvent(lang) {\n";
+        before +=  "var evtObject = document.createEvent('Event');\n";
+        before +=  "  evtObject.initEvent('localized', true, false);\n";
+        before +=  "  evtObject.language = lang;\n";
+        before +=  "  document.dispatchEvent(evtObject);\n";
+        before +=  "}\n";
+        before += "\n";
+        line = before + line;
+        expectedChanges--;
+      } else if (line.includes("gReadyState = 'complete';")) {
+        // breaking change in pdf.js 2.2 -> 2.3.200
+        line = "fireL10nReadyEvent(lang);\n" + line;
+        expectedChanges--;
       }
 
       if (line != null) {

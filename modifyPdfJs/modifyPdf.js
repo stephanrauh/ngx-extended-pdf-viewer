@@ -6,7 +6,7 @@ const lineReader = require('readline').createInterface({
 
 let result = '';
 
-let expectedChanges = 9;
+let expectedChanges = 8;
 let dropLines = 0;
 let es2015 = false;
 lineReader
@@ -60,17 +60,19 @@ lineReader
       } else if (line.includes('//# sourceMappingURL=pdf.js.map')) {
         line = ''; // the file hasn't been minified, so there's no use for a source map
         expectedChanges--;
+      /* temporarily deactivated during migration to version 2.3.200
       } else if (line.includes('if (fontSize !== this._layoutTextLastFontSize')) {
         expectedChanges--;
-        dropLines = 7;
-        line = 'if (this._layoutTextCtx) {\n';
-        line += 'if (fontSize !== this._layoutTextLastFontSize || fontFamily !== this._layoutTextLastFontFamily) {\n';
-        line += "this._layoutTextCtx.font = fontSize + ' ' + fontFamily;\n";
-        line += 'this._layoutTextLastFontSize = fontSize;\n';
-        line += 'this._layoutTextLastFontFamily = fontFamily;\n';
-        line += '}\n';
-        line += '}\n';
-        line += 'let width = this._layoutTextCtx?this._layoutTextCtx.measureText(textDiv.textContent).width:0;\n';
+        // dropLines = 7;
+        line = '//if (this._layoutTextCtx) {\n';
+        line += '//if (fontSize !== this._layoutTextLastFontSize || fontFamily !== this._layoutTextLastFontFamily) {\n';
+        line += "//this._layoutTextCtx.font = fontSize + ' ' + fontFamily;\n";
+        line += '//this._layoutTextLastFontSize = fontSize;\n';
+        line += '//this._layoutTextLastFontFamily = fontFamily;\n';
+        line += '//}\n';
+        line += '//}\n';
+        line += '//let width = this._layoutTextCtx?this._layoutTextCtx.measureText(textDiv.textContent).width:0;\n';
+      */
       }
 
       result += line + '\n';
