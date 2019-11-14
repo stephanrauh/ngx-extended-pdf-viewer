@@ -12,6 +12,19 @@
   body[data-pdfjsprinting] > * {
     display: none !important;
   }
+  body[data-pdfjsprinting] > #printContainer {
+    display: block !important;
+  }
+}
+
+body[data-pdfjsprinting] #printContainer * {
+  padding: 0;
+  margin: 0;
+}
+
+#printContainer canvas,
+#printContainer img {
+  display: block !important;
 }
 
 .toolbarViewerMiddleBelow900px {
