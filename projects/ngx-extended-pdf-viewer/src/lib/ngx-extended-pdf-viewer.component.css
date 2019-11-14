@@ -12,14 +12,22 @@
   body[data-pdfjsprinting] > * {
     display: none !important;
   }
-  body[data-pdfjsprinting] > #printContainer {
+  body[data-pdfjsprinting] #printContainer {
     display: block !important;
+  }
+  body[data-pdfjsprinting] #printContainer div img {
+    height: 100vh !important;
   }
 }
 
-body[data-pdfjsprinting] #printContainer * {
+body[data-pdfjsprinting] #printContainer, body[data-pdfjsprinting] #printContainer * {
   padding: 0;
   margin: 0;
+}
+
+body[data-pdfjsprinting] #printContainer, body[data-pdfjsprinting] #printContainer * {
+  font: message-box;
+  outline: none;
 }
 
 #printContainer canvas,
