@@ -28995,7 +28995,8 @@ function (_Annotation2) {
     if (data.fieldType === 'Sig') {
       data.fieldValue = null;
 
-      _this3.setFlags(_util.AnnotationFlag.HIDDEN);
+      // _this3.setFlags(_util.AnnotationFlag.HIDDEN);
+      console.log("The PDF file contains a signature. Please take into account that it can't be verified yet.");
     }
 
     return _this3;

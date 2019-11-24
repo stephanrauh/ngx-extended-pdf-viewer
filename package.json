@@ -38,7 +38,7 @@
     "@angular/cli": "^7.2.15",
     "@angular/compiler-cli": "^7.2.15",
     "@angular/language-service": "^7.2.15",
-    "@types/node": "^12.12.8",
+    "@types/node": "^12.12.12",
     "caniuse-lite": "^1.0.30001010",
     "codelyzer": "^5.2.0",
     "cypress": "^3.6.1",

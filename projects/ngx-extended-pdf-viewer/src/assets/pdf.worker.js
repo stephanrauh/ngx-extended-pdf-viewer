@@ -27179,7 +27179,8 @@ class WidgetAnnotation extends Annotation {
 
     if (data.fieldType === 'Sig') {
       data.fieldValue = null;
-      this.setFlags(_util.AnnotationFlag.HIDDEN);
+      // this.setFlags(_util.AnnotationFlag.HIDDEN);
+      console.log("The PDF file contains a signature. Please take into account that it can't be verified yet.");
     }
   }
 

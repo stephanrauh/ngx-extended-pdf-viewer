@@ -519,3 +519,4 @@ Thanks to the awesome pdf.j team and to all the users you've reported bugs and e
 - 1.7.6 #167 restrict the list of files that can be opened in the "open file" dialog to PDF files (can be overwritten by the user, so that's no breaking change)
 - 1.7.7 #169 fix a Angular 9.0.0-rc.1 bug by removing the context menu additions of the presentation mode that were only visible in Firefox (`menuitem` is a defined tag in Firefox, but not in Chrome or Safari, and the current RC1 of Angular gets confused by that)
 - 1.8.0-rc.0 update to pdf.js 2.3.200; #168 and #170 fix printing (was broken after updating to pdf.js 2.3.200; stop printing empty pages at the end)
+- 1.8.0-rc.1 #171 added preliminary support for displaying signature. Published it as an RC because this pdf.js feature is experimental, so there should be an option that switches the feature off by default. This is going to land in 1.8.0.
