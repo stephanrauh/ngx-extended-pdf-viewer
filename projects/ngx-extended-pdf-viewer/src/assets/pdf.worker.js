@@ -639,6 +639,13 @@ var WorkerMessageHandler = {
       setupDoc(docParams);
       docParams = null;
     });
+    // #171 receive options from ngx-extended-pdf-viewer
+    handler.on('showUnverifiedSignatures', function wphReady(data) {
+      console.log("showUnverifiedSignatures " + data);
+      self.showUnverifiedSignatures = data;
+    });
+    // #171 end of receive options from ngx-extended-pdf-viewer
+
     return workerHandlerName;
   },
 
@@ -27179,8 +27186,13 @@ class WidgetAnnotation extends Annotation {
 
     if (data.fieldType === 'Sig') {
       data.fieldValue = null;
-      // this.setFlags(_util.AnnotationFlag.HIDDEN);
-      console.log("The PDF file contains a signature. Please take into account that it can't be verified yet.");
+
+      // #171 modification start
+      if (!self.showUnverifiedSignatures) {
+        this.setFlags(_util.AnnotationFlag.HIDDEN);
+        console.log("The PDF file contains a signature. Please take into account that it can't be verified yet.");
+      }
+      // #171 modification end
     }
   }
 

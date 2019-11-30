@@ -196,6 +196,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   public viewerPositionTop = '32px';
 
+  /** pdf.js can show signatures, but fails to verify them. So they are switched off by default.
+    * Set "[showUnverifiedSignatures]"="true" to display e-signatures nonetheless.
+    */
+  @Input()
+  public showUnverifiedSignatures = false;
+
   public get showSidebarButton() {
     return this._showSidebarButton;
   }
@@ -896,6 +902,24 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       const options = (<any>window).PDFViewerApplicationOptions;
       if (options) {
         this.overrideDefaultSettings();
+      }
+    }
+    if ('showUnverifiedSignatures' in changes) {
+      // this.redraw();
+      if ((<any>window).PDFViewerApplication && (<any>window).PDFViewerApplication.pdfDocument) {
+       (<any>window).PDFViewerApplication.pdfDocument._transport.messageHandler.send('showUnverifiedSignatures',
+          this.showUnverifiedSignatures);
+        }
+    }
+  }
+
+  private redraw() {
+    if (((<any>window).PDFViewerApplication) && ((<any>window).PDFViewerApplication).pdfViewer) {
+      const pages = ((<any>window).PDFViewerApplication).pdfViewer._pages;
+      if (pages) {
+        for (let i = 0, ii = pages.length; i < ii; i++) {
+          pages[i].update((<any>window).PDFViewerApplication.pdfViewer.currentScaleValue);
+        }
       }
     }
   }

@@ -9888,6 +9888,10 @@ function getDocument(src) {
       messageHandler.postMessageTransfers = worker.postMessageTransfers;
       const transport = new WorkerTransport(messageHandler, task, networkStream, params);
       task._transport = transport;
+      // #171 receive options from ngx-extended-pdf-viewer
+      messageHandler.send('showUnverifiedSignatures',
+        window.ServiceWorkerOptions.showUnverifiedSignatures);
+      // #171 end of receive options from ngx-extended-pdf-viewer
       messageHandler.send('Ready', null);
     });
   }).catch(task._capability.reject);
