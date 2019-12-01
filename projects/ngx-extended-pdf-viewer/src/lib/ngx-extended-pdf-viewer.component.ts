@@ -33,6 +33,7 @@ import { FileInputChanged } from './file-input-changed';
 import { SidebarviewChange } from './sidebarview-changed';
 import { HandtoolChanged } from './handtool-changed';
 import { PageNumberChange } from './page-number-change';
+import { ServiceWorkerOptions } from './service-worker-options';
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
@@ -603,6 +604,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   private openPDF() {
+    ServiceWorkerOptions.showUnverifiedSignatures = this.showUnverifiedSignatures;
     NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized = true;
     this.onResize();
     if (!this.listenToURL) {
