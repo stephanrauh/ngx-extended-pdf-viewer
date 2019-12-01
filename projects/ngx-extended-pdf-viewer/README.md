@@ -522,3 +522,4 @@ Thanks to the awesome pdf.j team and to all the users you've reported bugs and e
 - 1.8.0-rc.0 update to pdf.js 2.3.200; #168 and #170 fix printing (was broken after updating to pdf.js 2.3.200; stop printing empty pages at the end)
 - 1.8.0-rc.1 #171 added preliminary support for displaying signature. Published it as an RC because this pdf.js feature is experimental, so there should be an option that switches the feature off by default. This is going to land in 1.8.0.
 - 1.8.0-rc.2 #171 implemented `showUnverifiedSignatures`
+- 1.8.0-rc.3 #171 bugfixes and #168 updated the IE11 versions of the JavaScript files to pdf.js 2.3.200

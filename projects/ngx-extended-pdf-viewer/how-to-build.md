@@ -12,11 +12,9 @@
 12. cd ..
 13. cd ngx-extended-pdf-viewer
 14. sh ./updateMozillasPdfViewer.sh
-15. open pdf.worker.js, find `if (data.fieldType === 'Sig')` and comment the line `this.setFlags(_util.AnnotationFlag.HIDDEN);` (currently line 27182)
-16. open pdf.worker-es5.js, find `if (data.fieldType === 'Sig')` and comment the line `_this3.setFlags(_util.AnnotationFlag.HIDDEN);` (currently line 28998)
-17. examine the history of https://github.com/mozilla/pdf.js/blob/master/web/viewer.html and copy the changes to ngx-extended-pdf-viewer.component.html. Warning: ngx-extended-pdf-viewer.component.html has a lot of additions to the original file. Proceed with care.
+15. examine the history of https://github.com/mozilla/pdf.js/blob/master/web/viewer.html and copy the changes to ngx-extended-pdf-viewer.component.html. Warning: ngx-extended-pdf-viewer.component.html has a lot of additions to the original file. Proceed with care.
 
-18. npm run win-package (or npm run unix-package, depending on your OS) (this command copies the viewer files to the dist folder so you can run the demo)
-19. ng serve
+16. npm run win-package (or npm run unix-package, depending on your OS) (this command copies the viewer files to the dist folder so you can run the demo)
+17. ng serve
 
 Note to myself: to deploy the library on npm, change to the folder `dist/ngx-extended-pdf-viewer` and run `npm publish` from there. Or: run `npm run unix-package` followed by `npm run release`.
