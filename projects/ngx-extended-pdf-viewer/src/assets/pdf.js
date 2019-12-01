@@ -9890,7 +9890,7 @@ function getDocument(src) {
       task._transport = transport;
       // #171 receive options from ngx-extended-pdf-viewer
       messageHandler.send('showUnverifiedSignatures',
-        window.ServiceWorkerOptions.showUnverifiedSignatures);
+          window.ServiceWorkerOptions.showUnverifiedSignatures);
       // #171 end of receive options from ngx-extended-pdf-viewer
       messageHandler.send('Ready', null);
     });

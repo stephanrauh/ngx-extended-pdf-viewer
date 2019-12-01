@@ -14,4 +14,5 @@ cd ..
 cd modifyPdfJs
 node modifyPdf.js
 node modifyViewer.js
+node modifyPdfWorker.js
 cd ..

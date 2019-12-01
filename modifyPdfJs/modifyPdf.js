@@ -6,7 +6,7 @@ const lineReader = require('readline').createInterface({
 
 let result = '';
 
-let expectedChanges = 8;
+let expectedChanges = 9;
 let dropLines = 0;
 let es2015 = false;
 lineReader
@@ -59,6 +59,14 @@ lineReader
         expectedChanges--;
       } else if (line.includes('//# sourceMappingURL=pdf.js.map')) {
         line = ''; // the file hasn't been minified, so there's no use for a source map
+        expectedChanges--;
+      } else if (line.includes("messageHandler.send('Ready', null);")) {
+        const before = `      // #171 receive options from ngx-extended-pdf-viewer
+      messageHandler.send('showUnverifiedSignatures',
+          window.ServiceWorkerOptions.showUnverifiedSignatures);
+      // #171 end of receive options from ngx-extended-pdf-viewer
+`;
+        line = before + line;
         expectedChanges--;
       /* temporarily deactivated during migration to version 2.3.200
       } else if (line.includes('if (fontSize !== this._layoutTextLastFontSize')) {
