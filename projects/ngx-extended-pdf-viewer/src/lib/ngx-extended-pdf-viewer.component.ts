@@ -34,6 +34,10 @@ import { SidebarviewChange } from './sidebarview-changed';
 import { HandtoolChanged } from './handtool-changed';
 import { PageNumberChange } from './page-number-change';
 import { ServiceWorkerOptions } from './service-worker-options';
+import * as deburr from 'lodash.deburr'; // #177
+
+(window as any).deburr = deburr; // #177
+
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
@@ -225,6 +229,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   /** If [showSideBarButton]="true", do you want the sidebar to be shown by default ([showSidebarOnLoad])="true")
    * or not? By default, this flag is undefined, telling the PDF viewer to use the last setting used with this particular
    * document, or to hide the sidebar if the document is opened for the first time.
+   * @deprecated Use showSidebar instead; dreprecated since 1.8.0; to be removed with 2.0.0
    */
   @Input()
   public showSidebarOnLoad: boolean | undefined = undefined;
@@ -413,7 +418,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
   }
 
-  constructor(private ngZone: NgZone) {}
+  constructor(private ngZone: NgZone) {
+  }
 
   public emitZoomChange(): void {
     const selectedIndex = this.sizeSelector.nativeElement.selectedIndex;
@@ -573,11 +579,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       sidebarVisible = this.showSidebarOnLoad;
     }
     if (sidebarVisible !== undefined) {
-      (<any>window).PDFViewerApplication.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
+      (<any>window).PDFViewerApplication.sidebarViewOnLoad = sidebarVisible ? 1 : 0;
       if ((<any>window).PDFViewerApplication.appConfig) {
-        (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = this.showSidebarOnLoad ? 1 : 0;
+        (<any>window).PDFViewerApplication.appConfig.sidebarViewOnLoad = sidebarVisible ? 1 : 0;
       }
-      options.set('sidebarViewOnLoad', this.showSidebarOnLoad ? 1 : 0);
+      options.set('sidebarViewOnLoad', this.sidebarVisible ? 1 : 0);
     }
     if (this.spread === 'even') {
       options.set('spreadModeOnLoad', 2);
@@ -626,7 +632,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         if (this.nameddest) {
           (<any>window).PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
         } else if (this.page) {
-          (<any>window).PDFViewerApplication.page = this.page;
+          (<any>window).PDFViewerApplication.page = Number(this.page);
         } else if (this.pageLabel) {
           (<any>window).PDFViewerApplication.pdfViewer.currentPageLabel = this.pageLabel;
         }
@@ -945,6 +951,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   public onResize(): void {
+    console.log("onResize");
     if (this.ignoreResponsiveCSS) {
       clearTimeout(this.resizeTimeout);
       this.resizeTimeout = setTimeout(this.doResize, 100);

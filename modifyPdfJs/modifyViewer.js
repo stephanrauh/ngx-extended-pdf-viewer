@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 35;
+let expectedChanges = 47;
 
 let dropLines = 0;
 currentFunction = '';
@@ -68,6 +68,9 @@ function convertLines() {
     } else {
       if (line.includes('function ') || line.startsWith('class ')) {
         currentFunction = line;
+      }
+      if (line.includes('_calculateMatch(pageIndex) {')) {
+        currentFunction = '_calculateMatch';
       }
       if (line.includes("require('../build/pdf.js')")) {
         line = line.replace("require('../build/pdf.js')", "require('./pdf-2.2.js')");
@@ -233,7 +236,119 @@ function convertLines() {
         // breaking change in pdf.js 2.2 -> 2.3.200
         line = "fireL10nReadyEvent(lang);\n" + line;
         expectedChanges--;
+      } else if (
+        line.includes(
+          "entireWordCheckbox: document.getElementById('findEntireWord')"
+        )
+      ) {
+        line =
+          line +
+          '\n' +
+          "      ignoreAccentsCheckbox: document.getElementById('findIgnoreAccents'), // #177";
+        expectedChanges--;
+      } else if (line.includes('entireWord: evt.entireWord')) {
+        line = line + '\n' + '    ignoreAccents: evt.ignoreAccents, // #177';
+        expectedChanges--;
+      } else if (line.includes('entireWord: false')) {
+        line = line + '\n' + '    ignoreAccents: false, // #177';
+        expectedChanges--;
+      } else if (line.includes('entireWord: findState.entireWord')) {
+        line =
+          line +
+          '\n' +
+          '              ignoreAccents: findState.ignoreAccents, // #177';
+        expectedChanges--;
+      } else if (
+        line.includes('this.entireWord = options.entireWordCheckbox || null')
+      ) {
+        line =
+          line +
+          '\n' +
+          '    this.ignoreAccents = options.ignoreAccentsCheckbox || null; // #177';
+        expectedChanges--;
+      } else if (
+        line.includes("this.eventBus.on('resize', this._adjustWidth.bind(this))")
+      ) {
+        if (es2015) {
+          line =
+            "    this.ignoreAccents.addEventListener('click', () => { // #177\n" +
+            "          this.dispatchEvent('ignoreAccentsChange'); // #177\n" +
+            '    }); // #177\n' +
+            line;
+        } else {
+          line =
+            "    this.ignoreAccents.addEventListener('click', function () {\n" +
+            "     _this.dispatchEvent('ignoreAccentsChange');\n" +
+            '    });\n' +
+            line;
+        }
+        expectedChanges--;
+      } else if (line.includes('entireWord: this.entireWord.checked')) {
+        line =
+          line +
+          '\n' +
+          '        ignoreAccents: this.ignoreAccents.checked, // #177';
+        expectedChanges--;
+      } else if (line.includes('  _calculatePhraseMatch(')) {
+        line = `  _calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
+            if (ignoreAccents) { // #177
+              pageContent = window.deburr(pageContent); // #177
+              query = window.deburr(query); // #177
+            } // #177
+  `;
+        expectedChanges--;
+      } else if (line.includes('function _calculatePhraseMatch(query, pageIndex, pageContent, entireWord)')) {
+        line = `    value: function _calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
+            if (ignoreAccents) { // #177
+              pageContent = window.deburr(pageContent); // #177
+              query = window.deburr(query); // #177
+            } // #177
+  `;
+        expectedChanges--;
+      } else if (line.includes('  _calculateWordMatch(')) {
+        line = `  _calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
+            if (ignoreAccents) { // #177
+              pageContent = window.deburr(pageContent); // #177
+              query = window.deburr(query); // #177
+            } // #177
+  `;
+        expectedChanges--;
+      } else if (line.includes('function _calculateWordMatch(query, pageIndex, pageContent, entireWord)')) {
+        line = `    value: function _calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
+            if (ignoreAccents) { // #177
+              pageContent = window.deburr(pageContent); // #177
+              query = window.deburr(query); // #177
+            } // #177
+  `;
+        expectedChanges--;
+      } else if (
+        (currentFunction == '_calculateMatch' && line.includes('entireWord,'))
+      ) {
+        if (es2015) {
+          line = line + '\n      ignoreAccents, // #177';
+        } else {
+          line = line + '\n          ignoreAccents = _this$_state.ignoreAccents,';
+        }
+        currentFunction = '';
+        expectedChanges--;
+      } else if (
+        line.includes(
+          'this._calculatePhraseMatch(query, pageIndex, pageContent, entireWord'
+        )
+      ) {
+        line =
+          '      this._calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents); // #177';
+        expectedChanges--;
+      } else if (
+        line.includes(
+          'this._calculateWordMatch(query, pageIndex, pageContent, entireWord'
+        )
+      ) {
+        line =
+          '      this._calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents); // #177';
+        expectedChanges--;
       }
+
 
       if (line != null) {
         line = line.replace(' print(', ' printPDF(');

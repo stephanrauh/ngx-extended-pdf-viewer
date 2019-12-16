@@ -203,6 +203,7 @@ function getViewerConfiguration() {
       highlightAllCheckbox: document.getElementById('findHighlightAll'),
       caseSensitiveCheckbox: document.getElementById('findMatchCase'),
       entireWordCheckbox: document.getElementById('findEntireWord'),
+      ignoreAccentsCheckbox: document.getElementById('findIgnoreAccents'), // #177
       findMsg: document.getElementById('findMsg'),
       findResultsCount: document.getElementById('findResultsCount'),
       findPreviousButton: document.getElementById('findPrevious'),
@@ -1997,6 +1998,7 @@ function webViewerFind(evt) {
     phraseSearch: evt.phraseSearch,
     caseSensitive: evt.caseSensitive,
     entireWord: evt.entireWord,
+    ignoreAccents: evt.ignoreAccents, // #177
     highlightAll: evt.highlightAll,
     findPrevious: evt.findPrevious
   });
@@ -2008,6 +2010,7 @@ function webViewerFindFromUrlHash(evt) {
     phraseSearch: evt.phraseSearch,
     caseSensitive: false,
     entireWord: false,
+    ignoreAccents: false, // #177
     highlightAll: true,
     findPrevious: false
   });
@@ -2180,6 +2183,7 @@ function webViewerKeyDown(evt) {
               phraseSearch: findState.phraseSearch,
               caseSensitive: findState.caseSensitive,
               entireWord: findState.entireWord,
+              ignoreAccents: findState.ignoreAccents, // #177
               highlightAll: findState.highlightAll,
               findPrevious: cmd === 5 || cmd === 12
             });
@@ -4993,6 +4997,7 @@ class PDFFindBar {
     this.highlightAll = options.highlightAllCheckbox || null;
     this.caseSensitive = options.caseSensitiveCheckbox || null;
     this.entireWord = options.entireWordCheckbox || null;
+    this.ignoreAccents = options.ignoreAccentsCheckbox || null; // #177
     this.findMsg = options.findMsg || null;
     this.findResultsCount = options.findResultsCount || null;
     this.findPreviousButton = options.findPreviousButton || null;
@@ -5034,6 +5039,9 @@ class PDFFindBar {
     this.entireWord.addEventListener('click', () => {
       this.dispatchEvent('entirewordchange');
     });
+    this.ignoreAccents.addEventListener('click', () => { // #177
+          this.dispatchEvent('ignoreAccentsChange'); // #177
+    }); // #177
     this.eventBus.on('resize', this._adjustWidth.bind(this));
   }
 
@@ -5049,6 +5057,7 @@ class PDFFindBar {
       phraseSearch: true,
       caseSensitive: this.caseSensitive.checked,
       entireWord: this.entireWord.checked,
+        ignoreAccents: this.ignoreAccents.checked, // #177
       highlightAll: this.highlightAll.checked,
       findPrevious: findPrev
     });
@@ -5486,7 +5495,12 @@ class PDFFindController {
     return true;
   }
 
-  _calculatePhraseMatch(query, pageIndex, pageContent, entireWord) {
+  _calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
+            if (ignoreAccents) { // #177
+              pageContent = window.deburr(pageContent); // #177
+              query = window.deburr(query); // #177
+            } // #177
+  
     const matches = [];
     const queryLen = query.length;
     let matchIdx = -queryLen;
@@ -5508,7 +5522,12 @@ class PDFFindController {
     this._pageMatches[pageIndex] = matches;
   }
 
-  _calculateWordMatch(query, pageIndex, pageContent, entireWord) {
+  _calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
+            if (ignoreAccents) { // #177
+              pageContent = window.deburr(pageContent); // #177
+              query = window.deburr(query); // #177
+            } // #177
+  
     const matchesWithLength = [];
     const queryArray = query.match(/\S+/g);
 
@@ -5548,6 +5567,7 @@ class PDFFindController {
     const {
       caseSensitive,
       entireWord,
+      ignoreAccents, // #177
       phraseSearch
     } = this._state;
 
@@ -5561,9 +5581,9 @@ class PDFFindController {
     }
 
     if (phraseSearch) {
-      this._calculatePhraseMatch(query, pageIndex, pageContent, entireWord);
+      this._calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents); // #177
     } else {
-      this._calculateWordMatch(query, pageIndex, pageContent, entireWord);
+      this._calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents); // #177
     }
 
     if (this._state.highlightAll) {
