@@ -35,6 +35,7 @@ import { HandtoolChanged } from './handtool-changed';
 import { PageNumberChange } from './page-number-change';
 import { ServiceWorkerOptions } from './service-worker-options';
 import * as deburr from 'lodash.deburr'; // #177
+import { VerbosityLevel } from './verbosity-level';
 
 (window as any).deburr = deburr; // #177
 
@@ -82,6 +83,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   /** store the timeout id so it can be canceled if user leaves the page before the PDF is shown */
   private initTimeout: any;
+
+  /** How many log messages should be printed?
+   * Legal values: VerbosityLevel.INFOS (= 5), VerbosityLevel.WARNINGS (= 1), VerbosityLevel.ERRORS (= 0) */
+  @Input()
+  public logLevel = VerbosityLevel.WARNINGS;
 
   public primaryMenuVisible = true;
 
@@ -697,7 +703,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     // open a file in the viewer
     if (!!this._src) {
       const options = {
-        password: this.password
+        password: this.password,
+        verbosity: this.logLevel
       };
       (<any>window).PDFViewerApplication.open(this._src, options).then(
         () => this.pdfLoaded.emit({ pagesCount: (<any>window).PDFViewerApplication.pagesCount }),
