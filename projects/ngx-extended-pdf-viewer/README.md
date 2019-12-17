@@ -526,3 +526,4 @@ Thanks to the awesome pdf.j team and to all the users you've reported bugs and e
 - 1.8.0-rc.2 #171 implemented `showUnverifiedSignatures`
 - 1.8.0-rc.3 #171 bugfixes and #168 updated the IE11 versions of the JavaScript files to pdf.js 2.3.200
 - 1.8.0 #178 fixed [sidebar]; deprecated [sidebarOnLoad]; #177 added an option to ignoring accents and diacritics to the find dialog; #162 added more options to the `NgxExtendedPdfViewerService.find()`
+- 1.8.1 #184 added the parameter `logLevel` and improved font-related messages; #186 added "ngx-extended-pdf-viewer" to the startup-message; #162 the new options parameters of `find()` should have a default value
