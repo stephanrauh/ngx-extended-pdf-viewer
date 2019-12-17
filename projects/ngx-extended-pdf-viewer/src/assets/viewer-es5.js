@@ -1378,7 +1378,8 @@ var PDFViewerApplication = {
       _this5.documentInfo = info;
       _this5.metadata = metadata;
       _this5.contentDispositionFilename = contentDispositionFilename;
-      console.log('PDF ' + pdfDocument.fingerprint + ' [' + info.PDFFormatVersion + ' ' + (info.Producer || '-').trim() + ' / ' + (info.Creator || '-').trim() + ']' + ' (PDF.js: ' + (_pdfjsLib.version || '-') + (_app_options.AppOptions.get('enableWebGL') ? ' [WebGL]' : '') + ')');
+      console.log('PDF viewer: ngx-extended-pdf-viewer running on pdf.js ' + _pdfjsLib.version);
+      console.log('PDF ' + pdfDocument.fingerprint + ' [' + info.PDFFormatVersion + ' ' + (info.Producer || '-').trim() + ' / ' + (info.Creator || '-').trim() + ']' + ' (PDF.js: ' + (_pdfjsLib.version || '-') + (_app_options.AppOptions.get('enableWebGL') ? ' [WebGL]' : '') + ' modified by ngx-extended-pdf-viewer)');
       var pdfTitle;
 
       if (metadata && metadata.has('dc:title')) {
@@ -6813,11 +6814,11 @@ function () {
   }, {
     key: "_calculatePhraseMatch",
     value: function _calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
-          if (ignoreAccents) { // #177
-            pageContent = window.deburr(pageContent); // #177
-            query = window.deburr(query); // #177
-          } // #177
-
+            if (ignoreAccents) { // #177
+              pageContent = window.deburr(pageContent); // #177
+              query = window.deburr(query); // #177
+            } // #177
+  
       var matches = [];
       var queryLen = query.length;
       var matchIdx = -queryLen;
@@ -6841,11 +6842,11 @@ function () {
   }, {
     key: "_calculateWordMatch",
     value: function _calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
-          if (ignoreAccents) { // #177
-            pageContent = window.deburr(pageContent); // #177
-            query = window.deburr(query); // #177
-          } // #177
-
+            if (ignoreAccents) { // #177
+              pageContent = window.deburr(pageContent); // #177
+              query = window.deburr(query); // #177
+            } // #177
+  
       var matchesWithLength = [];
       var queryArray = query.match(/\S+/g);
 

@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 47;
+let expectedChanges = 48;
 
 let dropLines = 0;
 currentFunction = '';
@@ -216,35 +216,27 @@ function convertLines() {
         let addition = '  if (isKeyIgnored(cmd, evt.keyCode)) {\n';
         addition += '    return;\n';
         line = addition + '  }\n' + line;
-
       } else if (line.includes("fileInput.setAttribute('type', 'file');")) {
         expectedChanges--;
         let addition = "  fileInput.setAttribute('accept', '.pdf,application/pdf');";
         line = addition + '\n' + line;
-      } else if (line.includes("function xhrLoadText(url, onSuccess, onFailure) {")) {
+      } else if (line.includes('function xhrLoadText(url, onSuccess, onFailure) {')) {
         // breaking change in pdf.js 2.2 -> 2.3.200
-        let before = "function fireL10nReadyEvent(lang) {\n";
-        before +=  "var evtObject = document.createEvent('Event');\n";
-        before +=  "  evtObject.initEvent('localized', true, false);\n";
-        before +=  "  evtObject.language = lang;\n";
-        before +=  "  document.dispatchEvent(evtObject);\n";
-        before +=  "}\n";
-        before += "\n";
+        let before = 'function fireL10nReadyEvent(lang) {\n';
+        before += "var evtObject = document.createEvent('Event');\n";
+        before += "  evtObject.initEvent('localized', true, false);\n";
+        before += '  evtObject.language = lang;\n';
+        before += '  document.dispatchEvent(evtObject);\n';
+        before += '}\n';
+        before += '\n';
         line = before + line;
         expectedChanges--;
       } else if (line.includes("gReadyState = 'complete';")) {
         // breaking change in pdf.js 2.2 -> 2.3.200
-        line = "fireL10nReadyEvent(lang);\n" + line;
+        line = 'fireL10nReadyEvent(lang);\n' + line;
         expectedChanges--;
-      } else if (
-        line.includes(
-          "entireWordCheckbox: document.getElementById('findEntireWord')"
-        )
-      ) {
-        line =
-          line +
-          '\n' +
-          "      ignoreAccentsCheckbox: document.getElementById('findIgnoreAccents'), // #177";
+      } else if (line.includes("entireWordCheckbox: document.getElementById('findEntireWord')")) {
+        line = line + '\n' + "      ignoreAccentsCheckbox: document.getElementById('findIgnoreAccents'), // #177";
         expectedChanges--;
       } else if (line.includes('entireWord: evt.entireWord')) {
         line = line + '\n' + '    ignoreAccents: evt.ignoreAccents, // #177';
@@ -253,22 +245,12 @@ function convertLines() {
         line = line + '\n' + '    ignoreAccents: false, // #177';
         expectedChanges--;
       } else if (line.includes('entireWord: findState.entireWord')) {
-        line =
-          line +
-          '\n' +
-          '              ignoreAccents: findState.ignoreAccents, // #177';
+        line = line + '\n' + '              ignoreAccents: findState.ignoreAccents, // #177';
         expectedChanges--;
-      } else if (
-        line.includes('this.entireWord = options.entireWordCheckbox || null')
-      ) {
-        line =
-          line +
-          '\n' +
-          '    this.ignoreAccents = options.ignoreAccentsCheckbox || null; // #177';
+      } else if (line.includes('this.entireWord = options.entireWordCheckbox || null')) {
+        line = line + '\n' + '    this.ignoreAccents = options.ignoreAccentsCheckbox || null; // #177';
         expectedChanges--;
-      } else if (
-        line.includes("this.eventBus.on('resize', this._adjustWidth.bind(this))")
-      ) {
+      } else if (line.includes("this.eventBus.on('resize', this._adjustWidth.bind(this))")) {
         if (es2015) {
           line =
             "    this.ignoreAccents.addEventListener('click', () => { // #177\n" +
@@ -284,10 +266,7 @@ function convertLines() {
         }
         expectedChanges--;
       } else if (line.includes('entireWord: this.entireWord.checked')) {
-        line =
-          line +
-          '\n' +
-          '        ignoreAccents: this.ignoreAccents.checked, // #177';
+        line = line + '\n' + '        ignoreAccents: this.ignoreAccents.checked, // #177';
         expectedChanges--;
       } else if (line.includes('  _calculatePhraseMatch(')) {
         line = `  _calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
@@ -321,9 +300,7 @@ function convertLines() {
             } // #177
   `;
         expectedChanges--;
-      } else if (
-        (currentFunction == '_calculateMatch' && line.includes('entireWord,'))
-      ) {
+      } else if (currentFunction == '_calculateMatch' && line.includes('entireWord,')) {
         if (es2015) {
           line = line + '\n      ignoreAccents, // #177';
         } else {
@@ -331,24 +308,16 @@ function convertLines() {
         }
         currentFunction = '';
         expectedChanges--;
-      } else if (
-        line.includes(
-          'this._calculatePhraseMatch(query, pageIndex, pageContent, entireWord'
-        )
-      ) {
-        line =
-          '      this._calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents); // #177';
+      } else if (line.includes('this._calculatePhraseMatch(query, pageIndex, pageContent, entireWord')) {
+        line = '      this._calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents); // #177';
         expectedChanges--;
-      } else if (
-        line.includes(
-          'this._calculateWordMatch(query, pageIndex, pageContent, entireWord'
-        )
-      ) {
-        line =
-          '      this._calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents); // #177';
+      } else if (line.includes('this._calculateWordMatch(query, pageIndex, pageContent, entireWord')) {
+        line = '      this._calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents); // #177';
         expectedChanges--;
+      } else if (line.includes("console.log('PDF ' + pdfDocument.fingerprint")) {
+        line = line.replace("')');", "' modified by ngx-extended-pdf-viewer)');")
+        line = "      console.log('PDF viewer: ngx-extended-pdf-viewer running on pdf.js ' + _pdfjsLib.version);\n" + line;
       }
-
 
       if (line != null) {
         line = line.replace(' print(', ' printPDF(');

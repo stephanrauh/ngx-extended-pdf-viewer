@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 2;
+let expectedChanges = 12;
 
 let dropLines = 0;
 currentFunction = '';
@@ -68,6 +68,9 @@ function convertLines() {
         console.log("The PDF file contains a signature. Please take into account that it can't be verified yet.");
       }
     // #171 modification end`;
+        expectedChanges--;
+      } else if (line.includes('"TT: ')) {
+        line = line.replace('"TT: ', 'The embedded font contains errors: TT: ');
         expectedChanges--;
       }
       if (line != null) {
