@@ -14,7 +14,7 @@ export interface FindOptions {
 export class NgxExtendedPdfViewerService {
   constructor() {}
 
-  public find(text: string, options: FindOptions): boolean {
+  public find(text: string, options: FindOptions = {}): boolean {
     if (!NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
       // tslint:disable-next-line:quotemark
       console.error("The PDF viewer hasn't finished initializing. Please call find() later.");
