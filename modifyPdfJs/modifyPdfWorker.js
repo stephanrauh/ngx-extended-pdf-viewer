@@ -69,8 +69,8 @@ function convertLines() {
       }
     // #171 modification end`;
         expectedChanges--;
-      } else if (line.includes('"TT: ')) {
-        line = line.replace('"TT: ', 'The embedded font contains errors: TT: ');
+      } else if (line.includes("'TT: ")) {
+        line = line.replace("'TT: ", "'The font embedded in the PDF file contains errors: TT: ");
         expectedChanges--;
       }
       if (line != null) {
