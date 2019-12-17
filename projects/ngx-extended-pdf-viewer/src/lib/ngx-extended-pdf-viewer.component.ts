@@ -36,9 +36,9 @@ import { PageNumberChange } from './page-number-change';
 import { ServiceWorkerOptions } from './service-worker-options';
 import * as deburr from 'lodash.deburr'; // #177
 import { VerbosityLevel } from './verbosity-level';
+import { FindState, FindResultMatchesCount, FindResult } from './find-result';
 
 (window as any).deburr = deburr; // #177
-
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
@@ -180,7 +180,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   /** Allows the user to explicitely enable a list of key bindings. If this property is set, every other key binding is ignored. */
   @Input()
-  public acceptKeys: Array<string>  = [];
+  public acceptKeys: Array<string> = [];
 
   /** Allows the user to put the viewer's svg images into an arbitrary folder */
   @Input()
@@ -208,8 +208,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public viewerPositionTop = '32px';
 
   /** pdf.js can show signatures, but fails to verify them. So they are switched off by default.
-    * Set "[showUnverifiedSignatures]"="true" to display e-signatures nonetheless.
-    */
+   * Set "[showUnverifiedSignatures]"="true" to display e-signatures nonetheless.
+   */
   @Input()
   public showUnverifiedSignatures = false;
 
@@ -311,6 +311,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   @Output()
   public pdfLoadingFailed = new EventEmitter<Error>();
+
+  @Output()
+  public updateFindMatchesCount = new EventEmitter<FindResultMatchesCount>();
+
+  @Output()
+  public updateFindState = new EventEmitter<FindState>();
 
   /** Legal values: undefined, 'auto', 'page-actual', 'page_fit', 'page-width', or '50' (or any other percentage) */
   @Input()
@@ -424,8 +430,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
   }
 
-  constructor(private ngZone: NgZone) {
-  }
+  constructor(private ngZone: NgZone) {}
 
   public emitZoomChange(): void {
     const selectedIndex = this.sizeSelector.nativeElement.selectedIndex;
@@ -689,6 +694,27 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       });
     });
 
+    (window as any).PDFViewerApplication.eventBus.on('updatefindcontrolstate', (x: FindResult) => {
+      if (this.updateFindMatchesCount) {
+        if (x.state === FindState.NOT_FOUND) {
+          this.updateFindMatchesCount.emit({ current: 0, total: 0 });
+        } else if (x.matchesCount.total) {
+          this.updateFindMatchesCount.emit(x.matchesCount);
+        }
+      }
+
+      if (this.updateFindState) {
+        this.updateFindState.emit(x.state);
+      }
+    });
+    (window as any).PDFViewerApplication.eventBus.on('updatefindmatchescount', (x: FindResult) => {
+      if (this.updateFindMatchesCount) {
+        if (x.matchesCount.total) {
+          this.updateFindMatchesCount.emit(x.matchesCount);
+        }
+      }
+    });
+
     (<any>window).PDFViewerApplication.eventBus.on('pagechanging', (x: PageNumberChange) => {
       this.ngZone.run(() => {
         const currentPage = (<any>window).PDFViewerApplication.pdfViewer.currentPageNumber;
@@ -713,7 +739,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
     setTimeout(() => {
       if (this.page) {
-        (<any>window).PDFViewerApplication.page = this.page;
+        (<any>window).PDFViewerApplication.page = Number(this.page);
       }
     }, 100);
   }
@@ -920,21 +946,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       }
     }
     if ('showUnverifiedSignatures' in changes) {
-      // this.redraw();
       if ((<any>window).PDFViewerApplication && (<any>window).PDFViewerApplication.pdfDocument) {
-       (<any>window).PDFViewerApplication.pdfDocument._transport.messageHandler.send('showUnverifiedSignatures',
-          this.showUnverifiedSignatures);
-        }
-    }
-  }
-
-  private redraw() {
-    if (((<any>window).PDFViewerApplication) && ((<any>window).PDFViewerApplication).pdfViewer) {
-      const pages = ((<any>window).PDFViewerApplication).pdfViewer._pages;
-      if (pages) {
-        for (let i = 0, ii = pages.length; i < ii; i++) {
-          pages[i].update((<any>window).PDFViewerApplication.pdfViewer.currentScaleValue);
-        }
+        (<any>window).PDFViewerApplication.pdfDocument._transport.messageHandler.send(
+          'showUnverifiedSignatures',
+          this.showUnverifiedSignatures
+        );
       }
     }
   }
@@ -958,7 +974,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   public onResize(): void {
-    console.log("onResize");
+    console.log('onResize');
     if (this.ignoreResponsiveCSS) {
       clearTimeout(this.resizeTimeout);
       this.resizeTimeout = setTimeout(this.doResize, 100);

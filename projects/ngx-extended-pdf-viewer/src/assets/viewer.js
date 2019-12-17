@@ -2023,7 +2023,7 @@ function webViewerUpdateFindMatchesCount({
   if (PDFViewerApplication.supportsIntegratedFind) {
     PDFViewerApplication.externalServices.updateFindMatchesCount(matchesCount);
   } else {
-    PDFViewerApplication.findBar.updateResultsCount(matchesCount);
+     PDFViewerApplication.findBar.updateResultsCount(matchesCount);
   }
 }
 
@@ -2039,7 +2039,7 @@ function webViewerUpdateFindControlState({
       matchesCount
     });
   } else {
-    PDFViewerApplication.findBar.updateUIState(state, previous, matchesCount);
+       PDFViewerApplication.findBar.updateUIState(state, previous, matchesCount);
   }
 }
 

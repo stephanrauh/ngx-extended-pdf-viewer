@@ -2191,7 +2191,7 @@ function webViewerUpdateFindControlState(_ref9) {
       matchesCount: matchesCount
     });
   } else {
-    PDFViewerApplication.findBar.updateUIState(state, previous, matchesCount);
+       PDFViewerApplication.findBar.updateUIState(state, previous, matchesCount);
   }
 }
 
