@@ -64,6 +64,7 @@
         <div id="mainContainer">
           <div
             class="findbar hidden doorHanger"
+            [class.invisible]="!showFindButton"
             id="findbar"
             [style.transform]="'scale('+mobileFriendlyZoomScale+')'"
             [style.transformOrigin]="'left center'"
@@ -285,10 +286,10 @@
                 >
               </button>
 
-              <div class="horizontalToolbarSeparator" [class.invisible]="!showHandToolButton"></div>
+              <div class="horizontalToolbarSeparator" [class.invisible]="(!showHandToolButton)"></div>
 
               <button type="button" type="button"
-                [class.invisible]="!showHandToolButton"
+                [class.invisible]="(!showHandToolButton)"
                 id="cursorSelectTool"
                 class="secondaryToolbarButton selectTool toggled"
                 title="Enable Text Selection Tool"
@@ -300,7 +301,7 @@
                 >
               </button>
               <button type="button" type="button"
-                [class.invisible]="!showHandToolButton"
+                [class.invisible]="(!showHandToolButton)"
                 id="cursorHandTool"
                 class="secondaryToolbarButton handTool"
                 title="Enable Hand Tool"
@@ -440,7 +441,7 @@
                     class="toolbarButtonSpacer"
                   ></div>
                   <button type="button"
-                    [class.invisible]="!showFindButton"
+                    [class.invisible]="(!showFindButton) || (!textLayer)"
                     id="viewFind"
                     class="toolbarButton"
                     title="Find in Document"

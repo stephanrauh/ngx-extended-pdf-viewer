@@ -114,7 +114,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         // minimal length of a base64 encoded PDF
         if (url.length % 4 === 0) {
           if (/^[a-zA-Z\d\/+]+={0,2}$/.test(url)) {
-            console.warn('The URL looks like a base64 encoded string. If so, please use the attribute base64 instead of src');
+            console.error('The URL looks like a base64 encoded string. If so, please use the attribute base64 instead of src');
           }
         }
       }
@@ -247,7 +247,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public sidebarVisibleChange = new EventEmitter<boolean>();
 
   @Input()
-  public showFindButton = true;
+  public showFindButton: boolean | undefined = undefined;
   @Input()
   public showPagingButtons = true;
   @Input()
@@ -311,6 +311,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   @Output()
   public pdfLoadingFailed = new EventEmitter<Error>();
+
+  @Input()
+  public textLayer: boolean | undefined = undefined;
 
   @Output()
   public updateFindMatchesCount = new EventEmitter<FindResultMatchesCount>();
@@ -517,6 +520,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     };
     document.addEventListener('webviewerloaded', onLoaded);
 
+    this.activateTextlayerIfNecessary(null);
+
     setTimeout(() => {
       // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
       this.primaryMenuVisible = true;
@@ -566,6 +571,61 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     this.spreadChange.emit(newSpread);
   }
 
+  private activateTextlayerIfNecessary(options: any): void {
+    if (this.textLayer === undefined) {
+      if (!this.handTool) {
+        if (options) { options.set('textLayerMode', 1); }
+        this.textLayer = true;
+        if (this.showFindButton === undefined) {
+          this.showFindButton = true;
+        }
+      } else {
+        if (options) { options.set('textLayerMode', this.showHandToolButton ? 1 : 0); }
+        if (!this.showHandToolButton) {
+          if (this.showFindButton || this.showFindButton === undefined) {
+            this.showFindButton = false;
+            if (this.logLevel >= VerbosityLevel.WARNINGS) {
+              // tslint:disable-next-line:max-line-length
+              console.warn('Hiding the "find" button because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the find button.');
+            }
+          }
+          if (this.showHandToolButton) {
+            if (this.logLevel >= VerbosityLevel.WARNINGS) {
+              // tslint:disable-next-line:max-line-length
+              console.warn('Hiding the "hand tool / selection mode" menu because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the the menu items.');
+              this.showHandToolButton = false;
+            }
+          }
+        }
+      }
+    } else {
+      if (this.textLayer) {
+        if (options) { options.set('textLayerMode', 1);}
+        this.textLayer = true;
+        if (this.showFindButton === undefined) {
+          this.showFindButton = true;
+        }
+      } else {
+        if (options) { options.set('textLayerMode', 0);}
+        this.textLayer = false;
+        if (this.showFindButton) {
+          if (this.logLevel >= VerbosityLevel.WARNINGS) {
+            // tslint:disable-next-line:max-line-length
+            console.warn('Hiding the "find" button because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the find button.');
+            this.showFindButton = false;
+          }
+        }
+        if (this.showHandToolButton) {
+          if (this.logLevel >= VerbosityLevel.WARNINGS) {
+            // tslint:disable-next-line:max-line-length
+            console.warn('Hiding the "hand tool / selection mode" menu because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the the menu items.');
+            this.showHandToolButton = false;
+          }
+        }
+      }
+    }
+  }
+
   private overrideDefaultSettings() {
     const options = (<any>window).PDFViewerApplicationOptions;
     // tslint:disable-next-line:forin
@@ -578,12 +638,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     options.set('ignoreKeyboard', this.ignoreKeyboard);
     options.set('ignoreKeys', this.ignoreKeys);
     options.set('acceptKeys', this.acceptKeys);
-
-    if (!this.handTool) {
-      options.set('textLayerMode', 1);
-    } else {
-      options.set('textLayerMode', this.showHandToolButton ? 1 : 0);
-    }
+    this.activateTextlayerIfNecessary(options);
 
     let sidebarVisible = this.sidebarVisible;
     if (sidebarVisible === undefined) {
@@ -974,7 +1029,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   public onResize(): void {
-    console.log('onResize');
     if (this.ignoreResponsiveCSS) {
       clearTimeout(this.resizeTimeout);
       this.resizeTimeout = setTimeout(this.doResize, 100);
