@@ -1,12 +1,9 @@
 import { Component } from '@angular/core';
-import { PagesLoadedEvent } from 'projects/ngx-extended-pdf-viewer/src/lib/pages-loaded-event';
 import { pdfBase64 } from './pdfBase64';
-import { PageRenderedEvent } from '../../projects/ngx-extended-pdf-viewer/src/lib/page-rendered-event';
-import { PdfDownloadedEvent } from '../../projects/ngx-extended-pdf-viewer/src/lib/pdf-downloaded-event';
-import { PdfLoadedEvent } from '../../projects/ngx-extended-pdf-viewer/src/lib/pdf-loaded-event';
-import { NgxExtendedPdfViewerService } from '../../projects/ngx-extended-pdf-viewer/src/lib/ngx-extended-pdf-viewer.service';
-import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { NgxExtendedPdfViewerService } from 'ngx-extended-pdf-viewer';
+import { MatDialog } from '@angular/material/dialog';
 import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
+import { PagesLoadedEvent, PageRenderedEvent, PdfDownloadedEvent, PdfLoadedEvent } from 'projects/ngx-extended-pdf-viewer/src/public_api';
 
 @Component({
   selector: 'app-root',

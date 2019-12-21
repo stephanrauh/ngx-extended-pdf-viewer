@@ -13,12 +13,12 @@ import {
   HostListener,
   NgZone
 } from '@angular/core';
-import { PagesLoadedEvent } from './pages-loaded-event';
-import { PageRenderedEvent } from './page-rendered-event';
-import { PdfDownloadedEvent } from './pdf-downloaded-event';
-import { PdfLoadedEvent } from './pdf-loaded-event';
-import { defaultOptions } from './default-options';
-import { ScaleChangingEvent } from './scale-changing-event';
+import { PagesLoadedEvent } from './events/pages-loaded-event';
+import { PageRenderedEvent } from './events/page-rendered-event';
+import { PdfDownloadedEvent } from './events/pdf-downloaded-event';
+import { PdfLoadedEvent } from './events/pdf-loaded-event';
+import { defaultOptions } from './options/default-options';
+import { ScaleChangingEvent } from './events/scale-changing-event';
 import {
   resizeUpTo900px,
   resizeUpTo840px,
@@ -28,15 +28,15 @@ import {
   resizeUpTo535px,
   removeDynamicCSS
 } from './ResponsiveCSSSimulation';
-import { PagesRotationEvent } from './pages-rotation-event';
-import { FileInputChanged } from './file-input-changed';
-import { SidebarviewChange } from './sidebarview-changed';
-import { HandtoolChanged } from './handtool-changed';
-import { PageNumberChange } from './page-number-change';
-import { ServiceWorkerOptions } from './service-worker-options';
+import { PagesRotationEvent } from './events/pages-rotation-event';
+import { FileInputChanged } from './events/file-input-changed';
+import { SidebarviewChange } from './events/sidebarview-changed';
+import { HandtoolChanged } from './events/handtool-changed';
+import { PageNumberChange } from './events/page-number-change';
+import { ServiceWorkerOptions } from './options/service-worker-options';
 import * as deburr from 'lodash.deburr'; // #177
-import { VerbosityLevel } from './verbosity-level';
-import { FindState, FindResultMatchesCount, FindResult } from './find-result';
+import { VerbosityLevel } from './options/verbosity-level';
+import { FindState, FindResultMatchesCount, FindResult } from './events/find-result';
 
 (window as any).deburr = deburr; // #177
 
