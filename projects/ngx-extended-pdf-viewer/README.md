@@ -13,9 +13,9 @@
   CDN: <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">unpkg.com</a>
  </p>
 
-## Showcase
+## Showcase and manual
 
-There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos and source code examples!
+There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook.
 
 ## Bringing PDF to the Angular world
 
@@ -534,3 +534,4 @@ Thanks to the awesome pdf.j team and to all the users you've reported bugs and e
 - 1.8.2 #183 implemented `(updateFindMatchesCount)` and `(updateFindState)`
 - 1.8.3 #187 add `textLayer` to enable users to activate the text layer even if `[handTool]="true"`; #185 added lodash.deburr to the library (so now it should be added automatically to your node_modules folder)
 - 1.8.4 #187 hide the "find" button and the "selection mode / hand tool" menu when the text layer is disabled; report a warning on the JavaScript console if the settings of `textLayer` and `showFindButton` / `[handTool]` / `[showHandToolButton]` don't match to each other
+- 1.8.5 #177 added a few custom translations
