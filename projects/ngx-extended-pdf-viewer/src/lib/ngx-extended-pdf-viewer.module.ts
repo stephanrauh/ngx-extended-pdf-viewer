@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
+import { PdfZoomDropdownComponent } from './toolbar/pdf-zoom-dropdown/pdf-zoom-dropdown.component';
 
 function isKeyIgnored(cmd: number, keycode: number): boolean {
   if (keycode === 16 || keycode === 17 || keycode === 18 || keycode === 224) {
@@ -104,7 +105,7 @@ function isKey(keyDef: string, cmd: number, keycode: number): boolean {
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [NgxExtendedPdfViewerComponent],
+  declarations: [NgxExtendedPdfViewerComponent, PdfZoomDropdownComponent],
   providers: [NgxExtendedPdfViewerService],
   exports: [NgxExtendedPdfViewerComponent]
 })

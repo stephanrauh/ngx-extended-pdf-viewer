@@ -386,8 +386,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     this.mobileFriendlyZoom = mobileFriendlyZoom;
   }
 
-  @ViewChild('sizeSelector') sizeSelector: any;
-
   private _top: string | undefined = undefined;
 
   public get sidebarPositionTop(): string {
@@ -435,19 +433,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   constructor(private ngZone: NgZone) {}
 
-  public emitZoomChange(): void {
-    const selectedIndex = this.sizeSelector.nativeElement.selectedIndex;
-    if (selectedIndex || selectedIndex === 0) {
-      const s = this.sizeSelector.nativeElement.options[selectedIndex] as HTMLOptionElement;
-      let value: number | string = s.label;
-
-      if (value.endsWith('%')) {
-        value = Number(value.replace('%', ''));
-      } else {
-        value = s.value;
-      }
-      this.zoomChange.emit(value);
-    }
+  public emitZoomChange(value: string | number): void {
+    this.zoomChange.emit(value);
   }
 
   ngOnInit() {
@@ -720,7 +707,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         setTimeout(() => {
           this.ngZone.run(() => {
             this.currentZoomFactor.emit(x.scale);
-            this.emitZoomChange();
+            this.emitZoomChange(x.scale * 100);
           });
         });
       });
