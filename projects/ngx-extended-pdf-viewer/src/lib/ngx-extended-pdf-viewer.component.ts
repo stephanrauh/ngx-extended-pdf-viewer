@@ -645,9 +645,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         if (this.showFindButton) {
           if (this.logLevel >= VerbosityLevel.WARNINGS) {
             // tslint:disable-next-line:max-line-length
-            console.warn(
-              'Hiding the "find" button because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the find button.'
-            );
+            console.warn('Hiding the "find" button because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the find button.');
             this.showFindButton = false;
           }
         }
@@ -1040,10 +1038,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
     if ('showUnverifiedSignatures' in changes) {
       if ((<any>window).PDFViewerApplication && (<any>window).PDFViewerApplication.pdfDocument) {
-        (<any>window).PDFViewerApplication.pdfDocument._transport.messageHandler.send(
-          'showUnverifiedSignatures',
-          this.showUnverifiedSignatures
-        );
+        (<any>window).PDFViewerApplication.pdfDocument._transport.messageHandler.send('showUnverifiedSignatures', this.showUnverifiedSignatures);
       }
     }
   }
