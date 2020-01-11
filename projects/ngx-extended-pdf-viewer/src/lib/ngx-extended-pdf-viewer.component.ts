@@ -431,13 +431,48 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
   }
 
-  constructor(private ngZone: NgZone) {}
+  constructor(private ngZone: NgZone) {
+    if (!window['pdfjs-dist/build/pdf']) {
+      const isIE = navigator.appName === 'Microsoft Internet Explorer';
+      const script = document.createElement('script');
+      script.src = isIE ? 'pdf-es5.js' : 'pdf.js';
+      script.type = 'text/javascript';
+      script.async = true;
+      document.getElementsByTagName('head')[0].appendChild(script);
+    }
+    if (!(window as any).webViewerLoad) {
+      this.loadViewer();
+    }
+  }
+
+  private loadViewer(): void {
+    if (!window['pdfjs-dist/build/pdf']) {
+      console.log('Waiting for pdf.js to load');
+      setTimeout(() => this.loadViewer(), 25);
+    } else {
+      const isIE = navigator.appName === 'Microsoft Internet Explorer';
+      const script2 = document.createElement('script');
+      script2.src = isIE ? 'viewer-es5.js' : 'viewer.js';
+      script2.type = 'text/javascript';
+      script2.async = true;
+      document.getElementsByTagName('head')[0].appendChild(script2);
+    }
+  }
 
   public emitZoomChange(value: string | number): void {
     this.zoomChange.emit(value);
   }
 
   ngOnInit() {
+    if ((window as any).webViewerLoad) {
+      this.doInitPDFViewer();
+    } else {
+      console.log('Waiting for the PDF viewer to load');
+      setTimeout(() => this.ngOnInit(), 50);
+    }
+  }
+
+  private doInitPDFViewer() {
     if (this.ignoreResponsiveCSS === undefined) {
       const pdfViewer = document.getElementsByClassName('html');
       if (pdfViewer && pdfViewer.length > 0) {
@@ -561,25 +596,33 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   private activateTextlayerIfNecessary(options: any): void {
     if (this.textLayer === undefined) {
       if (!this.handTool) {
-        if (options) { options.set('textLayerMode', 1); }
+        if (options) {
+          options.set('textLayerMode', 1);
+        }
         this.textLayer = true;
         if (this.showFindButton === undefined) {
           this.showFindButton = true;
         }
       } else {
-        if (options) { options.set('textLayerMode', this.showHandToolButton ? 1 : 0); }
+        if (options) {
+          options.set('textLayerMode', this.showHandToolButton ? 1 : 0);
+        }
         if (!this.showHandToolButton) {
           if (this.showFindButton || this.showFindButton === undefined) {
             this.showFindButton = false;
             if (this.logLevel >= VerbosityLevel.WARNINGS) {
               // tslint:disable-next-line:max-line-length
-              console.warn('Hiding the "find" button because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the find button.');
+              console.warn(
+                'Hiding the "find" button because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the find button.'
+              );
             }
           }
           if (this.showHandToolButton) {
             if (this.logLevel >= VerbosityLevel.WARNINGS) {
               // tslint:disable-next-line:max-line-length
-              console.warn('Hiding the "hand tool / selection mode" menu because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the the menu items.');
+              console.warn(
+                'Hiding the "hand tool / selection mode" menu because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the the menu items.'
+              );
               this.showHandToolButton = false;
             }
           }
@@ -587,25 +630,33 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       }
     } else {
       if (this.textLayer) {
-        if (options) { options.set('textLayerMode', 1);}
+        if (options) {
+          options.set('textLayerMode', 1);
+        }
         this.textLayer = true;
         if (this.showFindButton === undefined) {
           this.showFindButton = true;
         }
       } else {
-        if (options) { options.set('textLayerMode', 0);}
+        if (options) {
+          options.set('textLayerMode', 0);
+        }
         this.textLayer = false;
         if (this.showFindButton) {
           if (this.logLevel >= VerbosityLevel.WARNINGS) {
             // tslint:disable-next-line:max-line-length
-            console.warn('Hiding the "find" button because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the find button.');
+            console.warn(
+              'Hiding the "find" button because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the find button.'
+            );
             this.showFindButton = false;
           }
         }
         if (this.showHandToolButton) {
           if (this.logLevel >= VerbosityLevel.WARNINGS) {
             // tslint:disable-next-line:max-line-length
-            console.warn('Hiding the "hand tool / selection mode" menu because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the the menu items.');
+            console.warn(
+              'Hiding the "hand tool / selection mode" menu because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the the menu items.'
+            );
             this.showHandToolButton = false;
           }
         }

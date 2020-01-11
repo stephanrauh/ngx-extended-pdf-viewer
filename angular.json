@@ -41,8 +41,14 @@
             ],
             "styles": ["src/styles.css"],
             "scripts": [
-              "dist/ngx-extended-pdf-viewer/assets/pdf.js",
-              "dist/ngx-extended-pdf-viewer/assets/viewer.js"
+              {
+                "input": "dist/ngx-extended-pdf-viewer/assets/pdf.js",
+                "lazy": true
+              },
+              {
+                "input": "dist/ngx-extended-pdf-viewer/assets/viewer.js",
+                "lazy": true
+              }
             ]
           },
           "configurations": {
