@@ -96,3 +96,10 @@ html[dir='rtl'] .findbar.below640px {
     position: initial;
   }
 }
+
+html[dir='ltr'] .splitToolbarButton {
+  display: inline;
+}
+html[dir='rtl'] .splitToolbarButton {
+  display: inline;
+}

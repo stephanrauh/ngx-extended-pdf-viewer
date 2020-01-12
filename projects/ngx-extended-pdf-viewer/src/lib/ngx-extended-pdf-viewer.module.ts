@@ -9,6 +9,9 @@ import { PdfOpenFileComponent } from './toolbar/pdf-open-file/pdf-open-file.comp
 import { PdfPrintComponent } from './toolbar/pdf-print/pdf-print.component';
 import { PdfDownloadComponent } from './toolbar/pdf-download/pdf-download.component';
 import { PdfBookmarkComponent } from './toolbar/pdf-bookmark/pdf-bookmark.component';
+import { PdfZoomToolbarComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-toolbar.component';
+import { PdfPagingAreaComponent } from './toolbar/pdf-paging-area/pdf-paging-area.component';
+import { PdfFindbarComponent } from './toolbar/pdf-findbar/pdf-findbar.component';
 
 function isKeyIgnored(cmd: number, keycode: number): boolean {
   if (keycode === 16 || keycode === 17 || keycode === 18 || keycode === 224) {
@@ -119,7 +122,10 @@ function isKey(keyDef: string, cmd: number, keycode: number): boolean {
     PdfOpenFileComponent,
     PdfPrintComponent,
     PdfDownloadComponent,
-    PdfBookmarkComponent
+    PdfBookmarkComponent,
+    PdfZoomToolbarComponent,
+    PdfPagingAreaComponent,
+    PdfFindbarComponent
   ],
   providers: [NgxExtendedPdfViewerService],
   exports: [NgxExtendedPdfViewerComponent]

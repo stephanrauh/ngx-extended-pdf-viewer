@@ -1,0 +1,24 @@
+<div [class.invisible]="!showZoomButtons" id="toolbarViewerMiddle">
+  <div class="splitToolbarButton">
+    <button type="button"
+            id="zoomOut"
+            class="toolbarButton zoomOut"
+            title="Zoom Out"
+            tabindex="21"
+            data-l10n-id="zoom_out">
+              <span data-l10n-id="zoom_out_label">Zoom Out</span>
+    </button>
+    <div class="splitToolbarButtonSeparator"></div>
+    <button type="button"
+            id="zoomIn"
+            class="toolbarButton zoomIn"
+            title="Zoom In"
+            tabindex="22"
+            data-l10n-id="zoom_in">
+      <span data-l10n-id="zoom_in_label">Zoom In</span>
+    </button>
+  </div>
+  <pdf-zoom-dropdown
+      style="width: unset; max-width: unset;padding-top:6px"
+      (zoomChange)="emitZoomChange($event)"></pdf-zoom-dropdown>
+</div>

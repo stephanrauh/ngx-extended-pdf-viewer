@@ -62,110 +62,11 @@
         <!-- sidebarContainer -->
 
         <div id="mainContainer">
-          <div
-            class="findbar hidden doorHanger"
-            [class.invisible]="!showFindButton"
-            id="findbar"
-            [style.transform]="'scale('+mobileFriendlyZoomScale+')'"
-            [style.transformOrigin]="'left center'"
-            [style.left]="findbarLeft"
-            [style.top]="findbarTop"
-          >
-            <div id="findbarInputContainer">
-              <input
-                autocomplete="search-input-field"
-                id="findInput"
-                class="toolbarField"
-                title="Find"
-                placeholder="Find in document…"
-                tabindex="91"
-                data-l10n-id="find_input"
-                name="search-input-field"
-              />
-              <div class="splitToolbarButton">
-                <button type="button" type="button"
-                  id="findPrevious"
-                  class="toolbarButton findPrevious"
-                  title="Find the previous occurrence of the phrase"
-                  tabindex="92"
-                  data-l10n-id="find_previous"
-                >
-                  <span data-l10n-id="find_previous_label">Previous</span>
-                </button>
-                <div class="splitToolbarButtonSeparator"></div>
-                <button type="button" type="button"
-                  id="findNext"
-                  class="toolbarButton findNext"
-                  title="Find the next occurrence of the phrase"
-                  tabindex="93"
-                  data-l10n-id="find_next"
-                >
-                  <span data-l10n-id="find_next_label">Next</span>
-                </button>
-              </div>
-            </div>
-
-            <div id="findbarOptionsOneContainer">
-              <input
-                type="checkbox"
-                id="findHighlightAll"
-                class="toolbarField"
-                tabindex="94"
-              />
-              <label
-                for="findHighlightAll"
-                class="toolbarLabel"
-                data-l10n-id="find_highlight"
-                >Highlight all</label
-              >
-              <input
-                type="checkbox"
-                id="findMatchCase"
-                class="toolbarField"
-                tabindex="95"
-              />
-              <label
-                for="findMatchCase"
-                class="toolbarLabel"
-                data-l10n-id="find_match_case_label"
-                >Match case</label
-              >
-            </div>
-            <div id="findbarOptionsTwoContainer">
-              <input
-                type="checkbox"
-                id="findEntireWord"
-                class="toolbarField"
-                tabindex="96"
-              />
-              <label
-                for="findEntireWord"
-                class="toolbarLabel"
-                data-l10n-id="find_entire_word_label"
-                >Whole words</label
-              >
-            </div>
-            <div id="findbarOptionsThreeContainer">
-              <input
-                type="checkbox"
-                id="findIgnoreAccents"
-                class="toolbarField"
-                tabindex="97"
-              />
-              <label
-                for="findIgnoreAccents"
-                class="toolbarLabel"
-                data-l10n-id="find_ignore_accents"
-                >Ignore accents and diacritics</label
-              >
-              <span id="findResultsCount" class="toolbarLabel hidden"></span>
-            </div>
-
-            <div id="findbarMessageContainer">
-              <span id="findMsg" class="toolbarLabel"></span>
-            </div>
-          </div>
-          <!-- findbar -->
+          <pdf-findbar [findbarLeft]="findbarLeft"
+                       [findbarTop]="findbarTop"
+                       [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+                       [showFindButton]="showFindButton">
+          </pdf-findbar>
 
           <div
             id="secondaryToolbar"
@@ -450,47 +351,7 @@
                   >
                     <span data-l10n-id="findbar_label">Find</span>
                   </button>
-                  <div
-                    [class.invisible]="!showPagingButtons"
-                    class="splitToolbarButton hiddenSmallView"
-                  >
-                    <button type="button"
-                      class="toolbarButton pageUp"
-                      title="Previous Page"
-                      id="previous"
-                      tabindex="13"
-                      data-l10n-id="previous"
-                    >
-                      <span data-l10n-id="previous_label">Previous</span>
-                    </button>
-                    <div class="splitToolbarButtonSeparator"></div>
-                    <button type="button"
-                      class="toolbarButton pageDown"
-                      title="Next Page"
-                      id="next"
-                      tabindex="14"
-                      data-l10n-id="next"
-                    >
-                      <span data-l10n-id="next_label">Next</span>
-                    </button>
-                  </div>
-                  <input
-                    [class.invisible]="!showPagingButtons"
-                    type="number"
-                    id="pageNumber"
-                    class="toolbarField pageNumber"
-                    title="Page"
-                    value="1"
-                    size="4"
-                    min="1"
-                    tabindex="15"
-                    data-l10n-id="page"
-                  />
-                  <span
-                    [class.invisible]="!showPagingButtons"
-                    id="numPages"
-                    class="toolbarLabel"
-                  ></span>
+                  <pdf-paging-area [showPagingButtons]="showPagingButtons"></pdf-paging-area>
                 </div>
                 <div id="toolbarViewerRight">
                   <pdf-presentation-mode [showPresentationModeButton]="showPresentationModeButton"></pdf-presentation-mode>
@@ -514,30 +375,7 @@
                     <span data-l10n-id="tools_label">Tools</span>
                   </button>
                 </div>
-                <div [class.invisible]="!showZoomButtons" id="toolbarViewerMiddle">
-                  <div class="splitToolbarButton">
-                    <button type="button"
-                            id="zoomOut"
-                            class="toolbarButton zoomOut"
-                            title="Zoom Out"
-                            tabindex="21"
-                            data-l10n-id="zoom_out">
-                              <span data-l10n-id="zoom_out_label">Zoom Out</span>
-                    </button>
-                    <div class="splitToolbarButtonSeparator"></div>
-                    <button type="button"
-                            id="zoomIn"
-                            class="toolbarButton zoomIn"
-                            title="Zoom In"
-                            tabindex="22"
-                            data-l10n-id="zoom_in">
-                      <span data-l10n-id="zoom_in_label">Zoom In</span>
-                    </button>
-                  </div>
-                  <pdf-zoom-dropdown
-                      style="width: unset; max-width: unset;padding-top:6px"
-                      (zoomChange)="emitZoomChange($event)"></pdf-zoom-dropdown>
-                </div>
+                <pdf-zoom-toolbar [showZoomButtons]="showZoomButtons" (zoomChange)="emitZoomChange($event)"></pdf-zoom-toolbar>
               </div>
               <div id="loadingBar">
                 <div class="progress"><div class="glimmer"></div></div>
