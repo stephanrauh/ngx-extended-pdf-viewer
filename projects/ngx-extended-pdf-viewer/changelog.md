@@ -1,0 +1,112 @@
+- till 0.1.3 initial version based on the embeddable PDF-Viewer https://github.com/legalthings/pdf.js-viewer
+- 0.2.0 use Mozilla's pdf.js (https://github.com/mozilla/pdf.js) directly. Update to pdf.js 2.0.641.
+- 0.2.1 minor bugfixes
+- 0.2.2 Make the library compatible to the `--prod` build; improve the CSS locality
+- 0.3.0 Solved the timing issue; added options for internationalization; improved the documentation
+- 0.3.1 improved the documentation
+- 0.3.2 stop registering event listeners multiple times if the component is used multiple times; tentative bugfix that occurred when switching from a file with few thumbnails (i.e. pages) to another instance of the viewer showing a file with many thumbnails
+- 0.3.3 removed debug code and solved the bug causing crashing when switching to a new instance of <ngx-extended-pdf-viewe>
+- 0.3.4 removed debug code
+- 0.9.0 added options to hide every button from the UI
+- 0.9.1 tried to add a screenshot to the readme file
+- 0.9.2 managed to add a screenshot to the readme file
+- 0.9.3 removed debug code
+- 0.9.4 improved the documentation
+- 0.9.5 recompiled with Angular 7 and updated the peer dependencies, allowing for both Angular 6 and 7
+- 0.9.6 updated to pdf.js 2.0.943; added more language files; fixed a bug preventing loading the language defined in a script tag for many language; repaired the parameter `[showSidebarButton]`; fixed broken i18n on OSX Chrome 70 by adding several translations for languages without region specifier (such as "es" instead of "es-ES")
+- 0.9.7 fixed the CSS file (font size and margins accidentially spilled to the surrounding page); corrected the link to the bug tracker
+- 0.9.8 make the option `[showSidebarOnLoad]` configurable; plus, don't load a sidebar if `[showSidebarButton]="false"`. Kudos go to GitHub user AlexandrosG. Stop the PDF viewer from crashing if the page is left before the PDF is rendered (issue #9). Kudos go to GitHub user Max Dertcaf. Prevent auto-completion in the search input field because it sometimes shows user names and email addresses (#8). Kudos go to Paul Kocher. Also added the optional property `[zoom]`.
+- 0.9.9 added the attribute `[mobileZoom]`; repaired the paginator buttons after hiding and re-displaying the PDF viewer; reduced the memory leaks of the `pdf.js` viewer (work in progress); documented how to use ngx-extended-pdf-viewer with tabs
+- 0.9.10 adjust the position of the document and the thumbails after increasing the size of the toolbar via `[mobileZoom]="200%"`; implemented the two-way-binding of the `[zoom]` attribute
+- 0.9.11 Now the `[zoom]` attribute is also respected when a new document is loaded in the same instance of the PDF viewer
+- 0.9.12 fixed the IE11 compatibility of `[mobileFriendlyZoom]` (dirty hack / temporary solution); correct positioning of the findbar when the sidebar is disabled
+- 0.9.13 Added some documentation about how to use a `Blob` (e.g. a PDF file downloaded from the server); fixed #21 (progress bar wouldn't hide on any instance of `<ngx-extended-pdf-viewer>`except for the fist instance)
+- 0.9.14 #24 fixed the IE11 compatibility of `[zoom]`
+- 0.9.15 #27 removed the "j" hidden in the HTML code; updated to PDF.js 2.1.266; # fixed a few bugs in the library README.md and mentioned it in the README.md of the root project; #37 mentioned the memory footprint; #39 updated / corrected the "how to build" instructions
+- 0.9.16 #45 allow percentage for the `height` option
+- 0.9.17 #40 added an option for the hand tool; #48 improved the documentation concerning Bootstrap; the `[zoom]` attribute now reacts to changes after loading the PDF viewer (previously: only at load time)
+- 0.9.18 #49 documented IE11 compatibility with polyfills; #25 implemented the two-way binding attribute `[(page)]` to select the page to display
+- 0.9.19 #35 add an option to override the default file name after clicking the "download" button; #34 implemented (pagesLoaded); fixed the `[page]` attribute which always showed page 13 on startup; reduced the timeout to set the initial `[page]`; removed debug code
+- 0.9.20 #55 if the setting `"height=100%"` results in a container with 0 pixels height, the PDF viewer automatically resizes to fill all available space.; #38 initial support for `[(spread)]` (work in progress!)
+- 0.9.21 #56 made the `[src]` attribute more flexible. Now it also accepts `Blobs`, `Uint8Arrays`, and `ArrayBuffers`. Also added a new attribute, `[base64Src]`, to display PDFs encoded as base64 encoded strings
+- 0.9.22 #29 `[backgroundColor]` can now be set to "white" or "#ffffff". Until 0.9.21, pdf.js always converted white to off-white. I am still trying to understand what is going on, so there might be side-effects. However, my tests did not reveal such side-effects yet.
+- 0.9.23 #38 fixed the `[spread]` attribute, and made the `[height]` property more reliable
+- 0.9.24 #57 added the documentation to get the PDF viewer up and running on JHipster
+- 0.9.25 fixed the formatting of the README file
+- 0.9.26 mentioned the showcase; added the missing documentation of (pagesLoaded); updated to Angular 8.0.0-rc.4
+- 0.9.27 updated to Angular 8.0.0-rc.5; reduced the z-indices
+- 0.9.28 #72 added `[password]`
+- 0.9.29 #51 added `[nameddest]`; #71 added `listenToURL` and deactivate the hash listener by default
+- 0.9.30 #38 improved the attribute `[spread]`; now it works's more reliable (although it's still not perfect, because sometime the PDF file is already shown before applying the correct spread mode); also successfully tested `(spread)`. Now `[(spread)]` is a two-way-binding attribute.
+- 0.9.31 #60 added the attribute `language` and repaired the language resolution algorithm
+- 0.9.32 #81 implemented `(pageRendered)`
+- 0.9.33 #82 sometimes the code initializing the app is called before the app is completely configured. Added code to deal with both early and late calls.
+- 0.9.34 #12 fixed a minor memory leak.
+- 0.9.35 #67 revisited: reduced the `z-index` of the toolbar to 7. Now every `z-index` is below 11.
+- 0.9.36 `[mobileFriendlyZoom]` can now also be 'true' (= '150%') or 'false' (= '100%'); #85 now the zoom buttons are hidden if you want them to be hidden, even if you're using an iPad
+- 0.9.37 #85 reverted the bugfix because it's a bug itself
+- 0.9.38 #85 addressed the real bug: now the pdf viewer toolbar is responsive on small screen even if the pdf viewer covers only part of the screen width
+- 0.9.39 fully automated the process to update to a new version of `pdf.js`; added `pdf.js 2.2.222` as an optional preview version; added pull request #76 (additional null checks and type checks)
+- 0.9.40 #84 fixed `[zoom]` (didn't work on page load)
+- 0.9.41 #33 implemented a service to call `find()`, `findNext()`, and `findPrevious()` programatically
+- 0.9.42 #33 added the documentation for the `find()` service and published `NgxExtendedPdfViewerService` (possibly work in progress)
+- 0.9.43 #86 compile the library with Angular 7 because compiling it with Angular 8 breaks backward compatibility
+- 0.9.44 #87 wait until the localization event has been fired before opening a PDF file
+- 0.9.45 #87 added error messages to make `useBrowserLocale` less confusing
+- 0.9.46 #90 fixed the default value of `[zoom]`; corrected the documentation
+- 0.9.47 #88 deactivate the text layer by default; it's only active if `[showHandToolButton]="true"`; removed `[showSelectToolButton]` in favor of `[showHandToolButton]`; optimized the way the PDF viewer is configured; breaking change: `[showHandTool]` now is false by default, while `[handTool]` is true by default
+- 0.9.48 #95 if the user defines a button to be hidden, it should remain hidden even if responsive design indicates there's enough space to show it.
+- 0.9.49 #91 one of the validation checks introduced with 0.9.45 stumbled over a DOM node added by ngx-extended-pdf-viewer itself; 0.9.49 fixes that
+- 0.9.50 #86 documented how to use ngx-extended-pdf-viewer with Angular 5 / Ionic 3; updated the preview version of `pdf.js` to 2.2.222 and replaced the ES5 version of these files by the debugger-friendly ES2016 version
+- 0.9.51 #80 changed the change detection strategy to "on push" to reduce CPU load. Mentioned that the "find" function become slow in very large documents (above 10 MB and 500 pages).
+- 0.9.52 #96 starting with 0.9.47, the attribute `filenameForDownload` was partially broken. 0.9.52 fixes that.
+- 0.9.53 #101 stop overwriting `window.print()` by renaming `print()` to `printPDF()`. This is an experimental feature, so currently only the preview JS file `viewer-2.2.222.js` is modified. The 2.1 file is going to be changed after checking for detrimental side-effects.
+- 0.9.54 Updated to `pdf.js 2.2.226`. #101 now the print service of the PDF viewer is properly deactivated when the `<ngx-extended-pdf-viewer>` widget is detroyed. Standard printing is reactivated. Also see https://github.com/mozilla/pdf.js/issues/10948 and https://github.com/mozilla/pdf.js/issues/10946
+- 0.9.55 #103 finished the migration of responsive design to JavaScript in order to support PDF viewers that have less then the full window width available; added the flag ignoreResponsiveCSS to allow users to deactivate this features; set the flag `[ignoreResponsiveCSS]` to sensible default values depending on the available window width
+- 1.0.0-rc.1 #103 implemented the ngOnChanges bit of `[ignoreResponsiveCSS]` so the showcase can demonstrate the effect of returning to the CSS-only approach
+- 1.0.0-rc.2 #105 when the user downloads a document, the event `(pdfDownloaded)` is fired. #104 fixed the print overlay which didn't work after creating a second instance of the pdf viewer. Updated the JavaScript files from version 2.1.266 to 2.2.228 of Mozilla's PDF viewer.
+- 1.0.0-rc.3 #17 reduced the memory leak
+- 1.0.0-rc.4 #113 added an option to suppress the context menu when the right-hand side button is clicked
+- 1.0.0-rc.5 #113 restored IE11 compatibility by adding the ES5 files `pdf-es5.js`, `pdf-worker-es5.js`, and `viewer-es5.js`. #115 now `[mobileFriendlyZoom]` also works on Firefox.
+- 1.0.0-rc.6 #116 now text selection works when `[handTool]="false"` and `[showHandToolButton]="false"`
+- 1.0.0-rc.7 #118 corrected the width and the position of the secondary toolbar (which was broken by fixing #115 in 1.0.0-rc.5). Tested with Firefox, Chrome, and Safari on OSX. IE11 compatibility is yet to be tested, it may or may not be broken.
+- 1.0.0-rc.8 #118 tested with Edge and IE11. Removed the temporary IE11 hacks. Fixed a bug with `mobileFriendlyZoom="1.7"` (using floating point numbers instead of percentages resulted in layout glitches).
+- 1.0.0-rc.9 #117 added the SVG images to the assets folder; introduced `imageResourcesPath` to allow for even more flexibility
+- 1.0.0 minor formatting improvements in the README file
+- 1.0.1 #124 made the CSS selector of the progress bar more specific
+- 1.0.2 #120 made `[page]` more reliable; sometimes the initial setting was ignored when the page loads slow
+- 1.1.0 #125 added `(currentZoomFactor)`; `(zoomChanged)` now also fires when the user selects "auto"
+- 1.1.1 #126 up/down keypress shouldn't move the focus away from the current input field.
+- 1.2.0 #127 add an option for setting the print resolution; #126 bugfix (forgotten `this` keyword); #129 added `(afterPrint)` and `(beforePrint)`
+- 1.3.0 #130 add the events `pdfLoaded` and `pdfLoadingFailed`. Thanks a lot to Taras Mogilyak for providing this pull request!
+- 1.3.1 #135 `[base64Src]` now redraws the PDF file when the input has changed; #126 up/down keypress shouldn't move the focus away from the current input field (didn't work in all cases);
+- 1.4.0 #134 implemented `[(rotation)]`; #133 implement (src)
+- 1.5.0 #136 fixed the configuration so it's possible to use the service worker thread; #132 added `(handTool)`; #131 added `[(sidebarVisible)]`
+- 1.5.1 #136 made the `defaultOptions` accessible to IE11 users can configure the worker thread URL; fixed the error message "Invalid pages rotation angle."
+- 1.5.2 #142 now the PDF viewer can be used in a form
+- 1.5.3 #148 override any custom settings of `overflow-y` on `<html>` and `<body>` when printing (because `overflow-y: hidden` used to clip the print output); preliminary fix of #147
+- 1.6.0-rc.0 continued fixing #147: modified behaviour of (page); make a difference between [(page)] and  [(pageLabel)]; 
+- 1.6.0-rc.1 #150 stop loading a generic translation file (e.g. "en.properties") if there's a more specific translation file (e.g. "en-GB.properties") 
+- 1.6.0-rc.2 #150 stop loading a generic translation file (e.g. "en.properties") if there's a more specific translation file (e.g. "en-GB.properties") (this time for real)
+- 1.6.0 #137 Now both `(currentZoomFactor)` and `(zoomChange)` react to the keyboard events CTRL + "+" and CTRL + "-". Caveat:  after selecting one of the text settings of the dropdown menu (i.e. "page fit", "actual page", and so on), the `(zoomChange)` event fires twice. Another caveat: this change might be a breaking change (although I don't think so, but it's a major internal change).
+- 1.6.1 #152 now the viewer can print even if it's embedded in a Bootstrap modal. Most likely, this also fixes problems with other frameworks.
+- 1.6.2 #152 improved compatibility with Bootstrap (and many other scenarios). Now the sidebar does show on the left-hand side of the PDF viewer when it's hidden. Plus, the box model of the sidebar now is always the browser default (i.e. "content-box"), even if Bootstrap or another framework tries to modify that.
+- 1.7.0 Announced compatiblity to Angular 9. #154 added a polyfill for IE11.
+- 1.7.1 #143 Prevent Angular Material's MatDialog messing up printing.
+- 1.7.2 #160 improved the confusing message "no resource to load, early way out"
+- 1.7.3 #149 implement `[ignoreKeyboard]`, `[ignoreKeys]`, and `[acceptKeys]`; #165 prevent the `ExpressionChangedAfterItHasBeenCheckedError` when the page width changes
+- 1.7.4 #149 improved `[ignoreKeyboard]`, `[ignoreKeys]`, and `[acceptKeys]` with more key bindings; started to document the feature at https://pdfviewer.net/keyboard
+- 1.7.5 #149 improved `[ignoreKeys]` and `[acceptKeys]` with more key bindings and with multiple modifiers (such as CTRL+ALT+G)
+- 1.7.6 #167 restrict the list of files that can be opened in the "open file" dialog to PDF files (can be overwritten by the user, so that's no breaking change)
+- 1.7.7 #169 fix a Angular 9.0.0-rc.1 bug by removing the context menu additions of the presentation mode that were only visible in Firefox (`menuitem` is a defined tag in Firefox, but not in Chrome or Safari, and the current RC1 of Angular gets confused by that)
+- 1.8.0-rc.0 update to pdf.js 2.3.200; #168 and #170 fix printing (was broken after updating to pdf.js 2.3.200; stop printing empty pages at the end)
+- 1.8.0-rc.1 #171 added preliminary support for displaying signature. Published it as an RC because this pdf.js feature is experimental, so there should be an option that switches the feature off by default. This is going to land in 1.8.0.
+- 1.8.0-rc.2 #171 implemented `showUnverifiedSignatures`
+- 1.8.0-rc.3 #171 bugfixes and #168 updated the IE11 versions of the JavaScript files to pdf.js 2.3.200
+- 1.8.0 #178 fixed [sidebar]; deprecated [sidebarOnLoad]; #177 added an option to ignoring accents and diacritics to the find dialog; #162 added more options to the `NgxExtendedPdfViewerService.find()`
+- 1.8.1 #184 added the parameter `logLevel` and improved font-related messages; #186 added "ngx-extended-pdf-viewer" to the startup-message; #162 the new options parameters of `find()` should have a default value
+- 1.8.2 #183 implemented `(updateFindMatchesCount)` and `(updateFindState)`
+- 1.8.3 #187 add `textLayer` to enable users to activate the text layer even if `[handTool]="true"`; #185 added lodash.deburr to the library (so now it should be added automatically to your node_modules folder)
+- 1.8.4 #187 hide the "find" button and the "selection mode / hand tool" menu when the text layer is disabled; report a warning on the JavaScript console if the settings of `textLayer` and `showFindButton` / `[handTool]` / `[showHandToolButton]` don't match to each other
+- 1.8.5 #177 added a few custom translations
+- 2.0.0-rc.0 #188 load the pdf.js files lazily by default; #186, #179, and #157 refactor the HTML code in order to make it easier to customize the toolbar (work in progress)
