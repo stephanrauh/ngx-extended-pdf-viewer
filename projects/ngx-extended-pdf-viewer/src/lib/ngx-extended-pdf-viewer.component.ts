@@ -433,9 +433,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   constructor(private ngZone: NgZone) {
     if (!window['pdfjs-dist/build/pdf']) {
-      const isIE = navigator.appName === 'Microsoft Internet Explorer';
+      const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
       const script = document.createElement('script');
-      script.src = isIE ? 'pdf-es5.js' : 'pdf.js';
+      script.src = isIE ? 'assets/pdf-es5.js' : 'assets/pdf.js';
       script.type = 'text/javascript';
       script.async = true;
       document.getElementsByTagName('head')[0].appendChild(script);
@@ -447,12 +447,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   private loadViewer(): void {
     if (!window['pdfjs-dist/build/pdf']) {
-      console.log('Waiting for pdf.js to load');
       setTimeout(() => this.loadViewer(), 25);
     } else {
-      const isIE = navigator.appName === 'Microsoft Internet Explorer';
+      const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
       const script2 = document.createElement('script');
-      script2.src = isIE ? 'viewer-es5.js' : 'viewer.js';
+      script2.src = isIE ? 'assets/viewer-es5.js' : 'assets/viewer.js';
       script2.type = 'text/javascript';
       script2.async = true;
       document.getElementsByTagName('head')[0].appendChild(script2);
@@ -467,7 +466,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if ((window as any).webViewerLoad) {
       this.doInitPDFViewer();
     } else {
-      console.log('Waiting for the PDF viewer to load');
       setTimeout(() => this.ngOnInit(), 50);
     }
   }

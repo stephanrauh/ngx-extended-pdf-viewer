@@ -3,6 +3,12 @@ import { CommonModule } from '@angular/common';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 import { PdfZoomDropdownComponent } from './toolbar/pdf-zoom-dropdown/pdf-zoom-dropdown.component';
+import { PdfContextMenuComponent } from './toolbar/pdf-context-menu/pdf-context-menu.component';
+import { PdfPresentationModeComponent } from './toolbar/pdf-presentation-mode/pdf-presentation-mode.component';
+import { PdfOpenFileComponent } from './toolbar/pdf-open-file/pdf-open-file.component';
+import { PdfPrintComponent } from './toolbar/pdf-print/pdf-print.component';
+import { PdfDownloadComponent } from './toolbar/pdf-download/pdf-download.component';
+import { PdfBookmarkComponent } from './toolbar/pdf-bookmark/pdf-bookmark.component';
 
 function isKeyIgnored(cmd: number, keycode: number): boolean {
   if (keycode === 16 || keycode === 17 || keycode === 18 || keycode === 224) {
@@ -105,7 +111,16 @@ function isKey(keyDef: string, cmd: number, keycode: number): boolean {
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [NgxExtendedPdfViewerComponent, PdfZoomDropdownComponent],
+  declarations: [
+    NgxExtendedPdfViewerComponent,
+    PdfZoomDropdownComponent,
+    PdfContextMenuComponent,
+    PdfPresentationModeComponent,
+    PdfOpenFileComponent,
+    PdfPrintComponent,
+    PdfDownloadComponent,
+    PdfBookmarkComponent
+  ],
   providers: [NgxExtendedPdfViewerService],
   exports: [NgxExtendedPdfViewerComponent]
 })

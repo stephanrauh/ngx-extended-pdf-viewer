@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'pdf-zoom-dropdown',
   templateUrl: './pdf-zoom-dropdown.component.html',
-  styleUrls: ['./pdf-zoom-dropdown.component.css'],
+  styleUrls: ['./pdf-zoom-dropdown.component.css']
 })
 export class PdfZoomDropdownComponent implements OnInit {
 

@@ -24,32 +24,12 @@
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "dist/ngx-extended-pdf-viewer/assets/locale",
-                "output": "/assets/locale/"
-              },
-              { "glob": "**/pdf.worker*.js", "input": "dist/ngx-extended-pdf-viewer/assets", "output": "/assets/" },
-              {
-                "glob": "**/locale.properties",
-                "input": "dist/ngx-extended-pdf-viewer/assets/locale",
-                "output": "/assets/locale/"
-              },
-              {
-                "glob": "**/*",
-                "input": "dist/ngx-extended-pdf-viewer/assets/images",
-                "output": "/assets/images"
+                "input": "dist/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/"
               }
             ],
             "styles": ["src/styles.css"],
-            "scripts": [
-              {
-                "input": "dist/ngx-extended-pdf-viewer/assets/pdf.js",
-                "lazy": true
-              },
-              {
-                "input": "dist/ngx-extended-pdf-viewer/assets/viewer.js",
-                "lazy": true
-              }
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -133,7 +113,7 @@
       "root": "projects/ngx-extended-pdf-viewer",
       "sourceRoot": "projects/ngx-extended-pdf-viewer/src",
       "projectType": "library",
-      "prefix": "ngx",
+      "prefix": "",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
