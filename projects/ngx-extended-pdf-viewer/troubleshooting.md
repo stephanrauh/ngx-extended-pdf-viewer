@@ -1,5 +1,5 @@
 ## Breaking changes
-- 2.0.0-rc.0 Two changes that _shouldn't_ be breaking changes, but you never know:
+- 2.0.0-alpha.0 Two changes that _shouldn't_ be breaking changes, but you never know:
   - The HMTL code looks a bit different. That may break your CSS code.
   - The library loads the JavaScript lazily by default. 
 - 1.8.3 Not a breaking change, but quite the contrary: since version 1.8.3 you don't have to add lodash.deburr. It's added automatically as a transitive dependency if it isn't already there.

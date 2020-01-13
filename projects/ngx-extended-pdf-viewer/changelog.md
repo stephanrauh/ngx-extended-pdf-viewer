@@ -109,4 +109,4 @@
 - 1.8.3 #187 add `textLayer` to enable users to activate the text layer even if `[handTool]="true"`; #185 added lodash.deburr to the library (so now it should be added automatically to your node_modules folder)
 - 1.8.4 #187 hide the "find" button and the "selection mode / hand tool" menu when the text layer is disabled; report a warning on the JavaScript console if the settings of `textLayer` and `showFindButton` / `[handTool]` / `[showHandToolButton]` don't match to each other
 - 1.8.5 #177 added a few custom translations
-- 2.0.0-rc.0 #188 load the pdf.js files lazily by default; #186, #179, and #157 refactor the HTML code in order to make it easier to customize the toolbar (work in progress)
+- 2.0.0-alpha.0 #188 load the pdf.js files lazily by default; #186, #179, and #157 refactor the HTML code in order to make it easier to customize the toolbar (work in progress)
