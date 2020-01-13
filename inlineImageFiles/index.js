@@ -64,6 +64,8 @@ lineReader
       line = line.replace('button,', '.pdf-viewer button,');
     } else if (line === 'select {') {
       line = line.replace('select', '.pdf-viewer select');
+    } else if (line === '#overlayContainer > .container > .dialog {') {
+      line = line.replace('#overlayContainer > .container > .dialog', '#overlayContainer > .container .dialog');
     }
     result += line + '\n';
   })

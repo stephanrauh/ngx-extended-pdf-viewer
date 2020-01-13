@@ -1901,7 +1901,7 @@ html[dir='rtl'] .outlineItemToggler::before {
   text-align: center;
 }
 
-#overlayContainer > .container > .dialog {
+#overlayContainer > .container .dialog {
   display: inline-block;
   padding: 15px;
   border-spacing: 4px;

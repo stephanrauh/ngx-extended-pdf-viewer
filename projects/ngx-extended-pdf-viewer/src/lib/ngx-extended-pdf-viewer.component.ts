@@ -358,7 +358,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (zoom == 'true') {
       zoom = '150%';
       // tslint:disable-next-line:triple-equals - the type conversion is intended
-    } else if (zoom == 'false') {
+    } else if (zoom == 'false' || zoom === undefined || zoom === null) {
       zoom = '100%';
     }
     this._mobileFriendlyZoom = zoom;

@@ -12,6 +12,9 @@ import { PdfBookmarkComponent } from './toolbar/pdf-bookmark/pdf-bookmark.compon
 import { PdfZoomToolbarComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-toolbar.component';
 import { PdfPagingAreaComponent } from './toolbar/pdf-paging-area/pdf-paging-area.component';
 import { PdfFindbarComponent } from './toolbar/pdf-findbar/pdf-findbar.component';
+import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
+import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
+import { PdfDocumentPropertiesOverlayComponent } from './document-properties/pdf-document-properties-overlay/pdf-document-properties-overlay.component';
 
 function isKeyIgnored(cmd: number, keycode: number): boolean {
   if (keycode === 16 || keycode === 17 || keycode === 18 || keycode === 224) {
@@ -125,7 +128,10 @@ function isKey(keyDef: string, cmd: number, keycode: number): boolean {
     PdfBookmarkComponent,
     PdfZoomToolbarComponent,
     PdfPagingAreaComponent,
-    PdfFindbarComponent
+    PdfFindbarComponent,
+    PdfSidebarComponent,
+    PdfSecondaryToolbarComponent,
+    PdfDocumentPropertiesOverlayComponent
   ],
   providers: [NgxExtendedPdfViewerService],
   exports: [NgxExtendedPdfViewerComponent]
