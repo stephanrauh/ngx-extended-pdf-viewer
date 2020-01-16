@@ -1,3 +1,7 @@
+<ng-template #findbarInputArea>
+  find bar
+</ng-template>
+
 <mat-card>
   <mat-card-content>
     <section class="section">
@@ -108,6 +112,7 @@
   <mat-tab label="fancy PDF (low print res)">
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
+      [findbarInputArea]="findbarInputArea"
         *ngIf="visible[0] && !hidden"
         printResolution="50"
         language="es-MX"
@@ -226,7 +231,7 @@
       <ngx-extended-pdf-viewer
         *ngIf="visible[4] && !hidden"
         printResolution="150"
-        [src]="'assets/pdfs/somatosensory.pdf'"
+        [src]="'assets/pdfs/hidden-layers.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#ffffff"
         [contextMenuAllowed]="contextMenuAllowed"

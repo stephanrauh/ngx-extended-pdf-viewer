@@ -1,3 +1,4 @@
+// tslint:disable:max-line-length
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
@@ -15,6 +16,20 @@ import { PdfFindbarComponent } from './toolbar/pdf-findbar/pdf-findbar.component
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
 import { PdfDocumentPropertiesOverlayComponent } from './document-properties/pdf-document-properties-overlay/pdf-document-properties-overlay.component';
+import { PdfSearchInputFieldComponent } from './toolbar/pdf-findbar/pdf-search-input-field/pdf-search-input-field.component';
+import { PdfFindPreviousComponent } from './toolbar/pdf-findbar/pdf-find-previous/pdf-find-previous.component';
+import { PdfFindNextComponent } from './toolbar/pdf-findbar/pdf-find-next/pdf-find-next.component';
+import { PdfFindInputAreaComponent } from './toolbar/pdf-findbar/pdf-find-input-area/pdf-find-input-area.component';
+import { PdfFindbarOptionsTwoContainerComponent } from './toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-findbar-options-two-container.component';
+import { PdfFindbarOptionsOneContainerComponent } from './toolbar/pdf-findbar/pdf-findbar-options-one-container/pdf-findbar-options-one-container.component';
+import { PdfFindMatchCaseComponent } from './toolbar/pdf-findbar/pdf-findbar-options-one-container/pdf-find-match-case/pdf-find-match-case.component';
+import { PdfFindHighlightAllComponent } from './toolbar/pdf-findbar/pdf-findbar-options-one-container/pdf-find-highlight-all/pdf-find-highlight-all.component';
+import { PdfFindEntireWordComponent } from './toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-find-entire-word/pdf-find-entire-word.component';
+import { PdfFindIgnoreAccentsComponent } from './toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-find-ignore-accents/pdf-find-ignore-accents.component';
+import { PdfFindbarOptionsThreeContainerComponent } from './toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-findbar-options-three-container.component';
+import { PdfFindResultsCountComponent } from './toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-find-results-count/pdf-find-results-count.component';
+import { PdfFindbarMessageContainerComponent } from './toolbar/pdf-findbar/pdf-findbar-message-container/pdf-findbar-message-container.component';
+import { PdfSplitToolbarButtonComponent } from './toolbar/pdf-findbar/pdf-split-toolbar-button/pdf-split-toolbar-button.component';
 
 function isKeyIgnored(cmd: number, keycode: number): boolean {
   if (keycode === 16 || keycode === 17 || keycode === 18 || keycode === 224) {
@@ -131,7 +146,21 @@ function isKey(keyDef: string, cmd: number, keycode: number): boolean {
     PdfFindbarComponent,
     PdfSidebarComponent,
     PdfSecondaryToolbarComponent,
-    PdfDocumentPropertiesOverlayComponent
+    PdfDocumentPropertiesOverlayComponent,
+    PdfSearchInputFieldComponent,
+    PdfFindPreviousComponent,
+    PdfFindNextComponent,
+    PdfFindInputAreaComponent,
+    PdfFindbarOptionsTwoContainerComponent,
+    PdfFindbarOptionsOneContainerComponent,
+    PdfFindMatchCaseComponent,
+    PdfFindHighlightAllComponent,
+    PdfFindEntireWordComponent,
+    PdfFindIgnoreAccentsComponent,
+    PdfFindbarOptionsThreeContainerComponent,
+    PdfFindResultsCountComponent,
+    PdfFindbarMessageContainerComponent,
+    PdfSplitToolbarButtonComponent
   ],
   providers: [NgxExtendedPdfViewerService],
   exports: [NgxExtendedPdfViewerComponent]

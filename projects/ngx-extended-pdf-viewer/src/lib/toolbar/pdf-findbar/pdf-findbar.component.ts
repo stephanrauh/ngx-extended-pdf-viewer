@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'pdf-findbar',
@@ -17,4 +17,8 @@ export class PdfFindbarComponent  {
 
   @Input()
   public findbarTop: string | undefined;
+
+  /* UI templates */
+  @Input()
+  public findbarInputArea: TemplateRef<any>;
 }

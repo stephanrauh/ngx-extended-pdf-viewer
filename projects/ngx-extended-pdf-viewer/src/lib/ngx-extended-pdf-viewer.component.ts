@@ -11,7 +11,8 @@ import {
   ViewChild,
   ChangeDetectionStrategy,
   HostListener,
-  NgZone
+  NgZone,
+  TemplateRef
 } from '@angular/core';
 import { PagesLoadedEvent } from './events/pages-loaded-event';
 import { PageRenderedEvent } from './events/page-rendered-event';
@@ -49,6 +50,10 @@ import { FindState, FindResultMatchesCount, FindResult } from './events/find-res
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestroy {
   public static ngxExtendedPdfViewerInitialized = false;
+
+  /* UI templates */
+  @Input()
+  public findbarInputArea: TemplateRef<any>;
 
   private _src: string | ArrayBuffer;
 
