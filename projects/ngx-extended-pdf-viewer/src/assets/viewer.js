@@ -478,6 +478,10 @@ let PDFViewerApplication = {
       _app_options.AppOptions.set('useOnlyCssZoom', hashParams['useonlycsszoom'] === 'true');
     }
 
+    if ('removepageborders' in hashParams) {
+      _app_options.AppOptions.set('removePageBorders', hashParams['removepageborders'] === 'true');
+    }
+
     if ('verbosity' in hashParams) {
       _app_options.AppOptions.set('verbosity', hashParams['verbosity'] | 0);
     }
@@ -560,6 +564,7 @@ let PDFViewerApplication = {
       l10n: this.l10n,
       textLayerMode: _app_options.AppOptions.get('textLayerMode'),
       imageResourcesPath: _app_options.AppOptions.get('imageResourcesPath'),
+      removePageBorders: _app_options.AppOptions.get('removePageBorders'),
       renderInteractiveForms: _app_options.AppOptions.get('renderInteractiveForms'),
       enablePrintAutoRotate: _app_options.AppOptions.get('enablePrintAutoRotate'),
       useOnlyCssZoom: _app_options.AppOptions.get('useOnlyCssZoom'),
@@ -3325,6 +3330,10 @@ const defaultOptions = {
     value: false,
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
   },
+  removePageBorders: {
+    value: false,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
   renderer: {
     value: 'canvas',
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
@@ -5501,7 +5510,7 @@ class PDFFindController {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-  
+
     const matches = [];
     const queryLen = query.length;
     let matchIdx = -queryLen;
@@ -5528,7 +5537,7 @@ class PDFFindController {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-  
+
     const matchesWithLength = [];
     const queryArray = query.match(/\S+/g);
 
@@ -8806,6 +8815,7 @@ class BaseViewer {
           textLayerMode: this.textLayerMode,
           annotationLayerFactory: this,
           imageResourcesPath: this.imageResourcesPath,
+          removePageBorders: this.removePageBorders,
           renderInteractiveForms: this.renderInteractiveForms,
           renderer: this.renderer,
           enableWebGL: this.enableWebGL,
@@ -11454,6 +11464,7 @@ function getDefaultPreferences() {
       "externalLinkTarget": 0,
       "historyUpdateUrl": false,
       "pdfBugEnabled": false,
+      "removePageBorders": false,
       "renderer": "canvas",
       "renderInteractiveForms": false,
       "sidebarViewOnLoad": -1,

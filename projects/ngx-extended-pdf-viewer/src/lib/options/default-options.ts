@@ -15,6 +15,7 @@ export const defaultOptions = {
   imageResourcesPath: './images/',
   maxCanvasPixels: 16777216,
   pdfBugEnabled: false,
+  removePageBorders: false,
   renderer: 'canvas',
   renderInteractiveForms: false,
   sidebarViewOnLoad: -1,

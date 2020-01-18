@@ -283,6 +283,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public showSpreadButton = true;
   @Input()
   public showPropertiesButton = true;
+  @Input()
+  public removePageBorders = false;
 
   @Input()
   public spread: 'off' | 'even' | 'odd';
@@ -711,6 +713,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
     if (this.printResolution) {
       options.set('printResolution', this.printResolution);
+    }
+    if (this.removePageBorders) {
+      options.set('removePageBorders', this.removePageBorders);
     }
   }
 
