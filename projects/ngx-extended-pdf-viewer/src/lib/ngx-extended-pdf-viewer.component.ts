@@ -8,7 +8,6 @@ import {
   OnDestroy,
   Output,
   EventEmitter,
-  ViewChild,
   ChangeDetectionStrategy,
   HostListener,
   NgZone,
@@ -1044,6 +1043,30 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         this.overrideDefaultSettings();
       }
     }
+    if ('removePageBorders' in changes) {
+      const options = (<any>window).PDFViewerApplicationOptions;
+      if (options) {
+
+        this.overrideDefaultSettings();
+        const viewer = document.getElementById('viewer') as HTMLElement;
+        if (this.removePageBorders) {
+          viewer.classList.add('removePageBorders');
+        } else {
+          viewer.classList.remove('removePageBorders');
+        }
+
+        if ((<any>window).PDFViewerApplication.pdfViewer) {
+          (<any>window).PDFViewerApplication.pdfViewer.removePageBorders = this.removePageBorders;
+        }
+        const zoomEvent = {
+          source: viewer,
+          scale: (Number(this.zoom) | 100) / 100,
+          presetValue: this.zoom
+        } as ScaleChangingEvent;
+        (<any>window).PDFViewerApplication.eventBus.dispatch('scalechanging', zoomEvent);
+      }
+    }
+
     if ('showUnverifiedSignatures' in changes) {
       if ((<any>window).PDFViewerApplication && (<any>window).PDFViewerApplication.pdfDocument) {
         (<any>window).PDFViewerApplication.pdfDocument._transport.messageHandler.send('showUnverifiedSignatures', this.showUnverifiedSignatures);
@@ -1053,6 +1076,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   private setZoom() {
     let zoomAsNumber = this.zoom;
+    console.log(this.zoom);
     if (String(zoomAsNumber).endsWith('%')) {
       zoomAsNumber = Number(String(zoomAsNumber).replace('%', '')) / 100;
     } else if (!isNaN(Number(zoomAsNumber))) {

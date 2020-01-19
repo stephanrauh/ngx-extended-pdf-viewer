@@ -32,6 +32,7 @@ export class AppComponent {
   public rotation = 0;
 
   public ignoreKeyboard = false;
+  public removePageBorders = false;
 
   public page: number | undefined = undefined;
 
@@ -92,7 +93,7 @@ export class AppComponent {
   }
 
   public get zoom84percent(): boolean {
-    return this.zoom === '84%';
+    return this.zoom === '84%'  || this.zoom === 84;
   }
 
   public set zoom84percent(auto: boolean) {
@@ -102,7 +103,7 @@ export class AppComponent {
   }
 
   public get zoom42(): boolean {
-    return this.zoom === '42';
+    return this.zoom === '42' || this.zoom === 42;
   }
 
   public set zoom42(auto: boolean) {

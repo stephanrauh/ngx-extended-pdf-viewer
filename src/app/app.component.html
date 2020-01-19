@@ -70,22 +70,22 @@
     </section>
     <section class="section">
       <mat-checkbox class="margin" [(ngModel)]="zoom42" matTooltip="Changes apply after switching to another PDF file">
-        [zoom]="42"</mat-checkbox
+        [(zoom)]="42"</mat-checkbox
       >
       <mat-checkbox class="margin" [(ngModel)]="zoom84percent" matTooltip="Changes apply after switching to another PDF file"
-        >[zoom]="'84%''"</mat-checkbox
+        >[(zoom)]="'84%''"</mat-checkbox
       >
       <mat-checkbox class="margin" [(ngModel)]="zoomAuto" matTooltip="Changes apply after switching to another PDF file"
-        >[zoom]="'auto'"</mat-checkbox
+        >[(zoom)]="'auto'"</mat-checkbox
       >
       <mat-checkbox class="margin" [(ngModel)]="zoomPageActual" matTooltip="Changes apply after switching to another PDF file"
-        >[zoom]="'page-actual'"</mat-checkbox
+        >[(zoom)]="'page-actual'"</mat-checkbox
       >
       <mat-checkbox class="margin" [(ngModel)]="zoomPageFit" matTooltip="Changes apply after switching to another PDF file"
-        >[zoom]="'page-fit'"</mat-checkbox
+        >[(zoom)]="'page-fit'"</mat-checkbox
       >
       <mat-checkbox class="margin" [(ngModel)]="zoomPageWidth" matTooltip="Changes apply after switching to another PDF file"
-        >[zoom]="'page-width'"</mat-checkbox
+        >[(zoom)]="'page-width'"</mat-checkbox
       >
       <div class="margin">resulting zoom factor: {{ zoom }}<br />zoom factor reported from the viewer: {{ currentZoomFactor }}</div>
     </section>
@@ -103,6 +103,8 @@
       </mat-form-field>
       <mat-checkbox class="margin" [(ngModel)]="ignoreKeyboard" matTooltip="Ignore every keyboard event" [disabled]="visible[0]"
       >[ignoreKeyboard]="true"</mat-checkbox>
+      <mat-checkbox class="margin" [(ngModel)]="removePageBorders" matTooltip="display the page without border"
+      >[removeBorder]="true"</mat-checkbox>
 
       <button mat-raised-button color="primary" class="margin" (click)="openDialog()">Modal</button>
     </section>
@@ -114,6 +116,7 @@
       <ngx-extended-pdf-viewer
       [findbarInputArea]="findbarInputArea"
         *ngIf="visible[0] && !hidden"
+        [removePageBorders]="removePageBorders"
         printResolution="50"
         language="es-MX"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
@@ -160,6 +163,7 @@
       <ngx-extended-pdf-viewer
         *ngIf="visible[1] && !hidden"
         printResolution="150"
+        [removePageBorders]="removePageBorders"
         [src]="'assets/pdfs/codpaste-teachingpack.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#e8e8ef"
@@ -207,6 +211,7 @@
         [logLevel]="5"
         [mobileZoom]="mobileFriendlyZoom"
         printResolution="300"
+        [removePageBorders]="removePageBorders"
         [(rotation)]="rotation"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebarButton"
@@ -238,6 +243,7 @@
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [ignoreKeyboard]="ignoreKeyboard"
         [mobileFriendlyZoom]="mobileFriendlyZoom"
+        [removePageBorders]="removePageBorders"
         [(rotation)]="rotation"
         [showSidebarButton]="showSidebarButton"
         [(sidebarVisible)]="sidebarVisible"
@@ -275,6 +281,7 @@
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [ignoreKeyboard]="ignoreKeyboard"
         [mobileFriendlyZoom]="mobileFriendlyZoom"
+        [removePageBorders]="removePageBorders"
         [(rotation)]="rotation"
         [showBookmarkButton]="false"
         [showDownloadButton]="false"
@@ -315,6 +322,7 @@
         [printResolution]="printResolution"
         (afterPrint)="afterPrint()"
         (beforePrint)="beforePrint()"
+        [removePageBorders]="removePageBorders"
         [(rotation)]="rotation"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebarButton"
@@ -347,6 +355,7 @@
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [ignoreKeyboard]="ignoreKeyboard"
         [mobileZoom]="mobileFriendlyZoom"
+        [removePageBorders]="removePageBorders"
         [(rotation)]="rotation"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebarButton"
@@ -382,6 +391,7 @@
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [ignoreKeyboard]="ignoreKeyboard"
         [mobileZoom]="mobileFriendlyZoom"
+        [removePageBorders]="removePageBorders"
         [(rotation)]="rotation"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebarButton"
@@ -419,6 +429,7 @@
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [ignoreKeyboard]="ignoreKeyboard"
         [mobileZoom]="mobileFriendlyZoom"
+        [removePageBorders]="removePageBorders"
         [(rotation)]="rotation"
         [showZoomButtons]="true"
         [showSidebarButton]="showSidebarButton"
