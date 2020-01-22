@@ -32,7 +32,7 @@ export class AppComponent {
   public rotation = 0;
 
   public ignoreKeyboard = false;
-  public removePageBorders = false;
+  public showBorders = true;
 
   public page: number | undefined = undefined;
 

@@ -283,7 +283,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public showPropertiesButton = true;
   @Input()
-  public removePageBorders = false;
+  public showBorders = false;
 
   @Input()
   public spread: 'off' | 'even' | 'odd';
@@ -713,8 +713,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (this.printResolution) {
       options.set('printResolution', this.printResolution);
     }
-    if (this.removePageBorders) {
-      options.set('removePageBorders', this.removePageBorders);
+    if (this.showBorders) {
+      options.set('showBorders', this.showBorders);
     }
   }
 
@@ -1043,20 +1043,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         this.overrideDefaultSettings();
       }
     }
-    if ('removePageBorders' in changes) {
+    if ('showBorders' in changes) {
       const options = (<any>window).PDFViewerApplicationOptions;
       if (options) {
 
         this.overrideDefaultSettings();
         const viewer = document.getElementById('viewer') as HTMLElement;
-        if (this.removePageBorders) {
-          viewer.classList.add('removePageBorders');
-        } else {
+        if (this.showBorders) {
           viewer.classList.remove('removePageBorders');
+        } else {
+          viewer.classList.add('removePageBorders');
         }
 
         if ((<any>window).PDFViewerApplication.pdfViewer) {
-          (<any>window).PDFViewerApplication.pdfViewer.removePageBorders = this.removePageBorders;
+          (<any>window).PDFViewerApplication.pdfViewer.removePageBorders = !this.showBorders;
         }
         const zoomEvent = {
           source: viewer,
