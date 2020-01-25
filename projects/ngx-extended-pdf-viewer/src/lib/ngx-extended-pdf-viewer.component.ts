@@ -902,7 +902,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       this.showPropertiesButton ||
       this.showRotateButton ||
       this.showScrollingButton ||
-      this.showRotateButton ||
       this.showSpreadButton;
     if (visible) {
       return true;
