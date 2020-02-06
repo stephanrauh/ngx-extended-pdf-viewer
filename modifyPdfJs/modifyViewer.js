@@ -236,6 +236,7 @@ function convertLines() {
         line = 'fireL10nReadyEvent(lang);\n' + line;
         expectedChanges--;
       } else if (line.includes("entireWordCheckbox: document.getElementById('findEntireWord')")) {
+        line = line + '\n' + "      findEntirePhraseCheckbox: document.getElementById('findEntirePhrase'), // #201";
         line = line + '\n' + "      ignoreAccentsCheckbox: document.getElementById('findIgnoreAccents'), // #177";
         expectedChanges--;
       } else if (line.includes('entireWord: evt.entireWord')) {
@@ -245,28 +246,39 @@ function convertLines() {
         line = line + '\n' + '    ignoreAccents: false, // #177';
         expectedChanges--;
       } else if (line.includes('entireWord: findState.entireWord')) {
+        line = line + '\n' + '              entirePhrase: findState.entirePhrase, // #201';
         line = line + '\n' + '              ignoreAccents: findState.ignoreAccents, // #177';
         expectedChanges--;
       } else if (line.includes('this.entireWord = options.entireWordCheckbox || null')) {
+        line = line + '\n' + '    this.entirePhrase = options.findEntirePhraseCheckbox || null; // #201';
         line = line + '\n' + '    this.ignoreAccents = options.ignoreAccentsCheckbox || null; // #177';
         expectedChanges--;
       } else if (line.includes("this.eventBus.on('resize', this._adjustWidth.bind(this))")) {
         if (es2015) {
           line =
-            "    this.ignoreAccents.addEventListener('click', () => { // #177\n" +
-            "          this.dispatchEvent('ignoreAccentsChange'); // #177\n" +
-            '    }); // #177\n' +
-            line;
+          "    this.entirePhrase.addEventListener('click', () => { // #201\n" +
+          "          this.dispatchEvent('entirePhraseChange'); // #201\n" +
+          '    }); // #201\n' +
+          "    this.ignoreAccents.addEventListener('click', () => { // #177\n" +
+          "          this.dispatchEvent('ignoreAccentsChange'); // #177\n" +
+          '    }); // #177\n' +
+        line;
         } else {
           line =
-            "    this.ignoreAccents.addEventListener('click', function () {\n" +
-            "     _this.dispatchEvent('ignoreAccentsChange');\n" +
-            '    });\n' +
-            line;
+          "    this.entirePhrase.addEventListener('click', function () {\n" +
+          "     _this.dispatchEvent('entirePhraseChange');\n" +
+          '    });\n' +
+          "    this.ignoreAccents.addEventListener('click', function () {\n" +
+          "     _this.dispatchEvent('ignoreAccentsChange');\n" +
+          '    });\n' +
+        line;
         }
         expectedChanges--;
+      } else if (line.includes('phraseSearch: true,')) {
+        line = line + '\n' + '      phraseSearch: this.entirePhrase.checked, // #201';
+        expectedChanges--;
       } else if (line.includes('entireWord: this.entireWord.checked')) {
-        line = line + '\n' + '        ignoreAccents: this.ignoreAccents.checked, // #177';
+        line = line + '\n' + '      ignoreAccents: this.ignoreAccents.checked, // #177';
         expectedChanges--;
       } else if (line.includes('  _calculatePhraseMatch(')) {
         line = `  _calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
@@ -302,9 +314,11 @@ function convertLines() {
         expectedChanges--;
       } else if (currentFunction == '_calculateMatch' && line.includes('entireWord,')) {
         if (es2015) {
+          line = line + '\n      entirePhrase, // #201';
           line = line + '\n      ignoreAccents, // #177';
         } else {
-          line = line + '\n          ignoreAccents = _this$_state.ignoreAccents,';
+          line = line + '\n          entirePhrase = _this$_state.entirePhrase, // #201';
+          line = line + '\n          ignoreAccents = _this$_state.ignoreAccents // #177,';
         }
         currentFunction = '';
         expectedChanges--;
@@ -317,6 +331,26 @@ function convertLines() {
       } else if (line.includes("console.log('PDF ' + pdfDocument.fingerprint")) {
         line = line.replace("')');", "' modified by ngx-extended-pdf-viewer)');")
         line = "      console.log('PDF viewer: ngx-extended-pdf-viewer running on pdf.js ' + _pdfjsLib.version);\n" + line;
+      } else if (line.includes("if ('verbosity' in hashParams) {")) {
+        line = `    if ('removepageborders' in hashParams) {
+      _app_options.AppOptions.set('removePageBorders', hashParams['removepageborders'] === 'true');
+    }
+
+${line}`;
+      } else if (line.includes("imageResourcesPath: _app_options.AppOptions.get('imageResourcesPath'),")) {
+        line += "\n      removePageBorders: _app_options.AppOptions.get('removePageBorders'),";
+      } else if (line.includes("renderer: {")) {
+        line = `  removePageBorders: {
+          value: false,
+          kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+        },
+        ` + line;
+      } else if (line.includes("imageResourcesPath: _app_options.AppOptions.get('imageResourcesPath'),")) {
+        line += "\n        removePageBorders: this.removePageBorders,";
+      } else if (line.includes('      "renderer": "canvas",')) {
+        line = '      "removePageBorders": false,\n' + line;
+      } else if (line.includes('imageResourcesPath: this.imageResourcesPath,')) {
+        line += '\n          removePageBorders: this.removePageBorders,';
       }
 
       if (line != null) {

@@ -216,6 +216,7 @@ function getViewerConfiguration() {
       highlightAllCheckbox: document.getElementById('findHighlightAll'),
       caseSensitiveCheckbox: document.getElementById('findMatchCase'),
       entireWordCheckbox: document.getElementById('findEntireWord'),
+      findEntirePhraseCheckbox: document.getElementById('findEntirePhrase'), // #201
       ignoreAccentsCheckbox: document.getElementById('findIgnoreAccents'), // #177
       findMsg: document.getElementById('findMsg'),
       findResultsCount: document.getElementById('findResultsCount'),
@@ -2151,6 +2152,7 @@ function webViewerFind(evt) {
     phraseSearch: evt.phraseSearch,
     caseSensitive: evt.caseSensitive,
     entireWord: evt.entireWord,
+    entirePhrase: evt.entirePhrase, // #201
     ignoreAccents: evt.ignoreAccents, // #177
     highlightAll: evt.highlightAll,
     findPrevious: evt.findPrevious
@@ -2163,6 +2165,7 @@ function webViewerFindFromUrlHash(evt) {
     phraseSearch: evt.phraseSearch,
     caseSensitive: false,
     entireWord: false,
+    entirePhrase: false, // #201
     ignoreAccents: false, // #177
     highlightAll: true,
     findPrevious: false
@@ -2191,7 +2194,7 @@ function webViewerUpdateFindControlState(_ref9) {
       matchesCount: matchesCount
     });
   } else {
-       PDFViewerApplication.findBar.updateUIState(state, previous, matchesCount);
+    PDFViewerApplication.findBar.updateUIState(state, previous, matchesCount);
   }
 }
 
@@ -2334,6 +2337,7 @@ function webViewerKeyDown(evt) {
               phraseSearch: findState.phraseSearch,
               caseSensitive: findState.caseSensitive,
               entireWord: findState.entireWord,
+              entirePhrase: findState.entirePhrase, // #201
               ignoreAccents: findState.ignoreAccents, // #177
               highlightAll: findState.highlightAll,
               findPrevious: cmd === 5 || cmd === 12
@@ -6298,6 +6302,7 @@ function () {
     this.highlightAll = options.highlightAllCheckbox || null;
     this.caseSensitive = options.caseSensitiveCheckbox || null;
     this.entireWord = options.entireWordCheckbox || null;
+    this.entirePhrase = options.entirePhraseCheckbox || null; // #201
     this.ignoreAccents = options.ignoreAccentsCheckbox || null; // #177
     this.findMsg = options.findMsg || null;
     this.findResultsCount = options.findResultsCount || null;
@@ -6341,6 +6346,9 @@ function () {
     this.entireWord.addEventListener('click', function () {
       _this.dispatchEvent('entirewordchange');
     });
+    this.entirePhrase.addEventListener('click', function () {
+     _this.dispatchEvent('entirePhraseChange');
+    });
     this.ignoreAccents.addEventListener('click', function () {
      _this.dispatchEvent('ignoreAccentsChange');
     });
@@ -6362,6 +6370,7 @@ function () {
         phraseSearch: true,
         caseSensitive: this.caseSensitive.checked,
         entireWord: this.entireWord.checked,
+        entirePhrase: this.entirePhrase.checked, // #201
         ignoreAccents: this.ignoreAccents.checked, // #177
         highlightAll: this.highlightAll.checked,
         findPrevious: findPrev
@@ -6887,7 +6896,8 @@ function () {
       var _this$_state = this._state,
           caseSensitive = _this$_state.caseSensitive,
           entireWord = _this$_state.entireWord,
-          ignoreAccents = _this$_state.ignoreAccents,
+          entirePhrase = _this$_state.entirePhrase, // #201
+          ignoreAccents = _this$_state.ignoreAccents // #177,
           phraseSearch = _this$_state.phraseSearch;
 
       if (query.length === 0) {

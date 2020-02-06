@@ -203,6 +203,7 @@ function getViewerConfiguration() {
       highlightAllCheckbox: document.getElementById('findHighlightAll'),
       caseSensitiveCheckbox: document.getElementById('findMatchCase'),
       entireWordCheckbox: document.getElementById('findEntireWord'),
+      findEntirePhraseCheckbox: document.getElementById('findEntirePhrase'), // #201
       ignoreAccentsCheckbox: document.getElementById('findIgnoreAccents'), // #177
       findMsg: document.getElementById('findMsg'),
       findResultsCount: document.getElementById('findResultsCount'),
@@ -2028,7 +2029,7 @@ function webViewerUpdateFindMatchesCount({
   if (PDFViewerApplication.supportsIntegratedFind) {
     PDFViewerApplication.externalServices.updateFindMatchesCount(matchesCount);
   } else {
-     PDFViewerApplication.findBar.updateResultsCount(matchesCount);
+    PDFViewerApplication.findBar.updateResultsCount(matchesCount);
   }
 }
 
@@ -2044,7 +2045,7 @@ function webViewerUpdateFindControlState({
       matchesCount
     });
   } else {
-       PDFViewerApplication.findBar.updateUIState(state, previous, matchesCount);
+    PDFViewerApplication.findBar.updateUIState(state, previous, matchesCount);
   }
 }
 
@@ -2189,6 +2190,7 @@ function webViewerKeyDown(evt) {
               phraseSearch: findState.phraseSearch,
               caseSensitive: findState.caseSensitive,
               entireWord: findState.entireWord,
+              entirePhrase: findState.entirePhrase, // #201
               ignoreAccents: findState.ignoreAccents, // #177
               highlightAll: findState.highlightAll,
               findPrevious: cmd === 5 || cmd === 12
@@ -3331,10 +3333,10 @@ const defaultOptions = {
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
   },
   removePageBorders: {
-    value: false,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  renderer: {
+          value: false,
+          kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+        },
+          renderer: {
     value: 'canvas',
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
   },
@@ -5007,6 +5009,7 @@ class PDFFindBar {
     this.highlightAll = options.highlightAllCheckbox || null;
     this.caseSensitive = options.caseSensitiveCheckbox || null;
     this.entireWord = options.entireWordCheckbox || null;
+    this.entirePhrase = options.findEntirePhraseCheckbox || null; // #201
     this.ignoreAccents = options.ignoreAccentsCheckbox || null; // #177
     this.findMsg = options.findMsg || null;
     this.findResultsCount = options.findResultsCount || null;
@@ -5049,6 +5052,9 @@ class PDFFindBar {
     this.entireWord.addEventListener('click', () => {
       this.dispatchEvent('entirewordchange');
     });
+    this.entirePhrase.addEventListener('click', () => { // #201
+          this.dispatchEvent('entirePhraseChange'); // #201
+    }); // #201
     this.ignoreAccents.addEventListener('click', () => { // #177
           this.dispatchEvent('ignoreAccentsChange'); // #177
     }); // #177
@@ -5065,9 +5071,10 @@ class PDFFindBar {
       type,
       query: this.findField.value,
       phraseSearch: true,
+      phraseSearch: this.entirePhrase.checked, // #201
       caseSensitive: this.caseSensitive.checked,
       entireWord: this.entireWord.checked,
-        ignoreAccents: this.ignoreAccents.checked, // #177
+      ignoreAccents: this.ignoreAccents.checked, // #177
       highlightAll: this.highlightAll.checked,
       findPrevious: findPrev
     });
@@ -5510,7 +5517,7 @@ class PDFFindController {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-
+  
     const matches = [];
     const queryLen = query.length;
     let matchIdx = -queryLen;
@@ -5537,7 +5544,7 @@ class PDFFindController {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-
+  
     const matchesWithLength = [];
     const queryArray = query.match(/\S+/g);
 
@@ -5577,6 +5584,7 @@ class PDFFindController {
     const {
       caseSensitive,
       entireWord,
+      entirePhrase, // #201
       ignoreAccents, // #177
       phraseSearch
     } = this._state;
@@ -9587,6 +9595,7 @@ class AnnotationLayerBuilder {
         annotations,
         page: this.pdfPage,
         imageResourcesPath: this.imageResourcesPath,
+          removePageBorders: this.removePageBorders,
         renderInteractiveForms: this.renderInteractiveForms,
         linkService: this.linkService,
         downloadManager: this.downloadManager

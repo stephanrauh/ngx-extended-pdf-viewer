@@ -30,6 +30,7 @@ import { PdfFindbarOptionsThreeContainerComponent } from './toolbar/pdf-findbar/
 import { PdfFindResultsCountComponent } from './toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-find-results-count/pdf-find-results-count.component';
 import { PdfFindbarMessageContainerComponent } from './toolbar/pdf-findbar/pdf-findbar-message-container/pdf-findbar-message-container.component';
 import { PdfSplitToolbarButtonComponent } from './toolbar/pdf-findbar/pdf-split-toolbar-button/pdf-split-toolbar-button.component';
+import { PdfFindEntirePhraseComponent } from './toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-find-entire-phrase/pdf-find-entire-phrase.component';
 
 function isKeyIgnored(cmd: number, keycode: number): boolean {
   if (keycode === 16 || keycode === 17 || keycode === 18 || keycode === 224) {
@@ -156,6 +157,7 @@ function isKey(keyDef: string, cmd: number, keycode: number): boolean {
     PdfFindMatchCaseComponent,
     PdfFindHighlightAllComponent,
     PdfFindEntireWordComponent,
+    PdfFindEntirePhraseComponent,
     PdfFindIgnoreAccentsComponent,
     PdfFindbarOptionsThreeContainerComponent,
     PdfFindResultsCountComponent,

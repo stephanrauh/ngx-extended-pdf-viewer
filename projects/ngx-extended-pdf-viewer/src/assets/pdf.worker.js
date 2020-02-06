@@ -641,7 +641,9 @@ var WorkerMessageHandler = {
     });
     // #171 receive options from ngx-extended-pdf-viewer
     handler.on('showUnverifiedSignatures', function wphReady(data) {
-      console.log("showUnverifiedSignatures " + data);
+      if (data) {
+        console.log("showUnverifiedSignatures=" + data + ". This is an incompletely implemented feature. Signatures cannot be validated, so use it at own risk.");
+      }
       self.showUnverifiedSignatures = data;
     });
     // #171 end of receive options from ngx-extended-pdf-viewer
