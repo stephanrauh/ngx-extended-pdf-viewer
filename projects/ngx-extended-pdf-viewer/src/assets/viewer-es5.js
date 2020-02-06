@@ -552,6 +552,10 @@ var PDFViewerApplication = {
               _app_options.AppOptions.set('useOnlyCssZoom', hashParams['useonlycsszoom'] === 'true');
             }
 
+    if ('removepageborders' in hashParams) {
+      _app_options.AppOptions.set('removePageBorders', hashParams['removepageborders'] === 'true');
+    }
+
             if ('verbosity' in hashParams) {
               _app_options.AppOptions.set('verbosity', hashParams['verbosity'] | 0);
             }
@@ -664,6 +668,7 @@ var PDFViewerApplication = {
               l10n: this.l10n,
               textLayerMode: _app_options.AppOptions.get('textLayerMode'),
               imageResourcesPath: _app_options.AppOptions.get('imageResourcesPath'),
+      removePageBorders: _app_options.AppOptions.get('removePageBorders'),
               renderInteractiveForms: _app_options.AppOptions.get('renderInteractiveForms'),
               enablePrintAutoRotate: _app_options.AppOptions.get('enablePrintAutoRotate'),
               useOnlyCssZoom: _app_options.AppOptions.get('useOnlyCssZoom'),
@@ -2152,7 +2157,6 @@ function webViewerFind(evt) {
     phraseSearch: evt.phraseSearch,
     caseSensitive: evt.caseSensitive,
     entireWord: evt.entireWord,
-    entirePhrase: evt.entirePhrase, // #201
     ignoreAccents: evt.ignoreAccents, // #177
     highlightAll: evt.highlightAll,
     findPrevious: evt.findPrevious
@@ -2165,7 +2169,6 @@ function webViewerFindFromUrlHash(evt) {
     phraseSearch: evt.phraseSearch,
     caseSensitive: false,
     entireWord: false,
-    entirePhrase: false, // #201
     ignoreAccents: false, // #177
     highlightAll: true,
     findPrevious: false
@@ -4208,7 +4211,11 @@ var defaultOptions = {
     value: false,
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
   },
-  renderer: {
+  removePageBorders: {
+          value: false,
+          kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+        },
+          renderer: {
     value: 'canvas',
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
   },
@@ -6302,7 +6309,7 @@ function () {
     this.highlightAll = options.highlightAllCheckbox || null;
     this.caseSensitive = options.caseSensitiveCheckbox || null;
     this.entireWord = options.entireWordCheckbox || null;
-    this.entirePhrase = options.entirePhraseCheckbox || null; // #201
+    this.entirePhrase = options.findEntirePhraseCheckbox || null; // #201
     this.ignoreAccents = options.ignoreAccentsCheckbox || null; // #177
     this.findMsg = options.findMsg || null;
     this.findResultsCount = options.findResultsCount || null;
@@ -6368,10 +6375,10 @@ function () {
         type: type,
         query: this.findField.value,
         phraseSearch: true,
+      phraseSearch: this.entirePhrase.checked, // #201
         caseSensitive: this.caseSensitive.checked,
         entireWord: this.entireWord.checked,
-        entirePhrase: this.entirePhrase.checked, // #201
-        ignoreAccents: this.ignoreAccents.checked, // #177
+      ignoreAccents: this.ignoreAccents.checked, // #177
         highlightAll: this.highlightAll.checked,
         findPrevious: findPrev
       });
@@ -13706,6 +13713,7 @@ function getDefaultPreferences() {
       "externalLinkTarget": 0,
       "historyUpdateUrl": false,
       "pdfBugEnabled": false,
+      "removePageBorders": false,
       "renderer": "canvas",
       "renderInteractiveForms": false,
       "sidebarViewOnLoad": -1,
