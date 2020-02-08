@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 48;
+let expectedChanges = 61;
 
 let dropLines = 0;
 currentFunction = '';
@@ -37,7 +37,7 @@ lineReader
 
       console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets/' + filename);
       if (expectedChanges !== 0) {
-        console.error(expectedChanges + " changes couldn't be appied!");
+        console.error(expectedChanges + " changes couldn't be applied!");
       }
     });
   });
@@ -123,8 +123,7 @@ function convertLines() {
         expectedChanges--;
       } else if (line.includes('var defaultFilename') || line.includes("defaultFilename = 'document.pdf'")) {
         line = line.replace("'document.pdf'", 'PDFViewerApplication.appConfig.filenameForDownload');
-        line =
-          line + '\nif (PDFViewerApplication.appConfig.filenameForDownload) return PDFViewerApplication.appConfig.filenameForDownload;';
+        line = line + '\nif (PDFViewerApplication.appConfig.filenameForDownload) return PDFViewerApplication.appConfig.filenameForDownload;';
         expectedChanges--;
       } else if (line.includes('this.bar = this.div.parentNode;') && currentFunction.includes('ProgressBar')) {
         line = '    if (this.div) {\n  ' + line + '\n    }';
@@ -256,22 +255,22 @@ function convertLines() {
       } else if (line.includes("this.eventBus.on('resize', this._adjustWidth.bind(this))")) {
         if (es2015) {
           line =
-          "    this.multipleSearchTexts.addEventListener('click', () => { // #201\n" +
-          "          this.dispatchEvent('multipleSearchTextsChange'); // #201\n" +
-          '    }); // #201\n' +
-          "    this.ignoreAccents.addEventListener('click', () => { // #177\n" +
-          "          this.dispatchEvent('ignoreAccentsChange'); // #177\n" +
-          '    }); // #177\n' +
-        line;
+            "    this.multipleSearchTexts.addEventListener('click', () => { // #201\n" +
+            "          this.dispatchEvent('multiplesearchtextschange'); // #201\n" +
+            '    }); // #201\n' +
+            "    this.ignoreAccents.addEventListener('click', () => { // #177\n" +
+            "          this.dispatchEvent('ignoreAccentsChange'); // #177\n" +
+            '    }); // #177\n' +
+            line;
         } else {
           line =
-          "    this.multipleSearchTexts.addEventListener('click', function () {\n" +
-          "     _this.dispatchEvent('multipleSearchTextsChange');\n" +
-          '    });\n' +
-          "    this.ignoreAccents.addEventListener('click', function () {\n" +
-          "     _this.dispatchEvent('ignoreAccentsChange');\n" +
-          '    });\n' +
-        line;
+            "    this.multipleSearchTexts.addEventListener('click', function () {\n" +
+            "     _this.dispatchEvent('multiplesearchtextschange');\n" +
+            '    });\n' +
+            "    this.ignoreAccents.addEventListener('click', function () {\n" +
+            "     _this.dispatchEvent('ignoreAccentsChange');\n" +
+            '    });\n' +
+            line;
         }
         expectedChanges--;
       } else if (line.includes('phraseSearch: true,')) {
@@ -313,7 +312,7 @@ function convertLines() {
   `;
         expectedChanges--;
       } else if (line.includes('const queryArray = query.match(/\\S+/g);')) {
-        line = "    const queryArray = (query.includes('\\n')) ? query.match(/\\W+/g) : query.match(/\\S+/g);" // #201
+        line = "    const queryArray = (query.includes('\\n')) ? query.trim().split(/\\n+/g) : query.trim().match(/\\S+/g);"; // #201
       } else if (currentFunction == '_calculateMatch' && line.includes('entireWord,')) {
         if (es2015) {
           line = line + '\n      ignoreAccents, // #177';
@@ -329,28 +328,65 @@ function convertLines() {
         line = '      this._calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents); // #177';
         expectedChanges--;
       } else if (line.includes("console.log('PDF ' + pdfDocument.fingerprint")) {
-        line = line.replace("')');", "' modified by ngx-extended-pdf-viewer)');")
+        line = line.replace("')');", "' modified by ngx-extended-pdf-viewer)');");
         line = "      console.log('PDF viewer: ngx-extended-pdf-viewer running on pdf.js ' + _pdfjsLib.version);\n" + line;
+        expectedChanges--;
       } else if (line.includes("if ('verbosity' in hashParams) {")) {
         line = `    if ('removepageborders' in hashParams) {
       _app_options.AppOptions.set('removePageBorders', hashParams['removepageborders'] === 'true');
     }
 
 ${line}`;
+        expectedChanges--;
       } else if (line.includes("imageResourcesPath: _app_options.AppOptions.get('imageResourcesPath'),")) {
         line += "\n      removePageBorders: _app_options.AppOptions.get('removePageBorders'),";
-      } else if (line.includes("renderer: {")) {
-        line = `  removePageBorders: {
+      } else if (line.includes('renderer: {')) {
+        line =
+          `  removePageBorders: {
           value: false,
           kind: OptionKind.VIEWER + OptionKind.PREFERENCE
         },
         ` + line;
+        expectedChanges--;
       } else if (line.includes("imageResourcesPath: _app_options.AppOptions.get('imageResourcesPath'),")) {
-        line += "\n        removePageBorders: this.removePageBorders,";
+        line += '\n        removePageBorders: this.removePageBorders,';
       } else if (line.includes('      "renderer": "canvas",')) {
         line = '      "removePageBorders": false,\n' + line;
+        expectedChanges--;
       } else if (line.includes('imageResourcesPath: this.imageResourcesPath,')) {
         line += '\n          removePageBorders: this.removePageBorders,';
+        expectedChanges--;
+      } else if (line.includes("findField: document.getElementById('findInput'),")) {
+        line += "\n      findFieldMultiline: document.getElementById('findInputMultiline'),";
+        expectedChanges--;
+      } else if (line.includes('this.findField = options.findField || null;')) {
+        line += '\n    this.findFieldMultiline = options.findFieldMultiline || null;';
+      } else if (line.includes("this.findField.addEventListener('input', () => {")) {
+        line =
+          `    this.findFieldMultiline.addEventListener('input', () => {
+      this.dispatchEvent('findMultiline');
+    });
+` + line;
+        expectedChanges--;
+      } else if (line.includes(' type,')) {
+        line = `      type: type === 'findMultiline'?'':type,
+      query: type === 'findMultiline'? this.findFieldMultiline.value:this.findField.value,`;
+        dropLines = 1;
+        expectedChanges--;
+      } else if (line.includes("this.findField.setAttribute('data-status', status);")) {
+        line += `
+    this.findFieldMultiline.classList.toggle('notFound', notFound);
+    this.findFieldMultiline.setAttribute('data-status', status);
+`;
+        expectedChanges--;
+      } else if (line.includes("console.warn('#' + key + ' is undefined.')")) {
+        line = line.replace("'#'", "'Translation for the key #'");
+        line = line.replace('undefined', 'missing');
+        expectedChanges--;
+      } else if (line.includes("console.warn('#' + l10n.id + ' is undefined.');")) {
+        line = line.replace("'#'", "'Translation for the key #'");
+        line = line.replace('undefined', 'missing');
+        expectedChanges--;
       }
 
       if (line != null) {

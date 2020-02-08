@@ -200,6 +200,7 @@ function getViewerConfiguration() {
       bar: document.getElementById('findbar'),
       toggleButton: document.getElementById('viewFind'),
       findField: document.getElementById('findInput'),
+      findFieldMultiline: document.getElementById('findInputMultiline'),
       highlightAllCheckbox: document.getElementById('findHighlightAll'),
       caseSensitiveCheckbox: document.getElementById('findMatchCase'),
       entireWordCheckbox: document.getElementById('findEntireWord'),
@@ -5005,6 +5006,7 @@ class PDFFindBar {
     this.bar = options.bar || null;
     this.toggleButton = options.toggleButton || null;
     this.findField = options.findField || null;
+    this.findFieldMultiline = options.findFieldMultiline || null;
     this.highlightAll = options.highlightAllCheckbox || null;
     this.caseSensitive = options.caseSensitiveCheckbox || null;
     this.entireWord = options.entireWordCheckbox || null;
@@ -5018,6 +5020,9 @@ class PDFFindBar {
     this.l10n = l10n;
     this.toggleButton.addEventListener('click', () => {
       this.toggle();
+    });
+    this.findFieldMultiline.addEventListener('input', () => {
+      this.dispatchEvent('findMultiline');
     });
     this.findField.addEventListener('input', () => {
       this.dispatchEvent('');
@@ -5052,7 +5057,7 @@ class PDFFindBar {
       this.dispatchEvent('entirewordchange');
     });
     this.multipleSearchTexts.addEventListener('click', () => { // #201
-          this.dispatchEvent('multipleSearchTextsChange'); // #201
+          this.dispatchEvent('multiplesearchtextschange'); // #201
     }); // #201
     this.ignoreAccents.addEventListener('click', () => { // #177
           this.dispatchEvent('ignoreAccentsChange'); // #177
@@ -5067,8 +5072,8 @@ class PDFFindBar {
   dispatchEvent(type, findPrev) {
     this.eventBus.dispatch('find', {
       source: this,
-      type,
-      query: this.findField.value,
+      type: type === 'findMultiline'?'':type,
+      query: type === 'findMultiline'? this.findFieldMultiline.value:this.findField.value,
       phraseSearch: !this.multipleSearchTexts.checked, // #201
       caseSensitive: this.caseSensitive.checked,
       entireWord: this.entireWord.checked,
@@ -5108,6 +5113,9 @@ class PDFFindBar {
 
     this.findField.classList.toggle('notFound', notFound);
     this.findField.setAttribute('data-status', status);
+    this.findFieldMultiline.classList.toggle('notFound', notFound);
+    this.findFieldMultiline.setAttribute('data-status', status);
+
     Promise.resolve(findMsg).then(msg => {
       this.findMsg.textContent = msg;
 
@@ -5544,7 +5552,7 @@ class PDFFindController {
             } // #177
   
     const matchesWithLength = [];
-    const queryArray = (query.includes('\n')) ? query.match(/\W+/g) : query.match(/\S+/g);
+    const queryArray = (query.includes('\n')) ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g);
 
     for (let i = 0, len = queryArray.length; i < len; i++) {
       const subquery = queryArray[i];
@@ -12376,7 +12384,7 @@ fireL10nReadyEvent(lang);
     var data = gL10nData[key];
 
     if (!data) {
-      console.warn('#' + key + ' is undefined.');
+      console.warn('Translation for the key #' + key + ' is missing.');
 
       if (!fallback) {
         return null;
@@ -12441,7 +12449,7 @@ fireL10nReadyEvent(lang);
     var data = getL10nData(l10n.id, l10n.args);
 
     if (!data) {
-      console.warn('#' + l10n.id + ' is undefined.');
+      console.warn('Translation for the key #' + l10n.id + ' is missing.');
       return;
     }
 

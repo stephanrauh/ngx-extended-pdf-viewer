@@ -1,0 +1,20 @@
+textarea {
+  width: 200px;
+  height: 3.5em;
+}
+
+textarea::-webkit-input-placeholder {
+  color: hsl(0, 0%, 75%);
+}
+textarea::-moz-placeholder {
+  font-style: italic;
+}
+textarea:-ms-input-placeholder {
+  font-style: italic;
+}
+textarea::-ms-input-placeholder {
+  font-style: italic;
+}
+textarea::placeholder {
+  font-style: italic;
+}
