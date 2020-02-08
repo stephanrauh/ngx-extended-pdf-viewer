@@ -1075,7 +1075,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   private setZoom() {
     let zoomAsNumber = this.zoom;
-    console.log(this.zoom);
     if (String(zoomAsNumber).endsWith('%')) {
       zoomAsNumber = Number(String(zoomAsNumber).replace('%', '')) / 100;
     } else if (!isNaN(Number(zoomAsNumber))) {

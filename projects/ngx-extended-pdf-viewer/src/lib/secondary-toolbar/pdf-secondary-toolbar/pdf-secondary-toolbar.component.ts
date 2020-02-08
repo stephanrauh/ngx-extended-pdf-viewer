@@ -5,7 +5,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange
   templateUrl: './pdf-secondary-toolbar.component.html',
   styleUrls: ['./pdf-secondary-toolbar.component.css']
 })
-export class PdfSecondaryToolbarComponent implements OnInit, OnChanges {
+export class PdfSecondaryToolbarComponent {
   @Input()
   public secondaryToolbarTop;
 
@@ -53,14 +53,4 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges {
   }
 
   constructor() { }
-
-  ngOnInit() {
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if ('mobileFriendlyZoomScale' in changes) {
-      console.log(this.mobileFriendlyZoomScale);
-    }
-  }
-
 }
