@@ -112,3 +112,4 @@
 - 2.0.0-alpha.0 #188 load the pdf.js files lazily by default; #186, #179, and #157 refactor the HTML code in order to make it easier to customize the toolbar (work in progress)
 - 2.0.0-alpha.1 #194 add an option to display the PDF file without the border. Kudos to Balaji Sivaraman for contributing this pull request!
 - 2.0.0-alpha.2 #194 renamed the option to `[showBorders]="'true'"`. Kudos to Balaji Sivaraman for contributing this pull request!
+- 2.0.0-alpha.3 #201 added an option to find multiple texts. 
