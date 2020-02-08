@@ -203,7 +203,7 @@ function getViewerConfiguration() {
       highlightAllCheckbox: document.getElementById('findHighlightAll'),
       caseSensitiveCheckbox: document.getElementById('findMatchCase'),
       entireWordCheckbox: document.getElementById('findEntireWord'),
-      findEntirePhraseCheckbox: document.getElementById('findEntirePhrase'), // #201
+      findMultipleSearchTextsCheckbox: document.getElementById('findMultipleSearchTexts'), // #201
       ignoreAccentsCheckbox: document.getElementById('findIgnoreAccents'), // #177
       findMsg: document.getElementById('findMsg'),
       findResultsCount: document.getElementById('findResultsCount'),
@@ -2190,7 +2190,6 @@ function webViewerKeyDown(evt) {
               phraseSearch: findState.phraseSearch,
               caseSensitive: findState.caseSensitive,
               entireWord: findState.entireWord,
-              entirePhrase: findState.entirePhrase, // #201
               ignoreAccents: findState.ignoreAccents, // #177
               highlightAll: findState.highlightAll,
               findPrevious: cmd === 5 || cmd === 12
@@ -5009,7 +5008,7 @@ class PDFFindBar {
     this.highlightAll = options.highlightAllCheckbox || null;
     this.caseSensitive = options.caseSensitiveCheckbox || null;
     this.entireWord = options.entireWordCheckbox || null;
-    this.entirePhrase = options.findEntirePhraseCheckbox || null; // #201
+    this.multipleSearchTexts = options.findMultipleSearchTextsCheckbox || null; // #201
     this.ignoreAccents = options.ignoreAccentsCheckbox || null; // #177
     this.findMsg = options.findMsg || null;
     this.findResultsCount = options.findResultsCount || null;
@@ -5052,8 +5051,8 @@ class PDFFindBar {
     this.entireWord.addEventListener('click', () => {
       this.dispatchEvent('entirewordchange');
     });
-    this.entirePhrase.addEventListener('click', () => { // #201
-          this.dispatchEvent('entirePhraseChange'); // #201
+    this.multipleSearchTexts.addEventListener('click', () => { // #201
+          this.dispatchEvent('multipleSearchTextsChange'); // #201
     }); // #201
     this.ignoreAccents.addEventListener('click', () => { // #177
           this.dispatchEvent('ignoreAccentsChange'); // #177
@@ -5070,8 +5069,7 @@ class PDFFindBar {
       source: this,
       type,
       query: this.findField.value,
-      phraseSearch: true,
-      phraseSearch: this.entirePhrase.checked, // #201
+      phraseSearch: !this.multipleSearchTexts.checked, // #201
       caseSensitive: this.caseSensitive.checked,
       entireWord: this.entireWord.checked,
       ignoreAccents: this.ignoreAccents.checked, // #177
@@ -5546,7 +5544,7 @@ class PDFFindController {
             } // #177
   
     const matchesWithLength = [];
-    const queryArray = query.match(/\S+/g);
+    const queryArray = (query.includes('\n')) ? query.match(/\W+/g) : query.match(/\S+/g);
 
     for (let i = 0, len = queryArray.length; i < len; i++) {
       const subquery = queryArray[i];
@@ -5584,7 +5582,6 @@ class PDFFindController {
     const {
       caseSensitive,
       entireWord,
-      entirePhrase, // #201
       ignoreAccents, // #177
       phraseSearch
     } = this._state;

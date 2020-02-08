@@ -1,4 +1,4 @@
-<input
+<input *ngIf="!pdfFindbarService.lineMode"
   autocomplete="search-input-field"
   id="findInput"
   class="toolbarField"
@@ -7,4 +7,12 @@
   tabindex="91"
   data-l10n-id="find_input"
   name="search-input-field"
+  [(ngModel)]="pdfFindbarService.searchPhrase"
 />
+<textarea *ngIf="pdfFindbarService.lineMode"
+  type="checkbox"
+  class="toolbarField"
+  tabindex="92"
+  lines="3"
+  [(ngModel)]="pdfFindbarService.searchPhrase"
+></textarea>

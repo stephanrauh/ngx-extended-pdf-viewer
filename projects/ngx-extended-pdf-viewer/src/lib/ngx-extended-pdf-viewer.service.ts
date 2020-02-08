@@ -6,7 +6,7 @@ export interface FindOptions {
   matchCase?: boolean;
   wholeWords?: boolean;
   ignoreAccents?: boolean;
-  findEntirePhrase?: boolean;
+  findMultipleSearchTexts?: boolean;
 }
 
 @Injectable({
@@ -37,9 +37,9 @@ export class NgxExtendedPdfViewerService {
       if (findIgnoreAccentsCheckbox) {
         findIgnoreAccentsCheckbox.checked = options.ignoreAccents || false;
       }
-      const findEntirePhraseCheckbox = document.getElementById('findEntirePhrase') as HTMLInputElement;
-      if (findEntirePhraseCheckbox) {
-        findEntirePhraseCheckbox.checked = options.findEntirePhrase || true;
+      const findMultipleSearchTextsCheckbox = document.getElementById('findMultipleSearchTexts') as HTMLInputElement;
+      if (findMultipleSearchTextsCheckbox) {
+        findMultipleSearchTextsCheckbox.checked = options.findMultipleSearchTexts || true;
       }
       const inputField = document.getElementById('findInput');
       if (inputField) {

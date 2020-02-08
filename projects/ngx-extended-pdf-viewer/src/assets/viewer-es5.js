@@ -216,7 +216,7 @@ function getViewerConfiguration() {
       highlightAllCheckbox: document.getElementById('findHighlightAll'),
       caseSensitiveCheckbox: document.getElementById('findMatchCase'),
       entireWordCheckbox: document.getElementById('findEntireWord'),
-      findEntirePhraseCheckbox: document.getElementById('findEntirePhrase'), // #201
+      findMultipleSearchTextsCheckbox: document.getElementById('findMultipleSearchTexts'), // #201
       ignoreAccentsCheckbox: document.getElementById('findIgnoreAccents'), // #177
       findMsg: document.getElementById('findMsg'),
       findResultsCount: document.getElementById('findResultsCount'),
@@ -2340,7 +2340,6 @@ function webViewerKeyDown(evt) {
               phraseSearch: findState.phraseSearch,
               caseSensitive: findState.caseSensitive,
               entireWord: findState.entireWord,
-              entirePhrase: findState.entirePhrase, // #201
               ignoreAccents: findState.ignoreAccents, // #177
               highlightAll: findState.highlightAll,
               findPrevious: cmd === 5 || cmd === 12
@@ -6309,7 +6308,7 @@ function () {
     this.highlightAll = options.highlightAllCheckbox || null;
     this.caseSensitive = options.caseSensitiveCheckbox || null;
     this.entireWord = options.entireWordCheckbox || null;
-    this.entirePhrase = options.findEntirePhraseCheckbox || null; // #201
+    this.multipleSearchTexts = options.findMultipleSearchTextsCheckbox || null; // #201
     this.ignoreAccents = options.ignoreAccentsCheckbox || null; // #177
     this.findMsg = options.findMsg || null;
     this.findResultsCount = options.findResultsCount || null;
@@ -6353,8 +6352,8 @@ function () {
     this.entireWord.addEventListener('click', function () {
       _this.dispatchEvent('entirewordchange');
     });
-    this.entirePhrase.addEventListener('click', function () {
-     _this.dispatchEvent('entirePhraseChange');
+    this.multipleSearchTexts.addEventListener('click', function () {
+     _this.dispatchEvent('multipleSearchTextsChange');
     });
     this.ignoreAccents.addEventListener('click', function () {
      _this.dispatchEvent('ignoreAccentsChange');
@@ -6374,8 +6373,7 @@ function () {
         source: this,
         type: type,
         query: this.findField.value,
-        phraseSearch: true,
-      phraseSearch: this.entirePhrase.checked, // #201
+      phraseSearch: !this.multipleSearchTexts.checked, // #201
         caseSensitive: this.caseSensitive.checked,
         entireWord: this.entireWord.checked,
       ignoreAccents: this.ignoreAccents.checked, // #177
@@ -6903,7 +6901,6 @@ function () {
       var _this$_state = this._state,
           caseSensitive = _this$_state.caseSensitive,
           entireWord = _this$_state.entireWord,
-          entirePhrase = _this$_state.entirePhrase, // #201
           ignoreAccents = _this$_state.ignoreAccents // #177,
           phraseSearch = _this$_state.phraseSearch;
 

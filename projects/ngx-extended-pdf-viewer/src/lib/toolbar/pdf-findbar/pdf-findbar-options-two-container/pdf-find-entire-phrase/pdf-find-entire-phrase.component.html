@@ -1,12 +1,29 @@
 <input
   type="checkbox"
-  id="findEntirePhrase"
+  id="findMultipleSearchTexts"
   class="toolbarField"
   tabindex="97"
+  [(ngModel)]="pdfFindbarService.multipleSearchTexts"
 />
+
 <label
-  for="findEntirePhrase"
+  for="findMultipleSearchTexts"
   class="toolbarLabel"
-  data-l10n-id="find_entire_phrase_label">
-  Whole phrase
+  data-l10n-id="find_multiple_texts_label">
+  multiple search texts
+</label>
+
+<input *ngIf="!pdfFindbarService.multipleSearchTexts"
+  type="checkbox"
+  id="findByLineMode"
+  class="toolbarField"
+  tabindex="98"
+  [(ngModel)]="pdfFindbarService.lineMode"
+/>
+
+<label *ngIf="!pdfFindbarService.multipleSearchTexts"
+  for="findByLineMode"
+  class="toolbarLabel"
+  data-l10n-id="find_by_line_mode_label">
+  separated by word boundaries
 </label>

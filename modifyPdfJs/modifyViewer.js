@@ -236,7 +236,7 @@ function convertLines() {
         line = 'fireL10nReadyEvent(lang);\n' + line;
         expectedChanges--;
       } else if (line.includes("entireWordCheckbox: document.getElementById('findEntireWord')")) {
-        line = line + '\n' + "      findEntirePhraseCheckbox: document.getElementById('findEntirePhrase'), // #201";
+        line = line + '\n' + "      findMultipleSearchTextsCheckbox: document.getElementById('findMultipleSearchTexts'), // #201";
         line = line + '\n' + "      ignoreAccentsCheckbox: document.getElementById('findIgnoreAccents'), // #177";
         expectedChanges--;
       } else if (line.includes('entireWord: evt.entireWord')) {
@@ -246,18 +246,18 @@ function convertLines() {
         line = line + '\n' + '    ignoreAccents: false, // #177';
         expectedChanges--;
       } else if (line.includes('entireWord: findState.entireWord')) {
-        line = line + '\n' + '              entirePhrase: findState.entirePhrase, // #201';
         line = line + '\n' + '              ignoreAccents: findState.ignoreAccents, // #177';
         expectedChanges--;
+        expectedChanges--;
       } else if (line.includes('this.entireWord = options.entireWordCheckbox || null')) {
-        line = line + '\n' + '    this.entirePhrase = options.findEntirePhraseCheckbox || null; // #201';
+        line = line + '\n' + '    this.multipleSearchTexts = options.findMultipleSearchTextsCheckbox || null; // #201';
         line = line + '\n' + '    this.ignoreAccents = options.ignoreAccentsCheckbox || null; // #177';
         expectedChanges--;
       } else if (line.includes("this.eventBus.on('resize', this._adjustWidth.bind(this))")) {
         if (es2015) {
           line =
-          "    this.entirePhrase.addEventListener('click', () => { // #201\n" +
-          "          this.dispatchEvent('entirePhraseChange'); // #201\n" +
+          "    this.multipleSearchTexts.addEventListener('click', () => { // #201\n" +
+          "          this.dispatchEvent('multipleSearchTextsChange'); // #201\n" +
           '    }); // #201\n' +
           "    this.ignoreAccents.addEventListener('click', () => { // #177\n" +
           "          this.dispatchEvent('ignoreAccentsChange'); // #177\n" +
@@ -265,8 +265,8 @@ function convertLines() {
         line;
         } else {
           line =
-          "    this.entirePhrase.addEventListener('click', function () {\n" +
-          "     _this.dispatchEvent('entirePhraseChange');\n" +
+          "    this.multipleSearchTexts.addEventListener('click', function () {\n" +
+          "     _this.dispatchEvent('multipleSearchTextsChange');\n" +
           '    });\n' +
           "    this.ignoreAccents.addEventListener('click', function () {\n" +
           "     _this.dispatchEvent('ignoreAccentsChange');\n" +
@@ -275,7 +275,7 @@ function convertLines() {
         }
         expectedChanges--;
       } else if (line.includes('phraseSearch: true,')) {
-        line = line + '\n' + '      phraseSearch: this.entirePhrase.checked, // #201';
+        line = '      phraseSearch: !this.multipleSearchTexts.checked, // #201';
         expectedChanges--;
       } else if (line.includes('entireWord: this.entireWord.checked')) {
         line = line + '\n' + '      ignoreAccents: this.ignoreAccents.checked, // #177';
@@ -312,12 +312,12 @@ function convertLines() {
             } // #177
   `;
         expectedChanges--;
+      } else if (line.includes('const queryArray = query.match(/\\S+/g);')) {
+        line = "    const queryArray = (query.includes('\\n')) ? query.match(/\\W+/g) : query.match(/\\S+/g);" // #201
       } else if (currentFunction == '_calculateMatch' && line.includes('entireWord,')) {
         if (es2015) {
-          line = line + '\n      entirePhrase, // #201';
           line = line + '\n      ignoreAccents, // #177';
         } else {
-          line = line + '\n          entirePhrase = _this$_state.entirePhrase, // #201';
           line = line + '\n          ignoreAccents = _this$_state.ignoreAccents // #177,';
         }
         currentFunction = '';
