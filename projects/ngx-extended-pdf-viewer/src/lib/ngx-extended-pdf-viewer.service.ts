@@ -15,6 +15,15 @@ export interface FindOptions {
 export class NgxExtendedPdfViewerService {
   constructor() {}
 
+  public findMultiple(text: Array<string>, options: FindOptions = {}): boolean {
+    options = {
+      ...options,
+      findMultipleSearchTexts: true
+    };
+    const searchString = text.join('\n') + '\n';
+    return this.find(searchString, options);
+  }
+
   public find(text: string, options: FindOptions = {}): boolean {
     if (!NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
       // tslint:disable-next-line:quotemark
@@ -39,7 +48,7 @@ export class NgxExtendedPdfViewerService {
       }
       const findMultipleSearchTextsCheckbox = document.getElementById('findMultipleSearchTexts') as HTMLInputElement;
       if (findMultipleSearchTextsCheckbox) {
-        findMultipleSearchTextsCheckbox.checked = options.findMultipleSearchTexts || true;
+        findMultipleSearchTextsCheckbox.checked = options.findMultipleSearchTexts || false;
       }
       const inputField = document.getElementById('findInput');
       if (inputField) {
