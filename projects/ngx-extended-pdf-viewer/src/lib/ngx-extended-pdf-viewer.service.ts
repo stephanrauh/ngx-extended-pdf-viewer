@@ -53,7 +53,7 @@ export class NgxExtendedPdfViewerService {
       }
       const individualWordsModeCheckbox = document.getElementById('individualWordsMode') as HTMLInputElement;
       if (individualWordsModeCheckbox) {
-        individualWordsModeCheckbox.checked = multipleSearchTerms;
+        individualWordsModeCheckbox.checked = false;
       }
 
       const inputField = multipleSearchTerms ? document.getElementById('findInputMultiline') : document.getElementById('findInput');
