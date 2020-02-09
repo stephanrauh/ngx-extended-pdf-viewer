@@ -113,3 +113,4 @@
 - 2.0.0-alpha.1 #194 add an option to display the PDF file without the border. Kudos to Balaji Sivaraman for contributing this pull request!
 - 2.0.0-alpha.2 #194 renamed the option to `[showBorders]="'true'"`. Kudos to Balaji Sivaraman for contributing this pull request!
 - 2.0.0-alpha.3 #201 added an option to find multiple texts. 
+- 2.0.0-alpha.4 #201 improved the option to find multiple texts and added the programmatic API
