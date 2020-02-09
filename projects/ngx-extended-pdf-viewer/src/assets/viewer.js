@@ -5283,6 +5283,9 @@ class PDFFindController {
     return this._pageMatches;
   }
 
+  get pageMatchesColor() {         // #201
+    return this._pageMatchesColor; // #201
+  }                                // #201
   get pageMatchesLength() {
     return this._pageMatchesLength;
   }
@@ -5396,6 +5399,7 @@ class PDFFindController {
     this._pdfDocument = null;
     this._pageMatches = [];
     this._pageMatchesLength = [];
+    this._pageMatchesColor = [];
     this._state = null;
     this._selected = {
       pageIdx: -1,
@@ -5450,7 +5454,7 @@ class PDFFindController {
     return true;
   }
 
-  _prepareMatches(matchesWithLength, matches, matchesLength) {
+  _prepareMatches(matchesWithLength, matches, matchesLength, matchesColor) {
     function isSubTerm(matchesWithLength, currentIndex) {
       const currentElem = matchesWithLength[currentIndex];
       const nextElem = matchesWithLength[currentIndex + 1];
@@ -5491,6 +5495,7 @@ class PDFFindController {
 
       matches.push(matchesWithLength[i].match);
       matchesLength.push(matchesWithLength[i].matchLength);
+      matchesColor.push(matchesWithLength[i].color);
     }
   }
 
@@ -5552,7 +5557,7 @@ class PDFFindController {
             } // #177
   
     const matchesWithLength = [];
-    const queryArray = (query.includes('\n')) ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g);
+    var queryArray = (query.includes('\n')) ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g);
 
     for (let i = 0, len = queryArray.length; i < len; i++) {
       const subquery = queryArray[i];
@@ -5573,15 +5578,17 @@ class PDFFindController {
         matchesWithLength.push({
           match: matchIdx,
           matchLength: subqueryLen,
-          skipped: false
+          skipped: false,
+          color: i
         });
       }
     }
 
     this._pageMatchesLength[pageIndex] = [];
+    this._pageMatchesColor[pageIndex] = [];
     this._pageMatches[pageIndex] = [];
 
-    this._prepareMatches(matchesWithLength, this._pageMatches[pageIndex], this._pageMatchesLength[pageIndex]);
+    this._prepareMatches(matchesWithLength, this._pageMatches[pageIndex], this._pageMatchesLength[pageIndex], this._pageMatchesColor[pageIndex]);;
   }
 
   _calculateMatch(pageIndex) {
@@ -5695,6 +5702,7 @@ class PDFFindController {
       this._resumePageIdx = null;
       this._pageMatches.length = 0;
       this._pageMatchesLength.length = 0;
+      this._pageMatchesColor.length = 0;
       this._matchesCountTotal = 0;
 
       this._updateAllPages();
@@ -10363,7 +10371,7 @@ class TextLayerBuilder {
     this.textContent = textContent;
   }
 
-  _convertMatches(matches, matchesLength) {
+  _convertMatches(matches, matchesLength, matchesColor) {
     if (!matches) {
       return [];
     }
@@ -10391,6 +10399,7 @@ class TextLayerBuilder {
       }
 
       let match = {
+        color: matchesColor ? matchesColor[m] : 0,
         begin: {
           divIdx: i,
           offset: matchIdx - iIndex
@@ -10475,7 +10484,7 @@ class TextLayerBuilder {
       let begin = match.begin;
       let end = match.end;
       const isSelected = isSelectedPage && i === selectedMatchIdx;
-      const highlightSuffix = isSelected ? ' selected' : '';
+      var highlightSuffix = (isSelected ? ' selected' : '') + ' color' + match.color;
 
       if (isSelected) {
         findController.scrollMatchIntoView({
@@ -10548,7 +10557,8 @@ class TextLayerBuilder {
 
     const pageMatches = findController.pageMatches[pageIdx] || null;
     const pageMatchesLength = findController.pageMatchesLength[pageIdx] || null;
-    this.matches = this._convertMatches(pageMatches, pageMatchesLength);
+      var pageMatchesColor = findController.pageMatchesColor[pageIdx] || null;
+      this.matches = this._convertMatches(pageMatches, pageMatchesLength, pageMatchesColor);
 
     this._renderMatches(this.matches);
   }

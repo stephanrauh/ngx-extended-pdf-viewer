@@ -264,10 +264,10 @@ function convertLines() {
             line;
         } else {
           line =
-            "    this.multipleSearchTexts.addEventListener('click', function () {\n" +
+            "    this.multipleSearchTexts.addEventListener('click', function () { // #201\n" +
             "     _this.dispatchEvent('multiplesearchtextschange');\n" +
             '    });\n' +
-            "    this.ignoreAccents.addEventListener('click', function () {\n" +
+            "    this.ignoreAccents.addEventListener('click', function () { // #177\n" +
             "     _this.dispatchEvent('ignoreAccentsChange');\n" +
             '    });\n' +
             line;
@@ -311,8 +311,8 @@ function convertLines() {
             } // #177
   `;
         expectedChanges--;
-      } else if (line.includes('const queryArray = query.match(/\\S+/g);')) {
-        line = "    const queryArray = (query.includes('\\n')) ? query.trim().split(/\\n+/g) : query.trim().match(/\\S+/g);"; // #201
+      } else if (line.includes('queryArray = query.match(/\\S+/g);')) {
+        line = "    var queryArray = (query.includes('\\n')) ? query.trim().split(/\\n+/g) : query.trim().match(/\\S+/g); // #201";
       } else if (currentFunction == '_calculateMatch' && line.includes('entireWord,')) {
         if (es2015) {
           line = line + '\n      ignoreAccents, // #177';
@@ -332,51 +332,51 @@ function convertLines() {
         line = "      console.log('PDF viewer: ngx-extended-pdf-viewer running on pdf.js ' + _pdfjsLib.version);\n" + line;
         expectedChanges--;
       } else if (line.includes("if ('verbosity' in hashParams) {")) {
-        line = `    if ('removepageborders' in hashParams) {
-      _app_options.AppOptions.set('removePageBorders', hashParams['removepageborders'] === 'true');
+        line = `    if ('removepageborders' in hashParams) { // #194
+      _app_options.AppOptions.set('removePageBorders', hashParams['removepageborders'] === 'true'); // #194
     }
 
 ${line}`;
         expectedChanges--;
       } else if (line.includes("imageResourcesPath: _app_options.AppOptions.get('imageResourcesPath'),")) {
-        line += "\n      removePageBorders: _app_options.AppOptions.get('removePageBorders'),";
+        line += "\n      removePageBorders: _app_options.AppOptions.get('removePageBorders'), // #194";
       } else if (line.includes('renderer: {')) {
         line =
-          `  removePageBorders: {
+          `  removePageBorders: { // #194
           value: false,
           kind: OptionKind.VIEWER + OptionKind.PREFERENCE
         },
         ` + line;
         expectedChanges--;
       } else if (line.includes("imageResourcesPath: _app_options.AppOptions.get('imageResourcesPath'),")) {
-        line += '\n        removePageBorders: this.removePageBorders,';
+        line += '\n        removePageBorders: this.removePageBorders, // #194';
       } else if (line.includes('      "renderer": "canvas",')) {
-        line = '      "removePageBorders": false,\n' + line;
+        line = '      "removePageBorders": false,// #194 \n' + line;
         expectedChanges--;
       } else if (line.includes('imageResourcesPath: this.imageResourcesPath,')) {
-        line += '\n          removePageBorders: this.removePageBorders,';
+        line += '\n          removePageBorders: this.removePageBorders, // #194';
         expectedChanges--;
       } else if (line.includes("findField: document.getElementById('findInput'),")) {
-        line += "\n      findFieldMultiline: document.getElementById('findInputMultiline'),";
+        line += "\n      findFieldMultiline: document.getElementById('findInputMultiline'), // #201";
         expectedChanges--;
       } else if (line.includes('this.findField = options.findField || null;')) {
-        line += '\n    this.findFieldMultiline = options.findFieldMultiline || null;';
+        line += '\n    this.findFieldMultiline = options.findFieldMultiline || null; // #201';
       } else if (line.includes("this.findField.addEventListener('input', () => {")) {
         line =
-          `    this.findFieldMultiline.addEventListener('input', () => {
+          `    this.findFieldMultiline.addEventListener('input', () => { // #201
       this.dispatchEvent('');
     });
 ` + line;
         expectedChanges--;
       } else if (line.includes(' type,')) {
         line = `      type: type,
-      query: this.findFieldMultiline.classList.contains('hidden')? this.findField.value: this.findFieldMultiline.value,`;
+      query: this.findFieldMultiline.classList.contains('hidden')? this.findField.value: this.findFieldMultiline.value, // #201`;
         dropLines = 1;
         expectedChanges--;
       } else if (line.includes("this.findField.setAttribute('data-status', status);")) {
         line += `
-    this.findFieldMultiline.classList.toggle('notFound', notFound);
-    this.findFieldMultiline.setAttribute('data-status', status);
+    this.findFieldMultiline.classList.toggle('notFound', notFound); // #201
+    this.findFieldMultiline.setAttribute('data-status', status);    // #201
 `;
         expectedChanges--;
       } else if (line.includes("console.warn('#' + key + ' is undefined.')")) {
@@ -387,7 +387,55 @@ ${line}`;
         line = line.replace("'#'", "'Translation for the key #'");
         line = line.replace('undefined', 'missing');
         expectedChanges--;
-      }
+      } else if (line.includes('get pageMatchesLength() {')) {
+        line = `  get pageMatchesColor() {         // #201
+    return this._pageMatchesColor; // #201
+  }                                // #201
+` + line;
+        expectedChanges--;
+      } else if (line.includes('key: "pageMatchesLength",')) {
+        line = `    key: "pageMatchesColor",
+    get: function get() {  // #201
+      return this._pageMatchesColor;
+    }
+  }, {
+` + line;
+      expectedChanges--;
+        } else if (line.includes('this._pageMatchesLength = [];')) {
+          line += '\n    this._pageMatchesColor = [];  // #201';
+          expectedChanges--;
+        } else if (line.includes('_prepareMatches(matchesWithLength, matches, matchesLength) {')) {
+          line = line.replace('matchesLength)', 'matchesLength, matchesColor)  // #201');
+          expectedChanges--;
+        } else if (line.includes('matchesLength.push(matchesWithLength[i].matchLength);')) {
+          line += '\n      matchesColor.push(matchesWithLength[i].color);  // #201';
+          expectedChanges--;
+        } else if (line.includes('skipped: false')) {
+          line += ',\n          color: i  // #201';
+          expectedChanges--;
+        } else if (line.includes('this._pageMatchesLength[pageIndex] = [];')) {
+          line += '\n    this._pageMatchesColor[pageIndex] = [];  // #201';
+          expectedChanges--;
+        } else if (line.includes('this._prepareMatches(matchesWithLength, this._pageMatches[pageIndex], this._pageMatchesLength[pageIndex]);')) {
+          line = line.replace('this._pageMatchesLength[pageIndex])', 'this._pageMatchesLength[pageIndex], /* #201 */ this._pageMatchesColor[pageIndex]);');
+          expectedChanges--;
+        } else if (line.includes('this._pageMatchesLength.length = 0;')) {
+          line += '\n      this._pageMatchesColor.length = 0;  // #201';
+          expectedChanges--;
+        } else if (line.includes('_convertMatches(matches, matchesLength) {')) {
+          line = line.replace('matchesLength)', 'matchesLength, /* #201 */ matchesColor)');
+          expectedChanges--;
+        } else if (line.includes('begin: {')) {
+          line = '        color: matchesColor ? matchesColor[m] : 0, // #201\n' + line;
+          expectedChanges--;
+        } else if (line.includes("highlightSuffix = isSelected ? ' selected' : '';")) {
+          line = "      var highlightSuffix = (isSelected ? ' selected' : '') + ' color' + match.color; // #201";
+          expectedChanges--;
+        } else if (line.includes('this.matches = this._convertMatches(pageMatches, pageMatchesLength);')) {
+          line = `      var pageMatchesColor = findController.pageMatchesColor[pageIdx] || null; // #201
+      this.matches = this._convertMatches(pageMatches, pageMatchesLength, pageMatchesColor); // #201`
+          expectedChanges--;
+        }
 
       if (line != null) {
         line = line.replace(' print(', ' printPDF(');
