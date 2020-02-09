@@ -200,7 +200,7 @@ function getViewerConfiguration() {
       bar: document.getElementById('findbar'),
       toggleButton: document.getElementById('viewFind'),
       findField: document.getElementById('findInput'),
-      findFieldMultiline: document.getElementById('findInputMultiline'),
+      findFieldMultiline: document.getElementById('findInputMultiline'), // #201
       highlightAllCheckbox: document.getElementById('findHighlightAll'),
       caseSensitiveCheckbox: document.getElementById('findMatchCase'),
       entireWordCheckbox: document.getElementById('findEntireWord'),
@@ -480,8 +480,8 @@ let PDFViewerApplication = {
       _app_options.AppOptions.set('useOnlyCssZoom', hashParams['useonlycsszoom'] === 'true');
     }
 
-    if ('removepageborders' in hashParams) {
-      _app_options.AppOptions.set('removePageBorders', hashParams['removepageborders'] === 'true');
+    if ('removepageborders' in hashParams) { // #194
+      _app_options.AppOptions.set('removePageBorders', hashParams['removepageborders'] === 'true'); // #194
     }
 
     if ('verbosity' in hashParams) {
@@ -566,7 +566,7 @@ let PDFViewerApplication = {
       l10n: this.l10n,
       textLayerMode: _app_options.AppOptions.get('textLayerMode'),
       imageResourcesPath: _app_options.AppOptions.get('imageResourcesPath'),
-      removePageBorders: _app_options.AppOptions.get('removePageBorders'),
+      removePageBorders: _app_options.AppOptions.get('removePageBorders'), // #194
       renderInteractiveForms: _app_options.AppOptions.get('renderInteractiveForms'),
       enablePrintAutoRotate: _app_options.AppOptions.get('enablePrintAutoRotate'),
       useOnlyCssZoom: _app_options.AppOptions.get('useOnlyCssZoom'),
@@ -3332,7 +3332,7 @@ const defaultOptions = {
     value: false,
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
   },
-  removePageBorders: {
+  removePageBorders: { // #194
           value: false,
           kind: OptionKind.VIEWER + OptionKind.PREFERENCE
         },
@@ -5006,7 +5006,7 @@ class PDFFindBar {
     this.bar = options.bar || null;
     this.toggleButton = options.toggleButton || null;
     this.findField = options.findField || null;
-    this.findFieldMultiline = options.findFieldMultiline || null;
+    this.findFieldMultiline = options.findFieldMultiline || null; // #201
     this.highlightAll = options.highlightAllCheckbox || null;
     this.caseSensitive = options.caseSensitiveCheckbox || null;
     this.entireWord = options.entireWordCheckbox || null;
@@ -5021,7 +5021,7 @@ class PDFFindBar {
     this.toggleButton.addEventListener('click', () => {
       this.toggle();
     });
-    this.findFieldMultiline.addEventListener('input', () => {
+    this.findFieldMultiline.addEventListener('input', () => { // #201
       this.dispatchEvent('');
     });
     this.findField.addEventListener('input', () => {
@@ -5073,7 +5073,7 @@ class PDFFindBar {
     this.eventBus.dispatch('find', {
       source: this,
       type: type,
-      query: this.findFieldMultiline.classList.contains('hidden')? this.findField.value: this.findFieldMultiline.value,
+      query: this.findFieldMultiline.classList.contains('hidden')? this.findField.value: this.findFieldMultiline.value, // #201
       phraseSearch: !this.multipleSearchTexts.checked, // #201
       caseSensitive: this.caseSensitive.checked,
       entireWord: this.entireWord.checked,
@@ -5113,8 +5113,8 @@ class PDFFindBar {
 
     this.findField.classList.toggle('notFound', notFound);
     this.findField.setAttribute('data-status', status);
-    this.findFieldMultiline.classList.toggle('notFound', notFound);
-    this.findFieldMultiline.setAttribute('data-status', status);
+    this.findFieldMultiline.classList.toggle('notFound', notFound); // #201
+    this.findFieldMultiline.setAttribute('data-status', status);    // #201
 
     Promise.resolve(findMsg).then(msg => {
       this.findMsg.textContent = msg;
@@ -5399,7 +5399,7 @@ class PDFFindController {
     this._pdfDocument = null;
     this._pageMatches = [];
     this._pageMatchesLength = [];
-    this._pageMatchesColor = [];
+    this._pageMatchesColor = [];  // #201
     this._state = null;
     this._selected = {
       pageIdx: -1,
@@ -5454,7 +5454,7 @@ class PDFFindController {
     return true;
   }
 
-  _prepareMatches(matchesWithLength, matches, matchesLength, matchesColor) {
+  _prepareMatches(matchesWithLength, matches, matchesLength, /* #201 */ matchesColor) {
     function isSubTerm(matchesWithLength, currentIndex) {
       const currentElem = matchesWithLength[currentIndex];
       const nextElem = matchesWithLength[currentIndex + 1];
@@ -5495,7 +5495,7 @@ class PDFFindController {
 
       matches.push(matchesWithLength[i].match);
       matchesLength.push(matchesWithLength[i].matchLength);
-      matchesColor.push(matchesWithLength[i].color);
+      matchesColor.push(matchesWithLength[i].color);  // #201
     }
   }
 
@@ -5557,7 +5557,7 @@ class PDFFindController {
             } // #177
   
     const matchesWithLength = [];
-    var queryArray = (query.includes('\n')) ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g);
+    var queryArray = (query.includes('\n')) ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g); // #201
 
     for (let i = 0, len = queryArray.length; i < len; i++) {
       const subquery = queryArray[i];
@@ -5579,16 +5579,16 @@ class PDFFindController {
           match: matchIdx,
           matchLength: subqueryLen,
           skipped: false,
-          color: i
+          color: i  // #201
         });
       }
     }
 
     this._pageMatchesLength[pageIndex] = [];
-    this._pageMatchesColor[pageIndex] = [];
+    this._pageMatchesColor[pageIndex] = [];  // #201
     this._pageMatches[pageIndex] = [];
 
-    this._prepareMatches(matchesWithLength, this._pageMatches[pageIndex], this._pageMatchesLength[pageIndex], this._pageMatchesColor[pageIndex]);;
+    this._prepareMatches(matchesWithLength, this._pageMatches[pageIndex], this._pageMatchesLength[pageIndex], /* #201 */ this._pageMatchesColor[pageIndex]);;
   }
 
   _calculateMatch(pageIndex) {
@@ -5702,7 +5702,7 @@ class PDFFindController {
       this._resumePageIdx = null;
       this._pageMatches.length = 0;
       this._pageMatchesLength.length = 0;
-      this._pageMatchesColor.length = 0;
+      this._pageMatchesColor.length = 0;  // #201
       this._matchesCountTotal = 0;
 
       this._updateAllPages();
@@ -8836,7 +8836,7 @@ class BaseViewer {
           textLayerMode: this.textLayerMode,
           annotationLayerFactory: this,
           imageResourcesPath: this.imageResourcesPath,
-          removePageBorders: this.removePageBorders,
+          removePageBorders: this.removePageBorders, // #194
           renderInteractiveForms: this.renderInteractiveForms,
           renderer: this.renderer,
           enableWebGL: this.enableWebGL,
@@ -9608,7 +9608,7 @@ class AnnotationLayerBuilder {
         annotations,
         page: this.pdfPage,
         imageResourcesPath: this.imageResourcesPath,
-          removePageBorders: this.removePageBorders,
+          removePageBorders: this.removePageBorders, // #194
         renderInteractiveForms: this.renderInteractiveForms,
         linkService: this.linkService,
         downloadManager: this.downloadManager
@@ -10371,7 +10371,7 @@ class TextLayerBuilder {
     this.textContent = textContent;
   }
 
-  _convertMatches(matches, matchesLength, matchesColor) {
+  _convertMatches(matches, matchesLength, /* #201 */ matchesColor) {
     if (!matches) {
       return [];
     }
@@ -10399,7 +10399,7 @@ class TextLayerBuilder {
       }
 
       let match = {
-        color: matchesColor ? matchesColor[m] : 0,
+        color: matchesColor ? matchesColor[m] : 0, // #201
         begin: {
           divIdx: i,
           offset: matchIdx - iIndex
@@ -10484,7 +10484,7 @@ class TextLayerBuilder {
       let begin = match.begin;
       let end = match.end;
       const isSelected = isSelectedPage && i === selectedMatchIdx;
-      var highlightSuffix = (isSelected ? ' selected' : '') + ' color' + match.color;
+      var highlightSuffix = (isSelected ? ' selected' : '') + ' color' + match.color; // #201
 
       if (isSelected) {
         findController.scrollMatchIntoView({
@@ -10557,8 +10557,8 @@ class TextLayerBuilder {
 
     const pageMatches = findController.pageMatches[pageIdx] || null;
     const pageMatchesLength = findController.pageMatchesLength[pageIdx] || null;
-      var pageMatchesColor = findController.pageMatchesColor[pageIdx] || null;
-      this.matches = this._convertMatches(pageMatches, pageMatchesLength, pageMatchesColor);
+      var pageMatchesColor = findController.pageMatchesColor[pageIdx] || null; // #201
+      this.matches = this._convertMatches(pageMatches, pageMatchesLength, pageMatchesColor); // #201
 
     this._renderMatches(this.matches);
   }
@@ -11488,7 +11488,7 @@ function getDefaultPreferences() {
       "externalLinkTarget": 0,
       "historyUpdateUrl": false,
       "pdfBugEnabled": false,
-      "removePageBorders": false,
+      "removePageBorders": false,// #194 
       "renderer": "canvas",
       "renderInteractiveForms": false,
       "sidebarViewOnLoad": -1,

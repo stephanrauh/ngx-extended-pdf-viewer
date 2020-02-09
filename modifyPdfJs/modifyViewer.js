@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 61;
+let expectedChanges = 73;
 
 let dropLines = 0;
 currentFunction = '';
@@ -20,7 +20,7 @@ lineReader
       if (line.startsWith('class ')) {
         if (!es2015) {
           console.log('ES 2015 version');
-          expectedChanges -= 4;
+          expectedChanges -= 1;
         }
         es2015 = true;
       }
@@ -405,7 +405,7 @@ ${line}`;
           line += '\n    this._pageMatchesColor = [];  // #201';
           expectedChanges--;
         } else if (line.includes('_prepareMatches(matchesWithLength, matches, matchesLength) {')) {
-          line = line.replace('matchesLength)', 'matchesLength, matchesColor)  // #201');
+          line = line.replace('matchesLength)', 'matchesLength, /* #201 */ matchesColor)');
           expectedChanges--;
         } else if (line.includes('matchesLength.push(matchesWithLength[i].matchLength);')) {
           line += '\n      matchesColor.push(matchesWithLength[i].color);  // #201';

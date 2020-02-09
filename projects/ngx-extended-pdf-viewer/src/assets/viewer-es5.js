@@ -213,7 +213,7 @@ function getViewerConfiguration() {
       bar: document.getElementById('findbar'),
       toggleButton: document.getElementById('viewFind'),
       findField: document.getElementById('findInput'),
-      findFieldMultiline: document.getElementById('findInputMultiline'),
+      findFieldMultiline: document.getElementById('findInputMultiline'), // #201
       highlightAllCheckbox: document.getElementById('findHighlightAll'),
       caseSensitiveCheckbox: document.getElementById('findMatchCase'),
       entireWordCheckbox: document.getElementById('findEntireWord'),
@@ -576,8 +576,8 @@ var PDFViewerApplication = {
                 _app_options.AppOptions.set('useOnlyCssZoom', hashParams['useonlycsszoom'] === 'true');
               }
 
-    if ('removepageborders' in hashParams) {
-      _app_options.AppOptions.set('removePageBorders', hashParams['removepageborders'] === 'true');
+    if ('removepageborders' in hashParams) { // #194
+      _app_options.AppOptions.set('removePageBorders', hashParams['removepageborders'] === 'true'); // #194
     }
 
               if ('verbosity' in hashParams) {
@@ -704,7 +704,7 @@ var PDFViewerApplication = {
                 l10n: _this5.l10n,
                 textLayerMode: _app_options.AppOptions.get('textLayerMode'),
                 imageResourcesPath: _app_options.AppOptions.get('imageResourcesPath'),
-      removePageBorders: _app_options.AppOptions.get('removePageBorders'),
+      removePageBorders: _app_options.AppOptions.get('removePageBorders'), // #194
                 renderInteractiveForms: _app_options.AppOptions.get('renderInteractiveForms'),
                 enablePrintAutoRotate: _app_options.AppOptions.get('enablePrintAutoRotate'),
                 useOnlyCssZoom: _app_options.AppOptions.get('useOnlyCssZoom'),
@@ -4297,7 +4297,7 @@ var defaultOptions = {
     value: false,
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
   },
-  removePageBorders: {
+  removePageBorders: { // #194
           value: false,
           kind: OptionKind.VIEWER + OptionKind.PREFERENCE
         },
@@ -6470,7 +6470,7 @@ function () {
     this.bar = options.bar || null;
     this.toggleButton = options.toggleButton || null;
     this.findField = options.findField || null;
-    this.findFieldMultiline = options.findFieldMultiline || null;
+    this.findFieldMultiline = options.findFieldMultiline || null; // #201
     this.highlightAll = options.highlightAllCheckbox || null;
     this.caseSensitive = options.caseSensitiveCheckbox || null;
     this.entireWord = options.entireWordCheckbox || null;
@@ -6518,10 +6518,10 @@ function () {
     this.entireWord.addEventListener('click', function () {
       _this.dispatchEvent('entirewordchange');
     });
-    this.multipleSearchTexts.addEventListener('click', function () {
+    this.multipleSearchTexts.addEventListener('click', function () { // #201
      _this.dispatchEvent('multiplesearchtextschange');
     });
-    this.ignoreAccents.addEventListener('click', function () {
+    this.ignoreAccents.addEventListener('click', function () { // #177
      _this.dispatchEvent('ignoreAccentsChange');
     });
     this.eventBus.on('resize', this._adjustWidth.bind(this));
@@ -6538,7 +6538,7 @@ function () {
       this.eventBus.dispatch('find', {
         source: this,
       type: type,
-      query: this.findFieldMultiline.classList.contains('hidden')? this.findField.value: this.findFieldMultiline.value,
+      query: this.findFieldMultiline.classList.contains('hidden')? this.findField.value: this.findFieldMultiline.value, // #201
       phraseSearch: !this.multipleSearchTexts.checked, // #201
         caseSensitive: this.caseSensitive.checked,
         entireWord: this.entireWord.checked,
@@ -6581,8 +6581,8 @@ function () {
 
       this.findField.classList.toggle('notFound', notFound);
       this.findField.setAttribute('data-status', status);
-    this.findFieldMultiline.classList.toggle('notFound', notFound);
-    this.findFieldMultiline.setAttribute('data-status', status);
+    this.findFieldMultiline.classList.toggle('notFound', notFound); // #201
+    this.findFieldMultiline.setAttribute('data-status', status);    // #201
 
       Promise.resolve(findMsg).then(function (msg) {
         _this2.findMsg.textContent = msg;
@@ -6878,7 +6878,7 @@ function () {
       this._pdfDocument = null;
       this._pageMatches = [];
       this._pageMatchesLength = [];
-    this._pageMatchesColor = [];
+    this._pageMatchesColor = [];  // #201
       this._state = null;
       this._selected = {
         pageIdx: -1,
@@ -6926,7 +6926,7 @@ function () {
     }
   }, {
     key: "_prepareMatches",
-    value: function _prepareMatches(matchesWithLength, matches, matchesLength, matchesColor) {
+    value: function _prepareMatches(matchesWithLength, matches, matchesLength, /* #201 */ matchesColor) {
       function isSubTerm(matchesWithLength, currentIndex) {
         var currentElem = matchesWithLength[currentIndex];
         var nextElem = matchesWithLength[currentIndex + 1];
@@ -6967,7 +6967,7 @@ function () {
 
         matches.push(matchesWithLength[i].match);
         matchesLength.push(matchesWithLength[i].matchLength);
-      matchesColor.push(matchesWithLength[i].color);
+      matchesColor.push(matchesWithLength[i].color);  // #201
       }
     }
   }, {
@@ -7033,7 +7033,7 @@ function () {
             } // #177
   
       var matchesWithLength = [];
-    var queryArray = (query.includes('\n')) ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g);
+    var queryArray = (query.includes('\n')) ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g); // #201
 
       for (var i = 0, len = queryArray.length; i < len; i++) {
         var subquery = queryArray[i];
@@ -7055,16 +7055,16 @@ function () {
             match: matchIdx,
             matchLength: subqueryLen,
             skipped: false,
-          color: i
+          color: i  // #201
           });
         }
       }
 
       this._pageMatchesLength[pageIndex] = [];
-    this._pageMatchesColor[pageIndex] = [];
+    this._pageMatchesColor[pageIndex] = [];  // #201
       this._pageMatches[pageIndex] = [];
 
-      this._prepareMatches(matchesWithLength, this._pageMatches[pageIndex], this._pageMatchesLength[pageIndex], this._pageMatchesColor[pageIndex]);;
+      this._prepareMatches(matchesWithLength, this._pageMatches[pageIndex], this._pageMatchesLength[pageIndex], /* #201 */ this._pageMatchesColor[pageIndex]);;
     }
   }, {
     key: "_calculateMatch",
@@ -7190,7 +7190,7 @@ function () {
         this._resumePageIdx = null;
         this._pageMatches.length = 0;
         this._pageMatchesLength.length = 0;
-      this._pageMatchesColor.length = 0;
+      this._pageMatchesColor.length = 0;  // #201
         this._matchesCountTotal = 0;
 
         this._updateAllPages();
@@ -7413,7 +7413,7 @@ function () {
     }
   }, {
     key: "pageMatchesColor",
-    get: function get() {
+    get: function get() {  // #201
       return this._pageMatchesColor;
     }
   }, {
@@ -12484,7 +12484,7 @@ function () {
     }
   }, {
     key: "_convertMatches",
-    value: function _convertMatches(matches, matchesLength, matchesColor) {
+    value: function _convertMatches(matches, matchesLength, /* #201 */ matchesColor) {
       if (!matches) {
         return [];
       }
@@ -12510,7 +12510,7 @@ function () {
         }
 
         var match = {
-        color: matchesColor ? matchesColor[m] : 0,
+        color: matchesColor ? matchesColor[m] : 0, // #201
           begin: {
             divIdx: i,
             offset: matchIdx - iIndex
@@ -12594,7 +12594,7 @@ function () {
         var begin = match.begin;
         var end = match.end;
         var isSelected = isSelectedPage && i === selectedMatchIdx;
-      var highlightSuffix = (isSelected ? ' selected' : '') + ' color' + match.color;
+      var highlightSuffix = (isSelected ? ' selected' : '') + ' color' + match.color; // #201
 
         if (isSelected) {
           findController.scrollMatchIntoView({
@@ -12666,8 +12666,8 @@ function () {
 
       var pageMatches = findController.pageMatches[pageIdx] || null;
       var pageMatchesLength = findController.pageMatchesLength[pageIdx] || null;
-      var pageMatchesColor = findController.pageMatchesColor[pageIdx] || null;
-      this.matches = this._convertMatches(pageMatches, pageMatchesLength, pageMatchesColor);
+      var pageMatchesColor = findController.pageMatchesColor[pageIdx] || null; // #201
+      this.matches = this._convertMatches(pageMatches, pageMatchesLength, pageMatchesColor); // #201
 
       this._renderMatches(this.matches);
     }
@@ -13997,7 +13997,7 @@ function getDefaultPreferences() {
       "externalLinkTarget": 0,
       "historyUpdateUrl": false,
       "pdfBugEnabled": false,
-      "removePageBorders": false,
+      "removePageBorders": false,// #194 
       "renderer": "canvas",
       "renderInteractiveForms": false,
       "sidebarViewOnLoad": -1,
