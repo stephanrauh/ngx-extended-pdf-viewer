@@ -11,7 +11,8 @@ import {
   ChangeDetectionStrategy,
   HostListener,
   NgZone,
-  TemplateRef
+  TemplateRef,
+  ApplicationRef
 } from '@angular/core';
 import { PagesLoadedEvent } from './events/pages-loaded-event';
 import { PageRenderedEvent } from './events/page-rendered-event';
@@ -606,6 +607,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         this.textLayer = true;
         if (this.showFindButton === undefined) {
           this.showFindButton = true;
+          // todo remove this hack:
+          (document.getElementById('viewFind') as HTMLElement).classList.remove('invisible');
         }
       } else {
         if (options) {
@@ -613,7 +616,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         }
         if (!this.showHandToolButton) {
           if (this.showFindButton || this.showFindButton === undefined) {
-            this.showFindButton = false;
+            this.ngZone.run(() => {
+              this.showFindButton = false;
+            });
             if (this.logLevel >= VerbosityLevel.WARNINGS) {
               // tslint:disable-next-line:max-line-length
               console.warn(
@@ -640,6 +645,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         this.textLayer = true;
         if (this.showFindButton === undefined) {
           this.showFindButton = true;
+          // todo remove this hack:
+          (document.getElementById('viewFind') as HTMLElement).classList.remove('invisible');
         }
       } else {
         if (options) {
@@ -650,7 +657,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           if (this.logLevel >= VerbosityLevel.WARNINGS) {
             // tslint:disable-next-line:max-line-length
             console.warn('Hiding the "find" button because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the find button.');
-            this.showFindButton = false;
+            this.ngZone.run(() => {
+              this.showFindButton = false;
+            });
           }
         }
         if (this.showHandToolButton) {
