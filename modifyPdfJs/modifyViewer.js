@@ -364,13 +364,13 @@ ${line}`;
       } else if (line.includes("this.findField.addEventListener('input', () => {")) {
         line =
           `    this.findFieldMultiline.addEventListener('input', () => {
-      this.dispatchEvent('findMultiline');
+      this.dispatchEvent('');
     });
 ` + line;
         expectedChanges--;
       } else if (line.includes(' type,')) {
-        line = `      type: type === 'findMultiline'?'':type,
-      query: type === 'findMultiline'? this.findFieldMultiline.value:this.findField.value,`;
+        line = `      type: type,
+      query: this.findFieldMultiline.classList.contains('hidden')? this.findField.value: this.findFieldMultiline.value,`;
         dropLines = 1;
         expectedChanges--;
       } else if (line.includes("this.findField.setAttribute('data-status', status);")) {

@@ -6537,8 +6537,8 @@ function () {
     value: function dispatchEvent(type, findPrev) {
       this.eventBus.dispatch('find', {
         source: this,
-      type: type === 'findMultiline'?'':type,
-      query: type === 'findMultiline'? this.findFieldMultiline.value:this.findField.value,
+      type: type,
+      query: this.findFieldMultiline.classList.contains('hidden')? this.findField.value: this.findFieldMultiline.value,
       phraseSearch: !this.multipleSearchTexts.checked, // #201
         caseSensitive: this.caseSensitive.checked,
         entireWord: this.entireWord.checked,

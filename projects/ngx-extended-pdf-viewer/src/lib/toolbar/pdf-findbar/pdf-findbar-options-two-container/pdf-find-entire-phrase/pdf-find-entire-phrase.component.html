@@ -13,7 +13,7 @@
   multiple search texts
 </label>
 
-<input *ngIf="pdfFindbarService.multipleSearchTexts"
+<input [class.hidden]="!pdfFindbarService.multipleSearchTexts"
   type="checkbox"
   id="individualWordsMode"
   class="toolbarField"
@@ -21,8 +21,9 @@
   [(ngModel)]="pdfFindbarService.individualWordsMode"
 />
 
-<label *ngIf="pdfFindbarService.multipleSearchTexts"
+<label [class.hidden]="!pdfFindbarService.multipleSearchTexts"
   for="individualWordsMode"
+  id="individualWordsModeLabel"
   class="toolbarLabel"
   data-l10n-id="find_individual_words_label">
   separated by word boundaries

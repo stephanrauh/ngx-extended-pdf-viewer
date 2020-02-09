@@ -38,21 +38,44 @@ export class NgxExtendedPdfViewerService {
       if (matchCaseCheckbox) {
         matchCaseCheckbox.checked = options.matchCase || false;
       }
-      const entireWorkCheckbox = document.getElementById('findEntireWord') as HTMLInputElement;
-      if (entireWorkCheckbox) {
-        entireWorkCheckbox.checked = options.wholeWords || false;
+      const entireWordCheckbox = document.getElementById('findEntireWord') as HTMLInputElement;
+      if (entireWordCheckbox) {
+        entireWordCheckbox.checked = options.wholeWords || false;
       }
       const findIgnoreAccentsCheckbox = document.getElementById('findIgnoreAccents') as HTMLInputElement;
       if (findIgnoreAccentsCheckbox) {
         findIgnoreAccentsCheckbox.checked = options.ignoreAccents || false;
       }
+      const multipleSearchTerms = options.findMultipleSearchTexts || text.includes('\n') || false;
       const findMultipleSearchTextsCheckbox = document.getElementById('findMultipleSearchTexts') as HTMLInputElement;
       if (findMultipleSearchTextsCheckbox) {
-        findMultipleSearchTextsCheckbox.checked = options.findMultipleSearchTexts || false;
+        findMultipleSearchTextsCheckbox.checked = multipleSearchTerms;
       }
-      const inputField = document.getElementById('findInput');
+      const individualWordsModeCheckbox = document.getElementById('individualWordsMode') as HTMLInputElement;
+      if (individualWordsModeCheckbox) {
+        individualWordsModeCheckbox.checked = multipleSearchTerms;
+      }
+
+      const inputField = multipleSearchTerms ? document.getElementById('findInputMultiline') : document.getElementById('findInput');
       if (inputField) {
-        inputField.setAttribute('value', text);
+        if (inputField instanceof HTMLTextAreaElement) {
+          inputField.value = text;
+
+          // todo dirty hack!
+          inputField.classList.remove('hidden');
+          (document.getElementById('findInput') as HTMLInputElement).classList.add('hidden');
+          (document.getElementById('individualWordsModeLabel') as HTMLInputElement).classList.remove('hidden');
+          (document.getElementById('individualWordsMode') as HTMLInputElement).classList.remove('hidden');
+          // end of the dirty hack
+        } else if (inputField instanceof HTMLInputElement) {
+          inputField.value = text;
+          // todo dirty hack!
+          inputField.classList.remove('hidden');
+          (document.getElementById('findInputMultiline') as HTMLInputElement).classList.add('hidden');
+          (document.getElementById('individualWordsModeLabel') as HTMLInputElement).classList.add('hidden');
+          (document.getElementById('individualWordsMode') as HTMLInputElement).classList.add('hidden');
+          // end of the dirty hack
+        }
         inputField.dispatchEvent(new Event('input'));
         return true;
       } else {
