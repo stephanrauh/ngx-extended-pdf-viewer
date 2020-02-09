@@ -103,3 +103,38 @@ html[dir='ltr'] .splitToolbarButton {
 html[dir='rtl'] .splitToolbarButton {
   display: inline;
 }
+
+.textLayer .highlight.color0 {
+  background-color: rgba(180, 0, 170, 0.4);
+}
+.textLayer .highlight.color0.selected {
+  background-color: rgb(180, 0, 170);
+}
+
+.textLayer .highlight.color1 {
+  background-color: rgb(0, 100, 0, 0.4);
+}
+.textLayer .highlight.color1.selected {
+  background-color: rgb(0, 100, 0);
+}
+
+.textLayer .highlight.color2 {
+  background-color: rgb(0, 0, 255, 0.4);
+}
+.textLayer .highlight.color2.selected {
+  background-color: rgb(0, 0, 255);
+}
+
+.textLayer .highlight.color3 {
+  background-color: rgb(255, 0, 0, 0.4);
+}
+.textLayer .highlight.color3.selected {
+  background-color: rgb(255, 0, 0);
+}
+
+textLayer .highlight.color4 {
+  background-color: rgb(255, 94, 0, 0.4);
+}
+.textLayer .highlight.color4.selected {
+  background-color: rgb(255, 94, 0);
+}
