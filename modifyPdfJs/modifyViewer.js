@@ -317,7 +317,7 @@ function convertLines() {
         if (es2015) {
           line = line + '\n      ignoreAccents, // #177';
         } else {
-          line = line + '\n          ignoreAccents = _this$_state.ignoreAccents // #177,';
+          line = line + '\n          ignoreAccents = _this$_state.ignoreAccents, // #177';
         }
         currentFunction = '';
         expectedChanges--;

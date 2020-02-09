@@ -7074,7 +7074,7 @@ function () {
       var _this$_state = this._state,
           caseSensitive = _this$_state.caseSensitive,
           entireWord = _this$_state.entireWord,
-          ignoreAccents = _this$_state.ignoreAccents // #177,
+          ignoreAccents = _this$_state.ignoreAccents, // #177
           phraseSearch = _this$_state.phraseSearch;
 
       if (query.length === 0) {
