@@ -609,6 +609,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           this.showFindButton = true;
           // todo remove this hack:
           (document.getElementById('viewFind') as HTMLElement).classList.remove('invisible');
+          (document.getElementById('findbar') as HTMLElement).classList.remove('invisible');
         }
       } else {
         if (options) {
@@ -647,6 +648,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           this.showFindButton = true;
           // todo remove this hack:
           (document.getElementById('viewFind') as HTMLElement).classList.remove('invisible');
+          (document.getElementById('findbar') as HTMLElement).classList.remove('invisible');
         }
       } else {
         if (options) {

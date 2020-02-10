@@ -5165,6 +5165,7 @@ class PDFFindBar {
 
     this.findField.select();
     this.findField.focus();
+    this.dispatchEvent('');
 
     this._adjustWidth();
   }

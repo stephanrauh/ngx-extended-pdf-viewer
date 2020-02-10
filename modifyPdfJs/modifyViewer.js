@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 73;
+let expectedChanges = 71;
 
 let dropLines = 0;
 currentFunction = '';
@@ -434,6 +434,9 @@ ${line}`;
         } else if (line.includes('this.matches = this._convertMatches(pageMatches, pageMatchesLength);')) {
           line = `      var pageMatchesColor = findController.pageMatchesColor[pageIdx] || null; // #201
       this.matches = this._convertMatches(pageMatches, pageMatchesLength, pageMatchesColor); // #201`
+          expectedChanges--;
+        } else if (line.includes('this.findField.focus();')) {
+          line = line + "\n    this.dispatchEvent(''); // #206"
           expectedChanges--;
         }
 

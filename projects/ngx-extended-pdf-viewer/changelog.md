@@ -115,3 +115,4 @@
 - 2.0.0-alpha.3 #201 added an option to find multiple texts. 
 - 2.0.0-alpha.4 #201 improved the option to find multiple texts and added the programmatic API
 - 2.0.0-alpha.5 #201 polished the option to find multiple texts
+- 2.0.0-alpha.6 #206 fixed a bug that prevented the findbar from being shown; running the search again when opening the find bar for the second time
