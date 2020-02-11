@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 71;
+let expectedChanges = 72;
 
 let dropLines = 0;
 currentFunction = '';
@@ -437,6 +437,11 @@ ${line}`;
           expectedChanges--;
         } else if (line.includes('this.findField.focus();')) {
           line = line + "\n    this.dispatchEvent(''); // #206"
+          expectedChanges--;
+        } else if (line.includes('throw new Error(msg);')) {
+          line = `        var error = new Error(msg); // #205
+        this.onError(error); // #205
+` + line.replace('new Error(msg)', 'error');
           expectedChanges--;
         }
 

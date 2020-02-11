@@ -841,9 +841,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         password: this.password,
         verbosity: this.logLevel
       };
+      (<any>window).PDFViewerApplication.onError = (error: Error) => this.pdfLoadingFailed.emit(error);
       (<any>window).PDFViewerApplication.open(this._src, options).then(
-        () => this.pdfLoaded.emit({ pagesCount: (<any>window).PDFViewerApplication.pagesCount }),
-        (error: Error) => this.pdfLoadingFailed.emit(error)
+        () => this.pdfLoaded.emit({ pagesCount: (<any>window).PDFViewerApplication.pagesCount })
       );
     }
     setTimeout(() => {

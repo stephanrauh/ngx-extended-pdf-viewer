@@ -886,7 +886,9 @@ let PDFViewerApplication = {
         this.error(msg, {
           message
         });
-        throw new Error(msg);
+        var error = new Error(msg); // #205
+        this.onError(error); // #205
+        throw error;
       });
     });
   },
@@ -5165,7 +5167,7 @@ class PDFFindBar {
 
     this.findField.select();
     this.findField.focus();
-    this.dispatchEvent('');
+    this.dispatchEvent(''); // #206
 
     this._adjustWidth();
   }

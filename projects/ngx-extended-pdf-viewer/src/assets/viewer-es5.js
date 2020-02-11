@@ -1076,7 +1076,9 @@ var PDFViewerApplication = {
                     message: message
                   });
 
-                  throw new Error(msg);
+        var error = new Error(msg); // #205
+        this.onError(error); // #205
+                  throw error;
                 });
               }));
 
@@ -6641,7 +6643,7 @@ function () {
 
       this.findField.select();
       this.findField.focus();
-      this.dispatchEvent('');
+    this.dispatchEvent(''); // #206
 
       this._adjustWidth();
     }
