@@ -4,6 +4,7 @@ node index.js
 cd ..
 cp -R ../mozillas-pdf.js/build/generic/web/locale/* ./projects/ngx-extended-pdf-viewer/src/assets/locale/
 cp -R ../mozillas-pdf.js/build/generic/web/images/*.svg ./projects/ngx-extended-pdf-viewer/src/assets/images/
+cp -R ../mozillas-pdf.js/build/generic/web/cmaps/* ./projects/ngx-extended-pdf-viewer/src/assets/cmaps/
 cd addBaseLanguages
 node index.js
 node add-additional-translations.js

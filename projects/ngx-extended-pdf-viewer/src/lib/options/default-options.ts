@@ -25,7 +25,7 @@ export const defaultOptions = {
   useOnlyCssZoom: false,
   viewOnLoad: 0,
   cMapPacked: true,
-  cMapUrl: '../web/cmaps/',
+  cMapUrl: '../assets/cmaps/',
   disableAutoFetch: false,
   disableCreateObjectURL: false,
   disableFontFace: false,

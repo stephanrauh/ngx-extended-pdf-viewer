@@ -117,3 +117,4 @@
 - 2.0.0-alpha.5 #201 polished the option to find multiple texts
 - 2.0.0-alpha.6 #206 fixed a bug that prevented the findbar from being shown; running the search again when opening the find bar for the second time
 - 2.0.0-alpha.7 #205 emit the error listener `(pdfLoadingFailed)` even if the user loads a buggy PDF file later (using the UI) (potentially breaking change)
+- 2.0.0-alpha.8 #208 add the CMAP files required by some PDF files written in East Asian languages
