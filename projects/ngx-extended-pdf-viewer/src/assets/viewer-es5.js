@@ -2330,6 +2330,12 @@ function webViewerWheel(evt) {
     return;
   }
 
+  let cmd = (evt.ctrlKey ? 1 : 0) | (evt.altKey ? 2 : 0) | (evt.shiftKey ? 4 : 0) | (evt.metaKey ? 8 : 0);
+
+  if (isKeyIgnored(cmd, "WHEEL")) {
+    return;
+  }
+
   if (evt.ctrlKey && supportedMouseWheelZoomModifierKeys.ctrlKey || evt.metaKey && supportedMouseWheelZoomModifierKeys.metaKey) {
     evt.preventDefault();
 
