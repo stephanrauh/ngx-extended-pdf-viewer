@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 72;
+let expectedChanges = 73;
 
 let dropLines = 0;
 currentFunction = '';
@@ -441,6 +441,15 @@ ${line}`;
         } else if (line.includes('throw new Error(msg);')) {
           line = `        var error = new Error(msg); // #205
         this.onError(error); // #205
+` + line.replace('new Error(msg)', 'error');
+          expectedChanges--;
+        } else if (line.includes('if (evt.ctrlKey && supportedMouseWheelZoomModifierKeys.ctrlKey')) {
+          line = `  let cmd = (evt.ctrlKey ? 1 : 0) | (evt.altKey ? 2 : 0) | (evt.shiftKey ? 4 : 0) | (evt.metaKey ? 8 : 0);
+
+  if (isKeyIgnored(cmd, "WHEEL")) {
+    return;
+  }
+
 ` + line.replace('new Error(msg)', 'error');
           expectedChanges--;
         }

@@ -33,7 +33,21 @@ import { PdfSplitToolbarButtonComponent } from './toolbar/pdf-findbar/pdf-split-
 import { PdfFindMultipleSearchTextsComponent } from './toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-find-entire-phrase/pdf-find-entire-phrase.component';
 import { FormsModule } from '@angular/forms';
 
-function isKeyIgnored(cmd: number, keycode: number): boolean {
+function isKeyIgnored(cmd: number, keycode: number | 'WHEEL'): boolean {
+  const options = (window as any).PDFViewerApplicationOptions;
+  const ignoreKeys: Array<string> = options.get('ignoreKeys');
+  const acceptKeys: Array<string> = options.get('acceptKeys');
+  if (keycode === 'WHEEL') {
+    if (isKeyInList(ignoreKeys, cmd, 'WHEEL')) {
+      return true;
+    }
+    if (!!acceptKeys && acceptKeys.length > 0) {
+      return !isKeyInList(acceptKeys, cmd, 'WHEEL');
+    }
+
+    return false;
+  }
+
   if (keycode === 16 || keycode === 17 || keycode === 18 || keycode === 224) {
     // ignore solitary SHIFT, ALT, CMD, and CTRL because they only make sense as two-key-combinations
     return true;
@@ -43,31 +57,28 @@ function isKeyIgnored(cmd: number, keycode: number): boolean {
   // 2 == ALT
   // 4 == SHIFT
   // 8 == META
-  const options = (window as any).PDFViewerApplicationOptions;
   const ignoreKeyboard = options.get('ignoreKeyboard');
   if (!!ignoreKeyboard) {
     return true;
   }
 
-  const ignoreKeys: Array<string> = options.get('ignoreKeys');
   if (!!ignoreKeys && ignoreKeys.length > 0) {
     if (isKeyInList(ignoreKeys, cmd, keycode)) {
       return true;
     }
   }
 
-  const acceptKeys = options.get('acceptKeys');
   if (!!acceptKeys && acceptKeys.length > 0) {
     return !isKeyInList(acceptKeys, cmd, keycode);
   }
   return false;
 }
 
-function isKeyInList(settings: Array<string>, cmd: number, keycode: number): boolean {
+function isKeyInList(settings: Array<string>, cmd: number, keycode: number | 'WHEEL'): boolean {
   return settings.some(keyDef => isKey(keyDef, cmd, keycode));
 }
 
-function isKey(keyDef: string, cmd: number, keycode: number): boolean {
+function isKey(keyDef: string, cmd: number, keycode: number | 'WHEEL'): boolean {
   let cmdDef = 0;
   let key = 0;
   keyDef = keyDef.toLowerCase();
