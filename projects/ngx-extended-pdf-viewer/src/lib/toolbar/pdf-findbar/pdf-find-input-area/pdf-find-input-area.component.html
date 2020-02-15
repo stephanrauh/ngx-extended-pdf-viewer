@@ -1,7 +1,9 @@
-<div id="findbarInputContainer">
+<div id="findbarInputContainer" *ngIf="!findbarInputArea">
   <pdf-search-input-field></pdf-search-input-field>
   <div class="splitToolbarButton"></div>
   <pdf-find-previous></pdf-find-previous>
   <pdf-split-toolbar-button></pdf-split-toolbar-button>
   <pdf-find-next></pdf-find-next>
 </div>
+
+<ng-container [ngTemplateOutlet]="findbarInputArea"> </ng-container>

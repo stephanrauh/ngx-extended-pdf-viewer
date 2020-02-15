@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'pdf-find-input-area',
   templateUrl: './pdf-find-input-area.component.html',
   styleUrls: ['./pdf-find-input-area.component.css']
 })
-export class PdfFindInputAreaComponent implements OnInit {
+export class PdfFindInputAreaComponent {
+  @Input()
+  public findbarInputArea: TemplateRef<any>;
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  constructor() {}
 }
