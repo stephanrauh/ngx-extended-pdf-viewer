@@ -1,20 +1,11 @@
-import { Component, Input, TemplateRef, ViewChild, OnInit } from '@angular/core';
+import { Component, Input, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'pdf-findbar',
   templateUrl: './pdf-findbar.component.html',
   styleUrls: ['./pdf-findbar.component.css']
 })
-export class PdfFindbarComponent implements OnInit {
-
-
-  @Input()
-  findbar: TemplateRef<any> | undefined = undefined;
-
-  @Input()
-  findbarButtons: TemplateRef<any> | undefined = undefined;
-
-
+export class PdfFindbarComponent {
   @Input()
   public showFindButton: boolean;
 
@@ -29,12 +20,11 @@ export class PdfFindbarComponent implements OnInit {
 
   /* UI templates */
   @Input()
-  public findbarInputArea: TemplateRef<any>;
+  public customFindbarInputArea: TemplateRef<any>;
 
-  @ViewChild('defaultFindbar')
-  public defaultFindbar: TemplateRef<any>;
+  @Input()
+  public customFindbar: TemplateRef<any>;
 
-  ngOnInit(): void {
-  }
-
+  @Input()
+  public customFindbarButtons: TemplateRef<any> | undefined = undefined;
 }

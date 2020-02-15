@@ -1,9 +1,8 @@
-<ng-container [ngTemplateOutlet]="findbar ? findbar : defaultFindbar">
+<ng-container [ngTemplateOutlet]="customFindbar ? customFindbar : defaultFindbar">
 </ng-container>
 
 <ng-template #defaultFindbar>
   <div
-    *ngIf="!findbar"
     class="findbar hidden doorHanger"
     [class.invisible]="!showFindButton"
     id="findbar"
@@ -12,12 +11,12 @@
     [style.left]="findbarLeft"
     [style.top]="findbarTop"
   >
-    <ng-container [ngTemplateOutlet]="findbarButtons ? findbarButtons : defaultFindbarButtons"> </ng-container>
+    <ng-container [ngTemplateOutlet]="customFindbarButtons ? customFindbarButtons : defaultFindbarButtons"> </ng-container>
     </div>
 </ng-template>
 
 <ng-template #defaultFindbarButtons>
-  <pdf-find-input-area [findbarInputArea]="findbarInputArea"></pdf-find-input-area>
+  <pdf-find-input-area [customFindbarInputArea]="customFindbarInputArea"></pdf-find-input-area>
   <pdf-findbar-options-one-container></pdf-findbar-options-one-container>
   <pdf-findbar-options-two-container></pdf-findbar-options-two-container>
   <pdf-findbar-options-three-container></pdf-findbar-options-three-container>
