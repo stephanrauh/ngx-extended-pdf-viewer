@@ -58,7 +58,19 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   /* UI templates */
   @Input()
-  public findbarInputArea: TemplateRef<any>;
+  public customFindbarInputArea: TemplateRef<any>;
+
+  @Input()
+  public customToolbar: TemplateRef<any>;
+
+  @Input()
+  public customFindbar: TemplateRef<any>;
+
+  @Input()
+  public customFindbarButtons: TemplateRef<any> | undefined = undefined;
+
+  /* regular attributes */
+
 
   private _src: string | ArrayBuffer;
 

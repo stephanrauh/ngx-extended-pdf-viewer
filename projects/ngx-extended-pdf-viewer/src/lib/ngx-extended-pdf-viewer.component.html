@@ -1,106 +1,44 @@
-<link
-  *ngIf="useBrowserLocale"
-  rel="resource"
-  type="application/l10n"
-  href="assets/locale/locale.properties"
-  origin="ngx-extended-pdf-viewer"
-/>
+<link *ngIf="useBrowserLocale" rel="resource" type="application/l10n" href="assets/locale/locale.properties" origin="ngx-extended-pdf-viewer" />
 <div class="zoom" [style.height]="height" [style.minHeight]="minHeight">
   <div class="html">
-    <div
-      tabindex="1"
-      class="loadingInProgress body"
-      [style.backgroundColor]="backgroundColor"
-    >
+    <div tabindex="1" class="loadingInProgress body" [style.backgroundColor]="backgroundColor">
       <div id="outerContainer">
         <pdf-sidebar [sidebarPositionTop]="sidebarPositionTop" [showSidebarButton]="showSidebarButton"></pdf-sidebar>
         <div id="mainContainer">
-          <pdf-findbar [findbarLeft]="findbarLeft"
-                       [findbarTop]="findbarTop"
-                       [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
-                       [showFindButton]="showFindButton"
-                       [findbarInputArea]="findbarInputArea"
-                       >
-
+          <pdf-findbar
+            [findbarLeft]="findbarLeft"
+            [findbarTop]="findbarTop"
+            [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+            [showFindButton]="showFindButton"
+            [customFindbarInputArea]="customFindbarInputArea"
+          >
           </pdf-findbar>
-          <pdf-secondary-toolbar [secondaryToolbarTop]="secondaryToolbarTop"
-                                 [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
-                                 [showPresentationModeButton]="showPresentationModeButton"
-                                 [showOpenFileButton]="showOpenFileButton"
-                                 [showPrintButton]="showPrintButton"
-                                 [showDownloadButton]="showDownloadButton"
-                                 [showBookmarkButton]="showBookmarkButton"
-                                 [showPagingButtons]="showPagingButtons"
-                                 [showRotateButton]="showRotateButton"
-                                 [showHandToolButton]="showHandToolButton"
-                                 [showScrollingButton]="showScrollingButton"
-                                 [showSpreadButton]="showSpreadButton"
-                                 [showPropertiesButton]="showPropertiesButton"
-                                 (spreadChange)="onSpreadChange($event)"
+          <pdf-secondary-toolbar
+            [secondaryToolbarTop]="secondaryToolbarTop"
+            [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+            [showPresentationModeButton]="showPresentationModeButton"
+            [showOpenFileButton]="showOpenFileButton"
+            [showPrintButton]="showPrintButton"
+            [showDownloadButton]="showDownloadButton"
+            [showBookmarkButton]="showBookmarkButton"
+            [showPagingButtons]="showPagingButtons"
+            [showRotateButton]="showRotateButton"
+            [showHandToolButton]="showHandToolButton"
+            [showScrollingButton]="showScrollingButton"
+            [showSpreadButton]="showSpreadButton"
+            [showPropertiesButton]="showPropertiesButton"
+            (spreadChange)="onSpreadChange($event)"
           >
           </pdf-secondary-toolbar>
 
           <div class="toolbar" [class.invisible]="!primaryMenuVisible" (window:resize)="onResize()">
             <div
               id="toolbarContainer"
-              [style.transform]="'scale('+mobileFriendlyZoomScale+')'"
+              [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
               [style.transformOrigin]="'left center'"
               [style.width]="toolbarWidth"
             >
-              <div id="toolbarViewer">
-                <div id="toolbarViewerLeft">
-                  <button type="button"
-                    [class.invisible]="!showSidebarButton"
-                    id="sidebarToggle"
-                    class="toolbarButton"
-                    title="Toggle Sidebar"
-                    tabindex="11"
-                    data-l10n-id="toggle_sidebar"
-                  >
-                    <span data-l10n-id="toggle_sidebar_label"
-                      >Toggle Sidebar</span
-                    >
-                  </button>
-                  <div
-                    [class.invisible]="!showSidebarButton"
-                    class="toolbarButtonSpacer"
-                  ></div>
-                  <button type="button"
-                    [class.invisible]="(!showFindButton) || (!textLayer)"
-                    id="viewFind"
-                    class="toolbarButton"
-                    title="Find in Document"
-                    tabindex="12"
-                    data-l10n-id="findbar"
-                  >
-                    <span data-l10n-id="findbar_label">Find</span>
-                  </button>
-                  <pdf-paging-area [showPagingButtons]="showPagingButtons"></pdf-paging-area>
-                </div>
-                <div id="toolbarViewerRight">
-                  <pdf-presentation-mode [showPresentationModeButton]="showPresentationModeButton"></pdf-presentation-mode>
-                  <pdf-open-file [showOpenFileButton]="showOpenFileButton"></pdf-open-file>
-                  <pdf-print [showPrintButton]="showPrintButton"></pdf-print>
-                  <pdf-download [showDownloadButton]="showDownloadButton"></pdf-download>
-                  <pdf-bookmark [showBookmarkButton]="showBookmarkButton"></pdf-bookmark>
-                  <div
-                    [class.invisible]="!showSecondaryToolbarButton"
-                    class="verticalToolbarSeparator hiddenSmallView"
-                  ></div>
-
-                  <button type="button"
-                    [class.invisible]="!showSecondaryToolbarButton"
-                    id="secondaryToolbarToggle"
-                    class="toolbarButton"
-                    title="Tools"
-                    tabindex="36"
-                    data-l10n-id="tools"
-                  >
-                    <span data-l10n-id="tools_label">Tools</span>
-                  </button>
-                </div>
-                <pdf-zoom-toolbar [showZoomButtons]="showZoomButtons" (zoomChange)="emitZoomChange($event)"></pdf-zoom-toolbar>
-              </div>
+              <ng-content *ngTemplateOutlet="customToolbar ? customToolbar : defaultToolbar"></ng-content>
               <div id="loadingBar">
                 <div class="progress"><div class="glimmer"></div></div>
               </div>
@@ -109,11 +47,7 @@
 
           <pdf-context-menu></pdf-context-menu>
 
-          <div
-            id="viewerContainer"
-            tabindex="0"
-            [style.top]="viewerPositionTop"
-          >
+          <div id="viewerContainer" tabindex="0" [style.top]="viewerPositionTop">
             <div id="viewer" class="pdfViewer" [style.backgroundColor]="backgroundColor"></div>
           </div>
 
@@ -123,11 +57,7 @@
               <button type="button" id="errorShowMore" data-l10n-id="error_more_info">
                 More Information
               </button>
-              <button type="button"
-                id="errorShowLess"
-                data-l10n-id="error_less_info"
-                hidden="true"
-              >
+              <button type="button" id="errorShowLess" data-l10n-id="error_less_info" hidden="true">
                 Less Information
               </button>
             </div>
@@ -135,11 +65,7 @@
               <button type="button" id="errorClose" data-l10n-id="error_close">Close</button>
             </div>
             <div class="clearBoth"></div>
-            <textarea
-              id="errorMoreInfo"
-              hidden="true"
-              readonly="readonly"
-            ></textarea>
+            <textarea id="errorMoreInfo" hidden="true" readonly="readonly"></textarea>
           </div>
         </div>
         <!-- mainContainer -->
@@ -165,26 +91,16 @@
               </div>
             </div>
           </div>
-          <pdf-document-properties-overlay
-              class="container hidden"
-              id="documentPropertiesOverlay">
-          </pdf-document-properties-overlay>
-          <!-- #if !(FIREFOX || MOZCENTRAL) -->
+          <pdf-document-properties-overlay class="container hidden" id="documentPropertiesOverlay"> </pdf-document-properties-overlay>
+
           <div id="printServiceOverlay" class="container hidden">
             <div class="dialog">
               <div class="row">
-                <span data-l10n-id="print_progress_message"
-                  >Preparing document for printing…</span
-                >
+                <span data-l10n-id="print_progress_message">Preparing document for printing…</span>
               </div>
               <div class="row">
                 <progress value="0" max="100"></progress>
-                <span
-                  data-l10n-id="print_progress_percent"
-                  data-l10n-args="{ &quot;progress&quot;: 0 }"
-                  class="relative-progress"
-                  >0%</span
-                >
+                <span data-l10n-id="print_progress_percent" data-l10n-args='{ "progress": 0 }' class="relative-progress">0%</span>
               </div>
               <div class="buttonRow">
                 <button type="button" id="printCancel" class="overlayButton">
@@ -193,11 +109,7 @@
               </div>
             </div>
           </div>
-          <!-- #endif -->
-          <!-- #if CHROME -->
-          <!-- #include viewer-snippet-chrome-overlays.html -->
-          <!-- #endif -->
-        </div>
+         </div>
         <!-- overlayContainer -->
       </div>
       <!-- outerContainer -->
@@ -205,3 +117,57 @@
     </div>
   </div>
 </div>
+
+
+<!-- The (primary) toolbar is the black bar containing the buttons. -->
+<ng-template #defaultToolbar>
+  <div id="toolbarViewer">
+    <div id="toolbarViewerLeft">
+      <button
+        type="button"
+        [class.invisible]="!showSidebarButton"
+        id="sidebarToggle"
+        class="toolbarButton"
+        title="Toggle Sidebar"
+        tabindex="11"
+        data-l10n-id="toggle_sidebar"
+      >
+        <span data-l10n-id="toggle_sidebar_label">Toggle Sidebar</span>
+      </button>
+      <div [class.invisible]="!showSidebarButton" class="toolbarButtonSpacer"></div>
+      <button
+        type="button"
+        [class.invisible]="!showFindButton || !textLayer"
+        id="viewFind"
+        class="toolbarButton"
+        title="Find in Document"
+        tabindex="12"
+        data-l10n-id="findbar"
+      >
+        <span data-l10n-id="findbar_label">Find</span>
+      </button>
+      <pdf-paging-area [showPagingButtons]="showPagingButtons"></pdf-paging-area>
+    </div>
+    <div id="toolbarViewerRight">
+      <pdf-presentation-mode [showPresentationModeButton]="showPresentationModeButton"></pdf-presentation-mode>
+      <pdf-open-file [showOpenFileButton]="showOpenFileButton"></pdf-open-file>
+      <pdf-print [showPrintButton]="showPrintButton"></pdf-print>
+      <pdf-download [showDownloadButton]="showDownloadButton"></pdf-download>
+      <pdf-bookmark [showBookmarkButton]="showBookmarkButton"></pdf-bookmark>
+      <div [class.invisible]="!showSecondaryToolbarButton" class="verticalToolbarSeparator hiddenSmallView"></div>
+
+      <button
+        type="button"
+        [class.invisible]="!showSecondaryToolbarButton"
+        id="secondaryToolbarToggle"
+        class="toolbarButton"
+        title="Tools"
+        tabindex="36"
+        data-l10n-id="tools"
+      >
+        <span data-l10n-id="tools_label">Tools</span>
+      </button>
+    </div>
+    <pdf-zoom-toolbar [showZoomButtons]="showZoomButtons" (zoomChange)="emitZoomChange($event)"></pdf-zoom-toolbar>
+  </div>
+</ng-template>

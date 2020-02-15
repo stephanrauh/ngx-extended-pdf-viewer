@@ -7,7 +7,7 @@ import { Component, Input, TemplateRef } from '@angular/core';
 })
 export class PdfFindInputAreaComponent {
   @Input()
-  public findbarInputArea: TemplateRef<any>;
+  public customFindbarInputArea: TemplateRef<any>;
 
   constructor() {}
 }

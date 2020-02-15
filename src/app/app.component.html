@@ -1,4 +1,4 @@
-<ng-template #findbarInputArea>
+<ng-template #customFindbarInputArea>
   <div id="findbarInputContainer">
     <pdf-search-input-field></pdf-search-input-field>
     <br />
@@ -119,7 +119,7 @@
   <mat-tab label="fancy PDF (low print res)">
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
-      [findbarInputArea]="findbarInputArea"
+      [customFindbarInputArea]="customFindbarInputArea"
         *ngIf="visible[0] && !hidden"
         [showBorders]="showBorders"
         printResolution="50"
