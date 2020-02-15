@@ -179,7 +179,36 @@ if (typeof window !== 'undefined') {
     PdfSplitToolbarButtonComponent
   ],
   providers: [NgxExtendedPdfViewerService],
-  exports: [NgxExtendedPdfViewerComponent]
+  exports: [NgxExtendedPdfViewerComponent,
+    PdfZoomDropdownComponent,
+    PdfContextMenuComponent,
+    PdfPresentationModeComponent,
+    PdfOpenFileComponent,
+    PdfPrintComponent,
+    PdfDownloadComponent,
+    PdfBookmarkComponent,
+    PdfZoomToolbarComponent,
+    PdfPagingAreaComponent,
+    PdfFindbarComponent,
+    PdfSidebarComponent,
+    PdfSecondaryToolbarComponent,
+    PdfDocumentPropertiesOverlayComponent,
+    PdfSearchInputFieldComponent,
+    PdfFindPreviousComponent,
+    PdfFindNextComponent,
+    PdfFindInputAreaComponent,
+    PdfFindbarOptionsTwoContainerComponent,
+    PdfFindbarOptionsOneContainerComponent,
+    PdfFindMatchCaseComponent,
+    PdfFindHighlightAllComponent,
+    PdfFindEntireWordComponent,
+    PdfFindMultipleSearchTextsComponent,
+    PdfFindIgnoreAccentsComponent,
+    PdfFindbarOptionsThreeContainerComponent,
+    PdfFindResultsCountComponent,
+    PdfFindbarMessageContainerComponent,
+    PdfSplitToolbarButtonComponent
+]
 })
 export class NgxExtendedPdfViewerModule {
   constructor() {}
