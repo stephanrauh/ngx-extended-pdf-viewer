@@ -119,3 +119,4 @@
 - 2.0.0-alpha.7 #205 emit the error listener `(pdfLoadingFailed)` even if the user loads a buggy PDF file later (using the UI) (potentially breaking change)
 - 2.0.0-alpha.8 #208 add the CMAP files required by some PDF files written in East Asian languages
 - 2.0.0-alpha.9 #193 suppress or enable zooming with the mouse wheel via the keyboard settings `[acceptKeys]` and `[ignoreKeys]`
+- 2.0.0-alpha.10 #193 suppress or enable zooming with the mouse wheel via the keyboard settings `[acceptKeys]` and `[ignoreKeys]`; #179 and #159 preliminary support for customizing the UI
