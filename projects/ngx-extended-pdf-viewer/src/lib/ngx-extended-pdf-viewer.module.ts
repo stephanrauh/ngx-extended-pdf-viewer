@@ -137,6 +137,9 @@ function isKey(keyDef: string, cmd: number, keycode: number | 'WHEEL'): boolean 
   } else {
     key = keyDef.toUpperCase().charCodeAt(0);
   }
+  if (keycode === 'WHEEL') {
+    return keyDef === 'wheel' && cmd === cmdDef;
+  }
   return key === keycode && cmd === cmdDef;
 }
 
