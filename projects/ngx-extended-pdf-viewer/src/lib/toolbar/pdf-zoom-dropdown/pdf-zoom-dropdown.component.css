@@ -1,0 +1,10 @@
+.dropdownToolbarButton {
+  display: table-cell;
+  -webkit-appearance: none;
+  width: 120px; /* todo: remove with pdf.js 2.4 */
+  max-width: 120px; /* todo: remove with pdf.js 2.4 */
+}
+
+.dropdownToolbarButton > select {
+  width: 140px; /* todo: remove with pdf.js 2.4 */
+}
