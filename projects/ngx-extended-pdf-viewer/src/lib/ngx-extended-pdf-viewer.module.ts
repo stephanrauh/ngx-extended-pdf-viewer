@@ -60,7 +60,6 @@ function isKeyIgnored(cmd: number, keycode: number): boolean {
   if (!!acceptKeys && acceptKeys.length > 0) {
     return !isKeyInList(acceptKeys, cmd, keycode);
   }
-
   return false;
 }
 
@@ -130,7 +129,10 @@ function isKey(keyDef: string, cmd: number, keycode: number): boolean {
   return key === keycode && cmd === cmdDef;
 }
 
-(window as any).isKeyIgnored = isKeyIgnored;
+if (typeof window !== 'undefined') {
+  console.info("checking is key ignored");
+  (window as any).isKeyIgnored = isKeyIgnored;
+}
 
 @NgModule({
   imports: [CommonModule, FormsModule],

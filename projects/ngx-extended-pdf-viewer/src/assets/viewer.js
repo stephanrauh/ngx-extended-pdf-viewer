@@ -2113,6 +2113,11 @@ function webViewerWheel(evt) {
   if (pdfViewer.isInPresentationMode) {
     return;
   }
+  let cmd = (evt.ctrlKey ? 1 : 0) | (evt.altKey ? 2 : 0) | (evt.shiftKey ? 4 : 0) | (evt.metaKey ? 8 : 0);
+
+  if (isKeyIgnored(cmd, "WHEEL")) {
+    return;
+  }
 
   if (evt.ctrlKey && supportedMouseWheelZoomModifierKeys.ctrlKey || evt.metaKey && supportedMouseWheelZoomModifierKeys.metaKey) {
     evt.preventDefault();
@@ -5531,7 +5536,7 @@ class PDFFindController {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-  
+
     const matches = [];
     const queryLen = query.length;
     let matchIdx = -queryLen;
@@ -5558,7 +5563,7 @@ class PDFFindController {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-  
+
     const matchesWithLength = [];
     var queryArray = (query.includes('\n')) ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g); // #201
 
@@ -11491,7 +11496,7 @@ function getDefaultPreferences() {
       "externalLinkTarget": 0,
       "historyUpdateUrl": false,
       "pdfBugEnabled": false,
-      "removePageBorders": false,// #194 
+      "removePageBorders": false,// #194
       "renderer": "canvas",
       "renderInteractiveForms": false,
       "sidebarViewOnLoad": -1,

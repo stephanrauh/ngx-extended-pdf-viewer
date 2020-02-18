@@ -2,4 +2,6 @@ export const ServiceWorkerOptions = {
   showUnverifiedSignatures: false
 };
 
-(window as any).ServiceWorkerOptions = ServiceWorkerOptions;
+if (typeof window !== 'undefined') {
+  (window as any).ServiceWorkerOptions = ServiceWorkerOptions;
+}
