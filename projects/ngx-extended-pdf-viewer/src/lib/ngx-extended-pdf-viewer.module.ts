@@ -144,7 +144,6 @@ function isKey(keyDef: string, cmd: number, keycode: number | 'WHEEL'): boolean 
 }
 
 if (typeof window !== 'undefined') {
-  console.info("checking is key ignored");
   (window as any).isKeyIgnored = isKeyIgnored;
 }
 
@@ -182,7 +181,8 @@ if (typeof window !== 'undefined') {
     PdfSplitToolbarButtonComponent
   ],
   providers: [NgxExtendedPdfViewerService],
-  exports: [NgxExtendedPdfViewerComponent,
+  exports: [
+    NgxExtendedPdfViewerComponent,
     PdfZoomDropdownComponent,
     PdfContextMenuComponent,
     PdfPresentationModeComponent,
@@ -211,7 +211,7 @@ if (typeof window !== 'undefined') {
     PdfFindResultsCountComponent,
     PdfFindbarMessageContainerComponent,
     PdfSplitToolbarButtonComponent
-]
+  ]
 })
 export class NgxExtendedPdfViewerModule {
   constructor() {}
