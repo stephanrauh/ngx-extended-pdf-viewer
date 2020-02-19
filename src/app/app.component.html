@@ -7,6 +7,27 @@
   </div>
 </ng-template>
 
+<ng-template #customFindbarButtons>
+  <pdf-find-input-area [customFindbarInputArea]="customFindbarInputArea"></pdf-find-input-area>
+  <div id="findbarOptionsOneContainer">
+    <pdf-find-highlight-all></pdf-find-highlight-all>
+    <pdf-find-match-case></pdf-find-match-case>
+  </div>
+  <br />
+  <div id="findbarOptionsTwoContainer">
+    <pdf-find-entire-word></pdf-find-entire-word>
+    <pdf-find-entire-phrase></pdf-find-entire-phrase>
+  </div>
+  <br />
+  <div id="findbarOptionsThreeContainer">
+    <pdf-find-ignore-accents></pdf-find-ignore-accents>
+    <pdf-find-results-count></pdf-find-results-count>
+  </div>
+  <br />
+  <pdf-findbar-message-container></pdf-findbar-message-container>
+</ng-template>
+
+
 <mat-card>
   <mat-card-content>
     <section class="section">
@@ -119,7 +140,8 @@
   <mat-tab label="fancy PDF (low print res)">
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
-      [customFindbarInputArea]="customFindbarInputArea"
+        [customFindbarButtons]="customFindbarButtons"
+        [customFindbarInputArea]="customFindbarInputArea"
         *ngIf="visible[0] && !hidden"
         [showBorders]="showBorders"
         printResolution="50"

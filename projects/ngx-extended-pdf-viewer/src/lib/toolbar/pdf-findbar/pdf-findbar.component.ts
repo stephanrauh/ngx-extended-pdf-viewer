@@ -26,5 +26,5 @@ export class PdfFindbarComponent {
   public customFindbar: TemplateRef<any>;
 
   @Input()
-  public customFindbarButtons: TemplateRef<any> | undefined = undefined;
+  public customFindbarButtons: TemplateRef<any>;
 }
