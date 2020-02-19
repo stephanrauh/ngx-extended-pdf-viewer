@@ -12,7 +12,9 @@ import {
   HostListener,
   NgZone,
   TemplateRef,
-  ApplicationRef
+  ApplicationRef,
+  Inject,
+  PLATFORM_ID
 } from '@angular/core';
 import { PagesLoadedEvent } from './events/pages-loaded-event';
 import { PageRenderedEvent } from './events/page-rendered-event';
@@ -38,8 +40,11 @@ import { ServiceWorkerOptions } from './options/service-worker-options';
 import * as deburr from 'lodash.deburr'; // #177
 import { VerbosityLevel } from './options/verbosity-level';
 import { FindState, FindResultMatchesCount, FindResult } from './events/find-result';
+import { isPlatformBrowser } from '@angular/common';
 
-(window as any).deburr = deburr; // #177
+if (typeof window !== 'undefined') {
+  (window as any).deburr = deburr; // #177
+}
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
@@ -450,17 +455,19 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
   }
 
-  constructor(private ngZone: NgZone) {
-    if (!window['pdfjs-dist/build/pdf']) {
-      const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
-      const script = document.createElement('script');
-      script.src = isIE ? 'assets/pdf-es5.js' : 'assets/pdf.js';
-      script.type = 'text/javascript';
-      script.async = true;
-      document.getElementsByTagName('head')[0].appendChild(script);
-    }
-    if (!(window as any).webViewerLoad) {
-      this.loadViewer();
+  constructor(private ngZone: NgZone, @Inject(PLATFORM_ID) private platformId) {
+    if(isPlatformBrowser(this.platformId)) {
+      if (!window['pdfjs-dist/build/pdf']) {
+        const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
+        const script = document.createElement('script');
+        script.src = isIE ? 'assets/pdf-es5.js' : 'assets/pdf.js';
+        script.type = 'text/javascript';
+        script.async = true;
+        document.getElementsByTagName('head')[0].appendChild(script);
+      }
+      if (!(window as any).webViewerLoad) {
+        this.loadViewer();
+      }
     }
   }
 

@@ -121,3 +121,4 @@
 - 2.0.0-alpha.9 #193 suppress or enable zooming with the mouse wheel via the keyboard settings `[acceptKeys]` and `[ignoreKeys]`
 - 2.0.0-alpha.10 #193 suppress or enable zooming with the mouse wheel via the keyboard settings `[acceptKeys]` and `[ignoreKeys]`; #179 and #159 preliminary support for customizing the UI
 - 2.0.0-alpha.11 #211 remove the gloss effect of the zoom dropdown in Safari; remove the duplicate drop-down-arrays (which may or may not have been caused by updating @angular/material)
+- 2.0.0-alpha.12 #213 compatibility to Angular Universal

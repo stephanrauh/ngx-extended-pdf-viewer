@@ -71,7 +71,6 @@ function isKeyIgnored(cmd: number, keycode: number | 'WHEEL'): boolean {
   if (!!acceptKeys && acceptKeys.length > 0) {
     return !isKeyInList(acceptKeys, cmd, keycode);
   }
-
   return false;
 }
 
@@ -144,7 +143,9 @@ function isKey(keyDef: string, cmd: number, keycode: number | 'WHEEL'): boolean 
   return key === keycode && cmd === cmdDef;
 }
 
-(window as any).isKeyIgnored = isKeyIgnored;
+if (typeof window !== 'undefined') {
+  (window as any).isKeyIgnored = isKeyIgnored;
+}
 
 @NgModule({
   imports: [CommonModule, FormsModule],
@@ -180,7 +181,8 @@ function isKey(keyDef: string, cmd: number, keycode: number | 'WHEEL'): boolean 
     PdfSplitToolbarButtonComponent
   ],
   providers: [NgxExtendedPdfViewerService],
-  exports: [NgxExtendedPdfViewerComponent,
+  exports: [
+    NgxExtendedPdfViewerComponent,
     PdfZoomDropdownComponent,
     PdfContextMenuComponent,
     PdfPresentationModeComponent,
@@ -209,7 +211,7 @@ function isKey(keyDef: string, cmd: number, keycode: number | 'WHEEL'): boolean 
     PdfFindResultsCountComponent,
     PdfFindbarMessageContainerComponent,
     PdfSplitToolbarButtonComponent
-]
+  ]
 })
 export class NgxExtendedPdfViewerModule {
   constructor() {}

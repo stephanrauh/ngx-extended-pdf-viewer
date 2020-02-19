@@ -1,4 +1,4 @@
-const _isIE11 = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
+const _isIE11 = typeof window === 'undefined' ? false : !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
 
 export const defaultOptions = {
   cursorToolOnLoad: 0,
