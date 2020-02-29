@@ -78,7 +78,11 @@ The detailed instructions for JHipster and Angular 2, 4, and 5 are available [on
 
 4. If you want to display a PDF file you have downloaded from a server, you probably have a `Blob` or a Base64 encoded string. `Blobs` can be passed directly to the attribute `[src]`. Base64 string must be passed to the attribute `[base64Src]` instead.
 
+
+
 ## Configuration
+<details>
+  <summary><b>Expand to show the full list of configuration options</b></summary>
 
 Do you miss a configuration option? File an issue on the [project bug tracker](https://github.com/stephanrauh/ExploringAngular/tree/master/embedding-pdf). If the base library [pdf.js](https://mozilla.github.io/pdf.js/) supports the requested option, I'll probably add it. BTW, you can speed up the process by providing a code snippet telling me how to implement the feature or by submitting a pull request.
 
@@ -150,6 +154,7 @@ Also see [the attribute list on the showcase](https://pdfviewer.net/attributes).
 | (updateFindState)            |    undefined    | This event is called during the find operations. It sends a `FindState`(i.e. `FindState.FOUND`, `FindState.NOT_FOUND`, `FindState.PENDING` or `FindState.WRAPPED`).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | useBrowserLocale             |      false      | if true, the PDF viewer assumes the locale files are in the assets folder. If false, you are responsible for providing the translated texts.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | [(zoom)]                     |    undefined    | `[zoom]="undefined"` (default value): use the zoom level `"auto"`. If not `undefined`: Set the zoom level of the page, no matter which zoom level was previously configured. Legal values are `[zoom]="'auto'"`, `="'page-actual'"`, `="'page-fit'"`, `="'page-width'"`, or `="50"` (or any other percentage). Numbers are always considered percentages; the trailing "%" character is optional. This attribute supports two-way binding. `[(zoom)]="zoomAttribute"` updates the variable `zoomAttribute` each time the user changes the zoom setting. This is useful to use the same zoom accross multiple PDF viewer instances or PDF document. If you're only interest in the event, that's `(zoomChange)`. Caveat: since version 1.6.0, `(zoomChange)` fires twice after chosing `page width`, `page fit`, `automatic zoom` or `actual size` from the drop-down menu. |
+</detail>
 
 ## Searching programmatically
 
