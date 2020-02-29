@@ -154,7 +154,7 @@ Also see [the attribute list on the showcase](https://pdfviewer.net/attributes).
 | (updateFindState)            |    undefined    | This event is called during the find operations. It sends a `FindState`(i.e. `FindState.FOUND`, `FindState.NOT_FOUND`, `FindState.PENDING` or `FindState.WRAPPED`).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | useBrowserLocale             |      false      | if true, the PDF viewer assumes the locale files are in the assets folder. If false, you are responsible for providing the translated texts.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | [(zoom)]                     |    undefined    | `[zoom]="undefined"` (default value): use the zoom level `"auto"`. If not `undefined`: Set the zoom level of the page, no matter which zoom level was previously configured. Legal values are `[zoom]="'auto'"`, `="'page-actual'"`, `="'page-fit'"`, `="'page-width'"`, or `="50"` (or any other percentage). Numbers are always considered percentages; the trailing "%" character is optional. This attribute supports two-way binding. `[(zoom)]="zoomAttribute"` updates the variable `zoomAttribute` each time the user changes the zoom setting. This is useful to use the same zoom accross multiple PDF viewer instances or PDF document. If you're only interest in the event, that's `(zoomChange)`. Caveat: since version 1.6.0, `(zoomChange)` fires twice after chosing `page width`, `page fit`, `automatic zoom` or `actual size` from the drop-down menu. |
-</detail>
+</details>
 
 ## Searching programmatically
 
@@ -167,6 +167,9 @@ The service `NgxExtendedPdfViewerService` allows you to search programmatically.
 | `findPrevious(): boolean`    | finds the previous search result. Only call it after calling `find()` first. If the PDF viewer is not initialized, the method returns `false` and prints an error message on the console. |
 
 ## Internationalization
+<details>
+  <summary><b>Expand to learn how to translate ngx-extended-pdf-viewer to 120+ languages</b></summary>
+
 
 ### Slow default way
 
@@ -199,6 +202,7 @@ The folder `node_modules/ngx-extended-pdf-viewer/assets/inline-locale-files` con
 _Hint_: You can also add the language definition in another HTML file. The bottom line is that the HTML snippet is already part of the DOM when the PDF viewer is initialized. Cluttering the root index file with the translations is an ugly and inflexible hack, but it works.
 
 If you're using the "inline" approach, don't set `useBrowserLocale` (or set it explicitely to `false`).
+</details>
 
 ## Troubleshooting
 See https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/master/projects/ngx-extended-pdf-viewer/troubleshooting.md
