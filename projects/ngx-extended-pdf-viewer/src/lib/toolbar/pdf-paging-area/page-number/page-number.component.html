@@ -1,0 +1,13 @@
+<input
+  [class.invisible]="!showPagingButtons"
+  type="number"
+  id="pageNumber"
+  class="toolbarField pageNumber"
+  title="Page"
+  value="1"
+  size="4"
+  min="1"
+  tabindex="15"
+  data-l10n-id="page"
+/>
+<span [class.invisible]="!showPagingButtons" id="numPages" class="toolbarLabel"></span>

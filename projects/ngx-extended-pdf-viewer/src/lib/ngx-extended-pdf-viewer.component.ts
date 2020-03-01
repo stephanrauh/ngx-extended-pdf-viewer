@@ -12,7 +12,6 @@ import {
   HostListener,
   NgZone,
   TemplateRef,
-  ApplicationRef,
   Inject,
   PLATFORM_ID
 } from '@angular/core';
@@ -69,8 +68,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public customFindbarButtons: TemplateRef<any> | undefined = undefined;
 
-  /* regular attributes */
+  @Input()
+  public customSecondaryToolbar: TemplateRef<any>;
 
+
+  /* regular attributes */
 
   private _src: string | ArrayBuffer;
 
@@ -456,7 +458,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   constructor(private ngZone: NgZone, @Inject(PLATFORM_ID) private platformId) {
-    if(isPlatformBrowser(this.platformId)) {
+    if (isPlatformBrowser(this.platformId)) {
       if (!window['pdfjs-dist/build/pdf']) {
         const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
         const script = document.createElement('script');
@@ -861,8 +863,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         verbosity: this.logLevel
       };
       (<any>window).PDFViewerApplication.onError = (error: Error) => this.pdfLoadingFailed.emit(error);
-      (<any>window).PDFViewerApplication.open(this._src, options).then(
-        () => this.pdfLoaded.emit({ pagesCount: (<any>window).PDFViewerApplication.pagesCount })
+      (<any>window).PDFViewerApplication.open(this._src, options).then(() =>
+        this.pdfLoaded.emit({ pagesCount: (<any>window).PDFViewerApplication.pagesCount })
       );
     }
     setTimeout(() => {
@@ -1075,7 +1077,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if ('showBorders' in changes) {
       const options = (<any>window).PDFViewerApplicationOptions;
       if (options) {
-
         this.overrideDefaultSettings();
         const viewer = document.getElementById('viewer') as HTMLElement;
         if (this.showBorders) {

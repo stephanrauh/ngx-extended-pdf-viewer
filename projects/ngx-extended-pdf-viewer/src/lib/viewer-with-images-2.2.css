@@ -975,11 +975,11 @@ html[dir='rtl'] .splitToolbarButton {
   margin: 3px 0 4px 2px;
   display: inline-block;
 }
-html[dir='ltr'] .splitToolbarButton > .toolbarButton {
+html[dir='ltr'] .splitToolbarButton .toolbarButton {
   border-radius: 0;
   float: left;
 }
-html[dir='rtl'] .splitToolbarButton > .toolbarButton {
+html[dir='rtl'] .splitToolbarButton .toolbarButton {
   border-radius: 0;
   float: right;
 }
@@ -1010,9 +1010,9 @@ html[dir='rtl'] .splitToolbarButton > .toolbarButton {
   margin: 0;
 }
 
-.splitToolbarButton:hover > .toolbarButton,
-.splitToolbarButton:focus > .toolbarButton,
-.splitToolbarButton.toggled > .toolbarButton,
+.splitToolbarButton:hover  .toolbarButton,
+.splitToolbarButton:focus  .toolbarButton,
+.splitToolbarButton.toggled  .toolbarButton,
 .toolbarButton.textButton {
   background-color: hsla(0,0%,0%,.12);
   background-image: linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
@@ -1027,8 +1027,8 @@ html[dir='rtl'] .splitToolbarButton > .toolbarButton {
   transition-timing-function: ease;
 
 }
-.splitToolbarButton > .toolbarButton:hover,
-.splitToolbarButton > .toolbarButton:focus,
+.splitToolbarButton .toolbarButton:hover,
+.splitToolbarButton .toolbarButton:focus,
 .dropdownToolbarButton:hover,
 .overlayButton:hover,
 .overlayButton:focus,
@@ -1043,8 +1043,8 @@ html[dir='rtl'] .splitToolbarButton > .toolbarButton {
 .splitToolbarButton > .toolbarButton {
   position: relative;
 }
-html[dir='ltr'] .splitToolbarButton > .toolbarButton:first-child,
-html[dir='rtl'] .splitToolbarButton > .toolbarButton:last-child {
+html[dir='ltr'] .splitToolbarButton .toolbarButton:first-child,
+html[dir='rtl'] .splitToolbarButton .toolbarButton:last-child {
   position: relative;
   margin: 0;
   margin-right: -1px;
@@ -1052,8 +1052,8 @@ html[dir='rtl'] .splitToolbarButton > .toolbarButton:last-child {
   border-bottom-left-radius: 2px;
   border-right-color: transparent;
 }
-html[dir='ltr'] .splitToolbarButton > .toolbarButton:last-child,
-html[dir='rtl'] .splitToolbarButton > .toolbarButton:first-child {
+html[dir='ltr'] .splitToolbarButton .toolbarButton:last-child,
+html[dir='rtl'] .splitToolbarButton .toolbarButton:first-child {
   position: relative;
   margin: 0;
   margin-left: -1px;
@@ -1076,8 +1076,8 @@ html[dir='ltr'] .splitToolbarButtonSeparator {
 html[dir='rtl'] .splitToolbarButtonSeparator {
   float: right;
 }
-.splitToolbarButton:hover > .splitToolbarButtonSeparator,
-.splitToolbarButton.toggled > .splitToolbarButtonSeparator {
+.splitToolbarButton:hover .splitToolbarButtonSeparator,
+.splitToolbarButton.toggled .splitToolbarButtonSeparator {
   padding: 12px 0;
   margin: 1px 0;
   box-shadow: 0 0 0 1px hsla(0,0%,100%,.03);
@@ -1151,7 +1151,7 @@ html[dir='rtl'] .dropdownToolbarButton {
 }
 
 .toolbarButton.toggled,
-.splitToolbarButton.toggled > .toolbarButton.toggled,
+.splitToolbarButton.toggled .toolbarButton.toggled,
 .secondaryToolbarButton.toggled {
   background-color: hsla(0,0%,0%,.3);
   background-image: linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
@@ -1165,7 +1165,7 @@ html[dir='rtl'] .dropdownToolbarButton {
 }
 
 .toolbarButton.toggled:hover:active,
-.splitToolbarButton.toggled > .toolbarButton.toggled:hover:active,
+.splitToolbarButton.toggled .toolbarButton.toggled:hover:active,
 .secondaryToolbarButton.toggled:hover:active {
   background-color: hsla(0,0%,0%,.4);
   border-color: hsla(0,0%,0%,.4) hsla(0,0%,0%,.5) hsla(0,0%,0%,.55);

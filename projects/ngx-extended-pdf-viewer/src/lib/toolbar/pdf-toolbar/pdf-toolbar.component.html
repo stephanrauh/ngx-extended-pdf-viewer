@@ -1,0 +1,34 @@
+<div class="toolbar" [class.invisible]="!primaryMenuVisible" >
+  <div
+    id="toolbarContainer"
+    [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
+    [style.transformOrigin]="'left center'"
+    [style.width]="toolbarWidth"
+  >
+    <ng-content *ngTemplateOutlet="customToolbar ? customToolbar : defaultToolbar"></ng-content>
+    <div id="loadingBar">
+      <div class="progress"><div class="glimmer"></div></div>
+    </div>
+  </div>
+</div>
+
+<ng-template #defaultToolbar>
+  <div id="toolbarViewer">
+    <div id="toolbarViewerLeft">
+      <pdf-toggle-sidebar [showSidebarButton]="showSidebarButton"></pdf-toggle-sidebar>
+      <div [class.invisible]="!showSidebarButton" class="toolbarButtonSpacer"></div>
+      <pdf-find-button [showFindButton]="showFindButton" [textLayer]="textLayer"></pdf-find-button>
+      <pdf-paging-area [showPagingButtons]="showPagingButtons"></pdf-paging-area>
+    </div>
+    <div id="toolbarViewerRight">
+      <pdf-presentation-mode [showPresentationModeButton]="showPresentationModeButton"></pdf-presentation-mode>
+      <pdf-open-file [showOpenFileButton]="showOpenFileButton"></pdf-open-file>
+      <pdf-print [showPrintButton]="showPrintButton"></pdf-print>
+      <pdf-download [showDownloadButton]="showDownloadButton"></pdf-download>
+      <pdf-bookmark [showBookmarkButton]="showBookmarkButton"></pdf-bookmark>
+      <div [class.invisible]="!showSecondaryToolbarButton" class="verticalToolbarSeparator hiddenSmallView"></div>
+      <pdf-toggle-secondary-toolbar [showSecondaryToolbarButton]="showSecondaryToolbarButton"></pdf-toggle-secondary-toolbar>
+    </div>
+    <pdf-zoom-toolbar [showZoomButtons]="showZoomButtons" (zoomChange)="emitZoomChange($event)"></pdf-zoom-toolbar>
+  </div>
+</ng-template>

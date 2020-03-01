@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
-import { PdfZoomDropdownComponent } from './toolbar/pdf-zoom-dropdown/pdf-zoom-dropdown.component';
 import { PdfContextMenuComponent } from './toolbar/pdf-context-menu/pdf-context-menu.component';
 import { PdfPresentationModeComponent } from './toolbar/pdf-presentation-mode/pdf-presentation-mode.component';
 import { PdfOpenFileComponent } from './toolbar/pdf-open-file/pdf-open-file.component';
@@ -32,6 +31,17 @@ import { PdfFindbarMessageContainerComponent } from './toolbar/pdf-findbar/pdf-f
 import { PdfSplitToolbarButtonComponent } from './toolbar/pdf-findbar/pdf-split-toolbar-button/pdf-split-toolbar-button.component';
 import { PdfFindMultipleSearchTextsComponent } from './toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-find-entire-phrase/pdf-find-entire-phrase.component';
 import { FormsModule } from '@angular/forms';
+import { PdfToolbarComponent } from './toolbar/pdf-toolbar/pdf-toolbar.component';
+import { PdfFindButtonComponent } from './toolbar/pdf-find-button/pdf-find-button.component';
+import { PdfToggleSidebarComponent } from './toolbar/pdf-toggle-sidebar/pdf-toggle-sidebar.component';
+import { PdfToggleSecondaryToolbarComponent } from './toolbar/pdf-toggle-secondary-toolbar/pdf-toggle-secondary-toolbar.component';
+import { PdfNextPageComponent } from './toolbar/pdf-paging-area/pdf-next-page/pdf-next-page.component';
+import { PdfPreviousPageComponent } from './toolbar/pdf-paging-area/pdf-previous-page/pdf-previous-page.component';
+import { PageNumberComponent } from './toolbar/pdf-paging-area/page-number/page-number.component';
+import { PdfPageNumberComponent } from './toolbar/pdf-paging-area/pdf-page-number/pdf-page-number.component';
+import { PdfZoomInComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-in/pdf-zoom-in.component';
+import { PdfZoomOutComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-out/pdf-zoom-out.component';
+import { PdfZoomDropdownComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-dropdown/pdf-zoom-dropdown.component';
 
 function isKeyIgnored(cmd: number, keycode: number | 'WHEEL'): boolean {
   const options = (window as any).PDFViewerApplicationOptions;
@@ -178,7 +188,17 @@ if (typeof window !== 'undefined') {
     PdfFindbarOptionsThreeContainerComponent,
     PdfFindResultsCountComponent,
     PdfFindbarMessageContainerComponent,
-    PdfSplitToolbarButtonComponent
+    PdfSplitToolbarButtonComponent,
+    PdfToolbarComponent,
+    PdfFindButtonComponent,
+    PdfToggleSidebarComponent,
+    PdfToggleSecondaryToolbarComponent,
+    PdfNextPageComponent,
+    PdfPreviousPageComponent,
+    PageNumberComponent,
+    PdfPageNumberComponent,
+    PdfZoomInComponent,
+    PdfZoomOutComponent
   ],
   providers: [NgxExtendedPdfViewerService],
   exports: [

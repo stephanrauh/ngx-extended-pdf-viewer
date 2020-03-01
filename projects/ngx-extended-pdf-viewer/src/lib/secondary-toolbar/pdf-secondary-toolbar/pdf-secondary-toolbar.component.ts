@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'pdf-secondary-toolbar',
@@ -6,6 +6,9 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange
   styleUrls: ['./pdf-secondary-toolbar.component.css']
 })
 export class PdfSecondaryToolbarComponent {
+  @Input()
+  public customSecondaryToolbar: TemplateRef<any>;
+
   @Input()
   public secondaryToolbarTop;
 

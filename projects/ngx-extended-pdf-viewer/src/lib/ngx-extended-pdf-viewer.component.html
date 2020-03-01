@@ -2,7 +2,7 @@
 <div class="zoom" [style.height]="height" [style.minHeight]="minHeight">
   <div class="html">
     <div tabindex="1" class="loadingInProgress body" [style.backgroundColor]="backgroundColor">
-      <div id="outerContainer">
+      <div id="outerContainer" (window:resize)="onResize()">
         <pdf-sidebar [sidebarPositionTop]="sidebarPositionTop" [showSidebarButton]="showSidebarButton"></pdf-sidebar>
         <div id="mainContainer">
           <pdf-findbar
@@ -15,6 +15,7 @@
           >
           </pdf-findbar>
           <pdf-secondary-toolbar
+            [customSecondaryToolbar]="customSecondaryToolbar"
             [secondaryToolbarTop]="secondaryToolbarTop"
             [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
             [showPresentationModeButton]="showPresentationModeButton"
@@ -32,20 +33,25 @@
           >
           </pdf-secondary-toolbar>
 
-          <div class="toolbar" [class.invisible]="!primaryMenuVisible" (window:resize)="onResize()">
-            <div
-              id="toolbarContainer"
-              [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
-              [style.transformOrigin]="'left center'"
-              [style.width]="toolbarWidth"
-            >
-              <ng-content *ngTemplateOutlet="customToolbar ? customToolbar : defaultToolbar"></ng-content>
-              <div id="loadingBar">
-                <div class="progress"><div class="glimmer"></div></div>
-              </div>
-            </div>
-          </div>
+          <pdf-toolbar
+            [customToolbar]="customToolbar"
+            [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+            [primaryMenuVisible]="primaryMenuVisible"
+            [showBookmarkButton]="showBookmarkButton"
+            [showDownloadButton]="showDownloadButton"
+            [showFindButton]="showFindButton"
+            [showOpenFileButton]="showOpenFileButton"
+            [showPrintButton]="showPrintButton"
+            [showPagingButtons]="showPagingButtons"
+            [showPresentationModeButton]="showPresentationModeButton"
+            [showSecondaryToolbarButton]="showSecondaryToolbarButton"
+            [showSidebarButton]="showSidebarButton"
+            [showZoomButtons]="showZoomButtons"
+            [textLayer]="textLayer"
+            [toolbarWidth]="toolbarWidth"
+            (zoomChange)="emitZoomChange($event)"
 
+          ></pdf-toolbar>
           <pdf-context-menu></pdf-context-menu>
 
           <div id="viewerContainer" tabindex="0" [style.top]="viewerPositionTop">
@@ -121,54 +127,3 @@
 
 
 <!-- The (primary) toolbar is the black bar containing the buttons. -->
-<ng-template #defaultToolbar>
-  <div id="toolbarViewer">
-    <div id="toolbarViewerLeft">
-      <button
-        type="button"
-        [class.invisible]="!showSidebarButton"
-        id="sidebarToggle"
-        class="toolbarButton"
-        title="Toggle Sidebar"
-        tabindex="11"
-        data-l10n-id="toggle_sidebar"
-      >
-        <span data-l10n-id="toggle_sidebar_label">Toggle Sidebar</span>
-      </button>
-      <div [class.invisible]="!showSidebarButton" class="toolbarButtonSpacer"></div>
-      <button
-        type="button"
-        [class.invisible]="!showFindButton || !textLayer"
-        id="viewFind"
-        class="toolbarButton"
-        title="Find in Document"
-        tabindex="12"
-        data-l10n-id="findbar"
-      >
-        <span data-l10n-id="findbar_label">Find</span>
-      </button>
-      <pdf-paging-area [showPagingButtons]="showPagingButtons"></pdf-paging-area>
-    </div>
-    <div id="toolbarViewerRight">
-      <pdf-presentation-mode [showPresentationModeButton]="showPresentationModeButton"></pdf-presentation-mode>
-      <pdf-open-file [showOpenFileButton]="showOpenFileButton"></pdf-open-file>
-      <pdf-print [showPrintButton]="showPrintButton"></pdf-print>
-      <pdf-download [showDownloadButton]="showDownloadButton"></pdf-download>
-      <pdf-bookmark [showBookmarkButton]="showBookmarkButton"></pdf-bookmark>
-      <div [class.invisible]="!showSecondaryToolbarButton" class="verticalToolbarSeparator hiddenSmallView"></div>
-
-      <button
-        type="button"
-        [class.invisible]="!showSecondaryToolbarButton"
-        id="secondaryToolbarToggle"
-        class="toolbarButton"
-        title="Tools"
-        tabindex="36"
-        data-l10n-id="tools"
-      >
-        <span data-l10n-id="tools_label">Tools</span>
-      </button>
-    </div>
-    <pdf-zoom-toolbar [showZoomButtons]="showZoomButtons" (zoomChange)="emitZoomChange($event)"></pdf-zoom-toolbar>
-  </div>
-</ng-template>
