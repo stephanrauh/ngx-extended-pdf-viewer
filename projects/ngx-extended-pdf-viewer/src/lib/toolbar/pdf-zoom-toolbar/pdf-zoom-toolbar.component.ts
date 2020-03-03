@@ -7,13 +7,12 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class PdfZoomToolbarComponent {
   @Input()
-  public showZoomButtons: boolean;
+  public showZoomButtons = true;
 
   @Output()
   public zoomChange = new EventEmitter<string | number | undefined>();
 
   public emitZoomChange(event: string | number | undefined): void {
-    debugger;
     this.zoomChange.emit(event);
   }
 

@@ -16,37 +16,37 @@ export class PdfSecondaryToolbarComponent {
   public mobileFriendlyZoomScale: number;
 
   @Input()
-  public showPresentationModeButton: boolean;
+  public showPresentationModeButton = true;
 
   @Input()
-  public showOpenFileButton: boolean;
+  public showOpenFileButton = true;
 
   @Input()
-  public showPrintButton: boolean;
+  public showPrintButton = true;
 
   @Input()
-  public showDownloadButton: boolean;
+  public showDownloadButton = true;
 
   @Input()
-  public showBookmarkButton: boolean;
+  public showBookmarkButton = true;
 
   @Input()
-  public showPagingButtons: boolean;
+  public showPagingButtons = true;
 
   @Input()
-  public showRotateButton: boolean;
+  public showRotateButton = true;
 
   @Input()
-  public showHandToolButton: boolean;
+  public showHandToolButton = true;
 
   @Input()
-  public showScrollingButton: boolean;
+  public showScrollingButton = true;
 
   @Input()
-  public showSpreadButton: boolean;
+  public showSpreadButton = true;
 
   @Input()
-  public showPropertiesButton: boolean;
+  public showPropertiesButton = true;
 
   @Output()
   public spreadChange = new EventEmitter<string>();
@@ -55,5 +55,5 @@ export class PdfSecondaryToolbarComponent {
     this.spreadChange.emit(newSpread);
   }
 
-  constructor() { }
+  constructor() {}
 }

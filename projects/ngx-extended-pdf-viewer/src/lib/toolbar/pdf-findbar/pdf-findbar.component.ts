@@ -7,7 +7,7 @@ import { Component, Input, TemplateRef } from '@angular/core';
 })
 export class PdfFindbarComponent {
   @Input()
-  public showFindButton: boolean;
+  public showFindButton = true;
 
   @Input()
   public mobileFriendlyZoomScale: number;

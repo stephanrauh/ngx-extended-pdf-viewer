@@ -230,7 +230,17 @@ if (typeof window !== 'undefined') {
     PdfFindbarOptionsThreeContainerComponent,
     PdfFindResultsCountComponent,
     PdfFindbarMessageContainerComponent,
-    PdfSplitToolbarButtonComponent
+    PdfSplitToolbarButtonComponent,
+    PdfToolbarComponent,
+    PdfFindButtonComponent,
+    PdfToggleSidebarComponent,
+    PdfToggleSecondaryToolbarComponent,
+    PdfNextPageComponent,
+    PdfPreviousPageComponent,
+    PageNumberComponent,
+    PdfPageNumberComponent,
+    PdfZoomInComponent,
+    PdfZoomOutComponent
   ]
 })
 export class NgxExtendedPdfViewerModule {

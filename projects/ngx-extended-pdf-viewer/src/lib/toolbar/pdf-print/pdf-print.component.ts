@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class PdfPrintComponent {
   @Input()
-  public showPrintButton: boolean;
+  public showPrintButton = true;
 }

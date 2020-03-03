@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class PdfOpenFileComponent  {
   @Input()
-  public showOpenFileButton: boolean;
+  public showOpenFileButton = true;
 }

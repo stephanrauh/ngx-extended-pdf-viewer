@@ -8,5 +8,5 @@ import { Component, Input } from '@angular/core';
 export class PdfPagingAreaComponent {
 
   @Input()
-  public showPagingButtons: boolean;
+  public showPagingButtons = true;
 }

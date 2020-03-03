@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class PageNumberComponent implements OnInit {
   @Input()
-  public showPagingButtons: boolean;
+  public showPagingButtons = true;
 
   constructor() {}
 

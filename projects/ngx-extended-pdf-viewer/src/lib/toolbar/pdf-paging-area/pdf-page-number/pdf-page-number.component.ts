@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class PdfPageNumberComponent implements OnInit {
   @Input()
-  public showPagingButtons: boolean;
+  public showPagingButtons = true;
 
   constructor() {}
 

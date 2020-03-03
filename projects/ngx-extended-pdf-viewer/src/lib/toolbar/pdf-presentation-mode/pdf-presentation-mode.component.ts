@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class PdfPresentationModeComponent  {
   @Input()
-  public showPresentationModeButton: boolean;
+  public showPresentationModeButton = true;
 }

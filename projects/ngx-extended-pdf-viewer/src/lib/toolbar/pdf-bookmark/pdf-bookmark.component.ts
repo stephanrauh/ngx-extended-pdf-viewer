@@ -8,5 +8,5 @@ import { Component, Input } from '@angular/core';
 export class PdfBookmarkComponent {
 
   @Input()
-  public showBookmarkButton: boolean;
+  public showBookmarkButton = true;
 }

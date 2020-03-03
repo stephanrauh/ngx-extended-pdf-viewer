@@ -5,10 +5,10 @@ import { Component, Input } from '@angular/core';
   templateUrl: './pdf-sidebar.component.html',
   styleUrls: ['./pdf-sidebar.component.css']
 })
-export class PdfSidebarComponent  {
+export class PdfSidebarComponent {
   @Input()
   public sidebarPositionTop: number;
 
   @Input()
-  public showSidebarButton: boolean;
+  public showSidebarButton = true;
 }

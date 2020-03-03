@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class PdfDownloadComponent {
   @Input()
-  public showDownloadButton: boolean;
+  public showDownloadButton = true;
 }

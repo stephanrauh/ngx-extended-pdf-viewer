@@ -124,4 +124,4 @@
 - 2.0.0-alpha.12 #213 compatibility to Angular Universal
 - 2.0.0-alpha.13 #179 and #159 preliminary support for customizing the UI (activated [customFindbarButtons])
 - 2.0.0-alpha.14 #179 and #159 improved support for customizing the UI (`[customToolbar]`, `[customFindbarButtonscustomFindbarInputArea]`,  `[customSecondaryToolbar]`). If everything went according to the plan, you shouldn't notice any difference unless you're using the new features.
-
+- 2.0.0-alpha.15 #179 and #159 add the new components to the public API
