@@ -12,7 +12,7 @@ import { PagesLoadedEvent, PageRenderedEvent, PdfDownloadedEvent, PdfLoadedEvent
 })
 export class AppComponent {
   public pdf = 'assets/example.pdf';
-  public hidden = false;
+  public hidden = true;
   public zoom: number | string | undefined = 'page-width';
   public visible = { 0: true };
   public mobileFriendlyZoomPercent = false;

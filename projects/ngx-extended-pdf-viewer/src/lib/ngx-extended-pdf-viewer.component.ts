@@ -628,9 +628,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         this.textLayer = true;
         if (this.showFindButton === undefined) {
           this.showFindButton = true;
-          // todo remove this hack:
-          (document.getElementById('viewFind') as HTMLElement).classList.remove('invisible');
-          (document.getElementById('findbar') as HTMLElement).classList.remove('invisible');
+          setTimeout(() => {
+            // todo remove this hack:
+            (document.getElementById('viewFind') as HTMLElement).classList.remove('invisible');
+            (document.getElementById('findbar') as HTMLElement).classList.remove('invisible');
+          });
         }
       } else {
         if (options) {
@@ -667,9 +669,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         this.textLayer = true;
         if (this.showFindButton === undefined) {
           this.showFindButton = true;
-          // todo remove this hack:
-          (document.getElementById('viewFind') as HTMLElement).classList.remove('invisible');
-          (document.getElementById('findbar') as HTMLElement).classList.remove('invisible');
+          setTimeout(() => {
+            // todo remove this hack:
+            (document.getElementById('viewFind') as HTMLElement).classList.remove('invisible');
+            (document.getElementById('findbar') as HTMLElement).classList.remove('invisible');
+            });
         }
       } else {
         if (options) {
@@ -1075,25 +1079,28 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       }
     }
     if ('showBorders' in changes) {
-      const options = (<any>window).PDFViewerApplicationOptions;
-      if (options) {
-        this.overrideDefaultSettings();
-        const viewer = document.getElementById('viewer') as HTMLElement;
-        if (this.showBorders) {
-          viewer.classList.remove('removePageBorders');
-        } else {
-          viewer.classList.add('removePageBorders');
-        }
+      if (!changes['showBorders'].isFirstChange()) {
+        const options = (<any>window).PDFViewerApplicationOptions;
+        if (options) {
+          this.overrideDefaultSettings();
+          const viewer = document.getElementById('viewer') as HTMLElement;
+          if (this.showBorders) {
+            viewer.classList.remove('removePageBorders');
+          } else {
+            viewer.classList.add('removePageBorders');
+          }
 
-        if ((<any>window).PDFViewerApplication.pdfViewer) {
-          (<any>window).PDFViewerApplication.pdfViewer.removePageBorders = !this.showBorders;
+          if ((<any>window).PDFViewerApplication.pdfViewer) {
+            (<any>window).PDFViewerApplication.pdfViewer.removePageBorders = !this.showBorders;
+          }
+          const zoomEvent = {
+            source: viewer,
+            // tslint:disable-next-line:no-bitwise
+            scale: (Number(this.zoom) | 100) / 100,
+            presetValue: this.zoom
+          } as ScaleChangingEvent;
+          (<any>window).PDFViewerApplication.eventBus.dispatch('scalechanging', zoomEvent);
         }
-        const zoomEvent = {
-          source: viewer,
-          scale: (Number(this.zoom) | 100) / 100,
-          presetValue: this.zoom
-        } as ScaleChangingEvent;
-        (<any>window).PDFViewerApplication.eventBus.dispatch('scalechanging', zoomEvent);
       }
     }
 
