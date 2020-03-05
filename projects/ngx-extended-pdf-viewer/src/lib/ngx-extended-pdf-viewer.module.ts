@@ -85,6 +85,9 @@ function isKeyIgnored(cmd: number, keycode: number | 'WHEEL'): boolean {
 }
 
 function isKeyInList(settings: Array<string>, cmd: number, keycode: number | 'WHEEL'): boolean {
+  if (!settings) {
+    return true;
+  }
   return settings.some(keyDef => isKey(keyDef, cmd, keycode));
 }
 
