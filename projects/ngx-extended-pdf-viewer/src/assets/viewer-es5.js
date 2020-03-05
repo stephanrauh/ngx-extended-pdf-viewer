@@ -7012,7 +7012,7 @@ function () {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-  
+
       var matches = [];
       var queryLen = query.length;
       var matchIdx = -queryLen;
@@ -7040,7 +7040,7 @@ function () {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-  
+
       var matchesWithLength = [];
     var queryArray = (query.includes('\n')) ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g); // #201
 
@@ -14006,7 +14006,7 @@ function getDefaultPreferences() {
       "externalLinkTarget": 0,
       "historyUpdateUrl": false,
       "pdfBugEnabled": false,
-      "removePageBorders": false,// #194 
+      "removePageBorders": false,// #194
       "renderer": "canvas",
       "renderInteractiveForms": false,
       "sidebarViewOnLoad": -1,
@@ -15631,6 +15631,7 @@ PDFPrintService.prototype = {
 var print = window.print;
 
 window.printPDF = function printPDF() {
+ if (!PDFViewerApplication.enablePrint) { return; }
   if (activeService) {
     console.warn('Ignored window.printPDF() because of a pending print job.');
     return;

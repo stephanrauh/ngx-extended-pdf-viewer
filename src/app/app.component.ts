@@ -12,13 +12,14 @@ import { PagesLoadedEvent, PageRenderedEvent, PdfDownloadedEvent, PdfLoadedEvent
 })
 export class AppComponent {
   public pdf = 'assets/example.pdf';
-  public hidden = true;
+  public hidden = false;
   public zoom: number | string | undefined = 'page-width';
   public visible = { 0: true };
   public mobileFriendlyZoomPercent = false;
   public currentZoomFactor: number;
   public showSidebarButton = false;
   public sidebarVisible = undefined;
+  public enablePrint = true;
 
   public height: string | undefined = '80vh';
   public filenameForDownload: string | undefined = undefined;

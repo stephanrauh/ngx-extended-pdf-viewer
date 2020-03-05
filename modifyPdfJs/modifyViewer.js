@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 73;
+let expectedChanges = 74;
 
 let dropLines = 0;
 currentFunction = '';
@@ -451,6 +451,9 @@ ${line}`;
   }
 
 ` + line.replace('new Error(msg)', 'error');
+          expectedChanges--;
+        } else if (line.includes('window.print =')) {
+          line += '\n if (!PDFViewerApplication.enablePrint) { return; }';
           expectedChanges--;
         }
 

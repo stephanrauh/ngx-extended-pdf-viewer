@@ -131,6 +131,8 @@
       >[ignoreKeyboard]="true"</mat-checkbox>
       <mat-checkbox class="margin" [(ngModel)]="showBorders" matTooltip="display the page with border"
       >[showBorders]="true"</mat-checkbox>
+      <mat-checkbox class="margin" [(ngModel)]="enablePrint" matTooltip="display the page with border"
+      >[enablePrint]="true"</mat-checkbox>
 
       <button mat-raised-button color="primary" class="margin" (click)="openDialog()">Modal</button>
     </section>
@@ -154,6 +156,7 @@
         [src]="'assets/pdfs/links/Second-Sample-PDF-FILE1.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#ffffff"
+        [enablePrint]="enablePrint"
         [mobileFriendlyZoom]="mobileFriendlyZoom"
         [(rotation)]="rotation"
         [showZoomButtons]="true"
@@ -194,6 +197,7 @@
         [src]="'assets/pdfs/codpaste-teachingpack.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#e8e8ef"
+        [enablePrint]="enablePrint"
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [ignoreKeyboard]="ignoreKeyboard"
@@ -231,6 +235,7 @@
         [src]="'assets/pdfs/Math.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#e8e8ef"
+        [enablePrint]="enablePrint"
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [ignoreKeyboard]="ignoreKeyboard"
@@ -266,6 +271,7 @@
         [src]="'assets/pdfs/hidden-layers.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#ffffff"
+        [enablePrint]="enablePrint"
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [ignoreKeyboard]="ignoreKeyboard"
@@ -304,6 +310,7 @@
         [src]="'assets/pdfs/pdf-sample.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="blue"
+        [enablePrint]="enablePrint"
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [ignoreKeyboard]="ignoreKeyboard"
@@ -342,6 +349,7 @@
         [base64Src]="base64"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#e8e8ef"
+        [enablePrint]="enablePrint"
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [ignoreKeyboard]="ignoreKeyboard"
@@ -378,6 +386,7 @@
         [src]="'assets/pdfs/encrypted-sample.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#e8e8ef"
+        [enablePrint]="enablePrint"
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [ignoreKeyboard]="ignoreKeyboard"
@@ -414,6 +423,7 @@
         [src]="'assets/pdfs/ATS_TEST_PVC_2_1.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#e8e8ef"
+        [enablePrint]="enablePrint"
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [ignoreKeyboard]="ignoreKeyboard"
@@ -452,6 +462,7 @@
         [src]="'assets/pdfs/excerpt.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#e8e8ef"
+        [enablePrint]="enablePrint"
         [contextMenuAllowed]="contextMenuAllowed"
         (currentZoomFactor)="updateCurrentZoomFactor($event)"
         [ignoreKeyboard]="ignoreKeyboard"

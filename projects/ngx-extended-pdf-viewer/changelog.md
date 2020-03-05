@@ -126,3 +126,4 @@
 - 2.0.0-alpha.14 #179 and #159 improved support for customizing the UI (`[customToolbar]`, `[customFindbarButtonscustomFindbarInputArea]`,  `[customSecondaryToolbar]`). If everything went according to the plan, you shouldn't notice any difference unless you're using the new features.
 - 2.0.0-alpha.15 #179 and #159 add the new components to the public API
 - 2.0.0-alpha.16 #226 prevent a NPE that sometimes shows when the PDF viewer is hidden and shown again.
+- 2.0.0-alpha.17 #227 add `[enablePrint]`. Setting this options prevents printing entirely. 

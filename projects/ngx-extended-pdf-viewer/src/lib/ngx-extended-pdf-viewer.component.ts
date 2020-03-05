@@ -93,6 +93,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Output()
   public currentZoomFactor = new EventEmitter<number>();
 
+  @Input()
+  public enablePrint = true;
+
   /**
    * Number of milliseconds to wait between initializing the PDF viewer and loading the PDF file.
    * Most users can let this parameter safely at it's default value of zero.
@@ -756,6 +759,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   private openPDF() {
     ServiceWorkerOptions.showUnverifiedSignatures = this.showUnverifiedSignatures;
+    (<any>window).PDFViewerApplication.enablePrint = this.enablePrint;
     NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized = true;
     this.onResize();
     if (!this.listenToURL) {
@@ -1106,7 +1110,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
     if ('showUnverifiedSignatures' in changes) {
       if ((<any>window).PDFViewerApplication && (<any>window).PDFViewerApplication.pdfDocument) {
-        (<any>window).PDFViewerApplication.pdfDocument._transport.messageHandler.send('showUnverifiedSignatures', this.showUnverifiedSignatures);
+        (<any>window).PDFViewerApplication.pdfDocument._transport.messageHandler.send('showUnverifiedSignatures',
+                                                                                      this.showUnverifiedSignatures);
+      }
+    }
+
+    if ('enablePrint' in changes) {
+      if (!changes['enablePrint'].isFirstChange()) {
+        (<any>window).PDFViewerApplication.enablePrint = this.enablePrint;
       }
     }
   }

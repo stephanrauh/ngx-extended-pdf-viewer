@@ -2113,6 +2113,7 @@ function webViewerWheel(evt) {
   if (pdfViewer.isInPresentationMode) {
     return;
   }
+
   let cmd = (evt.ctrlKey ? 1 : 0) | (evt.altKey ? 2 : 0) | (evt.shiftKey ? 4 : 0) | (evt.metaKey ? 8 : 0);
 
   if (isKeyIgnored(cmd, "WHEEL")) {
@@ -12783,6 +12784,7 @@ PDFPrintService.prototype = {
 let print = window.print;
 
 window.printPDF = function printPDF() {
+ if (!PDFViewerApplication.enablePrint) { return; }
   if (activeService) {
     console.warn('Ignored window.printPDF() because of a pending print job.');
     return;
