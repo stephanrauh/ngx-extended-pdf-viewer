@@ -5,6 +5,7 @@
       <div id="outerContainer" (window:resize)="onResize()">
         <pdf-sidebar [sidebarPositionTop]="sidebarPositionTop" [showSidebarButton]="showSidebarButton"></pdf-sidebar>
         <div id="mainContainer">
+          <pdf-dummy-components></pdf-dummy-components>
           <pdf-findbar
             [findbarLeft]="findbarLeft"
             [findbarTop]="findbarTop"

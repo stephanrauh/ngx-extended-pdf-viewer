@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   ViewEncapsulation,
   Input,
   OnChanges,
@@ -13,7 +12,8 @@ import {
   NgZone,
   TemplateRef,
   Inject,
-  PLATFORM_ID
+  PLATFORM_ID,
+  ViewChild
 } from '@angular/core';
 import { PagesLoadedEvent } from './events/pages-loaded-event';
 import { PageRenderedEvent } from './events/page-rendered-event';
@@ -40,6 +40,8 @@ import * as deburr from 'lodash.deburr'; // #177
 import { VerbosityLevel } from './options/verbosity-level';
 import { FindState, FindResultMatchesCount, FindResult } from './events/find-result';
 import { isPlatformBrowser } from '@angular/common';
+import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
+import { AfterViewInit } from '@angular/core';
 
 if (typeof window !== 'undefined') {
   (window as any).deburr = deburr; // #177
@@ -52,8 +54,16 @@ if (typeof window !== 'undefined') {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestroy {
+export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, OnDestroy {
   public static ngxExtendedPdfViewerInitialized = false;
+
+  /**
+   * The dummy components are inserted automatically when the user customizes the toolbar
+   * without adding every original toolbar item. Without the dummy components, the
+   * initialization code of pdf.js crashes because it assume that every standard widget is there.
+   */
+  @ViewChild(PdfDummyComponentsComponent)
+  public dummyComponents: PdfDummyComponentsComponent;
 
   /* UI templates */
   @Input()
@@ -70,7 +80,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   @Input()
   public customSecondaryToolbar: TemplateRef<any>;
-
 
   /* regular attributes */
 
@@ -493,11 +502,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     this.zoomChange.emit(value);
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     if ((window as any).webViewerLoad) {
       this.doInitPDFViewer();
     } else {
-      setTimeout(() => this.ngOnInit(), 50);
+      setTimeout(() => this.ngAfterViewInit(), 50);
     }
   }
 
@@ -585,6 +594,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         }
       }
       this.calcViewerPositionTop();
+      this.dummyComponents.addMissingStandardWidgets();
       (<any>window).webViewerLoad();
       (<any>window).PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
       (<any>window).PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
@@ -633,8 +643,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           this.showFindButton = true;
           setTimeout(() => {
             // todo remove this hack:
-            (document.getElementById('viewFind') as HTMLElement).classList.remove('invisible');
-            (document.getElementById('findbar') as HTMLElement).classList.remove('invisible');
+            const viewFind = document.getElementById('viewFind') as HTMLElement;
+            if (viewFind) {
+              viewFind.classList.remove('invisible');
+            }
+            const findbar = document.getElementById('findbar') as HTMLElement;
+            if (findbar) {
+              findbar.classList.remove('invisible');
+            }
           });
         }
       } else {
@@ -674,9 +690,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           this.showFindButton = true;
           setTimeout(() => {
             // todo remove this hack:
-            (document.getElementById('viewFind') as HTMLElement).classList.remove('invisible');
-            (document.getElementById('findbar') as HTMLElement).classList.remove('invisible');
-            });
+            const viewFind = document.getElementById('viewFind') as HTMLElement;
+            if (viewFind) {
+              viewFind.classList.remove('invisible');
+            }
+            const findbar = document.getElementById('findbar') as HTMLElement;
+            if (findbar) {
+              findbar.classList.remove('invisible');
+            }
+          });
         }
       } else {
         if (options) {
@@ -1110,14 +1132,23 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
     if ('showUnverifiedSignatures' in changes) {
       if ((<any>window).PDFViewerApplication && (<any>window).PDFViewerApplication.pdfDocument) {
-        (<any>window).PDFViewerApplication.pdfDocument._transport.messageHandler.send('showUnverifiedSignatures',
-                                                                                      this.showUnverifiedSignatures);
+        (<any>window).PDFViewerApplication.pdfDocument._transport.messageHandler.send('showUnverifiedSignatures', this.showUnverifiedSignatures);
       }
     }
 
     if ('enablePrint' in changes) {
       if (!changes['enablePrint'].isFirstChange()) {
         (<any>window).PDFViewerApplication.enablePrint = this.enablePrint;
+      }
+    }
+    if (
+      ('customFindbar' in changes && !changes['customFindbar'].isFirstChange()) ||
+      ('customFindbarButtons' in changes && !changes['customFindbarButtons'].isFirstChange()) ||
+      ('customFindbarInputArea' in changes && !changes['customFindbarInputArea'].isFirstChange()) ||
+      ('customToolbar' in changes && !changes['customToolbar'].isFirstChange())
+    ) {
+      if (this.dummyComponents) {
+        this.dummyComponents.addMissingStandardWidgets();
       }
     }
   }

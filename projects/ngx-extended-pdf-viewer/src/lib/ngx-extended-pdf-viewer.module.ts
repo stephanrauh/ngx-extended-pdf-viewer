@@ -42,6 +42,7 @@ import { PdfPageNumberComponent } from './toolbar/pdf-paging-area/pdf-page-numbe
 import { PdfZoomInComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-in/pdf-zoom-in.component';
 import { PdfZoomOutComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-out/pdf-zoom-out.component';
 import { PdfZoomDropdownComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-dropdown/pdf-zoom-dropdown.component';
+import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
 
 function isKeyIgnored(cmd: number, keycode: number | 'WHEEL'): boolean {
   const options = (window as any).PDFViewerApplicationOptions;
@@ -201,7 +202,8 @@ if (typeof window !== 'undefined') {
     PageNumberComponent,
     PdfPageNumberComponent,
     PdfZoomInComponent,
-    PdfZoomOutComponent
+    PdfZoomOutComponent,
+    PdfDummyComponentsComponent
   ],
   providers: [NgxExtendedPdfViewerService],
   exports: [

@@ -127,3 +127,4 @@
 - 2.0.0-alpha.15 #179 and #159 add the new components to the public API
 - 2.0.0-alpha.16 #226 prevent a NPE that sometimes shows when the PDF viewer is hidden and shown again.
 - 2.0.0-alpha.17 #227 add `[enablePrint]`. Setting this options prevents printing entirely. 
+- 2.0.0-alpha.18 #179 and #159 add dummy versions of missing widgets automatically to make customization easier
