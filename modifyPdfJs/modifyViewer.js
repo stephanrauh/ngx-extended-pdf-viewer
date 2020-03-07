@@ -455,7 +455,16 @@ ${line}`;
         } else if (line.includes('window.print =')) {
           line += '\n if (!PDFViewerApplication.enablePrint) { return; }';
           expectedChanges--;
+        } else if (line.includes('PDFViewerApplication.pdfViewer.containsElement(evt.target)')) {
+          line += `
+          if (evt.target && evt.target.parentElement === appConfig.secondaryToolbar.toggleButton) {
+            return;
+          }
+          if (evt.target && evt.target.parentElement && evt.target.parentElement.parentElement === appConfig.secondaryToolbar.toggleButton) {
+            return;
+          }`;
         }
+
 
       if (line != null) {
         line = line.replace(' print(', ' printPDF(');

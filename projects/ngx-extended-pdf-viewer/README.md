@@ -36,16 +36,20 @@ This library provides an embeddable PDF viewer component. It's different from ot
 - several event listeners
 - various approaches to scrolling (vertical, horizontal, "wrapped" scrolling)
 - Internationalization (providing translations to several dozen languages)
-- plus the ability to deactivate each of these features.
+- plus the ability to deactivate each of these features
+- and to customize the toolbars and menus according to your needs.
 
 Not to mention the ability to display PDF files, running on Mozilla's pdf.js 2.3.200.
 
 ## Alternatives
-If you only need the base functionality, I'll happily pass you to [the project of Vadym Yatsyuk](https://github.com/vadimdez/ng2-pdf-viewer/). Vadym does a great job delivering a no-nonsense PDF viewer. However, if you need something that can easily pass as the native viewer on a gloomy day, ngx-extended-pdf-viewer is your friend.
+<details>
+  <summary><b>Expand to learn more about the other options to display PDF files in Angular</b></summary>
+  If you only need the base functionality, I'll happily pass you to [the project of Vadym Yatsyuk](https://github.com/vadimdez/ng2-pdf-viewer/). Vadym does a great job delivering a no-nonsense PDF viewer. However, if you need something that can easily pass as the native viewer on a gloomy day, ngx-extended-pdf-viewer is your friend.
 
 There's also a direct counterpart to my library: <a href="https://www.npmjs.com/package/ng2-pdfjs-viewer" target="#">ng2-pdfjs-viewer</a>. As far as I can see, it's also a good library. Recently (May 24, 2019), it has been updated to PDF.js 2.2.171. It wraps the PDF viewer in an iFrame. That's a more reliable approach, but it also offers less options. The list of attributes is shorter, and the PDF viewer can't emit events to your application.
 
 You might also try to use the native PDF viewer of your browser. That's a valid approach. Actually, it's even the preferred approach. The advantages of both `ngx-extended-pdf-viewer` and `ng2-pdfjs-viewer` are they also support Internet Explorer 11 (with some help of the polyfills). `ngx-extended-pdf-viewer` also gives you a wide range of options that aren't available using the native API.
+</details>
 
 ## How to use the library
 As a rule of thumb, I recommend to clone the [showcase project from GitHub](https://github.com/stephanrauh/extended-pdf-viewer-showcase) before doing anything else. It's a standard Angular CLI application, so you'll get it up and running in less than ten minutes. It's a good starting point to do your own experiments. Maybe even more important: you'll learn if the library works on your machine. (Of course it does, but it's always good to double-check!)
@@ -81,9 +85,6 @@ The detailed instructions for JHipster and Angular 2, 4, and 5 are available [on
 
 
 ## Configuration
-<details>
-  <summary><b>Expand to show the full list of configuration options</b></summary>
-
 Do you miss a configuration option? File an issue on the [project bug tracker](https://github.com/stephanrauh/ExploringAngular/tree/master/embedding-pdf). If the base library [pdf.js](https://mozilla.github.io/pdf.js/) supports the requested option, I'll probably add it. BTW, you can speed up the process by providing a code snippet telling me how to implement the feature or by submitting a pull request.
 
 _Legend:_
@@ -154,7 +155,6 @@ Also see [the attribute list on the showcase](https://pdfviewer.net/attributes).
 | (updateFindState)            |    undefined    | This event is called during the find operations. It sends a `FindState`(i.e. `FindState.FOUND`, `FindState.NOT_FOUND`, `FindState.PENDING` or `FindState.WRAPPED`).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | useBrowserLocale             |      false      | if true, the PDF viewer assumes the locale files are in the assets folder. If false, you are responsible for providing the translated texts.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | [(zoom)]                     |    undefined    | `[zoom]="undefined"` (default value): use the zoom level `"auto"`. If not `undefined`: Set the zoom level of the page, no matter which zoom level was previously configured. Legal values are `[zoom]="'auto'"`, `="'page-actual'"`, `="'page-fit'"`, `="'page-width'"`, or `="50"` (or any other percentage). Numbers are always considered percentages; the trailing "%" character is optional. This attribute supports two-way binding. `[(zoom)]="zoomAttribute"` updates the variable `zoomAttribute` each time the user changes the zoom setting. This is useful to use the same zoom accross multiple PDF viewer instances or PDF document. If you're only interest in the event, that's `(zoomChange)`. Caveat: since version 1.6.0, `(zoomChange)` fires twice after chosing `page width`, `page fit`, `automatic zoom` or `actual size` from the drop-down menu. |
-</details>
 
 ## Searching programmatically
 

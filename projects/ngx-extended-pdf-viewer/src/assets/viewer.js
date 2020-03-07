@@ -2161,6 +2161,12 @@ function webViewerClick(evt) {
   let appConfig = PDFViewerApplication.appConfig;
 
   if (PDFViewerApplication.pdfViewer.containsElement(evt.target) || appConfig.toolbar.container.contains(evt.target) && evt.target !== appConfig.secondaryToolbar.toggleButton) {
+          if (evt.target && evt.target.parentElement === appConfig.secondaryToolbar.toggleButton) {
+            return;
+          }
+          if (evt.target && evt.target.parentElement && evt.target.parentElement.parentElement === appConfig.secondaryToolbar.toggleButton) {
+            return;
+          }
     PDFViewerApplication.secondaryToolbar.close();
   }
 }
@@ -5537,7 +5543,7 @@ class PDFFindController {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-
+  
     const matches = [];
     const queryLen = query.length;
     let matchIdx = -queryLen;
@@ -5564,7 +5570,7 @@ class PDFFindController {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-
+  
     const matchesWithLength = [];
     var queryArray = (query.includes('\n')) ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g); // #201
 
@@ -11497,7 +11503,7 @@ function getDefaultPreferences() {
       "externalLinkTarget": 0,
       "historyUpdateUrl": false,
       "pdfBugEnabled": false,
-      "removePageBorders": false,// #194
+      "removePageBorders": false,// #194 
       "renderer": "canvas",
       "renderInteractiveForms": false,
       "sidebarViewOnLoad": -1,
