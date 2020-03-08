@@ -6,8 +6,10 @@ const lineReader = require('readline').createInterface({
 });
 
 const ignore=[
-  '.toolbarButton.pageDown::before', 
-  '.toolbarButton.pageUp::before', 
+  '.toolbarButton.findPrevious::before',
+  '.toolbarButton.findNext::before',
+  '.toolbarButton.pageDown::before',
+  '.toolbarButton.pageUp::before',
   '#viewFind.toolbarButton::before',
   'toolbarButton.presentationMode::before',
   '.toolbarButton.openFile::before',

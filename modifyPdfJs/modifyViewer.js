@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 74;
+let expectedChanges = 75;
 
 let dropLines = 0;
 currentFunction = '';
@@ -456,6 +456,7 @@ ${line}`;
           line += '\n if (!PDFViewerApplication.enablePrint) { return; }';
           expectedChanges--;
         } else if (line.includes('PDFViewerApplication.pdfViewer.containsElement(evt.target)')) {
+          expectedChanges--;
           line += `
           if (evt.target && evt.target.parentElement === appConfig.secondaryToolbar.toggleButton) {
             return;
