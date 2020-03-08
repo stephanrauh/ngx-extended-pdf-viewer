@@ -138,3 +138,33 @@ textLayer .highlight.color4 {
 .textLayer .highlight.color4.selected {
   background-color: rgb(255, 94, 0);
 }
+
+html[dir=ltr] .dropdownToolbarButton,
+html[dir=ltr] .overlayButton,
+html[dir=ltr] .toolbarButton {
+  margin: 3px 0 4px 0;
+}
+
+html[dir=ltr] .splitToolbarButton:last-child,
+html[dir=ltr] .toolbarButton:last-child,
+html[dir=rtl] .splitToolbarButton:first-child,
+html[dir=rtl] .toolbarButton:first-child {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+
+html[dir=ltr] #secondaryToolbarToggle {
+  margin-right: 4px;
+  margin-left: 0;
+}
+html[dir=rtl] #secondaryToolbarToggle {
+  margin-right: 0;
+  margin-left: 4px;
+}
+
+.toolbarButton, .dropdownToolbarButton, .secondaryToolbarButton, .overlayButton {
+  padding-left: 0;
+  padding-right: 0;
+}
+
