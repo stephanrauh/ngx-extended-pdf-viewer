@@ -60,5 +60,8 @@ export * from './lib/toolbar/pdf-paging-area/pdf-page-number/pdf-page-number.com
 export * from './lib/toolbar/pdf-zoom-toolbar/pdf-zoom-in/pdf-zoom-in.component';
 export * from './lib/toolbar/pdf-zoom-toolbar/pdf-zoom-out/pdf-zoom-out.component';
 export * from './lib/toolbar/pdf-zoom-toolbar/pdf-zoom-dropdown/pdf-zoom-dropdown.component';
+export * from './lib/options/pdf-viewer-application';
+export * from './lib/options/pdf-viewer-app-config';
+export * from './lib/options/pdf-viewer';
 
 

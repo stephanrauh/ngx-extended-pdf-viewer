@@ -22,7 +22,7 @@ export class AppComponent {
   public enablePrint = true;
 
   public height: string | undefined = '80vh';
-  public filenameForDownload: string | undefined = undefined;
+  public filenameForDownload: string | undefined = 'example.pdf';
   public language = 'es-ES';
   public nameddest = 'chapter_5';
   public printResolution: string | undefined = undefined;

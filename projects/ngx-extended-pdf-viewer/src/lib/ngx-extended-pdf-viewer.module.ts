@@ -43,11 +43,11 @@ import { PdfZoomInComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-in/pdf-z
 import { PdfZoomOutComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-out/pdf-zoom-out.component';
 import { PdfZoomDropdownComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-dropdown/pdf-zoom-dropdown.component';
 import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
+import { PDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
 
 function isKeyIgnored(cmd: number, keycode: number | 'WHEEL'): boolean {
-  const options = (window as any).PDFViewerApplicationOptions;
-  const ignoreKeys: Array<string> = options.get('ignoreKeys');
-  const acceptKeys: Array<string> = options.get('acceptKeys');
+  const ignoreKeys: Array<string> = PDFViewerApplicationOptions.get('ignoreKeys');
+  const acceptKeys: Array<string> = PDFViewerApplicationOptions.get('acceptKeys');
   if (keycode === 'WHEEL') {
     if (isKeyInList(ignoreKeys, cmd, 'WHEEL')) {
       return true;
@@ -68,7 +68,7 @@ function isKeyIgnored(cmd: number, keycode: number | 'WHEEL'): boolean {
   // 2 == ALT
   // 4 == SHIFT
   // 8 == META
-  const ignoreKeyboard = options.get('ignoreKeyboard');
+  const ignoreKeyboard = PDFViewerApplicationOptions.get('ignoreKeyboard');
   if (!!ignoreKeyboard) {
     return true;
   }
