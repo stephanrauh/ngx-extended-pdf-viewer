@@ -42,14 +42,12 @@ import { FindState, FindResultMatchesCount, FindResult } from './events/find-res
 import { isPlatformBrowser } from '@angular/common';
 import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
 import { AfterViewInit } from '@angular/core';
-import { IPDFViewerApplication, PDFViewerApplication } from './options/pdf-viewer-application';
-import { PDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
+import { IPDFViewerApplication } from './options/pdf-viewer-application';
+import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
 
 if (typeof window !== 'undefined') {
   (window as any).deburr = deburr; // #177
 }
-
-
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
@@ -601,8 +599,11 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
       this.dummyComponents.addMissingStandardWidgets();
       (<any>window).webViewerLoad();
 
+      const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
       PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
       PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
+      const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
+
       PDFViewerApplicationOptions.set('locale', this.language);
       PDFViewerApplicationOptions.set('imageResourcesPath', this.imageResourcesPath);
 
@@ -735,7 +736,7 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
   }
 
   private overrideDefaultSettings() {
-    const options = PDFViewerApplicationOptions;
+    const options = (window as any).PDFViewerApplicationOptions as IPDFViewerApplicationOptions;
     // tslint:disable-next-line:forin
     for (const key in defaultOptions) {
       options.set(key, defaultOptions[key]);
@@ -752,6 +753,8 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
     if (sidebarVisible === undefined) {
       sidebarVisible = this.showSidebarOnLoad;
     }
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+
     if (sidebarVisible !== undefined) {
       PDFViewerApplication.sidebarViewOnLoad = sidebarVisible ? 1 : 0;
       if (PDFViewerApplication.appConfig) {
@@ -788,6 +791,7 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
 
   private openPDF() {
     ServiceWorkerOptions.showUnverifiedSignatures = this.showUnverifiedSignatures;
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     PDFViewerApplication.enablePrint = this.enablePrint;
     NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized = true;
     this.onResize();
@@ -912,10 +916,13 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
   }
 
   private selectCursorTool() {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     PDFViewerApplication.eventBus.dispatch('switchcursortool', { tool: this.handTool ? 1 : 0 });
   }
 
   public ngOnDestroy(): void {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+
     NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized = false;
     if (this.initTimeout) {
       clearTimeout(this.initTimeout);
@@ -998,6 +1005,9 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
   }
 
   public ngOnChanges(changes: SimpleChanges) {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
+
     if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
       if ('src' in changes || 'base64Src' in changes) {
         if (!!this._src) {
@@ -1169,7 +1179,11 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
     if (!zoomAsNumber) {
       zoomAsNumber = 'auto';
     }
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+
     if (PDFViewerApplication) {
+      const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
+
       PDFViewerApplicationOptions.set('defaultZoomValue', zoomAsNumber);
     }
     if (PDFViewerApplication.pdfViewer) {

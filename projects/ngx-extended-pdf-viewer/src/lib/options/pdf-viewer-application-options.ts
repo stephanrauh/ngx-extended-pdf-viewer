@@ -5,4 +5,3 @@ export interface IPDFViewerApplicationOptions {
   remove(name: string): void;
 }
 
-export declare const PDFViewerApplicationOptions: IPDFViewerApplicationOptions;

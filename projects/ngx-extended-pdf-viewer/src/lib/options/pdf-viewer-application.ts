@@ -27,4 +27,3 @@ export interface IPDFViewerApplication {
   unbindWindowEvents(): void;
 }
 
-export declare const PDFViewerApplication: IPDFViewerApplication;

@@ -43,9 +43,11 @@ import { PdfZoomInComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-in/pdf-z
 import { PdfZoomOutComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-out/pdf-zoom-out.component';
 import { PdfZoomDropdownComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-dropdown/pdf-zoom-dropdown.component';
 import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
-import { PDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
+import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
 
 function isKeyIgnored(cmd: number, keycode: number | 'WHEEL'): boolean {
+  const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
+
   const ignoreKeys: Array<string> = PDFViewerApplicationOptions.get('ignoreKeys');
   const acceptKeys: Array<string> = PDFViewerApplicationOptions.get('acceptKeys');
   if (keycode === 'WHEEL') {
