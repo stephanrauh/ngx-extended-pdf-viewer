@@ -16,7 +16,8 @@ const ignore=[
   '.toolbarButton.print::before',
   '.toolbarButton.download::before',
   '.toolbarButton.bookmark::before',
-  '.toolbarButton#secondaryToolbarToggle::before'
+  '.toolbarButton#secondaryToolbarToggle::before',
+  '.toolbarButton#sidebarToggle::before'
   ];
 
 let result = '';

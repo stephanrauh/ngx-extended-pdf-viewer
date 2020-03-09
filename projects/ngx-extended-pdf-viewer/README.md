@@ -218,10 +218,11 @@ the project page: https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues
 Have a look at [this walkthrough](https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/master/projects/ngx-extended-pdf-viewer/how-to-build.md).
 
 ## License and Kudos
+The license of the `ngx-extended-pdf-viewer` is the Apache V2 license.
 
 The library is based on https://github.com/mozilla/pdf.js, which has been published under an Apache V2 license.
 
-Hence the licence of the `ngx-extended-pdf-viewer` is the Apache V2 license, too.
+Some of the default icons have been published under a <a href="http://scripts.sil.org/cms/scripts/page.php?item_id=OFL_web" target="#">SIL Open Font License 1.1</a> license at <a href="https://materialdesignicons.com/" target="#">Material Design Icons</a>. The other icons have either been published under an <a href="https://github.com/google/material-design-icons/blob/master/LICENSE" target="#">Apache V2 license</a> by Google or by the pdf.js team at Mozilla.
 
 Thanks to the awesome pdf.js team and to all the users you've reported bugs and even sent me pull requests!
 

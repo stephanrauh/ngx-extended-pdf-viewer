@@ -1260,12 +1260,6 @@ html[dir="rtl"] .secondaryToolbarButton::before {
   right: 4px;
 }
 
-html[dir='ltr'] .toolbarButton#sidebarToggle::before {
-  content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAqElEQVR4Aa3QoQrCUBSH8W/3JdZtIqgPZPIxVoaGYVpcNwoGm0bBRxh2rZchw7C0e64Xxk7RYdn/FwYL34Fr+DMD/uxfAy4e42FBM2AOBmiR4ykpkgKJVr3tBqEFAwgyu2VlViL+2ksPSIABHG7aAODQ+Tcu6E4EAOgX6P5rAbSgG6cw5onJV2GJFiRYswuEu9rrQ9kHQk0VCJWqEfu0GEucR+lvcR7zAZWDlG3B7eMJAAAAAElFTkSuQmCC');
-}
-html[dir='rtl'] .toolbarButton#sidebarToggle::before {
-  content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAqElEQVR4Aa3QsQrCMBSF4b95ic6Ogii+j5tvURARpDh17Oysg6OODr5Bcdc1iNSlU3PjBWkoaHHp+SBwl3Mghj8x4I/+2eHkMR4mVB3GYIAaWa+iWQNJ8iTfHxBqMIAgix3nQNIiLUYXRGEAh/MvTwMHMKxw6jOhWglXrZoGWglXjw39TEy/GgaEBlFbroGwUfPwUfaGUPIIBH0pEXu3GEucRcvf4izmDdM6lG3Ge8CEAAAAAElFTkSuQmCC');
-}
 
 
 
@@ -2037,12 +2031,6 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
     background-size: 7px 16px;
   }
 
-  html[dir='ltr'] .toolbarButton#sidebarToggle::before {
-    content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAABEklEQVR4Ae3QPcpTQRgF4GdyL0GL4AWbiLgBC5dgo7gB22CVwiqNhbWNC0gfEJGAIAqWYiFpXIGgth9C0igREn8zYyMJZBjwRuEDydOfw3lfpy5Aum6sr525kZfUCXHcaXzRThPHLhM26HyQtBdcJCQ4cZhL1CAB88XjF4sVcP824ZbMjebB8MIVv+0VzJ4O3p7/CUikVzKhe+fT9GGh4NourvSV9D28nqb9ggjs4oiUKsR8QS4pyxfIRWXxLwv+sxOOP8hPOJ5wzvIPFvSLCzaD6tG2IpXim3tVKhRUjbs6gI94IxerlR+2QoKZw1ylhq+fz/S0tl5CvcbkyfDm2V7b+OQZ1BOMno/e62rnm3f+hV83kH0MahGhPQAAAABJRU5ErkJggg==');
-  }
-  html[dir='rtl'] .toolbarButton#sidebarToggle::before {
-    content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAABH0lEQVR4Ae2UsUoDQRRFT8ZOiySI3+FHKPgPop/gNmJjZSEasDKNhaSxsZEUKSwsJFiYxkbE4B+YxkRSbGTRee74ihSPAYdYSe6B21ze5c4W65hRf1Mg69KXYSL98grBBfNNakwSqfmmx+N+rIpHEvGu6igJlnyu+OlHFOX1cWOnsm0J2f6ZcnoxGCCKKdg9ubmmawnZ0ZOy9XDXjhZc9iiw0lzF8ufaiy3wihSCRTRnWoFXzAIiMllsARGZzCszFPyvJ8y/wfwJZsHKrxbUowv8oa0wC+pfm9E/klvllmdLyGgo7C3UogUUjHizhKx0ZURhCj7GSDr5e06OC3Z+NRmnn7faLVq4YFln8bhykMZSI+tkZLhgDLmnm0iPIcA34aAiX0CWT00AAAAASUVORK5CYII=');
-  }
 
 
 

@@ -4,6 +4,7 @@
     [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
     [style.transformOrigin]="'left center'"
     [style.width]="toolbarWidth"
+    [style.paddingTop]="toolbarPaddingTop"
   >
     <ng-content *ngTemplateOutlet="customToolbar ? customToolbar : defaultToolbar"></ng-content>
     <div id="loadingBar">

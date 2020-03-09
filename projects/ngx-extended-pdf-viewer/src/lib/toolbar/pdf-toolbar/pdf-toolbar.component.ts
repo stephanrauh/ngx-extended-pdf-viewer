@@ -49,6 +49,9 @@ export class PdfToolbarComponent implements OnInit {
   public textLayer: boolean | undefined = undefined;
 
   @Input()
+  public toolbarPaddingTop = '0px';
+
+  @Input()
   public toolbarWidth = '100%';
 
   @Output()

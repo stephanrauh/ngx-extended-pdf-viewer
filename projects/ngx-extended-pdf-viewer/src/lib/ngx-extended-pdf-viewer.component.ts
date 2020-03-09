@@ -375,6 +375,8 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
 
   public mobileFriendlyZoomScale = 1;
 
+  public toolbarPaddingTop = '0px';
+
   public toolbarWidth = '100%';
 
   public secondaryToolbarTop: string | undefined = undefined;
@@ -409,13 +411,14 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
     factor = Number((zoom || '100').replace('%', '')) / 100;
     this.mobileFriendlyZoomScale = factor;
     this.toolbarWidth = (100 / factor).toString() + '%';
+    this.toolbarPaddingTop = (factor - 1) * 8 + 'px';
     if (this.showSidebarButton) {
       this.findbarLeft = (68 * factor).toString() + 'px';
     } else {
       this.findbarLeft = '0px';
     }
-    this.secondaryToolbarTop = (12 + 24 * factor).toString() + 'px';
-    this.findbarTop = (-6 + 42 * factor).toString() + 'px';
+    this.secondaryToolbarTop = (36 + 36 * (factor - 1)).toString() + 'px';
+    this.findbarTop = (36 + 116 * (factor - 1)).toString() + 'px';
   }
 
   /** Deprecated. Please use [mobileFriendlyZoom] instead.
@@ -435,7 +438,7 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
     if (this.mobileFriendlyZoom) {
       if (this.mobileFriendlyZoom.endsWith('%')) {
         const zoom = Number(this.mobileFriendlyZoom.substring(0, this.mobileFriendlyZoom.length - 1));
-        return (16 + 0.16 * zoom).toString() + 'px';
+        return (2 + 0.29 * zoom).toString() + 'px';
       }
       if (this.mobileFriendlyZoom.endsWith('px')) {
         return this.mobileFriendlyZoom;
@@ -904,9 +907,7 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
         verbosity: this.logLevel
       };
       PDFViewerApplication.onError = (error: Error) => this.pdfLoadingFailed.emit(error);
-      PDFViewerApplication.open(this._src, options).then(() =>
-        this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount })
-      );
+      PDFViewerApplication.open(this._src, options).then(() => this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount }));
     }
     setTimeout(() => {
       if (this.page) {
