@@ -1,3 +1,6 @@
+<ng-template #customSecondaryToolbar>
+</ng-template>
+
 <ng-template #customFindbarInputArea>
   <div id="findbarInputContainer">
     <pdf-search-input-field></pdf-search-input-field>
@@ -143,6 +146,7 @@
       <ngx-extended-pdf-viewer
         [customFindbarButtons]="customFindbarButtons"
         [customFindbarInputArea]="customFindbarInputArea"
+        [customSecondaryToolbar]="customSecondaryToolbar"
         *ngIf="visible[0] && !hidden"
         [showBorders]="showBorders"
         printResolution="50"

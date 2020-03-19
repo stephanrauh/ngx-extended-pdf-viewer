@@ -302,6 +302,10 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
   public showBookmarkButton = true;
   @Input()
   public showSecondaryToolbarButton = true;
+
+  /** Set by (secondaryMenuIsEmpty) */
+  public isSecondaryMenuEmpty = false;
+
   @Input()
   public showRotateButton = true;
   @Input()
@@ -972,17 +976,7 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
   }
 
   private isSecondaryMenuVisible(): boolean {
-    const visible =
-      this.showHandToolButton ||
-      this.showPagingButtons ||
-      this.showPropertiesButton ||
-      this.showRotateButton ||
-      this.showScrollingButton ||
-      this.showSpreadButton;
-    if (visible) {
-      return true;
-    }
-    return false;
+    return !this.isSecondaryMenuEmpty;
   }
 
   private isPrimaryMenuVisible(): boolean {
@@ -1218,5 +1212,10 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
   @HostListener('contextmenu')
   public onContextMenu(): boolean {
     return this.contextMenuAllowed;
+  }
+
+  public onSecondaryMenuIsEmpty(hideKebabButton: boolean) {
+    console.log("Hide Kebab =" + hideKebabButton);
+    this.isSecondaryMenuEmpty = hideKebabButton;
   }
 }
