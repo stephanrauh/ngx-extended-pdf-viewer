@@ -300,11 +300,12 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
   public showDownloadButton = true;
   @Input()
   public showBookmarkButton = true;
+
   @Input()
   public showSecondaryToolbarButton = true;
 
-  /** Set by (secondaryMenuIsEmpty) */
-  public isSecondaryMenuEmpty = false;
+  /** Set by the event (secondaryMenuIsEmpty) */
+  public hideKebabMenuForSecondaryToolbar = false;
 
   @Input()
   public showRotateButton = true;
@@ -594,10 +595,9 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
     setTimeout(() => {
       // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
       this.primaryMenuVisible = true;
-      if (!this.isSecondaryMenuVisible()) {
-        this.showSecondaryToolbarButton = false;
-      }
-      if (!this.showSecondaryToolbarButton) {
+      const showSecondaryMenu = this.hideKebabMenuForSecondaryToolbar && this.showSecondaryToolbarButton;
+
+      if (showSecondaryMenu) {
         if (!this.isPrimaryMenuVisible()) {
           this.primaryMenuVisible = false;
         }
@@ -975,10 +975,6 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
     }
   }
 
-  private isSecondaryMenuVisible(): boolean {
-    return !this.isSecondaryMenuEmpty;
-  }
-
   private isPrimaryMenuVisible(): boolean {
     const visible =
       this.showBookmarkButton ||
@@ -990,7 +986,6 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
       this.showPrintButton ||
       this.showPropertiesButton ||
       this.showSidebarButton ||
-      this.showSecondaryToolbarButton ||
       this.showZoomButtons;
 
     if (visible) {
@@ -1074,10 +1069,7 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
       }
 
       this.primaryMenuVisible = true;
-      if (!this.isSecondaryMenuVisible()) {
-        this.showSecondaryToolbarButton = false;
-      }
-      if (!this.showSecondaryToolbarButton) {
+      if (!this.showSecondaryToolbarButton || !this.hideKebabMenuForSecondaryToolbar) {
         if (!this.isPrimaryMenuVisible()) {
           this.primaryMenuVisible = false;
         }
@@ -1215,7 +1207,7 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
   }
 
   public onSecondaryMenuIsEmpty(hideKebabButton: boolean) {
-    console.log("Hide Kebab =" + hideKebabButton);
-    this.isSecondaryMenuEmpty = hideKebabButton;
+    console.log('Hide Kebab =' + hideKebabButton);
+    this.hideKebabMenuForSecondaryToolbar = hideKebabButton;
   }
 }

@@ -133,3 +133,4 @@
 - 2.0.0-beta.2 #186 fixed the positions of the secondary menu, the findbar, and the sidebar that were broken in the mobile-friendly view
 - 2.0.0 #228 removed the obsolete peer dependency to lodash.deburr that confused yarn
 - 2.1.0-beta.0 #200 added a smart algorithm to detect when to show or hide the secondary menu button (the kebab at the right-hand-side). This algorithm also copes with custom toolbars.
+- 2.1.0-beta.1 #200 fixed the functionality introduced with the previous beta version. Plus, stop overwriting the attribute `[showSecondaryMenu]` by a calculated value. So developers have better control over when to show or hide the secondary menu kebab button.
