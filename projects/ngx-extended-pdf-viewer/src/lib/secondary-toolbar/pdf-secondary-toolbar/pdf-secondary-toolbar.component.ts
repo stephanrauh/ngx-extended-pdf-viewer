@@ -72,7 +72,7 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
 
   public ngAfterViewInit() {
     setTimeout(() => this.checkVisibility());
-  }
+   }
 
   public ngOnInit() {
     setTimeout(() => this.checkVisibility());
@@ -86,7 +86,6 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
       const g = f.children.item(0);
       if (g && g instanceof HTMLElement) {
           visibleButtons = this.checkVisibilityRecursively(g);
-          console.log("Visible buttons:" + visibleButtons);
       }
     }
     this.secondaryMenuIsEmpty.emit(visibleButtons === 0);
@@ -96,13 +95,15 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
     if (e.style.display === 'none') {
       return 0;
     }
+    if (e.classList.contains('hidden')) {
+      return 0;
+    }
     const style = window.getComputedStyle(e);
     if (style.display === 'none') {
       return 0;
     }
 
     if (e instanceof HTMLButtonElement || e instanceof HTMLAnchorElement) {
-//      console.log(e.id);
       return 1;
     }
     let count = 0;

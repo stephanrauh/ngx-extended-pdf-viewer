@@ -44,6 +44,7 @@ import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-co
 import { AfterViewInit } from '@angular/core';
 import { IPDFViewerApplication } from './options/pdf-viewer-application';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
+import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
 
 if (typeof window !== 'undefined') {
   (window as any).deburr = deburr; // #177
@@ -82,6 +83,9 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
 
   @Input()
   public customSecondaryToolbar: TemplateRef<any>;
+
+  @ViewChild('pdfSecondaryToolbarComponent')
+  private secondaryToolbarComponent: PdfSecondaryToolbarComponent;
 
   /* regular attributes */
 
@@ -1181,11 +1185,11 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
   public onResize(): void {
     if (this.ignoreResponsiveCSS) {
       clearTimeout(this.resizeTimeout);
-      this.resizeTimeout = setTimeout(this.doResize, 100);
+      this.resizeTimeout = setTimeout(() => this.doResize(this.secondaryToolbarComponent), 100);
     }
   }
 
-  private doResize(): void {
+  private doResize(secondaryToolbarComponent: PdfSecondaryToolbarComponent): void {
     const pdfViewer = document.getElementsByClassName('html');
     if (pdfViewer && pdfViewer.length > 0) {
       const container = document.getElementById('outerContainer');
@@ -1197,6 +1201,7 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
         resizeUpTo700px(container, width);
         resizeUpTo640px(container, width);
         resizeUpTo535px(width);
+        secondaryToolbarComponent.onResize();
       }
     }
   }
@@ -1207,7 +1212,6 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
   }
 
   public onSecondaryMenuIsEmpty(hideKebabButton: boolean) {
-    console.log('Hide Kebab =' + hideKebabButton);
     this.hideKebabMenuForSecondaryToolbar = hideKebabButton;
   }
 }
