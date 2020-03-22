@@ -7,6 +7,12 @@ const lineReader = require('readline').createInterface({
 let result = '';
 let expectedChanges = 12;
 
+const successfulChanges = {};
+for (let i = 1; i <= expectedChanges; i++) {
+  successfulChanges[i] = 'not found';
+}
+// successfulChanges[6]="only till pdf.js 2.3";
+
 let dropLines = 0;
 currentFunction = '';
 let printKeyDownListener = false;
@@ -36,7 +42,12 @@ lineReader
 
       console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets/' + filename);
       if (expectedChanges !== 0) {
-        console.error(expectedChanges + " changes couldn't be appied!");
+        console.error(expectedChanges + " changes couldn't be applied!");
+        for (const [key, value] of Object.entries(successfulChanges)) {
+          if (value !== true) {
+            console.log(key + " " + value);
+          }
+        }
       }
     });
   });
@@ -50,7 +61,7 @@ function convertLines() {
       if (line.includes('function ') || line.startsWith('class ')) {
         currentFunction = line;
       }
-      if (line.includes("return workerHandlerName;")) {
+      if (line.includes('return workerHandlerName;')) {
         const before = `    // #171 receive options from ngx-extended-pdf-viewer
     handler.on('showUnverifiedSignatures', function wphReady(data) {
       if (data) {
@@ -62,18 +73,24 @@ function convertLines() {
 `;
         line = before + line;
         expectedChanges--;
+        successfulChanges[1] = true;
       } else if (line.includes('.setFlags(_util.AnnotationFlag.HIDDEN)')) {
         const before = `      // #171 modification start
       if (!self.showUnverifiedSignatures) {
   `;
-        line = before + line + `
+        line =
+          before +
+          line +
+          `
         console.log("The PDF file contains a signature. Please take into account that it can't be verified yet.");
       }
     // #171 modification end`;
         expectedChanges--;
-      } else if (line.includes("'TT: ")) {
-        line = line.replace("'TT: ", "'The font embedded in the PDF file contains errors: TT: ");
+        successfulChanges[2] = true;
+      } else if (line.includes("TT: ")) {
+        line = line.replace("TT: ", "'The font embedded in the PDF file contains errors: TT: ");
         expectedChanges--;
+        successfulChanges[3] = true; // Hint: this is called ten times!
       }
       if (line != null) {
         result += line + '\n';

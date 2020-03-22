@@ -7,6 +7,14 @@ const lineReader = require('readline').createInterface({
 let result = '';
 
 let expectedChanges = 9;
+
+const successfulChanges = {};
+for (let i = 1; i <= expectedChanges; i++) {
+  successfulChanges[i]="not found";
+}
+successfulChanges[6]="only till pdf.js 2.3";
+successfulChanges[7]="only till pdf.js 2.3";
+
 let dropLines = 0;
 let es2015 = false;
 lineReader
@@ -15,26 +23,30 @@ lineReader
       dropLines--;
       //      console.log('Dropping ' + line);
     } else {
-      if (line.includes('let fs')) {
+      if (line.includes('let fs') || line.includes('const fs')) {
         if (!es2015) console.log('ES 2015 version');
         es2015 = true;
+        successfulChanges[1] = true;
       }
-      if (line.includes("var fs = require('fs');") || line.includes("let fs = require('fs');")) {
+      if (line.includes("var fs = require('fs');") || line.includes("let fs = require('fs');") || line.includes('const fs = require("fs");')) {
         line = '';
         expectedChanges--;
-      } else if (line.includes("var http = require('http');") || line.includes("let http = require('http');")) {
+        successfulChanges[2] = true;
+      } else if (line.includes("var http = require('http');") || line.includes("let http = require('http');")|| line.includes('const http = require("http");')) {
         line = '';
         expectedChanges--;
-      } else if (line.includes("var https = require('https');") || line.includes("let https = require('https');")) {
+        successfulChanges[3] = true;
+      } else if (line.includes("var https = require('https');") || line.includes("let https = require('https');")|| line.includes('const https = require("https");')) {
         expectedChanges--;
         line = '';
+        successfulChanges[4] = true;
       } else if (
-        line.includes("var output = require('zlib').deflateSync(input, {") ||
-        line.includes("const output = require('zlib').deflateSync(input, {")
+        line.includes("require('zlib')") || line.includes('require("zlib")')
       ) {
         expectedChanges--;
         line = 'throw Error("zlib not available in the browser");';
         dropLines = 2;
+        successfulChanges[5] = true;
       } else if (line.includes('pdfjs-dist/build/pdf.worker')) {
         if (es2015) {
           line = line.replace('pdfjs-dist/build/pdf.worker', './assets/pdf.worker');
@@ -42,6 +54,7 @@ lineReader
           line = line.replace('pdfjs-dist/build/pdf.worker', './assets/pdf.worker-es5');
         }
         expectedChanges--;
+        successfulChanges[6] = true;
       } else if (line.includes('pdfjs-dist/build/pdf.worker.js')) {
         if (es2015) {
           line = line.replace('pdfjs-dist/build/pdf.worker.js', './assets/pdf.worker.js');
@@ -50,6 +63,7 @@ lineReader
         }
         line = line.replace('pdfjs-dist/build/pdf.worker.js', './pdf.worker-2.2.js');
         expectedChanges--;
+        successfulChanges[7] = true;
       } else if (line.includes('./pdf.worker.js')) {
         if (es2015) {
           line = line.replace('./pdf.worker.js', './assets/pdf.worker.js');
@@ -57,9 +71,11 @@ lineReader
           line = line.replace('./pdf.worker.js', './assets/pdf.worker-es5.js');
         }
         expectedChanges--;
+        successfulChanges[8] = true;
       } else if (line.includes('//# sourceMappingURL=pdf.js.map')) {
         line = ''; // the file hasn't been minified, so there's no use for a source map
         expectedChanges--;
+        successfulChanges[9] = true;
       } else if (line.includes("messageHandler.send('Ready', null);")) {
         const before = `      // #171 receive options from ngx-extended-pdf-viewer
       messageHandler.send('showUnverifiedSignatures',
@@ -68,6 +84,7 @@ lineReader
 `;
         line = before + line;
         expectedChanges--;
+        successfulChanges[10] = true;
       /* temporarily deactivated during migration to version 2.3.200
       } else if (line.includes('if (fontSize !== this._layoutTextLastFontSize')) {
         expectedChanges--;
@@ -98,7 +115,12 @@ lineReader
 
       console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets/' + filename);
       if (expectedChanges !== 0) {
-        console.error(expectedChanges + " changes couldn't be appied!");
+        console.error(expectedChanges + " changes couldn't be applied!");
+        for (const [key, value] of Object.entries(successfulChanges)) {
+          if (value !== true) {
+            console.log(key + " " + value);
+          }
+        }
       }
     });
   });

@@ -5,7 +5,17 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 75;
+let expectedChanges = 77;
+
+const successfulChanges = {};
+for (let i = 1; i <= expectedChanges; i++) {
+  successfulChanges[i]="not found";
+}
+successfulChanges[16]="ES5 only";
+successfulChanges[17]="ES5 only";
+successfulChanges[43]=true; // this changes is counted twice (ES5 and ES2015)
+successfulChanges[45]=true; // this changes is counted twice (ES5 and ES2015)
+successfulChanges[61]=true; // this changes is counted twice (ES5 and ES2015)
 
 let dropLines = 0;
 currentFunction = '';
@@ -38,6 +48,12 @@ lineReader
       console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets/' + filename);
       if (expectedChanges !== 0) {
         console.error(expectedChanges + " changes couldn't be applied!");
+        for (const [key, value] of Object.entries(successfulChanges)) {
+          if (value !== true) {
+            console.log(key + " " + value);
+          }
+        }
+
       }
     });
   });
@@ -66,35 +82,36 @@ function convertLines() {
       dropLines--;
       //      console.log('Dropping ' + line);
     } else {
-      if (line.includes('function ') || line.startsWith('class ')) {
+      const line2 = line.replace(/"/g, "'"); // since pdf.js 2.4, the ES2015 uses double quotes
+      if (line2.includes('function ') || line.startsWith('class ')) {
         currentFunction = line;
       }
-      if (line.includes('_calculateMatch(pageIndex) {')) {
+      if (line2.includes('_calculateMatch(pageIndex) {')) {
         currentFunction = '_calculateMatch';
       }
-      if (line.includes("require('../build/pdf.js')")) {
-        line = line.replace("require('../build/pdf.js')", "require('./pdf-2.2.js')");
-        expectedChanges--;
-      } else if (line.includes('compressed.tracemonkey-pldi-09.pdf')) {
+      if (line2.includes("../build/pdf.js")) {
+        line = line.replace("../build/pdf.js", "./pdf-2.2.js");
+         expectedChanges--; successfulChanges[1] = true;
+      } else if (line2.includes('compressed.tracemonkey-pldi-09.pdf')) {
         line = line.replace('compressed.tracemonkey-pldi-09.pdf', '');
-        expectedChanges--;
-      } else if (line.includes("if (document.readyState === 'interactive' || document.readyState === 'complete') {")) {
+         expectedChanges--; successfulChanges[2] = true;
+      } else if (line2.includes("if (document.readyState === 'interactive' || document.readyState === 'complete') {")) {
         line = 'window.webViewerLoad = webViewerLoad;';
         dropLines = 4;
-        expectedChanges--;
-      } else if (line.includes('for (var anyCaseLang in dict.locales) {')) {
+         expectedChanges--; successfulChanges[3] = true;
+      } else if (line2.includes('for (var anyCaseLang in dict.locales) {')) {
         line = line + '\n            originalCaseLang = anyCaseLang; // added line';
-        expectedChanges--;
-      } else if (line.includes('function loadLocale(lang, callback) {')) {
+         expectedChanges--; successfulChanges[4] = true;
+      } else if (line2.includes('function loadLocale(lang, callback) {')) {
         line = line + '\nlet originalCaseLang = lang;';
-        expectedChanges--;
-      } else if (line.includes('gL10nData = dict.locales[lang];')) {
+         expectedChanges--; successfulChanges[5] = true;
+      } else if (line2.includes('gL10nData = dict.locales[lang];')) {
         line = '              gL10nData = dict.locales[originalCaseLang]; // modified line';
-        expectedChanges--;
-      } else if (line.includes('gL10nData = dict.locales[defaultLocale];')) {
+         expectedChanges--; successfulChanges[6] = true;
+      } else if (line2.includes('gL10nData = dict.locales[defaultLocale];')) {
         line = line.replace('gL10nData = dict.locales[defaultLocale];', 'gL10nData = dict.locales[originalCaseLang]; // modified line');
-        expectedChanges--;
-      } else if (line.includes("this.bar.classList.add('hidden');")) {
+         expectedChanges--; successfulChanges[7] = true;
+      } else if (line2.includes("this.bar.classList.add('hidden');")) {
         if (currentFunction.includes('hide') || currentFunction.includes('ProgressBar')) {
           line =
             "    this.div = document.querySelector('.body #mainContainer .progress'); // always set this new instead of trying to cache this value\n" +
@@ -104,12 +121,12 @@ function convertLines() {
             line +
             '\n    }\n';
         }
-        expectedChanges--;
-      } else if (line.includes('if (!this.visible) {')) {
+         expectedChanges--; successfulChanges[8] = true;
+      } else if (line2.includes('if (!this.visible) {')) {
         line = null;
         dropLines = 3;
-        expectedChanges--;
-      } else if (line.includes('Stats.add(page, pageView.stats);')) {
+         expectedChanges--; successfulChanges[9] = true;
+      } else if (line2.includes('Stats.add(page, pageView.stats);')) {
         dropLines = 2;
 
         line =
@@ -120,64 +137,64 @@ function convertLines() {
           "\n    var pageScrollEvent = new CustomEvent('page-change');" +
           '\n    pageNumberInput.dispatchEvent(pageScrollEvent);' +
           '\n  }';
-        expectedChanges--;
-      } else if (line.includes('var defaultFilename') || line.includes("defaultFilename = 'document.pdf'")) {
+         expectedChanges--; successfulChanges[10] = true;
+      } else if (line2.includes('var defaultFilename') || line2.includes("defaultFilename = 'document.pdf'")) {
         line = line.replace("'document.pdf'", 'PDFViewerApplication.appConfig.filenameForDownload');
         line = line + '\nif (PDFViewerApplication.appConfig.filenameForDownload) return PDFViewerApplication.appConfig.filenameForDownload;';
-        expectedChanges--;
-      } else if (line.includes('this.bar = this.div.parentNode;') && currentFunction.includes('ProgressBar')) {
+         expectedChanges--; successfulChanges[11] = true;
+      } else if (line2.includes('this.bar = this.div.parentNode;') && currentFunction.includes('ProgressBar')) {
         line = '    if (this.div) {\n  ' + line + '\n    }';
-        expectedChanges--;
-      } else if (line.includes('this.div.style.height = this.height + this.units;') && currentFunction.includes('ProgressBar')) {
+         expectedChanges--; successfulChanges[12] = true;
+      } else if (line2.includes('this.div.style.height = this.height + this.units;') && currentFunction.includes('ProgressBar')) {
         line = '    if (this.div) {\n  ' + line + '\n    }';
-        expectedChanges--;
-      } else if (line.includes("this.div.classList.remove('indeterminate');") && currentFunction.includes('_updateBar')) {
+         expectedChanges--; successfulChanges[13] = true;
+      } else if (line2.includes("this.div.classList.remove('indeterminate');") && currentFunction.includes('_updateBar')) {
         line = '      if (this.div) {\n  ' + line + '\n      }';
-        expectedChanges--;
-      } else if (line.includes('this.div.style.width = progressSize + this.units;') && currentFunction.includes('_updateBar')) {
+         expectedChanges--; successfulChanges[14] = true;
+      } else if (line2.includes('this.div.style.width = progressSize + this.units;') && currentFunction.includes('_updateBar')) {
         line = '      if (this.div) {\n  ' + line + '\n      }';
-        expectedChanges--;
-      } else if (line.includes('function _loop(button) {')) {
+         expectedChanges--; successfulChanges[15] = true;
+      } else if (line2.includes('function _loop(button) {')) {
         // Babel version
         line = line + '\n    if (!isNaN(button)) {';
-        expectedChanges--;
-      } else if (line.includes('_this2.close();') && currentFunction.includes('click')) {
+         expectedChanges--; successfulChanges[16] = true;
+      } else if (line2.includes('_this2.close();') && currentFunction.includes('click')) {
         // Babel version
         line = line + '\n          }' + '\n        });' + '\n      }';
         dropLines = 2;
-        expectedChanges--;
-      } else if (line.includes('//# sourceMappingURL=viewer.js.map')) {
+         expectedChanges--; successfulChanges[17] = true;
+      } else if (line2.includes('//# sourceMappingURL=viewer.js.map')) {
         line = ''; // the file hasn't been minified, so there's not source map
-        expectedChanges--;
-      } else if (line.includes("window.addEventListener('keydown', function (event) {")) {
+         expectedChanges--; successfulChanges[18] = true;
+      } else if (line2.includes("window.addEventListener('keydown', function (event) {")) {
         line = '_app.PDFViewerApplication.printKeyDownListener = function (event) {';
         printKeyDownListener = true;
-        expectedChanges--;
-      } else if (printKeyDownListener && line.includes('}, true);')) {
+         expectedChanges--; successfulChanges[19] = true;
+      } else if (printKeyDownListener && line2.includes('}, true);')) {
         line = '};';
         printKeyDownListener = false;
-        expectedChanges--;
-      } else if (line.includes('this.printService.destroy();')) {
+         expectedChanges--; successfulChanges[20] = true;
+      } else if (line2.includes('this.printService.destroy();')) {
         line = "document.body.removeAttribute('data-pdfjsprinting');\n" + line;
-        expectedChanges--;
-      } else if (line.includes("overlayManager.close('printServiceOverlay');") && !unregisterPrintOverlayDone) {
+         expectedChanges--; successfulChanges[21] = true;
+      } else if (line2.includes("overlayManager.close('printServiceOverlay');") && !unregisterPrintOverlayDone) {
         unregisterPrintOverlayDone = true;
-        expectedChanges--;
+         expectedChanges--; successfulChanges[22] = true;
         dropLines = 1;
         line += "\n      overlayManager.unregister('printServiceOverlay'); // #104";
         line += '\n    });';
         line += '\n    overlayPromise = undefined; // #104';
-      } else if (line.includes('(!handled && !isViewerInPresentationMode)')) {
+      } else if (line2.includes('(!handled && !isViewerInPresentationMode)')) {
         line = '    if (false) {';
-        expectedChanges--;
-      } else if (line.includes('../build/pdf.worker.js')) {
+         expectedChanges--; successfulChanges[23] = true;
+      } else if (line2.includes('../build/pdf.worker.js')) {
         if (es2015) {
           line = line.replace('../build/pdf.worker.js', './assets/pdf.worker.js');
         } else {
           line = line.replace('../build/pdf.worker.js', './assets/pdf.worker-es5.js');
         }
-        expectedChanges--;
-      } else if (line.includes('function nextEntry() {')) {
+         expectedChanges--; successfulChanges[24] = true;
+      } else if (line2.includes('function nextEntry() {')) {
         dropLines = 2;
         line = '        var languagefound = false; // #150\n' + line;
         line += '\n          var genericMatch = undefined; // #150';
@@ -187,8 +204,8 @@ function convertLines() {
         line += '\n              return; // #150';
         line += '\n            }// #150';
         line += '\n            else if (!entries.length) { // #150';
-        expectedChanges--;
-      } else if (line.includes('loadImport(baseURL')) {
+         expectedChanges--; successfulChanges[25] = true;
+      } else if (line2.includes('loadImport(baseURL')) {
         line = "              if (currentLang === '*' || currentLang === lang) { // #150\n" + line;
         line += '\n                languagefound = true;';
         line += '\n                return;';
@@ -196,30 +213,30 @@ function convertLines() {
         line += '\n                genericMatch = baseURL + match[1]; // #150';
         line += '\n              } // #150';
         dropLines = 1;
-        expectedChanges--;
-      } else if (line.includes('no resource to load, early way out')) {
-        expectedChanges--;
+         expectedChanges--; successfulChanges[26] = true;
+      } else if (line2.includes('no resource to load, early way out')) {
+         expectedChanges--; successfulChanges[27] = true;
         line = line.replace(
           'no resource to load, early way out',
           'Could not load the translation files for the PDF viewer. Check the flag useBrowserLocale, check the locales subfolder of the assets folder, or add the locale definition to the index.html'
         );
-      } else if (line.includes('using the embedded JSON directory, early way out')) {
-        expectedChanges--;
+      } else if (line2.includes('using the embedded JSON directory, early way out')) {
+         expectedChanges--; successfulChanges[28] = true;
         line = line.replace(
           'using the embedded JSON directory, early way out',
           'The PDF viewer uses the pre-compiled language bundle stored in the HTML page.'
         );
-      } else if (line.includes('cmd === 1 || cmd === 8 || cmd === 5 || cmd === 12')) {
-        expectedChanges--;
+      } else if (line2.includes('cmd === 1 || cmd === 8 || cmd === 5 || cmd === 12')) {
+         expectedChanges--; successfulChanges[29] = true;
 
         let addition = '  if (isKeyIgnored(cmd, evt.keyCode)) {\n';
         addition += '    return;\n';
         line = addition + '  }\n' + line;
-      } else if (line.includes("fileInput.setAttribute('type', 'file');")) {
-        expectedChanges--;
+      } else if (line2.includes("fileInput.setAttribute('type', 'file');")) {
+         expectedChanges--; successfulChanges[30] = true;
         let addition = "  fileInput.setAttribute('accept', '.pdf,application/pdf');";
         line = addition + '\n' + line;
-      } else if (line.includes('function xhrLoadText(url, onSuccess, onFailure) {')) {
+      } else if (line2.includes('function xhrLoadText(url, onSuccess, onFailure) {')) {
         // breaking change in pdf.js 2.2 -> 2.3.200
         let before = 'function fireL10nReadyEvent(lang) {\n';
         before += "var evtObject = document.createEvent('Event');\n";
@@ -229,30 +246,30 @@ function convertLines() {
         before += '}\n';
         before += '\n';
         line = before + line;
-        expectedChanges--;
-      } else if (line.includes("gReadyState = 'complete';")) {
+         expectedChanges--; successfulChanges[31] = true;
+      } else if (line2.includes("gReadyState = 'complete';")) {
         // breaking change in pdf.js 2.2 -> 2.3.200
         line = 'fireL10nReadyEvent(lang);\n' + line;
-        expectedChanges--;
-      } else if (line.includes("entireWordCheckbox: document.getElementById('findEntireWord')")) {
+         expectedChanges--; successfulChanges[32] = true;
+      } else if (line2.includes("entireWordCheckbox: document.getElementById('findEntireWord')")) {
         line = line + '\n' + "      findMultipleSearchTextsCheckbox: document.getElementById('findMultipleSearchTexts'), // #201";
         line = line + '\n' + "      ignoreAccentsCheckbox: document.getElementById('findIgnoreAccents'), // #177";
-        expectedChanges--;
-      } else if (line.includes('entireWord: evt.entireWord')) {
+         expectedChanges--; successfulChanges[33] = true;
+      } else if (line2.includes('entireWord: evt.entireWord')) {
         line = line + '\n' + '    ignoreAccents: evt.ignoreAccents, // #177';
-        expectedChanges--;
-      } else if (line.includes('entireWord: false')) {
+         expectedChanges--; successfulChanges[34] = true;
+      } else if (line2.includes('entireWord: false')) {
         line = line + '\n' + '    ignoreAccents: false, // #177';
-        expectedChanges--;
-      } else if (line.includes('entireWord: findState.entireWord')) {
+         expectedChanges--; successfulChanges[35] = true;
+      } else if (line2.includes('entireWord: findState.entireWord')) {
         line = line + '\n' + '              ignoreAccents: findState.ignoreAccents, // #177';
-        expectedChanges--;
-        expectedChanges--;
-      } else if (line.includes('this.entireWord = options.entireWordCheckbox || null')) {
+         expectedChanges--; successfulChanges[36] = true;
+         expectedChanges--; successfulChanges[37] = true;
+      } else if (line2.includes('this.entireWord = options.entireWordCheckbox || null')) {
         line = line + '\n' + '    this.multipleSearchTexts = options.findMultipleSearchTextsCheckbox || null; // #201';
         line = line + '\n' + '    this.ignoreAccents = options.ignoreAccentsCheckbox || null; // #177';
-        expectedChanges--;
-      } else if (line.includes("this.eventBus.on('resize', this._adjustWidth.bind(this))")) {
+         expectedChanges--; successfulChanges[38] = true;
+      } else if (line2.includes("this.eventBus.on('resize', this._adjustWidth.bind(this))") || line2.includes("this.eventBus._on('resize', this._adjustWidth.bind(this))")) {
         if (es2015) {
           line =
             "    this.multipleSearchTexts.addEventListener('click', () => { // #201\n" +
@@ -272,178 +289,178 @@ function convertLines() {
             '    });\n' +
             line;
         }
-        expectedChanges--;
-      } else if (line.includes('phraseSearch: true,')) {
+        expectedChanges--; successfulChanges[39] = true;
+      } else if (line2.includes('phraseSearch: true,')) {
         line = '      phraseSearch: !this.multipleSearchTexts.checked, // #201';
-        expectedChanges--;
-      } else if (line.includes('entireWord: this.entireWord.checked')) {
+         expectedChanges--; successfulChanges[40] = true;
+      } else if (line2.includes('entireWord: this.entireWord.checked')) {
         line = line + '\n' + '      ignoreAccents: this.ignoreAccents.checked, // #177';
-        expectedChanges--;
-      } else if (line.includes('  _calculatePhraseMatch(')) {
+         expectedChanges--; successfulChanges[41] = true;
+      } else if (line2.includes('  _calculatePhraseMatch(')) {
         line = `  _calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
             if (ignoreAccents) { // #177
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
   `;
-        expectedChanges--;
-      } else if (line.includes('function _calculatePhraseMatch(query, pageIndex, pageContent, entireWord)')) {
+         expectedChanges--; successfulChanges[42] = true;
+      } else if (line2.includes('function _calculatePhraseMatch(query, pageIndex, pageContent, entireWord)')) {
         line = `    value: function _calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
             if (ignoreAccents) { // #177
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
   `;
-        expectedChanges--;
-      } else if (line.includes('  _calculateWordMatch(')) {
+         expectedChanges--; successfulChanges[42] = true;
+      } else if (line2.includes('  _calculateWordMatch(')) {
         line = `  _calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
             if (ignoreAccents) { // #177
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
   `;
-        expectedChanges--;
-      } else if (line.includes('function _calculateWordMatch(query, pageIndex, pageContent, entireWord)')) {
+         expectedChanges--; successfulChanges[44] = true;
+      } else if (line2.includes('function _calculateWordMatch(query, pageIndex, pageContent, entireWord)')) {
         line = `    value: function _calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
             if (ignoreAccents) { // #177
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
   `;
-        expectedChanges--;
-      } else if (line.includes('queryArray = query.match(/\\S+/g);')) {
+         expectedChanges--; successfulChanges[44] = true;
+      } else if (line2.includes('queryArray = query.match(/\\S+/g);')) {
         line = "    var queryArray = (query.includes('\\n')) ? query.trim().split(/\\n+/g) : query.trim().match(/\\S+/g); // #201";
-      } else if (currentFunction == '_calculateMatch' && line.includes('entireWord,')) {
+      } else if (currentFunction == '_calculateMatch' && line2.includes('entireWord,')) {
         if (es2015) {
           line = line + '\n      ignoreAccents, // #177';
         } else {
           line = line + '\n          ignoreAccents = _this$_state.ignoreAccents, // #177';
         }
         currentFunction = '';
-        expectedChanges--;
-      } else if (line.includes('this._calculatePhraseMatch(query, pageIndex, pageContent, entireWord')) {
+         expectedChanges--; successfulChanges[46] = true;
+      } else if (line2.includes('this._calculatePhraseMatch(query, pageIndex, pageContent, entireWord')) {
         line = '      this._calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents); // #177';
-        expectedChanges--;
-      } else if (line.includes('this._calculateWordMatch(query, pageIndex, pageContent, entireWord')) {
+         expectedChanges--; successfulChanges[47] = true;
+      } else if (line2.includes('this._calculateWordMatch(query, pageIndex, pageContent, entireWord')) {
         line = '      this._calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents); // #177';
-        expectedChanges--;
-      } else if (line.includes("console.log('PDF ' + pdfDocument.fingerprint")) {
+         expectedChanges--; successfulChanges[48] = true;
+      } else if (line2.includes("console.log('PDF ' + pdfDocument.fingerprint")) {
         line = line.replace("')');", "' modified by ngx-extended-pdf-viewer)');");
         line = "      console.log('PDF viewer: ngx-extended-pdf-viewer running on pdf.js ' + _pdfjsLib.version);\n" + line;
-        expectedChanges--;
-      } else if (line.includes("if ('verbosity' in hashParams) {")) {
+         expectedChanges--; successfulChanges[49] = true;
+      } else if (line2.includes("if ('verbosity' in hashParams) {")) {
         line = `    if ('removepageborders' in hashParams) { // #194
       _app_options.AppOptions.set('removePageBorders', hashParams['removepageborders'] === 'true'); // #194
     }
 
 ${line}`;
-        expectedChanges--;
-      } else if (line.includes("imageResourcesPath: _app_options.AppOptions.get('imageResourcesPath'),")) {
+         expectedChanges--; successfulChanges[50] = true;
+      } else if (line2.includes("imageResourcesPath: _app_options.AppOptions.get('imageResourcesPath'),")) {
         line += "\n      removePageBorders: _app_options.AppOptions.get('removePageBorders'), // #194";
-      } else if (line.includes('renderer: {')) {
+      } else if (line2.includes('renderer: {')) {
         line =
           `  removePageBorders: { // #194
           value: false,
           kind: OptionKind.VIEWER + OptionKind.PREFERENCE
         },
         ` + line;
-        expectedChanges--;
-      } else if (line.includes("imageResourcesPath: _app_options.AppOptions.get('imageResourcesPath'),")) {
+         expectedChanges--; successfulChanges[51] = true;
+      } else if (line2.includes("imageResourcesPath: _app_options.AppOptions.get('imageResourcesPath'),")) {
         line += '\n        removePageBorders: this.removePageBorders, // #194';
       } else if (line.includes('      "renderer": "canvas",')) {
         line = '      "removePageBorders": false,// #194 \n' + line;
-        expectedChanges--;
-      } else if (line.includes('imageResourcesPath: this.imageResourcesPath,')) {
+         expectedChanges--; successfulChanges[52] = true;
+      } else if (line2.includes('imageResourcesPath: this.imageResourcesPath,')) {
         line += '\n          removePageBorders: this.removePageBorders, // #194';
-        expectedChanges--;
-      } else if (line.includes("findField: document.getElementById('findInput'),")) {
+         expectedChanges--; successfulChanges[53] = true;
+      } else if (line2.includes("findField: document.getElementById('findInput'),")) {
         line += "\n      findFieldMultiline: document.getElementById('findInputMultiline'), // #201";
-        expectedChanges--;
-      } else if (line.includes('this.findField = options.findField || null;')) {
+         expectedChanges--; successfulChanges[54] = true;
+      } else if (line2.includes('this.findField = options.findField || null;')) {
         line += '\n    this.findFieldMultiline = options.findFieldMultiline || null; // #201';
-      } else if (line.includes("this.findField.addEventListener('input', () => {")) {
+      } else if (line2.includes("this.findField.addEventListener('input', () => {")) {
         line =
           `    this.findFieldMultiline.addEventListener('input', () => { // #201
       this.dispatchEvent('');
     });
 ` + line;
-        expectedChanges--;
-      } else if (line.includes(' type,')) {
+         expectedChanges--; successfulChanges[55] = true;
+      } else if (line2.includes(' type,')) {
         line = `      type: type,
       query: this.findFieldMultiline.classList.contains('hidden')? this.findField.value: this.findFieldMultiline.value, // #201`;
         dropLines = 1;
-        expectedChanges--;
-      } else if (line.includes("this.findField.setAttribute('data-status', status);")) {
+         expectedChanges--; successfulChanges[56] = true;
+      } else if (line2.includes("this.findField.setAttribute('data-status', status);")) {
         line += `
     this.findFieldMultiline.classList.toggle('notFound', notFound); // #201
     this.findFieldMultiline.setAttribute('data-status', status);    // #201
 `;
-        expectedChanges--;
-      } else if (line.includes("console.warn('#' + key + ' is undefined.')")) {
+         expectedChanges--; successfulChanges[57] = true;
+      } else if (line2.includes("console.warn('#' + key + ' is undefined.')")) {
         line = line.replace("'#'", "'Translation for the key #'");
         line = line.replace('undefined', 'missing');
-        expectedChanges--;
-      } else if (line.includes("console.warn('#' + l10n.id + ' is undefined.');")) {
+         expectedChanges--; successfulChanges[58] = true;
+      } else if (line2.includes("console.warn('#' + l10n.id + ' is undefined.');")) {
         line = line.replace("'#'", "'Translation for the key #'");
         line = line.replace('undefined', 'missing');
-        expectedChanges--;
-      } else if (line.includes('get pageMatchesLength() {')) {
+         expectedChanges--; successfulChanges[59] = true;
+      } else if (line2.includes('get pageMatchesLength() {')) {
         line = `  get pageMatchesColor() {         // #201
     return this._pageMatchesColor; // #201
   }                                // #201
 ` + line;
-        expectedChanges--;
-      } else if (line.includes('key: "pageMatchesLength",')) {
+         expectedChanges--; successfulChanges[60] = true;
+      } else if (line2.includes('key: "pageMatchesLength",')) {
         line = `    key: "pageMatchesColor",
     get: function get() {  // #201
       return this._pageMatchesColor;
     }
   }, {
 ` + line;
-      expectedChanges--;
-        } else if (line.includes('this._pageMatchesLength = [];')) {
+       expectedChanges--; successfulChanges[60] = true;
+        } else if (line2.includes('this._pageMatchesLength = [];')) {
           line += '\n    this._pageMatchesColor = [];  // #201';
-          expectedChanges--;
-        } else if (line.includes('_prepareMatches(matchesWithLength, matches, matchesLength) {')) {
+           expectedChanges--; successfulChanges[62] = true;
+        } else if (line2.includes('_prepareMatches(matchesWithLength, matches, matchesLength) {')) {
           line = line.replace('matchesLength)', 'matchesLength, /* #201 */ matchesColor)');
-          expectedChanges--;
-        } else if (line.includes('matchesLength.push(matchesWithLength[i].matchLength);')) {
+           expectedChanges--; successfulChanges[63] = true;
+        } else if (line2.includes('matchesLength.push(matchesWithLength[i].matchLength);')) {
           line += '\n      matchesColor.push(matchesWithLength[i].color);  // #201';
-          expectedChanges--;
-        } else if (line.includes('skipped: false')) {
+           expectedChanges--; successfulChanges[64] = true;
+        } else if (line2.includes('skipped: false')) {
           line += ',\n          color: i  // #201';
-          expectedChanges--;
-        } else if (line.includes('this._pageMatchesLength[pageIndex] = [];')) {
+           expectedChanges--; successfulChanges[65] = true;
+        } else if (line2.includes('this._pageMatchesLength[pageIndex] = [];')) {
           line += '\n    this._pageMatchesColor[pageIndex] = [];  // #201';
-          expectedChanges--;
-        } else if (line.includes('this._prepareMatches(matchesWithLength, this._pageMatches[pageIndex], this._pageMatchesLength[pageIndex]);')) {
+           expectedChanges--; successfulChanges[66] = true;
+        } else if (line2.includes('this._prepareMatches(matchesWithLength, this._pageMatches[pageIndex], this._pageMatchesLength[pageIndex]);')) {
           line = line.replace('this._pageMatchesLength[pageIndex])', 'this._pageMatchesLength[pageIndex], /* #201 */ this._pageMatchesColor[pageIndex]);');
-          expectedChanges--;
-        } else if (line.includes('this._pageMatchesLength.length = 0;')) {
+           expectedChanges--; successfulChanges[67] = true;
+        } else if (line2.includes('this._pageMatchesLength.length = 0;')) {
           line += '\n      this._pageMatchesColor.length = 0;  // #201';
-          expectedChanges--;
-        } else if (line.includes('_convertMatches(matches, matchesLength) {')) {
+           expectedChanges--; successfulChanges[68] = true;
+        } else if (line2.includes('_convertMatches(matches, matchesLength) {')) {
           line = line.replace('matchesLength)', 'matchesLength, /* #201 */ matchesColor)');
-          expectedChanges--;
-        } else if (line.includes('begin: {')) {
+           expectedChanges--; successfulChanges[69] = true;
+        } else if (line2.includes('begin: {')) {
           line = '        color: matchesColor ? matchesColor[m] : 0, // #201\n' + line;
-          expectedChanges--;
-        } else if (line.includes("highlightSuffix = isSelected ? ' selected' : '';")) {
+           expectedChanges--; successfulChanges[70] = true;
+        } else if (line2.includes("highlightSuffix = isSelected ? ' selected' : '';")) {
           line = "      var highlightSuffix = (isSelected ? ' selected' : '') + ' color' + match.color; // #201";
-          expectedChanges--;
-        } else if (line.includes('this.matches = this._convertMatches(pageMatches, pageMatchesLength);')) {
+           expectedChanges--; successfulChanges[71] = true;
+        } else if (line2.includes('this.matches = this._convertMatches(pageMatches, pageMatchesLength);')) {
           line = `      var pageMatchesColor = findController.pageMatchesColor[pageIdx] || null; // #201
       this.matches = this._convertMatches(pageMatches, pageMatchesLength, pageMatchesColor); // #201`
-          expectedChanges--;
-        } else if (line.includes('this.findField.focus();')) {
+           expectedChanges--; successfulChanges[72] = true;
+        } else if (line2.includes('this.findField.focus();')) {
           line = line + "\n    this.dispatchEvent(''); // #206"
-          expectedChanges--;
-        } else if (line.includes('throw new Error(msg);')) {
+           expectedChanges--; successfulChanges[73] = true;
+        } else if (line2.includes('throw new Error(msg);')) {
           line = `        var error = new Error(msg); // #205
         this.onError(error); // #205
 ` + line.replace('new Error(msg)', 'error');
-          expectedChanges--;
-        } else if (line.includes('if (evt.ctrlKey && supportedMouseWheelZoomModifierKeys.ctrlKey')) {
+           expectedChanges--; successfulChanges[74] = true;
+        } else if (line2.includes('if (evt.ctrlKey && supportedMouseWheelZoomModifierKeys.ctrlKey')) {
           line = `  let cmd = (evt.ctrlKey ? 1 : 0) | (evt.altKey ? 2 : 0) | (evt.shiftKey ? 4 : 0) | (evt.metaKey ? 8 : 0);
 
   if (isKeyIgnored(cmd, "WHEEL")) {
@@ -451,12 +468,12 @@ ${line}`;
   }
 
 ` + line.replace('new Error(msg)', 'error');
-          expectedChanges--;
-        } else if (line.includes('window.print =')) {
+           expectedChanges--; successfulChanges[75] = true;
+        } else if (line2.includes('window.print =')) {
           line += '\n if (!PDFViewerApplication.enablePrint) { return; }';
-          expectedChanges--;
-        } else if (line.includes('PDFViewerApplication.pdfViewer.containsElement(evt.target)')) {
-          expectedChanges--;
+           expectedChanges--; successfulChanges[76] = true;
+        } else if (line2.includes('PDFViewerApplication.pdfViewer.containsElement(evt.target)')) {
+           expectedChanges--; successfulChanges[77] = true;
           line += `
           if (evt.target && evt.target.parentElement === appConfig.secondaryToolbar.toggleButton) {
             return;
