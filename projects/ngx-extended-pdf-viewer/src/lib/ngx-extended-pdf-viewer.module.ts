@@ -209,8 +209,7 @@ if (typeof window !== 'undefined') {
   ],
   providers: [NgxExtendedPdfViewerService],
   exports: [
-    NgxExtendedPdfViewerComponent,
-    PdfZoomDropdownComponent,
+     PdfZoomDropdownComponent,
     PdfContextMenuComponent,
     PdfPresentationModeComponent,
     PdfOpenFileComponent,
@@ -247,7 +246,8 @@ if (typeof window !== 'undefined') {
     PageNumberComponent,
     PdfPageNumberComponent,
     PdfZoomInComponent,
-    PdfZoomOutComponent
+    PdfZoomOutComponent,
+    NgxExtendedPdfViewerComponent
   ]
 })
 export class NgxExtendedPdfViewerModule {

@@ -84,7 +84,7 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
   @Input()
   public customSecondaryToolbar: TemplateRef<any>;
 
-  @ViewChild(PdfSecondaryToolbarComponent)
+  @ViewChild('pdfSecondaryToolbarComponent')
   private secondaryToolbarComponent: PdfSecondaryToolbarComponent;
 
   /* regular attributes */
