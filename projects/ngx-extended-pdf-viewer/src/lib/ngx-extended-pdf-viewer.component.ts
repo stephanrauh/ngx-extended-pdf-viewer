@@ -44,7 +44,7 @@ import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-co
 import { AfterViewInit } from '@angular/core';
 import { IPDFViewerApplication } from './options/pdf-viewer-application';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
-import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
+import { PdfSecondaryToolbarComponent } from '../public_api';
 
 if (typeof window !== 'undefined') {
   (window as any).deburr = deburr; // #177
@@ -84,7 +84,7 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
   @Input()
   public customSecondaryToolbar: TemplateRef<any>;
 
-  @ViewChild('pdfSecondaryToolbarComponent')
+  @ViewChild(PdfSecondaryToolbarComponent)
   private secondaryToolbarComponent: PdfSecondaryToolbarComponent;
 
   /* regular attributes */
@@ -1201,7 +1201,7 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
         resizeUpTo700px(container, width);
         resizeUpTo640px(container, width);
         resizeUpTo535px(width);
-        secondaryToolbarComponent.onResize();
+        secondaryToolbarComponent.checkVisibility();
       }
     }
   }

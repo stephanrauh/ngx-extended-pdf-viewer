@@ -1,4 +1,16 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, TemplateRef, ElementRef, HostListener, AfterContentInit, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+  TemplateRef,
+  ElementRef,
+  HostListener,
+  AfterViewInit
+} from '@angular/core';
 
 @Component({
   selector: 'pdf-secondary-toolbar',
@@ -60,7 +72,6 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
     this.spreadChange.emit(newSpread);
   }
 
-
   public ngOnChanges(changes: SimpleChanges): void {
     setTimeout(() => this.checkVisibility());
   }
@@ -72,20 +83,20 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
 
   public ngAfterViewInit() {
     setTimeout(() => this.checkVisibility());
-   }
+  }
 
   public ngOnInit() {
     setTimeout(() => this.checkVisibility());
   }
 
-  private checkVisibility(): void {
+  public checkVisibility(): void {
     let visibleButtons = 0;
     const e = this.element.nativeElement as HTMLElement;
     const f = e.children.item(0);
     if (f) {
       const g = f.children.item(0);
       if (g && g instanceof HTMLElement) {
-          visibleButtons = this.checkVisibilityRecursively(g);
+        visibleButtons = this.checkVisibilityRecursively(g);
       }
     }
     this.secondaryMenuIsEmpty.emit(visibleButtons === 0);
@@ -98,6 +109,10 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
     if (e.classList.contains('hidden')) {
       return 0;
     }
+    if (e.classList.contains('invisible')) {
+      return 0;
+    }
+
     const style = window.getComputedStyle(e);
     if (style.display === 'none') {
       return 0;
@@ -109,7 +124,7 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
     let count = 0;
     const children = e.children;
     if (children && children.length) {
-      for (let i = 0; i < children.length; i++) {
+      for (let i = 0; i < children.length && count === 0; i++) {
         const child = children.item(i);
         if (child && child instanceof HTMLElement) {
           count += this.checkVisibilityRecursively(child);

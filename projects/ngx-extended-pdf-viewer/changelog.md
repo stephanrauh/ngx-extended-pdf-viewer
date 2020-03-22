@@ -135,3 +135,4 @@
 - 2.1.0-beta.0 #200 added a smart algorithm to detect when to show or hide the secondary menu button (the kebab at the right-hand-side). This algorithm also copes with custom toolbars.
 - 2.1.0-beta.1 #200 fixed the functionality introduced with the previous beta version. Plus, stop overwriting the attribute `[showSecondaryMenu]` by a calculated value. So developers have better control over when to show or hide the secondary menu kebab button.
 - 2.1.0 #200 removed debug code, and added extra code to hide the secondary toolbar reliably on startup it it's empty.
+- 2.1.1 #200 simplified and improved the implementation
