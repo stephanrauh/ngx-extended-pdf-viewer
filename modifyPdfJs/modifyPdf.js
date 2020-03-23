@@ -9,9 +9,11 @@ let result = '';
 let expectedChanges = 9;
 
 const successfulChanges = {};
-for (let i = 1; i <= expectedChanges; i++) {
+for (let i = 1; i <= expectedChanges+1; i++) {
   successfulChanges[i]="not found";
 }
+successfulChanges[1]="ES2015 only";
+successfulChanges[2]="ES5 only";
 successfulChanges[6]="only till pdf.js 2.3";
 successfulChanges[7]="only till pdf.js 2.3";
 
@@ -23,25 +25,26 @@ lineReader
       dropLines--;
       //      console.log('Dropping ' + line);
     } else {
+      const line2 = line.replace(/"/g, "'"); // since pdf.js 2.4, the ES2015 uses double quotes
       if (line.includes('let fs') || line.includes('const fs')) {
         if (!es2015) console.log('ES 2015 version');
         es2015 = true;
         successfulChanges[1] = true;
       }
-      if (line.includes("var fs = require('fs');") || line.includes("let fs = require('fs');") || line.includes('const fs = require("fs");')) {
+      if (line2.includes("var fs = require('fs');") || line2.includes("let fs = require('fs');")) {
         line = '';
         expectedChanges--;
         successfulChanges[2] = true;
-      } else if (line.includes("var http = require('http');") || line.includes("let http = require('http');")|| line.includes('const http = require("http");')) {
+      } else if (line2.includes("http = require('http');")) {
         line = '';
         expectedChanges--;
         successfulChanges[3] = true;
-      } else if (line.includes("var https = require('https');") || line.includes("let https = require('https');")|| line.includes('const https = require("https");')) {
+      } else if (line2.includes("https = require('https');")) {
         expectedChanges--;
         line = '';
         successfulChanges[4] = true;
       } else if (
-        line.includes("require('zlib')") || line.includes('require("zlib")')
+        line2.includes("require('zlib')")
       ) {
         expectedChanges--;
         line = 'throw Error("zlib not available in the browser");';
@@ -76,7 +79,7 @@ lineReader
         line = ''; // the file hasn't been minified, so there's no use for a source map
         expectedChanges--;
         successfulChanges[9] = true;
-      } else if (line.includes("messageHandler.send('Ready', null);")) {
+      } else if (line2.includes("messageHandler.send('Ready', null);")) {
         const before = `      // #171 receive options from ngx-extended-pdf-viewer
       messageHandler.send('showUnverifiedSignatures',
           window.ServiceWorkerOptions.showUnverifiedSignatures);
@@ -118,7 +121,7 @@ lineReader
         console.error(expectedChanges + " changes couldn't be applied!");
         for (const [key, value] of Object.entries(successfulChanges)) {
           if (value !== true) {
-            console.log(key + " " + value);
+            console.log("pdf.js " + key + " " + value);
           }
         }
       }
