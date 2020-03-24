@@ -44,7 +44,7 @@ import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-co
 import { AfterViewInit } from '@angular/core';
 import { IPDFViewerApplication } from './options/pdf-viewer-application';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
-import { PdfSecondaryToolbarComponent } from '../public_api';
+import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
 
 if (typeof window !== 'undefined') {
   (window as any).deburr = deburr; // #177
