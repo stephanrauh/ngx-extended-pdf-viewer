@@ -1,0 +1,11 @@
+.paging-right {
+  float: right;
+  display: block;
+  margin-top: -2px;
+}
+
+.paging-left {
+  float: left;
+  display: block;
+  margin-top: -2px;
+}

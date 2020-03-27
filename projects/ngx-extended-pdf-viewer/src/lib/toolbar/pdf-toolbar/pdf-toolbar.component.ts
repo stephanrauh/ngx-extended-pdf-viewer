@@ -37,6 +37,9 @@ export class PdfToolbarComponent implements OnInit {
   public showPresentationModeButton = false;
 
   @Input()
+  public showRotateButton = true;
+
+  @Input()
   public showSecondaryToolbarButton = true;
 
   @Input()

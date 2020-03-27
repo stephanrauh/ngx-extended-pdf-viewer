@@ -53,6 +53,8 @@ export * from './lib/toolbar/pdf-toolbar/pdf-toolbar.component';
 export * from './lib/toolbar/pdf-find-button/pdf-find-button.component';
 export * from './lib/toolbar/pdf-toggle-sidebar/pdf-toggle-sidebar.component';
 export * from './lib/toolbar/pdf-toggle-secondary-toolbar/pdf-toggle-secondary-toolbar.component';
+export * from './lib/toolbar/pdf-paging-area/pdf-first-page/pdf-first-page.component';
+export * from './lib/toolbar/pdf-paging-area/pdf-last-page/pdf-last-page.component';
 export * from './lib/toolbar/pdf-paging-area/pdf-next-page/pdf-next-page.component';
 export * from './lib/toolbar/pdf-paging-area/pdf-previous-page/pdf-previous-page.component';
 export * from './lib/toolbar/pdf-paging-area/page-number/page-number.component';
@@ -63,5 +65,4 @@ export * from './lib/toolbar/pdf-zoom-toolbar/pdf-zoom-dropdown/pdf-zoom-dropdow
 export * from './lib/options/pdf-viewer-application';
 export * from './lib/options/pdf-viewer-app-config';
 export * from './lib/options/pdf-viewer';
-
-
+export * from './lib/toolbar/pdf-rotate-page/pdf-rotate-page.component';

@@ -1,0 +1,16 @@
+:host {
+  margin-top: 0px;
+}
+
+
+:host:focus {
+  outline: none;
+}
+
+button:focus {
+  outline: none;
+}
+
+svg:focus {
+  outline: none;
+}

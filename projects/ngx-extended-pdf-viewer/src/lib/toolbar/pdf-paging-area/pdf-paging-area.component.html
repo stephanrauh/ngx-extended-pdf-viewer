@@ -1,9 +1,15 @@
 <div
 [class.invisible]="!showPagingButtons"
-class="splitToolbarButton hiddenSmallView"
+class="paging-left hiddenSmallView"
 >
-<pdf-previous-page></pdf-previous-page>
-<div class="splitToolbarButtonSeparator"></div>
-<pdf-next-page></pdf-next-page>
+<pdf-first-page style="margin-right: -3px;"></pdf-first-page>
+<pdf-previous-page style="margin-left: -3px;"></pdf-previous-page>
 </div>
 <pdf-page-number [showPagingButtons]="showPagingButtons"></pdf-page-number>
+<div
+[class.invisible]="!showPagingButtons"
+class="paging-right hiddenSmallView"
+>
+<pdf-next-page style="margin-right: -3px;margin-left: -3px;"></pdf-next-page>
+<pdf-last-page style="margin-left: -3px;"></pdf-last-page>
+</div>

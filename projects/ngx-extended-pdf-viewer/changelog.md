@@ -137,3 +137,6 @@
 - 2.1.0 #200 removed debug code, and added extra code to hide the secondary toolbar reliably on startup it it's empty.
 - 2.1.1 #200 simplified and improved the implementation
 - 2.1.2 #237 fixed the circular dependency introduced with #200
+- 2.2.0-beta.0 #235 tentative implementation of the rotate buttons (preliminary implementation; icons are subject to change)
+- 2.2.0-beta.0 #235 tentative implementation of the rotate buttons (preliminary implementation; icons are subject to change)
+- 2.2.0-beta.1 #235 tentative implementation of the rotate buttons (preliminary implementation)

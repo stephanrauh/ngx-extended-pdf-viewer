@@ -17,7 +17,11 @@ const ignore=[
   '.toolbarButton.download::before',
   '.toolbarButton.bookmark::before',
   '.toolbarButton#secondaryToolbarToggle::before',
-  '.toolbarButton#sidebarToggle::before'
+  '.toolbarButton#sidebarToggle::before',
+  '.secondaryToolbarButton.firstPage::before',
+  '.secondaryToolbarButton.lastPage::before',
+  '.secondaryToolbarButton.rotateCw::before',
+  '.secondaryToolbarButton.rotateCcw::before'
   ];
 
 let result = '';
