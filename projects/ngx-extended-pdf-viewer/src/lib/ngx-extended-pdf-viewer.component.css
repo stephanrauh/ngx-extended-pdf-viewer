@@ -168,3 +168,20 @@ html[dir=rtl] #secondaryToolbarToggle {
   padding-right: 0;
 }
 
+
+.visibleXLView {
+  display: none;
+}
+
+.hiddenXLView {
+  display: unset;
+}
+
+@media all and (max-width: 880px) {
+  #outerContainer .hiddenXLView {
+    display: none;
+  }
+  #outerContainer .visibleXLView {
+    display: inherit;
+  }
+}
