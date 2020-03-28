@@ -353,7 +353,7 @@ function convertLines() {
         line = line + '\n' + '      ignoreAccents: this.ignoreAccents.checked, // #177';
         expectedChanges--;
         successfulChanges[41] = true;
-      } else if (line2.includes('  _calculatePhraseMatch(')) {
+      } else if (line.includes('  _calculatePhraseMatch(')) {
         line = `  _calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
             if (ignoreAccents) { // #177
               pageContent = window.deburr(pageContent); // #177
@@ -371,7 +371,7 @@ function convertLines() {
   `;
         expectedChanges--;
         successfulChanges[42] = true;
-      } else if (line2.includes('  _calculateWordMatch(')) {
+      } else if (line.includes('  _calculateWordMatch(')) {
         line = `  _calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
             if (ignoreAccents) { // #177
               pageContent = window.deburr(pageContent); // #177
@@ -464,7 +464,7 @@ ${line}`;
 ` + line;
         expectedChanges--;
         successfulChanges[55] = true; // ES5 version
-      } else if (line2.includes(' type,')) {
+      } else if (line.includes(' type,')) {
         line = `      type: type,
       query: this.findFieldMultiline.classList.contains('hidden')? this.findField.value: this.findFieldMultiline.value, // #201`;
         dropLines = 1;
