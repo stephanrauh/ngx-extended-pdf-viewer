@@ -46,6 +46,7 @@ import { IPDFViewerApplication } from './options/pdf-viewer-application';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
 import { PDFNotificationService } from './pdf-notification-service';
+import { PdfCursorTools } from './options/pdf-cursor-tools';
 
 if (typeof window !== 'undefined') {
   (window as any).deburr = deburr; // #177
@@ -890,7 +891,7 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
     });
     PDFViewerApplication.eventBus.on('cursortoolchanged', (x: HandtoolChanged) => {
       this.ngZone.run(() => {
-        this.handToolChange.emit(x.tool === 1);
+        this.handToolChange.emit(x.tool === PdfCursorTools.HAND);
       });
     });
 

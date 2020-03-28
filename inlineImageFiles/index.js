@@ -21,7 +21,9 @@ const ignore=[
   '.secondaryToolbarButton.firstPage::before',
   '.secondaryToolbarButton.lastPage::before',
   '.secondaryToolbarButton.rotateCw::before',
-  '.secondaryToolbarButton.rotateCcw::before'
+  '.secondaryToolbarButton.rotateCcw::before',
+  '.secondaryToolbarButton.handTool::before',
+  '.secondaryToolbarButton.selectTool::before'
   ];
 
 let result = '';
@@ -55,12 +57,7 @@ lineReader
           line = line.substring(0, start) + "('" + data + "'" + line.substring(end);
         }
       }
-      if (line.includes('.secondaryToolbarButton.selectTool::before')) {
-        line = '.toolbarButton.selectTool::before, ' + line;
-      } else if (line.includes('.secondaryToolbarButton.handTool::before')) {
-        line = '.toolbarButton.handTool::before, ' + line;
-      }
-      else if (line.includes('z-index: 99;')) {
+      if (line.includes('z-index: 99;')) {
         line = line.replace('99', '1');
       } else if (line.includes('z-index: 100;')) {
         line = line.replace('100', '2');
