@@ -73,14 +73,30 @@ function addPolyfills() {
 }
 
 function convertLines() {
+  let indentAfter = 0;
+  let lineNumber = 0;
+  let currentMethod='';
+  let currentClass = '';
   lines.forEach(line => {
+    lineNumber++;
+    indentAfter += line.split('{').length -1;
+    indentAfter -= line.split('}').length -1;
     if (dropLines > 0) {
       dropLines--;
       //      console.log('Dropping ' + line);
     } else {
-      const line2 = line.replace(/"/g, "'"); // since pdf.js 2.4, the ES2015 uses double quotes
+      const line2 = line.replace(/"/g, "'").trim(); // since pdf.js 2.4, the ES2015 uses double quotes
       if (line2.includes('function ') || line.startsWith('class ')) {
-        currentFunction = line;
+        if (!line.includes('function ()')) {
+          currentFunction = line;
+          currentMethod = '';
+        }
+      }
+      if (line2.startsWith('_classCallCheck(') || line2.startsWith('class ')) {
+        currentClass = line2;
+      }
+      if (line2.startsWith('_updateUIState(')) {
+        currentMethod = '_updateUIState';
       }
       if (line2.includes('_calculateMatch(pageIndex) {')) {
         currentFunction = '_calculateMatch';
@@ -570,6 +586,33 @@ ${line}`;
           if (evt.target && evt.target.parentElement && evt.target.parentElement.parentElement === appConfig.secondaryToolbar.toggleButton) {
             return;
           }`;
+      } else if (currentMethod.includes('_updateUIState') && !currentClass.includes('PDFFindController')) {
+        if (indentAfter === 2) {
+          let source = '';
+          let info = '';
+          if (currentClass.includes('SecondaryToolbar')) {
+            info = `, {
+        source: this,
+        widget: 'SecondaryToolbar',
+        pageNumber: this.pageNumber,
+        pagesCount: this.pagesCount`;
+          }
+          else if (currentClass.includes('Toolbar')) {
+            info = `, {
+      source: this,
+      widget: 'Toolbar',
+      pageNumber,
+      pagesCount,
+      pageScaleValue,
+      pageScale`;
+        }
+          line = `
+    this.eventBus.dispatch("updateuistate"` + info + `
+    });
+` + line;
+          console.log(lineNumber + " " + result.split('\n').length+ " " + currentClass);
+          currentMethod='';
+        }
       }
 
       if (line != null) {

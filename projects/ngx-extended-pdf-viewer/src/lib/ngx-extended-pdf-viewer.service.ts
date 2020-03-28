@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
+import { Subject } from 'rxjs/internal/Subject';
 
 export interface FindOptions {
   highlightAll?: boolean;
@@ -13,6 +14,9 @@ export interface FindOptions {
   providedIn: 'root'
 })
 export class NgxExtendedPdfViewerService {
+  // this event is fired when the pdf.js library has been loaded and objects like PDFApplication are available
+  public onPDFJSInit = new Subject<void>();
+
   constructor() {}
 
   public findMultiple(text: Array<string>, options: FindOptions = {}): boolean {

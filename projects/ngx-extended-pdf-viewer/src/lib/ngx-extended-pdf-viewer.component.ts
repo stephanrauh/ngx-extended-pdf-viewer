@@ -45,6 +45,7 @@ import { AfterViewInit } from '@angular/core';
 import { IPDFViewerApplication } from './options/pdf-viewer-application';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
+import { PDFNotificationService } from './pdf-notification-service';
 
 if (typeof window !== 'undefined') {
   (window as any).deburr = deburr; // #177
@@ -483,7 +484,7 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
     }
   }
 
-  constructor(private ngZone: NgZone, @Inject(PLATFORM_ID) private platformId) {
+  constructor(private ngZone: NgZone, @Inject(PLATFORM_ID) private platformId, private notificationService: PDFNotificationService) {
     if (isPlatformBrowser(this.platformId)) {
       if (!window['pdfjs-dist/build/pdf']) {
         const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
@@ -570,6 +571,7 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
     const callback = e => {
       document.removeEventListener('localized', callback);
       this.initTimeout = setTimeout(() => {
+        this.afterLibraryInit();
         this.openPDF();
       }, this.delayFirstView);
     };
@@ -628,6 +630,28 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
         document.getElementsByTagName('body')[0].appendChild(pc);
       }
     }, 0);
+  }
+
+  /** Notifies every widget that implements onLibraryInit() that the PDF viewer objects are available */
+  private afterLibraryInit() {
+    this.notificationService.onPDFJSInit.next();
+  }
+
+  private afterLibraryInitRecursively(element: HTMLElement) {
+    console.log("i");
+    if (element) {
+      if (element['onPdfJsInit']) {
+        debugger;
+        element['onPdfJsInit']();
+      }
+      if (element.childNodes && element.childNodes.length > 0)  {
+        element.childNodes.forEach(node => {
+          if (node instanceof HTMLElement) {
+            this.afterLibraryInitRecursively(node);
+          }
+        });
+      }
+    }
   }
 
   public checkHeight(): void {
