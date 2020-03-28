@@ -1,3 +1,4 @@
+import { PdfHandToolComponent } from './toolbar/pdf-hand-tool/pdf-hand-tool.component';
 // tslint:disable:max-line-length
 
 import { CommonModule } from '@angular/common';
@@ -48,6 +49,7 @@ import { PdfZoomDropdownComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-dr
 import { PdfZoomInComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-in/pdf-zoom-in.component';
 import { PdfZoomOutComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-out/pdf-zoom-out.component';
 import { PdfZoomToolbarComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-toolbar.component';
+import { PdfSelectToolComponent } from './toolbar/pdf-select-tool/pdf-select-tool.component';
 
 
 function isKeyIgnored(cmd: number, keycode: number | 'WHEEL'): boolean {
@@ -183,6 +185,8 @@ if (typeof window !== 'undefined') {
     PdfPagingAreaComponent,
     PdfFindbarComponent,
     PdfSidebarComponent,
+    PdfHandToolComponent,
+    PdfSelectToolComponent,
     PdfSecondaryToolbarComponent,
     PdfDocumentPropertiesOverlayComponent,
     PdfSearchInputFieldComponent,

@@ -1,4 +1,39 @@
 <ng-template #customSecondaryToolbar>
+  <div
+  id="secondaryToolbar"
+  class="secondaryToolbar hidden doorHangerRight"
+  [style.top]="'36px'"
+  [style.transformOrigin]="'right top'"
+  >
+  <button
+    type="button"
+    class="secondaryToolbarButton"
+    title="Shameless self-advertising">
+      <a target="#" href="https://pdfviewer.net" style="color:white">
+        <span>Go to the manual and showcase</span>
+      </a>
+  </button>
+  <button
+      type="button"
+      class="secondaryToolbarButton"
+      title="Shameless self-advertising"
+    >
+     <a target="#" href="https://www.beyondjava.net" style="color:white">
+      <span>Visit https://www.beyondjava.net</span>
+    </a>
+    </button>
+
+    <button
+      type="button"
+      id="documentProperties"
+      class="secondaryToolbarButton documentProperties"
+      title="Document Properties…"
+      data-l10n-id="document_properties"
+    >
+    <span data-l10n-id="document_properties_label">Document Properties…</span>
+  </button>
+</div>
+
 </ng-template>
 
 <ng-template #customFindbarInputArea>

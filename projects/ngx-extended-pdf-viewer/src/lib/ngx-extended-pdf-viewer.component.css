@@ -169,11 +169,11 @@ html[dir=rtl] #secondaryToolbarToggle {
 }
 
 
-.visibleXLView {
+.visibleXLView,  .visibleXXLView {
   display: none;
 }
 
-.hiddenXLView {
+.hiddenXLView, .hiddenXXLView {
   display: unset;
 }
 
@@ -182,6 +182,15 @@ html[dir=rtl] #secondaryToolbarToggle {
     display: none;
   }
   #outerContainer .visibleXLView {
+    display: inherit;
+  }
+}
+
+@media all and (max-width: 990px) {
+  #outerContainer .hiddenXXLView {
+    display: none;
+  }
+  #outerContainer .visibleXXLView {
     display: inherit;
   }
 }

@@ -115,7 +115,7 @@
         <span data-l10n-id="last_page_label">Go to Last Page</span>
       </button>
 
-      <div [class.invisible]="!showRotateButton" class="horizontalToolbarSeparator"></div>
+      <div [class.invisible]="!showRotateButton" class="horizontalToolbarSeparator visibleXLView"></div>
 
       <button
         type="button"
@@ -146,13 +146,13 @@
         <span data-l10n-id="page_rotate_ccw_label">Rotate Counterclockwise</span>
       </button>
 
-      <div class="horizontalToolbarSeparator" [class.invisible]="!showHandToolButton"></div>
+      <div class="horizontalToolbarSeparator visibleXXLView" [class.invisible]="!showHandToolButton"></div>
 
       <button
         type="button"
         [class.invisible]="!showHandToolButton"
         id="cursorSelectTool"
-        class="secondaryToolbarButton selectTool toggled"
+        class="secondaryToolbarButton selectTool toggled visibleXXLView"
         title="Enable Text Selection Tool"
         tabindex="60"
         data-l10n-id="cursor_text_select_tool"
@@ -163,7 +163,7 @@
         type="button"
         [class.invisible]="!showHandToolButton"
         id="cursorHandTool"
-        class="secondaryToolbarButton handTool"
+        class="secondaryToolbarButton handTool visibleXXLView"
         title="Enable Hand Tool"
         tabindex="61"
         data-l10n-id="cursor_hand_tool"

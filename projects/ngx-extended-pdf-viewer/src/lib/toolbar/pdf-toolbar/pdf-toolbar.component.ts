@@ -25,6 +25,9 @@ export class PdfToolbarComponent implements OnInit {
   public showFindButton: boolean | undefined = undefined;
 
   @Input()
+  public showHandToolButton = true;
+
+  @Input()
   public showOpenFileButton = true;
 
   @Input()
