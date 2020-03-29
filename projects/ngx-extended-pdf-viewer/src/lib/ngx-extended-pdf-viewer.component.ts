@@ -943,7 +943,6 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
           this.ngZone.run(() => {
             this.currentZoomFactor.emit(x.scale);
             if (this.zoom !== 'auto' && this.zoom !== 'page-fit' && this.zoom !== 'page-actual' && this.zoom !== 'page-width') {
-              console.log('Mistake? ' + x.scale * 100);
               this.emitZoomChange(x.scale * 100);
             }
           });
