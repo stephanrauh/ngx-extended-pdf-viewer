@@ -140,3 +140,4 @@
 - 2.2.0-beta.0 #235 tentative implementation of the rotate buttons (preliminary implementation; icons are subject to change)
 - 2.2.0-beta.1 #235 tentative implementation of the rotate buttons (preliminary implementation)
 - 3.0.0-beta.0 #233 update to pdf.js 2.4.456; #235 shifted several buttons from the kebab menu to the main toolbar if available real estate allows; #239 fixed `(zoom)` (textual values like `auto`, `page-width`, `page-fit`, and `page-actual` should never be overwritten by numeric values)
+- 3.0.0-beta.1 #241 calculate the tab index programmatically; #233 made the find buttons visible again
