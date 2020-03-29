@@ -41,7 +41,7 @@ import { VerbosityLevel } from './options/verbosity-level';
 import { FindState, FindResultMatchesCount, FindResult } from './events/find-result';
 import { isPlatformBrowser } from '@angular/common';
 import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
-import { AfterViewInit } from '@angular/core';
+import { AfterViewInit, ElementRef } from '@angular/core';
 import { IPDFViewerApplication } from './options/pdf-viewer-application';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
@@ -50,6 +50,12 @@ import { PdfCursorTools } from './options/pdf-cursor-tools';
 
 if (typeof window !== 'undefined') {
   (window as any).deburr = deburr; // #177
+}
+
+interface ElementAndPosition {
+  element: HTMLElement;
+  x: number;
+  y: number;
 }
 
 @Component({
@@ -69,6 +75,9 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
    */
   @ViewChild(PdfDummyComponentsComponent)
   public dummyComponents: PdfDummyComponentsComponent;
+
+  @ViewChild('root')
+  public root: ElementRef;
 
   /* UI templates */
   @Input()
@@ -222,7 +231,7 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
   @Input()
   public ignoreKeys: Array<string> = [];
 
-  /** Allows the user to explicitely enable a list of key bindings. If this property is set, every other key binding is ignored. */
+  /** Allows the user to enable a list of key bindings explicitly. If this property is set, every other key binding is ignored. */
   @Input()
   public acceptKeys: Array<string> = [];
 
@@ -256,6 +265,9 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
    */
   @Input()
   public showUnverifiedSignatures = false;
+
+  @Input()
+  public startTabindex: number | undefined;
 
   public get showSidebarButton() {
     return this._showSidebarButton;
@@ -516,6 +528,7 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
 
   public emitZoomChange(value: string | number): void {
     this.zoomChange.emit(value);
+    console.log(value);
   }
 
   ngAfterViewInit() {
@@ -524,6 +537,79 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
     } else {
       setTimeout(() => this.ngAfterViewInit(), 50);
     }
+  }
+
+  private assignTabindexes() {
+    if (this.startTabindex) {
+      const start = performance.now();
+      const r = this.root.nativeElement.cloneNode(true) as HTMLElement;
+      r.classList.add('offscreen');
+      this.showElementsRecursively(r);
+      document.body.appendChild(r);
+      const elements = this.collectElementPositions(r, this.root.nativeElement, []);
+      document.body.removeChild(r);
+      const sorted = elements.sort((a, b) => {
+        if (a.y - b.y > 15) {
+          return 1;
+        }
+        if (b.y - a.y > 15) {
+          return -1;
+        }
+        return a.x - b.x;
+      });
+      for (let i = 0; i < sorted.length; i++) {
+        sorted[i].element.tabIndex = this.startTabindex + i;
+      }
+      const end = performance.now();
+      console.log('Duration: ' + (end - start));
+    }
+  }
+
+  private showElementsRecursively(root: Element): void {
+    root.classList.remove('hidden');
+    root.classList.remove('invisible');
+    root.classList.remove('hiddenXXLView');
+    root.classList.remove('hiddenXLView');
+    root.classList.remove('hiddenLargeView');
+    root.classList.remove('hiddenMediumView');
+    root.classList.remove('hiddenSmallView');
+    root.classList.remove('visibleXXLView');
+    root.classList.remove('visibleXLView');
+    root.classList.remove('visibleLargeView');
+    root.classList.remove('visibleMediumView');
+    root.classList.remove('visibleSmallView');
+
+    if (root instanceof HTMLButtonElement || root instanceof HTMLAnchorElement || root instanceof HTMLInputElement || root instanceof HTMLSelectElement) {
+      return;
+    } else if (root.childElementCount > 0) {
+      for (let i = 0; i < root.childElementCount; i++) {
+        const c = root.children.item(i);
+        if (c) {
+          this.showElementsRecursively(c);
+        }
+      }
+    }
+  }
+
+  private collectElementPositions(copy: Element, original: Element, elements: Array<ElementAndPosition>): Array<ElementAndPosition> {
+    if (copy instanceof HTMLButtonElement || copy instanceof HTMLAnchorElement || copy instanceof HTMLInputElement || copy instanceof HTMLSelectElement) {
+      const rect = copy.getBoundingClientRect();
+      const elementAndPos = {
+        element: original,
+        x: Math.round(rect.left),
+        y: Math.round(rect.top)
+      } as ElementAndPosition;
+      elements.push(elementAndPos);
+    } else if (copy.childElementCount > 0) {
+      for (let i = 0; i < copy.childElementCount; i++) {
+        const c = copy.children.item(i);
+        const o = original.children.item(i);
+        if (c && o) {
+          elements = this.collectElementPositions(c, o, elements);
+        }
+      }
+    }
+    return elements;
   }
 
   private doInitPDFViewer() {
@@ -574,6 +660,7 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
       this.initTimeout = setTimeout(() => {
         this.afterLibraryInit();
         this.openPDF();
+        this.assignTabindexes();
       }, this.delayFirstView);
     };
 
@@ -636,23 +723,6 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
   /** Notifies every widget that implements onLibraryInit() that the PDF viewer objects are available */
   private afterLibraryInit() {
     this.notificationService.onPDFJSInit.next();
-  }
-
-  private afterLibraryInitRecursively(element: HTMLElement) {
-    console.log("i");
-    if (element) {
-      if (element['onPdfJsInit']) {
-        debugger;
-        element['onPdfJsInit']();
-      }
-      if (element.childNodes && element.childNodes.length > 0)  {
-        element.childNodes.forEach(node => {
-          if (node instanceof HTMLElement) {
-            this.afterLibraryInitRecursively(node);
-          }
-        });
-      }
-    }
   }
 
   public checkHeight(): void {
@@ -872,7 +942,10 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
         setTimeout(() => {
           this.ngZone.run(() => {
             this.currentZoomFactor.emit(x.scale);
-            this.emitZoomChange(x.scale * 100);
+            if (this.zoom !== 'auto' && this.zoom !== 'page-fit' && this.zoom !== 'page-actual' && this.zoom !== 'page-width') {
+              console.log('Mistake? ' + x.scale * 100);
+              this.emitZoomChange(x.scale * 100);
+            }
           });
         });
       });

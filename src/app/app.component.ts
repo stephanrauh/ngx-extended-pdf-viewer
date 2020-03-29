@@ -13,7 +13,7 @@ import { PagesLoadedEvent, PageRenderedEvent, PdfDownloadedEvent, PdfLoadedEvent
 export class AppComponent {
   public pdf = 'assets/example.pdf';
   public hidden = false;
-  public zoom: number | string | undefined = 'page-width';
+  public zoom: number | string | undefined = 'auto';
   public visible = { 0: true };
   public mobileFriendlyZoomPercent = false;
   public currentZoomFactor: number;
@@ -217,7 +217,7 @@ export class AppComponent {
   }
 
   public onPageRendered(event: PageRenderedEvent) {
-    console.log(event);
+    // console.log(event);
   }
 
   public onDownload(event: PdfDownloadedEvent) {

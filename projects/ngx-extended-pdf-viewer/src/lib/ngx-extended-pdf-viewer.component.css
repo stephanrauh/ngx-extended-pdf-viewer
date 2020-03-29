@@ -194,3 +194,15 @@ html[dir=rtl] #secondaryToolbarToggle {
     display: inherit;
   }
 }
+
+.offscreen {
+  position: fixed !important;
+  left: -9999px !important;
+  display: block !important;
+  width: 3000px !important;
+}
+
+.offscreen #sidebarContainer {
+  top: 1000px !important;
+}
+

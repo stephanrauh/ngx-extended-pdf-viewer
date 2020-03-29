@@ -138,5 +138,5 @@
 - 2.1.1 #200 simplified and improved the implementation
 - 2.1.2 #237 fixed the circular dependency introduced with #200
 - 2.2.0-beta.0 #235 tentative implementation of the rotate buttons (preliminary implementation; icons are subject to change)
-- 2.2.0-beta.0 #235 tentative implementation of the rotate buttons (preliminary implementation; icons are subject to change)
 - 2.2.0-beta.1 #235 tentative implementation of the rotate buttons (preliminary implementation)
+- 3.0.0-beta.0 #233 update to pdf.js 2.4.456; #235 shifted several buttons from the kebab menu to the main toolbar if available real estate allows; #239 fixed `(zoom)` (textual values like `auto`, `page-width`, `page-fit`, and `page-actual` should never be overwritten by numeric values)

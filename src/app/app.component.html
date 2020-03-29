@@ -150,6 +150,8 @@
       <mat-checkbox class="margin" [(ngModel)]="zoomPageWidth" matTooltip="Changes apply after switching to another PDF file"
         >[(zoom)]="'page-width'"</mat-checkbox
       >
+    </section>
+    <section>
       <div class="margin">resulting zoom factor: {{ zoom }}<br />zoom factor reported from the viewer: {{ currentZoomFactor }}</div>
     </section>
     <section class="section">
@@ -182,6 +184,7 @@
         [customFindbarButtons]="customFindbarButtons"
         [customFindbarInputArea]="customFindbarInputArea"
         [customSecondaryToolbar]="customSecondaryToolbar"
+        [startTabindex]="200"
         *ngIf="visible[0] && !hidden"
         [showBorders]="showBorders"
         printResolution="50"

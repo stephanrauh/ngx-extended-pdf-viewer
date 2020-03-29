@@ -1,39 +1,11 @@
 <link *ngIf="useBrowserLocale" rel="resource" type="application/l10n" href="assets/locale/locale.properties" origin="ngx-extended-pdf-viewer" />
-<div class="zoom" [style.height]="height" [style.minHeight]="minHeight">
+<div class="zoom" [style.height]="height" [style.minHeight]="minHeight" #root>
   <div class="html">
-    <div tabindex="1" class="loadingInProgress body" [style.backgroundColor]="backgroundColor">
+    <div class="loadingInProgress body" [style.backgroundColor]="backgroundColor">
       <div id="outerContainer" (window:resize)="onResize()">
         <pdf-sidebar [sidebarPositionTop]="sidebarPositionTop" [showSidebarButton]="showSidebarButton"></pdf-sidebar>
         <div id="mainContainer">
           <pdf-dummy-components></pdf-dummy-components>
-          <pdf-findbar
-            [findbarLeft]="findbarLeft"
-            [findbarTop]="findbarTop"
-            [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
-            [showFindButton]="showFindButton"
-            [customFindbarInputArea]="customFindbarInputArea"
-            [customFindbarButtons]="customFindbarButtons"
-          >
-          </pdf-findbar>
-          <pdf-secondary-toolbar #pdfSecondaryToolbarComponent
-            [customSecondaryToolbar]="customSecondaryToolbar"
-            [secondaryToolbarTop]="secondaryToolbarTop"
-            [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
-            [showPresentationModeButton]="showPresentationModeButton"
-            [showOpenFileButton]="showOpenFileButton"
-            [showPrintButton]="showPrintButton && enablePrint"
-            [showDownloadButton]="showDownloadButton"
-            [showBookmarkButton]="showBookmarkButton"
-            [showPagingButtons]="showPagingButtons"
-            [showRotateButton]="showRotateButton"
-            [showHandToolButton]="showHandToolButton"
-            [showScrollingButton]="showScrollingButton"
-            [showSpreadButton]="showSpreadButton"
-            [showPropertiesButton]="showPropertiesButton"
-            (spreadChange)="onSpreadChange($event)"
-            (secondaryMenuIsEmpty)="onSecondaryMenuIsEmpty($event)"
-          >
-          </pdf-secondary-toolbar>
 
           <pdf-toolbar
             [customToolbar]="customToolbar"
@@ -57,9 +29,40 @@
             (zoomChange)="emitZoomChange($event)"
 
           ></pdf-toolbar>
+
+          <pdf-secondary-toolbar #pdfSecondaryToolbarComponent
+            [customSecondaryToolbar]="customSecondaryToolbar"
+            [secondaryToolbarTop]="secondaryToolbarTop"
+            [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+            [showPresentationModeButton]="showPresentationModeButton"
+            [showOpenFileButton]="showOpenFileButton"
+            [showPrintButton]="showPrintButton && enablePrint"
+            [showDownloadButton]="showDownloadButton"
+            [showBookmarkButton]="showBookmarkButton"
+            [showPagingButtons]="showPagingButtons"
+            [showRotateButton]="showRotateButton"
+            [showHandToolButton]="showHandToolButton"
+            [showScrollingButton]="showScrollingButton"
+            [showSpreadButton]="showSpreadButton"
+            [showPropertiesButton]="showPropertiesButton"
+            (spreadChange)="onSpreadChange($event)"
+            (secondaryMenuIsEmpty)="onSecondaryMenuIsEmpty($event)"
+          >
+          </pdf-secondary-toolbar>
+
+          <pdf-findbar
+            [findbarLeft]="findbarLeft"
+            [findbarTop]="findbarTop"
+            [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+            [showFindButton]="showFindButton"
+            [customFindbarInputArea]="customFindbarInputArea"
+            [customFindbarButtons]="customFindbarButtons"
+          >
+          </pdf-findbar>
+
           <pdf-context-menu></pdf-context-menu>
 
-          <div id="viewerContainer" tabindex="0" [style.top]="viewerPositionTop">
+          <div id="viewerContainer" [style.top]="viewerPositionTop">
             <div id="viewer" class="pdfViewer" [style.backgroundColor]="backgroundColor"></div>
           </div>
 
