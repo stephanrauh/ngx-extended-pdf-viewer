@@ -87,7 +87,7 @@ function convertLines() {
     } else {
       const line2 = line.replace(/"/g, "'").trim(); // since pdf.js 2.4, the ES2015 uses double quotes
       if (line2.includes('function ') || line.startsWith('class ')) {
-        if (!line.includes('function ()')) {
+        if (!line.includes('function (')) {
           currentFunction = line;
           currentMethod = '';
         }
@@ -95,7 +95,7 @@ function convertLines() {
       if (line2.startsWith('_classCallCheck(') || line2.startsWith('class ')) {
         currentClass = line2;
       }
-      if (line2.startsWith('_updateUIState(')) {
+      if (line2.startsWith('_updateUIState(') || line2.startsWith('value: function _updateUIState() {')) {
         currentMethod = '_updateUIState';
       }
       if (line2.includes('_calculateMatch(pageIndex) {')) {
@@ -591,7 +591,8 @@ ${line}`;
             return;
           }`;
       } else if (currentMethod.includes('_updateUIState') && !currentClass.includes('PDFFindController')) {
-        if (indentAfter === 2) {
+        console.log("UIPPPPP" + indentAfter + " " + result.split('\n').length);
+        if (indentAfter === (es2015?2:3)) {
           let source = '';
           let info = '';
           if (currentClass.includes('SecondaryToolbar')) {

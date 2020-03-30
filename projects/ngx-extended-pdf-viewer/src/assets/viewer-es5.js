@@ -13378,6 +13378,13 @@ var SecondaryToolbar = /*#__PURE__*/function () {
       this.items.lastPage.disabled = this.pageNumber >= this.pagesCount;
       this.items.pageRotateCw.disabled = this.pagesCount === 0;
       this.items.pageRotateCcw.disabled = this.pagesCount === 0;
+
+    this.eventBus.dispatch("updateuistate", {
+        source: this,
+        widget: 'SecondaryToolbar',
+        pageNumber: this.pageNumber,
+        pagesCount: this.pagesCount
+    });
     }
   }, {
     key: "_bindClickListeners",
@@ -13991,6 +13998,15 @@ var Toolbar = /*#__PURE__*/function () {
           items.customScaleOption.selected = true;
         }
       });
+
+    this.eventBus.dispatch("updateuistate", {
+      source: this,
+      widget: 'Toolbar',
+      pageNumber,
+      pagesCount,
+      pageScaleValue,
+      pageScale
+    });
     }
   }, {
     key: "updateLoadingIndicatorState",
