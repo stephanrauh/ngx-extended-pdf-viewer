@@ -12022,7 +12022,7 @@ var AnnotationLayerBuilder = /*#__PURE__*/function () {
           annotations: annotations,
           page: _this.pdfPage,
           imageResourcesPath: _this.imageResourcesPath,
-          removePageBorders: this.removePageBorders, // #194
+          removePageBorders: _this.removePageBorders, // #194
           renderInteractiveForms: _this.renderInteractiveForms,
           linkService: _this.linkService,
           downloadManager: _this.downloadManager

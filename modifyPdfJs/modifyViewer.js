@@ -439,7 +439,11 @@ ${line}`;
         expectedChanges--;
         successfulChanges[52] = true;
       } else if (line2.includes('imageResourcesPath: this.imageResourcesPath,') || line2.includes('imageResourcesPath: _this.imageResourcesPath,')) {
-        line += '\n          removePageBorders: this.removePageBorders, // #194';
+        if (es2015) {
+          line += '\n          removePageBorders: this.removePageBorders, // #194';
+        } else {
+          line += '\n          removePageBorders: _this.removePageBorders, // #194';
+        }
         expectedChanges--;
         successfulChanges[53] = true;
       } else if (line2.includes("findField: document.getElementById('findInput'),")) {
