@@ -528,7 +528,6 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
 
   public emitZoomChange(value: string | number): void {
     this.zoomChange.emit(value);
-    console.log(value);
   }
 
   ngAfterViewInit() {
@@ -541,7 +540,6 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
 
   private assignTabindexes() {
     if (this.startTabindex) {
-      const start = performance.now();
       const r = this.root.nativeElement.cloneNode(true) as HTMLElement;
       r.classList.add('offscreen');
       this.showElementsRecursively(r);
@@ -560,8 +558,6 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
       for (let i = 0; i < sorted.length; i++) {
         sorted[i].element.tabIndex = this.startTabindex + i;
       }
-      const end = performance.now();
-      console.log('Duration: ' + (end - start));
     }
   }
 
