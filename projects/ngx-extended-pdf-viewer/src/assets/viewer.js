@@ -5797,7 +5797,7 @@ class PDFFindController {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-  
+
     const matches = [];
     const queryLen = query.length;
     let matchIdx = -queryLen;
@@ -5824,7 +5824,7 @@ class PDFFindController {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-  
+
     const matchesWithLength = [];
     var queryArray = (query.includes('\n')) ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g); // #201
 
@@ -11686,10 +11686,10 @@ class Toolbar {
     this.eventBus.dispatch("updateuistate", {
       source: this,
       widget: 'Toolbar',
-      pageNumber,
-      pagesCount,
-      pageScaleValue,
-      pageScale
+      pageNumber: pageNumber,
+      pagesCount: pagesCount,
+      pageScaleValue: pageScaleValue,
+      pageScale: pageScale
     });
   }
 
@@ -11921,7 +11921,7 @@ function getDefaultPreferences() {
       "historyUpdateUrl": false,
       "ignoreDestinationZoom": false,
       "pdfBugEnabled": false,
-      "removePageBorders": false,// #194 
+      "removePageBorders": false,// #194
       "renderer": "canvas",
       "renderInteractiveForms": false,
       "sidebarViewOnLoad": -1,

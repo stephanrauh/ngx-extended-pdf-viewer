@@ -591,9 +591,7 @@ ${line}`;
             return;
           }`;
       } else if (currentMethod.includes('_updateUIState') && !currentClass.includes('PDFFindController')) {
-        console.log("UIPPPPP" + indentAfter + " " + result.split('\n').length);
         if (indentAfter === (es2015?2:3)) {
-          let source = '';
           let info = '';
           if (currentClass.includes('SecondaryToolbar')) {
             info = `, {
@@ -606,10 +604,10 @@ ${line}`;
             info = `, {
       source: this,
       widget: 'Toolbar',
-      pageNumber,
-      pagesCount,
-      pageScaleValue,
-      pageScale`;
+      pageNumber: pageNumber,
+      pagesCount: pagesCount,
+      pageScaleValue: pageScaleValue,
+      pageScale: pageScale`;
         }
           line = `
     this.eventBus.dispatch("updateuistate"` + info + `

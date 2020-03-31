@@ -142,3 +142,4 @@
 - 3.0.0-beta.0 #233 update to pdf.js 2.4.456; #235 shifted several buttons from the kebab menu to the main toolbar if available real estate allows; #239 fixed `(zoom)` (textual values like `auto`, `page-width`, `page-fit`, and `page-actual` should never be overwritten by numeric values)
 - 3.0.0-beta.1 #241 calculate the tab index programmatically; #233 made the find buttons visible again
 - 3.0.0-beta.2 #239 improved IE11 compatibility; #246 fixed a broken SVG image; #235 activate or deactivate buttton depending on the UI state in IE11
+- 3.0.0-beta.3 #248 IE11 compatibility

@@ -14002,10 +14002,10 @@ var Toolbar = /*#__PURE__*/function () {
     this.eventBus.dispatch("updateuistate", {
       source: this,
       widget: 'Toolbar',
-      pageNumber,
-      pagesCount,
-      pageScaleValue,
-      pageScale
+      pageNumber: pageNumber,
+      pagesCount: pagesCount,
+      pageScaleValue: pageScaleValue,
+      pageScale: pageScale
     });
     }
   }, {
