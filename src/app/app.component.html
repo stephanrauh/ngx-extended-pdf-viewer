@@ -1,3 +1,19 @@
+<ng-template #additionalButtons>
+  <div id="toolbarViewer">
+      <div id="toolbarViewerLeft">
+          <pdf-toggle-sidebar></pdf-toggle-sidebar>
+          <div class="toolbarButtonSpacer"></div>
+          <pdf-paging-area></pdf-paging-area>
+      </div>
+      <div id="toolbarViewerRight">
+          <button type="button" class="toolbarButton fas fa-print"></button>
+          <div class="verticalToolbarSeparator hiddenSmallView"></div>
+          <pdf-toggle-secondary-toolbar></pdf-toggle-secondary-toolbar>
+      </div>
+      <pdf-zoom-toolbar></pdf-zoom-toolbar>
+  </div>
+</ng-template>
+
 <ng-template #customSecondaryToolbar>
   <div
   id="secondaryToolbar"
@@ -181,9 +197,7 @@
   <mat-tab label="fancy PDF (low print res)">
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
-        [customFindbarButtons]="customFindbarButtons"
-        [customFindbarInputArea]="customFindbarInputArea"
-        [customSecondaryToolbar]="customSecondaryToolbar"
+        [customToolbar]="additionalButtons"
         [startTabindex]="200"
         *ngIf="visible[0] && !hidden"
         [showBorders]="showBorders"

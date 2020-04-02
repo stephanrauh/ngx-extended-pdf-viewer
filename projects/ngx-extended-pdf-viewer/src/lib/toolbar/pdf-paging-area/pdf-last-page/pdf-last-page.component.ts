@@ -1,5 +1,5 @@
 import { PDFNotificationService } from './../../../pdf-notification-service';
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IPDFViewerApplication } from '../../../options/pdf-viewer-application';
 import { UpdateUIStateEvent } from '../../../events/update-ui-state-event';
 
@@ -10,6 +10,9 @@ import { UpdateUIStateEvent } from '../../../events/update-ui-state-event';
 })
 export class PdfLastPageComponent {
   public disableLastPage = true;
+
+  @ViewChild('button')
+  private button: ElementRef<HTMLButtonElement>;
 
   constructor(private notificationService: PDFNotificationService) {
     const subscription = this.notificationService.onPDFJSInit.subscribe(() => {
@@ -25,11 +28,12 @@ export class PdfLastPageComponent {
 
   public onPdfJsInit(): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.on('updateuistate', (event) => this.updateUIState(event));
+    PDFViewerApplication.eventBus.on('updateuistate', event => this.updateUIState(event));
   }
 
   public updateUIState(event: UpdateUIStateEvent): void {
     this.disableLastPage = event.pageNumber === event.pagesCount;
+    this.button.nativeElement.disabled = this.disableLastPage;
   }
 
   public lastPage(): void {

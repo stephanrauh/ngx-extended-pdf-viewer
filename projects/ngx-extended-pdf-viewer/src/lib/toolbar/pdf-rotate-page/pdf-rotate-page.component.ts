@@ -1,5 +1,5 @@
 import { PDFNotificationService } from './../../pdf-notification-service';
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef } from '@angular/core';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { UpdateUIStateEvent } from '../../events/update-ui-state-event';
 
@@ -13,6 +13,12 @@ export class PdfRotatePageComponent  {
   public showRotateButton = true;
 
   public disableRotate = true;
+
+  @ViewChild('button1')
+  private button1: ElementRef<HTMLButtonElement>;
+
+  @ViewChild('button2')
+  private button2: ElementRef<HTMLButtonElement>;
 
   constructor(private notificationService: PDFNotificationService) {
     const subscription = this.notificationService.onPDFJSInit.subscribe(() => {
@@ -39,5 +45,7 @@ export class PdfRotatePageComponent  {
 
   public updateUIState(event: UpdateUIStateEvent): void {
     this.disableRotate = event.pagesCount === 0;
+    this.button1.nativeElement.disabled = this.disableRotate;
+    this.button2.nativeElement.disabled = this.disableRotate;
   }
 }

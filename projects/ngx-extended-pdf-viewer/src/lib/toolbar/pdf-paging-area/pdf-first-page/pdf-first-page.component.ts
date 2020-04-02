@@ -1,5 +1,5 @@
 import { PDFNotificationService } from './../../../pdf-notification-service';
-import { Component} from '@angular/core';
+import { Component, ViewChild, ElementRef} from '@angular/core';
 import { IPDFViewerApplication } from '../../../options/pdf-viewer-application';
 import { UpdateUIStateEvent } from '../../../events/update-ui-state-event';
 
@@ -10,6 +10,9 @@ import { UpdateUIStateEvent } from '../../../events/update-ui-state-event';
 })
 export class PdfFirstPageComponent {
   public disableFirstPage = true;
+
+  @ViewChild('button')
+  private button: ElementRef<HTMLButtonElement>;
 
   constructor(private notificationService: PDFNotificationService) {
     const subscription = this.notificationService.onPDFJSInit.subscribe(() => {
@@ -30,5 +33,6 @@ export class PdfFirstPageComponent {
 
   public updateUIState(event: UpdateUIStateEvent): void {
     this.disableFirstPage = event.pageNumber <= 1;
+    this.button.nativeElement.disabled = this.disableFirstPage;
   }
 }
