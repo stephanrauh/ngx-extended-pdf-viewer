@@ -1,4 +1,5 @@
 <link *ngIf="useBrowserLocale" rel="resource" type="application/l10n" href="assets/locale/locale.properties" origin="ngx-extended-pdf-viewer" />
+<pdf-dynamic-css [zoom]="mobileFriendlyZoomScale" [width]="toolbarWidthInPixels"></pdf-dynamic-css>
 <div class="zoom" [style.height]="height" [style.minHeight]="minHeight" #root>
   <div class="html">
     <div class="loadingInProgress body" [style.backgroundColor]="backgroundColor">

@@ -27,7 +27,7 @@
         type="button"
         id="secondaryOpenFile"
         [class.invisible]="!showOpenFileButton"
-        class="secondaryToolbarButton visibleLargeView"
+        class="secondaryToolbarButton visibleMediumView"
         title="Open File"
         data-l10n-id="open_file"
       >
@@ -40,7 +40,7 @@
       <button
         type="button"
         id="secondaryPrint"
-        class="secondaryToolbarButton visibleMediumView"
+        class="secondaryToolbarButton visibleSmallView"
         [class.invisible]="!showPrintButton"
         title="Print"
         data-l10n-id="print"
@@ -54,7 +54,7 @@
       <button
         type="button"
         id="secondaryDownload"
-        class="secondaryToolbarButton visibleMediumView"
+        class="secondaryToolbarButton visibleSmallView"
         [class.invisible]="!showDownloadButton"
         title="Download"
         data-l10n-id="download"
@@ -68,7 +68,7 @@
       <a
         href="#"
         id="secondaryViewBookmark"
-        class="secondaryToolbarButton bookmark visibleSmallView"
+        class="secondaryToolbarButton bookmark visibleTinyView"
         [class.invisible]="!showBookmarkButton"
         title="Current view (copy or open in new window)"
         data-l10n-id="bookmark"
@@ -85,7 +85,7 @@
         type="button"
         [class.invisible]="!showPagingButtons"
         id="firstPage"
-        class="secondaryToolbarButton firstPage visibleSmallView"
+        class="secondaryToolbarButton firstPage visibleLargeView"
         title="Go to First Page"
         data-l10n-id="first_page"
       >
@@ -98,7 +98,7 @@
         type="button"
         [class.invisible]="!showPagingButtons"
         id="lastPage"
-        class="secondaryToolbarButton lastPage visibleSmallView"
+        class="secondaryToolbarButton lastPage visibleLargeView"
         title="Go to Last Page"
         data-l10n-id="last_page"
       >

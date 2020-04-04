@@ -193,7 +193,7 @@
     </section>
   </mat-card-content>
 </mat-card>
-<mat-tab-group (selectedTabChange)="activateTab($event.index)">
+<mat-tab-group (selectedTabChange)="activateTab($event.index)" [selectedIndex]="1">
   <mat-tab label="fancy PDF (low print res)">
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
@@ -247,6 +247,7 @@
       >
       <ngx-extended-pdf-viewer
         *ngIf="visible[1] && !hidden"
+        [ignoreResponsiveCSS]="false"
         printResolution="150"
         [showBorders]="showBorders"
         [src]="'assets/pdfs/codpaste-teachingpack.pdf'"

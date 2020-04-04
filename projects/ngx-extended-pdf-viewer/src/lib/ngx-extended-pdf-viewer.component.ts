@@ -13,7 +13,8 @@ import {
   TemplateRef,
   Inject,
   PLATFORM_ID,
-  ViewChild
+  ViewChild,
+  OnInit
 } from '@angular/core';
 import { PagesLoadedEvent } from './events/pages-loaded-event';
 import { PageRenderedEvent } from './events/page-rendered-event';
@@ -21,15 +22,6 @@ import { PdfDownloadedEvent } from './events/pdf-downloaded-event';
 import { PdfLoadedEvent } from './events/pdf-loaded-event';
 import { defaultOptions } from './options/default-options';
 import { ScaleChangingEvent } from './events/scale-changing-event';
-import {
-  resizeUpTo900px,
-  resizeUpTo840px,
-  resizeUpTo770px,
-  resizeUpTo700px,
-  resizeUpTo640px,
-  resizeUpTo535px,
-  removeDynamicCSS
-} from './ResponsiveCSSSimulation';
 import { PagesRotationEvent } from './events/pages-rotation-event';
 import { FileInputChanged } from './events/file-input-changed';
 import { SidebarviewChange } from './events/sidebarview-changed';
@@ -65,7 +57,7 @@ interface ElementAndPosition {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   public static ngxExtendedPdfViewerInitialized = false;
 
   /**
@@ -105,8 +97,6 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
   @Output()
   public srcChange = new EventEmitter<string>();
 
-  private resizeTimeout: any = null;
-
   @Input()
   public contextMenuAllowed = true;
 
@@ -130,9 +120,6 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
    */
   @Input()
   public delayFirstView = 0;
-
-  @Input()
-  public ignoreResponsiveCSS: boolean | undefined = undefined;
 
   /** store the timeout id so it can be canceled if user leaves the page before the PDF is shown */
   private initTimeout: any;
@@ -402,6 +389,8 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
 
   public toolbarWidth = '100%';
 
+  public toolbarWidthInPixels = 100;
+
   public secondaryToolbarTop: string | undefined = undefined;
 
   // dirty IE11 hack - temporary solution
@@ -530,6 +519,10 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
     this.zoomChange.emit(value);
   }
 
+  ngOnInit() {
+    this.onResize();
+  }
+
   ngAfterViewInit() {
     if ((window as any).webViewerLoad) {
       this.doInitPDFViewer();
@@ -569,11 +562,13 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
     root.classList.remove('hiddenLargeView');
     root.classList.remove('hiddenMediumView');
     root.classList.remove('hiddenSmallView');
+    root.classList.remove('hiddenTinyView');
     root.classList.remove('visibleXXLView');
     root.classList.remove('visibleXLView');
     root.classList.remove('visibleLargeView');
     root.classList.remove('visibleMediumView');
     root.classList.remove('visibleSmallView');
+    root.classList.remove('visibleTinyView');
 
     if (root instanceof HTMLButtonElement || root instanceof HTMLAnchorElement || root instanceof HTMLInputElement || root instanceof HTMLSelectElement) {
       return;
@@ -609,20 +604,6 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
   }
 
   private doInitPDFViewer() {
-    if (this.ignoreResponsiveCSS === undefined) {
-      const pdfViewer = document.getElementsByClassName('html');
-      if (pdfViewer && pdfViewer.length > 0) {
-        const toolbar = pdfViewer[0].getElementsByClassName('toolbar');
-        if (toolbar && toolbar.length > 0) {
-          const width = toolbar[0].clientWidth;
-          if (window.innerWidth - width > 50) {
-            this.ignoreResponsiveCSS = true;
-          } else {
-            this.ignoreResponsiveCSS = false;
-          }
-        }
-      }
-    }
     const langLinks = document.querySelectorAll('link[type="application/l10n"]');
     const langCount = langLinks.length;
 
@@ -1173,13 +1154,8 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
       }
       this.calcViewerPositionTop();
     }
-    if ('ignoreResponsiveCSS' in changes) {
-      if (this.ignoreResponsiveCSS) {
-        this.onResize();
-      } else {
-        removeDynamicCSS();
-      }
-    }
+    this.onResize();
+
     if ('printResolution' in changes) {
       const options = PDFViewerApplicationOptions;
       if (options) {
@@ -1276,25 +1252,13 @@ export class NgxExtendedPdfViewerComponent implements AfterViewInit, OnChanges, 
   }
 
   public onResize(): void {
-    if (this.ignoreResponsiveCSS) {
-      clearTimeout(this.resizeTimeout);
-      this.resizeTimeout = setTimeout(() => this.doResize(this.secondaryToolbarComponent), 100);
-    }
-  }
-
-  private doResize(secondaryToolbarComponent: PdfSecondaryToolbarComponent): void {
     const pdfViewer = document.getElementsByClassName('html');
     if (pdfViewer && pdfViewer.length > 0) {
       const container = document.getElementById('outerContainer');
       if (container) {
         const width = container.clientWidth;
-        resizeUpTo900px(width);
-        resizeUpTo840px(width);
-        resizeUpTo770px(container, width);
-        resizeUpTo700px(container, width);
-        resizeUpTo640px(container, width);
-        resizeUpTo535px(width);
-        secondaryToolbarComponent.checkVisibility();
+        this.toolbarWidthInPixels = width;
+        this.secondaryToolbarComponent.checkVisibility();
       }
     }
   }

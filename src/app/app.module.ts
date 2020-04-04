@@ -15,20 +15,13 @@ import { MatTabsModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import {
-  NgxExtendedPdfViewerModule,
-  PdfFindPreviousComponent,
-  PdfFindNextComponent,
-  PdfSearchInputFieldComponent,
-  PdfSplitToolbarButtonComponent
+  NgxExtendedPdfViewerModule
 } from 'projects/ngx-extended-pdf-viewer/src/public_api';
 import { FormsModule } from '@angular/forms';
 import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ModalDialogComponent,
-  ],
+  declarations: [AppComponent, ModalDialogComponent],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,

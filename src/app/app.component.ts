@@ -14,8 +14,8 @@ export class AppComponent {
   public pdf = 'assets/example.pdf';
   public hidden = false;
   public zoom: number | string | undefined = 'auto';
-  public visible = { 0: true };
-  public mobileFriendlyZoomPercent = false;
+  public visible = { 1: true };
+  public mobileFriendlyZoomPercent = "200%";
   public currentZoomFactor: number;
   public showSidebarButton = false;
   public sidebarVisible = undefined;

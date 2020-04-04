@@ -50,6 +50,7 @@ import { PdfZoomInComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-in/pdf-z
 import { PdfZoomOutComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-out/pdf-zoom-out.component';
 import { PdfZoomToolbarComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-toolbar.component';
 import { PdfSelectToolComponent } from './toolbar/pdf-select-tool/pdf-select-tool.component';
+import { DynamicCssComponent } from './dynamic-css/dynamic-css.component';
 
 
 function isKeyIgnored(cmd: number, keycode: number | 'WHEEL'): boolean {
@@ -173,6 +174,7 @@ if (typeof window !== 'undefined') {
 @NgModule({
   imports: [CommonModule, FormsModule],
   declarations: [
+    DynamicCssComponent,
     NgxExtendedPdfViewerComponent,
     PdfZoomDropdownComponent,
     PdfContextMenuComponent,

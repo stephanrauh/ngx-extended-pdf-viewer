@@ -35,51 +35,8 @@ body[data-pdfjsprinting] #printContainer, body[data-pdfjsprinting] #printContain
   display: block !important;
 }
 
-.toolbarViewerMiddleBelow900px {
-  display: table;
-  margin: auto;
-  left: auto;
-  position: inherit;
-  -webkit-transform: none;
-  transform: none;
-}
-
 #outerContainer {
   clip-path: inset(0 0 0 0);
-}
-
-.below840px #sidebarContent {
-  background-color: hsla(0, 0%, 0%, 0.7);
-}
-
-.below840px html[dir='ltr'] #outerContainer.sidebarOpen #viewerContainer {
-  left: 0px !important;
-}
-.below840px html[dir='rtl'] #outerContainer.sidebarOpen #viewerContainer {
-  right: 0px !important;
-}
-
-.below840px #outerContainer .visibleLargeView,
-.below770px #outerContainer .visibleMediumView,
-.below640px #outerContainer .visibleSmallView {
-  display: block;
-}
-
-.below700px #outerContainer .hiddenMediumView {
-  display: hidden;
-}
-.below700px #outerContainer .visibleMediumView {
-  display: block;
-}
-
-.toolbarButtonSpacer.below640px {
-  width: 0;
-}
-html[dir='ltr'] .findbar.below640px {
-  left: 38px;
-}
-html[dir='rtl'] .findbar.below640px {
-  right: 38px;
 }
 
 @media print {
@@ -168,33 +125,6 @@ html[dir=rtl] #secondaryToolbarToggle {
   padding-right: 0;
 }
 
-
-.visibleXLView,  .visibleXXLView {
-  display: none;
-}
-
-.hiddenXLView, .hiddenXXLView {
-  display: unset;
-}
-
-@media all and (max-width: 880px) {
-  #outerContainer .hiddenXLView {
-    display: none;
-  }
-  #outerContainer .visibleXLView {
-    display: inherit;
-  }
-}
-
-@media all and (max-width: 990px) {
-  #outerContainer .hiddenXXLView {
-    display: none;
-  }
-  #outerContainer .visibleXXLView {
-    display: inherit;
-  }
-}
-
 .offscreen {
   position: fixed !important;
   left: -9999px !important;
@@ -206,3 +136,11 @@ html[dir=rtl] #secondaryToolbarToggle {
   top: 1000px !important;
 }
 
+.toolbarButton, .dropdownToolbarButton {
+  margin-left: -1px !important;
+  margin-right: -2px !important;
+}
+
+#numPages {
+  padding-right: 0;
+}
