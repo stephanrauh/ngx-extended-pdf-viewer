@@ -141,8 +141,9 @@
 - 2.2.0-beta.1 #235 tentative implementation of the rotate buttons (preliminary implementation)
 - 3.0.0-beta.0 #233 update to pdf.js 2.4.456; #235 shifted several buttons from the kebab menu to the main toolbar if available real estate allows; #239 fixed `(zoom)` (textual values like `auto`, `page-width`, `page-fit`, and `page-actual` should never be overwritten by numeric values)
 - 3.0.0-beta.1 #241 calculate the tab index programmatically; #233 made the find buttons visible again
-- 3.0.0-beta.2 #239 improved IE11 compatibility; #246 fixed a broken SVG image; #235 activate or deactivate buttton depending on the UI state in IE11
+- 3.0.0-beta.2 #239 improved IE11 compatibility; #246 fixed a broken SVG image; #235 activate or deactivate buttons depending on the UI state in IE11
 - 3.0.0-beta.3 #248 IE11 compatibility
 - 3.0.0-beta.4 #248 update the state of the "first page", "last page", and the "rotate page" buttons 
 - 3.0.0-beta.5 #253 corrected a wrong interface; #251 slightly improved icon alignment (but responsive CSS is still broken with certain resolutions, so it's subject to change)
 - 3.0.0-beta.6 #235 improved and simplified the responsive CSS; got rid of the property `[ignoreResponsiveCSS]`
+- 3.0.0-beta.7 #235 hide and show the hand tool button and the select tool button only if the text layer is available
