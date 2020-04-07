@@ -147,3 +147,4 @@
 - 3.0.0-beta.5 #253 corrected a wrong interface; #251 slightly improved icon alignment (but responsive CSS is still broken with certain resolutions, so it's subject to change)
 - 3.0.0-beta.6 #235 improved and simplified the responsive CSS; got rid of the property `[ignoreResponsiveCSS]`
 - 3.0.0-beta.7 #235 hide and show the hand tool button and the select tool button only if the text layer is available
+- 3.0.0-beta.8 #251 better alignment of the zoom select box; #256 prevent NPEs
