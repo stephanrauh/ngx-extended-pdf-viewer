@@ -144,3 +144,8 @@ html[dir=rtl] #secondaryToolbarToggle {
 #numPages {
   padding-right: 0;
 }
+
+/* issue 251 */
+.dropdownToolbarButton::after {
+  top: 8px;
+}
