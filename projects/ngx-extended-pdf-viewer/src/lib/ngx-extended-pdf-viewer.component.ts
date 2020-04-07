@@ -1258,7 +1258,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if (container) {
         const width = container.clientWidth;
         this.toolbarWidthInPixels = width;
-        this.secondaryToolbarComponent.checkVisibility();
+        if (this.secondaryToolbarComponent) {
+          this.secondaryToolbarComponent.checkVisibility();
+        }
       }
     }
   }
