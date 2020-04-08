@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
-import { Subject } from 'rxjs/internal/Subject';
+import { Subject } from 'rxjs';
 
 export interface FindOptions {
   highlightAll?: boolean;
