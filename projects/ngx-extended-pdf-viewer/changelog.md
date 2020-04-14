@@ -148,3 +148,5 @@
 - 3.0.0-beta.6 #235 improved and simplified the responsive CSS; got rid of the property `[ignoreResponsiveCSS]`
 - 3.0.0-beta.7 #235 hide and show the hand tool button and the select tool button only if the text layer is available
 - 3.0.0-beta.8 #251 better alignment of the zoom select box; #256 prevent NPEs
+- 3.0.0 #235 remove dynamic CSS when the component is destroyed; got rid of an accidental deep import of the rxjs Subject
+- 3.0.1 #260 bugfix: remove dynamic CSS properly

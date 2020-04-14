@@ -1,4 +1,4 @@
-# ngx-extended-pdf-viewer
+# ngx-extended-pdf-viewer (Easter edition)
 <p>
   <a href="https://www.npmjs.com/package/ngx-extended-pdf-viewer">
     <img src="https://img.shields.io/npm/dm/ngx-extended-pdf-viewer.svg?style=flat" alt="downloads">
@@ -11,6 +11,13 @@
   <p>
   CDN: <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">unpkg.com</a>
  </p>
+
+## Easter edition
+ BeyondJava.net and Pdfviewer.net wish you a happy Easter! That's a good reason to say "Thank you". Thank you, dear internet community, for downloading ngx-extended-pdf-viewer more than a quarter of a million times. Or 10.000 downloads each week. Not to mention your helpful bug reports, feature requests, and - last not least! - your positive feedback. You rock!
+
+ Version 3.0.0 comes with a slightly modified design. That's work in progress. The goal is to give you a highly customizable, easily themeable library with a fresh and modern look inspired my Material Design. As an unintended side-effect, it resembles the redesign called "Photon" of pdf.js.
+
+ Talking of which: if you're an UX- or UI-designer with some time to spear, don't hesitate to send me suggestions how to improve the look and feel of the library. Or send me your complaints if you don't my attempts at UI-design. I can't promise to implement every suggestion, but I'm looking forward to your valuable feedback!
 
 ## Showcase and manual
 

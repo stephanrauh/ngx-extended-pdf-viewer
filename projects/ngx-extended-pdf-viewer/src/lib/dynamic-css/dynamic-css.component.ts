@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, Inject, OnChanges, Input } from '@angular/core';
+import { Component, OnInit, Renderer2, Inject, OnChanges, Input, OnDestroy } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 @Component({
@@ -6,7 +6,7 @@ import { DOCUMENT } from '@angular/common';
   templateUrl: './dynamic-css.component.html',
   styleUrls: ['./dynamic-css.component.css']
 })
-export class DynamicCssComponent implements OnInit, OnChanges {
+export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   public zoom = 1.0;
 
@@ -195,5 +195,12 @@ export class DynamicCssComponent implements OnInit, OnChanges {
     styles.id = 'pdf-dynamic-css';
     styles.innerHTML = this.style;
     this.renderer.appendChild(this.document.head, styles);
+  }
+
+  public ngOnDestroy() {
+    const styles = this.document.getElementById('pdf-dynamic-css') as HTMLElement;
+    if (styles && styles.parentElement) {
+      (styles.parentElement as any).removeChild(styles);
+    }
   }
 }
