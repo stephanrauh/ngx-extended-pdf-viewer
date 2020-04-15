@@ -150,3 +150,4 @@
 - 3.0.0-beta.8 #251 better alignment of the zoom select box; #256 prevent NPEs
 - 3.0.0 #235 remove dynamic CSS when the component is destroyed; got rid of an accidental deep import of the rxjs Subject
 - 3.0.1 #260 bugfix: remove dynamic CSS properly
+- 3.1.0 #266 added `(textlayerRendered)`

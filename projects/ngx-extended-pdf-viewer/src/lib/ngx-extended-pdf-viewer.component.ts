@@ -39,6 +39,7 @@ import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-o
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
 import { PDFNotificationService } from './pdf-notification-service';
 import { PdfCursorTools } from './options/pdf-cursor-tools';
+import { TextlayerRenderedEvent } from './events/textlayer-rendered';
 
 if (typeof window !== 'undefined') {
   (window as any).deburr = deburr; // #177
@@ -364,6 +365,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public textLayer: boolean | undefined = undefined;
+
+  @Output()
+  public textlayerRendered = new EventEmitter<TextlayerRenderedEvent>();
 
   @Output()
   public updateFindMatchesCount = new EventEmitter<FindResultMatchesCount>();
@@ -883,6 +887,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
     this.initTimeout = null;
     this.selectCursorTool();
+
+    PDFViewerApplication.eventBus.on('textlayerrendered',
+      (x: TextlayerRenderedEvent) => this.textlayerRendered.emit(x)
+    );
+
     PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
       this.pagesLoaded.emit(x);
       if (this.rotation) {

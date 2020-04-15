@@ -4,6 +4,7 @@ import { NgxExtendedPdfViewerService } from 'ngx-extended-pdf-viewer';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
 import { PagesLoadedEvent, PageRenderedEvent, PdfDownloadedEvent, PdfLoadedEvent } from 'projects/ngx-extended-pdf-viewer/src/public_api';
+import { TextlayerRenderedEvent } from '../../projects/ngx-extended-pdf-viewer/src/lib/events/textlayer-rendered';
 
 @Component({
   selector: 'app-root',
@@ -257,6 +258,10 @@ export class AppComponent {
   }
 
   public onZoomChange(event: any): void {
+    console.log(event);
+  }
+
+  public onTextLayerRendered(event: TextlayerRenderedEvent): void {
     console.log(event);
   }
 }
