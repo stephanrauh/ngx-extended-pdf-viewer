@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 77;
+let expectedChanges = 78;
 
 const successfulChanges = {};
 for (let i = 1; i <= expectedChanges; i++) {
@@ -616,6 +616,10 @@ ${line}`;
           console.log(lineNumber + " " + result.split('\n').length+ " " + currentClass);
           currentMethod='';
         }
+      } else if (line.includes("subqueryLen = subquery.length")) {
+        line = line + `
+        if (subqueryLen === 0) continue;`;
+        successfulChanges[78] = true;
       }
 
       if (line != null) {

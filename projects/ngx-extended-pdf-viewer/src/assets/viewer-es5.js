@@ -7373,6 +7373,7 @@ var PDFFindController = /*#__PURE__*/function () {
       for (var i = 0, len = queryArray.length; i < len; i++) {
         var subquery = queryArray[i];
         var subqueryLen = subquery.length;
+        if (subqueryLen === 0) continue;
         var matchIdx = -subqueryLen;
 
         while (true) {

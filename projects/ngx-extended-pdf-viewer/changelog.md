@@ -151,4 +151,4 @@
 - 3.0.0 #235 remove dynamic CSS when the component is destroyed; got rid of an accidental deep import of the rxjs Subject
 - 3.0.1 #260 bugfix: remove dynamic CSS properly
 - 3.1.0 #266 added `(textlayerRendered)`
-- 3.1.1 #266 renamed `(textlayerRendered)` to an all camel-case `(textLayerRendered)` (while keeping the old variant to avoid a breaking change)
+- 3.1.1 #266 renamed `(textlayerRendered)` to an all camel-case `(textLayerRendered)` (while keeping the old variant to avoid a breaking change); #269 prevent a crash when the search term consists of a single empty line (i.e. if it equals `"\n"`)

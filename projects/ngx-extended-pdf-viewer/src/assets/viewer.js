@@ -5797,7 +5797,7 @@ class PDFFindController {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-
+  
     const matches = [];
     const queryLen = query.length;
     let matchIdx = -queryLen;
@@ -5824,13 +5824,14 @@ class PDFFindController {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-
+  
     const matchesWithLength = [];
     var queryArray = (query.includes('\n')) ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g); // #201
 
     for (let i = 0, len = queryArray.length; i < len; i++) {
       const subquery = queryArray[i];
       const subqueryLen = subquery.length;
+        if (subqueryLen === 0) continue;
       let matchIdx = -subqueryLen;
 
       while (true) {
@@ -11921,7 +11922,7 @@ function getDefaultPreferences() {
       "historyUpdateUrl": false,
       "ignoreDestinationZoom": false,
       "pdfBugEnabled": false,
-      "removePageBorders": false,// #194
+      "removePageBorders": false,// #194 
       "renderer": "canvas",
       "renderInteractiveForms": false,
       "sidebarViewOnLoad": -1,
