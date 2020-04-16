@@ -14,7 +14,7 @@ import {
   Inject,
   PLATFORM_ID,
   ViewChild,
-  OnInit
+  OnInit,
 } from '@angular/core';
 import { PagesLoadedEvent } from './events/pages-loaded-event';
 import { PageRenderedEvent } from './events/page-rendered-event';
@@ -56,7 +56,7 @@ interface ElementAndPosition {
   templateUrl: './ngx-extended-pdf-viewer.component.html',
   styleUrls: ['./viewer-with-images-2.2.css', './ngx-extended-pdf-viewer.component.css'],
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   public static ngxExtendedPdfViewerInitialized = false;
@@ -366,8 +366,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public textLayer: boolean | undefined = undefined;
 
+  /** deprecated */
   @Output()
   public textlayerRendered = new EventEmitter<TextlayerRenderedEvent>();
+
+  @Output()
+  public textLayerRendered = new EventEmitter<TextlayerRenderedEvent>();
 
   @Output()
   public updateFindMatchesCount = new EventEmitter<FindResultMatchesCount>();
@@ -592,7 +596,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       const elementAndPos = {
         element: original,
         x: Math.round(rect.left),
-        y: Math.round(rect.top)
+        y: Math.round(rect.top),
       } as ElementAndPosition;
       elements.push(elementAndPos);
     } else if (copy.childElementCount > 0) {
@@ -636,7 +640,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         );
       }
     }
-    const callback = e => {
+    const callback = (e) => {
       document.removeEventListener('localized', callback);
       this.initTimeout = setTimeout(() => {
         this.afterLibraryInit();
@@ -645,11 +649,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }, this.delayFirstView);
     };
 
-    window.addEventListener('afterprint', event => {
+    window.addEventListener('afterprint', (event) => {
       this.afterPrint.emit();
     });
 
-    window.addEventListener('beforeprint', event => {
+    window.addEventListener('beforeprint', (event) => {
       this.beforePrint.emit();
     });
 
@@ -883,14 +887,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized = true;
     this.onResize();
     if (!this.listenToURL) {
-      PDFViewerApplication.pdfLinkService.setHash = function() {};
+      PDFViewerApplication.pdfLinkService.setHash = function () {};
     }
     this.initTimeout = null;
     this.selectCursorTool();
 
-    PDFViewerApplication.eventBus.on('textlayerrendered',
-      (x: TextlayerRenderedEvent) => this.textlayerRendered.emit(x)
-    );
+    PDFViewerApplication.eventBus.on('textlayerrendered', (x: TextlayerRenderedEvent) => {
+      this.textlayerRendered.emit(x); // deprecated - kept to avoid a breaking change
+      this.textLayerRendered.emit(x);
+    });
 
     PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
       this.pagesLoaded.emit(x);
@@ -995,7 +1000,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (!!this._src) {
       const options = {
         password: this.password,
-        verbosity: this.logLevel
+        verbosity: this.logLevel,
       };
       PDFViewerApplication.onError = (error: Error) => this.pdfLoadingFailed.emit(error);
       PDFViewerApplication.open(this._src, options).then(() => this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount }));
@@ -1208,7 +1213,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             source: viewer,
             // tslint:disable-next-line:no-bitwise
             scale: (Number(this.zoom) | 100) / 100,
-            presetValue: this.zoom
+            presetValue: this.zoom,
           } as ScaleChangingEvent;
           PDFViewerApplication.eventBus.dispatch('scalechanging', zoomEvent);
         }
