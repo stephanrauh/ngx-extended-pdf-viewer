@@ -498,8 +498,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (isPlatformBrowser(this.platformId)) {
       if (!window['pdfjs-dist/build/pdf']) {
         const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
+        const isEdge = /Edge\/\d./i.test(navigator.userAgent);
+
         const script = document.createElement('script');
-        script.src = isIE ? 'assets/pdf-es5.js' : 'assets/pdf.js';
+        script.src = isIE || isEdge ? 'assets/pdf-es5.js' : 'assets/pdf.js';
         script.type = 'text/javascript';
         script.async = true;
         document.getElementsByTagName('head')[0].appendChild(script);
@@ -515,8 +517,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       setTimeout(() => this.loadViewer(), 25);
     } else {
       const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
+      const isEdge = /Edge\/\d./i.test(navigator.userAgent);
       const script2 = document.createElement('script');
-      script2.src = isIE ? 'assets/viewer-es5.js' : 'assets/viewer.js';
+      script2.src = isIE || isEdge ? 'assets/viewer-es5.js' : 'assets/viewer.js';
       script2.type = 'text/javascript';
       script2.async = true;
       document.getElementsByTagName('head')[0].appendChild(script2);

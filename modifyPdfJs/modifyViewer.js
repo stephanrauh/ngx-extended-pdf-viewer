@@ -25,7 +25,7 @@ let es2015 = false;
 let version2_4 = true;
 let lines = [];
 lineReader
-  .on('line', function(line) {
+  .on('line', function (line) {
     lines.push(line);
     if (line.includes('function ') || line.startsWith('class ')) {
       if (line.startsWith('class ')) {
@@ -37,7 +37,7 @@ lineReader
       }
     }
   })
-  .on('close', function() {
+  .on('close', function () {
     addPolyfills();
     convertLines();
     const filename = es2015 ? 'viewer.js' : 'viewer-es5.js';
@@ -56,6 +56,10 @@ lineReader
 
 function addPolyfills() {
   if (!es2015) {
+    result += `if (!HTMLCollection.prototype[Symbol.iterator]) {
+  HTMLCollection.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
+}
+    `;
     result += '(function () {\n';
     result += '\n';
     result += "  if ( typeof window.CustomEvent === 'function' ) return false;\n";
@@ -75,12 +79,12 @@ function addPolyfills() {
 function convertLines() {
   let indentAfter = 0;
   let lineNumber = 0;
-  let currentMethod='';
+  let currentMethod = '';
   let currentClass = '';
   lines.forEach(line => {
     lineNumber++;
-    indentAfter += line.split('{').length -1;
-    indentAfter -= line.split('}').length -1;
+    indentAfter += line.split('{').length - 1;
+    indentAfter -= line.split('}').length - 1;
     if (dropLines > 0) {
       dropLines--;
       //      console.log('Dropping ' + line);
@@ -591,7 +595,7 @@ ${line}`;
             return;
           }`;
       } else if (currentMethod.includes('_updateUIState') && !currentClass.includes('PDFFindController')) {
-        if (indentAfter === (es2015?2:3)) {
+        if (indentAfter === (es2015 ? 2 : 3)) {
           let info = '';
           if (currentClass.includes('SecondaryToolbar')) {
             info = `, {
@@ -608,13 +612,13 @@ ${line}`;
       pagesCount: pagesCount,
       pageScaleValue: pageScaleValue,
       pageScale: pageScale`;
-        }
+          }
           line = `
     this.eventBus.dispatch("updateuistate"` + info + `
     });
 ` + line;
-          console.log(lineNumber + " " + result.split('\n').length+ " " + currentClass);
-          currentMethod='';
+          console.log(lineNumber + " " + result.split('\n').length + " " + currentClass);
+          currentMethod = '';
         }
       } else if (line.includes("subqueryLen = subquery.length")) {
         line = line + `

@@ -1,4 +1,5 @@
 const _isIE11 = typeof window === 'undefined' ? false : !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
+const isEdge = /Edge\/\d./i.test(navigator.userAgent);
 
 export const defaultOptions = {
   cursorToolOnLoad: 0,
@@ -37,5 +38,5 @@ export const defaultOptions = {
   postMessageTransfers: true,
   verbosity: 1,
   workerPort: null,
-  workerSrc: _isIE11 ? './assets/pdf.worker-es5.js' : './assets/pdf.worker.js'
+  workerSrc: _isIE11 || isEdge ? './assets/pdf.worker-es5.js' : './assets/pdf.worker.js',
 };
