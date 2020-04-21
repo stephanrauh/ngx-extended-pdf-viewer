@@ -6,7 +6,6 @@ const requiredIds = [
   'numPages',
   'pageNumber',
   'scaleSelectContainer',
-  'scaleSelect',
   'customScaleOption',
   'previous',
   'next',
@@ -93,7 +92,8 @@ const requiredIds = [
   'errorClose',
   'errorMoreInfo',
   'errorShowMore',
-  'errorShowLess'
+  'errorShowLess',
+  'scaleSelectContainer'
 ];
 
 @Component({
@@ -123,6 +123,13 @@ export class PdfDummyComponentsComponent {
         this.dummyComponentsContainer.appendChild(dummy);
       }
     });
+
+    if (this.needsDummyWidget('scaleSelect')) {
+      const dummy = document.createElement('select');
+      dummy.id = 'scaleSelect';
+      dummy.className = 'invisible dummy-component';
+      this.dummyComponentsContainer.appendChild(dummy);
+    }
   }
 
   private needsDummyWidget(id: string): boolean {
