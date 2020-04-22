@@ -154,3 +154,4 @@
 - 3.2.0 #266 renamed `(textlayerRendered)` to an all camel-case `(textLayerRendered)` (while keeping the old variant to avoid a breaking change); #269 prevent a crash when the search term consists of a single empty line (i.e. if it equals `"\n"`)
 - 3.2.1 #261 improved compatiblilty to the pre-Chromium versions of Microsoft Edge
 - 3.2.2 #257 allow for custom toolbars without zoom dropdown
+- 3.2.3 #278 fixed an accidental deep import
