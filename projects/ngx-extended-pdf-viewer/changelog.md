@@ -155,3 +155,4 @@
 - 3.2.1 #261 improved compatiblilty to the pre-Chromium versions of Microsoft Edge
 - 3.2.2 #257 allow for custom toolbars without zoom dropdown
 - 3.2.3 #278 fixed an accidental deep import
+- 3.2.4 #284 support custom deploy URLs (i.e. `<base href="/some-path">`)

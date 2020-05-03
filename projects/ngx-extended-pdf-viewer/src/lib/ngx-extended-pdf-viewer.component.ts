@@ -40,6 +40,7 @@ import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-
 import { PDFNotificationService } from './pdf-notification-service';
 import { PdfCursorTools } from './options/pdf-cursor-tools';
 import { TextlayerRenderedEvent } from './events/textlayer-rendered';
+import { Location } from '@angular/common';
 
 if (typeof window !== 'undefined') {
   (window as any).deburr = deburr; // #177
@@ -494,14 +495,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
   }
 
-  constructor(private ngZone: NgZone, @Inject(PLATFORM_ID) private platformId, private notificationService: PDFNotificationService) {
+  constructor(private ngZone: NgZone, @Inject(PLATFORM_ID) private platformId, private notificationService: PDFNotificationService,
+              private location: Location) {
     if (isPlatformBrowser(this.platformId)) {
       if (!window['pdfjs-dist/build/pdf']) {
         const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
         const isEdge = /Edge\/\d./i.test(navigator.userAgent);
 
         const script = document.createElement('script');
-        script.src = isIE || isEdge ? 'assets/pdf-es5.js' : 'assets/pdf.js';
+        script.src = this.location.normalize(isIE || isEdge ? 'assets/pdf-es5.js' : 'assets/pdf.js');
         script.type = 'text/javascript';
         script.async = true;
         document.getElementsByTagName('head')[0].appendChild(script);
@@ -519,7 +521,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
       const isEdge = /Edge\/\d./i.test(navigator.userAgent);
       const script2 = document.createElement('script');
-      script2.src = isIE || isEdge ? 'assets/viewer-es5.js' : 'assets/viewer.js';
+      script2.src = this.location.normalize(isIE || isEdge ? 'assets/viewer-es5.js' : 'assets/viewer.js');
       script2.type = 'text/javascript';
       script2.async = true;
       document.getElementsByTagName('head')[0].appendChild(script2);

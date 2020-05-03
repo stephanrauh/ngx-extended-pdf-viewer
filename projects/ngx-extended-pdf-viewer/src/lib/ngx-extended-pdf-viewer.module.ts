@@ -1,7 +1,7 @@
 import { PdfHandToolComponent } from './toolbar/pdf-hand-tool/pdf-hand-tool.component';
 // tslint:disable:max-line-length
 
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
 import { NgModule } from '@angular/core';
@@ -221,7 +221,7 @@ if (typeof window !== 'undefined') {
     PdfZoomOutComponent,
     PdfDummyComponentsComponent
   ],
-  providers: [NgxExtendedPdfViewerService],
+  providers: [NgxExtendedPdfViewerService, Location, {provide: LocationStrategy, useClass: PathLocationStrategy}],
   exports: [
      PdfZoomDropdownComponent,
     PdfContextMenuComponent,

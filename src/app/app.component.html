@@ -207,7 +207,7 @@
         [ignoreKeyboard]="ignoreKeyboard"
         [contextMenuAllowed]="contextMenuAllowed"
         [logLevel]="0"
-        [src]="'assets/pdfs/links/Second-Sample-PDF-FILE1.pdf'"
+        [src]="rootFolder + '/assets/pdfs/links/Second-Sample-PDF-FILE1.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#ffffff"
         [enablePrint]="enablePrint"
@@ -248,7 +248,7 @@
         *ngIf="visible[1] && !hidden"
         printResolution="150"
         [showBorders]="showBorders"
-        [src]="'assets/pdfs/codpaste-teachingpack.pdf'"
+        [src]="rootFolder + '/assets/pdfs/codpaste-teachingpack.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#e8e8ef"
         [enablePrint]="enablePrint"
@@ -286,7 +286,7 @@
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
         *ngIf="visible[3] && !hidden"
-        [src]="'assets/pdfs/Math.pdf'"
+        [src]="rootFolder + '/assets/pdfs/Math.pdf'"
         (srcChange)="onSourceChange($event)"
         (textLayerRendered)="onTextLayerRendered($event)"
         backgroundColor="#e8e8ef"
@@ -323,7 +323,7 @@
       <ngx-extended-pdf-viewer
         *ngIf="visible[4] && !hidden"
         printResolution="150"
-        [src]="'assets/pdfs/hidden-layers.pdf'"
+        [src]="rootFolder + '/assets/pdfs/hidden-layers.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#ffffff"
         [enablePrint]="enablePrint"
@@ -362,7 +362,7 @@
       <ngx-extended-pdf-viewer
         *ngIf="visible[5] && !hidden"
         printResolution="150"
-        [src]="'assets/pdfs/pdf-sample.pdf'"
+        [src]="rootFolder + '/assets/pdfs/pdf-sample.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="blue"
         [enablePrint]="enablePrint"
@@ -438,7 +438,7 @@
       <ngx-extended-pdf-viewer
         *ngIf="visible[7] && !hidden"
         printResolution="150"
-        [src]="'assets/pdfs/encrypted-sample.pdf'"
+        [src]="rootFolder + '/assets/pdfs/encrypted-sample.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#e8e8ef"
         [enablePrint]="enablePrint"
@@ -475,7 +475,7 @@
       <ngx-extended-pdf-viewer
         *ngIf="visible[8] && !hidden"
         printResolution="150"
-        [src]="'assets/pdfs/ATS_TEST_PVC_2_1.pdf'"
+        [src]="rootFolder + '/assets/pdfs/ATS_TEST_PVC_2_1.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#e8e8ef"
         [enablePrint]="enablePrint"
@@ -514,7 +514,7 @@
       <ngx-extended-pdf-viewer
         *ngIf="visible[9] && !hidden"
         printResolution="150"
-        [src]="'assets/pdfs/excerpt.pdf'"
+        [src]="rootFolder + '/assets/pdfs/excerpt.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#e8e8ef"
         [enablePrint]="enablePrint"

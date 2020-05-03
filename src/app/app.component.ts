@@ -13,6 +13,7 @@ import { TextlayerRenderedEvent } from '../../projects/ngx-extended-pdf-viewer/s
 })
 export class AppComponent {
   public pdf = 'assets/example.pdf';
+  public rootFolder = location.href;
   public hidden = false;
   public zoom: number | string | undefined = 'auto';
   public visible = { 1: true };
