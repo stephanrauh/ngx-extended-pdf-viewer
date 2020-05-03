@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { pdfBase64 } from './pdfBase64';
 import { NgxExtendedPdfViewerService } from 'ngx-extended-pdf-viewer';
 import { MatDialog } from '@angular/material/dialog';
@@ -6,13 +6,15 @@ import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
 import { PagesLoadedEvent, PageRenderedEvent, PdfDownloadedEvent, PdfLoadedEvent } from 'projects/ngx-extended-pdf-viewer/src/public_api';
 import { TextlayerRenderedEvent } from '../../projects/ngx-extended-pdf-viewer/src/lib/events/textlayer-rendered';
 import { FormGroup, FormControl } from '@angular/forms';
+import { defaultOptions } from '../../projects/ngx-extended-pdf-viewer/src/lib/options/default-options';
+import { LinkTarget } from '../../projects/ngx-extended-pdf-viewer/src/lib/options/link-target';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   randomForm = new FormGroup({
     randomName: new FormControl(''),
@@ -204,6 +206,9 @@ export class AppComponent {
   }
 
   constructor(private ngxExtendedPdfViewerService: NgxExtendedPdfViewerService, public dialog: MatDialog) {}
+  ngOnInit(): void {
+    defaultOptions.externalLinkTarget = LinkTarget.BLANK;
+  }
 
   public openDialog(): void {
     this.hidden = true;
