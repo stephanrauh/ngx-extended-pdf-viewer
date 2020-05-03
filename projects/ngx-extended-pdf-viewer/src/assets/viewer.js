@@ -4761,6 +4761,7 @@ class PasswordPrompt {
 
   open() {
     this.overlayManager.open(this.overlayName).then(() => {
+      this.input.type="password";
       this.input.focus();
       let promptString;
 
@@ -4779,6 +4780,7 @@ class PasswordPrompt {
   close() {
     this.overlayManager.close(this.overlayName).then(() => {
       this.input.value = "";
+      this.input.type="";
     });
   }
 
@@ -5797,7 +5799,7 @@ class PDFFindController {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-  
+
     const matches = [];
     const queryLen = query.length;
     let matchIdx = -queryLen;
@@ -5824,7 +5826,7 @@ class PDFFindController {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-  
+
     const matchesWithLength = [];
     var queryArray = (query.includes('\n')) ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g); // #201
 
@@ -11922,7 +11924,7 @@ function getDefaultPreferences() {
       "historyUpdateUrl": false,
       "ignoreDestinationZoom": false,
       "pdfBugEnabled": false,
-      "removePageBorders": false,// #194 
+      "removePageBorders": false,// #194
       "renderer": "canvas",
       "renderInteractiveForms": false,
       "sidebarViewOnLoad": -1,

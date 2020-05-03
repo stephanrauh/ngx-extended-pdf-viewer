@@ -624,6 +624,12 @@ ${line}`;
         line = line + `
         if (subqueryLen === 0) continue;`;
         successfulChanges[78] = true;
+      } else if (line.includes("this.input.focus();")) {
+        line = '      this.input.type="password";\n' + line;
+        successfulChanges[79] = true;
+      } else if (line.includes('this.input.value = "";')) {
+        line = '      this.input.type="";\n' + line;
+        successfulChanges[79] = true;
       }
 
       if (line != null) {
