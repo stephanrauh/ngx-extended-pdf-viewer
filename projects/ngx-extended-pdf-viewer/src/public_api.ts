@@ -8,6 +8,7 @@ export * from './lib/pdf-notification-service';
 export * from './lib/ngx-extended-pdf-viewer.module';
 export * from './lib/options/default-options';
 export * from './lib/events/find-result';
+export * from './lib/options/link-target';
 export * from './lib/events/pages-loaded-event';
 export * from './lib/events/page-number-change';
 export * from './lib/events/page-rendered-event';
