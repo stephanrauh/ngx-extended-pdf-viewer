@@ -435,6 +435,9 @@
   </mat-tab>
   <mat-tab label="passing a password programatically" (click)="hideOtherPDFs()">
     <ng-template matTabContent>
+      <form [formGroup]="randomForm">
+        <input formControlName="randomName" />
+
       <ngx-extended-pdf-viewer
         *ngIf="visible[7] && !hidden"
         printResolution="150"
@@ -465,6 +468,7 @@
         [language]="language"
       >
       </ngx-extended-pdf-viewer>
+      </form>
     </ng-template>
   </mat-tab>
   <mat-tab (click)="hideOtherPDFs()">

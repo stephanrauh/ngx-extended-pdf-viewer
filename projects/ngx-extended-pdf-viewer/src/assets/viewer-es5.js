@@ -6104,6 +6104,7 @@ var PasswordPrompt = /*#__PURE__*/function () {
       var _this2 = this;
 
       this.overlayManager.open(this.overlayName).then(function () {
+        _this2.input.type="password";
         _this2.input.focus();
 
         var promptString;
@@ -6125,6 +6126,7 @@ var PasswordPrompt = /*#__PURE__*/function () {
       var _this3 = this;
 
       this.overlayManager.close(this.overlayName).then(function () {
+        _this3.input.type="";
         _this3.input.value = "";
       });
     }

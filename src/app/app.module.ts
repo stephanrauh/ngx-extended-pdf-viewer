@@ -17,7 +17,7 @@ import { AppComponent } from './app.component';
 import {
   NgxExtendedPdfViewerModule
 } from 'projects/ngx-extended-pdf-viewer/src/public_api';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
 
 @NgModule({
@@ -26,6 +26,7 @@ import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     NgxExtendedPdfViewerModule,
     MatButtonModule,
     MatCardModule,

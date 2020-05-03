@@ -5,7 +5,7 @@ const lineReader = require('readline').createInterface({
 });
 
 let result = '';
-let expectedChanges = 78;
+let expectedChanges = 80;
 
 const successfulChanges = {};
 for (let i = 1; i <= expectedChanges; i++) {
@@ -627,9 +627,15 @@ ${line}`;
       } else if (line.includes("this.input.focus();")) {
         line = '      this.input.type="password";\n' + line;
         successfulChanges[79] = true;
+      } else if (line.includes("_this2.input.focus();")) {
+        line = '        _this2.input.type="password";\n' + line;
+        successfulChanges[79] = true;
       } else if (line.includes('this.input.value = "";')) {
         line = '      this.input.type="";\n' + line;
-        successfulChanges[79] = true;
+        successfulChanges[80] = true;
+      } else if (line.includes('_this3.input.value = "";')) {
+        line = '        _this3.input.type="";\n' + line;
+        successfulChanges[80] = true;
       }
 
       if (line != null) {

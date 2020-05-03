@@ -156,3 +156,5 @@
 - 3.2.2 #257 allow for custom toolbars without zoom dropdown
 - 3.2.3 #278 fixed an accidental deep import
 - 3.2.4 #284 support custom deploy URLs (i.e. `<base href="/some-path">`)
+- 3.2.5 #277 prevent the password manager of the browser from activating when there's no password or when the PDF file is hidden
+

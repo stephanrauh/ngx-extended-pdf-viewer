@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
 import { PagesLoadedEvent, PageRenderedEvent, PdfDownloadedEvent, PdfLoadedEvent } from 'projects/ngx-extended-pdf-viewer/src/public_api';
 import { TextlayerRenderedEvent } from '../../projects/ngx-extended-pdf-viewer/src/lib/events/textlayer-rendered';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,11 @@ import { TextlayerRenderedEvent } from '../../projects/ngx-extended-pdf-viewer/s
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
+  randomForm = new FormGroup({
+    randomName: new FormControl(''),
+  });
+
   public pdf = 'assets/example.pdf';
   public rootFolder = location.href;
   public hidden = false;
