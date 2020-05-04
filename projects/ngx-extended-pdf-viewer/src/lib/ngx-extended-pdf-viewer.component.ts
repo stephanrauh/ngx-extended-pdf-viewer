@@ -39,7 +39,7 @@ import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-o
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
 import { PDFNotificationService } from './pdf-notification-service';
 import { PdfCursorTools } from './options/pdf-cursor-tools';
-import { TextlayerRenderedEvent } from './events/textlayer-rendered';
+import { TextLayerRenderedEvent } from './events/textlayer-rendered';
 import { Location } from '@angular/common';
 
 if (typeof window !== 'undefined') {
@@ -369,10 +369,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   /** deprecated */
   @Output()
-  public textlayerRendered = new EventEmitter<TextlayerRenderedEvent>();
+  public textlayerRendered = new EventEmitter<TextLayerRenderedEvent>();
 
   @Output()
-  public textLayerRendered = new EventEmitter<TextlayerRenderedEvent>();
+  public textLayerRendered = new EventEmitter<TextLayerRenderedEvent>();
 
   @Output()
   public updateFindMatchesCount = new EventEmitter<FindResultMatchesCount>();
@@ -897,7 +897,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.initTimeout = null;
     this.selectCursorTool();
 
-    PDFViewerApplication.eventBus.on('textlayerrendered', (x: TextlayerRenderedEvent) => {
+    PDFViewerApplication.eventBus.on('textlayerrendered', (x: TextLayerRenderedEvent) => {
       this.textlayerRendered.emit(x); // deprecated - kept to avoid a breaking change
       this.textLayerRendered.emit(x);
     });

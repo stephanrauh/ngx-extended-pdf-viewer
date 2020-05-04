@@ -18,6 +18,7 @@ export * from './lib/events/pdf-downloaded-event';
 export * from './lib/events/pdf-loaded-event';
 export * from './lib/events/scale-changing-event';
 export * from './lib/events/sidebarview-changed';
+export * from './lib/events/textlayer-rendered';
 export * from './lib/options/verbosity-level';
 export * from './lib/toolbar/pdf-findbar/pdf-find-next/pdf-find-next.component';
 export * from './lib/toolbar/pdf-findbar/pdf-search-input-field/pdf-search-input-field.component';
