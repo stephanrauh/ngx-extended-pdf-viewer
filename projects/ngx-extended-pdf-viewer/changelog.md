@@ -157,4 +157,4 @@
 - 3.2.3 #278 fixed an accidental deep import
 - 3.2.4 #284 support custom deploy URLs (i.e. `<base href="/some-path">`)
 - 3.2.5 #277 prevent the password manager of the browser from activating when there's no password or when the PDF file is hidden; #262 added the `LinkTarget` interface
-- 3.2.6 #268 added tge type definition for the `(textLayerRendered)` event
+- 3.2.6 #268 added tge type definition for the `(textLayerRendered)` event; #286 mark toggled button in the primary toolbar
