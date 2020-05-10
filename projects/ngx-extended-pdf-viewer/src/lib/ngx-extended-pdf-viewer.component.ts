@@ -145,7 +145,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public rotationChange = new EventEmitter<0 | 90 | 180 | 270>();
 
   @Input()
-  public set src(url: string | ArrayBuffer | Uint8Array) {
+  public set src(url: string | ArrayBuffer | Blob | Uint8Array) {
     if (url instanceof Uint8Array) {
       this._src = url.buffer;
     } else if (url instanceof Blob) {
