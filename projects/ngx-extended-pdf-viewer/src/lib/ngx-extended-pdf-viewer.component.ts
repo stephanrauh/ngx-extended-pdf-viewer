@@ -41,6 +41,7 @@ import { PDFNotificationService } from './pdf-notification-service';
 import { PdfCursorTools } from './options/pdf-cursor-tools';
 import { TextLayerRenderedEvent } from './events/textlayer-rendered';
 import { Location } from '@angular/common';
+import { PinchOnMobileSupport } from './pinch-on-mobile-support';
 
 if (typeof window !== 'undefined') {
   (window as any).deburr = deburr; // #177
@@ -72,6 +73,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @ViewChild('root')
   public root: ElementRef;
+
+  private pinchOnMobileSupport: PinchOnMobileSupport | undefined;
 
   /* UI templates */
   @Input()
@@ -130,6 +133,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
    * Legal values: VerbosityLevel.INFOS (= 5), VerbosityLevel.WARNINGS (= 1), VerbosityLevel.ERRORS (= 0) */
   @Input()
   public logLevel = VerbosityLevel.WARNINGS;
+
+  @Input()
+  public enablePinchOnMobile = false;
 
   public primaryMenuVisible = true;
 
@@ -495,8 +501,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
   }
 
-  constructor(private ngZone: NgZone, @Inject(PLATFORM_ID) private platformId, private notificationService: PDFNotificationService,
-              private location: Location) {
+  constructor(
+    private ngZone: NgZone,
+    @Inject(PLATFORM_ID) private platformId,
+    private notificationService: PDFNotificationService,
+    private location: Location
+  ) {
     if (isPlatformBrowser(this.platformId)) {
       if (!window['pdfjs-dist/build/pdf']) {
         const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
@@ -671,6 +681,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const onLoaded = () => {
       this.overrideDefaultSettings();
       document.removeEventListener('webviewerloaded', onLoaded);
+      debugger;
+      if (this.enablePinchOnMobile) {
+        this.pinchOnMobileSupport = new PinchOnMobileSupport(this.ngZone);
+      }
     };
     document.addEventListener('webviewerloaded', onLoaded);
 
@@ -1031,6 +1045,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.initTimeout = undefined;
     }
     if (PDFViewerApplication) {
+      if (this.pinchOnMobileSupport) {
+        this.pinchOnMobileSupport.destroyPinchZoom();
+        this.pinchOnMobileSupport = undefined;
+      }
+
       PDFViewerApplication.cleanup();
       PDFViewerApplication.close();
       if (PDFViewerApplication.printKeyDownListener) {
@@ -1162,6 +1181,21 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           PDFViewerApplication.spreadModeOnLoad = 0;
           PDFViewerApplication.pdfViewer.spreadMode = 0;
           this.onSpreadChange('off');
+        }
+      }
+
+      if ('enablePinchOnMobile' in changes) {
+        if (!changes['enablePinchOnMobile'].isFirstChange) {
+          if (changes['enablePinchOnMobile'].currentValue !== changes['enablePinchOnMobile'].previousValue) {
+            if (this.enablePinchOnMobile) {
+              this.pinchOnMobileSupport = new PinchOnMobileSupport(this.ngZone);
+            } else {
+              if (this.pinchOnMobileSupport) {
+                this.pinchOnMobileSupport.destroyPinchZoom();
+                this.pinchOnMobileSupport = undefined;
+              }
+            }
+          }
         }
       }
 

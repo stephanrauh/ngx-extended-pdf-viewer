@@ -159,3 +159,4 @@
 - 3.2.5 #277 prevent the password manager of the browser from activating when there's no password or when the PDF file is hidden; #262 added the `LinkTarget` interface
 - 3.2.6 #268 added the type definition for the `(textLayerRendered)` event; #286 mark toggled button in the primary toolbar
 - 3.2.7 #288 added `Blob` to the list of type of `[src]`
+- 3.3.0 #265 added `enablePinchOnMobile`
