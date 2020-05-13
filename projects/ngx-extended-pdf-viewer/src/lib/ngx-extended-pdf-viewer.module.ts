@@ -52,6 +52,9 @@ import { PdfZoomToolbarComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-too
 import { PdfSelectToolComponent } from './toolbar/pdf-select-tool/pdf-select-tool.component';
 import { DynamicCssComponent } from './dynamic-css/dynamic-css.component';
 
+if (!Promise['allSettled']) {
+  console.error("Please update zone.js to version 0.10.3 or higher. Otherwise, you'll see many messages complaining about Promise.allSettled.");
+}
 
 function isKeyIgnored(cmd: number, keycode: number | 'WHEEL'): boolean {
   const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
@@ -99,7 +102,7 @@ function isKeyInList(settings: Array<string>, cmd: number, keycode: number | 'WH
   if (!settings) {
     return true;
   }
-  return settings.some(keyDef => isKey(keyDef, cmd, keycode));
+  return settings.some((keyDef) => isKey(keyDef, cmd, keycode));
 }
 
 function isKey(keyDef: string, cmd: number, keycode: number | 'WHEEL'): boolean {
@@ -219,11 +222,11 @@ if (typeof window !== 'undefined') {
     PdfRotatePageComponent,
     PdfZoomInComponent,
     PdfZoomOutComponent,
-    PdfDummyComponentsComponent
+    PdfDummyComponentsComponent,
   ],
-  providers: [NgxExtendedPdfViewerService, Location, {provide: LocationStrategy, useClass: PathLocationStrategy}],
+  providers: [NgxExtendedPdfViewerService, Location, { provide: LocationStrategy, useClass: PathLocationStrategy }],
   exports: [
-     PdfZoomDropdownComponent,
+    PdfZoomDropdownComponent,
     PdfContextMenuComponent,
     PdfPresentationModeComponent,
     PdfOpenFileComponent,
@@ -264,8 +267,8 @@ if (typeof window !== 'undefined') {
     PdfPageNumberComponent,
     PdfZoomInComponent,
     PdfZoomOutComponent,
-    NgxExtendedPdfViewerComponent
-  ]
+    NgxExtendedPdfViewerComponent,
+  ],
 })
 export class NgxExtendedPdfViewerModule {
   constructor() {}
