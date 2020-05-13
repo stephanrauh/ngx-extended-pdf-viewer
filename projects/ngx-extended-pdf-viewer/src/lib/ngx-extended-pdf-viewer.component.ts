@@ -681,7 +681,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const onLoaded = () => {
       this.overrideDefaultSettings();
       document.removeEventListener('webviewerloaded', onLoaded);
-      debugger;
       if (this.enablePinchOnMobile) {
         this.pinchOnMobileSupport = new PinchOnMobileSupport(this.ngZone);
       }
@@ -1185,7 +1184,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
 
       if ('enablePinchOnMobile' in changes) {
-        if (!changes['enablePinchOnMobile'].isFirstChange) {
+        if (!changes['enablePinchOnMobile'].isFirstChange()) {
           if (changes['enablePinchOnMobile'].currentValue !== changes['enablePinchOnMobile'].previousValue) {
             if (this.enablePinchOnMobile) {
               this.pinchOnMobileSupport = new PinchOnMobileSupport(this.ngZone);

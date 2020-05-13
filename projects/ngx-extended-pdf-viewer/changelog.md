@@ -160,3 +160,4 @@
 - 3.2.6 #268 added the type definition for the `(textLayerRendered)` event; #286 mark toggled button in the primary toolbar
 - 3.2.7 #288 added `Blob` to the list of type of `[src]`
 - 3.3.0 #265 added `enablePinchOnMobile` (experimental / work in progress); #290 added `pdf-hand-tool` and `pdf-select-tool` to the public API; #289 added an error message if zone.js is outdated
+- 3.3.1 #290 added `pdf-hand-tool` and `pdf-select-tool` to the public API
