@@ -19,6 +19,9 @@ export interface IPDFViewerApplication {
   printKeyDownListener: undefined | ((this: Window, ev: KeyboardEvent) => any);
   sidebarViewOnLoad: 0 | 1;
   spreadModeOnLoad: 0 | 1 | 2;
+  secondaryToolbar: any;
+  toolbar: any;
+  viewer: HTMLDivElement;
 
   cleanup(): void;
   close(): void;

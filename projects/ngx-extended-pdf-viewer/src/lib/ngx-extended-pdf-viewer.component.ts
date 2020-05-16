@@ -730,17 +730,19 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public checkHeight(): void {
     const container = document.getElementsByClassName('zoom')[0];
-    if (container.clientHeight === 0 && this._height.includes('%')) {
-      const available = window.innerHeight;
-      const rect = container.getBoundingClientRect();
-      const top = rect.top;
-      let mh = available - top;
-      const factor = Number(this._height.replace('%', ''));
-      mh = (mh * factor) / 100;
-      if (mh > 100) {
-        this.minHeight = mh + 'px';
-      } else {
-        this.minHeight = '100px';
+    if (container) {
+      if (container.clientHeight === 0 && this._height.includes('%')) {
+        const available = window.innerHeight;
+        const rect = container.getBoundingClientRect();
+        const top = rect.top;
+        let mh = available - top;
+        const factor = Number(this._height.replace('%', ''));
+        mh = (mh * factor) / 100;
+        if (mh > 100) {
+          this.minHeight = mh + 'px';
+        } else {
+          this.minHeight = '100px';
+        }
       }
     }
   }
@@ -1278,6 +1280,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if (this.dummyComponents) {
         this.dummyComponents.addMissingStandardWidgets();
       }
+    }
+
+    if ('height' in changes) {
     }
   }
 
