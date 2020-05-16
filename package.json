@@ -38,7 +38,7 @@
     "@angular-devkit/build-ng-packagr": "0.13.9",
     "@angular/cli": "^7.3.10",
     "@angular/compiler-cli": "^7.2.16",
-    "@angular/language-service": "^7.2.16",
+    "@angular/language-service": "^9.1.7",
     "@types/node": "^12.12.38",
     "caniuse-lite": "^1.0.30001054",
     "codelyzer": "^5.2.2",
