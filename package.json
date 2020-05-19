@@ -45,7 +45,7 @@
     "cypress": "^3.8.3",
     "macaddress": "^0.5.0",
     "ng-packagr": "^4.7.1",
-    "properties-reader": "0.3.1",
+    "properties-reader": "2.0.0",
     "ts-node": "^8.10.1",
     "tsickle": "^0.38.1",
     "tslib": "^1.13.0",
