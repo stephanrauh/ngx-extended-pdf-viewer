@@ -1,4 +1,4 @@
-# ngx-extended-pdf-viewer (Easter edition)
+# ngx-extended-pdf-viewer
 <p>
   <a href="https://www.npmjs.com/package/ngx-extended-pdf-viewer">
     <img src="https://img.shields.io/npm/dm/ngx-extended-pdf-viewer.svg?style=flat" alt="downloads">

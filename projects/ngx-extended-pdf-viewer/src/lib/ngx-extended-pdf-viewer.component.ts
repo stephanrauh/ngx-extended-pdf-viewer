@@ -343,8 +343,21 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Output()
   public spreadChange = new EventEmitter<'off' | 'even' | 'odd'>();
 
+  private _page: number | undefined = undefined;
+
+  public get page(): number | undefined {
+    return this._page;
+  }
+
   @Input()
-  public page: number | undefined = undefined;
+  public set page(p: number | undefined) {
+    if (p) {
+      // silently cope with strings
+      this._page = Number(p);
+    } else {
+      this._page = undefined;
+    }
+  }
 
   @Output()
   public pageChange = new EventEmitter<number | undefined>();

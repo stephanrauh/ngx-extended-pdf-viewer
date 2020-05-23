@@ -12,10 +12,9 @@ import { LinkTarget } from '../../projects/ngx-extended-pdf-viewer/src/lib/optio
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-
   randomForm = new FormGroup({
     randomName: new FormControl(''),
   });
@@ -25,7 +24,7 @@ export class AppComponent implements OnInit {
   public hidden = false;
   public zoom: number | string | undefined = 'auto';
   public visible = { 1: true };
-  public mobileFriendlyZoomPercent = "200%";
+  public mobileFriendlyZoomPercent = '200%';
   public currentZoomFactor: number;
   public showSidebarButton = false;
   public sidebarVisible = undefined;
@@ -104,7 +103,7 @@ export class AppComponent implements OnInit {
   }
 
   public get zoom84percent(): boolean {
-    return this.zoom === '84%'  || this.zoom === 84;
+    return this.zoom === '84%' || this.zoom === 84;
   }
 
   public set zoom84percent(auto: boolean) {
@@ -215,10 +214,10 @@ export class AppComponent implements OnInit {
     setTimeout(() => {
       const dialogRef = this.dialog.open(ModalDialogComponent, {
         width: '750px',
-        data: {}
+        data: {},
       });
 
-      dialogRef.afterClosed().subscribe(result => {
+      dialogRef.afterClosed().subscribe((result) => {
         console.log('The dialog was closed');
         this.hidden = false;
       });
@@ -271,6 +270,7 @@ export class AppComponent implements OnInit {
 
   public onZoomChange(event: any): void {
     console.log(event);
+    debugger;
   }
 
   public onTextLayerRendered(event: TextLayerRenderedEvent): void {
