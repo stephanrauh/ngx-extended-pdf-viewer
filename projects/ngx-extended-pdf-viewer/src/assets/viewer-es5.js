@@ -6824,7 +6824,7 @@ var PDFFindBar = /*#__PURE__*/function () {
       _this.toggle();
     });
     this.findFieldMultiline.addEventListener('input', function () { // #201
-      this.dispatchEvent('');
+      _this.dispatchEvent('');
     });
     this.findField.addEventListener("input", function () {
       _this.dispatchEvent("");

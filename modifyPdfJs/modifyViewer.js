@@ -457,7 +457,7 @@ ${line}`;
       } else if (line2.includes('this.findField = options.findField || null;')) {
         line += '\n    this.findFieldMultiline = options.findFieldMultiline || null; // #201';
       } else if (line2.includes("this.findField.addEventListener('input', () => {")) {
-        line =
+          line =
           `    this.findFieldMultiline.addEventListener('input', () => { // #201
       this.dispatchEvent('');
     });
@@ -467,7 +467,7 @@ ${line}`;
       } else if (line2.includes("this.findField.addEventListener('input', function () {")) {
         line =
           `    this.findFieldMultiline.addEventListener('input', function () { // #201
-      this.dispatchEvent('');
+      _this.dispatchEvent('');
     });
 ` + line;
         expectedChanges--;
