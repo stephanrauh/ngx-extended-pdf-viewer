@@ -3332,9 +3332,9 @@ class DOMCMapReaderFactory {
         let cMapData;
 
         if (this.isCompressed) {
-          cMapData = new Uint8Array((await response.arrayBuffer()));
+          cMapData = new Uint8Array(await response.arrayBuffer());
         } else {
-          cMapData = (0, _util.stringToBytes)((await response.text()));
+          cMapData = (0, _util.stringToBytes)(await response.text());
         }
 
         return {

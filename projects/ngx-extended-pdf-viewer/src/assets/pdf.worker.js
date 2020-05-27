@@ -27177,7 +27177,7 @@ var Font = function FontClosure() {
         unicode = String.fromCharCode(unicode);
       }
 
-      var isInFont = charcode in this.toFontChar;
+      var isInFont = (charcode in this.toFontChar);
       fontCharCode = this.toFontChar[charcode] || charcode;
 
       if (this.missingFile) {
