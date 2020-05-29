@@ -5,7 +5,7 @@ import { Component, OnInit, Input, TemplateRef, Output, EventEmitter } from '@an
   templateUrl: './pdf-toolbar.component.html',
   styleUrls: ['./pdf-toolbar.component.css']
 })
-export class PdfToolbarComponent implements OnInit {
+export class PdfToolbarComponent {
   @Input()
   public customToolbar: TemplateRef<any>;
 
@@ -60,14 +60,5 @@ export class PdfToolbarComponent implements OnInit {
   @Input()
   public toolbarWidth = '100%';
 
-  @Output()
-  public zoomChange = new EventEmitter<string | number | undefined>();
-
   constructor() {}
-
-  ngOnInit() {}
-
-  public emitZoomChange(value: string | number): void {
-    this.zoomChange.emit(value);
-  }
 }

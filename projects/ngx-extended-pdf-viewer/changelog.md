@@ -164,3 +164,4 @@
 - 3.3.2 #294 added a check if the DOM element is there before checking its height; added a few fields to the `IPDFViewerApplication` interface
 - 3.3.3 #294 accept string values for `[page]` 
 - 3.3.4 #325 fixed an IE5 bug that disabled the "find" feature
+- 3.3.5 #293 fixed the event `(zoomChange)`

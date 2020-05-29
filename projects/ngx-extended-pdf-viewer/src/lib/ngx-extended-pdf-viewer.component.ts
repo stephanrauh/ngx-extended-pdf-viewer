@@ -551,10 +551,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
   }
 
-  public emitZoomChange(value: string | number): void {
-    this.zoomChange.emit(value);
-  }
-
   ngOnInit() {
     this.onResize();
   }
@@ -962,16 +958,19 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       });
     });
     PDFViewerApplication.eventBus.on('scalechanging', (x: ScaleChangingEvent) => {
-      this.ngZone.run(() => {
         setTimeout(() => {
           this.ngZone.run(() => {
             this.currentZoomFactor.emit(x.scale);
-            if (this.zoom !== 'auto' && this.zoom !== 'page-fit' && this.zoom !== 'page-actual' && this.zoom !== 'page-width') {
-              this.emitZoomChange(x.scale * 100);
+            const scale = (this.root.nativeElement as HTMLElement).querySelector('#scaleSelect') as HTMLSelectElement | undefined;
+            let userZoomFactor = this.zoom;
+            if (scale) {
+                userZoomFactor = scale.value;
+            }
+            if (userZoomFactor !== 'auto' && userZoomFactor !== 'page-fit' && userZoomFactor !== 'page-actual' && userZoomFactor !== 'page-width') {
+              this.zoomChange.emit(x.scale * 100);
             }
           });
         });
-      });
     });
 
     PDFViewerApplication.eventBus.on('rotationchanging', (x: PagesRotationEvent) => {
