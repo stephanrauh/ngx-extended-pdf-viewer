@@ -97,7 +97,7 @@ The detailed instructions for JHipster and Angular 2, 4, and 5 are available [on
     },
     {
       "glob": "**/*",
-      "input": "dist/ngx-extended-pdf-viewer/assets-2.5/",
+      "input": "node_modules/ngx-extended-pdf-viewer/assets-2.5/",
       "output": "/assets/"
     }
   ],

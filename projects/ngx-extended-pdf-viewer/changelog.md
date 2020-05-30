@@ -166,3 +166,4 @@
 - 3.3.4 #325 fixed an IE5 bug that disabled the "find" feature
 - 3.3.5 #293 fixed the event `(zoomChange)`
 - 3.4.0 #285 added an option to use the developer version of pdf.js 2.5 in order to display images correctly
+- 3.4.1 #285 fixed a misleading typo of the readme file
