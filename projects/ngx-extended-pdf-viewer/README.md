@@ -46,7 +46,7 @@ This library provides an embeddable PDF viewer component. It's different from ot
 - plus the ability to deactivate each of these features
 - and/or to customize the toolbars and menus according to your needs.
 
-Not to mention the ability to display PDF files, running on Mozilla's pdf.js 2.4.456, released in March 2020.
+Not to mention the ability to display PDF files, running on Mozilla's pdf.js 2.4.456, released in March 2020. If you're the daring one, you can also use the developer version 2.5. It's bleeding edge, so use it at own risk, but it fixes at least one bug ([#285](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/285)), so it may be worth a look.
 
 ## Potentially breaking changes with version 3.0.0
 - I've fixed the behavior of `(zoom)`. Now this event is never triggered if the value of `[zoom]` is `"auto"`, `"page-width"`, `"page-fit"` or `"page-actual"`. It was always meant to work like this, but nonetheless, fixing this bug might break your application. If it does, use `(currentZoomFactor)` instead.
@@ -83,6 +83,26 @@ The detailed instructions for JHipster and Angular 2, 4, and 5 are available [on
     "scripts": []
   ```
  This simply copies the entire assets folder. If you're concerned about disk memory, you can omit the subfolders `inline-locale-files` and `additional-locale`. If you need only one language, you can reduce the list to `locale.properties` and your language folder.
+
+ If you want to use the developer preview of pdf.js 2.5, add a second import like this:
+
+  ```json
+  "assets": [
+    "src/favicon.ico",
+    "src/assets",
+    {
+      "glob": "**/*",
+      "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+      "output": "/assets/"
+    },
+    {
+      "glob": "**/*",
+      "input": "dist/ngx-extended-pdf-viewer/assets-2.5/",
+      "output": "/assets/"
+    }
+  ],
+  "scripts": []
+  ```
 
   _Hint:_ There are two ways to define the language files needed for the labels of the buttons and screen elements of the PDF viewer. The second method is described below in the "internationalization" section.
 
