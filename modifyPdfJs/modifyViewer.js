@@ -43,9 +43,9 @@ lineReader
     addPolyfills();
     convertLines();
     const filename = es2015 ? 'viewer.js' : 'viewer-es5.js';
-    fs.writeFileSync('../projects/ngx-extended-pdf-viewer/src/assets/' + filename, result);
+    fs.writeFileSync('../projects/ngx-extended-pdf-viewer/src/assets-2.5/' + filename, result);
 
-    console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets/' + filename);
+    console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets-2.5/' + filename);
     if (expectedChanges !== 0) {
       console.error(expectedChanges + " changes couldn't be applied!");
       for (const [key, value] of Object.entries(successfulChanges)) {

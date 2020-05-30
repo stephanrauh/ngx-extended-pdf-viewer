@@ -26,7 +26,13 @@
                 "glob": "**/*",
                 "input": "dist/ngx-extended-pdf-viewer/assets/",
                 "output": "/assets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "dist/ngx-extended-pdf-viewer/assets-2.5/",
+                "output": "/assets/"
               }
+
             ],
             "styles": ["src/styles.css"],
             "scripts": []

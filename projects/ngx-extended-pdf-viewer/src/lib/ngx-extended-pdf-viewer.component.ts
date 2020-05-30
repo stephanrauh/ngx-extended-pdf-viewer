@@ -56,7 +56,7 @@ interface ElementAndPosition {
 @Component({
   selector: 'ngx-extended-pdf-viewer',
   templateUrl: './ngx-extended-pdf-viewer.component.html',
-  styleUrls: ['./viewer-with-images-2.2.css', './ngx-extended-pdf-viewer.component.css'],
+  styleUrls: ['./viewer-with-images.css', './ngx-extended-pdf-viewer.component.css'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
