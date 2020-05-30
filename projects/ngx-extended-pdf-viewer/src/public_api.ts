@@ -16,6 +16,7 @@ export * from './lib/events/pages-loaded-event';
 export * from './lib/events/pages-rotation-event';
 export * from './lib/events/pdf-downloaded-event';
 export * from './lib/events/pdf-loaded-event';
+export * from './lib/events/invalid-pdf-exception';
 export * from './lib/events/scale-changing-event';
 export * from './lib/events/sidebarview-changed';
 export * from './lib/events/textlayer-rendered';

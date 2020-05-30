@@ -4,6 +4,8 @@ const lineReader = require('readline').createInterface({
   input: fs.createReadStream('../../mozillas-pdf.js/build/generic/build/pdf.js')
 });
 
+console.log("\n");
+
 let result = '';
 
 let expectedChanges = 9;

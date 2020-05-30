@@ -4,6 +4,8 @@ const lineReader = require('readline').createInterface({
   input: fs.createReadStream('../../mozillas-pdf.js/build/generic/web/viewer.js')
 });
 
+console.log("\n");
+
 let result = '';
 let expectedChanges = 80;
 
@@ -416,7 +418,13 @@ function convertLines() {
         line = line.replace("')');", "' modified by ngx-extended-pdf-viewer)');");
         line = "      console.log('PDF viewer: ngx-extended-pdf-viewer running on pdf.js ' + _pdfjsLib.version);\n" + line;
         expectedChanges--;
-        successfulChanges[49] = true;
+        successfulChanges[49] = true; // only till version 2.4
+      } else if (line2.includes("console.log(`PDF ${pdfDocument.fingerprint}")) {
+        line = line.replace("`);", " modified by ngx-extended-pdf-viewer)`);");
+        line = "      console.log('PDF viewer: ngx-extended-pdf-viewer running on pdf.js ' + _pdfjsLib.version);\n" + line;
+        expectedChanges--;
+        successfulChanges[49] = true; // since version 2.5
+
       } else if (line2.includes("if ('verbosity' in hashParams) {")) {
         line = `    if ('removepageborders' in hashParams) { // #194
       _app_options.AppOptions.set('removePageBorders', hashParams['removepageborders'] === 'true'); // #194
@@ -568,7 +576,13 @@ ${line}`;
         this.onError(error); // #205
 ` + line.replace('new Error(msg)', 'error');
         expectedChanges--;
-        successfulChanges[74] = true;
+        successfulChanges[74] = true; // until version 2.4
+      } else if (line2.includes('throw exception;')) {
+        line =
+          `        this.onError(exception); // #205
+` + line;
+        expectedChanges--;
+        successfulChanges[74] = true; // until version 2.4
       } else if (line2.includes('if (evt.ctrlKey && supportedMouseWheelZoomModifierKeys.ctrlKey')) {
         line =
           `  let cmd = (evt.ctrlKey ? 1 : 0) | (evt.altKey ? 2 : 0) | (evt.shiftKey ? 4 : 0) | (evt.metaKey ? 8 : 0);
@@ -617,7 +631,6 @@ ${line}`;
     this.eventBus.dispatch("updateuistate"` + info + `
     });
 ` + line;
-          console.log(lineNumber + " " + result.split('\n').length + " " + currentClass);
           currentMethod = '';
         }
       } else if (line.includes("subqueryLen = subquery.length")) {
