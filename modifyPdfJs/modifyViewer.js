@@ -7,7 +7,7 @@ const lineReader = require('readline').createInterface({
 console.log("\n");
 
 let result = '';
-let expectedChanges = 80;
+let expectedChanges = 81;
 
 const successfulChanges = {};
 for (let i = 1; i <= expectedChanges; i++) {
@@ -649,6 +649,9 @@ ${line}`;
       } else if (line.includes('_this3.input.value = "";')) {
         line = '        _this3.input.type="";\n' + line;
         successfulChanges[80] = true;
+      } else if (line.includes('maxWidth += 1.5 * overflow;')) {
+        line = line.replace("+=", "+= 10 + ");
+        successfulChanges[81] = true;
       }
 
       if (line != null) {
