@@ -650,7 +650,7 @@ ${line}`;
         line = '        _this3.input.type="";\n' + line;
         successfulChanges[80] = true;
       } else if (line.includes('maxWidth += 1.5 * overflow;')) {
-        line = line.replace("+=", "+= 10 + ");
+        line = line.replace("+=", "+= 10 + "); // #329 fix the select box layout
         successfulChanges[81] = true;
       }
 

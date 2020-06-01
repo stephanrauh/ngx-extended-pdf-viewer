@@ -7343,7 +7343,7 @@ var PDFFindController = /*#__PURE__*/function () {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-  
+
       var matches = [];
       var queryLen = query.length;
       var matchIdx = -queryLen;
@@ -7371,7 +7371,7 @@ var PDFFindController = /*#__PURE__*/function () {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-  
+
       var matchesWithLength = [];
     var queryArray = (query.includes('\n')) ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g); // #201
 
@@ -14069,7 +14069,7 @@ var Toolbar = /*#__PURE__*/function () {
                 }
 
                 overflow = SCALE_SELECT_WIDTH - SCALE_SELECT_CONTAINER_WIDTH;
-                maxWidth += 1.5 * overflow;
+                maxWidth += 10 + 1.5 * overflow;
 
                 if (maxWidth > SCALE_SELECT_CONTAINER_WIDTH) {
                   items.scaleSelect.style.width = "".concat(maxWidth + overflow, "px");
@@ -14553,7 +14553,7 @@ function getDefaultPreferences() {
       "historyUpdateUrl": false,
       "ignoreDestinationZoom": false,
       "pdfBugEnabled": false,
-      "removePageBorders": false,// #194 
+      "removePageBorders": false,// #194
       "renderer": "canvas",
       "renderInteractiveForms": false,
       "sidebarViewOnLoad": -1,

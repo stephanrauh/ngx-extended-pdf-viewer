@@ -14225,7 +14225,7 @@ var Toolbar = /*#__PURE__*/function () {
                 }
 
                 overflow = SCALE_SELECT_WIDTH - SCALE_SELECT_CONTAINER_WIDTH;
-                maxWidth += 1.5 * overflow;
+                maxWidth += 10 +  1.5 * overflow;
 
                 if (maxWidth > SCALE_SELECT_CONTAINER_WIDTH) {
                   items.scaleSelect.style.width = "".concat(maxWidth + overflow, "px");

@@ -135,8 +135,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", {
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.5.205';
-var pdfjsBuild = '58797103';
+var pdfjsVersion = '2.5.207';
+var pdfjsBuild = '0974d605';
 
 /***/ }),
 /* 1 */
@@ -247,7 +247,7 @@ var WorkerMessageHandler = {
     var WorkerTasks = [];
     var verbosity = (0, _util.getVerbosityLevel)();
     var apiVersion = docParams.apiVersion;
-    var workerVersion = '2.5.205';
+    var workerVersion = '2.5.207';
 
     if (apiVersion !== workerVersion) {
       throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -32583,6 +32583,8 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
                   });
 
                   if (imageRef) {
+                    (0, _util.assert)(!isInline, "Cannot cache an inline image globally.");
+
                     _this3.globalImageCache.addPageIndex(imageRef, _this3.pageIndex);
 
                     if (cacheGlobally) {
