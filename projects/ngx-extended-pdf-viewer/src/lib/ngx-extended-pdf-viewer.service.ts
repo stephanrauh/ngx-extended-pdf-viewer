@@ -10,19 +10,14 @@ export interface FindOptions {
   findMultipleSearchTexts?: boolean;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
 export class NgxExtendedPdfViewerService {
-  // this event is fired when the pdf.js library has been loaded and objects like PDFApplication are available
-  public onPDFJSInit = new Subject<void>();
 
   constructor() {}
 
   public findMultiple(text: Array<string>, options: FindOptions = {}): boolean {
     options = {
       ...options,
-      findMultipleSearchTexts: true
+      findMultipleSearchTexts: true,
     };
     const searchString = text.join('\n') + '\n';
     return this.find(searchString, options);

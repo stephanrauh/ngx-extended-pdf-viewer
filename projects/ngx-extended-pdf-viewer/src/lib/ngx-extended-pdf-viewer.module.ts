@@ -51,6 +51,7 @@ import { PdfZoomOutComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-out/pdf
 import { PdfZoomToolbarComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-toolbar.component';
 import { PdfSelectToolComponent } from './toolbar/pdf-select-tool/pdf-select-tool.component';
 import { DynamicCssComponent } from './dynamic-css/dynamic-css.component';
+import { PDFNotificationService } from './pdf-notification-service';
 
 if (!Promise['allSettled']) {
   console.error("Please update zone.js to version 0.10.3 or higher. Otherwise, you'll see many messages complaining about Promise.allSettled.");
@@ -224,7 +225,7 @@ if (typeof window !== 'undefined') {
     PdfZoomOutComponent,
     PdfDummyComponentsComponent,
   ],
-  providers: [NgxExtendedPdfViewerService, Location, { provide: LocationStrategy, useClass: PathLocationStrategy }],
+  providers: [NgxExtendedPdfViewerService, PDFNotificationService, Location, { provide: LocationStrategy, useClass: PathLocationStrategy }],
   exports: [
     PdfZoomDropdownComponent,
     PdfContextMenuComponent,
@@ -270,6 +271,8 @@ if (typeof window !== 'undefined') {
     PdfZoomInComponent,
     PdfZoomOutComponent,
     NgxExtendedPdfViewerComponent,
+    NgxExtendedPdfViewerService,
+    PDFNotificationService,
   ],
 })
 export class NgxExtendedPdfViewerModule {
