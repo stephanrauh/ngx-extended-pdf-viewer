@@ -270,9 +270,7 @@ if (typeof window !== 'undefined') {
     PdfPageNumberComponent,
     PdfZoomInComponent,
     PdfZoomOutComponent,
-    NgxExtendedPdfViewerComponent,
-    NgxExtendedPdfViewerService,
-    PDFNotificationService,
+    NgxExtendedPdfViewerComponent
   ],
 })
 export class NgxExtendedPdfViewerModule {

@@ -13218,14 +13218,24 @@ PDFPrintService.prototype = {
     const renderNextPage = (resolve, reject) => {
       this.throwIfInactive();
 
-      if (++this.currentPage >= pageCount) {
-        renderProgress(pageCount, pageCount, this.l10n);
+
+      while (true) { // #243
+        ++this.currentPage; // #243
+        if (this.currentPage >= pageCount) { // #243
+          break; // #243
+        } // #243
+        if (window.isInPDFPrintRange(this.currentPage)) { // #243
+          break; // #243
+        } // #243
+      } // #243
+      if (this.currentPage >= pageCount) {
+renderProgress(window.filteredPageCount, window.filteredPageCount, this.l10n); // #243
         resolve();
         return;
       }
 
       const index = this.currentPage;
-      renderProgress(index, pageCount, this.l10n);
+renderProgress(index, window.filteredPageCount, this.l10n); // #243
       renderPage(this, this.pdfDocument, index + 1, this.pagesOverview[index]).then(this.useRenderedPage.bind(this)).then(function () {
         renderNextPage(resolve, reject);
       }, reject);

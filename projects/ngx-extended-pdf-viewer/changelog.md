@@ -169,3 +169,4 @@
 - 3.4.1 #285 fixed a misleading typo of the readme file
 - 3.4.2 #329 fixed the layout glitch of the zoom select box on IE11
 - 3.4.3 added an API for version numbers
+- 3.5.0 #243 added an option to limit the print range

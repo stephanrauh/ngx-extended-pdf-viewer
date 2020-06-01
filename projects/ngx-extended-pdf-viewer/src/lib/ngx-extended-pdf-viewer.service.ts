@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
-import { Subject } from 'rxjs';
+import { PDFPrintRange } from './options/pdf-print-range';
+import { IPDFViewerApplication } from './options/pdf-viewer-application';
 
 export interface FindOptions {
   highlightAll?: boolean;
@@ -11,7 +11,6 @@ export interface FindOptions {
 }
 
 export class NgxExtendedPdfViewerService {
-
   constructor() {}
 
   public findMultiple(text: Array<string>, options: FindOptions = {}): boolean {
@@ -113,5 +112,55 @@ export class NgxExtendedPdfViewerService {
       }
       return false;
     }
+  }
+
+  public print(printRange?: PDFPrintRange) {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    if (!printRange) {
+      printRange = {} as PDFPrintRange;
+    }
+    window['isInPDFPrintRange'] = (page: number) => this.isInPDFPrintRange(page, printRange as PDFPrintRange);
+    window['filteredPageCount'] = this.filteredPageCount(PDFViewerApplication.pagesCount, printRange);
+    (window as any).printPDF();
+    PDFViewerApplication.eventBus.on('afterprint', () => {
+      window['isInPDFPrintRange'] = undefined;
+      window['filteredPageCount'] = undefined;
+    });
+  }
+
+  public filteredPageCount(pageCount: number, range: PDFPrintRange): number {
+    let result = 0;
+    for (let page = 1; page <= pageCount; page++) {
+      if (this.isInPDFPrintRange(page, range)) {
+        result++;
+      }
+    }
+    return result;
+  }
+
+  public isInPDFPrintRange(pageIndex: number, printRange: PDFPrintRange) {
+    const page = pageIndex + 1;
+    if (printRange.from) {
+      if (page < printRange.from) {
+        return false;
+      }
+    }
+    if (printRange.to) {
+      if (page > printRange.to) {
+        return false;
+      }
+    }
+    if (printRange.excluded) {
+      let e = printRange.excluded as Array<number>;
+      if (e.some(p => p === page)) {
+        return false;
+      }
+    }
+    if (printRange.included) {
+      if (!printRange.included.some(p => p === page)) {
+        return false;
+      }
+    }
+    return true;
   }
 }

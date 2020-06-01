@@ -270,7 +270,6 @@ export class AppComponent implements OnInit {
 
   public onZoomChange(event: any): void {
     console.log(event);
-    debugger;
   }
 
   public onTextLayerRendered(event: TextLayerRenderedEvent): void {

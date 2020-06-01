@@ -7,7 +7,7 @@ const lineReader = require('readline').createInterface({
 console.log("\n");
 
 let result = '';
-let expectedChanges = 81;
+let expectedChanges = 84;
 
 const successfulChanges = {};
 for (let i = 1; i <= expectedChanges; i++) {
@@ -652,6 +652,45 @@ ${line}`;
       } else if (line.includes('maxWidth += 1.5 * overflow;')) {
         line = line.replace("+=", "+= 10 + "); // #329 fix the select box layout
         successfulChanges[81] = true;
+      } else if (line.includes('if (++this.currentPage >= pageCount)')) {
+        line = line.replace('++', '');
+        line = `
+      while (true) { // #243
+        ++this.currentPage; // #243
+        if (this.currentPage >= pageCount) { // #243
+          break; // #243
+        } // #243
+        if (window.isInPDFPrintRange(this.currentPage)) { // #243
+          break; // #243
+        } // #243
+      } // #243
+` + line;
+        successfulChanges[82] = true; // ES2015 version
+      } else if (line.includes('if (++_this.currentPage >= pageCount)')) {
+        line = line.replace('++', '');
+        line = `
+      while (++_this.currentPage) { // #243
+        if (_this.currentPage >= pageCont) { // #243
+          break; // #243
+        } // #243
+        if (window.isInPDFPrintRange(_this.currentPage)) { // #243
+          break; // #243
+        } // #243
+      } // #243
+` + line;
+        successfulChanges[82] = true; // ES5 version
+      } else if (line.includes('renderProgress(index, pageCount, this.l10n);')) {
+        line = 'renderProgress(index, window.filteredPageCount, this.l10n); // #243';
+        successfulChanges[83] = true; // ES2015 version
+      } else if (line.includes('renderProgress(index, pageCount, _this.l10n);')) {
+        line = 'renderProgress(index, window.filteredPageCount, _this.l10n); // #243';
+        successfulChanges[83] = true; // ES5 version
+      } else if (line.includes('renderProgress(pageCount, pageCount, this.l10n);')) {
+        line = 'renderProgress(window.filteredPageCount, window.filteredPageCount, this.l10n); // #243';
+        successfulChanges[84] = true; // ES2015 version
+      } else if (line.includes('renderProgress(pageCount, pageCount, _this.l10n);')) {
+        line = 'renderProgress(window.filteredPageCount, window.filteredPageCount, _this.l10n); // #243';
+        successfulChanges[84] = true; // ES5 version
       }
 
       if (line != null) {
