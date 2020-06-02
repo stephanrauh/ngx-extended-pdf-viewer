@@ -7486,7 +7486,7 @@ var PDFFindController = /*#__PURE__*/function () {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-
+  
       var matches = [];
       var queryLen = query.length;
       var matchIdx = -queryLen;
@@ -7514,7 +7514,7 @@ var PDFFindController = /*#__PURE__*/function () {
               pageContent = window.deburr(pageContent); // #177
               query = window.deburr(query); // #177
             } // #177
-
+  
       var matchesWithLength = [];
     var queryArray = (query.includes('\n')) ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g); // #201
 
@@ -14710,7 +14710,7 @@ function getDefaultPreferences() {
       "historyUpdateUrl": false,
       "ignoreDestinationZoom": false,
       "pdfBugEnabled": false,
-      "removePageBorders": false,// #194
+      "removePageBorders": false,// #194 
       "renderer": "canvas",
       "renderInteractiveForms": false,
       "sidebarViewOnLoad": -1,
@@ -16244,8 +16244,7 @@ PDFPrintService.prototype = {
       _this.throwIfInactive();
 
 
-      while (true) { // #243
-        ++_this.currentPage; // #243
+      while (++_this.currentPage) { // #243
         if (_this.currentPage >= pageCont) { // #243
           break; // #243
         } // #243
@@ -16254,13 +16253,13 @@ PDFPrintService.prototype = {
         } // #243
       } // #243
       if (_this.currentPage >= pageCount) {
-        renderProgress(window.filteredPageCount, window.filteredPageCount | pageCount, _this.l10n);
+renderProgress(window.filteredPageCount | pageCount, window.filteredPageCount | pageCount, _this.l10n); // #243
         resolve();
         return;
       }
 
       var index = _this.currentPage;
-      renderProgress(index, window.filteredPageCount | pageCount, _this.l10n);
+renderProgress(index, window.filteredPageCount | pageCount, _this.l10n); // #243
       renderPage(_this, _this.pdfDocument, index + 1, _this.pagesOverview[index]).then(_this.useRenderedPage.bind(_this)).then(function () {
         renderNextPage(resolve, reject);
       }, reject);

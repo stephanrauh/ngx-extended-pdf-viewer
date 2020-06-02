@@ -171,3 +171,4 @@
 - 3.4.3 added an API for version numbers
 - 3.5.0 #243 added an option to limit the print range
 - 3.5.1 #243 fixed the print button and the key binding CTRL+P; added an API to set the print range for the print button and for CTRL+P
+- 3.6.0 updated to pdf.js 2.5.207; removed the pdf.js 2.5 folder and replaced it with a 2.6 folder

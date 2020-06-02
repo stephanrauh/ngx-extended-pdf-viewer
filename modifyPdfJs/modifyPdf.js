@@ -113,12 +113,12 @@ lineReader
     if (es2015) {
       filename = 'pdf.js';
     }
-    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets-2.5/' + filename, result, function (err) {
+    fs.writeFile('../projects/ngx-extended-pdf-viewer/src/assets-2.6/' + filename, result, function (err) {
       if (err) {
         return console.log(err);
       }
 
-      console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets-2.5/' + filename);
+      console.log('The file was saved to ../projects/ngx-extended-pdf-viewer/src/assets-2.6/' + filename);
       if (expectedChanges !== 0) {
         console.error(expectedChanges + " changes couldn't be applied!");
         for (const [key, value] of Object.entries(successfulChanges)) {
