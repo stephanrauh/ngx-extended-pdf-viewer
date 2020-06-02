@@ -16249,18 +16249,18 @@ PDFPrintService.prototype = {
         if (_this.currentPage >= pageCont) { // #243
           break; // #243
         } // #243
-        if (window.isInPDFPrintRange(_this.currentPage)) { // #243
+        if ((!window.isInPDFPrintRange) || window.isInPDFPrintRange(_this.currentPage)) { // #243
           break; // #243
         } // #243
       } // #243
       if (_this.currentPage >= pageCount) {
-        renderProgress(window.filteredPageCount, window.filteredPageCount, _this.l10n);
+        renderProgress(window.filteredPageCount, window.filteredPageCount | pageCount, _this.l10n);
         resolve();
         return;
       }
 
       var index = _this.currentPage;
-      renderProgress(index, window.filteredPageCount, _this.l10n);
+      renderProgress(index, window.filteredPageCount | pageCount, _this.l10n);
       renderPage(_this, _this.pdfDocument, index + 1, _this.pagesOverview[index]).then(_this.useRenderedPage.bind(_this)).then(function () {
         renderNextPage(resolve, reject);
       }, reject);

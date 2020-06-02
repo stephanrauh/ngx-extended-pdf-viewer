@@ -16,7 +16,7 @@ import { MatTabsModule } from '@angular/material';
 import { AppComponent } from './app.component';
 import {
   NgxExtendedPdfViewerModule
-} from 'projects/ngx-extended-pdf-viewer/src/public_api';
+} from 'ngx-extended-pdf-viewer';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
 

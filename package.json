@@ -32,7 +32,8 @@
     "core-js": "^2.6.11",
     "lodash.deburr": "^4.1.0",
     "rxjs": "^6.5.5",
-    "zone.js": "~0.10.3"
+    "zone.js": "~0.10.3",
+    "ngx-extended-pdf-viewer": "file:./dist/ngx-extended-pdf-viewer"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.13.9",
@@ -51,5 +52,8 @@
     "tslib": "^1.13.0",
     "tslint": "^6.1.2",
     "typescript": "~3.2.4"
+  },
+  "optionalDependencies": {
+    "fsevents": "^2.1.13"
   }
 }

@@ -116,16 +116,30 @@ export class NgxExtendedPdfViewerService {
 
   public print(printRange?: PDFPrintRange) {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    if (!printRange) {
-      printRange = {} as PDFPrintRange;
+    const alreadyThere = !!window['isInPDFPrintRange'] && (!printRange);
+    if (!alreadyThere) {
+      if (!printRange) {
+        printRange = {} as PDFPrintRange;
+      }
+      this.setPrintRange(printRange);
     }
+    (window as any).printPDF();
+    if (!alreadyThere) {
+      PDFViewerApplication.eventBus.on('afterprint', () => {
+        this.removePrintRange();
+      });
+    }
+  }
+
+  public removePrintRange() {
+    window['isInPDFPrintRange'] = undefined;
+    window['filteredPageCount'] = undefined;
+  }
+
+  public setPrintRange(printRange: PDFPrintRange) {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     window['isInPDFPrintRange'] = (page: number) => this.isInPDFPrintRange(page, printRange as PDFPrintRange);
     window['filteredPageCount'] = this.filteredPageCount(PDFViewerApplication.pagesCount, printRange);
-    (window as any).printPDF();
-    PDFViewerApplication.eventBus.on('afterprint', () => {
-      window['isInPDFPrintRange'] = undefined;
-      window['filteredPageCount'] = undefined;
-    });
   }
 
   public filteredPageCount(pageCount: number, range: PDFPrintRange): number {
