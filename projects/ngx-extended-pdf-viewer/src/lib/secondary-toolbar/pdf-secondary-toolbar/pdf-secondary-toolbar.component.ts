@@ -70,9 +70,9 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
   @Output()
   public secondaryMenuIsEmpty = new EventEmitter<boolean>();
 
-  public disablePreviousPage = false;
+  public disablePreviousPage = true;
 
-  public disableNextPage = false;
+  public disableNextPage = true;
 
   constructor(private element: ElementRef, private notificationService: PDFNotificationService, private ngZone: NgZone) {
     const subscription = this.notificationService.onPDFJSInit.subscribe(() => {
@@ -84,26 +84,30 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
   public onPdfJsInit(): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     PDFViewerApplication.eventBus.on('pagechanging', () => {
-      this.ngZone.run(() => {
-        this.updateUIState();
-      });
+      this.updateUIState();
+    });
+    PDFViewerApplication.eventBus.on('pagerendered', () => {
+      this.updateUIState();
     });
   }
 
   public updateUIState(): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    const currentPage = PDFViewerApplication.pdfViewer.currentPageNumber;
-    console.log('Upate - current page ' + currentPage + ' pages: ' + PDFViewerApplication.pagesCount);
-    const previousButton = document.getElementById('previousPage') as HTMLButtonElement;
-    if (previousButton) {
-      this.disablePreviousPage = currentPage <= 1;
-      previousButton.disabled = this.disablePreviousPage;
-    }
-    const nextButton = document.getElementById('previousPage') as HTMLButtonElement;
-    if (nextButton) {
-      this.disableNextPage = currentPage === PDFViewerApplication.pagesCount;
-      nextButton.disabled = this.disableNextPage;
-    }
+    setTimeout(() => {
+      const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+      const currentPage = PDFViewerApplication.pdfViewer.currentPageNumber;
+      console.log('Upate - current page ' + currentPage + ' pages: ' + PDFViewerApplication.pagesCount);
+      const previousButton = document.getElementById('previousPage') as HTMLButtonElement;
+      if (previousButton) {
+        this.disablePreviousPage = Number(currentPage) <= 1;
+        previousButton.disabled = this.disablePreviousPage;
+        console.log('Previous.disabled is ' + this.disablePreviousPage);
+      }
+      const nextButton = document.getElementById('previousPage') as HTMLButtonElement;
+      if (nextButton) {
+        this.disableNextPage = currentPage === PDFViewerApplication.pagesCount;
+        nextButton.disabled = this.disableNextPage;
+      }
+    });
   }
 
   public onSpreadChange(newSpread: string): void {
