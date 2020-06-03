@@ -97,6 +97,36 @@
       <button
         type="button"
         [class.invisible]="!showPagingButtons"
+        [disabled]="disablePreviousPage"
+        id="previousPage"
+        class="secondaryToolbarButton previousPage visibleTinyView"
+        title="Go to Previous Page"
+        data-l10n-id="previous"
+        (click)="previousPage()"
+      >
+        <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" />
+        </svg>
+        <span data-l10n-id="previous_label">Go to Previous Page</span>
+      </button>
+      <button
+        type="button"
+        [class.invisible]="!showPagingButtons"
+        [disabled]="disableNextPage"
+        id="nextPage"
+        class="secondaryToolbarButton nextPage visibleTinyView"
+        title="Go to Next Page"
+        data-l10n-id="next"
+        (click)="nextPage()"
+      >
+        <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" />
+        </svg>
+        <span data-l10n-id="next_label">Go to Next Page</span>
+      </button>
+      <button
+        type="button"
+        [class.invisible]="!showPagingButtons"
         id="lastPage"
         class="secondaryToolbarButton lastPage visibleLargeView"
         title="Go to Last Page"

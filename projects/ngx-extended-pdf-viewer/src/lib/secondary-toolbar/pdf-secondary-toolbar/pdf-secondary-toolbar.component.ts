@@ -9,13 +9,17 @@ import {
   TemplateRef,
   ElementRef,
   HostListener,
-  AfterViewInit
+  AfterViewInit,
+  NgZone,
 } from '@angular/core';
+import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
+import { UpdateUIStateEvent } from '../../events/update-ui-state-event';
+import { PDFNotificationService } from './../../pdf-notification-service';
 
 @Component({
   selector: 'pdf-secondary-toolbar',
   templateUrl: './pdf-secondary-toolbar.component.html',
-  styleUrls: ['./pdf-secondary-toolbar.component.css']
+  styleUrls: ['./pdf-secondary-toolbar.component.css'],
 })
 export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterViewInit {
   @Input()
@@ -66,7 +70,41 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
   @Output()
   public secondaryMenuIsEmpty = new EventEmitter<boolean>();
 
-  constructor(private element: ElementRef) {}
+  public disablePreviousPage = false;
+
+  public disableNextPage = false;
+
+  constructor(private element: ElementRef, private notificationService: PDFNotificationService, private ngZone: NgZone) {
+    const subscription = this.notificationService.onPDFJSInit.subscribe(() => {
+      this.onPdfJsInit();
+      subscription.unsubscribe();
+    });
+  }
+
+  public onPdfJsInit(): void {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    PDFViewerApplication.eventBus.on('pagechanging', () => {
+      this.ngZone.run(() => {
+        this.updateUIState();
+      });
+    });
+  }
+
+  public updateUIState(): void {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const currentPage = PDFViewerApplication.pdfViewer.currentPageNumber;
+    console.log('Upate - current page ' + currentPage + ' pages: ' + PDFViewerApplication.pagesCount);
+    const previousButton = document.getElementById('previousPage') as HTMLButtonElement;
+    if (previousButton) {
+      this.disablePreviousPage = currentPage <= 1;
+      previousButton.disabled = this.disablePreviousPage;
+    }
+    const nextButton = document.getElementById('previousPage') as HTMLButtonElement;
+    if (nextButton) {
+      this.disableNextPage = currentPage === PDFViewerApplication.pagesCount;
+      nextButton.disabled = this.disableNextPage;
+    }
+  }
 
   public onSpreadChange(newSpread: string): void {
     this.spreadChange.emit(newSpread);
@@ -132,5 +170,15 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
       }
     }
     return count;
+  }
+
+  public previousPage(): void {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    PDFViewerApplication.eventBus.dispatch('previouspage');
+  }
+
+  public nextPage(): void {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    PDFViewerApplication.eventBus.dispatch('nextpage');
   }
 }
