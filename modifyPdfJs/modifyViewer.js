@@ -670,7 +670,7 @@ ${line}`;
         line = line.replace('++', '');
         line = `
       while (++_this.currentPage) { // #243
-        if (_this.currentPage >= pageCont) { // #243
+        if (_this.currentPage >= pageCount) { // #243
           break; // #243
         } // #243
         if ((!window.isInPDFPrintRange) || window.isInPDFPrintRange(_this.currentPage)) { // #243

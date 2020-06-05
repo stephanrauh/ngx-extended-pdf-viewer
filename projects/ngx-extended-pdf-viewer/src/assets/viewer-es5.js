@@ -16246,7 +16246,7 @@ PDFPrintService.prototype = {
 
       while (true) { // #243
         ++_this.currentPage; // #243
-        if (_this.currentPage >= pageCont) { // #243
+        if (_this.currentPage >= pageCount) { // #243
           break; // #243
         } // #243
         if ((!window.isInPDFPrintRange) || window.isInPDFPrintRange(_this.currentPage)) { // #243
@@ -16254,7 +16254,7 @@ PDFPrintService.prototype = {
         } // #243
       } // #243
       if (_this.currentPage >= pageCount) {
-        renderProgress(window.filteredPageCount, window.filteredPageCount | pageCount, _this.l10n);
+        renderProgress(window.filteredPageCount | pageCount, window.filteredPageCount | pageCount, _this.l10n);
         resolve();
         return;
       }

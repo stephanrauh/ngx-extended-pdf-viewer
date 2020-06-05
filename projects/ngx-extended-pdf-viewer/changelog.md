@@ -174,3 +174,4 @@
 - 3.6.0 updated to pdf.js 2.5.207; removed the pdf.js 2.5 folder and replaced it with a 2.6 folder
 - 3.7.0 #234 shift the "next page" / "previous page" buttons to the secondary toolbar on small screens
 - 3.7.1 #234 disable the "previous/next" page menu item of the secondary toolbar more reliable
+- 3.7.2 fixed a typo preventing IE5 and Edge from printing
