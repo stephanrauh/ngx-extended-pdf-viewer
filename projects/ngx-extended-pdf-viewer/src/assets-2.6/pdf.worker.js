@@ -135,8 +135,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", {
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.6.2';
-const pdfjsBuild = '8fc1126b';
+const pdfjsVersion = '2.6.12';
+const pdfjsBuild = '039307f8';
 
 /***/ }),
 /* 1 */
@@ -231,7 +231,7 @@ var WorkerMessageHandler = {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.6.2';
+    const workerVersion = '2.6.12';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -2090,8 +2090,7 @@ class ChunkedStream {
     this.pos = 0;
     this.end = length;
     this.chunkSize = chunkSize;
-    this.loadedChunks = [];
-    this.numChunksLoaded = 0;
+    this._loadedChunks = new Set();
     this.numChunks = Math.ceil(length / chunkSize);
     this.manager = manager;
     this.progressiveDataLength = 0;
@@ -2102,7 +2101,7 @@ class ChunkedStream {
     const chunks = [];
 
     for (let chunk = 0, n = this.numChunks; chunk < n; ++chunk) {
-      if (!this.loadedChunks[chunk]) {
+      if (!this._loadedChunks.has(chunk)) {
         chunks.push(chunk);
       }
     }
@@ -2112,6 +2111,10 @@ class ChunkedStream {
 
   getBaseStreams() {
     return [this];
+  }
+
+  get numChunksLoaded() {
+    return this._loadedChunks.size;
   }
 
   allChunksLoaded() {
@@ -2136,10 +2139,7 @@ class ChunkedStream {
     const endChunk = Math.floor((end - 1) / chunkSize) + 1;
 
     for (let curChunk = beginChunk; curChunk < endChunk; ++curChunk) {
-      if (!this.loadedChunks[curChunk]) {
-        this.loadedChunks[curChunk] = true;
-        ++this.numChunksLoaded;
-      }
+      this._loadedChunks.add(curChunk);
     }
   }
 
@@ -2152,10 +2152,7 @@ class ChunkedStream {
     const endChunk = position >= this.end ? this.numChunks : Math.floor(position / this.chunkSize);
 
     for (let curChunk = beginChunk; curChunk < endChunk; ++curChunk) {
-      if (!this.loadedChunks[curChunk]) {
-        this.loadedChunks[curChunk] = true;
-        ++this.numChunksLoaded;
-      }
+      this._loadedChunks.add(curChunk);
     }
   }
 
@@ -2170,7 +2167,7 @@ class ChunkedStream {
       return;
     }
 
-    if (!this.loadedChunks[chunk]) {
+    if (!this._loadedChunks.has(chunk)) {
       throw new _core_utils.MissingDataException(pos, pos + 1);
     }
 
@@ -2191,7 +2188,7 @@ class ChunkedStream {
     const endChunk = Math.floor((end - 1) / chunkSize) + 1;
 
     for (let chunk = beginChunk; chunk < endChunk; ++chunk) {
-      if (!this.loadedChunks[chunk]) {
+      if (!this._loadedChunks.has(chunk)) {
         throw new _core_utils.MissingDataException(begin, end);
       }
     }
@@ -2203,7 +2200,7 @@ class ChunkedStream {
     for (let i = 0; i < numChunks; ++i) {
       const chunk = (beginChunk + i) % numChunks;
 
-      if (!this.loadedChunks[chunk]) {
+      if (!this._loadedChunks.has(chunk)) {
         return chunk;
       }
     }
@@ -2212,7 +2209,7 @@ class ChunkedStream {
   }
 
   hasChunk(chunk) {
-    return !!this.loadedChunks[chunk];
+    return this._loadedChunks.has(chunk);
   }
 
   get length() {
@@ -2355,7 +2352,7 @@ class ChunkedStream {
       const missingChunks = [];
 
       for (let chunk = beginChunk; chunk < endChunk; ++chunk) {
-        if (!this.loadedChunks[chunk]) {
+        if (!this._loadedChunks.has(chunk)) {
           missingChunks.push(chunk);
         }
       }
@@ -12920,8 +12917,10 @@ var JpegImage = function JpegImageClosure() {
                 component;
 
             for (i = 0; i < selectorsCount; i++) {
-              var componentIndex = frame.componentIds[data[offset++]];
+              const index = data[offset++];
+              var componentIndex = frame.componentIds[index];
               component = frame.components[componentIndex];
+              component.index = index;
               var tableSpec = data[offset++];
               component.huffmanTableDC = huffmanTablesDC[tableSpec >> 4];
               component.huffmanTableAC = huffmanTablesAC[tableSpec & 15];
@@ -12998,6 +12997,7 @@ var JpegImage = function JpegImageClosure() {
         }
 
         this.components.push({
+          index: component.index,
           output: buildComponentData(frame, component),
           scaleX: component.h / frame.maxH,
           scaleY: component.v / frame.maxV,
@@ -13077,6 +13077,8 @@ var JpegImage = function JpegImageClosure() {
 
       if (this.numComponents === 3) {
         if (this._colorTransform === 0) {
+          return false;
+        } else if (this.components[0].index === 0x52 && this.components[1].index === 0x47 && this.components[2].index === 0x42) {
           return false;
         }
 

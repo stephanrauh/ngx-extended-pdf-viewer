@@ -427,6 +427,8 @@ const PDFViewerApplication = {
   externalServices: DefaultExternalServices,
   _boundEvents: {},
   contentDispositionFilename: null,
+  _hasInteracted: false,
+  _delayedFallbackFeatureIds: [],
 
   async initialize(appConfig) {
     this.preferences = this.externalServices.createPreferences();
@@ -962,6 +964,11 @@ const PDFViewerApplication = {
   },
 
   fallback(featureId) {
+    if (this._delayedFallbackFeatureIds.length >= 1 && this._hasInteracted) {
+      featureId = this._delayedFallbackFeatureIds[0];
+      this._delayedFallbackFeatureIds = [];
+    }
+
     if (this.fellback) {
       return;
     }
@@ -1241,7 +1248,9 @@ const PDFViewerApplication = {
         }
 
         console.warn("Warning: JavaScript is not supported");
-        this.fallback(_pdfjsLib.UNSUPPORTED_FEATURES.javaScript);
+
+        this._delayedFallbackFeatureIds.push(_pdfjsLib.UNSUPPORTED_FEATURES.javaScript);
+
         return true;
       });
 
@@ -1305,7 +1314,8 @@ const PDFViewerApplication = {
 
     if (info.IsAcroFormPresent) {
       console.warn("Warning: AcroForm/XFA is not supported");
-      this.fallback(_pdfjsLib.UNSUPPORTED_FEATURES.forms);
+
+      this._delayedFallbackFeatureIds.push(_pdfjsLib.UNSUPPORTED_FEATURES.forms);
     }
 
     let versionId = "other";
@@ -1670,6 +1680,7 @@ document.body.removeAttribute('data-pdfjsprinting');
     });
     window.addEventListener("click", webViewerClick);
     window.addEventListener("keydown", webViewerKeyDown);
+    window.addEventListener("keyup", webViewerKeyUp);
     window.addEventListener("resize", _boundEvents.windowResize);
     window.addEventListener("hashchange", _boundEvents.windowHashChange);
     window.addEventListener("beforeprint", _boundEvents.windowBeforePrint);
@@ -1772,6 +1783,7 @@ document.body.removeAttribute('data-pdfjsprinting');
     });
     window.removeEventListener("click", webViewerClick);
     window.removeEventListener("keydown", webViewerKeyDown);
+    window.removeEventListener("keyup", webViewerKeyUp);
     window.removeEventListener("resize", _boundEvents.windowResize);
     window.removeEventListener("hashchange", _boundEvents.windowHashChange);
     window.removeEventListener("beforeprint", _boundEvents.windowBeforePrint);
@@ -2424,6 +2436,18 @@ function webViewerWheel(evt) {
 }
 
 function webViewerClick(evt) {
+  PDFViewerApplication._hasInteracted = true;
+
+  if (PDFViewerApplication._delayedFallbackFeatureIds.length >= 1 && PDFViewerApplication.pdfViewer.containsElement(evt.target)) {
+          if (evt.target && evt.target.parentElement === appConfig.secondaryToolbar.toggleButton) {
+            return;
+          }
+          if (evt.target && evt.target.parentElement && evt.target.parentElement.parentElement === appConfig.secondaryToolbar.toggleButton) {
+            return;
+          }
+    PDFViewerApplication.fallback();
+  }
+
   if (!PDFViewerApplication.secondaryToolbar.isOpen) {
     return;
   }
@@ -2438,6 +2462,16 @@ function webViewerClick(evt) {
             return;
           }
     PDFViewerApplication.secondaryToolbar.close();
+  }
+}
+
+function webViewerKeyUp(evt) {
+  if (evt.keyCode === 9) {
+    PDFViewerApplication._hasInteracted = true;
+
+    if (PDFViewerApplication._delayedFallbackFeatureIds.length >= 1) {
+      PDFViewerApplication.fallback();
+    }
   }
 }
 
