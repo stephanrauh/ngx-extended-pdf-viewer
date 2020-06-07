@@ -12,6 +12,10 @@
   CDN: <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">unpkg.com</a>
  </p>
 
+## What's new in version 4.0?
+
+Version 4.0 is basically a major internal change. Now it's easier to update to the latest version of pdf.js. Your benefit is that you can finally use the minified pdf.js libraries. You'll notice the performance boost. There's also a new option in the findbar: "fuzzy search" is slow but useful if just ignoring diacritics and accents isn't enough flexibility.
+
 ## New: transition to a UI design inspired by Material Design (work in progress)
 Version 3.0.0 comes with a slightly modified design. That's work in progress. The goal is to give you a highly customizable, easily themeable library with a fresh and modern look inspired my Material Design. As an unintended side effect, it resembles the redesign called "Photon" of pdf.js. Among other things, you'll soon be able to select between the light mode and the dark mode.
 

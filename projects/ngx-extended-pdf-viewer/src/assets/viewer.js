@@ -5987,8 +5987,8 @@ class PDFFindController {
 
   _calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) {
     if (ignoreAccents) {
-      pageContent = window.deburr(pageContent);
-      query = window.deburr(query);
+      pageContent = (0, _index.deburr)(pageContent);
+      query = (0, _index.deburr)(query);
     }
 
     const matchesWithLength = [];

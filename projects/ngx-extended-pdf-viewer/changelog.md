@@ -176,3 +176,4 @@
 - 3.7.1 #234 disable the "previous/next" page menu item of the secondary toolbar more reliable
 - 3.7.2 fixed a typo preventing IE5 and Edge from printing
 - 4.0.0.alpha.0 #304 implemented a prototype of fuzzy search; start building pdf.js from a custom fork (https://github.com/stephanrauh/pdf.js); added source maps pointing to the original pdf.js source code; add minified files and load them by default; add [minified] to allow users to load the non-minified files
+- 4.0.0.alpha.1 fixed a bug that happened when combining "find ignore diacritics" and "find multiple words"
