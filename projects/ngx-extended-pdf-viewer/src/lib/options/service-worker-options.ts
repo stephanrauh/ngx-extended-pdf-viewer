@@ -1,7 +1,5 @@
-export const ServiceWorkerOptions = {
-  showUnverifiedSignatures: false
-};
-
-if (typeof window !== 'undefined') {
-  (window as any).ServiceWorkerOptions = ServiceWorkerOptions;
+export interface ServiceWorkerOptionsType {
+    showUnverifiedSignatures: boolean;
 }
+
+export declare const ServiceWorkerOptions: ServiceWorkerOptionsType;
