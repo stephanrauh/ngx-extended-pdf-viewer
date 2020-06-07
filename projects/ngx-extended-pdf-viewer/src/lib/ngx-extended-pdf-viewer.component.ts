@@ -28,7 +28,6 @@ import { SidebarviewChange } from './events/sidebarview-changed';
 import { HandtoolChanged } from './events/handtool-changed';
 import { PageNumberChange } from './events/page-number-change';
 import { ServiceWorkerOptions } from './options/service-worker-options';
-import * as deburr from 'lodash.deburr'; // #177
 import { VerbosityLevel } from './options/verbosity-level';
 import { FindState, FindResultMatchesCount, FindResult } from './events/find-result';
 import { isPlatformBrowser } from '@angular/common';
@@ -42,10 +41,6 @@ import { PdfCursorTools } from './options/pdf-cursor-tools';
 import { TextLayerRenderedEvent } from './events/textlayer-rendered';
 import { Location } from '@angular/common';
 import { PinchOnMobileSupport } from './pinch-on-mobile-support';
-
-if (typeof window !== 'undefined') {
-  (window as any).deburr = deburr; // #177
-}
 
 interface ElementAndPosition {
   element: HTMLElement;
