@@ -144,11 +144,11 @@ let pdfjsWebApp, pdfjsWebAppOptions;
 }
 ;
 {
-  __webpack_require__(38);
+  __webpack_require__(35);
 }
 ;
 {
-  __webpack_require__(43);
+  __webpack_require__(40);
 }
 
 function getViewerConfiguration() {
@@ -337,25 +337,25 @@ var _pdf_find_bar = __webpack_require__(14);
 
 var _pdf_find_controller = __webpack_require__(15);
 
-var _pdf_history = __webpack_require__(22);
+var _pdf_history = __webpack_require__(19);
 
-var _pdf_link_service = __webpack_require__(23);
+var _pdf_link_service = __webpack_require__(20);
 
-var _pdf_outline_viewer = __webpack_require__(24);
+var _pdf_outline_viewer = __webpack_require__(21);
 
-var _pdf_presentation_mode = __webpack_require__(25);
+var _pdf_presentation_mode = __webpack_require__(22);
 
-var _pdf_sidebar_resizer = __webpack_require__(26);
+var _pdf_sidebar_resizer = __webpack_require__(23);
 
-var _pdf_thumbnail_viewer = __webpack_require__(27);
+var _pdf_thumbnail_viewer = __webpack_require__(24);
 
-var _pdf_viewer = __webpack_require__(29);
+var _pdf_viewer = __webpack_require__(26);
 
-var _secondary_toolbar = __webpack_require__(34);
+var _secondary_toolbar = __webpack_require__(31);
 
-var _toolbar = __webpack_require__(36);
+var _toolbar = __webpack_require__(33);
 
-var _view_history = __webpack_require__(37);
+var _view_history = __webpack_require__(34);
 
 const DEFAULT_SCALE_DELTA = 1.1;
 const DISABLE_AUTO_FETCH_LOADING_BAR_TIMEOUT = 5000;
@@ -5622,19 +5622,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.PDFFindController = exports.FindState = void 0;
 
-var levenshtein = _interopRequireWildcard(__webpack_require__(16));
-
 var _pdfjsLib = __webpack_require__(5);
 
-var _index = __webpack_require__(20);
+var _index = __webpack_require__(16);
 
-var _pdf_find_utils = __webpack_require__(21);
+var _pdf_find_utils = __webpack_require__(17);
+
+var _levenshtein = __webpack_require__(18);
 
 var _ui_utils = __webpack_require__(2);
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 const FindState = {
   FOUND: 0,
@@ -5943,14 +5939,14 @@ class PDFFindController {
     const options = {
       useCollator: true
     };
-    const lev = window.Levenshtein;
 
     for (let i = 0; i < pageContent.length - queryLen; i++) {
       const shortCurrentContent = pageContent.substring(i, i + shortLen);
 
-      if (lev.get(shortQuery, shortCurrentContent, options) < 3) {
+      if (_levenshtein.Levenshtein.distance(shortQuery, shortCurrentContent, options) < 3) {
         const currentContent = pageContent.substring(i, i + queryLen);
-        const distance = window.Levenshtein.get(query, currentContent, options);
+
+        const distance = _levenshtein.Levenshtein.distance(query, currentContent, options);
 
         if (distance <= maxDistance) {
           matches.push(i);
@@ -6045,7 +6041,6 @@ class PDFFindController {
       fuzzySearch,
       phraseSearch
     } = this._state;
-    debugger;
 
     if (query.length === 0) {
       return;
@@ -6365,165 +6360,6 @@ exports.PDFFindController = PDFFindController;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_RESULT__;
-
-(function () {
-  'use strict';
-
-  var collator;
-
-  try {
-    collator = typeof Intl !== "undefined" && typeof Intl.Collator !== "undefined" ? Intl.Collator("generic", {
-      sensitivity: "base"
-    }) : null;
-  } catch (err) {
-    console.log("Collator could not be initialized and wouldn't be used");
-  }
-
-  var prevRow = [],
-      str2Char = [];
-  var Levenshtein = {
-    get: function (str1, str2, options) {
-      var useCollator = options && collator && options.useCollator;
-      var str1Len = str1.length,
-          str2Len = str2.length;
-      if (str1Len === 0) return str2Len;
-      if (str2Len === 0) return str1Len;
-      var curCol, nextCol, i, j, tmp;
-
-      for (i = 0; i < str2Len; ++i) {
-        prevRow[i] = i;
-        str2Char[i] = str2.charCodeAt(i);
-      }
-
-      prevRow[str2Len] = str2Len;
-      var strCmp;
-
-      if (useCollator) {
-        for (i = 0; i < str1Len; ++i) {
-          nextCol = i + 1;
-
-          for (j = 0; j < str2Len; ++j) {
-            curCol = nextCol;
-            strCmp = 0 === collator.compare(str1.charAt(i), String.fromCharCode(str2Char[j]));
-            nextCol = prevRow[j] + (strCmp ? 0 : 1);
-            tmp = curCol + 1;
-
-            if (nextCol > tmp) {
-              nextCol = tmp;
-            }
-
-            tmp = prevRow[j + 1] + 1;
-
-            if (nextCol > tmp) {
-              nextCol = tmp;
-            }
-
-            prevRow[j] = curCol;
-          }
-
-          prevRow[j] = nextCol;
-        }
-      } else {
-        for (i = 0; i < str1Len; ++i) {
-          nextCol = i + 1;
-
-          for (j = 0; j < str2Len; ++j) {
-            curCol = nextCol;
-            strCmp = str1.charCodeAt(i) === str2Char[j];
-            nextCol = prevRow[j] + (strCmp ? 0 : 1);
-            tmp = curCol + 1;
-
-            if (nextCol > tmp) {
-              nextCol = tmp;
-            }
-
-            tmp = prevRow[j + 1] + 1;
-
-            if (nextCol > tmp) {
-              nextCol = tmp;
-            }
-
-            prevRow[j] = curCol;
-          }
-
-          prevRow[j] = nextCol;
-        }
-      }
-
-      return nextCol;
-    }
-  };
-
-  if ( true && __webpack_require__(18) !== null && __webpack_require__(19)) {
-    !(__WEBPACK_AMD_DEFINE_RESULT__ = (function () {
-      return Levenshtein;
-    }).call(exports, __webpack_require__, exports, module),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-  } else if ( true && module !== null && typeof exports !== "undefined" && module.exports === exports) {
-    module.exports = Levenshtein;
-  } else if (typeof self !== "undefined" && typeof self.postMessage === 'function' && typeof self.importScripts === 'function') {
-    self.Levenshtein = Levenshtein;
-  } else if (typeof window !== "undefined" && window !== null) {
-    window.Levenshtein = Levenshtein;
-  }
-})();
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)(module)))
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = function (module) {
-  if (!module.webpackPolyfill) {
-    module.deprecate = function () {};
-
-    module.paths = [];
-    if (!module.children) module.children = [];
-    Object.defineProperty(module, "loaded", {
-      enumerable: true,
-      get: function () {
-        return module.l;
-      }
-    });
-    Object.defineProperty(module, "id", {
-      enumerable: true,
-      get: function () {
-        return module.i;
-      }
-    });
-    module.webpackPolyfill = 1;
-  }
-
-  return module;
-};
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports) {
-
-module.exports = function() {
-	throw new Error("define cannot be used indirect");
-};
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports) {
-
-/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
-module.exports = __webpack_amd_options__;
-
-/* WEBPACK VAR INJECTION */}.call(this, {}))
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
 
 
 Object.defineProperty(exports, "__esModule", {
@@ -6777,7 +6613,7 @@ function deburr(string) {
 }
 
 /***/ }),
-/* 21 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6873,7 +6709,107 @@ function getCharacterType(charCode) {
 }
 
 /***/ }),
-/* 22 */
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Levenshtein = void 0;
+const levenshtein_collator = Intl.Collator("generic", {
+  sensitivity: "base"
+});
+const levenshtein_prevRow = [];
+const levenshtein_str2Char = [];
+
+class Levenshtein {
+  static distance(str1, str2, options) {
+    const useCollator = options && levenshtein_collator && options.useCollator;
+    const str1Len = str1.length;
+    const str2Len = str2.length;
+
+    if (str1Len === 0) {
+      return str2Len;
+    }
+
+    if (str2Len === 0) {
+      return str1Len;
+    }
+
+    let curCol, nextCol, i, j, tmp;
+
+    for (i = 0; i < str2Len; ++i) {
+      levenshtein_prevRow[i] = i;
+      levenshtein_str2Char[i] = str2.charCodeAt(i);
+    }
+
+    levenshtein_prevRow[str2Len] = str2Len;
+    let strCmp;
+
+    if (useCollator) {
+      for (i = 0; i < str1Len; ++i) {
+        nextCol = i + 1;
+
+        for (j = 0; j < str2Len; ++j) {
+          curCol = nextCol;
+          strCmp = levenshtein_collator.compare(str1.charAt(i), String.fromCharCode(levenshtein_str2Char[j])) === 0;
+          nextCol = levenshtein_prevRow[j] + (strCmp ? 0 : 1);
+          tmp = curCol + 1;
+
+          if (nextCol > tmp) {
+            nextCol = tmp;
+          }
+
+          tmp = levenshtein_prevRow[j + 1] + 1;
+
+          if (nextCol > tmp) {
+            nextCol = tmp;
+          }
+
+          levenshtein_prevRow[j] = curCol;
+        }
+
+        levenshtein_prevRow[j] = nextCol;
+      }
+    } else {
+      for (i = 0; i < str1Len; ++i) {
+        nextCol = i + 1;
+
+        for (j = 0; j < str2Len; ++j) {
+          curCol = nextCol;
+          strCmp = str1.charCodeAt(i) === levenshtein_str2Char[j];
+          nextCol = levenshtein_prevRow[j] + (strCmp ? 0 : 1);
+          tmp = curCol + 1;
+
+          if (nextCol > tmp) {
+            nextCol = tmp;
+          }
+
+          tmp = levenshtein_prevRow[j + 1] + 1;
+
+          if (nextCol > tmp) {
+            nextCol = tmp;
+          }
+
+          levenshtein_prevRow[j] = curCol;
+        }
+
+        levenshtein_prevRow[j] = nextCol;
+      }
+    }
+
+    return nextCol;
+  }
+
+}
+
+exports.Levenshtein = Levenshtein;
+
+/***/ }),
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7461,7 +7397,7 @@ function isDestArraysEqual(firstDest, secondDest) {
 }
 
 /***/ }),
-/* 23 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7900,7 +7836,7 @@ class SimpleLinkService {
 exports.SimpleLinkService = SimpleLinkService;
 
 /***/ }),
-/* 24 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8100,7 +8036,7 @@ class PDFOutlineViewer {
 exports.PDFOutlineViewer = PDFOutlineViewer;
 
 /***/ }),
-/* 25 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8509,7 +8445,7 @@ class PDFPresentationMode {
 exports.PDFPresentationMode = PDFPresentationMode;
 
 /***/ }),
-/* 26 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8658,7 +8594,7 @@ class PDFSidebarResizer {
 exports.PDFSidebarResizer = PDFSidebarResizer;
 
 /***/ }),
-/* 27 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8671,7 +8607,7 @@ exports.PDFThumbnailViewer = void 0;
 
 var _ui_utils = __webpack_require__(2);
 
-var _pdf_thumbnail_view = __webpack_require__(28);
+var _pdf_thumbnail_view = __webpack_require__(25);
 
 const THUMBNAIL_SCROLL_MARGIN = -19;
 const THUMBNAIL_SELECTED_CLASS = "selected";
@@ -8915,7 +8851,7 @@ class PDFThumbnailViewer {
 exports.PDFThumbnailViewer = PDFThumbnailViewer;
 
 /***/ }),
-/* 28 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9325,7 +9261,7 @@ class PDFThumbnailView {
 exports.PDFThumbnailView = PDFThumbnailView;
 
 /***/ }),
-/* 29 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9336,7 +9272,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.PDFViewer = void 0;
 
-var _base_viewer = __webpack_require__(30);
+var _base_viewer = __webpack_require__(27);
 
 var _pdfjsLib = __webpack_require__(5);
 
@@ -9412,7 +9348,7 @@ class PDFViewer extends _base_viewer.BaseViewer {
 exports.PDFViewer = PDFViewer;
 
 /***/ }),
-/* 30 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9427,15 +9363,15 @@ var _ui_utils = __webpack_require__(2);
 
 var _pdf_rendering_queue = __webpack_require__(8);
 
-var _annotation_layer_builder = __webpack_require__(31);
+var _annotation_layer_builder = __webpack_require__(28);
 
 var _pdfjsLib = __webpack_require__(5);
 
-var _pdf_page_view = __webpack_require__(32);
+var _pdf_page_view = __webpack_require__(29);
 
-var _pdf_link_service = __webpack_require__(23);
+var _pdf_link_service = __webpack_require__(20);
 
-var _text_layer_builder = __webpack_require__(33);
+var _text_layer_builder = __webpack_require__(30);
 
 const DEFAULT_CACHE_SIZE = 10;
 
@@ -10533,7 +10469,7 @@ class BaseViewer {
 exports.BaseViewer = BaseViewer;
 
 /***/ }),
-/* 31 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10548,7 +10484,7 @@ var _pdfjsLib = __webpack_require__(5);
 
 var _ui_utils = __webpack_require__(2);
 
-var _pdf_link_service = __webpack_require__(23);
+var _pdf_link_service = __webpack_require__(20);
 
 class AnnotationLayerBuilder {
   constructor({
@@ -10645,7 +10581,7 @@ class DefaultAnnotationLayerFactory {
 exports.DefaultAnnotationLayerFactory = DefaultAnnotationLayerFactory;
 
 /***/ }),
-/* 32 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11243,7 +11179,7 @@ class PDFPageView {
 exports.PDFPageView = PDFPageView;
 
 /***/ }),
-/* 33 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11629,7 +11565,7 @@ class DefaultTextLayerFactory {
 exports.DefaultTextLayerFactory = DefaultTextLayerFactory;
 
 /***/ }),
-/* 34 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11644,7 +11580,7 @@ var _ui_utils = __webpack_require__(2);
 
 var _pdf_cursor_tools = __webpack_require__(6);
 
-var _pdf_single_page_viewer = __webpack_require__(35);
+var _pdf_single_page_viewer = __webpack_require__(32);
 
 class SecondaryToolbar {
   constructor(options, mainContainer, eventBus) {
@@ -11953,7 +11889,7 @@ class SecondaryToolbar {
 exports.SecondaryToolbar = SecondaryToolbar;
 
 /***/ }),
-/* 35 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11964,7 +11900,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.PDFSinglePageViewer = void 0;
 
-var _base_viewer = __webpack_require__(30);
+var _base_viewer = __webpack_require__(27);
 
 var _pdfjsLib = __webpack_require__(5);
 
@@ -12075,7 +12011,7 @@ class PDFSinglePageViewer extends _base_viewer.BaseViewer {
 exports.PDFSinglePageViewer = PDFSinglePageViewer;
 
 /***/ }),
-/* 36 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12353,7 +12289,7 @@ class Toolbar {
 exports.Toolbar = Toolbar;
 
 /***/ }),
-/* 37 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12449,7 +12385,7 @@ class ViewHistory {
 exports.ViewHistory = ViewHistory;
 
 /***/ }),
-/* 38 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12462,11 +12398,11 @@ exports.GenericCom = void 0;
 
 var _app = __webpack_require__(1);
 
-var _preferences = __webpack_require__(39);
+var _preferences = __webpack_require__(36);
 
-var _download_manager = __webpack_require__(40);
+var _download_manager = __webpack_require__(37);
 
-var _genericl10n = __webpack_require__(41);
+var _genericl10n = __webpack_require__(38);
 
 ;
 const GenericCom = {};
@@ -12503,7 +12439,7 @@ class GenericExternalServices extends _app.DefaultExternalServices {
 _app.PDFViewerApplication.externalServices = GenericExternalServices;
 
 /***/ }),
-/* 39 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12654,7 +12590,7 @@ class BasePreferences {
 exports.BasePreferences = BasePreferences;
 
 /***/ }),
-/* 40 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12741,7 +12677,7 @@ class DownloadManager {
 exports.DownloadManager = DownloadManager;
 
 /***/ }),
-/* 41 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12752,7 +12688,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.GenericL10n = void 0;
 
-__webpack_require__(42);
+__webpack_require__(39);
 
 const webL10n = document.webL10n;
 
@@ -12791,7 +12727,7 @@ class GenericL10n {
 exports.GenericL10n = GenericL10n;
 
 /***/ }),
-/* 42 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13642,7 +13578,7 @@ document.webL10n = function (window, document, undefined) {
 }(window, document);
 
 /***/ }),
-/* 43 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

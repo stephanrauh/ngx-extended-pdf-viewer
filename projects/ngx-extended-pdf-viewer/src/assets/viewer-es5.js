@@ -1,19 +1,3 @@
-if (!HTMLCollection.prototype[Symbol.iterator]) {
-  HTMLCollection.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
-}
-    (function () {
-
-  if ( typeof window.CustomEvent === 'function' ) return false;
-
-  function CustomEvent ( event, params ) {
-    params = params || { bubbles: false, cancelable: false, detail: null };
-    var evt = document.createEvent( 'CustomEvent' );
-    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
-    return evt;
-   }
-
-  window.CustomEvent = CustomEvent;
-})();
 /**
  * @licstart The following is the entire license notice for the
  * Javascript code in this page
@@ -129,6 +113,29 @@ if (!HTMLCollection.prototype[Symbol.iterator]) {
 "use strict";
 
 
+if (!HTMLCollection.prototype[Symbol.iterator]) {
+  HTMLCollection.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
+}
+
+(function () {
+  if (typeof window.CustomEvent === "function") {
+    return;
+  }
+
+  function CustomEvent(event, params) {
+    params = params || {
+      bubbles: false,
+      cancelable: false,
+      detail: null
+    };
+    var evt = document.createEvent("CustomEvent");
+    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+    return evt;
+  }
+
+  window.CustomEvent = CustomEvent;
+})();
+
 ;
 var pdfjsWebApp, pdfjsWebAppOptions;
 {
@@ -137,11 +144,11 @@ var pdfjsWebApp, pdfjsWebAppOptions;
 }
 ;
 {
-  __webpack_require__(36);
+  __webpack_require__(38);
 }
 ;
 {
-  __webpack_require__(41);
+  __webpack_require__(43);
 }
 
 function getViewerConfiguration() {
@@ -216,12 +223,13 @@ function getViewerConfiguration() {
       bar: document.getElementById("findbar"),
       toggleButton: document.getElementById("viewFind"),
       findField: document.getElementById("findInput"),
-      findFieldMultiline: document.getElementById('findInputMultiline'), // #201
+      findFieldMultiline: document.getElementById("findInputMultiline"),
       highlightAllCheckbox: document.getElementById("findHighlightAll"),
       caseSensitiveCheckbox: document.getElementById("findMatchCase"),
       entireWordCheckbox: document.getElementById("findEntireWord"),
-      findMultipleSearchTextsCheckbox: document.getElementById('findMultipleSearchTexts'), // #201
-      ignoreAccentsCheckbox: document.getElementById('findIgnoreAccents'), // #177
+      findMultipleSearchTextsCheckbox: document.getElementById("findMultipleSearchTexts"),
+      ignoreAccentsCheckbox: document.getElementById("findIgnoreAccents"),
+      fuzzyCheckbox: document.getElementById("findFuzzy"),
       findMsg: document.getElementById("findMsg"),
       findResultsCount: document.getElementById("findResultsCount"),
       findPreviousButton: document.getElementById("findPrevious"),
@@ -289,7 +297,9 @@ function webViewerLoad() {
   pdfjsWebApp.PDFViewerApplication.run(config);
 }
 
-window.webViewerLoad = webViewerLoad;
+{
+  window.webViewerLoad = webViewerLoad;
+}
 
 /***/ }),
 /* 1 */
@@ -329,25 +339,25 @@ var _pdf_find_bar = __webpack_require__(17);
 
 var _pdf_find_controller = __webpack_require__(18);
 
-var _pdf_history = __webpack_require__(20);
+var _pdf_history = __webpack_require__(22);
 
-var _pdf_link_service = __webpack_require__(21);
+var _pdf_link_service = __webpack_require__(23);
 
-var _pdf_outline_viewer = __webpack_require__(22);
+var _pdf_outline_viewer = __webpack_require__(24);
 
-var _pdf_presentation_mode = __webpack_require__(23);
+var _pdf_presentation_mode = __webpack_require__(25);
 
-var _pdf_sidebar_resizer = __webpack_require__(24);
+var _pdf_sidebar_resizer = __webpack_require__(26);
 
-var _pdf_thumbnail_viewer = __webpack_require__(25);
+var _pdf_thumbnail_viewer = __webpack_require__(27);
 
-var _pdf_viewer = __webpack_require__(27);
+var _pdf_viewer = __webpack_require__(29);
 
-var _secondary_toolbar = __webpack_require__(32);
+var _secondary_toolbar = __webpack_require__(34);
 
-var _toolbar = __webpack_require__(34);
+var _toolbar = __webpack_require__(36);
 
-var _view_history = __webpack_require__(35);
+var _view_history = __webpack_require__(37);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -488,6 +498,8 @@ var PDFViewerApplication = {
   externalServices: DefaultExternalServices,
   _boundEvents: {},
   contentDispositionFilename: null,
+  _hasInteracted: false,
+  _delayedFallbackFeatureIds: [],
   initialize: function initialize(appConfig) {
     var _this = this;
 
@@ -642,34 +654,34 @@ var PDFViewerApplication = {
                 _app_options.AppOptions.set("enableWebGL", hashParams.webgl === "true");
               }
 
-    if ('removepageborders' in hashParams) { // #194
-      _app_options.AppOptions.set('removePageBorders', hashParams['removepageborders'] === 'true'); // #194
-    }
+              if ("removepageborders" in hashParams) {
+                _app_options.AppOptions.set("removePageBorders", hashParams["removepageborders"] === "true");
+              }
 
               if ("verbosity" in hashParams) {
                 _app_options.AppOptions.set("verbosity", hashParams.verbosity | 0);
               }
 
               if (!("textlayer" in hashParams)) {
-                _context3.next = 23;
+                _context3.next = 24;
                 break;
               }
 
               _context3.t0 = hashParams.textlayer;
-              _context3.next = _context3.t0 === "off" ? 18 : _context3.t0 === "visible" ? 20 : _context3.t0 === "shadow" ? 20 : _context3.t0 === "hover" ? 20 : 23;
+              _context3.next = _context3.t0 === "off" ? 19 : _context3.t0 === "visible" ? 21 : _context3.t0 === "shadow" ? 21 : _context3.t0 === "hover" ? 21 : 24;
               break;
 
-            case 18:
+            case 19:
               _app_options.AppOptions.set("textLayerMode", _ui_utils.TextLayerMode.DISABLE);
 
-              return _context3.abrupt("break", 23);
+              return _context3.abrupt("break", 24);
 
-            case 20:
+            case 21:
               viewer = _this3.appConfig.viewerContainer;
               viewer.classList.add("textLayer-" + hashParams.textlayer);
-              return _context3.abrupt("break", 23);
+              return _context3.abrupt("break", 24);
 
-            case 23:
+            case 24:
               if ("pdfbug" in hashParams) {
                 _app_options.AppOptions.set("pdfBug", true);
 
@@ -687,7 +699,7 @@ var PDFViewerApplication = {
                 console.error("_parseHashParameters: \"".concat(reason.message, "\"."));
               }));
 
-            case 26:
+            case 27:
             case "end":
               return _context3.stop();
           }
@@ -771,7 +783,7 @@ var PDFViewerApplication = {
                 l10n: _this5.l10n,
                 textLayerMode: _app_options.AppOptions.get("textLayerMode"),
                 imageResourcesPath: _app_options.AppOptions.get("imageResourcesPath"),
-      removePageBorders: _app_options.AppOptions.get('removePageBorders'), // #194
+                removePageBorders: _app_options.AppOptions.get("removePageBorders"),
                 renderInteractiveForms: _app_options.AppOptions.get("renderInteractiveForms"),
                 enablePrintAutoRotate: _app_options.AppOptions.get("enablePrintAutoRotate"),
                 useOnlyCssZoom: _app_options.AppOptions.get("useOnlyCssZoom"),
@@ -1148,7 +1160,8 @@ var PDFViewerApplication = {
                     message: message
                   });
 
-        this.onError(exception); // #205
+                  _this7.onError(exception);
+
                   throw exception;
                 });
               }));
@@ -1189,6 +1202,11 @@ var PDFViewerApplication = {
     })["catch"](downloadByUrl);
   },
   fallback: function fallback(featureId) {
+    if (this._delayedFallbackFeatureIds.length >= 1 && this._hasInteracted) {
+      featureId = this._delayedFallbackFeatureIds[0];
+      this._delayedFallbackFeatureIds = [];
+    }
+
     if (this.fellback) {
       return;
     }
@@ -1522,7 +1540,7 @@ var PDFViewerApplication = {
 
                 console.warn("Warning: JavaScript is not supported");
 
-                _this11.fallback(_pdfjsLib.UNSUPPORTED_FEATURES.javaScript);
+                _this11._delayedFallbackFeatureIds.push(_pdfjsLib.UNSUPPORTED_FEATURES.javaScript);
 
                 return true;
               });
@@ -1627,7 +1645,8 @@ var PDFViewerApplication = {
               _this12.documentInfo = info;
               _this12.metadata = metadata;
               _this12.contentDispositionFilename = contentDispositionFilename;
-              console.log("PDF ".concat(pdfDocument.fingerprint, " [").concat(info.PDFFormatVersion, " ") + "".concat((info.Producer || "-").trim(), " / ").concat((info.Creator || "-").trim(), "] ") + "(PDF.js: ".concat(_pdfjsLib.version || "-") + "".concat(_this12.pdfViewer.enableWebGL ? " [WebGL]" : "", ")"));
+              console.log("PDF viewer: ngx-extended-pdf-viewer running on pdf.js " + (window["pdfjs-dist/build/pdf"] ? window["pdfjs-dist/build/pdf"].version : " developer version (?)"));
+              console.log("PDF ".concat(pdfDocument.fingerprint, " [").concat(info.PDFFormatVersion, " ") + "".concat((info.Producer || "-").trim(), " / ").concat((info.Creator || "-").trim(), "] ") + "(PDF.js: ".concat(_pdfjsLib.version || "-") + "".concat(_this12.pdfViewer.enableWebGL ? " [WebGL]" : "", ") modified by ngx-extended-pdf-viewer)"));
               infoTitle = info && info.Title;
 
               if (infoTitle) {
@@ -1651,7 +1670,7 @@ var PDFViewerApplication = {
               if (info.IsAcroFormPresent) {
                 console.warn("Warning: AcroForm/XFA is not supported");
 
-                _this12.fallback(_pdfjsLib.UNSUPPORTED_FEATURES.forms);
+                _this12._delayedFallbackFeatureIds.push(_pdfjsLib.UNSUPPORTED_FEATURES.forms);
               }
 
               versionId = "other";
@@ -1689,7 +1708,7 @@ var PDFViewerApplication = {
                 formType: formType
               });
 
-            case 27:
+            case 28:
             case "end":
               return _context10.stop();
           }
@@ -1935,7 +1954,7 @@ var PDFViewerApplication = {
   },
   afterPrint: function afterPrint() {
     if (this.printService) {
-document.body.removeAttribute('data-pdfjsprinting');
+      document.body.removeAttribute("data-pdfjsprinting");
       this.printService.destroy();
       this.printService = null;
     }
@@ -2074,6 +2093,7 @@ document.body.removeAttribute('data-pdfjsprinting');
     });
     window.addEventListener("click", webViewerClick);
     window.addEventListener("keydown", webViewerKeyDown);
+    window.addEventListener("keyup", webViewerKeyUp);
     window.addEventListener("resize", _boundEvents.windowResize);
     window.addEventListener("hashchange", _boundEvents.windowHashChange);
     window.addEventListener("beforeprint", _boundEvents.windowBeforePrint);
@@ -2170,6 +2190,7 @@ document.body.removeAttribute('data-pdfjsprinting');
     });
     window.removeEventListener("click", webViewerClick);
     window.removeEventListener("keydown", webViewerKeyDown);
+    window.removeEventListener("keyup", webViewerKeyUp);
     window.removeEventListener("resize", _boundEvents.windowResize);
     window.removeEventListener("hashchange", _boundEvents.windowHashChange);
     window.removeEventListener("beforeprint", _boundEvents.windowBeforePrint);
@@ -2262,7 +2283,7 @@ function webViewerInitialized() {
   var fileInput = document.createElement("input");
   fileInput.id = appConfig.openFileInputName;
   fileInput.className = "fileInput";
-  fileInput.setAttribute('accept', '.pdf,application/pdf');
+  fileInput.setAttribute("accept", ".pdf,application/pdf");
   fileInput.setAttribute("type", "file");
   fileInput.oncontextmenu = _ui_utils.noContextMenuHandler;
   document.body.appendChild(fileInput);
@@ -2686,7 +2707,8 @@ function webViewerFind(evt) {
     phraseSearch: evt.phraseSearch,
     caseSensitive: evt.caseSensitive,
     entireWord: evt.entireWord,
-    ignoreAccents: evt.ignoreAccents, // #177
+    ignoreAccents: evt.ignoreAccents,
+    fuzzySearch: evt.fuzzySearch,
     highlightAll: evt.highlightAll,
     findPrevious: evt.findPrevious
   });
@@ -2698,7 +2720,8 @@ function webViewerFindFromUrlHash(evt) {
     phraseSearch: evt.phraseSearch,
     caseSensitive: false,
     entireWord: false,
-    ignoreAccents: false, // #177
+    ignoreAccents: false,
+    fuzzySearch: false,
     highlightAll: true,
     findPrevious: false
   });
@@ -2757,9 +2780,11 @@ function webViewerPageChanging(evt) {
       Stats.add(page, pageView.stats);
     }
   }
-  let pageNumberInput = document.getElementById('pageNumber');
+
+  var pageNumberInput = document.getElementById("pageNumber");
+
   if (pageNumberInput) {
-    var pageScrollEvent = new CustomEvent('page-change');
+    var pageScrollEvent = new CustomEvent("page-change");
     pageNumberInput.dispatchEvent(pageScrollEvent);
   }
 }
@@ -2790,9 +2815,9 @@ function webViewerWheel(evt) {
     return;
   }
 
-  let cmd = (evt.ctrlKey ? 1 : 0) | (evt.altKey ? 2 : 0) | (evt.shiftKey ? 4 : 0) | (evt.metaKey ? 8 : 0);
+  var cmd = (evt.ctrlKey ? 1 : 0) | (evt.altKey ? 2 : 0) | (evt.shiftKey ? 4 : 0) | (evt.metaKey ? 8 : 0);
 
-  if (isKeyIgnored(cmd, "WHEEL")) {
+  if (window.isKeyIgnored && window.isKeyIgnored(cmd, "WHEEL")) {
     return;
   }
 
@@ -2830,6 +2855,20 @@ function webViewerWheel(evt) {
 }
 
 function webViewerClick(evt) {
+  PDFViewerApplication._hasInteracted = true;
+
+  if (PDFViewerApplication._delayedFallbackFeatureIds.length >= 1 && PDFViewerApplication.pdfViewer.containsElement(evt.target)) {
+    if (evt.target && evt.target.parentElement === appConfig.secondaryToolbar.toggleButton) {
+      return;
+    }
+
+    if (evt.target && evt.target.parentElement && evt.target.parentElement.parentElement === appConfig.secondaryToolbar.toggleButton) {
+      return;
+    }
+
+    PDFViewerApplication.fallback();
+  }
+
   if (!PDFViewerApplication.secondaryToolbar.isOpen) {
     return;
   }
@@ -2837,13 +2876,25 @@ function webViewerClick(evt) {
   var appConfig = PDFViewerApplication.appConfig;
 
   if (PDFViewerApplication.pdfViewer.containsElement(evt.target) || appConfig.toolbar.container.contains(evt.target) && evt.target !== appConfig.secondaryToolbar.toggleButton) {
-          if (evt.target && evt.target.parentElement === appConfig.secondaryToolbar.toggleButton) {
-            return;
-          }
-          if (evt.target && evt.target.parentElement && evt.target.parentElement.parentElement === appConfig.secondaryToolbar.toggleButton) {
-            return;
-          }
+    if (evt.target && evt.target.parentElement === appConfig.secondaryToolbar.toggleButton) {
+      return;
+    }
+
+    if (evt.target && evt.target.parentElement && evt.target.parentElement.parentElement === appConfig.secondaryToolbar.toggleButton) {
+      return;
+    }
+
     PDFViewerApplication.secondaryToolbar.close();
+  }
+}
+
+function webViewerKeyUp(evt) {
+  if (evt.keyCode === 9) {
+    PDFViewerApplication._hasInteracted = true;
+
+    if (PDFViewerApplication._delayedFallbackFeatureIds.length >= 1) {
+      PDFViewerApplication.fallback();
+    }
   }
 }
 
@@ -2858,9 +2909,10 @@ function webViewerKeyDown(evt) {
   var pdfViewer = PDFViewerApplication.pdfViewer;
   var isViewerInPresentationMode = pdfViewer && pdfViewer.isInPresentationMode;
 
-  if (isKeyIgnored(cmd, evt.keyCode)) {
+  if (window.isKeyIgnored && window.isKeyIgnored(cmd, evt.keyCode)) {
     return;
   }
+
   if (cmd === 1 || cmd === 8 || cmd === 5 || cmd === 12) {
     switch (evt.keyCode) {
       case 70:
@@ -2881,7 +2933,8 @@ function webViewerKeyDown(evt) {
               phraseSearch: findState.phraseSearch,
               caseSensitive: findState.caseSensitive,
               entireWord: findState.entireWord,
-              ignoreAccents: findState.ignoreAccents, // #177
+              ignoreAccents: findState.ignoreAccents,
+              fuzzySearch: findState.fuzzySearch,
               highlightAll: findState.highlightAll,
               findPrevious: cmd === 5 || cmd === 12
             });
@@ -3139,12 +3192,6 @@ function webViewerKeyDown(evt) {
       case 82:
         PDFViewerApplication.rotatePages(-90);
         break;
-    }
-  }
-
-    if (false) {
-    if (evt.keyCode >= 33 && evt.keyCode <= 40 || evt.keyCode === 32 && curElementTagName !== "BUTTON") {
-      ensureViewerFocused = true;
     }
   }
 
@@ -3650,7 +3697,6 @@ var runtime = function (exports) {
     },
     dispatchException: function dispatchException(exception) {
       if (this.done) {
-        this.onError(exception); // #205
         throw exception;
       }
 
@@ -4350,7 +4396,10 @@ function isDataSchema(url) {
 
 function getPDFFileNameFromURL(url) {
   var defaultFilename = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "document.pdf";
-if (PDFViewerApplication.appConfig.filenameForDownload) return PDFViewerApplication.appConfig.filenameForDownload;
+
+  if (window.PDFViewerApplication.appConfig.filenameForDownload) {
+    return window.PDFViewerApplication.appConfig.filenameForDownload;
+  }
 
   if (typeof url !== "string") {
     return defaultFilename;
@@ -4579,15 +4628,19 @@ var ProgressBar = /*#__PURE__*/function () {
 
     this.visible = true;
     this.div = document.querySelector(id + " .progress");
+
     if (this.div) {
       this.bar = this.div.parentNode;
     }
+
     this.height = height || 100;
     this.width = width || 100;
     this.units = units || "%";
+
     if (this.div) {
       this.div.style.height = this.height + this.units;
     }
+
     this.percent = 0;
   }
 
@@ -4603,7 +4656,9 @@ var ProgressBar = /*#__PURE__*/function () {
       if (this.div) {
         this.div.classList.remove("indeterminate");
       }
+
       var progressSize = this.width * this._percent / 100;
+
       if (this.div) {
         this.div.style.width = progressSize + this.units;
       }
@@ -4626,11 +4681,12 @@ var ProgressBar = /*#__PURE__*/function () {
     key: "hide",
     value: function hide() {
       this.visible = false;
-    this.div = document.querySelector('.body #mainContainer .progress'); // always set this new instead of trying to cache this value
-    if (this.div) {
-      this.bar = this.div.parentNode; // always set this new instead of trying to cache this value
+      this.div = document.querySelector(".body #mainContainer .progress");
+
+      if (this.div) {
+        this.bar = this.div.parentNode;
         this.bar.classList.add("hidden");
-    }
+      }
 
       document.body.classList.remove("loadingInProgress");
     }
@@ -4782,11 +4838,11 @@ var defaultOptions = {
     value: 150,
     kind: OptionKind.VIEWER
   },
-  removePageBorders: { // #194
-          value: false,
-          kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-        },
-          renderer: {
+  removePageBorders: {
+    value: false,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  renderer: {
     value: "canvas",
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
   },
@@ -4871,7 +4927,7 @@ var defaultOptions = {
     kind: OptionKind.WORKER
   },
   workerSrc: {
-    value: "./assets/pdf.worker-es5.js",
+    value: "./assets/pdf.worker.js",
     kind: OptionKind.WORKER
   }
 };
@@ -5004,15 +5060,7 @@ exports.viewerCompatibilityParams = viewerCompatibilityParams;
 "use strict";
 
 
-var pdfjsLib;
-
-if (typeof window !== "undefined" && window["pdfjs-dist/build/pdf"]) {
-  pdfjsLib = window["pdfjs-dist/build/pdf"];
-} else {
-  pdfjsLib = require("./pdf.js");
-}
-
-module.exports = pdfjsLib;
+module.exports = window["pdfjs-dist/build/pdf"];
 
 /***/ }),
 /* 9 */
@@ -6242,7 +6290,8 @@ var PasswordPrompt = /*#__PURE__*/function () {
       var _this2 = this;
 
       this.overlayManager.open(this.overlayName).then(function () {
-        _this2.input.type="password";
+        _this2.input.type = "password";
+
         _this2.input.focus();
 
         var promptString;
@@ -6264,7 +6313,7 @@ var PasswordPrompt = /*#__PURE__*/function () {
       var _this3 = this;
 
       this.overlayManager.close(this.overlayName).then(function () {
-        _this3.input.type="";
+        _this3.input.type = "";
         _this3.input.value = "";
       });
     }
@@ -6951,12 +7000,13 @@ var PDFFindBar = /*#__PURE__*/function () {
     this.bar = options.bar || null;
     this.toggleButton = options.toggleButton || null;
     this.findField = options.findField || null;
-    this.findFieldMultiline = options.findFieldMultiline || null; // #201
+    this.findFieldMultiline = options.findFieldMultiline || null;
     this.highlightAll = options.highlightAllCheckbox || null;
     this.caseSensitive = options.caseSensitiveCheckbox || null;
     this.entireWord = options.entireWordCheckbox || null;
-    this.multipleSearchTexts = options.findMultipleSearchTextsCheckbox || null; // #201
-    this.ignoreAccents = options.ignoreAccentsCheckbox || null; // #177
+    this.multipleSearchTexts = options.findMultipleSearchTextsCheckbox || null;
+    this.ignoreAccents = options.ignoreAccentsCheckbox || null;
+    this.fuzzySearch = options.fuzzyCheckbox || null;
     this.findMsg = options.findMsg || null;
     this.findResultsCount = options.findResultsCount || null;
     this.findPreviousButton = options.findPreviousButton || null;
@@ -6966,8 +7016,8 @@ var PDFFindBar = /*#__PURE__*/function () {
     this.toggleButton.addEventListener("click", function () {
       _this.toggle();
     });
-    this.findFieldMultiline.addEventListener('input', function () { // #201
-      _this.dispatchEvent('');
+    this.findFieldMultiline.addEventListener("input", function () {
+      _this.dispatchEvent("");
     });
     this.findField.addEventListener("input", function () {
       _this.dispatchEvent("");
@@ -7002,13 +7052,16 @@ var PDFFindBar = /*#__PURE__*/function () {
     this.entireWord.addEventListener("click", function () {
       _this.dispatchEvent("entirewordchange");
     });
+    this.multipleSearchTexts.addEventListener("click", function () {
+      _this.dispatchEvent("multiplesearchtextschange");
+    });
+    this.ignoreAccents.addEventListener("click", function () {
+      _this.dispatchEvent("ignoreAccentsChange");
+    });
+    this.fuzzySearch.addEventListener("click", function () {
+      _this.dispatchEvent("fuzzySearchChange");
+    });
 
-    this.multipleSearchTexts.addEventListener('click', function () { // #201
-     _this.dispatchEvent('multiplesearchtextschange');
-    });
-    this.ignoreAccents.addEventListener('click', function () { // #177
-     _this.dispatchEvent('ignoreAccentsChange');
-    });
     this.eventBus._on("resize", this._adjustWidth.bind(this));
   }
 
@@ -7022,12 +7075,13 @@ var PDFFindBar = /*#__PURE__*/function () {
     value: function dispatchEvent(type, findPrev) {
       this.eventBus.dispatch("find", {
         source: this,
-      type: type,
-      query: this.findFieldMultiline.classList.contains('hidden')? this.findField.value: this.findFieldMultiline.value, // #201
-      phraseSearch: !this.multipleSearchTexts.checked, // #201
+        type: type,
+        query: this.findFieldMultiline.classList.contains("hidden") ? this.findField.value : this.findFieldMultiline.value,
+        phraseSearch: !this.multipleSearchTexts.checked,
         caseSensitive: this.caseSensitive.checked,
         entireWord: this.entireWord.checked,
-      ignoreAccents: this.ignoreAccents.checked, // #177
+        ignoreAccents: this.ignoreAccents.checked,
+        fuzzySearch: this.fuzzySearch.checked,
         highlightAll: this.highlightAll.checked,
         findPrevious: findPrev
       });
@@ -7066,9 +7120,8 @@ var PDFFindBar = /*#__PURE__*/function () {
 
       this.findField.classList.toggle("notFound", notFound);
       this.findField.setAttribute("data-status", status);
-    this.findFieldMultiline.classList.toggle('notFound', notFound); // #201
-    this.findFieldMultiline.setAttribute('data-status', status);    // #201
-
+      this.findFieldMultiline.classList.toggle("notFound", notFound);
+      this.findFieldMultiline.setAttribute("data-status", status);
       Promise.resolve(findMsg).then(function (msg) {
         _this2.findMsg.textContent = msg;
 
@@ -7126,7 +7179,7 @@ var PDFFindBar = /*#__PURE__*/function () {
 
       this.findField.select();
       this.findField.focus();
-    this.dispatchEvent(''); // #206
+      this.dispatchEvent("");
 
       this._adjustWidth();
     }
@@ -7189,7 +7242,11 @@ exports.PDFFindController = exports.FindState = void 0;
 
 var _pdfjsLib = __webpack_require__(8);
 
-var _pdf_find_utils = __webpack_require__(19);
+var _index = __webpack_require__(19);
+
+var _pdf_find_utils = __webpack_require__(20);
+
+var _levenshtein = __webpack_require__(21);
 
 var _ui_utils = __webpack_require__(5);
 
@@ -7361,7 +7418,7 @@ var PDFFindController = /*#__PURE__*/function () {
       this._pdfDocument = null;
       this._pageMatches = [];
       this._pageMatchesLength = [];
-    this._pageMatchesColor = [];  // #201
+      this._pageMatchesColor = [];
       this._state = null;
       this._selected = {
         pageIdx: -1,
@@ -7409,7 +7466,7 @@ var PDFFindController = /*#__PURE__*/function () {
     }
   }, {
     key: "_prepareMatches",
-    value: function _prepareMatches(matchesWithLength, matches, matchesLength, /* #201 */ matchesColor) {
+    value: function _prepareMatches(matchesWithLength, matches, matchesLength, matchesColor) {
       function isSubTerm(currentIndex) {
         var currentElem = matchesWithLength[currentIndex];
         var nextElem = matchesWithLength[currentIndex + 1];
@@ -7450,7 +7507,7 @@ var PDFFindController = /*#__PURE__*/function () {
 
         matches.push(matchesWithLength[i].match);
         matchesLength.push(matchesWithLength[i].matchLength);
-      matchesColor.push(matchesWithLength[i].color);  // #201
+        matchesColor.push(matchesWithLength[i].color);
       }
     }
   }, {
@@ -7480,12 +7537,41 @@ var PDFFindController = /*#__PURE__*/function () {
       return true;
     }
   }, {
+    key: "_calculateFuzzyMatch",
+    value: function _calculateFuzzyMatch(query, pageIndex, pageContent) {
+      var matches = [];
+      var queryLen = query.length;
+      var shortLen = queryLen < 5 ? queryLen : 5;
+      var maxDistance = Math.round(queryLen / 5);
+      var shortQuery = query.substring(0, shortLen);
+      var options = {
+        useCollator: true
+      };
+
+      for (var i = 0; i < pageContent.length - queryLen; i++) {
+        var shortCurrentContent = pageContent.substring(i, i + shortLen);
+
+        if (_levenshtein.Levenshtein.distance(shortQuery, shortCurrentContent, options) < 3) {
+          var currentContent = pageContent.substring(i, i + queryLen);
+
+          var distance = _levenshtein.Levenshtein.distance(query, currentContent, options);
+
+          if (distance <= maxDistance) {
+            matches.push(i);
+            i += queryLen - 1;
+          }
+        }
+      }
+
+      this._pageMatches[pageIndex] = matches;
+    }
+  }, {
     key: "_calculatePhraseMatch",
-    value: function _calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
-            if (ignoreAccents) { // #177
-              pageContent = window.deburr(pageContent); // #177
-              query = window.deburr(query); // #177
-            } // #177
+    value: function _calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) {
+      if (ignoreAccents) {
+        pageContent = (0, _index.deburr)(pageContent);
+        query = (0, _index.deburr)(query);
+      }
 
       var matches = [];
       var queryLen = query.length;
@@ -7509,19 +7595,23 @@ var PDFFindController = /*#__PURE__*/function () {
     }
   }, {
     key: "_calculateWordMatch",
-    value: function _calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
-            if (ignoreAccents) { // #177
-              pageContent = window.deburr(pageContent); // #177
-              query = window.deburr(query); // #177
-            } // #177
+    value: function _calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) {
+      if (ignoreAccents) {
+        pageContent = window.deburr(pageContent);
+        query = window.deburr(query);
+      }
 
       var matchesWithLength = [];
-    var queryArray = (query.includes('\n')) ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g); // #201
+      var queryArray = query.includes("\n") ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g);
 
       for (var i = 0, len = queryArray.length; i < len; i++) {
         var subquery = queryArray[i];
         var subqueryLen = subquery.length;
-        if (subqueryLen === 0) continue;
+
+        if (subqueryLen === 0) {
+          continue;
+        }
+
         var matchIdx = -subqueryLen;
 
         while (true) {
@@ -7539,16 +7629,16 @@ var PDFFindController = /*#__PURE__*/function () {
             match: matchIdx,
             matchLength: subqueryLen,
             skipped: false,
-          color: i  // #201
+            color: i
           });
         }
       }
 
       this._pageMatchesLength[pageIndex] = [];
-    this._pageMatchesColor[pageIndex] = [];  // #201
+      this._pageMatchesColor[pageIndex] = [];
       this._pageMatches[pageIndex] = [];
 
-      this._prepareMatches(matchesWithLength, this._pageMatches[pageIndex], this._pageMatchesLength[pageIndex], /* #201 */ this._pageMatchesColor[pageIndex]);;
+      this._prepareMatches(matchesWithLength, this._pageMatches[pageIndex], this._pageMatchesLength[pageIndex], this._pageMatchesColor[pageIndex]);
     }
   }, {
     key: "_calculateMatch",
@@ -7558,7 +7648,8 @@ var PDFFindController = /*#__PURE__*/function () {
       var _this$_state = this._state,
           caseSensitive = _this$_state.caseSensitive,
           entireWord = _this$_state.entireWord,
-          ignoreAccents = _this$_state.ignoreAccents, // #177
+          ignoreAccents = _this$_state.ignoreAccents,
+          fuzzySearch = _this$_state.fuzzySearch,
           phraseSearch = _this$_state.phraseSearch;
 
       if (query.length === 0) {
@@ -7570,10 +7661,16 @@ var PDFFindController = /*#__PURE__*/function () {
         query = query.toLowerCase();
       }
 
-      if (phraseSearch) {
-      this._calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents); // #177
+      if (fuzzySearch) {
+        if (query.length <= 2) {
+          this._calculatePhraseMatch(query, pageIndex, pageContent, false);
+        } else {
+          this._calculateFuzzyMatch(query, pageIndex, pageContent);
+        }
+      } else if (phraseSearch) {
+        this._calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents);
       } else {
-      this._calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents); // #177
+        this._calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents);
       }
 
       if (this._state.highlightAll) {
@@ -7674,7 +7771,7 @@ var PDFFindController = /*#__PURE__*/function () {
         this._resumePageIdx = null;
         this._pageMatches.length = 0;
         this._pageMatchesLength.length = 0;
-      this._pageMatchesColor.length = 0;  // #201
+        this._pageMatchesColor.length = 0;
         this._matchesCountTotal = 0;
 
         this._updateAllPages();
@@ -7897,7 +7994,7 @@ var PDFFindController = /*#__PURE__*/function () {
     }
   }, {
     key: "pageMatchesColor",
-    get: function get() {  // #201
+    get: function get() {
       return this._pageMatchesColor;
     }
   }, {
@@ -7934,6 +8031,266 @@ exports.PDFFindController = PDFFindController;
 
 /***/ }),
 /* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.deburr = deburr;
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+var INFINITY = 1 / 0;
+var symbolTag = '[object Symbol]';
+var reLatin = /[\xc0-\xd6\xd8-\xf6\xf8-\xff\u0100-\u017f]/g;
+var rsComboMarksRange = "\\u0300-\\u036f\\ufe20-\\ufe23",
+    rsComboSymbolsRange = "\\u20d0-\\u20f0";
+var rsCombo = '[' + rsComboMarksRange + rsComboSymbolsRange + ']';
+var reComboMark = RegExp(rsCombo, 'g');
+var deburredLetters = {
+  '\xc0': 'A',
+  '\xc1': 'A',
+  '\xc2': 'A',
+  '\xc3': 'A',
+  '\xc4': 'A',
+  '\xc5': 'A',
+  '\xe0': 'a',
+  '\xe1': 'a',
+  '\xe2': 'a',
+  '\xe3': 'a',
+  '\xe4': 'a',
+  '\xe5': 'a',
+  '\xc7': 'C',
+  '\xe7': 'c',
+  '\xd0': 'D',
+  '\xf0': 'd',
+  '\xc8': 'E',
+  '\xc9': 'E',
+  '\xca': 'E',
+  '\xcb': 'E',
+  '\xe8': 'e',
+  '\xe9': 'e',
+  '\xea': 'e',
+  '\xeb': 'e',
+  '\xcc': 'I',
+  '\xcd': 'I',
+  '\xce': 'I',
+  '\xcf': 'I',
+  '\xec': 'i',
+  '\xed': 'i',
+  '\xee': 'i',
+  '\xef': 'i',
+  '\xd1': 'N',
+  '\xf1': 'n',
+  '\xd2': 'O',
+  '\xd3': 'O',
+  '\xd4': 'O',
+  '\xd5': 'O',
+  '\xd6': 'O',
+  '\xd8': 'O',
+  '\xf2': 'o',
+  '\xf3': 'o',
+  '\xf4': 'o',
+  '\xf5': 'o',
+  '\xf6': 'o',
+  '\xf8': 'o',
+  '\xd9': 'U',
+  '\xda': 'U',
+  '\xdb': 'U',
+  '\xdc': 'U',
+  '\xf9': 'u',
+  '\xfa': 'u',
+  '\xfb': 'u',
+  '\xfc': 'u',
+  '\xdd': 'Y',
+  '\xfd': 'y',
+  '\xff': 'y',
+  '\xc6': 'Ae',
+  '\xe6': 'ae',
+  '\xde': 'Th',
+  '\xfe': 'th',
+  '\xdf': 'ss',
+  "\u0100": 'A',
+  "\u0102": 'A',
+  "\u0104": 'A',
+  "\u0101": 'a',
+  "\u0103": 'a',
+  "\u0105": 'a',
+  "\u0106": 'C',
+  "\u0108": 'C',
+  "\u010A": 'C',
+  "\u010C": 'C',
+  "\u0107": 'c',
+  "\u0109": 'c',
+  "\u010B": 'c',
+  "\u010D": 'c',
+  "\u010E": 'D',
+  "\u0110": 'D',
+  "\u010F": 'd',
+  "\u0111": 'd',
+  "\u0112": 'E',
+  "\u0114": 'E',
+  "\u0116": 'E',
+  "\u0118": 'E',
+  "\u011A": 'E',
+  "\u0113": 'e',
+  "\u0115": 'e',
+  "\u0117": 'e',
+  "\u0119": 'e',
+  "\u011B": 'e',
+  "\u011C": 'G',
+  "\u011E": 'G',
+  "\u0120": 'G',
+  "\u0122": 'G',
+  "\u011D": 'g',
+  "\u011F": 'g',
+  "\u0121": 'g',
+  "\u0123": 'g',
+  "\u0124": 'H',
+  "\u0126": 'H',
+  "\u0125": 'h',
+  "\u0127": 'h',
+  "\u0128": 'I',
+  "\u012A": 'I',
+  "\u012C": 'I',
+  "\u012E": 'I',
+  "\u0130": 'I',
+  "\u0129": 'i',
+  "\u012B": 'i',
+  "\u012D": 'i',
+  "\u012F": 'i',
+  "\u0131": 'i',
+  "\u0134": 'J',
+  "\u0135": 'j',
+  "\u0136": 'K',
+  "\u0137": 'k',
+  "\u0138": 'k',
+  "\u0139": 'L',
+  "\u013B": 'L',
+  "\u013D": 'L',
+  "\u013F": 'L',
+  "\u0141": 'L',
+  "\u013A": 'l',
+  "\u013C": 'l',
+  "\u013E": 'l',
+  "\u0140": 'l',
+  "\u0142": 'l',
+  "\u0143": 'N',
+  "\u0145": 'N',
+  "\u0147": 'N',
+  "\u014A": 'N',
+  "\u0144": 'n',
+  "\u0146": 'n',
+  "\u0148": 'n',
+  "\u014B": 'n',
+  "\u014C": 'O',
+  "\u014E": 'O',
+  "\u0150": 'O',
+  "\u014D": 'o',
+  "\u014F": 'o',
+  "\u0151": 'o',
+  "\u0154": 'R',
+  "\u0156": 'R',
+  "\u0158": 'R',
+  "\u0155": 'r',
+  "\u0157": 'r',
+  "\u0159": 'r',
+  "\u015A": 'S',
+  "\u015C": 'S',
+  "\u015E": 'S',
+  "\u0160": 'S',
+  "\u015B": 's',
+  "\u015D": 's',
+  "\u015F": 's',
+  "\u0161": 's',
+  "\u0162": 'T',
+  "\u0164": 'T',
+  "\u0166": 'T',
+  "\u0163": 't',
+  "\u0165": 't',
+  "\u0167": 't',
+  "\u0168": 'U',
+  "\u016A": 'U',
+  "\u016C": 'U',
+  "\u016E": 'U',
+  "\u0170": 'U',
+  "\u0172": 'U',
+  "\u0169": 'u',
+  "\u016B": 'u',
+  "\u016D": 'u',
+  "\u016F": 'u',
+  "\u0171": 'u',
+  "\u0173": 'u',
+  "\u0174": 'W',
+  "\u0175": 'w',
+  "\u0176": 'Y',
+  "\u0177": 'y',
+  "\u0178": 'Y',
+  "\u0179": 'Z',
+  "\u017B": 'Z',
+  "\u017D": 'Z',
+  "\u017A": 'z',
+  "\u017C": 'z',
+  "\u017E": 'z',
+  "\u0132": 'IJ',
+  "\u0133": 'ij',
+  "\u0152": 'Oe',
+  "\u0153": 'oe',
+  "\u0149": "'n",
+  "\u017F": 'ss'
+};
+var freeGlobal = (typeof global === "undefined" ? "undefined" : _typeof(global)) == 'object' && global && global.Object === Object && global;
+var freeSelf = (typeof self === "undefined" ? "undefined" : _typeof(self)) == 'object' && self && self.Object === Object && self;
+var root = freeGlobal || freeSelf || Function('return this')();
+
+function basePropertyOf(object) {
+  return function (key) {
+    return object == null ? undefined : object[key];
+  };
+}
+
+var deburrLetter = basePropertyOf(deburredLetters);
+var objectProto = Object.prototype;
+var objectToString = objectProto.toString;
+var _Symbol = root.Symbol;
+var symbolProto = _Symbol ? _Symbol.prototype : undefined,
+    symbolToString = symbolProto ? symbolProto.toString : undefined;
+
+function baseToString(value) {
+  if (typeof value == 'string') {
+    return value;
+  }
+
+  if (isSymbol(value)) {
+    return symbolToString ? symbolToString.call(value) : '';
+  }
+
+  var result = value + '';
+  return result == '0' && 1 / value == -INFINITY ? '-0' : result;
+}
+
+function isObjectLike(value) {
+  return !!value && _typeof(value) == 'object';
+}
+
+function isSymbol(value) {
+  return _typeof(value) == 'symbol' || isObjectLike(value) && objectToString.call(value) == symbolTag;
+}
+
+function toString(value) {
+  return value == null ? '' : baseToString(value);
+}
+
+function deburr(string) {
+  string = toString(string);
+  return string && string.replace(reLatin, deburrLetter).replace(reComboMark, '');
+}
+
+/***/ }),
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8029,7 +8386,122 @@ function getCharacterType(charCode) {
 }
 
 /***/ }),
-/* 20 */
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Levenshtein = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var levenshtein_collator = Intl.Collator("generic", {
+  sensitivity: "base"
+});
+var levenshtein_prevRow = [];
+var levenshtein_str2Char = [];
+
+var Levenshtein = /*#__PURE__*/function () {
+  function Levenshtein() {
+    _classCallCheck(this, Levenshtein);
+  }
+
+  _createClass(Levenshtein, null, [{
+    key: "distance",
+    value: function distance(str1, str2, options) {
+      var useCollator = options && levenshtein_collator && options.useCollator;
+      var str1Len = str1.length;
+      var str2Len = str2.length;
+
+      if (str1Len === 0) {
+        return str2Len;
+      }
+
+      if (str2Len === 0) {
+        return str1Len;
+      }
+
+      var curCol, nextCol, i, j, tmp;
+
+      for (i = 0; i < str2Len; ++i) {
+        levenshtein_prevRow[i] = i;
+        levenshtein_str2Char[i] = str2.charCodeAt(i);
+      }
+
+      levenshtein_prevRow[str2Len] = str2Len;
+      var strCmp;
+
+      if (useCollator) {
+        for (i = 0; i < str1Len; ++i) {
+          nextCol = i + 1;
+
+          for (j = 0; j < str2Len; ++j) {
+            curCol = nextCol;
+            strCmp = levenshtein_collator.compare(str1.charAt(i), String.fromCharCode(levenshtein_str2Char[j])) === 0;
+            nextCol = levenshtein_prevRow[j] + (strCmp ? 0 : 1);
+            tmp = curCol + 1;
+
+            if (nextCol > tmp) {
+              nextCol = tmp;
+            }
+
+            tmp = levenshtein_prevRow[j + 1] + 1;
+
+            if (nextCol > tmp) {
+              nextCol = tmp;
+            }
+
+            levenshtein_prevRow[j] = curCol;
+          }
+
+          levenshtein_prevRow[j] = nextCol;
+        }
+      } else {
+        for (i = 0; i < str1Len; ++i) {
+          nextCol = i + 1;
+
+          for (j = 0; j < str2Len; ++j) {
+            curCol = nextCol;
+            strCmp = str1.charCodeAt(i) === levenshtein_str2Char[j];
+            nextCol = levenshtein_prevRow[j] + (strCmp ? 0 : 1);
+            tmp = curCol + 1;
+
+            if (nextCol > tmp) {
+              nextCol = tmp;
+            }
+
+            tmp = levenshtein_prevRow[j + 1] + 1;
+
+            if (nextCol > tmp) {
+              nextCol = tmp;
+            }
+
+            levenshtein_prevRow[j] = curCol;
+          }
+
+          levenshtein_prevRow[j] = nextCol;
+        }
+      }
+
+      return nextCol;
+    }
+  }]);
+
+  return Levenshtein;
+}();
+
+exports.Levenshtein = Levenshtein;
+
+/***/ }),
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8678,7 +9150,7 @@ function isDestArraysEqual(firstDest, secondDest) {
 }
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9166,7 +9638,7 @@ var SimpleLinkService = /*#__PURE__*/function () {
 exports.SimpleLinkService = SimpleLinkService;
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9409,7 +9881,7 @@ var PDFOutlineViewer = /*#__PURE__*/function () {
 exports.PDFOutlineViewer = PDFOutlineViewer;
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9866,7 +10338,7 @@ var PDFPresentationMode = /*#__PURE__*/function () {
 exports.PDFPresentationMode = PDFPresentationMode;
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10040,7 +10512,7 @@ var PDFSidebarResizer = /*#__PURE__*/function () {
 exports.PDFSidebarResizer = PDFSidebarResizer;
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10053,7 +10525,7 @@ exports.PDFThumbnailViewer = void 0;
 
 var _ui_utils = __webpack_require__(5);
 
-var _pdf_thumbnail_view = __webpack_require__(26);
+var _pdf_thumbnail_view = __webpack_require__(28);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -10326,7 +10798,7 @@ var PDFThumbnailViewer = /*#__PURE__*/function () {
 exports.PDFThumbnailViewer = PDFThumbnailViewer;
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10764,7 +11236,7 @@ var PDFThumbnailView = /*#__PURE__*/function () {
 exports.PDFThumbnailView = PDFThumbnailView;
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10775,7 +11247,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.PDFViewer = void 0;
 
-var _base_viewer = __webpack_require__(28);
+var _base_viewer = __webpack_require__(30);
 
 var _pdfjsLib = __webpack_require__(8);
 
@@ -10912,7 +11384,7 @@ var PDFViewer = /*#__PURE__*/function (_BaseViewer) {
 exports.PDFViewer = PDFViewer;
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10927,15 +11399,15 @@ var _ui_utils = __webpack_require__(5);
 
 var _pdf_rendering_queue = __webpack_require__(11);
 
-var _annotation_layer_builder = __webpack_require__(29);
+var _annotation_layer_builder = __webpack_require__(31);
 
 var _pdfjsLib = __webpack_require__(8);
 
-var _pdf_page_view = __webpack_require__(30);
+var _pdf_page_view = __webpack_require__(32);
 
-var _pdf_link_service = __webpack_require__(21);
+var _pdf_link_service = __webpack_require__(23);
 
-var _text_layer_builder = __webpack_require__(31);
+var _text_layer_builder = __webpack_require__(33);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -11170,6 +11642,7 @@ var BaseViewer = /*#__PURE__*/function () {
             textLayerMode: _this2.textLayerMode,
             annotationLayerFactory: _this2,
             imageResourcesPath: _this2.imageResourcesPath,
+            removePageBorders: _this2.removePageBorders,
             renderInteractiveForms: _this2.renderInteractiveForms,
             renderer: _this2.renderer,
             enableWebGL: _this2.enableWebGL,
@@ -12116,7 +12589,7 @@ var BaseViewer = /*#__PURE__*/function () {
 exports.BaseViewer = BaseViewer;
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12131,7 +12604,7 @@ var _pdfjsLib = __webpack_require__(8);
 
 var _ui_utils = __webpack_require__(5);
 
-var _pdf_link_service = __webpack_require__(21);
+var _pdf_link_service = __webpack_require__(23);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -12186,7 +12659,7 @@ var AnnotationLayerBuilder = /*#__PURE__*/function () {
           annotations: annotations,
           page: _this.pdfPage,
           imageResourcesPath: _this.imageResourcesPath,
-          removePageBorders: _this.removePageBorders, // #194
+          removePageBorders: _this.removePageBorders,
           renderInteractiveForms: _this.renderInteractiveForms,
           linkService: _this.linkService,
           downloadManager: _this.downloadManager
@@ -12261,7 +12734,7 @@ var DefaultAnnotationLayerFactory = /*#__PURE__*/function () {
 exports.DefaultAnnotationLayerFactory = DefaultAnnotationLayerFactory;
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12922,7 +13395,7 @@ var PDFPageView = /*#__PURE__*/function () {
 exports.PDFPageView = PDFPageView;
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13062,7 +13535,7 @@ var TextLayerBuilder = /*#__PURE__*/function () {
     }
   }, {
     key: "_convertMatches",
-    value: function _convertMatches(matches, matchesLength, /* #201 */ matchesColor) {
+    value: function _convertMatches(matches, matchesLength, matchesColor) {
       if (!matches) {
         return [];
       }
@@ -13088,7 +13561,7 @@ var TextLayerBuilder = /*#__PURE__*/function () {
         }
 
         var match = {
-        color: matchesColor ? matchesColor[m] : 0, // #201
+          color: matchesColor ? matchesColor[m] : 0,
           begin: {
             divIdx: i,
             offset: matchIdx - iIndex
@@ -13172,7 +13645,7 @@ var TextLayerBuilder = /*#__PURE__*/function () {
         var begin = match.begin;
         var end = match.end;
         var isSelected = isSelectedPage && i === selectedMatchIdx;
-      var highlightSuffix = (isSelected ? ' selected' : '') + ' color' + match.color; // #201
+        var highlightSuffix = (isSelected ? " selected" : "") + " color" + match.color;
 
         if (isSelected) {
           findController.scrollMatchIntoView({
@@ -13244,8 +13717,8 @@ var TextLayerBuilder = /*#__PURE__*/function () {
 
       var pageMatches = findController.pageMatches[pageIdx] || null;
       var pageMatchesLength = findController.pageMatchesLength[pageIdx] || null;
-      var pageMatchesColor = findController.pageMatchesColor[pageIdx] || null; // #201
-      this.matches = this._convertMatches(pageMatches, pageMatchesLength, pageMatchesColor); // #201
+      var pageMatchesColor = findController.pageMatchesColor[pageIdx] || null;
+      this.matches = this._convertMatches(pageMatches, pageMatchesLength, pageMatchesColor);
 
       this._renderMatches(this.matches);
     }
@@ -13340,7 +13813,7 @@ var DefaultTextLayerFactory = /*#__PURE__*/function () {
 exports.DefaultTextLayerFactory = DefaultTextLayerFactory;
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13355,7 +13828,7 @@ var _ui_utils = __webpack_require__(5);
 
 var _pdf_cursor_tools = __webpack_require__(9);
 
-var _pdf_single_page_viewer = __webpack_require__(33);
+var _pdf_single_page_viewer = __webpack_require__(35);
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
@@ -13540,13 +14013,12 @@ var SecondaryToolbar = /*#__PURE__*/function () {
       this.items.lastPage.disabled = this.pageNumber >= this.pagesCount;
       this.items.pageRotateCw.disabled = this.pagesCount === 0;
       this.items.pageRotateCcw.disabled = this.pagesCount === 0;
-
-    this.eventBus.dispatch("updateuistate", {
+      this.eventBus.dispatch("updateuistate", {
         source: this,
-        widget: 'SecondaryToolbar',
+        widget: "SecondaryToolbar",
         pageNumber: this.pageNumber,
         pagesCount: this.pagesCount
-    });
+      });
     }
   }, {
     key: "_bindClickListeners",
@@ -13713,7 +14185,7 @@ var SecondaryToolbar = /*#__PURE__*/function () {
 exports.SecondaryToolbar = SecondaryToolbar;
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13724,7 +14196,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.PDFSinglePageViewer = void 0;
 
-var _base_viewer = __webpack_require__(28);
+var _base_viewer = __webpack_require__(30);
 
 var _pdfjsLib = __webpack_require__(8);
 
@@ -13888,7 +14360,7 @@ var PDFSinglePageViewer = /*#__PURE__*/function (_BaseViewer) {
 exports.PDFSinglePageViewer = PDFSinglePageViewer;
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14160,15 +14632,14 @@ var Toolbar = /*#__PURE__*/function () {
           items.customScaleOption.selected = true;
         }
       });
-
-    this.eventBus.dispatch("updateuistate", {
-      source: this,
-      widget: 'Toolbar',
-      pageNumber: pageNumber,
-      pagesCount: pagesCount,
-      pageScaleValue: pageScaleValue,
-      pageScale: pageScale
-    });
+      this.eventBus.dispatch("updateuistate", {
+        source: this,
+        widget: "Toolbar",
+        pageNumber: pageNumber,
+        pagesCount: pagesCount,
+        pageScaleValue: pageScaleValue,
+        pageScale: pageScale
+      });
     }
   }, {
     key: "updateLoadingIndicatorState",
@@ -14225,7 +14696,7 @@ var Toolbar = /*#__PURE__*/function () {
                 }
 
                 overflow = SCALE_SELECT_WIDTH - SCALE_SELECT_CONTAINER_WIDTH;
-                maxWidth += 10 +  1.5 * overflow;
+                maxWidth += 10 + 1.5 * overflow;
 
                 if (maxWidth > SCALE_SELECT_CONTAINER_WIDTH) {
                   items.scaleSelect.style.width = "".concat(maxWidth + overflow, "px");
@@ -14258,7 +14729,7 @@ var Toolbar = /*#__PURE__*/function () {
 exports.Toolbar = Toolbar;
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14513,7 +14984,7 @@ var ViewHistory = /*#__PURE__*/function () {
 exports.ViewHistory = ViewHistory;
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14528,11 +14999,11 @@ var _regenerator = _interopRequireDefault(__webpack_require__(2));
 
 var _app = __webpack_require__(1);
 
-var _preferences = __webpack_require__(37);
+var _preferences = __webpack_require__(39);
 
-var _download_manager = __webpack_require__(38);
+var _download_manager = __webpack_require__(40);
 
-var _genericl10n = __webpack_require__(39);
+var _genericl10n = __webpack_require__(41);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -14666,7 +15137,7 @@ var GenericExternalServices = /*#__PURE__*/function (_DefaultExternalServi) {
 _app.PDFViewerApplication.externalServices = GenericExternalServices;
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14710,7 +15181,7 @@ function getDefaultPreferences() {
       "historyUpdateUrl": false,
       "ignoreDestinationZoom": false,
       "pdfBugEnabled": false,
-      "removePageBorders": false,// #194
+      "removePageBorders": false,
       "renderer": "canvas",
       "renderInteractiveForms": false,
       "sidebarViewOnLoad": -1,
@@ -15010,7 +15481,7 @@ var BasePreferences = /*#__PURE__*/function () {
 exports.BasePreferences = BasePreferences;
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15114,7 +15585,7 @@ var DownloadManager = /*#__PURE__*/function () {
 exports.DownloadManager = DownloadManager;
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15127,7 +15598,7 @@ exports.GenericL10n = void 0;
 
 var _regenerator = _interopRequireDefault(__webpack_require__(2));
 
-__webpack_require__(40);
+__webpack_require__(42);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -15283,7 +15754,7 @@ var GenericL10n = /*#__PURE__*/function () {
 exports.GenericL10n = GenericL10n;
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15291,11 +15762,11 @@ exports.GenericL10n = GenericL10n;
 
 document.webL10n = function (window, document, undefined) {
   var gL10nData = {};
-  var gTextData = '';
-  var gTextProp = 'textContent';
-  var gLanguage = '';
+  var gTextData = "";
+  var gTextProp = "textContent";
+  var gLanguage = "";
   var gMacros = {};
-  var gReadyState = 'loading';
+  var gReadyState = "loading";
   var gAsyncResourceLoading = true;
 
   function getL10nResourceLinks() {
@@ -15308,20 +15779,20 @@ document.webL10n = function (window, document, undefined) {
   }
 
   function getTranslatableChildren(element) {
-    return element ? element.querySelectorAll('*[data-l10n-id]') : [];
+    return element ? element.querySelectorAll("*[data-l10n-id]") : [];
   }
 
   function getL10nAttributes(element) {
     if (!element) return {};
-    var l10nId = element.getAttribute('data-l10n-id');
-    var l10nArgs = element.getAttribute('data-l10n-args');
+    var l10nId = element.getAttribute("data-l10n-id");
+    var l10nArgs = element.getAttribute("data-l10n-args");
     var args = {};
 
     if (l10nArgs) {
       try {
         args = JSON.parse(l10nArgs);
       } catch (e) {
-        console.warn('could not parse arguments for #' + l10nId);
+        console.warn("could not parse arguments for #" + l10nId);
       }
     }
 
@@ -15331,12 +15802,12 @@ document.webL10n = function (window, document, undefined) {
     };
   }
 
-function fireL10nReadyEvent(lang) {
-var evtObject = document.createEvent('Event');
-  evtObject.initEvent('localized', true, false);
-  evtObject.language = lang;
-  document.dispatchEvent(evtObject);
-}
+  function fireL10nReadyEvent(lang) {
+    var evtObject = document.createEvent("Event");
+    evtObject.initEvent("localized", true, false);
+    evtObject.language = lang;
+    document.dispatchEvent(evtObject);
+  }
 
   function xhrLoadText(url, onSuccess, onFailure) {
     onSuccess = onSuccess || function _onSuccess(data) {};
@@ -15344,10 +15815,10 @@ var evtObject = document.createEvent('Event');
     onFailure = onFailure || function _onFailure() {};
 
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, gAsyncResourceLoading);
+    xhr.open("GET", url, gAsyncResourceLoading);
 
     if (xhr.overrideMimeType) {
-      xhr.overrideMimeType('text/plain; charset=utf-8');
+      xhr.overrideMimeType("text/plain; charset=utf-8");
     }
 
     xhr.onreadystatechange = function () {
@@ -15371,11 +15842,11 @@ var evtObject = document.createEvent('Event');
   }
 
   function parseResource(href, lang, successCallback, failureCallback) {
-    var baseURL = href.replace(/[^\/]*$/, '') || './';
+    var baseURL = href.replace(/[^\/]*$/, "") || "./";
 
     function evalString(text) {
-      if (text.lastIndexOf('\\') < 0) return text;
-      return text.replace(/\\\\/g, '\\').replace(/\\n/g, '\n').replace(/\\r/g, '\r').replace(/\\t/g, '\t').replace(/\\b/g, '\b').replace(/\\f/g, '\f').replace(/\\{/g, '{').replace(/\\}/g, '}').replace(/\\"/g, '"').replace(/\\'/g, "'");
+      if (text.lastIndexOf("\\") < 0) return text;
+      return text.replace(/\\\\/g, "\\").replace(/\\n/g, "\n").replace(/\\r/g, "\r").replace(/\\t/g, "\t").replace(/\\b/g, "\b").replace(/\\f/g, "\f").replace(/\\{/g, "{").replace(/\\}/g, "}").replace(/\\"/g, '"').replace(/\\'/g, "'");
     }
 
     function parseProperties(text, parsedPropertiesCallback) {
@@ -15387,21 +15858,26 @@ var evtObject = document.createEvent('Event');
       var reSplit = /^([^=\s]*)\s*=\s*(.+)$/;
 
       function parseRawLines(rawText, extendedSyntax, parsedRawLinesCallback) {
-        var entries = rawText.replace(reBlank, '').split(/[\r\n]+/);
-        var currentLang = '*';
-        var genericLang = lang.split('-', 1)[0];
+        var entries = rawText.replace(reBlank, "").split(/[\r\n]+/);
+        var currentLang = "*";
+        var genericLang = lang.split("-", 1)[0];
         var skipLang = false;
-        var match = '';
+        var match = "";
+        var languagefound = false;
 
-        var languagefound = false; // #150
         function nextEntry() {
-          var genericMatch = undefined; // #150
+          var genericMatch = undefined;
+
           while (true) {
-            if ((!entries.length) && genericMatch) { // #150
-              if (!languagefound) loadImport(genericMatch, nextEntry); else nextEntry(); // #150
-              return; // #150
-            }// #150
-            else if (!entries.length) { // #150
+            if (!entries.length && genericMatch) {
+              if (!languagefound) {
+                loadImport(genericMatch, nextEntry);
+              } else {
+                nextEntry();
+              }
+
+              return;
+            } else if (!entries.length) {
               parsedRawLinesCallback();
               return;
             }
@@ -15414,7 +15890,7 @@ var evtObject = document.createEvent('Event');
 
               if (match) {
                 currentLang = match[1].toLowerCase();
-                skipLang = currentLang !== '*' && currentLang !== lang && currentLang !== genericLang;
+                skipLang = currentLang !== "*" && currentLang !== lang && currentLang !== genericLang;
                 continue;
               } else if (skipLang) {
                 continue;
@@ -15423,13 +15899,13 @@ var evtObject = document.createEvent('Event');
               match = reImport.exec(line);
 
               if (match) {
-              if (currentLang === '*' || currentLang === lang) { // #150
-                loadImport(baseURL + match[1], nextEntry);
-                languagefound = true;
-                return;
-              } else { // #150
-                genericMatch = baseURL + match[1]; // #150
-              } // #150
+                if (currentLang === "*" || currentLang === lang) {
+                  loadImport(baseURL + match[1], nextEntry);
+                  languagefound = true;
+                  return;
+                } else {
+                  genericMatch = baseURL + match[1];
+                }
               }
             }
 
@@ -15448,7 +15924,7 @@ var evtObject = document.createEvent('Event');
         xhrLoadText(url, function (content) {
           parseRawLines(content, false, callback);
         }, function () {
-          console.warn(url + ' not found.');
+          console.warn(url + " not found.");
           callback();
         });
       }
@@ -15464,7 +15940,7 @@ var evtObject = document.createEvent('Event');
         for (var key in data) {
           var id,
               prop,
-              index = key.lastIndexOf('.');
+              index = key.lastIndexOf(".");
 
           if (index > 0) {
             id = key.substring(0, index);
@@ -15489,7 +15965,8 @@ var evtObject = document.createEvent('Event');
   }
 
   function loadLocale(lang, callback) {
-let originalCaseLang = lang;
+    var originalCaseLang = lang;
+
     if (lang) {
       lang = lang.toLowerCase();
     }
@@ -15505,32 +15982,32 @@ let originalCaseLang = lang;
       var dict = getL10nDictionary();
 
       if (dict && dict.locales && dict.default_locale) {
-        console.log('The PDF viewer uses the pre-compiled language bundle stored in the HTML page.');
-              gL10nData = dict.locales[originalCaseLang]; // modified line
+        console.log("The PDF viewer uses the pre-compiled language bundle stored in the HTML page.");
+        gL10nData = dict.locales[originalCaseLang];
 
         if (!gL10nData) {
           var defaultLocale = dict.default_locale.toLowerCase();
 
           for (var anyCaseLang in dict.locales) {
-            originalCaseLang = anyCaseLang; // added line
+            originalCaseLang = anyCaseLang;
             anyCaseLang = anyCaseLang.toLowerCase();
 
             if (anyCaseLang === lang) {
-              gL10nData = dict.locales[originalCaseLang]; // modified line
+              gL10nData = dict.locales[originalCaseLang];
               break;
             } else if (anyCaseLang === defaultLocale) {
-              gL10nData = dict.locales[originalCaseLang]; // modified line
+              gL10nData = dict.locales[originalCaseLang];
             }
           }
         }
 
         callback();
       } else {
-        console.log('Could not load the translation files for the PDF viewer. Check the flag useBrowserLocale, check the locales subfolder of the assets folder, or add the locale definition to the index.html');
+        console.log("Could not load the translation files for the PDF viewer. Check the flag useBrowserLocale, check the locales subfolder of the assets folder, or add the locale definition to the index.html");
       }
 
-fireL10nReadyEvent(lang);
-      gReadyState = 'complete';
+      fireL10nReadyEvent(lang);
+      gReadyState = "complete";
       return;
     }
 
@@ -15542,8 +16019,8 @@ fireL10nReadyEvent(lang);
 
       if (gResourceCount >= langCount) {
         callback();
-fireL10nReadyEvent(lang);
-        gReadyState = 'complete';
+        fireL10nReadyEvent(lang);
+        gReadyState = "complete";
       }
     };
 
@@ -15552,9 +16029,9 @@ fireL10nReadyEvent(lang);
 
       this.load = function (lang, callback) {
         parseResource(href, lang, callback, function () {
-          console.warn(href + ' not found.');
+          console.warn(href + " not found.");
           console.warn('"' + lang + '" resource not found');
-          gLanguage = '';
+          gLanguage = "";
           callback();
         });
       };
@@ -15568,182 +16045,182 @@ fireL10nReadyEvent(lang);
 
   function clear() {
     gL10nData = {};
-    gTextData = '';
-    gLanguage = '';
+    gTextData = "";
+    gLanguage = "";
   }
 
   function getPluralRules(lang) {
     var locales2rules = {
-      'af': 3,
-      'ak': 4,
-      'am': 4,
-      'ar': 1,
-      'asa': 3,
-      'az': 0,
-      'be': 11,
-      'bem': 3,
-      'bez': 3,
-      'bg': 3,
-      'bh': 4,
-      'bm': 0,
-      'bn': 3,
-      'bo': 0,
-      'br': 20,
-      'brx': 3,
-      'bs': 11,
-      'ca': 3,
-      'cgg': 3,
-      'chr': 3,
-      'cs': 12,
-      'cy': 17,
-      'da': 3,
-      'de': 3,
-      'dv': 3,
-      'dz': 0,
-      'ee': 3,
-      'el': 3,
-      'en': 3,
-      'eo': 3,
-      'es': 3,
-      'et': 3,
-      'eu': 3,
-      'fa': 0,
-      'ff': 5,
-      'fi': 3,
-      'fil': 4,
-      'fo': 3,
-      'fr': 5,
-      'fur': 3,
-      'fy': 3,
-      'ga': 8,
-      'gd': 24,
-      'gl': 3,
-      'gsw': 3,
-      'gu': 3,
-      'guw': 4,
-      'gv': 23,
-      'ha': 3,
-      'haw': 3,
-      'he': 2,
-      'hi': 4,
-      'hr': 11,
-      'hu': 0,
-      'id': 0,
-      'ig': 0,
-      'ii': 0,
-      'is': 3,
-      'it': 3,
-      'iu': 7,
-      'ja': 0,
-      'jmc': 3,
-      'jv': 0,
-      'ka': 0,
-      'kab': 5,
-      'kaj': 3,
-      'kcg': 3,
-      'kde': 0,
-      'kea': 0,
-      'kk': 3,
-      'kl': 3,
-      'km': 0,
-      'kn': 0,
-      'ko': 0,
-      'ksb': 3,
-      'ksh': 21,
-      'ku': 3,
-      'kw': 7,
-      'lag': 18,
-      'lb': 3,
-      'lg': 3,
-      'ln': 4,
-      'lo': 0,
-      'lt': 10,
-      'lv': 6,
-      'mas': 3,
-      'mg': 4,
-      'mk': 16,
-      'ml': 3,
-      'mn': 3,
-      'mo': 9,
-      'mr': 3,
-      'ms': 0,
-      'mt': 15,
-      'my': 0,
-      'nah': 3,
-      'naq': 7,
-      'nb': 3,
-      'nd': 3,
-      'ne': 3,
-      'nl': 3,
-      'nn': 3,
-      'no': 3,
-      'nr': 3,
-      'nso': 4,
-      'ny': 3,
-      'nyn': 3,
-      'om': 3,
-      'or': 3,
-      'pa': 3,
-      'pap': 3,
-      'pl': 13,
-      'ps': 3,
-      'pt': 3,
-      'rm': 3,
-      'ro': 9,
-      'rof': 3,
-      'ru': 11,
-      'rwk': 3,
-      'sah': 0,
-      'saq': 3,
-      'se': 7,
-      'seh': 3,
-      'ses': 0,
-      'sg': 0,
-      'sh': 11,
-      'shi': 19,
-      'sk': 12,
-      'sl': 14,
-      'sma': 7,
-      'smi': 7,
-      'smj': 7,
-      'smn': 7,
-      'sms': 7,
-      'sn': 3,
-      'so': 3,
-      'sq': 3,
-      'sr': 11,
-      'ss': 3,
-      'ssy': 3,
-      'st': 3,
-      'sv': 3,
-      'sw': 3,
-      'syr': 3,
-      'ta': 3,
-      'te': 3,
-      'teo': 3,
-      'th': 0,
-      'ti': 4,
-      'tig': 3,
-      'tk': 3,
-      'tl': 4,
-      'tn': 3,
-      'to': 0,
-      'tr': 0,
-      'ts': 3,
-      'tzm': 22,
-      'uk': 11,
-      'ur': 3,
-      've': 3,
-      'vi': 0,
-      'vun': 3,
-      'wa': 4,
-      'wae': 3,
-      'wo': 0,
-      'xh': 3,
-      'xog': 3,
-      'yo': 0,
-      'zh': 0,
-      'zu': 3
+      af: 3,
+      ak: 4,
+      am: 4,
+      ar: 1,
+      asa: 3,
+      az: 0,
+      be: 11,
+      bem: 3,
+      bez: 3,
+      bg: 3,
+      bh: 4,
+      bm: 0,
+      bn: 3,
+      bo: 0,
+      br: 20,
+      brx: 3,
+      bs: 11,
+      ca: 3,
+      cgg: 3,
+      chr: 3,
+      cs: 12,
+      cy: 17,
+      da: 3,
+      de: 3,
+      dv: 3,
+      dz: 0,
+      ee: 3,
+      el: 3,
+      en: 3,
+      eo: 3,
+      es: 3,
+      et: 3,
+      eu: 3,
+      fa: 0,
+      ff: 5,
+      fi: 3,
+      fil: 4,
+      fo: 3,
+      fr: 5,
+      fur: 3,
+      fy: 3,
+      ga: 8,
+      gd: 24,
+      gl: 3,
+      gsw: 3,
+      gu: 3,
+      guw: 4,
+      gv: 23,
+      ha: 3,
+      haw: 3,
+      he: 2,
+      hi: 4,
+      hr: 11,
+      hu: 0,
+      id: 0,
+      ig: 0,
+      ii: 0,
+      is: 3,
+      it: 3,
+      iu: 7,
+      ja: 0,
+      jmc: 3,
+      jv: 0,
+      ka: 0,
+      kab: 5,
+      kaj: 3,
+      kcg: 3,
+      kde: 0,
+      kea: 0,
+      kk: 3,
+      kl: 3,
+      km: 0,
+      kn: 0,
+      ko: 0,
+      ksb: 3,
+      ksh: 21,
+      ku: 3,
+      kw: 7,
+      lag: 18,
+      lb: 3,
+      lg: 3,
+      ln: 4,
+      lo: 0,
+      lt: 10,
+      lv: 6,
+      mas: 3,
+      mg: 4,
+      mk: 16,
+      ml: 3,
+      mn: 3,
+      mo: 9,
+      mr: 3,
+      ms: 0,
+      mt: 15,
+      my: 0,
+      nah: 3,
+      naq: 7,
+      nb: 3,
+      nd: 3,
+      ne: 3,
+      nl: 3,
+      nn: 3,
+      no: 3,
+      nr: 3,
+      nso: 4,
+      ny: 3,
+      nyn: 3,
+      om: 3,
+      or: 3,
+      pa: 3,
+      pap: 3,
+      pl: 13,
+      ps: 3,
+      pt: 3,
+      rm: 3,
+      ro: 9,
+      rof: 3,
+      ru: 11,
+      rwk: 3,
+      sah: 0,
+      saq: 3,
+      se: 7,
+      seh: 3,
+      ses: 0,
+      sg: 0,
+      sh: 11,
+      shi: 19,
+      sk: 12,
+      sl: 14,
+      sma: 7,
+      smi: 7,
+      smj: 7,
+      smn: 7,
+      sms: 7,
+      sn: 3,
+      so: 3,
+      sq: 3,
+      sr: 11,
+      ss: 3,
+      ssy: 3,
+      st: 3,
+      sv: 3,
+      sw: 3,
+      syr: 3,
+      ta: 3,
+      te: 3,
+      teo: 3,
+      th: 0,
+      ti: 4,
+      tig: 3,
+      tk: 3,
+      tl: 4,
+      tn: 3,
+      to: 0,
+      tr: 0,
+      ts: 3,
+      tzm: 22,
+      uk: 11,
+      ur: 3,
+      ve: 3,
+      vi: 0,
+      vun: 3,
+      wa: 4,
+      wae: 3,
+      wo: 0,
+      xh: 3,
+      xog: 3,
+      yo: 0,
+      zh: 0,
+      zu: 3
     };
 
     function isIn(n, list) {
@@ -15755,146 +16232,146 @@ fireL10nReadyEvent(lang);
     }
 
     var pluralRules = {
-      '0': function _(n) {
-        return 'other';
+      "0": function _(n) {
+        return "other";
       },
-      '1': function _(n) {
-        if (isBetween(n % 100, 3, 10)) return 'few';
-        if (n === 0) return 'zero';
-        if (isBetween(n % 100, 11, 99)) return 'many';
-        if (n == 2) return 'two';
-        if (n == 1) return 'one';
-        return 'other';
+      "1": function _(n) {
+        if (isBetween(n % 100, 3, 10)) return "few";
+        if (n === 0) return "zero";
+        if (isBetween(n % 100, 11, 99)) return "many";
+        if (n == 2) return "two";
+        if (n == 1) return "one";
+        return "other";
       },
-      '2': function _(n) {
-        if (n !== 0 && n % 10 === 0) return 'many';
-        if (n == 2) return 'two';
-        if (n == 1) return 'one';
-        return 'other';
+      "2": function _(n) {
+        if (n !== 0 && n % 10 === 0) return "many";
+        if (n == 2) return "two";
+        if (n == 1) return "one";
+        return "other";
       },
-      '3': function _(n) {
-        if (n == 1) return 'one';
-        return 'other';
+      "3": function _(n) {
+        if (n == 1) return "one";
+        return "other";
       },
-      '4': function _(n) {
-        if (isBetween(n, 0, 1)) return 'one';
-        return 'other';
+      "4": function _(n) {
+        if (isBetween(n, 0, 1)) return "one";
+        return "other";
       },
-      '5': function _(n) {
-        if (isBetween(n, 0, 2) && n != 2) return 'one';
-        return 'other';
+      "5": function _(n) {
+        if (isBetween(n, 0, 2) && n != 2) return "one";
+        return "other";
       },
-      '6': function _(n) {
-        if (n === 0) return 'zero';
-        if (n % 10 == 1 && n % 100 != 11) return 'one';
-        return 'other';
+      "6": function _(n) {
+        if (n === 0) return "zero";
+        if (n % 10 == 1 && n % 100 != 11) return "one";
+        return "other";
       },
-      '7': function _(n) {
-        if (n == 2) return 'two';
-        if (n == 1) return 'one';
-        return 'other';
+      "7": function _(n) {
+        if (n == 2) return "two";
+        if (n == 1) return "one";
+        return "other";
       },
-      '8': function _(n) {
-        if (isBetween(n, 3, 6)) return 'few';
-        if (isBetween(n, 7, 10)) return 'many';
-        if (n == 2) return 'two';
-        if (n == 1) return 'one';
-        return 'other';
+      "8": function _(n) {
+        if (isBetween(n, 3, 6)) return "few";
+        if (isBetween(n, 7, 10)) return "many";
+        if (n == 2) return "two";
+        if (n == 1) return "one";
+        return "other";
       },
-      '9': function _(n) {
-        if (n === 0 || n != 1 && isBetween(n % 100, 1, 19)) return 'few';
-        if (n == 1) return 'one';
-        return 'other';
+      "9": function _(n) {
+        if (n === 0 || n != 1 && isBetween(n % 100, 1, 19)) return "few";
+        if (n == 1) return "one";
+        return "other";
       },
-      '10': function _(n) {
-        if (isBetween(n % 10, 2, 9) && !isBetween(n % 100, 11, 19)) return 'few';
-        if (n % 10 == 1 && !isBetween(n % 100, 11, 19)) return 'one';
-        return 'other';
+      "10": function _(n) {
+        if (isBetween(n % 10, 2, 9) && !isBetween(n % 100, 11, 19)) return "few";
+        if (n % 10 == 1 && !isBetween(n % 100, 11, 19)) return "one";
+        return "other";
       },
-      '11': function _(n) {
-        if (isBetween(n % 10, 2, 4) && !isBetween(n % 100, 12, 14)) return 'few';
-        if (n % 10 === 0 || isBetween(n % 10, 5, 9) || isBetween(n % 100, 11, 14)) return 'many';
-        if (n % 10 == 1 && n % 100 != 11) return 'one';
-        return 'other';
+      "11": function _(n) {
+        if (isBetween(n % 10, 2, 4) && !isBetween(n % 100, 12, 14)) return "few";
+        if (n % 10 === 0 || isBetween(n % 10, 5, 9) || isBetween(n % 100, 11, 14)) return "many";
+        if (n % 10 == 1 && n % 100 != 11) return "one";
+        return "other";
       },
-      '12': function _(n) {
-        if (isBetween(n, 2, 4)) return 'few';
-        if (n == 1) return 'one';
-        return 'other';
+      "12": function _(n) {
+        if (isBetween(n, 2, 4)) return "few";
+        if (n == 1) return "one";
+        return "other";
       },
-      '13': function _(n) {
-        if (isBetween(n % 10, 2, 4) && !isBetween(n % 100, 12, 14)) return 'few';
-        if (n != 1 && isBetween(n % 10, 0, 1) || isBetween(n % 10, 5, 9) || isBetween(n % 100, 12, 14)) return 'many';
-        if (n == 1) return 'one';
-        return 'other';
+      "13": function _(n) {
+        if (isBetween(n % 10, 2, 4) && !isBetween(n % 100, 12, 14)) return "few";
+        if (n != 1 && isBetween(n % 10, 0, 1) || isBetween(n % 10, 5, 9) || isBetween(n % 100, 12, 14)) return "many";
+        if (n == 1) return "one";
+        return "other";
       },
-      '14': function _(n) {
-        if (isBetween(n % 100, 3, 4)) return 'few';
-        if (n % 100 == 2) return 'two';
-        if (n % 100 == 1) return 'one';
-        return 'other';
+      "14": function _(n) {
+        if (isBetween(n % 100, 3, 4)) return "few";
+        if (n % 100 == 2) return "two";
+        if (n % 100 == 1) return "one";
+        return "other";
       },
-      '15': function _(n) {
-        if (n === 0 || isBetween(n % 100, 2, 10)) return 'few';
-        if (isBetween(n % 100, 11, 19)) return 'many';
-        if (n == 1) return 'one';
-        return 'other';
+      "15": function _(n) {
+        if (n === 0 || isBetween(n % 100, 2, 10)) return "few";
+        if (isBetween(n % 100, 11, 19)) return "many";
+        if (n == 1) return "one";
+        return "other";
       },
-      '16': function _(n) {
-        if (n % 10 == 1 && n != 11) return 'one';
-        return 'other';
+      "16": function _(n) {
+        if (n % 10 == 1 && n != 11) return "one";
+        return "other";
       },
-      '17': function _(n) {
-        if (n == 3) return 'few';
-        if (n === 0) return 'zero';
-        if (n == 6) return 'many';
-        if (n == 2) return 'two';
-        if (n == 1) return 'one';
-        return 'other';
+      "17": function _(n) {
+        if (n == 3) return "few";
+        if (n === 0) return "zero";
+        if (n == 6) return "many";
+        if (n == 2) return "two";
+        if (n == 1) return "one";
+        return "other";
       },
-      '18': function _(n) {
-        if (n === 0) return 'zero';
-        if (isBetween(n, 0, 2) && n !== 0 && n != 2) return 'one';
-        return 'other';
+      "18": function _(n) {
+        if (n === 0) return "zero";
+        if (isBetween(n, 0, 2) && n !== 0 && n != 2) return "one";
+        return "other";
       },
-      '19': function _(n) {
-        if (isBetween(n, 2, 10)) return 'few';
-        if (isBetween(n, 0, 1)) return 'one';
-        return 'other';
+      "19": function _(n) {
+        if (isBetween(n, 2, 10)) return "few";
+        if (isBetween(n, 0, 1)) return "one";
+        return "other";
       },
-      '20': function _(n) {
-        if ((isBetween(n % 10, 3, 4) || n % 10 == 9) && !(isBetween(n % 100, 10, 19) || isBetween(n % 100, 70, 79) || isBetween(n % 100, 90, 99))) return 'few';
-        if (n % 1000000 === 0 && n !== 0) return 'many';
-        if (n % 10 == 2 && !isIn(n % 100, [12, 72, 92])) return 'two';
-        if (n % 10 == 1 && !isIn(n % 100, [11, 71, 91])) return 'one';
-        return 'other';
+      "20": function _(n) {
+        if ((isBetween(n % 10, 3, 4) || n % 10 == 9) && !(isBetween(n % 100, 10, 19) || isBetween(n % 100, 70, 79) || isBetween(n % 100, 90, 99))) return "few";
+        if (n % 1000000 === 0 && n !== 0) return "many";
+        if (n % 10 == 2 && !isIn(n % 100, [12, 72, 92])) return "two";
+        if (n % 10 == 1 && !isIn(n % 100, [11, 71, 91])) return "one";
+        return "other";
       },
-      '21': function _(n) {
-        if (n === 0) return 'zero';
-        if (n == 1) return 'one';
-        return 'other';
+      "21": function _(n) {
+        if (n === 0) return "zero";
+        if (n == 1) return "one";
+        return "other";
       },
-      '22': function _(n) {
-        if (isBetween(n, 0, 1) || isBetween(n, 11, 99)) return 'one';
-        return 'other';
+      "22": function _(n) {
+        if (isBetween(n, 0, 1) || isBetween(n, 11, 99)) return "one";
+        return "other";
       },
-      '23': function _(n) {
-        if (isBetween(n % 10, 1, 2) || n % 20 === 0) return 'one';
-        return 'other';
+      "23": function _(n) {
+        if (isBetween(n % 10, 1, 2) || n % 20 === 0) return "one";
+        return "other";
       },
-      '24': function _(n) {
-        if (isBetween(n, 3, 10) || isBetween(n, 13, 19)) return 'few';
-        if (isIn(n, [2, 12])) return 'two';
-        if (isIn(n, [1, 11])) return 'one';
-        return 'other';
+      "24": function _(n) {
+        if (isBetween(n, 3, 10) || isBetween(n, 13, 19)) return "few";
+        if (isIn(n, [2, 12])) return "two";
+        if (isIn(n, [1, 11])) return "one";
+        return "other";
       }
     };
-    var index = locales2rules[lang.replace(/-.*$/, '')];
+    var index = locales2rules[lang.replace(/-.*$/, "")];
 
     if (!(index in pluralRules)) {
-      console.warn('plural form unknown for [' + lang + ']');
+      console.warn("plural form unknown for [" + lang + "]");
       return function () {
-        return 'other';
+        return "other";
       };
     }
 
@@ -15910,18 +16387,18 @@ fireL10nReadyEvent(lang);
       gMacros._pluralRules = getPluralRules(gLanguage);
     }
 
-    var index = '[' + gMacros._pluralRules(n) + ']';
+    var index = "[" + gMacros._pluralRules(n) + "]";
 
-    if (n === 0 && key + '[zero]' in gL10nData) {
-      str = gL10nData[key + '[zero]'][prop];
-    } else if (n == 1 && key + '[one]' in gL10nData) {
-      str = gL10nData[key + '[one]'][prop];
-    } else if (n == 2 && key + '[two]' in gL10nData) {
-      str = gL10nData[key + '[two]'][prop];
+    if (n === 0 && key + "[zero]" in gL10nData) {
+      str = gL10nData[key + "[zero]"][prop];
+    } else if (n == 1 && key + "[one]" in gL10nData) {
+      str = gL10nData[key + "[one]"][prop];
+    } else if (n == 2 && key + "[two]" in gL10nData) {
+      str = gL10nData[key + "[two]"][prop];
     } else if (key + index in gL10nData) {
       str = gL10nData[key + index][prop];
-    } else if (key + '[other]' in gL10nData) {
-      str = gL10nData[key + '[other]'][prop];
+    } else if (key + "[other]" in gL10nData) {
+      str = gL10nData[key + "[other]"][prop];
     }
 
     return str;
@@ -15931,7 +16408,7 @@ fireL10nReadyEvent(lang);
     var data = gL10nData[key];
 
     if (!data) {
-      console.warn('Translation for the key #' + key + ' is missing.');
+      console.warn("Translation for the key #" + key + " is missing.");
 
       if (!fallback) {
         return null;
@@ -15985,7 +16462,7 @@ fireL10nReadyEvent(lang);
         return gL10nData[arg];
       }
 
-      console.log('argument {{' + arg + '}} for #' + key + ' is undefined.');
+      console.log("argument {{" + arg + "}} for #" + key + " is undefined.");
       return matched_text;
     });
   }
@@ -15996,7 +16473,7 @@ fireL10nReadyEvent(lang);
     var data = getL10nData(l10n.id, l10n.args);
 
     if (!data) {
-      console.warn('Translation for the key #' + l10n.id + ' is missing.');
+      console.warn("#" + l10n.id + " is undefined.");
       return;
     }
 
@@ -16010,7 +16487,7 @@ fireL10nReadyEvent(lang);
         for (var i = 0, l = children.length; i < l; i++) {
           if (children[i].nodeType === 3 && /\S/.test(children[i].nodeValue)) {
             if (found) {
-              children[i].nodeValue = '';
+              children[i].nodeValue = "";
             } else {
               children[i].nodeValue = data[gTextProp];
               found = true;
@@ -16037,7 +16514,7 @@ fireL10nReadyEvent(lang);
       return element.children.length;
     }
 
-    if (typeof element.childElementCount !== 'undefined') {
+    if (typeof element.childElementCount !== "undefined") {
       return element.childElementCount;
     }
 
@@ -16064,7 +16541,7 @@ fireL10nReadyEvent(lang);
 
   return {
     get: function get(key, args, fallbackString) {
-      var index = key.lastIndexOf('.');
+      var index = key.lastIndexOf(".");
       var prop = gTextProp;
 
       if (index > 0) {
@@ -16085,7 +16562,7 @@ fireL10nReadyEvent(lang);
         return data[prop];
       }
 
-      return '{{' + key + '}}';
+      return "{{" + key + "}}";
     },
     getData: function getData() {
       return gL10nData;
@@ -16102,9 +16579,9 @@ fireL10nReadyEvent(lang);
       });
     },
     getDirection: function getDirection() {
-      var rtlList = ['ar', 'he', 'fa', 'ps', 'ur'];
-      var shortCode = gLanguage.split('-', 1)[0];
-      return rtlList.indexOf(shortCode) >= 0 ? 'rtl' : 'ltr';
+      var rtlList = ["ar", "he", "fa", "ps", "ur"];
+      var shortCode = gLanguage.split("-", 1)[0];
+      return rtlList.indexOf(shortCode) >= 0 ? "rtl" : "ltr";
     },
     translate: translateFragment,
     getReadyState: function getReadyState() {
@@ -16113,13 +16590,13 @@ fireL10nReadyEvent(lang);
     ready: function ready(callback) {
       if (!callback) {
         return;
-      } else if (gReadyState == 'complete' || gReadyState == 'interactive') {
+      } else if (gReadyState == "complete" || gReadyState == "interactive") {
         window.setTimeout(function () {
           callback();
         });
       } else if (document.addEventListener) {
-        document.addEventListener('localized', function once() {
-          document.removeEventListener('localized', once);
+        document.addEventListener("localized", function once() {
+          document.removeEventListener("localized", once);
           callback();
         });
       }
@@ -16128,7 +16605,7 @@ fireL10nReadyEvent(lang);
 }(window, document);
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16231,9 +16708,9 @@ PDFPrintService.prototype = {
       }
 
       overlayManager.close("printServiceOverlay");
-      overlayManager.unregister('printServiceOverlay'); // #104
+      overlayManager.unregister("printServiceOverlay");
     });
-    overlayPromise = undefined; // #104
+    overlayPromise = undefined;
   },
   renderPages: function renderPages() {
     var _this = this;
@@ -16243,16 +16720,18 @@ PDFPrintService.prototype = {
     var renderNextPage = function renderNextPage(resolve, reject) {
       _this.throwIfInactive();
 
+      while (true) {
+        ++_this.currentPage;
 
-      while (true) { // #243
-        ++_this.currentPage; // #243
-        if (_this.currentPage >= pageCount) { // #243
-          break; // #243
-        } // #243
-        if ((!window.isInPDFPrintRange) || window.isInPDFPrintRange(_this.currentPage)) { // #243
-          break; // #243
-        } // #243
-      } // #243
+        if (_this.currentPage >= pageCount) {
+          break;
+        }
+
+        if (!window.isInPDFPrintRange || window.isInPDFPrintRange(_this.currentPage)) {
+          break;
+        }
+      }
+
       if (_this.currentPage >= pageCount) {
         renderProgress(window.filteredPageCount | pageCount, window.filteredPageCount | pageCount, _this.l10n);
         resolve();
@@ -16321,7 +16800,10 @@ PDFPrintService.prototype = {
 var print = window.print;
 
 window.printPDF = function () {
- if (!PDFViewerApplication.enablePrint) { return; }
+  if (!_app.PDFViewerApplication.enablePrint) {
+    return;
+  }
+
   if (activeService) {
     console.warn("Ignored window.printPDF() because of a pending print job.");
     return;
@@ -16438,4 +16920,4 @@ _app.PDFPrintServiceFactory.instance = {
 
 /***/ })
 /******/ ]);
-
+//# sourceMappingURL=viewer-es5.js.map

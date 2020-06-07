@@ -50,6 +50,7 @@ export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-one-container/pdf-f
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-one-container/pdf-find-match-case/pdf-find-match-case.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-one-container/pdf-find-highlight-all/pdf-find-highlight-all.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-find-entire-word/pdf-find-entire-word.component';
+export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-find-fuzzily/pdf-find-fuzzily.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-find-ignore-accents/pdf-find-ignore-accents.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-findbar-options-three-container.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-find-results-count/pdf-find-results-count.component';

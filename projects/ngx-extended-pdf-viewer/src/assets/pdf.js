@@ -2720,12 +2720,7 @@ const PDFWorker = function PDFWorkerClosure() {
   let nextFakeWorkerId = 0;
   let fakeWorkerCapability;
 
-  if (isNodeJS && typeof require === "function") {
-    isWorkerDisabled = true;
-    const isIE = !!window.MSInputMethodContext && !!document.documentMode;
-    const isEdge = /Edge\/\d./i.test(navigator.userAgent);
-    fallbackWorkerSrc = isIE || isEdge ? "./assets/pdf.worker-es5.js" : "./assets/pdf.worker.js";
-  } else if (typeof document === "object" && "currentScript" in document) {
+  if (typeof document === "object" && "currentScript" in document) {
     const pdfjsFilePath = document.currentScript && document.currentScript.src;
 
     if (pdfjsFilePath) {
@@ -2739,10 +2734,7 @@ const PDFWorker = function PDFWorkerClosure() {
     }
 
     if (typeof fallbackWorkerSrc !== "undefined") {
-      if (!isNodeJS) {
-        (0, _display_utils.deprecated)('No "GlobalWorkerOptions.workerSrc" specified.');
-      }
-
+      (0, _display_utils.deprecated)('No "GlobalWorkerOptions.workerSrc" specified.');
       return fallbackWorkerSrc;
     }
 
@@ -2771,11 +2763,6 @@ const PDFWorker = function PDFWorkerClosure() {
 
       if (mainWorkerMessageHandler) {
         return mainWorkerMessageHandler;
-      }
-
-      if (isNodeJS && typeof require === "function") {
-        const worker = eval("require")(getWorkerSrc());
-        return worker.WorkerMessageHandler;
       }
 
       await (0, _display_utils.loadScript)(getWorkerSrc());

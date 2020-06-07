@@ -20,6 +20,7 @@ import { PdfFindbarOptionsThreeContainerComponent } from './toolbar/pdf-findbar/
 import { PdfFindbarOptionsTwoContainerComponent } from './toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-findbar-options-two-container.component';
 import { PdfFindButtonComponent } from './toolbar/pdf-find-button/pdf-find-button.component';
 import { PdfFindEntireWordComponent } from './toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-find-entire-word/pdf-find-entire-word.component';
+import { PdfFindFuzzilyComponent } from './toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-find-fuzzily/pdf-find-fuzzily.component';
 import { PdfFindHighlightAllComponent } from './toolbar/pdf-findbar/pdf-findbar-options-one-container/pdf-find-highlight-all/pdf-find-highlight-all.component';
 import { PdfFindIgnoreAccentsComponent } from './toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-find-ignore-accents/pdf-find-ignore-accents.component';
 import { PdfFindInputAreaComponent } from './toolbar/pdf-findbar/pdf-find-input-area/pdf-find-input-area.component';
@@ -204,6 +205,7 @@ if (typeof window !== 'undefined') {
     PdfFindMatchCaseComponent,
     PdfFindHighlightAllComponent,
     PdfFindEntireWordComponent,
+    PdfFindFuzzilyComponent,
     PdfFindMultipleSearchTextsComponent,
     PdfFindIgnoreAccentsComponent,
     PdfFindbarOptionsThreeContainerComponent,
