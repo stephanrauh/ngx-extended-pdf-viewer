@@ -327,8 +327,8 @@ var _text_layer = __w_pdfjs_require__(208);
 
 var _svg = __w_pdfjs_require__(209);
 
-var pdfjsVersion = '2.6.23';
-var pdfjsBuild = '93360bec';
+var pdfjsVersion = '2.6.48';
+var pdfjsBuild = '6dda20cc';
 {
   var PDFNetworkStream = __w_pdfjs_require__(210).PDFNetworkStream;
 
@@ -12253,7 +12253,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId: docId,
-    apiVersion: '2.6.23',
+    apiVersion: '2.6.48',
     source: {
       data: source.data,
       url: source.url,
@@ -14434,9 +14434,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.6.23';
+var version = '2.6.48';
 exports.version = version;
-var build = '93360bec';
+var build = '6dda20cc';
 exports.build = build;
 
 /***/ }),
@@ -23733,15 +23733,6 @@ var NetworkManager = /*#__PURE__*/function () {
       }
     }
   }, {
-    key: "hasPendingRequests",
-    value: function hasPendingRequests() {
-      for (var xhrId in this.pendingRequests) {
-        return true;
-      }
-
-      return false;
-    }
-  }, {
     key: "getRequestXhr",
     value: function getRequestXhr(xhrId) {
       return this.pendingRequests[xhrId].xhr;
@@ -23750,13 +23741,6 @@ var NetworkManager = /*#__PURE__*/function () {
     key: "isPendingRequest",
     value: function isPendingRequest(xhrId) {
       return xhrId in this.pendingRequests;
-    }
-  }, {
-    key: "abortAllRequests",
-    value: function abortAllRequests() {
-      for (var xhrId in this.pendingRequests) {
-        this.abortRequest(xhrId | 0);
-      }
     }
   }, {
     key: "abortRequest",

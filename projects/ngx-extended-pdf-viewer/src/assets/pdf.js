@@ -327,8 +327,8 @@ var _text_layer = __w_pdfjs_require__(15);
 
 var _svg = __w_pdfjs_require__(16);
 
-const pdfjsVersion = '2.6.23';
-const pdfjsBuild = '93360bec';
+const pdfjsVersion = '2.6.48';
+const pdfjsBuild = '6dda20cc';
 {
   const PDFNetworkStream = __w_pdfjs_require__(17).PDFNetworkStream;
 
@@ -1893,7 +1893,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.6.23',
+    apiVersion: '2.6.48',
     source: {
       data: source.data,
       url: source.url,
@@ -3746,9 +3746,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.6.23';
+const version = '2.6.48';
 exports.version = version;
-const build = '93360bec';
+const build = '6dda20cc';
 exports.build = build;
 
 /***/ }),
@@ -11970,26 +11970,12 @@ class NetworkManager {
     }
   }
 
-  hasPendingRequests() {
-    for (const xhrId in this.pendingRequests) {
-      return true;
-    }
-
-    return false;
-  }
-
   getRequestXhr(xhrId) {
     return this.pendingRequests[xhrId].xhr;
   }
 
   isPendingRequest(xhrId) {
     return xhrId in this.pendingRequests;
-  }
-
-  abortAllRequests() {
-    for (const xhrId in this.pendingRequests) {
-      this.abortRequest(xhrId | 0);
-    }
   }
 
   abortRequest(xhrId) {

@@ -135,8 +135,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", {
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.6.23';
-var pdfjsBuild = '93360bec';
+var pdfjsVersion = '2.6.48';
+var pdfjsBuild = '6dda20cc';
 
 /***/ }),
 /* 1 */
@@ -245,7 +245,7 @@ var WorkerMessageHandler = {
     var WorkerTasks = [];
     var verbosity = (0, _util.getVerbosityLevel)();
     var apiVersion = docParams.apiVersion;
-    var workerVersion = '2.6.23';
+    var workerVersion = '2.6.48';
 
     if (apiVersion !== workerVersion) {
       throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -29245,6 +29245,10 @@ var CalRGBCS = function CalRGBCSClosure() {
       return adjustToRange(0, 1, 12.92 * color);
     }
 
+    if (color >= 0.99554525) {
+      return 1;
+    }
+
     return adjustToRange(0, 1, (1 + 0.055) * Math.pow(color, 1 / 2.4) - 0.055);
   }
 
@@ -29317,9 +29321,9 @@ var CalRGBCS = function CalRGBCSClosure() {
     var A = adjustToRange(0, 1, src[srcOffset] * scale);
     var B = adjustToRange(0, 1, src[srcOffset + 1] * scale);
     var C = adjustToRange(0, 1, src[srcOffset + 2] * scale);
-    var AGR = Math.pow(A, cs.GR);
-    var BGG = Math.pow(B, cs.GG);
-    var CGB = Math.pow(C, cs.GB);
+    var AGR = A === 1 ? 1 : Math.pow(A, cs.GR);
+    var BGG = B === 1 ? 1 : Math.pow(B, cs.GG);
+    var CGB = C === 1 ? 1 : Math.pow(C, cs.GB);
     var X = cs.MXA * AGR + cs.MXB * BGG + cs.MXC * CGB;
     var Y = cs.MYA * AGR + cs.MYB * BGG + cs.MYC * CGB;
     var Z = cs.MZA * AGR + cs.MZB * BGG + cs.MZC * CGB;
@@ -29712,11 +29716,11 @@ var GlobalImageCache = /*#__PURE__*/function () {
   }, {
     key: "getData",
     value: function getData(ref, pageIndex) {
-      if (!this._refCache.has(ref)) {
+      var pageIndexSet = this._refCache.get(ref);
+
+      if (!pageIndexSet) {
         return null;
       }
-
-      var pageIndexSet = this._refCache.get(ref);
 
       if (pageIndexSet.size < GlobalImageCache.NUM_PAGES_THRESHOLD) {
         return null;
@@ -32387,6 +32391,20 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
         }, _callee2);
       }))();
     },
+    _sendImgData: function _sendImgData(objId, imgData) {
+      var cacheGlobally = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+      var transfers = imgData ? [imgData.data.buffer] : null;
+
+      if (this.parsingType3Font) {
+        return this.handler.sendWithPromise("commonobj", [objId, "FontType3Res", imgData], transfers);
+      }
+
+      if (cacheGlobally) {
+        return this.handler.send("commonobj", [objId, "Image", imgData], transfers);
+      }
+
+      return this.handler.send("obj", [objId, this.pageIndex, "Image", imgData], transfers);
+    },
     buildPaintImageXObject: function buildPaintImageXObject(_ref4) {
       var _this3 = this;
 
@@ -32499,32 +32517,10 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
                   pdfFunctionFactory: _this3.pdfFunctionFactory
                 }).then(function (imageObj) {
                   imgData = imageObj.createImageData(false);
-
-                  if (_this3.parsingType3Font) {
-                    return _this3.handler.sendWithPromise("commonobj", [objId, "FontType3Res", imgData], [imgData.data.buffer]);
-                  } else if (cacheGlobally) {
-                    _this3.handler.send("commonobj", [objId, "Image", imgData], [imgData.data.buffer]);
-
-                    return undefined;
-                  }
-
-                  _this3.handler.send("obj", [objId, _this3.pageIndex, "Image", imgData], [imgData.data.buffer]);
-
-                  return undefined;
+                  return _this3._sendImgData(objId, imgData, cacheGlobally);
                 })["catch"](function (reason) {
                   (0, _util.warn)("Unable to decode image: " + reason);
-
-                  if (_this3.parsingType3Font) {
-                    return _this3.handler.sendWithPromise("commonobj", [objId, "FontType3Res", null]);
-                  } else if (cacheGlobally) {
-                    _this3.handler.send("commonobj", [objId, "Image", null]);
-
-                    return undefined;
-                  }
-
-                  _this3.handler.send("obj", [objId, _this3.pageIndex, "Image", null]);
-
-                  return undefined;
+                  return _this3._sendImgData(objId, null, cacheGlobally);
                 });
 
                 if (!_this3.parsingType3Font) {

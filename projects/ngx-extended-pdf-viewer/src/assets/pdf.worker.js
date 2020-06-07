@@ -135,8 +135,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", {
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.6.23';
-const pdfjsBuild = '93360bec';
+const pdfjsVersion = '2.6.48';
+const pdfjsBuild = '6dda20cc';
 
 /***/ }),
 /* 1 */
@@ -229,7 +229,7 @@ var WorkerMessageHandler = {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.6.23';
+    const workerVersion = '2.6.48';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -17944,6 +17944,10 @@ const CalRGBCS = function CalRGBCSClosure() {
       return adjustToRange(0, 1, 12.92 * color);
     }
 
+    if (color >= 0.99554525) {
+      return 1;
+    }
+
     return adjustToRange(0, 1, (1 + 0.055) * color ** (1 / 2.4) - 0.055);
   }
 
@@ -18016,9 +18020,9 @@ const CalRGBCS = function CalRGBCSClosure() {
     const A = adjustToRange(0, 1, src[srcOffset] * scale);
     const B = adjustToRange(0, 1, src[srcOffset + 1] * scale);
     const C = adjustToRange(0, 1, src[srcOffset + 2] * scale);
-    const AGR = A ** cs.GR;
-    const BGG = B ** cs.GG;
-    const CGB = C ** cs.GB;
+    const AGR = A === 1 ? 1 : A ** cs.GR;
+    const BGG = B === 1 ? 1 : B ** cs.GG;
+    const CGB = C === 1 ? 1 : C ** cs.GB;
     const X = cs.MXA * AGR + cs.MXB * BGG + cs.MXC * CGB;
     const Y = cs.MYA * AGR + cs.MYB * BGG + cs.MYC * CGB;
     const Z = cs.MZA * AGR + cs.MZB * BGG + cs.MZC * CGB;
@@ -18350,11 +18354,11 @@ class GlobalImageCache {
   }
 
   getData(ref, pageIndex) {
-    if (!this._refCache.has(ref)) {
+    const pageIndexSet = this._refCache.get(ref);
+
+    if (!pageIndexSet) {
       return null;
     }
-
-    const pageIndexSet = this._refCache.get(ref);
 
     if (pageIndexSet.size < GlobalImageCache.NUM_PAGES_THRESHOLD) {
       return null;
@@ -20585,6 +20589,20 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
       });
     },
 
+    _sendImgData(objId, imgData, cacheGlobally = false) {
+      const transfers = imgData ? [imgData.data.buffer] : null;
+
+      if (this.parsingType3Font) {
+        return this.handler.sendWithPromise("commonobj", [objId, "FontType3Res", imgData], transfers);
+      }
+
+      if (cacheGlobally) {
+        return this.handler.send("commonobj", [objId, "Image", imgData], transfers);
+      }
+
+      return this.handler.send("obj", [objId, this.pageIndex, "Image", imgData], transfers);
+    },
+
     async buildPaintImageXObject({
       resources,
       image,
@@ -20681,28 +20699,10 @@ var PartialEvaluator = function PartialEvaluatorClosure() {
         pdfFunctionFactory: this.pdfFunctionFactory
       }).then(imageObj => {
         imgData = imageObj.createImageData(false);
-
-        if (this.parsingType3Font) {
-          return this.handler.sendWithPromise("commonobj", [objId, "FontType3Res", imgData], [imgData.data.buffer]);
-        } else if (cacheGlobally) {
-          this.handler.send("commonobj", [objId, "Image", imgData], [imgData.data.buffer]);
-          return undefined;
-        }
-
-        this.handler.send("obj", [objId, this.pageIndex, "Image", imgData], [imgData.data.buffer]);
-        return undefined;
+        return this._sendImgData(objId, imgData, cacheGlobally);
       }).catch(reason => {
         (0, _util.warn)("Unable to decode image: " + reason);
-
-        if (this.parsingType3Font) {
-          return this.handler.sendWithPromise("commonobj", [objId, "FontType3Res", null]);
-        } else if (cacheGlobally) {
-          this.handler.send("commonobj", [objId, "Image", null]);
-          return undefined;
-        }
-
-        this.handler.send("obj", [objId, this.pageIndex, "Image", null]);
-        return undefined;
+        return this._sendImgData(objId, null, cacheGlobally);
       });
 
       if (this.parsingType3Font) {
