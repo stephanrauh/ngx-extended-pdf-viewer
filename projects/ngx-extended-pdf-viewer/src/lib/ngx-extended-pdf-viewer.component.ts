@@ -27,7 +27,7 @@ import { FileInputChanged } from './events/file-input-changed';
 import { SidebarviewChange } from './events/sidebarview-changed';
 import { HandtoolChanged } from './events/handtool-changed';
 import { PageNumberChange } from './events/page-number-change';
-import { ServiceWorkerOptions } from './options/service-worker-options';
+import { ServiceWorkerOptionsType } from './options/service-worker-options';
 import { VerbosityLevel } from './options/verbosity-level';
 import { FindState, FindResultMatchesCount, FindResult } from './events/find-result';
 import { isPlatformBrowser } from '@angular/common';
@@ -41,6 +41,8 @@ import { PdfCursorTools } from './options/pdf-cursor-tools';
 import { TextLayerRenderedEvent } from './events/textlayer-rendered';
 import { Location } from '@angular/common';
 import { PinchOnMobileSupport } from './pinch-on-mobile-support';
+
+declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 
 interface ElementAndPosition {
   element: HTMLElement;

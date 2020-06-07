@@ -113,6 +113,29 @@
 "use strict";
 
 
+if (!HTMLCollection.prototype[Symbol.iterator]) {
+  HTMLCollection.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
+}
+
+(function () {
+  if (typeof window.CustomEvent === "function") {
+    return;
+  }
+
+  function CustomEvent(event, params) {
+    params = params || {
+      bubbles: false,
+      cancelable: false,
+      detail: null
+    };
+    const evt = document.createEvent("CustomEvent");
+    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+    return evt;
+  }
+
+  window.CustomEvent = CustomEvent;
+})();
+
 ;
 let pdfjsWebApp, pdfjsWebAppOptions;
 {
@@ -121,11 +144,11 @@ let pdfjsWebApp, pdfjsWebAppOptions;
 }
 ;
 {
-  __webpack_require__(33);
+  __webpack_require__(38);
 }
 ;
 {
-  __webpack_require__(38);
+  __webpack_require__(43);
 }
 
 function getViewerConfiguration() {
@@ -200,12 +223,13 @@ function getViewerConfiguration() {
       bar: document.getElementById("findbar"),
       toggleButton: document.getElementById("viewFind"),
       findField: document.getElementById("findInput"),
-      findFieldMultiline: document.getElementById('findInputMultiline'), // #201
+      findFieldMultiline: document.getElementById("findInputMultiline"),
       highlightAllCheckbox: document.getElementById("findHighlightAll"),
       caseSensitiveCheckbox: document.getElementById("findMatchCase"),
       entireWordCheckbox: document.getElementById("findEntireWord"),
-      findMultipleSearchTextsCheckbox: document.getElementById('findMultipleSearchTexts'), // #201
-      ignoreAccentsCheckbox: document.getElementById('findIgnoreAccents'), // #177
+      findMultipleSearchTextsCheckbox: document.getElementById("findMultipleSearchTexts"),
+      ignoreAccentsCheckbox: document.getElementById("findIgnoreAccents"),
+      fuzzyCheckbox: document.getElementById("findFuzzy"),
       findMsg: document.getElementById("findMsg"),
       findResultsCount: document.getElementById("findResultsCount"),
       findPreviousButton: document.getElementById("findPrevious"),
@@ -273,7 +297,9 @@ function webViewerLoad() {
   pdfjsWebApp.PDFViewerApplication.run(config);
 }
 
-window.webViewerLoad = webViewerLoad;
+{
+  window.webViewerLoad = webViewerLoad;
+}
 
 /***/ }),
 /* 1 */
@@ -311,25 +337,25 @@ var _pdf_find_bar = __webpack_require__(14);
 
 var _pdf_find_controller = __webpack_require__(15);
 
-var _pdf_history = __webpack_require__(17);
+var _pdf_history = __webpack_require__(22);
 
-var _pdf_link_service = __webpack_require__(18);
+var _pdf_link_service = __webpack_require__(23);
 
-var _pdf_outline_viewer = __webpack_require__(19);
+var _pdf_outline_viewer = __webpack_require__(24);
 
-var _pdf_presentation_mode = __webpack_require__(20);
+var _pdf_presentation_mode = __webpack_require__(25);
 
-var _pdf_sidebar_resizer = __webpack_require__(21);
+var _pdf_sidebar_resizer = __webpack_require__(26);
 
-var _pdf_thumbnail_viewer = __webpack_require__(22);
+var _pdf_thumbnail_viewer = __webpack_require__(27);
 
-var _pdf_viewer = __webpack_require__(24);
+var _pdf_viewer = __webpack_require__(29);
 
-var _secondary_toolbar = __webpack_require__(29);
+var _secondary_toolbar = __webpack_require__(34);
 
-var _toolbar = __webpack_require__(31);
+var _toolbar = __webpack_require__(36);
 
-var _view_history = __webpack_require__(32);
+var _view_history = __webpack_require__(37);
 
 const DEFAULT_SCALE_DELTA = 1.1;
 const DISABLE_AUTO_FETCH_LOADING_BAR_TIMEOUT = 5000;
@@ -427,6 +453,8 @@ const PDFViewerApplication = {
   externalServices: DefaultExternalServices,
   _boundEvents: {},
   contentDispositionFilename: null,
+  _hasInteracted: false,
+  _delayedFallbackFeatureIds: [],
 
   async initialize(appConfig) {
     this.preferences = this.externalServices.createPreferences();
@@ -510,8 +538,8 @@ const PDFViewerApplication = {
       _app_options.AppOptions.set("enableWebGL", hashParams.webgl === "true");
     }
 
-    if ('removepageborders' in hashParams) { // #194
-      _app_options.AppOptions.set('removePageBorders', hashParams['removepageborders'] === 'true'); // #194
+    if ("removepageborders" in hashParams) {
+      _app_options.AppOptions.set("removePageBorders", hashParams["removepageborders"] === "true");
     }
 
     if ("verbosity" in hashParams) {
@@ -601,7 +629,7 @@ const PDFViewerApplication = {
       l10n: this.l10n,
       textLayerMode: _app_options.AppOptions.get("textLayerMode"),
       imageResourcesPath: _app_options.AppOptions.get("imageResourcesPath"),
-      removePageBorders: _app_options.AppOptions.get('removePageBorders'), // #194
+      removePageBorders: _app_options.AppOptions.get("removePageBorders"),
       renderInteractiveForms: _app_options.AppOptions.get("renderInteractiveForms"),
       enablePrintAutoRotate: _app_options.AppOptions.get("enablePrintAutoRotate"),
       useOnlyCssZoom: _app_options.AppOptions.get("useOnlyCssZoom"),
@@ -929,7 +957,7 @@ const PDFViewerApplication = {
         this.error(msg, {
           message
         });
-        this.onError(exception); // #205
+        this.onError(exception);
         throw exception;
       });
     });
@@ -962,6 +990,11 @@ const PDFViewerApplication = {
   },
 
   fallback(featureId) {
+    if (this._delayedFallbackFeatureIds.length >= 1 && this._hasInteracted) {
+      featureId = this._delayedFallbackFeatureIds[0];
+      this._delayedFallbackFeatureIds = [];
+    }
+
     if (this.fellback) {
       return;
     }
@@ -1241,7 +1274,9 @@ const PDFViewerApplication = {
         }
 
         console.warn("Warning: JavaScript is not supported");
-        this.fallback(_pdfjsLib.UNSUPPORTED_FEATURES.javaScript);
+
+        this._delayedFallbackFeatureIds.push(_pdfjsLib.UNSUPPORTED_FEATURES.javaScript);
+
         return true;
       });
 
@@ -1280,7 +1315,7 @@ const PDFViewerApplication = {
     this.documentInfo = info;
     this.metadata = metadata;
     this.contentDispositionFilename = contentDispositionFilename;
-      console.log('PDF viewer: ngx-extended-pdf-viewer running on pdf.js ' + _pdfjsLib.version);
+    console.log("PDF viewer: ngx-extended-pdf-viewer running on pdf.js " + (window["pdfjs-dist/build/pdf"] ? window["pdfjs-dist/build/pdf"].version : " developer version (?)"));
     console.log(`PDF ${pdfDocument.fingerprint} [${info.PDFFormatVersion} ` + `${(info.Producer || "-").trim()} / ${(info.Creator || "-").trim()}] ` + `(PDF.js: ${_pdfjsLib.version || "-"}` + `${this.pdfViewer.enableWebGL ? " [WebGL]" : ""}) modified by ngx-extended-pdf-viewer)`);
     let pdfTitle;
     const infoTitle = info && info.Title;
@@ -1305,7 +1340,8 @@ const PDFViewerApplication = {
 
     if (info.IsAcroFormPresent) {
       console.warn("Warning: AcroForm/XFA is not supported");
-      this.fallback(_pdfjsLib.UNSUPPORTED_FEATURES.forms);
+
+      this._delayedFallbackFeatureIds.push(_pdfjsLib.UNSUPPORTED_FEATURES.forms);
     }
 
     let versionId = "other";
@@ -1523,7 +1559,7 @@ const PDFViewerApplication = {
 
   afterPrint() {
     if (this.printService) {
-document.body.removeAttribute('data-pdfjsprinting');
+      document.body.removeAttribute("data-pdfjsprinting");
       this.printService.destroy();
       this.printService = null;
     }
@@ -1670,6 +1706,7 @@ document.body.removeAttribute('data-pdfjsprinting');
     });
     window.addEventListener("click", webViewerClick);
     window.addEventListener("keydown", webViewerKeyDown);
+    window.addEventListener("keyup", webViewerKeyUp);
     window.addEventListener("resize", _boundEvents.windowResize);
     window.addEventListener("hashchange", _boundEvents.windowHashChange);
     window.addEventListener("beforeprint", _boundEvents.windowBeforePrint);
@@ -1772,6 +1809,7 @@ document.body.removeAttribute('data-pdfjsprinting');
     });
     window.removeEventListener("click", webViewerClick);
     window.removeEventListener("keydown", webViewerKeyDown);
+    window.removeEventListener("keyup", webViewerKeyUp);
     window.removeEventListener("resize", _boundEvents.windowResize);
     window.removeEventListener("hashchange", _boundEvents.windowHashChange);
     window.removeEventListener("beforeprint", _boundEvents.windowBeforePrint);
@@ -1848,7 +1886,7 @@ function webViewerInitialized() {
   const fileInput = document.createElement("input");
   fileInput.id = appConfig.openFileInputName;
   fileInput.className = "fileInput";
-  fileInput.setAttribute('accept', '.pdf,application/pdf');
+  fileInput.setAttribute("accept", ".pdf,application/pdf");
   fileInput.setAttribute("type", "file");
   fileInput.oncontextmenu = _ui_utils.noContextMenuHandler;
   document.body.appendChild(fileInput);
@@ -2278,7 +2316,8 @@ function webViewerFind(evt) {
     phraseSearch: evt.phraseSearch,
     caseSensitive: evt.caseSensitive,
     entireWord: evt.entireWord,
-    ignoreAccents: evt.ignoreAccents, // #177
+    ignoreAccents: evt.ignoreAccents,
+    fuzzySearch: evt.fuzzySearch,
     highlightAll: evt.highlightAll,
     findPrevious: evt.findPrevious
   });
@@ -2290,7 +2329,8 @@ function webViewerFindFromUrlHash(evt) {
     phraseSearch: evt.phraseSearch,
     caseSensitive: false,
     entireWord: false,
-    ignoreAccents: false, // #177
+    ignoreAccents: false,
+    fuzzySearch: false,
     highlightAll: true,
     findPrevious: false
   });
@@ -2349,9 +2389,11 @@ function webViewerPageChanging(evt) {
       Stats.add(page, pageView.stats);
     }
   }
-  let pageNumberInput = document.getElementById('pageNumber');
+
+  const pageNumberInput = document.getElementById("pageNumber");
+
   if (pageNumberInput) {
-    var pageScrollEvent = new CustomEvent('page-change');
+    const pageScrollEvent = new CustomEvent("page-change");
     pageNumberInput.dispatchEvent(pageScrollEvent);
   }
 }
@@ -2384,9 +2426,9 @@ function webViewerWheel(evt) {
     return;
   }
 
-  let cmd = (evt.ctrlKey ? 1 : 0) | (evt.altKey ? 2 : 0) | (evt.shiftKey ? 4 : 0) | (evt.metaKey ? 8 : 0);
+  const cmd = (evt.ctrlKey ? 1 : 0) | (evt.altKey ? 2 : 0) | (evt.shiftKey ? 4 : 0) | (evt.metaKey ? 8 : 0);
 
-  if (isKeyIgnored(cmd, "WHEEL")) {
+  if (window.isKeyIgnored && window.isKeyIgnored(cmd, "WHEEL")) {
     return;
   }
 
@@ -2424,6 +2466,20 @@ function webViewerWheel(evt) {
 }
 
 function webViewerClick(evt) {
+  PDFViewerApplication._hasInteracted = true;
+
+  if (PDFViewerApplication._delayedFallbackFeatureIds.length >= 1 && PDFViewerApplication.pdfViewer.containsElement(evt.target)) {
+    if (evt.target && evt.target.parentElement === appConfig.secondaryToolbar.toggleButton) {
+      return;
+    }
+
+    if (evt.target && evt.target.parentElement && evt.target.parentElement.parentElement === appConfig.secondaryToolbar.toggleButton) {
+      return;
+    }
+
+    PDFViewerApplication.fallback();
+  }
+
   if (!PDFViewerApplication.secondaryToolbar.isOpen) {
     return;
   }
@@ -2431,13 +2487,25 @@ function webViewerClick(evt) {
   const appConfig = PDFViewerApplication.appConfig;
 
   if (PDFViewerApplication.pdfViewer.containsElement(evt.target) || appConfig.toolbar.container.contains(evt.target) && evt.target !== appConfig.secondaryToolbar.toggleButton) {
-          if (evt.target && evt.target.parentElement === appConfig.secondaryToolbar.toggleButton) {
-            return;
-          }
-          if (evt.target && evt.target.parentElement && evt.target.parentElement.parentElement === appConfig.secondaryToolbar.toggleButton) {
-            return;
-          }
+    if (evt.target && evt.target.parentElement === appConfig.secondaryToolbar.toggleButton) {
+      return;
+    }
+
+    if (evt.target && evt.target.parentElement && evt.target.parentElement.parentElement === appConfig.secondaryToolbar.toggleButton) {
+      return;
+    }
+
     PDFViewerApplication.secondaryToolbar.close();
+  }
+}
+
+function webViewerKeyUp(evt) {
+  if (evt.keyCode === 9) {
+    PDFViewerApplication._hasInteracted = true;
+
+    if (PDFViewerApplication._delayedFallbackFeatureIds.length >= 1) {
+      PDFViewerApplication.fallback();
+    }
   }
 }
 
@@ -2452,9 +2520,10 @@ function webViewerKeyDown(evt) {
   const pdfViewer = PDFViewerApplication.pdfViewer;
   const isViewerInPresentationMode = pdfViewer && pdfViewer.isInPresentationMode;
 
-  if (isKeyIgnored(cmd, evt.keyCode)) {
+  if (window.isKeyIgnored && window.isKeyIgnored(cmd, evt.keyCode)) {
     return;
   }
+
   if (cmd === 1 || cmd === 8 || cmd === 5 || cmd === 12) {
     switch (evt.keyCode) {
       case 70:
@@ -2475,7 +2544,8 @@ function webViewerKeyDown(evt) {
               phraseSearch: findState.phraseSearch,
               caseSensitive: findState.caseSensitive,
               entireWord: findState.entireWord,
-              ignoreAccents: findState.ignoreAccents, // #177
+              ignoreAccents: findState.ignoreAccents,
+              fuzzySearch: findState.fuzzySearch,
               highlightAll: findState.highlightAll,
               findPrevious: cmd === 5 || cmd === 12
             });
@@ -2735,12 +2805,6 @@ function webViewerKeyDown(evt) {
       case 82:
         PDFViewerApplication.rotatePages(-90);
         break;
-    }
-  }
-
-    if (false) {
-    if (evt.keyCode >= 33 && evt.keyCode <= 40 || evt.keyCode === 32 && curElementTagName !== "BUTTON") {
-      ensureViewerFocused = true;
     }
   }
 
@@ -3240,7 +3304,10 @@ function isDataSchema(url) {
 }
 
 function getPDFFileNameFromURL(url, defaultFilename = "document.pdf") {
-if (PDFViewerApplication.appConfig.filenameForDownload) return PDFViewerApplication.appConfig.filenameForDownload;
+  if (window.PDFViewerApplication.appConfig.filenameForDownload) {
+    return window.PDFViewerApplication.appConfig.filenameForDownload;
+  }
+
   if (typeof url !== "string") {
     return defaultFilename;
   }
@@ -3452,15 +3519,19 @@ class ProgressBar {
   } = {}) {
     this.visible = true;
     this.div = document.querySelector(id + " .progress");
+
     if (this.div) {
       this.bar = this.div.parentNode;
     }
+
     this.height = height || 100;
     this.width = width || 100;
     this.units = units || "%";
+
     if (this.div) {
       this.div.style.height = this.height + this.units;
     }
+
     this.percent = 0;
   }
 
@@ -3471,13 +3542,15 @@ class ProgressBar {
       return;
     }
 
-      if (this.div) {
+    if (this.div) {
       this.div.classList.remove("indeterminate");
-      }
+    }
+
     const progressSize = this.width * this._percent / 100;
-      if (this.div) {
+
+    if (this.div) {
       this.div.style.width = progressSize + this.units;
-      }
+    }
   }
 
   get percent() {
@@ -3506,9 +3579,10 @@ class ProgressBar {
 
   hide() {
     this.visible = false;
-    this.div = document.querySelector('.body #mainContainer .progress'); // always set this new instead of trying to cache this value
+    this.div = document.querySelector(".body #mainContainer .progress");
+
     if (this.div) {
-      this.bar = this.div.parentNode; // always set this new instead of trying to cache this value
+      this.bar = this.div.parentNode;
       this.bar.classList.add("hidden");
     }
 
@@ -3640,11 +3714,11 @@ const defaultOptions = {
     value: 150,
     kind: OptionKind.VIEWER
   },
-  removePageBorders: { // #194
-          value: false,
-          kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-        },
-          renderer: {
+  removePageBorders: {
+    value: false,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  renderer: {
     value: "canvas",
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
   },
@@ -3852,15 +3926,7 @@ exports.viewerCompatibilityParams = viewerCompatibilityParams;
 "use strict";
 
 
-let pdfjsLib;
-
-if (typeof window !== "undefined" && window["pdfjs-dist/build/pdf"]) {
-  pdfjsLib = window["pdfjs-dist/build/pdf"];
-} else {
-  pdfjsLib = require("./pdf.js");
-}
-
-module.exports = pdfjsLib;
+module.exports = window["pdfjs-dist/build/pdf"];
 
 /***/ }),
 /* 6 */
@@ -4820,7 +4886,7 @@ class PasswordPrompt {
 
   open() {
     this.overlayManager.open(this.overlayName).then(() => {
-      this.input.type="password";
+      this.input.type = "password";
       this.input.focus();
       let promptString;
 
@@ -4838,7 +4904,7 @@ class PasswordPrompt {
 
   close() {
     this.overlayManager.close(this.overlayName).then(() => {
-      this.input.type="";
+      this.input.type = "";
       this.input.value = "";
     });
   }
@@ -5336,12 +5402,13 @@ class PDFFindBar {
     this.bar = options.bar || null;
     this.toggleButton = options.toggleButton || null;
     this.findField = options.findField || null;
-    this.findFieldMultiline = options.findFieldMultiline || null; // #201
+    this.findFieldMultiline = options.findFieldMultiline || null;
     this.highlightAll = options.highlightAllCheckbox || null;
     this.caseSensitive = options.caseSensitiveCheckbox || null;
     this.entireWord = options.entireWordCheckbox || null;
-    this.multipleSearchTexts = options.findMultipleSearchTextsCheckbox || null; // #201
-    this.ignoreAccents = options.ignoreAccentsCheckbox || null; // #177
+    this.multipleSearchTexts = options.findMultipleSearchTextsCheckbox || null;
+    this.ignoreAccents = options.ignoreAccentsCheckbox || null;
+    this.fuzzySearch = options.fuzzyCheckbox || null;
     this.findMsg = options.findMsg || null;
     this.findResultsCount = options.findResultsCount || null;
     this.findPreviousButton = options.findPreviousButton || null;
@@ -5351,8 +5418,8 @@ class PDFFindBar {
     this.toggleButton.addEventListener("click", () => {
       this.toggle();
     });
-    this.findFieldMultiline.addEventListener('input', () => { // #201
-      this.dispatchEvent('');
+    this.findFieldMultiline.addEventListener("input", () => {
+      this.dispatchEvent("");
     });
     this.findField.addEventListener("input", () => {
       this.dispatchEvent("");
@@ -5386,13 +5453,16 @@ class PDFFindBar {
     this.entireWord.addEventListener("click", () => {
       this.dispatchEvent("entirewordchange");
     });
+    this.multipleSearchTexts.addEventListener("click", () => {
+      this.dispatchEvent("multiplesearchtextschange");
+    });
+    this.ignoreAccents.addEventListener("click", () => {
+      this.dispatchEvent("ignoreAccentsChange");
+    });
+    this.fuzzySearch.addEventListener("click", () => {
+      this.dispatchEvent("fuzzySearchChange");
+    });
 
-    this.multipleSearchTexts.addEventListener('click', () => { // #201
-          this.dispatchEvent('multiplesearchtextschange'); // #201
-    }); // #201
-    this.ignoreAccents.addEventListener('click', () => { // #177
-          this.dispatchEvent('ignoreAccentsChange'); // #177
-    }); // #177
     this.eventBus._on("resize", this._adjustWidth.bind(this));
   }
 
@@ -5403,12 +5473,13 @@ class PDFFindBar {
   dispatchEvent(type, findPrev) {
     this.eventBus.dispatch("find", {
       source: this,
-      type: type,
-      query: this.findFieldMultiline.classList.contains('hidden')? this.findField.value: this.findFieldMultiline.value, // #201
-      phraseSearch: !this.multipleSearchTexts.checked, // #201
+      type,
+      query: this.findFieldMultiline.classList.contains("hidden") ? this.findField.value : this.findFieldMultiline.value,
+      phraseSearch: !this.multipleSearchTexts.checked,
       caseSensitive: this.caseSensitive.checked,
       entireWord: this.entireWord.checked,
-      ignoreAccents: this.ignoreAccents.checked, // #177
+      ignoreAccents: this.ignoreAccents.checked,
+      fuzzySearch: this.fuzzySearch.checked,
       highlightAll: this.highlightAll.checked,
       findPrevious: findPrev
     });
@@ -5444,9 +5515,8 @@ class PDFFindBar {
 
     this.findField.classList.toggle("notFound", notFound);
     this.findField.setAttribute("data-status", status);
-    this.findFieldMultiline.classList.toggle('notFound', notFound); // #201
-    this.findFieldMultiline.setAttribute('data-status', status);    // #201
-
+    this.findFieldMultiline.classList.toggle("notFound", notFound);
+    this.findFieldMultiline.setAttribute("data-status", status);
     Promise.resolve(findMsg).then(msg => {
       this.findMsg.textContent = msg;
 
@@ -5496,7 +5566,7 @@ class PDFFindBar {
 
     this.findField.select();
     this.findField.focus();
-    this.dispatchEvent(''); // #206
+    this.dispatchEvent("");
 
     this._adjustWidth();
   }
@@ -5552,11 +5622,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.PDFFindController = exports.FindState = void 0;
 
+var levenshtein = _interopRequireWildcard(__webpack_require__(16));
+
 var _pdfjsLib = __webpack_require__(5);
 
-var _pdf_find_utils = __webpack_require__(16);
+var _index = __webpack_require__(20);
+
+var _pdf_find_utils = __webpack_require__(21);
 
 var _ui_utils = __webpack_require__(2);
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 const FindState = {
   FOUND: 0,
@@ -5615,9 +5693,10 @@ class PDFFindController {
     return this._pageMatches;
   }
 
-  get pageMatchesColor() {         // #201
-    return this._pageMatchesColor; // #201
-  }                                // #201
+  get pageMatchesColor() {
+    return this._pageMatchesColor;
+  }
+
   get pageMatchesLength() {
     return this._pageMatchesLength;
   }
@@ -5731,7 +5810,7 @@ class PDFFindController {
     this._pdfDocument = null;
     this._pageMatches = [];
     this._pageMatchesLength = [];
-    this._pageMatchesColor = [];  // #201
+    this._pageMatchesColor = [];
     this._state = null;
     this._selected = {
       pageIdx: -1,
@@ -5786,7 +5865,7 @@ class PDFFindController {
     return true;
   }
 
-  _prepareMatches(matchesWithLength, matches, matchesLength, /* #201 */ matchesColor) {
+  _prepareMatches(matchesWithLength, matches, matchesLength, matchesColor) {
     function isSubTerm(currentIndex) {
       const currentElem = matchesWithLength[currentIndex];
       const nextElem = matchesWithLength[currentIndex + 1];
@@ -5827,7 +5906,7 @@ class PDFFindController {
 
       matches.push(matchesWithLength[i].match);
       matchesLength.push(matchesWithLength[i].matchLength);
-      matchesColor.push(matchesWithLength[i].color);  // #201
+      matchesColor.push(matchesWithLength[i].color);
     }
   }
 
@@ -5855,12 +5934,40 @@ class PDFFindController {
     return true;
   }
 
-  _calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
-            if (ignoreAccents) { // #177
-              pageContent = window.deburr(pageContent); // #177
-              query = window.deburr(query); // #177
-            } // #177
-  
+  _calculateFuzzyMatch(query, pageIndex, pageContent) {
+    const matches = [];
+    const queryLen = query.length;
+    const shortLen = queryLen < 5 ? queryLen : 5;
+    const maxDistance = Math.round(queryLen / 5);
+    const shortQuery = query.substring(0, shortLen);
+    const options = {
+      useCollator: true
+    };
+    const lev = window.Levenshtein;
+
+    for (let i = 0; i < pageContent.length - queryLen; i++) {
+      const shortCurrentContent = pageContent.substring(i, i + shortLen);
+
+      if (lev.get(shortQuery, shortCurrentContent, options) < 3) {
+        const currentContent = pageContent.substring(i, i + queryLen);
+        const distance = window.Levenshtein.get(query, currentContent, options);
+
+        if (distance <= maxDistance) {
+          matches.push(i);
+          i += queryLen - 1;
+        }
+      }
+    }
+
+    this._pageMatches[pageIndex] = matches;
+  }
+
+  _calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) {
+    if (ignoreAccents) {
+      pageContent = (0, _index.deburr)(pageContent);
+      query = (0, _index.deburr)(query);
+    }
+
     const matches = [];
     const queryLen = query.length;
     let matchIdx = -queryLen;
@@ -5882,19 +5989,23 @@ class PDFFindController {
     this._pageMatches[pageIndex] = matches;
   }
 
-  _calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) { // #177
-            if (ignoreAccents) { // #177
-              pageContent = window.deburr(pageContent); // #177
-              query = window.deburr(query); // #177
-            } // #177
-  
+  _calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents) {
+    if (ignoreAccents) {
+      pageContent = window.deburr(pageContent);
+      query = window.deburr(query);
+    }
+
     const matchesWithLength = [];
-    var queryArray = (query.includes('\n')) ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g); // #201
+    const queryArray = query.includes("\n") ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g);
 
     for (let i = 0, len = queryArray.length; i < len; i++) {
       const subquery = queryArray[i];
       const subqueryLen = subquery.length;
-        if (subqueryLen === 0) continue;
+
+      if (subqueryLen === 0) {
+        continue;
+      }
+
       let matchIdx = -subqueryLen;
 
       while (true) {
@@ -5912,16 +6023,16 @@ class PDFFindController {
           match: matchIdx,
           matchLength: subqueryLen,
           skipped: false,
-          color: i  // #201
+          color: i
         });
       }
     }
 
     this._pageMatchesLength[pageIndex] = [];
-    this._pageMatchesColor[pageIndex] = [];  // #201
+    this._pageMatchesColor[pageIndex] = [];
     this._pageMatches[pageIndex] = [];
 
-    this._prepareMatches(matchesWithLength, this._pageMatches[pageIndex], this._pageMatchesLength[pageIndex], /* #201 */ this._pageMatchesColor[pageIndex]);;
+    this._prepareMatches(matchesWithLength, this._pageMatches[pageIndex], this._pageMatchesLength[pageIndex], this._pageMatchesColor[pageIndex]);
   }
 
   _calculateMatch(pageIndex) {
@@ -5930,9 +6041,11 @@ class PDFFindController {
     const {
       caseSensitive,
       entireWord,
-      ignoreAccents, // #177
+      ignoreAccents,
+      fuzzySearch,
       phraseSearch
     } = this._state;
+    debugger;
 
     if (query.length === 0) {
       return;
@@ -5943,10 +6056,16 @@ class PDFFindController {
       query = query.toLowerCase();
     }
 
-    if (phraseSearch) {
-      this._calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents); // #177
+    if (fuzzySearch) {
+      if (query.length <= 2) {
+        this._calculatePhraseMatch(query, pageIndex, pageContent, false);
+      } else {
+        this._calculateFuzzyMatch(query, pageIndex, pageContent);
+      }
+    } else if (phraseSearch) {
+      this._calculatePhraseMatch(query, pageIndex, pageContent, entireWord, ignoreAccents);
     } else {
-      this._calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents); // #177
+      this._calculateWordMatch(query, pageIndex, pageContent, entireWord, ignoreAccents);
     }
 
     if (this._state.highlightAll) {
@@ -6035,7 +6154,7 @@ class PDFFindController {
       this._resumePageIdx = null;
       this._pageMatches.length = 0;
       this._pageMatchesLength.length = 0;
-      this._pageMatchesColor.length = 0;  // #201
+      this._pageMatchesColor.length = 0;
       this._matchesCountTotal = 0;
 
       this._updateAllPages();
@@ -6246,6 +6365,422 @@ exports.PDFFindController = PDFFindController;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_RESULT__;
+
+(function () {
+  'use strict';
+
+  var collator;
+
+  try {
+    collator = typeof Intl !== "undefined" && typeof Intl.Collator !== "undefined" ? Intl.Collator("generic", {
+      sensitivity: "base"
+    }) : null;
+  } catch (err) {
+    console.log("Collator could not be initialized and wouldn't be used");
+  }
+
+  var prevRow = [],
+      str2Char = [];
+  var Levenshtein = {
+    get: function (str1, str2, options) {
+      var useCollator = options && collator && options.useCollator;
+      var str1Len = str1.length,
+          str2Len = str2.length;
+      if (str1Len === 0) return str2Len;
+      if (str2Len === 0) return str1Len;
+      var curCol, nextCol, i, j, tmp;
+
+      for (i = 0; i < str2Len; ++i) {
+        prevRow[i] = i;
+        str2Char[i] = str2.charCodeAt(i);
+      }
+
+      prevRow[str2Len] = str2Len;
+      var strCmp;
+
+      if (useCollator) {
+        for (i = 0; i < str1Len; ++i) {
+          nextCol = i + 1;
+
+          for (j = 0; j < str2Len; ++j) {
+            curCol = nextCol;
+            strCmp = 0 === collator.compare(str1.charAt(i), String.fromCharCode(str2Char[j]));
+            nextCol = prevRow[j] + (strCmp ? 0 : 1);
+            tmp = curCol + 1;
+
+            if (nextCol > tmp) {
+              nextCol = tmp;
+            }
+
+            tmp = prevRow[j + 1] + 1;
+
+            if (nextCol > tmp) {
+              nextCol = tmp;
+            }
+
+            prevRow[j] = curCol;
+          }
+
+          prevRow[j] = nextCol;
+        }
+      } else {
+        for (i = 0; i < str1Len; ++i) {
+          nextCol = i + 1;
+
+          for (j = 0; j < str2Len; ++j) {
+            curCol = nextCol;
+            strCmp = str1.charCodeAt(i) === str2Char[j];
+            nextCol = prevRow[j] + (strCmp ? 0 : 1);
+            tmp = curCol + 1;
+
+            if (nextCol > tmp) {
+              nextCol = tmp;
+            }
+
+            tmp = prevRow[j + 1] + 1;
+
+            if (nextCol > tmp) {
+              nextCol = tmp;
+            }
+
+            prevRow[j] = curCol;
+          }
+
+          prevRow[j] = nextCol;
+        }
+      }
+
+      return nextCol;
+    }
+  };
+
+  if ( true && __webpack_require__(18) !== null && __webpack_require__(19)) {
+    !(__WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+      return Levenshtein;
+    }).call(exports, __webpack_require__, exports, module),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else if ( true && module !== null && typeof exports !== "undefined" && module.exports === exports) {
+    module.exports = Levenshtein;
+  } else if (typeof self !== "undefined" && typeof self.postMessage === 'function' && typeof self.importScripts === 'function') {
+    self.Levenshtein = Levenshtein;
+  } else if (typeof window !== "undefined" && window !== null) {
+    window.Levenshtein = Levenshtein;
+  }
+})();
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)(module)))
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function (module) {
+  if (!module.webpackPolyfill) {
+    module.deprecate = function () {};
+
+    module.paths = [];
+    if (!module.children) module.children = [];
+    Object.defineProperty(module, "loaded", {
+      enumerable: true,
+      get: function () {
+        return module.l;
+      }
+    });
+    Object.defineProperty(module, "id", {
+      enumerable: true,
+      get: function () {
+        return module.i;
+      }
+    });
+    module.webpackPolyfill = 1;
+  }
+
+  return module;
+};
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports) {
+
+module.exports = function() {
+	throw new Error("define cannot be used indirect");
+};
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
+module.exports = __webpack_amd_options__;
+
+/* WEBPACK VAR INJECTION */}.call(this, {}))
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.deburr = deburr;
+var INFINITY = 1 / 0;
+var symbolTag = '[object Symbol]';
+var reLatin = /[\xc0-\xd6\xd8-\xf6\xf8-\xff\u0100-\u017f]/g;
+var rsComboMarksRange = '\\u0300-\\u036f\\ufe20-\\ufe23',
+    rsComboSymbolsRange = '\\u20d0-\\u20f0';
+var rsCombo = '[' + rsComboMarksRange + rsComboSymbolsRange + ']';
+var reComboMark = RegExp(rsCombo, 'g');
+var deburredLetters = {
+  '\xc0': 'A',
+  '\xc1': 'A',
+  '\xc2': 'A',
+  '\xc3': 'A',
+  '\xc4': 'A',
+  '\xc5': 'A',
+  '\xe0': 'a',
+  '\xe1': 'a',
+  '\xe2': 'a',
+  '\xe3': 'a',
+  '\xe4': 'a',
+  '\xe5': 'a',
+  '\xc7': 'C',
+  '\xe7': 'c',
+  '\xd0': 'D',
+  '\xf0': 'd',
+  '\xc8': 'E',
+  '\xc9': 'E',
+  '\xca': 'E',
+  '\xcb': 'E',
+  '\xe8': 'e',
+  '\xe9': 'e',
+  '\xea': 'e',
+  '\xeb': 'e',
+  '\xcc': 'I',
+  '\xcd': 'I',
+  '\xce': 'I',
+  '\xcf': 'I',
+  '\xec': 'i',
+  '\xed': 'i',
+  '\xee': 'i',
+  '\xef': 'i',
+  '\xd1': 'N',
+  '\xf1': 'n',
+  '\xd2': 'O',
+  '\xd3': 'O',
+  '\xd4': 'O',
+  '\xd5': 'O',
+  '\xd6': 'O',
+  '\xd8': 'O',
+  '\xf2': 'o',
+  '\xf3': 'o',
+  '\xf4': 'o',
+  '\xf5': 'o',
+  '\xf6': 'o',
+  '\xf8': 'o',
+  '\xd9': 'U',
+  '\xda': 'U',
+  '\xdb': 'U',
+  '\xdc': 'U',
+  '\xf9': 'u',
+  '\xfa': 'u',
+  '\xfb': 'u',
+  '\xfc': 'u',
+  '\xdd': 'Y',
+  '\xfd': 'y',
+  '\xff': 'y',
+  '\xc6': 'Ae',
+  '\xe6': 'ae',
+  '\xde': 'Th',
+  '\xfe': 'th',
+  '\xdf': 'ss',
+  '\u0100': 'A',
+  '\u0102': 'A',
+  '\u0104': 'A',
+  '\u0101': 'a',
+  '\u0103': 'a',
+  '\u0105': 'a',
+  '\u0106': 'C',
+  '\u0108': 'C',
+  '\u010a': 'C',
+  '\u010c': 'C',
+  '\u0107': 'c',
+  '\u0109': 'c',
+  '\u010b': 'c',
+  '\u010d': 'c',
+  '\u010e': 'D',
+  '\u0110': 'D',
+  '\u010f': 'd',
+  '\u0111': 'd',
+  '\u0112': 'E',
+  '\u0114': 'E',
+  '\u0116': 'E',
+  '\u0118': 'E',
+  '\u011a': 'E',
+  '\u0113': 'e',
+  '\u0115': 'e',
+  '\u0117': 'e',
+  '\u0119': 'e',
+  '\u011b': 'e',
+  '\u011c': 'G',
+  '\u011e': 'G',
+  '\u0120': 'G',
+  '\u0122': 'G',
+  '\u011d': 'g',
+  '\u011f': 'g',
+  '\u0121': 'g',
+  '\u0123': 'g',
+  '\u0124': 'H',
+  '\u0126': 'H',
+  '\u0125': 'h',
+  '\u0127': 'h',
+  '\u0128': 'I',
+  '\u012a': 'I',
+  '\u012c': 'I',
+  '\u012e': 'I',
+  '\u0130': 'I',
+  '\u0129': 'i',
+  '\u012b': 'i',
+  '\u012d': 'i',
+  '\u012f': 'i',
+  '\u0131': 'i',
+  '\u0134': 'J',
+  '\u0135': 'j',
+  '\u0136': 'K',
+  '\u0137': 'k',
+  '\u0138': 'k',
+  '\u0139': 'L',
+  '\u013b': 'L',
+  '\u013d': 'L',
+  '\u013f': 'L',
+  '\u0141': 'L',
+  '\u013a': 'l',
+  '\u013c': 'l',
+  '\u013e': 'l',
+  '\u0140': 'l',
+  '\u0142': 'l',
+  '\u0143': 'N',
+  '\u0145': 'N',
+  '\u0147': 'N',
+  '\u014a': 'N',
+  '\u0144': 'n',
+  '\u0146': 'n',
+  '\u0148': 'n',
+  '\u014b': 'n',
+  '\u014c': 'O',
+  '\u014e': 'O',
+  '\u0150': 'O',
+  '\u014d': 'o',
+  '\u014f': 'o',
+  '\u0151': 'o',
+  '\u0154': 'R',
+  '\u0156': 'R',
+  '\u0158': 'R',
+  '\u0155': 'r',
+  '\u0157': 'r',
+  '\u0159': 'r',
+  '\u015a': 'S',
+  '\u015c': 'S',
+  '\u015e': 'S',
+  '\u0160': 'S',
+  '\u015b': 's',
+  '\u015d': 's',
+  '\u015f': 's',
+  '\u0161': 's',
+  '\u0162': 'T',
+  '\u0164': 'T',
+  '\u0166': 'T',
+  '\u0163': 't',
+  '\u0165': 't',
+  '\u0167': 't',
+  '\u0168': 'U',
+  '\u016a': 'U',
+  '\u016c': 'U',
+  '\u016e': 'U',
+  '\u0170': 'U',
+  '\u0172': 'U',
+  '\u0169': 'u',
+  '\u016b': 'u',
+  '\u016d': 'u',
+  '\u016f': 'u',
+  '\u0171': 'u',
+  '\u0173': 'u',
+  '\u0174': 'W',
+  '\u0175': 'w',
+  '\u0176': 'Y',
+  '\u0177': 'y',
+  '\u0178': 'Y',
+  '\u0179': 'Z',
+  '\u017b': 'Z',
+  '\u017d': 'Z',
+  '\u017a': 'z',
+  '\u017c': 'z',
+  '\u017e': 'z',
+  '\u0132': 'IJ',
+  '\u0133': 'ij',
+  '\u0152': 'Oe',
+  '\u0153': 'oe',
+  '\u0149': "'n",
+  '\u017f': 'ss'
+};
+var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+var root = freeGlobal || freeSelf || Function('return this')();
+
+function basePropertyOf(object) {
+  return function (key) {
+    return object == null ? undefined : object[key];
+  };
+}
+
+var deburrLetter = basePropertyOf(deburredLetters);
+var objectProto = Object.prototype;
+var objectToString = objectProto.toString;
+var Symbol = root.Symbol;
+var symbolProto = Symbol ? Symbol.prototype : undefined,
+    symbolToString = symbolProto ? symbolProto.toString : undefined;
+
+function baseToString(value) {
+  if (typeof value == 'string') {
+    return value;
+  }
+
+  if (isSymbol(value)) {
+    return symbolToString ? symbolToString.call(value) : '';
+  }
+
+  var result = value + '';
+  return result == '0' && 1 / value == -INFINITY ? '-0' : result;
+}
+
+function isObjectLike(value) {
+  return !!value && typeof value == 'object';
+}
+
+function isSymbol(value) {
+  return typeof value == 'symbol' || isObjectLike(value) && objectToString.call(value) == symbolTag;
+}
+
+function toString(value) {
+  return value == null ? '' : baseToString(value);
+}
+
+function deburr(string) {
+  string = toString(string);
+  return string && string.replace(reLatin, deburrLetter).replace(reComboMark, '');
+}
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 
 
 Object.defineProperty(exports, "__esModule", {
@@ -6338,7 +6873,7 @@ function getCharacterType(charCode) {
 }
 
 /***/ }),
-/* 17 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6926,7 +7461,7 @@ function isDestArraysEqual(firstDest, secondDest) {
 }
 
 /***/ }),
-/* 18 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7365,7 +7900,7 @@ class SimpleLinkService {
 exports.SimpleLinkService = SimpleLinkService;
 
 /***/ }),
-/* 19 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7565,7 +8100,7 @@ class PDFOutlineViewer {
 exports.PDFOutlineViewer = PDFOutlineViewer;
 
 /***/ }),
-/* 20 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7974,7 +8509,7 @@ class PDFPresentationMode {
 exports.PDFPresentationMode = PDFPresentationMode;
 
 /***/ }),
-/* 21 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8123,7 +8658,7 @@ class PDFSidebarResizer {
 exports.PDFSidebarResizer = PDFSidebarResizer;
 
 /***/ }),
-/* 22 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8136,7 +8671,7 @@ exports.PDFThumbnailViewer = void 0;
 
 var _ui_utils = __webpack_require__(2);
 
-var _pdf_thumbnail_view = __webpack_require__(23);
+var _pdf_thumbnail_view = __webpack_require__(28);
 
 const THUMBNAIL_SCROLL_MARGIN = -19;
 const THUMBNAIL_SELECTED_CLASS = "selected";
@@ -8380,7 +8915,7 @@ class PDFThumbnailViewer {
 exports.PDFThumbnailViewer = PDFThumbnailViewer;
 
 /***/ }),
-/* 23 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8790,7 +9325,7 @@ class PDFThumbnailView {
 exports.PDFThumbnailView = PDFThumbnailView;
 
 /***/ }),
-/* 24 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8801,7 +9336,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.PDFViewer = void 0;
 
-var _base_viewer = __webpack_require__(25);
+var _base_viewer = __webpack_require__(30);
 
 var _pdfjsLib = __webpack_require__(5);
 
@@ -8877,7 +9412,7 @@ class PDFViewer extends _base_viewer.BaseViewer {
 exports.PDFViewer = PDFViewer;
 
 /***/ }),
-/* 25 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8892,15 +9427,15 @@ var _ui_utils = __webpack_require__(2);
 
 var _pdf_rendering_queue = __webpack_require__(8);
 
-var _annotation_layer_builder = __webpack_require__(26);
+var _annotation_layer_builder = __webpack_require__(31);
 
 var _pdfjsLib = __webpack_require__(5);
 
-var _pdf_page_view = __webpack_require__(27);
+var _pdf_page_view = __webpack_require__(32);
 
-var _pdf_link_service = __webpack_require__(18);
+var _pdf_link_service = __webpack_require__(23);
 
-var _text_layer_builder = __webpack_require__(28);
+var _text_layer_builder = __webpack_require__(33);
 
 const DEFAULT_CACHE_SIZE = 10;
 
@@ -9256,7 +9791,7 @@ class BaseViewer {
           textLayerMode: this.textLayerMode,
           annotationLayerFactory: this,
           imageResourcesPath: this.imageResourcesPath,
-          removePageBorders: this.removePageBorders, // #194
+          removePageBorders: this.removePageBorders,
           renderInteractiveForms: this.renderInteractiveForms,
           renderer: this.renderer,
           enableWebGL: this.enableWebGL,
@@ -9998,7 +10533,7 @@ class BaseViewer {
 exports.BaseViewer = BaseViewer;
 
 /***/ }),
-/* 26 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10013,7 +10548,7 @@ var _pdfjsLib = __webpack_require__(5);
 
 var _ui_utils = __webpack_require__(2);
 
-var _pdf_link_service = __webpack_require__(18);
+var _pdf_link_service = __webpack_require__(23);
 
 class AnnotationLayerBuilder {
   constructor({
@@ -10052,7 +10587,7 @@ class AnnotationLayerBuilder {
         annotations,
         page: this.pdfPage,
         imageResourcesPath: this.imageResourcesPath,
-          removePageBorders: this.removePageBorders, // #194
+        removePageBorders: this.removePageBorders,
         renderInteractiveForms: this.renderInteractiveForms,
         linkService: this.linkService,
         downloadManager: this.downloadManager
@@ -10110,7 +10645,7 @@ class DefaultAnnotationLayerFactory {
 exports.DefaultAnnotationLayerFactory = DefaultAnnotationLayerFactory;
 
 /***/ }),
-/* 27 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10708,7 +11243,7 @@ class PDFPageView {
 exports.PDFPageView = PDFPageView;
 
 /***/ }),
-/* 28 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10827,7 +11362,7 @@ class TextLayerBuilder {
     this.textContent = textContent;
   }
 
-  _convertMatches(matches, matchesLength, /* #201 */ matchesColor) {
+  _convertMatches(matches, matchesLength, matchesColor) {
     if (!matches) {
       return [];
     }
@@ -10855,7 +11390,7 @@ class TextLayerBuilder {
       }
 
       const match = {
-        color: matchesColor ? matchesColor[m] : 0, // #201
+        color: matchesColor ? matchesColor[m] : 0,
         begin: {
           divIdx: i,
           offset: matchIdx - iIndex
@@ -10940,7 +11475,7 @@ class TextLayerBuilder {
       const begin = match.begin;
       const end = match.end;
       const isSelected = isSelectedPage && i === selectedMatchIdx;
-      var highlightSuffix = (isSelected ? ' selected' : '') + ' color' + match.color; // #201
+      const highlightSuffix = (isSelected ? " selected" : "") + " color" + match.color;
 
       if (isSelected) {
         findController.scrollMatchIntoView({
@@ -11013,8 +11548,8 @@ class TextLayerBuilder {
 
     const pageMatches = findController.pageMatches[pageIdx] || null;
     const pageMatchesLength = findController.pageMatchesLength[pageIdx] || null;
-      var pageMatchesColor = findController.pageMatchesColor[pageIdx] || null; // #201
-      this.matches = this._convertMatches(pageMatches, pageMatchesLength, pageMatchesColor); // #201
+    const pageMatchesColor = findController.pageMatchesColor[pageIdx] || null;
+    this.matches = this._convertMatches(pageMatches, pageMatchesLength, pageMatchesColor);
 
     this._renderMatches(this.matches);
   }
@@ -11094,7 +11629,7 @@ class DefaultTextLayerFactory {
 exports.DefaultTextLayerFactory = DefaultTextLayerFactory;
 
 /***/ }),
-/* 29 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11109,7 +11644,7 @@ var _ui_utils = __webpack_require__(2);
 
 var _pdf_cursor_tools = __webpack_require__(6);
 
-var _pdf_single_page_viewer = __webpack_require__(30);
+var _pdf_single_page_viewer = __webpack_require__(35);
 
 class SecondaryToolbar {
   constructor(options, mainContainer, eventBus) {
@@ -11277,12 +11812,11 @@ class SecondaryToolbar {
     this.items.lastPage.disabled = this.pageNumber >= this.pagesCount;
     this.items.pageRotateCw.disabled = this.pagesCount === 0;
     this.items.pageRotateCcw.disabled = this.pagesCount === 0;
-
     this.eventBus.dispatch("updateuistate", {
-        source: this,
-        widget: 'SecondaryToolbar',
-        pageNumber: this.pageNumber,
-        pagesCount: this.pagesCount
+      source: this,
+      widget: "SecondaryToolbar",
+      pageNumber: this.pageNumber,
+      pagesCount: this.pagesCount
     });
   }
 
@@ -11419,7 +11953,7 @@ class SecondaryToolbar {
 exports.SecondaryToolbar = SecondaryToolbar;
 
 /***/ }),
-/* 30 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11430,7 +11964,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.PDFSinglePageViewer = void 0;
 
-var _base_viewer = __webpack_require__(25);
+var _base_viewer = __webpack_require__(30);
 
 var _pdfjsLib = __webpack_require__(5);
 
@@ -11541,7 +12075,7 @@ class PDFSinglePageViewer extends _base_viewer.BaseViewer {
 exports.PDFSinglePageViewer = PDFSinglePageViewer;
 
 /***/ }),
-/* 31 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11757,14 +12291,13 @@ class Toolbar {
         items.customScaleOption.selected = true;
       }
     });
-
     this.eventBus.dispatch("updateuistate", {
       source: this,
-      widget: 'Toolbar',
-      pageNumber: pageNumber,
-      pagesCount: pagesCount,
-      pageScaleValue: pageScaleValue,
-      pageScale: pageScale
+      widget: "Toolbar",
+      pageNumber,
+      pagesCount,
+      pageScaleValue,
+      pageScale
     });
   }
 
@@ -11803,7 +12336,7 @@ class Toolbar {
     }
 
     const overflow = SCALE_SELECT_WIDTH - SCALE_SELECT_CONTAINER_WIDTH;
-    maxWidth += 10 +  1.5 * overflow;
+    maxWidth += 10 + 1.5 * overflow;
 
     if (maxWidth > SCALE_SELECT_CONTAINER_WIDTH) {
       items.scaleSelect.style.width = `${maxWidth + overflow}px`;
@@ -11820,7 +12353,7 @@ class Toolbar {
 exports.Toolbar = Toolbar;
 
 /***/ }),
-/* 32 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11916,7 +12449,7 @@ class ViewHistory {
 exports.ViewHistory = ViewHistory;
 
 /***/ }),
-/* 33 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11929,11 +12462,11 @@ exports.GenericCom = void 0;
 
 var _app = __webpack_require__(1);
 
-var _preferences = __webpack_require__(34);
+var _preferences = __webpack_require__(39);
 
-var _download_manager = __webpack_require__(35);
+var _download_manager = __webpack_require__(40);
 
-var _genericl10n = __webpack_require__(36);
+var _genericl10n = __webpack_require__(41);
 
 ;
 const GenericCom = {};
@@ -11970,7 +12503,7 @@ class GenericExternalServices extends _app.DefaultExternalServices {
 _app.PDFViewerApplication.externalServices = GenericExternalServices;
 
 /***/ }),
-/* 34 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11998,7 +12531,7 @@ function getDefaultPreferences() {
       "historyUpdateUrl": false,
       "ignoreDestinationZoom": false,
       "pdfBugEnabled": false,
-      "removePageBorders": false,// #194 
+      "removePageBorders": false,
       "renderer": "canvas",
       "renderInteractiveForms": false,
       "sidebarViewOnLoad": -1,
@@ -12121,7 +12654,7 @@ class BasePreferences {
 exports.BasePreferences = BasePreferences;
 
 /***/ }),
-/* 35 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12208,7 +12741,7 @@ class DownloadManager {
 exports.DownloadManager = DownloadManager;
 
 /***/ }),
-/* 36 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12219,7 +12752,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.GenericL10n = void 0;
 
-__webpack_require__(37);
+__webpack_require__(42);
 
 const webL10n = document.webL10n;
 
@@ -12258,7 +12791,7 @@ class GenericL10n {
 exports.GenericL10n = GenericL10n;
 
 /***/ }),
-/* 37 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12266,11 +12799,11 @@ exports.GenericL10n = GenericL10n;
 
 document.webL10n = function (window, document, undefined) {
   var gL10nData = {};
-  var gTextData = '';
-  var gTextProp = 'textContent';
-  var gLanguage = '';
+  var gTextData = "";
+  var gTextProp = "textContent";
+  var gLanguage = "";
   var gMacros = {};
-  var gReadyState = 'loading';
+  var gReadyState = "loading";
   var gAsyncResourceLoading = true;
 
   function getL10nResourceLinks() {
@@ -12283,20 +12816,20 @@ document.webL10n = function (window, document, undefined) {
   }
 
   function getTranslatableChildren(element) {
-    return element ? element.querySelectorAll('*[data-l10n-id]') : [];
+    return element ? element.querySelectorAll("*[data-l10n-id]") : [];
   }
 
   function getL10nAttributes(element) {
     if (!element) return {};
-    var l10nId = element.getAttribute('data-l10n-id');
-    var l10nArgs = element.getAttribute('data-l10n-args');
+    var l10nId = element.getAttribute("data-l10n-id");
+    var l10nArgs = element.getAttribute("data-l10n-args");
     var args = {};
 
     if (l10nArgs) {
       try {
         args = JSON.parse(l10nArgs);
       } catch (e) {
-        console.warn('could not parse arguments for #' + l10nId);
+        console.warn("could not parse arguments for #" + l10nId);
       }
     }
 
@@ -12306,12 +12839,12 @@ document.webL10n = function (window, document, undefined) {
     };
   }
 
-function fireL10nReadyEvent(lang) {
-var evtObject = document.createEvent('Event');
-  evtObject.initEvent('localized', true, false);
-  evtObject.language = lang;
-  document.dispatchEvent(evtObject);
-}
+  function fireL10nReadyEvent(lang) {
+    var evtObject = document.createEvent("Event");
+    evtObject.initEvent("localized", true, false);
+    evtObject.language = lang;
+    document.dispatchEvent(evtObject);
+  }
 
   function xhrLoadText(url, onSuccess, onFailure) {
     onSuccess = onSuccess || function _onSuccess(data) {};
@@ -12319,10 +12852,10 @@ var evtObject = document.createEvent('Event');
     onFailure = onFailure || function _onFailure() {};
 
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, gAsyncResourceLoading);
+    xhr.open("GET", url, gAsyncResourceLoading);
 
     if (xhr.overrideMimeType) {
-      xhr.overrideMimeType('text/plain; charset=utf-8');
+      xhr.overrideMimeType("text/plain; charset=utf-8");
     }
 
     xhr.onreadystatechange = function () {
@@ -12346,11 +12879,11 @@ var evtObject = document.createEvent('Event');
   }
 
   function parseResource(href, lang, successCallback, failureCallback) {
-    var baseURL = href.replace(/[^\/]*$/, '') || './';
+    var baseURL = href.replace(/[^\/]*$/, "") || "./";
 
     function evalString(text) {
-      if (text.lastIndexOf('\\') < 0) return text;
-      return text.replace(/\\\\/g, '\\').replace(/\\n/g, '\n').replace(/\\r/g, '\r').replace(/\\t/g, '\t').replace(/\\b/g, '\b').replace(/\\f/g, '\f').replace(/\\{/g, '{').replace(/\\}/g, '}').replace(/\\"/g, '"').replace(/\\'/g, "'");
+      if (text.lastIndexOf("\\") < 0) return text;
+      return text.replace(/\\\\/g, "\\").replace(/\\n/g, "\n").replace(/\\r/g, "\r").replace(/\\t/g, "\t").replace(/\\b/g, "\b").replace(/\\f/g, "\f").replace(/\\{/g, "{").replace(/\\}/g, "}").replace(/\\"/g, '"').replace(/\\'/g, "'");
     }
 
     function parseProperties(text, parsedPropertiesCallback) {
@@ -12362,21 +12895,26 @@ var evtObject = document.createEvent('Event');
       var reSplit = /^([^=\s]*)\s*=\s*(.+)$/;
 
       function parseRawLines(rawText, extendedSyntax, parsedRawLinesCallback) {
-        var entries = rawText.replace(reBlank, '').split(/[\r\n]+/);
-        var currentLang = '*';
-        var genericLang = lang.split('-', 1)[0];
+        var entries = rawText.replace(reBlank, "").split(/[\r\n]+/);
+        var currentLang = "*";
+        var genericLang = lang.split("-", 1)[0];
         var skipLang = false;
-        var match = '';
+        var match = "";
+        var languagefound = false;
 
-        var languagefound = false; // #150
         function nextEntry() {
-          var genericMatch = undefined; // #150
+          var genericMatch = undefined;
+
           while (true) {
-            if ((!entries.length) && genericMatch) { // #150
-              if (!languagefound) loadImport(genericMatch, nextEntry); else nextEntry(); // #150
-              return; // #150
-            }// #150
-            else if (!entries.length) { // #150
+            if (!entries.length && genericMatch) {
+              if (!languagefound) {
+                loadImport(genericMatch, nextEntry);
+              } else {
+                nextEntry();
+              }
+
+              return;
+            } else if (!entries.length) {
               parsedRawLinesCallback();
               return;
             }
@@ -12389,7 +12927,7 @@ var evtObject = document.createEvent('Event');
 
               if (match) {
                 currentLang = match[1].toLowerCase();
-                skipLang = currentLang !== '*' && currentLang !== lang && currentLang !== genericLang;
+                skipLang = currentLang !== "*" && currentLang !== lang && currentLang !== genericLang;
                 continue;
               } else if (skipLang) {
                 continue;
@@ -12398,13 +12936,13 @@ var evtObject = document.createEvent('Event');
               match = reImport.exec(line);
 
               if (match) {
-              if (currentLang === '*' || currentLang === lang) { // #150
-                loadImport(baseURL + match[1], nextEntry);
-                languagefound = true;
-                return;
-              } else { // #150
-                genericMatch = baseURL + match[1]; // #150
-              } // #150
+                if (currentLang === "*" || currentLang === lang) {
+                  loadImport(baseURL + match[1], nextEntry);
+                  languagefound = true;
+                  return;
+                } else {
+                  genericMatch = baseURL + match[1];
+                }
               }
             }
 
@@ -12423,7 +12961,7 @@ var evtObject = document.createEvent('Event');
         xhrLoadText(url, function (content) {
           parseRawLines(content, false, callback);
         }, function () {
-          console.warn(url + ' not found.');
+          console.warn(url + " not found.");
           callback();
         });
       }
@@ -12439,7 +12977,7 @@ var evtObject = document.createEvent('Event');
         for (var key in data) {
           var id,
               prop,
-              index = key.lastIndexOf('.');
+              index = key.lastIndexOf(".");
 
           if (index > 0) {
             id = key.substring(0, index);
@@ -12464,7 +13002,8 @@ var evtObject = document.createEvent('Event');
   }
 
   function loadLocale(lang, callback) {
-let originalCaseLang = lang;
+    let originalCaseLang = lang;
+
     if (lang) {
       lang = lang.toLowerCase();
     }
@@ -12480,32 +13019,32 @@ let originalCaseLang = lang;
       var dict = getL10nDictionary();
 
       if (dict && dict.locales && dict.default_locale) {
-        console.log('The PDF viewer uses the pre-compiled language bundle stored in the HTML page.');
-              gL10nData = dict.locales[originalCaseLang]; // modified line
+        console.log("The PDF viewer uses the pre-compiled language bundle stored in the HTML page.");
+        gL10nData = dict.locales[originalCaseLang];
 
         if (!gL10nData) {
           var defaultLocale = dict.default_locale.toLowerCase();
 
           for (var anyCaseLang in dict.locales) {
-            originalCaseLang = anyCaseLang; // added line
+            originalCaseLang = anyCaseLang;
             anyCaseLang = anyCaseLang.toLowerCase();
 
             if (anyCaseLang === lang) {
-              gL10nData = dict.locales[originalCaseLang]; // modified line
+              gL10nData = dict.locales[originalCaseLang];
               break;
             } else if (anyCaseLang === defaultLocale) {
-              gL10nData = dict.locales[originalCaseLang]; // modified line
+              gL10nData = dict.locales[originalCaseLang];
             }
           }
         }
 
         callback();
       } else {
-        console.log('Could not load the translation files for the PDF viewer. Check the flag useBrowserLocale, check the locales subfolder of the assets folder, or add the locale definition to the index.html');
+        console.log("Could not load the translation files for the PDF viewer. Check the flag useBrowserLocale, check the locales subfolder of the assets folder, or add the locale definition to the index.html");
       }
 
-fireL10nReadyEvent(lang);
-      gReadyState = 'complete';
+      fireL10nReadyEvent(lang);
+      gReadyState = "complete";
       return;
     }
 
@@ -12517,8 +13056,8 @@ fireL10nReadyEvent(lang);
 
       if (gResourceCount >= langCount) {
         callback();
-fireL10nReadyEvent(lang);
-        gReadyState = 'complete';
+        fireL10nReadyEvent(lang);
+        gReadyState = "complete";
       }
     };
 
@@ -12527,9 +13066,9 @@ fireL10nReadyEvent(lang);
 
       this.load = function (lang, callback) {
         parseResource(href, lang, callback, function () {
-          console.warn(href + ' not found.');
+          console.warn(href + " not found.");
           console.warn('"' + lang + '" resource not found');
-          gLanguage = '';
+          gLanguage = "";
           callback();
         });
       };
@@ -12543,182 +13082,182 @@ fireL10nReadyEvent(lang);
 
   function clear() {
     gL10nData = {};
-    gTextData = '';
-    gLanguage = '';
+    gTextData = "";
+    gLanguage = "";
   }
 
   function getPluralRules(lang) {
     var locales2rules = {
-      'af': 3,
-      'ak': 4,
-      'am': 4,
-      'ar': 1,
-      'asa': 3,
-      'az': 0,
-      'be': 11,
-      'bem': 3,
-      'bez': 3,
-      'bg': 3,
-      'bh': 4,
-      'bm': 0,
-      'bn': 3,
-      'bo': 0,
-      'br': 20,
-      'brx': 3,
-      'bs': 11,
-      'ca': 3,
-      'cgg': 3,
-      'chr': 3,
-      'cs': 12,
-      'cy': 17,
-      'da': 3,
-      'de': 3,
-      'dv': 3,
-      'dz': 0,
-      'ee': 3,
-      'el': 3,
-      'en': 3,
-      'eo': 3,
-      'es': 3,
-      'et': 3,
-      'eu': 3,
-      'fa': 0,
-      'ff': 5,
-      'fi': 3,
-      'fil': 4,
-      'fo': 3,
-      'fr': 5,
-      'fur': 3,
-      'fy': 3,
-      'ga': 8,
-      'gd': 24,
-      'gl': 3,
-      'gsw': 3,
-      'gu': 3,
-      'guw': 4,
-      'gv': 23,
-      'ha': 3,
-      'haw': 3,
-      'he': 2,
-      'hi': 4,
-      'hr': 11,
-      'hu': 0,
-      'id': 0,
-      'ig': 0,
-      'ii': 0,
-      'is': 3,
-      'it': 3,
-      'iu': 7,
-      'ja': 0,
-      'jmc': 3,
-      'jv': 0,
-      'ka': 0,
-      'kab': 5,
-      'kaj': 3,
-      'kcg': 3,
-      'kde': 0,
-      'kea': 0,
-      'kk': 3,
-      'kl': 3,
-      'km': 0,
-      'kn': 0,
-      'ko': 0,
-      'ksb': 3,
-      'ksh': 21,
-      'ku': 3,
-      'kw': 7,
-      'lag': 18,
-      'lb': 3,
-      'lg': 3,
-      'ln': 4,
-      'lo': 0,
-      'lt': 10,
-      'lv': 6,
-      'mas': 3,
-      'mg': 4,
-      'mk': 16,
-      'ml': 3,
-      'mn': 3,
-      'mo': 9,
-      'mr': 3,
-      'ms': 0,
-      'mt': 15,
-      'my': 0,
-      'nah': 3,
-      'naq': 7,
-      'nb': 3,
-      'nd': 3,
-      'ne': 3,
-      'nl': 3,
-      'nn': 3,
-      'no': 3,
-      'nr': 3,
-      'nso': 4,
-      'ny': 3,
-      'nyn': 3,
-      'om': 3,
-      'or': 3,
-      'pa': 3,
-      'pap': 3,
-      'pl': 13,
-      'ps': 3,
-      'pt': 3,
-      'rm': 3,
-      'ro': 9,
-      'rof': 3,
-      'ru': 11,
-      'rwk': 3,
-      'sah': 0,
-      'saq': 3,
-      'se': 7,
-      'seh': 3,
-      'ses': 0,
-      'sg': 0,
-      'sh': 11,
-      'shi': 19,
-      'sk': 12,
-      'sl': 14,
-      'sma': 7,
-      'smi': 7,
-      'smj': 7,
-      'smn': 7,
-      'sms': 7,
-      'sn': 3,
-      'so': 3,
-      'sq': 3,
-      'sr': 11,
-      'ss': 3,
-      'ssy': 3,
-      'st': 3,
-      'sv': 3,
-      'sw': 3,
-      'syr': 3,
-      'ta': 3,
-      'te': 3,
-      'teo': 3,
-      'th': 0,
-      'ti': 4,
-      'tig': 3,
-      'tk': 3,
-      'tl': 4,
-      'tn': 3,
-      'to': 0,
-      'tr': 0,
-      'ts': 3,
-      'tzm': 22,
-      'uk': 11,
-      'ur': 3,
-      've': 3,
-      'vi': 0,
-      'vun': 3,
-      'wa': 4,
-      'wae': 3,
-      'wo': 0,
-      'xh': 3,
-      'xog': 3,
-      'yo': 0,
-      'zh': 0,
-      'zu': 3
+      af: 3,
+      ak: 4,
+      am: 4,
+      ar: 1,
+      asa: 3,
+      az: 0,
+      be: 11,
+      bem: 3,
+      bez: 3,
+      bg: 3,
+      bh: 4,
+      bm: 0,
+      bn: 3,
+      bo: 0,
+      br: 20,
+      brx: 3,
+      bs: 11,
+      ca: 3,
+      cgg: 3,
+      chr: 3,
+      cs: 12,
+      cy: 17,
+      da: 3,
+      de: 3,
+      dv: 3,
+      dz: 0,
+      ee: 3,
+      el: 3,
+      en: 3,
+      eo: 3,
+      es: 3,
+      et: 3,
+      eu: 3,
+      fa: 0,
+      ff: 5,
+      fi: 3,
+      fil: 4,
+      fo: 3,
+      fr: 5,
+      fur: 3,
+      fy: 3,
+      ga: 8,
+      gd: 24,
+      gl: 3,
+      gsw: 3,
+      gu: 3,
+      guw: 4,
+      gv: 23,
+      ha: 3,
+      haw: 3,
+      he: 2,
+      hi: 4,
+      hr: 11,
+      hu: 0,
+      id: 0,
+      ig: 0,
+      ii: 0,
+      is: 3,
+      it: 3,
+      iu: 7,
+      ja: 0,
+      jmc: 3,
+      jv: 0,
+      ka: 0,
+      kab: 5,
+      kaj: 3,
+      kcg: 3,
+      kde: 0,
+      kea: 0,
+      kk: 3,
+      kl: 3,
+      km: 0,
+      kn: 0,
+      ko: 0,
+      ksb: 3,
+      ksh: 21,
+      ku: 3,
+      kw: 7,
+      lag: 18,
+      lb: 3,
+      lg: 3,
+      ln: 4,
+      lo: 0,
+      lt: 10,
+      lv: 6,
+      mas: 3,
+      mg: 4,
+      mk: 16,
+      ml: 3,
+      mn: 3,
+      mo: 9,
+      mr: 3,
+      ms: 0,
+      mt: 15,
+      my: 0,
+      nah: 3,
+      naq: 7,
+      nb: 3,
+      nd: 3,
+      ne: 3,
+      nl: 3,
+      nn: 3,
+      no: 3,
+      nr: 3,
+      nso: 4,
+      ny: 3,
+      nyn: 3,
+      om: 3,
+      or: 3,
+      pa: 3,
+      pap: 3,
+      pl: 13,
+      ps: 3,
+      pt: 3,
+      rm: 3,
+      ro: 9,
+      rof: 3,
+      ru: 11,
+      rwk: 3,
+      sah: 0,
+      saq: 3,
+      se: 7,
+      seh: 3,
+      ses: 0,
+      sg: 0,
+      sh: 11,
+      shi: 19,
+      sk: 12,
+      sl: 14,
+      sma: 7,
+      smi: 7,
+      smj: 7,
+      smn: 7,
+      sms: 7,
+      sn: 3,
+      so: 3,
+      sq: 3,
+      sr: 11,
+      ss: 3,
+      ssy: 3,
+      st: 3,
+      sv: 3,
+      sw: 3,
+      syr: 3,
+      ta: 3,
+      te: 3,
+      teo: 3,
+      th: 0,
+      ti: 4,
+      tig: 3,
+      tk: 3,
+      tl: 4,
+      tn: 3,
+      to: 0,
+      tr: 0,
+      ts: 3,
+      tzm: 22,
+      uk: 11,
+      ur: 3,
+      ve: 3,
+      vi: 0,
+      vun: 3,
+      wa: 4,
+      wae: 3,
+      wo: 0,
+      xh: 3,
+      xog: 3,
+      yo: 0,
+      zh: 0,
+      zu: 3
     };
 
     function isIn(n, list) {
@@ -12730,146 +13269,146 @@ fireL10nReadyEvent(lang);
     }
 
     var pluralRules = {
-      '0': function (n) {
-        return 'other';
+      "0": function (n) {
+        return "other";
       },
-      '1': function (n) {
-        if (isBetween(n % 100, 3, 10)) return 'few';
-        if (n === 0) return 'zero';
-        if (isBetween(n % 100, 11, 99)) return 'many';
-        if (n == 2) return 'two';
-        if (n == 1) return 'one';
-        return 'other';
+      "1": function (n) {
+        if (isBetween(n % 100, 3, 10)) return "few";
+        if (n === 0) return "zero";
+        if (isBetween(n % 100, 11, 99)) return "many";
+        if (n == 2) return "two";
+        if (n == 1) return "one";
+        return "other";
       },
-      '2': function (n) {
-        if (n !== 0 && n % 10 === 0) return 'many';
-        if (n == 2) return 'two';
-        if (n == 1) return 'one';
-        return 'other';
+      "2": function (n) {
+        if (n !== 0 && n % 10 === 0) return "many";
+        if (n == 2) return "two";
+        if (n == 1) return "one";
+        return "other";
       },
-      '3': function (n) {
-        if (n == 1) return 'one';
-        return 'other';
+      "3": function (n) {
+        if (n == 1) return "one";
+        return "other";
       },
-      '4': function (n) {
-        if (isBetween(n, 0, 1)) return 'one';
-        return 'other';
+      "4": function (n) {
+        if (isBetween(n, 0, 1)) return "one";
+        return "other";
       },
-      '5': function (n) {
-        if (isBetween(n, 0, 2) && n != 2) return 'one';
-        return 'other';
+      "5": function (n) {
+        if (isBetween(n, 0, 2) && n != 2) return "one";
+        return "other";
       },
-      '6': function (n) {
-        if (n === 0) return 'zero';
-        if (n % 10 == 1 && n % 100 != 11) return 'one';
-        return 'other';
+      "6": function (n) {
+        if (n === 0) return "zero";
+        if (n % 10 == 1 && n % 100 != 11) return "one";
+        return "other";
       },
-      '7': function (n) {
-        if (n == 2) return 'two';
-        if (n == 1) return 'one';
-        return 'other';
+      "7": function (n) {
+        if (n == 2) return "two";
+        if (n == 1) return "one";
+        return "other";
       },
-      '8': function (n) {
-        if (isBetween(n, 3, 6)) return 'few';
-        if (isBetween(n, 7, 10)) return 'many';
-        if (n == 2) return 'two';
-        if (n == 1) return 'one';
-        return 'other';
+      "8": function (n) {
+        if (isBetween(n, 3, 6)) return "few";
+        if (isBetween(n, 7, 10)) return "many";
+        if (n == 2) return "two";
+        if (n == 1) return "one";
+        return "other";
       },
-      '9': function (n) {
-        if (n === 0 || n != 1 && isBetween(n % 100, 1, 19)) return 'few';
-        if (n == 1) return 'one';
-        return 'other';
+      "9": function (n) {
+        if (n === 0 || n != 1 && isBetween(n % 100, 1, 19)) return "few";
+        if (n == 1) return "one";
+        return "other";
       },
-      '10': function (n) {
-        if (isBetween(n % 10, 2, 9) && !isBetween(n % 100, 11, 19)) return 'few';
-        if (n % 10 == 1 && !isBetween(n % 100, 11, 19)) return 'one';
-        return 'other';
+      "10": function (n) {
+        if (isBetween(n % 10, 2, 9) && !isBetween(n % 100, 11, 19)) return "few";
+        if (n % 10 == 1 && !isBetween(n % 100, 11, 19)) return "one";
+        return "other";
       },
-      '11': function (n) {
-        if (isBetween(n % 10, 2, 4) && !isBetween(n % 100, 12, 14)) return 'few';
-        if (n % 10 === 0 || isBetween(n % 10, 5, 9) || isBetween(n % 100, 11, 14)) return 'many';
-        if (n % 10 == 1 && n % 100 != 11) return 'one';
-        return 'other';
+      "11": function (n) {
+        if (isBetween(n % 10, 2, 4) && !isBetween(n % 100, 12, 14)) return "few";
+        if (n % 10 === 0 || isBetween(n % 10, 5, 9) || isBetween(n % 100, 11, 14)) return "many";
+        if (n % 10 == 1 && n % 100 != 11) return "one";
+        return "other";
       },
-      '12': function (n) {
-        if (isBetween(n, 2, 4)) return 'few';
-        if (n == 1) return 'one';
-        return 'other';
+      "12": function (n) {
+        if (isBetween(n, 2, 4)) return "few";
+        if (n == 1) return "one";
+        return "other";
       },
-      '13': function (n) {
-        if (isBetween(n % 10, 2, 4) && !isBetween(n % 100, 12, 14)) return 'few';
-        if (n != 1 && isBetween(n % 10, 0, 1) || isBetween(n % 10, 5, 9) || isBetween(n % 100, 12, 14)) return 'many';
-        if (n == 1) return 'one';
-        return 'other';
+      "13": function (n) {
+        if (isBetween(n % 10, 2, 4) && !isBetween(n % 100, 12, 14)) return "few";
+        if (n != 1 && isBetween(n % 10, 0, 1) || isBetween(n % 10, 5, 9) || isBetween(n % 100, 12, 14)) return "many";
+        if (n == 1) return "one";
+        return "other";
       },
-      '14': function (n) {
-        if (isBetween(n % 100, 3, 4)) return 'few';
-        if (n % 100 == 2) return 'two';
-        if (n % 100 == 1) return 'one';
-        return 'other';
+      "14": function (n) {
+        if (isBetween(n % 100, 3, 4)) return "few";
+        if (n % 100 == 2) return "two";
+        if (n % 100 == 1) return "one";
+        return "other";
       },
-      '15': function (n) {
-        if (n === 0 || isBetween(n % 100, 2, 10)) return 'few';
-        if (isBetween(n % 100, 11, 19)) return 'many';
-        if (n == 1) return 'one';
-        return 'other';
+      "15": function (n) {
+        if (n === 0 || isBetween(n % 100, 2, 10)) return "few";
+        if (isBetween(n % 100, 11, 19)) return "many";
+        if (n == 1) return "one";
+        return "other";
       },
-      '16': function (n) {
-        if (n % 10 == 1 && n != 11) return 'one';
-        return 'other';
+      "16": function (n) {
+        if (n % 10 == 1 && n != 11) return "one";
+        return "other";
       },
-      '17': function (n) {
-        if (n == 3) return 'few';
-        if (n === 0) return 'zero';
-        if (n == 6) return 'many';
-        if (n == 2) return 'two';
-        if (n == 1) return 'one';
-        return 'other';
+      "17": function (n) {
+        if (n == 3) return "few";
+        if (n === 0) return "zero";
+        if (n == 6) return "many";
+        if (n == 2) return "two";
+        if (n == 1) return "one";
+        return "other";
       },
-      '18': function (n) {
-        if (n === 0) return 'zero';
-        if (isBetween(n, 0, 2) && n !== 0 && n != 2) return 'one';
-        return 'other';
+      "18": function (n) {
+        if (n === 0) return "zero";
+        if (isBetween(n, 0, 2) && n !== 0 && n != 2) return "one";
+        return "other";
       },
-      '19': function (n) {
-        if (isBetween(n, 2, 10)) return 'few';
-        if (isBetween(n, 0, 1)) return 'one';
-        return 'other';
+      "19": function (n) {
+        if (isBetween(n, 2, 10)) return "few";
+        if (isBetween(n, 0, 1)) return "one";
+        return "other";
       },
-      '20': function (n) {
-        if ((isBetween(n % 10, 3, 4) || n % 10 == 9) && !(isBetween(n % 100, 10, 19) || isBetween(n % 100, 70, 79) || isBetween(n % 100, 90, 99))) return 'few';
-        if (n % 1000000 === 0 && n !== 0) return 'many';
-        if (n % 10 == 2 && !isIn(n % 100, [12, 72, 92])) return 'two';
-        if (n % 10 == 1 && !isIn(n % 100, [11, 71, 91])) return 'one';
-        return 'other';
+      "20": function (n) {
+        if ((isBetween(n % 10, 3, 4) || n % 10 == 9) && !(isBetween(n % 100, 10, 19) || isBetween(n % 100, 70, 79) || isBetween(n % 100, 90, 99))) return "few";
+        if (n % 1000000 === 0 && n !== 0) return "many";
+        if (n % 10 == 2 && !isIn(n % 100, [12, 72, 92])) return "two";
+        if (n % 10 == 1 && !isIn(n % 100, [11, 71, 91])) return "one";
+        return "other";
       },
-      '21': function (n) {
-        if (n === 0) return 'zero';
-        if (n == 1) return 'one';
-        return 'other';
+      "21": function (n) {
+        if (n === 0) return "zero";
+        if (n == 1) return "one";
+        return "other";
       },
-      '22': function (n) {
-        if (isBetween(n, 0, 1) || isBetween(n, 11, 99)) return 'one';
-        return 'other';
+      "22": function (n) {
+        if (isBetween(n, 0, 1) || isBetween(n, 11, 99)) return "one";
+        return "other";
       },
-      '23': function (n) {
-        if (isBetween(n % 10, 1, 2) || n % 20 === 0) return 'one';
-        return 'other';
+      "23": function (n) {
+        if (isBetween(n % 10, 1, 2) || n % 20 === 0) return "one";
+        return "other";
       },
-      '24': function (n) {
-        if (isBetween(n, 3, 10) || isBetween(n, 13, 19)) return 'few';
-        if (isIn(n, [2, 12])) return 'two';
-        if (isIn(n, [1, 11])) return 'one';
-        return 'other';
+      "24": function (n) {
+        if (isBetween(n, 3, 10) || isBetween(n, 13, 19)) return "few";
+        if (isIn(n, [2, 12])) return "two";
+        if (isIn(n, [1, 11])) return "one";
+        return "other";
       }
     };
-    var index = locales2rules[lang.replace(/-.*$/, '')];
+    var index = locales2rules[lang.replace(/-.*$/, "")];
 
     if (!(index in pluralRules)) {
-      console.warn('plural form unknown for [' + lang + ']');
+      console.warn("plural form unknown for [" + lang + "]");
       return function () {
-        return 'other';
+        return "other";
       };
     }
 
@@ -12885,18 +13424,18 @@ fireL10nReadyEvent(lang);
       gMacros._pluralRules = getPluralRules(gLanguage);
     }
 
-    var index = '[' + gMacros._pluralRules(n) + ']';
+    var index = "[" + gMacros._pluralRules(n) + "]";
 
-    if (n === 0 && key + '[zero]' in gL10nData) {
-      str = gL10nData[key + '[zero]'][prop];
-    } else if (n == 1 && key + '[one]' in gL10nData) {
-      str = gL10nData[key + '[one]'][prop];
-    } else if (n == 2 && key + '[two]' in gL10nData) {
-      str = gL10nData[key + '[two]'][prop];
+    if (n === 0 && key + "[zero]" in gL10nData) {
+      str = gL10nData[key + "[zero]"][prop];
+    } else if (n == 1 && key + "[one]" in gL10nData) {
+      str = gL10nData[key + "[one]"][prop];
+    } else if (n == 2 && key + "[two]" in gL10nData) {
+      str = gL10nData[key + "[two]"][prop];
     } else if (key + index in gL10nData) {
       str = gL10nData[key + index][prop];
-    } else if (key + '[other]' in gL10nData) {
-      str = gL10nData[key + '[other]'][prop];
+    } else if (key + "[other]" in gL10nData) {
+      str = gL10nData[key + "[other]"][prop];
     }
 
     return str;
@@ -12906,7 +13445,7 @@ fireL10nReadyEvent(lang);
     var data = gL10nData[key];
 
     if (!data) {
-      console.warn('Translation for the key #' + key + ' is missing.');
+      console.warn("Translation for the key #" + key + " is missing.");
 
       if (!fallback) {
         return null;
@@ -12960,7 +13499,7 @@ fireL10nReadyEvent(lang);
         return gL10nData[arg];
       }
 
-      console.log('argument {{' + arg + '}} for #' + key + ' is undefined.');
+      console.log("argument {{" + arg + "}} for #" + key + " is undefined.");
       return matched_text;
     });
   }
@@ -12971,7 +13510,7 @@ fireL10nReadyEvent(lang);
     var data = getL10nData(l10n.id, l10n.args);
 
     if (!data) {
-      console.warn('Translation for the key #' + l10n.id + ' is missing.');
+      console.warn("#" + l10n.id + " is undefined.");
       return;
     }
 
@@ -12985,7 +13524,7 @@ fireL10nReadyEvent(lang);
         for (var i = 0, l = children.length; i < l; i++) {
           if (children[i].nodeType === 3 && /\S/.test(children[i].nodeValue)) {
             if (found) {
-              children[i].nodeValue = '';
+              children[i].nodeValue = "";
             } else {
               children[i].nodeValue = data[gTextProp];
               found = true;
@@ -13012,7 +13551,7 @@ fireL10nReadyEvent(lang);
       return element.children.length;
     }
 
-    if (typeof element.childElementCount !== 'undefined') {
+    if (typeof element.childElementCount !== "undefined") {
       return element.childElementCount;
     }
 
@@ -13039,7 +13578,7 @@ fireL10nReadyEvent(lang);
 
   return {
     get: function (key, args, fallbackString) {
-      var index = key.lastIndexOf('.');
+      var index = key.lastIndexOf(".");
       var prop = gTextProp;
 
       if (index > 0) {
@@ -13060,7 +13599,7 @@ fireL10nReadyEvent(lang);
         return data[prop];
       }
 
-      return '{{' + key + '}}';
+      return "{{" + key + "}}";
     },
     getData: function () {
       return gL10nData;
@@ -13077,9 +13616,9 @@ fireL10nReadyEvent(lang);
       });
     },
     getDirection: function () {
-      var rtlList = ['ar', 'he', 'fa', 'ps', 'ur'];
-      var shortCode = gLanguage.split('-', 1)[0];
-      return rtlList.indexOf(shortCode) >= 0 ? 'rtl' : 'ltr';
+      var rtlList = ["ar", "he", "fa", "ps", "ur"];
+      var shortCode = gLanguage.split("-", 1)[0];
+      return rtlList.indexOf(shortCode) >= 0 ? "rtl" : "ltr";
     },
     translate: translateFragment,
     getReadyState: function () {
@@ -13088,13 +13627,13 @@ fireL10nReadyEvent(lang);
     ready: function (callback) {
       if (!callback) {
         return;
-      } else if (gReadyState == 'complete' || gReadyState == 'interactive') {
+      } else if (gReadyState == "complete" || gReadyState == "interactive") {
         window.setTimeout(function () {
           callback();
         });
       } else if (document.addEventListener) {
-        document.addEventListener('localized', function once() {
-          document.removeEventListener('localized', once);
+        document.addEventListener("localized", function once() {
+          document.removeEventListener("localized", once);
           callback();
         });
       }
@@ -13103,7 +13642,7 @@ fireL10nReadyEvent(lang);
 }(window, document);
 
 /***/ }),
-/* 38 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13207,9 +13746,9 @@ PDFPrintService.prototype = {
       }
 
       overlayManager.close("printServiceOverlay");
-      overlayManager.unregister('printServiceOverlay'); // #104
+      overlayManager.unregister("printServiceOverlay");
     });
-    overlayPromise = undefined; // #104
+    overlayPromise = undefined;
   },
 
   renderPages() {
@@ -13218,24 +13757,26 @@ PDFPrintService.prototype = {
     const renderNextPage = (resolve, reject) => {
       this.throwIfInactive();
 
+      while (true) {
+        ++this.currentPage;
 
-      while (true) { // #243
-        ++this.currentPage; // #243
-        if (this.currentPage >= pageCount) { // #243
-          break; // #243
-        } // #243
-        if ((!window.isInPDFPrintRange) || window.isInPDFPrintRange(this.currentPage)) { // #243
-          break; // #243
-        } // #243
-      } // #243
+        if (this.currentPage >= pageCount) {
+          break;
+        }
+
+        if (!window.isInPDFPrintRange || window.isInPDFPrintRange(this.currentPage)) {
+          break;
+        }
+      }
+
       if (this.currentPage >= pageCount) {
-renderProgress(window.filteredPageCount | pageCount, window.filteredPageCount | pageCount, this.l10n); // #243
+        renderProgress(window.filteredPageCount | pageCount, window.filteredPageCount | pageCount, this.l10n);
         resolve();
         return;
       }
 
       const index = this.currentPage;
-renderProgress(index, window.filteredPageCount | pageCount, this.l10n); // #243
+      renderProgress(index, window.filteredPageCount | pageCount, this.l10n);
       renderPage(this, this.pdfDocument, index + 1, this.pagesOverview[index]).then(this.useRenderedPage.bind(this)).then(function () {
         renderNextPage(resolve, reject);
       }, reject);
@@ -13297,7 +13838,10 @@ renderProgress(index, window.filteredPageCount | pageCount, this.l10n); // #243
 const print = window.print;
 
 window.printPDF = function () {
- if (!PDFViewerApplication.enablePrint) { return; }
+  if (!_app.PDFViewerApplication.enablePrint) {
+    return;
+  }
+
   if (activeService) {
     console.warn("Ignored window.printPDF() because of a pending print job.");
     return;
@@ -13416,4 +13960,4 @@ _app.PDFPrintServiceFactory.instance = {
 
 /***/ })
 /******/ ]);
-
+//# sourceMappingURL=viewer.js.map

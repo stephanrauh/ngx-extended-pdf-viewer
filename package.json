@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "unix-package": "ng b ngx-extended-pdf-viewer && rm -r dist && ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json && cp -R projects/ngx-extended-pdf-viewer/src/assets dist/ngx-extended-pdf-viewer/assets && cp -R projects/ngx-extended-pdf-viewer/src/assets-2.6 dist/ngx-extended-pdf-viewer/assets-2.6",
+    "unix-package": "ng b ngx-extended-pdf-viewer && rm -r dist && ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json && cp -R projects/ngx-extended-pdf-viewer/src/assets dist/ngx-extended-pdf-viewer/assets",
     "showcase": "npm run unix-package && rm -r ../extended-pdf-viewer-showcase/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../extended-pdf-viewer-showcase/node_modules/ngx-extended-pdf-viewer",
     "issue": "npm run unix-package && rm -r ../ngx-extended-pdf-viewer-issues/issue205/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../ngx-extended-pdf-viewer-issues/issue205/node_modules/ngx-extended-pdf-viewer",
     "bootstrap": "npm run unix-package && rm -r ../bootstrap-shows-pdf/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../bootstrap-shows-pdf/node_modules/ngx-extended-pdf-viewer",

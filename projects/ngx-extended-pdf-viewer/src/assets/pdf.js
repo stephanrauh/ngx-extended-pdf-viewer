@@ -294,12 +294,6 @@ Object.defineProperty(exports, "AnnotationLayer", {
     return _annotation_layer.AnnotationLayer;
   }
 });
-Object.defineProperty(exports, "apiCompatibilityParams", {
-  enumerable: true,
-  get: function () {
-    return _api_compatibility.apiCompatibilityParams;
-  }
-});
 Object.defineProperty(exports, "GlobalWorkerOptions", {
   enumerable: true,
   get: function () {
@@ -321,50 +315,36 @@ Object.defineProperty(exports, "SVGGraphics", {
 
 var _display_utils = __w_pdfjs_require__(1);
 
-var _api = __w_pdfjs_require__(5);
+var _api = __w_pdfjs_require__(4);
 
 var _util = __w_pdfjs_require__(2);
 
-var _annotation_layer = __w_pdfjs_require__(16);
+var _annotation_layer = __w_pdfjs_require__(14);
 
-var _api_compatibility = __w_pdfjs_require__(7);
+var _worker_options = __w_pdfjs_require__(8);
 
-var _worker_options = __w_pdfjs_require__(10);
+var _text_layer = __w_pdfjs_require__(15);
 
-var _text_layer = __w_pdfjs_require__(17);
+var _svg = __w_pdfjs_require__(16);
 
-var _svg = __w_pdfjs_require__(18);
-
-const pdfjsVersion = '2.5.207';
-const pdfjsBuild = '0974d605';
+const pdfjsVersion = '2.6.22';
+const pdfjsBuild = '5a9e9d4e';
 {
-  const {
-    isNodeJS
-  } = __w_pdfjs_require__(4);
+  const PDFNetworkStream = __w_pdfjs_require__(17).PDFNetworkStream;
 
-  if (isNodeJS) {
-    const PDFNodeStream = __w_pdfjs_require__(19).PDFNodeStream;
+  let PDFFetchStream;
 
-    (0, _api.setPDFNetworkStreamFactory)(params => {
-      return new PDFNodeStream(params);
-    });
-  } else {
-    const PDFNetworkStream = __w_pdfjs_require__(22).PDFNetworkStream;
+  if ((0, _display_utils.isFetchSupported)()) {
+    PDFFetchStream = __w_pdfjs_require__(20).PDFFetchStream;
+  }
 
-    let PDFFetchStream;
-
-    if ((0, _display_utils.isFetchSupported)()) {
-      PDFFetchStream = __w_pdfjs_require__(23).PDFFetchStream;
+  (0, _api.setPDFNetworkStreamFactory)(params => {
+    if (PDFFetchStream && (0, _display_utils.isValidFetchUrl)(params.url)) {
+      return new PDFFetchStream(params);
     }
 
-    (0, _api.setPDFNetworkStreamFactory)(params => {
-      if (PDFFetchStream && (0, _display_utils.isValidFetchUrl)(params.url)) {
-        return new PDFFetchStream(params);
-      }
-
-      return new PDFNetworkStream(params);
-    });
-  }
+    return new PDFNetworkStream(params);
+  });
 }
 
 /***/ }),
@@ -1702,26 +1682,11 @@ exports.createObjectURL = createObjectURL;
 "use strict";
 
 
-var _is_node = __w_pdfjs_require__(4);
-
+const isNodeJS = false;
 ;
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports, __w_pdfjs_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.isNodeJS = void 0;
-const isNodeJS = typeof process === "object" && process + "" === "[object process]" && !process.versions.nw && !process.versions.electron;
-exports.isNodeJS = isNodeJS;
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -1738,26 +1703,26 @@ var _util = __w_pdfjs_require__(2);
 
 var _display_utils = __w_pdfjs_require__(1);
 
-var _font_loader = __w_pdfjs_require__(6);
+var _font_loader = __w_pdfjs_require__(5);
 
-var _api_compatibility = __w_pdfjs_require__(7);
+var _canvas = __w_pdfjs_require__(6);
 
-var _canvas = __w_pdfjs_require__(8);
+var _worker_options = __w_pdfjs_require__(8);
 
-var _worker_options = __w_pdfjs_require__(10);
+var _message_handler = __w_pdfjs_require__(9);
 
-var _is_node = __w_pdfjs_require__(4);
+var _metadata = __w_pdfjs_require__(10);
 
-var _message_handler = __w_pdfjs_require__(11);
+var _transport_stream = __w_pdfjs_require__(12);
 
-var _metadata = __w_pdfjs_require__(12);
-
-var _transport_stream = __w_pdfjs_require__(14);
-
-var _webgl = __w_pdfjs_require__(15);
+var _webgl = __w_pdfjs_require__(13);
 
 const DEFAULT_RANGE_CHUNK_SIZE = 65536;
 const RENDERING_CANCELLED_TIMEOUT = 100;
+const ServiceWorkerOptions = {
+  showUnverifiedSignatures: false
+};
+window.ServiceWorkerOptions = ServiceWorkerOptions;
 let createPDFNetworkStream;
 
 function setPDFNetworkStreamFactory(pdfNetworkStreamFactory) {
@@ -1840,7 +1805,7 @@ function getDocument(src) {
   }
 
   if (typeof params.disableFontFace !== "boolean") {
-    params.disableFontFace = _api_compatibility.apiCompatibilityParams.disableFontFace || false;
+    params.disableFontFace = false;
   }
 
   if (typeof params.disableRange !== "boolean") {
@@ -1908,10 +1873,7 @@ function getDocument(src) {
       messageHandler.postMessageTransfers = worker.postMessageTransfers;
       const transport = new WorkerTransport(messageHandler, task, networkStream, params);
       task._transport = transport;
-      // #171 receive options from ngx-extended-pdf-viewer
-      messageHandler.send('showUnverifiedSignatures',
-          window.ServiceWorkerOptions.showUnverifiedSignatures);
-      // #171 end of receive options from ngx-extended-pdf-viewer
+      messageHandler.send("showUnverifiedSignatures", window.ServiceWorkerOptions.showUnverifiedSignatures);
       messageHandler.send("Ready", null);
     });
   }).catch(task._capability.reject);
@@ -1931,7 +1893,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.5.207',
+    apiVersion: '2.6.22',
     source: {
       data: source.data,
       url: source.url,
@@ -2114,13 +2076,6 @@ class PDFDocumentProxy {
 
   getOpenAction() {
     return this._transport.getOpenAction();
-  }
-
-  getOpenActionDestination() {
-    (0, _display_utils.deprecated)("getOpenActionDestination, use getOpenAction instead.");
-    return this.getOpenAction().then(function (openAction) {
-      return openAction && openAction.dest ? openAction.dest : null;
-    });
   }
 
   getAttachments() {
@@ -2765,9 +2720,11 @@ const PDFWorker = function PDFWorkerClosure() {
   let nextFakeWorkerId = 0;
   let fakeWorkerCapability;
 
-  if (_is_node.isNodeJS && typeof require === "function") {
+  if (isNodeJS && typeof require === "function") {
     isWorkerDisabled = true;
-    fallbackWorkerSrc = "./assets/pdf.worker-es5.js";
+    const isIE = !!window.MSInputMethodContext && !!document.documentMode;
+    const isEdge = /Edge\/\d./i.test(navigator.userAgent);
+    fallbackWorkerSrc = isIE || isEdge ? "./assets/pdf.worker-es5.js" : "./assets/pdf.worker.js";
   } else if (typeof document === "object" && "currentScript" in document) {
     const pdfjsFilePath = document.currentScript && document.currentScript.src;
 
@@ -2782,7 +2739,7 @@ const PDFWorker = function PDFWorkerClosure() {
     }
 
     if (typeof fallbackWorkerSrc !== "undefined") {
-      if (!_is_node.isNodeJS) {
+      if (!isNodeJS) {
         (0, _display_utils.deprecated)('No "GlobalWorkerOptions.workerSrc" specified.');
       }
 
@@ -2816,7 +2773,7 @@ const PDFWorker = function PDFWorkerClosure() {
         return mainWorkerMessageHandler;
       }
 
-      if (_is_node.isNodeJS && typeof require === "function") {
+      if (isNodeJS && typeof require === "function") {
         const worker = eval("require")(getWorkerSrc());
         return worker.WorkerMessageHandler;
       }
@@ -3802,13 +3759,13 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.5.207';
+const version = '2.6.22';
 exports.version = version;
-const build = '0974d605';
+const build = '5a9e9d4e';
 exports.build = build;
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -4195,32 +4152,7 @@ class FontFaceObject {
 exports.FontFaceObject = FontFaceObject;
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports, __w_pdfjs_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.apiCompatibilityParams = void 0;
-
-var _is_node = __w_pdfjs_require__(4);
-
-const compatibilityParams = Object.create(null);
-{
-  (function checkFontFace() {
-    if (_is_node.isNodeJS) {
-      compatibilityParams.disableFontFace = true;
-    }
-  })();
-}
-const apiCompatibilityParams = Object.freeze(compatibilityParams);
-exports.apiCompatibilityParams = apiCompatibilityParams;
-
-/***/ }),
-/* 8 */
+/* 6 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -4233,7 +4165,7 @@ exports.CanvasGraphics = void 0;
 
 var _util = __w_pdfjs_require__(2);
 
-var _pattern_helper = __w_pdfjs_require__(9);
+var _pattern_helper = __w_pdfjs_require__(7);
 
 var MIN_FONT_SIZE = 16;
 var MAX_FONT_SIZE = 100;
@@ -6266,7 +6198,7 @@ var CanvasGraphics = function CanvasGraphicsClosure() {
 exports.CanvasGraphics = CanvasGraphics;
 
 /***/ }),
-/* 9 */
+/* 7 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -6747,7 +6679,7 @@ var TilingPattern = function TilingPatternClosure() {
 exports.TilingPattern = TilingPattern;
 
 /***/ }),
-/* 10 */
+/* 8 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -6763,7 +6695,7 @@ GlobalWorkerOptions.workerPort = GlobalWorkerOptions.workerPort === undefined ? 
 GlobalWorkerOptions.workerSrc = GlobalWorkerOptions.workerSrc === undefined ? "" : GlobalWorkerOptions.workerSrc;
 
 /***/ }),
-/* 11 */
+/* 9 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -7264,7 +7196,7 @@ class MessageHandler {
 exports.MessageHandler = MessageHandler;
 
 /***/ }),
-/* 12 */
+/* 10 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -7277,7 +7209,7 @@ exports.Metadata = void 0;
 
 var _util = __w_pdfjs_require__(2);
 
-var _xml_parser = __w_pdfjs_require__(13);
+var _xml_parser = __w_pdfjs_require__(11);
 
 class Metadata {
   constructor(data) {
@@ -7392,7 +7324,7 @@ class Metadata {
 exports.Metadata = Metadata;
 
 /***/ }),
-/* 13 */
+/* 11 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -7835,7 +7767,7 @@ class SimpleXMLParser extends XMLParserBase {
 exports.SimpleXMLParser = SimpleXMLParser;
 
 /***/ }),
-/* 14 */
+/* 12 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -8190,7 +8122,7 @@ class PDFDataTransportStreamRangeReader {
 }
 
 /***/ }),
-/* 15 */
+/* 13 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -8637,7 +8569,7 @@ var WebGLUtils = function WebGLUtilsClosure() {
 }();
 
 /***/ }),
-/* 16 */
+/* 14 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -9673,7 +9605,7 @@ class AnnotationLayer {
 exports.AnnotationLayer = AnnotationLayer;
 
 /***/ }),
-/* 17 */
+/* 15 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -10368,7 +10300,7 @@ var renderTextLayer = function renderTextLayerClosure() {
 exports.renderTextLayer = renderTextLayer;
 
 /***/ }),
-/* 18 */
+/* 16 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -10382,8 +10314,6 @@ exports.SVGGraphics = void 0;
 var _util = __w_pdfjs_require__(2);
 
 var _display_utils = __w_pdfjs_require__(1);
-
-var _is_node = __w_pdfjs_require__(4);
 
 let SVGGraphics = function () {
   throw new Error("Not implemented: SVGGraphics");
@@ -10467,26 +10397,6 @@ exports.SVGGraphics = SVGGraphics;
     }
 
     function deflateSync(literals) {
-      if (!_is_node.isNodeJS) {
-        return deflateSyncUncompressed(literals);
-      }
-
-      try {
-        let input;
-
-        if (parseInt(process.versions.node) >= 8) {
-          input = literals;
-        } else {
-          input = Buffer.from(literals);
-        }
-
-throw Error("zlib not available in the browser");
-
-        return output instanceof Uint8Array ? output : new Uint8Array(output);
-      } catch (e) {
-        (0, _util.warn)("Not compressing PNG because zlib.deflateSync is unavailable: " + e);
-      }
-
       return deflateSyncUncompressed(literals);
     }
 
@@ -11892,756 +11802,7 @@ throw Error("zlib not available in the browser");
 }
 
 /***/ }),
-/* 19 */
-/***/ (function(module, exports, __w_pdfjs_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.PDFNodeStream = void 0;
-
-var _util = __w_pdfjs_require__(2);
-
-var _network_utils = __w_pdfjs_require__(20);
-
-;
-
-const fs = require("fs");
-
-
-
-
-
-const url = require("url");
-
-const fileUriRegex = /^file:\/\/\/[a-zA-Z]:\//;
-
-function parseUrl(sourceUrl) {
-  const parsedUrl = url.parse(sourceUrl);
-
-  if (parsedUrl.protocol === "file:" || parsedUrl.host) {
-    return parsedUrl;
-  }
-
-  if (/^[a-z]:[/\\]/i.test(sourceUrl)) {
-    return url.parse(`file:///${sourceUrl}`);
-  }
-
-  if (!parsedUrl.host) {
-    parsedUrl.protocol = "file:";
-  }
-
-  return parsedUrl;
-}
-
-class PDFNodeStream {
-  constructor(source) {
-    this.source = source;
-    this.url = parseUrl(source.url);
-    this.isHttp = this.url.protocol === "http:" || this.url.protocol === "https:";
-    this.isFsUrl = this.url.protocol === "file:";
-    this.httpHeaders = this.isHttp && source.httpHeaders || {};
-    this._fullRequestReader = null;
-    this._rangeRequestReaders = [];
-  }
-
-  get _progressiveDataLength() {
-    return this._fullRequestReader ? this._fullRequestReader._loaded : 0;
-  }
-
-  getFullReader() {
-    (0, _util.assert)(!this._fullRequestReader, "PDFNodeStream.getFullReader can only be called once.");
-    this._fullRequestReader = this.isFsUrl ? new PDFNodeStreamFsFullReader(this) : new PDFNodeStreamFullReader(this);
-    return this._fullRequestReader;
-  }
-
-  getRangeReader(start, end) {
-    if (end <= this._progressiveDataLength) {
-      return null;
-    }
-
-    const rangeReader = this.isFsUrl ? new PDFNodeStreamFsRangeReader(this, start, end) : new PDFNodeStreamRangeReader(this, start, end);
-
-    this._rangeRequestReaders.push(rangeReader);
-
-    return rangeReader;
-  }
-
-  cancelAllRequests(reason) {
-    if (this._fullRequestReader) {
-      this._fullRequestReader.cancel(reason);
-    }
-
-    const readers = this._rangeRequestReaders.slice(0);
-
-    readers.forEach(function (reader) {
-      reader.cancel(reason);
-    });
-  }
-
-}
-
-exports.PDFNodeStream = PDFNodeStream;
-
-class BaseFullReader {
-  constructor(stream) {
-    this._url = stream.url;
-    this._done = false;
-    this._storedError = null;
-    this.onProgress = null;
-    const source = stream.source;
-    this._contentLength = source.length;
-    this._loaded = 0;
-    this._filename = null;
-    this._disableRange = source.disableRange || false;
-    this._rangeChunkSize = source.rangeChunkSize;
-
-    if (!this._rangeChunkSize && !this._disableRange) {
-      this._disableRange = true;
-    }
-
-    this._isStreamingSupported = !source.disableStream;
-    this._isRangeSupported = !source.disableRange;
-    this._readableStream = null;
-    this._readCapability = (0, _util.createPromiseCapability)();
-    this._headersCapability = (0, _util.createPromiseCapability)();
-  }
-
-  get headersReady() {
-    return this._headersCapability.promise;
-  }
-
-  get filename() {
-    return this._filename;
-  }
-
-  get contentLength() {
-    return this._contentLength;
-  }
-
-  get isRangeSupported() {
-    return this._isRangeSupported;
-  }
-
-  get isStreamingSupported() {
-    return this._isStreamingSupported;
-  }
-
-  async read() {
-    await this._readCapability.promise;
-
-    if (this._done) {
-      return {
-        value: undefined,
-        done: true
-      };
-    }
-
-    if (this._storedError) {
-      throw this._storedError;
-    }
-
-    const chunk = this._readableStream.read();
-
-    if (chunk === null) {
-      this._readCapability = (0, _util.createPromiseCapability)();
-      return this.read();
-    }
-
-    this._loaded += chunk.length;
-
-    if (this.onProgress) {
-      this.onProgress({
-        loaded: this._loaded,
-        total: this._contentLength
-      });
-    }
-
-    const buffer = new Uint8Array(chunk).buffer;
-    return {
-      value: buffer,
-      done: false
-    };
-  }
-
-  cancel(reason) {
-    if (!this._readableStream) {
-      this._error(reason);
-
-      return;
-    }
-
-    this._readableStream.destroy(reason);
-  }
-
-  _error(reason) {
-    this._storedError = reason;
-
-    this._readCapability.resolve();
-  }
-
-  _setReadableStream(readableStream) {
-    this._readableStream = readableStream;
-    readableStream.on("readable", () => {
-      this._readCapability.resolve();
-    });
-    readableStream.on("end", () => {
-      readableStream.destroy();
-      this._done = true;
-
-      this._readCapability.resolve();
-    });
-    readableStream.on("error", reason => {
-      this._error(reason);
-    });
-
-    if (!this._isStreamingSupported && this._isRangeSupported) {
-      this._error(new _util.AbortException("streaming is disabled"));
-    }
-
-    if (this._storedError) {
-      this._readableStream.destroy(this._storedError);
-    }
-  }
-
-}
-
-class BaseRangeReader {
-  constructor(stream) {
-    this._url = stream.url;
-    this._done = false;
-    this._storedError = null;
-    this.onProgress = null;
-    this._loaded = 0;
-    this._readableStream = null;
-    this._readCapability = (0, _util.createPromiseCapability)();
-    const source = stream.source;
-    this._isStreamingSupported = !source.disableStream;
-  }
-
-  get isStreamingSupported() {
-    return this._isStreamingSupported;
-  }
-
-  async read() {
-    await this._readCapability.promise;
-
-    if (this._done) {
-      return {
-        value: undefined,
-        done: true
-      };
-    }
-
-    if (this._storedError) {
-      throw this._storedError;
-    }
-
-    const chunk = this._readableStream.read();
-
-    if (chunk === null) {
-      this._readCapability = (0, _util.createPromiseCapability)();
-      return this.read();
-    }
-
-    this._loaded += chunk.length;
-
-    if (this.onProgress) {
-      this.onProgress({
-        loaded: this._loaded
-      });
-    }
-
-    const buffer = new Uint8Array(chunk).buffer;
-    return {
-      value: buffer,
-      done: false
-    };
-  }
-
-  cancel(reason) {
-    if (!this._readableStream) {
-      this._error(reason);
-
-      return;
-    }
-
-    this._readableStream.destroy(reason);
-  }
-
-  _error(reason) {
-    this._storedError = reason;
-
-    this._readCapability.resolve();
-  }
-
-  _setReadableStream(readableStream) {
-    this._readableStream = readableStream;
-    readableStream.on("readable", () => {
-      this._readCapability.resolve();
-    });
-    readableStream.on("end", () => {
-      readableStream.destroy();
-      this._done = true;
-
-      this._readCapability.resolve();
-    });
-    readableStream.on("error", reason => {
-      this._error(reason);
-    });
-
-    if (this._storedError) {
-      this._readableStream.destroy(this._storedError);
-    }
-  }
-
-}
-
-function createRequestOptions(parsedUrl, headers) {
-  return {
-    protocol: parsedUrl.protocol,
-    auth: parsedUrl.auth,
-    host: parsedUrl.hostname,
-    port: parsedUrl.port,
-    path: parsedUrl.path,
-    method: "GET",
-    headers
-  };
-}
-
-class PDFNodeStreamFullReader extends BaseFullReader {
-  constructor(stream) {
-    super(stream);
-
-    const handleResponse = response => {
-      if (response.statusCode === 404) {
-        const error = new _util.MissingPDFException(`Missing PDF "${this._url}".`);
-        this._storedError = error;
-
-        this._headersCapability.reject(error);
-
-        return;
-      }
-
-      this._headersCapability.resolve();
-
-      this._setReadableStream(response);
-
-      const getResponseHeader = name => {
-        return this._readableStream.headers[name.toLowerCase()];
-      };
-
-      const {
-        allowRangeRequests,
-        suggestedLength
-      } = (0, _network_utils.validateRangeRequestCapabilities)({
-        getResponseHeader,
-        isHttp: stream.isHttp,
-        rangeChunkSize: this._rangeChunkSize,
-        disableRange: this._disableRange
-      });
-      this._isRangeSupported = allowRangeRequests;
-      this._contentLength = suggestedLength || this._contentLength;
-      this._filename = (0, _network_utils.extractFilenameFromHeader)(getResponseHeader);
-    };
-
-    this._request = null;
-
-    if (this._url.protocol === "http:") {
-      this._request = http.request(createRequestOptions(this._url, stream.httpHeaders), handleResponse);
-    } else {
-      this._request = https.request(createRequestOptions(this._url, stream.httpHeaders), handleResponse);
-    }
-
-    this._request.on("error", reason => {
-      this._storedError = reason;
-
-      this._headersCapability.reject(reason);
-    });
-
-    this._request.end();
-  }
-
-}
-
-class PDFNodeStreamRangeReader extends BaseRangeReader {
-  constructor(stream, start, end) {
-    super(stream);
-    this._httpHeaders = {};
-
-    for (const property in stream.httpHeaders) {
-      const value = stream.httpHeaders[property];
-
-      if (typeof value === "undefined") {
-        continue;
-      }
-
-      this._httpHeaders[property] = value;
-    }
-
-    this._httpHeaders.Range = `bytes=${start}-${end - 1}`;
-
-    const handleResponse = response => {
-      if (response.statusCode === 404) {
-        const error = new _util.MissingPDFException(`Missing PDF "${this._url}".`);
-        this._storedError = error;
-        return;
-      }
-
-      this._setReadableStream(response);
-    };
-
-    this._request = null;
-
-    if (this._url.protocol === "http:") {
-      this._request = http.request(createRequestOptions(this._url, this._httpHeaders), handleResponse);
-    } else {
-      this._request = https.request(createRequestOptions(this._url, this._httpHeaders), handleResponse);
-    }
-
-    this._request.on("error", reason => {
-      this._storedError = reason;
-    });
-
-    this._request.end();
-  }
-
-}
-
-class PDFNodeStreamFsFullReader extends BaseFullReader {
-  constructor(stream) {
-    super(stream);
-    let path = decodeURIComponent(this._url.path);
-
-    if (fileUriRegex.test(this._url.href)) {
-      path = path.replace(/^\//, "");
-    }
-
-    fs.lstat(path, (error, stat) => {
-      if (error) {
-        if (error.code === "ENOENT") {
-          error = new _util.MissingPDFException(`Missing PDF "${path}".`);
-        }
-
-        this._storedError = error;
-
-        this._headersCapability.reject(error);
-
-        return;
-      }
-
-      this._contentLength = stat.size;
-
-      this._setReadableStream(fs.createReadStream(path));
-
-      this._headersCapability.resolve();
-    });
-  }
-
-}
-
-class PDFNodeStreamFsRangeReader extends BaseRangeReader {
-  constructor(stream, start, end) {
-    super(stream);
-    let path = decodeURIComponent(this._url.path);
-
-    if (fileUriRegex.test(this._url.href)) {
-      path = path.replace(/^\//, "");
-    }
-
-    this._setReadableStream(fs.createReadStream(path, {
-      start,
-      end: end - 1
-    }));
-  }
-
-}
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __w_pdfjs_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.createResponseStatusError = createResponseStatusError;
-exports.extractFilenameFromHeader = extractFilenameFromHeader;
-exports.validateRangeRequestCapabilities = validateRangeRequestCapabilities;
-exports.validateResponseStatus = validateResponseStatus;
-
-var _util = __w_pdfjs_require__(2);
-
-var _content_disposition = __w_pdfjs_require__(21);
-
-function validateRangeRequestCapabilities({
-  getResponseHeader,
-  isHttp,
-  rangeChunkSize,
-  disableRange
-}) {
-  (0, _util.assert)(rangeChunkSize > 0, "Range chunk size must be larger than zero");
-  const returnValues = {
-    allowRangeRequests: false,
-    suggestedLength: undefined
-  };
-  const length = parseInt(getResponseHeader("Content-Length"), 10);
-
-  if (!Number.isInteger(length)) {
-    return returnValues;
-  }
-
-  returnValues.suggestedLength = length;
-
-  if (length <= 2 * rangeChunkSize) {
-    return returnValues;
-  }
-
-  if (disableRange || !isHttp) {
-    return returnValues;
-  }
-
-  if (getResponseHeader("Accept-Ranges") !== "bytes") {
-    return returnValues;
-  }
-
-  const contentEncoding = getResponseHeader("Content-Encoding") || "identity";
-
-  if (contentEncoding !== "identity") {
-    return returnValues;
-  }
-
-  returnValues.allowRangeRequests = true;
-  return returnValues;
-}
-
-function extractFilenameFromHeader(getResponseHeader) {
-  const contentDisposition = getResponseHeader("Content-Disposition");
-
-  if (contentDisposition) {
-    let filename = (0, _content_disposition.getFilenameFromContentDispositionHeader)(contentDisposition);
-
-    if (filename.includes("%")) {
-      try {
-        filename = decodeURIComponent(filename);
-      } catch (ex) {}
-    }
-
-    if (/\.pdf$/i.test(filename)) {
-      return filename;
-    }
-  }
-
-  return null;
-}
-
-function createResponseStatusError(status, url) {
-  if (status === 404 || status === 0 && url.startsWith("file:")) {
-    return new _util.MissingPDFException('Missing PDF "' + url + '".');
-  }
-
-  return new _util.UnexpectedResponseException("Unexpected server response (" + status + ') while retrieving PDF "' + url + '".', status);
-}
-
-function validateResponseStatus(status) {
-  return status === 200 || status === 206;
-}
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __w_pdfjs_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getFilenameFromContentDispositionHeader = getFilenameFromContentDispositionHeader;
-
-function getFilenameFromContentDispositionHeader(contentDisposition) {
-  let needsEncodingFixup = true;
-  let tmp = toParamRegExp("filename\\*", "i").exec(contentDisposition);
-
-  if (tmp) {
-    tmp = tmp[1];
-    let filename = rfc2616unquote(tmp);
-    filename = unescape(filename);
-    filename = rfc5987decode(filename);
-    filename = rfc2047decode(filename);
-    return fixupEncoding(filename);
-  }
-
-  tmp = rfc2231getparam(contentDisposition);
-
-  if (tmp) {
-    const filename = rfc2047decode(tmp);
-    return fixupEncoding(filename);
-  }
-
-  tmp = toParamRegExp("filename", "i").exec(contentDisposition);
-
-  if (tmp) {
-    tmp = tmp[1];
-    let filename = rfc2616unquote(tmp);
-    filename = rfc2047decode(filename);
-    return fixupEncoding(filename);
-  }
-
-  function toParamRegExp(attributePattern, flags) {
-    return new RegExp("(?:^|;)\\s*" + attributePattern + "\\s*=\\s*" + "(" + '[^";\\s][^;\\s]*' + "|" + '"(?:[^"\\\\]|\\\\"?)+"?' + ")", flags);
-  }
-
-  function textdecode(encoding, value) {
-    if (encoding) {
-      if (!/^[\x00-\xFF]+$/.test(value)) {
-        return value;
-      }
-
-      try {
-        const decoder = new TextDecoder(encoding, {
-          fatal: true
-        });
-        const bytes = Array.from(value, function (ch) {
-          return ch.charCodeAt(0) & 0xff;
-        });
-        value = decoder.decode(new Uint8Array(bytes));
-        needsEncodingFixup = false;
-      } catch (e) {
-        if (/^utf-?8$/i.test(encoding)) {
-          try {
-            value = decodeURIComponent(escape(value));
-            needsEncodingFixup = false;
-          } catch (err) {}
-        }
-      }
-    }
-
-    return value;
-  }
-
-  function fixupEncoding(value) {
-    if (needsEncodingFixup && /[\x80-\xff]/.test(value)) {
-      value = textdecode("utf-8", value);
-
-      if (needsEncodingFixup) {
-        value = textdecode("iso-8859-1", value);
-      }
-    }
-
-    return value;
-  }
-
-  function rfc2231getparam(contentDispositionStr) {
-    const matches = [];
-    let match;
-    const iter = toParamRegExp("filename\\*((?!0\\d)\\d+)(\\*?)", "ig");
-
-    while ((match = iter.exec(contentDispositionStr)) !== null) {
-      let [, n, quot, part] = match;
-      n = parseInt(n, 10);
-
-      if (n in matches) {
-        if (n === 0) {
-          break;
-        }
-
-        continue;
-      }
-
-      matches[n] = [quot, part];
-    }
-
-    const parts = [];
-
-    for (let n = 0; n < matches.length; ++n) {
-      if (!(n in matches)) {
-        break;
-      }
-
-      let [quot, part] = matches[n];
-      part = rfc2616unquote(part);
-
-      if (quot) {
-        part = unescape(part);
-
-        if (n === 0) {
-          part = rfc5987decode(part);
-        }
-      }
-
-      parts.push(part);
-    }
-
-    return parts.join("");
-  }
-
-  function rfc2616unquote(value) {
-    if (value.startsWith('"')) {
-      const parts = value.slice(1).split('\\"');
-
-      for (let i = 0; i < parts.length; ++i) {
-        const quotindex = parts[i].indexOf('"');
-
-        if (quotindex !== -1) {
-          parts[i] = parts[i].slice(0, quotindex);
-          parts.length = i + 1;
-        }
-
-        parts[i] = parts[i].replace(/\\(.)/g, "$1");
-      }
-
-      value = parts.join('"');
-    }
-
-    return value;
-  }
-
-  function rfc5987decode(extvalue) {
-    const encodingend = extvalue.indexOf("'");
-
-    if (encodingend === -1) {
-      return extvalue;
-    }
-
-    const encoding = extvalue.slice(0, encodingend);
-    const langvalue = extvalue.slice(encodingend + 1);
-    const value = langvalue.replace(/^[^']*'/, "");
-    return textdecode(encoding, value);
-  }
-
-  function rfc2047decode(value) {
-    if (!value.startsWith("=?") || /[\x00-\x19\x80-\xff]/.test(value)) {
-      return value;
-    }
-
-    return value.replace(/=\?([\w-]*)\?([QqBb])\?((?:[^?]|\?(?!=))*)\?=/g, function (matches, charset, encoding, text) {
-      if (encoding === "q" || encoding === "Q") {
-        text = text.replace(/_/g, " ");
-        text = text.replace(/=([0-9a-fA-F]{2})/g, function (match, hex) {
-          return String.fromCharCode(parseInt(hex, 16));
-        });
-        return textdecode(charset, text);
-      }
-
-      try {
-        text = atob(text);
-      } catch (e) {}
-
-      return textdecode(charset, text);
-    });
-  }
-
-  return "";
-}
-
-/***/ }),
-/* 22 */
+/* 17 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -12654,7 +11815,7 @@ exports.PDFNetworkStream = void 0;
 
 var _util = __w_pdfjs_require__(2);
 
-var _network_utils = __w_pdfjs_require__(20);
+var _network_utils = __w_pdfjs_require__(18);
 
 ;
 const OK_RESPONSE = 200;
@@ -13198,7 +12359,287 @@ class PDFNetworkStreamRangeRequestReader {
 }
 
 /***/ }),
-/* 23 */
+/* 18 */
+/***/ (function(module, exports, __w_pdfjs_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createResponseStatusError = createResponseStatusError;
+exports.extractFilenameFromHeader = extractFilenameFromHeader;
+exports.validateRangeRequestCapabilities = validateRangeRequestCapabilities;
+exports.validateResponseStatus = validateResponseStatus;
+
+var _util = __w_pdfjs_require__(2);
+
+var _content_disposition = __w_pdfjs_require__(19);
+
+function validateRangeRequestCapabilities({
+  getResponseHeader,
+  isHttp,
+  rangeChunkSize,
+  disableRange
+}) {
+  (0, _util.assert)(rangeChunkSize > 0, "Range chunk size must be larger than zero");
+  const returnValues = {
+    allowRangeRequests: false,
+    suggestedLength: undefined
+  };
+  const length = parseInt(getResponseHeader("Content-Length"), 10);
+
+  if (!Number.isInteger(length)) {
+    return returnValues;
+  }
+
+  returnValues.suggestedLength = length;
+
+  if (length <= 2 * rangeChunkSize) {
+    return returnValues;
+  }
+
+  if (disableRange || !isHttp) {
+    return returnValues;
+  }
+
+  if (getResponseHeader("Accept-Ranges") !== "bytes") {
+    return returnValues;
+  }
+
+  const contentEncoding = getResponseHeader("Content-Encoding") || "identity";
+
+  if (contentEncoding !== "identity") {
+    return returnValues;
+  }
+
+  returnValues.allowRangeRequests = true;
+  return returnValues;
+}
+
+function extractFilenameFromHeader(getResponseHeader) {
+  const contentDisposition = getResponseHeader("Content-Disposition");
+
+  if (contentDisposition) {
+    let filename = (0, _content_disposition.getFilenameFromContentDispositionHeader)(contentDisposition);
+
+    if (filename.includes("%")) {
+      try {
+        filename = decodeURIComponent(filename);
+      } catch (ex) {}
+    }
+
+    if (/\.pdf$/i.test(filename)) {
+      return filename;
+    }
+  }
+
+  return null;
+}
+
+function createResponseStatusError(status, url) {
+  if (status === 404 || status === 0 && url.startsWith("file:")) {
+    return new _util.MissingPDFException('Missing PDF "' + url + '".');
+  }
+
+  return new _util.UnexpectedResponseException("Unexpected server response (" + status + ') while retrieving PDF "' + url + '".', status);
+}
+
+function validateResponseStatus(status) {
+  return status === 200 || status === 206;
+}
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __w_pdfjs_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getFilenameFromContentDispositionHeader = getFilenameFromContentDispositionHeader;
+
+function getFilenameFromContentDispositionHeader(contentDisposition) {
+  let needsEncodingFixup = true;
+  let tmp = toParamRegExp("filename\\*", "i").exec(contentDisposition);
+
+  if (tmp) {
+    tmp = tmp[1];
+    let filename = rfc2616unquote(tmp);
+    filename = unescape(filename);
+    filename = rfc5987decode(filename);
+    filename = rfc2047decode(filename);
+    return fixupEncoding(filename);
+  }
+
+  tmp = rfc2231getparam(contentDisposition);
+
+  if (tmp) {
+    const filename = rfc2047decode(tmp);
+    return fixupEncoding(filename);
+  }
+
+  tmp = toParamRegExp("filename", "i").exec(contentDisposition);
+
+  if (tmp) {
+    tmp = tmp[1];
+    let filename = rfc2616unquote(tmp);
+    filename = rfc2047decode(filename);
+    return fixupEncoding(filename);
+  }
+
+  function toParamRegExp(attributePattern, flags) {
+    return new RegExp("(?:^|;)\\s*" + attributePattern + "\\s*=\\s*" + "(" + '[^";\\s][^;\\s]*' + "|" + '"(?:[^"\\\\]|\\\\"?)+"?' + ")", flags);
+  }
+
+  function textdecode(encoding, value) {
+    if (encoding) {
+      if (!/^[\x00-\xFF]+$/.test(value)) {
+        return value;
+      }
+
+      try {
+        const decoder = new TextDecoder(encoding, {
+          fatal: true
+        });
+        const bytes = Array.from(value, function (ch) {
+          return ch.charCodeAt(0) & 0xff;
+        });
+        value = decoder.decode(new Uint8Array(bytes));
+        needsEncodingFixup = false;
+      } catch (e) {
+        if (/^utf-?8$/i.test(encoding)) {
+          try {
+            value = decodeURIComponent(escape(value));
+            needsEncodingFixup = false;
+          } catch (err) {}
+        }
+      }
+    }
+
+    return value;
+  }
+
+  function fixupEncoding(value) {
+    if (needsEncodingFixup && /[\x80-\xff]/.test(value)) {
+      value = textdecode("utf-8", value);
+
+      if (needsEncodingFixup) {
+        value = textdecode("iso-8859-1", value);
+      }
+    }
+
+    return value;
+  }
+
+  function rfc2231getparam(contentDispositionStr) {
+    const matches = [];
+    let match;
+    const iter = toParamRegExp("filename\\*((?!0\\d)\\d+)(\\*?)", "ig");
+
+    while ((match = iter.exec(contentDispositionStr)) !== null) {
+      let [, n, quot, part] = match;
+      n = parseInt(n, 10);
+
+      if (n in matches) {
+        if (n === 0) {
+          break;
+        }
+
+        continue;
+      }
+
+      matches[n] = [quot, part];
+    }
+
+    const parts = [];
+
+    for (let n = 0; n < matches.length; ++n) {
+      if (!(n in matches)) {
+        break;
+      }
+
+      let [quot, part] = matches[n];
+      part = rfc2616unquote(part);
+
+      if (quot) {
+        part = unescape(part);
+
+        if (n === 0) {
+          part = rfc5987decode(part);
+        }
+      }
+
+      parts.push(part);
+    }
+
+    return parts.join("");
+  }
+
+  function rfc2616unquote(value) {
+    if (value.startsWith('"')) {
+      const parts = value.slice(1).split('\\"');
+
+      for (let i = 0; i < parts.length; ++i) {
+        const quotindex = parts[i].indexOf('"');
+
+        if (quotindex !== -1) {
+          parts[i] = parts[i].slice(0, quotindex);
+          parts.length = i + 1;
+        }
+
+        parts[i] = parts[i].replace(/\\(.)/g, "$1");
+      }
+
+      value = parts.join('"');
+    }
+
+    return value;
+  }
+
+  function rfc5987decode(extvalue) {
+    const encodingend = extvalue.indexOf("'");
+
+    if (encodingend === -1) {
+      return extvalue;
+    }
+
+    const encoding = extvalue.slice(0, encodingend);
+    const langvalue = extvalue.slice(encodingend + 1);
+    const value = langvalue.replace(/^[^']*'/, "");
+    return textdecode(encoding, value);
+  }
+
+  function rfc2047decode(value) {
+    if (!value.startsWith("=?") || /[\x00-\x19\x80-\xff]/.test(value)) {
+      return value;
+    }
+
+    return value.replace(/=\?([\w-]*)\?([QqBb])\?((?:[^?]|\?(?!=))*)\?=/g, function (matches, charset, encoding, text) {
+      if (encoding === "q" || encoding === "Q") {
+        text = text.replace(/_/g, " ");
+        text = text.replace(/=([0-9a-fA-F]{2})/g, function (match, hex) {
+          return String.fromCharCode(parseInt(hex, 16));
+        });
+        return textdecode(charset, text);
+      }
+
+      try {
+        text = atob(text);
+      } catch (e) {}
+
+      return textdecode(charset, text);
+    });
+  }
+
+  return "";
+}
+
+/***/ }),
+/* 20 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -13211,7 +12652,7 @@ exports.PDFFetchStream = void 0;
 
 var _util = __w_pdfjs_require__(2);
 
-var _network_utils = __w_pdfjs_require__(20);
+var _network_utils = __w_pdfjs_require__(18);
 
 ;
 
@@ -13488,4 +12929,4 @@ class PDFFetchStreamRangeReader {
 /***/ })
 /******/ ]);
 });
-
+//# sourceMappingURL=pdf.js.map
