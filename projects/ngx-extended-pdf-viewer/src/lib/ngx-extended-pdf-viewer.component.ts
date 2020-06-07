@@ -134,6 +134,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public enablePinchOnMobile = false;
 
+  /** Use the minified (minifiedJSLibraries="true", which is the default) or the user-readable pdf.js library (minifiedJSLibraries="false") */
+  @Input()
+  public minifiedJSLibraries = true;
+
   public primaryMenuVisible = true;
 
   /** option to increase (or reduce) print resolution. Default is 150 (dpi). Sensible values
@@ -521,9 +525,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if (!window['pdfjs-dist/build/pdf']) {
         const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
         const isEdge = /Edge\/\d./i.test(navigator.userAgent);
+        const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
+        if (this.minifiedJSLibraries) {
+          if (!defaultOptions.workerSrc.endsWith('.min.js')) {
+            defaultOptions.workerSrc = defaultOptions.workerSrc.replace('.js', '.min.js');
+          }
+        }
 
         const script = document.createElement('script');
-        script.src = this.location.normalize(isIE || isEdge ? 'assets/pdf-es5.js' : 'assets/pdf.js');
+        script.src = this.location.normalize(isIE || isEdge ? 'assets/pdf-es5' + suffix : 'assets/pdf' + suffix);
         script.type = 'text/javascript';
         script.async = true;
         document.getElementsByTagName('head')[0].appendChild(script);
@@ -540,8 +550,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     } else {
       const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
       const isEdge = /Edge\/\d./i.test(navigator.userAgent);
+      const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
       const script2 = document.createElement('script');
-      script2.src = this.location.normalize(isIE || isEdge ? 'assets/viewer-es5.js' : 'assets/viewer.js');
+      script2.src = this.location.normalize(isIE || isEdge ? 'assets/viewer-es5' + suffix : 'assets/viewer' + suffix);
       script2.type = 'text/javascript';
       script2.async = true;
       document.getElementsByTagName('head')[0].appendChild(script2);
@@ -955,19 +966,19 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       });
     });
     PDFViewerApplication.eventBus.on('scalechanging', (x: ScaleChangingEvent) => {
-        setTimeout(() => {
-          this.ngZone.run(() => {
-            this.currentZoomFactor.emit(x.scale);
-            const scale = (this.root.nativeElement as HTMLElement).querySelector('#scaleSelect') as HTMLSelectElement | undefined;
-            let userZoomFactor = this.zoom;
-            if (scale) {
-                userZoomFactor = scale.value;
-            }
-            if (userZoomFactor !== 'auto' && userZoomFactor !== 'page-fit' && userZoomFactor !== 'page-actual' && userZoomFactor !== 'page-width') {
-              this.zoomChange.emit(x.scale * 100);
-            }
-          });
+      setTimeout(() => {
+        this.ngZone.run(() => {
+          this.currentZoomFactor.emit(x.scale);
+          const scale = (this.root.nativeElement as HTMLElement).querySelector('#scaleSelect') as HTMLSelectElement | undefined;
+          let userZoomFactor = this.zoom;
+          if (scale) {
+            userZoomFactor = scale.value;
+          }
+          if (userZoomFactor !== 'auto' && userZoomFactor !== 'page-fit' && userZoomFactor !== 'page-actual' && userZoomFactor !== 'page-width') {
+            this.zoomChange.emit(x.scale * 100);
+          }
         });
+      });
     });
 
     PDFViewerApplication.eventBus.on('rotationchanging', (x: PagesRotationEvent) => {
