@@ -95,14 +95,12 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
     setTimeout(() => {
       const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
       const currentPage = PDFViewerApplication.pdfViewer.currentPageNumber;
-      console.log('Upate - current page ' + currentPage + ' pages: ' + PDFViewerApplication.pagesCount);
       const previousButton = document.getElementById('previousPage') as HTMLButtonElement;
       if (previousButton) {
         this.disablePreviousPage = Number(currentPage) <= 1;
         previousButton.disabled = this.disablePreviousPage;
-        console.log('Previous.disabled is ' + this.disablePreviousPage);
       }
-      const nextButton = document.getElementById('previousPage') as HTMLButtonElement;
+      const nextButton = document.getElementById('nextPage') as HTMLButtonElement;
       if (nextButton) {
         this.disableNextPage = currentPage === PDFViewerApplication.pagesCount;
         nextButton.disabled = this.disableNextPage;

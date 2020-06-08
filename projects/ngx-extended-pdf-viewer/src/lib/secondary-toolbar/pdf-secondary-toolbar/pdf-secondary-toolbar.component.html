@@ -101,6 +101,7 @@
         class="secondaryToolbarButton previousPage visibleTinyView"
         title="Go to Previous Page"
         data-l10n-id="previous"
+        [disabled]="disablePreviousPage"
         (click)="previousPage()"
       >
         <svg style="width:24px;height:24px" viewBox="0 0 24 24">
