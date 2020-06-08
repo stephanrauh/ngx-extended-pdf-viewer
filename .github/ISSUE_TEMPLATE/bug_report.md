@@ -25,9 +25,6 @@ A clear and concise description of what the bug is.
  
 **Smartphone (please complete the following information):**
  - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
 
 **To Reproduce**
 Can you provide a reproducer? That's a small and simple but complete project demonstrating the bug. It's always a good idea to start from a fresh, new project. There's a template project at https://github.com/stephanrauh/ngx-extended-pdf-viewer-issues/tree/master/template. A side effect is that writing a reproducer often helps you to find bugs of your code. This spares me the embarrassement of pointing our you bugs. More important, it saves me a lot of time. ngx-extended-pdf-viewer has become so popular that answering issues costs a lot of my spare time, so I appreciate your help.
