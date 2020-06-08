@@ -410,7 +410,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   /** This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
    * This attribute is a string with a percent character at the end (e.g. "150%").
    */
-  @Input() _mobileFriendlyZoom = '100%';
+  @Input() _mobileFriendlyZoom = '150%';
 
   public mobileFriendlyZoomScale = 1;
 
@@ -459,7 +459,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.findbarLeft = '0px';
     }
     this.secondaryToolbarTop = (36 + 36 * (factor - 1)).toString() + 'px';
-    this.findbarTop = (36 + 116 * (factor - 1)).toString() + 'px';
+    this.findbarTop = (36 + 52 * (factor - 1)).toString() + 'px';
   }
 
   /** Deprecated. Please use [mobileFriendlyZoom] instead.
