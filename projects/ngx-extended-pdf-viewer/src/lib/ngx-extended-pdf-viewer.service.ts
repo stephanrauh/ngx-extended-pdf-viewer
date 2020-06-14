@@ -10,6 +10,17 @@ export interface FindOptions {
   findMultipleSearchTexts?: boolean;
 }
 
+interface DrawContext {
+  ctx: CanvasRenderingContext2D;
+  canvas: HTMLCanvasElement;
+}
+
+export interface PDFExportScaleFactor {
+  width?: number;
+  height?: number;
+  scale?: number;
+}
+
 export class NgxExtendedPdfViewerService {
   constructor() {}
 
@@ -116,7 +127,7 @@ export class NgxExtendedPdfViewerService {
 
   public print(printRange?: PDFPrintRange) {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    const alreadyThere = !!window['isInPDFPrintRange'] && (!printRange);
+    const alreadyThere = !!window['isInPDFPrintRange'] && !printRange;
     if (!alreadyThere) {
       if (!printRange) {
         printRange = {} as PDFPrintRange;
@@ -166,15 +177,98 @@ export class NgxExtendedPdfViewerService {
     }
     if (printRange.excluded) {
       let e = printRange.excluded as Array<number>;
-      if (e.some(p => p === page)) {
+      if (e.some((p) => p === page)) {
         return false;
       }
     }
     if (printRange.included) {
-      if (!printRange.included.some(p => p === page)) {
+      if (!printRange.included.some((p) => p === page)) {
         return false;
       }
     }
     return true;
+  }
+
+  public getPageAsText_preview(pageNumber: number, callback: (text) => void): void {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const pdfDocument = PDFViewerApplication.pdfDocument;
+    return pdfDocument.getPage(pageNumber).then((pdfPage) => {
+      const text = pdfPage.getTextContent();
+      text.then((txt) => callback(this.convertTextInfoToText(txt)));
+    });
+  }
+
+  private convertTextInfoToText(textInfo: any): string {
+    if (!textInfo) {
+      return '';
+    }
+    return textInfo.items.map((info) => info.str).join('');
+  }
+
+  public getPageAsImage_preview(pageNumber: number, scale: PDFExportScaleFactor, callback: (dataURL) => void, errorCallback?: (error: any) => void): void {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const pdfDocument = PDFViewerApplication.pdfDocument;
+    pdfDocument
+      .getPage(pageNumber)
+      .then((pdfPage) => {
+        this.draw(pdfPage, scale, callback, errorCallback);
+      })
+      .catch((reason) => {
+        if (errorCallback) {
+          errorCallback({ message: 'Unable to initialize PDF page service', reason });
+        } else {
+          console.error('Unable to initialize PDF page service', reason);
+        }
+      });
+  }
+
+  private draw(pdfPage: any, scale: PDFExportScaleFactor, callback: (dataURL: string) => void, errorCallback?: (error: any) => void): void {
+    let zoomFactor = 1;
+    if (scale.scale) {
+      zoomFactor = scale.scale;
+    } else if (scale.width) {
+      zoomFactor = scale.width / pdfPage.getViewport({ scale: 1 }).width;
+    } else if (scale.height) {
+      zoomFactor = scale.height / pdfPage.getViewport({ scale: 1 }).height;
+    }
+    const viewport = pdfPage.getViewport({
+      scale: zoomFactor,
+    });
+    const { ctx, canvas } = this.getPageDrawContext(viewport.width, viewport.height);
+    const drawViewport = viewport.clone();
+
+    const renderContext = {
+      canvasContext: ctx,
+      viewport: drawViewport,
+    };
+    const renderTask = pdfPage.render(renderContext);
+
+    renderTask.promise.then(
+      function () {
+        const dataURL = canvas.toDataURL();
+        callback(dataURL);
+      },
+      function (error) {
+        if (errorCallback) {
+          errorCallback(error);
+        }
+      }
+    );
+  }
+
+  private getPageDrawContext(width: number, height: number): DrawContext {
+    const canvas = document.createElement('canvas') as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d', { alpha: false });
+    if (!ctx) {
+      // tslint:disable-next-line: quotemark
+      throw new Error("Couldn't create the 2d context");
+    }
+
+    canvas.width = width;
+    canvas.height = height;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+
+    return { ctx, canvas };
   }
 }
