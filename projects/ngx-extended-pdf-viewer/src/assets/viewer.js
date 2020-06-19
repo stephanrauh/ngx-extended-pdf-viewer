@@ -6719,9 +6719,22 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.Levenshtein = void 0;
-const levenshtein_collator = Intl.Collator("generic", {
-  sensitivity: "base"
-});
+let levenshtein_collator;
+
+try {
+  levenshtein_collator = Intl.Collator("und", {
+    sensitivity: "base"
+  });
+} catch (missingBrowserSupport) {
+  try {
+    levenshtein_collator = Intl.Collator("generic", {
+      sensitivity: "base"
+    });
+  } catch (noBrowserSupport) {
+    levenshtein_collator = undefined;
+  }
+}
+
 const levenshtein_prevRow = [];
 const levenshtein_str2Char = [];
 

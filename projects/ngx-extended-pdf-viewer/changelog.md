@@ -180,3 +180,4 @@
 - 4.0.0.alpha.2 #337 bugfix: disable the "previous/next" page menu item of the secondary toolbar when reaching the first / last page; #344 fixed the position of the findbar when the mobile-friendly zoom is active
 - 4.0.0.alpha.3 #348 added the changelog to the npm package
 - 4.0.0.alpha.4 #341 added an API to extract PDF pages as image or text
+- 4.0.0.alpha.5 #357 fixed IE11 compatibility (was broken by the fuzzy search)

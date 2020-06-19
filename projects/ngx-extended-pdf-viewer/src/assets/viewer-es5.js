@@ -8403,9 +8403,22 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var levenshtein_collator = Intl.Collator("generic", {
-  sensitivity: "base"
-});
+var levenshtein_collator;
+
+try {
+  levenshtein_collator = Intl.Collator("und", {
+    sensitivity: "base"
+  });
+} catch (missingBrowserSupport) {
+  try {
+    levenshtein_collator = Intl.Collator("generic", {
+      sensitivity: "base"
+    });
+  } catch (noBrowserSupport) {
+    levenshtein_collator = undefined;
+  }
+}
+
 var levenshtein_prevRow = [];
 var levenshtein_str2Char = [];
 
