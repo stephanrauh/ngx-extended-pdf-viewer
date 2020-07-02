@@ -8,6 +8,7 @@ export interface FindOptions {
   wholeWords?: boolean;
   ignoreAccents?: boolean;
   findMultipleSearchTexts?: boolean;
+  fuzzySearch?: boolean;
 }
 
 interface DrawContext {
@@ -64,7 +65,10 @@ export class NgxExtendedPdfViewerService {
       if (individualWordsModeCheckbox) {
         individualWordsModeCheckbox.checked = false;
       }
-
+      const fuzzySearchCheckbox = document.getElementById('findFuzzy') as HTMLInputElement;
+      if (fuzzySearchCheckbox) {
+        fuzzySearchCheckbox.checked = options.fuzzySearch || false;
+      }
       const inputField = multipleSearchTerms ? document.getElementById('findInputMultiline') : document.getElementById('findInput');
       if (inputField) {
         if (inputField instanceof HTMLTextAreaElement) {
