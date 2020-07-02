@@ -32,7 +32,7 @@
     "@angular/platform-server": "^7.2.16",
     "@angular/router": "^7.2.16",
     "core-js": "^2.6.11",
-    "rxjs": "^6.5.5",
+    "rxjs": "^6.6.0",
     "zone.js": "~0.10.3",
     "ngx-extended-pdf-viewer": "file:./dist/ngx-extended-pdf-viewer"
   },
