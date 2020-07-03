@@ -44,7 +44,7 @@
     "@angular/language-service": "^10.0.2",
     "@types/node": "^14.0.14",
     "caniuse-lite": "^1.0.30001093",
-    "codelyzer": "^5.2.2",
+    "codelyzer": "^6.0.0",
     "macaddress": "^0.5.1",
     "ng-packagr": "^4.7.1",
     "properties-reader": "2.0.0",
