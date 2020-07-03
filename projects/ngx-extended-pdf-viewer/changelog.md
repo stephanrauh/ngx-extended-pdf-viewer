@@ -181,3 +181,4 @@
 - 4.0.0.alpha.3 #348 added the changelog to the npm package
 - 4.0.0.alpha.4 #341 added an API to extract PDF pages as image or text
 - 4.0.0.alpha.5 #357 fixed IE11 compatibility (was broken by the fuzzy search)
+- 4.0.0.alpha.6 #385 added a programmatic API to the fuzzy search; #376 added `defaultOptions.assetsFolder` to allow for custom project directories

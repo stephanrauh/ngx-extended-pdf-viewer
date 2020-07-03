@@ -38,5 +38,6 @@ export const defaultOptions = {
   postMessageTransfers: true,
   verbosity: 1,
   workerPort: null,
-  workerSrc: _isIE11 || isEdge ? './assets/pdf.worker-es5.js' : './assets/pdf.worker.js',
+  assetsFolder: 'assets',
+  workerSrc: () => _isIE11 || isEdge ? './' + this.assetsFolder + '/pdf.worker-es5.js' : './' + this.assetsFolder + '/pdf.worker.js',
 };

@@ -233,7 +233,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   /** Allows the user to put the viewer's svg images into an arbitrary folder */
   @Input()
-  public imageResourcesPath = './assets/images/';
+  public imageResourcesPath = './' + defaultOptions.assetsFolder + '/images/';
 
   /** Override the default locale. This must be the complete locale name, such as "es-ES". The string is allowed to be all lowercase.
    */
@@ -527,13 +527,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         const isEdge = /Edge\/\d./i.test(navigator.userAgent);
         const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
         if (this.minifiedJSLibraries) {
-          if (!defaultOptions.workerSrc.endsWith('.min.js')) {
-            defaultOptions.workerSrc = defaultOptions.workerSrc.replace('.js', '.min.js');
+          if (!defaultOptions.workerSrc().endsWith('.min.js')) {
+            const src = defaultOptions.workerSrc();
+            defaultOptions.workerSrc = () => src.replace('.js', '.min.js');
           }
         }
 
+        const assets = defaultOptions.assetsFolder;
         const script = document.createElement('script');
-        script.src = this.location.normalize(isIE || isEdge ? 'assets/pdf-es5' + suffix : 'assets/pdf' + suffix);
+        debugger;
+        script.src = this.location.normalize(isIE || isEdge ? assets + '/pdf-es5' + suffix : assets + '/pdf' + suffix);
         script.type = 'text/javascript';
         script.async = true;
         document.getElementsByTagName('head')[0].appendChild(script);
@@ -552,7 +555,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       const isEdge = /Edge\/\d./i.test(navigator.userAgent);
       const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
       const script2 = document.createElement('script');
-      script2.src = this.location.normalize(isIE || isEdge ? 'assets/viewer-es5' + suffix : 'assets/viewer' + suffix);
+      const assets = defaultOptions.assetsFolder;
+
+      script2.src = this.location.normalize(isIE || isEdge ? assets + '/viewer-es5' + suffix : assets + '/viewer' + suffix);
       script2.type = 'text/javascript';
       script2.async = true;
       document.getElementsByTagName('head')[0].appendChild(script2);
