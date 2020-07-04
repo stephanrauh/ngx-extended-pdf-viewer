@@ -1,5 +1,6 @@
+const folder = process.argv[2];
 const fs = require('fs');
-const file = fs.readFileSync('../projects/ngx-extended-pdf-viewer/src/assets/locale/locale.properties');
+const file = fs.readFileSync('../projects/ngx-extended-pdf-viewer/src/' + folder + '/locale/locale.properties');
 const content = file.toString().split('\n');
 
 const languages = {};
@@ -13,8 +14,8 @@ for (let i = 0; i < content.length; i++) {
 
 for (let lang in languages) {
   const shortcode = lang.substring(0, 2);
-  const additionalFilename = '../projects/ngx-extended-pdf-viewer/src/assets/additional-locale/' + shortcode + '.properties';
-  const originalFilename = '../projects/ngx-extended-pdf-viewer/src/assets/locale/' + lang + '/viewer.properties';
+  const additionalFilename = '../projects/ngx-extended-pdf-viewer/src/' + folder + '/additional-locale/' + shortcode + '.properties';
+  const originalFilename = '../projects/ngx-extended-pdf-viewer/src/' + folder + '/locale/' + lang + '/viewer.properties';
   if (fs.existsSync(additionalFilename) && fs.existsSync(originalFilename)) {
     const original = fs.readFileSync(originalFilename);
     const additional = fs.readFileSync(additionalFilename);

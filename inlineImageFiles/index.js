@@ -2,7 +2,7 @@ const base64Img = require('base64-img');
 const fs = require('fs');
 
 const lineReader = require('readline').createInterface({
-  input: fs.createReadStream('../../mozillas-pdf.js/build/generic/web/viewer.css')
+  input: fs.createReadStream('../../mypdf.js/build/generic/web/viewer.css')
 });
 
 const ignore = [
@@ -53,7 +53,7 @@ lineReader
             url = url.substring(1, url.length - 1);
           }
           if (!url.startsWith('data:')) {
-            url = '../../mozillas-pdf.js/build/generic/web/' + url;
+            url = '../../mypdf.js/build/generic/web/' + url;
             const data = base64Img.base64Sync(url);
             line = line.substring(0, start) + "('" + data + "'" + line.substring(end);
           }

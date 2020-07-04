@@ -1,8 +1,9 @@
+const folder = process.argv[2];
 var fs = require('fs');
 
 function convertLanguage(language) {
   var PropertiesReader = require('properties-reader');
-  var properties = PropertiesReader(`../projects/ngx-extended-pdf-viewer/src/assets/locale/${language}/viewer.properties`);
+  var properties = PropertiesReader(`../projects/ngx-extended-pdf-viewer/src/${folder}/locale/${language}/viewer.properties`);
   console.log(`${language} has ${properties.length} translations.`);
   const result = {};
   properties.each(x => {
@@ -21,12 +22,12 @@ function convertLanguage(language) {
     }
   });
   fs.writeFileSync(
-    '../projects/ngx-extended-pdf-viewer/src/assets/inline-locale-files/' + language + '.html',
+    '../projects/ngx-extended-pdf-viewer/src/' + folder + '/inline-locale-files/' + language + '.html',
     `<script type="application/l10n">{"default_locale":"${language}","locales":{"${language}":${JSON.stringify(result)}}}\n</script>`
   );
 }
 
-const dir = fs.readdirSync('../projects/ngx-extended-pdf-viewer/src/assets/locale');
+const dir = fs.readdirSync('../projects/ngx-extended-pdf-viewer/src/' + folder + '/locale');
 dir.forEach(language => {
   if (language != 'locale.properties') {
     convertLanguage(language);
