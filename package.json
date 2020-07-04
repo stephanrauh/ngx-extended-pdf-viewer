@@ -14,8 +14,9 @@
     "win-package": "ng b ngx-extended-pdf-viewer && rmdir dist /S && ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json && xcopy /S/E/-Y projects\\ngx-extended-pdf-viewer\\src\\assets dist\\ngx-extended-pdf-viewer\\assets\\",
     "release": "npm run unix-package && cd dist/ngx-extended-pdf-viewer && npm publish",
     "cypress": "./node_modules/.bin/cypress open",
-    "copy": "npm run copy-assets && npm run copy-changelog",
+    "copy": "npm run copy-assets && npm run copy-bleeding-edge && npm run copy-changelog",
     "copy-assets": "cp -R projects/ngx-extended-pdf-viewer/src/assets dist/ngx-extended-pdf-viewer/assets",
+    "copy-bleeding-edge": "cp -R projects/ngx-extended-pdf-viewer/src/bleeding-edge dist/ngx-extended-pdf-viewer/bleeding-edge",
     "copy-changelog": "cp projects/ngx-extended-pdf-viewer/changelog.md dist/ngx-extended-pdf-viewer/changelog.md"
   },
   "private": true,

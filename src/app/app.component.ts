@@ -6,7 +6,7 @@ import { ModalDialogComponent } from './modal-dialog/modal-dialog.component';
 import { PagesLoadedEvent, PageRenderedEvent, PdfDownloadedEvent, PdfLoadedEvent } from 'projects/ngx-extended-pdf-viewer/src/public_api';
 import { TextLayerRenderedEvent } from '../../projects/ngx-extended-pdf-viewer/src/lib/events/textlayer-rendered';
 import { FormGroup, FormControl } from '@angular/forms';
-import { defaultOptions } from '../../projects/ngx-extended-pdf-viewer/src/lib/options/default-options';
+import { pdfDefaultOptions } from '../../projects/ngx-extended-pdf-viewer/src/lib/options/pdf-default-options';
 import { LinkTarget } from '../../projects/ngx-extended-pdf-viewer/src/lib/options/link-target';
 
 @Component({
@@ -206,7 +206,7 @@ export class AppComponent implements OnInit {
 
   constructor(private ngxExtendedPdfViewerService: NgxExtendedPdfViewerService, public dialog: MatDialog) {}
   ngOnInit(): void {
-    defaultOptions.externalLinkTarget = LinkTarget.BLANK;
+    pdfDefaultOptions.externalLinkTarget = LinkTarget.BLANK;
   }
 
   public openDialog(): void {

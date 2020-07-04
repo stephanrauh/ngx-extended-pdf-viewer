@@ -20,7 +20,7 @@ import { PagesLoadedEvent } from './events/pages-loaded-event';
 import { PageRenderedEvent } from './events/page-rendered-event';
 import { PdfDownloadedEvent } from './events/pdf-downloaded-event';
 import { PdfLoadedEvent } from './events/pdf-loaded-event';
-import { defaultOptions } from './options/default-options';
+import { pdfDefaultOptions } from './options/pdf-default-options';
 import { ScaleChangingEvent } from './events/scale-changing-event';
 import { PagesRotationEvent } from './events/pages-rotation-event';
 import { FileInputChanged } from './events/file-input-changed';
@@ -233,7 +233,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   /** Allows the user to put the viewer's svg images into an arbitrary folder */
   @Input()
-  public imageResourcesPath = './' + defaultOptions.assetsFolder + '/images/';
+  public imageResourcesPath = './' + pdfDefaultOptions.assetsFolder + '/images/';
 
   /** Override the default locale. This must be the complete locale name, such as "es-ES". The string is allowed to be all lowercase.
    */
@@ -527,15 +527,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         const isEdge = /Edge\/\d./i.test(navigator.userAgent);
         const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
         if (this.minifiedJSLibraries) {
-          if (!defaultOptions.workerSrc().endsWith('.min.js')) {
-            const src = defaultOptions.workerSrc();
-            defaultOptions.workerSrc = () => src.replace('.js', '.min.js');
+          if (!pdfDefaultOptions.workerSrc().endsWith('.min.js')) {
+            const src = pdfDefaultOptions.workerSrc();
+            pdfDefaultOptions.workerSrc = () => src.replace('.js', '.min.js');
           }
         }
 
-        const assets = defaultOptions.assetsFolder;
+        const assets = pdfDefaultOptions.assetsFolder;
         const script = document.createElement('script');
-        debugger;
         script.src = this.location.normalize(isIE || isEdge ? assets + '/pdf-es5' + suffix : assets + '/pdf' + suffix);
         script.type = 'text/javascript';
         script.async = true;
@@ -555,7 +554,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       const isEdge = /Edge\/\d./i.test(navigator.userAgent);
       const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
       const script2 = document.createElement('script');
-      const assets = defaultOptions.assetsFolder;
+      const assets = pdfDefaultOptions.assetsFolder;
 
       script2.src = this.location.normalize(isIE || isEdge ? assets + '/viewer-es5' + suffix : assets + '/viewer' + suffix);
       script2.type = 'text/javascript';
@@ -871,8 +870,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   private overrideDefaultSettings() {
     const options = (window as any).PDFViewerApplicationOptions as IPDFViewerApplicationOptions;
     // tslint:disable-next-line:forin
-    for (const key in defaultOptions) {
-      options.set(key, defaultOptions[key]);
+    for (const key in pdfDefaultOptions) {
+      options.set(key, pdfDefaultOptions[key]);
     }
     options.set('disablePreferences', true);
     this.setZoom();

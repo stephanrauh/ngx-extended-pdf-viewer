@@ -1,7 +1,7 @@
 const _isIE11 = typeof window === 'undefined' ? false : !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
 const isEdge = /Edge\/\d./i.test(navigator.userAgent);
 
-export const defaultOptions = {
+export let pdfDefaultOptions = {
   cursorToolOnLoad: 0,
   defaultUrl: '',
   defaultZoomValue: '',
@@ -39,5 +39,13 @@ export const defaultOptions = {
   verbosity: 1,
   workerPort: null,
   assetsFolder: 'assets',
-  workerSrc: () => _isIE11 || isEdge ? './' + this.assetsFolder + '/pdf.worker-es5.js' : './' + this.assetsFolder + '/pdf.worker.js',
+  workerSrc: () => _isIE11 || isEdge ? './' + pdfDefaultOptions.assetsFolder + '/pdf.worker-es5.js' : './' + pdfDefaultOptions.assetsFolder + '/pdf.worker.js',
 };
+
+if ((<any>window).pdfDefaultOptions) {
+  pdfDefaultOptions = (<any>window).pdfDefaultOptions;
+} else {
+  (<any>window).pdfDefaultOptions = pdfDefaultOptions;
+}
+
+
