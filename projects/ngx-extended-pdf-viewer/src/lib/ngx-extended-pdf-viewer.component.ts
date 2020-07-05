@@ -100,6 +100,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public srcChange = new EventEmitter<string>();
 
   @Input()
+  public authorization: Object | undefined = undefined;
+
+  @Input()
+  public httpHeaders: Object | undefined = undefined;
+
+  @Input()
   public contextMenuAllowed = true;
 
   @Output()
@@ -1042,10 +1048,25 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.checkHeight();
     // open a file in the viewer
     if (!!this._src) {
-      const options = {
+      const options: any = {
         password: this.password,
-        verbosity: this.logLevel,
+        verbosity: this.logLevel
       };
+      if (this.httpHeaders) {
+        options.httpHeaders = this.httpHeaders;
+      }
+      if (this.authorization) {
+        options.withCredentials = true;
+        if (options.httpHeaders) {
+          if (!options.httpHeaders.Authorization) {
+            options.httpHeaders.Authorization = this.authorization;
+          }
+        } else {
+          options.httpHeaders = {
+            Authorization: this.authorization
+          };
+        }
+      }
       PDFViewerApplication.onError = (error: Error) => this.pdfLoadingFailed.emit(error);
       PDFViewerApplication.open(this._src, options).then(() => this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount }));
     }

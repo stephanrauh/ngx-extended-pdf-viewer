@@ -182,3 +182,6 @@
 - 4.0.0.alpha.4 #341 added an API to extract PDF pages as image or text
 - 4.0.0.alpha.5 #357 fixed IE11 compatibility (was broken by the fuzzy search)
 - 4.0.0.alpha.6 #385 added a programmatic API to the fuzzy search; #376 added `pdfDefaultOptions.assetsFolder` to allow for custom project directories; added the "bleeding edge" developer branch of pdf.js; renamed `defaultOptions` to `pdfDefaultOptions` (breaking change!)
+- 4.0.0.alpha.7 #360 tentative implementation of `[authentication]` (subject to change!)
+- 4.0.0.alpha.8 #360 another tentative implementation of `[authentication]` (subject to change!)
+- 4.0.0.alpha.9 #360 renamed `authentication` to `authorization` and added the attribute `httpHeaders` (subject to change!)
