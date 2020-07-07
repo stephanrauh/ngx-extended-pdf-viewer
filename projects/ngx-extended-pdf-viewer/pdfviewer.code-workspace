@@ -1,8 +1,14 @@
 {
   "folders": [
-	{
-		"path": "/Users/stephan/git/embedded-pdf"
-	}
-],
+    {
+      "path": "../.."
+    },
+    {
+      "path": "../../../extended-pdf-viewer-showcase"
+    },
+    {
+      "path": "../../../mypdf.js"
+    }
+  ],
   "settings": {}
 }

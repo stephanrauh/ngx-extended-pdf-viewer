@@ -1050,7 +1050,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (!!this._src) {
       const options: any = {
         password: this.password,
-        verbosity: this.logLevel
+        verbosity: this.logLevel,
       };
       if (this.httpHeaders) {
         options.httpHeaders = this.httpHeaders;
@@ -1063,7 +1063,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           }
         } else {
           options.httpHeaders = {
-            Authorization: this.authorization
+            Authorization: this.authorization,
           };
         }
       }
@@ -1164,7 +1164,26 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if ('src' in changes || 'base64Src' in changes) {
         if (!!this._src) {
           this.overrideDefaultSettings();
-          PDFViewerApplication.open(this._src).then(
+          const options: any = {
+            password: this.password,
+            verbosity: this.logLevel,
+          };
+          if (this.httpHeaders) {
+            options.httpHeaders = this.httpHeaders;
+          }
+          if (this.authorization) {
+            options.withCredentials = true;
+            if (options.httpHeaders) {
+              if (!options.httpHeaders.Authorization) {
+                options.httpHeaders.Authorization = this.authorization;
+              }
+            } else {
+              options.httpHeaders = {
+                Authorization: this.authorization,
+              };
+            }
+          }
+          PDFViewerApplication.open(this._src, options).then(
             () => this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount }),
             (error: Error) => this.pdfLoadingFailed.emit(error)
           );
