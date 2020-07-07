@@ -185,3 +185,5 @@
 - 4.0.0.alpha.7 #360 tentative implementation of `[authentication]` (subject to change!)
 - 4.0.0.alpha.8 #360 another tentative implementation of `[authentication]` (subject to change!)
 - 4.0.0.alpha.9 #360 renamed `authentication` to `authorization` and added the attribute `httpHeaders` (subject to change!)
+- 4.0.0.alpha.10 #394 pass `authorization`, `httpHeaders`, `password`, and `logLevel` when `[src]` is changed (earlier versions forgot to send the options after loading the initial PDF files with the options)
+- 4.0.0.alpha.11 #341 the extract image / extract text API now uses Promises, so you can use it with async/await.

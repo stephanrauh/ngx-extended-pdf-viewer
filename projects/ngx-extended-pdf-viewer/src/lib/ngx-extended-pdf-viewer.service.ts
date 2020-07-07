@@ -193,6 +193,7 @@ export class NgxExtendedPdfViewerService {
     return true;
   }
 
+  /** @deprecated please use getPageAsText(). The preview method will be removed soon. */
   public getPageAsText_preview(pageNumber: number, callback: (text) => void): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const pdfDocument = PDFViewerApplication.pdfDocument;
@@ -202,6 +203,23 @@ export class NgxExtendedPdfViewerService {
     });
   }
 
+  public getPageAsText(pageNumber: number): Promise<string> {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const pdfDocument = PDFViewerApplication.pdfDocument;
+
+    const pagePromise: Promise<any> =  pdfDocument.getPage(pageNumber);
+
+    const extractTextSnippets = pdfPage => new Promise<any>((resolve, reject) => {
+      const textSnippets = pdfPage.getTextContent();
+      resolve(textSnippets);
+    });
+    const combineTextSnippets = textSnippets => new Promise<string>((resolve, reject) => {
+      const text = this.convertTextInfoToText(textSnippets);
+      resolve(text);
+    });
+    return pagePromise.then(extractTextSnippets).then(combineTextSnippets);
+  }
+
   private convertTextInfoToText(textInfo: any): string {
     if (!textInfo) {
       return '';
@@ -209,13 +227,14 @@ export class NgxExtendedPdfViewerService {
     return textInfo.items.map((info) => info.str).join('');
   }
 
+  /** @deprecated please use getPageAsImage(). The preview method will be removed soon. */
   public getPageAsImage_preview(pageNumber: number, scale: PDFExportScaleFactor, callback: (dataURL) => void, errorCallback?: (error: any) => void): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const pdfDocument = PDFViewerApplication.pdfDocument;
     pdfDocument
       .getPage(pageNumber)
       .then((pdfPage) => {
-        this.draw(pdfPage, scale, callback, errorCallback);
+        this.draw_preview(pdfPage, scale, callback, errorCallback);
       })
       .catch((reason) => {
         if (errorCallback) {
@@ -226,7 +245,47 @@ export class NgxExtendedPdfViewerService {
       });
   }
 
-  private draw(pdfPage: any, scale: PDFExportScaleFactor, callback: (dataURL: string) => void, errorCallback?: (error: any) => void): void {
+  public getPageAsImage(pageNumber: number, scale: PDFExportScaleFactor): Promise<any> {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const pdfDocument = PDFViewerApplication.pdfDocument;
+    const pagePromise: Promise<any> =  pdfDocument.getPage(pageNumber);
+    const imagePromise = pdfPage => new Promise<any>((resolve, reject) => {
+      resolve(this.draw(pdfPage, scale));
+    });
+
+    return pagePromise.then(imagePromise);
+  }
+
+  private draw(pdfPage: any, scale: PDFExportScaleFactor): Promise<HTMLCanvasElement> {
+    let zoomFactor = 1;
+    if (scale.scale) {
+      zoomFactor = scale.scale;
+    } else if (scale.width) {
+      zoomFactor = scale.width / pdfPage.getViewport({ scale: 1 }).width;
+    } else if (scale.height) {
+      zoomFactor = scale.height / pdfPage.getViewport({ scale: 1 }).height;
+    }
+    const viewport = pdfPage.getViewport({
+      scale: zoomFactor,
+    });
+    const { ctx, canvas } = this.getPageDrawContext(viewport.width, viewport.height);
+    const drawViewport = viewport.clone();
+
+    const renderContext = {
+      canvasContext: ctx,
+      viewport: drawViewport,
+    };
+    const renderTask = pdfPage.render(renderContext);
+
+    const dataUrlPromise = () => new Promise<string>((resolve, reject) => {
+      resolve(canvas.toDataURL());
+    });
+
+    return renderTask.promise.then(dataUrlPromise);
+  }
+
+  /** @deprecated please use draw(). The preview method will be removed soon. */
+  private draw_preview(pdfPage: any, scale: PDFExportScaleFactor, callback: (dataURL: string) => void, errorCallback?: (error: any) => void): void {
     let zoomFactor = 1;
     if (scale.scale) {
       zoomFactor = scale.scale;
