@@ -413,6 +413,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Output()
   public zoomChange = new EventEmitter<string | number | undefined>();
 
+  @Input()
+  public zoomLevels = ['auto', 'page-actual', 'page-fit', 'page-width', 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
+
   /** This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
    * This attribute is a string with a percent character at the end (e.g. "150%").
    */
