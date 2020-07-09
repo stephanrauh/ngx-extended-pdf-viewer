@@ -188,4 +188,4 @@
 - 4.0.0.alpha.10 #394 pass `authorization`, `httpHeaders`, `password`, and `logLevel` when `[src]` is changed (earlier versions forgot to send the options after loading the initial PDF files with the options)
 - 4.0.0.alpha.11 #341 the extract image / extract text API now uses Promises, so you can use it with async/await.
 - 4.0.0.alpha.12 #387 + #367 customizable `[zoomLevels]`; #387 added an additional browser check to select ES5 on iOS 12.4.5; #398 added `PDFDataRangeTransport` to the type list of `[src]`
-- 4.0.0.alpha.13 #387 + #367 added `[minZoom]` and `[maxZoom]`
+- 4.0.0.alpha.13 #387 + #367 added `[minZoom]` and `[maxZoom]`; updated the "bleeding edge" branch to the latest changes of pdf.js
