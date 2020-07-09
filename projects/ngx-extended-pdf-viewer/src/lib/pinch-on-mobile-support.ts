@@ -1,4 +1,5 @@
 import { NgZone } from '@angular/core';
+import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
 
 export class PinchOnMobileSupport {
   private viewer: any;
@@ -24,7 +25,7 @@ export class PinchOnMobileSupport {
       const rect = this.container.getBoundingClientRect();
       // + this.container.scrollTop
       if (event.touches[0].pageX >= rect.left && event.touches[0].pageX <= rect.right) {
-        if (event.touches[0].pageY >= rect.top  /* && event.touches[0].pageY <= rect.bottom */) {
+        if (event.touches[0].pageY >= rect.top /* && event.touches[0].pageY <= rect.bottom */) {
           if (event.touches[1].pageX >= rect.left && event.touches[1].pageX <= rect.right) {
             if (event.touches[1].pageY >= rect.top /* && event.touches[1].pageY <= rect.bottom  */) {
               this.startX = (event.touches[0].pageX + event.touches[1].pageX) / 2;
@@ -40,6 +41,8 @@ export class PinchOnMobileSupport {
   }
 
   private onViewerTouchMove(event: TouchEvent): void {
+    const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
+
     if (this.initialPinchDistance <= 0 || event.touches.length !== 2) {
       return;
     }
@@ -50,6 +53,20 @@ export class PinchOnMobileSupport {
     const originX = this.startX + this.container.scrollLeft;
     const originY = this.startY + this.container.scrollTop;
     this.pinchScale = pinchDistance / this.initialPinchDistance;
+    let minZoom = Number(PDFViewerApplicationOptions.get('minZoom'));
+    if (!minZoom) {
+      minZoom = 0.1;
+    }
+    if (this.pinchScale < minZoom) {
+      this.pinchScale = minZoom;
+    }
+    let maxZoom = Number(PDFViewerApplicationOptions.get('maxZoom'));
+    if (!maxZoom) {
+      maxZoom = 10;
+    }
+    if (this.pinchScale > maxZoom) {
+      this.pinchScale = maxZoom;
+    }
     this.viewer.style.transform = `scale(${this.pinchScale})`;
     this.viewer.style.transformOrigin = `${originX}px ${originY}px`;
     event.preventDefault();

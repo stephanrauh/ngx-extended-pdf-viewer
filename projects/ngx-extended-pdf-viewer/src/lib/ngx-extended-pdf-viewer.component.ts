@@ -414,7 +414,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public zoomChange = new EventEmitter<string | number | undefined>();
 
   @Input()
-  public zoomLevels = ['auto', 'page-actual', 'page-fit', 'page-width', 0.33, 0.5, 0.75, 1, 1.1, 1.25, 1.33, 1.5, 2, 2.5, 3, 3.5, 4];
+  public zoomLevels = ['auto', 'page-actual', 'page-fit', 'page-width', 0.5, 1, 1.25, 1.5, 2, 3, 4];
+
+  @Input()
+  public maxZoom = 10;
+
+  @Input()
+  public minZoom = 0.1;
 
   /** This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
    * This attribute is a string with a percent character at the end (e.g. "150%").
@@ -742,6 +748,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
       PDFViewerApplicationOptions.set('locale', this.language);
       PDFViewerApplicationOptions.set('imageResourcesPath', this.imageResourcesPath);
+      PDFViewerApplicationOptions.set('minZoom', this.minZoom);
+      PDFViewerApplicationOptions.set('maxZoom', this.maxZoom);
 
       PDFViewerApplication.isViewerEmbedded = true;
       if (PDFViewerApplication.printKeyDownListener) {
@@ -1202,6 +1210,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
       if ('zoom' in changes) {
         this.setZoom();
+      }
+
+      if ('maxZoom' in changes) {
+        PDFViewerApplicationOptions.set('maxZoom', this.maxZoom);
+      }
+
+      if ('minZoom' in changes) {
+        PDFViewerApplicationOptions.set('minZoom', this.minZoom);
       }
 
       if ('handTool' in changes) {

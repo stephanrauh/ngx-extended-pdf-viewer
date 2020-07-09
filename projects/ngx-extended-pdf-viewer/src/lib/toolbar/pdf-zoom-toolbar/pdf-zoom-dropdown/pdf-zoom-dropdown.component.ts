@@ -18,9 +18,7 @@ export class PdfZoomDropdownComponent implements OnInit {
 
   @Input()
   public set zoomLevels(levels: Array<string | number>) {
-    console.log(levels);
     this._zoomLevels = levels.map((l) => this.valueToZoomLevel(l));
-    console.log(this._zoomLevels);
   }
 
   @ViewChild('sizeSelector') sizeSelector: any;

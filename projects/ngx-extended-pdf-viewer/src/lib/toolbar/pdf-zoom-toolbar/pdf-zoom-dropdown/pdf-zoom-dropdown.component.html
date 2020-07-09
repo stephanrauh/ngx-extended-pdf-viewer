@@ -10,7 +10,14 @@
       [attr.value]="level.value"
       [attr.data-l10n-id]="level.dataL10nId"
       [attr.data-l10n-args]="level.dataL10nArgs">
-      {{level.value}}
+      {{level.displayValue}}
     </option>
+    <option
+    id="customScaleOption"
+    title=""
+    value="custom"
+    disabled="disabled"
+    hidden="true"
+  ></option>
   </select>
 </span>
