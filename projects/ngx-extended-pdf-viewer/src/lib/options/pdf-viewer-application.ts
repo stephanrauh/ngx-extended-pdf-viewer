@@ -25,7 +25,7 @@ export interface IPDFViewerApplication {
 
   cleanup(): void;
   close(): void;
-  open(source: string | any, options?: any): Promise<any>;
+  open(source: string | ArrayBuffer | {range: any} | any, options?: any): Promise<any>;
   unbindEvents(): void;
   unbindWindowEvents(): void;
 }

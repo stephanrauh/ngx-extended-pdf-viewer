@@ -94,7 +94,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   /* regular attributes */
 
-  private _src: string | ArrayBuffer;
+  private _src: string | ArrayBuffer | {range: any};
 
   @Output()
   public srcChange = new EventEmitter<string>();
@@ -158,7 +158,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public rotationChange = new EventEmitter<0 | 90 | 180 | 270>();
 
   @Input()
-  public set src(url: string | ArrayBuffer | Blob | Uint8Array) {
+  public set src(url: string | ArrayBuffer | Blob | Uint8Array | {range: any}) {
     if (url instanceof Uint8Array) {
       this._src = url.buffer;
     } else if (url instanceof Blob) {
@@ -414,7 +414,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public zoomChange = new EventEmitter<string | number | undefined>();
 
   @Input()
-  public zoomLevels = ['auto', 'page-actual', 'page-fit', 'page-width', 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
+  public zoomLevels = ['auto', 'page-actual', 'page-fit', 'page-width', 0.33, 0.5, 0.75, 1, 1.1, 1.25, 1.33, 1.5, 2, 2.5, 3, 3.5, 4];
 
   /** This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
    * This attribute is a string with a percent character at the end (e.g. "150%").
@@ -534,6 +534,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if (!window['pdfjs-dist/build/pdf']) {
         const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
         const isEdge = /Edge\/\d./i.test(navigator.userAgent);
+        const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
         const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
         if (this.minifiedJSLibraries) {
           if (!pdfDefaultOptions.workerSrc().endsWith('.min.js')) {
@@ -544,7 +545,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
         const assets = pdfDefaultOptions.assetsFolder;
         const script = document.createElement('script');
-        script.src = this.location.normalize(isIE || isEdge ? assets + '/pdf-es5' + suffix : assets + '/pdf' + suffix);
+        script.src = this.location.normalize(isIE || isEdge || needsES5 ? assets + '/pdf-es5' + suffix : assets + '/pdf' + suffix);
         script.type = 'text/javascript';
         script.async = true;
         document.getElementsByTagName('head')[0].appendChild(script);
@@ -561,11 +562,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     } else {
       const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
       const isEdge = /Edge\/\d./i.test(navigator.userAgent);
+      const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
       const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
       const script2 = document.createElement('script');
       const assets = pdfDefaultOptions.assetsFolder;
 
-      script2.src = this.location.normalize(isIE || isEdge ? assets + '/viewer-es5' + suffix : assets + '/viewer' + suffix);
+      script2.src = this.location.normalize(isIE || isEdge || needsES5 ? assets + '/viewer-es5' + suffix : assets + '/viewer' + suffix);
       script2.type = 'text/javascript';
       script2.async = true;
       document.getElementsByTagName('head')[0].appendChild(script2);
@@ -1055,6 +1057,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         password: this.password,
         verbosity: this.logLevel,
       };
+      if (this._src['range']) {
+        options.range = this._src['range'];
+      }
       if (this.httpHeaders) {
         options.httpHeaders = this.httpHeaders;
       }
@@ -1171,6 +1176,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             password: this.password,
             verbosity: this.logLevel,
           };
+          if (this._src['range']) {
+            options.range = this._src['range'];
+          }
           if (this.httpHeaders) {
             options.httpHeaders = this.httpHeaders;
           }

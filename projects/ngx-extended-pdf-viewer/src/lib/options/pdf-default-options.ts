@@ -1,5 +1,7 @@
 const _isIE11 = typeof window === 'undefined' ? false : !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
 const isEdge = /Edge\/\d./i.test(navigator.userAgent);
+const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
+
 
 export let pdfDefaultOptions = {
   cursorToolOnLoad: 0,
@@ -39,7 +41,7 @@ export let pdfDefaultOptions = {
   verbosity: 1,
   workerPort: null,
   assetsFolder: 'assets',
-  workerSrc: () => _isIE11 || isEdge ? './' + pdfDefaultOptions.assetsFolder + '/pdf.worker-es5.js' : './' + pdfDefaultOptions.assetsFolder + '/pdf.worker.js',
+  workerSrc: () => _isIE11 || isEdge || needsES5 ? './' + pdfDefaultOptions.assetsFolder + '/pdf.worker-es5.js' : './' + pdfDefaultOptions.assetsFolder + '/pdf.worker.js',
 };
 
 if ((<any>window).pdfDefaultOptions) {
