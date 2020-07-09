@@ -375,6 +375,8 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -873,12 +875,17 @@ var PDFViewerApplication = {
     }
 
     var newScale = this.pdfViewer.currentScale;
+    var maxScale = Number(_app_options.AppOptions.get("maxZoom"));
+
+    if (!maxScale) {
+      maxScale = (_readOnlyError("maxScale"), _ui_utils.MAX_SCALE);
+    }
 
     do {
       newScale = (newScale * DEFAULT_SCALE_DELTA).toFixed(2);
       newScale = Math.ceil(newScale * 10) / 10;
-      newScale = Math.min(_ui_utils.MAX_SCALE, newScale);
-    } while (--ticks > 0 && newScale < _ui_utils.MAX_SCALE);
+      newScale = Math.min(maxScale, newScale);
+    } while (--ticks > 0 && newScale < maxScale);
 
     this.pdfViewer.currentScaleValue = newScale;
   },
@@ -888,12 +895,17 @@ var PDFViewerApplication = {
     }
 
     var newScale = this.pdfViewer.currentScale;
+    var minScale = Number(_app_options.AppOptions.get("minZoom"));
+
+    if (!minScale) {
+      minScale = (_readOnlyError("minScale"), _ui_utils.MIN_SCALE);
+    }
 
     do {
       newScale = (newScale / DEFAULT_SCALE_DELTA).toFixed(2);
       newScale = Math.floor(newScale * 10) / 10;
-      newScale = Math.max(_ui_utils.MIN_SCALE, newScale);
-    } while (--ticks > 0 && newScale > _ui_utils.MIN_SCALE);
+      newScale = Math.max(minScale, newScale);
+    } while (--ticks > 0 && newScale > minScale);
 
     this.pdfViewer.currentScaleValue = newScale;
   },

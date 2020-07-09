@@ -712,12 +712,17 @@ const PDFViewerApplication = {
     }
 
     let newScale = this.pdfViewer.currentScale;
+    const maxScale = Number(_app_options.AppOptions.get("maxZoom"));
+
+    if (!maxScale) {
+      maxScale = _ui_utils.MAX_SCALE;
+    }
 
     do {
       newScale = (newScale * DEFAULT_SCALE_DELTA).toFixed(2);
       newScale = Math.ceil(newScale * 10) / 10;
-      newScale = Math.min(_ui_utils.MAX_SCALE, newScale);
-    } while (--ticks > 0 && newScale < _ui_utils.MAX_SCALE);
+      newScale = Math.min(maxScale, newScale);
+    } while (--ticks > 0 && newScale < maxScale);
 
     this.pdfViewer.currentScaleValue = newScale;
   },
@@ -728,12 +733,17 @@ const PDFViewerApplication = {
     }
 
     let newScale = this.pdfViewer.currentScale;
+    const minScale = Number(_app_options.AppOptions.get("minZoom"));
+
+    if (!minScale) {
+      minScale = _ui_utils.MIN_SCALE;
+    }
 
     do {
       newScale = (newScale / DEFAULT_SCALE_DELTA).toFixed(2);
       newScale = Math.floor(newScale * 10) / 10;
-      newScale = Math.max(_ui_utils.MIN_SCALE, newScale);
-    } while (--ticks > 0 && newScale > _ui_utils.MIN_SCALE);
+      newScale = Math.max(minScale, newScale);
+    } while (--ticks > 0 && newScale > minScale);
 
     this.pdfViewer.currentScaleValue = newScale;
   },
