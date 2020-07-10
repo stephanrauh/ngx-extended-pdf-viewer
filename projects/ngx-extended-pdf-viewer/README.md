@@ -14,7 +14,7 @@
 
 ## What's new in version 4.0?
 
-Version 4.0 is basically a major internal change. Now it's easier to update to the latest version of pdf.js. Your benefit is that you can finally use the minified pdf.js libraries. You'll notice the performance boost. There's also a new option in the findbar: "fuzzy search" is slow but useful if just ignoring diacritics and accents isn't enough flexibility.
+Version 4.0 is a major internal change. Now it's easier to update to the latest version of pdf.js. Your benefit is that you can finally use the minified pdf.js libraries. You'll notice the performance boost. There's also a new option in the findbar: "fuzzy search" is slow but useful if just ignoring diacritics and accents isn't enough flexibility.
 
 ## Breaking changes
 `defaultOptions` has been renamed to pdfDefaultOptions. You'll also have to modify the import statement.
@@ -22,7 +22,7 @@ Version 4.0 is basically a major internal change. Now it's easier to update to t
 ## New: transition to a UI design inspired by Material Design (work in progress)
 Version 3.0.0 comes with a slightly modified design. That's work in progress. The goal is to give you a highly customizable, easily themeable library with a fresh and modern look inspired my Material Design. As an unintended side effect, it resembles the redesign called "Photon" of pdf.js. Among other things, you'll soon be able to select between the light mode and the dark mode.
 
- Talking of which: if you're an UX- or UI-designer with some time to spear, don't hesitate to send me suggestions how to improve the look and feel of the library. Or send me your complaints if you don't my attempts at UI-design. I can't promise to implement every suggestion, but I'm looking forward to your valuable feedback!
+ Talking of which: if you're a UX- or UI-designer with some time to spear, don't hesitate to send me suggestions on how to improve the look and feel of the library. Or send me your complaints if you don't like my attempts at UI-design. I can't promise to implement every suggestion, but I'm looking forward to your valuable feedback!
 
 ## Showcase and manual
 
@@ -47,17 +47,14 @@ This library provides an embeddable PDF viewer component. It's different from ot
 - various selection tools
 - standard display or even / odd spreads (like a book)
 - several event listeners
-- various approaches to scrolling (vertical, horizontal, "wrapped" scrolling)
+- multiple approaches to scrolling (vertical, horizontal, "wrapped" scrolling)
 - Internationalization (providing translations to several dozen languages)
 - direct access to the core API of pdf.js (including TypeScript definition files)
 - plus the ability to deactivate each of these features
-- and/or to customize the toolbars and menus according to your needs.
+- and to customize the toolbars and menus according to your needs.
 
 Not to mention the ability to display PDF files, running on Mozilla's pdf.js 2.4.456, released in March 2020. If you're the daring one, you can also use the developer version 2.5. It's bleeding edge, so use it at own risk, but it fixes at least one bug ([#285](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/285)), so it may be worth a look.
 
-## Potentially breaking changes with version 3.0.0
-- I've fixed the behavior of `(zoom)`. Now this event is never triggered if the value of `[zoom]` is `"auto"`, `"page-width"`, `"page-fit"` or `"page-actual"`. It was always meant to work like this, but nonetheless, fixing this bug might break your application. If it does, use `(currentZoomFactor)` instead.
-- I've updated to the most current version of pdf.js (2.4.456). That's shouldn't break anything, but you never know, so I've included it in this list.
 
 ## Alternatives
 <details>
@@ -66,11 +63,11 @@ Not to mention the ability to display PDF files, running on Mozilla's pdf.js 2.4
 
 There's also a direct counterpart to my library: <a href="https://www.npmjs.com/package/ng2-pdfjs-viewer" target="#">ng2-pdfjs-viewer</a>. As far as I can see, it's also a good library. Recently (May 24, 2019), it has been updated to PDF.js 2.2.171. It wraps the PDF viewer in an iFrame. That's a more reliable approach, but it also offers fewer options. The list of attributes is shorter, and the PDF viewer can't emit events to your application. If you're not happy with my library, check out ng2-pdfjs-viewer. It's a good library, too. Its unique selling point is displaying multiple PDF files simultaneously on the same page.
 
-You might also try to use the native PDF viewer of your browser. That's a valid approach. Actually, it's even the preferred approach. The advantages of both `ngx-extended-pdf-viewer` and `ng2-pdfjs-viewer` are they also support Internet Explorer 11 (with some help of the polyfills). `ngx-extended-pdf-viewer` also gives you a wide range of options that aren't available using the native API.
+You might also try to use the native PDF viewer of your browser. That's a valid approach. It's even the preferred approach. The advantages of both `ngx-extended-pdf-viewer` and `ng2-pdfjs-viewer` are they also support Internet Explorer 11 (with some help of the polyfills). `ngx-extended-pdf-viewer` also gives you a wide range of options that aren't available using the native API.
 </details>
 
 ## How to use the library
-As a rule of thumb, I recommend to clone the [showcase project from GitHub](https://github.com/stephanrauh/extended-pdf-viewer-showcase) before doing anything else. It's a standard Angular CLI application, so you'll get it up and running in less than ten minutes. It's a good starting point to do your own experiments. Maybe even more important: you'll learn if the library works on your machine. (Of course it does, but it's always good to double-check!)
+As a rule of thumb, I recommend cloning the [showcase project from GitHub](https://github.com/stephanrauh/extended-pdf-viewer-showcase) before doing anything else. It's a standard Angular CLI application, so you'll get it up and running in less than ten minutes. It's a good starting point to do your own experiments. Maybe even more important: you'll learn if the library works on your machine. (Of course, it does, but it's always good to double-check!)
 
 The detailed instructions for JHipster and Angular 2, 4, and 5 are available [on the showcase](https://pdfviewer.net/getting-started).
 
@@ -111,7 +108,7 @@ The detailed instructions for JHipster and Angular 2, 4, and 5 are available [on
   "scripts": []
   ```
 
-  _Hint:_ There are two ways to define the language files needed for the labels of the buttons and screen elements of the PDF viewer. The second method is described below in the "internationalization" section.
+  _Hint:_ There are two ways to define the language files needed for the labels of the buttons and screen elements. The second method is described below in the "internationalization" section.
 
 3.  Now you can display the PDF file like so:
   ```html
@@ -161,7 +158,7 @@ Also see [the attribute list on the showcase](https://pdfviewer.net/attributes).
 | [logLevel]                     |        1        | Log level. Legal values: VerbosityLevel.ERRORS (=0),VerbosityLevel.WARNINGS (=1), and VerbosityLevel.INFOS (=5). The higher the log level, the more is logged. Please note that the log level is only updated when a new PDF document is loaded programmatically (i.e. when `[src]`changes).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | [nameddest]                  |    undefined    | allows you to jump to a "named destination" inside the document. Typical examples of names destinations are "chapter_7" oder "image_3". The named destination are defined within the PDF document; you can only jump to destinations defined by the author of the PDF file.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | [showSidebarButton]          |      true       | Show or hide the button to toggle the sidebar                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| minifiedJSLibraries          |      true       | Since version 4.0.0, ngx-extended-pdf-viewer loads the minified pdf.js libraries by default. You can set this flag to load the human-readable files. However, in most cases this shouldn't be necessary due to the source map files. Using the human-readable files give you a performance penalty.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| minifiedJSLibraries          |      true       | Since version 4.0.0, ngx-extended-pdf-viewer loads the minified pdf.js libraries by default. You can set this flag to load the human-readable files. In most cases this shouldn't be necessary due to the source map files, but sometimes the debugger doesn't cope well with the sourcemaps. Caveat: Using the human-readable files gives you a performance penalty.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | minZoom          |      0.1       | Minimum zoom factor you can achieve by pinching or by hitting the "-" button or the "+" key.                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
  maxZoom          |      10       | Maximum zoom factor you can achieve by pinching or by hitting the "+" button or the "+" key.                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | [mobileFriendlyZoom]         |      100%       | Increases the size of the UI elements so you can use them on small mobile devices. Must be a percentage (`'150%'`) or a floating-point number (`'1.5'`). Alternatively you can set this attribute to `'true'` (= `'150%'`) or `'false'` (= `'100%'`).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -273,7 +270,7 @@ The library is based on https://github.com/mozilla/pdf.js, which has been publis
 
 Some of the default icons have been published under a <a href="http://scripts.sil.org/cms/scripts/page.php?item_id=OFL_web" target="#">SIL Open Font License 1.1</a> license at <a href="https://materialdesignicons.com/" target="#">Material Design Icons</a>. The other icons have either been published under an <a href="https://github.com/google/material-design-icons/blob/master/LICENSE" target="#">Apache V2 license</a> by Google or by the pdf.js team at Mozilla.
 
-Thanks to the awesome pdf.js team and to all the users you've reported bugs and even sent me pull requests!
+Thanks to the awesome pdf.js team and all the users who've reported bugs and even sent me pull requests!
 
 ## Changelog
 See https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/master/projects/ngx-extended-pdf-viewer/changelog.md

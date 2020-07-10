@@ -536,6 +536,28 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     private notificationService: PDFNotificationService,
     private location: Location
   ) {
+   }
+
+  private loadViewer(): void {
+    if (!window['pdfjs-dist/build/pdf']) {
+      setTimeout(() => this.loadViewer(), 25);
+    } else {
+      const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
+      const isEdge = /Edge\/\d./i.test(navigator.userAgent);
+      const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
+      const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
+      const script2 = document.createElement('script');
+      const assets = pdfDefaultOptions.assetsFolder;
+
+      script2.src = this.location.normalize(isIE || isEdge || needsES5 ? assets + '/viewer-es5' + suffix : assets + '/viewer' + suffix);
+      script2.type = 'text/javascript';
+      script2.async = true;
+      document.getElementsByTagName('head')[0].appendChild(script2);
+    }
+  }
+
+  ngOnInit() {
+    this.onResize();
     if (isPlatformBrowser(this.platformId)) {
       if (!window['pdfjs-dist/build/pdf']) {
         const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
@@ -560,28 +582,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.loadViewer();
       }
     }
-  }
 
-  private loadViewer(): void {
-    if (!window['pdfjs-dist/build/pdf']) {
-      setTimeout(() => this.loadViewer(), 25);
-    } else {
-      const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
-      const isEdge = /Edge\/\d./i.test(navigator.userAgent);
-      const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
-      const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
-      const script2 = document.createElement('script');
-      const assets = pdfDefaultOptions.assetsFolder;
-
-      script2.src = this.location.normalize(isIE || isEdge || needsES5 ? assets + '/viewer-es5' + suffix : assets + '/viewer' + suffix);
-      script2.type = 'text/javascript';
-      script2.async = true;
-      document.getElementsByTagName('head')[0].appendChild(script2);
-    }
-  }
-
-  ngOnInit() {
-    this.onResize();
   }
 
   ngAfterViewInit() {
