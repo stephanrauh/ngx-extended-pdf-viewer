@@ -13335,7 +13335,11 @@ var PDFPageView = /*#__PURE__*/function () {
         })) {
           var max = this.determineMaxDimensions();
           var divisor = Math.max(width / max, height / max);
-          this.scale /= divisor;
+          var newScale = Math.floor(100 * this.scale / divisor) / 100;
+          divisor = this.scale / newScale;
+          this.scale = newScale;
+          var PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
+          PDFViewerApplicationOptions.set('maxZoom', newScale);
           PDFViewerApplication.pdfViewer.currentScaleValue = this.scale;
           viewport.width /= divisor;
           viewport.height /= divisor;
