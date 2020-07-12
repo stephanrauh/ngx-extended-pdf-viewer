@@ -8757,6 +8757,12 @@ class PDFThumbnailViewer {
       this._resetView();
     }
 
+    if (!window.pdfThumbnailGeneratorReady()) {
+      console.log("Delaying 100 ms " + new Date().getSeconds());
+      setTimeout(() => this.setDocument(pdfDocument), 100);
+      return;
+    }
+
     this.pdfDocument = pdfDocument;
 
     if (!pdfDocument) {
@@ -8963,10 +8969,18 @@ class PDFThumbnailView {
     this.canvasHeight = this.canvasWidth / this.pageRatio | 0;
     this.scale = this.canvasWidth / this.pageWidth;
     this.l10n = l10n;
+
+    if (window.pdfThumbnailGenerator) {
+      window.pdfThumbnailGenerator(this, linkService, id, container, this._thumbPageTitle);
+    } else {
+      this.createThumbnail(this, linkService, id, container, this._thumbPageTitle);
+    }
+  }
+
+  createThumbnail(pdfThumbnailView, linkService, id, container, thumbPageTitlePromise) {
     const anchor = document.createElement("a");
     anchor.href = linkService.getAnchorUrl("#page=" + id);
-
-    this._thumbPageTitle.then(msg => {
+    thumbPageTitlePromise.then(msg => {
       anchor.title = msg;
     });
 
@@ -8975,17 +8989,17 @@ class PDFThumbnailView {
       return false;
     };
 
-    this.anchor = anchor;
+    pdfThumbnailView.anchor = anchor;
     const div = document.createElement("div");
     div.className = "thumbnail";
     div.setAttribute("data-page-number", this.id);
-    this.div = div;
+    pdfThumbnailView.div = div;
     const ring = document.createElement("div");
     ring.className = "thumbnailSelectionRing";
     const borderAdjustment = 2 * THUMBNAIL_CANVAS_BORDER_WIDTH;
     ring.style.width = this.canvasWidth + borderAdjustment + "px";
     ring.style.height = this.canvasHeight + borderAdjustment + "px";
-    this.ring = ring;
+    pdfThumbnailView.ring = ring;
     div.appendChild(ring);
     anchor.appendChild(div);
     container.appendChild(anchor);
