@@ -190,3 +190,5 @@
 - 4.0.0.alpha.12 #387 + #367 customizable `[zoomLevels]`; #387 added an additional browser check to select ES5 on iOS 12.4.5; #398 added `PDFDataRangeTransport` to the type list of `[src]`
 - 4.0.0.alpha.13 #387 + #367 added `[minZoom]` and `[maxZoom]`; updated the "bleeding edge" branch to the latest changes of pdf.js
 - 4.0.0.alpha.14 #387 if the zoom exceed the maximum canvas size supported by the browser, reduce it to the maximum the browser displays; moved loading the pdf.js file from the constructor to `ngOnInit()` because `[minifiedJSLibraries]` was ignored (might be a breaking change!)
+- 4.0.0.alpha.15 #238 added `[customSidebar]`; #157 added `customThumbnail`
+- 4.0.0 #157 added keyboard navigation to the thumbnails in the sidebar

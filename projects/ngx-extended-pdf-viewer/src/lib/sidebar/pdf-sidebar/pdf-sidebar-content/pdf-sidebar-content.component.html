@@ -2,7 +2,7 @@
   <div #thumbnailViewTemplate>
     <ng-content *ngTemplateOutlet="customThumbnail ? customThumbnail : defaultThumbnail"></ng-content>
   </div>
-  <div id="thumbnailView"></div>
+  <div id="thumbnailView" (keydown)="onKeyDown($event)"></div>
   <div id="outlineView" class="hidden"></div>
   <div id="attachmentsView" class="hidden"></div>
 </div>
