@@ -89,6 +89,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public customSecondaryToolbar: TemplateRef<any>;
 
+  @Input()
+  public customSidebar: TemplateRef<any>;
+
+  @Input()
+  public customThumbnail: TemplateRef<any>;
+
   @ViewChild('pdfSecondaryToolbarComponent')
   private secondaryToolbarComponent: PdfSecondaryToolbarComponent;
 
@@ -425,7 +431,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   /** This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
    * This attribute is a string with a percent character at the end (e.g. "150%").
    */
-  @Input() _mobileFriendlyZoom = '150%';
+  @Input() _mobileFriendlyZoom = '100%';
 
   public mobileFriendlyZoomScale = 1;
 

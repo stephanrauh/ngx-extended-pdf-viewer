@@ -10924,35 +10924,44 @@ var PDFThumbnailView = /*#__PURE__*/function () {
     this.canvasHeight = this.canvasWidth / this.pageRatio | 0;
     this.scale = this.canvasWidth / this.pageWidth;
     this.l10n = l10n;
-    var anchor = document.createElement("a");
-    anchor.href = linkService.getAnchorUrl("#page=" + id);
 
-    this._thumbPageTitle.then(function (msg) {
-      anchor.title = msg;
-    });
-
-    anchor.onclick = function () {
-      linkService.page = id;
-      return false;
-    };
-
-    this.anchor = anchor;
-    var div = document.createElement("div");
-    div.className = "thumbnail";
-    div.setAttribute("data-page-number", this.id);
-    this.div = div;
-    var ring = document.createElement("div");
-    ring.className = "thumbnailSelectionRing";
-    var borderAdjustment = 2 * THUMBNAIL_CANVAS_BORDER_WIDTH;
-    ring.style.width = this.canvasWidth + borderAdjustment + "px";
-    ring.style.height = this.canvasHeight + borderAdjustment + "px";
-    this.ring = ring;
-    div.appendChild(ring);
-    anchor.appendChild(div);
-    container.appendChild(anchor);
+    if (window.pdfThumbnailGenerator) {
+      window.pdfThumbnailGenerator(this, linkService, id, container, this._thumbPageTitle);
+    } else {
+      this.createThumbnail(this, linkService, id, container, this._thumbPageTitle);
+    }
   }
 
   _createClass(PDFThumbnailView, [{
+    key: "createThumbnail",
+    value: function createThumbnail(pdfThumbnailView, linkService, id, container, thumbPageTitlePromise) {
+      var anchor = document.createElement("a");
+      anchor.href = linkService.getAnchorUrl("#page=" + id);
+      thumbPageTitlePromise.then(function (msg) {
+        anchor.title = msg;
+      });
+
+      anchor.onclick = function () {
+        linkService.page = id;
+        return false;
+      };
+
+      pdfThumbnailView.anchor = anchor;
+      var div = document.createElement("div");
+      div.className = "thumbnail";
+      div.setAttribute("data-page-number", this.id);
+      pdfThumbnailView.div = div;
+      var ring = document.createElement("div");
+      ring.className = "thumbnailSelectionRing";
+      var borderAdjustment = 2 * THUMBNAIL_CANVAS_BORDER_WIDTH;
+      ring.style.width = this.canvasWidth + borderAdjustment + "px";
+      ring.style.height = this.canvasHeight + borderAdjustment + "px";
+      pdfThumbnailView.ring = ring;
+      div.appendChild(ring);
+      anchor.appendChild(div);
+      container.appendChild(anchor);
+    }
+  }, {
     key: "setPdfPage",
     value: function setPdfPage(pdfPage) {
       this.pdfPage = pdfPage;

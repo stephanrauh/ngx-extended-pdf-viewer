@@ -4,7 +4,11 @@
   <div class="html">
     <div class="loadingInProgress body" [style.backgroundColor]="backgroundColor">
       <div id="outerContainer" (window:resize)="onResize()">
-        <pdf-sidebar [sidebarPositionTop]="sidebarPositionTop" [showSidebarButton]="showSidebarButton"></pdf-sidebar>
+        <pdf-sidebar [sidebarPositionTop]="sidebarPositionTop"
+                     [showSidebarButton]="showSidebarButton"
+                     [customSidebar]="customSidebar"
+                     [customThumbnail]="customThumbnail">
+                    </pdf-sidebar>
         <div id="mainContainer">
           <pdf-dummy-components></pdf-dummy-components>
 

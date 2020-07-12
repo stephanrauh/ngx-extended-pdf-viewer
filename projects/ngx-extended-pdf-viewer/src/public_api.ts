@@ -39,6 +39,8 @@ export * from './lib/toolbar/pdf-select-tool/pdf-select-tool.component';
 export * from './lib/toolbar/pdf-zoom-toolbar/pdf-zoom-toolbar.component';
 export * from './lib/toolbar/pdf-paging-area/pdf-paging-area.component';
 export * from './lib/sidebar/pdf-sidebar/pdf-sidebar.component';
+export * from './lib/sidebar/pdf-sidebar/pdf-sidebar-content/pdf-sidebar-content.component';
+export * from './lib/sidebar/pdf-sidebar/pdf-sidebar-toolbar/pdf-sidebar-toolbar.component';
 export * from './lib/secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
 export * from './lib/document-properties/pdf-document-properties-overlay/pdf-document-properties-overlay.component';
 export * from './lib/toolbar/pdf-findbar/pdf-search-input-field/pdf-search-input-field.component';

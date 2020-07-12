@@ -8757,12 +8757,6 @@ class PDFThumbnailViewer {
       this._resetView();
     }
 
-    if (!window.pdfThumbnailGeneratorReady()) {
-      console.log("Delaying 100 ms " + new Date().getSeconds());
-      setTimeout(() => this.setDocument(pdfDocument), 100);
-      return;
-    }
-
     this.pdfDocument = pdfDocument;
 
     if (!pdfDocument) {

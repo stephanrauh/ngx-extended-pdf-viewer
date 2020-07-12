@@ -10672,14 +10672,6 @@ var PDFThumbnailViewer = /*#__PURE__*/function () {
         this._resetView();
       }
 
-      if (!window.pdfThumbnailGeneratorReady()) {
-        console.log("Delaying 100 ms " + new Date().getSeconds());
-        setTimeout(function () {
-          return _this.setDocument(pdfDocument);
-        }, 100);
-        return;
-      }
-
       this.pdfDocument = pdfDocument;
 
       if (!pdfDocument) {

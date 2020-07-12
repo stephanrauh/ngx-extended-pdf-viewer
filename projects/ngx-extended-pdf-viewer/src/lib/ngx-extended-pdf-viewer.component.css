@@ -149,3 +149,7 @@ html[dir=rtl] #secondaryToolbarToggle {
 .dropdownToolbarButton::after {
   top: 8px;
 }
+
+.pdf-viewer-template, .pdf-viewer-template * {
+  display: none;
+}
