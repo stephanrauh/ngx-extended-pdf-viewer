@@ -43,7 +43,7 @@
     "@angular/cli": "^7.3.10",
     "@angular/compiler-cli": "^7.2.16",
     "@angular/language-service": "^7.2.16",
-    "@types/node": "^14.0.20",
+    "@types/node": "^14.0.22",
     "caniuse-lite": "^1.0.30001097",
     "codelyzer": "^6.0.0",
     "macaddress": "^0.5.1",
