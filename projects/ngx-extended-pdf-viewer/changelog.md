@@ -192,3 +192,4 @@
 - 4.0.0.alpha.14 #387 if the zoom exceed the maximum canvas size supported by the browser, reduce it to the maximum the browser displays; moved loading the pdf.js file from the constructor to `ngOnInit()` because `[minifiedJSLibraries]` was ignored (might be a breaking change!)
 - 4.0.0.alpha.15 #238 added `[customSidebar]`; #157 added `customThumbnail`
 - 4.0.0 #157 added keyboard navigation to the thumbnails in the sidebar
+- 4.0.1 fixed Chrome 83 compatiblity

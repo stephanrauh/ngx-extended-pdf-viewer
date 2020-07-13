@@ -9,7 +9,7 @@ declare class PDFThumbnailView {
 }
 
 declare class PDFLinkService {
-  public page: string;
+  public page: number;
   public pagesCount: number;
   public getAnchorUrl(targetUrl: string): string;
 }
@@ -28,14 +28,14 @@ export class PdfSidebarContentComponent implements OnDestroy {
   @ViewChild('thumbnailViewTemplate')
   public thumbnailViewTemplate: ElementRef;
 
-  private linkService: PDFLinkService;
+  private linkService: PDFLinkService | undefined;
 
   constructor() {
     (window as any).pdfThumbnailGeneratorReady = () => this.pdfThumbnailGeneratorReady();
     (window as any).pdfThumbnailGenerator = (
       pdfThumbnailView: PDFThumbnailView,
       linkService: any,
-      id: string,
+      id: number,
       container: HTMLDivElement,
       thumbPageTitlePromise: Promise<string>
     ) => this.createThumbnail(pdfThumbnailView, linkService, id, container, thumbPageTitlePromise);
@@ -56,7 +56,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
   public createThumbnail(
     pdfThumbnailView: PDFThumbnailView,
     linkService: PDFLinkService,
-    id: string,
+    id: number,
     container: HTMLDivElement,
     thumbPageTitlePromise: Promise<string>
   ) {
@@ -64,9 +64,9 @@ export class PdfSidebarContentComponent implements OnDestroy {
     const template = this.thumbnailViewTemplate;
     // get the inner HTML without the attributes and classes added by Angular
     const inner = template.nativeElement.innerHTML
-      .replaceAll(/_ng\w+-\w+-\w+=""/g, '')
-      .replaceAll(/ng-\w+-\w+/g, '')
-      .replace(/<!--[\s\S]*?-->/g, '');
+      .split(/_ng\w+-\w+-\w+=""/g).join('')
+      .split(/ng-\w+-\w+/g).join('')
+      .split(/<!--[\s\S]*?-->/g).join('');
 
     const borderAdjustment = 2 * THUMBNAIL_CANVAS_BORDER_WIDTH;
 
