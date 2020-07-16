@@ -73,7 +73,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
     const widthOfRing = pdfThumbnailView.canvasWidth + borderAdjustment + 'px';
     const heightOfRing = pdfThumbnailView.canvasHeight + borderAdjustment + 'px';
 
-    const newHtml = inner.replace('WIDTH_OF_RING', widthOfRing).replace('HEIGHT_OF_RING', heightOfRing).replaceAll('PAGE_NUMBER', id);
+    const newHtml = inner.split('WIDTH_OF_RING').join(widthOfRing).split('HEIGHT_OF_RING').join(heightOfRing).split('PAGE_NUMBER').join(id);
     const newElement = this.createElementFromHTML(newHtml);
     newElement.classList.remove('pdf-viewer-template');
 
