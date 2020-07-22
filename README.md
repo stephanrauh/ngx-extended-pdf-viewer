@@ -20,21 +20,5 @@ Bringing Mozilla's pdf.js to the Angular world. That's not only the core PDF vie
 
 There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook.
 
-
-
-Now the (tiny) demo app will automatically reload if you change any of the source files.
-
 ## Build or update the library from scratch
-If you want to use the library, install it via npm:
-
-```
-npm i ngx-extended-pdf-viewer --save
-```
-
-
-If you want to send a pull request or if you're simply curious, there are two options:
-- Simple changes to the HTML or JavaScript code:
-   -  `npm run unix-package` (or `npm run win-package` if you're running Windows)
-   -  `ng serve -o` (to start the demo project)
-- Changes including the core library (pdf.js) itself:
-  - see the [how-to-build walkthrough](projects/ngx-extended-pdf-viewer/how-to-build.md).
+See the [how-to-build walkthrough](projects/ngx-extended-pdf-viewer/how-to-build.md).
