@@ -348,7 +348,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public showPropertiesButton = true;
   @Input()
-  public showBorders = false;
+  public showBorders = true;
 
   @Input()
   public spread: 'off' | 'even' | 'odd';
@@ -942,8 +942,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (this.printResolution) {
       options.set('printResolution', this.printResolution);
     }
-    if (this.showBorders) {
-      options.set('showBorders', this.showBorders);
+    if (this.showBorders === false) {
+      options.set('removePageBorders', !this.showBorders);
     }
   }
 
