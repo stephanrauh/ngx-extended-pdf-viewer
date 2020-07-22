@@ -194,3 +194,4 @@
 - 4.0.0 #157 added keyboard navigation to the thumbnails in the sidebar
 - 4.0.1 #408 fixed Chrome 83 compatiblity
 - 4.0.2 #408 fixed Chrome 83 compatiblity; #406 decare Angular 10 support officially
+- 4.0.3 #412 fixed `[showBorders]="false"` at load time and corrected the documentation
