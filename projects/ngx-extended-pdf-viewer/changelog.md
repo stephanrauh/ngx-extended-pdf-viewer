@@ -195,3 +195,4 @@
 - 4.0.1 #408 fixed Chrome 83 compatiblity
 - 4.0.2 #408 fixed Chrome 83 compatiblity; #406 decare Angular 10 support officially
 - 4.0.3 #412 fixed `[showBorders]="false"` at load time and corrected the documentation
+- 4.0.4 #400 added `(thumbnailDrawn)` to make customizing and adding custom behavior to the thumbnails easier

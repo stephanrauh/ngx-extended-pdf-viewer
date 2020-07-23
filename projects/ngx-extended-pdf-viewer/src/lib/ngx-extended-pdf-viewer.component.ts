@@ -41,6 +41,7 @@ import { PdfCursorTools } from './options/pdf-cursor-tools';
 import { TextLayerRenderedEvent } from './events/textlayer-rendered';
 import { Location } from '@angular/common';
 import { PinchOnMobileSupport } from './pinch-on-mobile-support';
+import { PdfThumbnailDrawnEvent } from './events/pdf-thumbnail-drawn-event';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 
@@ -355,6 +356,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Output()
   public spreadChange = new EventEmitter<'off' | 'even' | 'odd'>();
+
+  @Output()
+  public thumbnailDrawn = new EventEmitter<PdfThumbnailDrawnEvent>();
 
   private _page: number | undefined = undefined;
 

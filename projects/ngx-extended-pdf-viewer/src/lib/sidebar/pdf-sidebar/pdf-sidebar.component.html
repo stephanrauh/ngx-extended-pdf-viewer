@@ -7,7 +7,7 @@
     <div id="additionalSidebarContainer" [class.invisible]="!showSidebarButton">
       <pdf-sidebar-toolbar></pdf-sidebar-toolbar>
     </div>
-    <pdf-sidebar-content [customThumbnail]="customThumbnail"></pdf-sidebar-content>
+    <pdf-sidebar-content [customThumbnail]="customThumbnail" (thumbnailDrawn)="thumbnailDrawn.emit($event)"></pdf-sidebar-content>
     <div id="sidebarResizer" class="hidden"></div>
   </div>
 </ng-template>

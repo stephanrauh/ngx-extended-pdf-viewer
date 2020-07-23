@@ -1,4 +1,5 @@
-import { Component, Input, TemplateRef, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, Input, TemplateRef, ViewChild, ElementRef, OnDestroy, EventEmitter, Output } from '@angular/core';
+import { PdfThumbnailDrawnEvent } from '../../../events/pdf-thumbnail-drawn-event';
 
 declare class PDFThumbnailView {
   anchor: HTMLAnchorElement;
@@ -30,6 +31,9 @@ export class PdfSidebarContentComponent implements OnDestroy {
 
   private linkService: PDFLinkService | undefined;
 
+  @Output()
+  public thumbnailDrawn = new EventEmitter<PdfThumbnailDrawnEvent>();
+
   constructor() {
     (window as any).pdfThumbnailGeneratorReady = () => this.pdfThumbnailGeneratorReady();
     (window as any).pdfThumbnailGenerator = (
@@ -53,7 +57,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
     return !!t && !!t.innerHTML && t.innerHTML.length > 0;
   }
 
-  public createThumbnail(
+  private createThumbnail(
     pdfThumbnailView: PDFThumbnailView,
     linkService: PDFLinkService,
     id: number,
@@ -93,6 +97,13 @@ export class PdfSidebarContentComponent implements OnDestroy {
     pdfThumbnailView.div = newElement.getElementsByClassName('thumbnail')[0] as HTMLElement;
 
     container.appendChild(newElement);
+
+    const thumbnailDrawnEvent: PdfThumbnailDrawnEvent = {
+      thumbnail: newElement,
+      container: container,
+      pageId: id
+    };
+    this.thumbnailDrawn.emit(thumbnailDrawnEvent);
   }
 
   private createElementFromHTML(htmlString): HTMLElement {

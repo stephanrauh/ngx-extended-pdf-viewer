@@ -1,4 +1,5 @@
-import { Component, Input, TemplateRef, AfterContentInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, TemplateRef, AfterContentInit, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { PdfThumbnailDrawnEvent } from '../../events/pdf-thumbnail-drawn-event';
 
 @Component({
   selector: 'pdf-sidebar',
@@ -17,6 +18,9 @@ export class PdfSidebarComponent {
 
   @Input()
   public customThumbnail: TemplateRef<any>;
+
+  @Output()
+  public thumbnailDrawn = new EventEmitter<PdfThumbnailDrawnEvent>();
 
   constructor() {
   }
