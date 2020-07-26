@@ -548,18 +548,28 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   ) {
    }
 
+   private iOSVersionRequiresES5(): boolean {
+    const match = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
+    if (match !== undefined && match !== null) {
+      return parseInt(match[1], 10) < 13;
+    }
+
+    return false;
+  }
+
   private loadViewer(): void {
     if (!window['pdfjs-dist/build/pdf']) {
       setTimeout(() => this.loadViewer(), 25);
     } else {
       const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
       const isEdge = /Edge\/\d./i.test(navigator.userAgent);
+      const isIOs12OrBelow = this.iOSVersionRequiresES5();
       const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
       const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
       const script2 = document.createElement('script');
       const assets = pdfDefaultOptions.assetsFolder;
 
-      script2.src = this.location.normalize(isIE || isEdge || needsES5 ? assets + '/viewer-es5' + suffix : assets + '/viewer' + suffix);
+      script2.src = this.location.normalize(isIE || isEdge || isIOs12OrBelow || needsES5 ? assets + '/viewer-es5' + suffix : assets + '/viewer' + suffix);
       script2.type = 'text/javascript';
       script2.async = true;
       document.getElementsByTagName('head')[0].appendChild(script2);
@@ -573,6 +583,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
         const isEdge = /Edge\/\d./i.test(navigator.userAgent);
         const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
+        const isIOs12OrBelow = this.iOSVersionRequiresES5();
         const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
         if (this.minifiedJSLibraries) {
           if (!pdfDefaultOptions.workerSrc().endsWith('.min.js')) {
@@ -583,7 +594,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
         const assets = pdfDefaultOptions.assetsFolder;
         const script = document.createElement('script');
-        script.src = this.location.normalize(isIE || isEdge || needsES5 ? assets + '/pdf-es5' + suffix : assets + '/pdf' + suffix);
+        script.src = this.location.normalize(isIE || isEdge || isIOs12OrBelow || needsES5 ? assets + '/pdf-es5' + suffix : assets + '/pdf' + suffix);
         script.type = 'text/javascript';
         script.async = true;
         document.getElementsByTagName('head')[0].appendChild(script);
@@ -1064,8 +1075,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         const currentPage = PDFViewerApplication.pdfViewer.currentPageNumber;
         const currentPageLabel = PDFViewerApplication.pdfViewer.currentPageLabel;
 
-        this.pageChange.emit(currentPage);
-        this.pageLabelChange.emit(currentPageLabel);
+        if (currentPage !== this.page) {
+          this.pageChange.emit(currentPage);
+        }
+        if (currentPageLabel !== this.pageLabel) {
+          this.pageLabelChange.emit(currentPageLabel);
+        }
       });
     });
 
@@ -1236,12 +1251,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
       if ('page' in changes) {
         if (this.page) {
-          PDFViewerApplication.page = this.page;
+          // tslint:disable-next-line: triple-equals
+          if (this.page != PDFViewerApplication.page) {
+            PDFViewerApplication.page = this.page;
+          }
         }
       }
       if ('pageLabel' in changes) {
         if (this.pageLabel) {
-          PDFViewerApplication.pdfViewer.currentPageLabel = this.pageLabel;
+          if (this.pageLabel !==  PDFViewerApplication.pdfViewer.currentPageLabel) {
+            PDFViewerApplication.pdfViewer.currentPageLabel = this.pageLabel;
+          }
         }
       }
 
