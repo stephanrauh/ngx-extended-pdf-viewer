@@ -66,6 +66,7 @@ const requiredIds = [
   'findResultsCount',
   'findPrevious',
   'findNext',
+  'findFuzzy',
   'passwordOverlay',
   'passwordText',
   'password',
