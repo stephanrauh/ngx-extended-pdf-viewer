@@ -96,6 +96,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public customThumbnail: TemplateRef<any>;
 
+  @Input()
+  public customFreeFloatingBar: TemplateRef<any>;
+
   @ViewChild('pdfSecondaryToolbarComponent')
   private secondaryToolbarComponent: PdfSecondaryToolbarComponent;
 

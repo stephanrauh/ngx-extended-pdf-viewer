@@ -4,12 +4,15 @@
   <div class="html">
     <div class="loadingInProgress body" [style.backgroundColor]="backgroundColor">
       <div id="outerContainer" (window:resize)="onResize()">
+        <div class="free-floating-bar">
+          <ng-content *ngTemplateOutlet="customFreeFloatingBar ? customFreeFloatingBar : defaultFreeFloatingBar"></ng-content>
+        </div>
         <pdf-sidebar [sidebarPositionTop]="sidebarPositionTop"
                      [showSidebarButton]="showSidebarButton"
                      [customSidebar]="customSidebar"
                      [customThumbnail]="customThumbnail"
                      (thumbnailDrawn)="thumbnailDrawn.emit($event)">
-                    </pdf-sidebar>
+        </pdf-sidebar>
         <div id="mainContainer">
           <pdf-dummy-components></pdf-dummy-components>
 
@@ -138,5 +141,6 @@
   </div>
 </div>
 
+<ng-template #defaultFreeFloatingBar>
 
-<!-- The (primary) toolbar is the black bar containing the buttons. -->
+</ng-template>
