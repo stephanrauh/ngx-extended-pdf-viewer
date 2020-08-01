@@ -15,6 +15,8 @@ export interface DialogData {
   styleUrls: ['./modal-dialog.component.css']
 })
 export class ModalDialogComponent {
+  public rootFolder = location.href;
+
   constructor() {}
 }
 
