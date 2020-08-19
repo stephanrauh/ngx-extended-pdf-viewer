@@ -153,3 +153,7 @@ html[dir=rtl] #secondaryToolbarToggle {
 .pdf-viewer-template, .pdf-viewer-template * {
   display: none;
 }
+
+div.html {
+  position: absolute;
+}
