@@ -57,7 +57,9 @@ import { PdfSidebarContentComponent } from './sidebar/pdf-sidebar/pdf-sidebar-co
 import { PdfSidebarToolbarComponent } from './sidebar/pdf-sidebar/pdf-sidebar-toolbar/pdf-sidebar-toolbar.component';
 
 if (!Promise['allSettled']) {
-  console.error("Please update zone.js to version 0.10.3 or higher. Otherwise, you'll see many messages complaining about Promise.allSettled.");
+  if ((!!window['Zone']) && (!window['__zone_symbol__Promise.allSettled'])) {
+    console.error('Please update zone.js to version 0.10.3 or higher. Otherwise, you\'ll run the slow ECMAScript 5 version even on modern browser that can run the fast ESMAScript 2015 version.');
+  }
 }
 
 function isKeyIgnored(cmd: number, keycode: number | 'WHEEL'): boolean {
@@ -282,5 +284,5 @@ if (typeof window !== 'undefined') {
   ],
 })
 export class NgxExtendedPdfViewerModule {
-  constructor() {}
+  constructor() { }
 }

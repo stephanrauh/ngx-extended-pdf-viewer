@@ -104,7 +104,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   /* regular attributes */
 
-  private _src: string | ArrayBuffer | {range: any};
+  private _src: string | ArrayBuffer | { range: any };
 
   @Output()
   public srcChange = new EventEmitter<string>();
@@ -168,7 +168,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public rotationChange = new EventEmitter<0 | 90 | 180 | 270>();
 
   @Input()
-  public set src(url: string | ArrayBuffer | Blob | Uint8Array | {range: any}) {
+  public set src(url: string | ArrayBuffer | Blob | Uint8Array | { range: any }) {
     if (url instanceof Uint8Array) {
       this._src = url.buffer;
     } else if (url instanceof Blob) {
@@ -548,11 +548,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     @Inject(PLATFORM_ID) private platformId,
     private notificationService: PDFNotificationService,
     private location: Location
-  ) {
-   }
+  ) {}
 
-   private iOSVersionRequiresES5(): boolean {
-    const match = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
+  private iOSVersionRequiresES5(): boolean {
+    const match = navigator.appVersion.match(/OS (\d+)_(\d+)_?(\d+)?/);
     if (match !== undefined && match !== null) {
       return parseInt(match[1], 10) < 13;
     }
@@ -571,6 +570,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
       const script2 = document.createElement('script');
       const assets = pdfDefaultOptions.assetsFolder;
+      if (needsES5) {
+        console.log('Using the ES5 version of the PDF viewer.');
+      }
 
       script2.src = this.location.normalize(isIE || isEdge || isIOs12OrBelow || needsES5 ? assets + '/viewer-es5' + suffix : assets + '/viewer' + suffix);
       script2.type = 'text/javascript';
@@ -606,7 +608,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.loadViewer();
       }
     }
-
   }
 
   ngAfterViewInit() {
@@ -1262,7 +1263,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
       if ('pageLabel' in changes) {
         if (this.pageLabel) {
-          if (this.pageLabel !==  PDFViewerApplication.pdfViewer.currentPageLabel) {
+          if (this.pageLabel !== PDFViewerApplication.pdfViewer.currentPageLabel) {
             PDFViewerApplication.pdfViewer.currentPageLabel = this.pageLabel;
           }
         }
