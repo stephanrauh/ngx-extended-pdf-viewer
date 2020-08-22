@@ -30,7 +30,7 @@
     "@angular/material": "^7.3.7",
     "@angular/platform-browser": "^7.2.16",
     "@angular/platform-browser-dynamic": "^7.2.16",
-    "@angular/platform-server": "^7.2.16",
+    "@angular/platform-server": "^10.0.9",
     "@angular/router": "^7.2.16",
     "core-js": "^2.6.11",
     "ngx-extended-pdf-viewer": "file:./dist/ngx-extended-pdf-viewer",
