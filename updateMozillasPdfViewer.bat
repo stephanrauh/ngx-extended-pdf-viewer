@@ -4,9 +4,6 @@ gulp minified-es5
 
 cd ../ngx-extended-pdf-viewer
 
-cd inlineImageFiles
-node index.js assets
-cd ..
 xcopy /S/E ../mypdf.js/build/minified/web/locale ./projects/ngx-extended-pdf-viewer/src/assets/locale/
 xcopy /S/E ../mypdf.js/build/minified/web/images/*.svg ./projects/ngx-extended-pdf-viewer/src/assets/imges/
 xcopy /S/E ../mypdf.js/build/minified/web/cmaps ./projects/ngx-extended-pdf-viewer/src/assets/cmaps/

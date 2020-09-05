@@ -1,13 +1,13 @@
 {
   "folders": [
     {
-      "path": "../.."
-    },
-    {
       "path": "../../../extended-pdf-viewer-showcase"
     },
     {
       "path": "../../../mypdf.js"
+    },
+    {
+      "path": "."
     }
   ],
   "settings": {}

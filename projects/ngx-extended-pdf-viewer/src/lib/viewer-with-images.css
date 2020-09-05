@@ -1557,7 +1557,8 @@ a:focus > .thumbnail > .thumbnailSelectionRing,
 }
 
 #outlineView,
-#attachmentsView {
+#attachmentsView,
+#layersView {
   position: absolute;
   width: calc(100% - 8px);
   top: 0;
@@ -1686,6 +1687,100 @@ html[dir='rtl'] .outlineItemToggler::before {
               0 0 1px rgba(255, 255, 255, 0.1) inset,
               0 0 1px rgba(0, 0, 0, 0.2);
   color: rgba(255, 255, 255, 1);
+}
+
+html[dir="ltr"] .treeWithDeepNesting > .treeItem,
+html[dir="ltr"] .treeItem > .treeItems {
+  margin-left: 20px;
+}
+
+html[dir="rtl"] .treeWithDeepNesting > .treeItem,
+html[dir="rtl"] .treeItem > .treeItems {
+  margin-right: 20px;
+}
+
+.treeItem > a {
+  text-decoration: none;
+  display: inline-block;
+  min-width: 95%;
+  /* Subtract the right padding (left, in RTL mode) of the container: */
+  min-width: calc(100% - 4px);
+  height: auto;
+  margin-bottom: 1px;
+  border-radius: 2px;
+  color: var(--outline-color);
+  font-size: 13px;
+  line-height: 15px;
+  user-select: none;
+  white-space: normal;
+  cursor: pointer;
+}
+html[dir="ltr"] .treeItem > a {
+  padding: 2px 0 5px 4px;
+}
+html[dir="rtl"] .treeItem > a {
+  padding: 2px 4px 5px 0;
+}
+
+#layersView .treeItem > a > * {
+  cursor: pointer;
+}
+html[dir="ltr"] #layersView .treeItem > a > label {
+  padding-left: 4px;
+}
+html[dir="rtl"] #layersView .treesItem > a > label {
+  padding-right: 4px;
+}
+
+.treeItemToggler {
+  position: relative;
+  height: 0;
+  width: 0;
+  color: rgba(255, 255, 255, 0.5);
+}
+.treeItemToggler::before {
+  content: url(assets/images/treeitem-expanded.svg);
+  display: inline-block;
+  position: absolute;
+  max-width: 16px;
+}
+.treeItemToggler.treeItemsHidden::before {
+  content: url(assets/images/treeitem-collapsed.svg);
+  max-width: 16px;
+}
+html[dir="rtl"] .treeItemToggler.treeItemsHidden::before {
+  transform: scaleX(-1);
+}
+.treeItemToggler.treeItemsHidden ~ .treeItems {
+  display: none;
+}
+html[dir="ltr"] .treeItemToggler {
+  float: left;
+}
+html[dir="rtl"] .treeItemToggler {
+  float: right;
+}
+html[dir="ltr"] .treeItemToggler::before {
+  right: 4px;
+}
+html[dir="rtl"] .treeItemToggler::before {
+  left: 4px;
+}
+
+.treeItemToggler:hover,
+.treeItemToggler:hover + a,
+.treeItemToggler:hover ~ .treeItems,
+.treeItem > a:hover {
+  background-color: var(--sidebaritem-bg-color);
+  background-clip: padding-box;
+  border-radius: 2px;
+  color: var(--outline-hover-color);
+}
+
+.treeItem.selected {
+  background-color: var(--outline-active-bg-color);
+  background-clip: padding-box;
+  color: var(--outline-active-color);
 }
 
 .noResults {

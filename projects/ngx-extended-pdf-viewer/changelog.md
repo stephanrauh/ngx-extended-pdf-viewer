@@ -200,3 +200,4 @@
 - 4.1.0 #370 added `[customFreeFloatingBar]` to allow for custom toolbars that can be positioned anywhere on the PDF viewer
 - 4.1.1 #437 more helpful error messages if the project is using an old version of zone.js.
 - 4.1.2 #449 added code to stop the - sometimes time-consuming - initialization when the component has already been destroyed
+- 5.0.0-alpha.0 #457 updated the "bleeding edge" version of the assets folder to pdf.js 2.6.384 and ran several smoke tests; added support for layers

@@ -5,12 +5,13 @@
   <div id="thumbnailView" (keydown)="onKeyDown($event)"></div>
   <div id="outlineView" class="hidden"></div>
   <div id="attachmentsView" class="hidden"></div>
+  <div id="layersView" class="hidden"></div>
 </div>
 
 <ng-template #defaultThumbnail>
   <a class="pdf-viewer-template">
     <div class="thumbnail" data-page-number="$page">
-      <div class="thumbnailSelectionRing image-container" style="width: WIDTH_OF_RING; height: HEIGHT_OF_RING;">
+      <div class="thumbnailSelectionRing image-container" style="width: WIDTH_OF_RING; height: HEIGHT_OF_RING">
         <!-- image is automatically inserted here -->
         <!-- <img class="thumbnailImage" style="width: 98px; height: 73px;" /> -->
       </div>
