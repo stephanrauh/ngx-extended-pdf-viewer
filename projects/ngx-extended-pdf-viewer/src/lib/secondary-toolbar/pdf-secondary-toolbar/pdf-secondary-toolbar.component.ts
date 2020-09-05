@@ -10,10 +10,8 @@ import {
   ElementRef,
   HostListener,
   AfterViewInit,
-  NgZone,
 } from '@angular/core';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
-import { UpdateUIStateEvent } from '../../events/update-ui-state-event';
 import { PDFNotificationService } from './../../pdf-notification-service';
 
 @Component({
@@ -74,7 +72,7 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
 
   public disableNextPage = true;
 
-  constructor(private element: ElementRef, private notificationService: PDFNotificationService, private ngZone: NgZone) {
+  constructor(private element: ElementRef, private notificationService: PDFNotificationService) {
     const subscription = this.notificationService.onPDFJSInit.subscribe(() => {
       this.onPdfJsInit();
       subscription.unsubscribe();

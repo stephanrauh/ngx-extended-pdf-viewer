@@ -500,6 +500,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   private _top: string | undefined = undefined;
 
+  private shuttingDown = false;
+
   public get sidebarPositionTop(): string {
     if (this._top) {
       return this._top;
@@ -611,10 +613,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   ngAfterViewInit() {
-    if ((window as any).webViewerLoad) {
-      this.doInitPDFViewer();
-    } else {
-      setTimeout(() => this.ngAfterViewInit(), 50);
+    if (!this.shuttingDown) {
+      // hurried users sometimes reload the PDF before it has finished initializing
+      if ((window as any).webViewerLoad) {
+        this.doInitPDFViewer();
+      } else {
+        setTimeout(() => this.ngAfterViewInit(), 50);
+      }
     }
   }
 
@@ -722,9 +727,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const callback = (e) => {
       document.removeEventListener('localized', callback);
       this.initTimeout = setTimeout(() => {
-        this.afterLibraryInit();
-        this.openPDF();
-        this.assignTabindexes();
+        if (!this.shuttingDown) {
+          // hurried users sometimes reload the PDF before it has finished initializing
+          this.afterLibraryInit();
+          this.openPDF();
+          this.assignTabindexes();
+        }
       }, this.delayFirstView);
     };
 
@@ -754,37 +762,40 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.activateTextlayerIfNecessary(null);
 
     setTimeout(() => {
-      // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
-      this.primaryMenuVisible = true;
-      const showSecondaryMenu = this.hideKebabMenuForSecondaryToolbar && this.showSecondaryToolbarButton;
+      if (!this.shuttingDown) {
+        // hurried users sometimes reload the PDF before it has finished initializing
+        // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
+        this.primaryMenuVisible = true;
+        const showSecondaryMenu = this.hideKebabMenuForSecondaryToolbar && this.showSecondaryToolbarButton;
 
-      if (showSecondaryMenu) {
-        if (!this.isPrimaryMenuVisible()) {
-          this.primaryMenuVisible = false;
+        if (showSecondaryMenu) {
+          if (!this.isPrimaryMenuVisible()) {
+            this.primaryMenuVisible = false;
+          }
         }
-      }
-      this.calcViewerPositionTop();
-      this.dummyComponents.addMissingStandardWidgets();
-      (<any>window).webViewerLoad();
+        this.calcViewerPositionTop();
+        this.dummyComponents.addMissingStandardWidgets();
+        (<any>window).webViewerLoad();
 
-      const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-      PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
-      PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
-      const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
+        const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+        PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
+        PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
+        const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
 
-      PDFViewerApplicationOptions.set('locale', this.language);
-      PDFViewerApplicationOptions.set('imageResourcesPath', this.imageResourcesPath);
-      PDFViewerApplicationOptions.set('minZoom', this.minZoom);
-      PDFViewerApplicationOptions.set('maxZoom', this.maxZoom);
+        PDFViewerApplicationOptions.set('locale', this.language);
+        PDFViewerApplicationOptions.set('imageResourcesPath', this.imageResourcesPath);
+        PDFViewerApplicationOptions.set('minZoom', this.minZoom);
+        PDFViewerApplicationOptions.set('maxZoom', this.maxZoom);
 
-      PDFViewerApplication.isViewerEmbedded = true;
-      if (PDFViewerApplication.printKeyDownListener) {
-        window.addEventListener('keydown', PDFViewerApplication.printKeyDownListener, true);
-      }
+        PDFViewerApplication.isViewerEmbedded = true;
+        if (PDFViewerApplication.printKeyDownListener) {
+          window.addEventListener('keydown', PDFViewerApplication.printKeyDownListener, true);
+        }
 
-      const pc = document.getElementById('printContainer');
-      if (pc) {
-        document.getElementsByTagName('body')[0].appendChild(pc);
+        const pc = document.getElementById('printContainer');
+        if (pc) {
+          document.getElementsByTagName('body')[0].appendChild(pc);
+        }
       }
     }, 0);
   }
@@ -994,12 +1005,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         PDFViewerApplication.pdfViewer.pagesRotation = 0;
       }
       setTimeout(() => {
-        if (this.nameddest) {
-          PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
-        } else if (this.page) {
-          PDFViewerApplication.page = Number(this.page);
-        } else if (this.pageLabel) {
-          PDFViewerApplication.pdfViewer.currentPageLabel = this.pageLabel;
+        if (!this.shuttingDown) {
+          // hurried users sometimes reload the PDF before it has finished initializing
+          if (this.nameddest) {
+            PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
+          } else if (this.page) {
+            PDFViewerApplication.page = Number(this.page);
+          } else if (this.pageLabel) {
+            PDFViewerApplication.pdfViewer.currentPageLabel = this.pageLabel;
+          }
         }
       });
       this.setZoom();
@@ -1075,17 +1089,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     });
 
     PDFViewerApplication.eventBus.on('pagechanging', (x: PageNumberChange) => {
-      this.ngZone.run(() => {
-        const currentPage = PDFViewerApplication.pdfViewer.currentPageNumber;
-        const currentPageLabel = PDFViewerApplication.pdfViewer.currentPageLabel;
+      if (!this.shuttingDown) {
+        // hurried users sometimes reload the PDF before it has finished initializing
+        this.ngZone.run(() => {
+          const currentPage = PDFViewerApplication.pdfViewer.currentPageNumber;
+          const currentPageLabel = PDFViewerApplication.pdfViewer.currentPageLabel;
 
-        if (currentPage !== this.page) {
-          this.pageChange.emit(currentPage);
-        }
-        if (currentPageLabel !== this.pageLabel) {
-          this.pageLabelChange.emit(currentPageLabel);
-        }
-      });
+          if (currentPage !== this.page) {
+            this.pageChange.emit(currentPage);
+          }
+          if (currentPageLabel !== this.pageLabel) {
+            this.pageLabelChange.emit(currentPageLabel);
+          }
+        });
+      }
     });
 
     this.checkHeight();
@@ -1117,8 +1134,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       PDFViewerApplication.open(this._src, options).then(() => this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount }));
     }
     setTimeout(() => {
-      if (this.page) {
-        PDFViewerApplication.page = Number(this.page);
+      if (!this.shuttingDown) {
+        // hurried users sometimes reload the PDF before it has finished initializing
+        if (this.page) {
+          PDFViewerApplication.page = Number(this.page);
+        }
       }
     }, 100);
   }
@@ -1130,6 +1150,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public ngOnDestroy(): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    this.shuttingDown = true;
 
     NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized = false;
     if (this.initTimeout) {
