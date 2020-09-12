@@ -94,7 +94,11 @@ const requiredIds = [
   'errorMoreInfo',
   'errorShowMore',
   'errorShowLess',
-  'scaleSelectContainer'
+  'scaleSelectContainer',
+  'viewAttachments',
+  'viewLayers',
+  'viewThumbnail',
+  'viewOutline'
 ];
 
 @Component({
