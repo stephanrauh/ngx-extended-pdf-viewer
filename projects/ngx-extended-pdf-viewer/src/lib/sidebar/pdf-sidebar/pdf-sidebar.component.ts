@@ -11,6 +11,9 @@ export class PdfSidebarComponent {
   public sidebarPositionTop: number;
 
   @Input()
+  public sidebarVisible = true;
+
+  @Input()
   public showSidebarButton = true;
 
   @Input()

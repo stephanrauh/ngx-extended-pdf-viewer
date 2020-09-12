@@ -8,6 +8,7 @@
           <ng-content *ngTemplateOutlet="customFreeFloatingBar ? customFreeFloatingBar : defaultFreeFloatingBar"></ng-content>
         </div>
         <pdf-sidebar [sidebarPositionTop]="sidebarPositionTop"
+                     [sidebarVisible]="sidebarVisible"
                      [showSidebarButton]="showSidebarButton"
                      [customSidebar]="customSidebar"
                      [customThumbnail]="customThumbnail"

@@ -135,8 +135,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", {
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.6.57';
-var pdfjsBuild = '76c592cf5';
+var pdfjsVersion = '2.6.53';
+var pdfjsBuild = '900e81e82';
 
 /***/ }),
 /* 1 */
@@ -245,7 +245,7 @@ var WorkerMessageHandler = {
     var WorkerTasks = [];
     var verbosity = (0, _util.getVerbosityLevel)();
     var apiVersion = docParams.apiVersion;
-    var workerVersion = '2.6.57';
+    var workerVersion = '2.6.53';
 
     if (apiVersion !== workerVersion) {
       throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -769,6 +769,24 @@ var runtime = function (exports) {
   var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
   var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
 
+  function define(obj, key, value) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+    return obj[key];
+  }
+
+  try {
+    define({}, "");
+  } catch (err) {
+    define = function define(obj, key, value) {
+      return obj[key] = value;
+    };
+  }
+
   function wrap(innerFn, outerFn, self, tryLocsList) {
     var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
     var generator = Object.create(protoGenerator.prototype);
@@ -821,13 +839,13 @@ var runtime = function (exports) {
   var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
   GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
   GeneratorFunctionPrototype.constructor = GeneratorFunction;
-  GeneratorFunctionPrototype[toStringTagSymbol] = GeneratorFunction.displayName = "GeneratorFunction";
+  GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction");
 
   function defineIteratorMethods(prototype) {
     ["next", "throw", "return"].forEach(function (method) {
-      prototype[method] = function (arg) {
+      define(prototype, method, function (arg) {
         return this._invoke(method, arg);
-      };
+      });
     });
   }
 
@@ -841,10 +859,7 @@ var runtime = function (exports) {
       Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
     } else {
       genFun.__proto__ = GeneratorFunctionPrototype;
-
-      if (!(toStringTagSymbol in genFun)) {
-        genFun[toStringTagSymbol] = "GeneratorFunction";
-      }
+      define(genFun, toStringTagSymbol, "GeneratorFunction");
     }
 
     genFun.prototype = Object.create(Gp);
@@ -1040,7 +1055,7 @@ var runtime = function (exports) {
   }
 
   defineIteratorMethods(Gp);
-  Gp[toStringTagSymbol] = "Generator";
+  define(Gp, toStringTagSymbol, "Generator");
 
   Gp[iteratorSymbol] = function () {
     return this;
@@ -14754,13 +14769,8 @@ var Catalog = /*#__PURE__*/function () {
         while (nodesToVisit.length) {
           var _ret = _loop();
 
-          switch (_ret) {
-            case "continue":
-              continue;
-
-            default:
-              if (_typeof(_ret) === "object") return _ret.v;
-          }
+          if (_ret === "continue") continue;
+          if (_typeof(_ret) === "object") return _ret.v;
         }
 
         capability.reject(new Error("Page index ".concat(pageIndex, " not found.")));
