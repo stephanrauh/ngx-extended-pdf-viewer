@@ -54,8 +54,6 @@ interface ElementAndPosition {
 @Component({
   selector: 'ngx-extended-pdf-viewer',
   templateUrl: './ngx-extended-pdf-viewer.component.html',
-  styleUrls: ['./viewer-with-images.css', './ngx-extended-pdf-viewer.component.css'],
-  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
@@ -330,6 +328,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public showDownloadButton = true;
   @Input()
   public showBookmarkButton = true;
+
+  @Input()
+  public theme: 'original' | 'dark' | 'light' | 'custom' = 'dark';
 
   @Input()
   public showSecondaryToolbarButton = true;

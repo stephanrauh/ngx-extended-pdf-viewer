@@ -1,5 +1,5 @@
-:host {
-  margin-top: -3px;
+:host button.toolbarButton {
+  margin-top: 0px;
 }
 
 :host:focus {

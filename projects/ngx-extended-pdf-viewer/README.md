@@ -16,6 +16,8 @@
 
 Version 4.0 is a major internal change. Now it's easier to update to the latest version of pdf.js. Your benefit is that you can finally use the minified pdf.js libraries. You'll notice the performance boost. There's also a new option in the findbar: "fuzzy search" is slow but useful if just ignoring diacritics and accents isn't enough flexibility.
 
+The new version also brings theming. If everything goes according to plan, you will soon be able to chose between a light and a dark color theme.
+
 ## Breaking changes
 `defaultOptions` has been renamed to pdfDefaultOptions. You'll also have to modify the import statement.
 
