@@ -1,15 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'pdf-photon-theme',
   templateUrl: './pdf-photon.component.html',
-  styleUrls: []
+  styleUrls: ['colors.scss', '../common/viewer-with-images.scss', '../common/ngx-extended-pdf-viewer.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
-export class PdfPhotonComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-}
+export class PdfPhotonComponent {}

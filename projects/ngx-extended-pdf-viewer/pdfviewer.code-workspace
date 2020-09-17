@@ -7,7 +7,7 @@
       "path": "../../../mypdf.js"
     },
     {
-      "path": "."
+      "path": "../.."
     }
   ],
   "settings": {}

@@ -4319,6 +4319,15 @@ GrabToPan.prototype = {
     this.scrollTopStart = this.element.scrollTop;
     this.clientXStart = event.clientX;
     this.clientYStart = event.clientY;
+
+    if (isOverPerfectScrollbar(this.clientXStart, this.clientYStart, "ps__rail-x")) {
+      return;
+    }
+
+    if (isOverPerfectScrollbar(this.clientXStart, this.clientYStart, "ps__rail-y")) {
+      return;
+    }
+
     this.document.addEventListener("mousemove", this._onmousemove, true);
     this.document.addEventListener("mouseup", this._endPan, true);
     this.element.addEventListener("scroll", this._endPan, true);
@@ -4396,6 +4405,29 @@ function isLeftMouseReleased(event) {
     return event.which === 0;
   }
 
+  return false;
+}
+
+function isOverPerfectScrollbar(x, y, divName) {
+  const perfectScrollbar = document.getElementsByClassName(divName);
+
+  if (perfectScrollbar && perfectScrollbar.length === 1) {
+    var {
+      top,
+      right,
+      bottom,
+      left
+    } = perfectScrollbar[0].getBoundingClientRect();
+
+    if (y >= top && y <= bottom) {
+      if (x <= right && x >= left) {
+        console.log("over scrollbar");
+        return true;
+      }
+    }
+  }
+
+  console.log("out of scrollbar");
   return false;
 }
 
