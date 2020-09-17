@@ -1,9 +1,6 @@
 <div [class.invisible]="!showZoomButtons" id="toolbarViewerMiddle">
-  <div class="splitToolbarButton">
-    <pdf-zoom-out></pdf-zoom-out>
-    <div class="splitToolbarButtonSeparator"></div>
-    <pdf-zoom-in></pdf-zoom-in>
-  </div>
+  <pdf-zoom-out></pdf-zoom-out>
+  <pdf-zoom-in></pdf-zoom-in>
   <pdf-zoom-dropdown
       style="width: unset; max-width: unset;padding-top:3px" [zoomLevels]="zoomLevels">
   </pdf-zoom-dropdown>

@@ -12,19 +12,23 @@
   CDN: <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">unpkg.com</a>
  </p>
 
-## What's new in version 4.0?
+## What's new in version 5.0?
 
-Version 4.0 is a major internal change. Now it's easier to update to the latest version of pdf.js. Your benefit is that you can finally use the minified pdf.js libraries. You'll notice the performance boost. There's also a new option in the findbar: "fuzzy search" is slow but useful if just ignoring diacritics and accents isn't enough flexibility.
+Version 5.0 updates to pdf.js 2.6. In a nutshell, this means supports for layers and forms. Version 5.0 also brings support for color themes.
 
-The new version also brings theming. If everything goes according to plan, you will soon be able to chose between a light and a dark color theme.
+I haven't tested PDF files with forms yet, so expect a rough ride if you need forms. Layers already work well, and currently I'm implementing the themes.
+They aren't perfect yet, but they are already pretty good. Expect minor glitches, but no major trouble.
+
+That's a major change, so I'll publish a couple of alpha versions before publishing an official release. Please update to the alpha versions
+and run a test. Your bug reports help the entire community!
 
 ## Breaking changes
-`defaultOptions` has been renamed to pdfDefaultOptions. You'll also have to modify the import statement.
+With version 5.0, I've radically simplified the CSS code. Almost all the shadows, focus styles, and hover styles are gone. I hope that doesn't break any real-world application,
+but if you've customized the CSS code of ngx-extended-pdf-viewer deeply, expect breaking changes.
 
-## New: transition to a UI design inspired by Material Design (work in progress)
-Version 3.0.0 comes with a slightly modified design. That's work in progress. The goal is to give you a highly customizable, easily themeable library with a fresh and modern look inspired my Material Design. As an unintended side effect, it resembles the redesign called "Photon" of pdf.js. Among other things, you'll soon be able to select between the light mode and the dark mode.
+There are also minor changes to the UI. I've replaced several icons by SVG graphics to make theming easier.
 
- Talking of which: if you're a UX- or UI-designer with some time to spear, don't hesitate to send me suggestions on how to improve the look and feel of the library. Or send me your complaints if you don't like my attempts at UI-design. I can't promise to implement every suggestion, but I'm looking forward to your valuable feedback!
+Version 5.0 also updates to pdf.js 2.6. It's unlikely, but that may be a breaking change to some applications, too.
 
 ## Showcase and manual
 

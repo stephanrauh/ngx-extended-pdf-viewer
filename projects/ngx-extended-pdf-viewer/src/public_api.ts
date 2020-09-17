@@ -25,7 +25,6 @@ export * from './lib/events/textlayer-rendered';
 export * from './lib/options/verbosity-level';
 export * from './lib/toolbar/pdf-findbar/pdf-find-next/pdf-find-next.component';
 export * from './lib/toolbar/pdf-findbar/pdf-search-input-field/pdf-search-input-field.component';
-export * from './lib/toolbar/pdf-findbar/pdf-split-toolbar-button/pdf-split-toolbar-button.component';
 export * from './lib/toolbar/pdf-findbar/pdf-find-previous/pdf-find-previous.component';
 export * from './lib/toolbar/pdf-toggle-secondary-toolbar/pdf-toggle-secondary-toolbar.component';
 export * from './lib/toolbar/pdf-context-menu/pdf-context-menu.component';
@@ -58,7 +57,6 @@ export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-findbar-options-three-container.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-find-results-count/pdf-find-results-count.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-message-container/pdf-findbar-message-container.component';
-export * from './lib/toolbar/pdf-findbar/pdf-split-toolbar-button/pdf-split-toolbar-button.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-find-entire-phrase/pdf-find-entire-phrase.component';
 export * from './lib/toolbar/pdf-toolbar/pdf-toolbar.component';
 export * from './lib/toolbar/pdf-find-button/pdf-find-button.component';

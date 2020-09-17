@@ -54,13 +54,6 @@ body[data-pdfjsprinting] #printContainer, body[data-pdfjsprinting] #printContain
   }
 }
 
-html[dir='ltr'] .splitToolbarButton {
-  display: inline;
-}
-html[dir='rtl'] .splitToolbarButton {
-  display: inline;
-}
-
 .textLayer .highlight.color0 {
   background-color: rgba(180, 0, 170, 0.4);
 }
@@ -102,9 +95,7 @@ html[dir=ltr] .toolbarButton {
   margin: 3px 0 4px 0;
 }
 
-html[dir=ltr] .splitToolbarButton:last-child,
 html[dir=ltr] .toolbarButton:last-child,
-html[dir=rtl] .splitToolbarButton:first-child,
 html[dir=rtl] .toolbarButton:first-child {
   margin-right: 0;
   margin-left: 0;

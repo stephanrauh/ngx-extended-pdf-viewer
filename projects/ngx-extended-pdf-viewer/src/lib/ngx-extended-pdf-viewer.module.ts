@@ -42,7 +42,6 @@ import { PdfRotatePageComponent } from './toolbar/pdf-rotate-page/pdf-rotate-pag
 import { PdfSearchInputFieldComponent } from './toolbar/pdf-findbar/pdf-search-input-field/pdf-search-input-field.component';
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
-import { PdfSplitToolbarButtonComponent } from './toolbar/pdf-findbar/pdf-split-toolbar-button/pdf-split-toolbar-button.component';
 import { PdfToggleSecondaryToolbarComponent } from './toolbar/pdf-toggle-secondary-toolbar/pdf-toggle-secondary-toolbar.component';
 import { PdfToggleSidebarComponent } from './toolbar/pdf-toggle-sidebar/pdf-toggle-sidebar.component';
 import { PdfToolbarComponent } from './toolbar/pdf-toolbar/pdf-toolbar.component';
@@ -216,7 +215,6 @@ if (typeof window !== 'undefined') {
     PdfFindbarOptionsThreeContainerComponent,
     PdfFindResultsCountComponent,
     PdfFindbarMessageContainerComponent,
-    PdfSplitToolbarButtonComponent,
     PdfToolbarComponent,
     PdfFindButtonComponent,
     PdfToggleSidebarComponent,
@@ -271,7 +269,6 @@ if (typeof window !== 'undefined') {
     PdfHandToolComponent,
     PdfRotatePageComponent,
     PdfSelectToolComponent,
-    PdfSplitToolbarButtonComponent,
     PdfToolbarComponent,
     PdfFindButtonComponent,
     PdfToggleSidebarComponent,

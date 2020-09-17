@@ -196,6 +196,7 @@
   <mat-tab label="fancy PDF (low print res)">
     <ng-template matTabContent>
       <ngx-extended-pdf-viewer
+        [theme]="'light'"
         [customToolbar]="additionalButtons"
         [startTabindex]="200"
         *ngIf="visible[0] && !hidden"
@@ -245,9 +246,10 @@
       >
       <ngx-extended-pdf-viewer
         *ngIf="visible[1] && !hidden"
+        [theme]="'dark'"
         printResolution="150"
         [showBorders]="showBorders"
-        [src]="rootFolder + '/assets/pdfs/portrait.pdf'"
+        [src]="rootFolder + '/assets/pdfs/icelandic-dictionary.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#e8e8ef"
         [enablePrint]="enablePrint"

@@ -61,7 +61,7 @@
 
   --notification-color: rgba(112, 219, 85, 1);
 
-  --input-backgrund-color:  rgba(255, 255, 255, 0.09);
+  --input-backgrund-color:  rgb(255, 255, 255);
 
   --thumbnail-selection-ring: rgba(255, 255, 255, 0.25);
 
@@ -76,9 +76,3 @@
   --selection-background: rgba(0, 0, 255, 0.3);
 
 }
-
-/** temporary workaround */
-#toolbarSidebar > .splitToolbarButton > button.toggled {
-  background-color: #ddd;
-}
-/** end of workaround */

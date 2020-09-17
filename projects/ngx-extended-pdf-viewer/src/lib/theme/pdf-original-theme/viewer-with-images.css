@@ -978,23 +978,6 @@ html[dir='rtl'] .findbar * {
   float: right;
 }
 
-html[dir='ltr'] .splitToolbarButton {
-  margin: 3px 2px 4px 0;
-  display: inline-block;
-}
-html[dir='rtl'] .splitToolbarButton {
-  margin: 3px 0 4px 2px;
-  display: inline-block;
-}
-html[dir='ltr'] .splitToolbarButton .toolbarButton {
-  border-radius: 0;
-  float: left;
-}
-html[dir='rtl'] .splitToolbarButton .toolbarButton {
-  border-radius: 0;
-  float: right;
-}
-
 .toolbarButton,
 .secondaryToolbarButton,
 .overlayButton {
@@ -1017,13 +1000,6 @@ html[dir='rtl'] .splitToolbarButton .toolbarButton {
   opacity: .5;
 }
 
-.splitToolbarButton.toggled .toolbarButton {
-  margin: 0;
-}
-
-.splitToolbarButton:hover .toolbarButton,
-.splitToolbarButton:focus .toolbarButton,
-.splitToolbarButton.toggled .toolbarButton,
 .toolbarButton.textButton {
   background-color: rgba(0, 0, 0, 0.12);
   background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
@@ -1034,8 +1010,6 @@ html[dir='rtl'] .splitToolbarButton .toolbarButton {
               0 0 1px rgba(255, 255, 255, 0.15) inset,
               0 1px 0 rgba(255, 255, 255, 0.05);
 }
-.splitToolbarButton .toolbarButton:hover,
-.splitToolbarButton .toolbarButton:focus,
 .dropdownToolbarButton:hover,
 .overlayButton:hover,
 .overlayButton:focus,
@@ -1049,48 +1023,6 @@ html[dir='rtl'] .splitToolbarButton .toolbarButton {
 }
 .dropdownToolbarButton:hover {
   background-color: rgba(0, 0, 0, 0.26);
-}
-.splitToolbarButton .toolbarButton {
-  position: relative;
-}
-html[dir='ltr'] .splitToolbarButton .toolbarButton:first-child,
-html[dir='rtl'] .splitToolbarButton .toolbarButton:last-child {
-  position: relative;
-  margin: 0;
-  margin-right: -1px;
-  border-top-left-radius: 2px;
-  border-bottom-left-radius: 2px;
-  border-right-color: rgba(0, 0, 0, 0);
-}
-html[dir='ltr'] .splitToolbarButton .toolbarButton:last-child,
-html[dir='rtl'] .splitToolbarButton .toolbarButton:first-child {
-  position: relative;
-  margin: 0;
-  margin-left: -1px;
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
-  border-left-color: rgba(0, 0, 0, 0);
-}
-.splitToolbarButtonSeparator {
-  padding: 8px 0;
-  width: 1px;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
-  display: inline-block;
-  margin: 5px 0;
-}
-html[dir='ltr'] .splitToolbarButtonSeparator {
-  float: left;
-}
-html[dir='rtl'] .splitToolbarButtonSeparator {
-  float: right;
-}
-.splitToolbarButton:hover .splitToolbarButtonSeparator,
-.splitToolbarButton.toggled .splitToolbarButtonSeparator {
-  padding: 12px 0;
-  margin: 1px 0;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 
 .toolbarButton,
@@ -1152,7 +1084,6 @@ html[dir='rtl'] .dropdownToolbarButton {
 }
 
 .toolbarButton.toggled,
-.splitToolbarButton.toggled .toolbarButton.toggled,
 .secondaryToolbarButton.toggled {
   background-color: rgba(0, 0, 0, 0.3);
   background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
@@ -1163,7 +1094,6 @@ html[dir='rtl'] .dropdownToolbarButton {
 }
 
 .toolbarButton.toggled:hover:active,
-.splitToolbarButton.toggled .toolbarButton.toggled:hover:active,
 .secondaryToolbarButton.toggled:hover:active {
   background-color: rgba(0, 0, 0, 0.4);
   border-color: rgba(0, 0, 0, 0.4) rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.55);
@@ -1213,15 +1143,11 @@ html[dir='rtl'] .dropdownToolbarButton::after {
   border-bottom: 1px rgba(255, 255, 255, 0.5) solid;
 }
 
-html[dir='ltr'] .splitToolbarButton:first-child,
 html[dir='ltr'] .toolbarButton:first-child,
-html[dir='rtl'] .splitToolbarButton:last-child,
 html[dir='rtl'] .toolbarButton:last-child {
   margin-left: 4px;
 }
-html[dir='ltr'] .splitToolbarButton:last-child,
 html[dir='ltr'] .toolbarButton:last-child,
-html[dir='rtl'] .splitToolbarButton:first-child,
 html[dir='rtl'] .toolbarButton:first-child {
   margin-right: 4px;
 }
