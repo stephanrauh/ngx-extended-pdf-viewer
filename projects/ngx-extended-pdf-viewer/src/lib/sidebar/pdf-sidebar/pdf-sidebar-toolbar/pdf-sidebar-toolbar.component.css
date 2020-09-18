@@ -1,0 +1,7 @@
+button {
+  margin-right: 4px !important;
+}
+
+div#toolbarSidebar > button:first-child {
+  margin-left: 4px !important;
+}
