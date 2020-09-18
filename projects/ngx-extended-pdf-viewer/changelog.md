@@ -202,3 +202,4 @@
 - 4.1.2 #449 added code to stop the - sometimes time-consuming - initialization when the component has already been destroyed
 - 5.0.0-alpha.0 #457 updated the "bleeding edge" version of the assets folder to pdf.js 2.6.384 and ran several smoke tests; added support for layers
 - 5.0.0-alpha.1 #435 improved encapsulation of the CSS code; #244 started to add color themes; implement early versions of the simplified dark and the light theme; #469 added support for the Perfect Scrollbar plugin
+- 5.0.0-alpha.2 #471 don't close the sidebar when another sidebar view is selected; #244 minor improvements of the layout

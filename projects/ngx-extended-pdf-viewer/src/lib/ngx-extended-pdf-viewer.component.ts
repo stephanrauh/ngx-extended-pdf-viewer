@@ -1064,7 +1064,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
     PDFViewerApplication.eventBus.on('sidebarviewchanged', (x: SidebarviewChange) => {
       this.ngZone.run(() => {
-        this.sidebarVisibleChange.emit(x.view === 1);
+        this.sidebarVisibleChange.emit(x.view > 0);
       });
     });
 
