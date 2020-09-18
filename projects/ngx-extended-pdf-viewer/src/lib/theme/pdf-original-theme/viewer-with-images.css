@@ -1306,15 +1306,6 @@ html[dir='rtl'] .verticalToolbarSeparator {
   margin-right: 2px;
 }
 
-.horizontalToolbarSeparator {
-  display: block;
-  margin: 0 0 4px 0;
-  height: 1px;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
-}
-
 .toolbarField {
   padding: 3px 6px;
   margin: 4px 0 4px 0;

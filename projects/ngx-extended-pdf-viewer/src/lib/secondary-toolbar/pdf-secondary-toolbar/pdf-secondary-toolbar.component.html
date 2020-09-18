@@ -79,8 +79,6 @@
         <span data-l10n-id="bookmark_label">Current View</span>
       </a>
 
-      <div class="horizontalToolbarSeparator visibleLargeView"></div>
-
       <button
         type="button"
         [class.invisible]="!showPagingButtons"
@@ -138,8 +136,6 @@
         <span data-l10n-id="last_page_label">Go to Last Page</span>
       </button>
 
-      <div [class.invisible]="!showRotateButton" class="horizontalToolbarSeparator visibleXLView"></div>
-
       <button
         type="button"
         [class.invisible]="!showRotateButton"
@@ -167,8 +163,6 @@
         <span data-l10n-id="page_rotate_ccw_label">Rotate Counterclockwise</span>
       </button>
 
-      <div class="horizontalToolbarSeparator visibleXXLView" [class.invisible]="!showHandToolButton"></div>
-
       <button
         type="button"
         [class.invisible]="!showHandToolButton"
@@ -195,8 +189,6 @@
         </svg>
         <span data-l10n-id="cursor_hand_tool_label">Hand Tool</span>
       </button>
-
-      <div [class.invisible]="!showScrollingButton" class="horizontalToolbarSeparator"></div>
 
       <button
         type="button"
@@ -228,8 +220,6 @@
       >
         <span data-l10n-id="scroll_wrapped_label">Wrapped Scrolling</span>
       </button>
-
-      <div [class.invisible]="!showSpreadButton" class="horizontalToolbarSeparator"></div>
 
       <button
         type="button"
@@ -264,8 +254,6 @@
       >
         <span data-l10n-id="spread_even_label">Even Spreads</span>
       </button>
-
-      <div [class.invisible]="!showPropertiesButton" class="horizontalToolbarSeparator spreadModeButtons"></div>
 
       <button
         type="button"
