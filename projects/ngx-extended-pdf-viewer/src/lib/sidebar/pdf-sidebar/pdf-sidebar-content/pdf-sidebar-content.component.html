@@ -1,4 +1,4 @@
-<div id="sidebarContent">
+<div id="sidebarContent" [style.top]="top">
   <div #thumbnailViewTemplate>
     <ng-content *ngTemplateOutlet="customThumbnail ? customThumbnail : defaultThumbnail"></ng-content>
   </div>

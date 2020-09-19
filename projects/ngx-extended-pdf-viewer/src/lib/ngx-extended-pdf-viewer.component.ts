@@ -42,6 +42,7 @@ import { TextLayerRenderedEvent } from './events/textlayer-rendered';
 import { Location } from '@angular/common';
 import { PinchOnMobileSupport } from './pinch-on-mobile-support';
 import { PdfThumbnailDrawnEvent } from './events/pdf-thumbnail-drawn-event';
+import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 
@@ -99,6 +100,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @ViewChild('pdfSecondaryToolbarComponent')
   private secondaryToolbarComponent: PdfSecondaryToolbarComponent;
+
+  @ViewChild('pdfsidebar')
+  private sidebarComponent: PdfSidebarComponent;
 
   /* regular attributes */
 
@@ -1065,8 +1069,25 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     PDFViewerApplication.eventBus.on('sidebarviewchanged', (x: SidebarviewChange) => {
       this.ngZone.run(() => {
         this.sidebarVisibleChange.emit(x.view > 0);
+        if (this.sidebarComponent) {
+          this.sidebarComponent.showToolbarWhenNecessary();
+        }
       });
     });
+
+    const hideSidebarToolbar = () => {
+      this.ngZone.run(() => {
+        if (this.sidebarComponent) {
+          this.sidebarComponent.showToolbarWhenNecessary();
+        }
+      });
+    };
+
+    PDFViewerApplication.eventBus.on('outlineloaded', hideSidebarToolbar);
+
+    PDFViewerApplication.eventBus.on('attachmentsloaded', hideSidebarToolbar);
+
+    PDFViewerApplication.eventBus.on('layersloaded', hideSidebarToolbar);
 
     PDFViewerApplication.eventBus.on('updatefindcontrolstate', (x: FindResult) => {
       if (this.updateFindMatchesCount) {

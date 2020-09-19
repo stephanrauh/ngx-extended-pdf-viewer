@@ -1,7 +1,4 @@
-
-
 :root {
-
   --highlight-color0: rgba(180, 0, 170, 0.4);
   --highlight-color0-selected: rgb(180, 0, 170);
 
@@ -9,13 +6,13 @@
   --highlight-color1-selected: rgb(0, 100, 0);
 
   --highlight-color2: rgba(0, 0, 255, 0.4);
-  --highlight-color2-selected:rgb(0, 0, 255);
+  --highlight-color2-selected: rgb(0, 0, 255);
 
   --highlight-color3: rgba(255, 0, 0, 0.4);
-  --highlight-color3-selected:rgb(255, 0, 0);
+  --highlight-color3-selected: rgb(255, 0, 0);
 
   --highlight-color4: rgba(255, 94, 0, 0.4);
-  --highlight-color4-selected:  rgb(255, 94, 0);
+  --highlight-color4-selected: rgb(255, 94, 0);
 
   --highlight: var(--highlight-color0-selected);
 
@@ -27,6 +24,8 @@
 
   --annotation-field-background: rgba(0, 54, 255, 0.13);
 
+  --annotation-field-foreground: rgba(71, 71, 71, 1);
+
   --background: rgba(0, 0, 0, 1);
 
   --annotation-popup-background: rgba(255, 255, 153, 1);
@@ -35,7 +34,7 @@
 
   --page-background: rgba(255, 255, 255, 1);
 
-  --fullscreen-background:rgba(0, 0, 0, 0);
+  --fullscreen-background: rgba(0, 0, 0, 0);
 
   --sidebar-background: rgba(0, 0, 0, 0.1);
 
@@ -55,11 +54,11 @@
 
   --placeholder-color: rgba(191, 191, 191, 1);
 
-  --error-color:  rgba(255, 102, 102, 1);
+  --error-color: rgba(255, 102, 102, 1);
 
   --notification-color: rgba(112, 219, 85, 1);
 
-  --input-backgrund-color:  rgba(255, 255, 255, 0.09);
+  --input-backgrund-color: rgba(255, 255, 255, 0.09);
 
   --thumbnail-selection-ring: rgba(255, 255, 255, 0.25);
 
@@ -72,5 +71,4 @@
   --toolbarfield-focus-ring: rgba(77, 184, 255, 0.8);
 
   --selection-background: rgba(0, 0, 255, 0.3);
-
 }

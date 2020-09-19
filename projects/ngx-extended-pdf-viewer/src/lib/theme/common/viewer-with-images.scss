@@ -114,6 +114,7 @@ ngx-extended-pdf-viewer {
   .annotationLayer .buttonWidgetAnnotation.checkBox input,
   .annotationLayer .buttonWidgetAnnotation.radioButton input {
     background-color: var(--annotation-field-background);
+    color: var(--annotation-field-foreground);
     border: 1px solid transparent;
     box-sizing: border-box;
     font-size: 9px;
@@ -151,7 +152,7 @@ ngx-extended-pdf-viewer {
   .annotationLayer .buttonWidgetAnnotation.checkBox input:checked:before,
   .annotationLayer .buttonWidgetAnnotation.checkBox input:checked:after,
   .annotationLayer .buttonWidgetAnnotation.radioButton input:checked:before {
-    background-color: var(--background);
+    background-color: var(--annotation-field-foreground);
     content: '';
     display: block;
     position: absolute;
@@ -674,9 +675,7 @@ ngx-extended-pdf-viewer {
     height: 32px;
     background-color: var(--sidebar-toolbar-background);
     color: var(--text-color);
-    border-bottom: 1px solid var(--toolbar-border);
-    border-left: 1px solid var(--toolbar-border);
-    border-right: 1px solid var(--toolbar-border);
+    border: none;
     padding-top: 1px;
   }
 }
@@ -1640,6 +1639,16 @@ html[dir='rtl'] ngx-extended-pdf-viewer #documentPropertiesOverlay .row > * {
   text-align: right;
 }
 
+.fileInput {
+  background: var(--page-background);
+  color: var(--background);
+  margin-top: 5px;
+  visibility: hidden;
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
 ngx-extended-pdf-viewer {
   #documentPropertiesOverlay .row > span {
     width: 125px;
@@ -1655,16 +1664,6 @@ ngx-extended-pdf-viewer {
 
   .clearBoth {
     clear: both;
-  }
-
-  .fileInput {
-    background: var(--page-background);
-    color: var(--background);
-    margin-top: 5px;
-    visibility: hidden;
-    position: fixed;
-    right: 0;
-    top: 0;
   }
 
   .grab-to-pan-grab {

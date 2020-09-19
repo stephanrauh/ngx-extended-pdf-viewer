@@ -246,10 +246,10 @@
       >
       <ngx-extended-pdf-viewer
         *ngIf="visible[1] && !hidden"
-        [theme]="'dark'"
+        [theme]="'light'"
         printResolution="150"
         [showBorders]="showBorders"
-        [src]="rootFolder + '/assets/pdfs/icelandic-dictionary.pdf'"
+        [src]="rootFolder + '/assets/pdfs/OoPdfFormExample.pdf'"
         (srcChange)="onSourceChange($event)"
         backgroundColor="#e8e8ef"
         [enablePrint]="enablePrint"
@@ -276,6 +276,7 @@
         (pagesLoaded)="onPagesLoaded($event)"
         [(spread)]="spread"
         [language]="language"
+        [minifiedJSLibraries]="false"
       >
       </ngx-extended-pdf-viewer>
     </ng-template>

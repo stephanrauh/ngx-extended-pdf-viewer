@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --deployUrl=/path/ --open --host 10.0.1.3 --disable-host-check",
+    "start": "ng serve --deployUrl=/path/ --host 10.0.1.3 --disable-host-check",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

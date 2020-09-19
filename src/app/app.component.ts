@@ -26,8 +26,8 @@ export class AppComponent implements OnInit {
   public visible = { 1: true };
   public mobileFriendlyZoomPercent = '150%';
   public currentZoomFactor: number;
-  public showSidebarButton = false;
-  public sidebarVisible = undefined;
+  public showSidebarButton = true;
+  public sidebarVisible = true;
   public enablePrint = true;
 
   public height: string | undefined = '80vh';

@@ -34,6 +34,10 @@ export class PdfSidebarContentComponent implements OnDestroy {
   @Output()
   public thumbnailDrawn = new EventEmitter<PdfThumbnailDrawnEvent>();
 
+  public top = '32px';
+
+  public _hideSidebarToolbar = false;
+
   constructor() {
     (window as any).pdfThumbnailGeneratorReady = () => this.pdfThumbnailGeneratorReady();
     (window as any).pdfThumbnailGenerator = (
@@ -68,9 +72,12 @@ export class PdfSidebarContentComponent implements OnDestroy {
     const template = this.thumbnailViewTemplate;
     // get the inner HTML without the attributes and classes added by Angular
     const inner = template.nativeElement.innerHTML
-      .split(/_ng\w+-\w+-\w+=""/g).join('')
-      .split(/ng-\w+-\w+/g).join('')
-      .split(/<!--[\s\S]*?-->/g).join('');
+      .split(/_ng\w+-\w+-\w+=""/g)
+      .join('')
+      .split(/ng-\w+-\w+/g)
+      .join('')
+      .split(/<!--[\s\S]*?-->/g)
+      .join('');
 
     const borderAdjustment = 2 * THUMBNAIL_CANVAS_BORDER_WIDTH;
 
@@ -101,7 +108,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
     const thumbnailDrawnEvent: PdfThumbnailDrawnEvent = {
       thumbnail: newElement,
       container: container,
-      pageId: id
+      pageId: id,
     };
     this.thumbnailDrawn.emit(thumbnailDrawnEvent);
   }
@@ -133,6 +140,16 @@ export class PdfSidebarContentComponent implements OnDestroy {
         }
         event.preventDefault();
       }
+    }
+  }
+
+  @Input()
+  public set hideSidebarToolbar(h: boolean) {
+    this._hideSidebarToolbar = h;
+    if (this._hideSidebarToolbar) {
+      this.top = '0';
+    } else {
+      this.top = '32px';
     }
   }
 }

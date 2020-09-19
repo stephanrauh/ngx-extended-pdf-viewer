@@ -4,11 +4,14 @@
 
 <ng-template #defaultSidebar>
   <div id="sidebarContainer" [style.top]="sidebarPositionTop">
-    <div id="additionalSidebarContainer">
+    <div id="additionalSidebarContainer" [style.display]="hideSidebarToolbar ? 'none' : ''">
       <pdf-sidebar-toolbar></pdf-sidebar-toolbar>
     </div>
-    <pdf-sidebar-content [customThumbnail]="customThumbnail" (thumbnailDrawn)="thumbnailDrawn.emit($event)"></pdf-sidebar-content>
+    <pdf-sidebar-content
+      [customThumbnail]="customThumbnail"
+      (thumbnailDrawn)="thumbnailDrawn.emit($event)"
+      [hideSidebarToolbar]="hideSidebarToolbar"
+    ></pdf-sidebar-content>
     <div id="sidebarResizer" class="hidden"></div>
   </div>
 </ng-template>
-
