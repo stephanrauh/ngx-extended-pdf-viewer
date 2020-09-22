@@ -54,7 +54,7 @@ import { DynamicCssComponent } from './dynamic-css/dynamic-css.component';
 import { PDFNotificationService } from './pdf-notification-service';
 import { PdfSidebarContentComponent } from './sidebar/pdf-sidebar/pdf-sidebar-content/pdf-sidebar-content.component';
 import { PdfSidebarToolbarComponent } from './sidebar/pdf-sidebar/pdf-sidebar-toolbar/pdf-sidebar-toolbar.component';
-import { pdfLightThemeComponent } from './theme/pdf-light-theme/pdf-light-theme.component';
+import { PdfLightThemeComponent } from './theme/pdf-light-theme/pdf-light-theme.component';
 import { PdfOriginalComponent } from './theme/pdf-original-theme/pdf-original.component';
 import { PdfDarkThemeComponent } from './theme/pdf-dark-theme/pdf-dark-theme.component';
 if (!Promise['allSettled']) {
@@ -236,7 +236,7 @@ if (typeof window !== 'undefined') {
     PdfSidebarToolbarComponent,
     PdfOriginalComponent,
     PdfDarkThemeComponent,
-    pdfLightThemeComponent,
+    PdfLightThemeComponent,
   ],
   providers: [NgxExtendedPdfViewerService, PDFNotificationService, Location, { provide: LocationStrategy, useClass: PathLocationStrategy }],
   exports: [

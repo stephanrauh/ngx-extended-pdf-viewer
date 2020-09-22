@@ -334,7 +334,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public showBookmarkButton = true;
 
   @Input()
-  public theme: 'dark' | 'light' | 'custom' = 'dark';
+  public theme: 'dark' | 'light' | 'custom' = 'light';
 
   @Input()
   public showSecondaryToolbarButton = true;

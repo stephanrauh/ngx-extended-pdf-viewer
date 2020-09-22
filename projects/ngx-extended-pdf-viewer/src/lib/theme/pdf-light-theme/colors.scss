@@ -1,76 +1,83 @@
-:root {
-  --highlight-color0: rgba(180, 0, 170, 0.4);
-  --highlight-color0-selected: rgb(180, 0, 170);
+$highlight-color0: rgba(180, 0, 170, 0.4);
+$highlight-color0-selected: rgb(180, 0, 170);
 
-  --highlight-color1: rgba(0, 100, 0, 0.4);
-  --highlight-color1-selected: rgb(0, 100, 0);
+$highlight-color1: rgba(0, 100, 0, 0.4);
+$highlight-color1-selected: rgb(0, 100, 0);
 
-  --highlight-color2: rgba(0, 0, 255, 0.4);
-  --highlight-color2-selected: rgb(0, 0, 255);
+$highlight-color2: rgba(0, 0, 255, 0.4);
+$highlight-color2-selected: rgb(0, 0, 255);
 
-  --highlight-color3: rgba(255, 0, 0, 0.4);
-  --highlight-color3-selected: rgb(255, 0, 0);
+$highlight-color3: rgba(255, 0, 0, 0.4);
+$highlight-color3-selected: rgb(255, 0, 0);
 
-  --highlight-color4: rgba(255, 94, 0, 0.4);
-  --highlight-color4-selected: rgb(255, 94, 0);
+$highlight-color4: rgba(255, 94, 0, 0.4);
+$highlight-color4-selected: rgb(255, 94, 0);
 
-  --highlight: var(--highlight-color0-selected);
+$highlight: var($highlight-color0-selected);
 
-  --highlight-selected: rgba(0, 100, 0, 1);
+$highlight-selected: rgba(0, 100, 0, 1);
 
-  --selected: rgba(0, 0, 255, 1);
+$selected: rgba(0, 0, 255, 1);
 
-  --annotation: rgba(255, 255, 0, 1);
+$annotation: rgba(255, 255, 0, 1);
 
-  --annotation-field-background: rgba(0, 54, 255, 0.13);
+$annotation-field-background: rgba(0, 54, 255, 0.13);
 
-  --annotation-field-foreground: #5a5a5a;
+$annotation-field-foreground: #5a5a5a;
 
-  --background: #f9f9f9;
+$background: #f9f9f9;
 
-  --annotation-popup-background: rgba(255, 255, 153, 1);
-  --annotation-popup-shadow: rgba(136, 136, 136, 1);
-  --container-border: rgba(51, 51, 51, 1);
+$annotation-popup-background: rgba(255, 255, 153, 1);
+$annotation-popup-shadow: rgba(136, 136, 136, 1);
+$container-border: rgba(51, 51, 51, 1);
 
-  --page-background: rgba(255, 255, 255, 1);
+$page-background: rgba(255, 255, 255, 1);
 
-  --fullscreen-background: rgba(0, 0, 0, 0);
+$fullscreen-background: rgba(0, 0, 0, 0);
 
-  --sidebar-background: #e3e1e6;
+$sidebar-background: #e3e1e6;
 
-  --border: rgba(0, 0, 0, 0.5);
+$border: rgba(0, 0, 0, 0.5);
 
-  --border-dark: rgba(0, 0, 0, 0.4);
+$border-dark: rgba(0, 0, 0, 0.4);
 
-  --sidebar-toolbar-background: var(--sidebar-background);
+$sidebar-toolbar-background: var($sidebar-background);
 
-  --toolbar-background: #f9f9f9;
+$toolbar-background: #f9f9f9;
 
-  --toolbar-border: #ddd;
+$toolbar-border: #ddd;
 
-  --text-color: #5a5a5a;
+$text-color: #5a5a5a;
 
-  --loading-bar-background: rgba(221, 221, 221, 1);
+$tree-text-color: #5a5a5a;
 
-  --loadingBar-progress-indeterminate: rgba(153, 153, 153, 1);
+$loading-bar-background: rgba(221, 221, 221, 1);
 
-  --placeholder-color: rgba(191, 191, 191, 1);
+$loadingBar-progress-indeterminate: rgba(153, 153, 153, 1);
 
-  --error-color: rgba(255, 102, 102, 1);
+$placeholder-color: rgba(191, 191, 191, 1);
 
-  --notification-color: rgba(112, 219, 85, 1);
+$error-color: rgba(255, 102, 102, 1);
 
-  --input-backgrund-color: rgb(255, 255, 255);
+$notification-color: rgba(112, 219, 85, 1);
 
-  --thumbnail-selection-ring: rgba(255, 255, 255, 0.25);
+$input-backgrund-color: rgb(255, 255, 255);
 
-  --window-background: rgba(0, 0, 0, 0.2);
+$thumbnail-selection-ring: rgba(255, 255, 255, 0.25);
 
-  --thumbnail-not-loaded-ring: rgba(255, 0, 0, 0.5);
+$window-background: rgba(0, 0, 0, 0.2);
 
-  --thumbnail-selection-ring: rgba(255, 255, 255, 0.4);
+$thumbnail-not-loaded-ring: rgba(255, 0, 0, 0.5);
 
-  --toolbarfield-focus-ring: rgba(77, 184, 255, 0.8);
+$thumbnail-selection-ring: rgba(255, 255, 255, 0.4);
 
-  --selection-background: rgba(0, 0, 255, 0.3);
-}
+$toolbarfield-focus-ring: rgba(77, 184, 255, 0.8);
+
+$selection-background: rgba(0, 0, 255, 0.3);
+
+$outline-active-color: rgba(0, 0, 0, 0.08);
+$outline-active-bg-color: rgba(0, 0, 0, 1);
+
+
+@import "../common/viewer-with-images.scss";
+@import '../common/ngx-extended-pdf-viewer.component.scss';
