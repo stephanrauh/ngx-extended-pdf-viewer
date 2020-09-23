@@ -7,7 +7,6 @@ import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-o
 import { NgModule } from '@angular/core';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
-import { PageNumberComponent } from './toolbar/pdf-paging-area/page-number/page-number.component';
 import { PdfBookmarkComponent } from './toolbar/pdf-bookmark/pdf-bookmark.component';
 import { PdfContextMenuComponent } from './toolbar/pdf-context-menu/pdf-context-menu.component';
 import { PdfDocumentPropertiesOverlayComponent } from './document-properties/pdf-document-properties-overlay/pdf-document-properties-overlay.component';
@@ -226,7 +225,6 @@ if (typeof window !== 'undefined') {
     PdfFirstPageComponent,
     PdfNextPageComponent,
     PdfPreviousPageComponent,
-    PageNumberComponent,
     PdfPageNumberComponent,
     PdfRotatePageComponent,
     PdfZoomInComponent,
@@ -280,7 +278,6 @@ if (typeof window !== 'undefined') {
     PdfFirstPageComponent,
     PdfNextPageComponent,
     PdfPreviousPageComponent,
-    PageNumberComponent,
     PdfPageNumberComponent,
     PdfZoomInComponent,
     PdfZoomOutComponent,

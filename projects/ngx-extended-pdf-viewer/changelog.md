@@ -205,3 +205,4 @@
 - 5.0.0-alpha.2 #471 don't close the sidebar when another sidebar view is selected; #244 minor improvements of the layout
 - 5.0.0-alpha.3 support for forms; #244 minor improvements of the layout
 - 5.0.0-alpha.4 improved support for older browsers
+- 5.0.0-alpha.5 #244 now the secondary toolbar icons support every color theme

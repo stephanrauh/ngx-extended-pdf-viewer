@@ -66,8 +66,6 @@ export * from './lib/toolbar/pdf-paging-area/pdf-first-page/pdf-first-page.compo
 export * from './lib/toolbar/pdf-paging-area/pdf-last-page/pdf-last-page.component';
 export * from './lib/toolbar/pdf-paging-area/pdf-next-page/pdf-next-page.component';
 export * from './lib/toolbar/pdf-paging-area/pdf-previous-page/pdf-previous-page.component';
-export * from './lib/toolbar/pdf-paging-area/page-number/page-number.component';
-export * from './lib/toolbar/pdf-paging-area/pdf-page-number/pdf-page-number.component';
 export * from './lib/toolbar/pdf-zoom-toolbar/pdf-zoom-in/pdf-zoom-in.component';
 export * from './lib/toolbar/pdf-zoom-toolbar/pdf-zoom-out/pdf-zoom-out.component';
 export * from './lib/toolbar/pdf-zoom-toolbar/pdf-zoom-dropdown/pdf-zoom-dropdown.component';
