@@ -148,11 +148,6 @@ ngx-extended-pdf-viewer {
     padding-right: 0;
   }
 
-  /* issue 251 */
-  .dropdownToolbarButton::after {
-    top: 8px;
-  }
-
   .pdf-viewer-template,
   .pdf-viewer-template * {
     display: none;
@@ -172,3 +167,4 @@ ngx-extended-pdf-viewer {
     outline: 1px solid blue;
   }
 }
+

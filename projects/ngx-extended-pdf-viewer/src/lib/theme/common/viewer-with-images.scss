@@ -1056,13 +1056,8 @@ ngx-extended-pdf-viewer {
     padding: 0;
     overflow: hidden;
   }
-  .dropdownToolbarButton::after {
-    position: absolute;
-    display: inline-block;
-    top: 4px;
-    content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAQCAYAAADagWXwAAAAMklEQVR4AWMYSPD//39+IF4AotElWIB4LRA/g9IsyJJLwBIIvIR8NxAylrCDML0ygAAAMdZbs0uKR4sAAAAASUVORK5CYII=');
-  }
 }
+
 html[dir='ltr'] ngx-extended-pdf-viewer .dropdownToolbarButton::after {
   right: 8px;
 }
@@ -1700,17 +1695,13 @@ ngx-extended-pdf-viewer {
   }
 
   .dropdownToolbarButton::after {
-    transform: scale(0.5);
-    top: -5px;
-    content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAgCAQAAACI54EcAAAAX0lEQVR4AWMYieB/PBAyICADEsf2/yMgtMUmqfz/+v9nQHgdyEKT5P9/GCgBhkAWP7Iky/+VQEE4BPJYEJLtUEEEbIdI4oA0kiToIMJewQwEgsFHOOAREDPK0OAwlQQAP2d+rjszeyAAAAAASUVORK5CYII=');
+    // content is defined in the colors.scss
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    position: absolute;
+    margin-top: 5px;
   }
-}
-
-html[dir='ltr'] ngx-extended-pdf-viewer .dropdownToolbarButton::after {
-  right: 4px;
-}
-html[dir='rtl'] ngx-extended-pdf-viewer .dropdownToolbarButton::after {
-  left: 4px;
 }
 
 @media print {
