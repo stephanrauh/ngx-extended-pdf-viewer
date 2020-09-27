@@ -14,21 +14,16 @@
 
 ## What's new in version 5.0?
 
-Version 5.0 updates to pdf.js 2.6. In a nutshell, this means supports for layers and forms. Version 5.0 also brings support for color themes.
+Version 5.0 updates to pdf.js 2.6.347. In a nutshell, this means supports for layers and forms. Version 5.0 also brings support for color themes.
 
-I haven't tested PDF files with forms yet, so expect a rough ride if you need forms. Layers already work well, and currently I'm implementing the themes.
-They aren't perfect yet, but they are already pretty good. Expect minor glitches, but no major trouble.
-
-That's a major change, so I'll publish a couple of alpha versions before publishing an official release. Please update to the alpha versions
-and run a test. Your bug reports help the entire community!
+Note that the support for forms is slightly limited. You can fill the form, and you can print the document with the filled fields, but if you save it using the "download" button, the input is lost.
 
 ## Breaking changes
-With version 5.0, I've radically simplified the CSS code. Almost all the shadows, focus styles, and hover styles are gone. I hope that doesn't break any real-world application,
-but if you've customized the CSS code of ngx-extended-pdf-viewer deeply, expect breaking changes.
+With version 5.0, I've radically simplified the CSS code and some of the HTML code. Almost all the shadows, focus styles, and hover styles are gone. I hope that doesn't break any real-world application, but if you've customized the CSS code of ngx-extended-pdf-viewer deeply, expect breaking changes.
 
 There are also minor changes to the UI. I've replaced several icons by SVG graphics to make theming easier.
 
-Version 5.0 also updates to pdf.js 2.6. It's unlikely, but that may be a breaking change to some applications, too.
+As mentioned above, version 5.0 also updates to pdf.js 2.6.347. It's unlikely, but that may be a breaking change to some applications, too.
 
 ## Showcase and manual
 
@@ -45,6 +40,8 @@ This library provides an embeddable PDF viewer component. It's different from ot
 - Support for Internet Explorer 11
 - Searching (including a programmatic API)
 - Printing
+- (limited) support for forms
+- (limited) support for signatures (lacking verification of the signature, so use on your own risk!)
 - Sidebar with thumbnails, outlines, and attachments
 - Rotating
 - Download and upload
@@ -57,9 +54,10 @@ This library provides an embeddable PDF viewer component. It's different from ot
 - Internationalization (providing translations to several dozen languages)
 - direct access to the core API of pdf.js (including TypeScript definition files)
 - plus the ability to deactivate each of these features
+- color theming
 - and to customize the toolbars and menus according to your needs.
 
-Not to mention the ability to display PDF files, running on Mozilla's pdf.js 2.4.456, released in March 2020. If you're the daring one, you can also use the developer version 2.5. It's bleeding edge, so use it at own risk, but it fixes at least one bug ([#285](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/285)), so it may be worth a look.
+Not to mention the ability to display PDF files, running on Mozilla's pdf.js 2.6.347, released in March 2020. If you're the daring one, you can also use the developer version 2.7. It's bleeding edge, so use it at own risk. Basically, this preview is there to make the update easier when a Mozilla publishes a new version of their pdf.js library.
 
 
 ## Alternatives
@@ -94,7 +92,7 @@ The detailed instructions for JHipster and Angular 2, 4, and 5 are available [on
   ```
  This simply copies the entire assets folder. If you're concerned about disk memory, you can omit the subfolders `inline-locale-files` and `additional-locale`. If you need only one language, you can reduce the list to `locale.properties` and your language folder.
 
- If you want to use the developer preview of pdf.js 2.5, add a second import like this:
+ If you want to use the developer preview of pdf.js 2.7, import the "bleeding edge" files instead:
 
   ```json
   "assets": [
@@ -102,12 +100,7 @@ The detailed instructions for JHipster and Angular 2, 4, and 5 are available [on
     "src/assets",
     {
       "glob": "**/*",
-      "input": "node_modules/ngx-extended-pdf-viewer/assets/",
-      "output": "/assets/"
-    },
-    {
-      "glob": "**/*",
-      "input": "node_modules/ngx-extended-pdf-viewer/assets-2.5/",
+      "input": "node_modules/ngx-extended-pdf-viewer/bleeding-edge/",
       "output": "/assets/"
     }
   ],
