@@ -1653,10 +1653,8 @@ ngx-extended-pdf-viewer {
   margin: 0;
 }
 
-.ngx-extended-pdf-viewer {
-  #printContainer {
-    display: none;
-  }
+#printContainer {
+  display: none;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 1.1), screen and (min-resolution: 1.1dppx) {

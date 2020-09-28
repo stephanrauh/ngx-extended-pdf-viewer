@@ -22,24 +22,24 @@ ngx-extended-pdf-viewer {
   }
 }
 
+body[data-pdfjsprinting] #printContainer,
+body[data-pdfjsprinting] #printContainer * {
+  padding: 0;
+  margin: 0;
+}
+
+body[data-pdfjsprinting] #printContainer,
+body[data-pdfjsprinting] #printContainer * {
+  font: message-box;
+  outline: none;
+}
+
+#printContainer canvas,
+#printContainer img {
+  display: block !important;
+}
+
 ngx-extended-pdf-viewer {
-  body[data-pdfjsprinting] #printContainer,
-  body[data-pdfjsprinting] #printContainer * {
-    padding: 0;
-    margin: 0;
-  }
-
-  body[data-pdfjsprinting] #printContainer,
-  body[data-pdfjsprinting] #printContainer * {
-    font: message-box;
-    outline: none;
-  }
-
-  #printContainer canvas,
-  #printContainer img {
-    display: block !important;
-  }
-
   #outerContainer {
     clip-path: inset(0 0 0 0);
   }

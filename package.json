@@ -10,7 +10,7 @@
     "e2e": "ng e2e",
     "unix-package": "ng b ngx-extended-pdf-viewer && rm -r dist && ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json && npm run copy",
     "showcase": "npm run unix-package && rm -r ../extended-pdf-viewer-showcase/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../extended-pdf-viewer-showcase/node_modules/ngx-extended-pdf-viewer",
-    "issue": "npm run unix-package && rm -r ../ngx-extended-pdf-viewer-issues/issue205/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../ngx-extended-pdf-viewer-issues/issue205/node_modules/ngx-extended-pdf-viewer",
+    "issue": "npm run unix-package && rm -r ../ngx-extended-pdf-viewer-issues/issue478/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../ngx-extended-pdf-viewer-issues/issue478/node_modules/ngx-extended-pdf-viewer",
     "win-package": "ng b ngx-extended-pdf-viewer && rmdir dist /S && ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json && xcopy /S/E/-Y projects\\ngx-extended-pdf-viewer\\src\\assets dist\\ngx-extended-pdf-viewer\\assets\\",
     "release": "npm run unix-package && cd dist/ngx-extended-pdf-viewer && npm publish",
     "cypress": "./node_modules/.bin/cypress open",
