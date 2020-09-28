@@ -135,8 +135,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", {
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.6.384';
-var pdfjsBuild = 'fe5c6a72f';
+var pdfjsVersion = '2.7.52';
+var pdfjsBuild = 'f178d2074';
 
 /***/ }),
 /* 1 */
@@ -158,9 +158,9 @@ var _primitives = __w_pdfjs_require__(201);
 
 var _pdf_manager = __w_pdfjs_require__(202);
 
-var _message_handler = __w_pdfjs_require__(242);
+var _message_handler = __w_pdfjs_require__(243);
 
-var _worker_stream = __w_pdfjs_require__(243);
+var _worker_stream = __w_pdfjs_require__(244);
 
 var _core_utils = __w_pdfjs_require__(204);
 
@@ -275,7 +275,7 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
       var WorkerTasks = [];
       var verbosity = (0, _util.getVerbosityLevel)();
       var apiVersion = docParams.apiVersion;
-      var workerVersion = '2.6.384';
+      var workerVersion = '2.7.52';
 
       if (apiVersion !== workerVersion) {
         throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -648,7 +648,7 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
             annotationStorage = _ref7.annotationStorage,
             filename = _ref7.filename;
         pdfManager.requestLoadedStream();
-        var promises = [pdfManager.onLoadedStream()];
+        var promises = [pdfManager.onLoadedStream(), pdfManager.ensureCatalog("acroForm")];
         var document = pdfManager.pdfDocument;
 
         var _loop = function _loop(pageIndex) {
@@ -665,7 +665,8 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
         return Promise.all(promises).then(function (_ref8) {
           var _ref9 = _toArray(_ref8),
               stream = _ref9[0],
-              refs = _ref9.slice(1);
+              acroForm = _ref9[1],
+              refs = _ref9.slice(2);
 
           var newRefs = [];
 
@@ -691,6 +692,19 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
             return stream.bytes;
           }
 
+          var xfa = acroForm instanceof _primitives.Dict && acroForm.get("XFA") || [];
+          var xfaDatasets = null;
+
+          if (Array.isArray(xfa)) {
+            for (var i = 0, ii = xfa.length; i < ii; i += 2) {
+              if (xfa[i] === "datasets") {
+                xfaDatasets = xfa[i + 1];
+              }
+            }
+          } else {
+            (0, _util.warn)("Unsupported XFA type.");
+          }
+
           var xref = document.xref;
           var newXrefInfo = Object.create(null);
 
@@ -699,7 +713,7 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
 
             var xrefInfo = xref.trailer.get("Info") || null;
 
-            if (xrefInfo) {
+            if (xrefInfo instanceof _primitives.Dict) {
               xrefInfo.forEach(function (key, value) {
                 if ((0, _util.isString)(key) && (0, _util.isString)(value)) {
                   _info[key] = (0, _util.stringToPDFString)(value);
@@ -720,7 +734,13 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
           }
 
           xref.resetNewRef();
-          return incrementalUpdate(stream.bytes, newXrefInfo, newRefs);
+          return incrementalUpdate({
+            originalData: stream.bytes,
+            xrefInfo: newXrefInfo,
+            newRefs: newRefs,
+            xref: xref,
+            datasetsRef: xfaDatasets
+          });
         });
       });
       handler.on("GetOperatorList", function wphSetupRenderPage(data, sink) {
@@ -1514,6 +1534,7 @@ exports.assert = assert;
 exports.bytesToString = bytesToString;
 exports.createPromiseCapability = createPromiseCapability;
 exports.escapeString = escapeString;
+exports.encodeToXmlString = encodeToXmlString;
 exports.getModificationDate = getModificationDate;
 exports.getVerbosityLevel = getVerbosityLevel;
 exports.info = info;
@@ -2352,7 +2373,15 @@ function stringToPDFString(str) {
 }
 
 function escapeString(str) {
-  return str.replace(/([\(\)\\])/g, "\\$1");
+  return str.replace(/([\(\)\\\n\r])/g, function (match) {
+    if (match === "\n") {
+      return "\\n";
+    } else if (match === "\r") {
+      return "\\r";
+    }
+
+    return "\\".concat(match);
+  });
 }
 
 function stringToUTF8String(str) {
@@ -2390,8 +2419,8 @@ function isArrayEqual(arr1, arr2) {
 }
 
 function getModificationDate() {
-  var date = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date(Date.now());
-  var buffer = [date.getUTCFullYear().toString(), (date.getUTCMonth() + 1).toString().padStart(2, "0"), (date.getUTCDate() + 1).toString().padStart(2, "0"), date.getUTCHours().toString().padStart(2, "0"), date.getUTCMinutes().toString().padStart(2, "0"), date.getUTCSeconds().toString().padStart(2, "0")];
+  var date = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date();
+  var buffer = [date.getUTCFullYear().toString(), (date.getUTCMonth() + 1).toString().padStart(2, "0"), date.getUTCDate().toString().padStart(2, "0"), date.getUTCHours().toString().padStart(2, "0"), date.getUTCMinutes().toString().padStart(2, "0"), date.getUTCSeconds().toString().padStart(2, "0")];
   return buffer.join("");
 }
 
@@ -2447,6 +2476,57 @@ var createObjectURL = function createObjectURLClosure() {
 }();
 
 exports.createObjectURL = createObjectURL;
+var XMLEntities = {
+  0x3c: "&lt;",
+  0x3e: "&gt;",
+  0x26: "&amp;",
+  0x22: "&quot;",
+  0x27: "&apos;"
+};
+
+function encodeToXmlString(str) {
+  var buffer = [];
+  var start = 0;
+
+  for (var i = 0, ii = str.length; i < ii; i++) {
+    var _char = str.codePointAt(i);
+
+    if (0x20 <= _char && _char <= 0x7e) {
+      var entity = XMLEntities[_char];
+
+      if (entity) {
+        if (start < i) {
+          buffer.push(str.substring(start, i));
+        }
+
+        buffer.push(entity);
+        start = i + 1;
+      }
+    } else {
+      if (start < i) {
+        buffer.push(str.substring(start, i));
+      }
+
+      buffer.push("&#x".concat(_char.toString(16).toUpperCase(), ";"));
+
+      if (_char > 0xd7ff && (_char < 0xe000 || _char > 0xfffd)) {
+        i++;
+      }
+
+      start = i + 1;
+    }
+  }
+
+  if (buffer.length === 0) {
+    return str;
+  }
+
+  if (start < str.length) {
+    buffer.push(str.substring(start, str.length));
+  }
+
+  return buffer.join("");
+}
 
 /***/ }),
 /* 6 */
@@ -2454,8 +2534,6 @@ exports.createObjectURL = createObjectURL;
 
 "use strict";
 
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var isNodeJS = false;
 
@@ -2465,97 +2543,24 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
   }
 
   globalThis._pdfjsCompatibilityChecked = true;
-  var hasDOM = (typeof window === "undefined" ? "undefined" : _typeof(window)) === "object" && (typeof document === "undefined" ? "undefined" : _typeof(document)) === "object";
-  var userAgent = typeof navigator !== "undefined" && navigator.userAgent || "";
-  var isIE = /Trident/.test(userAgent);
 
-  (function checkChildNodeRemove() {
-    if (!hasDOM) {
+  (function checkNodeBtoa() {
+    if (globalThis.btoa || !isNodeJS) {
       return;
     }
 
-    if (typeof Element.prototype.remove !== "undefined") {
-      return;
-    }
-
-    Element.prototype.remove = function () {
-      if (this.parentNode) {
-        this.parentNode.removeChild(this);
-      }
+    globalThis.btoa = function (chars) {
+      return Buffer.from(chars, "binary").toString("base64");
     };
   })();
 
-  (function checkDOMTokenListAddRemove() {
-    if (!hasDOM || isNodeJS) {
+  (function checkNodeAtob() {
+    if (globalThis.atob || !isNodeJS) {
       return;
     }
 
-    var div = document.createElement("div");
-    div.classList.add("testOne", "testTwo");
-
-    if (div.classList.contains("testOne") === true && div.classList.contains("testTwo") === true) {
-      return;
-    }
-
-    var OriginalDOMTokenListAdd = DOMTokenList.prototype.add;
-    var OriginalDOMTokenListRemove = DOMTokenList.prototype.remove;
-
-    DOMTokenList.prototype.add = function () {
-      for (var _len = arguments.length, tokens = new Array(_len), _key = 0; _key < _len; _key++) {
-        tokens[_key] = arguments[_key];
-      }
-
-      for (var _i = 0, _tokens = tokens; _i < _tokens.length; _i++) {
-        var token = _tokens[_i];
-        OriginalDOMTokenListAdd.call(this, token);
-      }
-    };
-
-    DOMTokenList.prototype.remove = function () {
-      for (var _len2 = arguments.length, tokens = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        tokens[_key2] = arguments[_key2];
-      }
-
-      for (var _i2 = 0, _tokens2 = tokens; _i2 < _tokens2.length; _i2++) {
-        var token = _tokens2[_i2];
-        OriginalDOMTokenListRemove.call(this, token);
-      }
-    };
-  })();
-
-  (function checkDOMTokenListToggle() {
-    if (!hasDOM || isNodeJS) {
-      return;
-    }
-
-    var div = document.createElement("div");
-
-    if (div.classList.toggle("test", 0) === false) {
-      return;
-    }
-
-    DOMTokenList.prototype.toggle = function (token) {
-      var force = arguments.length > 1 ? !!arguments[1] : !this.contains(token);
-      return this[force ? "add" : "remove"](token), force;
-    };
-  })();
-
-  (function checkWindowHistoryPushStateReplaceState() {
-    if (!hasDOM || !isIE) {
-      return;
-    }
-
-    var OriginalPushState = window.history.pushState;
-    var OriginalReplaceState = window.history.replaceState;
-
-    window.history.pushState = function (state, title, url) {
-      var args = url === undefined ? [state, title] : [state, title, url];
-      OriginalPushState.apply(this, args);
-    };
-
-    window.history.replaceState = function (state, title, url) {
-      var args = url === undefined ? [state, title] : [state, title, url];
-      OriginalReplaceState.apply(this, args);
+    globalThis.atob = function (input) {
+      return Buffer.from(input, "base64").toString("binary");
     };
   })();
 
@@ -2648,7 +2653,7 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
   })();
 
   (function checkPromise() {
-    if (globalThis.Promise && globalThis.Promise.allSettled) {
+    if (globalThis.Promise.allSettled) {
       return;
     }
 
@@ -12111,7 +12116,16 @@ var Dict = function DictClosure() {
       }
     }
   };
-  Dict.empty = new Dict(null);
+
+  Dict.empty = function () {
+    var emptyDict = new Dict(null);
+
+    emptyDict.set = function (key, value) {
+      (0, _util.unreachable)("Should not call `set` on the empty dictionary.");
+    };
+
+    return emptyDict;
+  }();
 
   Dict.merge = function (_ref) {
     var xref = _ref.xref,
@@ -13546,10 +13560,12 @@ exports.ChunkedStreamManager = ChunkedStreamManager;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.escapePDFName = escapePDFName;
 exports.getLookupTableFactory = getLookupTableFactory;
 exports.getInheritableProperty = getInheritableProperty;
 exports.toRomanNumerals = toRomanNumerals;
 exports.log2 = log2;
+exports.parseXFAPath = parseXFAPath;
 exports.readInt8 = readInt8;
 exports.readUint16 = readUint16;
 exports.readUint32 = readUint32;
@@ -13727,6 +13743,53 @@ function isWhiteSpace(ch) {
   return ch === 0x20 || ch === 0x09 || ch === 0x0d || ch === 0x0a;
 }
 
+function parseXFAPath(path) {
+  var positionPattern = /(.+)\[([0-9]+)\]$/;
+  return path.split(".").map(function (component) {
+    var m = component.match(positionPattern);
+
+    if (m) {
+      return {
+        name: m[1],
+        pos: parseInt(m[2], 10)
+      };
+    }
+
+    return {
+      name: component,
+      pos: 0
+    };
+  });
+}
+
+function escapePDFName(str) {
+  var buffer = [];
+  var start = 0;
+
+  for (var i = 0, ii = str.length; i < ii; i++) {
+    var _char = str.charCodeAt(i);
+
+    if (_char < 0x21 || _char > 0x7e || _char === 0x23) {
+      if (start < i) {
+        buffer.push(str.substring(start, i));
+      }
+
+      buffer.push("#".concat(_char.toString(16)));
+      start = i + 1;
+    }
+  }
+
+  if (buffer.length === 0) {
+    return str;
+  }
+
+  if (start < str.length) {
+    buffer.push(str.substring(start, str.length));
+  }
+
+  return buffer.join("");
+}
+
 /***/ }),
 /* 205 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
@@ -13759,7 +13822,7 @@ var _parser = __w_pdfjs_require__(207);
 
 var _operator_list = __w_pdfjs_require__(222);
 
-var _evaluator = __w_pdfjs_require__(224);
+var _evaluator = __w_pdfjs_require__(225);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19130,6 +19193,10 @@ var DecodeStream = function DecodeStreamClosure() {
   }
 
   DecodeStream.prototype = {
+    get length() {
+      (0, _util.unreachable)("Should not access DecodeStream.length");
+    },
+
     get isEmpty() {
       while (!this.eof && this.bufferLength === 0) {
         this.readBlock();
@@ -30914,6 +30981,14 @@ var _writer = __w_pdfjs_require__(223);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
 function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
 
 function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
@@ -31104,7 +31179,7 @@ function getQuadPoints(dict, rect) {
       var x = quadPoints[j];
       var y = quadPoints[j + 1];
 
-      if (x < rect[0] || x > rect[2] || y < rect[1] || y > rect[3]) {
+      if (rect !== null && (x < rect[0] || x > rect[2] || y < rect[1] || y > rect[3])) {
         return null;
       }
 
@@ -31147,6 +31222,12 @@ var Annotation = /*#__PURE__*/function () {
     this.setColor(dict.getArray("C"));
     this.setBorderStyle(dict);
     this.setAppearance(dict);
+    this._streams = [];
+
+    if (this.appearance) {
+      this._streams.push(this.appearance);
+    }
+
     this.data = {
       annotationFlags: this.flags,
       borderStyle: this.borderStyle,
@@ -31322,6 +31403,8 @@ var Annotation = /*#__PURE__*/function () {
   }, {
     key: "getOperatorList",
     value: function getOperatorList(evaluator, task, renderForms, annotationStorage) {
+      var _this2 = this;
+
       if (!this.appearance) {
         return Promise.resolve(new _operator_list.OperatorList());
       }
@@ -31343,7 +31426,9 @@ var Annotation = /*#__PURE__*/function () {
           operatorList: opList
         }).then(function () {
           opList.addOp(_util.OPS.endAnnotation, []);
-          appearance.reset();
+
+          _this2.reset();
+
           return opList;
         });
       });
@@ -31372,6 +31457,23 @@ var Annotation = /*#__PURE__*/function () {
 
       return save;
     }()
+  }, {
+    key: "reset",
+    value: function reset() {
+      var _iterator = _createForOfIteratorHelper(this._streams),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var stream = _step.value;
+          stream.reset();
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+    }
   }, {
     key: "viewable",
     get: function get() {
@@ -31471,12 +31573,12 @@ var AnnotationBorderStyle = /*#__PURE__*/function () {
         var isValid = true;
         var allZeros = true;
 
-        var _iterator = _createForOfIteratorHelper(dashArray),
-            _step;
+        var _iterator2 = _createForOfIteratorHelper(dashArray),
+            _step2;
 
         try {
-          for (_iterator.s(); !(_step = _iterator.n()).done;) {
-            var element = _step.value;
+          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+            var element = _step2.value;
             var validNumber = +element >= 0;
 
             if (!validNumber) {
@@ -31487,9 +31589,9 @@ var AnnotationBorderStyle = /*#__PURE__*/function () {
             }
           }
         } catch (err) {
-          _iterator.e(err);
+          _iterator2.e(err);
         } finally {
-          _iterator.f();
+          _iterator2.f();
         }
 
         if (isValid && !allZeros) {
@@ -31528,73 +31630,152 @@ var MarkupAnnotation = /*#__PURE__*/function (_Annotation) {
   var _super = _createSuper(MarkupAnnotation);
 
   function MarkupAnnotation(parameters) {
-    var _this2;
+    var _this3;
 
     _classCallCheck(this, MarkupAnnotation);
 
-    _this2 = _super.call(this, parameters);
+    _this3 = _super.call(this, parameters);
     var dict = parameters.dict;
 
     if (dict.has("IRT")) {
       var rawIRT = dict.getRaw("IRT");
-      _this2.data.inReplyTo = (0, _primitives.isRef)(rawIRT) ? rawIRT.toString() : null;
+      _this3.data.inReplyTo = (0, _primitives.isRef)(rawIRT) ? rawIRT.toString() : null;
       var rt = dict.get("RT");
-      _this2.data.replyType = (0, _primitives.isName)(rt) ? rt.name : _util.AnnotationReplyType.REPLY;
+      _this3.data.replyType = (0, _primitives.isName)(rt) ? rt.name : _util.AnnotationReplyType.REPLY;
     }
 
-    if (_this2.data.replyType === _util.AnnotationReplyType.GROUP) {
+    if (_this3.data.replyType === _util.AnnotationReplyType.GROUP) {
       var parent = dict.get("IRT");
-      _this2.data.title = (0, _util.stringToPDFString)(parent.get("T") || "");
+      _this3.data.title = (0, _util.stringToPDFString)(parent.get("T") || "");
 
-      _this2.setContents(parent.get("Contents"));
+      _this3.setContents(parent.get("Contents"));
 
-      _this2.data.contents = _this2.contents;
+      _this3.data.contents = _this3.contents;
 
       if (!parent.has("CreationDate")) {
-        _this2.data.creationDate = null;
+        _this3.data.creationDate = null;
       } else {
-        _this2.setCreationDate(parent.get("CreationDate"));
+        _this3.setCreationDate(parent.get("CreationDate"));
 
-        _this2.data.creationDate = _this2.creationDate;
+        _this3.data.creationDate = _this3.creationDate;
       }
 
       if (!parent.has("M")) {
-        _this2.data.modificationDate = null;
+        _this3.data.modificationDate = null;
       } else {
-        _this2.setModificationDate(parent.get("M"));
+        _this3.setModificationDate(parent.get("M"));
 
-        _this2.data.modificationDate = _this2.modificationDate;
+        _this3.data.modificationDate = _this3.modificationDate;
       }
 
-      _this2.data.hasPopup = parent.has("Popup");
+      _this3.data.hasPopup = parent.has("Popup");
 
       if (!parent.has("C")) {
-        _this2.data.color = null;
+        _this3.data.color = null;
       } else {
-        _this2.setColor(parent.getArray("C"));
+        _this3.setColor(parent.getArray("C"));
 
-        _this2.data.color = _this2.color;
+        _this3.data.color = _this3.color;
       }
     } else {
-      _this2.data.title = (0, _util.stringToPDFString)(dict.get("T") || "");
+      _this3.data.title = (0, _util.stringToPDFString)(dict.get("T") || "");
 
-      _this2.setCreationDate(dict.get("CreationDate"));
+      _this3.setCreationDate(dict.get("CreationDate"));
 
-      _this2.data.creationDate = _this2.creationDate;
-      _this2.data.hasPopup = dict.has("Popup");
+      _this3.data.creationDate = _this3.creationDate;
+      _this3.data.hasPopup = dict.has("Popup");
 
       if (!dict.has("C")) {
-        _this2.data.color = null;
+        _this3.data.color = null;
       }
     }
 
-    return _this2;
+    return _this3;
   }
 
   _createClass(MarkupAnnotation, [{
     key: "setCreationDate",
     value: function setCreationDate(creationDate) {
       this.creationDate = (0, _util.isString)(creationDate) ? creationDate : null;
+    }
+  }, {
+    key: "_setDefaultAppearance",
+    value: function _setDefaultAppearance(_ref) {
+      var xref = _ref.xref,
+          extra = _ref.extra,
+          strokeColor = _ref.strokeColor,
+          fillColor = _ref.fillColor,
+          blendMode = _ref.blendMode,
+          pointsCallback = _ref.pointsCallback;
+      var minX = Number.MAX_VALUE;
+      var minY = Number.MAX_VALUE;
+      var maxX = Number.MIN_VALUE;
+      var maxY = Number.MIN_VALUE;
+      var buffer = ["q"];
+
+      if (extra) {
+        buffer.push(extra);
+      }
+
+      if (strokeColor) {
+        buffer.push("".concat(strokeColor[0], " ").concat(strokeColor[1], " ").concat(strokeColor[2], " RG"));
+      }
+
+      if (fillColor) {
+        buffer.push("".concat(fillColor[0], " ").concat(fillColor[1], " ").concat(fillColor[2], " rg"));
+      }
+
+      var _iterator3 = _createForOfIteratorHelper(this.data.quadPoints),
+          _step3;
+
+      try {
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var points = _step3.value;
+
+          var _pointsCallback = pointsCallback(buffer, points),
+              _pointsCallback2 = _slicedToArray(_pointsCallback, 4),
+              mX = _pointsCallback2[0],
+              MX = _pointsCallback2[1],
+              mY = _pointsCallback2[2],
+              MY = _pointsCallback2[3];
+
+          minX = Math.min(minX, mX);
+          maxX = Math.max(maxX, MX);
+          minY = Math.min(minY, mY);
+          maxY = Math.max(maxY, MY);
+        }
+      } catch (err) {
+        _iterator3.e(err);
+      } finally {
+        _iterator3.f();
+      }
+
+      buffer.push("Q");
+      var formDict = new _primitives.Dict(xref);
+      var appearanceStreamDict = new _primitives.Dict(xref);
+      appearanceStreamDict.set("Subtype", _primitives.Name.get("Form"));
+      var appearanceStream = new _stream.StringStream(buffer.join(" "));
+      appearanceStream.dict = appearanceStreamDict;
+      formDict.set("Fm0", appearanceStream);
+      var gsDict = new _primitives.Dict(xref);
+
+      if (blendMode) {
+        gsDict.set("BM", _primitives.Name.get(blendMode));
+      }
+
+      var stateDict = new _primitives.Dict(xref);
+      stateDict.set("GS0", gsDict);
+      var resources = new _primitives.Dict(xref);
+      resources.set("ExtGState", stateDict);
+      resources.set("XObject", formDict);
+      var appearanceDict = new _primitives.Dict(xref);
+      appearanceDict.set("Resources", resources);
+      var bbox = this.data.rect = [minX, minY, maxX, maxY];
+      appearanceDict.set("BBox", bbox);
+      this.appearance = new _stream.StringStream("/GS0 gs /Fm0 Do");
+      this.appearance.dict = appearanceDict;
+
+      this._streams.push(this.appearance, appearanceStream);
     }
   }]);
 
@@ -31609,22 +31790,22 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
   var _super2 = _createSuper(WidgetAnnotation);
 
   function WidgetAnnotation(params) {
-    var _this3;
+    var _this4;
 
     _classCallCheck(this, WidgetAnnotation);
 
-    _this3 = _super2.call(this, params);
+    _this4 = _super2.call(this, params);
     var dict = params.dict;
-    var data = _this3.data;
-    _this3.ref = params.ref;
+    var data = _this4.data;
+    _this4.ref = params.ref;
     data.annotationType = _util.AnnotationType.WIDGET;
-    data.fieldName = _this3._constructFieldName(dict);
+    data.fieldName = _this4._constructFieldName(dict);
     var fieldValue = (0, _core_utils.getInheritableProperty)({
       dict: dict,
       key: "V",
       getArray: true
     });
-    data.fieldValue = _this3._decodeFormValue(fieldValue);
+    data.fieldValue = _this4._decodeFormValue(fieldValue);
     data.alternativeText = (0, _util.stringToPDFString)(dict.get("TU") || "");
     data.defaultAppearance = (0, _core_utils.getInheritableProperty)({
       dict: dict,
@@ -31635,10 +31816,20 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
       key: "FT"
     });
     data.fieldType = (0, _primitives.isName)(fieldType) ? fieldType.name : null;
-    _this3.fieldResources = (0, _core_utils.getInheritableProperty)({
+    var localResources = (0, _core_utils.getInheritableProperty)({
       dict: dict,
       key: "DR"
-    }) || params.acroForm.get("DR") || _primitives.Dict.empty;
+    });
+    var acroFormResources = params.acroForm.get("DR");
+    _this4._fieldResources = {
+      localResources: localResources,
+      acroFormResources: acroFormResources,
+      mergedResources: _primitives.Dict.merge({
+        xref: params.xref,
+        dictArray: [localResources, acroFormResources],
+        mergeSubDicts: true
+      })
+    };
     data.fieldFlags = (0, _core_utils.getInheritableProperty)({
       dict: dict,
       key: "Ff"
@@ -31648,19 +31839,19 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
       data.fieldFlags = 0;
     }
 
-    data.readOnly = _this3.hasFieldFlag(_util.AnnotationFieldFlag.READONLY);
+    data.readOnly = _this4.hasFieldFlag(_util.AnnotationFieldFlag.READONLY);
 
     if (data.fieldType === "Sig") {
       data.fieldValue = null;
 
       if (!self.showUnverifiedSignatures) {
-        _this3.setFlags(_util.AnnotationFlag.HIDDEN);
+        _this4.setFlags(_util.AnnotationFlag.HIDDEN);
 
         console.log("The PDF file contains a signature. Please take into account that it can't be verified yet.");
       }
     }
 
-    return _this3;
+    return _this4;
   }
 
   _createClass(WidgetAnnotation, [{
@@ -31722,7 +31913,7 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
   }, {
     key: "getOperatorList",
     value: function getOperatorList(evaluator, task, renderForms, annotationStorage) {
-      var _this4 = this;
+      var _this5 = this;
 
       if (renderForms) {
         return Promise.resolve(new _operator_list.OperatorList());
@@ -31733,25 +31924,25 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
       }
 
       return this._getAppearance(evaluator, task, annotationStorage).then(function (content) {
-        if (_this4.appearance && content === null) {
-          return _get(_getPrototypeOf(WidgetAnnotation.prototype), "getOperatorList", _this4).call(_this4, evaluator, task, renderForms, annotationStorage);
+        if (_this5.appearance && content === null) {
+          return _get(_getPrototypeOf(WidgetAnnotation.prototype), "getOperatorList", _this5).call(_this5, evaluator, task, renderForms, annotationStorage);
         }
 
         var operatorList = new _operator_list.OperatorList();
 
-        if (!_this4.data.defaultAppearance || content === null) {
+        if (!_this5.data.defaultAppearance || content === null) {
           return operatorList;
         }
 
         var matrix = [1, 0, 0, 1, 0, 0];
-        var bbox = [0, 0, _this4.data.rect[2] - _this4.data.rect[0], _this4.data.rect[3] - _this4.data.rect[1]];
-        var transform = getTransformMatrix(_this4.data.rect, bbox, matrix);
-        operatorList.addOp(_util.OPS.beginAnnotation, [_this4.data.rect, transform, matrix]);
+        var bbox = [0, 0, _this5.data.rect[2] - _this5.data.rect[0], _this5.data.rect[3] - _this5.data.rect[1]];
+        var transform = getTransformMatrix(_this5.data.rect, bbox, matrix);
+        operatorList.addOp(_util.OPS.beginAnnotation, [_this5.data.rect, transform, matrix]);
         var stream = new _stream.StringStream(content);
         return evaluator.getOperatorList({
           stream: stream,
           task: task,
-          resources: _this4.fieldResources,
+          resources: _this5._fieldResources.mergedResources,
           operatorList: operatorList
         }).then(function () {
           operatorList.addOp(_util.OPS.endAnnotation, []);
@@ -31763,7 +31954,7 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
     key: "save",
     value: function () {
       var _save2 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee2(evaluator, task, annotationStorage) {
-        var appearance, dict, bbox, newRef, AP, value, encrypt, originalTransform, newTransform, appearanceDict, bufferOriginal, bufferNew;
+        var appearance, xref, dict, value, bbox, xfa, newRef, AP, encrypt, originalTransform, newTransform, appearanceDict, bufferOriginal, bufferNew;
         return _regenerator["default"].wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -31790,22 +31981,27 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                 return _context2.abrupt("return", null);
 
               case 7:
-                dict = evaluator.xref.fetchIfRef(this.ref);
+                xref = evaluator.xref;
+                dict = xref.fetchIfRef(this.ref);
 
                 if ((0, _primitives.isDict)(dict)) {
-                  _context2.next = 10;
+                  _context2.next = 11;
                   break;
                 }
 
                 return _context2.abrupt("return", null);
 
-              case 10:
-                bbox = [0, 0, this.data.rect[2] - this.data.rect[0], this.data.rect[3] - this.data.rect[1]];
-                newRef = evaluator.xref.getNewRef();
-                AP = new _primitives.Dict(evaluator.xref);
-                AP.set("N", newRef);
+              case 11:
                 value = annotationStorage[this.data.id];
-                encrypt = evaluator.xref.encrypt;
+                bbox = [0, 0, this.data.rect[2] - this.data.rect[0], this.data.rect[3] - this.data.rect[1]];
+                xfa = {
+                  path: (0, _util.stringToPDFString)(dict.get("T") || ""),
+                  value: value
+                };
+                newRef = xref.getNewRef();
+                AP = new _primitives.Dict(xref);
+                AP.set("N", newRef);
+                encrypt = xref.encrypt;
                 originalTransform = null;
                 newTransform = null;
 
@@ -31818,10 +32014,10 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                 dict.set("V", value);
                 dict.set("AP", AP);
                 dict.set("M", "D:".concat((0, _util.getModificationDate)()));
-                appearanceDict = new _primitives.Dict(evaluator.xref);
+                appearanceDict = new _primitives.Dict(xref);
                 appearanceDict.set("Length", appearance.length);
                 appearanceDict.set("Subtype", _primitives.Name.get("Form"));
-                appearanceDict.set("Resources", this.fieldResources);
+                appearanceDict.set("Resources", this._getSaveFieldResources(xref));
                 appearanceDict.set("BBox", bbox);
                 bufferOriginal = ["".concat(this.ref.num, " ").concat(this.ref.gen, " obj\n")];
                 (0, _writer.writeDict)(dict, bufferOriginal, originalTransform);
@@ -31833,13 +32029,15 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                 bufferNew.push("\nendstream\nendobj\n");
                 return _context2.abrupt("return", [{
                   ref: this.ref,
-                  data: bufferOriginal.join("")
+                  data: bufferOriginal.join(""),
+                  xfa: xfa
                 }, {
                   ref: newRef,
-                  data: bufferNew.join("")
+                  data: bufferNew.join(""),
+                  xfa: null
                 }]);
 
-              case 36:
+              case 38:
               case "end":
                 return _context2.stop();
             }
@@ -31863,38 +32061,39 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
+                this._fontName = null;
                 isPassword = this.hasFieldFlag(_util.AnnotationFieldFlag.PASSWORD);
 
                 if (!(!annotationStorage || isPassword)) {
-                  _context3.next = 3;
+                  _context3.next = 4;
                   break;
                 }
 
                 return _context3.abrupt("return", null);
 
-              case 3:
+              case 4:
                 value = annotationStorage[this.data.id];
 
                 if (!(value === "")) {
-                  _context3.next = 6;
+                  _context3.next = 7;
                   break;
                 }
 
                 return _context3.abrupt("return", "");
 
-              case 6:
+              case 7:
                 defaultPadding = 2;
                 hPadding = defaultPadding;
                 totalHeight = this.data.rect[3] - this.data.rect[1];
                 totalWidth = this.data.rect[2] - this.data.rect[0];
-                _context3.next = 12;
+                _context3.next = 13;
                 return this._getFontData(evaluator, task);
 
-              case 12:
+              case 13:
                 fontInfo = _context3.sent;
                 _fontInfo = _slicedToArray(fontInfo, 2), font = _fontInfo[0], fontName = _fontInfo[1];
-                fontSize = fontInfo[2];
-                fontSize = this._computeFontSize(font, fontName, fontSize, totalHeight);
+                fontSize = this._computeFontSize.apply(this, _toConsumableArray(fontInfo).concat([totalHeight]));
+                this._fontName = fontName;
                 descent = font.descent;
 
                 if (isNaN(descent)) {
@@ -31906,33 +32105,33 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                 alignment = this.data.textAlignment;
 
                 if (!this.data.comb) {
-                  _context3.next = 23;
+                  _context3.next = 24;
                   break;
                 }
 
                 return _context3.abrupt("return", this._getCombAppearance(defaultAppearance, value, totalWidth, hPadding, vPadding));
 
-              case 23:
+              case 24:
                 if (!this.data.multiLine) {
-                  _context3.next = 25;
+                  _context3.next = 26;
                   break;
                 }
 
                 return _context3.abrupt("return", this._getMultilineAppearance(defaultAppearance, value, font, fontSize, totalWidth, totalHeight, alignment, hPadding, vPadding));
 
-              case 25:
+              case 26:
                 if (!(alignment === 0 || alignment > 2)) {
-                  _context3.next = 27;
+                  _context3.next = 28;
                   break;
                 }
 
                 return _context3.abrupt("return", "/Tx BMC q BT " + defaultAppearance + " 1 0 0 1 ".concat(hPadding, " ").concat(vPadding, " Tm (").concat((0, _util.escapeString)(value), ") Tj") + " ET Q EMC");
 
-              case 27:
+              case 28:
                 renderedText = this._renderText(value, font, fontSize, totalWidth, alignment, hPadding, vPadding);
                 return _context3.abrupt("return", "/Tx BMC q BT " + defaultAppearance + " 1 0 0 1 0 0 Tm ".concat(renderedText) + " ET Q EMC");
 
-              case 29:
+              case 30:
               case "end":
                 return _context3.stop();
             }
@@ -31968,7 +32167,7 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                 return evaluator.getOperatorList({
                   stream: new _stream.StringStream(this.data.defaultAppearance),
                   task: task,
-                  resources: this.fieldResources,
+                  resources: this._fieldResources.mergedResources,
                   operatorList: operatorList,
                   initialState: initialState
                 });
@@ -32015,18 +32214,18 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
       var scale = fontSize / 1000;
       var width = 0;
 
-      var _iterator2 = _createForOfIteratorHelper(glyphs),
-          _step2;
+      var _iterator4 = _createForOfIteratorHelper(glyphs),
+          _step4;
 
       try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var glyph = _step2.value;
+        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+          var glyph = _step4.value;
           width += glyph.width * scale;
         }
       } catch (err) {
-        _iterator2.e(err);
+        _iterator4.e(err);
       } finally {
-        _iterator2.f();
+        _iterator4.f();
       }
 
       var shift;
@@ -32043,6 +32242,43 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
       vPadding = vPadding.toFixed(2);
       return "".concat(shift, " ").concat(vPadding, " Td (").concat((0, _util.escapeString)(text), ") Tj");
     }
+  }, {
+    key: "_getSaveFieldResources",
+    value: function _getSaveFieldResources(xref) {
+      var _this$_fieldResources = this._fieldResources,
+          localResources = _this$_fieldResources.localResources,
+          acroFormResources = _this$_fieldResources.acroFormResources;
+
+      if (!this._fontName) {
+        return localResources || _primitives.Dict.empty;
+      }
+
+      if (localResources instanceof _primitives.Dict) {
+        var localFont = localResources.get("Font");
+
+        if (localFont instanceof _primitives.Dict && localFont.has(this._fontName)) {
+          return localResources;
+        }
+      }
+
+      if (acroFormResources instanceof _primitives.Dict) {
+        var acroFormFont = acroFormResources.get("Font");
+
+        if (acroFormFont instanceof _primitives.Dict && acroFormFont.has(this._fontName)) {
+          var subFontDict = new _primitives.Dict(xref);
+          subFontDict.set(this._fontName, acroFormFont.getRaw(this._fontName));
+          var subResourcesDict = new _primitives.Dict(xref);
+          subResourcesDict.set("Font", subFontDict);
+          return _primitives.Dict.merge({
+            xref: xref,
+            dictArray: [subResourcesDict, localResources],
+            mergeSubDicts: true
+          });
+        }
+      }
+
+      return localResources || _primitives.Dict.empty;
+    }
   }]);
 
   return WidgetAnnotation;
@@ -32054,16 +32290,16 @@ var TextWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation) {
   var _super3 = _createSuper(TextWidgetAnnotation);
 
   function TextWidgetAnnotation(params) {
-    var _this5;
+    var _this6;
 
     _classCallCheck(this, TextWidgetAnnotation);
 
-    _this5 = _super3.call(this, params);
-    _this5._hasText = true;
+    _this6 = _super3.call(this, params);
+    _this6._hasText = true;
     var dict = params.dict;
 
-    if (!(0, _util.isString)(_this5.data.fieldValue)) {
-      _this5.data.fieldValue = "";
+    if (!(0, _util.isString)(_this6.data.fieldValue)) {
+      _this6.data.fieldValue = "";
     }
 
     var alignment = (0, _core_utils.getInheritableProperty)({
@@ -32075,7 +32311,7 @@ var TextWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation) {
       alignment = null;
     }
 
-    _this5.data.textAlignment = alignment;
+    _this6.data.textAlignment = alignment;
     var maximumLength = (0, _core_utils.getInheritableProperty)({
       dict: dict,
       key: "MaxLen"
@@ -32085,10 +32321,10 @@ var TextWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation) {
       maximumLength = null;
     }
 
-    _this5.data.maxLen = maximumLength;
-    _this5.data.multiLine = _this5.hasFieldFlag(_util.AnnotationFieldFlag.MULTILINE);
-    _this5.data.comb = _this5.hasFieldFlag(_util.AnnotationFieldFlag.COMB) && !_this5.hasFieldFlag(_util.AnnotationFieldFlag.MULTILINE) && !_this5.hasFieldFlag(_util.AnnotationFieldFlag.PASSWORD) && !_this5.hasFieldFlag(_util.AnnotationFieldFlag.FILESELECT) && _this5.data.maxLen !== null;
-    return _this5;
+    _this6.data.maxLen = maximumLength;
+    _this6.data.multiLine = _this6.hasFieldFlag(_util.AnnotationFieldFlag.MULTILINE);
+    _this6.data.comb = _this6.hasFieldFlag(_util.AnnotationFieldFlag.COMB) && !_this6.hasFieldFlag(_util.AnnotationFieldFlag.MULTILINE) && !_this6.hasFieldFlag(_util.AnnotationFieldFlag.PASSWORD) && !_this6.hasFieldFlag(_util.AnnotationFieldFlag.FILESELECT) && _this6.data.maxLen !== null;
+    return _this6;
   }
 
   _createClass(TextWidgetAnnotation, [{
@@ -32097,18 +32333,18 @@ var TextWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation) {
       var combWidth = (width / this.data.maxLen).toFixed(2);
       var buf = [];
 
-      var _iterator3 = _createForOfIteratorHelper(text),
-          _step3;
+      var _iterator5 = _createForOfIteratorHelper(text),
+          _step5;
 
       try {
-        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-          var character = _step3.value;
+        for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+          var character = _step5.value;
           buf.push("(".concat((0, _util.escapeString)(character), ") Tj"));
         }
       } catch (err) {
-        _iterator3.e(err);
+        _iterator5.e(err);
       } finally {
-        _iterator3.f();
+        _iterator5.f();
       }
 
       var renderedComb = buf.join(" ".concat(combWidth, " 0 Td "));
@@ -32121,34 +32357,34 @@ var TextWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation) {
       var buf = [];
       var totalWidth = width - 2 * hPadding;
 
-      var _iterator4 = _createForOfIteratorHelper(lines),
-          _step4;
+      var _iterator6 = _createForOfIteratorHelper(lines),
+          _step6;
 
       try {
-        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-          var line = _step4.value;
+        for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+          var line = _step6.value;
 
           var chunks = this._splitLine(line, font, fontSize, totalWidth);
 
-          var _iterator5 = _createForOfIteratorHelper(chunks),
-              _step5;
+          var _iterator7 = _createForOfIteratorHelper(chunks),
+              _step7;
 
           try {
-            for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
-              var chunk = _step5.value;
+            for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
+              var chunk = _step7.value;
               var padding = buf.length === 0 ? hPadding : 0;
               buf.push(this._renderText(chunk, font, fontSize, width, alignment, padding, -fontSize));
             }
           } catch (err) {
-            _iterator5.e(err);
+            _iterator7.e(err);
           } finally {
-            _iterator5.f();
+            _iterator7.f();
           }
         }
       } catch (err) {
-        _iterator4.e(err);
+        _iterator6.e(err);
       } finally {
-        _iterator4.f();
+        _iterator6.f();
       }
 
       var renderedText = buf.join("\n");
@@ -32218,28 +32454,28 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
   var _super4 = _createSuper(ButtonWidgetAnnotation);
 
   function ButtonWidgetAnnotation(params) {
-    var _this6;
+    var _this7;
 
     _classCallCheck(this, ButtonWidgetAnnotation);
 
-    _this6 = _super4.call(this, params);
-    _this6.checkedAppearance = null;
-    _this6.uncheckedAppearance = null;
-    _this6.data.checkBox = !_this6.hasFieldFlag(_util.AnnotationFieldFlag.RADIO) && !_this6.hasFieldFlag(_util.AnnotationFieldFlag.PUSHBUTTON);
-    _this6.data.radioButton = _this6.hasFieldFlag(_util.AnnotationFieldFlag.RADIO) && !_this6.hasFieldFlag(_util.AnnotationFieldFlag.PUSHBUTTON);
-    _this6.data.pushButton = _this6.hasFieldFlag(_util.AnnotationFieldFlag.PUSHBUTTON);
+    _this7 = _super4.call(this, params);
+    _this7.checkedAppearance = null;
+    _this7.uncheckedAppearance = null;
+    _this7.data.checkBox = !_this7.hasFieldFlag(_util.AnnotationFieldFlag.RADIO) && !_this7.hasFieldFlag(_util.AnnotationFieldFlag.PUSHBUTTON);
+    _this7.data.radioButton = _this7.hasFieldFlag(_util.AnnotationFieldFlag.RADIO) && !_this7.hasFieldFlag(_util.AnnotationFieldFlag.PUSHBUTTON);
+    _this7.data.pushButton = _this7.hasFieldFlag(_util.AnnotationFieldFlag.PUSHBUTTON);
 
-    if (_this6.data.checkBox) {
-      _this6._processCheckBox(params);
-    } else if (_this6.data.radioButton) {
-      _this6._processRadioButton(params);
-    } else if (_this6.data.pushButton) {
-      _this6._processPushButton(params);
+    if (_this7.data.checkBox) {
+      _this7._processCheckBox(params);
+    } else if (_this7.data.radioButton) {
+      _this7._processRadioButton(params);
+    } else if (_this7.data.pushButton) {
+      _this7._processPushButton(params);
     } else {
       (0, _util.warn)("Invalid field flags for button widget annotation");
     }
 
-    return _this6;
+    return _this7;
   }
 
   _createClass(ButtonWidgetAnnotation, [{
@@ -32298,7 +32534,7 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
                 return _context5.abrupt("return", this._saveRadioButton(evaluator, task, annotationStorage));
 
               case 4:
-                return _context5.abrupt("return", _get(_getPrototypeOf(ButtonWidgetAnnotation.prototype), "save", this).call(this, evaluator, task, annotationStorage));
+                return _context5.abrupt("return", null);
 
               case 5:
               case "end":
@@ -32318,7 +32554,7 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
     key: "_saveCheckbox",
     value: function () {
       var _saveCheckbox2 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee6(evaluator, task, annotationStorage) {
-        var defaultValue, value, dict, name, encrypt, originalTransform, buffer;
+        var defaultValue, value, dict, xfa, name, encrypt, originalTransform, buffer;
         return _regenerator["default"].wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
@@ -32344,6 +32580,10 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
                 return _context6.abrupt("return", null);
 
               case 7:
+                xfa = {
+                  path: (0, _util.stringToPDFString)(dict.get("T") || ""),
+                  value: value ? this.data.exportValue : ""
+                };
                 name = _primitives.Name.get(value ? this.data.exportValue : "Off");
                 dict.set("V", name);
                 dict.set("AS", name);
@@ -32360,10 +32600,11 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
                 buffer.push("\nendobj\n");
                 return _context6.abrupt("return", [{
                   ref: this.ref,
-                  data: buffer.join("")
+                  data: buffer.join(""),
+                  xfa: xfa
                 }]);
 
-              case 18:
+              case 19:
               case "end":
                 return _context6.stop();
             }
@@ -32381,7 +32622,7 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
     key: "_saveRadioButton",
     value: function () {
       var _saveRadioButton2 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee7(evaluator, task, annotationStorage) {
-        var defaultValue, value, dict, name, parentBuffer, encrypt, parent, parentTransform, originalTransform, buffer, newRefs;
+        var defaultValue, value, dict, xfa, name, parentBuffer, encrypt, parent, parentTransform, originalTransform, buffer, newRefs;
         return _regenerator["default"].wrap(function _callee7$(_context7) {
           while (1) {
             switch (_context7.prev = _context7.next) {
@@ -32407,6 +32648,10 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
                 return _context7.abrupt("return", null);
 
               case 7:
+                xfa = {
+                  path: (0, _util.stringToPDFString)(dict.get("T") || ""),
+                  value: value ? this.data.buttonValue : ""
+                };
                 name = _primitives.Name.get(value ? this.data.buttonValue : "Off");
                 parentBuffer = null;
                 encrypt = evaluator.xref.encrypt;
@@ -32442,19 +32687,21 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
                 buffer.push("\nendobj\n");
                 newRefs = [{
                   ref: this.ref,
-                  data: buffer.join("")
+                  data: buffer.join(""),
+                  xfa: xfa
                 }];
 
                 if (parentBuffer !== null) {
                   newRefs.push({
                     ref: this.parent,
-                    data: parentBuffer.join("")
+                    data: parentBuffer.join(""),
+                    xfa: null
                   });
                 }
 
                 return _context7.abrupt("return", newRefs);
 
-              case 21:
+              case 22:
               case "end":
                 return _context7.stop();
             }
@@ -32496,6 +32743,12 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
       this.data.exportValue = exportValues[0] === "Off" ? exportValues[1] : exportValues[0];
       this.checkedAppearance = normalAppearance.get(this.data.exportValue);
       this.uncheckedAppearance = normalAppearance.get("Off") || null;
+
+      this._streams.push(this.checkedAppearance);
+
+      if (this.uncheckedAppearance) {
+        this._streams.push(this.uncheckedAppearance);
+      }
     }
   }, {
     key: "_processRadioButton",
@@ -32503,11 +32756,11 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
       this.data.fieldValue = this.data.buttonValue = null;
       var fieldParent = params.dict.get("Parent");
 
-      if ((0, _primitives.isDict)(fieldParent) && fieldParent.has("V")) {
+      if ((0, _primitives.isDict)(fieldParent)) {
+        this.parent = params.dict.getRaw("Parent");
         var fieldParentValue = fieldParent.get("V");
 
         if ((0, _primitives.isName)(fieldParentValue)) {
-          this.parent = params.dict.getRaw("Parent");
           this.data.fieldValue = this._decodeFormValue(fieldParentValue);
         }
       }
@@ -32524,26 +32777,32 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
         return;
       }
 
-      var _iterator6 = _createForOfIteratorHelper(normalAppearance.getKeys()),
-          _step6;
+      var _iterator8 = _createForOfIteratorHelper(normalAppearance.getKeys()),
+          _step8;
 
       try {
-        for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
-          var key = _step6.value;
+        for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
+          var key = _step8.value;
 
           if (key !== "Off") {
-            this.data.buttonValue = key;
+            this.data.buttonValue = this._decodeFormValue(key);
             break;
           }
         }
       } catch (err) {
-        _iterator6.e(err);
+        _iterator8.e(err);
       } finally {
-        _iterator6.f();
+        _iterator8.f();
       }
 
       this.checkedAppearance = normalAppearance.get(this.data.buttonValue);
       this.uncheckedAppearance = normalAppearance.get("Off") || null;
+
+      this._streams.push(this.checkedAppearance);
+
+      if (this.uncheckedAppearance) {
+        this._streams.push(this.uncheckedAppearance);
+      }
     }
   }, {
     key: "_processPushButton",
@@ -32570,12 +32829,12 @@ var ChoiceWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation3) {
   var _super5 = _createSuper(ChoiceWidgetAnnotation);
 
   function ChoiceWidgetAnnotation(params) {
-    var _this7;
+    var _this8;
 
     _classCallCheck(this, ChoiceWidgetAnnotation);
 
-    _this7 = _super5.call(this, params);
-    _this7.data.options = [];
+    _this8 = _super5.call(this, params);
+    _this8.data.options = [];
     var options = (0, _core_utils.getInheritableProperty)({
       dict: params.dict,
       key: "Opt"
@@ -32587,23 +32846,23 @@ var ChoiceWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation3) {
       for (var i = 0, ii = options.length; i < ii; i++) {
         var option = xref.fetchIfRef(options[i]);
         var isOptionArray = Array.isArray(option);
-        _this7.data.options[i] = {
-          exportValue: _this7._decodeFormValue(isOptionArray ? xref.fetchIfRef(option[0]) : option),
-          displayValue: _this7._decodeFormValue(isOptionArray ? xref.fetchIfRef(option[1]) : option)
+        _this8.data.options[i] = {
+          exportValue: _this8._decodeFormValue(isOptionArray ? xref.fetchIfRef(option[0]) : option),
+          displayValue: _this8._decodeFormValue(isOptionArray ? xref.fetchIfRef(option[1]) : option)
         };
       }
     }
 
-    if ((0, _util.isString)(_this7.data.fieldValue)) {
-      _this7.data.fieldValue = [_this7.data.fieldValue];
-    } else if (!_this7.data.fieldValue) {
-      _this7.data.fieldValue = [];
+    if ((0, _util.isString)(_this8.data.fieldValue)) {
+      _this8.data.fieldValue = [_this8.data.fieldValue];
+    } else if (!_this8.data.fieldValue) {
+      _this8.data.fieldValue = [];
     }
 
-    _this7.data.combo = _this7.hasFieldFlag(_util.AnnotationFieldFlag.COMBO);
-    _this7.data.multiSelect = _this7.hasFieldFlag(_util.AnnotationFieldFlag.MULTISELECT);
-    _this7._hasText = true;
-    return _this7;
+    _this8.data.combo = _this8.hasFieldFlag(_util.AnnotationFieldFlag.COMBO);
+    _this8.data.multiSelect = _this8.hasFieldFlag(_util.AnnotationFieldFlag.MULTISELECT);
+    _this8._hasText = true;
+    return _this8;
   }
 
   return ChoiceWidgetAnnotation;
@@ -32615,32 +32874,32 @@ var TextAnnotation = /*#__PURE__*/function (_MarkupAnnotation) {
   var _super6 = _createSuper(TextAnnotation);
 
   function TextAnnotation(parameters) {
-    var _this8;
+    var _this9;
 
     _classCallCheck(this, TextAnnotation);
 
     var DEFAULT_ICON_SIZE = 22;
-    _this8 = _super6.call(this, parameters);
+    _this9 = _super6.call(this, parameters);
     var dict = parameters.dict;
-    _this8.data.annotationType = _util.AnnotationType.TEXT;
+    _this9.data.annotationType = _util.AnnotationType.TEXT;
 
-    if (_this8.data.hasAppearance) {
-      _this8.data.name = "NoIcon";
+    if (_this9.data.hasAppearance) {
+      _this9.data.name = "NoIcon";
     } else {
-      _this8.data.rect[1] = _this8.data.rect[3] - DEFAULT_ICON_SIZE;
-      _this8.data.rect[2] = _this8.data.rect[0] + DEFAULT_ICON_SIZE;
-      _this8.data.name = dict.has("Name") ? dict.get("Name").name : "Note";
+      _this9.data.rect[1] = _this9.data.rect[3] - DEFAULT_ICON_SIZE;
+      _this9.data.rect[2] = _this9.data.rect[0] + DEFAULT_ICON_SIZE;
+      _this9.data.name = dict.has("Name") ? dict.get("Name").name : "Note";
     }
 
     if (dict.has("State")) {
-      _this8.data.state = dict.get("State") || null;
-      _this8.data.stateModel = dict.get("StateModel") || null;
+      _this9.data.state = dict.get("State") || null;
+      _this9.data.stateModel = dict.get("StateModel") || null;
     } else {
-      _this8.data.state = null;
-      _this8.data.stateModel = null;
+      _this9.data.state = null;
+      _this9.data.stateModel = null;
     }
 
-    return _this8;
+    return _this9;
   }
 
   return TextAnnotation;
@@ -32652,25 +32911,25 @@ var LinkAnnotation = /*#__PURE__*/function (_Annotation3) {
   var _super7 = _createSuper(LinkAnnotation);
 
   function LinkAnnotation(params) {
-    var _this9;
+    var _this10;
 
     _classCallCheck(this, LinkAnnotation);
 
-    _this9 = _super7.call(this, params);
-    _this9.data.annotationType = _util.AnnotationType.LINK;
-    var quadPoints = getQuadPoints(params.dict, _this9.rectangle);
+    _this10 = _super7.call(this, params);
+    _this10.data.annotationType = _util.AnnotationType.LINK;
+    var quadPoints = getQuadPoints(params.dict, _this10.rectangle);
 
     if (quadPoints) {
-      _this9.data.quadPoints = quadPoints;
+      _this10.data.quadPoints = quadPoints;
     }
 
     _obj.Catalog.parseDestDictionary({
       destDict: params.dict,
-      resultObj: _this9.data,
+      resultObj: _this10.data,
       docBaseUrl: params.pdfManager.docBaseUrl
     });
 
-    return _this9;
+    return _this10;
   }
 
   return LinkAnnotation;
@@ -32682,23 +32941,23 @@ var PopupAnnotation = /*#__PURE__*/function (_Annotation4) {
   var _super8 = _createSuper(PopupAnnotation);
 
   function PopupAnnotation(parameters) {
-    var _this10;
+    var _this11;
 
     _classCallCheck(this, PopupAnnotation);
 
-    _this10 = _super8.call(this, parameters);
-    _this10.data.annotationType = _util.AnnotationType.POPUP;
+    _this11 = _super8.call(this, parameters);
+    _this11.data.annotationType = _util.AnnotationType.POPUP;
     var parentItem = parameters.dict.get("Parent");
 
     if (!parentItem) {
       (0, _util.warn)("Popup annotation has a missing or invalid parent annotation.");
-      return _possibleConstructorReturn(_this10);
+      return _possibleConstructorReturn(_this11);
     }
 
     var parentSubtype = parentItem.get("Subtype");
-    _this10.data.parentType = (0, _primitives.isName)(parentSubtype) ? parentSubtype.name : null;
+    _this11.data.parentType = (0, _primitives.isName)(parentSubtype) ? parentSubtype.name : null;
     var rawParent = parameters.dict.getRaw("Parent");
-    _this10.data.parentId = (0, _primitives.isRef)(rawParent) ? rawParent.toString() : null;
+    _this11.data.parentId = (0, _primitives.isRef)(rawParent) ? rawParent.toString() : null;
     var rt = parentItem.get("RT");
 
     if ((0, _primitives.isName)(rt, _util.AnnotationReplyType.GROUP)) {
@@ -32706,32 +32965,32 @@ var PopupAnnotation = /*#__PURE__*/function (_Annotation4) {
     }
 
     if (!parentItem.has("M")) {
-      _this10.data.modificationDate = null;
+      _this11.data.modificationDate = null;
     } else {
-      _this10.setModificationDate(parentItem.get("M"));
+      _this11.setModificationDate(parentItem.get("M"));
 
-      _this10.data.modificationDate = _this10.modificationDate;
+      _this11.data.modificationDate = _this11.modificationDate;
     }
 
     if (!parentItem.has("C")) {
-      _this10.data.color = null;
+      _this11.data.color = null;
     } else {
-      _this10.setColor(parentItem.getArray("C"));
+      _this11.setColor(parentItem.getArray("C"));
 
-      _this10.data.color = _this10.color;
+      _this11.data.color = _this11.color;
     }
 
-    if (!_this10.viewable) {
+    if (!_this11.viewable) {
       var parentFlags = parentItem.get("F");
 
-      if (_this10._isViewable(parentFlags)) {
-        _this10.setFlags(parentFlags);
+      if (_this11._isViewable(parentFlags)) {
+        _this11.setFlags(parentFlags);
       }
     }
 
-    _this10.data.title = (0, _util.stringToPDFString)(parentItem.get("T") || "");
-    _this10.data.contents = (0, _util.stringToPDFString)(parentItem.get("Contents") || "");
-    return _this10;
+    _this11.data.title = (0, _util.stringToPDFString)(parentItem.get("T") || "");
+    _this11.data.contents = (0, _util.stringToPDFString)(parentItem.get("Contents") || "");
+    return _this11;
   }
 
   return PopupAnnotation;
@@ -32743,13 +33002,13 @@ var FreeTextAnnotation = /*#__PURE__*/function (_MarkupAnnotation2) {
   var _super9 = _createSuper(FreeTextAnnotation);
 
   function FreeTextAnnotation(parameters) {
-    var _this11;
+    var _this12;
 
     _classCallCheck(this, FreeTextAnnotation);
 
-    _this11 = _super9.call(this, parameters);
-    _this11.data.annotationType = _util.AnnotationType.FREETEXT;
-    return _this11;
+    _this12 = _super9.call(this, parameters);
+    _this12.data.annotationType = _util.AnnotationType.FREETEXT;
+    return _this12;
   }
 
   return FreeTextAnnotation;
@@ -32761,14 +33020,14 @@ var LineAnnotation = /*#__PURE__*/function (_MarkupAnnotation3) {
   var _super10 = _createSuper(LineAnnotation);
 
   function LineAnnotation(parameters) {
-    var _this12;
+    var _this13;
 
     _classCallCheck(this, LineAnnotation);
 
-    _this12 = _super10.call(this, parameters);
-    _this12.data.annotationType = _util.AnnotationType.LINE;
-    _this12.data.lineCoordinates = _util.Util.normalizeRect(parameters.dict.getArray("L"));
-    return _this12;
+    _this13 = _super10.call(this, parameters);
+    _this13.data.annotationType = _util.AnnotationType.LINE;
+    _this13.data.lineCoordinates = _util.Util.normalizeRect(parameters.dict.getArray("L"));
+    return _this13;
   }
 
   return LineAnnotation;
@@ -32780,13 +33039,13 @@ var SquareAnnotation = /*#__PURE__*/function (_MarkupAnnotation4) {
   var _super11 = _createSuper(SquareAnnotation);
 
   function SquareAnnotation(parameters) {
-    var _this13;
+    var _this14;
 
     _classCallCheck(this, SquareAnnotation);
 
-    _this13 = _super11.call(this, parameters);
-    _this13.data.annotationType = _util.AnnotationType.SQUARE;
-    return _this13;
+    _this14 = _super11.call(this, parameters);
+    _this14.data.annotationType = _util.AnnotationType.SQUARE;
+    return _this14;
   }
 
   return SquareAnnotation;
@@ -32798,13 +33057,13 @@ var CircleAnnotation = /*#__PURE__*/function (_MarkupAnnotation5) {
   var _super12 = _createSuper(CircleAnnotation);
 
   function CircleAnnotation(parameters) {
-    var _this14;
+    var _this15;
 
     _classCallCheck(this, CircleAnnotation);
 
-    _this14 = _super12.call(this, parameters);
-    _this14.data.annotationType = _util.AnnotationType.CIRCLE;
-    return _this14;
+    _this15 = _super12.call(this, parameters);
+    _this15.data.annotationType = _util.AnnotationType.CIRCLE;
+    return _this15;
   }
 
   return CircleAnnotation;
@@ -32816,23 +33075,27 @@ var PolylineAnnotation = /*#__PURE__*/function (_MarkupAnnotation6) {
   var _super13 = _createSuper(PolylineAnnotation);
 
   function PolylineAnnotation(parameters) {
-    var _this15;
+    var _this16;
 
     _classCallCheck(this, PolylineAnnotation);
 
-    _this15 = _super13.call(this, parameters);
-    _this15.data.annotationType = _util.AnnotationType.POLYLINE;
+    _this16 = _super13.call(this, parameters);
+    _this16.data.annotationType = _util.AnnotationType.POLYLINE;
+    _this16.data.vertices = [];
     var rawVertices = parameters.dict.getArray("Vertices");
-    _this15.data.vertices = [];
+
+    if (!Array.isArray(rawVertices)) {
+      return _possibleConstructorReturn(_this16);
+    }
 
     for (var i = 0, ii = rawVertices.length; i < ii; i += 2) {
-      _this15.data.vertices.push({
+      _this16.data.vertices.push({
         x: rawVertices[i],
         y: rawVertices[i + 1]
       });
     }
 
-    return _this15;
+    return _this16;
   }
 
   return PolylineAnnotation;
@@ -32844,13 +33107,13 @@ var PolygonAnnotation = /*#__PURE__*/function (_PolylineAnnotation) {
   var _super14 = _createSuper(PolygonAnnotation);
 
   function PolygonAnnotation(parameters) {
-    var _this16;
+    var _this17;
 
     _classCallCheck(this, PolygonAnnotation);
 
-    _this16 = _super14.call(this, parameters);
-    _this16.data.annotationType = _util.AnnotationType.POLYGON;
-    return _this16;
+    _this17 = _super14.call(this, parameters);
+    _this17.data.annotationType = _util.AnnotationType.POLYGON;
+    return _this17;
   }
 
   return PolygonAnnotation;
@@ -32862,13 +33125,13 @@ var CaretAnnotation = /*#__PURE__*/function (_MarkupAnnotation7) {
   var _super15 = _createSuper(CaretAnnotation);
 
   function CaretAnnotation(parameters) {
-    var _this17;
+    var _this18;
 
     _classCallCheck(this, CaretAnnotation);
 
-    _this17 = _super15.call(this, parameters);
-    _this17.data.annotationType = _util.AnnotationType.CARET;
-    return _this17;
+    _this18 = _super15.call(this, parameters);
+    _this18.data.annotationType = _util.AnnotationType.CARET;
+    return _this18;
   }
 
   return CaretAnnotation;
@@ -32880,28 +33143,33 @@ var InkAnnotation = /*#__PURE__*/function (_MarkupAnnotation8) {
   var _super16 = _createSuper(InkAnnotation);
 
   function InkAnnotation(parameters) {
-    var _this18;
+    var _this19;
 
     _classCallCheck(this, InkAnnotation);
 
-    _this18 = _super16.call(this, parameters);
-    _this18.data.annotationType = _util.AnnotationType.INK;
+    _this19 = _super16.call(this, parameters);
+    _this19.data.annotationType = _util.AnnotationType.INK;
+    _this19.data.inkLists = [];
+    var rawInkLists = parameters.dict.getArray("InkList");
+
+    if (!Array.isArray(rawInkLists)) {
+      return _possibleConstructorReturn(_this19);
+    }
+
     var xref = parameters.xref;
-    var originalInkLists = parameters.dict.getArray("InkList");
-    _this18.data.inkLists = [];
 
-    for (var i = 0, ii = originalInkLists.length; i < ii; ++i) {
-      _this18.data.inkLists.push([]);
+    for (var i = 0, ii = rawInkLists.length; i < ii; ++i) {
+      _this19.data.inkLists.push([]);
 
-      for (var j = 0, jj = originalInkLists[i].length; j < jj; j += 2) {
-        _this18.data.inkLists[i].push({
-          x: xref.fetchIfRef(originalInkLists[i][j]),
-          y: xref.fetchIfRef(originalInkLists[i][j + 1])
+      for (var j = 0, jj = rawInkLists[i].length; j < jj; j += 2) {
+        _this19.data.inkLists[i].push({
+          x: xref.fetchIfRef(rawInkLists[i][j]),
+          y: xref.fetchIfRef(rawInkLists[i][j + 1])
         });
       }
     }
 
-    return _this18;
+    return _this19;
   }
 
   return InkAnnotation;
@@ -32913,19 +33181,39 @@ var HighlightAnnotation = /*#__PURE__*/function (_MarkupAnnotation9) {
   var _super17 = _createSuper(HighlightAnnotation);
 
   function HighlightAnnotation(parameters) {
-    var _this19;
+    var _this20;
 
     _classCallCheck(this, HighlightAnnotation);
 
-    _this19 = _super17.call(this, parameters);
-    _this19.data.annotationType = _util.AnnotationType.HIGHLIGHT;
-    var quadPoints = getQuadPoints(parameters.dict, _this19.rectangle);
+    _this20 = _super17.call(this, parameters);
+    _this20.data.annotationType = _util.AnnotationType.HIGHLIGHT;
+    var quadPoints = getQuadPoints(parameters.dict, null);
 
     if (quadPoints) {
-      _this19.data.quadPoints = quadPoints;
+      _this20.data.quadPoints = quadPoints;
+
+      if (!_this20.appearance) {
+        var fillColor = _this20.color ? Array.from(_this20.color).map(function (c) {
+          return c / 255;
+        }) : [1, 1, 0];
+
+        _this20._setDefaultAppearance({
+          xref: parameters.xref,
+          fillColor: fillColor,
+          blendMode: "Multiply",
+          pointsCallback: function pointsCallback(buffer, points) {
+            buffer.push("".concat(points[0].x, " ").concat(points[0].y, " m"));
+            buffer.push("".concat(points[1].x, " ").concat(points[1].y, " l"));
+            buffer.push("".concat(points[3].x, " ").concat(points[3].y, " l"));
+            buffer.push("".concat(points[2].x, " ").concat(points[2].y, " l"));
+            buffer.push("f");
+            return [points[0].x, points[1].x, points[3].y, points[1].y];
+          }
+        });
+      }
     }
 
-    return _this19;
+    return _this20;
   }
 
   return HighlightAnnotation;
@@ -32937,19 +33225,37 @@ var UnderlineAnnotation = /*#__PURE__*/function (_MarkupAnnotation10) {
   var _super18 = _createSuper(UnderlineAnnotation);
 
   function UnderlineAnnotation(parameters) {
-    var _this20;
+    var _this21;
 
     _classCallCheck(this, UnderlineAnnotation);
 
-    _this20 = _super18.call(this, parameters);
-    _this20.data.annotationType = _util.AnnotationType.UNDERLINE;
-    var quadPoints = getQuadPoints(parameters.dict, _this20.rectangle);
+    _this21 = _super18.call(this, parameters);
+    _this21.data.annotationType = _util.AnnotationType.UNDERLINE;
+    var quadPoints = getQuadPoints(parameters.dict, null);
 
     if (quadPoints) {
-      _this20.data.quadPoints = quadPoints;
+      _this21.data.quadPoints = quadPoints;
+
+      if (!_this21.appearance) {
+        var strokeColor = _this21.color ? Array.from(_this21.color).map(function (c) {
+          return c / 255;
+        }) : [0, 0, 0];
+
+        _this21._setDefaultAppearance({
+          xref: parameters.xref,
+          extra: "[] 0 d 1 w",
+          strokeColor: strokeColor,
+          pointsCallback: function pointsCallback(buffer, points) {
+            buffer.push("".concat(points[2].x, " ").concat(points[2].y, " m"));
+            buffer.push("".concat(points[3].x, " ").concat(points[3].y, " l"));
+            buffer.push("S");
+            return [points[0].x, points[1].x, points[3].y, points[1].y];
+          }
+        });
+      }
     }
 
-    return _this20;
+    return _this21;
   }
 
   return UnderlineAnnotation;
@@ -32961,19 +33267,48 @@ var SquigglyAnnotation = /*#__PURE__*/function (_MarkupAnnotation11) {
   var _super19 = _createSuper(SquigglyAnnotation);
 
   function SquigglyAnnotation(parameters) {
-    var _this21;
+    var _this22;
 
     _classCallCheck(this, SquigglyAnnotation);
 
-    _this21 = _super19.call(this, parameters);
-    _this21.data.annotationType = _util.AnnotationType.SQUIGGLY;
-    var quadPoints = getQuadPoints(parameters.dict, _this21.rectangle);
+    _this22 = _super19.call(this, parameters);
+    _this22.data.annotationType = _util.AnnotationType.SQUIGGLY;
+    var quadPoints = getQuadPoints(parameters.dict, null);
 
     if (quadPoints) {
-      _this21.data.quadPoints = quadPoints;
+      _this22.data.quadPoints = quadPoints;
+
+      if (!_this22.appearance) {
+        var strokeColor = _this22.color ? Array.from(_this22.color).map(function (c) {
+          return c / 255;
+        }) : [0, 0, 0];
+
+        _this22._setDefaultAppearance({
+          xref: parameters.xref,
+          extra: "[] 0 d 1 w",
+          strokeColor: strokeColor,
+          pointsCallback: function pointsCallback(buffer, points) {
+            var dy = (points[0].y - points[2].y) / 6;
+            var shift = dy;
+            var x = points[2].x;
+            var y = points[2].y;
+            var xEnd = points[3].x;
+            buffer.push("".concat(x, " ").concat(y + shift, " m"));
+
+            do {
+              x += 2;
+              shift = shift === 0 ? dy : 0;
+              buffer.push("".concat(x, " ").concat(y + shift, " l"));
+            } while (x < xEnd);
+
+            buffer.push("S");
+            return [points[2].x, xEnd, y - 2 * dy, y + 2 * dy];
+          }
+        });
+      }
     }
 
-    return _this21;
+    return _this22;
   }
 
   return SquigglyAnnotation;
@@ -32985,19 +33320,37 @@ var StrikeOutAnnotation = /*#__PURE__*/function (_MarkupAnnotation12) {
   var _super20 = _createSuper(StrikeOutAnnotation);
 
   function StrikeOutAnnotation(parameters) {
-    var _this22;
+    var _this23;
 
     _classCallCheck(this, StrikeOutAnnotation);
 
-    _this22 = _super20.call(this, parameters);
-    _this22.data.annotationType = _util.AnnotationType.STRIKEOUT;
-    var quadPoints = getQuadPoints(parameters.dict, _this22.rectangle);
+    _this23 = _super20.call(this, parameters);
+    _this23.data.annotationType = _util.AnnotationType.STRIKEOUT;
+    var quadPoints = getQuadPoints(parameters.dict, null);
 
     if (quadPoints) {
-      _this22.data.quadPoints = quadPoints;
+      _this23.data.quadPoints = quadPoints;
+
+      if (!_this23.appearance) {
+        var strokeColor = _this23.color ? Array.from(_this23.color).map(function (c) {
+          return c / 255;
+        }) : [0, 0, 0];
+
+        _this23._setDefaultAppearance({
+          xref: parameters.xref,
+          extra: "[] 0 d 1 w",
+          strokeColor: strokeColor,
+          pointsCallback: function pointsCallback(buffer, points) {
+            buffer.push("".concat((points[0].x + points[2].x) / 2) + " ".concat((points[0].y + points[2].y) / 2, " m"));
+            buffer.push("".concat((points[1].x + points[3].x) / 2) + " ".concat((points[1].y + points[3].y) / 2, " l"));
+            buffer.push("S");
+            return [points[0].x, points[1].x, points[3].y, points[1].y];
+          }
+        });
+      }
     }
 
-    return _this22;
+    return _this23;
   }
 
   return StrikeOutAnnotation;
@@ -33009,13 +33362,13 @@ var StampAnnotation = /*#__PURE__*/function (_MarkupAnnotation13) {
   var _super21 = _createSuper(StampAnnotation);
 
   function StampAnnotation(parameters) {
-    var _this23;
+    var _this24;
 
     _classCallCheck(this, StampAnnotation);
 
-    _this23 = _super21.call(this, parameters);
-    _this23.data.annotationType = _util.AnnotationType.STAMP;
-    return _this23;
+    _this24 = _super21.call(this, parameters);
+    _this24.data.annotationType = _util.AnnotationType.STAMP;
+    return _this24;
   }
 
   return StampAnnotation;
@@ -33027,15 +33380,15 @@ var FileAttachmentAnnotation = /*#__PURE__*/function (_MarkupAnnotation14) {
   var _super22 = _createSuper(FileAttachmentAnnotation);
 
   function FileAttachmentAnnotation(parameters) {
-    var _this24;
+    var _this25;
 
     _classCallCheck(this, FileAttachmentAnnotation);
 
-    _this24 = _super22.call(this, parameters);
+    _this25 = _super22.call(this, parameters);
     var file = new _obj.FileSpec(parameters.dict.get("FS"), parameters.xref);
-    _this24.data.annotationType = _util.AnnotationType.FILEATTACHMENT;
-    _this24.data.file = file.serializable;
-    return _this24;
+    _this25.data.annotationType = _util.AnnotationType.FILEATTACHMENT;
+    _this25.data.file = file.serializable;
+    return _this25;
   }
 
   return FileAttachmentAnnotation;
@@ -33735,6 +34088,10 @@ var _util = __w_pdfjs_require__(5);
 
 var _primitives = __w_pdfjs_require__(201);
 
+var _core_utils = __w_pdfjs_require__(204);
+
+var _xml_parser = __w_pdfjs_require__(224);
+
 var _crypto = __w_pdfjs_require__(218);
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
@@ -33760,7 +34117,7 @@ function writeDict(dict, buffer, transform) {
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
       var key = _step.value;
-      buffer.push(" /".concat(key, " "));
+      buffer.push(" /".concat((0, _core_utils.escapePDFName)(key), " "));
       writeValue(dict.getRaw(key), buffer, transform);
     }
   } catch (err) {
@@ -33833,7 +34190,7 @@ function numberToString(value) {
 
 function writeValue(value, buffer, transform) {
   if ((0, _primitives.isName)(value)) {
-    buffer.push("/".concat(value.name));
+    buffer.push("/".concat((0, _core_utils.escapePDFName)(value.name)));
   } else if ((0, _primitives.isRef)(value)) {
     buffer.push("".concat(value.num, " ").concat(value.gen, " R"));
   } else if (Array.isArray(value)) {
@@ -33894,7 +34251,73 @@ function computeMD5(filesize, xrefInfo) {
   return (0, _util.bytesToString)((0, _crypto.calculateMD5)(array));
 }
 
-function incrementalUpdate(originalData, xrefInfo, newRefs) {
+function updateXFA(datasetsRef, newRefs, xref) {
+  if (datasetsRef === null || xref === null) {
+    return;
+  }
+
+  var datasets = xref.fetchIfRef(datasetsRef);
+  var str = (0, _util.bytesToString)(datasets.getBytes());
+  var xml = new _xml_parser.SimpleXMLParser(true).parseFromString(str);
+
+  var _iterator3 = _createForOfIteratorHelper(newRefs),
+      _step3;
+
+  try {
+    for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+      var xfa = _step3.value.xfa;
+
+      if (!xfa) {
+        continue;
+      }
+
+      var path = xfa.path,
+          value = xfa.value;
+
+      if (!path) {
+        continue;
+      }
+
+      var node = xml.documentElement.searchNode((0, _core_utils.parseXFAPath)(path), 0);
+
+      if (node) {
+        node.childNodes = [new _xml_parser.SimpleDOMNode("#text", value)];
+      } else {
+        (0, _util.warn)("Node not found for path: ".concat(path));
+      }
+    }
+  } catch (err) {
+    _iterator3.e(err);
+  } finally {
+    _iterator3.f();
+  }
+
+  var buffer = [];
+  xml.documentElement.dump(buffer);
+  var updatedXml = buffer.join("");
+  var encrypt = xref.encrypt;
+
+  if (encrypt) {
+    var transform = encrypt.createCipherTransform(datasetsRef.num, datasetsRef.gen);
+    updatedXml = transform.encryptString(updatedXml);
+  }
+
+  var data = "".concat(datasetsRef.num, " ").concat(datasetsRef.gen, " obj\n") + "<< /Type /EmbeddedFile /Length ".concat(updatedXml.length, ">>\nstream\n") + updatedXml + "\nendstream\nendobj\n";
+  newRefs.push({
+    ref: datasetsRef,
+    data: data
+  });
+}
+
+function incrementalUpdate(_ref) {
+  var originalData = _ref.originalData,
+      xrefInfo = _ref.xrefInfo,
+      newRefs = _ref.newRefs,
+      _ref$xref = _ref.xref,
+      xref = _ref$xref === void 0 ? null : _ref$xref,
+      _ref$datasetsRef = _ref.datasetsRef,
+      datasetsRef = _ref$datasetsRef === void 0 ? null : _ref$datasetsRef;
+  updateXFA(datasetsRef, newRefs, xref);
   var newXref = new _primitives.Dict(null);
   var refForXrefTable = xrefInfo.newRef;
   var buffer, baseOffset;
@@ -33935,14 +34358,14 @@ function incrementalUpdate(originalData, xrefInfo, newRefs) {
   var indexes = [0, 1];
   var maxOffset = 0;
 
-  var _iterator3 = _createForOfIteratorHelper(newRefs),
-      _step3;
+  var _iterator4 = _createForOfIteratorHelper(newRefs),
+      _step4;
 
   try {
-    for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-      var _step3$value = _step3.value,
-          ref = _step3$value.ref,
-          data = _step3$value.data;
+    for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+      var _step4$value = _step4.value,
+          ref = _step4$value.ref,
+          data = _step4$value.data;
       maxOffset = Math.max(maxOffset, baseOffset);
       xrefTableData.push([1, baseOffset, Math.min(ref.gen, 0xffff)]);
       baseOffset += data.length;
@@ -33951,9 +34374,9 @@ function incrementalUpdate(originalData, xrefInfo, newRefs) {
       buffer.push(data);
     }
   } catch (err) {
-    _iterator3.e(err);
+    _iterator4.e(err);
   } finally {
-    _iterator3.f();
+    _iterator4.f();
   }
 
   newXref.set("Index", indexes);
@@ -33980,19 +34403,19 @@ function incrementalUpdate(originalData, xrefInfo, newRefs) {
   array.set(originalData);
   var offset = originalData.length;
 
-  var _iterator4 = _createForOfIteratorHelper(buffer),
-      _step4;
+  var _iterator5 = _createForOfIteratorHelper(buffer),
+      _step5;
 
   try {
-    for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-      var str = _step4.value;
+    for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+      var str = _step5.value;
       writeString(str, offset, array);
       offset += str.length;
     }
   } catch (err) {
-    _iterator4.e(err);
+    _iterator5.e(err);
   } finally {
-    _iterator4.f();
+    _iterator5.f();
   }
 
   for (var _i3 = 0, _xrefTableData = xrefTableData; _i3 < _xrefTableData.length; _i3++) {
@@ -34020,49 +34443,725 @@ function incrementalUpdate(originalData, xrefInfo, newRefs) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.SimpleXMLParser = exports.SimpleDOMNode = void 0;
+
+var _util = __w_pdfjs_require__(5);
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var XMLParserErrorCode = {
+  NoError: 0,
+  EndOfDocument: -1,
+  UnterminatedCdat: -2,
+  UnterminatedXmlDeclaration: -3,
+  UnterminatedDoctypeDeclaration: -4,
+  UnterminatedComment: -5,
+  MalformedElement: -6,
+  OutOfMemory: -7,
+  UnterminatedAttributeValue: -8,
+  UnterminatedElement: -9,
+  ElementNeverBegun: -10
+};
+
+function isWhitespace(s, index) {
+  var ch = s[index];
+  return ch === " " || ch === "\n" || ch === "\r" || ch === "\t";
+}
+
+function isWhitespaceString(s) {
+  for (var i = 0, ii = s.length; i < ii; i++) {
+    if (!isWhitespace(s, i)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+var XMLParserBase = /*#__PURE__*/function () {
+  function XMLParserBase() {
+    _classCallCheck(this, XMLParserBase);
+  }
+
+  _createClass(XMLParserBase, [{
+    key: "_resolveEntities",
+    value: function _resolveEntities(s) {
+      var _this = this;
+
+      return s.replace(/&([^;]+);/g, function (all, entity) {
+        if (entity.substring(0, 2) === "#x") {
+          return String.fromCodePoint(parseInt(entity.substring(2), 16));
+        } else if (entity.substring(0, 1) === "#") {
+          return String.fromCodePoint(parseInt(entity.substring(1), 10));
+        }
+
+        switch (entity) {
+          case "lt":
+            return "<";
+
+          case "gt":
+            return ">";
+
+          case "amp":
+            return "&";
+
+          case "quot":
+            return '"';
+        }
+
+        return _this.onResolveEntity(entity);
+      });
+    }
+  }, {
+    key: "_parseContent",
+    value: function _parseContent(s, start) {
+      var attributes = [];
+      var pos = start;
+
+      function skipWs() {
+        while (pos < s.length && isWhitespace(s, pos)) {
+          ++pos;
+        }
+      }
+
+      while (pos < s.length && !isWhitespace(s, pos) && s[pos] !== ">" && s[pos] !== "/") {
+        ++pos;
+      }
+
+      var name = s.substring(start, pos);
+      skipWs();
+
+      while (pos < s.length && s[pos] !== ">" && s[pos] !== "/" && s[pos] !== "?") {
+        skipWs();
+        var attrName = "",
+            attrValue = "";
+
+        while (pos < s.length && !isWhitespace(s, pos) && s[pos] !== "=") {
+          attrName += s[pos];
+          ++pos;
+        }
+
+        skipWs();
+
+        if (s[pos] !== "=") {
+          return null;
+        }
+
+        ++pos;
+        skipWs();
+        var attrEndChar = s[pos];
+
+        if (attrEndChar !== '"' && attrEndChar !== "'") {
+          return null;
+        }
+
+        var attrEndIndex = s.indexOf(attrEndChar, ++pos);
+
+        if (attrEndIndex < 0) {
+          return null;
+        }
+
+        attrValue = s.substring(pos, attrEndIndex);
+        attributes.push({
+          name: attrName,
+          value: this._resolveEntities(attrValue)
+        });
+        pos = attrEndIndex + 1;
+        skipWs();
+      }
+
+      return {
+        name: name,
+        attributes: attributes,
+        parsed: pos - start
+      };
+    }
+  }, {
+    key: "_parseProcessingInstruction",
+    value: function _parseProcessingInstruction(s, start) {
+      var pos = start;
+
+      function skipWs() {
+        while (pos < s.length && isWhitespace(s, pos)) {
+          ++pos;
+        }
+      }
+
+      while (pos < s.length && !isWhitespace(s, pos) && s[pos] !== ">" && s[pos] !== "/") {
+        ++pos;
+      }
+
+      var name = s.substring(start, pos);
+      skipWs();
+      var attrStart = pos;
+
+      while (pos < s.length && (s[pos] !== "?" || s[pos + 1] !== ">")) {
+        ++pos;
+      }
+
+      var value = s.substring(attrStart, pos);
+      return {
+        name: name,
+        value: value,
+        parsed: pos - start
+      };
+    }
+  }, {
+    key: "parseXml",
+    value: function parseXml(s) {
+      var i = 0;
+
+      while (i < s.length) {
+        var ch = s[i];
+        var j = i;
+
+        if (ch === "<") {
+          ++j;
+          var ch2 = s[j];
+          var q = void 0;
+
+          switch (ch2) {
+            case "/":
+              ++j;
+              q = s.indexOf(">", j);
+
+              if (q < 0) {
+                this.onError(XMLParserErrorCode.UnterminatedElement);
+                return;
+              }
+
+              this.onEndElement(s.substring(j, q));
+              j = q + 1;
+              break;
+
+            case "?":
+              ++j;
+
+              var pi = this._parseProcessingInstruction(s, j);
+
+              if (s.substring(j + pi.parsed, j + pi.parsed + 2) !== "?>") {
+                this.onError(XMLParserErrorCode.UnterminatedXmlDeclaration);
+                return;
+              }
+
+              this.onPi(pi.name, pi.value);
+              j += pi.parsed + 2;
+              break;
+
+            case "!":
+              if (s.substring(j + 1, j + 3) === "--") {
+                q = s.indexOf("-->", j + 3);
+
+                if (q < 0) {
+                  this.onError(XMLParserErrorCode.UnterminatedComment);
+                  return;
+                }
+
+                this.onComment(s.substring(j + 3, q));
+                j = q + 3;
+              } else if (s.substring(j + 1, j + 8) === "[CDATA[") {
+                q = s.indexOf("]]>", j + 8);
+
+                if (q < 0) {
+                  this.onError(XMLParserErrorCode.UnterminatedCdat);
+                  return;
+                }
+
+                this.onCdata(s.substring(j + 8, q));
+                j = q + 3;
+              } else if (s.substring(j + 1, j + 8) === "DOCTYPE") {
+                var q2 = s.indexOf("[", j + 8);
+                var complexDoctype = false;
+                q = s.indexOf(">", j + 8);
+
+                if (q < 0) {
+                  this.onError(XMLParserErrorCode.UnterminatedDoctypeDeclaration);
+                  return;
+                }
+
+                if (q2 > 0 && q > q2) {
+                  q = s.indexOf("]>", j + 8);
+
+                  if (q < 0) {
+                    this.onError(XMLParserErrorCode.UnterminatedDoctypeDeclaration);
+                    return;
+                  }
+
+                  complexDoctype = true;
+                }
+
+                var doctypeContent = s.substring(j + 8, q + (complexDoctype ? 1 : 0));
+                this.onDoctype(doctypeContent);
+                j = q + (complexDoctype ? 2 : 1);
+              } else {
+                this.onError(XMLParserErrorCode.MalformedElement);
+                return;
+              }
+
+              break;
+
+            default:
+              var content = this._parseContent(s, j);
+
+              if (content === null) {
+                this.onError(XMLParserErrorCode.MalformedElement);
+                return;
+              }
+
+              var isClosed = false;
+
+              if (s.substring(j + content.parsed, j + content.parsed + 2) === "/>") {
+                isClosed = true;
+              } else if (s.substring(j + content.parsed, j + content.parsed + 1) !== ">") {
+                this.onError(XMLParserErrorCode.UnterminatedElement);
+                return;
+              }
+
+              this.onBeginElement(content.name, content.attributes, isClosed);
+              j += content.parsed + (isClosed ? 2 : 1);
+              break;
+          }
+        } else {
+          while (j < s.length && s[j] !== "<") {
+            j++;
+          }
+
+          var text = s.substring(i, j);
+          this.onText(this._resolveEntities(text));
+        }
+
+        i = j;
+      }
+    }
+  }, {
+    key: "onResolveEntity",
+    value: function onResolveEntity(name) {
+      return "&".concat(name, ";");
+    }
+  }, {
+    key: "onPi",
+    value: function onPi(name, value) {}
+  }, {
+    key: "onComment",
+    value: function onComment(text) {}
+  }, {
+    key: "onCdata",
+    value: function onCdata(text) {}
+  }, {
+    key: "onDoctype",
+    value: function onDoctype(doctypeContent) {}
+  }, {
+    key: "onText",
+    value: function onText(text) {}
+  }, {
+    key: "onBeginElement",
+    value: function onBeginElement(name, attributes, isEmpty) {}
+  }, {
+    key: "onEndElement",
+    value: function onEndElement(name) {}
+  }, {
+    key: "onError",
+    value: function onError(code) {}
+  }]);
+
+  return XMLParserBase;
+}();
+
+var SimpleDOMNode = /*#__PURE__*/function () {
+  function SimpleDOMNode(nodeName, nodeValue) {
+    _classCallCheck(this, SimpleDOMNode);
+
+    this.nodeName = nodeName;
+    this.nodeValue = nodeValue;
+    Object.defineProperty(this, "parentNode", {
+      value: null,
+      writable: true
+    });
+  }
+
+  _createClass(SimpleDOMNode, [{
+    key: "hasChildNodes",
+    value: function hasChildNodes() {
+      return this.childNodes && this.childNodes.length > 0;
+    }
+  }, {
+    key: "searchNode",
+    value: function searchNode(paths, pos) {
+      if (pos >= paths.length) {
+        return this;
+      }
+
+      var component = paths[pos];
+      var stack = [];
+      var node = this;
+
+      while (true) {
+        if (component.name === node.nodeName) {
+          if (component.pos === 0) {
+            var res = node.searchNode(paths, pos + 1);
+
+            if (res !== null) {
+              return res;
+            }
+          } else if (stack.length === 0) {
+            return null;
+          } else {
+            var _stack$pop = stack.pop(),
+                _stack$pop2 = _slicedToArray(_stack$pop, 1),
+                parent = _stack$pop2[0];
+
+            var siblingPos = 0;
+
+            var _iterator = _createForOfIteratorHelper(parent.childNodes),
+                _step;
+
+            try {
+              for (_iterator.s(); !(_step = _iterator.n()).done;) {
+                var child = _step.value;
+
+                if (component.name === child.nodeName) {
+                  if (siblingPos === component.pos) {
+                    return child.searchNode(paths, pos + 1);
+                  }
+
+                  siblingPos++;
+                }
+              }
+            } catch (err) {
+              _iterator.e(err);
+            } finally {
+              _iterator.f();
+            }
+
+            return node.searchNode(paths, pos + 1);
+          }
+        }
+
+        if (node.childNodes && node.childNodes.length !== 0) {
+          stack.push([node, 0]);
+          node = node.childNodes[0];
+        } else if (stack.length === 0) {
+          return null;
+        } else {
+          while (stack.length !== 0) {
+            var _stack$pop3 = stack.pop(),
+                _stack$pop4 = _slicedToArray(_stack$pop3, 2),
+                _parent = _stack$pop4[0],
+                currentPos = _stack$pop4[1];
+
+            var newPos = currentPos + 1;
+
+            if (newPos < _parent.childNodes.length) {
+              stack.push([_parent, newPos]);
+              node = _parent.childNodes[newPos];
+              break;
+            }
+          }
+
+          if (stack.length === 0) {
+            return null;
+          }
+        }
+      }
+    }
+  }, {
+    key: "dump",
+    value: function dump(buffer) {
+      if (this.nodeName === "#text") {
+        buffer.push((0, _util.encodeToXmlString)(this.nodeValue));
+        return;
+      }
+
+      buffer.push("<".concat(this.nodeName));
+
+      if (this.attributes) {
+        var _iterator2 = _createForOfIteratorHelper(this.attributes),
+            _step2;
+
+        try {
+          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+            var attribute = _step2.value;
+            buffer.push(" ".concat(attribute.name, "=\"").concat((0, _util.encodeToXmlString)(attribute.value), "\""));
+          }
+        } catch (err) {
+          _iterator2.e(err);
+        } finally {
+          _iterator2.f();
+        }
+      }
+
+      if (this.hasChildNodes()) {
+        buffer.push(">");
+
+        var _iterator3 = _createForOfIteratorHelper(this.childNodes),
+            _step3;
+
+        try {
+          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            var child = _step3.value;
+            child.dump(buffer);
+          }
+        } catch (err) {
+          _iterator3.e(err);
+        } finally {
+          _iterator3.f();
+        }
+
+        buffer.push("</".concat(this.nodeName, ">"));
+      } else if (this.nodeValue) {
+        buffer.push(">".concat((0, _util.encodeToXmlString)(this.nodeValue), "</").concat(this.nodeName, ">"));
+      } else {
+        buffer.push("/>");
+      }
+    }
+  }, {
+    key: "firstChild",
+    get: function get() {
+      return this.childNodes && this.childNodes[0];
+    }
+  }, {
+    key: "nextSibling",
+    get: function get() {
+      var childNodes = this.parentNode.childNodes;
+
+      if (!childNodes) {
+        return undefined;
+      }
+
+      var index = childNodes.indexOf(this);
+
+      if (index === -1) {
+        return undefined;
+      }
+
+      return childNodes[index + 1];
+    }
+  }, {
+    key: "textContent",
+    get: function get() {
+      if (!this.childNodes) {
+        return this.nodeValue || "";
+      }
+
+      return this.childNodes.map(function (child) {
+        return child.textContent;
+      }).join("");
+    }
+  }]);
+
+  return SimpleDOMNode;
+}();
+
+exports.SimpleDOMNode = SimpleDOMNode;
+
+var SimpleXMLParser = /*#__PURE__*/function (_XMLParserBase) {
+  _inherits(SimpleXMLParser, _XMLParserBase);
+
+  var _super = _createSuper(SimpleXMLParser);
+
+  function SimpleXMLParser() {
+    var _this2;
+
+    var hasAttributes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+    _classCallCheck(this, SimpleXMLParser);
+
+    _this2 = _super.call(this);
+    _this2._currentFragment = null;
+    _this2._stack = null;
+    _this2._errorCode = XMLParserErrorCode.NoError;
+    _this2._hasAttributes = hasAttributes;
+    return _this2;
+  }
+
+  _createClass(SimpleXMLParser, [{
+    key: "parseFromString",
+    value: function parseFromString(data) {
+      this._currentFragment = [];
+      this._stack = [];
+      this._errorCode = XMLParserErrorCode.NoError;
+      this.parseXml(data);
+
+      if (this._errorCode !== XMLParserErrorCode.NoError) {
+        return undefined;
+      }
+
+      var _this$_currentFragmen = _slicedToArray(this._currentFragment, 1),
+          documentElement = _this$_currentFragmen[0];
+
+      if (!documentElement) {
+        return undefined;
+      }
+
+      return {
+        documentElement: documentElement
+      };
+    }
+  }, {
+    key: "onResolveEntity",
+    value: function onResolveEntity(name) {
+      switch (name) {
+        case "apos":
+          return "'";
+      }
+
+      return _get(_getPrototypeOf(SimpleXMLParser.prototype), "onResolveEntity", this).call(this, name);
+    }
+  }, {
+    key: "onText",
+    value: function onText(text) {
+      if (isWhitespaceString(text)) {
+        return;
+      }
+
+      var node = new SimpleDOMNode("#text", text);
+
+      this._currentFragment.push(node);
+    }
+  }, {
+    key: "onCdata",
+    value: function onCdata(text) {
+      var node = new SimpleDOMNode("#text", text);
+
+      this._currentFragment.push(node);
+    }
+  }, {
+    key: "onBeginElement",
+    value: function onBeginElement(name, attributes, isEmpty) {
+      var node = new SimpleDOMNode(name);
+      node.childNodes = [];
+
+      if (this._hasAttributes) {
+        node.attributes = attributes;
+      }
+
+      this._currentFragment.push(node);
+
+      if (isEmpty) {
+        return;
+      }
+
+      this._stack.push(this._currentFragment);
+
+      this._currentFragment = node.childNodes;
+    }
+  }, {
+    key: "onEndElement",
+    value: function onEndElement(name) {
+      this._currentFragment = this._stack.pop() || [];
+      var lastElement = this._currentFragment[this._currentFragment.length - 1];
+
+      if (!lastElement) {
+        return;
+      }
+
+      for (var i = 0, ii = lastElement.childNodes.length; i < ii; i++) {
+        lastElement.childNodes[i].parentNode = lastElement;
+      }
+    }
+  }, {
+    key: "onError",
+    value: function onError(code) {
+      this._errorCode = code;
+    }
+  }]);
+
+  return SimpleXMLParser;
+}(XMLParserBase);
+
+exports.SimpleXMLParser = SimpleXMLParser;
+
+/***/ }),
+/* 225 */
+/***/ (function(module, exports, __w_pdfjs_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.PartialEvaluator = void 0;
 
 var _regenerator = _interopRequireDefault(__w_pdfjs_require__(2));
 
 var _util = __w_pdfjs_require__(5);
 
-var _cmap = __w_pdfjs_require__(225);
+var _cmap = __w_pdfjs_require__(226);
 
 var _primitives = __w_pdfjs_require__(201);
 
-var _fonts = __w_pdfjs_require__(226);
+var _fonts = __w_pdfjs_require__(227);
 
-var _encodings = __w_pdfjs_require__(229);
+var _encodings = __w_pdfjs_require__(230);
 
 var _core_utils = __w_pdfjs_require__(204);
 
-var _unicode = __w_pdfjs_require__(232);
+var _unicode = __w_pdfjs_require__(233);
 
-var _standard_fonts = __w_pdfjs_require__(231);
+var _standard_fonts = __w_pdfjs_require__(232);
 
-var _pattern = __w_pdfjs_require__(235);
+var _pattern = __w_pdfjs_require__(236);
 
-var _function = __w_pdfjs_require__(236);
+var _function = __w_pdfjs_require__(237);
 
 var _parser = __w_pdfjs_require__(207);
 
 var _image_utils = __w_pdfjs_require__(220);
 
-var _bidi = __w_pdfjs_require__(238);
+var _bidi = __w_pdfjs_require__(239);
 
 var _colorspace = __w_pdfjs_require__(219);
 
 var _stream = __w_pdfjs_require__(208);
 
-var _glyphlist = __w_pdfjs_require__(230);
+var _glyphlist = __w_pdfjs_require__(231);
 
-var _metrics = __w_pdfjs_require__(239);
+var _metrics = __w_pdfjs_require__(240);
 
-var _murmurhash = __w_pdfjs_require__(240);
+var _murmurhash = __w_pdfjs_require__(241);
 
 var _operator_list = __w_pdfjs_require__(222);
 
-var _image = __w_pdfjs_require__(241);
+var _image = __w_pdfjs_require__(242);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -38317,7 +39416,7 @@ var EvaluatorPreprocessor = /*#__PURE__*/function () {
 }();
 
 /***/ }),
-/* 225 */
+/* 226 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -39320,7 +40419,7 @@ var CMapFactory = function CMapFactoryClosure() {
 exports.CMapFactory = CMapFactory;
 
 /***/ }),
-/* 226 */
+/* 227 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -39334,25 +40433,25 @@ exports.IdentityToUnicodeMap = exports.ToUnicodeMap = exports.FontFlags = export
 
 var _util = __w_pdfjs_require__(5);
 
-var _cff_parser = __w_pdfjs_require__(227);
+var _cff_parser = __w_pdfjs_require__(228);
 
-var _glyphlist = __w_pdfjs_require__(230);
+var _glyphlist = __w_pdfjs_require__(231);
 
-var _encodings = __w_pdfjs_require__(229);
+var _encodings = __w_pdfjs_require__(230);
 
-var _standard_fonts = __w_pdfjs_require__(231);
+var _standard_fonts = __w_pdfjs_require__(232);
 
-var _unicode = __w_pdfjs_require__(232);
+var _unicode = __w_pdfjs_require__(233);
 
 var _core_utils = __w_pdfjs_require__(204);
 
-var _font_renderer = __w_pdfjs_require__(233);
+var _font_renderer = __w_pdfjs_require__(234);
 
-var _cmap = __w_pdfjs_require__(225);
+var _cmap = __w_pdfjs_require__(226);
 
 var _stream = __w_pdfjs_require__(208);
 
-var _type1_parser = __w_pdfjs_require__(234);
+var _type1_parser = __w_pdfjs_require__(235);
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
@@ -42581,7 +43680,7 @@ var CFFFont = function CFFFontClosure() {
 }();
 
 /***/ }),
-/* 227 */
+/* 228 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -42594,9 +43693,9 @@ exports.CFFFDSelect = exports.CFFCompiler = exports.CFFPrivateDict = exports.CFF
 
 var _util = __w_pdfjs_require__(5);
 
-var _charsets = __w_pdfjs_require__(228);
+var _charsets = __w_pdfjs_require__(229);
 
-var _encodings = __w_pdfjs_require__(229);
+var _encodings = __w_pdfjs_require__(230);
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -44544,7 +45643,7 @@ var CFFCompiler = /*#__PURE__*/function () {
 exports.CFFCompiler = CFFCompiler;
 
 /***/ }),
-/* 228 */
+/* 229 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -44562,7 +45661,7 @@ var ExpertSubsetCharset = [".notdef", "space", "dollaroldstyle", "dollarsuperior
 exports.ExpertSubsetCharset = ExpertSubsetCharset;
 
 /***/ }),
-/* 229 */
+/* 230 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -44616,7 +45715,7 @@ function getEncoding(encodingName) {
 }
 
 /***/ }),
-/* 230 */
+/* 231 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 var getLookupTableFactory = __w_pdfjs_require__(204).getLookupTableFactory;
@@ -49153,7 +50252,7 @@ exports.getGlyphsUnicode = getGlyphsUnicode;
 exports.getDingbatsGlyphsUnicode = getDingbatsGlyphsUnicode;
 
 /***/ }),
-/* 231 */
+/* 232 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -49897,7 +50996,7 @@ var getSupplementalGlyphMapForCalibri = (0, _core_utils.getLookupTableFactory)(f
 exports.getSupplementalGlyphMapForCalibri = getSupplementalGlyphMapForCalibri;
 
 /***/ }),
-/* 232 */
+/* 233 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 var getLookupTableFactory = __w_pdfjs_require__(204).getLookupTableFactory;
@@ -51874,7 +52973,7 @@ exports.getNormalizedUnicodes = getNormalizedUnicodes;
 exports.getUnicodeForGlyph = getUnicodeForGlyph;
 
 /***/ }),
-/* 233 */
+/* 234 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -51887,11 +52986,11 @@ exports.FontRendererFactory = void 0;
 
 var _util = __w_pdfjs_require__(5);
 
-var _cff_parser = __w_pdfjs_require__(227);
+var _cff_parser = __w_pdfjs_require__(228);
 
-var _glyphlist = __w_pdfjs_require__(230);
+var _glyphlist = __w_pdfjs_require__(231);
 
-var _encodings = __w_pdfjs_require__(229);
+var _encodings = __w_pdfjs_require__(230);
 
 var _stream = __w_pdfjs_require__(208);
 
@@ -52897,7 +53996,7 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
 exports.FontRendererFactory = FontRendererFactory;
 
 /***/ }),
-/* 234 */
+/* 235 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -52908,7 +54007,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Type1Parser = void 0;
 
-var _encodings = __w_pdfjs_require__(229);
+var _encodings = __w_pdfjs_require__(230);
 
 var _core_utils = __w_pdfjs_require__(204);
 
@@ -53608,7 +54707,7 @@ var Type1Parser = function Type1ParserClosure() {
 exports.Type1Parser = Type1Parser;
 
 /***/ }),
-/* 235 */
+/* 236 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -54560,7 +55659,7 @@ function getTilingPatternIR(operatorList, dict, args) {
 }
 
 /***/ }),
-/* 236 */
+/* 237 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -54576,7 +55675,7 @@ var _primitives = __w_pdfjs_require__(201);
 
 var _util = __w_pdfjs_require__(5);
 
-var _ps_parser = __w_pdfjs_require__(237);
+var _ps_parser = __w_pdfjs_require__(238);
 
 var _image_utils = __w_pdfjs_require__(220);
 
@@ -55972,7 +57071,7 @@ var PostScriptCompiler = function PostScriptCompilerClosure() {
 exports.PostScriptCompiler = PostScriptCompiler;
 
 /***/ }),
-/* 237 */
+/* 238 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -56261,7 +57360,7 @@ var PostScriptLexer = /*#__PURE__*/function () {
 exports.PostScriptLexer = PostScriptLexer;
 
 /***/ }),
-/* 238 */
+/* 239 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -56574,7 +57673,7 @@ function bidi(str, startLevel, vertical) {
 }
 
 /***/ }),
-/* 239 */
+/* 240 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -59528,7 +60627,7 @@ var getMetrics = (0, _core_utils.getLookupTableFactory)(function (t) {
 exports.getMetrics = getMetrics;
 
 /***/ }),
-/* 240 */
+/* 241 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -59667,7 +60766,7 @@ var MurmurHash3_64 = /*#__PURE__*/function () {
 exports.MurmurHash3_64 = MurmurHash3_64;
 
 /***/ }),
-/* 241 */
+/* 242 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -60391,7 +61490,7 @@ var PDFImage = /*#__PURE__*/function () {
 exports.PDFImage = PDFImage;
 
 /***/ }),
-/* 242 */
+/* 243 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
@@ -60944,7 +62043,7 @@ var MessageHandler = /*#__PURE__*/function () {
 exports.MessageHandler = MessageHandler;
 
 /***/ }),
-/* 243 */
+/* 244 */
 /***/ (function(module, exports, __w_pdfjs_require__) {
 
 "use strict";
