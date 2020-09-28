@@ -21,6 +21,8 @@ Note that the support for forms is slightly limited. You can fill the form, and 
 ## Breaking changes
 With version 5.0, I've radically simplified the CSS code and some of the HTML code. Almost all the shadows, focus styles, and hover styles are gone. I hope that doesn't break any real-world application, but if you've customized the CSS code of ngx-extended-pdf-viewer deeply, expect breaking changes.
 
+`showSecondaryToolbarButton` did exactly the opposite of what it was meant to do. If you're relying on this bug (or simply inverted the boolean value as a workaround), the bug fix breaks your code.
+
 There are also minor changes to the UI. I've replaced several icons by SVG graphics to make theming easier.
 
 As mentioned above, version 5.0 also updates to pdf.js 2.6.347. It's unlikely, but that may be a breaking change to some applications, too.

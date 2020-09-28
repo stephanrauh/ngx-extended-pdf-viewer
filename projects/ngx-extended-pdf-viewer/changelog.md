@@ -208,3 +208,4 @@
 - 5.0.0-alpha.5 #244 now the secondary toolbar icons support every color theme
 - 5.0.0-beta.0 #244 now the scale dropdown supports every color theme
 - 5.0.0-beta.1 #478 fixed the CSS code for printing (broken by #435)
+- 5.0.0-beta.2 #479 `showSecondaryToolbarButton` did exactly the opposite of what it was meant to do

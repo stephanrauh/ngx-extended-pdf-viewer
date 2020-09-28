@@ -771,9 +771,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         // hurried users sometimes reload the PDF before it has finished initializing
         // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
         this.primaryMenuVisible = true;
-        const showSecondaryMenu = this.hideKebabMenuForSecondaryToolbar && this.showSecondaryToolbarButton;
+        const hideSecondaryMenu = this.hideKebabMenuForSecondaryToolbar && !this.showSecondaryToolbarButton;
 
-        if (showSecondaryMenu) {
+        if (hideSecondaryMenu) {
           if (!this.isPrimaryMenuVisible()) {
             this.primaryMenuVisible = false;
           }
@@ -1370,7 +1370,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
 
       this.primaryMenuVisible = true;
-      if (!this.showSecondaryToolbarButton || !this.hideKebabMenuForSecondaryToolbar) {
+      if (!this.showSecondaryToolbarButton || this.hideKebabMenuForSecondaryToolbar) {
         if (!this.isPrimaryMenuVisible()) {
           this.primaryMenuVisible = false;
         }
