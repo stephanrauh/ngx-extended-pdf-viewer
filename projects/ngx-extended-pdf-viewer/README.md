@@ -41,22 +41,22 @@ This library provides an embeddable PDF viewer component. It's different from ot
 - Support for Internet Explorer 11
 - Searching (including a programmatic API)
 - Printing
-- support for forms
-- (limited) support for signatures (lacking verification of the signature, so use on your own risk!)
-- Sidebar with thumbnails, outlines, and attachments
+- Support for forms
+- (Limited) support for signatures (lacking verification of the signature, so use on your own risk!)
+- Sidebar with thumbnails, outlines, and attachments (and each of them both optional and customizable)
 - Rotating
-- Download and upload
+- Download (including form data) and upload
 - Zoom (with optional two-way binding to an attribute)
 - Full-screen mode
-- various selection tools
-- standard display or even / odd spreads (like a book)
-- several event listeners
-- multiple approaches to scrolling (vertical, horizontal, "wrapped" scrolling)
+- Various selection tools
+- Standard display or even / odd spreads (like a book)
+- Multiple event listeners
+- Several approaches to scrolling (vertical, horizontal, "wrapped" scrolling)
 - Internationalization (providing translations to several dozen languages)
-- direct access to the core API of pdf.js (including TypeScript definition files)
-- plus the ability to deactivate each of these features
-- color theming
-- and to customize the toolbars and menus according to your needs.
+- Direct access to the core API of pdf.js (including TypeScript definition files)
+- The ability to deactivate (i.e. hide) every button, menu item, and the context menu
+- Color theming
+- And to customize the toolbars and menus according to your needs.
 
 Not to mention the ability to display PDF files, running on Mozilla's pdf.js 2.6.347, released in March 2020. If you're the daring one, you can also use the developer version 2.7. It's bleeding edge, so use it at own risk. Basically, this preview is there to make the update easier when a Mozilla publishes a new version of their pdf.js library.
 
