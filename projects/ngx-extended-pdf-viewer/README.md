@@ -16,7 +16,6 @@
 
 Version 5.0 updates to pdf.js 2.6.347. In a nutshell, this means supports for layers and forms. Version 5.0 also brings support for color themes.
 
-Note that the support for forms is slightly limited. You can fill the form, and you can print the document with the filled fields, but if you save it using the "download" button, the input is lost.
 
 ## Breaking changes
 With version 5.0, I've radically simplified the CSS code and some of the HTML code. Almost all the shadows, focus styles, and hover styles are gone. I hope that doesn't break any real-world application, but if you've customized the CSS code of ngx-extended-pdf-viewer deeply, expect breaking changes.
@@ -42,7 +41,7 @@ This library provides an embeddable PDF viewer component. It's different from ot
 - Support for Internet Explorer 11
 - Searching (including a programmatic API)
 - Printing
-- (limited) support for forms
+- support for forms
 - (limited) support for signatures (lacking verification of the signature, so use on your own risk!)
 - Sidebar with thumbnails, outlines, and attachments
 - Rotating

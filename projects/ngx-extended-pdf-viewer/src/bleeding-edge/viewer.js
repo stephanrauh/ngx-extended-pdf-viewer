@@ -4460,13 +4460,11 @@ function isOverPerfectScrollbar(x, y, divName) {
 
     if (y >= top && y <= bottom) {
       if (x <= right && x >= left) {
-        console.log("over scrollbar");
         return true;
       }
     }
   }
 
-  console.log("out of scrollbar");
   return false;
 }
 

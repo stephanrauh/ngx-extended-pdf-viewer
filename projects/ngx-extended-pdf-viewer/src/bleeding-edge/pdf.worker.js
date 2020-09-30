@@ -135,8 +135,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", {
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.7.52';
-const pdfjsBuild = 'f178d2074';
+const pdfjsVersion = '2.7.54';
+const pdfjsBuild = '0ccd14375';
 
 /***/ }),
 /* 1 */
@@ -155,6 +155,8 @@ var _util = __w_pdfjs_require__(2);
 var _primitives = __w_pdfjs_require__(4);
 
 var _pdf_manager = __w_pdfjs_require__(5);
+
+var _writer = __w_pdfjs_require__(26);
 
 var _message_handler = __w_pdfjs_require__(46);
 
@@ -227,7 +229,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.7.52';
+    const workerVersion = '2.7.54';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -624,7 +626,7 @@ class WorkerMessageHandler {
         }
 
         xref.resetNewRef();
-        return incrementalUpdate({
+        return (0, _writer.incrementalUpdate)({
           originalData: stream.bytes,
           xrefInfo: newXrefInfo,
           newRefs,

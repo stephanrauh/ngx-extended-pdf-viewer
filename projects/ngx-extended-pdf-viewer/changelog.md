@@ -210,3 +210,4 @@
 - 5.0.0-beta.1 #478 fixed the CSS code for printing (broken by #435)
 - 5.0.0-beta.2 #479 `showSecondaryToolbarButton` did exactly the opposite of what it was meant to do; #457 restored the sourcemaps of the minified files of pdf.js
 - 5.0.0-beta.3 updated the "bleeding edge" branch to pdf.js 2.7.52
+- 5.0.0 fixed a bug that prevented to save PDF forms with the data entered by the user

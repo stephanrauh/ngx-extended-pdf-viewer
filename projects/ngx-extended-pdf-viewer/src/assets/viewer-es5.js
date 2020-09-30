@@ -1267,7 +1267,10 @@ var PDFViewerApplication = {
         type: "application/pdf"
       });
       downloadManager.download(blob, url, filename, sourceEventType);
-    })["catch"](function () {
+    })["catch"](function (error) {
+      console.log("Error during the download:");
+      console.log(error);
+
       _this9.download({
         sourceEventType: sourceEventType
       });
@@ -5604,13 +5607,11 @@ function isOverPerfectScrollbar(x, y, divName) {
 
     if (y >= top && y <= bottom) {
       if (x <= right && x >= left) {
-        console.log("over scrollbar");
         return true;
       }
     }
   }
 
-  console.log("out of scrollbar");
   return false;
 }
 
