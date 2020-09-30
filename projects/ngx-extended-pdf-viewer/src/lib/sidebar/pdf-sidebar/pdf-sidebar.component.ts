@@ -40,6 +40,5 @@ export class PdfSidebarComponent {
     });
     this.hideSidebarToolbar = visible <= 1;
     this.ref.markForCheck();
-    console.log(visible);
   }
 }
