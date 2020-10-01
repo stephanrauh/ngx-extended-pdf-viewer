@@ -28,7 +28,7 @@ export let pdfDefaultOptions = {
   useOnlyCssZoom: false,
   viewOnLoad: 0,
   cMapPacked: true,
-  cMapUrl: () => '../' + pdfDefaultOptions.assetsFolder + '/cmaps/',
+  cMapUrl: () => './' + pdfDefaultOptions.assetsFolder + '/cmaps/',
   disableAutoFetch: false,
   disableCreateObjectURL: false,
   disableFontFace: false,
