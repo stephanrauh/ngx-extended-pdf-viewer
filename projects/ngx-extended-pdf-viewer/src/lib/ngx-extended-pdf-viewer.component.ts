@@ -1,6 +1,5 @@
 import {
   Component,
-  ViewEncapsulation,
   Input,
   OnChanges,
   SimpleChanges,
@@ -43,6 +42,8 @@ import { Location } from '@angular/common';
 import { PinchOnMobileSupport } from './pinch-on-mobile-support';
 import { PdfThumbnailDrawnEvent } from './events/pdf-thumbnail-drawn-event';
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
+import { ScrollModeType } from '../public_api';
+import { ScrollModeChangedEvent } from './options/pdf-viewer';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 
@@ -51,6 +52,8 @@ interface ElementAndPosition {
   x: number;
   y: number;
 }
+
+
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
@@ -110,6 +113,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Output()
   public srcChange = new EventEmitter<string>();
+
+  @Input()
+  public scrollMode: ScrollModeType | undefined = undefined;
+
+  @Output()
+  public scrollModeChange = new EventEmitter<ScrollModeType>();
 
   @Input()
   public authorization: Object | undefined = undefined;
@@ -942,6 +951,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     options.set('acceptKeys', this.acceptKeys);
     this.activateTextlayerIfNecessary(options);
 
+    if (this.scrollMode) {
+      options.set('scrollModeOnLoad', this.scrollMode);
+    }
+
     let sidebarVisible = this.sidebarVisible;
     if (sidebarVisible === undefined) {
       sidebarVisible = this.showSidebarOnLoad;
@@ -998,6 +1011,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.textlayerRendered.emit(x); // deprecated - kept to avoid a breaking change
       this.textLayerRendered.emit(x);
     });
+
+    PDFViewerApplication.eventBus.on('scrollmodechanged', (x: ScrollModeChangedEvent) => {
+      this.scrollModeChange.emit(x.mode);
+    });
+
 
     PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
       this.pagesLoaded.emit(x);
@@ -1320,6 +1338,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           }
         } else {
           PDFViewerApplication.pdfViewer.pagesRotation = 0;
+        }
+      }
+      if ('scrollMode' in changes) {
+        if (this.scrollMode) {
+          PDFViewerApplication.pdfViewer.scrollMode = Number(this.scrollMode);
         }
       }
       if ('sidebarVisible' in changes) {

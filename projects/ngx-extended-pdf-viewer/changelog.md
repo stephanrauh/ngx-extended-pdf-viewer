@@ -212,3 +212,4 @@
 - 5.0.0-beta.3 updated the "bleeding edge" branch to pdf.js 2.7.52
 - 5.0.0 #483 fixed a bug that prevented to save PDF forms with the data entered by the user
 - 5.0.1 #488 fixed the URL of the CMap files 
+- 5.1.0 #495 implemented `[(scrollMode)]`

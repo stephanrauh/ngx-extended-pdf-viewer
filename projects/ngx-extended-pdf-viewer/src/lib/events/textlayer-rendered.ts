@@ -19,3 +19,4 @@ export interface TextLayerRenderedEvent {
   pageNumber: number;
   numTextDivs: number;
 }
+
