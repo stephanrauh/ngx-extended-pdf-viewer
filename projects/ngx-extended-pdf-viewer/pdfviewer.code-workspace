@@ -8,6 +8,9 @@
     },
     {
       "path": "../.."
+    },
+    {
+      "path": "../../../ngx-extended-pdf-viewer-issues/issue502-unexpected-zoom-changes"
     }
   ],
   "settings": {}

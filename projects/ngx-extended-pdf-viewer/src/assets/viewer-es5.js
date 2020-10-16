@@ -797,7 +797,8 @@ var PDFViewerApplication = {
                 renderInteractiveForms: _app_options.AppOptions.get("renderInteractiveForms"),
                 enablePrintAutoRotate: _app_options.AppOptions.get("enablePrintAutoRotate"),
                 useOnlyCssZoom: _app_options.AppOptions.get("useOnlyCssZoom"),
-                maxCanvasPixels: _app_options.AppOptions.get("maxCanvasPixels")
+                maxCanvasPixels: _app_options.AppOptions.get("maxCanvasPixels"),
+                pageViewMode: _app_options.AppOptions.get("pageViewMode")
               });
               pdfRenderingQueue.setViewer(_this5.pdfViewer);
               pdfLinkService.setViewer(_this5.pdfViewer);
@@ -12332,6 +12333,7 @@ var BaseViewer = /*#__PURE__*/function () {
     this._name = this.constructor.name;
     this.container = options.container;
     this.viewer = options.viewer || options.container.firstElementChild;
+    this.pageViewMode = options.pageViewMode || "single";
 
     if (!(this.container instanceof HTMLDivElement && this.viewer instanceof HTMLDivElement)) {
       throw new Error("Invalid `container` and/or `viewer` option.");
@@ -12383,6 +12385,17 @@ var BaseViewer = /*#__PURE__*/function () {
       return this._pages[index];
     }
   }, {
+    key: "hidePagesDependingOnpageViewMode",
+    value: function hidePagesDependingOnpageViewMode() {
+      var _this2 = this;
+
+      if (this.pageViewMode === "single") {
+        this._pages.forEach(function (page) {
+          page.div.style.display = page.id === _this2.currentPageNumber ? "block" : "none";
+        });
+      }
+    }
+  }, {
     key: "_setCurrentPageNumber",
     value: function _setCurrentPageNumber(val) {
       var resetCurrentPageView = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
@@ -12424,7 +12437,7 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "setDocument",
     value: function setDocument(pdfDocument) {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.pdfDocument) {
         this._cancelRendering();
@@ -12448,93 +12461,93 @@ var BaseViewer = /*#__PURE__*/function () {
       var optionalContentConfigPromise = pdfDocument.getOptionalContentConfig();
 
       this._pagesCapability.promise.then(function () {
-        _this2.eventBus.dispatch("pagesloaded", {
-          source: _this2,
+        _this3.eventBus.dispatch("pagesloaded", {
+          source: _this3,
           pagesCount: pagesCount
         });
       });
 
       this._onBeforeDraw = function (evt) {
-        var pageView = _this2._pages[evt.pageNumber - 1];
+        var pageView = _this3._pages[evt.pageNumber - 1];
 
         if (!pageView) {
           return;
         }
 
-        _this2._buffer.push(pageView);
+        _this3._buffer.push(pageView);
       };
 
       this.eventBus._on("pagerender", this._onBeforeDraw);
 
       this._onAfterDraw = function (evt) {
-        if (evt.cssTransform || _this2._onePageRenderedCapability.settled) {
+        if (evt.cssTransform || _this3._onePageRenderedCapability.settled) {
           return;
         }
 
-        _this2._onePageRenderedCapability.resolve();
+        _this3._onePageRenderedCapability.resolve();
 
-        _this2.eventBus._off("pagerendered", _this2._onAfterDraw);
+        _this3.eventBus._off("pagerendered", _this3._onAfterDraw);
 
-        _this2._onAfterDraw = null;
+        _this3._onAfterDraw = null;
       };
 
       this.eventBus._on("pagerendered", this._onAfterDraw);
 
       firstPagePromise.then(function (firstPdfPage) {
-        _this2._firstPageCapability.resolve(firstPdfPage);
+        _this3._firstPageCapability.resolve(firstPdfPage);
 
-        _this2._optionalContentConfigPromise = optionalContentConfigPromise;
-        var scale = _this2.currentScale;
+        _this3._optionalContentConfigPromise = optionalContentConfigPromise;
+        var scale = _this3.currentScale;
         var viewport = firstPdfPage.getViewport({
           scale: scale * _ui_utils.CSS_UNITS
         });
-        var textLayerFactory = _this2.textLayerMode !== _ui_utils.TextLayerMode.DISABLE ? _this2 : null;
+        var textLayerFactory = _this3.textLayerMode !== _ui_utils.TextLayerMode.DISABLE ? _this3 : null;
 
         for (var pageNum = 1; pageNum <= pagesCount; ++pageNum) {
           var pageView = new _pdf_page_view.PDFPageView({
-            container: _this2._viewerElement,
-            eventBus: _this2.eventBus,
+            container: _this3._viewerElement,
+            eventBus: _this3.eventBus,
             id: pageNum,
             scale: scale,
             defaultViewport: viewport.clone(),
             annotationStorage: annotationStorage,
             optionalContentConfigPromise: optionalContentConfigPromise,
-            renderingQueue: _this2.renderingQueue,
+            renderingQueue: _this3.renderingQueue,
             textLayerFactory: textLayerFactory,
-            textLayerMode: _this2.textLayerMode,
-            annotationLayerFactory: _this2,
-            imageResourcesPath: _this2.imageResourcesPath,
-            removePageBorders: _this2.removePageBorders,
-            renderInteractiveForms: _this2.renderInteractiveForms,
-            renderer: _this2.renderer,
-            enableWebGL: _this2.enableWebGL,
-            useOnlyCssZoom: _this2.useOnlyCssZoom,
-            maxCanvasPixels: _this2.maxCanvasPixels,
-            l10n: _this2.l10n
+            textLayerMode: _this3.textLayerMode,
+            annotationLayerFactory: _this3,
+            imageResourcesPath: _this3.imageResourcesPath,
+            removePageBorders: _this3.removePageBorders,
+            renderInteractiveForms: _this3.renderInteractiveForms,
+            renderer: _this3.renderer,
+            enableWebGL: _this3.enableWebGL,
+            useOnlyCssZoom: _this3.useOnlyCssZoom,
+            maxCanvasPixels: _this3.maxCanvasPixels,
+            l10n: _this3.l10n
           });
 
-          _this2._pages.push(pageView);
+          _this3._pages.push(pageView);
         }
 
-        var firstPageView = _this2._pages[0];
+        var firstPageView = _this3._pages[0];
 
         if (firstPageView) {
           firstPageView.setPdfPage(firstPdfPage);
 
-          _this2.linkService.cachePageRef(1, firstPdfPage.ref);
+          _this3.linkService.cachePageRef(1, firstPdfPage.ref);
         }
 
-        if (_this2._spreadMode !== _ui_utils.SpreadMode.NONE) {
-          _this2._updateSpreadMode();
+        if (_this3._spreadMode !== _ui_utils.SpreadMode.NONE) {
+          _this3._updateSpreadMode();
         }
 
-        _this2._onePageRenderedOrForceFetch().then(function () {
-          if (_this2.findController) {
-            _this2.findController.setDocument(pdfDocument);
+        _this3._onePageRenderedOrForceFetch().then(function () {
+          if (_this3.findController) {
+            _this3.findController.setDocument(pdfDocument);
           }
 
           if (pdfDocument.loadingParams.disableAutoFetch || pagesCount > 7500) {
-            _this2._pagesCapability.resolve();
+            _this3._pagesCapability.resolve();
 
             return;
           }
@@ -12542,29 +12555,29 @@ var BaseViewer = /*#__PURE__*/function () {
           var getPagesLeft = pagesCount - 1;
 
           if (getPagesLeft <= 0) {
-            _this2._pagesCapability.resolve();
+            _this3._pagesCapability.resolve();
 
             return;
           }
 
           var _loop = function _loop(_pageNum) {
             pdfDocument.getPage(_pageNum).then(function (pdfPage) {
-              var pageView = _this2._pages[_pageNum - 1];
+              var pageView = _this3._pages[_pageNum - 1];
 
               if (!pageView.pdfPage) {
                 pageView.setPdfPage(pdfPage);
               }
 
-              _this2.linkService.cachePageRef(_pageNum, pdfPage.ref);
+              _this3.linkService.cachePageRef(_pageNum, pdfPage.ref);
 
               if (--getPagesLeft === 0) {
-                _this2._pagesCapability.resolve();
+                _this3._pagesCapability.resolve();
               }
             }, function (reason) {
               console.error("Unable to get page ".concat(_pageNum, " to initialize viewer"), reason);
 
               if (--getPagesLeft === 0) {
-                _this2._pagesCapability.resolve();
+                _this3._pagesCapability.resolve();
               }
             });
           };
@@ -12574,12 +12587,14 @@ var BaseViewer = /*#__PURE__*/function () {
           }
         });
 
-        _this2.eventBus.dispatch("pagesinit", {
-          source: _this2
+        _this3.hidePagesDependingOnpageViewMode();
+
+        _this3.eventBus.dispatch("pagesinit", {
+          source: _this3
         });
 
-        if (_this2.defaultRenderingQueue) {
-          _this2.update();
+        if (_this3.defaultRenderingQueue) {
+          _this3.update();
         }
       })["catch"](function (reason) {
         console.error("Unable to initialize viewer", reason);
@@ -12659,6 +12674,13 @@ var BaseViewer = /*#__PURE__*/function () {
           pageSpot = _ref$pageSpot === void 0 ? null : _ref$pageSpot,
           _ref$pageNumber = _ref.pageNumber,
           pageNumber = _ref$pageNumber === void 0 ? null : _ref$pageNumber;
+
+      if (this.pageViewMode === "single") {
+        this._pages.forEach(function () {
+          pageDiv.style.display = "block";
+        });
+      }
+
       (0, _ui_utils.scrollIntoView)(pageDiv, pageSpot);
     }
   }, {
@@ -12788,6 +12810,8 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "scrollPageIntoView",
     value: function scrollPageIntoView(_ref3) {
+      var _this4 = this;
+
       var pageNumber = _ref3.pageNumber,
           _ref3$destArray = _ref3.destArray,
           destArray = _ref3$destArray === void 0 ? null : _ref3$destArray,
@@ -12882,6 +12906,10 @@ var BaseViewer = /*#__PURE__*/function () {
           this.currentScaleValue = _ui_utils.DEFAULT_SCALE_VALUE;
         }
       }
+
+      this._ensurePdfPageLoaded(pageView).then(function () {
+        _this4.renderingQueue.renderView(pageView);
+      });
 
       if (scale === "page-fit" && !destArray[4]) {
         this._scrollIntoView({
@@ -13002,6 +13030,10 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "_getVisiblePages",
     value: function _getVisiblePages() {
+      if (this.pageViewMode === 'single') {
+        return this._getCurrentVisiblePage();
+      }
+
       return (0, _ui_utils.getVisibleElements)(this.container, this._pages, true, this._isScrollModeHorizontal);
     }
   }, {
@@ -13041,7 +13073,7 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "_ensurePdfPageLoaded",
     value: function _ensurePdfPageLoaded(pageView) {
-      var _this3 = this;
+      var _this5 = this;
 
       if (pageView.pdfPage) {
         return Promise.resolve(pageView.pdfPage);
@@ -13056,13 +13088,13 @@ var BaseViewer = /*#__PURE__*/function () {
           pageView.setPdfPage(pdfPage);
         }
 
-        _this3._pagesRequests["delete"](pageView);
+        _this5._pagesRequests["delete"](pageView);
 
         return pdfPage;
       })["catch"](function (reason) {
         console.error("Unable to get page for page view", reason);
 
-        _this3._pagesRequests["delete"](pageView);
+        _this5._pagesRequests["delete"](pageView);
       });
 
       this._pagesRequests.set(pageView, promise);
@@ -13072,7 +13104,7 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "forceRendering",
     value: function forceRendering(currentlyVisiblePages) {
-      var _this4 = this;
+      var _this6 = this;
 
       var visiblePages = currentlyVisiblePages || this._getVisiblePages();
 
@@ -13081,7 +13113,7 @@ var BaseViewer = /*#__PURE__*/function () {
 
       if (pageView) {
         this._ensurePdfPageLoaded(pageView).then(function () {
-          _this4.renderingQueue.renderView(pageView);
+          _this6.renderingQueue.renderView(pageView);
         });
 
         return true;
@@ -13237,6 +13269,8 @@ var BaseViewer = /*#__PURE__*/function () {
       return this._currentPageNumber;
     },
     set: function set(val) {
+      var _this7 = this;
+
       if (!Number.isInteger(val)) {
         throw new Error("Invalid page number.");
       }
@@ -13247,6 +13281,16 @@ var BaseViewer = /*#__PURE__*/function () {
 
       if (!this._setCurrentPageNumber(val, true)) {
         console.error("".concat(this._name, ".currentPageNumber: \"").concat(val, "\" is not a valid page."));
+      }
+
+      this.hidePagesDependingOnpageViewMode();
+
+      if (this.pageViewMode === "single") {
+        var pageView = this._pages[this.currentPageNumber - 1];
+
+        this._ensurePdfPageLoaded(pageView).then(function () {
+          _this7.renderingQueue.renderView(pageView);
+        });
       }
     }
   }, {

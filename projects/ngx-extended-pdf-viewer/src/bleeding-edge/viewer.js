@@ -10041,6 +10041,7 @@ class BaseViewer {
     this._name = this.constructor.name;
     this.container = options.container;
     this.viewer = options.viewer || options.container.firstElementChild;
+    this.pageMode = "single";
 
     if (!(this.container && this.container.tagName.toUpperCase() === "DIV" && this.viewer && this.viewer.tagName.toUpperCase() === "DIV")) {
       throw new Error("Invalid `container` and/or `viewer` option.");
@@ -10123,6 +10124,26 @@ class BaseViewer {
 
     if (!this._setCurrentPageNumber(val, true)) {
       console.error(`${this._name}.currentPageNumber: "${val}" is not a valid page.`);
+    }
+
+    this.hidePagesDependingOnPageMode();
+
+    if (this.pageMode === "single") {
+      debugger;
+      const pageView = this._pages[this.currentPageNumber - 1];
+
+      this._ensurePdfPageLoaded(pageView).then(() => {
+        console.log("Rendered: " + pageView.id);
+        this.renderingQueue.renderView(pageView);
+      });
+    }
+  }
+
+  hidePagesDependingOnPageMode() {
+    if (this.pageMode === "single") {
+      this._pages.forEach(page => {
+        page.div.style.display = page.id === this.currentPageNumber ? "block" : "none";
+      });
     }
   }
 
@@ -10413,6 +10434,7 @@ class BaseViewer {
         }
       });
 
+      this.hidePagesDependingOnPageMode();
       this.eventBus.dispatch("pagesinit", {
         source: this
       });
@@ -10493,6 +10515,12 @@ class BaseViewer {
     pageSpot = null,
     pageNumber = null
   }) {
+    if (this.pageMode === "single") {
+      this._pages.forEach(() => {
+        pageDiv.style.display = "block";
+      });
+    }
+
     (0, _ui_utils.scrollIntoView)(pageDiv, pageSpot);
   }
 
@@ -10839,6 +10867,10 @@ class BaseViewer {
   }
 
   _getVisiblePages() {
+    if (this.pageMode === 'single') {
+      return this._getCurrentVisiblePage();
+    }
+
     return (0, _ui_utils.getVisibleElements)(this.container, this._pages, true, this._isScrollModeHorizontal);
   }
 

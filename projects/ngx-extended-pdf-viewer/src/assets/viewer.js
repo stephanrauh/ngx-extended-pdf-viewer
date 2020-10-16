@@ -641,7 +641,8 @@ const PDFViewerApplication = {
       renderInteractiveForms: _app_options.AppOptions.get("renderInteractiveForms"),
       enablePrintAutoRotate: _app_options.AppOptions.get("enablePrintAutoRotate"),
       useOnlyCssZoom: _app_options.AppOptions.get("useOnlyCssZoom"),
-      maxCanvasPixels: _app_options.AppOptions.get("maxCanvasPixels")
+      maxCanvasPixels: _app_options.AppOptions.get("maxCanvasPixels"),
+      pageViewMode: _app_options.AppOptions.get("pageViewMode")
     });
     pdfRenderingQueue.setViewer(this.pdfViewer);
     pdfLinkService.setViewer(this.pdfViewer);
@@ -10015,6 +10016,7 @@ class BaseViewer {
     this._name = this.constructor.name;
     this.container = options.container;
     this.viewer = options.viewer || options.container.firstElementChild;
+    this.pageViewMode = options.pageViewMode || "single";
 
     if (!(this.container instanceof HTMLDivElement && this.viewer instanceof HTMLDivElement)) {
       throw new Error("Invalid `container` and/or `viewer` option.");
@@ -10093,6 +10095,24 @@ class BaseViewer {
 
     if (!this._setCurrentPageNumber(val, true)) {
       console.error(`${this._name}.currentPageNumber: "${val}" is not a valid page.`);
+    }
+
+    this.hidePagesDependingOnpageViewMode();
+
+    if (this.pageViewMode === "single") {
+      const pageView = this._pages[this.currentPageNumber - 1];
+
+      this._ensurePdfPageLoaded(pageView).then(() => {
+        this.renderingQueue.renderView(pageView);
+      });
+    }
+  }
+
+  hidePagesDependingOnpageViewMode() {
+    if (this.pageViewMode === "single") {
+      this._pages.forEach(page => {
+        page.div.style.display = page.id === this.currentPageNumber ? "block" : "none";
+      });
     }
   }
 
@@ -10383,6 +10403,7 @@ class BaseViewer {
         }
       });
 
+      this.hidePagesDependingOnpageViewMode();
       this.eventBus.dispatch("pagesinit", {
         source: this
       });
@@ -10463,6 +10484,12 @@ class BaseViewer {
     pageSpot = null,
     pageNumber = null
   }) {
+    if (this.pageViewMode === "single") {
+      this._pages.forEach(() => {
+        pageDiv.style.display = "block";
+      });
+    }
+
     (0, _ui_utils.scrollIntoView)(pageDiv, pageSpot);
   }
 
@@ -10675,6 +10702,10 @@ class BaseViewer {
       }
     }
 
+    this._ensurePdfPageLoaded(pageView).then(() => {
+      this.renderingQueue.renderView(pageView);
+    });
+
     if (scale === "page-fit" && !destArray[4]) {
       this._scrollIntoView({
         pageDiv: pageView.div,
@@ -10807,6 +10838,10 @@ class BaseViewer {
   }
 
   _getVisiblePages() {
+    if (this.pageViewMode === 'single') {
+      return this._getCurrentVisiblePage();
+    }
+
     return (0, _ui_utils.getVisibleElements)(this.container, this._pages, true, this._isScrollModeHorizontal);
   }
 
