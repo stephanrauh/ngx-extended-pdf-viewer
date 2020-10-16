@@ -101,6 +101,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public customFreeFloatingBar: TemplateRef<any>;
 
+  @Input()
+  public pageViewMode: 'single' | 'book' | 'multiple' = 'multiple';
+
   @ViewChild('pdfSecondaryToolbarComponent')
   private secondaryToolbarComponent: PdfSecondaryToolbarComponent;
 
@@ -800,6 +803,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         PDFViewerApplicationOptions.set('imageResourcesPath', this.imageResourcesPath);
         PDFViewerApplicationOptions.set('minZoom', this.minZoom);
         PDFViewerApplicationOptions.set('maxZoom', this.maxZoom);
+        PDFViewerApplicationOptions.set('pageViewMode', this.pageViewMode);
+
 
         PDFViewerApplication.isViewerEmbedded = true;
         if (PDFViewerApplication.printKeyDownListener) {
