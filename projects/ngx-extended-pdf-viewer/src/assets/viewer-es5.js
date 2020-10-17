@@ -12909,6 +12909,8 @@ var BaseViewer = /*#__PURE__*/function () {
 
       this._ensurePdfPageLoaded(pageView).then(function () {
         _this4.renderingQueue.renderView(pageView);
+
+        _this4.currentPageNumber = pageNumber;
       });
 
       if (scale === "page-fit" && !destArray[4]) {
