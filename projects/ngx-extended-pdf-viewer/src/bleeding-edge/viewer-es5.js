@@ -20,98 +20,38 @@
  * Javascript code in this page
  */
 
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
-/******/ })
-/************************************************************************/
-/******/ ([
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-"use strict";
 
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+Object.defineProperty(exports, "PDFViewerApplicationOptions", ({
+  enumerable: true,
+  get: function get() {
+    return _app_options.AppOptions;
+  }
+}));
+Object.defineProperty(exports, "PDFViewerApplication", ({
+  enumerable: true,
+  get: function get() {
+    return _app.PDFViewerApplication;
+  }
+}));
+
+var _app_options = __webpack_require__(1);
+
+var _app = __webpack_require__(3);
+
+var pdfjsVersion = '2.7.213';
+var pdfjsBuild = 'd6025a7b8';
+window.PDFViewerApplication = _app.PDFViewerApplication;
+window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
 if (!HTMLCollection.prototype[Symbol.iterator]) {
   HTMLCollection.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
@@ -137,18 +77,13 @@ if (!HTMLCollection.prototype[Symbol.iterator]) {
 })();
 
 ;
-var pdfjsWebApp, pdfjsWebAppOptions;
+;
 {
-  pdfjsWebApp = __webpack_require__(1);
-  pdfjsWebAppOptions = __webpack_require__(6);
+  __webpack_require__(40);
 }
 ;
 {
-  __webpack_require__(41);
-}
-;
-{
-  __webpack_require__(46);
+  __webpack_require__(45);
 }
 
 function getViewerConfiguration() {
@@ -282,8 +217,6 @@ function getViewerConfiguration() {
 
 function webViewerLoad() {
   var config = getViewerConfiguration();
-  window.PDFViewerApplication = pdfjsWebApp.PDFViewerApplication;
-  window.PDFViewerApplicationOptions = pdfjsWebAppOptions.AppOptions;
   var event = document.createEvent("CustomEvent");
   event.initCustomEvent("webviewerloaded", true, true, {
     source: window
@@ -296,7 +229,7 @@ function webViewerLoad() {
     document.dispatchEvent(event);
   }
 
-  pdfjsWebApp.PDFViewerApplication.run(config);
+  _app.PDFViewerApplication.run(config);
 }
 
 {
@@ -305,65 +238,371 @@ function webViewerLoad() {
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
+exports.OptionKind = exports.AppOptions = void 0;
+
+var _viewer_compatibility = __webpack_require__(2);
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var OptionKind = {
+  VIEWER: 0x02,
+  API: 0x04,
+  WORKER: 0x08,
+  PREFERENCE: 0x80
+};
+exports.OptionKind = OptionKind;
+var defaultOptions = {
+  cursorToolOnLoad: {
+    value: 0,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  defaultUrl: {
+    value: "",
+    kind: OptionKind.VIEWER
+  },
+  defaultZoomValue: {
+    value: "",
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  disableHistory: {
+    value: false,
+    kind: OptionKind.VIEWER
+  },
+  disablePageLabels: {
+    value: false,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  enablePermissions: {
+    value: false,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  enablePrintAutoRotate: {
+    value: false,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  enableWebGL: {
+    value: false,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  externalLinkRel: {
+    value: "noopener noreferrer nofollow",
+    kind: OptionKind.VIEWER
+  },
+  externalLinkTarget: {
+    value: 0,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  historyUpdateUrl: {
+    value: false,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  ignoreDestinationZoom: {
+    value: false,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  imageResourcesPath: {
+    value: "./images/",
+    kind: OptionKind.VIEWER
+  },
+  maxCanvasPixels: {
+    value: 16777216,
+    compatibility: _viewer_compatibility.viewerCompatibilityParams.maxCanvasPixels,
+    kind: OptionKind.VIEWER
+  },
+  pdfBugEnabled: {
+    value: false,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  printResolution: {
+    value: 150,
+    kind: OptionKind.VIEWER
+  },
+  removePageBorders: {
+    value: false,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  renderer: {
+    value: "canvas",
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  renderInteractiveForms: {
+    value: true,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  sidebarViewOnLoad: {
+    value: -1,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  scrollModeOnLoad: {
+    value: -1,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  spreadModeOnLoad: {
+    value: -1,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  textLayerMode: {
+    value: 1,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  useOnlyCssZoom: {
+    value: false,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  viewOnLoad: {
+    value: 0,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
+  cMapPacked: {
+    value: true,
+    kind: OptionKind.API
+  },
+  cMapUrl: {
+    value: "../web/cmaps/",
+    kind: OptionKind.API
+  },
+  disableAutoFetch: {
+    value: false,
+    kind: OptionKind.API + OptionKind.PREFERENCE
+  },
+  disableFontFace: {
+    value: false,
+    kind: OptionKind.API + OptionKind.PREFERENCE
+  },
+  disableRange: {
+    value: false,
+    kind: OptionKind.API + OptionKind.PREFERENCE
+  },
+  disableStream: {
+    value: false,
+    kind: OptionKind.API + OptionKind.PREFERENCE
+  },
+  docBaseUrl: {
+    value: "",
+    kind: OptionKind.API
+  },
+  fontExtraProperties: {
+    value: false,
+    kind: OptionKind.API
+  },
+  isEvalSupported: {
+    value: true,
+    kind: OptionKind.API
+  },
+  maxImageSize: {
+    value: -1,
+    kind: OptionKind.API
+  },
+  pdfBug: {
+    value: false,
+    kind: OptionKind.API
+  },
+  verbosity: {
+    value: 1,
+    kind: OptionKind.API
+  },
+  workerPort: {
+    value: null,
+    kind: OptionKind.WORKER
+  },
+  workerSrc: {
+    value: "./assets/pdf.worker.js",
+    kind: OptionKind.WORKER
+  }
+};
+{
+  defaultOptions.disablePreferences = {
+    value: false,
+    kind: OptionKind.VIEWER
+  };
+  defaultOptions.locale = {
+    value: typeof navigator !== "undefined" ? navigator.language : "en-US",
+    kind: OptionKind.VIEWER
+  };
+}
+var userOptions = Object.create(null);
+
+var AppOptions = /*#__PURE__*/function () {
+  function AppOptions() {
+    _classCallCheck(this, AppOptions);
+
+    throw new Error("Cannot initialize AppOptions.");
+  }
+
+  _createClass(AppOptions, null, [{
+    key: "get",
+    value: function get(name) {
+      var userOption = userOptions[name];
+
+      if (userOption !== undefined) {
+        return userOption;
+      }
+
+      var defaultOption = defaultOptions[name];
+
+      if (defaultOption !== undefined) {
+        return defaultOption.compatibility || defaultOption.value;
+      }
+
+      return undefined;
+    }
+  }, {
+    key: "getAll",
+    value: function getAll() {
+      var kind = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      var options = Object.create(null);
+
+      for (var name in defaultOptions) {
+        var defaultOption = defaultOptions[name];
+
+        if (kind) {
+          if ((kind & defaultOption.kind) === 0) {
+            continue;
+          }
+
+          if (kind === OptionKind.PREFERENCE) {
+            var value = defaultOption.value,
+                valueType = _typeof(value);
+
+            if (valueType === "boolean" || valueType === "string" || valueType === "number" && Number.isInteger(value)) {
+              options[name] = value;
+              continue;
+            }
+
+            throw new Error("Invalid type for preference: ".concat(name));
+          }
+        }
+
+        var userOption = userOptions[name];
+        options[name] = userOption !== undefined ? userOption : defaultOption.compatibility || defaultOption.value;
+      }
+
+      return options;
+    }
+  }, {
+    key: "set",
+    value: function set(name, value) {
+      userOptions[name] = value;
+    }
+  }, {
+    key: "remove",
+    value: function remove(name) {
+      delete userOptions[name];
+    }
+  }]);
+
+  return AppOptions;
+}();
+
+exports.AppOptions = AppOptions;
+
+/***/ }),
+/* 2 */
+/***/ ((__unused_webpack_module, exports) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.viewerCompatibilityParams = void 0;
+var compatibilityParams = Object.create(null);
+{
+  var userAgent = typeof navigator !== "undefined" && navigator.userAgent || "";
+  var platform = typeof navigator !== "undefined" && navigator.platform || "";
+  var maxTouchPoints = typeof navigator !== "undefined" && navigator.maxTouchPoints || 1;
+  var isAndroid = /Android/.test(userAgent);
+  var isIOS = /\b(iPad|iPhone|iPod)(?=;)/.test(userAgent) || platform === "MacIntel" && maxTouchPoints > 1;
+  var isIOSChrome = /CriOS/.test(userAgent);
+
+  (function checkOnBlobSupport() {
+    if (isIOSChrome) {
+      compatibilityParams.disableCreateObjectURL = true;
+    }
+  })();
+
+  (function checkCanvasSizeLimitation() {
+    if (isIOS || isAndroid) {
+      compatibilityParams.maxCanvasPixels = 5242880;
+    }
+  })();
+}
+var viewerCompatibilityParams = Object.freeze(compatibilityParams);
+exports.viewerCompatibilityParams = viewerCompatibilityParams;
+
+/***/ }),
+/* 3 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
 exports.PDFPrintServiceFactory = exports.DefaultExternalServices = exports.PDFViewerApplication = void 0;
 
-var _regenerator = _interopRequireDefault(__webpack_require__(2));
+var _regenerator = _interopRequireDefault(__webpack_require__(4));
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
-var _app_options = __webpack_require__(6);
+var _app_options = __webpack_require__(1);
 
-var _pdfjsLib = __webpack_require__(8);
+var _pdfjsLib = __webpack_require__(7);
 
-var _pdf_cursor_tools = __webpack_require__(9);
+var _pdf_cursor_tools = __webpack_require__(8);
 
-var _pdf_rendering_queue = __webpack_require__(11);
+var _pdf_rendering_queue = __webpack_require__(10);
 
-var _pdf_sidebar = __webpack_require__(12);
+var _pdf_sidebar = __webpack_require__(11);
 
-var _overlay_manager = __webpack_require__(13);
+var _overlay_manager = __webpack_require__(12);
 
-var _password_prompt = __webpack_require__(14);
+var _password_prompt = __webpack_require__(13);
 
-var _pdf_attachment_viewer = __webpack_require__(15);
+var _pdf_attachment_viewer = __webpack_require__(14);
 
-var _pdf_document_properties = __webpack_require__(17);
+var _pdf_document_properties = __webpack_require__(16);
 
-var _pdf_find_bar = __webpack_require__(18);
+var _pdf_find_bar = __webpack_require__(17);
 
-var _pdf_find_controller = __webpack_require__(19);
+var _pdf_find_controller = __webpack_require__(18);
 
-var _pdf_history = __webpack_require__(23);
+var _pdf_history = __webpack_require__(22);
 
-var _pdf_layer_viewer = __webpack_require__(24);
+var _pdf_layer_viewer = __webpack_require__(23);
 
-var _pdf_link_service = __webpack_require__(25);
+var _pdf_link_service = __webpack_require__(24);
 
-var _pdf_outline_viewer = __webpack_require__(26);
+var _pdf_outline_viewer = __webpack_require__(25);
 
-var _pdf_presentation_mode = __webpack_require__(27);
+var _pdf_presentation_mode = __webpack_require__(26);
 
-var _pdf_sidebar_resizer = __webpack_require__(28);
+var _pdf_sidebar_resizer = __webpack_require__(27);
 
-var _pdf_thumbnail_viewer = __webpack_require__(29);
+var _pdf_thumbnail_viewer = __webpack_require__(28);
 
-var _pdf_viewer = __webpack_require__(31);
+var _pdf_viewer = __webpack_require__(30);
 
-var _secondary_toolbar = __webpack_require__(37);
+var _secondary_toolbar = __webpack_require__(36);
 
-var _toolbar = __webpack_require__(39);
+var _toolbar = __webpack_require__(38);
 
-var _viewer_compatibility = __webpack_require__(7);
+var _viewer_compatibility = __webpack_require__(2);
 
-var _view_history = __webpack_require__(40);
+var _view_history = __webpack_require__(39);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -797,7 +1036,8 @@ var PDFViewerApplication = {
                 renderInteractiveForms: _app_options.AppOptions.get("renderInteractiveForms"),
                 enablePrintAutoRotate: _app_options.AppOptions.get("enablePrintAutoRotate"),
                 useOnlyCssZoom: _app_options.AppOptions.get("useOnlyCssZoom"),
-                maxCanvasPixels: _app_options.AppOptions.get("maxCanvasPixels")
+                maxCanvasPixels: _app_options.AppOptions.get("maxCanvasPixels"),
+                pageViewMode: _app_options.AppOptions.get("pageViewMode")
               });
               pdfRenderingQueue.setViewer(_this5.pdfViewer);
               pdfLinkService.setViewer(_this5.pdfViewer);
@@ -941,10 +1181,6 @@ var PDFViewerApplication = {
 
   set page(val) {
     this.pdfViewer.currentPageNumber = val;
-  },
-
-  get printing() {
-    return !!this.printService;
   },
 
   get supportsPrinting() {
@@ -1172,7 +1408,7 @@ var PDFViewerApplication = {
                   return undefined;
                 }
 
-                var message = exception && exception.message;
+                var message = exception === null || exception === void 0 ? void 0 : exception.message;
                 var loadingErrorMessage;
 
                 if (exception instanceof _pdfjsLib.InvalidPDFException) {
@@ -1701,21 +1937,13 @@ var PDFViewerApplication = {
               return _context9.finish(28);
 
             case 31:
-              if (_this13.supportsPrinting) {
-                _context9.next = 33;
-                break;
-              }
-
-              return _context9.abrupt("return");
-
-            case 33:
               if (triggerAutoPrint) {
                 setTimeout(function () {
-                  window.printPDF();
+                  _this13.triggerPrinting();
                 });
               }
 
-            case 34:
+            case 32:
             case "end":
               return _context9.stop();
           }
@@ -2029,7 +2257,7 @@ var PDFViewerApplication = {
     }
   },
   forceRendering: function forceRendering() {
-    this.pdfRenderingQueue.printing = this.printing;
+    this.pdfRenderingQueue.printing = !!this.printService;
     this.pdfRenderingQueue.isThumbnailViewEnabled = this.pdfSidebar.isThumbnailViewVisible;
     this.pdfRenderingQueue.renderHighestPriority();
   },
@@ -2095,6 +2323,13 @@ var PDFViewerApplication = {
     }
 
     this.pdfPresentationMode.request();
+  },
+  triggerPrinting: function triggerPrinting() {
+    if (!this.supportsPrinting) {
+      return;
+    }
+
+    window.print();
   },
   bindEvents: function bindEvents() {
     var eventBus = this.eventBus,
@@ -2658,10 +2893,7 @@ function webViewerNamedAction(evt) {
       break;
 
     case "Print":
-      if (PDFViewerApplication.supportsPrinting) {
-        webViewerPrint();
-      }
-
+      PDFViewerApplication.triggerPrinting();
       break;
 
     case "SaveAs":
@@ -2812,7 +3044,7 @@ function webViewerPresentationMode() {
 }
 
 function webViewerPrint() {
-  window.printPDF();
+  PDFViewerApplication.triggerPrinting();
 }
 
 function webViewerDownloadOrSave(sourceEventType) {
@@ -3121,7 +3353,7 @@ function webViewerKeyDown(evt) {
   if (cmd === 1 || cmd === 8 || cmd === 5 || cmd === 12) {
     switch (evt.keyCode) {
       case 70:
-        if (!PDFViewerApplication.supportsIntegratedFind) {
+        if (!PDFViewerApplication.supportsIntegratedFind && !evt.shiftKey) {
           PDFViewerApplication.findBar.open();
           handled = true;
         }
@@ -3465,20 +3697,19 @@ var PDFPrintServiceFactory = {
 exports.PDFPrintServiceFactory = PDFPrintServiceFactory;
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 4 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-module.exports = __webpack_require__(3);
+
+module.exports = __webpack_require__(5);
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 5 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
+/* module decorator */ module = __webpack_require__.nmd(module);
+
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -4061,56 +4292,23 @@ var runtime = function (exports) {
     }
   };
   return exports;
-}(( false ? undefined : _typeof(module)) === "object" ? module.exports : {});
+}(( false ? 0 : _typeof(module)) === "object" ? module.exports : {});
 
 try {
   regeneratorRuntime = runtime;
 } catch (accidentalStrictMode) {
   Function("r", "regeneratorRuntime = r")(runtime);
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(4)(module)))
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 6 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-module.exports = function (module) {
-  if (!module.webpackPolyfill) {
-    module.deprecate = function () {};
 
-    module.paths = [];
-    if (!module.children) module.children = [];
-    Object.defineProperty(module, "loaded", {
-      enumerable: true,
-      get: function get() {
-        return module.l;
-      }
-    });
-    Object.defineProperty(module, "id", {
-      enumerable: true,
-      get: function get() {
-        return module.i;
-      }
-    });
-    module.webpackPolyfill = 1;
-  }
-
-  return module;
-};
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.isValidRotation = isValidRotation;
 exports.isValidScrollMode = isValidScrollMode;
 exports.isValidSpreadMode = isValidSpreadMode;
@@ -4134,7 +4332,7 @@ exports.moveToEndOfArray = moveToEndOfArray;
 exports.getActiveOrFocusedElement = getActiveOrFocusedElement;
 exports.WaitOnType = exports.animationStarted = exports.ProgressBar = exports.EventBus = exports.NullL10n = exports.SpreadMode = exports.ScrollMode = exports.TextLayerMode = exports.RendererType = exports.PresentationModeState = exports.VERTICAL_PADDING = exports.SCROLLBAR_PADDING = exports.MAX_AUTO_SCALE = exports.UNKNOWN_SCALE = exports.MAX_SCALE = exports.MIN_SCALE = exports.DEFAULT_SCALE = exports.DEFAULT_SCALE_VALUE = exports.CSS_UNITS = exports.AutoPrintRegExp = void 0;
 
-var _regenerator = _interopRequireDefault(__webpack_require__(2));
+var _regenerator = _interopRequireDefault(__webpack_require__(4));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -4989,336 +5187,25 @@ function getActiveOrFocusedElement() {
 }
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.OptionKind = exports.AppOptions = void 0;
-
-var _viewer_compatibility = __webpack_require__(7);
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var OptionKind = {
-  VIEWER: 0x02,
-  API: 0x04,
-  WORKER: 0x08,
-  PREFERENCE: 0x80
-};
-exports.OptionKind = OptionKind;
-var defaultOptions = {
-  cursorToolOnLoad: {
-    value: 0,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  defaultUrl: {
-    value: "",
-    kind: OptionKind.VIEWER
-  },
-  defaultZoomValue: {
-    value: "",
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  disableHistory: {
-    value: false,
-    kind: OptionKind.VIEWER
-  },
-  disablePageLabels: {
-    value: false,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  enablePermissions: {
-    value: false,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  enablePrintAutoRotate: {
-    value: false,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  enableWebGL: {
-    value: false,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  externalLinkRel: {
-    value: "noopener noreferrer nofollow",
-    kind: OptionKind.VIEWER
-  },
-  externalLinkTarget: {
-    value: 0,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  historyUpdateUrl: {
-    value: false,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  ignoreDestinationZoom: {
-    value: false,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  imageResourcesPath: {
-    value: "./images/",
-    kind: OptionKind.VIEWER
-  },
-  maxCanvasPixels: {
-    value: 16777216,
-    compatibility: _viewer_compatibility.viewerCompatibilityParams.maxCanvasPixels,
-    kind: OptionKind.VIEWER
-  },
-  pdfBugEnabled: {
-    value: false,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  printResolution: {
-    value: 150,
-    kind: OptionKind.VIEWER
-  },
-  removePageBorders: {
-    value: false,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  renderer: {
-    value: "canvas",
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  renderInteractiveForms: {
-    value: true,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  sidebarViewOnLoad: {
-    value: -1,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  scrollModeOnLoad: {
-    value: -1,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  spreadModeOnLoad: {
-    value: -1,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  textLayerMode: {
-    value: 1,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  useOnlyCssZoom: {
-    value: false,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  viewOnLoad: {
-    value: 0,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
-  cMapPacked: {
-    value: true,
-    kind: OptionKind.API
-  },
-  cMapUrl: {
-    value: "../web/cmaps/",
-    kind: OptionKind.API
-  },
-  disableAutoFetch: {
-    value: false,
-    kind: OptionKind.API + OptionKind.PREFERENCE
-  },
-  disableFontFace: {
-    value: false,
-    kind: OptionKind.API + OptionKind.PREFERENCE
-  },
-  disableRange: {
-    value: false,
-    kind: OptionKind.API + OptionKind.PREFERENCE
-  },
-  disableStream: {
-    value: false,
-    kind: OptionKind.API + OptionKind.PREFERENCE
-  },
-  docBaseUrl: {
-    value: "",
-    kind: OptionKind.API
-  },
-  fontExtraProperties: {
-    value: false,
-    kind: OptionKind.API
-  },
-  isEvalSupported: {
-    value: true,
-    kind: OptionKind.API
-  },
-  maxImageSize: {
-    value: -1,
-    kind: OptionKind.API
-  },
-  pdfBug: {
-    value: false,
-    kind: OptionKind.API
-  },
-  verbosity: {
-    value: 1,
-    kind: OptionKind.API
-  },
-  workerPort: {
-    value: null,
-    kind: OptionKind.WORKER
-  },
-  workerSrc: {
-    value: "./assets/pdf.worker.js",
-    kind: OptionKind.WORKER
-  }
-};
-{
-  defaultOptions.disablePreferences = {
-    value: false,
-    kind: OptionKind.VIEWER
-  };
-  defaultOptions.locale = {
-    value: typeof navigator !== "undefined" ? navigator.language : "en-US",
-    kind: OptionKind.VIEWER
-  };
-}
-var userOptions = Object.create(null);
-
-var AppOptions = /*#__PURE__*/function () {
-  function AppOptions() {
-    _classCallCheck(this, AppOptions);
-
-    throw new Error("Cannot initialize AppOptions.");
-  }
-
-  _createClass(AppOptions, null, [{
-    key: "get",
-    value: function get(name) {
-      var userOption = userOptions[name];
-
-      if (userOption !== undefined) {
-        return userOption;
-      }
-
-      var defaultOption = defaultOptions[name];
-
-      if (defaultOption !== undefined) {
-        return defaultOption.compatibility || defaultOption.value;
-      }
-
-      return undefined;
-    }
-  }, {
-    key: "getAll",
-    value: function getAll() {
-      var kind = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-      var options = Object.create(null);
-
-      for (var name in defaultOptions) {
-        var defaultOption = defaultOptions[name];
-
-        if (kind) {
-          if ((kind & defaultOption.kind) === 0) {
-            continue;
-          }
-
-          if (kind === OptionKind.PREFERENCE) {
-            var value = defaultOption.value,
-                valueType = _typeof(value);
-
-            if (valueType === "boolean" || valueType === "string" || valueType === "number" && Number.isInteger(value)) {
-              options[name] = value;
-              continue;
-            }
-
-            throw new Error("Invalid type for preference: ".concat(name));
-          }
-        }
-
-        var userOption = userOptions[name];
-        options[name] = userOption !== undefined ? userOption : defaultOption.compatibility || defaultOption.value;
-      }
-
-      return options;
-    }
-  }, {
-    key: "set",
-    value: function set(name, value) {
-      userOptions[name] = value;
-    }
-  }, {
-    key: "remove",
-    value: function remove(name) {
-      delete userOptions[name];
-    }
-  }]);
-
-  return AppOptions;
-}();
-
-exports.AppOptions = AppOptions;
-
-/***/ }),
 /* 7 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module) => {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.viewerCompatibilityParams = void 0;
-var compatibilityParams = Object.create(null);
-{
-  var userAgent = typeof navigator !== "undefined" && navigator.userAgent || "";
-  var platform = typeof navigator !== "undefined" && navigator.platform || "";
-  var maxTouchPoints = typeof navigator !== "undefined" && navigator.maxTouchPoints || 1;
-  var isAndroid = /Android/.test(userAgent);
-  var isIOS = /\b(iPad|iPhone|iPod)(?=;)/.test(userAgent) || platform === "MacIntel" && maxTouchPoints > 1;
-  var isIOSChrome = /CriOS/.test(userAgent);
-
-  (function checkOnBlobSupport() {
-    if (isIOSChrome) {
-      compatibilityParams.disableCreateObjectURL = true;
-    }
-  })();
-
-  (function checkCanvasSizeLimitation() {
-    if (isIOS || isAndroid) {
-      compatibilityParams.maxCanvasPixels = 5242880;
-    }
-  })();
-}
-var viewerCompatibilityParams = Object.freeze(compatibilityParams);
-exports.viewerCompatibilityParams = viewerCompatibilityParams;
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
 
 
 module.exports = window["pdfjs-dist/build/pdf"];
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 8 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PDFCursorTools = exports.CursorTool = void 0;
 
-var _grab_to_pan = __webpack_require__(10);
+var _grab_to_pan = __webpack_require__(9);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -5457,15 +5344,14 @@ var PDFCursorTools = /*#__PURE__*/function () {
 exports.PDFCursorTools = PDFCursorTools;
 
 /***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 9 */
+/***/ ((__unused_webpack_module, exports) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.GrabToPan = GrabToPan;
 
 function GrabToPan(options) {
@@ -5651,18 +5537,17 @@ function isOverPerfectScrollbar(x, y, divName) {
 }
 
 /***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 10 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PDFRenderingQueue = exports.RenderingStates = void 0;
 
-var _pdfjsLib = __webpack_require__(8);
+var _pdfjsLib = __webpack_require__(7);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -5814,20 +5699,19 @@ var PDFRenderingQueue = /*#__PURE__*/function () {
 exports.PDFRenderingQueue = PDFRenderingQueue;
 
 /***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 11 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PDFSidebar = exports.SidebarView = void 0;
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
-var _pdf_rendering_queue = __webpack_require__(11);
+var _pdf_rendering_queue = __webpack_require__(10);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -6264,18 +6148,17 @@ var PDFSidebar = /*#__PURE__*/function () {
 exports.PDFSidebar = PDFSidebar;
 
 /***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 12 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.OverlayManager = void 0;
 
-var _regenerator = _interopRequireDefault(__webpack_require__(2));
+var _regenerator = _interopRequireDefault(__webpack_require__(4));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -6541,20 +6424,19 @@ var OverlayManager = /*#__PURE__*/function () {
 exports.OverlayManager = OverlayManager;
 
 /***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 13 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PasswordPrompt = void 0;
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
-var _pdfjsLib = __webpack_require__(8);
+var _pdfjsLib = __webpack_require__(7);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -6647,22 +6529,21 @@ var PasswordPrompt = /*#__PURE__*/function () {
 exports.PasswordPrompt = PasswordPrompt;
 
 /***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 14 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PDFAttachmentViewer = void 0;
 
-var _pdfjsLib = __webpack_require__(8);
+var _pdfjsLib = __webpack_require__(7);
 
-var _base_tree_viewer = __webpack_require__(16);
+var _base_tree_viewer = __webpack_require__(15);
 
-var _viewer_compatibility = __webpack_require__(7);
+var _viewer_compatibility = __webpack_require__(2);
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -6921,18 +6802,17 @@ var PDFAttachmentViewer = /*#__PURE__*/function (_BaseTreeViewer) {
 exports.PDFAttachmentViewer = PDFAttachmentViewer;
 
 /***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 15 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.BaseTreeViewer = void 0;
 
-var _pdfjsLib = __webpack_require__(8);
+var _pdfjsLib = __webpack_require__(7);
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
@@ -7045,22 +6925,21 @@ var BaseTreeViewer = /*#__PURE__*/function () {
 exports.BaseTreeViewer = BaseTreeViewer;
 
 /***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 16 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PDFDocumentProperties = void 0;
 
-var _regenerator = _interopRequireDefault(__webpack_require__(2));
+var _regenerator = _interopRequireDefault(__webpack_require__(4));
 
-var _pdfjsLib = __webpack_require__(8);
+var _pdfjsLib = __webpack_require__(7);
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -7486,20 +7365,19 @@ var PDFDocumentProperties = /*#__PURE__*/function () {
 exports.PDFDocumentProperties = PDFDocumentProperties;
 
 /***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 17 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PDFFindBar = void 0;
 
-var _pdf_find_controller = __webpack_require__(19);
+var _pdf_find_controller = __webpack_require__(18);
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -7750,26 +7628,25 @@ var PDFFindBar = /*#__PURE__*/function () {
 exports.PDFFindBar = PDFFindBar;
 
 /***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 18 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PDFFindController = exports.FindState = void 0;
 
-var _pdfjsLib = __webpack_require__(8);
+var _pdfjsLib = __webpack_require__(7);
 
-var _index = __webpack_require__(20);
+var _index = __webpack_require__(19);
 
-var _pdf_find_utils = __webpack_require__(21);
+var _pdf_find_utils = __webpack_require__(20);
 
-var _levenshtein = __webpack_require__(22);
+var _levenshtein = __webpack_require__(21);
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -8552,15 +8429,14 @@ var PDFFindController = /*#__PURE__*/function () {
 exports.PDFFindController = PDFFindController;
 
 /***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 19 */
+/***/ ((__unused_webpack_module, exports) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.deburr = deburr;
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -8812,15 +8688,14 @@ function deburr(string) {
 }
 
 /***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 20 */
+/***/ ((__unused_webpack_module, exports) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.getCharacterType = getCharacterType;
 exports.CharacterType = void 0;
 var CharacterType = {
@@ -8908,15 +8783,14 @@ function getCharacterType(charCode) {
 }
 
 /***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 21 */
+/***/ ((__unused_webpack_module, exports) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.Levenshtein = void 0;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -9036,20 +8910,19 @@ var Levenshtein = /*#__PURE__*/function () {
 exports.Levenshtein = Levenshtein;
 
 /***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 22 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.isDestHashesEqual = isDestHashesEqual;
 exports.isDestArraysEqual = isDestArraysEqual;
 exports.PDFHistory = void 0;
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -9685,20 +9558,19 @@ function isDestArraysEqual(firstDest, secondDest) {
 }
 
 /***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 23 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PDFLayerViewer = void 0;
 
-var _regenerator = _interopRequireDefault(__webpack_require__(2));
+var _regenerator = _interopRequireDefault(__webpack_require__(4));
 
-var _base_tree_viewer = __webpack_require__(16);
+var _base_tree_viewer = __webpack_require__(15);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -10010,18 +9882,17 @@ var PDFLayerViewer = /*#__PURE__*/function (_BaseTreeViewer) {
 exports.PDFLayerViewer = PDFLayerViewer;
 
 /***/ }),
-/* 25 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 24 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.SimpleLinkService = exports.PDFLinkService = void 0;
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -10498,20 +10369,19 @@ var SimpleLinkService = /*#__PURE__*/function () {
 exports.SimpleLinkService = SimpleLinkService;
 
 /***/ }),
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 25 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PDFOutlineViewer = void 0;
 
-var _pdfjsLib = __webpack_require__(8);
+var _pdfjsLib = __webpack_require__(7);
 
-var _base_tree_viewer = __webpack_require__(16);
+var _base_tree_viewer = __webpack_require__(15);
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -10724,18 +10594,17 @@ var PDFOutlineViewer = /*#__PURE__*/function (_BaseTreeViewer) {
 exports.PDFOutlineViewer = PDFOutlineViewer;
 
 /***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 26 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PDFPresentationMode = void 0;
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -11177,18 +11046,17 @@ var PDFPresentationMode = /*#__PURE__*/function () {
 exports.PDFPresentationMode = PDFPresentationMode;
 
 /***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 27 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PDFSidebarResizer = void 0;
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -11340,20 +11208,19 @@ var PDFSidebarResizer = /*#__PURE__*/function () {
 exports.PDFSidebarResizer = PDFSidebarResizer;
 
 /***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 28 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PDFThumbnailViewer = void 0;
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
-var _pdf_thumbnail_view = __webpack_require__(30);
+var _pdf_thumbnail_view = __webpack_require__(29);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -11644,24 +11511,23 @@ var PDFThumbnailViewer = /*#__PURE__*/function () {
 exports.PDFThumbnailViewer = PDFThumbnailViewer;
 
 /***/ }),
-/* 30 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 29 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PDFThumbnailView = void 0;
 
-var _regenerator = _interopRequireDefault(__webpack_require__(2));
+var _regenerator = _interopRequireDefault(__webpack_require__(4));
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
-var _pdfjsLib = __webpack_require__(8);
+var _pdfjsLib = __webpack_require__(7);
 
-var _pdf_rendering_queue = __webpack_require__(11);
+var _pdf_rendering_queue = __webpack_require__(10);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -12140,20 +12006,19 @@ var PDFThumbnailView = /*#__PURE__*/function () {
 exports.PDFThumbnailView = PDFThumbnailView;
 
 /***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 30 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PDFViewer = void 0;
 
-var _base_viewer = __webpack_require__(32);
+var _base_viewer = __webpack_require__(31);
 
-var _pdfjsLib = __webpack_require__(8);
+var _pdfjsLib = __webpack_require__(7);
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -12288,30 +12153,29 @@ var PDFViewer = /*#__PURE__*/function (_BaseViewer) {
 exports.PDFViewer = PDFViewer;
 
 /***/ }),
-/* 32 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 31 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.BaseViewer = void 0;
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
-var _pdf_rendering_queue = __webpack_require__(11);
+var _pdf_rendering_queue = __webpack_require__(10);
 
-var _annotation_layer_builder = __webpack_require__(33);
+var _annotation_layer_builder = __webpack_require__(32);
 
-var _pdfjsLib = __webpack_require__(8);
+var _pdfjsLib = __webpack_require__(7);
 
-var _pdf_page_view = __webpack_require__(34);
+var _pdf_page_view = __webpack_require__(33);
 
-var _pdf_link_service = __webpack_require__(25);
+var _pdf_link_service = __webpack_require__(24);
 
-var _text_layer_builder = __webpack_require__(36);
+var _text_layer_builder = __webpack_require__(35);
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
@@ -12390,7 +12254,7 @@ var BaseViewer = /*#__PURE__*/function () {
     this._name = this.constructor.name;
     this.container = options.container;
     this.viewer = options.viewer || options.container.firstElementChild;
-    this.pageMode = "single";
+    this.pageViewMode = options.pageViewMode || "single";
 
     if (!(this.container && this.container.tagName.toUpperCase() === "DIV" && this.viewer && this.viewer.tagName.toUpperCase() === "DIV")) {
       throw new Error("Invalid `container` and/or `viewer` option.");
@@ -12446,11 +12310,11 @@ var BaseViewer = /*#__PURE__*/function () {
       return this._pages[index];
     }
   }, {
-    key: "hidePagesDependingOnPageMode",
-    value: function hidePagesDependingOnPageMode() {
+    key: "hidePagesDependingOnpageViewMode",
+    value: function hidePagesDependingOnpageViewMode() {
       var _this2 = this;
 
-      if (this.pageMode === "single") {
+      if (this.pageViewMode === "single") {
         this._pages.forEach(function (page) {
           page.div.style.display = page.id === _this2.currentPageNumber ? "block" : "none";
         });
@@ -12648,7 +12512,7 @@ var BaseViewer = /*#__PURE__*/function () {
           }
         });
 
-        _this3.hidePagesDependingOnPageMode();
+        _this3.hidePagesDependingOnpageViewMode();
 
         _this3.eventBus.dispatch("pagesinit", {
           source: _this3
@@ -12736,7 +12600,7 @@ var BaseViewer = /*#__PURE__*/function () {
           _ref$pageNumber = _ref.pageNumber,
           pageNumber = _ref$pageNumber === void 0 ? null : _ref$pageNumber;
 
-      if (this.pageMode === "single") {
+      if (this.pageViewMode === "single") {
         this._pages.forEach(function () {
           pageDiv.style.display = "block";
         });
@@ -12871,6 +12735,8 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "scrollPageIntoView",
     value: function scrollPageIntoView(_ref3) {
+      var _this4 = this;
+
       var pageNumber = _ref3.pageNumber,
           _ref3$destArray = _ref3.destArray,
           destArray = _ref3$destArray === void 0 ? null : _ref3$destArray,
@@ -12967,6 +12833,12 @@ var BaseViewer = /*#__PURE__*/function () {
           this.currentScaleValue = _ui_utils.DEFAULT_SCALE_VALUE;
         }
       }
+
+      this._ensurePdfPageLoaded(pageView).then(function () {
+        _this4.renderingQueue.renderView(pageView);
+
+        _this4.currentPageNumber = pageNumber;
+      });
 
       if (scale === "page-fit" && !destArray[4]) {
         this._scrollIntoView({
@@ -13087,7 +12959,7 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "_getVisiblePages",
     value: function _getVisiblePages() {
-      if (this.pageMode === 'single') {
+      if (this.pageViewMode === 'single') {
         return this._getCurrentVisiblePage();
       }
 
@@ -13130,7 +13002,7 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "_ensurePdfPageLoaded",
     value: function _ensurePdfPageLoaded(pageView) {
-      var _this4 = this;
+      var _this5 = this;
 
       if (pageView.pdfPage) {
         return Promise.resolve(pageView.pdfPage);
@@ -13145,13 +13017,13 @@ var BaseViewer = /*#__PURE__*/function () {
           pageView.setPdfPage(pdfPage);
         }
 
-        _this4._pagesRequests["delete"](pageView);
+        _this5._pagesRequests["delete"](pageView);
 
         return pdfPage;
       })["catch"](function (reason) {
         console.error("Unable to get page for page view", reason);
 
-        _this4._pagesRequests["delete"](pageView);
+        _this5._pagesRequests["delete"](pageView);
       });
 
       this._pagesRequests.set(pageView, promise);
@@ -13161,7 +13033,7 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "forceRendering",
     value: function forceRendering(currentlyVisiblePages) {
-      var _this5 = this;
+      var _this6 = this;
 
       var visiblePages = currentlyVisiblePages || this._getVisiblePages();
 
@@ -13170,7 +13042,7 @@ var BaseViewer = /*#__PURE__*/function () {
 
       if (pageView) {
         this._ensurePdfPageLoaded(pageView).then(function () {
-          _this5.renderingQueue.renderView(pageView);
+          _this6.renderingQueue.renderView(pageView);
         });
 
         return true;
@@ -13326,7 +13198,7 @@ var BaseViewer = /*#__PURE__*/function () {
       return this._currentPageNumber;
     },
     set: function set(val) {
-      var _this6 = this;
+      var _this7 = this;
 
       if (!Number.isInteger(val)) {
         throw new Error("Invalid page number.");
@@ -13340,16 +13212,13 @@ var BaseViewer = /*#__PURE__*/function () {
         console.error("".concat(this._name, ".currentPageNumber: \"").concat(val, "\" is not a valid page."));
       }
 
-      this.hidePagesDependingOnPageMode();
+      this.hidePagesDependingOnpageViewMode();
 
-      if (this.pageMode === "single") {
-        debugger;
+      if (this.pageViewMode === "single") {
         var pageView = this._pages[this.currentPageNumber - 1];
 
         this._ensurePdfPageLoaded(pageView).then(function () {
-          console.log("Rendered: " + pageView.id);
-
-          _this6.renderingQueue.renderView(pageView);
+          _this7.renderingQueue.renderView(pageView);
         });
       }
     }
@@ -13605,22 +13474,21 @@ var BaseViewer = /*#__PURE__*/function () {
 exports.BaseViewer = BaseViewer;
 
 /***/ }),
-/* 33 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 32 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.DefaultAnnotationLayerFactory = exports.AnnotationLayerBuilder = void 0;
 
-var _pdfjsLib = __webpack_require__(8);
+var _pdfjsLib = __webpack_require__(7);
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
-var _pdf_link_service = __webpack_require__(25);
+var _pdf_link_service = __webpack_require__(24);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -13756,28 +13624,27 @@ var DefaultAnnotationLayerFactory = /*#__PURE__*/function () {
 exports.DefaultAnnotationLayerFactory = DefaultAnnotationLayerFactory;
 
 /***/ }),
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 33 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PDFPageView = void 0;
 
-var _regenerator = _interopRequireDefault(__webpack_require__(2));
+var _regenerator = _interopRequireDefault(__webpack_require__(4));
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
-var _pdfjsLib = __webpack_require__(8);
+var _pdfjsLib = __webpack_require__(7);
 
-var _pdf_rendering_queue = __webpack_require__(11);
+var _pdf_rendering_queue = __webpack_require__(10);
 
-var _viewer_compatibility = __webpack_require__(7);
+var _viewer_compatibility = __webpack_require__(2);
 
-var _canvasSize = _interopRequireDefault(__webpack_require__(35));
+var _canvasSize = _interopRequireDefault(__webpack_require__(34));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -14520,16 +14387,15 @@ var PDFPageView = /*#__PURE__*/function () {
 exports.PDFPageView = PDFPageView;
 
 /***/ }),
-/* 35 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 34 */
+/***/ ((__unused_webpack_module, exports) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-exports["default"] = void 0;
+}));
+exports.default = void 0;
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -14959,21 +14825,20 @@ var canvasSize = {
   }
 };
 var _default = canvasSize;
-exports["default"] = _default;
+exports.default = _default;
 
 /***/ }),
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 35 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.DefaultTextLayerFactory = exports.TextLayerBuilder = void 0;
 
-var _pdfjsLib = __webpack_require__(8);
+var _pdfjsLib = __webpack_require__(7);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -15380,22 +15245,21 @@ var DefaultTextLayerFactory = /*#__PURE__*/function () {
 exports.DefaultTextLayerFactory = DefaultTextLayerFactory;
 
 /***/ }),
-/* 37 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 36 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.SecondaryToolbar = void 0;
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
-var _pdf_cursor_tools = __webpack_require__(9);
+var _pdf_cursor_tools = __webpack_require__(8);
 
-var _pdf_single_page_viewer = __webpack_require__(38);
+var _pdf_single_page_viewer = __webpack_require__(37);
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
@@ -15762,20 +15626,19 @@ var SecondaryToolbar = /*#__PURE__*/function () {
 exports.SecondaryToolbar = SecondaryToolbar;
 
 /***/ }),
-/* 38 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 37 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PDFSinglePageViewer = void 0;
 
-var _base_viewer = __webpack_require__(32);
+var _base_viewer = __webpack_require__(31);
 
-var _pdfjsLib = __webpack_require__(8);
+var _pdfjsLib = __webpack_require__(7);
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -15937,20 +15800,19 @@ var PDFSinglePageViewer = /*#__PURE__*/function (_BaseViewer) {
 exports.PDFSinglePageViewer = PDFSinglePageViewer;
 
 /***/ }),
-/* 39 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 38 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.Toolbar = void 0;
 
-var _regenerator = _interopRequireDefault(__webpack_require__(2));
+var _regenerator = _interopRequireDefault(__webpack_require__(4));
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -16306,18 +16168,17 @@ var Toolbar = /*#__PURE__*/function () {
 exports.Toolbar = Toolbar;
 
 /***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 39 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.ViewHistory = void 0;
 
-var _regenerator = _interopRequireDefault(__webpack_require__(2));
+var _regenerator = _interopRequireDefault(__webpack_require__(4));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -16561,26 +16422,25 @@ var ViewHistory = /*#__PURE__*/function () {
 exports.ViewHistory = ViewHistory;
 
 /***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 40 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.GenericCom = void 0;
 
-var _regenerator = _interopRequireDefault(__webpack_require__(2));
+var _regenerator = _interopRequireDefault(__webpack_require__(4));
 
-var _app = __webpack_require__(1);
+var _app = __webpack_require__(3);
 
-var _preferences = __webpack_require__(42);
+var _preferences = __webpack_require__(41);
 
-var _download_manager = __webpack_require__(43);
+var _download_manager = __webpack_require__(42);
 
-var _genericl10n = __webpack_require__(44);
+var _genericl10n = __webpack_require__(43);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -16714,20 +16574,19 @@ var GenericExternalServices = /*#__PURE__*/function (_DefaultExternalServi) {
 _app.PDFViewerApplication.externalServices = GenericExternalServices;
 
 /***/ }),
-/* 42 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 41 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.BasePreferences = void 0;
 
-var _regenerator = _interopRequireDefault(__webpack_require__(2));
+var _regenerator = _interopRequireDefault(__webpack_require__(4));
 
-var _app_options = __webpack_require__(6);
+var _app_options = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -17058,20 +16917,19 @@ var BasePreferences = /*#__PURE__*/function () {
 exports.BasePreferences = BasePreferences;
 
 /***/ }),
-/* 43 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 42 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.DownloadManager = void 0;
 
-var _pdfjsLib = __webpack_require__(8);
+var _pdfjsLib = __webpack_require__(7);
 
-var _viewer_compatibility = __webpack_require__(7);
+var _viewer_compatibility = __webpack_require__(2);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -17143,20 +17001,19 @@ var DownloadManager = /*#__PURE__*/function () {
 exports.DownloadManager = DownloadManager;
 
 /***/ }),
-/* 44 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 43 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.GenericL10n = void 0;
 
-var _regenerator = _interopRequireDefault(__webpack_require__(2));
+var _regenerator = _interopRequireDefault(__webpack_require__(4));
 
-__webpack_require__(45);
+__webpack_require__(44);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -17312,10 +17169,9 @@ var GenericL10n = /*#__PURE__*/function () {
 exports.GenericL10n = GenericL10n;
 
 /***/ }),
-/* 45 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 44 */
+/***/ (() => {
 
-"use strict";
 
 
 document.webL10n = function (window, document, undefined) {
@@ -18163,22 +18019,21 @@ document.webL10n = function (window, document, undefined) {
 }(window, document);
 
 /***/ }),
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/* 45 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
+}));
 exports.PDFPrintService = PDFPrintService;
 
-var _ui_utils = __webpack_require__(5);
+var _ui_utils = __webpack_require__(6);
 
-var _app = __webpack_require__(1);
+var _app = __webpack_require__(3);
 
-var _viewer_compatibility = __webpack_require__(7);
+var _viewer_compatibility = __webpack_require__(2);
 
 var activeService = null;
 var overlayManager = null;
@@ -18481,5 +18336,49 @@ _app.PDFPrintServiceFactory.instance = {
 };
 
 /***/ })
-/******/ ]);
+/******/ 	]);
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		if(__webpack_module_cache__[moduleId]) {
+/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			id: moduleId,
+/******/ 			loaded: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/node module decorator */
+/******/ 	(() => {
+/******/ 		__webpack_require__.nmd = (module) => {
+/******/ 			module.paths = [];
+/******/ 			if (!module.children) module.children = [];
+/******/ 			return module;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	// startup
+/******/ 	// Load entry module
+/******/ 	__webpack_require__(0);
+/******/ 	// This entry module used 'exports' so it can't be inlined
+/******/ })()
+;
 //# sourceMappingURL=viewer-es5.js.map

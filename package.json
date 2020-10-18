@@ -34,7 +34,7 @@
     "core-js": "^2.6.11",
     "ngx-extended-pdf-viewer": "file:./dist/ngx-extended-pdf-viewer",
     "rxjs": "^6.6.3",
-    "zone.js": "~0.11.1"
+    "zone.js": "^0.11.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.13.9",
@@ -43,12 +43,12 @@
     "@angular/compiler-cli": "^7.2.16",
     "@angular/language-service": "^7.2.16",
     "@types/node": "^14.11.10",
-    "caniuse-lite": "^1.0.30001146",
+    "caniuse-lite": "^1.0.30001148",
     "codelyzer": "^6.0.1",
     "dot-prop": "^5.3.0",
     "macaddress": "^0.5.1",
     "ng-packagr": "^4.7.1",
-    "npm-registry-fetch": ">=8.1.4",
+    "npm-registry-fetch": "^8.1.5",
     "properties-reader": "2.1.1",
     "serialize-javascript": "^5.0.1",
     "ts-node": "^9.0.0",
