@@ -1,0 +1,2 @@
+- name: Debug Action
+  uses: hmarr/debug-action@v1.0.0
