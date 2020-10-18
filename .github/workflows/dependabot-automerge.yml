@@ -12,8 +12,19 @@ jobs:
       - name: Debug Action
         uses: hmarr/debug-action@v1.0.0
 
+      - name: 'Wait for status checks'
+        id: waitforstatuschecks
+        uses: WyriHaximus/github-action-wait-for-status@v1.2.0
+        with:
+          ignoreActions: automerge,WIP
+          checkInterval: 300
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
       - name: automerge
         uses: actions/github-script@0.2.0
+        if: steps.waitforstatuschecks.outputs.status == 'success'
         with:
           script: |
             github.pullRequests.createReview({
