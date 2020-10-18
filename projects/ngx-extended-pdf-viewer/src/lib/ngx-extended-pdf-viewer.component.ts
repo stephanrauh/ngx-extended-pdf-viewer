@@ -53,7 +53,9 @@ interface ElementAndPosition {
   y: number;
 }
 
-
+export interface FormDataType {
+  [fieldName: string]: string;
+}
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
@@ -100,6 +102,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public customFreeFloatingBar: TemplateRef<any>;
+
+  @Input()
+  public formDataSneakPreview: FormDataType = {};
+
+  @Output()
+  public formDataSneakPreviewChange = new EventEmitter<FormDataType>();
 
   @Input()
   public pageViewMode: 'single' | 'book' | 'multiple' = 'multiple';
@@ -805,7 +813,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         PDFViewerApplicationOptions.set('maxZoom', this.maxZoom);
         PDFViewerApplicationOptions.set('pageViewMode', this.pageViewMode);
 
-
         PDFViewerApplication.isViewerEmbedded = true;
         if (PDFViewerApplication.printKeyDownListener) {
           window.addEventListener('keydown', PDFViewerApplication.printKeyDownListener, true);
@@ -1021,7 +1028,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.scrollModeChange.emit(x.mode);
     });
 
-
     PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
       this.pagesLoaded.emit(x);
       if (this.rotation) {
@@ -1049,6 +1055,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
       this.ngZone.run(() => {
         this.pageRendered.emit(x);
+        this.fillFormFields(this.formDataSneakPreview);
       });
     });
     PDFViewerApplication.eventBus.on('download', (x: PdfDownloadedEvent) => {
@@ -1176,7 +1183,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
       }
       PDFViewerApplication.onError = (error: Error) => this.pdfLoadingFailed.emit(error);
-      PDFViewerApplication.open(this._src, options).then(() => this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount }));
+      PDFViewerApplication.open(this._src, options).then(() => {
+        this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount });
+      });
     }
     setTimeout(() => {
       if (!this.shuttingDown) {
@@ -1299,7 +1308,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             }
           }
           PDFViewerApplication.open(this._src, options).then(
-            () => this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount }),
+            () => {
+              this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount });
+            },
             (error: Error) => this.pdfLoadingFailed.emit(error)
           );
         }
@@ -1526,5 +1537,28 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public onSecondaryMenuIsEmpty(hideKebabButton: boolean) {
     this.hideKebabMenuForSecondaryToolbar = hideKebabButton;
+  }
+
+  public fillFormFields(formDataSneakPreview: FormDataType): void {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+
+    const annotations = PDFViewerApplication.pdfDocument.annotationStorage.getAll();
+    for (const annotation in annotations) {
+      if (annotation) {
+        const value = annotations[annotation];
+        const container = document.querySelector('[data-annotation-id="' + annotation + '"]');
+        if (container) {
+          const field = container.querySelector('input');
+          if (field) {
+            const fieldName = field.name;
+            const newValue = formDataSneakPreview[fieldName];
+            if (newValue) {
+              PDFViewerApplication.pdfDocument.annotationStorage.setValue(annotation, newValue);
+              field.value = newValue;
+            }
+          }
+        }
+      }
+    }
   }
 }
