@@ -1,0 +1,23 @@
+version: 2
+updates:
+  # Enable version updates for npm
+  - package-ecosystem: "npm"
+    # Look for `package.json` and `lock` files in the `root` directory
+    directory: "/"
+    # Check the npm registry for updates every day (weekdays)
+    schedule:
+      interval: "daily"
+    ignore:
+      - dependency-name: "@angular/language-service"
+      - dependency-name: "@@angular/animations"
+      - dependency-name: "@angular/cdk"
+      - dependency-name: "@angular/common"
+      - dependency-name: "@angular/compiler"
+      - dependency-name: "@angular/core"
+      - dependency-name: "@angular/forms"
+      - dependency-name: "@angular/material"
+      - dependency-name: "@angular/platform-browser"
+      - dependency-name: "@angular/router"
+      - dependency-name: "@angular-devkit/build-angular"
+      - dependency-name: "@angular-devkit/build-ng-packagr"
+      - dependency-name: "@angular/compiler-cli"
