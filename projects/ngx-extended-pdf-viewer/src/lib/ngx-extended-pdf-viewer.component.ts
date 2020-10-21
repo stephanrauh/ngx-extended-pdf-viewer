@@ -1056,6 +1056,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.ngZone.run(() => {
         this.pageRendered.emit(x);
         this.fillFormFields(this.formDataSneakPreview);
+        this.addFormFieldListeners(this.formDataSneakPreview);
       });
     });
     PDFViewerApplication.eventBus.on('download', (x: PdfDownloadedEvent) => {
@@ -1490,6 +1491,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
     }
 
+    if ('formDataSneakPreview' in changes) {
+      this.fillFormFields(this.formDataSneakPreview);
+    }
+
     if ('height' in changes) {
     }
   }
@@ -1542,23 +1547,93 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public fillFormFields(formDataSneakPreview: FormDataType): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
 
+    if ((!PDFViewerApplication) || (!PDFViewerApplication.pdfDocument) || (!PDFViewerApplication.pdfDocument.annotationStorage)) {
+      // ngOnChanges calls this method too early - so just ignore it
+      return;
+    }
+
     const annotations = PDFViewerApplication.pdfDocument.annotationStorage.getAll();
     for (const annotation in annotations) {
       if (annotation) {
-        const value = annotations[annotation];
         const container = document.querySelector('[data-annotation-id="' + annotation + '"]');
         if (container) {
           const field = container.querySelector('input');
           if (field) {
             const fieldName = field.name;
             const newValue = formDataSneakPreview[fieldName];
-            if (newValue) {
+            if (newValue !== undefined) {
               PDFViewerApplication.pdfDocument.annotationStorage.setValue(annotation, newValue);
-              field.value = newValue;
+              if (field.type === 'checkbox') {
+                const v = String(newValue) === 'true';
+                field.checked = v;
+              } else {
+                field.value = newValue;
+              }
+            }
+          }
+          const select = container.querySelector('select');
+          if (select) {
+            const fieldName = select.name;
+            const newValue = formDataSneakPreview[fieldName];
+            if (newValue !== undefined) {
+              PDFViewerApplication.pdfDocument.annotationStorage.setValue(annotation, newValue);
+              select.value = newValue;
             }
           }
         }
       }
     }
+  }
+
+
+  public addFormFieldListeners(formDataSneakPreview: FormDataType): void {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+
+    const annotations = PDFViewerApplication.pdfDocument.annotationStorage.getAll();
+    for (const annotation in annotations) {
+      if (annotation) {
+        const container = document.querySelector('[data-annotation-id="' + annotation + '"]');
+        if (container) {
+          const field = container.querySelector('input');
+          if (field) {
+            const fieldName = field.name;
+            console.log(fieldName);
+            const newValue = formDataSneakPreview[fieldName];
+            if (newValue !== undefined) {
+              field.addEventListener('input', () => this.emitFormDataChange(fieldName, field));
+            }
+          }
+          const select = container.querySelector('select');
+          if (select) {
+            const fieldName = select.name;
+            console.log(fieldName);
+            const newValue = formDataSneakPreview[fieldName];
+            if (newValue !== undefined) {
+              select.addEventListener('input', () => this.emitFormDataChange(fieldName, select));
+            }
+          }
+        }
+      }
+    }
+  }
+
+  private emitFormDataChange(fieldName: string, field: HTMLElement): void {
+    let value = '';
+
+    if (field instanceof HTMLSelectElement) {
+      value = field.value;
+    } else if (field instanceof HTMLInputElement) {
+      if (field.type === 'checkbox') {
+        value = String(field.checked);
+      } else {
+        value = field.value;
+      }
+    }
+    this.ngZone.run(() => {
+      if (this.formDataSneakPreview[fieldName] !== undefined) {
+        this.formDataSneakPreview[fieldName] = value;
+        this.formDataSneakPreviewChange.emit(this.formDataSneakPreview);
+      }
+    });
   }
 }
