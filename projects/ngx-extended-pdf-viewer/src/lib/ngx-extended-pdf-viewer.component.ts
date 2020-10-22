@@ -1492,11 +1492,35 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
 
     if ('formDataSneakPreview' in changes) {
-      this.fillFormFields(this.formDataSneakPreview);
+      if (!this.equals(changes['formDataSneakPreview'].currentValue, changes['formDataSneakPreview'].previousValue)) {
+        this.fillFormFields(this.formDataSneakPreview);
+      }
     }
 
     if ('height' in changes) {
     }
+  }
+
+  private equals(object1: Array<any>, object2: Array<any>): boolean {
+    if (!object1 || !object2) {
+      return object1 === object2;
+    }
+    const keys1 = Object.keys(object1);
+    const keys2 = Object.keys(object2);
+
+    if (keys1.length !== keys2.length) {
+      return false;
+    }
+
+    for (const key of keys1) {
+      if (object1.hasOwnProperty(key)) {
+        if (object1[key] !== object2[key]) {
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 
   private setZoom() {
@@ -1547,7 +1571,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public fillFormFields(formDataSneakPreview: FormDataType): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
 
-    if ((!PDFViewerApplication) || (!PDFViewerApplication.pdfDocument) || (!PDFViewerApplication.pdfDocument.annotationStorage)) {
+    if (!PDFViewerApplication || !PDFViewerApplication.pdfDocument || !PDFViewerApplication.pdfDocument.annotationStorage) {
       // ngOnChanges calls this method too early - so just ignore it
       return;
     }
@@ -1584,7 +1608,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
     }
   }
-
 
   public addFormFieldListeners(formDataSneakPreview: FormDataType): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;

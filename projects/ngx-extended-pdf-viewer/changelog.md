@@ -213,3 +213,4 @@
 - 5.0.0 #483 fixed a bug that prevented to save PDF forms with the data entered by the user
 - 5.0.1 #488 fixed the URL of the CMap files 
 - 5.1.0 #495 implemented `[(scrollMode)]`; implemented `pageViewMode="single"`; updated the bleeding-edge branch
+- 5.2.0-alpha.0 #499 and #511 implemented a proof of concept for `[(formDataSneakPreview)]` (which is going to be renamed `[(formDataSneakPreview)])` after deciding what the final API looks like)
