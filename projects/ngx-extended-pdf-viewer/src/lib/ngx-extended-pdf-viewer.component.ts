@@ -104,10 +104,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public customFreeFloatingBar: TemplateRef<any>;
 
   @Input()
-  public formDataSneakPreview: FormDataType = {};
+  public formData: FormDataType = {};
 
   @Output()
-  public formDataSneakPreviewChange = new EventEmitter<FormDataType>();
+  public formDataChange = new EventEmitter<FormDataType>();
 
   @Input()
   public pageViewMode: 'single' | 'book' | 'multiple' = 'multiple';
@@ -1055,8 +1055,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
       this.ngZone.run(() => {
         this.pageRendered.emit(x);
-        this.fillFormFields(this.formDataSneakPreview);
-        this.addFormFieldListeners(this.formDataSneakPreview);
+        this.fillFormFields(this.formData);
+        this.addFormFieldListeners(this.formData);
       });
     });
     PDFViewerApplication.eventBus.on('download', (x: PdfDownloadedEvent) => {
@@ -1491,9 +1491,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
     }
 
-    if ('formDataSneakPreview' in changes) {
-      if (!this.equals(changes['formDataSneakPreview'].currentValue, changes['formDataSneakPreview'].previousValue)) {
-        this.fillFormFields(this.formDataSneakPreview);
+    if ('formData' in changes) {
+      const newFormData = this.addMissingFormFields(changes['formData'].currentValue);
+      if (!this.equals(newFormData, changes['formData'].previousValue)) {
+        this.fillFormFields(this.formData);
       }
     }
 
@@ -1501,23 +1502,31 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
   }
 
-  private equals(object1: Array<any>, object2: Array<any>): boolean {
+  private equals(object1: any, object2: any): boolean {
     if (!object1 || !object2) {
       return object1 === object2;
     }
     const keys1 = Object.keys(object1);
     const keys2 = Object.keys(object2);
 
-    if (keys1.length !== keys2.length) {
-      return false;
-    }
-
     for (const key of keys1) {
       if (object1.hasOwnProperty(key)) {
-        if (object1[key] !== object2[key]) {
-          return false;
+        if (object1[key] !== undefined && object2[key] !== undefined) {
+          if (object1[key] !== object2[key]) {
+            return false;
+          }
         }
       }
+    }
+
+    for (const key of keys2) {
+      if (object2.hasOwnProperty(key)) {
+        if (object1[key] !== undefined && object2[key] !== undefined) {
+          if (object1[key] !== object2[key]) {
+            return false;
+          }
+        }
+       }
     }
 
     return true;
@@ -1568,7 +1577,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.hideKebabMenuForSecondaryToolbar = hideKebabButton;
   }
 
-  public fillFormFields(formDataSneakPreview: FormDataType): void {
+  public fillFormFields(formData: FormDataType): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
 
     if (!PDFViewerApplication || !PDFViewerApplication.pdfDocument || !PDFViewerApplication.pdfDocument.annotationStorage) {
@@ -1584,7 +1593,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           const field = container.querySelector('input');
           if (field) {
             const fieldName = field.name;
-            const newValue = formDataSneakPreview[fieldName];
+            const newValue = formData[fieldName];
+            if (newValue === undefined) {
+              if (field.type === 'checkbox') {
+                this.formData[fieldName] = String(field.checked);
+              } else {
+                this.formData[fieldName] = field.value;
+              }
+            }
             if (newValue !== undefined) {
               PDFViewerApplication.pdfDocument.annotationStorage.setValue(annotation, newValue);
               if (field.type === 'checkbox') {
@@ -1598,7 +1614,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           const select = container.querySelector('select');
           if (select) {
             const fieldName = select.name;
-            const newValue = formDataSneakPreview[fieldName];
+            const newValue = formData[fieldName];
+            if (newValue === undefined) {
+              this.formData[fieldName] = select.value;
+            }
             if (newValue !== undefined) {
               PDFViewerApplication.pdfDocument.annotationStorage.setValue(annotation, newValue);
               select.value = newValue;
@@ -1609,7 +1628,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
   }
 
-  public addFormFieldListeners(formDataSneakPreview: FormDataType): void {
+  public addFormFieldListeners(formData: FormDataType): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
 
     const annotations = PDFViewerApplication.pdfDocument.annotationStorage.getAll();
@@ -1620,24 +1639,60 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           const field = container.querySelector('input');
           if (field) {
             const fieldName = field.name;
-            console.log(fieldName);
-            const newValue = formDataSneakPreview[fieldName];
-            if (newValue !== undefined) {
-              field.addEventListener('input', () => this.emitFormDataChange(fieldName, field));
+            const newValue = formData[fieldName];
+            if (newValue === undefined) {
+              this.formData[fieldName] = field.value;
             }
+            field.addEventListener('input', () => this.emitFormDataChange(fieldName, field));
           }
           const select = container.querySelector('select');
           if (select) {
             const fieldName = select.name;
-            console.log(fieldName);
-            const newValue = formDataSneakPreview[fieldName];
-            if (newValue !== undefined) {
-              select.addEventListener('input', () => this.emitFormDataChange(fieldName, select));
+            const newValue = formData[fieldName];
+            if (newValue === undefined) {
+              this.formData[fieldName] = select.value;
+            }
+            select.addEventListener('input', () => this.emitFormDataChange(fieldName, select));
+          }
+        }
+      }
+    }
+  }
+
+  public addMissingFormFields(formData: FormDataType): FormDataType {
+    const result = { ...formData };
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    if (PDFViewerApplication && PDFViewerApplication.pdfDocument) {
+      const annotations = PDFViewerApplication.pdfDocument.annotationStorage.getAll();
+      for (const annotation in annotations) {
+        if (annotation) {
+          const container = document.querySelector('[data-annotation-id="' + annotation + '"]');
+          if (container) {
+            const field = container.querySelector('input');
+            if (field) {
+              const fieldName = field.name;
+              const newValue = result[fieldName];
+              if (newValue === undefined) {
+                if (field.type === 'checkbox') {
+                  result[fieldName] = String(field.checked);
+                } else {
+                  result[fieldName] = field.value;
+                }
+              }
+            }
+            const select = container.querySelector('select');
+            if (select) {
+              const fieldName = select.name;
+              const newValue = result[fieldName];
+              if (newValue === undefined) {
+                result[fieldName] = select.value;
+              }
             }
           }
         }
       }
     }
+    return result;
   }
 
   private emitFormDataChange(fieldName: string, field: HTMLElement): void {
@@ -1653,9 +1708,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
     }
     this.ngZone.run(() => {
-      if (this.formDataSneakPreview[fieldName] !== undefined) {
-        this.formDataSneakPreview[fieldName] = value;
-        this.formDataSneakPreviewChange.emit(this.formDataSneakPreview);
+      if (this.formData[fieldName] !== undefined) {
+        this.formData[fieldName] = value;
+        this.formDataChange.emit(this.formData);
       }
     });
   }
