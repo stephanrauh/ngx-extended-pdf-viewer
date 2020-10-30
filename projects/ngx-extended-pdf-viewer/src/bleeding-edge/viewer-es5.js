@@ -49,7 +49,7 @@ var _app_options = __webpack_require__(1);
 var _app = __webpack_require__(3);
 
 var pdfjsVersion = '2.7.213';
-var pdfjsBuild = 'd6025a7b8';
+var pdfjsBuild = '74c27de1f';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

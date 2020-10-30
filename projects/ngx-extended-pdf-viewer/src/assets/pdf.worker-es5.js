@@ -135,8 +135,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", {
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.6.403';
-var pdfjsBuild = '54c67993a';
+var pdfjsVersion = '2.6.404';
+var pdfjsBuild = '239cd6725';
 
 /***/ }),
 /* 1 */
@@ -195,6 +195,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+if (!Promise.allSettled) {
+  Promise.allSettled = function (promises) {
+    var mappedPromises = promises.filter(function (o) {
+      return !!o;
+    }).map(function (p) {
+      return p.then(function (value) {
+        return {
+          status: 'fulfilled',
+          value: value
+        };
+      })["catch"](function (reason) {
+        return {
+          status: 'rejected',
+          reason: reason
+        };
+      });
+    });
+    return Promise.all(mappedPromises);
+  };
+}
 
 var WorkerTask = /*#__PURE__*/function () {
   function WorkerTask(name) {
@@ -277,7 +298,7 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
       var WorkerTasks = [];
       var verbosity = (0, _util.getVerbosityLevel)();
       var apiVersion = docParams.apiVersion;
-      var workerVersion = '2.6.403';
+      var workerVersion = '2.6.404';
 
       if (apiVersion !== workerVersion) {
         throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));

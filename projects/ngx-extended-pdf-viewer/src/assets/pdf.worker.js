@@ -135,8 +135,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", {
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.6.403';
-const pdfjsBuild = '54c67993a';
+const pdfjsVersion = '2.6.404';
+const pdfjsBuild = '239cd6725';
 
 /***/ }),
 /* 1 */
@@ -163,6 +163,25 @@ var _message_handler = __w_pdfjs_require__(45);
 var _worker_stream = __w_pdfjs_require__(46);
 
 var _core_utils = __w_pdfjs_require__(7);
+
+if (!Promise.allSettled) {
+  Promise.allSettled = function (promises) {
+    let mappedPromises = promises.filter(o => !!o).map(p => {
+      return p.then(value => {
+        return {
+          status: 'fulfilled',
+          value
+        };
+      }).catch(reason => {
+        return {
+          status: 'rejected',
+          reason
+        };
+      });
+    });
+    return Promise.all(mappedPromises);
+  };
+}
 
 class WorkerTask {
   constructor(name) {
@@ -229,7 +248,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.6.403';
+    const workerVersion = '2.6.404';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);

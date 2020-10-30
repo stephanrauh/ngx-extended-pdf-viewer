@@ -51,7 +51,7 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 var _worker = __w_pdfjs_require__(1);
 
 const pdfjsVersion = '2.7.213';
-const pdfjsBuild = 'd6025a7b8';
+const pdfjsBuild = '74c27de1f';
 
 /***/ }),
 /* 1 */
@@ -78,6 +78,25 @@ var _message_handler = __w_pdfjs_require__(46);
 var _worker_stream = __w_pdfjs_require__(47);
 
 var _core_utils = __w_pdfjs_require__(7);
+
+if (!Promise.allSettled) {
+  Promise.allSettled = function (promises) {
+    let mappedPromises = promises.filter(o => !!o).map(p => {
+      return p.then(value => {
+        return {
+          status: 'fulfilled',
+          value
+        };
+      }).catch(reason => {
+        return {
+          status: 'rejected',
+          reason
+        };
+      });
+    });
+    return Promise.all(mappedPromises);
+  };
+}
 
 class WorkerTask {
   constructor(name) {

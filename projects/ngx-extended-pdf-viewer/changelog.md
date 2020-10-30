@@ -216,3 +216,4 @@
 - 5.2.0-alpha.0 #499 and #511 implemented a proof of concept for `[(formData)]` (which is going to be renamed `[(formData)])` after deciding what the final API looks like)
 - 5.2.0 #499 and #511 implemented `[(formData)]`
 - 5.2.1 #499 and #511 bugfix for `[(formData)]` (two-way binding was broken)
+- 5.3.0 #358 added a polyfill to the service worker (several not-so-old browsers don't implement Promise.allSettled())

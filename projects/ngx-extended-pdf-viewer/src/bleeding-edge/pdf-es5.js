@@ -243,7 +243,7 @@ var _text_layer = __w_pdfjs_require__(216);
 var _svg = __w_pdfjs_require__(217);
 
 var pdfjsVersion = '2.7.213';
-var pdfjsBuild = 'd6025a7b8';
+var pdfjsBuild = '74c27de1f';
 {
   var PDFNetworkStream = __w_pdfjs_require__(218).PDFNetworkStream;
 
@@ -15334,7 +15334,7 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
 
 var version = '2.7.213';
 exports.version = version;
-var build = 'd6025a7b8';
+var build = '74c27de1f';
 exports.build = build;
 
 /***/ }),
