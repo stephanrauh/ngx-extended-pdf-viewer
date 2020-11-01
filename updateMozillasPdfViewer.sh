@@ -23,6 +23,9 @@ cp -R ../mypdf.js/build/minified/web/viewer.js* ./projects/ngx-extended-pdf-view
 cp -R ../mypdf.js/build/minified/web/viewer.min* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/
 cp -R ../mypdf.js/build/minified-es5/build/pdf* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/
 cp -R ../mypdf.js/build/minified-es5/web/viewer-* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/
+
+"../mypdf.js/node_modules/.bin/tsc" --target ES2020 --allowJS --declaration --outDir projects/ngx-extended-pdf-viewer/types/ --strict --esModuleInterop --forceConsistentCasingInFileNames --emitDeclarationOnly ../mypdf.js/src/pdf.worker.js ../mypdf.js/src/pdf.js ../mypdf.js/web/pdf_viewer.js
+
 cd addBaseLanguages
 node index.js $FOLDER
 node add-additional-translations.js $FOLDER
