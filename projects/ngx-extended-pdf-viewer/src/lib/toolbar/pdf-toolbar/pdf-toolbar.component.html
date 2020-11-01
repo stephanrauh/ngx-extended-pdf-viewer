@@ -24,7 +24,8 @@
     <div id="toolbarViewerRight">
       <pdf-hand-tool [showHandToolButton]="showHandToolButton"></pdf-hand-tool>
       <pdf-select-tool [showSelectToolButton]="showHandToolButton"></pdf-select-tool>
-      <pdf-rotate-page [showRotateButton]="showRotateButton"></pdf-rotate-page>
+      <pdf-rotate-page [showRotateButton]="showRotateButton" [clockwise]="true" [counterClockwise]="false"></pdf-rotate-page>
+      <pdf-rotate-page [showRotateButton]="showRotateButton" [clockwise]="false" [counterClockwise]="true"></pdf-rotate-page>
       <pdf-presentation-mode [showPresentationModeButton]="showPresentationModeButton"></pdf-presentation-mode>
       <pdf-open-file [showOpenFileButton]="showOpenFileButton"></pdf-open-file>
       <pdf-print [showPrintButton]="showPrintButton"></pdf-print>

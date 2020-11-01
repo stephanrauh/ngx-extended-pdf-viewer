@@ -97,7 +97,6 @@ ngx-extended-pdf-viewer {
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer .dropdownToolbarButton,
 html[dir='ltr'] ngx-extended-pdf-viewer .overlayButton,
 html[dir='ltr'] ngx-extended-pdf-viewer .toolbarButton {
   margin: 3px 0 4px 0;
@@ -120,7 +119,6 @@ html[dir='rtl'] ngx-extended-pdf-viewer #secondaryToolbarToggle {
 
 ngx-extended-pdf-viewer {
   .toolbarButton,
-  .dropdownToolbarButton,
   .secondaryToolbarButton,
   .overlayButton {
     padding-left: 0;
@@ -138,8 +136,7 @@ ngx-extended-pdf-viewer {
     top: 1000px !important;
   }
 
-  .toolbarButton,
-  .dropdownToolbarButton {
+  .toolbarButton {
     margin-left: -1px !important;
     margin-right: -2px !important;
   }

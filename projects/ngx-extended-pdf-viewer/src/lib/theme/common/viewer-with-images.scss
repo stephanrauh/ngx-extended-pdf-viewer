@@ -1009,11 +1009,15 @@ ngx-extended-pdf-viewer {
   .dropdownToolbarButton,
   .secondaryToolbarButton,
   .overlayButton {
+    border: 1px solid $fullscreen-background;
+    color: $text-color;
+  }
+  .toolbarButton,
+  .secondaryToolbarButton,
+  .overlayButton {
     min-width: 16px;
     padding: 2px 6px 0;
-    border: 1px solid $fullscreen-background;
     border-radius: 2px;
-    color: $text-color;
     font-size: 12px;
     line-height: 14px;
     -webkit-user-select: none;
@@ -1026,22 +1030,24 @@ ngx-extended-pdf-viewer {
 }
 
 html[dir='ltr'] ngx-extended-pdf-viewer .toolbarButton,
-html[dir='ltr'] ngx-extended-pdf-viewer .overlayButton,
-html[dir='ltr'] ngx-extended-pdf-viewer .dropdownToolbarButton {
+html[dir='ltr'] ngx-extended-pdf-viewer .overlayButton {
   margin: 3px 2px 4px 0;
 }
 
 html[dir='rtl'] ngx-extended-pdf-viewer .toolbarButton,
-html[dir='rtl'] ngx-extended-pdf-viewer .overlayButton,
-html[dir='rtl'] ngx-extended-pdf-viewer .dropdownToolbarButton {
+html[dir='rtl'] ngx-extended-pdf-viewer .overlayButton {
   margin: 3px 0 4px 2px;
 }
 
 ngx-extended-pdf-viewer {
-  .dropdownToolbarButton,
   .overlayButton {
     background-color: $window-background;
     background-clip: padding-box;
+    border: 1px solid $border-dark;
+  }
+
+  .dropdownToolbarButton {
+    background-color: $window-background;
     border: 1px solid $border-dark;
   }
 
@@ -1050,42 +1056,17 @@ ngx-extended-pdf-viewer {
     background-color: $window-background;;
     border-color: $border-dark;
   }
-
-  .dropdownToolbarButton {
-    width: 140px;
-    padding: 0;
-    overflow: hidden;
-  }
-}
-
-html[dir='ltr'] ngx-extended-pdf-viewer .dropdownToolbarButton::after {
-  right: 8px;
-}
-
-html[dir='rtl'] ngx-extended-pdf-viewer .dropdownToolbarButton::after {
-  left: 8px;
 }
 
 ngx-extended-pdf-viewer {
   .dropdownToolbarButton > select {
-    width: 162px;
-    height: 23px;
-    font-size: 12px;
     color:$text-color;
-    margin: 0;
-    padding: 3px 2px 2px;
-    border: none;
     background-color: $input-backgrund-color; /* Opera does not support 'transparent' <select> background */
   }
 
   .dropdownToolbarButton > select > option {
     background:$toolbar-background;
   }
-
-  #customScaleOption {
-    display: none;
-  }
-
 }
 
 html[dir='ltr'] ngx-extended-pdf-viewer .toolbarButton:first-child,
@@ -1692,14 +1673,7 @@ ngx-extended-pdf-viewer {
     background-size: 16px 17px;
   }
 
-  .dropdownToolbarButton::after {
-    // content is defined in the colors.scss
-    width: 24px;
-    height: 24px;
-    display: inline-block;
-    position: absolute;
-    margin-top: 5px;
-  }
+
 }
 
 @media print {

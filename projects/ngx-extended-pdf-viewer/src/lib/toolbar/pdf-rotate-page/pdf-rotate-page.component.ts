@@ -14,6 +14,12 @@ export class PdfRotatePageComponent  {
 
   public disableRotate = true;
 
+  @Input()
+  public clockwise = true;
+
+  @Input()
+  public counterClockwise = true;
+
   @ViewChild('button1')
   private button1: ElementRef<HTMLButtonElement>;
 
@@ -45,7 +51,11 @@ export class PdfRotatePageComponent  {
 
   public updateUIState(event: UpdateUIStateEvent): void {
     this.disableRotate = event.pagesCount === 0;
-    this.button1.nativeElement.disabled = this.disableRotate;
-    this.button2.nativeElement.disabled = this.disableRotate;
+    if (this.button1) {
+      this.button1.nativeElement.disabled = this.disableRotate;
+    }
+    if (this.button2) {
+      this.button2.nativeElement.disabled = this.disableRotate;
+    }
   }
 }

@@ -1,4 +1,5 @@
 <button
+  *ngIf="clockwise"
   (click)="rotateCW()"
   type="button"
   [class.invisible]="!showRotateButton"
@@ -13,6 +14,7 @@
     </svg>
 </button>
 <button
+  *ngIf="counterClockwise"
   (click)="rotateCCW()"
   type="button"
   [class.invisible]="!showRotateButton"

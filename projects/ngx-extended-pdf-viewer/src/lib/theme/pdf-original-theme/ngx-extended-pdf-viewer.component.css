@@ -89,7 +89,6 @@ textLayer .highlight.color4 {
   background-color: rgb(255, 94, 0);
 }
 
-html[dir=ltr] .dropdownToolbarButton,
 html[dir=ltr] .overlayButton,
 html[dir=ltr] .toolbarButton {
   margin: 3px 0 4px 0;
@@ -111,7 +110,7 @@ html[dir=rtl] #secondaryToolbarToggle {
   margin-left: 4px;
 }
 
-.toolbarButton, .dropdownToolbarButton, .secondaryToolbarButton, .overlayButton {
+.toolbarButton, .secondaryToolbarButton, .overlayButton {
   padding-left: 0;
   padding-right: 0;
 }
@@ -127,18 +126,13 @@ html[dir=rtl] #secondaryToolbarToggle {
   top: 1000px !important;
 }
 
-.toolbarButton, .dropdownToolbarButton {
+.toolbarButton {
   margin-left: -1px !important;
   margin-right: -2px !important;
 }
 
 #numPages {
   padding-right: 0;
-}
-
-/* issue 251 */
-.dropdownToolbarButton::after {
-  top: 8px;
 }
 
 .pdf-viewer-template, .pdf-viewer-template * {
