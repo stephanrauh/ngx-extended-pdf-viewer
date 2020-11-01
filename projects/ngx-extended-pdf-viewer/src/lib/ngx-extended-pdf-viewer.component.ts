@@ -44,6 +44,7 @@ import { PdfThumbnailDrawnEvent } from './events/pdf-thumbnail-drawn-event';
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 import { ScrollModeType } from '../public_api';
 import { ScrollModeChangedEvent } from './options/pdf-viewer';
+import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 
@@ -189,6 +190,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Output()
   public rotationChange = new EventEmitter<0 | 90 | 180 | 270>();
 
+  public hasSignature: boolean;
+
   @Input()
   public set src(url: string | ArrayBuffer | Blob | Uint8Array | { range: any }) {
     if (url instanceof Uint8Array) {
@@ -298,7 +301,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
    * Set "[showUnverifiedSignatures]"="true" to display e-signatures nonetheless.
    */
   @Input()
-  public showUnverifiedSignatures = false;
+  public showUnverifiedSignatures = true;
 
   @Input()
   public startTabindex: number | undefined;
@@ -1106,6 +1109,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       });
     });
 
+    PDFViewerApplication.eventBus.on('documentloaded', (pdfLoadedEvent: PdfDocumentLoadedEvent) => {
+      this.ngZone.run(() => {
+        this.loadComplete(pdfLoadedEvent.source.pdfDocument);
+      });
+    });
+
     const hideSidebarToolbar = () => {
       this.ngZone.run(() => {
         if (this.sidebarComponent) {
@@ -1526,7 +1535,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             return false;
           }
         }
-       }
+      }
     }
 
     return true;
@@ -1713,5 +1722,59 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.formDataChange.emit(this.formData);
       }
     });
+  }
+
+  /*
+  private addInput(annotation: PDFAnnotationData, rect: number[]): void {
+    // add input to page
+    console.log(annotation);
+  }
+  */
+
+  public loadComplete(pdf: any /* PDFDocumentProxy */): void {
+    /** This method has been inspired by https://medium.com/factory-mind/angular-pdf-forms-fa72b15c3fbd. Thanks, Jonny Fox! */
+    // screen DPI / PDF DPI
+    const dpiRatio = 96 / 72;
+    this.hasSignature = false;
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+      // track the current page
+      let currentPage: any = null;
+      pdf
+        .getPage(i)
+        .then((p) => {
+          currentPage = p;
+
+          // get the annotations of the current page
+          return p.getAnnotations();
+        })
+        .then((ann) => {
+          // ugly cast due to missing typescript definitions
+          // please contribute to complete @types/pdfjs-dist
+          const annotations = ann; /* (<any>ann) as PDFAnnotationData[]; */
+
+          annotations
+            .filter((a) => a.subtype === 'Widget') // get the form field annotation only
+            .forEach((a) => {
+              if (a.fieldType === 'Sig') {
+                this.ngZone.run(() => {
+                  this.hasSignature = true;
+                  setTimeout(() => {
+                    const viewerContainer = document.querySelector('#viewerContainer') as HTMLElement;
+                    viewerContainer.scrollBy(0, -32);
+                  });
+                });
+              }
+              /*
+              // get the rectangle that represent the single field
+              // and resize it according to the current DPI
+              const fieldRect = currentPage.getViewport(dpiRatio).convertToViewportRectangle(a.rect);
+
+              // add the corresponding input
+              this.addInput(a, fieldRect);
+              */
+            });
+        });
+    }
   }
 }

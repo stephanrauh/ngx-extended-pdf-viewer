@@ -1755,3 +1755,11 @@ ngx-extended-pdf-viewer {
     display: none;
   }
 }
+
+ngx-extended-pdf-viewer .html .unverified-signature-warning {
+  width: 100%;
+  background-color: red;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
