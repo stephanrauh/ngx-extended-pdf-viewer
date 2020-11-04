@@ -47,7 +47,7 @@
     "codelyzer": "^6.0.1",
     "macaddress": "^0.5.1",
     "ng-packagr": "^4.7.1",
-    "npm-registry-fetch": "^8.1.5",
+    "npm-registry-fetch": "^9.0.0",
     "properties-reader": "2.1.1",
     "serialize-javascript": "^5.0.1",
     "ts-node": "^9.0.0",
