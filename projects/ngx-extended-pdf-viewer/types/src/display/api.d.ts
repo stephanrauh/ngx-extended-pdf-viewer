@@ -783,6 +783,12 @@ export class PDFDocumentProxy {
      *   {Uint8Array} containing the full data of the saved document.
      */
     saveDocument(annotationStorage: AnnotationStorage): Promise<Uint8Array>;
+    /**
+     * @returns {Promise<Array<Object> | null>} A promise that is resolved with an
+     *   {Array<Object>} containing /AcroForm field data for the JS sandbox,
+     *   or `null` when no field data is present in the PDF file.
+     */
+    getFieldObjects(): Promise<Array<Object> | null>;
 }
 /**
  * Page getViewport parameters.

@@ -6,6 +6,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./pdf-zoom-toolbar.component.css']
 })
 export class PdfZoomToolbarComponent {
+
   @Input()
   public showZoomButtons = true;
 

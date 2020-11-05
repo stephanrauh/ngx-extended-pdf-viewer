@@ -13344,8 +13344,6 @@ class Toolbar {
     this.eventBus._on("localized", () => {
       this._wasLocalized = true;
 
-      this._adjustScaleWidth();
-
       this._updateUIState(true);
     });
   }
@@ -13428,48 +13426,6 @@ class Toolbar {
   updateLoadingIndicatorState(loading = false) {
     const pageNumberInput = this.items.pageNumber;
     pageNumberInput.classList.toggle(PAGE_NUMBER_LOADING_INDICATOR, loading);
-  }
-
-  async _adjustScaleWidth() {
-    const {
-      items,
-      l10n
-    } = this;
-    const predefinedValuesPromise = Promise.all([l10n.get("page_scale_auto", null, "Automatic Zoom"), l10n.get("page_scale_actual", null, "Actual Size"), l10n.get("page_scale_fit", null, "Page Fit"), l10n.get("page_scale_width", null, "Page Width")]);
-    let canvas = document.createElement("canvas");
-    canvas.mozOpaque = true;
-    let ctx = canvas.getContext("2d", {
-      alpha: false
-    });
-    await _ui_utils.animationStarted;
-    const {
-      fontSize,
-      fontFamily
-    } = getComputedStyle(items.scaleSelect);
-    ctx.font = `${fontSize} ${fontFamily}`;
-    let maxWidth = 0;
-
-    for (const predefinedValue of await predefinedValuesPromise) {
-      const {
-        width
-      } = ctx.measureText(predefinedValue);
-
-      if (width > maxWidth) {
-        maxWidth = width;
-      }
-    }
-
-    const overflow = SCALE_SELECT_WIDTH - SCALE_SELECT_CONTAINER_WIDTH;
-    maxWidth += 10 + 1.5 * overflow;
-
-    if (maxWidth > SCALE_SELECT_CONTAINER_WIDTH) {
-      items.scaleSelect.style.width = `${maxWidth + overflow}px`;
-      items.scaleSelectContainer.style.width = `${maxWidth}px`;
-    }
-
-    canvas.width = 0;
-    canvas.height = 0;
-    canvas = ctx = null;
   }
 
 }

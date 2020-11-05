@@ -10,6 +10,9 @@ export class LocalFunctionCache extends BaseLocalCache {
 export class LocalGStateCache extends BaseLocalCache {
     constructor(options: any);
 }
+export class LocalTilingPatternCache extends BaseLocalCache {
+    constructor(options: any);
+}
 export class GlobalImageCache {
     static get NUM_PAGES_THRESHOLD(): any;
     static get MAX_IMAGES_TO_CACHE(): any;

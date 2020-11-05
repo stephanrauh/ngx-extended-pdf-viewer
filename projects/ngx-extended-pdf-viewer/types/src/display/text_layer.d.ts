@@ -80,4 +80,4 @@ export type TextLayerRenderTask = {
 /**
  * @type {(renderParameters: TextLayerRenderParameters) => TextLayerRenderTask}
  */
-export var renderTextLayer: (renderParameters: TextLayerRenderParameters) => TextLayerRenderTask;
+export const renderTextLayer: (renderParameters: TextLayerRenderParameters) => TextLayerRenderTask;

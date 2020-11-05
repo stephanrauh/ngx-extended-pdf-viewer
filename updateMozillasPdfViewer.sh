@@ -12,11 +12,11 @@ gulp minified-es5
 
 
 cd ../ngx-extended-pdf-viewer
-// cd inlineImageFiles
-// node index.js $FOLDER
-// cd ..
+# cd inlineImageFiles
+# node index.js $FOLDER
+# cd ..
 cp -R ../mypdf.js/build/minified/web/locale/* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/locale/
-// cp -R ../mypdf.js/build/minified/web/images/*.svg ./projects/ngx-extended-pdf-viewer/src/$FOLDER/images/
+# cp -R ../mypdf.js/build/minified/web/images/*.svg ./projects/ngx-extended-pdf-viewer/src/$FOLDER/images/
 cp -R ../mypdf.js/build/minified/web/cmaps/* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/cmaps/
 cp -R ../mypdf.js/build/minified/build/pdf.* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/
 cp -R ../mypdf.js/build/minified/web/viewer.js* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/

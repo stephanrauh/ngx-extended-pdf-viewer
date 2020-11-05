@@ -416,8 +416,13 @@ ngx-extended-pdf-viewer {
     outline: none;
   }
 
+  button {
+    cursor: pointer;
+  }
+
   select {
     background-color: $input-backgrund-color !important;
+    color: $text-color;
   }
 
   .hidden {
@@ -1025,7 +1030,7 @@ ngx-extended-pdf-viewer {
     -ms-user-select: none;
     user-select: none;
     /* Opera does not support user-select, use <... unselectable="on"> instead */
-    cursor: default;
+    cursor: pointer;
   }
 }
 
@@ -1124,14 +1129,6 @@ html[dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbarButton::before {
 }
 
 ngx-extended-pdf-viewer {
-  .toolbarButton.zoomOut {
-    font-size: 30px;
-  }
-
-  .toolbarButton.zoomIn {
-    font-size: 24px;
-  }
-
   .toolbarButton.bookmark,
   .secondaryToolbarButton.bookmark {
     box-sizing: border-box;
@@ -1758,7 +1755,8 @@ ngx-extended-pdf-viewer {
 
 ngx-extended-pdf-viewer .html .unverified-signature-warning {
   width: 100%;
-  background-color: red;
+  background-color: #ff5353;
+  font-size: 12px;
   text-align: center;
   padding-top: 5px;
   padding-bottom: 5px;

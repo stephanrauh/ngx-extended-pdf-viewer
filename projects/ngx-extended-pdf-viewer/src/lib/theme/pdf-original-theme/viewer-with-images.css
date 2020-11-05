@@ -1189,14 +1189,6 @@ html[dir="rtl"] .secondaryToolbarButton::before {
   right: 4px;
 }
 
-.toolbarButton.zoomOut {
-  font-size: 24px;
-}
-
-.toolbarButton.zoomIn {
-  font-size: 24px;
-}
-
 .toolbarButton.bookmark,
 .secondaryToolbarButton.bookmark {
   box-sizing: border-box;

@@ -95,7 +95,6 @@ export class EventBus {
      */
     _off(eventName: any, listener: any, options?: any): void;
 }
-export function clamp(v: any, min: any, max: any): number;
 export class ProgressBar {
     constructor(id: any, { height, width, units }?: {
         height: any;
@@ -259,3 +258,12 @@ export function waitOnEventOrTimeout({ target, name, delay }: WaitOnEventOrTimeo
  * array, preserving the order of the rest.
  */
 export function moveToEndOfArray(arr: any, condition: any): void;
+/**
+ * Get the active or focused element in current DOM.
+ *
+ * Recursively search for the truly active or focused element in case there are
+ * shadow DOMs.
+ *
+ * @returns {Element} the truly active or focused element.
+ */
+export function getActiveOrFocusedElement(): Element;

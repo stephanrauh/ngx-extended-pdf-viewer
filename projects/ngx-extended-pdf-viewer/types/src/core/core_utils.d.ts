@@ -1,3 +1,4 @@
+export function escapePDFName(str: any): any;
 export function getLookupTableFactory(initializer: any): () => any;
 declare const MissingDataException_base: any;
 export class MissingDataException extends MissingDataException_base {
@@ -45,6 +46,16 @@ export function getInheritableProperty({ dict, key, getArray, stopWhenFound, }: 
  */
 export function toRomanNumerals(number: number, lowerCase?: boolean): string;
 export function log2(x: any): number;
+/**
+ * AcroForm field names use an array like notation to refer to
+ * repeated XFA elements e.g. foo.bar[nnn].
+ * see: XFA Spec Chapter 3 - Repeated Elements
+ *
+ * @param {string} path - XFA path name.
+ * @returns {Array} - Array of Objects with the name and pos of
+ * each part of the path.
+ */
+export function parseXFAPath(path: string): any[];
 export function readInt8(data: any, offset: any): number;
 export function readUint16(data: any, offset: any): number;
 export function readUint32(data: any, offset: any): number;

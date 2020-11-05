@@ -1,60 +1,11 @@
-/* the width settings ensure the built-in arrow of the dropdown isn't shown */
-.dropdownToolbarButton {
-  display: table-cell;
-  -webkit-appearance: none;
-  width: 150px;
-  max-width: 150px;
-  min-width: 16px;
-  border-radius: 2px;
+select {
   font-size: 12px;
-  line-height: 14px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  /* Opera does not support user-select, use <... unselectable="on"> instead */
-  cursor: default;
-  /* margin-left: -1px !important;
-  margin-right: -2px !important; */
-  background-clip: padding-box;
-  padding: 0;
-  overflow: hidden;
-}
-
-::ng-deep html[dir='ltr'] .dropdownToolbarButton {
-  margin: 3px 2px 4px 0;
-}
-
-::ng-deep html[dir='ltr'] .dropdownToolbarButton::after {
-  right: 8px;
-}
-
-::ng-deep html[dir='rtl'] .dropdownToolbarButton {
-  margin: 3px 0 4px 2px;
-}
-
-::ng-deep html[dir='rtl'] .dropdownToolbarButton::after {
-  left: 8px;
-}
-
-.dropdownToolbarButton::after {
-  top: 4px;
-  /* content is defined in the colors.scss */
-  width: 24px;
-  height: 24px;
-  display: inline-block;
-  position: absolute;
+  height: 26px;
   cursor: pointer;
-}
+  border-radius: 2px;
+  border-width: 1px;
+  border-style: solid;
 
-.dropdownToolbarButton > select {
-  width: 170px;
-  width: 162px;
-  height: 23px;
-  font-size: 12px;
-  margin: 0;
-  padding: 3px 2px 2px;
-  border: none;
 }
 
 #customScaleOption {

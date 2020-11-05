@@ -42,8 +42,7 @@ import { Location } from '@angular/common';
 import { PinchOnMobileSupport } from './pinch-on-mobile-support';
 import { PdfThumbnailDrawnEvent } from './events/pdf-thumbnail-drawn-event';
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
-import { ScrollModeType } from '../public_api';
-import { ScrollModeChangedEvent } from './options/pdf-viewer';
+import { ScrollModeChangedEvent, ScrollModeType } from './options/pdf-viewer';
 import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
@@ -578,7 +577,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     @Inject(PLATFORM_ID) private platformId,
     private notificationService: PDFNotificationService,
     private location: Location
-  ) {}
+  ) {
+  }
 
   private iOSVersionRequiresES5(): boolean {
     const match = navigator.appVersion.match(/OS (\d+)_(\d+)_?(\d+)?/);

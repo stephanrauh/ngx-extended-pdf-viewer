@@ -144,6 +144,27 @@ export namespace UNSUPPORTED_FEATURES {
     const errorFontGetPath: string;
     const errorMarkedContent: string;
 }
+export namespace AnnotationActionEventType {
+    const E: string;
+    const X: string;
+    const D: string;
+    const U: string;
+    const Fo: string;
+    const Bl: string;
+    const PO: string;
+    const PC: string;
+    const PV: string;
+    const PI: string;
+    const K: string;
+    const F: string;
+    const V: string;
+    const C: string;
+    const WC: string;
+    const WS: string;
+    const DS: string;
+    const WP: string;
+    const DP: string;
+}
 export namespace AnnotationBorderStyleType {
     const SOLID: number;
     const DASHED: number;
@@ -384,6 +405,7 @@ export function bytesToString(bytes: any): string;
 export function createPromiseCapability(): PromiseCapability;
 export function createObjectURL(data: any, contentType: any, forceDataSchema?: boolean): string;
 export function escapeString(str: any): any;
+export function encodeToXmlString(str: any): any;
 export function getModificationDate(date?: Date): string;
 export function getVerbosityLevel(): number;
 export function info(msg: any): void;

@@ -117,13 +117,12 @@ export class PDFPageView {
     paintedViewportMap: WeakMap<object, any>;
     renderingState: number;
     resume: (() => void) | null;
-    error: any;
+    _renderError: any;
     annotationLayer: any;
     textLayer: any;
     zoomLayer: (Node & ParentNode) | null;
     div: HTMLDivElement;
     setPdfPage(pdfPage: any): void;
-    stats: any;
     destroy(): void;
     /**
      * @private

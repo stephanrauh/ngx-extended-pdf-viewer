@@ -219,3 +219,4 @@
 - 5.3.0 #358 added a polyfill to the service worker (several not-so-old browsers don't implement Promise.allSettled())
 - 5.4.0-beta.0 #523 moved every CSS of the zoom dropdown to the zoom dropdown component, tidying up the contractictory CSS rules
 - 5.4.0-beta.1 #523 fixed the broken layout of the rotate buttons in the Edge browser
+- 6.0.0-beta.0 #523 use the standard dropdown box for zooming; changed the cursor appearance on buttons; fine-tuned the CSS of the "unverified signature" message
