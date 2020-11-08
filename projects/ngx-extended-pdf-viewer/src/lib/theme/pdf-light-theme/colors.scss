@@ -35,13 +35,13 @@ $page-background: rgba(255, 255, 255, 1);
 
 $fullscreen-background: rgba(0, 0, 0, 0);
 
-$sidebar-background: #e3e1e6;
+$sidebar-background: #f2f2f3;
 
 $border: rgba(0, 0, 0, 0.5);
 
 $border-dark: rgba(0, 0, 0, 0.4);
 
-$sidebar-toolbar-background: var($sidebar-background);
+$sidebar-toolbar-background: $sidebar-background;
 
 $toolbar-background: #f9f9f9;
 

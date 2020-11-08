@@ -550,7 +550,6 @@ ngx-extended-pdf-viewer {
     width: $sidebar-width;
     visibility: hidden;
     z-index: 2;
-    border-top: 1px solid $container-border;
     transition-duration: 200ms;
     transition-duration: $sidebar-transition-duration;
     transition-timing-function: ease;

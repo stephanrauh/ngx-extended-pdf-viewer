@@ -359,6 +359,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public theme: 'dark' | 'light' | 'custom' = 'light';
 
   @Input()
+  public showToolbar = true;
+
+  @Input()
   public showSecondaryToolbarButton = true;
 
   /** Set by the event (secondaryMenuIsEmpty) */
@@ -525,13 +528,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.mobileFriendlyZoom = mobileFriendlyZoom;
   }
 
-  private _top: string | undefined = undefined;
-
   private shuttingDown = false;
 
   public get sidebarPositionTop(): string {
-    if (this._top) {
-      return this._top;
+    if (!this.isPrimaryMenuVisible()) {
+      return '0';
     }
     if (this.mobileFriendlyZoom) {
       if (this.mobileFriendlyZoom.endsWith('%')) {
@@ -546,8 +547,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     return '32px';
   }
   public calcViewerPositionTop(): void {
-    if (this._top) {
-      this.viewerPositionTop = this._top;
+    if (!this.isPrimaryMenuVisible()) {
+      this.viewerPositionTop = '0';
       return;
     }
     if (this.mobileFriendlyZoom) {
@@ -565,11 +566,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         return;
       }
     }
-    if (this.isPrimaryMenuVisible()) {
-      this.viewerPositionTop = '32px';
-    } else {
-      this.viewerPositionTop = '0';
-    }
+    this.viewerPositionTop = '32px';
   }
 
   constructor(
@@ -577,8 +574,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     @Inject(PLATFORM_ID) private platformId,
     private notificationService: PDFNotificationService,
     private location: Location
-  ) {
-  }
+  ) {}
 
   private iOSVersionRequiresES5(): boolean {
     const match = navigator.appVersion.match(/OS (\d+)_(\d+)_?(\d+)?/);
@@ -1269,21 +1265,27 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   private isPrimaryMenuVisible(): boolean {
-    const visible =
-      this.showBookmarkButton ||
-      this.showDownloadButton ||
-      this.showFindButton ||
-      this.showOpenFileButton ||
-      this.showPagingButtons ||
-      this.showPresentationModeButton ||
-      this.showPrintButton ||
-      this.showPropertiesButton ||
-      this.showSidebarButton ||
-      this.showZoomButtons;
+    if (this.showToolbar) {
+      const visible =
+        this.showBookmarkButton ||
+        this.showDownloadButton ||
+        this.showFindButton ||
+        this.showOpenFileButton ||
+        this.showPagingButtons ||
+        this.showPresentationModeButton ||
+        this.showPrintButton ||
+        this.showPropertiesButton ||
+        this.showRotateButton ||
+        this.showHandToolButton ||
+        this.showSidebarButton ||
+        this.showZoomButtons;
 
-    if (visible) {
-      return true;
+      if (visible) {
+        console.log("isPrimaryVisible");
+        return true;
+      }
     }
+    console.log("isPrimaryHidden");
     return false;
   }
 
@@ -1425,7 +1427,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
       }
       this.calcViewerPositionTop();
-    }
+    } // end of if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized)
     this.onResize();
 
     if ('printResolution' in changes) {
@@ -1476,11 +1478,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           PDFViewerApplication.eventBus.dispatch('scalechanging', zoomEvent);
         }
       }
-    }
 
-    if ('showUnverifiedSignatures' in changes) {
-      if (PDFViewerApplication && PDFViewerApplication.pdfDocument) {
-        PDFViewerApplication.pdfDocument._transport.messageHandler.send('showUnverifiedSignatures', this.showUnverifiedSignatures);
+      if ('showUnverifiedSignatures' in changes) {
+        if (PDFViewerApplication && PDFViewerApplication.pdfDocument) {
+          PDFViewerApplication.pdfDocument._transport.messageHandler.send('showUnverifiedSignatures', this.showUnverifiedSignatures);
+        }
+      }
+
+      if ('formData' in changes) {
+        const newFormData = this.addMissingFormFields(changes['formData'].currentValue);
+        if (!this.equals(newFormData, changes['formData'].previousValue)) {
+          this.fillFormFields(this.formData);
+        }
       }
     }
 
@@ -1497,13 +1506,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     ) {
       if (this.dummyComponents) {
         this.dummyComponents.addMissingStandardWidgets();
-      }
-    }
-
-    if ('formData' in changes) {
-      const newFormData = this.addMissingFormFields(changes['formData'].currentValue);
-      if (!this.equals(newFormData, changes['formData'].previousValue)) {
-        this.fillFormFields(this.formData);
       }
     }
 
@@ -1584,6 +1586,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public onSecondaryMenuIsEmpty(hideKebabButton: boolean) {
     this.hideKebabMenuForSecondaryToolbar = hideKebabButton;
+    if (hideKebabButton) {
+      if (!this.isPrimaryMenuVisible()) {
+        this.primaryMenuVisible = false;
+      }
+    }
   }
 
   public fillFormFields(formData: FormDataType): void {
