@@ -44,6 +44,7 @@ import { PdfThumbnailDrawnEvent } from './events/pdf-thumbnail-drawn-event';
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 import { ScrollModeChangedEvent, ScrollModeType } from './options/pdf-viewer';
 import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
+import { addLinkAttributes } from '../../types/src/display/display_utils';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 
@@ -275,6 +276,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public imageResourcesPath = './' + pdfDefaultOptions.assetsFolder + '/images/';
 
+  /** Allows the user to put their locale folder into an arbitrary folder */
+  @Input()
+  public localeFolderPath = './' + pdfDefaultOptions.assetsFolder + '/locale';
+
   /** Override the default locale. This must be the complete locale name, such as "es-ES". The string is allowed to be all lowercase.
    */
   @Input()
@@ -300,7 +305,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
    * Set "[showUnverifiedSignatures]"="true" to display e-signatures nonetheless.
    */
   @Input()
-  public showUnverifiedSignatures = true;
+  public showUnverifiedSignatures = false;
 
   @Input()
   public startTabindex: number | undefined;
@@ -573,7 +578,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     private ngZone: NgZone,
     @Inject(PLATFORM_ID) private platformId,
     private notificationService: PDFNotificationService,
-    private location: Location
+    private location: Location,
+    private elementRef: ElementRef
   ) {}
 
   private iOSVersionRequiresES5(): boolean {
@@ -608,6 +614,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   ngOnInit() {
+    const link = document.createElement('link');
+    link.href = this.localeFolderPath + '/locale.properties';
+    link.setAttribute('origin', 'ngx-extended-pdf-viewer');
+    link.rel = 'resource';
+    link.type = 'application/l10n';
+    const widget: HTMLElement = this.elementRef.nativeElement;
+    widget.appendChild(link);
+
     this.onResize();
     if (isPlatformBrowser(this.platformId)) {
       if (!window['pdfjs-dist/build/pdf']) {
@@ -1277,15 +1291,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.showPropertiesButton ||
         this.showRotateButton ||
         this.showHandToolButton ||
+        this.showScrollingButton ||
         this.showSidebarButton ||
         this.showZoomButtons;
 
       if (visible) {
-        console.log("isPrimaryVisible");
         return true;
       }
     }
-    console.log("isPrimaryHidden");
     return false;
   }
 
