@@ -222,4 +222,4 @@
 - 6.0.0-beta.0 #523 use the standard dropdown box for zooming; changed the cursor appearance on buttons; fine-tuned the CSS of the "unverified signature" message
 - 6.0.0-beta.1 #535 added the attribute `showToolbar`; fixed the detection whether the primary tool should be hidden or not
 - 6.0.0-beta.2 #548 look for the locale folder in the assets path defined by `pdfDefaultOptions.assetsFolder`; added the attribute `localeFolderPath` to allow users to put their locale folder into an alternative path; removed debug log messages; admit that the library is compatible to Angular 11; reset the default value of "showUnverifiedSignatures" to false
-- 6.0.0-beta.3 removed the deprecated attribute `[mobileZoom]` (use `[mobileFriendlyZoom]` instead); #535 `showToolbar` wasn't always respected
+- 6.0.0-beta.3 removed the deprecated attribute `[mobileZoom]` (use `[mobileFriendlyZoom]` instead); #535 `showToolbar` wasn't always respected; #534 solved the Chrome Content Security Policy (CSP) failure that happened when using BLOBs and running on a server implementing the Content Security Policy strictly

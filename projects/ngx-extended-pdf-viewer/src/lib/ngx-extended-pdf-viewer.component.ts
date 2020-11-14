@@ -197,7 +197,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (url instanceof Uint8Array) {
       this._src = url.buffer;
     } else if (url instanceof Blob) {
-      this._src = URL.createObjectURL(url);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        this._src = new Uint8Array(reader.result as ArrayBuffer);
+      };
+      reader.readAsArrayBuffer(url);
+
     } else if (typeof url === 'string') {
       this._src = url;
       if (url.length > 980) {
