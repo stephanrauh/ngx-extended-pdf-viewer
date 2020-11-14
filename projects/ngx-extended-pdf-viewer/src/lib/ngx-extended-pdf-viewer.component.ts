@@ -199,7 +199,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     } else if (url instanceof Blob) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        this._src = new Uint8Array(reader.result as ArrayBuffer);
+        setTimeout(() => {
+          this.src = new Uint8Array(reader.result as ArrayBuffer);
+          if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
+            this.openPDF2();
+            // else openPDF is called later, so we should load the PDF file twice
+          }
+        });
       };
       reader.readAsArrayBuffer(url);
 
@@ -209,7 +215,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         // minimal length of a base64 encoded PDF
         if (url.length % 4 === 0) {
           if (/^[a-zA-Z\d\/+]+={0,2}$/.test(url)) {
-            console.error('The URL looks like a base64 encoded string. If so, please use the attribute base64 instead of src');
+            console.error('The URL looks like a base64 encoded string. If so, please use the attribute [base64Src] instead of [src]');
           }
         }
       }
@@ -1214,6 +1220,39 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }, 100);
   }
 
+  public openPDF2(): void {
+    this.overrideDefaultSettings();
+    const options: any = {
+      password: this.password,
+      verbosity: this.logLevel,
+    };
+    if (this._src['range']) {
+      options.range = this._src['range'];
+    }
+    if (this.httpHeaders) {
+      options.httpHeaders = this.httpHeaders;
+    }
+    if (this.authorization) {
+      options.withCredentials = true;
+      if (options.httpHeaders) {
+        if (!options.httpHeaders.Authorization) {
+          options.httpHeaders.Authorization = this.authorization;
+        }
+      } else {
+        options.httpHeaders = {
+          Authorization: this.authorization,
+        };
+      }
+    }
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    PDFViewerApplication.open(this._src, options).then(
+      () => {
+        this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount });
+      },
+      (error: Error) => this.pdfLoadingFailed.emit(error)
+    );
+  }
+
   private selectCursorTool() {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     PDFViewerApplication.eventBus.dispatch('switchcursortool', { tool: this.handTool ? 1 : 0 });
@@ -1306,35 +1345,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
       if ('src' in changes || 'base64Src' in changes) {
         if (!!this._src) {
-          this.overrideDefaultSettings();
-          const options: any = {
-            password: this.password,
-            verbosity: this.logLevel,
-          };
-          if (this._src['range']) {
-            options.range = this._src['range'];
-          }
-          if (this.httpHeaders) {
-            options.httpHeaders = this.httpHeaders;
-          }
-          if (this.authorization) {
-            options.withCredentials = true;
-            if (options.httpHeaders) {
-              if (!options.httpHeaders.Authorization) {
-                options.httpHeaders.Authorization = this.authorization;
-              }
-            } else {
-              options.httpHeaders = {
-                Authorization: this.authorization,
-              };
-            }
-          }
-          PDFViewerApplication.open(this._src, options).then(
-            () => {
-              this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount });
-            },
-            (error: Error) => this.pdfLoadingFailed.emit(error)
-          );
+          this.openPDF2();
         }
       }
       if ('zoom' in changes) {
