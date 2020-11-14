@@ -525,14 +525,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.findbarTop = (36 + 52 * (factor - 1)).toString() + 'px';
   }
 
-  /** Deprecated. Please use [mobileFriendlyZoom] instead.
-   * This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
-   * This attribute is a string with a percent character at the end (e.g. "150%").*/
-  @Input()
-  public set mobileZoom(mobileFriendlyZoom: string) {
-    this.mobileFriendlyZoom = mobileFriendlyZoom;
-  }
-
   private shuttingDown = false;
 
   public get sidebarPositionTop(): string {
@@ -803,7 +795,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if (!this.shuttingDown) {
         // hurried users sometimes reload the PDF before it has finished initializing
         // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
-        this.primaryMenuVisible = true;
+        this.primaryMenuVisible = this.showToolbar;
         const hideSecondaryMenu = this.hideKebabMenuForSecondaryToolbar && !this.showSecondaryToolbarButton;
 
         if (hideSecondaryMenu) {
@@ -1433,7 +1425,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
       }
 
-      this.primaryMenuVisible = true;
+      this.primaryMenuVisible = this.showToolbar;
       if (!this.showSecondaryToolbarButton || this.hideKebabMenuForSecondaryToolbar) {
         if (!this.isPrimaryMenuVisible()) {
           this.primaryMenuVisible = false;
