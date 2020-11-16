@@ -828,6 +828,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         PDFViewerApplicationOptions.set('minZoom', this.minZoom);
         PDFViewerApplicationOptions.set('maxZoom', this.maxZoom);
         PDFViewerApplicationOptions.set('pageViewMode', this.pageViewMode);
+        PDFViewerApplicationOptions.set('verbosity', this.logLevel);
+        PDFViewerApplicationOptions.set('initialZoom', this.zoom);
 
         PDFViewerApplication.isViewerEmbedded = true;
         if (PDFViewerApplication.printKeyDownListener) {

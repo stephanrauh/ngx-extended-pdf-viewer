@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-var pdfjsVersion = '2.7.215';
-var pdfjsBuild = '10cc65f51';
+var pdfjsVersion = '2.7.216';
+var pdfjsBuild = '56c6111d6';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -1955,7 +1955,7 @@ var PDFViewerApplication = {
     var _this14 = this;
 
     return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee10() {
-      var _yield$pdfDocument$ge, info, metadata, contentDispositionFilename, pdfTitle, infoTitle, metadataTitle, versionId, generatorId, producer, formType;
+      var _yield$pdfDocument$ge, info, metadata, contentDispositionFilename, PDFViewerApplicationOptions, pdfTitle, infoTitle, metadataTitle, versionId, generatorId, producer, formType;
 
       return _regenerator["default"].wrap(function _callee10$(_context10) {
         while (1) {
@@ -1981,8 +1981,13 @@ var PDFViewerApplication = {
               _this14.documentInfo = info;
               _this14.metadata = metadata;
               _this14.contentDispositionFilename = contentDispositionFilename;
-              console.log("PDF viewer: ngx-extended-pdf-viewer running on pdf.js " + (window["pdfjs-dist/build/pdf"] ? window["pdfjs-dist/build/pdf"].version : " developer version (?)"));
-              console.log("PDF ".concat(pdfDocument.fingerprint, " [").concat(info.PDFFormatVersion, " ") + "".concat((info.Producer || "-").trim(), " / ").concat((info.Creator || "-").trim(), "] ") + "(PDF.js: ".concat(_pdfjsLib.version || "-") + "".concat(_this14.pdfViewer.enableWebGL ? " [WebGL]" : "", ") modified by ngx-extended-pdf-viewer)"));
+              PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
+
+              if (!PDFViewerApplicationOptions || PDFViewerApplicationOptions.get("verbosity") > 0) {
+                console.log("PDF viewer: ngx-extended-pdf-viewer running on pdf.js " + (window["pdfjs-dist/build/pdf"] ? window["pdfjs-dist/build/pdf"].version : " developer version (?)"));
+                console.log("PDF ".concat(pdfDocument.fingerprint, " [").concat(info.PDFFormatVersion, " ") + "".concat((info.Producer || "-").trim(), " / ").concat((info.Creator || "-").trim(), "] ") + "(PDF.js: ".concat(_pdfjsLib.version || "-") + "".concat(_this14.pdfViewer.enableWebGL ? " [WebGL]" : "", ") modified by ngx-extended-pdf-viewer)"));
+              }
+
               infoTitle = info && info.Title;
 
               if (infoTitle) {
@@ -17123,7 +17128,11 @@ document.webL10n = function (window, document, undefined) {
       try {
         args = JSON.parse(l10nArgs);
       } catch (e) {
-        console.warn("could not parse arguments for #" + l10nId);
+        var PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
+
+        if (!PDFViewerApplicationOptions || PDFViewerApplicationOptions.get("verbosity") > 0) {
+          console.warn("could not parse arguments for #" + l10nId);
+        }
       }
     }
 
@@ -17255,7 +17264,12 @@ document.webL10n = function (window, document, undefined) {
         xhrLoadText(url, function (content) {
           parseRawLines(content, false, callback);
         }, function () {
-          console.warn(url + " not found.");
+          var PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
+
+          if (!PDFViewerApplicationOptions || PDFViewerApplicationOptions.get("verbosity") > 0) {
+            console.warn(url + " not found.");
+          }
+
           callback();
         });
       }
@@ -17360,8 +17374,13 @@ document.webL10n = function (window, document, undefined) {
 
       this.load = function (lang, callback) {
         parseResource(href, lang, callback, function () {
-          console.warn(href + " not found.");
-          console.warn('"' + lang + '" resource not found');
+          var PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
+
+          if (!PDFViewerApplicationOptions || PDFViewerApplicationOptions.get("verbosity") > 0) {
+            console.warn(href + " not found.");
+            console.warn('"' + lang + '" resource not found');
+          }
+
           gLanguage = "";
           callback();
         });
@@ -17700,7 +17719,12 @@ document.webL10n = function (window, document, undefined) {
     var index = locales2rules[lang.replace(/-.*$/, "")];
 
     if (!(index in pluralRules)) {
-      console.warn("plural form unknown for [" + lang + "]");
+      var PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
+
+      if (!PDFViewerApplicationOptions || PDFViewerApplicationOptions.get("verbosity") > 0) {
+        console.warn("plural form unknown for [" + lang + "]");
+      }
+
       return function () {
         return "other";
       };
@@ -17739,7 +17763,11 @@ document.webL10n = function (window, document, undefined) {
     var data = gL10nData[key];
 
     if (!data) {
-      console.warn("Translation for the key #" + key + " is missing.");
+      var PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
+
+      if (!PDFViewerApplicationOptions || PDFViewerApplicationOptions.get("verbosity") > 0) {
+        console.warn("Translation for the key #" + key + " is missing.");
+      }
 
       if (!fallback) {
         return null;
@@ -17804,7 +17832,12 @@ document.webL10n = function (window, document, undefined) {
     var data = getL10nData(l10n.id, l10n.args);
 
     if (!data) {
-      console.warn("#" + l10n.id + " is undefined.");
+      var PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
+
+      if (!PDFViewerApplicationOptions || PDFViewerApplicationOptions.get("verbosity") > 0) {
+        console.warn("#" + l10n.id + " is undefined.");
+      }
+
       return;
     }
 
