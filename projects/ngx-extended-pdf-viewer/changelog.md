@@ -226,3 +226,4 @@
 - 6.0.0-beta.4 #534 made the solution more resilient
 - 6.0.0-beta.5 #534 finished implementing the feature
 - 6.0.0-beta.6 #533 #450 implemented the `PdfDocumentPropertiesExtractor`
+- 6.0.0 identical to 6.0.0-beta.6 - but let's call it a version!
