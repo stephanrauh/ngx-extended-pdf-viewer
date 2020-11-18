@@ -4311,6 +4311,11 @@ function scrollIntoView(element, spot) {
     parent = parent.offsetParent;
 
     if (!parent) {
+      if (document.body.clientHeight > offsetY) {
+        offsetY -= 32;
+        window.scrollTo(window.scrollX, offsetY);
+      }
+
       return;
     }
   }

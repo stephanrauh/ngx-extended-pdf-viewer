@@ -228,3 +228,4 @@
 - 6.0.0-beta.6 #533 #450 implemented the `PdfDocumentPropertiesExtractor`
 - 6.0.0 identical to 6.0.0-beta.6 - but let's call it a version!
 - 6.1.0 #551 stop printing infos and warnings on `logLevel="0"`; #552 repaired the minified files of the "bleeding edge" branch
+- 6.2.0-alpha.0 #492 support infinite scrolling (i.e. using the browser scrollbar instead of implementing our own scrollbar)
