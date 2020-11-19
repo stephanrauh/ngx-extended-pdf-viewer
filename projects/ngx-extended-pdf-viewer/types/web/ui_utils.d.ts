@@ -204,7 +204,7 @@ export function getOutputScale(ctx: any): Object;
  * @param {boolean} skipOverflowHiddenElements - Ignore elements that have
  *   the CSS rule `overflow: hidden;` set. The default is false.
  */
-export function scrollIntoView(element: Object, spot: Object, skipOverflowHiddenElements?: boolean): void;
+export function scrollIntoView(element: Object, spot: Object, skipOverflowHiddenElements?: boolean, infiniteScroll?: boolean): void;
 /**
  * Helper function to start monitoring the scroll event and converting them into
  * PDF.js friendly one: with scroll debounce and scroll direction.

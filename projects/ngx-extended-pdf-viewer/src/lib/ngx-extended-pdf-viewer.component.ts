@@ -111,7 +111,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public formDataChange = new EventEmitter<FormDataType>();
 
   @Input()
-  public pageViewMode: 'single' | 'book' | 'multiple' = 'multiple';
+  public pageViewMode: 'single' | 'book' | 'multiple' | 'infinite-scroll' = 'multiple';
 
   @ViewChild('pdfSecondaryToolbarComponent')
   private secondaryToolbarComponent: PdfSecondaryToolbarComponent;
@@ -1048,6 +1048,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
     PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
       this.pagesLoaded.emit(x);
+      if (this.pageViewMode === 'infinite-scroll') {
+        const h = x.source.viewer.clientHeight;
+        if (this.primaryMenuVisible) {
+          this.height = h + 35 + 'px';
+        } else {
+          this.height = h + 'px';
+        }
+      }
       if (this.rotation) {
         const r = Number(this.rotation);
         if (r === 0 || r === 90 || r === 180 || r === 270) {

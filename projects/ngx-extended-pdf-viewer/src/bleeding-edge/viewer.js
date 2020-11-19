@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.7.217';
-const pdfjsBuild = 'd3460203f';
+const pdfjsVersion = '2.7.220';
+const pdfjsBuild = '02dcc597c';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -840,7 +840,8 @@ const PDFViewerApplication = {
     this.downloadManager = downloadManager;
     const findController = new _pdf_find_controller.PDFFindController({
       linkService: pdfLinkService,
-      eventBus
+      eventBus,
+      pageViewMode: _app_options.AppOptions.get("pageViewMode")
     });
     this.findController = findController;
     const container = appConfig.mainContainer;
@@ -3419,7 +3420,7 @@ function getOutputScale(ctx) {
   };
 }
 
-function scrollIntoView(element, spot, skipOverflowHiddenElements = false) {
+function scrollIntoView(element, spot, skipOverflowHiddenElements = false, infiniteScroll = false) {
   let parent = element.offsetParent;
 
   if (!parent) {
@@ -3441,6 +3442,13 @@ function scrollIntoView(element, spot, skipOverflowHiddenElements = false) {
     parent = parent.offsetParent;
 
     if (!parent) {
+      if (infiniteScroll) {
+        if (document.body.clientHeight > offsetY) {
+          offsetY -= 32;
+          window.scrollTo(window.scrollX, offsetY);
+        }
+      }
+
       return;
     }
   }
@@ -6001,10 +6009,12 @@ function normalize(text) {
 class PDFFindController {
   constructor({
     linkService,
-    eventBus
+    eventBus,
+    pageViewMode
   }) {
     this._linkService = linkService;
     this._eventBus = eventBus;
+    this._pageViewMode = pageViewMode;
 
     this._reset();
 
@@ -6127,7 +6137,7 @@ class PDFFindController {
       top: MATCH_SCROLL_OFFSET_TOP,
       left: MATCH_SCROLL_OFFSET_LEFT
     };
-    (0, _ui_utils.scrollIntoView)(element, spot, true);
+    (0, _ui_utils.scrollIntoView)(element, spot, true, this._pageViewMode === 'infinite-scroll');
   }
 
   _reset() {
@@ -10426,7 +10436,7 @@ class BaseViewer {
       });
     }
 
-    (0, _ui_utils.scrollIntoView)(pageDiv, pageSpot);
+    (0, _ui_utils.scrollIntoView)(pageDiv, pageSpot, false, this.pageViewMode === 'infinite-scroll');
   }
 
   _setScaleUpdatePages(newScale, newValue, noScroll = false, preset = false) {
