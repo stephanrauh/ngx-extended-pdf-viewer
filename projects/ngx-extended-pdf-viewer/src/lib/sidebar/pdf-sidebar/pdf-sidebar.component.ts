@@ -33,11 +33,13 @@ export class PdfSidebarComponent {
     const element = this.elementRef.nativeElement as HTMLElement;
     const buttons = element.querySelectorAll('button');
     let visible = 0;
-    buttons.forEach((b) => {
+    for (let index = 0; index < buttons.length; index++) {
+      const b = buttons.item(index);
       if (!b.hidden) {
         visible++;
       }
-    });
+      index++;
+    }
     this.hideSidebarToolbar = visible <= 1;
     this.ref.markForCheck();
   }
