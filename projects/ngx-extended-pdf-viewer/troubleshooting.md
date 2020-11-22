@@ -1,11 +1,3 @@
-## Breaking changes
-- 2.0.0-alpha.0 Two changes that _shouldn't_ be breaking changes, but you never know:
-  - The HMTL code looks a bit different. That may break your CSS code.
-  - The library loads the JavaScript lazily by default. 
-- 1.8.3 Not a breaking change, but quite the contrary: since version 1.8.3 you don't have to add lodash.deburr. It's added automatically as a transitive dependency if it isn't already there.
-- 1.8.0-1.8.2 Only in these versions: new required dependency: lodash.deburr. If you haven't got it already, run `npm i lodash.deburr`. Plus, `[showSidebarOnLoad]` has been deprecated. Updated to pdf.js 2.3.200.
-- 1.7.0 I've fixed a few bugs concerning IE11 support. If you rely on the bug, your application may break. Now I recommend to add both the ES2015 version `pdf.worker.js` and the ES5 version `pdf.worker-es5.js` of the service worker to your assets folder.
-
 ## Known bugs
 Mozilla's PDF viewer suffers from several memory leaks. Currently, ngx-extended-pdf-viewer inherits these leaks (or I didn't find out yet how to remove the viewer from memory properly). If you know how to solve the bug, please leave a message at [the corresponding issue on GitHub](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/12). Any help is appreciated!
 

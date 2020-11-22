@@ -1,3 +1,4 @@
+// import { PDFDocumentProxy, PDFPageProxy } from './../../types/src/display/api.d';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { PDFPrintRange } from './options/pdf-print-range';
 import { IPDFViewerApplication } from './options/pdf-viewer-application';
@@ -193,30 +194,22 @@ export class NgxExtendedPdfViewerService {
     return true;
   }
 
-  /** @deprecated please use getPageAsText(). The preview method will be removed soon. */
-  public getPageAsText_preview(pageNumber: number, callback: (text) => void): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    const pdfDocument = PDFViewerApplication.pdfDocument;
-    return pdfDocument.getPage(pageNumber).then((pdfPage) => {
-      const text = pdfPage.getTextContent();
-      text.then((txt) => callback(this.convertTextInfoToText(txt)));
-    });
-  }
-
   public getPageAsText(pageNumber: number): Promise<string> {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const pdfDocument = PDFViewerApplication.pdfDocument;
 
-    const pagePromise: Promise<any> =  pdfDocument.getPage(pageNumber);
+    const pagePromise: Promise<any> = pdfDocument.getPage(pageNumber);
 
-    const extractTextSnippets = pdfPage => new Promise<any>((resolve, reject) => {
-      const textSnippets = pdfPage.getTextContent();
-      resolve(textSnippets);
-    });
-    const combineTextSnippets = textSnippets => new Promise<string>((resolve, reject) => {
-      const text = this.convertTextInfoToText(textSnippets);
-      resolve(text);
-    });
+    const extractTextSnippets = (pdfPage) =>
+      new Promise<any>((resolve, reject) => {
+        const textSnippets = pdfPage.getTextContent();
+        resolve(textSnippets);
+      });
+    const combineTextSnippets = (textSnippets) =>
+      new Promise<string>((resolve, reject) => {
+        const text = this.convertTextInfoToText(textSnippets);
+        resolve(text);
+      });
     return pagePromise.then(extractTextSnippets).then(combineTextSnippets);
   }
 
@@ -227,31 +220,14 @@ export class NgxExtendedPdfViewerService {
     return textInfo.items.map((info) => info.str).join('');
   }
 
-  /** @deprecated please use getPageAsImage(). The preview method will be removed soon. */
-  public getPageAsImage_preview(pageNumber: number, scale: PDFExportScaleFactor, callback: (dataURL) => void, errorCallback?: (error: any) => void): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    const pdfDocument = PDFViewerApplication.pdfDocument;
-    pdfDocument
-      .getPage(pageNumber)
-      .then((pdfPage) => {
-        this.draw_preview(pdfPage, scale, callback, errorCallback);
-      })
-      .catch((reason) => {
-        if (errorCallback) {
-          errorCallback({ message: 'Unable to initialize PDF page service', reason });
-        } else {
-          console.error('Unable to initialize PDF page service', reason);
-        }
-      });
-  }
-
   public getPageAsImage(pageNumber: number, scale: PDFExportScaleFactor): Promise<any> {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const pdfDocument = PDFViewerApplication.pdfDocument;
-    const pagePromise: Promise<any> =  pdfDocument.getPage(pageNumber);
-    const imagePromise = pdfPage => new Promise<any>((resolve, reject) => {
-      resolve(this.draw(pdfPage, scale));
-    });
+    const pagePromise: Promise<any> = pdfDocument.getPage(pageNumber);
+    const imagePromise = (pdfPage) =>
+      new Promise<any>((resolve, reject) => {
+        resolve(this.draw(pdfPage, scale));
+      });
 
     return pagePromise.then(imagePromise);
   }
@@ -277,46 +253,12 @@ export class NgxExtendedPdfViewerService {
     };
     const renderTask = pdfPage.render(renderContext);
 
-    const dataUrlPromise = () => new Promise<string>((resolve, reject) => {
-      resolve(canvas.toDataURL());
-    });
+    const dataUrlPromise = () =>
+      new Promise<string>((resolve, reject) => {
+        resolve(canvas.toDataURL());
+      });
 
     return renderTask.promise.then(dataUrlPromise);
-  }
-
-  /** @deprecated please use draw(). The preview method will be removed soon. */
-  private draw_preview(pdfPage: any, scale: PDFExportScaleFactor, callback: (dataURL: string) => void, errorCallback?: (error: any) => void): void {
-    let zoomFactor = 1;
-    if (scale.scale) {
-      zoomFactor = scale.scale;
-    } else if (scale.width) {
-      zoomFactor = scale.width / pdfPage.getViewport({ scale: 1 }).width;
-    } else if (scale.height) {
-      zoomFactor = scale.height / pdfPage.getViewport({ scale: 1 }).height;
-    }
-    const viewport = pdfPage.getViewport({
-      scale: zoomFactor,
-    });
-    const { ctx, canvas } = this.getPageDrawContext(viewport.width, viewport.height);
-    const drawViewport = viewport.clone();
-
-    const renderContext = {
-      canvasContext: ctx,
-      viewport: drawViewport,
-    };
-    const renderTask = pdfPage.render(renderContext);
-
-    renderTask.promise.then(
-      function () {
-        const dataURL = canvas.toDataURL();
-        callback(dataURL);
-      },
-      function (error) {
-        if (errorCallback) {
-          errorCallback(error);
-        }
-      }
-    );
   }
 
   private getPageDrawContext(width: number, height: number): DrawContext {
@@ -333,5 +275,36 @@ export class NgxExtendedPdfViewerService {
     canvas.style.height = height + 'px';
 
     return { ctx, canvas };
+  }
+
+  public async getCurrentDocumentAsBlob(): Promise<Blob> {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const data = await PDFViewerApplication.pdfDocument.getData();
+    return new Blob([data], { type: 'application/pdf' });
+  }
+
+  public async getFormData(): Promise<Array<Object>> {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const pdf /*: PDFDocumentProxy */ = PDFViewerApplication.pdfDocument;
+    // screen DPI / PDF DPI
+    const dpiRatio = 96 / 72;
+    const result: Array<Object> = [];
+    for (let i = 1; i <= pdf.numPages; i++) {
+      // track the current page
+      const currentPage /* : PDFPageProxy */ = await pdf.getPage(i);
+      const annotations = await currentPage.getAnnotations();
+
+      annotations
+        .filter((a) => a.subtype === 'Widget') // get the form field annotations only
+        .forEach((a) => {
+          // get the rectangle that represent the single field
+          // and resize it according to the current DPI
+          const fieldRect: Array<number> = currentPage.getViewport({ scale: dpiRatio }).convertToViewportRectangle(a.rect);
+
+          // add the corresponding input
+          result.push({ fieldAnnotation: a, fieldRect });
+        });
+    }
+    return result;
   }
 }

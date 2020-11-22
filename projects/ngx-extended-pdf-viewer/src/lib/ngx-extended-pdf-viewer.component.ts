@@ -340,14 +340,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
   }
 
-  /** If [showSideBarButton]="true", do you want the sidebar to be shown by default ([showSidebarOnLoad])="true")
-   * or not? By default, this flag is undefined, telling the PDF viewer to use the last setting used with this particular
-   * document, or to hide the sidebar if the document is opened for the first time.
-   * @deprecated Use showSidebar instead; dreprecated since 1.8.0; to be removed with 2.0.0
-   */
-  @Input()
-  public showSidebarOnLoad: boolean | undefined = undefined;
-
   @Input()
   public sidebarVisible: boolean | undefined = undefined;
 
@@ -451,10 +443,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public textLayer: boolean | undefined = undefined;
-
-  /** deprecated */
-  @Output()
-  public textlayerRendered = new EventEmitter<TextLayerRenderedEvent>();
 
   @Output()
   public textLayerRendered = new EventEmitter<TextLayerRenderedEvent>();
@@ -985,10 +973,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       options.set('scrollModeOnLoad', this.scrollMode);
     }
 
-    let sidebarVisible = this.sidebarVisible;
-    if (sidebarVisible === undefined) {
-      sidebarVisible = this.showSidebarOnLoad;
-    }
+    const sidebarVisible = this.sidebarVisible;
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
 
     if (sidebarVisible !== undefined) {
@@ -1038,7 +1023,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.selectCursorTool();
 
     PDFViewerApplication.eventBus.on('textlayerrendered', (x: TextLayerRenderedEvent) => {
-      this.textlayerRendered.emit(x); // deprecated - kept to avoid a breaking change
       this.textLayerRendered.emit(x);
     });
 
@@ -1101,6 +1085,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           }
           if (userZoomFactor !== 'auto' && userZoomFactor !== 'page-fit' && userZoomFactor !== 'page-actual' && userZoomFactor !== 'page-width') {
             this.zoomChange.emit(x.scale * 100);
+          } else if (this.zoom !== userZoomFactor) {
+            // called when the user selects one of the text values of the zoom select dropdown
+            this.zoomChange.emit(userZoomFactor);
           }
         });
       });
@@ -1232,6 +1219,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public openPDF2(): void {
     this.overrideDefaultSettings();
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const options: any = {
       password: this.password,
       verbosity: this.logLevel,
@@ -1254,7 +1242,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         };
       }
     }
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     PDFViewerApplication.open(this._src, options).then(
       () => {
         this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount });
@@ -1356,6 +1343,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if ('src' in changes || 'base64Src' in changes) {
         if (!!this._src) {
           this.openPDF2();
+        } else {
+          PDFViewerApplication.close();
         }
       }
       if ('zoom' in changes) {

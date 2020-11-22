@@ -2247,7 +2247,13 @@ var PDFViewerApplication = {
     this.secondaryToolbar.setPageNumber(this.pdfViewer.currentPageNumber);
 
     if (!this.pdfViewer.currentScaleValue) {
-      this.pdfViewer.currentScaleValue = _ui_utils.DEFAULT_SCALE_VALUE;
+      var defaultZoomOption = PDFViewerApplicationOptions.get('defaultZoomValue');
+
+      if (defaultZoomOption) {
+        this.pdfViewer.currentScaleValue = defaultZoomOption;
+      } else {
+        this.pdfViewer.currentScaleValue = _ui_utils.DEFAULT_SCALE_VALUE;
+      }
     }
   },
   cleanup: function cleanup() {
@@ -15929,8 +15935,18 @@ var Toolbar = /*#__PURE__*/function () {
       this.pageLabel = null;
       this.hasPageLabels = false;
       this.pagesCount = 0;
-      this.pageScaleValue = _ui_utils.DEFAULT_SCALE_VALUE;
-      this.pageScale = _ui_utils.DEFAULT_SCALE;
+      var defaultZoomOption = PDFViewerApplicationOptions.get('defaultZoomValue');
+
+      if (defaultZoomOption) {
+        this.pageScaleValue = defaultZoomOption;
+
+        if (!!Number(defaultZoomOption)) {
+          this.pageScale = Number(defaultZoomOption);
+        }
+      } else {
+        this.pageScaleValue = _ui_utils.DEFAULT_SCALE_VALUE;
+        this.pageScale = _ui_utils.DEFAULT_SCALE;
+      }
 
       this._updateUIState(true);
 
