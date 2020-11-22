@@ -20,3 +20,7 @@ cd ..
 cd convertI18nFilesToJson
 node index.js assets
 cd ..
+
+cd add-version-number-to-file-name
+node add-version-number.js
+cd ..

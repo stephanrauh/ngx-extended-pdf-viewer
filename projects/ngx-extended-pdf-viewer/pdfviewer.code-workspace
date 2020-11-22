@@ -8,9 +8,6 @@
     },
     {
       "path": "../.."
-    },
-    {
-      "path": "../../../ngx-extended-pdf-viewer-issues/issue556-non-numeric-zoom"
     }
   ],
   "settings": {}

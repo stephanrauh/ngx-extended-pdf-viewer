@@ -17,19 +17,23 @@
 
 Limited Internet Explorer 11 support. Starting with version 7.0, I'll reduce my efforts to support IE11. It's extremly difficult to hunt down bugs in IE11. But I'll happily accept pull requests for IE11.
 
+The JavaScript files have been renamed. Now the file names contain the version number. This should avoid caching problems after updating ngx-extended-pdf-viewer.
+
 `[(zoom)]` has been overhauled. Now opening a new PDF file doesn't reset the zoom value.
 
 `[src]` closes the current PDF file if you set `[src]="undefined"`. 
 
-`NgxExtendedPdfViewerService` now allows you to `getCurrentDocumentAsBlob()` and to `getFormData()`.
+`NgxExtendedPdfViewerService` now allows you to `getCurrentDocumentAsBlob()` and to access the low-level form data using `getFormData()`.
 
 Version 6.0 adds a warning if you're displaying a signature (because the PDF viewer can't verify it) and it drops the custom zoom dropdown menu.
 
 
-## Breaking changes
+## Potentially breaking changes
 Version 7.0 fixes several bugs concerning `[(zoom)]`. Now `(zoom)` also emits the text values ("page-fit", "auto", "page-width", "page-actual"). When you open
 a new PDF document, the old value of `[zoom]` is used for the new document. This was always the intended behavior, but it's possible it breaks applications relying
 on the bugs.
+
+The JavaScript files have been renamed. Now the version number is part of the file name.
 
 Version 7.0 also removes several attributes and methods that have been deprecated a long time ago.
 

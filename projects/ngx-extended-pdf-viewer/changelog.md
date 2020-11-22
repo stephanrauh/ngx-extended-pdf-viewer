@@ -231,3 +231,4 @@
 - 6.2.0-alpha.0 #492 support infinite scrolling (i.e. using the browser scrollbar instead of implementing our own scrollbar)
 - 6.2.0-alpha.1 #557 improved compatibility to IE11; #492 support infinite scrolling (i.e. using the browser scrollbar)
 - 7.0.0-beta.0 #558 added `getCurrentDocumentAsBlob()` and `getFormData()` to `NgxExtendedPdfViewerService`; #556 and #543 emit `(zoom)` even if it's one of the text options, and stop resetting the zoom when loading a new PDF file; close the PDF viewer if `[src]` is set to `undefined`; removed deprecated attributes and methods
+- 7.0.0-beta.1 #553 added the version number to the JavaScript file (thus avoiding cache problems after updating ngx-extended-pdf-viewer)

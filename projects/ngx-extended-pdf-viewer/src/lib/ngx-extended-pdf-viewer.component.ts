@@ -19,7 +19,7 @@ import { PagesLoadedEvent } from './events/pages-loaded-event';
 import { PageRenderedEvent } from './events/page-rendered-event';
 import { PdfDownloadedEvent } from './events/pdf-downloaded-event';
 import { PdfLoadedEvent } from './events/pdf-loaded-event';
-import { pdfDefaultOptions } from './options/pdf-default-options';
+import { getVersionSuffix, pdfDefaultOptions } from './options/pdf-default-options';
 import { ScaleChangingEvent } from './events/scale-changing-event';
 import { PagesRotationEvent } from './events/pages-rotation-event';
 import { FileInputChanged } from './events/file-input-changed';
@@ -208,7 +208,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         });
       };
       reader.readAsArrayBuffer(url);
-
     } else if (typeof url === 'string') {
       this._src = url;
       if (url.length > 980) {
@@ -593,11 +592,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
       const script2 = document.createElement('script');
       const assets = pdfDefaultOptions.assetsFolder;
+      const versionSuffix = getVersionSuffix(assets);
+
       if (needsES5) {
         console.log('Using the ES5 version of the PDF viewer.');
       }
 
-      script2.src = this.location.normalize(isIE || isEdge || isIOs12OrBelow || needsES5 ? assets + '/viewer-es5' + suffix : assets + '/viewer' + suffix);
+      script2.src = this.location.normalize(
+        isIE || isEdge || isIOs12OrBelow || needsES5
+        ? assets + '/viewer-' + versionSuffix + '-es5' + suffix
+        : assets + '/viewer-' + versionSuffix + suffix
+      );
       script2.type = 'text/javascript';
       script2.async = true;
       document.getElementsByTagName('head')[0].appendChild(script2);
@@ -629,8 +634,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
 
         const assets = pdfDefaultOptions.assetsFolder;
+        const versionSuffix = getVersionSuffix(assets);
         const script = document.createElement('script');
-        script.src = this.location.normalize(isIE || isEdge || isIOs12OrBelow || needsES5 ? assets + '/pdf-es5' + suffix : assets + '/pdf' + suffix);
+        script.src = this.location.normalize(
+          isIE || isEdge || isIOs12OrBelow || needsES5 ? assets + '/pdf-' + versionSuffix + '-es5' + suffix : assets + '/pdf-' + versionSuffix + suffix
+        );
         script.type = 'text/javascript';
         script.async = true;
         document.getElementsByTagName('head')[0].appendChild(script);

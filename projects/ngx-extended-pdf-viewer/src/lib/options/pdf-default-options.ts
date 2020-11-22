@@ -2,6 +2,15 @@ const _isIE11 = typeof window === 'undefined' ? false : !!(<any>window).MSInputM
 const isEdge = /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
+export let pdfjsVersion = '2.6.411';
+export let pdfjsBleedingEdgeVersion = '2.7.220';
+
+export function getVersionSuffix(folder: string): string {
+  if (folder && folder.includes('bleeding-edge')) {
+    return pdfjsBleedingEdgeVersion;
+  }
+  return pdfjsVersion;
+}
 
 export let pdfDefaultOptions = {
   cursorToolOnLoad: 0,
@@ -41,7 +50,10 @@ export let pdfDefaultOptions = {
   verbosity: 1,
   workerPort: null,
   assetsFolder: 'assets',
-  workerSrc: () => _isIE11 || isEdge || needsES5 ? './' + pdfDefaultOptions.assetsFolder + '/pdf.worker-es5.js' : './' + pdfDefaultOptions.assetsFolder + '/pdf.worker.js',
+  workerSrc: () =>
+    _isIE11 || isEdge || needsES5
+      ? './' + pdfDefaultOptions.assetsFolder + '/pdf.worker-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '-es5.js'
+      : './' + pdfDefaultOptions.assetsFolder + '/pdf.worker-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '.js',
 };
 
 if ((<any>window).pdfDefaultOptions) {
@@ -49,5 +61,3 @@ if ((<any>window).pdfDefaultOptions) {
 } else {
   (<any>window).pdfDefaultOptions = pdfDefaultOptions;
 }
-
-

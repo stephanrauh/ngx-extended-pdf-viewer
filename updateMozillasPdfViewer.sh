@@ -33,3 +33,7 @@ cd ..
 cd convertI18nFilesToJson
 node index.js $FOLDER
 cd ..
+
+cd add-version-number-to-file-name
+node add-version-number.js
+cd ..
