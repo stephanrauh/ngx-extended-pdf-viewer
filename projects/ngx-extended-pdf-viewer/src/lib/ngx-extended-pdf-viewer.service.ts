@@ -279,7 +279,7 @@ export class NgxExtendedPdfViewerService {
 
   public async getCurrentDocumentAsBlob(): Promise<Blob> {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    const data = await PDFViewerApplication.pdfDocument.getData();
+    const data = await PDFViewerApplication.pdfDocument.saveDocument(PDFViewerApplication.pdfDocument.annotationStorage);
     return new Blob([data], { type: 'application/pdf' });
   }
 
