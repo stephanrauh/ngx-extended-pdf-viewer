@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.7.220';
-const pdfjsBuild = '02dcc597c';
+const pdfjsVersion = '2.7.222';
+const pdfjsBuild = '6e18cd09e';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -10144,7 +10144,7 @@ class BaseViewer {
       return;
     }
 
-    this._setScale(val, false);
+    this._setScale(val, this.pageViewMode === "single");
   }
 
   get pagesRotation() {

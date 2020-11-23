@@ -13367,7 +13367,7 @@ var BaseViewer = /*#__PURE__*/function () {
         return;
       }
 
-      this._setScale(val, false);
+      this._setScale(val, this.pageViewMode === "single");
     }
   }, {
     key: "pagesRotation",

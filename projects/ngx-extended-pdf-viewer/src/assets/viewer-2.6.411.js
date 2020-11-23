@@ -10213,7 +10213,7 @@ class BaseViewer {
       return;
     }
 
-    this._setScale(val, false);
+    this._setScale(val, this.pageViewMode === "single");
   }
 
   get pagesRotation() {

@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-var pdfjsVersion = '2.7.220';
-var pdfjsBuild = '02dcc597c';
+var pdfjsVersion = '2.7.222';
+var pdfjsBuild = '6e18cd09e';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -13294,7 +13294,7 @@ var BaseViewer = /*#__PURE__*/function () {
         return;
       }
 
-      this._setScale(val, false);
+      this._setScale(val, this.pageViewMode === "single");
     }
   }, {
     key: "pagesRotation",
