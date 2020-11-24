@@ -15,6 +15,7 @@ cd ../ngx-extended-pdf-viewer
 # cd inlineImageFiles
 # node index.js $FOLDER
 # cd ..
+rm -R ./projects/ngx-extended-pdf-viewer/src/$FOLDER/*.js
 cp -R ../mypdf.js/build/minified/web/locale/* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/locale/
 # cp -R ../mypdf.js/build/minified/web/images/*.svg ./projects/ngx-extended-pdf-viewer/src/$FOLDER/images/
 cp -R ../mypdf.js/build/minified/web/cmaps/* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/cmaps/

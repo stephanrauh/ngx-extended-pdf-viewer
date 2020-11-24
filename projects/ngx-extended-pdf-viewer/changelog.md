@@ -234,4 +234,5 @@
 - 7.0.0-beta.1 #553 added the version number to the JavaScript file (thus avoiding cache problems after updating ngx-extended-pdf-viewer)
 - 7.0.0-beta.2 #558 added the form data to the BLOB exported by `getCurrentDocumentAsBlob()`
 - 7.0.0-beta.3 #562 don't jump to another page after changing the zoom in single-page mode
+- 7.0.0-beta.4 #530 reduce the print resolution if it exceeds the limits of the browser; emit a warning when using an over-the-top `[zoom]` or `[printResolution]`
 
