@@ -328,7 +328,7 @@ var _text_layer = __w_pdfjs_require__(20);
 var _svg = __w_pdfjs_require__(21);
 
 const pdfjsVersion = '2.6.413';
-const pdfjsBuild = '9131214da';
+const pdfjsBuild = 'becd427d5';
 {
   const PDFNetworkStream = __w_pdfjs_require__(22).PDFNetworkStream;
 
@@ -3906,7 +3906,7 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
 
 const version = '2.6.413';
 exports.version = version;
-const build = '9131214da';
+const build = 'becd427d5';
 exports.build = build;
 
 /***/ }),

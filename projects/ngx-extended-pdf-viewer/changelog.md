@@ -235,4 +235,4 @@
 - 7.0.0-beta.2 #558 added the form data to the BLOB exported by `getCurrentDocumentAsBlob()`
 - 7.0.0-beta.3 #562 don't jump to another page after changing the zoom in single-page mode
 - 7.0.0-beta.4 #530 reduce the print resolution if it exceeds the limits of the browser; emit a warning when using an over-the-top `[zoom]` or `[printResolution]`
-
+- 7.0.0-beta.5 #542 prevent IE11 and Edge from scrolling to the end of the page

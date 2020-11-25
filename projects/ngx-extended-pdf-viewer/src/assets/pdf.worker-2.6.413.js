@@ -136,7 +136,7 @@ Object.defineProperty(exports, "WorkerMessageHandler", {
 var _worker = __w_pdfjs_require__(1);
 
 const pdfjsVersion = '2.6.413';
-const pdfjsBuild = '9131214da';
+const pdfjsBuild = 'becd427d5';
 
 /***/ }),
 /* 1 */
