@@ -3,7 +3,7 @@ const isEdge = /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
 export let pdfjsVersion = '2.6.413';
-export let pdfjsBleedingEdgeVersion = '2.7.223';
+export let pdfjsBleedingEdgeVersion = '2.7.225';
 
 export function getVersionSuffix(folder: string): string {
   if (folder && folder.includes('bleeding-edge')) {

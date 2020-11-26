@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.7.223';
-const pdfjsBuild = '122b4ce06';
+const pdfjsVersion = '2.7.225';
+const pdfjsBuild = '35bceebfb';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -2675,11 +2675,19 @@ function webViewerFirstPage() {
 function webViewerLastPage() {
   if (PDFViewerApplication.pdfDocument) {
     PDFViewerApplication.page = PDFViewerApplication.pagesCount;
+
+    if (PDFViewerApplication.pdfViewer && PDFViewerApplication.pdfViewer.container) {
+      PDFViewerApplication.pdfViewer.container.scrollTop = 0;
+    }
   }
 }
 
 function webViewerNextPage() {
   PDFViewerApplication.page++;
+
+  if (PDFViewerApplication.pdfViewer && PDFViewerApplication.pdfViewer.container) {
+    PDFViewerApplication.pdfViewer.container.scrollTop = 0;
+  }
 }
 
 function webViewerPreviousPage() {
