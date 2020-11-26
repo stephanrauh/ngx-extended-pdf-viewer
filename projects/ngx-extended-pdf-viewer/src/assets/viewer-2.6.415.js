@@ -2431,8 +2431,10 @@ function webViewerLastPage() {
   if (PDFViewerApplication.pdfDocument) {
     PDFViewerApplication.page = PDFViewerApplication.pagesCount;
 
-    if (PDFViewerApplication.pdfViewer && PDFViewerApplication.pdfViewer.container) {
-      PDFViewerApplication.pdfViewer.container.scrollTop = 0;
+    if (PDFViewerApplication.pageViewMode === "single") {
+      if (PDFViewerApplication.pdfViewer && PDFViewerApplication.pdfViewer.container) {
+        PDFViewerApplication.pdfViewer.container.scrollTop = 0;
+      }
     }
   }
 }
@@ -2440,8 +2442,10 @@ function webViewerLastPage() {
 function webViewerNextPage() {
   PDFViewerApplication.page++;
 
-  if (PDFViewerApplication.pdfViewer && PDFViewerApplication.pdfViewer.container) {
-    PDFViewerApplication.pdfViewer.container.scrollTop = 0;
+  if (PDFViewerApplication.pageViewMode === "single") {
+    if (PDFViewerApplication.pdfViewer && PDFViewerApplication.pdfViewer.container) {
+      PDFViewerApplication.pdfViewer.container.scrollTop = 0;
+    }
   }
 }
 
