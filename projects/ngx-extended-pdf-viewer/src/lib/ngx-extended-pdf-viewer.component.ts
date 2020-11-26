@@ -55,7 +55,7 @@ interface ElementAndPosition {
 }
 
 export interface FormDataType {
-  [fieldName: string]: string;
+  [fieldName: string]: string | string[];
 }
 
 @Component({
@@ -488,6 +488,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   // dirty IE11 hack - temporary solution
   public findbarLeft: string | undefined = undefined;
+
+  // Additional PDF Form Field Types #567: Used to store the exported values of radio and checkbox buttons
+  public buttonValues: any = {};
 
   public get mobileFriendlyZoom() {
     return this._mobileFriendlyZoom;
@@ -1634,39 +1637,75 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if (annotation) {
         const container = document.querySelector('[data-annotation-id="' + annotation + '"]');
         if (container) {
+
           const field = container.querySelector('input');
           if (field) {
             const fieldName = field.name;
             const newValue = formData[fieldName];
             if (newValue === undefined) {
-              if (field.type === 'checkbox') {
-                this.formData[fieldName] = String(field.checked);
-              } else {
+              if (field.type === 'checkbox') 
+              {
+                // Additional PDF Form Field Types #567: use exportValue from the field annotation for the value
+                this.formData[fieldName] = field.checked?this.buttonValues[annotation]:null; 
+              } 
+              else if (field.type === 'radio') 
+              {
+                // Additional PDF Form Field Types #567: use buttonValue from the field annotation for the value
+
+                if(field.checked)
+                  this.formData[fieldName] = this.buttonValues[annotation]; 
+              } 
+              else 
+              {
                 this.formData[fieldName] = field.value;
               }
             }
             if (newValue !== undefined) {
               PDFViewerApplication.pdfDocument.annotationStorage.setValue(annotation, newValue);
               if (field.type === 'checkbox') {
-                const v = String(newValue) === 'true';
+                const v = String(newValue) == this.buttonValues[annotation]; 
                 field.checked = v;
-              } else {
-                field.value = newValue;
+              } 
+              else if (field.type === 'radio') {
+                const v = String(newValue) == this.buttonValues[annotation];
+                field.checked = v;
+              } 
+              else {
+                field.value = <string>newValue;
               }
             }
           }
+
+          // Additional PDF Form Field Types #567: handle multi line text fields
+          const textarea = container.querySelector('textarea');
+          if (textarea) {
+            const fieldName = textarea.name;
+            const newValue = formData[fieldName];
+            if (newValue === undefined) {
+              this.formData[fieldName] = textarea.value;
+            }
+            if (newValue !== undefined) {
+              PDFViewerApplication.pdfDocument.annotationStorage.setValue(annotation, newValue);
+              textarea.value = <string>newValue;
+            }
+          }
+
           const select = container.querySelector('select');
           if (select) {
             const fieldName = select.name;
             const newValue = formData[fieldName];
             if (newValue === undefined) {
-              this.formData[fieldName] = select.value;
+              // Additional PDF Form Field Types #567: moved setting and retrieving <select> field values to functions to handle single or multi select fields
+              this.formData[fieldName] = this.getSelectValue(select); 
             }
             if (newValue !== undefined) {
               PDFViewerApplication.pdfDocument.annotationStorage.setValue(annotation, newValue);
-              select.value = newValue;
+              // Additional PDF Form Field Types #567: moved setting and retrieving <select> field values to functions to handle single or multi select fields
+              this.setSelectValue(select,newValue);
             }
           }
+
+
         }
       }
     }
@@ -1678,26 +1717,49 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const annotations = PDFViewerApplication.pdfDocument.annotationStorage.getAll();
     for (const annotation in annotations) {
       if (annotation) {
+
         const container = document.querySelector('[data-annotation-id="' + annotation + '"]');
         if (container) {
+
           const field = container.querySelector('input');
           if (field) {
             const fieldName = field.name;
             const newValue = formData[fieldName];
             if (newValue === undefined) {
-              this.formData[fieldName] = field.value;
+
+              // Additional PDF Form Field Types #567: use exportValue/buttonValue from the field annotation for the value for checkboxes/radio buttons
+              if (field.type === 'checkbox' || field.type === 'radio') {
+                if(field.checked)
+                  this.formData[fieldName] = this.buttonValues[annotation];
+              }
+              else
+                this.formData[fieldName] = field.value;
             }
-            field.addEventListener('input', () => this.emitFormDataChange(fieldName, field));
+            field.addEventListener('input', () => this.emitFormDataChange(annotation,fieldName, field));
           }
+
+          // Additional PDF Form Field Types #567: handle multi line text fields
+          const textarea = container.querySelector('textarea');
+          if (textarea) {
+            const fieldName = textarea.name;
+            const newValue = formData[fieldName];
+            if (newValue === undefined) {
+              this.formData[fieldName] = textarea.value;
+            }
+            textarea.addEventListener('input', () => this.emitFormDataChange(annotation,fieldName, textarea));
+          }
+
           const select = container.querySelector('select');
           if (select) {
             const fieldName = select.name;
             const newValue = formData[fieldName];
             if (newValue === undefined) {
-              this.formData[fieldName] = select.value;
+              // Additional PDF Form Field Types #567: moved setting and retrieving <select> field values to functions to handle single or multi select fields
+              this.formData[fieldName] = this.getSelectValue(select);
             }
-            select.addEventListener('input', () => this.emitFormDataChange(fieldName, select));
+            select.addEventListener('input', () => this.emitFormDataChange(annotation,fieldName, select));
           }
+
         }
       }
     }
@@ -1712,26 +1774,47 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         if (annotation) {
           const container = document.querySelector('[data-annotation-id="' + annotation + '"]');
           if (container) {
+
             const field = container.querySelector('input');
             if (field) {
               const fieldName = field.name;
               const newValue = result[fieldName];
               if (newValue === undefined) {
+                // Additional PDF Form Field Types #567: use exportValue/buttonValue from the field annotation for the value for checkboxes/radio buttons
                 if (field.type === 'checkbox') {
-                  result[fieldName] = String(field.checked);
-                } else {
+                  result[fieldName] = field.checked?this.buttonValues[annotation]:null;
+                }
+                else if (field.type === 'radio') {
+                  if(field.checked)
+                    result[fieldName] = this.buttonValues[annotation];
+                }  
+                else {
                   result[fieldName] = field.value;
                 }
               }
             }
+
             const select = container.querySelector('select');
             if (select) {
               const fieldName = select.name;
               const newValue = result[fieldName];
               if (newValue === undefined) {
-                result[fieldName] = select.value;
+                // Additional PDF Form Field Types #567: moved setting and retrieving <select> field values to functions to handle single or multi select fields
+                result[fieldName] = this.getSelectValue(select);
               }
             }
+
+            // Additional PDF Form Field Types #567: handle multi line text fields
+            const textarea = container.querySelector('textarea');
+            if (textarea) {
+              const fieldName = textarea.name;
+              const newValue = result[fieldName];
+              if (newValue === undefined) {
+                result[fieldName] = textarea.value;
+              }
+            }
+
+
           }
         }
       }
@@ -1739,15 +1822,62 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     return result;
   }
 
-  private emitFormDataChange(fieldName: string, field: HTMLElement): void {
-    let value = '';
+  private getSelectValue(field:HTMLSelectElement)
+  {
+    if(field.multiple)
+    {
+      let values:string[] = [];
+      let options = field.options;
+    
+      for (let i=0; i<options.length; i++) 
+      {
+        if (options[i].selected) {
+          values.push(options[i].value);
+        }
+      }
+      return(values);
+    }
+    else
+      return(field.value);
+  }
+
+  private setSelectValue(field:HTMLSelectElement,value:string | string[])
+  {
+    if(field.multiple && Array.isArray(value) )
+    {
+      let values:string[]= value;
+      let options = field.options;
+    
+      for (let i=0; i<options.length; i++) 
+        options[i].selected =  (values.indexOf(options[i].value) != -1);
+    }
+    else
+      field.value = <string>value;
+  }
+
+  private emitFormDataChange(annotation:string, fieldName: string, field: HTMLElement): void {
+    let value:any = null;
 
     if (field instanceof HTMLSelectElement) {
+      value = this.getSelectValue(field);
+    }
+    // Additional PDF Form Field Types #567: handle multi line text fields
+    else if (field instanceof HTMLTextAreaElement) {      
       value = field.value;
-    } else if (field instanceof HTMLInputElement) {
+    }  
+    else if (field instanceof HTMLInputElement) {
+      // Additional PDF Form Field Types #567: use exportValue/buttonValue from the field annotation for the value for checkboxes/radio buttons
       if (field.type === 'checkbox') {
-        value = String(field.checked);
-      } else {
+
+        if(field.checked)
+          value = this.buttonValues[annotation];
+      } 
+      else if (field.type === 'radio') {
+
+        if(field.checked)
+          value = this.buttonValues[annotation];
+      } 
+      else {
         value = field.value;
       }
     }
@@ -1772,6 +1902,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const dpiRatio = 96 / 72;
     this.hasSignature = false;
 
+    this.buttonValues = {};
+
     for (let i = 1; i <= pdf.numPages; i++) {
       // track the current page
       let currentPage: any = null;
@@ -1791,6 +1923,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           annotations
             .filter((a) => a.subtype === 'Widget') // get the form field annotation only
             .forEach((a) => {
+
+              // Additional PDF Form Field Types #567: Store the exportValue for the check boxes and buttonValue for radio buttons for quick reference 
+              if(a.checkBox)
+                this.buttonValues[a.id] = a.exportValue;
+              else if(a.radioButton)
+                this.buttonValues[a.id] = a.buttonValue;
+
               if (a.fieldType === 'Sig') {
                 this.ngZone.run(() => {
                   this.hasSignature = true;
