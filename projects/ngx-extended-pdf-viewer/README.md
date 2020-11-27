@@ -15,7 +15,7 @@
 
 ## What's new in version 6.0 and 7.0?
 
-Limited Internet Explorer 11 support. Starting with version 7.0, I'll reduce my efforts to support IE11. It's extremly difficult to hunt down bugs in IE11. But I'll happily accept pull requests for IE11.
+Limited Internet Explorer 11 support. More to the point, IE 11 support is now a community effort. Starting with version 7.0, I'll reduce my efforts to support IE11. It's extremly difficult to hunt down bugs in IE11. In my installation of IE11, the debugger crashes all the time. But I'll happily accept pull requests for IE11. I can also fix bugs when you tell me which line is buggy. IE has a tendency to omit this info from the error messages, so I appreciate your help!
 
 The JavaScript files have been renamed. Now the file names contain the version number. This should avoid caching problems after updating ngx-extended-pdf-viewer.
 
