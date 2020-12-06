@@ -10737,7 +10737,10 @@ class BaseViewer {
 
     this._ensurePdfPageLoaded(pageView).then(() => {
       this.renderingQueue.renderView(pageView);
-      this.currentPageNumber = pageNumber;
+
+      if (this.currentPageNumber !== pageNumber) {
+        this.currentPageNumber = pageNumber;
+      }
     });
 
     if (scale === "page-fit" && !destArray[4]) {

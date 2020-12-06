@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.7.225';
-const pdfjsBuild = '35bceebfb';
+const pdfjsVersion = '2.7.228';
+const pdfjsBuild = 'ea1bffbc7';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -10670,7 +10670,10 @@ class BaseViewer {
 
     this._ensurePdfPageLoaded(pageView).then(() => {
       this.renderingQueue.renderView(pageView);
-      this.currentPageNumber = pageNumber;
+
+      if (this.currentPageNumber !== pageNumber) {
+        this.currentPageNumber = pageNumber;
+      }
     });
 
     if (scale === "page-fit" && !destArray[4]) {

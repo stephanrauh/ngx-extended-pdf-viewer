@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-var pdfjsVersion = '2.7.225';
-var pdfjsBuild = '35bceebfb';
+var pdfjsVersion = '2.7.228';
+var pdfjsBuild = 'ea1bffbc7';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -12902,7 +12902,9 @@ var BaseViewer = /*#__PURE__*/function () {
       this._ensurePdfPageLoaded(pageView).then(function () {
         _this4.renderingQueue.renderView(pageView);
 
-        _this4.currentPageNumber = pageNumber;
+        if (_this4.currentPageNumber !== pageNumber) {
+          _this4.currentPageNumber = pageNumber;
+        }
       });
 
       if (scale === "page-fit" && !destArray[4]) {

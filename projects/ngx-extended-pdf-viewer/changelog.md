@@ -237,3 +237,4 @@
 - 7.0.0-beta.4 #530 reduce the print resolution if it exceeds the limits of the browser; emit a warning when using an over-the-top `[zoom]` or `[printResolution]`
 - 7.0.0-beta.5 #542 prevent IE11 and Edge from scrolling to the end of the page
 - 7.0.0-beta.6 #567 support Acroform radio buttons and multine fields; improved support for Acroform checkboxes; #542 repair forward page navigation when `pageMode!="single"`
+- 7.0.0 #573 don't jump to the top of the page when zooming
