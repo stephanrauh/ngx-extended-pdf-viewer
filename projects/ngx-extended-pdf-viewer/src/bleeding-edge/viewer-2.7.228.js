@@ -10060,16 +10060,6 @@ class BaseViewer {
     if (!this._setCurrentPageNumber(val, true)) {
       console.error(`${this._name}.currentPageNumber: "${val}" is not a valid page.`);
     }
-
-    this.hidePagesDependingOnpageViewMode();
-
-    if (this.pageViewMode === "single") {
-      const pageView = this._pages[this.currentPageNumber - 1];
-
-      this._ensurePdfPageLoaded(pageView).then(() => {
-        this.renderingQueue.renderView(pageView);
-      });
-    }
   }
 
   hidePagesDependingOnpageViewMode() {
@@ -10094,6 +10084,16 @@ class BaseViewer {
     }
 
     this._currentPageNumber = val;
+    this.hidePagesDependingOnpageViewMode();
+
+    if (this.pageViewMode === "single" || this.pageViewMode === "infinite-scroll") {
+      const pageView = this._pages[this.currentPageNumber - 1];
+
+      this._ensurePdfPageLoaded(pageView).then(() => {
+        this.renderingQueue.renderView(pageView);
+      });
+    }
+
     this.eventBus.dispatch("pagechanging", {
       source: this,
       pageNumber: val,

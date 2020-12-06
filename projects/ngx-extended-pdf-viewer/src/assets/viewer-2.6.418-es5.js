@@ -12432,6 +12432,8 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "_setCurrentPageNumber",
     value: function _setCurrentPageNumber(val) {
+      var _this3 = this;
+
       var resetCurrentPageView = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
       if (this._currentPageNumber === val) {
@@ -12447,6 +12449,16 @@ var BaseViewer = /*#__PURE__*/function () {
       }
 
       this._currentPageNumber = val;
+      this.hidePagesDependingOnpageViewMode();
+
+      if (this.pageViewMode === "single" || this.pageViewMode === "infinite-scroll") {
+        var pageView = this._pages[this.currentPageNumber - 1];
+
+        this._ensurePdfPageLoaded(pageView).then(function () {
+          _this3.renderingQueue.renderView(pageView);
+        });
+      }
+
       this.eventBus.dispatch("pagechanging", {
         source: this,
         pageNumber: val,
@@ -12471,7 +12483,7 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "setDocument",
     value: function setDocument(pdfDocument) {
-      var _this3 = this;
+      var _this4 = this;
 
       if (this.pdfDocument) {
         this._cancelRendering();
@@ -12495,93 +12507,93 @@ var BaseViewer = /*#__PURE__*/function () {
       var optionalContentConfigPromise = pdfDocument.getOptionalContentConfig();
 
       this._pagesCapability.promise.then(function () {
-        _this3.eventBus.dispatch("pagesloaded", {
-          source: _this3,
+        _this4.eventBus.dispatch("pagesloaded", {
+          source: _this4,
           pagesCount: pagesCount
         });
       });
 
       this._onBeforeDraw = function (evt) {
-        var pageView = _this3._pages[evt.pageNumber - 1];
+        var pageView = _this4._pages[evt.pageNumber - 1];
 
         if (!pageView) {
           return;
         }
 
-        _this3._buffer.push(pageView);
+        _this4._buffer.push(pageView);
       };
 
       this.eventBus._on("pagerender", this._onBeforeDraw);
 
       this._onAfterDraw = function (evt) {
-        if (evt.cssTransform || _this3._onePageRenderedCapability.settled) {
+        if (evt.cssTransform || _this4._onePageRenderedCapability.settled) {
           return;
         }
 
-        _this3._onePageRenderedCapability.resolve();
+        _this4._onePageRenderedCapability.resolve();
 
-        _this3.eventBus._off("pagerendered", _this3._onAfterDraw);
+        _this4.eventBus._off("pagerendered", _this4._onAfterDraw);
 
-        _this3._onAfterDraw = null;
+        _this4._onAfterDraw = null;
       };
 
       this.eventBus._on("pagerendered", this._onAfterDraw);
 
       firstPagePromise.then(function (firstPdfPage) {
-        _this3._firstPageCapability.resolve(firstPdfPage);
+        _this4._firstPageCapability.resolve(firstPdfPage);
 
-        _this3._optionalContentConfigPromise = optionalContentConfigPromise;
-        var scale = _this3.currentScale;
+        _this4._optionalContentConfigPromise = optionalContentConfigPromise;
+        var scale = _this4.currentScale;
         var viewport = firstPdfPage.getViewport({
           scale: scale * _ui_utils.CSS_UNITS
         });
-        var textLayerFactory = _this3.textLayerMode !== _ui_utils.TextLayerMode.DISABLE ? _this3 : null;
+        var textLayerFactory = _this4.textLayerMode !== _ui_utils.TextLayerMode.DISABLE ? _this4 : null;
 
         for (var pageNum = 1; pageNum <= pagesCount; ++pageNum) {
           var pageView = new _pdf_page_view.PDFPageView({
-            container: _this3._viewerElement,
-            eventBus: _this3.eventBus,
+            container: _this4._viewerElement,
+            eventBus: _this4.eventBus,
             id: pageNum,
             scale: scale,
             defaultViewport: viewport.clone(),
             annotationStorage: annotationStorage,
             optionalContentConfigPromise: optionalContentConfigPromise,
-            renderingQueue: _this3.renderingQueue,
+            renderingQueue: _this4.renderingQueue,
             textLayerFactory: textLayerFactory,
-            textLayerMode: _this3.textLayerMode,
-            annotationLayerFactory: _this3,
-            imageResourcesPath: _this3.imageResourcesPath,
-            removePageBorders: _this3.removePageBorders,
-            renderInteractiveForms: _this3.renderInteractiveForms,
-            renderer: _this3.renderer,
-            enableWebGL: _this3.enableWebGL,
-            useOnlyCssZoom: _this3.useOnlyCssZoom,
-            maxCanvasPixels: _this3.maxCanvasPixels,
-            l10n: _this3.l10n
+            textLayerMode: _this4.textLayerMode,
+            annotationLayerFactory: _this4,
+            imageResourcesPath: _this4.imageResourcesPath,
+            removePageBorders: _this4.removePageBorders,
+            renderInteractiveForms: _this4.renderInteractiveForms,
+            renderer: _this4.renderer,
+            enableWebGL: _this4.enableWebGL,
+            useOnlyCssZoom: _this4.useOnlyCssZoom,
+            maxCanvasPixels: _this4.maxCanvasPixels,
+            l10n: _this4.l10n
           });
 
-          _this3._pages.push(pageView);
+          _this4._pages.push(pageView);
         }
 
-        var firstPageView = _this3._pages[0];
+        var firstPageView = _this4._pages[0];
 
         if (firstPageView) {
           firstPageView.setPdfPage(firstPdfPage);
 
-          _this3.linkService.cachePageRef(1, firstPdfPage.ref);
+          _this4.linkService.cachePageRef(1, firstPdfPage.ref);
         }
 
-        if (_this3._spreadMode !== _ui_utils.SpreadMode.NONE) {
-          _this3._updateSpreadMode();
+        if (_this4._spreadMode !== _ui_utils.SpreadMode.NONE) {
+          _this4._updateSpreadMode();
         }
 
-        _this3._onePageRenderedOrForceFetch().then(function () {
-          if (_this3.findController) {
-            _this3.findController.setDocument(pdfDocument);
+        _this4._onePageRenderedOrForceFetch().then(function () {
+          if (_this4.findController) {
+            _this4.findController.setDocument(pdfDocument);
           }
 
           if (pdfDocument.loadingParams.disableAutoFetch || pagesCount > 7500) {
-            _this3._pagesCapability.resolve();
+            _this4._pagesCapability.resolve();
 
             return;
           }
@@ -12589,29 +12601,29 @@ var BaseViewer = /*#__PURE__*/function () {
           var getPagesLeft = pagesCount - 1;
 
           if (getPagesLeft <= 0) {
-            _this3._pagesCapability.resolve();
+            _this4._pagesCapability.resolve();
 
             return;
           }
 
           var _loop = function _loop(_pageNum) {
             pdfDocument.getPage(_pageNum).then(function (pdfPage) {
-              var pageView = _this3._pages[_pageNum - 1];
+              var pageView = _this4._pages[_pageNum - 1];
 
               if (!pageView.pdfPage) {
                 pageView.setPdfPage(pdfPage);
               }
 
-              _this3.linkService.cachePageRef(_pageNum, pdfPage.ref);
+              _this4.linkService.cachePageRef(_pageNum, pdfPage.ref);
 
               if (--getPagesLeft === 0) {
-                _this3._pagesCapability.resolve();
+                _this4._pagesCapability.resolve();
               }
             }, function (reason) {
               console.error("Unable to get page ".concat(_pageNum, " to initialize viewer"), reason);
 
               if (--getPagesLeft === 0) {
-                _this3._pagesCapability.resolve();
+                _this4._pagesCapability.resolve();
               }
             });
           };
@@ -12621,14 +12633,14 @@ var BaseViewer = /*#__PURE__*/function () {
           }
         });
 
-        _this3.hidePagesDependingOnpageViewMode();
+        _this4.hidePagesDependingOnpageViewMode();
 
-        _this3.eventBus.dispatch("pagesinit", {
-          source: _this3
+        _this4.eventBus.dispatch("pagesinit", {
+          source: _this4
         });
 
-        if (_this3.defaultRenderingQueue) {
-          _this3.update();
+        if (_this4.defaultRenderingQueue) {
+          _this4.update();
         }
       })["catch"](function (reason) {
         console.error("Unable to initialize viewer", reason);
@@ -12844,7 +12856,7 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "scrollPageIntoView",
     value: function scrollPageIntoView(_ref3) {
-      var _this4 = this;
+      var _this5 = this;
 
       var pageNumber = _ref3.pageNumber,
           _ref3$destArray = _ref3.destArray,
@@ -12942,10 +12954,10 @@ var BaseViewer = /*#__PURE__*/function () {
       }
 
       this._ensurePdfPageLoaded(pageView).then(function () {
-        _this4.renderingQueue.renderView(pageView);
+        _this5.renderingQueue.renderView(pageView);
 
-        if (_this4.currentPageNumber !== pageNumber) {
-          _this4.currentPageNumber = pageNumber;
+        if (_this5.currentPageNumber !== pageNumber) {
+          _this5.currentPageNumber = pageNumber;
         }
       });
 
@@ -13111,7 +13123,7 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "_ensurePdfPageLoaded",
     value: function _ensurePdfPageLoaded(pageView) {
-      var _this5 = this;
+      var _this6 = this;
 
       if (pageView.pdfPage) {
         return Promise.resolve(pageView.pdfPage);
@@ -13126,13 +13138,13 @@ var BaseViewer = /*#__PURE__*/function () {
           pageView.setPdfPage(pdfPage);
         }
 
-        _this5._pagesRequests["delete"](pageView);
+        _this6._pagesRequests["delete"](pageView);
 
         return pdfPage;
       })["catch"](function (reason) {
         console.error("Unable to get page for page view", reason);
 
-        _this5._pagesRequests["delete"](pageView);
+        _this6._pagesRequests["delete"](pageView);
       });
 
       this._pagesRequests.set(pageView, promise);
@@ -13142,7 +13154,7 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "forceRendering",
     value: function forceRendering(currentlyVisiblePages) {
-      var _this6 = this;
+      var _this7 = this;
 
       var visiblePages = currentlyVisiblePages || this._getVisiblePages();
 
@@ -13151,7 +13163,7 @@ var BaseViewer = /*#__PURE__*/function () {
 
       if (pageView) {
         this._ensurePdfPageLoaded(pageView).then(function () {
-          _this6.renderingQueue.renderView(pageView);
+          _this7.renderingQueue.renderView(pageView);
         });
 
         return true;
@@ -13307,8 +13319,6 @@ var BaseViewer = /*#__PURE__*/function () {
       return this._currentPageNumber;
     },
     set: function set(val) {
-      var _this7 = this;
-
       if (!Number.isInteger(val)) {
         throw new Error("Invalid page number.");
       }
@@ -13319,16 +13329,6 @@ var BaseViewer = /*#__PURE__*/function () {
 
       if (!this._setCurrentPageNumber(val, true)) {
         console.error("".concat(this._name, ".currentPageNumber: \"").concat(val, "\" is not a valid page."));
-      }
-
-      this.hidePagesDependingOnpageViewMode();
-
-      if (this.pageViewMode === "single") {
-        var pageView = this._pages[this.currentPageNumber - 1];
-
-        this._ensurePdfPageLoaded(pageView).then(function () {
-          _this7.renderingQueue.renderView(pageView);
-        });
       }
     }
   }, {
