@@ -38,7 +38,6 @@ export class PdfSidebarComponent {
       if (!b.hidden) {
         visible++;
       }
-      index++;
     }
     this.hideSidebarToolbar = visible <= 1;
     this.ref.markForCheck();
