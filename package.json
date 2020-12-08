@@ -50,7 +50,7 @@
     "npm-registry-fetch": "^9.0.0",
     "properties-reader": "2.1.1",
     "serialize-javascript": "^5.0.1",
-    "ts-node": "^9.1.0",
+    "ts-node": "^9.1.1",
     "tsickle": "0.38.0",
     "tslib": "^1.14.1",
     "tslint": "^6.1.3",
