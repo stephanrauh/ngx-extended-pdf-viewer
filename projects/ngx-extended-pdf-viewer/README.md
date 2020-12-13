@@ -29,6 +29,8 @@ Version 6.0 adds a warning if you're displaying a signature (because the PDF vie
 
 
 ## Potentially breaking changes
+Version 7.1. is a pure bug-fix release. It's extremely unlikely, but it might cause difficulties if the PDF viewer is destroyed and immediately re-created. Should you run into this, adding a delay of a single millisecond fixes this (or even a `setTimeout()` without the delay parameter). 
+
 Version 7.0 fixes several bugs concerning `[(zoom)]`. Now `(zoom)` also emits the text values ("page-fit", "auto", "page-width", "page-actual"). When you open
 a new PDF document, the old value of `[zoom]` is used for the new document. This was always the intended behavior, but it's possible it breaks applications relying
 on the bugs.
