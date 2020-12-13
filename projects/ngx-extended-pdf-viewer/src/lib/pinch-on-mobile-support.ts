@@ -42,6 +42,7 @@ export class PinchOnMobileSupport {
 
   private onViewerTouchMove(event: TouchEvent): void {
     const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
+    const PDFViewerApplication: any = (window as any).PDFViewerApplication;
 
     if (this.initialPinchDistance <= 0 || event.touches.length !== 2) {
       return;
@@ -57,15 +58,17 @@ export class PinchOnMobileSupport {
     if (!minZoom) {
       minZoom = 0.1;
     }
-    if (this.pinchScale < minZoom) {
-      this.pinchScale = minZoom;
+
+    const currentZoom = PDFViewerApplication.pdfViewer.currentScale | 1;
+    if (currentZoom * this.pinchScale < minZoom) {
+      this.pinchScale = minZoom / currentZoom;
     }
     let maxZoom = Number(PDFViewerApplicationOptions.get('maxZoom'));
     if (!maxZoom) {
       maxZoom = 10;
     }
-    if (this.pinchScale > maxZoom) {
-      this.pinchScale = maxZoom;
+    if (currentZoom * this.pinchScale > maxZoom) {
+      this.pinchScale = maxZoom / currentZoom;
     }
     this.viewer.style.transform = `scale(${this.pinchScale})`;
     this.viewer.style.transformOrigin = `${originX}px ${originY}px`;
