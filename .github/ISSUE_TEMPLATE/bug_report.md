@@ -9,7 +9,7 @@ assignees: ''
 
 **Check this first**
 The project is a wrapper around Mozilla's PDF viewer, so maybe your bug is caused by the base library. Please check this first by answering these three questions:
-- Does the bug also happen on https://mozilla.github.io/pdf.js/web/viewer.htm? (If so, please open the issue at Mozilla's bugtracker).
+- Does the bug also happen on https://mozilla.github.io/pdf.js/web/viewer.html? (If so, please open the issue at Mozilla's bugtracker).
 - Does the bug also happen on https://pdfviewer.net/simple?
 - Can you write a reproducer based on this template project? https://github.com/stephanrauh/ngx-extended-pdf-viewer-issues/tree/master/template
 
