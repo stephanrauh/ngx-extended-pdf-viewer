@@ -677,6 +677,14 @@ export class PDFDocumentProxy {
      */
     getJavaScript(): Promise<Array<string> | null>;
     /**
+     * @returns {Promise<Object | null>} A promise that is resolved with
+     *   an {Object} with the JavaScript actions:
+     *     - from the name tree (like getJavaScript);
+     *     - from A or AA entries in the catalog dictionary.
+     *   , or `null` if no JavaScript exists.
+     */
+    getJSActions(): Promise<Object | null>;
+    /**
      * @typedef {Object} OutlineNode
      * @property {string} title
      * @property {boolean} bold
@@ -734,6 +742,23 @@ export class PDFDocumentProxy {
         metadata: Metadata;
     }>;
     /**
+     * @typedef {Object} MarkInfo
+     * Properties correspond to Table 321 of the PDF 32000-1:2008 spec.
+     * @property {boolean} Marked
+     * @property {boolean} UserProperties
+     * @property {boolean} Suspects
+     */
+    /**
+     * @returns {Promise<MarkInfo | null>} A promise that is resolved with
+     *   a {MarkInfo} object that contains the MarkInfo flags for the PDF
+     *   document, or `null` when no MarkInfo values are present in the PDF file.
+     */
+    getMarkInfo(): Promise<{
+        Marked: boolean;
+        UserProperties: boolean;
+        Suspects: boolean;
+    } | null>;
+    /**
      * @returns {Promise<TypedArray>} A promise that is resolved with a
      *   {TypedArray} that has the raw data from the PDF.
      */
@@ -789,6 +814,17 @@ export class PDFDocumentProxy {
      *   or `null` when no field data is present in the PDF file.
      */
     getFieldObjects(): Promise<Array<Object> | null>;
+    /**
+     * @returns {Promise<boolean>} A promise that is resolved with `true`
+     *   if some /AcroForm fields have JavaScript actions.
+     */
+    hasJSActions(): Promise<boolean>;
+    /**
+     * @returns {Promise<Array<string> | null>} A promise that is resolved with an
+     *   {Array<string>} containing IDs of annotations that have a calculation
+     *   action, or `null` when no such annotations are present in the PDF file.
+     */
+    getCalculationOrderIds(): Promise<Array<string> | null>;
 }
 /**
  * Page getViewport parameters.
@@ -943,6 +979,13 @@ export class PDFPageProxy {
     getAnnotations({ intent }?: GetAnnotationsParameters): Promise<Array<any>>;
     annotationsPromise: any;
     annotationsIntent: string | undefined;
+    /**
+     * @param {GetAnnotationsParameters} params - Annotation parameters.
+     * @returns {Promise<Array<any>>} A promise that is resolved with an
+     *   {Array} of the annotation objects.
+     */
+    getJSActions(): Promise<Array<any>>;
+    _jsActionsPromise: any;
     /**
      * Begins the process of rendering a page to the desired context.
      *

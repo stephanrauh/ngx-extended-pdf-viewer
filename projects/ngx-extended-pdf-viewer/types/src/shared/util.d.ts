@@ -159,11 +159,6 @@ export namespace AnnotationActionEventType {
     const F: string;
     const V: string;
     const C: string;
-    const WC: string;
-    const WS: string;
-    const DS: string;
-    const WP: string;
-    const DP: string;
 }
 export namespace AnnotationBorderStyleType {
     const SOLID: number;
@@ -279,6 +274,13 @@ export namespace CMapCompressionType {
     export const BINARY: number;
     export const STREAM: number;
 }
+export namespace DocumentActionEventType {
+    const WC: string;
+    const WS: string;
+    const DS: string;
+    const WP: string;
+    const DP: string;
+}
 declare const AbortException_base: any;
 /**
  * Error used to indicate task cancellation.
@@ -293,6 +295,11 @@ export class InvalidPDFException extends InvalidPDFException_base {
 declare const MissingPDFException_base: any;
 export class MissingPDFException extends MissingPDFException_base {
     [x: string]: any;
+}
+export namespace PageActionEventType {
+    export const O: string;
+    const C_1: string;
+    export { C_1 as C };
 }
 declare const PasswordException_base: any;
 export class PasswordException extends PasswordException_base {
@@ -354,7 +361,7 @@ export class UnknownErrorException extends UnknownErrorException_base {
     details: any;
 }
 export class Util {
-    static makeCssRgb(r: any, g: any, b: any): string;
+    static makeHexColor(r: any, g: any, b: any): string;
     static transform(m1: any, m2: any): any[];
     static applyTransform(p: any, m: any): any[];
     static applyInverseTransform(p: any, m: any): number[];
@@ -423,6 +430,8 @@ export function isSameOrigin(baseUrl: any, otherUrl: any): boolean;
  * @returns Either a valid {URL}, or `null` otherwise.
  */
 export function createValidAbsoluteUrl(url: URL | string, baseUrl: URL | string): URL | null;
+export function objectSize(obj: any): number;
+export function objectFromEntries(iterable: any): any;
 export namespace IsLittleEndianCached { }
 export namespace IsEvalSupportedCached { }
 /**

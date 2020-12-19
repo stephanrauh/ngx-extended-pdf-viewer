@@ -217,9 +217,10 @@ export function isFetchSupported(): boolean;
 export function isValidFetchUrl(url: any, baseUrl: any): boolean;
 /**
  * @param {string} src
+ * @param {boolean} [removeScriptElement]
  * @returns {Promise<void>}
  */
-export function loadScript(src: string): Promise<void>;
+export function loadScript(src: string, removeScriptElement?: boolean | undefined): Promise<void>;
 export function deprecated(details: any): void;
 export class PDFDateString {
     /**

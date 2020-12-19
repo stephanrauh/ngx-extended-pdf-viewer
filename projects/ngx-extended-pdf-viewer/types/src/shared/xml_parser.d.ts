@@ -5,7 +5,7 @@ export class SimpleDOMNode {
     get firstChild(): any;
     get nextSibling(): any;
     get textContent(): any;
-    hasChildNodes(): boolean;
+    hasChildNodes(): any;
     /**
      * Search a node in the tree with the given path
      * foo.bar[nnn], i.e. find the nnn-th node named

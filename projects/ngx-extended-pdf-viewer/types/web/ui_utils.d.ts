@@ -1,3 +1,31 @@
+export type GetVisibleElementsParameters = {
+    /**
+     * - A container that can possibly scroll.
+     */
+    scrollEl: HTMLElement;
+    /**
+     * - Objects with a `div` property that contains an
+     * HTMLElement, which should all be descendants of `scrollEl` satisfying the
+     * relevant layout assumptions.
+     */
+    views: any[];
+    /**
+     * - If `true`, the returned elements are
+     * sorted in descending order of the percent of their padding box that is
+     * visible. The default value is `false`.
+     */
+    sortByVisibility: boolean;
+    /**
+     * - If `true`, the elements are assumed to be
+     * laid out horizontally instead of vertically. The default value is `false`.
+     */
+    horizontal: boolean;
+    /**
+     * - If `true`, the `scrollEl` container is assumed to
+     * be in right-to-left mode. The default value is `false`.
+     */
+    rtl: boolean;
+};
 export type WaitOnEventOrTimeoutParameters = {
     /**
      * - The event target, can for example be:
@@ -145,6 +173,20 @@ export function parseQueryString(query: any): any;
  */
 export function backtrackBeforeAllVisibleElements(index: number, views: any[], top: number): number;
 /**
+ * @typedef {Object} GetVisibleElementsParameters
+ * @property {HTMLElement} scrollEl - A container that can possibly scroll.
+ * @property {Array} views - Objects with a `div` property that contains an
+ *   HTMLElement, which should all be descendants of `scrollEl` satisfying the
+ *   relevant layout assumptions.
+ * @property {boolean} sortByVisibility - If `true`, the returned elements are
+ *   sorted in descending order of the percent of their padding box that is
+ *   visible. The default value is `false`.
+ * @property {boolean} horizontal - If `true`, the elements are assumed to be
+ *   laid out horizontally instead of vertically. The default value is `false`.
+ * @property {boolean} rtl - If `true`, the `scrollEl` container is assumed to
+ *   be in right-to-left mode. The default value is `false`.
+ */
+/**
  * Generic helper to find out what elements are visible within a scroll pane.
  *
  * Well, pretty generic. There are some assumptions placed on the elements
@@ -161,17 +203,10 @@ export function backtrackBeforeAllVisibleElements(index: number, views: any[], t
  * rendering canvas. Earlier and later refer to index in `views`, not page
  * layout.)
  *
- * @param scrollEl {HTMLElement} - a container that can possibly scroll
- * @param views {Array} - objects with a `div` property that contains an
- *   HTMLElement, which should all be descendents of `scrollEl` satisfying the
- *   above layout assumptions
- * @param sortByVisibility {boolean} - if true, the returned elements are sorted
- *   in descending order of the percent of their padding box that is visible
- * @param horizontal {boolean} - if true, the elements are assumed to be laid
- *   out horizontally instead of vertically
+ * @param {GetVisibleElementsParameters}
  * @returns {Object} `{ first, last, views: [{ id, x, y, view, percent }] }`
  */
-export function getVisibleElements(scrollEl: HTMLElement, views: any[], sortByVisibility?: boolean, horizontal?: boolean): Object;
+export function getVisibleElements({ scrollEl, views, sortByVisibility, horizontal, rtl, }: GetVisibleElementsParameters): Object;
 export function roundToDivide(x: any, div: any): any;
 /**
  * Gets the size of the specified page, converted from PDF units to inches.

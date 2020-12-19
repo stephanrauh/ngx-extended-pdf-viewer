@@ -20,11 +20,6 @@ export type PDFPageViewOptions = {
      */
     defaultViewport: any;
     /**
-     * - Storage for annotation
-     * data in forms. The default value is `null`.
-     */
-    annotationStorage?: any;
-    /**
      * -
      * A promise that is resolved with an {@link OptionalContentConfig} instance.
      * The default value is `null`.
@@ -77,6 +72,11 @@ export type PDFPageViewOptions = {
      * - Localization service.
      */
     l10n: any;
+    /**
+     * - Enable embedded script execution.
+     * The default value is `false`.
+     */
+    enableScripting?: boolean | undefined;
 };
 /**
  * @implements {IRenderableView}
@@ -94,7 +94,6 @@ export class PDFPageView {
     scale: number;
     viewport: any;
     pdfPageRotate: any;
-    _annotationStorage: any;
     _optionalContentConfigPromise: Promise<any> | null;
     hasRestrictedScaling: boolean;
     textLayerMode: number | undefined;
@@ -109,6 +108,7 @@ export class PDFPageView {
     renderer: string;
     enableWebGL: boolean;
     l10n: any;
+    enableScripting: boolean;
     paintTask: {
         promise: any;
         onRenderContinue(cont: any): void;

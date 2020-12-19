@@ -14,6 +14,9 @@ export type AnnotationLayerBuilderOptions = {
      * - Localization service.
      */
     l10n: any;
+    enableScripting?: boolean | undefined;
+    hasJSActionsPromise?: Promise<boolean> | undefined;
+    mouseState?: Object | undefined;
 };
 /**
  * @typedef {Object} AnnotationLayerBuilderOptions
@@ -26,12 +29,15 @@ export type AnnotationLayerBuilderOptions = {
  * @property {IPDFLinkService} linkService
  * @property {DownloadManager} downloadManager
  * @property {IL10n} l10n - Localization service.
+ * @property {boolean} [enableScripting]
+ * @property {Promise<boolean>} [hasJSActionsPromise]
+ * @property {Object} [mouseState]
  */
 export class AnnotationLayerBuilder {
     /**
      * @param {AnnotationLayerBuilderOptions} options
      */
-    constructor({ pageDiv, pdfPage, linkService, downloadManager, annotationStorage, imageResourcesPath, renderInteractiveForms, l10n, }: AnnotationLayerBuilderOptions);
+    constructor({ pageDiv, pdfPage, linkService, downloadManager, annotationStorage, imageResourcesPath, renderInteractiveForms, l10n, enableScripting, hasJSActionsPromise, mouseState, }: AnnotationLayerBuilderOptions);
     pageDiv: HTMLDivElement;
     pdfPage: any;
     linkService: any;
@@ -40,6 +46,9 @@ export class AnnotationLayerBuilder {
     renderInteractiveForms: boolean;
     l10n: any;
     annotationStorage: any;
+    enableScripting: boolean;
+    _hasJSActionsPromise: Promise<boolean>;
+    _mouseState: Object;
     div: HTMLDivElement | null;
     _cancelled: boolean;
     /**
@@ -64,7 +73,10 @@ export class DefaultAnnotationLayerFactory {
      *   for annotation icons. Include trailing slash.
      * @param {boolean} renderInteractiveForms
      * @param {IL10n} l10n
+     * @param {boolean} [enableScripting]
+     * @param {Promise<boolean>} [hasJSActionsPromise]
+     * @param {Object} [mouseState]
      * @returns {AnnotationLayerBuilder}
      */
-    createAnnotationLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any, annotationStorage?: any, imageResourcesPath?: string | undefined, renderInteractiveForms?: boolean, l10n?: any): AnnotationLayerBuilder;
+    createAnnotationLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any, annotationStorage?: any, imageResourcesPath?: string | undefined, renderInteractiveForms?: boolean, l10n?: any, enableScripting?: boolean | undefined, hasJSActionsPromise?: Promise<boolean> | undefined, mouseState?: Object | undefined): AnnotationLayerBuilder;
 }

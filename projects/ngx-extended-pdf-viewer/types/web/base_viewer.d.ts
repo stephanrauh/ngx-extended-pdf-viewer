@@ -80,6 +80,16 @@ export type PDFViewerOptions = {
      * - Localization service.
      */
     l10n: any;
+    /**
+     * - Enable embedded script execution.
+     * The default value is `false`.
+     */
+    enableScripting?: boolean | undefined;
+    /**
+     * - The mouse button state. The default value
+     * is `null`.
+     */
+    mouseState?: Object | undefined;
 };
 /**
  * Simple viewer control to display PDF content/pages.
@@ -109,6 +119,8 @@ export class BaseViewer {
     useOnlyCssZoom: boolean;
     maxCanvasPixels: number | undefined;
     l10n: any;
+    enableScripting: boolean;
+    _mouseState: Object | null;
     defaultRenderingQueue: boolean;
     renderingQueue: PDFRenderingQueue | undefined;
     scroll: {
@@ -219,6 +231,7 @@ export class BaseViewer {
     _pagesCapability: any;
     _scrollMode: any;
     _spreadMode: any;
+    _pageOpenPendingSet: Set<any> | null | undefined;
     _scrollUpdate(): void;
     _scrollIntoView({ pageDiv, pageSpot, pageNumber }: {
         pageDiv: any;
@@ -226,12 +239,22 @@ export class BaseViewer {
         pageNumber?: any;
     }): void;
     _setScaleUpdatePages(newScale: any, newValue: any, noScroll?: boolean, preset?: boolean): void;
+    /**
+     * @private
+     */
+    private get _pageWidthScaleFactor();
     _setScale(value: any, noScroll?: boolean): void;
     /**
      * Refreshes page view: scrolls to the current page and updates the scale.
      * @private
      */
     private _resetCurrentPageView;
+    /**
+     * @param {string} label - The page label.
+     * @returns {number|null} The page number corresponding to the page label,
+     *   or `null` when no page labels exist and/or the input is invalid.
+     */
+    pageLabelToPageNumber(label: string): number | null;
     /**
      * @typedef ScrollPageIntoViewParameters
      * @property {number} pageNumber - The page number.
@@ -273,6 +296,7 @@ export class BaseViewer {
     containsElement(element: any): boolean;
     focus(): void;
     get _isScrollModeHorizontal(): boolean;
+    get _isContainerRtl(): boolean;
     get isInPresentationMode(): boolean;
     get isChangingPresentationMode(): boolean;
     get isHorizontalScrollbarEnabled(): boolean;
@@ -312,6 +336,10 @@ export class BaseViewer {
      * @param {number} pageNumber
      */
     isPageVisible(pageNumber: number): any;
+    /**
+     * @param {number} pageNumber
+     */
+    isPageCached(pageNumber: number): boolean;
     cleanup(): void;
     /**
      * @private
@@ -336,13 +364,18 @@ export class BaseViewer {
     /**
      * @param {HTMLDivElement} pageDiv
      * @param {PDFPage} pdfPage
+     * @param {AnnotationStorage} [annotationStorage] - Storage for annotation
+     *   data in forms.
      * @param {string} [imageResourcesPath] - Path for image resources, mainly
      *   for annotation icons. Include trailing slash.
      * @param {boolean} renderInteractiveForms
      * @param {IL10n} l10n
+     * @param {boolean} [enableScripting]
+     * @param {Promise<boolean>} [hasJSActionsPromise]
+     * @param {Object} [mouseState]
      * @returns {AnnotationLayerBuilder}
      */
-    createAnnotationLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any, annotationStorage?: any, imageResourcesPath?: string | undefined, renderInteractiveForms?: boolean, l10n?: any): AnnotationLayerBuilder;
+    createAnnotationLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any, annotationStorage?: any, imageResourcesPath?: string | undefined, renderInteractiveForms?: boolean, l10n?: any, enableScripting?: boolean | undefined, hasJSActionsPromise?: Promise<boolean> | undefined, mouseState?: Object | undefined): AnnotationLayerBuilder;
     /**
      * @type {boolean} Whether all pages of the PDF document have identical
      *   widths and heights.
@@ -384,6 +417,10 @@ export class BaseViewer {
      */
     get spreadMode(): number;
     _updateSpreadMode(pageNumber?: any): void;
+    /**
+     * @private
+     */
+    private _initializeScriptingEvents;
 }
 import { PDFRenderingQueue } from "./pdf_rendering_queue.js";
 /**
@@ -418,6 +455,10 @@ import { PDFRenderingQueue } from "./pdf_rendering_queue.js";
  *   total pixels, i.e. width * height. Use -1 for no limit. The default value
  *   is 4096 * 4096 (16 mega-pixels).
  * @property {IL10n} l10n - Localization service.
+ * @property {boolean} [enableScripting] - Enable embedded script execution.
+ *   The default value is `false`.
+ * @property {Object} [mouseState] - The mouse button state. The default value
+ *   is `null`.
  */
 declare function PDFPageViewBuffer(size: any): void;
 declare class PDFPageViewBuffer {
@@ -453,6 +494,10 @@ declare class PDFPageViewBuffer {
      *   total pixels, i.e. width * height. Use -1 for no limit. The default value
      *   is 4096 * 4096 (16 mega-pixels).
      * @property {IL10n} l10n - Localization service.
+     * @property {boolean} [enableScripting] - Enable embedded script execution.
+     *   The default value is `false`.
+     * @property {Object} [mouseState] - The mouse button state. The default value
+     *   is `null`.
      */
     constructor(size: any);
     push: (view: any) => void;
@@ -464,6 +509,7 @@ declare class PDFPageViewBuffer {
      * than newSize, some of those pages will be destroyed anyway.
      */
     resize: (newSize: any, pagesToKeep: any) => void;
+    has: (view: any) => boolean;
 }
 import { TextLayerBuilder } from "./text_layer_builder.js";
 import { AnnotationLayerBuilder } from "./annotation_layer_builder.js";

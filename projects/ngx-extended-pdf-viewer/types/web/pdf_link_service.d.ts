@@ -77,9 +77,25 @@ export class PDFLinkService {
      */
     get rotation(): number;
     /**
+     * @deprecated
+     */
+    navigateTo(dest: any): void;
+    /**
+     * @private
+     */
+    private _goToDestinationHelper;
+    /**
+     * This method will, when available, also update the browser history.
+     *
      * @param {string|Array} dest - The named, or explicit, PDF destination.
      */
-    navigateTo(dest: string | any[]): void;
+    goToDestination(dest: string | any[]): Promise<void>;
+    /**
+     * This method will, when available, also update the browser history.
+     *
+     * @param {number|string} val - The page number, or page label.
+     */
+    goToPage(val: number | string): void;
     /**
      * @param {string|Array} dest - The PDF destination object.
      * @returns {string} The hyperlink to the PDF object.
@@ -88,7 +104,7 @@ export class PDFLinkService {
     /**
      * Prefix the full url on anchor links to make sure that links are resolved
      * relative to the current URL instead of the one defined in <base href>.
-     * @param {string} anchor The anchor hash, including the #.
+     * @param {string} anchor - The anchor hash, including the #.
      * @returns {string} The hyperlink to the PDF object.
      */
     getAnchorUrl(anchor: string): string;
@@ -105,11 +121,18 @@ export class PDFLinkService {
      * @param {Object} pageRef - reference to the page.
      */
     cachePageRef(pageNum: number, pageRef: Object): void;
-    _cachedPageNumber(pageRef: any): any;
+    /**
+     * @private
+     */
+    private _cachedPageNumber;
     /**
      * @param {number} pageNumber
      */
     isPageVisible(pageNumber: number): any;
+    /**
+     * @param {number} pageNumber
+     */
+    isPageCached(pageNumber: number): any;
 }
 /**
  * @implements {IPDFLinkService}
@@ -140,9 +163,13 @@ export class SimpleLinkService {
      */
     get rotation(): number;
     /**
-     * @param dest - The PDF destination object.
+     * @param {string|Array} dest - The named, or explicit, PDF destination.
      */
-    navigateTo(dest: any): void;
+    goToDestination(dest: string | any[]): Promise<void>;
+    /**
+     * @param {number|string} val - The page number, or page label.
+     */
+    goToPage(val: number | string): void;
     /**
      * @param dest - The PDF destination object.
      * @returns {string} The hyperlink to the PDF object.
@@ -170,4 +197,8 @@ export class SimpleLinkService {
      * @param {number} pageNumber
      */
     isPageVisible(pageNumber: number): boolean;
+    /**
+     * @param {number} pageNumber
+     */
+    isPageCached(pageNumber: number): boolean;
 }
