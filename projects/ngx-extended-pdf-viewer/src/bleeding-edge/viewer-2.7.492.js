@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.7.491';
-const pdfjsBuild = 'e717e21a7';
+const pdfjsVersion = '2.7.492';
+const pdfjsBuild = '1e8091e29';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -10430,7 +10430,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.7.491';
+    const viewerVersion = '2.7.492';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -11001,8 +11001,14 @@ class BaseViewer {
       }
 
       const noPadding = this.isInPresentationMode || this.removePageBorders;
+      let verticalPadding = _ui_utils.VERTICAL_PADDING;
+
+      if (this.pageViewMode === 'single') {
+        verticalPadding += 15;
+      }
+
       let hPadding = noPadding ? 0 : _ui_utils.SCROLLBAR_PADDING;
-      let vPadding = noPadding ? 0 : _ui_utils.VERTICAL_PADDING;
+      let vPadding = noPadding ? 0 : verticalPadding;
 
       if (!noPadding && this._isScrollModeHorizontal) {
         [hPadding, vPadding] = [vPadding, hPadding];
