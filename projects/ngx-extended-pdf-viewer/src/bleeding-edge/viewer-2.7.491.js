@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.7.490';
-const pdfjsBuild = '119262476';
+const pdfjsVersion = '2.7.491';
+const pdfjsBuild = 'e717e21a7';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -2273,7 +2273,7 @@ const PDFViewerApplication = {
       id: "doc",
       name: "WillPrint"
     });
-    window.print();
+    window.printPDF();
     this._scriptingInstance?.scripting.dispatchEventInSandbox({
       id: "doc",
       name: "DidPrint"
@@ -10430,7 +10430,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.7.490';
+    const viewerVersion = '2.7.491';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);

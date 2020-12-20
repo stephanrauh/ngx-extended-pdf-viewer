@@ -239,3 +239,4 @@
 - 7.0.0-beta.6 #567 support Acroform radio buttons and multine fields; improved support for Acroform checkboxes; #542 repair forward page navigation when `pageMode!="single"`
 - 7.0.0 #573 don't jump to the top of the page when zooming; #579 don't hide the sidebar toolbar if the table of contents should visible; #492 and #495 make sure the current page is rendered as early as possible
 - 7.1.0 #715 fixed a memory leak that sometime preventing printing more than once; #583 pinch gestures now respect `[minZoom]` and `[maxZoom]` on mobile devices
+- 7.1.1 #586 now the bleeding-edge branch prints again
