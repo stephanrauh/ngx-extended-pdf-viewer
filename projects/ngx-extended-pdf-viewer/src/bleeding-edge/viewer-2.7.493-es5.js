@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-var pdfjsVersion = '2.7.492';
-var pdfjsBuild = '1e8091e29';
+var pdfjsVersion = '2.7.493';
+var pdfjsBuild = '3dc83c39c';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -13098,7 +13098,7 @@ var BaseViewer = /*#__PURE__*/function () {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    var viewerVersion = '2.7.492';
+    var viewerVersion = '2.7.493';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error("The API version \"".concat(_pdfjsLib.version, "\" does not match the Viewer version \"").concat(viewerVersion, "\"."));
@@ -13559,7 +13559,7 @@ var BaseViewer = /*#__PURE__*/function () {
         }
 
         var hPadding = noPadding ? 0 : _ui_utils.SCROLLBAR_PADDING;
-        var vPadding = noPadding ? 0 : verticalPadding;
+        var vPadding = noPadding ? this.pageViewMode === 'single' ? 10 : 0 : verticalPadding;
 
         if (!noPadding && this._isScrollModeHorizontal) {
           var _ref2 = [vPadding, hPadding];

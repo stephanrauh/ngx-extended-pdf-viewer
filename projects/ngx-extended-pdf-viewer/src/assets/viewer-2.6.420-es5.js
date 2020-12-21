@@ -12805,7 +12805,7 @@ var BaseViewer = /*#__PURE__*/function () {
         }
 
         var hPadding = noPadding ? 0 : _ui_utils.SCROLLBAR_PADDING;
-        var vPadding = noPadding ? 0 : verticalPadding;
+        var vPadding = noPadding ? this.pageViewMode === 'single' ? 10 : 0 : verticalPadding;
 
         if (!noPadding && this._isScrollModeHorizontal) {
           var _ref2 = [vPadding, hPadding];

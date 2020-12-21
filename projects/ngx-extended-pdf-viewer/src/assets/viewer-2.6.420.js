@@ -10596,7 +10596,7 @@ class BaseViewer {
       }
 
       let hPadding = noPadding ? 0 : _ui_utils.SCROLLBAR_PADDING;
-      let vPadding = noPadding ? 0 : verticalPadding;
+      let vPadding = noPadding ? this.pageViewMode === 'single' ? 10 : 0 : verticalPadding;
 
       if (!noPadding && this._isScrollModeHorizontal) {
         [hPadding, vPadding] = [vPadding, hPadding];
