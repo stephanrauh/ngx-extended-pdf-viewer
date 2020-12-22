@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.7.493';
-const pdfjsBuild = '3dc83c39c';
+const pdfjsVersion = '2.7.511';
+const pdfjsBuild = 'c8f77e912';
 
 /***/ }),
 /* 1 */
@@ -181,7 +181,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.7.493';
+    const workerVersion = '2.7.511';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -20190,10 +20190,11 @@ class WidgetAnnotation extends Annotation {
     });
     data.defaultFieldValue = this._decodeFormValue(defaultFieldValue);
     data.alternativeText = (0, _util.stringToPDFString)(dict.get("TU") || "");
-    data.defaultAppearance = (0, _core_utils.getInheritableProperty)({
+    const defaultAppearance = (0, _core_utils.getInheritableProperty)({
       dict,
       key: "DA"
     }) || params.acroForm.get("DA") || "";
+    data.defaultAppearance = (0, _util.isString)(defaultAppearance) ? defaultAppearance : "";
     const fieldType = (0, _core_utils.getInheritableProperty)({
       dict,
       key: "FT"
@@ -20410,6 +20411,11 @@ class WidgetAnnotation extends Annotation {
     const hPadding = defaultPadding;
     const totalHeight = this.data.rect[3] - this.data.rect[1];
     const totalWidth = this.data.rect[2] - this.data.rect[0];
+
+    if (!this.data.defaultAppearance) {
+      this.data.defaultAppearance = "/Helvetica 0 Tf 0 g";
+    }
+
     const fontInfo = await this._getFontData(evaluator, task);
     const [font, fontName] = fontInfo;
 

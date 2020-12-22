@@ -44,7 +44,7 @@ import { PdfThumbnailDrawnEvent } from './events/pdf-thumbnail-drawn-event';
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 import { ScrollModeChangedEvent, ScrollModeType } from './options/pdf-viewer';
 import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
-import { addLinkAttributes } from '../../types/src/display/display_utils';
+import { ProgressBarEvent } from './events/progress-bar-event';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 
@@ -117,6 +117,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public pageViewMode: 'single' | 'book' | 'multiple' | 'infinite-scroll' = 'multiple';
+
+  @Output()
+  public progress = new EventEmitter<ProgressBarEvent>();
 
   @ViewChild('pdfSecondaryToolbarComponent')
   private secondaryToolbarComponent: PdfSecondaryToolbarComponent;
@@ -1042,6 +1045,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
     PDFViewerApplication.eventBus.on('scrollmodechanged', (x: ScrollModeChangedEvent) => {
       this.scrollModeChange.emit(x.mode);
+    });
+    PDFViewerApplication.eventBus.on('progress', (x: ProgressBarEvent) => {
+      this.progress.emit(x);
     });
 
     PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {

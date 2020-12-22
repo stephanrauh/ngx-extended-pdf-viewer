@@ -8,6 +8,9 @@
     },
     {
       "path": "../.."
+    },
+    {
+      "path": "../../../ng2-pdf-viewer"
     }
   ],
   "settings": {}

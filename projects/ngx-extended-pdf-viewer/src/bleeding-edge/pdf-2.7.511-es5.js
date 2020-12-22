@@ -242,8 +242,8 @@ var _text_layer = __w_pdfjs_require__(150);
 
 var _svg = __w_pdfjs_require__(151);
 
-var pdfjsVersion = '2.7.493';
-var pdfjsBuild = '3dc83c39c';
+var pdfjsVersion = '2.7.511';
+var pdfjsBuild = 'c8f77e912';
 {
   var PDFNetworkStream = __w_pdfjs_require__(152).PDFNetworkStream;
 
@@ -11072,7 +11072,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId: docId,
-    apiVersion: '2.7.493',
+    apiVersion: '2.7.511',
     source: {
       data: source.data,
       url: source.url,
@@ -12603,6 +12603,16 @@ var WorkerTransport = /*#__PURE__*/function () {
       this.pagePromises.length = 0;
       var terminated = this.messageHandler.sendWithPromise("Terminate", null);
       waitOn.push(terminated);
+
+      if (this.loadingTaskSettled) {
+        var annotationStorageResetModified = this.loadingTask.promise.then(function (pdfDocument) {
+          if (pdfDocument.hasOwnProperty("annotationStorage")) {
+            pdfDocument.annotationStorage.resetModified();
+          }
+        })["catch"](function () {});
+        waitOn.push(annotationStorageResetModified);
+      }
+
       Promise.all(waitOn).then(function () {
         _this11.commonObjs.clear();
 
@@ -13182,6 +13192,11 @@ var WorkerTransport = /*#__PURE__*/function () {
       });
     }
   }, {
+    key: "loadingTaskSettled",
+    get: function get() {
+      return this.loadingTask._capability.settled;
+    }
+  }, {
     key: "loadingParams",
     get: function get() {
       var params = this._params;
@@ -13497,9 +13512,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.7.493';
+var version = '2.7.511';
 exports.version = version;
-var build = '3dc83c39c';
+var build = 'c8f77e912';
 exports.build = build;
 
 /***/ }),

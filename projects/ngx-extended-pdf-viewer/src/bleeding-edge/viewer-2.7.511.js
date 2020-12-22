@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.7.493';
-const pdfjsBuild = '3dc83c39c';
+const pdfjsVersion = '2.7.511';
+const pdfjsBuild = 'c8f77e912';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -1293,6 +1293,13 @@ const PDFViewerApplication = {
       total
     }) => {
       this.progress(loaded / total);
+      this.eventBus.dispatch("progress", {
+        source: this,
+        type: "load",
+        total,
+        loaded,
+        percent: 100 * loaded / total
+      });
     };
 
     loadingTask.onUnsupportedFeature = this.fallback.bind(this);
@@ -1397,6 +1404,14 @@ const PDFViewerApplication = {
     }).finally(() => {
       this._saveInProgress = false;
     });
+  },
+
+  downloadOrSave(options) {
+    if (this.pdfDocument?.annotationStorage.size > 0) {
+      this.save(options);
+    } else {
+      this.download(options);
+    }
   },
 
   _delayedFallback(featureId) {
@@ -1552,16 +1567,6 @@ const PDFViewerApplication = {
     baseDocumentUrl = null;
     this.pdfLinkService.setDocument(pdfDocument, baseDocumentUrl);
     this.pdfDocumentProperties.setDocument(pdfDocument, this.url);
-    const annotationStorage = pdfDocument.annotationStorage;
-
-    annotationStorage.onSetModified = function () {
-      window.addEventListener("beforeunload", beforeUnload);
-    };
-
-    annotationStorage.onResetModified = function () {
-      window.removeEventListener("beforeunload", beforeUnload);
-    };
-
     const pdfViewer = this.pdfViewer;
     pdfViewer.setDocument(pdfDocument);
     const {
@@ -1585,6 +1590,9 @@ const PDFViewerApplication = {
     });
     firstPagePromise.then(pdfPage => {
       this.loadingBar.setWidth(this.appConfig.viewerContainer);
+
+      this._initializeAnnotationStorageCallbacks(pdfDocument);
+
       Promise.all([_ui_utils.animationStarted, storedPromise, pageLayoutPromise, pageModePromise, openActionPromise]).then(async ([timeStamp, stored, pageLayout, pageMode, openAction]) => {
         const viewOnLoad = _app_options.AppOptions.get("viewOnLoad");
 
@@ -1911,7 +1919,7 @@ const PDFViewerApplication = {
   },
 
   async _initializeAutoPrint(pdfDocument, openActionPromise) {
-    const [openAction, javaScript] = await Promise.all([openActionPromise, pdfDocument.getJavaScript()]);
+    const [openAction, javaScript] = await Promise.all([openActionPromise, !_app_options.AppOptions.get("enableScripting") ? pdfDocument.getJavaScript() : null]);
 
     if (pdfDocument !== this.pdfDocument) {
       return;
@@ -1919,11 +1927,11 @@ const PDFViewerApplication = {
 
     let triggerAutoPrint = false;
 
-    if (openAction && openAction.action === "Print") {
+    if (openAction?.action === "Print") {
       triggerAutoPrint = true;
     }
 
-    if (javaScript && !_app_options.AppOptions.get("enableScripting")) {
+    if (javaScript) {
       javaScript.some(js => {
         if (!js) {
           return false;
@@ -1947,9 +1955,7 @@ const PDFViewerApplication = {
     }
 
     if (triggerAutoPrint) {
-      setTimeout(() => {
-        this.triggerPrinting();
-      });
+      this.triggerPrinting();
     }
   },
 
@@ -2130,6 +2136,24 @@ const PDFViewerApplication = {
     }
   },
 
+  _initializeAnnotationStorageCallbacks(pdfDocument) {
+    if (pdfDocument !== this.pdfDocument) {
+      return;
+    }
+
+    const {
+      annotationStorage
+    } = pdfDocument;
+
+    annotationStorage.onSetModified = function () {
+      window.addEventListener("beforeunload", beforeUnload);
+    };
+
+    annotationStorage.onResetModified = function () {
+      window.removeEventListener("beforeunload", beforeUnload);
+    };
+  },
+
   setInitialView(storedHash, {
     rotation,
     sidebarView,
@@ -2224,7 +2248,7 @@ const PDFViewerApplication = {
     const printResolution = _app_options.AppOptions.get("printResolution");
 
     const optionalContentConfigPromise = this.pdfViewer.optionalContentConfigPromise;
-    const printService = PDFPrintServiceFactory.instance.createPrintService(this.pdfDocument, pagesOverview, printContainer, printResolution, optionalContentConfigPromise, this.l10n);
+    const printService = PDFPrintServiceFactory.instance.createPrintService(this.pdfDocument, pagesOverview, printContainer, printResolution, optionalContentConfigPromise, this.l10n, this.pdfViewer.eventBus);
     this.printService = printService;
     this.forceRendering();
     printService.layout();
@@ -3012,24 +3036,16 @@ function webViewerPrint() {
   PDFViewerApplication.triggerPrinting();
 }
 
-function webViewerDownloadOrSave(sourceEventType) {
-  if (PDFViewerApplication.pdfDocument && PDFViewerApplication.pdfDocument.annotationStorage.size > 0) {
-    PDFViewerApplication.save({
-      sourceEventType
-    });
-  } else {
-    PDFViewerApplication.download({
-      sourceEventType
-    });
-  }
-}
-
 function webViewerDownload() {
-  webViewerDownloadOrSave("download");
+  PDFViewerApplication.downloadOrSave({
+    sourceEventType: "download"
+  });
 }
 
 function webViewerSave() {
-  webViewerDownloadOrSave("save");
+  PDFViewerApplication.downloadOrSave({
+    sourceEventType: "save"
+  });
 }
 
 function webViewerFirstPage() {
@@ -10430,7 +10446,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.7.493';
+    const viewerVersion = '2.7.511';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -10613,7 +10629,7 @@ class BaseViewer {
       return;
     }
 
-    this._setScale(val, false);
+    this._setScale(val, this.pageViewMode === "single");
   }
 
   get currentScaleValue() {
@@ -16385,7 +16401,7 @@ function determineMaxDimensions() {
   return 16384;
 }
 
-function PDFPrintService(pdfDocument, pagesOverview, printContainer, printResolution, optionalContentConfigPromise = null, l10n) {
+function PDFPrintService(pdfDocument, pagesOverview, printContainer, printResolution, optionalContentConfigPromise = null, l10n, eventBus) {
   this.pdfDocument = pdfDocument;
   this.pagesOverview = pagesOverview;
   this.printContainer = printContainer;
@@ -16394,6 +16410,7 @@ function PDFPrintService(pdfDocument, pagesOverview, printContainer, printResolu
   this.l10n = l10n || _ui_utils.NullL10n;
   this.currentPage = -1;
   this.scratchCanvas = document.createElement("canvas");
+  this.eventBus = eventBus;
 }
 
 PDFPrintService.prototype = {
@@ -16462,13 +16479,13 @@ PDFPrintService.prototype = {
       }
 
       if (this.currentPage >= pageCount) {
-        renderProgress(window.filteredPageCount | pageCount, window.filteredPageCount | pageCount, this.l10n);
+        renderProgress(window.filteredPageCount | pageCount, window.filteredPageCount | pageCount, this.l10n, this.eventBus);
         resolve();
         return;
       }
 
       const index = this.currentPage;
-      renderProgress(index, window.filteredPageCount | pageCount, this.l10n);
+      renderProgress(index, window.filteredPageCount | pageCount, this.l10n, this.eventBus);
       renderPage(this, this.pdfDocument, index + 1, this.pagesOverview[index], this._printResolution, this._optionalContentConfigPromise).then(this.useRenderedPage.bind(this)).then(function () {
         renderNextPage(resolve, reject);
       }, reject);
@@ -16582,7 +16599,7 @@ function abort() {
   }
 }
 
-function renderProgress(index, total, l10n) {
+function renderProgress(index, total, l10n, eventBus) {
   const progressContainer = document.getElementById("printServiceOverlay");
   const progress = Math.round(100 * index / total);
   const progressBar = progressContainer.querySelector("progress");
@@ -16592,6 +16609,13 @@ function renderProgress(index, total, l10n) {
     progress
   }, progress + "%").then(msg => {
     progressPerc.textContent = msg;
+  });
+  eventBus.dispatch("progress", {
+    source: this,
+    type: "print",
+    total,
+    page: index,
+    percent: 100 * index / total
   });
 }
 
@@ -16639,12 +16663,12 @@ function ensureOverlay() {
 _app.PDFPrintServiceFactory.instance = {
   supportsPrinting: true,
 
-  createPrintService(pdfDocument, pagesOverview, printContainer, printResolution, optionalContentConfigPromise, l10n) {
+  createPrintService(pdfDocument, pagesOverview, printContainer, printResolution, optionalContentConfigPromise, l10n, eventBus) {
     if (activeService) {
       throw new Error("The print service is created and active.");
     }
 
-    activeService = new PDFPrintService(pdfDocument, pagesOverview, printContainer, printResolution, optionalContentConfigPromise, l10n);
+    activeService = new PDFPrintService(pdfDocument, pagesOverview, printContainer, printResolution, optionalContentConfigPromise, l10n, eventBus);
     return activeService;
   }
 

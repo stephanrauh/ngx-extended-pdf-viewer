@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.7.493';
-var pdfjsBuild = '3dc83c39c';
+var pdfjsVersion = '2.7.511';
+var pdfjsBuild = 'c8f77e912';
 
 /***/ }),
 /* 1 */
@@ -234,7 +234,7 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
       var WorkerTasks = [];
       var verbosity = (0, _util.getVerbosityLevel)();
       var apiVersion = docParams.apiVersion;
-      var workerVersion = '2.7.493';
+      var workerVersion = '2.7.511';
 
       if (apiVersion !== workerVersion) {
         throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -31067,10 +31067,11 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
     });
     data.defaultFieldValue = _this4._decodeFormValue(defaultFieldValue);
     data.alternativeText = (0, _util.stringToPDFString)(dict.get("TU") || "");
-    data.defaultAppearance = (0, _core_utils.getInheritableProperty)({
+    var defaultAppearance = (0, _core_utils.getInheritableProperty)({
       dict: dict,
       key: "DA"
     }) || params.acroForm.get("DA") || "";
+    data.defaultAppearance = (0, _util.isString)(defaultAppearance) ? defaultAppearance : "";
     var fieldType = (0, _core_utils.getInheritableProperty)({
       dict: dict,
       key: "FT"
@@ -31356,10 +31357,15 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                 hPadding = defaultPadding;
                 totalHeight = this.data.rect[3] - this.data.rect[1];
                 totalWidth = this.data.rect[2] - this.data.rect[0];
-                _context3.next = 15;
+
+                if (!this.data.defaultAppearance) {
+                  this.data.defaultAppearance = "/Helvetica 0 Tf 0 g";
+                }
+
+                _context3.next = 16;
                 return this._getFontData(evaluator, task);
 
-              case 15:
+              case 16:
                 fontInfo = _context3.sent;
                 _fontInfo = _slicedToArray(fontInfo, 2), font = _fontInfo[0], fontName = _fontInfo[1];
                 fontSize = this._computeFontSize.apply(this, _toConsumableArray(fontInfo).concat([totalHeight]));
@@ -31375,33 +31381,33 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                 alignment = this.data.textAlignment;
 
                 if (!this.data.comb) {
-                  _context3.next = 26;
+                  _context3.next = 27;
                   break;
                 }
 
                 return _context3.abrupt("return", this._getCombAppearance(defaultAppearance, value, totalWidth, hPadding, vPadding));
 
-              case 26:
+              case 27:
                 if (!this.data.multiLine) {
-                  _context3.next = 28;
+                  _context3.next = 29;
                   break;
                 }
 
                 return _context3.abrupt("return", this._getMultilineAppearance(defaultAppearance, value, font, fontSize, totalWidth, totalHeight, alignment, hPadding, vPadding));
 
-              case 28:
+              case 29:
                 if (!(alignment === 0 || alignment > 2)) {
-                  _context3.next = 30;
+                  _context3.next = 31;
                   break;
                 }
 
                 return _context3.abrupt("return", "/Tx BMC q BT " + defaultAppearance + " 1 0 0 1 ".concat(hPadding, " ").concat(vPadding, " Tm (").concat((0, _util.escapeString)(value), ") Tj") + " ET Q EMC");
 
-              case 30:
+              case 31:
                 renderedText = this._renderText(value, font, fontSize, totalWidth, alignment, hPadding, vPadding);
                 return _context3.abrupt("return", "/Tx BMC q BT " + defaultAppearance + " 1 0 0 1 0 0 Tm ".concat(renderedText) + " ET Q EMC");
 
-              case 32:
+              case 33:
               case "end":
                 return _context3.stop();
             }

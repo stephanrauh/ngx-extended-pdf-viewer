@@ -21,6 +21,7 @@ export * from './lib/events/pdf-loaded-event';
 export * from './lib/events/pdf-thumbnail-drawn-event';
 export * from './lib/events/invalid-pdf-exception';
 export * from './lib/events/scale-changing-event';
+export * from './lib/events/progress-bar-event';
 export * from './lib/events/sidebarview-changed';
 export * from './lib/events/textlayer-rendered';
 export * from './lib/options/verbosity-level';

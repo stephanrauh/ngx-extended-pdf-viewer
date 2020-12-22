@@ -242,8 +242,8 @@ var _text_layer = __w_pdfjs_require__(21);
 
 var _svg = __w_pdfjs_require__(22);
 
-const pdfjsVersion = '2.7.493';
-const pdfjsBuild = '3dc83c39c';
+const pdfjsVersion = '2.7.511';
+const pdfjsBuild = 'c8f77e912';
 {
   const PDFNetworkStream = __w_pdfjs_require__(23).PDFNetworkStream;
 
@@ -1964,7 +1964,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.7.493',
+    apiVersion: '2.7.511',
     source: {
       data: source.data,
       url: source.url,
@@ -3182,6 +3182,10 @@ class WorkerTransport {
     this.setupMessageHandler();
   }
 
+  get loadingTaskSettled() {
+    return this.loadingTask._capability.settled;
+  }
+
   destroy() {
     if (this.destroyCapability) {
       return this.destroyCapability.promise;
@@ -3204,6 +3208,16 @@ class WorkerTransport {
     this.pagePromises.length = 0;
     const terminated = this.messageHandler.sendWithPromise("Terminate", null);
     waitOn.push(terminated);
+
+    if (this.loadingTaskSettled) {
+      const annotationStorageResetModified = this.loadingTask.promise.then(pdfDocument => {
+        if (pdfDocument.hasOwnProperty("annotationStorage")) {
+          pdfDocument.annotationStorage.resetModified();
+        }
+      }).catch(() => {});
+      waitOn.push(annotationStorageResetModified);
+    }
+
     Promise.all(waitOn).then(() => {
       this.commonObjs.clear();
       this.fontLoader.clear();
@@ -3977,9 +3991,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.7.493';
+const version = '2.7.511';
 exports.version = version;
-const build = '3dc83c39c';
+const build = 'c8f77e912';
 exports.build = build;
 
 /***/ }),
