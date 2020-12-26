@@ -986,7 +986,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     options.set('acceptKeys', this.acceptKeys);
     this.activateTextlayerIfNecessary(options);
 
-    if (this.scrollMode) {
+    if (this.scrollMode || this.scrollMode === ScrollModeType.vertical) {
       options.set('scrollModeOnLoad', this.scrollMode);
     }
 
@@ -1425,7 +1425,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
       }
       if ('scrollMode' in changes) {
-        if (this.scrollMode) {
+        if (this.scrollMode || this.scrollMode === ScrollModeType.vertical) {
           PDFViewerApplication.pdfViewer.scrollMode = Number(this.scrollMode);
         }
       }
