@@ -242,8 +242,8 @@ var _text_layer = __w_pdfjs_require__(150);
 
 var _svg = __w_pdfjs_require__(151);
 
-var pdfjsVersion = '2.7.511';
-var pdfjsBuild = 'c8f77e912';
+var pdfjsVersion = '2.7.519';
+var pdfjsBuild = '1c1cacc61';
 {
   var PDFNetworkStream = __w_pdfjs_require__(152).PDFNetworkStream;
 
@@ -11072,7 +11072,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId: docId,
-    apiVersion: '2.7.511',
+    apiVersion: '2.7.519',
     source: {
       data: source.data,
       url: source.url,
@@ -13512,9 +13512,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.7.511';
+var version = '2.7.519';
 exports.version = version;
-var build = 'c8f77e912';
+var build = '1c1cacc61';
 exports.build = build;
 
 /***/ }),
@@ -20316,6 +20316,10 @@ var TextWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem) 
                 storage.setValue(id, {
                   value: elementData.userValue.toString()
                 });
+
+                if (!elementData.formattedValue) {
+                  event.target.value = elementData.userValue;
+                }
               },
               valueAsString: function valueAsString() {
                 elementData.formattedValue = detail.valueAsString || "";

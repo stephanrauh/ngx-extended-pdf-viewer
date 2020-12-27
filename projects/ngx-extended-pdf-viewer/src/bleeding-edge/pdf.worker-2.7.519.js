@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.7.511';
-const pdfjsBuild = 'c8f77e912';
+const pdfjsVersion = '2.7.519';
+const pdfjsBuild = '1c1cacc61';
 
 /***/ }),
 /* 1 */
@@ -181,7 +181,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.7.511';
+    const workerVersion = '2.7.519';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -20984,20 +20984,21 @@ class ButtonWidgetAnnotation extends WidgetAnnotation {
 
   getFieldObject() {
     let type = "button";
-    let value = null;
+    let exportValues;
 
     if (this.data.checkBox) {
       type = "checkbox";
-      value = this.data.fieldValue && this.data.fieldValue !== "Off";
+      exportValues = this.data.exportValue;
     } else if (this.data.radioButton) {
       type = "radiobutton";
-      value = this.data.fieldValue === this.data.buttonValue;
+      exportValues = this.data.buttonValue;
     }
 
     return {
       id: this.data.id,
-      value,
+      value: this.data.fieldValue || null,
       defaultValue: this.data.defaultFieldValue,
+      exportValues,
       editable: !this.data.readOnly,
       name: this.data.fieldName,
       rect: this.data.rect,
@@ -21061,6 +21062,7 @@ class ChoiceWidgetAnnotation extends WidgetAnnotation {
       editable: !this.data.readOnly,
       name: this.data.fieldName,
       rect: this.data.rect,
+      numItems: this.data.fieldValue.length,
       multipleSelection: this.data.multiSelect,
       hidden: this.data.hidden,
       actions: this.data.actions,

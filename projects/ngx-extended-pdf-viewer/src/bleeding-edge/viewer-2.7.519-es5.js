@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-var pdfjsVersion = '2.7.511';
-var pdfjsBuild = 'c8f77e912';
+var pdfjsVersion = '2.7.519';
+var pdfjsBuild = '1c1cacc61';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -717,7 +717,7 @@ var DefaultExternalServices = /*#__PURE__*/function () {
     }
   }, {
     key: "createScripting",
-    value: function createScripting() {
+    value: function createScripting(options) {
       throw new Error("Not implemented: createScripting");
     }
   }, {
@@ -1666,55 +1666,96 @@ var PDFViewerApplication = {
     })["catch"](downloadByUrl);
   },
   save: function save() {
-    var _this10 = this,
-        _this$_scriptingInsta;
+    var _arguments = arguments,
+        _this10 = this;
 
-    var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        _ref3$sourceEventType = _ref3.sourceEventType,
-        sourceEventType = _ref3$sourceEventType === void 0 ? "download" : _ref3$sourceEventType;
-
-    if (this._saveInProgress) {
-      return;
-    }
-
-    var url = this.baseUrl;
-    var filename = this._contentDispositionFilename || (0, _ui_utils.getPDFFileNameFromURL)(this.url);
-    var downloadManager = this.downloadManager;
-
-    downloadManager.onerror = function (err) {
-      _this10.error("PDF failed to be saved: ".concat(err));
-    };
-
-    if (!this.pdfDocument || !this.downloadComplete) {
-      this.download({
-        sourceEventType: sourceEventType
-      });
-      return;
-    }
-
-    (_this$_scriptingInsta = this._scriptingInstance) === null || _this$_scriptingInsta === void 0 ? void 0 : _this$_scriptingInsta.scripting.dispatchEventInSandbox({
-      id: "doc",
-      name: "WillSave"
-    });
-    this._saveInProgress = true;
-    this.pdfDocument.saveDocument(this.pdfDocument.annotationStorage).then(function (data) {
+    return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee10() {
       var _this10$_scriptingIns;
 
-      var blob = new Blob([data], {
-        type: "application/pdf"
-      });
-      downloadManager.download(blob, url, filename, sourceEventType);
-      (_this10$_scriptingIns = _this10._scriptingInstance) === null || _this10$_scriptingIns === void 0 ? void 0 : _this10$_scriptingIns.scripting.dispatchEventInSandbox({
-        id: "doc",
-        name: "DidSave"
-      });
-    })["catch"](function () {
-      _this10.download({
-        sourceEventType: sourceEventType
-      });
-    })["finally"](function () {
-      _this10._saveInProgress = false;
-    });
+      var _ref3, _ref3$sourceEventType, sourceEventType, url, filename, downloadManager;
+
+      return _regenerator["default"].wrap(function _callee10$(_context10) {
+        while (1) {
+          switch (_context10.prev = _context10.next) {
+            case 0:
+              _ref3 = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : {}, _ref3$sourceEventType = _ref3.sourceEventType, sourceEventType = _ref3$sourceEventType === void 0 ? "download" : _ref3$sourceEventType;
+
+              if (!_this10._saveInProgress) {
+                _context10.next = 3;
+                break;
+              }
+
+              return _context10.abrupt("return");
+
+            case 3:
+              url = _this10.baseUrl;
+              filename = _this10._contentDispositionFilename || (0, _ui_utils.getPDFFileNameFromURL)(_this10.url);
+              downloadManager = _this10.downloadManager;
+
+              downloadManager.onerror = function (err) {
+                _this10.error("PDF failed to be saved: ".concat(err));
+              };
+
+              if (!(!_this10.pdfDocument || !_this10.downloadComplete)) {
+                _context10.next = 10;
+                break;
+              }
+
+              _this10.download({
+                sourceEventType: sourceEventType
+              });
+
+              return _context10.abrupt("return");
+
+            case 10:
+              _this10._saveInProgress = true;
+              _context10.next = 13;
+              return (_this10$_scriptingIns = _this10._scriptingInstance) === null || _this10$_scriptingIns === void 0 ? void 0 : _this10$_scriptingIns.scripting.dispatchEventInSandbox({
+                id: "doc",
+                name: "WillSave"
+              });
+
+            case 13:
+              _this10.pdfDocument.saveDocument(_this10.pdfDocument.annotationStorage).then(function (data) {
+                var blob = new Blob([data], {
+                  type: "application/pdf"
+                });
+                downloadManager.download(blob, url, filename, sourceEventType);
+              })["catch"](function () {
+                _this10.download({
+                  sourceEventType: sourceEventType
+                });
+              })["finally"]( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee9() {
+                var _this10$_scriptingIns2;
+
+                return _regenerator["default"].wrap(function _callee9$(_context9) {
+                  while (1) {
+                    switch (_context9.prev = _context9.next) {
+                      case 0:
+                        _context9.next = 2;
+                        return (_this10$_scriptingIns2 = _this10._scriptingInstance) === null || _this10$_scriptingIns2 === void 0 ? void 0 : _this10$_scriptingIns2.scripting.dispatchEventInSandbox({
+                          id: "doc",
+                          name: "DidSave"
+                        });
+
+                      case 2:
+                        _this10._saveInProgress = false;
+
+                      case 3:
+                      case "end":
+                        return _context9.stop();
+                    }
+                  }
+                }, _callee9);
+              })));
+
+            case 14:
+            case "end":
+              return _context10.stop();
+          }
+        }
+      }, _callee10);
+    }))();
   },
   downloadOrSave: function downloadOrSave(options) {
     var _this$pdfDocument;
@@ -1909,14 +1950,14 @@ var PDFViewerApplication = {
       _this13._initializeAnnotationStorageCallbacks(pdfDocument);
 
       Promise.all([_ui_utils.animationStarted, storedPromise, pageLayoutPromise, pageModePromise, openActionPromise]).then( /*#__PURE__*/function () {
-        var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee9(_ref4) {
-          var _ref6, timeStamp, stored, pageLayout, pageMode, openAction, viewOnLoad, initialBookmark, zoom, hash, rotation, sidebarView, scrollMode, spreadMode;
+        var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee11(_ref5) {
+          var _ref7, timeStamp, stored, pageLayout, pageMode, openAction, viewOnLoad, initialBookmark, zoom, hash, rotation, sidebarView, scrollMode, spreadMode;
 
-          return _regenerator["default"].wrap(function _callee9$(_context9) {
+          return _regenerator["default"].wrap(function _callee11$(_context11) {
             while (1) {
-              switch (_context9.prev = _context9.next) {
+              switch (_context11.prev = _context11.next) {
                 case 0:
-                  _ref6 = _slicedToArray(_ref4, 5), timeStamp = _ref6[0], stored = _ref6[1], pageLayout = _ref6[2], pageMode = _ref6[3], openAction = _ref6[4];
+                  _ref7 = _slicedToArray(_ref5, 5), timeStamp = _ref7[0], stored = _ref7[1], pageLayout = _ref7[2], pageMode = _ref7[3], openAction = _ref7[4];
                   viewOnLoad = _app_options.AppOptions.get("viewOnLoad");
 
                   _this13._initializePdfHistory({
@@ -1975,26 +2016,26 @@ var PDFViewerApplication = {
 
                   _this13._initializePermissions(pdfDocument);
 
-                  _context9.next = 19;
+                  _context11.next = 19;
                   return Promise.race([pagesPromise, new Promise(function (resolve) {
                     setTimeout(resolve, FORCE_PAGES_LOADED_TIMEOUT);
                   })]);
 
                 case 19:
                   if (!(!initialBookmark && !hash)) {
-                    _context9.next = 21;
+                    _context11.next = 21;
                     break;
                   }
 
-                  return _context9.abrupt("return");
+                  return _context11.abrupt("return");
 
                 case 21:
                   if (!pdfViewer.hasEqualPageSizes) {
-                    _context9.next = 23;
+                    _context11.next = 23;
                     break;
                   }
 
-                  return _context9.abrupt("return");
+                  return _context11.abrupt("return");
 
                 case 23:
                   _this13.initialBookmark = initialBookmark;
@@ -2004,14 +2045,14 @@ var PDFViewerApplication = {
 
                 case 26:
                 case "end":
-                  return _context9.stop();
+                  return _context11.stop();
               }
             }
-          }, _callee9);
+          }, _callee11);
         }));
 
         return function (_x) {
-          return _ref5.apply(this, arguments);
+          return _ref6.apply(this, arguments);
         };
       }())["catch"](function () {
         _this13.setInitialView();
@@ -2062,48 +2103,50 @@ var PDFViewerApplication = {
   _initializeJavaScript: function _initializeJavaScript(pdfDocument) {
     var _this14 = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee10() {
+    return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee12() {
       var _yield$Promise$all, _yield$Promise$all2, objects, calculationOrder, docActions, scripting, internalEvents, domEvents, updateFromSandbox, dispatchEventInSandbox, mouseDown, mouseUp, _iterator4, _step4, _step4$value, name, listener, _iterator5, _step5, _step5$value, _name2, _listener2, _yield$pdfDocument$ge, length, filename;
 
-      return _regenerator["default"].wrap(function _callee10$(_context10) {
+      return _regenerator["default"].wrap(function _callee12$(_context12) {
         while (1) {
-          switch (_context10.prev = _context10.next) {
+          switch (_context12.prev = _context12.next) {
             case 0:
               if (_app_options.AppOptions.get("enableScripting")) {
-                _context10.next = 2;
+                _context12.next = 2;
                 break;
               }
 
-              return _context10.abrupt("return");
+              return _context12.abrupt("return");
 
             case 2:
-              _context10.next = 4;
+              _context12.next = 4;
               return Promise.all([pdfDocument.getFieldObjects(), pdfDocument.getCalculationOrderIds(), pdfDocument.getJSActions()]);
 
             case 4:
-              _yield$Promise$all = _context10.sent;
+              _yield$Promise$all = _context12.sent;
               _yield$Promise$all2 = _slicedToArray(_yield$Promise$all, 3);
               objects = _yield$Promise$all2[0];
               calculationOrder = _yield$Promise$all2[1];
               docActions = _yield$Promise$all2[2];
 
               if (!(!objects && !docActions)) {
-                _context10.next = 11;
+                _context12.next = 11;
                 break;
               }
 
-              return _context10.abrupt("return");
+              return _context12.abrupt("return");
 
             case 11:
               if (!(pdfDocument !== _this14.pdfDocument)) {
-                _context10.next = 13;
+                _context12.next = 13;
                 break;
               }
 
-              return _context10.abrupt("return");
+              return _context12.abrupt("return");
 
             case 13:
-              scripting = _this14.externalServices.createScripting();
+              scripting = _this14.externalServices.createScripting({
+                sandboxBundleSrc: _app_options.AppOptions.get("sandboxBundleSrc")
+              });
               internalEvents = new Map(), domEvents = new Map();
               _this14._scriptingInstance = {
                 scripting: scripting,
@@ -2113,11 +2156,11 @@ var PDFViewerApplication = {
               };
 
               if (_this14.documentInfo) {
-                _context10.next = 21;
+                _context12.next = 21;
                 break;
               }
 
-              _context10.next = 19;
+              _context12.next = 19;
               return new Promise(function (resolve) {
                 var metadataLoaded = function metadataLoaded() {
                   _this14.eventBus._off("metadataloaded", metadataLoaded);
@@ -2130,15 +2173,15 @@ var PDFViewerApplication = {
 
             case 19:
               if (!(pdfDocument !== _this14.pdfDocument)) {
-                _context10.next = 21;
+                _context12.next = 21;
                 break;
               }
 
-              return _context10.abrupt("return");
+              return _context12.abrupt("return");
 
             case 21:
-              updateFromSandbox = function updateFromSandbox(_ref7) {
-                var detail = _ref7.detail;
+              updateFromSandbox = function updateFromSandbox(_ref8) {
+                var detail = _ref8.detail;
                 var id = detail.id,
                     command = detail.command,
                     value = detail.value;
@@ -2195,8 +2238,8 @@ var PDFViewerApplication = {
 
               internalEvents.set("updatefromsandbox", updateFromSandbox);
 
-              dispatchEventInSandbox = function dispatchEventInSandbox(_ref8) {
-                var detail = _ref8.detail;
+              dispatchEventInSandbox = function dispatchEventInSandbox(_ref9) {
+                var detail = _ref9.detail;
                 scripting.dispatchEventInSandbox(detail);
               };
 
@@ -2241,31 +2284,31 @@ var PDFViewerApplication = {
               }
 
               if (_this14._contentLength) {
-                _context10.next = 41;
+                _context12.next = 41;
                 break;
               }
 
-              _context10.next = 36;
+              _context12.next = 36;
               return pdfDocument.getDownloadInfo();
 
             case 36:
-              _yield$pdfDocument$ge = _context10.sent;
+              _yield$pdfDocument$ge = _context12.sent;
               length = _yield$pdfDocument$ge.length;
 
               if (!(pdfDocument !== _this14.pdfDocument)) {
-                _context10.next = 40;
+                _context12.next = 40;
                 break;
               }
 
-              return _context10.abrupt("return");
+              return _context12.abrupt("return");
 
             case 40:
               _this14._contentLength = length;
 
             case 41:
               filename = _this14._contentDispositionFilename || (0, _ui_utils.getPDFFileNameFromURL)(_this14.url);
-              _context10.prev = 42;
-              _context10.next = 45;
+              _context12.prev = 42;
+              _context12.next = 45;
               return scripting.createSandbox({
                 objects: objects,
                 calculationOrder: calculationOrder,
@@ -2291,58 +2334,61 @@ var PDFViewerApplication = {
                 });
               }
 
-              _context10.next = 53;
+              _context12.next = 53;
               break;
 
             case 48:
-              _context10.prev = 48;
-              _context10.t0 = _context10["catch"](42);
-              console.error("_initializeJavaScript: \"".concat(_context10.t0 === null || _context10.t0 === void 0 ? void 0 : _context10.t0.message, "\"."));
+              _context12.prev = 48;
+              _context12.t0 = _context12["catch"](42);
+              console.error("_initializeJavaScript: \"".concat(_context12.t0 === null || _context12.t0 === void 0 ? void 0 : _context12.t0.message, "\"."));
 
               _this14._destroyScriptingInstance();
 
-              return _context10.abrupt("return");
+              return _context12.abrupt("return");
 
             case 53:
-              scripting.dispatchEventInSandbox({
+              _context12.next = 55;
+              return scripting.dispatchEventInSandbox({
                 id: "doc",
                 name: "Open"
               });
+
+            case 55:
               Promise.resolve().then(function () {
                 if (_this14._scriptingInstance) {
                   _this14._scriptingInstance.ready = true;
                 }
               });
 
-            case 55:
+            case 56:
             case "end":
-              return _context10.stop();
+              return _context12.stop();
           }
         }
-      }, _callee10, null, [[42, 48]]);
+      }, _callee12, null, [[42, 48]]);
     }))();
   },
   _collectTelemetry: function _collectTelemetry(pdfDocument) {
     var _this15 = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee11() {
+    return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee13() {
       var markInfo, tagged;
-      return _regenerator["default"].wrap(function _callee11$(_context11) {
+      return _regenerator["default"].wrap(function _callee13$(_context13) {
         while (1) {
-          switch (_context11.prev = _context11.next) {
+          switch (_context13.prev = _context13.next) {
             case 0:
-              _context11.next = 2;
+              _context13.next = 2;
               return _this15.pdfDocument.getMarkInfo();
 
             case 2:
-              markInfo = _context11.sent;
+              markInfo = _context13.sent;
 
               if (!(pdfDocument !== _this15.pdfDocument)) {
-                _context11.next = 5;
+                _context13.next = 5;
                 break;
               }
 
-              return _context11.abrupt("return");
+              return _context13.abrupt("return");
 
             case 5:
               tagged = (markInfo === null || markInfo === void 0 ? void 0 : markInfo.Marked) || false;
@@ -2354,37 +2400,37 @@ var PDFViewerApplication = {
 
             case 7:
             case "end":
-              return _context11.stop();
+              return _context13.stop();
           }
         }
-      }, _callee11);
+      }, _callee13);
     }))();
   },
   _initializeAutoPrint: function _initializeAutoPrint(pdfDocument, openActionPromise) {
     var _this16 = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee12() {
+    return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee14() {
       var _yield$Promise$all3, _yield$Promise$all4, openAction, javaScript, triggerAutoPrint, _iterator6, _step6, js;
 
-      return _regenerator["default"].wrap(function _callee12$(_context12) {
+      return _regenerator["default"].wrap(function _callee14$(_context14) {
         while (1) {
-          switch (_context12.prev = _context12.next) {
+          switch (_context14.prev = _context14.next) {
             case 0:
-              _context12.next = 2;
+              _context14.next = 2;
               return Promise.all([openActionPromise, !_app_options.AppOptions.get("enableScripting") ? pdfDocument.getJavaScript() : null]);
 
             case 2:
-              _yield$Promise$all3 = _context12.sent;
+              _yield$Promise$all3 = _context14.sent;
               _yield$Promise$all4 = _slicedToArray(_yield$Promise$all3, 2);
               openAction = _yield$Promise$all4[0];
               javaScript = _yield$Promise$all4[1];
 
               if (!(pdfDocument !== _this16.pdfDocument)) {
-                _context12.next = 8;
+                _context14.next = 8;
                 break;
               }
 
-              return _context12.abrupt("return");
+              return _context14.abrupt("return");
 
             case 8:
               triggerAutoPrint = false;
@@ -2394,7 +2440,7 @@ var PDFViewerApplication = {
               }
 
               if (!javaScript) {
-                _context12.next = 31;
+                _context14.next = 31;
                 break;
               }
 
@@ -2411,51 +2457,51 @@ var PDFViewerApplication = {
               });
 
               if (triggerAutoPrint) {
-                _context12.next = 31;
+                _context14.next = 31;
                 break;
               }
 
               _iterator6 = _createForOfIteratorHelper(javaScript);
-              _context12.prev = 14;
+              _context14.prev = 14;
 
               _iterator6.s();
 
             case 16:
               if ((_step6 = _iterator6.n()).done) {
-                _context12.next = 23;
+                _context14.next = 23;
                 break;
               }
 
               js = _step6.value;
 
               if (!(js && _ui_utils.AutoPrintRegExp.test(js))) {
-                _context12.next = 21;
+                _context14.next = 21;
                 break;
               }
 
               triggerAutoPrint = true;
-              return _context12.abrupt("break", 23);
+              return _context14.abrupt("break", 23);
 
             case 21:
-              _context12.next = 16;
+              _context14.next = 16;
               break;
 
             case 23:
-              _context12.next = 28;
+              _context14.next = 28;
               break;
 
             case 25:
-              _context12.prev = 25;
-              _context12.t0 = _context12["catch"](14);
+              _context14.prev = 25;
+              _context14.t0 = _context14["catch"](14);
 
-              _iterator6.e(_context12.t0);
+              _iterator6.e(_context14.t0);
 
             case 28:
-              _context12.prev = 28;
+              _context14.prev = 28;
 
               _iterator6.f();
 
-              return _context12.finish(28);
+              return _context14.finish(28);
 
             case 31:
               if (triggerAutoPrint) {
@@ -2464,38 +2510,38 @@ var PDFViewerApplication = {
 
             case 32:
             case "end":
-              return _context12.stop();
+              return _context14.stop();
           }
         }
-      }, _callee12, null, [[14, 25, 28, 31]]);
+      }, _callee14, null, [[14, 25, 28, 31]]);
     }))();
   },
   _initializeMetadata: function _initializeMetadata(pdfDocument) {
     var _this17 = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee13() {
+    return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee15() {
       var _yield$pdfDocument$ge2, info, metadata, contentDispositionFilename, contentLength, PDFViewerApplicationOptions, pdfTitle, infoTitle, metadataTitle, versionId, generatorId, producer, formType;
 
-      return _regenerator["default"].wrap(function _callee13$(_context13) {
+      return _regenerator["default"].wrap(function _callee15$(_context15) {
         while (1) {
-          switch (_context13.prev = _context13.next) {
+          switch (_context15.prev = _context15.next) {
             case 0:
-              _context13.next = 2;
+              _context15.next = 2;
               return pdfDocument.getMetadata();
 
             case 2:
-              _yield$pdfDocument$ge2 = _context13.sent;
+              _yield$pdfDocument$ge2 = _context15.sent;
               info = _yield$pdfDocument$ge2.info;
               metadata = _yield$pdfDocument$ge2.metadata;
               contentDispositionFilename = _yield$pdfDocument$ge2.contentDispositionFilename;
               contentLength = _yield$pdfDocument$ge2.contentLength;
 
               if (!(pdfDocument !== _this17.pdfDocument)) {
-                _context13.next = 9;
+                _context15.next = 9;
                 break;
               }
 
-              return _context13.abrupt("return");
+              return _context15.abrupt("return");
 
             case 9:
               _this17.documentInfo = info;
@@ -2580,52 +2626,52 @@ var PDFViewerApplication = {
 
             case 29:
             case "end":
-              return _context13.stop();
+              return _context15.stop();
           }
         }
-      }, _callee13);
+      }, _callee15);
     }))();
   },
   _initializePageLabels: function _initializePageLabels(pdfDocument) {
     var _this18 = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee14() {
+    return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee16() {
       var labels, numLabels, i, pdfViewer, pdfThumbnailViewer, toolbar;
-      return _regenerator["default"].wrap(function _callee14$(_context14) {
+      return _regenerator["default"].wrap(function _callee16$(_context16) {
         while (1) {
-          switch (_context14.prev = _context14.next) {
+          switch (_context16.prev = _context16.next) {
             case 0:
-              _context14.next = 2;
+              _context16.next = 2;
               return pdfDocument.getPageLabels();
 
             case 2:
-              labels = _context14.sent;
+              labels = _context16.sent;
 
               if (!(pdfDocument !== _this18.pdfDocument)) {
-                _context14.next = 5;
+                _context16.next = 5;
                 break;
               }
 
-              return _context14.abrupt("return");
+              return _context16.abrupt("return");
 
             case 5:
               if (!(!labels || _app_options.AppOptions.get("disablePageLabels"))) {
-                _context14.next = 7;
+                _context16.next = 7;
                 break;
               }
 
-              return _context14.abrupt("return");
+              return _context16.abrupt("return");
 
             case 7:
               numLabels = labels.length;
 
               if (!(numLabels !== _this18.pagesCount)) {
-                _context14.next = 11;
+                _context16.next = 11;
                 break;
               }
 
               console.error("The number of Page Labels does not match the number of pages in the document.");
-              return _context14.abrupt("return");
+              return _context16.abrupt("return");
 
             case 11:
               i = 0;
@@ -2635,11 +2681,11 @@ var PDFViewerApplication = {
               }
 
               if (!(i === numLabels)) {
-                _context14.next = 15;
+                _context16.next = 15;
                 break;
               }
 
-              return _context14.abrupt("return");
+              return _context16.abrupt("return");
 
             case 15:
               pdfViewer = _this18.pdfViewer, pdfThumbnailViewer = _this18.pdfThumbnailViewer, toolbar = _this18.toolbar;
@@ -2650,17 +2696,17 @@ var PDFViewerApplication = {
 
             case 20:
             case "end":
-              return _context14.stop();
+              return _context16.stop();
           }
         }
-      }, _callee14);
+      }, _callee16);
     }))();
   },
-  _initializePdfHistory: function _initializePdfHistory(_ref9) {
-    var fingerprint = _ref9.fingerprint,
-        viewOnLoad = _ref9.viewOnLoad,
-        _ref9$initialDest = _ref9.initialDest,
-        initialDest = _ref9$initialDest === void 0 ? null : _ref9$initialDest;
+  _initializePdfHistory: function _initializePdfHistory(_ref10) {
+    var fingerprint = _ref10.fingerprint,
+        viewOnLoad = _ref10.viewOnLoad,
+        _ref10$initialDest = _ref10.initialDest,
+        initialDest = _ref10$initialDest === void 0 ? null : _ref10$initialDest;
 
     if (this.isViewerEmbedded || _app_options.AppOptions.get("disableHistory")) {
       return;
@@ -2688,32 +2734,32 @@ var PDFViewerApplication = {
   _initializePermissions: function _initializePermissions(pdfDocument) {
     var _this19 = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee15() {
+    return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee17() {
       var permissions;
-      return _regenerator["default"].wrap(function _callee15$(_context15) {
+      return _regenerator["default"].wrap(function _callee17$(_context17) {
         while (1) {
-          switch (_context15.prev = _context15.next) {
+          switch (_context17.prev = _context17.next) {
             case 0:
-              _context15.next = 2;
+              _context17.next = 2;
               return pdfDocument.getPermissions();
 
             case 2:
-              permissions = _context15.sent;
+              permissions = _context17.sent;
 
               if (!(pdfDocument !== _this19.pdfDocument)) {
-                _context15.next = 5;
+                _context17.next = 5;
                 break;
               }
 
-              return _context15.abrupt("return");
+              return _context17.abrupt("return");
 
             case 5:
               if (!(!permissions || !_app_options.AppOptions.get("enablePermissions"))) {
-                _context15.next = 7;
+                _context17.next = 7;
                 break;
               }
 
-              return _context15.abrupt("return");
+              return _context17.abrupt("return");
 
             case 7:
               if (!permissions.includes(_pdfjsLib.PermissionFlag.COPY)) {
@@ -2722,10 +2768,10 @@ var PDFViewerApplication = {
 
             case 8:
             case "end":
-              return _context15.stop();
+              return _context17.stop();
           }
         }
-      }, _callee15);
+      }, _callee17);
     }))();
   },
   _initializeAnnotationStorageCallbacks: function _initializeAnnotationStorageCallbacks(pdfDocument) {
@@ -2746,11 +2792,11 @@ var PDFViewerApplication = {
   setInitialView: function setInitialView(storedHash) {
     var _this20 = this;
 
-    var _ref10 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-        rotation = _ref10.rotation,
-        sidebarView = _ref10.sidebarView,
-        scrollMode = _ref10.scrollMode,
-        spreadMode = _ref10.spreadMode;
+    var _ref11 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+        rotation = _ref11.rotation,
+        sidebarView = _ref11.sidebarView,
+        scrollMode = _ref11.scrollMode,
+        spreadMode = _ref11.spreadMode;
 
     var setRotation = function setRotation(angle) {
       if ((0, _ui_utils.isValidRotation)(angle)) {
@@ -2813,7 +2859,13 @@ var PDFViewerApplication = {
     this.pdfRenderingQueue.renderHighestPriority();
   },
   beforePrint: function beforePrint() {
-    var _this21 = this;
+    var _this$_scriptingInsta,
+        _this21 = this;
+
+    (_this$_scriptingInsta = this._scriptingInstance) === null || _this$_scriptingInsta === void 0 ? void 0 : _this$_scriptingInsta.scripting.dispatchEventInSandbox({
+      id: "doc",
+      name: "WillPrint"
+    });
 
     if (this.printService) {
       return;
@@ -2848,6 +2900,13 @@ var PDFViewerApplication = {
     });
   },
   afterPrint: function afterPrint() {
+    var _this$_scriptingInsta2;
+
+    (_this$_scriptingInsta2 = this._scriptingInstance) === null || _this$_scriptingInsta2 === void 0 ? void 0 : _this$_scriptingInsta2.scripting.dispatchEventInSandbox({
+      id: "doc",
+      name: "DidPrint"
+    });
+
     if (this.printService) {
       document.body.removeAttribute("data-pdfjsprinting");
       this.printService.destroy();
@@ -2876,21 +2935,11 @@ var PDFViewerApplication = {
     this.pdfPresentationMode.request();
   },
   triggerPrinting: function triggerPrinting() {
-    var _this$_scriptingInsta2, _this$_scriptingInsta3;
-
     if (!this.supportsPrinting) {
       return;
     }
 
-    (_this$_scriptingInsta2 = this._scriptingInstance) === null || _this$_scriptingInsta2 === void 0 ? void 0 : _this$_scriptingInsta2.scripting.dispatchEventInSandbox({
-      id: "doc",
-      name: "WillPrint"
-    });
     window.printPDF();
-    (_this$_scriptingInsta3 = this._scriptingInstance) === null || _this$_scriptingInsta3 === void 0 ? void 0 : _this$_scriptingInsta3.scripting.dispatchEventInSandbox({
-      id: "doc",
-      name: "DidPrint"
-    });
   },
   bindEvents: function bindEvents() {
     var eventBus = this.eventBus,
@@ -3168,9 +3217,9 @@ var PDFViewerApplication = {
   },
 
   get scriptingReady() {
-    var _this$_scriptingInsta4;
+    var _this$_scriptingInsta3;
 
-    return ((_this$_scriptingInsta4 = this._scriptingInstance) === null || _this$_scriptingInsta4 === void 0 ? void 0 : _this$_scriptingInsta4.ready) || false;
+    return ((_this$_scriptingInsta3 = this._scriptingInstance) === null || _this$_scriptingInsta3 === void 0 ? void 0 : _this$_scriptingInsta3.ready) || false;
   }
 
 };
@@ -3215,23 +3264,23 @@ function loadFakeWorker() {
 }
 
 function _loadFakeWorker() {
-  _loadFakeWorker = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee16() {
-    return _regenerator["default"].wrap(function _callee16$(_context16) {
+  _loadFakeWorker = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee18() {
+    return _regenerator["default"].wrap(function _callee18$(_context18) {
       while (1) {
-        switch (_context16.prev = _context16.next) {
+        switch (_context18.prev = _context18.next) {
           case 0:
             if (!_pdfjsLib.GlobalWorkerOptions.workerSrc) {
               _pdfjsLib.GlobalWorkerOptions.workerSrc = _app_options.AppOptions.get("workerSrc");
             }
 
-            return _context16.abrupt("return", (0, _pdfjsLib.loadScript)(_pdfjsLib.PDFWorker.getWorkerSrc()));
+            return _context18.abrupt("return", (0, _pdfjsLib.loadScript)(_pdfjsLib.PDFWorker.getWorkerSrc()));
 
           case 2:
           case "end":
-            return _context16.stop();
+            return _context18.stop();
         }
       }
-    }, _callee16);
+    }, _callee18);
   }));
   return _loadFakeWorker.apply(this, arguments);
 }
@@ -3246,8 +3295,8 @@ function loadAndEnablePDFBug(enabledTabs) {
   });
 }
 
-function reportPageStatsPDFBug(_ref11) {
-  var pageNumber = _ref11.pageNumber;
+function reportPageStatsPDFBug(_ref12) {
+  var pageNumber = _ref12.pageNumber;
 
   if (typeof Stats === "undefined" || !Stats.enabled) {
     return;
@@ -3387,10 +3436,10 @@ function webViewerResetPermissions() {
   appConfig.viewerContainer.classList.remove(ENABLE_PERMISSIONS_CLASS);
 }
 
-function webViewerPageRendered(_ref12) {
-  var pageNumber = _ref12.pageNumber,
-      timestamp = _ref12.timestamp,
-      error = _ref12.error;
+function webViewerPageRendered(_ref13) {
+  var pageNumber = _ref13.pageNumber,
+      timestamp = _ref13.timestamp,
+      error = _ref13.error;
 
   if (pageNumber === PDFViewerApplication.page) {
     PDFViewerApplication.toolbar.updateLoadingIndicatorState(false);
@@ -3423,8 +3472,8 @@ function webViewerPageRendered(_ref12) {
   });
 }
 
-function webViewerPageMode(_ref13) {
-  var mode = _ref13.mode;
+function webViewerPageMode(_ref14) {
+  var mode = _ref14.mode;
   var view;
 
   switch (mode) {
@@ -3480,9 +3529,9 @@ function webViewerNamedAction(evt) {
   }
 }
 
-function webViewerPresentationModeChanged(_ref14) {
-  var active = _ref14.active,
-      switchInProgress = _ref14.switchInProgress;
+function webViewerPresentationModeChanged(_ref15) {
+  var active = _ref15.active,
+      switchInProgress = _ref15.switchInProgress;
   var state = _ui_utils.PresentationModeState.NORMAL;
 
   if (switchInProgress) {
@@ -3747,8 +3796,8 @@ function webViewerFindFromUrlHash(evt) {
   });
 }
 
-function webViewerUpdateFindMatchesCount(_ref15) {
-  var matchesCount = _ref15.matchesCount;
+function webViewerUpdateFindMatchesCount(_ref16) {
+  var matchesCount = _ref16.matchesCount;
 
   if (PDFViewerApplication.supportsIntegratedFind) {
     PDFViewerApplication.externalServices.updateFindMatchesCount(matchesCount);
@@ -3757,11 +3806,11 @@ function webViewerUpdateFindMatchesCount(_ref15) {
   }
 }
 
-function webViewerUpdateFindControlState(_ref16) {
-  var state = _ref16.state,
-      previous = _ref16.previous,
-      matchesCount = _ref16.matchesCount,
-      rawQuery = _ref16.rawQuery;
+function webViewerUpdateFindControlState(_ref17) {
+  var state = _ref17.state,
+      previous = _ref17.previous,
+      matchesCount = _ref17.matchesCount,
+      rawQuery = _ref17.rawQuery;
 
   if (PDFViewerApplication.supportsIntegratedFind) {
     PDFViewerApplication.externalServices.updateFindControlState({
@@ -3786,9 +3835,9 @@ function webViewerRotationChanging(evt) {
   PDFViewerApplication.pdfViewer.currentPageNumber = evt.pageNumber;
 }
 
-function webViewerPageChanging(_ref17) {
-  var pageNumber = _ref17.pageNumber,
-      pageLabel = _ref17.pageLabel;
+function webViewerPageChanging(_ref18) {
+  var pageNumber = _ref18.pageNumber,
+      pageLabel = _ref18.pageLabel;
   PDFViewerApplication.toolbar.setPageNumber(pageNumber, pageLabel);
   PDFViewerApplication.secondaryToolbar.setPageNumber(pageNumber);
 
@@ -13112,7 +13161,7 @@ var BaseViewer = /*#__PURE__*/function () {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    var viewerVersion = '2.7.511';
+    var viewerVersion = '2.7.519';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error("The API version \"".concat(_pdfjsLib.version, "\" does not match the Viewer version \"").concat(viewerVersion, "\"."));
@@ -26743,8 +26792,9 @@ var GenericExternalServices = /*#__PURE__*/function (_DefaultExternalServi) {
     }
   }, {
     key: "createScripting",
-    value: function createScripting() {
-      return new _generic_scripting.GenericScripting();
+    value: function createScripting(_ref2) {
+      var sandboxBundleSrc = _ref2.sandboxBundleSrc;
+      return new _generic_scripting.GenericScripting(sandboxBundleSrc);
     }
   }]);
 
@@ -28233,8 +28283,6 @@ exports.GenericScripting = void 0;
 
 var _regenerator = _interopRequireDefault(__webpack_require__(4));
 
-var _app_options = __webpack_require__(1);
-
 var _pdfjsLib = __webpack_require__(7);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -28250,10 +28298,10 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var GenericScripting = /*#__PURE__*/function () {
-  function GenericScripting() {
+  function GenericScripting(sandboxBundleSrc) {
     _classCallCheck(this, GenericScripting);
 
-    this._ready = (0, _pdfjsLib.loadScript)(_app_options.AppOptions.get("sandboxBundleSrc"), true).then(function () {
+    this._ready = (0, _pdfjsLib.loadScript)(sandboxBundleSrc, true).then(function () {
       return window.pdfjsSandbox.QuickJSSandbox();
     });
   }

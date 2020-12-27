@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.7.511';
-const pdfjsBuild = 'c8f77e912';
+const pdfjsVersion = '2.7.519';
+const pdfjsBuild = '1c1cacc61';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -647,7 +647,7 @@ class DefaultExternalServices {
     throw new Error("Not implemented: createL10n");
   }
 
-  static createScripting() {
+  static createScripting(options) {
     throw new Error("Not implemented: createScripting");
   }
 
@@ -1361,7 +1361,7 @@ const PDFViewerApplication = {
     }).catch(downloadByUrl);
   },
 
-  save({
+  async save({
     sourceEventType = "download"
   } = {}) {
     if (this._saveInProgress) {
@@ -1383,25 +1383,25 @@ const PDFViewerApplication = {
       return;
     }
 
-    this._scriptingInstance?.scripting.dispatchEventInSandbox({
+    this._saveInProgress = true;
+    await this._scriptingInstance?.scripting.dispatchEventInSandbox({
       id: "doc",
       name: "WillSave"
     });
-    this._saveInProgress = true;
     this.pdfDocument.saveDocument(this.pdfDocument.annotationStorage).then(data => {
       const blob = new Blob([data], {
         type: "application/pdf"
       });
       downloadManager.download(blob, url, filename, sourceEventType);
-      this._scriptingInstance?.scripting.dispatchEventInSandbox({
-        id: "doc",
-        name: "DidSave"
-      });
     }).catch(() => {
       this.download({
         sourceEventType
       });
-    }).finally(() => {
+    }).finally(async () => {
+      await this._scriptingInstance?.scripting.dispatchEventInSandbox({
+        id: "doc",
+        name: "DidSave"
+      });
       this._saveInProgress = false;
     });
   },
@@ -1733,7 +1733,9 @@ const PDFViewerApplication = {
       return;
     }
 
-    const scripting = this.externalServices.createScripting();
+    const scripting = this.externalServices.createScripting({
+      sandboxBundleSrc: _app_options.AppOptions.get("sandboxBundleSrc")
+    });
     const internalEvents = new Map(),
           domEvents = new Map();
     this._scriptingInstance = {
@@ -1893,7 +1895,7 @@ const PDFViewerApplication = {
       return;
     }
 
-    scripting.dispatchEventInSandbox({
+    await scripting.dispatchEventInSandbox({
       id: "doc",
       name: "Open"
     });
@@ -2224,6 +2226,11 @@ const PDFViewerApplication = {
   },
 
   beforePrint() {
+    this._scriptingInstance?.scripting.dispatchEventInSandbox({
+      id: "doc",
+      name: "WillPrint"
+    });
+
     if (this.printService) {
       return;
     }
@@ -2258,6 +2265,11 @@ const PDFViewerApplication = {
   },
 
   afterPrint() {
+    this._scriptingInstance?.scripting.dispatchEventInSandbox({
+      id: "doc",
+      name: "DidPrint"
+    });
+
     if (this.printService) {
       document.body.removeAttribute("data-pdfjsprinting");
       this.printService.destroy();
@@ -2293,15 +2305,7 @@ const PDFViewerApplication = {
       return;
     }
 
-    this._scriptingInstance?.scripting.dispatchEventInSandbox({
-      id: "doc",
-      name: "WillPrint"
-    });
     window.printPDF();
-    this._scriptingInstance?.scripting.dispatchEventInSandbox({
-      id: "doc",
-      name: "DidPrint"
-    });
   },
 
   bindEvents() {
@@ -10446,7 +10450,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.7.511';
+    const viewerVersion = '2.7.519';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -15131,8 +15135,10 @@ class GenericExternalServices extends _app.DefaultExternalServices {
     return new _genericl10n.GenericL10n(locale);
   }
 
-  static createScripting() {
-    return new _generic_scripting.GenericScripting();
+  static createScripting({
+    sandboxBundleSrc
+  }) {
+    return new _generic_scripting.GenericScripting(sandboxBundleSrc);
   }
 
 }
@@ -16280,13 +16286,11 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.GenericScripting = void 0;
 
-var _app_options = __webpack_require__(1);
-
 var _pdfjsLib = __webpack_require__(5);
 
 class GenericScripting {
-  constructor() {
-    this._ready = (0, _pdfjsLib.loadScript)(_app_options.AppOptions.get("sandboxBundleSrc"), true).then(() => {
+  constructor(sandboxBundleSrc) {
+    this._ready = (0, _pdfjsLib.loadScript)(sandboxBundleSrc, true).then(() => {
       return window.pdfjsSandbox.QuickJSSandbox();
     });
   }

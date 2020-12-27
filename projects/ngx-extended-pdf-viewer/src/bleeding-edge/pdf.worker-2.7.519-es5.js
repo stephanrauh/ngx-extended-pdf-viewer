@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.7.511';
-var pdfjsBuild = 'c8f77e912';
+var pdfjsVersion = '2.7.519';
+var pdfjsBuild = '1c1cacc61';
 
 /***/ }),
 /* 1 */
@@ -234,7 +234,7 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
       var WorkerTasks = [];
       var verbosity = (0, _util.getVerbosityLevel)();
       var apiVersion = docParams.apiVersion;
-      var workerVersion = '2.7.511';
+      var workerVersion = '2.7.519';
 
       if (apiVersion !== workerVersion) {
         throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -32160,20 +32160,21 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
     key: "getFieldObject",
     value: function getFieldObject() {
       var type = "button";
-      var value = null;
+      var exportValues;
 
       if (this.data.checkBox) {
         type = "checkbox";
-        value = this.data.fieldValue && this.data.fieldValue !== "Off";
+        exportValues = this.data.exportValue;
       } else if (this.data.radioButton) {
         type = "radiobutton";
-        value = this.data.fieldValue === this.data.buttonValue;
+        exportValues = this.data.buttonValue;
       }
 
       return {
         id: this.data.id,
-        value: value,
+        value: this.data.fieldValue || null,
         defaultValue: this.data.defaultFieldValue,
+        exportValues: exportValues,
         editable: !this.data.readOnly,
         name: this.data.fieldName,
         rect: this.data.rect,
@@ -32251,6 +32252,7 @@ var ChoiceWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation3) {
         editable: !this.data.readOnly,
         name: this.data.fieldName,
         rect: this.data.rect,
+        numItems: this.data.fieldValue.length,
         multipleSelection: this.data.multiSelect,
         hidden: this.data.hidden,
         actions: this.data.actions,
