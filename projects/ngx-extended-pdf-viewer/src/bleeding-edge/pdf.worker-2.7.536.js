@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.7.519';
-const pdfjsBuild = '1c1cacc61';
+const pdfjsVersion = '2.7.536';
+const pdfjsBuild = '3124b643e';
 
 /***/ }),
 /* 1 */
@@ -181,7 +181,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.7.519';
+    const workerVersion = '2.7.536';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -14567,7 +14567,7 @@ var JpxImage = function JpxImageClosure() {
 
               if (unsupported.length > 0) {
                 doNotRecover = true;
-                throw new Error("Unsupported COD options (" + unsupported.join(", ") + ")");
+                (0, _util.warn)(`JPX: Unsupported COD options (${unsupported.join(", ")}).`);
               }
 
               if (context.mainHeader) {
@@ -14631,7 +14631,7 @@ var JpxImage = function JpxImageClosure() {
         if (doNotRecover || this.failOnCorruptedImage) {
           throw new JpxError(e.message);
         } else {
-          (0, _util.warn)("JPX: Trying to recover from: " + e.message);
+          (0, _util.warn)(`JPX: Trying to recover from: "${e.message}".`);
         }
       }
 

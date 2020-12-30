@@ -3,12 +3,17 @@ import { IPDFViewerAppConfig } from './pdf-viewer-app-config';
 import { IPDFViewer } from './pdf-viewer';
 import { IEventBus } from './pdf-event-bus';
 
+export interface IWebL10n {
+  get(key: string, args: any, fallbackString: string): string;
+}
+
 export interface IPDFViewerApplication {
   appConfig: IPDFViewerAppConfig;
   _boundEvents: any;
   enablePrint: boolean;
   eventBus: IEventBus;
   isViewerEmbedded: boolean;
+  l10n: IWebL10n;
   onError: (error: Error) => void;
   page: number;
   pagesCount: number;

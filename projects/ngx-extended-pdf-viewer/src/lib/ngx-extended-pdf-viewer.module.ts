@@ -56,6 +56,7 @@ import { PdfSidebarToolbarComponent } from './sidebar/pdf-sidebar/pdf-sidebar-to
 import { PdfLightThemeComponent } from './theme/pdf-light-theme/pdf-light-theme.component';
 import { PdfOriginalComponent } from './theme/pdf-original-theme/pdf-original.component';
 import { PdfDarkThemeComponent } from './theme/pdf-dark-theme/pdf-dark-theme.component';
+import { TranslatePipe } from './translate.pipe';
 if (!Promise['allSettled']) {
   if (!!window['Zone'] && !window['__zone_symbol__Promise.allSettled']) {
     console.error(
@@ -235,6 +236,7 @@ if (typeof window !== 'undefined') {
     PdfOriginalComponent,
     PdfDarkThemeComponent,
     PdfLightThemeComponent,
+    TranslatePipe,
   ],
   providers: [NgxExtendedPdfViewerService, PDFNotificationService, Location, { provide: LocationStrategy, useClass: PathLocationStrategy }],
   exports: [

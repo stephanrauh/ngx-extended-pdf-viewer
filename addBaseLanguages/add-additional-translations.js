@@ -14,7 +14,10 @@ for (let i = 0; i < content.length; i++) {
 
 for (let lang in languages) {
   const shortcode = lang.substring(0, 2);
-  const additionalFilename = '../projects/ngx-extended-pdf-viewer/src/' + folder + '/additional-locale/' + shortcode + '.properties';
+  let additionalFilename = '../projects/ngx-extended-pdf-viewer/src/assets/additional-locale/' + shortcode + '.properties';
+  if (!fs.existsSync(additionalFilename)) {
+    additionalFilename = '../projects/ngx-extended-pdf-viewer/src/assets/additional-locale/en.properties';
+  }
   const originalFilename = '../projects/ngx-extended-pdf-viewer/src/' + folder + '/locale/' + lang + '/viewer.properties';
   if (fs.existsSync(additionalFilename) && fs.existsSync(originalFilename)) {
     const original = fs.readFileSync(originalFilename);

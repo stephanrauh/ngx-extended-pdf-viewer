@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.7.519';
-const pdfjsBuild = '1c1cacc61';
+const pdfjsVersion = '2.7.536';
+const pdfjsBuild = '3124b643e';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -1747,13 +1747,11 @@ const PDFViewerApplication = {
 
     if (!this.documentInfo) {
       await new Promise(resolve => {
-        const metadataLoaded = () => {
-          this.eventBus._off("metadataloaded", metadataLoaded);
-
+        this.eventBus._on("metadataloaded", evt => {
           resolve();
-        };
-
-        this.eventBus._on("metadataloaded", metadataLoaded);
+        }, {
+          once: true
+        });
       });
 
       if (pdfDocument !== this.pdfDocument) {
@@ -2892,19 +2890,8 @@ function webViewerNamedAction(evt) {
   }
 }
 
-function webViewerPresentationModeChanged({
-  active,
-  switchInProgress
-}) {
-  let state = _ui_utils.PresentationModeState.NORMAL;
-
-  if (switchInProgress) {
-    state = _ui_utils.PresentationModeState.CHANGING;
-  } else if (active) {
-    state = _ui_utils.PresentationModeState.FULLSCREEN;
-  }
-
-  PDFViewerApplication.pdfViewer.presentationModeState = state;
+function webViewerPresentationModeChanged(evt) {
+  PDFViewerApplication.pdfViewer.presentationModeState = evt.state;
 }
 
 function webViewerSidebarViewChanged(evt) {
@@ -4283,15 +4270,17 @@ class EventBus {
     this._listeners = Object.create(null);
   }
 
-  on(eventName, listener) {
+  on(eventName, listener, options = null) {
     this._on(eventName, listener, {
-      external: true
+      external: true,
+      once: options?.once
     });
   }
 
-  off(eventName, listener) {
+  off(eventName, listener, options = null) {
     this._off(eventName, listener, {
-      external: true
+      external: true,
+      once: options?.once
     });
   }
 
@@ -4304,16 +4293,17 @@ class EventBus {
 
     const args = Array.prototype.slice.call(arguments, 1);
     let externalListeners;
-    eventListeners.slice(0).forEach(function ({
+    eventListeners.slice(0).forEach(({
       listener,
-      external
-    }) {
-      if (external) {
-        if (!externalListeners) {
-          externalListeners = [];
-        }
+      external,
+      once
+    }) => {
+      if (once) {
+        this._off(eventName, listener);
+      }
 
-        externalListeners.push(listener);
+      if (external) {
+        (externalListeners || (externalListeners = [])).push(listener);
         return;
       }
 
@@ -4321,7 +4311,7 @@ class EventBus {
     });
 
     if (externalListeners) {
-      externalListeners.forEach(function (listener) {
+      externalListeners.forEach(listener => {
         listener.apply(null, args);
       });
       externalListeners = null;
@@ -4329,15 +4319,13 @@ class EventBus {
   }
 
   _on(eventName, listener, options = null) {
-    let eventListeners = this._listeners[eventName];
+    var _this$_listeners;
 
-    if (!eventListeners) {
-      this._listeners[eventName] = eventListeners = [];
-    }
-
+    const eventListeners = (_this$_listeners = this._listeners)[eventName] || (_this$_listeners[eventName] = []);
     eventListeners.push({
       listener,
-      external: (options && options.external) === true
+      external: options?.external === true,
+      once: options?.once === true
     });
   }
 
@@ -4512,6 +4500,8 @@ exports.PDFCursorTools = exports.CursorTool = void 0;
 
 var _grab_to_pan = __webpack_require__(7);
 
+var _ui_utils = __webpack_require__(4);
+
 const CursorTool = {
   SELECT: 0,
   HAND: 1,
@@ -4600,20 +4590,25 @@ class PDFCursorTools {
     });
 
     this.eventBus._on("presentationmodechanged", evt => {
-      if (evt.switchInProgress) {
-        return;
-      }
+      switch (evt.state) {
+        case _ui_utils.PresentationModeState.CHANGING:
+          break;
 
-      let previouslyActive;
+        case _ui_utils.PresentationModeState.FULLSCREEN:
+          {
+            const previouslyActive = this.active;
+            this.switchTool(CursorTool.SELECT);
+            this.activeBeforePresentationMode = previouslyActive;
+            break;
+          }
 
-      if (evt.active) {
-        previouslyActive = this.active;
-        this.switchTool(CursorTool.SELECT);
-        this.activeBeforePresentationMode = previouslyActive;
-      } else {
-        previouslyActive = this.activeBeforePresentationMode;
-        this.activeBeforePresentationMode = null;
-        this.switchTool(previouslyActive);
+        case _ui_utils.PresentationModeState.NORMAL:
+          {
+            const previouslyActive = this.activeBeforePresentationMode;
+            this.activeBeforePresentationMode = null;
+            this.switchTool(previouslyActive);
+            break;
+          }
       }
     });
   }
@@ -5354,7 +5349,7 @@ class PDFSidebar {
     });
 
     this.eventBus._on("presentationmodechanged", evt => {
-      if (!evt.active && !evt.switchInProgress && this.isThumbnailViewVisible) {
+      if (evt.state === _ui_utils.PresentationModeState.NORMAL && this.isThumbnailViewVisible) {
         this._updateThumbnailViewer();
       }
     });
@@ -5708,9 +5703,7 @@ class PDFAttachmentViewer extends _base_tree_viewer.BaseTreeViewer {
       attachmentsCount++;
     }
 
-    this.container.appendChild(fragment);
-
-    this._dispatchEvent(attachmentsCount);
+    this._finishRendering(fragment, attachmentsCount);
   }
 
   _appendAttachment({
@@ -5825,6 +5818,17 @@ class BaseTreeViewer {
 
   _toggleAllTreeItems() {
     this._toggleTreeItem(this.container, !this._lastToggleIsShow);
+  }
+
+  _finishRendering(fragment, count, hasAnyNesting = false) {
+    if (hasAnyNesting) {
+      this.container.classList.add("treeWithDeepNesting");
+      this._lastToggleIsShow = !fragment.querySelector(".treeItemsHidden");
+    }
+
+    this.container.appendChild(fragment);
+
+    this._dispatchEvent(count);
   }
 
   render(params) {
@@ -6250,7 +6254,7 @@ class PDFFindBar {
     }
 
     this.findField.setAttribute("data-status", status);
-    this.findFieldMultiline.classList.toggle("notFound", notFound);
+    this.findFieldMultiline.classList.toggle("notFound", status === "notFound");
     this.findFieldMultiline.setAttribute("data-status", status);
     Promise.resolve(findMsg).then(msg => {
       this.findMsg.textContent = msg;
@@ -7592,19 +7596,17 @@ class PDFHistory {
     this._isViewerInPresentationMode = false;
 
     this.eventBus._on("presentationmodechanged", evt => {
-      this._isViewerInPresentationMode = evt.active || evt.switchInProgress;
+      this._isViewerInPresentationMode = evt.state !== _ui_utils.PresentationModeState.NORMAL;
     });
 
     this.eventBus._on("pagesinit", () => {
       this._isPagesLoaded = false;
 
-      const onPagesLoaded = evt => {
-        this.eventBus._off("pagesloaded", onPagesLoaded);
-
+      this.eventBus._on("pagesloaded", evt => {
         this._isPagesLoaded = !!evt.pagesCount;
-      };
-
-      this.eventBus._on("pagesloaded", onPagesLoaded);
+      }, {
+        once: true
+      });
     });
   }
 
@@ -8328,14 +8330,7 @@ class PDFLayerViewer extends _base_tree_viewer.BaseTreeViewer {
       }
     }
 
-    if (hasAnyNesting) {
-      this.container.classList.add("treeWithDeepNesting");
-      this._lastToggleIsShow = fragment.querySelectorAll(".treeItemsHidden").length === 0;
-    }
-
-    this.container.appendChild(fragment);
-
-    this._dispatchEvent(layersCount);
+    this._finishRendering(fragment, layersCount, hasAnyNesting);
   }
 
   async _resetLayers() {
@@ -9008,14 +9003,7 @@ class PDFOutlineViewer extends _base_tree_viewer.BaseTreeViewer {
       }
     }
 
-    if (hasAnyNesting) {
-      this.container.classList.add("treeWithDeepNesting");
-      this._lastToggleIsShow = fragment.querySelectorAll(".treeItemsHidden").length === 0;
-    }
-
-    this.container.appendChild(fragment);
-
-    this._dispatchEvent(outlineCount);
+    this._finishRendering(fragment, outlineCount, hasAnyNesting);
   }
 
 }
@@ -9177,10 +9165,26 @@ class PDFPresentationMode {
   }
 
   _notifyStateChange() {
+    let state = _ui_utils.PresentationModeState.NORMAL;
+
+    if (this.switchInProgress) {
+      state = _ui_utils.PresentationModeState.CHANGING;
+    } else if (this.active) {
+      state = _ui_utils.PresentationModeState.FULLSCREEN;
+    }
+
     this.eventBus.dispatch("presentationmodechanged", {
       source: this,
-      active: this.active,
-      switchInProgress: !!this.switchInProgress
+      state,
+
+      get active() {
+        throw new Error("Deprecated parameter: `active`, please use `state` instead.");
+      },
+
+      get switchInProgress() {
+        throw new Error("Deprecated parameter: `switchInProgress`, please use `state` instead.");
+      }
+
     });
   }
 
@@ -10450,7 +10454,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.7.519';
+    const viewerVersion = '2.7.536';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
