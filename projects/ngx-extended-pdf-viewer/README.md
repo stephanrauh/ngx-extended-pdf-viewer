@@ -13,6 +13,18 @@
   CDN: <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">unpkg.com</a>
  </p>
 
+## New Years Eve edition (aka version 7.3)
+
+Version 7.3.0 is almost certainly the last version of 2020, so indulge me to look both back and forward. The tech stuff starts with the next section.
+
+For almost everyone of us, 2020 has been a difficult year, a year that's changed our lifes profoundly. npm is a tech platform, so let's leave it at that. I'm positive 2021 is going to be better, and I wish all of you a Happy New Year!
+
+From the point of view of ngx-extended-pdf-viewer, 2020 has been an incredibly successful year. According to [https://npm-stat.com/](https://npm-stat.com/), the library has seen more than 630.000 downloads in 2020, and almost 800.000 downloads ever. That's just awesome. 800.000 signs of trust... time to say "Thank you!"
+
+I'm curious what the next year is going to bring. pdf.js has started to implement scripting, so that's probably the next big thing for ngx-extended-pdf-viewer. That's going to be a challenge. Among other things, scripting adds a megabyte to the memory footprint of the library - something that's not popular in the Angular universe. So scripting has be be optional.
+
+I'd also like to win contributors to the library. Every pull request and every bug report is welcome. Mind you: ngx-extended-pdf-viewer wouldn't be the success story it is if it weren't for its vibrant, friendly, and helpful community!
+
 ## What's new in version 6.0 and 7.0?
 
 Limited Internet Explorer 11 support. More to the point, IE 11 support is now a community effort. Starting with version 7.0, I'll reduce my efforts to support IE11. It's extremly difficult to hunt down bugs in IE11. In my installation of IE11, the debugger crashes all the time. But I'll happily accept pull requests for IE11. I can also fix bugs when you tell me which line is buggy. IE has a tendency to omit this info from the error messages, so I appreciate your help!

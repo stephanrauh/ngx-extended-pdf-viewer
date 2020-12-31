@@ -106,13 +106,15 @@ export class EventBus {
     /**
      * @param {string} eventName
      * @param {function} listener
+     * @param {Object} [options]
      */
-    on(eventName: string, listener: Function): void;
+    on(eventName: string, listener: Function, options?: Object | undefined): void;
     /**
      * @param {string} eventName
      * @param {function} listener
+     * @param {Object} [options]
      */
-    off(eventName: string, listener: Function): void;
+    off(eventName: string, listener: Function, options?: Object | undefined): void;
     dispatch(eventName: any, ...args: any[]): void;
     /**
      * @ignore

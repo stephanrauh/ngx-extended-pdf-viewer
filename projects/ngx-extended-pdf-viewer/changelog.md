@@ -242,4 +242,5 @@
 - 7.1.1 #586 now the bleeding-edge branch prints again; #589 remove the scrollbar when `[pageViewMode]="'single'"` and `[zoom]="'page-fit'"`; #589 resize the viewer area when the zoom is change when `[pageViewMode]="'infinite-scroll'"`
 - 7.1.2 #589 get rid of the scrollbar when `[pageViewMode]="'single'"` and `[zoom]="'page-fit'"` and `[showBorders]="'false'"`
 - 7.2.0 #588 added `(progress)`; #589 prevent unexpected scrolling in single-page mode when the zoom is changed
-- 7.2.1 `[scrollMode]` now also when you set it from horizontal or wrapped to vertical
+- 7.2.1 `[scrollMode]` now also works when you set it from horizontal or wrapped to vertical
+- 7.3.0 #598 translate the message "This PDF contains a digital signature"; #603 added Dutch translations for the texts added by ngx-extended-pdf-viewer
