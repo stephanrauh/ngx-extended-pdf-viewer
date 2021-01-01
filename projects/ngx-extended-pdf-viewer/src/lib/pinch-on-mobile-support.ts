@@ -3,7 +3,6 @@ import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-o
 
 export class PinchOnMobileSupport {
   private viewer: any;
-  private container: HTMLDivElement;
   private startX = 0;
   private startY = 0;
   private initialPinchDistance = 0;
@@ -21,13 +20,14 @@ export class PinchOnMobileSupport {
 
   private onViewerTouchStart(event: TouchEvent): void {
     this.initialPinchDistance = 0;
+
     if (event.touches.length === 2) {
-      const rect = this.container.getBoundingClientRect();
-      // + this.container.scrollTop
+      const container = document.getElementById('viewerContainer') as HTMLDivElement;
+      const rect = container.getBoundingClientRect();
       if (event.touches[0].pageX >= rect.left && event.touches[0].pageX <= rect.right) {
-        if (event.touches[0].pageY >= rect.top /* && event.touches[0].pageY <= rect.bottom */) {
+        if (event.touches[0].pageY >= (rect.top + window.scrollY) && event.touches[0].pageY <= (rect.bottom + window.scrollY)) {
           if (event.touches[1].pageX >= rect.left && event.touches[1].pageX <= rect.right) {
-            if (event.touches[1].pageY >= rect.top /* && event.touches[1].pageY <= rect.bottom  */) {
+            if (event.touches[1].pageY >= (rect.top + window.scrollY) && event.touches[1].pageY <= (rect.bottom + window.scrollY)) {
               this.startX = (event.touches[0].pageX + event.touches[1].pageX) / 2;
               this.startY = (event.touches[0].pageY + event.touches[1].pageY) / 2;
               this.initialPinchDistance = Math.hypot(event.touches[1].pageX - event.touches[0].pageX, event.touches[1].pageY - event.touches[0].pageY);
@@ -51,8 +51,9 @@ export class PinchOnMobileSupport {
       event.preventDefault();
     }
     const pinchDistance = Math.hypot(event.touches[1].pageX - event.touches[0].pageX, event.touches[1].pageY - event.touches[0].pageY);
-    const originX = this.startX + this.container.scrollLeft;
-    const originY = this.startY + this.container.scrollTop;
+    const container = document.getElementById('viewerContainer') as HTMLDivElement;
+    const originX = this.startX + container.scrollLeft;
+    const originY = this.startY + container.scrollTop;
     this.pinchScale = pinchDistance / this.initialPinchDistance;
     let minZoom = Number(PDFViewerApplicationOptions.get('minZoom'));
     if (!minZoom) {
@@ -84,11 +85,12 @@ export class PinchOnMobileSupport {
     this.viewer.style.transform = `none`;
     this.viewer.style.transformOrigin = `unset`;
     PDFViewerApplication.pdfViewer.currentScale *= this.pinchScale;
-    const rect = this.container.getBoundingClientRect();
+    const container = document.getElementById('viewerContainer') as HTMLDivElement;
+    const rect = container.getBoundingClientRect();
     const dx = this.startX - rect.left;
     const dy = this.startY - rect.top;
-    this.container.scrollLeft += dx * (this.pinchScale - 1);
-    this.container.scrollTop += dy * (this.pinchScale - 1);
+    container.scrollLeft += dx * (this.pinchScale - 1);
+    container.scrollTop += dy * (this.pinchScale - 1);
     this.resetPinchZoomParams();
     event.preventDefault();
     event.stopPropagation();
@@ -101,7 +103,6 @@ export class PinchOnMobileSupport {
 
   public initializePinchZoom(): void {
     this.viewer = document.getElementById('viewer');
-    this.container = document.getElementById('viewerContainer') as HTMLDivElement;
     this._zone.runOutsideAngular(() => {
       document.addEventListener('touchstart', this.onViewerTouchStart.bind(this));
       document.addEventListener('touchmove', this.onViewerTouchMove.bind(this), { passive: false });
