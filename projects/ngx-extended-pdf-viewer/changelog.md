@@ -244,4 +244,4 @@
 - 7.2.0 #588 added `(progress)`; #589 prevent unexpected scrolling in single-page mode when the zoom is changed
 - 7.2.1 `[scrollMode]` now also works when you set it from horizontal or wrapped to vertical
 - 7.3.0 #598 translate the message "This PDF contains a digital signature"; #603 added Dutch translations for the texts added by ngx-extended-pdf-viewer
-- 7.3.1 #598 Dutch and Slovenian translations; #265 consider the scroll position of the window when using touch events to zoom; 
+- 7.3.1 #598 Dutch and Slovenian translations; #265 consider the scroll position of the window when using touch events to zoom; #599 fix min/max zoom on mobile devices

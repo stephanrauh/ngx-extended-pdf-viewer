@@ -60,7 +60,7 @@ export class PinchOnMobileSupport {
       minZoom = 0.1;
     }
 
-    const currentZoom = PDFViewerApplication.pdfViewer.currentScale | 1;
+    const currentZoom = PDFViewerApplication.pdfViewer._currentScale;
     if (currentZoom * this.pinchScale < minZoom) {
       this.pinchScale = minZoom / currentZoom;
     }
