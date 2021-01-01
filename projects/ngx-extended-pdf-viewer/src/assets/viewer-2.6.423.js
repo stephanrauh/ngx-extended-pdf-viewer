@@ -728,7 +728,7 @@ const PDFViewerApplication = {
     }
 
     let newScale = this.pdfViewer.currentScale;
-    const maxScale = Number(_app_options.AppOptions.get("maxZoom"));
+    let maxScale = Number(_app_options.AppOptions.get("maxZoom"));
 
     if (!maxScale) {
       maxScale = _ui_utils.MAX_SCALE;
@@ -749,7 +749,7 @@ const PDFViewerApplication = {
     }
 
     let newScale = this.pdfViewer.currentScale;
-    const minScale = Number(_app_options.AppOptions.get("minZoom"));
+    let minScale = Number(_app_options.AppOptions.get("minZoom"));
 
     if (!minScale) {
       minScale = _ui_utils.MIN_SCALE;

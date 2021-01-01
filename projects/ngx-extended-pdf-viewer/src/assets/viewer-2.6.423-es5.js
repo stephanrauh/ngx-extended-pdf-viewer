@@ -381,8 +381,6 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
-
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -894,7 +892,7 @@ var PDFViewerApplication = {
     var maxScale = Number(_app_options.AppOptions.get("maxZoom"));
 
     if (!maxScale) {
-      maxScale = (_readOnlyError("maxScale"), _ui_utils.MAX_SCALE);
+      maxScale = _ui_utils.MAX_SCALE;
     }
 
     do {
@@ -914,7 +912,7 @@ var PDFViewerApplication = {
     var minScale = Number(_app_options.AppOptions.get("minZoom"));
 
     if (!minScale) {
-      minScale = (_readOnlyError("minScale"), _ui_utils.MIN_SCALE);
+      minScale = _ui_utils.MIN_SCALE;
     }
 
     do {
