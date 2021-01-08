@@ -60,7 +60,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
 }
 
 @media all and (max-width: ${this.lg}px) {
-  #outerContainer .toolbarButtonSpacer {
+  .toolbarButtonSpacer {
     width: 15px;
   }
 
@@ -73,7 +73,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
 }
 
 @media all and (max-width: ${this.md}px) {
-  #outerContainer .toolbarButtonSpacer {
+  .toolbarButtonSpacer {
     display: none;
   }
   #outerContainer .hiddenMediumView {
@@ -92,7 +92,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   #outerContainer .visibleSmallView {
     display: inherit;
   }
-  #outerContainer .toolbarButtonSpacer {
+  .toolbarButtonSpacer {
     width: 0;
   }
   html[dir='ltr'] .findbar {
