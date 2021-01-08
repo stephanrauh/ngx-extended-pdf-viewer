@@ -1,5 +1,5 @@
-import { Component, OnInit, Renderer2, Inject, OnChanges, Input, OnDestroy } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'pdf-dynamic-css',
@@ -60,7 +60,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
 }
 
 @media all and (max-width: ${this.lg}px) {
-  .toolbarButtonSpacer {
+  #outerContainer .toolbarButtonSpacer {
     width: 15px;
   }
 
@@ -73,7 +73,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
 }
 
 @media all and (max-width: ${this.md}px) {
-  .toolbarButtonSpacer {
+  #outerContainer .toolbarButtonSpacer {
     display: none;
   }
   #outerContainer .hiddenMediumView {
@@ -85,14 +85,14 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
 }
 
 @media all and (max-width: ${this.sm}px) {
-  .hiddenSmallView,
-  .hiddenSmallView * {
+  #outerContainer .hiddenSmallView,
+  #outerContainer .hiddenSmallView * {
     display: none;
   }
-  .visibleSmallView {
+  #outerContainer .visibleSmallView {
     display: inherit;
   }
-  .toolbarButtonSpacer {
+  #outerContainer .toolbarButtonSpacer {
     width: 0;
   }
   html[dir='ltr'] .findbar {
@@ -109,14 +109,14 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   }
 }
 
-.visibleXLView,
-.visibleXXLView,
-.visibleTinyView {
+#outerContainer .visibleXLView,
+#outerContainer .visibleXXLView,
+#outerContainer .visibleTinyView {
   display: none;
 }
 
-.hiddenXLView,
-.hiddenXXLView {
+#outerContainer .hiddenXLView,
+#outerContainer .hiddenXXLView {
   display: unset;
 }
 
@@ -155,11 +155,11 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
 }
 
 @media all and (max-width: ${this.xs}px) {
-  .hiddenTinyView,
-  .hiddenTinyView * {
+  #outerContainer .hiddenTinyView,
+  #outerContainer .hiddenTinyView * {
     display: none;
   }
-  .visibleTinyView {
+  #outerContainer .visibleTinyView {
     display: inherit;
   }
 }
