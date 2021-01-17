@@ -476,7 +476,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public minZoom = 0.1;
 
-  /** This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
+  /** This attribute allows you to increase the size of the UI elements so you can use them on small mobile devices.
    * This attribute is a string with a percent character at the end (e.g. "150%").
    */
   @Input() _mobileFriendlyZoom = '100%';
@@ -1089,22 +1089,27 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       });
     });
     PDFViewerApplication.eventBus.on('scalechanging', (x: ScaleChangingEvent) => {
-      setTimeout(() => {
-        this.ngZone.run(() => {
-          this.currentZoomFactor.emit(x.scale);
-          const scale = (this.root.nativeElement as HTMLElement).querySelector('#scaleSelect') as HTMLSelectElement | undefined;
-          let userZoomFactor = this.zoom;
-          if (scale) {
-            userZoomFactor = scale.value;
-          }
-          if (userZoomFactor !== 'auto' && userZoomFactor !== 'page-fit' && userZoomFactor !== 'page-actual' && userZoomFactor !== 'page-width') {
-            this.zoomChange.emit(x.scale * 100);
-          } else if (this.zoom !== userZoomFactor) {
-            // called when the user selects one of the text values of the zoom select dropdown
-            this.zoomChange.emit(userZoomFactor);
-          }
-        });
-      });
+      {
+        const scale = (this.root.nativeElement as HTMLElement).querySelector('#scaleSelect') as HTMLSelectElement | undefined;
+        let userZoomFactor = '';
+        if (scale) {
+          userZoomFactor = scale.value;
+        }
+      }
+
+      this.currentZoomFactor.emit(x.scale);
+
+      const scale = (this.root.nativeElement as HTMLElement).querySelector('#scaleSelect') as HTMLSelectElement | undefined;
+      let userZoomFactor = this.zoom;
+      if (scale) {
+        userZoomFactor = scale.value;
+      }
+      if (userZoomFactor !== 'auto' && userZoomFactor !== 'page-fit' && userZoomFactor !== 'page-actual' && userZoomFactor !== 'page-width') {
+        this.zoomChange.emit(x.scale * 100);
+      } else if (this.zoom !== userZoomFactor) {
+        // called when the user selects one of the text values of the zoom select dropdown
+        this.zoomChange.emit(userZoomFactor);
+      }
     });
 
     PDFViewerApplication.eventBus.on('rotationchanging', (x: PagesRotationEvent) => {
@@ -1616,6 +1621,22 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
       PDFViewerApplicationOptions.set('defaultZoomValue', zoomAsNumber);
     }
+
+    const scale = (this.root.nativeElement as HTMLElement).querySelector('#scaleSelect') as HTMLSelectElement | undefined;
+    if (scale) {
+      if (this.zoom === 'auto' || this.zoom === 'page-fit' || this.zoom === 'page-actual' || this.zoom === 'page-width') {
+        scale.value = this.zoom;
+      } else {
+        scale.value = 'custom';
+        for (const option of (scale.options as any)) {
+          if (option.value === 'custom') {
+            option.textContent = (Math.round(Number(zoomAsNumber) * 100_000) / 1000) + "%";
+            continue;
+          }
+        }
+      }
+    }
+
     if (PDFViewerApplication.pdfViewer) {
       PDFViewerApplication.pdfViewer.currentScaleValue = zoomAsNumber;
     }
