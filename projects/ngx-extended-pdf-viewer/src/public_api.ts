@@ -3,10 +3,12 @@
  */
 
 export * from './lib/ngx-extended-pdf-viewer.component';
+export * from './lib/ngx-extended-pdf-viewer-server.component';
 export * from './lib/ngx-extended-pdf-viewer.service';
 export * from './lib/pdf-notification-service';
 export * from './lib/options/pdf-print-range';
 export * from './lib/ngx-extended-pdf-viewer.module';
+export * from './lib/ngx-extended-pdf-viewer-server.module';
 export * from './lib/pdf-document-properties-extractor';
 export * from './lib/options/pdf-default-options';
 export * from './lib/events/find-result';

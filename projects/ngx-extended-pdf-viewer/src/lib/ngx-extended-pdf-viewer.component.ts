@@ -204,7 +204,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public set src(url: string | ArrayBuffer | Blob | Uint8Array | { range: any }) {
     if (url instanceof Uint8Array) {
       this._src = url.buffer;
-    } else if (url instanceof Blob) {
+    } else if (typeof Blob !== 'undefined' && url instanceof Blob) { // additional check introduced to support server side rendering
       const reader = new FileReader();
       reader.onloadend = () => {
         setTimeout(() => {
@@ -227,7 +227,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
       }
     } else {
-      this._src = url;
+      (this._src as any) = url;
     }
   }
 
@@ -619,16 +619,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   ngOnInit() {
-    const link = document.createElement('link');
-    link.href = this.localeFolderPath + '/locale.properties';
-    link.setAttribute('origin', 'ngx-extended-pdf-viewer');
-    link.rel = 'resource';
-    link.type = 'application/l10n';
-    const widget: HTMLElement = this.elementRef.nativeElement;
-    widget.appendChild(link);
+     if (isPlatformBrowser(this.platformId)) {
+      const link = document.createElement('link');
+      link.href = this.localeFolderPath + '/locale.properties';
+      link.setAttribute('origin', 'ngx-extended-pdf-viewer');
+      link.rel = 'resource';
+      link.type = 'application/l10n';
+      const widget: HTMLElement = this.elementRef.nativeElement;
+      widget.appendChild(link);
 
-    this.onResize();
-    if (isPlatformBrowser(this.platformId)) {
+      this.onResize();
+
       if (!window['pdfjs-dist/build/pdf']) {
         const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
         const isEdge = /Edge\/\d./i.test(navigator.userAgent);
@@ -659,12 +660,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   ngAfterViewInit() {
-    if (!this.shuttingDown) {
-      // hurried users sometimes reload the PDF before it has finished initializing
-      if ((window as any).webViewerLoad) {
-        this.doInitPDFViewer();
-      } else {
-        setTimeout(() => this.ngAfterViewInit(), 50);
+    if (typeof window !== 'undefined') {
+      if (!this.shuttingDown) {
+        // hurried users sometimes reload the PDF before it has finished initializing
+        if ((window as any).webViewerLoad) {
+          this.doInitPDFViewer();
+        } else {
+          setTimeout(() => this.ngAfterViewInit(), 50);
+        }
       }
     }
   }
@@ -742,6 +745,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   private doInitPDFViewer() {
+    if (typeof window === 'undefined') {
+      return;
+    }
     const langLinks = document.querySelectorAll('link[type="application/l10n"]');
     const langCount = langLinks.length;
 
@@ -855,19 +861,21 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   public checkHeight(): void {
-    const container = document.getElementsByClassName('zoom')[0];
-    if (container) {
-      if (container.clientHeight === 0 && this._height.includes('%')) {
-        const available = window.innerHeight;
-        const rect = container.getBoundingClientRect();
-        const top = rect.top;
-        let mh = available - top;
-        const factor = Number(this._height.replace('%', ''));
-        mh = (mh * factor) / 100;
-        if (mh > 100) {
-          this.minHeight = mh + 'px';
-        } else {
-          this.minHeight = '100px';
+    if (typeof document !== 'undefined') {
+      const container = document.getElementsByClassName('zoom')[0];
+      if (container) {
+        if (container.clientHeight === 0 && this._height.includes('%')) {
+          const available = window.innerHeight;
+          const rect = container.getBoundingClientRect();
+          const top = rect.top;
+          let mh = available - top;
+          const factor = Number(this._height.replace('%', ''));
+          mh = (mh * factor) / 100;
+          if (mh > 100) {
+            this.minHeight = mh + 'px';
+          } else {
+            this.minHeight = '100px';
+          }
         }
       }
     }
@@ -1295,6 +1303,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   public ngOnDestroy(): void {
+    if (typeof window === 'undefined') {
+      return; // fast escape for server side rendering
+    }
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     this.shuttingDown = true;
 
@@ -1377,6 +1388,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   public ngOnChanges(changes: SimpleChanges) {
+    if (typeof window === 'undefined') {
+      return; // server side rendering
+    }
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
 

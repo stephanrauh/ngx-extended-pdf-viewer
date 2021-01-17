@@ -11,12 +11,14 @@ export class PDFNotificationService {
   public pdfjsVersion = new ReplaySubject<string>(1);
 
   constructor() {
-    if ((window as any).pdfjsLib && (window as any).pdfjsLib.version) {
-      this.pdfjsVersion.next((window as any).pdfjsLib.version);
-    } else {
-      this.onPDFJSInit.subscribe(() => {
+    if (typeof window !== 'undefined') {
+      if ((window as any).pdfjsLib && (window as any).pdfjsLib.version) {
         this.pdfjsVersion.next((window as any).pdfjsLib.version);
-      });
+      } else {
+        this.onPDFJSInit.subscribe(() => {
+          this.pdfjsVersion.next((window as any).pdfjsLib.version);
+        });
+      }
     }
   }
 }

@@ -28,11 +28,13 @@ export class PdfZoomDropdownComponent implements OnInit {
   constructor(private element: ElementRef) {}
 
   ngOnInit() {
-    const callback = (e) => {
-      document.removeEventListener('localized', callback);
-    };
+    if (typeof document !== 'undefined') {
+      const callback = (e) => {
+        document.removeEventListener('localized', callback);
+      };
 
-    document.addEventListener('localized', callback);
+      document.addEventListener('localized', callback);
+    }
   }
 
   private valueToZoomLevel(value: string | number): ZoomLevel {

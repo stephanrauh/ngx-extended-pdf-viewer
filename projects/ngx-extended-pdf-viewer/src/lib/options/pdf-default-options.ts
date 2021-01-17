@@ -1,5 +1,5 @@
 const _isIE11 = typeof window === 'undefined' ? false : !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
-const isEdge = /Edge\/\d./i.test(navigator.userAgent);
+const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
 export let pdfjsVersion = '2.6.423';
@@ -56,8 +56,10 @@ export let pdfDefaultOptions = {
       : './' + pdfDefaultOptions.assetsFolder + '/pdf.worker-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '.js',
 };
 
-if ((<any>window).pdfDefaultOptions) {
-  pdfDefaultOptions = (<any>window).pdfDefaultOptions;
-} else {
-  (<any>window).pdfDefaultOptions = pdfDefaultOptions;
+if (typeof window !== 'undefined') {
+  if ((<any>window).pdfDefaultOptions) {
+    pdfDefaultOptions = (<any>window).pdfDefaultOptions;
+  } else {
+    (<any>window).pdfDefaultOptions = pdfDefaultOptions;
+  }
 }

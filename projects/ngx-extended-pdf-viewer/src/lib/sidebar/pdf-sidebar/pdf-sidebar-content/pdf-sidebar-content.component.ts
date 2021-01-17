@@ -39,14 +39,16 @@ export class PdfSidebarContentComponent implements OnDestroy {
   public _hideSidebarToolbar = false;
 
   constructor() {
-    (window as any).pdfThumbnailGeneratorReady = () => this.pdfThumbnailGeneratorReady();
-    (window as any).pdfThumbnailGenerator = (
-      pdfThumbnailView: PDFThumbnailView,
-      linkService: any,
-      id: number,
-      container: HTMLDivElement,
-      thumbPageTitlePromise: Promise<string>
-    ) => this.createThumbnail(pdfThumbnailView, linkService, id, container, thumbPageTitlePromise);
+    if (typeof window !== 'undefined') {
+      (window as any).pdfThumbnailGeneratorReady = () => this.pdfThumbnailGeneratorReady();
+      (window as any).pdfThumbnailGenerator = (
+        pdfThumbnailView: PDFThumbnailView,
+        linkService: any,
+        id: number,
+        container: HTMLDivElement,
+        thumbPageTitlePromise: Promise<string>
+      ) => this.createThumbnail(pdfThumbnailView, linkService, id, container, thumbPageTitlePromise);
+    }
   }
 
   public ngOnDestroy(): void {
