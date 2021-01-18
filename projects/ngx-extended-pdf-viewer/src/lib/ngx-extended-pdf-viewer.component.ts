@@ -1113,7 +1113,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         userZoomFactor = scale.value;
       }
       if (userZoomFactor !== 'auto' && userZoomFactor !== 'page-fit' && userZoomFactor !== 'page-actual' && userZoomFactor !== 'page-width') {
+        this.zoom = x.scale * 100;
         this.zoomChange.emit(x.scale * 100);
+        // setTimeout(() => this.zoomChange.emit(x.scale * 100));
       } else if (this.zoom !== userZoomFactor) {
         // called when the user selects one of the text values of the zoom select dropdown
         this.zoomChange.emit(userZoomFactor);

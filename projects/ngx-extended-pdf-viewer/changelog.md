@@ -247,3 +247,4 @@
 - 7.3.1 #598 Dutch and Slovenian translations; #265 consider the scroll position of the window when using touch events to zoom; #599 fix min/max zoom on mobile devices
 - 7.3.2 #615 improved several CSS rules. Kudos to Roman Sattler for sending the pull request!
 - 8.0.0-beta.0 #609 enable server-side rendering; #591 fixed the bug that zoom using wheel and ctrl goes to endless loop
+- 8.0.0-beta.1 #591 send `(zoomChange)` without causing an `ExpressionChangedAfterItHasBeenCheckedErrror`

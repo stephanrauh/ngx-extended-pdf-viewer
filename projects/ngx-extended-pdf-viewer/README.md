@@ -13,34 +13,12 @@
   CDN: <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">unpkg.com</a>
  </p>
 
-## New Years Eve edition (aka version 7.3)
+## Showcase and manual
 
-Version 7.3.0 is almost certainly the last version of 2020, so indulge me to look both back and forward. The tech stuff starts with the next section.
-
-For almost everyone of us, 2020 has been a difficult year, a year that's changed our lifes profoundly. npm is a tech platform, so let's leave it at that. I'm positive 2021 is going to be better, and I wish all of you a Happy New Year!
-
-From the point of view of ngx-extended-pdf-viewer, 2020 has been an incredibly successful year. According to [https://npm-stat.com/](https://npm-stat.com/), the library has seen more than 630.000 downloads in 2020, and almost 800.000 downloads ever. That's just awesome. 800.000 signs of trust... time to say "Thank you!"
-
-I'm curious what the next year is going to bring. pdf.js has started to implement scripting, so that's probably the next big thing for ngx-extended-pdf-viewer. That's going to be a challenge. Among other things, scripting adds a megabyte to the memory footprint of the library - something that's not popular in the Angular universe. So scripting has be be optional.
-
-I'd also like to win contributors to the library. Every pull request and every bug report is welcome. Mind you: ngx-extended-pdf-viewer wouldn't be the success story it is if it weren't for its vibrant, friendly, and helpful community!
-
-## What's new in version 6.0 and 7.0?
-
-Limited Internet Explorer 11 support. More to the point, IE 11 support is now a community effort. Starting with version 7.0, I'll reduce my efforts to support IE11. It's extremly difficult to hunt down bugs in IE11. In my installation of IE11, the debugger crashes all the time. But I'll happily accept pull requests for IE11. I can also fix bugs when you tell me which line is buggy. IE has a tendency to omit this info from the error messages, so I appreciate your help!
-
-The JavaScript files have been renamed. Now the file names contain the version number. This should avoid caching problems after updating ngx-extended-pdf-viewer.
-
-`[(zoom)]` has been overhauled. Now opening a new PDF file doesn't reset the zoom value.
-
-`[src]` closes the current PDF file if you set `[src]="undefined"`. 
-
-`NgxExtendedPdfViewerService` now allows you to `getCurrentDocumentAsBlob()` and to access the low-level form data using `getFormData()`.
-
-Version 6.0 adds a warning if you're displaying a signature (because the PDF viewer can't verify it) and it drops the custom zoom dropdown menu.
-
-
-## Potentially breaking changes
+There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook.
+## What's new in version 8.0?
+Once again, I've fixed `[(zoom)]`. Now there's no infinite loop when you resize the PDF quickly with the mouse wheel. It's unlikely, but the bug fix might break some applications, so I've decided to call it a new major version.
+## Other potentially breaking changes
 Version 7.1. is a pure bug-fix release. It's extremely unlikely, but it might cause difficulties if the PDF viewer is destroyed and immediately re-created. Should you run into this, adding a delay of a single millisecond fixes this (or even a `setTimeout()` without the delay parameter). 
 
 Version 7.0 fixes several bugs concerning `[(zoom)]`. Now `(zoom)` also emits the text values ("page-fit", "auto", "page-width", "page-actual"). When you open
@@ -50,20 +28,6 @@ on the bugs.
 The JavaScript files have been renamed. Now the version number is part of the file name.
 
 Version 7.0 also removes several attributes and methods that have been deprecated a long time ago.
-
-Several additions of version 6.0 may be consider breaking changes:
-- There's a warning if you're displaying a signature (because the PDF viewer can't verify it).
-- The custom zoom dropdown menu is replaced by the standard dropdown element of the browser because of cross-browser incompatibilities.
-- The algorithm hiding the toolbar has been fixed. If no button is shown, it's hidden, and the PDF file uses the free screen estate. Previously, 
-  this algorithm wasn't 100% failsafe.
-- The locale files are now expected to be in the assets folder defined by `pdfDefaultOptions.assetsFolder`. If you're configured a user-defined
-  assets folder, this may be a breaking change because previous versions ignored this setting. You can override the default using the new attribute
-  `localeFolderPath`.
-
-## Showcase and manual
-
-There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook.
-
 ## Bringing PDF to the Angular world
 
 This library provides an embeddable PDF viewer component. It's different from other approaches like [ng2-pdf-viewer](https://vadimdez.github.io/ng2-pdf-viewer/) in that it shows the full suite of UI widgets. In other words, it strongly resembles the PDF viewer of your browser:
