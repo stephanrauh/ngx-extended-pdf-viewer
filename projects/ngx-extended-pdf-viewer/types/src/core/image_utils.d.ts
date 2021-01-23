@@ -1,18 +1,3 @@
-export class LocalImageCache extends BaseLocalCache {
-    constructor(options: any);
-}
-export class LocalColorSpaceCache extends BaseLocalCache {
-    constructor(options: any);
-}
-export class LocalFunctionCache extends BaseLocalCache {
-    constructor(options: any);
-}
-export class LocalGStateCache extends BaseLocalCache {
-    constructor(options: any);
-}
-export class LocalTilingPatternCache extends BaseLocalCache {
-    constructor(options: any);
-}
 export class GlobalImageCache {
     static get NUM_PAGES_THRESHOLD(): any;
     static get MAX_IMAGES_TO_CACHE(): any;
@@ -24,6 +9,22 @@ export class GlobalImageCache {
     setData(ref: any, data: any): void;
     clear(onlyData?: boolean): void;
 }
+export class LocalColorSpaceCache extends BaseLocalCache {
+    constructor(options: any);
+}
+export class LocalFunctionCache extends BaseLocalCache {
+    constructor(options: any);
+}
+export class LocalGStateCache extends BaseLocalCache {
+    constructor(options: any);
+}
+export class LocalImageCache extends BaseLocalCache {
+    constructor(options: any);
+}
+export class LocalTilingPatternCache extends BaseLocalCache {
+    constructor(options: any);
+}
+import { RefSetCache } from "./primitives.js";
 declare class BaseLocalCache {
     constructor(options: any);
     _nameRefMap: Map<any, any> | undefined;
@@ -33,5 +34,4 @@ declare class BaseLocalCache {
     getByRef(ref: any): any;
     set(name: any, ref: any, data: any): void;
 }
-import { RefSetCache } from "./primitives.js";
 export {};

@@ -23,6 +23,20 @@ export type TextLayerBuilderOptions = {
     enhanceTextSelection: boolean;
 };
 /**
+ * @implements IPDFTextLayerFactory
+ */
+export class DefaultTextLayerFactory {
+    /**
+     * @param {HTMLDivElement} textLayerDiv
+     * @param {number} pageIndex
+     * @param {PageViewport} viewport
+     * @param {boolean} enhanceTextSelection
+     * @param {EventBus} eventBus
+     * @returns {TextLayerBuilder}
+     */
+    createTextLayerBuilder(textLayerDiv: HTMLDivElement, pageIndex: number, viewport: any, enhanceTextSelection: boolean | undefined, eventBus: any): TextLayerBuilder;
+}
+/**
  * @typedef {Object} TextLayerBuilderOptions
  * @property {HTMLDivElement} textLayerDiv - The text layer container.
  * @property {EventBus} eventBus - The application event bus.
@@ -96,18 +110,4 @@ export class TextLayerBuilder {
      * @private
      */
     private _bindMouse;
-}
-/**
- * @implements IPDFTextLayerFactory
- */
-export class DefaultTextLayerFactory {
-    /**
-     * @param {HTMLDivElement} textLayerDiv
-     * @param {number} pageIndex
-     * @param {PageViewport} viewport
-     * @param {boolean} enhanceTextSelection
-     * @param {EventBus} eventBus
-     * @returns {TextLayerBuilder}
-     */
-    createTextLayerBuilder(textLayerDiv: HTMLDivElement, pageIndex: number, viewport: any, enhanceTextSelection: boolean | undefined, eventBus: any): TextLayerBuilder;
 }

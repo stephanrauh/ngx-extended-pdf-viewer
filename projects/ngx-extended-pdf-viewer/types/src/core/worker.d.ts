@@ -1,3 +1,8 @@
+export class WorkerMessageHandler {
+    static setup(handler: any, port: any): void;
+    static createDocumentHandler(docParams: any, port: any): string;
+    static initializeFromPort(port: any): void;
+}
 export class WorkerTask {
     constructor(name: any);
     name: any;
@@ -7,9 +12,4 @@ export class WorkerTask {
     finish(): void;
     terminate(): void;
     ensureNotTerminated(): void;
-}
-export class WorkerMessageHandler {
-    static setup(handler: any, port: any): void;
-    static createDocumentHandler(docParams: any, port: any): string;
-    static initializeFromPort(port: any): void;
 }

@@ -1,9 +1,3 @@
-export namespace RenderingStates {
-    const INITIAL: number;
-    const RUNNING: number;
-    const PAUSED: number;
-    const FINISHED: number;
-}
 /**
  * Controls rendering of the views for pages and thumbnails.
  */
@@ -51,4 +45,10 @@ export class PDFRenderingQueue {
      * @param {IRenderableView} view
      */
     renderView(view: any): boolean;
+}
+export namespace RenderingStates {
+    const INITIAL: number;
+    const RUNNING: number;
+    const PAUSED: number;
+    const FINISHED: number;
 }

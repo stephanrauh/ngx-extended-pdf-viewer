@@ -1,8 +1,12 @@
 <div id="toolbarSidebar">
+  <div id="toolbarSidebarLeft">
     <button type="button" id="viewThumbnail" class="toolbarButton toggled" title="Show Thumbnails" data-l10n-id="thumbs">
       <span data-l10n-id="thumbs_label">Thumbnails</span>
-      <svg style="width:20px;height:20px" viewBox="0 0 24 24">
-        <path fill="currentColor" d="M19,19H5V5H19M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M13.96,12.29L11.21,15.83L9.25,13.47L6.5,17H17.5L13.96,12.29Z" />
+      <svg style="width: 20px; height: 20px" viewBox="0 0 24 24">
+        <path
+          fill="currentColor"
+          d="M19,19H5V5H19M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M13.96,12.29L11.21,15.83L9.25,13.47L6.5,17H17.5L13.96,12.29Z"
+        />
       </svg>
     </button>
 
@@ -15,16 +19,19 @@
       hidden="true"
     >
       <span data-l10n-id="document_outline_label">Document Outline</span>
-      <svg style="width:20px;height:20px" viewBox="0 0 24 24">
+      <svg style="width: 20px; height: 20px" viewBox="0 0 24 24">
         <path fill="currentColor" d="M3,9H17V7H3V9M3,13H17V11H3V13M3,17H17V15H3V17M19,17H21V15H19V17M19,7V9H21V7H19M19,13H21V11H19V13Z" />
       </svg>
     </button>
 
     <button type="button" id="viewAttachments" class="toolbarButton" title="Show Attachments" data-l10n-id="attachments" hidden="true">
       <span data-l10n-id="attachments_label">Attachments</span>
-      <svg style="width:20px;height:20px" viewBox="0 0 24 24">
-        <path fill="currentColor" d="M16.5,6V17.5A4,4 0 0,1 12.5,21.5A4,4 0 0,1 8.5,17.5V5A2.5,2.5 0 0,1 11,2.5A2.5,2.5 0 0,1 13.5,5V15.5A1,1 0 0,1 12.5,16.5A1,1 0 0,1 11.5,15.5V6H10V15.5A2.5,2.5 0 0,0 12.5,18A2.5,2.5 0 0,0 15,15.5V5A4,4 0 0,0 11,1A4,4 0 0,0 7,5V17.5A5.5,5.5 0 0,0 12.5,23A5.5,5.5 0 0,0 18,17.5V6H16.5Z" />
-    </svg>
+      <svg style="width: 20px; height: 20px" viewBox="0 0 24 24">
+        <path
+          fill="currentColor"
+          d="M16.5,6V17.5A4,4 0 0,1 12.5,21.5A4,4 0 0,1 8.5,17.5V5A2.5,2.5 0 0,1 11,2.5A2.5,2.5 0 0,1 13.5,5V15.5A1,1 0 0,1 12.5,16.5A1,1 0 0,1 11.5,15.5V6H10V15.5A2.5,2.5 0 0,0 12.5,18A2.5,2.5 0 0,0 15,15.5V5A4,4 0 0,0 11,1A4,4 0 0,0 7,5V17.5A5.5,5.5 0 0,0 12.5,23A5.5,5.5 0 0,0 18,17.5V6H16.5Z"
+        />
+      </svg>
     </button>
     <button
       id="viewLayers"
@@ -34,10 +41,31 @@
       hidden="true"
     >
       <span data-l10n-id="layers_label">Layers</span>
-      <svg style="width:20px;height:20px" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4.233 4.233">
+      <svg style="width: 20px; height: 20px" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4.233 4.233">
         <path
           d="M.15 2.992c-.198.1-.2.266-.002.365l1.604.802a.93.93 0 00.729-.001l1.602-.801c.198-.1.197-.264 0-.364l-.695-.348c-1.306.595-2.542 0-2.542 0m-.264.53l.658-.329c.6.252 1.238.244 1.754 0l.659.329-1.536.768zM.15 1.935c-.198.1-.198.265 0 .364l1.604.802a.926.926 0 00.727 0l1.603-.802c.198-.099.198-.264 0-.363l-.694-.35c-1.14.56-2.546.001-2.546.001m-.264.53l.664-.332c.52.266 1.261.235 1.75.002l.659.33-1.537.768zM.15.877c-.198.099-.198.264 0 .363l1.604.802a.926.926 0 00.727 0l1.603-.802c.198-.099.198-.264 0-.363L2.481.075a.926.926 0 00-.727 0zm.43.182L2.117.29l1.538.769-1.538.768z"
         />
       </svg>
     </button>
+  </div>
+
+  <div id="toolbarSidebarRight">
+    <div id="outlineOptionsContainer" class="hidden">
+      <div class="verticalToolbarSeparator"></div>
+
+      <button
+        id="currentOutlineItem"
+        class="toolbarButton"
+        disabled="disabled"
+        title="Find Current Outline Item"
+        tabindex="6"
+        data-l10n-id="current_outline_item"
+      >
+        <span data-l10n-id="current_outline_item_label">Current Outline Item</span>
+        <svg style="width: 20px; height: 20px" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+          <path d="m14 9h-6c-1.3 0-1.3 2 0 2h6c1.3 0 1.3-2 0-2zm-5.2-8h-3.8c-1.3 0-1.3 2 0 2h1.7zm-6.8 0c-1 0-1.3 1-0.7 1.7 0.7 0.6 1.7 0.3 1.7-0.7 0-0.5-0.4-1-1-1zm3 8c-1 0-1.3 1-0.7 1.7 0.6 0.6 1.7 0.2 1.7-0.7 0-0.5-0.4-1-1-1zm0.3-4h-0.3c-1.4 0-1.4 2 0 2h2.3zm-3.3 0c-0.9 0-1.4 1-0.7 1.7 0.7 0.6 1.7 0.2 1.7-0.7 0-0.6-0.5-1-1-1zm12 8h-9c-1.3 0-1.3 2 0 2h9c1.3 0 1.3-2 0-2zm-12 0c-1 0-1.3 1-0.7 1.7 0.7 0.6 1.7 0.2 1.7-0.712 0-0.5-0.4-1-1-1z"/><path d="m7.37 4.838 3.93-3.911v2.138h3.629v3.546h-3.629v2.138l-3.93-3.911"/>
+        </svg>
+      </button>
+    </div>
+  </div>
 </div>

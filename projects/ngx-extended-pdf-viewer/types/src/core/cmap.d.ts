@@ -18,13 +18,14 @@ export class CMap {
     charCodeOf(value: any): number;
     getMap(): any[];
     readCharCode(str: any, offset: any, out: any): void;
+    getCharCodeLength(charCode: any): number;
     get length(): number;
     get isIdentityCMap(): boolean;
-}
-export class IdentityCMap extends CMap {
-    constructor(vertical: any, n: any);
 }
 export namespace CMapFactory {
     function create(params: any): Promise<any>;
     function create(params: any): Promise<any>;
+}
+export class IdentityCMap extends CMap {
+    constructor(vertical: any, n: any);
 }

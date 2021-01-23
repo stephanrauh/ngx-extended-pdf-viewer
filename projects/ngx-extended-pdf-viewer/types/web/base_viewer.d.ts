@@ -231,7 +231,6 @@ export class BaseViewer {
     _pagesCapability: any;
     _scrollMode: any;
     _spreadMode: any;
-    _pageOpenPendingSet: Set<any> | null | undefined;
     _scrollUpdate(): void;
     _scrollIntoView({ pageDiv, pageSpot, pageNumber }: {
         pageDiv: any;
@@ -417,10 +416,12 @@ export class BaseViewer {
      */
     get spreadMode(): number;
     _updateSpreadMode(pageNumber?: any): void;
+    initializeScriptingEvents(): void;
+    _pageOpenPendingSet: Set<any> | null | undefined;
     /**
      * @private
      */
-    private _initializeScriptingEvents;
+    private _resetScriptingEvents;
 }
 import { PDFRenderingQueue } from "./pdf_rendering_queue.js";
 /**

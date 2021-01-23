@@ -430,6 +430,14 @@ export type PDFWorkerParameters = {
      */
     verbosity?: number | undefined;
 };
+/** @type {string} */
+export const build: string;
+export const DefaultCanvasFactory: typeof DOMCanvasFactory | {
+    new (): {};
+};
+export const DefaultCMapReaderFactory: typeof DOMCMapReaderFactory | {
+    new (): {};
+};
 /**
  * @typedef { Int8Array | Uint8Array | Uint8ClampedArray |
  *            Int16Array | Uint16Array |
@@ -574,15 +582,6 @@ export class PDFDataRangeTransport {
     requestDataRange(begin: any, end: any): void;
     abort(): void;
 }
-/**
- * @typedef {Object} PDFWorkerParameters
- * @property {string} [name] - The name of the worker.
- * @property {Object} [port] - The `workerPort` object.
- * @property {number} [verbosity] - Controls the logging level; the
- *   constants from {@link VerbosityLevel} should be used.
- */
-/** @type {any} */
-export const PDFWorker: any;
 /**
  * Proxy to a `PDFDocument` in the worker thread.
  */
@@ -980,12 +979,10 @@ export class PDFPageProxy {
     annotationsPromise: any;
     annotationsIntent: string | undefined;
     /**
-     * @param {GetAnnotationsParameters} params - Annotation parameters.
-     * @returns {Promise<Array<any>>} A promise that is resolved with an
-     *   {Array} of the annotation objects.
+     * @returns {Promise<Object>} A promise that is resolved with an
+     *   {Object} with JS actions.
      */
-    getJSActions(): Promise<Array<any>>;
-    _jsActionsPromise: any;
+    getJSActions(): Promise<Object>;
     /**
      * Begins the process of rendering a page to the desired context.
      *
@@ -1015,6 +1012,7 @@ export class PDFPageProxy {
      * @private
      */
     private _destroy;
+    _jsActionsPromise: any;
     /**
      * Cleans up resources allocated by the page.
      *
@@ -1050,6 +1048,15 @@ export class PDFPageProxy {
     get stats(): Object;
 }
 /**
+ * @typedef {Object} PDFWorkerParameters
+ * @property {string} [name] - The name of the worker.
+ * @property {Object} [port] - The `workerPort` object.
+ * @property {number} [verbosity] - Controls the logging level; the
+ *   constants from {@link VerbosityLevel} should be used.
+ */
+/** @type {any} */
+export const PDFWorker: any;
+/**
  * Sets the function that instantiates an {IPDFStream} as an alternative PDF
  * data transport.
  *
@@ -1061,11 +1068,11 @@ export class PDFPageProxy {
 export function setPDFNetworkStreamFactory(pdfNetworkStreamFactory: IPDFStreamFactory): void;
 /** @type {string} */
 export const version: string;
-/** @type {string} */
-export const build: string;
 import { PageViewport } from "./display_utils.js";
 import { AnnotationStorage } from "./annotation_storage.js";
 import { OptionalContentConfig } from "./optional_content_config.js";
+import { DOMCanvasFactory } from "./display_utils.js";
+import { DOMCMapReaderFactory } from "./display_utils.js";
 /**
  * The loading task controls the operations required to load a PDF document
  * (such as network requests) and provides a way to listen for completion,

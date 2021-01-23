@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.7.537';
-var pdfjsBuild = '4e030a6f3';
+var pdfjsVersion = '2.7.632';
+var pdfjsBuild = '79050ddae';
 
 /***/ }),
 /* 1 */
@@ -63,23 +63,23 @@ var pdfjsBuild = '4e030a6f3';
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.WorkerMessageHandler = exports.WorkerTask = void 0;
+exports.WorkerTask = exports.WorkerMessageHandler = void 0;
 
 var _regenerator = _interopRequireDefault(__w_pdfjs_require__(2));
 
 var _util = __w_pdfjs_require__(4);
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
-var _pdf_manager = __w_pdfjs_require__(134);
+var _pdf_manager = __w_pdfjs_require__(135);
 
-var _writer = __w_pdfjs_require__(155);
+var _writer = __w_pdfjs_require__(175);
 
-var _message_handler = __w_pdfjs_require__(175);
+var _message_handler = __w_pdfjs_require__(177);
 
-var _worker_stream = __w_pdfjs_require__(176);
+var _worker_stream = __w_pdfjs_require__(178);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -118,33 +118,12 @@ if (!Promise.allSettled) {
     }).map(function (p) {
       return p.then(function (value) {
         return {
-          status: 'fulfilled',
+          status: "fulfilled",
           value: value
         };
       })["catch"](function (reason) {
         return {
-          status: 'rejected',
-          reason: reason
-        };
-      });
-    });
-    return Promise.all(mappedPromises);
-  };
-}
-
-if (!Promise.allSettled) {
-  Promise.allSettled = function (promises) {
-    var mappedPromises = promises.filter(function (o) {
-      return !!o;
-    }).map(function (p) {
-      return p.then(function (value) {
-        return {
-          status: 'fulfilled',
-          value: value
-        };
-      })["catch"](function (reason) {
-        return {
-          status: 'rejected',
+          status: "rejected",
           reason: reason
         };
       });
@@ -234,7 +213,7 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
       var WorkerTasks = [];
       var verbosity = (0, _util.getVerbosityLevel)();
       var apiVersion = docParams.apiVersion;
-      var workerVersion = '2.7.537';
+      var workerVersion = '2.7.632';
 
       if (apiVersion !== workerVersion) {
         throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -1484,31 +1463,33 @@ exports.arraysToBytes = arraysToBytes;
 exports.assert = assert;
 exports.bytesToString = bytesToString;
 exports.createPromiseCapability = createPromiseCapability;
-exports.escapeString = escapeString;
+exports.createValidAbsoluteUrl = createValidAbsoluteUrl;
 exports.encodeToXmlString = encodeToXmlString;
+exports.escapeString = escapeString;
 exports.getModificationDate = getModificationDate;
 exports.getVerbosityLevel = getVerbosityLevel;
 exports.info = info;
 exports.isArrayBuffer = isArrayBuffer;
 exports.isArrayEqual = isArrayEqual;
+exports.isAscii = isAscii;
 exports.isBool = isBool;
 exports.isNum = isNum;
-exports.isString = isString;
 exports.isSameOrigin = isSameOrigin;
-exports.createValidAbsoluteUrl = createValidAbsoluteUrl;
-exports.objectSize = objectSize;
+exports.isString = isString;
 exports.objectFromEntries = objectFromEntries;
+exports.objectSize = objectSize;
 exports.removeNullCharacters = removeNullCharacters;
 exports.setVerbosityLevel = setVerbosityLevel;
 exports.shadow = shadow;
 exports.string32 = string32;
 exports.stringToBytes = stringToBytes;
 exports.stringToPDFString = stringToPDFString;
+exports.stringToUTF16BEString = stringToUTF16BEString;
 exports.stringToUTF8String = stringToUTF8String;
+exports.unreachable = unreachable;
 exports.utf8StringToString = utf8StringToString;
 exports.warn = warn;
-exports.unreachable = unreachable;
-exports.IsEvalSupportedCached = exports.IsLittleEndianCached = exports.createObjectURL = exports.FormatError = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.StreamType = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.MissingPDFException = exports.InvalidPDFException = exports.AbortException = exports.DocumentActionEventType = exports.CMapCompressionType = exports.ImageKind = exports.FontType = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.UNSUPPORTED_FEATURES = exports.VerbosityLevel = exports.OPS = exports.IDENTITY_MATRIX = exports.FONT_IDENTITY_MATRIX = exports.BaseException = void 0;
+exports.VerbosityLevel = exports.Util = exports.UNSUPPORTED_FEATURES = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.StreamType = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.IsLittleEndianCached = exports.IsEvalSupportedCached = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FontType = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.createObjectURL = exports.CMapCompressionType = exports.BaseException = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
 
 __w_pdfjs_require__(5);
 
@@ -2387,6 +2368,23 @@ function escapeString(str) {
   });
 }
 
+function isAscii(str) {
+  return /^[\x00-\x7F]*$/.test(str);
+}
+
+function stringToUTF16BEString(str) {
+  var buf = ["\xFE\xFF"];
+
+  for (var i = 0, ii = str.length; i < ii; i++) {
+    var _char = str.charCodeAt(i);
+
+    buf.push(String.fromCharCode(_char >> 8 & 0xff));
+    buf.push(String.fromCharCode(_char & 0xff));
+  }
+
+  return buf.join("");
+}
+
 function stringToUTF8String(str) {
   return decodeURIComponent(escape(str));
 }
@@ -2492,10 +2490,10 @@ function encodeToXmlString(str) {
   var start = 0;
 
   for (var i = 0, ii = str.length; i < ii; i++) {
-    var _char = str.codePointAt(i);
+    var _char2 = str.codePointAt(i);
 
-    if (0x20 <= _char && _char <= 0x7e) {
-      var entity = XMLEntities[_char];
+    if (0x20 <= _char2 && _char2 <= 0x7e) {
+      var entity = XMLEntities[_char2];
 
       if (entity) {
         if (start < i) {
@@ -2510,9 +2508,9 @@ function encodeToXmlString(str) {
         buffer.push(str.substring(start, i));
       }
 
-      buffer.push("&#x".concat(_char.toString(16).toUpperCase(), ";"));
+      buffer.push("&#x".concat(_char2.toString(16).toUpperCase(), ";"));
 
-      if (_char > 0xd7ff && (_char < 0xe000 || _char > 0xfffd)) {
+      if (_char2 > 0xd7ff && (_char2 < 0xe000 || _char2 > 0xfffd)) {
         i++;
       }
 
@@ -2584,7 +2582,7 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
   })();
 
   (function checkURL() {
-    globalThis.URL = __w_pdfjs_require__(109);
+    globalThis.URL = __w_pdfjs_require__(110);
   })();
 
   (function checkReadableStream() {
@@ -2605,7 +2603,7 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
       return;
     }
 
-    globalThis.ReadableStream = __w_pdfjs_require__(119).ReadableStream;
+    globalThis.ReadableStream = __w_pdfjs_require__(120).ReadableStream;
   })();
 
   (function checkStringPadStart() {
@@ -2613,7 +2611,7 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
       return;
     }
 
-    __w_pdfjs_require__(120);
+    __w_pdfjs_require__(121);
   })();
 
   (function checkStringPadEnd() {
@@ -2621,7 +2619,7 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
       return;
     }
 
-    __w_pdfjs_require__(126);
+    __w_pdfjs_require__(127);
   })();
 
   (function checkObjectValues() {
@@ -2629,7 +2627,7 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
       return;
     }
 
-    Object.values = __w_pdfjs_require__(128);
+    Object.values = __w_pdfjs_require__(129);
   })();
 
   (function checkObjectEntries() {
@@ -2637,7 +2635,7 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
       return;
     }
 
-    Object.entries = __w_pdfjs_require__(131);
+    Object.entries = __w_pdfjs_require__(132);
   })();
 }
 
@@ -3120,9 +3118,9 @@ var store = __w_pdfjs_require__(30);
 (module.exports = function (key, value) {
  return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
- version: '3.8.1',
+ version: '3.8.2',
  mode: IS_PURE ? 'pure' : 'global',
- copyright: '© 2020 Denis Pushkarev (zloirock.ru)'
+ copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
 
 /***/ }),
@@ -4046,11 +4044,11 @@ module.exports = function (object, key, value) {
 __w_pdfjs_require__(82);
 __w_pdfjs_require__(83);
 __w_pdfjs_require__(85);
-__w_pdfjs_require__(102);
 __w_pdfjs_require__(103);
 __w_pdfjs_require__(104);
 __w_pdfjs_require__(105);
-__w_pdfjs_require__(107);
+__w_pdfjs_require__(106);
+__w_pdfjs_require__(108);
 var path = __w_pdfjs_require__(41);
 module.exports = path.Promise;
 
@@ -4135,15 +4133,15 @@ var checkCorrectnessOfIteration = __w_pdfjs_require__(90);
 var speciesConstructor = __w_pdfjs_require__(91);
 var task = __w_pdfjs_require__(92).set;
 var microtask = __w_pdfjs_require__(96);
-var promiseResolve = __w_pdfjs_require__(97);
-var hostReportErrors = __w_pdfjs_require__(99);
-var newPromiseCapabilityModule = __w_pdfjs_require__(98);
-var perform = __w_pdfjs_require__(100);
+var promiseResolve = __w_pdfjs_require__(98);
+var hostReportErrors = __w_pdfjs_require__(100);
+var newPromiseCapabilityModule = __w_pdfjs_require__(99);
+var perform = __w_pdfjs_require__(101);
 var InternalStateModule = __w_pdfjs_require__(31);
 var isForced = __w_pdfjs_require__(50);
 var wellKnownSymbol = __w_pdfjs_require__(54);
 var IS_NODE = __w_pdfjs_require__(95);
-var V8_VERSION = __w_pdfjs_require__(101);
+var V8_VERSION = __w_pdfjs_require__(102);
 var SPECIES = wellKnownSymbol('species');
 var PROMISE = 'Promise';
 var getInternalState = InternalStateModule.get;
@@ -4721,6 +4719,7 @@ var global = __w_pdfjs_require__(9);
 var getOwnPropertyDescriptor = __w_pdfjs_require__(10).f;
 var macrotask = __w_pdfjs_require__(92).set;
 var IS_IOS = __w_pdfjs_require__(93);
+var IS_WEBOS_WEBKIT = __w_pdfjs_require__(97);
 var IS_NODE = __w_pdfjs_require__(95);
 var MutationObserver = global.MutationObserver || global.WebKitMutationObserver;
 var document = global.document;
@@ -4751,7 +4750,7 @@ if (!queueMicrotask) {
   if (parent)
    parent.enter();
  };
- if (!IS_IOS && !IS_NODE && MutationObserver && document) {
+ if (!IS_IOS && !IS_NODE && !IS_WEBOS_WEBKIT && MutationObserver && document) {
   toggle = true;
   node = document.createTextNode('');
   new MutationObserver(flush).observe(node, { characterData: true });
@@ -4792,9 +4791,16 @@ module.exports = queueMicrotask || function (fn) {
 /* 97 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
+var userAgent = __w_pdfjs_require__(94);
+module.exports = /web0s(?!.*chrome)/i.test(userAgent);
+
+/***/ }),
+/* 98 */
+/***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
+
 var anObject = __w_pdfjs_require__(26);
 var isObject = __w_pdfjs_require__(20);
-var newPromiseCapability = __w_pdfjs_require__(98);
+var newPromiseCapability = __w_pdfjs_require__(99);
 module.exports = function (C, x) {
  anObject(C);
  if (isObject(x) && x.constructor === C)
@@ -4806,7 +4812,7 @@ module.exports = function (C, x) {
 };
 
 /***/ }),
-/* 98 */
+/* 99 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -4828,7 +4834,7 @@ module.exports.f = function (C) {
 };
 
 /***/ }),
-/* 99 */
+/* 100 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 var global = __w_pdfjs_require__(9);
@@ -4840,7 +4846,7 @@ module.exports = function (a, b) {
 };
 
 /***/ }),
-/* 100 */
+/* 101 */
 /***/ ((module) => {
 
 module.exports = function (exec) {
@@ -4858,7 +4864,7 @@ module.exports = function (exec) {
 };
 
 /***/ }),
-/* 101 */
+/* 102 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 var global = __w_pdfjs_require__(9);
@@ -4881,15 +4887,15 @@ if (v8) {
 module.exports = version && +version;
 
 /***/ }),
-/* 102 */
+/* 103 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 "use strict";
 
 var $ = __w_pdfjs_require__(8);
 var aFunction = __w_pdfjs_require__(75);
-var newPromiseCapabilityModule = __w_pdfjs_require__(98);
-var perform = __w_pdfjs_require__(100);
+var newPromiseCapabilityModule = __w_pdfjs_require__(99);
+var perform = __w_pdfjs_require__(101);
 var iterate = __w_pdfjs_require__(72);
 $({
  target: 'Promise',
@@ -4939,7 +4945,7 @@ $({
 });
 
 /***/ }),
-/* 103 */
+/* 104 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -4947,8 +4953,8 @@ $({
 var $ = __w_pdfjs_require__(8);
 var aFunction = __w_pdfjs_require__(75);
 var getBuiltIn = __w_pdfjs_require__(40);
-var newPromiseCapabilityModule = __w_pdfjs_require__(98);
-var perform = __w_pdfjs_require__(100);
+var newPromiseCapabilityModule = __w_pdfjs_require__(99);
+var perform = __w_pdfjs_require__(101);
 var iterate = __w_pdfjs_require__(72);
 var PROMISE_ANY_ERROR = 'No one promise resolved';
 $({
@@ -4993,7 +4999,7 @@ $({
 });
 
 /***/ }),
-/* 104 */
+/* 105 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -5004,7 +5010,7 @@ var NativePromise = __w_pdfjs_require__(86);
 var fails = __w_pdfjs_require__(12);
 var getBuiltIn = __w_pdfjs_require__(40);
 var speciesConstructor = __w_pdfjs_require__(91);
-var promiseResolve = __w_pdfjs_require__(97);
+var promiseResolve = __w_pdfjs_require__(98);
 var redefine = __w_pdfjs_require__(27);
 var NON_GENERIC = !!NativePromise && fails(function () {
  NativePromise.prototype['finally'].call({
@@ -5038,12 +5044,12 @@ if (!IS_PURE && typeof NativePromise == 'function' && !NativePromise.prototype['
 }
 
 /***/ }),
-/* 105 */
+/* 106 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 "use strict";
 
-var charAt = __w_pdfjs_require__(106).charAt;
+var charAt = __w_pdfjs_require__(107).charAt;
 var InternalStateModule = __w_pdfjs_require__(31);
 var defineIterator = __w_pdfjs_require__(62);
 var STRING_ITERATOR = 'String Iterator';
@@ -5074,7 +5080,7 @@ defineIterator(String, 'String', function (iterated) {
 });
 
 /***/ }),
-/* 106 */
+/* 107 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 var toInteger = __w_pdfjs_require__(46);
@@ -5097,11 +5103,11 @@ module.exports = {
 };
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 var global = __w_pdfjs_require__(9);
-var DOMIterables = __w_pdfjs_require__(108);
+var DOMIterables = __w_pdfjs_require__(109);
 var ArrayIteratorMethods = __w_pdfjs_require__(52);
 var createNonEnumerableProperty = __w_pdfjs_require__(24);
 var wellKnownSymbol = __w_pdfjs_require__(54);
@@ -5134,7 +5140,7 @@ for (var COLLECTION_NAME in DOMIterables) {
 }
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ ((module) => {
 
 module.exports = {
@@ -5172,36 +5178,36 @@ module.exports = {
 };
 
 /***/ }),
-/* 109 */
+/* 110 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
-__w_pdfjs_require__(110);
-__w_pdfjs_require__(118);
-__w_pdfjs_require__(116);
+__w_pdfjs_require__(111);
+__w_pdfjs_require__(119);
+__w_pdfjs_require__(117);
 var path = __w_pdfjs_require__(41);
 module.exports = path.URL;
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 "use strict";
 
-__w_pdfjs_require__(105);
+__w_pdfjs_require__(106);
 var $ = __w_pdfjs_require__(8);
 var DESCRIPTORS = __w_pdfjs_require__(11);
-var USE_NATIVE_URL = __w_pdfjs_require__(111);
+var USE_NATIVE_URL = __w_pdfjs_require__(112);
 var global = __w_pdfjs_require__(9);
 var defineProperties = __w_pdfjs_require__(58);
 var redefine = __w_pdfjs_require__(27);
 var anInstance = __w_pdfjs_require__(89);
 var has = __w_pdfjs_require__(21);
-var assign = __w_pdfjs_require__(112);
-var arrayFrom = __w_pdfjs_require__(113);
-var codeAt = __w_pdfjs_require__(106).codeAt;
-var toASCII = __w_pdfjs_require__(115);
+var assign = __w_pdfjs_require__(113);
+var arrayFrom = __w_pdfjs_require__(114);
+var codeAt = __w_pdfjs_require__(107).codeAt;
+var toASCII = __w_pdfjs_require__(116);
 var setToStringTag = __w_pdfjs_require__(68);
-var URLSearchParamsModule = __w_pdfjs_require__(116);
+var URLSearchParamsModule = __w_pdfjs_require__(117);
 var InternalStateModule = __w_pdfjs_require__(31);
 var NativeURL = global.URL;
 var URLSearchParams = URLSearchParamsModule.URLSearchParams;
@@ -6192,7 +6198,7 @@ $({
 }, { URL: URLConstructor });
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 var fails = __w_pdfjs_require__(12);
@@ -6212,7 +6218,7 @@ module.exports = !fails(function () {
 });
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -6268,14 +6274,14 @@ module.exports = !nativeAssign || fails(function () {
 } : nativeAssign;
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 "use strict";
 
 var bind = __w_pdfjs_require__(74);
 var toObject = __w_pdfjs_require__(66);
-var callWithSafeIterationClosing = __w_pdfjs_require__(114);
+var callWithSafeIterationClosing = __w_pdfjs_require__(115);
 var isArrayIteratorMethod = __w_pdfjs_require__(73);
 var toLength = __w_pdfjs_require__(45);
 var createProperty = __w_pdfjs_require__(80);
@@ -6315,7 +6321,7 @@ module.exports = function from(arrayLike) {
 };
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 var anObject = __w_pdfjs_require__(26);
@@ -6330,7 +6336,7 @@ module.exports = function (iterator, fn, value, ENTRIES) {
 };
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ ((module) => {
 
 "use strict";
@@ -6454,7 +6460,7 @@ module.exports = function (input) {
 };
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -6462,7 +6468,7 @@ module.exports = function (input) {
 __w_pdfjs_require__(52);
 var $ = __w_pdfjs_require__(8);
 var getBuiltIn = __w_pdfjs_require__(40);
-var USE_NATIVE_URL = __w_pdfjs_require__(111);
+var USE_NATIVE_URL = __w_pdfjs_require__(112);
 var redefine = __w_pdfjs_require__(27);
 var redefineAll = __w_pdfjs_require__(87);
 var setToStringTag = __w_pdfjs_require__(68);
@@ -6476,7 +6482,7 @@ var anObject = __w_pdfjs_require__(26);
 var isObject = __w_pdfjs_require__(20);
 var create = __w_pdfjs_require__(57);
 var createPropertyDescriptor = __w_pdfjs_require__(14);
-var getIterator = __w_pdfjs_require__(117);
+var getIterator = __w_pdfjs_require__(118);
 var getIteratorMethod = __w_pdfjs_require__(76);
 var wellKnownSymbol = __w_pdfjs_require__(54);
 var $fetch = getBuiltIn('fetch');
@@ -6789,7 +6795,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 var anObject = __w_pdfjs_require__(26);
@@ -6803,7 +6809,7 @@ module.exports = function (it) {
 };
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -6820,7 +6826,7 @@ $({
 });
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ (function(__unused_webpack_module, exports) {
 
 (function (global, factory) {
@@ -10435,22 +10441,22 @@ $({
 }));
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
-__w_pdfjs_require__(121);
-var entryUnbind = __w_pdfjs_require__(125);
+__w_pdfjs_require__(122);
+var entryUnbind = __w_pdfjs_require__(126);
 module.exports = entryUnbind('String', 'padStart');
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 "use strict";
 
 var $ = __w_pdfjs_require__(8);
-var $padStart = __w_pdfjs_require__(122).start;
-var WEBKIT_BUG = __w_pdfjs_require__(124);
+var $padStart = __w_pdfjs_require__(123).start;
+var WEBKIT_BUG = __w_pdfjs_require__(125);
 $({
  target: 'String',
  proto: true,
@@ -10462,11 +10468,11 @@ $({
 });
 
 /***/ }),
-/* 122 */
+/* 123 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 var toLength = __w_pdfjs_require__(45);
-var repeat = __w_pdfjs_require__(123);
+var repeat = __w_pdfjs_require__(124);
 var requireObjectCoercible = __w_pdfjs_require__(18);
 var ceil = Math.ceil;
 var createMethod = function (IS_END) {
@@ -10491,7 +10497,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 123 */
+/* 124 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -10511,14 +10517,14 @@ module.exports = ''.repeat || function repeat(count) {
 };
 
 /***/ }),
-/* 124 */
+/* 125 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 var userAgent = __w_pdfjs_require__(94);
 module.exports = /Version\/10\.\d+(\.\d+)?( Mobile\/\w+)? Safari\//.test(userAgent);
 
 /***/ }),
-/* 125 */
+/* 126 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 var global = __w_pdfjs_require__(9);
@@ -10529,22 +10535,22 @@ module.exports = function (CONSTRUCTOR, METHOD, length) {
 };
 
 /***/ }),
-/* 126 */
+/* 127 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
-__w_pdfjs_require__(127);
-var entryUnbind = __w_pdfjs_require__(125);
+__w_pdfjs_require__(128);
+var entryUnbind = __w_pdfjs_require__(126);
 module.exports = entryUnbind('String', 'padEnd');
 
 /***/ }),
-/* 127 */
+/* 128 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 "use strict";
 
 var $ = __w_pdfjs_require__(8);
-var $padEnd = __w_pdfjs_require__(122).end;
-var WEBKIT_BUG = __w_pdfjs_require__(124);
+var $padEnd = __w_pdfjs_require__(123).end;
+var WEBKIT_BUG = __w_pdfjs_require__(125);
 $({
  target: 'String',
  proto: true,
@@ -10556,19 +10562,19 @@ $({
 });
 
 /***/ }),
-/* 128 */
+/* 129 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
-__w_pdfjs_require__(129);
+__w_pdfjs_require__(130);
 var path = __w_pdfjs_require__(41);
 module.exports = path.Object.values;
 
 /***/ }),
-/* 129 */
+/* 130 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 var $ = __w_pdfjs_require__(8);
-var $values = __w_pdfjs_require__(130).values;
+var $values = __w_pdfjs_require__(131).values;
 $({
  target: 'Object',
  stat: true
@@ -10579,7 +10585,7 @@ $({
 });
 
 /***/ }),
-/* 130 */
+/* 131 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 var DESCRIPTORS = __w_pdfjs_require__(11);
@@ -10612,19 +10618,19 @@ module.exports = {
 };
 
 /***/ }),
-/* 131 */
+/* 132 */
 /***/ ((module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
-__w_pdfjs_require__(132);
+__w_pdfjs_require__(133);
 var path = __w_pdfjs_require__(41);
 module.exports = path.Object.entries;
 
 /***/ }),
-/* 132 */
+/* 133 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __w_pdfjs_require__) => {
 
 var $ = __w_pdfjs_require__(8);
-var $entries = __w_pdfjs_require__(130).entries;
+var $entries = __w_pdfjs_require__(131).entries;
 $({
  target: 'Object',
  stat: true
@@ -10635,7 +10641,7 @@ $({
 });
 
 /***/ }),
-/* 133 */
+/* 134 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -10645,14 +10651,14 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.clearPrimitiveCaches = clearPrimitiveCaches;
-exports.isEOF = isEOF;
 exports.isCmd = isCmd;
 exports.isDict = isDict;
+exports.isEOF = isEOF;
 exports.isName = isName;
 exports.isRef = isRef;
 exports.isRefsEqual = isRefsEqual;
 exports.isStream = isStream;
-exports.RefSetCache = exports.RefSet = exports.Ref = exports.Name = exports.Dict = exports.Cmd = exports.EOF = void 0;
+exports.RefSetCache = exports.RefSet = exports.Ref = exports.Name = exports.EOF = exports.Dict = exports.Cmd = void 0;
 
 var _regenerator = _interopRequireDefault(__w_pdfjs_require__(2));
 
@@ -11180,7 +11186,7 @@ function clearPrimitiveCaches() {
 }
 
 /***/ }),
-/* 134 */
+/* 135 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -11197,13 +11203,13 @@ var _regenerator = _interopRequireDefault(__w_pdfjs_require__(2));
 
 var _util = __w_pdfjs_require__(4);
 
-var _chunked_stream = __w_pdfjs_require__(135);
+var _chunked_stream = __w_pdfjs_require__(136);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
-var _document = __w_pdfjs_require__(137);
+var _document = __w_pdfjs_require__(138);
 
-var _stream = __w_pdfjs_require__(140);
+var _stream = __w_pdfjs_require__(141);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -11551,7 +11557,7 @@ var NetworkPdfManager = /*#__PURE__*/function (_BasePdfManager2) {
 exports.NetworkPdfManager = NetworkPdfManager;
 
 /***/ }),
-/* 135 */
+/* 136 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -11564,7 +11570,7 @@ exports.ChunkedStreamManager = exports.ChunkedStream = void 0;
 
 var _util = __w_pdfjs_require__(4);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
@@ -12310,7 +12316,7 @@ var ChunkedStreamManager = /*#__PURE__*/function () {
 exports.ChunkedStreamManager = ChunkedStreamManager;
 
 /***/ }),
-/* 136 */
+/* 137 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -12323,21 +12329,21 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.collectActions = collectActions;
 exports.escapePDFName = escapePDFName;
-exports.getLookupTableFactory = getLookupTableFactory;
 exports.getArrayLookupTableFactory = getArrayLookupTableFactory;
 exports.getInheritableProperty = getInheritableProperty;
-exports.toRomanNumerals = toRomanNumerals;
+exports.getLookupTableFactory = getLookupTableFactory;
+exports.isWhiteSpace = isWhiteSpace;
 exports.log2 = log2;
 exports.parseXFAPath = parseXFAPath;
 exports.readInt8 = readInt8;
 exports.readUint16 = readUint16;
 exports.readUint32 = readUint32;
-exports.isWhiteSpace = isWhiteSpace;
+exports.toRomanNumerals = toRomanNumerals;
 exports.XRefParseException = exports.XRefEntryException = exports.MissingDataException = void 0;
 
 var _util = __w_pdfjs_require__(4);
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
@@ -12689,7 +12695,7 @@ function collectActions(xref, dict, eventType) {
 }
 
 /***/ }),
-/* 137 */
+/* 138 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -12706,23 +12712,23 @@ var _regenerator = _interopRequireDefault(__w_pdfjs_require__(2));
 
 var _util = __w_pdfjs_require__(4);
 
-var _obj = __w_pdfjs_require__(138);
+var _obj = __w_pdfjs_require__(139);
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
-var _stream = __w_pdfjs_require__(140);
+var _stream = __w_pdfjs_require__(141);
 
-var _annotation = __w_pdfjs_require__(153);
+var _annotation = __w_pdfjs_require__(154);
 
-var _crypto = __w_pdfjs_require__(150);
+var _crypto = __w_pdfjs_require__(151);
 
-var _parser = __w_pdfjs_require__(139);
+var _parser = __w_pdfjs_require__(140);
 
-var _operator_list = __w_pdfjs_require__(154);
+var _operator_list = __w_pdfjs_require__(173);
 
-var _evaluator = __w_pdfjs_require__(157);
+var _evaluator = __w_pdfjs_require__(156);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -13859,12 +13865,14 @@ var PDFDocument = /*#__PURE__*/function () {
   }, {
     key: "hasJSActions",
     get: function get() {
+      var _this8 = this;
+
       return (0, _util.shadow)(this, "hasJSActions", this.fieldObjects.then(function (fieldObjects) {
         return fieldObjects !== null && Object.values(fieldObjects).some(function (fieldObject) {
           return fieldObject.some(function (object) {
             return object.actions !== null;
           });
-        });
+        }) || !!_this8.catalog.jsActions;
       }));
     }
   }, {
@@ -13900,7 +13908,7 @@ var PDFDocument = /*#__PURE__*/function () {
 exports.PDFDocument = PDFDocument;
 
 /***/ }),
-/* 138 */
+/* 139 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -13909,23 +13917,23 @@ exports.PDFDocument = PDFDocument;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.FileSpec = exports.XRef = exports.ObjectLoader = exports.Catalog = void 0;
+exports.XRef = exports.ObjectLoader = exports.FileSpec = exports.Catalog = void 0;
 
 var _regenerator = _interopRequireDefault(__w_pdfjs_require__(2));
 
 var _util = __w_pdfjs_require__(4);
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
-var _parser = __w_pdfjs_require__(139);
+var _parser = __w_pdfjs_require__(140);
 
-var _crypto = __w_pdfjs_require__(150);
+var _crypto = __w_pdfjs_require__(151);
 
-var _colorspace = __w_pdfjs_require__(151);
+var _colorspace = __w_pdfjs_require__(152);
 
-var _image_utils = __w_pdfjs_require__(152);
+var _image_utils = __w_pdfjs_require__(153);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -16777,7 +16785,7 @@ var ObjectLoader = function () {
 exports.ObjectLoader = ObjectLoader;
 
 /***/ }),
-/* 139 */
+/* 140 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -16788,21 +16796,21 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.Parser = exports.Linearization = exports.Lexer = void 0;
 
-var _stream = __w_pdfjs_require__(140);
+var _stream = __w_pdfjs_require__(141);
 
 var _util = __w_pdfjs_require__(4);
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
-var _ccitt_stream = __w_pdfjs_require__(141);
+var _ccitt_stream = __w_pdfjs_require__(142);
 
-var _jbig2_stream = __w_pdfjs_require__(143);
+var _jbig2_stream = __w_pdfjs_require__(144);
 
-var _jpeg_stream = __w_pdfjs_require__(146);
+var _jpeg_stream = __w_pdfjs_require__(147);
 
-var _jpx_stream = __w_pdfjs_require__(148);
+var _jpx_stream = __w_pdfjs_require__(149);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -18173,7 +18181,7 @@ var Linearization = /*#__PURE__*/function () {
 exports.Linearization = Linearization;
 
 /***/ }),
-/* 140 */
+/* 141 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -18182,13 +18190,13 @@ exports.Linearization = Linearization;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.LZWStream = exports.StringStream = exports.StreamsSequenceStream = exports.Stream = exports.RunLengthStream = exports.PredictorStream = exports.NullStream = exports.FlateStream = exports.DecodeStream = exports.DecryptStream = exports.AsciiHexStream = exports.Ascii85Stream = void 0;
+exports.StringStream = exports.StreamsSequenceStream = exports.Stream = exports.RunLengthStream = exports.PredictorStream = exports.NullStream = exports.LZWStream = exports.FlateStream = exports.DecryptStream = exports.DecodeStream = exports.AsciiHexStream = exports.Ascii85Stream = void 0;
 
 var _util = __w_pdfjs_require__(4);
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
@@ -19485,7 +19493,7 @@ var NullStream = function NullStreamClosure() {
 exports.NullStream = NullStream;
 
 /***/ }),
-/* 141 */
+/* 142 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -19496,11 +19504,11 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.CCITTFaxStream = void 0;
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
-var _ccitt = __w_pdfjs_require__(142);
+var _ccitt = __w_pdfjs_require__(143);
 
-var _stream = __w_pdfjs_require__(140);
+var _stream = __w_pdfjs_require__(141);
 
 var CCITTFaxStream = function CCITTFaxStreamClosure() {
   function CCITTFaxStream(str, maybeLength, params) {
@@ -19551,7 +19559,7 @@ var CCITTFaxStream = function CCITTFaxStreamClosure() {
 exports.CCITTFaxStream = CCITTFaxStream;
 
 /***/ }),
-/* 142 */
+/* 143 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -20249,7 +20257,7 @@ var CCITTFaxDecoder = function CCITTFaxDecoder() {
 exports.CCITTFaxDecoder = CCITTFaxDecoder;
 
 /***/ }),
-/* 143 */
+/* 144 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -20260,11 +20268,11 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.Jbig2Stream = void 0;
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
-var _stream = __w_pdfjs_require__(140);
+var _stream = __w_pdfjs_require__(141);
 
-var _jbig = __w_pdfjs_require__(144);
+var _jbig = __w_pdfjs_require__(145);
 
 var _util = __w_pdfjs_require__(4);
 
@@ -20332,7 +20340,7 @@ var Jbig2Stream = function Jbig2StreamClosure() {
 exports.Jbig2Stream = Jbig2Stream;
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -20347,11 +20355,11 @@ exports.Jbig2Image = void 0;
 
 var _util = __w_pdfjs_require__(4);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
-var _arithmetic_decoder = __w_pdfjs_require__(145);
+var _arithmetic_decoder = __w_pdfjs_require__(146);
 
-var _ccitt = __w_pdfjs_require__(142);
+var _ccitt = __w_pdfjs_require__(143);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -22551,7 +22559,7 @@ var Jbig2Image = function Jbig2ImageClosure() {
 exports.Jbig2Image = Jbig2Image;
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -22919,7 +22927,7 @@ var ArithmeticDecoder = /*#__PURE__*/function () {
 exports.ArithmeticDecoder = ArithmeticDecoder;
 
 /***/ }),
-/* 146 */
+/* 147 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -22930,11 +22938,11 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.JpegStream = void 0;
 
-var _stream = __w_pdfjs_require__(140);
+var _stream = __w_pdfjs_require__(141);
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
-var _jpg = __w_pdfjs_require__(147);
+var _jpg = __w_pdfjs_require__(148);
 
 var _util = __w_pdfjs_require__(4);
 
@@ -23026,7 +23034,7 @@ var JpegStream = function JpegStreamClosure() {
 exports.JpegStream = JpegStream;
 
 /***/ }),
-/* 147 */
+/* 148 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -23039,7 +23047,7 @@ exports.JpegImage = void 0;
 
 var _util = __w_pdfjs_require__(4);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -24094,7 +24102,7 @@ var JpegImage = function JpegImageClosure() {
               break;
             }
 
-            if (offset >= data.length - 1) {
+            if (!nextFileMarker || offset >= data.length - 1) {
               (0, _util.warn)("JpegImage.parse - reached the end of the image data " + "without finding an EOI marker (0xFFD9).");
               break markerLoop;
             }
@@ -24326,7 +24334,7 @@ var JpegImage = function JpegImageClosure() {
 exports.JpegImage = JpegImage;
 
 /***/ }),
-/* 148 */
+/* 149 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -24337,9 +24345,9 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.JpxStream = void 0;
 
-var _stream = __w_pdfjs_require__(140);
+var _stream = __w_pdfjs_require__(141);
 
-var _jpx = __w_pdfjs_require__(149);
+var _jpx = __w_pdfjs_require__(150);
 
 var _util = __w_pdfjs_require__(4);
 
@@ -24413,7 +24421,7 @@ var JpxStream = function JpxStreamClosure() {
 exports.JpxStream = JpxStream;
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -24428,9 +24436,9 @@ exports.JpxImage = void 0;
 
 var _util = __w_pdfjs_require__(4);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
-var _arithmetic_decoder = __w_pdfjs_require__(145);
+var _arithmetic_decoder = __w_pdfjs_require__(146);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -26774,7 +26782,7 @@ var JpxImage = function JpxImageClosure() {
 exports.JpxImage = JpxImage;
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -26785,13 +26793,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.calculateSHA512 = exports.calculateSHA384 = exports.calculateSHA256 = exports.calculateMD5 = exports.PDF20 = exports.PDF17 = exports.CipherTransformFactory = exports.ARCFourCipher = exports.AES256Cipher = exports.AES128Cipher = void 0;
+exports.PDF20 = exports.PDF17 = exports.CipherTransformFactory = exports.calculateSHA512 = exports.calculateSHA384 = exports.calculateSHA256 = exports.calculateMD5 = exports.ARCFourCipher = exports.AES256Cipher = exports.AES128Cipher = void 0;
 
 var _util = __w_pdfjs_require__(4);
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
-var _stream = __w_pdfjs_require__(140);
+var _stream = __w_pdfjs_require__(141);
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -28462,7 +28470,7 @@ var CipherTransformFactory = function CipherTransformFactoryClosure() {
 exports.CipherTransformFactory = CipherTransformFactory;
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -28479,9 +28487,9 @@ var _regenerator = _interopRequireDefault(__w_pdfjs_require__(2));
 
 var _util = __w_pdfjs_require__(4);
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -29732,7 +29740,7 @@ var LabCS = function LabCSClosure() {
 }();
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -29743,11 +29751,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.GlobalImageCache = exports.LocalTilingPatternCache = exports.LocalGStateCache = exports.LocalFunctionCache = exports.LocalColorSpaceCache = exports.LocalImageCache = void 0;
+exports.LocalTilingPatternCache = exports.LocalImageCache = exports.LocalGStateCache = exports.LocalFunctionCache = exports.LocalColorSpaceCache = exports.GlobalImageCache = void 0;
 
 var _util = __w_pdfjs_require__(4);
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -30147,7 +30155,7 @@ var GlobalImageCache = /*#__PURE__*/function () {
 exports.GlobalImageCache = GlobalImageCache;
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -30165,29 +30173,23 @@ var _regenerator = _interopRequireDefault(__w_pdfjs_require__(2));
 
 var _util = __w_pdfjs_require__(4);
 
-var _obj = __w_pdfjs_require__(138);
+var _obj = __w_pdfjs_require__(139);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
-var _primitives = __w_pdfjs_require__(133);
+var _default_appearance = __w_pdfjs_require__(155);
 
-var _colorspace = __w_pdfjs_require__(151);
+var _primitives = __w_pdfjs_require__(134);
 
-var _operator_list = __w_pdfjs_require__(154);
+var _colorspace = __w_pdfjs_require__(152);
 
-var _stream = __w_pdfjs_require__(140);
+var _operator_list = __w_pdfjs_require__(173);
 
-var _writer = __w_pdfjs_require__(155);
+var _stream = __w_pdfjs_require__(141);
+
+var _writer = __w_pdfjs_require__(175);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
 
@@ -31072,6 +31074,7 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
       key: "DA"
     }) || params.acroForm.get("DA") || "";
     data.defaultAppearance = (0, _util.isString)(defaultAppearance) ? defaultAppearance : "";
+    _this4._defaultAppearanceData = (0, _default_appearance.parseDefaultAppearance)(data.defaultAppearance);
     var fieldType = (0, _core_utils.getInheritableProperty)({
       dict: dict,
       key: "FT"
@@ -31082,12 +31085,16 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
       key: "DR"
     });
     var acroFormResources = params.acroForm.get("DR");
+
+    var appearanceResources = _this4.appearance && _this4.appearance.dict.get("Resources");
+
     _this4._fieldResources = {
       localResources: localResources,
       acroFormResources: acroFormResources,
+      appearanceResources: appearanceResources,
       mergedResources: _primitives.Dict.merge({
         xref: params.xref,
-        dictArray: [localResources, acroFormResources],
+        dictArray: [localResources, appearanceResources, acroFormResources],
         mergeSubDicts: true
       })
     };
@@ -31274,7 +31281,7 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                   appearance = newTransform.encryptString(appearance);
                 }
 
-                dict.set("V", value);
+                dict.set("V", (0, _util.isAscii)(value) ? value : (0, _util.stringToUTF16BEString)(value));
                 dict.set("AP", AP);
                 dict.set("M", "D:".concat((0, _util.getModificationDate)()));
                 appearanceDict = new _primitives.Dict(xref);
@@ -31318,8 +31325,7 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
     key: "_getAppearance",
     value: function () {
       var _getAppearance2 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee3(evaluator, task, annotationStorage) {
-        var isPassword, value, defaultPadding, hPadding, totalHeight, totalWidth, fontInfo, _fontInfo, font, fontName, fontSize, descent, vPadding, defaultAppearance, alignment, renderedText;
-
+        var isPassword, value, defaultPadding, hPadding, totalHeight, totalWidth, font, fontSize, descent, vPadding, defaultAppearance, alignment, encodedString, renderedText;
         return _regenerator["default"].wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -31360,16 +31366,16 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
 
                 if (!this.data.defaultAppearance) {
                   this.data.defaultAppearance = "/Helvetica 0 Tf 0 g";
+                  this._defaultAppearanceData = (0, _default_appearance.parseDefaultAppearance)(this.data.defaultAppearance);
                 }
 
                 _context3.next = 16;
                 return this._getFontData(evaluator, task);
 
               case 16:
-                fontInfo = _context3.sent;
-                _fontInfo = _slicedToArray(fontInfo, 2), font = _fontInfo[0], fontName = _fontInfo[1];
-                fontSize = this._computeFontSize.apply(this, _toConsumableArray(fontInfo).concat([totalHeight]));
-                this._fontName = fontName;
+                font = _context3.sent;
+                fontSize = this._computeFontSize(font, totalHeight);
+                this._fontName = this._defaultAppearanceData.fontName.name;
                 descent = font.descent;
 
                 if (isNaN(descent)) {
@@ -31380,20 +31386,22 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                 defaultAppearance = this.data.defaultAppearance;
                 alignment = this.data.textAlignment;
 
-                if (!this.data.comb) {
-                  _context3.next = 27;
-                  break;
-                }
-
-                return _context3.abrupt("return", this._getCombAppearance(defaultAppearance, value, totalWidth, hPadding, vPadding));
-
-              case 27:
                 if (!this.data.multiLine) {
-                  _context3.next = 29;
+                  _context3.next = 26;
                   break;
                 }
 
                 return _context3.abrupt("return", this._getMultilineAppearance(defaultAppearance, value, font, fontSize, totalWidth, totalHeight, alignment, hPadding, vPadding));
+
+              case 26:
+                encodedString = font.encodeString(value).join("");
+
+                if (!this.data.comb) {
+                  _context3.next = 29;
+                  break;
+                }
+
+                return _context3.abrupt("return", this._getCombAppearance(defaultAppearance, font, encodedString, totalWidth, hPadding, vPadding));
 
               case 29:
                 if (!(alignment === 0 || alignment > 2)) {
@@ -31401,10 +31409,10 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                   break;
                 }
 
-                return _context3.abrupt("return", "/Tx BMC q BT " + defaultAppearance + " 1 0 0 1 ".concat(hPadding, " ").concat(vPadding, " Tm (").concat((0, _util.escapeString)(value), ") Tj") + " ET Q EMC");
+                return _context3.abrupt("return", "/Tx BMC q BT " + defaultAppearance + " 1 0 0 1 ".concat(hPadding, " ").concat(vPadding, " Tm (").concat((0, _util.escapeString)(encodedString), ") Tj") + " ET Q EMC");
 
               case 31:
-                renderedText = this._renderText(value, font, fontSize, totalWidth, alignment, hPadding, vPadding);
+                renderedText = this._renderText(encodedString, font, fontSize, totalWidth, alignment, hPadding, vPadding);
                 return _context3.abrupt("return", "/Tx BMC q BT " + defaultAppearance + " 1 0 0 1 0 0 Tm ".concat(renderedText) + " ET Q EMC");
 
               case 33:
@@ -31425,33 +31433,27 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
     key: "_getFontData",
     value: function () {
       var _getFontData2 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee4(evaluator, task) {
-        var operatorList, initialState;
+        var operatorList, initialState, _this$_defaultAppeara, fontName, fontSize;
+
         return _regenerator["default"].wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
                 operatorList = new _operator_list.OperatorList();
                 initialState = {
-                  fontSize: 0,
                   font: null,
-                  fontName: null,
                   clone: function clone() {
                     return this;
                   }
                 };
-                _context4.next = 4;
-                return evaluator.getOperatorList({
-                  stream: new _stream.StringStream(this.data.defaultAppearance),
-                  task: task,
-                  resources: this._fieldResources.mergedResources,
-                  operatorList: operatorList,
-                  initialState: initialState
-                });
-
-              case 4:
-                return _context4.abrupt("return", [initialState.font, initialState.fontName, initialState.fontSize]);
+                _this$_defaultAppeara = this._defaultAppearanceData, fontName = _this$_defaultAppeara.fontName, fontSize = _this$_defaultAppeara.fontSize;
+                _context4.next = 5;
+                return evaluator.handleSetFont(this._fieldResources.mergedResources, [fontName, fontSize], null, operatorList, task, initialState, null);
 
               case 5:
+                return _context4.abrupt("return", initialState.font);
+
+              case 6:
               case "end":
                 return _context4.stop();
             }
@@ -31467,18 +31469,34 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
     }()
   }, {
     key: "_computeFontSize",
-    value: function _computeFontSize(font, fontName, fontSize, height) {
-      if (fontSize === null || fontSize === 0) {
-        var em = font.charsToGlyphs("M")[0].width / 1000;
-        var capHeight = 0.7 * em;
-        fontSize = Math.max(1, Math.floor(height / (1.5 * capHeight)));
-        var fontRegex = new RegExp("/".concat(fontName, "\\s+[0-9.]+\\s+Tf"));
+    value: function _computeFontSize(font, height) {
+      var fontSize = this._defaultAppearanceData.fontSize;
 
-        if (this.data.defaultAppearance.search(fontRegex) === -1) {
-          fontRegex = new RegExp("/".concat(fontName, "\\s+Tf"));
+      if (!fontSize) {
+        var _this$_defaultAppeara2 = this._defaultAppearanceData,
+            fontColor = _this$_defaultAppeara2.fontColor,
+            fontName = _this$_defaultAppeara2.fontName;
+        var capHeight;
+
+        if (font.capHeight) {
+          capHeight = font.capHeight;
+        } else {
+          var glyphs = font.charsToGlyphs(font.encodeString("M").join(""));
+
+          if (glyphs.length === 1 && glyphs[0].width) {
+            var em = glyphs[0].width / 1000;
+            capHeight = 0.7 * em;
+          } else {
+            capHeight = 0.7;
+          }
         }
 
-        this.data.defaultAppearance = this.data.defaultAppearance.replace(fontRegex, "/".concat(fontName, " ").concat(fontSize, " Tf"));
+        fontSize = Math.max(1, Math.floor(height / (1.5 * capHeight)));
+        this.data.defaultAppearance = (0, _default_appearance.createDefaultAppearance)({
+          fontSize: fontSize,
+          fontName: fontName,
+          fontColor: fontColor
+        });
       }
 
       return fontSize;
@@ -31523,17 +31541,22 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
     value: function _getSaveFieldResources(xref) {
       var _this$_fieldResources = this._fieldResources,
           localResources = _this$_fieldResources.localResources,
-          acroFormResources = _this$_fieldResources.acroFormResources;
+          acroFormResources = _this$_fieldResources.acroFormResources,
+          appearanceResources = _this$_fieldResources.appearanceResources;
 
       if (!this._fontName) {
         return localResources || _primitives.Dict.empty;
       }
 
-      if (localResources instanceof _primitives.Dict) {
-        var localFont = localResources.get("Font");
+      for (var _i2 = 0, _arr2 = [localResources, appearanceResources]; _i2 < _arr2.length; _i2++) {
+        var resources = _arr2[_i2];
 
-        if (localFont instanceof _primitives.Dict && localFont.has(this._fontName)) {
-          return localResources;
+        if (resources instanceof _primitives.Dict) {
+          var localFont = resources.get("Font");
+
+          if (localFont instanceof _primitives.Dict && localFont.has(this._fontName)) {
+            return resources;
+          }
         }
       }
 
@@ -31618,17 +31641,21 @@ var TextWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation) {
 
   _createClass(TextWidgetAnnotation, [{
     key: "_getCombAppearance",
-    value: function _getCombAppearance(defaultAppearance, text, width, hPadding, vPadding) {
+    value: function _getCombAppearance(defaultAppearance, font, text, width, hPadding, vPadding) {
       var combWidth = (width / this.data.maxLen).toFixed(2);
       var buf = [];
+      var positions = font.getCharPositions(text);
 
-      var _iterator5 = _createForOfIteratorHelper(text),
+      var _iterator5 = _createForOfIteratorHelper(positions),
           _step5;
 
       try {
         for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
-          var character = _step5.value;
-          buf.push("(".concat((0, _util.escapeString)(character), ") Tj"));
+          var _step5$value = _slicedToArray(_step5.value, 2),
+              start = _step5$value[0],
+              end = _step5$value[1];
+
+          buf.push("(".concat((0, _util.escapeString)(text.substring(start, end)), ") Tj"));
         }
       } catch (err) {
         _iterator5.e(err);
@@ -31682,46 +31709,58 @@ var TextWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation) {
   }, {
     key: "_splitLine",
     value: function _splitLine(line, font, fontSize, width) {
-      if (line.length <= 1) {
+      line = font.encodeString(line).join("");
+      var glyphs = font.charsToGlyphs(line);
+
+      if (glyphs.length <= 1) {
         return [line];
       }
 
+      var positions = font.getCharPositions(line);
       var scale = fontSize / 1000;
-      var whitespace = font.charsToGlyphs(" ")[0].width * scale;
       var chunks = [];
-      var lastSpacePos = -1,
+      var lastSpacePosInStringStart = -1,
+          lastSpacePosInStringEnd = -1,
+          lastSpacePos = -1,
           startChunk = 0,
           currentWidth = 0;
 
-      for (var i = 0, ii = line.length; i < ii; i++) {
-        var character = line.charAt(i);
+      for (var i = 0, ii = glyphs.length; i < ii; i++) {
+        var _positions$i = _slicedToArray(positions[i], 2),
+            start = _positions$i[0],
+            end = _positions$i[1];
 
-        if (character === " ") {
-          if (currentWidth + whitespace > width) {
-            chunks.push(line.substring(startChunk, i));
-            startChunk = i;
-            currentWidth = whitespace;
+        var glyph = glyphs[i];
+        var glyphWidth = glyph.width * scale;
+
+        if (glyph.unicode === " ") {
+          if (currentWidth + glyphWidth > width) {
+            chunks.push(line.substring(startChunk, start));
+            startChunk = start;
+            currentWidth = glyphWidth;
+            lastSpacePosInStringStart = -1;
             lastSpacePos = -1;
           } else {
-            currentWidth += whitespace;
+            currentWidth += glyphWidth;
+            lastSpacePosInStringStart = start;
+            lastSpacePosInStringEnd = end;
             lastSpacePos = i;
           }
         } else {
-          var charWidth = font.charsToGlyphs(character)[0].width * scale;
-
-          if (currentWidth + charWidth > width) {
-            if (lastSpacePos !== -1) {
-              chunks.push(line.substring(startChunk, lastSpacePos + 1));
-              startChunk = i = lastSpacePos + 1;
-              lastSpacePos = -1;
+          if (currentWidth + glyphWidth > width) {
+            if (lastSpacePosInStringStart !== -1) {
+              chunks.push(line.substring(startChunk, lastSpacePosInStringEnd));
+              startChunk = lastSpacePosInStringEnd;
+              i = lastSpacePos + 1;
+              lastSpacePosInStringStart = -1;
               currentWidth = 0;
             } else {
-              chunks.push(line.substring(startChunk, i));
-              startChunk = i;
-              currentWidth = charWidth;
+              chunks.push(line.substring(startChunk, start));
+              startChunk = start;
+              currentWidth = glyphWidth;
             }
           } else {
-            currentWidth += charWidth;
+            currentWidth += glyphWidth;
           }
         }
       }
@@ -32799,1046 +32838,7 @@ var FileAttachmentAnnotation = /*#__PURE__*/function (_MarkupAnnotation14) {
 }(MarkupAnnotation);
 
 /***/ }),
-/* 154 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.OperatorList = void 0;
-
-var _util = __w_pdfjs_require__(4);
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-var QueueOptimizer = function QueueOptimizerClosure() {
-  function addState(parentState, pattern, checkFn, iterateFn, processFn) {
-    var state = parentState;
-
-    for (var i = 0, ii = pattern.length - 1; i < ii; i++) {
-      var item = pattern[i];
-      state = state[item] || (state[item] = []);
-    }
-
-    state[pattern[pattern.length - 1]] = {
-      checkFn: checkFn,
-      iterateFn: iterateFn,
-      processFn: processFn
-    };
-  }
-
-  function handlePaintSolidColorImageMask(iFirstSave, count, fnArray, argsArray) {
-    var iFirstPIMXO = iFirstSave + 2;
-
-    for (var i = 0; i < count; i++) {
-      var arg = argsArray[iFirstPIMXO + 4 * i];
-      var imageMask = arg.length === 1 && arg[0];
-
-      if (imageMask && imageMask.width === 1 && imageMask.height === 1 && (!imageMask.data.length || imageMask.data.length === 1 && imageMask.data[0] === 0)) {
-        fnArray[iFirstPIMXO + 4 * i] = _util.OPS.paintSolidColorImageMask;
-        continue;
-      }
-
-      break;
-    }
-
-    return count - i;
-  }
-
-  var InitialState = [];
-  addState(InitialState, [_util.OPS.save, _util.OPS.transform, _util.OPS.paintInlineImageXObject, _util.OPS.restore], null, function iterateInlineImageGroup(context, i) {
-    var fnArray = context.fnArray;
-    var iFirstSave = context.iCurr - 3;
-    var pos = (i - iFirstSave) % 4;
-
-    switch (pos) {
-      case 0:
-        return fnArray[i] === _util.OPS.save;
-
-      case 1:
-        return fnArray[i] === _util.OPS.transform;
-
-      case 2:
-        return fnArray[i] === _util.OPS.paintInlineImageXObject;
-
-      case 3:
-        return fnArray[i] === _util.OPS.restore;
-    }
-
-    throw new Error("iterateInlineImageGroup - invalid pos: ".concat(pos));
-  }, function foundInlineImageGroup(context, i) {
-    var MIN_IMAGES_IN_INLINE_IMAGES_BLOCK = 10;
-    var MAX_IMAGES_IN_INLINE_IMAGES_BLOCK = 200;
-    var MAX_WIDTH = 1000;
-    var IMAGE_PADDING = 1;
-    var fnArray = context.fnArray,
-        argsArray = context.argsArray;
-    var curr = context.iCurr;
-    var iFirstSave = curr - 3;
-    var iFirstTransform = curr - 2;
-    var iFirstPIIXO = curr - 1;
-    var count = Math.min(Math.floor((i - iFirstSave) / 4), MAX_IMAGES_IN_INLINE_IMAGES_BLOCK);
-
-    if (count < MIN_IMAGES_IN_INLINE_IMAGES_BLOCK) {
-      return i - (i - iFirstSave) % 4;
-    }
-
-    var maxX = 0;
-    var map = [],
-        maxLineHeight = 0;
-    var currentX = IMAGE_PADDING,
-        currentY = IMAGE_PADDING;
-    var q;
-
-    for (q = 0; q < count; q++) {
-      var transform = argsArray[iFirstTransform + (q << 2)];
-      var img = argsArray[iFirstPIIXO + (q << 2)][0];
-
-      if (currentX + img.width > MAX_WIDTH) {
-        maxX = Math.max(maxX, currentX);
-        currentY += maxLineHeight + 2 * IMAGE_PADDING;
-        currentX = 0;
-        maxLineHeight = 0;
-      }
-
-      map.push({
-        transform: transform,
-        x: currentX,
-        y: currentY,
-        w: img.width,
-        h: img.height
-      });
-      currentX += img.width + 2 * IMAGE_PADDING;
-      maxLineHeight = Math.max(maxLineHeight, img.height);
-    }
-
-    var imgWidth = Math.max(maxX, currentX) + IMAGE_PADDING;
-    var imgHeight = currentY + maxLineHeight + IMAGE_PADDING;
-    var imgData = new Uint8ClampedArray(imgWidth * imgHeight * 4);
-    var imgRowSize = imgWidth << 2;
-
-    for (q = 0; q < count; q++) {
-      var data = argsArray[iFirstPIIXO + (q << 2)][0].data;
-      var rowSize = map[q].w << 2;
-      var dataOffset = 0;
-      var offset = map[q].x + map[q].y * imgWidth << 2;
-      imgData.set(data.subarray(0, rowSize), offset - imgRowSize);
-
-      for (var k = 0, kk = map[q].h; k < kk; k++) {
-        imgData.set(data.subarray(dataOffset, dataOffset + rowSize), offset);
-        dataOffset += rowSize;
-        offset += imgRowSize;
-      }
-
-      imgData.set(data.subarray(dataOffset - rowSize, dataOffset), offset);
-
-      while (offset >= 0) {
-        data[offset - 4] = data[offset];
-        data[offset - 3] = data[offset + 1];
-        data[offset - 2] = data[offset + 2];
-        data[offset - 1] = data[offset + 3];
-        data[offset + rowSize] = data[offset + rowSize - 4];
-        data[offset + rowSize + 1] = data[offset + rowSize - 3];
-        data[offset + rowSize + 2] = data[offset + rowSize - 2];
-        data[offset + rowSize + 3] = data[offset + rowSize - 1];
-        offset -= imgRowSize;
-      }
-    }
-
-    fnArray.splice(iFirstSave, count * 4, _util.OPS.paintInlineImageXObjectGroup);
-    argsArray.splice(iFirstSave, count * 4, [{
-      width: imgWidth,
-      height: imgHeight,
-      kind: _util.ImageKind.RGBA_32BPP,
-      data: imgData
-    }, map]);
-    return iFirstSave + 1;
-  });
-  addState(InitialState, [_util.OPS.save, _util.OPS.transform, _util.OPS.paintImageMaskXObject, _util.OPS.restore], null, function iterateImageMaskGroup(context, i) {
-    var fnArray = context.fnArray;
-    var iFirstSave = context.iCurr - 3;
-    var pos = (i - iFirstSave) % 4;
-
-    switch (pos) {
-      case 0:
-        return fnArray[i] === _util.OPS.save;
-
-      case 1:
-        return fnArray[i] === _util.OPS.transform;
-
-      case 2:
-        return fnArray[i] === _util.OPS.paintImageMaskXObject;
-
-      case 3:
-        return fnArray[i] === _util.OPS.restore;
-    }
-
-    throw new Error("iterateImageMaskGroup - invalid pos: ".concat(pos));
-  }, function foundImageMaskGroup(context, i) {
-    var MIN_IMAGES_IN_MASKS_BLOCK = 10;
-    var MAX_IMAGES_IN_MASKS_BLOCK = 100;
-    var MAX_SAME_IMAGES_IN_MASKS_BLOCK = 1000;
-    var fnArray = context.fnArray,
-        argsArray = context.argsArray;
-    var curr = context.iCurr;
-    var iFirstSave = curr - 3;
-    var iFirstTransform = curr - 2;
-    var iFirstPIMXO = curr - 1;
-    var count = Math.floor((i - iFirstSave) / 4);
-    count = handlePaintSolidColorImageMask(iFirstSave, count, fnArray, argsArray);
-
-    if (count < MIN_IMAGES_IN_MASKS_BLOCK) {
-      return i - (i - iFirstSave) % 4;
-    }
-
-    var q;
-    var isSameImage = false;
-    var iTransform, transformArgs;
-    var firstPIMXOArg0 = argsArray[iFirstPIMXO][0];
-    var firstTransformArg0 = argsArray[iFirstTransform][0],
-        firstTransformArg1 = argsArray[iFirstTransform][1],
-        firstTransformArg2 = argsArray[iFirstTransform][2],
-        firstTransformArg3 = argsArray[iFirstTransform][3];
-
-    if (firstTransformArg1 === firstTransformArg2) {
-      isSameImage = true;
-      iTransform = iFirstTransform + 4;
-      var iPIMXO = iFirstPIMXO + 4;
-
-      for (q = 1; q < count; q++, iTransform += 4, iPIMXO += 4) {
-        transformArgs = argsArray[iTransform];
-
-        if (argsArray[iPIMXO][0] !== firstPIMXOArg0 || transformArgs[0] !== firstTransformArg0 || transformArgs[1] !== firstTransformArg1 || transformArgs[2] !== firstTransformArg2 || transformArgs[3] !== firstTransformArg3) {
-          if (q < MIN_IMAGES_IN_MASKS_BLOCK) {
-            isSameImage = false;
-          } else {
-            count = q;
-          }
-
-          break;
-        }
-      }
-    }
-
-    if (isSameImage) {
-      count = Math.min(count, MAX_SAME_IMAGES_IN_MASKS_BLOCK);
-      var positions = new Float32Array(count * 2);
-      iTransform = iFirstTransform;
-
-      for (q = 0; q < count; q++, iTransform += 4) {
-        transformArgs = argsArray[iTransform];
-        positions[q << 1] = transformArgs[4];
-        positions[(q << 1) + 1] = transformArgs[5];
-      }
-
-      fnArray.splice(iFirstSave, count * 4, _util.OPS.paintImageMaskXObjectRepeat);
-      argsArray.splice(iFirstSave, count * 4, [firstPIMXOArg0, firstTransformArg0, firstTransformArg1, firstTransformArg2, firstTransformArg3, positions]);
-    } else {
-      count = Math.min(count, MAX_IMAGES_IN_MASKS_BLOCK);
-      var images = [];
-
-      for (q = 0; q < count; q++) {
-        transformArgs = argsArray[iFirstTransform + (q << 2)];
-        var maskParams = argsArray[iFirstPIMXO + (q << 2)][0];
-        images.push({
-          data: maskParams.data,
-          width: maskParams.width,
-          height: maskParams.height,
-          transform: transformArgs
-        });
-      }
-
-      fnArray.splice(iFirstSave, count * 4, _util.OPS.paintImageMaskXObjectGroup);
-      argsArray.splice(iFirstSave, count * 4, [images]);
-    }
-
-    return iFirstSave + 1;
-  });
-  addState(InitialState, [_util.OPS.save, _util.OPS.transform, _util.OPS.paintImageXObject, _util.OPS.restore], function (context) {
-    var argsArray = context.argsArray;
-    var iFirstTransform = context.iCurr - 2;
-    return argsArray[iFirstTransform][1] === 0 && argsArray[iFirstTransform][2] === 0;
-  }, function iterateImageGroup(context, i) {
-    var fnArray = context.fnArray,
-        argsArray = context.argsArray;
-    var iFirstSave = context.iCurr - 3;
-    var pos = (i - iFirstSave) % 4;
-
-    switch (pos) {
-      case 0:
-        return fnArray[i] === _util.OPS.save;
-
-      case 1:
-        if (fnArray[i] !== _util.OPS.transform) {
-          return false;
-        }
-
-        var iFirstTransform = context.iCurr - 2;
-        var firstTransformArg0 = argsArray[iFirstTransform][0];
-        var firstTransformArg3 = argsArray[iFirstTransform][3];
-
-        if (argsArray[i][0] !== firstTransformArg0 || argsArray[i][1] !== 0 || argsArray[i][2] !== 0 || argsArray[i][3] !== firstTransformArg3) {
-          return false;
-        }
-
-        return true;
-
-      case 2:
-        if (fnArray[i] !== _util.OPS.paintImageXObject) {
-          return false;
-        }
-
-        var iFirstPIXO = context.iCurr - 1;
-        var firstPIXOArg0 = argsArray[iFirstPIXO][0];
-
-        if (argsArray[i][0] !== firstPIXOArg0) {
-          return false;
-        }
-
-        return true;
-
-      case 3:
-        return fnArray[i] === _util.OPS.restore;
-    }
-
-    throw new Error("iterateImageGroup - invalid pos: ".concat(pos));
-  }, function (context, i) {
-    var MIN_IMAGES_IN_BLOCK = 3;
-    var MAX_IMAGES_IN_BLOCK = 1000;
-    var fnArray = context.fnArray,
-        argsArray = context.argsArray;
-    var curr = context.iCurr;
-    var iFirstSave = curr - 3;
-    var iFirstTransform = curr - 2;
-    var iFirstPIXO = curr - 1;
-    var firstPIXOArg0 = argsArray[iFirstPIXO][0];
-    var firstTransformArg0 = argsArray[iFirstTransform][0];
-    var firstTransformArg3 = argsArray[iFirstTransform][3];
-    var count = Math.min(Math.floor((i - iFirstSave) / 4), MAX_IMAGES_IN_BLOCK);
-
-    if (count < MIN_IMAGES_IN_BLOCK) {
-      return i - (i - iFirstSave) % 4;
-    }
-
-    var positions = new Float32Array(count * 2);
-    var iTransform = iFirstTransform;
-
-    for (var q = 0; q < count; q++, iTransform += 4) {
-      var transformArgs = argsArray[iTransform];
-      positions[q << 1] = transformArgs[4];
-      positions[(q << 1) + 1] = transformArgs[5];
-    }
-
-    var args = [firstPIXOArg0, firstTransformArg0, firstTransformArg3, positions];
-    fnArray.splice(iFirstSave, count * 4, _util.OPS.paintImageXObjectRepeat);
-    argsArray.splice(iFirstSave, count * 4, args);
-    return iFirstSave + 1;
-  });
-  addState(InitialState, [_util.OPS.beginText, _util.OPS.setFont, _util.OPS.setTextMatrix, _util.OPS.showText, _util.OPS.endText], null, function iterateShowTextGroup(context, i) {
-    var fnArray = context.fnArray,
-        argsArray = context.argsArray;
-    var iFirstSave = context.iCurr - 4;
-    var pos = (i - iFirstSave) % 5;
-
-    switch (pos) {
-      case 0:
-        return fnArray[i] === _util.OPS.beginText;
-
-      case 1:
-        return fnArray[i] === _util.OPS.setFont;
-
-      case 2:
-        return fnArray[i] === _util.OPS.setTextMatrix;
-
-      case 3:
-        if (fnArray[i] !== _util.OPS.showText) {
-          return false;
-        }
-
-        var iFirstSetFont = context.iCurr - 3;
-        var firstSetFontArg0 = argsArray[iFirstSetFont][0];
-        var firstSetFontArg1 = argsArray[iFirstSetFont][1];
-
-        if (argsArray[i][0] !== firstSetFontArg0 || argsArray[i][1] !== firstSetFontArg1) {
-          return false;
-        }
-
-        return true;
-
-      case 4:
-        return fnArray[i] === _util.OPS.endText;
-    }
-
-    throw new Error("iterateShowTextGroup - invalid pos: ".concat(pos));
-  }, function (context, i) {
-    var MIN_CHARS_IN_BLOCK = 3;
-    var MAX_CHARS_IN_BLOCK = 1000;
-    var fnArray = context.fnArray,
-        argsArray = context.argsArray;
-    var curr = context.iCurr;
-    var iFirstBeginText = curr - 4;
-    var iFirstSetFont = curr - 3;
-    var iFirstSetTextMatrix = curr - 2;
-    var iFirstShowText = curr - 1;
-    var iFirstEndText = curr;
-    var firstSetFontArg0 = argsArray[iFirstSetFont][0];
-    var firstSetFontArg1 = argsArray[iFirstSetFont][1];
-    var count = Math.min(Math.floor((i - iFirstBeginText) / 5), MAX_CHARS_IN_BLOCK);
-
-    if (count < MIN_CHARS_IN_BLOCK) {
-      return i - (i - iFirstBeginText) % 5;
-    }
-
-    var iFirst = iFirstBeginText;
-
-    if (iFirstBeginText >= 4 && fnArray[iFirstBeginText - 4] === fnArray[iFirstSetFont] && fnArray[iFirstBeginText - 3] === fnArray[iFirstSetTextMatrix] && fnArray[iFirstBeginText - 2] === fnArray[iFirstShowText] && fnArray[iFirstBeginText - 1] === fnArray[iFirstEndText] && argsArray[iFirstBeginText - 4][0] === firstSetFontArg0 && argsArray[iFirstBeginText - 4][1] === firstSetFontArg1) {
-      count++;
-      iFirst -= 5;
-    }
-
-    var iEndText = iFirst + 4;
-
-    for (var q = 1; q < count; q++) {
-      fnArray.splice(iEndText, 3);
-      argsArray.splice(iEndText, 3);
-      iEndText += 2;
-    }
-
-    return iEndText + 1;
-  });
-
-  function QueueOptimizer(queue) {
-    this.queue = queue;
-    this.state = null;
-    this.context = {
-      iCurr: 0,
-      fnArray: queue.fnArray,
-      argsArray: queue.argsArray
-    };
-    this.match = null;
-    this.lastProcessed = 0;
-  }
-
-  QueueOptimizer.prototype = {
-    _optimize: function _optimize() {
-      var fnArray = this.queue.fnArray;
-      var i = this.lastProcessed,
-          ii = fnArray.length;
-      var state = this.state;
-      var match = this.match;
-
-      if (!state && !match && i + 1 === ii && !InitialState[fnArray[i]]) {
-        this.lastProcessed = ii;
-        return;
-      }
-
-      var context = this.context;
-
-      while (i < ii) {
-        if (match) {
-          var iterate = (0, match.iterateFn)(context, i);
-
-          if (iterate) {
-            i++;
-            continue;
-          }
-
-          i = (0, match.processFn)(context, i + 1);
-          ii = fnArray.length;
-          match = null;
-          state = null;
-
-          if (i >= ii) {
-            break;
-          }
-        }
-
-        state = (state || InitialState)[fnArray[i]];
-
-        if (!state || Array.isArray(state)) {
-          i++;
-          continue;
-        }
-
-        context.iCurr = i;
-        i++;
-
-        if (state.checkFn && !(0, state.checkFn)(context)) {
-          state = null;
-          continue;
-        }
-
-        match = state;
-        state = null;
-      }
-
-      this.state = state;
-      this.match = match;
-      this.lastProcessed = i;
-    },
-    push: function push(fn, args) {
-      this.queue.fnArray.push(fn);
-      this.queue.argsArray.push(args);
-
-      this._optimize();
-    },
-    flush: function flush() {
-      while (this.match) {
-        var length = this.queue.fnArray.length;
-        this.lastProcessed = (0, this.match.processFn)(this.context, length);
-        this.match = null;
-        this.state = null;
-
-        this._optimize();
-      }
-    },
-    reset: function reset() {
-      this.state = null;
-      this.match = null;
-      this.lastProcessed = 0;
-    }
-  };
-  return QueueOptimizer;
-}();
-
-var NullOptimizer = function NullOptimizerClosure() {
-  function NullOptimizer(queue) {
-    this.queue = queue;
-  }
-
-  NullOptimizer.prototype = {
-    push: function push(fn, args) {
-      this.queue.fnArray.push(fn);
-      this.queue.argsArray.push(args);
-    },
-    flush: function flush() {},
-    reset: function reset() {}
-  };
-  return NullOptimizer;
-}();
-
-var OperatorList = function OperatorListClosure() {
-  var CHUNK_SIZE = 1000;
-  var CHUNK_SIZE_ABOUT = CHUNK_SIZE - 5;
-
-  function OperatorList(intent, streamSink) {
-    this._streamSink = streamSink;
-    this.fnArray = [];
-    this.argsArray = [];
-
-    if (streamSink && intent !== "oplist") {
-      this.optimizer = new QueueOptimizer(this);
-    } else {
-      this.optimizer = new NullOptimizer(this);
-    }
-
-    this.dependencies = new Set();
-    this._totalLength = 0;
-    this.weight = 0;
-    this._resolved = streamSink ? null : Promise.resolve();
-  }
-
-  OperatorList.prototype = {
-    get length() {
-      return this.argsArray.length;
-    },
-
-    get ready() {
-      return this._resolved || this._streamSink.ready;
-    },
-
-    get totalLength() {
-      return this._totalLength + this.length;
-    },
-
-    addOp: function addOp(fn, args) {
-      this.optimizer.push(fn, args);
-      this.weight++;
-
-      if (this._streamSink) {
-        if (this.weight >= CHUNK_SIZE) {
-          this.flush();
-        } else if (this.weight >= CHUNK_SIZE_ABOUT && (fn === _util.OPS.restore || fn === _util.OPS.endText)) {
-          this.flush();
-        }
-      }
-    },
-    addDependency: function addDependency(dependency) {
-      if (this.dependencies.has(dependency)) {
-        return;
-      }
-
-      this.dependencies.add(dependency);
-      this.addOp(_util.OPS.dependency, [dependency]);
-    },
-    addDependencies: function addDependencies(dependencies) {
-      var _iterator = _createForOfIteratorHelper(dependencies),
-          _step;
-
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var dependency = _step.value;
-          this.addDependency(dependency);
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
-    },
-    addOpList: function addOpList(opList) {
-      if (!(opList instanceof OperatorList)) {
-        (0, _util.warn)('addOpList - ignoring invalid "opList" parameter.');
-        return;
-      }
-
-      var _iterator2 = _createForOfIteratorHelper(opList.dependencies),
-          _step2;
-
-      try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var dependency = _step2.value;
-          this.dependencies.add(dependency);
-        }
-      } catch (err) {
-        _iterator2.e(err);
-      } finally {
-        _iterator2.f();
-      }
-
-      for (var i = 0, ii = opList.length; i < ii; i++) {
-        this.addOp(opList.fnArray[i], opList.argsArray[i]);
-      }
-    },
-    getIR: function getIR() {
-      return {
-        fnArray: this.fnArray,
-        argsArray: this.argsArray,
-        length: this.length
-      };
-    },
-
-    get _transfers() {
-      var transfers = [];
-      var fnArray = this.fnArray,
-          argsArray = this.argsArray,
-          length = this.length;
-
-      for (var i = 0; i < length; i++) {
-        switch (fnArray[i]) {
-          case _util.OPS.paintInlineImageXObject:
-          case _util.OPS.paintInlineImageXObjectGroup:
-          case _util.OPS.paintImageMaskXObject:
-            var arg = argsArray[i][0];
-            ;
-
-            if (!arg.cached) {
-              transfers.push(arg.data.buffer);
-            }
-
-            break;
-        }
-      }
-
-      return transfers;
-    },
-
-    flush: function flush() {
-      var lastChunk = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-      this.optimizer.flush();
-      var length = this.length;
-      this._totalLength += length;
-
-      this._streamSink.enqueue({
-        fnArray: this.fnArray,
-        argsArray: this.argsArray,
-        lastChunk: lastChunk,
-        length: length
-      }, 1, this._transfers);
-
-      this.dependencies.clear();
-      this.fnArray.length = 0;
-      this.argsArray.length = 0;
-      this.weight = 0;
-      this.optimizer.reset();
-    }
-  };
-  return OperatorList;
-}();
-
-exports.OperatorList = OperatorList;
-
-/***/ }),
 /* 155 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.writeDict = writeDict;
-exports.incrementalUpdate = incrementalUpdate;
-
-var _util = __w_pdfjs_require__(4);
-
-var _primitives = __w_pdfjs_require__(133);
-
-var _core_utils = __w_pdfjs_require__(136);
-
-var _xml_parser = __w_pdfjs_require__(156);
-
-var _crypto = __w_pdfjs_require__(150);
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function writeDict(dict, buffer, transform) {
-  buffer.push("<<");
-
-  var _iterator = _createForOfIteratorHelper(dict.getKeys()),
-      _step;
-
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var key = _step.value;
-      buffer.push(" /".concat((0, _core_utils.escapePDFName)(key), " "));
-      writeValue(dict.getRaw(key), buffer, transform);
-    }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
-  }
-
-  buffer.push(">>");
-}
-
-function writeStream(stream, buffer, transform) {
-  writeDict(stream.dict, buffer, transform);
-  buffer.push(" stream\n");
-  var string = (0, _util.bytesToString)(stream.getBytes());
-
-  if (transform !== null) {
-    string = transform.encryptString(string);
-  }
-
-  buffer.push(string);
-  buffer.push("\nendstream\n");
-}
-
-function writeArray(array, buffer, transform) {
-  buffer.push("[");
-  var first = true;
-
-  var _iterator2 = _createForOfIteratorHelper(array),
-      _step2;
-
-  try {
-    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-      var val = _step2.value;
-
-      if (!first) {
-        buffer.push(" ");
-      } else {
-        first = false;
-      }
-
-      writeValue(val, buffer, transform);
-    }
-  } catch (err) {
-    _iterator2.e(err);
-  } finally {
-    _iterator2.f();
-  }
-
-  buffer.push("]");
-}
-
-function numberToString(value) {
-  if (Number.isInteger(value)) {
-    return value.toString();
-  }
-
-  var roundedValue = Math.round(value * 100);
-
-  if (roundedValue % 100 === 0) {
-    return (roundedValue / 100).toString();
-  }
-
-  if (roundedValue % 10 === 0) {
-    return value.toFixed(1);
-  }
-
-  return value.toFixed(2);
-}
-
-function writeValue(value, buffer, transform) {
-  if ((0, _primitives.isName)(value)) {
-    buffer.push("/".concat((0, _core_utils.escapePDFName)(value.name)));
-  } else if ((0, _primitives.isRef)(value)) {
-    buffer.push("".concat(value.num, " ").concat(value.gen, " R"));
-  } else if (Array.isArray(value)) {
-    writeArray(value, buffer, transform);
-  } else if (typeof value === "string") {
-    if (transform !== null) {
-      value = transform.encryptString(value);
-    }
-
-    buffer.push("(".concat((0, _util.escapeString)(value), ")"));
-  } else if (typeof value === "number") {
-    buffer.push(numberToString(value));
-  } else if ((0, _primitives.isDict)(value)) {
-    writeDict(value, buffer, transform);
-  } else if ((0, _primitives.isStream)(value)) {
-    writeStream(value, buffer, transform);
-  }
-}
-
-function writeInt(number, size, offset, buffer) {
-  for (var i = size + offset - 1; i > offset - 1; i--) {
-    buffer[i] = number & 0xff;
-    number >>= 8;
-  }
-
-  return offset + size;
-}
-
-function writeString(string, offset, buffer) {
-  for (var i = 0, len = string.length; i < len; i++) {
-    buffer[offset + i] = string.charCodeAt(i) & 0xff;
-  }
-}
-
-function computeMD5(filesize, xrefInfo) {
-  var time = Math.floor(Date.now() / 1000);
-  var filename = xrefInfo.filename || "";
-  var md5Buffer = [time.toString(), filename, filesize.toString()];
-  var md5BufferLen = md5Buffer.reduce(function (a, str) {
-    return a + str.length;
-  }, 0);
-
-  for (var _i = 0, _Object$values = Object.values(xrefInfo.info); _i < _Object$values.length; _i++) {
-    var value = _Object$values[_i];
-    md5Buffer.push(value);
-    md5BufferLen += value.length;
-  }
-
-  var array = new Uint8Array(md5BufferLen);
-  var offset = 0;
-
-  for (var _i2 = 0, _md5Buffer = md5Buffer; _i2 < _md5Buffer.length; _i2++) {
-    var str = _md5Buffer[_i2];
-    writeString(str, offset, array);
-    offset += str.length;
-  }
-
-  return (0, _util.bytesToString)((0, _crypto.calculateMD5)(array));
-}
-
-function updateXFA(datasetsRef, newRefs, xref) {
-  if (datasetsRef === null || xref === null) {
-    return;
-  }
-
-  var datasets = xref.fetchIfRef(datasetsRef);
-  var str = (0, _util.bytesToString)(datasets.getBytes());
-  var xml = new _xml_parser.SimpleXMLParser(true).parseFromString(str);
-
-  var _iterator3 = _createForOfIteratorHelper(newRefs),
-      _step3;
-
-  try {
-    for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-      var xfa = _step3.value.xfa;
-
-      if (!xfa) {
-        continue;
-      }
-
-      var path = xfa.path,
-          value = xfa.value;
-
-      if (!path) {
-        continue;
-      }
-
-      var node = xml.documentElement.searchNode((0, _core_utils.parseXFAPath)(path), 0);
-
-      if (node) {
-        node.childNodes = [new _xml_parser.SimpleDOMNode("#text", value)];
-      } else {
-        (0, _util.warn)("Node not found for path: ".concat(path));
-      }
-    }
-  } catch (err) {
-    _iterator3.e(err);
-  } finally {
-    _iterator3.f();
-  }
-
-  var buffer = [];
-  xml.documentElement.dump(buffer);
-  var updatedXml = buffer.join("");
-  var encrypt = xref.encrypt;
-
-  if (encrypt) {
-    var transform = encrypt.createCipherTransform(datasetsRef.num, datasetsRef.gen);
-    updatedXml = transform.encryptString(updatedXml);
-  }
-
-  var data = "".concat(datasetsRef.num, " ").concat(datasetsRef.gen, " obj\n") + "<< /Type /EmbeddedFile /Length ".concat(updatedXml.length, ">>\nstream\n") + updatedXml + "\nendstream\nendobj\n";
-  newRefs.push({
-    ref: datasetsRef,
-    data: data
-  });
-}
-
-function incrementalUpdate(_ref) {
-  var originalData = _ref.originalData,
-      xrefInfo = _ref.xrefInfo,
-      newRefs = _ref.newRefs,
-      _ref$xref = _ref.xref,
-      xref = _ref$xref === void 0 ? null : _ref$xref,
-      _ref$datasetsRef = _ref.datasetsRef,
-      datasetsRef = _ref$datasetsRef === void 0 ? null : _ref$datasetsRef;
-  updateXFA(datasetsRef, newRefs, xref);
-  var newXref = new _primitives.Dict(null);
-  var refForXrefTable = xrefInfo.newRef;
-  var buffer, baseOffset;
-  var lastByte = originalData[originalData.length - 1];
-
-  if (lastByte === 0x0a || lastByte === 0x0d) {
-    buffer = [];
-    baseOffset = originalData.length;
-  } else {
-    buffer = ["\n"];
-    baseOffset = originalData.length + 1;
-  }
-
-  newXref.set("Size", refForXrefTable.num + 1);
-  newXref.set("Prev", xrefInfo.startXRef);
-  newXref.set("Type", _primitives.Name.get("XRef"));
-
-  if (xrefInfo.rootRef !== null) {
-    newXref.set("Root", xrefInfo.rootRef);
-  }
-
-  if (xrefInfo.infoRef !== null) {
-    newXref.set("Info", xrefInfo.infoRef);
-  }
-
-  if (xrefInfo.encrypt !== null) {
-    newXref.set("Encrypt", xrefInfo.encrypt);
-  }
-
-  newRefs.push({
-    ref: refForXrefTable,
-    data: ""
-  });
-  newRefs = newRefs.sort(function (a, b) {
-    return a.ref.num - b.ref.num;
-  });
-  var xrefTableData = [[0, 1, 0xffff]];
-  var indexes = [0, 1];
-  var maxOffset = 0;
-
-  var _iterator4 = _createForOfIteratorHelper(newRefs),
-      _step4;
-
-  try {
-    for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-      var _step4$value = _step4.value,
-          ref = _step4$value.ref,
-          data = _step4$value.data;
-      maxOffset = Math.max(maxOffset, baseOffset);
-      xrefTableData.push([1, baseOffset, Math.min(ref.gen, 0xffff)]);
-      baseOffset += data.length;
-      indexes.push(ref.num);
-      indexes.push(1);
-      buffer.push(data);
-    }
-  } catch (err) {
-    _iterator4.e(err);
-  } finally {
-    _iterator4.f();
-  }
-
-  newXref.set("Index", indexes);
-
-  if (xrefInfo.fileIds.length !== 0) {
-    var md5 = computeMD5(baseOffset, xrefInfo);
-    newXref.set("ID", [xrefInfo.fileIds[0], md5]);
-  }
-
-  var offsetSize = Math.ceil(Math.log2(maxOffset) / 8);
-  var sizes = [1, offsetSize, 2];
-  var structSize = sizes[0] + sizes[1] + sizes[2];
-  var tableLength = structSize * xrefTableData.length;
-  newXref.set("W", sizes);
-  newXref.set("Length", tableLength);
-  buffer.push("".concat(refForXrefTable.num, " ").concat(refForXrefTable.gen, " obj\n"));
-  writeDict(newXref, buffer, null);
-  buffer.push(" stream\n");
-  var bufferLen = buffer.reduce(function (a, str) {
-    return a + str.length;
-  }, 0);
-  var footer = "\nendstream\nendobj\nstartxref\n".concat(baseOffset, "\n%%EOF\n");
-  var array = new Uint8Array(originalData.length + bufferLen + tableLength + footer.length);
-  array.set(originalData);
-  var offset = originalData.length;
-
-  var _iterator5 = _createForOfIteratorHelper(buffer),
-      _step5;
-
-  try {
-    for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
-      var str = _step5.value;
-      writeString(str, offset, array);
-      offset += str.length;
-    }
-  } catch (err) {
-    _iterator5.e(err);
-  } finally {
-    _iterator5.f();
-  }
-
-  for (var _i3 = 0, _xrefTableData = xrefTableData; _i3 < _xrefTableData.length; _i3++) {
-    var _xrefTableData$_i = _slicedToArray(_xrefTableData[_i3], 3),
-        type = _xrefTableData$_i[0],
-        objOffset = _xrefTableData$_i[1],
-        gen = _xrefTableData$_i[2];
-
-    offset = writeInt(type, sizes[0], offset, array);
-    offset = writeInt(objOffset, sizes[1], offset, array);
-    offset = writeInt(gen, sizes[2], offset, array);
-  }
-
-  writeString(footer, offset, array);
-  return array;
-}
-
-/***/ }),
-/* 156 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -33849,29 +32849,20 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.SimpleXMLParser = exports.SimpleDOMNode = void 0;
+exports.createDefaultAppearance = createDefaultAppearance;
+exports.parseDefaultAppearance = parseDefaultAppearance;
+
+var _primitives = __w_pdfjs_require__(134);
 
 var _util = __w_pdfjs_require__(4);
 
-function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+var _colorspace = __w_pdfjs_require__(152);
 
-function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+var _core_utils = __w_pdfjs_require__(137);
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+var _evaluator = __w_pdfjs_require__(156);
 
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+var _stream = __w_pdfjs_require__(141);
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -33891,630 +32882,124 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var XMLParserErrorCode = {
-  NoError: 0,
-  EndOfDocument: -1,
-  UnterminatedCdat: -2,
-  UnterminatedXmlDeclaration: -3,
-  UnterminatedDoctypeDeclaration: -4,
-  UnterminatedComment: -5,
-  MalformedElement: -6,
-  OutOfMemory: -7,
-  UnterminatedAttributeValue: -8,
-  UnterminatedElement: -9,
-  ElementNeverBegun: -10
-};
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
-function isWhitespace(s, index) {
-  var ch = s[index];
-  return ch === " " || ch === "\n" || ch === "\r" || ch === "\t";
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var DefaultAppearanceEvaluator = /*#__PURE__*/function (_EvaluatorPreprocesso) {
+  _inherits(DefaultAppearanceEvaluator, _EvaluatorPreprocesso);
+
+  var _super = _createSuper(DefaultAppearanceEvaluator);
+
+  function DefaultAppearanceEvaluator(str) {
+    _classCallCheck(this, DefaultAppearanceEvaluator);
+
+    return _super.call(this, new _stream.StringStream(str));
+  }
+
+  _createClass(DefaultAppearanceEvaluator, [{
+    key: "parse",
+    value: function parse() {
+      var operation = {
+        fn: 0,
+        args: []
+      };
+      var result = {
+        fontSize: 0,
+        fontName: _primitives.Name.get(""),
+        fontColor: new Uint8ClampedArray([0, 0, 0])
+      };
+
+      try {
+        while (this.read(operation)) {
+          if (this.stateManager.stateStack.length !== 0) {
+            args.length = 0;
+            continue;
+          }
+
+          var fn = operation.fn,
+              args = operation.args;
+
+          switch (fn | 0) {
+            case _util.OPS.setFont:
+              var _args = _slicedToArray(args, 2),
+                  fontName = _args[0],
+                  fontSize = _args[1];
+
+              if ((0, _primitives.isName)(fontName)) {
+                result.fontName = fontName;
+              }
+
+              if (typeof fontSize === "number" && fontSize > 0) {
+                result.fontSize = fontSize;
+              }
+
+              break;
+
+            case _util.OPS.setFillRGBColor:
+              _colorspace.ColorSpace.singletons.rgb.getRgbItem(args, 0, result.fontColor, 0);
+
+              break;
+
+            case _util.OPS.setFillGray:
+              _colorspace.ColorSpace.singletons.gray.getRgbItem(args, 0, result.fontColor, 0);
+
+              break;
+
+            case _util.OPS.setFillColorSpace:
+              _colorspace.ColorSpace.singletons.cmyk.getRgbItem(args, 0, result.fontColor, 0);
+
+              break;
+          }
+
+          args.length = 0;
+        }
+      } catch (reason) {
+        (0, _util.warn)("parseDefaultAppearance - ignoring errors: \"".concat(reason, "\"."));
+      }
+
+      return result;
+    }
+  }]);
+
+  return DefaultAppearanceEvaluator;
+}(_evaluator.EvaluatorPreprocessor);
+
+function parseDefaultAppearance(str) {
+  return new DefaultAppearanceEvaluator(str).parse();
 }
 
-function isWhitespaceString(s) {
-  for (var i = 0, ii = s.length; i < ii; i++) {
-    if (!isWhitespace(s, i)) {
-      return false;
-    }
+function createDefaultAppearance(_ref) {
+  var fontSize = _ref.fontSize,
+      fontName = _ref.fontName,
+      fontColor = _ref.fontColor;
+  var colorCmd;
+
+  if (fontColor.every(function (c) {
+    return c === 0;
+  })) {
+    colorCmd = "0 g";
+  } else {
+    colorCmd = Array.from(fontColor).map(function (c) {
+      return (c / 255).toFixed(2);
+    }).join(" ") + " rg";
   }
 
-  return true;
+  return "/".concat((0, _core_utils.escapePDFName)(fontName.name), " ").concat(fontSize, " Tf ").concat(colorCmd);
 }
-
-var XMLParserBase = /*#__PURE__*/function () {
-  function XMLParserBase() {
-    _classCallCheck(this, XMLParserBase);
-  }
-
-  _createClass(XMLParserBase, [{
-    key: "_resolveEntities",
-    value: function _resolveEntities(s) {
-      var _this = this;
-
-      return s.replace(/&([^;]+);/g, function (all, entity) {
-        if (entity.substring(0, 2) === "#x") {
-          return String.fromCodePoint(parseInt(entity.substring(2), 16));
-        } else if (entity.substring(0, 1) === "#") {
-          return String.fromCodePoint(parseInt(entity.substring(1), 10));
-        }
-
-        switch (entity) {
-          case "lt":
-            return "<";
-
-          case "gt":
-            return ">";
-
-          case "amp":
-            return "&";
-
-          case "quot":
-            return '"';
-        }
-
-        return _this.onResolveEntity(entity);
-      });
-    }
-  }, {
-    key: "_parseContent",
-    value: function _parseContent(s, start) {
-      var attributes = [];
-      var pos = start;
-
-      function skipWs() {
-        while (pos < s.length && isWhitespace(s, pos)) {
-          ++pos;
-        }
-      }
-
-      while (pos < s.length && !isWhitespace(s, pos) && s[pos] !== ">" && s[pos] !== "/") {
-        ++pos;
-      }
-
-      var name = s.substring(start, pos);
-      skipWs();
-
-      while (pos < s.length && s[pos] !== ">" && s[pos] !== "/" && s[pos] !== "?") {
-        skipWs();
-        var attrName = "",
-            attrValue = "";
-
-        while (pos < s.length && !isWhitespace(s, pos) && s[pos] !== "=") {
-          attrName += s[pos];
-          ++pos;
-        }
-
-        skipWs();
-
-        if (s[pos] !== "=") {
-          return null;
-        }
-
-        ++pos;
-        skipWs();
-        var attrEndChar = s[pos];
-
-        if (attrEndChar !== '"' && attrEndChar !== "'") {
-          return null;
-        }
-
-        var attrEndIndex = s.indexOf(attrEndChar, ++pos);
-
-        if (attrEndIndex < 0) {
-          return null;
-        }
-
-        attrValue = s.substring(pos, attrEndIndex);
-        attributes.push({
-          name: attrName,
-          value: this._resolveEntities(attrValue)
-        });
-        pos = attrEndIndex + 1;
-        skipWs();
-      }
-
-      return {
-        name: name,
-        attributes: attributes,
-        parsed: pos - start
-      };
-    }
-  }, {
-    key: "_parseProcessingInstruction",
-    value: function _parseProcessingInstruction(s, start) {
-      var pos = start;
-
-      function skipWs() {
-        while (pos < s.length && isWhitespace(s, pos)) {
-          ++pos;
-        }
-      }
-
-      while (pos < s.length && !isWhitespace(s, pos) && s[pos] !== ">" && s[pos] !== "/") {
-        ++pos;
-      }
-
-      var name = s.substring(start, pos);
-      skipWs();
-      var attrStart = pos;
-
-      while (pos < s.length && (s[pos] !== "?" || s[pos + 1] !== ">")) {
-        ++pos;
-      }
-
-      var value = s.substring(attrStart, pos);
-      return {
-        name: name,
-        value: value,
-        parsed: pos - start
-      };
-    }
-  }, {
-    key: "parseXml",
-    value: function parseXml(s) {
-      var i = 0;
-
-      while (i < s.length) {
-        var ch = s[i];
-        var j = i;
-
-        if (ch === "<") {
-          ++j;
-          var ch2 = s[j];
-          var q = void 0;
-
-          switch (ch2) {
-            case "/":
-              ++j;
-              q = s.indexOf(">", j);
-
-              if (q < 0) {
-                this.onError(XMLParserErrorCode.UnterminatedElement);
-                return;
-              }
-
-              this.onEndElement(s.substring(j, q));
-              j = q + 1;
-              break;
-
-            case "?":
-              ++j;
-
-              var pi = this._parseProcessingInstruction(s, j);
-
-              if (s.substring(j + pi.parsed, j + pi.parsed + 2) !== "?>") {
-                this.onError(XMLParserErrorCode.UnterminatedXmlDeclaration);
-                return;
-              }
-
-              this.onPi(pi.name, pi.value);
-              j += pi.parsed + 2;
-              break;
-
-            case "!":
-              if (s.substring(j + 1, j + 3) === "--") {
-                q = s.indexOf("-->", j + 3);
-
-                if (q < 0) {
-                  this.onError(XMLParserErrorCode.UnterminatedComment);
-                  return;
-                }
-
-                this.onComment(s.substring(j + 3, q));
-                j = q + 3;
-              } else if (s.substring(j + 1, j + 8) === "[CDATA[") {
-                q = s.indexOf("]]>", j + 8);
-
-                if (q < 0) {
-                  this.onError(XMLParserErrorCode.UnterminatedCdat);
-                  return;
-                }
-
-                this.onCdata(s.substring(j + 8, q));
-                j = q + 3;
-              } else if (s.substring(j + 1, j + 8) === "DOCTYPE") {
-                var q2 = s.indexOf("[", j + 8);
-                var complexDoctype = false;
-                q = s.indexOf(">", j + 8);
-
-                if (q < 0) {
-                  this.onError(XMLParserErrorCode.UnterminatedDoctypeDeclaration);
-                  return;
-                }
-
-                if (q2 > 0 && q > q2) {
-                  q = s.indexOf("]>", j + 8);
-
-                  if (q < 0) {
-                    this.onError(XMLParserErrorCode.UnterminatedDoctypeDeclaration);
-                    return;
-                  }
-
-                  complexDoctype = true;
-                }
-
-                var doctypeContent = s.substring(j + 8, q + (complexDoctype ? 1 : 0));
-                this.onDoctype(doctypeContent);
-                j = q + (complexDoctype ? 2 : 1);
-              } else {
-                this.onError(XMLParserErrorCode.MalformedElement);
-                return;
-              }
-
-              break;
-
-            default:
-              var content = this._parseContent(s, j);
-
-              if (content === null) {
-                this.onError(XMLParserErrorCode.MalformedElement);
-                return;
-              }
-
-              var isClosed = false;
-
-              if (s.substring(j + content.parsed, j + content.parsed + 2) === "/>") {
-                isClosed = true;
-              } else if (s.substring(j + content.parsed, j + content.parsed + 1) !== ">") {
-                this.onError(XMLParserErrorCode.UnterminatedElement);
-                return;
-              }
-
-              this.onBeginElement(content.name, content.attributes, isClosed);
-              j += content.parsed + (isClosed ? 2 : 1);
-              break;
-          }
-        } else {
-          while (j < s.length && s[j] !== "<") {
-            j++;
-          }
-
-          var text = s.substring(i, j);
-          this.onText(this._resolveEntities(text));
-        }
-
-        i = j;
-      }
-    }
-  }, {
-    key: "onResolveEntity",
-    value: function onResolveEntity(name) {
-      return "&".concat(name, ";");
-    }
-  }, {
-    key: "onPi",
-    value: function onPi(name, value) {}
-  }, {
-    key: "onComment",
-    value: function onComment(text) {}
-  }, {
-    key: "onCdata",
-    value: function onCdata(text) {}
-  }, {
-    key: "onDoctype",
-    value: function onDoctype(doctypeContent) {}
-  }, {
-    key: "onText",
-    value: function onText(text) {}
-  }, {
-    key: "onBeginElement",
-    value: function onBeginElement(name, attributes, isEmpty) {}
-  }, {
-    key: "onEndElement",
-    value: function onEndElement(name) {}
-  }, {
-    key: "onError",
-    value: function onError(code) {}
-  }]);
-
-  return XMLParserBase;
-}();
-
-var SimpleDOMNode = /*#__PURE__*/function () {
-  function SimpleDOMNode(nodeName, nodeValue) {
-    _classCallCheck(this, SimpleDOMNode);
-
-    this.nodeName = nodeName;
-    this.nodeValue = nodeValue;
-    Object.defineProperty(this, "parentNode", {
-      value: null,
-      writable: true
-    });
-  }
-
-  _createClass(SimpleDOMNode, [{
-    key: "hasChildNodes",
-    value: function hasChildNodes() {
-      return this.childNodes && this.childNodes.length > 0;
-    }
-  }, {
-    key: "searchNode",
-    value: function searchNode(paths, pos) {
-      if (pos >= paths.length) {
-        return this;
-      }
-
-      var component = paths[pos];
-      var stack = [];
-      var node = this;
-
-      while (true) {
-        if (component.name === node.nodeName) {
-          if (component.pos === 0) {
-            var res = node.searchNode(paths, pos + 1);
-
-            if (res !== null) {
-              return res;
-            }
-          } else if (stack.length === 0) {
-            return null;
-          } else {
-            var _stack$pop = stack.pop(),
-                _stack$pop2 = _slicedToArray(_stack$pop, 1),
-                parent = _stack$pop2[0];
-
-            var siblingPos = 0;
-
-            var _iterator = _createForOfIteratorHelper(parent.childNodes),
-                _step;
-
-            try {
-              for (_iterator.s(); !(_step = _iterator.n()).done;) {
-                var child = _step.value;
-
-                if (component.name === child.nodeName) {
-                  if (siblingPos === component.pos) {
-                    return child.searchNode(paths, pos + 1);
-                  }
-
-                  siblingPos++;
-                }
-              }
-            } catch (err) {
-              _iterator.e(err);
-            } finally {
-              _iterator.f();
-            }
-
-            return node.searchNode(paths, pos + 1);
-          }
-        }
-
-        if (node.childNodes && node.childNodes.length !== 0) {
-          stack.push([node, 0]);
-          node = node.childNodes[0];
-        } else if (stack.length === 0) {
-          return null;
-        } else {
-          while (stack.length !== 0) {
-            var _stack$pop3 = stack.pop(),
-                _stack$pop4 = _slicedToArray(_stack$pop3, 2),
-                _parent = _stack$pop4[0],
-                currentPos = _stack$pop4[1];
-
-            var newPos = currentPos + 1;
-
-            if (newPos < _parent.childNodes.length) {
-              stack.push([_parent, newPos]);
-              node = _parent.childNodes[newPos];
-              break;
-            }
-          }
-
-          if (stack.length === 0) {
-            return null;
-          }
-        }
-      }
-    }
-  }, {
-    key: "dump",
-    value: function dump(buffer) {
-      if (this.nodeName === "#text") {
-        buffer.push((0, _util.encodeToXmlString)(this.nodeValue));
-        return;
-      }
-
-      buffer.push("<".concat(this.nodeName));
-
-      if (this.attributes) {
-        var _iterator2 = _createForOfIteratorHelper(this.attributes),
-            _step2;
-
-        try {
-          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-            var attribute = _step2.value;
-            buffer.push(" ".concat(attribute.name, "=\"").concat((0, _util.encodeToXmlString)(attribute.value), "\""));
-          }
-        } catch (err) {
-          _iterator2.e(err);
-        } finally {
-          _iterator2.f();
-        }
-      }
-
-      if (this.hasChildNodes()) {
-        buffer.push(">");
-
-        var _iterator3 = _createForOfIteratorHelper(this.childNodes),
-            _step3;
-
-        try {
-          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-            var child = _step3.value;
-            child.dump(buffer);
-          }
-        } catch (err) {
-          _iterator3.e(err);
-        } finally {
-          _iterator3.f();
-        }
-
-        buffer.push("</".concat(this.nodeName, ">"));
-      } else if (this.nodeValue) {
-        buffer.push(">".concat((0, _util.encodeToXmlString)(this.nodeValue), "</").concat(this.nodeName, ">"));
-      } else {
-        buffer.push("/>");
-      }
-    }
-  }, {
-    key: "firstChild",
-    get: function get() {
-      return this.childNodes && this.childNodes[0];
-    }
-  }, {
-    key: "nextSibling",
-    get: function get() {
-      var childNodes = this.parentNode.childNodes;
-
-      if (!childNodes) {
-        return undefined;
-      }
-
-      var index = childNodes.indexOf(this);
-
-      if (index === -1) {
-        return undefined;
-      }
-
-      return childNodes[index + 1];
-    }
-  }, {
-    key: "textContent",
-    get: function get() {
-      if (!this.childNodes) {
-        return this.nodeValue || "";
-      }
-
-      return this.childNodes.map(function (child) {
-        return child.textContent;
-      }).join("");
-    }
-  }]);
-
-  return SimpleDOMNode;
-}();
-
-exports.SimpleDOMNode = SimpleDOMNode;
-
-var SimpleXMLParser = /*#__PURE__*/function (_XMLParserBase) {
-  _inherits(SimpleXMLParser, _XMLParserBase);
-
-  var _super = _createSuper(SimpleXMLParser);
-
-  function SimpleXMLParser() {
-    var _this2;
-
-    var hasAttributes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-    _classCallCheck(this, SimpleXMLParser);
-
-    _this2 = _super.call(this);
-    _this2._currentFragment = null;
-    _this2._stack = null;
-    _this2._errorCode = XMLParserErrorCode.NoError;
-    _this2._hasAttributes = hasAttributes;
-    return _this2;
-  }
-
-  _createClass(SimpleXMLParser, [{
-    key: "parseFromString",
-    value: function parseFromString(data) {
-      this._currentFragment = [];
-      this._stack = [];
-      this._errorCode = XMLParserErrorCode.NoError;
-      this.parseXml(data);
-
-      if (this._errorCode !== XMLParserErrorCode.NoError) {
-        return undefined;
-      }
-
-      var _this$_currentFragmen = _slicedToArray(this._currentFragment, 1),
-          documentElement = _this$_currentFragmen[0];
-
-      if (!documentElement) {
-        return undefined;
-      }
-
-      return {
-        documentElement: documentElement
-      };
-    }
-  }, {
-    key: "onResolveEntity",
-    value: function onResolveEntity(name) {
-      switch (name) {
-        case "apos":
-          return "'";
-      }
-
-      return _get(_getPrototypeOf(SimpleXMLParser.prototype), "onResolveEntity", this).call(this, name);
-    }
-  }, {
-    key: "onText",
-    value: function onText(text) {
-      if (isWhitespaceString(text)) {
-        return;
-      }
-
-      var node = new SimpleDOMNode("#text", text);
-
-      this._currentFragment.push(node);
-    }
-  }, {
-    key: "onCdata",
-    value: function onCdata(text) {
-      var node = new SimpleDOMNode("#text", text);
-
-      this._currentFragment.push(node);
-    }
-  }, {
-    key: "onBeginElement",
-    value: function onBeginElement(name, attributes, isEmpty) {
-      var node = new SimpleDOMNode(name);
-      node.childNodes = [];
-
-      if (this._hasAttributes) {
-        node.attributes = attributes;
-      }
-
-      this._currentFragment.push(node);
-
-      if (isEmpty) {
-        return;
-      }
-
-      this._stack.push(this._currentFragment);
-
-      this._currentFragment = node.childNodes;
-    }
-  }, {
-    key: "onEndElement",
-    value: function onEndElement(name) {
-      this._currentFragment = this._stack.pop() || [];
-      var lastElement = this._currentFragment[this._currentFragment.length - 1];
-
-      if (!lastElement) {
-        return;
-      }
-
-      for (var i = 0, ii = lastElement.childNodes.length; i < ii; i++) {
-        lastElement.childNodes[i].parentNode = lastElement;
-      }
-    }
-  }, {
-    key: "onError",
-    value: function onError(code) {
-      this._errorCode = code;
-    }
-  }]);
-
-  return SimpleXMLParser;
-}(XMLParserBase);
-
-exports.SimpleXMLParser = SimpleXMLParser;
 
 /***/ }),
-/* 157 */
+/* 156 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -34523,47 +33008,47 @@ exports.SimpleXMLParser = SimpleXMLParser;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.PartialEvaluator = void 0;
+exports.PartialEvaluator = exports.EvaluatorPreprocessor = void 0;
 
 var _regenerator = _interopRequireDefault(__w_pdfjs_require__(2));
 
 var _util = __w_pdfjs_require__(4);
 
-var _cmap = __w_pdfjs_require__(158);
+var _cmap = __w_pdfjs_require__(157);
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
-var _fonts = __w_pdfjs_require__(159);
+var _fonts = __w_pdfjs_require__(158);
 
-var _encodings = __w_pdfjs_require__(162);
+var _encodings = __w_pdfjs_require__(161);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
-var _unicode = __w_pdfjs_require__(165);
+var _unicode = __w_pdfjs_require__(164);
 
-var _standard_fonts = __w_pdfjs_require__(164);
+var _standard_fonts = __w_pdfjs_require__(163);
 
-var _pattern = __w_pdfjs_require__(168);
+var _pattern = __w_pdfjs_require__(167);
 
-var _function = __w_pdfjs_require__(169);
+var _function = __w_pdfjs_require__(168);
 
-var _parser = __w_pdfjs_require__(139);
+var _parser = __w_pdfjs_require__(140);
 
-var _image_utils = __w_pdfjs_require__(152);
+var _image_utils = __w_pdfjs_require__(153);
 
-var _bidi = __w_pdfjs_require__(171);
+var _bidi = __w_pdfjs_require__(170);
 
-var _colorspace = __w_pdfjs_require__(151);
+var _colorspace = __w_pdfjs_require__(152);
 
-var _stream = __w_pdfjs_require__(140);
+var _stream = __w_pdfjs_require__(141);
 
-var _glyphlist = __w_pdfjs_require__(163);
+var _glyphlist = __w_pdfjs_require__(162);
 
-var _metrics = __w_pdfjs_require__(172);
+var _metrics = __w_pdfjs_require__(171);
 
-var _murmurhash = __w_pdfjs_require__(173);
+var _murmurhash = __w_pdfjs_require__(172);
 
-var _operator_list = __w_pdfjs_require__(154);
+var _operator_list = __w_pdfjs_require__(173);
 
 var _image = __w_pdfjs_require__(174);
 
@@ -35433,13 +33918,11 @@ var PartialEvaluator = /*#__PURE__*/function () {
       var _this3 = this;
 
       var fallbackFontDict = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : null;
-      var fontName,
-          fontSize = 0;
+      var fontName;
 
       if (fontArgs) {
         fontArgs = fontArgs.slice();
         fontName = fontArgs[0].name;
-        fontSize = fontArgs[1];
       }
 
       return this.loadFont(fontName, fontRef, resources, fallbackFontDict).then(function (translated) {
@@ -35464,8 +33947,6 @@ var PartialEvaluator = /*#__PURE__*/function () {
         });
       }).then(function (translated) {
         state.font = translated.font;
-        state.fontSize = fontSize;
-        state.fontName = fontName;
         translated.send(_this3.handler);
         return translated.loadedName;
       });
@@ -35717,9 +34198,18 @@ var PartialEvaluator = /*#__PURE__*/function () {
       }
 
       var fontCapability = (0, _util.createPromiseCapability)();
-      var preEvaluatedFont = this.preEvaluateFont(font);
-      var descriptor = preEvaluatedFont.descriptor,
-          hash = preEvaluatedFont.hash;
+      var preEvaluatedFont;
+
+      try {
+        preEvaluatedFont = this.preEvaluateFont(font);
+      } catch (reason) {
+        (0, _util.warn)("loadFont - ignoring preEvaluateFont errors: \"".concat(reason, "\"."));
+        return errorFont();
+      }
+
+      var _preEvaluatedFont = preEvaluatedFont,
+          descriptor = _preEvaluatedFont.descriptor,
+          hash = _preEvaluatedFont.hash;
       var fontRefIsRef = (0, _primitives.isRef)(fontRef),
           fontID;
 
@@ -37737,6 +36227,11 @@ var PartialEvaluator = /*#__PURE__*/function () {
         }
 
         dict = Array.isArray(df) ? this.xref.fetchIfRef(df[0]) : df;
+
+        if (!(dict instanceof _primitives.Dict)) {
+          throw new _util.FormatError("Descendant font is not a dictionary.");
+        }
+
         type = dict.get("Subtype");
 
         if (!(0, _primitives.isName)(type)) {
@@ -38264,7 +36759,9 @@ var TranslatedFont = /*#__PURE__*/function () {
 }();
 
 var StateManager = /*#__PURE__*/function () {
-  function StateManager(initialState) {
+  function StateManager() {
+    var initialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new EvalState();
+
     _classCallCheck(this, StateManager);
 
     this.state = initialState;
@@ -38828,7 +37325,9 @@ var EvaluatorPreprocessor = /*#__PURE__*/function () {
     }
   }]);
 
-  function EvaluatorPreprocessor(stream, xref, stateManager) {
+  function EvaluatorPreprocessor(stream, xref) {
+    var stateManager = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new StateManager();
+
     _classCallCheck(this, EvaluatorPreprocessor);
 
     this.parser = new _parser.Parser({
@@ -38949,8 +37448,10 @@ var EvaluatorPreprocessor = /*#__PURE__*/function () {
   return EvaluatorPreprocessor;
 }();
 
+exports.EvaluatorPreprocessor = EvaluatorPreprocessor;
+
 /***/ }),
-/* 158 */
+/* 157 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -38961,19 +37462,19 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.CMapFactory = exports.IdentityCMap = exports.CMap = void 0;
+exports.IdentityCMap = exports.CMapFactory = exports.CMap = void 0;
 
 var _regenerator = _interopRequireDefault(__w_pdfjs_require__(2));
 
 var _util = __w_pdfjs_require__(4);
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
-var _parser = __w_pdfjs_require__(139);
+var _parser = __w_pdfjs_require__(140);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
-var _stream = __w_pdfjs_require__(140);
+var _stream = __w_pdfjs_require__(141);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -39144,6 +37645,26 @@ var CMap = /*#__PURE__*/function () {
 
       out.charcode = 0;
       out.length = 1;
+    }
+  }, {
+    key: "getCharCodeLength",
+    value: function getCharCodeLength(charCode) {
+      var codespaceRanges = this.codespaceRanges;
+
+      for (var n = 0, nn = codespaceRanges.length; n < nn; n++) {
+        var codespaceRange = codespaceRanges[n];
+
+        for (var k = 0, kk = codespaceRange.length; k < kk;) {
+          var low = codespaceRange[k++];
+          var high = codespaceRange[k++];
+
+          if (charCode >= low && charCode <= high) {
+            return n + 1;
+          }
+        }
+      }
+
+      return 1;
     }
   }, {
     key: "length",
@@ -39953,7 +38474,7 @@ var CMapFactory = function CMapFactoryClosure() {
 exports.CMapFactory = CMapFactory;
 
 /***/ }),
-/* 159 */
+/* 158 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -39963,29 +38484,29 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.getFontType = getFontType;
-exports.IdentityToUnicodeMap = exports.ToUnicodeMap = exports.FontFlags = exports.Font = exports.ErrorFont = exports.SEAC_ANALYSIS_ENABLED = void 0;
+exports.ToUnicodeMap = exports.SEAC_ANALYSIS_ENABLED = exports.IdentityToUnicodeMap = exports.FontFlags = exports.Font = exports.ErrorFont = void 0;
 
 var _util = __w_pdfjs_require__(4);
 
-var _cff_parser = __w_pdfjs_require__(160);
+var _cff_parser = __w_pdfjs_require__(159);
 
-var _glyphlist = __w_pdfjs_require__(163);
+var _glyphlist = __w_pdfjs_require__(162);
 
-var _encodings = __w_pdfjs_require__(162);
+var _encodings = __w_pdfjs_require__(161);
 
-var _standard_fonts = __w_pdfjs_require__(164);
+var _standard_fonts = __w_pdfjs_require__(163);
 
-var _unicode = __w_pdfjs_require__(165);
+var _unicode = __w_pdfjs_require__(164);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
-var _font_renderer = __w_pdfjs_require__(166);
+var _font_renderer = __w_pdfjs_require__(165);
 
-var _cmap = __w_pdfjs_require__(158);
+var _cmap = __w_pdfjs_require__(157);
 
-var _stream = __w_pdfjs_require__(140);
+var _stream = __w_pdfjs_require__(141);
 
-var _type1_parser = __w_pdfjs_require__(167);
+var _type1_parser = __w_pdfjs_require__(166);
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
@@ -40378,6 +38899,7 @@ var Font = function FontClosure() {
     this.defaultWidth = properties.defaultWidth;
     this.composite = properties.composite;
     this.cMap = properties.cMap;
+    this.capHeight = properties.capHeight / PDF_GLYPH_SPACE_UNITS;
     this.ascent = properties.ascent / PDF_GLYPH_SPACE_UNITS;
     this.descent = properties.descent / PDF_GLYPH_SPACE_UNITS;
     this.fontMatrix = properties.fontMatrix;
@@ -40993,7 +39515,8 @@ var Font = function FontClosure() {
       this.bold = fontName.search(/bold/gi) !== -1;
       this.italic = fontName.search(/oblique/gi) !== -1 || fontName.search(/italic/gi) !== -1;
       this.black = name.search(/Black/g) !== -1;
-      this.remeasure = !isStandardFont && Object.keys(this.widths).length > 0;
+      var isNarrow = name.search(/Narrow/g) !== -1;
+      this.remeasure = (!isStandardFont || isNarrow) && Object.keys(this.widths).length > 0;
 
       if ((isStandardFont || isMappedToStandardFont) && type === "CIDFontType2" && this.cidEncoding.startsWith("Identity-")) {
         var GlyphMapForStandardFonts = (0, _standard_fonts.getGlyphMapForStandardFonts)(),
@@ -42720,11 +41243,79 @@ var Font = function FontClosure() {
 
       return charsCache[charsCacheKey] = glyphs;
     },
+    getCharPositions: function getCharPositions(chars) {
+      var positions = [];
+
+      if (this.cMap) {
+        var c = Object.create(null);
+        var i = 0;
+
+        while (i < chars.length) {
+          this.cMap.readCharCode(chars, i, c);
+          var length = c.length;
+          positions.push([i, i + length]);
+          i += length;
+        }
+      } else {
+        for (var _i6 = 0, ii = chars.length; _i6 < ii; ++_i6) {
+          positions.push([_i6, _i6 + 1]);
+        }
+      }
+
+      return positions;
+    },
 
     get glyphCacheValues() {
       return Object.values(this.glyphCache);
-    }
+    },
 
+    encodeString: function encodeString(str) {
+      var buffers = [];
+      var currentBuf = [];
+
+      var hasCurrentBufErrors = function hasCurrentBufErrors() {
+        return buffers.length % 2 === 1;
+      };
+
+      for (var i = 0, ii = str.length; i < ii; i++) {
+        var unicode = str.codePointAt(i);
+
+        if (unicode > 0xd7ff && (unicode < 0xe000 || unicode > 0xfffd)) {
+          i++;
+        }
+
+        if (this.toUnicode) {
+          var _char = String.fromCodePoint(unicode);
+
+          var charCode = this.toUnicode.charCodeOf(_char);
+
+          if (charCode !== -1) {
+            if (hasCurrentBufErrors()) {
+              buffers.push(currentBuf.join(""));
+              currentBuf.length = 0;
+            }
+
+            var charCodeLength = this.cMap ? this.cMap.getCharCodeLength(charCode) : 1;
+
+            for (var j = charCodeLength - 1; j >= 0; j--) {
+              currentBuf.push(String.fromCharCode(charCode >> 8 * j & 0xff));
+            }
+
+            continue;
+          }
+        }
+
+        if (!hasCurrentBufErrors()) {
+          buffers.push(currentBuf.join(""));
+          currentBuf.length = 0;
+        }
+
+        currentBuf.push(String.fromCodePoint(unicode));
+      }
+
+      buffers.push(currentBuf.join(""));
+      return buffers;
+    }
   };
   return Font;
 }();
@@ -42741,6 +41332,9 @@ var ErrorFont = function ErrorFontClosure() {
   ErrorFont.prototype = {
     charsToGlyphs: function ErrorFont_charsToGlyphs() {
       return [];
+    },
+    encodeString: function ErrorFont_encodeString(chars) {
+      return [chars];
     },
     exportData: function exportData() {
       var extraProperties = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
@@ -43227,7 +41821,7 @@ var CFFFont = function CFFFontClosure() {
 }();
 
 /***/ }),
-/* 160 */
+/* 159 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -43238,13 +41832,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.CFFFDSelect = exports.CFFCompiler = exports.CFFPrivateDict = exports.CFFTopDict = exports.CFFCharset = exports.CFFIndex = exports.CFFStrings = exports.CFFHeader = exports.CFF = exports.CFFParser = exports.CFFStandardStrings = void 0;
+exports.CFFTopDict = exports.CFFStrings = exports.CFFStandardStrings = exports.CFFPrivateDict = exports.CFFParser = exports.CFFIndex = exports.CFFHeader = exports.CFFFDSelect = exports.CFFCompiler = exports.CFFCharset = exports.CFF = void 0;
 
 var _util = __w_pdfjs_require__(4);
 
-var _charsets = __w_pdfjs_require__(161);
+var _charsets = __w_pdfjs_require__(160);
 
-var _encodings = __w_pdfjs_require__(162);
+var _encodings = __w_pdfjs_require__(161);
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -45196,6 +43790,24 @@ var CFFCompiler = /*#__PURE__*/function () {
 exports.CFFCompiler = CFFCompiler;
 
 /***/ }),
+/* 160 */
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.ISOAdobeCharset = exports.ExpertSubsetCharset = exports.ExpertCharset = void 0;
+var ISOAdobeCharset = [".notdef", "space", "exclam", "quotedbl", "numbersign", "dollar", "percent", "ampersand", "quoteright", "parenleft", "parenright", "asterisk", "plus", "comma", "hyphen", "period", "slash", "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "colon", "semicolon", "less", "equal", "greater", "question", "at", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "bracketleft", "backslash", "bracketright", "asciicircum", "underscore", "quoteleft", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "braceleft", "bar", "braceright", "asciitilde", "exclamdown", "cent", "sterling", "fraction", "yen", "florin", "section", "currency", "quotesingle", "quotedblleft", "guillemotleft", "guilsinglleft", "guilsinglright", "fi", "fl", "endash", "dagger", "daggerdbl", "periodcentered", "paragraph", "bullet", "quotesinglbase", "quotedblbase", "quotedblright", "guillemotright", "ellipsis", "perthousand", "questiondown", "grave", "acute", "circumflex", "tilde", "macron", "breve", "dotaccent", "dieresis", "ring", "cedilla", "hungarumlaut", "ogonek", "caron", "emdash", "AE", "ordfeminine", "Lslash", "Oslash", "OE", "ordmasculine", "ae", "dotlessi", "lslash", "oslash", "oe", "germandbls", "onesuperior", "logicalnot", "mu", "trademark", "Eth", "onehalf", "plusminus", "Thorn", "onequarter", "divide", "brokenbar", "degree", "thorn", "threequarters", "twosuperior", "registered", "minus", "eth", "multiply", "threesuperior", "copyright", "Aacute", "Acircumflex", "Adieresis", "Agrave", "Aring", "Atilde", "Ccedilla", "Eacute", "Ecircumflex", "Edieresis", "Egrave", "Iacute", "Icircumflex", "Idieresis", "Igrave", "Ntilde", "Oacute", "Ocircumflex", "Odieresis", "Ograve", "Otilde", "Scaron", "Uacute", "Ucircumflex", "Udieresis", "Ugrave", "Yacute", "Ydieresis", "Zcaron", "aacute", "acircumflex", "adieresis", "agrave", "aring", "atilde", "ccedilla", "eacute", "ecircumflex", "edieresis", "egrave", "iacute", "icircumflex", "idieresis", "igrave", "ntilde", "oacute", "ocircumflex", "odieresis", "ograve", "otilde", "scaron", "uacute", "ucircumflex", "udieresis", "ugrave", "yacute", "ydieresis", "zcaron"];
+exports.ISOAdobeCharset = ISOAdobeCharset;
+var ExpertCharset = [".notdef", "space", "exclamsmall", "Hungarumlautsmall", "dollaroldstyle", "dollarsuperior", "ampersandsmall", "Acutesmall", "parenleftsuperior", "parenrightsuperior", "twodotenleader", "onedotenleader", "comma", "hyphen", "period", "fraction", "zerooldstyle", "oneoldstyle", "twooldstyle", "threeoldstyle", "fouroldstyle", "fiveoldstyle", "sixoldstyle", "sevenoldstyle", "eightoldstyle", "nineoldstyle", "colon", "semicolon", "commasuperior", "threequartersemdash", "periodsuperior", "questionsmall", "asuperior", "bsuperior", "centsuperior", "dsuperior", "esuperior", "isuperior", "lsuperior", "msuperior", "nsuperior", "osuperior", "rsuperior", "ssuperior", "tsuperior", "ff", "fi", "fl", "ffi", "ffl", "parenleftinferior", "parenrightinferior", "Circumflexsmall", "hyphensuperior", "Gravesmall", "Asmall", "Bsmall", "Csmall", "Dsmall", "Esmall", "Fsmall", "Gsmall", "Hsmall", "Ismall", "Jsmall", "Ksmall", "Lsmall", "Msmall", "Nsmall", "Osmall", "Psmall", "Qsmall", "Rsmall", "Ssmall", "Tsmall", "Usmall", "Vsmall", "Wsmall", "Xsmall", "Ysmall", "Zsmall", "colonmonetary", "onefitted", "rupiah", "Tildesmall", "exclamdownsmall", "centoldstyle", "Lslashsmall", "Scaronsmall", "Zcaronsmall", "Dieresissmall", "Brevesmall", "Caronsmall", "Dotaccentsmall", "Macronsmall", "figuredash", "hypheninferior", "Ogoneksmall", "Ringsmall", "Cedillasmall", "onequarter", "onehalf", "threequarters", "questiondownsmall", "oneeighth", "threeeighths", "fiveeighths", "seveneighths", "onethird", "twothirds", "zerosuperior", "onesuperior", "twosuperior", "threesuperior", "foursuperior", "fivesuperior", "sixsuperior", "sevensuperior", "eightsuperior", "ninesuperior", "zeroinferior", "oneinferior", "twoinferior", "threeinferior", "fourinferior", "fiveinferior", "sixinferior", "seveninferior", "eightinferior", "nineinferior", "centinferior", "dollarinferior", "periodinferior", "commainferior", "Agravesmall", "Aacutesmall", "Acircumflexsmall", "Atildesmall", "Adieresissmall", "Aringsmall", "AEsmall", "Ccedillasmall", "Egravesmall", "Eacutesmall", "Ecircumflexsmall", "Edieresissmall", "Igravesmall", "Iacutesmall", "Icircumflexsmall", "Idieresissmall", "Ethsmall", "Ntildesmall", "Ogravesmall", "Oacutesmall", "Ocircumflexsmall", "Otildesmall", "Odieresissmall", "OEsmall", "Oslashsmall", "Ugravesmall", "Uacutesmall", "Ucircumflexsmall", "Udieresissmall", "Yacutesmall", "Thornsmall", "Ydieresissmall"];
+exports.ExpertCharset = ExpertCharset;
+var ExpertSubsetCharset = [".notdef", "space", "dollaroldstyle", "dollarsuperior", "parenleftsuperior", "parenrightsuperior", "twodotenleader", "onedotenleader", "comma", "hyphen", "period", "fraction", "zerooldstyle", "oneoldstyle", "twooldstyle", "threeoldstyle", "fouroldstyle", "fiveoldstyle", "sixoldstyle", "sevenoldstyle", "eightoldstyle", "nineoldstyle", "colon", "semicolon", "commasuperior", "threequartersemdash", "periodsuperior", "asuperior", "bsuperior", "centsuperior", "dsuperior", "esuperior", "isuperior", "lsuperior", "msuperior", "nsuperior", "osuperior", "rsuperior", "ssuperior", "tsuperior", "ff", "fi", "fl", "ffi", "ffl", "parenleftinferior", "parenrightinferior", "hyphensuperior", "colonmonetary", "onefitted", "rupiah", "centoldstyle", "figuredash", "hypheninferior", "onequarter", "onehalf", "threequarters", "oneeighth", "threeeighths", "fiveeighths", "seveneighths", "onethird", "twothirds", "zerosuperior", "onesuperior", "twosuperior", "threesuperior", "foursuperior", "fivesuperior", "sixsuperior", "sevensuperior", "eightsuperior", "ninesuperior", "zeroinferior", "oneinferior", "twoinferior", "threeinferior", "fourinferior", "fiveinferior", "sixinferior", "seveninferior", "eightinferior", "nineinferior", "centinferior", "dollarinferior", "periodinferior", "commainferior"];
+exports.ExpertSubsetCharset = ExpertSubsetCharset;
+
+/***/ }),
 /* 161 */
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -45205,26 +43817,8 @@ exports.CFFCompiler = CFFCompiler;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.ExpertSubsetCharset = exports.ExpertCharset = exports.ISOAdobeCharset = void 0;
-var ISOAdobeCharset = [".notdef", "space", "exclam", "quotedbl", "numbersign", "dollar", "percent", "ampersand", "quoteright", "parenleft", "parenright", "asterisk", "plus", "comma", "hyphen", "period", "slash", "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "colon", "semicolon", "less", "equal", "greater", "question", "at", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "bracketleft", "backslash", "bracketright", "asciicircum", "underscore", "quoteleft", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "braceleft", "bar", "braceright", "asciitilde", "exclamdown", "cent", "sterling", "fraction", "yen", "florin", "section", "currency", "quotesingle", "quotedblleft", "guillemotleft", "guilsinglleft", "guilsinglright", "fi", "fl", "endash", "dagger", "daggerdbl", "periodcentered", "paragraph", "bullet", "quotesinglbase", "quotedblbase", "quotedblright", "guillemotright", "ellipsis", "perthousand", "questiondown", "grave", "acute", "circumflex", "tilde", "macron", "breve", "dotaccent", "dieresis", "ring", "cedilla", "hungarumlaut", "ogonek", "caron", "emdash", "AE", "ordfeminine", "Lslash", "Oslash", "OE", "ordmasculine", "ae", "dotlessi", "lslash", "oslash", "oe", "germandbls", "onesuperior", "logicalnot", "mu", "trademark", "Eth", "onehalf", "plusminus", "Thorn", "onequarter", "divide", "brokenbar", "degree", "thorn", "threequarters", "twosuperior", "registered", "minus", "eth", "multiply", "threesuperior", "copyright", "Aacute", "Acircumflex", "Adieresis", "Agrave", "Aring", "Atilde", "Ccedilla", "Eacute", "Ecircumflex", "Edieresis", "Egrave", "Iacute", "Icircumflex", "Idieresis", "Igrave", "Ntilde", "Oacute", "Ocircumflex", "Odieresis", "Ograve", "Otilde", "Scaron", "Uacute", "Ucircumflex", "Udieresis", "Ugrave", "Yacute", "Ydieresis", "Zcaron", "aacute", "acircumflex", "adieresis", "agrave", "aring", "atilde", "ccedilla", "eacute", "ecircumflex", "edieresis", "egrave", "iacute", "icircumflex", "idieresis", "igrave", "ntilde", "oacute", "ocircumflex", "odieresis", "ograve", "otilde", "scaron", "uacute", "ucircumflex", "udieresis", "ugrave", "yacute", "ydieresis", "zcaron"];
-exports.ISOAdobeCharset = ISOAdobeCharset;
-var ExpertCharset = [".notdef", "space", "exclamsmall", "Hungarumlautsmall", "dollaroldstyle", "dollarsuperior", "ampersandsmall", "Acutesmall", "parenleftsuperior", "parenrightsuperior", "twodotenleader", "onedotenleader", "comma", "hyphen", "period", "fraction", "zerooldstyle", "oneoldstyle", "twooldstyle", "threeoldstyle", "fouroldstyle", "fiveoldstyle", "sixoldstyle", "sevenoldstyle", "eightoldstyle", "nineoldstyle", "colon", "semicolon", "commasuperior", "threequartersemdash", "periodsuperior", "questionsmall", "asuperior", "bsuperior", "centsuperior", "dsuperior", "esuperior", "isuperior", "lsuperior", "msuperior", "nsuperior", "osuperior", "rsuperior", "ssuperior", "tsuperior", "ff", "fi", "fl", "ffi", "ffl", "parenleftinferior", "parenrightinferior", "Circumflexsmall", "hyphensuperior", "Gravesmall", "Asmall", "Bsmall", "Csmall", "Dsmall", "Esmall", "Fsmall", "Gsmall", "Hsmall", "Ismall", "Jsmall", "Ksmall", "Lsmall", "Msmall", "Nsmall", "Osmall", "Psmall", "Qsmall", "Rsmall", "Ssmall", "Tsmall", "Usmall", "Vsmall", "Wsmall", "Xsmall", "Ysmall", "Zsmall", "colonmonetary", "onefitted", "rupiah", "Tildesmall", "exclamdownsmall", "centoldstyle", "Lslashsmall", "Scaronsmall", "Zcaronsmall", "Dieresissmall", "Brevesmall", "Caronsmall", "Dotaccentsmall", "Macronsmall", "figuredash", "hypheninferior", "Ogoneksmall", "Ringsmall", "Cedillasmall", "onequarter", "onehalf", "threequarters", "questiondownsmall", "oneeighth", "threeeighths", "fiveeighths", "seveneighths", "onethird", "twothirds", "zerosuperior", "onesuperior", "twosuperior", "threesuperior", "foursuperior", "fivesuperior", "sixsuperior", "sevensuperior", "eightsuperior", "ninesuperior", "zeroinferior", "oneinferior", "twoinferior", "threeinferior", "fourinferior", "fiveinferior", "sixinferior", "seveninferior", "eightinferior", "nineinferior", "centinferior", "dollarinferior", "periodinferior", "commainferior", "Agravesmall", "Aacutesmall", "Acircumflexsmall", "Atildesmall", "Adieresissmall", "Aringsmall", "AEsmall", "Ccedillasmall", "Egravesmall", "Eacutesmall", "Ecircumflexsmall", "Edieresissmall", "Igravesmall", "Iacutesmall", "Icircumflexsmall", "Idieresissmall", "Ethsmall", "Ntildesmall", "Ogravesmall", "Oacutesmall", "Ocircumflexsmall", "Otildesmall", "Odieresissmall", "OEsmall", "Oslashsmall", "Ugravesmall", "Uacutesmall", "Ucircumflexsmall", "Udieresissmall", "Yacutesmall", "Thornsmall", "Ydieresissmall"];
-exports.ExpertCharset = ExpertCharset;
-var ExpertSubsetCharset = [".notdef", "space", "dollaroldstyle", "dollarsuperior", "parenleftsuperior", "parenrightsuperior", "twodotenleader", "onedotenleader", "comma", "hyphen", "period", "fraction", "zerooldstyle", "oneoldstyle", "twooldstyle", "threeoldstyle", "fouroldstyle", "fiveoldstyle", "sixoldstyle", "sevenoldstyle", "eightoldstyle", "nineoldstyle", "colon", "semicolon", "commasuperior", "threequartersemdash", "periodsuperior", "asuperior", "bsuperior", "centsuperior", "dsuperior", "esuperior", "isuperior", "lsuperior", "msuperior", "nsuperior", "osuperior", "rsuperior", "ssuperior", "tsuperior", "ff", "fi", "fl", "ffi", "ffl", "parenleftinferior", "parenrightinferior", "hyphensuperior", "colonmonetary", "onefitted", "rupiah", "centoldstyle", "figuredash", "hypheninferior", "onequarter", "onehalf", "threequarters", "oneeighth", "threeeighths", "fiveeighths", "seveneighths", "onethird", "twothirds", "zerosuperior", "onesuperior", "twosuperior", "threesuperior", "foursuperior", "fivesuperior", "sixsuperior", "sevensuperior", "eightsuperior", "ninesuperior", "zeroinferior", "oneinferior", "twoinferior", "threeinferior", "fourinferior", "fiveinferior", "sixinferior", "seveninferior", "eightinferior", "nineinferior", "centinferior", "dollarinferior", "periodinferior", "commainferior"];
-exports.ExpertSubsetCharset = ExpertSubsetCharset;
-
-/***/ }),
-/* 162 */
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
 exports.getEncoding = getEncoding;
-exports.ExpertEncoding = exports.ZapfDingbatsEncoding = exports.SymbolSetEncoding = exports.MacRomanEncoding = exports.StandardEncoding = exports.WinAnsiEncoding = void 0;
+exports.ZapfDingbatsEncoding = exports.WinAnsiEncoding = exports.SymbolSetEncoding = exports.StandardEncoding = exports.MacRomanEncoding = exports.ExpertEncoding = void 0;
 var ExpertEncoding = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "space", "exclamsmall", "Hungarumlautsmall", "", "dollaroldstyle", "dollarsuperior", "ampersandsmall", "Acutesmall", "parenleftsuperior", "parenrightsuperior", "twodotenleader", "onedotenleader", "comma", "hyphen", "period", "fraction", "zerooldstyle", "oneoldstyle", "twooldstyle", "threeoldstyle", "fouroldstyle", "fiveoldstyle", "sixoldstyle", "sevenoldstyle", "eightoldstyle", "nineoldstyle", "colon", "semicolon", "commasuperior", "threequartersemdash", "periodsuperior", "questionsmall", "", "asuperior", "bsuperior", "centsuperior", "dsuperior", "esuperior", "", "", "", "isuperior", "", "", "lsuperior", "msuperior", "nsuperior", "osuperior", "", "", "rsuperior", "ssuperior", "tsuperior", "", "ff", "fi", "fl", "ffi", "ffl", "parenleftinferior", "", "parenrightinferior", "Circumflexsmall", "hyphensuperior", "Gravesmall", "Asmall", "Bsmall", "Csmall", "Dsmall", "Esmall", "Fsmall", "Gsmall", "Hsmall", "Ismall", "Jsmall", "Ksmall", "Lsmall", "Msmall", "Nsmall", "Osmall", "Psmall", "Qsmall", "Rsmall", "Ssmall", "Tsmall", "Usmall", "Vsmall", "Wsmall", "Xsmall", "Ysmall", "Zsmall", "colonmonetary", "onefitted", "rupiah", "Tildesmall", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "exclamdownsmall", "centoldstyle", "Lslashsmall", "", "", "Scaronsmall", "Zcaronsmall", "Dieresissmall", "Brevesmall", "Caronsmall", "", "Dotaccentsmall", "", "", "Macronsmall", "", "", "figuredash", "hypheninferior", "", "", "Ogoneksmall", "Ringsmall", "Cedillasmall", "", "", "", "onequarter", "onehalf", "threequarters", "questiondownsmall", "oneeighth", "threeeighths", "fiveeighths", "seveneighths", "onethird", "twothirds", "", "", "zerosuperior", "onesuperior", "twosuperior", "threesuperior", "foursuperior", "fivesuperior", "sixsuperior", "sevensuperior", "eightsuperior", "ninesuperior", "zeroinferior", "oneinferior", "twoinferior", "threeinferior", "fourinferior", "fiveinferior", "sixinferior", "seveninferior", "eightinferior", "nineinferior", "centinferior", "dollarinferior", "periodinferior", "commainferior", "Agravesmall", "Aacutesmall", "Acircumflexsmall", "Atildesmall", "Adieresissmall", "Aringsmall", "AEsmall", "Ccedillasmall", "Egravesmall", "Eacutesmall", "Ecircumflexsmall", "Edieresissmall", "Igravesmall", "Iacutesmall", "Icircumflexsmall", "Idieresissmall", "Ethsmall", "Ntildesmall", "Ogravesmall", "Oacutesmall", "Ocircumflexsmall", "Otildesmall", "Odieresissmall", "OEsmall", "Oslashsmall", "Ugravesmall", "Uacutesmall", "Ucircumflexsmall", "Udieresissmall", "Yacutesmall", "Thornsmall", "Ydieresissmall"];
 exports.ExpertEncoding = ExpertEncoding;
 var MacExpertEncoding = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "space", "exclamsmall", "Hungarumlautsmall", "centoldstyle", "dollaroldstyle", "dollarsuperior", "ampersandsmall", "Acutesmall", "parenleftsuperior", "parenrightsuperior", "twodotenleader", "onedotenleader", "comma", "hyphen", "period", "fraction", "zerooldstyle", "oneoldstyle", "twooldstyle", "threeoldstyle", "fouroldstyle", "fiveoldstyle", "sixoldstyle", "sevenoldstyle", "eightoldstyle", "nineoldstyle", "colon", "semicolon", "", "threequartersemdash", "", "questionsmall", "", "", "", "", "Ethsmall", "", "", "onequarter", "onehalf", "threequarters", "oneeighth", "threeeighths", "fiveeighths", "seveneighths", "onethird", "twothirds", "", "", "", "", "", "", "ff", "fi", "fl", "ffi", "ffl", "parenleftinferior", "", "parenrightinferior", "Circumflexsmall", "hypheninferior", "Gravesmall", "Asmall", "Bsmall", "Csmall", "Dsmall", "Esmall", "Fsmall", "Gsmall", "Hsmall", "Ismall", "Jsmall", "Ksmall", "Lsmall", "Msmall", "Nsmall", "Osmall", "Psmall", "Qsmall", "Rsmall", "Ssmall", "Tsmall", "Usmall", "Vsmall", "Wsmall", "Xsmall", "Ysmall", "Zsmall", "colonmonetary", "onefitted", "rupiah", "Tildesmall", "", "", "asuperior", "centsuperior", "", "", "", "", "Aacutesmall", "Agravesmall", "Acircumflexsmall", "Adieresissmall", "Atildesmall", "Aringsmall", "Ccedillasmall", "Eacutesmall", "Egravesmall", "Ecircumflexsmall", "Edieresissmall", "Iacutesmall", "Igravesmall", "Icircumflexsmall", "Idieresissmall", "Ntildesmall", "Oacutesmall", "Ogravesmall", "Ocircumflexsmall", "Odieresissmall", "Otildesmall", "Uacutesmall", "Ugravesmall", "Ucircumflexsmall", "Udieresissmall", "", "eightsuperior", "fourinferior", "threeinferior", "sixinferior", "eightinferior", "seveninferior", "Scaronsmall", "", "centinferior", "twoinferior", "", "Dieresissmall", "", "Caronsmall", "osuperior", "fiveinferior", "", "commainferior", "periodinferior", "Yacutesmall", "", "dollarinferior", "", "", "Thornsmall", "", "nineinferior", "zeroinferior", "Zcaronsmall", "AEsmall", "Oslashsmall", "questiondownsmall", "oneinferior", "Lslashsmall", "", "", "", "", "", "", "Cedillasmall", "", "", "", "", "", "OEsmall", "figuredash", "hyphensuperior", "", "", "", "", "exclamdownsmall", "", "Ydieresissmall", "", "onesuperior", "twosuperior", "threesuperior", "foursuperior", "fivesuperior", "sixsuperior", "sevensuperior", "ninesuperior", "zerosuperior", "", "esuperior", "rsuperior", "tsuperior", "", "", "isuperior", "ssuperior", "dsuperior", "", "", "", "", "", "lsuperior", "Ogoneksmall", "Brevesmall", "Macronsmall", "bsuperior", "nsuperior", "msuperior", "commasuperior", "periodsuperior", "Dotaccentsmall", "Ringsmall", "", "", "", ""];
@@ -45268,16 +43862,16 @@ function getEncoding(encodingName) {
 }
 
 /***/ }),
-/* 163 */
+/* 162 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __w_pdfjs_require__) => {
 
 "use strict";
 __w_pdfjs_require__.r(__webpack_exports__);
 /* harmony export */ __w_pdfjs_require__.d(__webpack_exports__, {
-/* harmony export */   "getGlyphsUnicode": () => /* binding */ getGlyphsUnicode,
-/* harmony export */   "getDingbatsGlyphsUnicode": () => /* binding */ getDingbatsGlyphsUnicode
+/* harmony export */   "getDingbatsGlyphsUnicode": () => /* binding */ getDingbatsGlyphsUnicode,
+/* harmony export */   "getGlyphsUnicode": () => /* binding */ getGlyphsUnicode
 /* harmony export */ });
-/* harmony import */ var _core_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __w_pdfjs_require__(136);
+/* harmony import */ var _core_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __w_pdfjs_require__(137);
 
 var getGlyphsUnicode = (0,_core_utils_js__WEBPACK_IMPORTED_MODULE_0__.getArrayLookupTableFactory)(function () {
  return [
@@ -54340,7 +52934,7 @@ var getDingbatsGlyphsUnicode = (0,_core_utils_js__WEBPACK_IMPORTED_MODULE_0__.ge
 
 
 /***/ }),
-/* 164 */
+/* 163 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -54349,9 +52943,9 @@ var getDingbatsGlyphsUnicode = (0,_core_utils_js__WEBPACK_IMPORTED_MODULE_0__.ge
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.getSupplementalGlyphMapForCalibri = exports.getSupplementalGlyphMapForArialBlack = exports.getGlyphMapForStandardFonts = exports.getSymbolsFonts = exports.getSerifFonts = exports.getNonStdFontMap = exports.getStdFontMap = void 0;
+exports.getSymbolsFonts = exports.getSupplementalGlyphMapForCalibri = exports.getSupplementalGlyphMapForArialBlack = exports.getStdFontMap = exports.getSerifFonts = exports.getNonStdFontMap = exports.getGlyphMapForStandardFonts = void 0;
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
 var getStdFontMap = (0, _core_utils.getLookupTableFactory)(function (t) {
   t.ArialNarrow = "Helvetica";
@@ -55084,19 +53678,19 @@ var getSupplementalGlyphMapForCalibri = (0, _core_utils.getLookupTableFactory)(f
 exports.getSupplementalGlyphMapForCalibri = getSupplementalGlyphMapForCalibri;
 
 /***/ }),
-/* 165 */
+/* 164 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __w_pdfjs_require__) => {
 
 "use strict";
 __w_pdfjs_require__.r(__webpack_exports__);
 /* harmony export */ __w_pdfjs_require__.d(__webpack_exports__, {
-/* harmony export */   "mapSpecialUnicodeValues": () => /* binding */ mapSpecialUnicodeValues,
-/* harmony export */   "reverseIfRtl": () => /* binding */ reverseIfRtl,
-/* harmony export */   "getUnicodeRangeFor": () => /* binding */ getUnicodeRangeFor,
 /* harmony export */   "getNormalizedUnicodes": () => /* binding */ getNormalizedUnicodes,
-/* harmony export */   "getUnicodeForGlyph": () => /* binding */ getUnicodeForGlyph
+/* harmony export */   "getUnicodeForGlyph": () => /* binding */ getUnicodeForGlyph,
+/* harmony export */   "getUnicodeRangeFor": () => /* binding */ getUnicodeRangeFor,
+/* harmony export */   "mapSpecialUnicodeValues": () => /* binding */ mapSpecialUnicodeValues,
+/* harmony export */   "reverseIfRtl": () => /* binding */ reverseIfRtl
 /* harmony export */ });
-/* harmony import */ var _core_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __w_pdfjs_require__(136);
+/* harmony import */ var _core_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __w_pdfjs_require__(137);
 
 var getSpecialPUASymbols = (0,_core_utils_js__WEBPACK_IMPORTED_MODULE_0__.getLookupTableFactory)(function (t) {
  t[63721] = 0x00a9;
@@ -58446,7 +57040,7 @@ function reverseIfRtl(chars) {
 
 
 /***/ }),
-/* 166 */
+/* 165 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -58461,13 +57055,13 @@ exports.FontRendererFactory = void 0;
 
 var _util = __w_pdfjs_require__(4);
 
-var _cff_parser = __w_pdfjs_require__(160);
+var _cff_parser = __w_pdfjs_require__(159);
 
-var _glyphlist = __w_pdfjs_require__(163);
+var _glyphlist = __w_pdfjs_require__(162);
 
-var _encodings = __w_pdfjs_require__(162);
+var _encodings = __w_pdfjs_require__(161);
 
-var _stream = __w_pdfjs_require__(140);
+var _stream = __w_pdfjs_require__(141);
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -59469,7 +58063,7 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
 exports.FontRendererFactory = FontRendererFactory;
 
 /***/ }),
-/* 167 */
+/* 166 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -59480,11 +58074,11 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.Type1Parser = void 0;
 
-var _encodings = __w_pdfjs_require__(162);
+var _encodings = __w_pdfjs_require__(161);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
-var _stream = __w_pdfjs_require__(140);
+var _stream = __w_pdfjs_require__(141);
 
 var _util = __w_pdfjs_require__(4);
 
@@ -60180,7 +58774,7 @@ var Type1Parser = function Type1ParserClosure() {
 exports.Type1Parser = Type1Parser;
 
 /***/ }),
-/* 168 */
+/* 167 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -60194,11 +58788,11 @@ exports.Pattern = void 0;
 
 var _util = __w_pdfjs_require__(4);
 
-var _colorspace = __w_pdfjs_require__(151);
+var _colorspace = __w_pdfjs_require__(152);
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
 var ShadingType = {
   FUNCTION_BASED: 1,
@@ -61132,7 +59726,7 @@ function getTilingPatternIR(operatorList, dict, color) {
 }
 
 /***/ }),
-/* 169 */
+/* 168 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -61142,15 +59736,15 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.isPDFFunction = isPDFFunction;
-exports.PostScriptCompiler = exports.PostScriptEvaluator = exports.PDFFunctionFactory = void 0;
+exports.PostScriptEvaluator = exports.PostScriptCompiler = exports.PDFFunctionFactory = void 0;
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
 var _util = __w_pdfjs_require__(4);
 
-var _ps_parser = __w_pdfjs_require__(170);
+var _ps_parser = __w_pdfjs_require__(169);
 
-var _image_utils = __w_pdfjs_require__(152);
+var _image_utils = __w_pdfjs_require__(153);
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -62544,7 +61138,7 @@ var PostScriptCompiler = function PostScriptCompilerClosure() {
 exports.PostScriptCompiler = PostScriptCompiler;
 
 /***/ }),
-/* 170 */
+/* 169 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -62557,9 +61151,9 @@ exports.PostScriptParser = exports.PostScriptLexer = void 0;
 
 var _util = __w_pdfjs_require__(4);
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -62833,7 +61427,7 @@ var PostScriptLexer = /*#__PURE__*/function () {
 exports.PostScriptLexer = PostScriptLexer;
 
 /***/ }),
-/* 171 */
+/* 170 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -63146,7 +61740,7 @@ function bidi(str, startLevel, vertical) {
 }
 
 /***/ }),
-/* 172 */
+/* 171 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -63157,7 +61751,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.getMetrics = void 0;
 
-var _core_utils = __w_pdfjs_require__(136);
+var _core_utils = __w_pdfjs_require__(137);
 
 var getMetrics = (0, _core_utils.getLookupTableFactory)(function (t) {
   t.Courier = 600;
@@ -66100,7 +64694,7 @@ var getMetrics = (0, _core_utils.getLookupTableFactory)(function (t) {
 exports.getMetrics = getMetrics;
 
 /***/ }),
-/* 173 */
+/* 172 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -66239,6 +64833,683 @@ var MurmurHash3_64 = /*#__PURE__*/function () {
 exports.MurmurHash3_64 = MurmurHash3_64;
 
 /***/ }),
+/* 173 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.OperatorList = void 0;
+
+var _util = __w_pdfjs_require__(4);
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+var QueueOptimizer = function QueueOptimizerClosure() {
+  function addState(parentState, pattern, checkFn, iterateFn, processFn) {
+    var state = parentState;
+
+    for (var i = 0, ii = pattern.length - 1; i < ii; i++) {
+      var item = pattern[i];
+      state = state[item] || (state[item] = []);
+    }
+
+    state[pattern[pattern.length - 1]] = {
+      checkFn: checkFn,
+      iterateFn: iterateFn,
+      processFn: processFn
+    };
+  }
+
+  function handlePaintSolidColorImageMask(iFirstSave, count, fnArray, argsArray) {
+    var iFirstPIMXO = iFirstSave + 2;
+
+    for (var i = 0; i < count; i++) {
+      var arg = argsArray[iFirstPIMXO + 4 * i];
+      var imageMask = arg.length === 1 && arg[0];
+
+      if (imageMask && imageMask.width === 1 && imageMask.height === 1 && (!imageMask.data.length || imageMask.data.length === 1 && imageMask.data[0] === 0)) {
+        fnArray[iFirstPIMXO + 4 * i] = _util.OPS.paintSolidColorImageMask;
+        continue;
+      }
+
+      break;
+    }
+
+    return count - i;
+  }
+
+  var InitialState = [];
+  addState(InitialState, [_util.OPS.save, _util.OPS.transform, _util.OPS.paintInlineImageXObject, _util.OPS.restore], null, function iterateInlineImageGroup(context, i) {
+    var fnArray = context.fnArray;
+    var iFirstSave = context.iCurr - 3;
+    var pos = (i - iFirstSave) % 4;
+
+    switch (pos) {
+      case 0:
+        return fnArray[i] === _util.OPS.save;
+
+      case 1:
+        return fnArray[i] === _util.OPS.transform;
+
+      case 2:
+        return fnArray[i] === _util.OPS.paintInlineImageXObject;
+
+      case 3:
+        return fnArray[i] === _util.OPS.restore;
+    }
+
+    throw new Error("iterateInlineImageGroup - invalid pos: ".concat(pos));
+  }, function foundInlineImageGroup(context, i) {
+    var MIN_IMAGES_IN_INLINE_IMAGES_BLOCK = 10;
+    var MAX_IMAGES_IN_INLINE_IMAGES_BLOCK = 200;
+    var MAX_WIDTH = 1000;
+    var IMAGE_PADDING = 1;
+    var fnArray = context.fnArray,
+        argsArray = context.argsArray;
+    var curr = context.iCurr;
+    var iFirstSave = curr - 3;
+    var iFirstTransform = curr - 2;
+    var iFirstPIIXO = curr - 1;
+    var count = Math.min(Math.floor((i - iFirstSave) / 4), MAX_IMAGES_IN_INLINE_IMAGES_BLOCK);
+
+    if (count < MIN_IMAGES_IN_INLINE_IMAGES_BLOCK) {
+      return i - (i - iFirstSave) % 4;
+    }
+
+    var maxX = 0;
+    var map = [],
+        maxLineHeight = 0;
+    var currentX = IMAGE_PADDING,
+        currentY = IMAGE_PADDING;
+    var q;
+
+    for (q = 0; q < count; q++) {
+      var transform = argsArray[iFirstTransform + (q << 2)];
+      var img = argsArray[iFirstPIIXO + (q << 2)][0];
+
+      if (currentX + img.width > MAX_WIDTH) {
+        maxX = Math.max(maxX, currentX);
+        currentY += maxLineHeight + 2 * IMAGE_PADDING;
+        currentX = 0;
+        maxLineHeight = 0;
+      }
+
+      map.push({
+        transform: transform,
+        x: currentX,
+        y: currentY,
+        w: img.width,
+        h: img.height
+      });
+      currentX += img.width + 2 * IMAGE_PADDING;
+      maxLineHeight = Math.max(maxLineHeight, img.height);
+    }
+
+    var imgWidth = Math.max(maxX, currentX) + IMAGE_PADDING;
+    var imgHeight = currentY + maxLineHeight + IMAGE_PADDING;
+    var imgData = new Uint8ClampedArray(imgWidth * imgHeight * 4);
+    var imgRowSize = imgWidth << 2;
+
+    for (q = 0; q < count; q++) {
+      var data = argsArray[iFirstPIIXO + (q << 2)][0].data;
+      var rowSize = map[q].w << 2;
+      var dataOffset = 0;
+      var offset = map[q].x + map[q].y * imgWidth << 2;
+      imgData.set(data.subarray(0, rowSize), offset - imgRowSize);
+
+      for (var k = 0, kk = map[q].h; k < kk; k++) {
+        imgData.set(data.subarray(dataOffset, dataOffset + rowSize), offset);
+        dataOffset += rowSize;
+        offset += imgRowSize;
+      }
+
+      imgData.set(data.subarray(dataOffset - rowSize, dataOffset), offset);
+
+      while (offset >= 0) {
+        data[offset - 4] = data[offset];
+        data[offset - 3] = data[offset + 1];
+        data[offset - 2] = data[offset + 2];
+        data[offset - 1] = data[offset + 3];
+        data[offset + rowSize] = data[offset + rowSize - 4];
+        data[offset + rowSize + 1] = data[offset + rowSize - 3];
+        data[offset + rowSize + 2] = data[offset + rowSize - 2];
+        data[offset + rowSize + 3] = data[offset + rowSize - 1];
+        offset -= imgRowSize;
+      }
+    }
+
+    fnArray.splice(iFirstSave, count * 4, _util.OPS.paintInlineImageXObjectGroup);
+    argsArray.splice(iFirstSave, count * 4, [{
+      width: imgWidth,
+      height: imgHeight,
+      kind: _util.ImageKind.RGBA_32BPP,
+      data: imgData
+    }, map]);
+    return iFirstSave + 1;
+  });
+  addState(InitialState, [_util.OPS.save, _util.OPS.transform, _util.OPS.paintImageMaskXObject, _util.OPS.restore], null, function iterateImageMaskGroup(context, i) {
+    var fnArray = context.fnArray;
+    var iFirstSave = context.iCurr - 3;
+    var pos = (i - iFirstSave) % 4;
+
+    switch (pos) {
+      case 0:
+        return fnArray[i] === _util.OPS.save;
+
+      case 1:
+        return fnArray[i] === _util.OPS.transform;
+
+      case 2:
+        return fnArray[i] === _util.OPS.paintImageMaskXObject;
+
+      case 3:
+        return fnArray[i] === _util.OPS.restore;
+    }
+
+    throw new Error("iterateImageMaskGroup - invalid pos: ".concat(pos));
+  }, function foundImageMaskGroup(context, i) {
+    var MIN_IMAGES_IN_MASKS_BLOCK = 10;
+    var MAX_IMAGES_IN_MASKS_BLOCK = 100;
+    var MAX_SAME_IMAGES_IN_MASKS_BLOCK = 1000;
+    var fnArray = context.fnArray,
+        argsArray = context.argsArray;
+    var curr = context.iCurr;
+    var iFirstSave = curr - 3;
+    var iFirstTransform = curr - 2;
+    var iFirstPIMXO = curr - 1;
+    var count = Math.floor((i - iFirstSave) / 4);
+    count = handlePaintSolidColorImageMask(iFirstSave, count, fnArray, argsArray);
+
+    if (count < MIN_IMAGES_IN_MASKS_BLOCK) {
+      return i - (i - iFirstSave) % 4;
+    }
+
+    var q;
+    var isSameImage = false;
+    var iTransform, transformArgs;
+    var firstPIMXOArg0 = argsArray[iFirstPIMXO][0];
+    var firstTransformArg0 = argsArray[iFirstTransform][0],
+        firstTransformArg1 = argsArray[iFirstTransform][1],
+        firstTransformArg2 = argsArray[iFirstTransform][2],
+        firstTransformArg3 = argsArray[iFirstTransform][3];
+
+    if (firstTransformArg1 === firstTransformArg2) {
+      isSameImage = true;
+      iTransform = iFirstTransform + 4;
+      var iPIMXO = iFirstPIMXO + 4;
+
+      for (q = 1; q < count; q++, iTransform += 4, iPIMXO += 4) {
+        transformArgs = argsArray[iTransform];
+
+        if (argsArray[iPIMXO][0] !== firstPIMXOArg0 || transformArgs[0] !== firstTransformArg0 || transformArgs[1] !== firstTransformArg1 || transformArgs[2] !== firstTransformArg2 || transformArgs[3] !== firstTransformArg3) {
+          if (q < MIN_IMAGES_IN_MASKS_BLOCK) {
+            isSameImage = false;
+          } else {
+            count = q;
+          }
+
+          break;
+        }
+      }
+    }
+
+    if (isSameImage) {
+      count = Math.min(count, MAX_SAME_IMAGES_IN_MASKS_BLOCK);
+      var positions = new Float32Array(count * 2);
+      iTransform = iFirstTransform;
+
+      for (q = 0; q < count; q++, iTransform += 4) {
+        transformArgs = argsArray[iTransform];
+        positions[q << 1] = transformArgs[4];
+        positions[(q << 1) + 1] = transformArgs[5];
+      }
+
+      fnArray.splice(iFirstSave, count * 4, _util.OPS.paintImageMaskXObjectRepeat);
+      argsArray.splice(iFirstSave, count * 4, [firstPIMXOArg0, firstTransformArg0, firstTransformArg1, firstTransformArg2, firstTransformArg3, positions]);
+    } else {
+      count = Math.min(count, MAX_IMAGES_IN_MASKS_BLOCK);
+      var images = [];
+
+      for (q = 0; q < count; q++) {
+        transformArgs = argsArray[iFirstTransform + (q << 2)];
+        var maskParams = argsArray[iFirstPIMXO + (q << 2)][0];
+        images.push({
+          data: maskParams.data,
+          width: maskParams.width,
+          height: maskParams.height,
+          transform: transformArgs
+        });
+      }
+
+      fnArray.splice(iFirstSave, count * 4, _util.OPS.paintImageMaskXObjectGroup);
+      argsArray.splice(iFirstSave, count * 4, [images]);
+    }
+
+    return iFirstSave + 1;
+  });
+  addState(InitialState, [_util.OPS.save, _util.OPS.transform, _util.OPS.paintImageXObject, _util.OPS.restore], function (context) {
+    var argsArray = context.argsArray;
+    var iFirstTransform = context.iCurr - 2;
+    return argsArray[iFirstTransform][1] === 0 && argsArray[iFirstTransform][2] === 0;
+  }, function iterateImageGroup(context, i) {
+    var fnArray = context.fnArray,
+        argsArray = context.argsArray;
+    var iFirstSave = context.iCurr - 3;
+    var pos = (i - iFirstSave) % 4;
+
+    switch (pos) {
+      case 0:
+        return fnArray[i] === _util.OPS.save;
+
+      case 1:
+        if (fnArray[i] !== _util.OPS.transform) {
+          return false;
+        }
+
+        var iFirstTransform = context.iCurr - 2;
+        var firstTransformArg0 = argsArray[iFirstTransform][0];
+        var firstTransformArg3 = argsArray[iFirstTransform][3];
+
+        if (argsArray[i][0] !== firstTransformArg0 || argsArray[i][1] !== 0 || argsArray[i][2] !== 0 || argsArray[i][3] !== firstTransformArg3) {
+          return false;
+        }
+
+        return true;
+
+      case 2:
+        if (fnArray[i] !== _util.OPS.paintImageXObject) {
+          return false;
+        }
+
+        var iFirstPIXO = context.iCurr - 1;
+        var firstPIXOArg0 = argsArray[iFirstPIXO][0];
+
+        if (argsArray[i][0] !== firstPIXOArg0) {
+          return false;
+        }
+
+        return true;
+
+      case 3:
+        return fnArray[i] === _util.OPS.restore;
+    }
+
+    throw new Error("iterateImageGroup - invalid pos: ".concat(pos));
+  }, function (context, i) {
+    var MIN_IMAGES_IN_BLOCK = 3;
+    var MAX_IMAGES_IN_BLOCK = 1000;
+    var fnArray = context.fnArray,
+        argsArray = context.argsArray;
+    var curr = context.iCurr;
+    var iFirstSave = curr - 3;
+    var iFirstTransform = curr - 2;
+    var iFirstPIXO = curr - 1;
+    var firstPIXOArg0 = argsArray[iFirstPIXO][0];
+    var firstTransformArg0 = argsArray[iFirstTransform][0];
+    var firstTransformArg3 = argsArray[iFirstTransform][3];
+    var count = Math.min(Math.floor((i - iFirstSave) / 4), MAX_IMAGES_IN_BLOCK);
+
+    if (count < MIN_IMAGES_IN_BLOCK) {
+      return i - (i - iFirstSave) % 4;
+    }
+
+    var positions = new Float32Array(count * 2);
+    var iTransform = iFirstTransform;
+
+    for (var q = 0; q < count; q++, iTransform += 4) {
+      var transformArgs = argsArray[iTransform];
+      positions[q << 1] = transformArgs[4];
+      positions[(q << 1) + 1] = transformArgs[5];
+    }
+
+    var args = [firstPIXOArg0, firstTransformArg0, firstTransformArg3, positions];
+    fnArray.splice(iFirstSave, count * 4, _util.OPS.paintImageXObjectRepeat);
+    argsArray.splice(iFirstSave, count * 4, args);
+    return iFirstSave + 1;
+  });
+  addState(InitialState, [_util.OPS.beginText, _util.OPS.setFont, _util.OPS.setTextMatrix, _util.OPS.showText, _util.OPS.endText], null, function iterateShowTextGroup(context, i) {
+    var fnArray = context.fnArray,
+        argsArray = context.argsArray;
+    var iFirstSave = context.iCurr - 4;
+    var pos = (i - iFirstSave) % 5;
+
+    switch (pos) {
+      case 0:
+        return fnArray[i] === _util.OPS.beginText;
+
+      case 1:
+        return fnArray[i] === _util.OPS.setFont;
+
+      case 2:
+        return fnArray[i] === _util.OPS.setTextMatrix;
+
+      case 3:
+        if (fnArray[i] !== _util.OPS.showText) {
+          return false;
+        }
+
+        var iFirstSetFont = context.iCurr - 3;
+        var firstSetFontArg0 = argsArray[iFirstSetFont][0];
+        var firstSetFontArg1 = argsArray[iFirstSetFont][1];
+
+        if (argsArray[i][0] !== firstSetFontArg0 || argsArray[i][1] !== firstSetFontArg1) {
+          return false;
+        }
+
+        return true;
+
+      case 4:
+        return fnArray[i] === _util.OPS.endText;
+    }
+
+    throw new Error("iterateShowTextGroup - invalid pos: ".concat(pos));
+  }, function (context, i) {
+    var MIN_CHARS_IN_BLOCK = 3;
+    var MAX_CHARS_IN_BLOCK = 1000;
+    var fnArray = context.fnArray,
+        argsArray = context.argsArray;
+    var curr = context.iCurr;
+    var iFirstBeginText = curr - 4;
+    var iFirstSetFont = curr - 3;
+    var iFirstSetTextMatrix = curr - 2;
+    var iFirstShowText = curr - 1;
+    var iFirstEndText = curr;
+    var firstSetFontArg0 = argsArray[iFirstSetFont][0];
+    var firstSetFontArg1 = argsArray[iFirstSetFont][1];
+    var count = Math.min(Math.floor((i - iFirstBeginText) / 5), MAX_CHARS_IN_BLOCK);
+
+    if (count < MIN_CHARS_IN_BLOCK) {
+      return i - (i - iFirstBeginText) % 5;
+    }
+
+    var iFirst = iFirstBeginText;
+
+    if (iFirstBeginText >= 4 && fnArray[iFirstBeginText - 4] === fnArray[iFirstSetFont] && fnArray[iFirstBeginText - 3] === fnArray[iFirstSetTextMatrix] && fnArray[iFirstBeginText - 2] === fnArray[iFirstShowText] && fnArray[iFirstBeginText - 1] === fnArray[iFirstEndText] && argsArray[iFirstBeginText - 4][0] === firstSetFontArg0 && argsArray[iFirstBeginText - 4][1] === firstSetFontArg1) {
+      count++;
+      iFirst -= 5;
+    }
+
+    var iEndText = iFirst + 4;
+
+    for (var q = 1; q < count; q++) {
+      fnArray.splice(iEndText, 3);
+      argsArray.splice(iEndText, 3);
+      iEndText += 2;
+    }
+
+    return iEndText + 1;
+  });
+
+  function QueueOptimizer(queue) {
+    this.queue = queue;
+    this.state = null;
+    this.context = {
+      iCurr: 0,
+      fnArray: queue.fnArray,
+      argsArray: queue.argsArray
+    };
+    this.match = null;
+    this.lastProcessed = 0;
+  }
+
+  QueueOptimizer.prototype = {
+    _optimize: function _optimize() {
+      var fnArray = this.queue.fnArray;
+      var i = this.lastProcessed,
+          ii = fnArray.length;
+      var state = this.state;
+      var match = this.match;
+
+      if (!state && !match && i + 1 === ii && !InitialState[fnArray[i]]) {
+        this.lastProcessed = ii;
+        return;
+      }
+
+      var context = this.context;
+
+      while (i < ii) {
+        if (match) {
+          var iterate = (0, match.iterateFn)(context, i);
+
+          if (iterate) {
+            i++;
+            continue;
+          }
+
+          i = (0, match.processFn)(context, i + 1);
+          ii = fnArray.length;
+          match = null;
+          state = null;
+
+          if (i >= ii) {
+            break;
+          }
+        }
+
+        state = (state || InitialState)[fnArray[i]];
+
+        if (!state || Array.isArray(state)) {
+          i++;
+          continue;
+        }
+
+        context.iCurr = i;
+        i++;
+
+        if (state.checkFn && !(0, state.checkFn)(context)) {
+          state = null;
+          continue;
+        }
+
+        match = state;
+        state = null;
+      }
+
+      this.state = state;
+      this.match = match;
+      this.lastProcessed = i;
+    },
+    push: function push(fn, args) {
+      this.queue.fnArray.push(fn);
+      this.queue.argsArray.push(args);
+
+      this._optimize();
+    },
+    flush: function flush() {
+      while (this.match) {
+        var length = this.queue.fnArray.length;
+        this.lastProcessed = (0, this.match.processFn)(this.context, length);
+        this.match = null;
+        this.state = null;
+
+        this._optimize();
+      }
+    },
+    reset: function reset() {
+      this.state = null;
+      this.match = null;
+      this.lastProcessed = 0;
+    }
+  };
+  return QueueOptimizer;
+}();
+
+var NullOptimizer = function NullOptimizerClosure() {
+  function NullOptimizer(queue) {
+    this.queue = queue;
+  }
+
+  NullOptimizer.prototype = {
+    push: function push(fn, args) {
+      this.queue.fnArray.push(fn);
+      this.queue.argsArray.push(args);
+    },
+    flush: function flush() {},
+    reset: function reset() {}
+  };
+  return NullOptimizer;
+}();
+
+var OperatorList = function OperatorListClosure() {
+  var CHUNK_SIZE = 1000;
+  var CHUNK_SIZE_ABOUT = CHUNK_SIZE - 5;
+
+  function OperatorList(intent, streamSink) {
+    this._streamSink = streamSink;
+    this.fnArray = [];
+    this.argsArray = [];
+
+    if (streamSink && intent !== "oplist") {
+      this.optimizer = new QueueOptimizer(this);
+    } else {
+      this.optimizer = new NullOptimizer(this);
+    }
+
+    this.dependencies = new Set();
+    this._totalLength = 0;
+    this.weight = 0;
+    this._resolved = streamSink ? null : Promise.resolve();
+  }
+
+  OperatorList.prototype = {
+    get length() {
+      return this.argsArray.length;
+    },
+
+    get ready() {
+      return this._resolved || this._streamSink.ready;
+    },
+
+    get totalLength() {
+      return this._totalLength + this.length;
+    },
+
+    addOp: function addOp(fn, args) {
+      this.optimizer.push(fn, args);
+      this.weight++;
+
+      if (this._streamSink) {
+        if (this.weight >= CHUNK_SIZE) {
+          this.flush();
+        } else if (this.weight >= CHUNK_SIZE_ABOUT && (fn === _util.OPS.restore || fn === _util.OPS.endText)) {
+          this.flush();
+        }
+      }
+    },
+    addDependency: function addDependency(dependency) {
+      if (this.dependencies.has(dependency)) {
+        return;
+      }
+
+      this.dependencies.add(dependency);
+      this.addOp(_util.OPS.dependency, [dependency]);
+    },
+    addDependencies: function addDependencies(dependencies) {
+      var _iterator = _createForOfIteratorHelper(dependencies),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var dependency = _step.value;
+          this.addDependency(dependency);
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+    },
+    addOpList: function addOpList(opList) {
+      if (!(opList instanceof OperatorList)) {
+        (0, _util.warn)('addOpList - ignoring invalid "opList" parameter.');
+        return;
+      }
+
+      var _iterator2 = _createForOfIteratorHelper(opList.dependencies),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var dependency = _step2.value;
+          this.dependencies.add(dependency);
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+
+      for (var i = 0, ii = opList.length; i < ii; i++) {
+        this.addOp(opList.fnArray[i], opList.argsArray[i]);
+      }
+    },
+    getIR: function getIR() {
+      return {
+        fnArray: this.fnArray,
+        argsArray: this.argsArray,
+        length: this.length
+      };
+    },
+
+    get _transfers() {
+      var transfers = [];
+      var fnArray = this.fnArray,
+          argsArray = this.argsArray,
+          length = this.length;
+
+      for (var i = 0; i < length; i++) {
+        switch (fnArray[i]) {
+          case _util.OPS.paintInlineImageXObject:
+          case _util.OPS.paintInlineImageXObjectGroup:
+          case _util.OPS.paintImageMaskXObject:
+            var arg = argsArray[i][0];
+            ;
+
+            if (!arg.cached) {
+              transfers.push(arg.data.buffer);
+            }
+
+            break;
+        }
+      }
+
+      return transfers;
+    },
+
+    flush: function flush() {
+      var lastChunk = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      this.optimizer.flush();
+      var length = this.length;
+      this._totalLength += length;
+
+      this._streamSink.enqueue({
+        fnArray: this.fnArray,
+        argsArray: this.argsArray,
+        lastChunk: lastChunk,
+        length: length
+      }, 1, this._transfers);
+
+      this.dependencies.clear();
+      this.fnArray.length = 0;
+      this.argsArray.length = 0;
+      this.weight = 0;
+      this.optimizer.reset();
+    }
+  };
+  return OperatorList;
+}();
+
+exports.OperatorList = OperatorList;
+
+/***/ }),
 /* 174 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
@@ -66254,15 +65525,15 @@ var _regenerator = _interopRequireDefault(__w_pdfjs_require__(2));
 
 var _util = __w_pdfjs_require__(4);
 
-var _primitives = __w_pdfjs_require__(133);
+var _primitives = __w_pdfjs_require__(134);
 
-var _colorspace = __w_pdfjs_require__(151);
+var _colorspace = __w_pdfjs_require__(152);
 
-var _stream = __w_pdfjs_require__(140);
+var _stream = __w_pdfjs_require__(141);
 
-var _jpeg_stream = __w_pdfjs_require__(146);
+var _jpeg_stream = __w_pdfjs_require__(147);
 
-var _jpx = __w_pdfjs_require__(149);
+var _jpx = __w_pdfjs_require__(150);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -66972,6 +66243,1054 @@ exports.PDFImage = PDFImage;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
+exports.incrementalUpdate = incrementalUpdate;
+exports.writeDict = writeDict;
+
+var _util = __w_pdfjs_require__(4);
+
+var _primitives = __w_pdfjs_require__(134);
+
+var _core_utils = __w_pdfjs_require__(137);
+
+var _xml_parser = __w_pdfjs_require__(176);
+
+var _crypto = __w_pdfjs_require__(151);
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function writeDict(dict, buffer, transform) {
+  buffer.push("<<");
+
+  var _iterator = _createForOfIteratorHelper(dict.getKeys()),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var key = _step.value;
+      buffer.push(" /".concat((0, _core_utils.escapePDFName)(key), " "));
+      writeValue(dict.getRaw(key), buffer, transform);
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+
+  buffer.push(">>");
+}
+
+function writeStream(stream, buffer, transform) {
+  writeDict(stream.dict, buffer, transform);
+  buffer.push(" stream\n");
+  var string = (0, _util.bytesToString)(stream.getBytes());
+
+  if (transform !== null) {
+    string = transform.encryptString(string);
+  }
+
+  buffer.push(string);
+  buffer.push("\nendstream\n");
+}
+
+function writeArray(array, buffer, transform) {
+  buffer.push("[");
+  var first = true;
+
+  var _iterator2 = _createForOfIteratorHelper(array),
+      _step2;
+
+  try {
+    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+      var val = _step2.value;
+
+      if (!first) {
+        buffer.push(" ");
+      } else {
+        first = false;
+      }
+
+      writeValue(val, buffer, transform);
+    }
+  } catch (err) {
+    _iterator2.e(err);
+  } finally {
+    _iterator2.f();
+  }
+
+  buffer.push("]");
+}
+
+function numberToString(value) {
+  if (Number.isInteger(value)) {
+    return value.toString();
+  }
+
+  var roundedValue = Math.round(value * 100);
+
+  if (roundedValue % 100 === 0) {
+    return (roundedValue / 100).toString();
+  }
+
+  if (roundedValue % 10 === 0) {
+    return value.toFixed(1);
+  }
+
+  return value.toFixed(2);
+}
+
+function writeValue(value, buffer, transform) {
+  if ((0, _primitives.isName)(value)) {
+    buffer.push("/".concat((0, _core_utils.escapePDFName)(value.name)));
+  } else if ((0, _primitives.isRef)(value)) {
+    buffer.push("".concat(value.num, " ").concat(value.gen, " R"));
+  } else if (Array.isArray(value)) {
+    writeArray(value, buffer, transform);
+  } else if (typeof value === "string") {
+    if (transform !== null) {
+      value = transform.encryptString(value);
+    }
+
+    buffer.push("(".concat((0, _util.escapeString)(value), ")"));
+  } else if (typeof value === "number") {
+    buffer.push(numberToString(value));
+  } else if ((0, _primitives.isDict)(value)) {
+    writeDict(value, buffer, transform);
+  } else if ((0, _primitives.isStream)(value)) {
+    writeStream(value, buffer, transform);
+  }
+}
+
+function writeInt(number, size, offset, buffer) {
+  for (var i = size + offset - 1; i > offset - 1; i--) {
+    buffer[i] = number & 0xff;
+    number >>= 8;
+  }
+
+  return offset + size;
+}
+
+function writeString(string, offset, buffer) {
+  for (var i = 0, len = string.length; i < len; i++) {
+    buffer[offset + i] = string.charCodeAt(i) & 0xff;
+  }
+}
+
+function computeMD5(filesize, xrefInfo) {
+  var time = Math.floor(Date.now() / 1000);
+  var filename = xrefInfo.filename || "";
+  var md5Buffer = [time.toString(), filename, filesize.toString()];
+  var md5BufferLen = md5Buffer.reduce(function (a, str) {
+    return a + str.length;
+  }, 0);
+
+  for (var _i = 0, _Object$values = Object.values(xrefInfo.info); _i < _Object$values.length; _i++) {
+    var value = _Object$values[_i];
+    md5Buffer.push(value);
+    md5BufferLen += value.length;
+  }
+
+  var array = new Uint8Array(md5BufferLen);
+  var offset = 0;
+
+  for (var _i2 = 0, _md5Buffer = md5Buffer; _i2 < _md5Buffer.length; _i2++) {
+    var str = _md5Buffer[_i2];
+    writeString(str, offset, array);
+    offset += str.length;
+  }
+
+  return (0, _util.bytesToString)((0, _crypto.calculateMD5)(array));
+}
+
+function updateXFA(datasetsRef, newRefs, xref) {
+  if (datasetsRef === null || xref === null) {
+    return;
+  }
+
+  var datasets = xref.fetchIfRef(datasetsRef);
+  var str = (0, _util.bytesToString)(datasets.getBytes());
+  var xml = new _xml_parser.SimpleXMLParser({
+    hasAttributes: true
+  }).parseFromString(str);
+
+  var _iterator3 = _createForOfIteratorHelper(newRefs),
+      _step3;
+
+  try {
+    for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+      var xfa = _step3.value.xfa;
+
+      if (!xfa) {
+        continue;
+      }
+
+      var path = xfa.path,
+          value = xfa.value;
+
+      if (!path) {
+        continue;
+      }
+
+      var node = xml.documentElement.searchNode((0, _core_utils.parseXFAPath)(path), 0);
+
+      if (node) {
+        node.childNodes = [new _xml_parser.SimpleDOMNode("#text", value)];
+      } else {
+        (0, _util.warn)("Node not found for path: ".concat(path));
+      }
+    }
+  } catch (err) {
+    _iterator3.e(err);
+  } finally {
+    _iterator3.f();
+  }
+
+  var buffer = [];
+  xml.documentElement.dump(buffer);
+  var updatedXml = buffer.join("");
+  var encrypt = xref.encrypt;
+
+  if (encrypt) {
+    var transform = encrypt.createCipherTransform(datasetsRef.num, datasetsRef.gen);
+    updatedXml = transform.encryptString(updatedXml);
+  }
+
+  var data = "".concat(datasetsRef.num, " ").concat(datasetsRef.gen, " obj\n") + "<< /Type /EmbeddedFile /Length ".concat(updatedXml.length, ">>\nstream\n") + updatedXml + "\nendstream\nendobj\n";
+  newRefs.push({
+    ref: datasetsRef,
+    data: data
+  });
+}
+
+function incrementalUpdate(_ref) {
+  var originalData = _ref.originalData,
+      xrefInfo = _ref.xrefInfo,
+      newRefs = _ref.newRefs,
+      _ref$xref = _ref.xref,
+      xref = _ref$xref === void 0 ? null : _ref$xref,
+      _ref$datasetsRef = _ref.datasetsRef,
+      datasetsRef = _ref$datasetsRef === void 0 ? null : _ref$datasetsRef;
+  updateXFA(datasetsRef, newRefs, xref);
+  var newXref = new _primitives.Dict(null);
+  var refForXrefTable = xrefInfo.newRef;
+  var buffer, baseOffset;
+  var lastByte = originalData[originalData.length - 1];
+
+  if (lastByte === 0x0a || lastByte === 0x0d) {
+    buffer = [];
+    baseOffset = originalData.length;
+  } else {
+    buffer = ["\n"];
+    baseOffset = originalData.length + 1;
+  }
+
+  newXref.set("Size", refForXrefTable.num + 1);
+  newXref.set("Prev", xrefInfo.startXRef);
+  newXref.set("Type", _primitives.Name.get("XRef"));
+
+  if (xrefInfo.rootRef !== null) {
+    newXref.set("Root", xrefInfo.rootRef);
+  }
+
+  if (xrefInfo.infoRef !== null) {
+    newXref.set("Info", xrefInfo.infoRef);
+  }
+
+  if (xrefInfo.encrypt !== null) {
+    newXref.set("Encrypt", xrefInfo.encrypt);
+  }
+
+  newRefs.push({
+    ref: refForXrefTable,
+    data: ""
+  });
+  newRefs = newRefs.sort(function (a, b) {
+    return a.ref.num - b.ref.num;
+  });
+  var xrefTableData = [[0, 1, 0xffff]];
+  var indexes = [0, 1];
+  var maxOffset = 0;
+
+  var _iterator4 = _createForOfIteratorHelper(newRefs),
+      _step4;
+
+  try {
+    for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+      var _step4$value = _step4.value,
+          ref = _step4$value.ref,
+          data = _step4$value.data;
+      maxOffset = Math.max(maxOffset, baseOffset);
+      xrefTableData.push([1, baseOffset, Math.min(ref.gen, 0xffff)]);
+      baseOffset += data.length;
+      indexes.push(ref.num);
+      indexes.push(1);
+      buffer.push(data);
+    }
+  } catch (err) {
+    _iterator4.e(err);
+  } finally {
+    _iterator4.f();
+  }
+
+  newXref.set("Index", indexes);
+
+  if (xrefInfo.fileIds.length !== 0) {
+    var md5 = computeMD5(baseOffset, xrefInfo);
+    newXref.set("ID", [xrefInfo.fileIds[0], md5]);
+  }
+
+  var offsetSize = Math.ceil(Math.log2(maxOffset) / 8);
+  var sizes = [1, offsetSize, 2];
+  var structSize = sizes[0] + sizes[1] + sizes[2];
+  var tableLength = structSize * xrefTableData.length;
+  newXref.set("W", sizes);
+  newXref.set("Length", tableLength);
+  buffer.push("".concat(refForXrefTable.num, " ").concat(refForXrefTable.gen, " obj\n"));
+  writeDict(newXref, buffer, null);
+  buffer.push(" stream\n");
+  var bufferLen = buffer.reduce(function (a, str) {
+    return a + str.length;
+  }, 0);
+  var footer = "\nendstream\nendobj\nstartxref\n".concat(baseOffset, "\n%%EOF\n");
+  var array = new Uint8Array(originalData.length + bufferLen + tableLength + footer.length);
+  array.set(originalData);
+  var offset = originalData.length;
+
+  var _iterator5 = _createForOfIteratorHelper(buffer),
+      _step5;
+
+  try {
+    for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+      var str = _step5.value;
+      writeString(str, offset, array);
+      offset += str.length;
+    }
+  } catch (err) {
+    _iterator5.e(err);
+  } finally {
+    _iterator5.f();
+  }
+
+  for (var _i3 = 0, _xrefTableData = xrefTableData; _i3 < _xrefTableData.length; _i3++) {
+    var _xrefTableData$_i = _slicedToArray(_xrefTableData[_i3], 3),
+        type = _xrefTableData$_i[0],
+        objOffset = _xrefTableData$_i[1],
+        gen = _xrefTableData$_i[2];
+
+    offset = writeInt(type, sizes[0], offset, array);
+    offset = writeInt(objOffset, sizes[1], offset, array);
+    offset = writeInt(gen, sizes[2], offset, array);
+  }
+
+  writeString(footer, offset, array);
+  return array;
+}
+
+/***/ }),
+/* 176 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+"use strict";
+
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.SimpleXMLParser = exports.SimpleDOMNode = void 0;
+
+var _util = __w_pdfjs_require__(4);
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var XMLParserErrorCode = {
+  NoError: 0,
+  EndOfDocument: -1,
+  UnterminatedCdat: -2,
+  UnterminatedXmlDeclaration: -3,
+  UnterminatedDoctypeDeclaration: -4,
+  UnterminatedComment: -5,
+  MalformedElement: -6,
+  OutOfMemory: -7,
+  UnterminatedAttributeValue: -8,
+  UnterminatedElement: -9,
+  ElementNeverBegun: -10
+};
+
+function isWhitespace(s, index) {
+  var ch = s[index];
+  return ch === " " || ch === "\n" || ch === "\r" || ch === "\t";
+}
+
+function isWhitespaceString(s) {
+  for (var i = 0, ii = s.length; i < ii; i++) {
+    if (!isWhitespace(s, i)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+var XMLParserBase = /*#__PURE__*/function () {
+  function XMLParserBase() {
+    _classCallCheck(this, XMLParserBase);
+  }
+
+  _createClass(XMLParserBase, [{
+    key: "_resolveEntities",
+    value: function _resolveEntities(s) {
+      var _this = this;
+
+      return s.replace(/&([^;]+);/g, function (all, entity) {
+        if (entity.substring(0, 2) === "#x") {
+          return String.fromCodePoint(parseInt(entity.substring(2), 16));
+        } else if (entity.substring(0, 1) === "#") {
+          return String.fromCodePoint(parseInt(entity.substring(1), 10));
+        }
+
+        switch (entity) {
+          case "lt":
+            return "<";
+
+          case "gt":
+            return ">";
+
+          case "amp":
+            return "&";
+
+          case "quot":
+            return '"';
+        }
+
+        return _this.onResolveEntity(entity);
+      });
+    }
+  }, {
+    key: "_parseContent",
+    value: function _parseContent(s, start) {
+      var attributes = [];
+      var pos = start;
+
+      function skipWs() {
+        while (pos < s.length && isWhitespace(s, pos)) {
+          ++pos;
+        }
+      }
+
+      while (pos < s.length && !isWhitespace(s, pos) && s[pos] !== ">" && s[pos] !== "/") {
+        ++pos;
+      }
+
+      var name = s.substring(start, pos);
+      skipWs();
+
+      while (pos < s.length && s[pos] !== ">" && s[pos] !== "/" && s[pos] !== "?") {
+        skipWs();
+        var attrName = "",
+            attrValue = "";
+
+        while (pos < s.length && !isWhitespace(s, pos) && s[pos] !== "=") {
+          attrName += s[pos];
+          ++pos;
+        }
+
+        skipWs();
+
+        if (s[pos] !== "=") {
+          return null;
+        }
+
+        ++pos;
+        skipWs();
+        var attrEndChar = s[pos];
+
+        if (attrEndChar !== '"' && attrEndChar !== "'") {
+          return null;
+        }
+
+        var attrEndIndex = s.indexOf(attrEndChar, ++pos);
+
+        if (attrEndIndex < 0) {
+          return null;
+        }
+
+        attrValue = s.substring(pos, attrEndIndex);
+        attributes.push({
+          name: attrName,
+          value: this._resolveEntities(attrValue)
+        });
+        pos = attrEndIndex + 1;
+        skipWs();
+      }
+
+      return {
+        name: name,
+        attributes: attributes,
+        parsed: pos - start
+      };
+    }
+  }, {
+    key: "_parseProcessingInstruction",
+    value: function _parseProcessingInstruction(s, start) {
+      var pos = start;
+
+      function skipWs() {
+        while (pos < s.length && isWhitespace(s, pos)) {
+          ++pos;
+        }
+      }
+
+      while (pos < s.length && !isWhitespace(s, pos) && s[pos] !== ">" && s[pos] !== "/") {
+        ++pos;
+      }
+
+      var name = s.substring(start, pos);
+      skipWs();
+      var attrStart = pos;
+
+      while (pos < s.length && (s[pos] !== "?" || s[pos + 1] !== ">")) {
+        ++pos;
+      }
+
+      var value = s.substring(attrStart, pos);
+      return {
+        name: name,
+        value: value,
+        parsed: pos - start
+      };
+    }
+  }, {
+    key: "parseXml",
+    value: function parseXml(s) {
+      var i = 0;
+
+      while (i < s.length) {
+        var ch = s[i];
+        var j = i;
+
+        if (ch === "<") {
+          ++j;
+          var ch2 = s[j];
+          var q = void 0;
+
+          switch (ch2) {
+            case "/":
+              ++j;
+              q = s.indexOf(">", j);
+
+              if (q < 0) {
+                this.onError(XMLParserErrorCode.UnterminatedElement);
+                return;
+              }
+
+              this.onEndElement(s.substring(j, q));
+              j = q + 1;
+              break;
+
+            case "?":
+              ++j;
+
+              var pi = this._parseProcessingInstruction(s, j);
+
+              if (s.substring(j + pi.parsed, j + pi.parsed + 2) !== "?>") {
+                this.onError(XMLParserErrorCode.UnterminatedXmlDeclaration);
+                return;
+              }
+
+              this.onPi(pi.name, pi.value);
+              j += pi.parsed + 2;
+              break;
+
+            case "!":
+              if (s.substring(j + 1, j + 3) === "--") {
+                q = s.indexOf("-->", j + 3);
+
+                if (q < 0) {
+                  this.onError(XMLParserErrorCode.UnterminatedComment);
+                  return;
+                }
+
+                this.onComment(s.substring(j + 3, q));
+                j = q + 3;
+              } else if (s.substring(j + 1, j + 8) === "[CDATA[") {
+                q = s.indexOf("]]>", j + 8);
+
+                if (q < 0) {
+                  this.onError(XMLParserErrorCode.UnterminatedCdat);
+                  return;
+                }
+
+                this.onCdata(s.substring(j + 8, q));
+                j = q + 3;
+              } else if (s.substring(j + 1, j + 8) === "DOCTYPE") {
+                var q2 = s.indexOf("[", j + 8);
+                var complexDoctype = false;
+                q = s.indexOf(">", j + 8);
+
+                if (q < 0) {
+                  this.onError(XMLParserErrorCode.UnterminatedDoctypeDeclaration);
+                  return;
+                }
+
+                if (q2 > 0 && q > q2) {
+                  q = s.indexOf("]>", j + 8);
+
+                  if (q < 0) {
+                    this.onError(XMLParserErrorCode.UnterminatedDoctypeDeclaration);
+                    return;
+                  }
+
+                  complexDoctype = true;
+                }
+
+                var doctypeContent = s.substring(j + 8, q + (complexDoctype ? 1 : 0));
+                this.onDoctype(doctypeContent);
+                j = q + (complexDoctype ? 2 : 1);
+              } else {
+                this.onError(XMLParserErrorCode.MalformedElement);
+                return;
+              }
+
+              break;
+
+            default:
+              var content = this._parseContent(s, j);
+
+              if (content === null) {
+                this.onError(XMLParserErrorCode.MalformedElement);
+                return;
+              }
+
+              var isClosed = false;
+
+              if (s.substring(j + content.parsed, j + content.parsed + 2) === "/>") {
+                isClosed = true;
+              } else if (s.substring(j + content.parsed, j + content.parsed + 1) !== ">") {
+                this.onError(XMLParserErrorCode.UnterminatedElement);
+                return;
+              }
+
+              this.onBeginElement(content.name, content.attributes, isClosed);
+              j += content.parsed + (isClosed ? 2 : 1);
+              break;
+          }
+        } else {
+          while (j < s.length && s[j] !== "<") {
+            j++;
+          }
+
+          var text = s.substring(i, j);
+          this.onText(this._resolveEntities(text));
+        }
+
+        i = j;
+      }
+    }
+  }, {
+    key: "onResolveEntity",
+    value: function onResolveEntity(name) {
+      return "&".concat(name, ";");
+    }
+  }, {
+    key: "onPi",
+    value: function onPi(name, value) {}
+  }, {
+    key: "onComment",
+    value: function onComment(text) {}
+  }, {
+    key: "onCdata",
+    value: function onCdata(text) {}
+  }, {
+    key: "onDoctype",
+    value: function onDoctype(doctypeContent) {}
+  }, {
+    key: "onText",
+    value: function onText(text) {}
+  }, {
+    key: "onBeginElement",
+    value: function onBeginElement(name, attributes, isEmpty) {}
+  }, {
+    key: "onEndElement",
+    value: function onEndElement(name) {}
+  }, {
+    key: "onError",
+    value: function onError(code) {}
+  }]);
+
+  return XMLParserBase;
+}();
+
+var SimpleDOMNode = /*#__PURE__*/function () {
+  function SimpleDOMNode(nodeName, nodeValue) {
+    _classCallCheck(this, SimpleDOMNode);
+
+    this.nodeName = nodeName;
+    this.nodeValue = nodeValue;
+    Object.defineProperty(this, "parentNode", {
+      value: null,
+      writable: true
+    });
+  }
+
+  _createClass(SimpleDOMNode, [{
+    key: "hasChildNodes",
+    value: function hasChildNodes() {
+      return this.childNodes && this.childNodes.length > 0;
+    }
+  }, {
+    key: "searchNode",
+    value: function searchNode(paths, pos) {
+      if (pos >= paths.length) {
+        return this;
+      }
+
+      var component = paths[pos];
+      var stack = [];
+      var node = this;
+
+      while (true) {
+        if (component.name === node.nodeName) {
+          if (component.pos === 0) {
+            var res = node.searchNode(paths, pos + 1);
+
+            if (res !== null) {
+              return res;
+            }
+          } else if (stack.length === 0) {
+            return null;
+          } else {
+            var _stack$pop = stack.pop(),
+                _stack$pop2 = _slicedToArray(_stack$pop, 1),
+                parent = _stack$pop2[0];
+
+            var siblingPos = 0;
+
+            var _iterator = _createForOfIteratorHelper(parent.childNodes),
+                _step;
+
+            try {
+              for (_iterator.s(); !(_step = _iterator.n()).done;) {
+                var child = _step.value;
+
+                if (component.name === child.nodeName) {
+                  if (siblingPos === component.pos) {
+                    return child.searchNode(paths, pos + 1);
+                  }
+
+                  siblingPos++;
+                }
+              }
+            } catch (err) {
+              _iterator.e(err);
+            } finally {
+              _iterator.f();
+            }
+
+            return node.searchNode(paths, pos + 1);
+          }
+        }
+
+        if (node.childNodes && node.childNodes.length !== 0) {
+          stack.push([node, 0]);
+          node = node.childNodes[0];
+        } else if (stack.length === 0) {
+          return null;
+        } else {
+          while (stack.length !== 0) {
+            var _stack$pop3 = stack.pop(),
+                _stack$pop4 = _slicedToArray(_stack$pop3, 2),
+                _parent = _stack$pop4[0],
+                currentPos = _stack$pop4[1];
+
+            var newPos = currentPos + 1;
+
+            if (newPos < _parent.childNodes.length) {
+              stack.push([_parent, newPos]);
+              node = _parent.childNodes[newPos];
+              break;
+            }
+          }
+
+          if (stack.length === 0) {
+            return null;
+          }
+        }
+      }
+    }
+  }, {
+    key: "dump",
+    value: function dump(buffer) {
+      if (this.nodeName === "#text") {
+        buffer.push((0, _util.encodeToXmlString)(this.nodeValue));
+        return;
+      }
+
+      buffer.push("<".concat(this.nodeName));
+
+      if (this.attributes) {
+        var _iterator2 = _createForOfIteratorHelper(this.attributes),
+            _step2;
+
+        try {
+          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+            var attribute = _step2.value;
+            buffer.push(" ".concat(attribute.name, "=\"").concat((0, _util.encodeToXmlString)(attribute.value), "\""));
+          }
+        } catch (err) {
+          _iterator2.e(err);
+        } finally {
+          _iterator2.f();
+        }
+      }
+
+      if (this.hasChildNodes()) {
+        buffer.push(">");
+
+        var _iterator3 = _createForOfIteratorHelper(this.childNodes),
+            _step3;
+
+        try {
+          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            var child = _step3.value;
+            child.dump(buffer);
+          }
+        } catch (err) {
+          _iterator3.e(err);
+        } finally {
+          _iterator3.f();
+        }
+
+        buffer.push("</".concat(this.nodeName, ">"));
+      } else if (this.nodeValue) {
+        buffer.push(">".concat((0, _util.encodeToXmlString)(this.nodeValue), "</").concat(this.nodeName, ">"));
+      } else {
+        buffer.push("/>");
+      }
+    }
+  }, {
+    key: "firstChild",
+    get: function get() {
+      return this.childNodes && this.childNodes[0];
+    }
+  }, {
+    key: "nextSibling",
+    get: function get() {
+      var childNodes = this.parentNode.childNodes;
+
+      if (!childNodes) {
+        return undefined;
+      }
+
+      var index = childNodes.indexOf(this);
+
+      if (index === -1) {
+        return undefined;
+      }
+
+      return childNodes[index + 1];
+    }
+  }, {
+    key: "textContent",
+    get: function get() {
+      if (!this.childNodes) {
+        return this.nodeValue || "";
+      }
+
+      return this.childNodes.map(function (child) {
+        return child.textContent;
+      }).join("");
+    }
+  }]);
+
+  return SimpleDOMNode;
+}();
+
+exports.SimpleDOMNode = SimpleDOMNode;
+
+var SimpleXMLParser = /*#__PURE__*/function (_XMLParserBase) {
+  _inherits(SimpleXMLParser, _XMLParserBase);
+
+  var _super = _createSuper(SimpleXMLParser);
+
+  function SimpleXMLParser(_ref) {
+    var _this2;
+
+    var _ref$hasAttributes = _ref.hasAttributes,
+        hasAttributes = _ref$hasAttributes === void 0 ? false : _ref$hasAttributes,
+        _ref$lowerCaseName = _ref.lowerCaseName,
+        lowerCaseName = _ref$lowerCaseName === void 0 ? false : _ref$lowerCaseName;
+
+    _classCallCheck(this, SimpleXMLParser);
+
+    _this2 = _super.call(this);
+    _this2._currentFragment = null;
+    _this2._stack = null;
+    _this2._errorCode = XMLParserErrorCode.NoError;
+    _this2._hasAttributes = hasAttributes;
+    _this2._lowerCaseName = lowerCaseName;
+    return _this2;
+  }
+
+  _createClass(SimpleXMLParser, [{
+    key: "parseFromString",
+    value: function parseFromString(data) {
+      this._currentFragment = [];
+      this._stack = [];
+      this._errorCode = XMLParserErrorCode.NoError;
+      this.parseXml(data);
+
+      if (this._errorCode !== XMLParserErrorCode.NoError) {
+        return undefined;
+      }
+
+      var _this$_currentFragmen = _slicedToArray(this._currentFragment, 1),
+          documentElement = _this$_currentFragmen[0];
+
+      if (!documentElement) {
+        return undefined;
+      }
+
+      return {
+        documentElement: documentElement
+      };
+    }
+  }, {
+    key: "onResolveEntity",
+    value: function onResolveEntity(name) {
+      switch (name) {
+        case "apos":
+          return "'";
+      }
+
+      return _get(_getPrototypeOf(SimpleXMLParser.prototype), "onResolveEntity", this).call(this, name);
+    }
+  }, {
+    key: "onText",
+    value: function onText(text) {
+      if (isWhitespaceString(text)) {
+        return;
+      }
+
+      var node = new SimpleDOMNode("#text", text);
+
+      this._currentFragment.push(node);
+    }
+  }, {
+    key: "onCdata",
+    value: function onCdata(text) {
+      var node = new SimpleDOMNode("#text", text);
+
+      this._currentFragment.push(node);
+    }
+  }, {
+    key: "onBeginElement",
+    value: function onBeginElement(name, attributes, isEmpty) {
+      if (this._lowerCaseName) {
+        name = name.toLowerCase();
+      }
+
+      var node = new SimpleDOMNode(name);
+      node.childNodes = [];
+
+      if (this._hasAttributes) {
+        node.attributes = attributes;
+      }
+
+      this._currentFragment.push(node);
+
+      if (isEmpty) {
+        return;
+      }
+
+      this._stack.push(this._currentFragment);
+
+      this._currentFragment = node.childNodes;
+    }
+  }, {
+    key: "onEndElement",
+    value: function onEndElement(name) {
+      this._currentFragment = this._stack.pop() || [];
+      var lastElement = this._currentFragment[this._currentFragment.length - 1];
+
+      if (!lastElement) {
+        return;
+      }
+
+      for (var i = 0, ii = lastElement.childNodes.length; i < ii; i++) {
+        lastElement.childNodes[i].parentNode = lastElement;
+      }
+    }
+  }, {
+    key: "onError",
+    value: function onError(code) {
+      this._errorCode = code;
+    }
+  }]);
+
+  return SimpleXMLParser;
+}(XMLParserBase);
+
+exports.SimpleXMLParser = SimpleXMLParser;
+
+/***/ }),
+/* 177 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
 exports.MessageHandler = void 0;
 
 var _regenerator = _interopRequireDefault(__w_pdfjs_require__(2));
@@ -67516,7 +67835,7 @@ var MessageHandler = /*#__PURE__*/function () {
 exports.MessageHandler = MessageHandler;
 
 /***/ }),
-/* 176 */
+/* 178 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";

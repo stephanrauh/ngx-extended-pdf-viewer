@@ -22,11 +22,15 @@ export class SimpleDOMNode {
     dump(buffer: any): void;
 }
 export class SimpleXMLParser extends XMLParserBase {
-    constructor(hasAttributes?: boolean);
+    constructor({ hasAttributes, lowerCaseName }: {
+        hasAttributes?: boolean | undefined;
+        lowerCaseName?: boolean | undefined;
+    });
     _currentFragment: any;
     _stack: any[] | null;
     _errorCode: number;
     _hasAttributes: boolean;
+    _lowerCaseName: boolean;
     parseFromString(data: any): {
         documentElement: any;
     } | undefined;

@@ -42,6 +42,7 @@ const requiredIds = [
   'contextLastPage',
   'contextPageRotateCw',
   'contextPageRotateCcw',
+  'currentOutlineItem',
   'outerContainer',
   'viewerContainer',
   'sidebarToggle',
@@ -98,7 +99,7 @@ const requiredIds = [
   'viewAttachments',
   'viewLayers',
   'viewThumbnail',
-  'viewOutline'
+  'viewOutline',
 ];
 
 @Component({

@@ -1,4 +1,3 @@
-export function writeDict(dict: any, buffer: any, transform: any): void;
 export function incrementalUpdate({ originalData, xrefInfo, newRefs, xref, datasetsRef, }: {
     originalData: any;
     xrefInfo: any;
@@ -6,3 +5,4 @@ export function incrementalUpdate({ originalData, xrefInfo, newRefs, xref, datas
     xref?: any;
     datasetsRef?: any;
 }): Uint8Array;
+export function writeDict(dict: any, buffer: any, transform: any): void;
