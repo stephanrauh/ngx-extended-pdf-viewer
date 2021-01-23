@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-var pdfjsVersion = '2.7.646';
-var pdfjsBuild = '1e8765c1d';
+var pdfjsVersion = '2.7.654';
+var pdfjsBuild = 'd227a8248';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -8441,8 +8441,9 @@ var PDFFindController = /*#__PURE__*/function () {
     }
   }, {
     key: "_calculateFuzzyMatch",
-    value: function _calculateFuzzyMatch(query, pageIndex, pageContent) {
-      var matches = [];
+    value: function _calculateFuzzyMatch(query, pageIndex, pageContent, pageDiffs) {
+      var matches = [],
+          matchesLength = [];
       var queryLen = query.length;
       var shortLen = queryLen < 5 ? queryLen : 5;
       var maxDistance = Math.round(queryLen / 5);
@@ -8460,13 +8461,18 @@ var PDFFindController = /*#__PURE__*/function () {
           var distance = _levenshtein.Levenshtein.distance(query, currentContent, options);
 
           if (distance <= maxDistance) {
-            matches.push(i);
+            var originalMatchIdx = getOriginalIndex(i, pageDiffs),
+                matchEnd = i + queryLen - 1,
+                originalQueryLen = getOriginalIndex(matchEnd, pageDiffs) - originalMatchIdx + 1;
+            matches.push(originalMatchIdx);
+            matchesLength.push(originalQueryLen);
             i += queryLen - 1;
           }
         }
       }
 
       this._pageMatches[pageIndex] = matches;
+      this._pageMatchesLength[pageIndex] = matchesLength;
     }
   }, {
     key: "_calculatePhraseMatch",
@@ -8578,7 +8584,7 @@ var PDFFindController = /*#__PURE__*/function () {
         if (query.length <= 2) {
           this._calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, false);
         } else {
-          this._calculateFuzzyMatch(query, pageIndex, pageContent);
+          this._calculateFuzzyMatch(query, pageIndex, pageContent, pageDiffs);
         }
       } else if (phraseSearch) {
         this._calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, entireWord, ignoreAccents);
@@ -13724,7 +13730,7 @@ var BaseViewer = /*#__PURE__*/function () {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    var viewerVersion = '2.7.646';
+    var viewerVersion = '2.7.654';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error("The API version \"".concat(_pdfjsLib.version, "\" does not match the Viewer version \"").concat(viewerVersion, "\"."));

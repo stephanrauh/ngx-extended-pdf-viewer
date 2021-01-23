@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.7.646';
-const pdfjsBuild = '1e8765c1d';
+const pdfjsVersion = '2.7.654';
+const pdfjsBuild = 'd227a8248';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -6403,8 +6403,9 @@ class PDFFindController {
     return true;
   }
 
-  _calculateFuzzyMatch(query, pageIndex, pageContent) {
-    const matches = [];
+  _calculateFuzzyMatch(query, pageIndex, pageContent, pageDiffs) {
+    const matches = [],
+          matchesLength = [];
     const queryLen = query.length;
     const shortLen = queryLen < 5 ? queryLen : 5;
     const maxDistance = Math.round(queryLen / 5);
@@ -6422,13 +6423,18 @@ class PDFFindController {
         const distance = _levenshtein.Levenshtein.distance(query, currentContent, options);
 
         if (distance <= maxDistance) {
-          matches.push(i);
+          const originalMatchIdx = getOriginalIndex(i, pageDiffs),
+                matchEnd = i + queryLen - 1,
+                originalQueryLen = getOriginalIndex(matchEnd, pageDiffs) - originalMatchIdx + 1;
+          matches.push(originalMatchIdx);
+          matchesLength.push(originalQueryLen);
           i += queryLen - 1;
         }
       }
     }
 
     this._pageMatches[pageIndex] = matches;
+    this._pageMatchesLength[pageIndex] = matchesLength;
   }
 
   _calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, entireWord, ignoreAccents) {
@@ -6538,7 +6544,7 @@ class PDFFindController {
       if (query.length <= 2) {
         this._calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, false);
       } else {
-        this._calculateFuzzyMatch(query, pageIndex, pageContent);
+        this._calculateFuzzyMatch(query, pageIndex, pageContent, pageDiffs);
       }
     } else if (phraseSearch) {
       this._calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, entireWord, ignoreAccents);
@@ -10697,7 +10703,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.7.646';
+    const viewerVersion = '2.7.654';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);

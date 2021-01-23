@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.7.646';
-var pdfjsBuild = '1e8765c1d';
+var pdfjsVersion = '2.7.654';
+var pdfjsBuild = 'd227a8248';
 
 /***/ }),
 /* 1 */
@@ -213,7 +213,7 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
       var WorkerTasks = [];
       var verbosity = (0, _util.getVerbosityLevel)();
       var apiVersion = docParams.apiVersion;
-      var workerVersion = '2.7.646';
+      var workerVersion = '2.7.654';
 
       if (apiVersion !== workerVersion) {
         throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -31074,7 +31074,7 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
       key: "DA"
     }) || params.acroForm.get("DA") || "";
     data.defaultAppearance = (0, _util.isString)(defaultAppearance) ? defaultAppearance : "";
-    _this4._defaultAppearanceData = (0, _default_appearance.parseDefaultAppearance)(data.defaultAppearance);
+    data.defaultAppearanceData = (0, _default_appearance.parseDefaultAppearance)(data.defaultAppearance);
     var fieldType = (0, _core_utils.getInheritableProperty)({
       dict: dict,
       key: "FT"
@@ -31365,7 +31365,7 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
 
                 if (!this.data.defaultAppearance) {
                   this.data.defaultAppearance = "/Helvetica 0 Tf 0 g";
-                  this._defaultAppearanceData = (0, _default_appearance.parseDefaultAppearance)(this.data.defaultAppearance);
+                  this.data.defaultAppearanceData = (0, _default_appearance.parseDefaultAppearance)(this.data.defaultAppearance);
                 }
 
                 _context3.next = 15;
@@ -31431,7 +31431,7 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
     key: "_getFontData",
     value: function () {
       var _getFontData2 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee4(evaluator, task) {
-        var operatorList, initialState, _this$_defaultAppeara, fontName, fontSize;
+        var operatorList, initialState, _this$data$defaultApp, fontName, fontSize;
 
         return _regenerator["default"].wrap(function _callee4$(_context4) {
           while (1) {
@@ -31444,7 +31444,7 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                     return this;
                   }
                 };
-                _this$_defaultAppeara = this._defaultAppearanceData, fontName = _this$_defaultAppeara.fontName, fontSize = _this$_defaultAppeara.fontSize;
+                _this$data$defaultApp = this.data.defaultAppearanceData, fontName = _this$data$defaultApp.fontName, fontSize = _this$data$defaultApp.fontSize;
                 _context4.next = 5;
                 return evaluator.handleSetFont(this._fieldResources.mergedResources, [fontName, fontSize], null, operatorList, task, initialState, null);
 
@@ -31468,12 +31468,12 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
   }, {
     key: "_computeFontSize",
     value: function _computeFontSize(font, height) {
-      var fontSize = this._defaultAppearanceData.fontSize;
+      var fontSize = this.data.defaultAppearanceData.fontSize;
 
       if (!fontSize) {
-        var _this$_defaultAppeara2 = this._defaultAppearanceData,
-            fontColor = _this$_defaultAppeara2.fontColor,
-            fontName = _this$_defaultAppeara2.fontName;
+        var _this$data$defaultApp2 = this.data.defaultAppearanceData,
+            fontColor = _this$data$defaultApp2.fontColor,
+            fontName = _this$data$defaultApp2.fontName;
         var capHeight;
 
         if (font.capHeight) {
@@ -31541,7 +31541,7 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
           localResources = _this$_fieldResources.localResources,
           appearanceResources = _this$_fieldResources.appearanceResources,
           acroFormResources = _this$_fieldResources.acroFormResources;
-      var fontNameStr = this._defaultAppearanceData && this._defaultAppearanceData.fontName.name;
+      var fontNameStr = this.data.defaultAppearanceData && this.data.defaultAppearanceData.fontName.name;
 
       if (!fontNameStr) {
         return localResources || _primitives.Dict.empty;
@@ -32920,9 +32920,14 @@ var DefaultAppearanceEvaluator = /*#__PURE__*/function (_EvaluatorPreprocesso) {
       };
 
       try {
-        while (this.read(operation)) {
-          if (this.stateManager.stateStack.length !== 0) {
-            args.length = 0;
+        while (true) {
+          operation.args.length = 0;
+
+          if (!this.read(operation)) {
+            break;
+          }
+
+          if (this.savedStatesDepth !== 0) {
             continue;
           }
 
@@ -32960,8 +32965,6 @@ var DefaultAppearanceEvaluator = /*#__PURE__*/function (_EvaluatorPreprocesso) {
 
               break;
           }
-
-          args.length = 0;
         }
       } catch (reason) {
         (0, _util.warn)("parseDefaultAppearance - ignoring errors: \"".concat(reason, "\"."));

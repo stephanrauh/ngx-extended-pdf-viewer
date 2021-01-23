@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.7.646';
-const pdfjsBuild = '1e8765c1d';
+const pdfjsVersion = '2.7.654';
+const pdfjsBuild = 'd227a8248';
 
 /***/ }),
 /* 1 */
@@ -162,7 +162,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.7.646';
+    const workerVersion = '2.7.654';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -20196,7 +20196,7 @@ class WidgetAnnotation extends Annotation {
       key: "DA"
     }) || params.acroForm.get("DA") || "";
     data.defaultAppearance = (0, _util.isString)(defaultAppearance) ? defaultAppearance : "";
-    this._defaultAppearanceData = (0, _default_appearance.parseDefaultAppearance)(data.defaultAppearance);
+    data.defaultAppearanceData = (0, _default_appearance.parseDefaultAppearance)(data.defaultAppearance);
     const fieldType = (0, _core_utils.getInheritableProperty)({
       dict,
       key: "FT"
@@ -20417,7 +20417,7 @@ class WidgetAnnotation extends Annotation {
 
     if (!this.data.defaultAppearance) {
       this.data.defaultAppearance = "/Helvetica 0 Tf 0 g";
-      this._defaultAppearanceData = (0, _default_appearance.parseDefaultAppearance)(this.data.defaultAppearance);
+      this.data.defaultAppearanceData = (0, _default_appearance.parseDefaultAppearance)(this.data.defaultAppearance);
     }
 
     const font = await this._getFontData(evaluator, task);
@@ -20466,19 +20466,19 @@ class WidgetAnnotation extends Annotation {
     const {
       fontName,
       fontSize
-    } = this._defaultAppearanceData;
+    } = this.data.defaultAppearanceData;
     await evaluator.handleSetFont(this._fieldResources.mergedResources, [fontName, fontSize], null, operatorList, task, initialState, null);
     return initialState.font;
   }
 
   _computeFontSize(font, height) {
-    let fontSize = this._defaultAppearanceData.fontSize;
+    let fontSize = this.data.defaultAppearanceData.fontSize;
 
     if (!fontSize) {
       const {
         fontColor,
         fontName
-      } = this._defaultAppearanceData;
+      } = this.data.defaultAppearanceData;
       let capHeight;
 
       if (font.capHeight) {
@@ -20535,7 +20535,7 @@ class WidgetAnnotation extends Annotation {
       appearanceResources,
       acroFormResources
     } = this._fieldResources;
-    const fontNameStr = this._defaultAppearanceData && this._defaultAppearanceData.fontName.name;
+    const fontNameStr = this.data.defaultAppearanceData && this.data.defaultAppearanceData.fontName.name;
 
     if (!fontNameStr) {
       return localResources || _primitives.Dict.empty;
@@ -21490,9 +21490,14 @@ class DefaultAppearanceEvaluator extends _evaluator.EvaluatorPreprocessor {
     };
 
     try {
-      while (this.read(operation)) {
-        if (this.stateManager.stateStack.length !== 0) {
-          args.length = 0;
+      while (true) {
+        operation.args.length = 0;
+
+        if (!this.read(operation)) {
+          break;
+        }
+
+        if (this.savedStatesDepth !== 0) {
           continue;
         }
 
@@ -21530,8 +21535,6 @@ class DefaultAppearanceEvaluator extends _evaluator.EvaluatorPreprocessor {
 
             break;
         }
-
-        args.length = 0;
       }
     } catch (reason) {
       (0, _util.warn)(`parseDefaultAppearance - ignoring errors: "${reason}".`);

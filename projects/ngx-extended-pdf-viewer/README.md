@@ -18,6 +18,8 @@
 There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook.
 ## What's new in version 8.0?
 Once again, I've fixed `[(zoom)]`. Now there's no infinite loop when you resize the PDF quickly with the mouse wheel. It's unlikely, but the bug fix might break some applications, so I've decided to call it a new major version.
+
+Version 8.0 also supports server-side rendering. The current approach probably isn't optimal yet; if you have an idea how to improve it, just open a ticket on GitHub. The working demo is here: https://github.com/stephanrauh/ngx-extended-pdf-viewer-issues/tree/master/issue609
 ## Other potentially breaking changes
 Version 7.1. is a pure bug-fix release. It's extremely unlikely, but it might cause difficulties if the PDF viewer is destroyed and immediately re-created. Should you run into this, adding a delay of a single millisecond fixes this (or even a `setTimeout()` without the delay parameter). 
 

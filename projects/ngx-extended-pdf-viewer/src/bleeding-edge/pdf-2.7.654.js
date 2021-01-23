@@ -242,8 +242,8 @@ var _text_layer = __w_pdfjs_require__(21);
 
 var _svg = __w_pdfjs_require__(22);
 
-const pdfjsVersion = '2.7.646';
-const pdfjsBuild = '1e8765c1d';
+const pdfjsVersion = '2.7.654';
+const pdfjsBuild = 'd227a8248';
 {
   const PDFNetworkStream = __w_pdfjs_require__(23).PDFNetworkStream;
 
@@ -1984,7 +1984,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.7.646',
+    apiVersion: '2.7.654',
     source: {
       data: source.data,
       url: source.url,
@@ -4007,9 +4007,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.7.646';
+const version = '2.7.654';
 exports.version = version;
-const build = '1e8765c1d';
+const build = 'd227a8248';
 exports.build = build;
 
 /***/ }),
@@ -9973,7 +9973,6 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
   }
 
   render() {
-    const TEXT_ALIGNMENT = ["left", "center", "right"];
     const storage = this.annotationStorage;
     const id = this.data.id;
     this.container.className = "textWidgetAnnotation";
@@ -10203,45 +10202,31 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
       element.textContent = this.data.fieldValue;
       element.style.verticalAlign = "middle";
       element.style.display = "table-cell";
-      let font = null;
-
-      if (this.data.fontRefName && this.page.commonObjs.has(this.data.fontRefName)) {
-        font = this.page.commonObjs.get(this.data.fontRefName);
-      }
-
-      this._setTextStyle(element, font);
     }
 
-    if (this.data.textAlignment !== null) {
-      element.style.textAlign = TEXT_ALIGNMENT[this.data.textAlignment];
-    }
+    this._setTextStyle(element);
 
     this.container.appendChild(element);
     return this.container;
   }
 
-  _setTextStyle(element, font) {
+  _setTextStyle(element) {
+    const TEXT_ALIGNMENT = ["left", "center", "right"];
+    const {
+      fontSize,
+      fontColor
+    } = this.data.defaultAppearanceData;
     const style = element.style;
-    style.fontSize = `${this.data.fontSize}px`;
-    style.direction = this.data.fontDirection < 0 ? "rtl" : "ltr";
 
-    if (!font) {
-      return;
+    if (fontSize) {
+      style.fontSize = `${fontSize}px`;
     }
 
-    let bold = "normal";
+    style.color = _util.Util.makeHexColor(fontColor[0], fontColor[1], fontColor[2]);
 
-    if (font.black) {
-      bold = "900";
-    } else if (font.bold) {
-      bold = "bold";
+    if (this.data.textAlignment !== null) {
+      style.textAlign = TEXT_ALIGNMENT[this.data.textAlignment];
     }
-
-    style.fontWeight = bold;
-    style.fontStyle = font.italic ? "italic" : "normal";
-    const fontFamily = font.loadedName ? `"${font.loadedName}", ` : "";
-    const fallbackName = font.fallbackName || "Helvetica, sans-serif";
-    style.fontFamily = fontFamily + fallbackName;
   }
 
 }
