@@ -11,9 +11,6 @@
     },
     {
       "path": "../../../ng2-pdf-viewer"
-    },
-    {
-      "path": "../../../ngx-extended-pdf-viewer-issues/issue609"
     }
   ],
   "settings": {}

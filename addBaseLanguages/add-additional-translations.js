@@ -30,4 +30,48 @@ for (let lang in languages) {
       fs.writeFileSync(originalFilename, complete);
     }
   }
+  const filename27 = '../projects/ngx-extended-pdf-viewer/src/bleeding-edge/locale/' + lang + '/viewer.properties'
+  if (filename27 != originalFilename && fs.existsSync(filename27) && fs.existsSync(originalFilename)) {
+    const originalLines = fs.readFileSync(originalFilename);
+    const additionalLines = fs.readFileSync(filename27).toString().split("\n");
+    let additions = "";
+
+    for (const line of additionalLines) {
+      if (line.trim().length > 0 && (!line.startsWith("#"))) {
+        const pos = line.indexOf("=");
+        const key = line.substring(0, pos+1);
+        if (!originalLines.includes(key)) {
+          additions += line + "\n";
+        }
+      }
+    }
+
+    if (additions.length > 0) {
+      const complete = originalLines + '\n\n# Translations added from pdf.js 2.7\n\n' + additions;
+      console.log('Added 2.7 translations to ' + lang);
+      fs.writeFileSync(originalFilename, complete);
+    }
+  }
+  const filename27English = '../projects/ngx-extended-pdf-viewer/src/bleeding-edge/locale/en-US/viewer.properties';
+  if (fs.existsSync(originalFilename)) {
+    const originalLines = fs.readFileSync(originalFilename);
+    const additionalLines = fs.readFileSync(filename27English).toString().split("\n");
+    let additions = "";
+
+    for (const line of additionalLines) {
+      if (line.trim().length > 0 && (!line.startsWith("#"))) {
+        const pos = line.indexOf("=");
+        const key = line.substring(0, pos+1);
+        if (!originalLines.includes(key)) {
+          additions += line + "\n";
+        }
+      }
+    }
+
+    if (additions.length > 0) {
+      const complete = originalLines + '\n\n# Translations added from the English translations of pdf.js 2.7\n\n' + additions;
+      console.log('Added English 2.7 translations to ' + lang);
+      fs.writeFileSync(originalFilename, complete);
+    }
+  }
 }
