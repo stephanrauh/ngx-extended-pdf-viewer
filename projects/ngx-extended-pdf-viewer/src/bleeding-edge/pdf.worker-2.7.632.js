@@ -20394,7 +20394,6 @@ class WidgetAnnotation extends Annotation {
   }
 
   async _getAppearance(evaluator, task, annotationStorage) {
-    this._fontName = null;
     const isPassword = this.hasFieldFlag(_util.AnnotationFieldFlag.PASSWORD);
 
     if (!annotationStorage || isPassword) {
@@ -20425,7 +20424,6 @@ class WidgetAnnotation extends Annotation {
 
     const fontSize = this._computeFontSize(font, totalHeight);
 
-    this._fontName = this._defaultAppearanceData.fontName.name;
     let descent = font.descent;
 
     if (isNaN(descent)) {
@@ -20534,11 +20532,12 @@ class WidgetAnnotation extends Annotation {
   _getSaveFieldResources(xref) {
     const {
       localResources,
-      acroFormResources,
-      appearanceResources
+      appearanceResources,
+      acroFormResources
     } = this._fieldResources;
+    const fontNameStr = this._defaultAppearanceData && this._defaultAppearanceData.fontName.name;
 
-    if (!this._fontName) {
+    if (!fontNameStr) {
       return localResources || _primitives.Dict.empty;
     }
 
@@ -20546,7 +20545,7 @@ class WidgetAnnotation extends Annotation {
       if (resources instanceof _primitives.Dict) {
         const localFont = resources.get("Font");
 
-        if (localFont instanceof _primitives.Dict && localFont.has(this._fontName)) {
+        if (localFont instanceof _primitives.Dict && localFont.has(fontNameStr)) {
           return resources;
         }
       }
@@ -20555,9 +20554,9 @@ class WidgetAnnotation extends Annotation {
     if (acroFormResources instanceof _primitives.Dict) {
       const acroFormFont = acroFormResources.get("Font");
 
-      if (acroFormFont instanceof _primitives.Dict && acroFormFont.has(this._fontName)) {
+      if (acroFormFont instanceof _primitives.Dict && acroFormFont.has(fontNameStr)) {
         const subFontDict = new _primitives.Dict(xref);
-        subFontDict.set(this._fontName, acroFormFont.getRaw(this._fontName));
+        subFontDict.set(fontNameStr, acroFormFont.getRaw(fontNameStr));
         const subResourcesDict = new _primitives.Dict(xref);
         subResourcesDict.set("Font", subFontDict);
         return _primitives.Dict.merge({
@@ -21028,7 +21027,7 @@ class ButtonWidgetAnnotation extends WidgetAnnotation {
 
     return {
       id: this.data.id,
-      value: this.data.fieldValue || null,
+      value: this.data.fieldValue || "Off",
       defaultValue: this.data.defaultFieldValue,
       exportValues,
       editable: !this.data.readOnly,
@@ -24835,7 +24834,7 @@ class TranslatedFont {
           continue;
 
         case _util.OPS.setGState:
-          const gStateObj = operatorList.argsArray[i];
+          const [gStateObj] = operatorList.argsArray[i];
           let j = 0,
               jj = gStateObj.length;
 
@@ -47506,7 +47505,6 @@ class PDFFunctionFactory {
   }) {
     this.xref = xref;
     this.isEvalSupported = isEvalSupported !== false;
-    this._localFunctionCache = null;
   }
 
   create(fn) {
@@ -47557,10 +47555,6 @@ class PDFFunctionFactory {
     }
 
     if (fnRef) {
-      if (!this._localFunctionCache) {
-        this._localFunctionCache = new _image_utils.LocalFunctionCache();
-      }
-
       const localFunction = this._localFunctionCache.getByRef(fnRef);
 
       if (localFunction) {
@@ -47587,12 +47581,12 @@ class PDFFunctionFactory {
     }
 
     if (fnRef) {
-      if (!this._localFunctionCache) {
-        this._localFunctionCache = new _image_utils.LocalFunctionCache();
-      }
-
       this._localFunctionCache.set(null, fnRef, parsedFunction);
     }
+  }
+
+  get _localFunctionCache() {
+    return (0, _util.shadow)(this, "_localFunctionCache", new _image_utils.LocalFunctionCache());
   }
 
 }

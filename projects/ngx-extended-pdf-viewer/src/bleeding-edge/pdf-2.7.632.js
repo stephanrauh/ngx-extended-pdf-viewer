@@ -9927,10 +9927,6 @@ class WidgetAnnotationElement extends AnnotationElement {
   }
 
   _setEventListener(element, baseName, eventName, valueGetter) {
-    if (this.data.actions[eventName.replace(" ", "")] === undefined) {
-      return;
-    }
-
     if (baseName.includes("mouse")) {
       element.addEventListener(baseName, event => {
         this.linkService.eventBus?.dispatch("dispatcheventinsandbox", {
@@ -9959,12 +9955,10 @@ class WidgetAnnotationElement extends AnnotationElement {
   }
 
   _setEventListeners(element, names, getter) {
-    if (!this.data.actions) {
-      return;
-    }
-
     for (const [baseName, eventName] of names) {
-      this._setEventListener(element, baseName, eventName, getter);
+      if (eventName === "Action" || this.data.actions && this.data.actions[eventName.replace(" ", "")] !== undefined) {
+        this._setEventListener(element, baseName, eventName, getter);
+      }
     }
   }
 

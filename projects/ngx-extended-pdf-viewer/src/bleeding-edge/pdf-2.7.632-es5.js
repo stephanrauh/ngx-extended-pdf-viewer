@@ -20326,10 +20326,6 @@ var WidgetAnnotationElement = /*#__PURE__*/function (_AnnotationElement3) {
     value: function _setEventListener(element, baseName, eventName, valueGetter) {
       var _this4 = this;
 
-      if (this.data.actions[eventName.replace(" ", "")] === undefined) {
-        return;
-      }
-
       if (baseName.includes("mouse")) {
         element.addEventListener(baseName, function (event) {
           var _this4$linkService$ev;
@@ -20363,10 +20359,6 @@ var WidgetAnnotationElement = /*#__PURE__*/function (_AnnotationElement3) {
   }, {
     key: "_setEventListeners",
     value: function _setEventListeners(element, names, getter) {
-      if (!this.data.actions) {
-        return;
-      }
-
       var _iterator2 = _createForOfIteratorHelper(names),
           _step2;
 
@@ -20376,7 +20368,9 @@ var WidgetAnnotationElement = /*#__PURE__*/function (_AnnotationElement3) {
               baseName = _step2$value[0],
               eventName = _step2$value[1];
 
-          this._setEventListener(element, baseName, eventName, getter);
+          if (eventName === "Action" || this.data.actions && this.data.actions[eventName.replace(" ", "")] !== undefined) {
+            this._setEventListener(element, baseName, eventName, getter);
+          }
         }
       } catch (err) {
         _iterator2.e(err);

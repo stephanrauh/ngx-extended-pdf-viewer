@@ -31330,35 +31330,34 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                this._fontName = null;
                 isPassword = this.hasFieldFlag(_util.AnnotationFieldFlag.PASSWORD);
 
                 if (!(!annotationStorage || isPassword)) {
-                  _context3.next = 4;
+                  _context3.next = 3;
                   break;
                 }
 
                 return _context3.abrupt("return", null);
 
-              case 4:
+              case 3:
                 value = annotationStorage[this.data.id] && annotationStorage[this.data.id].value;
 
                 if (!(value === undefined)) {
-                  _context3.next = 7;
+                  _context3.next = 6;
                   break;
                 }
 
                 return _context3.abrupt("return", null);
 
-              case 7:
+              case 6:
                 if (!(value === "")) {
-                  _context3.next = 9;
+                  _context3.next = 8;
                   break;
                 }
 
                 return _context3.abrupt("return", "");
 
-              case 9:
+              case 8:
                 defaultPadding = 2;
                 hPadding = defaultPadding;
                 totalHeight = this.data.rect[3] - this.data.rect[1];
@@ -31369,13 +31368,12 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                   this._defaultAppearanceData = (0, _default_appearance.parseDefaultAppearance)(this.data.defaultAppearance);
                 }
 
-                _context3.next = 16;
+                _context3.next = 15;
                 return this._getFontData(evaluator, task);
 
-              case 16:
+              case 15:
                 font = _context3.sent;
                 fontSize = this._computeFontSize(font, totalHeight);
-                this._fontName = this._defaultAppearanceData.fontName.name;
                 descent = font.descent;
 
                 if (isNaN(descent)) {
@@ -31387,35 +31385,35 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                 alignment = this.data.textAlignment;
 
                 if (!this.data.multiLine) {
-                  _context3.next = 26;
+                  _context3.next = 24;
                   break;
                 }
 
                 return _context3.abrupt("return", this._getMultilineAppearance(defaultAppearance, value, font, fontSize, totalWidth, totalHeight, alignment, hPadding, vPadding));
 
-              case 26:
+              case 24:
                 encodedString = font.encodeString(value).join("");
 
                 if (!this.data.comb) {
-                  _context3.next = 29;
+                  _context3.next = 27;
                   break;
                 }
 
                 return _context3.abrupt("return", this._getCombAppearance(defaultAppearance, font, encodedString, totalWidth, hPadding, vPadding));
 
-              case 29:
+              case 27:
                 if (!(alignment === 0 || alignment > 2)) {
-                  _context3.next = 31;
+                  _context3.next = 29;
                   break;
                 }
 
                 return _context3.abrupt("return", "/Tx BMC q BT " + defaultAppearance + " 1 0 0 1 ".concat(hPadding, " ").concat(vPadding, " Tm (").concat((0, _util.escapeString)(encodedString), ") Tj") + " ET Q EMC");
 
-              case 31:
+              case 29:
                 renderedText = this._renderText(encodedString, font, fontSize, totalWidth, alignment, hPadding, vPadding);
                 return _context3.abrupt("return", "/Tx BMC q BT " + defaultAppearance + " 1 0 0 1 0 0 Tm ".concat(renderedText) + " ET Q EMC");
 
-              case 33:
+              case 31:
               case "end":
                 return _context3.stop();
             }
@@ -31541,10 +31539,11 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
     value: function _getSaveFieldResources(xref) {
       var _this$_fieldResources = this._fieldResources,
           localResources = _this$_fieldResources.localResources,
-          acroFormResources = _this$_fieldResources.acroFormResources,
-          appearanceResources = _this$_fieldResources.appearanceResources;
+          appearanceResources = _this$_fieldResources.appearanceResources,
+          acroFormResources = _this$_fieldResources.acroFormResources;
+      var fontNameStr = this._defaultAppearanceData && this._defaultAppearanceData.fontName.name;
 
-      if (!this._fontName) {
+      if (!fontNameStr) {
         return localResources || _primitives.Dict.empty;
       }
 
@@ -31554,7 +31553,7 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
         if (resources instanceof _primitives.Dict) {
           var localFont = resources.get("Font");
 
-          if (localFont instanceof _primitives.Dict && localFont.has(this._fontName)) {
+          if (localFont instanceof _primitives.Dict && localFont.has(fontNameStr)) {
             return resources;
           }
         }
@@ -31563,9 +31562,9 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
       if (acroFormResources instanceof _primitives.Dict) {
         var acroFormFont = acroFormResources.get("Font");
 
-        if (acroFormFont instanceof _primitives.Dict && acroFormFont.has(this._fontName)) {
+        if (acroFormFont instanceof _primitives.Dict && acroFormFont.has(fontNameStr)) {
           var subFontDict = new _primitives.Dict(xref);
-          subFontDict.set(this._fontName, acroFormFont.getRaw(this._fontName));
+          subFontDict.set(fontNameStr, acroFormFont.getRaw(fontNameStr));
           var subResourcesDict = new _primitives.Dict(xref);
           subResourcesDict.set("Font", subFontDict);
           return _primitives.Dict.merge({
@@ -32211,7 +32210,7 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
 
       return {
         id: this.data.id,
-        value: this.data.fieldValue || null,
+        value: this.data.fieldValue || "Off",
         defaultValue: this.data.defaultFieldValue,
         exportValues: exportValues,
         editable: !this.data.readOnly,
@@ -36722,7 +36721,9 @@ var TranslatedFont = /*#__PURE__*/function () {
             continue;
 
           case _util.OPS.setGState:
-            var _gStateObj = operatorList.argsArray[i];
+            var _operatorList$argsArr = _slicedToArray(operatorList.argsArray[i], 1),
+                _gStateObj = _operatorList$argsArr[0];
+
             var j = 0,
                 jj = _gStateObj.length;
 
@@ -59764,7 +59765,6 @@ var PDFFunctionFactory = /*#__PURE__*/function () {
 
     this.xref = xref;
     this.isEvalSupported = isEvalSupported !== false;
-    this._localFunctionCache = null;
   }
 
   _createClass(PDFFunctionFactory, [{
@@ -59819,10 +59819,6 @@ var PDFFunctionFactory = /*#__PURE__*/function () {
       }
 
       if (fnRef) {
-        if (!this._localFunctionCache) {
-          this._localFunctionCache = new _image_utils.LocalFunctionCache();
-        }
-
         var localFunction = this._localFunctionCache.getByRef(fnRef);
 
         if (localFunction) {
@@ -59850,12 +59846,13 @@ var PDFFunctionFactory = /*#__PURE__*/function () {
       }
 
       if (fnRef) {
-        if (!this._localFunctionCache) {
-          this._localFunctionCache = new _image_utils.LocalFunctionCache();
-        }
-
         this._localFunctionCache.set(null, fnRef, parsedFunction);
       }
+    }
+  }, {
+    key: "_localFunctionCache",
+    get: function get() {
+      return (0, _util.shadow)(this, "_localFunctionCache", new _image_utils.LocalFunctionCache());
     }
   }]);
 
