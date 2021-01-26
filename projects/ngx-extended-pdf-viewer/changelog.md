@@ -249,3 +249,4 @@
 - 8.0.0-beta.0 #609 enable server-side rendering; #591 fixed the bug that zoom using wheel and ctrl goes to endless loop
 - 8.0.0-beta.1 #591 send `(zoomChange)` without causing an `ExpressionChangedAfterItHasBeenCheckedErrror`
 - 8.0.0-beta.2 #620 copied the missing translation key from pdf.js 2.7 ("bleeding edge") to the default version pdf.js 2.6; copied English translations of the missing translations of any language to get rid of the warnings; merged the latest changes of pdf.js. 2.7
+- 8.0.0-beta.3 #627 updated the bleeding edge to the latest (and final) version 2.7 and load the correct version of the 2.6 files

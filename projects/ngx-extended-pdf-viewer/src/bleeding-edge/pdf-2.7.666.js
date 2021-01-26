@@ -242,8 +242,8 @@ var _text_layer = __w_pdfjs_require__(21);
 
 var _svg = __w_pdfjs_require__(22);
 
-const pdfjsVersion = '2.7.654';
-const pdfjsBuild = 'd227a8248';
+const pdfjsVersion = '2.7.666';
+const pdfjsBuild = '8975e4df9';
 {
   const PDFNetworkStream = __w_pdfjs_require__(23).PDFNetworkStream;
 
@@ -979,10 +979,10 @@ const AnnotationBorderStyleType = {
 };
 exports.AnnotationBorderStyleType = AnnotationBorderStyleType;
 const AnnotationActionEventType = {
-  E: "MouseEnter",
-  X: "MouseExit",
-  D: "MouseDown",
-  U: "MouseUp",
+  E: "Mouse Enter",
+  X: "Mouse Exit",
+  D: "Mouse Down",
+  U: "Mouse Up",
   Fo: "Focus",
   Bl: "Blur",
   PO: "PageOpen",
@@ -1984,7 +1984,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.7.654',
+    apiVersion: '2.7.666',
     source: {
       data: source.data,
       url: source.url,
@@ -4007,9 +4007,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.7.654';
+const version = '2.7.666';
 exports.version = version;
-const build = 'd227a8248';
+const build = '8975e4df9';
 exports.build = build;
 
 /***/ }),
@@ -9784,7 +9784,7 @@ class AnnotationElement {
 
 class LinkAnnotationElement extends AnnotationElement {
   constructor(parameters) {
-    const isRenderable = !!(parameters.data.url || parameters.data.dest || parameters.data.action || parameters.data.isTooltipOnly || parameters.data.actions && (parameters.data.actions.Action || parameters.data.actions.MouseUp || parameters.data.actions.MouseDown));
+    const isRenderable = !!(parameters.data.url || parameters.data.dest || parameters.data.action || parameters.data.isTooltipOnly || parameters.data.actions && (parameters.data.actions.Action || parameters.data.actions["Mouse Up"] || parameters.data.actions["Mouse Down"]));
     super(parameters, {
       isRenderable,
       createQuadrilaterals: true
@@ -9809,7 +9809,7 @@ class LinkAnnotationElement extends AnnotationElement {
       this._bindNamedAction(link, data.action);
     } else if (data.dest) {
       this._bindLink(link, data.dest);
-    } else if (data.actions && (data.actions.Action || data.actions.MouseUp || data.actions.MouseDown) && this.enableScripting && this.hasJSActions) {
+    } else if (data.actions && (data.actions.Action || data.actions["Mouse Up"] || data.actions["Mouse Down"]) && this.enableScripting && this.hasJSActions) {
       this._bindJSAction(link, data);
     } else {
       this._bindLink(link, "");
@@ -9857,7 +9857,7 @@ class LinkAnnotationElement extends AnnotationElement {
 
   _bindJSAction(link, data) {
     link.href = this.linkService.getAnchorUrl("");
-    const map = new Map([["Action", "onclick"], ["MouseUp", "onmouseup"], ["MouseDown", "onmousedown"]]);
+    const map = new Map([["Action", "onclick"], ["Mouse Up", "onmouseup"], ["Mouse Down", "onmousedown"]]);
 
     for (const name of Object.keys(data.actions)) {
       const jsName = map.get(name);
@@ -9956,7 +9956,7 @@ class WidgetAnnotationElement extends AnnotationElement {
 
   _setEventListeners(element, names, getter) {
     for (const [baseName, eventName] of names) {
-      if (eventName === "Action" || this.data.actions && this.data.actions[eventName.replace(" ", "")] !== undefined) {
+      if (eventName === "Action" || this.data.actions?.[eventName]) {
         this._setEventListener(element, baseName, eventName, getter);
       }
     }
@@ -10176,7 +10176,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
             });
           }
 
-          this._setEventListeners(element, [["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "MouseUp"]], event => event.target.value);
+          this._setEventListeners(element, [["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "Mouse Up"]], event => event.target.value);
         }
       }
 
@@ -10307,7 +10307,7 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
         Object.keys(detail).filter(name => name in actions).forEach(name => actions[name]());
       });
 
-      this._setEventListeners(element, [["change", "Validate"], ["change", "Action"], ["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "MouseUp"]], event => event.target.checked);
+      this._setEventListeners(element, [["change", "Validate"], ["change", "Action"], ["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "Mouse Up"]], event => event.target.checked);
     }
 
     this.container.appendChild(element);
@@ -10406,7 +10406,7 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
         Object.keys(detail).filter(name => name in actions).forEach(name => actions[name]());
       });
 
-      this._setEventListeners(element, [["change", "Validate"], ["change", "Action"], ["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "MouseUp"]], event => event.target.checked);
+      this._setEventListeners(element, [["change", "Validate"], ["change", "Action"], ["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "Mouse Up"]], event => event.target.checked);
     }
 
     this.container.appendChild(element);
@@ -10530,7 +10530,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
         });
       });
 
-      this._setEventListeners(selectElement, [["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "MouseUp"]], event => event.target.checked);
+      this._setEventListeners(selectElement, [["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "Mouse Up"]], event => event.target.checked);
     } else {
       selectElement.addEventListener("input", function (event) {
         storage.setValue(id, {

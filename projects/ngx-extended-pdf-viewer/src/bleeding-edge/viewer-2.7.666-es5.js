@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-var pdfjsVersion = '2.7.654';
-var pdfjsBuild = 'd227a8248';
+var pdfjsVersion = '2.7.666';
+var pdfjsBuild = '8975e4df9';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -3825,7 +3825,7 @@ function webViewerLastPage() {
 }
 
 function webViewerNextPage() {
-  PDFViewerApplication.page++;
+  PDFViewerApplication.pdfViewer.nextPage();
 
   if (PDFViewerApplication.pageViewMode === "single") {
     if (PDFViewerApplication.pdfViewer && PDFViewerApplication.pdfViewer.container) {
@@ -3835,7 +3835,7 @@ function webViewerNextPage() {
 }
 
 function webViewerPreviousPage() {
-  PDFViewerApplication.page--;
+  PDFViewerApplication.pdfViewer.previousPage();
 }
 
 function webViewerZoomIn() {
@@ -4349,13 +4349,9 @@ function webViewerKeyDown(evt) {
 
     if (turnPage !== 0 && (!turnOnlyIfPageFit || pdfViewer.currentScaleValue === "page-fit")) {
       if (turnPage > 0) {
-        if (PDFViewerApplication.page < PDFViewerApplication.pagesCount) {
-          PDFViewerApplication.page++;
-        }
+        pdfViewer.nextPage();
       } else {
-        if (PDFViewerApplication.page > 1) {
-          PDFViewerApplication.page--;
-        }
+        pdfViewer.previousPage();
       }
 
       handled = true;
@@ -5552,13 +5548,16 @@ function getVisibleElements(_ref2) {
 
     var hiddenHeight = Math.max(0, top - currentHeight) + Math.max(0, viewBottom - bottom);
     var hiddenWidth = Math.max(0, left - currentWidth) + Math.max(0, viewRight - right);
-    var percent = (viewHeight - hiddenHeight) * (viewWidth - hiddenWidth) * 100 / viewHeight / viewWidth | 0;
+    var fractionHeight = (viewHeight - hiddenHeight) / viewHeight,
+        fractionWidth = (viewWidth - hiddenWidth) / viewWidth;
+    var percent = fractionHeight * fractionWidth * 100 | 0;
     visible.push({
       id: view.id,
       x: currentWidth,
       y: currentHeight,
       view: view,
-      percent: percent
+      percent: percent,
+      widthPercent: fractionWidth * 100 | 0
     });
   }
 
@@ -8441,9 +8440,8 @@ var PDFFindController = /*#__PURE__*/function () {
     }
   }, {
     key: "_calculateFuzzyMatch",
-    value: function _calculateFuzzyMatch(query, pageIndex, pageContent, pageDiffs) {
-      var matches = [],
-          matchesLength = [];
+    value: function _calculateFuzzyMatch(query, pageIndex, pageContent) {
+      var matches = [];
       var queryLen = query.length;
       var shortLen = queryLen < 5 ? queryLen : 5;
       var maxDistance = Math.round(queryLen / 5);
@@ -8461,18 +8459,13 @@ var PDFFindController = /*#__PURE__*/function () {
           var distance = _levenshtein.Levenshtein.distance(query, currentContent, options);
 
           if (distance <= maxDistance) {
-            var originalMatchIdx = getOriginalIndex(i, pageDiffs),
-                matchEnd = i + queryLen - 1,
-                originalQueryLen = getOriginalIndex(matchEnd, pageDiffs) - originalMatchIdx + 1;
-            matches.push(originalMatchIdx);
-            matchesLength.push(originalQueryLen);
+            matches.push(i);
             i += queryLen - 1;
           }
         }
       }
 
       this._pageMatches[pageIndex] = matches;
-      this._pageMatchesLength[pageIndex] = matchesLength;
     }
   }, {
     key: "_calculatePhraseMatch",
@@ -8584,7 +8577,7 @@ var PDFFindController = /*#__PURE__*/function () {
         if (query.length <= 2) {
           this._calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, false);
         } else {
-          this._calculateFuzzyMatch(query, pageIndex, pageContent, pageDiffs);
+          this._calculateFuzzyMatch(query, pageIndex, pageContent);
         }
       } else if (phraseSearch) {
         this._calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, entireWord, ignoreAccents);
@@ -10791,17 +10784,11 @@ var PDFLinkService = /*#__PURE__*/function () {
           break;
 
         case "NextPage":
-          if (this.page < this.pagesCount) {
-            this.page++;
-          }
-
+          this.pdfViewer.nextPage();
           break;
 
         case "PrevPage":
-          if (this.page > 1) {
-            this.page--;
-          }
-
+          this.pdfViewer.previousPage();
           break;
 
         case "LastPage":
@@ -11748,36 +11735,12 @@ var PDFPresentationMode = /*#__PURE__*/function () {
 
         this._resetMouseScrollState();
 
-        var success = totalDelta > 0 ? this._goToPreviousPage() : this._goToNextPage();
+        var success = totalDelta > 0 ? this.pdfViewer.previousPage() : this.pdfViewer.nextPage();
 
         if (success) {
           this.mouseScrollTimeStamp = currentTime;
         }
       }
-    }
-  }, {
-    key: "_goToPreviousPage",
-    value: function _goToPreviousPage() {
-      var page = this.pdfViewer.currentPageNumber;
-
-      if (page <= 1) {
-        return false;
-      }
-
-      this.pdfViewer.currentPageNumber = page - 1;
-      return true;
-    }
-  }, {
-    key: "_goToNextPage",
-    value: function _goToNextPage() {
-      var page = this.pdfViewer.currentPageNumber;
-
-      if (page >= this.pdfViewer.pagesCount) {
-        return false;
-      }
-
-      this.pdfViewer.currentPageNumber = page + 1;
-      return true;
     }
   }, {
     key: "_notifyStateChange",
@@ -11898,9 +11861,9 @@ var PDFPresentationMode = /*#__PURE__*/function () {
           evt.preventDefault();
 
           if (evt.shiftKey) {
-            this._goToPreviousPage();
+            this.pdfViewer.previousPage();
           } else {
-            this._goToNextPage();
+            this.pdfViewer.nextPage();
           }
         }
       }
@@ -11993,9 +11956,9 @@ var PDFPresentationMode = /*#__PURE__*/function () {
           }
 
           if (delta > 0) {
-            this._goToPreviousPage();
+            this.pdfViewer.previousPage();
           } else if (delta < 0) {
-            this._goToNextPage();
+            this.pdfViewer.nextPage();
           }
 
           break;
@@ -13490,6 +13453,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.PDFViewer = void 0;
 
+var _ui_utils = __webpack_require__(6);
+
 var _base_viewer = __webpack_require__(31);
 
 var _pdfjsLib = __webpack_require__(7);
@@ -13595,7 +13560,7 @@ var PDFViewer = /*#__PURE__*/function (_BaseViewer) {
             break;
           }
 
-          if (page.id === currentId) {
+          if (page.id === currentId && this._scrollMode === _ui_utils.ScrollMode.VERTICAL && this._spreadMode === _ui_utils.SpreadMode.NONE) {
             stillFullyVisible = true;
             break;
           }
@@ -13730,7 +13695,7 @@ var BaseViewer = /*#__PURE__*/function () {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    var viewerVersion = '2.7.654';
+    var viewerVersion = '2.7.666';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error("The API version \"".concat(_pdfjsLib.version, "\" does not match the Viewer version \"").concat(viewerVersion, "\"."));
@@ -14744,6 +14709,197 @@ var BaseViewer = /*#__PURE__*/function () {
       this.update();
     }
   }, {
+    key: "_getPageAdvance",
+    value: function _getPageAdvance(currentPageNumber) {
+      var previous = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      if (this.isInPresentationMode) {
+        return 1;
+      }
+
+      switch (this._scrollMode) {
+        case _ui_utils.ScrollMode.WRAPPED:
+          {
+            var _this$_getVisiblePage = this._getVisiblePages(),
+                views = _this$_getVisiblePage.views,
+                pageLayout = new Map();
+
+            var _iterator = _createForOfIteratorHelper(views),
+                _step;
+
+            try {
+              for (_iterator.s(); !(_step = _iterator.n()).done;) {
+                var _step$value = _step.value,
+                    id = _step$value.id,
+                    y = _step$value.y,
+                    percent = _step$value.percent,
+                    widthPercent = _step$value.widthPercent;
+
+                if (percent === 0 || widthPercent < 100) {
+                  continue;
+                }
+
+                var yArray = pageLayout.get(y);
+
+                if (!yArray) {
+                  pageLayout.set(y, yArray || (yArray = []));
+                }
+
+                yArray.push(id);
+              }
+            } catch (err) {
+              _iterator.e(err);
+            } finally {
+              _iterator.f();
+            }
+
+            var _iterator2 = _createForOfIteratorHelper(pageLayout.values()),
+                _step2;
+
+            try {
+              for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+                var _yArray = _step2.value;
+
+                var currentIndex = _yArray.indexOf(currentPageNumber);
+
+                if (currentIndex === -1) {
+                  continue;
+                }
+
+                var numPages = _yArray.length;
+
+                if (numPages === 1) {
+                  break;
+                }
+
+                if (previous) {
+                  for (var i = currentIndex - 1, ii = 0; i >= ii; i--) {
+                    var currentId = _yArray[i],
+                        expectedId = _yArray[i + 1] - 1;
+
+                    if (currentId < expectedId) {
+                      return currentPageNumber - expectedId;
+                    }
+                  }
+                } else {
+                  for (var _i2 = currentIndex + 1, _ii = numPages; _i2 < _ii; _i2++) {
+                    var _currentId = _yArray[_i2],
+                        _expectedId = _yArray[_i2 - 1] + 1;
+
+                    if (_currentId > _expectedId) {
+                      return _expectedId - currentPageNumber;
+                    }
+                  }
+                }
+
+                if (previous) {
+                  var firstId = _yArray[0];
+
+                  if (firstId < currentPageNumber) {
+                    return currentPageNumber - firstId + 1;
+                  }
+                } else {
+                  var lastId = _yArray[numPages - 1];
+
+                  if (lastId > currentPageNumber) {
+                    return lastId - currentPageNumber + 1;
+                  }
+                }
+
+                break;
+              }
+            } catch (err) {
+              _iterator2.e(err);
+            } finally {
+              _iterator2.f();
+            }
+
+            break;
+          }
+
+        case _ui_utils.ScrollMode.HORIZONTAL:
+          {
+            break;
+          }
+
+        case _ui_utils.ScrollMode.VERTICAL:
+          {
+            if (this._spreadMode === _ui_utils.SpreadMode.NONE) {
+              break;
+            }
+
+            var parity = this._spreadMode - 1;
+
+            if (previous && currentPageNumber % 2 !== parity) {
+              break;
+            } else if (!previous && currentPageNumber % 2 === parity) {
+              break;
+            }
+
+            var _this$_getVisiblePage2 = this._getVisiblePages(),
+                _views = _this$_getVisiblePage2.views,
+                _expectedId2 = previous ? currentPageNumber - 1 : currentPageNumber + 1;
+
+            var _iterator3 = _createForOfIteratorHelper(_views),
+                _step3;
+
+            try {
+              for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+                var _step3$value = _step3.value,
+                    _id = _step3$value.id,
+                    _percent = _step3$value.percent,
+                    _widthPercent = _step3$value.widthPercent;
+
+                if (_id !== _expectedId2) {
+                  continue;
+                }
+
+                if (_percent > 0 && _widthPercent === 100) {
+                  return 2;
+                }
+
+                break;
+              }
+            } catch (err) {
+              _iterator3.e(err);
+            } finally {
+              _iterator3.f();
+            }
+
+            break;
+          }
+      }
+
+      return 1;
+    }
+  }, {
+    key: "nextPage",
+    value: function nextPage() {
+      var currentPageNumber = this._currentPageNumber,
+          pagesCount = this.pagesCount;
+
+      if (currentPageNumber >= pagesCount) {
+        return false;
+      }
+
+      var advance = this._getPageAdvance(currentPageNumber, false) || 1;
+      this.currentPageNumber = Math.min(currentPageNumber + advance, pagesCount);
+      return true;
+    }
+  }, {
+    key: "previousPage",
+    value: function previousPage() {
+      var currentPageNumber = this._currentPageNumber;
+
+      if (currentPageNumber <= 1) {
+        return false;
+      }
+
+      var advance = this._getPageAdvance(currentPageNumber, true) || 1;
+      this.currentPageNumber = Math.max(currentPageNumber - advance, 1);
+      return true;
+    }
+  }, {
     key: "initializeScriptingEvents",
     value: function initializeScriptingEvents() {
       var _this8 = this;
@@ -15073,18 +15229,18 @@ var BaseViewer = /*#__PURE__*/function () {
 
       this._optionalContentConfigPromise = promise;
 
-      var _iterator = _createForOfIteratorHelper(this._pages),
-          _step;
+      var _iterator4 = _createForOfIteratorHelper(this._pages),
+          _step4;
 
       try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var pageView = _step.value;
+        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+          var pageView = _step4.value;
           pageView.update(pageView.scale, pageView.rotation, promise);
         }
       } catch (err) {
-        _iterator.e(err);
+        _iterator4.e(err);
       } finally {
-        _iterator.f();
+        _iterator4.f();
       }
 
       this.update();
@@ -16748,10 +16904,10 @@ var AnnotationBorderStyleType = {
 };
 exports.AnnotationBorderStyleType = AnnotationBorderStyleType;
 var AnnotationActionEventType = {
-  E: "MouseEnter",
-  X: "MouseExit",
-  D: "MouseDown",
-  U: "MouseUp",
+  E: "Mouse Enter",
+  X: "Mouse Exit",
+  D: "Mouse Down",
+  U: "Mouse Up",
   Fo: "Focus",
   Bl: "Blur",
   PO: "PageOpen",
@@ -18209,7 +18365,7 @@ var store = __webpack_require__(61);
 (module.exports = function (key, value) {
  return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
- version: '3.8.2',
+ version: '3.8.3',
  mode: IS_PURE ? 'pure' : 'global',
  copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -18788,6 +18944,7 @@ module.exports = function (IteratorConstructor, NAME, next) {
 
 "use strict";
 
+var fails = __webpack_require__(43);
 var getPrototypeOf = __webpack_require__(96);
 var createNonEnumerableProperty = __webpack_require__(55);
 var has = __webpack_require__(52);
@@ -18809,9 +18966,13 @@ if ([].keys) {
    IteratorPrototype = PrototypeOfArrayIteratorPrototype;
  }
 }
-if (IteratorPrototype == undefined)
+var NEW_ITERATOR_PROTOTYPE = IteratorPrototype == undefined || fails(function () {
+ var test = {};
+ return IteratorPrototype[ITERATOR].call(test) !== test;
+});
+if (NEW_ITERATOR_PROTOTYPE)
  IteratorPrototype = {};
-if (!IS_PURE && !has(IteratorPrototype, ITERATOR)) {
+if ((!IS_PURE || NEW_ITERATOR_PROTOTYPE) && !has(IteratorPrototype, ITERATOR)) {
  createNonEnumerableProperty(IteratorPrototype, ITERATOR, returnThis);
 }
 module.exports = {
@@ -26682,6 +26843,11 @@ var PDFSinglePageViewer = /*#__PURE__*/function (_BaseViewer) {
   }, {
     key: "_updateSpreadMode",
     value: function _updateSpreadMode() {}
+  }, {
+    key: "_getPageAdvance",
+    value: function _getPageAdvance() {
+      return 1;
+    }
   }, {
     key: "_viewerElement",
     get: function get() {

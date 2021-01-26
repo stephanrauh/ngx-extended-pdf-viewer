@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.7.654';
-const pdfjsBuild = 'd227a8248';
+const pdfjsVersion = '2.7.666';
+const pdfjsBuild = '8975e4df9';
 
 /***/ }),
 /* 1 */
@@ -162,7 +162,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.7.654';
+    const workerVersion = '2.7.666';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -899,10 +899,10 @@ const AnnotationBorderStyleType = {
 };
 exports.AnnotationBorderStyleType = AnnotationBorderStyleType;
 const AnnotationActionEventType = {
-  E: "MouseEnter",
-  X: "MouseExit",
-  D: "MouseDown",
-  U: "MouseUp",
+  E: "Mouse Enter",
+  X: "Mouse Exit",
+  D: "Mouse Down",
+  U: "Mouse Up",
   Fo: "Focus",
   Bl: "Blur",
   PO: "PageOpen",

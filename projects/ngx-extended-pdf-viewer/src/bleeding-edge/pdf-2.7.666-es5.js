@@ -242,8 +242,8 @@ var _text_layer = __w_pdfjs_require__(151);
 
 var _svg = __w_pdfjs_require__(152);
 
-var pdfjsVersion = '2.7.654';
-var pdfjsBuild = 'd227a8248';
+var pdfjsVersion = '2.7.666';
+var pdfjsBuild = '8975e4df9';
 {
   var PDFNetworkStream = __w_pdfjs_require__(153).PDFNetworkStream;
 
@@ -1850,10 +1850,10 @@ var AnnotationBorderStyleType = {
 };
 exports.AnnotationBorderStyleType = AnnotationBorderStyleType;
 var AnnotationActionEventType = {
-  E: "MouseEnter",
-  X: "MouseExit",
-  D: "MouseDown",
-  U: "MouseUp",
+  E: "Mouse Enter",
+  X: "Mouse Exit",
+  D: "Mouse Down",
+  U: "Mouse Up",
   Fo: "Focus",
   Bl: "Blur",
   PO: "PageOpen",
@@ -3311,7 +3311,7 @@ var store = __w_pdfjs_require__(30);
 (module.exports = function (key, value) {
  return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
- version: '3.8.2',
+ version: '3.8.3',
  mode: IS_PURE ? 'pure' : 'global',
  copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -3890,6 +3890,7 @@ module.exports = function (IteratorConstructor, NAME, next) {
 
 "use strict";
 
+var fails = __w_pdfjs_require__(12);
 var getPrototypeOf = __w_pdfjs_require__(65);
 var createNonEnumerableProperty = __w_pdfjs_require__(24);
 var has = __w_pdfjs_require__(21);
@@ -3911,9 +3912,13 @@ if ([].keys) {
    IteratorPrototype = PrototypeOfArrayIteratorPrototype;
  }
 }
-if (IteratorPrototype == undefined)
+var NEW_ITERATOR_PROTOTYPE = IteratorPrototype == undefined || fails(function () {
+ var test = {};
+ return IteratorPrototype[ITERATOR].call(test) !== test;
+});
+if (NEW_ITERATOR_PROTOTYPE)
  IteratorPrototype = {};
-if (!IS_PURE && !has(IteratorPrototype, ITERATOR)) {
+if ((!IS_PURE || NEW_ITERATOR_PROTOTYPE) && !has(IteratorPrototype, ITERATOR)) {
  createNonEnumerableProperty(IteratorPrototype, ITERATOR, returnThis);
 }
 module.exports = {
@@ -11101,7 +11106,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId: docId,
-    apiVersion: '2.7.654',
+    apiVersion: '2.7.666',
     source: {
       data: source.data,
       url: source.url,
@@ -13539,9 +13544,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.7.654';
+var version = '2.7.666';
 exports.version = version;
-var build = 'd227a8248';
+var build = '8975e4df9';
 exports.build = build;
 
 /***/ }),
@@ -20136,7 +20141,7 @@ var LinkAnnotationElement = /*#__PURE__*/function (_AnnotationElement) {
   function LinkAnnotationElement(parameters) {
     _classCallCheck(this, LinkAnnotationElement);
 
-    var isRenderable = !!(parameters.data.url || parameters.data.dest || parameters.data.action || parameters.data.isTooltipOnly || parameters.data.actions && (parameters.data.actions.Action || parameters.data.actions.MouseUp || parameters.data.actions.MouseDown));
+    var isRenderable = !!(parameters.data.url || parameters.data.dest || parameters.data.action || parameters.data.isTooltipOnly || parameters.data.actions && (parameters.data.actions.Action || parameters.data.actions["Mouse Up"] || parameters.data.actions["Mouse Down"]));
     return _super.call(this, parameters, {
       isRenderable: isRenderable,
       createQuadrilaterals: true
@@ -20161,7 +20166,7 @@ var LinkAnnotationElement = /*#__PURE__*/function (_AnnotationElement) {
         this._bindNamedAction(link, data.action);
       } else if (data.dest) {
         this._bindLink(link, data.dest);
-      } else if (data.actions && (data.actions.Action || data.actions.MouseUp || data.actions.MouseDown) && this.enableScripting && this.hasJSActions) {
+      } else if (data.actions && (data.actions.Action || data.actions["Mouse Up"] || data.actions["Mouse Down"]) && this.enableScripting && this.hasJSActions) {
         this._bindJSAction(link, data);
       } else {
         this._bindLink(link, "");
@@ -20219,7 +20224,7 @@ var LinkAnnotationElement = /*#__PURE__*/function (_AnnotationElement) {
       var _this3 = this;
 
       link.href = this.linkService.getAnchorUrl("");
-      var map = new Map([["Action", "onclick"], ["MouseUp", "onmouseup"], ["MouseDown", "onmousedown"]]);
+      var map = new Map([["Action", "onclick"], ["Mouse Up", "onmouseup"], ["Mouse Down", "onmousedown"]]);
 
       var _loop = function _loop() {
         var name = _Object$keys[_i];
@@ -20364,11 +20369,13 @@ var WidgetAnnotationElement = /*#__PURE__*/function (_AnnotationElement3) {
 
       try {
         for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var _this$data$actions;
+
           var _step2$value = _slicedToArray(_step2.value, 2),
               baseName = _step2$value[0],
               eventName = _step2$value[1];
 
-          if (eventName === "Action" || this.data.actions && this.data.actions[eventName.replace(" ", "")] !== undefined) {
+          if (eventName === "Action" || (_this$data$actions = this.data.actions) !== null && _this$data$actions !== void 0 && _this$data$actions[eventName]) {
             this._setEventListener(element, baseName, eventName, getter);
           }
         }
@@ -20612,7 +20619,7 @@ var TextWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem) 
               });
             }
 
-            this._setEventListeners(element, [["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "MouseUp"]], function (event) {
+            this._setEventListeners(element, [["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "Mouse Up"]], function (event) {
               return event.target.value;
             });
           }
@@ -20766,7 +20773,7 @@ var CheckboxWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationEl
           });
         });
 
-        this._setEventListeners(element, [["change", "Validate"], ["change", "Action"], ["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "MouseUp"]], function (event) {
+        this._setEventListeners(element, [["change", "Validate"], ["change", "Action"], ["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "Mouse Up"]], function (event) {
           return event.target.checked;
         });
       }
@@ -20896,7 +20903,7 @@ var RadioButtonWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotatio
           });
         });
 
-        this._setEventListeners(element, [["change", "Validate"], ["change", "Action"], ["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "MouseUp"]], function (event) {
+        this._setEventListeners(element, [["change", "Validate"], ["change", "Action"], ["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "Mouse Up"]], function (event) {
           return event.target.checked;
         });
       }
@@ -21061,7 +21068,7 @@ var ChoiceWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem
           });
         });
 
-        this._setEventListeners(selectElement, [["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "MouseUp"]], function (event) {
+        this._setEventListeners(selectElement, [["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "Mouse Up"]], function (event) {
           return event.target.checked;
         });
       } else {

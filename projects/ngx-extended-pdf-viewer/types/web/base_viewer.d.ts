@@ -416,6 +416,20 @@ export class BaseViewer {
      */
     get spreadMode(): number;
     _updateSpreadMode(pageNumber?: any): void;
+    /**
+     * @private
+     */
+    private _getPageAdvance;
+    /**
+     * Go to the next page, taking scroll/spread-modes into account.
+     * @returns {boolean} Whether navigation occured.
+     */
+    nextPage(): boolean;
+    /**
+     * Go to the previous page, taking scroll/spread-modes into account.
+     * @returns {boolean} Whether navigation occured.
+     */
+    previousPage(): boolean;
     initializeScriptingEvents(): void;
     _pageOpenPendingSet: Set<any> | null | undefined;
     /**
