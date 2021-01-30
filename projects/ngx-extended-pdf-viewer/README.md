@@ -20,6 +20,10 @@ There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>.
 Once again, I've fixed `[(zoom)]`. Now there's no infinite loop when you resize the PDF quickly with the mouse wheel. It's unlikely, but the bug fix might break some applications, so I've decided to call it a new major version.
 
 Version 8.0 also supports server-side rendering. The current approach probably isn't optimal yet; if you have an idea how to improve it, just open a ticket on GitHub. The working demo is here: https://github.com/stephanrauh/ngx-extended-pdf-viewer-issues/tree/main/issue609
+
+Starting with version 8.0.0-beta.4, ngx-extended-pdf-viewer uses version 2.7 of pdf.js for the default branch and pdf.js 2.8 for the bleeding-edge branch. Among other things, this means improved highlighting. When using the find function, the highlighting was often a bit off if the text used not just letters and digits. It's still not perfect, but in many cases it's better than it used to be. If you're interested in the gory details, here's the link to the pull request: https://github.com/mozilla/pdf.js/pull/12855
+
+As of version 8.0.0-beta.4, the improved highlighting hasn't been added to fuzzy search yet. Fuzzy search still works, but chances are it's going to improve soon.
 ## Other potentially breaking changes
 Version 7.1. is a pure bug-fix release. It's extremely unlikely, but it might cause difficulties if the PDF viewer is destroyed and immediately re-created. Should you run into this, adding a delay of a single millisecond fixes this (or even a `setTimeout()` without the delay parameter). 
 

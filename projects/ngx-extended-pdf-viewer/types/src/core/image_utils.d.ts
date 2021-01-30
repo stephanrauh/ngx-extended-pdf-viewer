@@ -1,10 +1,17 @@
 export class GlobalImageCache {
     static get NUM_PAGES_THRESHOLD(): any;
-    static get MAX_IMAGES_TO_CACHE(): any;
+    static get MIN_IMAGES_TO_CACHE(): any;
+    static get MAX_BYTE_SIZE(): any;
     _refCache: RefSetCache;
     _imageCache: RefSetCache;
+    get _byteSize(): number;
+    get _cacheLimitReached(): boolean;
     shouldCache(ref: any, pageIndex: any): boolean;
     addPageIndex(ref: any, pageIndex: any): void;
+    /**
+     * PLEASE NOTE: Must be called *after* the `setData` method.
+     */
+    addByteSize(ref: any, byteSize: any): void;
     getData(ref: any, pageIndex: any): any;
     setData(ref: any, data: any): void;
     clear(onlyData?: boolean): void;

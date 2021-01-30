@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.7.666';
-const pdfjsBuild = '8975e4df9';
+const pdfjsVersion = '2.8.121';
+const pdfjsBuild = '25f215563';
 
 /***/ }),
 /* 1 */
@@ -162,7 +162,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.7.666';
+    const workerVersion = '2.8.121';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -19395,13 +19395,39 @@ class GlobalImageCache {
     return (0, _util.shadow)(this, "NUM_PAGES_THRESHOLD", 2);
   }
 
-  static get MAX_IMAGES_TO_CACHE() {
-    return (0, _util.shadow)(this, "MAX_IMAGES_TO_CACHE", 10);
+  static get MIN_IMAGES_TO_CACHE() {
+    return (0, _util.shadow)(this, "MIN_IMAGES_TO_CACHE", 10);
+  }
+
+  static get MAX_BYTE_SIZE() {
+    return (0, _util.shadow)(this, "MAX_BYTE_SIZE", 40e6);
   }
 
   constructor() {
     this._refCache = new _primitives.RefSetCache();
     this._imageCache = new _primitives.RefSetCache();
+  }
+
+  get _byteSize() {
+    let byteSize = 0;
+
+    this._imageCache.forEach(imageData => {
+      byteSize += imageData.byteSize;
+    });
+
+    return byteSize;
+  }
+
+  get _cacheLimitReached() {
+    if (this._imageCache.size < GlobalImageCache.MIN_IMAGES_TO_CACHE) {
+      return false;
+    }
+
+    if (this._byteSize < GlobalImageCache.MAX_BYTE_SIZE) {
+      return false;
+    }
+
+    return true;
   }
 
   shouldCache(ref, pageIndex) {
@@ -19413,7 +19439,7 @@ class GlobalImageCache {
       return false;
     }
 
-    if (!this._imageCache.has(ref) && this._imageCache.size >= GlobalImageCache.MAX_IMAGES_TO_CACHE) {
+    if (!this._imageCache.has(ref) && this._cacheLimitReached) {
       return false;
     }
 
@@ -19432,6 +19458,20 @@ class GlobalImageCache {
     pageIndexSet.add(pageIndex);
   }
 
+  addByteSize(ref, byteSize) {
+    const imageData = this._imageCache.get(ref);
+
+    if (!imageData) {
+      return;
+    }
+
+    if (imageData.byteSize) {
+      return;
+    }
+
+    imageData.byteSize = byteSize;
+  }
+
   getData(ref, pageIndex) {
     const pageIndexSet = this._refCache.get(ref);
 
@@ -19443,12 +19483,14 @@ class GlobalImageCache {
       return null;
     }
 
-    if (!this._imageCache.has(ref)) {
+    const imageData = this._imageCache.get(ref);
+
+    if (!imageData) {
       return null;
     }
 
     pageIndexSet.add(pageIndex);
-    return this._imageCache.get(ref);
+    return imageData;
   }
 
   setData(ref, data) {
@@ -19460,8 +19502,8 @@ class GlobalImageCache {
       return;
     }
 
-    if (this._imageCache.size >= GlobalImageCache.MAX_IMAGES_TO_CACHE) {
-      (0, _util.info)("GlobalImageCache.setData - ignoring image above MAX_IMAGES_TO_CACHE.");
+    if (this._cacheLimitReached) {
+      (0, _util.warn)("GlobalImageCache.setData - cache limit reached.");
       return;
     }
 
@@ -21097,6 +21139,7 @@ class ChoiceWidgetAnnotation extends WidgetAnnotation {
       multipleSelection: this.data.multiSelect,
       hidden: this.data.hidden,
       actions: this.data.actions,
+      items: this.data.options,
       type
     };
   }
@@ -22128,6 +22171,11 @@ class PartialEvaluator {
       localColorSpaceCache
     }).then(imageObj => {
       imgData = imageObj.createImageData(false);
+
+      if (cacheKey && imageRef && cacheGlobally) {
+        this.globalImageCache.addByteSize(imageRef, imgData.data.length);
+      }
+
       return this._sendImgData(objId, imgData, cacheGlobally);
     }).catch(reason => {
       (0, _util.warn)(`Unable to decode image "${objId}": "${reason}".`);
@@ -22150,7 +22198,8 @@ class PartialEvaluator {
           this.globalImageCache.setData(imageRef, {
             objId,
             fn: _util.OPS.paintImageXObject,
-            args
+            args,
+            byteSize: 0
           });
         }
       }
@@ -23791,6 +23840,13 @@ class PartialEvaluator {
                   return;
                 }
 
+                const globalImage = self.globalImageCache.getData(xobj, self.pageIndex);
+
+                if (globalImage) {
+                  resolveXObject();
+                  return;
+                }
+
                 xobj = xref.fetch(xobj);
               }
 
@@ -24389,7 +24445,7 @@ class PartialEvaluator {
 
   getBaseFontMetrics(name) {
     var defaultWidth = 0;
-    var widths = [];
+    var widths = Object.create(null);
     var monospace = false;
     var stdFontMap = (0, _standard_fonts.getStdFontMap)();
     var lookupName = stdFontMap[name] || name;

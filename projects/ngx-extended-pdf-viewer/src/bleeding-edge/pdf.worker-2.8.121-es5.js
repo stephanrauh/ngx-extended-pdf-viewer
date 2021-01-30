@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.7.666';
-var pdfjsBuild = '8975e4df9';
+var pdfjsVersion = '2.8.121';
+var pdfjsBuild = '25f215563';
 
 /***/ }),
 /* 1 */
@@ -213,7 +213,7 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
       var WorkerTasks = [];
       var verbosity = (0, _util.getVerbosityLevel)();
       var apiVersion = docParams.apiVersion;
-      var workerVersion = '2.7.666';
+      var workerVersion = '2.8.121';
 
       if (apiVersion !== workerVersion) {
         throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -30060,9 +30060,14 @@ var GlobalImageCache = /*#__PURE__*/function () {
       return (0, _util.shadow)(this, "NUM_PAGES_THRESHOLD", 2);
     }
   }, {
-    key: "MAX_IMAGES_TO_CACHE",
+    key: "MIN_IMAGES_TO_CACHE",
     get: function get() {
-      return (0, _util.shadow)(this, "MAX_IMAGES_TO_CACHE", 10);
+      return (0, _util.shadow)(this, "MIN_IMAGES_TO_CACHE", 10);
+    }
+  }, {
+    key: "MAX_BYTE_SIZE",
+    get: function get() {
+      return (0, _util.shadow)(this, "MAX_BYTE_SIZE", 40e6);
     }
   }]);
 
@@ -30084,7 +30089,7 @@ var GlobalImageCache = /*#__PURE__*/function () {
         return false;
       }
 
-      if (!this._imageCache.has(ref) && this._imageCache.size >= GlobalImageCache.MAX_IMAGES_TO_CACHE) {
+      if (!this._imageCache.has(ref) && this._cacheLimitReached) {
         return false;
       }
 
@@ -30104,6 +30109,21 @@ var GlobalImageCache = /*#__PURE__*/function () {
       pageIndexSet.add(pageIndex);
     }
   }, {
+    key: "addByteSize",
+    value: function addByteSize(ref, byteSize) {
+      var imageData = this._imageCache.get(ref);
+
+      if (!imageData) {
+        return;
+      }
+
+      if (imageData.byteSize) {
+        return;
+      }
+
+      imageData.byteSize = byteSize;
+    }
+  }, {
     key: "getData",
     value: function getData(ref, pageIndex) {
       var pageIndexSet = this._refCache.get(ref);
@@ -30116,12 +30136,14 @@ var GlobalImageCache = /*#__PURE__*/function () {
         return null;
       }
 
-      if (!this._imageCache.has(ref)) {
+      var imageData = this._imageCache.get(ref);
+
+      if (!imageData) {
         return null;
       }
 
       pageIndexSet.add(pageIndex);
-      return this._imageCache.get(ref);
+      return imageData;
     }
   }, {
     key: "setData",
@@ -30134,8 +30156,8 @@ var GlobalImageCache = /*#__PURE__*/function () {
         return;
       }
 
-      if (this._imageCache.size >= GlobalImageCache.MAX_IMAGES_TO_CACHE) {
-        (0, _util.info)("GlobalImageCache.setData - ignoring image above MAX_IMAGES_TO_CACHE.");
+      if (this._cacheLimitReached) {
+        (0, _util.warn)("GlobalImageCache.setData - cache limit reached.");
         return;
       }
 
@@ -30151,6 +30173,30 @@ var GlobalImageCache = /*#__PURE__*/function () {
       }
 
       this._imageCache.clear();
+    }
+  }, {
+    key: "_byteSize",
+    get: function get() {
+      var byteSize = 0;
+
+      this._imageCache.forEach(function (imageData) {
+        byteSize += imageData.byteSize;
+      });
+
+      return byteSize;
+    }
+  }, {
+    key: "_cacheLimitReached",
+    get: function get() {
+      if (this._imageCache.size < GlobalImageCache.MIN_IMAGES_TO_CACHE) {
+        return false;
+      }
+
+      if (this._byteSize < GlobalImageCache.MAX_BYTE_SIZE) {
+        return false;
+      }
+
+      return true;
     }
   }]);
 
@@ -32299,6 +32345,7 @@ var ChoiceWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation3) {
         multipleSelection: this.data.multiSelect,
         hidden: this.data.hidden,
         actions: this.data.actions,
+        items: this.data.options,
         type: type
       };
     }
@@ -33739,6 +33786,11 @@ var PartialEvaluator = /*#__PURE__*/function () {
                   localColorSpaceCache: localColorSpaceCache
                 }).then(function (imageObj) {
                   imgData = imageObj.createImageData(false);
+
+                  if (cacheKey && imageRef && cacheGlobally) {
+                    _this.globalImageCache.addByteSize(imageRef, imgData.data.length);
+                  }
+
                   return _this._sendImgData(objId, imgData, cacheGlobally);
                 })["catch"](function (reason) {
                   (0, _util.warn)("Unable to decode image \"".concat(objId, "\": \"").concat(reason, "\"."));
@@ -33761,7 +33813,8 @@ var PartialEvaluator = /*#__PURE__*/function () {
                       this.globalImageCache.setData(imageRef, {
                         objId: objId,
                         fn: _util.OPS.paintImageXObject,
-                        args: args
+                        args: args,
+                        byteSize: 0
                       });
                     }
                   }
@@ -35552,6 +35605,13 @@ var PartialEvaluator = /*#__PURE__*/function () {
                     return;
                   }
 
+                  var globalImage = self.globalImageCache.getData(xobj, self.pageIndex);
+
+                  if (globalImage) {
+                    resolveXObject();
+                    return;
+                  }
+
                   xobj = xref.fetch(xobj);
                 }
 
@@ -36163,7 +36223,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
     key: "getBaseFontMetrics",
     value: function getBaseFontMetrics(name) {
       var defaultWidth = 0;
-      var widths = [];
+      var widths = Object.create(null);
       var monospace = false;
       var stdFontMap = (0, _standard_fonts.getStdFontMap)();
       var lookupName = stdFontMap[name] || name;
