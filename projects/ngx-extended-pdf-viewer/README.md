@@ -19,7 +19,7 @@ There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>.
 ## What's new in version 8.0?
 Once again, I've fixed `[(zoom)]`. Now there's no infinite loop when you resize the PDF quickly with the mouse wheel. It's unlikely, but the bug fix might break some applications, so I've decided to call it a new major version.
 
-Version 8.0 also supports server-side rendering. The current approach probably isn't optimal yet; if you have an idea how to improve it, just open a ticket on GitHub. The working demo is here: https://github.com/stephanrauh/ngx-extended-pdf-viewer-issues/tree/master/issue609
+Version 8.0 also supports server-side rendering. The current approach probably isn't optimal yet; if you have an idea how to improve it, just open a ticket on GitHub. The working demo is here: https://github.com/stephanrauh/ngx-extended-pdf-viewer-issues/tree/main/issue609
 ## Other potentially breaking changes
 Version 7.1. is a pure bug-fix release. It's extremely unlikely, but it might cause difficulties if the PDF viewer is destroyed and immediately re-created. Should you run into this, adding a delay of a single millisecond fixes this (or even a `setTimeout()` without the delay parameter). 
 
@@ -120,7 +120,7 @@ The detailed instructions for JHipster and Angular 2, 4, and 5 are available [on
 
 
 ## Configuration
-Do you miss a configuration option? File an issue on the [project bug tracker](https://github.com/stephanrauh/ExploringAngular/tree/master/embedding-pdf). If the base library [pdf.js](https://mozilla.github.io/pdf.js/) supports the requested option, I'll probably add it. BTW, you can speed up the process by providing a code snippet telling me how to implement the feature or by submitting a pull request.
+Do you miss a configuration option? File an issue on the [project bug tracker](https://github.com/stephanrauh/ExploringAngular/tree/main/embedding-pdf). If the base library [pdf.js](https://mozilla.github.io/pdf.js/) supports the requested option, I'll probably add it. BTW, you can speed up the process by providing a code snippet telling me how to implement the feature or by submitting a pull request.
 
 _Legend:_
 
@@ -260,7 +260,7 @@ If you're using the "inline" approach, don't set `useBrowserLocale` (or set it e
 </details>
 
 ## Troubleshooting
-See https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/master/projects/ngx-extended-pdf-viewer/troubleshooting.md
+See https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/main/projects/ngx-extended-pdf-viewer/troubleshooting.md
 
 
 ## Feedback, pull requests and bug reports
@@ -270,16 +270,16 @@ the project page: https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues
 
 ## Building the library from scratch (and updating to the latest version of Mozilla's pdf.js)
 
-Have a look at [this walkthrough](https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/master/projects/ngx-extended-pdf-viewer/how-to-build.md).
+Have a look at [this walkthrough](https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/how-to-build.md).
 
 ## License and Kudos
 The license of the `ngx-extended-pdf-viewer` is the Apache V2 license.
 
 The library is based on https://github.com/mozilla/pdf.js, which has been published under an Apache V2 license.
 
-Some of the default icons have been published under a <a href="http://scripts.sil.org/cms/scripts/page.php?item_id=OFL_web" target="#">SIL Open Font License 1.1</a> license at <a href="https://materialdesignicons.com/" target="#">Material Design Icons</a>. The other icons have either been published under an <a href="https://github.com/google/material-design-icons/blob/master/LICENSE" target="#">Apache V2 license</a> by Google or by the pdf.js team at Mozilla.
+Some of the default icons have been published under a <a href="http://scripts.sil.org/cms/scripts/page.php?item_id=OFL_web" target="#">SIL Open Font License 1.1</a> license at <a href="https://materialdesignicons.com/" target="#">Material Design Icons</a>. The other icons have either been published under an <a href="https://github.com/google/material-design-icons/blob/main/LICENSE" target="#">Apache V2 license</a> by Google or by the pdf.js team at Mozilla.
 
 Thanks to the awesome pdf.js team and all the users who've reported bugs and even sent me pull requests!
 
 ## Changelog
-See https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/master/projects/ngx-extended-pdf-viewer/changelog.md
+See https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/main/projects/ngx-extended-pdf-viewer/changelog.md

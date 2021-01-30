@@ -32,7 +32,7 @@ SCRIPT438: Object doesn't support property or method `fill`
 The PDF viewer is very prone to timing problems:
 
 - Hiding and re-displaying a PDF quickly (or vice versa) results in errors. This is because the bulk of `pdf.js` works asynchronously. It takes some time to initialize the widget. If it's destroyed while still being initialized, you run into problems. The same happens if it's initialized while an earlier instance is still being destroyed.
-- Putting PDFs in tab frequently causes this problem. Switching between tabs often means that the content of one of the tabs is hidden. At the same time, the content of the new tab is shown. I've observed this when using @angular/material. The solution is to hide the first tab and to show the new tab after a timeout, as demonstrated in [the demo project](https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/master/src/app).
+- Putting PDFs in tab frequently causes this problem. Switching between tabs often means that the content of one of the tabs is hidden. At the same time, the content of the new tab is shown. I've observed this when using @angular/material. The solution is to hide the first tab and to show the new tab after a timeout, as demonstrated in [the demo project](https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/main/src/app).
 
 ```html
 <mat-tab-group (selectedTabChange)="activateTab($event.index)">
