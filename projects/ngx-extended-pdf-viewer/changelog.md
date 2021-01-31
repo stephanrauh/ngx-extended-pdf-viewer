@@ -250,3 +250,5 @@
 - 8.0.0-beta.1 #591 send `(zoomChange)` without causing an `ExpressionChangedAfterItHasBeenCheckedErrror`
 - 8.0.0-beta.2 #620 copied the missing translation key from pdf.js 2.7 ("bleeding edge") to the default version pdf.js 2.6; copied English translations of the missing translations of any language to get rid of the warnings; merged the latest changes of pdf.js. 2.7
 - 8.0.0-beta.3 #627 updated the bleeding edge to the latest (and final) version 2.7 and load the correct version of the 2.6 files
+- 8.0.0-beta.4 updated to the newest version of pdf.js (default branch now is pdf.js 2.7, bleeding-edge now is pdf.js 2.8)
+- 8.0.0-beta.5 #623 don't show the "unverified signature" warning if the signature is not displayed

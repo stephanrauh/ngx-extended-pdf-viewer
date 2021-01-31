@@ -76,7 +76,7 @@
           <pdf-context-menu></pdf-context-menu>
 
           <div id="viewerContainer" [style.top]="viewerPositionTop">
-            <div class="unverified-signature-warning" *ngIf="hasSignature">
+            <div class="unverified-signature-warning" *ngIf="hasSignature && showUnverifiedSignatures">
               {{ 'unverified_signature_warning'
                   | translate: "This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid."
                   | async}}
