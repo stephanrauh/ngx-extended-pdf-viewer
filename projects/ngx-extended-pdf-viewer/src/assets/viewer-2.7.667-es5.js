@@ -860,7 +860,9 @@ var PDFViewerApplication = {
 
               _this._initializedCapability.resolve();
 
-            case 17:
+              _this.initializeLoadingBar();
+
+            case 18:
             case "end":
               return _context2.stop();
           }
@@ -1316,8 +1318,10 @@ var PDFViewerApplication = {
     return this.externalServices.supportsDocumentFonts;
   },
 
-  get loadingBar() {
+  initializeLoadingBar: function initializeLoadingBar() {
     var bar = new _ui_utils.ProgressBar("#loadingBar");
+    bar.hide();
+    console.log("Loading bar = " + bar);
     return (0, _pdfjsLib.shadow)(this, "loadingBar", bar);
   },
 

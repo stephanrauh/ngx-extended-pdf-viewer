@@ -252,3 +252,4 @@
 - 8.0.0-beta.3 #627 updated the bleeding edge to the latest (and final) version 2.7 and load the correct version of the 2.6 files
 - 8.0.0-beta.4 updated to the newest version of pdf.js (default branch now is pdf.js 2.7, bleeding-edge now is pdf.js 2.8)
 - 8.0.0-beta.5 #623 don't show the "unverified signature" warning if the signature is not displayed
+- 8.0.0-beta.6 #633 hide the loading bar not only for the first instance of ngx-extended-pdf-viewer, but also for every instance shown later (version 2.7 only)

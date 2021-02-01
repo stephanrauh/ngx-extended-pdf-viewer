@@ -747,6 +747,8 @@ const PDFViewerApplication = {
     });
 
     this._initializedCapability.resolve();
+
+    this.initializeLoadingBar();
   },
 
   async _readPreferences() {
@@ -1104,8 +1106,10 @@ const PDFViewerApplication = {
     return this.externalServices.supportsDocumentFonts;
   },
 
-  get loadingBar() {
+  initializeLoadingBar() {
     const bar = new _ui_utils.ProgressBar("#loadingBar");
+    bar.hide();
+    console.log("Loading bar = " + bar);
     return (0, _pdfjsLib.shadow)(this, "loadingBar", bar);
   },
 
