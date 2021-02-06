@@ -665,7 +665,8 @@ ngx-extended-pdf-viewer {
     right: 0;
     z-index: 7;
     cursor: default;
-    border: 1px solid $toolbar-border;
+    border: 0;
+    border-bottom: 1px solid $toolbar-border;
   }
 
   #toolbarContainer {
@@ -711,14 +712,14 @@ ngx-extended-pdf-viewer {
   .findbar,
   .secondaryToolbar {
     position: relative;
-    height: 32px;
+    min-height: 32px;
     background-color: $toolbar-background;
   }
 }
 
 ngx-extended-pdf-viewer {
   #toolbarViewer {
-    height: 32px;
+    min-height: 32px;
   }
 
   #loadingBar {

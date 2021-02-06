@@ -253,3 +253,4 @@
 - 8.0.0-beta.4 updated to the newest version of pdf.js (default branch now is pdf.js 2.7, bleeding-edge now is pdf.js 2.8)
 - 8.0.0-beta.5 #623 don't show the "unverified signature" warning if the signature is not displayed
 - 8.0.0-beta.6 #633 hide the loading bar not only for the first instance of ngx-extended-pdf-viewer, but also for every instance shown later (version 2.7 only)
+- 8.0.0-beta.7 #639 now unverified digital signatures can be displayed without having to deactivate form support. Use the feature at your own risk - currently there's no way to detect forget signatures! #632 allow for multi-line custom toolbars

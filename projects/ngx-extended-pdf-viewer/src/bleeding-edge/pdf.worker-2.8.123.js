@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.8.121';
-const pdfjsBuild = '25f215563';
+const pdfjsVersion = '2.8.123';
+const pdfjsBuild = '13506341e';
 
 /***/ }),
 /* 1 */
@@ -162,7 +162,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.8.121';
+    const workerVersion = '2.8.123';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -19602,6 +19602,15 @@ class AnnotationFactory {
 
           case "Ch":
             return new ChoiceWidgetAnnotation(parameters);
+
+          case "Sig":
+            if (self.showUnverifiedSignatures) {
+              console.log("The PDF file contains a signature. Please take into account that it can't be verified yet. ngx-extended-pdf-viewer also displays forged signatures, so use this feature only if you're sure what you're doing.");
+              const annotation = new SquareAnnotation(parameters);
+              annotation.data.fieldType = "Sig";
+              return annotation;
+            }
+
         }
 
         (0, _util.warn)('Unimplemented widget field type "' + fieldType + '", ' + "falling back to base field type.");
@@ -20277,7 +20286,7 @@ class WidgetAnnotation extends Annotation {
 
       if (!self.showUnverifiedSignatures) {
         this.setFlags(_util.AnnotationFlag.HIDDEN);
-        console.log("The PDF file contains a signature. Please take into account that it can't be verified yet.");
+        console.log("The PDF file contains a signature. Please take into account that it can't be verified yet. ngx-extended-pdf-viewer also displays forged signatures, so use this feature only if you're sure what you're doing.");
       }
     }
   }

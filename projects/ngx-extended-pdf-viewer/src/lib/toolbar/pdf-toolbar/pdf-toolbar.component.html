@@ -1,11 +1,10 @@
-<div class="toolbar" [class.invisible]="!primaryMenuVisible" >
-  <div
-    id="toolbarContainer"
+<div class="toolbar" [class.invisible]="!primaryMenuVisible"
     [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
     [style.transformOrigin]="'left center'"
     [style.width]="toolbarWidth"
-    [style.paddingTop]="toolbarPaddingTop"
-  >
+    [style.marginTop]="toolbarMarginTop"
+>
+  <div id="toolbarContainer">
     <ng-content *ngTemplateOutlet="customToolbar ? customToolbar : defaultToolbar"></ng-content>
     <div id="loadingBar">
       <div class="progress"><div class="glimmer"></div></div>

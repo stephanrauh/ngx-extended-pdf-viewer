@@ -483,7 +483,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public mobileFriendlyZoomScale = 1;
 
-  public toolbarPaddingTop = '0px';
+  public toolbarMarginTop = '0px';
 
   public toolbarWidth = '100%';
 
@@ -524,7 +524,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     factor = Number((zoom || '100').replace('%', '')) / 100;
     this.mobileFriendlyZoomScale = factor;
     this.toolbarWidth = (100 / factor).toString() + '%';
-    this.toolbarPaddingTop = (factor - 1) * 8 + 'px';
+    this.toolbarMarginTop = (factor - 1) * 16 + 'px';
     if (this.showSidebarButton) {
       this.findbarLeft = (68 * factor).toString() + 'px';
     } else {
@@ -532,6 +532,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
     this.secondaryToolbarTop = (36 + 36 * (factor - 1)).toString() + 'px';
     this.findbarTop = (36 + 52 * (factor - 1)).toString() + 'px';
+    setTimeout(() => this.calcViewerPositionTop());
   }
 
   private shuttingDown = false;
@@ -553,6 +554,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     return '32px';
   }
   public calcViewerPositionTop(): void {
+    const toolbar = document.getElementsByClassName("toolbar")[0] as HTMLElement;
+    let top = toolbar.getBoundingClientRect().height;
+    console.log("Top: " + top);
+    this.viewerPositionTop = top + "px";
+/*
     if (!this.isPrimaryMenuVisible()) {
       this.viewerPositionTop = '0';
       return;
@@ -573,6 +579,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
     }
     this.viewerPositionTop = '32px';
+    */
   }
 
   constructor(
@@ -781,6 +788,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.initTimeout = setTimeout(() => {
         if (!this.shuttingDown) {
           // hurried users sometimes reload the PDF before it has finished initializing
+          this.calcViewerPositionTop();
           this.afterLibraryInit();
           this.openPDF();
           this.assignTabindexes();
@@ -825,7 +833,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             this.primaryMenuVisible = false;
           }
         }
-        this.calcViewerPositionTop();
         this.dummyComponents.addMissingStandardWidgets();
         (<any>window).webViewerLoad();
 
@@ -1503,7 +1510,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           this.primaryMenuVisible = false;
         }
       }
-      this.calcViewerPositionTop();
+      setTimeout(() => this.calcViewerPositionTop());
     } // end of if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized)
     this.onResize();
 
@@ -1928,8 +1935,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public loadComplete(pdf: any /* PDFDocumentProxy */): void {
     /** This method has been inspired by https://medium.com/factory-mind/angular-pdf-forms-fa72b15c3fbd. Thanks, Jonny Fox! */
-    // screen DPI / PDF DPI
-    const dpiRatio = 96 / 72;
     this.hasSignature = false;
 
     this.buttonValues = {};
@@ -1945,10 +1950,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           // get the annotations of the current page
           return p.getAnnotations();
         })
-        .then((ann) => {
+        .then((annotations) => {
           // ugly cast due to missing typescript definitions
           // please contribute to complete @types/pdfjs-dist
-          const annotations = ann; /* (<any>ann) as PDFAnnotationData[]; */
 
           annotations
             .filter((a) => a.subtype === 'Widget') // get the form field annotation only

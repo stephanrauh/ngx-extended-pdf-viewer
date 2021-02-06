@@ -24,6 +24,10 @@ Version 8.0 also supports server-side rendering. The current approach probably i
 Starting with version 8.0.0-beta.4, ngx-extended-pdf-viewer uses version 2.7 of pdf.js for the default branch and pdf.js 2.8 for the bleeding-edge branch. Among other things, this means improved highlighting. When using the find function, the highlighting was often a bit off if the text used not just letters and digits. It's still not perfect, but in many cases it's better than it used to be. If you're interested in the gory details, here's the link to the pull request: https://github.com/mozilla/pdf.js/pull/12855
 
 As of version 8.0.0-beta.4, the improved highlighting hasn't been added to fuzzy search yet. Fuzzy search still works, but chances are it's going to improve soon.
+
+Signatures can now be shown without having to deactivate AcroForm support. Note that the libraries still doesn't verify the signatures, so use the feature at your own risk. You don't want to display forged signatures.
+
+Custom toolbars can now have multiple lines.
 ## Other potentially breaking changes
 Version 7.1. is a pure bug-fix release. It's extremely unlikely, but it might cause difficulties if the PDF viewer is destroyed and immediately re-created. Should you run into this, adding a delay of a single millisecond fixes this (or even a `setTimeout()` without the delay parameter). 
 

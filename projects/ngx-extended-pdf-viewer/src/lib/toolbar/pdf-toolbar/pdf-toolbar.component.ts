@@ -55,7 +55,7 @@ export class PdfToolbarComponent {
   public textLayer: boolean | undefined = undefined;
 
   @Input()
-  public toolbarPaddingTop = '0px';
+  public toolbarMarginTop = '0px';
 
   @Input()
   public toolbarWidth = '100%';
