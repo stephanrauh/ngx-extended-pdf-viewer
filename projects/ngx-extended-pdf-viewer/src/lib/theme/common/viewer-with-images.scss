@@ -421,8 +421,8 @@ ngx-extended-pdf-viewer {
   }
 
   select {
-    background-color: $input-backgrund-color !important;
-    color: $text-color;
+    background-color: $select-background-color !important;
+    color: $select-text-color;
   }
 
   .hidden {
@@ -674,12 +674,14 @@ ngx-extended-pdf-viewer {
   }
 
   #toolbarSidebar {
-    width: 100%;
+    width: calc(100% - 10px);
     height: 32px;
     background-color: $sidebar-toolbar-background;
     color: $text-color;
     border: none;
     padding-top: 1px;
+    padding-left: 5px;
+    padding-right: 5px;
   }
 }
 
@@ -688,6 +690,13 @@ html[dir="ltr"] #toolbarSidebarRight .toolbarButton {
 }
 html[dir="rtl"] #toolbarSidebarRight .toolbarButton {
   margin-left: 3px !important;
+}
+
+html[dir="ltr"] #sidebarToggle {
+  margin-right: 5px;
+}
+html[dir="rtl"] #sidebarToggle  {
+  margin-left: 5px;
 }
 
 ngx-extended-pdf-viewer {
@@ -1244,10 +1253,14 @@ ngx-extended-pdf-viewer {
     border-width: 1px;
     border-style: solid;
     border-color: $border-dark;
-    color: $text-color;
+    color: $inputfield-text-color;
     font-size: 12px;
     line-height: 14px;
     outline-style: none;
+  }
+
+  .toolbarField::placeholder, .toolbarField:-ms-input-placeholder, .toolbarField::-ms-input-placeholder {
+    color: $placeholder-color;
   }
 
   .toolbarField[type='checkbox'] {
