@@ -491,6 +491,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public secondaryToolbarTop: string | undefined = undefined;
 
+  public sidebarPositionTop: string | undefined = undefined;
+
   // dirty IE11 hack - temporary solution
   public findbarTop: string | undefined = undefined;
 
@@ -525,61 +527,35 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.mobileFriendlyZoomScale = factor;
     this.toolbarWidth = (100 / factor).toString() + '%';
     this.toolbarMarginTop = (factor - 1) * 16 + 'px';
-    if (this.showSidebarButton) {
-      this.findbarLeft = (68 * factor).toString() + 'px';
-    } else {
-      this.findbarLeft = '0px';
-    }
-    this.secondaryToolbarTop = (36 + 36 * (factor - 1)).toString() + 'px';
-    this.findbarTop = (36 + 52 * (factor - 1)).toString() + 'px';
+
     setTimeout(() => this.calcViewerPositionTop());
   }
 
   private shuttingDown = false;
 
-  public get sidebarPositionTop(): string {
-    if (!this.isPrimaryMenuVisible()) {
-      return '0';
-    }
-    if (this.mobileFriendlyZoom) {
-      if (this.mobileFriendlyZoom.endsWith('%')) {
-        const zoom = Number(this.mobileFriendlyZoom.substring(0, this.mobileFriendlyZoom.length - 1));
-        return (2 + 0.29 * zoom).toString() + 'px';
-      }
-      if (this.mobileFriendlyZoom.endsWith('px')) {
-        return this.mobileFriendlyZoom;
-      }
-      return (16 + 0.16 * Number(this.mobileFriendlyZoom)).toString() + 'px';
-    }
-    return '32px';
-  }
+
   public calcViewerPositionTop(): void {
     const toolbar = document.getElementsByClassName("toolbar")[0] as HTMLElement;
     let top = toolbar.getBoundingClientRect().height;
-    console.log("Top: " + top);
     this.viewerPositionTop = top + "px";
-/*
-    if (!this.isPrimaryMenuVisible()) {
-      this.viewerPositionTop = '0';
-      return;
+
+    const factor = top / 33;
+
+    this.sidebarPositionTop = (33 + 33 * (factor - 1)).toString() + 'px';
+    this.secondaryToolbarTop = (33 + 38 * (factor - 1)).toString() + 'px';
+    this.findbarTop = (34 + 54 * (factor - 1)).toString() + 'px';
+
+    const findButton = document.getElementById("viewFind");
+    if (findButton) {
+      const containerPositionLeft = toolbar.getBoundingClientRect().left;
+      const findButtonPosition = findButton.getBoundingClientRect();
+      const left = findButtonPosition.left - containerPositionLeft;
+      this.findbarLeft = left + "px";
+    } else if (this.showSidebarButton) {
+      this.findbarLeft = 34 + (32 * factor).toString() + 'px';
+    } else {
+      this.findbarLeft = '0px';
     }
-    if (this.mobileFriendlyZoom) {
-      if (this.mobileFriendlyZoom.endsWith('%')) {
-        const zoom = Number(this.mobileFriendlyZoom.substring(0, this.mobileFriendlyZoom.length - 1));
-        if (!this.isPrimaryMenuVisible()) {
-          this.viewerPositionTop = '0';
-        } else {
-          this.viewerPositionTop = (1 + 0.32 * zoom).toString() + 'px';
-        }
-        return;
-      }
-      if (this.mobileFriendlyZoom.endsWith('px')) {
-        this.viewerPositionTop = this.mobileFriendlyZoom;
-        return;
-      }
-    }
-    this.viewerPositionTop = '32px';
-    */
   }
 
   constructor(
@@ -1925,13 +1901,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
     });
   }
-
-  /*
-  private addInput(annotation: PDFAnnotationData, rect: number[]): void {
-    // add input to page
-    console.log(annotation);
-  }
-  */
 
   public loadComplete(pdf: any /* PDFDocumentProxy */): void {
     /** This method has been inspired by https://medium.com/factory-mind/angular-pdf-forms-fa72b15c3fbd. Thanks, Jonny Fox! */
