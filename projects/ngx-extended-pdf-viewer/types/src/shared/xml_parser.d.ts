@@ -35,7 +35,7 @@ export class SimpleXMLParser extends XMLParserBase {
         documentElement: any;
     } | undefined;
 }
-declare class XMLParserBase {
+export class XMLParserBase {
     _resolveEntities(s: any): any;
     _parseContent(s: any, start: any): {
         name: any;
@@ -61,4 +61,16 @@ declare class XMLParserBase {
     onEndElement(name: any): void;
     onError(code: any): void;
 }
-export {};
+export namespace XMLParserErrorCode {
+    const NoError: number;
+    const EndOfDocument: number;
+    const UnterminatedCdat: number;
+    const UnterminatedXmlDeclaration: number;
+    const UnterminatedDoctypeDeclaration: number;
+    const UnterminatedComment: number;
+    const MalformedElement: number;
+    const OutOfMemory: number;
+    const UnterminatedAttributeValue: number;
+    const UnterminatedElement: number;
+    const ElementNeverBegun: number;
+}

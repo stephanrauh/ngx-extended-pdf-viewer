@@ -51,7 +51,7 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 var _worker = __w_pdfjs_require__(1);
 
 const pdfjsVersion = '2.8.123';
-const pdfjsBuild = '13506341e';
+const pdfjsBuild = '9ba36e463';
 
 /***/ }),
 /* 1 */
@@ -6611,7 +6611,12 @@ const ObjectLoader = function () {
             currentNode = this.xref.fetch(currentNode);
           } catch (ex) {
             if (!(ex instanceof _core_utils.MissingDataException)) {
-              throw ex;
+              (0, _util.warn)(`ObjectLoader._walk - requesting all data: "${ex}".`);
+              this.refSet = null;
+              const {
+                manager
+              } = this.xref.stream;
+              return manager.requestAllChunks();
             }
 
             nodesToRevisit.push(currentNode);
@@ -21634,6 +21639,8 @@ var _cmap = __w_pdfjs_require__(27);
 
 var _primitives = __w_pdfjs_require__(4);
 
+var _stream = __w_pdfjs_require__(11);
+
 var _fonts = __w_pdfjs_require__(28);
 
 var _encodings = __w_pdfjs_require__(31);
@@ -21655,8 +21662,6 @@ var _image_utils = __w_pdfjs_require__(23);
 var _bidi = __w_pdfjs_require__(40);
 
 var _colorspace = __w_pdfjs_require__(22);
-
-var _stream = __w_pdfjs_require__(11);
 
 var _glyphlist = __w_pdfjs_require__(32);
 
@@ -22577,7 +22582,7 @@ class PartialEvaluator {
     try {
       preEvaluatedFont = this.preEvaluateFont(font);
     } catch (reason) {
-      (0, _util.warn)(`loadFont - ignoring preEvaluateFont errors: "${reason}".`);
+      (0, _util.warn)(`loadFont - preEvaluateFont failed: "${reason}".`);
       return errorFont();
     }
 
@@ -22648,6 +22653,7 @@ class PartialEvaluator {
       this.handler.send("UnsupportedFeature", {
         featureId: _util.UNSUPPORTED_FEATURES.errorFontTranslate
       });
+      (0, _util.warn)(`loadFont - translateFont failed: "${reason}".`);
 
       try {
         var fontFile3 = descriptor && descriptor.get("FontFile3");
@@ -24689,7 +24695,18 @@ class PartialEvaluator {
       throw new _util.FormatError("invalid font name");
     }
 
-    var fontFile = descriptor.get("FontFile", "FontFile2", "FontFile3");
+    let fontFile;
+
+    try {
+      fontFile = descriptor.get("FontFile", "FontFile2", "FontFile3");
+    } catch (ex) {
+      if (!this.options.ignoreErrors) {
+        throw ex;
+      }
+
+      (0, _util.warn)(`translateFont - fetching "${fontName.name}" font file: "${ex}".`);
+      fontFile = new _stream.NullStream();
+    }
 
     if (fontFile) {
       if (fontFile.dict) {
@@ -54240,7 +54257,7 @@ function incrementalUpdate({
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.SimpleXMLParser = exports.SimpleDOMNode = void 0;
+exports.XMLParserErrorCode = exports.XMLParserBase = exports.SimpleXMLParser = exports.SimpleDOMNode = void 0;
 
 var _util = __w_pdfjs_require__(2);
 
@@ -54257,6 +54274,7 @@ const XMLParserErrorCode = {
   UnterminatedElement: -9,
   ElementNeverBegun: -10
 };
+exports.XMLParserErrorCode = XMLParserErrorCode;
 
 function isWhitespace(s, index) {
   const ch = s[index];
@@ -54294,6 +54312,9 @@ class XMLParserBase {
 
         case "quot":
           return '"';
+
+        case "apos":
+          return "'";
       }
 
       return this.onResolveEntity(entity);
@@ -54540,6 +54561,8 @@ class XMLParserBase {
 
 }
 
+exports.XMLParserBase = XMLParserBase;
+
 class SimpleDOMNode {
   constructor(nodeName, nodeValue) {
     this.nodeName = nodeName;
@@ -54710,15 +54733,6 @@ class SimpleXMLParser extends XMLParserBase {
     return {
       documentElement
     };
-  }
-
-  onResolveEntity(name) {
-    switch (name) {
-      case "apos":
-        return "'";
-    }
-
-    return super.onResolveEntity(name);
   }
 
   onText(text) {

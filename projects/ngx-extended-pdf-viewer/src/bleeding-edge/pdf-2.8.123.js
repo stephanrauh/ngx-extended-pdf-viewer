@@ -243,7 +243,7 @@ var _text_layer = __w_pdfjs_require__(21);
 var _svg = __w_pdfjs_require__(22);
 
 const pdfjsVersion = '2.8.123';
-const pdfjsBuild = '13506341e';
+const pdfjsBuild = '9ba36e463';
 {
   const PDFNetworkStream = __w_pdfjs_require__(23).PDFNetworkStream;
 
@@ -4009,7 +4009,7 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
 
 const version = '2.8.123';
 exports.version = version;
-const build = '13506341e';
+const build = '9ba36e463';
 exports.build = build;
 
 /***/ }),
@@ -8012,7 +8012,7 @@ exports.Metadata = Metadata;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.SimpleXMLParser = exports.SimpleDOMNode = void 0;
+exports.XMLParserErrorCode = exports.XMLParserBase = exports.SimpleXMLParser = exports.SimpleDOMNode = void 0;
 
 var _util = __w_pdfjs_require__(2);
 
@@ -8029,6 +8029,7 @@ const XMLParserErrorCode = {
   UnterminatedElement: -9,
   ElementNeverBegun: -10
 };
+exports.XMLParserErrorCode = XMLParserErrorCode;
 
 function isWhitespace(s, index) {
   const ch = s[index];
@@ -8066,6 +8067,9 @@ class XMLParserBase {
 
         case "quot":
           return '"';
+
+        case "apos":
+          return "'";
       }
 
       return this.onResolveEntity(entity);
@@ -8312,6 +8316,8 @@ class XMLParserBase {
 
 }
 
+exports.XMLParserBase = XMLParserBase;
+
 class SimpleDOMNode {
   constructor(nodeName, nodeValue) {
     this.nodeName = nodeName;
@@ -8482,15 +8488,6 @@ class SimpleXMLParser extends XMLParserBase {
     return {
       documentElement
     };
-  }
-
-  onResolveEntity(name) {
-    switch (name) {
-      case "apos":
-        return "'";
-    }
-
-    return super.onResolveEntity(name);
   }
 
   onText(text) {

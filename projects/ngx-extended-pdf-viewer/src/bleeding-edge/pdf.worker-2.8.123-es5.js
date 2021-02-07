@@ -51,7 +51,7 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 var _worker = __w_pdfjs_require__(1);
 
 var pdfjsVersion = '2.8.123';
-var pdfjsBuild = '13506341e';
+var pdfjsBuild = '9ba36e463';
 
 /***/ }),
 /* 1 */
@@ -16669,7 +16669,7 @@ var ObjectLoader = function () {
       var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee4() {
-        var nodesToRevisit, pendingRequests, currentNode, baseStreams, foundMissingData, i, ii, stream, _i6, _ii3, node;
+        var nodesToRevisit, pendingRequests, currentNode, manager, baseStreams, foundMissingData, i, ii, stream, _i6, _ii3, node;
 
         return _regenerator["default"].wrap(function _callee4$(_context4) {
           while (1) {
@@ -16680,14 +16680,14 @@ var ObjectLoader = function () {
 
               case 2:
                 if (!nodesToVisit.length) {
-                  _context4.next = 22;
+                  _context4.next = 25;
                   break;
                 }
 
                 currentNode = nodesToVisit.pop();
 
                 if (!(currentNode instanceof _primitives.Ref)) {
-                  _context4.next = 18;
+                  _context4.next = 21;
                   break;
                 }
 
@@ -16704,7 +16704,7 @@ var ObjectLoader = function () {
                 _this6.refSet.put(currentNode);
 
                 currentNode = _this6.xref.fetch(currentNode);
-                _context4.next = 18;
+                _context4.next = 21;
                 break;
 
               case 12:
@@ -16712,20 +16712,23 @@ var ObjectLoader = function () {
                 _context4.t0 = _context4["catch"](7);
 
                 if (_context4.t0 instanceof _core_utils.MissingDataException) {
-                  _context4.next = 16;
+                  _context4.next = 19;
                   break;
                 }
 
-                throw _context4.t0;
+                (0, _util.warn)("ObjectLoader._walk - requesting all data: \"".concat(_context4.t0, "\"."));
+                _this6.refSet = null;
+                manager = _this6.xref.stream.manager;
+                return _context4.abrupt("return", manager.requestAllChunks());
 
-              case 16:
+              case 19:
                 nodesToRevisit.push(currentNode);
                 pendingRequests.push({
                   begin: _context4.t0.begin,
                   end: _context4.t0.end
                 });
 
-              case 18:
+              case 21:
                 if (currentNode && currentNode.getBaseStreams) {
                   baseStreams = currentNode.getBaseStreams();
                   foundMissingData = false;
@@ -16751,16 +16754,16 @@ var ObjectLoader = function () {
                 _context4.next = 2;
                 break;
 
-              case 22:
+              case 25:
                 if (!pendingRequests.length) {
-                  _context4.next = 27;
+                  _context4.next = 30;
                   break;
                 }
 
-                _context4.next = 25;
+                _context4.next = 28;
                 return _this6.xref.stream.manager.requestRanges(pendingRequests);
 
-              case 25:
+              case 28:
                 for (_i6 = 0, _ii3 = nodesToRevisit.length; _i6 < _ii3; _i6++) {
                   node = nodesToRevisit[_i6];
 
@@ -16771,11 +16774,11 @@ var ObjectLoader = function () {
 
                 return _context4.abrupt("return", _this6._walk(nodesToRevisit));
 
-              case 27:
+              case 30:
                 _this6.refSet = null;
                 return _context4.abrupt("return", undefined);
 
-              case 29:
+              case 32:
               case "end":
                 return _context4.stop();
             }
@@ -33081,6 +33084,8 @@ var _cmap = __w_pdfjs_require__(157);
 
 var _primitives = __w_pdfjs_require__(134);
 
+var _stream = __w_pdfjs_require__(141);
+
 var _fonts = __w_pdfjs_require__(158);
 
 var _encodings = __w_pdfjs_require__(161);
@@ -33102,8 +33107,6 @@ var _image_utils = __w_pdfjs_require__(153);
 var _bidi = __w_pdfjs_require__(170);
 
 var _colorspace = __w_pdfjs_require__(152);
-
-var _stream = __w_pdfjs_require__(141);
 
 var _glyphlist = __w_pdfjs_require__(162);
 
@@ -34272,7 +34275,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
       try {
         preEvaluatedFont = this.preEvaluateFont(font);
       } catch (reason) {
-        (0, _util.warn)("loadFont - ignoring preEvaluateFont errors: \"".concat(reason, "\"."));
+        (0, _util.warn)("loadFont - preEvaluateFont failed: \"".concat(reason, "\"."));
         return errorFont();
       }
 
@@ -34342,6 +34345,8 @@ var PartialEvaluator = /*#__PURE__*/function () {
         _this5.handler.send("UnsupportedFeature", {
           featureId: _util.UNSUPPORTED_FEATURES.errorFontTranslate
         });
+
+        (0, _util.warn)("loadFont - translateFont failed: \"".concat(reason, "\"."));
 
         try {
           var fontFile3 = descriptor && descriptor.get("FontFile3");
@@ -36506,8 +36511,27 @@ var PartialEvaluator = /*#__PURE__*/function () {
                 throw new _util.FormatError("invalid font name");
 
               case 33:
+                _context7.prev = 33;
                 fontFile = descriptor.get("FontFile", "FontFile2", "FontFile3");
+                _context7.next = 43;
+                break;
 
+              case 37:
+                _context7.prev = 37;
+                _context7.t0 = _context7["catch"](33);
+
+                if (this.options.ignoreErrors) {
+                  _context7.next = 41;
+                  break;
+                }
+
+                throw _context7.t0;
+
+              case 41:
+                (0, _util.warn)("translateFont - fetching \"".concat(fontName.name, "\" font file: \"").concat(_context7.t0, "\"."));
+                fontFile = new _stream.NullStream();
+
+              case 43:
                 if (fontFile) {
                   if (fontFile.dict) {
                     subtype = fontFile.dict.get("Subtype");
@@ -36547,7 +36571,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
                 };
 
                 if (!composite) {
-                  _context7.next = 44;
+                  _context7.next = 53;
                   break;
                 }
 
@@ -36557,19 +36581,19 @@ var PartialEvaluator = /*#__PURE__*/function () {
                   properties.cidEncoding = cidEncoding.name;
                 }
 
-                _context7.next = 41;
+                _context7.next = 50;
                 return _cmap.CMapFactory.create({
                   encoding: cidEncoding,
                   fetchBuiltInCMap: this._fetchBuiltInCMapBound,
                   useCMap: null
                 });
 
-              case 41:
+              case 50:
                 cMap = _context7.sent;
                 properties.cMap = cMap;
                 properties.vertical = properties.cMap.vertical;
 
-              case 44:
+              case 53:
                 return _context7.abrupt("return", this.extractDataStructures(dict, baseDict, properties).then(function (newProperties) {
                   _this11.extractWidths(dict, descriptor, newProperties);
 
@@ -36580,12 +36604,12 @@ var PartialEvaluator = /*#__PURE__*/function () {
                   return new _fonts.Font(fontName.name, fontFile, newProperties);
                 }));
 
-              case 45:
+              case 54:
               case "end":
                 return _context7.stop();
             }
           }
-        }, _callee7, this);
+        }, _callee7, this, [[33, 37]]);
       }));
 
       function translateFont(_x13) {
@@ -66683,13 +66707,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.SimpleXMLParser = exports.SimpleDOMNode = void 0;
+exports.XMLParserErrorCode = exports.XMLParserBase = exports.SimpleXMLParser = exports.SimpleDOMNode = void 0;
 
 var _util = __w_pdfjs_require__(4);
-
-function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
-
-function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -66738,6 +66758,7 @@ var XMLParserErrorCode = {
   UnterminatedElement: -9,
   ElementNeverBegun: -10
 };
+exports.XMLParserErrorCode = XMLParserErrorCode;
 
 function isWhitespace(s, index) {
   var ch = s[index];
@@ -66783,6 +66804,9 @@ var XMLParserBase = /*#__PURE__*/function () {
 
           case "quot":
             return '"';
+
+          case "apos":
+            return "'";
         }
 
         return _this.onResolveEntity(entity);
@@ -67043,6 +67067,8 @@ var XMLParserBase = /*#__PURE__*/function () {
   return XMLParserBase;
 }();
 
+exports.XMLParserBase = XMLParserBase;
+
 var SimpleDOMNode = /*#__PURE__*/function () {
   function SimpleDOMNode(nodeName, nodeValue) {
     _classCallCheck(this, SimpleDOMNode);
@@ -67276,16 +67302,6 @@ var SimpleXMLParser = /*#__PURE__*/function (_XMLParserBase) {
       return {
         documentElement: documentElement
       };
-    }
-  }, {
-    key: "onResolveEntity",
-    value: function onResolveEntity(name) {
-      switch (name) {
-        case "apos":
-          return "'";
-      }
-
-      return _get(_getPrototypeOf(SimpleXMLParser.prototype), "onResolveEntity", this).call(this, name);
     }
   }, {
     key: "onText",

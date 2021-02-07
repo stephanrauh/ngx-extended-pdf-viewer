@@ -243,7 +243,7 @@ var _text_layer = __w_pdfjs_require__(151);
 var _svg = __w_pdfjs_require__(152);
 
 var pdfjsVersion = '2.8.123';
-var pdfjsBuild = '13506341e';
+var pdfjsBuild = '9ba36e463';
 {
   var PDFNetworkStream = __w_pdfjs_require__(153).PDFNetworkStream;
 
@@ -13546,7 +13546,7 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
 
 var version = '2.8.123';
 exports.version = version;
-var build = '13506341e';
+var build = '9ba36e463';
 exports.build = build;
 
 /***/ }),
@@ -17903,13 +17903,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.SimpleXMLParser = exports.SimpleDOMNode = void 0;
+exports.XMLParserErrorCode = exports.XMLParserBase = exports.SimpleXMLParser = exports.SimpleDOMNode = void 0;
 
 var _util = __w_pdfjs_require__(4);
-
-function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
-
-function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -17958,6 +17954,7 @@ var XMLParserErrorCode = {
   UnterminatedElement: -9,
   ElementNeverBegun: -10
 };
+exports.XMLParserErrorCode = XMLParserErrorCode;
 
 function isWhitespace(s, index) {
   var ch = s[index];
@@ -18003,6 +18000,9 @@ var XMLParserBase = /*#__PURE__*/function () {
 
           case "quot":
             return '"';
+
+          case "apos":
+            return "'";
         }
 
         return _this.onResolveEntity(entity);
@@ -18263,6 +18263,8 @@ var XMLParserBase = /*#__PURE__*/function () {
   return XMLParserBase;
 }();
 
+exports.XMLParserBase = XMLParserBase;
+
 var SimpleDOMNode = /*#__PURE__*/function () {
   function SimpleDOMNode(nodeName, nodeValue) {
     _classCallCheck(this, SimpleDOMNode);
@@ -18496,16 +18498,6 @@ var SimpleXMLParser = /*#__PURE__*/function (_XMLParserBase) {
       return {
         documentElement: documentElement
       };
-    }
-  }, {
-    key: "onResolveEntity",
-    value: function onResolveEntity(name) {
-      switch (name) {
-        case "apos":
-          return "'";
-      }
-
-      return _get(_getPrototypeOf(SimpleXMLParser.prototype), "onResolveEntity", this).call(this, name);
     }
   }, {
     key: "onText",
