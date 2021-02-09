@@ -242,8 +242,8 @@ var _text_layer = __w_pdfjs_require__(151);
 
 var _svg = __w_pdfjs_require__(152);
 
-var pdfjsVersion = '2.8.123';
-var pdfjsBuild = '9ba36e463';
+var pdfjsVersion = '2.8.163';
+var pdfjsBuild = '3bc2011d8';
 {
   var PDFNetworkStream = __w_pdfjs_require__(153).PDFNetworkStream;
 
@@ -11106,7 +11106,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId: docId,
-    apiVersion: '2.8.123',
+    apiVersion: '2.8.163',
     source: {
       data: source.data,
       url: source.url,
@@ -13544,9 +13544,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.8.123';
+var version = '2.8.163';
 exports.version = version;
-var build = '9ba36e463';
+var build = '3bc2011d8';
 exports.build = build;
 
 /***/ }),
@@ -21268,7 +21268,7 @@ var PopupElement = /*#__PURE__*/function () {
       var wrapper = document.createElement("div");
       wrapper.className = "popupWrapper";
       this.hideElement = this.hideWrapper ? wrapper : this.container;
-      this.hideElement.setAttribute("hidden", true);
+      this.hideElement.hidden = true;
       var popup = document.createElement("div");
       popup.className = "popup";
       var color = this.color;
@@ -21349,8 +21349,8 @@ var PopupElement = /*#__PURE__*/function () {
         this.pinned = true;
       }
 
-      if (this.hideElement.hasAttribute("hidden")) {
-        this.hideElement.removeAttribute("hidden");
+      if (this.hideElement.hidden) {
+        this.hideElement.hidden = false;
         this.container.style.zIndex += 1;
       }
     }
@@ -21363,8 +21363,8 @@ var PopupElement = /*#__PURE__*/function () {
         this.pinned = false;
       }
 
-      if (!this.hideElement.hasAttribute("hidden") && !this.pinned) {
-        this.hideElement.setAttribute("hidden", true);
+      if (!this.hideElement.hidden && !this.pinned) {
+        this.hideElement.hidden = true;
         this.container.style.zIndex -= 1;
       }
     }
@@ -22072,7 +22072,7 @@ var AnnotationLayer = /*#__PURE__*/function () {
         _iterator13.f();
       }
 
-      parameters.div.removeAttribute("hidden");
+      parameters.div.hidden = false;
     }
   }]);
 

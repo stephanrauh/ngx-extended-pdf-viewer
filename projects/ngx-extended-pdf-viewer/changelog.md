@@ -255,3 +255,4 @@
 - 8.0.0-beta.6 #633 hide the loading bar not only for the first instance of ngx-extended-pdf-viewer, but also for every instance shown later (version 2.7 only)
 - 8.0.0-beta.7 #639 now unverified digital signatures can be displayed without having to deactivate form support. Use the feature at your own risk - currently there's no way to detect forget signatures! #632 allow for multi-line custom toolbars
 - 8.0.0-beta.8 #632 allow for multi-line custom toolbars; minor CSS improvements; updated the "bleeding edge" branch
+- 8.0.0-beta.9 #633 hide the "preparing document for print" dialog after opening the print preview window; added the new, improved highlighting of find results to fuzzy search

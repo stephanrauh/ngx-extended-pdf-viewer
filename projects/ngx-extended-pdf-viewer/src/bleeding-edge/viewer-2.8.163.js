@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.8.123';
-const pdfjsBuild = '9ba36e463';
+const pdfjsVersion = '2.8.163';
+const pdfjsBuild = '3bc2011d8';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -1195,8 +1195,10 @@ const PDFViewerApplication = {
   },
 
   async close() {
+    this._unblockDocumentLoadEvent();
+
     const errorWrapper = this.appConfig.errorWrapper.container;
-    errorWrapper.setAttribute("hidden", "true");
+    errorWrapper.hidden = true;
 
     if (!this.pdfLoadingTask) {
       return undefined;
@@ -1320,8 +1322,6 @@ const PDFViewerApplication = {
     return loadingTask.promise.then(pdfDocument => {
       this.load(pdfDocument);
     }, exception => {
-      this._unblockDocumentLoadEvent();
-
       if (loadingTask !== this.pdfLoadingTask) {
         return undefined;
       }
@@ -1344,6 +1344,11 @@ const PDFViewerApplication = {
           message
         });
         this.onError(exception);
+
+        this._documentError(msg, {
+          message
+        });
+
         throw exception;
       });
     });
@@ -1466,7 +1471,13 @@ const PDFViewerApplication = {
     });
   },
 
-  error(message, moreInfo) {
+  _documentError(message, moreInfo = null) {
+    this._unblockDocumentLoadEvent();
+
+    this._otherError(message, moreInfo);
+  },
+
+  _otherError(message, moreInfo = null) {
     const moreInfoText = [this.l10n.get("error_version_info", {
       version: _pdfjsLib.version || "?",
       build: _pdfjsLib.build || "?"
@@ -1498,13 +1509,13 @@ const PDFViewerApplication = {
 
     const errorWrapperConfig = this.appConfig.errorWrapper;
     const errorWrapper = errorWrapperConfig.container;
-    errorWrapper.removeAttribute("hidden");
+    errorWrapper.hidden = false;
     const errorMessage = errorWrapperConfig.errorMessage;
     errorMessage.textContent = message;
     const closeButton = errorWrapperConfig.closeButton;
 
     closeButton.onclick = function () {
-      errorWrapper.setAttribute("hidden", "true");
+      errorWrapper.hidden = true;
     };
 
     const errorMoreInfo = errorWrapperConfig.errorMoreInfo;
@@ -1512,23 +1523,23 @@ const PDFViewerApplication = {
     const lessInfoButton = errorWrapperConfig.lessInfoButton;
 
     moreInfoButton.onclick = function () {
-      errorMoreInfo.removeAttribute("hidden");
-      moreInfoButton.setAttribute("hidden", "true");
-      lessInfoButton.removeAttribute("hidden");
+      errorMoreInfo.hidden = false;
+      moreInfoButton.hidden = true;
+      lessInfoButton.hidden = false;
       errorMoreInfo.style.height = errorMoreInfo.scrollHeight + "px";
     };
 
     lessInfoButton.onclick = function () {
-      errorMoreInfo.setAttribute("hidden", "true");
-      moreInfoButton.removeAttribute("hidden");
-      lessInfoButton.setAttribute("hidden", "true");
+      errorMoreInfo.hidden = true;
+      moreInfoButton.hidden = false;
+      lessInfoButton.hidden = true;
     };
 
     moreInfoButton.oncontextmenu = _ui_utils.noContextMenuHandler;
     lessInfoButton.oncontextmenu = _ui_utils.noContextMenuHandler;
     closeButton.oncontextmenu = _ui_utils.noContextMenuHandler;
-    moreInfoButton.removeAttribute("hidden");
-    lessInfoButton.setAttribute("hidden", "true");
+    moreInfoButton.hidden = false;
+    lessInfoButton.hidden = true;
     Promise.all(moreInfoText).then(parts => {
       errorMoreInfo.value = parts.join("\n");
     });
@@ -2307,7 +2318,7 @@ const PDFViewerApplication = {
 
     if (!this.supportsPrinting) {
       this.l10n.get("printing_not_supported", null, "Warning: Printing is not fully supported by this browser.").then(printMessage => {
-        this.error(printMessage);
+        this._otherError(printMessage);
       });
       return;
     }
@@ -2705,7 +2716,7 @@ let validateFileURL;
       }
     } catch (ex) {
       PDFViewerApplication.l10n.get("loading_error", null, "An error occurred while loading the PDF.").then(loadingErrorMessage => {
-        PDFViewerApplication.error(loadingErrorMessage, {
+        PDFViewerApplication._documentError(loadingErrorMessage, {
           message: ex?.message
         });
       });
@@ -2765,8 +2776,8 @@ function webViewerInitialized() {
   document.body.appendChild(fileInput);
 
   if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
-    appConfig.toolbar.openFile.setAttribute("hidden", "true");
-    appConfig.secondaryToolbar.openFileButton.setAttribute("hidden", "true");
+    appConfig.toolbar.openFile.hidden = true;
+    appConfig.secondaryToolbar.openFileButton.hidden = true;
   } else {
     fileInput.value = null;
   }
@@ -2835,7 +2846,7 @@ function webViewerInitialized() {
     webViewerOpenFileViaURL(file);
   } catch (reason) {
     PDFViewerApplication.l10n.get("loading_error", null, "An error occurred while loading the PDF.").then(msg => {
-      PDFViewerApplication.error(msg, reason);
+      PDFViewerApplication._documentError(msg, reason);
     });
   }
 }
@@ -2895,7 +2906,7 @@ function webViewerPageRendered({
 
   if (error) {
     PDFViewerApplication.l10n.get("rendering_error", null, "An error occurred while rendering the page.").then(msg => {
-      PDFViewerApplication.error(msg, error);
+      PDFViewerApplication._otherError(msg, error);
     });
   }
 
@@ -3086,10 +3097,10 @@ let webViewerFileInputChange, webViewerOpenFile;
     }
 
     const appConfig = PDFViewerApplication.appConfig;
-    appConfig.toolbar.viewBookmark.setAttribute("hidden", "true");
-    appConfig.secondaryToolbar.viewBookmarkButton.setAttribute("hidden", "true");
-    appConfig.toolbar.download.setAttribute("hidden", "true");
-    appConfig.secondaryToolbar.downloadButton.setAttribute("hidden", "true");
+    appConfig.toolbar.viewBookmark.hidden = true;
+    appConfig.secondaryToolbar.viewBookmarkButton.hidden = true;
+    appConfig.toolbar.download.hidden = true;
+    appConfig.secondaryToolbar.downloadButton.hidden = true;
   };
 
   webViewerOpenFile = function (evt) {
@@ -6428,8 +6439,9 @@ class PDFFindController {
     return true;
   }
 
-  _calculateFuzzyMatch(query, pageIndex, pageContent) {
+  _calculateFuzzyMatch(query, pageIndex, pageContent, pageDiffs) {
     const matches = [];
+    const matchesLength = [];
     const queryLen = query.length;
     const shortLen = queryLen < 5 ? queryLen : 5;
     const maxDistance = Math.round(queryLen / 5);
@@ -6447,13 +6459,18 @@ class PDFFindController {
         const distance = _levenshtein.Levenshtein.distance(query, currentContent, options);
 
         if (distance <= maxDistance) {
-          matches.push(i);
+          const originalMatchIdx = getOriginalIndex(i, pageDiffs),
+                matchEnd = i + queryLen - 1,
+                originalQueryLen = getOriginalIndex(matchEnd, pageDiffs) - originalMatchIdx + 1;
+          matches.push(originalMatchIdx);
+          matchesLength.push(originalQueryLen);
           i += queryLen - 1;
         }
       }
     }
 
     this._pageMatches[pageIndex] = matches;
+    this._pageMatchesLength[pageIndex] = matchesLength;
   }
 
   _calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, entireWord, ignoreAccents) {
@@ -6563,7 +6580,7 @@ class PDFFindController {
       if (query.length <= 2) {
         this._calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, false);
       } else {
-        this._calculateFuzzyMatch(query, pageIndex, pageContent);
+        this._calculateFuzzyMatch(query, pageIndex, pageContent, pageDiffs);
       }
     } else if (phraseSearch) {
       this._calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, entireWord, ignoreAccents);
@@ -10696,7 +10713,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.8.123';
+    const viewerVersion = '2.8.163';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -12256,7 +12273,7 @@ class AnnotationLayerBuilder {
       return;
     }
 
-    this.div.setAttribute("hidden", "true");
+    this.div.hidden = true;
   }
 
 }
@@ -12508,7 +12525,7 @@ class PDFPageView {
         return;
       }
 
-      if (!this.zoomLayer && !this.canvas.hasAttribute("hidden")) {
+      if (!this.zoomLayer && !this.canvas.hidden) {
         this.zoomLayer = this.canvas.parentNode;
         this.zoomLayer.style.position = "absolute";
       }
@@ -12775,12 +12792,12 @@ class PDFPageView {
     }, "Page {{page}}").then(msg => {
       canvas.setAttribute("aria-label", msg);
     });
-    canvas.setAttribute("hidden", "hidden");
+    canvas.hidden = true;
     let isCanvasHidden = true;
 
     const showCanvas = function () {
       if (isCanvasHidden) {
-        canvas.removeAttribute("hidden");
+        canvas.hidden = false;
         isCanvasHidden = false;
       }
     };
@@ -16769,9 +16786,9 @@ var _ui_utils = __webpack_require__(4);
 
 var _app = __webpack_require__(3);
 
-var _viewer_compatibility = __webpack_require__(2);
-
 var _canvasSize = _interopRequireDefault(__webpack_require__(32));
+
+var _viewer_compatibility = __webpack_require__(2);
 
 var _util = __webpack_require__(33);
 
@@ -17021,6 +17038,12 @@ window.printPDF = function () {
 
     const activeServiceOnEntry = activeService;
     activeService.renderPages().then(function () {
+      const progressIndicator = document.getElementById("printServiceOverlay");
+
+      if (progressIndicator) {
+        progressIndicator.classList.add("hidden");
+      }
+
       return activeServiceOnEntry.performPrint();
     }).catch(function () {}).then(function () {
       if (activeServiceOnEntry.active) {

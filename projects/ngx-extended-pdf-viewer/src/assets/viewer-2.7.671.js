@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.7.669';
-const pdfjsBuild = 'bd8c33317';
+const pdfjsVersion = '2.7.671';
+const pdfjsBuild = '201a42ae3';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -6406,8 +6406,9 @@ class PDFFindController {
     return true;
   }
 
-  _calculateFuzzyMatch(query, pageIndex, pageContent) {
+  _calculateFuzzyMatch(query, pageIndex, pageContent, pageDiffs) {
     const matches = [];
+    const matchesLength = [];
     const queryLen = query.length;
     const shortLen = queryLen < 5 ? queryLen : 5;
     const maxDistance = Math.round(queryLen / 5);
@@ -6425,13 +6426,18 @@ class PDFFindController {
         const distance = _levenshtein.Levenshtein.distance(query, currentContent, options);
 
         if (distance <= maxDistance) {
-          matches.push(i);
+          const originalMatchIdx = getOriginalIndex(i, pageDiffs),
+                matchEnd = i + queryLen - 1,
+                originalQueryLen = getOriginalIndex(matchEnd, pageDiffs) - originalMatchIdx + 1;
+          matches.push(originalMatchIdx);
+          matchesLength.push(originalQueryLen);
           i += queryLen - 1;
         }
       }
     }
 
     this._pageMatches[pageIndex] = matches;
+    this._pageMatchesLength[pageIndex] = matchesLength;
   }
 
   _calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, entireWord, ignoreAccents) {
@@ -6541,7 +6547,7 @@ class PDFFindController {
       if (query.length <= 2) {
         this._calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, false);
       } else {
-        this._calculateFuzzyMatch(query, pageIndex, pageContent);
+        this._calculateFuzzyMatch(query, pageIndex, pageContent, pageDiffs);
       }
     } else if (phraseSearch) {
       this._calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, entireWord, ignoreAccents);
@@ -10674,7 +10680,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.7.669';
+    const viewerVersion = '2.7.671';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -16747,9 +16753,9 @@ var _ui_utils = __webpack_require__(4);
 
 var _app = __webpack_require__(3);
 
-var _viewer_compatibility = __webpack_require__(2);
-
 var _canvasSize = _interopRequireDefault(__webpack_require__(32));
+
+var _viewer_compatibility = __webpack_require__(2);
 
 var _util = __webpack_require__(33);
 
@@ -16999,6 +17005,12 @@ window.printPDF = function () {
 
     const activeServiceOnEntry = activeService;
     activeService.renderPages().then(function () {
+      const progressIndicator = document.getElementById("printServiceOverlay");
+
+      if (progressIndicator) {
+        progressIndicator.classList.add("hidden");
+      }
+
       return activeServiceOnEntry.performPrint();
     }).catch(function () {}).then(function () {
       if (activeServiceOnEntry.active) {
