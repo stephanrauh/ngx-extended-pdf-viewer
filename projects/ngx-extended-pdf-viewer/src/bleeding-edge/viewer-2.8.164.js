@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.8.163';
-const pdfjsBuild = '3bc2011d8';
+const pdfjsVersion = '2.8.164';
+const pdfjsBuild = '485f30be2';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -132,12 +132,6 @@ function getViewerConfiguration() {
       spreadOddButton: document.getElementById("spreadOdd"),
       spreadEvenButton: document.getElementById("spreadEven"),
       documentPropertiesButton: document.getElementById("documentProperties")
-    },
-    fullscreen: {
-      contextFirstPage: document.getElementById("contextFirstPage"),
-      contextLastPage: document.getElementById("contextLastPage"),
-      contextPageRotateCw: document.getElementById("contextPageRotateCw"),
-      contextPageRotateCcw: document.getElementById("contextPageRotateCcw")
     },
     sidebar: {
       outerContainer: document.getElementById("outerContainer"),
@@ -980,8 +974,7 @@ const PDFViewerApplication = {
       this.pdfPresentationMode = new _pdf_presentation_mode.PDFPresentationMode({
         container,
         pdfViewer: this.pdfViewer,
-        eventBus,
-        contextMenuItems: appConfig.fullscreen
+        eventBus
       });
     }
 
@@ -4269,7 +4262,7 @@ function getPDFFileNameFromURL(url, defaultFilename = "document.pdf") {
 }
 
 function normalizeWheelEventDirection(evt) {
-  let delta = Math.sqrt(evt.deltaX * evt.deltaX + evt.deltaY * evt.deltaY);
+  let delta = Math.hypot(evt.deltaX, evt.deltaY);
   const angle = Math.atan2(evt.deltaY, evt.deltaX);
 
   if (-0.25 * Math.PI < angle && angle < 0.75 * Math.PI) {
@@ -6459,6 +6452,16 @@ class PDFFindController {
         const distance = _levenshtein.Levenshtein.distance(query, currentContent, options);
 
         if (distance <= maxDistance) {
+          if (i + 1 < pageContent.length - queryLen) {
+            const nextCurrentContent = pageContent.substring(i + 1, i + 1 + queryLen);
+
+            const nextDistance = _levenshtein.Levenshtein.distance(query, nextCurrentContent, options);
+
+            if (distance >= nextDistance) {
+              continue;
+            }
+          }
+
           const originalMatchIdx = getOriginalIndex(i, pageDiffs),
                 matchEnd = i + queryLen - 1,
                 originalQueryLen = getOriginalIndex(matchEnd, pageDiffs) - originalMatchIdx + 1;
@@ -8954,8 +8957,7 @@ class PDFPresentationMode {
   constructor({
     container,
     pdfViewer,
-    eventBus,
-    contextMenuItems = null
+    eventBus
   }) {
     this.container = container;
     this.pdfViewer = pdfViewer;
@@ -8966,33 +8968,6 @@ class PDFPresentationMode {
     this.mouseScrollTimeStamp = 0;
     this.mouseScrollDelta = 0;
     this.touchSwipeState = null;
-
-    if (contextMenuItems) {
-      contextMenuItems.contextFirstPage.addEventListener("click", () => {
-        this.contextMenuOpen = false;
-        this.eventBus.dispatch("firstpage", {
-          source: this
-        });
-      });
-      contextMenuItems.contextLastPage.addEventListener("click", () => {
-        this.contextMenuOpen = false;
-        this.eventBus.dispatch("lastpage", {
-          source: this
-        });
-      });
-      contextMenuItems.contextPageRotateCw.addEventListener("click", () => {
-        this.contextMenuOpen = false;
-        this.eventBus.dispatch("rotatecw", {
-          source: this
-        });
-      });
-      contextMenuItems.contextPageRotateCcw.addEventListener("click", () => {
-        this.contextMenuOpen = false;
-        this.eventBus.dispatch("rotateccw", {
-          source: this
-        });
-      });
-    }
   }
 
   request() {
@@ -9123,7 +9098,6 @@ class PDFPresentationMode {
     this._showControls();
 
     this.contextMenuOpen = false;
-    this.container.setAttribute("contextmenu", "viewerContextMenu");
     window.getSelection().removeAllRanges();
   }
 
@@ -9148,7 +9122,6 @@ class PDFPresentationMode {
 
     this._resetMouseScrollState();
 
-    this.container.removeAttribute("contextmenu");
     this.contextMenuOpen = false;
   }
 
@@ -10713,7 +10686,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.8.163';
+    const viewerVersion = '2.8.164';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -10728,7 +10701,7 @@ class BaseViewer {
       throw new Error("Invalid `container` and/or `viewer` option.");
     }
 
-    if (getComputedStyle(this.container).position !== "absolute") {
+    if (this.container.offsetParent && getComputedStyle(this.container).position !== "absolute") {
       throw new Error("The `container` must be absolutely positioned.");
     }
 
@@ -14105,7 +14078,7 @@ class Util {
     const c = m[2] * transpose[0] + m[3] * transpose[2];
     const d = m[2] * transpose[1] + m[3] * transpose[3];
     const first = (a + d) / 2;
-    const second = Math.sqrt((a + d) * (a + d) - 4 * (a * d - c * b)) / 2;
+    const second = Math.sqrt((a + d) ** 2 - 4 * (a * d - c * b)) / 2;
     const sx = first + second || 1;
     const sy = first - second || 1;
     return [Math.sqrt(sx), Math.sqrt(sy)];

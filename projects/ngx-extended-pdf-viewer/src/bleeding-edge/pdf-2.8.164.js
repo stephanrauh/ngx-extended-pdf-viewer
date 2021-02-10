@@ -242,8 +242,8 @@ var _text_layer = __w_pdfjs_require__(21);
 
 var _svg = __w_pdfjs_require__(22);
 
-const pdfjsVersion = '2.8.163';
-const pdfjsBuild = '3bc2011d8';
+const pdfjsVersion = '2.8.164';
+const pdfjsBuild = '485f30be2';
 {
   const PDFNetworkStream = __w_pdfjs_require__(23).PDFNetworkStream;
 
@@ -1503,7 +1503,7 @@ class Util {
     const c = m[2] * transpose[0] + m[3] * transpose[2];
     const d = m[2] * transpose[1] + m[3] * transpose[3];
     const first = (a + d) / 2;
-    const second = Math.sqrt((a + d) * (a + d) - 4 * (a * d - c * b)) / 2;
+    const second = Math.sqrt((a + d) ** 2 - 4 * (a * d - c * b)) / 2;
     const sx = first + second || 1;
     const sy = first - second || 1;
     return [Math.sqrt(sx), Math.sqrt(sy)];
@@ -1984,7 +1984,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.8.163',
+    apiVersion: '2.8.164',
     source: {
       data: source.data,
       url: source.url,
@@ -4007,9 +4007,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.8.163';
+const version = '2.8.164';
 exports.version = version;
-const build = '3bc2011d8';
+const build = '485f30be2';
 exports.build = build;
 
 /***/ }),
@@ -5962,7 +5962,7 @@ const CanvasGraphics = function CanvasGraphicsClosure() {
     },
     setTextMatrix: function CanvasGraphics_setTextMatrix(a, b, c, d, e, f) {
       this.current.textMatrix = [a, b, c, d, e, f];
-      this.current.textMatrixScale = Math.sqrt(a * a + b * b);
+      this.current.textMatrixScale = Math.hypot(a, b);
       this.current.x = this.current.lineX = 0;
       this.current.y = this.current.lineY = 0;
     },
@@ -6671,12 +6671,8 @@ const CanvasGraphics = function CanvasGraphicsClosure() {
       this.save();
       ctx.scale(1 / width, -1 / height);
       const currentTransform = ctx.mozCurrentTransformInverse;
-      const a = currentTransform[0],
-            b = currentTransform[1];
-      let widthScale = Math.max(Math.sqrt(a * a + b * b), 1);
-      const c = currentTransform[2],
-            d = currentTransform[3];
-      let heightScale = Math.max(Math.sqrt(c * c + d * d), 1);
+      let widthScale = Math.max(Math.hypot(currentTransform[0], currentTransform[1]), 1);
+      let heightScale = Math.max(Math.hypot(currentTransform[2], currentTransform[3]), 1);
       let imgToPaint, tmpCanvas, tmpCtx;
 
       if (typeof HTMLElement === "function" && imgData instanceof HTMLElement || !imgData.data) {
@@ -11412,7 +11408,7 @@ const renderTextLayer = function renderTextLayerClosure() {
       angle += Math.PI / 2;
     }
 
-    const fontHeight = Math.sqrt(tx[2] * tx[2] + tx[3] * tx[3]);
+    const fontHeight = Math.hypot(tx[2], tx[3]);
     let fontAscent = fontHeight;
 
     if (style.ascent) {
@@ -12709,7 +12705,7 @@ exports.SVGGraphics = SVGGraphics;
     setTextMatrix(a, b, c, d, e, f) {
       const current = this.current;
       current.textMatrix = current.lineMatrix = [a, b, c, d, e, f];
-      current.textMatrixScale = Math.sqrt(a * a + b * b);
+      current.textMatrixScale = Math.hypot(a, b);
       current.x = current.lineX = 0;
       current.y = current.lineY = 0;
       current.xcoords = [];

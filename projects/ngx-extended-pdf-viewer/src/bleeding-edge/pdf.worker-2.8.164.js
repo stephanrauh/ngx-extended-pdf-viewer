@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.8.163';
-const pdfjsBuild = '3bc2011d8';
+const pdfjsVersion = '2.8.164';
+const pdfjsBuild = '485f30be2';
 
 /***/ }),
 /* 1 */
@@ -162,7 +162,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.8.163';
+    const workerVersion = '2.8.164';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -179,7 +179,7 @@ class WorkerMessageHandler {
     }
 
     if (typeof ReadableStream === "undefined") {
-      throw new Error("The browser/environment lacks native support for critical " + "functionality used by the PDF.js library (e.g. `ReadableStream`); " + "please use an `es5`-build instead.");
+      throw new Error("The browser/environment lacks native support for critical " + "functionality used by the PDF.js library (e.g. `ReadableStream`); " + "please use a `legacy`-build instead.");
     }
 
     var docId = docParams.docId;
@@ -1423,7 +1423,7 @@ class Util {
     const c = m[2] * transpose[0] + m[3] * transpose[2];
     const d = m[2] * transpose[1] + m[3] * transpose[3];
     const first = (a + d) / 2;
-    const second = Math.sqrt((a + d) * (a + d) - 4 * (a * d - c * b)) / 2;
+    const second = Math.sqrt((a + d) ** 2 - 4 * (a * d - c * b)) / 2;
     const sx = first + second || 1;
     const sy = first - second || 1;
     return [Math.sqrt(sx), Math.sqrt(sy)];
@@ -19073,7 +19073,7 @@ const LabCS = function LabCSClosure() {
     let result;
 
     if (x >= 6 / 29) {
-      result = x * x * x;
+      result = x ** 3;
     } else {
       result = 108 / 841 * (x - 4 / 29);
     }
@@ -23451,20 +23451,16 @@ class PartialEvaluator {
 
       if (!font.vertical) {
         textContentItem.width = 0;
-        textContentItem.height = Math.sqrt(trm[2] * trm[2] + trm[3] * trm[3]);
+        textContentItem.height = Math.hypot(trm[2], trm[3]);
         textContentItem.vertical = false;
       } else {
-        textContentItem.width = Math.sqrt(trm[0] * trm[0] + trm[1] * trm[1]);
+        textContentItem.width = Math.hypot(trm[0], trm[1]);
         textContentItem.height = 0;
         textContentItem.vertical = true;
       }
 
-      var a = textState.textLineMatrix[0];
-      var b = textState.textLineMatrix[1];
-      var scaleLineX = Math.sqrt(a * a + b * b);
-      a = textState.ctm[0];
-      b = textState.ctm[1];
-      var scaleCtmX = Math.sqrt(a * a + b * b);
+      const scaleLineX = Math.hypot(textState.textLineMatrix[0], textState.textLineMatrix[1]);
+      const scaleCtmX = Math.hypot(textState.ctm[0], textState.ctm[1]);
       textContentItem.textAdvanceScale = scaleCtmX * scaleLineX;
       textContentItem.lastAdvanceWidth = 0;
       textContentItem.lastAdvanceHeight = 0;
@@ -31766,8 +31762,8 @@ function getEncoding(encodingName) {
 
 __w_pdfjs_require__.r(__webpack_exports__);
 /* harmony export */ __w_pdfjs_require__.d(__webpack_exports__, {
-/* harmony export */   "getDingbatsGlyphsUnicode": () => /* binding */ getDingbatsGlyphsUnicode,
-/* harmony export */   "getGlyphsUnicode": () => /* binding */ getGlyphsUnicode
+/* harmony export */   "getDingbatsGlyphsUnicode": () => (/* binding */ getDingbatsGlyphsUnicode),
+/* harmony export */   "getGlyphsUnicode": () => (/* binding */ getGlyphsUnicode)
 /* harmony export */ });
 /* harmony import */ var _core_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __w_pdfjs_require__(7);
 
@@ -41580,11 +41576,11 @@ exports.getSupplementalGlyphMapForCalibri = getSupplementalGlyphMapForCalibri;
 
 __w_pdfjs_require__.r(__webpack_exports__);
 /* harmony export */ __w_pdfjs_require__.d(__webpack_exports__, {
-/* harmony export */   "getNormalizedUnicodes": () => /* binding */ getNormalizedUnicodes,
-/* harmony export */   "getUnicodeForGlyph": () => /* binding */ getUnicodeForGlyph,
-/* harmony export */   "getUnicodeRangeFor": () => /* binding */ getUnicodeRangeFor,
-/* harmony export */   "mapSpecialUnicodeValues": () => /* binding */ mapSpecialUnicodeValues,
-/* harmony export */   "reverseIfRtl": () => /* binding */ reverseIfRtl
+/* harmony export */   "getNormalizedUnicodes": () => (/* binding */ getNormalizedUnicodes),
+/* harmony export */   "getUnicodeForGlyph": () => (/* binding */ getUnicodeForGlyph),
+/* harmony export */   "getUnicodeRangeFor": () => (/* binding */ getUnicodeRangeFor),
+/* harmony export */   "mapSpecialUnicodeValues": () => (/* binding */ mapSpecialUnicodeValues),
+/* harmony export */   "reverseIfRtl": () => (/* binding */ reverseIfRtl)
 /* harmony export */ });
 /* harmony import */ var _core_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __w_pdfjs_require__(7);
 
@@ -46735,13 +46731,8 @@ Shadings.RadialAxial = function RadialAxialClosure() {
     }
 
     if (this.shadingType === ShadingType.RADIAL && (!extendStart || !extendEnd)) {
-      var x1 = this.coordsArr[0];
-      var y1 = this.coordsArr[1];
-      var r1 = this.coordsArr[2];
-      var x2 = this.coordsArr[3];
-      var y2 = this.coordsArr[4];
-      var r2 = this.coordsArr[5];
-      var distance = Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+      const [x1, y1, r1, x2, y2, r2] = this.coordsArr;
+      const distance = Math.hypot(x1 - x2, y1 - y2);
 
       if (r1 <= r2 + distance && r2 <= r1 + distance) {
         (0, _util.warn)("Unsupported radial gradient.");
@@ -55488,7 +55479,7 @@ class PDFWorkerStreamRangeReader {
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
-/******/ 		__w_pdfjs_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
+/******/ 		__w_pdfjs_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */

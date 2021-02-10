@@ -8464,6 +8464,16 @@ var PDFFindController = /*#__PURE__*/function () {
           var distance = _levenshtein.Levenshtein.distance(query, currentContent, options);
 
           if (distance <= maxDistance) {
+            if (i + 1 < pageContent.length - queryLen) {
+              var nextCurrentContent = pageContent.substring(i + 1, i + 1 + queryLen);
+
+              var nextDistance = _levenshtein.Levenshtein.distance(query, nextCurrentContent, options);
+
+              if (distance >= nextDistance) {
+                continue;
+              }
+            }
+
             var originalMatchIdx = getOriginalIndex(i, pageDiffs),
                 matchEnd = i + queryLen - 1,
                 originalQueryLen = getOriginalIndex(matchEnd, pageDiffs) - originalMatchIdx + 1;

@@ -242,8 +242,8 @@ var _text_layer = __w_pdfjs_require__(151);
 
 var _svg = __w_pdfjs_require__(152);
 
-var pdfjsVersion = '2.8.163';
-var pdfjsBuild = '3bc2011d8';
+var pdfjsVersion = '2.8.164';
+var pdfjsBuild = '485f30be2';
 {
   var PDFNetworkStream = __w_pdfjs_require__(153).PDFNetworkStream;
 
@@ -2468,7 +2468,7 @@ var Util = /*#__PURE__*/function () {
       var c = m[2] * transpose[0] + m[3] * transpose[2];
       var d = m[2] * transpose[1] + m[3] * transpose[3];
       var first = (a + d) / 2;
-      var second = Math.sqrt((a + d) * (a + d) - 4 * (a * d - c * b)) / 2;
+      var second = Math.sqrt(Math.pow(a + d, 2) - 4 * (a * d - c * b)) / 2;
       var sx = first + second || 1;
       var sy = first - second || 1;
       return [Math.sqrt(sx), Math.sqrt(sy)];
@@ -11106,7 +11106,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId: docId,
-    apiVersion: '2.8.163',
+    apiVersion: '2.8.164',
     source: {
       data: source.data,
       url: source.url,
@@ -11149,6 +11149,11 @@ var PDFDocumentLoadingTask = function PDFDocumentLoadingTaskClosure() {
     }
 
     _createClass(PDFDocumentLoadingTask, [{
+      key: "promise",
+      get: function get() {
+        return this._capability.promise;
+      }
+    }, {
       key: "destroy",
       value: function destroy() {
         var _this = this;
@@ -11164,11 +11169,6 @@ var PDFDocumentLoadingTask = function PDFDocumentLoadingTaskClosure() {
             _this._worker = null;
           }
         });
-      }
-    }, {
-      key: "promise",
-      get: function get() {
-        return this._capability.promise;
       }
     }]);
 
@@ -11323,6 +11323,21 @@ var PDFDocumentProxy = /*#__PURE__*/function () {
   }
 
   _createClass(PDFDocumentProxy, [{
+    key: "annotationStorage",
+    get: function get() {
+      return (0, _util.shadow)(this, "annotationStorage", new _annotation_storage.AnnotationStorage());
+    }
+  }, {
+    key: "numPages",
+    get: function get() {
+      return this._pdfInfo.numPages;
+    }
+  }, {
+    key: "fingerprint",
+    get: function get() {
+      return this._pdfInfo.fingerprint;
+    }
+  }, {
     key: "getPage",
     value: function getPage(pageNumber) {
       return this._transport.getPage(pageNumber);
@@ -11433,6 +11448,16 @@ var PDFDocumentProxy = /*#__PURE__*/function () {
       return this.loadingTask.destroy();
     }
   }, {
+    key: "loadingParams",
+    get: function get() {
+      return this._transport.loadingParams;
+    }
+  }, {
+    key: "loadingTask",
+    get: function get() {
+      return this._transport.loadingTask;
+    }
+  }, {
     key: "saveDocument",
     value: function saveDocument(annotationStorage) {
       return this._transport.saveDocument(annotationStorage);
@@ -11451,31 +11476,6 @@ var PDFDocumentProxy = /*#__PURE__*/function () {
     key: "getCalculationOrderIds",
     value: function getCalculationOrderIds() {
       return this._transport.getCalculationOrderIds();
-    }
-  }, {
-    key: "annotationStorage",
-    get: function get() {
-      return (0, _util.shadow)(this, "annotationStorage", new _annotation_storage.AnnotationStorage());
-    }
-  }, {
-    key: "numPages",
-    get: function get() {
-      return this._pdfInfo.numPages;
-    }
-  }, {
-    key: "fingerprint",
-    get: function get() {
-      return this._pdfInfo.fingerprint;
-    }
-  }, {
-    key: "loadingParams",
-    get: function get() {
-      return this._transport.loadingParams;
-    }
-  }, {
-    key: "loadingTask",
-    get: function get() {
-      return this._transport.loadingTask;
     }
   }]);
 
@@ -11505,6 +11505,31 @@ var PDFPageProxy = /*#__PURE__*/function () {
   }
 
   _createClass(PDFPageProxy, [{
+    key: "pageNumber",
+    get: function get() {
+      return this._pageIndex + 1;
+    }
+  }, {
+    key: "rotate",
+    get: function get() {
+      return this._pageInfo.rotate;
+    }
+  }, {
+    key: "ref",
+    get: function get() {
+      return this._pageInfo.ref;
+    }
+  }, {
+    key: "userUnit",
+    get: function get() {
+      return this._pageInfo.userUnit;
+    }
+  }, {
+    key: "view",
+    get: function get() {
+      return this._pageInfo.view;
+    }
+  }, {
     key: "getViewport",
     value: function getViewport() {
       var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
@@ -12068,31 +12093,6 @@ var PDFPageProxy = /*#__PURE__*/function () {
       this.cleanup();
     }
   }, {
-    key: "pageNumber",
-    get: function get() {
-      return this._pageIndex + 1;
-    }
-  }, {
-    key: "rotate",
-    get: function get() {
-      return this._pageInfo.rotate;
-    }
-  }, {
-    key: "ref",
-    get: function get() {
-      return this._pageInfo.ref;
-    }
-  }, {
-    key: "userUnit",
-    get: function get() {
-      return this._pageInfo.userUnit;
-    }
-  }, {
-    key: "view",
-    get: function get() {
-      return this._pageInfo.view;
-    }
-  }, {
     key: "stats",
     get: function get() {
       return this._stats;
@@ -12366,6 +12366,21 @@ var PDFWorker = function PDFWorkerClosure() {
     }
 
     _createClass(PDFWorker, [{
+      key: "promise",
+      get: function get() {
+        return this._readyCapability.promise;
+      }
+    }, {
+      key: "port",
+      get: function get() {
+        return this._port;
+      }
+    }, {
+      key: "messageHandler",
+      get: function get() {
+        return this._messageHandler;
+      }
+    }, {
       key: "_initializeFromPort",
       value: function _initializeFromPort(port) {
         this._port = port;
@@ -12529,21 +12544,6 @@ var PDFWorker = function PDFWorkerClosure() {
           this._messageHandler = null;
         }
       }
-    }, {
-      key: "promise",
-      get: function get() {
-        return this._readyCapability.promise;
-      }
-    }, {
-      key: "port",
-      get: function get() {
-        return this._port;
-      }
-    }, {
-      key: "messageHandler",
-      get: function get() {
-        return this._messageHandler;
-      }
     }], [{
       key: "fromPort",
       value: function fromPort(params) {
@@ -12608,6 +12608,11 @@ var WorkerTransport = /*#__PURE__*/function () {
   }
 
   _createClass(WorkerTransport, [{
+    key: "loadingTaskSettled",
+    get: function get() {
+      return this.loadingTask._capability.settled;
+    }
+  }, {
     key: "destroy",
     value: function destroy() {
       var _this11 = this;
@@ -13224,11 +13229,6 @@ var WorkerTransport = /*#__PURE__*/function () {
       });
     }
   }, {
-    key: "loadingTaskSettled",
-    get: function get() {
-      return this.loadingTask._capability.settled;
-    }
-  }, {
     key: "loadingParams",
     get: function get() {
       var params = this._params;
@@ -13315,14 +13315,14 @@ var RenderTask = /*#__PURE__*/function () {
   }
 
   _createClass(RenderTask, [{
-    key: "cancel",
-    value: function cancel() {
-      this._internalRenderTask.cancel();
-    }
-  }, {
     key: "promise",
     get: function get() {
       return this._internalRenderTask.capability.promise;
+    }
+  }, {
+    key: "cancel",
+    value: function cancel() {
+      this._internalRenderTask.cancel();
     }
   }]);
 
@@ -13373,6 +13373,11 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
     }
 
     _createClass(InternalRenderTask, [{
+      key: "completed",
+      get: function get() {
+        return this.capability.promise["catch"](function () {});
+      }
+    }, {
       key: "initializeGraphics",
       value: function initializeGraphics(_ref19) {
         var _globalThis$StepperMa;
@@ -13531,11 +13536,6 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
 
         return _next;
       }()
-    }, {
-      key: "completed",
-      get: function get() {
-        return this.capability.promise["catch"](function () {});
-      }
     }]);
 
     return InternalRenderTask;
@@ -13544,9 +13544,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.8.163';
+var version = '2.8.164';
 exports.version = version;
-var build = '3bc2011d8';
+var build = '485f30be2';
 exports.build = build;
 
 /***/ }),
@@ -13752,11 +13752,6 @@ var BaseFontLoader = /*#__PURE__*/function () {
       (0, _util.unreachable)("Abstract method `_queueLoadingCallback`.");
     }
   }, {
-    key: "_prepareFontLoadEvent",
-    value: function _prepareFontLoadEvent(rules, fontsToLoad, request) {
-      (0, _util.unreachable)("Abstract method `_prepareFontLoadEvent`.");
-    }
-  }, {
     key: "isFontLoadingAPISupported",
     get: function get() {
       var _this$_document;
@@ -13772,6 +13767,11 @@ var BaseFontLoader = /*#__PURE__*/function () {
     key: "_loadTestFont",
     get: function get() {
       (0, _util.unreachable)("Abstract method `_loadTestFont`.");
+    }
+  }, {
+    key: "_prepareFontLoadEvent",
+    value: function _prepareFontLoadEvent(rules, fontsToLoad, request) {
+      (0, _util.unreachable)("Abstract method `_prepareFontLoadEvent`.");
     }
   }]);
 
@@ -13801,6 +13801,23 @@ exports.FontLoader = FontLoader;
     }
 
     _createClass(GenericFontLoader, [{
+      key: "isSyncFontLoadingSupported",
+      get: function get() {
+        var supported = false;
+
+        if (typeof navigator === "undefined") {
+          supported = true;
+        } else {
+          var m = /Mozilla\/5.0.*?rv:(\d+).*? Gecko/.exec(navigator.userAgent);
+
+          if ((m === null || m === void 0 ? void 0 : m[1]) >= 14) {
+            supported = true;
+          }
+        }
+
+        return (0, _util.shadow)(this, "isSyncFontLoadingSupported", supported);
+      }
+    }, {
       key: "_queueLoadingCallback",
       value: function _queueLoadingCallback(callback) {
         function completeRequest() {
@@ -13822,6 +13839,15 @@ exports.FontLoader = FontLoader;
         };
         context.requests.push(request);
         return request;
+      }
+    }, {
+      key: "_loadTestFont",
+      get: function get() {
+        var getLoadTestFont = function getLoadTestFont() {
+          return atob("T1RUTwALAIAAAwAwQ0ZGIDHtZg4AAAOYAAAAgUZGVE1lkzZwAAAEHAAAABxHREVGABQA" + "FQAABDgAAAAeT1MvMlYNYwkAAAEgAAAAYGNtYXABDQLUAAACNAAAAUJoZWFk/xVFDQAA" + "ALwAAAA2aGhlYQdkA+oAAAD0AAAAJGhtdHgD6AAAAAAEWAAAAAZtYXhwAAJQAAAAARgA" + "AAAGbmFtZVjmdH4AAAGAAAAAsXBvc3T/hgAzAAADeAAAACAAAQAAAAEAALZRFsRfDzz1" + "AAsD6AAAAADOBOTLAAAAAM4KHDwAAAAAA+gDIQAAAAgAAgAAAAAAAAABAAADIQAAAFoD" + "6AAAAAAD6AABAAAAAAAAAAAAAAAAAAAAAQAAUAAAAgAAAAQD6AH0AAUAAAKKArwAAACM" + "AooCvAAAAeAAMQECAAACAAYJAAAAAAAAAAAAAQAAAAAAAAAAAAAAAFBmRWQAwAAuAC4D" + "IP84AFoDIQAAAAAAAQAAAAAAAAAAACAAIAABAAAADgCuAAEAAAAAAAAAAQAAAAEAAAAA" + "AAEAAQAAAAEAAAAAAAIAAQAAAAEAAAAAAAMAAQAAAAEAAAAAAAQAAQAAAAEAAAAAAAUA" + "AQAAAAEAAAAAAAYAAQAAAAMAAQQJAAAAAgABAAMAAQQJAAEAAgABAAMAAQQJAAIAAgAB" + "AAMAAQQJAAMAAgABAAMAAQQJAAQAAgABAAMAAQQJAAUAAgABAAMAAQQJAAYAAgABWABY" + "AAAAAAAAAwAAAAMAAAAcAAEAAAAAADwAAwABAAAAHAAEACAAAAAEAAQAAQAAAC7//wAA" + "AC7////TAAEAAAAAAAABBgAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + "AAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAD/gwAyAAAAAQAAAAAAAAAAAAAAAAAA" + "AAABAAQEAAEBAQJYAAEBASH4DwD4GwHEAvgcA/gXBIwMAYuL+nz5tQXkD5j3CBLnEQAC" + "AQEBIVhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYAAABAQAADwACAQEEE/t3" + "Dov6fAH6fAT+fPp8+nwHDosMCvm1Cvm1DAz6fBQAAAAAAAABAAAAAMmJbzEAAAAAzgTj" + "FQAAAADOBOQpAAEAAAAAAAAADAAUAAQAAAABAAAAAgABAAAAAAAAAAAD6AAAAAAAAA==");
+        };
+
+        return (0, _util.shadow)(this, "_loadTestFont", getLoadTestFont());
       }
     }, {
       key: "_prepareFontLoadEvent",
@@ -13918,32 +13944,6 @@ exports.FontLoader = FontLoader;
 
           request.complete();
         });
-      }
-    }, {
-      key: "isSyncFontLoadingSupported",
-      get: function get() {
-        var supported = false;
-
-        if (typeof navigator === "undefined") {
-          supported = true;
-        } else {
-          var m = /Mozilla\/5.0.*?rv:(\d+).*? Gecko/.exec(navigator.userAgent);
-
-          if ((m === null || m === void 0 ? void 0 : m[1]) >= 14) {
-            supported = true;
-          }
-        }
-
-        return (0, _util.shadow)(this, "isSyncFontLoadingSupported", supported);
-      }
-    }, {
-      key: "_loadTestFont",
-      get: function get() {
-        var getLoadTestFont = function getLoadTestFont() {
-          return atob("T1RUTwALAIAAAwAwQ0ZGIDHtZg4AAAOYAAAAgUZGVE1lkzZwAAAEHAAAABxHREVGABQA" + "FQAABDgAAAAeT1MvMlYNYwkAAAEgAAAAYGNtYXABDQLUAAACNAAAAUJoZWFk/xVFDQAA" + "ALwAAAA2aGhlYQdkA+oAAAD0AAAAJGhtdHgD6AAAAAAEWAAAAAZtYXhwAAJQAAAAARgA" + "AAAGbmFtZVjmdH4AAAGAAAAAsXBvc3T/hgAzAAADeAAAACAAAQAAAAEAALZRFsRfDzz1" + "AAsD6AAAAADOBOTLAAAAAM4KHDwAAAAAA+gDIQAAAAgAAgAAAAAAAAABAAADIQAAAFoD" + "6AAAAAAD6AABAAAAAAAAAAAAAAAAAAAAAQAAUAAAAgAAAAQD6AH0AAUAAAKKArwAAACM" + "AooCvAAAAeAAMQECAAACAAYJAAAAAAAAAAAAAQAAAAAAAAAAAAAAAFBmRWQAwAAuAC4D" + "IP84AFoDIQAAAAAAAQAAAAAAAAAAACAAIAABAAAADgCuAAEAAAAAAAAAAQAAAAEAAAAA" + "AAEAAQAAAAEAAAAAAAIAAQAAAAEAAAAAAAMAAQAAAAEAAAAAAAQAAQAAAAEAAAAAAAUA" + "AQAAAAEAAAAAAAYAAQAAAAMAAQQJAAAAAgABAAMAAQQJAAEAAgABAAMAAQQJAAIAAgAB" + "AAMAAQQJAAMAAgABAAMAAQQJAAQAAgABAAMAAQQJAAUAAgABAAMAAQQJAAYAAgABWABY" + "AAAAAAAAAwAAAAMAAAAcAAEAAAAAADwAAwABAAAAHAAEACAAAAAEAAQAAQAAAC7//wAA" + "AC7////TAAEAAAAAAAABBgAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + "AAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAD/gwAyAAAAAQAAAAAAAAAAAAAAAAAA" + "AAABAAQEAAEBAQJYAAEBASH4DwD4GwHEAvgcA/gXBIwMAYuL+nz5tQXkD5j3CBLnEQAC" + "AQEBIVhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYAAABAQAADwACAQEEE/t3" + "Dov6fAH6fAT+fPp8+nwHDosMCvm1Cvm1DAz6fBQAAAAAAAABAAAAAMmJbzEAAAAAzgTj" + "FQAAAADOBOQpAAEAAAAAAAAADAAUAAQAAAABAAAAAgABAAAAAAAAAAAD6AAAAAAAAA==");
-        };
-
-        return (0, _util.shadow)(this, "_loadTestFont", getLoadTestFont());
       }
     }]);
 
@@ -14304,6 +14304,11 @@ var AnnotationStorage = /*#__PURE__*/function () {
       return (0, _util.objectFromEntries)(this._storage);
     }
   }, {
+    key: "size",
+    get: function get() {
+      return this._storage.size;
+    }
+  }, {
     key: "_setModified",
     value: function _setModified() {
       if (!this._modified) {
@@ -14324,11 +14329,6 @@ var AnnotationStorage = /*#__PURE__*/function () {
           this.onResetModified();
         }
       }
-    }
-  }, {
-    key: "size",
-    get: function get() {
-      return this._storage.size;
     }
   }]);
 
@@ -15739,7 +15739,7 @@ var CanvasGraphics = function CanvasGraphicsClosure() {
     },
     setTextMatrix: function CanvasGraphics_setTextMatrix(a, b, c, d, e, f) {
       this.current.textMatrix = [a, b, c, d, e, f];
-      this.current.textMatrixScale = Math.sqrt(a * a + b * b);
+      this.current.textMatrixScale = Math.hypot(a, b);
       this.current.x = this.current.lineX = 0;
       this.current.y = this.current.lineY = 0;
     },
@@ -16453,12 +16453,8 @@ var CanvasGraphics = function CanvasGraphicsClosure() {
       this.save();
       ctx.scale(1 / width, -1 / height);
       var currentTransform = ctx.mozCurrentTransformInverse;
-      var a = currentTransform[0],
-          b = currentTransform[1];
-      var widthScale = Math.max(Math.sqrt(a * a + b * b), 1);
-      var c = currentTransform[2],
-          d = currentTransform[3];
-      var heightScale = Math.max(Math.sqrt(c * c + d * d), 1);
+      var widthScale = Math.max(Math.hypot(currentTransform[0], currentTransform[1]), 1);
+      var heightScale = Math.max(Math.hypot(currentTransform[2], currentTransform[3]), 1);
       var imgToPaint, tmpCanvas, tmpCtx;
 
       if (typeof HTMLElement === "function" && imgData instanceof HTMLElement || !imgData.data) {
@@ -18278,6 +18274,39 @@ var SimpleDOMNode = /*#__PURE__*/function () {
   }
 
   _createClass(SimpleDOMNode, [{
+    key: "firstChild",
+    get: function get() {
+      return this.childNodes && this.childNodes[0];
+    }
+  }, {
+    key: "nextSibling",
+    get: function get() {
+      var childNodes = this.parentNode.childNodes;
+
+      if (!childNodes) {
+        return undefined;
+      }
+
+      var index = childNodes.indexOf(this);
+
+      if (index === -1) {
+        return undefined;
+      }
+
+      return childNodes[index + 1];
+    }
+  }, {
+    key: "textContent",
+    get: function get() {
+      if (!this.childNodes) {
+        return this.nodeValue || "";
+      }
+
+      return this.childNodes.map(function (child) {
+        return child.textContent;
+      }).join("");
+    }
+  }, {
     key: "hasChildNodes",
     value: function hasChildNodes() {
       return this.childNodes && this.childNodes.length > 0;
@@ -18411,39 +18440,6 @@ var SimpleDOMNode = /*#__PURE__*/function () {
       } else {
         buffer.push("/>");
       }
-    }
-  }, {
-    key: "firstChild",
-    get: function get() {
-      return this.childNodes && this.childNodes[0];
-    }
-  }, {
-    key: "nextSibling",
-    get: function get() {
-      var childNodes = this.parentNode.childNodes;
-
-      if (!childNodes) {
-        return undefined;
-      }
-
-      var index = childNodes.indexOf(this);
-
-      if (index === -1) {
-        return undefined;
-      }
-
-      return childNodes[index + 1];
-    }
-  }, {
-    key: "textContent",
-    get: function get() {
-      if (!this.childNodes) {
-        return this.nodeValue || "";
-      }
-
-      return this.childNodes.map(function (child) {
-        return child.textContent;
-      }).join("");
     }
   }]);
 
@@ -18955,6 +18951,13 @@ var PDFDataTransportStream = /*#__PURE__*/function () {
       }
     }
   }, {
+    key: "_progressiveDataLength",
+    get: function get() {
+      var _this$_fullRequestRea, _this$_fullRequestRea2;
+
+      return (_this$_fullRequestRea = (_this$_fullRequestRea2 = this._fullRequestReader) === null || _this$_fullRequestRea2 === void 0 ? void 0 : _this$_fullRequestRea2._loaded) !== null && _this$_fullRequestRea !== void 0 ? _this$_fullRequestRea : 0;
+    }
+  }, {
     key: "_onProgress",
     value: function _onProgress(evt) {
       if (evt.total === undefined) {
@@ -19032,13 +19035,6 @@ var PDFDataTransportStream = /*#__PURE__*/function () {
 
       this._pdfDataRangeTransport.abort();
     }
-  }, {
-    key: "_progressiveDataLength",
-    get: function get() {
-      var _this$_fullRequestRea, _this$_fullRequestRea2;
-
-      return (_this$_fullRequestRea = (_this$_fullRequestRea2 = this._fullRequestReader) === null || _this$_fullRequestRea2 === void 0 ? void 0 : _this$_fullRequestRea2._loaded) !== null && _this$_fullRequestRea !== void 0 ? _this$_fullRequestRea : 0;
-    }
   }]);
 
   return PDFDataTransportStream;
@@ -19097,6 +19093,31 @@ var PDFDataTransportStreamReader = /*#__PURE__*/function () {
       }
 
       this._loaded += chunk.byteLength;
+    }
+  }, {
+    key: "headersReady",
+    get: function get() {
+      return this._headersReady;
+    }
+  }, {
+    key: "filename",
+    get: function get() {
+      return this._filename;
+    }
+  }, {
+    key: "isRangeSupported",
+    get: function get() {
+      return this._stream._isRangeSupported;
+    }
+  }, {
+    key: "isStreamingSupported",
+    get: function get() {
+      return this._stream._isStreamingSupported;
+    }
+  }, {
+    key: "contentLength",
+    get: function get() {
+      return this._stream._contentLength;
     }
   }, {
     key: "read",
@@ -19173,31 +19194,6 @@ var PDFDataTransportStreamReader = /*#__PURE__*/function () {
 
       this._done = true;
     }
-  }, {
-    key: "headersReady",
-    get: function get() {
-      return this._headersReady;
-    }
-  }, {
-    key: "filename",
-    get: function get() {
-      return this._filename;
-    }
-  }, {
-    key: "isRangeSupported",
-    get: function get() {
-      return this._stream._isRangeSupported;
-    }
-  }, {
-    key: "isStreamingSupported",
-    get: function get() {
-      return this._stream._isStreamingSupported;
-    }
-  }, {
-    key: "contentLength",
-    get: function get() {
-      return this._stream._contentLength;
-    }
   }]);
 
   return PDFDataTransportStreamReader;
@@ -19246,6 +19242,11 @@ var PDFDataTransportStreamRangeReader = /*#__PURE__*/function () {
       this._done = true;
 
       this._stream._removeRangeReader(this);
+    }
+  }, {
+    key: "isStreamingSupported",
+    get: function get() {
+      return false;
     }
   }, {
     key: "read",
@@ -19316,11 +19317,6 @@ var PDFDataTransportStreamRangeReader = /*#__PURE__*/function () {
 
       this._stream._removeRangeReader(this);
     }
-  }, {
-    key: "isStreamingSupported",
-    get: function get() {
-      return false;
-    }
   }]);
 
   return PDFDataTransportStreamRangeReader;
@@ -19357,6 +19353,17 @@ var WebGLContext = /*#__PURE__*/function () {
   }
 
   _createClass(WebGLContext, [{
+    key: "isEnabled",
+    get: function get() {
+      var enabled = this._enabled;
+
+      if (enabled) {
+        enabled = WebGLUtils.tryInitGL();
+      }
+
+      return (0, _util.shadow)(this, "isEnabled", enabled);
+    }
+  }, {
     key: "composeSMask",
     value: function composeSMask(_ref2) {
       var layer = _ref2.layer,
@@ -19378,17 +19385,6 @@ var WebGLContext = /*#__PURE__*/function () {
     key: "clear",
     value: function clear() {
       WebGLUtils.cleanup();
-    }
-  }, {
-    key: "isEnabled",
-    get: function get() {
-      var enabled = this._enabled;
-
-      if (enabled) {
-        enabled = WebGLUtils.tryInitGL();
-      }
-
-      return (0, _util.shadow)(this, "isEnabled", enabled);
     }
   }]);
 
@@ -22276,7 +22272,7 @@ var renderTextLayer = function renderTextLayerClosure() {
       angle += Math.PI / 2;
     }
 
-    var fontHeight = Math.sqrt(tx[2] * tx[2] + tx[3] * tx[3]);
+    var fontHeight = Math.hypot(tx[2], tx[3]);
     var fontAscent = fontHeight;
 
     if (style.ascent) {
@@ -23674,7 +23670,7 @@ exports.SVGGraphics = SVGGraphics;
       value: function setTextMatrix(a, b, c, d, e, f) {
         var current = this.current;
         current.textMatrix = current.lineMatrix = [a, b, c, d, e, f];
-        current.textMatrixScale = Math.sqrt(a * a + b * b);
+        current.textMatrixScale = Math.hypot(a, b);
         current.x = current.lineX = 0;
         current.y = current.lineY = 0;
         current.xcoords = [];
@@ -25047,6 +25043,31 @@ var PDFNetworkStreamFullRequestReader = /*#__PURE__*/function () {
       }
     }
   }, {
+    key: "filename",
+    get: function get() {
+      return this._filename;
+    }
+  }, {
+    key: "isRangeSupported",
+    get: function get() {
+      return this._isRangeSupported;
+    }
+  }, {
+    key: "isStreamingSupported",
+    get: function get() {
+      return this._isStreamingSupported;
+    }
+  }, {
+    key: "contentLength",
+    get: function get() {
+      return this._contentLength;
+    }
+  }, {
+    key: "headersReady",
+    get: function get() {
+      return this._headersReceivedCapability.promise;
+    }
+  }, {
     key: "read",
     value: function () {
       var _read = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
@@ -25128,31 +25149,6 @@ var PDFNetworkStreamFullRequestReader = /*#__PURE__*/function () {
 
       this._fullRequestReader = null;
     }
-  }, {
-    key: "filename",
-    get: function get() {
-      return this._filename;
-    }
-  }, {
-    key: "isRangeSupported",
-    get: function get() {
-      return this._isRangeSupported;
-    }
-  }, {
-    key: "isStreamingSupported",
-    get: function get() {
-      return this._isStreamingSupported;
-    }
-  }, {
-    key: "contentLength",
-    get: function get() {
-      return this._contentLength;
-    }
-  }, {
-    key: "headersReady",
-    get: function get() {
-      return this._headersReceivedCapability.promise;
-    }
   }]);
 
   return PDFNetworkStreamFullRequestReader;
@@ -25219,6 +25215,11 @@ var PDFNetworkStreamRangeRequestReader = /*#__PURE__*/function () {
           loaded: evt.loaded
         });
       }
+    }
+  }, {
+    key: "isStreamingSupported",
+    get: function get() {
+      return false;
     }
   }, {
     key: "read",
@@ -25292,11 +25293,6 @@ var PDFNetworkStreamRangeRequestReader = /*#__PURE__*/function () {
       }
 
       this._close();
-    }
-  }, {
-    key: "isStreamingSupported",
-    get: function get() {
-      return false;
     }
   }]);
 
@@ -25676,6 +25672,13 @@ var PDFFetchStream = /*#__PURE__*/function () {
   }
 
   _createClass(PDFFetchStream, [{
+    key: "_progressiveDataLength",
+    get: function get() {
+      var _this$_fullRequestRea, _this$_fullRequestRea2;
+
+      return (_this$_fullRequestRea = (_this$_fullRequestRea2 = this._fullRequestReader) === null || _this$_fullRequestRea2 === void 0 ? void 0 : _this$_fullRequestRea2._loaded) !== null && _this$_fullRequestRea !== void 0 ? _this$_fullRequestRea : 0;
+    }
+  }, {
     key: "getFullReader",
     value: function getFullReader() {
       (0, _util.assert)(!this._fullRequestReader, "PDFFetchStream.getFullReader can only be called once.");
@@ -25707,13 +25710,6 @@ var PDFFetchStream = /*#__PURE__*/function () {
       readers.forEach(function (reader) {
         reader.cancel(reason);
       });
-    }
-  }, {
-    key: "_progressiveDataLength",
-    get: function get() {
-      var _this$_fullRequestRea, _this$_fullRequestRea2;
-
-      return (_this$_fullRequestRea = (_this$_fullRequestRea2 = this._fullRequestReader) === null || _this$_fullRequestRea2 === void 0 ? void 0 : _this$_fullRequestRea2._loaded) !== null && _this$_fullRequestRea !== void 0 ? _this$_fullRequestRea : 0;
     }
   }]);
 
@@ -25785,6 +25781,31 @@ var PDFFetchStreamReader = /*#__PURE__*/function () {
   }
 
   _createClass(PDFFetchStreamReader, [{
+    key: "headersReady",
+    get: function get() {
+      return this._headersCapability.promise;
+    }
+  }, {
+    key: "filename",
+    get: function get() {
+      return this._filename;
+    }
+  }, {
+    key: "contentLength",
+    get: function get() {
+      return this._contentLength;
+    }
+  }, {
+    key: "isRangeSupported",
+    get: function get() {
+      return this._isRangeSupported;
+    }
+  }, {
+    key: "isStreamingSupported",
+    get: function get() {
+      return this._isStreamingSupported;
+    }
+  }, {
     key: "read",
     value: function () {
       var _read = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
@@ -25857,31 +25878,6 @@ var PDFFetchStreamReader = /*#__PURE__*/function () {
         this._abortController.abort();
       }
     }
-  }, {
-    key: "headersReady",
-    get: function get() {
-      return this._headersCapability.promise;
-    }
-  }, {
-    key: "filename",
-    get: function get() {
-      return this._filename;
-    }
-  }, {
-    key: "contentLength",
-    get: function get() {
-      return this._contentLength;
-    }
-  }, {
-    key: "isRangeSupported",
-    get: function get() {
-      return this._isRangeSupported;
-    }
-  }, {
-    key: "isStreamingSupported",
-    get: function get() {
-      return this._isStreamingSupported;
-    }
   }]);
 
   return PDFFetchStreamReader;
@@ -25929,6 +25925,11 @@ var PDFFetchStreamRangeReader = /*#__PURE__*/function () {
   }
 
   _createClass(PDFFetchStreamRangeReader, [{
+    key: "isStreamingSupported",
+    get: function get() {
+      return this._isStreamingSupported;
+    }
+  }, {
     key: "read",
     value: function () {
       var _read2 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
@@ -25999,11 +26000,6 @@ var PDFFetchStreamRangeReader = /*#__PURE__*/function () {
       if (this._abortController) {
         this._abortController.abort();
       }
-    }
-  }, {
-    key: "isStreamingSupported",
-    get: function get() {
-      return this._isStreamingSupported;
     }
   }]);
 

@@ -6426,6 +6426,16 @@ class PDFFindController {
         const distance = _levenshtein.Levenshtein.distance(query, currentContent, options);
 
         if (distance <= maxDistance) {
+          if (i + 1 < pageContent.length - queryLen) {
+            const nextCurrentContent = pageContent.substring(i + 1, i + 1 + queryLen);
+
+            const nextDistance = _levenshtein.Levenshtein.distance(query, nextCurrentContent, options);
+
+            if (distance >= nextDistance) {
+              continue;
+            }
+          }
+
           const originalMatchIdx = getOriginalIndex(i, pageDiffs),
                 matchEnd = i + queryLen - 1,
                 originalQueryLen = getOriginalIndex(matchEnd, pageDiffs) - originalMatchIdx + 1;

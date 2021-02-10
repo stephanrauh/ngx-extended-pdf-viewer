@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.8.163';
-var pdfjsBuild = '3bc2011d8';
+var pdfjsVersion = '2.8.164';
+var pdfjsBuild = '485f30be2';
 
 /***/ }),
 /* 1 */
@@ -142,6 +142,11 @@ var WorkerTask = /*#__PURE__*/function () {
   }
 
   _createClass(WorkerTask, [{
+    key: "finished",
+    get: function get() {
+      return this._capability.promise;
+    }
+  }, {
     key: "finish",
     value: function finish() {
       this._capability.resolve();
@@ -157,11 +162,6 @@ var WorkerTask = /*#__PURE__*/function () {
       if (this.terminated) {
         throw new Error("Worker task was terminated");
       }
-    }
-  }, {
-    key: "finished",
-    get: function get() {
-      return this._capability.promise;
     }
   }]);
 
@@ -213,7 +213,7 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
       var WorkerTasks = [];
       var verbosity = (0, _util.getVerbosityLevel)();
       var apiVersion = docParams.apiVersion;
-      var workerVersion = '2.8.163';
+      var workerVersion = '2.8.164';
 
       if (apiVersion !== workerVersion) {
         throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -2275,7 +2275,7 @@ var Util = /*#__PURE__*/function () {
       var c = m[2] * transpose[0] + m[3] * transpose[2];
       var d = m[2] * transpose[1] + m[3] * transpose[3];
       var first = (a + d) / 2;
-      var second = Math.sqrt((a + d) * (a + d) - 4 * (a * d - c * b)) / 2;
+      var second = Math.sqrt(Math.pow(a + d, 2) - 4 * (a * d - c * b)) / 2;
       var sx = first + second || 1;
       var sy = first - second || 1;
       return [Math.sqrt(sx), Math.sqrt(sy)];
@@ -11101,6 +11101,11 @@ var RefSetCache = /*#__PURE__*/function () {
   }
 
   _createClass(RefSetCache, [{
+    key: "size",
+    get: function get() {
+      return this._map.size;
+    }
+  }, {
     key: "get",
     value: function get(ref) {
       return this._map.get(ref.toString());
@@ -11141,11 +11146,6 @@ var RefSetCache = /*#__PURE__*/function () {
     key: "clear",
     value: function clear() {
       this._map.clear();
-    }
-  }, {
-    key: "size",
-    get: function get() {
-      return this._map.size;
     }
   }]);
 
@@ -11252,6 +11252,33 @@ var BasePdfManager = /*#__PURE__*/function () {
   }
 
   _createClass(BasePdfManager, [{
+    key: "docId",
+    get: function get() {
+      return this._docId;
+    }
+  }, {
+    key: "password",
+    get: function get() {
+      return this._password;
+    }
+  }, {
+    key: "docBaseUrl",
+    get: function get() {
+      var docBaseUrl = null;
+
+      if (this._docBaseUrl) {
+        var absoluteUrl = (0, _util.createValidAbsoluteUrl)(this._docBaseUrl);
+
+        if (absoluteUrl) {
+          docBaseUrl = absoluteUrl.href;
+        } else {
+          (0, _util.warn)("Invalid absolute docBaseUrl: \"".concat(this._docBaseUrl, "\"."));
+        }
+      }
+
+      return (0, _util.shadow)(this, "docBaseUrl", docBaseUrl);
+    }
+  }, {
     key: "onLoadedStream",
     value: function onLoadedStream() {
       (0, _util.unreachable)("Abstract method `onLoadedStream` called");
@@ -11335,33 +11362,6 @@ var BasePdfManager = /*#__PURE__*/function () {
     key: "terminate",
     value: function terminate(reason) {
       (0, _util.unreachable)("Abstract method `terminate` called");
-    }
-  }, {
-    key: "docId",
-    get: function get() {
-      return this._docId;
-    }
-  }, {
-    key: "password",
-    get: function get() {
-      return this._password;
-    }
-  }, {
-    key: "docBaseUrl",
-    get: function get() {
-      var docBaseUrl = null;
-
-      if (this._docBaseUrl) {
-        var absoluteUrl = (0, _util.createValidAbsoluteUrl)(this._docBaseUrl);
-
-        if (absoluteUrl) {
-          docBaseUrl = absoluteUrl.href;
-        } else {
-          (0, _util.warn)("Invalid absolute docBaseUrl: \"".concat(this._docBaseUrl, "\"."));
-        }
-      }
-
-      return (0, _util.shadow)(this, "docBaseUrl", docBaseUrl);
     }
   }]);
 
@@ -11624,6 +11624,11 @@ var ChunkedStream = /*#__PURE__*/function () {
       return [this];
     }
   }, {
+    key: "numChunksLoaded",
+    get: function get() {
+      return this._loadedChunks.size;
+    }
+  }, {
     key: "allChunksLoaded",
     value: function allChunksLoaded() {
       return this.numChunksLoaded === this.numChunks;
@@ -11724,6 +11729,16 @@ var ChunkedStream = /*#__PURE__*/function () {
     key: "hasChunk",
     value: function hasChunk(chunk) {
       return this._loadedChunks.has(chunk);
+    }
+  }, {
+    key: "length",
+    get: function get() {
+      return this.end - this.start;
+    }
+  }, {
+    key: "isEmpty",
+    get: function get() {
+      return this.length === 0;
     }
   }, {
     key: "getByte",
@@ -11893,21 +11908,6 @@ var ChunkedStream = /*#__PURE__*/function () {
       subStream.end = start + length || this.end;
       subStream.dict = dict;
       return subStream;
-    }
-  }, {
-    key: "numChunksLoaded",
-    get: function get() {
-      return this._loadedChunks.size;
-    }
-  }, {
-    key: "length",
-    get: function get() {
-      return this.end - this.start;
-    }
-  }, {
-    key: "isEmpty",
-    get: function get() {
-      return this.length === 0;
     }
   }]);
 
@@ -12859,6 +12859,16 @@ var Page = /*#__PURE__*/function () {
       });
     }
   }, {
+    key: "content",
+    get: function get() {
+      return this.pageDict.get("Contents");
+    }
+  }, {
+    key: "resources",
+    get: function get() {
+      return (0, _util.shadow)(this, "resources", this._getInheritableProperty("Resources") || _primitives.Dict.empty);
+    }
+  }, {
     key: "_getBoundingBox",
     value: function _getBoundingBox(name) {
       var box = this._getInheritableProperty(name, true);
@@ -12872,6 +12882,63 @@ var Page = /*#__PURE__*/function () {
       }
 
       return null;
+    }
+  }, {
+    key: "mediaBox",
+    get: function get() {
+      return (0, _util.shadow)(this, "mediaBox", this._getBoundingBox("MediaBox") || LETTER_SIZE_MEDIABOX);
+    }
+  }, {
+    key: "cropBox",
+    get: function get() {
+      return (0, _util.shadow)(this, "cropBox", this._getBoundingBox("CropBox") || this.mediaBox);
+    }
+  }, {
+    key: "userUnit",
+    get: function get() {
+      var obj = this.pageDict.get("UserUnit");
+
+      if (!(0, _util.isNum)(obj) || obj <= 0) {
+        obj = DEFAULT_USER_UNIT;
+      }
+
+      return (0, _util.shadow)(this, "userUnit", obj);
+    }
+  }, {
+    key: "view",
+    get: function get() {
+      var cropBox = this.cropBox,
+          mediaBox = this.mediaBox;
+      var view;
+
+      if (cropBox === mediaBox || (0, _util.isArrayEqual)(cropBox, mediaBox)) {
+        view = mediaBox;
+      } else {
+        var box = _util.Util.intersect(cropBox, mediaBox);
+
+        if (box && box[2] - box[0] !== 0 && box[3] - box[1] !== 0) {
+          view = box;
+        } else {
+          (0, _util.warn)("Empty /CropBox and /MediaBox intersection.");
+        }
+      }
+
+      return (0, _util.shadow)(this, "view", view || mediaBox);
+    }
+  }, {
+    key: "rotate",
+    get: function get() {
+      var rotate = this._getInheritableProperty("Rotate") || 0;
+
+      if (rotate % 90 !== 0) {
+        rotate = 0;
+      } else if (rotate >= 360) {
+        rotate = rotate % 360;
+      } else if (rotate < 0) {
+        rotate = (rotate % 360 + 360) % 360;
+      }
+
+      return (0, _util.shadow)(this, "rotate", rotate);
     }
   }, {
     key: "getContentStream",
@@ -13116,73 +13183,6 @@ var Page = /*#__PURE__*/function () {
       });
     }
   }, {
-    key: "content",
-    get: function get() {
-      return this.pageDict.get("Contents");
-    }
-  }, {
-    key: "resources",
-    get: function get() {
-      return (0, _util.shadow)(this, "resources", this._getInheritableProperty("Resources") || _primitives.Dict.empty);
-    }
-  }, {
-    key: "mediaBox",
-    get: function get() {
-      return (0, _util.shadow)(this, "mediaBox", this._getBoundingBox("MediaBox") || LETTER_SIZE_MEDIABOX);
-    }
-  }, {
-    key: "cropBox",
-    get: function get() {
-      return (0, _util.shadow)(this, "cropBox", this._getBoundingBox("CropBox") || this.mediaBox);
-    }
-  }, {
-    key: "userUnit",
-    get: function get() {
-      var obj = this.pageDict.get("UserUnit");
-
-      if (!(0, _util.isNum)(obj) || obj <= 0) {
-        obj = DEFAULT_USER_UNIT;
-      }
-
-      return (0, _util.shadow)(this, "userUnit", obj);
-    }
-  }, {
-    key: "view",
-    get: function get() {
-      var cropBox = this.cropBox,
-          mediaBox = this.mediaBox;
-      var view;
-
-      if (cropBox === mediaBox || (0, _util.isArrayEqual)(cropBox, mediaBox)) {
-        view = mediaBox;
-      } else {
-        var box = _util.Util.intersect(cropBox, mediaBox);
-
-        if (box && box[2] - box[0] !== 0 && box[3] - box[1] !== 0) {
-          view = box;
-        } else {
-          (0, _util.warn)("Empty /CropBox and /MediaBox intersection.");
-        }
-      }
-
-      return (0, _util.shadow)(this, "view", view || mediaBox);
-    }
-  }, {
-    key: "rotate",
-    get: function get() {
-      var rotate = this._getInheritableProperty("Rotate") || 0;
-
-      if (rotate % 90 !== 0) {
-        rotate = 0;
-      } else if (rotate >= 360) {
-        rotate = rotate % 360;
-      } else if (rotate < 0) {
-        rotate = (rotate % 360 + 360) % 360;
-      }
-
-      return (0, _util.shadow)(this, "rotate", rotate);
-    }
-  }, {
     key: "annotations",
     get: function get() {
       var annots = this._getInheritableProperty("Annots");
@@ -13356,6 +13356,77 @@ var PDFDocument = /*#__PURE__*/function () {
       }
     }
   }, {
+    key: "linearization",
+    get: function get() {
+      var linearization = null;
+
+      try {
+        linearization = _parser.Linearization.create(this.stream);
+      } catch (err) {
+        if (err instanceof _core_utils.MissingDataException) {
+          throw err;
+        }
+
+        (0, _util.info)(err);
+      }
+
+      return (0, _util.shadow)(this, "linearization", linearization);
+    }
+  }, {
+    key: "startXRef",
+    get: function get() {
+      var stream = this.stream;
+      var startXRef = 0;
+
+      if (this.linearization) {
+        stream.reset();
+
+        if (find(stream, ENDOBJ_SIGNATURE)) {
+          startXRef = stream.pos + 6 - stream.start;
+        }
+      } else {
+        var step = 1024;
+        var startXRefLength = STARTXREF_SIGNATURE.length;
+        var found = false,
+            pos = stream.end;
+
+        while (!found && pos > 0) {
+          pos -= step - startXRefLength;
+
+          if (pos < 0) {
+            pos = 0;
+          }
+
+          stream.pos = pos;
+          found = find(stream, STARTXREF_SIGNATURE, step, true);
+        }
+
+        if (found) {
+          stream.skip(9);
+          var ch;
+
+          do {
+            ch = stream.getByte();
+          } while ((0, _core_utils.isWhiteSpace)(ch));
+
+          var str = "";
+
+          while (ch >= 0x20 && ch <= 0x39) {
+            str += String.fromCharCode(ch);
+            ch = stream.getByte();
+          }
+
+          startXRef = parseInt(str, 10);
+
+          if (isNaN(startXRef)) {
+            startXRef = 0;
+          }
+        }
+      }
+
+      return (0, _util.shadow)(this, "startXRef", startXRef);
+    }
+  }, {
     key: "checkHeader",
     value: function checkHeader() {
       var stream = this.stream;
@@ -13386,6 +13457,13 @@ var PDFDocument = /*#__PURE__*/function () {
     key: "parseStartXRef",
     value: function parseStartXRef() {
       this.xref.setStartXRef(this.startXRef);
+    }
+  }, {
+    key: "numPages",
+    get: function get() {
+      var linearization = this.linearization;
+      var num = linearization ? linearization.numPages : this.catalog.numPages;
+      return (0, _util.shadow)(this, "numPages", num);
     }
   }, {
     key: "_hasOnlyDocumentSignatures",
@@ -13422,6 +13500,145 @@ var PDFDocument = /*#__PURE__*/function () {
         });
         return isSignature && isInvisible;
       });
+    }
+  }, {
+    key: "formInfo",
+    get: function get() {
+      var formInfo = {
+        hasFields: false,
+        hasAcroForm: false,
+        hasXfa: false
+      };
+      var acroForm = this.catalog.acroForm;
+
+      if (!acroForm) {
+        return (0, _util.shadow)(this, "formInfo", formInfo);
+      }
+
+      try {
+        var fields = acroForm.get("Fields");
+        var hasFields = Array.isArray(fields) && fields.length > 0;
+        formInfo.hasFields = hasFields;
+        var xfa = acroForm.get("XFA");
+        formInfo.hasXfa = Array.isArray(xfa) && xfa.length > 0 || (0, _primitives.isStream)(xfa) && !xfa.isEmpty;
+        var sigFlags = acroForm.get("SigFlags");
+
+        var hasOnlyDocumentSignatures = !!(sigFlags & 0x1) && this._hasOnlyDocumentSignatures(fields);
+
+        formInfo.hasAcroForm = hasFields && !hasOnlyDocumentSignatures;
+      } catch (ex) {
+        if (ex instanceof _core_utils.MissingDataException) {
+          throw ex;
+        }
+
+        (0, _util.warn)("Cannot fetch form information: \"".concat(ex, "\"."));
+      }
+
+      return (0, _util.shadow)(this, "formInfo", formInfo);
+    }
+  }, {
+    key: "documentInfo",
+    get: function get() {
+      var DocumentInfoValidators = {
+        Title: _util.isString,
+        Author: _util.isString,
+        Subject: _util.isString,
+        Keywords: _util.isString,
+        Creator: _util.isString,
+        Producer: _util.isString,
+        CreationDate: _util.isString,
+        ModDate: _util.isString,
+        Trapped: _primitives.isName
+      };
+      var version = this._version;
+
+      if (typeof version !== "string" || !PDF_HEADER_VERSION_REGEXP.test(version)) {
+        (0, _util.warn)("Invalid PDF header version number: ".concat(version));
+        version = null;
+      }
+
+      var docInfo = {
+        PDFFormatVersion: version,
+        IsLinearized: !!this.linearization,
+        IsAcroFormPresent: this.formInfo.hasAcroForm,
+        IsXFAPresent: this.formInfo.hasXfa,
+        IsCollectionPresent: !!this.catalog.collection
+      };
+      var infoDict;
+
+      try {
+        infoDict = this.xref.trailer.get("Info");
+      } catch (err) {
+        if (err instanceof _core_utils.MissingDataException) {
+          throw err;
+        }
+
+        (0, _util.info)("The document information dictionary is invalid.");
+      }
+
+      if ((0, _primitives.isDict)(infoDict)) {
+        var _iterator6 = _createForOfIteratorHelper(infoDict.getKeys()),
+            _step6;
+
+        try {
+          for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+            var key = _step6.value;
+            var value = infoDict.get(key);
+
+            if (DocumentInfoValidators[key]) {
+              if (DocumentInfoValidators[key](value)) {
+                docInfo[key] = typeof value !== "string" ? value : (0, _util.stringToPDFString)(value);
+              } else {
+                (0, _util.info)("Bad value in document info for \"".concat(key, "\"."));
+              }
+            } else if (typeof key === "string") {
+              var customValue = void 0;
+
+              if ((0, _util.isString)(value)) {
+                customValue = (0, _util.stringToPDFString)(value);
+              } else if ((0, _primitives.isName)(value) || (0, _util.isNum)(value) || (0, _util.isBool)(value)) {
+                customValue = value;
+              } else {
+                (0, _util.info)("Unsupported value in document info for (custom) \"".concat(key, "\"."));
+                continue;
+              }
+
+              if (!docInfo.Custom) {
+                docInfo.Custom = Object.create(null);
+              }
+
+              docInfo.Custom[key] = customValue;
+            }
+          }
+        } catch (err) {
+          _iterator6.e(err);
+        } finally {
+          _iterator6.f();
+        }
+      }
+
+      return (0, _util.shadow)(this, "documentInfo", docInfo);
+    }
+  }, {
+    key: "fingerprint",
+    get: function get() {
+      var hash;
+      var idArray = this.xref.trailer.get("ID");
+
+      if (Array.isArray(idArray) && idArray[0] && (0, _util.isString)(idArray[0]) && idArray[0] !== EMPTY_FINGERPRINT) {
+        hash = (0, _util.stringToBytes)(idArray[0]);
+      } else {
+        hash = (0, _crypto.calculateMD5)(this.stream.getByteRange(0, FINGERPRINT_FIRST_BYTES), 0, FINGERPRINT_FIRST_BYTES);
+      }
+
+      var fingerprintBuf = [];
+
+      for (var i = 0, ii = hash.length; i < ii; i++) {
+        var hex = hash[i].toString(16);
+        fingerprintBuf.push(hex.padStart(2, "0"));
+      }
+
+      return (0, _util.shadow)(this, "fingerprint", fingerprintBuf.join(""));
     }
   }, {
     key: "_getLinearizationPage",
@@ -13574,208 +13791,14 @@ var PDFDocument = /*#__PURE__*/function () {
       if (field.has("Kids")) {
         var kids = field.get("Kids");
 
-        var _iterator6 = _createForOfIteratorHelper(kids),
-            _step6;
-
-        try {
-          for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
-            var kid = _step6.value;
-
-            this._collectFieldObjects(name, kid, promises);
-          }
-        } catch (err) {
-          _iterator6.e(err);
-        } finally {
-          _iterator6.f();
-        }
-      }
-    }
-  }, {
-    key: "linearization",
-    get: function get() {
-      var linearization = null;
-
-      try {
-        linearization = _parser.Linearization.create(this.stream);
-      } catch (err) {
-        if (err instanceof _core_utils.MissingDataException) {
-          throw err;
-        }
-
-        (0, _util.info)(err);
-      }
-
-      return (0, _util.shadow)(this, "linearization", linearization);
-    }
-  }, {
-    key: "startXRef",
-    get: function get() {
-      var stream = this.stream;
-      var startXRef = 0;
-
-      if (this.linearization) {
-        stream.reset();
-
-        if (find(stream, ENDOBJ_SIGNATURE)) {
-          startXRef = stream.pos + 6 - stream.start;
-        }
-      } else {
-        var step = 1024;
-        var startXRefLength = STARTXREF_SIGNATURE.length;
-        var found = false,
-            pos = stream.end;
-
-        while (!found && pos > 0) {
-          pos -= step - startXRefLength;
-
-          if (pos < 0) {
-            pos = 0;
-          }
-
-          stream.pos = pos;
-          found = find(stream, STARTXREF_SIGNATURE, step, true);
-        }
-
-        if (found) {
-          stream.skip(9);
-          var ch;
-
-          do {
-            ch = stream.getByte();
-          } while ((0, _core_utils.isWhiteSpace)(ch));
-
-          var str = "";
-
-          while (ch >= 0x20 && ch <= 0x39) {
-            str += String.fromCharCode(ch);
-            ch = stream.getByte();
-          }
-
-          startXRef = parseInt(str, 10);
-
-          if (isNaN(startXRef)) {
-            startXRef = 0;
-          }
-        }
-      }
-
-      return (0, _util.shadow)(this, "startXRef", startXRef);
-    }
-  }, {
-    key: "numPages",
-    get: function get() {
-      var linearization = this.linearization;
-      var num = linearization ? linearization.numPages : this.catalog.numPages;
-      return (0, _util.shadow)(this, "numPages", num);
-    }
-  }, {
-    key: "formInfo",
-    get: function get() {
-      var formInfo = {
-        hasFields: false,
-        hasAcroForm: false,
-        hasXfa: false
-      };
-      var acroForm = this.catalog.acroForm;
-
-      if (!acroForm) {
-        return (0, _util.shadow)(this, "formInfo", formInfo);
-      }
-
-      try {
-        var fields = acroForm.get("Fields");
-        var hasFields = Array.isArray(fields) && fields.length > 0;
-        formInfo.hasFields = hasFields;
-        var xfa = acroForm.get("XFA");
-        formInfo.hasXfa = Array.isArray(xfa) && xfa.length > 0 || (0, _primitives.isStream)(xfa) && !xfa.isEmpty;
-        var sigFlags = acroForm.get("SigFlags");
-
-        var hasOnlyDocumentSignatures = !!(sigFlags & 0x1) && this._hasOnlyDocumentSignatures(fields);
-
-        formInfo.hasAcroForm = hasFields && !hasOnlyDocumentSignatures;
-      } catch (ex) {
-        if (ex instanceof _core_utils.MissingDataException) {
-          throw ex;
-        }
-
-        (0, _util.warn)("Cannot fetch form information: \"".concat(ex, "\"."));
-      }
-
-      return (0, _util.shadow)(this, "formInfo", formInfo);
-    }
-  }, {
-    key: "documentInfo",
-    get: function get() {
-      var DocumentInfoValidators = {
-        Title: _util.isString,
-        Author: _util.isString,
-        Subject: _util.isString,
-        Keywords: _util.isString,
-        Creator: _util.isString,
-        Producer: _util.isString,
-        CreationDate: _util.isString,
-        ModDate: _util.isString,
-        Trapped: _primitives.isName
-      };
-      var version = this._version;
-
-      if (typeof version !== "string" || !PDF_HEADER_VERSION_REGEXP.test(version)) {
-        (0, _util.warn)("Invalid PDF header version number: ".concat(version));
-        version = null;
-      }
-
-      var docInfo = {
-        PDFFormatVersion: version,
-        IsLinearized: !!this.linearization,
-        IsAcroFormPresent: this.formInfo.hasAcroForm,
-        IsXFAPresent: this.formInfo.hasXfa,
-        IsCollectionPresent: !!this.catalog.collection
-      };
-      var infoDict;
-
-      try {
-        infoDict = this.xref.trailer.get("Info");
-      } catch (err) {
-        if (err instanceof _core_utils.MissingDataException) {
-          throw err;
-        }
-
-        (0, _util.info)("The document information dictionary is invalid.");
-      }
-
-      if ((0, _primitives.isDict)(infoDict)) {
-        var _iterator7 = _createForOfIteratorHelper(infoDict.getKeys()),
+        var _iterator7 = _createForOfIteratorHelper(kids),
             _step7;
 
         try {
           for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
-            var key = _step7.value;
-            var value = infoDict.get(key);
+            var kid = _step7.value;
 
-            if (DocumentInfoValidators[key]) {
-              if (DocumentInfoValidators[key](value)) {
-                docInfo[key] = typeof value !== "string" ? value : (0, _util.stringToPDFString)(value);
-              } else {
-                (0, _util.info)("Bad value in document info for \"".concat(key, "\"."));
-              }
-            } else if (typeof key === "string") {
-              var customValue = void 0;
-
-              if ((0, _util.isString)(value)) {
-                customValue = (0, _util.stringToPDFString)(value);
-              } else if ((0, _primitives.isName)(value) || (0, _util.isNum)(value) || (0, _util.isBool)(value)) {
-                customValue = value;
-              } else {
-                (0, _util.info)("Unsupported value in document info for (custom) \"".concat(key, "\"."));
-                continue;
-              }
-
-              if (!docInfo.Custom) {
-                docInfo.Custom = Object.create(null);
-              }
-
-              docInfo.Custom[key] = customValue;
-            }
+            this._collectFieldObjects(name, kid, promises);
           }
         } catch (err) {
           _iterator7.e(err);
@@ -13783,29 +13806,6 @@ var PDFDocument = /*#__PURE__*/function () {
           _iterator7.f();
         }
       }
-
-      return (0, _util.shadow)(this, "documentInfo", docInfo);
-    }
-  }, {
-    key: "fingerprint",
-    get: function get() {
-      var hash;
-      var idArray = this.xref.trailer.get("ID");
-
-      if (Array.isArray(idArray) && idArray[0] && (0, _util.isString)(idArray[0]) && idArray[0] !== EMPTY_FINGERPRINT) {
-        hash = (0, _util.stringToBytes)(idArray[0]);
-      } else {
-        hash = (0, _crypto.calculateMD5)(this.stream.getByteRange(0, FINGERPRINT_FIRST_BYTES), 0, FINGERPRINT_FIRST_BYTES);
-      }
-
-      var fingerprintBuf = [];
-
-      for (var i = 0, ii = hash.length; i < ii; i++) {
-        var hex = hash[i].toString(16);
-        fingerprintBuf.push(hex.padStart(2, "0"));
-      }
-
-      return (0, _util.shadow)(this, "fingerprint", fingerprintBuf.join(""));
     }
   }, {
     key: "fieldObjects",
@@ -13960,6 +13960,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -13967,8 +13969,6 @@ function _nonIterableRest() { throw new TypeError("Invalid attempt to destructur
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
@@ -14006,6 +14006,108 @@ var Catalog = /*#__PURE__*/function () {
   }
 
   _createClass(Catalog, [{
+    key: "version",
+    get: function get() {
+      var version = this._catDict.get("Version");
+
+      if (!(0, _primitives.isName)(version)) {
+        return (0, _util.shadow)(this, "version", null);
+      }
+
+      return (0, _util.shadow)(this, "version", version.name);
+    }
+  }, {
+    key: "collection",
+    get: function get() {
+      var collection = null;
+
+      try {
+        var obj = this._catDict.get("Collection");
+
+        if ((0, _primitives.isDict)(obj) && obj.size > 0) {
+          collection = obj;
+        }
+      } catch (ex) {
+        if (ex instanceof _core_utils.MissingDataException) {
+          throw ex;
+        }
+
+        (0, _util.info)("Cannot fetch Collection entry; assuming no collection is present.");
+      }
+
+      return (0, _util.shadow)(this, "collection", collection);
+    }
+  }, {
+    key: "acroForm",
+    get: function get() {
+      var acroForm = null;
+
+      try {
+        var obj = this._catDict.get("AcroForm");
+
+        if ((0, _primitives.isDict)(obj) && obj.size > 0) {
+          acroForm = obj;
+        }
+      } catch (ex) {
+        if (ex instanceof _core_utils.MissingDataException) {
+          throw ex;
+        }
+
+        (0, _util.info)("Cannot fetch AcroForm entry; assuming no forms are present.");
+      }
+
+      return (0, _util.shadow)(this, "acroForm", acroForm);
+    }
+  }, {
+    key: "metadata",
+    get: function get() {
+      var streamRef = this._catDict.getRaw("Metadata");
+
+      if (!(0, _primitives.isRef)(streamRef)) {
+        return (0, _util.shadow)(this, "metadata", null);
+      }
+
+      var suppressEncryption = !(this.xref.encrypt && this.xref.encrypt.encryptMetadata);
+      var stream = this.xref.fetch(streamRef, suppressEncryption);
+      var metadata;
+
+      if (stream && (0, _primitives.isDict)(stream.dict)) {
+        var type = stream.dict.get("Type");
+        var subtype = stream.dict.get("Subtype");
+
+        if ((0, _primitives.isName)(type, "Metadata") && (0, _primitives.isName)(subtype, "XML")) {
+          try {
+            metadata = (0, _util.stringToUTF8String)((0, _util.bytesToString)(stream.getBytes()));
+          } catch (e) {
+            if (e instanceof _core_utils.MissingDataException) {
+              throw e;
+            }
+
+            (0, _util.info)("Skipping invalid metadata.");
+          }
+        }
+      }
+
+      return (0, _util.shadow)(this, "metadata", metadata);
+    }
+  }, {
+    key: "markInfo",
+    get: function get() {
+      var markInfo = null;
+
+      try {
+        markInfo = this._readMarkInfo();
+      } catch (ex) {
+        if (ex instanceof _core_utils.MissingDataException) {
+          throw ex;
+        }
+
+        (0, _util.warn)("Unable to read mark info.");
+      }
+
+      return (0, _util.shadow)(this, "markInfo", markInfo);
+    }
+  }, {
     key: "_readMarkInfo",
     value: function _readMarkInfo() {
       var obj = this._catDict.get("MarkInfo");
@@ -14035,6 +14137,34 @@ var Catalog = /*#__PURE__*/function () {
       }
 
       return markInfo;
+    }
+  }, {
+    key: "toplevelPagesDict",
+    get: function get() {
+      var pagesObj = this._catDict.get("Pages");
+
+      if (!(0, _primitives.isDict)(pagesObj)) {
+        throw new _util.FormatError("Invalid top-level pages dictionary.");
+      }
+
+      return (0, _util.shadow)(this, "toplevelPagesDict", pagesObj);
+    }
+  }, {
+    key: "documentOutline",
+    get: function get() {
+      var obj = null;
+
+      try {
+        obj = this._readDocumentOutline();
+      } catch (ex) {
+        if (ex instanceof _core_utils.MissingDataException) {
+          throw ex;
+        }
+
+        (0, _util.warn)("Unable to read document outline.");
+      }
+
+      return (0, _util.shadow)(this, "documentOutline", obj);
     }
   }, {
     key: "_readDocumentOutline",
@@ -14131,6 +14261,23 @@ var Catalog = /*#__PURE__*/function () {
       return root.items.length > 0 ? root.items : null;
     }
   }, {
+    key: "permissions",
+    get: function get() {
+      var permissions = null;
+
+      try {
+        permissions = this._readPermissions();
+      } catch (ex) {
+        if (ex instanceof _core_utils.MissingDataException) {
+          throw ex;
+        }
+
+        (0, _util.warn)("Unable to read permissions.");
+      }
+
+      return (0, _util.shadow)(this, "permissions", permissions);
+    }
+  }, {
     key: "_readPermissions",
     value: function _readPermissions() {
       var encrypt = this.xref.trailer.get("Encrypt");
@@ -14159,18 +14306,82 @@ var Catalog = /*#__PURE__*/function () {
       return permissions;
     }
   }, {
+    key: "optionalContentConfig",
+    get: function get() {
+      var config = null;
+
+      try {
+        var properties = this._catDict.get("OCProperties");
+
+        if (!properties) {
+          return (0, _util.shadow)(this, "optionalContentConfig", null);
+        }
+
+        var defaultConfig = properties.get("D");
+
+        if (!defaultConfig) {
+          return (0, _util.shadow)(this, "optionalContentConfig", null);
+        }
+
+        var groupsData = properties.get("OCGs");
+
+        if (!Array.isArray(groupsData)) {
+          return (0, _util.shadow)(this, "optionalContentConfig", null);
+        }
+
+        var groups = [];
+        var groupRefs = [];
+
+        var _iterator = _createForOfIteratorHelper(groupsData),
+            _step;
+
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var groupRef = _step.value;
+
+            if (!(0, _primitives.isRef)(groupRef)) {
+              continue;
+            }
+
+            groupRefs.push(groupRef);
+            var group = this.xref.fetchIfRef(groupRef);
+            groups.push({
+              id: groupRef.toString(),
+              name: (0, _util.isString)(group.get("Name")) ? (0, _util.stringToPDFString)(group.get("Name")) : null,
+              intent: (0, _util.isString)(group.get("Intent")) ? (0, _util.stringToPDFString)(group.get("Intent")) : null
+            });
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+
+        config = this._readOptionalContentConfig(defaultConfig, groupRefs);
+        config.groups = groups;
+      } catch (ex) {
+        if (ex instanceof _core_utils.MissingDataException) {
+          throw ex;
+        }
+
+        (0, _util.warn)("Unable to read optional content config: ".concat(ex));
+      }
+
+      return (0, _util.shadow)(this, "optionalContentConfig", config);
+    }
+  }, {
     key: "_readOptionalContentConfig",
     value: function _readOptionalContentConfig(config, contentGroupRefs) {
       function parseOnOff(refs) {
         var onParsed = [];
 
         if (Array.isArray(refs)) {
-          var _iterator = _createForOfIteratorHelper(refs),
-              _step;
+          var _iterator2 = _createForOfIteratorHelper(refs),
+              _step2;
 
           try {
-            for (_iterator.s(); !(_step = _iterator.n()).done;) {
-              var value = _step.value;
+            for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+              var value = _step2.value;
 
               if (!(0, _primitives.isRef)(value)) {
                 continue;
@@ -14181,9 +14392,9 @@ var Catalog = /*#__PURE__*/function () {
               }
             }
           } catch (err) {
-            _iterator.e(err);
+            _iterator2.e(err);
           } finally {
-            _iterator.f();
+            _iterator2.f();
           }
         }
 
@@ -14199,12 +14410,12 @@ var Catalog = /*#__PURE__*/function () {
 
         var order = [];
 
-        var _iterator2 = _createForOfIteratorHelper(refs),
-            _step2;
+        var _iterator3 = _createForOfIteratorHelper(refs),
+            _step3;
 
         try {
-          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-            var value = _step2.value;
+          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            var value = _step3.value;
 
             if ((0, _primitives.isRef)(value) && contentGroupRefs.includes(value)) {
               parsedOrderRefs.put(value);
@@ -14219,9 +14430,9 @@ var Catalog = /*#__PURE__*/function () {
             }
           }
         } catch (err) {
-          _iterator2.e(err);
+          _iterator3.e(err);
         } finally {
-          _iterator2.f();
+          _iterator3.f();
         }
 
         if (nestedLevels > 0) {
@@ -14230,12 +14441,12 @@ var Catalog = /*#__PURE__*/function () {
 
         var hiddenGroups = [];
 
-        var _iterator3 = _createForOfIteratorHelper(contentGroupRefs),
-            _step3;
+        var _iterator4 = _createForOfIteratorHelper(contentGroupRefs),
+            _step4;
 
         try {
-          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-            var groupRef = _step3.value;
+          for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+            var groupRef = _step4.value;
 
             if (parsedOrderRefs.has(groupRef)) {
               continue;
@@ -14244,9 +14455,9 @@ var Catalog = /*#__PURE__*/function () {
             hiddenGroups.push(groupRef.toString());
           }
         } catch (err) {
-          _iterator3.e(err);
+          _iterator4.e(err);
         } finally {
-          _iterator3.f();
+          _iterator4.f();
         }
 
         if (hiddenGroups.length) {
@@ -14303,6 +14514,39 @@ var Catalog = /*#__PURE__*/function () {
       };
     }
   }, {
+    key: "numPages",
+    get: function get() {
+      var obj = this.toplevelPagesDict.get("Count");
+
+      if (!Number.isInteger(obj)) {
+        throw new _util.FormatError("Page count in top-level pages dictionary is not an integer.");
+      }
+
+      return (0, _util.shadow)(this, "numPages", obj);
+    }
+  }, {
+    key: "destinations",
+    get: function get() {
+      var obj = this._readDests(),
+          dests = Object.create(null);
+
+      if (obj instanceof NameTree) {
+        var names = obj.getAll();
+
+        for (var name in names) {
+          dests[name] = fetchDestination(names[name]);
+        }
+      } else if (obj instanceof _primitives.Dict) {
+        obj.forEach(function (key, value) {
+          if (value) {
+            dests[key] = fetchDestination(value);
+          }
+        });
+      }
+
+      return (0, _util.shadow)(this, "destinations", dests);
+    }
+  }, {
     key: "getDestination",
     value: function getDestination(destinationId) {
       var obj = this._readDests();
@@ -14325,6 +14569,23 @@ var Catalog = /*#__PURE__*/function () {
       }
 
       return undefined;
+    }
+  }, {
+    key: "pageLabels",
+    get: function get() {
+      var obj = null;
+
+      try {
+        obj = this._readPageLabels();
+      } catch (ex) {
+        if (ex instanceof _core_utils.MissingDataException) {
+          throw ex;
+        }
+
+        (0, _util.warn)("Unable to read page labels.");
+      }
+
+      return (0, _util.shadow)(this, "pageLabels", obj);
     }
   }, {
     key: "_readPageLabels",
@@ -14434,6 +14695,268 @@ var Catalog = /*#__PURE__*/function () {
       return pageLabels;
     }
   }, {
+    key: "pageLayout",
+    get: function get() {
+      var obj = this._catDict.get("PageLayout");
+
+      var pageLayout = "";
+
+      if ((0, _primitives.isName)(obj)) {
+        switch (obj.name) {
+          case "SinglePage":
+          case "OneColumn":
+          case "TwoColumnLeft":
+          case "TwoColumnRight":
+          case "TwoPageLeft":
+          case "TwoPageRight":
+            pageLayout = obj.name;
+        }
+      }
+
+      return (0, _util.shadow)(this, "pageLayout", pageLayout);
+    }
+  }, {
+    key: "pageMode",
+    get: function get() {
+      var obj = this._catDict.get("PageMode");
+
+      var pageMode = "UseNone";
+
+      if ((0, _primitives.isName)(obj)) {
+        switch (obj.name) {
+          case "UseNone":
+          case "UseOutlines":
+          case "UseThumbs":
+          case "FullScreen":
+          case "UseOC":
+          case "UseAttachments":
+            pageMode = obj.name;
+        }
+      }
+
+      return (0, _util.shadow)(this, "pageMode", pageMode);
+    }
+  }, {
+    key: "viewerPreferences",
+    get: function get() {
+      var _this = this;
+
+      var ViewerPreferencesValidators = {
+        HideToolbar: _util.isBool,
+        HideMenubar: _util.isBool,
+        HideWindowUI: _util.isBool,
+        FitWindow: _util.isBool,
+        CenterWindow: _util.isBool,
+        DisplayDocTitle: _util.isBool,
+        NonFullScreenPageMode: _primitives.isName,
+        Direction: _primitives.isName,
+        ViewArea: _primitives.isName,
+        ViewClip: _primitives.isName,
+        PrintArea: _primitives.isName,
+        PrintClip: _primitives.isName,
+        PrintScaling: _primitives.isName,
+        Duplex: _primitives.isName,
+        PickTrayByPDFSize: _util.isBool,
+        PrintPageRange: Array.isArray,
+        NumCopies: Number.isInteger
+      };
+
+      var obj = this._catDict.get("ViewerPreferences");
+
+      var prefs = null;
+
+      if ((0, _primitives.isDict)(obj)) {
+        for (var key in ViewerPreferencesValidators) {
+          if (!obj.has(key)) {
+            continue;
+          }
+
+          var value = obj.get(key);
+
+          if (!ViewerPreferencesValidators[key](value)) {
+            (0, _util.info)("Bad value in ViewerPreferences for \"".concat(key, "\"."));
+            continue;
+          }
+
+          var prefValue = void 0;
+
+          switch (key) {
+            case "NonFullScreenPageMode":
+              switch (value.name) {
+                case "UseNone":
+                case "UseOutlines":
+                case "UseThumbs":
+                case "UseOC":
+                  prefValue = value.name;
+                  break;
+
+                default:
+                  prefValue = "UseNone";
+              }
+
+              break;
+
+            case "Direction":
+              switch (value.name) {
+                case "L2R":
+                case "R2L":
+                  prefValue = value.name;
+                  break;
+
+                default:
+                  prefValue = "L2R";
+              }
+
+              break;
+
+            case "ViewArea":
+            case "ViewClip":
+            case "PrintArea":
+            case "PrintClip":
+              switch (value.name) {
+                case "MediaBox":
+                case "CropBox":
+                case "BleedBox":
+                case "TrimBox":
+                case "ArtBox":
+                  prefValue = value.name;
+                  break;
+
+                default:
+                  prefValue = "CropBox";
+              }
+
+              break;
+
+            case "PrintScaling":
+              switch (value.name) {
+                case "None":
+                case "AppDefault":
+                  prefValue = value.name;
+                  break;
+
+                default:
+                  prefValue = "AppDefault";
+              }
+
+              break;
+
+            case "Duplex":
+              switch (value.name) {
+                case "Simplex":
+                case "DuplexFlipShortEdge":
+                case "DuplexFlipLongEdge":
+                  prefValue = value.name;
+                  break;
+
+                default:
+                  prefValue = "None";
+              }
+
+              break;
+
+            case "PrintPageRange":
+              var length = value.length;
+
+              if (length % 2 !== 0) {
+                break;
+              }
+
+              var isValid = value.every(function (page, i, arr) {
+                return Number.isInteger(page) && page > 0 && (i === 0 || page >= arr[i - 1]) && page <= _this.numPages;
+              });
+
+              if (isValid) {
+                prefValue = value;
+              }
+
+              break;
+
+            case "NumCopies":
+              if (value > 0) {
+                prefValue = value;
+              }
+
+              break;
+
+            default:
+              if (typeof value !== "boolean") {
+                throw new _util.FormatError("viewerPreferences - expected a boolean value for: ".concat(key));
+              }
+
+              prefValue = value;
+          }
+
+          if (prefValue !== undefined) {
+            if (!prefs) {
+              prefs = Object.create(null);
+            }
+
+            prefs[key] = prefValue;
+          } else {
+            (0, _util.info)("Bad value in ViewerPreferences for \"".concat(key, "\"."));
+          }
+        }
+      }
+
+      return (0, _util.shadow)(this, "viewerPreferences", prefs);
+    }
+  }, {
+    key: "openAction",
+    get: function get() {
+      var obj = this._catDict.get("OpenAction");
+
+      var openAction = Object.create(null);
+
+      if ((0, _primitives.isDict)(obj)) {
+        var destDict = new _primitives.Dict(this.xref);
+        destDict.set("A", obj);
+        var resultObj = {
+          url: null,
+          dest: null,
+          action: null
+        };
+        Catalog.parseDestDictionary({
+          destDict: destDict,
+          resultObj: resultObj
+        });
+
+        if (Array.isArray(resultObj.dest)) {
+          openAction.dest = resultObj.dest;
+        } else if (resultObj.action) {
+          openAction.action = resultObj.action;
+        }
+      } else if (Array.isArray(obj)) {
+        openAction.dest = obj;
+      }
+
+      return (0, _util.shadow)(this, "openAction", (0, _util.objectSize)(openAction) > 0 ? openAction : null);
+    }
+  }, {
+    key: "attachments",
+    get: function get() {
+      var obj = this._catDict.get("Names");
+
+      var attachments = null;
+
+      if (obj && obj.has("EmbeddedFiles")) {
+        var nameTree = new NameTree(obj.getRaw("EmbeddedFiles"), this.xref);
+        var names = nameTree.getAll();
+
+        for (var name in names) {
+          var fs = new FileSpec(names[name], this.xref);
+
+          if (!attachments) {
+            attachments = Object.create(null);
+          }
+
+          attachments[(0, _util.stringToPDFString)(name)] = fs.serializable;
+        }
+      }
+
+      return (0, _util.shadow)(this, "attachments", attachments);
+    }
+  }, {
     key: "_collectJavaScript",
     value: function _collectJavaScript() {
       var obj = this._catDict.get("Names");
@@ -14484,6 +15007,40 @@ var Catalog = /*#__PURE__*/function () {
       return javaScript;
     }
   }, {
+    key: "javaScript",
+    get: function get() {
+      var javaScript = this._collectJavaScript();
+
+      return (0, _util.shadow)(this, "javaScript", javaScript ? Object.values(javaScript) : null);
+    }
+  }, {
+    key: "jsActions",
+    get: function get() {
+      var js = this._collectJavaScript();
+
+      var actions = (0, _core_utils.collectActions)(this.xref, this._catDict, _util.DocumentActionEventType);
+
+      if (!actions && js) {
+        actions = Object.create(null);
+      }
+
+      if (actions && js) {
+        for (var _i = 0, _Object$entries = Object.entries(js); _i < _Object$entries.length; _i++) {
+          var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+              key = _Object$entries$_i[0],
+              val = _Object$entries$_i[1];
+
+          if (key in actions) {
+            actions[key].push(val);
+          } else {
+            actions[key] = [val];
+          }
+        }
+      }
+
+      return (0, _util.shadow)(this, "jsActions", actions);
+    }
+  }, {
     key: "fontFallback",
     value: function fontFallback(id, handler) {
       var promises = [];
@@ -14491,12 +15048,12 @@ var Catalog = /*#__PURE__*/function () {
         promises.push(promise);
       });
       return Promise.all(promises).then(function (translatedFonts) {
-        var _iterator4 = _createForOfIteratorHelper(translatedFonts),
-            _step4;
+        var _iterator5 = _createForOfIteratorHelper(translatedFonts),
+            _step5;
 
         try {
-          for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-            var translatedFont = _step4.value;
+          for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+            var translatedFont = _step5.value;
 
             if (translatedFont.loadedName === id) {
               translatedFont.fallback(handler);
@@ -14504,16 +15061,16 @@ var Catalog = /*#__PURE__*/function () {
             }
           }
         } catch (err) {
-          _iterator4.e(err);
+          _iterator5.e(err);
         } finally {
-          _iterator4.f();
+          _iterator5.f();
         }
       });
     }
   }, {
     key: "cleanup",
     value: function cleanup() {
-      var _this = this;
+      var _this2 = this;
 
       var manuallyTriggered = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
       (0, _primitives.clearPrimitiveCaches)();
@@ -14525,23 +15082,23 @@ var Catalog = /*#__PURE__*/function () {
         promises.push(promise);
       });
       return Promise.all(promises).then(function (translatedFonts) {
-        var _iterator5 = _createForOfIteratorHelper(translatedFonts),
-            _step5;
+        var _iterator6 = _createForOfIteratorHelper(translatedFonts),
+            _step6;
 
         try {
-          for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
-            var dict = _step5.value.dict;
+          for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+            var dict = _step6.value.dict;
             delete dict.cacheKey;
           }
         } catch (err) {
-          _iterator5.e(err);
+          _iterator6.e(err);
         } finally {
-          _iterator5.f();
+          _iterator6.f();
         }
 
-        _this.fontCache.clear();
+        _this2.fontCache.clear();
 
-        _this.builtInCMapCache.clear();
+        _this2.builtInCMapCache.clear();
       });
     }
   }, {
@@ -14754,563 +15311,6 @@ var Catalog = /*#__PURE__*/function () {
       }
 
       return next(pageRef);
-    }
-  }, {
-    key: "version",
-    get: function get() {
-      var version = this._catDict.get("Version");
-
-      if (!(0, _primitives.isName)(version)) {
-        return (0, _util.shadow)(this, "version", null);
-      }
-
-      return (0, _util.shadow)(this, "version", version.name);
-    }
-  }, {
-    key: "collection",
-    get: function get() {
-      var collection = null;
-
-      try {
-        var obj = this._catDict.get("Collection");
-
-        if ((0, _primitives.isDict)(obj) && obj.size > 0) {
-          collection = obj;
-        }
-      } catch (ex) {
-        if (ex instanceof _core_utils.MissingDataException) {
-          throw ex;
-        }
-
-        (0, _util.info)("Cannot fetch Collection entry; assuming no collection is present.");
-      }
-
-      return (0, _util.shadow)(this, "collection", collection);
-    }
-  }, {
-    key: "acroForm",
-    get: function get() {
-      var acroForm = null;
-
-      try {
-        var obj = this._catDict.get("AcroForm");
-
-        if ((0, _primitives.isDict)(obj) && obj.size > 0) {
-          acroForm = obj;
-        }
-      } catch (ex) {
-        if (ex instanceof _core_utils.MissingDataException) {
-          throw ex;
-        }
-
-        (0, _util.info)("Cannot fetch AcroForm entry; assuming no forms are present.");
-      }
-
-      return (0, _util.shadow)(this, "acroForm", acroForm);
-    }
-  }, {
-    key: "metadata",
-    get: function get() {
-      var streamRef = this._catDict.getRaw("Metadata");
-
-      if (!(0, _primitives.isRef)(streamRef)) {
-        return (0, _util.shadow)(this, "metadata", null);
-      }
-
-      var suppressEncryption = !(this.xref.encrypt && this.xref.encrypt.encryptMetadata);
-      var stream = this.xref.fetch(streamRef, suppressEncryption);
-      var metadata;
-
-      if (stream && (0, _primitives.isDict)(stream.dict)) {
-        var type = stream.dict.get("Type");
-        var subtype = stream.dict.get("Subtype");
-
-        if ((0, _primitives.isName)(type, "Metadata") && (0, _primitives.isName)(subtype, "XML")) {
-          try {
-            metadata = (0, _util.stringToUTF8String)((0, _util.bytesToString)(stream.getBytes()));
-          } catch (e) {
-            if (e instanceof _core_utils.MissingDataException) {
-              throw e;
-            }
-
-            (0, _util.info)("Skipping invalid metadata.");
-          }
-        }
-      }
-
-      return (0, _util.shadow)(this, "metadata", metadata);
-    }
-  }, {
-    key: "markInfo",
-    get: function get() {
-      var markInfo = null;
-
-      try {
-        markInfo = this._readMarkInfo();
-      } catch (ex) {
-        if (ex instanceof _core_utils.MissingDataException) {
-          throw ex;
-        }
-
-        (0, _util.warn)("Unable to read mark info.");
-      }
-
-      return (0, _util.shadow)(this, "markInfo", markInfo);
-    }
-  }, {
-    key: "toplevelPagesDict",
-    get: function get() {
-      var pagesObj = this._catDict.get("Pages");
-
-      if (!(0, _primitives.isDict)(pagesObj)) {
-        throw new _util.FormatError("Invalid top-level pages dictionary.");
-      }
-
-      return (0, _util.shadow)(this, "toplevelPagesDict", pagesObj);
-    }
-  }, {
-    key: "documentOutline",
-    get: function get() {
-      var obj = null;
-
-      try {
-        obj = this._readDocumentOutline();
-      } catch (ex) {
-        if (ex instanceof _core_utils.MissingDataException) {
-          throw ex;
-        }
-
-        (0, _util.warn)("Unable to read document outline.");
-      }
-
-      return (0, _util.shadow)(this, "documentOutline", obj);
-    }
-  }, {
-    key: "permissions",
-    get: function get() {
-      var permissions = null;
-
-      try {
-        permissions = this._readPermissions();
-      } catch (ex) {
-        if (ex instanceof _core_utils.MissingDataException) {
-          throw ex;
-        }
-
-        (0, _util.warn)("Unable to read permissions.");
-      }
-
-      return (0, _util.shadow)(this, "permissions", permissions);
-    }
-  }, {
-    key: "optionalContentConfig",
-    get: function get() {
-      var config = null;
-
-      try {
-        var properties = this._catDict.get("OCProperties");
-
-        if (!properties) {
-          return (0, _util.shadow)(this, "optionalContentConfig", null);
-        }
-
-        var defaultConfig = properties.get("D");
-
-        if (!defaultConfig) {
-          return (0, _util.shadow)(this, "optionalContentConfig", null);
-        }
-
-        var groupsData = properties.get("OCGs");
-
-        if (!Array.isArray(groupsData)) {
-          return (0, _util.shadow)(this, "optionalContentConfig", null);
-        }
-
-        var groups = [];
-        var groupRefs = [];
-
-        var _iterator6 = _createForOfIteratorHelper(groupsData),
-            _step6;
-
-        try {
-          for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
-            var groupRef = _step6.value;
-
-            if (!(0, _primitives.isRef)(groupRef)) {
-              continue;
-            }
-
-            groupRefs.push(groupRef);
-            var group = this.xref.fetchIfRef(groupRef);
-            groups.push({
-              id: groupRef.toString(),
-              name: (0, _util.isString)(group.get("Name")) ? (0, _util.stringToPDFString)(group.get("Name")) : null,
-              intent: (0, _util.isString)(group.get("Intent")) ? (0, _util.stringToPDFString)(group.get("Intent")) : null
-            });
-          }
-        } catch (err) {
-          _iterator6.e(err);
-        } finally {
-          _iterator6.f();
-        }
-
-        config = this._readOptionalContentConfig(defaultConfig, groupRefs);
-        config.groups = groups;
-      } catch (ex) {
-        if (ex instanceof _core_utils.MissingDataException) {
-          throw ex;
-        }
-
-        (0, _util.warn)("Unable to read optional content config: ".concat(ex));
-      }
-
-      return (0, _util.shadow)(this, "optionalContentConfig", config);
-    }
-  }, {
-    key: "numPages",
-    get: function get() {
-      var obj = this.toplevelPagesDict.get("Count");
-
-      if (!Number.isInteger(obj)) {
-        throw new _util.FormatError("Page count in top-level pages dictionary is not an integer.");
-      }
-
-      return (0, _util.shadow)(this, "numPages", obj);
-    }
-  }, {
-    key: "destinations",
-    get: function get() {
-      var obj = this._readDests(),
-          dests = Object.create(null);
-
-      if (obj instanceof NameTree) {
-        var names = obj.getAll();
-
-        for (var name in names) {
-          dests[name] = fetchDestination(names[name]);
-        }
-      } else if (obj instanceof _primitives.Dict) {
-        obj.forEach(function (key, value) {
-          if (value) {
-            dests[key] = fetchDestination(value);
-          }
-        });
-      }
-
-      return (0, _util.shadow)(this, "destinations", dests);
-    }
-  }, {
-    key: "pageLabels",
-    get: function get() {
-      var obj = null;
-
-      try {
-        obj = this._readPageLabels();
-      } catch (ex) {
-        if (ex instanceof _core_utils.MissingDataException) {
-          throw ex;
-        }
-
-        (0, _util.warn)("Unable to read page labels.");
-      }
-
-      return (0, _util.shadow)(this, "pageLabels", obj);
-    }
-  }, {
-    key: "pageLayout",
-    get: function get() {
-      var obj = this._catDict.get("PageLayout");
-
-      var pageLayout = "";
-
-      if ((0, _primitives.isName)(obj)) {
-        switch (obj.name) {
-          case "SinglePage":
-          case "OneColumn":
-          case "TwoColumnLeft":
-          case "TwoColumnRight":
-          case "TwoPageLeft":
-          case "TwoPageRight":
-            pageLayout = obj.name;
-        }
-      }
-
-      return (0, _util.shadow)(this, "pageLayout", pageLayout);
-    }
-  }, {
-    key: "pageMode",
-    get: function get() {
-      var obj = this._catDict.get("PageMode");
-
-      var pageMode = "UseNone";
-
-      if ((0, _primitives.isName)(obj)) {
-        switch (obj.name) {
-          case "UseNone":
-          case "UseOutlines":
-          case "UseThumbs":
-          case "FullScreen":
-          case "UseOC":
-          case "UseAttachments":
-            pageMode = obj.name;
-        }
-      }
-
-      return (0, _util.shadow)(this, "pageMode", pageMode);
-    }
-  }, {
-    key: "viewerPreferences",
-    get: function get() {
-      var _this2 = this;
-
-      var ViewerPreferencesValidators = {
-        HideToolbar: _util.isBool,
-        HideMenubar: _util.isBool,
-        HideWindowUI: _util.isBool,
-        FitWindow: _util.isBool,
-        CenterWindow: _util.isBool,
-        DisplayDocTitle: _util.isBool,
-        NonFullScreenPageMode: _primitives.isName,
-        Direction: _primitives.isName,
-        ViewArea: _primitives.isName,
-        ViewClip: _primitives.isName,
-        PrintArea: _primitives.isName,
-        PrintClip: _primitives.isName,
-        PrintScaling: _primitives.isName,
-        Duplex: _primitives.isName,
-        PickTrayByPDFSize: _util.isBool,
-        PrintPageRange: Array.isArray,
-        NumCopies: Number.isInteger
-      };
-
-      var obj = this._catDict.get("ViewerPreferences");
-
-      var prefs = null;
-
-      if ((0, _primitives.isDict)(obj)) {
-        for (var key in ViewerPreferencesValidators) {
-          if (!obj.has(key)) {
-            continue;
-          }
-
-          var value = obj.get(key);
-
-          if (!ViewerPreferencesValidators[key](value)) {
-            (0, _util.info)("Bad value in ViewerPreferences for \"".concat(key, "\"."));
-            continue;
-          }
-
-          var prefValue = void 0;
-
-          switch (key) {
-            case "NonFullScreenPageMode":
-              switch (value.name) {
-                case "UseNone":
-                case "UseOutlines":
-                case "UseThumbs":
-                case "UseOC":
-                  prefValue = value.name;
-                  break;
-
-                default:
-                  prefValue = "UseNone";
-              }
-
-              break;
-
-            case "Direction":
-              switch (value.name) {
-                case "L2R":
-                case "R2L":
-                  prefValue = value.name;
-                  break;
-
-                default:
-                  prefValue = "L2R";
-              }
-
-              break;
-
-            case "ViewArea":
-            case "ViewClip":
-            case "PrintArea":
-            case "PrintClip":
-              switch (value.name) {
-                case "MediaBox":
-                case "CropBox":
-                case "BleedBox":
-                case "TrimBox":
-                case "ArtBox":
-                  prefValue = value.name;
-                  break;
-
-                default:
-                  prefValue = "CropBox";
-              }
-
-              break;
-
-            case "PrintScaling":
-              switch (value.name) {
-                case "None":
-                case "AppDefault":
-                  prefValue = value.name;
-                  break;
-
-                default:
-                  prefValue = "AppDefault";
-              }
-
-              break;
-
-            case "Duplex":
-              switch (value.name) {
-                case "Simplex":
-                case "DuplexFlipShortEdge":
-                case "DuplexFlipLongEdge":
-                  prefValue = value.name;
-                  break;
-
-                default:
-                  prefValue = "None";
-              }
-
-              break;
-
-            case "PrintPageRange":
-              var length = value.length;
-
-              if (length % 2 !== 0) {
-                break;
-              }
-
-              var isValid = value.every(function (page, i, arr) {
-                return Number.isInteger(page) && page > 0 && (i === 0 || page >= arr[i - 1]) && page <= _this2.numPages;
-              });
-
-              if (isValid) {
-                prefValue = value;
-              }
-
-              break;
-
-            case "NumCopies":
-              if (value > 0) {
-                prefValue = value;
-              }
-
-              break;
-
-            default:
-              if (typeof value !== "boolean") {
-                throw new _util.FormatError("viewerPreferences - expected a boolean value for: ".concat(key));
-              }
-
-              prefValue = value;
-          }
-
-          if (prefValue !== undefined) {
-            if (!prefs) {
-              prefs = Object.create(null);
-            }
-
-            prefs[key] = prefValue;
-          } else {
-            (0, _util.info)("Bad value in ViewerPreferences for \"".concat(key, "\"."));
-          }
-        }
-      }
-
-      return (0, _util.shadow)(this, "viewerPreferences", prefs);
-    }
-  }, {
-    key: "openAction",
-    get: function get() {
-      var obj = this._catDict.get("OpenAction");
-
-      var openAction = Object.create(null);
-
-      if ((0, _primitives.isDict)(obj)) {
-        var destDict = new _primitives.Dict(this.xref);
-        destDict.set("A", obj);
-        var resultObj = {
-          url: null,
-          dest: null,
-          action: null
-        };
-        Catalog.parseDestDictionary({
-          destDict: destDict,
-          resultObj: resultObj
-        });
-
-        if (Array.isArray(resultObj.dest)) {
-          openAction.dest = resultObj.dest;
-        } else if (resultObj.action) {
-          openAction.action = resultObj.action;
-        }
-      } else if (Array.isArray(obj)) {
-        openAction.dest = obj;
-      }
-
-      return (0, _util.shadow)(this, "openAction", (0, _util.objectSize)(openAction) > 0 ? openAction : null);
-    }
-  }, {
-    key: "attachments",
-    get: function get() {
-      var obj = this._catDict.get("Names");
-
-      var attachments = null;
-
-      if (obj && obj.has("EmbeddedFiles")) {
-        var nameTree = new NameTree(obj.getRaw("EmbeddedFiles"), this.xref);
-        var names = nameTree.getAll();
-
-        for (var name in names) {
-          var fs = new FileSpec(names[name], this.xref);
-
-          if (!attachments) {
-            attachments = Object.create(null);
-          }
-
-          attachments[(0, _util.stringToPDFString)(name)] = fs.serializable;
-        }
-      }
-
-      return (0, _util.shadow)(this, "attachments", attachments);
-    }
-  }, {
-    key: "javaScript",
-    get: function get() {
-      var javaScript = this._collectJavaScript();
-
-      return (0, _util.shadow)(this, "javaScript", javaScript ? Object.values(javaScript) : null);
-    }
-  }, {
-    key: "jsActions",
-    get: function get() {
-      var js = this._collectJavaScript();
-
-      var actions = (0, _core_utils.collectActions)(this.xref, this._catDict, _util.DocumentActionEventType);
-
-      if (!actions && js) {
-        actions = Object.create(null);
-      }
-
-      if (actions && js) {
-        for (var _i2 = 0, _Object$entries = Object.entries(js); _i2 < _Object$entries.length; _i2++) {
-          var _Object$entries$_i = _slicedToArray(_Object$entries[_i2], 2),
-              key = _Object$entries$_i[0],
-              val = _Object$entries$_i[1];
-
-          if (key in actions) {
-            actions[key].push(val);
-          } else {
-            actions[key] = [val];
-          }
-        }
-      }
-
-      return (0, _util.shadow)(this, "jsActions", actions);
     }
   }], [{
     key: "parseDestDictionary",
@@ -15929,8 +15929,8 @@ var XRef = function XRefClosure() {
 
       var trailerDict;
 
-      for (var _i3 = 0, _ii = trailers.length; _i3 < _ii; ++_i3) {
-        stream.pos = trailers[_i3];
+      for (var _i2 = 0, _ii = trailers.length; _i2 < _ii; ++_i2) {
+        stream.pos = trailers[_i2];
         var parser = new _parser.Parser({
           lexer: new _parser.Lexer(stream),
           xref: this,
@@ -16216,9 +16216,9 @@ var XRef = function XRefClosure() {
 
       var entries = new Array(n);
 
-      for (var _i4 = 0; _i4 < n; ++_i4) {
+      for (var _i3 = 0; _i3 < n; ++_i3) {
         var obj = parser.getObj();
-        entries[_i4] = obj;
+        entries[_i3] = obj;
 
         if (parser.buf1 instanceof _primitives.Cmd && parser.buf1.cmd === "endobj") {
           parser.shift();
@@ -16228,10 +16228,10 @@ var XRef = function XRefClosure() {
           continue;
         }
 
-        var _num = nums[_i4],
+        var _num = nums[_i3],
             entry = this.entries[_num];
 
-        if (entry && entry.offset === tableOffset && entry.gen === _i4) {
+        if (entry && entry.offset === tableOffset && entry.gen === _i3) {
           this._cacheMap.set(_num, obj);
         }
       }
@@ -16370,8 +16370,8 @@ var NameOrNumberTree = /*#__PURE__*/function () {
         var entries = obj.get(this._type);
 
         if (Array.isArray(entries)) {
-          for (var _i5 = 0, _ii2 = entries.length; _i5 < _ii2; _i5 += 2) {
-            dict[xref.fetchIfRef(entries[_i5])] = xref.fetchIfRef(entries[_i5 + 1]);
+          for (var _i4 = 0, _ii2 = entries.length; _i4 < _ii2; _i4 += 2) {
+            dict[xref.fetchIfRef(entries[_i4])] = xref.fetchIfRef(entries[_i4 + 1]);
           }
         }
       }
@@ -16669,7 +16669,7 @@ var ObjectLoader = function () {
       var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee4() {
-        var nodesToRevisit, pendingRequests, currentNode, manager, baseStreams, foundMissingData, i, ii, stream, _i6, _ii3, node;
+        var nodesToRevisit, pendingRequests, currentNode, manager, baseStreams, foundMissingData, i, ii, stream, _i5, _ii3, node;
 
         return _regenerator["default"].wrap(function _callee4$(_context4) {
           while (1) {
@@ -16764,8 +16764,8 @@ var ObjectLoader = function () {
                 return _this6.xref.stream.manager.requestRanges(pendingRequests);
 
               case 28:
-                for (_i6 = 0, _ii3 = nodesToRevisit.length; _i6 < _ii3; _i6++) {
-                  node = nodesToRevisit[_i6];
+                for (_i5 = 0, _ii3 = nodesToRevisit.length; _i5 < _ii3; _i5++) {
+                  node = nodesToRevisit[_i5];
 
                   if (node instanceof _primitives.Ref) {
                     _this6.refSet.remove(node);
@@ -29601,7 +29601,7 @@ var LabCS = function LabCSClosure() {
     var result;
 
     if (x >= 6 / 29) {
-      result = x * x * x;
+      result = Math.pow(x, 3);
     } else {
       result = 108 / 841 * (x - 4 / 29);
     }
@@ -30057,23 +30057,6 @@ var LocalTilingPatternCache = /*#__PURE__*/function (_BaseLocalCache5) {
 exports.LocalTilingPatternCache = LocalTilingPatternCache;
 
 var GlobalImageCache = /*#__PURE__*/function () {
-  _createClass(GlobalImageCache, null, [{
-    key: "NUM_PAGES_THRESHOLD",
-    get: function get() {
-      return (0, _util.shadow)(this, "NUM_PAGES_THRESHOLD", 2);
-    }
-  }, {
-    key: "MIN_IMAGES_TO_CACHE",
-    get: function get() {
-      return (0, _util.shadow)(this, "MIN_IMAGES_TO_CACHE", 10);
-    }
-  }, {
-    key: "MAX_BYTE_SIZE",
-    get: function get() {
-      return (0, _util.shadow)(this, "MAX_BYTE_SIZE", 40e6);
-    }
-  }]);
-
   function GlobalImageCache() {
     _classCallCheck(this, GlobalImageCache);
 
@@ -30082,6 +30065,30 @@ var GlobalImageCache = /*#__PURE__*/function () {
   }
 
   _createClass(GlobalImageCache, [{
+    key: "_byteSize",
+    get: function get() {
+      var byteSize = 0;
+
+      this._imageCache.forEach(function (imageData) {
+        byteSize += imageData.byteSize;
+      });
+
+      return byteSize;
+    }
+  }, {
+    key: "_cacheLimitReached",
+    get: function get() {
+      if (this._imageCache.size < GlobalImageCache.MIN_IMAGES_TO_CACHE) {
+        return false;
+      }
+
+      if (this._byteSize < GlobalImageCache.MAX_BYTE_SIZE) {
+        return false;
+      }
+
+      return true;
+    }
+  }, {
     key: "shouldCache",
     value: function shouldCache(ref, pageIndex) {
       var pageIndexSet = this._refCache.get(ref);
@@ -30177,29 +30184,20 @@ var GlobalImageCache = /*#__PURE__*/function () {
 
       this._imageCache.clear();
     }
-  }, {
-    key: "_byteSize",
+  }], [{
+    key: "NUM_PAGES_THRESHOLD",
     get: function get() {
-      var byteSize = 0;
-
-      this._imageCache.forEach(function (imageData) {
-        byteSize += imageData.byteSize;
-      });
-
-      return byteSize;
+      return (0, _util.shadow)(this, "NUM_PAGES_THRESHOLD", 2);
     }
   }, {
-    key: "_cacheLimitReached",
+    key: "MIN_IMAGES_TO_CACHE",
     get: function get() {
-      if (this._imageCache.size < GlobalImageCache.MIN_IMAGES_TO_CACHE) {
-        return false;
-      }
-
-      if (this._byteSize < GlobalImageCache.MAX_BYTE_SIZE) {
-        return false;
-      }
-
-      return true;
+      return (0, _util.shadow)(this, "MIN_IMAGES_TO_CACHE", 10);
+    }
+  }, {
+    key: "MAX_BYTE_SIZE",
+    get: function get() {
+      return (0, _util.shadow)(this, "MAX_BYTE_SIZE", 40e6);
     }
   }]);
 
@@ -30561,6 +30559,32 @@ var Annotation = /*#__PURE__*/function () {
       return this._hasFlag(this.flags, _util.AnnotationFlag.HIDDEN);
     }
   }, {
+    key: "viewable",
+    get: function get() {
+      if (this.data.quadPoints === null) {
+        return false;
+      }
+
+      if (this.flags === 0) {
+        return true;
+      }
+
+      return this._isViewable(this.flags);
+    }
+  }, {
+    key: "printable",
+    get: function get() {
+      if (this.data.quadPoints === null) {
+        return false;
+      }
+
+      if (this.flags === 0) {
+        return false;
+      }
+
+      return this._isPrintable(this.flags);
+    }
+  }, {
     key: "setContents",
     value: function setContents(contents) {
       this.contents = (0, _util.stringToPDFString)(contents || "");
@@ -30783,32 +30807,6 @@ var Annotation = /*#__PURE__*/function () {
       } finally {
         _iterator.f();
       }
-    }
-  }, {
-    key: "viewable",
-    get: function get() {
-      if (this.data.quadPoints === null) {
-        return false;
-      }
-
-      if (this.flags === 0) {
-        return true;
-      }
-
-      return this._isViewable(this.flags);
-    }
-  }, {
-    key: "printable",
-    get: function get() {
-      if (this.data.quadPoints === null) {
-        return false;
-      }
-
-      if (this.flags === 0) {
-        return false;
-      }
-
-      return this._isPrintable(this.flags);
     }
   }]);
 
@@ -33241,18 +33239,6 @@ function normalizeBlendMode(value) {
 }
 
 var TimeSlotManager = /*#__PURE__*/function () {
-  _createClass(TimeSlotManager, null, [{
-    key: "TIME_SLOT_DURATION_MS",
-    get: function get() {
-      return (0, _util.shadow)(this, "TIME_SLOT_DURATION_MS", 20);
-    }
-  }, {
-    key: "CHECK_TIME_EVERY",
-    get: function get() {
-      return (0, _util.shadow)(this, "CHECK_TIME_EVERY", 100);
-    }
-  }]);
-
   function TimeSlotManager() {
     _classCallCheck(this, TimeSlotManager);
 
@@ -33274,6 +33260,16 @@ var TimeSlotManager = /*#__PURE__*/function () {
     value: function reset() {
       this.endTime = Date.now() + TimeSlotManager.TIME_SLOT_DURATION_MS;
       this.checked = 0;
+    }
+  }], [{
+    key: "TIME_SLOT_DURATION_MS",
+    get: function get() {
+      return (0, _util.shadow)(this, "TIME_SLOT_DURATION_MS", 20);
+    }
+  }, {
+    key: "CHECK_TIME_EVERY",
+    get: function get() {
+      return (0, _util.shadow)(this, "CHECK_TIME_EVERY", 100);
     }
   }]);
 
@@ -33307,6 +33303,15 @@ var PartialEvaluator = /*#__PURE__*/function () {
   }
 
   _createClass(PartialEvaluator, [{
+    key: "_pdfFunctionFactory",
+    get: function get() {
+      var pdfFunctionFactory = new _function.PDFFunctionFactory({
+        xref: this.xref,
+        isEvalSupported: this.options.isEvalSupported
+      });
+      return (0, _util.shadow)(this, "_pdfFunctionFactory", pdfFunctionFactory);
+    }
+  }, {
     key: "clone",
     value: function clone() {
       var newOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DefaultPartialEvaluatorOptions;
@@ -35215,20 +35220,16 @@ var PartialEvaluator = /*#__PURE__*/function () {
 
         if (!font.vertical) {
           textContentItem.width = 0;
-          textContentItem.height = Math.sqrt(trm[2] * trm[2] + trm[3] * trm[3]);
+          textContentItem.height = Math.hypot(trm[2], trm[3]);
           textContentItem.vertical = false;
         } else {
-          textContentItem.width = Math.sqrt(trm[0] * trm[0] + trm[1] * trm[1]);
+          textContentItem.width = Math.hypot(trm[0], trm[1]);
           textContentItem.height = 0;
           textContentItem.vertical = true;
         }
 
-        var a = textState.textLineMatrix[0];
-        var b = textState.textLineMatrix[1];
-        var scaleLineX = Math.sqrt(a * a + b * b);
-        a = textState.ctm[0];
-        b = textState.ctm[1];
-        var scaleCtmX = Math.sqrt(a * a + b * b);
+        var scaleLineX = Math.hypot(textState.textLineMatrix[0], textState.textLineMatrix[1]);
+        var scaleCtmX = Math.hypot(textState.ctm[0], textState.ctm[1]);
         textContentItem.textAdvanceScale = scaleCtmX * scaleLineX;
         textContentItem.lastAdvanceWidth = 0;
         textContentItem.lastAdvanceHeight = 0;
@@ -36618,15 +36619,6 @@ var PartialEvaluator = /*#__PURE__*/function () {
 
       return translateFont;
     }()
-  }, {
-    key: "_pdfFunctionFactory",
-    get: function get() {
-      var pdfFunctionFactory = new _function.PDFFunctionFactory({
-        xref: this.xref,
-        isEvalSupported: this.options.isEvalSupported
-      });
-      return (0, _util.shadow)(this, "_pdfFunctionFactory", pdfFunctionFactory);
-    }
   }], [{
     key: "buildFontPaths",
     value: function buildFontPaths(font, glyphs, handler) {
@@ -37038,7 +37030,125 @@ var EvalState = /*#__PURE__*/function () {
 }();
 
 var EvaluatorPreprocessor = /*#__PURE__*/function () {
-  _createClass(EvaluatorPreprocessor, null, [{
+  function EvaluatorPreprocessor(stream, xref) {
+    var stateManager = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new StateManager();
+
+    _classCallCheck(this, EvaluatorPreprocessor);
+
+    this.parser = new _parser.Parser({
+      lexer: new _parser.Lexer(stream, EvaluatorPreprocessor.opMap),
+      xref: xref
+    });
+    this.stateManager = stateManager;
+    this.nonProcessedArgs = [];
+    this._numInvalidPathOPS = 0;
+  }
+
+  _createClass(EvaluatorPreprocessor, [{
+    key: "savedStatesDepth",
+    get: function get() {
+      return this.stateManager.stateStack.length;
+    }
+  }, {
+    key: "read",
+    value: function read(operation) {
+      var args = operation.args;
+
+      while (true) {
+        var obj = this.parser.getObj();
+
+        if (obj instanceof _primitives.Cmd) {
+          var cmd = obj.cmd;
+          var opSpec = EvaluatorPreprocessor.opMap[cmd];
+
+          if (!opSpec) {
+            (0, _util.warn)("Unknown command \"".concat(cmd, "\"."));
+            continue;
+          }
+
+          var fn = opSpec.id;
+          var numArgs = opSpec.numArgs;
+          var argsLength = args !== null ? args.length : 0;
+
+          if (!opSpec.variableArgs) {
+            if (argsLength !== numArgs) {
+              var nonProcessedArgs = this.nonProcessedArgs;
+
+              while (argsLength > numArgs) {
+                nonProcessedArgs.push(args.shift());
+                argsLength--;
+              }
+
+              while (argsLength < numArgs && nonProcessedArgs.length !== 0) {
+                if (args === null) {
+                  args = [];
+                }
+
+                args.unshift(nonProcessedArgs.pop());
+                argsLength++;
+              }
+            }
+
+            if (argsLength < numArgs) {
+              var partialMsg = "command ".concat(cmd, ": expected ").concat(numArgs, " args, ") + "but received ".concat(argsLength, " args.");
+
+              if (fn >= _util.OPS.moveTo && fn <= _util.OPS.endPath && ++this._numInvalidPathOPS > EvaluatorPreprocessor.MAX_INVALID_PATH_OPS) {
+                throw new _util.FormatError("Invalid ".concat(partialMsg));
+              }
+
+              (0, _util.warn)("Skipping ".concat(partialMsg));
+
+              if (args !== null) {
+                args.length = 0;
+              }
+
+              continue;
+            }
+          } else if (argsLength > numArgs) {
+            (0, _util.info)("Command ".concat(cmd, ": expected [0, ").concat(numArgs, "] args, ") + "but received ".concat(argsLength, " args."));
+          }
+
+          this.preprocessCommand(fn, args);
+          operation.fn = fn;
+          operation.args = args;
+          return true;
+        }
+
+        if (obj === _primitives.EOF) {
+          return false;
+        }
+
+        if (obj !== null) {
+          if (args === null) {
+            args = [];
+          }
+
+          args.push(obj);
+
+          if (args.length > 33) {
+            throw new _util.FormatError("Too many arguments");
+          }
+        }
+      }
+    }
+  }, {
+    key: "preprocessCommand",
+    value: function preprocessCommand(fn, args) {
+      switch (fn | 0) {
+        case _util.OPS.save:
+          this.stateManager.save();
+          break;
+
+        case _util.OPS.restore:
+          this.stateManager.restore();
+          break;
+
+        case _util.OPS.transform:
+          this.stateManager.transform(args);
+          break;
+      }
+    }
+  }], [{
     key: "opMap",
     get: function get() {
       var getOPMap = (0, _core_utils.getLookupTableFactory)(function (t) {
@@ -37424,126 +37534,6 @@ var EvaluatorPreprocessor = /*#__PURE__*/function () {
     key: "MAX_INVALID_PATH_OPS",
     get: function get() {
       return (0, _util.shadow)(this, "MAX_INVALID_PATH_OPS", 20);
-    }
-  }]);
-
-  function EvaluatorPreprocessor(stream, xref) {
-    var stateManager = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new StateManager();
-
-    _classCallCheck(this, EvaluatorPreprocessor);
-
-    this.parser = new _parser.Parser({
-      lexer: new _parser.Lexer(stream, EvaluatorPreprocessor.opMap),
-      xref: xref
-    });
-    this.stateManager = stateManager;
-    this.nonProcessedArgs = [];
-    this._numInvalidPathOPS = 0;
-  }
-
-  _createClass(EvaluatorPreprocessor, [{
-    key: "read",
-    value: function read(operation) {
-      var args = operation.args;
-
-      while (true) {
-        var obj = this.parser.getObj();
-
-        if (obj instanceof _primitives.Cmd) {
-          var cmd = obj.cmd;
-          var opSpec = EvaluatorPreprocessor.opMap[cmd];
-
-          if (!opSpec) {
-            (0, _util.warn)("Unknown command \"".concat(cmd, "\"."));
-            continue;
-          }
-
-          var fn = opSpec.id;
-          var numArgs = opSpec.numArgs;
-          var argsLength = args !== null ? args.length : 0;
-
-          if (!opSpec.variableArgs) {
-            if (argsLength !== numArgs) {
-              var nonProcessedArgs = this.nonProcessedArgs;
-
-              while (argsLength > numArgs) {
-                nonProcessedArgs.push(args.shift());
-                argsLength--;
-              }
-
-              while (argsLength < numArgs && nonProcessedArgs.length !== 0) {
-                if (args === null) {
-                  args = [];
-                }
-
-                args.unshift(nonProcessedArgs.pop());
-                argsLength++;
-              }
-            }
-
-            if (argsLength < numArgs) {
-              var partialMsg = "command ".concat(cmd, ": expected ").concat(numArgs, " args, ") + "but received ".concat(argsLength, " args.");
-
-              if (fn >= _util.OPS.moveTo && fn <= _util.OPS.endPath && ++this._numInvalidPathOPS > EvaluatorPreprocessor.MAX_INVALID_PATH_OPS) {
-                throw new _util.FormatError("Invalid ".concat(partialMsg));
-              }
-
-              (0, _util.warn)("Skipping ".concat(partialMsg));
-
-              if (args !== null) {
-                args.length = 0;
-              }
-
-              continue;
-            }
-          } else if (argsLength > numArgs) {
-            (0, _util.info)("Command ".concat(cmd, ": expected [0, ").concat(numArgs, "] args, ") + "but received ".concat(argsLength, " args."));
-          }
-
-          this.preprocessCommand(fn, args);
-          operation.fn = fn;
-          operation.args = args;
-          return true;
-        }
-
-        if (obj === _primitives.EOF) {
-          return false;
-        }
-
-        if (obj !== null) {
-          if (args === null) {
-            args = [];
-          }
-
-          args.push(obj);
-
-          if (args.length > 33) {
-            throw new _util.FormatError("Too many arguments");
-          }
-        }
-      }
-    }
-  }, {
-    key: "preprocessCommand",
-    value: function preprocessCommand(fn, args) {
-      switch (fn | 0) {
-        case _util.OPS.save:
-          this.stateManager.save();
-          break;
-
-        case _util.OPS.restore:
-          this.stateManager.restore();
-          break;
-
-        case _util.OPS.transform:
-          this.stateManager.transform(args);
-          break;
-      }
-    }
-  }, {
-    key: "savedStatesDepth",
-    get: function get() {
-      return this.stateManager.stateStack.length;
     }
   }]);
 
@@ -43970,8 +43960,8 @@ function getEncoding(encodingName) {
 "use strict";
 __w_pdfjs_require__.r(__webpack_exports__);
 /* harmony export */ __w_pdfjs_require__.d(__webpack_exports__, {
-/* harmony export */   "getDingbatsGlyphsUnicode": () => /* binding */ getDingbatsGlyphsUnicode,
-/* harmony export */   "getGlyphsUnicode": () => /* binding */ getGlyphsUnicode
+/* harmony export */   "getDingbatsGlyphsUnicode": () => (/* binding */ getDingbatsGlyphsUnicode),
+/* harmony export */   "getGlyphsUnicode": () => (/* binding */ getGlyphsUnicode)
 /* harmony export */ });
 /* harmony import */ var _core_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __w_pdfjs_require__(137);
 
@@ -53786,11 +53776,11 @@ exports.getSupplementalGlyphMapForCalibri = getSupplementalGlyphMapForCalibri;
 "use strict";
 __w_pdfjs_require__.r(__webpack_exports__);
 /* harmony export */ __w_pdfjs_require__.d(__webpack_exports__, {
-/* harmony export */   "getNormalizedUnicodes": () => /* binding */ getNormalizedUnicodes,
-/* harmony export */   "getUnicodeForGlyph": () => /* binding */ getUnicodeForGlyph,
-/* harmony export */   "getUnicodeRangeFor": () => /* binding */ getUnicodeRangeFor,
-/* harmony export */   "mapSpecialUnicodeValues": () => /* binding */ mapSpecialUnicodeValues,
-/* harmony export */   "reverseIfRtl": () => /* binding */ reverseIfRtl
+/* harmony export */   "getNormalizedUnicodes": () => (/* binding */ getNormalizedUnicodes),
+/* harmony export */   "getUnicodeForGlyph": () => (/* binding */ getUnicodeForGlyph),
+/* harmony export */   "getUnicodeRangeFor": () => (/* binding */ getUnicodeRangeFor),
+/* harmony export */   "mapSpecialUnicodeValues": () => (/* binding */ mapSpecialUnicodeValues),
+/* harmony export */   "reverseIfRtl": () => (/* binding */ reverseIfRtl)
 /* harmony export */ });
 /* harmony import */ var _core_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __w_pdfjs_require__(137);
 
@@ -58896,6 +58886,18 @@ var _primitives = __w_pdfjs_require__(134);
 
 var _core_utils = __w_pdfjs_require__(137);
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 var ShadingType = {
   FUNCTION_BASED: 1,
   AXIAL: 2,
@@ -58999,13 +59001,15 @@ Shadings.RadialAxial = function RadialAxialClosure() {
     }
 
     if (this.shadingType === ShadingType.RADIAL && (!extendStart || !extendEnd)) {
-      var x1 = this.coordsArr[0];
-      var y1 = this.coordsArr[1];
-      var r1 = this.coordsArr[2];
-      var x2 = this.coordsArr[3];
-      var y2 = this.coordsArr[4];
-      var r2 = this.coordsArr[5];
-      var distance = Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+      var _this$coordsArr = _slicedToArray(this.coordsArr, 6),
+          x1 = _this$coordsArr[0],
+          y1 = _this$coordsArr[1],
+          r1 = _this$coordsArr[2],
+          x2 = _this$coordsArr[3],
+          y2 = _this$coordsArr[4],
+          r2 = _this$coordsArr[5];
+
+      var distance = Math.hypot(x1 - x2, y1 - y2);
 
       if (r1 <= r2 + distance && r2 <= r1 + distance) {
         (0, _util.warn)("Unsupported radial gradient.");
@@ -65856,6 +65860,16 @@ var PDFImage = /*#__PURE__*/function () {
   }
 
   _createClass(PDFImage, [{
+    key: "drawWidth",
+    get: function get() {
+      return Math.max(this.width, this.smask && this.smask.width || 0, this.mask && this.mask.width || 0);
+    }
+  }, {
+    key: "drawHeight",
+    get: function get() {
+      return Math.max(this.height, this.smask && this.smask.height || 0, this.mask && this.mask.height || 0);
+    }
+  }, {
     key: "decodeBuffer",
     value: function decodeBuffer(buffer) {
       var bpc = this.bpc;
@@ -66222,16 +66236,6 @@ var PDFImage = /*#__PURE__*/function () {
       this.image.drawHeight = drawHeight || this.height;
       this.image.forceRGB = !!forceRGB;
       return this.image.getBytes(length, true);
-    }
-  }, {
-    key: "drawWidth",
-    get: function get() {
-      return Math.max(this.width, this.smask && this.smask.width || 0, this.mask && this.mask.width || 0);
-    }
-  }, {
-    key: "drawHeight",
-    get: function get() {
-      return Math.max(this.height, this.smask && this.smask.height || 0, this.mask && this.mask.height || 0);
     }
   }], [{
     key: "buildImage",
@@ -67082,6 +67086,39 @@ var SimpleDOMNode = /*#__PURE__*/function () {
   }
 
   _createClass(SimpleDOMNode, [{
+    key: "firstChild",
+    get: function get() {
+      return this.childNodes && this.childNodes[0];
+    }
+  }, {
+    key: "nextSibling",
+    get: function get() {
+      var childNodes = this.parentNode.childNodes;
+
+      if (!childNodes) {
+        return undefined;
+      }
+
+      var index = childNodes.indexOf(this);
+
+      if (index === -1) {
+        return undefined;
+      }
+
+      return childNodes[index + 1];
+    }
+  }, {
+    key: "textContent",
+    get: function get() {
+      if (!this.childNodes) {
+        return this.nodeValue || "";
+      }
+
+      return this.childNodes.map(function (child) {
+        return child.textContent;
+      }).join("");
+    }
+  }, {
     key: "hasChildNodes",
     value: function hasChildNodes() {
       return this.childNodes && this.childNodes.length > 0;
@@ -67215,39 +67252,6 @@ var SimpleDOMNode = /*#__PURE__*/function () {
       } else {
         buffer.push("/>");
       }
-    }
-  }, {
-    key: "firstChild",
-    get: function get() {
-      return this.childNodes && this.childNodes[0];
-    }
-  }, {
-    key: "nextSibling",
-    get: function get() {
-      var childNodes = this.parentNode.childNodes;
-
-      if (!childNodes) {
-        return undefined;
-      }
-
-      var index = childNodes.indexOf(this);
-
-      if (index === -1) {
-        return undefined;
-      }
-
-      return childNodes[index + 1];
-    }
-  }, {
-    key: "textContent",
-    get: function get() {
-      if (!this.childNodes) {
-        return this.nodeValue || "";
-      }
-
-      return this.childNodes.map(function (child) {
-        return child.textContent;
-      }).join("");
     }
   }]);
 
@@ -68021,6 +68025,26 @@ var PDFWorkerStreamReader = /*#__PURE__*/function () {
   }
 
   _createClass(PDFWorkerStreamReader, [{
+    key: "headersReady",
+    get: function get() {
+      return this._headersReady;
+    }
+  }, {
+    key: "contentLength",
+    get: function get() {
+      return this._contentLength;
+    }
+  }, {
+    key: "isStreamingSupported",
+    get: function get() {
+      return this._isStreamingSupported;
+    }
+  }, {
+    key: "isRangeSupported",
+    get: function get() {
+      return this._isRangeSupported;
+    }
+  }, {
     key: "read",
     value: function () {
       var _read = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
@@ -68073,26 +68097,6 @@ var PDFWorkerStreamReader = /*#__PURE__*/function () {
     value: function cancel(reason) {
       this._reader.cancel(reason);
     }
-  }, {
-    key: "headersReady",
-    get: function get() {
-      return this._headersReady;
-    }
-  }, {
-    key: "contentLength",
-    get: function get() {
-      return this._contentLength;
-    }
-  }, {
-    key: "isStreamingSupported",
-    get: function get() {
-      return this._isStreamingSupported;
-    }
-  }, {
-    key: "isRangeSupported",
-    get: function get() {
-      return this._isRangeSupported;
-    }
   }]);
 
   return PDFWorkerStreamReader;
@@ -68114,6 +68118,11 @@ var PDFWorkerStreamRangeReader = /*#__PURE__*/function () {
   }
 
   _createClass(PDFWorkerStreamRangeReader, [{
+    key: "isStreamingSupported",
+    get: function get() {
+      return false;
+    }
+  }, {
     key: "read",
     value: function () {
       var _read2 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
@@ -68166,11 +68175,6 @@ var PDFWorkerStreamRangeReader = /*#__PURE__*/function () {
     value: function cancel(reason) {
       this._reader.cancel(reason);
     }
-  }, {
-    key: "isStreamingSupported",
-    get: function get() {
-      return false;
-    }
   }]);
 
   return PDFWorkerStreamRangeReader;
@@ -68220,7 +68224,7 @@ var PDFWorkerStreamRangeReader = /*#__PURE__*/function () {
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
-/******/ 		__w_pdfjs_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
+/******/ 		__w_pdfjs_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */

@@ -17,15 +17,11 @@
 
 There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook.
 ## What's new in version 8.0?
-Once again, I've fixed `[(zoom)]`. Now there's no infinite loop when you resize the PDF quickly with the mouse wheel. It's unlikely, but the bug fix might break some applications, so I've decided to call it a new major version.
-
-Version 8.0 also supports server-side rendering. The current approach probably isn't optimal yet; if you have an idea how to improve it, just open a ticket on GitHub. The working demo is here: https://github.com/stephanrauh/ngx-extended-pdf-viewer-issues/tree/main/issue609
-
-Starting with version 8.0.0-beta.4, ngx-extended-pdf-viewer uses version 2.7 of pdf.js for the default branch and pdf.js 2.8 for the bleeding-edge branch. Among other things, this means improved highlighting. When using the find function, the highlighting was often a bit off if the text used not just letters and digits. It's still not perfect, but in many cases it's better than it used to be. If you're interested in the gory details, here's the link to the pull request: https://github.com/mozilla/pdf.js/pull/12855
-
-Signatures can now be shown without having to deactivate AcroForm support. Note that the libraries still doesn't verify the signatures, so use the feature at your own risk. You don't want to display forged signatures.
-
-Custom toolbars can now have multiple lines.
+- Once again, I've fixed `[(zoom)]`. Now there's no infinite loop when you resize the PDF quickly with the mouse wheel. It's unlikely, but the bug fix might break some applications, so I've decided to call it a new major version.
+- Version 8.0 also supports server-side rendering. The current approach probably isn't optimal yet; if you have an idea how to improve it, just open a ticket on GitHub. The working demo is here: https://github.com/stephanrauh/ngx-extended-pdf-viewer-issues/tree/main/issue609
+- Starting with version 8.0.0-beta.4, ngx-extended-pdf-viewer uses version 2.7 of pdf.js for the default branch and pdf.js 2.8 for the bleeding-edge branch. Among other things, this means improved highlighting. When using the find function, the highlighting was often a bit off if the text used not just letters and digits. It's still not perfect, but in many cases it's better than it used to be. If you're interested in the gory details, here's the link to the pull request: https://github.com/mozilla/pdf.js/pull/12855
+- Signatures can now be shown without having to deactivate AcroForm support. Note that the libraries still doesn't verify the signatures, so use the feature at your own risk. You don't want to display forged signatures.
+- Custom toolbars can now have multiple lines.
 ## Other potentially breaking changes
 Version 8.0 introduces a few minor CSS changes. If your layout is broken, check the version history of the *.scss files.
 
