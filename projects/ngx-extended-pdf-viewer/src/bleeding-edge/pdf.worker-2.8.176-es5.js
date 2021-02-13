@@ -2,7 +2,7 @@
  * @licstart The following is the entire license notice for the
  * Javascript code in this page
  *
- * Copyright 2020 Mozilla Foundation
+ * Copyright 2021 Mozilla Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.8.175';
-var pdfjsBuild = '859198b2d';
+var pdfjsVersion = '2.8.176';
+var pdfjsBuild = '5658b3a22';
 
 /***/ }),
 /* 1 */
@@ -213,7 +213,7 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
       var WorkerTasks = [];
       var verbosity = (0, _util.getVerbosityLevel)();
       var apiVersion = docParams.apiVersion;
-      var workerVersion = '2.8.175';
+      var workerVersion = '2.8.176';
 
       if (apiVersion !== workerVersion) {
         throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -15968,10 +15968,6 @@ var XRef = function XRefClosure() {
             continue;
           }
         } catch (ex) {
-          if (ex instanceof _core_utils.MissingDataException) {
-            throw ex;
-          }
-
           continue;
         }
 
@@ -31386,7 +31382,8 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
     key: "_getAppearance",
     value: function () {
       var _getAppearance2 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee3(evaluator, task, annotationStorage) {
-        var isPassword, value, defaultPadding, hPadding, totalHeight, totalWidth, font, fontSize, descent, vPadding, defaultAppearance, alignment, encodedString, renderedText;
+        var isPassword, value, lineCount, defaultPadding, hPadding, totalHeight, totalWidth, _this$_computeFontSiz, _this$_computeFontSiz2, defaultAppearance, fontSize, font, descent, vPadding, alignment, encodedString, renderedText;
+
         return _regenerator["default"].wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -31411,14 +31408,22 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                 return _context3.abrupt("return", null);
 
               case 6:
+                value = value.trim();
+
                 if (!(value === "")) {
-                  _context3.next = 8;
+                  _context3.next = 9;
                   break;
                 }
 
                 return _context3.abrupt("return", "");
 
-              case 8:
+              case 9:
+                lineCount = -1;
+
+                if (this.data.multiLine) {
+                  lineCount = value.split(/\r\n|\r|\n/).length;
+                }
+
                 defaultPadding = 2;
                 hPadding = defaultPadding;
                 totalHeight = this.data.rect[3] - this.data.rect[1];
@@ -31429,12 +31434,12 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                   this.data.defaultAppearanceData = (0, _default_appearance.parseDefaultAppearance)(this.data.defaultAppearance);
                 }
 
-                _context3.next = 15;
+                _this$_computeFontSiz = this._computeFontSize(totalHeight, lineCount), _this$_computeFontSiz2 = _slicedToArray(_this$_computeFontSiz, 2), defaultAppearance = _this$_computeFontSiz2[0], fontSize = _this$_computeFontSiz2[1];
+                _context3.next = 19;
                 return this._getFontData(evaluator, task);
 
-              case 15:
+              case 19:
                 font = _context3.sent;
-                fontSize = this._computeFontSize(font, totalHeight);
                 descent = font.descent;
 
                 if (isNaN(descent)) {
@@ -31442,39 +31447,38 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                 }
 
                 vPadding = defaultPadding + Math.abs(descent) * fontSize;
-                defaultAppearance = this.data.defaultAppearance;
                 alignment = this.data.textAlignment;
 
                 if (!this.data.multiLine) {
-                  _context3.next = 24;
+                  _context3.next = 26;
                   break;
                 }
 
                 return _context3.abrupt("return", this._getMultilineAppearance(defaultAppearance, value, font, fontSize, totalWidth, totalHeight, alignment, hPadding, vPadding));
 
-              case 24:
+              case 26:
                 encodedString = font.encodeString(value).join("");
 
                 if (!this.data.comb) {
-                  _context3.next = 27;
+                  _context3.next = 29;
                   break;
                 }
 
                 return _context3.abrupt("return", this._getCombAppearance(defaultAppearance, font, encodedString, totalWidth, hPadding, vPadding));
 
-              case 27:
+              case 29:
                 if (!(alignment === 0 || alignment > 2)) {
-                  _context3.next = 29;
+                  _context3.next = 31;
                   break;
                 }
 
                 return _context3.abrupt("return", "/Tx BMC q BT " + defaultAppearance + " 1 0 0 1 ".concat(hPadding, " ").concat(vPadding, " Tm (").concat((0, _util.escapeString)(encodedString), ") Tj") + " ET Q EMC");
 
-              case 29:
+              case 31:
                 renderedText = this._renderText(encodedString, font, fontSize, totalWidth, alignment, hPadding, vPadding);
                 return _context3.abrupt("return", "/Tx BMC q BT " + defaultAppearance + " 1 0 0 1 0 0 Tm ".concat(renderedText) + " ET Q EMC");
 
-              case 31:
+              case 33:
               case "end":
                 return _context3.stop();
             }
@@ -31528,29 +31532,30 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
     }()
   }, {
     key: "_computeFontSize",
-    value: function _computeFontSize(font, height) {
+    value: function _computeFontSize(height, lineCount) {
       var fontSize = this.data.defaultAppearanceData.fontSize;
 
-      if (!fontSize) {
-        var _this$data$defaultApp2 = this.data.defaultAppearanceData,
-            fontColor = _this$data$defaultApp2.fontColor,
-            fontName = _this$data$defaultApp2.fontName;
-        var capHeight;
+      if (fontSize === null || fontSize === 0) {
+        var roundWithOneDigit = function roundWithOneDigit(x) {
+          return Math.round(x * 10) / 10;
+        };
 
-        if (font.capHeight) {
-          capHeight = font.capHeight;
+        var FONT_FACTOR = 0.8;
+
+        if (lineCount === -1) {
+          fontSize = roundWithOneDigit(FONT_FACTOR * height);
         } else {
-          var glyphs = font.charsToGlyphs(font.encodeString("M").join(""));
-
-          if (glyphs.length === 1 && glyphs[0].width) {
-            var em = glyphs[0].width / 1000;
-            capHeight = 0.7 * em;
-          } else {
-            capHeight = 0.7;
-          }
+          fontSize = 10;
+          var lineHeight = fontSize / FONT_FACTOR;
+          var numberOfLines = Math.round(height / lineHeight);
+          numberOfLines = Math.max(numberOfLines, lineCount);
+          lineHeight = height / numberOfLines;
+          fontSize = roundWithOneDigit(FONT_FACTOR * lineHeight);
         }
 
-        fontSize = Math.max(1, Math.floor(height / (1.5 * capHeight)));
+        var _this$data$defaultApp2 = this.data.defaultAppearanceData,
+            fontName = _this$data$defaultApp2.fontName,
+            fontColor = _this$data$defaultApp2.fontColor;
         this.data.defaultAppearance = (0, _default_appearance.createDefaultAppearance)({
           fontSize: fontSize,
           fontName: fontName,
@@ -31558,7 +31563,7 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
         });
       }
 
-      return fontSize;
+      return [this.data.defaultAppearance, fontSize];
     }
   }, {
     key: "_renderText",
@@ -33088,8 +33093,6 @@ var _fonts = __w_pdfjs_require__(158);
 
 var _encodings = __w_pdfjs_require__(161);
 
-var _core_utils = __w_pdfjs_require__(137);
-
 var _unicode = __w_pdfjs_require__(164);
 
 var _standard_fonts = __w_pdfjs_require__(163);
@@ -33107,6 +33110,8 @@ var _bidi = __w_pdfjs_require__(170);
 var _colorspace = __w_pdfjs_require__(152);
 
 var _glyphlist = __w_pdfjs_require__(162);
+
+var _core_utils = __w_pdfjs_require__(137);
 
 var _metrics = __w_pdfjs_require__(171);
 
@@ -33359,10 +33364,6 @@ var PartialEvaluator = /*#__PURE__*/function () {
                 try {
                   graphicState = xref.fetch(graphicState);
                 } catch (ex) {
-                  if (ex instanceof _core_utils.MissingDataException) {
-                    throw ex;
-                  }
-
                   processed.put(graphicState);
                   (0, _util.info)("hasBlendModes - ignoring ExtGState: \"".concat(ex, "\"."));
                   continue;
@@ -33434,10 +33435,6 @@ var PartialEvaluator = /*#__PURE__*/function () {
               try {
                 xObject = xref.fetch(xObject);
               } catch (ex) {
-                if (ex instanceof _core_utils.MissingDataException) {
-                  throw ex;
-                }
-
                 processed.put(xObject);
                 (0, _util.info)("hasBlendModes - ignoring XObject: \"".concat(ex, "\"."));
                 continue;
@@ -34443,11 +34440,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
             var tilingPatternIR = (0, _pattern.getTilingPatternIR)(localTilingPattern.operatorListIR, localTilingPattern.dict, color);
             operatorList.addOp(fn, tilingPatternIR);
             return undefined;
-          } catch (ex) {
-            if (ex instanceof _core_utils.MissingDataException) {
-              throw ex;
-            }
-          }
+          } catch (ex) {}
         }
 
         var pattern = patterns.get(name);

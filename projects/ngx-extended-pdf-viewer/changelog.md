@@ -257,3 +257,4 @@
 - 8.0.0-beta.8 #632 allow for multi-line custom toolbars; minor CSS improvements; updated the "bleeding edge" branch
 - 8.0.0-beta.9 #633 hide the "preparing document for print" dialog after opening the print preview window; added the new, improved highlighting of find results to fuzzy search
 - 8.0.0 #644 more precise highlighting when searching long words fuzzily
+- 8.1.0 #426 fix full-screen mode on Safari and iPad. Note this is a fairly radical solution which might cause problems with Angular.

@@ -2,7 +2,7 @@
  * @licstart The following is the entire license notice for the
  * Javascript code in this page
  *
- * Copyright 2020 Mozilla Foundation
+ * Copyright 2021 Mozilla Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -242,8 +242,8 @@ var _text_layer = __w_pdfjs_require__(21);
 
 var _svg = __w_pdfjs_require__(22);
 
-const pdfjsVersion = '2.8.175';
-const pdfjsBuild = '859198b2d';
+const pdfjsVersion = '2.8.176';
+const pdfjsBuild = '5658b3a22';
 {
   const PDFNetworkStream = __w_pdfjs_require__(23).PDFNetworkStream;
 
@@ -1984,7 +1984,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.8.175',
+    apiVersion: '2.8.176',
     source: {
       data: source.data,
       url: source.url,
@@ -4007,9 +4007,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.8.175';
+const version = '2.8.176';
 exports.version = version;
-const build = '859198b2d';
+const build = '5658b3a22';
 exports.build = build;
 
 /***/ }),
@@ -4501,6 +4501,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.AnnotationStorage = void 0;
 
+var _display_utils = __w_pdfjs_require__(1);
+
 var _util = __w_pdfjs_require__(2);
 
 class AnnotationStorage {
@@ -4511,7 +4513,17 @@ class AnnotationStorage {
     this.onResetModified = null;
   }
 
+  getValue(key, defaultValue) {
+    if (this._storage.has(key)) {
+      return this._storage.get(key);
+    }
+
+    return defaultValue;
+  }
+
   getOrCreateValue(key, defaultValue) {
+    (0, _display_utils.deprecated)("Use getValue instead.");
+
     if (this._storage.has(key)) {
       return this._storage.get(key);
     }
@@ -9970,7 +9982,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
     let element = null;
 
     if (this.renderInteractiveForms) {
-      const textContent = storage.getOrCreateValue(id, {
+      const textContent = storage.getValue(id, {
         value: this.data.fieldValue
       }).value;
       const elementData = {
@@ -10230,8 +10242,8 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
     const storage = this.annotationStorage;
     const data = this.data;
     const id = data.id;
-    const value = storage.getOrCreateValue(id, {
-      value: data.fieldValue && data.fieldValue !== "Off"
+    const value = storage.getValue(id, {
+      value: data.fieldValue && (data.exportValue && data.exportValue === data.fieldValue || !data.exportValue && data.fieldValue !== "Off")
     }).value;
     this.container.className = "buttonWidgetAnnotation checkBox";
     const element = document.createElement("input");
@@ -10316,7 +10328,7 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
     const storage = this.annotationStorage;
     const data = this.data;
     const id = data.id;
-    const value = storage.getOrCreateValue(id, {
+    const value = storage.getValue(id, {
       value: data.fieldValue === data.buttonValue
     }).value;
     const element = document.createElement("input");
@@ -10428,7 +10440,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
     this.container.className = "choiceWidgetAnnotation";
     const storage = this.annotationStorage;
     const id = this.data.id;
-    storage.getOrCreateValue(id, {
+    storage.getValue(id, {
       value: this.data.fieldValue.length > 0 ? this.data.fieldValue[0] : undefined
     });
     const selectElement = document.createElement("select");
@@ -11369,13 +11381,73 @@ var _util = __w_pdfjs_require__(2);
 
 const renderTextLayer = function renderTextLayerClosure() {
   const MAX_TEXT_DIVS_TO_RENDER = 100000;
+  const DEFAULT_FONT_SIZE = 30;
+  const DEFAULT_FONT_ASCENT = 0.8;
+  const ascentCache = new Map();
   const NonWhitespaceRegexp = /\S/;
 
   function isAllWhitespace(str) {
     return !NonWhitespaceRegexp.test(str);
   }
 
-  function appendText(task, geom, styles) {
+  function getAscent(fontFamily, ctx) {
+    const cachedAscent = ascentCache.get(fontFamily);
+
+    if (cachedAscent) {
+      return cachedAscent;
+    }
+
+    ctx.save();
+    ctx.font = `${DEFAULT_FONT_SIZE}px ${fontFamily}`;
+    const metrics = ctx.measureText("");
+    let ascent = metrics.fontBoundingBoxAscent;
+    let descent = Math.abs(metrics.fontBoundingBoxDescent);
+
+    if (ascent) {
+      ctx.restore();
+      const ratio = ascent / (ascent + descent);
+      ascentCache.set(fontFamily, ratio);
+      return ratio;
+    }
+
+    ctx.strokeStyle = "red";
+    ctx.clearRect(0, 0, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE);
+    ctx.strokeText("g", 0, 0);
+    let pixels = ctx.getImageData(0, 0, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE).data;
+    descent = 0;
+
+    for (let i = pixels.length - 1 - 3; i >= 0; i -= 4) {
+      if (pixels[i] > 0) {
+        descent = Math.ceil(i / 4 / DEFAULT_FONT_SIZE);
+        break;
+      }
+    }
+
+    ctx.clearRect(0, 0, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE);
+    ctx.strokeText("A", 0, DEFAULT_FONT_SIZE);
+    pixels = ctx.getImageData(0, 0, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE).data;
+    ascent = 0;
+
+    for (let i = 0, ii = pixels.length; i < ii; i += 4) {
+      if (pixels[i] > 0) {
+        ascent = DEFAULT_FONT_SIZE - Math.floor(i / 4 / DEFAULT_FONT_SIZE);
+        break;
+      }
+    }
+
+    ctx.restore();
+
+    if (ascent) {
+      const ratio = ascent / (ascent + descent);
+      ascentCache.set(fontFamily, ratio);
+      return ratio;
+    }
+
+    ascentCache.set(fontFamily, DEFAULT_FONT_ASCENT);
+    return DEFAULT_FONT_ASCENT;
+  }
+
+  function appendText(task, geom, styles, ctx) {
     const textDiv = document.createElement("span");
     const textDivProperties = {
       angle: 0,
@@ -11409,14 +11481,7 @@ const renderTextLayer = function renderTextLayerClosure() {
     }
 
     const fontHeight = Math.hypot(tx[2], tx[3]);
-    let fontAscent = fontHeight;
-
-    if (style.ascent) {
-      fontAscent = style.ascent * fontAscent;
-    } else if (style.descent) {
-      fontAscent = (1 + style.descent) * fontAscent;
-    }
-
+    const fontAscent = fontHeight * getAscent(style.fontFamily, ctx);
     let left, top;
 
     if (angle === 0) {
@@ -11854,7 +11919,7 @@ const renderTextLayer = function renderTextLayerClosure() {
       for (let i = 0, len = items.length; i < len; i++) {
         this._textContentItemsStr.push(items[i].str);
 
-        appendText(this, items[i], styleCache);
+        appendText(this, items[i], styleCache, this._layoutTextCtx);
       }
     },
 
@@ -11912,6 +11977,7 @@ const renderTextLayer = function renderTextLayerClosure() {
 
       const canvas = this._document.createElement("canvas");
 
+      canvas.height = canvas.width = DEFAULT_FONT_SIZE;
       canvas.mozOpaque = true;
       this._layoutTextCtx = canvas.getContext("2d", {
         alpha: false

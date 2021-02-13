@@ -2,7 +2,7 @@
  * @licstart The following is the entire license notice for the
  * Javascript code in this page
  *
- * Copyright 2020 Mozilla Foundation
+ * Copyright 2021 Mozilla Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.8.175';
-const pdfjsBuild = '859198b2d';
+const pdfjsVersion = '2.8.176';
+const pdfjsBuild = '5658b3a22';
 
 /***/ }),
 /* 1 */
@@ -162,7 +162,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.8.175';
+    const workerVersion = '2.8.176';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -5987,10 +5987,6 @@ var XRef = function XRefClosure() {
             continue;
           }
         } catch (ex) {
-          if (ex instanceof _core_utils.MissingDataException) {
-            throw ex;
-          }
-
           continue;
         }
 
@@ -20456,14 +20452,22 @@ class WidgetAnnotation extends Annotation {
       return null;
     }
 
-    const value = annotationStorage[this.data.id] && annotationStorage[this.data.id].value;
+    let value = annotationStorage[this.data.id] && annotationStorage[this.data.id].value;
 
     if (value === undefined) {
       return null;
     }
 
+    value = value.trim();
+
     if (value === "") {
       return "";
+    }
+
+    let lineCount = -1;
+
+    if (this.data.multiLine) {
+      lineCount = value.split(/\r\n|\r|\n/).length;
     }
 
     const defaultPadding = 2;
@@ -20476,10 +20480,9 @@ class WidgetAnnotation extends Annotation {
       this.data.defaultAppearanceData = (0, _default_appearance.parseDefaultAppearance)(this.data.defaultAppearance);
     }
 
+    const [defaultAppearance, fontSize] = this._computeFontSize(totalHeight, lineCount);
+
     const font = await this._getFontData(evaluator, task);
-
-    const fontSize = this._computeFontSize(font, totalHeight);
-
     let descent = font.descent;
 
     if (isNaN(descent)) {
@@ -20487,7 +20490,6 @@ class WidgetAnnotation extends Annotation {
     }
 
     const vPadding = defaultPadding + Math.abs(descent) * fontSize;
-    const defaultAppearance = this.data.defaultAppearance;
     const alignment = this.data.textAlignment;
 
     if (this.data.multiLine) {
@@ -20527,30 +20529,31 @@ class WidgetAnnotation extends Annotation {
     return initialState.font;
   }
 
-  _computeFontSize(font, height) {
-    let fontSize = this.data.defaultAppearanceData.fontSize;
+  _computeFontSize(height, lineCount) {
+    let {
+      fontSize
+    } = this.data.defaultAppearanceData;
 
-    if (!fontSize) {
-      const {
-        fontColor,
-        fontName
-      } = this.data.defaultAppearanceData;
-      let capHeight;
+    if (fontSize === null || fontSize === 0) {
+      const roundWithOneDigit = x => Math.round(x * 10) / 10;
 
-      if (font.capHeight) {
-        capHeight = font.capHeight;
+      const FONT_FACTOR = 0.8;
+
+      if (lineCount === -1) {
+        fontSize = roundWithOneDigit(FONT_FACTOR * height);
       } else {
-        const glyphs = font.charsToGlyphs(font.encodeString("M").join(""));
-
-        if (glyphs.length === 1 && glyphs[0].width) {
-          const em = glyphs[0].width / 1000;
-          capHeight = 0.7 * em;
-        } else {
-          capHeight = 0.7;
-        }
+        fontSize = 10;
+        let lineHeight = fontSize / FONT_FACTOR;
+        let numberOfLines = Math.round(height / lineHeight);
+        numberOfLines = Math.max(numberOfLines, lineCount);
+        lineHeight = height / numberOfLines;
+        fontSize = roundWithOneDigit(FONT_FACTOR * lineHeight);
       }
 
-      fontSize = Math.max(1, Math.floor(height / (1.5 * capHeight)));
+      const {
+        fontName,
+        fontColor
+      } = this.data.defaultAppearanceData;
       this.data.defaultAppearance = (0, _default_appearance.createDefaultAppearance)({
         fontSize,
         fontName,
@@ -20558,7 +20561,7 @@ class WidgetAnnotation extends Annotation {
       });
     }
 
-    return fontSize;
+    return [this.data.defaultAppearance, fontSize];
   }
 
   _renderText(text, font, fontSize, totalWidth, alignment, hPadding, vPadding) {
@@ -21645,8 +21648,6 @@ var _fonts = __w_pdfjs_require__(28);
 
 var _encodings = __w_pdfjs_require__(31);
 
-var _core_utils = __w_pdfjs_require__(7);
-
 var _unicode = __w_pdfjs_require__(34);
 
 var _standard_fonts = __w_pdfjs_require__(33);
@@ -21664,6 +21665,8 @@ var _bidi = __w_pdfjs_require__(40);
 var _colorspace = __w_pdfjs_require__(22);
 
 var _glyphlist = __w_pdfjs_require__(32);
+
+var _core_utils = __w_pdfjs_require__(7);
 
 var _metrics = __w_pdfjs_require__(41);
 
@@ -21865,10 +21868,6 @@ class PartialEvaluator {
             try {
               graphicState = xref.fetch(graphicState);
             } catch (ex) {
-              if (ex instanceof _core_utils.MissingDataException) {
-                throw ex;
-              }
-
               processed.put(graphicState);
               (0, _util.info)(`hasBlendModes - ignoring ExtGState: "${ex}".`);
               continue;
@@ -21918,10 +21917,6 @@ class PartialEvaluator {
           try {
             xObject = xref.fetch(xObject);
           } catch (ex) {
-            if (ex instanceof _core_utils.MissingDataException) {
-              throw ex;
-            }
-
             processed.put(xObject);
             (0, _util.info)(`hasBlendModes - ignoring XObject: "${ex}".`);
             continue;
@@ -22739,11 +22734,7 @@ class PartialEvaluator {
           const tilingPatternIR = (0, _pattern.getTilingPatternIR)(localTilingPattern.operatorListIR, localTilingPattern.dict, color);
           operatorList.addOp(fn, tilingPatternIR);
           return undefined;
-        } catch (ex) {
-          if (ex instanceof _core_utils.MissingDataException) {
-            throw ex;
-          }
-        }
+        } catch (ex) {}
       }
 
       let pattern = patterns.get(name);

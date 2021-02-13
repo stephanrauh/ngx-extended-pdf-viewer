@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.7.671';
-const pdfjsBuild = '201a42ae3';
+const pdfjsVersion = '2.7.673';
+const pdfjsBuild = 'e50f03ecd';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -8988,7 +8988,9 @@ class PDFPresentationMode {
     } else if (this.container.mozRequestFullScreen) {
       this.container.mozRequestFullScreen();
     } else if (this.container.webkitRequestFullscreen) {
-      this.container.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+      document.body.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+
+      this._prepareFullscreenMode();
     } else {
       return false;
     }
@@ -9105,6 +9107,8 @@ class PDFPresentationMode {
   }
 
   _exit() {
+    this._tidyUpFullscreenMode();
+
     const page = this.pdfViewer.currentPageNumber;
     this.container.classList.remove(ACTIVE_SELECTOR);
     setTimeout(() => {
@@ -9127,6 +9131,62 @@ class PDFPresentationMode {
 
     this.container.removeAttribute("contextmenu");
     this.contextMenuOpen = false;
+  }
+
+  _prepareFullscreenMode() {
+    const domElement = document.getElementsByClassName("zoom")[0].parentElement;
+    const parent = domElement.parentElement;
+    this.ngxContainer = parent;
+
+    for (let i = 0; i < parent.childElementCount; i++) {
+      if (parent.children.item(i) === domElement) {
+        this.ngxContainerIndex = i;
+      }
+    }
+
+    parent.removeChild(domElement);
+    document.body.append(domElement);
+    const siblings = document.body.children;
+
+    for (let i = 0; i < siblings.length; i++) {
+      const s = siblings.item(i);
+
+      if (s !== domElement && s instanceof HTMLElement) {
+        s.classList.add("hidden-by-fullscreen");
+      }
+    }
+
+    document.getElementById("sidebarContainer").classList.add("hidden-by-fullscreen");
+    document.getElementsByClassName("toolbar")[0].classList.add("hidden-by-fullscreen");
+  }
+
+  _tidyUpFullscreenMode() {
+    if (this.ngxContainer) {
+      const domElement = document.getElementsByClassName("zoom")[0].parentElement;
+      document.body.removeChild(domElement);
+
+      if (this.ngxContainerIndex >= this.ngxContainer.childElementCount) {
+        this.ngxContainer.append(domElement);
+      } else {
+        this.ngxContainer.insertBefore(domElement, this.ngxContainer.children.item(this.ngxContainerIndex));
+      }
+
+      this.ngxContainer = undefined;
+      const siblings = document.body.children;
+
+      for (let i = 0; i < siblings.length; i++) {
+        const s = siblings.item(i);
+
+        if (s !== domElement && s instanceof HTMLElement) {
+          if (s.classList.contains("hidden-by-fullscreen")) {
+            s.classList.remove("hidden-by-fullscreen");
+          }
+        }
+      }
+
+      document.getElementById("sidebarContainer").classList.remove("hidden-by-fullscreen");
+      document.getElementsByClassName("toolbar")[0].classList.remove("hidden-by-fullscreen");
+    }
   }
 
   _mouseDown(evt) {
@@ -10690,7 +10750,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.7.671';
+    const viewerVersion = '2.7.673';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
