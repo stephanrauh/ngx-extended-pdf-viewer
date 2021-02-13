@@ -11717,7 +11717,9 @@ var PDFPresentationMode = /*#__PURE__*/function () {
       } else if (this.container.mozRequestFullScreen) {
         this.container.mozRequestFullScreen();
       } else if (this.container.webkitRequestFullscreen) {
-        this.container.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        document.body.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+
+        this._prepareFullscreenMode();
       } else {
         return false;
       }
@@ -11846,6 +11848,8 @@ var PDFPresentationMode = /*#__PURE__*/function () {
     value: function _exit() {
       var _this3 = this;
 
+      this._tidyUpFullscreenMode();
+
       var page = this.pdfViewer.currentPageNumber;
       this.container.classList.remove(ACTIVE_SELECTOR);
       setTimeout(function () {
@@ -11867,6 +11871,58 @@ var PDFPresentationMode = /*#__PURE__*/function () {
       this._resetMouseScrollState();
 
       this.contextMenuOpen = false;
+    }
+  }, {
+    key: "_prepareFullscreenMode",
+    value: function _prepareFullscreenMode() {
+      var domElement = document.getElementsByClassName("zoom")[0].parentElement;
+      var parent = domElement.parentElement;
+      this.ngxContainer = parent;
+
+      for (var i = 0; i < parent.childElementCount; i++) {
+        if (parent.children.item(i) === domElement) {
+          this.ngxContainerIndex = i;
+        }
+      }
+
+      parent.removeChild(domElement);
+      document.body.append(domElement);
+      var siblings = document.body.children;
+
+      for (var _i = 0; _i < siblings.length; _i++) {
+        var s = siblings.item(_i);
+
+        if (s !== domElement && s instanceof HTMLElement) {
+          s.classList.add("hidden-by-fullscreen");
+        }
+      }
+    }
+  }, {
+    key: "_tidyUpFullscreenMode",
+    value: function _tidyUpFullscreenMode() {
+      if (this.ngxContainer) {
+        var domElement = document.getElementsByClassName("zoom")[0].parentElement;
+        document.body.removeChild(domElement);
+
+        if (this.ngxContainerIndex >= this.ngxContainer.childElementCount) {
+          this.ngxContainer.append(domElement);
+        } else {
+          this.ngxContainer.insertBefore(domElement, this.ngxContainer.children.item(this.ngxContainerIndex));
+        }
+
+        this.ngxContainer = undefined;
+        var siblings = document.body.children;
+
+        for (var i = 0; i < siblings.length; i++) {
+          var s = siblings.item(i);
+
+          if (s !== domElement && s instanceof HTMLElement) {
+            if (s.classList.contains("hidden-by-fullscreen")) {
+              s.classList.remove("hidden-by-fullscreen");
+            }
+          }
+        }
+      }
     }
   }, {
     key: "_mouseDown",

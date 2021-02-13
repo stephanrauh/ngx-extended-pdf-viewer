@@ -8986,7 +8986,9 @@ class PDFPresentationMode {
     } else if (this.container.mozRequestFullScreen) {
       this.container.mozRequestFullScreen();
     } else if (this.container.webkitRequestFullscreen) {
-      this.container.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+      document.body.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+
+      this._prepareFullscreenMode();
     } else {
       return false;
     }
@@ -9102,6 +9104,8 @@ class PDFPresentationMode {
   }
 
   _exit() {
+    this._tidyUpFullscreenMode();
+
     const page = this.pdfViewer.currentPageNumber;
     this.container.classList.remove(ACTIVE_SELECTOR);
     setTimeout(() => {
@@ -9123,6 +9127,56 @@ class PDFPresentationMode {
     this._resetMouseScrollState();
 
     this.contextMenuOpen = false;
+  }
+
+  _prepareFullscreenMode() {
+    const domElement = document.getElementsByClassName("zoom")[0].parentElement;
+    const parent = domElement.parentElement;
+    this.ngxContainer = parent;
+
+    for (let i = 0; i < parent.childElementCount; i++) {
+      if (parent.children.item(i) === domElement) {
+        this.ngxContainerIndex = i;
+      }
+    }
+
+    parent.removeChild(domElement);
+    document.body.append(domElement);
+    const siblings = document.body.children;
+
+    for (let i = 0; i < siblings.length; i++) {
+      const s = siblings.item(i);
+
+      if (s !== domElement && s instanceof HTMLElement) {
+        s.classList.add("hidden-by-fullscreen");
+      }
+    }
+  }
+
+  _tidyUpFullscreenMode() {
+    if (this.ngxContainer) {
+      const domElement = document.getElementsByClassName("zoom")[0].parentElement;
+      document.body.removeChild(domElement);
+
+      if (this.ngxContainerIndex >= this.ngxContainer.childElementCount) {
+        this.ngxContainer.append(domElement);
+      } else {
+        this.ngxContainer.insertBefore(domElement, this.ngxContainer.children.item(this.ngxContainerIndex));
+      }
+
+      this.ngxContainer = undefined;
+      const siblings = document.body.children;
+
+      for (let i = 0; i < siblings.length; i++) {
+        const s = siblings.item(i);
+
+        if (s !== domElement && s instanceof HTMLElement) {
+          if (s.classList.contains("hidden-by-fullscreen")) {
+            s.classList.remove("hidden-by-fullscreen");
+          }
+        }
+      }
+    }
   }
 
   _mouseDown(evt) {

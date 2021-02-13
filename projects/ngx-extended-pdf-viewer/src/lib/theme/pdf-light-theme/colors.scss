@@ -92,3 +92,7 @@ ngx-extended-pdf-viewer {
 
 @import "../common/viewer-with-images.scss";
 @import '../common/ngx-extended-pdf-viewer.component.scss';
+
+.hidden-by-fullscreen {
+  display: none !important;
+}
