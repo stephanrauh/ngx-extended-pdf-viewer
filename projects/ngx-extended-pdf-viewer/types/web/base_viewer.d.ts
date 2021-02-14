@@ -430,7 +430,7 @@ export class BaseViewer {
      * @returns {boolean} Whether navigation occured.
      */
     previousPage(): boolean;
-    initializeScriptingEvents(): void;
+    initializeScriptingEvents(): Promise<void>;
     _pageOpenPendingSet: Set<any> | null | undefined;
     /**
      * @private

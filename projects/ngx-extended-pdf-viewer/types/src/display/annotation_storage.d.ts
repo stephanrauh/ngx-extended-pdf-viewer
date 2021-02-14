@@ -8,7 +8,7 @@ export class AnnotationStorage {
     onResetModified: any;
     /**
      * Get the value for a given key if it exists
-     * or store and return the default value
+     * or return the default value
      *
      * @public
      * @memberof AnnotationStorage
@@ -16,7 +16,11 @@ export class AnnotationStorage {
      * @param {Object} defaultValue
      * @returns {Object}
      */
-    public getOrCreateValue(key: string, defaultValue: Object): Object;
+    public getValue(key: string, defaultValue: Object): Object;
+    /**
+     * @deprecated
+     */
+    getOrCreateValue(key: any, defaultValue: any): any;
     /**
      * Set the value for a given key
      *

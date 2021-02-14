@@ -11,6 +11,9 @@
     },
     {
       "path": "../../../ng2-pdf-viewer"
+    },
+    {
+      "path": "../../../pdfAnnotate"
     }
   ],
   "settings": {}

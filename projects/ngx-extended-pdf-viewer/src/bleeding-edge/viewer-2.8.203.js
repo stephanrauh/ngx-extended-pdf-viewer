@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.8.176';
-const pdfjsBuild = '5658b3a22';
+const pdfjsVersion = '2.8.203';
+const pdfjsBuild = '4e403a70a';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -87,6 +87,15 @@ if (!HTMLCollection.prototype[Symbol.iterator]) {
 }
 
 function getViewerConfiguration() {
+  let errorWrapper = null;
+  errorWrapper = {
+    container: document.getElementById("errorWrapper"),
+    errorMessage: document.getElementById("errorMessage"),
+    closeButton: document.getElementById("errorClose"),
+    errorMoreInfo: document.getElementById("errorMoreInfo"),
+    moreInfoButton: document.getElementById("errorShowMore"),
+    lessInfoButton: document.getElementById("errorShowLess")
+  };
   return {
     appContainer: document.body,
     mainContainer: document.getElementById("viewerContainer"),
@@ -197,14 +206,7 @@ function getViewerConfiguration() {
         linearized: document.getElementById("linearizedField")
       }
     },
-    errorWrapper: {
-      container: document.getElementById("errorWrapper"),
-      errorMessage: document.getElementById("errorMessage"),
-      closeButton: document.getElementById("errorClose"),
-      errorMoreInfo: document.getElementById("errorMoreInfo"),
-      moreInfoButton: document.getElementById("errorShowMore"),
-      lessInfoButton: document.getElementById("errorShowLess")
-    },
+    errorWrapper,
     printContainer: document.getElementById("printContainer"),
     openFileInputName: "fileInput",
     debuggerScriptPath: "./debugger.js"
@@ -1209,8 +1211,10 @@ const PDFViewerApplication = {
   async close() {
     this._unblockDocumentLoadEvent();
 
-    const errorWrapper = this.appConfig.errorWrapper.container;
-    errorWrapper.hidden = true;
+    const {
+      container
+    } = this.appConfig.errorWrapper;
+    container.hidden = true;
 
     if (!this.pdfLoadingTask) {
       return undefined;
@@ -1782,9 +1786,7 @@ const PDFViewerApplication = {
 
     if (!this.documentInfo) {
       await new Promise(resolve => {
-        this.eventBus._on("metadataloaded", evt => {
-          resolve();
-        }, {
+        this.eventBus._on("metadataloaded", resolve, {
           once: true
         });
       });
@@ -1796,9 +1798,7 @@ const PDFViewerApplication = {
 
     if (!this._contentLength) {
       await new Promise(resolve => {
-        this.eventBus._on("documentloaded", evt => {
-          resolve();
-        }, {
+        this.eventBus._on("documentloaded", resolve, {
           once: true
         });
       });
@@ -4697,9 +4697,6 @@ class PDFCursorTools {
 
     this.eventBus._on("presentationmodechanged", evt => {
       switch (evt.state) {
-        case _ui_utils.PresentationModeState.CHANGING:
-          break;
-
         case _ui_utils.PresentationModeState.FULLSCREEN:
           {
             const previouslyActive = this.active;
@@ -10761,7 +10758,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.8.176';
+    const viewerVersion = '2.8.203';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -11309,7 +11306,7 @@ class BaseViewer {
   }
 
   get _pageWidthScaleFactor() {
-    if (this.spreadMode !== _ui_utils.SpreadMode.NONE && this.scrollMode !== _ui_utils.ScrollMode.HORIZONTAL && !this.isInPresentationMode) {
+    if (this._spreadMode !== _ui_utils.SpreadMode.NONE && this._scrollMode !== _ui_utils.ScrollMode.HORIZONTAL && !this.isInPresentationMode) {
       return 2;
     }
 
@@ -12121,7 +12118,7 @@ class BaseViewer {
     return true;
   }
 
-  initializeScriptingEvents() {
+  async initializeScriptingEvents() {
     if (!this.enableScripting || this._pageOpenPendingSet) {
       return;
     }
