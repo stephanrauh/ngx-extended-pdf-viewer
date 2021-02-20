@@ -582,7 +582,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const isEdge = /Edge\/\d./i.test(navigator.userAgent);
     const isIOs13OrBelow = this.iOSVersionRequiresES5();
     let needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
-    needsES5 = needsES5 || ngxBrowserSupportsNullSafeChaining();
+    needsES5 = needsES5 || !ngxBrowserSupportsNullSafeChaining();
     needsES5 = needsES5 || isIE || isEdge || isIOs13OrBelow;
     return needsES5;
   }
@@ -632,7 +632,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (!window["ngxBrowserSupportsNullSafeChaining"]) {
       const assets = pdfDefaultOptions.assetsFolder;
       const script = document.createElement('script');
-      script.src = this.location.normalize(assets + "/compatibility-check.js");
+      script.src = this.location.normalize(assets + "/ngx-compatibility-checks.js");
       script.type = 'text/javascript';
       script.async = false;
       script.onload = () => this.loadPdfJs();
