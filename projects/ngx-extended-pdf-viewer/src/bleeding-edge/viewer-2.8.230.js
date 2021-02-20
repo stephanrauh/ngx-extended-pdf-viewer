@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.8.226';
-const pdfjsBuild = 'c7d20badd';
+const pdfjsVersion = '2.8.230';
+const pdfjsBuild = '12aa73e4b';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -1126,7 +1126,6 @@ const PDFViewerApplication = {
   initializeLoadingBar() {
     const bar = new _ui_utils.ProgressBar("#loadingBar");
     bar.hide();
-    console.log("Loading bar = " + bar);
     return (0, _pdfjsLib.shadow)(this, "loadingBar", bar);
   },
 
@@ -10753,7 +10752,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.8.226';
+    const viewerVersion = '2.8.230';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);

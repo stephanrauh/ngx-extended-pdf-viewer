@@ -242,8 +242,8 @@ var _text_layer = __w_pdfjs_require__(20);
 
 var _svg = __w_pdfjs_require__(21);
 
-const pdfjsVersion = '2.8.226';
-const pdfjsBuild = 'c7d20badd';
+const pdfjsVersion = '2.8.230';
+const pdfjsBuild = '12aa73e4b';
 {
   const PDFNetworkStream = __w_pdfjs_require__(22).PDFNetworkStream;
 
@@ -1932,7 +1932,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.8.226',
+    apiVersion: '2.8.230',
     source: {
       data: source.data,
       url: source.url,
@@ -3826,6 +3826,7 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
       this.cancelled = false;
       this.capability = (0, _util.createPromiseCapability)();
       this.task = new RenderTask(this);
+      this._cancelBound = this.cancel.bind(this);
       this._continueBound = this._continue.bind(this);
       this._scheduleNextBound = this._scheduleNext.bind(this);
       this._nextBound = this._next.bind(this);
@@ -3932,10 +3933,10 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
     _scheduleNext() {
       if (this._useRequestAnimationFrame) {
         window.requestAnimationFrame(() => {
-          this._nextBound().catch(this.cancel.bind(this));
+          this._nextBound().catch(this._cancelBound);
         });
       } else {
-        Promise.resolve().then(this._nextBound).catch(this.cancel.bind(this));
+        Promise.resolve().then(this._nextBound).catch(this._cancelBound);
       }
     }
 
@@ -3966,9 +3967,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.8.226';
+const version = '2.8.230';
 exports.version = version;
-const build = 'c7d20badd';
+const build = '12aa73e4b';
 exports.build = build;
 
 /***/ }),
