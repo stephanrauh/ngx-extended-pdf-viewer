@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-var pdfjsVersion = '2.8.203';
-var pdfjsBuild = '4e403a70a';
+var pdfjsVersion = '2.8.226';
+var pdfjsBuild = 'c7d20badd';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -1827,6 +1827,7 @@ var PDFViewerApplication = {
 
     switch (featureId) {
       case _pdfjsLib.UNSUPPORTED_FEATURES.errorFontLoadNative:
+      case _pdfjsLib.UNSUPPORTED_FEATURES.errorFontMissing:
         return;
     }
 
@@ -2681,7 +2682,7 @@ var PDFViewerApplication = {
     return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee18() {
       var _this17$_contentLengt;
 
-      var _yield$pdfDocument$ge, info, metadata, contentDispositionFilename, contentLength, PDFViewerApplicationOptions, pdfTitle, infoTitle, metadataTitle, versionId, generatorId, producer, formType;
+      var _yield$pdfDocument$ge, info, metadata, contentDispositionFilename, contentLength, PDFViewerApplicationOptions, pdfTitle, metadataTitle, versionId, generatorId, producer, formType;
 
       return _regenerator["default"].wrap(function _callee18$(_context18) {
         while (1) {
@@ -2716,12 +2717,7 @@ var PDFViewerApplication = {
                 console.log("PDF ".concat(pdfDocument.fingerprint, " [").concat(info.PDFFormatVersion, " ") + "".concat((info.Producer || "-").trim(), " / ").concat((info.Creator || "-").trim(), "] ") + "(PDF.js: ".concat(_pdfjsLib.version || "-") + "".concat(_this17.pdfViewer.enableWebGL ? " [WebGL]" : "", ") modified by ngx-extended-pdf-viewer)"));
               }
 
-              infoTitle = info === null || info === void 0 ? void 0 : info.Title;
-
-              if (infoTitle) {
-                pdfTitle = infoTitle;
-              }
-
+              pdfTitle = info === null || info === void 0 ? void 0 : info.Title;
               metadataTitle = metadata === null || metadata === void 0 ? void 0 : metadata.get("dc:title");
 
               if (metadataTitle) {
@@ -2785,7 +2781,7 @@ var PDFViewerApplication = {
                 source: _this17
               });
 
-            case 29:
+            case 28:
             case "end":
               return _context18.stop();
           }
@@ -13795,7 +13791,7 @@ var BaseViewer = /*#__PURE__*/function () {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    var viewerVersion = '2.8.203';
+    var viewerVersion = '2.8.226';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error("The API version \"".concat(_pdfjsLib.version, "\" does not match the Viewer version \"").concat(viewerVersion, "\"."));
@@ -13821,7 +13817,7 @@ var BaseViewer = /*#__PURE__*/function () {
     this.removePageBorders = options.removePageBorders || false;
     this.textLayerMode = Number.isInteger(options.textLayerMode) ? options.textLayerMode : _ui_utils.TextLayerMode.ENABLE;
     this.imageResourcesPath = options.imageResourcesPath || "";
-    this.renderInteractiveForms = typeof options.renderInteractiveForms === "boolean" ? options.renderInteractiveForms : true;
+    this.renderInteractiveForms = options.renderInteractiveForms !== false;
     this.enablePrintAutoRotate = options.enablePrintAutoRotate || false;
     this.renderer = options.renderer || _ui_utils.RendererType.CANVAS;
     this.enableWebGL = options.enableWebGL || false;
@@ -15670,7 +15666,7 @@ var PDFPageView = /*#__PURE__*/function () {
     this.hasRestrictedScaling = false;
     this.textLayerMode = Number.isInteger(options.textLayerMode) ? options.textLayerMode : _ui_utils.TextLayerMode.ENABLE;
     this.imageResourcesPath = options.imageResourcesPath || "";
-    this.renderInteractiveForms = typeof options.renderInteractiveForms === "boolean" ? options.renderInteractiveForms : true;
+    this.renderInteractiveForms = options.renderInteractiveForms !== false;
     this.useOnlyCssZoom = options.useOnlyCssZoom || false;
     this.maxCanvasPixels = options.maxCanvasPixels || MAX_CANVAS_PIXELS;
     this.eventBus = options.eventBus;
@@ -16842,7 +16838,6 @@ exports.assert = assert;
 exports.bytesToString = bytesToString;
 exports.createPromiseCapability = createPromiseCapability;
 exports.createValidAbsoluteUrl = createValidAbsoluteUrl;
-exports.encodeToXmlString = encodeToXmlString;
 exports.escapeString = escapeString;
 exports.getModificationDate = getModificationDate;
 exports.getVerbosityLevel = getVerbosityLevel;
@@ -17855,57 +17850,6 @@ var createObjectURL = function createObjectURLClosure() {
 }();
 
 exports.createObjectURL = createObjectURL;
-var XMLEntities = {
-  0x3c: "&lt;",
-  0x3e: "&gt;",
-  0x26: "&amp;",
-  0x22: "&quot;",
-  0x27: "&apos;"
-};
-
-function encodeToXmlString(str) {
-  var buffer = [];
-  var start = 0;
-
-  for (var i = 0, ii = str.length; i < ii; i++) {
-    var _char2 = str.codePointAt(i);
-
-    if (0x20 <= _char2 && _char2 <= 0x7e) {
-      var entity = XMLEntities[_char2];
-
-      if (entity) {
-        if (start < i) {
-          buffer.push(str.substring(start, i));
-        }
-
-        buffer.push(entity);
-        start = i + 1;
-      }
-    } else {
-      if (start < i) {
-        buffer.push(str.substring(start, i));
-      }
-
-      buffer.push("&#x".concat(_char2.toString(16).toUpperCase(), ";"));
-
-      if (_char2 > 0xd7ff && (_char2 < 0xe000 || _char2 > 0xfffd)) {
-        i++;
-      }
-
-      start = i + 1;
-    }
-  }
-
-  if (buffer.length === 0) {
-    return str;
-  }
-
-  if (start < str.length) {
-    buffer.push(str.substring(start, str.length));
-  }
-
-  return buffer.join("");
-}
 
 /***/ }),
 /* 36 */

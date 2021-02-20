@@ -543,9 +543,7 @@ export const DefaultCMapReaderFactory: typeof DOMCMapReaderFactory | {
  */
 export function getDocument(src: string | TypedArray | DocumentInitParameters | PDFDataRangeTransport): PDFDocumentLoadingTask;
 export class LoopbackPort {
-    constructor(defer?: boolean);
     _listeners: any[];
-    _defer: boolean;
     _deferred: Promise<undefined>;
     postMessage(obj: any, transfers: any): void;
     addEventListener(name: any, listener: any): void;

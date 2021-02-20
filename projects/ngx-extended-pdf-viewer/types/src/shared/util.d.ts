@@ -189,7 +189,6 @@ export namespace DocumentActionEventType {
     const WP: string;
     const DP: string;
 }
-export function encodeToXmlString(str: any): any;
 export function escapeString(str: any): any;
 export const FONT_IDENTITY_MATRIX: number[];
 export namespace FontType {

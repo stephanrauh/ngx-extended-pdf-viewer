@@ -37,4 +37,9 @@ export class AnnotationStorage {
      */
     private _setModified;
     resetModified(): void;
+    /**
+     * PLEASE NOTE: Only intended for usage within the API itself.
+     * @ignore
+     */
+    get serializable(): Map<any, any> | null;
 }

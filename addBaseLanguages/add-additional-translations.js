@@ -4,6 +4,7 @@ const file = fs.readFileSync('../projects/ngx-extended-pdf-viewer/src/' + folder
 const content = file.toString().split('\n');
 
 const languages = {};
+
 for (let i = 0; i < content.length; i++) {
   const key = content[i];
   if (key.startsWith('[')) {
@@ -30,28 +31,31 @@ for (let lang in languages) {
       fs.writeFileSync(originalFilename, complete);
     }
   }
-  const filename28 = '../projects/ngx-extended-pdf-viewer/src/bleeding-edge/locale/' + lang + '/viewer.properties'
-  if (filename28 != originalFilename && fs.existsSync(filename28) && fs.existsSync(originalFilename)) {
-    const originalLines = fs.readFileSync(originalFilename).toString().replace(" = ", "=");
-    const additionalLines = fs.readFileSync(filename28).toString().replace(" = ", "=").toString().split("\n");
-    let additions = "";
+  if (folder !== 'bleeding-edge') {
+    const filename28 = '../projects/ngx-extended-pdf-viewer/src/bleeding-edge/locale/' + lang + '/viewer.properties'
+    if (filename28 != originalFilename && fs.existsSync(filename28) && fs.existsSync(originalFilename)) {
+      const originalLines = fs.readFileSync(originalFilename).toString().replace(" = ", "=");
+      const additionalLines = fs.readFileSync(filename28).toString().replace(" = ", "=").toString().split("\n");
+      let additions = "";
 
-    for (const line of additionalLines) {
-      if (line.trim().length > 0 && (!line.startsWith("#"))) {
-        const pos = line.indexOf("=");
-        const key = line.substring(0, pos).trim();
-        if (!originalLines.includes(key + "=")) {
-          additions += line + "\n";
+      for (const line of additionalLines) {
+        if (line.trim().length > 0 && (!line.startsWith("#"))) {
+          const pos = line.indexOf("=");
+          const key = line.substring(0, pos).trim();
+          if (!originalLines.includes(key + "=") && !originalLines.includes(key + " =")) {
+            additions += line + "\n";
+          }
         }
       }
-    }
 
-    if (additions.length > 0) {
-      const complete = originalLines + '\n\n# Translations added from pdf.js 2.8\n\n' + additions;
-      console.log('Added 2.8 translations to ' + lang);
-      fs.writeFileSync(originalFilename, complete);
+      if (additions.length > 0) {
+        const complete = originalLines + '\n\n# Translations added from pdf.js 2.8\n\n' + additions;
+        console.log('Added 2.8 translations to ' + lang);
+        fs.writeFileSync(originalFilename, complete);
+      }
     }
   }
+
   const filename28English = '../projects/ngx-extended-pdf-viewer/src/bleeding-edge/locale/en-US/viewer.properties';
   if (fs.existsSync(originalFilename)) {
     const originalLines = fs.readFileSync(originalFilename).toString().replace(" = ", "=");
@@ -62,7 +66,7 @@ for (let lang in languages) {
       if (line.trim().length > 0 && (!line.startsWith("#"))) {
         const pos = line.indexOf("=");
         const key = line.substring(0, pos).trim();
-        if (!originalLines.includes(key + "=")) {
+        if (!originalLines.includes(key + "=") && !originalLines.includes(key + " =")) {
           additions += line + "\n";
         }
       }

@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.8.203';
-const pdfjsBuild = '4e403a70a';
+const pdfjsVersion = '2.8.226';
+const pdfjsBuild = 'c7d20badd';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -1458,6 +1458,7 @@ const PDFViewerApplication = {
 
     switch (featureId) {
       case _pdfjsLib.UNSUPPORTED_FEATURES.errorFontLoadNative:
+      case _pdfjsLib.UNSUPPORTED_FEATURES.errorFontMissing:
         return;
     }
 
@@ -2070,13 +2071,7 @@ const PDFViewerApplication = {
       console.log(`PDF ${pdfDocument.fingerprint} [${info.PDFFormatVersion} ` + `${(info.Producer || "-").trim()} / ${(info.Creator || "-").trim()}] ` + `(PDF.js: ${_pdfjsLib.version || "-"}` + `${this.pdfViewer.enableWebGL ? " [WebGL]" : ""}) modified by ngx-extended-pdf-viewer)`);
     }
 
-    let pdfTitle;
-    const infoTitle = info?.Title;
-
-    if (infoTitle) {
-      pdfTitle = infoTitle;
-    }
-
+    let pdfTitle = info?.Title;
     const metadataTitle = metadata?.get("dc:title");
 
     if (metadataTitle) {
@@ -10758,7 +10753,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.8.203';
+    const viewerVersion = '2.8.226';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -10784,7 +10779,7 @@ class BaseViewer {
     this.removePageBorders = options.removePageBorders || false;
     this.textLayerMode = Number.isInteger(options.textLayerMode) ? options.textLayerMode : _ui_utils.TextLayerMode.ENABLE;
     this.imageResourcesPath = options.imageResourcesPath || "";
-    this.renderInteractiveForms = typeof options.renderInteractiveForms === "boolean" ? options.renderInteractiveForms : true;
+    this.renderInteractiveForms = options.renderInteractiveForms !== false;
     this.enablePrintAutoRotate = options.enablePrintAutoRotate || false;
     this.renderer = options.renderer || _ui_utils.RendererType.CANVAS;
     this.enableWebGL = options.enableWebGL || false;
@@ -12388,7 +12383,7 @@ class PDFPageView {
     this.hasRestrictedScaling = false;
     this.textLayerMode = Number.isInteger(options.textLayerMode) ? options.textLayerMode : _ui_utils.TextLayerMode.ENABLE;
     this.imageResourcesPath = options.imageResourcesPath || "";
-    this.renderInteractiveForms = typeof options.renderInteractiveForms === "boolean" ? options.renderInteractiveForms : true;
+    this.renderInteractiveForms = options.renderInteractiveForms !== false;
     this.useOnlyCssZoom = options.useOnlyCssZoom || false;
     this.maxCanvasPixels = options.maxCanvasPixels || MAX_CANVAS_PIXELS;
     this.eventBus = options.eventBus;
@@ -13467,7 +13462,6 @@ exports.assert = assert;
 exports.bytesToString = bytesToString;
 exports.createPromiseCapability = createPromiseCapability;
 exports.createValidAbsoluteUrl = createValidAbsoluteUrl;
-exports.encodeToXmlString = encodeToXmlString;
 exports.escapeString = escapeString;
 exports.getModificationDate = getModificationDate;
 exports.getVerbosityLevel = getVerbosityLevel;
@@ -14345,57 +14339,6 @@ const createObjectURL = function createObjectURLClosure() {
 }();
 
 exports.createObjectURL = createObjectURL;
-const XMLEntities = {
-  0x3c: "&lt;",
-  0x3e: "&gt;",
-  0x26: "&amp;",
-  0x22: "&quot;",
-  0x27: "&apos;"
-};
-
-function encodeToXmlString(str) {
-  const buffer = [];
-  let start = 0;
-
-  for (let i = 0, ii = str.length; i < ii; i++) {
-    const char = str.codePointAt(i);
-
-    if (0x20 <= char && char <= 0x7e) {
-      const entity = XMLEntities[char];
-
-      if (entity) {
-        if (start < i) {
-          buffer.push(str.substring(start, i));
-        }
-
-        buffer.push(entity);
-        start = i + 1;
-      }
-    } else {
-      if (start < i) {
-        buffer.push(str.substring(start, i));
-      }
-
-      buffer.push(`&#x${char.toString(16).toUpperCase()};`);
-
-      if (char > 0xd7ff && (char < 0xe000 || char > 0xfffd)) {
-        i++;
-      }
-
-      start = i + 1;
-    }
-  }
-
-  if (buffer.length === 0) {
-    return str;
-  }
-
-  if (start < str.length) {
-    buffer.push(str.substring(start, str.length));
-  }
-
-  return buffer.join("");
-}
 
 /***/ }),
 /* 34 */

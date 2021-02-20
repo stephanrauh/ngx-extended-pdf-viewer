@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.8.203';
-var pdfjsBuild = '4e403a70a';
+var pdfjsVersion = '2.8.226';
+var pdfjsBuild = 'c7d20badd';
 
 /***/ }),
 /* 1 */
@@ -73,11 +73,11 @@ var _primitives = __w_pdfjs_require__(134);
 
 var _pdf_manager = __w_pdfjs_require__(135);
 
-var _writer = __w_pdfjs_require__(175);
+var _writer = __w_pdfjs_require__(177);
 
-var _message_handler = __w_pdfjs_require__(177);
+var _message_handler = __w_pdfjs_require__(178);
 
-var _worker_stream = __w_pdfjs_require__(178);
+var _worker_stream = __w_pdfjs_require__(179);
 
 var _core_utils = __w_pdfjs_require__(137);
 
@@ -213,7 +213,7 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
       var WorkerTasks = [];
       var verbosity = (0, _util.getVerbosityLevel)();
       var apiVersion = docParams.apiVersion;
-      var workerVersion = '2.8.203';
+      var workerVersion = '2.8.226';
 
       if (apiVersion !== workerVersion) {
         throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -1464,7 +1464,6 @@ exports.assert = assert;
 exports.bytesToString = bytesToString;
 exports.createPromiseCapability = createPromiseCapability;
 exports.createValidAbsoluteUrl = createValidAbsoluteUrl;
-exports.encodeToXmlString = encodeToXmlString;
 exports.escapeString = escapeString;
 exports.getModificationDate = getModificationDate;
 exports.getVerbosityLevel = getVerbosityLevel;
@@ -2477,57 +2476,6 @@ var createObjectURL = function createObjectURLClosure() {
 }();
 
 exports.createObjectURL = createObjectURL;
-var XMLEntities = {
-  0x3c: "&lt;",
-  0x3e: "&gt;",
-  0x26: "&amp;",
-  0x22: "&quot;",
-  0x27: "&apos;"
-};
-
-function encodeToXmlString(str) {
-  var buffer = [];
-  var start = 0;
-
-  for (var i = 0, ii = str.length; i < ii; i++) {
-    var _char2 = str.codePointAt(i);
-
-    if (0x20 <= _char2 && _char2 <= 0x7e) {
-      var entity = XMLEntities[_char2];
-
-      if (entity) {
-        if (start < i) {
-          buffer.push(str.substring(start, i));
-        }
-
-        buffer.push(entity);
-        start = i + 1;
-      }
-    } else {
-      if (start < i) {
-        buffer.push(str.substring(start, i));
-      }
-
-      buffer.push("&#x".concat(_char2.toString(16).toUpperCase(), ";"));
-
-      if (_char2 > 0xd7ff && (_char2 < 0xe000 || _char2 > 0xfffd)) {
-        i++;
-      }
-
-      start = i + 1;
-    }
-  }
-
-  if (buffer.length === 0) {
-    return str;
-  }
-
-  if (start < str.length) {
-    buffer.push(str.substring(start, str.length));
-  }
-
-  return buffer.join("");
-}
 
 /***/ }),
 /* 5 */
@@ -12333,6 +12281,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.collectActions = collectActions;
+exports.encodeToXmlString = encodeToXmlString;
 exports.escapePDFName = escapePDFName;
 exports.getArrayLookupTableFactory = getArrayLookupTableFactory;
 exports.getInheritableProperty = getInheritableProperty;
@@ -12464,11 +12413,14 @@ function getInheritableProperty(_ref) {
       getArray = _ref$getArray === void 0 ? false : _ref$getArray,
       _ref$stopWhenFound = _ref.stopWhenFound,
       stopWhenFound = _ref$stopWhenFound === void 0 ? true : _ref$stopWhenFound;
-  var LOOP_LIMIT = 100;
-  var loopCount = 0;
   var values;
+  var visited = new _primitives.RefSet();
 
-  while (dict) {
+  while (dict instanceof _primitives.Dict && !(dict.objId && visited.has(dict.objId))) {
+    if (dict.objId) {
+      visited.put(dict.objId);
+    }
+
     var value = getArray ? dict.getArray(key) : dict.get(key);
 
     if (value !== undefined) {
@@ -12481,11 +12433,6 @@ function getInheritableProperty(_ref) {
       }
 
       values.push(value);
-    }
-
-    if (++loopCount > LOOP_LIMIT) {
-      (0, _util.warn)("getInheritableProperty: maximum loop count exceeded for \"".concat(key, "\""));
-      break;
     }
 
     dict = dict.get("Parent");
@@ -12699,6 +12646,58 @@ function collectActions(xref, dict, eventType) {
   return (0, _util.objectSize)(actions) > 0 ? actions : null;
 }
 
+var XMLEntities = {
+  0x3c: "&lt;",
+  0x3e: "&gt;",
+  0x26: "&amp;",
+  0x22: "&quot;",
+  0x27: "&apos;"
+};
+
+function encodeToXmlString(str) {
+  var buffer = [];
+  var start = 0;
+
+  for (var i = 0, ii = str.length; i < ii; i++) {
+    var _char2 = str.codePointAt(i);
+
+    if (0x20 <= _char2 && _char2 <= 0x7e) {
+      var entity = XMLEntities[_char2];
+
+      if (entity) {
+        if (start < i) {
+          buffer.push(str.substring(start, i));
+        }
+
+        buffer.push(entity);
+        start = i + 1;
+      }
+    } else {
+      if (start < i) {
+        buffer.push(str.substring(start, i));
+      }
+
+      buffer.push("&#x".concat(_char2.toString(16).toUpperCase(), ";"));
+
+      if (_char2 > 0xd7ff && (_char2 < 0xe000 || _char2 > 0xfffd)) {
+        i++;
+      }
+
+      start = i + 1;
+    }
+  }
+
+  if (buffer.length === 0) {
+    return str;
+  }
+
+  if (start < str.length) {
+    buffer.push(str.substring(start, str.length));
+  }
+
+  return buffer.join("");
+}
+
 /***/ }),
 /* 138 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
@@ -12725,15 +12724,15 @@ var _core_utils = __w_pdfjs_require__(137);
 
 var _stream = __w_pdfjs_require__(141);
 
-var _annotation = __w_pdfjs_require__(154);
+var _annotation = __w_pdfjs_require__(156);
 
 var _crypto = __w_pdfjs_require__(151);
 
 var _parser = __w_pdfjs_require__(140);
 
-var _operator_list = __w_pdfjs_require__(173);
+var _operator_list = __w_pdfjs_require__(175);
 
-var _evaluator = __w_pdfjs_require__(156);
+var _evaluator = __w_pdfjs_require__(158);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -13940,6 +13939,8 @@ var _colorspace = __w_pdfjs_require__(152);
 
 var _image_utils = __w_pdfjs_require__(153);
 
+var _metadata_parser = __w_pdfjs_require__(154);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
@@ -14069,15 +14070,19 @@ var Catalog = /*#__PURE__*/function () {
 
       var suppressEncryption = !(this.xref.encrypt && this.xref.encrypt.encryptMetadata);
       var stream = this.xref.fetch(streamRef, suppressEncryption);
-      var metadata;
+      var metadata = null;
 
-      if (stream && (0, _primitives.isDict)(stream.dict)) {
+      if ((0, _primitives.isStream)(stream) && (0, _primitives.isDict)(stream.dict)) {
         var type = stream.dict.get("Type");
         var subtype = stream.dict.get("Subtype");
 
         if ((0, _primitives.isName)(type, "Metadata") && (0, _primitives.isName)(subtype, "XML")) {
           try {
-            metadata = (0, _util.stringToUTF8String)((0, _util.bytesToString)(stream.getBytes()));
+            var data = (0, _util.stringToUTF8String)((0, _util.bytesToString)(stream.getBytes()));
+
+            if (data) {
+              metadata = new _metadata_parser.MetadataParser(data).serializable;
+            }
           } catch (e) {
             if (e instanceof _core_utils.MissingDataException) {
               throw e;
@@ -30209,6 +30214,879 @@ exports.GlobalImageCache = GlobalImageCache;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.MetadataParser = void 0;
+
+var _xml_parser = __w_pdfjs_require__(155);
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var MetadataParser = /*#__PURE__*/function () {
+  function MetadataParser(data) {
+    _classCallCheck(this, MetadataParser);
+
+    data = this._repair(data);
+    var parser = new _xml_parser.SimpleXMLParser({
+      lowerCaseName: true
+    });
+    var xmlDocument = parser.parseFromString(data);
+    this._metadataMap = new Map();
+    this._data = data;
+
+    if (xmlDocument) {
+      this._parse(xmlDocument);
+    }
+  }
+
+  _createClass(MetadataParser, [{
+    key: "_repair",
+    value: function _repair(data) {
+      return data.replace(/^[^<]+/, "").replace(/>\\376\\377([^<]+)/g, function (all, codes) {
+        var bytes = codes.replace(/\\([0-3])([0-7])([0-7])/g, function (code, d1, d2, d3) {
+          return String.fromCharCode(d1 * 64 + d2 * 8 + d3 * 1);
+        }).replace(/&(amp|apos|gt|lt|quot);/g, function (str, name) {
+          switch (name) {
+            case "amp":
+              return "&";
+
+            case "apos":
+              return "'";
+
+            case "gt":
+              return ">";
+
+            case "lt":
+              return "<";
+
+            case "quot":
+              return '"';
+          }
+
+          throw new Error("_repair: ".concat(name, " isn't defined."));
+        });
+        var charBuf = [];
+
+        for (var i = 0, ii = bytes.length; i < ii; i += 2) {
+          var code = bytes.charCodeAt(i) * 256 + bytes.charCodeAt(i + 1);
+
+          if (code >= 32 && code < 127 && code !== 60 && code !== 62 && code !== 38) {
+            charBuf.push(String.fromCharCode(code));
+          } else {
+            charBuf.push("&#x" + (0x10000 + code).toString(16).substring(1) + ";");
+          }
+        }
+
+        return ">" + charBuf.join("");
+      });
+    }
+  }, {
+    key: "_getSequence",
+    value: function _getSequence(entry) {
+      var name = entry.nodeName;
+
+      if (name !== "rdf:bag" && name !== "rdf:seq" && name !== "rdf:alt") {
+        return null;
+      }
+
+      return entry.childNodes.filter(function (node) {
+        return node.nodeName === "rdf:li";
+      });
+    }
+  }, {
+    key: "_parseArray",
+    value: function _parseArray(entry) {
+      if (!entry.hasChildNodes()) {
+        return;
+      }
+
+      var _entry$childNodes = _slicedToArray(entry.childNodes, 1),
+          seqNode = _entry$childNodes[0];
+
+      var sequence = this._getSequence(seqNode) || [];
+
+      this._metadataMap.set(entry.nodeName, sequence.map(function (node) {
+        return node.textContent.trim();
+      }));
+    }
+  }, {
+    key: "_parse",
+    value: function _parse(xmlDocument) {
+      var rdf = xmlDocument.documentElement;
+
+      if (rdf.nodeName !== "rdf:rdf") {
+        rdf = rdf.firstChild;
+
+        while (rdf && rdf.nodeName !== "rdf:rdf") {
+          rdf = rdf.nextSibling;
+        }
+      }
+
+      if (!rdf || rdf.nodeName !== "rdf:rdf" || !rdf.hasChildNodes()) {
+        return;
+      }
+
+      var _iterator = _createForOfIteratorHelper(rdf.childNodes),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var desc = _step.value;
+
+          if (desc.nodeName !== "rdf:description") {
+            continue;
+          }
+
+          var _iterator2 = _createForOfIteratorHelper(desc.childNodes),
+              _step2;
+
+          try {
+            for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+              var entry = _step2.value;
+              var name = entry.nodeName;
+
+              switch (name) {
+                case "#text":
+                  continue;
+
+                case "dc:creator":
+                case "dc:subject":
+                  this._parseArray(entry);
+
+                  continue;
+              }
+
+              this._metadataMap.set(name, entry.textContent.trim());
+            }
+          } catch (err) {
+            _iterator2.e(err);
+          } finally {
+            _iterator2.f();
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+    }
+  }, {
+    key: "serializable",
+    get: function get() {
+      return {
+        parsedData: this._metadataMap,
+        rawData: this._data
+      };
+    }
+  }]);
+
+  return MetadataParser;
+}();
+
+exports.MetadataParser = MetadataParser;
+
+/***/ }),
+/* 155 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+"use strict";
+
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.XMLParserErrorCode = exports.XMLParserBase = exports.SimpleXMLParser = exports.SimpleDOMNode = void 0;
+
+var _core_utils = __w_pdfjs_require__(137);
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var XMLParserErrorCode = {
+  NoError: 0,
+  EndOfDocument: -1,
+  UnterminatedCdat: -2,
+  UnterminatedXmlDeclaration: -3,
+  UnterminatedDoctypeDeclaration: -4,
+  UnterminatedComment: -5,
+  MalformedElement: -6,
+  OutOfMemory: -7,
+  UnterminatedAttributeValue: -8,
+  UnterminatedElement: -9,
+  ElementNeverBegun: -10
+};
+exports.XMLParserErrorCode = XMLParserErrorCode;
+
+function isWhitespace(s, index) {
+  var ch = s[index];
+  return ch === " " || ch === "\n" || ch === "\r" || ch === "\t";
+}
+
+function isWhitespaceString(s) {
+  for (var i = 0, ii = s.length; i < ii; i++) {
+    if (!isWhitespace(s, i)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+var XMLParserBase = /*#__PURE__*/function () {
+  function XMLParserBase() {
+    _classCallCheck(this, XMLParserBase);
+  }
+
+  _createClass(XMLParserBase, [{
+    key: "_resolveEntities",
+    value: function _resolveEntities(s) {
+      var _this = this;
+
+      return s.replace(/&([^;]+);/g, function (all, entity) {
+        if (entity.substring(0, 2) === "#x") {
+          return String.fromCodePoint(parseInt(entity.substring(2), 16));
+        } else if (entity.substring(0, 1) === "#") {
+          return String.fromCodePoint(parseInt(entity.substring(1), 10));
+        }
+
+        switch (entity) {
+          case "lt":
+            return "<";
+
+          case "gt":
+            return ">";
+
+          case "amp":
+            return "&";
+
+          case "quot":
+            return '"';
+
+          case "apos":
+            return "'";
+        }
+
+        return _this.onResolveEntity(entity);
+      });
+    }
+  }, {
+    key: "_parseContent",
+    value: function _parseContent(s, start) {
+      var attributes = [];
+      var pos = start;
+
+      function skipWs() {
+        while (pos < s.length && isWhitespace(s, pos)) {
+          ++pos;
+        }
+      }
+
+      while (pos < s.length && !isWhitespace(s, pos) && s[pos] !== ">" && s[pos] !== "/") {
+        ++pos;
+      }
+
+      var name = s.substring(start, pos);
+      skipWs();
+
+      while (pos < s.length && s[pos] !== ">" && s[pos] !== "/" && s[pos] !== "?") {
+        skipWs();
+        var attrName = "",
+            attrValue = "";
+
+        while (pos < s.length && !isWhitespace(s, pos) && s[pos] !== "=") {
+          attrName += s[pos];
+          ++pos;
+        }
+
+        skipWs();
+
+        if (s[pos] !== "=") {
+          return null;
+        }
+
+        ++pos;
+        skipWs();
+        var attrEndChar = s[pos];
+
+        if (attrEndChar !== '"' && attrEndChar !== "'") {
+          return null;
+        }
+
+        var attrEndIndex = s.indexOf(attrEndChar, ++pos);
+
+        if (attrEndIndex < 0) {
+          return null;
+        }
+
+        attrValue = s.substring(pos, attrEndIndex);
+        attributes.push({
+          name: attrName,
+          value: this._resolveEntities(attrValue)
+        });
+        pos = attrEndIndex + 1;
+        skipWs();
+      }
+
+      return {
+        name: name,
+        attributes: attributes,
+        parsed: pos - start
+      };
+    }
+  }, {
+    key: "_parseProcessingInstruction",
+    value: function _parseProcessingInstruction(s, start) {
+      var pos = start;
+
+      function skipWs() {
+        while (pos < s.length && isWhitespace(s, pos)) {
+          ++pos;
+        }
+      }
+
+      while (pos < s.length && !isWhitespace(s, pos) && s[pos] !== ">" && s[pos] !== "/") {
+        ++pos;
+      }
+
+      var name = s.substring(start, pos);
+      skipWs();
+      var attrStart = pos;
+
+      while (pos < s.length && (s[pos] !== "?" || s[pos + 1] !== ">")) {
+        ++pos;
+      }
+
+      var value = s.substring(attrStart, pos);
+      return {
+        name: name,
+        value: value,
+        parsed: pos - start
+      };
+    }
+  }, {
+    key: "parseXml",
+    value: function parseXml(s) {
+      var i = 0;
+
+      while (i < s.length) {
+        var ch = s[i];
+        var j = i;
+
+        if (ch === "<") {
+          ++j;
+          var ch2 = s[j];
+          var q = void 0;
+
+          switch (ch2) {
+            case "/":
+              ++j;
+              q = s.indexOf(">", j);
+
+              if (q < 0) {
+                this.onError(XMLParserErrorCode.UnterminatedElement);
+                return;
+              }
+
+              this.onEndElement(s.substring(j, q));
+              j = q + 1;
+              break;
+
+            case "?":
+              ++j;
+
+              var pi = this._parseProcessingInstruction(s, j);
+
+              if (s.substring(j + pi.parsed, j + pi.parsed + 2) !== "?>") {
+                this.onError(XMLParserErrorCode.UnterminatedXmlDeclaration);
+                return;
+              }
+
+              this.onPi(pi.name, pi.value);
+              j += pi.parsed + 2;
+              break;
+
+            case "!":
+              if (s.substring(j + 1, j + 3) === "--") {
+                q = s.indexOf("-->", j + 3);
+
+                if (q < 0) {
+                  this.onError(XMLParserErrorCode.UnterminatedComment);
+                  return;
+                }
+
+                this.onComment(s.substring(j + 3, q));
+                j = q + 3;
+              } else if (s.substring(j + 1, j + 8) === "[CDATA[") {
+                q = s.indexOf("]]>", j + 8);
+
+                if (q < 0) {
+                  this.onError(XMLParserErrorCode.UnterminatedCdat);
+                  return;
+                }
+
+                this.onCdata(s.substring(j + 8, q));
+                j = q + 3;
+              } else if (s.substring(j + 1, j + 8) === "DOCTYPE") {
+                var q2 = s.indexOf("[", j + 8);
+                var complexDoctype = false;
+                q = s.indexOf(">", j + 8);
+
+                if (q < 0) {
+                  this.onError(XMLParserErrorCode.UnterminatedDoctypeDeclaration);
+                  return;
+                }
+
+                if (q2 > 0 && q > q2) {
+                  q = s.indexOf("]>", j + 8);
+
+                  if (q < 0) {
+                    this.onError(XMLParserErrorCode.UnterminatedDoctypeDeclaration);
+                    return;
+                  }
+
+                  complexDoctype = true;
+                }
+
+                var doctypeContent = s.substring(j + 8, q + (complexDoctype ? 1 : 0));
+                this.onDoctype(doctypeContent);
+                j = q + (complexDoctype ? 2 : 1);
+              } else {
+                this.onError(XMLParserErrorCode.MalformedElement);
+                return;
+              }
+
+              break;
+
+            default:
+              var content = this._parseContent(s, j);
+
+              if (content === null) {
+                this.onError(XMLParserErrorCode.MalformedElement);
+                return;
+              }
+
+              var isClosed = false;
+
+              if (s.substring(j + content.parsed, j + content.parsed + 2) === "/>") {
+                isClosed = true;
+              } else if (s.substring(j + content.parsed, j + content.parsed + 1) !== ">") {
+                this.onError(XMLParserErrorCode.UnterminatedElement);
+                return;
+              }
+
+              this.onBeginElement(content.name, content.attributes, isClosed);
+              j += content.parsed + (isClosed ? 2 : 1);
+              break;
+          }
+        } else {
+          while (j < s.length && s[j] !== "<") {
+            j++;
+          }
+
+          var text = s.substring(i, j);
+          this.onText(this._resolveEntities(text));
+        }
+
+        i = j;
+      }
+    }
+  }, {
+    key: "onResolveEntity",
+    value: function onResolveEntity(name) {
+      return "&".concat(name, ";");
+    }
+  }, {
+    key: "onPi",
+    value: function onPi(name, value) {}
+  }, {
+    key: "onComment",
+    value: function onComment(text) {}
+  }, {
+    key: "onCdata",
+    value: function onCdata(text) {}
+  }, {
+    key: "onDoctype",
+    value: function onDoctype(doctypeContent) {}
+  }, {
+    key: "onText",
+    value: function onText(text) {}
+  }, {
+    key: "onBeginElement",
+    value: function onBeginElement(name, attributes, isEmpty) {}
+  }, {
+    key: "onEndElement",
+    value: function onEndElement(name) {}
+  }, {
+    key: "onError",
+    value: function onError(code) {}
+  }]);
+
+  return XMLParserBase;
+}();
+
+exports.XMLParserBase = XMLParserBase;
+
+var SimpleDOMNode = /*#__PURE__*/function () {
+  function SimpleDOMNode(nodeName, nodeValue) {
+    _classCallCheck(this, SimpleDOMNode);
+
+    this.nodeName = nodeName;
+    this.nodeValue = nodeValue;
+    Object.defineProperty(this, "parentNode", {
+      value: null,
+      writable: true
+    });
+  }
+
+  _createClass(SimpleDOMNode, [{
+    key: "firstChild",
+    get: function get() {
+      return this.childNodes && this.childNodes[0];
+    }
+  }, {
+    key: "nextSibling",
+    get: function get() {
+      var childNodes = this.parentNode.childNodes;
+
+      if (!childNodes) {
+        return undefined;
+      }
+
+      var index = childNodes.indexOf(this);
+
+      if (index === -1) {
+        return undefined;
+      }
+
+      return childNodes[index + 1];
+    }
+  }, {
+    key: "textContent",
+    get: function get() {
+      if (!this.childNodes) {
+        return this.nodeValue || "";
+      }
+
+      return this.childNodes.map(function (child) {
+        return child.textContent;
+      }).join("");
+    }
+  }, {
+    key: "hasChildNodes",
+    value: function hasChildNodes() {
+      return this.childNodes && this.childNodes.length > 0;
+    }
+  }, {
+    key: "searchNode",
+    value: function searchNode(paths, pos) {
+      if (pos >= paths.length) {
+        return this;
+      }
+
+      var component = paths[pos];
+      var stack = [];
+      var node = this;
+
+      while (true) {
+        if (component.name === node.nodeName) {
+          if (component.pos === 0) {
+            var res = node.searchNode(paths, pos + 1);
+
+            if (res !== null) {
+              return res;
+            }
+          } else if (stack.length === 0) {
+            return null;
+          } else {
+            var _stack$pop = stack.pop(),
+                _stack$pop2 = _slicedToArray(_stack$pop, 1),
+                parent = _stack$pop2[0];
+
+            var siblingPos = 0;
+
+            var _iterator = _createForOfIteratorHelper(parent.childNodes),
+                _step;
+
+            try {
+              for (_iterator.s(); !(_step = _iterator.n()).done;) {
+                var child = _step.value;
+
+                if (component.name === child.nodeName) {
+                  if (siblingPos === component.pos) {
+                    return child.searchNode(paths, pos + 1);
+                  }
+
+                  siblingPos++;
+                }
+              }
+            } catch (err) {
+              _iterator.e(err);
+            } finally {
+              _iterator.f();
+            }
+
+            return node.searchNode(paths, pos + 1);
+          }
+        }
+
+        if (node.childNodes && node.childNodes.length !== 0) {
+          stack.push([node, 0]);
+          node = node.childNodes[0];
+        } else if (stack.length === 0) {
+          return null;
+        } else {
+          while (stack.length !== 0) {
+            var _stack$pop3 = stack.pop(),
+                _stack$pop4 = _slicedToArray(_stack$pop3, 2),
+                _parent = _stack$pop4[0],
+                currentPos = _stack$pop4[1];
+
+            var newPos = currentPos + 1;
+
+            if (newPos < _parent.childNodes.length) {
+              stack.push([_parent, newPos]);
+              node = _parent.childNodes[newPos];
+              break;
+            }
+          }
+
+          if (stack.length === 0) {
+            return null;
+          }
+        }
+      }
+    }
+  }, {
+    key: "dump",
+    value: function dump(buffer) {
+      if (this.nodeName === "#text") {
+        buffer.push((0, _core_utils.encodeToXmlString)(this.nodeValue));
+        return;
+      }
+
+      buffer.push("<".concat(this.nodeName));
+
+      if (this.attributes) {
+        var _iterator2 = _createForOfIteratorHelper(this.attributes),
+            _step2;
+
+        try {
+          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+            var attribute = _step2.value;
+            buffer.push(" ".concat(attribute.name, "=\"").concat((0, _core_utils.encodeToXmlString)(attribute.value), "\""));
+          }
+        } catch (err) {
+          _iterator2.e(err);
+        } finally {
+          _iterator2.f();
+        }
+      }
+
+      if (this.hasChildNodes()) {
+        buffer.push(">");
+
+        var _iterator3 = _createForOfIteratorHelper(this.childNodes),
+            _step3;
+
+        try {
+          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            var child = _step3.value;
+            child.dump(buffer);
+          }
+        } catch (err) {
+          _iterator3.e(err);
+        } finally {
+          _iterator3.f();
+        }
+
+        buffer.push("</".concat(this.nodeName, ">"));
+      } else if (this.nodeValue) {
+        buffer.push(">".concat((0, _core_utils.encodeToXmlString)(this.nodeValue), "</").concat(this.nodeName, ">"));
+      } else {
+        buffer.push("/>");
+      }
+    }
+  }]);
+
+  return SimpleDOMNode;
+}();
+
+exports.SimpleDOMNode = SimpleDOMNode;
+
+var SimpleXMLParser = /*#__PURE__*/function (_XMLParserBase) {
+  _inherits(SimpleXMLParser, _XMLParserBase);
+
+  var _super = _createSuper(SimpleXMLParser);
+
+  function SimpleXMLParser(_ref) {
+    var _this2;
+
+    var _ref$hasAttributes = _ref.hasAttributes,
+        hasAttributes = _ref$hasAttributes === void 0 ? false : _ref$hasAttributes,
+        _ref$lowerCaseName = _ref.lowerCaseName,
+        lowerCaseName = _ref$lowerCaseName === void 0 ? false : _ref$lowerCaseName;
+
+    _classCallCheck(this, SimpleXMLParser);
+
+    _this2 = _super.call(this);
+    _this2._currentFragment = null;
+    _this2._stack = null;
+    _this2._errorCode = XMLParserErrorCode.NoError;
+    _this2._hasAttributes = hasAttributes;
+    _this2._lowerCaseName = lowerCaseName;
+    return _this2;
+  }
+
+  _createClass(SimpleXMLParser, [{
+    key: "parseFromString",
+    value: function parseFromString(data) {
+      this._currentFragment = [];
+      this._stack = [];
+      this._errorCode = XMLParserErrorCode.NoError;
+      this.parseXml(data);
+
+      if (this._errorCode !== XMLParserErrorCode.NoError) {
+        return undefined;
+      }
+
+      var _this$_currentFragmen = _slicedToArray(this._currentFragment, 1),
+          documentElement = _this$_currentFragmen[0];
+
+      if (!documentElement) {
+        return undefined;
+      }
+
+      return {
+        documentElement: documentElement
+      };
+    }
+  }, {
+    key: "onText",
+    value: function onText(text) {
+      if (isWhitespaceString(text)) {
+        return;
+      }
+
+      var node = new SimpleDOMNode("#text", text);
+
+      this._currentFragment.push(node);
+    }
+  }, {
+    key: "onCdata",
+    value: function onCdata(text) {
+      var node = new SimpleDOMNode("#text", text);
+
+      this._currentFragment.push(node);
+    }
+  }, {
+    key: "onBeginElement",
+    value: function onBeginElement(name, attributes, isEmpty) {
+      if (this._lowerCaseName) {
+        name = name.toLowerCase();
+      }
+
+      var node = new SimpleDOMNode(name);
+      node.childNodes = [];
+
+      if (this._hasAttributes) {
+        node.attributes = attributes;
+      }
+
+      this._currentFragment.push(node);
+
+      if (isEmpty) {
+        return;
+      }
+
+      this._stack.push(this._currentFragment);
+
+      this._currentFragment = node.childNodes;
+    }
+  }, {
+    key: "onEndElement",
+    value: function onEndElement(name) {
+      this._currentFragment = this._stack.pop() || [];
+      var lastElement = this._currentFragment[this._currentFragment.length - 1];
+
+      if (!lastElement) {
+        return;
+      }
+
+      for (var i = 0, ii = lastElement.childNodes.length; i < ii; i++) {
+        lastElement.childNodes[i].parentNode = lastElement;
+      }
+    }
+  }, {
+    key: "onError",
+    value: function onError(code) {
+      this._errorCode = code;
+    }
+  }]);
+
+  return SimpleXMLParser;
+}(XMLParserBase);
+
+exports.SimpleXMLParser = SimpleXMLParser;
+
+/***/ }),
+/* 156 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+"use strict";
+
+
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 Object.defineProperty(exports, "__esModule", ({
@@ -30225,17 +31103,17 @@ var _obj = __w_pdfjs_require__(139);
 
 var _core_utils = __w_pdfjs_require__(137);
 
-var _default_appearance = __w_pdfjs_require__(155);
+var _default_appearance = __w_pdfjs_require__(157);
 
 var _primitives = __w_pdfjs_require__(134);
 
 var _colorspace = __w_pdfjs_require__(152);
 
-var _operator_list = __w_pdfjs_require__(173);
+var _operator_list = __w_pdfjs_require__(175);
 
 var _stream = __w_pdfjs_require__(141);
 
-var _writer = __w_pdfjs_require__(175);
+var _writer = __w_pdfjs_require__(177);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -30546,10 +31424,10 @@ var Annotation = /*#__PURE__*/function () {
   }, {
     key: "isHidden",
     value: function isHidden(annotationStorage) {
-      var data = annotationStorage && annotationStorage[this.data.id];
+      var storageEntry = annotationStorage && annotationStorage.get(this.data.id);
 
-      if (data && "hidden" in data) {
-        return data.hidden;
+      if (storageEntry && storageEntry.hidden !== undefined) {
+        return storageEntry.hidden;
       }
 
       return this._hasFlag(this.flags, _util.AnnotationFlag.HIDDEN);
@@ -31199,12 +32077,21 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
       }
 
       var loopDict = dict;
+      var visited = new _primitives.RefSet();
+
+      if (dict.objId) {
+        visited.put(dict.objId);
+      }
 
       while (loopDict.has("Parent")) {
         loopDict = loopDict.get("Parent");
 
-        if (!(0, _primitives.isDict)(loopDict)) {
+        if (!(loopDict instanceof _primitives.Dict) || loopDict.objId && visited.has(loopDict.objId)) {
           break;
+        }
+
+        if (loopDict.objId) {
+          visited.put(loopDict.objId);
         }
 
         if (loopDict.has("T")) {
@@ -31280,46 +32167,55 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
     key: "save",
     value: function () {
       var _save2 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee2(evaluator, task, annotationStorage) {
-        var value, appearance, xref, dict, bbox, xfa, newRef, AP, encrypt, originalTransform, newTransform, appearanceDict, bufferOriginal, bufferNew;
+        var storageEntry, value, appearance, xref, dict, bbox, xfa, newRef, AP, encrypt, originalTransform, newTransform, appearanceDict, bufferOriginal, bufferNew;
         return _regenerator["default"].wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                value = annotationStorage[this.data.id] && annotationStorage[this.data.id].value;
-
-                if (!(value === this.data.fieldValue || value === undefined)) {
-                  _context2.next = 3;
+                if (annotationStorage) {
+                  _context2.next = 2;
                   break;
                 }
 
                 return _context2.abrupt("return", null);
 
-              case 3:
-                _context2.next = 5;
+              case 2:
+                storageEntry = annotationStorage.get(this.data.id);
+                value = storageEntry && storageEntry.value;
+
+                if (!(value === this.data.fieldValue || value === undefined)) {
+                  _context2.next = 6;
+                  break;
+                }
+
+                return _context2.abrupt("return", null);
+
+              case 6:
+                _context2.next = 8;
                 return this._getAppearance(evaluator, task, annotationStorage);
 
-              case 5:
+              case 8:
                 appearance = _context2.sent;
 
                 if (!(appearance === null)) {
-                  _context2.next = 8;
+                  _context2.next = 11;
                   break;
                 }
 
                 return _context2.abrupt("return", null);
 
-              case 8:
+              case 11:
                 xref = evaluator.xref;
                 dict = xref.fetchIfRef(this.ref);
 
                 if ((0, _primitives.isDict)(dict)) {
-                  _context2.next = 12;
+                  _context2.next = 15;
                   break;
                 }
 
                 return _context2.abrupt("return", null);
 
-              case 12:
+              case 15:
                 bbox = [0, 0, this.data.rect[2] - this.data.rect[0], this.data.rect[3] - this.data.rect[1]];
                 xfa = {
                   path: (0, _util.stringToPDFString)(dict.get("T") || ""),
@@ -31364,7 +32260,7 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                   xfa: null
                 }]);
 
-              case 38:
+              case 41:
               case "end":
                 return _context2.stop();
             }
@@ -31382,7 +32278,7 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
     key: "_getAppearance",
     value: function () {
       var _getAppearance2 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee3(evaluator, task, annotationStorage) {
-        var isPassword, value, lineCount, defaultPadding, hPadding, totalHeight, totalWidth, _this$_computeFontSiz, _this$_computeFontSiz2, defaultAppearance, fontSize, font, descent, vPadding, alignment, encodedString, renderedText;
+        var isPassword, storageEntry, value, lineCount, defaultPadding, hPadding, totalHeight, totalWidth, _this$_computeFontSiz, _this$_computeFontSiz2, defaultAppearance, fontSize, font, descent, vPadding, alignment, encodedString, renderedText;
 
         return _regenerator["default"].wrap(function _callee3$(_context3) {
           while (1) {
@@ -31398,26 +32294,27 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                 return _context3.abrupt("return", null);
 
               case 3:
-                value = annotationStorage[this.data.id] && annotationStorage[this.data.id].value;
+                storageEntry = annotationStorage.get(this.data.id);
+                value = storageEntry && storageEntry.value;
 
                 if (!(value === undefined)) {
-                  _context3.next = 6;
+                  _context3.next = 7;
                   break;
                 }
 
                 return _context3.abrupt("return", null);
 
-              case 6:
+              case 7:
                 value = value.trim();
 
                 if (!(value === "")) {
-                  _context3.next = 9;
+                  _context3.next = 10;
                   break;
                 }
 
                 return _context3.abrupt("return", "");
 
-              case 9:
+              case 10:
                 lineCount = -1;
 
                 if (this.data.multiLine) {
@@ -31435,10 +32332,10 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                 }
 
                 _this$_computeFontSiz = this._computeFontSize(totalHeight, lineCount), _this$_computeFontSiz2 = _slicedToArray(_this$_computeFontSiz, 2), defaultAppearance = _this$_computeFontSiz2[0], fontSize = _this$_computeFontSiz2[1];
-                _context3.next = 19;
+                _context3.next = 20;
                 return this._getFontData(evaluator, task);
 
-              case 19:
+              case 20:
                 font = _context3.sent;
                 descent = font.descent;
 
@@ -31450,35 +32347,35 @@ var WidgetAnnotation = /*#__PURE__*/function (_Annotation2) {
                 alignment = this.data.textAlignment;
 
                 if (!this.data.multiLine) {
-                  _context3.next = 26;
+                  _context3.next = 27;
                   break;
                 }
 
                 return _context3.abrupt("return", this._getMultilineAppearance(defaultAppearance, value, font, fontSize, totalWidth, totalHeight, alignment, hPadding, vPadding));
 
-              case 26:
+              case 27:
                 encodedString = font.encodeString(value).join("");
 
                 if (!this.data.comb) {
-                  _context3.next = 29;
+                  _context3.next = 30;
                   break;
                 }
 
                 return _context3.abrupt("return", this._getCombAppearance(defaultAppearance, font, encodedString, totalWidth, hPadding, vPadding));
 
-              case 29:
+              case 30:
                 if (!(alignment === 0 || alignment > 2)) {
-                  _context3.next = 31;
+                  _context3.next = 32;
                   break;
                 }
 
                 return _context3.abrupt("return", "/Tx BMC q BT " + defaultAppearance + " 1 0 0 1 ".concat(hPadding, " ").concat(vPadding, " Tm (").concat((0, _util.escapeString)(encodedString), ") Tj") + " ET Q EMC");
 
-              case 31:
+              case 32:
                 renderedText = this._renderText(encodedString, font, fontSize, totalWidth, alignment, hPadding, vPadding);
                 return _context3.abrupt("return", "/Tx BMC q BT " + defaultAppearance + " 1 0 0 1 0 0 Tm ".concat(renderedText) + " ET Q EMC");
 
-              case 33:
+              case 34:
               case "end":
                 return _context3.stop();
             }
@@ -31899,7 +32796,8 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
       }
 
       if (annotationStorage) {
-        var value = annotationStorage[this.data.id] && annotationStorage[this.data.id].value;
+        var storageEntry = annotationStorage.get(this.data.id);
+        var value = storageEntry && storageEntry.value;
 
         if (value === undefined) {
           return _get(_getPrototypeOf(ButtonWidgetAnnotation.prototype), "getOperatorList", this).call(this, evaluator, task, renderForms, annotationStorage);
@@ -31972,24 +32870,23 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
     key: "_saveCheckbox",
     value: function () {
       var _saveCheckbox2 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee6(evaluator, task, annotationStorage) {
-        var value, defaultValue, dict, xfa, name, encrypt, originalTransform, buffer;
+        var storageEntry, value, defaultValue, dict, xfa, name, encrypt, originalTransform, buffer;
         return _regenerator["default"].wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
-                value = annotationStorage[this.data.id] && annotationStorage[this.data.id].value;
-
-                if (!(value === undefined)) {
-                  _context6.next = 3;
+                if (annotationStorage) {
+                  _context6.next = 2;
                   break;
                 }
 
                 return _context6.abrupt("return", null);
 
-              case 3:
-                defaultValue = this.data.fieldValue && this.data.fieldValue !== "Off";
+              case 2:
+                storageEntry = annotationStorage.get(this.data.id);
+                value = storageEntry && storageEntry.value;
 
-                if (!(defaultValue === value)) {
+                if (!(value === undefined)) {
                   _context6.next = 6;
                   break;
                 }
@@ -31997,9 +32894,9 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
                 return _context6.abrupt("return", null);
 
               case 6:
-                dict = evaluator.xref.fetchIfRef(this.ref);
+                defaultValue = this.data.fieldValue && this.data.fieldValue !== "Off";
 
-                if ((0, _primitives.isDict)(dict)) {
+                if (!(defaultValue === value)) {
                   _context6.next = 9;
                   break;
                 }
@@ -32007,6 +32904,16 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
                 return _context6.abrupt("return", null);
 
               case 9:
+                dict = evaluator.xref.fetchIfRef(this.ref);
+
+                if ((0, _primitives.isDict)(dict)) {
+                  _context6.next = 12;
+                  break;
+                }
+
+                return _context6.abrupt("return", null);
+
+              case 12:
                 xfa = {
                   path: (0, _util.stringToPDFString)(dict.get("T") || ""),
                   value: value ? this.data.exportValue : ""
@@ -32031,7 +32938,7 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
                   xfa: xfa
                 }]);
 
-              case 21:
+              case 24:
               case "end":
                 return _context6.stop();
             }
@@ -32049,24 +32956,23 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
     key: "_saveRadioButton",
     value: function () {
       var _saveRadioButton2 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee7(evaluator, task, annotationStorage) {
-        var value, defaultValue, dict, xfa, name, parentBuffer, encrypt, parent, parentTransform, originalTransform, buffer, newRefs;
+        var storageEntry, value, defaultValue, dict, xfa, name, parentBuffer, encrypt, parent, parentTransform, originalTransform, buffer, newRefs;
         return _regenerator["default"].wrap(function _callee7$(_context7) {
           while (1) {
             switch (_context7.prev = _context7.next) {
               case 0:
-                value = annotationStorage[this.data.id] && annotationStorage[this.data.id].value;
-
-                if (!(value === undefined)) {
-                  _context7.next = 3;
+                if (annotationStorage) {
+                  _context7.next = 2;
                   break;
                 }
 
                 return _context7.abrupt("return", null);
 
-              case 3:
-                defaultValue = this.data.fieldValue === this.data.buttonValue;
+              case 2:
+                storageEntry = annotationStorage.get(this.data.id);
+                value = storageEntry && storageEntry.value;
 
-                if (!(defaultValue === value)) {
+                if (!(value === undefined)) {
                   _context7.next = 6;
                   break;
                 }
@@ -32074,9 +32980,9 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
                 return _context7.abrupt("return", null);
 
               case 6:
-                dict = evaluator.xref.fetchIfRef(this.ref);
+                defaultValue = this.data.fieldValue === this.data.buttonValue;
 
-                if ((0, _primitives.isDict)(dict)) {
+                if (!(defaultValue === value)) {
                   _context7.next = 9;
                   break;
                 }
@@ -32084,6 +32990,16 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
                 return _context7.abrupt("return", null);
 
               case 9:
+                dict = evaluator.xref.fetchIfRef(this.ref);
+
+                if ((0, _primitives.isDict)(dict)) {
+                  _context7.next = 12;
+                  break;
+                }
+
+                return _context7.abrupt("return", null);
+
+              case 12:
                 xfa = {
                   path: (0, _util.stringToPDFString)(dict.get("T") || ""),
                   value: value ? this.data.buttonValue : ""
@@ -32137,7 +33053,7 @@ var ButtonWidgetAnnotation = /*#__PURE__*/function (_WidgetAnnotation2) {
 
                 return _context7.abrupt("return", newRefs);
 
-              case 24:
+              case 27:
               case "end":
                 return _context7.stop();
             }
@@ -32904,7 +33820,7 @@ var FileAttachmentAnnotation = /*#__PURE__*/function (_MarkupAnnotation14) {
 }(MarkupAnnotation);
 
 /***/ }),
-/* 155 */
+/* 157 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -32926,7 +33842,7 @@ var _colorspace = __w_pdfjs_require__(152);
 
 var _core_utils = __w_pdfjs_require__(137);
 
-var _evaluator = __w_pdfjs_require__(156);
+var _evaluator = __w_pdfjs_require__(158);
 
 var _stream = __w_pdfjs_require__(141);
 
@@ -33068,7 +33984,7 @@ function createDefaultAppearance(_ref) {
 }
 
 /***/ }),
-/* 156 */
+/* 158 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -33083,43 +33999,43 @@ var _regenerator = _interopRequireDefault(__w_pdfjs_require__(2));
 
 var _util = __w_pdfjs_require__(4);
 
-var _cmap = __w_pdfjs_require__(157);
+var _cmap = __w_pdfjs_require__(159);
 
 var _primitives = __w_pdfjs_require__(134);
 
 var _stream = __w_pdfjs_require__(141);
 
-var _fonts = __w_pdfjs_require__(158);
+var _fonts = __w_pdfjs_require__(160);
 
-var _encodings = __w_pdfjs_require__(161);
+var _encodings = __w_pdfjs_require__(163);
 
-var _unicode = __w_pdfjs_require__(164);
+var _unicode = __w_pdfjs_require__(166);
 
-var _standard_fonts = __w_pdfjs_require__(163);
+var _standard_fonts = __w_pdfjs_require__(165);
 
-var _pattern = __w_pdfjs_require__(167);
+var _pattern = __w_pdfjs_require__(169);
 
-var _function = __w_pdfjs_require__(168);
+var _function = __w_pdfjs_require__(170);
 
 var _parser = __w_pdfjs_require__(140);
 
 var _image_utils = __w_pdfjs_require__(153);
 
-var _bidi = __w_pdfjs_require__(170);
+var _bidi = __w_pdfjs_require__(172);
 
 var _colorspace = __w_pdfjs_require__(152);
 
-var _glyphlist = __w_pdfjs_require__(162);
+var _glyphlist = __w_pdfjs_require__(164);
 
 var _core_utils = __w_pdfjs_require__(137);
 
-var _metrics = __w_pdfjs_require__(171);
+var _metrics = __w_pdfjs_require__(173);
 
-var _murmurhash = __w_pdfjs_require__(172);
+var _murmurhash = __w_pdfjs_require__(174);
 
-var _operator_list = __w_pdfjs_require__(173);
+var _operator_list = __w_pdfjs_require__(175);
 
-var _image = __w_pdfjs_require__(174);
+var _image = __w_pdfjs_require__(176);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -37536,7 +38452,7 @@ var EvaluatorPreprocessor = /*#__PURE__*/function () {
 exports.EvaluatorPreprocessor = EvaluatorPreprocessor;
 
 /***/ }),
-/* 157 */
+/* 159 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -38559,7 +39475,7 @@ var CMapFactory = function CMapFactoryClosure() {
 exports.CMapFactory = CMapFactory;
 
 /***/ }),
-/* 158 */
+/* 160 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -38573,25 +39489,25 @@ exports.ToUnicodeMap = exports.SEAC_ANALYSIS_ENABLED = exports.IdentityToUnicode
 
 var _util = __w_pdfjs_require__(4);
 
-var _cff_parser = __w_pdfjs_require__(159);
+var _cff_parser = __w_pdfjs_require__(161);
 
-var _glyphlist = __w_pdfjs_require__(162);
+var _glyphlist = __w_pdfjs_require__(164);
 
-var _encodings = __w_pdfjs_require__(161);
+var _encodings = __w_pdfjs_require__(163);
 
-var _standard_fonts = __w_pdfjs_require__(163);
+var _standard_fonts = __w_pdfjs_require__(165);
 
-var _unicode = __w_pdfjs_require__(164);
+var _unicode = __w_pdfjs_require__(166);
 
 var _core_utils = __w_pdfjs_require__(137);
 
-var _font_renderer = __w_pdfjs_require__(165);
+var _font_renderer = __w_pdfjs_require__(167);
 
-var _cmap = __w_pdfjs_require__(157);
+var _cmap = __w_pdfjs_require__(159);
 
 var _stream = __w_pdfjs_require__(141);
 
-var _type1_parser = __w_pdfjs_require__(166);
+var _type1_parser = __w_pdfjs_require__(168);
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
@@ -41906,7 +42822,7 @@ var CFFFont = function CFFFontClosure() {
 }();
 
 /***/ }),
-/* 159 */
+/* 161 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -41921,9 +42837,9 @@ exports.CFFTopDict = exports.CFFStrings = exports.CFFStandardStrings = exports.C
 
 var _util = __w_pdfjs_require__(4);
 
-var _charsets = __w_pdfjs_require__(160);
+var _charsets = __w_pdfjs_require__(162);
 
-var _encodings = __w_pdfjs_require__(161);
+var _encodings = __w_pdfjs_require__(163);
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -43875,7 +44791,7 @@ var CFFCompiler = /*#__PURE__*/function () {
 exports.CFFCompiler = CFFCompiler;
 
 /***/ }),
-/* 160 */
+/* 162 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -43893,7 +44809,7 @@ var ExpertSubsetCharset = [".notdef", "space", "dollaroldstyle", "dollarsuperior
 exports.ExpertSubsetCharset = ExpertSubsetCharset;
 
 /***/ }),
-/* 161 */
+/* 163 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -43947,7 +44863,7 @@ function getEncoding(encodingName) {
 }
 
 /***/ }),
-/* 162 */
+/* 164 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __w_pdfjs_require__) => {
 
 "use strict";
@@ -53019,7 +53935,7 @@ var getDingbatsGlyphsUnicode = (0,_core_utils_js__WEBPACK_IMPORTED_MODULE_0__.ge
 
 
 /***/ }),
-/* 163 */
+/* 165 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -53763,7 +54679,7 @@ var getSupplementalGlyphMapForCalibri = (0, _core_utils.getLookupTableFactory)(f
 exports.getSupplementalGlyphMapForCalibri = getSupplementalGlyphMapForCalibri;
 
 /***/ }),
-/* 164 */
+/* 166 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __w_pdfjs_require__) => {
 
 "use strict";
@@ -57125,7 +58041,7 @@ function reverseIfRtl(chars) {
 
 
 /***/ }),
-/* 165 */
+/* 167 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -57140,11 +58056,11 @@ exports.FontRendererFactory = void 0;
 
 var _util = __w_pdfjs_require__(4);
 
-var _cff_parser = __w_pdfjs_require__(159);
+var _cff_parser = __w_pdfjs_require__(161);
 
-var _glyphlist = __w_pdfjs_require__(162);
+var _glyphlist = __w_pdfjs_require__(164);
 
-var _encodings = __w_pdfjs_require__(161);
+var _encodings = __w_pdfjs_require__(163);
 
 var _stream = __w_pdfjs_require__(141);
 
@@ -58148,7 +59064,7 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
 exports.FontRendererFactory = FontRendererFactory;
 
 /***/ }),
-/* 166 */
+/* 168 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -58159,7 +59075,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.Type1Parser = void 0;
 
-var _encodings = __w_pdfjs_require__(161);
+var _encodings = __w_pdfjs_require__(163);
 
 var _core_utils = __w_pdfjs_require__(137);
 
@@ -58859,7 +59775,7 @@ var Type1Parser = function Type1ParserClosure() {
 exports.Type1Parser = Type1Parser;
 
 /***/ }),
-/* 167 */
+/* 169 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -59825,7 +60741,7 @@ function getTilingPatternIR(operatorList, dict, color) {
 }
 
 /***/ }),
-/* 168 */
+/* 170 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -59841,7 +60757,7 @@ var _primitives = __w_pdfjs_require__(134);
 
 var _util = __w_pdfjs_require__(4);
 
-var _ps_parser = __w_pdfjs_require__(169);
+var _ps_parser = __w_pdfjs_require__(171);
 
 var _image_utils = __w_pdfjs_require__(153);
 
@@ -61233,7 +62149,7 @@ var PostScriptCompiler = function PostScriptCompilerClosure() {
 exports.PostScriptCompiler = PostScriptCompiler;
 
 /***/ }),
-/* 169 */
+/* 171 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -61522,7 +62438,7 @@ var PostScriptLexer = /*#__PURE__*/function () {
 exports.PostScriptLexer = PostScriptLexer;
 
 /***/ }),
-/* 170 */
+/* 172 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -61835,7 +62751,7 @@ function bidi(str, startLevel, vertical) {
 }
 
 /***/ }),
-/* 171 */
+/* 173 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -64789,7 +65705,7 @@ var getMetrics = (0, _core_utils.getLookupTableFactory)(function (t) {
 exports.getMetrics = getMetrics;
 
 /***/ }),
-/* 172 */
+/* 174 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -64928,7 +65844,7 @@ var MurmurHash3_64 = /*#__PURE__*/function () {
 exports.MurmurHash3_64 = MurmurHash3_64;
 
 /***/ }),
-/* 173 */
+/* 175 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -65605,7 +66521,7 @@ var OperatorList = function OperatorListClosure() {
 exports.OperatorList = OperatorList;
 
 /***/ }),
-/* 174 */
+/* 176 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -66329,7 +67245,7 @@ var PDFImage = /*#__PURE__*/function () {
 exports.PDFImage = PDFImage;
 
 /***/ }),
-/* 175 */
+/* 177 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -66347,7 +67263,7 @@ var _primitives = __w_pdfjs_require__(134);
 
 var _core_utils = __w_pdfjs_require__(137);
 
-var _xml_parser = __w_pdfjs_require__(176);
+var _xml_parser = __w_pdfjs_require__(155);
 
 var _crypto = __w_pdfjs_require__(151);
 
@@ -66693,683 +67609,7 @@ function incrementalUpdate(_ref) {
 }
 
 /***/ }),
-/* 176 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
-
-"use strict";
-
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.XMLParserErrorCode = exports.XMLParserBase = exports.SimpleXMLParser = exports.SimpleDOMNode = void 0;
-
-var _util = __w_pdfjs_require__(4);
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var XMLParserErrorCode = {
-  NoError: 0,
-  EndOfDocument: -1,
-  UnterminatedCdat: -2,
-  UnterminatedXmlDeclaration: -3,
-  UnterminatedDoctypeDeclaration: -4,
-  UnterminatedComment: -5,
-  MalformedElement: -6,
-  OutOfMemory: -7,
-  UnterminatedAttributeValue: -8,
-  UnterminatedElement: -9,
-  ElementNeverBegun: -10
-};
-exports.XMLParserErrorCode = XMLParserErrorCode;
-
-function isWhitespace(s, index) {
-  var ch = s[index];
-  return ch === " " || ch === "\n" || ch === "\r" || ch === "\t";
-}
-
-function isWhitespaceString(s) {
-  for (var i = 0, ii = s.length; i < ii; i++) {
-    if (!isWhitespace(s, i)) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-var XMLParserBase = /*#__PURE__*/function () {
-  function XMLParserBase() {
-    _classCallCheck(this, XMLParserBase);
-  }
-
-  _createClass(XMLParserBase, [{
-    key: "_resolveEntities",
-    value: function _resolveEntities(s) {
-      var _this = this;
-
-      return s.replace(/&([^;]+);/g, function (all, entity) {
-        if (entity.substring(0, 2) === "#x") {
-          return String.fromCodePoint(parseInt(entity.substring(2), 16));
-        } else if (entity.substring(0, 1) === "#") {
-          return String.fromCodePoint(parseInt(entity.substring(1), 10));
-        }
-
-        switch (entity) {
-          case "lt":
-            return "<";
-
-          case "gt":
-            return ">";
-
-          case "amp":
-            return "&";
-
-          case "quot":
-            return '"';
-
-          case "apos":
-            return "'";
-        }
-
-        return _this.onResolveEntity(entity);
-      });
-    }
-  }, {
-    key: "_parseContent",
-    value: function _parseContent(s, start) {
-      var attributes = [];
-      var pos = start;
-
-      function skipWs() {
-        while (pos < s.length && isWhitespace(s, pos)) {
-          ++pos;
-        }
-      }
-
-      while (pos < s.length && !isWhitespace(s, pos) && s[pos] !== ">" && s[pos] !== "/") {
-        ++pos;
-      }
-
-      var name = s.substring(start, pos);
-      skipWs();
-
-      while (pos < s.length && s[pos] !== ">" && s[pos] !== "/" && s[pos] !== "?") {
-        skipWs();
-        var attrName = "",
-            attrValue = "";
-
-        while (pos < s.length && !isWhitespace(s, pos) && s[pos] !== "=") {
-          attrName += s[pos];
-          ++pos;
-        }
-
-        skipWs();
-
-        if (s[pos] !== "=") {
-          return null;
-        }
-
-        ++pos;
-        skipWs();
-        var attrEndChar = s[pos];
-
-        if (attrEndChar !== '"' && attrEndChar !== "'") {
-          return null;
-        }
-
-        var attrEndIndex = s.indexOf(attrEndChar, ++pos);
-
-        if (attrEndIndex < 0) {
-          return null;
-        }
-
-        attrValue = s.substring(pos, attrEndIndex);
-        attributes.push({
-          name: attrName,
-          value: this._resolveEntities(attrValue)
-        });
-        pos = attrEndIndex + 1;
-        skipWs();
-      }
-
-      return {
-        name: name,
-        attributes: attributes,
-        parsed: pos - start
-      };
-    }
-  }, {
-    key: "_parseProcessingInstruction",
-    value: function _parseProcessingInstruction(s, start) {
-      var pos = start;
-
-      function skipWs() {
-        while (pos < s.length && isWhitespace(s, pos)) {
-          ++pos;
-        }
-      }
-
-      while (pos < s.length && !isWhitespace(s, pos) && s[pos] !== ">" && s[pos] !== "/") {
-        ++pos;
-      }
-
-      var name = s.substring(start, pos);
-      skipWs();
-      var attrStart = pos;
-
-      while (pos < s.length && (s[pos] !== "?" || s[pos + 1] !== ">")) {
-        ++pos;
-      }
-
-      var value = s.substring(attrStart, pos);
-      return {
-        name: name,
-        value: value,
-        parsed: pos - start
-      };
-    }
-  }, {
-    key: "parseXml",
-    value: function parseXml(s) {
-      var i = 0;
-
-      while (i < s.length) {
-        var ch = s[i];
-        var j = i;
-
-        if (ch === "<") {
-          ++j;
-          var ch2 = s[j];
-          var q = void 0;
-
-          switch (ch2) {
-            case "/":
-              ++j;
-              q = s.indexOf(">", j);
-
-              if (q < 0) {
-                this.onError(XMLParserErrorCode.UnterminatedElement);
-                return;
-              }
-
-              this.onEndElement(s.substring(j, q));
-              j = q + 1;
-              break;
-
-            case "?":
-              ++j;
-
-              var pi = this._parseProcessingInstruction(s, j);
-
-              if (s.substring(j + pi.parsed, j + pi.parsed + 2) !== "?>") {
-                this.onError(XMLParserErrorCode.UnterminatedXmlDeclaration);
-                return;
-              }
-
-              this.onPi(pi.name, pi.value);
-              j += pi.parsed + 2;
-              break;
-
-            case "!":
-              if (s.substring(j + 1, j + 3) === "--") {
-                q = s.indexOf("-->", j + 3);
-
-                if (q < 0) {
-                  this.onError(XMLParserErrorCode.UnterminatedComment);
-                  return;
-                }
-
-                this.onComment(s.substring(j + 3, q));
-                j = q + 3;
-              } else if (s.substring(j + 1, j + 8) === "[CDATA[") {
-                q = s.indexOf("]]>", j + 8);
-
-                if (q < 0) {
-                  this.onError(XMLParserErrorCode.UnterminatedCdat);
-                  return;
-                }
-
-                this.onCdata(s.substring(j + 8, q));
-                j = q + 3;
-              } else if (s.substring(j + 1, j + 8) === "DOCTYPE") {
-                var q2 = s.indexOf("[", j + 8);
-                var complexDoctype = false;
-                q = s.indexOf(">", j + 8);
-
-                if (q < 0) {
-                  this.onError(XMLParserErrorCode.UnterminatedDoctypeDeclaration);
-                  return;
-                }
-
-                if (q2 > 0 && q > q2) {
-                  q = s.indexOf("]>", j + 8);
-
-                  if (q < 0) {
-                    this.onError(XMLParserErrorCode.UnterminatedDoctypeDeclaration);
-                    return;
-                  }
-
-                  complexDoctype = true;
-                }
-
-                var doctypeContent = s.substring(j + 8, q + (complexDoctype ? 1 : 0));
-                this.onDoctype(doctypeContent);
-                j = q + (complexDoctype ? 2 : 1);
-              } else {
-                this.onError(XMLParserErrorCode.MalformedElement);
-                return;
-              }
-
-              break;
-
-            default:
-              var content = this._parseContent(s, j);
-
-              if (content === null) {
-                this.onError(XMLParserErrorCode.MalformedElement);
-                return;
-              }
-
-              var isClosed = false;
-
-              if (s.substring(j + content.parsed, j + content.parsed + 2) === "/>") {
-                isClosed = true;
-              } else if (s.substring(j + content.parsed, j + content.parsed + 1) !== ">") {
-                this.onError(XMLParserErrorCode.UnterminatedElement);
-                return;
-              }
-
-              this.onBeginElement(content.name, content.attributes, isClosed);
-              j += content.parsed + (isClosed ? 2 : 1);
-              break;
-          }
-        } else {
-          while (j < s.length && s[j] !== "<") {
-            j++;
-          }
-
-          var text = s.substring(i, j);
-          this.onText(this._resolveEntities(text));
-        }
-
-        i = j;
-      }
-    }
-  }, {
-    key: "onResolveEntity",
-    value: function onResolveEntity(name) {
-      return "&".concat(name, ";");
-    }
-  }, {
-    key: "onPi",
-    value: function onPi(name, value) {}
-  }, {
-    key: "onComment",
-    value: function onComment(text) {}
-  }, {
-    key: "onCdata",
-    value: function onCdata(text) {}
-  }, {
-    key: "onDoctype",
-    value: function onDoctype(doctypeContent) {}
-  }, {
-    key: "onText",
-    value: function onText(text) {}
-  }, {
-    key: "onBeginElement",
-    value: function onBeginElement(name, attributes, isEmpty) {}
-  }, {
-    key: "onEndElement",
-    value: function onEndElement(name) {}
-  }, {
-    key: "onError",
-    value: function onError(code) {}
-  }]);
-
-  return XMLParserBase;
-}();
-
-exports.XMLParserBase = XMLParserBase;
-
-var SimpleDOMNode = /*#__PURE__*/function () {
-  function SimpleDOMNode(nodeName, nodeValue) {
-    _classCallCheck(this, SimpleDOMNode);
-
-    this.nodeName = nodeName;
-    this.nodeValue = nodeValue;
-    Object.defineProperty(this, "parentNode", {
-      value: null,
-      writable: true
-    });
-  }
-
-  _createClass(SimpleDOMNode, [{
-    key: "firstChild",
-    get: function get() {
-      return this.childNodes && this.childNodes[0];
-    }
-  }, {
-    key: "nextSibling",
-    get: function get() {
-      var childNodes = this.parentNode.childNodes;
-
-      if (!childNodes) {
-        return undefined;
-      }
-
-      var index = childNodes.indexOf(this);
-
-      if (index === -1) {
-        return undefined;
-      }
-
-      return childNodes[index + 1];
-    }
-  }, {
-    key: "textContent",
-    get: function get() {
-      if (!this.childNodes) {
-        return this.nodeValue || "";
-      }
-
-      return this.childNodes.map(function (child) {
-        return child.textContent;
-      }).join("");
-    }
-  }, {
-    key: "hasChildNodes",
-    value: function hasChildNodes() {
-      return this.childNodes && this.childNodes.length > 0;
-    }
-  }, {
-    key: "searchNode",
-    value: function searchNode(paths, pos) {
-      if (pos >= paths.length) {
-        return this;
-      }
-
-      var component = paths[pos];
-      var stack = [];
-      var node = this;
-
-      while (true) {
-        if (component.name === node.nodeName) {
-          if (component.pos === 0) {
-            var res = node.searchNode(paths, pos + 1);
-
-            if (res !== null) {
-              return res;
-            }
-          } else if (stack.length === 0) {
-            return null;
-          } else {
-            var _stack$pop = stack.pop(),
-                _stack$pop2 = _slicedToArray(_stack$pop, 1),
-                parent = _stack$pop2[0];
-
-            var siblingPos = 0;
-
-            var _iterator = _createForOfIteratorHelper(parent.childNodes),
-                _step;
-
-            try {
-              for (_iterator.s(); !(_step = _iterator.n()).done;) {
-                var child = _step.value;
-
-                if (component.name === child.nodeName) {
-                  if (siblingPos === component.pos) {
-                    return child.searchNode(paths, pos + 1);
-                  }
-
-                  siblingPos++;
-                }
-              }
-            } catch (err) {
-              _iterator.e(err);
-            } finally {
-              _iterator.f();
-            }
-
-            return node.searchNode(paths, pos + 1);
-          }
-        }
-
-        if (node.childNodes && node.childNodes.length !== 0) {
-          stack.push([node, 0]);
-          node = node.childNodes[0];
-        } else if (stack.length === 0) {
-          return null;
-        } else {
-          while (stack.length !== 0) {
-            var _stack$pop3 = stack.pop(),
-                _stack$pop4 = _slicedToArray(_stack$pop3, 2),
-                _parent = _stack$pop4[0],
-                currentPos = _stack$pop4[1];
-
-            var newPos = currentPos + 1;
-
-            if (newPos < _parent.childNodes.length) {
-              stack.push([_parent, newPos]);
-              node = _parent.childNodes[newPos];
-              break;
-            }
-          }
-
-          if (stack.length === 0) {
-            return null;
-          }
-        }
-      }
-    }
-  }, {
-    key: "dump",
-    value: function dump(buffer) {
-      if (this.nodeName === "#text") {
-        buffer.push((0, _util.encodeToXmlString)(this.nodeValue));
-        return;
-      }
-
-      buffer.push("<".concat(this.nodeName));
-
-      if (this.attributes) {
-        var _iterator2 = _createForOfIteratorHelper(this.attributes),
-            _step2;
-
-        try {
-          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-            var attribute = _step2.value;
-            buffer.push(" ".concat(attribute.name, "=\"").concat((0, _util.encodeToXmlString)(attribute.value), "\""));
-          }
-        } catch (err) {
-          _iterator2.e(err);
-        } finally {
-          _iterator2.f();
-        }
-      }
-
-      if (this.hasChildNodes()) {
-        buffer.push(">");
-
-        var _iterator3 = _createForOfIteratorHelper(this.childNodes),
-            _step3;
-
-        try {
-          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-            var child = _step3.value;
-            child.dump(buffer);
-          }
-        } catch (err) {
-          _iterator3.e(err);
-        } finally {
-          _iterator3.f();
-        }
-
-        buffer.push("</".concat(this.nodeName, ">"));
-      } else if (this.nodeValue) {
-        buffer.push(">".concat((0, _util.encodeToXmlString)(this.nodeValue), "</").concat(this.nodeName, ">"));
-      } else {
-        buffer.push("/>");
-      }
-    }
-  }]);
-
-  return SimpleDOMNode;
-}();
-
-exports.SimpleDOMNode = SimpleDOMNode;
-
-var SimpleXMLParser = /*#__PURE__*/function (_XMLParserBase) {
-  _inherits(SimpleXMLParser, _XMLParserBase);
-
-  var _super = _createSuper(SimpleXMLParser);
-
-  function SimpleXMLParser(_ref) {
-    var _this2;
-
-    var _ref$hasAttributes = _ref.hasAttributes,
-        hasAttributes = _ref$hasAttributes === void 0 ? false : _ref$hasAttributes,
-        _ref$lowerCaseName = _ref.lowerCaseName,
-        lowerCaseName = _ref$lowerCaseName === void 0 ? false : _ref$lowerCaseName;
-
-    _classCallCheck(this, SimpleXMLParser);
-
-    _this2 = _super.call(this);
-    _this2._currentFragment = null;
-    _this2._stack = null;
-    _this2._errorCode = XMLParserErrorCode.NoError;
-    _this2._hasAttributes = hasAttributes;
-    _this2._lowerCaseName = lowerCaseName;
-    return _this2;
-  }
-
-  _createClass(SimpleXMLParser, [{
-    key: "parseFromString",
-    value: function parseFromString(data) {
-      this._currentFragment = [];
-      this._stack = [];
-      this._errorCode = XMLParserErrorCode.NoError;
-      this.parseXml(data);
-
-      if (this._errorCode !== XMLParserErrorCode.NoError) {
-        return undefined;
-      }
-
-      var _this$_currentFragmen = _slicedToArray(this._currentFragment, 1),
-          documentElement = _this$_currentFragmen[0];
-
-      if (!documentElement) {
-        return undefined;
-      }
-
-      return {
-        documentElement: documentElement
-      };
-    }
-  }, {
-    key: "onText",
-    value: function onText(text) {
-      if (isWhitespaceString(text)) {
-        return;
-      }
-
-      var node = new SimpleDOMNode("#text", text);
-
-      this._currentFragment.push(node);
-    }
-  }, {
-    key: "onCdata",
-    value: function onCdata(text) {
-      var node = new SimpleDOMNode("#text", text);
-
-      this._currentFragment.push(node);
-    }
-  }, {
-    key: "onBeginElement",
-    value: function onBeginElement(name, attributes, isEmpty) {
-      if (this._lowerCaseName) {
-        name = name.toLowerCase();
-      }
-
-      var node = new SimpleDOMNode(name);
-      node.childNodes = [];
-
-      if (this._hasAttributes) {
-        node.attributes = attributes;
-      }
-
-      this._currentFragment.push(node);
-
-      if (isEmpty) {
-        return;
-      }
-
-      this._stack.push(this._currentFragment);
-
-      this._currentFragment = node.childNodes;
-    }
-  }, {
-    key: "onEndElement",
-    value: function onEndElement(name) {
-      this._currentFragment = this._stack.pop() || [];
-      var lastElement = this._currentFragment[this._currentFragment.length - 1];
-
-      if (!lastElement) {
-        return;
-      }
-
-      for (var i = 0, ii = lastElement.childNodes.length; i < ii; i++) {
-        lastElement.childNodes[i].parentNode = lastElement;
-      }
-    }
-  }, {
-    key: "onError",
-    value: function onError(code) {
-      this._errorCode = code;
-    }
-  }]);
-
-  return SimpleXMLParser;
-}(XMLParserBase);
-
-exports.SimpleXMLParser = SimpleXMLParser;
-
-/***/ }),
-/* 177 */
+/* 178 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -67922,7 +68162,7 @@ var MessageHandler = /*#__PURE__*/function () {
 exports.MessageHandler = MessageHandler;
 
 /***/ }),
-/* 178 */
+/* 179 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
