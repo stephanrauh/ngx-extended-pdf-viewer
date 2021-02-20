@@ -48,6 +48,8 @@ import { ProgressBarEvent } from './events/progress-bar-event';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 
+declare function ngxBrowserSupportsNullSafeChaining(): boolean; // defined in assets/compatibilits-check.js
+
 declare class ResizeObserver {
   constructor(param: () => void);
   public observe(div: HTMLElement);
@@ -569,20 +571,27 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   private iOSVersionRequiresES5(): boolean {
     const match = navigator.appVersion.match(/OS (\d+)_(\d+)_?(\d+)?/);
     if (match !== undefined && match !== null) {
-      return parseInt(match[1], 10) < 13;
+      return parseInt(match[1], 10) < 14;
     }
 
     return false;
+  }
+
+  private needsES5() {
+    const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
+    const isEdge = /Edge\/\d./i.test(navigator.userAgent);
+    const isIOs13OrBelow = this.iOSVersionRequiresES5();
+    let needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
+    needsES5 = needsES5 || ngxBrowserSupportsNullSafeChaining();
+    needsES5 = needsES5 || isIE || isEdge || isIOs13OrBelow;
+    return needsES5;
   }
 
   private loadViewer(): void {
     if (!window['pdfjs-dist/build/pdf']) {
       setTimeout(() => this.loadViewer(), 25);
     } else {
-      const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
-      const isEdge = /Edge\/\d./i.test(navigator.userAgent);
-      const isIOs12OrBelow = this.iOSVersionRequiresES5();
-      const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
+      let needsES5 = this.needsES5();
       const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
       const script2 = document.createElement('script');
       const assets = pdfDefaultOptions.assetsFolder;
@@ -593,7 +602,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
 
       script2.src = this.location.normalize(
-        isIE || isEdge || isIOs12OrBelow || needsES5 ? assets + '/viewer-' + versionSuffix + '-es5' + suffix : assets + '/viewer-' + versionSuffix + suffix
+        needsES5 ? assets + '/viewer-' + versionSuffix + '-es5' + suffix : assets + '/viewer-' + versionSuffix + suffix
       );
       script2.type = 'text/javascript';
       script2.async = true;
@@ -613,32 +622,49 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
       this.onResize();
 
-      if (!window['pdfjs-dist/build/pdf']) {
-        const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
-        const isEdge = /Edge\/\d./i.test(navigator.userAgent);
-        const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
-        const isIOs12OrBelow = this.iOSVersionRequiresES5();
-        const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
-        if (this.minifiedJSLibraries) {
-          if (!pdfDefaultOptions.workerSrc().endsWith('.min.js')) {
-            const src = pdfDefaultOptions.workerSrc();
-            pdfDefaultOptions.workerSrc = () => src.replace('.js', '.min.js');
-          }
-        }
+      this.checkBrowserCompatibilityAndLoadPdsjs();
 
-        const assets = pdfDefaultOptions.assetsFolder;
-        const versionSuffix = getVersionSuffix(assets);
-        const script = document.createElement('script');
-        script.src = this.location.normalize(
-          isIE || isEdge || isIOs12OrBelow || needsES5 ? assets + '/pdf-' + versionSuffix + '-es5' + suffix : assets + '/pdf-' + versionSuffix + suffix
-        );
-        script.type = 'text/javascript';
-        script.async = true;
-        document.getElementsByTagName('head')[0].appendChild(script);
+    }
+  }
+
+  private checkBrowserCompatibilityAndLoadPdsjs() {
+    debugger;
+    if (!window["ngxBrowserSupportsNullSafeChaining"]) {
+      const assets = pdfDefaultOptions.assetsFolder;
+      const script = document.createElement('script');
+      script.src = this.location.normalize(assets + "/compatibility-check.js");
+      script.type = 'text/javascript';
+      script.async = false;
+      script.onload = () => this.loadPdfJs();
+      document.getElementsByTagName('head')[0].appendChild(script);
+    } else {
+      this.loadPdfJs();
+    }
+  }
+
+  private loadPdfJs() {
+    if (!window['pdfjs-dist/build/pdf']) {
+      const needsES5 = this.needsES5();
+      const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
+      if (this.minifiedJSLibraries) {
+        if (!pdfDefaultOptions.workerSrc().endsWith('.min.js')) {
+          const src = pdfDefaultOptions.workerSrc();
+          pdfDefaultOptions.workerSrc = () => src.replace('.js', '.min.js');
+        }
       }
-      if (!(window as any).webViewerLoad) {
-        this.loadViewer();
-      }
+
+      const assets = pdfDefaultOptions.assetsFolder;
+      const versionSuffix = getVersionSuffix(assets);
+      const script = document.createElement('script');
+      script.src = this.location.normalize(
+        needsES5 ? assets + '/pdf-' + versionSuffix + '-es5' + suffix : assets + '/pdf-' + versionSuffix + suffix
+      );
+      script.type = 'text/javascript';
+      script.async = true;
+      document.getElementsByTagName('head')[0].appendChild(script);
+    }
+    if (!(window as any).webViewerLoad) {
+      this.loadViewer();
     }
   }
 
