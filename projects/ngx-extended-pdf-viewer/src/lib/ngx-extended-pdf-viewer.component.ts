@@ -628,7 +628,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   private checkBrowserCompatibilityAndLoadPdsjs() {
-    debugger;
     if (!window["ngxBrowserSupportsNullSafeChaining"]) {
       const assets = pdfDefaultOptions.assetsFolder;
       const script = document.createElement('script');

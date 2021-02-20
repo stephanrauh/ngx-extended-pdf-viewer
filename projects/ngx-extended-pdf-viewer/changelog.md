@@ -259,3 +259,4 @@
 - 8.0.0 #644 more precise highlighting when searching long words fuzzily
 - 8.1.0 #426 fix full-screen mode on Safari and iPad. Note this is a fairly radical solution which might cause problems with Angular.
 - 8.1.1 #649 fixed the Italian translations (and probably many other translations, too)
+- 8.1.2 #650 + #657 restored compatibility to MacOS Mojave and iOS 13; #649 fixed the Italian translations (and probably many other translations, too)
