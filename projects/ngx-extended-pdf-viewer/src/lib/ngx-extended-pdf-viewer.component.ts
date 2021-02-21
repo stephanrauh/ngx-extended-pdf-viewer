@@ -462,7 +462,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Output()
   public updateFindState = new EventEmitter<FindState>();
 
-  /** Legal values: undefined, 'auto', 'page-actual', 'page_fit', 'page-width', or '50' (or any other percentage) */
+  /** Legal values: undefined, 'auto', 'page-actual', 'page-fit', 'page-width', or '50' (or any other percentage) */
   @Input()
   public zoom: string | number | undefined = undefined;
 
