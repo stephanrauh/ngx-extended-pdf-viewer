@@ -558,11 +558,13 @@ export class PDFDataRangeTransport {
      * @param {number} length
      * @param {Uint8Array} initialData
      * @param {boolean} [progressiveDone]
+     * @param {string} [contentDispositionFilename]
      */
-    constructor(length: number, initialData: Uint8Array, progressiveDone?: boolean | undefined);
+    constructor(length: number, initialData: Uint8Array, progressiveDone?: boolean | undefined, contentDispositionFilename?: string | undefined);
     length: number;
     initialData: Uint8Array;
     progressiveDone: boolean;
+    contentDispositionFilename: string;
     _rangeListeners: any[];
     _progressListeners: any[];
     _progressiveReadListeners: any[];

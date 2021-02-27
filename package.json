@@ -34,8 +34,8 @@
     "core-js": "^2.6.12",
     "fsevents": "^2.3.1",
     "ngx-extended-pdf-viewer": "file:./dist/ngx-extended-pdf-viewer",
-    "rxjs": "^6.6.3",
-    "zone.js": "^0.11.3"
+    "rxjs": "^6.6.6",
+    "zone.js": "^0.11.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.13.9",

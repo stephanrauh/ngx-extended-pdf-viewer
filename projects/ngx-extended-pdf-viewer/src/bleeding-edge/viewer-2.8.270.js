@@ -23,222 +23,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ([
-/* 0 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-Object.defineProperty(exports, "PDFViewerApplicationOptions", ({
-  enumerable: true,
-  get: function () {
-    return _app_options.AppOptions;
-  }
-}));
-Object.defineProperty(exports, "PDFViewerApplication", ({
-  enumerable: true,
-  get: function () {
-    return _app.PDFViewerApplication;
-  }
-}));
-
-var _app_options = __webpack_require__(1);
-
-var _app = __webpack_require__(3);
-
-const pdfjsVersion = '2.8.230';
-const pdfjsBuild = '12aa73e4b';
-window.PDFViewerApplication = _app.PDFViewerApplication;
-window.PDFViewerApplicationOptions = _app_options.AppOptions;
-
-if (!HTMLCollection.prototype[Symbol.iterator]) {
-  HTMLCollection.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
-}
-
-(function () {
-  if (typeof window.CustomEvent === "function") {
-    return;
-  }
-
-  function CustomEvent(event, params) {
-    params = params || {
-      bubbles: false,
-      cancelable: false,
-      detail: null
-    };
-    const evt = document.createEvent("CustomEvent");
-    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-    return evt;
-  }
-
-  window.CustomEvent = CustomEvent;
-})();
-
-;
-;
-{
-  __webpack_require__(40);
-}
-;
-{
-  __webpack_require__(46);
-}
-
-function getViewerConfiguration() {
-  let errorWrapper = null;
-  errorWrapper = {
-    container: document.getElementById("errorWrapper"),
-    errorMessage: document.getElementById("errorMessage"),
-    closeButton: document.getElementById("errorClose"),
-    errorMoreInfo: document.getElementById("errorMoreInfo"),
-    moreInfoButton: document.getElementById("errorShowMore"),
-    lessInfoButton: document.getElementById("errorShowLess")
-  };
-  return {
-    appContainer: document.body,
-    mainContainer: document.getElementById("viewerContainer"),
-    viewerContainer: document.getElementById("viewer"),
-    eventBus: null,
-    toolbar: {
-      container: document.getElementById("toolbarViewer"),
-      numPages: document.getElementById("numPages"),
-      pageNumber: document.getElementById("pageNumber"),
-      scaleSelectContainer: document.getElementById("scaleSelectContainer"),
-      scaleSelect: document.getElementById("scaleSelect"),
-      customScaleOption: document.getElementById("customScaleOption"),
-      previous: document.getElementById("previous"),
-      next: document.getElementById("next"),
-      zoomIn: document.getElementById("zoomIn"),
-      zoomOut: document.getElementById("zoomOut"),
-      viewFind: document.getElementById("viewFind"),
-      openFile: document.getElementById("openFile"),
-      print: document.getElementById("print"),
-      presentationModeButton: document.getElementById("presentationMode"),
-      download: document.getElementById("download"),
-      viewBookmark: document.getElementById("viewBookmark")
-    },
-    secondaryToolbar: {
-      toolbar: document.getElementById("secondaryToolbar"),
-      toggleButton: document.getElementById("secondaryToolbarToggle"),
-      toolbarButtonContainer: document.getElementById("secondaryToolbarButtonContainer"),
-      presentationModeButton: document.getElementById("secondaryPresentationMode"),
-      openFileButton: document.getElementById("secondaryOpenFile"),
-      printButton: document.getElementById("secondaryPrint"),
-      downloadButton: document.getElementById("secondaryDownload"),
-      viewBookmarkButton: document.getElementById("secondaryViewBookmark"),
-      firstPageButton: document.getElementById("firstPage"),
-      lastPageButton: document.getElementById("lastPage"),
-      pageRotateCwButton: document.getElementById("pageRotateCw"),
-      pageRotateCcwButton: document.getElementById("pageRotateCcw"),
-      cursorSelectToolButton: document.getElementById("cursorSelectTool"),
-      cursorHandToolButton: document.getElementById("cursorHandTool"),
-      scrollVerticalButton: document.getElementById("scrollVertical"),
-      scrollHorizontalButton: document.getElementById("scrollHorizontal"),
-      scrollWrappedButton: document.getElementById("scrollWrapped"),
-      spreadNoneButton: document.getElementById("spreadNone"),
-      spreadOddButton: document.getElementById("spreadOdd"),
-      spreadEvenButton: document.getElementById("spreadEven"),
-      documentPropertiesButton: document.getElementById("documentProperties")
-    },
-    sidebar: {
-      outerContainer: document.getElementById("outerContainer"),
-      viewerContainer: document.getElementById("viewerContainer"),
-      toggleButton: document.getElementById("sidebarToggle"),
-      thumbnailButton: document.getElementById("viewThumbnail"),
-      outlineButton: document.getElementById("viewOutline"),
-      attachmentsButton: document.getElementById("viewAttachments"),
-      layersButton: document.getElementById("viewLayers"),
-      thumbnailView: document.getElementById("thumbnailView"),
-      outlineView: document.getElementById("outlineView"),
-      attachmentsView: document.getElementById("attachmentsView"),
-      layersView: document.getElementById("layersView"),
-      outlineOptionsContainer: document.getElementById("outlineOptionsContainer"),
-      currentOutlineItemButton: document.getElementById("currentOutlineItem")
-    },
-    sidebarResizer: {
-      outerContainer: document.getElementById("outerContainer"),
-      resizer: document.getElementById("sidebarResizer")
-    },
-    findBar: {
-      bar: document.getElementById("findbar"),
-      toggleButton: document.getElementById("viewFind"),
-      findField: document.getElementById("findInput"),
-      findFieldMultiline: document.getElementById("findInputMultiline"),
-      highlightAllCheckbox: document.getElementById("findHighlightAll"),
-      caseSensitiveCheckbox: document.getElementById("findMatchCase"),
-      entireWordCheckbox: document.getElementById("findEntireWord"),
-      findMultipleSearchTextsCheckbox: document.getElementById("findMultipleSearchTexts"),
-      ignoreAccentsCheckbox: document.getElementById("findIgnoreAccents"),
-      fuzzyCheckbox: document.getElementById("findFuzzy"),
-      findMsg: document.getElementById("findMsg"),
-      findResultsCount: document.getElementById("findResultsCount"),
-      findPreviousButton: document.getElementById("findPrevious"),
-      findNextButton: document.getElementById("findNext")
-    },
-    passwordOverlay: {
-      overlayName: "passwordOverlay",
-      container: document.getElementById("passwordOverlay"),
-      label: document.getElementById("passwordText"),
-      input: document.getElementById("password"),
-      submitButton: document.getElementById("passwordSubmit"),
-      cancelButton: document.getElementById("passwordCancel")
-    },
-    documentProperties: {
-      overlayName: "documentPropertiesOverlay",
-      container: document.getElementById("documentPropertiesOverlay"),
-      closeButton: document.getElementById("documentPropertiesClose"),
-      fields: {
-        fileName: document.getElementById("fileNameField"),
-        fileSize: document.getElementById("fileSizeField"),
-        title: document.getElementById("titleField"),
-        author: document.getElementById("authorField"),
-        subject: document.getElementById("subjectField"),
-        keywords: document.getElementById("keywordsField"),
-        creationDate: document.getElementById("creationDateField"),
-        modificationDate: document.getElementById("modificationDateField"),
-        creator: document.getElementById("creatorField"),
-        producer: document.getElementById("producerField"),
-        version: document.getElementById("versionField"),
-        pageCount: document.getElementById("pageCountField"),
-        pageSize: document.getElementById("pageSizeField"),
-        linearized: document.getElementById("linearizedField")
-      }
-    },
-    errorWrapper,
-    printContainer: document.getElementById("printContainer"),
-    openFileInputName: "fileInput",
-    debuggerScriptPath: "./debugger.js"
-  };
-}
-
-function webViewerLoad() {
-  const config = getViewerConfiguration();
-  const event = document.createEvent("CustomEvent");
-  event.initCustomEvent("webviewerloaded", true, true, {
-    source: window
-  });
-
-  try {
-    parent.document.dispatchEvent(event);
-  } catch (ex) {
-    console.error(`webviewerloaded: ${ex}`);
-    document.dispatchEvent(event);
-  }
-
-  _app.PDFViewerApplication.run(config);
-}
-
-if (document.blockUnblockOnload) {
-  document.blockUnblockOnload(true);
-}
-
-{
-  window.webViewerLoad = webViewerLoad;
-}
-
-/***/ }),
+/* 0 */,
 /* 1 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -2061,7 +1846,7 @@ const PDFViewerApplication = {
 
     this.documentInfo = info;
     this.metadata = metadata;
-    this._contentDispositionFilename = contentDispositionFilename;
+    this._contentDispositionFilename ?? (this._contentDispositionFilename = contentDispositionFilename);
     this._contentLength ?? (this._contentLength = contentLength);
     const PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
 
@@ -5171,12 +4956,10 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.PasswordPrompt = void 0;
 
-var _ui_utils = __webpack_require__(4);
-
 var _pdfjsLib = __webpack_require__(5);
 
 class PasswordPrompt {
-  constructor(options, overlayManager, l10n = _ui_utils.NullL10n, isViewerEmbedded = false) {
+  constructor(options, overlayManager, l10n, isViewerEmbedded = false) {
     this.overlayName = options.overlayName;
     this.container = options.container;
     this.label = options.label;
@@ -5256,10 +5039,6 @@ var _pdfjsLib = __webpack_require__(5);
 
 var _base_tree_viewer = __webpack_require__(12);
 
-var _viewer_compatibility = __webpack_require__(2);
-
-const PdfFileRegExp = /\.pdf$/i;
-
 class PDFAttachmentViewer extends _base_tree_viewer.BaseTreeViewer {
   constructor(options) {
     super(options);
@@ -5308,42 +5087,12 @@ class PDFAttachmentViewer extends _base_tree_viewer.BaseTreeViewer {
     });
   }
 
-  _bindPdfLink(element, {
-    content,
-    filename
-  }) {
-    let blobUrl;
-
-    element.onclick = () => {
-      if (!blobUrl) {
-        blobUrl = URL.createObjectURL(new Blob([content], {
-          type: "application/pdf"
-        }));
-      }
-
-      let viewerUrl;
-      viewerUrl = "?file=" + encodeURIComponent(blobUrl + "#" + filename);
-
-      try {
-        window.open(viewerUrl);
-      } catch (ex) {
-        console.error(`_bindPdfLink: ${ex}`);
-        URL.revokeObjectURL(blobUrl);
-        blobUrl = null;
-        this.downloadManager.downloadData(content, filename, "application/pdf");
-      }
-
-      return false;
-    };
-  }
-
   _bindLink(element, {
     content,
     filename
   }) {
     element.onclick = () => {
-      const contentType = PdfFileRegExp.test(filename) ? "application/pdf" : "";
-      this.downloadManager.downloadData(content, filename, contentType);
+      this.downloadManager.openOrDownloadData(element, content, filename);
       return false;
     };
   }
@@ -5372,22 +5121,16 @@ class PDFAttachmentViewer extends _base_tree_viewer.BaseTreeViewer {
 
     for (const name of names) {
       const item = attachments[name];
-      const filename = (0, _pdfjsLib.getFilenameFromUrl)(item.filename);
+      const content = item.content,
+            filename = (0, _pdfjsLib.getFilenameFromUrl)(item.filename);
       const div = document.createElement("div");
       div.className = "treeItem";
       const element = document.createElement("a");
 
-      if (PdfFileRegExp.test(filename) && !_viewer_compatibility.viewerCompatibilityParams.disableCreateObjectURL) {
-        this._bindPdfLink(element, {
-          content: item.content,
-          filename
-        });
-      } else {
-        this._bindLink(element, {
-          content: item.content,
-          filename
-        });
-      }
+      this._bindLink(element, {
+        content,
+        filename
+      });
 
       element.textContent = this._normalizeTextContent(filename);
       div.appendChild(element);
@@ -5608,7 +5351,7 @@ class PDFDocumentProperties {
     fields,
     container,
     closeButton
-  }, overlayManager, eventBus, l10n = _ui_utils.NullL10n) {
+  }, overlayManager, eventBus, l10n) {
     this.overlayName = overlayName;
     this.fields = fields;
     this.container = container;
@@ -5864,27 +5607,25 @@ exports.PDFFindBar = void 0;
 
 var _pdf_find_controller = __webpack_require__(15);
 
-var _ui_utils = __webpack_require__(4);
-
 const MATCHES_COUNT_LIMIT = 1000;
 
 class PDFFindBar {
-  constructor(options, eventBus, l10n = _ui_utils.NullL10n) {
+  constructor(options, eventBus, l10n) {
     this.opened = false;
-    this.bar = options.bar || null;
-    this.toggleButton = options.toggleButton || null;
-    this.findField = options.findField || null;
+    this.bar = options.bar;
+    this.toggleButton = options.toggleButton;
+    this.findField = options.findField;
+    this.highlightAll = options.highlightAllCheckbox;
+    this.caseSensitive = options.caseSensitiveCheckbox;
+    this.entireWord = options.entireWordCheckbox;
+    this.findMsg = options.findMsg;
+    this.findResultsCount = options.findResultsCount;
+    this.findPreviousButton = options.findPreviousButton;
+    this.findNextButton = options.findNextButton;
     this.findFieldMultiline = options.findFieldMultiline || null;
-    this.highlightAll = options.highlightAllCheckbox || null;
-    this.caseSensitive = options.caseSensitiveCheckbox || null;
-    this.entireWord = options.entireWordCheckbox || null;
     this.multipleSearchTexts = options.findMultipleSearchTextsCheckbox || null;
     this.ignoreAccents = options.ignoreAccentsCheckbox || null;
     this.fuzzySearch = options.fuzzyCheckbox || null;
-    this.findMsg = options.findMsg || null;
-    this.findResultsCount = options.findResultsCount || null;
-    this.findPreviousButton = options.findPreviousButton || null;
-    this.findNextButton = options.findNextButton || null;
     this.eventBus = eventBus;
     this.l10n = l10n;
     this.toggleButton.addEventListener("click", () => {
@@ -5999,10 +5740,6 @@ class PDFFindBar {
     current = 0,
     total = 0
   } = {}) {
-    if (!this.findResultsCount) {
-      return;
-    }
-
     const limit = MATCHES_COUNT_LIMIT;
     let matchesCountMsg = "";
 
@@ -9388,7 +9125,7 @@ class PDFSidebar {
     pdfViewer,
     pdfThumbnailViewer,
     eventBus,
-    l10n = _ui_utils.NullL10n
+    l10n
   }) {
     this.isOpen = false;
     this.active = _ui_utils.SidebarView.THUMBS;
@@ -9730,7 +9467,7 @@ exports.PDFSidebar = PDFSidebar;
 
 /***/ }),
 /* 25 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports) => {
 
 
 
@@ -9738,15 +9475,12 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.PDFSidebarResizer = void 0;
-
-var _ui_utils = __webpack_require__(4);
-
 const SIDEBAR_WIDTH_VAR = "--sidebar-width";
 const SIDEBAR_MIN_WIDTH = 200;
 const SIDEBAR_RESIZING_CLASS = "sidebarResizing";
 
 class PDFSidebarResizer {
-  constructor(options, eventBus, l10n = _ui_utils.NullL10n) {
+  constructor(options, eventBus, l10n) {
     this.isRTL = false;
     this.sidebarOpen = false;
     this.doc = document.documentElement;
@@ -9892,7 +9626,7 @@ class PDFThumbnailViewer {
     eventBus,
     linkService,
     renderingQueue,
-    l10n = _ui_utils.NullL10n
+    l10n
   }) {
     this.container = container;
     this.linkService = linkService;
@@ -10218,7 +9952,7 @@ class PDFThumbnailView {
     renderingQueue,
     checkSetImageDisabled,
     disableCanvasToImageConversion = false,
-    l10n = _ui_utils.NullL10n
+    l10n
   }) {
     this.id = id;
     this.renderingId = "thumbnail" + id;
@@ -10752,7 +10486,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.8.230';
+    const viewerVersion = '2.8.270';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -12948,7 +12682,7 @@ class PDFPageView {
     });
     const promise = pdfPage.getOperatorList().then(opList => {
       ensureNotCancelled();
-      const svgGfx = new _pdfjsLib.SVGGraphics(pdfPage.commonObjs, pdfPage.objs);
+      const svgGfx = new _pdfjsLib.SVGGraphics(pdfPage.commonObjs, pdfPage.objs, _viewer_compatibility.viewerCompatibilityParams.disableCreateObjectURL);
       return svgGfx.getSVG(opList, actualSizeViewport).then(svg => {
         ensureNotCancelled();
         this.svg = svg;
@@ -13459,6 +13193,7 @@ exports.arrayByteLength = arrayByteLength;
 exports.arraysToBytes = arraysToBytes;
 exports.assert = assert;
 exports.bytesToString = bytesToString;
+exports.createObjectURL = createObjectURL;
 exports.createPromiseCapability = createPromiseCapability;
 exports.createValidAbsoluteUrl = createValidAbsoluteUrl;
 exports.escapeString = escapeString;
@@ -13485,7 +13220,7 @@ exports.stringToUTF8String = stringToUTF8String;
 exports.unreachable = unreachable;
 exports.utf8StringToString = utf8StringToString;
 exports.warn = warn;
-exports.VerbosityLevel = exports.Util = exports.UNSUPPORTED_FEATURES = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.StreamType = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.IsLittleEndianCached = exports.IsEvalSupportedCached = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FontType = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.createObjectURL = exports.CMapCompressionType = exports.BaseException = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
+exports.VerbosityLevel = exports.Util = exports.UNSUPPORTED_FEATURES = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.StreamType = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.IsLittleEndianCached = exports.IsEvalSupportedCached = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FontType = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
 
 __webpack_require__(34);
 
@@ -14277,9 +14012,13 @@ function isArrayEqual(arr1, arr2) {
     return false;
   }
 
-  return arr1.every(function (element, index) {
-    return element === arr2[index];
-  });
+  for (let i = 0, ii = arr1.length; i < ii; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 function getModificationDate(date = new Date()) {
@@ -14310,34 +14049,29 @@ function createPromiseCapability() {
   return capability;
 }
 
-const createObjectURL = function createObjectURLClosure() {
+function createObjectURL(data, contentType = "", forceDataSchema = false) {
+  if (URL.createObjectURL && !forceDataSchema) {
+    return URL.createObjectURL(new Blob([data], {
+      type: contentType
+    }));
+  }
+
   const digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-  return function createObjectURL(data, contentType, forceDataSchema = false) {
-    if (!forceDataSchema && URL.createObjectURL) {
-      const blob = new Blob([data], {
-        type: contentType
-      });
-      return URL.createObjectURL(blob);
-    }
+  let buffer = `data:${contentType};base64,`;
 
-    let buffer = `data:${contentType};base64,`;
+  for (let i = 0, ii = data.length; i < ii; i += 3) {
+    const b1 = data[i] & 0xff;
+    const b2 = data[i + 1] & 0xff;
+    const b3 = data[i + 2] & 0xff;
+    const d1 = b1 >> 2,
+          d2 = (b1 & 3) << 4 | b2 >> 4;
+    const d3 = i + 1 < ii ? (b2 & 0xf) << 2 | b3 >> 6 : 64;
+    const d4 = i + 2 < ii ? b3 & 0x3f : 64;
+    buffer += digits[d1] + digits[d2] + digits[d3] + digits[d4];
+  }
 
-    for (let i = 0, ii = data.length; i < ii; i += 3) {
-      const b1 = data[i] & 0xff;
-      const b2 = data[i + 1] & 0xff;
-      const b3 = data[i + 2] & 0xff;
-      const d1 = b1 >> 2,
-            d2 = (b1 & 3) << 4 | b2 >> 4;
-      const d3 = i + 1 < ii ? (b2 & 0xf) << 2 | b3 >> 6 : 64;
-      const d4 = i + 2 < ii ? b3 & 0x3f : 64;
-      buffer += digits[d1] + digits[d2] + digits[d3] + digits[d4];
-    }
-
-    return buffer;
-  };
-}();
-
-exports.createObjectURL = createObjectURL;
+  return buffer;
+}
 
 /***/ }),
 /* 34 */
@@ -15208,7 +14942,7 @@ const SCALE_SELECT_CONTAINER_WIDTH = 140;
 const SCALE_SELECT_WIDTH = 162;
 
 class Toolbar {
-  constructor(options, eventBus, l10n = _ui_utils.NullL10n) {
+  constructor(options, eventBus, l10n) {
     this.toolbar = options.container;
     this.eventBus = eventBus;
     this.l10n = l10n;
@@ -15765,6 +15499,10 @@ function download(blobUrl, filename) {
 }
 
 class DownloadManager {
+  constructor() {
+    this._openBlobUrls = new WeakMap();
+  }
+
   downloadUrl(url, filename) {
     if (!(0, _pdfjsLib.createValidAbsoluteUrl)(url, "http://example.com")) {
       return;
@@ -15776,6 +15514,39 @@ class DownloadManager {
   downloadData(data, filename, contentType) {
     const blobUrl = (0, _pdfjsLib.createObjectURL)(data, contentType, _viewer_compatibility.viewerCompatibilityParams.disableCreateObjectURL);
     download(blobUrl, filename);
+  }
+
+  openOrDownloadData(element, data, filename) {
+    const isPdfData = (0, _pdfjsLib.isPdfFile)(filename);
+    const contentType = isPdfData ? "application/pdf" : "";
+
+    if (isPdfData && !_viewer_compatibility.viewerCompatibilityParams.disableCreateObjectURL) {
+      let blobUrl = this._openBlobUrls.get(element);
+
+      if (!blobUrl) {
+        blobUrl = URL.createObjectURL(new Blob([data], {
+          type: contentType
+        }));
+
+        this._openBlobUrls.set(element, blobUrl);
+      }
+
+      let viewerUrl;
+      viewerUrl = "?file=" + encodeURIComponent(blobUrl + "#" + filename);
+
+      try {
+        window.open(viewerUrl);
+        return true;
+      } catch (ex) {
+        console.error(`openOrDownloadData: ${ex}`);
+        URL.revokeObjectURL(blobUrl);
+
+        this._openBlobUrls.delete(element);
+      }
+    }
+
+    this.downloadData(data, filename, contentType);
+    return false;
   }
 
   download(blob, url, filename, sourceEventType = "download") {
@@ -16769,11 +16540,11 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.PDFPrintService = PDFPrintService;
 
-var _ui_utils = __webpack_require__(4);
-
 var _app = __webpack_require__(3);
 
 var _canvasSize = _interopRequireDefault(__webpack_require__(32));
+
+var _ui_utils = __webpack_require__(4);
 
 var _viewer_compatibility = __webpack_require__(2);
 
@@ -16855,7 +16626,7 @@ function PDFPrintService(pdfDocument, pagesOverview, printContainer, printResolu
   this.printContainer = printContainer;
   this._printResolution = printResolution || 150;
   this._optionalContentConfigPromise = optionalContentConfigPromise || pdfDocument.getOptionalContentConfig();
-  this.l10n = l10n || _ui_utils.NullL10n;
+  this.l10n = l10n;
   this.currentPage = -1;
   this.scratchCanvas = document.createElement("canvas");
   this.eventBus = eventBus;
@@ -17155,10 +16926,223 @@ _app.PDFPrintServiceFactory.instance = {
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	// startup
-/******/ 	// Load entry module
-/******/ 	__webpack_require__(0);
-/******/ 	// This entry module used 'exports' so it can't be inlined
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+var exports = __webpack_exports__;
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+Object.defineProperty(exports, "PDFViewerApplicationOptions", ({
+  enumerable: true,
+  get: function () {
+    return _app_options.AppOptions;
+  }
+}));
+Object.defineProperty(exports, "PDFViewerApplication", ({
+  enumerable: true,
+  get: function () {
+    return _app.PDFViewerApplication;
+  }
+}));
+
+var _app_options = __webpack_require__(1);
+
+var _app = __webpack_require__(3);
+
+const pdfjsVersion = '2.8.270';
+const pdfjsBuild = 'ea71d61aa';
+window.PDFViewerApplication = _app.PDFViewerApplication;
+window.PDFViewerApplicationOptions = _app_options.AppOptions;
+
+if (!HTMLCollection.prototype[Symbol.iterator]) {
+  HTMLCollection.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
+}
+
+(function () {
+  if (typeof window.CustomEvent === "function") {
+    return;
+  }
+
+  function CustomEvent(event, params) {
+    params = params || {
+      bubbles: false,
+      cancelable: false,
+      detail: null
+    };
+    const evt = document.createEvent("CustomEvent");
+    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+    return evt;
+  }
+
+  window.CustomEvent = CustomEvent;
+})();
+
+;
+;
+{
+  __webpack_require__(40);
+}
+;
+{
+  __webpack_require__(46);
+}
+
+function getViewerConfiguration() {
+  let errorWrapper = null;
+  errorWrapper = {
+    container: document.getElementById("errorWrapper"),
+    errorMessage: document.getElementById("errorMessage"),
+    closeButton: document.getElementById("errorClose"),
+    errorMoreInfo: document.getElementById("errorMoreInfo"),
+    moreInfoButton: document.getElementById("errorShowMore"),
+    lessInfoButton: document.getElementById("errorShowLess")
+  };
+  return {
+    appContainer: document.body,
+    mainContainer: document.getElementById("viewerContainer"),
+    viewerContainer: document.getElementById("viewer"),
+    eventBus: null,
+    toolbar: {
+      container: document.getElementById("toolbarViewer"),
+      numPages: document.getElementById("numPages"),
+      pageNumber: document.getElementById("pageNumber"),
+      scaleSelectContainer: document.getElementById("scaleSelectContainer"),
+      scaleSelect: document.getElementById("scaleSelect"),
+      customScaleOption: document.getElementById("customScaleOption"),
+      previous: document.getElementById("previous"),
+      next: document.getElementById("next"),
+      zoomIn: document.getElementById("zoomIn"),
+      zoomOut: document.getElementById("zoomOut"),
+      viewFind: document.getElementById("viewFind"),
+      openFile: document.getElementById("openFile"),
+      print: document.getElementById("print"),
+      presentationModeButton: document.getElementById("presentationMode"),
+      download: document.getElementById("download"),
+      viewBookmark: document.getElementById("viewBookmark")
+    },
+    secondaryToolbar: {
+      toolbar: document.getElementById("secondaryToolbar"),
+      toggleButton: document.getElementById("secondaryToolbarToggle"),
+      toolbarButtonContainer: document.getElementById("secondaryToolbarButtonContainer"),
+      presentationModeButton: document.getElementById("secondaryPresentationMode"),
+      openFileButton: document.getElementById("secondaryOpenFile"),
+      printButton: document.getElementById("secondaryPrint"),
+      downloadButton: document.getElementById("secondaryDownload"),
+      viewBookmarkButton: document.getElementById("secondaryViewBookmark"),
+      firstPageButton: document.getElementById("firstPage"),
+      lastPageButton: document.getElementById("lastPage"),
+      pageRotateCwButton: document.getElementById("pageRotateCw"),
+      pageRotateCcwButton: document.getElementById("pageRotateCcw"),
+      cursorSelectToolButton: document.getElementById("cursorSelectTool"),
+      cursorHandToolButton: document.getElementById("cursorHandTool"),
+      scrollVerticalButton: document.getElementById("scrollVertical"),
+      scrollHorizontalButton: document.getElementById("scrollHorizontal"),
+      scrollWrappedButton: document.getElementById("scrollWrapped"),
+      spreadNoneButton: document.getElementById("spreadNone"),
+      spreadOddButton: document.getElementById("spreadOdd"),
+      spreadEvenButton: document.getElementById("spreadEven"),
+      documentPropertiesButton: document.getElementById("documentProperties")
+    },
+    sidebar: {
+      outerContainer: document.getElementById("outerContainer"),
+      viewerContainer: document.getElementById("viewerContainer"),
+      toggleButton: document.getElementById("sidebarToggle"),
+      thumbnailButton: document.getElementById("viewThumbnail"),
+      outlineButton: document.getElementById("viewOutline"),
+      attachmentsButton: document.getElementById("viewAttachments"),
+      layersButton: document.getElementById("viewLayers"),
+      thumbnailView: document.getElementById("thumbnailView"),
+      outlineView: document.getElementById("outlineView"),
+      attachmentsView: document.getElementById("attachmentsView"),
+      layersView: document.getElementById("layersView"),
+      outlineOptionsContainer: document.getElementById("outlineOptionsContainer"),
+      currentOutlineItemButton: document.getElementById("currentOutlineItem")
+    },
+    sidebarResizer: {
+      outerContainer: document.getElementById("outerContainer"),
+      resizer: document.getElementById("sidebarResizer")
+    },
+    findBar: {
+      bar: document.getElementById("findbar"),
+      toggleButton: document.getElementById("viewFind"),
+      findField: document.getElementById("findInput"),
+      findFieldMultiline: document.getElementById("findInputMultiline"),
+      highlightAllCheckbox: document.getElementById("findHighlightAll"),
+      caseSensitiveCheckbox: document.getElementById("findMatchCase"),
+      entireWordCheckbox: document.getElementById("findEntireWord"),
+      findMultipleSearchTextsCheckbox: document.getElementById("findMultipleSearchTexts"),
+      ignoreAccentsCheckbox: document.getElementById("findIgnoreAccents"),
+      fuzzyCheckbox: document.getElementById("findFuzzy"),
+      findMsg: document.getElementById("findMsg"),
+      findResultsCount: document.getElementById("findResultsCount"),
+      findPreviousButton: document.getElementById("findPrevious"),
+      findNextButton: document.getElementById("findNext")
+    },
+    passwordOverlay: {
+      overlayName: "passwordOverlay",
+      container: document.getElementById("passwordOverlay"),
+      label: document.getElementById("passwordText"),
+      input: document.getElementById("password"),
+      submitButton: document.getElementById("passwordSubmit"),
+      cancelButton: document.getElementById("passwordCancel")
+    },
+    documentProperties: {
+      overlayName: "documentPropertiesOverlay",
+      container: document.getElementById("documentPropertiesOverlay"),
+      closeButton: document.getElementById("documentPropertiesClose"),
+      fields: {
+        fileName: document.getElementById("fileNameField"),
+        fileSize: document.getElementById("fileSizeField"),
+        title: document.getElementById("titleField"),
+        author: document.getElementById("authorField"),
+        subject: document.getElementById("subjectField"),
+        keywords: document.getElementById("keywordsField"),
+        creationDate: document.getElementById("creationDateField"),
+        modificationDate: document.getElementById("modificationDateField"),
+        creator: document.getElementById("creatorField"),
+        producer: document.getElementById("producerField"),
+        version: document.getElementById("versionField"),
+        pageCount: document.getElementById("pageCountField"),
+        pageSize: document.getElementById("pageSizeField"),
+        linearized: document.getElementById("linearizedField")
+      }
+    },
+    errorWrapper,
+    printContainer: document.getElementById("printContainer"),
+    openFileInputName: "fileInput",
+    debuggerScriptPath: "./debugger.js"
+  };
+}
+
+function webViewerLoad() {
+  const config = getViewerConfiguration();
+  const event = document.createEvent("CustomEvent");
+  event.initCustomEvent("webviewerloaded", true, true, {
+    source: window
+  });
+
+  try {
+    parent.document.dispatchEvent(event);
+  } catch (ex) {
+    console.error(`webviewerloaded: ${ex}`);
+    document.dispatchEvent(event);
+  }
+
+  _app.PDFViewerApplication.run(config);
+}
+
+if (document.blockUnblockOnload) {
+  document.blockUnblockOnload(true);
+}
+
+{
+  window.webViewerLoad = webViewerLoad;
+}
+})();
+
 /******/ })()
 ;
 //# sourceMappingURL=viewer.js.map

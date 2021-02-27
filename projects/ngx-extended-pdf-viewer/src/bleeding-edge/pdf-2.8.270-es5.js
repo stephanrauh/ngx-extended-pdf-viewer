@@ -32,237 +32,7 @@
 })(this, function() {
 return /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ([
-/* 0 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-Object.defineProperty(exports, "addLinkAttributes", ({
-  enumerable: true,
-  get: function get() {
-    return _display_utils.addLinkAttributes;
-  }
-}));
-Object.defineProperty(exports, "getFilenameFromUrl", ({
-  enumerable: true,
-  get: function get() {
-    return _display_utils.getFilenameFromUrl;
-  }
-}));
-Object.defineProperty(exports, "LinkTarget", ({
-  enumerable: true,
-  get: function get() {
-    return _display_utils.LinkTarget;
-  }
-}));
-Object.defineProperty(exports, "loadScript", ({
-  enumerable: true,
-  get: function get() {
-    return _display_utils.loadScript;
-  }
-}));
-Object.defineProperty(exports, "PDFDateString", ({
-  enumerable: true,
-  get: function get() {
-    return _display_utils.PDFDateString;
-  }
-}));
-Object.defineProperty(exports, "RenderingCancelledException", ({
-  enumerable: true,
-  get: function get() {
-    return _display_utils.RenderingCancelledException;
-  }
-}));
-Object.defineProperty(exports, "build", ({
-  enumerable: true,
-  get: function get() {
-    return _api.build;
-  }
-}));
-Object.defineProperty(exports, "getDocument", ({
-  enumerable: true,
-  get: function get() {
-    return _api.getDocument;
-  }
-}));
-Object.defineProperty(exports, "LoopbackPort", ({
-  enumerable: true,
-  get: function get() {
-    return _api.LoopbackPort;
-  }
-}));
-Object.defineProperty(exports, "PDFDataRangeTransport", ({
-  enumerable: true,
-  get: function get() {
-    return _api.PDFDataRangeTransport;
-  }
-}));
-Object.defineProperty(exports, "PDFWorker", ({
-  enumerable: true,
-  get: function get() {
-    return _api.PDFWorker;
-  }
-}));
-Object.defineProperty(exports, "version", ({
-  enumerable: true,
-  get: function get() {
-    return _api.version;
-  }
-}));
-Object.defineProperty(exports, "CMapCompressionType", ({
-  enumerable: true,
-  get: function get() {
-    return _util.CMapCompressionType;
-  }
-}));
-Object.defineProperty(exports, "createObjectURL", ({
-  enumerable: true,
-  get: function get() {
-    return _util.createObjectURL;
-  }
-}));
-Object.defineProperty(exports, "createPromiseCapability", ({
-  enumerable: true,
-  get: function get() {
-    return _util.createPromiseCapability;
-  }
-}));
-Object.defineProperty(exports, "createValidAbsoluteUrl", ({
-  enumerable: true,
-  get: function get() {
-    return _util.createValidAbsoluteUrl;
-  }
-}));
-Object.defineProperty(exports, "InvalidPDFException", ({
-  enumerable: true,
-  get: function get() {
-    return _util.InvalidPDFException;
-  }
-}));
-Object.defineProperty(exports, "MissingPDFException", ({
-  enumerable: true,
-  get: function get() {
-    return _util.MissingPDFException;
-  }
-}));
-Object.defineProperty(exports, "OPS", ({
-  enumerable: true,
-  get: function get() {
-    return _util.OPS;
-  }
-}));
-Object.defineProperty(exports, "PasswordResponses", ({
-  enumerable: true,
-  get: function get() {
-    return _util.PasswordResponses;
-  }
-}));
-Object.defineProperty(exports, "PermissionFlag", ({
-  enumerable: true,
-  get: function get() {
-    return _util.PermissionFlag;
-  }
-}));
-Object.defineProperty(exports, "removeNullCharacters", ({
-  enumerable: true,
-  get: function get() {
-    return _util.removeNullCharacters;
-  }
-}));
-Object.defineProperty(exports, "shadow", ({
-  enumerable: true,
-  get: function get() {
-    return _util.shadow;
-  }
-}));
-Object.defineProperty(exports, "UnexpectedResponseException", ({
-  enumerable: true,
-  get: function get() {
-    return _util.UnexpectedResponseException;
-  }
-}));
-Object.defineProperty(exports, "UNSUPPORTED_FEATURES", ({
-  enumerable: true,
-  get: function get() {
-    return _util.UNSUPPORTED_FEATURES;
-  }
-}));
-Object.defineProperty(exports, "Util", ({
-  enumerable: true,
-  get: function get() {
-    return _util.Util;
-  }
-}));
-Object.defineProperty(exports, "VerbosityLevel", ({
-  enumerable: true,
-  get: function get() {
-    return _util.VerbosityLevel;
-  }
-}));
-Object.defineProperty(exports, "AnnotationLayer", ({
-  enumerable: true,
-  get: function get() {
-    return _annotation_layer.AnnotationLayer;
-  }
-}));
-Object.defineProperty(exports, "GlobalWorkerOptions", ({
-  enumerable: true,
-  get: function get() {
-    return _worker_options.GlobalWorkerOptions;
-  }
-}));
-Object.defineProperty(exports, "renderTextLayer", ({
-  enumerable: true,
-  get: function get() {
-    return _text_layer.renderTextLayer;
-  }
-}));
-Object.defineProperty(exports, "SVGGraphics", ({
-  enumerable: true,
-  get: function get() {
-    return _svg.SVGGraphics;
-  }
-}));
-
-var _display_utils = __w_pdfjs_require__(1);
-
-var _api = __w_pdfjs_require__(134);
-
-var _util = __w_pdfjs_require__(4);
-
-var _annotation_layer = __w_pdfjs_require__(148);
-
-var _worker_options = __w_pdfjs_require__(142);
-
-var _text_layer = __w_pdfjs_require__(150);
-
-var _svg = __w_pdfjs_require__(151);
-
-var pdfjsVersion = '2.8.230';
-var pdfjsBuild = '12aa73e4b';
-{
-  var PDFNetworkStream = __w_pdfjs_require__(152).PDFNetworkStream;
-
-  var PDFFetchStream;
-
-  if ((0, _display_utils.isFetchSupported)()) {
-    PDFFetchStream = __w_pdfjs_require__(155).PDFFetchStream;
-  }
-
-  (0, _api.setPDFNetworkStreamFactory)(function (params) {
-    if (PDFFetchStream && (0, _display_utils.isValidFetchUrl)(params.url)) {
-      return new PDFFetchStream(params);
-    }
-
-    return new PDFNetworkStream(params);
-  });
-}
-
-/***/ }),
+/* 0 */,
 /* 1 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
@@ -278,6 +48,7 @@ exports.addLinkAttributes = addLinkAttributes;
 exports.deprecated = deprecated;
 exports.getFilenameFromUrl = getFilenameFromUrl;
 exports.isFetchSupported = isFetchSupported;
+exports.isPdfFile = isPdfFile;
 exports.isValidFetchUrl = isValidFetchUrl;
 exports.loadScript = loadScript;
 exports.StatTimer = exports.RenderingCancelledException = exports.PDFDateString = exports.PageViewport = exports.LinkTarget = exports.DOMSVGFactory = exports.DOMCMapReaderFactory = exports.DOMCanvasFactory = exports.DEFAULT_LINK_REL = exports.BaseCMapReaderFactory = exports.BaseCanvasFactory = void 0;
@@ -848,6 +619,10 @@ function addLinkAttributes(link) {
 
   link.target = targetStr;
   link.rel = typeof rel === "string" ? rel : DEFAULT_LINK_REL;
+}
+
+function isPdfFile(filename) {
+  return typeof filename === "string" && /\.pdf$/i.test(filename);
 }
 
 function getFilenameFromUrl(url) {
@@ -1655,6 +1430,7 @@ exports.arrayByteLength = arrayByteLength;
 exports.arraysToBytes = arraysToBytes;
 exports.assert = assert;
 exports.bytesToString = bytesToString;
+exports.createObjectURL = createObjectURL;
 exports.createPromiseCapability = createPromiseCapability;
 exports.createValidAbsoluteUrl = createValidAbsoluteUrl;
 exports.escapeString = escapeString;
@@ -1681,7 +1457,7 @@ exports.stringToUTF8String = stringToUTF8String;
 exports.unreachable = unreachable;
 exports.utf8StringToString = utf8StringToString;
 exports.warn = warn;
-exports.VerbosityLevel = exports.Util = exports.UNSUPPORTED_FEATURES = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.StreamType = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.IsLittleEndianCached = exports.IsEvalSupportedCached = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FontType = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.createObjectURL = exports.CMapCompressionType = exports.BaseException = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
+exports.VerbosityLevel = exports.Util = exports.UNSUPPORTED_FEATURES = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.StreamType = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.IsLittleEndianCached = exports.IsEvalSupportedCached = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FontType = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
 
 __w_pdfjs_require__(5);
 
@@ -2606,9 +2382,13 @@ function isArrayEqual(arr1, arr2) {
     return false;
   }
 
-  return arr1.every(function (element, index) {
-    return element === arr2[index];
-  });
+  for (var i = 0, ii = arr1.length; i < ii; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 function getModificationDate() {
@@ -2639,36 +2419,32 @@ function createPromiseCapability() {
   return capability;
 }
 
-var createObjectURL = function createObjectURLClosure() {
+function createObjectURL(data) {
+  var contentType = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+  var forceDataSchema = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+  if (URL.createObjectURL && !forceDataSchema) {
+    return URL.createObjectURL(new Blob([data], {
+      type: contentType
+    }));
+  }
+
   var digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-  return function createObjectURL(data, contentType) {
-    var forceDataSchema = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  var buffer = "data:".concat(contentType, ";base64,");
 
-    if (!forceDataSchema && URL.createObjectURL) {
-      var blob = new Blob([data], {
-        type: contentType
-      });
-      return URL.createObjectURL(blob);
-    }
+  for (var i = 0, ii = data.length; i < ii; i += 3) {
+    var b1 = data[i] & 0xff;
+    var b2 = data[i + 1] & 0xff;
+    var b3 = data[i + 2] & 0xff;
+    var d1 = b1 >> 2,
+        d2 = (b1 & 3) << 4 | b2 >> 4;
+    var d3 = i + 1 < ii ? (b2 & 0xf) << 2 | b3 >> 6 : 64;
+    var d4 = i + 2 < ii ? b3 & 0x3f : 64;
+    buffer += digits[d1] + digits[d2] + digits[d3] + digits[d4];
+  }
 
-    var buffer = "data:".concat(contentType, ";base64,");
-
-    for (var i = 0, ii = data.length; i < ii; i += 3) {
-      var b1 = data[i] & 0xff;
-      var b2 = data[i + 1] & 0xff;
-      var b3 = data[i + 2] & 0xff;
-      var d1 = b1 >> 2,
-          d2 = (b1 & 3) << 4 | b2 >> 4;
-      var d3 = i + 1 < ii ? (b2 & 0xf) << 2 | b3 >> 6 : 64;
-      var d4 = i + 2 < ii ? b3 & 0x3f : 64;
-      buffer += digits[d1] + digits[d2] + digits[d3] + digits[d4];
-    }
-
-    return buffer;
-  };
-}();
-
-exports.createObjectURL = createObjectURL;
+  return buffer;
+}
 
 /***/ }),
 /* 5 */
@@ -3259,7 +3035,7 @@ var store = __w_pdfjs_require__(30);
 (module.exports = function (key, value) {
  return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
- version: '3.8.3',
+ version: '3.9.0',
  mode: IS_PURE ? 'pure' : 'global',
  copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -5373,10 +5149,10 @@ var HEX_START = /^(0x|0X)/;
 var OCT = /^[0-7]+$/;
 var DEC = /^\d+$/;
 var HEX = /^[\dA-Fa-f]+$/;
-var FORBIDDEN_HOST_CODE_POINT = /[\u0000\u0009\u000A\u000D #%/:?@[\\]]/;
-var FORBIDDEN_HOST_CODE_POINT_EXCLUDING_PERCENT = /[\u0000\u0009\u000A\u000D #/:?@[\\]]/;
+var FORBIDDEN_HOST_CODE_POINT = /[\u0000\t\u000A\u000D #%/:?@[\\]]/;
+var FORBIDDEN_HOST_CODE_POINT_EXCLUDING_PERCENT = /[\u0000\t\u000A\u000D #/:?@[\\]]/;
 var LEADING_AND_TRAILING_C0_CONTROL_OR_SPACE = /^[\u0000-\u001F ]+|[\u0000-\u001F ]+$/g;
-var TAB_AND_NEW_LINE = /[\u0009\u000A\u000D]/g;
+var TAB_AND_NEW_LINE = /[\t\u000A\u000D]/g;
 var EOF;
 var parseHost = function (url, input) {
  var result, codePoints, index;
@@ -8187,6 +7963,9 @@ $({
    };
   }
   var autoAllocateChunkSize = underlyingByteSource.autoAllocateChunkSize;
+  if (autoAllocateChunkSize === 0) {
+   throw new TypeError('autoAllocateChunkSize must be greater than 0');
+  }
   SetUpReadableByteStreamController(stream, controller, startAlgorithm, pullAlgorithm, cancelAlgorithm, highWaterMark, autoAllocateChunkSize);
  }
  function SetUpReadableStreamBYOBRequest(request, controller, view) {
@@ -10088,13 +9867,13 @@ $({
   if (reader === undefined) {
    return;
   }
+  defaultReaderClosedPromiseResolve(reader);
   if (IsReadableStreamDefaultReader(reader)) {
    reader._readRequests.forEach(function (readRequest) {
     readRequest._closeSteps();
    });
    reader._readRequests = new SimpleQueue();
   }
-  defaultReaderClosedPromiseResolve(reader);
  }
  function ReadableStreamError(stream, e) {
   stream._state = 'errored';
@@ -10103,6 +9882,7 @@ $({
   if (reader === undefined) {
    return;
   }
+  defaultReaderClosedPromiseReject(reader, e);
   if (IsReadableStreamDefaultReader(reader)) {
    reader._readRequests.forEach(function (readRequest) {
     readRequest._errorSteps(e);
@@ -10114,7 +9894,6 @@ $({
    });
    reader._readIntoRequests = new SimpleQueue();
   }
-  defaultReaderClosedPromiseReject(reader, e);
  }
  function streamBrandCheckException$1(name) {
   return new TypeError("ReadableStream.prototype." + name + " can only be used on a ReadableStream");
@@ -11004,6 +10783,7 @@ function getDocument(src) {
           length: params.length,
           initialData: params.initialData,
           progressiveDone: params.progressiveDone,
+          contentDispositionFilename: params.contentDispositionFilename,
           disableRange: params.disableRange,
           disableStream: params.disableStream
         }, rangeTransport);
@@ -11050,11 +10830,12 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
     source.length = pdfDataRangeTransport.length;
     source.initialData = pdfDataRangeTransport.initialData;
     source.progressiveDone = pdfDataRangeTransport.progressiveDone;
+    source.contentDispositionFilename = pdfDataRangeTransport.contentDispositionFilename;
   }
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId: docId,
-    apiVersion: '2.8.230',
+    apiVersion: '2.8.270',
     source: {
       data: source.data,
       url: source.url,
@@ -11129,12 +10910,14 @@ var PDFDocumentLoadingTask = function PDFDocumentLoadingTaskClosure() {
 var PDFDataRangeTransport = /*#__PURE__*/function () {
   function PDFDataRangeTransport(length, initialData) {
     var progressiveDone = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+    var contentDispositionFilename = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
 
     _classCallCheck(this, PDFDataRangeTransport);
 
     this.length = length;
     this.initialData = initialData;
     this.progressiveDone = progressiveDone;
+    this.contentDispositionFilename = contentDispositionFilename;
     this._rangeListeners = [];
     this._progressListeners = [];
     this._progressiveReadListeners = [];
@@ -13537,9 +13320,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.8.230';
+var version = '2.8.270';
 exports.version = version;
-var build = '12aa73e4b';
+var build = 'ea71d61aa';
 exports.build = build;
 
 /***/ }),
@@ -18039,6 +17822,8 @@ var _regenerator = _interopRequireDefault(__w_pdfjs_require__(2));
 
 var _util = __w_pdfjs_require__(4);
 
+var _display_utils = __w_pdfjs_require__(1);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -18066,6 +17851,7 @@ var PDFDataTransportStream = /*#__PURE__*/function () {
     (0, _util.assert)(pdfDataRangeTransport, 'PDFDataTransportStream - missing required "pdfDataRangeTransport" argument.');
     this._queuedChunks = [];
     this._progressiveDone = params.progressiveDone || false;
+    this._contentDispositionFilename = params.contentDispositionFilename || null;
     var initialData = params.initialData;
 
     if ((initialData === null || initialData === void 0 ? void 0 : initialData.length) > 0) {
@@ -18186,7 +17972,7 @@ var PDFDataTransportStream = /*#__PURE__*/function () {
       (0, _util.assert)(!this._fullRequestReader, "PDFDataTransportStream.getFullReader can only be called once.");
       var queuedChunks = this._queuedChunks;
       this._queuedChunks = null;
-      return new PDFDataTransportStreamReader(this, queuedChunks, this._progressiveDone);
+      return new PDFDataTransportStreamReader(this, queuedChunks, this._progressiveDone, this._contentDispositionFilename);
     }
   }, {
     key: "getRangeReader",
@@ -18228,12 +18014,13 @@ exports.PDFDataTransportStream = PDFDataTransportStream;
 var PDFDataTransportStreamReader = /*#__PURE__*/function () {
   function PDFDataTransportStreamReader(stream, queuedChunks) {
     var progressiveDone = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+    var contentDispositionFilename = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
 
     _classCallCheck(this, PDFDataTransportStreamReader);
 
     this._stream = stream;
     this._done = progressiveDone || false;
-    this._filename = null;
+    this._filename = (0, _display_utils.isPdfFile)(contentDispositionFilename) ? contentDispositionFilename : null;
     this._queuedChunks = queuedChunks || [];
     this._loaded = 0;
 
@@ -19553,6 +19340,41 @@ var WidgetAnnotationElement = /*#__PURE__*/function (_AnnotationElement3) {
         _iterator2.f();
       }
     }
+  }, {
+    key: "_setColor",
+    value: function _setColor(event) {
+      var detail = event.detail,
+          target = event.target;
+      var style = target.style;
+
+      for (var _i2 = 0, _arr2 = ["bgColor", "fillColor", "fgColor", "textColor", "borderColor", "strokeColor"]; _i2 < _arr2.length; _i2++) {
+        var name = _arr2[_i2];
+        var color = detail[name];
+
+        if (!color) {
+          continue;
+        }
+
+        color = _scripting_utils.ColorConverters["".concat(color[0], "_HTML")](color.slice(1));
+
+        switch (name) {
+          case "bgColor":
+          case "fillColor":
+            style.backgroundColor = color;
+            break;
+
+          case "fgColor":
+          case "textColor":
+            style.color = color;
+            break;
+
+          case "borderColor":
+          case "strokeColor":
+            style.borderColor = color;
+            break;
+        }
+      }
+    }
   }]);
 
   return WidgetAnnotationElement;
@@ -19678,10 +19500,6 @@ var TextWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem) 
                 if (selStart >= 0 && selEnd < event.target.value.length) {
                   event.target.setSelectionRange(selStart, selEnd);
                 }
-              },
-              strokeColor: function strokeColor() {
-                var color = detail.strokeColor;
-                event.target.style.color = _scripting_utils.ColorConverters["".concat(color[0], "_HTML")](color.slice(1));
               }
             };
             Object.keys(detail).filter(function (name) {
@@ -19689,6 +19507,8 @@ var TextWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem) 
             }).forEach(function (name) {
               return actions[name]();
             });
+
+            _this5._setColor(event);
           });
           element.addEventListener("keydown", function (event) {
             var _this5$linkService$ev;
@@ -19861,6 +19681,8 @@ var CheckboxWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationEl
   _createClass(CheckboxWidgetAnnotationElement, [{
     key: "render",
     value: function render() {
+      var _this6 = this;
+
       var storage = this.annotationStorage;
       var data = this.data;
       var id = data.id;
@@ -19938,6 +19760,8 @@ var CheckboxWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationEl
           }).forEach(function (name) {
             return actions[name]();
           });
+
+          _this6._setColor(event);
         });
 
         this._setEventListeners(element, [["change", "Validate"], ["change", "Action"], ["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "Mouse Up"]], function (event) {
@@ -19969,6 +19793,8 @@ var RadioButtonWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotatio
   _createClass(RadioButtonWidgetAnnotationElement, [{
     key: "render",
     value: function render() {
+      var _this7 = this;
+
       this.container.className = "buttonWidgetAnnotation radioButton";
       var storage = this.annotationStorage;
       var data = this.data;
@@ -20068,6 +19894,8 @@ var RadioButtonWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotatio
           }).forEach(function (name) {
             return actions[name]();
           });
+
+          _this7._setColor(event);
         });
 
         this._setEventListeners(element, [["change", "Validate"], ["change", "Action"], ["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "Mouse Up"]], function (event) {
@@ -20128,7 +19956,7 @@ var ChoiceWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem
   _createClass(ChoiceWidgetAnnotationElement, [{
     key: "render",
     value: function render() {
-      var _this6 = this;
+      var _this8 = this;
 
       this.container.className = "choiceWidgetAnnotation";
       var storage = this.annotationStorage;
@@ -20326,17 +20154,19 @@ var ChoiceWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem
           }).forEach(function (name) {
             return actions[name]();
           });
+
+          _this8._setColor(event);
         });
         selectElement.addEventListener("input", function (event) {
-          var _this6$linkService$ev;
+          var _this8$linkService$ev;
 
           var exportValue = getValue(event, true);
           var value = getValue(event, false);
           storage.setValue(id, {
             value: exportValue
           });
-          (_this6$linkService$ev = _this6.linkService.eventBus) === null || _this6$linkService$ev === void 0 ? void 0 : _this6$linkService$ev.dispatch("dispatcheventinsandbox", {
-            source: _this6,
+          (_this8$linkService$ev = _this8.linkService.eventBus) === null || _this8$linkService$ev === void 0 ? void 0 : _this8$linkService$ev.dispatch("dispatcheventinsandbox", {
+            source: _this8,
             detail: {
               id: id,
               name: "Keystroke",
@@ -20441,7 +20271,7 @@ var PopupElement = /*#__PURE__*/function () {
   _createClass(PopupElement, [{
     key: "render",
     value: function render() {
-      var _this7 = this;
+      var _this9 = this;
 
       var BACKGROUND_ENLIGHT = 0.7;
       var wrapper = document.createElement("div");
@@ -20485,9 +20315,9 @@ var PopupElement = /*#__PURE__*/function () {
       }
 
       this.trigger.forEach(function (element) {
-        element.addEventListener("click", _this7._toggle.bind(_this7));
-        element.addEventListener("mouseover", _this7._show.bind(_this7, false));
-        element.addEventListener("mouseout", _this7._hide.bind(_this7, false));
+        element.addEventListener("click", _this9._toggle.bind(_this9));
+        element.addEventListener("mouseover", _this9._show.bind(_this9, false));
+        element.addEventListener("mouseout", _this9._hide.bind(_this9, false));
       });
       popup.addEventListener("click", this._hide.bind(this, true));
       wrapper.appendChild(popup);
@@ -20719,18 +20549,18 @@ var PolylineAnnotationElement = /*#__PURE__*/function (_AnnotationElement9) {
   var _super14 = _createSuper(PolylineAnnotationElement);
 
   function PolylineAnnotationElement(parameters) {
-    var _this8;
+    var _this10;
 
     _classCallCheck(this, PolylineAnnotationElement);
 
     var isRenderable = !!(parameters.data.hasPopup || parameters.data.title || parameters.data.contents);
-    _this8 = _super14.call(this, parameters, {
+    _this10 = _super14.call(this, parameters, {
       isRenderable: isRenderable,
       ignoreBorder: true
     });
-    _this8.containerClassName = "polylineAnnotation";
-    _this8.svgElementName = "svg:polyline";
-    return _this8;
+    _this10.containerClassName = "polylineAnnotation";
+    _this10.svgElementName = "svg:polyline";
+    return _this10;
   }
 
   _createClass(PolylineAnnotationElement, [{
@@ -20783,14 +20613,14 @@ var PolygonAnnotationElement = /*#__PURE__*/function (_PolylineAnnotationEl) {
   var _super15 = _createSuper(PolygonAnnotationElement);
 
   function PolygonAnnotationElement(parameters) {
-    var _this9;
+    var _this11;
 
     _classCallCheck(this, PolygonAnnotationElement);
 
-    _this9 = _super15.call(this, parameters);
-    _this9.containerClassName = "polygonAnnotation";
-    _this9.svgElementName = "svg:polygon";
-    return _this9;
+    _this11 = _super15.call(this, parameters);
+    _this11.containerClassName = "polygonAnnotation";
+    _this11.svgElementName = "svg:polygon";
+    return _this11;
   }
 
   return PolygonAnnotationElement;
@@ -20833,18 +20663,18 @@ var InkAnnotationElement = /*#__PURE__*/function (_AnnotationElement11) {
   var _super17 = _createSuper(InkAnnotationElement);
 
   function InkAnnotationElement(parameters) {
-    var _this10;
+    var _this12;
 
     _classCallCheck(this, InkAnnotationElement);
 
     var isRenderable = !!(parameters.data.hasPopup || parameters.data.title || parameters.data.contents);
-    _this10 = _super17.call(this, parameters, {
+    _this12 = _super17.call(this, parameters, {
       isRenderable: isRenderable,
       ignoreBorder: true
     });
-    _this10.containerClassName = "inkAnnotation";
-    _this10.svgElementName = "svg:polyline";
-    return _this10;
+    _this12.containerClassName = "inkAnnotation";
+    _this12.svgElementName = "svg:polyline";
+    return _this12;
   }
 
   _createClass(InkAnnotationElement, [{
@@ -21082,27 +20912,27 @@ var FileAttachmentAnnotationElement = /*#__PURE__*/function (_AnnotationElement1
   var _super23 = _createSuper(FileAttachmentAnnotationElement);
 
   function FileAttachmentAnnotationElement(parameters) {
-    var _this11$linkService$e;
+    var _this13$linkService$e;
 
-    var _this11;
+    var _this13;
 
     _classCallCheck(this, FileAttachmentAnnotationElement);
 
-    _this11 = _super23.call(this, parameters, {
+    _this13 = _super23.call(this, parameters, {
       isRenderable: true
     });
-    var _this11$data$file = _this11.data.file,
-        filename = _this11$data$file.filename,
-        content = _this11$data$file.content;
-    _this11.filename = (0, _display_utils.getFilenameFromUrl)(filename);
-    _this11.content = content;
-    (_this11$linkService$e = _this11.linkService.eventBus) === null || _this11$linkService$e === void 0 ? void 0 : _this11$linkService$e.dispatch("fileattachmentannotation", {
-      source: _assertThisInitialized(_this11),
+    var _this13$data$file = _this13.data.file,
+        filename = _this13$data$file.filename,
+        content = _this13$data$file.content;
+    _this13.filename = (0, _display_utils.getFilenameFromUrl)(filename);
+    _this13.content = content;
+    (_this13$linkService$e = _this13.linkService.eventBus) === null || _this13$linkService$e === void 0 ? void 0 : _this13$linkService$e.dispatch("fileattachmentannotation", {
+      source: _assertThisInitialized(_this13),
       id: (0, _util.stringToPDFString)(filename),
       filename: filename,
       content: content
     });
-    return _this11;
+    return _this13;
   }
 
   _createClass(FileAttachmentAnnotationElement, [{
@@ -21124,12 +20954,9 @@ var FileAttachmentAnnotationElement = /*#__PURE__*/function (_AnnotationElement1
   }, {
     key: "_download",
     value: function _download() {
-      if (!this.downloadManager) {
-        (0, _util.warn)("Download cannot be started due to unavailable download manager");
-        return;
-      }
+      var _this$downloadManager;
 
-      this.downloadManager.downloadData(this.content, this.filename, "");
+      (_this$downloadManager = this.downloadManager) === null || _this$downloadManager === void 0 ? void 0 : _this$downloadManager.openOrDownloadData(this.container, this.content, this.filename);
     }
   }]);
 
@@ -21175,8 +21002,8 @@ var AnnotationLayer = /*#__PURE__*/function () {
         sortedAnnotations.push.apply(sortedAnnotations, popupAnnotations);
       }
 
-      for (var _i2 = 0, _sortedAnnotations = sortedAnnotations; _i2 < _sortedAnnotations.length; _i2++) {
-        var data = _sortedAnnotations[_i2];
+      for (var _i3 = 0, _sortedAnnotations = sortedAnnotations; _i3 < _sortedAnnotations.length; _i3++) {
+        var data = _sortedAnnotations[_i3];
         var element = AnnotationElementFactory.create({
           data: data,
           layer: parameters.div,
@@ -24556,6 +24383,8 @@ var _util = __w_pdfjs_require__(4);
 
 var _content_disposition = __w_pdfjs_require__(154);
 
+var _display_utils = __w_pdfjs_require__(1);
+
 function validateRangeRequestCapabilities(_ref) {
   var getResponseHeader = _ref.getResponseHeader,
       isHttp = _ref.isHttp,
@@ -24608,7 +24437,7 @@ function extractFilenameFromHeader(getResponseHeader) {
       } catch (ex) {}
     }
 
-    if (/\.pdf$/i.test(filename)) {
+    if ((0, _display_utils.isPdfFile)(filename)) {
       return filename;
     }
   }
@@ -24621,7 +24450,7 @@ function createResponseStatusError(status, url) {
     return new _util.MissingPDFException('Missing PDF "' + url + '".');
   }
 
-  return new _util.UnexpectedResponseException("Unexpected server response (" + status + ') while retrieving PDF "' + url + '".', status);
+  return new _util.UnexpectedResponseException("Unexpected server response (".concat(status, ") while retrieving PDF \"").concat(url, "\"."), status);
 }
 
 function validateResponseStatus(status) {
@@ -25284,10 +25113,245 @@ var PDFFetchStreamRangeReader = /*#__PURE__*/function () {
 /******/ 	})();
 /******/ 	
 /************************************************************************/
-/******/ 	// module exports must be returned from runtime so entry inlining is disabled
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	return __w_pdfjs_require__(0);
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+var exports = __webpack_exports__;
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+Object.defineProperty(exports, "addLinkAttributes", ({
+  enumerable: true,
+  get: function get() {
+    return _display_utils.addLinkAttributes;
+  }
+}));
+Object.defineProperty(exports, "getFilenameFromUrl", ({
+  enumerable: true,
+  get: function get() {
+    return _display_utils.getFilenameFromUrl;
+  }
+}));
+Object.defineProperty(exports, "isPdfFile", ({
+  enumerable: true,
+  get: function get() {
+    return _display_utils.isPdfFile;
+  }
+}));
+Object.defineProperty(exports, "LinkTarget", ({
+  enumerable: true,
+  get: function get() {
+    return _display_utils.LinkTarget;
+  }
+}));
+Object.defineProperty(exports, "loadScript", ({
+  enumerable: true,
+  get: function get() {
+    return _display_utils.loadScript;
+  }
+}));
+Object.defineProperty(exports, "PDFDateString", ({
+  enumerable: true,
+  get: function get() {
+    return _display_utils.PDFDateString;
+  }
+}));
+Object.defineProperty(exports, "RenderingCancelledException", ({
+  enumerable: true,
+  get: function get() {
+    return _display_utils.RenderingCancelledException;
+  }
+}));
+Object.defineProperty(exports, "build", ({
+  enumerable: true,
+  get: function get() {
+    return _api.build;
+  }
+}));
+Object.defineProperty(exports, "getDocument", ({
+  enumerable: true,
+  get: function get() {
+    return _api.getDocument;
+  }
+}));
+Object.defineProperty(exports, "LoopbackPort", ({
+  enumerable: true,
+  get: function get() {
+    return _api.LoopbackPort;
+  }
+}));
+Object.defineProperty(exports, "PDFDataRangeTransport", ({
+  enumerable: true,
+  get: function get() {
+    return _api.PDFDataRangeTransport;
+  }
+}));
+Object.defineProperty(exports, "PDFWorker", ({
+  enumerable: true,
+  get: function get() {
+    return _api.PDFWorker;
+  }
+}));
+Object.defineProperty(exports, "version", ({
+  enumerable: true,
+  get: function get() {
+    return _api.version;
+  }
+}));
+Object.defineProperty(exports, "CMapCompressionType", ({
+  enumerable: true,
+  get: function get() {
+    return _util.CMapCompressionType;
+  }
+}));
+Object.defineProperty(exports, "createObjectURL", ({
+  enumerable: true,
+  get: function get() {
+    return _util.createObjectURL;
+  }
+}));
+Object.defineProperty(exports, "createPromiseCapability", ({
+  enumerable: true,
+  get: function get() {
+    return _util.createPromiseCapability;
+  }
+}));
+Object.defineProperty(exports, "createValidAbsoluteUrl", ({
+  enumerable: true,
+  get: function get() {
+    return _util.createValidAbsoluteUrl;
+  }
+}));
+Object.defineProperty(exports, "InvalidPDFException", ({
+  enumerable: true,
+  get: function get() {
+    return _util.InvalidPDFException;
+  }
+}));
+Object.defineProperty(exports, "MissingPDFException", ({
+  enumerable: true,
+  get: function get() {
+    return _util.MissingPDFException;
+  }
+}));
+Object.defineProperty(exports, "OPS", ({
+  enumerable: true,
+  get: function get() {
+    return _util.OPS;
+  }
+}));
+Object.defineProperty(exports, "PasswordResponses", ({
+  enumerable: true,
+  get: function get() {
+    return _util.PasswordResponses;
+  }
+}));
+Object.defineProperty(exports, "PermissionFlag", ({
+  enumerable: true,
+  get: function get() {
+    return _util.PermissionFlag;
+  }
+}));
+Object.defineProperty(exports, "removeNullCharacters", ({
+  enumerable: true,
+  get: function get() {
+    return _util.removeNullCharacters;
+  }
+}));
+Object.defineProperty(exports, "shadow", ({
+  enumerable: true,
+  get: function get() {
+    return _util.shadow;
+  }
+}));
+Object.defineProperty(exports, "UnexpectedResponseException", ({
+  enumerable: true,
+  get: function get() {
+    return _util.UnexpectedResponseException;
+  }
+}));
+Object.defineProperty(exports, "UNSUPPORTED_FEATURES", ({
+  enumerable: true,
+  get: function get() {
+    return _util.UNSUPPORTED_FEATURES;
+  }
+}));
+Object.defineProperty(exports, "Util", ({
+  enumerable: true,
+  get: function get() {
+    return _util.Util;
+  }
+}));
+Object.defineProperty(exports, "VerbosityLevel", ({
+  enumerable: true,
+  get: function get() {
+    return _util.VerbosityLevel;
+  }
+}));
+Object.defineProperty(exports, "AnnotationLayer", ({
+  enumerable: true,
+  get: function get() {
+    return _annotation_layer.AnnotationLayer;
+  }
+}));
+Object.defineProperty(exports, "GlobalWorkerOptions", ({
+  enumerable: true,
+  get: function get() {
+    return _worker_options.GlobalWorkerOptions;
+  }
+}));
+Object.defineProperty(exports, "renderTextLayer", ({
+  enumerable: true,
+  get: function get() {
+    return _text_layer.renderTextLayer;
+  }
+}));
+Object.defineProperty(exports, "SVGGraphics", ({
+  enumerable: true,
+  get: function get() {
+    return _svg.SVGGraphics;
+  }
+}));
+
+var _display_utils = __w_pdfjs_require__(1);
+
+var _api = __w_pdfjs_require__(134);
+
+var _util = __w_pdfjs_require__(4);
+
+var _annotation_layer = __w_pdfjs_require__(148);
+
+var _worker_options = __w_pdfjs_require__(142);
+
+var _text_layer = __w_pdfjs_require__(150);
+
+var _svg = __w_pdfjs_require__(151);
+
+var pdfjsVersion = '2.8.270';
+var pdfjsBuild = 'ea71d61aa';
+{
+  var PDFNetworkStream = __w_pdfjs_require__(152).PDFNetworkStream;
+
+  var PDFFetchStream;
+
+  if ((0, _display_utils.isFetchSupported)()) {
+    PDFFetchStream = __w_pdfjs_require__(155).PDFFetchStream;
+  }
+
+  (0, _api.setPDFNetworkStreamFactory)(function (params) {
+    if (PDFFetchStream && (0, _display_utils.isValidFetchUrl)(params.url)) {
+      return new PDFFetchStream(params);
+    }
+
+    return new PDFNetworkStream(params);
+  });
+}
+})();
+
+/******/ 	return __webpack_exports__;
 /******/ })()
 ;
 });

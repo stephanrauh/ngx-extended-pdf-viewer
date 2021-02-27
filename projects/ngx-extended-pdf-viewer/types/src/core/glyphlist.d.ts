@@ -1,2 +1,2 @@
-export var getDingbatsGlyphsUnicode: () => any;
-export var getGlyphsUnicode: () => any;
+export const getDingbatsGlyphsUnicode: () => any;
+export const getGlyphsUnicode: () => any;

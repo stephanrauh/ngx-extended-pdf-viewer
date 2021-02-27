@@ -45,11 +45,9 @@ import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component
 import { ScrollModeChangedEvent, ScrollModeType } from './options/pdf-viewer';
 import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
 import { ProgressBarEvent } from './events/progress-bar-event';
+import { UnitToPx } from './unit-to-px';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
-
-declare function ngxBrowserSupportsNullSafeChaining(): boolean; // defined in assets/compatibilits-check.js
-
 declare class ResizeObserver {
   constructor(param: () => void);
   public observe(div: HTMLElement);
@@ -244,6 +242,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.src = bytes.buffer;
   }
 
+  /**
+   * The combination of height, minHeight, and autoHeight ensures the PDF height of the PDF viewer is calculated correctly when the height is a percentage.
+   * By default, many CSS frameworks make a div with 100% have a height or zero pixels. checkHeigth() fixes this.
+   */
+  private autoHeight = false;
+
   public minHeight: string | undefined = undefined;
 
   private _height = '100%';
@@ -251,6 +255,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public set height(h: string) {
     this.minHeight = undefined;
+    this.autoHeight = false;
     if (h) {
       this._height = h;
     } else {
@@ -582,9 +587,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const isEdge = /Edge\/\d./i.test(navigator.userAgent);
     const isIOs13OrBelow = this.iOSVersionRequiresES5();
     let needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
-    needsES5 = needsES5 || !ngxBrowserSupportsNullSafeChaining();
-    needsES5 = needsES5 || isIE || isEdge || isIOs13OrBelow;
+    needsES5 = needsES5 || isIE || isEdge || isIOs13OrBelow || !this.ngxBrowserSupportsNullSafeChaining();;
     return needsES5;
+  }
+
+  private ngxBrowserSupportsNullSafeChaining(): boolean {
+    try {
+      eval("null?.size()");
+      return true;
+    } catch (notSupportedException) {
+      return false;
+    }
   }
 
   private loadViewer(): void {
@@ -621,22 +634,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       widget.appendChild(link);
 
       this.onResize();
-
-      this.checkBrowserCompatibilityAndLoadPdsjs();
-
-    }
-  }
-
-  private checkBrowserCompatibilityAndLoadPdsjs() {
-    if (!window["ngxBrowserSupportsNullSafeChaining"]) {
-      const assets = pdfDefaultOptions.assetsFolder;
-      const script = document.createElement('script');
-      script.src = this.location.normalize(assets + "/ngx-compatibility-checks.js");
-      script.type = 'text/javascript';
-      script.async = false;
-      script.onload = () => this.loadPdfJs();
-      document.getElementsByTagName('head')[0].appendChild(script);
-    } else {
       this.loadPdfJs();
     }
   }
@@ -870,23 +867,41 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public checkHeight(): void {
     if (typeof document !== 'undefined') {
-      const container = document.getElementsByClassName('zoom')[0];
+      const container = document.getElementsByClassName('zoom')[0] as HTMLElement;
       if (container) {
-        if (container.clientHeight === 0 && this._height.includes('%')) {
+        if ((this.autoHeight || container.clientHeight === 0) && this._height.includes('%')) {
+          this.autoHeight = true;
           const available = window.innerHeight;
           const rect = container.getBoundingClientRect();
           const top = rect.top;
-          let mh = available - top;
+          let maximumHeight = available - top;
+          // take the margins and paddings of the parent containers into account
+          let padding = this.calculateBorderMarging(container);
+          maximumHeight -= padding;
           const factor = Number(this._height.replace('%', ''));
-          mh = (mh * factor) / 100;
-          if (mh > 100) {
-            this.minHeight = mh + 'px';
+          maximumHeight = (maximumHeight * factor) / 100;
+          if (maximumHeight > 100) {
+            this.minHeight = maximumHeight + 'px';
           } else {
             this.minHeight = '100px';
           }
         }
       }
     }
+  }
+
+  private calculateBorderMarging(container: HTMLElement | null): number {
+    if (container) {
+      const computedStyle = window.getComputedStyle(container);
+
+      const padding = UnitToPx.toPx(computedStyle.paddingBottom);
+      const margin = UnitToPx.toPx(computedStyle.marginBottom);
+      if (container.style.zIndex) {
+        return padding + margin;
+      }
+      return padding + margin + this.calculateBorderMarging(container.parentElement);
+    }
+    return 0;
   }
 
   public onSpreadChange(newSpread: 'off' | 'even' | 'odd'): void {
@@ -1677,6 +1692,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           this.secondaryToolbarComponent.checkVisibility();
         }
       }
+      this.checkHeight();
     }
     try {
       const observer = new ResizeObserver(() => this.removeScrollbarInInititeScrollMode());

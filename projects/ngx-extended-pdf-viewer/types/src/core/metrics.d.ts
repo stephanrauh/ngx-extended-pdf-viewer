@@ -1,1 +1,1 @@
-export var getMetrics: () => any;
+export const getMetrics: () => any;

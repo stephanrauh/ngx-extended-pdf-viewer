@@ -157,7 +157,7 @@ export namespace CMapCompressionType {
     export const BINARY: number;
     export const STREAM: number;
 }
-export function createObjectURL(data: any, contentType: any, forceDataSchema?: boolean): string;
+export function createObjectURL(data: any, contentType?: string, forceDataSchema?: boolean): string;
 /**
  * Promise Capability object.
  *
@@ -225,7 +225,7 @@ export class InvalidPDFException extends InvalidPDFException_base {
     [x: string]: any;
 }
 export function isArrayBuffer(v: any): boolean;
-export function isArrayEqual(arr1: any, arr2: any): any;
+export function isArrayEqual(arr1: any, arr2: any): boolean;
 export function isAscii(str: any): boolean;
 export function isBool(v: any): boolean;
 export namespace IsEvalSupportedCached { }

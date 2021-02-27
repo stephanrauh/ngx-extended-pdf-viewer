@@ -3,7 +3,7 @@
 <pdf-light-theme *ngIf="theme==='light'"></pdf-light-theme>
 
 <pdf-dynamic-css [zoom]="mobileFriendlyZoomScale" [width]="toolbarWidthInPixels"></pdf-dynamic-css>
-<div class="zoom" [style.height]="height" [style.minHeight]="minHeight" #root>
+<div class="zoom" [style.height]="minHeight ? minHeight : height" #root>
   <div class="html">
     <div class="loadingInProgress body" [style.backgroundColor]="backgroundColor">
       <div id="outerContainer" (window:resize)="onResize()">

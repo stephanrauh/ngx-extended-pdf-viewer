@@ -33,27 +33,7 @@
 return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ([
-/* 0 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-Object.defineProperty(exports, "WorkerMessageHandler", ({
-  enumerable: true,
-  get: function () {
-    return _worker.WorkerMessageHandler;
-  }
-}));
-
-var _worker = __w_pdfjs_require__(1);
-
-const pdfjsVersion = '2.8.230';
-const pdfjsBuild = '12aa73e4b';
-
-/***/ }),
+/* 0 */,
 /* 1 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
@@ -162,7 +142,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.8.230';
+    const workerVersion = '2.8.270';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -738,6 +718,7 @@ exports.arrayByteLength = arrayByteLength;
 exports.arraysToBytes = arraysToBytes;
 exports.assert = assert;
 exports.bytesToString = bytesToString;
+exports.createObjectURL = createObjectURL;
 exports.createPromiseCapability = createPromiseCapability;
 exports.createValidAbsoluteUrl = createValidAbsoluteUrl;
 exports.escapeString = escapeString;
@@ -764,7 +745,7 @@ exports.stringToUTF8String = stringToUTF8String;
 exports.unreachable = unreachable;
 exports.utf8StringToString = utf8StringToString;
 exports.warn = warn;
-exports.VerbosityLevel = exports.Util = exports.UNSUPPORTED_FEATURES = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.StreamType = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.IsLittleEndianCached = exports.IsEvalSupportedCached = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FontType = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.createObjectURL = exports.CMapCompressionType = exports.BaseException = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
+exports.VerbosityLevel = exports.Util = exports.UNSUPPORTED_FEATURES = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.StreamType = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.IsLittleEndianCached = exports.IsEvalSupportedCached = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FontType = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
 
 __w_pdfjs_require__(3);
 
@@ -1556,9 +1537,13 @@ function isArrayEqual(arr1, arr2) {
     return false;
   }
 
-  return arr1.every(function (element, index) {
-    return element === arr2[index];
-  });
+  for (let i = 0, ii = arr1.length; i < ii; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 function getModificationDate(date = new Date()) {
@@ -1589,34 +1574,29 @@ function createPromiseCapability() {
   return capability;
 }
 
-const createObjectURL = function createObjectURLClosure() {
+function createObjectURL(data, contentType = "", forceDataSchema = false) {
+  if (URL.createObjectURL && !forceDataSchema) {
+    return URL.createObjectURL(new Blob([data], {
+      type: contentType
+    }));
+  }
+
   const digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-  return function createObjectURL(data, contentType, forceDataSchema = false) {
-    if (!forceDataSchema && URL.createObjectURL) {
-      const blob = new Blob([data], {
-        type: contentType
-      });
-      return URL.createObjectURL(blob);
-    }
+  let buffer = `data:${contentType};base64,`;
 
-    let buffer = `data:${contentType};base64,`;
+  for (let i = 0, ii = data.length; i < ii; i += 3) {
+    const b1 = data[i] & 0xff;
+    const b2 = data[i + 1] & 0xff;
+    const b3 = data[i + 2] & 0xff;
+    const d1 = b1 >> 2,
+          d2 = (b1 & 3) << 4 | b2 >> 4;
+    const d3 = i + 1 < ii ? (b2 & 0xf) << 2 | b3 >> 6 : 64;
+    const d4 = i + 2 < ii ? b3 & 0x3f : 64;
+    buffer += digits[d1] + digits[d2] + digits[d3] + digits[d4];
+  }
 
-    for (let i = 0, ii = data.length; i < ii; i += 3) {
-      const b1 = data[i] & 0xff;
-      const b2 = data[i + 1] & 0xff;
-      const b3 = data[i + 2] & 0xff;
-      const d1 = b1 >> 2,
-            d2 = (b1 & 3) << 4 | b2 >> 4;
-      const d3 = i + 1 < ii ? (b2 & 0xf) << 2 | b3 >> 6 : 64;
-      const d4 = i + 2 < ii ? b3 & 0x3f : 64;
-      buffer += digits[d1] + digits[d2] + digits[d3] + digits[d4];
-    }
-
-    return buffer;
-  };
-}();
-
-exports.createObjectURL = createObjectURL;
+  return buffer;
+}
 
 /***/ }),
 /* 3 */
@@ -1648,10 +1628,10 @@ exports.RefSetCache = exports.RefSet = exports.Ref = exports.Name = exports.EOF 
 
 var _util = __w_pdfjs_require__(2);
 
-var EOF = {};
+const EOF = {};
 exports.EOF = EOF;
 
-var Name = function NameClosure() {
+const Name = function NameClosure() {
   let nameCache = Object.create(null);
 
   function Name(name) {
@@ -1661,7 +1641,7 @@ var Name = function NameClosure() {
   Name.prototype = {};
 
   Name.get = function Name_get(name) {
-    var nameValue = nameCache[name];
+    const nameValue = nameCache[name];
     return nameValue ? nameValue : nameCache[name] = new Name(name);
   };
 
@@ -1674,7 +1654,7 @@ var Name = function NameClosure() {
 
 exports.Name = Name;
 
-var Cmd = function CmdClosure() {
+const Cmd = function CmdClosure() {
   let cmdCache = Object.create(null);
 
   function Cmd(cmd) {
@@ -1684,7 +1664,7 @@ var Cmd = function CmdClosure() {
   Cmd.prototype = {};
 
   Cmd.get = function Cmd_get(cmd) {
-    var cmdValue = cmdCache[cmd];
+    const cmdValue = cmdCache[cmd];
     return cmdValue ? cmdValue : cmdCache[cmd] = new Cmd(cmd);
   };
 
@@ -1697,8 +1677,8 @@ var Cmd = function CmdClosure() {
 
 exports.Cmd = Cmd;
 
-var Dict = function DictClosure() {
-  var nonSerializable = function nonSerializableClosure() {
+const Dict = function DictClosure() {
+  const nonSerializable = function nonSerializableClosure() {
     return nonSerializable;
   };
 
@@ -1791,7 +1771,7 @@ var Dict = function DictClosure() {
       return this._map[key] !== undefined;
     },
     forEach: function Dict_forEach(callback) {
-      for (var key in this._map) {
+      for (const key in this._map) {
         callback(key, this.get(key));
       }
     }
@@ -1883,7 +1863,7 @@ var Dict = function DictClosure() {
 
 exports.Dict = Dict;
 
-var Ref = function RefClosure() {
+const Ref = function RefClosure() {
   let refCache = Object.create(null);
 
   function Ref(num, gen) {
@@ -9341,7 +9321,7 @@ var _ccitt = __w_pdfjs_require__(13);
 
 var _stream = __w_pdfjs_require__(11);
 
-var CCITTFaxStream = function CCITTFaxStreamClosure() {
+const CCITTFaxStream = function CCITTFaxStreamClosure() {
   function CCITTFaxStream(str, maybeLength, params) {
     this.str = str;
     this.dict = str.dict;
@@ -16518,7 +16498,8 @@ exports.JpxImage = JpxImage;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.PDF20 = exports.PDF17 = exports.CipherTransformFactory = exports.calculateSHA512 = exports.calculateSHA384 = exports.calculateSHA256 = exports.calculateMD5 = exports.ARCFourCipher = exports.AES256Cipher = exports.AES128Cipher = void 0;
+exports.calculateSHA384 = calculateSHA384;
+exports.PDF20 = exports.PDF17 = exports.CipherTransformFactory = exports.calculateSHA512 = exports.calculateSHA256 = exports.calculateMD5 = exports.ARCFourCipher = exports.AES256Cipher = exports.AES128Cipher = void 0;
 
 var _util = __w_pdfjs_require__(2);
 
@@ -16526,8 +16507,8 @@ var _primitives = __w_pdfjs_require__(4);
 
 var _stream = __w_pdfjs_require__(11);
 
-var ARCFourCipher = function ARCFourCipherClosure() {
-  function ARCFourCipher(key) {
+class ARCFourCipher {
+  constructor(key) {
     this.a = 0;
     this.b = 0;
     var s = new Uint8Array(256);
@@ -16550,36 +16531,40 @@ var ARCFourCipher = function ARCFourCipherClosure() {
     this.s = s;
   }
 
-  ARCFourCipher.prototype = {
-    encryptBlock: function ARCFourCipher_encryptBlock(data) {
-      var i,
-          n = data.length,
-          tmp,
-          tmp2;
-      var a = this.a,
-          b = this.b,
-          s = this.s;
-      var output = new Uint8Array(n);
+  encryptBlock(data) {
+    var i,
+        n = data.length,
+        tmp,
+        tmp2;
+    var a = this.a,
+        b = this.b,
+        s = this.s;
+    var output = new Uint8Array(n);
 
-      for (i = 0; i < n; ++i) {
-        a = a + 1 & 0xff;
-        tmp = s[a];
-        b = b + tmp & 0xff;
-        tmp2 = s[b];
-        s[a] = tmp2;
-        s[b] = tmp;
-        output[i] = data[i] ^ s[tmp + tmp2 & 0xff];
-      }
-
-      this.a = a;
-      this.b = b;
-      return output;
+    for (i = 0; i < n; ++i) {
+      a = a + 1 & 0xff;
+      tmp = s[a];
+      b = b + tmp & 0xff;
+      tmp2 = s[b];
+      s[a] = tmp2;
+      s[b] = tmp;
+      output[i] = data[i] ^ s[tmp + tmp2 & 0xff];
     }
-  };
-  ARCFourCipher.prototype.decryptBlock = ARCFourCipher.prototype.encryptBlock;
-  ARCFourCipher.prototype.encrypt = ARCFourCipher.prototype.encryptBlock;
-  return ARCFourCipher;
-}();
+
+    this.a = a;
+    this.b = b;
+    return output;
+  }
+
+  decryptBlock(data) {
+    return this.encryptBlock(data);
+  }
+
+  encrypt(data) {
+    return this.encryptBlock(data);
+  }
+
+}
 
 exports.ARCFourCipher = ARCFourCipher;
 
@@ -16667,90 +16652,97 @@ var calculateMD5 = function calculateMD5Closure() {
 
 exports.calculateMD5 = calculateMD5;
 
-var Word64 = function Word64Closure() {
-  function Word64(highInteger, lowInteger) {
+class Word64 {
+  constructor(highInteger, lowInteger) {
     this.high = highInteger | 0;
     this.low = lowInteger | 0;
   }
 
-  Word64.prototype = {
-    and: function Word64_and(word) {
-      this.high &= word.high;
-      this.low &= word.low;
-    },
-    xor: function Word64_xor(word) {
-      this.high ^= word.high;
-      this.low ^= word.low;
-    },
-    or: function Word64_or(word) {
-      this.high |= word.high;
-      this.low |= word.low;
-    },
-    shiftRight: function Word64_shiftRight(places) {
-      if (places >= 32) {
-        this.low = this.high >>> places - 32 | 0;
-        this.high = 0;
-      } else {
-        this.low = this.low >>> places | this.high << 32 - places;
-        this.high = this.high >>> places | 0;
-      }
-    },
-    shiftLeft: function Word64_shiftLeft(places) {
-      if (places >= 32) {
-        this.high = this.low << places - 32;
-        this.low = 0;
-      } else {
-        this.high = this.high << places | this.low >>> 32 - places;
-        this.low = this.low << places;
-      }
-    },
-    rotateRight: function Word64_rotateRight(places) {
-      var low, high;
+  and(word) {
+    this.high &= word.high;
+    this.low &= word.low;
+  }
 
-      if (places & 32) {
-        high = this.low;
-        low = this.high;
-      } else {
-        low = this.low;
-        high = this.high;
-      }
+  xor(word) {
+    this.high ^= word.high;
+    this.low ^= word.low;
+  }
 
-      places &= 31;
-      this.low = low >>> places | high << 32 - places;
-      this.high = high >>> places | low << 32 - places;
-    },
-    not: function Word64_not() {
-      this.high = ~this.high;
-      this.low = ~this.low;
-    },
-    add: function Word64_add(word) {
-      var lowAdd = (this.low >>> 0) + (word.low >>> 0);
-      var highAdd = (this.high >>> 0) + (word.high >>> 0);
+  or(word) {
+    this.high |= word.high;
+    this.low |= word.low;
+  }
 
-      if (lowAdd > 0xffffffff) {
-        highAdd += 1;
-      }
-
-      this.low = lowAdd | 0;
-      this.high = highAdd | 0;
-    },
-    copyTo: function Word64_copyTo(bytes, offset) {
-      bytes[offset] = this.high >>> 24 & 0xff;
-      bytes[offset + 1] = this.high >> 16 & 0xff;
-      bytes[offset + 2] = this.high >> 8 & 0xff;
-      bytes[offset + 3] = this.high & 0xff;
-      bytes[offset + 4] = this.low >>> 24 & 0xff;
-      bytes[offset + 5] = this.low >> 16 & 0xff;
-      bytes[offset + 6] = this.low >> 8 & 0xff;
-      bytes[offset + 7] = this.low & 0xff;
-    },
-    assign: function Word64_assign(word) {
-      this.high = word.high;
-      this.low = word.low;
+  shiftRight(places) {
+    if (places >= 32) {
+      this.low = this.high >>> places - 32 | 0;
+      this.high = 0;
+    } else {
+      this.low = this.low >>> places | this.high << 32 - places;
+      this.high = this.high >>> places | 0;
     }
-  };
-  return Word64;
-}();
+  }
+
+  shiftLeft(places) {
+    if (places >= 32) {
+      this.high = this.low << places - 32;
+      this.low = 0;
+    } else {
+      this.high = this.high << places | this.low >>> 32 - places;
+      this.low = this.low << places;
+    }
+  }
+
+  rotateRight(places) {
+    var low, high;
+
+    if (places & 32) {
+      high = this.low;
+      low = this.high;
+    } else {
+      low = this.low;
+      high = this.high;
+    }
+
+    places &= 31;
+    this.low = low >>> places | high << 32 - places;
+    this.high = high >>> places | low << 32 - places;
+  }
+
+  not() {
+    this.high = ~this.high;
+    this.low = ~this.low;
+  }
+
+  add(word) {
+    var lowAdd = (this.low >>> 0) + (word.low >>> 0);
+    var highAdd = (this.high >>> 0) + (word.high >>> 0);
+
+    if (lowAdd > 0xffffffff) {
+      highAdd += 1;
+    }
+
+    this.low = lowAdd | 0;
+    this.high = highAdd | 0;
+  }
+
+  copyTo(bytes, offset) {
+    bytes[offset] = this.high >>> 24 & 0xff;
+    bytes[offset + 1] = this.high >> 16 & 0xff;
+    bytes[offset + 2] = this.high >> 8 & 0xff;
+    bytes[offset + 3] = this.high & 0xff;
+    bytes[offset + 4] = this.low >>> 24 & 0xff;
+    bytes[offset + 5] = this.low >> 16 & 0xff;
+    bytes[offset + 6] = this.low >> 8 & 0xff;
+    bytes[offset + 7] = this.low & 0xff;
+  }
+
+  assign(word) {
+    this.high = word.high;
+    this.low = word.low;
+  }
+
+}
 
 var calculateSHA256 = function calculateSHA256Closure() {
   function rotr(x, n) {
@@ -16936,8 +16928,7 @@ var calculateSHA512 = function calculateSHA512Closure() {
 
   var k = [new Word64(0x428a2f98, 0xd728ae22), new Word64(0x71374491, 0x23ef65cd), new Word64(0xb5c0fbcf, 0xec4d3b2f), new Word64(0xe9b5dba5, 0x8189dbbc), new Word64(0x3956c25b, 0xf348b538), new Word64(0x59f111f1, 0xb605d019), new Word64(0x923f82a4, 0xaf194f9b), new Word64(0xab1c5ed5, 0xda6d8118), new Word64(0xd807aa98, 0xa3030242), new Word64(0x12835b01, 0x45706fbe), new Word64(0x243185be, 0x4ee4b28c), new Word64(0x550c7dc3, 0xd5ffb4e2), new Word64(0x72be5d74, 0xf27b896f), new Word64(0x80deb1fe, 0x3b1696b1), new Word64(0x9bdc06a7, 0x25c71235), new Word64(0xc19bf174, 0xcf692694), new Word64(0xe49b69c1, 0x9ef14ad2), new Word64(0xefbe4786, 0x384f25e3), new Word64(0x0fc19dc6, 0x8b8cd5b5), new Word64(0x240ca1cc, 0x77ac9c65), new Word64(0x2de92c6f, 0x592b0275), new Word64(0x4a7484aa, 0x6ea6e483), new Word64(0x5cb0a9dc, 0xbd41fbd4), new Word64(0x76f988da, 0x831153b5), new Word64(0x983e5152, 0xee66dfab), new Word64(0xa831c66d, 0x2db43210), new Word64(0xb00327c8, 0x98fb213f), new Word64(0xbf597fc7, 0xbeef0ee4), new Word64(0xc6e00bf3, 0x3da88fc2), new Word64(0xd5a79147, 0x930aa725), new Word64(0x06ca6351, 0xe003826f), new Word64(0x14292967, 0x0a0e6e70), new Word64(0x27b70a85, 0x46d22ffc), new Word64(0x2e1b2138, 0x5c26c926), new Word64(0x4d2c6dfc, 0x5ac42aed), new Word64(0x53380d13, 0x9d95b3df), new Word64(0x650a7354, 0x8baf63de), new Word64(0x766a0abb, 0x3c77b2a8), new Word64(0x81c2c92e, 0x47edaee6), new Word64(0x92722c85, 0x1482353b), new Word64(0xa2bfe8a1, 0x4cf10364), new Word64(0xa81a664b, 0xbc423001), new Word64(0xc24b8b70, 0xd0f89791), new Word64(0xc76c51a3, 0x0654be30), new Word64(0xd192e819, 0xd6ef5218), new Word64(0xd6990624, 0x5565a910), new Word64(0xf40e3585, 0x5771202a), new Word64(0x106aa070, 0x32bbd1b8), new Word64(0x19a4c116, 0xb8d2d0c8), new Word64(0x1e376c08, 0x5141ab53), new Word64(0x2748774c, 0xdf8eeb99), new Word64(0x34b0bcb5, 0xe19b48a8), new Word64(0x391c0cb3, 0xc5c95a63), new Word64(0x4ed8aa4a, 0xe3418acb), new Word64(0x5b9cca4f, 0x7763e373), new Word64(0x682e6ff3, 0xd6b2b8a3), new Word64(0x748f82ee, 0x5defb2fc), new Word64(0x78a5636f, 0x43172f60), new Word64(0x84c87814, 0xa1f0ab72), new Word64(0x8cc70208, 0x1a6439ec), new Word64(0x90befffa, 0x23631e28), new Word64(0xa4506ceb, 0xde82bde9), new Word64(0xbef9a3f7, 0xb2c67915), new Word64(0xc67178f2, 0xe372532b), new Word64(0xca273ece, 0xea26619c), new Word64(0xd186b8c7, 0x21c0c207), new Word64(0xeada7dd6, 0xcde0eb1e), new Word64(0xf57d4f7f, 0xee6ed178), new Word64(0x06f067aa, 0x72176fba), new Word64(0x0a637dc5, 0xa2c898a6), new Word64(0x113f9804, 0xbef90dae), new Word64(0x1b710b35, 0x131c471b), new Word64(0x28db77f5, 0x23047d84), new Word64(0x32caab7b, 0x40c72493), new Word64(0x3c9ebe0a, 0x15c9bebc), new Word64(0x431d67c4, 0x9c100d4c), new Word64(0x4cc5d4be, 0xcb3e42b6), new Word64(0x597f299c, 0xfc657e2a), new Word64(0x5fcb6fab, 0x3ad6faec), new Word64(0x6c44198c, 0x4a475817)];
 
-  function hash(data, offset, length, mode384) {
-    mode384 = !!mode384;
+  function hash(data, offset, length, mode384 = false) {
     var h0, h1, h2, h3, h4, h5, h6, h7;
 
     if (!mode384) {
@@ -17101,29 +17092,20 @@ var calculateSHA512 = function calculateSHA512Closure() {
 
 exports.calculateSHA512 = calculateSHA512;
 
-var calculateSHA384 = function calculateSHA384Closure() {
-  function hash(data, offset, length) {
-    return calculateSHA512(data, offset, length, true);
+function calculateSHA384(data, offset, length) {
+  return calculateSHA512(data, offset, length, true);
+}
+
+class NullCipher {
+  decryptBlock(data) {
+    return data;
   }
 
-  return hash;
-}();
+  encrypt(data) {
+    return data;
+  }
 
-exports.calculateSHA384 = calculateSHA384;
-
-var NullCipher = function NullCipherClosure() {
-  function NullCipher() {}
-
-  NullCipher.prototype = {
-    decryptBlock: function NullCipher_decryptBlock(data) {
-      return data;
-    },
-    encrypt: function NullCipher_encrypt(data) {
-      return data;
-    }
-  };
-  return NullCipher;
-}();
+}
 
 class AESBaseCipher {
   constructor() {
@@ -17553,83 +17535,66 @@ class AES256Cipher extends AESBaseCipher {
 
 exports.AES256Cipher = AES256Cipher;
 
-var PDF17 = function PDF17Closure() {
-  function compareByteArrays(array1, array2) {
-    if (array1.length !== array2.length) {
-      return false;
-    }
-
-    for (var i = 0; i < array1.length; i++) {
-      if (array1[i] !== array2[i]) {
-        return false;
-      }
-    }
-
-    return true;
+class PDF17 {
+  checkOwnerPassword(password, ownerValidationSalt, userBytes, ownerPassword) {
+    var hashData = new Uint8Array(password.length + 56);
+    hashData.set(password, 0);
+    hashData.set(ownerValidationSalt, password.length);
+    hashData.set(userBytes, password.length + ownerValidationSalt.length);
+    var result = calculateSHA256(hashData, 0, hashData.length);
+    return (0, _util.isArrayEqual)(result, ownerPassword);
   }
 
-  function PDF17() {}
+  checkUserPassword(password, userValidationSalt, userPassword) {
+    var hashData = new Uint8Array(password.length + 8);
+    hashData.set(password, 0);
+    hashData.set(userValidationSalt, password.length);
+    var result = calculateSHA256(hashData, 0, hashData.length);
+    return (0, _util.isArrayEqual)(result, userPassword);
+  }
 
-  PDF17.prototype = {
-    checkOwnerPassword: function PDF17_checkOwnerPassword(password, ownerValidationSalt, userBytes, ownerPassword) {
-      var hashData = new Uint8Array(password.length + 56);
-      hashData.set(password, 0);
-      hashData.set(ownerValidationSalt, password.length);
-      hashData.set(userBytes, password.length + ownerValidationSalt.length);
-      var result = calculateSHA256(hashData, 0, hashData.length);
-      return compareByteArrays(result, ownerPassword);
-    },
-    checkUserPassword: function PDF17_checkUserPassword(password, userValidationSalt, userPassword) {
-      var hashData = new Uint8Array(password.length + 8);
-      hashData.set(password, 0);
-      hashData.set(userValidationSalt, password.length);
-      var result = calculateSHA256(hashData, 0, hashData.length);
-      return compareByteArrays(result, userPassword);
-    },
-    getOwnerKey: function PDF17_getOwnerKey(password, ownerKeySalt, userBytes, ownerEncryption) {
-      var hashData = new Uint8Array(password.length + 56);
-      hashData.set(password, 0);
-      hashData.set(ownerKeySalt, password.length);
-      hashData.set(userBytes, password.length + ownerKeySalt.length);
-      var key = calculateSHA256(hashData, 0, hashData.length);
-      var cipher = new AES256Cipher(key);
-      return cipher.decryptBlock(ownerEncryption, false, new Uint8Array(16));
-    },
-    getUserKey: function PDF17_getUserKey(password, userKeySalt, userEncryption) {
-      var hashData = new Uint8Array(password.length + 8);
-      hashData.set(password, 0);
-      hashData.set(userKeySalt, password.length);
-      var key = calculateSHA256(hashData, 0, hashData.length);
-      var cipher = new AES256Cipher(key);
-      return cipher.decryptBlock(userEncryption, false, new Uint8Array(16));
-    }
-  };
-  return PDF17;
-}();
+  getOwnerKey(password, ownerKeySalt, userBytes, ownerEncryption) {
+    var hashData = new Uint8Array(password.length + 56);
+    hashData.set(password, 0);
+    hashData.set(ownerKeySalt, password.length);
+    hashData.set(userBytes, password.length + ownerKeySalt.length);
+    var key = calculateSHA256(hashData, 0, hashData.length);
+    var cipher = new AES256Cipher(key);
+    return cipher.decryptBlock(ownerEncryption, false, new Uint8Array(16));
+  }
+
+  getUserKey(password, userKeySalt, userEncryption) {
+    var hashData = new Uint8Array(password.length + 8);
+    hashData.set(password, 0);
+    hashData.set(userKeySalt, password.length);
+    var key = calculateSHA256(hashData, 0, hashData.length);
+    var cipher = new AES256Cipher(key);
+    return cipher.decryptBlock(userEncryption, false, new Uint8Array(16));
+  }
+
+}
 
 exports.PDF17 = PDF17;
 
 var PDF20 = function PDF20Closure() {
-  function concatArrays(array1, array2) {
-    var t = new Uint8Array(array1.length + array2.length);
-    t.set(array1, 0);
-    t.set(array2, array1.length);
-    return t;
-  }
-
   function calculatePDF20Hash(password, input, userBytes) {
     var k = calculateSHA256(input, 0, input.length).subarray(0, 32);
     var e = [0];
     var i = 0;
 
     while (i < 64 || e[e.length - 1] > i - 32) {
-      var arrayLength = password.length + k.length + userBytes.length;
-      var k1 = new Uint8Array(arrayLength * 64);
-      var array = concatArrays(password, k);
-      array = concatArrays(array, userBytes);
+      const combinedLength = password.length + k.length + userBytes.length,
+            combinedArray = new Uint8Array(combinedLength);
+      let writeOffset = 0;
+      combinedArray.set(password, writeOffset);
+      writeOffset += password.length;
+      combinedArray.set(k, writeOffset);
+      writeOffset += k.length;
+      combinedArray.set(userBytes, writeOffset);
+      var k1 = new Uint8Array(combinedLength * 64);
 
-      for (var j = 0, pos = 0; j < 64; j++, pos += arrayLength) {
-        k1.set(array, pos);
+      for (var j = 0, pos = 0; j < 64; j++, pos += combinedLength) {
+        k1.set(combinedArray, pos);
       }
 
       var cipher = new AES128Cipher(k.subarray(0, 16));
@@ -17657,42 +17622,29 @@ var PDF20 = function PDF20Closure() {
     return k.subarray(0, 32);
   }
 
-  function PDF20() {}
-
-  function compareByteArrays(array1, array2) {
-    if (array1.length !== array2.length) {
-      return false;
-    }
-
-    for (var i = 0; i < array1.length; i++) {
-      if (array1[i] !== array2[i]) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  PDF20.prototype = {
-    hash: function PDF20_hash(password, concatBytes, userBytes) {
+  class PDF20 {
+    hash(password, concatBytes, userBytes) {
       return calculatePDF20Hash(password, concatBytes, userBytes);
-    },
-    checkOwnerPassword: function PDF20_checkOwnerPassword(password, ownerValidationSalt, userBytes, ownerPassword) {
+    }
+
+    checkOwnerPassword(password, ownerValidationSalt, userBytes, ownerPassword) {
       var hashData = new Uint8Array(password.length + 56);
       hashData.set(password, 0);
       hashData.set(ownerValidationSalt, password.length);
       hashData.set(userBytes, password.length + ownerValidationSalt.length);
       var result = calculatePDF20Hash(password, hashData, userBytes);
-      return compareByteArrays(result, ownerPassword);
-    },
-    checkUserPassword: function PDF20_checkUserPassword(password, userValidationSalt, userPassword) {
+      return (0, _util.isArrayEqual)(result, ownerPassword);
+    }
+
+    checkUserPassword(password, userValidationSalt, userPassword) {
       var hashData = new Uint8Array(password.length + 8);
       hashData.set(password, 0);
       hashData.set(userValidationSalt, password.length);
       var result = calculatePDF20Hash(password, hashData, []);
-      return compareByteArrays(result, userPassword);
-    },
-    getOwnerKey: function PDF20_getOwnerKey(password, ownerKeySalt, userBytes, ownerEncryption) {
+      return (0, _util.isArrayEqual)(result, userPassword);
+    }
+
+    getOwnerKey(password, ownerKeySalt, userBytes, ownerEncryption) {
       var hashData = new Uint8Array(password.length + 56);
       hashData.set(password, 0);
       hashData.set(ownerKeySalt, password.length);
@@ -17700,8 +17652,9 @@ var PDF20 = function PDF20Closure() {
       var key = calculatePDF20Hash(password, hashData, userBytes);
       var cipher = new AES256Cipher(key);
       return cipher.decryptBlock(ownerEncryption, false, new Uint8Array(16));
-    },
-    getUserKey: function PDF20_getUserKey(password, userKeySalt, userEncryption) {
+    }
+
+    getUserKey(password, userKeySalt, userEncryption) {
       var hashData = new Uint8Array(password.length + 8);
       hashData.set(password, 0);
       hashData.set(userKeySalt, password.length);
@@ -17709,67 +17662,69 @@ var PDF20 = function PDF20Closure() {
       var cipher = new AES256Cipher(key);
       return cipher.decryptBlock(userEncryption, false, new Uint8Array(16));
     }
-  };
+
+  }
+
   return PDF20;
 }();
 
 exports.PDF20 = PDF20;
 
-var CipherTransform = function CipherTransformClosure() {
-  function CipherTransform(stringCipherConstructor, streamCipherConstructor) {
+class CipherTransform {
+  constructor(stringCipherConstructor, streamCipherConstructor) {
     this.StringCipherConstructor = stringCipherConstructor;
     this.StreamCipherConstructor = streamCipherConstructor;
   }
 
-  CipherTransform.prototype = {
-    createStream: function CipherTransform_createStream(stream, length) {
-      var cipher = new this.StreamCipherConstructor();
-      return new _stream.DecryptStream(stream, length, function cipherTransformDecryptStream(data, finalize) {
-        return cipher.decryptBlock(data, finalize);
-      });
-    },
-    decryptString: function CipherTransform_decryptString(s) {
-      var cipher = new this.StringCipherConstructor();
-      var data = (0, _util.stringToBytes)(s);
-      data = cipher.decryptBlock(data, true);
-      return (0, _util.bytesToString)(data);
-    },
-    encryptString: function CipherTransform_encryptString(s) {
-      const cipher = new this.StringCipherConstructor();
+  createStream(stream, length) {
+    var cipher = new this.StreamCipherConstructor();
+    return new _stream.DecryptStream(stream, length, function cipherTransformDecryptStream(data, finalize) {
+      return cipher.decryptBlock(data, finalize);
+    });
+  }
 
-      if (cipher instanceof AESBaseCipher) {
-        const strLen = s.length;
-        const pad = 16 - strLen % 16;
+  decryptString(s) {
+    var cipher = new this.StringCipherConstructor();
+    var data = (0, _util.stringToBytes)(s);
+    data = cipher.decryptBlock(data, true);
+    return (0, _util.bytesToString)(data);
+  }
 
-        if (pad !== 16) {
-          s = s.padEnd(16 * Math.ceil(strLen / 16), String.fromCharCode(pad));
+  encryptString(s) {
+    const cipher = new this.StringCipherConstructor();
+
+    if (cipher instanceof AESBaseCipher) {
+      const strLen = s.length;
+      const pad = 16 - strLen % 16;
+
+      if (pad !== 16) {
+        s = s.padEnd(16 * Math.ceil(strLen / 16), String.fromCharCode(pad));
+      }
+
+      const iv = new Uint8Array(16);
+
+      if (typeof crypto !== "undefined") {
+        crypto.getRandomValues(iv);
+      } else {
+        for (let i = 0; i < 16; i++) {
+          iv[i] = Math.floor(256 * Math.random());
         }
-
-        const iv = new Uint8Array(16);
-
-        if (typeof crypto !== "undefined") {
-          crypto.getRandomValues(iv);
-        } else {
-          for (let i = 0; i < 16; i++) {
-            iv[i] = Math.floor(256 * Math.random());
-          }
-        }
-
-        let data = (0, _util.stringToBytes)(s);
-        data = cipher.encrypt(data, iv);
-        const buf = new Uint8Array(16 + data.length);
-        buf.set(iv);
-        buf.set(data, 16);
-        return (0, _util.bytesToString)(buf);
       }
 
       let data = (0, _util.stringToBytes)(s);
-      data = cipher.encrypt(data);
-      return (0, _util.bytesToString)(data);
+      data = cipher.encrypt(data, iv);
+      const buf = new Uint8Array(16 + data.length);
+      buf.set(iv);
+      buf.set(data, 16);
+      return (0, _util.bytesToString)(buf);
     }
-  };
-  return CipherTransform;
-}();
+
+    let data = (0, _util.stringToBytes)(s);
+    data = cipher.encrypt(data);
+    return (0, _util.bytesToString)(data);
+  }
+
+}
 
 var CipherTransformFactory = function CipherTransformFactoryClosure() {
   var defaultPasswordBytes = new Uint8Array([0x28, 0xBF, 0x4E, 0x5E, 0x4E, 0x75, 0x8A, 0x41, 0x64, 0x00, 0x4E, 0x56, 0xFF, 0xFA, 0x01, 0x08, 0x2E, 0x2E, 0x00, 0xB6, 0xD0, 0x68, 0x3E, 0x80, 0x2F, 0x0C, 0xA9, 0xFE, 0x64, 0x53, 0x69, 0x7A]);
@@ -17946,111 +17901,7 @@ var CipherTransformFactory = function CipherTransformFactoryClosure() {
 
   var identityName = _primitives.Name.get("Identity");
 
-  function CipherTransformFactory(dict, fileId, password) {
-    var filter = dict.get("Filter");
-
-    if (!(0, _primitives.isName)(filter, "Standard")) {
-      throw new _util.FormatError("unknown encryption method");
-    }
-
-    this.dict = dict;
-    var algorithm = dict.get("V");
-
-    if (!Number.isInteger(algorithm) || algorithm !== 1 && algorithm !== 2 && algorithm !== 4 && algorithm !== 5) {
-      throw new _util.FormatError("unsupported encryption algorithm");
-    }
-
-    this.algorithm = algorithm;
-    var keyLength = dict.get("Length");
-
-    if (!keyLength) {
-      if (algorithm <= 3) {
-        keyLength = 40;
-      } else {
-        var cfDict = dict.get("CF");
-        var streamCryptoName = dict.get("StmF");
-
-        if ((0, _primitives.isDict)(cfDict) && (0, _primitives.isName)(streamCryptoName)) {
-          cfDict.suppressEncryption = true;
-          var handlerDict = cfDict.get(streamCryptoName.name);
-          keyLength = handlerDict && handlerDict.get("Length") || 128;
-
-          if (keyLength < 40) {
-            keyLength <<= 3;
-          }
-        }
-      }
-    }
-
-    if (!Number.isInteger(keyLength) || keyLength < 40 || keyLength % 8 !== 0) {
-      throw new _util.FormatError("invalid key length");
-    }
-
-    var ownerPassword = (0, _util.stringToBytes)(dict.get("O")).subarray(0, 32);
-    var userPassword = (0, _util.stringToBytes)(dict.get("U")).subarray(0, 32);
-    var flags = dict.get("P");
-    var revision = dict.get("R");
-    var encryptMetadata = (algorithm === 4 || algorithm === 5) && dict.get("EncryptMetadata") !== false;
-    this.encryptMetadata = encryptMetadata;
-    var fileIdBytes = (0, _util.stringToBytes)(fileId);
-    var passwordBytes;
-
-    if (password) {
-      if (revision === 6) {
-        try {
-          password = (0, _util.utf8StringToString)(password);
-        } catch (ex) {
-          (0, _util.warn)("CipherTransformFactory: " + "Unable to convert UTF8 encoded password.");
-        }
-      }
-
-      passwordBytes = (0, _util.stringToBytes)(password);
-    }
-
-    var encryptionKey;
-
-    if (algorithm !== 5) {
-      encryptionKey = prepareKeyData(fileIdBytes, passwordBytes, ownerPassword, userPassword, flags, revision, keyLength, encryptMetadata);
-    } else {
-      var ownerValidationSalt = (0, _util.stringToBytes)(dict.get("O")).subarray(32, 40);
-      var ownerKeySalt = (0, _util.stringToBytes)(dict.get("O")).subarray(40, 48);
-      var uBytes = (0, _util.stringToBytes)(dict.get("U")).subarray(0, 48);
-      var userValidationSalt = (0, _util.stringToBytes)(dict.get("U")).subarray(32, 40);
-      var userKeySalt = (0, _util.stringToBytes)(dict.get("U")).subarray(40, 48);
-      var ownerEncryption = (0, _util.stringToBytes)(dict.get("OE"));
-      var userEncryption = (0, _util.stringToBytes)(dict.get("UE"));
-      var perms = (0, _util.stringToBytes)(dict.get("Perms"));
-      encryptionKey = createEncryptionKey20(revision, passwordBytes, ownerPassword, ownerValidationSalt, ownerKeySalt, uBytes, userPassword, userValidationSalt, userKeySalt, ownerEncryption, userEncryption, perms);
-    }
-
-    if (!encryptionKey && !password) {
-      throw new _util.PasswordException("No password given", _util.PasswordResponses.NEED_PASSWORD);
-    } else if (!encryptionKey && password) {
-      var decodedPassword = decodeUserPassword(passwordBytes, ownerPassword, revision, keyLength);
-      encryptionKey = prepareKeyData(fileIdBytes, decodedPassword, ownerPassword, userPassword, flags, revision, keyLength, encryptMetadata);
-    }
-
-    if (!encryptionKey) {
-      throw new _util.PasswordException("Incorrect Password", _util.PasswordResponses.INCORRECT_PASSWORD);
-    }
-
-    this.encryptionKey = encryptionKey;
-
-    if (algorithm >= 4) {
-      var cf = dict.get("CF");
-
-      if ((0, _primitives.isDict)(cf)) {
-        cf.suppressEncryption = true;
-      }
-
-      this.cf = cf;
-      this.stmf = dict.get("StmF") || identityName;
-      this.strf = dict.get("StrF") || identityName;
-      this.eff = dict.get("EFF") || this.stmf;
-    }
-  }
-
-  function buildObjectKey(num, gen, encryptionKey, isAes) {
+  function buildObjectKey(num, gen, encryptionKey, isAes = false) {
     var key = new Uint8Array(encryptionKey.length + 9),
         i,
         n;
@@ -18115,8 +17966,112 @@ var CipherTransformFactory = function CipherTransformFactoryClosure() {
     throw new _util.FormatError("Unknown crypto method");
   }
 
-  CipherTransformFactory.prototype = {
-    createCipherTransform: function CipherTransformFactory_createCipherTransform(num, gen) {
+  class CipherTransformFactory {
+    constructor(dict, fileId, password) {
+      var filter = dict.get("Filter");
+
+      if (!(0, _primitives.isName)(filter, "Standard")) {
+        throw new _util.FormatError("unknown encryption method");
+      }
+
+      this.dict = dict;
+      var algorithm = dict.get("V");
+
+      if (!Number.isInteger(algorithm) || algorithm !== 1 && algorithm !== 2 && algorithm !== 4 && algorithm !== 5) {
+        throw new _util.FormatError("unsupported encryption algorithm");
+      }
+
+      this.algorithm = algorithm;
+      var keyLength = dict.get("Length");
+
+      if (!keyLength) {
+        if (algorithm <= 3) {
+          keyLength = 40;
+        } else {
+          var cfDict = dict.get("CF");
+          var streamCryptoName = dict.get("StmF");
+
+          if ((0, _primitives.isDict)(cfDict) && (0, _primitives.isName)(streamCryptoName)) {
+            cfDict.suppressEncryption = true;
+            var handlerDict = cfDict.get(streamCryptoName.name);
+            keyLength = handlerDict && handlerDict.get("Length") || 128;
+
+            if (keyLength < 40) {
+              keyLength <<= 3;
+            }
+          }
+        }
+      }
+
+      if (!Number.isInteger(keyLength) || keyLength < 40 || keyLength % 8 !== 0) {
+        throw new _util.FormatError("invalid key length");
+      }
+
+      var ownerPassword = (0, _util.stringToBytes)(dict.get("O")).subarray(0, 32);
+      var userPassword = (0, _util.stringToBytes)(dict.get("U")).subarray(0, 32);
+      var flags = dict.get("P");
+      var revision = dict.get("R");
+      var encryptMetadata = (algorithm === 4 || algorithm === 5) && dict.get("EncryptMetadata") !== false;
+      this.encryptMetadata = encryptMetadata;
+      var fileIdBytes = (0, _util.stringToBytes)(fileId);
+      var passwordBytes;
+
+      if (password) {
+        if (revision === 6) {
+          try {
+            password = (0, _util.utf8StringToString)(password);
+          } catch (ex) {
+            (0, _util.warn)("CipherTransformFactory: " + "Unable to convert UTF8 encoded password.");
+          }
+        }
+
+        passwordBytes = (0, _util.stringToBytes)(password);
+      }
+
+      var encryptionKey;
+
+      if (algorithm !== 5) {
+        encryptionKey = prepareKeyData(fileIdBytes, passwordBytes, ownerPassword, userPassword, flags, revision, keyLength, encryptMetadata);
+      } else {
+        var ownerValidationSalt = (0, _util.stringToBytes)(dict.get("O")).subarray(32, 40);
+        var ownerKeySalt = (0, _util.stringToBytes)(dict.get("O")).subarray(40, 48);
+        var uBytes = (0, _util.stringToBytes)(dict.get("U")).subarray(0, 48);
+        var userValidationSalt = (0, _util.stringToBytes)(dict.get("U")).subarray(32, 40);
+        var userKeySalt = (0, _util.stringToBytes)(dict.get("U")).subarray(40, 48);
+        var ownerEncryption = (0, _util.stringToBytes)(dict.get("OE"));
+        var userEncryption = (0, _util.stringToBytes)(dict.get("UE"));
+        var perms = (0, _util.stringToBytes)(dict.get("Perms"));
+        encryptionKey = createEncryptionKey20(revision, passwordBytes, ownerPassword, ownerValidationSalt, ownerKeySalt, uBytes, userPassword, userValidationSalt, userKeySalt, ownerEncryption, userEncryption, perms);
+      }
+
+      if (!encryptionKey && !password) {
+        throw new _util.PasswordException("No password given", _util.PasswordResponses.NEED_PASSWORD);
+      } else if (!encryptionKey && password) {
+        var decodedPassword = decodeUserPassword(passwordBytes, ownerPassword, revision, keyLength);
+        encryptionKey = prepareKeyData(fileIdBytes, decodedPassword, ownerPassword, userPassword, flags, revision, keyLength, encryptMetadata);
+      }
+
+      if (!encryptionKey) {
+        throw new _util.PasswordException("Incorrect Password", _util.PasswordResponses.INCORRECT_PASSWORD);
+      }
+
+      this.encryptionKey = encryptionKey;
+
+      if (algorithm >= 4) {
+        var cf = dict.get("CF");
+
+        if ((0, _primitives.isDict)(cf)) {
+          cf.suppressEncryption = true;
+        }
+
+        this.cf = cf;
+        this.stmf = dict.get("StmF") || identityName;
+        this.strf = dict.get("StrF") || identityName;
+        this.eff = dict.get("EFF") || this.stmf;
+      }
+    }
+
+    createCipherTransform(num, gen) {
       if (this.algorithm === 4 || this.algorithm === 5) {
         return new CipherTransform(buildCipherConstructor(this.cf, this.stmf, num, gen, this.encryptionKey), buildCipherConstructor(this.cf, this.strf, num, gen, this.encryptionKey));
       }
@@ -18129,7 +18084,9 @@ var CipherTransformFactory = function CipherTransformFactoryClosure() {
 
       return new CipherTransform(cipherConstructor, cipherConstructor);
     }
-  };
+
+  }
+
   return CipherTransformFactory;
 }();
 
@@ -26608,21 +26565,21 @@ var BinaryCMapReader = function BinaryCMapReaderClosure() {
   var MAX_NUM_SIZE = 16;
   var MAX_ENCODED_NUM_SIZE = 19;
 
-  function BinaryCMapStream(data) {
-    this.buffer = data;
-    this.pos = 0;
-    this.end = data.length;
-    this.tmpBuf = new Uint8Array(MAX_ENCODED_NUM_SIZE);
-  }
+  class BinaryCMapStream {
+    constructor(data) {
+      this.buffer = data;
+      this.pos = 0;
+      this.end = data.length;
+      this.tmpBuf = new Uint8Array(MAX_ENCODED_NUM_SIZE);
+    }
 
-  BinaryCMapStream.prototype = {
     readByte() {
       if (this.pos >= this.end) {
         return -1;
       }
 
       return this.buffer[this.pos++];
-    },
+    }
 
     readNumber() {
       var n = 0;
@@ -26640,17 +26597,17 @@ var BinaryCMapReader = function BinaryCMapReaderClosure() {
       } while (!last);
 
       return n;
-    },
+    }
 
     readSigned() {
       var n = this.readNumber();
       return n & 1 ? ~(n >>> 1) : n >>> 1;
-    },
+    }
 
     readHex(num, size) {
       num.set(this.buffer.subarray(this.pos, this.pos + size + 1));
       this.pos += size + 1;
-    },
+    }
 
     readHexNumber(num, size) {
       var last;
@@ -26683,7 +26640,7 @@ var BinaryCMapReader = function BinaryCMapReaderClosure() {
         buffer >>= 8;
         bufferSize -= 8;
       }
-    },
+    }
 
     readHexSigned(num, size) {
       this.readHexNumber(num, size);
@@ -26694,7 +26651,7 @@ var BinaryCMapReader = function BinaryCMapReaderClosure() {
         c = (c & 1) << 8 | num[i];
         num[i] = c >> 1 ^ sign;
       }
-    },
+    }
 
     readString() {
       var len = this.readNumber();
@@ -26707,10 +26664,10 @@ var BinaryCMapReader = function BinaryCMapReaderClosure() {
       return s;
     }
 
-  };
+  }
 
-  function processBinaryCMap(data, cMap, extend) {
-    return new Promise(function (resolve, reject) {
+  class BinaryCMapReader {
+    async process(data, cMap, extend) {
       var stream = new BinaryCMapStream(data);
       var header = stream.readByte();
       cMap.vertical = !!(header & 1);
@@ -26744,7 +26701,7 @@ var BinaryCMapReader = function BinaryCMapReaderClosure() {
         var dataSize = b & 15;
 
         if (dataSize + 1 > MAX_NUM_SIZE) {
-          throw new Error("processBinaryCMap: Invalid dataSize.");
+          throw new Error("BinaryCMapReader.process: Invalid dataSize.");
         }
 
         var ucs2DataSize = 1;
@@ -26877,25 +26834,19 @@ var BinaryCMapReader = function BinaryCMapReaderClosure() {
             break;
 
           default:
-            reject(new Error("processBinaryCMap: Unknown type: " + type));
-            return;
+            throw new Error(`BinaryCMapReader.process - unknown type: ${type}`);
         }
       }
 
       if (useCMap) {
-        resolve(extend(useCMap));
-        return;
+        return extend(useCMap);
       }
 
-      resolve(cMap);
-    });
+      return cMap;
+    }
+
   }
 
-  function BinaryCMapReader() {}
-
-  BinaryCMapReader.prototype = {
-    process: processBinaryCMap
-  };
   return BinaryCMapReader;
 }();
 
@@ -27074,7 +27025,7 @@ var CMapFactory = function CMapFactoryClosure() {
     }
   }
 
-  function parseCMap(cMap, lexer, fetchBuiltInCMap, useCMap) {
+  async function parseCMap(cMap, lexer, fetchBuiltInCMap, useCMap) {
     var previous;
     var embeddedUseCMap;
 
@@ -27143,65 +27094,63 @@ var CMapFactory = function CMapFactoryClosure() {
       return extendCMap(cMap, fetchBuiltInCMap, useCMap);
     }
 
-    return Promise.resolve(cMap);
+    return cMap;
   }
 
-  function extendCMap(cMap, fetchBuiltInCMap, useCMap) {
-    return createBuiltInCMap(useCMap, fetchBuiltInCMap).then(function (newCMap) {
-      cMap.useCMap = newCMap;
+  async function extendCMap(cMap, fetchBuiltInCMap, useCMap) {
+    cMap.useCMap = await createBuiltInCMap(useCMap, fetchBuiltInCMap);
 
-      if (cMap.numCodespaceRanges === 0) {
-        var useCodespaceRanges = cMap.useCMap.codespaceRanges;
+    if (cMap.numCodespaceRanges === 0) {
+      var useCodespaceRanges = cMap.useCMap.codespaceRanges;
 
-        for (var i = 0; i < useCodespaceRanges.length; i++) {
-          cMap.codespaceRanges[i] = useCodespaceRanges[i].slice();
-        }
-
-        cMap.numCodespaceRanges = cMap.useCMap.numCodespaceRanges;
+      for (var i = 0; i < useCodespaceRanges.length; i++) {
+        cMap.codespaceRanges[i] = useCodespaceRanges[i].slice();
       }
 
-      cMap.useCMap.forEach(function (key, value) {
-        if (!cMap.contains(key)) {
-          cMap.mapOne(key, cMap.useCMap.lookup(key));
-        }
-      });
-      return cMap;
+      cMap.numCodespaceRanges = cMap.useCMap.numCodespaceRanges;
+    }
+
+    cMap.useCMap.forEach(function (key, value) {
+      if (!cMap.contains(key)) {
+        cMap.mapOne(key, cMap.useCMap.lookup(key));
+      }
     });
+    return cMap;
   }
 
-  function createBuiltInCMap(name, fetchBuiltInCMap) {
+  async function createBuiltInCMap(name, fetchBuiltInCMap) {
     if (name === "Identity-H") {
-      return Promise.resolve(new IdentityCMap(false, 2));
+      return new IdentityCMap(false, 2);
     } else if (name === "Identity-V") {
-      return Promise.resolve(new IdentityCMap(true, 2));
+      return new IdentityCMap(true, 2);
     }
 
     if (!BUILT_IN_CMAPS.includes(name)) {
-      return Promise.reject(new Error("Unknown CMap name: " + name));
+      throw new Error("Unknown CMap name: " + name);
     }
 
     if (!fetchBuiltInCMap) {
-      return Promise.reject(new Error("Built-in CMap parameters are not provided."));
+      throw new Error("Built-in CMap parameters are not provided.");
     }
 
-    return fetchBuiltInCMap(name).then(function (data) {
-      var cMapData = data.cMapData,
-          compressionType = data.compressionType;
-      var cMap = new CMap(true);
+    const {
+      cMapData,
+      compressionType
+    } = await fetchBuiltInCMap(name);
+    var cMap = new CMap(true);
 
-      if (compressionType === _util.CMapCompressionType.BINARY) {
-        return new BinaryCMapReader().process(cMapData, cMap, function (useCMap) {
-          return extendCMap(cMap, fetchBuiltInCMap, useCMap);
-        });
-      }
+    if (compressionType === _util.CMapCompressionType.BINARY) {
+      return new BinaryCMapReader().process(cMapData, cMap, useCMap => {
+        return extendCMap(cMap, fetchBuiltInCMap, useCMap);
+      });
+    }
 
-      if (compressionType === _util.CMapCompressionType.NONE) {
-        var lexer = new _parser.Lexer(new _stream.Stream(cMapData));
-        return parseCMap(cMap, lexer, fetchBuiltInCMap, null);
-      }
+    if (compressionType === _util.CMapCompressionType.NONE) {
+      var lexer = new _parser.Lexer(new _stream.Stream(cMapData));
+      return parseCMap(cMap, lexer, fetchBuiltInCMap, null);
+    }
 
-      return Promise.reject(new Error("TODO: Only BINARY/NONE CMap compression is currently supported."));
-    });
+    throw new Error("TODO: Only BINARY/NONE CMap compression is currently supported.");
   }
 
   return {
@@ -27213,15 +27162,13 @@ var CMapFactory = function CMapFactoryClosure() {
       if ((0, _primitives.isName)(encoding)) {
         return createBuiltInCMap(encoding.name, fetchBuiltInCMap);
       } else if ((0, _primitives.isStream)(encoding)) {
-        var cMap = new CMap();
-        var lexer = new _parser.Lexer(encoding);
-        return parseCMap(cMap, lexer, fetchBuiltInCMap, useCMap).then(function (parsedCMap) {
-          if (parsedCMap.isIdentityCMap) {
-            return createBuiltInCMap(parsedCMap.name, fetchBuiltInCMap);
-          }
+        const parsedCMap = await parseCMap(new CMap(), new _parser.Lexer(encoding), fetchBuiltInCMap, useCMap);
 
-          return parsedCMap;
-        });
+        if (parsedCMap.isIdentityCMap) {
+          return createBuiltInCMap(parsedCMap.name, fetchBuiltInCMap);
+        }
+
+        return parsedCMap;
       }
 
       throw new Error("Encoding required.");
@@ -32475,7 +32422,7 @@ __w_pdfjs_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _core_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __w_pdfjs_require__(7);
 
-var getGlyphsUnicode = (0,_core_utils_js__WEBPACK_IMPORTED_MODULE_0__.getArrayLookupTableFactory)(function () {
+const getGlyphsUnicode = (0,_core_utils_js__WEBPACK_IMPORTED_MODULE_0__.getArrayLookupTableFactory)(function () {
  return [
   "A",
   0x0041,
@@ -41123,7 +41070,7 @@ var getGlyphsUnicode = (0,_core_utils_js__WEBPACK_IMPORTED_MODULE_0__.getArrayLo
   0x2223
  ];
 });
-var getDingbatsGlyphsUnicode = (0,_core_utils_js__WEBPACK_IMPORTED_MODULE_0__.getArrayLookupTableFactory)(function () {
+const getDingbatsGlyphsUnicode = (0,_core_utils_js__WEBPACK_IMPORTED_MODULE_0__.getArrayLookupTableFactory)(function () {
  return [
   "space",
   0x0020,
@@ -42292,7 +42239,7 @@ __w_pdfjs_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _core_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __w_pdfjs_require__(7);
 
-var getSpecialPUASymbols = (0,_core_utils_js__WEBPACK_IMPORTED_MODULE_0__.getLookupTableFactory)(function (t) {
+const getSpecialPUASymbols = (0,_core_utils_js__WEBPACK_IMPORTED_MODULE_0__.getLookupTableFactory)(function (t) {
  t[63721] = 0x00a9;
  t[63193] = 0x00a9;
  t[63720] = 0x00ae;
@@ -42329,7 +42276,7 @@ function mapSpecialUnicodeValues(code) {
  return code;
 }
 function getUnicodeForGlyph(name, glyphsUnicodeMap) {
- var unicode = glyphsUnicodeMap[name];
+ let unicode = glyphsUnicodeMap[name];
  if (unicode !== undefined) {
   return unicode;
  }
@@ -42337,7 +42284,8 @@ function getUnicodeForGlyph(name, glyphsUnicodeMap) {
   return -1;
  }
  if (name[0] === "u") {
-  var nameLen = name.length, hexStr;
+  const nameLen = name.length;
+  let hexStr;
   if (nameLen === 7 && name[1] === "n" && name[2] === "i") {
    hexStr = name.substring(3);
   } else if (nameLen >= 5 && nameLen <= 7) {
@@ -42354,7 +42302,7 @@ function getUnicodeForGlyph(name, glyphsUnicodeMap) {
  }
  return -1;
 }
-var UnicodeRanges = [
+const UnicodeRanges = [
  {
   begin: 0x0000,
   end: 0x007f
@@ -42849,8 +42797,8 @@ var UnicodeRanges = [
  }
 ];
 function getUnicodeRangeFor(value) {
- for (var i = 0, ii = UnicodeRanges.length; i < ii; i++) {
-  var range = UnicodeRanges[i];
+ for (let i = 0, ii = UnicodeRanges.length; i < ii; i++) {
+  const range = UnicodeRanges[i];
   if (value >= range.begin && value < range.end) {
    return i;
   }
@@ -42858,7 +42806,7 @@ function getUnicodeRangeFor(value) {
  return -1;
 }
 function isRTLRangeFor(value) {
- var range = UnicodeRanges[13];
+ let range = UnicodeRanges[13];
  if (value >= range.begin && value < range.end) {
   return true;
  }
@@ -42868,7 +42816,7 @@ function isRTLRangeFor(value) {
  }
  return false;
 }
-var getNormalizedUnicodes = (0,_core_utils_js__WEBPACK_IMPORTED_MODULE_0__.getArrayLookupTableFactory)(function () {
+const getNormalizedUnicodes = (0,_core_utils_js__WEBPACK_IMPORTED_MODULE_0__.getArrayLookupTableFactory)(function () {
  return [
   "\u00A8",
   "\u0020\u0308",
@@ -45627,15 +45575,15 @@ var getNormalizedUnicodes = (0,_core_utils_js__WEBPACK_IMPORTED_MODULE_0__.getAr
  ];
 });
 function reverseIfRtl(chars) {
- var charsLength = chars.length;
+ const charsLength = chars.length;
  if (charsLength <= 1 || !isRTLRangeFor(chars.charCodeAt(0))) {
   return chars;
  }
- var s = "";
- for (var ii = charsLength - 1; ii >= 0; ii--) {
-  s += chars[ii];
+ const buf = [];
+ for (let ii = charsLength - 1; ii >= 0; ii--) {
+  buf.push(chars[ii]);
  }
- return s;
+ return buf.join("");
 }
 
 
@@ -48917,26 +48865,28 @@ function isPDFFunction(v) {
 var PostScriptStack = function PostScriptStackClosure() {
   var MAX_STACK_SIZE = 100;
 
-  function PostScriptStack(initialStack) {
-    this.stack = !initialStack ? [] : Array.prototype.slice.call(initialStack, 0);
-  }
+  class PostScriptStack {
+    constructor(initialStack) {
+      this.stack = !initialStack ? [] : Array.prototype.slice.call(initialStack, 0);
+    }
 
-  PostScriptStack.prototype = {
-    push: function PostScriptStack_push(value) {
+    push(value) {
       if (this.stack.length >= MAX_STACK_SIZE) {
         throw new Error("PostScript function stack overflow.");
       }
 
       this.stack.push(value);
-    },
-    pop: function PostScriptStack_pop() {
+    }
+
+    pop() {
       if (this.stack.length <= 0) {
         throw new Error("PostScript function stack underflow.");
       }
 
       return this.stack.pop();
-    },
-    copy: function PostScriptStack_copy(n) {
+    }
+
+    copy(n) {
       if (this.stack.length + n >= MAX_STACK_SIZE) {
         throw new Error("PostScript function stack overflow.");
       }
@@ -48946,11 +48896,13 @@ var PostScriptStack = function PostScriptStackClosure() {
       for (var i = stack.length - n, j = n - 1; j >= 0; j--, i++) {
         stack.push(stack[i]);
       }
-    },
-    index: function PostScriptStack_index(n) {
+    }
+
+    index(n) {
       this.push(this.stack[this.stack.length - n - 1]);
-    },
-    roll: function PostScriptStack_roll(n, p) {
+    }
+
+    roll(n, p) {
       var stack = this.stack;
       var l = stack.length - n;
       var r = stack.length - 1,
@@ -48977,406 +48929,415 @@ var PostScriptStack = function PostScriptStackClosure() {
         stack[j] = t;
       }
     }
-  };
+
+  }
+
   return PostScriptStack;
 }();
 
-var PostScriptEvaluator = function PostScriptEvaluatorClosure() {
-  function PostScriptEvaluator(operators) {
+class PostScriptEvaluator {
+  constructor(operators) {
     this.operators = operators;
   }
 
-  PostScriptEvaluator.prototype = {
-    execute: function PostScriptEvaluator_execute(initialStack) {
-      var stack = new PostScriptStack(initialStack);
-      var counter = 0;
-      var operators = this.operators;
-      var length = operators.length;
-      var operator, a, b;
+  execute(initialStack) {
+    var stack = new PostScriptStack(initialStack);
+    var counter = 0;
+    var operators = this.operators;
+    var length = operators.length;
+    var operator, a, b;
 
-      while (counter < length) {
-        operator = operators[counter++];
+    while (counter < length) {
+      operator = operators[counter++];
 
-        if (typeof operator === "number") {
-          stack.push(operator);
-          continue;
-        }
-
-        switch (operator) {
-          case "jz":
-            b = stack.pop();
-            a = stack.pop();
-
-            if (!a) {
-              counter = b;
-            }
-
-            break;
-
-          case "j":
-            a = stack.pop();
-            counter = a;
-            break;
-
-          case "abs":
-            a = stack.pop();
-            stack.push(Math.abs(a));
-            break;
-
-          case "add":
-            b = stack.pop();
-            a = stack.pop();
-            stack.push(a + b);
-            break;
-
-          case "and":
-            b = stack.pop();
-            a = stack.pop();
-
-            if ((0, _util.isBool)(a) && (0, _util.isBool)(b)) {
-              stack.push(a && b);
-            } else {
-              stack.push(a & b);
-            }
-
-            break;
-
-          case "atan":
-            a = stack.pop();
-            stack.push(Math.atan(a));
-            break;
-
-          case "bitshift":
-            b = stack.pop();
-            a = stack.pop();
-
-            if (a > 0) {
-              stack.push(a << b);
-            } else {
-              stack.push(a >> b);
-            }
-
-            break;
-
-          case "ceiling":
-            a = stack.pop();
-            stack.push(Math.ceil(a));
-            break;
-
-          case "copy":
-            a = stack.pop();
-            stack.copy(a);
-            break;
-
-          case "cos":
-            a = stack.pop();
-            stack.push(Math.cos(a));
-            break;
-
-          case "cvi":
-            a = stack.pop() | 0;
-            stack.push(a);
-            break;
-
-          case "cvr":
-            break;
-
-          case "div":
-            b = stack.pop();
-            a = stack.pop();
-            stack.push(a / b);
-            break;
-
-          case "dup":
-            stack.copy(1);
-            break;
-
-          case "eq":
-            b = stack.pop();
-            a = stack.pop();
-            stack.push(a === b);
-            break;
-
-          case "exch":
-            stack.roll(2, 1);
-            break;
-
-          case "exp":
-            b = stack.pop();
-            a = stack.pop();
-            stack.push(a ** b);
-            break;
-
-          case "false":
-            stack.push(false);
-            break;
-
-          case "floor":
-            a = stack.pop();
-            stack.push(Math.floor(a));
-            break;
-
-          case "ge":
-            b = stack.pop();
-            a = stack.pop();
-            stack.push(a >= b);
-            break;
-
-          case "gt":
-            b = stack.pop();
-            a = stack.pop();
-            stack.push(a > b);
-            break;
-
-          case "idiv":
-            b = stack.pop();
-            a = stack.pop();
-            stack.push(a / b | 0);
-            break;
-
-          case "index":
-            a = stack.pop();
-            stack.index(a);
-            break;
-
-          case "le":
-            b = stack.pop();
-            a = stack.pop();
-            stack.push(a <= b);
-            break;
-
-          case "ln":
-            a = stack.pop();
-            stack.push(Math.log(a));
-            break;
-
-          case "log":
-            a = stack.pop();
-            stack.push(Math.log(a) / Math.LN10);
-            break;
-
-          case "lt":
-            b = stack.pop();
-            a = stack.pop();
-            stack.push(a < b);
-            break;
-
-          case "mod":
-            b = stack.pop();
-            a = stack.pop();
-            stack.push(a % b);
-            break;
-
-          case "mul":
-            b = stack.pop();
-            a = stack.pop();
-            stack.push(a * b);
-            break;
-
-          case "ne":
-            b = stack.pop();
-            a = stack.pop();
-            stack.push(a !== b);
-            break;
-
-          case "neg":
-            a = stack.pop();
-            stack.push(-a);
-            break;
-
-          case "not":
-            a = stack.pop();
-
-            if ((0, _util.isBool)(a)) {
-              stack.push(!a);
-            } else {
-              stack.push(~a);
-            }
-
-            break;
-
-          case "or":
-            b = stack.pop();
-            a = stack.pop();
-
-            if ((0, _util.isBool)(a) && (0, _util.isBool)(b)) {
-              stack.push(a || b);
-            } else {
-              stack.push(a | b);
-            }
-
-            break;
-
-          case "pop":
-            stack.pop();
-            break;
-
-          case "roll":
-            b = stack.pop();
-            a = stack.pop();
-            stack.roll(a, b);
-            break;
-
-          case "round":
-            a = stack.pop();
-            stack.push(Math.round(a));
-            break;
-
-          case "sin":
-            a = stack.pop();
-            stack.push(Math.sin(a));
-            break;
-
-          case "sqrt":
-            a = stack.pop();
-            stack.push(Math.sqrt(a));
-            break;
-
-          case "sub":
-            b = stack.pop();
-            a = stack.pop();
-            stack.push(a - b);
-            break;
-
-          case "true":
-            stack.push(true);
-            break;
-
-          case "truncate":
-            a = stack.pop();
-            a = a < 0 ? Math.ceil(a) : Math.floor(a);
-            stack.push(a);
-            break;
-
-          case "xor":
-            b = stack.pop();
-            a = stack.pop();
-
-            if ((0, _util.isBool)(a) && (0, _util.isBool)(b)) {
-              stack.push(a !== b);
-            } else {
-              stack.push(a ^ b);
-            }
-
-            break;
-
-          default:
-            throw new _util.FormatError(`Unknown operator ${operator}`);
-        }
+      if (typeof operator === "number") {
+        stack.push(operator);
+        continue;
       }
 
-      return stack.stack;
+      switch (operator) {
+        case "jz":
+          b = stack.pop();
+          a = stack.pop();
+
+          if (!a) {
+            counter = b;
+          }
+
+          break;
+
+        case "j":
+          a = stack.pop();
+          counter = a;
+          break;
+
+        case "abs":
+          a = stack.pop();
+          stack.push(Math.abs(a));
+          break;
+
+        case "add":
+          b = stack.pop();
+          a = stack.pop();
+          stack.push(a + b);
+          break;
+
+        case "and":
+          b = stack.pop();
+          a = stack.pop();
+
+          if ((0, _util.isBool)(a) && (0, _util.isBool)(b)) {
+            stack.push(a && b);
+          } else {
+            stack.push(a & b);
+          }
+
+          break;
+
+        case "atan":
+          a = stack.pop();
+          stack.push(Math.atan(a));
+          break;
+
+        case "bitshift":
+          b = stack.pop();
+          a = stack.pop();
+
+          if (a > 0) {
+            stack.push(a << b);
+          } else {
+            stack.push(a >> b);
+          }
+
+          break;
+
+        case "ceiling":
+          a = stack.pop();
+          stack.push(Math.ceil(a));
+          break;
+
+        case "copy":
+          a = stack.pop();
+          stack.copy(a);
+          break;
+
+        case "cos":
+          a = stack.pop();
+          stack.push(Math.cos(a));
+          break;
+
+        case "cvi":
+          a = stack.pop() | 0;
+          stack.push(a);
+          break;
+
+        case "cvr":
+          break;
+
+        case "div":
+          b = stack.pop();
+          a = stack.pop();
+          stack.push(a / b);
+          break;
+
+        case "dup":
+          stack.copy(1);
+          break;
+
+        case "eq":
+          b = stack.pop();
+          a = stack.pop();
+          stack.push(a === b);
+          break;
+
+        case "exch":
+          stack.roll(2, 1);
+          break;
+
+        case "exp":
+          b = stack.pop();
+          a = stack.pop();
+          stack.push(a ** b);
+          break;
+
+        case "false":
+          stack.push(false);
+          break;
+
+        case "floor":
+          a = stack.pop();
+          stack.push(Math.floor(a));
+          break;
+
+        case "ge":
+          b = stack.pop();
+          a = stack.pop();
+          stack.push(a >= b);
+          break;
+
+        case "gt":
+          b = stack.pop();
+          a = stack.pop();
+          stack.push(a > b);
+          break;
+
+        case "idiv":
+          b = stack.pop();
+          a = stack.pop();
+          stack.push(a / b | 0);
+          break;
+
+        case "index":
+          a = stack.pop();
+          stack.index(a);
+          break;
+
+        case "le":
+          b = stack.pop();
+          a = stack.pop();
+          stack.push(a <= b);
+          break;
+
+        case "ln":
+          a = stack.pop();
+          stack.push(Math.log(a));
+          break;
+
+        case "log":
+          a = stack.pop();
+          stack.push(Math.log(a) / Math.LN10);
+          break;
+
+        case "lt":
+          b = stack.pop();
+          a = stack.pop();
+          stack.push(a < b);
+          break;
+
+        case "mod":
+          b = stack.pop();
+          a = stack.pop();
+          stack.push(a % b);
+          break;
+
+        case "mul":
+          b = stack.pop();
+          a = stack.pop();
+          stack.push(a * b);
+          break;
+
+        case "ne":
+          b = stack.pop();
+          a = stack.pop();
+          stack.push(a !== b);
+          break;
+
+        case "neg":
+          a = stack.pop();
+          stack.push(-a);
+          break;
+
+        case "not":
+          a = stack.pop();
+
+          if ((0, _util.isBool)(a)) {
+            stack.push(!a);
+          } else {
+            stack.push(~a);
+          }
+
+          break;
+
+        case "or":
+          b = stack.pop();
+          a = stack.pop();
+
+          if ((0, _util.isBool)(a) && (0, _util.isBool)(b)) {
+            stack.push(a || b);
+          } else {
+            stack.push(a | b);
+          }
+
+          break;
+
+        case "pop":
+          stack.pop();
+          break;
+
+        case "roll":
+          b = stack.pop();
+          a = stack.pop();
+          stack.roll(a, b);
+          break;
+
+        case "round":
+          a = stack.pop();
+          stack.push(Math.round(a));
+          break;
+
+        case "sin":
+          a = stack.pop();
+          stack.push(Math.sin(a));
+          break;
+
+        case "sqrt":
+          a = stack.pop();
+          stack.push(Math.sqrt(a));
+          break;
+
+        case "sub":
+          b = stack.pop();
+          a = stack.pop();
+          stack.push(a - b);
+          break;
+
+        case "true":
+          stack.push(true);
+          break;
+
+        case "truncate":
+          a = stack.pop();
+          a = a < 0 ? Math.ceil(a) : Math.floor(a);
+          stack.push(a);
+          break;
+
+        case "xor":
+          b = stack.pop();
+          a = stack.pop();
+
+          if ((0, _util.isBool)(a) && (0, _util.isBool)(b)) {
+            stack.push(a !== b);
+          } else {
+            stack.push(a ^ b);
+          }
+
+          break;
+
+        default:
+          throw new _util.FormatError(`Unknown operator ${operator}`);
+      }
     }
-  };
-  return PostScriptEvaluator;
-}();
+
+    return stack.stack;
+  }
+
+}
 
 exports.PostScriptEvaluator = PostScriptEvaluator;
 
 var PostScriptCompiler = function PostScriptCompilerClosure() {
-  function AstNode(type) {
-    this.type = type;
+  class AstNode {
+    constructor(type) {
+      this.type = type;
+    }
+
+    visit(visitor) {
+      (0, _util.unreachable)("abstract method");
+    }
+
   }
 
-  AstNode.prototype.visit = function (visitor) {
-    (0, _util.unreachable)("abstract method");
-  };
+  class AstArgument extends AstNode {
+    constructor(index, min, max) {
+      super("args");
+      this.index = index;
+      this.min = min;
+      this.max = max;
+    }
 
-  function AstArgument(index, min, max) {
-    AstNode.call(this, "args");
-    this.index = index;
-    this.min = min;
-    this.max = max;
+    visit(visitor) {
+      visitor.visitArgument(this);
+    }
+
   }
 
-  AstArgument.prototype = Object.create(AstNode.prototype);
+  class AstLiteral extends AstNode {
+    constructor(number) {
+      super("literal");
+      this.number = number;
+      this.min = number;
+      this.max = number;
+    }
 
-  AstArgument.prototype.visit = function (visitor) {
-    visitor.visitArgument(this);
-  };
+    visit(visitor) {
+      visitor.visitLiteral(this);
+    }
 
-  function AstLiteral(number) {
-    AstNode.call(this, "literal");
-    this.number = number;
-    this.min = number;
-    this.max = number;
   }
 
-  AstLiteral.prototype = Object.create(AstNode.prototype);
+  class AstBinaryOperation extends AstNode {
+    constructor(op, arg1, arg2, min, max) {
+      super("binary");
+      this.op = op;
+      this.arg1 = arg1;
+      this.arg2 = arg2;
+      this.min = min;
+      this.max = max;
+    }
 
-  AstLiteral.prototype.visit = function (visitor) {
-    visitor.visitLiteral(this);
-  };
+    visit(visitor) {
+      visitor.visitBinaryOperation(this);
+    }
 
-  function AstBinaryOperation(op, arg1, arg2, min, max) {
-    AstNode.call(this, "binary");
-    this.op = op;
-    this.arg1 = arg1;
-    this.arg2 = arg2;
-    this.min = min;
-    this.max = max;
   }
 
-  AstBinaryOperation.prototype = Object.create(AstNode.prototype);
+  class AstMin extends AstNode {
+    constructor(arg, max) {
+      super("max");
+      this.arg = arg;
+      this.min = arg.min;
+      this.max = max;
+    }
 
-  AstBinaryOperation.prototype.visit = function (visitor) {
-    visitor.visitBinaryOperation(this);
-  };
+    visit(visitor) {
+      visitor.visitMin(this);
+    }
 
-  function AstMin(arg, max) {
-    AstNode.call(this, "max");
-    this.arg = arg;
-    this.min = arg.min;
-    this.max = max;
   }
 
-  AstMin.prototype = Object.create(AstNode.prototype);
+  class AstVariable extends AstNode {
+    constructor(index, min, max) {
+      super("var");
+      this.index = index;
+      this.min = min;
+      this.max = max;
+    }
 
-  AstMin.prototype.visit = function (visitor) {
-    visitor.visitMin(this);
-  };
+    visit(visitor) {
+      visitor.visitVariable(this);
+    }
 
-  function AstVariable(index, min, max) {
-    AstNode.call(this, "var");
-    this.index = index;
-    this.min = min;
-    this.max = max;
   }
 
-  AstVariable.prototype = Object.create(AstNode.prototype);
+  class AstVariableDefinition extends AstNode {
+    constructor(variable, arg) {
+      super("definition");
+      this.variable = variable;
+      this.arg = arg;
+    }
 
-  AstVariable.prototype.visit = function (visitor) {
-    visitor.visitVariable(this);
-  };
+    visit(visitor) {
+      visitor.visitVariableDefinition(this);
+    }
 
-  function AstVariableDefinition(variable, arg) {
-    AstNode.call(this, "definition");
-    this.variable = variable;
-    this.arg = arg;
   }
 
-  AstVariableDefinition.prototype = Object.create(AstNode.prototype);
+  class ExpressionBuilderVisitor {
+    constructor() {
+      this.parts = [];
+    }
 
-  AstVariableDefinition.prototype.visit = function (visitor) {
-    visitor.visitVariableDefinition(this);
-  };
-
-  function ExpressionBuilderVisitor() {
-    this.parts = [];
-  }
-
-  ExpressionBuilderVisitor.prototype = {
     visitArgument(arg) {
       this.parts.push("Math.max(", arg.min, ", Math.min(", arg.max, ", src[srcOffset + ", arg.index, "]))");
-    },
+    }
 
     visitVariable(variable) {
       this.parts.push("v", variable.index);
-    },
+    }
 
     visitLiteral(literal) {
       this.parts.push(literal.number);
-    },
+    }
 
     visitBinaryOperation(operation) {
       this.parts.push("(");
@@ -49384,7 +49345,7 @@ var PostScriptCompiler = function PostScriptCompilerClosure() {
       this.parts.push(" ", operation.op, " ");
       operation.arg2.visit(this);
       this.parts.push(")");
-    },
+    }
 
     visitVariableDefinition(definition) {
       this.parts.push("var ");
@@ -49392,19 +49353,19 @@ var PostScriptCompiler = function PostScriptCompilerClosure() {
       this.parts.push(" = ");
       definition.arg.visit(this);
       this.parts.push(";");
-    },
+    }
 
     visitMin(max) {
       this.parts.push("Math.min(");
       max.arg.visit(this);
       this.parts.push(", ", max.max, ")");
-    },
+    }
 
     toString() {
       return this.parts.join("");
     }
 
-  };
+  }
 
   function buildAddOperation(num1, num2) {
     if (num2.type === "literal" && num2.number === 0) {
@@ -49472,10 +49433,8 @@ var PostScriptCompiler = function PostScriptCompilerClosure() {
     return new AstMin(num1, max);
   }
 
-  function PostScriptCompiler() {}
-
-  PostScriptCompiler.prototype = {
-    compile: function PostScriptCompiler_compile(code, domain, range) {
+  class PostScriptCompiler {
+    compile(code, domain, range) {
       var stack = [];
       var instructions = [];
       var inputSize = domain.length >> 1,
@@ -49673,7 +49632,9 @@ var PostScriptCompiler = function PostScriptCompilerClosure() {
       });
       return result.join("\n");
     }
-  };
+
+  }
+
   return PostScriptCompiler;
 }();
 
@@ -50256,7 +50217,7 @@ exports.getMetrics = void 0;
 
 var _core_utils = __w_pdfjs_require__(7);
 
-var getMetrics = (0, _core_utils.getLookupTableFactory)(function (t) {
+const getMetrics = (0, _core_utils.getLookupTableFactory)(function (t) {
   t.Courier = 600;
   t["Courier-Bold"] = 600;
   t["Courier-BoldOblique"] = 600;
@@ -55655,10 +55616,29 @@ class PDFWorkerStreamRangeReader {
 /******/ 	})();
 /******/ 	
 /************************************************************************/
-/******/ 	// module exports must be returned from runtime so entry inlining is disabled
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	return __w_pdfjs_require__(0);
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+var exports = __webpack_exports__;
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+Object.defineProperty(exports, "WorkerMessageHandler", ({
+  enumerable: true,
+  get: function () {
+    return _worker.WorkerMessageHandler;
+  }
+}));
+
+var _worker = __w_pdfjs_require__(1);
+
+const pdfjsVersion = '2.8.270';
+const pdfjsBuild = 'ea71d61aa';
+})();
+
+/******/ 	return __webpack_exports__;
 /******/ })()
 ;
 });

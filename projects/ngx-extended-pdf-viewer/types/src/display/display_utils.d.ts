@@ -117,6 +117,7 @@ export class DOMSVGFactory {
  */
 export function getFilenameFromUrl(url: string): string;
 export function isFetchSupported(): boolean;
+export function isPdfFile(filename: any): boolean;
 export function isValidFetchUrl(url: any, baseUrl: any): boolean;
 export namespace LinkTarget {
     const NONE: number;

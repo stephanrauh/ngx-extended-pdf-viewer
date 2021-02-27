@@ -260,3 +260,4 @@
 - 8.1.0 #426 fix full-screen mode on Safari and iPad. Note this is a fairly radical solution which might cause problems with Angular.
 - 8.1.1 #649 fixed the Italian translations (and probably many other translations, too)
 - 8.1.2 #650 + #657 restored compatibility to MacOS Mojave and iOS 13; #649 fixed the Italian translations (and probably many other translations, too)
+- 8.2.0 #650 compatibility to Safari 12.1 and 11.1; fixed the automatic height calculation if the height attribute is omitted or given as a percentage and the CSS framework translates that to "0px"
