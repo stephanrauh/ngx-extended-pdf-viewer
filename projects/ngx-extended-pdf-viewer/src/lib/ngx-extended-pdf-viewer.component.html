@@ -82,7 +82,7 @@
                   | async}}
 
             </div>
-            <div id="viewer" class="pdfViewer" [style.backgroundColor]="backgroundColor">
+            <div id="viewer" class="pdfViewer" [style.backgroundColor]="backgroundColor" (dblclick)="zoomToPageWidth($event)">
             </div>
           </div>
 

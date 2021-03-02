@@ -158,6 +158,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Output()
   public currentZoomFactor = new EventEmitter<number>();
 
+  /** This field stores the previous zoom level if the page is enlarged with a double-tap or double-click */
+  private previousZoom: string | number | undefined;
+
+
   @Input()
   public enablePrint = true;
 
@@ -1990,6 +1994,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
               */
             });
         });
+    }
+  }
+
+  public zoomToPageWidth(event: MouseEvent): void {
+    if (this.zoom !== 'page-width') {
+      this.previousZoom = this.zoom;
+      this.zoom = 'page-width';
+      this.setZoom();
+    } else {
+      this.zoom = this.previousZoom;
+      this.setZoom();
     }
   }
 }
