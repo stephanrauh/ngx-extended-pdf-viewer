@@ -113,7 +113,7 @@ The detailed instructions for JHipster and Angular 2, 4, and 5 are available [on
   "scripts": []
   ```
 
-  You will also need to add those lines to your componenent : 
+  You will also need to add those lines to your component : 
   - An import statement
   ```ts
   import { pdfDefaultOptions } from 'ngx-extended-pdf-viewer';
