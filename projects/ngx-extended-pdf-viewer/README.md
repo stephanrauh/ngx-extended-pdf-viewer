@@ -107,10 +107,20 @@ The detailed instructions for JHipster and Angular 2, 4, and 5 are available [on
     {
       "glob": "**/*",
       "input": "node_modules/ngx-extended-pdf-viewer/bleeding-edge/",
-      "output": "/assets/"
+      "output": "/bleeding-edge/"
     }
   ],
   "scripts": []
+  ```
+
+  You will also need to add those lines to your componenent : 
+  - An import statement
+  ```ts
+  import { pdfDefaultOptions } from 'ngx-extended-pdf-viewer';
+  ```
+  - A line in your constructor
+  ```ts 
+  pdfDefaultOptions.assetsFolder = 'bleeding-edge';
   ```
 
   _Hint:_ There are two ways to define the language files needed for the labels of the buttons and screen elements. The second method is described below in the "internationalization" section.
