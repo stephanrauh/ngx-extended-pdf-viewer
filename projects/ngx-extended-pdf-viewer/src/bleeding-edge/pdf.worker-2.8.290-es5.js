@@ -192,7 +192,7 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
       var WorkerTasks = [];
       var verbosity = (0, _util.getVerbosityLevel)();
       var apiVersion = docParams.apiVersion;
-      var workerVersion = '2.8.270';
+      var workerVersion = '2.8.290';
 
       if (apiVersion !== workerVersion) {
         throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -15448,7 +15448,11 @@ var Catalog = /*#__PURE__*/function () {
             }
 
           default:
-            (0, _util.warn)("parseDestDictionary: unsupported action type \"".concat(actionName, "\"."));
+            if (actionName === "JavaScript" || actionName === "ResetForm" || actionName === "SubmitForm") {
+              break;
+            }
+
+            (0, _util.warn)("parseDestDictionary - unsupported action: \"".concat(actionName, "\"."));
             break;
         }
       } else if (destDict.has("Dest")) {
@@ -31325,6 +31329,37 @@ var AnnotationFactory = /*#__PURE__*/function () {
 
 exports.AnnotationFactory = AnnotationFactory;
 
+function getRgbColor(color) {
+  var rgbColor = new Uint8ClampedArray(3);
+
+  if (!Array.isArray(color)) {
+    return rgbColor;
+  }
+
+  switch (color.length) {
+    case 0:
+      return null;
+
+    case 1:
+      _colorspace.ColorSpace.singletons.gray.getRgbItem(color, 0, rgbColor, 0);
+
+      return rgbColor;
+
+    case 3:
+      _colorspace.ColorSpace.singletons.rgb.getRgbItem(color, 0, rgbColor, 0);
+
+      return rgbColor;
+
+    case 4:
+      _colorspace.ColorSpace.singletons.cmyk.getRgbItem(color, 0, rgbColor, 0);
+
+      return rgbColor;
+
+    default:
+      return rgbColor;
+  }
+}
+
 function getQuadPoints(dict, rect) {
   if (!dict.has("QuadPoints")) {
     return null;
@@ -31521,40 +31556,7 @@ var Annotation = /*#__PURE__*/function () {
   }, {
     key: "setColor",
     value: function setColor(color) {
-      var rgbColor = new Uint8ClampedArray(3);
-
-      if (!Array.isArray(color)) {
-        this.color = rgbColor;
-        return;
-      }
-
-      switch (color.length) {
-        case 0:
-          this.color = null;
-          break;
-
-        case 1:
-          _colorspace.ColorSpace.singletons.gray.getRgbItem(color, 0, rgbColor, 0);
-
-          this.color = rgbColor;
-          break;
-
-        case 3:
-          _colorspace.ColorSpace.singletons.rgb.getRgbItem(color, 0, rgbColor, 0);
-
-          this.color = rgbColor;
-          break;
-
-        case 4:
-          _colorspace.ColorSpace.singletons.cmyk.getRgbItem(color, 0, rgbColor, 0);
-
-          this.color = rgbColor;
-          break;
-
-        default:
-          this.color = rgbColor;
-          break;
-      }
+      this.color = getRgbColor(color);
     }
   }, {
     key: "setBorderStyle",
@@ -31946,7 +31948,25 @@ var MarkupAnnotation = /*#__PURE__*/function (_Annotation) {
         buffer.push("".concat(fillColor[0], " ").concat(fillColor[1], " ").concat(fillColor[2], " rg"));
       }
 
-      var _iterator3 = _createForOfIteratorHelper(this.data.quadPoints),
+      var pointsArray = this.data.quadPoints;
+
+      if (!pointsArray) {
+        pointsArray = [[{
+          x: this.rectangle[0],
+          y: this.rectangle[3]
+        }, {
+          x: this.rectangle[2],
+          y: this.rectangle[3]
+        }, {
+          x: this.rectangle[0],
+          y: this.rectangle[1]
+        }, {
+          x: this.rectangle[2],
+          y: this.rectangle[1]
+        }]];
+      }
+
+      var _iterator3 = _createForOfIteratorHelper(pointsArray),
           _step3;
 
       try {
@@ -33482,7 +33502,28 @@ var LineAnnotation = /*#__PURE__*/function (_MarkupAnnotation3) {
 
     _this13 = _super10.call(this, parameters);
     _this13.data.annotationType = _util.AnnotationType.LINE;
-    _this13.data.lineCoordinates = _util.Util.normalizeRect(parameters.dict.getArray("L"));
+    var lineCoordinates = parameters.dict.getArray("L");
+    _this13.data.lineCoordinates = _util.Util.normalizeRect(lineCoordinates);
+
+    if (!_this13.appearance) {
+      var strokeColor = _this13.color ? Array.from(_this13.color).map(function (c) {
+        return c / 255;
+      }) : [0, 0, 0];
+      var borderWidth = _this13.borderStyle.width;
+
+      _this13._setDefaultAppearance({
+        xref: parameters.xref,
+        extra: "".concat(borderWidth, " w"),
+        strokeColor: strokeColor,
+        pointsCallback: function pointsCallback(buffer, points) {
+          buffer.push("".concat(lineCoordinates[0], " ").concat(lineCoordinates[1], " m"));
+          buffer.push("".concat(lineCoordinates[2], " ").concat(lineCoordinates[3], " l"));
+          buffer.push("S");
+          return [points[0].x - borderWidth, points[1].x + borderWidth, points[3].y - borderWidth, points[1].y + borderWidth];
+        }
+      });
+    }
+
     return _this13;
   }
 
@@ -33501,6 +33542,44 @@ var SquareAnnotation = /*#__PURE__*/function (_MarkupAnnotation4) {
 
     _this14 = _super11.call(this, parameters);
     _this14.data.annotationType = _util.AnnotationType.SQUARE;
+
+    if (!_this14.appearance) {
+      var strokeColor = _this14.color ? Array.from(_this14.color).map(function (c) {
+        return c / 255;
+      }) : [0, 0, 0];
+      var fillColor = null;
+      var interiorColor = parameters.dict.getArray("IC");
+
+      if (interiorColor) {
+        interiorColor = getRgbColor(interiorColor);
+        fillColor = interiorColor ? Array.from(interiorColor).map(function (c) {
+          return c / 255;
+        }) : null;
+      }
+
+      _this14._setDefaultAppearance({
+        xref: parameters.xref,
+        extra: "".concat(_this14.borderStyle.width, " w"),
+        strokeColor: strokeColor,
+        fillColor: fillColor,
+        pointsCallback: function pointsCallback(buffer, points) {
+          var x = points[2].x + _this14.borderStyle.width / 2;
+          var y = points[2].y + _this14.borderStyle.width / 2;
+          var width = points[3].x - points[2].x - _this14.borderStyle.width;
+          var height = points[1].y - points[3].y - _this14.borderStyle.width;
+          buffer.push("".concat(x, " ").concat(y, " ").concat(width, " ").concat(height, " re"));
+
+          if (fillColor) {
+            buffer.push("B");
+          } else {
+            buffer.push("S");
+          }
+
+          return [points[0].x, points[1].x, points[3].y, points[1].y];
+        }
+      });
+    }
+
     return _this14;
   }
 
@@ -33519,6 +33598,55 @@ var CircleAnnotation = /*#__PURE__*/function (_MarkupAnnotation5) {
 
     _this15 = _super12.call(this, parameters);
     _this15.data.annotationType = _util.AnnotationType.CIRCLE;
+
+    if (!_this15.appearance) {
+      var strokeColor = _this15.color ? Array.from(_this15.color).map(function (c) {
+        return c / 255;
+      }) : [0, 0, 0];
+      var fillColor = null;
+      var interiorColor = parameters.dict.getArray("IC");
+
+      if (interiorColor) {
+        interiorColor = getRgbColor(interiorColor);
+        fillColor = interiorColor ? Array.from(interiorColor).map(function (c) {
+          return c / 255;
+        }) : null;
+      }
+
+      var controlPointsDistance = 4 / 3 * Math.tan(Math.PI / (2 * 4));
+
+      _this15._setDefaultAppearance({
+        xref: parameters.xref,
+        extra: "".concat(_this15.borderStyle.width, " w"),
+        strokeColor: strokeColor,
+        fillColor: fillColor,
+        pointsCallback: function pointsCallback(buffer, points) {
+          var x0 = points[0].x + _this15.borderStyle.width / 2;
+          var y0 = points[0].y - _this15.borderStyle.width / 2;
+          var x1 = points[3].x - _this15.borderStyle.width / 2;
+          var y1 = points[3].y + _this15.borderStyle.width / 2;
+          var xMid = x0 + (x1 - x0) / 2;
+          var yMid = y0 + (y1 - y0) / 2;
+          var xOffset = (x1 - x0) / 2 * controlPointsDistance;
+          var yOffset = (y1 - y0) / 2 * controlPointsDistance;
+          buffer.push("".concat(xMid, " ").concat(y1, " m"));
+          buffer.push("".concat(xMid + xOffset, " ").concat(y1, " ").concat(x1, " ").concat(yMid + yOffset, " ").concat(x1, " ").concat(yMid, " c"));
+          buffer.push("".concat(x1, " ").concat(yMid - yOffset, " ").concat(xMid + xOffset, " ").concat(y0, " ").concat(xMid, " ").concat(y0, " c"));
+          buffer.push("".concat(xMid - xOffset, " ").concat(y0, " ").concat(x0, " ").concat(yMid - yOffset, " ").concat(x0, " ").concat(yMid, " c"));
+          buffer.push("".concat(x0, " ").concat(yMid + yOffset, " ").concat(xMid - xOffset, " ").concat(y1, " ").concat(xMid, " ").concat(y1, " c"));
+          buffer.push("h");
+
+          if (fillColor) {
+            buffer.push("B");
+          } else {
+            buffer.push("S");
+          }
+
+          return [points[0].x, points[1].x, points[3].y, points[1].y];
+        }
+      });
+    }
+
     return _this15;
   }
 
@@ -68879,8 +69007,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.8.270';
-var pdfjsBuild = 'ea71d61aa';
+var pdfjsVersion = '2.8.290';
+var pdfjsBuild = 'ca35349cc';
 })();
 
 /******/ 	return __webpack_exports__;

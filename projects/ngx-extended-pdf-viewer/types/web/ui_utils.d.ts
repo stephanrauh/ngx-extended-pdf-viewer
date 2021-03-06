@@ -47,6 +47,24 @@ export type WaitOnEventOrTimeoutParameters = {
  */
 export const animationStarted: Promise<any>;
 /**
+ * Converts API PageLayout values to the format used by `BaseViewer`.
+ * NOTE: This is supported to the extent that the viewer implements the
+ *       necessary Scroll/Spread modes (since SinglePage, TwoPageLeft,
+ *       and TwoPageRight all suggests using non-continuous scrolling).
+ * @param {string} mode - The API PageLayout value.
+ * @returns {number} A value from {SpreadMode}.
+ */
+export function apiPageLayoutToSpreadMode(layout: any): number;
+/**
+ * Converts API PageMode values to the format used by `PDFSidebar`.
+ * NOTE: There's also a "FullScreen" parameter which is not possible to support,
+ *       since the Fullscreen API used in browsers requires that entering
+ *       fullscreen mode only occurs as a result of a user-initiated event.
+ * @param {string} mode - The API PageMode value.
+ * @returns {number} A value from {SidebarView}.
+ */
+export function apiPageModeToSidebarView(mode: string): number;
+/**
  *  Approximates float number as a fraction using Farey sequence (max order
  *  of 8).
  *  @param {number} x - Positive float number.
@@ -195,16 +213,6 @@ export function moveToEndOfArray(arr: any, condition: any): void;
 export function noContextMenuHandler(evt: any): void;
 export function normalizeWheelEventDelta(evt: any): number;
 export function normalizeWheelEventDirection(evt: any): number;
-export namespace NullL10n {
-    function getLanguage(): Promise<string>;
-    function getLanguage(): Promise<string>;
-    function getDirection(): Promise<string>;
-    function getDirection(): Promise<string>;
-    function get(property: any, args: any, fallback: any): Promise<any>;
-    function get(property: any, args: any, fallback: any): Promise<any>;
-    function translate(element: any): Promise<void>;
-    function translate(element: any): Promise<void>;
-}
 /**
  * Helper function to parse query string (e.g. ?param1=value&parm2=...).
  */

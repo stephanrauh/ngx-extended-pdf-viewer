@@ -142,7 +142,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.8.270';
+    const workerVersion = '2.8.290';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -5466,7 +5466,11 @@ class Catalog {
           }
 
         default:
-          (0, _util.warn)(`parseDestDictionary: unsupported action type "${actionName}".`);
+          if (actionName === "JavaScript" || actionName === "ResetForm" || actionName === "SubmitForm") {
+            break;
+          }
+
+          (0, _util.warn)(`parseDestDictionary - unsupported action: "${actionName}".`);
           break;
       }
     } else if (destDict.has("Dest")) {
@@ -20325,6 +20329,37 @@ class AnnotationFactory {
 
 exports.AnnotationFactory = AnnotationFactory;
 
+function getRgbColor(color) {
+  const rgbColor = new Uint8ClampedArray(3);
+
+  if (!Array.isArray(color)) {
+    return rgbColor;
+  }
+
+  switch (color.length) {
+    case 0:
+      return null;
+
+    case 1:
+      _colorspace.ColorSpace.singletons.gray.getRgbItem(color, 0, rgbColor, 0);
+
+      return rgbColor;
+
+    case 3:
+      _colorspace.ColorSpace.singletons.rgb.getRgbItem(color, 0, rgbColor, 0);
+
+      return rgbColor;
+
+    case 4:
+      _colorspace.ColorSpace.singletons.cmyk.getRgbItem(color, 0, rgbColor, 0);
+
+      return rgbColor;
+
+    default:
+      return rgbColor;
+  }
+}
+
 function getQuadPoints(dict, rect) {
   if (!dict.has("QuadPoints")) {
     return null;
@@ -20487,40 +20522,7 @@ class Annotation {
   }
 
   setColor(color) {
-    const rgbColor = new Uint8ClampedArray(3);
-
-    if (!Array.isArray(color)) {
-      this.color = rgbColor;
-      return;
-    }
-
-    switch (color.length) {
-      case 0:
-        this.color = null;
-        break;
-
-      case 1:
-        _colorspace.ColorSpace.singletons.gray.getRgbItem(color, 0, rgbColor, 0);
-
-        this.color = rgbColor;
-        break;
-
-      case 3:
-        _colorspace.ColorSpace.singletons.rgb.getRgbItem(color, 0, rgbColor, 0);
-
-        this.color = rgbColor;
-        break;
-
-      case 4:
-        _colorspace.ColorSpace.singletons.cmyk.getRgbItem(color, 0, rgbColor, 0);
-
-        this.color = rgbColor;
-        break;
-
-      default:
-        this.color = rgbColor;
-        break;
-    }
+    this.color = getRgbColor(color);
   }
 
   setBorderStyle(borderStyle) {
@@ -20829,7 +20831,25 @@ class MarkupAnnotation extends Annotation {
       buffer.push(`${fillColor[0]} ${fillColor[1]} ${fillColor[2]} rg`);
     }
 
-    for (const points of this.data.quadPoints) {
+    let pointsArray = this.data.quadPoints;
+
+    if (!pointsArray) {
+      pointsArray = [[{
+        x: this.rectangle[0],
+        y: this.rectangle[3]
+      }, {
+        x: this.rectangle[2],
+        y: this.rectangle[3]
+      }, {
+        x: this.rectangle[0],
+        y: this.rectangle[1]
+      }, {
+        x: this.rectangle[2],
+        y: this.rectangle[1]
+      }]];
+    }
+
+    for (const points of pointsArray) {
       const [mX, MX, mY, MY] = pointsCallback(buffer, points);
       minX = Math.min(minX, mX);
       maxX = Math.max(maxX, MX);
@@ -21951,7 +21971,25 @@ class LineAnnotation extends MarkupAnnotation {
   constructor(parameters) {
     super(parameters);
     this.data.annotationType = _util.AnnotationType.LINE;
-    this.data.lineCoordinates = _util.Util.normalizeRect(parameters.dict.getArray("L"));
+    const lineCoordinates = parameters.dict.getArray("L");
+    this.data.lineCoordinates = _util.Util.normalizeRect(lineCoordinates);
+
+    if (!this.appearance) {
+      const strokeColor = this.color ? Array.from(this.color).map(c => c / 255) : [0, 0, 0];
+      const borderWidth = this.borderStyle.width;
+
+      this._setDefaultAppearance({
+        xref: parameters.xref,
+        extra: `${borderWidth} w`,
+        strokeColor,
+        pointsCallback: (buffer, points) => {
+          buffer.push(`${lineCoordinates[0]} ${lineCoordinates[1]} m`);
+          buffer.push(`${lineCoordinates[2]} ${lineCoordinates[3]} l`);
+          buffer.push("S");
+          return [points[0].x - borderWidth, points[1].x + borderWidth, points[3].y - borderWidth, points[1].y + borderWidth];
+        }
+      });
+    }
   }
 
 }
@@ -21960,6 +21998,39 @@ class SquareAnnotation extends MarkupAnnotation {
   constructor(parameters) {
     super(parameters);
     this.data.annotationType = _util.AnnotationType.SQUARE;
+
+    if (!this.appearance) {
+      const strokeColor = this.color ? Array.from(this.color).map(c => c / 255) : [0, 0, 0];
+      let fillColor = null;
+      let interiorColor = parameters.dict.getArray("IC");
+
+      if (interiorColor) {
+        interiorColor = getRgbColor(interiorColor);
+        fillColor = interiorColor ? Array.from(interiorColor).map(c => c / 255) : null;
+      }
+
+      this._setDefaultAppearance({
+        xref: parameters.xref,
+        extra: `${this.borderStyle.width} w`,
+        strokeColor,
+        fillColor,
+        pointsCallback: (buffer, points) => {
+          const x = points[2].x + this.borderStyle.width / 2;
+          const y = points[2].y + this.borderStyle.width / 2;
+          const width = points[3].x - points[2].x - this.borderStyle.width;
+          const height = points[1].y - points[3].y - this.borderStyle.width;
+          buffer.push(`${x} ${y} ${width} ${height} re`);
+
+          if (fillColor) {
+            buffer.push("B");
+          } else {
+            buffer.push("S");
+          }
+
+          return [points[0].x, points[1].x, points[3].y, points[1].y];
+        }
+      });
+    }
   }
 
 }
@@ -21968,6 +22039,50 @@ class CircleAnnotation extends MarkupAnnotation {
   constructor(parameters) {
     super(parameters);
     this.data.annotationType = _util.AnnotationType.CIRCLE;
+
+    if (!this.appearance) {
+      const strokeColor = this.color ? Array.from(this.color).map(c => c / 255) : [0, 0, 0];
+      let fillColor = null;
+      let interiorColor = parameters.dict.getArray("IC");
+
+      if (interiorColor) {
+        interiorColor = getRgbColor(interiorColor);
+        fillColor = interiorColor ? Array.from(interiorColor).map(c => c / 255) : null;
+      }
+
+      const controlPointsDistance = 4 / 3 * Math.tan(Math.PI / (2 * 4));
+
+      this._setDefaultAppearance({
+        xref: parameters.xref,
+        extra: `${this.borderStyle.width} w`,
+        strokeColor,
+        fillColor,
+        pointsCallback: (buffer, points) => {
+          const x0 = points[0].x + this.borderStyle.width / 2;
+          const y0 = points[0].y - this.borderStyle.width / 2;
+          const x1 = points[3].x - this.borderStyle.width / 2;
+          const y1 = points[3].y + this.borderStyle.width / 2;
+          const xMid = x0 + (x1 - x0) / 2;
+          const yMid = y0 + (y1 - y0) / 2;
+          const xOffset = (x1 - x0) / 2 * controlPointsDistance;
+          const yOffset = (y1 - y0) / 2 * controlPointsDistance;
+          buffer.push(`${xMid} ${y1} m`);
+          buffer.push(`${xMid + xOffset} ${y1} ${x1} ${yMid + yOffset} ${x1} ${yMid} c`);
+          buffer.push(`${x1} ${yMid - yOffset} ${xMid + xOffset} ${y0} ${xMid} ${y0} c`);
+          buffer.push(`${xMid - xOffset} ${y0} ${x0} ${yMid - yOffset} ${x0} ${yMid} c`);
+          buffer.push(`${x0} ${yMid + yOffset} ${xMid - xOffset} ${y1} ${xMid} ${y1} c`);
+          buffer.push("h");
+
+          if (fillColor) {
+            buffer.push("B");
+          } else {
+            buffer.push("S");
+          }
+
+          return [points[0].x, points[1].x, points[3].y, points[1].y];
+        }
+      });
+    }
   }
 
 }
@@ -55634,8 +55749,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.8.270';
-const pdfjsBuild = 'ea71d61aa';
+const pdfjsVersion = '2.8.290';
+const pdfjsBuild = 'ca35349cc';
 })();
 
 /******/ 	return __webpack_exports__;

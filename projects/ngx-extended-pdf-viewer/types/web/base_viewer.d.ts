@@ -26,6 +26,11 @@ export type PDFViewerOptions = {
      */
     findController?: any;
     /**
+     * - The scripting manager
+     * component.
+     */
+    scriptingManager?: any;
+    /**
      * - The rendering queue object.
      */
     renderingQueue?: PDFRenderingQueue | undefined;
@@ -81,15 +86,10 @@ export type PDFViewerOptions = {
      */
     l10n: any;
     /**
-     * - Enable embedded script execution.
-     * The default value is `false`.
+     * - Enable embedded script execution
+     * (also requires {scriptingManager} being set). The default value is `false`.
      */
     enableScripting?: boolean | undefined;
-    /**
-     * - The mouse button state. The default value
-     * is `null`.
-     */
-    mouseState?: Object | undefined;
 };
 /**
  * Simple viewer control to display PDF content/pages.
@@ -109,6 +109,7 @@ export class BaseViewer {
     linkService: any;
     downloadManager: any;
     findController: any;
+    _scriptingManager: any;
     removePageBorders: boolean;
     textLayerMode: number | undefined;
     imageResourcesPath: string;
@@ -120,7 +121,6 @@ export class BaseViewer {
     maxCanvasPixels: number | undefined;
     l10n: any;
     enableScripting: boolean;
-    _mouseState: Object | null;
     defaultRenderingQueue: boolean;
     renderingQueue: PDFRenderingQueue | undefined;
     scroll: {
@@ -432,6 +432,7 @@ export class BaseViewer {
     previousPage(): boolean;
     initializeScriptingEvents(): Promise<void>;
     _pageOpenPendingSet: Set<any> | null | undefined;
+    _scriptingEvents: any;
     /**
      * @private
      */
@@ -447,6 +448,8 @@ import { PDFRenderingQueue } from "./pdf_rendering_queue.js";
  * @property {DownloadManager} [downloadManager] - The download manager
  *   component.
  * @property {PDFFindController} [findController] - The find controller
+ *   component.
+ * @property {PDFScriptingManager} [scriptingManager] - The scripting manager
  *   component.
  * @property {PDFRenderingQueue} [renderingQueue] - The rendering queue object.
  * @property {boolean} [removePageBorders] - Removes the border shadow around
@@ -470,10 +473,8 @@ import { PDFRenderingQueue } from "./pdf_rendering_queue.js";
  *   total pixels, i.e. width * height. Use -1 for no limit. The default value
  *   is 4096 * 4096 (16 mega-pixels).
  * @property {IL10n} l10n - Localization service.
- * @property {boolean} [enableScripting] - Enable embedded script execution.
- *   The default value is `false`.
- * @property {Object} [mouseState] - The mouse button state. The default value
- *   is `null`.
+ * @property {boolean} [enableScripting] - Enable embedded script execution
+ *   (also requires {scriptingManager} being set). The default value is `false`.
  */
 declare function PDFPageViewBuffer(size: any): void;
 declare class PDFPageViewBuffer {
@@ -486,6 +487,8 @@ declare class PDFPageViewBuffer {
      * @property {DownloadManager} [downloadManager] - The download manager
      *   component.
      * @property {PDFFindController} [findController] - The find controller
+     *   component.
+     * @property {PDFScriptingManager} [scriptingManager] - The scripting manager
      *   component.
      * @property {PDFRenderingQueue} [renderingQueue] - The rendering queue object.
      * @property {boolean} [removePageBorders] - Removes the border shadow around
@@ -509,10 +512,8 @@ declare class PDFPageViewBuffer {
      *   total pixels, i.e. width * height. Use -1 for no limit. The default value
      *   is 4096 * 4096 (16 mega-pixels).
      * @property {IL10n} l10n - Localization service.
-     * @property {boolean} [enableScripting] - Enable embedded script execution.
-     *   The default value is `false`.
-     * @property {Object} [mouseState] - The mouse button state. The default value
-     *   is `null`.
+     * @property {boolean} [enableScripting] - Enable embedded script execution
+     *   (also requires {scriptingManager} being set). The default value is `false`.
      */
     constructor(size: any);
     push: (view: any) => void;
