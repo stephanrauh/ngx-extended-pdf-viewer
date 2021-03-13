@@ -38,7 +38,7 @@ export type PDFLinkServiceOptions = {
  * or destination.
  * @implements {IPDFLinkService}
  */
-export class PDFLinkService {
+export class PDFLinkService implements IPDFLinkService {
     /**
      * @param {PDFLinkServiceOptions} options
      */
@@ -137,7 +137,7 @@ export class PDFLinkService {
 /**
  * @implements {IPDFLinkService}
  */
-export class SimpleLinkService {
+export class SimpleLinkService implements IPDFLinkService {
     externalLinkTarget: any;
     externalLinkRel: any;
     externalLinkEnabled: boolean;

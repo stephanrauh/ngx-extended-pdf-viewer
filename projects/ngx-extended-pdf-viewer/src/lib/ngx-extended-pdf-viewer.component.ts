@@ -597,7 +597,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   private ngxBrowserSupportsNullSafeChaining(): boolean {
     try {
-      eval("null?.size()");
+      Function('null?.size()')();
       return true;
     } catch (notSupportedException) {
       return false;
@@ -1998,6 +1998,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   public zoomToPageWidth(event: MouseEvent): void {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const desiredCenterY = event.clientY;
+    const previousScale = (PDFViewerApplication.pdfViewer as any).currentScale;
+    debugger;
     if (this.zoom !== 'page-width') {
       this.previousZoom = this.zoom;
       this.zoom = 'page-width';
@@ -2006,5 +2010,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.zoom = this.previousZoom;
       this.setZoom();
     }
+
+
+    const currentScale = (PDFViewerApplication.pdfViewer as any).currentScale;
+    const scaleCorrectionFactor = currentScale / previousScale - 1;
+    const rect = (PDFViewerApplication.pdfViewer as any).container.getBoundingClientRect();
+    const dy = desiredCenterY - rect.top;
+    (PDFViewerApplication.pdfViewer as any).container.scrollTop += dy * scaleCorrectionFactor;
+
+
   }
 }

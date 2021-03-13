@@ -12,7 +12,7 @@ export type DocumentInitParameters = {
      * typed arrays (Uint8Array) to improve the memory usage. If PDF data is
      * BASE64-encoded, use `atob()` to convert it to a binary string first.
      */
-    data?: string | number[] | Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array | undefined;
+    data?: string | number[] | TypedArray | undefined;
     /**
      * - Basic authentication headers.
      */
@@ -32,7 +32,7 @@ export type DocumentInitParameters = {
      * or all of the pdf data. Used by the extension since some data is already
      * loaded before the switch to range requests.
      */
-    initialData?: Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array | undefined;
+    initialData?: TypedArray | undefined;
     /**
      * - The PDF file length. It's used for progress
      * reports and range requests operations.
@@ -213,6 +213,30 @@ export type PDFDocumentLoadingTask = {
      * completed.
      */
     destroy: Function;
+};
+export type OutlineNode = {
+    title: string;
+    bold: boolean;
+    italic: boolean;
+    /**
+     * - The color in RGB format to use for
+     * display purposes.
+     */
+    color: Uint8ClampedArray;
+    dest: string | Array<any> | null;
+    url: string | null;
+    unsafeUrl: string | undefined;
+    newWindow: boolean | undefined;
+    count: number | undefined;
+    items: Array<OutlineNode>;
+};
+/**
+ * Properties correspond to Table 321 of the PDF 32000-1:2008 spec.
+ */
+export type MarkInfo = {
+    Marked: boolean;
+    UserProperties: boolean;
+    Suspects: boolean;
 };
 /**
  * Page getViewport parameters.
@@ -701,22 +725,7 @@ export class PDFDocumentProxy {
      * @returns {Promise<Array<OutlineNode>>} A promise that is resolved with an
      *   {Array} that is a tree outline (if it has one) of the PDF file.
      */
-    getOutline(): Promise<{
-        title: string;
-        bold: boolean;
-        italic: boolean;
-        /**
-         * - The color in RGB format to use for
-         * display purposes.
-         */
-        color: Uint8ClampedArray;
-        dest: string | Array<any> | null;
-        url: string | null;
-        unsafeUrl: string | undefined;
-        newWindow: boolean | undefined;
-        count: number | undefined;
-        items: any[];
-    }[]>;
+    getOutline(): Promise<Array<OutlineNode>>;
     /**
      * @returns {Promise<OptionalContentConfig>} A promise that is resolved with
      *   an {@link OptionalContentConfig} that contains all the optional content
@@ -752,11 +761,7 @@ export class PDFDocumentProxy {
      *   a {MarkInfo} object that contains the MarkInfo flags for the PDF
      *   document, or `null` when no MarkInfo values are present in the PDF file.
      */
-    getMarkInfo(): Promise<{
-        Marked: boolean;
-        UserProperties: boolean;
-        Suspects: boolean;
-    } | null>;
+    getMarkInfo(): Promise<MarkInfo | null>;
     /**
      * @returns {Promise<TypedArray>} A promise that is resolved with a
      *   {TypedArray} that has the raw data from the PDF.

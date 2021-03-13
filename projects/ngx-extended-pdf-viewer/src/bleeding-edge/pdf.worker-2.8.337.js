@@ -142,7 +142,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.8.290';
+    const workerVersion = '2.8.337';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -732,7 +732,7 @@ exports.isBool = isBool;
 exports.isNum = isNum;
 exports.isSameOrigin = isSameOrigin;
 exports.isString = isString;
-exports.objectFromEntries = objectFromEntries;
+exports.objectFromMap = objectFromMap;
 exports.objectSize = objectSize;
 exports.removeNullCharacters = removeNullCharacters;
 exports.setVerbosityLevel = setVerbosityLevel;
@@ -1320,8 +1320,14 @@ function objectSize(obj) {
   return Object.keys(obj).length;
 }
 
-function objectFromEntries(iterable) {
-  return Object.assign(Object.create(null), Object.fromEntries(iterable));
+function objectFromMap(map) {
+  const obj = Object.create(null);
+
+  for (const [key, value] of map) {
+    obj[key] = value;
+  }
+
+  return obj;
 }
 
 function isLittleEndian() {
@@ -30637,13 +30643,13 @@ var _charsets = __w_pdfjs_require__(32);
 
 var _encodings = __w_pdfjs_require__(33);
 
-var MAX_SUBR_NESTING = 10;
-var CFFStandardStrings = [".notdef", "space", "exclam", "quotedbl", "numbersign", "dollar", "percent", "ampersand", "quoteright", "parenleft", "parenright", "asterisk", "plus", "comma", "hyphen", "period", "slash", "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "colon", "semicolon", "less", "equal", "greater", "question", "at", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "bracketleft", "backslash", "bracketright", "asciicircum", "underscore", "quoteleft", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "braceleft", "bar", "braceright", "asciitilde", "exclamdown", "cent", "sterling", "fraction", "yen", "florin", "section", "currency", "quotesingle", "quotedblleft", "guillemotleft", "guilsinglleft", "guilsinglright", "fi", "fl", "endash", "dagger", "daggerdbl", "periodcentered", "paragraph", "bullet", "quotesinglbase", "quotedblbase", "quotedblright", "guillemotright", "ellipsis", "perthousand", "questiondown", "grave", "acute", "circumflex", "tilde", "macron", "breve", "dotaccent", "dieresis", "ring", "cedilla", "hungarumlaut", "ogonek", "caron", "emdash", "AE", "ordfeminine", "Lslash", "Oslash", "OE", "ordmasculine", "ae", "dotlessi", "lslash", "oslash", "oe", "germandbls", "onesuperior", "logicalnot", "mu", "trademark", "Eth", "onehalf", "plusminus", "Thorn", "onequarter", "divide", "brokenbar", "degree", "thorn", "threequarters", "twosuperior", "registered", "minus", "eth", "multiply", "threesuperior", "copyright", "Aacute", "Acircumflex", "Adieresis", "Agrave", "Aring", "Atilde", "Ccedilla", "Eacute", "Ecircumflex", "Edieresis", "Egrave", "Iacute", "Icircumflex", "Idieresis", "Igrave", "Ntilde", "Oacute", "Ocircumflex", "Odieresis", "Ograve", "Otilde", "Scaron", "Uacute", "Ucircumflex", "Udieresis", "Ugrave", "Yacute", "Ydieresis", "Zcaron", "aacute", "acircumflex", "adieresis", "agrave", "aring", "atilde", "ccedilla", "eacute", "ecircumflex", "edieresis", "egrave", "iacute", "icircumflex", "idieresis", "igrave", "ntilde", "oacute", "ocircumflex", "odieresis", "ograve", "otilde", "scaron", "uacute", "ucircumflex", "udieresis", "ugrave", "yacute", "ydieresis", "zcaron", "exclamsmall", "Hungarumlautsmall", "dollaroldstyle", "dollarsuperior", "ampersandsmall", "Acutesmall", "parenleftsuperior", "parenrightsuperior", "twodotenleader", "onedotenleader", "zerooldstyle", "oneoldstyle", "twooldstyle", "threeoldstyle", "fouroldstyle", "fiveoldstyle", "sixoldstyle", "sevenoldstyle", "eightoldstyle", "nineoldstyle", "commasuperior", "threequartersemdash", "periodsuperior", "questionsmall", "asuperior", "bsuperior", "centsuperior", "dsuperior", "esuperior", "isuperior", "lsuperior", "msuperior", "nsuperior", "osuperior", "rsuperior", "ssuperior", "tsuperior", "ff", "ffi", "ffl", "parenleftinferior", "parenrightinferior", "Circumflexsmall", "hyphensuperior", "Gravesmall", "Asmall", "Bsmall", "Csmall", "Dsmall", "Esmall", "Fsmall", "Gsmall", "Hsmall", "Ismall", "Jsmall", "Ksmall", "Lsmall", "Msmall", "Nsmall", "Osmall", "Psmall", "Qsmall", "Rsmall", "Ssmall", "Tsmall", "Usmall", "Vsmall", "Wsmall", "Xsmall", "Ysmall", "Zsmall", "colonmonetary", "onefitted", "rupiah", "Tildesmall", "exclamdownsmall", "centoldstyle", "Lslashsmall", "Scaronsmall", "Zcaronsmall", "Dieresissmall", "Brevesmall", "Caronsmall", "Dotaccentsmall", "Macronsmall", "figuredash", "hypheninferior", "Ogoneksmall", "Ringsmall", "Cedillasmall", "questiondownsmall", "oneeighth", "threeeighths", "fiveeighths", "seveneighths", "onethird", "twothirds", "zerosuperior", "foursuperior", "fivesuperior", "sixsuperior", "sevensuperior", "eightsuperior", "ninesuperior", "zeroinferior", "oneinferior", "twoinferior", "threeinferior", "fourinferior", "fiveinferior", "sixinferior", "seveninferior", "eightinferior", "nineinferior", "centinferior", "dollarinferior", "periodinferior", "commainferior", "Agravesmall", "Aacutesmall", "Acircumflexsmall", "Atildesmall", "Adieresissmall", "Aringsmall", "AEsmall", "Ccedillasmall", "Egravesmall", "Eacutesmall", "Ecircumflexsmall", "Edieresissmall", "Igravesmall", "Iacutesmall", "Icircumflexsmall", "Idieresissmall", "Ethsmall", "Ntildesmall", "Ogravesmall", "Oacutesmall", "Ocircumflexsmall", "Otildesmall", "Odieresissmall", "OEsmall", "Oslashsmall", "Ugravesmall", "Uacutesmall", "Ucircumflexsmall", "Udieresissmall", "Yacutesmall", "Thornsmall", "Ydieresissmall", "001.000", "001.001", "001.002", "001.003", "Black", "Bold", "Book", "Light", "Medium", "Regular", "Roman", "Semibold"];
+const MAX_SUBR_NESTING = 10;
+const CFFStandardStrings = [".notdef", "space", "exclam", "quotedbl", "numbersign", "dollar", "percent", "ampersand", "quoteright", "parenleft", "parenright", "asterisk", "plus", "comma", "hyphen", "period", "slash", "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "colon", "semicolon", "less", "equal", "greater", "question", "at", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "bracketleft", "backslash", "bracketright", "asciicircum", "underscore", "quoteleft", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "braceleft", "bar", "braceright", "asciitilde", "exclamdown", "cent", "sterling", "fraction", "yen", "florin", "section", "currency", "quotesingle", "quotedblleft", "guillemotleft", "guilsinglleft", "guilsinglright", "fi", "fl", "endash", "dagger", "daggerdbl", "periodcentered", "paragraph", "bullet", "quotesinglbase", "quotedblbase", "quotedblright", "guillemotright", "ellipsis", "perthousand", "questiondown", "grave", "acute", "circumflex", "tilde", "macron", "breve", "dotaccent", "dieresis", "ring", "cedilla", "hungarumlaut", "ogonek", "caron", "emdash", "AE", "ordfeminine", "Lslash", "Oslash", "OE", "ordmasculine", "ae", "dotlessi", "lslash", "oslash", "oe", "germandbls", "onesuperior", "logicalnot", "mu", "trademark", "Eth", "onehalf", "plusminus", "Thorn", "onequarter", "divide", "brokenbar", "degree", "thorn", "threequarters", "twosuperior", "registered", "minus", "eth", "multiply", "threesuperior", "copyright", "Aacute", "Acircumflex", "Adieresis", "Agrave", "Aring", "Atilde", "Ccedilla", "Eacute", "Ecircumflex", "Edieresis", "Egrave", "Iacute", "Icircumflex", "Idieresis", "Igrave", "Ntilde", "Oacute", "Ocircumflex", "Odieresis", "Ograve", "Otilde", "Scaron", "Uacute", "Ucircumflex", "Udieresis", "Ugrave", "Yacute", "Ydieresis", "Zcaron", "aacute", "acircumflex", "adieresis", "agrave", "aring", "atilde", "ccedilla", "eacute", "ecircumflex", "edieresis", "egrave", "iacute", "icircumflex", "idieresis", "igrave", "ntilde", "oacute", "ocircumflex", "odieresis", "ograve", "otilde", "scaron", "uacute", "ucircumflex", "udieresis", "ugrave", "yacute", "ydieresis", "zcaron", "exclamsmall", "Hungarumlautsmall", "dollaroldstyle", "dollarsuperior", "ampersandsmall", "Acutesmall", "parenleftsuperior", "parenrightsuperior", "twodotenleader", "onedotenleader", "zerooldstyle", "oneoldstyle", "twooldstyle", "threeoldstyle", "fouroldstyle", "fiveoldstyle", "sixoldstyle", "sevenoldstyle", "eightoldstyle", "nineoldstyle", "commasuperior", "threequartersemdash", "periodsuperior", "questionsmall", "asuperior", "bsuperior", "centsuperior", "dsuperior", "esuperior", "isuperior", "lsuperior", "msuperior", "nsuperior", "osuperior", "rsuperior", "ssuperior", "tsuperior", "ff", "ffi", "ffl", "parenleftinferior", "parenrightinferior", "Circumflexsmall", "hyphensuperior", "Gravesmall", "Asmall", "Bsmall", "Csmall", "Dsmall", "Esmall", "Fsmall", "Gsmall", "Hsmall", "Ismall", "Jsmall", "Ksmall", "Lsmall", "Msmall", "Nsmall", "Osmall", "Psmall", "Qsmall", "Rsmall", "Ssmall", "Tsmall", "Usmall", "Vsmall", "Wsmall", "Xsmall", "Ysmall", "Zsmall", "colonmonetary", "onefitted", "rupiah", "Tildesmall", "exclamdownsmall", "centoldstyle", "Lslashsmall", "Scaronsmall", "Zcaronsmall", "Dieresissmall", "Brevesmall", "Caronsmall", "Dotaccentsmall", "Macronsmall", "figuredash", "hypheninferior", "Ogoneksmall", "Ringsmall", "Cedillasmall", "questiondownsmall", "oneeighth", "threeeighths", "fiveeighths", "seveneighths", "onethird", "twothirds", "zerosuperior", "foursuperior", "fivesuperior", "sixsuperior", "sevensuperior", "eightsuperior", "ninesuperior", "zeroinferior", "oneinferior", "twoinferior", "threeinferior", "fourinferior", "fiveinferior", "sixinferior", "seveninferior", "eightinferior", "nineinferior", "centinferior", "dollarinferior", "periodinferior", "commainferior", "Agravesmall", "Aacutesmall", "Acircumflexsmall", "Atildesmall", "Adieresissmall", "Aringsmall", "AEsmall", "Ccedillasmall", "Egravesmall", "Eacutesmall", "Ecircumflexsmall", "Edieresissmall", "Igravesmall", "Iacutesmall", "Icircumflexsmall", "Idieresissmall", "Ethsmall", "Ntildesmall", "Ogravesmall", "Oacutesmall", "Ocircumflexsmall", "Otildesmall", "Odieresissmall", "OEsmall", "Oslashsmall", "Ugravesmall", "Uacutesmall", "Ucircumflexsmall", "Udieresissmall", "Yacutesmall", "Thornsmall", "Ydieresissmall", "001.000", "001.001", "001.002", "001.003", "Black", "Bold", "Book", "Light", "Medium", "Regular", "Roman", "Semibold"];
 exports.CFFStandardStrings = CFFStandardStrings;
 const NUM_STANDARD_CFF_STRINGS = 391;
 
-var CFFParser = function CFFParserClosure() {
-  var CharstringValidationData = [null, {
+const CFFParser = function CFFParserClosure() {
+  const CharstringValidationData = [null, {
     id: "hstem",
     min: 2,
     stackClearing: true,
@@ -30740,7 +30746,7 @@ var CFFParser = function CFFParserClosure() {
     min: 4,
     resetStack: true
   }];
-  var CharstringValidationData12 = [null, null, null, {
+  const CharstringValidationData12 = [null, null, null, {
     id: "and",
     min: 2,
     stackDelta: -1
@@ -30861,16 +30867,16 @@ var CFFParser = function CFFParserClosure() {
     }
 
     parse() {
-      var properties = this.properties;
-      var cff = new CFF();
+      const properties = this.properties;
+      const cff = new CFF();
       this.cff = cff;
-      var header = this.parseHeader();
-      var nameIndex = this.parseIndex(header.endPos);
-      var topDictIndex = this.parseIndex(nameIndex.endPos);
-      var stringIndex = this.parseIndex(topDictIndex.endPos);
-      var globalSubrIndex = this.parseIndex(stringIndex.endPos);
-      var topDictParsed = this.parseDict(topDictIndex.obj.get(0));
-      var topDict = this.createDict(CFFTopDict, topDictParsed, cff.strings);
+      const header = this.parseHeader();
+      const nameIndex = this.parseIndex(header.endPos);
+      const topDictIndex = this.parseIndex(nameIndex.endPos);
+      const stringIndex = this.parseIndex(topDictIndex.endPos);
+      const globalSubrIndex = this.parseIndex(stringIndex.endPos);
+      const topDictParsed = this.parseDict(topDictIndex.obj.get(0));
+      const topDict = this.createDict(CFFTopDict, topDictParsed, cff.strings);
       cff.header = header.obj;
       cff.names = this.parseNameIndex(nameIndex.obj);
       cff.strings = this.parseStringIndex(stringIndex.obj);
@@ -30878,15 +30884,15 @@ var CFFParser = function CFFParserClosure() {
       cff.globalSubrIndex = globalSubrIndex.obj;
       this.parsePrivateDict(cff.topDict);
       cff.isCIDFont = topDict.hasName("ROS");
-      var charStringOffset = topDict.getByName("CharStrings");
-      var charStringIndex = this.parseIndex(charStringOffset).obj;
-      var fontMatrix = topDict.getByName("FontMatrix");
+      const charStringOffset = topDict.getByName("CharStrings");
+      const charStringIndex = this.parseIndex(charStringOffset).obj;
+      const fontMatrix = topDict.getByName("FontMatrix");
 
       if (fontMatrix) {
         properties.fontMatrix = fontMatrix;
       }
 
-      var fontBBox = topDict.getByName("FontBBox");
+      const fontBBox = topDict.getByName("FontBBox");
 
       if (fontBBox) {
         properties.ascent = Math.max(fontBBox[3], fontBBox[1]);
@@ -30894,14 +30900,14 @@ var CFFParser = function CFFParserClosure() {
         properties.ascentScaled = true;
       }
 
-      var charset, encoding;
+      let charset, encoding;
 
       if (cff.isCIDFont) {
-        var fdArrayIndex = this.parseIndex(topDict.getByName("FDArray")).obj;
+        const fdArrayIndex = this.parseIndex(topDict.getByName("FDArray")).obj;
 
-        for (var i = 0, ii = fdArrayIndex.count; i < ii; ++i) {
-          var dictRaw = fdArrayIndex.get(i);
-          var fontDict = this.createDict(CFFTopDict, this.parseDict(dictRaw), cff.strings);
+        for (let i = 0, ii = fdArrayIndex.count; i < ii; ++i) {
+          const dictRaw = fdArrayIndex.get(i);
+          const fontDict = this.createDict(CFFTopDict, this.parseDict(dictRaw), cff.strings);
           this.parsePrivateDict(fontDict);
           cff.fdArray.push(fontDict);
         }
@@ -30916,7 +30922,7 @@ var CFFParser = function CFFParserClosure() {
 
       cff.charset = charset;
       cff.encoding = encoding;
-      var charStringsAndSeacs = this.parseCharStrings({
+      const charStringsAndSeacs = this.parseCharStrings({
         charStrings: charStringIndex,
         localSubrIndex: topDict.privateDict.subrsIndex,
         globalSubrIndex: globalSubrIndex.obj,
@@ -30931,9 +30937,9 @@ var CFFParser = function CFFParserClosure() {
     }
 
     parseHeader() {
-      var bytes = this.bytes;
-      var bytesLength = bytes.length;
-      var offset = 0;
+      let bytes = this.bytes;
+      const bytesLength = bytes.length;
+      let offset = 0;
 
       while (offset < bytesLength && bytes[offset] !== 1) {
         ++offset;
@@ -30949,11 +30955,11 @@ var CFFParser = function CFFParserClosure() {
         this.bytes = bytes;
       }
 
-      var major = bytes[0];
-      var minor = bytes[1];
-      var hdrSize = bytes[2];
-      var offSize = bytes[3];
-      var header = new CFFHeader(major, minor, hdrSize, offSize);
+      const major = bytes[0];
+      const minor = bytes[1];
+      const hdrSize = bytes[2];
+      const offSize = bytes[3];
+      const header = new CFFHeader(major, minor, hdrSize, offSize);
       return {
         obj: header,
         endPos: hdrSize
@@ -30961,10 +30967,10 @@ var CFFParser = function CFFParserClosure() {
     }
 
     parseDict(dict) {
-      var pos = 0;
+      let pos = 0;
 
       function parseOperand() {
-        var value = dict[pos++];
+        let value = dict[pos++];
 
         if (value === 30) {
           return parseFloatOperand();
@@ -30991,15 +30997,15 @@ var CFFParser = function CFFParserClosure() {
       }
 
       function parseFloatOperand() {
-        var str = "";
-        var eof = 15;
+        let str = "";
+        const eof = 15;
         const lookup = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "E", "E-", null, "-"];
-        var length = dict.length;
+        const length = dict.length;
 
         while (pos < length) {
-          var b = dict[pos++];
-          var b1 = b >> 4;
-          var b2 = b & 15;
+          const b = dict[pos++];
+          const b1 = b >> 4;
+          const b2 = b & 15;
 
           if (b1 === eof) {
             break;
@@ -31017,13 +31023,13 @@ var CFFParser = function CFFParserClosure() {
         return parseFloat(str);
       }
 
-      var operands = [];
-      var entries = [];
+      let operands = [];
+      const entries = [];
       pos = 0;
-      var end = dict.length;
+      const end = dict.length;
 
       while (pos < end) {
-        var b = dict[pos];
+        let b = dict[pos];
 
         if (b <= 21) {
           if (b === 12) {
@@ -31042,21 +31048,21 @@ var CFFParser = function CFFParserClosure() {
     }
 
     parseIndex(pos) {
-      var cffIndex = new CFFIndex();
-      var bytes = this.bytes;
-      var count = bytes[pos++] << 8 | bytes[pos++];
-      var offsets = [];
-      var end = pos;
-      var i, ii;
+      const cffIndex = new CFFIndex();
+      const bytes = this.bytes;
+      const count = bytes[pos++] << 8 | bytes[pos++];
+      const offsets = [];
+      let end = pos;
+      let i, ii;
 
       if (count !== 0) {
-        var offsetSize = bytes[pos++];
-        var startPos = pos + (count + 1) * offsetSize - 1;
+        const offsetSize = bytes[pos++];
+        const startPos = pos + (count + 1) * offsetSize - 1;
 
         for (i = 0, ii = count + 1; i < ii; ++i) {
-          var offset = 0;
+          let offset = 0;
 
-          for (var j = 0; j < offsetSize; ++j) {
+          for (let j = 0; j < offsetSize; ++j) {
             offset <<= 8;
             offset += bytes[pos++];
           }
@@ -31068,8 +31074,8 @@ var CFFParser = function CFFParserClosure() {
       }
 
       for (i = 0, ii = offsets.length - 1; i < ii; ++i) {
-        var offsetStart = offsets[i];
-        var offsetEnd = offsets[i + 1];
+        const offsetStart = offsets[i];
+        const offsetEnd = offsets[i + 1];
         cffIndex.add(bytes.subarray(offsetStart, offsetEnd));
       }
 
@@ -31080,10 +31086,10 @@ var CFFParser = function CFFParserClosure() {
     }
 
     parseNameIndex(index) {
-      var names = [];
+      const names = [];
 
-      for (var i = 0, ii = index.count; i < ii; ++i) {
-        var name = index.get(i);
+      for (let i = 0, ii = index.count; i < ii; ++i) {
+        const name = index.get(i);
         names.push((0, _util.bytesToString)(name));
       }
 
@@ -31091,10 +31097,10 @@ var CFFParser = function CFFParserClosure() {
     }
 
     parseStringIndex(index) {
-      var strings = new CFFStrings();
+      const strings = new CFFStrings();
 
-      for (var i = 0, ii = index.count; i < ii; ++i) {
-        var data = index.get(i);
+      for (let i = 0, ii = index.count; i < ii; ++i) {
+        const data = index.get(i);
         strings.add((0, _util.bytesToString)(data));
       }
 
@@ -31102,12 +31108,12 @@ var CFFParser = function CFFParserClosure() {
     }
 
     createDict(Type, dict, strings) {
-      var cffDict = new Type(strings);
+      const cffDict = new Type(strings);
 
-      for (var i = 0, ii = dict.length; i < ii; ++i) {
-        var pair = dict[i];
-        var key = pair[0];
-        var value = pair[1];
+      for (let i = 0, ii = dict.length; i < ii; ++i) {
+        const pair = dict[i];
+        const key = pair[0];
+        const value = pair[1];
         cffDict.setByKey(key, value);
       }
 
@@ -31119,16 +31125,16 @@ var CFFParser = function CFFParserClosure() {
         return false;
       }
 
-      var stackSize = state.stackSize;
-      var stack = state.stack;
-      var length = data.length;
+      let stackSize = state.stackSize;
+      const stack = state.stack;
+      const length = data.length;
 
-      for (var j = 0; j < length;) {
-        var value = data[j++];
-        var validationCommand = null;
+      for (let j = 0; j < length;) {
+        const value = data[j++];
+        let validationCommand = null;
 
         if (value === 12) {
-          var q = data[j++];
+          const q = data[j++];
 
           if (q === 0) {
             data[j - 2] = 139;
@@ -31169,7 +31175,7 @@ var CFFParser = function CFFParserClosure() {
           stackSize %= 2;
           validationCommand = CharstringValidationData[value];
         } else if (value === 10 || value === 29) {
-          var subrsIndex;
+          let subrsIndex;
 
           if (value === 10) {
             subrsIndex = localSubrIndex;
@@ -31183,7 +31189,7 @@ var CFFParser = function CFFParserClosure() {
             return false;
           }
 
-          var bias = 32768;
+          let bias = 32768;
 
           if (subrsIndex.count < 1240) {
             bias = 107;
@@ -31191,7 +31197,7 @@ var CFFParser = function CFFParserClosure() {
             bias = 1131;
           }
 
-          var subrNumber = stack[--stackSize] + bias;
+          const subrNumber = stack[--stackSize] + bias;
 
           if (subrNumber < 0 || subrNumber >= subrsIndex.count || isNaN(subrNumber)) {
             validationCommand = CharstringValidationData[value];
@@ -31201,7 +31207,7 @@ var CFFParser = function CFFParserClosure() {
 
           state.stackSize = stackSize;
           state.callDepth++;
-          var valid = this.parseCharString(state, subrsIndex.get(subrNumber), localSubrIndex, globalSubrIndex);
+          const valid = this.parseCharString(state, subrsIndex.get(subrNumber), localSubrIndex, globalSubrIndex);
 
           if (!valid) {
             return false;
@@ -31282,13 +31288,13 @@ var CFFParser = function CFFParserClosure() {
       fdArray,
       privateDict
     }) {
-      var seacs = [];
-      var widths = [];
-      var count = charStrings.count;
+      const seacs = [];
+      const widths = [];
+      const count = charStrings.count;
 
-      for (var i = 0; i < count; i++) {
-        var charstring = charStrings.get(i);
-        var state = {
+      for (let i = 0; i < count; i++) {
+        const charstring = charStrings.get(i);
+        const state = {
           callDepth: 0,
           stackSize: 0,
           stack: [],
@@ -31299,12 +31305,12 @@ var CFFParser = function CFFParserClosure() {
           width: null,
           hasVStems: false
         };
-        var valid = true;
-        var localSubrToUse = null;
-        var privateDictToUse = privateDict;
+        let valid = true;
+        let localSubrToUse = null;
+        let privateDictToUse = privateDict;
 
         if (fdSelect && fdArray.length) {
-          var fdIndex = fdSelect.getFDIndex(i);
+          const fdIndex = fdSelect.getFDIndex(i);
 
           if (fdIndex === -1) {
             (0, _util.warn)("Glyph index is not in fd select.");
@@ -31353,7 +31359,7 @@ var CFFParser = function CFFParserClosure() {
     }
 
     emptyPrivateDictionary(parentDict) {
-      var privateDict = this.createDict(CFFPrivateDict, [], parentDict.strings);
+      const privateDict = this.createDict(CFFPrivateDict, [], parentDict.strings);
       parentDict.setByKey(18, [0, 0]);
       parentDict.privateDict = privateDict;
     }
@@ -31364,40 +31370,40 @@ var CFFParser = function CFFParserClosure() {
         return;
       }
 
-      var privateOffset = parentDict.getByName("Private");
+      const privateOffset = parentDict.getByName("Private");
 
       if (!Array.isArray(privateOffset) || privateOffset.length !== 2) {
         parentDict.removeByName("Private");
         return;
       }
 
-      var size = privateOffset[0];
-      var offset = privateOffset[1];
+      const size = privateOffset[0];
+      const offset = privateOffset[1];
 
       if (size === 0 || offset >= this.bytes.length) {
         this.emptyPrivateDictionary(parentDict);
         return;
       }
 
-      var privateDictEnd = offset + size;
-      var dictData = this.bytes.subarray(offset, privateDictEnd);
-      var dict = this.parseDict(dictData);
-      var privateDict = this.createDict(CFFPrivateDict, dict, parentDict.strings);
+      const privateDictEnd = offset + size;
+      const dictData = this.bytes.subarray(offset, privateDictEnd);
+      const dict = this.parseDict(dictData);
+      const privateDict = this.createDict(CFFPrivateDict, dict, parentDict.strings);
       parentDict.privateDict = privateDict;
 
       if (!privateDict.getByName("Subrs")) {
         return;
       }
 
-      var subrsOffset = privateDict.getByName("Subrs");
-      var relativeOffset = offset + subrsOffset;
+      const subrsOffset = privateDict.getByName("Subrs");
+      const relativeOffset = offset + subrsOffset;
 
       if (subrsOffset === 0 || relativeOffset >= this.bytes.length) {
         this.emptyPrivateDictionary(parentDict);
         return;
       }
 
-      var subrsIndex = this.parseIndex(relativeOffset);
+      const subrsIndex = this.parseIndex(relativeOffset);
       privateDict.subrsIndex = subrsIndex.obj;
     }
 
@@ -31410,11 +31416,11 @@ var CFFParser = function CFFParserClosure() {
         return new CFFCharset(true, CFFCharsetPredefinedTypes.EXPERT_SUBSET, _charsets.ExpertSubsetCharset);
       }
 
-      var bytes = this.bytes;
-      var start = pos;
-      var format = bytes[pos++];
+      const bytes = this.bytes;
+      const start = pos;
+      const format = bytes[pos++];
       const charset = [cid ? 0 : ".notdef"];
-      var id, count, i;
+      let id, count, i;
       length -= 1;
 
       switch (format) {
@@ -31454,24 +31460,24 @@ var CFFParser = function CFFParserClosure() {
           throw new _util.FormatError("Unknown charset format");
       }
 
-      var end = pos;
-      var raw = bytes.subarray(start, end);
+      const end = pos;
+      const raw = bytes.subarray(start, end);
       return new CFFCharset(false, format, charset, raw);
     }
 
     parseEncoding(pos, properties, strings, charset) {
-      var encoding = Object.create(null);
-      var bytes = this.bytes;
-      var predefined = false;
-      var format, i, ii;
-      var raw = null;
+      const encoding = Object.create(null);
+      const bytes = this.bytes;
+      let predefined = false;
+      let format, i, ii;
+      let raw = null;
 
       function readSupplement() {
-        var supplementsCount = bytes[pos++];
+        const supplementsCount = bytes[pos++];
 
         for (i = 0; i < supplementsCount; i++) {
-          var code = bytes[pos++];
-          var sid = (bytes[pos++] << 8) + (bytes[pos++] & 0xff);
+          const code = bytes[pos++];
+          const sid = (bytes[pos++] << 8) + (bytes[pos++] & 0xff);
           encoding[code] = charset.indexOf(strings.get(sid));
         }
       }
@@ -31479,22 +31485,22 @@ var CFFParser = function CFFParserClosure() {
       if (pos === 0 || pos === 1) {
         predefined = true;
         format = pos;
-        var baseEncoding = pos ? _encodings.ExpertEncoding : _encodings.StandardEncoding;
+        const baseEncoding = pos ? _encodings.ExpertEncoding : _encodings.StandardEncoding;
 
         for (i = 0, ii = charset.length; i < ii; i++) {
-          var index = baseEncoding.indexOf(charset[i]);
+          const index = baseEncoding.indexOf(charset[i]);
 
           if (index !== -1) {
             encoding[index] = i;
           }
         }
       } else {
-        var dataStart = pos;
+        const dataStart = pos;
         format = bytes[pos++];
 
         switch (format & 0x7f) {
           case 0:
-            var glyphsCount = bytes[pos++];
+            const glyphsCount = bytes[pos++];
 
             for (i = 1; i <= glyphsCount; i++) {
               encoding[bytes[pos++]] = i;
@@ -31503,14 +31509,14 @@ var CFFParser = function CFFParserClosure() {
             break;
 
           case 1:
-            var rangesCount = bytes[pos++];
-            var gid = 1;
+            const rangesCount = bytes[pos++];
+            let gid = 1;
 
             for (i = 0; i < rangesCount; i++) {
-              var start = bytes[pos++];
-              var left = bytes[pos++];
+              const start = bytes[pos++];
+              const left = bytes[pos++];
 
-              for (var j = start; j <= start + left; j++) {
+              for (let j = start; j <= start + left; j++) {
                 encoding[j] = gid++;
               }
             }
@@ -31521,7 +31527,7 @@ var CFFParser = function CFFParserClosure() {
             throw new _util.FormatError(`Unknown encoding format: ${format} in CFF`);
         }
 
-        var dataEnd = pos;
+        const dataEnd = pos;
 
         if (format & 0x80) {
           bytes[dataStart] &= 0x7f;
@@ -31536,35 +31542,35 @@ var CFFParser = function CFFParserClosure() {
     }
 
     parseFDSelect(pos, length) {
-      var bytes = this.bytes;
-      var format = bytes[pos++];
-      var fdSelect = [];
-      var i;
+      const bytes = this.bytes;
+      const format = bytes[pos++];
+      const fdSelect = [];
+      let i;
 
       switch (format) {
         case 0:
           for (i = 0; i < length; ++i) {
-            var id = bytes[pos++];
+            const id = bytes[pos++];
             fdSelect.push(id);
           }
 
           break;
 
         case 3:
-          var rangesCount = bytes[pos++] << 8 | bytes[pos++];
+          const rangesCount = bytes[pos++] << 8 | bytes[pos++];
 
           for (i = 0; i < rangesCount; ++i) {
-            var first = bytes[pos++] << 8 | bytes[pos++];
+            let first = bytes[pos++] << 8 | bytes[pos++];
 
             if (i === 0 && first !== 0) {
               (0, _util.warn)("parseFDSelect: The first range must have a first GID of 0" + " -- trying to recover.");
               first = 0;
             }
 
-            var fdIndex = bytes[pos++];
-            var next = bytes[pos] << 8 | bytes[pos + 1];
+            const fdIndex = bytes[pos++];
+            const next = bytes[pos] << 8 | bytes[pos + 1];
 
-            for (var j = first; j < next; ++j) {
+            for (let j = first; j < next; ++j) {
               fdSelect.push(fdIndex);
             }
           }
@@ -31611,7 +31617,7 @@ class CFF {
       return;
     }
 
-    var glyphZero = this.charStrings.get(0);
+    const glyphZero = this.charStrings.get(0);
     this.charStrings.add(glyphZero);
 
     if (this.isCIDFont) {
@@ -31624,7 +31630,7 @@ class CFF {
       return false;
     }
 
-    var glyph = this.charStrings.get(id);
+    const glyph = this.charStrings.get(id);
     return glyph.length > 0;
   }
 
@@ -31734,20 +31740,20 @@ class CFFDict {
       return false;
     }
 
-    var valueLength = value.length;
+    const valueLength = value.length;
 
     if (valueLength === 0) {
       return true;
     }
 
-    for (var i = 0; i < valueLength; i++) {
+    for (let i = 0; i < valueLength; i++) {
       if (isNaN(value[i])) {
         (0, _util.warn)('Invalid CFFDict value: "' + value + '" for key "' + key + '".');
         return true;
       }
     }
 
-    var type = this.types[key];
+    const type = this.types[key];
 
     if (type === "num" || type === "sid" || type === "offset") {
       value = value[0];
@@ -31774,7 +31780,7 @@ class CFFDict {
       throw new _util.FormatError(`Invalid dictionary name ${name}"`);
     }
 
-    var key = this.nameToKeyMap[name];
+    const key = this.nameToKeyMap[name];
 
     if (!(key in this.values)) {
       return this.defaults[key];
@@ -31788,7 +31794,7 @@ class CFFDict {
   }
 
   static createTables(layout) {
-    var tables = {
+    const tables = {
       keyToNameMap: {},
       nameToKeyMap: {},
       defaults: {},
@@ -31797,9 +31803,9 @@ class CFFDict {
       order: []
     };
 
-    for (var i = 0, ii = layout.length; i < ii; ++i) {
-      var entry = layout[i];
-      var key = Array.isArray(entry[0]) ? (entry[0][0] << 8) + entry[0][1] : entry[0];
+    for (let i = 0, ii = layout.length; i < ii; ++i) {
+      const entry = layout[i];
+      const key = Array.isArray(entry[0]) ? (entry[0][0] << 8) + entry[0][1] : entry[0];
       tables.keyToNameMap[key] = entry[1];
       tables.nameToKeyMap[entry[1]] = key;
       tables.types[key] = entry[2];
@@ -31813,9 +31819,9 @@ class CFFDict {
 
 }
 
-var CFFTopDict = function CFFTopDictClosure() {
-  var layout = [[[12, 30], "ROS", ["sid", "sid", "num"], null], [[12, 20], "SyntheticBase", "num", null], [0, "version", "sid", null], [1, "Notice", "sid", null], [[12, 0], "Copyright", "sid", null], [2, "FullName", "sid", null], [3, "FamilyName", "sid", null], [4, "Weight", "sid", null], [[12, 1], "isFixedPitch", "num", 0], [[12, 2], "ItalicAngle", "num", 0], [[12, 3], "UnderlinePosition", "num", -100], [[12, 4], "UnderlineThickness", "num", 50], [[12, 5], "PaintType", "num", 0], [[12, 6], "CharstringType", "num", 2], [[12, 7], "FontMatrix", ["num", "num", "num", "num", "num", "num"], [0.001, 0, 0, 0.001, 0, 0]], [13, "UniqueID", "num", null], [5, "FontBBox", ["num", "num", "num", "num"], [0, 0, 0, 0]], [[12, 8], "StrokeWidth", "num", 0], [14, "XUID", "array", null], [15, "charset", "offset", 0], [16, "Encoding", "offset", 0], [17, "CharStrings", "offset", 0], [18, "Private", ["offset", "offset"], null], [[12, 21], "PostScript", "sid", null], [[12, 22], "BaseFontName", "sid", null], [[12, 23], "BaseFontBlend", "delta", null], [[12, 31], "CIDFontVersion", "num", 0], [[12, 32], "CIDFontRevision", "num", 0], [[12, 33], "CIDFontType", "num", 0], [[12, 34], "CIDCount", "num", 8720], [[12, 35], "UIDBase", "num", null], [[12, 37], "FDSelect", "offset", null], [[12, 36], "FDArray", "offset", null], [[12, 38], "FontName", "sid", null]];
-  var tables = null;
+const CFFTopDict = function CFFTopDictClosure() {
+  const layout = [[[12, 30], "ROS", ["sid", "sid", "num"], null], [[12, 20], "SyntheticBase", "num", null], [0, "version", "sid", null], [1, "Notice", "sid", null], [[12, 0], "Copyright", "sid", null], [2, "FullName", "sid", null], [3, "FamilyName", "sid", null], [4, "Weight", "sid", null], [[12, 1], "isFixedPitch", "num", 0], [[12, 2], "ItalicAngle", "num", 0], [[12, 3], "UnderlinePosition", "num", -100], [[12, 4], "UnderlineThickness", "num", 50], [[12, 5], "PaintType", "num", 0], [[12, 6], "CharstringType", "num", 2], [[12, 7], "FontMatrix", ["num", "num", "num", "num", "num", "num"], [0.001, 0, 0, 0.001, 0, 0]], [13, "UniqueID", "num", null], [5, "FontBBox", ["num", "num", "num", "num"], [0, 0, 0, 0]], [[12, 8], "StrokeWidth", "num", 0], [14, "XUID", "array", null], [15, "charset", "offset", 0], [16, "Encoding", "offset", 0], [17, "CharStrings", "offset", 0], [18, "Private", ["offset", "offset"], null], [[12, 21], "PostScript", "sid", null], [[12, 22], "BaseFontName", "sid", null], [[12, 23], "BaseFontBlend", "delta", null], [[12, 31], "CIDFontVersion", "num", 0], [[12, 32], "CIDFontRevision", "num", 0], [[12, 33], "CIDFontType", "num", 0], [[12, 34], "CIDCount", "num", 8720], [[12, 35], "UIDBase", "num", null], [[12, 37], "FDSelect", "offset", null], [[12, 36], "FDArray", "offset", null], [[12, 38], "FontName", "sid", null]];
+  let tables = null;
 
   class CFFTopDict extends CFFDict {
     constructor(strings) {
@@ -31834,9 +31840,9 @@ var CFFTopDict = function CFFTopDictClosure() {
 
 exports.CFFTopDict = CFFTopDict;
 
-var CFFPrivateDict = function CFFPrivateDictClosure() {
-  var layout = [[6, "BlueValues", "delta", null], [7, "OtherBlues", "delta", null], [8, "FamilyBlues", "delta", null], [9, "FamilyOtherBlues", "delta", null], [[12, 9], "BlueScale", "num", 0.039625], [[12, 10], "BlueShift", "num", 7], [[12, 11], "BlueFuzz", "num", 1], [10, "StdHW", "num", null], [11, "StdVW", "num", null], [[12, 12], "StemSnapH", "delta", null], [[12, 13], "StemSnapV", "delta", null], [[12, 14], "ForceBold", "num", 0], [[12, 17], "LanguageGroup", "num", 0], [[12, 18], "ExpansionFactor", "num", 0.06], [[12, 19], "initialRandomSeed", "num", 0], [20, "defaultWidthX", "num", 0], [21, "nominalWidthX", "num", 0], [19, "Subrs", "offset", null]];
-  var tables = null;
+const CFFPrivateDict = function CFFPrivateDictClosure() {
+  const layout = [[6, "BlueValues", "delta", null], [7, "OtherBlues", "delta", null], [8, "FamilyBlues", "delta", null], [9, "FamilyOtherBlues", "delta", null], [[12, 9], "BlueScale", "num", 0.039625], [[12, 10], "BlueShift", "num", 7], [[12, 11], "BlueFuzz", "num", 1], [10, "StdHW", "num", null], [11, "StdVW", "num", null], [[12, 12], "StemSnapH", "delta", null], [[12, 13], "StemSnapV", "delta", null], [[12, 14], "ForceBold", "num", 0], [[12, 17], "LanguageGroup", "num", 0], [[12, 18], "ExpansionFactor", "num", 0.06], [[12, 19], "initialRandomSeed", "num", 0], [20, "defaultWidthX", "num", 0], [21, "nominalWidthX", "num", 0], [19, "Subrs", "offset", null]];
+  let tables = null;
 
   class CFFPrivateDict extends CFFDict {
     constructor(strings) {
@@ -31854,7 +31860,7 @@ var CFFPrivateDict = function CFFPrivateDictClosure() {
 }();
 
 exports.CFFPrivateDict = CFFPrivateDict;
-var CFFCharsetPredefinedTypes = {
+const CFFCharsetPredefinedTypes = {
   ISO_ADOBE: 0,
   EXPERT: 1,
   EXPERT_SUBSET: 2
@@ -31918,7 +31924,7 @@ class CFFOffsetTracker {
   }
 
   offset(value) {
-    for (var key in this.offsets) {
+    for (const key in this.offsets) {
       this.offsets[key] += value;
     }
   }
@@ -31928,22 +31934,22 @@ class CFFOffsetTracker {
       throw new _util.FormatError(`Not tracking location of ${key}`);
     }
 
-    var data = output.data;
-    var dataOffset = this.offsets[key];
-    var size = 5;
+    const data = output.data;
+    const dataOffset = this.offsets[key];
+    const size = 5;
 
-    for (var i = 0, ii = values.length; i < ii; ++i) {
-      var offset0 = i * size + dataOffset;
-      var offset1 = offset0 + 1;
-      var offset2 = offset0 + 2;
-      var offset3 = offset0 + 3;
-      var offset4 = offset0 + 4;
+    for (let i = 0, ii = values.length; i < ii; ++i) {
+      const offset0 = i * size + dataOffset;
+      const offset1 = offset0 + 1;
+      const offset2 = offset0 + 2;
+      const offset3 = offset0 + 3;
+      const offset4 = offset0 + 4;
 
       if (data[offset0] !== 0x1d || data[offset1] !== 0 || data[offset2] !== 0 || data[offset3] !== 0 || data[offset4] !== 0) {
         throw new _util.FormatError("writing to an offset that is not empty");
       }
 
-      var value = values[i];
+      const value = values[i];
       data[offset0] = 0x1d;
       data[offset1] = value >> 24 & 0xff;
       data[offset2] = value >> 16 & 0xff;
@@ -31960,8 +31966,8 @@ class CFFCompiler {
   }
 
   compile() {
-    var cff = this.cff;
-    var output = {
+    const cff = this.cff;
+    const output = {
       data: [],
       length: 0,
       add: function CFFCompiler_add(data) {
@@ -31969,19 +31975,19 @@ class CFFCompiler {
         this.length = this.data.length;
       }
     };
-    var header = this.compileHeader(cff.header);
+    const header = this.compileHeader(cff.header);
     output.add(header);
-    var nameIndex = this.compileNameIndex(cff.names);
+    const nameIndex = this.compileNameIndex(cff.names);
     output.add(nameIndex);
 
     if (cff.isCIDFont) {
       if (cff.topDict.hasName("FontMatrix")) {
-        var base = cff.topDict.getByName("FontMatrix");
+        const base = cff.topDict.getByName("FontMatrix");
         cff.topDict.removeByName("FontMatrix");
 
-        for (var i = 0, ii = cff.fdArray.length; i < ii; i++) {
-          var subDict = cff.fdArray[i];
-          var matrix = base.slice(0);
+        for (let i = 0, ii = cff.fdArray.length; i < ii; i++) {
+          const subDict = cff.fdArray[i];
+          let matrix = base.slice(0);
 
           if (subDict.hasName("FontMatrix")) {
             matrix = _util.Util.transform(matrix, subDict.getByName("FontMatrix"));
@@ -31999,39 +32005,39 @@ class CFFCompiler {
     }
 
     cff.topDict.setByName("charset", 0);
-    var compiled = this.compileTopDicts([cff.topDict], output.length, cff.isCIDFont);
+    let compiled = this.compileTopDicts([cff.topDict], output.length, cff.isCIDFont);
     output.add(compiled.output);
-    var topDictTracker = compiled.trackers[0];
-    var stringIndex = this.compileStringIndex(cff.strings.strings);
+    const topDictTracker = compiled.trackers[0];
+    const stringIndex = this.compileStringIndex(cff.strings.strings);
     output.add(stringIndex);
-    var globalSubrIndex = this.compileIndex(cff.globalSubrIndex);
+    const globalSubrIndex = this.compileIndex(cff.globalSubrIndex);
     output.add(globalSubrIndex);
 
     if (cff.encoding && cff.topDict.hasName("Encoding")) {
       if (cff.encoding.predefined) {
         topDictTracker.setEntryLocation("Encoding", [cff.encoding.format], output);
       } else {
-        var encoding = this.compileEncoding(cff.encoding);
+        const encoding = this.compileEncoding(cff.encoding);
         topDictTracker.setEntryLocation("Encoding", [output.length], output);
         output.add(encoding);
       }
     }
 
-    var charset = this.compileCharset(cff.charset, cff.charStrings.count, cff.strings, cff.isCIDFont);
+    const charset = this.compileCharset(cff.charset, cff.charStrings.count, cff.strings, cff.isCIDFont);
     topDictTracker.setEntryLocation("charset", [output.length], output);
     output.add(charset);
-    var charStrings = this.compileCharStrings(cff.charStrings);
+    const charStrings = this.compileCharStrings(cff.charStrings);
     topDictTracker.setEntryLocation("CharStrings", [output.length], output);
     output.add(charStrings);
 
     if (cff.isCIDFont) {
       topDictTracker.setEntryLocation("FDSelect", [output.length], output);
-      var fdSelect = this.compileFDSelect(cff.fdSelect);
+      const fdSelect = this.compileFDSelect(cff.fdSelect);
       output.add(fdSelect);
       compiled = this.compileTopDicts(cff.fdArray, output.length, true);
       topDictTracker.setEntryLocation("FDArray", [output.length], output);
       output.add(compiled.output);
-      var fontDictTrackers = compiled.trackers;
+      const fontDictTrackers = compiled.trackers;
       this.compilePrivateDicts(cff.fdArray, fontDictTrackers, output);
     }
 
@@ -32053,19 +32059,19 @@ class CFFCompiler {
   }
 
   encodeFloat(num) {
-    var value = num.toString();
-    var m = CFFCompiler.EncodeFloatRegExp.exec(value);
+    let value = num.toString();
+    const m = CFFCompiler.EncodeFloatRegExp.exec(value);
 
     if (m) {
-      var epsilon = parseFloat("1e" + ((m[2] ? +m[2] : 0) + m[1].length));
+      const epsilon = parseFloat("1e" + ((m[2] ? +m[2] : 0) + m[1].length));
       value = (Math.round(num * epsilon) / epsilon).toString();
     }
 
-    var nibbles = "";
-    var i, ii;
+    let nibbles = "";
+    let i, ii;
 
     for (i = 0, ii = value.length; i < ii; ++i) {
-      var a = value[i];
+      const a = value[i];
 
       if (a === "e") {
         nibbles += value[++i] === "-" ? "c" : "b";
@@ -32079,7 +32085,7 @@ class CFFCompiler {
     }
 
     nibbles += nibbles.length & 1 ? "f" : "ff";
-    var out = [30];
+    const out = [30];
 
     for (i = 0, ii = nibbles.length; i < ii; i += 2) {
       out.push(parseInt(nibbles.substring(i, i + 2), 16));
@@ -32089,7 +32095,7 @@ class CFFCompiler {
   }
 
   encodeInteger(value) {
-    var code;
+    let code;
 
     if (value >= -107 && value <= 107) {
       code = [value + 139];
@@ -32113,15 +32119,15 @@ class CFFCompiler {
   }
 
   compileNameIndex(names) {
-    var nameIndex = new CFFIndex();
+    const nameIndex = new CFFIndex();
 
-    for (var i = 0, ii = names.length; i < ii; ++i) {
-      var name = names[i];
-      var length = Math.min(name.length, 127);
-      var sanitizedName = new Array(length);
+    for (let i = 0, ii = names.length; i < ii; ++i) {
+      const name = names[i];
+      const length = Math.min(name.length, 127);
+      let sanitizedName = new Array(length);
 
-      for (var j = 0; j < length; j++) {
-        var char = name[j];
+      for (let j = 0; j < length; j++) {
+        let char = name[j];
 
         if (char < "!" || char > "~" || char === "[" || char === "]" || char === "(" || char === ")" || char === "{" || char === "}" || char === "<" || char === ">" || char === "/" || char === "%") {
           char = "_";
@@ -32143,11 +32149,11 @@ class CFFCompiler {
   }
 
   compileTopDicts(dicts, length, removeCidKeys) {
-    var fontDictTrackers = [];
-    var fdArrayIndex = new CFFIndex();
+    const fontDictTrackers = [];
+    let fdArrayIndex = new CFFIndex();
 
-    for (var i = 0, ii = dicts.length; i < ii; ++i) {
-      var fontDict = dicts[i];
+    for (let i = 0, ii = dicts.length; i < ii; ++i) {
+      const fontDict = dicts[i];
 
       if (removeCidKeys) {
         fontDict.removeByName("CIDFontVersion");
@@ -32157,8 +32163,8 @@ class CFFCompiler {
         fontDict.removeByName("UIDBase");
       }
 
-      var fontDictTracker = new CFFOffsetTracker();
-      var fontDictData = this.compileDict(fontDict, fontDictTracker);
+      const fontDictTracker = new CFFOffsetTracker();
+      const fontDictData = this.compileDict(fontDict, fontDictTracker);
       fontDictTrackers.push(fontDictTracker);
       fdArrayIndex.add(fontDictData);
       fontDictTracker.offset(length);
@@ -32172,17 +32178,17 @@ class CFFCompiler {
   }
 
   compilePrivateDicts(dicts, trackers, output) {
-    for (var i = 0, ii = dicts.length; i < ii; ++i) {
-      var fontDict = dicts[i];
-      var privateDict = fontDict.privateDict;
+    for (let i = 0, ii = dicts.length; i < ii; ++i) {
+      const fontDict = dicts[i];
+      const privateDict = fontDict.privateDict;
 
       if (!privateDict || !fontDict.hasName("Private")) {
         throw new _util.FormatError("There must be a private dictionary.");
       }
 
-      var privateDictTracker = new CFFOffsetTracker();
-      var privateDictData = this.compileDict(privateDict, privateDictTracker);
-      var outputLength = output.length;
+      const privateDictTracker = new CFFOffsetTracker();
+      const privateDictData = this.compileDict(privateDict, privateDictTracker);
+      let outputLength = output.length;
       privateDictTracker.offset(outputLength);
 
       if (!privateDictData.length) {
@@ -32193,7 +32199,7 @@ class CFFCompiler {
       output.add(privateDictData);
 
       if (privateDict.subrsIndex && privateDict.hasName("Subrs")) {
-        var subrs = this.compileIndex(privateDict.subrsIndex);
+        const subrs = this.compileIndex(privateDict.subrsIndex);
         privateDictTracker.setEntryLocation("Subrs", [privateDictData.length], output);
         output.add(subrs);
       }
@@ -32201,18 +32207,18 @@ class CFFCompiler {
   }
 
   compileDict(dict, offsetTracker) {
-    var out = [];
-    var order = dict.order;
+    let out = [];
+    const order = dict.order;
 
-    for (var i = 0; i < order.length; ++i) {
-      var key = order[i];
+    for (let i = 0; i < order.length; ++i) {
+      const key = order[i];
 
       if (!(key in dict.values)) {
         continue;
       }
 
-      var values = dict.values[key];
-      var types = dict.types[key];
+      let values = dict.values[key];
+      let types = dict.types[key];
 
       if (!Array.isArray(types)) {
         types = [types];
@@ -32226,9 +32232,9 @@ class CFFCompiler {
         continue;
       }
 
-      for (var j = 0, jj = types.length; j < jj; ++j) {
-        var type = types[j];
-        var value = values[j];
+      for (let j = 0, jj = types.length; j < jj; ++j) {
+        const type = types[j];
+        const value = values[j];
 
         switch (type) {
           case "num":
@@ -32237,7 +32243,7 @@ class CFFCompiler {
             break;
 
           case "offset":
-            var name = dict.keyToNameMap[key];
+            const name = dict.keyToNameMap[key];
 
             if (!offsetTracker.isTracking(name)) {
               offsetTracker.track(name, out.length);
@@ -32250,7 +32256,7 @@ class CFFCompiler {
           case "delta":
             out = out.concat(this.encodeNumber(value));
 
-            for (var k = 1, kk = values.length; k < kk; ++k) {
+            for (let k = 1, kk = values.length; k < kk; ++k) {
               out = out.concat(this.encodeNumber(values[k]));
             }
 
@@ -32268,9 +32274,9 @@ class CFFCompiler {
   }
 
   compileStringIndex(strings) {
-    var stringIndex = new CFFIndex();
+    const stringIndex = new CFFIndex();
 
-    for (var i = 0, ii = strings.length; i < ii; ++i) {
+    for (let i = 0, ii = strings.length; i < ii; ++i) {
       stringIndex.add((0, _util.stringToBytes)(strings[i]));
     }
 
@@ -32278,15 +32284,15 @@ class CFFCompiler {
   }
 
   compileGlobalSubrIndex() {
-    var globalSubrIndex = this.cff.globalSubrIndex;
+    const globalSubrIndex = this.cff.globalSubrIndex;
     this.out.writeByteArray(this.compileIndex(globalSubrIndex));
   }
 
   compileCharStrings(charStrings) {
-    var charStringsIndex = new CFFIndex();
+    const charStringsIndex = new CFFIndex();
 
-    for (var i = 0; i < charStrings.count; i++) {
-      var glyph = charStrings.get(i);
+    for (let i = 0; i < charStrings.count; i++) {
+      const glyph = charStrings.get(i);
 
       if (glyph.length === 0) {
         charStringsIndex.add(new Uint8Array([0x8b, 0x0e]));
@@ -32383,9 +32389,9 @@ class CFFCompiler {
   }
 
   compileTypedArray(data) {
-    var out = [];
+    const out = [];
 
-    for (var i = 0, ii = data.length; i < ii; ++i) {
+    for (let i = 0, ii = data.length; i < ii; ++i) {
       out[i] = data[i];
     }
 
@@ -32393,22 +32399,22 @@ class CFFCompiler {
   }
 
   compileIndex(index, trackers = []) {
-    var objects = index.objects;
-    var count = objects.length;
+    const objects = index.objects;
+    const count = objects.length;
 
     if (count === 0) {
       return [0, 0, 0];
     }
 
-    var data = [count >> 8 & 0xff, count & 0xff];
-    var lastOffset = 1,
+    const data = [count >> 8 & 0xff, count & 0xff];
+    let lastOffset = 1,
         i;
 
     for (i = 0; i < count; ++i) {
       lastOffset += objects[i].length;
     }
 
-    var offsetSize;
+    let offsetSize;
 
     if (lastOffset < 0x100) {
       offsetSize = 1;
@@ -32421,7 +32427,7 @@ class CFFCompiler {
     }
 
     data.push(offsetSize);
-    var relativeOffset = 1;
+    let relativeOffset = 1;
 
     for (i = 0; i < count + 1; i++) {
       if (offsetSize === 1) {
@@ -32444,7 +32450,7 @@ class CFFCompiler {
         trackers[i].offset(data.length);
       }
 
-      for (var j = 0, jj = objects[i].length; j < jj; j++) {
+      for (let j = 0, jj = objects[i].length; j < jj; j++) {
         data.push(objects[i][j]);
       }
     }
@@ -45723,7 +45729,7 @@ var _encodings = __w_pdfjs_require__(33);
 
 var _stream = __w_pdfjs_require__(11);
 
-var FontRendererFactory = function FontRendererFactoryClosure() {
+const FontRendererFactory = function FontRendererFactoryClosure() {
   function getLong(data, offset) {
     return data[offset] << 24 | data[offset + 1] << 16 | data[offset + 2] << 8 | data[offset + 3];
   }
@@ -45746,13 +45752,13 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
   }
 
   function parseCmap(data, start, end) {
-    var offset = getUshort(data, start + 2) === 1 ? getLong(data, start + 8) : getLong(data, start + 16);
-    var format = getUshort(data, start + offset);
-    var ranges, p, i;
+    const offset = getUshort(data, start + 2) === 1 ? getLong(data, start + 8) : getLong(data, start + 16);
+    const format = getUshort(data, start + offset);
+    let ranges, p, i;
 
     if (format === 4) {
       getUshort(data, start + offset + 2);
-      var segCount = getUshort(data, start + offset + 6) >> 1;
+      const segCount = getUshort(data, start + offset + 6) >> 1;
       p = start + offset + 14;
       ranges = [];
 
@@ -45773,7 +45779,7 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
       }
 
       for (i = 0; i < segCount; i++, p += 2) {
-        var idOffset = getUshort(data, p);
+        let idOffset = getUshort(data, p);
 
         if (idOffset === 0) {
           continue;
@@ -45781,7 +45787,7 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
 
         ranges[i].ids = [];
 
-        for (var j = 0, jj = ranges[i].end - ranges[i].start + 1; j < jj; j++) {
+        for (let j = 0, jj = ranges[i].end - ranges[i].start + 1; j < jj; j++) {
           ranges[i].ids[j] = getUshort(data, p + idOffset);
           idOffset += 2;
         }
@@ -45790,7 +45796,7 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
       return ranges;
     } else if (format === 12) {
       getLong(data, start + offset + 4);
-      var groups = getLong(data, start + offset + 12);
+      const groups = getLong(data, start + offset + 12);
       p = start + offset + 16;
       ranges = [];
 
@@ -45810,9 +45816,9 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
   }
 
   function parseCff(data, start, end, seacAnalysisEnabled) {
-    var properties = {};
-    var parser = new _cff_parser.CFFParser(new _stream.Stream(data, start, end - start), properties, seacAnalysisEnabled);
-    var cff = parser.parse();
+    const properties = {};
+    const parser = new _cff_parser.CFFParser(new _stream.Stream(data, start, end - start), properties, seacAnalysisEnabled);
+    const cff = parser.parse();
     return {
       glyphs: cff.charStrings.objects,
       subrs: cff.topDict.privateDict && cff.topDict.privateDict.subrsIndex && cff.topDict.privateDict.subrsIndex.objects,
@@ -45824,7 +45830,7 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
   }
 
   function parseGlyfTable(glyf, loca, isGlyphLocationsLong) {
-    var itemSize, itemDecode;
+    let itemSize, itemDecode;
 
     if (isGlyphLocationsLong) {
       itemSize = 4;
@@ -45840,11 +45846,11 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
       };
     }
 
-    var glyphs = [];
-    var startOffset = itemDecode(loca, 0);
+    const glyphs = [];
+    let startOffset = itemDecode(loca, 0);
 
-    for (var j = itemSize; j < loca.length; j += itemSize) {
-      var endOffset = itemDecode(loca, j);
+    for (let j = itemSize; j < loca.length; j += itemSize) {
+      const endOffset = itemDecode(loca, j);
       glyphs.push(glyf.subarray(startOffset, endOffset));
       startOffset = endOffset;
     }
@@ -45853,13 +45859,13 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
   }
 
   function lookupCmap(ranges, unicode) {
-    var code = unicode.codePointAt(0),
-        gid = 0;
-    var l = 0,
+    const code = unicode.codePointAt(0);
+    let gid = 0,
+        l = 0,
         r = ranges.length - 1;
 
     while (l < r) {
-      var c = l + r + 1 >> 1;
+      const c = l + r + 1 >> 1;
 
       if (code < ranges[c].start) {
         r = c - 1;
@@ -45900,19 +45906,19 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
       });
     }
 
-    var i = 0;
-    var numberOfContours = (code[i] << 24 | code[i + 1] << 16) >> 16;
-    var flags;
-    var x = 0,
+    let i = 0;
+    const numberOfContours = (code[i] << 24 | code[i + 1] << 16) >> 16;
+    let flags;
+    let x = 0,
         y = 0;
     i += 10;
 
     if (numberOfContours < 0) {
       do {
         flags = code[i] << 8 | code[i + 1];
-        var glyphIndex = code[i + 2] << 8 | code[i + 3];
+        const glyphIndex = code[i + 2] << 8 | code[i + 3];
         i += 4;
-        var arg1, arg2;
+        let arg1, arg2;
 
         if (flags & 0x01) {
           arg1 = (code[i] << 24 | code[i + 1] << 16) >> 16;
@@ -45931,7 +45937,7 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
           y = 0;
         }
 
-        var scaleX = 1,
+        let scaleX = 1,
             scaleY = 1,
             scale01 = 0,
             scale10 = 0;
@@ -45951,7 +45957,7 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
           i += 8;
         }
 
-        var subglyph = font.glyphs[glyphIndex];
+        const subglyph = font.glyphs[glyphIndex];
 
         if (subglyph) {
           cmds.push({
@@ -45968,22 +45974,22 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
         }
       } while (flags & 0x20);
     } else {
-      var endPtsOfContours = [];
-      var j, jj;
+      const endPtsOfContours = [];
+      let j, jj;
 
       for (j = 0; j < numberOfContours; j++) {
         endPtsOfContours.push(code[i] << 8 | code[i + 1]);
         i += 2;
       }
 
-      var instructionLength = code[i] << 8 | code[i + 1];
+      const instructionLength = code[i] << 8 | code[i + 1];
       i += 2 + instructionLength;
-      var numberOfPoints = endPtsOfContours[endPtsOfContours.length - 1] + 1;
-      var points = [];
+      const numberOfPoints = endPtsOfContours[endPtsOfContours.length - 1] + 1;
+      const points = [];
 
       while (points.length < numberOfPoints) {
         flags = code[i++];
-        var repeat = 1;
+        let repeat = 1;
 
         if (flags & 0x08) {
           repeat += code[i++];
@@ -46034,18 +46040,18 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
         points[j].y = y;
       }
 
-      var startPoint = 0;
+      let startPoint = 0;
 
       for (i = 0; i < numberOfContours; i++) {
-        var endPoint = endPtsOfContours[i];
-        var contour = points.slice(startPoint, endPoint + 1);
+        const endPoint = endPtsOfContours[i];
+        const contour = points.slice(startPoint, endPoint + 1);
 
         if (contour[0].flags & 1) {
           contour.push(contour[0]);
         } else if (contour[contour.length - 1].flags & 1) {
           contour.unshift(contour[contour.length - 1]);
         } else {
-          var p = {
+          const p = {
             flags: 1,
             x: (contour[0].x + contour[contour.length - 1].x) / 2,
             y: (contour[0].y + contour[contour.length - 1].y) / 2
@@ -46094,18 +46100,18 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
       });
     }
 
-    var stack = [];
-    var x = 0,
+    const stack = [];
+    let x = 0,
         y = 0;
-    var stems = 0;
+    let stems = 0;
 
     function parse(code) {
-      var i = 0;
+      let i = 0;
 
       while (i < code.length) {
-        var stackClean = false;
-        var v = code[i++];
-        var xa, xb, ya, yb, y1, y2, y3, n, subrCode;
+        let stackClean = false;
+        let v = code[i++];
+        let xa, xb, ya, yb, y1, y2, y3, n, subrCode;
 
         switch (v) {
           case 1:
@@ -46260,8 +46266,8 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
                 break;
 
               case 37:
-                var x0 = x,
-                    y0 = y;
+                const x0 = x,
+                      y0 = y;
                 xa = x + stack.shift();
                 ya = y + stack.shift();
                 xb = xa + stack.shift();
@@ -46293,8 +46299,8 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
 
           case 14:
             if (stack.length >= 4) {
-              var achar = stack.pop();
-              var bchar = stack.pop();
+              const achar = stack.pop();
+              const bchar = stack.pop();
               y = stack.pop();
               x = stack.pop();
               cmds.push({
@@ -46304,7 +46310,7 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
                 cmd: "translate",
                 args: [x, y]
               });
-              var cmap = lookupCmap(font.cmap, String.fromCharCode(font.glyphNameMap[_encodings.StandardEncoding[achar]]));
+              let cmap = lookupCmap(font.cmap, String.fromCharCode(font.glyphNameMap[_encodings.StandardEncoding[achar]]));
               compileCharString(font.glyphs[cmap.glyphId], cmds, font, cmap.glyphId);
               cmds.push({
                 cmd: "restore"
@@ -46622,14 +46628,14 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
 
   return {
     create: function FontRendererFactory_create(font, seacAnalysisEnabled) {
-      var data = new Uint8Array(font.data);
-      var cmap, glyf, loca, cff, indexToLocFormat, unitsPerEm;
-      var numTables = getUshort(data, 4);
+      const data = new Uint8Array(font.data);
+      let cmap, glyf, loca, cff, indexToLocFormat, unitsPerEm;
+      const numTables = getUshort(data, 4);
 
-      for (var i = 0, p = 12; i < numTables; i++, p += 16) {
-        var tag = (0, _util.bytesToString)(data.subarray(p, p + 4));
-        var offset = getLong(data, p + 8);
-        var length = getLong(data, p + 12);
+      for (let i = 0, p = 12; i < numTables; i++, p += 16) {
+        const tag = (0, _util.bytesToString)(data.subarray(p, p + 4));
+        const offset = getLong(data, p + 8);
+        const length = getLong(data, p + 12);
 
         switch (tag) {
           case "cmap":
@@ -46656,7 +46662,7 @@ var FontRendererFactory = function FontRendererFactoryClosure() {
       }
 
       if (glyf) {
-        var fontMatrix = !unitsPerEm ? font.fontMatrix : [1 / unitsPerEm, 0, 0, 1 / unitsPerEm, 0, 0];
+        const fontMatrix = !unitsPerEm ? font.fontMatrix : [1 / unitsPerEm, 0, 0, 1 / unitsPerEm, 0, 0];
         return new TrueTypeCompiled(parseGlyfTable(glyf, loca, indexToLocFormat), cmap, fontMatrix);
       }
 
@@ -46686,10 +46692,10 @@ var _stream = __w_pdfjs_require__(11);
 
 var _util = __w_pdfjs_require__(2);
 
-var HINTING_ENABLED = false;
+const HINTING_ENABLED = false;
 
-var Type1CharString = function Type1CharStringClosure() {
-  var COMMAND_MAP = {
+const Type1CharString = function Type1CharStringClosure() {
+  const COMMAND_MAP = {
     hstem: [1],
     vstem: [3],
     vmoveto: [4],
@@ -46707,22 +46713,22 @@ var Type1CharString = function Type1CharStringClosure() {
     hvcurveto: [31]
   };
 
-  function Type1CharString() {
-    this.width = 0;
-    this.lsb = 0;
-    this.flexing = false;
-    this.output = [];
-    this.stack = [];
-  }
+  class Type1CharString {
+    constructor() {
+      this.width = 0;
+      this.lsb = 0;
+      this.flexing = false;
+      this.output = [];
+      this.stack = [];
+    }
 
-  Type1CharString.prototype = {
-    convert: function Type1CharString_convert(encoded, subrs, seacAnalysisEnabled) {
-      var count = encoded.length;
-      var error = false;
-      var wx, sbx, subrNumber;
+    convert(encoded, subrs, seacAnalysisEnabled) {
+      const count = encoded.length;
+      let error = false;
+      let wx, sbx, subrNumber;
 
-      for (var i = 0; i < count; i++) {
-        var value = encoded[i];
+      for (let i = 0; i < count; i++) {
+        let value = encoded[i];
 
         if (value < 32) {
           if (value === 12) {
@@ -46755,7 +46761,7 @@ var Type1CharString = function Type1CharStringClosure() {
                   break;
                 }
 
-                var dy = this.stack.pop();
+                const dy = this.stack.pop();
                 this.stack.push(0, dy);
                 break;
               }
@@ -46887,7 +46893,7 @@ var Type1CharString = function Type1CharStringClosure() {
 
               this.stack.pop();
               wx = this.stack.pop();
-              var sby = this.stack.pop();
+              const sby = this.stack.pop();
               sbx = this.stack.pop();
               this.lsb = sbx;
               this.width = wx;
@@ -46901,8 +46907,8 @@ var Type1CharString = function Type1CharStringClosure() {
                 break;
               }
 
-              var num2 = this.stack.pop();
-              var num1 = this.stack.pop();
+              const num2 = this.stack.pop();
+              const num1 = this.stack.pop();
               this.stack.push(num1 / num2);
               break;
 
@@ -46913,10 +46919,10 @@ var Type1CharString = function Type1CharStringClosure() {
               }
 
               subrNumber = this.stack.pop();
-              var numArgs = this.stack.pop();
+              const numArgs = this.stack.pop();
 
               if (subrNumber === 0 && numArgs === 3) {
-                var flexArgs = this.stack.splice(this.stack.length - 17, 17);
+                const flexArgs = this.stack.splice(this.stack.length - 17, 17);
                 this.stack.push(flexArgs[2] + flexArgs[0], flexArgs[3] + flexArgs[1], flexArgs[4], flexArgs[5], flexArgs[6], flexArgs[7], flexArgs[8], flexArgs[9], flexArgs[10], flexArgs[11], flexArgs[12], flexArgs[13], flexArgs[14]);
                 error = this.executeCommand(13, COMMAND_MAP.flex, true);
                 this.flexing = false;
@@ -46958,19 +46964,19 @@ var Type1CharString = function Type1CharStringClosure() {
       }
 
       return error;
-    },
+    }
 
     executeCommand(howManyArgs, command, keepStack) {
-      var stackLength = this.stack.length;
+      const stackLength = this.stack.length;
 
       if (howManyArgs > stackLength) {
         return true;
       }
 
-      var start = stackLength - howManyArgs;
+      const start = stackLength - howManyArgs;
 
-      for (var i = start; i < stackLength; i++) {
-        var value = this.stack[i];
+      for (let i = start; i < stackLength; i++) {
+        let value = this.stack[i];
 
         if (Number.isInteger(value)) {
           this.output.push(28, value >> 8 & 0xff, value & 0xff);
@@ -46991,13 +46997,14 @@ var Type1CharString = function Type1CharStringClosure() {
       return false;
     }
 
-  };
+  }
+
   return Type1CharString;
 }();
 
-var Type1Parser = function Type1ParserClosure() {
-  var EEXEC_ENCRYPT_KEY = 55665;
-  var CHAR_STRS_ENCRYPT_KEY = 4330;
+const Type1Parser = function Type1ParserClosure() {
+  const EEXEC_ENCRYPT_KEY = 55665;
+  const CHAR_STRS_ENCRYPT_KEY = 4330;
 
   function isHexDigit(code) {
     return code >= 48 && code <= 57 || code >= 65 && code <= 70 || code >= 97 && code <= 102;
@@ -47008,9 +47015,9 @@ var Type1Parser = function Type1ParserClosure() {
       return new Uint8Array(0);
     }
 
-    var r = key | 0,
-        c1 = 52845,
-        c2 = 22719,
+    const c1 = 52845,
+          c2 = 22719;
+    let r = key | 0,
         i,
         j;
 
@@ -47018,11 +47025,11 @@ var Type1Parser = function Type1ParserClosure() {
       r = (data[i] + r) * c1 + c2 & (1 << 16) - 1;
     }
 
-    var count = data.length - discardNumber;
-    var decrypted = new Uint8Array(count);
+    const count = data.length - discardNumber;
+    const decrypted = new Uint8Array(count);
 
     for (i = discardNumber, j = 0; j < count; i++, j++) {
-      var value = data[i];
+      const value = data[i];
       decrypted[j] = value ^ r >> 8;
       r = (value + r) * c1 + c2 & (1 << 16) - 1;
     }
@@ -47031,30 +47038,30 @@ var Type1Parser = function Type1ParserClosure() {
   }
 
   function decryptAscii(data, key, discardNumber) {
-    var r = key | 0,
-        c1 = 52845,
-        c2 = 22719;
-    var count = data.length,
-        maybeLength = count >>> 1;
-    var decrypted = new Uint8Array(maybeLength);
-    var i, j;
+    const c1 = 52845,
+          c2 = 22719;
+    let r = key | 0;
+    const count = data.length,
+          maybeLength = count >>> 1;
+    const decrypted = new Uint8Array(maybeLength);
+    let i, j;
 
     for (i = 0, j = 0; i < count; i++) {
-      var digit1 = data[i];
+      const digit1 = data[i];
 
       if (!isHexDigit(digit1)) {
         continue;
       }
 
       i++;
-      var digit2;
+      let digit2;
 
       while (i < count && !isHexDigit(digit2 = data[i])) {
         i++;
       }
 
       if (i < count) {
-        var value = parseInt(String.fromCharCode(digit1, digit2), 16);
+        const value = parseInt(String.fromCharCode(digit1, digit2), 16);
         decrypted[j++] = value ^ r >> 8;
         r = (value + r) * c1 + c2 & (1 << 16) - 1;
       }
@@ -47067,25 +47074,25 @@ var Type1Parser = function Type1ParserClosure() {
     return c === 0x2f || c === 0x5b || c === 0x5d || c === 0x7b || c === 0x7d || c === 0x28 || c === 0x29;
   }
 
-  function Type1Parser(stream, encrypted, seacAnalysisEnabled) {
-    if (encrypted) {
-      var data = stream.getBytes();
-      var isBinary = !((isHexDigit(data[0]) || (0, _core_utils.isWhiteSpace)(data[0])) && isHexDigit(data[1]) && isHexDigit(data[2]) && isHexDigit(data[3]) && isHexDigit(data[4]) && isHexDigit(data[5]) && isHexDigit(data[6]) && isHexDigit(data[7]));
-      stream = new _stream.Stream(isBinary ? decrypt(data, EEXEC_ENCRYPT_KEY, 4) : decryptAscii(data, EEXEC_ENCRYPT_KEY, 4));
+  class Type1Parser {
+    constructor(stream, encrypted, seacAnalysisEnabled) {
+      if (encrypted) {
+        const data = stream.getBytes();
+        const isBinary = !((isHexDigit(data[0]) || (0, _core_utils.isWhiteSpace)(data[0])) && isHexDigit(data[1]) && isHexDigit(data[2]) && isHexDigit(data[3]) && isHexDigit(data[4]) && isHexDigit(data[5]) && isHexDigit(data[6]) && isHexDigit(data[7]));
+        stream = new _stream.Stream(isBinary ? decrypt(data, EEXEC_ENCRYPT_KEY, 4) : decryptAscii(data, EEXEC_ENCRYPT_KEY, 4));
+      }
+
+      this.seacAnalysisEnabled = !!seacAnalysisEnabled;
+      this.stream = stream;
+      this.nextChar();
     }
 
-    this.seacAnalysisEnabled = !!seacAnalysisEnabled;
-    this.stream = stream;
-    this.nextChar();
-  }
-
-  Type1Parser.prototype = {
-    readNumberArray: function Type1Parser_readNumberArray() {
+    readNumberArray() {
       this.getToken();
-      var array = [];
+      const array = [];
 
       while (true) {
-        var token = this.getToken();
+        const token = this.getToken();
 
         if (token === null || token === "]" || token === "}") {
           break;
@@ -47095,25 +47102,30 @@ var Type1Parser = function Type1ParserClosure() {
       }
 
       return array;
-    },
-    readNumber: function Type1Parser_readNumber() {
-      var token = this.getToken();
+    }
+
+    readNumber() {
+      const token = this.getToken();
       return parseFloat(token || 0);
-    },
-    readInt: function Type1Parser_readInt() {
-      var token = this.getToken();
+    }
+
+    readInt() {
+      const token = this.getToken();
       return parseInt(token || 0, 10) | 0;
-    },
-    readBoolean: function Type1Parser_readBoolean() {
-      var token = this.getToken();
+    }
+
+    readBoolean() {
+      const token = this.getToken();
       return token === "true" ? 1 : 0;
-    },
-    nextChar: function Type1_nextChar() {
+    }
+
+    nextChar() {
       return this.currentChar = this.stream.getByte();
-    },
-    getToken: function Type1Parser_getToken() {
-      var comment = false;
-      var ch = this.currentChar;
+    }
+
+    getToken() {
+      let comment = false;
+      let ch = this.currentChar;
 
       while (true) {
         if (ch === -1) {
@@ -47138,7 +47150,7 @@ var Type1Parser = function Type1ParserClosure() {
         return String.fromCharCode(ch);
       }
 
-      var token = "";
+      let token = "";
 
       do {
         token += String.fromCharCode(ch);
@@ -47146,28 +47158,30 @@ var Type1Parser = function Type1ParserClosure() {
       } while (ch >= 0 && !(0, _core_utils.isWhiteSpace)(ch) && !isSpecial(ch));
 
       return token;
-    },
-    readCharStrings: function Type1Parser_readCharStrings(bytes, lenIV) {
+    }
+
+    readCharStrings(bytes, lenIV) {
       if (lenIV === -1) {
         return bytes;
       }
 
       return decrypt(bytes, CHAR_STRS_ENCRYPT_KEY, lenIV);
-    },
-    extractFontProgram: function Type1Parser_extractFontProgram(properties) {
-      var stream = this.stream;
-      var subrs = [],
-          charstrings = [];
-      var privateData = Object.create(null);
+    }
+
+    extractFontProgram(properties) {
+      const stream = this.stream;
+      const subrs = [],
+            charstrings = [];
+      const privateData = Object.create(null);
       privateData.lenIV = 4;
-      var program = {
+      const program = {
         subrs: [],
         charstrings: [],
         properties: {
           privateData
         }
       };
-      var token, length, data, lenIV, encoded;
+      let token, length, data, lenIV, encoded;
 
       while ((token = this.getToken()) !== null) {
         if (token !== "/") {
@@ -47194,7 +47208,7 @@ var Type1Parser = function Type1ParserClosure() {
                 continue;
               }
 
-              var glyph = this.getToken();
+              const glyph = this.getToken();
               length = this.readInt();
               this.getToken();
               data = length > 0 ? stream.getBytes(length) : new Uint8Array(0);
@@ -47242,7 +47256,7 @@ var Type1Parser = function Type1ParserClosure() {
           case "OtherBlues":
           case "FamilyBlues":
           case "FamilyOtherBlues":
-            var blueArray = this.readNumberArray();
+            const blueArray = this.readNumberArray();
 
             if (blueArray.length > 0 && blueArray.length % 2 === 0 && HINTING_ENABLED) {
               program.properties.privateData[token] = blueArray;
@@ -47275,12 +47289,12 @@ var Type1Parser = function Type1ParserClosure() {
         }
       }
 
-      for (var i = 0; i < charstrings.length; i++) {
-        glyph = charstrings[i].glyph;
+      for (let i = 0; i < charstrings.length; i++) {
+        const glyph = charstrings[i].glyph;
         encoded = charstrings[i].encoded;
-        var charString = new Type1CharString();
-        var error = charString.convert(encoded, subrs, this.seacAnalysisEnabled);
-        var output = charString.output;
+        const charString = new Type1CharString();
+        const error = charString.convert(encoded, subrs, this.seacAnalysisEnabled);
+        let output = charString.output;
 
         if (error) {
           output = [14];
@@ -47310,9 +47324,10 @@ var Type1Parser = function Type1ParserClosure() {
       }
 
       return program;
-    },
-    extractFontHeader: function Type1Parser_extractFontHeader(properties) {
-      var token;
+    }
+
+    extractFontHeader(properties) {
+      let token;
 
       while ((token = this.getToken()) !== null) {
         if (token !== "/") {
@@ -47323,22 +47338,22 @@ var Type1Parser = function Type1ParserClosure() {
 
         switch (token) {
           case "FontMatrix":
-            var matrix = this.readNumberArray();
+            const matrix = this.readNumberArray();
             properties.fontMatrix = matrix;
             break;
 
           case "Encoding":
-            var encodingArg = this.getToken();
-            var encoding;
+            const encodingArg = this.getToken();
+            let encoding;
 
             if (!/^\d+$/.test(encodingArg)) {
               encoding = (0, _encodings.getEncoding)(encodingArg);
             } else {
               encoding = [];
-              var size = parseInt(encodingArg, 10) | 0;
+              const size = parseInt(encodingArg, 10) | 0;
               this.getToken();
 
-              for (var j = 0; j < size; j++) {
+              for (let j = 0; j < size; j++) {
                 token = this.getToken();
 
                 while (token !== "dup" && token !== "def") {
@@ -47353,9 +47368,9 @@ var Type1Parser = function Type1ParserClosure() {
                   break;
                 }
 
-                var index = this.readInt();
+                const index = this.readInt();
                 this.getToken();
-                var glyph = this.getToken();
+                const glyph = this.getToken();
                 encoding[index] = glyph;
                 this.getToken();
               }
@@ -47365,7 +47380,7 @@ var Type1Parser = function Type1ParserClosure() {
             break;
 
           case "FontBBox":
-            var fontBBox = this.readNumberArray();
+            const fontBBox = this.readNumberArray();
             properties.ascent = Math.max(fontBBox[3], fontBBox[1]);
             properties.descent = Math.min(fontBBox[1], fontBBox[3]);
             properties.ascentScaled = true;
@@ -47373,7 +47388,9 @@ var Type1Parser = function Type1ParserClosure() {
         }
       }
     }
-  };
+
+  }
+
   return Type1Parser;
 }();
 
@@ -55749,8 +55766,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.8.290';
-const pdfjsBuild = 'ca35349cc';
+const pdfjsVersion = '2.8.337';
+const pdfjsBuild = '3fc88e11a';
 })();
 
 /******/ 	return __webpack_exports__;

@@ -1,5 +1,5 @@
 /** @implements {IPDFStream} */
-export class PDFWorkerStream {
+export class PDFWorkerStream implements IPDFStream {
     constructor(msgHandler: any);
     _msgHandler: any;
     _contentLength: any;
@@ -10,7 +10,7 @@ export class PDFWorkerStream {
     cancelAllRequests(reason: any): void;
 }
 /** @implements {IPDFStreamReader} */
-declare class PDFWorkerStreamReader {
+declare class PDFWorkerStreamReader implements IPDFStreamReader {
     constructor(msgHandler: any);
     _msgHandler: any;
     onProgress: any;
@@ -30,7 +30,7 @@ declare class PDFWorkerStreamReader {
     cancel(reason: any): void;
 }
 /** @implements {IPDFStreamRangeReader} */
-declare class PDFWorkerStreamRangeReader {
+declare class PDFWorkerStreamRangeReader implements IPDFStreamRangeReader {
     constructor(begin: any, end: any, msgHandler: any);
     _msgHandler: any;
     onProgress: any;

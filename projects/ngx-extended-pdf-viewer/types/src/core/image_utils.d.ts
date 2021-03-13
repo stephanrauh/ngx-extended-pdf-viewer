@@ -17,19 +17,14 @@ export class GlobalImageCache {
     clear(onlyData?: boolean): void;
 }
 export class LocalColorSpaceCache extends BaseLocalCache {
-    constructor(options: any);
 }
 export class LocalFunctionCache extends BaseLocalCache {
-    constructor(options: any);
 }
 export class LocalGStateCache extends BaseLocalCache {
-    constructor(options: any);
 }
 export class LocalImageCache extends BaseLocalCache {
-    constructor(options: any);
 }
 export class LocalTilingPatternCache extends BaseLocalCache {
-    constructor(options: any);
 }
 import { RefSetCache } from "./primitives.js";
 declare class BaseLocalCache {

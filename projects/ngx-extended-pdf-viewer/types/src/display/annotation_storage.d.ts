@@ -7,8 +7,7 @@ export class AnnotationStorage {
     onSetModified: any;
     onResetModified: any;
     /**
-     * Get the value for a given key if it exists
-     * or return the default value
+     * Get the value for a given key if it exists, or return the default value.
      *
      * @public
      * @memberof AnnotationStorage

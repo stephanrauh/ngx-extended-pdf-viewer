@@ -237,7 +237,7 @@ declare const MissingPDFException_base: any;
 export class MissingPDFException extends MissingPDFException_base {
     [x: string]: any;
 }
-export function objectFromEntries(iterable: any): any;
+export function objectFromMap(map: any): any;
 export function objectSize(obj: any): number;
 export namespace OPS {
     const dependency: number;
