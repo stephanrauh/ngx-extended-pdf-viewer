@@ -10610,7 +10610,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.8.337';
+    const viewerVersion = '2.8.354';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -16868,7 +16868,7 @@ PDFPrintService.prototype = {
 
     this.pageStyleSheet = document.createElement("style");
     const pageSize = this.pagesOverview[0];
-    this.pageStyleSheet.textContent = "@supports ((size:A4) and (size:1pt 1pt)) {" + "@page { size: " + pageSize.width + "pt " + pageSize.height + "pt;}" + "}";
+    this.pageStyleSheet.textContent = "@page { size: " + pageSize.width + "pt " + pageSize.height + "pt;}";
     body.appendChild(this.pageStyleSheet);
   },
 
@@ -16951,6 +16951,8 @@ PDFPrintService.prototype = {
 
     const wrapper = document.createElement("div");
     wrapper.appendChild(img);
+    wrapper.style.width = img.style.width;
+    wrapper.style.height = img.style.height;
     this.printContainer.appendChild(wrapper);
     return new Promise(function (resolve, reject) {
       img.onload = resolve;
@@ -17173,8 +17175,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.8.337';
-const pdfjsBuild = '3fc88e11a';
+const pdfjsVersion = '2.8.354';
+const pdfjsBuild = 'a9a074ac6';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

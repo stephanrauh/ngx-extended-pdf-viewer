@@ -142,7 +142,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.8.337';
+    const workerVersion = '2.8.354';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -47416,7 +47416,7 @@ var _primitives = __w_pdfjs_require__(4);
 
 var _core_utils = __w_pdfjs_require__(7);
 
-var ShadingType = {
+const ShadingType = {
   FUNCTION_BASED: 1,
   AXIAL: 2,
   RADIAL: 3,
@@ -47426,7 +47426,7 @@ var ShadingType = {
   TENSOR_PATCH_MESH: 7
 };
 
-var Pattern = function PatternClosure() {
+const Pattern = function PatternClosure() {
   function Pattern() {
     (0, _util.unreachable)("should not call Pattern constructor");
   }
@@ -47438,8 +47438,8 @@ var Pattern = function PatternClosure() {
   };
 
   Pattern.parseShading = function (shading, matrix, xref, res, handler, pdfFunctionFactory, localColorSpaceCache) {
-    var dict = (0, _primitives.isStream)(shading) ? shading.dict : shading;
-    var type = dict.get("ShadingType");
+    const dict = (0, _primitives.isStream)(shading) ? shading.dict : shading;
+    const type = dict.get("ShadingType");
 
     try {
       switch (type) {
@@ -47473,7 +47473,7 @@ var Pattern = function PatternClosure() {
 }();
 
 exports.Pattern = Pattern;
-var Shadings = {};
+const Shadings = {};
 Shadings.SMALL_NUMBER = 1e-6;
 
 Shadings.RadialAxial = function RadialAxialClosure() {
@@ -47500,20 +47500,20 @@ Shadings.RadialAxial = function RadialAxialClosure() {
       this.bbox = null;
     }
 
-    var t0 = 0.0,
+    let t0 = 0.0,
         t1 = 1.0;
 
     if (dict.has("Domain")) {
-      var domainArr = dict.getArray("Domain");
+      const domainArr = dict.getArray("Domain");
       t0 = domainArr[0];
       t1 = domainArr[1];
     }
 
-    var extendStart = false,
+    let extendStart = false,
         extendEnd = false;
 
     if (dict.has("Extend")) {
-      var extendArr = dict.getArray("Extend");
+      const extendArr = dict.getArray("Extend");
       extendStart = extendArr[0];
       extendEnd = extendArr[1];
     }
@@ -47529,32 +47529,32 @@ Shadings.RadialAxial = function RadialAxialClosure() {
 
     this.extendStart = extendStart;
     this.extendEnd = extendEnd;
-    var fnObj = dict.getRaw("Function");
-    var fn = pdfFunctionFactory.createFromArray(fnObj);
+    const fnObj = dict.getRaw("Function");
+    const fn = pdfFunctionFactory.createFromArray(fnObj);
     const NUMBER_OF_SAMPLES = 10;
     const step = (t1 - t0) / NUMBER_OF_SAMPLES;
-    var colorStops = this.colorStops = [];
+    const colorStops = this.colorStops = [];
 
     if (t0 >= t1 || step <= 0) {
       (0, _util.info)("Bad shading domain.");
       return;
     }
 
-    var color = new Float32Array(cs.numComps),
-        ratio = new Float32Array(1);
-    var rgbColor;
+    const color = new Float32Array(cs.numComps),
+          ratio = new Float32Array(1);
+    let rgbColor;
 
     for (let i = 0; i <= NUMBER_OF_SAMPLES; i++) {
       ratio[0] = t0 + i * step;
       fn(ratio, 0, color, 0);
       rgbColor = cs.getRgb(color, 0);
 
-      var cssColor = _util.Util.makeHexColor(rgbColor[0], rgbColor[1], rgbColor[2]);
+      const cssColor = _util.Util.makeHexColor(rgbColor[0], rgbColor[1], rgbColor[2]);
 
       colorStops.push([i / NUMBER_OF_SAMPLES, cssColor]);
     }
 
-    var background = "transparent";
+    let background = "transparent";
 
     if (dict.has("Background")) {
       rgbColor = cs.getRgb(dict.get("Background"), 0);
@@ -47576,9 +47576,9 @@ Shadings.RadialAxial = function RadialAxialClosure() {
 
   RadialAxial.prototype = {
     getIR: function RadialAxial_getIR() {
-      var coordsArr = this.coordsArr;
-      var shadingType = this.shadingType;
-      var type, p0, p1, r0, r1;
+      const coordsArr = this.coordsArr;
+      const shadingType = this.shadingType;
+      let type, p0, p1, r0, r1;
 
       if (shadingType === ShadingType.AXIAL) {
         p0 = [coordsArr[0], coordsArr[1]];
@@ -47596,14 +47596,14 @@ Shadings.RadialAxial = function RadialAxialClosure() {
         (0, _util.unreachable)(`getPattern type unknown: ${shadingType}`);
       }
 
-      var matrix = this.matrix;
+      const matrix = this.matrix;
 
       if (matrix) {
         p0 = _util.Util.applyTransform(p0, matrix);
         p1 = _util.Util.applyTransform(p1, matrix);
 
         if (shadingType === ShadingType.RADIAL) {
-          var scale = _util.Util.singularValueDecompose2dScale(matrix);
+          const scale = _util.Util.singularValueDecompose2dScale(matrix);
 
           r0 *= scale[0];
           r1 *= scale[1];
@@ -47622,9 +47622,9 @@ Shadings.Mesh = function MeshClosure() {
     this.context = context;
     this.buffer = 0;
     this.bufferLength = 0;
-    var numComps = context.numComps;
+    const numComps = context.numComps;
     this.tmpCompsBuf = new Float32Array(numComps);
-    var csNumComps = context.colorSpace.numComps;
+    const csNumComps = context.colorSpace.numComps;
     this.tmpCsCompsBuf = context.colorFn ? new Float32Array(csNumComps) : this.tmpCompsBuf;
   }
 
@@ -47638,7 +47638,7 @@ Shadings.Mesh = function MeshClosure() {
         return true;
       }
 
-      var nextByte = this.stream.getByte();
+      const nextByte = this.stream.getByte();
 
       if (nextByte < 0) {
         return false;
@@ -47650,8 +47650,8 @@ Shadings.Mesh = function MeshClosure() {
     },
 
     readBits: function MeshStreamReader_readBits(n) {
-      var buffer = this.buffer;
-      var bufferLength = this.bufferLength;
+      let buffer = this.buffer;
+      let bufferLength = this.bufferLength;
 
       if (n === 32) {
         if (bufferLength === 0) {
@@ -47659,7 +47659,7 @@ Shadings.Mesh = function MeshClosure() {
         }
 
         buffer = buffer << 24 | this.stream.getByte() << 16 | this.stream.getByte() << 8 | this.stream.getByte();
-        var nextByte = this.stream.getByte();
+        const nextByte = this.stream.getByte();
         this.buffer = nextByte & (1 << bufferLength) - 1;
         return (buffer << 8 - bufferLength | (nextByte & 0xff) >> bufferLength) >>> 0;
       }
@@ -47686,26 +47686,26 @@ Shadings.Mesh = function MeshClosure() {
       return this.readBits(this.context.bitsPerFlag);
     },
     readCoordinate: function MeshStreamReader_readCoordinate() {
-      var bitsPerCoordinate = this.context.bitsPerCoordinate;
-      var xi = this.readBits(bitsPerCoordinate);
-      var yi = this.readBits(bitsPerCoordinate);
-      var decode = this.context.decode;
-      var scale = bitsPerCoordinate < 32 ? 1 / ((1 << bitsPerCoordinate) - 1) : 2.3283064365386963e-10;
+      const bitsPerCoordinate = this.context.bitsPerCoordinate;
+      const xi = this.readBits(bitsPerCoordinate);
+      const yi = this.readBits(bitsPerCoordinate);
+      const decode = this.context.decode;
+      const scale = bitsPerCoordinate < 32 ? 1 / ((1 << bitsPerCoordinate) - 1) : 2.3283064365386963e-10;
       return [xi * scale * (decode[1] - decode[0]) + decode[0], yi * scale * (decode[3] - decode[2]) + decode[2]];
     },
     readComponents: function MeshStreamReader_readComponents() {
-      var numComps = this.context.numComps;
-      var bitsPerComponent = this.context.bitsPerComponent;
-      var scale = bitsPerComponent < 32 ? 1 / ((1 << bitsPerComponent) - 1) : 2.3283064365386963e-10;
-      var decode = this.context.decode;
-      var components = this.tmpCompsBuf;
+      const numComps = this.context.numComps;
+      const bitsPerComponent = this.context.bitsPerComponent;
+      const scale = bitsPerComponent < 32 ? 1 / ((1 << bitsPerComponent) - 1) : 2.3283064365386963e-10;
+      const decode = this.context.decode;
+      const components = this.tmpCompsBuf;
 
-      for (var i = 0, j = 4; i < numComps; i++, j += 2) {
-        var ci = this.readBits(bitsPerComponent);
+      for (let i = 0, j = 4; i < numComps; i++, j += 2) {
+        const ci = this.readBits(bitsPerComponent);
         components[i] = ci * scale * (decode[j + 1] - decode[j]) + decode[j];
       }
 
-      var color = this.tmpCsCompsBuf;
+      const color = this.tmpCsCompsBuf;
 
       if (this.context.colorFn) {
         this.context.colorFn(components, 0, color, 0);
@@ -47716,16 +47716,16 @@ Shadings.Mesh = function MeshClosure() {
   };
 
   function decodeType4Shading(mesh, reader) {
-    var coords = mesh.coords;
-    var colors = mesh.colors;
-    var operators = [];
-    var ps = [];
-    var verticesLeft = 0;
+    const coords = mesh.coords;
+    const colors = mesh.colors;
+    const operators = [];
+    const ps = [];
+    let verticesLeft = 0;
 
     while (reader.hasData) {
-      var f = reader.readFlag();
-      var coord = reader.readCoordinate();
-      var color = reader.readComponents();
+      const f = reader.readFlag();
+      const coord = reader.readCoordinate();
+      const color = reader.readComponents();
 
       if (verticesLeft === 0) {
         if (!(0 <= f && f <= 2)) {
@@ -47766,13 +47766,13 @@ Shadings.Mesh = function MeshClosure() {
   }
 
   function decodeType5Shading(mesh, reader, verticesPerRow) {
-    var coords = mesh.coords;
-    var colors = mesh.colors;
-    var ps = [];
+    const coords = mesh.coords;
+    const colors = mesh.colors;
+    const ps = [];
 
     while (reader.hasData) {
-      var coord = reader.readCoordinate();
-      var color = reader.readComponents();
+      const coord = reader.readCoordinate();
+      const color = reader.readComponents();
       ps.push(coords.length);
       coords.push(coord);
       colors.push(color);
@@ -47786,24 +47786,24 @@ Shadings.Mesh = function MeshClosure() {
     });
   }
 
-  var MIN_SPLIT_PATCH_CHUNKS_AMOUNT = 3;
-  var MAX_SPLIT_PATCH_CHUNKS_AMOUNT = 20;
-  var TRIANGLE_DENSITY = 20;
+  const MIN_SPLIT_PATCH_CHUNKS_AMOUNT = 3;
+  const MAX_SPLIT_PATCH_CHUNKS_AMOUNT = 20;
+  const TRIANGLE_DENSITY = 20;
 
-  var getB = function getBClosure() {
+  const getB = function getBClosure() {
     function buildB(count) {
-      var lut = [];
+      const lut = [];
 
-      for (var i = 0; i <= count; i++) {
-        var t = i / count,
-            t_ = 1 - t;
+      for (let i = 0; i <= count; i++) {
+        const t = i / count,
+              t_ = 1 - t;
         lut.push(new Float32Array([t_ * t_ * t_, 3 * t * t_ * t_, 3 * t * t * t_, t * t * t]));
       }
 
       return lut;
     }
 
-    var cache = [];
+    const cache = [];
     return function getB(count) {
       if (!cache[count]) {
         cache[count] = buildB(count);
@@ -47814,34 +47814,34 @@ Shadings.Mesh = function MeshClosure() {
   }();
 
   function buildFigureFromPatch(mesh, index) {
-    var figure = mesh.figures[index];
+    const figure = mesh.figures[index];
     (0, _util.assert)(figure.type === "patch", "Unexpected patch mesh figure");
-    var coords = mesh.coords,
-        colors = mesh.colors;
-    var pi = figure.coords;
-    var ci = figure.colors;
-    var figureMinX = Math.min(coords[pi[0]][0], coords[pi[3]][0], coords[pi[12]][0], coords[pi[15]][0]);
-    var figureMinY = Math.min(coords[pi[0]][1], coords[pi[3]][1], coords[pi[12]][1], coords[pi[15]][1]);
-    var figureMaxX = Math.max(coords[pi[0]][0], coords[pi[3]][0], coords[pi[12]][0], coords[pi[15]][0]);
-    var figureMaxY = Math.max(coords[pi[0]][1], coords[pi[3]][1], coords[pi[12]][1], coords[pi[15]][1]);
-    var splitXBy = Math.ceil((figureMaxX - figureMinX) * TRIANGLE_DENSITY / (mesh.bounds[2] - mesh.bounds[0]));
+    const coords = mesh.coords,
+          colors = mesh.colors;
+    const pi = figure.coords;
+    const ci = figure.colors;
+    const figureMinX = Math.min(coords[pi[0]][0], coords[pi[3]][0], coords[pi[12]][0], coords[pi[15]][0]);
+    const figureMinY = Math.min(coords[pi[0]][1], coords[pi[3]][1], coords[pi[12]][1], coords[pi[15]][1]);
+    const figureMaxX = Math.max(coords[pi[0]][0], coords[pi[3]][0], coords[pi[12]][0], coords[pi[15]][0]);
+    const figureMaxY = Math.max(coords[pi[0]][1], coords[pi[3]][1], coords[pi[12]][1], coords[pi[15]][1]);
+    let splitXBy = Math.ceil((figureMaxX - figureMinX) * TRIANGLE_DENSITY / (mesh.bounds[2] - mesh.bounds[0]));
     splitXBy = Math.max(MIN_SPLIT_PATCH_CHUNKS_AMOUNT, Math.min(MAX_SPLIT_PATCH_CHUNKS_AMOUNT, splitXBy));
-    var splitYBy = Math.ceil((figureMaxY - figureMinY) * TRIANGLE_DENSITY / (mesh.bounds[3] - mesh.bounds[1]));
+    let splitYBy = Math.ceil((figureMaxY - figureMinY) * TRIANGLE_DENSITY / (mesh.bounds[3] - mesh.bounds[1]));
     splitYBy = Math.max(MIN_SPLIT_PATCH_CHUNKS_AMOUNT, Math.min(MAX_SPLIT_PATCH_CHUNKS_AMOUNT, splitYBy));
-    var verticesPerRow = splitXBy + 1;
-    var figureCoords = new Int32Array((splitYBy + 1) * verticesPerRow);
-    var figureColors = new Int32Array((splitYBy + 1) * verticesPerRow);
-    var k = 0;
-    var cl = new Uint8Array(3),
-        cr = new Uint8Array(3);
-    var c0 = colors[ci[0]],
-        c1 = colors[ci[1]],
-        c2 = colors[ci[2]],
-        c3 = colors[ci[3]];
-    var bRow = getB(splitYBy),
-        bCol = getB(splitXBy);
+    const verticesPerRow = splitXBy + 1;
+    const figureCoords = new Int32Array((splitYBy + 1) * verticesPerRow);
+    const figureColors = new Int32Array((splitYBy + 1) * verticesPerRow);
+    let k = 0;
+    const cl = new Uint8Array(3),
+          cr = new Uint8Array(3);
+    const c0 = colors[ci[0]],
+          c1 = colors[ci[1]],
+          c2 = colors[ci[2]],
+          c3 = colors[ci[3]];
+    const bRow = getB(splitYBy),
+          bCol = getB(splitXBy);
 
-    for (var row = 0; row <= splitYBy; row++) {
+    for (let row = 0; row <= splitYBy; row++) {
       cl[0] = (c0[0] * (splitYBy - row) + c2[0] * row) / splitYBy | 0;
       cl[1] = (c0[1] * (splitYBy - row) + c2[1] * row) / splitYBy | 0;
       cl[2] = (c0[2] * (splitYBy - row) + c2[2] * row) / splitYBy | 0;
@@ -47849,18 +47849,18 @@ Shadings.Mesh = function MeshClosure() {
       cr[1] = (c1[1] * (splitYBy - row) + c3[1] * row) / splitYBy | 0;
       cr[2] = (c1[2] * (splitYBy - row) + c3[2] * row) / splitYBy | 0;
 
-      for (var col = 0; col <= splitXBy; col++, k++) {
+      for (let col = 0; col <= splitXBy; col++, k++) {
         if ((row === 0 || row === splitYBy) && (col === 0 || col === splitXBy)) {
           continue;
         }
 
-        var x = 0,
+        let x = 0,
             y = 0;
-        var q = 0;
+        let q = 0;
 
-        for (var i = 0; i <= 3; i++) {
-          for (var j = 0; j <= 3; j++, q++) {
-            var m = bRow[row][i] * bCol[col][j];
+        for (let i = 0; i <= 3; i++) {
+          for (let j = 0; j <= 3; j++, q++) {
+            const m = bRow[row][i] * bCol[col][j];
             x += coords[pi[q]][0] * m;
             y += coords[pi[q]][1] * m;
           }
@@ -47869,7 +47869,7 @@ Shadings.Mesh = function MeshClosure() {
         figureCoords[k] = coords.length;
         coords.push([x, y]);
         figureColors[k] = colors.length;
-        var newColor = new Uint8Array(3);
+        const newColor = new Uint8Array(3);
         newColor[0] = (cl[0] * (splitXBy - col) + cr[0] * col) / splitXBy | 0;
         newColor[1] = (cl[1] * (splitXBy - col) + cr[1] * col) / splitXBy | 0;
         newColor[2] = (cl[2] * (splitXBy - col) + cr[2] * col) / splitXBy | 0;
@@ -47894,32 +47894,31 @@ Shadings.Mesh = function MeshClosure() {
   }
 
   function decodeType6Shading(mesh, reader) {
-    var coords = mesh.coords;
-    var colors = mesh.colors;
-    var ps = new Int32Array(16);
-    var cs = new Int32Array(4);
+    const coords = mesh.coords;
+    const colors = mesh.colors;
+    const ps = new Int32Array(16);
+    const cs = new Int32Array(4);
 
     while (reader.hasData) {
-      var f = reader.readFlag();
+      const f = reader.readFlag();
 
       if (!(0 <= f && f <= 3)) {
         throw new _util.FormatError("Unknown type6 flag");
       }
 
-      var i, ii;
-      var pi = coords.length;
+      const pi = coords.length;
 
-      for (i = 0, ii = f !== 0 ? 8 : 12; i < ii; i++) {
+      for (let i = 0, ii = f !== 0 ? 8 : 12; i < ii; i++) {
         coords.push(reader.readCoordinate());
       }
 
-      var ci = colors.length;
+      const ci = colors.length;
 
-      for (i = 0, ii = f !== 0 ? 2 : 4; i < ii; i++) {
+      for (let i = 0, ii = f !== 0 ? 2 : 4; i < ii; i++) {
         colors.push(reader.readComponents());
       }
 
-      var tmp1, tmp2, tmp3, tmp4;
+      let tmp1, tmp2, tmp3, tmp4;
 
       switch (f) {
         case 0:
@@ -48025,32 +48024,31 @@ Shadings.Mesh = function MeshClosure() {
   }
 
   function decodeType7Shading(mesh, reader) {
-    var coords = mesh.coords;
-    var colors = mesh.colors;
-    var ps = new Int32Array(16);
-    var cs = new Int32Array(4);
+    const coords = mesh.coords;
+    const colors = mesh.colors;
+    const ps = new Int32Array(16);
+    const cs = new Int32Array(4);
 
     while (reader.hasData) {
-      var f = reader.readFlag();
+      const f = reader.readFlag();
 
       if (!(0 <= f && f <= 3)) {
         throw new _util.FormatError("Unknown type7 flag");
       }
 
-      var i, ii;
-      var pi = coords.length;
+      const pi = coords.length;
 
-      for (i = 0, ii = f !== 0 ? 12 : 16; i < ii; i++) {
+      for (let i = 0, ii = f !== 0 ? 12 : 16; i < ii; i++) {
         coords.push(reader.readCoordinate());
       }
 
-      var ci = colors.length;
+      const ci = colors.length;
 
-      for (i = 0, ii = f !== 0 ? 2 : 4; i < ii; i++) {
+      for (let i = 0, ii = f !== 0 ? 2 : 4; i < ii; i++) {
         colors.push(reader.readComponents());
       }
 
-      var tmp1, tmp2, tmp3, tmp4;
+      let tmp1, tmp2, tmp3, tmp4;
 
       switch (f) {
         case 0:
@@ -48164,14 +48162,14 @@ Shadings.Mesh = function MeshClosure() {
   }
 
   function updateBounds(mesh) {
-    var minX = mesh.coords[0][0],
+    let minX = mesh.coords[0][0],
         minY = mesh.coords[0][1],
         maxX = minX,
         maxY = minY;
 
-    for (var i = 1, ii = mesh.coords.length; i < ii; i++) {
-      var x = mesh.coords[i][0],
-          y = mesh.coords[i][1];
+    for (let i = 1, ii = mesh.coords.length; i < ii; i++) {
+      const x = mesh.coords[i][0],
+            y = mesh.coords[i][1];
       minX = minX > x ? x : minX;
       minY = minY > y ? y : minY;
       maxX = maxX < x ? x : maxX;
@@ -48182,34 +48180,34 @@ Shadings.Mesh = function MeshClosure() {
   }
 
   function packData(mesh) {
-    var i, ii, j, jj;
-    var coords = mesh.coords;
-    var coordsPacked = new Float32Array(coords.length * 2);
+    let i, ii, j, jj;
+    const coords = mesh.coords;
+    const coordsPacked = new Float32Array(coords.length * 2);
 
     for (i = 0, j = 0, ii = coords.length; i < ii; i++) {
-      var xy = coords[i];
+      const xy = coords[i];
       coordsPacked[j++] = xy[0];
       coordsPacked[j++] = xy[1];
     }
 
     mesh.coords = coordsPacked;
-    var colors = mesh.colors;
-    var colorsPacked = new Uint8Array(colors.length * 3);
+    const colors = mesh.colors;
+    const colorsPacked = new Uint8Array(colors.length * 3);
 
     for (i = 0, j = 0, ii = colors.length; i < ii; i++) {
-      var c = colors[i];
+      const c = colors[i];
       colorsPacked[j++] = c[0];
       colorsPacked[j++] = c[1];
       colorsPacked[j++] = c[2];
     }
 
     mesh.colors = colorsPacked;
-    var figures = mesh.figures;
+    const figures = mesh.figures;
 
     for (i = 0, ii = figures.length; i < ii; i++) {
-      var figure = figures[i],
-          ps = figure.coords,
-          cs = figure.colors;
+      const figure = figures[i],
+            ps = figure.coords,
+            cs = figure.colors;
 
       for (j = 0, jj = ps.length; j < jj; j++) {
         ps[j] *= 2;
@@ -48223,7 +48221,7 @@ Shadings.Mesh = function MeshClosure() {
       throw new _util.FormatError("Mesh data is not a stream");
     }
 
-    var dict = stream.dict;
+    const dict = stream.dict;
     this.matrix = matrix;
     this.shadingType = dict.get("ShadingType");
     this.type = "Pattern";
@@ -48245,12 +48243,12 @@ Shadings.Mesh = function MeshClosure() {
 
     this.cs = cs;
     this.background = dict.has("Background") ? cs.getRgb(dict.get("Background"), 0) : null;
-    var fnObj = dict.getRaw("Function");
-    var fn = fnObj ? pdfFunctionFactory.createFromArray(fnObj) : null;
+    const fnObj = dict.getRaw("Function");
+    const fn = fnObj ? pdfFunctionFactory.createFromArray(fnObj) : null;
     this.coords = [];
     this.colors = [];
     this.figures = [];
-    var decodeContext = {
+    const decodeContext = {
       bitsPerCoordinate: dict.get("BitsPerCoordinate"),
       bitsPerComponent: dict.get("BitsPerComponent"),
       bitsPerFlag: dict.get("BitsPerFlag"),
@@ -48259,8 +48257,8 @@ Shadings.Mesh = function MeshClosure() {
       colorSpace: cs,
       numComps: fn ? 1 : cs.numComps
     };
-    var reader = new MeshStreamReader(stream, decodeContext);
-    var patchMesh = false;
+    const reader = new MeshStreamReader(stream, decodeContext);
+    let patchMesh = false;
 
     switch (this.shadingType) {
       case ShadingType.FREE_FORM_MESH:
@@ -48268,7 +48266,7 @@ Shadings.Mesh = function MeshClosure() {
         break;
 
       case ShadingType.LATTICE_FORM_MESH:
-        var verticesPerRow = dict.get("VerticesPerRow") | 0;
+        const verticesPerRow = dict.get("VerticesPerRow") | 0;
 
         if (verticesPerRow < 2) {
           throw new _util.FormatError("Invalid VerticesPerRow");
@@ -48295,7 +48293,7 @@ Shadings.Mesh = function MeshClosure() {
     if (patchMesh) {
       updateBounds(this);
 
-      for (var i = 0, ii = this.figures.length; i < ii; i++) {
+      for (let i = 0, ii = this.figures.length; i < ii; i++) {
         buildFigureFromPatch(this, i);
       }
     }
@@ -53427,12 +53425,12 @@ exports.OperatorList = void 0;
 
 var _util = __w_pdfjs_require__(2);
 
-var QueueOptimizer = function QueueOptimizerClosure() {
+const QueueOptimizer = function QueueOptimizerClosure() {
   function addState(parentState, pattern, checkFn, iterateFn, processFn) {
-    var state = parentState;
+    let state = parentState;
 
-    for (var i = 0, ii = pattern.length - 1; i < ii; i++) {
-      var item = pattern[i];
+    for (let i = 0, ii = pattern.length - 1; i < ii; i++) {
+      const item = pattern[i];
       state = state[item] || (state[item] = []);
     }
 
@@ -53444,11 +53442,12 @@ var QueueOptimizer = function QueueOptimizerClosure() {
   }
 
   function handlePaintSolidColorImageMask(iFirstSave, count, fnArray, argsArray) {
-    var iFirstPIMXO = iFirstSave + 2;
+    const iFirstPIMXO = iFirstSave + 2;
+    let i;
 
-    for (var i = 0; i < count; i++) {
-      var arg = argsArray[iFirstPIMXO + 4 * i];
-      var imageMask = arg.length === 1 && arg[0];
+    for (i = 0; i < count; i++) {
+      const arg = argsArray[iFirstPIMXO + 4 * i];
+      const imageMask = arg.length === 1 && arg[0];
 
       if (imageMask && imageMask.width === 1 && imageMask.height === 1 && (!imageMask.data.length || imageMask.data.length === 1 && imageMask.data[0] === 0)) {
         fnArray[iFirstPIMXO + 4 * i] = _util.OPS.paintSolidColorImageMask;
@@ -53461,11 +53460,11 @@ var QueueOptimizer = function QueueOptimizerClosure() {
     return count - i;
   }
 
-  var InitialState = [];
+  const InitialState = [];
   addState(InitialState, [_util.OPS.save, _util.OPS.transform, _util.OPS.paintInlineImageXObject, _util.OPS.restore], null, function iterateInlineImageGroup(context, i) {
-    var fnArray = context.fnArray;
-    var iFirstSave = context.iCurr - 3;
-    var pos = (i - iFirstSave) % 4;
+    const fnArray = context.fnArray;
+    const iFirstSave = context.iCurr - 3;
+    const pos = (i - iFirstSave) % 4;
 
     switch (pos) {
       case 0:
@@ -53483,32 +53482,31 @@ var QueueOptimizer = function QueueOptimizerClosure() {
 
     throw new Error(`iterateInlineImageGroup - invalid pos: ${pos}`);
   }, function foundInlineImageGroup(context, i) {
-    var MIN_IMAGES_IN_INLINE_IMAGES_BLOCK = 10;
-    var MAX_IMAGES_IN_INLINE_IMAGES_BLOCK = 200;
-    var MAX_WIDTH = 1000;
-    var IMAGE_PADDING = 1;
-    var fnArray = context.fnArray,
-        argsArray = context.argsArray;
-    var curr = context.iCurr;
-    var iFirstSave = curr - 3;
-    var iFirstTransform = curr - 2;
-    var iFirstPIIXO = curr - 1;
-    var count = Math.min(Math.floor((i - iFirstSave) / 4), MAX_IMAGES_IN_INLINE_IMAGES_BLOCK);
+    const MIN_IMAGES_IN_INLINE_IMAGES_BLOCK = 10;
+    const MAX_IMAGES_IN_INLINE_IMAGES_BLOCK = 200;
+    const MAX_WIDTH = 1000;
+    const IMAGE_PADDING = 1;
+    const fnArray = context.fnArray,
+          argsArray = context.argsArray;
+    const curr = context.iCurr;
+    const iFirstSave = curr - 3;
+    const iFirstTransform = curr - 2;
+    const iFirstPIIXO = curr - 1;
+    const count = Math.min(Math.floor((i - iFirstSave) / 4), MAX_IMAGES_IN_INLINE_IMAGES_BLOCK);
 
     if (count < MIN_IMAGES_IN_INLINE_IMAGES_BLOCK) {
       return i - (i - iFirstSave) % 4;
     }
 
-    var maxX = 0;
-    var map = [],
-        maxLineHeight = 0;
-    var currentX = IMAGE_PADDING,
+    let maxX = 0;
+    const map = [];
+    let maxLineHeight = 0;
+    let currentX = IMAGE_PADDING,
         currentY = IMAGE_PADDING;
-    var q;
 
-    for (q = 0; q < count; q++) {
-      var transform = argsArray[iFirstTransform + (q << 2)];
-      var img = argsArray[iFirstPIIXO + (q << 2)][0];
+    for (let q = 0; q < count; q++) {
+      const transform = argsArray[iFirstTransform + (q << 2)];
+      const img = argsArray[iFirstPIIXO + (q << 2)][0];
 
       if (currentX + img.width > MAX_WIDTH) {
         maxX = Math.max(maxX, currentX);
@@ -53528,19 +53526,19 @@ var QueueOptimizer = function QueueOptimizerClosure() {
       maxLineHeight = Math.max(maxLineHeight, img.height);
     }
 
-    var imgWidth = Math.max(maxX, currentX) + IMAGE_PADDING;
-    var imgHeight = currentY + maxLineHeight + IMAGE_PADDING;
-    var imgData = new Uint8ClampedArray(imgWidth * imgHeight * 4);
-    var imgRowSize = imgWidth << 2;
+    const imgWidth = Math.max(maxX, currentX) + IMAGE_PADDING;
+    const imgHeight = currentY + maxLineHeight + IMAGE_PADDING;
+    const imgData = new Uint8ClampedArray(imgWidth * imgHeight * 4);
+    const imgRowSize = imgWidth << 2;
 
-    for (q = 0; q < count; q++) {
-      var data = argsArray[iFirstPIIXO + (q << 2)][0].data;
-      var rowSize = map[q].w << 2;
-      var dataOffset = 0;
-      var offset = map[q].x + map[q].y * imgWidth << 2;
+    for (let q = 0; q < count; q++) {
+      const data = argsArray[iFirstPIIXO + (q << 2)][0].data;
+      const rowSize = map[q].w << 2;
+      let dataOffset = 0;
+      let offset = map[q].x + map[q].y * imgWidth << 2;
       imgData.set(data.subarray(0, rowSize), offset - imgRowSize);
 
-      for (var k = 0, kk = map[q].h; k < kk; k++) {
+      for (let k = 0, kk = map[q].h; k < kk; k++) {
         imgData.set(data.subarray(dataOffset, dataOffset + rowSize), offset);
         dataOffset += rowSize;
         offset += imgRowSize;
@@ -53571,9 +53569,9 @@ var QueueOptimizer = function QueueOptimizerClosure() {
     return iFirstSave + 1;
   });
   addState(InitialState, [_util.OPS.save, _util.OPS.transform, _util.OPS.paintImageMaskXObject, _util.OPS.restore], null, function iterateImageMaskGroup(context, i) {
-    var fnArray = context.fnArray;
-    var iFirstSave = context.iCurr - 3;
-    var pos = (i - iFirstSave) % 4;
+    const fnArray = context.fnArray;
+    const iFirstSave = context.iCurr - 3;
+    const pos = (i - iFirstSave) % 4;
 
     switch (pos) {
       case 0:
@@ -53591,26 +53589,25 @@ var QueueOptimizer = function QueueOptimizerClosure() {
 
     throw new Error(`iterateImageMaskGroup - invalid pos: ${pos}`);
   }, function foundImageMaskGroup(context, i) {
-    var MIN_IMAGES_IN_MASKS_BLOCK = 10;
-    var MAX_IMAGES_IN_MASKS_BLOCK = 100;
-    var MAX_SAME_IMAGES_IN_MASKS_BLOCK = 1000;
-    var fnArray = context.fnArray,
-        argsArray = context.argsArray;
-    var curr = context.iCurr;
-    var iFirstSave = curr - 3;
-    var iFirstTransform = curr - 2;
-    var iFirstPIMXO = curr - 1;
-    var count = Math.floor((i - iFirstSave) / 4);
+    const MIN_IMAGES_IN_MASKS_BLOCK = 10;
+    const MAX_IMAGES_IN_MASKS_BLOCK = 100;
+    const MAX_SAME_IMAGES_IN_MASKS_BLOCK = 1000;
+    const fnArray = context.fnArray,
+          argsArray = context.argsArray;
+    const curr = context.iCurr;
+    const iFirstSave = curr - 3;
+    const iFirstTransform = curr - 2;
+    const iFirstPIMXO = curr - 1;
+    let count = Math.floor((i - iFirstSave) / 4);
     count = handlePaintSolidColorImageMask(iFirstSave, count, fnArray, argsArray);
 
     if (count < MIN_IMAGES_IN_MASKS_BLOCK) {
       return i - (i - iFirstSave) % 4;
     }
 
-    var q;
-    var isSameImage = false;
-    var iTransform, transformArgs;
-    var firstPIMXOArg0 = argsArray[iFirstPIMXO][0];
+    let isSameImage = false;
+    let iTransform, transformArgs;
+    const firstPIMXOArg0 = argsArray[iFirstPIMXO][0];
     const firstTransformArg0 = argsArray[iFirstTransform][0],
           firstTransformArg1 = argsArray[iFirstTransform][1],
           firstTransformArg2 = argsArray[iFirstTransform][2],
@@ -53619,9 +53616,9 @@ var QueueOptimizer = function QueueOptimizerClosure() {
     if (firstTransformArg1 === firstTransformArg2) {
       isSameImage = true;
       iTransform = iFirstTransform + 4;
-      var iPIMXO = iFirstPIMXO + 4;
+      let iPIMXO = iFirstPIMXO + 4;
 
-      for (q = 1; q < count; q++, iTransform += 4, iPIMXO += 4) {
+      for (let q = 1; q < count; q++, iTransform += 4, iPIMXO += 4) {
         transformArgs = argsArray[iTransform];
 
         if (argsArray[iPIMXO][0] !== firstPIMXOArg0 || transformArgs[0] !== firstTransformArg0 || transformArgs[1] !== firstTransformArg1 || transformArgs[2] !== firstTransformArg2 || transformArgs[3] !== firstTransformArg3) {
@@ -53638,10 +53635,10 @@ var QueueOptimizer = function QueueOptimizerClosure() {
 
     if (isSameImage) {
       count = Math.min(count, MAX_SAME_IMAGES_IN_MASKS_BLOCK);
-      var positions = new Float32Array(count * 2);
+      const positions = new Float32Array(count * 2);
       iTransform = iFirstTransform;
 
-      for (q = 0; q < count; q++, iTransform += 4) {
+      for (let q = 0; q < count; q++, iTransform += 4) {
         transformArgs = argsArray[iTransform];
         positions[q << 1] = transformArgs[4];
         positions[(q << 1) + 1] = transformArgs[5];
@@ -53651,11 +53648,11 @@ var QueueOptimizer = function QueueOptimizerClosure() {
       argsArray.splice(iFirstSave, count * 4, [firstPIMXOArg0, firstTransformArg0, firstTransformArg1, firstTransformArg2, firstTransformArg3, positions]);
     } else {
       count = Math.min(count, MAX_IMAGES_IN_MASKS_BLOCK);
-      var images = [];
+      const images = [];
 
-      for (q = 0; q < count; q++) {
+      for (let q = 0; q < count; q++) {
         transformArgs = argsArray[iFirstTransform + (q << 2)];
-        var maskParams = argsArray[iFirstPIMXO + (q << 2)][0];
+        const maskParams = argsArray[iFirstPIMXO + (q << 2)][0];
         images.push({
           data: maskParams.data,
           width: maskParams.width,
@@ -53671,14 +53668,14 @@ var QueueOptimizer = function QueueOptimizerClosure() {
     return iFirstSave + 1;
   });
   addState(InitialState, [_util.OPS.save, _util.OPS.transform, _util.OPS.paintImageXObject, _util.OPS.restore], function (context) {
-    var argsArray = context.argsArray;
-    var iFirstTransform = context.iCurr - 2;
+    const argsArray = context.argsArray;
+    const iFirstTransform = context.iCurr - 2;
     return argsArray[iFirstTransform][1] === 0 && argsArray[iFirstTransform][2] === 0;
   }, function iterateImageGroup(context, i) {
-    var fnArray = context.fnArray,
-        argsArray = context.argsArray;
-    var iFirstSave = context.iCurr - 3;
-    var pos = (i - iFirstSave) % 4;
+    const fnArray = context.fnArray,
+          argsArray = context.argsArray;
+    const iFirstSave = context.iCurr - 3;
+    const pos = (i - iFirstSave) % 4;
 
     switch (pos) {
       case 0:
@@ -53689,9 +53686,9 @@ var QueueOptimizer = function QueueOptimizerClosure() {
           return false;
         }
 
-        var iFirstTransform = context.iCurr - 2;
-        var firstTransformArg0 = argsArray[iFirstTransform][0];
-        var firstTransformArg3 = argsArray[iFirstTransform][3];
+        const iFirstTransform = context.iCurr - 2;
+        const firstTransformArg0 = argsArray[iFirstTransform][0];
+        const firstTransformArg3 = argsArray[iFirstTransform][3];
 
         if (argsArray[i][0] !== firstTransformArg0 || argsArray[i][1] !== 0 || argsArray[i][2] !== 0 || argsArray[i][3] !== firstTransformArg3) {
           return false;
@@ -53704,8 +53701,8 @@ var QueueOptimizer = function QueueOptimizerClosure() {
           return false;
         }
 
-        var iFirstPIXO = context.iCurr - 1;
-        var firstPIXOArg0 = argsArray[iFirstPIXO][0];
+        const iFirstPIXO = context.iCurr - 1;
+        const firstPIXOArg0 = argsArray[iFirstPIXO][0];
 
         if (argsArray[i][0] !== firstPIXOArg0) {
           return false;
@@ -53719,42 +53716,42 @@ var QueueOptimizer = function QueueOptimizerClosure() {
 
     throw new Error(`iterateImageGroup - invalid pos: ${pos}`);
   }, function (context, i) {
-    var MIN_IMAGES_IN_BLOCK = 3;
-    var MAX_IMAGES_IN_BLOCK = 1000;
-    var fnArray = context.fnArray,
-        argsArray = context.argsArray;
-    var curr = context.iCurr;
-    var iFirstSave = curr - 3;
-    var iFirstTransform = curr - 2;
-    var iFirstPIXO = curr - 1;
-    var firstPIXOArg0 = argsArray[iFirstPIXO][0];
-    var firstTransformArg0 = argsArray[iFirstTransform][0];
-    var firstTransformArg3 = argsArray[iFirstTransform][3];
-    var count = Math.min(Math.floor((i - iFirstSave) / 4), MAX_IMAGES_IN_BLOCK);
+    const MIN_IMAGES_IN_BLOCK = 3;
+    const MAX_IMAGES_IN_BLOCK = 1000;
+    const fnArray = context.fnArray,
+          argsArray = context.argsArray;
+    const curr = context.iCurr;
+    const iFirstSave = curr - 3;
+    const iFirstTransform = curr - 2;
+    const iFirstPIXO = curr - 1;
+    const firstPIXOArg0 = argsArray[iFirstPIXO][0];
+    const firstTransformArg0 = argsArray[iFirstTransform][0];
+    const firstTransformArg3 = argsArray[iFirstTransform][3];
+    const count = Math.min(Math.floor((i - iFirstSave) / 4), MAX_IMAGES_IN_BLOCK);
 
     if (count < MIN_IMAGES_IN_BLOCK) {
       return i - (i - iFirstSave) % 4;
     }
 
-    var positions = new Float32Array(count * 2);
-    var iTransform = iFirstTransform;
+    const positions = new Float32Array(count * 2);
+    let iTransform = iFirstTransform;
 
-    for (var q = 0; q < count; q++, iTransform += 4) {
-      var transformArgs = argsArray[iTransform];
+    for (let q = 0; q < count; q++, iTransform += 4) {
+      const transformArgs = argsArray[iTransform];
       positions[q << 1] = transformArgs[4];
       positions[(q << 1) + 1] = transformArgs[5];
     }
 
-    var args = [firstPIXOArg0, firstTransformArg0, firstTransformArg3, positions];
+    const args = [firstPIXOArg0, firstTransformArg0, firstTransformArg3, positions];
     fnArray.splice(iFirstSave, count * 4, _util.OPS.paintImageXObjectRepeat);
     argsArray.splice(iFirstSave, count * 4, args);
     return iFirstSave + 1;
   });
   addState(InitialState, [_util.OPS.beginText, _util.OPS.setFont, _util.OPS.setTextMatrix, _util.OPS.showText, _util.OPS.endText], null, function iterateShowTextGroup(context, i) {
-    var fnArray = context.fnArray,
-        argsArray = context.argsArray;
-    var iFirstSave = context.iCurr - 4;
-    var pos = (i - iFirstSave) % 5;
+    const fnArray = context.fnArray,
+          argsArray = context.argsArray;
+    const iFirstSave = context.iCurr - 4;
+    const pos = (i - iFirstSave) % 5;
 
     switch (pos) {
       case 0:
@@ -53771,9 +53768,9 @@ var QueueOptimizer = function QueueOptimizerClosure() {
           return false;
         }
 
-        var iFirstSetFont = context.iCurr - 3;
-        var firstSetFontArg0 = argsArray[iFirstSetFont][0];
-        var firstSetFontArg1 = argsArray[iFirstSetFont][1];
+        const iFirstSetFont = context.iCurr - 3;
+        const firstSetFontArg0 = argsArray[iFirstSetFont][0];
+        const firstSetFontArg1 = argsArray[iFirstSetFont][1];
 
         if (argsArray[i][0] !== firstSetFontArg0 || argsArray[i][1] !== firstSetFontArg1) {
           return false;
@@ -53787,34 +53784,34 @@ var QueueOptimizer = function QueueOptimizerClosure() {
 
     throw new Error(`iterateShowTextGroup - invalid pos: ${pos}`);
   }, function (context, i) {
-    var MIN_CHARS_IN_BLOCK = 3;
-    var MAX_CHARS_IN_BLOCK = 1000;
-    var fnArray = context.fnArray,
-        argsArray = context.argsArray;
-    var curr = context.iCurr;
-    var iFirstBeginText = curr - 4;
-    var iFirstSetFont = curr - 3;
-    var iFirstSetTextMatrix = curr - 2;
-    var iFirstShowText = curr - 1;
-    var iFirstEndText = curr;
-    var firstSetFontArg0 = argsArray[iFirstSetFont][0];
-    var firstSetFontArg1 = argsArray[iFirstSetFont][1];
-    var count = Math.min(Math.floor((i - iFirstBeginText) / 5), MAX_CHARS_IN_BLOCK);
+    const MIN_CHARS_IN_BLOCK = 3;
+    const MAX_CHARS_IN_BLOCK = 1000;
+    const fnArray = context.fnArray,
+          argsArray = context.argsArray;
+    const curr = context.iCurr;
+    const iFirstBeginText = curr - 4;
+    const iFirstSetFont = curr - 3;
+    const iFirstSetTextMatrix = curr - 2;
+    const iFirstShowText = curr - 1;
+    const iFirstEndText = curr;
+    const firstSetFontArg0 = argsArray[iFirstSetFont][0];
+    const firstSetFontArg1 = argsArray[iFirstSetFont][1];
+    let count = Math.min(Math.floor((i - iFirstBeginText) / 5), MAX_CHARS_IN_BLOCK);
 
     if (count < MIN_CHARS_IN_BLOCK) {
       return i - (i - iFirstBeginText) % 5;
     }
 
-    var iFirst = iFirstBeginText;
+    let iFirst = iFirstBeginText;
 
     if (iFirstBeginText >= 4 && fnArray[iFirstBeginText - 4] === fnArray[iFirstSetFont] && fnArray[iFirstBeginText - 3] === fnArray[iFirstSetTextMatrix] && fnArray[iFirstBeginText - 2] === fnArray[iFirstShowText] && fnArray[iFirstBeginText - 1] === fnArray[iFirstEndText] && argsArray[iFirstBeginText - 4][0] === firstSetFontArg0 && argsArray[iFirstBeginText - 4][1] === firstSetFontArg1) {
       count++;
       iFirst -= 5;
     }
 
-    var iEndText = iFirst + 4;
+    let iEndText = iFirst + 4;
 
-    for (var q = 1; q < count; q++) {
+    for (let q = 1; q < count; q++) {
       fnArray.splice(iEndText, 3);
       argsArray.splice(iEndText, 3);
       iEndText += 2;
@@ -53921,7 +53918,7 @@ var QueueOptimizer = function QueueOptimizerClosure() {
   return QueueOptimizer;
 }();
 
-var NullOptimizer = function NullOptimizerClosure() {
+const NullOptimizer = function NullOptimizerClosure() {
   function NullOptimizer(queue) {
     this.queue = queue;
   }
@@ -53940,9 +53937,9 @@ var NullOptimizer = function NullOptimizerClosure() {
   return NullOptimizer;
 }();
 
-var OperatorList = function OperatorListClosure() {
-  var CHUNK_SIZE = 1000;
-  var CHUNK_SIZE_ABOUT = CHUNK_SIZE - 5;
+const OperatorList = function OperatorListClosure() {
+  const CHUNK_SIZE = 1000;
+  const CHUNK_SIZE_ABOUT = CHUNK_SIZE - 5;
 
   function OperatorList(intent, streamSink) {
     this._streamSink = streamSink;
@@ -54012,7 +54009,7 @@ var OperatorList = function OperatorListClosure() {
         this.dependencies.add(dependency);
       }
 
-      for (var i = 0, ii = opList.length; i < ii; i++) {
+      for (let i = 0, ii = opList.length; i < ii; i++) {
         this.addOp(opList.fnArray[i], opList.argsArray[i]);
       }
     },
@@ -55766,8 +55763,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.8.337';
-const pdfjsBuild = '3fc88e11a';
+const pdfjsVersion = '2.8.354';
+const pdfjsBuild = 'a9a074ac6';
 })();
 
 /******/ 	return __webpack_exports__;
