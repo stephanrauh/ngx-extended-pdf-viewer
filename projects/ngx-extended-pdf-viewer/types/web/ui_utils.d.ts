@@ -153,14 +153,6 @@ export function getOutputScale(ctx: any): Object;
  */
 export function getPageSizeInches({ view, userUnit, rotate }: Object): Object;
 /**
- * Returns the filename or guessed filename from the url (see issue 3455).
- * @param {string} url - The original PDF location.
- * @param {string} defaultFilename - The value returned if the filename is
- *   unknown, or the protocol is unsupported.
- * @returns {string} Guessed PDF filename.
- */
-export function getPDFFileNameFromURL(url: string, defaultFilename?: string): string;
-/**
  * @typedef {Object} GetVisibleElementsParameters
  * @property {HTMLElement} scrollEl - A container that can possibly scroll.
  * @property {Array} views - Objects with a `div` property that contains an

@@ -116,6 +116,11 @@ export type DocumentInitParameters = {
      */
     fontExtraProperties?: boolean | undefined;
     /**
+     * - Render Xfa forms if any.
+     * The default value is `false`.
+     */
+    enableXfa?: boolean | undefined;
+    /**
      * - Specify an explicit document
      * context to create elements with and to load resources, such as fonts,
      * into. Defaults to the current document.
@@ -525,6 +530,8 @@ export const DefaultCMapReaderFactory: typeof DOMCMapReaderFactory | {
  *   parsed font data from the worker-thread. This may be useful for debugging
  *   purposes (and backwards compatibility), but note that it will lead to
  *   increased memory usage. The default value is `false`.
+ * @property {boolean} [enableXfa] - Render Xfa forms if any.
+ *   The default value is `false`.
  * @property {HTMLDocument} [ownerDocument] - Specify an explicit document
  *   context to create elements with and to load resources, such as fonts,
  *   into. Defaults to the current document.
@@ -625,6 +632,10 @@ export class PDFDocumentProxy {
      * @type {string} A (not guaranteed to be) unique ID to identify a PDF.
      */
     get fingerprint(): string;
+    /**
+     * @type {boolean} True if only XFA form.
+     */
+    get isPureXfa(): boolean;
     /**
      * @param {number} pageNumber - The page number to get. The first page is 1.
      * @returns {Promise<PDFPageProxy>} A promise that is resolved with
@@ -989,6 +1000,13 @@ export class PDFPageProxy {
      */
     getJSActions(): Promise<Object>;
     /**
+     * @returns {Promise<Object | null>} A promise that is resolved with
+     *   an {Object} with a fake DOM object (a tree structure where elements
+     *   are {Object} with a name, attributes (class, style, ...), value and
+     *   children, very similar to a HTML DOM tree), or `null` if no XFA exists.
+     */
+    getXfa(): Promise<Object | null>;
+    /**
      * Begins the process of rendering a page to the desired context.
      *
      * @param {RenderParameters} params Page render parameters.
@@ -1018,6 +1036,7 @@ export class PDFPageProxy {
      */
     private _destroy;
     _jsActionsPromise: any;
+    _xfaPromise: any;
     /**
      * Cleans up resources allocated by the page.
      *

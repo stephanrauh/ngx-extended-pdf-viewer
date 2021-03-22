@@ -38,6 +38,7 @@ export type PDFPageViewOptions = {
      */
     textLayerMode?: number | undefined;
     annotationLayerFactory: any;
+    xfaLayerFactory: any;
     /**
      * - Path for image resources, mainly
      * for annotation icons. Include trailing slash.
@@ -105,6 +106,7 @@ export class PDFPageView implements IRenderableView {
     renderingQueue: any;
     textLayerFactory: any;
     annotationLayerFactory: any;
+    xfaLayerFactory: any;
     renderer: string;
     enableWebGL: boolean;
     l10n: any;
@@ -121,6 +123,7 @@ export class PDFPageView implements IRenderableView {
     annotationLayer: any;
     textLayer: any;
     zoomLayer: (Node & ParentNode) | null;
+    xfaLayer: any;
     div: HTMLDivElement;
     setPdfPage(pdfPage: any): void;
     destroy(): void;
@@ -128,6 +131,10 @@ export class PDFPageView implements IRenderableView {
      * @private
      */
     private _renderAnnotationLayer;
+    /**
+     * @private
+     */
+    private _renderXfaLayer;
     /**
      * @private
      */

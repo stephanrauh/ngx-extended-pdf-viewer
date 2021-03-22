@@ -377,6 +377,12 @@ export class BaseViewer implements IRenderableView {
      */
     createAnnotationLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any, annotationStorage?: any, imageResourcesPath?: string | undefined, renderInteractiveForms?: boolean, l10n?: any, enableScripting?: boolean | undefined, hasJSActionsPromise?: Promise<boolean> | undefined, mouseState?: Object | undefined): AnnotationLayerBuilder;
     /**
+     * @param {HTMLDivElement} pageDiv
+     * @param {PDFPage} pdfPage
+     * @returns {XfaLayerBuilder}
+     */
+    createXfaLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any): XfaLayerBuilder;
+    /**
      * @type {boolean} Whether all pages of the PDF document have identical
      *   widths and heights.
      */
@@ -523,4 +529,5 @@ declare class PDFPageViewBuffer {
 }
 import { TextLayerBuilder } from "./text_layer_builder.js";
 import { AnnotationLayerBuilder } from "./annotation_layer_builder.js";
+import { XfaLayerBuilder } from "./xfa_layer_builder.js";
 export {};

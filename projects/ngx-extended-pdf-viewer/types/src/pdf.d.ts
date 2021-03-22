@@ -1,5 +1,6 @@
 import { addLinkAttributes } from "./display/display_utils.js";
 import { getFilenameFromUrl } from "./display/display_utils.js";
+import { getPdfFilenameFromUrl } from "./display/display_utils.js";
 import { isPdfFile } from "./display/display_utils.js";
 import { LinkTarget } from "./display/display_utils.js";
 import { loadScript } from "./display/display_utils.js";
@@ -30,4 +31,5 @@ import { AnnotationLayer } from "./display/annotation_layer.js";
 import { GlobalWorkerOptions } from "./display/worker_options.js";
 import { renderTextLayer } from "./display/text_layer.js";
 import { SVGGraphics } from "./display/svg.js";
-export { addLinkAttributes, getFilenameFromUrl, isPdfFile, LinkTarget, loadScript, PDFDateString, RenderingCancelledException, build, getDocument, LoopbackPort, PDFDataRangeTransport, PDFWorker, version, CMapCompressionType, createObjectURL, createPromiseCapability, createValidAbsoluteUrl, InvalidPDFException, MissingPDFException, OPS, PasswordResponses, PermissionFlag, removeNullCharacters, shadow, UnexpectedResponseException, UNSUPPORTED_FEATURES, Util, VerbosityLevel, AnnotationLayer, GlobalWorkerOptions, renderTextLayer, SVGGraphics };
+import { XfaLayer } from "./display/xfa_layer.js";
+export { addLinkAttributes, getFilenameFromUrl, getPdfFilenameFromUrl, isPdfFile, LinkTarget, loadScript, PDFDateString, RenderingCancelledException, build, getDocument, LoopbackPort, PDFDataRangeTransport, PDFWorker, version, CMapCompressionType, createObjectURL, createPromiseCapability, createValidAbsoluteUrl, InvalidPDFException, MissingPDFException, OPS, PasswordResponses, PermissionFlag, removeNullCharacters, shadow, UnexpectedResponseException, UNSUPPORTED_FEATURES, Util, VerbosityLevel, AnnotationLayer, GlobalWorkerOptions, renderTextLayer, SVGGraphics, XfaLayer };
