@@ -547,6 +547,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public calcViewerPositionTop(): void {
     const toolbar = document.getElementsByClassName("toolbar")[0] as HTMLElement;
+    if (toolbar === undefined) {
+      return;
+    }
     let top = toolbar.getBoundingClientRect().height;
     this.viewerPositionTop = top + "px";
 
