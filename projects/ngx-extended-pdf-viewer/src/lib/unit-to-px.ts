@@ -1,4 +1,3 @@
-import { stringToUTF16BEString } from '../../types/src/shared/util';
 export class UnitToPx {
   // cache this.con, el for reused
   private static con: HTMLDivElement = document.createElement('div');
