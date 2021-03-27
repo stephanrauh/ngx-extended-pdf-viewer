@@ -129,7 +129,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   /* regular attributes */
 
-  private _src: string | ArrayBuffer | { range: any };
+  private _src: string | ArrayBuffer | Uint8Array  | { range: any };
 
   @Output()
   public srcChange = new EventEmitter<string>();
@@ -205,9 +205,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public hasSignature: boolean;
 
   @Input()
-  public set src(url: string | ArrayBuffer | Blob | Uint8Array | { range: any }) {
+  public set src(url: string | ArrayBuffer | Blob | Uint8Array | URL | { range: any }) {
     if (url instanceof Uint8Array) {
       this._src = url.buffer;
+    } else if (url instanceof URL) {
+      this._src = url.toString();
     } else if (typeof Blob !== 'undefined' && url instanceof Blob) { // additional check introduced to support server side rendering
       const reader = new FileReader();
       reader.onloadend = () => {
