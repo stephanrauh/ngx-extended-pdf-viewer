@@ -37,6 +37,7 @@ export const $setSetAttributes: unique symbol;
 export const $setValue: unique symbol;
 export const $text: unique symbol;
 export const $toHTML: unique symbol;
+export const $toStyle: unique symbol;
 export const $uid: unique symbol;
 export class ContentObject extends XFAObject {
     constructor(nsId: any, name: any);
@@ -95,6 +96,7 @@ export class XFAObject {
     [$getChildren](name?: any): any;
     [$getChildren](name?: any): any;
     [$dump](): any;
+    [$toStyle](): null;
     [$toHTML](): null;
     [$childrenToHTML]({ filter, include }: {
         filter?: any;

@@ -4242,7 +4242,7 @@ GrabToPan.prototype = {
     }
   },
   ignoreTarget: function GrabToPan_ignoreTarget(node) {
-    return node[matchesSelector]("a[href], a[href] *, input, textarea, button, button *, select, option");
+    return node.matches("a[href], a[href] *, input, textarea, button, button *, select, option");
   },
   _onmousedown: function GrabToPan__onmousedown(event) {
     if (event.button !== 0 || this.ignoreTarget(event.target)) {
@@ -4317,31 +4317,15 @@ GrabToPan.prototype = {
     this.overlay.remove();
   }
 };
-let matchesSelector;
-["webkitM", "mozM", "m"].some(function (prefix) {
-  let name = prefix + "atches";
-
-  if (name in document.documentElement) {
-    matchesSelector = name;
-  }
-
-  name += "Selector";
-
-  if (name in document.documentElement) {
-    matchesSelector = name;
-  }
-
-  return matchesSelector;
-});
-const isNotIEorIsIE10plus = !document.documentMode || document.documentMode > 9;
-const chrome = window.chrome;
-const isChrome15OrOpera15plus = chrome && (chrome.webstore || chrome.app);
-const isSafari6plus = /Apple/.test(navigator.vendor) && /Version\/([6-9]\d*|[1-5]\d+)/.test(navigator.userAgent);
 
 function isLeftMouseReleased(event) {
-  if ("buttons" in event && isNotIEorIsIE10plus) {
+  if ("buttons" in event) {
     return !(event.buttons & 1);
   }
+
+  const chrome = window.chrome;
+  const isChrome15OrOpera15plus = chrome && (chrome.webstore || chrome.app);
+  const isSafari6plus = /Apple/.test(navigator.vendor) && /Version\/([6-9]\d*|[1-5]\d+)/.test(navigator.userAgent);
 
   if (isChrome15OrOpera15plus || isSafari6plus) {
     return event.which === 0;
@@ -6906,7 +6890,7 @@ class PDFHistory {
     } else if (!Array.isArray(explicitDest)) {
       console.error("PDFHistory.push: " + `"${explicitDest}" is not a valid explicitDest parameter.`);
       return;
-    } else if (!(Number.isInteger(pageNumber) && pageNumber > 0 && pageNumber <= this.linkService.pagesCount)) {
+    } else if (!this._isValidPage(pageNumber)) {
       if (pageNumber !== null || this._destination) {
         console.error("PDFHistory.push: " + `"${pageNumber}" is not a valid pageNumber parameter.`);
         return;
@@ -6953,7 +6937,7 @@ class PDFHistory {
       return;
     }
 
-    if (!(Number.isInteger(pageNumber) && pageNumber > 0 && pageNumber <= this.linkService.pagesCount)) {
+    if (!this._isValidPage(pageNumber)) {
       console.error(`PDFHistory.pushPage: "${pageNumber}" is not a valid page number.`);
       return;
     }
@@ -6967,6 +6951,7 @@ class PDFHistory {
     }
 
     this._pushOrReplaceState({
+      dest: null,
       hash: `page=${pageNumber}`,
       page: pageNumber,
       rotation: this.linkService.rotation
@@ -7086,7 +7071,7 @@ class PDFHistory {
     let forceReplace = false;
 
     if (this._destination.page >= position.first && this._destination.page <= position.page) {
-      if (this._destination.dest || !this._destination.first) {
+      if (this._destination.dest !== undefined || !this._destination.first) {
         return;
       }
 
@@ -7094,6 +7079,10 @@ class PDFHistory {
     }
 
     this._pushOrReplaceState(position, forceReplace);
+  }
+
+  _isValidPage(val) {
+    return Number.isInteger(val) && val > 0 && val <= this.linkService.pagesCount;
   }
 
   _isValidState(state, checkReload = false) {
@@ -7150,7 +7139,7 @@ class PDFHistory {
     const nameddest = params.nameddest || "";
     let page = params.page | 0;
 
-    if (!(Number.isInteger(page) && page > 0 && page <= this.linkService.pagesCount) || checkNameddest && nameddest.length > 0) {
+    if (!this._isValidPage(page) || checkNameddest && nameddest.length > 0) {
       page = null;
     }
 
@@ -8870,6 +8859,10 @@ class PDFScriptingManager {
 
     this._internalEvents.set("pagesdestroy", async event => {
       await this._dispatchPageClose(this._pdfViewer.currentPageNumber);
+      await this._scripting?.dispatchEventInSandbox({
+        id: "doc",
+        name: "WillClose"
+      });
       this._closeCapability?.resolve();
     });
 
@@ -10583,7 +10576,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.8.354';
+    const viewerVersion = '2.8.409';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -14663,7 +14656,6 @@ class XfaLayerBuilder {
         _pdfjsLib.XfaLayer.update(parameters);
       } else {
         this.div = document.createElement("div");
-        this.div.className = "xfaLayer";
         this.pageDiv.appendChild(this.div);
         parameters.div = this.div;
 
@@ -15655,21 +15647,14 @@ class BasePreferences {
       enumerable: true,
       configurable: false
     });
-    this.prefs = Object.assign(Object.create(null), this.defaults);
+    this.prefs = Object.create(null);
     this._initializedPromise = this._readFromStorage(this.defaults).then(prefs => {
-      if (!prefs) {
-        return;
-      }
+      for (const name in this.defaults) {
+        const prefValue = prefs?.[name];
 
-      for (const name in prefs) {
-        const defaultValue = this.defaults[name],
-              prefValue = prefs[name];
-
-        if (defaultValue === undefined || typeof prefValue !== typeof defaultValue) {
-          continue;
+        if (typeof prefValue === typeof this.defaults[name]) {
+          this.prefs[name] = prefValue;
         }
-
-        this.prefs[name] = prefValue;
       }
     });
   }
@@ -15684,7 +15669,7 @@ class BasePreferences {
 
   async reset() {
     await this._initializedPromise;
-    this.prefs = Object.assign(Object.create(null), this.defaults);
+    this.prefs = Object.create(null);
     return this._writeToStorage(this.defaults);
   }
 
@@ -15705,7 +15690,7 @@ class BasePreferences {
       if (valueType === "number" && defaultType === "string") {
         value = value.toString();
       } else {
-        throw new Error(`Set preference: "${value}" is a ${valueType}, ` + `expected a ${defaultType}.`);
+        throw new Error(`Set preference: "${value}" is a ${valueType}, expected a ${defaultType}.`);
       }
     } else {
       if (valueType === "number" && !Number.isInteger(value)) {
@@ -15719,24 +15704,26 @@ class BasePreferences {
 
   async get(name) {
     await this._initializedPromise;
-    const defaultValue = this.defaults[name];
+    const defaultValue = this.defaults[name],
+          prefValue = this.prefs[name];
 
     if (defaultValue === undefined) {
       throw new Error(`Get preference: "${name}" is undefined.`);
-    } else {
-      const prefValue = this.prefs[name];
-
-      if (prefValue !== undefined) {
-        return prefValue;
-      }
     }
 
-    return defaultValue;
+    return prefValue !== undefined ? prefValue : defaultValue;
   }
 
   async getAll() {
     await this._initializedPromise;
-    return Object.assign(Object.create(null), this.defaults, this.prefs);
+    const obj = Object.create(null);
+
+    for (const name in this.defaults) {
+      const prefValue = this.prefs[name];
+      obj[name] = prefValue !== undefined ? prefValue : this.defaults[name];
+    }
+
+    return obj;
   }
 
 }
@@ -16860,8 +16847,6 @@ var _ui_utils = __webpack_require__(4);
 
 var _viewer_compatibility = __webpack_require__(2);
 
-var _util = __webpack_require__(35);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 let activeService = null;
@@ -16883,14 +16868,12 @@ function renderPage(activeServiceOnEntry, pdfDocument, pageNumber, size, printRe
       scale = Math.min(max / canvasWidth, max / canvasHeight) * 0.95;
     }
 
-    (0, _util.warn)("Page " + pageNumber + ": Reduced the [printResolution] to " + Math.floor(printResolution * scale) + " because the browser can't render larger canvases. If you see blank page in the print preview, reduce [printResolution] manually to a lower value.");
+    warn("Page " + pageNumber + ": Reduced the [printResolution] to " + Math.floor(printResolution * scale) + " because the browser can't render larger canvases. If you see blank page in the print preview, reduce [printResolution] manually to a lower value.");
   }
 
   PRINT_UNITS *= scale;
   scratchCanvas.width = Math.floor(size.width * PRINT_UNITS);
   scratchCanvas.height = Math.floor(size.height * PRINT_UNITS);
-  const width = Math.floor(size.width * _ui_utils.CSS_UNITS) + "px";
-  const height = Math.floor(size.height * _ui_utils.CSS_UNITS) + "px";
   const ctx = scratchCanvas.getContext("2d");
   ctx.save();
   ctx.fillStyle = "rgb(255, 255, 255)";
@@ -16909,11 +16892,6 @@ function renderPage(activeServiceOnEntry, pdfDocument, pageNumber, size, printRe
       optionalContentConfigPromise
     };
     return pdfPage.render(renderContext).promise;
-  }).then(function () {
-    return {
-      width,
-      height
-    };
   });
 }
 
@@ -17025,11 +17003,9 @@ PDFPrintService.prototype = {
     return new Promise(renderNextPage);
   },
 
-  useRenderedPage(printItem) {
+  useRenderedPage() {
     this.throwIfInactive();
     const img = document.createElement("img");
-    img.style.width = printItem.width;
-    img.style.height = printItem.height;
     const scratchCanvas = this.scratchCanvas;
 
     if ("toBlob" in scratchCanvas && !_viewer_compatibility.viewerCompatibilityParams.disableCreateObjectURL) {
@@ -17042,8 +17018,6 @@ PDFPrintService.prototype = {
 
     const wrapper = document.createElement("div");
     wrapper.appendChild(img);
-    wrapper.style.width = img.style.width;
-    wrapper.style.height = img.style.height;
     this.printContainer.appendChild(wrapper);
     return new Promise(function (resolve, reject) {
       img.onload = resolve;
@@ -17267,8 +17241,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.8.354';
-const pdfjsBuild = 'a9a074ac6';
+const pdfjsVersion = '2.8.409';
+const pdfjsBuild = 'cda32bfeb';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

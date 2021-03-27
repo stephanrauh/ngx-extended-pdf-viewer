@@ -1766,7 +1766,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.8.354',
+    apiVersion: '2.8.409',
     source: {
       data: source.data,
       url: source.url,
@@ -3819,9 +3819,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.8.354';
+const version = '2.8.409';
 exports.version = version;
-const build = 'a9a074ac6';
+const build = 'cda32bfeb';
 exports.build = build;
 
 /***/ }),
@@ -12831,9 +12831,11 @@ class XfaLayer {
     }
 
     const stack = [[root, -1, rootHtml]];
-    parameters.div.appendChild(rootHtml);
+    const rootDiv = parameters.div;
+    rootDiv.appendChild(rootHtml);
     const coeffs = parameters.viewport.transform.join(",");
-    parameters.div.style.transform = `matrix(${coeffs})`;
+    rootDiv.style.transform = `matrix(${coeffs})`;
+    rootDiv.setAttribute("class", "xfaLayer xfaFont");
 
     while (stack.length > 0) {
       const [parent, i, html] = stack[stack.length - 1];
@@ -14256,8 +14258,8 @@ var _svg = __w_pdfjs_require__(21);
 
 var _xfa_layer = __w_pdfjs_require__(22);
 
-const pdfjsVersion = '2.8.354';
-const pdfjsBuild = 'a9a074ac6';
+const pdfjsVersion = '2.8.409';
+const pdfjsBuild = 'cda32bfeb';
 {
   const PDFNetworkStream = __w_pdfjs_require__(23).PDFNetworkStream;
 

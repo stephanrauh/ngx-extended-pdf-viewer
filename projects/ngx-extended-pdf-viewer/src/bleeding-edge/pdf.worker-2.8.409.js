@@ -142,7 +142,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.8.354';
+    const workerVersion = '2.8.409';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -32254,7 +32254,7 @@ class CFFCompiler {
   }
 
   compileHeader(header) {
-    return [header.major, header.minor, header.hdrSize, header.offSize];
+    return [header.major, header.minor, 4, header.offSize];
   }
 
   compileNameIndex(names) {
@@ -55233,7 +55233,7 @@ exports.XFAFactory = XFAFactory;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.XmlObject = exports.XFAObjectArray = exports.XFAObject = exports.XFAAttribute = exports.StringObject = exports.OptionObject = exports.Option10 = exports.Option01 = exports.IntegerObject = exports.ContentObject = exports.$uid = exports.$toHTML = exports.$text = exports.$setValue = exports.$setSetAttributes = exports.$setId = exports.$resolvePrototypes = exports.$removeChild = exports.$onText = exports.$onChildCheck = exports.$onChild = exports.$nsAttributes = exports.$nodeName = exports.$namespaceId = exports.$isTransparent = exports.$isDescendent = exports.$isDataValue = exports.$insertAt = exports.$indexOf = exports.$hasSettableValue = exports.$hasItem = exports.$global = exports.$getRealChildrenByNameIt = exports.$getParent = exports.$getChildrenByNameIt = exports.$getChildrenByName = exports.$getChildrenByClass = exports.$getChildren = exports.$getAttributeIt = exports.$finalize = exports.$extra = exports.$dump = exports.$data = exports.$content = exports.$consumed = exports.$clone = exports.$cleanup = exports.$clean = exports.$childrenToHTML = exports.$appendChild = void 0;
+exports.XmlObject = exports.XFAObjectArray = exports.XFAObject = exports.XFAAttribute = exports.StringObject = exports.OptionObject = exports.Option10 = exports.Option01 = exports.IntegerObject = exports.ContentObject = exports.$uid = exports.$toStyle = exports.$toHTML = exports.$text = exports.$setValue = exports.$setSetAttributes = exports.$setId = exports.$resolvePrototypes = exports.$removeChild = exports.$onText = exports.$onChildCheck = exports.$onChild = exports.$nsAttributes = exports.$nodeName = exports.$namespaceId = exports.$isTransparent = exports.$isDescendent = exports.$isDataValue = exports.$insertAt = exports.$indexOf = exports.$hasSettableValue = exports.$hasItem = exports.$global = exports.$getRealChildrenByNameIt = exports.$getParent = exports.$getChildrenByNameIt = exports.$getChildrenByName = exports.$getChildrenByClass = exports.$getChildren = exports.$getAttributeIt = exports.$finalize = exports.$extra = exports.$dump = exports.$data = exports.$content = exports.$consumed = exports.$clone = exports.$cleanup = exports.$clean = exports.$childrenToHTML = exports.$appendChild = void 0;
 
 var _utils = __w_pdfjs_require__(50);
 
@@ -55320,6 +55320,8 @@ const $text = Symbol();
 exports.$text = $text;
 const $toHTML = Symbol();
 exports.$toHTML = $toHTML;
+const $toStyle = Symbol();
+exports.$toStyle = $toStyle;
 const $uid = Symbol("uid");
 exports.$uid = $uid;
 
@@ -55541,6 +55543,10 @@ class XFAObject {
     }
 
     return dumped;
+  }
+
+  [$toStyle]() {
+    return null;
   }
 
   [$toHTML]() {
@@ -56145,7 +56151,13 @@ exports.getMeasurement = getMeasurement;
 exports.getRatio = getRatio;
 exports.getRelevant = getRelevant;
 exports.getStringOption = getStringOption;
-const measurementPattern = /([+-]?)([0-9]+\.?[0-9]*)(.*)/;
+const dimConverters = {
+  pt: x => x,
+  cm: x => x / 2.54 * 72,
+  mm: x => x / (10 * 2.54) * 72,
+  in: x => x * 72
+};
+const measurementPattern = /([+-]?[0-9]+\.?[0-9]*)(.*)/;
 
 function getInteger({
   data,
@@ -56224,17 +56236,24 @@ function getMeasurement(str, def = "0") {
     return getMeasurement(def);
   }
 
-  const [, sign, valueStr, unit] = match;
+  const [, valueStr, unit] = match;
   const value = parseFloat(valueStr);
 
   if (isNaN(value)) {
     return getMeasurement(def);
   }
 
-  return {
-    value: sign === "-" ? -value : value,
-    unit: unit || "pt"
-  };
+  if (value === 0) {
+    return 0;
+  }
+
+  const conv = dimConverters[unit];
+
+  if (conv) {
+    return conv(value);
+  }
+
+  return value;
 }
 
 function getRatio(data) {
@@ -56308,7 +56327,7 @@ function getColor(data, def = [0, 0, 0]) {
 }
 
 function getBBox(data) {
-  const def = getMeasurement("-1");
+  const def = -1;
 
   if (!data) {
     return {
@@ -56321,7 +56340,7 @@ function getBBox(data) {
 
   const bbox = data.trim().split(/\s*,\s*/).map(m => getMeasurement(m, "-1"));
 
-  if (bbox.length < 4 || bbox[2].value < 0 || bbox[3].value < 0) {
+  if (bbox.length < 4 || bbox[2] < 0 || bbox[3] < 0) {
     return {
       x: def,
       y: def,
@@ -57370,6 +57389,10 @@ class Color extends _xfa_object.XFAObject {
     return false;
   }
 
+  [_xfa_object.$toStyle]() {
+    return _util.Util.makeHexColor(this.value.r, this.value.g, this.value.b);
+  }
+
 }
 
 class Comb extends _xfa_object.XFAObject {
@@ -57432,7 +57455,7 @@ class ContentArea extends _xfa_object.XFAObject {
       children: [],
       attributes: {
         style,
-        className: "xfa-contentarea",
+        class: "xfaContentarea",
         id: this[_xfa_object.$uid]
       }
     };
@@ -57611,10 +57634,10 @@ class Draw extends _xfa_object.XFAObject {
     this.name = attributes.name || "";
     this.presence = (0, _utils.getStringOption)(attributes.presence, ["visible", "hidden", "inactive", "invisible"]);
     this.relevant = (0, _utils.getRelevant)(attributes.relevant);
-    this.rotate = (0, _utils.getFloat)({
+    this.rotate = (0, _utils.getInteger)({
       data: attributes.rotate,
       defaultValue: 0,
-      validate: x => true
+      validate: x => x % 90 === 0
     });
     this.use = attributes.use || "";
     this.usehref = attributes.usehref || "";
@@ -57638,6 +57661,30 @@ class Draw extends _xfa_object.XFAObject {
 
   [_xfa_object.$setValue](value) {
     _setValue(this, value);
+  }
+
+  [_xfa_object.$toHTML]() {
+    if (!this.value) {
+      return null;
+    }
+
+    const style = (0, _html_utils.toStyle)(this, "font", "dimensions", "position", "rotate", "anchorType");
+    const clazz = ["xfaDraw"];
+
+    if (this.font) {
+      clazz.push("xfaFont");
+    }
+
+    const attributes = {
+      style,
+      id: this[_xfa_object.$uid],
+      class: clazz.join(" ")
+    };
+    return {
+      name: "div",
+      attributes,
+      children: []
+    };
   }
 
 }
@@ -57896,6 +57943,30 @@ class ExclGroup extends _xfa_object.XFAObject {
     }
   }
 
+  [_xfa_object.$toHTML]() {
+    if (!this.value) {
+      return null;
+    }
+
+    const style = (0, _html_utils.toStyle)(this, "dimensions", "position", "anchorType");
+    const attributes = {
+      style,
+      id: this[_xfa_object.$uid],
+      class: "xfaExclgroup"
+    };
+
+    const children = this[_xfa_object.$childrenToHTML]({
+      filter: new Set(["field"]),
+      include: true
+    });
+
+    return {
+      name: "div",
+      attributes,
+      children
+    };
+  }
+
 }
 
 class Execute extends _xfa_object.XFAObject {
@@ -57955,7 +58026,11 @@ class Field extends _xfa_object.XFAObject {
     this.name = attributes.name || "";
     this.presence = (0, _utils.getStringOption)(attributes.presence, ["visible", "hidden", "inactive", "invisible"]);
     this.relevant = (0, _utils.getRelevant)(attributes.relevant);
-    this.rotate = (0, _utils.getStringOption)(attributes.rotate, ["0", "angle"]);
+    this.rotate = (0, _utils.getInteger)({
+      data: attributes.rotate,
+      defaultValue: 0,
+      validate: x => x % 90 === 0
+    });
     this.use = attributes.use || "";
     this.usehref = attributes.usehref || "";
     this.w = (0, _utils.getMeasurement)(attributes.w);
@@ -57988,6 +58063,30 @@ class Field extends _xfa_object.XFAObject {
     _setValue(this, value);
   }
 
+  [_xfa_object.$toHTML]() {
+    if (!this.value) {
+      return null;
+    }
+
+    const style = (0, _html_utils.toStyle)(this, "font", "dimensions", "position", "rotate", "anchorType");
+    const clazz = ["xfaField"];
+
+    if (this.font) {
+      clazz.push("xfaFont");
+    }
+
+    const attributes = {
+      style,
+      id: this[_xfa_object.$uid],
+      class: clazz.join(" ")
+    };
+    return {
+      name: "div",
+      attributes,
+      children: []
+    };
+  }
+
 }
 
 exports.Field = Field;
@@ -58006,6 +58105,29 @@ class Fill extends _xfa_object.XFAObject {
     this.radial = null;
     this.solid = null;
     this.stipple = null;
+  }
+
+  [_xfa_object.$toStyle]() {
+    let fill = "#000000";
+
+    for (const name of Object.getOwnPropertyNames(this)) {
+      if (name === "extras" || name === "color") {
+        continue;
+      }
+
+      const obj = this[name];
+
+      if (!(obj instanceof _xfa_object.XFAObject)) {
+        continue;
+      }
+
+      fill = obj[_xfa_object.$toStyle](this.color);
+      break;
+    }
+
+    return {
+      color: fill
+    };
   }
 
 }
@@ -58096,6 +58218,74 @@ class Font extends _xfa_object.XFAObject {
     this.weight = (0, _utils.getStringOption)(attributes.weight, ["normal", "bold"]);
     this.extras = null;
     this.fill = null;
+  }
+
+  [_xfa_object.$toStyle]() {
+    const style = (0, _html_utils.toStyle)(this, "fill");
+
+    if (style.color) {
+      if (!style.color.startsWith("#")) {
+        style.backgroundClip = "text";
+        style.background = style.color;
+        style.color = "transparent";
+      } else if (style.color === "#000000") {
+        delete style.color;
+      }
+    }
+
+    if (this.baselineShift) {
+      style.verticalAlign = (0, _html_utils.measureToString)(this.baselineShift);
+    }
+
+    if (this.kerningMode !== "none") {
+      style.fontKerning = "normal";
+    }
+
+    if (this.letterSpacing) {
+      style.letterSpacing = (0, _html_utils.measureToString)(this.letterSpacing);
+    }
+
+    if (this.lineThrough !== 0) {
+      style.textDecoration = "line-through";
+
+      if (this.lineThrough === 2) {
+        style.textDecorationStyle = "double";
+      }
+    }
+
+    if (this.overline !== 0) {
+      style.textDecoration = "overline";
+
+      if (this.overline === 2) {
+        style.textDecorationStyle = "double";
+      }
+    }
+
+    if (this.posture !== "normal") {
+      style.fontStyle = this.posture;
+    }
+
+    const fontSize = (0, _html_utils.measureToString)(this.size);
+
+    if (fontSize !== "10px") {
+      style.fontSize = fontSize;
+    }
+
+    style.fontFamily = this.typeface;
+
+    if (this.underline !== 0) {
+      style.textDecoration = "underline";
+
+      if (this.underline === 2) {
+        style.textDecorationStyle = "double";
+      }
+    }
+
+    if (this.weight !== "normal") {
+      style.fontWeight = this.weight;
+    }
+
+    return style;
   }
 
 }
@@ -58314,6 +58504,13 @@ class Linear extends _xfa_object.XFAObject {
     this.extras = null;
   }
 
+  [_xfa_object.$toStyle](startColor) {
+    startColor = startColor ? startColor[_xfa_object.$toStyle]() : "#FFFFFF";
+    const transf = this.type.replace(/([RBLT])/, " $1").toLowerCase();
+    const endColor = this.color ? this.color[_xfa_object.$toStyle]() : "#000000";
+    return `linear-gradient(${transf}, ${startColor}, ${endColor})`;
+  }
+
 }
 
 class LockDocument extends _xfa_object.ContentObject {
@@ -58524,10 +58721,10 @@ class PageArea extends _xfa_object.XFAObject {
       include: true
     });
 
-    const contentArea = children.find(node => node.attributes.className === "xfa-contentarea");
+    const contentArea = children.find(node => node.attributes.class === "xfaContentarea");
     const style = Object.create(null);
 
-    if (this.medium && this.medium.short.value && this.medium.long.value) {
+    if (this.medium && this.medium.short && this.medium.long) {
       style.width = (0, _html_utils.measureToString)(this.medium.short);
       style.height = (0, _html_utils.measureToString)(this.medium.long);
     } else {}
@@ -58633,6 +58830,36 @@ class Pattern extends _xfa_object.XFAObject {
     this.usehref = attributes.usehref || "";
     this.color = null;
     this.extras = null;
+  }
+
+  [_xfa_object.$toStyle](startColor) {
+    startColor = startColor ? startColor[_xfa_object.$toStyle]() : "#FFFFFF";
+    const endColor = this.color ? this.color[_xfa_object.$toStyle]() : "#000000";
+    const width = 5;
+    const cmd = "repeating-linear-gradient";
+    const colors = `${startColor},${startColor} ${width}px,${endColor} ${width}px,${endColor} ${2 * width}px`;
+
+    switch (this.type) {
+      case "crossHatch":
+        return `${cmd}(to top,${colors}) ${cmd}(to right,${colors})`;
+
+      case "crossDiagonal":
+        return `${cmd}(45deg,${colors}) ${cmd}(-45deg,${colors})`;
+
+      case "diagonalLeft":
+        return `${cmd}(45deg,${colors})`;
+
+      case "diagonalRight":
+        return `${cmd}(-45deg,${colors})`;
+
+      case "horizontal":
+        return `${cmd}(to top,${colors})`;
+
+      case "vertical":
+        return `${cmd}(to right,${colors})`;
+    }
+
+    return "";
   }
 
 }
@@ -58775,6 +59002,13 @@ class Radial extends _xfa_object.XFAObject {
     this.extras = null;
   }
 
+  [_xfa_object.$toStyle](startColor) {
+    startColor = startColor ? startColor[_xfa_object.$toStyle]() : "#FFFFFF";
+    const endColor = this.color ? this.color[_xfa_object.$toStyle]() : "#000000";
+    const colors = this.type === "toEdge" ? `${startColor},${endColor}` : `${endColor},${startColor}`;
+    return `radial-gradient(circle to center, ${colors})`;
+  }
+
 }
 
 class Reason extends _xfa_object.StringObject {
@@ -58902,6 +59136,10 @@ class Solid extends _xfa_object.XFAObject {
     this.extras = null;
   }
 
+  [_xfa_object.$toStyle](startColor) {
+    return startColor ? startColor[_xfa_object.$toStyle]() : "#FFFFFF";
+  }
+
 }
 
 class Speak extends _xfa_object.StringObject {
@@ -58934,6 +59172,11 @@ class Stipple extends _xfa_object.XFAObject {
     this.usehref = attributes.usehref || "";
     this.color = null;
     this.extras = null;
+  }
+
+  [_xfa_object.$toStyle](bgColor) {
+    const alpha = this.rate / 100;
+    return _util.Util.makeHexColor(Math.round(bgColor.value.r * (1 - alpha) + this.value.r * alpha), Math.round(bgColor.value.g * (1 - alpha) + this.value.g * alpha), Math.round(bgColor.value.b * (1 - alpha) + this.value.b * alpha));
   }
 
 }
@@ -59026,16 +59269,15 @@ class Subform extends _xfa_object.XFAObject {
       page = pageAreas[pageNumber][_xfa_object.$toHTML]();
     }
 
-    const style = Object.create(null);
-    (0, _html_utils.setWidthHeight)(this, style);
-    (0, _html_utils.setPosition)(this, style);
+    const style = (0, _html_utils.toStyle)(this, "dimensions", "position");
     const attributes = {
       style,
-      id: this[_xfa_object.$uid]
+      id: this[_xfa_object.$uid],
+      class: "xfaSubform"
     };
 
     if (this.name) {
-      attributes["xfa-name"] = this.name;
+      attributes.xfaName = this.name;
     }
 
     const children = this[_xfa_object.$childrenToHTML]({
@@ -59892,7 +60134,7 @@ exports.TemplateNamespace = TemplateNamespace;
 
 /***/ }),
 /* 54 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
 
@@ -59900,64 +60142,132 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.measureToString = measureToString;
-exports.setPosition = setPosition;
-exports.setWidthHeight = setWidthHeight;
-const converters = {
-  pt: x => x,
-  cm: x => Math.round(x / 2.54 * 72),
-  mm: x => Math.round(x / (10 * 2.54) * 72),
-  in: x => Math.round(x * 72)
-};
+exports.toStyle = toStyle;
+
+var _xfa_object = __w_pdfjs_require__(49);
+
+var _util = __w_pdfjs_require__(2);
 
 function measureToString(m) {
-  const conv = converters[m.unit];
-
-  if (conv) {
-    return `${conv(m.value)}px`;
-  }
-
-  return `${m.value}${m.unit}`;
+  return Number.isInteger(m) ? `${m}px` : `${m.toFixed(2)}px`;
 }
 
-function setWidthHeight(node, style) {
-  if (node.w) {
-    style.width = measureToString(node.w);
-  } else {
-    if (node.maxW && node.maxW.value > 0) {
-      style.maxWidth = measureToString(node.maxW);
+const converters = {
+  anchorType(node, style) {
+    if (!("transform" in style)) {
+      style.transform = "";
     }
 
-    if (node.minW && node.minW.value > 0) {
-      style.minWidth = measureToString(node.minW);
+    switch (node.anchorType) {
+      case "bottomCenter":
+        style.transform += "translate(-50%, -100%)";
+        break;
+
+      case "bottomLeft":
+        style.transform += "translate(0,-100%)";
+        break;
+
+      case "bottomRight":
+        style.transform += "translate(-100%,-100%)";
+        break;
+
+      case "middleCenter":
+        style.transform += "translate(-50%,-50%)";
+        break;
+
+      case "middleLeft":
+        style.transform += "translate(0,-50%)";
+        break;
+
+      case "middleRight":
+        style.transform += "translate(-100%,-50%)";
+        break;
+
+      case "topCenter":
+        style.transform += "translate(-50%,0)";
+        break;
+
+      case "topRight":
+        style.transform += "translate(-100%,0)";
+        break;
+    }
+  },
+
+  dimensions(node, style) {
+    if (node.w) {
+      style.width = measureToString(node.w);
+    } else {
+      if (node.maxW && node.maxW.value > 0) {
+        style.maxWidth = measureToString(node.maxW);
+      }
+
+      if (node.minW && node.minW.value > 0) {
+        style.minWidth = measureToString(node.minW);
+      }
+    }
+
+    if (node.h) {
+      style.height = measureToString(node.h);
+    } else {
+      if (node.maxH && node.maxH.value > 0) {
+        style.maxHeight = measureToString(node.maxH);
+      }
+
+      if (node.minH && node.minH.value > 0) {
+        style.minHeight = measureToString(node.minH);
+      }
+    }
+  },
+
+  position(node, style) {
+    if (node.x !== "" || node.y !== "") {
+      style.position = "absolute";
+      style.left = measureToString(node.x);
+      style.top = measureToString(node.y);
+    }
+  },
+
+  rotate(node, style) {
+    if (node.rotate) {
+      if (!("transform" in style)) {
+        style.transform = "";
+      }
+
+      style.transform += `rotate(-${node.rotate}deg)`;
+      style.transformOrigin = "top left";
     }
   }
 
-  if (node.h) {
-    style.height = measureToString(node.h);
-  } else {
-    if (node.maxH && node.maxH.value > 0) {
-      style.maxHeight = measureToString(node.maxH);
+};
+
+function toStyle(node, ...names) {
+  const style = Object.create(null);
+
+  for (const name of names) {
+    const value = node[name];
+
+    if (value === null) {
+      continue;
     }
 
-    if (node.minH && node.minH.value > 0) {
-      style.minHeight = measureToString(node.minH);
+    if (value instanceof _xfa_object.XFAObject) {
+      const newStyle = value[_xfa_object.$toStyle]();
+
+      if (newStyle) {
+        Object.assign(style, newStyle);
+      } else {
+        (0, _util.warn)(`(DEBUG) - XFA - style for ${name} not implemented yet`);
+      }
+
+      continue;
+    }
+
+    if (converters.hasOwnProperty(name)) {
+      converters[name](node, style);
     }
   }
-}
 
-function setPosition(node, style) {
-  style.transform = "";
-
-  if (node.rotate) {
-    style.transform = `rotate(-${node.rotate}deg) `;
-    style.transformOrigin = "top left";
-  }
-
-  if (node.x !== "" || node.y !== "") {
-    style.position = "absolute";
-    style.left = node.x ? measureToString(node.x) : "0pt";
-    style.top = node.y ? measureToString(node.y) : "0pt";
-  }
+  return style;
 }
 
 /***/ }),
@@ -64301,8 +64611,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.8.354';
-const pdfjsBuild = 'a9a074ac6';
+const pdfjsVersion = '2.8.409';
+const pdfjsBuild = 'cda32bfeb';
 })();
 
 /******/ 	return __webpack_exports__;
