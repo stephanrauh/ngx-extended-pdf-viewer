@@ -110,6 +110,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public customFreeFloatingBar: TemplateRef<any>;
 
   @Input()
+  public enableDragAndDrop = true;
+
+  @Input()
   public formData: FormDataType = {};
 
   @Output()
@@ -848,6 +851,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
         const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
 
+        PDFViewerApplicationOptions.set('enableDragAndDrop', this.enableDragAndDrop);
         PDFViewerApplicationOptions.set('locale', this.language);
         PDFViewerApplicationOptions.set('imageResourcesPath', this.imageResourcesPath);
         PDFViewerApplicationOptions.set('minZoom', this.minZoom);
@@ -1436,6 +1440,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           PDFViewerApplication.close();
         }
       }
+      if ('enableDragAndDrop' in changes) {
+        PDFViewerApplicationOptions.set('enableDragAndDrop', this.enableDragAndDrop);
+      }
+
       if ('zoom' in changes) {
         this.setZoom();
       }

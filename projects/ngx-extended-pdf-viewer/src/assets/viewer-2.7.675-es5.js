@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-var pdfjsVersion = '2.7.673';
-var pdfjsBuild = 'e50f03ecd';
+var pdfjsVersion = '2.7.675';
+var pdfjsBuild = 'f89f123ab';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -3480,21 +3480,25 @@ function webViewerInitialized() {
     });
   });
   appConfig.mainContainer.addEventListener("dragover", function (evt) {
-    evt.preventDefault();
-    evt.dataTransfer.dropEffect = "move";
+    if (_app_options.AppOptions.get("enableDragAndDrop")) {
+      evt.preventDefault();
+      evt.dataTransfer.dropEffect = "move";
+    }
   });
   appConfig.mainContainer.addEventListener("drop", function (evt) {
-    evt.preventDefault();
-    var files = evt.dataTransfer.files;
+    if (_app_options.AppOptions.get("enableDragAndDrop")) {
+      evt.preventDefault();
+      var files = evt.dataTransfer.files;
 
-    if (!files || files.length === 0) {
-      return;
+      if (!files || files.length === 0) {
+        return;
+      }
+
+      PDFViewerApplication.eventBus.dispatch("fileinputchange", {
+        source: this,
+        fileInput: evt.dataTransfer
+      });
     }
-
-    PDFViewerApplication.eventBus.dispatch("fileinputchange", {
-      source: this,
-      fileInput: evt.dataTransfer
-    });
   });
 
   if (!PDFViewerApplication.supportsDocumentFonts) {
@@ -13776,7 +13780,7 @@ var BaseViewer = /*#__PURE__*/function () {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    var viewerVersion = '2.7.673';
+    var viewerVersion = '2.7.675';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error("The API version \"".concat(_pdfjsLib.version, "\" does not match the Viewer version \"").concat(viewerVersion, "\"."));
