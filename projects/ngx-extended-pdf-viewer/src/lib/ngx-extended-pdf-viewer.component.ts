@@ -921,7 +921,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (this.textLayer === undefined) {
       if (!this.handTool) {
         if (options) {
-          options.set('textLayerMode', 1);
+          options.set('textLayerMode', pdfDefaultOptions.textLayerMode);
         }
         this.textLayer = true;
         if (this.showFindButton === undefined) {
@@ -940,7 +940,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
       } else {
         if (options) {
-          options.set('textLayerMode', this.showHandToolButton ? 1 : 0);
+          options.set('textLayerMode', this.showHandToolButton ? pdfDefaultOptions.textLayerMode : 0);
         }
         if (!this.showHandToolButton) {
           if (this.showFindButton || this.showFindButton === undefined) {
@@ -968,7 +968,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     } else {
       if (this.textLayer) {
         if (options) {
-          options.set('textLayerMode', 1);
+          options.set('textLayerMode', pdfDefaultOptions.textLayerMode);
         }
         this.textLayer = true;
         if (this.showFindButton === undefined) {
@@ -2006,7 +2006,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const desiredCenterY = event.clientY;
     const previousScale = (PDFViewerApplication.pdfViewer as any).currentScale;
-    debugger;
     if (this.zoom !== 'page-width') {
       this.previousZoom = this.zoom;
       this.zoom = 'page-width';

@@ -33,7 +33,7 @@ export let pdfDefaultOptions = {
   sidebarViewOnLoad: -1,
   scrollModeOnLoad: -1,
   spreadModeOnLoad: -1,
-  textLayerMode: 1,
+  textLayerMode: 2,
   useOnlyCssZoom: false,
   viewOnLoad: 0,
   cMapPacked: true,

@@ -262,4 +262,4 @@
 - 8.1.2 #650 + #657 restored compatibility to MacOS Mojave and iOS 13; #649 fixed the Italian translations (and probably many other translations, too)
 - 8.2.0 #650 compatibility to Safari 12.1 and 11.1; fixed the automatic height calculation if the height attribute is omitted or given as a percentage and the CSS framework translates that to "0px"
 - 8.3.0-alpha.0 #652 support the double-tap gesture to enlarge the PDF; #675 use the correct color to display errors; #690 fix an error that sometimes happens when the preview window is closed
-- 8.3.0 #704 now you can pass URL objects to the `[url]`
+- 8.3.0 #704 now you can pass URL objects to the `[url]`; #694 by default, `pdfDefaultOptions.textLayerMode` is now the enhanced text layer; plus, the PDF uses `pdfDefaultOptions.textLayerMode` the chose the text layer mode
