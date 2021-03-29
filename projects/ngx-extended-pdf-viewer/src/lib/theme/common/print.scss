@@ -1,0 +1,62 @@
+@media print {
+  body,
+  html {
+    overflow-y: visible !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background: rgba(0, 0, 0, 0) none;
+    height: 100%;
+    width: 100%;
+
+    & > * {
+      display: none !important;
+      outline: 0;
+      padding: 0;
+      margin: 0;
+    }
+
+    #printContainer {
+      display: block !important;
+      height: 100%;
+      width: 100%;
+    }
+
+    #printContainer img {
+      /* The intrinsic canvas / image size will make sure that we fit the page. */
+      max-width: 100%;
+      max-height: 100%;
+      direction: ltr;
+      display: block !important;
+    }
+
+    /* wrapper around (scaled) print canvas elements */
+    #printContainer > div {
+      page-break-after: always;
+      page-break-inside: avoid;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      /* overflow: visible; */
+      height: 100%;
+      width: 100%;
+
+    }
+  }
+
+  html {
+    overflow-y: visible !important;
+  }
+
+  body {
+    overflow-y: visible !important;
+  }
+
+  html.cdk-global-scrollblock {
+    width: initial;
+    position: initial;
+  }
+}

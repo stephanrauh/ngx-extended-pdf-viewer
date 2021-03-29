@@ -1673,9 +1673,7 @@ ngx-extended-pdf-viewer {
   margin: 0;
 }
 
-#printContainer {
-  display: none;
-}
+
 
 @media screen and (-webkit-min-device-pixel-ratio: 1.1), screen and (min-resolution: 1.1dppx) {
   /* Rules for Retina screens */
@@ -1713,78 +1711,6 @@ ngx-extended-pdf-viewer {
   }
 
 
-}
-
-@media print {
-  /* General rules for printing. */
-  body {
-    background: rgba(0, 0, 0, 0) none;
-  }
-
-  /* Rules for browsers that don't support mozPrintCallback. */
-  #sidebarContainer,
-  #secondaryToolbar,
-  .toolbar,
-  #loadingBox,
-  #errorWrapper,
-  .textLayer {
-    display: none;
-  }
-  #viewerContainer {
-    overflow: visible;
-  }
-
-  #mainContainer,
-  #viewerContainer,
-  .page,
-  .page canvas {
-    position: static;
-    padding: 0;
-    margin: 0;
-  }
-
-  .page {
-    float: left;
-    display: none;
-    border: none;
-    box-shadow: none;
-    background-clip: content-box;
-    background-color: $page-background;
-  }
-
-  .page[data-loaded] {
-    display: block;
-  }
-
-  .fileInput {
-    display: none;
-  }
-
-  /* Rules for browsers that support PDF.js printing */
-  body[data-pdfjsprinting] #outerContainer {
-    display: none;
-  }
-  body[data-pdfjsprinting] #printContainer {
-    display: block;
-  }
-  #printContainer {
-    height: 100%;
-  }
-  /* wrapper around (scaled) print canvas elements */
-  #printContainer > div {
-    position: relative;
-    top: 0;
-    left: 0;
-    width: 1px;
-    height: 1px;
-    overflow: visible;
-    page-break-after: always;
-    page-break-inside: avoid;
-  }
-  #printContainer canvas,
-  #printContainer img {
-    display: block;
-  }
 }
 
 ngx-extended-pdf-viewer {

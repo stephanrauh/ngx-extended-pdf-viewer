@@ -10,53 +10,9 @@ ngx-extended-pdf-viewer {
   }
 }
 
-@media print {
-  body[data-pdfjsprinting] > * {
-    display: none !important;
-  }
-  body[data-pdfjsprinting] #printContainer {
-    display: block !important;
-  }
-  body[data-pdfjsprinting] #printContainer div img {
-    height: 100vh !important;
-  }
-}
-
-body[data-pdfjsprinting] #printContainer,
-body[data-pdfjsprinting] #printContainer * {
-  padding: 0;
-  margin: 0;
-}
-
-body[data-pdfjsprinting] #printContainer,
-body[data-pdfjsprinting] #printContainer * {
-  font: message-box;
-  outline: none;
-}
-
-#printContainer canvas,
-#printContainer img {
-  display: block !important;
-}
-
 ngx-extended-pdf-viewer {
   #outerContainer {
     clip-path: inset(0 0 0 0);
-  }
-}
-
-@media print {
-  html {
-    overflow-y: visible !important;
-  }
-
-  body {
-    overflow-y: visible !important;
-  }
-
-  html.cdk-global-scrollblock {
-    width: initial;
-    position: initial;
   }
 }
 
