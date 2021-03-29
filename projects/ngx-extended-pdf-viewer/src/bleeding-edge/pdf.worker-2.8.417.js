@@ -142,7 +142,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.8.410';
+    const workerVersion = '2.8.417';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -6336,12 +6336,13 @@ var XRef = function XRefClosure() {
         throw new _util.FormatError("invalid first and n parameters for ObjStm stream");
       }
 
-      const parser = new _parser.Parser({
+      let parser = new _parser.Parser({
         lexer: new _parser.Lexer(stream),
         xref: this,
         allowStreams: true
       });
       const nums = new Array(n);
+      const offsets = new Array(n);
 
       for (let i = 0; i < n; ++i) {
         const num = parser.getObj();
@@ -6357,17 +6358,26 @@ var XRef = function XRefClosure() {
         }
 
         nums[i] = num;
+        offsets[i] = offset;
       }
 
+      const start = (stream.start || 0) + first;
       const entries = new Array(n);
 
       for (let i = 0; i < n; ++i) {
+        const length = i < n - 1 ? offsets[i + 1] - offsets[i] : undefined;
+
+        if (length < 0) {
+          throw new _util.FormatError("Invalid offset in the ObjStm stream.");
+        }
+
+        parser = new _parser.Parser({
+          lexer: new _parser.Lexer(stream.makeSubStream(start + offsets[i], length, stream.dict)),
+          xref: this,
+          allowStreams: true
+        });
         const obj = parser.getObj();
         entries[i] = obj;
-
-        if (parser.buf1 instanceof _primitives.Cmd && parser.buf1.cmd === "endobj") {
-          parser.shift();
-        }
 
         if ((0, _primitives.isStream)(obj)) {
           continue;
@@ -8413,10 +8423,16 @@ var DecodeStream = function DecodeStreamClosure() {
     },
 
     makeSubStream: function DecodeStream_makeSubStream(start, length, dict) {
-      var end = start + length;
+      if (length === undefined) {
+        while (!this.eof) {
+          this.readBlock();
+        }
+      } else {
+        var end = start + length;
 
-      while (this.bufferLength <= end && !this.eof) {
-        this.readBlock();
+        while (this.bufferLength <= end && !this.eof) {
+          this.readBlock();
+        }
       }
 
       return new Stream(this.buffer, start, length, dict);
@@ -64611,8 +64627,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.8.410';
-const pdfjsBuild = '4db0d290f';
+const pdfjsVersion = '2.8.417';
+const pdfjsBuild = '776d1a71a';
 })();
 
 /******/ 	return __webpack_exports__;

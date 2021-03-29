@@ -268,8 +268,11 @@ class PageViewport {
     const centerX = (viewBox[2] + viewBox[0]) / 2;
     const centerY = (viewBox[3] + viewBox[1]) / 2;
     let rotateA, rotateB, rotateC, rotateD;
-    rotation = rotation % 360;
-    rotation = rotation < 0 ? rotation + 360 : rotation;
+    rotation %= 360;
+
+    if (rotation < 0) {
+      rotation += 360;
+    }
 
     switch (rotation) {
       case 180:
@@ -1766,7 +1769,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.8.410',
+    apiVersion: '2.8.417',
     source: {
       data: source.data,
       url: source.url,
@@ -3819,9 +3822,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.8.410';
+const version = '2.8.417';
 exports.version = version;
-const build = '4db0d290f';
+const build = '776d1a71a';
 exports.build = build;
 
 /***/ }),
@@ -14258,8 +14261,8 @@ var _svg = __w_pdfjs_require__(21);
 
 var _xfa_layer = __w_pdfjs_require__(22);
 
-const pdfjsVersion = '2.8.410';
-const pdfjsBuild = '4db0d290f';
+const pdfjsVersion = '2.8.417';
+const pdfjsBuild = '776d1a71a';
 {
   const PDFNetworkStream = __w_pdfjs_require__(23).PDFNetworkStream;
 
