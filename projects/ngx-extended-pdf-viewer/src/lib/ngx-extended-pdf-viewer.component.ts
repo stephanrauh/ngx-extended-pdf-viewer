@@ -46,6 +46,7 @@ import { ScrollModeChangedEvent, ScrollModeType } from './options/pdf-viewer';
 import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
 import { ProgressBarEvent } from './events/progress-bar-event';
 import { UnitToPx } from './unit-to-px';
+import { PageRenderEvent } from './events/page-render-event';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 declare class ResizeObserver {
@@ -451,6 +452,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Output()
   public pagesLoaded = new EventEmitter<PagesLoadedEvent>();
+
+  @Output()
+  public pageRender = new EventEmitter<PageRenderEvent>();
 
   @Output()
   public pageRendered = new EventEmitter<PageRenderedEvent>();
@@ -1127,6 +1131,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.removeScrollbarInInititeScrollMode();
       });
     });
+    PDFViewerApplication.eventBus.on('pagerender', (x: PageRenderEvent) => {
+      this.ngZone.run(() => {
+        this.pageRender.emit(x);
+      });
+    });
+
     PDFViewerApplication.eventBus.on('download', (x: PdfDownloadedEvent) => {
       this.ngZone.run(() => {
         this.pdfDownloaded.emit(x);
