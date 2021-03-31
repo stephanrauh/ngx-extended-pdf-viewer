@@ -264,3 +264,5 @@
 - 8.3.0-alpha.0 #652 support the double-tap gesture to enlarge the PDF; #675 use the correct color to display errors; #690 fix an error that sometimes happens when the preview window is closed
 - 8.3.0 #704 now you can pass URL objects to the `[url]`; #694 by default, `pdfDefaultOptions.textLayerMode` is now the enhanced text layer; plus, the PDF uses `pdfDefaultOptions.textLayerMode` the chose the text layer mode
 - 8.4.0 #686 optionally prevent dragging and dropping files to the PDF viewer
+- 9.0.0-alpha.0 #700 re-worked the print CSS
+- 9.0.0-alpha.1 #90 #543 if `[zoom]` is undefined or omitted, the zoom, page number, and rotation are taken from `localStore`. In other words: if you've viewed the document before, your settings are restored. #255 stop reporting the "worker is terminated" message. #707 fixed the exception occurring in Brave on iOS with active fingerprinting protection

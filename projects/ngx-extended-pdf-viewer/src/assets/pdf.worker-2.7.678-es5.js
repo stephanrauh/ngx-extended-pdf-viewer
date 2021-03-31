@@ -50,8 +50,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.7.675';
-var pdfjsBuild = 'f89f123ab';
+var pdfjsVersion = '2.7.678';
+var pdfjsBuild = 'a4a76875e';
 
 /***/ }),
 /* 1 */
@@ -213,7 +213,7 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
       var WorkerTasks = [];
       var verbosity = (0, _util.getVerbosityLevel)();
       var apiVersion = docParams.apiVersion;
-      var workerVersion = '2.7.675';
+      var workerVersion = '2.7.678';
 
       if (apiVersion !== workerVersion) {
         throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -67787,6 +67787,8 @@ var MessageHandler = /*#__PURE__*/function () {
               streamId: streamId,
               reason: wrapReason(reason)
             });
+          })["catch"](function (reason) {
+            console.log("Caught an error of the worker thread: " + reason);
           });
           this.streamSinks[streamId].sinkCapability.reject(wrapReason(data.reason));
           this.streamSinks[streamId].isCancelled = true;

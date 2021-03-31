@@ -242,8 +242,8 @@ var _text_layer = __w_pdfjs_require__(21);
 
 var _svg = __w_pdfjs_require__(22);
 
-const pdfjsVersion = '2.7.675';
-const pdfjsBuild = 'f89f123ab';
+const pdfjsVersion = '2.7.678';
+const pdfjsBuild = 'a4a76875e';
 {
   const PDFNetworkStream = __w_pdfjs_require__(23).PDFNetworkStream;
 
@@ -1984,7 +1984,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.7.675',
+    apiVersion: '2.7.678',
     source: {
       data: source.data,
       url: source.url,
@@ -4007,9 +4007,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.7.675';
+const version = '2.7.678';
 exports.version = version;
-const build = 'f89f123ab';
+const build = 'a4a76875e';
 exports.build = build;
 
 /***/ }),
@@ -6160,16 +6160,20 @@ const CanvasGraphics = function CanvasGraphicsClosure() {
         }
 
         if (font.remeasure && width > 0) {
-          const measuredWidth = ctx.measureText(character).width * 1000 / fontSize * fontSizeScale;
+          const measurement = ctx.measureText(character);
 
-          if (width < measuredWidth && this.isFontSubpixelAAEnabled) {
-            const characterScaleX = width / measuredWidth;
-            restoreNeeded = true;
-            ctx.save();
-            ctx.scale(characterScaleX, 1);
-            scaledX /= characterScaleX;
-          } else if (width !== measuredWidth) {
-            scaledX += (width - measuredWidth) / 2000 * fontSize / fontSizeScale;
+          if (measurement) {
+            const measuredWidth = measurement.width * 1000 / fontSize * fontSizeScale;
+
+            if (width < measuredWidth && this.isFontSubpixelAAEnabled) {
+              const characterScaleX = width / measuredWidth;
+              restoreNeeded = true;
+              ctx.save();
+              ctx.scale(characterScaleX, 1);
+              scaledX /= characterScaleX;
+            } else if (width !== measuredWidth) {
+              scaledX += (width - measuredWidth) / 2000 * fontSize / fontSizeScale;
+            }
           }
         }
 
@@ -7816,6 +7820,8 @@ class MessageHandler {
             streamId,
             reason: wrapReason(reason)
           });
+        }).catch(reason => {
+          console.log("Caught an error of the worker thread: " + reason);
         });
         this.streamSinks[streamId].sinkCapability.reject(wrapReason(data.reason));
         this.streamSinks[streamId].isCancelled = true;
@@ -11781,14 +11787,16 @@ const renderTextLayer = function renderTextLayerClosure() {
           this._layoutTextLastFontFamily = fontFamily;
         }
 
-        const {
-          width
-        } = this._layoutTextCtx.measureText(textDiv.textContent);
+        try {
+          const {
+            width
+          } = this._layoutTextCtx.measureText(textDiv.textContent);
 
-        if (width > 0) {
-          textDivProperties.scale = textDivProperties.canvasWidth / width;
-          transform = `scaleX(${textDivProperties.scale})`;
-        }
+          if (width > 0) {
+            textDivProperties.scale = textDivProperties.canvasWidth / width;
+            transform = `scaleX(${textDivProperties.scale})`;
+          }
+        } catch (fingerprintingProtectionIsActiveException) {}
       }
 
       if (textDivProperties.angle !== 0) {

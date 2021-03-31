@@ -7,6 +7,9 @@ export interface IWebL10n {
   get(key: string, args: any, fallbackString: string): string;
 }
 
+export interface ViewHistory {
+  get(name: string, defaultValue?: string): Promise<string>;
+}
 export interface IPDFViewerApplication {
   appConfig: IPDFViewerAppConfig;
   _boundEvents: any;
@@ -25,6 +28,7 @@ export interface IPDFViewerApplication {
   sidebarViewOnLoad: 0 | 1;
   spreadModeOnLoad: 0 | 1 | 2;
   secondaryToolbar: any;
+  store: ViewHistory;
   toolbar: any;
   viewer: HTMLDivElement;
 

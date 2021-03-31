@@ -1016,14 +1016,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
   }
 
-  private overrideDefaultSettings() {
+  private async overrideDefaultSettings() {
     const options = (window as any).PDFViewerApplicationOptions as IPDFViewerApplicationOptions;
     // tslint:disable-next-line:forin
     for (const key in pdfDefaultOptions) {
       options.set(key, pdfDefaultOptions[key]);
     }
     options.set('disablePreferences', true);
-    this.setZoom();
+    await this.setZoom();
 
     options.set('ignoreKeyboard', this.ignoreKeyboard);
     options.set('ignoreKeys', this.ignoreKeys);
@@ -1094,7 +1094,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.progress.emit(x);
     });
 
-    PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
+    PDFViewerApplication.eventBus.on('pagesloaded', async (x: PagesLoadedEvent) => {
       this.pagesLoaded.emit(x);
       this.removeScrollbarInInititeScrollMode();
       if (this.rotation) {
@@ -1117,7 +1117,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           }
         }
       });
-      this.setZoom();
+      await this.setZoom();
     });
     PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
       this.ngZone.run(() => {
@@ -1445,7 +1445,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
 
       if ('zoom' in changes) {
-        this.setZoom();
+        (async () => await this.setZoom())();
       }
 
       if ('maxZoom' in changes) {
@@ -1660,41 +1660,53 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     return true;
   }
 
-  private setZoom() {
-    let zoomAsNumber = this.zoom;
-    if (String(zoomAsNumber).endsWith('%')) {
-      zoomAsNumber = Number(String(zoomAsNumber).replace('%', '')) / 100;
-    } else if (!isNaN(Number(zoomAsNumber))) {
-      zoomAsNumber = Number(zoomAsNumber) / 100;
-    }
-    if (!zoomAsNumber) {
-      zoomAsNumber = 'auto';
-    }
+  private async setZoom() {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    if (PDFViewerApplication.store) {
+      let zoomAsNumber = this.zoom;
+      if (String(zoomAsNumber).endsWith('%')) {
+        zoomAsNumber = Number(String(zoomAsNumber).replace('%', '')) / 100;
+      } else if (!isNaN(Number(zoomAsNumber))) {
+        zoomAsNumber = Number(zoomAsNumber) / 100;
+      }
+      if (!zoomAsNumber) {
+        const userSetting = await PDFViewerApplication.store.get('zoom');
+        if (userSetting) {
+          if (!isNaN(Number(userSetting))) {
+            zoomAsNumber = Number(userSetting) / 100;
+          } else {
+            zoomAsNumber = userSetting;
+          }
+        } else {
+          zoomAsNumber = 'auto';
+        }
+      }
 
-    if (PDFViewerApplication) {
-      const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
+      if (PDFViewerApplication) {
+        const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
 
-      PDFViewerApplicationOptions.set('defaultZoomValue', zoomAsNumber);
-    }
+        PDFViewerApplicationOptions.set('defaultZoomValue', zoomAsNumber);
+      }
 
-    const scale = (this.root.nativeElement as HTMLElement).querySelector('#scaleSelect') as HTMLSelectElement | undefined;
-    if (scale) {
-      if (this.zoom === 'auto' || this.zoom === 'page-fit' || this.zoom === 'page-actual' || this.zoom === 'page-width') {
-        scale.value = this.zoom;
-      } else {
-        scale.value = 'custom';
-        for (const option of (scale.options as any)) {
-          if (option.value === 'custom') {
-            option.textContent = (Math.round(Number(zoomAsNumber) * 100_000) / 1000) + "%";
-            continue;
+      const scaleDropdownField = (this.root.nativeElement as HTMLElement).querySelector('#scaleSelect') as HTMLSelectElement | undefined;
+      if (scaleDropdownField) {
+        if (this.zoom === 'auto' || this.zoom === 'page-fit' || this.zoom === 'page-actual' || this.zoom === 'page-width') {
+          scaleDropdownField.value = this.zoom;
+        } else {
+          scaleDropdownField.value = 'custom';
+          for (const option of (scaleDropdownField.options as any)) {
+            if (option.value === 'custom') {
+              option.textContent = (Math.round(Number(zoomAsNumber) * 100_000) / 1000) + "%";
+              continue;
+            }
           }
         }
       }
-    }
 
-    if (PDFViewerApplication.pdfViewer) {
-      PDFViewerApplication.pdfViewer.currentScaleValue = zoomAsNumber;
+      if (PDFViewerApplication.pdfViewer) {
+        PDFViewerApplication.pdfViewer.currentScaleValue = zoomAsNumber;
+        console.log("Setting zoom: " + zoomAsNumber);
+      }
     }
   }
 
@@ -2010,17 +2022,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
   }
 
-  public zoomToPageWidth(event: MouseEvent): void {
+  public async zoomToPageWidth(event: MouseEvent): Promise<void> {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const desiredCenterY = event.clientY;
     const previousScale = (PDFViewerApplication.pdfViewer as any).currentScale;
     if (this.zoom !== 'page-width') {
       this.previousZoom = this.zoom;
       this.zoom = 'page-width';
-      this.setZoom();
+      await this.setZoom();
     } else {
       this.zoom = this.previousZoom;
-      this.setZoom();
+      await this.setZoom();
     }
 
 

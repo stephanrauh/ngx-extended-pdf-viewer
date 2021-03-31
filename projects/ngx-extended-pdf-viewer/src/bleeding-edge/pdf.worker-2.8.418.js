@@ -142,7 +142,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.8.417';
+    const workerVersion = '2.8.418';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -64366,6 +64366,8 @@ class MessageHandler {
             streamId,
             reason: wrapReason(reason)
           });
+        }).catch(reason => {
+          console.log("Caught an error of the worker thread: " + reason);
         });
         this.streamSinks[streamId].sinkCapability.reject(wrapReason(data.reason));
         this.streamSinks[streamId].isCancelled = true;
@@ -64627,8 +64629,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.8.417';
-const pdfjsBuild = '776d1a71a';
+const pdfjsVersion = '2.8.418';
+const pdfjsBuild = '2039aeb4d';
 })();
 
 /******/ 	return __webpack_exports__;

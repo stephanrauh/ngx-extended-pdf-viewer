@@ -1769,7 +1769,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.8.417',
+    apiVersion: '2.8.418',
     source: {
       data: source.data,
       url: source.url,
@@ -3822,9 +3822,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.8.417';
+const version = '2.8.418';
 exports.version = version;
-const build = '776d1a71a';
+const build = '2039aeb4d';
 exports.build = build;
 
 /***/ }),
@@ -5983,16 +5983,20 @@ const CanvasGraphics = function CanvasGraphicsClosure() {
         }
 
         if (font.remeasure && width > 0) {
-          const measuredWidth = ctx.measureText(character).width * 1000 / fontSize * fontSizeScale;
+          const measurement = ctx.measureText(character);
 
-          if (width < measuredWidth && this.isFontSubpixelAAEnabled) {
-            const characterScaleX = width / measuredWidth;
-            restoreNeeded = true;
-            ctx.save();
-            ctx.scale(characterScaleX, 1);
-            scaledX /= characterScaleX;
-          } else if (width !== measuredWidth) {
-            scaledX += (width - measuredWidth) / 2000 * fontSize / fontSizeScale;
+          if (measurement) {
+            const measuredWidth = measurement.width * 1000 / fontSize * fontSizeScale;
+
+            if (width < measuredWidth && this.isFontSubpixelAAEnabled) {
+              const characterScaleX = width / measuredWidth;
+              restoreNeeded = true;
+              ctx.save();
+              ctx.scale(characterScaleX, 1);
+              scaledX /= characterScaleX;
+            } else if (width !== measuredWidth) {
+              scaledX += (width - measuredWidth) / 2000 * fontSize / fontSizeScale;
+            }
           }
         }
 
@@ -7635,6 +7639,8 @@ class MessageHandler {
             streamId,
             reason: wrapReason(reason)
           });
+        }).catch(reason => {
+          console.log("Caught an error of the worker thread: " + reason);
         });
         this.streamSinks[streamId].sinkCapability.reject(wrapReason(data.reason));
         this.streamSinks[streamId].isCancelled = true;
@@ -10580,8 +10586,8 @@ const renderTextLayer = function renderTextLayerClosure() {
     ctx.save();
     ctx.font = `${DEFAULT_FONT_SIZE}px ${fontFamily}`;
     const metrics = ctx.measureText("");
-    let ascent = metrics.fontBoundingBoxAscent;
-    let descent = Math.abs(metrics.fontBoundingBoxDescent);
+    let ascent = metrics?.fontBoundingBoxAscent;
+    let descent = Math.abs(metrics?.fontBoundingBoxDescent);
 
     if (ascent) {
       ctx.restore();
@@ -11124,14 +11130,16 @@ const renderTextLayer = function renderTextLayerClosure() {
           this._layoutTextLastFontFamily = fontFamily;
         }
 
-        const {
-          width
-        } = this._layoutTextCtx.measureText(textDiv.textContent);
+        try {
+          const {
+            width
+          } = this._layoutTextCtx.measureText(textDiv.textContent);
 
-        if (width > 0) {
-          textDivProperties.scale = textDivProperties.canvasWidth / width;
-          transform = `scaleX(${textDivProperties.scale})`;
-        }
+          if (width > 0) {
+            textDivProperties.scale = textDivProperties.canvasWidth / width;
+            transform = `scaleX(${textDivProperties.scale})`;
+          }
+        } catch (fingerprintIsBlockedException) {}
       }
 
       if (textDivProperties.angle !== 0) {
@@ -14261,8 +14269,8 @@ var _svg = __w_pdfjs_require__(21);
 
 var _xfa_layer = __w_pdfjs_require__(22);
 
-const pdfjsVersion = '2.8.417';
-const pdfjsBuild = '776d1a71a';
+const pdfjsVersion = '2.8.418';
+const pdfjsBuild = '2039aeb4d';
 {
   const PDFNetworkStream = __w_pdfjs_require__(23).PDFNetworkStream;
 

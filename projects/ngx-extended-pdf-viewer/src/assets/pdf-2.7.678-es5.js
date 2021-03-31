@@ -242,8 +242,8 @@ var _text_layer = __w_pdfjs_require__(151);
 
 var _svg = __w_pdfjs_require__(152);
 
-var pdfjsVersion = '2.7.675';
-var pdfjsBuild = 'f89f123ab';
+var pdfjsVersion = '2.7.678';
+var pdfjsBuild = 'a4a76875e';
 {
   var PDFNetworkStream = __w_pdfjs_require__(153).PDFNetworkStream;
 
@@ -11106,7 +11106,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId: docId,
-    apiVersion: '2.7.675',
+    apiVersion: '2.7.678',
     source: {
       data: source.data,
       url: source.url,
@@ -13544,9 +13544,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.7.675';
+var version = '2.7.678';
 exports.version = version;
-var build = 'f89f123ab';
+var build = 'a4a76875e';
 exports.build = build;
 
 /***/ }),
@@ -15938,16 +15938,20 @@ var CanvasGraphics = function CanvasGraphicsClosure() {
         }
 
         if (font.remeasure && width > 0) {
-          var measuredWidth = ctx.measureText(character).width * 1000 / fontSize * fontSizeScale;
+          var measurement = ctx.measureText(character);
 
-          if (width < measuredWidth && this.isFontSubpixelAAEnabled) {
-            var characterScaleX = width / measuredWidth;
-            restoreNeeded = true;
-            ctx.save();
-            ctx.scale(characterScaleX, 1);
-            scaledX /= characterScaleX;
-          } else if (width !== measuredWidth) {
-            scaledX += (width - measuredWidth) / 2000 * fontSize / fontSizeScale;
+          if (measurement) {
+            var measuredWidth = measurement.width * 1000 / fontSize * fontSizeScale;
+
+            if (width < measuredWidth && this.isFontSubpixelAAEnabled) {
+              var characterScaleX = width / measuredWidth;
+              restoreNeeded = true;
+              ctx.save();
+              ctx.scale(characterScaleX, 1);
+              scaledX /= characterScaleX;
+            } else if (width !== measuredWidth) {
+              scaledX += (width - measuredWidth) / 2000 * fontSize / fontSizeScale;
+            }
           }
         }
 
@@ -17625,6 +17629,8 @@ var MessageHandler = /*#__PURE__*/function () {
               streamId: streamId,
               reason: wrapReason(reason)
             });
+          })["catch"](function (reason) {
+            console.log("Caught an error of the worker thread: " + reason);
           });
           this.streamSinks[streamId].sinkCapability.reject(wrapReason(data.reason));
           this.streamSinks[streamId].isCancelled = true;
@@ -22649,13 +22655,15 @@ var renderTextLayer = function renderTextLayerClosure() {
           this._layoutTextLastFontFamily = fontFamily;
         }
 
-        var _this$_layoutTextCtx$ = this._layoutTextCtx.measureText(textDiv.textContent),
-            width = _this$_layoutTextCtx$.width;
+        try {
+          var _this$_layoutTextCtx$ = this._layoutTextCtx.measureText(textDiv.textContent),
+              width = _this$_layoutTextCtx$.width;
 
-        if (width > 0) {
-          textDivProperties.scale = textDivProperties.canvasWidth / width;
-          transform = "scaleX(".concat(textDivProperties.scale, ")");
-        }
+          if (width > 0) {
+            textDivProperties.scale = textDivProperties.canvasWidth / width;
+            transform = "scaleX(".concat(textDivProperties.scale, ")");
+          }
+        } catch (fingerprintingProtectionIsActiveException) {}
       }
 
       if (textDivProperties.angle !== 0) {

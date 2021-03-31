@@ -15938,16 +15938,20 @@ var CanvasGraphics = function CanvasGraphicsClosure() {
         }
 
         if (font.remeasure && width > 0) {
-          var measuredWidth = ctx.measureText(character).width * 1000 / fontSize * fontSizeScale;
+          var measurement = ctx.measureText(character);
 
-          if (width < measuredWidth && this.isFontSubpixelAAEnabled) {
-            var characterScaleX = width / measuredWidth;
-            restoreNeeded = true;
-            ctx.save();
-            ctx.scale(characterScaleX, 1);
-            scaledX /= characterScaleX;
-          } else if (width !== measuredWidth) {
-            scaledX += (width - measuredWidth) / 2000 * fontSize / fontSizeScale;
+          if (measurement) {
+            var measuredWidth = measurement.width * 1000 / fontSize * fontSizeScale;
+
+            if (width < measuredWidth && this.isFontSubpixelAAEnabled) {
+              var characterScaleX = width / measuredWidth;
+              restoreNeeded = true;
+              ctx.save();
+              ctx.scale(characterScaleX, 1);
+              scaledX /= characterScaleX;
+            } else if (width !== measuredWidth) {
+              scaledX += (width - measuredWidth) / 2000 * fontSize / fontSizeScale;
+            }
           }
         }
 
@@ -22649,13 +22653,15 @@ var renderTextLayer = function renderTextLayerClosure() {
           this._layoutTextLastFontFamily = fontFamily;
         }
 
-        var _this$_layoutTextCtx$ = this._layoutTextCtx.measureText(textDiv.textContent),
-            width = _this$_layoutTextCtx$.width;
+        try {
+          var _this$_layoutTextCtx$ = this._layoutTextCtx.measureText(textDiv.textContent),
+              width = _this$_layoutTextCtx$.width;
 
-        if (width > 0) {
-          textDivProperties.scale = textDivProperties.canvasWidth / width;
-          transform = "scaleX(".concat(textDivProperties.scale, ")");
-        }
+          if (width > 0) {
+            textDivProperties.scale = textDivProperties.canvasWidth / width;
+            transform = "scaleX(".concat(textDivProperties.scale, ")");
+          }
+        } catch (fingerprintingProtectionIsActiveException) {}
       }
 
       if (textDivProperties.angle !== 0) {
