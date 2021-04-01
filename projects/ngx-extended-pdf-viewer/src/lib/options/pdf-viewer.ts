@@ -16,4 +16,5 @@ export interface IPDFViewer {
   removePageBorders: boolean;
   scrollMode: ScrollModeType;
   spreadMode: 0 | 1 | 2;
+  _pages: Array<any>;
 }

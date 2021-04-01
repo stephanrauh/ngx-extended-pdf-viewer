@@ -8,6 +8,10 @@ export enum FindState {
 export interface FindResultMatchesCount {
   current?: number;
   total?: number;
+  matches?: Array<any>;
+  matchesLength?: Array<any>;
+  matchesColor?: Array<any>;
+
 }
 
 export interface FindResult {

@@ -10,11 +10,18 @@ export interface IWebL10n {
 export interface ViewHistory {
   get(name: string, defaultValue?: string): Promise<string>;
 }
+
+export interface FindController {
+  _pageMatches: Array<any>;
+  _pageMatchesColor: Array<number>;
+  _pageMatchesLength: Array<number>;
+}
 export interface IPDFViewerApplication {
   appConfig: IPDFViewerAppConfig;
   _boundEvents: any;
   enablePrint: boolean;
   eventBus: IEventBus;
+  findController: FindController;
   isViewerEmbedded: boolean;
   l10n: IWebL10n;
   onError: (error: Error) => void;

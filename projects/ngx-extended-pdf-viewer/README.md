@@ -28,6 +28,7 @@ Version 9.0 doesn't introduce many features, but it may break your application, 
 }
 ```
 - If you omit `[zoom]` or assign `undefined` to it, the user's last choice of the scale factor is used. Before 9.0.0, it was always set to `auto`. Note that this feature only work when the document is initially loaded. If the user loads a document using the upload button of the PDF viewer, the zoom setting isn't changed, even if there's a zoom setting store in `localStorage`.
+- The event `(updateFindMatchesCount)` is now also fired when there's not find result. Before 9.0.0, it only fired when there was at least on find result, so you didn't notice when the user enters a word that's not there.
 
 ## What's new in version 8.0 and 8.1?
 - Version 8.1 fixes the full-screen mode on Safari and iPad. Note this is a fairly radical solution which might cause problems with Angular, because it moves the PDF viewer to the top of the DOM, so Angular can't access it as long as the full-screen mode is active. Also note there's no full-screen mode on iPhones.

@@ -1215,12 +1215,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     PDFViewerApplication.eventBus.on('layersloaded', hideSidebarToolbar);
 
     PDFViewerApplication.eventBus.on('updatefindcontrolstate', (x: FindResult) => {
-      if (this.updateFindMatchesCount) {
-        if (x.state === FindState.NOT_FOUND) {
-          this.updateFindMatchesCount.emit({ current: 0, total: 0 });
-        } else if (x.matchesCount.total) {
-          this.updateFindMatchesCount.emit(x.matchesCount);
-        }
+      if (x.state === FindState.NOT_FOUND) {
+        this.updateFindMatchesCount.emit({ current: 0, total: 0 });
+      } else if (x.matchesCount.total) {
+        x.matchesCount.matches = PDFViewerApplication.findController._pageMatches;
+        x.matchesCount.matchesLength = PDFViewerApplication.findController._pageMatchesLength;
+        x.matchesCount.matchesColor = PDFViewerApplication.findController._pageMatchesColor;
+        this.updateFindMatchesCount.emit(x.matchesCount);
       }
 
       if (this.updateFindState) {
@@ -1228,11 +1229,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
     });
     PDFViewerApplication.eventBus.on('updatefindmatchescount', (x: FindResult) => {
-      if (this.updateFindMatchesCount) {
-        if (x.matchesCount.total) {
-          this.updateFindMatchesCount.emit(x.matchesCount);
-        }
-      }
+      x.matchesCount.matches = PDFViewerApplication.findController._pageMatches;
+      x.matchesCount.matchesLength = PDFViewerApplication.findController._pageMatchesLength;
+      x.matchesCount.matchesColor = PDFViewerApplication.findController._pageMatchesColor;
+      this.updateFindMatchesCount.emit(x.matchesCount);
     });
 
     PDFViewerApplication.eventBus.on('pagechanging', (x: PageNumberChange) => {

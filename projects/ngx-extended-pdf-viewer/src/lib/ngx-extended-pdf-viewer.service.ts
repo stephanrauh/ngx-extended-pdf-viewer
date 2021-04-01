@@ -1,4 +1,3 @@
-// import { PDFDocumentProxy, PDFPageProxy } from './../../types/src/display/api.d';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { PDFPrintRange } from './options/pdf-print-range';
 import { IPDFViewerApplication } from './options/pdf-viewer-application';
