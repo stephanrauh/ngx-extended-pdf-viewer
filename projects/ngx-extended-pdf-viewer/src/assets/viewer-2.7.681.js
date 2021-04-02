@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.7.678';
-const pdfjsBuild = 'a4a76875e';
+const pdfjsVersion = '2.7.681';
+const pdfjsBuild = '8dfa2124b';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -2971,7 +2971,7 @@ function webViewerUpdateViewarea(evt) {
   if (store && PDFViewerApplication.isInitialViewSet) {
     const settings = {};
 
-    if (location.pageNumber) {
+    if (location.pageNumber !== undefined || location.pageNumber !== null) {
       settings.page = location.pageNumber;
     }
 
@@ -2987,7 +2987,7 @@ function webViewerUpdateViewarea(evt) {
       settings.scrollTop = location.top;
     }
 
-    if (location.rotation) {
+    if (location.rotation !== undefined || location.rotation !== null) {
       settings.rotation = location.rotation;
     }
 
@@ -10767,7 +10767,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.7.678';
+    const viewerVersion = '2.7.681';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -15850,7 +15850,7 @@ class DownloadManager {
   }
 
   download(blob, url, filename, sourceEventType = "download") {
-    if (_viewer_compatibility.viewerCompatibilityParams.disableCreateObjectURL) {
+    if (_viewer_compatibility.viewerCompatibilityParams.disableCreateObjectURL && url) {
       this.downloadUrl(url, filename);
       return;
     }

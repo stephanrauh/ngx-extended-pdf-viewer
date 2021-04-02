@@ -6,7 +6,7 @@ export type DocumentInitParameters = {
     /**
      * - The URL of the PDF.
      */
-    url?: string | undefined;
+    url?: string | URL | undefined;
     /**
      * - Binary PDF data. Use
      * typed arrays (Uint8Array) to improve the memory usage. If PDF data is
@@ -154,24 +154,6 @@ export type DocumentInitParameters = {
      */
     pdfBug?: boolean | undefined;
 };
-export type PDFDocumentStats = {
-    /**
-     * - Used stream types in the
-     * document (an item is set to true if specific stream ID was used in the
-     * document).
-     */
-    streamTypes: {
-        [x: string]: boolean;
-    };
-    /**
-     * - Used font types in the
-     * document (an item is set to true if specific font ID was used in the
-     * document).
-     */
-    fontTypes: {
-        [x: string]: boolean;
-    };
-};
 export type IPDFStreamFactory = Function;
 /**
  * The loading task controls the operations required to load a PDF document
@@ -242,6 +224,24 @@ export type MarkInfo = {
     Marked: boolean;
     UserProperties: boolean;
     Suspects: boolean;
+};
+export type PDFDocumentStats = {
+    /**
+     * - Used stream types in the
+     * document (an item is set to true if specific stream ID was used in the
+     * document).
+     */
+    streamTypes: {
+        [x: string]: boolean;
+    };
+    /**
+     * - Used font types in the
+     * document (an item is set to true if specific font ID was used in the
+     * document).
+     */
+    fontTypes: {
+        [x: string]: boolean;
+    };
 };
 /**
  * Page getViewport parameters.
@@ -478,7 +478,7 @@ export const DefaultCMapReaderFactory: typeof DOMCMapReaderFactory | {
  * Document initialization / loading parameters object.
  *
  * @typedef {Object} DocumentInitParameters
- * @property {string} [url] - The URL of the PDF.
+ * @property {string|URL} [url] - The URL of the PDF.
  * @property {TypedArray|Array<number>|string} [data] - Binary PDF data. Use
  *    typed arrays (Uint8Array) to improve the memory usage. If PDF data is
  *    BASE64-encoded, use `atob()` to convert it to a binary string first.
@@ -552,27 +552,18 @@ export const DefaultCMapReaderFactory: typeof DOMCMapReaderFactory | {
  *   (see `web/debugger.js`). The default value is `false`.
  */
 /**
- * @typedef {Object} PDFDocumentStats
- * @property {Object<string, boolean>} streamTypes - Used stream types in the
- *   document (an item is set to true if specific stream ID was used in the
- *   document).
- * @property {Object<string, boolean>} fontTypes - Used font types in the
- *   document (an item is set to true if specific font ID was used in the
- *   document).
- */
-/**
  * This is the main entry point for loading a PDF and interacting with it.
  *
  * NOTE: If a URL is used to fetch the PDF data a standard Fetch API call (or
  * XHR as fallback) is used, which means it must follow same origin rules,
  * e.g. no cross-domain requests without CORS.
  *
- * @param {string|TypedArray|DocumentInitParameters|PDFDataRangeTransport} src -
- *   Can be a URL to where a PDF file is located, a typed array (Uint8Array)
- *   already populated with data or parameter object.
+ * @param {string|URL|TypedArray|PDFDataRangeTransport|DocumentInitParameters}
+ *   src - Can be a URL where a PDF file is located, a typed array (Uint8Array)
+ *         already populated with data, or a parameter object.
  * @returns {PDFDocumentLoadingTask}
  */
-export function getDocument(src: string | TypedArray | DocumentInitParameters | PDFDataRangeTransport): PDFDocumentLoadingTask;
+export function getDocument(src: string | URL | TypedArray | PDFDataRangeTransport | DocumentInitParameters): PDFDocumentLoadingTask;
 export class LoopbackPort {
     _listeners: any[];
     _deferred: Promise<undefined>;
@@ -786,6 +777,15 @@ export class PDFDocumentProxy {
     getDownloadInfo(): Promise<{
         length: number;
     }>;
+    /**
+     * @typedef {Object} PDFDocumentStats
+     * @property {Object<string, boolean>} streamTypes - Used stream types in the
+     *   document (an item is set to true if specific stream ID was used in the
+     *   document).
+     * @property {Object<string, boolean>} fontTypes - Used font types in the
+     *   document (an item is set to true if specific font ID was used in the
+     *   document).
+     */
     /**
      * @returns {Promise<PDFDocumentStats>} A promise this is resolved with
      *   current statistics about document structures (see

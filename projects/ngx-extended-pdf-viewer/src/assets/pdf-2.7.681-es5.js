@@ -242,8 +242,8 @@ var _text_layer = __w_pdfjs_require__(151);
 
 var _svg = __w_pdfjs_require__(152);
 
-var pdfjsVersion = '2.7.675';
-var pdfjsBuild = 'f89f123ab';
+var pdfjsVersion = '2.7.681';
+var pdfjsBuild = '8dfa2124b';
 {
   var PDFNetworkStream = __w_pdfjs_require__(153).PDFNetworkStream;
 
@@ -11106,7 +11106,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId: docId,
-    apiVersion: '2.7.675',
+    apiVersion: '2.7.681',
     source: {
       data: source.data,
       url: source.url,
@@ -13544,9 +13544,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.7.675';
+var version = '2.7.681';
 exports.version = version;
-var build = 'f89f123ab';
+var build = '8dfa2124b';
 exports.build = build;
 
 /***/ }),
@@ -17629,6 +17629,8 @@ var MessageHandler = /*#__PURE__*/function () {
               streamId: streamId,
               reason: wrapReason(reason)
             });
+          })["catch"](function (reason) {
+            console.log("Caught an error of the worker thread: " + reason);
           });
           this.streamSinks[streamId].sinkCapability.reject(wrapReason(data.reason));
           this.streamSinks[streamId].isCancelled = true;

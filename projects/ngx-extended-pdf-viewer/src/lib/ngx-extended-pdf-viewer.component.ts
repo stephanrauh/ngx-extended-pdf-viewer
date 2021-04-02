@@ -1101,13 +1101,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     PDFViewerApplication.eventBus.on('pagesloaded', async (x: PagesLoadedEvent) => {
       this.pagesLoaded.emit(x);
       this.removeScrollbarInInititeScrollMode();
-      if (this.rotation) {
+      if (this.rotation !== undefined && this.rotation !== null) {
         const r = Number(this.rotation);
         if (r === 0 || r === 90 || r === 180 || r === 270) {
           PDFViewerApplication.pdfViewer.pagesRotation = r;
         }
-      } else {
-        PDFViewerApplication.pdfViewer.pagesRotation = 0;
       }
       setTimeout(() => {
         if (!this.shuttingDown) {
@@ -1715,7 +1713,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
       if (PDFViewerApplication.pdfViewer) {
         PDFViewerApplication.pdfViewer.currentScaleValue = zoomAsNumber;
-        console.log("Setting zoom: " + zoomAsNumber);
       }
     }
   }

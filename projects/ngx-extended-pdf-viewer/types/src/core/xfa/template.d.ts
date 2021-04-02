@@ -106,7 +106,7 @@ export class TemplateNamespace {
     static connect(attrs: any): Connect;
     static contentArea(attrs: any): ContentArea;
     static corner(attrs: any): Corner;
-    static date(attrs: any): Date;
+    static date(attrs: any): DateElement;
     static dateTime(attrs: any): DateTime;
     static dateTimeEdit(attrs: any): DateTimeEdit;
     static decimal(attrs: any): Decimal;
@@ -496,7 +496,7 @@ declare class Corner extends XFAObject {
     color: any;
     extras: any;
 }
-declare class Date extends ContentObject {
+declare class DateElement extends ContentObject {
     constructor(attributes: any);
     id: any;
     name: any;

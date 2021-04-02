@@ -14,3 +14,5 @@ cd ../ngx-extended-pdf-viewer
 cp -R ../mypdf.js/build/minified/build/pdf.* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/
 cp -R ../mypdf.js/build/minified/web/viewer.js* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/
 cp -R ../mypdf.js/build/minified/web/viewer.min* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/
+
+npm run copy-assets

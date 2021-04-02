@@ -5,6 +5,6 @@ export function createDefaultAppearance({ fontSize, fontName, fontColor }: {
 }): string;
 export function parseDefaultAppearance(str: any): {
     fontSize: number;
-    fontName: any;
+    fontName: string;
     fontColor: Uint8ClampedArray;
 };

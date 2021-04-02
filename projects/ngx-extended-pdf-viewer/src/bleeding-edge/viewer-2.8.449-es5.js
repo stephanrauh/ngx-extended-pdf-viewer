@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-var pdfjsVersion = '2.7.675';
-var pdfjsBuild = 'f89f123ab';
+var pdfjsVersion = '2.7.681';
+var pdfjsBuild = '8dfa2124b';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -2969,8 +2969,6 @@ var PDFViewerApplication = {
 
       if (defaultZoomOption) {
         this.pdfViewer.currentScaleValue = defaultZoomOption;
-      } else {
-        this.pdfViewer.currentScaleValue = _ui_utils.DEFAULT_SCALE_VALUE;
       }
     }
   },
@@ -3684,13 +3682,29 @@ function webViewerUpdateViewarea(evt) {
       store = PDFViewerApplication.store;
 
   if (store && PDFViewerApplication.isInitialViewSet) {
-    store.setMultiple({
-      page: location.pageNumber,
-      zoom: location.scale,
-      scrollLeft: location.left,
-      scrollTop: location.top,
-      rotation: location.rotation
-    })["catch"](function () {});
+    var settings = {};
+
+    if (location.pageNumber !== undefined || location.pageNumber !== null) {
+      settings.page = location.pageNumber;
+    }
+
+    if (location.scale) {
+      settings.zoom = location.scale;
+    }
+
+    if (location.left) {
+      settings.scrollLeft = location.left;
+    }
+
+    if (location.top) {
+      settings.scrollTop = location.top;
+    }
+
+    if (location.rotation !== undefined || location.rotation !== null) {
+      settings.rotation = location.rotation;
+    }
+
+    store.setMultiple(settings)["catch"](function () {});
   }
 
   var href = PDFViewerApplication.pdfLinkService.getAnchorUrl(location.pdfOpenParams);
@@ -13780,7 +13794,7 @@ var BaseViewer = /*#__PURE__*/function () {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    var viewerVersion = '2.7.675';
+    var viewerVersion = '2.7.681';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error("The API version \"".concat(_pdfjsLib.version, "\" does not match the Viewer version \"").concat(viewerVersion, "\"."));
@@ -14221,6 +14235,11 @@ var BaseViewer = /*#__PURE__*/function () {
     key: "_setScale",
     value: function _setScale(value) {
       var noScroll = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      if (null === value) {
+        value = "auto";
+      }
+
       var scale = parseFloat(value);
 
       if (scale > 0) {
@@ -28069,7 +28088,7 @@ var DownloadManager = /*#__PURE__*/function () {
     value: function download(blob, url, filename) {
       var sourceEventType = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "download";
 
-      if (_viewer_compatibility.viewerCompatibilityParams.disableCreateObjectURL) {
+      if (_viewer_compatibility.viewerCompatibilityParams.disableCreateObjectURL && url) {
         this.downloadUrl(url, filename);
         return;
       }

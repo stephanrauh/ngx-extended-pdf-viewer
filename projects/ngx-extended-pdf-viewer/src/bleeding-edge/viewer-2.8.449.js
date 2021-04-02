@@ -2383,27 +2383,10 @@ function webViewerInitialized() {
   }
 }
 
-let webViewerOpenFileViaURL;
-{
-  webViewerOpenFileViaURL = function (file) {
-    if (file && file.lastIndexOf("file:", 0) === 0) {
-      PDFViewerApplication.setTitleUsingUrl(file);
-      const xhr = new XMLHttpRequest();
-
-      xhr.onload = function () {
-        PDFViewerApplication.open(new Uint8Array(xhr.response));
-      };
-
-      xhr.open("GET", file);
-      xhr.responseType = "arraybuffer";
-      xhr.send();
-      return;
-    }
-
-    if (file) {
-      PDFViewerApplication.open(file);
-    }
-  };
+function webViewerOpenFileViaURL(file) {
+  if (file) {
+    PDFViewerApplication.open(file);
+  }
 }
 
 function webViewerResetPermissions() {
@@ -2532,7 +2515,7 @@ function webViewerUpdateViewarea(evt) {
   if (store && PDFViewerApplication.isInitialViewSet) {
     const settings = {};
 
-    if (location.pageNumber) {
+    if (location.pageNumber !== undefined || location.pageNumber !== null) {
       settings.page = location.pageNumber;
     }
 
@@ -2548,7 +2531,7 @@ function webViewerUpdateViewarea(evt) {
       settings.scrollTop = location.top;
     }
 
-    if (location.rotation) {
+    if (location.rotation !== undefined || location.rotation !== null) {
       settings.rotation = location.rotation;
     }
 
@@ -8294,7 +8277,7 @@ class PDFOutlineViewer extends _base_tree_viewer.BaseTreeViewer {
         if (Array.isArray(explicitDest)) {
           const [destRef] = explicitDest;
 
-          if (typeof destRef === "object") {
+          if (destRef instanceof Object) {
             pageNumber = this.linkService._cachedPageNumber(destRef);
 
             if (!pageNumber) {
@@ -9055,9 +9038,8 @@ class PDFScriptingManager {
         detail
       }));
     } else {
-      if (value !== undefined && value !== null) {
-        this._pdfDocument?.annotationStorage.setValue(id, value);
-      }
+      delete detail.id;
+      this._pdfDocument?.annotationStorage.setValue(id, detail);
     }
   }
 
@@ -10589,7 +10571,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.8.418';
+    const viewerVersion = '2.8.449';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -11160,6 +11142,10 @@ class BaseViewer {
   }
 
   _setScale(value, noScroll = false) {
+    if (null === value) {
+      value = "auto";
+    }
+
     let scale = parseFloat(value);
 
     if (scale > 0) {
@@ -15839,7 +15825,7 @@ class DownloadManager {
   }
 
   download(blob, url, filename, sourceEventType = "download") {
-    if (_viewer_compatibility.viewerCompatibilityParams.disableCreateObjectURL) {
+    if (_viewer_compatibility.viewerCompatibilityParams.disableCreateObjectURL && url) {
       this.downloadUrl(url, filename);
       return;
     }
@@ -17262,8 +17248,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.8.418';
-const pdfjsBuild = '2039aeb4d';
+const pdfjsVersion = '2.8.449';
+const pdfjsBuild = '4f8086a0c';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

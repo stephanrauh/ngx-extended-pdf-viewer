@@ -1594,7 +1594,7 @@ function getDocument(src) {
   const task = new PDFDocumentLoadingTask();
   let source;
 
-  if (typeof src === "string") {
+  if (typeof src === "string" || src instanceof URL) {
     source = {
       url: src
     };
@@ -1608,7 +1608,7 @@ function getDocument(src) {
     };
   } else {
     if (typeof src !== "object") {
-      throw new Error("Invalid parameter in getDocument, " + "need either Uint8Array, string or a parameter object");
+      throw new Error("Invalid parameter in getDocument, " + "need either string, URL, Uint8Array, or parameter object.");
     }
 
     if (!src.url && !src.data && !src.range) {
@@ -1623,36 +1623,51 @@ function getDocument(src) {
       worker = null;
 
   for (const key in source) {
-    if (key === "url" && typeof window !== "undefined") {
-      params[key] = new URL(source[key], window.location).href;
-      continue;
-    } else if (key === "range") {
-      rangeTransport = source[key];
-      continue;
-    } else if (key === "worker") {
-      worker = source[key];
-      continue;
-    } else if (key === "data") {
-      const pdfBytes = source[key];
+    const value = source[key];
 
-      if (_is_node.isNodeJS && typeof Buffer !== "undefined" && pdfBytes instanceof Buffer) {
-        params[key] = new Uint8Array(pdfBytes);
-      } else if (pdfBytes instanceof Uint8Array) {
-        params[key] = pdfBytes;
-      } else if (typeof pdfBytes === "string") {
-        params[key] = (0, _util.stringToBytes)(pdfBytes);
-      } else if (typeof pdfBytes === "object" && pdfBytes !== null && !isNaN(pdfBytes.length)) {
-        params[key] = new Uint8Array(pdfBytes);
-      } else if ((0, _util.isArrayBuffer)(pdfBytes)) {
-        params[key] = new Uint8Array(pdfBytes);
-      } else {
-        throw new Error("Invalid PDF binary data: either typed array, " + "string, or array-like object is expected in the data property.");
-      }
+    switch (key) {
+      case "url":
+        if (typeof window !== "undefined") {
+          try {
+            params[key] = new URL(value, window.location).href;
+            continue;
+          } catch (ex) {
+            (0, _util.warn)(`Cannot create valid URL: "${ex}".`);
+          }
+        } else if (typeof value === "string" || value instanceof URL) {
+          params[key] = value.toString();
+          continue;
+        }
 
-      continue;
+        throw new Error("Invalid PDF url data: " + "either string or URL-object is expected in the url property.");
+
+      case "range":
+        rangeTransport = value;
+        continue;
+
+      case "worker":
+        worker = value;
+        continue;
+
+      case "data":
+        if (_is_node.isNodeJS && typeof Buffer !== "undefined" && value instanceof Buffer) {
+          params[key] = new Uint8Array(value);
+        } else if (value instanceof Uint8Array) {
+          break;
+        } else if (typeof value === "string") {
+          params[key] = (0, _util.stringToBytes)(value);
+        } else if (typeof value === "object" && value !== null && !isNaN(value.length)) {
+          params[key] = new Uint8Array(value);
+        } else if ((0, _util.isArrayBuffer)(value)) {
+          params[key] = new Uint8Array(value);
+        } else {
+          throw new Error("Invalid PDF binary data: either typed array, " + "string, or array-like object is expected in the data property.");
+        }
+
+        continue;
     }
 
-    params[key] = source[key];
+    params[key] = value;
   }
 
   params.rangeChunkSize = params.rangeChunkSize || DEFAULT_RANGE_CHUNK_SIZE;
@@ -1769,7 +1784,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.8.418',
+    apiVersion: '2.8.449',
     source: {
       data: source.data,
       url: source.url,
@@ -3822,9 +3837,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.8.418';
+const version = '2.8.449';
 exports.version = version;
-const build = '2039aeb4d';
+const build = '4f8086a0c';
 exports.build = build;
 
 /***/ }),
@@ -4450,6 +4465,7 @@ const MAX_GROUP_SIZE = 4096;
 const COMPILE_TYPE3_GLYPHS = true;
 const MAX_SIZE_TO_COMPILE = 1000;
 const FULL_CHUNK_HEIGHT = 16;
+const LINEWIDTH_SCALE_FACTOR = 1.000001;
 
 function addContextCurrentTransform(ctx) {
   if (!ctx.mozCurrentTransform) {
@@ -4460,8 +4476,24 @@ function addContextCurrentTransform(ctx) {
     ctx._originalTranslate = ctx.translate;
     ctx._originalTransform = ctx.transform;
     ctx._originalSetTransform = ctx.setTransform;
+    ctx._originalResetTransform = ctx.resetTransform;
     ctx._transformMatrix = ctx._transformMatrix || [1, 0, 0, 1, 0, 0];
     ctx._transformStack = [];
+
+    try {
+      const desc = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(ctx), "lineWidth");
+      ctx._setLineWidth = desc.set;
+      ctx._getLineWidth = desc.get;
+      Object.defineProperty(ctx, "lineWidth", {
+        set: function setLineWidth(width) {
+          this._setLineWidth(width * LINEWIDTH_SCALE_FACTOR);
+        },
+        get: function getLineWidth() {
+          return this._getLineWidth();
+        }
+      });
+    } catch (_) {}
+
     Object.defineProperty(ctx, "mozCurrentTransform", {
       get: function getCurrentTransform() {
         return this._transformMatrix;
@@ -4531,6 +4563,12 @@ function addContextCurrentTransform(ctx) {
       this._transformMatrix = [a, b, c, d, e, f];
 
       ctx._originalSetTransform(a, b, c, d, e, f);
+    };
+
+    ctx.resetTransform = function ctxResetTransform() {
+      this._transformMatrix = [1, 0, 0, 1, 0, 0];
+
+      ctx._originalResetTransform();
     };
 
     ctx.rotate = function ctxRotate(angle) {
@@ -6649,7 +6687,7 @@ const CanvasGraphics = function CanvasGraphicsClosure() {
         if (sqNorm1 !== sqNorm2 && this._combinedScaleFactor * pixelHeight > 1) {
           this._cachedGetSinglePixelWidth = -(this._combinedScaleFactor * pixelHeight);
         } else if (absDet > Number.EPSILON) {
-          this._cachedGetSinglePixelWidth = pixelHeight * 1.0000001;
+          this._cachedGetSinglePixelWidth = pixelHeight;
         } else {
           this._cachedGetSinglePixelWidth = 1;
         }
@@ -9177,9 +9215,11 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
     let element = null;
 
     if (this.renderInteractiveForms) {
-      const textContent = storage.getValue(id, {
-        value: this.data.fieldValue
-      }).value;
+      const storedData = storage.getValue(id, {
+        value: this.data.fieldValue,
+        valueAsString: this.data.fieldValue
+      });
+      const textContent = storedData.valueAsString || storedData.value || "";
       const elementData = {
         userValue: null,
         formattedValue: null,
@@ -14269,8 +14309,8 @@ var _svg = __w_pdfjs_require__(21);
 
 var _xfa_layer = __w_pdfjs_require__(22);
 
-const pdfjsVersion = '2.8.418';
-const pdfjsBuild = '2039aeb4d';
+const pdfjsVersion = '2.8.449';
+const pdfjsBuild = '4f8086a0c';
 {
   const PDFNetworkStream = __w_pdfjs_require__(23).PDFNetworkStream;
 
