@@ -50,6 +50,10 @@ export let pdfDefaultOptions = {
   verbosity: 1,
   workerPort: null,
   assetsFolder: 'assets',
+  sandboxBundleSrc: () =>
+  _isIE11 || isEdge || needsES5
+    ? './' + pdfDefaultOptions.assetsFolder + '/pdf.sandbox-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '-es5.js'
+    : './' + pdfDefaultOptions.assetsFolder + '/pdf.sandbox-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '.js',
   workerSrc: () =>
     _isIE11 || isEdge || needsES5
       ? './' + pdfDefaultOptions.assetsFolder + '/pdf.worker-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '-es5.js'
