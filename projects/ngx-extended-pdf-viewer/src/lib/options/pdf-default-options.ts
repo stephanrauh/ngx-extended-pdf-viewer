@@ -54,6 +54,9 @@ export let pdfDefaultOptions = {
     _isIE11 || isEdge || needsES5
       ? './' + pdfDefaultOptions.assetsFolder + '/pdf.worker-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '-es5.js'
       : './' + pdfDefaultOptions.assetsFolder + '/pdf.worker-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '.js',
+
+  // options specific to ngx-extended-pdf-viewer (as opposed to being used by pdf.js)
+  doubleTapZoomFactor: 'page-width'
 };
 
 if (typeof window !== 'undefined') {

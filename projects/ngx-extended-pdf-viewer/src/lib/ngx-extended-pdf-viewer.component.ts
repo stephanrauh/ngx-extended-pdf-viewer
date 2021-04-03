@@ -2033,12 +2033,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const desiredCenterY = event.clientY;
     const previousScale = (PDFViewerApplication.pdfViewer as any).currentScale;
-    if (this.zoom !== 'page-width') {
+    if (this.zoom !== pdfDefaultOptions.doubleTapZoomFactor && (this.zoom+"%") !== pdfDefaultOptions.doubleTapZoomFactor) {
       this.previousZoom = this.zoom;
-      this.zoom = 'page-width';
+      this.zoom = pdfDefaultOptions.doubleTapZoomFactor; // by default: 'page-width';
       await this.setZoom();
     } else {
-      this.zoom = this.previousZoom;
+      if (this.previousZoom) {
+        this.zoom = this.previousZoom;
+      } else {
+        this.zoom = 'page-width';
+      }
       await this.setZoom();
     }
 
