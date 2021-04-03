@@ -54,6 +54,7 @@ const requiredIds = [
   'attachmentsView',
   'outerContainer',
   'sidebarResizer',
+  'outlineOptionsContainer',
   'findbar',
   'viewFind',
   'findInput',
