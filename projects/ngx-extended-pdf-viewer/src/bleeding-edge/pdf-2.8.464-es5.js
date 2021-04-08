@@ -2713,13 +2713,13 @@ var toIndexedObject = __w_pdfjs_require__(15);
 var toPrimitive = __w_pdfjs_require__(19);
 var has = __w_pdfjs_require__(21);
 var IE8_DOM_DEFINE = __w_pdfjs_require__(22);
-var nativeGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-exports.f = DESCRIPTORS ? nativeGetOwnPropertyDescriptor : function getOwnPropertyDescriptor(O, P) {
+var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDescriptor(O, P) {
  O = toIndexedObject(O);
  P = toPrimitive(P, true);
  if (IE8_DOM_DEFINE)
   try {
-   return nativeGetOwnPropertyDescriptor(O, P);
+   return $getOwnPropertyDescriptor(O, P);
   } catch (error) {
   }
  if (has(O, P))
@@ -2757,13 +2757,13 @@ module.exports = function (exec) {
 
 "use strict";
 
-var nativePropertyIsEnumerable = {}.propertyIsEnumerable;
+var $propertyIsEnumerable = {}.propertyIsEnumerable;
 var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-var NASHORN_BUG = getOwnPropertyDescriptor && !nativePropertyIsEnumerable.call({ 1: 2 }, 1);
+var NASHORN_BUG = getOwnPropertyDescriptor && !$propertyIsEnumerable.call({ 1: 2 }, 1);
 exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
  var descriptor = getOwnPropertyDescriptor(this, V);
  return !!descriptor && descriptor.enumerable;
-} : nativePropertyIsEnumerable;
+} : $propertyIsEnumerable;
 
 /***/ }),
 /* 14 */
@@ -2904,14 +2904,14 @@ var DESCRIPTORS = __w_pdfjs_require__(11);
 var IE8_DOM_DEFINE = __w_pdfjs_require__(22);
 var anObject = __w_pdfjs_require__(26);
 var toPrimitive = __w_pdfjs_require__(19);
-var nativeDefineProperty = Object.defineProperty;
-exports.f = DESCRIPTORS ? nativeDefineProperty : function defineProperty(O, P, Attributes) {
+var $defineProperty = Object.defineProperty;
+exports.f = DESCRIPTORS ? $defineProperty : function defineProperty(O, P, Attributes) {
  anObject(O);
  P = toPrimitive(P, true);
  anObject(Attributes);
  if (IE8_DOM_DEFINE)
   try {
-   return nativeDefineProperty(O, P, Attributes);
+   return $defineProperty(O, P, Attributes);
   } catch (error) {
   }
  if ('get' in Attributes || 'set' in Attributes)
@@ -3111,7 +3111,7 @@ var store = __w_pdfjs_require__(30);
 (module.exports = function (key, value) {
  return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
- version: '3.9.1',
+ version: '3.10.0',
  mode: IS_PURE ? 'pure' : 'global',
  copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -8860,7 +8860,7 @@ module.exports = {
 
 var toInteger = __w_pdfjs_require__(46);
 var requireObjectCoercible = __w_pdfjs_require__(18);
-module.exports = ''.repeat || function repeat(count) {
+module.exports = function repeat(count) {
  var str = String(requireObjectCoercible(this));
  var result = '';
  var n = toInteger(count);
@@ -9290,7 +9290,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId: docId,
-    apiVersion: '2.8.449',
+    apiVersion: '2.8.464',
     source: {
       data: source.data,
       url: source.url,
@@ -9632,7 +9632,8 @@ var PDFDocumentProxy = /*#__PURE__*/function () {
   }, {
     key: "cleanup",
     value: function cleanup() {
-      return this._transport.startCleanup();
+      var keepLoadedFonts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      return this._transport.startCleanup(keepLoadedFonts || this.isPureXfa);
     }
   }, {
     key: "destroy",
@@ -9751,12 +9752,12 @@ var PDFPageProxy = /*#__PURE__*/function () {
           _ref4$intent = _ref4.intent,
           intent = _ref4$intent === void 0 ? null : _ref4$intent;
 
-      if (!this.annotationsPromise || this.annotationsIntent !== intent) {
-        this.annotationsPromise = this._transport.getAnnotations(this._pageIndex, intent);
-        this.annotationsIntent = intent;
+      if (!this._annotationsPromise || this._annotationsIntent !== intent) {
+        this._annotationsPromise = this._transport.getAnnotations(this._pageIndex, intent);
+        this._annotationsIntent = intent;
       }
 
-      return this.annotationsPromise;
+      return this._annotationsPromise;
     }
   }, {
     key: "getJSActions",
@@ -9771,7 +9772,8 @@ var PDFPageProxy = /*#__PURE__*/function () {
   }, {
     key: "render",
     value: function render(_ref5) {
-      var _this5 = this;
+      var _this5 = this,
+          _intentState;
 
       var canvasContext = _ref5.canvasContext,
           viewport = _ref5.viewport,
@@ -9846,11 +9848,7 @@ var PDFPageProxy = /*#__PURE__*/function () {
       }
 
       var complete = function complete(error) {
-        var i = intentState.renderTasks.indexOf(internalRenderTask);
-
-        if (i >= 0) {
-          intentState.renderTasks.splice(i, 1);
-        }
+        intentState.renderTasks["delete"](internalRenderTask);
 
         if (_this5.cleanupAfterRender || renderingIntent === "print") {
           _this5.pendingCleanup = true;
@@ -9894,12 +9892,7 @@ var PDFPageProxy = /*#__PURE__*/function () {
         useRequestAnimationFrame: renderingIntent !== "print",
         pdfBug: this._pdfBug
       });
-
-      if (!intentState.renderTasks) {
-        intentState.renderTasks = [];
-      }
-
-      intentState.renderTasks.push(internalRenderTask);
+      ((_intentState = intentState).renderTasks || (_intentState.renderTasks = new Set())).add(internalRenderTask);
       var renderTask = internalRenderTask.task;
       Promise.all([intentState.displayReadyCapability.promise, optionalContentConfigPromise]).then(function (_ref6) {
         var _ref7 = _slicedToArray(_ref6, 2),
@@ -9929,11 +9922,7 @@ var PDFPageProxy = /*#__PURE__*/function () {
       function operatorListChanged() {
         if (intentState.operatorList.lastChunk) {
           intentState.opListReadCapability.resolve(intentState.operatorList);
-          var i = intentState.renderTasks.indexOf(opListTask);
-
-          if (i >= 0) {
-            intentState.renderTasks.splice(i, 1);
-          }
+          intentState.renderTasks["delete"](opListTask);
         }
       }
 
@@ -9950,11 +9939,12 @@ var PDFPageProxy = /*#__PURE__*/function () {
       var opListTask;
 
       if (!intentState.opListReadCapability) {
+        var _intentState2;
+
         opListTask = Object.create(null);
         opListTask.operatorListChanged = operatorListChanged;
         intentState.opListReadCapability = (0, _util.createPromiseCapability)();
-        intentState.renderTasks = [];
-        intentState.renderTasks.push(opListTask);
+        ((_intentState2 = intentState).renderTasks || (_intentState2.renderTasks = new Set())).add(opListTask);
         intentState.operatorList = {
           fnArray: [],
           argsArray: [],
@@ -10076,7 +10066,7 @@ var PDFPageProxy = /*#__PURE__*/function () {
       }
 
       this.objs.clear();
-      this.annotationsPromise = null;
+      this._annotationsPromise = null;
       this._jsActionsPromise = null;
       this._xfaPromise = null;
       this.pendingCleanup = false;
@@ -10107,7 +10097,7 @@ var PDFPageProxy = /*#__PURE__*/function () {
               renderTasks = _step7$value.renderTasks,
               operatorList = _step7$value.operatorList;
 
-          if (renderTasks.length !== 0 || !operatorList.lastChunk) {
+          if (renderTasks.size > 0 || !operatorList.lastChunk) {
             return false;
           }
         }
@@ -10120,7 +10110,7 @@ var PDFPageProxy = /*#__PURE__*/function () {
       this._intentStates.clear();
 
       this.objs.clear();
-      this.annotationsPromise = null;
+      this._annotationsPromise = null;
       this._jsActionsPromise = null;
       this._xfaPromise = null;
 
@@ -10158,8 +10148,18 @@ var PDFPageProxy = /*#__PURE__*/function () {
 
       intentState.operatorList.lastChunk = operatorListChunk.lastChunk;
 
-      for (var _i2 = 0; _i2 < intentState.renderTasks.length; _i2++) {
-        intentState.renderTasks[_i2].operatorListChanged();
+      var _iterator8 = _createForOfIteratorHelper(intentState.renderTasks),
+          _step8;
+
+      try {
+        for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
+          var internalRenderTask = _step8.value;
+          internalRenderTask.operatorListChanged();
+        }
+      } catch (err) {
+        _iterator8.e(err);
+      } finally {
+        _iterator8.f();
       }
 
       if (operatorListChunk.lastChunk) {
@@ -10208,8 +10208,18 @@ var PDFPageProxy = /*#__PURE__*/function () {
           if (intentState.operatorList) {
             intentState.operatorList.lastChunk = true;
 
-            for (var i = 0; i < intentState.renderTasks.length; i++) {
-              intentState.renderTasks[i].operatorListChanged();
+            var _iterator9 = _createForOfIteratorHelper(intentState.renderTasks),
+                _step9;
+
+            try {
+              for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
+                var internalRenderTask = _step9.value;
+                internalRenderTask.operatorListChanged();
+              }
+            } catch (err) {
+              _iterator9.e(err);
+            } finally {
+              _iterator9.f();
             }
 
             _this6._tryCleanup();
@@ -10243,7 +10253,7 @@ var PDFPageProxy = /*#__PURE__*/function () {
       }
 
       if (!force) {
-        if (intentState.renderTasks.length !== 0) {
+        if (intentState.renderTasks.size > 0) {
           return;
         }
 
@@ -10268,14 +10278,14 @@ var PDFPageProxy = /*#__PURE__*/function () {
         return;
       }
 
-      var _iterator8 = _createForOfIteratorHelper(this._intentStates),
-          _step8;
+      var _iterator10 = _createForOfIteratorHelper(this._intentStates),
+          _step10;
 
       try {
-        for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
-          var _step8$value = _slicedToArray(_step8.value, 2),
-              intent = _step8$value[0],
-              curIntentState = _step8$value[1];
+        for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
+          var _step10$value = _slicedToArray(_step10.value, 2),
+              intent = _step10$value[0],
+              curIntentState = _step10$value[1];
 
           if (curIntentState === intentState) {
             this._intentStates["delete"](intent);
@@ -10284,9 +10294,9 @@ var PDFPageProxy = /*#__PURE__*/function () {
           }
         }
       } catch (err) {
-        _iterator8.e(err);
+        _iterator10.e(err);
       } finally {
-        _iterator8.f();
+        _iterator10.f();
       }
 
       this.cleanup();
@@ -10342,21 +10352,21 @@ var LoopbackPort = /*#__PURE__*/function () {
           result = new Map();
           cloned.set(value, result);
 
-          var _iterator9 = _createForOfIteratorHelper(value),
-              _step9;
+          var _iterator11 = _createForOfIteratorHelper(value),
+              _step11;
 
           try {
-            for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
-              var _step9$value = _slicedToArray(_step9.value, 2),
-                  key = _step9$value[0],
-                  val = _step9$value[1];
+            for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
+              var _step11$value = _slicedToArray(_step11.value, 2),
+                  key = _step11$value[0],
+                  val = _step11$value[1];
 
               result.set(key, cloneValue(val));
             }
           } catch (err) {
-            _iterator9.e(err);
+            _iterator11.e(err);
           } finally {
-            _iterator9.f();
+            _iterator11.f();
           }
 
           return result;
@@ -10366,18 +10376,18 @@ var LoopbackPort = /*#__PURE__*/function () {
           result = new Set();
           cloned.set(value, result);
 
-          var _iterator10 = _createForOfIteratorHelper(value),
-              _step10;
+          var _iterator12 = _createForOfIteratorHelper(value),
+              _step12;
 
           try {
-            for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
-              var _val = _step10.value;
+            for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
+              var _val = _step12.value;
               result.add(cloneValue(_val));
             }
           } catch (err) {
-            _iterator10.e(err);
+            _iterator12.e(err);
           } finally {
-            _iterator10.f();
+            _iterator12.f();
           }
 
           return result;
@@ -10420,18 +10430,18 @@ var LoopbackPort = /*#__PURE__*/function () {
       };
 
       this._deferred.then(function () {
-        var _iterator11 = _createForOfIteratorHelper(_this8._listeners),
-            _step11;
+        var _iterator13 = _createForOfIteratorHelper(_this8._listeners),
+            _step13;
 
         try {
-          for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
-            var listener = _step11.value;
+          for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {
+            var listener = _step13.value;
             listener.call(_this8, event);
           }
         } catch (err) {
-          _iterator11.e(err);
+          _iterator13.e(err);
         } finally {
-          _iterator11.f();
+          _iterator13.f();
         }
       });
     }
@@ -11455,29 +11465,86 @@ var WorkerTransport = /*#__PURE__*/function () {
     }
   }, {
     key: "startCleanup",
-    value: function startCleanup() {
-      var _this15 = this;
+    value: function () {
+      var _startCleanup = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
+        var keepLoadedFonts,
+            i,
+            ii,
+            page,
+            cleanupSuccessful,
+            _args2 = arguments;
+        return _regenerator["default"].wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                keepLoadedFonts = _args2.length > 0 && _args2[0] !== undefined ? _args2[0] : false;
+                _context2.next = 3;
+                return this.messageHandler.sendWithPromise("Cleanup", null);
 
-      return this.messageHandler.sendWithPromise("Cleanup", null).then(function () {
-        for (var i = 0, ii = _this15.pageCache.length; i < ii; i++) {
-          var page = _this15.pageCache[i];
+              case 3:
+                if (!this.destroyed) {
+                  _context2.next = 5;
+                  break;
+                }
 
-          if (page) {
-            var cleanupSuccessful = page.cleanup();
+                return _context2.abrupt("return");
 
-            if (!cleanupSuccessful) {
-              throw new Error("startCleanup: Page ".concat(i + 1, " is currently rendering."));
+              case 5:
+                i = 0, ii = this.pageCache.length;
+
+              case 6:
+                if (!(i < ii)) {
+                  _context2.next = 16;
+                  break;
+                }
+
+                page = this.pageCache[i];
+
+                if (page) {
+                  _context2.next = 10;
+                  break;
+                }
+
+                return _context2.abrupt("continue", 13);
+
+              case 10:
+                cleanupSuccessful = page.cleanup();
+
+                if (cleanupSuccessful) {
+                  _context2.next = 13;
+                  break;
+                }
+
+                throw new Error("startCleanup: Page ".concat(i + 1, " is currently rendering."));
+
+              case 13:
+                i++;
+                _context2.next = 6;
+                break;
+
+              case 16:
+                this.commonObjs.clear();
+
+                if (!keepLoadedFonts) {
+                  this.fontLoader.clear();
+                }
+
+                this._hasJSActionsPromise = null;
+
+              case 19:
+              case "end":
+                return _context2.stop();
             }
           }
-        }
+        }, _callee2, this);
+      }));
 
-        _this15.commonObjs.clear();
+      function startCleanup() {
+        return _startCleanup.apply(this, arguments);
+      }
 
-        _this15.fontLoader.clear();
-
-        _this15._hasJSActionsPromise = null;
-      });
-    }
+      return startCleanup;
+    }()
   }, {
     key: "loadingParams",
     get: function get() {
@@ -11731,11 +11798,11 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
     }, {
       key: "_scheduleNext",
       value: function _scheduleNext() {
-        var _this16 = this;
+        var _this15 = this;
 
         if (this._useRequestAnimationFrame) {
           window.requestAnimationFrame(function () {
-            _this16._nextBound()["catch"](_this16._cancelBound);
+            _this15._nextBound()["catch"](_this15._cancelBound);
           });
         } else {
           Promise.resolve().then(this._nextBound)["catch"](this._cancelBound);
@@ -11744,17 +11811,17 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
     }, {
       key: "_next",
       value: function () {
-        var _next2 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
-          return _regenerator["default"].wrap(function _callee2$(_context2) {
+        var _next2 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
+          return _regenerator["default"].wrap(function _callee3$(_context3) {
             while (1) {
-              switch (_context2.prev = _context2.next) {
+              switch (_context3.prev = _context3.next) {
                 case 0:
                   if (!this.cancelled) {
-                    _context2.next = 2;
+                    _context3.next = 2;
                     break;
                   }
 
-                  return _context2.abrupt("return");
+                  return _context3.abrupt("return");
 
                 case 2:
                   this.operatorListIdx = this.gfx.executeOperatorList(this.operatorList, this.operatorListIdx, this._continueBound, this.stepper);
@@ -11775,10 +11842,10 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
 
                 case 4:
                 case "end":
-                  return _context2.stop();
+                  return _context3.stop();
               }
             }
-          }, _callee2, this);
+          }, _callee3, this);
         }));
 
         function _next() {
@@ -11795,9 +11862,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.8.449';
+var version = '2.8.464';
 exports.version = version;
-var build = '4f8086a0c';
+var build = '3fc243538';
 exports.build = build;
 
 /***/ }),
@@ -23963,8 +24030,8 @@ var _svg = __w_pdfjs_require__(141);
 
 var _xfa_layer = __w_pdfjs_require__(142);
 
-var pdfjsVersion = '2.8.449';
-var pdfjsBuild = '4f8086a0c';
+var pdfjsVersion = '2.8.464';
+var pdfjsBuild = '3fc243538';
 {
   var PDFNetworkStream = __w_pdfjs_require__(143).PDFNetworkStream;
 

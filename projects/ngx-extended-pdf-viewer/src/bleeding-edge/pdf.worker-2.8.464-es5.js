@@ -192,7 +192,7 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
       var WorkerTasks = [];
       var verbosity = (0, _util.getVerbosityLevel)();
       var apiVersion = docParams.apiVersion;
-      var workerVersion = '2.8.449';
+      var workerVersion = '2.8.464';
 
       if (apiVersion !== workerVersion) {
         throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -2684,13 +2684,13 @@ var toIndexedObject = __w_pdfjs_require__(15);
 var toPrimitive = __w_pdfjs_require__(19);
 var has = __w_pdfjs_require__(21);
 var IE8_DOM_DEFINE = __w_pdfjs_require__(22);
-var nativeGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-exports.f = DESCRIPTORS ? nativeGetOwnPropertyDescriptor : function getOwnPropertyDescriptor(O, P) {
+var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDescriptor(O, P) {
  O = toIndexedObject(O);
  P = toPrimitive(P, true);
  if (IE8_DOM_DEFINE)
   try {
-   return nativeGetOwnPropertyDescriptor(O, P);
+   return $getOwnPropertyDescriptor(O, P);
   } catch (error) {
   }
  if (has(O, P))
@@ -2728,13 +2728,13 @@ module.exports = function (exec) {
 
 "use strict";
 
-var nativePropertyIsEnumerable = {}.propertyIsEnumerable;
+var $propertyIsEnumerable = {}.propertyIsEnumerable;
 var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-var NASHORN_BUG = getOwnPropertyDescriptor && !nativePropertyIsEnumerable.call({ 1: 2 }, 1);
+var NASHORN_BUG = getOwnPropertyDescriptor && !$propertyIsEnumerable.call({ 1: 2 }, 1);
 exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
  var descriptor = getOwnPropertyDescriptor(this, V);
  return !!descriptor && descriptor.enumerable;
-} : nativePropertyIsEnumerable;
+} : $propertyIsEnumerable;
 
 /***/ }),
 /* 14 */
@@ -2875,14 +2875,14 @@ var DESCRIPTORS = __w_pdfjs_require__(11);
 var IE8_DOM_DEFINE = __w_pdfjs_require__(22);
 var anObject = __w_pdfjs_require__(26);
 var toPrimitive = __w_pdfjs_require__(19);
-var nativeDefineProperty = Object.defineProperty;
-exports.f = DESCRIPTORS ? nativeDefineProperty : function defineProperty(O, P, Attributes) {
+var $defineProperty = Object.defineProperty;
+exports.f = DESCRIPTORS ? $defineProperty : function defineProperty(O, P, Attributes) {
  anObject(O);
  P = toPrimitive(P, true);
  anObject(Attributes);
  if (IE8_DOM_DEFINE)
   try {
-   return nativeDefineProperty(O, P, Attributes);
+   return $defineProperty(O, P, Attributes);
   } catch (error) {
   }
  if ('get' in Attributes || 'set' in Attributes)
@@ -3082,7 +3082,7 @@ var store = __w_pdfjs_require__(30);
 (module.exports = function (key, value) {
  return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
- version: '3.9.1',
+ version: '3.10.0',
  mode: IS_PURE ? 'pure' : 'global',
  copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -8831,7 +8831,7 @@ module.exports = {
 
 var toInteger = __w_pdfjs_require__(46);
 var requireObjectCoercible = __w_pdfjs_require__(18);
-module.exports = ''.repeat || function repeat(count) {
+module.exports = function repeat(count) {
  var str = String(requireObjectCoercible(this));
  var result = '';
  var n = toInteger(count);
@@ -34813,7 +34813,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
           combineTextItems = _ref8$combineTextItem === void 0 ? false : _ref8$combineTextItem,
           sink = _ref8.sink,
           _ref8$seenStyles = _ref8.seenStyles,
-          seenStyles = _ref8$seenStyles === void 0 ? Object.create(null) : _ref8$seenStyles;
+          seenStyles = _ref8$seenStyles === void 0 ? new Set() : _ref8$seenStyles;
       resources = resources || _primitives.Dict.empty;
       stateManager = stateManager || new StateManager(new TextState());
       var WhitespaceRegexp = /\s/g;
@@ -34854,11 +34854,12 @@ var PartialEvaluator = /*#__PURE__*/function () {
           return textContentItem;
         }
 
-        var font = textState.font;
+        var font = textState.font,
+            loadedName = font.loadedName;
 
-        if (!(font.loadedName in seenStyles)) {
-          seenStyles[font.loadedName] = true;
-          textContent.styles[font.loadedName] = {
+        if (!seenStyles.has(loadedName)) {
+          seenStyles.add(loadedName);
+          textContent.styles[loadedName] = {
             fontFamily: font.fallbackName,
             ascent: font.ascent,
             descent: font.descent,
@@ -34866,7 +34867,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
           };
         }
 
-        textContentItem.fontName = font.loadedName;
+        textContentItem.fontName = loadedName;
         var tsm = [textState.fontSize * textState.textHScale, 0, 0, textState.fontSize, 0, textState.textRise];
 
         if (font.isType3Font && textState.fontSize <= 1 && !(0, _util.isArrayEqual)(textState.fontMatrix, _util.FONT_IDENTITY_MATRIX)) {
@@ -81932,8 +81933,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.8.449';
-var pdfjsBuild = '4f8086a0c';
+var pdfjsVersion = '2.8.464';
+var pdfjsBuild = '3fc243538';
 })();
 
 /******/ 	return __webpack_exports__;

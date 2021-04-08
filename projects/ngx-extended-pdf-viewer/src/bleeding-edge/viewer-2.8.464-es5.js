@@ -902,7 +902,7 @@ var PDFViewerApplication = {
               _this5.eventBus = eventBus;
               _this5.overlayManager = new _overlay_manager.OverlayManager();
               pdfRenderingQueue = new _pdf_rendering_queue.PDFRenderingQueue();
-              pdfRenderingQueue.onIdle = _this5.cleanup.bind(_this5);
+              pdfRenderingQueue.onIdle = _this5._cleanup.bind(_this5);
               _this5.pdfRenderingQueue = pdfRenderingQueue;
               pdfLinkService = new _pdf_link_service.PDFLinkService({
                 eventBus: eventBus,
@@ -1183,6 +1183,8 @@ var PDFViewerApplication = {
     var _this6 = this;
 
     return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee7() {
+      var _this6$pdfDocument;
+
       var container, promises;
       return _regenerator["default"].wrap(function _callee7$(_context7) {
         while (1) {
@@ -1198,9 +1200,29 @@ var PDFViewerApplication = {
                 break;
               }
 
-              return _context7.abrupt("return", undefined);
+              return _context7.abrupt("return");
 
             case 5:
+              if (!(((_this6$pdfDocument = _this6.pdfDocument) === null || _this6$pdfDocument === void 0 ? void 0 : _this6$pdfDocument.annotationStorage.size) > 0 && _this6._annotationStorageModified)) {
+                _context7.next = 13;
+                break;
+              }
+
+              _context7.prev = 6;
+              _context7.next = 9;
+              return _this6.save({
+                sourceEventType: "save"
+              });
+
+            case 9:
+              _context7.next = 13;
+              break;
+
+            case 11:
+              _context7.prev = 11;
+              _context7.t0 = _context7["catch"](6);
+
+            case 13:
               promises = [];
               promises.push(_this6.pdfLoadingTask.destroy());
               _this6.pdfLoadingTask = null;
@@ -1258,18 +1280,15 @@ var PDFViewerApplication = {
                 PDFBug.cleanup();
               }
 
-              _context7.next = 34;
+              _context7.next = 42;
               return Promise.all(promises);
 
-            case 34:
-              return _context7.abrupt("return", undefined);
-
-            case 35:
+            case 42:
             case "end":
               return _context7.stop();
           }
         }
-      }, _callee7);
+      }, _callee7, null, [[6, 11]]);
     }))();
   },
   open: function open(file, args) {
@@ -1390,45 +1409,73 @@ var PDFViewerApplication = {
       }, _callee8);
     }))();
   },
-  download: function download() {
-    var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        _ref2$sourceEventType = _ref2.sourceEventType,
-        sourceEventType = _ref2$sourceEventType === void 0 ? "download" : _ref2$sourceEventType;
-
-    function downloadByUrl() {
-      downloadManager.downloadUrl(url, filename);
-    }
-
-    var downloadManager = this.downloadManager,
-        url = this.baseUrl,
-        filename = this._docFilename;
-
-    if (!this.pdfDocument || !this.downloadComplete) {
-      downloadByUrl();
+  _ensureDownloadComplete: function _ensureDownloadComplete() {
+    if (this.pdfDocument && this.downloadComplete) {
       return;
     }
 
-    this.pdfDocument.getData().then(function (data) {
-      var blob = new Blob([data], {
-        type: "application/pdf"
-      });
-      downloadManager.download(blob, url, filename, sourceEventType);
-    })["catch"](downloadByUrl);
+    throw new Error("PDF document not downloaded.");
   },
-  save: function save() {
+  download: function download() {
     var _arguments = arguments,
         _this8 = this;
 
+    return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee9() {
+      var _ref2, _ref2$sourceEventType, sourceEventType, url, filename, data, blob;
+
+      return _regenerator["default"].wrap(function _callee9$(_context9) {
+        while (1) {
+          switch (_context9.prev = _context9.next) {
+            case 0:
+              _ref2 = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : {}, _ref2$sourceEventType = _ref2.sourceEventType, sourceEventType = _ref2$sourceEventType === void 0 ? "download" : _ref2$sourceEventType;
+              url = _this8.baseUrl, filename = _this8._docFilename;
+              _context9.prev = 2;
+
+              _this8._ensureDownloadComplete();
+
+              _context9.next = 6;
+              return _this8.pdfDocument.getData();
+
+            case 6:
+              data = _context9.sent;
+              blob = new Blob([data], {
+                type: "application/pdf"
+              });
+              _context9.next = 10;
+              return _this8.downloadManager.download(blob, url, filename, sourceEventType);
+
+            case 10:
+              _context9.next = 16;
+              break;
+
+            case 12:
+              _context9.prev = 12;
+              _context9.t0 = _context9["catch"](2);
+              _context9.next = 16;
+              return _this8.downloadManager.downloadUrl(url, filename);
+
+            case 16:
+            case "end":
+              return _context9.stop();
+          }
+        }
+      }, _callee9, null, [[2, 12]]);
+    }))();
+  },
+  save: function save() {
+    var _arguments2 = arguments,
+        _this9 = this;
+
     return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee10() {
-      var _ref3, _ref3$sourceEventType, sourceEventType, downloadManager, url, filename;
+      var _ref3, _ref3$sourceEventType, sourceEventType, url, filename, data, blob;
 
       return _regenerator["default"].wrap(function _callee10$(_context10) {
         while (1) {
           switch (_context10.prev = _context10.next) {
             case 0:
-              _ref3 = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : {}, _ref3$sourceEventType = _ref3.sourceEventType, sourceEventType = _ref3$sourceEventType === void 0 ? "download" : _ref3$sourceEventType;
+              _ref3 = _arguments2.length > 0 && _arguments2[0] !== undefined ? _arguments2[0] : {}, _ref3$sourceEventType = _ref3.sourceEventType, sourceEventType = _ref3$sourceEventType === void 0 ? "download" : _ref3$sourceEventType;
 
-              if (!_this8._saveInProgress) {
+              if (!_this9._saveInProgress) {
                 _context10.next = 3;
                 break;
               }
@@ -1436,59 +1483,54 @@ var PDFViewerApplication = {
               return _context10.abrupt("return");
 
             case 3:
-              downloadManager = _this8.downloadManager, url = _this8.baseUrl, filename = _this8._docFilename;
+              _this9._saveInProgress = true;
+              _context10.next = 6;
+              return _this9.pdfScriptingManager.dispatchWillSave();
 
-              if (!(!_this8.pdfDocument || !_this8.downloadComplete)) {
-                _context10.next = 7;
-                break;
-              }
+            case 6:
+              url = _this9.baseUrl, filename = _this9._docFilename;
+              _context10.prev = 7;
 
-              _this8.download({
+              _this9._ensureDownloadComplete();
+
+              _context10.next = 11;
+              return _this9.pdfDocument.saveDocument(_this9.pdfDocument.annotationStorage);
+
+            case 11:
+              data = _context10.sent;
+              blob = new Blob([data], {
+                type: "application/pdf"
+              });
+              _context10.next = 15;
+              return _this9.downloadManager.download(blob, url, filename, sourceEventType);
+
+            case 15:
+              _context10.next = 21;
+              break;
+
+            case 17:
+              _context10.prev = 17;
+              _context10.t0 = _context10["catch"](7);
+              _context10.next = 21;
+              return _this9.download({
                 sourceEventType: sourceEventType
               });
 
-              return _context10.abrupt("return");
+            case 21:
+              _context10.prev = 21;
+              _context10.next = 24;
+              return _this9.pdfScriptingManager.dispatchDidSave();
 
-            case 7:
-              _this8._saveInProgress = true;
-              _context10.next = 10;
-              return _this8.pdfScriptingManager.dispatchWillSave();
+            case 24:
+              _this9._saveInProgress = false;
+              return _context10.finish(21);
 
-            case 10:
-              _this8.pdfDocument.saveDocument(_this8.pdfDocument.annotationStorage).then(function (data) {
-                var blob = new Blob([data], {
-                  type: "application/pdf"
-                });
-                downloadManager.download(blob, url, filename, sourceEventType);
-              })["catch"](function () {
-                _this8.download({
-                  sourceEventType: sourceEventType
-                });
-              })["finally"]( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee9() {
-                return _regenerator["default"].wrap(function _callee9$(_context9) {
-                  while (1) {
-                    switch (_context9.prev = _context9.next) {
-                      case 0:
-                        _context9.next = 2;
-                        return _this8.pdfScriptingManager.dispatchDidSave();
-
-                      case 2:
-                        _this8._saveInProgress = false;
-
-                      case 3:
-                      case "end":
-                        return _context9.stop();
-                    }
-                  }
-                }, _callee9);
-              })));
-
-            case 11:
+            case 26:
             case "end":
               return _context10.stop();
           }
         }
-      }, _callee10);
+      }, _callee10, null, [[7, 17, 21, 26]]);
     }))();
   },
   downloadOrSave: function downloadOrSave(options) {
@@ -1501,7 +1543,7 @@ var PDFViewerApplication = {
     }
   },
   _delayedFallback: function _delayedFallback(featureId) {
-    var _this9 = this;
+    var _this10 = this;
 
     this.externalServices.reportTelemetry({
       type: "unsupportedFeature",
@@ -1510,14 +1552,14 @@ var PDFViewerApplication = {
 
     if (!this.triggerDelayedFallback) {
       this.triggerDelayedFallback = function () {
-        _this9.fallback(featureId);
+        _this10.fallback(featureId);
 
-        _this9.triggerDelayedFallback = null;
+        _this10.triggerDelayedFallback = null;
       };
     }
   },
   fallback: function fallback(featureId) {
-    var _this10 = this;
+    var _this11 = this;
 
     this.externalServices.reportTelemetry({
       type: "unsupportedFeature",
@@ -1543,7 +1585,7 @@ var PDFViewerApplication = {
         return;
       }
 
-      _this10.download({
+      _this11.download({
         sourceEventType: "download"
       });
     });
@@ -1624,7 +1666,7 @@ var PDFViewerApplication = {
     });
   },
   progress: function progress(level) {
-    var _this11 = this;
+    var _this12 = this;
 
     if (this.downloadComplete) {
       return;
@@ -1644,27 +1686,27 @@ var PDFViewerApplication = {
 
         this.loadingBar.show();
         this.disableAutoFetchLoadingBarTimeout = setTimeout(function () {
-          _this11.loadingBar.hide();
+          _this12.loadingBar.hide();
 
-          _this11.disableAutoFetchLoadingBarTimeout = null;
+          _this12.disableAutoFetchLoadingBarTimeout = null;
         }, DISABLE_AUTO_FETCH_LOADING_BAR_TIMEOUT);
       }
     }
   },
   load: function load(pdfDocument) {
-    var _this12 = this;
+    var _this13 = this;
 
     this.pdfDocument = pdfDocument;
-    pdfDocument.getDownloadInfo().then(function (_ref5) {
-      var length = _ref5.length;
-      _this12._contentLength = length;
-      _this12.downloadComplete = true;
+    pdfDocument.getDownloadInfo().then(function (_ref4) {
+      var length = _ref4.length;
+      _this13._contentLength = length;
+      _this13.downloadComplete = true;
 
-      _this12.loadingBar.hide();
+      _this13.loadingBar.hide();
 
       firstPagePromise.then(function () {
-        _this12.eventBus.dispatch("documentloaded", {
-          source: _this12
+        _this13.eventBus.dispatch("documentloaded", {
+          source: _this13
         });
       });
     });
@@ -1697,28 +1739,28 @@ var PDFViewerApplication = {
       return Object.create(null);
     });
     firstPagePromise.then(function (pdfPage) {
-      _this12.loadingBar.setWidth(_this12.appConfig.viewerContainer);
+      _this13.loadingBar.setWidth(_this13.appConfig.viewerContainer);
 
-      _this12._initializeAnnotationStorageCallbacks(pdfDocument);
+      _this13._initializeAnnotationStorageCallbacks(pdfDocument);
 
       Promise.all([_ui_utils.animationStarted, storedPromise, pageLayoutPromise, pageModePromise, openActionPromise]).then( /*#__PURE__*/function () {
-        var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee11(_ref6) {
-          var _ref8, timeStamp, stored, pageLayout, pageMode, openAction, viewOnLoad, initialBookmark, zoom, hash, rotation, sidebarView, scrollMode, spreadMode;
+        var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee11(_ref5) {
+          var _ref7, timeStamp, stored, pageLayout, pageMode, openAction, viewOnLoad, initialBookmark, zoom, hash, rotation, sidebarView, scrollMode, spreadMode;
 
           return _regenerator["default"].wrap(function _callee11$(_context11) {
             while (1) {
               switch (_context11.prev = _context11.next) {
                 case 0:
-                  _ref8 = _slicedToArray(_ref6, 5), timeStamp = _ref8[0], stored = _ref8[1], pageLayout = _ref8[2], pageMode = _ref8[3], openAction = _ref8[4];
+                  _ref7 = _slicedToArray(_ref5, 5), timeStamp = _ref7[0], stored = _ref7[1], pageLayout = _ref7[2], pageMode = _ref7[3], openAction = _ref7[4];
                   viewOnLoad = _app_options.AppOptions.get("viewOnLoad");
 
-                  _this12._initializePdfHistory({
+                  _this13._initializePdfHistory({
                     fingerprint: pdfDocument.fingerprint,
                     viewOnLoad: viewOnLoad,
                     initialDest: openAction === null || openAction === void 0 ? void 0 : openAction.dest
                   });
 
-                  initialBookmark = _this12.initialBookmark;
+                  initialBookmark = _this13.initialBookmark;
                   zoom = _app_options.AppOptions.get("defaultZoomValue");
                   hash = zoom ? "zoom=".concat(zoom) : null;
                   rotation = null;
@@ -1751,22 +1793,22 @@ var PDFViewerApplication = {
                     spreadMode = (0, _ui_utils.apiPageLayoutToSpreadMode)(pageLayout);
                   }
 
-                  _this12.setInitialView(hash, {
+                  _this13.setInitialView(hash, {
                     rotation: rotation,
                     sidebarView: sidebarView,
                     scrollMode: scrollMode,
                     spreadMode: spreadMode
                   });
 
-                  _this12.eventBus.dispatch("documentinit", {
-                    source: _this12
+                  _this13.eventBus.dispatch("documentinit", {
+                    source: _this13
                   });
 
-                  if (!_this12.isViewerEmbedded) {
+                  if (!_this13.isViewerEmbedded) {
                     pdfViewer.focus();
                   }
 
-                  _this12._initializePermissions(pdfDocument);
+                  _this13._initializePermissions(pdfDocument);
 
                   _context11.next = 19;
                   return Promise.race([pagesPromise, new Promise(function (resolve) {
@@ -1790,10 +1832,10 @@ var PDFViewerApplication = {
                   return _context11.abrupt("return");
 
                 case 23:
-                  _this12.initialBookmark = initialBookmark;
+                  _this13.initialBookmark = initialBookmark;
                   pdfViewer.currentScaleValue = pdfViewer.currentScaleValue;
 
-                  _this12.setInitialView(hash);
+                  _this13.setInitialView(hash);
 
                 case 26:
                 case "end":
@@ -1804,33 +1846,33 @@ var PDFViewerApplication = {
         }));
 
         return function (_x2) {
-          return _ref7.apply(this, arguments);
+          return _ref6.apply(this, arguments);
         };
       }())["catch"](function () {
-        _this12.setInitialView();
+        _this13.setInitialView();
       }).then(function () {
         pdfViewer.update();
       });
     });
     pagesPromise.then(function () {
-      _this12._unblockDocumentLoadEvent();
+      _this13._unblockDocumentLoadEvent();
 
-      _this12._initializeAutoPrint(pdfDocument, openActionPromise);
+      _this13._initializeAutoPrint(pdfDocument, openActionPromise);
     });
     onePageRendered.then(function () {
       pdfDocument.getOutline().then(function (outline) {
-        _this12.pdfOutlineViewer.render({
+        _this13.pdfOutlineViewer.render({
           outline: outline,
           pdfDocument: pdfDocument
         });
       });
       pdfDocument.getAttachments().then(function (attachments) {
-        _this12.pdfAttachmentViewer.render({
+        _this13.pdfAttachmentViewer.render({
           attachments: attachments
         });
       });
       pdfViewer.optionalContentConfigPromise.then(function (optionalContentConfig) {
-        _this12.pdfLayerViewer.render({
+        _this13.pdfLayerViewer.render({
           optionalContentConfig: optionalContentConfig,
           pdfDocument: pdfDocument
         });
@@ -1838,14 +1880,14 @@ var PDFViewerApplication = {
 
       if ("requestIdleCallback" in window) {
         var callback = window.requestIdleCallback(function () {
-          _this12._collectTelemetry(pdfDocument);
+          _this13._collectTelemetry(pdfDocument);
 
-          _this12._idleCallbacks["delete"](callback);
+          _this13._idleCallbacks["delete"](callback);
         }, {
           timeout: 1000
         });
 
-        _this12._idleCallbacks.add(callback);
+        _this13._idleCallbacks.add(callback);
       }
     });
 
@@ -1854,29 +1896,29 @@ var PDFViewerApplication = {
     this._initializeMetadata(pdfDocument);
   },
   _scriptingDocProperties: function _scriptingDocProperties(pdfDocument) {
-    var _this13 = this;
+    var _this14 = this;
 
     return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee12() {
-      var _this13$metadata, _this13$metadata2;
+      var _this14$metadata, _this14$metadata2;
 
       return _regenerator["default"].wrap(function _callee12$(_context12) {
         while (1) {
           switch (_context12.prev = _context12.next) {
             case 0:
-              if (_this13.documentInfo) {
+              if (_this14.documentInfo) {
                 _context12.next = 5;
                 break;
               }
 
               _context12.next = 3;
               return new Promise(function (resolve) {
-                _this13.eventBus._on("metadataloaded", resolve, {
+                _this14.eventBus._on("metadataloaded", resolve, {
                   once: true
                 });
               });
 
             case 3:
-              if (!(pdfDocument !== _this13.pdfDocument)) {
+              if (!(pdfDocument !== _this14.pdfDocument)) {
                 _context12.next = 5;
                 break;
               }
@@ -1884,20 +1926,20 @@ var PDFViewerApplication = {
               return _context12.abrupt("return", null);
 
             case 5:
-              if (_this13._contentLength) {
+              if (_this14._contentLength) {
                 _context12.next = 10;
                 break;
               }
 
               _context12.next = 8;
               return new Promise(function (resolve) {
-                _this13.eventBus._on("documentloaded", resolve, {
+                _this14.eventBus._on("documentloaded", resolve, {
                   once: true
                 });
               });
 
             case 8:
-              if (!(pdfDocument !== _this13.pdfDocument)) {
+              if (!(pdfDocument !== _this14.pdfDocument)) {
                 _context12.next = 10;
                 break;
               }
@@ -1905,14 +1947,14 @@ var PDFViewerApplication = {
               return _context12.abrupt("return", null);
 
             case 10:
-              return _context12.abrupt("return", _objectSpread(_objectSpread({}, _this13.documentInfo), {}, {
-                baseURL: _this13.baseUrl,
-                filesize: _this13._contentLength,
-                filename: _this13._docFilename,
-                metadata: (_this13$metadata = _this13.metadata) === null || _this13$metadata === void 0 ? void 0 : _this13$metadata.getRaw(),
-                authors: (_this13$metadata2 = _this13.metadata) === null || _this13$metadata2 === void 0 ? void 0 : _this13$metadata2.get("dc:creator"),
-                numPages: _this13.pagesCount,
-                URL: _this13.url
+              return _context12.abrupt("return", _objectSpread(_objectSpread({}, _this14.documentInfo), {}, {
+                baseURL: _this14.baseUrl,
+                filesize: _this14._contentLength,
+                filename: _this14._docFilename,
+                metadata: (_this14$metadata = _this14.metadata) === null || _this14$metadata === void 0 ? void 0 : _this14$metadata.getRaw(),
+                authors: (_this14$metadata2 = _this14.metadata) === null || _this14$metadata2 === void 0 ? void 0 : _this14$metadata2.get("dc:creator"),
+                numPages: _this14.pagesCount,
+                URL: _this14.url
               }));
 
             case 11:
@@ -1924,7 +1966,7 @@ var PDFViewerApplication = {
     }))();
   },
   _collectTelemetry: function _collectTelemetry(pdfDocument) {
-    var _this14 = this;
+    var _this15 = this;
 
     return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee13() {
       var markInfo, tagged;
@@ -1933,12 +1975,12 @@ var PDFViewerApplication = {
           switch (_context13.prev = _context13.next) {
             case 0:
               _context13.next = 2;
-              return _this14.pdfDocument.getMarkInfo();
+              return _this15.pdfDocument.getMarkInfo();
 
             case 2:
               markInfo = _context13.sent;
 
-              if (!(pdfDocument !== _this14.pdfDocument)) {
+              if (!(pdfDocument !== _this15.pdfDocument)) {
                 _context13.next = 5;
                 break;
               }
@@ -1948,7 +1990,7 @@ var PDFViewerApplication = {
             case 5:
               tagged = (markInfo === null || markInfo === void 0 ? void 0 : markInfo.Marked) || false;
 
-              _this14.externalServices.reportTelemetry({
+              _this15.externalServices.reportTelemetry({
                 type: "tagged",
                 tagged: tagged
               });
@@ -1962,7 +2004,7 @@ var PDFViewerApplication = {
     }))();
   },
   _initializeAutoPrint: function _initializeAutoPrint(pdfDocument, openActionPromise) {
-    var _this15 = this;
+    var _this16 = this;
 
     return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee14() {
       var _yield$Promise$all, _yield$Promise$all2, openAction, javaScript, triggerAutoPrint, _iterator2, _step2, js;
@@ -1972,7 +2014,7 @@ var PDFViewerApplication = {
           switch (_context14.prev = _context14.next) {
             case 0:
               _context14.next = 2;
-              return Promise.all([openActionPromise, !_this15.pdfViewer.enableScripting ? pdfDocument.getJavaScript() : null]);
+              return Promise.all([openActionPromise, !_this16.pdfViewer.enableScripting ? pdfDocument.getJavaScript() : null]);
 
             case 2:
               _yield$Promise$all = _context14.sent;
@@ -1980,7 +2022,7 @@ var PDFViewerApplication = {
               openAction = _yield$Promise$all2[0];
               javaScript = _yield$Promise$all2[1];
 
-              if (!(pdfDocument !== _this15.pdfDocument)) {
+              if (!(pdfDocument !== _this16.pdfDocument)) {
                 _context14.next = 8;
                 break;
               }
@@ -2006,7 +2048,7 @@ var PDFViewerApplication = {
 
                 console.warn("Warning: JavaScript is not supported");
 
-                _this15._delayedFallback(_pdfjsLib.UNSUPPORTED_FEATURES.javaScript);
+                _this16._delayedFallback(_pdfjsLib.UNSUPPORTED_FEATURES.javaScript);
 
                 return true;
               });
@@ -2060,7 +2102,7 @@ var PDFViewerApplication = {
 
             case 31:
               if (triggerAutoPrint) {
-                _this15.triggerPrinting();
+                _this16.triggerPrinting();
               }
 
             case 32:
@@ -2072,10 +2114,10 @@ var PDFViewerApplication = {
     }))();
   },
   _initializeMetadata: function _initializeMetadata(pdfDocument) {
-    var _this16 = this;
+    var _this17 = this;
 
     return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee15() {
-      var _this16$_contentDispo, _this16$_contentLengt;
+      var _this17$_contentDispo, _this17$_contentLengt;
 
       var _yield$pdfDocument$ge, info, metadata, contentDispositionFilename, contentLength, PDFViewerApplicationOptions, pdfTitle, metadataTitle, versionId, generatorId, producer, formType;
 
@@ -2093,7 +2135,7 @@ var PDFViewerApplication = {
               contentDispositionFilename = _yield$pdfDocument$ge.contentDispositionFilename;
               contentLength = _yield$pdfDocument$ge.contentLength;
 
-              if (!(pdfDocument !== _this16.pdfDocument)) {
+              if (!(pdfDocument !== _this17.pdfDocument)) {
                 _context15.next = 9;
                 break;
               }
@@ -2101,15 +2143,15 @@ var PDFViewerApplication = {
               return _context15.abrupt("return");
 
             case 9:
-              _this16.documentInfo = info;
-              _this16.metadata = metadata;
-              (_this16$_contentDispo = _this16._contentDispositionFilename) !== null && _this16$_contentDispo !== void 0 ? _this16$_contentDispo : _this16._contentDispositionFilename = contentDispositionFilename;
-              (_this16$_contentLengt = _this16._contentLength) !== null && _this16$_contentLengt !== void 0 ? _this16$_contentLengt : _this16._contentLength = contentLength;
+              _this17.documentInfo = info;
+              _this17.metadata = metadata;
+              (_this17$_contentDispo = _this17._contentDispositionFilename) !== null && _this17$_contentDispo !== void 0 ? _this17$_contentDispo : _this17._contentDispositionFilename = contentDispositionFilename;
+              (_this17$_contentLengt = _this17._contentLength) !== null && _this17$_contentLengt !== void 0 ? _this17$_contentLengt : _this17._contentLength = contentLength;
               PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
 
               if (!PDFViewerApplicationOptions || PDFViewerApplicationOptions.get("verbosity") > 0) {
                 console.log("PDF viewer: ngx-extended-pdf-viewer running on pdf.js " + (window["pdfjs-dist/build/pdf"] ? window["pdfjs-dist/build/pdf"].version : " developer version (?)"));
-                console.log("PDF ".concat(pdfDocument.fingerprint, " [").concat(info.PDFFormatVersion, " ") + "".concat((info.Producer || "-").trim(), " / ").concat((info.Creator || "-").trim(), "] ") + "(PDF.js: ".concat(_pdfjsLib.version || "-") + "".concat(_this16.pdfViewer.enableWebGL ? " [WebGL]" : "", ") modified by ngx-extended-pdf-viewer)"));
+                console.log("PDF ".concat(pdfDocument.fingerprint, " [").concat(info.PDFFormatVersion, " ") + "".concat((info.Producer || "-").trim(), " / ").concat((info.Creator || "-").trim(), "] ") + "(PDF.js: ".concat(_pdfjsLib.version || "-") + "".concat(_this17.pdfViewer.enableWebGL ? " [WebGL]" : "", ") modified by ngx-extended-pdf-viewer)"));
               }
 
               pdfTitle = info === null || info === void 0 ? void 0 : info.Title;
@@ -2122,19 +2164,19 @@ var PDFViewerApplication = {
               }
 
               if (pdfTitle) {
-                _this16.setTitle("".concat(pdfTitle, " - ").concat(contentDispositionFilename || document.title));
+                _this17.setTitle("".concat(pdfTitle, " - ").concat(contentDispositionFilename || document.title));
               } else if (contentDispositionFilename) {
-                _this16.setTitle(contentDispositionFilename);
+                _this17.setTitle(contentDispositionFilename);
               }
 
               if (info.IsXFAPresent && !info.IsAcroFormPresent && !pdfDocument.isPureXfa) {
                 console.warn("Warning: XFA is not supported");
 
-                _this16._delayedFallback(_pdfjsLib.UNSUPPORTED_FEATURES.forms);
-              } else if ((info.IsAcroFormPresent || info.IsXFAPresent) && !_this16.pdfViewer.renderInteractiveForms) {
+                _this17._delayedFallback(_pdfjsLib.UNSUPPORTED_FEATURES.forms);
+              } else if ((info.IsAcroFormPresent || info.IsXFAPresent) && !_this17.pdfViewer.renderInteractiveForms) {
                 console.warn("Warning: Interactive form support is not enabled");
 
-                _this16._delayedFallback(_pdfjsLib.UNSUPPORTED_FEATURES.forms);
+                _this17._delayedFallback(_pdfjsLib.UNSUPPORTED_FEATURES.forms);
               }
 
               versionId = "other";
@@ -2165,15 +2207,15 @@ var PDFViewerApplication = {
                 formType = "acroform";
               }
 
-              _this16.externalServices.reportTelemetry({
+              _this17.externalServices.reportTelemetry({
                 type: "documentInfo",
                 version: versionId,
                 generator: generatorId,
                 formType: formType
               });
 
-              _this16.eventBus.dispatch("metadataloaded", {
-                source: _this16
+              _this17.eventBus.dispatch("metadataloaded", {
+                source: _this17
               });
 
             case 28:
@@ -2185,7 +2227,7 @@ var PDFViewerApplication = {
     }))();
   },
   _initializePageLabels: function _initializePageLabels(pdfDocument) {
-    var _this17 = this;
+    var _this18 = this;
 
     return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee16() {
       var labels, numLabels, i, pdfViewer, pdfThumbnailViewer, toolbar;
@@ -2199,7 +2241,7 @@ var PDFViewerApplication = {
             case 2:
               labels = _context16.sent;
 
-              if (!(pdfDocument !== _this17.pdfDocument)) {
+              if (!(pdfDocument !== _this18.pdfDocument)) {
                 _context16.next = 5;
                 break;
               }
@@ -2217,7 +2259,7 @@ var PDFViewerApplication = {
             case 7:
               numLabels = labels.length;
 
-              if (!(numLabels !== _this17.pagesCount)) {
+              if (!(numLabels !== _this18.pagesCount)) {
                 _context16.next = 11;
                 break;
               }
@@ -2240,7 +2282,7 @@ var PDFViewerApplication = {
               return _context16.abrupt("return");
 
             case 15:
-              pdfViewer = _this17.pdfViewer, pdfThumbnailViewer = _this17.pdfThumbnailViewer, toolbar = _this17.toolbar;
+              pdfViewer = _this18.pdfViewer, pdfThumbnailViewer = _this18.pdfThumbnailViewer, toolbar = _this18.toolbar;
               pdfViewer.setPageLabels(labels);
               pdfThumbnailViewer.setPageLabels(labels);
               toolbar.setPagesCount(numLabels, true);
@@ -2254,11 +2296,11 @@ var PDFViewerApplication = {
       }, _callee16);
     }))();
   },
-  _initializePdfHistory: function _initializePdfHistory(_ref9) {
-    var fingerprint = _ref9.fingerprint,
-        viewOnLoad = _ref9.viewOnLoad,
-        _ref9$initialDest = _ref9.initialDest,
-        initialDest = _ref9$initialDest === void 0 ? null : _ref9$initialDest;
+  _initializePdfHistory: function _initializePdfHistory(_ref8) {
+    var fingerprint = _ref8.fingerprint,
+        viewOnLoad = _ref8.viewOnLoad,
+        _ref8$initialDest = _ref8.initialDest,
+        initialDest = _ref8$initialDest === void 0 ? null : _ref8$initialDest;
 
     if (this.isViewerEmbedded || _app_options.AppOptions.get("disableHistory")) {
       return;
@@ -2284,7 +2326,7 @@ var PDFViewerApplication = {
     }
   },
   _initializePermissions: function _initializePermissions(pdfDocument) {
-    var _this18 = this;
+    var _this19 = this;
 
     return _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee17() {
       var permissions;
@@ -2298,7 +2340,7 @@ var PDFViewerApplication = {
             case 2:
               permissions = _context17.sent;
 
-              if (!(pdfDocument !== _this18.pdfDocument)) {
+              if (!(pdfDocument !== _this19.pdfDocument)) {
                 _context17.next = 5;
                 break;
               }
@@ -2315,7 +2357,7 @@ var PDFViewerApplication = {
 
             case 7:
               if (!permissions.includes(_pdfjsLib.PermissionFlag.COPY)) {
-                _this18.appConfig.viewerContainer.classList.add(ENABLE_PERMISSIONS_CLASS);
+                _this19.appConfig.viewerContainer.classList.add(ENABLE_PERMISSIONS_CLASS);
               }
 
             case 8:
@@ -2327,6 +2369,8 @@ var PDFViewerApplication = {
     }))();
   },
   _initializeAnnotationStorageCallbacks: function _initializeAnnotationStorageCallbacks(pdfDocument) {
+    var _this20 = this;
+
     if (pdfDocument !== this.pdfDocument) {
       return;
     }
@@ -2335,34 +2379,36 @@ var PDFViewerApplication = {
 
     annotationStorage.onSetModified = function () {
       window.addEventListener("beforeunload", beforeUnload);
+      _this20._annotationStorageModified = true;
     };
 
     annotationStorage.onResetModified = function () {
       window.removeEventListener("beforeunload", beforeUnload);
+      delete _this20._annotationStorageModified;
     };
   },
   setInitialView: function setInitialView(storedHash) {
-    var _this19 = this;
+    var _this21 = this;
 
-    var _ref10 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-        rotation = _ref10.rotation,
-        sidebarView = _ref10.sidebarView,
-        scrollMode = _ref10.scrollMode,
-        spreadMode = _ref10.spreadMode;
+    var _ref9 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+        rotation = _ref9.rotation,
+        sidebarView = _ref9.sidebarView,
+        scrollMode = _ref9.scrollMode,
+        spreadMode = _ref9.spreadMode;
 
     var setRotation = function setRotation(angle) {
       if ((0, _ui_utils.isValidRotation)(angle)) {
-        _this19.pdfViewer.pagesRotation = angle;
+        _this21.pdfViewer.pagesRotation = angle;
       }
     };
 
     var setViewerModes = function setViewerModes(scroll, spread) {
       if ((0, _ui_utils.isValidScrollMode)(scroll)) {
-        _this19.pdfViewer.scrollMode = scroll;
+        _this21.pdfViewer.scrollMode = scroll;
       }
 
       if ((0, _ui_utils.isValidSpreadMode)(spread)) {
-        _this19.pdfViewer.spreadMode = spread;
+        _this21.pdfViewer.spreadMode = spread;
       }
     };
 
@@ -2391,17 +2437,14 @@ var PDFViewerApplication = {
       }
     }
   },
-  cleanup: function cleanup() {
+  _cleanup: function _cleanup() {
     if (!this.pdfDocument) {
       return;
     }
 
     this.pdfViewer.cleanup();
     this.pdfThumbnailViewer.cleanup();
-
-    if (this.pdfViewer.renderer !== _ui_utils.RendererType.SVG) {
-      this.pdfDocument.cleanup();
-    }
+    this.pdfDocument.cleanup(this.pdfViewer.renderer === _ui_utils.RendererType.SVG);
   },
   forceRendering: function forceRendering() {
     this.pdfRenderingQueue.printing = !!this.printService;
@@ -2409,7 +2452,7 @@ var PDFViewerApplication = {
     this.pdfRenderingQueue.renderHighestPriority();
   },
   beforePrint: function beforePrint() {
-    var _this20 = this;
+    var _this22 = this;
 
     this.pdfScriptingManager.dispatchWillPrint();
 
@@ -2419,7 +2462,7 @@ var PDFViewerApplication = {
 
     if (!this.supportsPrinting) {
       this.l10n.get("printing_not_supported").then(function (msg) {
-        _this20._otherError(msg);
+        _this22._otherError(msg);
       });
       return;
     }
@@ -2835,10 +2878,10 @@ function loadAndEnablePDFBug(enabledTabs) {
   });
 }
 
-function reportPageStatsPDFBug(_ref11) {
+function reportPageStatsPDFBug(_ref10) {
   var _pageView$pdfPage;
 
-  var pageNumber = _ref11.pageNumber;
+  var pageNumber = _ref10.pageNumber;
 
   if (typeof Stats === "undefined" || !Stats.enabled) {
     return;
@@ -2965,10 +3008,10 @@ function webViewerResetPermissions() {
   appConfig.viewerContainer.classList.remove(ENABLE_PERMISSIONS_CLASS);
 }
 
-function webViewerPageRendered(_ref12) {
-  var pageNumber = _ref12.pageNumber,
-      timestamp = _ref12.timestamp,
-      error = _ref12.error;
+function webViewerPageRendered(_ref11) {
+  var pageNumber = _ref11.pageNumber,
+      timestamp = _ref11.timestamp,
+      error = _ref11.error;
 
   if (pageNumber === PDFViewerApplication.page) {
     PDFViewerApplication.toolbar.updateLoadingIndicatorState(false);
@@ -3001,8 +3044,8 @@ function webViewerPageRendered(_ref12) {
   });
 }
 
-function webViewerPageMode(_ref13) {
-  var mode = _ref13.mode;
+function webViewerPageMode(_ref12) {
+  var mode = _ref12.mode;
   var view;
 
   switch (mode) {
@@ -3333,8 +3376,8 @@ function webViewerFindFromUrlHash(evt) {
   });
 }
 
-function webViewerUpdateFindMatchesCount(_ref14) {
-  var matchesCount = _ref14.matchesCount;
+function webViewerUpdateFindMatchesCount(_ref13) {
+  var matchesCount = _ref13.matchesCount;
 
   if (PDFViewerApplication.supportsIntegratedFind) {
     PDFViewerApplication.externalServices.updateFindMatchesCount(matchesCount);
@@ -3343,11 +3386,11 @@ function webViewerUpdateFindMatchesCount(_ref14) {
   }
 }
 
-function webViewerUpdateFindControlState(_ref15) {
-  var state = _ref15.state,
-      previous = _ref15.previous,
-      matchesCount = _ref15.matchesCount,
-      rawQuery = _ref15.rawQuery;
+function webViewerUpdateFindControlState(_ref14) {
+  var state = _ref14.state,
+      previous = _ref14.previous,
+      matchesCount = _ref14.matchesCount,
+      rawQuery = _ref14.rawQuery;
 
   if (PDFViewerApplication.supportsIntegratedFind) {
     PDFViewerApplication.externalServices.updateFindControlState({
@@ -3372,9 +3415,9 @@ function webViewerRotationChanging(evt) {
   PDFViewerApplication.pdfViewer.currentPageNumber = evt.pageNumber;
 }
 
-function webViewerPageChanging(_ref16) {
-  var pageNumber = _ref16.pageNumber,
-      pageLabel = _ref16.pageLabel;
+function webViewerPageChanging(_ref15) {
+  var pageNumber = _ref15.pageNumber,
+      pageLabel = _ref15.pageLabel;
   PDFViewerApplication.toolbar.setPageNumber(pageNumber, pageLabel);
   PDFViewerApplication.secondaryToolbar.setPageNumber(pageNumber);
 
@@ -13902,7 +13945,7 @@ var BaseViewer = /*#__PURE__*/function () {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    var viewerVersion = '2.8.449';
+    var viewerVersion = '2.8.464';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error("The API version \"".concat(_pdfjsLib.version, "\" does not match the Viewer version \"").concat(viewerVersion, "\"."));
@@ -18317,13 +18360,13 @@ var toIndexedObject = __webpack_require__(48);
 var toPrimitive = __webpack_require__(52);
 var has = __webpack_require__(54);
 var IE8_DOM_DEFINE = __webpack_require__(55);
-var nativeGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-exports.f = DESCRIPTORS ? nativeGetOwnPropertyDescriptor : function getOwnPropertyDescriptor(O, P) {
+var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDescriptor(O, P) {
  O = toIndexedObject(O);
  P = toPrimitive(P, true);
  if (IE8_DOM_DEFINE)
   try {
-   return nativeGetOwnPropertyDescriptor(O, P);
+   return $getOwnPropertyDescriptor(O, P);
   } catch (error) {
   }
  if (has(O, P))
@@ -18361,13 +18404,13 @@ module.exports = function (exec) {
 
 "use strict";
 
-var nativePropertyIsEnumerable = {}.propertyIsEnumerable;
+var $propertyIsEnumerable = {}.propertyIsEnumerable;
 var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-var NASHORN_BUG = getOwnPropertyDescriptor && !nativePropertyIsEnumerable.call({ 1: 2 }, 1);
+var NASHORN_BUG = getOwnPropertyDescriptor && !$propertyIsEnumerable.call({ 1: 2 }, 1);
 exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
  var descriptor = getOwnPropertyDescriptor(this, V);
  return !!descriptor && descriptor.enumerable;
-} : nativePropertyIsEnumerable;
+} : $propertyIsEnumerable;
 
 /***/ }),
 /* 47 */
@@ -18508,14 +18551,14 @@ var DESCRIPTORS = __webpack_require__(44);
 var IE8_DOM_DEFINE = __webpack_require__(55);
 var anObject = __webpack_require__(59);
 var toPrimitive = __webpack_require__(52);
-var nativeDefineProperty = Object.defineProperty;
-exports.f = DESCRIPTORS ? nativeDefineProperty : function defineProperty(O, P, Attributes) {
+var $defineProperty = Object.defineProperty;
+exports.f = DESCRIPTORS ? $defineProperty : function defineProperty(O, P, Attributes) {
  anObject(O);
  P = toPrimitive(P, true);
  anObject(Attributes);
  if (IE8_DOM_DEFINE)
   try {
-   return nativeDefineProperty(O, P, Attributes);
+   return $defineProperty(O, P, Attributes);
   } catch (error) {
   }
  if ('get' in Attributes || 'set' in Attributes)
@@ -18715,7 +18758,7 @@ var store = __webpack_require__(63);
 (module.exports = function (key, value) {
  return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
- version: '3.9.1',
+ version: '3.10.0',
  mode: IS_PURE ? 'pure' : 'global',
  copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
@@ -24464,7 +24507,7 @@ module.exports = {
 
 var toInteger = __webpack_require__(79);
 var requireObjectCoercible = __webpack_require__(51);
-module.exports = ''.repeat || function repeat(count) {
+module.exports = function repeat(count) {
  var str = String(requireObjectCoercible(this));
  var result = '';
  var n = toInteger(count);
@@ -28608,8 +28651,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-var pdfjsVersion = '2.8.449';
-var pdfjsBuild = '4f8086a0c';
+var pdfjsVersion = '2.8.464';
+var pdfjsBuild = '3fc243538';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

@@ -1789,7 +1789,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.8.449',
+    apiVersion: '2.8.464',
     source: {
       data: source.data,
       url: source.url,
@@ -2028,8 +2028,8 @@ class PDFDocumentProxy {
     return this._transport.getStats();
   }
 
-  cleanup() {
-    return this._transport.startCleanup();
+  cleanup(keepLoadedFonts = false) {
+    return this._transport.startCleanup(keepLoadedFonts || this.isPureXfa);
   }
 
   destroy() {
@@ -2120,12 +2120,12 @@ class PDFPageProxy {
   getAnnotations({
     intent = null
   } = {}) {
-    if (!this.annotationsPromise || this.annotationsIntent !== intent) {
-      this.annotationsPromise = this._transport.getAnnotations(this._pageIndex, intent);
-      this.annotationsIntent = intent;
+    if (!this._annotationsPromise || this._annotationsIntent !== intent) {
+      this._annotationsPromise = this._transport.getAnnotations(this._pageIndex, intent);
+      this._annotationsIntent = intent;
     }
 
-    return this.annotationsPromise;
+    return this._annotationsPromise;
   }
 
   getJSActions() {
@@ -2149,6 +2149,8 @@ class PDFPageProxy {
     annotationStorage = null,
     optionalContentConfigPromise = null
   }) {
+    var _intentState;
+
     if (this._stats) {
       this._stats.time("Overall");
     }
@@ -2201,11 +2203,7 @@ class PDFPageProxy {
     }
 
     const complete = error => {
-      const i = intentState.renderTasks.indexOf(internalRenderTask);
-
-      if (i >= 0) {
-        intentState.renderTasks.splice(i, 1);
-      }
+      intentState.renderTasks.delete(internalRenderTask);
 
       if (this.cleanupAfterRender || renderingIntent === "print") {
         this.pendingCleanup = true;
@@ -2249,12 +2247,7 @@ class PDFPageProxy {
       useRequestAnimationFrame: renderingIntent !== "print",
       pdfBug: this._pdfBug
     });
-
-    if (!intentState.renderTasks) {
-      intentState.renderTasks = [];
-    }
-
-    intentState.renderTasks.push(internalRenderTask);
+    ((_intentState = intentState).renderTasks || (_intentState.renderTasks = new Set())).add(internalRenderTask);
     const renderTask = internalRenderTask.task;
     Promise.all([intentState.displayReadyCapability.promise, optionalContentConfigPromise]).then(([transparency, optionalContentConfig]) => {
       if (this.pendingCleanup) {
@@ -2279,11 +2272,7 @@ class PDFPageProxy {
     function operatorListChanged() {
       if (intentState.operatorList.lastChunk) {
         intentState.opListReadCapability.resolve(intentState.operatorList);
-        const i = intentState.renderTasks.indexOf(opListTask);
-
-        if (i >= 0) {
-          intentState.renderTasks.splice(i, 1);
-        }
+        intentState.renderTasks.delete(opListTask);
       }
     }
 
@@ -2300,11 +2289,12 @@ class PDFPageProxy {
     let opListTask;
 
     if (!intentState.opListReadCapability) {
+      var _intentState2;
+
       opListTask = Object.create(null);
       opListTask.operatorListChanged = operatorListChanged;
       intentState.opListReadCapability = (0, _util.createPromiseCapability)();
-      intentState.renderTasks = [];
-      intentState.renderTasks.push(opListTask);
+      ((_intentState2 = intentState).renderTasks || (_intentState2.renderTasks = new Set())).add(opListTask);
       intentState.operatorList = {
         fnArray: [],
         argsArray: [],
@@ -2394,7 +2384,7 @@ class PDFPageProxy {
     }
 
     this.objs.clear();
-    this.annotationsPromise = null;
+    this._annotationsPromise = null;
     this._jsActionsPromise = null;
     this._xfaPromise = null;
     this.pendingCleanup = false;
@@ -2415,7 +2405,7 @@ class PDFPageProxy {
       renderTasks,
       operatorList
     } of this._intentStates.values()) {
-      if (renderTasks.length !== 0 || !operatorList.lastChunk) {
+      if (renderTasks.size > 0 || !operatorList.lastChunk) {
         return false;
       }
     }
@@ -2423,7 +2413,7 @@ class PDFPageProxy {
     this._intentStates.clear();
 
     this.objs.clear();
-    this.annotationsPromise = null;
+    this._annotationsPromise = null;
     this._jsActionsPromise = null;
     this._xfaPromise = null;
 
@@ -2459,8 +2449,8 @@ class PDFPageProxy {
 
     intentState.operatorList.lastChunk = operatorListChunk.lastChunk;
 
-    for (let i = 0; i < intentState.renderTasks.length; i++) {
-      intentState.renderTasks[i].operatorListChanged();
+    for (const internalRenderTask of intentState.renderTasks) {
+      internalRenderTask.operatorListChanged();
     }
 
     if (operatorListChunk.lastChunk) {
@@ -2506,8 +2496,8 @@ class PDFPageProxy {
         if (intentState.operatorList) {
           intentState.operatorList.lastChunk = true;
 
-          for (let i = 0; i < intentState.renderTasks.length; i++) {
-            intentState.renderTasks[i].operatorListChanged();
+          for (const internalRenderTask of intentState.renderTasks) {
+            internalRenderTask.operatorListChanged();
           }
 
           this._tryCleanup();
@@ -2538,7 +2528,7 @@ class PDFPageProxy {
     }
 
     if (!force) {
-      if (intentState.renderTasks.length !== 0) {
+      if (intentState.renderTasks.size > 0) {
         return;
       }
 
@@ -3570,24 +3560,34 @@ class WorkerTransport {
     return this.messageHandler.sendWithPromise("GetStats", null);
   }
 
-  startCleanup() {
-    return this.messageHandler.sendWithPromise("Cleanup", null).then(() => {
-      for (let i = 0, ii = this.pageCache.length; i < ii; i++) {
-        const page = this.pageCache[i];
+  async startCleanup(keepLoadedFonts = false) {
+    await this.messageHandler.sendWithPromise("Cleanup", null);
 
-        if (page) {
-          const cleanupSuccessful = page.cleanup();
+    if (this.destroyed) {
+      return;
+    }
 
-          if (!cleanupSuccessful) {
-            throw new Error(`startCleanup: Page ${i + 1} is currently rendering.`);
-          }
-        }
+    for (let i = 0, ii = this.pageCache.length; i < ii; i++) {
+      const page = this.pageCache[i];
+
+      if (!page) {
+        continue;
       }
 
-      this.commonObjs.clear();
+      const cleanupSuccessful = page.cleanup();
+
+      if (!cleanupSuccessful) {
+        throw new Error(`startCleanup: Page ${i + 1} is currently rendering.`);
+      }
+    }
+
+    this.commonObjs.clear();
+
+    if (!keepLoadedFonts) {
       this.fontLoader.clear();
-      this._hasJSActionsPromise = null;
-    });
+    }
+
+    this._hasJSActionsPromise = null;
   }
 
   get loadingParams() {
@@ -3842,9 +3842,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.8.449';
+const version = '2.8.464';
 exports.version = version;
-const build = '4f8086a0c';
+const build = '3fc243538';
 exports.build = build;
 
 /***/ }),
@@ -14314,8 +14314,8 @@ var _svg = __w_pdfjs_require__(21);
 
 var _xfa_layer = __w_pdfjs_require__(22);
 
-const pdfjsVersion = '2.8.449';
-const pdfjsBuild = '4f8086a0c';
+const pdfjsVersion = '2.8.464';
+const pdfjsBuild = '3fc243538';
 {
   const PDFNetworkStream = __w_pdfjs_require__(23).PDFNetworkStream;
 

@@ -692,7 +692,7 @@ const PDFViewerApplication = {
     this.eventBus = eventBus;
     this.overlayManager = new _overlay_manager.OverlayManager();
     const pdfRenderingQueue = new _pdf_rendering_queue.PDFRenderingQueue();
-    pdfRenderingQueue.onIdle = this.cleanup.bind(this);
+    pdfRenderingQueue.onIdle = this._cleanup.bind(this);
     this.pdfRenderingQueue = pdfRenderingQueue;
     const pdfLinkService = new _pdf_link_service.PDFLinkService({
       eventBus,
@@ -965,7 +965,15 @@ const PDFViewerApplication = {
     container.hidden = true;
 
     if (!this.pdfLoadingTask) {
-      return undefined;
+      return;
+    }
+
+    if (this.pdfDocument?.annotationStorage.size > 0 && this._annotationStorageModified) {
+      try {
+        await this.save({
+          sourceEventType: "save"
+        });
+      } catch (reason) {}
     }
 
     const promises = [];
@@ -1017,7 +1025,6 @@ const PDFViewerApplication = {
     }
 
     await Promise.all(promises);
-    return undefined;
   },
 
   async open(file, args) {
@@ -1111,28 +1118,31 @@ const PDFViewerApplication = {
     });
   },
 
-  download({
-    sourceEventType = "download"
-  } = {}) {
-    function downloadByUrl() {
-      downloadManager.downloadUrl(url, filename);
-    }
-
-    const downloadManager = this.downloadManager,
-          url = this.baseUrl,
-          filename = this._docFilename;
-
-    if (!this.pdfDocument || !this.downloadComplete) {
-      downloadByUrl();
+  _ensureDownloadComplete() {
+    if (this.pdfDocument && this.downloadComplete) {
       return;
     }
 
-    this.pdfDocument.getData().then(function (data) {
+    throw new Error("PDF document not downloaded.");
+  },
+
+  async download({
+    sourceEventType = "download"
+  } = {}) {
+    const url = this.baseUrl,
+          filename = this._docFilename;
+
+    try {
+      this._ensureDownloadComplete();
+
+      const data = await this.pdfDocument.getData();
       const blob = new Blob([data], {
         type: "application/pdf"
       });
-      downloadManager.download(blob, url, filename, sourceEventType);
-    }).catch(downloadByUrl);
+      await this.downloadManager.download(blob, url, filename, sourceEventType);
+    } catch (reason) {
+      await this.downloadManager.downloadUrl(url, filename);
+    }
   },
 
   async save({
@@ -1142,32 +1152,27 @@ const PDFViewerApplication = {
       return;
     }
 
-    const downloadManager = this.downloadManager,
-          url = this.baseUrl,
-          filename = this._docFilename;
-
-    if (!this.pdfDocument || !this.downloadComplete) {
-      this.download({
-        sourceEventType
-      });
-      return;
-    }
-
     this._saveInProgress = true;
     await this.pdfScriptingManager.dispatchWillSave();
-    this.pdfDocument.saveDocument(this.pdfDocument.annotationStorage).then(data => {
+    const url = this.baseUrl,
+          filename = this._docFilename;
+
+    try {
+      this._ensureDownloadComplete();
+
+      const data = await this.pdfDocument.saveDocument(this.pdfDocument.annotationStorage);
       const blob = new Blob([data], {
         type: "application/pdf"
       });
-      downloadManager.download(blob, url, filename, sourceEventType);
-    }).catch(() => {
-      this.download({
+      await this.downloadManager.download(blob, url, filename, sourceEventType);
+    } catch (reason) {
+      await this.download({
         sourceEventType
       });
-    }).finally(async () => {
+    } finally {
       await this.pdfScriptingManager.dispatchDidSave();
       this._saveInProgress = false;
-    });
+    }
   },
 
   downloadOrSave(options) {
@@ -1769,12 +1774,14 @@ const PDFViewerApplication = {
       annotationStorage
     } = pdfDocument;
 
-    annotationStorage.onSetModified = function () {
+    annotationStorage.onSetModified = () => {
       window.addEventListener("beforeunload", beforeUnload);
+      this._annotationStorageModified = true;
     };
 
-    annotationStorage.onResetModified = function () {
+    annotationStorage.onResetModified = () => {
       window.removeEventListener("beforeunload", beforeUnload);
+      delete this._annotationStorageModified;
     };
   },
 
@@ -1826,17 +1833,14 @@ const PDFViewerApplication = {
     }
   },
 
-  cleanup() {
+  _cleanup() {
     if (!this.pdfDocument) {
       return;
     }
 
     this.pdfViewer.cleanup();
     this.pdfThumbnailViewer.cleanup();
-
-    if (this.pdfViewer.renderer !== _ui_utils.RendererType.SVG) {
-      this.pdfDocument.cleanup();
-    }
+    this.pdfDocument.cleanup(this.pdfViewer.renderer === _ui_utils.RendererType.SVG);
   },
 
   forceRendering() {
@@ -10571,7 +10575,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.8.449';
+    const viewerVersion = '2.8.464';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -17248,8 +17252,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.8.449';
-const pdfjsBuild = '4f8086a0c';
+const pdfjsVersion = '2.8.464';
+const pdfjsBuild = '3fc243538';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

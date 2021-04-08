@@ -1366,7 +1366,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.pinchOnMobileSupport = undefined;
       }
 
-      PDFViewerApplication.cleanup();
+      if (PDFViewerApplication.cleanup) {
+        PDFViewerApplication.cleanup();
+      } else if (PDFViewerApplication._cleanup) {
+        PDFViewerApplication._cleanup();
+      }
       PDFViewerApplication.close();
       if (PDFViewerApplication.printKeyDownListener) {
         removeEventListener('keydown', PDFViewerApplication.printKeyDownListener, true);

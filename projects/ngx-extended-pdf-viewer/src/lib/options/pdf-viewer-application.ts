@@ -39,7 +39,8 @@ export interface IPDFViewerApplication {
   toolbar: any;
   viewer: HTMLDivElement;
 
-  cleanup(): void;
+  cleanup(): void; // until pdf.js 2.7
+  _cleanup(): void; // since pdf.js 2.8
   close(): void;
   open(source: string | ArrayBuffer | {range: any} | any, options?: any): Promise<any>;
   unbindEvents(): void;

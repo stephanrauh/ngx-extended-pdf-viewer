@@ -142,7 +142,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.8.449';
+    const workerVersion = '2.8.464';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -24367,7 +24367,7 @@ class PartialEvaluator {
     normalizeWhitespace = false,
     combineTextItems = false,
     sink,
-    seenStyles = Object.create(null)
+    seenStyles = new Set()
   }) {
     resources = resources || _primitives.Dict.empty;
     stateManager = stateManager || new StateManager(new TextState());
@@ -24409,11 +24409,12 @@ class PartialEvaluator {
         return textContentItem;
       }
 
-      var font = textState.font;
+      const font = textState.font,
+            loadedName = font.loadedName;
 
-      if (!(font.loadedName in seenStyles)) {
-        seenStyles[font.loadedName] = true;
-        textContent.styles[font.loadedName] = {
+      if (!seenStyles.has(loadedName)) {
+        seenStyles.add(loadedName);
+        textContent.styles[loadedName] = {
           fontFamily: font.fallbackName,
           ascent: font.ascent,
           descent: font.descent,
@@ -24421,7 +24422,7 @@ class PartialEvaluator {
         };
       }
 
-      textContentItem.fontName = font.loadedName;
+      textContentItem.fontName = loadedName;
       var tsm = [textState.fontSize * textState.textHScale, 0, 0, textState.fontSize, 0, textState.textRise];
 
       if (font.isType3Font && textState.fontSize <= 1 && !(0, _util.isArrayEqual)(textState.fontMatrix, _util.FONT_IDENTITY_MATRIX)) {
@@ -65305,8 +65306,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.8.449';
-const pdfjsBuild = '4f8086a0c';
+const pdfjsVersion = '2.8.464';
+const pdfjsBuild = '3fc243538';
 })();
 
 /******/ 	return __webpack_exports__;

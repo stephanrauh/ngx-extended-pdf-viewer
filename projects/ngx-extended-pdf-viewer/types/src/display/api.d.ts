@@ -799,9 +799,12 @@ export class PDFDocumentProxy {
      * NOTE: Do not, under any circumstances, call this method when rendering is
      * currently ongoing since that may lead to rendering errors.
      *
+     * @param {boolean} [keepLoadedFonts] - Let fonts remain attached to the DOM.
+     *   NOTE: This will increase persistent memory usage, hence don't use this
+     *   option unless absolutely necessary. The default value is `false`.
      * @returns {Promise} A promise that is resolved when clean-up has finished.
      */
-    cleanup(): Promise<any>;
+    cleanup(keepLoadedFonts?: boolean | undefined): Promise<any>;
     /**
      * Destroys the current document instance and terminates the worker.
      */
@@ -992,8 +995,8 @@ export class PDFPageProxy {
      *   {Array} of the annotation objects.
      */
     getAnnotations({ intent }?: GetAnnotationsParameters): Promise<Array<any>>;
-    annotationsPromise: any;
-    annotationsIntent: string | undefined;
+    _annotationsPromise: any;
+    _annotationsIntent: string | undefined;
     /**
      * @returns {Promise<Object>} A promise that is resolved with an
      *   {Object} with JS actions.
