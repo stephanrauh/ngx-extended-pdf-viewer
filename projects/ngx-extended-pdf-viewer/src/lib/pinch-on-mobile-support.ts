@@ -37,7 +37,10 @@ export class PinchOnMobileSupport {
               this.startX = (event.touches[0].pageX + event.touches[1].pageX) / 2;
               this.startY = (event.touches[0].pageY + event.touches[1].pageY) / 2;
               this.initialPinchDistance = Math.hypot(event.touches[1].pageX - event.touches[0].pageX, event.touches[1].pageY - event.touches[0].pageY);
-              event.preventDefault();
+              
+              if (event.cancelable) {
+                event.preventDefault();
+              }
               event.stopPropagation();
             }
           }
@@ -53,9 +56,7 @@ export class PinchOnMobileSupport {
     if (this.initialPinchDistance <= 0 || event.touches.length !== 2) {
       return;
     }
-    if (this.pinchScale !== 1) {
-      event.preventDefault();
-    }
+
     const pinchDistance = Math.hypot(event.touches[1].pageX - event.touches[0].pageX, event.touches[1].pageY - event.touches[0].pageY);
     const container = document.getElementById('viewerContainer') as HTMLDivElement;
     const originX = this.startX + container.scrollLeft;
@@ -79,7 +80,10 @@ export class PinchOnMobileSupport {
     }
     this.viewer.style.transform = `scale(${this.pinchScale})`;
     this.viewer.style.transformOrigin = `${originX}px ${originY}px`;
-    event.preventDefault();
+    
+    if (event.cancelable) {
+      event.preventDefault();
+    }
     event.stopPropagation();
   }
 
@@ -98,7 +102,10 @@ export class PinchOnMobileSupport {
     container.scrollLeft += dx * (this.pinchScale - 1);
     container.scrollTop += dy * (this.pinchScale - 1);
     this.resetPinchZoomParams();
-    event.preventDefault();
+
+    if (event.cancelable) {
+      event.preventDefault();
+    }
     event.stopPropagation();
   }
 
