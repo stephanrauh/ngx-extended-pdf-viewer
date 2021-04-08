@@ -8,10 +8,16 @@ export class PinchOnMobileSupport {
   private initialPinchDistance = 0;
   private pinchScale = 1;
 
+  private boundOnViewerTouchStart: any;
+  private boundOnViewerTouchMove: any;
+  private boundOnViewerTouchEnd: any;
+
   constructor(private _zone: NgZone) {
-    if (this.isMobile()) {
-      this.initializePinchZoom();
-    }
+    this.boundOnViewerTouchStart = this.onViewerTouchStart.bind(this);
+    this.boundOnViewerTouchMove = this.onViewerTouchMove.bind(this);
+    this.boundOnViewerTouchEnd = this.onViewerTouchEnd.bind(this);
+
+    this.initializePinchZoom();
   }
 
   private isMobile() {
@@ -102,19 +108,23 @@ export class PinchOnMobileSupport {
   }
 
   public initializePinchZoom(): void {
+    if (!this.isMobile()) {
+      return;
+    }
     this.viewer = document.getElementById('viewer');
     this._zone.runOutsideAngular(() => {
-      document.addEventListener('touchstart', this.onViewerTouchStart.bind(this));
-      document.addEventListener('touchmove', this.onViewerTouchMove.bind(this), { passive: false });
-      document.addEventListener('touchend', this.onViewerTouchEnd.bind(this));
+      document.addEventListener('touchstart', this.boundOnViewerTouchStart);
+      document.addEventListener('touchmove', this.boundOnViewerTouchMove, { passive: false });
+      document.addEventListener('touchend', this.boundOnViewerTouchEnd);
     });
   }
 
   public destroyPinchZoom(): void {
-    if (this.isMobile()) {
-      document.removeEventListener('touchstart', this.onViewerTouchStart);
-      document.removeEventListener('touchmove', this.onViewerTouchMove);
-      document.removeEventListener('touchend', this.onViewerTouchEnd);
+    if (!this.isMobile()) {
+      return;
     }
+    document.removeEventListener('touchstart', this.boundOnViewerTouchStart);
+    document.removeEventListener('touchmove', this.boundOnViewerTouchMove);
+    document.removeEventListener('touchend', this.boundOnViewerTouchEnd);
   }
 }
