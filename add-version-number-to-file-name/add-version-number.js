@@ -20,10 +20,12 @@ function fixVersionNumber(folder="assets") {
     fs.renameSync(f+'pdf-es5.js', f+`pdf-${pdfjsVersion}-es5.js`);
     fs.renameSync(f+'pdf-es5.min.js', f+`pdf-${pdfjsVersion}-es5.min.js`);
 
+    try {
     fs.renameSync(f+'pdf.sandbox.js', f+`pdf.sandbox-${pdfjsVersion}.js`);
     fs.renameSync(f+'pdf.sandbox.min.js', f+`pdf.sandbox-${pdfjsVersion}.min.js`);
     fs.renameSync(f+'pdf.sandbox-es5.js', f+`pdf.sandbox-${pdfjsVersion}-es5.js`);
     fs.renameSync(f+'pdf.sandbox-es5.min.js', f+`pdf.sandbox-${pdfjsVersion}-es5.min.js`);
+    } catch (e) {}
 
     fs.renameSync(f+'pdf.worker.js', f+`pdf.worker-${pdfjsVersion}.js`);
     fs.renameSync(f+'pdf.worker.min.js', f+`pdf.worker-${pdfjsVersion}.min.js`);

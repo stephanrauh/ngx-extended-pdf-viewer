@@ -29,7 +29,7 @@ function convertLanguage(language) {
 
 const dir = fs.readdirSync('../projects/ngx-extended-pdf-viewer/src/' + folder + '/locale');
 dir.forEach(language => {
-  if (language != 'locale.properties') {
+  if (language !== 'locale.properties' && language !== '.DS_Store') {
     convertLanguage(language);
   }
 });

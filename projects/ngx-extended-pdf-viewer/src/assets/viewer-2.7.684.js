@@ -48,8 +48,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.7.681';
-const pdfjsBuild = '8dfa2124b';
+const pdfjsVersion = '2.7.684';
+const pdfjsBuild = '2962db158';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -1313,6 +1313,7 @@ const PDFViewerApplication = {
     };
 
     loadingTask.onUnsupportedFeature = this.fallback.bind(this);
+    this.loadingBar.show();
     return loadingTask.promise.then(pdfDocument => {
       this.load(pdfDocument);
     }, exception => {
@@ -9716,9 +9717,11 @@ class PDFSidebar {
       onTreeLoaded(evt.outlineCount, this.outlineButton, _ui_utils.SidebarView.OUTLINE);
 
       if (evt.enableCurrentOutlineItemButton) {
-        this.pdfViewer.pagesPromise.then(() => {
-          this._currentOutlineItemButton.disabled = !this.isInitialViewSet;
-        });
+        if (this.pdfViewer.pagesPromise) {
+          this.pdfViewer.pagesPromise.then(() => {
+            this._currentOutlineItemButton.disabled = !this.isInitialViewSet;
+          });
+        }
       }
     });
 
@@ -10767,7 +10770,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.7.681';
+    const viewerVersion = '2.7.684';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);

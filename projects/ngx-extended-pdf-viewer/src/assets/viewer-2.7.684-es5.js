@@ -1373,6 +1373,9 @@ var PDFViewerApplication = {
               };
 
               loadingTask.onUnsupportedFeature = _this7.fallback.bind(_this7);
+
+              _this7.loadingBar.show();
+
               return _context8.abrupt("return", loadingTask.promise.then(function (pdfDocument) {
                 _this7.load(pdfDocument);
               }, function (exception) {
@@ -1401,7 +1404,7 @@ var PDFViewerApplication = {
                 });
               }));
 
-            case 16:
+            case 17:
             case "end":
               return _context8.stop();
           }
@@ -12673,9 +12676,11 @@ var PDFSidebar = /*#__PURE__*/function () {
         onTreeLoaded(evt.outlineCount, _this3.outlineButton, _ui_utils.SidebarView.OUTLINE);
 
         if (evt.enableCurrentOutlineItemButton) {
-          _this3.pdfViewer.pagesPromise.then(function () {
-            _this3._currentOutlineItemButton.disabled = !_this3.isInitialViewSet;
-          });
+          if (_this3.pdfViewer.pagesPromise) {
+            _this3.pdfViewer.pagesPromise.then(function () {
+              _this3._currentOutlineItemButton.disabled = !_this3.isInitialViewSet;
+            });
+          }
         }
       });
 
@@ -13945,7 +13950,7 @@ var BaseViewer = /*#__PURE__*/function () {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    var viewerVersion = '2.8.464';
+    var viewerVersion = '2.8.467';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error("The API version \"".concat(_pdfjsLib.version, "\" does not match the Viewer version \"").concat(viewerVersion, "\"."));
@@ -28651,8 +28656,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-var pdfjsVersion = '2.8.464';
-var pdfjsBuild = '3fc243538';
+var pdfjsVersion = '2.8.467';
+var pdfjsBuild = '165549af0';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
