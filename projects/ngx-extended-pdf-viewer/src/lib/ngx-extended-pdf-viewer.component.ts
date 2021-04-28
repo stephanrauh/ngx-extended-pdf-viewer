@@ -133,7 +133,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   /* regular attributes */
 
-  private _src: string | ArrayBuffer | Uint8Array  | { range: any };
+  private _src: string | ArrayBuffer | Uint8Array  | { range: any } | undefined;
 
   @Output()
   public srcChange = new EventEmitter<string>();
@@ -243,13 +243,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public set base64Src(base64: string) {
-    const binary_string = window.atob(base64);
-    const len = binary_string.length;
-    const bytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-      bytes[i] = binary_string.charCodeAt(i);
+    if (base64) {
+      const binary_string = window.atob(base64);
+      const len = binary_string.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binary_string.charCodeAt(i);
+      }
+      this.src = bytes.buffer;
+    } else {
+      this._src = undefined;
     }
-    this.src = bytes.buffer;
   }
 
   /**
@@ -1317,7 +1321,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       password: this.password,
       verbosity: this.logLevel,
     };
-    if (this._src['range']) {
+    if (this._src && this._src['range']) {
       options.range = this._src['range'];
     }
     if (this.httpHeaders) {
