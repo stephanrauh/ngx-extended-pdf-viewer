@@ -1,0 +1,90 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: "@angular/cli"
+    versions:
+    - "> 10.1.6"
+  - dependency-name: "@angular/cli"
+    versions:
+    - ">= 8.a, < 9"
+  - dependency-name: "@angular/cli"
+    versions:
+    - ">= 9.a, < 10"
+  - dependency-name: "@angular-devkit/build-angular"
+    versions:
+    - "> 0.1001.6"
+  - dependency-name: "@angular-devkit/build-angular"
+    versions:
+    - "> 0.901.7, < 0.902"
+  - dependency-name: "@angular-devkit/build-ng-packagr"
+    versions:
+    - "> 0.13.9, < 1"
+  - dependency-name: "@angular/language-service"
+    versions:
+    - ">= 10.a, < 11"
+  - dependency-name: "@angular/language-service"
+    versions:
+    - ">= 11.a, < 12"
+  - dependency-name: "@angular/language-service"
+    versions:
+    - ">= 8.a, < 9"
+  - dependency-name: "@angular/language-service"
+    versions:
+    - ">= 9.a, < 10"
+  - dependency-name: core-js
+    versions:
+    - ">= 3.a, < 4"
+  - dependency-name: tsickle
+    versions:
+    - "> 0.38.0"
+  - dependency-name: tsickle
+    versions:
+    - "> 0.38.0, < 0.39"
+  - dependency-name: caniuse-lite
+    versions:
+    - 1.0.30001183
+    - 1.0.30001185
+    - 1.0.30001190
+    - 1.0.30001191
+    - 1.0.30001192
+    - 1.0.30001194
+    - 1.0.30001196
+    - 1.0.30001197
+    - 1.0.30001198
+    - 1.0.30001199
+    - 1.0.30001200
+    - 1.0.30001202
+    - 1.0.30001203
+    - 1.0.30001205
+    - 1.0.30001207
+    - 1.0.30001214
+    - 1.0.30001216
+    - 1.0.30001218
+    - 1.0.30001219
+  - dependency-name: "@types/node"
+    versions:
+    - 14.14.24
+    - 14.14.25
+    - 14.14.26
+    - 14.14.31
+    - 14.14.32
+    - 14.14.33
+    - 14.14.34
+    - 14.14.35
+    - 14.14.41
+    - 15.0.0
+    - 15.0.1
+  - dependency-name: npm-registry-fetch
+    versions:
+    - 10.1.0
+  - dependency-name: rxjs
+    versions:
+    - 6.6.6
+  - dependency-name: zone.js
+    versions:
+    - 0.11.4
