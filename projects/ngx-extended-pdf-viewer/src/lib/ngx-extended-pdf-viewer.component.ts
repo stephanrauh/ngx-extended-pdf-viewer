@@ -612,12 +612,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   private ngxBrowserSupportsNullSafeChaining(): boolean {
-    try {
-      Function('null?.size()')();
-      return true;
-    } catch (notSupportedException) {
-      return false;
-    }
+    return !!Promise['allSettled'];
   }
 
   private loadViewer(): void {

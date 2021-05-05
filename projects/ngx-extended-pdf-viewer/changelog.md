@@ -269,3 +269,4 @@
 - 9.0.0-alpha.2 #681 make sure there's always an `outlineOptionsContainer` even if the custom sidebar doesn't need it
 - 9.0.0-alpha.3 #712 #714 fixed two annoying bug that sometimes caused crashes when using pinch gestures on mobile devices; updated the bleeding edge to the final version 2.8 of pdf.js; #645 make the cleanup() method more resilient - if you can't clean up the page proxy, clean it up after finishing the render task; don't report errors if the PDF viewer is destroyed while it's still rendering the sidebar; #707 show the progress bar when loading 
 - 9.0.0-alpha.4 #732 allow `[base64Src]` to be undefined (so it can be filled asynchronously with the result of a REST call)
+- 9.0.0-alpha.5 #740 support for CSP

@@ -7,12 +7,10 @@ import { FormsModule } from '@angular/forms';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
 import { NgModule } from '@angular/core';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
-import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 import { PdfBookmarkComponent } from './toolbar/pdf-bookmark/pdf-bookmark.component';
 import { PdfContextMenuComponent } from './toolbar/pdf-context-menu/pdf-context-menu.component';
 import { PdfDocumentPropertiesOverlayComponent } from './document-properties/pdf-document-properties-overlay/pdf-document-properties-overlay.component';
 import { PdfDownloadComponent } from './toolbar/pdf-download/pdf-download.component';
-import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
 import { PdfFindbarComponent } from './toolbar/pdf-findbar/pdf-findbar.component';
 import { PdfFindbarMessageContainerComponent } from './toolbar/pdf-findbar/pdf-findbar-message-container/pdf-findbar-message-container.component';
 import { PdfFindbarOptionsOneContainerComponent } from './toolbar/pdf-findbar/pdf-findbar-options-one-container/pdf-findbar-options-one-container.component';
@@ -20,7 +18,6 @@ import { PdfFindbarOptionsThreeContainerComponent } from './toolbar/pdf-findbar/
 import { PdfFindbarOptionsTwoContainerComponent } from './toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-findbar-options-two-container.component';
 import { PdfFindButtonComponent } from './toolbar/pdf-find-button/pdf-find-button.component';
 import { PdfFindEntireWordComponent } from './toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-find-entire-word/pdf-find-entire-word.component';
-import { PdfFindFuzzilyComponent } from './toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-find-fuzzily/pdf-find-fuzzily.component';
 import { PdfFindHighlightAllComponent } from './toolbar/pdf-findbar/pdf-findbar-options-one-container/pdf-find-highlight-all/pdf-find-highlight-all.component';
 import { PdfFindIgnoreAccentsComponent } from './toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-find-ignore-accents/pdf-find-ignore-accents.component';
 import { PdfFindInputAreaComponent } from './toolbar/pdf-findbar/pdf-find-input-area/pdf-find-input-area.component';
@@ -50,14 +47,8 @@ import { PdfZoomInComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-in/pdf-z
 import { PdfZoomOutComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-out/pdf-zoom-out.component';
 import { PdfZoomToolbarComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-toolbar.component';
 import { PdfSelectToolComponent } from './toolbar/pdf-select-tool/pdf-select-tool.component';
-import { DynamicCssComponent } from './dynamic-css/dynamic-css.component';
-import { PDFNotificationService } from './pdf-notification-service';
 import { PdfSidebarContentComponent } from './sidebar/pdf-sidebar/pdf-sidebar-content/pdf-sidebar-content.component';
 import { PdfSidebarToolbarComponent } from './sidebar/pdf-sidebar/pdf-sidebar-toolbar/pdf-sidebar-toolbar.component';
-import { PdfLightThemeComponent } from './theme/pdf-light-theme/pdf-light-theme.component';
-import { PdfOriginalComponent } from './theme/pdf-original-theme/pdf-original.component';
-import { PdfDarkThemeComponent } from './theme/pdf-dark-theme/pdf-dark-theme.component';
-import { TranslatePipe } from './translate.pipe';
 if (!Promise['allSettled']) {
   if (!!window['Zone'] && !window['__zone_symbol__Promise.allSettled']) {
     console.error(
