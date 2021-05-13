@@ -302,7 +302,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   /** Allows the user to define the name of the file after clicking "download" */
   @Input()
-  public filenameForDownload = 'document.pdf';
+  public filenameForDownload: string | undefined = undefined;
 
   /** Allows the user to disable the keyboard bindings completely */
   @Input()
@@ -851,7 +851,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
         const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
         PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
-        PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
+        if (this.filenameForDownload) {
+          PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
+        }
         const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
 
         PDFViewerApplicationOptions.set('enableDragAndDrop', this.enableDragAndDrop);
