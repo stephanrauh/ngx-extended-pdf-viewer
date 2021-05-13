@@ -18,6 +18,8 @@
 There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook.
 
 ## Breaking changes in version 9.0
+Version 9.0 drops compatibility to Angular 8 and below. The minimum required version is 9.0. Maybe it also works with Angular 8, but there's no guarantee.
+
 Version 9.0 doesn't introduce many features, but it may break your application, especially if you've added a work-around:
 - I went over the print CSS rules. Now you should be able to print without additional CSS rules. In particular, *remove* this rule because it breaks printing:
 ```css
