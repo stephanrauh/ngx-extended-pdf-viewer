@@ -27,7 +27,7 @@ cp -R ../mypdf.js/build/minified-legacy/web/viewer-* ./projects/ngx-extended-pdf
 
 if [ $BRANCH == "bleeding-edge" ]
 then
-  "../mypdf.js/node_modules/.bin/tsc" --target ES2020 --allowJS --declaration --outDir projects/ngx-extended-pdf-viewer/types/ --strict --esModuleInterop --forceConsistentCasingInFileNames --emitDeclarationOnly ../mypdf.js/src/pdf.worker.js ../mypdf.js/src/pdf.js ../mypdf.js/web/pdf_viewer.js
+  "./node_modules/.bin/tsc" --target ES2020 --allowJS --declaration --outDir projects/ngx-extended-pdf-viewer/types/ --strict --esModuleInterop --forceConsistentCasingInFileNames --emitDeclarationOnly --moduleResolution node ../mypdf.js/src/pdf.js ../mypdf.js/web/pdf_viewer.js
 fi
 
 cd addBaseLanguages
