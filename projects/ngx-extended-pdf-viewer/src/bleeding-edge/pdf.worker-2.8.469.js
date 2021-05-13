@@ -33,27 +33,7 @@
 return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ([
-/* 0 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-Object.defineProperty(exports, "WorkerMessageHandler", ({
-  enumerable: true,
-  get: function () {
-    return _worker.WorkerMessageHandler;
-  }
-}));
-
-var _worker = __w_pdfjs_require__(1);
-
-const pdfjsVersion = '2.8.467';
-const pdfjsBuild = '165549af0';
-
-/***/ }),
+/* 0 */,
 /* 1 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
@@ -162,7 +142,7 @@ class WorkerMessageHandler {
     var WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.8.467';
+    const workerVersion = '2.8.469';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -1646,7 +1626,7 @@ const isNodeJS = false;
 
 /***/ }),
 /* 4 */
-/***/ ((module, exports, __w_pdfjs_require__) => {
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
 
@@ -2038,24 +2018,6 @@ function clearPrimitiveCaches() {
 
   Ref._clearCache();
 }
-
-module.exports = {
-  clearPrimitiveCaches,
-  Cmd,
-  Dict,
-  EOF,
-  isCmd,
-  isDict,
-  isEOF,
-  isName,
-  isRef,
-  isRefsEqual,
-  isStream,
-  Name,
-  Ref,
-  RefSet,
-  RefSetCache
-};
 
 /***/ }),
 /* 5 */
@@ -32785,8 +32747,8 @@ function getEncoding(encodingName) {
 
 __w_pdfjs_require__.r(__webpack_exports__);
 /* harmony export */ __w_pdfjs_require__.d(__webpack_exports__, {
-/* harmony export */   "getDingbatsGlyphsUnicode": () => /* binding */ getDingbatsGlyphsUnicode,
-/* harmony export */   "getGlyphsUnicode": () => /* binding */ getGlyphsUnicode
+/* harmony export */   "getDingbatsGlyphsUnicode": () => (/* binding */ getDingbatsGlyphsUnicode),
+/* harmony export */   "getGlyphsUnicode": () => (/* binding */ getGlyphsUnicode)
 /* harmony export */ });
 /* harmony import */ var _core_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __w_pdfjs_require__(7);
 
@@ -42599,11 +42561,11 @@ exports.getSupplementalGlyphMapForCalibri = getSupplementalGlyphMapForCalibri;
 
 __w_pdfjs_require__.r(__webpack_exports__);
 /* harmony export */ __w_pdfjs_require__.d(__webpack_exports__, {
-/* harmony export */   "getNormalizedUnicodes": () => /* binding */ getNormalizedUnicodes,
-/* harmony export */   "getUnicodeForGlyph": () => /* binding */ getUnicodeForGlyph,
-/* harmony export */   "getUnicodeRangeFor": () => /* binding */ getUnicodeRangeFor,
-/* harmony export */   "mapSpecialUnicodeValues": () => /* binding */ mapSpecialUnicodeValues,
-/* harmony export */   "reverseIfRtl": () => /* binding */ reverseIfRtl
+/* harmony export */   "getNormalizedUnicodes": () => (/* binding */ getNormalizedUnicodes),
+/* harmony export */   "getUnicodeForGlyph": () => (/* binding */ getUnicodeForGlyph),
+/* harmony export */   "getUnicodeRangeFor": () => (/* binding */ getUnicodeRangeFor),
+/* harmony export */   "mapSpecialUnicodeValues": () => (/* binding */ mapSpecialUnicodeValues),
+/* harmony export */   "reverseIfRtl": () => (/* binding */ reverseIfRtl)
 /* harmony export */ });
 /* harmony import */ var _core_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __w_pdfjs_require__(7);
 
@@ -65278,8 +65240,9 @@ class PDFWorkerStreamRangeReader {
 /******/ 	// The require function
 /******/ 	function __w_pdfjs_require__(moduleId) {
 /******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
@@ -65310,7 +65273,7 @@ class PDFWorkerStreamRangeReader {
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
-/******/ 		__w_pdfjs_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
+/******/ 		__w_pdfjs_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
@@ -65325,10 +65288,29 @@ class PDFWorkerStreamRangeReader {
 /******/ 	})();
 /******/ 	
 /************************************************************************/
-/******/ 	// module exports must be returned from runtime so entry inlining is disabled
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	return __w_pdfjs_require__(0);
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+var exports = __webpack_exports__;
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+Object.defineProperty(exports, "WorkerMessageHandler", ({
+  enumerable: true,
+  get: function () {
+    return _worker.WorkerMessageHandler;
+  }
+}));
+
+var _worker = __w_pdfjs_require__(1);
+
+const pdfjsVersion = '2.8.469';
+const pdfjsBuild = '94297f081';
+})();
+
+/******/ 	return __webpack_exports__;
 /******/ })()
 ;
 });
