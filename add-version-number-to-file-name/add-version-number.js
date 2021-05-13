@@ -3,7 +3,7 @@ const originalOptions = fs.readFileSync('../projects/ngx-extended-pdf-viewer/src
 let options = originalOptions;
 
 function fixVersionNumber(folder="assets") {
-  const f = '../projects/ngx-extended-pdf-viewer/src/' + folder + "/";
+  const f = '../projects/ngx-extended-pdf-viewer/' + folder + "/";
   if (fs.existsSync(f+'pdf.js')) {
     const pdfjs = fs.readFileSync(f+'pdf.js').toString();
     let pdfjsVersion = pdfjs.match(/pdfjsVersion = \'.+\'/g)[0].match(/\'.+\'/g)[0];

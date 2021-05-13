@@ -1,6 +1,6 @@
 const folder = process.argv[2];
 const fs = require('fs');
-const file = fs.readFileSync('../projects/ngx-extended-pdf-viewer/src/' + folder + '/locale/locale.properties');
+const file = fs.readFileSync('../projects/ngx-extended-pdf-viewer/' + folder + '/locale/locale.properties');
 const content = file.toString().split('\n');
 
 const languages = {};
@@ -51,4 +51,4 @@ for (let i = 0; i < result.length; i++) {
   result2.push(key);
 }
 
-fs.writeFileSync('../projects/ngx-extended-pdf-viewer/src/' + folder + '/locale/locale.properties', result2.join('\n'));
+fs.writeFileSync('../projects/ngx-extended-pdf-viewer/' + folder + '/locale/locale.properties', result2.join('\n'));

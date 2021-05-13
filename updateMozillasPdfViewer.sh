@@ -15,19 +15,19 @@ cd ../ngx-extended-pdf-viewer
 # cd inlineImageFiles
 # node index.js $FOLDER
 # cd ..
-rm -R ./projects/ngx-extended-pdf-viewer/src/$FOLDER/*.js
-cp -R ../mypdf.js/build/minified/web/locale/* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/locale/
-# cp -R ../mypdf.js/build/minified/web/images/*.svg ./projects/ngx-extended-pdf-viewer/src/$FOLDER/images/
-cp -R ../mypdf.js/build/minified/web/cmaps/* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/cmaps/
-cp -R ../mypdf.js/build/minified/build/pdf.* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/
-cp -R ../mypdf.js/build/minified/web/viewer.js* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/
-cp -R ../mypdf.js/build/minified/web/viewer.min* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/
-cp -R ../mypdf.js/build/minified-legacy/build/pdf* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/
-cp -R ../mypdf.js/build/minified-legacy/web/viewer-* ./projects/ngx-extended-pdf-viewer/src/$FOLDER/
+rm -R ./projects/ngx-extended-pdf-viewer/$FOLDER/*.js
+cp -R ../mypdf.js/build/minified/web/locale/* ./projects/ngx-extended-pdf-viewer/$FOLDER/locale/
+# cp -R ../mypdf.js/build/minified/web/images/*.svg ./projects/ngx-extended-pdf-viewer/$FOLDER/images/
+cp -R ../mypdf.js/build/minified/web/cmaps/* ./projects/ngx-extended-pdf-viewer/$FOLDER/cmaps/
+cp -R ../mypdf.js/build/minified/build/pdf.* ./projects/ngx-extended-pdf-viewer/$FOLDER/
+cp -R ../mypdf.js/build/minified/web/viewer.js* ./projects/ngx-extended-pdf-viewer/$FOLDER/
+cp -R ../mypdf.js/build/minified/web/viewer.min* ./projects/ngx-extended-pdf-viewer/$FOLDER/
+cp -R ../mypdf.js/build/minified-legacy/build/pdf* ./projects/ngx-extended-pdf-viewer/$FOLDER/
+cp -R ../mypdf.js/build/minified-legacy/web/viewer-* ./projects/ngx-extended-pdf-viewer/$FOLDER/
 
 if [ $BRANCH == "bleeding-edge" ]
 then
-  "./node_modules/.bin/tsc" --target ES2020 --allowJS --declaration --outDir projects/ngx-extended-pdf-viewer/types/ --strict --esModuleInterop --forceConsistentCasingInFileNames --emitDeclarationOnly --moduleResolution node ../mypdf.js/src/pdf.js ../mypdf.js/web/pdf_viewer.js
+  "./node_modules/.bin/tsc" --target ES2020 --allowJS --declaration --outDir projects/ngx-extended-pdf-viewer/types/ --strict --esModuleInterop --forceConsistentCasingInFileNames --emitDeclarationOnly --moduleResolution node ../mypdf.js/pdf.js ../mypdf.js/web/pdf_viewer.js
 fi
 
 cd addBaseLanguages

@@ -1,6 +1,6 @@
 const folder = process.argv[2];
 const fs = require('fs');
-const file = fs.readFileSync('../projects/ngx-extended-pdf-viewer/src/' + folder + '/locale/locale.properties');
+const file = fs.readFileSync('../projects/ngx-extended-pdf-viewer/' + folder + '/locale/locale.properties');
 const content = file.toString().split('\n');
 
 const languages = {};
@@ -15,11 +15,11 @@ for (let i = 0; i < content.length; i++) {
 
 for (let lang in languages) {
   const shortcode = lang.substring(0, 2);
-  let additionalFilename = '../projects/ngx-extended-pdf-viewer/src/assets/additional-locale/' + shortcode + '.properties';
+  let additionalFilename = '../projects/ngx-extended-pdf-viewer/assets/additional-locale/' + shortcode + '.properties';
   if (!fs.existsSync(additionalFilename)) {
-    additionalFilename = '../projects/ngx-extended-pdf-viewer/src/assets/additional-locale/en.properties';
+    additionalFilename = '../projects/ngx-extended-pdf-viewer/assets/additional-locale/en.properties';
   }
-  const originalFilename = '../projects/ngx-extended-pdf-viewer/src/' + folder + '/locale/' + lang + '/viewer.properties';
+  const originalFilename = '../projects/ngx-extended-pdf-viewer/' + folder + '/locale/' + lang + '/viewer.properties';
   if (fs.existsSync(additionalFilename) && fs.existsSync(originalFilename)) {
     const original = fs.readFileSync(originalFilename).toString().replace(" = ", "=");
     const additional = fs.readFileSync(additionalFilename).toString().replace(" = ", "=");
@@ -32,7 +32,7 @@ for (let lang in languages) {
     }
   }
   if (folder !== 'bleeding-edge') {
-    const filename28 = '../projects/ngx-extended-pdf-viewer/src/bleeding-edge/locale/' + lang + '/viewer.properties'
+    const filename28 = '../projects/ngx-extended-pdf-viewer/bleeding-edge/locale/' + lang + '/viewer.properties'
     if (filename28 != originalFilename && fs.existsSync(filename28) && fs.existsSync(originalFilename)) {
       const originalLines = fs.readFileSync(originalFilename).toString().replace(" = ", "=");
       const additionalLines = fs.readFileSync(filename28).toString().replace(" = ", "=").toString().split("\n");
@@ -56,7 +56,7 @@ for (let lang in languages) {
     }
   }
 
-  const filename28English = '../projects/ngx-extended-pdf-viewer/src/bleeding-edge/locale/en-US/viewer.properties';
+  const filename28English = '../projects/ngx-extended-pdf-viewer/bleeding-edge/locale/en-US/viewer.properties';
   if (fs.existsSync(originalFilename)) {
     const originalLines = fs.readFileSync(originalFilename).toString().replace(" = ", "=");
     const additionalLines = fs.readFileSync(filename28English).toString().replace(" = ", "=").toString().split("\n");

@@ -8,16 +8,12 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "unix-package": "ng b ngx-extended-pdf-viewer && rm -r dist && ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json && npm run copy",
+    "unix-package": "ng b ngx-extended-pdf-viewer && rm -r dist && ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json",
     "showcase": "npm run unix-package && rm -r ../extended-pdf-viewer-showcase/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../extended-pdf-viewer-showcase/node_modules/ngx-extended-pdf-viewer",
     "issue": "npm run unix-package && rm -r ../ngx-extended-pdf-viewer-issues/issue284/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../ngx-extended-pdf-viewer-issues/issue284/node_modules/ngx-extended-pdf-viewer",
-    "win-package": "ng b ngx-extended-pdf-viewer && rmdir dist /S && ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json && xcopy /S/E/-Y projects\\ngx-extended-pdf-viewer\\src\\assets dist\\ngx-extended-pdf-viewer\\assets\\",
+    "win-package": "ng b ngx-extended-pdf-viewer && rmdir dist /S && ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json",
     "release": "npm run unix-package && cd dist/ngx-extended-pdf-viewer && npm publish",
-    "cypress": "./node_modules/.bin/cypress open",
-    "copy": "npm run copy-assets && npm run copy-bleeding-edge && npm run copy-changelog",
-    "copy-assets": "cp -R projects/ngx-extended-pdf-viewer/src/assets dist/ngx-extended-pdf-viewer/assets",
-    "copy-bleeding-edge": "cp -R projects/ngx-extended-pdf-viewer/src/bleeding-edge dist/ngx-extended-pdf-viewer/bleeding-edge",
-    "copy-changelog": "cp projects/ngx-extended-pdf-viewer/changelog.md dist/ngx-extended-pdf-viewer/changelog.md"
+    "cypress": "./node_modules/.bin/cypress open"
   },
   "private": true,
   "dependencies": {
@@ -47,6 +43,6 @@
     "typescript": "~4.1.5"
   },
   "optionalDependencies": {
-    "fsevents": "^2.3.1"
+    "fsevents": "^2.3.2"
   }
 }

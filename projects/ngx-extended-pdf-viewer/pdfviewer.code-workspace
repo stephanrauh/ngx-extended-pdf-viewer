@@ -10,13 +10,13 @@
       "path": "../.."
     },
     {
-      "path": "../../../ng2-pdf-viewer"
-    },
-    {
       "path": "../../../pdfAnnotate"
     },
     {
       "path": "../../../NAS-Website-v2"
+    },
+    {
+      "path": "../../../ngx-extended-pdf-viewer-issues/issue284"
     }
   ],
   "settings": {}
