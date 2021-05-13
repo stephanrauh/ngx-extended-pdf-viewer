@@ -74,7 +74,7 @@ export class XFAAttribute {
 export class XFAObject {
     static [_cloneAttribute](obj: any): any;
     constructor(nsId: any, name: any, hasChildren?: boolean);
-    use: string | undefined;
+    use: string;
     [$onChild](child: any): boolean;
     [$onChildCheck](child: any): boolean;
     [$setId](ids: any): void;
@@ -97,11 +97,11 @@ export class XFAObject {
     [$getChildren](name?: any): any;
     [$getChildren](name?: any): any;
     [$dump](): any;
-    [$toStyle](): null;
-    [$toHTML](): null;
+    [$toStyle](): any;
+    [$toHTML](): any;
     [$childrenToHTML]({ filter, include }: {
         filter?: any;
-        include?: boolean | undefined;
+        include?: boolean;
     }): any[];
     [$setSetAttributes](attributes: any): void;
     /**
@@ -125,7 +125,7 @@ export class XFAObject {
     [_parent]: any;
     [_children]: any[];
     [$uid]: string;
-    [_setAttributes]: Set<string> | undefined;
+    [_setAttributes]: Set<string>;
     [$content]: any;
 }
 export class XFAObjectArray {
@@ -143,8 +143,8 @@ export class XmlObject extends XFAObject {
     constructor(nsId: any, name: any, attributes?: {});
     [$getAttributeIt](name: any, skipConsumed: any): Generator<any, void, any>;
     [$getRealChildrenByNameIt](name: any, allTransparent: any, skipConsumed: any): Generator<any, void, any>;
-    [$isDataValue](): boolean | null;
-    [_dataValue]: boolean | null;
+    [$isDataValue](): boolean;
+    [_dataValue]: boolean;
     [_attributes]: Map<any, any>;
     [$consumed]: boolean;
 }

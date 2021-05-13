@@ -25,7 +25,7 @@ export type TextLayerBuilderOptions = {
 /**
  * @implements IPDFTextLayerFactory
  */
-export class DefaultTextLayerFactory implements IPDFTextLayerFactory {
+export class DefaultTextLayerFactory {
     /**
      * @param {HTMLDivElement} textLayerDiv
      * @param {number} pageIndex

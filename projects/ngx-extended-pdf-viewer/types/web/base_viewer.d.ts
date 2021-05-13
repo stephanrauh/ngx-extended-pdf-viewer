@@ -91,32 +91,11 @@ export type PDFViewerOptions = {
      */
     enableScripting?: boolean | undefined;
 };
-export type ScrollPageIntoViewParameters = {
-    /**
-     * - The page number.
-     */
-    pageNumber: number;
-    /**
-     * - The original PDF destination array, in the
-     * format: <page-ref> </XYZ|/FitXXX> <args..>
-     */
-    destArray?: any[] | undefined;
-    /**
-     * - Allow negative page offsets.
-     * The default value is `false`.
-     */
-    allowNegativeOffset?: boolean | undefined;
-    /**
-     * - Ignore the zoom argument in
-     * the destination array. The default value is `false`.
-     */
-    ignoreDestinationZoom?: boolean | undefined;
-};
 /**
  * Simple viewer control to display PDF content/pages.
  * @implements {IRenderableView}
  */
-export class BaseViewer implements IRenderableView {
+export class BaseViewer {
     /**
      * @param {PDFViewerOptions} options
      */
@@ -289,7 +268,27 @@ export class BaseViewer implements IRenderableView {
      * Scrolls page into view.
      * @param {ScrollPageIntoViewParameters} params
      */
-    scrollPageIntoView({ pageNumber, destArray, allowNegativeOffset, ignoreDestinationZoom, }: ScrollPageIntoViewParameters): void;
+    scrollPageIntoView({ pageNumber, destArray, allowNegativeOffset, ignoreDestinationZoom, }: {
+        /**
+         * - The page number.
+         */
+        pageNumber: number;
+        /**
+         * - The original PDF destination array, in the
+         * format: <page-ref> </XYZ|/FitXXX> <args..>
+         */
+        destArray?: any[] | undefined;
+        /**
+         * - Allow negative page offsets.
+         * The default value is `false`.
+         */
+        allowNegativeOffset?: boolean | undefined;
+        /**
+         * - Ignore the zoom argument in
+         * the destination array. The default value is `false`.
+         */
+        ignoreDestinationZoom?: boolean | undefined;
+    }): void;
     _updateLocation(firstPage: any): void;
     _updateHelper(visiblePages: any): void;
     update(): void;

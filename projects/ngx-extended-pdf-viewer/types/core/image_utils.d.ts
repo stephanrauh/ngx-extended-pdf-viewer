@@ -34,8 +34,8 @@ export class LocalTilingPatternCache extends BaseLocalCache {
 import { RefSetCache } from "./primitives.js";
 declare class BaseLocalCache {
     constructor(options: any);
-    _nameRefMap: Map<any, any> | undefined;
-    _imageMap: Map<any, any> | undefined;
+    _nameRefMap: Map<any, any>;
+    _imageMap: Map<any, any>;
     _imageCache: RefSetCache;
     getByName(name: any): any;
     getByRef(ref: any): any;

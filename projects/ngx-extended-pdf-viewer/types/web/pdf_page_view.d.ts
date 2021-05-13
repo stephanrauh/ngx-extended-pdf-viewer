@@ -82,7 +82,7 @@ export type PDFPageViewOptions = {
 /**
  * @implements {IRenderableView}
  */
-export class PDFPageView implements IRenderableView {
+export class PDFPageView {
     /**
      * @param {PDFPageViewOptions} options
      */

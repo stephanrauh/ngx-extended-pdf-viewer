@@ -3,7 +3,7 @@ export class PDFWorkerStream {
     constructor(msgHandler: any);
     _msgHandler: any;
     _contentLength: any;
-    _fullRequestReader: PDFWorkerStreamReader | null;
+    _fullRequestReader: PDFWorkerStreamReader;
     _rangeRequestReaders: any[];
     getFullReader(): PDFWorkerStreamReader;
     getRangeReader(begin: any, end: any): PDFWorkerStreamRangeReader;

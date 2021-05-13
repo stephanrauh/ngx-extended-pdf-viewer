@@ -102,6 +102,10 @@ export class DOMCanvasFactory extends BaseCanvasFactory {
     _document: Document;
 }
 export class DOMCMapReaderFactory extends BaseCMapReaderFactory {
+    constructor({ baseUrl, isCompressed }: {
+        baseUrl?: any;
+        isCompressed?: boolean | undefined;
+    });
 }
 export class DOMSVGFactory {
     create(width: any, height: any): SVGElement;

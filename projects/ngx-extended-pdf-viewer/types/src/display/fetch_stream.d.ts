@@ -1,5 +1,5 @@
 /** @implements {IPDFStream} */
-export class PDFFetchStream implements IPDFStream {
+export class PDFFetchStream {
     constructor(source: any);
     source: any;
     isHttp: boolean;
@@ -12,7 +12,7 @@ export class PDFFetchStream implements IPDFStream {
     cancelAllRequests(reason: any): void;
 }
 /** @implements {IPDFStreamReader} */
-declare class PDFFetchStreamReader implements IPDFStreamReader {
+declare class PDFFetchStreamReader {
     constructor(stream: any);
     _stream: any;
     _reader: ReadableStreamDefaultReader<Uint8Array> | null;
@@ -43,7 +43,7 @@ declare class PDFFetchStreamReader implements IPDFStreamReader {
     cancel(reason: any): void;
 }
 /** @implements {IPDFStreamRangeReader} */
-declare class PDFFetchStreamRangeReader implements IPDFStreamRangeReader {
+declare class PDFFetchStreamRangeReader {
     constructor(stream: any, begin: any, end: any);
     _stream: any;
     _reader: ReadableStreamDefaultReader<Uint8Array> | null;

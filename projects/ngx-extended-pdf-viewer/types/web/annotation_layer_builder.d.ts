@@ -64,7 +64,7 @@ export class AnnotationLayerBuilder {
 /**
  * @implements IPDFAnnotationLayerFactory
  */
-export class DefaultAnnotationLayerFactory implements IPDFAnnotationLayerFactory {
+export class DefaultAnnotationLayerFactory {
     /**
      * @param {HTMLDivElement} pageDiv
      * @param {PDFPage} pdfPage
