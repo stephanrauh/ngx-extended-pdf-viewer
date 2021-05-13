@@ -116,7 +116,7 @@
       "prefix": "",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/ngx-extended-pdf-viewer/tsconfig.lib.json",
             "project": "projects/ngx-extended-pdf-viewer/ng-package.json"

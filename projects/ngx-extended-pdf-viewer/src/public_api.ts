@@ -37,6 +37,7 @@ export * from './lib/toolbar/pdf-download/pdf-download.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar.component';
 export * from './lib/toolbar/pdf-hand-tool/pdf-hand-tool.component';
 export * from './lib/toolbar/pdf-open-file/pdf-open-file.component';
+export * from './lib/toolbar/pdf-paging-area/pdf-page-number/pdf-page-number.component';
 export * from './lib/toolbar/pdf-presentation-mode/pdf-presentation-mode.component';
 export * from './lib/toolbar/pdf-print/pdf-print.component';
 export * from './lib/toolbar/pdf-select-tool/pdf-select-tool.component';
