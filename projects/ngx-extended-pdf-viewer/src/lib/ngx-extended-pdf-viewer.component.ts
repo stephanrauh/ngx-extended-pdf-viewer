@@ -61,7 +61,7 @@ interface ElementAndPosition {
 }
 
 export interface FormDataType {
-  [fieldName: string]: string | string[];
+  [fieldName: string]: string  | number | boolean | string[];
 }
 
 @Component({
@@ -88,28 +88,28 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   /* UI templates */
   @Input()
-  public customFindbarInputArea: TemplateRef<any>;
+  public customFindbarInputArea: TemplateRef<any> | undefined;
 
   @Input()
-  public customToolbar: TemplateRef<any>;
+  public customToolbar: TemplateRef<any> | undefined;
 
   @Input()
-  public customFindbar: TemplateRef<any>;
+  public customFindbar: TemplateRef<any> | undefined;
 
   @Input()
-  public customFindbarButtons: TemplateRef<any> | undefined = undefined;
+  public customFindbarButtons: TemplateRef<any> | undefined;
 
   @Input()
-  public customSecondaryToolbar: TemplateRef<any>;
+  public customSecondaryToolbar: TemplateRef<any> | undefined;
 
   @Input()
-  public customSidebar: TemplateRef<any>;
+  public customSidebar: TemplateRef<any> | undefined;
 
   @Input()
-  public customThumbnail: TemplateRef<any>;
+  public customThumbnail: TemplateRef<any> | undefined;
 
   @Input()
-  public customFreeFloatingBar: TemplateRef<any>;
+  public customFreeFloatingBar: TemplateRef<any> | undefined;
 
   @Input()
   public enableDragAndDrop = true;
@@ -121,7 +121,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public formDataChange = new EventEmitter<FormDataType>();
 
   @Input()
-  public pageViewMode: 'single' | 'book' | 'multiple' | 'infinite-scroll' = 'multiple';
+  public pageViewMode: 'single' | 'book' | 'multiple' | 'infinite-scroll' | string = 'multiple';
 
   @Output()
   public progress = new EventEmitter<ProgressBarEvent>();
@@ -247,7 +247,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   @Input()
-  public set base64Src(base64: string) {
+  public set base64Src(base64: string | null | undefined) {
     if (base64) {
       const binary_string = window.atob(base64);
       const len = binary_string.length;
@@ -397,7 +397,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public showBookmarkButton = true;
 
   @Input()
-  public theme: 'dark' | 'light' | 'custom' = 'light';
+  public theme: 'dark' | 'light' | 'custom' | string = 'light';
 
   @Input()
   public showToolbar = true;
@@ -508,7 +508,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   /** This attribute allows you to increase the size of the UI elements so you can use them on small mobile devices.
    * This attribute is a string with a percent character at the end (e.g. "150%").
    */
-  @Input() _mobileFriendlyZoom = '100%';
+  @Input() _mobileFriendlyZoom: string = '100%';
 
   public mobileFriendlyZoomScale = 1;
 
@@ -1955,7 +1955,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     } else return field.value;
   }
 
-  private setSelectValue(field: HTMLSelectElement, value: string | string[]) {
+  private setSelectValue(field: HTMLSelectElement, value: string  | number | boolean | string[]) {
     if (field.multiple && Array.isArray(value)) {
       let values: string[] = value;
       let options = field.options;

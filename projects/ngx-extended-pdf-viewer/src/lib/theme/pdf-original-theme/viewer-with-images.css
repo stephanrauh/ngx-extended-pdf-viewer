@@ -1633,13 +1633,13 @@ html[dir="rtl"] #layersView .treesItem > a > label {
   color: rgba(255, 255, 255, 0.5);
 }
 .treeItemToggler::before {
-  content: url(assets/images/treeitem-expanded.svg);
+  content: url(../../../../assets/images/treeitem-expanded.svg);
   display: inline-block;
   position: absolute;
   max-width: 16px;
 }
 .treeItemToggler.treeItemsHidden::before {
-  content: url(assets/images/treeitem-collapsed.svg);
+  content: url(../../../../assets/images/treeitem-collapsed.svg);
   max-width: 16px;
 }
 html[dir="rtl"] .treeItemToggler.treeItemsHidden::before {
