@@ -61,7 +61,7 @@ interface ElementAndPosition {
 }
 
 export interface FormDataType {
-  [fieldName: string]: string  | number | boolean | string[];
+  [fieldName: string]: string | number | boolean | string[];
 }
 
 @Component({
@@ -649,6 +649,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       link.type = 'application/l10n';
       const widget: HTMLElement = this.elementRef.nativeElement;
       widget.appendChild(link);
+      (window as any).getFormValue = (key: string) => this.getFormValue(key);
+      (window as any).setFormValue = (key: string, value: string) => this.setFormValue(key, value);
 
       this.onResize();
       this.loadPdfJs();
@@ -1127,8 +1129,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
         this.ngZone.run(() => {
           this.pageRendered.emit(x);
-          this.fillFormFields(this.formData);
-          this.addFormFieldListeners(this.formData);
           this.removeScrollbarInInititeScrollMode();
         });
       });
@@ -1356,6 +1356,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (typeof window === 'undefined') {
       return; // fast escape for server side rendering
     }
+    (window as any).getFormValue = undefined;
+    (window as any).setFormValue = undefined;
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     this.shuttingDown = true;
 
@@ -1615,18 +1617,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           PDFViewerApplication.eventBus.dispatch('scalechanging', zoomEvent);
         }
       }
+    }
 
-      if ('showUnverifiedSignatures' in changes) {
-        if (PDFViewerApplication && PDFViewerApplication.pdfDocument) {
-          PDFViewerApplication.pdfDocument._transport.messageHandler.send('showUnverifiedSignatures', this.showUnverifiedSignatures);
-        }
+    if ('showUnverifiedSignatures' in changes) {
+      if (PDFViewerApplication && PDFViewerApplication.pdfDocument) {
+        PDFViewerApplication.pdfDocument._transport.messageHandler.send('showUnverifiedSignatures', this.showUnverifiedSignatures);
       }
+    }
 
-      if ('formData' in changes) {
-        const newFormData = this.addMissingFormFields(changes['formData'].currentValue);
-        if (!this.equals(newFormData, changes['formData'].previousValue)) {
-          this.fillFormFields(this.formData);
-        }
+    if ('formData' in changes) {
+      if (!changes['formData'].isFirstChange()) {
+        this.updateFormFields(this.formData, changes['formData'].previousValue);
       }
     }
 
@@ -1648,36 +1649,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
     if ('height' in changes) {
     }
-  }
-
-  private equals(object1: any, object2: any): boolean {
-    if (!object1 || !object2) {
-      return object1 === object2;
-    }
-    const keys1 = Object.keys(object1);
-    const keys2 = Object.keys(object2);
-
-    for (const key of keys1) {
-      if (object1.hasOwnProperty(key)) {
-        if (object1[key] !== undefined && object2[key] !== undefined) {
-          if (object1[key] !== object2[key]) {
-            return false;
-          }
-        }
-      }
-    }
-
-    for (const key of keys2) {
-      if (object2.hasOwnProperty(key)) {
-        if (object1[key] !== undefined && object2[key] !== undefined) {
-          if (object1[key] !== object2[key]) {
-            return false;
-          }
-        }
-      }
-    }
-
-    return true;
   }
 
   private async setZoom() {
@@ -1767,228 +1738,51 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
   }
 
-  public fillFormFields(formData: FormDataType): void {
+  public getFormValue(key: string): Object {
+    return { value: this.formData[key] };
+  }
+
+  public setFormValue(key: string, value: string): void {
+    if (!this.formData) {
+      this.formData = {};
+    }
+
+    this.formData[key] = value;
+
+    this.formDataChange.emit(this.formData);
+  }
+
+  public updateFormFields(formData: Object, previousFormData: Object) {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
 
     if (!PDFViewerApplication || !PDFViewerApplication.pdfDocument || !PDFViewerApplication.pdfDocument.annotationStorage) {
       // ngOnChanges calls this method too early - so just ignore it
       return;
     }
+    const storage = PDFViewerApplication.pdfDocument.annotationStorage;
 
-    const annotations = PDFViewerApplication.pdfDocument.annotationStorage.getAll();
-    for (const annotation in annotations) {
-      if (annotation) {
-        const container = document.querySelector('[data-annotation-id="' + annotation + '"]');
-        if (container) {
-          const field = container.querySelector('input');
-          if (field) {
-            const fieldName = field.name;
-            const newValue = formData[fieldName];
-            if (newValue === undefined) {
-              if (field.type === 'checkbox') {
-                // Additional PDF Form Field Types #567: use exportValue from the field annotation for the value
-                this.formData[fieldName] = field.checked ? this.buttonValues[annotation] : null;
-              } else if (field.type === 'radio') {
-                // Additional PDF Form Field Types #567: use buttonValue from the field annotation for the value
-
-                if (field.checked) this.formData[fieldName] = this.buttonValues[annotation];
-              } else {
-                this.formData[fieldName] = field.value;
-              }
-            }
-            if (newValue !== undefined) {
-              PDFViewerApplication.pdfDocument.annotationStorage.setValue(annotation, newValue);
-              if (field.type === 'checkbox') {
-                const v = String(newValue) == this.buttonValues[annotation];
-                field.checked = v;
-              } else if (field.type === 'radio') {
-                const v = String(newValue) == this.buttonValues[annotation];
-                field.checked = v;
-              } else {
-                field.value = <string>newValue;
-              }
-            }
-          }
-
-          // Additional PDF Form Field Types #567: handle multi line text fields
-          const textarea = container.querySelector('textarea');
-          if (textarea) {
-            const fieldName = textarea.name;
-            const newValue = formData[fieldName];
-            if (newValue === undefined) {
-              this.formData[fieldName] = textarea.value;
-            }
-            if (newValue !== undefined) {
-              PDFViewerApplication.pdfDocument.annotationStorage.setValue(annotation, newValue);
-              textarea.value = <string>newValue;
-            }
-          }
-
-          const select = container.querySelector('select');
-          if (select) {
-            const fieldName = select.name;
-            const newValue = formData[fieldName];
-            if (newValue === undefined) {
-              // Additional PDF Form Field Types #567: moved setting and retrieving <select> field values to functions to handle single or multi select fields
-              this.formData[fieldName] = this.getSelectValue(select);
-            }
-            if (newValue !== undefined) {
-              PDFViewerApplication.pdfDocument.annotationStorage.setValue(annotation, newValue);
-              // Additional PDF Form Field Types #567: moved setting and retrieving <select> field values to functions to handle single or multi select fields
-              this.setSelectValue(select, newValue);
-            }
+    for (const key in formData) {
+      if (formData.hasOwnProperty(key)) {
+        if (formData[key] !== previousFormData[key]) {
+          storage.setValue(key, undefined, {value: formData[key]});
+          const field = document.querySelector("input[name='" + key + "']") as HTMLElement;
+          if (field instanceof HTMLInputElement) {
+            field.value = formData[key];
           }
         }
       }
     }
-  }
 
-  public addFormFieldListeners(formData: FormDataType): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-
-    const annotations = PDFViewerApplication.pdfDocument.annotationStorage.getAll();
-    for (const annotation in annotations) {
-      if (annotation) {
-        const container = document.querySelector('[data-annotation-id="' + annotation + '"]');
-        if (container) {
-          const field = container.querySelector('input');
-          if (field) {
-            const fieldName = field.name;
-            const newValue = formData[fieldName];
-            if (newValue === undefined) {
-              // Additional PDF Form Field Types #567: use exportValue/buttonValue from the field annotation for the value for checkboxes/radio buttons
-              if (field.type === 'checkbox' || field.type === 'radio') {
-                if (field.checked) this.formData[fieldName] = this.buttonValues[annotation];
-              } else this.formData[fieldName] = field.value;
-            }
-            field.addEventListener('input', () => this.emitFormDataChange(annotation, fieldName, field));
-          }
-
-          // Additional PDF Form Field Types #567: handle multi line text fields
-          const textarea = container.querySelector('textarea');
-          if (textarea) {
-            const fieldName = textarea.name;
-            const newValue = formData[fieldName];
-            if (newValue === undefined) {
-              this.formData[fieldName] = textarea.value;
-            }
-            textarea.addEventListener('input', () => this.emitFormDataChange(annotation, fieldName, textarea));
-          }
-
-          const select = container.querySelector('select');
-          if (select) {
-            const fieldName = select.name;
-            const newValue = formData[fieldName];
-            if (newValue === undefined) {
-              // Additional PDF Form Field Types #567: moved setting and retrieving <select> field values to functions to handle single or multi select fields
-              this.formData[fieldName] = this.getSelectValue(select);
-            }
-            select.addEventListener('input', () => this.emitFormDataChange(annotation, fieldName, select));
-          }
+    for (const key in previousFormData) {
+      if (previousFormData.hasOwnProperty(key)) {
+        if (!formData.hasOwnProperty(key)) {
+          // this entry has been deleted
+          storage.setValue(key, undefined, undefined);
         }
       }
     }
-  }
 
-  public addMissingFormFields(formData: FormDataType): FormDataType {
-    const result = { ...formData };
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    if (PDFViewerApplication && PDFViewerApplication.pdfDocument) {
-      const annotations = PDFViewerApplication.pdfDocument.annotationStorage.getAll();
-      for (const annotation in annotations) {
-        if (annotation) {
-          const container = document.querySelector('[data-annotation-id="' + annotation + '"]');
-          if (container) {
-            const field = container.querySelector('input');
-            if (field) {
-              const fieldName = field.name;
-              const newValue = result[fieldName];
-              if (newValue === undefined) {
-                // Additional PDF Form Field Types #567: use exportValue/buttonValue from the field annotation for the value for checkboxes/radio buttons
-                if (field.type === 'checkbox') {
-                  result[fieldName] = field.checked ? this.buttonValues[annotation] : null;
-                } else if (field.type === 'radio') {
-                  if (field.checked) result[fieldName] = this.buttonValues[annotation];
-                } else {
-                  result[fieldName] = field.value;
-                }
-              }
-            }
-
-            const select = container.querySelector('select');
-            if (select) {
-              const fieldName = select.name;
-              const newValue = result[fieldName];
-              if (newValue === undefined) {
-                // Additional PDF Form Field Types #567: moved setting and retrieving <select> field values to functions to handle single or multi select fields
-                result[fieldName] = this.getSelectValue(select);
-              }
-            }
-
-            // Additional PDF Form Field Types #567: handle multi line text fields
-            const textarea = container.querySelector('textarea');
-            if (textarea) {
-              const fieldName = textarea.name;
-              const newValue = result[fieldName];
-              if (newValue === undefined) {
-                result[fieldName] = textarea.value;
-              }
-            }
-          }
-        }
-      }
-    }
-    return result;
-  }
-
-  private getSelectValue(field: HTMLSelectElement) {
-    if (field.multiple) {
-      let values: string[] = [];
-      let options = field.options;
-
-      for (let i = 0; i < options.length; i++) {
-        if (options[i].selected) {
-          values.push(options[i].value);
-        }
-      }
-      return values;
-    } else return field.value;
-  }
-
-  private setSelectValue(field: HTMLSelectElement, value: string  | number | boolean | string[]) {
-    if (field.multiple && Array.isArray(value)) {
-      let values: string[] = value;
-      let options = field.options;
-
-      for (let i = 0; i < options.length; i++) options[i].selected = values.indexOf(options[i].value) != -1;
-    } else field.value = <string>value;
-  }
-
-  private emitFormDataChange(annotation: string, fieldName: string, field: HTMLElement): void {
-    let value: any = null;
-
-    if (field instanceof HTMLSelectElement) {
-      value = this.getSelectValue(field);
-    }
-    // Additional PDF Form Field Types #567: handle multi line text fields
-    else if (field instanceof HTMLTextAreaElement) {
-      value = field.value;
-    } else if (field instanceof HTMLInputElement) {
-      // Additional PDF Form Field Types #567: use exportValue/buttonValue from the field annotation for the value for checkboxes/radio buttons
-      if (field.type === 'checkbox') {
-        if (field.checked) value = this.buttonValues[annotation];
-      } else if (field.type === 'radio') {
-        if (field.checked) value = this.buttonValues[annotation];
-      } else {
-        value = field.value;
-      }
-    }
-    this.ngZone.run(() => {
-      if (this.formData[fieldName] !== undefined) {
-        this.formData[fieldName] = value;
-        this.formDataChange.emit(this.formData);
-      }
-    });
+    console.log('new form data');
   }
 
   public loadComplete(pdf: any /* PDFDocumentProxy */): void {

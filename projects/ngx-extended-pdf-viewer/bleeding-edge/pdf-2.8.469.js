@@ -4357,8 +4357,14 @@ class AnnotationStorage {
     this.onResetModified = null;
   }
 
-  getValue(key, defaultValue) {
-    const obj = this._storage.get(key);
+  getValue(key, fieldname, defaultValue) {
+    let obj = this._storage.get(key);
+
+    if (obj === undefined) {
+      if (window.getFormValue) {
+        obj = window.getFormValue(fieldname);
+      }
+    }
 
     return obj !== undefined ? obj : defaultValue;
   }
@@ -4375,14 +4381,14 @@ class AnnotationStorage {
     return defaultValue;
   }
 
-  setValue(key, value) {
+  setValue(key, fieldname, value) {
     const obj = this._storage.get(key);
 
     let modified = false;
 
     if (obj !== undefined) {
       for (const [entry, val] of Object.entries(value)) {
-        if (obj[entry] !== val) {
+        if (entry !== "radioValue" && entry !== "emitMessage" && obj[entry] !== val) {
           modified = true;
           obj[entry] = val;
         }
@@ -4394,7 +4400,21 @@ class AnnotationStorage {
     }
 
     if (modified) {
-      this._setModified();
+      if (fieldname) {
+        this._setModified();
+
+        if (window.setFormValue) {
+          if (value.items) {
+            window.setFormValue(fieldname, value.items);
+          } else if (value.emitMessage === false) {} else if (value.radioValue) {
+            window.setFormValue(fieldname, value.radioValue);
+          } else {
+            for (const val of Object.values(value)) {
+              window.setFormValue(fieldname, val);
+            }
+          }
+        }
+      }
     }
   }
 
@@ -9229,7 +9249,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
     let element = null;
 
     if (this.renderInteractiveForms) {
-      const storedData = storage.getValue(id, {
+      const storedData = storage.getValue(id, this.data.fieldName, {
         value: this.data.fieldValue,
         valueAsString: this.data.fieldValue
       });
@@ -9252,8 +9272,8 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
 
       elementData.userValue = textContent;
       element.setAttribute("id", id);
-      element.addEventListener("input", function (event) {
-        storage.setValue(id, {
+      element.addEventListener("input", event => {
+        storage.setValue(id, this.data.fieldName, {
           value: event.target.value
         });
       });
@@ -9280,7 +9300,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
           const actions = {
             value() {
               elementData.userValue = detail.value || "";
-              storage.setValue(id, {
+              storage.setValue(id, this.data.fieldName, {
                 value: elementData.userValue.toString()
               });
 
@@ -9296,7 +9316,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
                 event.target.value = elementData.formattedValue;
               }
 
-              storage.setValue(id, {
+              storage.setValue(id, this.data.fieldName, {
                 formattedValue: elementData.formattedValue
               });
             },
@@ -9313,7 +9333,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
 
             hidden() {
               event.target.style.visibility = detail.hidden ? "hidden" : "visible";
-              storage.setValue(id, {
+              storage.setValue(id, this.data.fieldName, {
                 hidden: detail.hidden
               });
             },
@@ -9488,7 +9508,7 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
     const storage = this.annotationStorage;
     const data = this.data;
     const id = data.id;
-    const value = storage.getValue(id, {
+    const value = storage.getValue(id, this.data.fieldName, {
       value: data.fieldValue && (data.exportValue && data.exportValue === data.fieldValue || !data.exportValue && data.fieldValue !== "Off")
     }).value;
     this.container.className = "buttonWidgetAnnotation checkBox";
@@ -9502,19 +9522,19 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
     }
 
     element.setAttribute("id", id);
-    element.addEventListener("change", function (event) {
+    element.addEventListener("change", event => {
       const name = event.target.name;
 
       for (const checkbox of document.getElementsByName(name)) {
         if (checkbox !== event.target) {
           checkbox.checked = false;
-          storage.setValue(checkbox.parentNode.getAttribute("data-annotation-id"), {
+          storage.setValue(checkbox.parentNode.getAttribute("data-annotation-id"), this.data.fieldName, {
             value: false
           });
         }
       }
 
-      storage.setValue(id, {
+      storage.setValue(id, this.data.fieldName, {
         value: event.target.checked
       });
     });
@@ -9527,7 +9547,7 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
         const actions = {
           value() {
             event.target.checked = detail.value !== "Off";
-            storage.setValue(id, {
+            storage.setValue(id, this.data.fieldName, {
               value: event.target.checked
             });
           },
@@ -9540,7 +9560,7 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
 
           hidden() {
             event.target.style.visibility = detail.hidden ? "hidden" : "visible";
-            storage.setValue(id, {
+            storage.setValue(id, this.data.fieldName, {
               hidden: detail.hidden
             });
           },
@@ -9576,7 +9596,7 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
     const storage = this.annotationStorage;
     const data = this.data;
     const id = data.id;
-    const value = storage.getValue(id, {
+    const value = storage.getValue(id, this.data.fieldName, {
       value: data.fieldValue === data.buttonValue
     }).value;
     const element = document.createElement("input");
@@ -9589,21 +9609,23 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
     }
 
     element.setAttribute("id", id);
-    element.addEventListener("change", function (event) {
+    element.addEventListener("change", event => {
       const {
         target
       } = event;
 
       for (const radio of document.getElementsByName(target.name)) {
         if (radio !== target) {
-          storage.setValue(radio.getAttribute("id"), {
-            value: false
+          storage.setValue(radio.getAttribute("id"), this.data.fieldName, {
+            value: false,
+            emitMessage: false
           });
         }
       }
 
-      storage.setValue(id, {
-        value: target.checked
+      storage.setValue(id, this.data.fieldName, {
+        value: target.checked,
+        radioValue: this.data.buttonValue
       });
     });
 
@@ -9620,7 +9642,7 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
             for (const radio of document.getElementsByName(event.target.name)) {
               const radioId = radio.getAttribute("id");
               radio.checked = radioId === id && checked;
-              storage.setValue(radioId, {
+              storage.setValue(radioId, this.data.fieldName, {
                 value: radio.checked
               });
             }
@@ -9634,7 +9656,7 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
 
           hidden() {
             event.target.style.visibility = detail.hidden ? "hidden" : "visible";
-            storage.setValue(id, {
+            storage.setValue(id, this.data.fieldName, {
               hidden: detail.hidden
             });
           },
@@ -9683,7 +9705,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
     this.container.className = "choiceWidgetAnnotation";
     const storage = this.annotationStorage;
     const id = this.data.id;
-    storage.getValue(id, {
+    storage.getValue(id, this.data.fieldName, {
       value: this.data.fieldValue.length > 0 ? this.data.fieldValue[0] : undefined
     });
     const selectElement = document.createElement("select");
@@ -9745,7 +9767,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
             Array.prototype.forEach.call(options, option => {
               option.selected = values.has(option.value);
             });
-            storage.setValue(id, {
+            storage.setValue(id, this.data.fieldName, {
               value: getValue(event, true)
             });
           },
@@ -9768,7 +9790,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
               }
             }
 
-            storage.setValue(id, {
+            storage.setValue(id, this.data.fieldName, {
               value: getValue(event, true),
               items: getItems(event)
             });
@@ -9779,7 +9801,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
               selectElement.remove(0);
             }
 
-            storage.setValue(id, {
+            storage.setValue(id, this.data.fieldName, {
               value: null,
               items: []
             });
@@ -9795,7 +9817,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
             optionElement.textContent = displayValue;
             optionElement.value = exportValue;
             selectElement.insertBefore(optionElement, selectElement.children[index]);
-            storage.setValue(id, {
+            storage.setValue(id, this.data.fieldName, {
               value: getValue(event, true),
               items: getItems(event)
             });
@@ -9825,7 +9847,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
               selectElement.options[0].selected = true;
             }
 
-            storage.setValue(id, {
+            storage.setValue(id, this.data.fieldName, {
               value: getValue(event, true),
               items: getItems(event)
             });
@@ -9837,7 +9859,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
             Array.prototype.forEach.call(options, (option, i) => {
               option.selected = indices.has(i);
             });
-            storage.setValue(id, {
+            storage.setValue(id, this.data.fieldName, {
               value: getValue(event, true)
             });
           },
@@ -9850,7 +9872,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
 
           hidden() {
             event.target.style.visibility = detail.hidden ? "hidden" : "visible";
-            storage.setValue(id, {
+            storage.setValue(id, this.data.fieldName, {
               hidden: detail.hidden
             });
           },
@@ -9867,7 +9889,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
       selectElement.addEventListener("input", event => {
         const exportValue = getValue(event, true);
         const value = getValue(event, false);
-        storage.setValue(id, {
+        storage.setValue(id, this.data.fieldName, {
           value: exportValue
         });
         this.linkService.eventBus?.dispatch("dispatcheventinsandbox", {
@@ -9886,9 +9908,10 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
 
       this._setEventListeners(selectElement, [["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "Mouse Up"], ["input", "Action"]], event => event.target.checked);
     } else {
-      selectElement.addEventListener("input", function (event) {
-        storage.setValue(id, {
-          value: getValue(event)
+      selectElement.addEventListener("input", event => {
+        storage.setValue(id, this.data.fieldName, {
+          value: getValue(event),
+          radioValue: getValue(event, true)
         });
       });
     }
