@@ -1281,6 +1281,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         PDFViewerApplication.onError = (error: Error) => this.pdfLoadingFailed.emit(error);
         PDFViewerApplication.open(this._src, options).then(() => {
           this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount });
+          setTimeout(async () => await this.setZoom());
         });
       }
       setTimeout(() => {
@@ -1653,15 +1654,23 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   private async setZoom() {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    if (PDFViewerApplication.store) {
-      let zoomAsNumber = this.zoom;
-      if (String(zoomAsNumber).endsWith('%')) {
-        zoomAsNumber = Number(String(zoomAsNumber).replace('%', '')) / 100;
-      } else if (!isNaN(Number(zoomAsNumber))) {
-        zoomAsNumber = Number(zoomAsNumber) / 100;
-      }
-      if (!zoomAsNumber) {
+
+    let zoomAsNumber = this.zoom;
+    if (String(zoomAsNumber).endsWith('%')) {
+      zoomAsNumber = Number(String(zoomAsNumber).replace('%', '')) / 100;
+    } else if (!isNaN(Number(zoomAsNumber))) {
+      zoomAsNumber = Number(zoomAsNumber) / 100;
+    }
+    if (!zoomAsNumber) {
+      const start = new Date().getTime();
+      if (!PDFViewerApplication.store) {
+        // It's difficult to prevent calling this method to early, so we need this check.
+        // setZoom() is called later again, when the PDF document has been loaded and its
+        // fingerprint has been calculated.
+      } else {
         const userSetting = await PDFViewerApplication.store.get('zoom');
+        const end = new Date().getTime();
+        console.log("Looking up took " + ((end-start) + "ms"));
         if (userSetting) {
           if (!isNaN(Number(userSetting))) {
             zoomAsNumber = Number(userSetting) / 100;
@@ -1672,31 +1681,30 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           zoomAsNumber = 'auto';
         }
       }
+    }
 
-      if (PDFViewerApplication) {
-        const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
+    if (PDFViewerApplication) {
+      const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
+      PDFViewerApplicationOptions.set('defaultZoomValue', zoomAsNumber);
+    }
 
-        PDFViewerApplicationOptions.set('defaultZoomValue', zoomAsNumber);
-      }
-
-      const scaleDropdownField = (this.root.nativeElement as HTMLElement).querySelector('#scaleSelect') as HTMLSelectElement | undefined;
-      if (scaleDropdownField) {
-        if (this.zoom === 'auto' || this.zoom === 'page-fit' || this.zoom === 'page-actual' || this.zoom === 'page-width') {
-          scaleDropdownField.value = this.zoom;
-        } else {
-          scaleDropdownField.value = 'custom';
-          for (const option of scaleDropdownField.options as any) {
-            if (option.value === 'custom') {
-              option.textContent = Math.round(Number(zoomAsNumber) * 100_000) / 1000 + '%';
-              continue;
-            }
+    const scaleDropdownField = (this.root.nativeElement as HTMLElement).querySelector('#scaleSelect') as HTMLSelectElement | undefined;
+    if (scaleDropdownField) {
+      if (this.zoom === 'auto' || this.zoom === 'page-fit' || this.zoom === 'page-actual' || this.zoom === 'page-width') {
+        scaleDropdownField.value = this.zoom;
+      } else {
+        scaleDropdownField.value = 'custom';
+        for (const option of scaleDropdownField.options as any) {
+          if (option.value === 'custom') {
+            option.textContent = Math.round(Number(zoomAsNumber) * 100_000) / 1000 + '%';
+            continue;
           }
         }
       }
+    }
 
-      if (PDFViewerApplication.pdfViewer) {
-        PDFViewerApplication.pdfViewer.currentScaleValue = zoomAsNumber;
-      }
+    if (PDFViewerApplication.pdfViewer) {
+      PDFViewerApplication.pdfViewer.currentScaleValue = zoomAsNumber || 'auto';
     }
   }
 
