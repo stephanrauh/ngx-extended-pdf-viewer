@@ -272,3 +272,4 @@
 - 9.0.0-alpha.5 #740 support for CSP
 - 9.0.0-alpha.6 #748 delay the initialization of the PDF viewer if the PDF file is loaded lazily
 - 9.0.0-alpha.7 bugfixes required by the strict type checks of Angular 12; #748 fixed a bug introduced with version 9.0.0-alpha.1. That version ignored that the user settings are initialized after loading the PDF file, so sometimes zoom setting was ignore, resulting in a blank page until the screen was resized.
+- 9.0.0-alpha.8 #718 repaired `[(formData)]` for input fields, text areas, and checkboxes. Radio boxes and `<select>` fields are still broken.

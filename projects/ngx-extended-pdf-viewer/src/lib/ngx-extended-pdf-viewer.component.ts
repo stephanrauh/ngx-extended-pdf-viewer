@@ -1670,7 +1670,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       } else {
         const userSetting = await PDFViewerApplication.store.get('zoom');
         const end = new Date().getTime();
-        console.log("Looking up took " + ((end-start) + "ms"));
+        console.log('Looking up took ' + (end - start + 'ms'));
         if (userSetting) {
           if (!isNaN(Number(userSetting))) {
             zoomAsNumber = Number(userSetting) / 100;
@@ -1772,10 +1772,23 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     for (const key in formData) {
       if (formData.hasOwnProperty(key)) {
         if (formData[key] !== previousFormData[key]) {
-          storage.setValue(key, undefined, {value: formData[key]});
           const field = document.querySelector("input[name='" + key + "']") as HTMLElement;
           if (field instanceof HTMLInputElement) {
-            field.value = formData[key];
+            if (field.type === 'radio') {
+              storage.setValue(field.id, key, { value: formData[key] === field.value, emitMessage: false });
+            } else if (field.type === 'checkbox') {
+              storage.setValue(field.id, key, { value: formData[key], emitMessage: false });
+              field.checked = formData[key];
+            } else {
+              storage.setValue(field.id, key, { value: formData[key], emitMessage: false });
+              field.value = formData[key];
+            }
+          } else if (!field) {
+            const textarea = document.querySelector("textarea[name='" + key + "']");
+            if (textarea) {
+              storage.setValue(textarea.id, key, { value: formData[key], emitMessage: false });
+              textarea.textContent = formData[key];
+            }
           }
         }
       }
@@ -1784,13 +1797,26 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     for (const key in previousFormData) {
       if (previousFormData.hasOwnProperty(key)) {
         if (!formData.hasOwnProperty(key)) {
-          // this entry has been deleted
-          storage.setValue(key, undefined, undefined);
+          const field = document.querySelector("input[name='" + key + "']") as HTMLElement;
+          if (field instanceof HTMLInputElement) {
+            // this entry has been deleted
+            if (field.type === 'checkbox') {
+              storage.setValue(field.id, key, { value: false, emitMessage: false });
+              field.checked = false;
+            } else {
+              storage.setValue(field.id, key, { value: undefined, emitMessage: false });
+              field.value = '';
+            }
+          } else if (!field) {
+            const textarea = document.querySelector("textarea[name='" + key + "']");
+            if (textarea) {
+              storage.setValue(textarea.id, key, { value: undefined, emitMessage: false });
+              textarea.textContent = null;
+            }
+          }
         }
       }
     }
-
-    console.log('new form data');
   }
 
   public loadComplete(pdf: any /* PDFDocumentProxy */): void {

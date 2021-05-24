@@ -1793,7 +1793,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.8.469',
+    apiVersion: '2.8.470',
     source: {
       data: source.data,
       url: source.url,
@@ -3851,9 +3851,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.8.469';
+const version = '2.8.470';
 exports.version = version;
-const build = '94297f081';
+const build = 'bec9c3516';
 exports.build = build;
 
 /***/ }),
@@ -4363,6 +4363,7 @@ class AnnotationStorage {
     if (obj === undefined) {
       if (window.getFormValue) {
         obj = window.getFormValue(fieldname);
+        this.setValue(key, undefined, obj);
       }
     }
 
@@ -14346,8 +14347,8 @@ var _svg = __w_pdfjs_require__(21);
 
 var _xfa_layer = __w_pdfjs_require__(22);
 
-const pdfjsVersion = '2.8.469';
-const pdfjsBuild = '94297f081';
+const pdfjsVersion = '2.8.470';
+const pdfjsBuild = 'bec9c3516';
 {
   const PDFNetworkStream = __w_pdfjs_require__(23).PDFNetworkStream;
 

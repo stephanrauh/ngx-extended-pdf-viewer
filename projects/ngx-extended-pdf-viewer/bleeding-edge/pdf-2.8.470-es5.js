@@ -9294,7 +9294,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId: docId,
-    apiVersion: '2.8.469',
+    apiVersion: '2.8.470',
     source: {
       data: source.data,
       url: source.url,
@@ -11871,9 +11871,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.8.469';
+var version = '2.8.470';
 exports.version = version;
-var build = '94297f081';
+var build = 'bec9c3516';
 exports.build = build;
 
 /***/ }),
@@ -12592,6 +12592,7 @@ var AnnotationStorage = /*#__PURE__*/function () {
       if (obj === undefined) {
         if (window.getFormValue) {
           obj = window.getFormValue(fieldname);
+          this.setValue(key, undefined, obj);
         }
       }
 
@@ -24063,8 +24064,8 @@ var _svg = __w_pdfjs_require__(141);
 
 var _xfa_layer = __w_pdfjs_require__(142);
 
-var pdfjsVersion = '2.8.469';
-var pdfjsBuild = '94297f081';
+var pdfjsVersion = '2.8.470';
+var pdfjsBuild = 'bec9c3516';
 {
   var PDFNetworkStream = __w_pdfjs_require__(143).PDFNetworkStream;
 
