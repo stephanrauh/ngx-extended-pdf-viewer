@@ -117,6 +117,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public formData: FormDataType = {};
 
+  /** Maps the internal ids of the annotations of pdf.js to their field name */
+  private formIdToFieldName = {};
+  private formRadioButtonValueToId = {};
+
   @Output()
   public formDataChange = new EventEmitter<FormDataType>();
 
@@ -651,6 +655,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       widget.appendChild(link);
       (window as any).getFormValue = (key: string) => this.getFormValue(key);
       (window as any).setFormValue = (key: string, value: string) => this.setFormValue(key, value);
+      (window as any).assignFormIdAndFieldName = (key: string, fieldName: string, radioButtonField?: string) => this.assignFormIdAndFieldName(key, fieldName, radioButtonField);
 
       this.onResize();
       this.loadPdfJs();
@@ -1755,9 +1760,22 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.formData = {};
     }
 
-    this.formData[key] = value;
+    if (this.formIdToFieldName[key]) {
+      // radiobuttons
+      this.formData[this.formIdToFieldName[key]] = value;
+    }
+    else {
+      this.formData[key] = value;
+    }
 
     this.formDataChange.emit(this.formData);
+  }
+
+  public assignFormIdAndFieldName(key: string, fieldName: string | boolean, radioButtonField?: string): void {
+    this.formIdToFieldName[key] = fieldName;
+    if (radioButtonField) {
+      this.formRadioButtonValueToId[radioButtonField] = key;
+    }
   }
 
   public updateFormFields(formData: Object, previousFormData: Object) {
@@ -1776,6 +1794,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           if (field instanceof HTMLInputElement) {
             if (field.type === 'radio') {
               storage.setValue(field.id, key, { value: formData[key] === field.value, emitMessage: false });
+              const fields = document.querySelectorAll("input[name='" + key + "']");
+              const fieldIdToActivate = this.formRadioButtonValueToId[formData[key]];
+              fields.forEach((field: HTMLInputElement)  => {
+                field.checked = field.id === fieldIdToActivate;
+              })
+              this.formRadioButtonValueToId
+
+
             } else if (field.type === 'checkbox') {
               storage.setValue(field.id, key, { value: formData[key], emitMessage: false });
               field.checked = formData[key];
@@ -1789,6 +1815,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
               storage.setValue(textarea.id, key, { value: formData[key], emitMessage: false });
               textarea.textContent = formData[key];
             }
+          } else {
+            const fieldName = this.formIdToFieldName[key];
+            debugger;
           }
         }
       }
