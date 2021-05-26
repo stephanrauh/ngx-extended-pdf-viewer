@@ -1793,7 +1793,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.8.470',
+    apiVersion: '2.8.472',
     source: {
       data: source.data,
       url: source.url,
@@ -3851,9 +3851,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.8.470';
+const version = '2.8.472';
 exports.version = version;
-const build = 'bec9c3516';
+const build = '194261fb4';
 exports.build = build;
 
 /***/ }),
@@ -4357,13 +4357,26 @@ class AnnotationStorage {
     this.onResetModified = null;
   }
 
-  getValue(key, fieldname, defaultValue) {
+  getValue(key, fieldname, defaultValue, radioButtonField = undefined) {
     let obj = this._storage.get(key);
 
     if (obj === undefined) {
       if (window.getFormValue) {
-        obj = window.getFormValue(fieldname);
-        this.setValue(key, undefined, obj);
+        window.assignFormIdAndFieldName(key, fieldname, radioButtonField);
+        const ngObj = window.getFormValue(fieldname);
+
+        if (ngObj !== undefined && ngObj.value !== undefined) {
+          if (radioButtonField) {
+            const value = {
+              value: ngObj.value === radioButtonField
+            };
+            obj = value;
+          } else {
+            obj = ngObj;
+          }
+
+          this.setValue(key, undefined, obj);
+        }
       }
     }
 
@@ -4382,7 +4395,7 @@ class AnnotationStorage {
     return defaultValue;
   }
 
-  setValue(key, fieldname, value) {
+  setValue(key, fieldname, value, radioButtonField = undefined) {
     const obj = this._storage.get(key);
 
     let modified = false;
@@ -4401,9 +4414,9 @@ class AnnotationStorage {
     }
 
     if (modified) {
-      if (fieldname) {
-        this._setModified();
+      this._setModified();
 
+      if (fieldname || radioButtonField) {
         if (window.setFormValue) {
           if (value.items) {
             window.setFormValue(fieldname, value.items);
@@ -9599,7 +9612,7 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
     const id = data.id;
     const value = storage.getValue(id, this.data.fieldName, {
       value: data.fieldValue === data.buttonValue
-    }).value;
+    }, this.data.buttonValue).value;
     const element = document.createElement("input");
     element.disabled = data.readOnly;
     element.type = "radio";
@@ -9617,6 +9630,10 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
 
       for (const radio of document.getElementsByName(target.name)) {
         if (radio !== target) {
+          if (window.setFormValue) {
+            window.setFormValue(radio.getAttribute("id"), false);
+          }
+
           storage.setValue(radio.getAttribute("id"), this.data.fieldName, {
             value: false,
             emitMessage: false
@@ -9706,9 +9723,10 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
     this.container.className = "choiceWidgetAnnotation";
     const storage = this.annotationStorage;
     const id = this.data.id;
-    storage.getValue(id, this.data.fieldName, {
+    const value = storage.getValue(id, this.data.fieldName, {
       value: this.data.fieldValue.length > 0 ? this.data.fieldValue[0] : undefined
-    });
+    }).value;
+    this.data.fieldValue = value;
     const selectElement = document.createElement("select");
     selectElement.disabled = this.data.readOnly;
     selectElement.name = this.data.fieldName;
@@ -14347,8 +14365,8 @@ var _svg = __w_pdfjs_require__(21);
 
 var _xfa_layer = __w_pdfjs_require__(22);
 
-const pdfjsVersion = '2.8.470';
-const pdfjsBuild = 'bec9c3516';
+const pdfjsVersion = '2.8.472';
+const pdfjsBuild = '194261fb4';
 {
   const PDFNetworkStream = __w_pdfjs_require__(23).PDFNetworkStream;
 

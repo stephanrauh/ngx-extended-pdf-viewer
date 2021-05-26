@@ -1799,9 +1799,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
               fields.forEach((field: HTMLInputElement)  => {
                 field.checked = field.id === fieldIdToActivate;
               })
-              this.formRadioButtonValueToId
-
-
             } else if (field.type === 'checkbox') {
               storage.setValue(field.id, key, { value: formData[key], emitMessage: false });
               field.checked = formData[key];
@@ -1814,7 +1811,21 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             if (textarea) {
               storage.setValue(textarea.id, key, { value: formData[key], emitMessage: false });
               textarea.textContent = formData[key];
+            } else {
+              const dropdown = document.querySelector("select[name='" + key + "']") as HTMLSelectElement | null;
+              if (dropdown) {
+                storage.setValue(dropdown.id, key, { value: formData[key], emitMessage: false });
+                if (dropdown.multiple) {
+                  const options = this.formData[key] as string[];
+                  for (let i = 0; i < dropdown.options.length; i++) {
+                    dropdown.options[i].selected = options.indexOf(dropdown.options[i].value) >= 0;
+                  }
+                } else {
+                  dropdown.value = formData[key];
+                }
+              }
             }
+
           } else {
             const fieldName = this.formIdToFieldName[key];
             debugger;

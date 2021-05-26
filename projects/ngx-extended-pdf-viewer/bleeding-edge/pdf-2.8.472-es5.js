@@ -9294,7 +9294,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId: docId,
-    apiVersion: '2.8.470',
+    apiVersion: '2.8.472',
     source: {
       data: source.data,
       url: source.url,
@@ -11871,9 +11871,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.8.470';
+var version = '2.8.472';
 exports.version = version;
-var build = 'bec9c3516';
+var build = '194261fb4';
 exports.build = build;
 
 /***/ }),
@@ -12587,12 +12587,27 @@ var AnnotationStorage = /*#__PURE__*/function () {
   _createClass(AnnotationStorage, [{
     key: "getValue",
     value: function getValue(key, fieldname, defaultValue) {
+      var radioButtonField = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : undefined;
+
       var obj = this._storage.get(key);
 
       if (obj === undefined) {
         if (window.getFormValue) {
-          obj = window.getFormValue(fieldname);
-          this.setValue(key, undefined, obj);
+          window.assignFormIdAndFieldName(key, fieldname, radioButtonField);
+          var ngObj = window.getFormValue(fieldname);
+
+          if (ngObj !== undefined && ngObj.value !== undefined) {
+            if (radioButtonField) {
+              var value = {
+                value: ngObj.value === radioButtonField
+              };
+              obj = value;
+            } else {
+              obj = ngObj;
+            }
+
+            this.setValue(key, undefined, obj);
+          }
         }
       }
 
@@ -12614,6 +12629,8 @@ var AnnotationStorage = /*#__PURE__*/function () {
   }, {
     key: "setValue",
     value: function setValue(key, fieldname, value) {
+      var radioButtonField = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : undefined;
+
       var obj = this._storage.get(key);
 
       var modified = false;
@@ -12636,9 +12653,9 @@ var AnnotationStorage = /*#__PURE__*/function () {
       }
 
       if (modified) {
-        if (fieldname) {
-          this._setModified();
+        this._setModified();
 
+        if (fieldname || radioButtonField) {
           if (window.setFormValue) {
             if (value.items) {
               window.setFormValue(fieldname, value.items);
@@ -18399,7 +18416,7 @@ var RadioButtonWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotatio
       var id = data.id;
       var value = storage.getValue(id, this.data.fieldName, {
         value: data.fieldValue === data.buttonValue
-      }).value;
+      }, this.data.buttonValue).value;
       var element = document.createElement("input");
       element.disabled = data.readOnly;
       element.type = "radio";
@@ -18421,6 +18438,10 @@ var RadioButtonWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotatio
             var radio = _step4.value;
 
             if (radio !== target) {
+              if (window.setFormValue) {
+                window.setFormValue(radio.getAttribute("id"), false);
+              }
+
               storage.setValue(radio.getAttribute("id"), _this7.data.fieldName, {
                 value: false,
                 emitMessage: false
@@ -18554,9 +18575,10 @@ var ChoiceWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem
       this.container.className = "choiceWidgetAnnotation";
       var storage = this.annotationStorage;
       var id = this.data.id;
-      storage.getValue(id, this.data.fieldName, {
+      var value = storage.getValue(id, this.data.fieldName, {
         value: this.data.fieldValue.length > 0 ? this.data.fieldValue[0] : undefined
-      });
+      }).value;
+      this.data.fieldValue = value;
       var selectElement = document.createElement("select");
       selectElement.disabled = this.data.readOnly;
       selectElement.name = this.data.fieldName;
@@ -24064,8 +24086,8 @@ var _svg = __w_pdfjs_require__(141);
 
 var _xfa_layer = __w_pdfjs_require__(142);
 
-var pdfjsVersion = '2.8.470';
-var pdfjsBuild = 'bec9c3516';
+var pdfjsVersion = '2.8.472';
+var pdfjsBuild = '194261fb4';
 {
   var PDFNetworkStream = __w_pdfjs_require__(143).PDFNetworkStream;
 
