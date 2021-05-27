@@ -1667,15 +1667,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       zoomAsNumber = Number(zoomAsNumber) / 100;
     }
     if (!zoomAsNumber) {
-      const start = new Date().getTime();
       if (!PDFViewerApplication.store) {
         // It's difficult to prevent calling this method to early, so we need this check.
         // setZoom() is called later again, when the PDF document has been loaded and its
         // fingerprint has been calculated.
       } else {
         const userSetting = await PDFViewerApplication.store.get('zoom');
-        const end = new Date().getTime();
-        console.log('Looking up took ' + (end - start + 'ms'));
         if (userSetting) {
           if (!isNaN(Number(userSetting))) {
             zoomAsNumber = Number(userSetting) / 100;
