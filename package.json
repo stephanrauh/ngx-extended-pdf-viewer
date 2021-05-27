@@ -12,7 +12,7 @@
     "showcase": "npm run unix-package && rm -r ../extended-pdf-viewer-showcase/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../extended-pdf-viewer-showcase/node_modules/ngx-extended-pdf-viewer",
     "issue": "npm run unix-package && rm -r ../ngx-extended-pdf-viewer-issues/issue284/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../ngx-extended-pdf-viewer-issues/issue284/node_modules/ngx-extended-pdf-viewer",
     "win-package": "ng b ngx-extended-pdf-viewer && rmdir dist /S && ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json",
-    "release": "npm run unix-package && cd dist/ngx-extended-pdf-viewer && npm publish && ./createTag.sh",
+    "release": "npm run unix-package && cd dist/ngx-extended-pdf-viewer  && cd .. && cd .. && ./createTag.sh",
     "cypress": "./node_modules/.bin/cypress open"
   },
   "private": true,
