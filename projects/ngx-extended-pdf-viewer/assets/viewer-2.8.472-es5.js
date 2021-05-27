@@ -13950,7 +13950,7 @@ var BaseViewer = /*#__PURE__*/function () {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    var viewerVersion = '2.8.467';
+    var viewerVersion = '2.8.472';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error("The API version \"".concat(_pdfjsLib.version, "\" does not match the Viewer version \"").concat(viewerVersion, "\"."));
@@ -16791,18 +16791,21 @@ function _arrayWithHoles(arr) {
 }
 
 function _iterableToArray(iter) {
-  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
 }
 
 function _iterableToArrayLimit(arr, i) {
-  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]);
+
+  if (_i == null) return;
   var _arr = [];
   var _n = true;
   var _d = false;
-  var _e = undefined;
+
+  var _s, _e;
 
   try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+    for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
       _arr.push(_s.value);
 
       if (i && _arr.length === i) break;
@@ -16850,8 +16853,8 @@ function _nonIterableRest() {
 
 function canvasTest(settings) {
   var size = settings.sizes.shift();
-  var width = size[0];
-  var height = size[1];
+  var width = Math.max(Math.ceil(size[0]), 1);
+  var height = Math.max(Math.ceil(size[1]), 1);
   var fill = [width - 1, height - 1, 1, 1];
   var job = Date.now();
   var isWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
@@ -16905,7 +16908,7 @@ function canvasTest(settings) {
 }
 
 var testSizes = {
-  area: [16384, 14188, 11402, 10836, 11180, 8192, 4096, 1],
+  area: [16384, 14188, 11402, 11180, 10836, 8192, 4096, 1],
   height: [8388607, 65535, 32767, 16384, 8192, 4096, 1],
   width: [4194303, 65535, 32767, 16384, 8192, 4096, 1]
 };
@@ -16965,7 +16968,7 @@ function handleMethod(settings) {
   }
 
   if (settings.useWorker && hasOffscreenCanvasSupport) {
-    var js = "\n            ".concat(canvasTest.toString(), "\n            onmessage = function(e) {\n                canvasTest(e.data);\n            };\n        ");
+    var js = "\n            var canvasTest = ".concat(canvasTest.toString(), ";\n            onmessage = function(e) {\n                canvasTest(e.data);\n            };\n        ");
     var blob = new Blob([js], {
       type: "application/javascript"
     });
@@ -28656,8 +28659,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-var pdfjsVersion = '2.8.467';
-var pdfjsBuild = '165549af0';
+var pdfjsVersion = '2.8.472';
+var pdfjsBuild = 'cc481d843';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

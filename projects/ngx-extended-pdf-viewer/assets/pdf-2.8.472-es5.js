@@ -651,6 +651,10 @@ function getFilenameFromUrl(url) {
 function getPdfFilenameFromUrl(url) {
   var defaultFilename = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "document.pdf";
 
+  if (window.PDFViewerApplication.appConfig.filenameForDownload) {
+    return window.PDFViewerApplication.appConfig.filenameForDownload;
+  }
+
   if (typeof url !== "string") {
     return defaultFilename;
   }
@@ -9290,7 +9294,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId: docId,
-    apiVersion: '2.8.467',
+    apiVersion: '2.8.472',
     source: {
       data: source.data,
       url: source.url,
@@ -11867,9 +11871,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.8.467';
+var version = '2.8.472';
 exports.version = version;
-var build = '165549af0';
+var build = 'cc481d843';
 exports.build = build;
 
 /***/ }),
@@ -12582,8 +12586,30 @@ var AnnotationStorage = /*#__PURE__*/function () {
 
   _createClass(AnnotationStorage, [{
     key: "getValue",
-    value: function getValue(key, defaultValue) {
+    value: function getValue(key, fieldname, defaultValue) {
+      var radioButtonField = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : undefined;
+
       var obj = this._storage.get(key);
+
+      if (obj === undefined) {
+        if (window.getFormValue) {
+          window.assignFormIdAndFieldName(key, fieldname, radioButtonField);
+          var ngObj = window.getFormValue(fieldname);
+
+          if (ngObj !== undefined && ngObj.value !== undefined) {
+            if (radioButtonField) {
+              var value = {
+                value: ngObj.value === radioButtonField
+              };
+              obj = value;
+            } else {
+              obj = ngObj;
+            }
+
+            this.setValue(key, undefined, obj);
+          }
+        }
+      }
 
       return obj !== undefined ? obj : defaultValue;
     }
@@ -12602,7 +12628,9 @@ var AnnotationStorage = /*#__PURE__*/function () {
     }
   }, {
     key: "setValue",
-    value: function setValue(key, value) {
+    value: function setValue(key, fieldname, value) {
+      var radioButtonField = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : undefined;
+
       var obj = this._storage.get(key);
 
       var modified = false;
@@ -12613,7 +12641,7 @@ var AnnotationStorage = /*#__PURE__*/function () {
               entry = _Object$entries$_i[0],
               val = _Object$entries$_i[1];
 
-          if (obj[entry] !== val) {
+          if (entry !== "radioValue" && entry !== "emitMessage" && obj[entry] !== val) {
             modified = true;
             obj[entry] = val;
           }
@@ -12626,6 +12654,21 @@ var AnnotationStorage = /*#__PURE__*/function () {
 
       if (modified) {
         this._setModified();
+
+        if (fieldname || radioButtonField) {
+          if (window.setFormValue) {
+            if (value.items) {
+              window.setFormValue(fieldname, value.items);
+            } else if (value.emitMessage === false) {} else if (value.radioValue) {
+              window.setFormValue(fieldname, value.radioValue);
+            } else {
+              for (var _i2 = 0, _Object$values = Object.values(value); _i2 < _Object$values.length; _i2++) {
+                var _val = _Object$values[_i2];
+                window.setFormValue(fieldname, _val);
+              }
+            }
+          }
+        }
       }
     }
   }, {
@@ -17975,7 +18018,7 @@ var TextWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem) 
       var element = null;
 
       if (this.renderInteractiveForms) {
-        var storedData = storage.getValue(id, {
+        var storedData = storage.getValue(id, this.data.fieldName, {
           value: this.data.fieldValue,
           valueAsString: this.data.fieldValue
         });
@@ -17999,7 +18042,7 @@ var TextWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem) 
         elementData.userValue = textContent;
         element.setAttribute("id", id);
         element.addEventListener("input", function (event) {
-          storage.setValue(id, {
+          storage.setValue(id, _this5.data.fieldName, {
             value: event.target.value
           });
         });
@@ -18026,7 +18069,7 @@ var TextWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem) 
             var actions = {
               value: function value() {
                 elementData.userValue = detail.value || "";
-                storage.setValue(id, {
+                storage.setValue(id, this.data.fieldName, {
                   value: elementData.userValue.toString()
                 });
 
@@ -18041,7 +18084,7 @@ var TextWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem) 
                   event.target.value = elementData.formattedValue;
                 }
 
-                storage.setValue(id, {
+                storage.setValue(id, this.data.fieldName, {
                   formattedValue: elementData.formattedValue
                 });
               },
@@ -18057,7 +18100,7 @@ var TextWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem) 
               },
               hidden: function hidden() {
                 event.target.style.visibility = detail.hidden ? "hidden" : "visible";
-                storage.setValue(id, {
+                storage.setValue(id, this.data.fieldName, {
                   hidden: detail.hidden
                 });
               },
@@ -18258,7 +18301,7 @@ var CheckboxWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationEl
       var storage = this.annotationStorage;
       var data = this.data;
       var id = data.id;
-      var value = storage.getValue(id, {
+      var value = storage.getValue(id, this.data.fieldName, {
         value: data.fieldValue && (data.exportValue && data.exportValue === data.fieldValue || !data.exportValue && data.fieldValue !== "Off")
       }).value;
       this.container.className = "buttonWidgetAnnotation checkBox";
@@ -18284,7 +18327,7 @@ var CheckboxWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationEl
 
             if (checkbox !== event.target) {
               checkbox.checked = false;
-              storage.setValue(checkbox.parentNode.getAttribute("data-annotation-id"), {
+              storage.setValue(checkbox.parentNode.getAttribute("data-annotation-id"), _this6.data.fieldName, {
                 value: false
               });
             }
@@ -18295,7 +18338,7 @@ var CheckboxWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationEl
           _iterator3.f();
         }
 
-        storage.setValue(id, {
+        storage.setValue(id, _this6.data.fieldName, {
           value: event.target.checked
         });
       });
@@ -18306,7 +18349,7 @@ var CheckboxWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationEl
           var actions = {
             value: function value() {
               event.target.checked = detail.value !== "Off";
-              storage.setValue(id, {
+              storage.setValue(id, this.data.fieldName, {
                 value: event.target.checked
               });
             },
@@ -18319,7 +18362,7 @@ var CheckboxWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationEl
             },
             hidden: function hidden() {
               event.target.style.visibility = detail.hidden ? "hidden" : "visible";
-              storage.setValue(id, {
+              storage.setValue(id, this.data.fieldName, {
                 hidden: detail.hidden
               });
             },
@@ -18371,9 +18414,9 @@ var RadioButtonWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotatio
       var storage = this.annotationStorage;
       var data = this.data;
       var id = data.id;
-      var value = storage.getValue(id, {
+      var value = storage.getValue(id, this.data.fieldName, {
         value: data.fieldValue === data.buttonValue
-      }).value;
+      }, this.data.buttonValue).value;
       var element = document.createElement("input");
       element.disabled = data.readOnly;
       element.type = "radio";
@@ -18395,8 +18438,13 @@ var RadioButtonWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotatio
             var radio = _step4.value;
 
             if (radio !== target) {
-              storage.setValue(radio.getAttribute("id"), {
-                value: false
+              if (window.setFormValue) {
+                window.setFormValue(radio.getAttribute("id"), false);
+              }
+
+              storage.setValue(radio.getAttribute("id"), _this7.data.fieldName, {
+                value: false,
+                emitMessage: false
               });
             }
           }
@@ -18406,8 +18454,9 @@ var RadioButtonWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotatio
           _iterator4.f();
         }
 
-        storage.setValue(id, {
-          value: target.checked
+        storage.setValue(id, _this7.data.fieldName, {
+          value: target.checked,
+          radioValue: _this7.data.buttonValue
         });
       });
 
@@ -18427,7 +18476,7 @@ var RadioButtonWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotatio
                   var radio = _step5.value;
                   var radioId = radio.getAttribute("id");
                   radio.checked = radioId === id && checked;
-                  storage.setValue(radioId, {
+                  storage.setValue(radioId, this.data.fieldName, {
                     value: radio.checked
                   });
                 }
@@ -18446,7 +18495,7 @@ var RadioButtonWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotatio
             },
             hidden: function hidden() {
               event.target.style.visibility = detail.hidden ? "hidden" : "visible";
-              storage.setValue(id, {
+              storage.setValue(id, this.data.fieldName, {
                 hidden: detail.hidden
               });
             },
@@ -18526,9 +18575,10 @@ var ChoiceWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem
       this.container.className = "choiceWidgetAnnotation";
       var storage = this.annotationStorage;
       var id = this.data.id;
-      storage.getValue(id, {
+      var value = storage.getValue(id, this.data.fieldName, {
         value: this.data.fieldValue.length > 0 ? this.data.fieldValue[0] : undefined
-      });
+      }).value;
+      this.data.fieldValue = value;
       var selectElement = document.createElement("select");
       selectElement.disabled = this.data.readOnly;
       selectElement.name = this.data.fieldName;
@@ -18600,7 +18650,7 @@ var ChoiceWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem
               Array.prototype.forEach.call(options, function (option) {
                 option.selected = values.has(option.value);
               });
-              storage.setValue(id, {
+              storage.setValue(id, this.data.fieldName, {
                 value: getValue(event, true)
               });
             },
@@ -18623,7 +18673,7 @@ var ChoiceWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem
                 }
               }
 
-              storage.setValue(id, {
+              storage.setValue(id, this.data.fieldName, {
                 value: getValue(event, true),
                 items: getItems(event)
               });
@@ -18633,7 +18683,7 @@ var ChoiceWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem
                 selectElement.remove(0);
               }
 
-              storage.setValue(id, {
+              storage.setValue(id, this.data.fieldName, {
                 value: null,
                 items: []
               });
@@ -18647,7 +18697,7 @@ var ChoiceWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem
               optionElement.textContent = displayValue;
               optionElement.value = exportValue;
               selectElement.insertBefore(optionElement, selectElement.children[index]);
-              storage.setValue(id, {
+              storage.setValue(id, this.data.fieldName, {
                 value: getValue(event, true),
                 items: getItems(event)
               });
@@ -18682,7 +18732,7 @@ var ChoiceWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem
                 selectElement.options[0].selected = true;
               }
 
-              storage.setValue(id, {
+              storage.setValue(id, this.data.fieldName, {
                 value: getValue(event, true),
                 items: getItems(event)
               });
@@ -18693,7 +18743,7 @@ var ChoiceWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem
               Array.prototype.forEach.call(options, function (option, i) {
                 option.selected = indices.has(i);
               });
-              storage.setValue(id, {
+              storage.setValue(id, this.data.fieldName, {
                 value: getValue(event, true)
               });
             },
@@ -18706,7 +18756,7 @@ var ChoiceWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem
             },
             hidden: function hidden() {
               event.target.style.visibility = detail.hidden ? "hidden" : "visible";
-              storage.setValue(id, {
+              storage.setValue(id, this.data.fieldName, {
                 hidden: detail.hidden
               });
             },
@@ -18727,7 +18777,7 @@ var ChoiceWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem
 
           var exportValue = getValue(event, true);
           var value = getValue(event, false);
-          storage.setValue(id, {
+          storage.setValue(id, _this8.data.fieldName, {
             value: exportValue
           });
           (_this8$linkService$ev = _this8.linkService.eventBus) === null || _this8$linkService$ev === void 0 ? void 0 : _this8$linkService$ev.dispatch("dispatcheventinsandbox", {
@@ -18749,8 +18799,9 @@ var ChoiceWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem
         });
       } else {
         selectElement.addEventListener("input", function (event) {
-          storage.setValue(id, {
-            value: getValue(event)
+          storage.setValue(id, _this8.data.fieldName, {
+            value: getValue(event),
+            radioValue: getValue(event, true)
           });
         });
       }
@@ -24035,8 +24086,8 @@ var _svg = __w_pdfjs_require__(141);
 
 var _xfa_layer = __w_pdfjs_require__(142);
 
-var pdfjsVersion = '2.8.467';
-var pdfjsBuild = '165549af0';
+var pdfjsVersion = '2.8.472';
+var pdfjsBuild = 'cc481d843';
 {
   var PDFNetworkStream = __w_pdfjs_require__(143).PDFNetworkStream;
 

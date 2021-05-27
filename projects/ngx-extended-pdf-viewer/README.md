@@ -18,9 +18,14 @@
 There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook.
 
 ## Breaking changes in version 9.0
-Version 9.0 drops compatibility to Angular 8 and below. The minimum required version is 9.0. Maybe it also works with Angular 8, but there's no guarantee.
+- Version 9.0 updates pdf.js to version 2.8 (default branch) and 2.9 ("bleeding edge" branch). That shouldn't break your application. However, the pdf.js team has been very diligent in version 2.8, so it's possible one of the new features break your application.
 
-Version 9.0 doesn't introduce many features, but it may break your application, especially if you've added a work-around:
+- I've re-implemented form support. However, it was already broken in version 8, so it's hard to call this a breaking change. The good news: form support with two-way binding works again.
+
+- Version 9.0 drops compatibility to Angular 8 and below. The minimum required version is 9.0. Maybe it also works with Angular 8, but there's no guarantee.
+
+- The library should work with and without Ivy (the new compiler of Angular), but I frequently see a warning concerning Ivy, so I'm not sure yet. If you run into trouble (usually error messages with a greek letter theta), please open an issue.
+
 - I went over the print CSS rules. Now you should be able to print without additional CSS rules. In particular, *remove* this rule because it breaks printing:
 ```css
 @media print {
@@ -30,15 +35,8 @@ Version 9.0 doesn't introduce many features, but it may break your application, 
 }
 ```
 - If you omit `[zoom]` or assign `undefined` to it, the user's last choice of the scale factor is used. Before 9.0.0, it was always set to `auto`. Note that this feature only work when the document is initially loaded. If the user loads a document using the upload button of the PDF viewer, the zoom setting isn't changed, even if there's a zoom setting store in `localStorage`.
+- If you omit `[zoom]`, the PDF file is shown roughly half a second later, depending on the PDF file and the network connection. However, at least one user reports the PDF file shows only after a long wait, and sometimes it doesn't show at all. If you run into the same problem, please add your insight at https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/748. Possible workaround: set `[zoom]` or set `[listenToURL]="true"`.
 - The event `(updateFindMatchesCount)` is now also fired when there's not find result. Before 9.0.0, it only fired when there was at least on find result, so you didn't notice when the user enters a word that's not there.
-
-## What's new in version 8.0 and 8.1?
-- Version 8.1 fixes the full-screen mode on Safari and iPad. Note this is a fairly radical solution which might cause problems with Angular, because it moves the PDF viewer to the top of the DOM, so Angular can't access it as long as the full-screen mode is active. Also note there's no full-screen mode on iPhones.
-- Once again, I've fixed `[(zoom)]`. Now there's no infinite loop when you resize the PDF quickly with the mouse wheel. It's unlikely, but the bug fix might break some applications, so I've decided to call it a new major version.
-- Version 8.0 also supports server-side rendering. The current approach probably isn't optimal yet; if you have an idea how to improve it, just open a ticket on GitHub. The working demo is here: https://github.com/stephanrauh/ngx-extended-pdf-viewer-issues/tree/main/issue609
-- Starting with version 8.0.0-beta.4, ngx-extended-pdf-viewer uses version 2.7 of pdf.js for the default branch and pdf.js 2.8 for the bleeding-edge branch. Among other things, this means improved highlighting. When using the find function, the highlighting was often a bit off if the text used not just letters and digits. It's still not perfect, but in many cases it's better than it used to be. If you're interested in the gory details, here's the link to the pull request: https://github.com/mozilla/pdf.js/pull/12855
-- Signatures can now be shown without having to deactivate AcroForm support. Note that the libraries still doesn't verify the signatures, so use the feature at your own risk. You don't want to display forged signatures.
-- Custom toolbars can now have multiple lines.
 ## Other potentially breaking changes
 Version 8.0 introduces a few minor CSS changes. If your layout is broken, check the version history of the *.scss files.
 
@@ -59,12 +57,12 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 ## Internet Explorer 11 is no longer supported
 
-Reluctantly, I have to drop support for Internet Explorer 11. The base library, Mozilla's pdf.js, now generates binaries that are no longer compatible to Internet Explorer 11, and it seems there's no easy fix.
+Reluctantly, I have to drop support for Internet Explorer 11. The base library, Mozilla's pdf.js, now generates binaries that are no longer compatible to Internet Explorer 11, and it seems there's no easy fix. That's a pity because IE11 support was the original use-case of the library and because I frequently get messages from developers who need IE11 support. The last version known to be compatible is 5.3. Version 7.3.2 should be compatible, too, but a user reported crashes.
 ## Features
 
 - Searching (including a programmatic API)
 - Printing
-- Support for forms
+- Support for forms, including two-way binding
 - (Limited) support for signatures (lacking verification of the signature, so use on your own risk!)
 - Sidebar with thumbnails, outlines, and attachments (and each of them both optional and customizable)
 - Rotating
@@ -81,7 +79,7 @@ Reluctantly, I have to drop support for Internet Explorer 11. The base library, 
 - Color theming
 - And to customize the toolbars and menus according to your needs.
 
-Not to mention the ability to display PDF files, running on Mozilla's pdf.js 2.6.347, released in March 2020. If you're the daring one, you can also use the developer version 2.7. It's bleeding edge, so use it at own risk. Basically, this preview is there to make the update easier when a Mozilla publishes a new version of their pdf.js library.
+Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 2.8, released in March 2021. If you're the daring one, you can also use the developer version 2.9. It's bleeding edge, so use it at own risk. Basically, this preview is there to make the update easier when a Mozilla publishes a new version of their pdf.js library.
 
 
 ## Alternatives
@@ -89,7 +87,7 @@ Not to mention the ability to display PDF files, running on Mozilla's pdf.js 2.6
   <summary><b>Expand to learn more about the other options to display PDF files in Angular</b></summary>
   If you only need the base functionality, I'll happily pass you to <a href="https://github.com/vadimdez/ng2-pdf-viewer/" target="#">the project of Vadym Yatsyuk</a>. Vadym does a great job delivering a no-nonsense PDF viewer. However, if you need something that can easily pass as the native viewer on a gloomy day, ngx-extended-pdf-viewer is your friend.
 
-There's also a direct counterpart to my library: <a href="https://www.npmjs.com/package/ng2-pdfjs-viewer" target="#">ng2-pdfjs-viewer</a>. As far as I can see, it's also a good library. Recently (May 24, 2019), it has been updated to PDF.js 2.2.171. It wraps the PDF viewer in an iFrame. That's a more reliable approach, but it also offers fewer options. The list of attributes is shorter, and the PDF viewer can't emit events to your application. If you're not happy with my library, check out ng2-pdfjs-viewer. It's a good library, too. Its unique selling point is displaying multiple PDF files simultaneously on the same page.
+There's also a direct counterpart to my library: <a href="https://www.npmjs.com/package/ng2-pdfjs-viewer" target="#">ng2-pdfjs-viewer</a>. As far as I can see, it's also a good library. As of May 2021, it's running on PDF.js 2.2.171. It wraps the PDF viewer in an iFrame. That's a more reliable approach, but it also offers fewer options. The list of attributes is shorter, and the PDF viewer can't emit events to your application. If you're not happy with my library, check out ng2-pdfjs-viewer. It's a good library, too. Its unique selling point is displaying multiple PDF files simultaneously on the same page.
 
 You might also try to use the native PDF viewer of your browser. That's a valid approach. It's even the preferred approach. However, `ngx-extended-pdf-viewer` gives you a wide range of options that aren't available using the native API.
 </details>
@@ -97,7 +95,7 @@ You might also try to use the native PDF viewer of your browser. That's a valid 
 ## How to use the library
 As a rule of thumb, I recommend cloning the [showcase project from GitHub](https://github.com/stephanrauh/extended-pdf-viewer-showcase) before doing anything else. It's a standard Angular CLI application, so you'll get it up and running in less than ten minutes. It's a good starting point to do your own experiments. Maybe even more important: you'll learn if the library works on your machine. (Of course, it does, but it's always good to double-check!)
 
-Currently, the minimum required version is Angular 7. When Angular 12 is released, I'm going to drop support for Angular 8 and below. The minimum required version is going to be Angular 9. The idea is to support the four most current versions of Angular, which gives you roughly two years to update.
+Currently, the minimum required version is Angular 9. The minimum required version is going to be Angular 9. The idea is to support the four most current versions of Angular, which gives you roughly two years to update.
 
 1.  Install the library with `npm i ngx-extended-pdf-viewer --save`
     
@@ -116,7 +114,7 @@ Currently, the minimum required version is Angular 7. When Angular 12 is release
   ```
  This simply copies the entire assets folder. If you're concerned about disk memory, you can omit the subfolders `inline-locale-files` and `additional-locale`. If you need only one language, you can reduce the list to `locale.properties` and your language folder.
 
- If you want to use the developer preview of pdf.js 2.7, import the "bleeding edge" files instead:
+ If you want to use the developer preview of pdf.js 2.9, import the "bleeding edge" files instead:
 
   ```json
   "assets": [

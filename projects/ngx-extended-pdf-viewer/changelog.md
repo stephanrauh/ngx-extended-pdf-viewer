@@ -274,3 +274,4 @@
 - 9.0.0-alpha.7 bugfixes required by the strict type checks of Angular 12; #748 fixed a bug introduced with version 9.0.0-alpha.1. That version ignored that the user settings are initialized after loading the PDF file, so sometimes zoom setting was ignore, resulting in a blank page until the screen was resized.
 - 9.0.0-alpha.8 #718 repaired `[(formData)]` for input fields, text areas, and checkboxes. Radio boxes and `<select>` fields are still broken.
 - 9.0.0-alpha.9 #718 repaired `[(formData)]` for `<select>` fields (both dropdowns and multiple-choice fields) and radio buttons. However, multiple choice fields aren't printed.
+- 9.0.0-rc.0 #719 bumped up the default branch to pdf.js 2.8
