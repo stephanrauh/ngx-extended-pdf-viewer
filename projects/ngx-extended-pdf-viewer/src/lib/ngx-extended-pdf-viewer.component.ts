@@ -864,7 +864,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
 
         PDFViewerApplicationOptions.set('enableDragAndDrop', this.enableDragAndDrop);
-        PDFViewerApplicationOptions.set('locale', this.language);
+        let language = this.language === "" ? undefined: this.language;
+        if (!language) {
+          language = navigator.language;
+        }
+        PDFViewerApplicationOptions.set('locale', language);
         PDFViewerApplicationOptions.set('imageResourcesPath', this.imageResourcesPath);
         PDFViewerApplicationOptions.set('minZoom', this.minZoom);
         PDFViewerApplicationOptions.set('maxZoom', this.maxZoom);
