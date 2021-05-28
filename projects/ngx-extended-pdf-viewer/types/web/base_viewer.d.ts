@@ -66,11 +66,6 @@ export type PDFViewerOptions = {
      */
     renderer: string;
     /**
-     * - Enables WebGL accelerated rendering for
-     * some operations. The default value is `false`.
-     */
-    enableWebGL?: boolean | undefined;
-    /**
      * - Enables CSS only zooming. The default
      * value is `false`.
      */
@@ -116,7 +111,6 @@ export class BaseViewer {
     renderInteractiveForms: boolean;
     enablePrintAutoRotate: boolean;
     renderer: string;
-    enableWebGL: boolean;
     useOnlyCssZoom: boolean;
     maxCanvasPixels: number | undefined;
     l10n: any;
@@ -382,6 +376,11 @@ export class BaseViewer {
      */
     createXfaLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any): XfaLayerBuilder;
     /**
+     * @param {PDFPage} pdfPage
+     * @returns {StructTreeLayerBuilder}
+     */
+    createStructTreeLayerBuilder(pdfPage: any): StructTreeLayerBuilder;
+    /**
      * @type {boolean} Whether all pages of the PDF document have identical
      *   widths and heights.
      */
@@ -464,8 +463,6 @@ import { PDFRenderingQueue } from "./pdf_rendering_queue.js";
  * @property {boolean} [enablePrintAutoRotate] - Enables automatic rotation of
  *   landscape pages upon printing. The default is `false`.
  * @property {string} renderer - 'canvas' or 'svg'. The default is 'canvas'.
- * @property {boolean} [enableWebGL] - Enables WebGL accelerated rendering for
- *   some operations. The default value is `false`.
  * @property {boolean} [useOnlyCssZoom] - Enables CSS only zooming. The default
  *   value is `false`.
  * @property {number} [maxCanvasPixels] - The maximum supported canvas size in
@@ -503,8 +500,6 @@ declare class PDFPageViewBuffer {
      * @property {boolean} [enablePrintAutoRotate] - Enables automatic rotation of
      *   landscape pages upon printing. The default is `false`.
      * @property {string} renderer - 'canvas' or 'svg'. The default is 'canvas'.
-     * @property {boolean} [enableWebGL] - Enables WebGL accelerated rendering for
-     *   some operations. The default value is `false`.
      * @property {boolean} [useOnlyCssZoom] - Enables CSS only zooming. The default
      *   value is `false`.
      * @property {number} [maxCanvasPixels] - The maximum supported canvas size in
@@ -529,4 +524,5 @@ declare class PDFPageViewBuffer {
 import { TextLayerBuilder } from "./text_layer_builder.js";
 import { AnnotationLayerBuilder } from "./annotation_layer_builder.js";
 import { XfaLayerBuilder } from "./xfa_layer_builder.js";
+import { StructTreeLayerBuilder } from "./struct_tree_layer_builder.js";
 export {};

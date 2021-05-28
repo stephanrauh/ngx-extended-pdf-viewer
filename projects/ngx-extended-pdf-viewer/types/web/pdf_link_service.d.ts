@@ -77,10 +77,6 @@ export class PDFLinkService {
      */
     get rotation(): number;
     /**
-     * @deprecated
-     */
-    navigateTo(dest: any): void;
-    /**
      * @private
      */
     private _goToDestinationHelper;

@@ -1,4 +1,5 @@
 version=$(node ./read-version-number.js);
+git push
 git tag -a $version -m "$version"
 git push origin --tags
 #readme=$(<./projects/ngx-extended-pdf-viewer/README.md)

@@ -39,6 +39,7 @@ export type PDFPageViewOptions = {
     textLayerMode?: number | undefined;
     annotationLayerFactory: any;
     xfaLayerFactory: any;
+    structTreeLayerFactory: any;
     /**
      * - Path for image resources, mainly
      * for annotation icons. Include trailing slash.
@@ -54,11 +55,6 @@ export type PDFPageViewOptions = {
      */
     renderer: string;
     /**
-     * - Enables WebGL accelerated rendering for
-     * some operations. The default value is `false`.
-     */
-    enableWebGL?: boolean | undefined;
-    /**
      * - Enables CSS only zooming. The default
      * value is `false`.
      */
@@ -73,11 +69,6 @@ export type PDFPageViewOptions = {
      * - Localization service.
      */
     l10n: any;
-    /**
-     * - Enable embedded script execution.
-     * The default value is `false`.
-     */
-    enableScripting?: boolean | undefined;
 };
 /**
  * @implements {IRenderableView}
@@ -107,10 +98,9 @@ export class PDFPageView {
     textLayerFactory: any;
     annotationLayerFactory: any;
     xfaLayerFactory: any;
+    structTreeLayerFactory: any;
     renderer: string;
-    enableWebGL: boolean;
     l10n: any;
-    enableScripting: boolean;
     paintTask: {
         promise: any;
         onRenderContinue(cont: any): void;
@@ -124,6 +114,7 @@ export class PDFPageView {
     textLayer: any;
     zoomLayer: (Node & ParentNode) | null;
     xfaLayer: any;
+    structTreeLayer: any;
     div: HTMLDivElement;
     setPdfPage(pdfPage: any): void;
     destroy(): void;
@@ -147,6 +138,7 @@ export class PDFPageView {
      *              rather than calling this one directly.
      */
     cancelRendering(keepAnnotations?: boolean): void;
+    _onTextLayerRendered: any;
     cssTransform(target: any, redrawAnnotations?: boolean): void;
     get width(): any;
     get height(): any;
