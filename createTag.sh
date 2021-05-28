@@ -8,4 +8,4 @@ git push origin --tags
 #  -H "Accept: application/vnd.github.v3+json" \
 #  https://api.github.com/repos/stephanrauh/ngx-extended-pdf-viewer/releases \
 #  -d '{"tag_name":$version,"body": "$readme"}'
-node ./increase-version-number.js
+
