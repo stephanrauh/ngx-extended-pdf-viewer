@@ -414,17 +414,17 @@ var _pdf_thumbnail_viewer = __webpack_require__(29);
 
 var _pdf_viewer = __webpack_require__(31);
 
-var _secondary_toolbar = __webpack_require__(159);
+var _secondary_toolbar = __webpack_require__(160);
 
-var _toolbar = __webpack_require__(161);
+var _toolbar = __webpack_require__(162);
 
 var _viewer_compatibility = __webpack_require__(2);
 
-var _view_history = __webpack_require__(162);
+var _view_history = __webpack_require__(163);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
@@ -434,11 +434,11 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
@@ -4523,7 +4523,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -6239,7 +6239,7 @@ var _pdfjsLib = __webpack_require__(7);
 
 var _base_tree_viewer = __webpack_require__(14);
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
@@ -6463,7 +6463,7 @@ exports.BaseTreeViewer = void 0;
 
 var _pdfjsLib = __webpack_require__(7);
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
@@ -6658,7 +6658,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -7373,11 +7373,11 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
@@ -8760,7 +8760,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -9435,7 +9435,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
@@ -10352,7 +10352,7 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -10360,7 +10360,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
@@ -10368,7 +10368,7 @@ function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread n
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
@@ -11393,13 +11393,13 @@ var _pdf_rendering_queue = __webpack_require__(10);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -11409,7 +11409,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -13204,7 +13204,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -13710,7 +13710,7 @@ var _base_viewer = __webpack_require__(32);
 
 var _pdfjsLib = __webpack_require__(7);
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
@@ -13866,11 +13866,11 @@ var _pdf_page_view = __webpack_require__(35);
 
 var _pdf_link_service = __webpack_require__(23);
 
-var _text_layer_builder = __webpack_require__(157);
+var _text_layer_builder = __webpack_require__(158);
 
-var _xfa_layer_builder = __webpack_require__(158);
+var _xfa_layer_builder = __webpack_require__(159);
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
@@ -15506,7 +15506,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -17175,7 +17175,7 @@ function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableTo
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
@@ -17183,11 +17183,11 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
@@ -18222,7 +18222,7 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
       return;
     }
 
-    __webpack_require__(84);
+    __webpack_require__(85);
   })();
 
   (function checkPromise() {
@@ -18230,7 +18230,7 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
       return;
     }
 
-    globalThis.Promise = __webpack_require__(117);
+    globalThis.Promise = __webpack_require__(116);
   })();
 
   (function checkReadableStream() {
@@ -18251,7 +18251,7 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
       return;
     }
 
-    globalThis.ReadableStream = __webpack_require__(143).ReadableStream;
+    globalThis.ReadableStream = __webpack_require__(144).ReadableStream;
   })();
 
   (function checkStringPadStart() {
@@ -18259,7 +18259,7 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
       return;
     }
 
-    __webpack_require__(144);
+    __webpack_require__(145);
   })();
 
   (function checkStringPadEnd() {
@@ -18267,7 +18267,7 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
       return;
     }
 
-    __webpack_require__(150);
+    __webpack_require__(151);
   })();
 
   (function checkObjectValues() {
@@ -18275,7 +18275,7 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
       return;
     }
 
-    Object.values = __webpack_require__(152);
+    Object.values = __webpack_require__(153);
   })();
 
   (function checkObjectEntries() {
@@ -18283,7 +18283,7 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
       return;
     }
 
-    Object.entries = __webpack_require__(155);
+    Object.entries = __webpack_require__(156);
   })();
 }
 
@@ -18308,11 +18308,11 @@ $({ global: true }, { globalThis: global });
 
 var global = __webpack_require__(42);
 var getOwnPropertyDescriptor = __webpack_require__(43).f;
-var createNonEnumerableProperty = __webpack_require__(57);
-var redefine = __webpack_require__(60);
-var setGlobal = __webpack_require__(61);
-var copyConstructorProperties = __webpack_require__(71);
-var isForced = __webpack_require__(83);
+var createNonEnumerableProperty = __webpack_require__(58);
+var redefine = __webpack_require__(61);
+var setGlobal = __webpack_require__(62);
+var copyConstructorProperties = __webpack_require__(72);
+var isForced = __webpack_require__(84);
 module.exports = function (options, source) {
  var TARGET = options.target;
  var GLOBAL = options.global;
@@ -18367,7 +18367,7 @@ var createPropertyDescriptor = __webpack_require__(47);
 var toIndexedObject = __webpack_require__(48);
 var toPrimitive = __webpack_require__(52);
 var has = __webpack_require__(54);
-var IE8_DOM_DEFINE = __webpack_require__(55);
+var IE8_DOM_DEFINE = __webpack_require__(56);
 var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDescriptor(O, P) {
  O = toIndexedObject(O);
@@ -18503,20 +18503,30 @@ module.exports = function (it) {
 
 /***/ }),
 /* 54 */
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+var toObject = __webpack_require__(55);
 var hasOwnProperty = {}.hasOwnProperty;
-module.exports = function (it, key) {
- return hasOwnProperty.call(it, key);
+module.exports = function hasOwn(it, key) {
+ return hasOwnProperty.call(toObject(it), key);
 };
 
 /***/ }),
 /* 55 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+var requireObjectCoercible = __webpack_require__(51);
+module.exports = function (argument) {
+ return Object(requireObjectCoercible(argument));
+};
+
+/***/ }),
+/* 56 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 var DESCRIPTORS = __webpack_require__(44);
 var fails = __webpack_require__(45);
-var createElement = __webpack_require__(56);
+var createElement = __webpack_require__(57);
 module.exports = !DESCRIPTORS && !fails(function () {
  return Object.defineProperty(createElement('div'), 'a', {
   get: function () {
@@ -18526,7 +18536,7 @@ module.exports = !DESCRIPTORS && !fails(function () {
 });
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var global = __webpack_require__(42);
@@ -18538,11 +18548,11 @@ module.exports = function (it) {
 };
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var DESCRIPTORS = __webpack_require__(44);
-var definePropertyModule = __webpack_require__(58);
+var definePropertyModule = __webpack_require__(59);
 var createPropertyDescriptor = __webpack_require__(47);
 module.exports = DESCRIPTORS ? function (object, key, value) {
  return definePropertyModule.f(object, key, createPropertyDescriptor(1, value));
@@ -18552,12 +18562,12 @@ module.exports = DESCRIPTORS ? function (object, key, value) {
 };
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 var DESCRIPTORS = __webpack_require__(44);
-var IE8_DOM_DEFINE = __webpack_require__(55);
-var anObject = __webpack_require__(59);
+var IE8_DOM_DEFINE = __webpack_require__(56);
+var anObject = __webpack_require__(60);
 var toPrimitive = __webpack_require__(52);
 var $defineProperty = Object.defineProperty;
 exports.f = DESCRIPTORS ? $defineProperty : function defineProperty(O, P, Attributes) {
@@ -18577,7 +18587,7 @@ exports.f = DESCRIPTORS ? $defineProperty : function defineProperty(O, P, Attrib
 };
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var isObject = __webpack_require__(53);
@@ -18589,15 +18599,15 @@ module.exports = function (it) {
 };
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var global = __webpack_require__(42);
-var createNonEnumerableProperty = __webpack_require__(57);
+var createNonEnumerableProperty = __webpack_require__(58);
 var has = __webpack_require__(54);
-var setGlobal = __webpack_require__(61);
-var inspectSource = __webpack_require__(62);
-var InternalStateModule = __webpack_require__(64);
+var setGlobal = __webpack_require__(62);
+var inspectSource = __webpack_require__(63);
+var InternalStateModule = __webpack_require__(65);
 var getInternalState = InternalStateModule.get;
 var enforceInternalState = InternalStateModule.enforce;
 var TEMPLATE = String(String).split('String');
@@ -18635,11 +18645,11 @@ var TEMPLATE = String(String).split('String');
 });
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var global = __webpack_require__(42);
-var createNonEnumerableProperty = __webpack_require__(57);
+var createNonEnumerableProperty = __webpack_require__(58);
 module.exports = function (key, value) {
  try {
   createNonEnumerableProperty(global, key, value);
@@ -18650,10 +18660,10 @@ module.exports = function (key, value) {
 };
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var store = __webpack_require__(63);
+var store = __webpack_require__(64);
 var functionToString = Function.toString;
 if (typeof store.inspectSource != 'function') {
  store.inspectSource = function (it) {
@@ -18663,27 +18673,28 @@ if (typeof store.inspectSource != 'function') {
 module.exports = store.inspectSource;
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var global = __webpack_require__(42);
-var setGlobal = __webpack_require__(61);
+var setGlobal = __webpack_require__(62);
 var SHARED = '__core-js_shared__';
 var store = global[SHARED] || setGlobal(SHARED, {});
 module.exports = store;
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var NATIVE_WEAK_MAP = __webpack_require__(65);
+var NATIVE_WEAK_MAP = __webpack_require__(66);
 var global = __webpack_require__(42);
 var isObject = __webpack_require__(53);
-var createNonEnumerableProperty = __webpack_require__(57);
+var createNonEnumerableProperty = __webpack_require__(58);
 var objectHas = __webpack_require__(54);
-var shared = __webpack_require__(63);
-var sharedKey = __webpack_require__(66);
-var hiddenKeys = __webpack_require__(70);
+var shared = __webpack_require__(64);
+var sharedKey = __webpack_require__(67);
+var hiddenKeys = __webpack_require__(71);
+var OBJECT_ALREADY_INITIALIZED = 'Object already initialized';
 var WeakMap = global.WeakMap;
 var set, get, has;
 var enforce = function (it) {
@@ -18698,12 +18709,14 @@ var getterFor = function (TYPE) {
   return state;
  };
 };
-if (NATIVE_WEAK_MAP) {
+if (NATIVE_WEAK_MAP || shared.state) {
  var store = shared.state || (shared.state = new WeakMap());
  var wmget = store.get;
  var wmhas = store.has;
  var wmset = store.set;
  set = function (it, metadata) {
+  if (wmhas.call(store, it))
+   throw new TypeError(OBJECT_ALREADY_INITIALIZED);
   metadata.facade = it;
   wmset.call(store, it, metadata);
   return metadata;
@@ -18718,6 +18731,8 @@ if (NATIVE_WEAK_MAP) {
  var STATE = sharedKey('state');
  hiddenKeys[STATE] = true;
  set = function (it, metadata) {
+  if (objectHas(it, STATE))
+   throw new TypeError(OBJECT_ALREADY_INITIALIZED);
   metadata.facade = it;
   createNonEnumerableProperty(it, STATE, metadata);
   return metadata;
@@ -18738,47 +18753,47 @@ module.exports = {
 };
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var global = __webpack_require__(42);
-var inspectSource = __webpack_require__(62);
+var inspectSource = __webpack_require__(63);
 var WeakMap = global.WeakMap;
 module.exports = typeof WeakMap === 'function' && /native code/.test(inspectSource(WeakMap));
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var shared = __webpack_require__(67);
-var uid = __webpack_require__(69);
+var shared = __webpack_require__(68);
+var uid = __webpack_require__(70);
 var keys = shared('keys');
 module.exports = function (key) {
  return keys[key] || (keys[key] = uid(key));
 };
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var IS_PURE = __webpack_require__(68);
-var store = __webpack_require__(63);
+var IS_PURE = __webpack_require__(69);
+var store = __webpack_require__(64);
 (module.exports = function (key, value) {
  return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
- version: '3.10.0',
+ version: '3.13.0',
  mode: IS_PURE ? 'pure' : 'global',
  copyright: '© 2021 Denis Pushkarev (zloirock.ru)'
 });
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ ((module) => {
 
 module.exports = false;
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ ((module) => {
 
 var id = 0;
@@ -18788,19 +18803,19 @@ module.exports = function (key) {
 };
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ ((module) => {
 
 module.exports = {};
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var has = __webpack_require__(54);
-var ownKeys = __webpack_require__(72);
+var ownKeys = __webpack_require__(73);
 var getOwnPropertyDescriptorModule = __webpack_require__(43);
-var definePropertyModule = __webpack_require__(58);
+var definePropertyModule = __webpack_require__(59);
 module.exports = function (target, source) {
  var keys = ownKeys(source);
  var defineProperty = definePropertyModule.f;
@@ -18813,13 +18828,13 @@ module.exports = function (target, source) {
 };
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var getBuiltIn = __webpack_require__(73);
-var getOwnPropertyNamesModule = __webpack_require__(75);
-var getOwnPropertySymbolsModule = __webpack_require__(82);
-var anObject = __webpack_require__(59);
+var getBuiltIn = __webpack_require__(74);
+var getOwnPropertyNamesModule = __webpack_require__(76);
+var getOwnPropertySymbolsModule = __webpack_require__(83);
+var anObject = __webpack_require__(60);
 module.exports = getBuiltIn('Reflect', 'ownKeys') || function ownKeys(it) {
  var keys = getOwnPropertyNamesModule.f(anObject(it));
  var getOwnPropertySymbols = getOwnPropertySymbolsModule.f;
@@ -18827,10 +18842,10 @@ module.exports = getBuiltIn('Reflect', 'ownKeys') || function ownKeys(it) {
 };
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var path = __webpack_require__(74);
+var path = __webpack_require__(75);
 var global = __webpack_require__(42);
 var aFunction = function (variable) {
  return typeof variable == 'function' ? variable : undefined;
@@ -18840,31 +18855,31 @@ module.exports = function (namespace, method) {
 };
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var global = __webpack_require__(42);
 module.exports = global;
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-var internalObjectKeys = __webpack_require__(76);
-var enumBugKeys = __webpack_require__(81);
+var internalObjectKeys = __webpack_require__(77);
+var enumBugKeys = __webpack_require__(82);
 var hiddenKeys = enumBugKeys.concat('length', 'prototype');
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
  return internalObjectKeys(O, hiddenKeys);
 };
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var has = __webpack_require__(54);
 var toIndexedObject = __webpack_require__(48);
-var indexOf = __webpack_require__(77).indexOf;
-var hiddenKeys = __webpack_require__(70);
+var indexOf = __webpack_require__(78).indexOf;
+var hiddenKeys = __webpack_require__(71);
 module.exports = function (object, names) {
  var O = toIndexedObject(object);
  var i = 0;
@@ -18880,12 +18895,12 @@ module.exports = function (object, names) {
 };
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var toIndexedObject = __webpack_require__(48);
-var toLength = __webpack_require__(78);
-var toAbsoluteIndex = __webpack_require__(80);
+var toLength = __webpack_require__(79);
+var toAbsoluteIndex = __webpack_require__(81);
 var createMethod = function (IS_INCLUDES) {
  return function ($this, el, fromIndex) {
   var O = toIndexedObject($this);
@@ -18912,17 +18927,17 @@ module.exports = {
 };
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var toInteger = __webpack_require__(79);
+var toInteger = __webpack_require__(80);
 var min = Math.min;
 module.exports = function (argument) {
  return argument > 0 ? min(toInteger(argument), 0x1FFFFFFFFFFFFF) : 0;
 };
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ ((module) => {
 
 var ceil = Math.ceil;
@@ -18932,10 +18947,10 @@ module.exports = function (argument) {
 };
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var toInteger = __webpack_require__(79);
+var toInteger = __webpack_require__(80);
 var max = Math.max;
 var min = Math.min;
 module.exports = function (index, length) {
@@ -18944,7 +18959,7 @@ module.exports = function (index, length) {
 };
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ ((module) => {
 
 module.exports = [
@@ -18958,13 +18973,13 @@ module.exports = [
 ];
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ ((__unused_webpack_module, exports) => {
 
 exports.f = Object.getOwnPropertySymbols;
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var fails = __webpack_require__(45);
@@ -18982,24 +18997,24 @@ var POLYFILL = isForced.POLYFILL = 'P';
 module.exports = isForced;
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-__webpack_require__(85);
-__webpack_require__(107);
-var path = __webpack_require__(74);
+__webpack_require__(86);
+__webpack_require__(106);
+var path = __webpack_require__(75);
 module.exports = path.Object.fromEntries;
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 var toIndexedObject = __webpack_require__(48);
-var addToUnscopables = __webpack_require__(86);
+var addToUnscopables = __webpack_require__(87);
 var Iterators = __webpack_require__(97);
-var InternalStateModule = __webpack_require__(64);
+var InternalStateModule = __webpack_require__(65);
 var defineIterator = __webpack_require__(98);
 var ARRAY_ITERATOR = 'Array Iterator';
 var setInternalState = InternalStateModule.set;
@@ -19047,12 +19062,12 @@ addToUnscopables('values');
 addToUnscopables('entries');
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var wellKnownSymbol = __webpack_require__(87);
+var wellKnownSymbol = __webpack_require__(88);
 var create = __webpack_require__(93);
-var definePropertyModule = __webpack_require__(58);
+var definePropertyModule = __webpack_require__(59);
 var UNSCOPABLES = wellKnownSymbol('unscopables');
 var ArrayPrototype = Array.prototype;
 if (ArrayPrototype[UNSCOPABLES] == undefined) {
@@ -19066,14 +19081,14 @@ module.exports = function (key) {
 };
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var global = __webpack_require__(42);
-var shared = __webpack_require__(67);
+var shared = __webpack_require__(68);
 var has = __webpack_require__(54);
-var uid = __webpack_require__(69);
-var NATIVE_SYMBOL = __webpack_require__(88);
+var uid = __webpack_require__(70);
+var NATIVE_SYMBOL = __webpack_require__(89);
 var USE_SYMBOL_AS_UID = __webpack_require__(92);
 var WellKnownSymbolsStore = shared('wks');
 var Symbol = global.Symbol;
@@ -19090,23 +19105,14 @@ module.exports = function (name) {
 };
 
 /***/ }),
-/* 88 */
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var IS_NODE = __webpack_require__(89);
-var V8_VERSION = __webpack_require__(90);
-var fails = __webpack_require__(45);
-module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
- return !Symbol.sham && (IS_NODE ? V8_VERSION === 38 : V8_VERSION > 37 && V8_VERSION < 41);
-});
-
-/***/ }),
 /* 89 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var classof = __webpack_require__(50);
-var global = __webpack_require__(42);
-module.exports = classof(global.process) == 'process';
+var V8_VERSION = __webpack_require__(90);
+var fails = __webpack_require__(45);
+module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
+ return !String(Symbol()) || !Symbol.sham && V8_VERSION && V8_VERSION < 41;
+});
 
 /***/ }),
 /* 90 */
@@ -19120,7 +19126,7 @@ var v8 = versions && versions.v8;
 var match, version;
 if (v8) {
  match = v8.split('.');
- version = match[0] + match[1];
+ version = match[0] < 4 ? 1 : match[0] + match[1];
 } else if (userAgent) {
  match = userAgent.match(/Edge\/(\d+)/);
  if (!match || match[1] >= 74) {
@@ -19135,27 +19141,27 @@ module.exports = version && +version;
 /* 91 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var getBuiltIn = __webpack_require__(73);
+var getBuiltIn = __webpack_require__(74);
 module.exports = getBuiltIn('navigator', 'userAgent') || '';
 
 /***/ }),
 /* 92 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var NATIVE_SYMBOL = __webpack_require__(88);
+var NATIVE_SYMBOL = __webpack_require__(89);
 module.exports = NATIVE_SYMBOL && !Symbol.sham && typeof Symbol.iterator == 'symbol';
 
 /***/ }),
 /* 93 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var anObject = __webpack_require__(59);
+var anObject = __webpack_require__(60);
 var defineProperties = __webpack_require__(94);
-var enumBugKeys = __webpack_require__(81);
-var hiddenKeys = __webpack_require__(70);
+var enumBugKeys = __webpack_require__(82);
+var hiddenKeys = __webpack_require__(71);
 var html = __webpack_require__(96);
-var documentCreateElement = __webpack_require__(56);
-var sharedKey = __webpack_require__(66);
+var documentCreateElement = __webpack_require__(57);
+var sharedKey = __webpack_require__(67);
 var GT = '>';
 var LT = '<';
 var PROTOTYPE = 'prototype';
@@ -19216,8 +19222,8 @@ module.exports = Object.create || function create(O, Properties) {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var DESCRIPTORS = __webpack_require__(44);
-var definePropertyModule = __webpack_require__(58);
-var anObject = __webpack_require__(59);
+var definePropertyModule = __webpack_require__(59);
+var anObject = __webpack_require__(60);
 var objectKeys = __webpack_require__(95);
 module.exports = DESCRIPTORS ? Object.defineProperties : function defineProperties(O, Properties) {
  anObject(O);
@@ -19234,8 +19240,8 @@ module.exports = DESCRIPTORS ? Object.defineProperties : function defineProperti
 /* 95 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var internalObjectKeys = __webpack_require__(76);
-var enumBugKeys = __webpack_require__(81);
+var internalObjectKeys = __webpack_require__(77);
+var enumBugKeys = __webpack_require__(82);
 module.exports = Object.keys || function keys(O) {
  return internalObjectKeys(O, enumBugKeys);
 };
@@ -19244,7 +19250,7 @@ module.exports = Object.keys || function keys(O) {
 /* 96 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var getBuiltIn = __webpack_require__(73);
+var getBuiltIn = __webpack_require__(74);
 module.exports = getBuiltIn('document', 'documentElement');
 
 /***/ }),
@@ -19262,12 +19268,12 @@ module.exports = {};
 var $ = __webpack_require__(41);
 var createIteratorConstructor = __webpack_require__(99);
 var getPrototypeOf = __webpack_require__(101);
-var setPrototypeOf = __webpack_require__(105);
-var setToStringTag = __webpack_require__(104);
-var createNonEnumerableProperty = __webpack_require__(57);
-var redefine = __webpack_require__(60);
-var wellKnownSymbol = __webpack_require__(87);
-var IS_PURE = __webpack_require__(68);
+var setPrototypeOf = __webpack_require__(104);
+var setToStringTag = __webpack_require__(103);
+var createNonEnumerableProperty = __webpack_require__(58);
+var redefine = __webpack_require__(61);
+var wellKnownSymbol = __webpack_require__(88);
+var IS_PURE = __webpack_require__(69);
 var Iterators = __webpack_require__(97);
 var IteratorsCore = __webpack_require__(100);
 var IteratorPrototype = IteratorsCore.IteratorPrototype;
@@ -19367,7 +19373,7 @@ module.exports = function (Iterable, NAME, IteratorConstructor, next, DEFAULT, I
 var IteratorPrototype = __webpack_require__(100).IteratorPrototype;
 var create = __webpack_require__(93);
 var createPropertyDescriptor = __webpack_require__(47);
-var setToStringTag = __webpack_require__(104);
+var setToStringTag = __webpack_require__(103);
 var Iterators = __webpack_require__(97);
 var returnThis = function () {
  return this;
@@ -19388,10 +19394,10 @@ module.exports = function (IteratorConstructor, NAME, next) {
 
 var fails = __webpack_require__(45);
 var getPrototypeOf = __webpack_require__(101);
-var createNonEnumerableProperty = __webpack_require__(57);
+var createNonEnumerableProperty = __webpack_require__(58);
 var has = __webpack_require__(54);
-var wellKnownSymbol = __webpack_require__(87);
-var IS_PURE = __webpack_require__(68);
+var wellKnownSymbol = __webpack_require__(88);
+var IS_PURE = __webpack_require__(69);
 var ITERATOR = wellKnownSymbol('iterator');
 var BUGGY_SAFARI_ITERATORS = false;
 var returnThis = function () {
@@ -19427,9 +19433,9 @@ module.exports = {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var has = __webpack_require__(54);
-var toObject = __webpack_require__(102);
-var sharedKey = __webpack_require__(66);
-var CORRECT_PROTOTYPE_GETTER = __webpack_require__(103);
+var toObject = __webpack_require__(55);
+var sharedKey = __webpack_require__(67);
+var CORRECT_PROTOTYPE_GETTER = __webpack_require__(102);
 var IE_PROTO = sharedKey('IE_PROTO');
 var ObjectPrototype = Object.prototype;
 module.exports = CORRECT_PROTOTYPE_GETTER ? Object.getPrototypeOf : function (O) {
@@ -19446,15 +19452,6 @@ module.exports = CORRECT_PROTOTYPE_GETTER ? Object.getPrototypeOf : function (O)
 /* 102 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var requireObjectCoercible = __webpack_require__(51);
-module.exports = function (argument) {
- return Object(requireObjectCoercible(argument));
-};
-
-/***/ }),
-/* 103 */
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
 var fails = __webpack_require__(45);
 module.exports = !fails(function () {
  function F() {
@@ -19464,12 +19461,12 @@ module.exports = !fails(function () {
 });
 
 /***/ }),
-/* 104 */
+/* 103 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var defineProperty = __webpack_require__(58).f;
+var defineProperty = __webpack_require__(59).f;
 var has = __webpack_require__(54);
-var wellKnownSymbol = __webpack_require__(87);
+var wellKnownSymbol = __webpack_require__(88);
 var TO_STRING_TAG = wellKnownSymbol('toStringTag');
 module.exports = function (it, TAG, STATIC) {
  if (it && !has(it = STATIC ? it : it.prototype, TO_STRING_TAG)) {
@@ -19481,11 +19478,11 @@ module.exports = function (it, TAG, STATIC) {
 };
 
 /***/ }),
-/* 105 */
+/* 104 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var anObject = __webpack_require__(59);
-var aPossiblePrototype = __webpack_require__(106);
+var anObject = __webpack_require__(60);
+var aPossiblePrototype = __webpack_require__(105);
 module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
  var CORRECT_SETTER = false;
  var test = {};
@@ -19508,7 +19505,7 @@ module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
 }() : undefined);
 
 /***/ }),
-/* 106 */
+/* 105 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var isObject = __webpack_require__(53);
@@ -19520,12 +19517,12 @@ module.exports = function (it) {
 };
 
 /***/ }),
-/* 107 */
+/* 106 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 var $ = __webpack_require__(41);
-var iterate = __webpack_require__(108);
-var createProperty = __webpack_require__(116);
+var iterate = __webpack_require__(107);
+var createProperty = __webpack_require__(115);
 $({
  target: 'Object',
  stat: true
@@ -19540,15 +19537,15 @@ $({
 });
 
 /***/ }),
-/* 108 */
+/* 107 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var anObject = __webpack_require__(59);
-var isArrayIteratorMethod = __webpack_require__(109);
-var toLength = __webpack_require__(78);
-var bind = __webpack_require__(110);
-var getIteratorMethod = __webpack_require__(112);
-var iteratorClose = __webpack_require__(115);
+var anObject = __webpack_require__(60);
+var isArrayIteratorMethod = __webpack_require__(108);
+var toLength = __webpack_require__(79);
+var bind = __webpack_require__(109);
+var getIteratorMethod = __webpack_require__(111);
+var iteratorClose = __webpack_require__(114);
 var Result = function (stopped, result) {
  this.stopped = stopped;
  this.result = result;
@@ -19603,10 +19600,10 @@ module.exports = function (iterable, unboundFunction, options) {
 };
 
 /***/ }),
-/* 109 */
+/* 108 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var wellKnownSymbol = __webpack_require__(87);
+var wellKnownSymbol = __webpack_require__(88);
 var Iterators = __webpack_require__(97);
 var ITERATOR = wellKnownSymbol('iterator');
 var ArrayPrototype = Array.prototype;
@@ -19615,10 +19612,10 @@ module.exports = function (it) {
 };
 
 /***/ }),
-/* 110 */
+/* 109 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var aFunction = __webpack_require__(111);
+var aFunction = __webpack_require__(110);
 module.exports = function (fn, that, length) {
  aFunction(fn);
  if (that === undefined)
@@ -19647,7 +19644,7 @@ module.exports = function (fn, that, length) {
 };
 
 /***/ }),
-/* 111 */
+/* 110 */
 /***/ ((module) => {
 
 module.exports = function (it) {
@@ -19658,12 +19655,12 @@ module.exports = function (it) {
 };
 
 /***/ }),
-/* 112 */
+/* 111 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var classof = __webpack_require__(113);
+var classof = __webpack_require__(112);
 var Iterators = __webpack_require__(97);
-var wellKnownSymbol = __webpack_require__(87);
+var wellKnownSymbol = __webpack_require__(88);
 var ITERATOR = wellKnownSymbol('iterator');
 module.exports = function (it) {
  if (it != undefined)
@@ -19671,12 +19668,12 @@ module.exports = function (it) {
 };
 
 /***/ }),
-/* 113 */
+/* 112 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var TO_STRING_TAG_SUPPORT = __webpack_require__(114);
+var TO_STRING_TAG_SUPPORT = __webpack_require__(113);
 var classofRaw = __webpack_require__(50);
-var wellKnownSymbol = __webpack_require__(87);
+var wellKnownSymbol = __webpack_require__(88);
 var TO_STRING_TAG = wellKnownSymbol('toStringTag');
 var CORRECT_ARGUMENTS = classofRaw(function () {
  return arguments;
@@ -19693,20 +19690,20 @@ module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
 };
 
 /***/ }),
-/* 114 */
+/* 113 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var wellKnownSymbol = __webpack_require__(87);
+var wellKnownSymbol = __webpack_require__(88);
 var TO_STRING_TAG = wellKnownSymbol('toStringTag');
 var test = {};
 test[TO_STRING_TAG] = 'z';
 module.exports = String(test) === '[object z]';
 
 /***/ }),
-/* 115 */
+/* 114 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var anObject = __webpack_require__(59);
+var anObject = __webpack_require__(60);
 module.exports = function (iterator) {
  var returnMethod = iterator['return'];
  if (returnMethod !== undefined) {
@@ -19715,13 +19712,13 @@ module.exports = function (iterator) {
 };
 
 /***/ }),
-/* 116 */
+/* 115 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 var toPrimitive = __webpack_require__(52);
-var definePropertyModule = __webpack_require__(58);
+var definePropertyModule = __webpack_require__(59);
 var createPropertyDescriptor = __webpack_require__(47);
 module.exports = function (object, key, value) {
  var propertyKey = toPrimitive(key);
@@ -19732,33 +19729,33 @@ module.exports = function (object, key, value) {
 };
 
 /***/ }),
-/* 117 */
+/* 116 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+__webpack_require__(117);
 __webpack_require__(118);
-__webpack_require__(119);
-__webpack_require__(121);
-__webpack_require__(136);
+__webpack_require__(120);
 __webpack_require__(137);
 __webpack_require__(138);
 __webpack_require__(139);
-__webpack_require__(141);
-var path = __webpack_require__(74);
+__webpack_require__(140);
+__webpack_require__(142);
+var path = __webpack_require__(75);
 module.exports = path.Promise;
 
 /***/ }),
-/* 118 */
+/* 117 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 var $ = __webpack_require__(41);
 var getPrototypeOf = __webpack_require__(101);
-var setPrototypeOf = __webpack_require__(105);
+var setPrototypeOf = __webpack_require__(104);
 var create = __webpack_require__(93);
-var createNonEnumerableProperty = __webpack_require__(57);
+var createNonEnumerableProperty = __webpack_require__(58);
 var createPropertyDescriptor = __webpack_require__(47);
-var iterate = __webpack_require__(108);
+var iterate = __webpack_require__(107);
 var $AggregateError = function AggregateError(errors, message) {
  var that = this;
  if (!(that instanceof $AggregateError))
@@ -19781,71 +19778,74 @@ $AggregateError.prototype = create(Error.prototype, {
 $({ global: true }, { AggregateError: $AggregateError });
 
 /***/ }),
-/* 119 */
+/* 118 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-var TO_STRING_TAG_SUPPORT = __webpack_require__(114);
-var redefine = __webpack_require__(60);
-var toString = __webpack_require__(120);
+var TO_STRING_TAG_SUPPORT = __webpack_require__(113);
+var redefine = __webpack_require__(61);
+var toString = __webpack_require__(119);
 if (!TO_STRING_TAG_SUPPORT) {
  redefine(Object.prototype, 'toString', toString, { unsafe: true });
 }
 
 /***/ }),
-/* 120 */
+/* 119 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var TO_STRING_TAG_SUPPORT = __webpack_require__(114);
-var classof = __webpack_require__(113);
+var TO_STRING_TAG_SUPPORT = __webpack_require__(113);
+var classof = __webpack_require__(112);
 module.exports = TO_STRING_TAG_SUPPORT ? {}.toString : function toString() {
  return '[object ' + classof(this) + ']';
 };
 
 /***/ }),
-/* 121 */
+/* 120 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 var $ = __webpack_require__(41);
-var IS_PURE = __webpack_require__(68);
+var IS_PURE = __webpack_require__(69);
 var global = __webpack_require__(42);
-var getBuiltIn = __webpack_require__(73);
-var NativePromise = __webpack_require__(122);
-var redefine = __webpack_require__(60);
-var redefineAll = __webpack_require__(123);
-var setToStringTag = __webpack_require__(104);
-var setSpecies = __webpack_require__(124);
+var getBuiltIn = __webpack_require__(74);
+var NativePromise = __webpack_require__(121);
+var redefine = __webpack_require__(61);
+var redefineAll = __webpack_require__(122);
+var setPrototypeOf = __webpack_require__(104);
+var setToStringTag = __webpack_require__(103);
+var setSpecies = __webpack_require__(123);
 var isObject = __webpack_require__(53);
-var aFunction = __webpack_require__(111);
-var anInstance = __webpack_require__(125);
-var inspectSource = __webpack_require__(62);
-var iterate = __webpack_require__(108);
-var checkCorrectnessOfIteration = __webpack_require__(126);
-var speciesConstructor = __webpack_require__(127);
-var task = __webpack_require__(128).set;
+var aFunction = __webpack_require__(110);
+var anInstance = __webpack_require__(124);
+var inspectSource = __webpack_require__(63);
+var iterate = __webpack_require__(107);
+var checkCorrectnessOfIteration = __webpack_require__(125);
+var speciesConstructor = __webpack_require__(126);
+var task = __webpack_require__(127).set;
 var microtask = __webpack_require__(130);
 var promiseResolve = __webpack_require__(132);
 var hostReportErrors = __webpack_require__(134);
 var newPromiseCapabilityModule = __webpack_require__(133);
 var perform = __webpack_require__(135);
-var InternalStateModule = __webpack_require__(64);
-var isForced = __webpack_require__(83);
-var wellKnownSymbol = __webpack_require__(87);
-var IS_NODE = __webpack_require__(89);
+var InternalStateModule = __webpack_require__(65);
+var isForced = __webpack_require__(84);
+var wellKnownSymbol = __webpack_require__(88);
+var IS_BROWSER = __webpack_require__(136);
+var IS_NODE = __webpack_require__(129);
 var V8_VERSION = __webpack_require__(90);
 var SPECIES = wellKnownSymbol('species');
 var PROMISE = 'Promise';
 var getInternalState = InternalStateModule.get;
 var setInternalState = InternalStateModule.set;
 var getInternalPromiseState = InternalStateModule.getterFor(PROMISE);
+var NativePromisePrototype = NativePromise && NativePromise.prototype;
 var PromiseConstructor = NativePromise;
+var PromiseConstructorPrototype = NativePromisePrototype;
 var TypeError = global.TypeError;
 var document = global.document;
 var process = global.process;
-var $fetch = getBuiltIn('fetch');
 var newPromiseCapability = newPromiseCapabilityModule.f;
 var newGenericPromiseCapability = newPromiseCapability;
 var DISPATCH_EVENT = !!(document && document.createEvent && global.dispatchEvent);
@@ -19857,20 +19857,19 @@ var FULFILLED = 1;
 var REJECTED = 2;
 var HANDLED = 1;
 var UNHANDLED = 2;
+var SUBCLASSING = false;
 var Internal, OwnPromiseCapability, PromiseWrapper, nativeThen;
 var FORCED = isForced(PROMISE, function () {
  var GLOBAL_CORE_JS_PROMISE = inspectSource(PromiseConstructor) !== String(PromiseConstructor);
- if (!GLOBAL_CORE_JS_PROMISE) {
-  if (V8_VERSION === 66)
-   return true;
-  if (!IS_NODE && !NATIVE_REJECTION_EVENT)
-   return true;
- }
- if (IS_PURE && !PromiseConstructor.prototype['finally'])
+ if (!GLOBAL_CORE_JS_PROMISE && V8_VERSION === 66)
+  return true;
+ if (IS_PURE && !PromiseConstructorPrototype['finally'])
   return true;
  if (V8_VERSION >= 51 && /native code/.test(PromiseConstructor))
   return false;
- var promise = PromiseConstructor.resolve(1);
+ var promise = new PromiseConstructor(function (resolve) {
+  resolve(1);
+ });
  var FakePromise = function (exec) {
   exec(function () {
   }, function () {
@@ -19878,8 +19877,11 @@ var FORCED = isForced(PROMISE, function () {
  };
  var constructor = promise.constructor = {};
  constructor[SPECIES] = FakePromise;
- return !(promise.then(function () {
- }) instanceof FakePromise);
+ SUBCLASSING = promise.then(function () {
+ }) instanceof FakePromise;
+ if (!SUBCLASSING)
+  return true;
+ return !GLOBAL_CORE_JS_PROMISE && IS_BROWSER && !NATIVE_REJECTION_EVENT;
 });
 var INCORRECT_ITERATION = FORCED || !checkCorrectnessOfIteration(function (iterable) {
  PromiseConstructor.all(iterable)['catch'](function () {
@@ -20047,6 +20049,7 @@ if (FORCED) {
    internalReject(state, error);
   }
  };
+ PromiseConstructorPrototype = PromiseConstructor.prototype;
  Internal = function Promise(executor) {
   setInternalState(this, {
    type: PROMISE,
@@ -20059,7 +20062,7 @@ if (FORCED) {
    value: undefined
   });
  };
- Internal.prototype = redefineAll(PromiseConstructor.prototype, {
+ Internal.prototype = redefineAll(PromiseConstructorPrototype, {
   then: function then(onFulfilled, onRejected) {
    var state = getInternalPromiseState(this);
    var reaction = newPromiseCapability(speciesConstructor(this, PromiseConstructor));
@@ -20086,24 +20089,24 @@ if (FORCED) {
  newPromiseCapabilityModule.f = newPromiseCapability = function (C) {
   return C === PromiseConstructor || C === PromiseWrapper ? new OwnPromiseCapability(C) : newGenericPromiseCapability(C);
  };
- if (!IS_PURE && typeof NativePromise == 'function') {
-  nativeThen = NativePromise.prototype.then;
-  redefine(NativePromise.prototype, 'then', function then(onFulfilled, onRejected) {
-   var that = this;
-   return new PromiseConstructor(function (resolve, reject) {
-    nativeThen.call(that, resolve, reject);
-   }).then(onFulfilled, onRejected);
-  }, { unsafe: true });
-  if (typeof $fetch == 'function')
-   $({
-    global: true,
-    enumerable: true,
-    forced: true
-   }, {
-    fetch: function fetch(input) {
-     return promiseResolve(PromiseConstructor, $fetch.apply(global, arguments));
-    }
-   });
+ if (!IS_PURE && typeof NativePromise == 'function' && NativePromisePrototype !== Object.prototype) {
+  nativeThen = NativePromisePrototype.then;
+  if (!SUBCLASSING) {
+   redefine(NativePromisePrototype, 'then', function then(onFulfilled, onRejected) {
+    var that = this;
+    return new PromiseConstructor(function (resolve, reject) {
+     nativeThen.call(that, resolve, reject);
+    }).then(onFulfilled, onRejected);
+   }, { unsafe: true });
+   redefine(NativePromisePrototype, 'catch', PromiseConstructorPrototype['catch'], { unsafe: true });
+  }
+  try {
+   delete NativePromisePrototype.constructor;
+  } catch (error) {
+  }
+  if (setPrototypeOf) {
+   setPrototypeOf(NativePromisePrototype, PromiseConstructorPrototype);
+  }
  }
 }
 $({
@@ -20185,17 +20188,17 @@ $({
 });
 
 /***/ }),
-/* 122 */
+/* 121 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var global = __webpack_require__(42);
 module.exports = global.Promise;
 
 /***/ }),
-/* 123 */
+/* 122 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var redefine = __webpack_require__(60);
+var redefine = __webpack_require__(61);
 module.exports = function (target, src, options) {
  for (var key in src)
   redefine(target, key, src[key], options);
@@ -20203,14 +20206,14 @@ module.exports = function (target, src, options) {
 };
 
 /***/ }),
-/* 124 */
+/* 123 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var getBuiltIn = __webpack_require__(73);
-var definePropertyModule = __webpack_require__(58);
-var wellKnownSymbol = __webpack_require__(87);
+var getBuiltIn = __webpack_require__(74);
+var definePropertyModule = __webpack_require__(59);
+var wellKnownSymbol = __webpack_require__(88);
 var DESCRIPTORS = __webpack_require__(44);
 var SPECIES = wellKnownSymbol('species');
 module.exports = function (CONSTRUCTOR_NAME) {
@@ -20227,7 +20230,7 @@ module.exports = function (CONSTRUCTOR_NAME) {
 };
 
 /***/ }),
-/* 125 */
+/* 124 */
 /***/ ((module) => {
 
 module.exports = function (it, Constructor, name) {
@@ -20238,10 +20241,10 @@ module.exports = function (it, Constructor, name) {
 };
 
 /***/ }),
-/* 126 */
+/* 125 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var wellKnownSymbol = __webpack_require__(87);
+var wellKnownSymbol = __webpack_require__(88);
 var ITERATOR = wellKnownSymbol('iterator');
 var SAFE_CLOSING = false;
 try {
@@ -20282,12 +20285,12 @@ module.exports = function (exec, SKIP_CLOSING) {
 };
 
 /***/ }),
-/* 127 */
+/* 126 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var anObject = __webpack_require__(59);
-var aFunction = __webpack_require__(111);
-var wellKnownSymbol = __webpack_require__(87);
+var anObject = __webpack_require__(60);
+var aFunction = __webpack_require__(110);
+var wellKnownSymbol = __webpack_require__(88);
 var SPECIES = wellKnownSymbol('species');
 module.exports = function (O, defaultConstructor) {
  var C = anObject(O).constructor;
@@ -20296,16 +20299,16 @@ module.exports = function (O, defaultConstructor) {
 };
 
 /***/ }),
-/* 128 */
+/* 127 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var global = __webpack_require__(42);
 var fails = __webpack_require__(45);
-var bind = __webpack_require__(110);
+var bind = __webpack_require__(109);
 var html = __webpack_require__(96);
-var createElement = __webpack_require__(56);
-var IS_IOS = __webpack_require__(129);
-var IS_NODE = __webpack_require__(89);
+var createElement = __webpack_require__(57);
+var IS_IOS = __webpack_require__(128);
+var IS_NODE = __webpack_require__(129);
 var location = global.location;
 var set = global.setImmediate;
 var clear = global.clearImmediate;
@@ -20384,11 +20387,19 @@ module.exports = {
 };
 
 /***/ }),
-/* 129 */
+/* 128 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var userAgent = __webpack_require__(91);
-module.exports = /(iphone|ipod|ipad).*applewebkit/i.test(userAgent);
+module.exports = /(?:iphone|ipod|ipad).*applewebkit/i.test(userAgent);
+
+/***/ }),
+/* 129 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var classof = __webpack_require__(50);
+var global = __webpack_require__(42);
+module.exports = classof(global.process) == 'process';
 
 /***/ }),
 /* 130 */
@@ -20396,10 +20407,10 @@ module.exports = /(iphone|ipod|ipad).*applewebkit/i.test(userAgent);
 
 var global = __webpack_require__(42);
 var getOwnPropertyDescriptor = __webpack_require__(43).f;
-var macrotask = __webpack_require__(128).set;
-var IS_IOS = __webpack_require__(129);
+var macrotask = __webpack_require__(127).set;
+var IS_IOS = __webpack_require__(128);
 var IS_WEBOS_WEBKIT = __webpack_require__(131);
-var IS_NODE = __webpack_require__(89);
+var IS_NODE = __webpack_require__(129);
 var MutationObserver = global.MutationObserver || global.WebKitMutationObserver;
 var document = global.document;
 var process = global.process;
@@ -20438,6 +20449,7 @@ if (!queueMicrotask) {
   };
  } else if (Promise && Promise.resolve) {
   promise = Promise.resolve(undefined);
+  promise.constructor = Promise;
   then = promise.then;
   notify = function () {
    then.call(promise, flush);
@@ -20477,7 +20489,7 @@ module.exports = /web0s(?!.*chrome)/i.test(userAgent);
 /* 132 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var anObject = __webpack_require__(59);
+var anObject = __webpack_require__(60);
 var isObject = __webpack_require__(53);
 var newPromiseCapability = __webpack_require__(133);
 module.exports = function (C, x) {
@@ -20496,7 +20508,7 @@ module.exports = function (C, x) {
 
 "use strict";
 
-var aFunction = __webpack_require__(111);
+var aFunction = __webpack_require__(110);
 var PromiseCapability = function (C) {
  var resolve, reject;
  this.promise = new C(function ($$resolve, $$reject) {
@@ -20544,15 +20556,21 @@ module.exports = function (exec) {
 
 /***/ }),
 /* 136 */
+/***/ ((module) => {
+
+module.exports = typeof window == 'object';
+
+/***/ }),
+/* 137 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 var $ = __webpack_require__(41);
-var aFunction = __webpack_require__(111);
+var aFunction = __webpack_require__(110);
 var newPromiseCapabilityModule = __webpack_require__(133);
 var perform = __webpack_require__(135);
-var iterate = __webpack_require__(108);
+var iterate = __webpack_require__(107);
 $({
  target: 'Promise',
  stat: true
@@ -20601,17 +20619,17 @@ $({
 });
 
 /***/ }),
-/* 137 */
+/* 138 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 var $ = __webpack_require__(41);
-var aFunction = __webpack_require__(111);
-var getBuiltIn = __webpack_require__(73);
+var aFunction = __webpack_require__(110);
+var getBuiltIn = __webpack_require__(74);
 var newPromiseCapabilityModule = __webpack_require__(133);
 var perform = __webpack_require__(135);
-var iterate = __webpack_require__(108);
+var iterate = __webpack_require__(107);
 var PROMISE_ANY_ERROR = 'No one promise resolved';
 $({
  target: 'Promise',
@@ -20655,19 +20673,19 @@ $({
 });
 
 /***/ }),
-/* 138 */
+/* 139 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 var $ = __webpack_require__(41);
-var IS_PURE = __webpack_require__(68);
-var NativePromise = __webpack_require__(122);
+var IS_PURE = __webpack_require__(69);
+var NativePromise = __webpack_require__(121);
 var fails = __webpack_require__(45);
-var getBuiltIn = __webpack_require__(73);
-var speciesConstructor = __webpack_require__(127);
+var getBuiltIn = __webpack_require__(74);
+var speciesConstructor = __webpack_require__(126);
 var promiseResolve = __webpack_require__(132);
-var redefine = __webpack_require__(60);
+var redefine = __webpack_require__(61);
 var NON_GENERIC = !!NativePromise && fails(function () {
  NativePromise.prototype['finally'].call({
   then: function () {
@@ -20695,18 +20713,21 @@ $({
   } : onFinally);
  }
 });
-if (!IS_PURE && typeof NativePromise == 'function' && !NativePromise.prototype['finally']) {
- redefine(NativePromise.prototype, 'finally', getBuiltIn('Promise').prototype['finally']);
+if (!IS_PURE && typeof NativePromise == 'function') {
+ var method = getBuiltIn('Promise').prototype['finally'];
+ if (NativePromise.prototype['finally'] !== method) {
+  redefine(NativePromise.prototype, 'finally', method, { unsafe: true });
+ }
 }
 
 /***/ }),
-/* 139 */
+/* 140 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var charAt = __webpack_require__(140).charAt;
-var InternalStateModule = __webpack_require__(64);
+var charAt = __webpack_require__(141).charAt;
+var InternalStateModule = __webpack_require__(65);
 var defineIterator = __webpack_require__(98);
 var STRING_ITERATOR = 'String Iterator';
 var setInternalState = InternalStateModule.set;
@@ -20736,10 +20757,10 @@ defineIterator(String, 'String', function (iterated) {
 });
 
 /***/ }),
-/* 140 */
+/* 141 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var toInteger = __webpack_require__(79);
+var toInteger = __webpack_require__(80);
 var requireObjectCoercible = __webpack_require__(51);
 var createMethod = function (CONVERT_TO_STRING) {
  return function ($this, pos) {
@@ -20759,14 +20780,14 @@ module.exports = {
 };
 
 /***/ }),
-/* 141 */
+/* 142 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 var global = __webpack_require__(42);
-var DOMIterables = __webpack_require__(142);
-var ArrayIteratorMethods = __webpack_require__(85);
-var createNonEnumerableProperty = __webpack_require__(57);
-var wellKnownSymbol = __webpack_require__(87);
+var DOMIterables = __webpack_require__(143);
+var ArrayIteratorMethods = __webpack_require__(86);
+var createNonEnumerableProperty = __webpack_require__(58);
+var wellKnownSymbol = __webpack_require__(88);
 var ITERATOR = wellKnownSymbol('iterator');
 var TO_STRING_TAG = wellKnownSymbol('toStringTag');
 var ArrayValues = ArrayIteratorMethods.values;
@@ -20796,7 +20817,7 @@ for (var COLLECTION_NAME in DOMIterables) {
 }
 
 /***/ }),
-/* 142 */
+/* 143 */
 /***/ ((module) => {
 
 module.exports = {
@@ -20834,7 +20855,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 143 */
+/* 144 */
 /***/ (function(__unused_webpack_module, exports) {
 
 (function (global, factory) {
@@ -20845,6 +20866,7 @@ module.exports = {
   return "Symbol(" + description + ")";
  };
  function noop() {
+  return undefined;
  }
  function getGlobals() {
   if (typeof self !== 'undefined') {
@@ -22324,7 +22346,7 @@ module.exports = {
   Object.defineProperty(WritableStream.prototype, "locked", {
    get: function () {
     if (!IsWritableStream(this)) {
-     throw streamBrandCheckException('locked');
+     throw streamBrandCheckException$2('locked');
     }
     return IsWritableStreamLocked(this);
    },
@@ -22336,7 +22358,7 @@ module.exports = {
     reason = undefined;
    }
    if (!IsWritableStream(this)) {
-    return promiseRejectedWith(streamBrandCheckException('abort'));
+    return promiseRejectedWith(streamBrandCheckException$2('abort'));
    }
    if (IsWritableStreamLocked(this)) {
     return promiseRejectedWith(new TypeError('Cannot abort a stream that already has a writer'));
@@ -22345,7 +22367,7 @@ module.exports = {
   };
   WritableStream.prototype.close = function () {
    if (!IsWritableStream(this)) {
-    return promiseRejectedWith(streamBrandCheckException('close'));
+    return promiseRejectedWith(streamBrandCheckException$2('close'));
    }
    if (IsWritableStreamLocked(this)) {
     return promiseRejectedWith(new TypeError('Cannot close a stream that already has a writer'));
@@ -22357,7 +22379,7 @@ module.exports = {
   };
   WritableStream.prototype.getWriter = function () {
    if (!IsWritableStream(this)) {
-    throw streamBrandCheckException('getWriter');
+    throw streamBrandCheckException$2('getWriter');
    }
    return AcquireWritableStreamDefaultWriter(this);
   };
@@ -23016,7 +23038,7 @@ module.exports = {
   WritableStreamDefaultControllerClearAlgorithms(controller);
   WritableStreamStartErroring(stream, error);
  }
- function streamBrandCheckException(name) {
+ function streamBrandCheckException$2(name) {
   return new TypeError("WritableStream.prototype." + name + " can only be used on a WritableStream");
  }
  function defaultWriterBrandCheckException(name) {
@@ -23322,7 +23344,7 @@ module.exports = {
   Object.defineProperty(ReadableStreamDefaultController.prototype, "desiredSize", {
    get: function () {
     if (!IsReadableStreamDefaultController(this)) {
-     throw defaultControllerBrandCheckException('desiredSize');
+     throw defaultControllerBrandCheckException$1('desiredSize');
     }
     return ReadableStreamDefaultControllerGetDesiredSize(this);
    },
@@ -23331,7 +23353,7 @@ module.exports = {
   });
   ReadableStreamDefaultController.prototype.close = function () {
    if (!IsReadableStreamDefaultController(this)) {
-    throw defaultControllerBrandCheckException('close');
+    throw defaultControllerBrandCheckException$1('close');
    }
    if (!ReadableStreamDefaultControllerCanCloseOrEnqueue(this)) {
     throw new TypeError('The stream is not in a state that permits close');
@@ -23343,7 +23365,7 @@ module.exports = {
     chunk = undefined;
    }
    if (!IsReadableStreamDefaultController(this)) {
-    throw defaultControllerBrandCheckException('enqueue');
+    throw defaultControllerBrandCheckException$1('enqueue');
    }
    if (!ReadableStreamDefaultControllerCanCloseOrEnqueue(this)) {
     throw new TypeError('The stream is not in a state that permits enqueue');
@@ -23355,7 +23377,7 @@ module.exports = {
     e = undefined;
    }
    if (!IsReadableStreamDefaultController(this)) {
-    throw defaultControllerBrandCheckException('error');
+    throw defaultControllerBrandCheckException$1('error');
    }
    ReadableStreamDefaultControllerError(this, e);
   };
@@ -23564,7 +23586,7 @@ module.exports = {
   }
   SetUpReadableStreamDefaultController(stream, controller, startAlgorithm, pullAlgorithm, cancelAlgorithm, highWaterMark, sizeAlgorithm);
  }
- function defaultControllerBrandCheckException(name) {
+ function defaultControllerBrandCheckException$1(name) {
   return new TypeError("ReadableStreamDefaultController.prototype." + name + " can only be used on a ReadableStreamDefaultController");
  }
  function ReadableStreamTee(stream, cloneForBranch2) {
@@ -23597,7 +23619,6 @@ module.exports = {
       if (!canceled2) {
        ReadableStreamDefaultControllerEnqueue(branch2._readableStreamController, value2);
       }
-      resolveCancelPromise(undefined);
      });
     },
     _closeSteps: function () {
@@ -23607,6 +23628,9 @@ module.exports = {
      }
      if (!canceled2) {
       ReadableStreamDefaultControllerClose(branch2._readableStreamController);
+     }
+     if (!canceled1 || !canceled2) {
+      resolveCancelPromise(undefined);
      }
     },
     _errorSteps: function () {
@@ -23649,7 +23673,9 @@ module.exports = {
   uponRejection(reader._closedPromise, function (r) {
    ReadableStreamDefaultControllerError(branch1._readableStreamController, r);
    ReadableStreamDefaultControllerError(branch2._readableStreamController, r);
-   resolveCancelPromise(undefined);
+   if (!canceled1 || !canceled2) {
+    resolveCancelPromise(undefined);
+   }
   });
   return [
    branch1,
@@ -24174,7 +24200,7 @@ module.exports = {
   Object.defineProperty(TransformStream.prototype, "readable", {
    get: function () {
     if (!IsTransformStream(this)) {
-     throw streamBrandCheckException$2('readable');
+     throw streamBrandCheckException('readable');
     }
     return this._readable;
    },
@@ -24184,7 +24210,7 @@ module.exports = {
   Object.defineProperty(TransformStream.prototype, "writable", {
    get: function () {
     if (!IsTransformStream(this)) {
-     throw streamBrandCheckException$2('writable');
+     throw streamBrandCheckException('writable');
     }
     return this._writable;
    },
@@ -24267,7 +24293,7 @@ module.exports = {
   Object.defineProperty(TransformStreamDefaultController.prototype, "desiredSize", {
    get: function () {
     if (!IsTransformStreamDefaultController(this)) {
-     throw defaultControllerBrandCheckException$1('desiredSize');
+     throw defaultControllerBrandCheckException('desiredSize');
     }
     var readableController = this._controlledTransformStream._readable._readableStreamController;
     return ReadableStreamDefaultControllerGetDesiredSize(readableController);
@@ -24280,7 +24306,7 @@ module.exports = {
     chunk = undefined;
    }
    if (!IsTransformStreamDefaultController(this)) {
-    throw defaultControllerBrandCheckException$1('enqueue');
+    throw defaultControllerBrandCheckException('enqueue');
    }
    TransformStreamDefaultControllerEnqueue(this, chunk);
   };
@@ -24289,13 +24315,13 @@ module.exports = {
     reason = undefined;
    }
    if (!IsTransformStreamDefaultController(this)) {
-    throw defaultControllerBrandCheckException$1('error');
+    throw defaultControllerBrandCheckException('error');
    }
    TransformStreamDefaultControllerError(this, reason);
   };
   TransformStreamDefaultController.prototype.terminate = function () {
    if (!IsTransformStreamDefaultController(this)) {
-    throw defaultControllerBrandCheckException$1('terminate');
+    throw defaultControllerBrandCheckException('terminate');
    }
    TransformStreamDefaultControllerTerminate(this);
   };
@@ -24429,10 +24455,10 @@ module.exports = {
   TransformStreamSetBackpressure(stream, false);
   return stream._backpressureChangePromise;
  }
- function defaultControllerBrandCheckException$1(name) {
+ function defaultControllerBrandCheckException(name) {
   return new TypeError("TransformStreamDefaultController.prototype." + name + " can only be used on a TransformStreamDefaultController");
  }
- function streamBrandCheckException$2(name) {
+ function streamBrandCheckException(name) {
   return new TypeError("TransformStream.prototype." + name + " can only be used on a TransformStream");
  }
  exports.ByteLengthQueuingStrategy = ByteLengthQueuingStrategy;
@@ -24452,22 +24478,22 @@ module.exports = {
 }));
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-__webpack_require__(145);
-var entryUnbind = __webpack_require__(149);
+__webpack_require__(146);
+var entryUnbind = __webpack_require__(150);
 module.exports = entryUnbind('String', 'padStart');
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 var $ = __webpack_require__(41);
-var $padStart = __webpack_require__(146).start;
-var WEBKIT_BUG = __webpack_require__(148);
+var $padStart = __webpack_require__(147).start;
+var WEBKIT_BUG = __webpack_require__(149);
 $({
  target: 'String',
  proto: true,
@@ -24479,11 +24505,11 @@ $({
 });
 
 /***/ }),
-/* 146 */
+/* 147 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var toLength = __webpack_require__(78);
-var repeat = __webpack_require__(147);
+var toLength = __webpack_require__(79);
+var repeat = __webpack_require__(148);
 var requireObjectCoercible = __webpack_require__(51);
 var ceil = Math.ceil;
 var createMethod = function (IS_END) {
@@ -24508,12 +24534,12 @@ module.exports = {
 };
 
 /***/ }),
-/* 147 */
+/* 148 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var toInteger = __webpack_require__(79);
+var toInteger = __webpack_require__(80);
 var requireObjectCoercible = __webpack_require__(51);
 module.exports = function repeat(count) {
  var str = String(requireObjectCoercible(this));
@@ -24528,40 +24554,40 @@ module.exports = function repeat(count) {
 };
 
 /***/ }),
-/* 148 */
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var userAgent = __webpack_require__(91);
-module.exports = /Version\/10\.\d+(\.\d+)?( Mobile\/\w+)? Safari\//.test(userAgent);
-
-/***/ }),
 /* 149 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+var userAgent = __webpack_require__(91);
+module.exports = /Version\/10(?:\.\d+){1,2}(?: [\w./]+)?(?: Mobile\/\w+)? Safari\//.test(userAgent);
+
+/***/ }),
+/* 150 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 var global = __webpack_require__(42);
-var bind = __webpack_require__(110);
+var bind = __webpack_require__(109);
 var call = Function.call;
 module.exports = function (CONSTRUCTOR, METHOD, length) {
  return bind(call, global[CONSTRUCTOR].prototype[METHOD], length);
 };
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-__webpack_require__(151);
-var entryUnbind = __webpack_require__(149);
+__webpack_require__(152);
+var entryUnbind = __webpack_require__(150);
 module.exports = entryUnbind('String', 'padEnd');
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 var $ = __webpack_require__(41);
-var $padEnd = __webpack_require__(146).end;
-var WEBKIT_BUG = __webpack_require__(148);
+var $padEnd = __webpack_require__(147).end;
+var WEBKIT_BUG = __webpack_require__(149);
 $({
  target: 'String',
  proto: true,
@@ -24573,19 +24599,19 @@ $({
 });
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-__webpack_require__(153);
-var path = __webpack_require__(74);
+__webpack_require__(154);
+var path = __webpack_require__(75);
 module.exports = path.Object.values;
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 var $ = __webpack_require__(41);
-var $values = __webpack_require__(154).values;
+var $values = __webpack_require__(155).values;
 $({
  target: 'Object',
  stat: true
@@ -24596,7 +24622,7 @@ $({
 });
 
 /***/ }),
-/* 154 */
+/* 155 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var DESCRIPTORS = __webpack_require__(44);
@@ -24629,19 +24655,19 @@ module.exports = {
 };
 
 /***/ }),
-/* 155 */
+/* 156 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-__webpack_require__(156);
-var path = __webpack_require__(74);
+__webpack_require__(157);
+var path = __webpack_require__(75);
 module.exports = path.Object.entries;
 
 /***/ }),
-/* 156 */
+/* 157 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 var $ = __webpack_require__(41);
-var $entries = __webpack_require__(154).entries;
+var $entries = __webpack_require__(155).entries;
 $({
  target: 'Object',
  stat: true
@@ -24652,7 +24678,7 @@ $({
 });
 
 /***/ }),
-/* 157 */
+/* 158 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -25063,7 +25089,7 @@ var DefaultTextLayerFactory = /*#__PURE__*/function () {
 exports.DefaultTextLayerFactory = DefaultTextLayerFactory;
 
 /***/ }),
-/* 158 */
+/* 159 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -25170,7 +25196,7 @@ var DefaultXfaLayerFactory = /*#__PURE__*/function () {
 exports.DefaultXfaLayerFactory = DefaultXfaLayerFactory;
 
 /***/ }),
-/* 159 */
+/* 160 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -25185,9 +25211,9 @@ var _ui_utils = __webpack_require__(6);
 
 var _pdf_cursor_tools = __webpack_require__(8);
 
-var _pdf_single_page_viewer = __webpack_require__(160);
+var _pdf_single_page_viewer = __webpack_require__(161);
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
@@ -25554,7 +25580,7 @@ var SecondaryToolbar = /*#__PURE__*/function () {
 exports.SecondaryToolbar = SecondaryToolbar;
 
 /***/ }),
-/* 160 */
+/* 161 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -25739,7 +25765,7 @@ var PDFSinglePageViewer = /*#__PURE__*/function (_BaseViewer) {
 exports.PDFSinglePageViewer = PDFSinglePageViewer;
 
 /***/ }),
-/* 161 */
+/* 162 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -25760,7 +25786,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
@@ -26116,7 +26142,7 @@ var Toolbar = /*#__PURE__*/function () {
 exports.Toolbar = Toolbar;
 
 /***/ }),
-/* 162 */
+/* 163 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -26371,7 +26397,7 @@ var ViewHistory = /*#__PURE__*/function () {
 exports.ViewHistory = ViewHistory;
 
 /***/ }),
-/* 163 */
+/* 164 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -26388,13 +26414,13 @@ var _regenerator = _interopRequireDefault(__webpack_require__(4));
 
 var _app = __webpack_require__(3);
 
-var _preferences = __webpack_require__(164);
+var _preferences = __webpack_require__(165);
 
-var _download_manager = __webpack_require__(165);
+var _download_manager = __webpack_require__(166);
 
-var _genericl10n = __webpack_require__(166);
+var _genericl10n = __webpack_require__(167);
 
-var _generic_scripting = __webpack_require__(168);
+var _generic_scripting = __webpack_require__(169);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -26532,7 +26558,7 @@ var GenericExternalServices = /*#__PURE__*/function (_DefaultExternalServi) {
 _app.PDFViewerApplication.externalServices = GenericExternalServices;
 
 /***/ }),
-/* 164 */
+/* 165 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -26856,7 +26882,7 @@ var BasePreferences = /*#__PURE__*/function () {
 exports.BasePreferences = BasePreferences;
 
 /***/ }),
-/* 165 */
+/* 166 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -26977,7 +27003,7 @@ var DownloadManager = /*#__PURE__*/function () {
 exports.DownloadManager = DownloadManager;
 
 /***/ }),
-/* 166 */
+/* 167 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -26990,7 +27016,7 @@ exports.GenericL10n = void 0;
 
 var _regenerator = _interopRequireDefault(__webpack_require__(4));
 
-__webpack_require__(167);
+__webpack_require__(168);
 
 var _l10n_utils = __webpack_require__(34);
 
@@ -27153,7 +27179,7 @@ var GenericL10n = /*#__PURE__*/function () {
 exports.GenericL10n = GenericL10n;
 
 /***/ }),
-/* 167 */
+/* 168 */
 /***/ (() => {
 
 "use strict";
@@ -28032,7 +28058,7 @@ document.webL10n = function (window, document, undefined) {
 }(window, document);
 
 /***/ }),
-/* 168 */
+/* 169 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -28050,7 +28076,7 @@ var _pdfjsLib = __webpack_require__(7);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
@@ -28230,7 +28256,7 @@ var GenericScripting = /*#__PURE__*/function () {
 exports.GenericScripting = GenericScripting;
 
 /***/ }),
-/* 169 */
+/* 170 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -28690,11 +28716,11 @@ if (!HTMLCollection.prototype[Symbol.iterator]) {
 ;
 ;
 {
-  __webpack_require__(163);
+  __webpack_require__(164);
 }
 ;
 {
-  __webpack_require__(169);
+  __webpack_require__(170);
 }
 
 function getViewerConfiguration() {

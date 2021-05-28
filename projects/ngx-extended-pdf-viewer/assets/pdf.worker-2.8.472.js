@@ -21207,7 +21207,7 @@ class WidgetAnnotation extends Annotation {
 
       if (!self.showUnverifiedSignatures) {
         this.setFlags(_util.AnnotationFlag.HIDDEN);
-        console.log("The PDF file contains a signature. Please take into account that it can't be verified yet. ngx-extended-pdf-viewer also displays forged signatures, so use this feature only if you're sure what you're doing.");
+        console.log("The PDF file contains a signature. Please take into account that it can't be verified yet. By default, ngx-extended-pdf-viewer hides signatures until you configure it otherwise.");
       }
     }
   }
