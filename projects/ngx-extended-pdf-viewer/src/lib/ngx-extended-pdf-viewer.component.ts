@@ -986,7 +986,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
       }
     } else {
-      if (this.textLayer) {
+      if (this.textLayer) { // todo: is this a redundant check?
         if (options) {
           options.set('textLayerMode', pdfDefaultOptions.textLayerMode);
         }
@@ -1005,7 +1005,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             }
           });
         }
-      } else {
+      } else { // todo: is the else branch dead code?
         if (options) {
           options.set('textLayerMode', 0);
         }

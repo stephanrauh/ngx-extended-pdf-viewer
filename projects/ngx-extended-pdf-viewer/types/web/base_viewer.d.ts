@@ -372,9 +372,11 @@ export class BaseViewer {
     /**
      * @param {HTMLDivElement} pageDiv
      * @param {PDFPage} pdfPage
+     * @param {AnnotationStorage} [annotationStorage] - Storage for annotation
+     *   data in forms.
      * @returns {XfaLayerBuilder}
      */
-    createXfaLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any): XfaLayerBuilder;
+    createXfaLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any, annotationStorage?: any): XfaLayerBuilder;
     /**
      * @param {PDFPage} pdfPage
      * @returns {StructTreeLayerBuilder}

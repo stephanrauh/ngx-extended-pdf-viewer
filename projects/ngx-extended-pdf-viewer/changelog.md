@@ -276,4 +276,4 @@
 - 9.0.0-alpha.9 #718 repaired `[(formData)]` for `<select>` fields (both dropdowns and multiple-choice fields) and radio buttons. However, multiple choice fields aren't printed.
 - 9.0.0-rc.0 #719 bumped up the default branch to pdf.js 2.8
 - 9.0.0-rc.1 #719 bumped up the "bleeding edge" branch to pdf.js 2.9
-- 9.0.0-rc.2 #776 added new CSS rules from pdf.js 2.9; increased the z-indexes (that may be a breaking change!)
+- 9.0.0-rc.2 #776 added new CSS rules from pdf.js 2.9; increased the z-indexes (that may be a breaking change!); #771 `(formDataChange)` sends pre-filled form values to the Angular model again
