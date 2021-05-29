@@ -84,6 +84,13 @@ $selection-background: rgba(0, 0, 255, 0.3);
 $outline-active-color: rgba(0, 0, 0, 0.08);
 $outline-active-bg-color: rgba(0, 0, 0, 1);
 
+$scrollbar-color: auto;
+$scrollbar-bg-color: auto;
+
+$sidebar-width: 200px;
+$sidebar-transition-duration: 200ms;
+$sidebar-transition-timing-function: ease;
+
 ngx-extended-pdf-viewer {
   .fancyDropdownToolbarButton::after {
     content: url("data:image/svg+xml; utf8, <svg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path fill='rgb(90, 90, 90)' d='M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z' /></svg>");

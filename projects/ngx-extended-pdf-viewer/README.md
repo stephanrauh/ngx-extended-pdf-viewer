@@ -17,6 +17,10 @@
 
 There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook.
 
+## Contributors welcome!
+
+Would you like to participate in a popular open source project? It's easy: just open a ticket so we can discuss the change, create a fork, and send me a pull request. Contributions to the showcase are as welcome as contributions to the core library itself.
+
 ## Breaking changes in version 9.0
 - Version 9.0 updates pdf.js to version 2.8 (default branch) and 2.9 ("bleeding edge" branch). That shouldn't break your application. However, the pdf.js team has been very diligent in version 2.8, so it's possible one of the new features break your application.
 
@@ -34,6 +38,7 @@ There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>.
     }
 }
 ```
+- The z-indexes in the CSS rules of the PDF viewer have been drastically increased. If you use a z-index to display custom widgets above the PDF viewer, this may be a breaking change.
 - If you omit `[zoom]` or assign `undefined` to it, the user's last choice of the scale factor is used. Before 9.0.0, it was always set to `auto`. Note that this feature only work when the document is initially loaded. If the user loads a document using the upload button of the PDF viewer, the zoom setting isn't changed, even if there's a zoom setting store in `localStorage`.
 - If you omit `[zoom]`, the PDF file is shown roughly half a second later, depending on the PDF file and the network connection. However, at least one user reports the PDF file shows only after a long wait, and sometimes it doesn't show at all. If you run into the same problem, please add your insight at https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/748. Possible workaround: set `[zoom]` or set `[listenToURL]="true"`.
 - The event `(updateFindMatchesCount)` is now also fired when there's not find result. Before 9.0.0, it only fired when there was at least on find result, so you didn't notice when the user enters a word that's not there.
