@@ -22,7 +22,7 @@ There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>.
 Would you like to participate in a popular open source project? It's easy: just open a ticket so we can discuss the change, create a fork, and send me a pull request. Contributions to the showcase are as welcome as contributions to the core library itself.
 
 ## Breaking changes in version 9.0
-- Version 9.0 updates pdf.js to version 2.8 (default branch) and 2.9 ("bleeding edge" branch). That shouldn't break your application. However, the pdf.js team has been very diligent in version 2.8, so it's possible one of the new features break your application.
+- Version 9.0 updates pdf.js to version 2.9 (default branch) and 2.10 ("bleeding edge" branch). That shouldn't break your application. However, the pdf.js team has been very diligent during the versions 2.8 and 2.9, so it's possible one of the new features break your application.
 
 - I've re-implemented form support. However, it was already broken in version 8, so it's hard to call this a breaking change. The good news: form support with two-way binding works again.
 
@@ -84,7 +84,7 @@ Reluctantly, I have to drop support for Internet Explorer 11. The base library, 
 - Color theming
 - And to customize the toolbars and menus according to your needs.
 
-Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 2.8, released in March 2021. If you're the daring one, you can also use the developer version 2.9. It's bleeding edge, so use it at own risk. Basically, this preview is there to make the update easier when a Mozilla publishes a new version of their pdf.js library.
+Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 2.9, released in March 2021. If you're the daring one, you can also use the developer version 2.10. It's bleeding edge, so use it at own risk. Basically, this preview is there to make the update easier when a Mozilla publishes a new version of their pdf.js library.
 
 
 ## Alternatives
@@ -119,7 +119,7 @@ Currently, the minimum required version is Angular 9. The minimum required versi
   ```
  This simply copies the entire assets folder. If you're concerned about disk memory, you can omit the subfolders `inline-locale-files` and `additional-locale`. If you need only one language, you can reduce the list to `locale.properties` and your language folder.
 
- If you want to use the developer preview of pdf.js 2.9, import the "bleeding edge" files instead:
+ If you want to use the developer preview of pdf.js 2.10, import the "bleeding edge" files instead:
 
   ```json
   "assets": [

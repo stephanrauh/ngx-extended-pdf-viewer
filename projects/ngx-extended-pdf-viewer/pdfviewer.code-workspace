@@ -20,6 +20,9 @@
     },
     {
       "path": "../../../temp"
+    },
+    {
+      "path": "../../../ngx-extended-pdf-viewer-issues/issue317-ng9"
     }
   ],
   "settings": {

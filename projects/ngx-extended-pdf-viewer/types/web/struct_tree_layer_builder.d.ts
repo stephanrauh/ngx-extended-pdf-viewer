@@ -4,7 +4,7 @@ export type StructTreeLayerBuilderOptions = {
 /**
  * @implements IPDFStructTreeLayerFactory
  */
-export class DefaultStructTreeLayerFactory {
+export class DefaultStructTreeLayerFactory implements IPDFStructTreeLayerFactory {
     /**
      * @param {PDFPage} pdfPage
      * @returns {StructTreeLayerBuilder}

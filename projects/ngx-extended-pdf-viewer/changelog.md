@@ -277,3 +277,4 @@
 - 9.0.0-rc.0 #719 bumped up the default branch to pdf.js 2.8
 - 9.0.0-rc.1 #719 bumped up the "bleeding edge" branch to pdf.js 2.9
 - 9.0.0-rc.2 #776 added new CSS rules from pdf.js 2.9; increased the z-indexes (that may be a breaking change!); #771 `(formDataChange)` sends pre-filled form values to the Angular model again
+- 9.0.0-rc.3 #719 bumped up the default branch to pdf.js 2.9 and the bleeding-edge branch to pdf.js 2.10

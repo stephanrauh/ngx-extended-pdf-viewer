@@ -6,7 +6,7 @@ export type XfaLayerBuilderOptions = {
 /**
  * @implements IPDFXfaLayerFactory
  */
-export class DefaultXfaLayerFactory {
+export class DefaultXfaLayerFactory implements IPDFXfaLayerFactory {
     /**
      * @param {HTMLDivElement} pageDiv
      * @param {PDFPage} pdfPage
