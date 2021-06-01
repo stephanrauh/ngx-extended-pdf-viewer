@@ -13,8 +13,13 @@
  * limitations under the License.
  */
 
-
 ngx-extended-pdf-viewer {
+  * {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+  }
+
   .textLayer {
     position: absolute;
     left: 0;
