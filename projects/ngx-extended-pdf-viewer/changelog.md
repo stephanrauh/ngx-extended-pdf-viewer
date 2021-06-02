@@ -278,3 +278,4 @@
 - 9.0.0-rc.1 #719 bumped up the "bleeding edge" branch to pdf.js 2.9
 - 9.0.0-rc.2 #776 added new CSS rules from pdf.js 2.9; increased the z-indexes (that may be a breaking change!); #771 `(formDataChange)` sends pre-filled form values to the Angular model again
 - 9.0.0-rc.3 #719 bumped up the default branch to pdf.js 2.9 and the bleeding-edge branch to pdf.js 2.10
+- 9.0.0 #783 improved compatibility to Bootstrap 3; #787 show the toolbar if the only visible menu items are the spread modes (i.e. `[spreadButton]="true"`).

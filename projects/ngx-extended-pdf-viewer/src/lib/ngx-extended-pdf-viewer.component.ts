@@ -1443,6 +1443,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.showRotateButton ||
         this.showHandToolButton ||
         this.showScrollingButton ||
+        this.showSpreadButton ||
         this.showSidebarButton ||
         this.showZoomButtons;
 
