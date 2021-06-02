@@ -17,7 +17,7 @@
 
 There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook. 
 
-There's also a detailed <a hrerf="https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/main/projects/ngx-extended-pdf-viewer/changelog.md">changelog</>. If you're interested in breaking changes when updating to the latest version, scroll to the end of this page.
+There's also a detailed <a href="https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/main/projects/ngx-extended-pdf-viewer/changelog.md">changelog<a/>. If you're interested in breaking changes when updating to the latest version, scroll to the end of this page.
 
 ## Contributors welcome!
 
