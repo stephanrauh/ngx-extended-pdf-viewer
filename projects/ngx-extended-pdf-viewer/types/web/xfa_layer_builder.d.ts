@@ -11,8 +11,9 @@ export class DefaultXfaLayerFactory implements IPDFXfaLayerFactory {
      * @param {HTMLDivElement} pageDiv
      * @param {PDFPage} pdfPage
      * @param {AnnotationStorage} [annotationStorage]
+     * @param {Object} [xfaHtml]
      */
-    createXfaLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any, annotationStorage?: any): XfaLayerBuilder;
+    createXfaLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any, annotationStorage?: any, xfaHtml?: Object | undefined): XfaLayerBuilder;
 }
 /**
  * @typedef {Object} XfaLayerBuilderOptions
@@ -24,9 +25,10 @@ export class XfaLayerBuilder {
     /**
      * @param {XfaLayerBuilderOptions} options
      */
-    constructor({ pageDiv, pdfPage, annotationStorage }: XfaLayerBuilderOptions);
+    constructor({ pageDiv, pdfPage, xfaHtml, annotationStorage }: XfaLayerBuilderOptions);
     pageDiv: HTMLDivElement;
     pdfPage: any;
+    xfaHtml: any;
     annotationStorage: any;
     div: HTMLDivElement | null;
     _cancelled: boolean;

@@ -187,6 +187,7 @@ export function getPageSizeInches({ view, userUnit, rotate }: Object): Object;
  * @returns {Object} `{ first, last, views: [{ id, x, y, view, percent }] }`
  */
 export function getVisibleElements({ scrollEl, views, sortByVisibility, horizontal, rtl, }: GetVisibleElementsParameters): Object;
+export function getXfaHtmlForPrinting(printContainer: any, pdfDocument: any): void;
 export function isPortraitOrientation(size: any): boolean;
 export function isValidRotation(angle: any): boolean;
 export function isValidScrollMode(mode: any): boolean;

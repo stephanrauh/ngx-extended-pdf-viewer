@@ -1792,7 +1792,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.10.149',
+    apiVersion: '2.10.150',
     source: {
       data: source.data,
       url: source.url,
@@ -1948,7 +1948,11 @@ class PDFDocumentProxy {
   }
 
   get isPureXfa() {
-    return this._pdfInfo.isPureXfa;
+    return !!this._transport._htmlForXfa;
+  }
+
+  get allXfaHtml() {
+    return this._transport._htmlForXfa;
   }
 
   getPage(pageNumber) {
@@ -2139,8 +2143,8 @@ class PDFPageProxy {
     return this._jsActionsPromise || (this._jsActionsPromise = this._transport.getPageJSActions(this._pageIndex));
   }
 
-  getXfa() {
-    return this._xfaPromise || (this._xfaPromise = this._transport.getPageXfa(this._pageIndex));
+  async getXfa() {
+    return this._transport._htmlForXfa?.children[this._pageIndex] || null;
   }
 
   render({
@@ -2395,7 +2399,6 @@ class PDFPageProxy {
     this.objs.clear();
     this._annotationsPromise = null;
     this._jsActionsPromise = null;
-    this._xfaPromise = null;
     this._structTreePromise = null;
     this.pendingCleanup = false;
     return Promise.all(waitOn);
@@ -2430,7 +2433,6 @@ class PDFPageProxy {
     this.objs.clear();
     this._annotationsPromise = null;
     this._jsActionsPromise = null;
-    this._xfaPromise = null;
     this._structTreePromise = null;
 
     if (resetStats && this._stats) {
@@ -3202,6 +3204,8 @@ class WorkerTransport {
       pdfInfo
     }) => {
       this._numPages = pdfInfo.numPages;
+      this._htmlForXfa = pdfInfo.htmlForXfa;
+      delete pdfInfo.htmlForXfa;
 
       loadingTask._capability.resolve(new PDFDocumentProxy(pdfInfo, this));
     });
@@ -3536,12 +3540,6 @@ class WorkerTransport {
     });
   }
 
-  getPageXfa(pageIndex) {
-    return this.messageHandler.sendWithPromise("GetPageXfa", {
-      pageIndex
-    });
-  }
-
   getStructTree(pageIndex) {
     return this.messageHandler.sendWithPromise("GetStructTree", {
       pageIndex
@@ -3861,9 +3859,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.10.149';
+const version = '2.10.150';
 exports.version = version;
-const build = '80e9e1742';
+const build = '17fa07a1a';
 exports.build = build;
 
 /***/ }),
@@ -12621,7 +12619,7 @@ exports.SVGGraphics = SVGGraphics;
 
 /***/ }),
 /* 21 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
 
@@ -12629,6 +12627,8 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.XfaLayer = void 0;
+
+var _display_utils = __w_pdfjs_require__(1);
 
 class XfaLayer {
   static setupStorage(html, fieldId, element, storage) {
@@ -12738,7 +12738,15 @@ class XfaLayer {
     const stack = [[root, -1, rootHtml]];
     const rootDiv = parameters.div;
     rootDiv.appendChild(rootHtml);
-    const coeffs = parameters.viewport.transform.join(",");
+    let {
+      viewport
+    } = parameters;
+
+    if (!(viewport instanceof _display_utils.PageViewport)) {
+      viewport = new _display_utils.PageViewport(viewport);
+    }
+
+    const coeffs = viewport.transform.join(",");
     rootDiv.style.transform = `matrix(${coeffs})`;
     rootDiv.setAttribute("class", "xfaLayer xfaFont");
 
@@ -14159,8 +14167,8 @@ var _svg = __w_pdfjs_require__(20);
 
 var _xfa_layer = __w_pdfjs_require__(21);
 
-const pdfjsVersion = '2.10.149';
-const pdfjsBuild = '80e9e1742';
+const pdfjsVersion = '2.10.150';
+const pdfjsBuild = '17fa07a1a';
 {
   const PDFNetworkStream = __w_pdfjs_require__(22).PDFNetworkStream;
 

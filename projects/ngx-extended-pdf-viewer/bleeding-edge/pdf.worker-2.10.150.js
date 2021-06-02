@@ -142,7 +142,7 @@ class WorkerMessageHandler {
     const WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.10.149';
+    const workerVersion = '2.10.150';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -193,9 +193,9 @@ class WorkerMessageHandler {
         await pdfManager.ensureDoc("checkFirstPage");
       }
 
-      const [numPages, fingerprint, isPureXfa] = await Promise.all([pdfManager.ensureDoc("numPages"), pdfManager.ensureDoc("fingerprint"), pdfManager.ensureDoc("isPureXfa")]);
+      const [numPages, fingerprint, htmlForXfa] = await Promise.all([pdfManager.ensureDoc("numPages"), pdfManager.ensureDoc("fingerprint"), pdfManager.ensureDoc("htmlForXfa")]);
 
-      if (isPureXfa) {
+      if (htmlForXfa) {
         const task = new WorkerTask("loadXfaFonts");
         startWorkerTask(task);
         await pdfManager.loadXfaFonts(handler, task).catch(reason => {}).then(() => finishWorkerTask(task));
@@ -204,7 +204,7 @@ class WorkerMessageHandler {
       return {
         numPages,
         fingerprint,
-        isPureXfa
+        htmlForXfa
       };
     }
 
@@ -457,13 +457,6 @@ class WorkerMessageHandler {
     }) {
       return pdfManager.getPage(pageIndex).then(function (page) {
         return pdfManager.ensure(page, "jsActions");
-      });
-    });
-    handler.on("GetPageXfa", function wphSetupGetXfa({
-      pageIndex
-    }) {
-      return pdfManager.getPage(pageIndex).then(function (page) {
-        return pdfManager.ensure(page, "xfaData");
       });
     });
     handler.on("GetOutline", function wphSetupGetOutline(data) {
@@ -3557,11 +3550,7 @@ class Page {
 
   _getBoundingBox(name) {
     if (this.xfaData) {
-      const {
-        width,
-        height
-      } = this.xfaData.attributes.style;
-      return [0, 0, parseInt(width), parseInt(height)];
+      return this.xfaData.bbox;
     }
 
     const box = this._getInheritableProperty(name, true);
@@ -3647,7 +3636,9 @@ class Page {
 
   get xfaData() {
     if (this.xfaFactory) {
-      return (0, _util.shadow)(this, "xfaData", this.xfaFactory.getPage(this.pageIndex));
+      return (0, _util.shadow)(this, "xfaData", {
+        bbox: this.xfaFactory.getBoundingBox(this.pageIndex)
+      });
     }
 
     return (0, _util.shadow)(this, "xfaData", null);
@@ -4184,8 +4175,12 @@ class PDFDocument {
     return (0, _util.shadow)(this, "xfaFaxtory", null);
   }
 
-  get isPureXfa() {
-    return this.xfaFactory !== null;
+  get htmlForXfa() {
+    if (this.xfaFactory) {
+      return this.xfaFactory.getPages();
+    }
+
+    return null;
   }
 
   async loadXfaFonts(handler, task) {
@@ -8293,9 +8288,9 @@ class PartialEvaluator {
     return (0, _util.shadow)(this, "_pdfFunctionFactory", pdfFunctionFactory);
   }
 
-  clone(newOptions = DefaultPartialEvaluatorOptions) {
+  clone(newOptions = null) {
     const newEvaluator = Object.create(this);
-    newEvaluator.options = newOptions;
+    newEvaluator.options = Object.assign(Object.create(null), this.options, newOptions);
     return newEvaluator;
   }
 
@@ -11616,9 +11611,9 @@ class TranslatedFont {
       throw new Error("Must be a Type3 font.");
     }
 
-    const type3Options = Object.create(evaluator.options);
-    type3Options.ignoreErrors = false;
-    const type3Evaluator = evaluator.clone(type3Options);
+    const type3Evaluator = evaluator.clone({
+      ignoreErrors: false
+    });
     type3Evaluator.parsingType3Font = true;
     const translatedFont = this.font,
           type3Dependencies = this.type3Dependencies;
@@ -26082,6 +26077,9 @@ const CFFParser = function CFFParserClosure() {
         } else if (value === 11) {
           state.stackSize = stackSize;
           return true;
+        } else if (value === 0 && j === data.length) {
+          data[j - 1] = 14;
+          validationCommand = CharstringValidationData[14];
         } else {
           validationCommand = CharstringValidationData[value];
         }
@@ -55719,18 +55717,40 @@ class XFAFactory {
     try {
       this.root = new _parser.XFAParser().parse(XFAFactory._createDocument(data));
       this.form = new _bind.Binder(this.root).bind();
-      this.pages = this.form[_xfa_object.$toHTML]();
+
+      this._createPages();
     } catch (e) {
       console.log(e);
     }
   }
 
-  getPage(pageIndex) {
-    return this.pages.children[pageIndex];
+  _createPages() {
+    this.pages = this.form[_xfa_object.$toHTML]();
+    this.dims = this.pages.children.map(c => {
+      const {
+        width,
+        height
+      } = c.attributes.style;
+      return [0, 0, parseInt(width), parseInt(height)];
+    });
+  }
+
+  getBoundingBox(pageIndex) {
+    return this.dims[pageIndex];
   }
 
   get numberPages() {
-    return this.pages.children.length;
+    return this.dims.length;
+  }
+
+  getPages() {
+    if (!this.pages) {
+      this._createPages();
+    }
+
+    const pages = this.pages;
+    this.pages = null;
+    return pages;
   }
 
   static _createDocument(data) {
@@ -68376,8 +68396,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.10.149';
-const pdfjsBuild = '80e9e1742';
+const pdfjsVersion = '2.10.150';
+const pdfjsBuild = '17fa07a1a';
 })();
 
 /******/ 	return __webpack_exports__;

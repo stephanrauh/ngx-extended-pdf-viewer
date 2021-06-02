@@ -8840,10 +8840,6 @@ var _transport_stream = __w_pdfjs_require__(124);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -8851,6 +8847,10 @@ function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread n
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
@@ -9088,7 +9088,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId: docId,
-    apiVersion: '2.10.149',
+    apiVersion: '2.10.150',
     source: {
       data: source.data,
       url: source.url,
@@ -9325,7 +9325,12 @@ var PDFDocumentProxy = /*#__PURE__*/function () {
   }, {
     key: "isPureXfa",
     get: function get() {
-      return this._pdfInfo.isPureXfa;
+      return !!this._transport._htmlForXfa;
+    }
+  }, {
+    key: "allXfaHtml",
+    get: function get() {
+      return this._transport._htmlForXfa;
     }
   }, {
     key: "getPage",
@@ -9568,9 +9573,30 @@ var PDFPageProxy = /*#__PURE__*/function () {
     }
   }, {
     key: "getXfa",
-    value: function getXfa() {
-      return this._xfaPromise || (this._xfaPromise = this._transport.getPageXfa(this._pageIndex));
-    }
+    value: function () {
+      var _getXfa = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
+        var _this$_transport$_htm;
+
+        return _regenerator["default"].wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                return _context.abrupt("return", ((_this$_transport$_htm = this._transport._htmlForXfa) === null || _this$_transport$_htm === void 0 ? void 0 : _this$_transport$_htm.children[this._pageIndex]) || null);
+
+              case 1:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function getXfa() {
+        return _getXfa.apply(this, arguments);
+      }
+
+      return getXfa;
+    }()
   }, {
     key: "render",
     value: function render(_ref5) {
@@ -9873,7 +9899,6 @@ var PDFPageProxy = /*#__PURE__*/function () {
       this.objs.clear();
       this._annotationsPromise = null;
       this._jsActionsPromise = null;
-      this._xfaPromise = null;
       this._structTreePromise = null;
       this.pendingCleanup = false;
       return Promise.all(waitOn);
@@ -9923,7 +9948,6 @@ var PDFPageProxy = /*#__PURE__*/function () {
       this.objs.clear();
       this._annotationsPromise = null;
       this._jsActionsPromise = null;
-      this._xfaPromise = null;
       this._structTreePromise = null;
 
       if (resetStats && this._stats) {
@@ -10345,43 +10369,43 @@ var PDFWorker = function PDFWorkerClosure() {
     fakeWorkerCapability = (0, _util.createPromiseCapability)();
 
     var loader = /*#__PURE__*/function () {
-      var _ref12 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
+      var _ref12 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
         var mainWorkerMessageHandler, worker;
-        return _regenerator["default"].wrap(function _callee$(_context) {
+        return _regenerator["default"].wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
                 mainWorkerMessageHandler = getMainThreadWorkerMessageHandler();
 
                 if (!mainWorkerMessageHandler) {
-                  _context.next = 3;
+                  _context2.next = 3;
                   break;
                 }
 
-                return _context.abrupt("return", mainWorkerMessageHandler);
+                return _context2.abrupt("return", mainWorkerMessageHandler);
 
               case 3:
                 if (!(_is_node.isNodeJS && typeof require === "function")) {
-                  _context.next = 6;
+                  _context2.next = 6;
                   break;
                 }
 
                 worker = eval("require")(_getWorkerSrc());
-                return _context.abrupt("return", worker.WorkerMessageHandler);
+                return _context2.abrupt("return", worker.WorkerMessageHandler);
 
               case 6:
-                _context.next = 8;
+                _context2.next = 8;
                 return (0, _display_utils.loadScript)(_getWorkerSrc());
 
               case 8:
-                return _context.abrupt("return", window.pdfjsWorker.WorkerMessageHandler);
+                return _context2.abrupt("return", window.pdfjsWorker.WorkerMessageHandler);
 
               case 9:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee);
+        }, _callee2);
       }));
 
       return function loader() {
@@ -10861,6 +10885,8 @@ var WorkerTransport = /*#__PURE__*/function () {
       messageHandler.on("GetDoc", function (_ref16) {
         var pdfInfo = _ref16.pdfInfo;
         _this12._numPages = pdfInfo.numPages;
+        _this12._htmlForXfa = pdfInfo.htmlForXfa;
+        delete pdfInfo.htmlForXfa;
 
         loadingTask._capability.resolve(new PDFDocumentProxy(pdfInfo, _this12));
       });
@@ -11238,13 +11264,6 @@ var WorkerTransport = /*#__PURE__*/function () {
       });
     }
   }, {
-    key: "getPageXfa",
-    value: function getPageXfa(pageIndex) {
-      return this.messageHandler.sendWithPromise("GetPageXfa", {
-        pageIndex: pageIndex
-      });
-    }
-  }, {
     key: "getStructTree",
     value: function getStructTree(pageIndex) {
       return this.messageHandler.sendWithPromise("GetStructTree", {
@@ -11297,52 +11316,52 @@ var WorkerTransport = /*#__PURE__*/function () {
   }, {
     key: "startCleanup",
     value: function () {
-      var _startCleanup = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
+      var _startCleanup = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
         var keepLoadedFonts,
             i,
             ii,
             page,
             cleanupSuccessful,
-            _args2 = arguments;
-        return _regenerator["default"].wrap(function _callee2$(_context2) {
+            _args3 = arguments;
+        return _regenerator["default"].wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
-                keepLoadedFonts = _args2.length > 0 && _args2[0] !== undefined ? _args2[0] : false;
-                _context2.next = 3;
+                keepLoadedFonts = _args3.length > 0 && _args3[0] !== undefined ? _args3[0] : false;
+                _context3.next = 3;
                 return this.messageHandler.sendWithPromise("Cleanup", null);
 
               case 3:
                 if (!this.destroyed) {
-                  _context2.next = 5;
+                  _context3.next = 5;
                   break;
                 }
 
-                return _context2.abrupt("return");
+                return _context3.abrupt("return");
 
               case 5:
                 i = 0, ii = this.pageCache.length;
 
               case 6:
                 if (!(i < ii)) {
-                  _context2.next = 16;
+                  _context3.next = 16;
                   break;
                 }
 
                 page = this.pageCache[i];
 
                 if (page) {
-                  _context2.next = 10;
+                  _context3.next = 10;
                   break;
                 }
 
-                return _context2.abrupt("continue", 13);
+                return _context3.abrupt("continue", 13);
 
               case 10:
                 cleanupSuccessful = page.cleanup();
 
                 if (cleanupSuccessful) {
-                  _context2.next = 13;
+                  _context3.next = 13;
                   break;
                 }
 
@@ -11350,7 +11369,7 @@ var WorkerTransport = /*#__PURE__*/function () {
 
               case 13:
                 i++;
-                _context2.next = 6;
+                _context3.next = 6;
                 break;
 
               case 16:
@@ -11364,10 +11383,10 @@ var WorkerTransport = /*#__PURE__*/function () {
 
               case 19:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee3, this);
       }));
 
       function startCleanup() {
@@ -11640,17 +11659,17 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
     }, {
       key: "_next",
       value: function () {
-        var _next2 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
-          return _regenerator["default"].wrap(function _callee3$(_context3) {
+        var _next2 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee4() {
+          return _regenerator["default"].wrap(function _callee4$(_context4) {
             while (1) {
-              switch (_context3.prev = _context3.next) {
+              switch (_context4.prev = _context4.next) {
                 case 0:
                   if (!this.cancelled) {
-                    _context3.next = 2;
+                    _context4.next = 2;
                     break;
                   }
 
-                  return _context3.abrupt("return");
+                  return _context4.abrupt("return");
 
                 case 2:
                   this.operatorListIdx = this.gfx.executeOperatorList(this.operatorList, this.operatorListIdx, this._continueBound, this.stepper);
@@ -11671,10 +11690,10 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
 
                 case 4:
                 case "end":
-                  return _context3.stop();
+                  return _context4.stop();
               }
             }
-          }, _callee3, this);
+          }, _callee4, this);
         }));
 
         function _next() {
@@ -11691,9 +11710,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.10.149';
+var version = '2.10.150';
 exports.version = version;
-var build = '80e9e1742';
+var build = '17fa07a1a';
 exports.build = build;
 
 /***/ }),
@@ -22275,7 +22294,7 @@ exports.SVGGraphics = SVGGraphics;
 
 /***/ }),
 /* 129 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
 
@@ -22284,6 +22303,8 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.XfaLayer = void 0;
+
+var _display_utils = __w_pdfjs_require__(1);
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -22443,7 +22464,13 @@ var XfaLayer = /*#__PURE__*/function () {
       var stack = [[root, -1, rootHtml]];
       var rootDiv = parameters.div;
       rootDiv.appendChild(rootHtml);
-      var coeffs = parameters.viewport.transform.join(",");
+      var viewport = parameters.viewport;
+
+      if (!(viewport instanceof _display_utils.PageViewport)) {
+        viewport = new _display_utils.PageViewport(viewport);
+      }
+
+      var coeffs = viewport.transform.join(",");
       rootDiv.style.transform = "matrix(".concat(coeffs, ")");
       rootDiv.setAttribute("class", "xfaLayer xfaFont");
 
@@ -24224,8 +24251,8 @@ var _svg = __w_pdfjs_require__(128);
 
 var _xfa_layer = __w_pdfjs_require__(129);
 
-var pdfjsVersion = '2.10.149';
-var pdfjsBuild = '80e9e1742';
+var pdfjsVersion = '2.10.150';
+var pdfjsBuild = '17fa07a1a';
 {
   var PDFNetworkStream = __w_pdfjs_require__(130).PDFNetworkStream;
 
