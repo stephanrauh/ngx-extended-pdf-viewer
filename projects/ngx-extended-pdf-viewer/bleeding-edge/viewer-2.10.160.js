@@ -10679,7 +10679,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.10.150';
+    const viewerVersion = '2.10.160';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -17218,9 +17218,7 @@ PDFPrintService.prototype = {
 
       const index = this.currentPage;
       renderProgress(index, window.filteredPageCount | pageCount, this.l10n, this.eventBus);
-      renderPage(this, this.pdfDocument, index + 1, this.pagesOverview[index], this._printResolution, this._optionalContentConfigPromise).then(() => {
-        this.useRenderedPage.bind(this);
-      }).then(() => {
+      renderPage(this, this.pdfDocument, index + 1, this.pagesOverview[index], this._printResolution, this._optionalContentConfigPromise).then(this.useRenderedPage.bind(this)).then(() => {
         renderNextPage(resolve, reject);
       }, reject);
     };
@@ -17467,8 +17465,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.10.150';
-const pdfjsBuild = '17fa07a1a';
+const pdfjsVersion = '2.10.160';
+const pdfjsBuild = 'dc5c45f5c';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

@@ -14124,7 +14124,7 @@ var BaseViewer = /*#__PURE__*/function () {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    var viewerVersion = '2.10.150';
+    var viewerVersion = '2.10.160';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error("The API version \"".concat(_pdfjsLib.version, "\" does not match the Viewer version \"").concat(viewerVersion, "\"."));
@@ -28492,9 +28492,7 @@ PDFPrintService.prototype = {
 
       var index = _this.currentPage;
       renderProgress(index, window.filteredPageCount | pageCount, _this.l10n, _this.eventBus);
-      renderPage(_this, _this.pdfDocument, index + 1, _this.pagesOverview[index], _this._printResolution, _this._optionalContentConfigPromise).then(function () {
-        _this.useRenderedPage.bind(_this);
-      }).then(function () {
+      renderPage(_this, _this.pdfDocument, index + 1, _this.pagesOverview[index], _this._printResolution, _this._optionalContentConfigPromise).then(_this.useRenderedPage.bind(_this)).then(function () {
         renderNextPage(resolve, reject);
       }, reject);
     };
@@ -28752,8 +28750,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-var pdfjsVersion = '2.10.150';
-var pdfjsBuild = '17fa07a1a';
+var pdfjsVersion = '2.10.160';
+var pdfjsBuild = 'dc5c45f5c';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
