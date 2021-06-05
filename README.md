@@ -12,6 +12,9 @@
  </p>
 
 # Welcome to ngx-extended-pdf-viewer!
+
+[![Join the chat at https://gitter.im/ngx-extended-pdf-viewer/community](https://badges.gitter.im/ngx-extended-pdf-viewer/community.svg)](https://gitter.im/ngx-extended-pdf-viewer/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Bringing Mozilla's pdf.js to the Angular world. That's not only the core PDF viewer, but also the UI.
 
 [Follow this link](projects/ngx-extended-pdf-viewer/README.md) for a detailed description of how to use the PDF viewer.
