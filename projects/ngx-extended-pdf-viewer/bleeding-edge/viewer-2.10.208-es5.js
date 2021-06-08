@@ -205,6 +205,10 @@ var defaultOptions = {
     value: false,
     kind: OptionKind.API
   },
+  standardFontDataUrl: {
+    value: "../web/standard_fonts/",
+    kind: OptionKind.API
+  },
   verbosity: {
     value: 1,
     kind: OptionKind.API
@@ -4579,7 +4583,7 @@ function getOutputScale(ctx) {
 }
 
 function scrollIntoView(element, spot) {
-  var skipOverflowHiddenElements = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  var scrollMatches = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
   var infiniteScroll = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
   var parent = element.offsetParent;
 
@@ -4591,12 +4595,7 @@ function scrollIntoView(element, spot) {
   var offsetY = element.offsetTop + element.clientTop;
   var offsetX = element.offsetLeft + element.clientLeft;
 
-  while (parent.clientHeight === parent.scrollHeight && parent.clientWidth === parent.scrollWidth || skipOverflowHiddenElements && getComputedStyle(parent).overflow === "hidden") {
-    if (parent.dataset._scaleY) {
-      offsetY /= parent.dataset._scaleY;
-      offsetX /= parent.dataset._scaleX;
-    }
-
+  while (parent.clientHeight === parent.scrollHeight && parent.clientWidth === parent.scrollWidth || scrollMatches && (parent.classList.contains("markedContent") || getComputedStyle(parent).overflow === "hidden")) {
     offsetY += parent.offsetTop;
     offsetX += parent.offsetLeft;
     parent = parent.offsetParent;
@@ -5317,7 +5316,7 @@ function getXfaHtmlForPrinting(printContainer, pdfDocument) {
     for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
       var xfaPage = _step3.value;
       var page = document.createElement("div");
-      page.setAttribute("class", "xfaPrintedPage");
+      page.className = "xfaPrintedPage";
       printContainer.appendChild(page);
       var _xfaPage$attributes$s = xfaPage.attributes.style,
           width = _xfaPage$attributes$s.width,
@@ -5420,7 +5419,8 @@ var XfaLayerBuilder = /*#__PURE__*/function () {
         div: this.div,
         xfa: this.xfaHtml,
         page: null,
-        annotationStorage: this.annotationStorage
+        annotationStorage: this.annotationStorage,
+        intent: intent
       };
       var div = document.createElement("div");
       this.pageDiv.appendChild(div);
@@ -7561,6 +7561,7 @@ var FIND_TIMEOUT = 250;
 var MATCH_SCROLL_OFFSET_TOP = -50;
 var MATCH_SCROLL_OFFSET_LEFT = -400;
 var CHARACTERS_TO_NORMALIZE = {
+  "\u2010": "-",
   "\u2018": "'",
   "\u2019": "'",
   "\u201A": "'",
@@ -14124,7 +14125,7 @@ var BaseViewer = /*#__PURE__*/function () {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    var viewerVersion = '2.10.160';
+    var viewerVersion = '2.10.208';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error("The API version \"".concat(_pdfjsLib.version, "\" does not match the Viewer version \"").concat(viewerVersion, "\"."));
@@ -17611,6 +17612,7 @@ exports.StreamType = StreamType;
 var FontType = {
   UNKNOWN: "UNKNOWN",
   TYPE1: "TYPE1",
+  TYPE1STANDARD: "TYPE1STANDARD",
   TYPE1C: "TYPE1C",
   CIDFONTTYPE0: "CIDFONTTYPE0",
   CIDFONTTYPE0C: "CIDFONTTYPE0C",
@@ -25056,7 +25058,7 @@ var TextLayerBuilder = /*#__PURE__*/function () {
 
         if (className) {
           var span = document.createElement("span");
-          span.className = className;
+          span.className = "".concat(className, " appended");
           span.appendChild(node);
           div.appendChild(span);
           return;
@@ -28513,7 +28515,7 @@ PDFPrintService.prototype = {
     }
 
     var wrapper = document.createElement("div");
-    wrapper.setAttribute("class", "printedPage");
+    wrapper.className = "printedPage";
     wrapper.appendChild(img);
     this.printContainer.appendChild(wrapper);
     return new Promise(function (resolve, reject) {
@@ -28750,8 +28752,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-var pdfjsVersion = '2.10.160';
-var pdfjsBuild = 'dc5c45f5c';
+var pdfjsVersion = '2.10.208';
+var pdfjsBuild = 'd42e8f5af';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

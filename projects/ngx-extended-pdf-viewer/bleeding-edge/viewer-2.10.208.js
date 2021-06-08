@@ -197,6 +197,10 @@ const defaultOptions = {
     value: false,
     kind: OptionKind.API
   },
+  standardFontDataUrl: {
+    value: "../web/standard_fonts/",
+    kind: OptionKind.API
+  },
   verbosity: {
     value: 1,
     kind: OptionKind.API
@@ -3349,7 +3353,7 @@ function getOutputScale(ctx) {
   };
 }
 
-function scrollIntoView(element, spot, skipOverflowHiddenElements = false, infiniteScroll = false) {
+function scrollIntoView(element, spot, scrollMatches = false, infiniteScroll = false) {
   let parent = element.offsetParent;
 
   if (!parent) {
@@ -3360,12 +3364,7 @@ function scrollIntoView(element, spot, skipOverflowHiddenElements = false, infin
   let offsetY = element.offsetTop + element.clientTop;
   let offsetX = element.offsetLeft + element.clientLeft;
 
-  while (parent.clientHeight === parent.scrollHeight && parent.clientWidth === parent.scrollWidth || skipOverflowHiddenElements && getComputedStyle(parent).overflow === "hidden") {
-    if (parent.dataset._scaleY) {
-      offsetY /= parent.dataset._scaleY;
-      offsetX /= parent.dataset._scaleX;
-    }
-
+  while (parent.clientHeight === parent.scrollHeight && parent.clientWidth === parent.scrollWidth || scrollMatches && (parent.classList.contains("markedContent") || getComputedStyle(parent).overflow === "hidden")) {
     offsetY += parent.offsetTop;
     offsetX += parent.offsetLeft;
     parent = parent.offsetParent;
@@ -4025,7 +4024,7 @@ function getXfaHtmlForPrinting(printContainer, pdfDocument) {
 
   for (const xfaPage of xfaHtml.children) {
     const page = document.createElement("div");
-    page.setAttribute("class", "xfaPrintedPage");
+    page.className = "xfaPrintedPage";
     printContainer.appendChild(page);
     const {
       width,
@@ -4107,7 +4106,8 @@ class XfaLayerBuilder {
       div: this.div,
       xfa: this.xfaHtml,
       page: null,
-      annotationStorage: this.annotationStorage
+      annotationStorage: this.annotationStorage,
+      intent
     };
     const div = document.createElement("div");
     this.pageDiv.appendChild(div);
@@ -5602,6 +5602,7 @@ const FIND_TIMEOUT = 250;
 const MATCH_SCROLL_OFFSET_TOP = -50;
 const MATCH_SCROLL_OFFSET_LEFT = -400;
 const CHARACTERS_TO_NORMALIZE = {
+  "\u2010": "-",
   "\u2018": "'",
   "\u2019": "'",
   "\u201A": "'",
@@ -10679,7 +10680,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.10.160';
+    const viewerVersion = '2.10.208';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -13707,6 +13708,7 @@ exports.StreamType = StreamType;
 const FontType = {
   UNKNOWN: "UNKNOWN",
   TYPE1: "TYPE1",
+  TYPE1STANDARD: "TYPE1STANDARD",
   TYPE1C: "TYPE1C",
   CIDFONTTYPE0: "CIDFONTTYPE0",
   CIDFONTTYPE0C: "CIDFONTTYPE0C",
@@ -14724,7 +14726,7 @@ class TextLayerBuilder {
 
       if (className) {
         const span = document.createElement("span");
-        span.className = className;
+        span.className = `${className} appended`;
         span.appendChild(node);
         div.appendChild(span);
         return;
@@ -17218,7 +17220,7 @@ PDFPrintService.prototype = {
 
       const index = this.currentPage;
       renderProgress(index, window.filteredPageCount | pageCount, this.l10n, this.eventBus);
-      renderPage(this, this.pdfDocument, index + 1, this.pagesOverview[index], this._printResolution, this._optionalContentConfigPromise).then(this.useRenderedPage.bind(this)).then(() => {
+      renderPage(this, this.pdfDocument, index + 1, this.pagesOverview[index], this._printResolution, this._optionalContentConfigPromise).then(this.useRenderedPage.bind(this)).then(function () {
         renderNextPage(resolve, reject);
       }, reject);
     };
@@ -17240,7 +17242,7 @@ PDFPrintService.prototype = {
     }
 
     const wrapper = document.createElement("div");
-    wrapper.setAttribute("class", "printedPage");
+    wrapper.className = "printedPage";
     wrapper.appendChild(img);
     this.printContainer.appendChild(wrapper);
     return new Promise(function (resolve, reject) {
@@ -17465,8 +17467,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.10.160';
-const pdfjsBuild = 'dc5c45f5c';
+const pdfjsVersion = '2.10.208';
+const pdfjsBuild = 'd42e8f5af';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

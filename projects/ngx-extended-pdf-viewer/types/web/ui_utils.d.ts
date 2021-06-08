@@ -248,10 +248,11 @@ export const SCROLLBAR_PADDING: 40;
  * @param {Object} element - The element to be visible.
  * @param {Object} spot - An object with optional top and left properties,
  *   specifying the offset from the top left edge.
- * @param {boolean} skipOverflowHiddenElements - Ignore elements that have
- *   the CSS rule `overflow: hidden;` set. The default is false.
+ * @param {boolean} [scrollMatches] - When scrolling search results into view,
+ *   ignore elements that either: Contains marked content identifiers,
+ *   or have the CSS-rule `overflow: hidden;` set. The default value is `false`.
  */
-export function scrollIntoView(element: Object, spot: Object, skipOverflowHiddenElements?: boolean, infiniteScroll?: boolean): void;
+export function scrollIntoView(element: Object, spot: Object, scrollMatches?: boolean | undefined, infiniteScroll?: boolean): void;
 export namespace ScrollMode {
     const UNKNOWN_1: number;
     export { UNKNOWN_1 as UNKNOWN };

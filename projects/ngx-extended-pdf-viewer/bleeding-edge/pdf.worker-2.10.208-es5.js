@@ -192,7 +192,7 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
       var WorkerTasks = [];
       var verbosity = (0, _util.getVerbosityLevel)();
       var apiVersion = docParams.apiVersion;
-      var workerVersion = '2.10.160';
+      var workerVersion = '2.10.208';
 
       if (apiVersion !== workerVersion) {
         throw new Error("The API version \"".concat(apiVersion, "\" does not match ") + "the Worker version \"".concat(workerVersion, "\"."));
@@ -479,7 +479,9 @@ var WorkerMessageHandler = /*#__PURE__*/function () {
           disableFontFace: data.disableFontFace,
           ignoreErrors: data.ignoreErrors,
           isEvalSupported: data.isEvalSupported,
-          fontExtraProperties: data.fontExtraProperties
+          fontExtraProperties: data.fontExtraProperties,
+          useSystemFonts: data.useSystemFonts,
+          standardFontDataUrl: data.standardFontDataUrl
         };
         getPdfManager(data, evaluatorOptions, data.enableXfa).then(function (newPdfManager) {
           if (terminated) {
@@ -1724,6 +1726,7 @@ exports.StreamType = StreamType;
 var FontType = {
   UNKNOWN: "UNKNOWN",
   TYPE1: "TYPE1",
+  TYPE1STANDARD: "TYPE1STANDARD",
   TYPE1C: "TYPE1C",
   CIDFONTTYPE0: "CIDFONTTYPE0",
   CIDFONTTYPE0C: "CIDFONTTYPE0C",
@@ -17531,6 +17534,8 @@ var _parser = __w_pdfjs_require__(124);
 
 var _image_utils = __w_pdfjs_require__(158);
 
+var _stream = __w_pdfjs_require__(117);
+
 var _bidi = __w_pdfjs_require__(159);
 
 var _colorspace = __w_pdfjs_require__(121);
@@ -17544,8 +17549,6 @@ var _core_utils = __w_pdfjs_require__(116);
 var _metrics = __w_pdfjs_require__(160);
 
 var _murmurhash = __w_pdfjs_require__(161);
-
-var _stream = __w_pdfjs_require__(117);
 
 var _operator_list = __w_pdfjs_require__(162);
 
@@ -17582,7 +17585,9 @@ var DefaultPartialEvaluatorOptions = Object.freeze({
   disableFontFace: false,
   ignoreErrors: false,
   isEvalSupported: true,
-  fontExtraProperties: false
+  fontExtraProperties: false,
+  standardFontDataUrl: null,
+  useSystemFonts: true
 });
 var PatternType = {
   TILING: 1,
@@ -17973,13 +17978,95 @@ var PartialEvaluator = /*#__PURE__*/function () {
       return fetchBuiltInCMap;
     }()
   }, {
-    key: "buildFormXObject",
+    key: "fetchStandardFontData",
     value: function () {
-      var _buildFormXObject = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee2(resources, xobj, smask, operatorList, task, initialState, localColorSpaceCache) {
-        var dict, matrix, bbox, optionalContent, groupOptions, group, groupSubtype, colorSpace, cs, cachedColorSpace;
+      var _fetchStandardFontData = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee2(name) {
+        var standardFontNameToFileName, filename, url, response, data;
         return _regenerator["default"].wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
+              case 0:
+                if (!(this.options.useSystemFonts && name !== "Symbol" && name !== "ZapfDingbats")) {
+                  _context2.next = 2;
+                  break;
+                }
+
+                return _context2.abrupt("return", null);
+
+              case 2:
+                standardFontNameToFileName = (0, _standard_fonts.getStdFontNameToFileMap)();
+                filename = standardFontNameToFileName[name];
+
+                if (!(this.options.standardFontDataUrl !== null)) {
+                  _context2.next = 17;
+                  break;
+                }
+
+                url = "".concat(this.options.standardFontDataUrl).concat(filename, ".pfb");
+                _context2.next = 8;
+                return fetch(url);
+
+              case 8:
+                response = _context2.sent;
+
+                if (response.ok) {
+                  _context2.next = 12;
+                  break;
+                }
+
+                (0, _util.warn)("fetchStandardFontData failed to fetch file \"".concat(url, "\" with \"").concat(response.statusText, "\"."));
+                return _context2.abrupt("return", null);
+
+              case 12:
+                _context2.t0 = _stream.Stream;
+                _context2.next = 15;
+                return response.arrayBuffer();
+
+              case 15:
+                _context2.t1 = _context2.sent;
+                return _context2.abrupt("return", new _context2.t0(_context2.t1));
+
+              case 17:
+                _context2.prev = 17;
+                _context2.next = 20;
+                return this.handler.sendWithPromise("FetchStandardFontData", {
+                  filename: filename
+                });
+
+              case 20:
+                data = _context2.sent;
+                return _context2.abrupt("return", new _stream.Stream(data));
+
+              case 24:
+                _context2.prev = 24;
+                _context2.t2 = _context2["catch"](17);
+                (0, _util.warn)("fetchStandardFontData failed to fetch file \"".concat(filename, "\" with \"").concat(_context2.t2, "\"."));
+
+              case 27:
+                return _context2.abrupt("return", null);
+
+              case 28:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this, [[17, 24]]);
+      }));
+
+      function fetchStandardFontData(_x2) {
+        return _fetchStandardFontData.apply(this, arguments);
+      }
+
+      return fetchStandardFontData;
+    }()
+  }, {
+    key: "buildFormXObject",
+    value: function () {
+      var _buildFormXObject = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee3(resources, xobj, smask, operatorList, task, initialState, localColorSpaceCache) {
+        var dict, matrix, bbox, optionalContent, groupOptions, group, groupSubtype, colorSpace, cs, cachedColorSpace;
+        return _regenerator["default"].wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
               case 0:
                 dict = xobj.dict;
                 matrix = dict.getArray("Matrix");
@@ -17994,22 +18081,22 @@ var PartialEvaluator = /*#__PURE__*/function () {
                 optionalContent = null;
 
                 if (!dict.has("OC")) {
-                  _context2.next = 10;
+                  _context3.next = 10;
                   break;
                 }
 
-                _context2.next = 8;
+                _context3.next = 8;
                 return this.parseMarkedContentProps(dict.get("OC"), resources);
 
               case 8:
-                optionalContent = _context2.sent;
+                optionalContent = _context3.sent;
                 operatorList.addOp(_util.OPS.beginMarkedContentProps, ["OC", optionalContent]);
 
               case 10:
                 group = dict.get("Group");
 
                 if (!group) {
-                  _context2.next = 30;
+                  _context3.next = 30;
                   break;
                 }
 
@@ -18024,7 +18111,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
                 colorSpace = null;
 
                 if (!(0, _primitives.isName)(groupSubtype, "Transparency")) {
-                  _context2.next = 28;
+                  _context3.next = 28;
                   break;
                 }
 
@@ -18032,7 +18119,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
                 groupOptions.knockout = group.get("K") || false;
 
                 if (!group.has("CS")) {
-                  _context2.next = 28;
+                  _context3.next = 28;
                   break;
                 }
 
@@ -18040,16 +18127,16 @@ var PartialEvaluator = /*#__PURE__*/function () {
                 cachedColorSpace = _colorspace.ColorSpace.getCached(cs, this.xref, localColorSpaceCache);
 
                 if (!cachedColorSpace) {
-                  _context2.next = 25;
+                  _context3.next = 25;
                   break;
                 }
 
                 colorSpace = cachedColorSpace;
-                _context2.next = 28;
+                _context3.next = 28;
                 break;
 
               case 25:
-                _context2.next = 27;
+                _context3.next = 27;
                 return this.parseColorSpace({
                   cs: cs,
                   resources: resources,
@@ -18057,7 +18144,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
                 });
 
               case 27:
-                colorSpace = _context2.sent;
+                colorSpace = _context3.sent;
 
               case 28:
                 if (smask && smask.backdrop) {
@@ -18069,7 +18156,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
 
               case 30:
                 operatorList.addOp(_util.OPS.paintFormXObjectBegin, [matrix, bbox]);
-                return _context2.abrupt("return", this.getOperatorList({
+                return _context3.abrupt("return", this.getOperatorList({
                   stream: xobj,
                   task: task,
                   resources: dict.get("Resources") || resources,
@@ -18089,13 +18176,13 @@ var PartialEvaluator = /*#__PURE__*/function () {
 
               case 32:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee3, this);
       }));
 
-      function buildFormXObject(_x2, _x3, _x4, _x5, _x6, _x7, _x8) {
+      function buildFormXObject(_x3, _x4, _x5, _x6, _x7, _x8, _x9) {
         return _buildFormXObject.apply(this, arguments);
       }
 
@@ -18116,14 +18203,14 @@ var PartialEvaluator = /*#__PURE__*/function () {
   }, {
     key: "buildPaintImageXObject",
     value: function () {
-      var _buildPaintImageXObject = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee3(_ref3) {
+      var _buildPaintImageXObject = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_ref3) {
         var _this = this;
 
         var resources, image, _ref3$isInline, isInline, operatorList, cacheKey, localImageCache, localColorSpaceCache, dict, imageRef, w, h, maxImageSize, imageMask, imgData, args, width, height, bitStrideLength, imgArray, decode, softMask, mask, SMALL_IMAGE_DIMENSIONS, imageObj, objId, cacheGlobally;
 
-        return _regenerator["default"].wrap(function _callee3$(_context3) {
+        return _regenerator["default"].wrap(function _callee4$(_context4) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context4.prev = _context4.next) {
               case 0:
                 resources = _ref3.resources, image = _ref3.image, _ref3$isInline = _ref3.isInline, isInline = _ref3$isInline === void 0 ? false : _ref3$isInline, operatorList = _ref3.operatorList, cacheKey = _ref3.cacheKey, localImageCache = _ref3.localImageCache, localColorSpaceCache = _ref3.localColorSpaceCache;
                 dict = image.dict;
@@ -18132,29 +18219,29 @@ var PartialEvaluator = /*#__PURE__*/function () {
                 h = dict.get("Height", "H");
 
                 if (!(!(w && (0, _util.isNum)(w)) || !(h && (0, _util.isNum)(h)))) {
-                  _context3.next = 8;
+                  _context4.next = 8;
                   break;
                 }
 
                 (0, _util.warn)("Image dimensions are missing, or not numbers.");
-                return _context3.abrupt("return", undefined);
+                return _context4.abrupt("return", undefined);
 
               case 8:
                 maxImageSize = this.options.maxImageSize;
 
                 if (!(maxImageSize !== -1 && w * h > maxImageSize)) {
-                  _context3.next = 12;
+                  _context4.next = 12;
                   break;
                 }
 
                 (0, _util.warn)("Image exceeded maximum allowed size and was removed.");
-                return _context3.abrupt("return", undefined);
+                return _context4.abrupt("return", undefined);
 
               case 12:
                 imageMask = dict.get("ImageMask", "IM") || false;
 
                 if (!imageMask) {
-                  _context3.next = 25;
+                  _context4.next = 25;
                   break;
                 }
 
@@ -18181,7 +18268,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
                   });
                 }
 
-                return _context3.abrupt("return", undefined);
+                return _context4.abrupt("return", undefined);
 
               case 25:
                 softMask = dict.get("SMask", "SM") || false;
@@ -18189,7 +18276,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
                 SMALL_IMAGE_DIMENSIONS = 200;
 
                 if (!(isInline && !softMask && !mask && w + h < SMALL_IMAGE_DIMENSIONS)) {
-                  _context3.next = 33;
+                  _context4.next = 33;
                   break;
                 }
 
@@ -18203,7 +18290,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
                 });
                 imgData = imageObj.createImageData(true);
                 operatorList.addOp(_util.OPS.paintInlineImageXObject, [imgData]);
-                return _context3.abrupt("return", undefined);
+                return _context4.abrupt("return", undefined);
 
               case 33:
                 objId = "img_".concat(this.idFactory.createObjId()), cacheGlobally = false;
@@ -18264,17 +18351,17 @@ var PartialEvaluator = /*#__PURE__*/function () {
                   }
                 }
 
-                return _context3.abrupt("return", undefined);
+                return _context4.abrupt("return", undefined);
 
               case 41:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
           }
-        }, _callee3, this);
+        }, _callee4, this);
       }));
 
-      function buildPaintImageXObject(_x9) {
+      function buildPaintImageXObject(_x10) {
         return _buildPaintImageXObject.apply(this, arguments);
       }
 
@@ -18488,14 +18575,14 @@ var PartialEvaluator = /*#__PURE__*/function () {
   }, {
     key: "setGState",
     value: function () {
-      var _setGState = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_ref4) {
+      var _setGState = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee5(_ref4) {
         var _this4 = this;
 
         var resources, gState, operatorList, cacheKey, task, stateManager, localGStateCache, localColorSpaceCache, gStateRef, isSimpleGState, gStateObj, gStateKeys, promise, _loop, i, ii;
 
-        return _regenerator["default"].wrap(function _callee4$(_context4) {
+        return _regenerator["default"].wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
                 resources = _ref4.resources, gState = _ref4.gState, operatorList = _ref4.operatorList, cacheKey = _ref4.cacheKey, task = _ref4.task, stateManager = _ref4.stateManager, localGStateCache = _ref4.localGStateCache, localColorSpaceCache = _ref4.localColorSpaceCache;
                 gStateRef = gState.objId;
@@ -18588,7 +18675,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
                   _loop(i, ii);
                 }
 
-                return _context4.abrupt("return", promise.then(function () {
+                return _context5.abrupt("return", promise.then(function () {
                   if (gStateObj.length > 0) {
                     operatorList.addOp(_util.OPS.setGState, [gStateObj]);
                   }
@@ -18600,13 +18687,13 @@ var PartialEvaluator = /*#__PURE__*/function () {
 
               case 9:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
           }
-        }, _callee4);
+        }, _callee5);
       }));
 
-      function setGState(_x10) {
+      function setGState(_x11) {
         return _setGState.apply(this, arguments);
       }
 
@@ -18621,12 +18708,12 @@ var PartialEvaluator = /*#__PURE__*/function () {
       var cssFontInfo = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
 
       var errorFont = /*#__PURE__*/function () {
-        var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee5() {
-          return _regenerator["default"].wrap(function _callee5$(_context5) {
+        var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee6() {
+          return _regenerator["default"].wrap(function _callee6$(_context6) {
             while (1) {
-              switch (_context5.prev = _context5.next) {
+              switch (_context6.prev = _context6.next) {
                 case 0:
-                  return _context5.abrupt("return", new TranslatedFont({
+                  return _context6.abrupt("return", new TranslatedFont({
                     loadedName: "g_font_error",
                     font: new _fonts.ErrorFont("Font \"".concat(fontName, "\" is not available.")),
                     dict: font,
@@ -18635,10 +18722,10 @@ var PartialEvaluator = /*#__PURE__*/function () {
 
                 case 1:
                 case "end":
-                  return _context5.stop();
+                  return _context6.stop();
               }
             }
-          }, _callee5);
+          }, _callee6);
         }));
 
         return function errorFont() {
@@ -18941,31 +19028,31 @@ var PartialEvaluator = /*#__PURE__*/function () {
   }, {
     key: "parseMarkedContentProps",
     value: function () {
-      var _parseMarkedContentProps = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee6(contentProperties, resources) {
+      var _parseMarkedContentProps = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee7(contentProperties, resources) {
         var optionalContent, properties, optionalContentType, expression, result, optionalContentGroups, groupIds, _iterator5, _step5, ocg;
 
-        return _regenerator["default"].wrap(function _callee6$(_context6) {
+        return _regenerator["default"].wrap(function _callee7$(_context7) {
           while (1) {
-            switch (_context6.prev = _context6.next) {
+            switch (_context7.prev = _context7.next) {
               case 0:
                 if (!(0, _primitives.isName)(contentProperties)) {
-                  _context6.next = 5;
+                  _context7.next = 5;
                   break;
                 }
 
                 properties = resources.get("Properties");
                 optionalContent = properties.get(contentProperties.name);
-                _context6.next = 10;
+                _context7.next = 10;
                 break;
 
               case 5:
                 if (!(0, _primitives.isDict)(contentProperties)) {
-                  _context6.next = 9;
+                  _context7.next = 9;
                   break;
                 }
 
                 optionalContent = contentProperties;
-                _context6.next = 10;
+                _context7.next = 10;
                 break;
 
               case 9:
@@ -18975,25 +19062,25 @@ var PartialEvaluator = /*#__PURE__*/function () {
                 optionalContentType = optionalContent.get("Type").name;
 
                 if (!(optionalContentType === "OCG")) {
-                  _context6.next = 15;
+                  _context7.next = 15;
                   break;
                 }
 
-                return _context6.abrupt("return", {
+                return _context7.abrupt("return", {
                   type: optionalContentType,
                   id: optionalContent.objId
                 });
 
               case 15:
                 if (!(optionalContentType === "OCMD")) {
-                  _context6.next = 31;
+                  _context7.next = 31;
                   break;
                 }
 
                 expression = optionalContent.get("VE");
 
                 if (!Array.isArray(expression)) {
-                  _context6.next = 22;
+                  _context7.next = 22;
                   break;
                 }
 
@@ -19002,11 +19089,11 @@ var PartialEvaluator = /*#__PURE__*/function () {
                 this._parseVisibilityExpression(expression, 0, result);
 
                 if (!(result.length > 0)) {
-                  _context6.next = 22;
+                  _context7.next = 22;
                   break;
                 }
 
-                return _context6.abrupt("return", {
+                return _context7.abrupt("return", {
                   type: "OCMD",
                   expression: result
                 });
@@ -19015,7 +19102,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
                 optionalContentGroups = optionalContent.get("OCGs");
 
                 if (!(Array.isArray(optionalContentGroups) || (0, _primitives.isDict)(optionalContentGroups))) {
-                  _context6.next = 29;
+                  _context7.next = 29;
                   break;
                 }
 
@@ -19038,7 +19125,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
                   groupIds.push(optionalContentGroups.objId);
                 }
 
-                return _context6.abrupt("return", {
+                return _context7.abrupt("return", {
                   type: optionalContentType,
                   ids: groupIds,
                   policy: (0, _primitives.isName)(optionalContent.get("P")) ? optionalContent.get("P").name : null,
@@ -19047,27 +19134,27 @@ var PartialEvaluator = /*#__PURE__*/function () {
 
               case 29:
                 if (!(0, _primitives.isRef)(optionalContentGroups)) {
-                  _context6.next = 31;
+                  _context7.next = 31;
                   break;
                 }
 
-                return _context6.abrupt("return", {
+                return _context7.abrupt("return", {
                   type: optionalContentType,
                   id: optionalContentGroups.toString()
                 });
 
               case 31:
-                return _context6.abrupt("return", null);
+                return _context7.abrupt("return", null);
 
               case 32:
               case "end":
-                return _context6.stop();
+                return _context7.stop();
             }
           }
-        }, _callee6, this);
+        }, _callee7, this);
       }));
 
-      function parseMarkedContentProps(_x11, _x12) {
+      function parseMarkedContentProps(_x12, _x13) {
         return _parseMarkedContentProps.apply(this, arguments);
       }
 
@@ -19682,7 +19769,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
         var font = textState.font;
         var tsm = [textState.fontSize * textState.textHScale, 0, 0, textState.fontSize, 0, textState.textRise];
 
-        if (font.isType3Font && textState.fontSize <= 1 && !(0, _util.isArrayEqual)(textState.fontMatrix, _util.FONT_IDENTITY_MATRIX)) {
+        if (font.isType3Font && (textState.fontSize <= 1 || font.isCharBBox) && !(0, _util.isArrayEqual)(textState.fontMatrix, _util.FONT_IDENTITY_MATRIX)) {
           var glyphHeight = font.bbox[3] - font.bbox[1];
 
           if (glyphHeight > 0) {
@@ -19798,6 +19885,14 @@ var PartialEvaluator = /*#__PURE__*/function () {
 
       function handleSetFont(fontName, fontRef) {
         return self.loadFont(fontName, fontRef, resources).then(function (translated) {
+          if (!translated.font.isType3Font) {
+            return translated;
+          }
+
+          return translated.loadType3Data(self, resources, task)["catch"](function () {}).then(function () {
+            return translated;
+          });
+        }).then(function (translated) {
           textState.font = translated.font;
           textState.fontMatrix = translated.font.fontMatrix || _util.FONT_IDENTITY_MATRIX;
         });
@@ -21184,38 +21279,39 @@ var PartialEvaluator = /*#__PURE__*/function () {
   }, {
     key: "translateFont",
     value: function () {
-      var _translateFont = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee7(_ref10) {
+      var _translateFont = _asyncToGenerator( /*#__PURE__*/_regenerator["default"].mark(function _callee8(_ref10) {
         var _this11 = this;
 
-        var descriptor, dict, baseDict, composite, type, firstChar, lastChar, toUnicode, cssFontInfo, isType3Font, properties, baseFontName, metrics, fontNameWoStyle, flags, widths, fontName, baseFont, fontNameStr, baseFontStr, fontFile, subtype, length1, length2, length3, subtypeEntry, cidEncoding, cMap;
-        return _regenerator["default"].wrap(function _callee7$(_context7) {
+        var descriptor, dict, baseDict, composite, type, firstChar, lastChar, toUnicode, cssFontInfo, isType3Font, properties, baseFontName, metrics, fontNameWoStyle, flags, widths, standardFontName, file, fontName, baseFont, fontNameStr, baseFontStr, fontFile, subtype, length1, length2, length3, isStandardFont, isInternalFont, subtypeEntry, _standardFontName, cidEncoding, cMap;
+
+        return _regenerator["default"].wrap(function _callee8$(_context8) {
           while (1) {
-            switch (_context7.prev = _context7.next) {
+            switch (_context8.prev = _context8.next) {
               case 0:
                 descriptor = _ref10.descriptor, dict = _ref10.dict, baseDict = _ref10.baseDict, composite = _ref10.composite, type = _ref10.type, firstChar = _ref10.firstChar, lastChar = _ref10.lastChar, toUnicode = _ref10.toUnicode, cssFontInfo = _ref10.cssFontInfo;
                 isType3Font = type === "Type3";
 
                 if (descriptor) {
-                  _context7.next = 19;
+                  _context8.next = 27;
                   break;
                 }
 
                 if (!isType3Font) {
-                  _context7.next = 9;
+                  _context8.next = 9;
                   break;
                 }
 
                 descriptor = new _primitives.Dict(null);
                 descriptor.set("FontName", _primitives.Name.get(type));
                 descriptor.set("FontBBox", dict.getArray("FontBBox") || [0, 0, 0, 0]);
-                _context7.next = 19;
+                _context8.next = 27;
                 break;
 
               case 9:
                 baseFontName = dict.get("BaseFont");
 
                 if ((0, _primitives.isName)(baseFontName)) {
-                  _context7.next = 12;
+                  _context8.next = 12;
                   break;
                 }
 
@@ -21229,6 +21325,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
                 properties = {
                   type: type,
                   name: baseFontName,
+                  loadedName: baseDict.loadedName,
                   widths: metrics.widths,
                   defaultWidth: metrics.defaultWidth,
                   flags: flags,
@@ -21238,7 +21335,24 @@ var PartialEvaluator = /*#__PURE__*/function () {
                   isType3Font: isType3Font
                 };
                 widths = dict.get("Widths");
-                return _context7.abrupt("return", this.extractDataStructures(dict, dict, properties).then(function (newProperties) {
+                standardFontName = (0, _standard_fonts.getStandardFontName)(baseFontName);
+                file = null;
+
+                if (!standardFontName) {
+                  _context8.next = 26;
+                  break;
+                }
+
+                properties.isStandardFont = true;
+                _context8.next = 24;
+                return this.fetchStandardFontData(standardFontName);
+
+              case 24:
+                file = _context8.sent;
+                properties.isInternalFont = !!file;
+
+              case 26:
+                return _context8.abrupt("return", this.extractDataStructures(dict, dict, properties).then(function (newProperties) {
                   if (widths) {
                     var glyphWidths = [];
                     var j = firstChar;
@@ -21252,10 +21366,10 @@ var PartialEvaluator = /*#__PURE__*/function () {
                     newProperties.widths = _this11.buildCharCodeToWidth(metrics.widths, newProperties);
                   }
 
-                  return new _fonts.Font(baseFontName, null, newProperties);
+                  return new _fonts.Font(baseFontName, file, newProperties);
                 }));
 
-              case 19:
+              case 27:
                 fontName = descriptor.get("FontName");
                 baseFont = dict.get("BaseFont");
 
@@ -21283,48 +21397,79 @@ var PartialEvaluator = /*#__PURE__*/function () {
                 fontName = fontName || baseFont;
 
                 if ((0, _primitives.isName)(fontName)) {
-                  _context7.next = 27;
+                  _context8.next = 35;
                   break;
                 }
 
                 throw new _util.FormatError("invalid font name");
 
-              case 27:
-                _context7.prev = 27;
+              case 35:
+                _context8.prev = 35;
                 fontFile = descriptor.get("FontFile", "FontFile2", "FontFile3");
-                _context7.next = 37;
+                _context8.next = 45;
                 break;
 
-              case 31:
-                _context7.prev = 31;
-                _context7.t0 = _context7["catch"](27);
+              case 39:
+                _context8.prev = 39;
+                _context8.t0 = _context8["catch"](35);
 
                 if (this.options.ignoreErrors) {
-                  _context7.next = 35;
+                  _context8.next = 43;
                   break;
                 }
 
-                throw _context7.t0;
+                throw _context8.t0;
 
-              case 35:
-                (0, _util.warn)("translateFont - fetching \"".concat(fontName.name, "\" font file: \"").concat(_context7.t0, "\"."));
+              case 43:
+                (0, _util.warn)("translateFont - fetching \"".concat(fontName.name, "\" font file: \"").concat(_context8.t0, "\"."));
                 fontFile = new _stream.NullStream();
 
-              case 37:
-                if (fontFile) {
-                  if (fontFile.dict) {
-                    subtypeEntry = fontFile.dict.get("Subtype");
+              case 45:
+                isStandardFont = false;
+                isInternalFont = false;
 
-                    if (subtypeEntry instanceof _primitives.Name) {
-                      subtype = subtypeEntry.name;
-                    }
-
-                    length1 = fontFile.dict.get("Length1");
-                    length2 = fontFile.dict.get("Length2");
-                    length3 = fontFile.dict.get("Length3");
-                  }
+                if (!fontFile) {
+                  _context8.next = 51;
+                  break;
                 }
 
+                if (fontFile.dict) {
+                  subtypeEntry = fontFile.dict.get("Subtype");
+
+                  if (subtypeEntry instanceof _primitives.Name) {
+                    subtype = subtypeEntry.name;
+                  }
+
+                  length1 = fontFile.dict.get("Length1");
+                  length2 = fontFile.dict.get("Length2");
+                  length3 = fontFile.dict.get("Length3");
+                }
+
+                _context8.next = 59;
+                break;
+
+              case 51:
+                if (!(type === "Type1")) {
+                  _context8.next = 59;
+                  break;
+                }
+
+                _standardFontName = (0, _standard_fonts.getStandardFontName)(fontName.name);
+
+                if (!_standardFontName) {
+                  _context8.next = 59;
+                  break;
+                }
+
+                isStandardFont = true;
+                _context8.next = 57;
+                return this.fetchStandardFontData(_standardFontName);
+
+              case 57:
+                fontFile = _context8.sent;
+                isInternalFont = !!fontFile;
+
+              case 59:
                 properties = {
                   type: type,
                   name: fontName.name,
@@ -21333,6 +21478,8 @@ var PartialEvaluator = /*#__PURE__*/function () {
                   length1: length1,
                   length2: length2,
                   length3: length3,
+                  isStandardFont: isStandardFont,
+                  isInternalFont: isInternalFont,
                   loadedName: baseDict.loadedName,
                   composite: composite,
                   fixedPitch: false,
@@ -21340,7 +21487,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
                   firstChar: firstChar,
                   lastChar: lastChar,
                   toUnicode: toUnicode,
-                  bbox: descriptor.getArray("FontBBox"),
+                  bbox: descriptor.getArray("FontBBox") || dict.getArray("FontBBox"),
                   ascent: descriptor.get("Ascent"),
                   descent: descriptor.get("Descent"),
                   xHeight: descriptor.get("XHeight"),
@@ -21352,7 +21499,7 @@ var PartialEvaluator = /*#__PURE__*/function () {
                 };
 
                 if (!composite) {
-                  _context7.next = 47;
+                  _context8.next = 68;
                   break;
                 }
 
@@ -21362,34 +21509,34 @@ var PartialEvaluator = /*#__PURE__*/function () {
                   properties.cidEncoding = cidEncoding.name;
                 }
 
-                _context7.next = 44;
+                _context8.next = 65;
                 return _cmap.CMapFactory.create({
                   encoding: cidEncoding,
                   fetchBuiltInCMap: this._fetchBuiltInCMapBound,
                   useCMap: null
                 });
 
-              case 44:
-                cMap = _context7.sent;
+              case 65:
+                cMap = _context8.sent;
                 properties.cMap = cMap;
                 properties.vertical = properties.cMap.vertical;
 
-              case 47:
-                return _context7.abrupt("return", this.extractDataStructures(dict, baseDict, properties).then(function (newProperties) {
+              case 68:
+                return _context8.abrupt("return", this.extractDataStructures(dict, baseDict, properties).then(function (newProperties) {
                   _this11.extractWidths(dict, descriptor, newProperties);
 
                   return new _fonts.Font(fontName.name, fontFile, newProperties);
                 }));
 
-              case 48:
+              case 69:
               case "end":
-                return _context7.stop();
+                return _context8.stop();
             }
           }
-        }, _callee7, this, [[27, 31]]);
+        }, _callee8, this, [[35, 39]]);
       }));
 
-      function translateFont(_x13) {
+      function translateFont(_x14) {
         return _translateFont.apply(this, arguments);
       }
 
@@ -21517,6 +21664,7 @@ var TranslatedFont = /*#__PURE__*/function () {
       var charProcs = this.dict.get("CharProcs");
       var fontResources = this.dict.get("Resources") || resources;
       var charProcOperatorList = Object.create(null);
+      var isEmptyBBox = !translatedFont.bbox || (0, _util.isArrayEqual)(translatedFont.bbox, [0, 0, 0, 0]);
 
       var _iterator11 = _createForOfIteratorHelper(charProcs.getKeys()),
           _step11;
@@ -21534,7 +21682,7 @@ var TranslatedFont = /*#__PURE__*/function () {
               operatorList: operatorList
             }).then(function () {
               if (operatorList.fnArray[0] === _util.OPS.setCharWidthAndBounds) {
-                _this12._removeType3ColorOperators(operatorList);
+                _this12._removeType3ColorOperators(operatorList, isEmptyBBox);
               }
 
               charProcOperatorList[key] = operatorList.getIR();
@@ -21571,12 +21719,32 @@ var TranslatedFont = /*#__PURE__*/function () {
 
       this.type3Loaded = loadCharProcsPromise.then(function () {
         translatedFont.charProcOperatorList = charProcOperatorList;
+
+        if (_this12._bbox) {
+          translatedFont.isCharBBox = true;
+          translatedFont.bbox = _this12._bbox;
+        }
       });
       return this.type3Loaded;
     }
   }, {
     key: "_removeType3ColorOperators",
     value: function _removeType3ColorOperators(operatorList) {
+      var isEmptyBBox = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      if (isEmptyBBox) {
+        if (!this._bbox) {
+          this._bbox = [Infinity, Infinity, -Infinity, -Infinity];
+        }
+
+        var charBBox = _util.Util.normalizeRect(operatorList.argsArray[0].slice(2));
+
+        this._bbox[0] = Math.min(this._bbox[0], charBBox[0]);
+        this._bbox[1] = Math.min(this._bbox[1], charBBox[1]);
+        this._bbox[2] = Math.max(this._bbox[2], charBBox[2]);
+        this._bbox[3] = Math.max(this._bbox[3], charBBox[3]);
+      }
+
       var i = 1,
           ii = operatorList.length;
 
@@ -34076,6 +34244,10 @@ function adjustWidths(properties) {
 }
 
 function adjustToUnicode(properties, builtInEncoding) {
+  if (properties.isInternalFont) {
+    return;
+  }
+
   if (properties.hasIncludedToUnicodeMap) {
     return;
   }
@@ -34108,9 +34280,10 @@ function adjustToUnicode(properties, builtInEncoding) {
 }
 
 var Glyph = /*#__PURE__*/function () {
-  function Glyph(fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont) {
+  function Glyph(originalCharCode, fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont) {
     _classCallCheck(this, Glyph);
 
+    this.originalCharCode = originalCharCode;
     this.fontChar = fontChar;
     this.unicode = unicode;
     this.accent = accent;
@@ -34123,8 +34296,8 @@ var Glyph = /*#__PURE__*/function () {
 
   _createClass(Glyph, [{
     key: "matchesForCache",
-    value: function matchesForCache(fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont) {
-      return this.fontChar === fontChar && this.unicode === unicode && this.accent === accent && this.width === width && this.vmetric === vmetric && this.operatorListId === operatorListId && this.isSpace === isSpace && this.isInFont === isInFont;
+    value: function matchesForCache(originalCharCode, fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont) {
+      return this.originalCharCode === originalCharCode && this.fontChar === fontChar && this.unicode === unicode && this.accent === accent && this.width === width && this.vmetric === vmetric && this.operatorListId === operatorListId && this.isSpace === isSpace && this.isInFont === isInFont;
     }
   }]);
 
@@ -34725,7 +34898,7 @@ var Font = /*#__PURE__*/function () {
     }
 
     this.data = data;
-    this.fontType = (0, _fonts_utils.getFontType)(type, subtype);
+    this.fontType = (0, _fonts_utils.getFontType)(type, subtype, properties.isStandardFont);
     this.fontMatrix = properties.fontMatrix;
     this.widths = properties.widths;
     this.defaultWidth = properties.defaultWidth;
@@ -34777,7 +34950,7 @@ var Font = /*#__PURE__*/function () {
       var name = this.name;
       var type = this.type;
       var subtype = this.subtype;
-      var fontName = name.replace(/[,_]/g, "-").replace(/\s/g, "");
+      var fontName = (0, _fonts_utils.normalizeFontName)(name);
       var stdFontMap = (0, _standard_fonts.getStdFontMap)(),
           nonStdFontMap = (0, _standard_fonts.getNonStdFontMap)();
       var isStandardFont = !!stdFontMap[fontName];
@@ -34872,7 +35045,7 @@ var Font = /*#__PURE__*/function () {
       }
 
       this.loadedName = fontName.split("-")[0];
-      this.fontType = (0, _fonts_utils.getFontType)(type, subtype);
+      this.fontType = (0, _fonts_utils.getFontType)(type, subtype, properties.isStandardFont);
     }
   }, {
     key: "checkAndRepair",
@@ -36527,8 +36700,8 @@ var Font = /*#__PURE__*/function () {
 
       var glyph = this._glyphCache[charcode];
 
-      if (!glyph || !glyph.matchesForCache(fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont)) {
-        glyph = new Glyph(fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont);
+      if (!glyph || !glyph.matchesForCache(charcode, fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont)) {
+        glyph = new Glyph(charcode, fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont);
         this._glyphCache[charcode] = glyph;
       }
 
@@ -37339,6 +37512,12 @@ var CFFParser = function CFFParserClosure() {
             if ("min" in validationCommand) {
               if (!state.undefStack && stackSize < validationCommand.min) {
                 (0, _util.warn)("Not enough parameters for " + validationCommand.id + "; actual: " + stackSize + ", expected: " + validationCommand.min);
+
+                if (stackSize === 0) {
+                  data[j - 1] = 14;
+                  return true;
+                }
+
                 return false;
               }
             }
@@ -38745,6 +38924,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.getFontType = getFontType;
+exports.normalizeFontName = normalizeFontName;
 exports.recoverGlyphName = recoverGlyphName;
 exports.type1FontGlyphMapping = type1FontGlyphMapping;
 exports.SEAC_ANALYSIS_ENABLED = exports.MacStandardGlyphOrdering = exports.FontFlags = void 0;
@@ -38775,8 +38955,14 @@ var MacStandardGlyphOrdering = [".notdef", ".null", "nonmarkingreturn", "space",
 exports.MacStandardGlyphOrdering = MacStandardGlyphOrdering;
 
 function getFontType(type, subtype) {
+  var isStandardFont = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
   switch (type) {
     case "Type1":
+      if (isStandardFont) {
+        return _util.FontType.TYPE1STANDARD;
+      }
+
       return subtype === "Type1C" ? _util.FontType.TYPE1C : _util.FontType.TYPE1;
 
     case "CIDFontType0":
@@ -38826,7 +39012,19 @@ function type1FontGlyphMapping(properties, builtInEncoding, glyphNames) {
   var glyphId, charCode, baseEncoding;
   var isSymbolicFont = !!(properties.flags & FontFlags.Symbolic);
 
-  if (properties.baseEncodingName) {
+  if (properties.isInternalFont) {
+    baseEncoding = builtInEncoding;
+
+    for (charCode = 0; charCode < baseEncoding.length; charCode++) {
+      glyphId = glyphNames.indexOf(baseEncoding[charCode]);
+
+      if (glyphId >= 0) {
+        charCodeToGlyphId[charCode] = glyphId;
+      } else {
+        charCodeToGlyphId[charCode] = 0;
+      }
+    }
+  } else if (properties.baseEncodingName) {
     baseEncoding = (0, _encodings.getEncoding)(properties.baseEncodingName);
 
     for (charCode = 0; charCode < baseEncoding.length; charCode++) {
@@ -38885,6 +39083,10 @@ function type1FontGlyphMapping(properties, builtInEncoding, glyphNames) {
   }
 
   return charCodeToGlyphId;
+}
+
+function normalizeFontName(name) {
+  return name.replace(/[,_]/g, "-").replace(/\s/g, "");
 }
 
 /***/ }),
@@ -51332,11 +51534,28 @@ function reverseIfRtl(chars) {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.getSymbolsFonts = exports.getSupplementalGlyphMapForCalibri = exports.getSupplementalGlyphMapForArialBlack = exports.getStdFontMap = exports.getSerifFonts = exports.getNonStdFontMap = exports.getGlyphMapForStandardFonts = void 0;
+exports.getStandardFontName = getStandardFontName;
+exports.getSymbolsFonts = exports.getSupplementalGlyphMapForCalibri = exports.getSupplementalGlyphMapForArialBlack = exports.getStdFontNameToFileMap = exports.getStdFontMap = exports.getSerifFonts = exports.getNonStdFontMap = exports.getGlyphMapForStandardFonts = void 0;
 
 var _core_utils = __w_pdfjs_require__(116);
 
+var _fonts_utils = __w_pdfjs_require__(145);
+
 var getStdFontMap = (0, _core_utils.getLookupTableFactory)(function (t) {
+  t["Times-Roman"] = "Times-Roman";
+  t.Helvetica = "Helvetica";
+  t.Courier = "Courier";
+  t.Symbol = "Symbol";
+  t["Times-Bold"] = "Times-Bold";
+  t["Helvetica-Bold"] = "Helvetica-Bold";
+  t["Courier-Bold"] = "Courier-Bold";
+  t.ZapfDingbats = "ZapfDingbats";
+  t["Times-Italic"] = "Times-Italic";
+  t["Helvetica-Oblique"] = "Helvetica-Oblique";
+  t["Courier-Oblique"] = "Courier-Oblique";
+  t["Times-BoldItalic"] = "Times-BoldItalic";
+  t["Helvetica-BoldOblique"] = "Helvetica-BoldOblique";
+  t["Courier-BoldOblique"] = "Courier-BoldOblique";
   t.ArialNarrow = "Helvetica";
   t["ArialNarrow-Bold"] = "Helvetica-Bold";
   t["ArialNarrow-BoldItalic"] = "Helvetica-BoldOblique";
@@ -51357,7 +51576,6 @@ var getStdFontMap = (0, _core_utils.getLookupTableFactory)(function (t) {
   t["Arial-BoldMT"] = "Helvetica-Bold";
   t["Arial-ItalicMT"] = "Helvetica-Oblique";
   t.ArialMT = "Helvetica";
-  t["Courier-Bold"] = "Courier-Bold";
   t["Courier-BoldItalic"] = "Courier-BoldOblique";
   t["Courier-Italic"] = "Courier-Oblique";
   t.CourierNew = "Courier";
@@ -51368,12 +51586,8 @@ var getStdFontMap = (0, _core_utils.getLookupTableFactory)(function (t) {
   t["CourierNewPS-BoldMT"] = "Courier-Bold";
   t["CourierNewPS-ItalicMT"] = "Courier-Oblique";
   t.CourierNewPSMT = "Courier";
-  t.Helvetica = "Helvetica";
-  t["Helvetica-Bold"] = "Helvetica-Bold";
   t["Helvetica-BoldItalic"] = "Helvetica-BoldOblique";
-  t["Helvetica-BoldOblique"] = "Helvetica-BoldOblique";
   t["Helvetica-Italic"] = "Helvetica-Oblique";
-  t["Helvetica-Oblique"] = "Helvetica-Oblique";
   t["Symbol-Bold"] = "Symbol";
   t["Symbol-BoldItalic"] = "Symbol";
   t["Symbol-Italic"] = "Symbol";
@@ -51394,6 +51608,23 @@ var getStdFontMap = (0, _core_utils.getLookupTableFactory)(function (t) {
   t["TimesNewRomanPSMT-Italic"] = "Times-Italic";
 });
 exports.getStdFontMap = getStdFontMap;
+var getStdFontNameToFileMap = (0, _core_utils.getLookupTableFactory)(function (t) {
+  t.Courier = "FoxitFixed";
+  t["Courier-Bold"] = "FoxitFixedBold";
+  t["Courier-BoldOblique"] = "FoxitFixedBoldItalic";
+  t["Courier-Oblique"] = "FoxitFixedItalic";
+  t.Helvetica = "FoxitSans";
+  t["Helvetica-Bold"] = "FoxitSansBold";
+  t["Helvetica-BoldOblique"] = "FoxitSansBoldItalic";
+  t["Helvetica-Oblique"] = "FoxitSansItalic";
+  t["Times-Roman"] = "FoxitSerif";
+  t["Times-Bold"] = "FoxitSerifBold";
+  t["Times-BoldItalic"] = "FoxitSerifBoldItalic";
+  t["Times-Italic"] = "FoxitSerifItalic";
+  t.Symbol = "FoxitSymbol";
+  t.ZapfDingbats = "FoxitDingbats";
+});
+exports.getStdFontNameToFileMap = getStdFontNameToFileMap;
 var getNonStdFontMap = (0, _core_utils.getLookupTableFactory)(function (t) {
   t.Calibri = "Helvetica";
   t["Calibri-Bold"] = "Helvetica-Bold";
@@ -52066,6 +52297,12 @@ var getSupplementalGlyphMapForCalibri = (0, _core_utils.getLookupTableFactory)(f
 });
 exports.getSupplementalGlyphMapForCalibri = getSupplementalGlyphMapForCalibri;
 
+function getStandardFontName(name) {
+  var fontName = (0, _fonts_utils.normalizeFontName)(name);
+  var stdFontMap = getStdFontMap();
+  return stdFontMap[fontName];
+}
+
 /***/ }),
 /* 149 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
@@ -52284,6 +52521,11 @@ var CFFFont = /*#__PURE__*/function () {
       }
 
       var encoding = cff.encoding ? cff.encoding.encoding : null;
+
+      if (properties.isInternalFont) {
+        encoding = properties.defaultEncoding;
+      }
+
       charCodeToGlyphId = (0, _fonts_utils.type1FontGlyphMapping)(properties, encoding, charsets);
       return charCodeToGlyphId;
     }
@@ -68789,7 +69031,7 @@ exports.XFAFactory = void 0;
 
 var _xfa_object = __w_pdfjs_require__(175);
 
-var _bind = __w_pdfjs_require__(178);
+var _bind = __w_pdfjs_require__(179);
 
 var _parser = __w_pdfjs_require__(183);
 
@@ -68873,7 +69115,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.XmlObject = exports.XFAObjectArray = exports.XFAObject = exports.XFAAttribute = exports.StringObject = exports.OptionObject = exports.Option10 = exports.Option01 = exports.IntegerObject = exports.ContentObject = exports.$uid = exports.$toStyle = exports.$toHTML = exports.$text = exports.$setValue = exports.$setSetAttributes = exports.$setId = exports.$searchNode = exports.$resolvePrototypes = exports.$removeChild = exports.$onText = exports.$onChildCheck = exports.$onChild = exports.$nsAttributes = exports.$nodeName = exports.$namespaceId = exports.$isTransparent = exports.$isDescendent = exports.$isDataValue = exports.$insertAt = exports.$indexOf = exports.$ids = exports.$hasSettableValue = exports.$hasItem = exports.$global = exports.$getRealChildrenByNameIt = exports.$getParent = exports.$getNextPage = exports.$getDataValue = exports.$getChildrenByNameIt = exports.$getChildrenByName = exports.$getChildrenByClass = exports.$getChildren = exports.$getAvailableSpace = exports.$getAttributeIt = exports.$flushHTML = exports.$finalize = exports.$extra = exports.$dump = exports.$data = exports.$content = exports.$consumed = exports.$clone = exports.$cleanup = exports.$clean = exports.$childrenToHTML = exports.$break = exports.$appendChild = exports.$addHTML = exports.$acceptWhitespace = void 0;
+exports.XmlObject = exports.XFAObjectArray = exports.XFAObject = exports.XFAAttribute = exports.StringObject = exports.OptionObject = exports.Option10 = exports.Option01 = exports.IntegerObject = exports.ContentObject = exports.$uid = exports.$toStyle = exports.$toHTML = exports.$text = exports.$setValue = exports.$setSetAttributes = exports.$setId = exports.$searchNode = exports.$root = exports.$resolvePrototypes = exports.$removeChild = exports.$onText = exports.$onChildCheck = exports.$onChild = exports.$nsAttributes = exports.$nodeName = exports.$namespaceId = exports.$isTransparent = exports.$isDescendent = exports.$isDataValue = exports.$isCDATAXml = exports.$insertAt = exports.$indexOf = exports.$ids = exports.$hasSettableValue = exports.$hasItem = exports.$global = exports.$getRealChildrenByNameIt = exports.$getParent = exports.$getNextPage = exports.$getDataValue = exports.$getChildrenByNameIt = exports.$getChildrenByName = exports.$getChildrenByClass = exports.$getChildren = exports.$getAvailableSpace = exports.$getAttributeIt = exports.$flushHTML = exports.$finalize = exports.$extra = exports.$dump = exports.$data = exports.$content = exports.$consumed = exports.$clone = exports.$cleanup = exports.$clean = exports.$childrenToHTML = exports.$break = exports.$appendChild = exports.$addHTML = exports.$acceptWhitespace = void 0;
 
 var _regenerator = _interopRequireDefault(__w_pdfjs_require__(2));
 
@@ -68882,6 +69124,8 @@ var _utils = __w_pdfjs_require__(176);
 var _util = __w_pdfjs_require__(4);
 
 var _namespaces = __w_pdfjs_require__(177);
+
+var _som = __w_pdfjs_require__(178);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -68993,6 +69237,8 @@ var $indexOf = Symbol();
 exports.$indexOf = $indexOf;
 var $insertAt = Symbol();
 exports.$insertAt = $insertAt;
+var $isCDATAXml = Symbol();
+exports.$isCDATAXml = $isCDATAXml;
 var $isDataValue = Symbol();
 exports.$isDataValue = $isDataValue;
 var $isDescendent = Symbol();
@@ -69014,6 +69260,8 @@ var $onText = Symbol();
 exports.$onText = $onText;
 var $removeChild = Symbol();
 exports.$removeChild = $removeChild;
+var $root = Symbol("root");
+exports.$root = $root;
 var $resolvePrototypes = Symbol();
 exports.$resolvePrototypes = $resolvePrototypes;
 var $searchNode = Symbol();
@@ -69060,6 +69308,8 @@ var _max = Symbol();
 var _options = Symbol();
 
 var _parent = Symbol("parent");
+
+var _resolvePrototypesHelper = Symbol();
 
 var _setAttributes = Symbol();
 
@@ -69128,6 +69378,11 @@ var XFAObject = /*#__PURE__*/function () {
       return false;
     }
   }, {
+    key: $isCDATAXml,
+    value: function value() {
+      return false;
+    }
+  }, {
     key: $setId,
     value: function value(ids) {
       if (this.id && this[$namespaceId] === _namespaces.NamespaceIds.template.id) {
@@ -69192,7 +69447,7 @@ var XFAObject = /*#__PURE__*/function () {
   }, {
     key: $isTransparent,
     value: function value() {
-      return this.name === "";
+      return !this.name;
     }
   }, {
     key: $lastAttribute,
@@ -69447,9 +69702,7 @@ var XFAObject = /*#__PURE__*/function () {
   }, {
     key: $setSetAttributes,
     value: function value(attributes) {
-      if (attributes.use || attributes.id) {
-        this[_setAttributes] = new Set(Object.keys(attributes));
-      }
+      this[_setAttributes] = new Set(Object.keys(attributes));
     }
   }, {
     key: _getUnsetAttributes,
@@ -69472,13 +69725,7 @@ var XFAObject = /*#__PURE__*/function () {
         for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
           var child = _step4.value;
 
-          var proto = child[_getPrototype](ids, ancestors);
-
-          if (proto) {
-            child[_applyPrototype](proto, ids, ancestors);
-          } else {
-            child[$resolvePrototypes](ids, ancestors);
-          }
+          child[_resolvePrototypesHelper](ids, ancestors);
         }
       } catch (err) {
         _iterator4.e(err);
@@ -69487,46 +69734,89 @@ var XFAObject = /*#__PURE__*/function () {
       }
     }
   }, {
+    key: _resolvePrototypesHelper,
+    value: function value(ids, ancestors) {
+      var proto = this[_getPrototype](ids, ancestors);
+
+      if (proto) {
+        this[_applyPrototype](proto, ids, ancestors);
+      } else {
+        this[$resolvePrototypes](ids, ancestors);
+      }
+    }
+  }, {
     key: _getPrototype,
     value: function value(ids, ancestors) {
-      var use = this.use;
+      var use = this.use,
+          usehref = this.usehref;
 
-      if (use && use.startsWith("#")) {
-        var id = use.slice(1);
-        var proto = ids.get(id);
-        this.use = "";
+      if (!use && !usehref) {
+        return null;
+      }
 
-        if (!proto) {
-          (0, _util.warn)("XFA - Invalid prototype id: ".concat(id, "."));
-          return null;
+      var proto = null;
+      var somExpression = null;
+      var id = null;
+      var ref = use;
+
+      if (usehref) {
+        ref = usehref;
+
+        if (usehref.startsWith("#som(") && usehref.endsWith(")")) {
+          somExpression = usehref.slice("#som(".length, usehref.length - 1);
+        } else if (usehref.startsWith(".#som(") && usehref.endsWith(")")) {
+          somExpression = usehref.slice(".#som(".length, usehref.length - 1);
+        } else if (usehref.startsWith("#")) {
+          id = usehref.slice(1);
+        } else if (usehref.startsWith(".#")) {
+          id = usehref.slice(2);
         }
+      } else if (use.startsWith("#")) {
+        id = use.slice(1);
+      } else {
+        somExpression = use;
+      }
 
-        if (proto[$nodeName] !== this[$nodeName]) {
-          (0, _util.warn)("XFA - Incompatible prototype: ".concat(proto[$nodeName], " !== ").concat(this[$nodeName], "."));
-          return null;
+      this.use = this.usehref = "";
+
+      if (id) {
+        proto = ids.get(id);
+      } else {
+        proto = (0, _som.searchNode)(ids.get($root), this, somExpression, true, false);
+
+        if (proto) {
+          proto = proto[0];
         }
+      }
 
-        if (ancestors.has(proto)) {
-          (0, _util.warn)("XFA - Cycle detected in prototypes use.");
-          return null;
-        }
+      if (!proto) {
+        (0, _util.warn)("XFA - Invalid prototype reference: ".concat(ref, "."));
+        return null;
+      }
 
-        ancestors.add(proto);
+      if (proto[$nodeName] !== this[$nodeName]) {
+        (0, _util.warn)("XFA - Incompatible prototype: ".concat(proto[$nodeName], " !== ").concat(this[$nodeName], "."));
+        return null;
+      }
 
-        var protoProto = proto[_getPrototype](ids, ancestors);
+      if (ancestors.has(proto)) {
+        (0, _util.warn)("XFA - Cycle detected in prototypes use.");
+        return null;
+      }
 
-        if (!protoProto) {
-          ancestors["delete"](proto);
-          return proto;
-        }
+      ancestors.add(proto);
 
-        proto[_applyPrototype](protoProto, ids, ancestors);
+      var protoProto = proto[_getPrototype](ids, ancestors);
 
+      if (!protoProto) {
         ancestors["delete"](proto);
         return proto;
       }
 
-      return null;
+      proto[_applyPrototype](protoProto, ids, ancestors);
+
+      ancestors["delete"](proto);
+      return proto;
     }
   }, {
     key: _applyPrototype,
@@ -69583,7 +69873,7 @@ var XFAObject = /*#__PURE__*/function () {
               for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
                 var _child = _step7.value;
 
-                _child[$resolvePrototypes](ids, ancestors);
+                _child[_resolvePrototypesHelper](ids, ancestors);
               }
             } catch (err) {
               _iterator7.e(err);
@@ -69599,7 +69889,7 @@ var XFAObject = /*#__PURE__*/function () {
 
                 this[_children].push(child);
 
-                child[$resolvePrototypes](ids, newAncestors);
+                child[_resolvePrototypesHelper](ids, ancestors);
               } else {
                 break;
               }
@@ -69610,6 +69900,10 @@ var XFAObject = /*#__PURE__*/function () {
 
           if (_value !== null) {
             _value[$resolvePrototypes](ids, ancestors);
+
+            if (protoValue) {
+              _value[_applyPrototype](protoValue, ids, ancestors);
+            }
 
             continue;
           }
@@ -69622,7 +69916,7 @@ var XFAObject = /*#__PURE__*/function () {
 
             this[_children].push(_child2);
 
-            _child2[$resolvePrototypes](ids, newAncestors);
+            _child2[_resolvePrototypesHelper](ids, ancestors);
           }
         }
       } catch (err) {
@@ -70524,7 +70818,7 @@ exports.Option10 = Option10;
 
 /***/ }),
 /* 176 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
 
@@ -70542,6 +70836,8 @@ exports.getRatio = getRatio;
 exports.getRelevant = getRelevant;
 exports.getStringOption = getStringOption;
 exports.HTMLResult = void 0;
+
+var _util = __w_pdfjs_require__(4);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -70822,6 +71118,16 @@ var HTMLResult = /*#__PURE__*/function () {
   }
 
   _createClass(HTMLResult, null, [{
+    key: "FAILURE",
+    get: function get() {
+      return (0, _util.shadow)(this, "FAILURE", new HTMLResult(false, null, null));
+    }
+  }, {
+    key: "EMPTY",
+    get: function get() {
+      return (0, _util.shadow)(this, "EMPTY", new HTMLResult(true, null, null));
+    }
+  }, {
     key: "success",
     value: function success(html) {
       var bbox = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
@@ -70833,8 +71139,6 @@ var HTMLResult = /*#__PURE__*/function () {
 }();
 
 exports.HTMLResult = HTMLResult;
-HTMLResult.FAILURE = new HTMLResult(false, null, null);
-HTMLResult.EMPTY = new HTMLResult(true, null, null);
 
 /***/ }),
 /* 177 */
@@ -70953,13 +71257,435 @@ exports.NamespaceIds = NamespaceIds;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
+exports.createDataNode = createDataNode;
+exports.searchNode = searchNode;
+
+var _xfa_object = __w_pdfjs_require__(175);
+
+var _util = __w_pdfjs_require__(4);
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var namePattern = /^[^.[]+/;
+var indexPattern = /^[^\]]+/;
+var operators = {
+  dot: 0,
+  dotDot: 1,
+  dotHash: 2,
+  dotBracket: 3,
+  dotParen: 4
+};
+var shortcuts = new Map([["$data", function (root, current) {
+  return root.datasets.data;
+}], ["$template", function (root, current) {
+  return root.template;
+}], ["$connectionSet", function (root, current) {
+  return root.connectionSet;
+}], ["$form", function (root, current) {
+  return root.form;
+}], ["$layout", function (root, current) {
+  return root.layout;
+}], ["$host", function (root, current) {
+  return root.host;
+}], ["$dataWindow", function (root, current) {
+  return root.dataWindow;
+}], ["$event", function (root, current) {
+  return root.event;
+}], ["!", function (root, current) {
+  return root.datasets;
+}], ["$xfa", function (root, current) {
+  return root;
+}], ["xfa", function (root, current) {
+  return root;
+}], ["$", function (root, current) {
+  return current;
+}]]);
+var somCache = new WeakMap();
+
+function parseIndex(index) {
+  index = index.trim();
+
+  if (index === "*") {
+    return Infinity;
+  }
+
+  return parseInt(index, 10) || 0;
+}
+
+function parseExpression(expr, dotDotAllowed) {
+  var match = expr.match(namePattern);
+
+  if (!match) {
+    return null;
+  }
+
+  var _match = match,
+      _match2 = _slicedToArray(_match, 1),
+      name = _match2[0];
+
+  var parsed = [{
+    name: name,
+    cacheName: "." + name,
+    index: 0,
+    js: null,
+    formCalc: null,
+    operator: operators.dot
+  }];
+  var pos = name.length;
+
+  while (pos < expr.length) {
+    var spos = pos;
+
+    var _char = expr.charAt(pos++);
+
+    if (_char === "[") {
+      match = expr.slice(pos).match(indexPattern);
+
+      if (!match) {
+        (0, _util.warn)("XFA - Invalid index in SOM expression");
+        return null;
+      }
+
+      parsed[parsed.length - 1].index = parseIndex(match[0]);
+      pos += match[0].length + 1;
+      continue;
+    }
+
+    var operator = void 0;
+
+    switch (expr.charAt(pos)) {
+      case ".":
+        if (!dotDotAllowed) {
+          return null;
+        }
+
+        pos++;
+        operator = operators.dotDot;
+        break;
+
+      case "#":
+        pos++;
+        operator = operators.dotHash;
+        break;
+
+      case "[":
+        operator = operators.dotBracket;
+        break;
+
+      case "(":
+        operator = operators.dotParen;
+        break;
+
+      default:
+        operator = operators.dot;
+        break;
+    }
+
+    match = expr.slice(pos).match(namePattern);
+
+    if (!match) {
+      break;
+    }
+
+    var _match3 = match;
+
+    var _match4 = _slicedToArray(_match3, 1);
+
+    name = _match4[0];
+    pos += name.length;
+    parsed.push({
+      name: name,
+      cacheName: expr.slice(spos, pos),
+      operator: operator,
+      index: 0,
+      js: null,
+      formCalc: null
+    });
+  }
+
+  return parsed;
+}
+
+function searchNode(root, container, expr) {
+  var dotDotAllowed = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+  var useCache = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
+  var parsed = parseExpression(expr, dotDotAllowed);
+
+  if (!parsed) {
+    return null;
+  }
+
+  var fn = shortcuts.get(parsed[0].name);
+  var i = 0;
+  var isQualified;
+
+  if (fn) {
+    isQualified = true;
+    root = [fn(root, container)];
+    i = 1;
+  } else {
+    isQualified = container === null;
+    root = [container || root];
+  }
+
+  var _loop = function _loop(ii) {
+    var _parsed$i = parsed[i],
+        name = _parsed$i.name,
+        cacheName = _parsed$i.cacheName,
+        operator = _parsed$i.operator,
+        index = _parsed$i.index;
+    var nodes = [];
+
+    var _iterator = _createForOfIteratorHelper(root),
+        _step;
+
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var node = _step.value;
+
+        if (!(node instanceof _xfa_object.XFAObject)) {
+          continue;
+        }
+
+        var children = void 0,
+            cached = void 0;
+
+        if (useCache) {
+          cached = somCache.get(node);
+
+          if (!cached) {
+            cached = new Map();
+            somCache.set(node, cached);
+          }
+
+          children = cached.get(cacheName);
+        }
+
+        if (!children) {
+          switch (operator) {
+            case operators.dot:
+              children = node[_xfa_object.$getChildrenByName](name, false);
+              break;
+
+            case operators.dotDot:
+              children = node[_xfa_object.$getChildrenByName](name, true);
+              break;
+
+            case operators.dotHash:
+              children = node[_xfa_object.$getChildrenByClass](name);
+
+              if (children instanceof _xfa_object.XFAObjectArray) {
+                children = children.children;
+              } else {
+                children = [children];
+              }
+
+              break;
+
+            default:
+              break;
+          }
+
+          if (useCache) {
+            cached.set(cacheName, children);
+          }
+        }
+
+        if (children.length > 0) {
+          nodes.push(children);
+        }
+      }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+
+    if (nodes.length === 0 && !isQualified && i === 0) {
+      var parent = container[_xfa_object.$getParent]();
+
+      container = parent;
+
+      if (!container) {
+        return {
+          v: null
+        };
+      }
+
+      i = -1;
+      root = [container];
+      return "continue";
+    }
+
+    if (isFinite(index)) {
+      root = nodes.filter(function (node) {
+        return index < node.length;
+      }).map(function (node) {
+        return node[index];
+      });
+    } else {
+      root = nodes.reduce(function (acc, node) {
+        return acc.concat(node);
+      }, []);
+    }
+  };
+
+  for (var ii = parsed.length; i < ii; i++) {
+    var _ret = _loop(ii);
+
+    if (_ret === "continue") continue;
+    if (_typeof(_ret) === "object") return _ret.v;
+  }
+
+  if (root.length === 0) {
+    return null;
+  }
+
+  return root;
+}
+
+function createNodes(root, path) {
+  var node = null;
+
+  var _iterator2 = _createForOfIteratorHelper(path),
+      _step2;
+
+  try {
+    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+      var _step2$value = _step2.value,
+          name = _step2$value.name,
+          index = _step2$value.index;
+
+      for (var i = 0; i <= index; i++) {
+        node = new _xfa_object.XmlObject(root[_xfa_object.$namespaceId], name);
+
+        root[_xfa_object.$appendChild](node);
+      }
+
+      root = node;
+    }
+  } catch (err) {
+    _iterator2.e(err);
+  } finally {
+    _iterator2.f();
+  }
+
+  return node;
+}
+
+function createDataNode(root, container, expr) {
+  var parsed = parseExpression(expr);
+
+  if (!parsed) {
+    return null;
+  }
+
+  if (parsed.some(function (x) {
+    return x.operator === operators.dotDot;
+  })) {
+    return null;
+  }
+
+  var fn = shortcuts.get(parsed[0].name);
+  var i = 0;
+
+  if (fn) {
+    root = fn(root, container);
+    i = 1;
+  } else {
+    root = container || root;
+  }
+
+  for (var ii = parsed.length; i < ii; i++) {
+    var _parsed$i2 = parsed[i],
+        name = _parsed$i2.name,
+        operator = _parsed$i2.operator,
+        index = _parsed$i2.index;
+
+    if (!isFinite(index)) {
+      parsed[i].index = 0;
+      return createNodes(root, parsed.slice(i));
+    }
+
+    var children = void 0;
+
+    switch (operator) {
+      case operators.dot:
+        children = root[_xfa_object.$getChildrenByName](name, false);
+        break;
+
+      case operators.dotDot:
+        children = root[_xfa_object.$getChildrenByName](name, true);
+        break;
+
+      case operators.dotHash:
+        children = root[_xfa_object.$getChildrenByClass](name);
+
+        if (children instanceof _xfa_object.XFAObjectArray) {
+          children = children.children;
+        } else {
+          children = [children];
+        }
+
+        break;
+
+      default:
+        break;
+    }
+
+    if (children.length === 0) {
+      return createNodes(root, parsed.slice(i));
+    }
+
+    if (index < children.length) {
+      var child = children[index];
+
+      if (!(child instanceof _xfa_object.XFAObject)) {
+        (0, _util.warn)("XFA - Cannot create a node.");
+        return null;
+      }
+
+      root = child;
+    } else {
+      parsed[i].index = children.length - index;
+      return createNodes(root, parsed.slice(i));
+    }
+  }
+
+  return null;
+}
+
+/***/ }),
+/* 179 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
 exports.Binder = void 0;
 
 var _xfa_object = __w_pdfjs_require__(175);
 
-var _template = __w_pdfjs_require__(179);
+var _template = __w_pdfjs_require__(180);
 
-var _som = __w_pdfjs_require__(182);
+var _som = __w_pdfjs_require__(178);
 
 var _namespaces = __w_pdfjs_require__(177);
 
@@ -71542,6 +72268,10 @@ var Binder = /*#__PURE__*/function () {
                 match = new _xfa_object.XmlObject(dataNode[_xfa_object.$namespaceId], child.name);
 
                 dataNode[_xfa_object.$appendChild](match);
+
+                this._bindElement(child, match);
+
+                continue;
               }
 
               match = [match];
@@ -71583,7 +72313,7 @@ var Binder = /*#__PURE__*/function () {
 exports.Binder = Binder;
 
 /***/ }),
-/* 179 */
+/* 180 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -71600,29 +72330,21 @@ var _xfa_object = __w_pdfjs_require__(175);
 
 var _namespaces = __w_pdfjs_require__(177);
 
-var _html_utils = __w_pdfjs_require__(180);
-
 var _layout = __w_pdfjs_require__(181);
+
+var _html_utils = __w_pdfjs_require__(182);
 
 var _utils = __w_pdfjs_require__(176);
 
 var _util = __w_pdfjs_require__(4);
 
-var _som = __w_pdfjs_require__(182);
+var _som = __w_pdfjs_require__(178);
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
@@ -71643,6 +72365,18 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var TEMPLATE_NS_ID = _namespaces.NamespaceIds.template.id;
 var MAX_ATTEMPTS_FOR_LRTB_LAYOUT = 2;
@@ -71669,25 +72403,117 @@ function getRoot(node) {
   return parent;
 }
 
+function getTransformedBBox(node) {
+  var w = node.w === "" ? NaN : node.w;
+  var h = node.h === "" ? NaN : node.h;
+  var centerX = 0,
+      centerY = 0;
+
+  switch (node.anchorType || "") {
+    case "bottomCenter":
+      centerX = w / 2;
+      centerY = h;
+      break;
+
+    case "bottomLeft":
+      centerX = 0;
+      centerY = h;
+      break;
+
+    case "bottomRight":
+      centerX = w;
+      centerY = h;
+      break;
+
+    case "middleCenter":
+      centerX = w / 2;
+      centerY = h / 2;
+      break;
+
+    case "middleLeft":
+      centerX = 0;
+      centerY = h / 2;
+      break;
+
+    case "middleRight":
+      centerX = w;
+      centerY = h / 2;
+      break;
+
+    case "topCenter":
+      centerX = w / 2;
+      centerY = 0;
+      break;
+
+    case "topRight":
+      centerX = w;
+      centerY = 0;
+      break;
+  }
+
+  var x;
+  var y;
+
+  switch (node.rotate || 0) {
+    case 0:
+      x = -centerX;
+      y = -centerY;
+      break;
+
+    case 90:
+      x = -centerY;
+      y = centerX;
+      var _ref = [h, -w];
+      w = _ref[0];
+      h = _ref[1];
+      break;
+
+    case 180:
+      x = centerX;
+      y = centerY;
+      var _ref2 = [-w, -h];
+      w = _ref2[0];
+      h = _ref2[1];
+      break;
+
+    case 270:
+      x = centerY;
+      y = -centerX;
+      var _ref3 = [-h, w];
+      w = _ref3[0];
+      h = _ref3[1];
+      break;
+  }
+
+  return [node.x + x + Math.min(0, w), node.y + y + Math.min(0, h), Math.abs(w), Math.abs(h)];
+}
+
 var NOTHING = 0;
 var NOSPACE = 1;
 var VALID = 2;
 
 function checkDimensions(node, space) {
-  if (node.w !== "" && Math.round(node.w + node.x - space.width) > 1) {
+  var _getTransformedBBox = getTransformedBBox(node),
+      _getTransformedBBox2 = _slicedToArray(_getTransformedBBox, 4),
+      x = _getTransformedBBox2[0],
+      y = _getTransformedBBox2[1],
+      w = _getTransformedBBox2[2],
+      h = _getTransformedBBox2[3];
+
+  if (node.w !== "" && Math.round(x + w - space.width) > 1) {
     var area = getRoot(node)[_xfa_object.$extra].currentContentArea;
 
-    if (node.w + node.x > area.w) {
+    if (x + w > area.w) {
       return NOTHING;
     }
 
     return NOSPACE;
   }
 
-  if (node.h !== "" && Math.round(node.h + node.y - space.height) > 1) {
+  if (node.h !== "" && Math.round(y + h - space.height) > 1) {
     var _area = getRoot(node)[_xfa_object.$extra].currentContentArea;
 
-    if (node.h + node.y > _area.h) {
+    if (y + h > _area.h) {
       return NOTHING;
     }
 
@@ -71830,7 +72656,7 @@ var Area = /*#__PURE__*/function (_XFAObject2) {
       var attributes = {
         style: style,
         id: this[_xfa_object.$uid],
-        "class": "xfaArea"
+        "class": ["xfaArea"]
       };
 
       if (this.name) {
@@ -72095,7 +72921,7 @@ var Border = /*#__PURE__*/function (_XFAObject8) {
 
   _createClass(Border, [{
     key: _xfa_object.$toStyle,
-    value: function value(widths, margins) {
+    value: function value() {
       var edges = this.edge.children.slice();
 
       if (edges.length < 4) {
@@ -72106,46 +72932,37 @@ var Border = /*#__PURE__*/function (_XFAObject8) {
         }
       }
 
-      widths = widths || [0, 0, 0, 0];
-
-      for (var _i2 = 0; _i2 < 4; _i2++) {
-        widths[_i2] = edges[_i2].thickness;
-      }
-
-      margins = margins || [0, 0, 0, 0];
       var edgeStyles = edges.map(function (node) {
         var style = node[_xfa_object.$toStyle]();
 
         style.color = style.color || "#000000";
         return style;
       });
-      var style;
+      var widths = edges.map(function (edge) {
+        return edge.thickness;
+      });
+      var insets = [0, 0, 0, 0];
 
       if (this.margin) {
-        style = this.margin[_xfa_object.$toStyle]();
-        margins[0] = this.margin.topInset;
-        margins[1] = this.margin.rightInset;
-        margins[2] = this.margin.bottomInset;
-        margins[3] = this.margin.leftInset;
-      } else {
-        style = Object.create(null);
+        insets[0] = this.margin.topInset;
+        insets[1] = this.margin.rightInset;
+        insets[2] = this.margin.bottomInset;
+        insets[3] = this.margin.leftInset;
       }
 
-      var isForUi = false;
+      this[_xfa_object.$extra] = {
+        widths: widths,
+        insets: insets
+      };
+      var style = Object.create(null);
 
-      var parent = this[_xfa_object.$getParent]();
-
-      var grandParent = parent ? parent[_xfa_object.$getParent]() : null;
-
-      if (grandParent instanceof Ui) {
-        isForUi = true;
+      if (this.margin) {
+        Object.assign(style, this.margin[_xfa_object.$toStyle]());
       }
 
       if (this.fill) {
         Object.assign(style, this.fill[_xfa_object.$toStyle]());
       }
-
-      var hasRadius = false;
 
       if (this.corner.children.some(function (node) {
         return node.radius !== 0;
@@ -72157,7 +72974,7 @@ var Border = /*#__PURE__*/function (_XFAObject8) {
         if (cornerStyles.length === 2 || cornerStyles.length === 3) {
           var last = cornerStyles[cornerStyles.length - 1];
 
-          for (var _i3 = cornerStyles.length; _i3 < 4; _i3++) {
+          for (var _i2 = cornerStyles.length; _i2 < 4; _i2++) {
             cornerStyles.push(last);
           }
         }
@@ -72165,66 +72982,31 @@ var Border = /*#__PURE__*/function (_XFAObject8) {
         style.borderRadius = cornerStyles.map(function (s) {
           return s.radius;
         }).join(" ");
-        hasRadius = true;
       }
 
-      var firstEdge = edgeStyles[0];
+      switch (this.presence) {
+        case "invisible":
+        case "hidden":
+          style.borderStyle = "";
+          break;
 
-      if (!hasRadius && (this.edge.children.length <= 1 || edgeStyles.every(function (x) {
-        return x.style === firstEdge.style && x.width === firstEdge.width && x.color === firstEdge.color;
-      }) && margins.every(function (x) {
-        return x === margins[0];
-      }))) {
-        var borderStyle;
+        case "inactive":
+          style.borderStyle = "none";
+          break;
 
-        switch (this.presence) {
-          case "invisible":
-          case "hidden":
-            borderStyle = "";
-            break;
-
-          case "inactive":
-            borderStyle = "none";
-            break;
-
-          default:
-            borderStyle = firstEdge.style;
-            break;
-        }
-
-        style.outline = "".concat(firstEdge.width, " ").concat(firstEdge.color, " ").concat(borderStyle);
-        var offset = edges[0].thickness + margins[0];
-        style.outlineOffset = "-".concat((0, _html_utils.measureToString)(offset));
-
-        if (isForUi) {
-          style.padding = "".concat((0, _html_utils.measureToString)(offset + 1));
-        }
-      } else {
-        switch (this.presence) {
-          case "invisible":
-          case "hidden":
-            style.borderStyle = "";
-            break;
-
-          case "inactive":
-            style.borderStyle = "none";
-            break;
-
-          default:
-            style.borderStyle = edgeStyles.map(function (s) {
-              return s.style;
-            }).join(" ");
-            break;
-        }
-
-        style.borderWidth = edgeStyles.map(function (s) {
-          return s.width;
-        }).join(" ");
-        style.borderColor = edgeStyles.map(function (s) {
-          return s.color;
-        }).join(" ");
+        default:
+          style.borderStyle = edgeStyles.map(function (s) {
+            return s.style;
+          }).join(" ");
+          break;
       }
 
+      style.borderWidth = edgeStyles.map(function (s) {
+        return s.width;
+      }).join(" ");
+      style.borderColor = edgeStyles.map(function (s) {
+        return s.color;
+      }).join(" ");
       return style;
     }
   }]);
@@ -72366,7 +73148,8 @@ var Button = /*#__PURE__*/function (_XFAObject12) {
       return _utils.HTMLResult.success({
         name: "button",
         attributes: {
-          "class": "xfaButton",
+          id: this[_xfa_object.$uid],
+          "class": ["xfaButton"],
           style: {}
         },
         children: []
@@ -72483,7 +73266,7 @@ var Caption = /*#__PURE__*/function (_XFAObject14) {
         name: "div",
         attributes: {
           style: style,
-          "class": "xfaCaption"
+          "class": ["xfaCaption"]
         },
         children: children
       });
@@ -72569,89 +73352,52 @@ var CheckButton = /*#__PURE__*/function (_XFAObject16) {
   _createClass(CheckButton, [{
     key: _xfa_object.$toHTML,
     value: function value(availableSpace) {
-      var style = (0, _html_utils.toStyle)(this, "border", "margin");
+      var style = (0, _html_utils.toStyle)("margin");
       var size = (0, _html_utils.measureToString)(this.size);
       style.width = style.height = size;
-      var mark, radius;
-
-      if (this.shape === "square") {
-        mark = "▪";
-        radius = "10%";
-      } else {
-        mark = "●";
-        radius = "50%";
-      }
-
-      if (!style.borderRadius) {
-        style.borderRadius = radius;
-      }
-
-      if (this.mark !== "default") {
-        switch (this.mark) {
-          case "check":
-            mark = "✓";
-            break;
-
-          case "circle":
-            mark = "●";
-            break;
-
-          case "cross":
-            mark = "✕";
-            break;
-
-          case "diamond":
-            mark = "♦";
-            break;
-
-          case "square":
-            mark = "▪";
-            break;
-
-          case "star":
-            mark = "★";
-            break;
-        }
-      }
-
-      if (size !== "10px") {
-        style.fontSize = size;
-        style.lineHeight = size;
-        style.width = size;
-        style.height = size;
-      }
+      var type;
+      var className;
+      var groupId;
+      var id;
 
       var fieldId = this[_xfa_object.$getParent]()[_xfa_object.$getParent]()[_xfa_object.$uid];
-
-      var input = {
-        name: "input",
-        attributes: {
-          "class": "xfaCheckbox",
-          fieldId: fieldId,
-          type: "radio",
-          id: "".concat(fieldId, "-radio")
-        }
-      };
 
       var container = this[_xfa_object.$getParent]()[_xfa_object.$getParent]()[_xfa_object.$getParent]();
 
       if (container instanceof ExclGroup) {
-        input.attributes.name = container[_xfa_object.$uid];
+        groupId = container[_xfa_object.$uid];
+        type = "radio";
+        className = "xfaRadio";
+        id = "".concat(fieldId, "-radio");
+      } else {
+        type = "checkbox";
+        className = "xfaCheckbox";
+      }
+
+      var input = {
+        name: "input",
+        attributes: {
+          "class": [className],
+          style: style,
+          fieldId: fieldId,
+          type: type
+        }
+      };
+
+      if (id) {
+        input.attributes.id = id;
+      }
+
+      if (groupId) {
+        input.attributes.name = groupId;
       }
 
       return _utils.HTMLResult.success({
         name: "label",
         attributes: {
-          "class": "xfaLabel"
+          "class": ["xfaLabel"]
         },
-        children: [input, {
-          name: "span",
-          attributes: {
-            "class": "xfaCheckboxMark",
-            mark: mark,
-            style: style
-          }
-        }]
+        children: [input]
       });
     }
   }]);
@@ -72716,7 +73462,7 @@ var ChoiceList = /*#__PURE__*/function (_XFAObject17) {
       }
 
       var selectAttributes = {
-        "class": "xfaSelect",
+        "class": ["xfaSelect"],
         fieldId: this[_xfa_object.$getParent]()[_xfa_object.$getParent]()[_xfa_object.$uid],
         style: style
       };
@@ -72728,7 +73474,7 @@ var ChoiceList = /*#__PURE__*/function (_XFAObject17) {
       return _utils.HTMLResult.success({
         name: "label",
         attributes: {
-          "class": "xfaLabel"
+          "class": ["xfaLabel"]
         },
         children: [{
           name: "select",
@@ -72870,7 +73616,7 @@ var ContentArea = /*#__PURE__*/function (_XFAObject21) {
         children: [],
         attributes: {
           style: style,
-          "class": "xfaContentarea",
+          "class": ["xfaContentarea"],
           id: this[_xfa_object.$uid]
         }
       });
@@ -73021,14 +73767,14 @@ var DateTimeEdit = /*#__PURE__*/function (_XFAObject23) {
         attributes: {
           type: "text",
           fieldId: this[_xfa_object.$getParent]()[_xfa_object.$getParent]()[_xfa_object.$uid],
-          "class": "xfaTextfield",
+          "class": ["xfaTextfield"],
           style: style
         }
       };
       return _utils.HTMLResult.success({
         name: "label",
         attributes: {
-          "class": "xfaLabel"
+          "class": ["xfaLabel"]
         },
         children: [html]
       });
@@ -73276,7 +74022,7 @@ var Draw = /*#__PURE__*/function (_XFAObject27) {
           break;
       }
 
-      var style = (0, _html_utils.toStyle)(this, "font", "hAlign", "dimensions", "position", "presence", "rotate", "anchorType", "borderMarginPadding");
+      var style = (0, _html_utils.toStyle)(this, "font", "hAlign", "dimensions", "position", "presence", "rotate", "anchorType", "border", "margin");
       var classNames = ["xfaDraw"];
 
       if (this.font) {
@@ -73286,7 +74032,7 @@ var Draw = /*#__PURE__*/function (_XFAObject27) {
       var attributes = {
         style: style,
         id: this[_xfa_object.$uid],
-        "class": classNames.join(" ")
+        "class": classNames
       };
 
       if (this.name) {
@@ -73298,17 +74044,16 @@ var Draw = /*#__PURE__*/function (_XFAObject27) {
         attributes: attributes,
         children: []
       };
-      var extra = (0, _html_utils.addExtraDivForBorder)(html);
       var bbox = (0, _html_utils.computeBbox)(this, html, availableSpace);
       var value = this.value ? this.value[_xfa_object.$toHTML](availableSpace).html : null;
 
       if (value === null) {
-        return _utils.HTMLResult.success(extra, bbox);
+        return _utils.HTMLResult.success((0, _html_utils.createWrapper)(this, html), bbox);
       }
 
       html.children.push(value);
 
-      if (value.attributes["class"] === "xfaRich") {
+      if (value.attributes["class"].includes("xfaRich")) {
         if (this.h === "") {
           style.height = "auto";
         }
@@ -73340,8 +74085,8 @@ var Draw = /*#__PURE__*/function (_XFAObject27) {
           if (!value.attributes.style) {
             value.attributes.style = paraStyle;
           } else {
-            for (var _i4 = 0, _Object$entries = Object.entries(paraStyle); _i4 < _Object$entries.length; _i4++) {
-              var _Object$entries$_i = _slicedToArray(_Object$entries[_i4], 2),
+            for (var _i3 = 0, _Object$entries = Object.entries(paraStyle); _i3 < _Object$entries.length; _i3++) {
+              var _Object$entries$_i = _slicedToArray(_Object$entries[_i3], 2),
                   key = _Object$entries$_i[0],
                   val = _Object$entries$_i[1];
 
@@ -73353,7 +74098,7 @@ var Draw = /*#__PURE__*/function (_XFAObject27) {
         }
       }
 
-      return _utils.HTMLResult.success(extra, bbox);
+      return _utils.HTMLResult.success((0, _html_utils.createWrapper)(this, html), bbox);
     }
   }]);
 
@@ -73375,7 +74120,7 @@ var Edge = /*#__PURE__*/function (_XFAObject28) {
     _this35.id = attributes.id || "";
     _this35.presence = (0, _utils.getStringOption)(attributes.presence, ["visible", "hidden", "inactive", "invisible"]);
     _this35.stroke = (0, _utils.getStringOption)(attributes.stroke, ["solid", "dashDot", "dashDotDot", "dashed", "dotted", "embossed", "etched", "lowered", "raised"]);
-    _this35.thickness = Math.max(1, Math.round((0, _utils.getMeasurement)(attributes.thickness, "0.5pt")));
+    _this35.thickness = (0, _utils.getMeasurement)(attributes.thickness, "0.5pt");
     _this35.use = attributes.use || "";
     _this35.usehref = attributes.usehref || "";
     _this35.color = null;
@@ -73389,7 +74134,7 @@ var Edge = /*#__PURE__*/function (_XFAObject28) {
       var style = (0, _html_utils.toStyle)(this, "visibility");
       Object.assign(style, {
         linecap: this.cap,
-        width: (0, _html_utils.measureToString)(Math.max(1, Math.round(this.thickness))),
+        width: (0, _html_utils.measureToString)(this.thickness),
         color: this.color ? this.color[_xfa_object.$toStyle]() : "#000000",
         style: ""
       });
@@ -73654,6 +74399,11 @@ var ExData = /*#__PURE__*/function (_ContentObject4) {
   }
 
   _createClass(ExData, [{
+    key: _xfa_object.$isCDATAXml,
+    value: function value() {
+      return this.contentType === "text/html";
+    }
+  }, {
     key: _xfa_object.$onChild,
     value: function value(child) {
       if (this.contentType === "text/html" && child[_xfa_object.$namespaceId] === _namespaces.NamespaceIds.xhtml.id) {
@@ -73895,7 +74645,7 @@ var ExclGroup = /*#__PURE__*/function (_XFAObject36) {
         }
       }
 
-      var style = (0, _html_utils.toStyle)(this, "anchorType", "dimensions", "position", "presence", "borderMarginPadding", "hAlign");
+      var style = (0, _html_utils.toStyle)(this, "anchorType", "dimensions", "position", "presence", "border", "margin", "hAlign");
       var classNames = ["xfaExclgroup"];
       var cl = (0, _html_utils.layoutClass)(this);
 
@@ -73904,7 +74654,7 @@ var ExclGroup = /*#__PURE__*/function (_XFAObject36) {
       }
 
       attributes.style = style;
-      attributes["class"] = classNames.join(" ");
+      attributes["class"] = classNames;
 
       if (this.name) {
         attributes.xfaName = this.name;
@@ -73931,6 +74681,10 @@ var ExclGroup = /*#__PURE__*/function (_XFAObject36) {
       }
 
       if (failure) {
+        if (this.layout === "position") {
+          delete this[_xfa_object.$extra];
+        }
+
         return _utils.HTMLResult.FAILURE;
       }
 
@@ -73955,7 +74709,6 @@ var ExclGroup = /*#__PURE__*/function (_XFAObject36) {
         attributes: attributes,
         children: children
       };
-      html = (0, _html_utils.addExtraDivForBorder)(html);
       var bbox;
 
       if (this.w !== "" && this.h !== "") {
@@ -73967,7 +74720,7 @@ var ExclGroup = /*#__PURE__*/function (_XFAObject36) {
       }
 
       delete this[_xfa_object.$extra];
-      return _utils.HTMLResult.success(html, bbox);
+      return _utils.HTMLResult.success((0, _html_utils.createWrapper)(this, html), bbox);
     }
   }]);
 
@@ -74122,7 +74875,7 @@ var Field = /*#__PURE__*/function (_XFAObject39) {
           break;
       }
 
-      var style = (0, _html_utils.toStyle)(this, "font", "dimensions", "position", "rotate", "anchorType", "presence", "borderMarginPadding", "hAlign");
+      var style = (0, _html_utils.toStyle)(this, "font", "dimensions", "position", "rotate", "anchorType", "presence", "margin", "hAlign");
       var classNames = ["xfaField"];
 
       if (this.font) {
@@ -74132,7 +74885,7 @@ var Field = /*#__PURE__*/function (_XFAObject39) {
       var attributes = {
         style: style,
         id: this[_xfa_object.$uid],
-        "class": classNames.join(" ")
+        "class": classNames
       };
 
       if (this.name) {
@@ -74145,16 +74898,23 @@ var Field = /*#__PURE__*/function (_XFAObject39) {
         attributes: attributes,
         children: children
       };
+      var borderStyle = this.border ? this.border[_xfa_object.$toStyle]() : null;
       var bbox = (0, _html_utils.computeBbox)(this, html, availableSpace);
-      html = (0, _html_utils.addExtraDivForBorder)(html);
       var ui = this.ui ? this.ui[_xfa_object.$toHTML]().html : null;
 
       if (!ui) {
-        return _utils.HTMLResult.success(html, bbox);
+        Object.assign(style, borderStyle);
+        return _utils.HTMLResult.success((0, _html_utils.createWrapper)(this, html), bbox);
       }
 
       if (!ui.attributes.style) {
         ui.attributes.style = Object.create(null);
+      }
+
+      if (this.ui.button) {
+        Object.assign(ui.attributes.style, borderStyle);
+      } else {
+        Object.assign(style, borderStyle);
       }
 
       children.push(ui);
@@ -74162,7 +74922,7 @@ var Field = /*#__PURE__*/function (_XFAObject39) {
       if (this.value) {
         if (this.ui.imageEdit) {
           ui.children.push(this.value[_xfa_object.$toHTML]().html);
-        } else if (ui.name !== "button") {
+        } else if (!this.ui.button) {
           var value = this.value[_xfa_object.$toHTML]().html;
 
           if (value) {
@@ -74178,13 +74938,10 @@ var Field = /*#__PURE__*/function (_XFAObject39) {
       var caption = this.caption ? this.caption[_xfa_object.$toHTML]().html : null;
 
       if (!caption) {
-        return _utils.HTMLResult.success(html, bbox);
+        return _utils.HTMLResult.success((0, _html_utils.createWrapper)(this, html), bbox);
       }
 
-      if (ui.name === "button") {
-        ui.attributes.style.background = style.background;
-        delete style.background;
-
+      if (this.ui.button) {
         if (caption.name === "div") {
           caption.name = "span";
         }
@@ -74193,34 +74950,35 @@ var Field = /*#__PURE__*/function (_XFAObject39) {
         return _utils.HTMLResult.success(html, bbox);
       }
 
+      if (!ui.attributes["class"]) {
+        ui.attributes["class"] = [];
+      }
+
       ui.children.splice(0, 0, caption);
 
       switch (this.caption.placement) {
         case "left":
-          ui.attributes.style.flexDirection = "row";
+          ui.attributes["class"].push("xfaLeft");
           break;
 
         case "right":
-          ui.attributes.style.flexDirection = "row-reverse";
+          ui.attributes["class"].push("xfaRight");
           break;
 
         case "top":
-          ui.attributes.style.alignItems = "start";
-          ui.attributes.style.flexDirection = "column";
+          ui.attributes["class"].push("xfaTop");
           break;
 
         case "bottom":
-          ui.attributes.style.alignItems = "start";
-          ui.attributes.style.flexDirection = "column-reverse";
+          ui.attributes["class"].push("xfaBottom");
           break;
 
         case "inline":
-          delete ui.attributes["class"];
-          caption.attributes.style["float"] = "left";
+          ui.attributes["class"].push("xfaInline");
           break;
       }
 
-      return _utils.HTMLResult.success(html, bbox);
+      return _utils.HTMLResult.success((0, _html_utils.createWrapper)(this, html), bbox);
     }
   }]);
 
@@ -74658,7 +75416,7 @@ var Image = /*#__PURE__*/function (_StringObject4) {
         return _utils.HTMLResult.success({
           name: "img",
           attributes: {
-            "class": "xfaImage",
+            "class": ["xfaImage"],
             style: {},
             src: URL.createObjectURL(blob)
           }
@@ -75144,14 +75902,14 @@ var NumericEdit = /*#__PURE__*/function (_XFAObject57) {
         attributes: {
           type: "text",
           fieldId: this[_xfa_object.$getParent]()[_xfa_object.$getParent]()[_xfa_object.$uid],
-          "class": "xfaTextfield",
+          "class": ["xfaTextfield"],
           style: style
         }
       };
       return _utils.HTMLResult.success({
         name: "label",
         attributes: {
-          "class": "xfaLabel"
+          "class": ["xfaLabel"]
         },
         children: [html]
       });
@@ -76247,10 +77005,6 @@ var Subform = /*#__PURE__*/function (_XFAObject76) {
   }, {
     key: _xfa_object.$toHTML,
     value: function value(availableSpace) {
-      if (this.name === "helpText") {
-        return _utils.HTMLResult.EMPTY;
-      }
-
       if (this[_xfa_object.$extra] && this[_xfa_object.$extra].afterBreakAfter) {
         var ret = this[_xfa_object.$extra].afterBreakAfter;
         delete this[_xfa_object.$extra];
@@ -76320,7 +77074,7 @@ var Subform = /*#__PURE__*/function (_XFAObject76) {
         }
       }
 
-      var style = (0, _html_utils.toStyle)(this, "anchorType", "dimensions", "position", "presence", "borderMarginPadding", "hAlign");
+      var style = (0, _html_utils.toStyle)(this, "anchorType", "dimensions", "position", "presence", "border", "margin", "hAlign");
       var classNames = ["xfaSubform"];
       var cl = (0, _html_utils.layoutClass)(this);
 
@@ -76329,7 +77083,7 @@ var Subform = /*#__PURE__*/function (_XFAObject76) {
       }
 
       attributes.style = style;
-      attributes["class"] = classNames.join(" ");
+      attributes["class"] = classNames;
 
       if (this.name) {
         attributes.xfaName = this.name;
@@ -76356,6 +77110,10 @@ var Subform = /*#__PURE__*/function (_XFAObject76) {
       }
 
       if (failure) {
+        if (this.layout === "position") {
+          delete this[_xfa_object.$extra];
+        }
+
         return _utils.HTMLResult.FAILURE;
       }
 
@@ -76380,7 +77138,6 @@ var Subform = /*#__PURE__*/function (_XFAObject76) {
         attributes: attributes,
         children: children
       };
-      html = (0, _html_utils.addExtraDivForBorder)(html);
       var bbox;
 
       if (this.w !== "" && this.h !== "") {
@@ -76396,12 +77153,12 @@ var Subform = /*#__PURE__*/function (_XFAObject76) {
 
         getRoot(this)[_xfa_object.$break](breakAfter);
 
-        this[_xfa_object.$extra].afterBreakAfter = _utils.HTMLResult.success(html, bbox);
+        this[_xfa_object.$extra].afterBreakAfter = _utils.HTMLResult.success((0, _html_utils.createWrapper)(this, html), bbox);
         return _utils.HTMLResult.FAILURE;
       }
 
       delete this[_xfa_object.$extra];
-      return _utils.HTMLResult.success(html, bbox);
+      return _utils.HTMLResult.success((0, _html_utils.createWrapper)(this, html), bbox);
     }
   }]);
 
@@ -76687,7 +77444,7 @@ var Template = /*#__PURE__*/function (_XFAObject80) {
 
         var contentAreas = pageArea.contentArea.children;
         var htmlContentAreas = page.children.filter(function (node) {
-          return node.attributes["class"] === "xfaContentarea";
+          return node.attributes["class"].includes("xfaContentarea");
         });
 
         for (var i = 0, ii = contentAreas.length; i < ii; i++) {
@@ -76812,6 +77569,11 @@ var Text = /*#__PURE__*/function (_ContentObject9) {
   }
 
   _createClass(Text, [{
+    key: _xfa_object.$acceptWhitespace,
+    value: function value() {
+      return true;
+    }
+  }, {
     key: _xfa_object.$onChild,
     value: function value(child) {
       if (child[_xfa_object.$namespaceId] === _namespaces.NamespaceIds.xhtml.id) {
@@ -76823,13 +77585,22 @@ var Text = /*#__PURE__*/function (_ContentObject9) {
       return false;
     }
   }, {
+    key: _xfa_object.$onText,
+    value: function value(str) {
+      if (this[_xfa_object.$content] instanceof _xfa_object.XFAObject) {
+        return;
+      }
+
+      _get(_getPrototypeOf(Text.prototype), _xfa_object.$onText, this).call(this, str);
+    }
+  }, {
     key: _xfa_object.$toHTML,
     value: function value(availableSpace) {
       if (typeof this[_xfa_object.$content] === "string") {
         var html = {
           name: "span",
           attributes: {
-            "class": "xfaRich",
+            "class": ["xfaRich"],
             style: {}
           },
           value: this[_xfa_object.$content]
@@ -76929,7 +77700,7 @@ var TextEdit = /*#__PURE__*/function (_XFAObject81) {
           name: "textarea",
           attributes: {
             fieldId: this[_xfa_object.$getParent]()[_xfa_object.$getParent]()[_xfa_object.$uid],
-            "class": "xfaTextfield",
+            "class": ["xfaTextfield"],
             style: style
           }
         };
@@ -76939,7 +77710,7 @@ var TextEdit = /*#__PURE__*/function (_XFAObject81) {
           attributes: {
             type: "text",
             fieldId: this[_xfa_object.$getParent]()[_xfa_object.$getParent]()[_xfa_object.$uid],
-            "class": "xfaTextfield",
+            "class": ["xfaTextfield"],
             style: style
           }
         };
@@ -76948,7 +77719,7 @@ var TextEdit = /*#__PURE__*/function (_XFAObject81) {
       return _utils.HTMLResult.success({
         name: "label",
         attributes: {
-          "class": "xfaLabel"
+          "class": ["xfaLabel"]
         },
         children: [html]
       });
@@ -77963,7 +78734,7 @@ var TemplateNamespace = /*#__PURE__*/function () {
 exports.TemplateNamespace = TemplateNamespace;
 
 /***/ }),
-/* 180 */
+/* 181 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 "use strict";
@@ -77972,8 +78743,234 @@ exports.TemplateNamespace = TemplateNamespace;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.addExtraDivForBorder = addExtraDivForBorder;
+exports.addHTML = addHTML;
+exports.flushHTML = flushHTML;
+exports.getAvailableSpace = getAvailableSpace;
+
+var _xfa_object = __w_pdfjs_require__(175);
+
+var _html_utils = __w_pdfjs_require__(182);
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function flushHTML(node) {
+  if (!node[_xfa_object.$extra]) {
+    return null;
+  }
+
+  var attributes = node[_xfa_object.$extra].attributes;
+  var html = {
+    name: "div",
+    attributes: attributes,
+    children: node[_xfa_object.$extra].children
+  };
+
+  if (node[_xfa_object.$extra].failingNode) {
+    var htmlFromFailing = node[_xfa_object.$extra].failingNode[_xfa_object.$flushHTML]();
+
+    if (htmlFromFailing) {
+      html.children.push(htmlFromFailing);
+    }
+  }
+
+  if (html.children.length === 0) {
+    return null;
+  }
+
+  node[_xfa_object.$extra].children = [];
+  delete node[_xfa_object.$extra].line;
+  return html;
+}
+
+function addHTML(node, html, bbox) {
+  var extra = node[_xfa_object.$extra];
+  var availableSpace = extra.availableSpace;
+
+  switch (node.layout) {
+    case "position":
+      {
+        var _bbox = _slicedToArray(bbox, 4),
+            x = _bbox[0],
+            y = _bbox[1],
+            w = _bbox[2],
+            h = _bbox[3];
+
+        extra.width = Math.max(extra.width, x + w);
+        extra.height = Math.max(extra.height, y + h);
+        extra.children.push(html);
+        break;
+      }
+
+    case "lr-tb":
+    case "rl-tb":
+      if (!extra.line || extra.attempt === 1) {
+        extra.line = {
+          name: "div",
+          attributes: {
+            "class": [node.layout === "lr-tb" ? "xfaLr" : "xfaRl"]
+          },
+          children: []
+        };
+        extra.children.push(extra.line);
+      }
+
+      extra.line.children.push(html);
+
+      if (extra.attempt === 0) {
+        var _bbox2 = _slicedToArray(bbox, 4),
+            _w = _bbox2[2],
+            _h = _bbox2[3];
+
+        extra.currentWidth += _w;
+        extra.height = Math.max(extra.height, extra.prevHeight + _h);
+      } else {
+        var _bbox3 = _slicedToArray(bbox, 4),
+            _w2 = _bbox3[2],
+            _h2 = _bbox3[3];
+
+        extra.width = Math.max(extra.width, extra.currentWidth);
+        extra.currentWidth = _w2;
+        extra.prevHeight = extra.height;
+        extra.height += _h2;
+        extra.attempt = 0;
+      }
+
+      break;
+
+    case "rl-row":
+    case "row":
+      {
+        extra.children.push(html);
+
+        var _bbox4 = _slicedToArray(bbox, 4),
+            _w3 = _bbox4[2],
+            _h3 = _bbox4[3];
+
+        extra.width += _w3;
+        extra.height = Math.max(extra.height, _h3);
+        var height = (0, _html_utils.measureToString)(extra.height);
+
+        var _iterator = _createForOfIteratorHelper(extra.children),
+            _step;
+
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var child = _step.value;
+            child.attributes.style.height = height;
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+
+        break;
+      }
+
+    case "table":
+      {
+        var _bbox5 = _slicedToArray(bbox, 4),
+            _w4 = _bbox5[2],
+            _h4 = _bbox5[3];
+
+        extra.width = Math.min(availableSpace.width, Math.max(extra.width, _w4));
+        extra.height += _h4;
+        extra.children.push(html);
+        break;
+      }
+
+    case "tb":
+      {
+        var _bbox6 = _slicedToArray(bbox, 4),
+            _h5 = _bbox6[3];
+
+        extra.width = availableSpace.width;
+        extra.height += _h5;
+        extra.children.push(html);
+        break;
+      }
+  }
+}
+
+function getAvailableSpace(node) {
+  var availableSpace = node[_xfa_object.$extra].availableSpace;
+
+  var _ref = node.margin ? [node.margin.leftInset + node.margin.rightInset, node.margin.topInset + node.margin.leftInset] : [0, 0],
+      _ref2 = _slicedToArray(_ref, 2),
+      marginW = _ref2[0],
+      marginH = _ref2[1];
+
+  switch (node.layout) {
+    case "lr-tb":
+    case "rl-tb":
+      switch (node[_xfa_object.$extra].attempt) {
+        case 0:
+          return {
+            width: availableSpace.width - marginW - node[_xfa_object.$extra].currentWidth,
+            height: availableSpace.height - marginH - node[_xfa_object.$extra].prevHeight
+          };
+
+        case 1:
+          return {
+            width: availableSpace.width - marginW,
+            height: availableSpace.height - marginH - node[_xfa_object.$extra].height
+          };
+
+        default:
+          return {
+            width: Infinity,
+            height: availableSpace.height - marginH - node[_xfa_object.$extra].prevHeight
+          };
+      }
+
+    case "rl-row":
+    case "row":
+      var width = node[_xfa_object.$extra].columnWidths.slice(node[_xfa_object.$extra].currentColumn).reduce(function (a, x) {
+        return a + x;
+      });
+
+      return {
+        width: width,
+        height: availableSpace.height - marginH
+      };
+
+    case "table":
+    case "tb":
+      return {
+        width: availableSpace.width - marginW,
+        height: availableSpace.height - marginH - node[_xfa_object.$extra].height
+      };
+
+    case "position":
+    default:
+      return availableSpace;
+  }
+}
+
+/***/ }),
+/* 182 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
 exports.computeBbox = computeBbox;
+exports.createWrapper = createWrapper;
 exports.fixDimensions = fixDimensions;
 exports.fixTextIndent = fixTextIndent;
 exports.getFonts = getFonts;
@@ -77987,18 +78984,6 @@ var _xfa_object = __w_pdfjs_require__(175);
 var _utils = __w_pdfjs_require__(176);
 
 var _util = __w_pdfjs_require__(4);
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var wordNonWordRegex = new RegExp("([\\p{N}\\p{L}\\p{M}]+)|([^\\p{N}\\p{L}\\p{M}]+)", "gu");
 var wordFirstRegex = new RegExp("^[\\p{N}\\p{L}\\p{M}]", "u");
@@ -78162,61 +79147,24 @@ var converters = {
       }
     } else {
       switch (node.hAlign) {
-        case "right":
+        case "left":
+          style.alignSelf = "start";
+          break;
+
         case "center":
-          style.justifyContent = node.hAlign;
+          style.alignSelf = "center";
+          break;
+
+        case "right":
+          style.alignSelf = "end";
           break;
       }
     }
   },
-  borderMarginPadding: function borderMarginPadding(node, style) {
-    var borderWidths = [0, 0, 0, 0];
-    var borderInsets = [0, 0, 0, 0];
-    var marginNode = node.margin ? [node.margin.topInset, node.margin.rightInset, node.margin.bottomInset, node.margin.leftInset] : [0, 0, 0, 0];
-    var borderMargin;
-
-    if (node.border) {
-      Object.assign(style, node.border[_xfa_object.$toStyle](borderWidths, borderInsets));
-      borderMargin = style.margin;
-      delete style.margin;
-    }
-
-    if (borderWidths.every(function (x) {
-      return x === 0;
-    })) {
-      if (marginNode.every(function (x) {
-        return x === 0;
-      })) {
-        return;
-      }
-
-      Object.assign(style, node.margin[_xfa_object.$toStyle]());
-      style.padding = style.margin;
-      delete style.margin;
-      delete style.outline;
-      delete style.outlineOffset;
-      return;
-    }
-
+  margin: function margin(node, style) {
     if (node.margin) {
-      Object.assign(style, node.margin[_xfa_object.$toStyle]());
-      style.padding = style.margin;
-      delete style.margin;
+      style.margin = node.margin[_xfa_object.$toStyle]().margin;
     }
-
-    if (!style.borderWidth) {
-      return;
-    }
-
-    style.borderData = {
-      borderWidth: style.borderWidth,
-      borderColor: style.borderColor,
-      borderStyle: style.borderStyle,
-      margin: borderMargin
-    };
-    delete style.borderWidth;
-    delete style.borderColor;
-    delete style.borderStyle;
   }
 };
 
@@ -78460,96 +79408,89 @@ function toStyle(node) {
   return style;
 }
 
-function addExtraDivForBorder(html) {
-  var style = html.attributes.style;
-  var data = style.borderData;
-  var children = [];
-  var attributes = {
-    "class": "xfaWrapper",
-    style: Object.create(null)
+function createWrapper(node, html) {
+  var attributes = html.attributes;
+  var style = attributes.style;
+  var wrapper = {
+    name: "div",
+    attributes: {
+      "class": ["xfaWrapper"],
+      style: Object.create(null)
+    },
+    children: [html]
   };
+  attributes["class"].push("xfaWrapped");
 
-  for (var _i2 = 0, _arr = ["top", "left"]; _i2 < _arr.length; _i2++) {
-    var key = _arr[_i2];
+  if (node.border) {
+    var _node$border$$extra = node.border[_xfa_object.$extra],
+        widths = _node$border$$extra.widths,
+        insets = _node$border$$extra.insets;
+    var shiftH = 0;
+    var shiftW = 0;
 
-    if (style[key] !== undefined) {
-      attributes.style[key] = style[key];
+    switch (node.border.hand) {
+      case "even":
+        shiftW = widths[0] / 2;
+        shiftH = widths[3] / 2;
+        break;
+
+      case "left":
+        shiftW = widths[0];
+        shiftH = widths[3];
+        break;
+    }
+
+    var insetsW = insets[1] + insets[3];
+    var insetsH = insets[0] + insets[2];
+    var border = {
+      name: "div",
+      attributes: {
+        "class": ["xfaBorder"],
+        style: {
+          top: "".concat(insets[0] - widths[0] + shiftW, "px"),
+          left: "".concat(insets[3] - widths[3] + shiftH, "px"),
+          width: insetsW ? "calc(100% - ".concat(insetsW, "px)") : "100%",
+          height: insetsH ? "calc(100% - ".concat(insetsH, "px)") : "100%"
+        }
+      },
+      children: []
+    };
+
+    for (var _i2 = 0, _arr = ["border", "borderWidth", "borderColor", "borderRadius", "borderStyle"]; _i2 < _arr.length; _i2++) {
+      var key = _arr[_i2];
+
+      if (style[key] !== undefined) {
+        border.attributes.style[key] = style[key];
+        delete style[key];
+      }
+    }
+
+    wrapper.children.push(border);
+  }
+
+  for (var _i3 = 0, _arr2 = ["background", "backgroundClip", "top", "left", "width", "height", "minWidth", "minHeight", "maxWidth", "maxHeight", "transform", "transformOrigin"]; _i3 < _arr2.length; _i3++) {
+    var _key2 = _arr2[_i3];
+
+    if (style[_key2] !== undefined) {
+      wrapper.attributes.style[_key2] = style[_key2];
+      delete style[_key2];
     }
   }
 
-  delete style.top;
-  delete style.left;
-
   if (style.position === "absolute") {
-    attributes.style.position = "absolute";
+    wrapper.attributes.style.position = "absolute";
   } else {
-    attributes.style.position = "relative";
+    wrapper.attributes.style.position = "relative";
   }
 
   delete style.position;
 
-  if (style.justifyContent) {
-    attributes.style.justifyContent = style.justifyContent;
-    delete style.justifyContent;
+  if (style.alignSelf) {
+    wrapper.attributes.style.alignSelf = style.alignSelf;
+    delete style.alignSelf;
   }
 
-  if (data) {
-    delete style.borderData;
-    var insets;
-
-    if (data.margin) {
-      insets = data.margin.split(" ");
-      delete data.margin;
-    } else {
-      insets = ["0px", "0px", "0px", "0px"];
-    }
-
-    var width = "100%";
-    var height = width;
-
-    if (insets[1] !== "0px" || insets[3] !== "0px") {
-      width = "calc(100% - ".concat(parseInt(insets[1]) + parseInt(insets[3]), "px");
-    }
-
-    if (insets[0] !== "0px" || insets[2] !== "0px") {
-      height = "calc(100% - ".concat(parseInt(insets[0]) + parseInt(insets[2]), "px");
-    }
-
-    var borderStyle = {
-      top: insets[0],
-      left: insets[3],
-      width: width,
-      height: height
-    };
-
-    for (var _i3 = 0, _Object$entries = Object.entries(data); _i3 < _Object$entries.length; _i3++) {
-      var _Object$entries$_i = _slicedToArray(_Object$entries[_i3], 2),
-          k = _Object$entries$_i[0],
-          v = _Object$entries$_i[1];
-
-      borderStyle[k] = v;
-    }
-
-    if (style.transform) {
-      borderStyle.transform = style.transform;
-    }
-
-    var borderDiv = {
-      name: "div",
-      attributes: {
-        "class": "xfaBorderDiv",
-        style: borderStyle
-      }
-    };
-    children.push(borderDiv);
-  }
-
-  children.push(html);
-  return {
-    name: "div",
-    attributes: attributes,
-    children: children
-  };
+  return wrapper;
 }
 
 function fixTextIndent(styles) {
@@ -78562,9 +79503,9 @@ function fixTextIndent(styles) {
   var align = styles.textAlign || "left";
 
   if (align === "left" || align === "right") {
-    var name = "margin" + (align === "left" ? "Left" : "Right");
-    var margin = (0, _utils.getMeasurement)(styles[name], "0px");
-    styles[name] = "".concat(margin - indent, "pt");
+    var name = "padding" + (align === "left" ? "Left" : "Right");
+    var padding = (0, _utils.getMeasurement)(styles[name], "0px");
+    styles[name] = "".concat(padding - indent, "px");
   }
 }
 
@@ -78588,650 +79529,6 @@ function getFonts(family) {
   }
 
   return fonts.join(",");
-}
-
-/***/ }),
-/* 181 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.addHTML = addHTML;
-exports.flushHTML = flushHTML;
-exports.getAvailableSpace = getAvailableSpace;
-
-var _xfa_object = __w_pdfjs_require__(175);
-
-var _html_utils = __w_pdfjs_require__(180);
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function flushHTML(node) {
-  var attributes = node[_xfa_object.$extra].attributes;
-  var html = {
-    name: "div",
-    attributes: attributes,
-    children: node[_xfa_object.$extra].children
-  };
-
-  if (node[_xfa_object.$extra].failingNode) {
-    var htmlFromFailing = node[_xfa_object.$extra].failingNode[_xfa_object.$flushHTML]();
-
-    if (htmlFromFailing) {
-      html.children.push(htmlFromFailing);
-    }
-  }
-
-  if (html.children.length === 0) {
-    return null;
-  }
-
-  node[_xfa_object.$extra].children = [];
-  delete node[_xfa_object.$extra].line;
-  return html;
-}
-
-function addHTML(node, html, bbox) {
-  var extra = node[_xfa_object.$extra];
-  var availableSpace = extra.availableSpace;
-
-  switch (node.layout) {
-    case "position":
-      {
-        var _bbox = _slicedToArray(bbox, 4),
-            x = _bbox[0],
-            y = _bbox[1],
-            w = _bbox[2],
-            h = _bbox[3];
-
-        extra.width = Math.max(extra.width, x + w);
-        extra.height = Math.max(extra.height, y + h);
-        extra.children.push(html);
-        break;
-      }
-
-    case "lr-tb":
-    case "rl-tb":
-      if (!extra.line || extra.attempt === 1) {
-        extra.line = {
-          name: "div",
-          attributes: {
-            "class": node.layout === "lr-tb" ? "xfaLr" : "xfaRl"
-          },
-          children: []
-        };
-        extra.children.push(extra.line);
-      }
-
-      extra.line.children.push(html);
-
-      if (extra.attempt === 0) {
-        var _bbox2 = _slicedToArray(bbox, 4),
-            _w = _bbox2[2],
-            _h = _bbox2[3];
-
-        extra.currentWidth += _w;
-        extra.height = Math.max(extra.height, extra.prevHeight + _h);
-      } else {
-        var _bbox3 = _slicedToArray(bbox, 4),
-            _w2 = _bbox3[2],
-            _h2 = _bbox3[3];
-
-        extra.width = Math.max(extra.width, extra.currentWidth);
-        extra.currentWidth = _w2;
-        extra.prevHeight = extra.height;
-        extra.height += _h2;
-        extra.attempt = 0;
-      }
-
-      break;
-
-    case "rl-row":
-    case "row":
-      {
-        extra.children.push(html);
-
-        var _bbox4 = _slicedToArray(bbox, 4),
-            _w3 = _bbox4[2],
-            _h3 = _bbox4[3];
-
-        extra.width += _w3;
-        extra.height = Math.max(extra.height, _h3);
-        var height = (0, _html_utils.measureToString)(extra.height);
-
-        var _iterator = _createForOfIteratorHelper(extra.children),
-            _step;
-
-        try {
-          for (_iterator.s(); !(_step = _iterator.n()).done;) {
-            var child = _step.value;
-
-            if (child.attributes["class"] === "xfaWrapper") {
-              child.children[child.children.length - 1].attributes.style.height = height;
-            } else {
-              child.attributes.style.height = height;
-            }
-          }
-        } catch (err) {
-          _iterator.e(err);
-        } finally {
-          _iterator.f();
-        }
-
-        break;
-      }
-
-    case "table":
-      {
-        var _bbox5 = _slicedToArray(bbox, 4),
-            _w4 = _bbox5[2],
-            _h4 = _bbox5[3];
-
-        extra.width = Math.min(availableSpace.width, Math.max(extra.width, _w4));
-        extra.height += _h4;
-        extra.children.push(html);
-        break;
-      }
-
-    case "tb":
-      {
-        var _bbox6 = _slicedToArray(bbox, 4),
-            _h5 = _bbox6[3];
-
-        extra.width = availableSpace.width;
-        extra.height += _h5;
-        extra.children.push(html);
-        break;
-      }
-  }
-}
-
-function getAvailableSpace(node) {
-  var availableSpace = node[_xfa_object.$extra].availableSpace;
-
-  switch (node.layout) {
-    case "lr-tb":
-    case "rl-tb":
-      switch (node[_xfa_object.$extra].attempt) {
-        case 0:
-          return {
-            width: availableSpace.width - node[_xfa_object.$extra].currentWidth,
-            height: availableSpace.height - node[_xfa_object.$extra].prevHeight
-          };
-
-        case 1:
-          return {
-            width: availableSpace.width,
-            height: availableSpace.height - node[_xfa_object.$extra].height
-          };
-
-        default:
-          return {
-            width: Infinity,
-            height: availableSpace.height - node[_xfa_object.$extra].prevHeight
-          };
-      }
-
-    case "rl-row":
-    case "row":
-      var width = node[_xfa_object.$extra].columnWidths.slice(node[_xfa_object.$extra].currentColumn).reduce(function (a, x) {
-        return a + x;
-      });
-
-      return {
-        width: width,
-        height: availableSpace.height
-      };
-
-    case "table":
-    case "tb":
-      return {
-        width: availableSpace.width,
-        height: availableSpace.height - node[_xfa_object.$extra].height
-      };
-
-    case "position":
-    default:
-      return availableSpace;
-  }
-}
-
-/***/ }),
-/* 182 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.createDataNode = createDataNode;
-exports.searchNode = searchNode;
-
-var _xfa_object = __w_pdfjs_require__(175);
-
-var _util = __w_pdfjs_require__(4);
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-var namePattern = /^[^.[]+/;
-var indexPattern = /^[^\]]+/;
-var operators = {
-  dot: 0,
-  dotDot: 1,
-  dotHash: 2,
-  dotBracket: 3,
-  dotParen: 4
-};
-var shortcuts = new Map([["$data", function (root, current) {
-  return root.datasets.data;
-}], ["$template", function (root, current) {
-  return root.template;
-}], ["$connectionSet", function (root, current) {
-  return root.connectionSet;
-}], ["$form", function (root, current) {
-  return root.form;
-}], ["$layout", function (root, current) {
-  return root.layout;
-}], ["$host", function (root, current) {
-  return root.host;
-}], ["$dataWindow", function (root, current) {
-  return root.dataWindow;
-}], ["$event", function (root, current) {
-  return root.event;
-}], ["!", function (root, current) {
-  return root.datasets;
-}], ["$xfa", function (root, current) {
-  return root;
-}], ["xfa", function (root, current) {
-  return root;
-}], ["$", function (root, current) {
-  return current;
-}]]);
-var somCache = new WeakMap();
-
-function parseIndex(index) {
-  index = index.trim();
-
-  if (index === "*") {
-    return Infinity;
-  }
-
-  return parseInt(index, 10) || 0;
-}
-
-function parseExpression(expr, dotDotAllowed) {
-  var match = expr.match(namePattern);
-
-  if (!match) {
-    return null;
-  }
-
-  var _match = match,
-      _match2 = _slicedToArray(_match, 1),
-      name = _match2[0];
-
-  var parsed = [{
-    name: name,
-    cacheName: "." + name,
-    index: 0,
-    js: null,
-    formCalc: null,
-    operator: operators.dot
-  }];
-  var pos = name.length;
-
-  while (pos < expr.length) {
-    var spos = pos;
-
-    var _char = expr.charAt(pos++);
-
-    if (_char === "[") {
-      match = expr.slice(pos).match(indexPattern);
-
-      if (!match) {
-        (0, _util.warn)("XFA - Invalid index in SOM expression");
-        return null;
-      }
-
-      parsed[parsed.length - 1].index = parseIndex(match[0]);
-      pos += match[0].length + 1;
-      continue;
-    }
-
-    var operator = void 0;
-
-    switch (expr.charAt(pos)) {
-      case ".":
-        if (!dotDotAllowed) {
-          return null;
-        }
-
-        pos++;
-        operator = operators.dotDot;
-        break;
-
-      case "#":
-        pos++;
-        operator = operators.dotHash;
-        break;
-
-      case "[":
-        operator = operators.dotBracket;
-        break;
-
-      case "(":
-        operator = operators.dotParen;
-        break;
-
-      default:
-        operator = operators.dot;
-        break;
-    }
-
-    match = expr.slice(pos).match(namePattern);
-
-    if (!match) {
-      break;
-    }
-
-    var _match3 = match;
-
-    var _match4 = _slicedToArray(_match3, 1);
-
-    name = _match4[0];
-    pos += name.length;
-    parsed.push({
-      name: name,
-      cacheName: expr.slice(spos, pos),
-      operator: operator,
-      index: 0,
-      js: null,
-      formCalc: null
-    });
-  }
-
-  return parsed;
-}
-
-function searchNode(root, container, expr) {
-  var dotDotAllowed = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
-  var useCache = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
-  var parsed = parseExpression(expr, dotDotAllowed);
-
-  if (!parsed) {
-    return null;
-  }
-
-  var fn = shortcuts.get(parsed[0].name);
-  var i = 0;
-  var isQualified;
-
-  if (fn) {
-    isQualified = true;
-    root = [fn(root, container)];
-    i = 1;
-  } else {
-    isQualified = container === null;
-    root = [container || root];
-  }
-
-  var _loop = function _loop(ii) {
-    var _parsed$i = parsed[i],
-        name = _parsed$i.name,
-        cacheName = _parsed$i.cacheName,
-        operator = _parsed$i.operator,
-        index = _parsed$i.index;
-    var nodes = [];
-
-    var _iterator = _createForOfIteratorHelper(root),
-        _step;
-
-    try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var node = _step.value;
-
-        if (!(node instanceof _xfa_object.XFAObject)) {
-          continue;
-        }
-
-        var children = void 0,
-            cached = void 0;
-
-        if (useCache) {
-          cached = somCache.get(node);
-
-          if (!cached) {
-            cached = new Map();
-            somCache.set(node, cached);
-          }
-
-          children = cached.get(cacheName);
-        }
-
-        if (!children) {
-          switch (operator) {
-            case operators.dot:
-              children = node[_xfa_object.$getChildrenByName](name, false);
-              break;
-
-            case operators.dotDot:
-              children = node[_xfa_object.$getChildrenByName](name, true);
-              break;
-
-            case operators.dotHash:
-              children = node[_xfa_object.$getChildrenByClass](name);
-
-              if (children instanceof _xfa_object.XFAObjectArray) {
-                children = children.children;
-              } else {
-                children = [children];
-              }
-
-              break;
-
-            default:
-              break;
-          }
-
-          if (useCache) {
-            cached.set(cacheName, children);
-          }
-        }
-
-        if (children.length > 0) {
-          nodes.push(children);
-        }
-      }
-    } catch (err) {
-      _iterator.e(err);
-    } finally {
-      _iterator.f();
-    }
-
-    if (nodes.length === 0 && !isQualified && i === 0) {
-      var parent = container[_xfa_object.$getParent]();
-
-      container = parent;
-
-      if (!container) {
-        return {
-          v: null
-        };
-      }
-
-      i = -1;
-      root = [container];
-      return "continue";
-    }
-
-    if (isFinite(index)) {
-      root = nodes.filter(function (node) {
-        return index < node.length;
-      }).map(function (node) {
-        return node[index];
-      });
-    } else {
-      root = nodes.reduce(function (acc, node) {
-        return acc.concat(node);
-      }, []);
-    }
-  };
-
-  for (var ii = parsed.length; i < ii; i++) {
-    var _ret = _loop(ii);
-
-    if (_ret === "continue") continue;
-    if (_typeof(_ret) === "object") return _ret.v;
-  }
-
-  if (root.length === 0) {
-    return null;
-  }
-
-  return root;
-}
-
-function createNodes(root, path) {
-  var node = null;
-
-  var _iterator2 = _createForOfIteratorHelper(path),
-      _step2;
-
-  try {
-    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-      var _step2$value = _step2.value,
-          name = _step2$value.name,
-          index = _step2$value.index;
-
-      for (var i = 0; i <= index; i++) {
-        node = new _xfa_object.XmlObject(root[_xfa_object.$namespaceId], name);
-
-        root[_xfa_object.$appendChild](node);
-      }
-
-      root = node;
-    }
-  } catch (err) {
-    _iterator2.e(err);
-  } finally {
-    _iterator2.f();
-  }
-
-  return node;
-}
-
-function createDataNode(root, container, expr) {
-  var parsed = parseExpression(expr);
-
-  if (!parsed) {
-    return null;
-  }
-
-  if (parsed.some(function (x) {
-    return x.operator === operators.dotDot;
-  })) {
-    return null;
-  }
-
-  var fn = shortcuts.get(parsed[0].name);
-  var i = 0;
-
-  if (fn) {
-    root = fn(root, container);
-    i = 1;
-  } else {
-    root = container || root;
-  }
-
-  for (var ii = parsed.length; i < ii; i++) {
-    var _parsed$i2 = parsed[i],
-        name = _parsed$i2.name,
-        operator = _parsed$i2.operator,
-        index = _parsed$i2.index;
-
-    if (!isFinite(index)) {
-      parsed[i].index = 0;
-      return createNodes(root, parsed.slice(i));
-    }
-
-    var children = void 0;
-
-    switch (operator) {
-      case operators.dot:
-        children = root[_xfa_object.$getChildrenByName](name, false);
-        break;
-
-      case operators.dotDot:
-        children = root[_xfa_object.$getChildrenByName](name, true);
-        break;
-
-      case operators.dotHash:
-        children = root[_xfa_object.$getChildrenByClass](name);
-
-        if (children instanceof _xfa_object.XFAObjectArray) {
-          children = children.children;
-        } else {
-          children = [children];
-        }
-
-        break;
-
-      default:
-        break;
-    }
-
-    if (children.length === 0) {
-      return createNodes(root, parsed.slice(i));
-    }
-
-    if (index < children.length) {
-      var child = children[index];
-
-      if (!(child instanceof _xfa_object.XFAObject)) {
-        (0, _util.warn)("XFA - Cannot create a node.");
-        return null;
-      }
-
-      root = child;
-    } else {
-      parsed[i].index = children.length - index;
-      return createNodes(root, parsed.slice(i));
-    }
-  }
-
-  return null;
 }
 
 /***/ }),
@@ -79468,6 +79765,14 @@ var XFAParser = /*#__PURE__*/function (_XMLParserBase) {
     value: function onEndElement(name) {
       var node = this._current;
 
+      if (node[_xfa_object.$isCDATAXml]() && typeof node[_xfa_object.$content] === "string") {
+        var parser = new XFAParser();
+        var root = parser.parse(node[_xfa_object.$content]);
+        node[_xfa_object.$content] = null;
+
+        node[_xfa_object.$onChild](root);
+      }
+
       node[_xfa_object.$finalize]();
 
       this._current = this._stack.pop();
@@ -79510,7 +79815,7 @@ var _xfa_object = __w_pdfjs_require__(175);
 
 var _setup = __w_pdfjs_require__(185);
 
-var _template = __w_pdfjs_require__(179);
+var _template = __w_pdfjs_require__(180);
 
 var _unknown = __w_pdfjs_require__(194);
 
@@ -79590,6 +79895,8 @@ var Root = /*#__PURE__*/function (_XFAObject) {
       _get(_getPrototypeOf(Root.prototype), _xfa_object.$finalize, this).call(this);
 
       if (this.element.template instanceof _template.Template) {
+        this[_xfa_object.$ids].set(_xfa_object.$root, this.element);
+
         this.element.template[_xfa_object.$resolvePrototypes](this[_xfa_object.$ids]);
 
         this.element.template[_xfa_object.$ids] = this[_xfa_object.$ids];
@@ -79830,7 +80137,7 @@ var _signature = __w_pdfjs_require__(190);
 
 var _stylesheet = __w_pdfjs_require__(191);
 
-var _template = __w_pdfjs_require__(179);
+var _template = __w_pdfjs_require__(180);
 
 var _xdp = __w_pdfjs_require__(192);
 
@@ -84525,7 +84832,7 @@ var _xfa_object = __w_pdfjs_require__(175);
 
 var _namespaces = __w_pdfjs_require__(177);
 
-var _html_utils = __w_pdfjs_require__(180);
+var _html_utils = __w_pdfjs_require__(182);
 
 var _utils = __w_pdfjs_require__(176);
 
@@ -84576,11 +84883,11 @@ var StyleMapping = new Map([["page-break-after", "breakAfter"], ["page-break-bef
 }], ["xfa-font-vertical-scale", function (value) {
   return "scaleY(".concat(Math.max(0, Math.min(parseInt(value) / 100)).toFixed(2), ")");
 }], ["xfa-spacerun", ""], ["xfa-tab-stops", ""], ["font-size", function (value) {
-  return (0, _html_utils.measureToString)(1 * (0, _utils.getMeasurement)(value));
+  return (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value));
 }], ["letter-spacing", function (value) {
   return (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value));
 }], ["line-height", function (value) {
-  return (0, _html_utils.measureToString)(0.99 * (0, _utils.getMeasurement)(value));
+  return (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value));
 }], ["margin", function (value) {
   return (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value));
 }], ["margin-bottom", function (value) {
@@ -84793,7 +85100,7 @@ var Body = /*#__PURE__*/function (_XhtmlObject3) {
       }
 
       html.name = "div";
-      html.attributes["class"] = "xfaRich";
+      html.attributes["class"] = ["xfaRich"];
       return res;
     }
   }]);
@@ -84854,7 +85161,7 @@ var Html = /*#__PURE__*/function (_XhtmlObject5) {
         return _utils.HTMLResult.success({
           name: "div",
           attributes: {
-            "class": "xfaRich",
+            "class": ["xfaRich"],
             style: {}
           },
           value: this[_xfa_object.$content] || ""
@@ -84864,7 +85171,7 @@ var Html = /*#__PURE__*/function (_XhtmlObject5) {
       if (children.length === 1) {
         var child = children[0];
 
-        if (child.attributes && child.attributes["class"] === "xfaRich") {
+        if (child.attributes && child.attributes["class"].includes("xfaRich")) {
           return _utils.HTMLResult.success(child);
         }
       }
@@ -84872,7 +85179,7 @@ var Html = /*#__PURE__*/function (_XhtmlObject5) {
       return _utils.HTMLResult.success({
         name: "div",
         attributes: {
-          "class": "xfaRich",
+          "class": ["xfaRich"],
           style: {}
         },
         children: children
@@ -86953,8 +87260,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-var pdfjsVersion = '2.10.160';
-var pdfjsBuild = 'dc5c45f5c';
+var pdfjsVersion = '2.10.208';
+var pdfjsBuild = 'd42e8f5af';
 })();
 
 /******/ 	return __webpack_exports__;

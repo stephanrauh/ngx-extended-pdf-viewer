@@ -51,7 +51,7 @@ exports.isFetchSupported = isFetchSupported;
 exports.isPdfFile = isPdfFile;
 exports.isValidFetchUrl = isValidFetchUrl;
 exports.loadScript = loadScript;
-exports.StatTimer = exports.RenderingCancelledException = exports.PDFDateString = exports.PageViewport = exports.LinkTarget = exports.DOMSVGFactory = exports.DOMCMapReaderFactory = exports.DOMCanvasFactory = exports.DEFAULT_LINK_REL = exports.BaseCMapReaderFactory = exports.BaseCanvasFactory = void 0;
+exports.StatTimer = exports.RenderingCancelledException = exports.PDFDateString = exports.PageViewport = exports.LinkTarget = exports.DOMSVGFactory = exports.DOMStandardFontDataFactory = exports.DOMCMapReaderFactory = exports.DOMCanvasFactory = exports.DEFAULT_LINK_REL = exports.BaseStandardFontDataFactory = exports.BaseCMapReaderFactory = exports.BaseCanvasFactory = void 0;
 
 var _util = __w_pdfjs_require__(2);
 
@@ -126,6 +126,60 @@ class DOMCanvasFactory extends BaseCanvasFactory {
 
 exports.DOMCanvasFactory = DOMCanvasFactory;
 
+function fetchData(url, asTypedArray) {
+  if (isFetchSupported() && isValidFetchUrl(url, document.baseURI)) {
+    return fetch(url).then(async response => {
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+
+      let data;
+
+      if (asTypedArray) {
+        data = new Uint8Array(await response.arrayBuffer());
+      } else {
+        data = (0, _util.stringToBytes)(await response.text());
+      }
+
+      return data;
+    });
+  }
+
+  return new Promise((resolve, reject) => {
+    const request = new XMLHttpRequest();
+    request.open("GET", url, true);
+
+    if (asTypedArray) {
+      request.responseType = "arraybuffer";
+    }
+
+    request.onreadystatechange = () => {
+      if (request.readyState !== XMLHttpRequest.DONE) {
+        return;
+      }
+
+      if (request.status === 200 || request.status === 0) {
+        let data;
+
+        if (asTypedArray && request.response) {
+          data = new Uint8Array(request.response);
+        } else if (!asTypedArray && request.responseText) {
+          data = (0, _util.stringToBytes)(request.responseText);
+        }
+
+        if (data) {
+          resolve(data);
+          return;
+        }
+      }
+
+      reject(new Error(request.statusText));
+    };
+
+    request.send(null);
+  });
+}
+
 class BaseCMapReaderFactory {
   constructor({
     baseUrl = null,
@@ -167,68 +221,58 @@ exports.BaseCMapReaderFactory = BaseCMapReaderFactory;
 
 class DOMCMapReaderFactory extends BaseCMapReaderFactory {
   _fetchData(url, compressionType) {
-    if (isFetchSupported() && isValidFetchUrl(url, document.baseURI)) {
-      return fetch(url).then(async response => {
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-
-        let cMapData;
-
-        if (this.isCompressed) {
-          cMapData = new Uint8Array(await response.arrayBuffer());
-        } else {
-          cMapData = (0, _util.stringToBytes)(await response.text());
-        }
-
-        return {
-          cMapData,
-          compressionType
-        };
-      });
-    }
-
-    return new Promise((resolve, reject) => {
-      const request = new XMLHttpRequest();
-      request.open("GET", url, true);
-
-      if (this.isCompressed) {
-        request.responseType = "arraybuffer";
-      }
-
-      request.onreadystatechange = () => {
-        if (request.readyState !== XMLHttpRequest.DONE) {
-          return;
-        }
-
-        if (request.status === 200 || request.status === 0) {
-          let cMapData;
-
-          if (this.isCompressed && request.response) {
-            cMapData = new Uint8Array(request.response);
-          } else if (!this.isCompressed && request.responseText) {
-            cMapData = (0, _util.stringToBytes)(request.responseText);
-          }
-
-          if (cMapData) {
-            resolve({
-              cMapData,
-              compressionType
-            });
-            return;
-          }
-        }
-
-        reject(new Error(request.statusText));
+    return fetchData(url, this.isCompressed).then(data => {
+      return {
+        cMapData: data,
+        compressionType
       };
-
-      request.send(null);
     });
   }
 
 }
 
 exports.DOMCMapReaderFactory = DOMCMapReaderFactory;
+
+class BaseStandardFontDataFactory {
+  constructor({
+    baseUrl = null
+  }) {
+    if (this.constructor === BaseStandardFontDataFactory) {
+      (0, _util.unreachable)("Cannot initialize BaseStandardFontDataFactory.");
+    }
+
+    this.baseUrl = baseUrl;
+  }
+
+  async fetch({
+    filename
+  }) {
+    if (!this.baseUrl) {
+      throw new Error('The standard font "baseUrl" parameter must be specified, ensure that ' + 'the "standardFontDataUrl" API parameter is provided.');
+    }
+
+    if (!filename) {
+      throw new Error("Font filename must be specified.");
+    }
+
+    const url = this.baseUrl + filename + ".pfb";
+    return this._fetchData(url).catch(reason => {
+      throw new Error(`Unable to load font data at: ${url}`);
+    });
+  }
+
+}
+
+exports.BaseStandardFontDataFactory = BaseStandardFontDataFactory;
+
+class DOMStandardFontDataFactory extends BaseStandardFontDataFactory {
+  _fetchData(url) {
+    return fetchData(url, true);
+  }
+
+}
+
+exports.DOMStandardFontDataFactory = DOMStandardFontDataFactory;
 
 class DOMSVGFactory {
   create(width, height) {
@@ -853,6 +897,7 @@ exports.StreamType = StreamType;
 const FontType = {
   UNKNOWN: "UNKNOWN",
   TYPE1: "TYPE1",
+  TYPE1STANDARD: "TYPE1STANDARD",
   TYPE1C: "TYPE1C",
   CIDFONTTYPE0: "CIDFONTTYPE0",
   CIDFONTTYPE0C: "CIDFONTTYPE0C",
@@ -1554,7 +1599,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.getDocument = getDocument;
 exports.setPDFNetworkStreamFactory = setPDFNetworkStreamFactory;
-exports.version = exports.PDFWorker = exports.PDFPageProxy = exports.PDFDocumentProxy = exports.PDFDataRangeTransport = exports.LoopbackPort = exports.DefaultCMapReaderFactory = exports.DefaultCanvasFactory = exports.build = void 0;
+exports.version = exports.PDFWorker = exports.PDFPageProxy = exports.PDFDocumentProxy = exports.PDFDataRangeTransport = exports.LoopbackPort = exports.DefaultStandardFontDataFactory = exports.DefaultCMapReaderFactory = exports.DefaultCanvasFactory = exports.build = void 0;
 
 var _util = __w_pdfjs_require__(2);
 
@@ -1592,6 +1637,8 @@ const DefaultCanvasFactory = _is_node.isNodeJS ? _node_utils.NodeCanvasFactory :
 exports.DefaultCanvasFactory = DefaultCanvasFactory;
 const DefaultCMapReaderFactory = _is_node.isNodeJS ? _node_utils.NodeCMapReaderFactory : _display_utils.DOMCMapReaderFactory;
 exports.DefaultCMapReaderFactory = DefaultCMapReaderFactory;
+const DefaultStandardFontDataFactory = _is_node.isNodeJS ? _node_utils.NodeStandardFontDataFactory : _display_utils.DOMStandardFontDataFactory;
+exports.DefaultStandardFontDataFactory = DefaultStandardFontDataFactory;
 let createPDFNetworkStream;
 
 function setPDFNetworkStreamFactory(pdfNetworkStreamFactory) {
@@ -1680,6 +1727,7 @@ function getDocument(src) {
 
   params.rangeChunkSize = params.rangeChunkSize || DEFAULT_RANGE_CHUNK_SIZE;
   params.CMapReaderFactory = params.CMapReaderFactory || DefaultCMapReaderFactory;
+  params.StandardFontDataFactory = params.StandardFontDataFactory || DefaultStandardFontDataFactory;
   params.ignoreErrors = params.stopAtErrors !== true;
   params.fontExtraProperties = params.fontExtraProperties === true;
   params.pdfBug = params.pdfBug === true;
@@ -1691,6 +1739,14 @@ function getDocument(src) {
 
   if (!Number.isInteger(params.maxImageSize)) {
     params.maxImageSize = -1;
+  }
+
+  if (typeof params.useSystemFonts !== "boolean") {
+    params.useSystemFonts = !_is_node.isNodeJS;
+  }
+
+  if (typeof params.useWorkerFetch !== "boolean") {
+    params.useWorkerFetch = params.StandardFontDataFactory === _display_utils.DOMStandardFontDataFactory;
   }
 
   if (typeof params.isEvalSupported !== "boolean") {
@@ -1792,7 +1848,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.10.160',
+    apiVersion: '2.10.208',
     source: {
       data: source.data,
       url: source.url,
@@ -1808,7 +1864,9 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
     ignoreErrors: source.ignoreErrors,
     isEvalSupported: source.isEvalSupported,
     fontExtraProperties: source.fontExtraProperties,
-    enableXfa: source.enableXfa
+    enableXfa: source.enableXfa,
+    useSystemFonts: source.useSystemFonts,
+    standardFontDataUrl: source.useWorkerFetch ? source.standardFontDataUrl : null
   }).then(function (workerId) {
     if (worker.destroyed) {
       throw new Error("Worker was destroyed");
@@ -3013,7 +3071,8 @@ class WorkerTransport {
     this.fontLoader = new _font_loader.FontLoader({
       docId: loadingTask.docId,
       onUnsupportedFeature: this._onUnsupportedFeature.bind(this),
-      ownerDocument: params.ownerDocument
+      ownerDocument: params.ownerDocument,
+      styleElement: params.styleElement
     });
     this._params = params;
     let cMapUrl = params.cMapUrl;
@@ -3025,6 +3084,9 @@ class WorkerTransport {
     this.CMapReaderFactory = new params.CMapReaderFactory({
       baseUrl: cMapUrl,
       isCompressed: params.cMapPacked
+    });
+    this.StandardFontDataFactory = new params.StandardFontDataFactory({
+      baseUrl: params.standardFontDataUrl
     });
     this.destroyed = false;
     this.destroyCapability = null;
@@ -3385,6 +3447,13 @@ class WorkerTransport {
       }
     });
     messageHandler.on("UnsupportedFeature", this._onUnsupportedFeature.bind(this));
+    messageHandler.on("FetchStandardFontData", data => {
+      if (this.destroyed) {
+        return Promise.reject(new Error("Worker was destroyed"));
+      }
+
+      return this.StandardFontDataFactory.fetch(data);
+    });
     messageHandler.on("FetchBuiltInCMap", (data, sink) => {
       if (this.destroyed) {
         sink.error(new Error("Worker was destroyed"));
@@ -3859,9 +3928,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.10.160';
+const version = '2.10.208';
 exports.version = version;
-const build = 'dc5c45f5c';
+const build = 'd42e8f5af';
 exports.build = build;
 
 /***/ }),
@@ -3881,7 +3950,8 @@ class BaseFontLoader {
   constructor({
     docId,
     onUnsupportedFeature,
-    ownerDocument = globalThis.document
+    ownerDocument = globalThis.document,
+    styleElement = null
   }) {
     if (this.constructor === BaseFontLoader) {
       (0, _util.unreachable)("Cannot initialize BaseFontLoader.");
@@ -3978,7 +4048,8 @@ class BaseFontLoader {
   }
 
   get isFontLoadingAPISupported() {
-    return (0, _util.shadow)(this, "isFontLoadingAPISupported", !!this._document?.fonts);
+    const hasFonts = !!this._document?.fonts;
+    return (0, _util.shadow)(this, "isFontLoadingAPISupported", hasFonts);
   }
 
   get isSyncFontLoadingSupported() {
@@ -4284,13 +4355,28 @@ exports.FontFaceObject = FontFaceObject;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.NodeCMapReaderFactory = exports.NodeCanvasFactory = void 0;
+exports.NodeStandardFontDataFactory = exports.NodeCMapReaderFactory = exports.NodeCanvasFactory = void 0;
 
 var _display_utils = __w_pdfjs_require__(1);
 
 var _is_node = __w_pdfjs_require__(7);
 
 var _util = __w_pdfjs_require__(2);
+
+function fetchData(url) {
+  return new Promise((resolve, reject) => {
+    const fs = require("fs");
+
+    fs.readFile(url, (error, data) => {
+      if (error || !data) {
+        reject(new Error(error));
+        return;
+      }
+
+      resolve(new Uint8Array(data));
+    });
+  });
+}
 
 let NodeCanvasFactory = class {
   constructor() {
@@ -4306,6 +4392,13 @@ let NodeCMapReaderFactory = class {
 
 };
 exports.NodeCMapReaderFactory = NodeCMapReaderFactory;
+let NodeStandardFontDataFactory = class {
+  constructor() {
+    (0, _util.unreachable)("Not implemented: NodeStandardFontDataFactory");
+  }
+
+};
+exports.NodeStandardFontDataFactory = NodeStandardFontDataFactory;
 
 if (_is_node.isNodeJS) {
   exports.NodeCanvasFactory = NodeCanvasFactory = class extends _display_utils.BaseCanvasFactory {
@@ -4326,21 +4419,18 @@ if (_is_node.isNodeJS) {
   };
   exports.NodeCMapReaderFactory = NodeCMapReaderFactory = class extends _display_utils.BaseCMapReaderFactory {
     _fetchData(url, compressionType) {
-      return new Promise((resolve, reject) => {
-        const fs = require("fs");
-
-        fs.readFile(url, (error, data) => {
-          if (error || !data) {
-            reject(new Error(error));
-            return;
-          }
-
-          resolve({
-            cMapData: new Uint8Array(data),
-            compressionType
-          });
-        });
+      return fetchData(url).then(data => {
+        return {
+          cMapData: data,
+          compressionType
+        };
       });
+    }
+
+  };
+  exports.NodeStandardFontDataFactory = NodeStandardFontDataFactory = class extends _display_utils.BaseStandardFontDataFactory {
+    _fetchData(url) {
+      return fetchData(url);
     }
 
   };
@@ -6835,6 +6925,8 @@ exports.TilingPattern = void 0;
 
 var _util = __w_pdfjs_require__(2);
 
+var _display_utils = __w_pdfjs_require__(1);
+
 let svgElement;
 
 function createMatrix(matrix) {
@@ -6843,7 +6935,8 @@ function createMatrix(matrix) {
   }
 
   if (!svgElement) {
-    svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    const svgFactory = new _display_utils.DOMSVGFactory();
+    svgElement = svgFactory.createElement("svg");
   }
 
   return svgElement.createSVGMatrix(matrix);
@@ -12101,9 +12194,7 @@ exports.SVGGraphics = SVGGraphics;
       const paintType = args[7];
       const tilingId = `shading${shadingCount++}`;
 
-      const [tx0, ty0] = _util.Util.applyTransform([x0, y0], matrix);
-
-      const [tx1, ty1] = _util.Util.applyTransform([x1, y1], matrix);
+      const [tx0, ty0, tx1, ty1] = _util.Util.normalizeRect([..._util.Util.applyTransform([x0, y0], matrix), ..._util.Util.applyTransform([x1, y1], matrix)]);
 
       const [xscale, yscale] = _util.Util.singularValueDecompose2dScale(matrix);
 
@@ -12631,14 +12722,21 @@ exports.XfaLayer = void 0;
 var _display_utils = __w_pdfjs_require__(1);
 
 class XfaLayer {
-  static setupStorage(html, fieldId, element, storage) {
+  static setupStorage(html, fieldId, element, storage, intent) {
     const storedData = storage.getValue(fieldId, {
       value: null
     });
 
     switch (element.name) {
       case "textarea":
-        html.textContent = storedData.value !== null ? storedData.value : "";
+        if (storedData.value !== null) {
+          html.textContent = storedData.value;
+        }
+
+        if (intent === "print") {
+          break;
+        }
+
         html.addEventListener("input", event => {
           storage.setValue(fieldId, {
             value: event.target.value
@@ -12647,11 +12745,15 @@ class XfaLayer {
         break;
 
       case "input":
-        if (storedData.value !== null) {
-          html.setAttribute("value", storedData.value);
-        }
-
         if (element.attributes.type === "radio") {
+          if (storedData.value) {
+            html.setAttribute("checked", true);
+          }
+
+          if (intent === "print") {
+            break;
+          }
+
           html.addEventListener("change", event => {
             const {
               target
@@ -12670,7 +12772,29 @@ class XfaLayer {
               value: target.checked
             });
           });
+        } else if (element.attributes.type === "checkbox") {
+          if (storedData.value) {
+            html.setAttribute("checked", true);
+          }
+
+          if (intent === "print") {
+            break;
+          }
+
+          html.addEventListener("input", event => {
+            storage.setValue(fieldId, {
+              value: event.target.checked
+            });
+          });
         } else {
+          if (storedData.value !== null) {
+            html.setAttribute("value", storedData.value);
+          }
+
+          if (intent === "print") {
+            break;
+          }
+
           html.addEventListener("input", event => {
             storage.setValue(fieldId, {
               value: event.target.value
@@ -12700,10 +12824,14 @@ class XfaLayer {
     }
   }
 
-  static setAttributes(html, element, storage) {
+  static setAttributes(html, element, storage, intent) {
     const {
       attributes
     } = element;
+
+    if (attributes.type === "radio") {
+      attributes.name = `${attributes.name}-${intent}`;
+    }
 
     for (const [key, value] of Object.entries(attributes)) {
       if (value === null || value === undefined || key === "fieldId") {
@@ -12713,6 +12841,8 @@ class XfaLayer {
       if (key !== "style") {
         if (key === "textContent") {
           html.textContent = value;
+        } else if (key === "class") {
+          html.setAttribute(key, value.join(" "));
         } else {
           html.setAttribute(key, value);
         }
@@ -12729,6 +12859,7 @@ class XfaLayer {
   static render(parameters) {
     const storage = parameters.annotationStorage;
     const root = parameters.xfa;
+    const intent = parameters.intent;
     const rootHtml = document.createElement(root.name);
 
     if (root.attributes) {
@@ -12777,7 +12908,7 @@ class XfaLayer {
       html.appendChild(childHtml);
 
       if (child.attributes) {
-        this.setAttributes(childHtml, child, storage);
+        this.setAttributes(childHtml, child, storage, intent);
       }
 
       if (child.children && child.children.length > 0) {
@@ -14167,8 +14298,8 @@ var _svg = __w_pdfjs_require__(20);
 
 var _xfa_layer = __w_pdfjs_require__(21);
 
-const pdfjsVersion = '2.10.160';
-const pdfjsBuild = 'dc5c45f5c';
+const pdfjsVersion = '2.10.208';
+const pdfjsBuild = 'd42e8f5af';
 {
   const PDFNetworkStream = __w_pdfjs_require__(22).PDFNetworkStream;
 

@@ -142,7 +142,7 @@ class WorkerMessageHandler {
     const WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.10.160';
+    const workerVersion = '2.10.208';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -386,7 +386,9 @@ class WorkerMessageHandler {
         disableFontFace: data.disableFontFace,
         ignoreErrors: data.ignoreErrors,
         isEvalSupported: data.isEvalSupported,
-        fontExtraProperties: data.fontExtraProperties
+        fontExtraProperties: data.fontExtraProperties,
+        useSystemFonts: data.useSystemFonts,
+        standardFontDataUrl: data.standardFontDataUrl
       };
       getPdfManager(data, evaluatorOptions, data.enableXfa).then(function (newPdfManager) {
         if (terminated) {
@@ -939,6 +941,7 @@ exports.StreamType = StreamType;
 const FontType = {
   UNKNOWN: "UNKNOWN",
   TYPE1: "TYPE1",
+  TYPE1STANDARD: "TYPE1STANDARD",
   TYPE1C: "TYPE1C",
   CIDFONTTYPE0: "CIDFONTTYPE0",
   CIDFONTTYPE0C: "CIDFONTTYPE0C",
@@ -8114,6 +8117,8 @@ var _parser = __w_pdfjs_require__(16);
 
 var _image_utils = __w_pdfjs_require__(50);
 
+var _stream = __w_pdfjs_require__(9);
+
 var _bidi = __w_pdfjs_require__(51);
 
 var _colorspace = __w_pdfjs_require__(13);
@@ -8128,8 +8133,6 @@ var _metrics = __w_pdfjs_require__(52);
 
 var _murmurhash = __w_pdfjs_require__(53);
 
-var _stream = __w_pdfjs_require__(9);
-
 var _operator_list = __w_pdfjs_require__(54);
 
 var _image = __w_pdfjs_require__(55);
@@ -8139,7 +8142,9 @@ const DefaultPartialEvaluatorOptions = Object.freeze({
   disableFontFace: false,
   ignoreErrors: false,
   isEvalSupported: true,
-  fontExtraProperties: false
+  fontExtraProperties: false,
+  standardFontDataUrl: null,
+  useSystemFonts: true
 });
 const PatternType = {
   TILING: 1,
@@ -8447,6 +8452,38 @@ class PartialEvaluator {
     }
 
     return data;
+  }
+
+  async fetchStandardFontData(name) {
+    if (this.options.useSystemFonts && name !== "Symbol" && name !== "ZapfDingbats") {
+      return null;
+    }
+
+    const standardFontNameToFileName = (0, _standard_fonts.getStdFontNameToFileMap)();
+    const filename = standardFontNameToFileName[name];
+
+    if (this.options.standardFontDataUrl !== null) {
+      const url = `${this.options.standardFontDataUrl}${filename}.pfb`;
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        (0, _util.warn)(`fetchStandardFontData failed to fetch file "${url}" with "${response.statusText}".`);
+        return null;
+      }
+
+      return new _stream.Stream(await response.arrayBuffer());
+    }
+
+    try {
+      const data = await this.handler.sendWithPromise("FetchStandardFontData", {
+        filename
+      });
+      return new _stream.Stream(data);
+    } catch (e) {
+      (0, _util.warn)(`fetchStandardFontData failed to fetch file "${filename}" with "${e}".`);
+    }
+
+    return null;
   }
 
   async buildFormXObject(resources, xobj, smask, operatorList, task, initialState, localColorSpaceCache) {
@@ -9919,7 +9956,7 @@ class PartialEvaluator {
       const font = textState.font;
       const tsm = [textState.fontSize * textState.textHScale, 0, 0, textState.fontSize, 0, textState.textRise];
 
-      if (font.isType3Font && textState.fontSize <= 1 && !(0, _util.isArrayEqual)(textState.fontMatrix, _util.FONT_IDENTITY_MATRIX)) {
+      if (font.isType3Font && (textState.fontSize <= 1 || font.isCharBBox) && !(0, _util.isArrayEqual)(textState.fontMatrix, _util.FONT_IDENTITY_MATRIX)) {
         const glyphHeight = font.bbox[3] - font.bbox[1];
 
         if (glyphHeight > 0) {
@@ -10035,6 +10072,14 @@ class PartialEvaluator {
 
     function handleSetFont(fontName, fontRef) {
       return self.loadFont(fontName, fontRef, resources).then(function (translated) {
+        if (!translated.font.isType3Font) {
+          return translated;
+        }
+
+        return translated.loadType3Data(self, resources, task).catch(function () {}).then(function () {
+          return translated;
+        });
+      }).then(function (translated) {
         textState.font = translated.font;
         textState.fontMatrix = translated.font.fontMatrix || _util.FONT_IDENTITY_MATRIX;
       });
@@ -11389,6 +11434,7 @@ class PartialEvaluator {
         properties = {
           type,
           name: baseFontName,
+          loadedName: baseDict.loadedName,
           widths: metrics.widths,
           defaultWidth: metrics.defaultWidth,
           flags,
@@ -11398,6 +11444,15 @@ class PartialEvaluator {
           isType3Font
         };
         const widths = dict.get("Widths");
+        const standardFontName = (0, _standard_fonts.getStandardFontName)(baseFontName);
+        let file = null;
+
+        if (standardFontName) {
+          properties.isStandardFont = true;
+          file = await this.fetchStandardFontData(standardFontName);
+          properties.isInternalFont = !!file;
+        }
+
         return this.extractDataStructures(dict, dict, properties).then(newProperties => {
           if (widths) {
             const glyphWidths = [];
@@ -11412,7 +11467,7 @@ class PartialEvaluator {
             newProperties.widths = this.buildCharCodeToWidth(metrics.widths, newProperties);
           }
 
-          return new _fonts.Font(baseFontName, null, newProperties);
+          return new _fonts.Font(baseFontName, file, newProperties);
         });
       }
     }
@@ -11460,6 +11515,9 @@ class PartialEvaluator {
       fontFile = new _stream.NullStream();
     }
 
+    let isStandardFont = false;
+    let isInternalFont = false;
+
     if (fontFile) {
       if (fontFile.dict) {
         const subtypeEntry = fontFile.dict.get("Subtype");
@@ -11472,6 +11530,14 @@ class PartialEvaluator {
         length2 = fontFile.dict.get("Length2");
         length3 = fontFile.dict.get("Length3");
       }
+    } else if (type === "Type1") {
+      const standardFontName = (0, _standard_fonts.getStandardFontName)(fontName.name);
+
+      if (standardFontName) {
+        isStandardFont = true;
+        fontFile = await this.fetchStandardFontData(standardFontName);
+        isInternalFont = !!fontFile;
+      }
     }
 
     properties = {
@@ -11482,6 +11548,8 @@ class PartialEvaluator {
       length1,
       length2,
       length3,
+      isStandardFont,
+      isInternalFont,
       loadedName: baseDict.loadedName,
       composite,
       fixedPitch: false,
@@ -11489,7 +11557,7 @@ class PartialEvaluator {
       firstChar,
       lastChar,
       toUnicode,
-      bbox: descriptor.getArray("FontBBox"),
+      bbox: descriptor.getArray("FontBBox") || dict.getArray("FontBBox"),
       ascent: descriptor.get("Ascent"),
       descent: descriptor.get("Descent"),
       xHeight: descriptor.get("XHeight"),
@@ -11621,6 +11689,7 @@ class TranslatedFont {
     const charProcs = this.dict.get("CharProcs");
     const fontResources = this.dict.get("Resources") || resources;
     const charProcOperatorList = Object.create(null);
+    const isEmptyBBox = !translatedFont.bbox || (0, _util.isArrayEqual)(translatedFont.bbox, [0, 0, 0, 0]);
 
     for (const key of charProcs.getKeys()) {
       loadCharProcsPromise = loadCharProcsPromise.then(() => {
@@ -11633,7 +11702,7 @@ class TranslatedFont {
           operatorList
         }).then(() => {
           if (operatorList.fnArray[0] === _util.OPS.setCharWidthAndBounds) {
-            this._removeType3ColorOperators(operatorList);
+            this._removeType3ColorOperators(operatorList, isEmptyBBox);
           }
 
           charProcOperatorList[key] = operatorList.getIR();
@@ -11649,13 +11718,31 @@ class TranslatedFont {
       });
     }
 
-    this.type3Loaded = loadCharProcsPromise.then(function () {
+    this.type3Loaded = loadCharProcsPromise.then(() => {
       translatedFont.charProcOperatorList = charProcOperatorList;
+
+      if (this._bbox) {
+        translatedFont.isCharBBox = true;
+        translatedFont.bbox = this._bbox;
+      }
     });
     return this.type3Loaded;
   }
 
-  _removeType3ColorOperators(operatorList) {
+  _removeType3ColorOperators(operatorList, isEmptyBBox = false) {
+    if (isEmptyBBox) {
+      if (!this._bbox) {
+        this._bbox = [Infinity, Infinity, -Infinity, -Infinity];
+      }
+
+      const charBBox = _util.Util.normalizeRect(operatorList.argsArray[0].slice(2));
+
+      this._bbox[0] = Math.min(this._bbox[0], charBBox[0]);
+      this._bbox[1] = Math.min(this._bbox[1], charBBox[1]);
+      this._bbox[2] = Math.max(this._bbox[2], charBBox[2]);
+      this._bbox[3] = Math.max(this._bbox[3], charBBox[3]);
+    }
+
     let i = 1,
         ii = operatorList.length;
 
@@ -22931,6 +23018,10 @@ function adjustWidths(properties) {
 }
 
 function adjustToUnicode(properties, builtInEncoding) {
+  if (properties.isInternalFont) {
+    return;
+  }
+
   if (properties.hasIncludedToUnicodeMap) {
     return;
   }
@@ -22963,7 +23054,8 @@ function adjustToUnicode(properties, builtInEncoding) {
 }
 
 class Glyph {
-  constructor(fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont) {
+  constructor(originalCharCode, fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont) {
+    this.originalCharCode = originalCharCode;
     this.fontChar = fontChar;
     this.unicode = unicode;
     this.accent = accent;
@@ -22974,8 +23066,8 @@ class Glyph {
     this.isInFont = isInFont;
   }
 
-  matchesForCache(fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont) {
-    return this.fontChar === fontChar && this.unicode === unicode && this.accent === accent && this.width === width && this.vmetric === vmetric && this.operatorListId === operatorListId && this.isSpace === isSpace && this.isInFont === isInFont;
+  matchesForCache(originalCharCode, fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont) {
+    return this.originalCharCode === originalCharCode && this.fontChar === fontChar && this.unicode === unicode && this.accent === accent && this.width === width && this.vmetric === vmetric && this.operatorListId === operatorListId && this.isSpace === isSpace && this.isInFont === isInFont;
   }
 
 }
@@ -23568,7 +23660,7 @@ class Font {
     }
 
     this.data = data;
-    this.fontType = (0, _fonts_utils.getFontType)(type, subtype);
+    this.fontType = (0, _fonts_utils.getFontType)(type, subtype, properties.isStandardFont);
     this.fontMatrix = properties.fontMatrix;
     this.widths = properties.widths;
     this.defaultWidth = properties.defaultWidth;
@@ -23603,7 +23695,7 @@ class Font {
     const name = this.name;
     const type = this.type;
     const subtype = this.subtype;
-    let fontName = name.replace(/[,_]/g, "-").replace(/\s/g, "");
+    let fontName = (0, _fonts_utils.normalizeFontName)(name);
     const stdFontMap = (0, _standard_fonts.getStdFontMap)(),
           nonStdFontMap = (0, _standard_fonts.getNonStdFontMap)();
     const isStandardFont = !!stdFontMap[fontName];
@@ -23698,7 +23790,7 @@ class Font {
     }
 
     this.loadedName = fontName.split("-")[0];
-    this.fontType = (0, _fonts_utils.getFontType)(type, subtype);
+    this.fontType = (0, _fonts_utils.getFontType)(type, subtype, properties.isStandardFont);
   }
 
   checkAndRepair(name, font, properties) {
@@ -25337,8 +25429,8 @@ class Font {
 
     let glyph = this._glyphCache[charcode];
 
-    if (!glyph || !glyph.matchesForCache(fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont)) {
-      glyph = new Glyph(fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont);
+    if (!glyph || !glyph.matchesForCache(charcode, fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont)) {
+      glyph = new Glyph(charcode, fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont);
       this._glyphCache[charcode] = glyph;
     }
 
@@ -26099,6 +26191,12 @@ const CFFParser = function CFFParserClosure() {
           if ("min" in validationCommand) {
             if (!state.undefStack && stackSize < validationCommand.min) {
               (0, _util.warn)("Not enough parameters for " + validationCommand.id + "; actual: " + stackSize + ", expected: " + validationCommand.min);
+
+              if (stackSize === 0) {
+                data[j - 1] = 14;
+                return true;
+              }
+
               return false;
             }
           }
@@ -27403,6 +27501,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.getFontType = getFontType;
+exports.normalizeFontName = normalizeFontName;
 exports.recoverGlyphName = recoverGlyphName;
 exports.type1FontGlyphMapping = type1FontGlyphMapping;
 exports.SEAC_ANALYSIS_ENABLED = exports.MacStandardGlyphOrdering = exports.FontFlags = void 0;
@@ -27432,9 +27531,13 @@ exports.FontFlags = FontFlags;
 const MacStandardGlyphOrdering = [".notdef", ".null", "nonmarkingreturn", "space", "exclam", "quotedbl", "numbersign", "dollar", "percent", "ampersand", "quotesingle", "parenleft", "parenright", "asterisk", "plus", "comma", "hyphen", "period", "slash", "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "colon", "semicolon", "less", "equal", "greater", "question", "at", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "bracketleft", "backslash", "bracketright", "asciicircum", "underscore", "grave", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "braceleft", "bar", "braceright", "asciitilde", "Adieresis", "Aring", "Ccedilla", "Eacute", "Ntilde", "Odieresis", "Udieresis", "aacute", "agrave", "acircumflex", "adieresis", "atilde", "aring", "ccedilla", "eacute", "egrave", "ecircumflex", "edieresis", "iacute", "igrave", "icircumflex", "idieresis", "ntilde", "oacute", "ograve", "ocircumflex", "odieresis", "otilde", "uacute", "ugrave", "ucircumflex", "udieresis", "dagger", "degree", "cent", "sterling", "section", "bullet", "paragraph", "germandbls", "registered", "copyright", "trademark", "acute", "dieresis", "notequal", "AE", "Oslash", "infinity", "plusminus", "lessequal", "greaterequal", "yen", "mu", "partialdiff", "summation", "product", "pi", "integral", "ordfeminine", "ordmasculine", "Omega", "ae", "oslash", "questiondown", "exclamdown", "logicalnot", "radical", "florin", "approxequal", "Delta", "guillemotleft", "guillemotright", "ellipsis", "nonbreakingspace", "Agrave", "Atilde", "Otilde", "OE", "oe", "endash", "emdash", "quotedblleft", "quotedblright", "quoteleft", "quoteright", "divide", "lozenge", "ydieresis", "Ydieresis", "fraction", "currency", "guilsinglleft", "guilsinglright", "fi", "fl", "daggerdbl", "periodcentered", "quotesinglbase", "quotedblbase", "perthousand", "Acircumflex", "Ecircumflex", "Aacute", "Edieresis", "Egrave", "Iacute", "Icircumflex", "Idieresis", "Igrave", "Oacute", "Ocircumflex", "apple", "Ograve", "Uacute", "Ucircumflex", "Ugrave", "dotlessi", "circumflex", "tilde", "macron", "breve", "dotaccent", "ring", "cedilla", "hungarumlaut", "ogonek", "caron", "Lslash", "lslash", "Scaron", "scaron", "Zcaron", "zcaron", "brokenbar", "Eth", "eth", "Yacute", "yacute", "Thorn", "thorn", "minus", "multiply", "onesuperior", "twosuperior", "threesuperior", "onehalf", "onequarter", "threequarters", "franc", "Gbreve", "gbreve", "Idotaccent", "Scedilla", "scedilla", "Cacute", "cacute", "Ccaron", "ccaron", "dcroat"];
 exports.MacStandardGlyphOrdering = MacStandardGlyphOrdering;
 
-function getFontType(type, subtype) {
+function getFontType(type, subtype, isStandardFont = false) {
   switch (type) {
     case "Type1":
+      if (isStandardFont) {
+        return _util.FontType.TYPE1STANDARD;
+      }
+
       return subtype === "Type1C" ? _util.FontType.TYPE1C : _util.FontType.TYPE1;
 
     case "CIDFontType0":
@@ -27484,7 +27587,19 @@ function type1FontGlyphMapping(properties, builtInEncoding, glyphNames) {
   let glyphId, charCode, baseEncoding;
   const isSymbolicFont = !!(properties.flags & FontFlags.Symbolic);
 
-  if (properties.baseEncodingName) {
+  if (properties.isInternalFont) {
+    baseEncoding = builtInEncoding;
+
+    for (charCode = 0; charCode < baseEncoding.length; charCode++) {
+      glyphId = glyphNames.indexOf(baseEncoding[charCode]);
+
+      if (glyphId >= 0) {
+        charCodeToGlyphId[charCode] = glyphId;
+      } else {
+        charCodeToGlyphId[charCode] = 0;
+      }
+    }
+  } else if (properties.baseEncodingName) {
     baseEncoding = (0, _encodings.getEncoding)(properties.baseEncodingName);
 
     for (charCode = 0; charCode < baseEncoding.length; charCode++) {
@@ -27543,6 +27658,10 @@ function type1FontGlyphMapping(properties, builtInEncoding, glyphNames) {
   }
 
   return charCodeToGlyphId;
+}
+
+function normalizeFontName(name) {
+  return name.replace(/[,_]/g, "-").replace(/\s/g, "");
 }
 
 /***/ }),
@@ -39987,11 +40106,28 @@ function reverseIfRtl(chars) {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.getSymbolsFonts = exports.getSupplementalGlyphMapForCalibri = exports.getSupplementalGlyphMapForArialBlack = exports.getStdFontMap = exports.getSerifFonts = exports.getNonStdFontMap = exports.getGlyphMapForStandardFonts = void 0;
+exports.getStandardFontName = getStandardFontName;
+exports.getSymbolsFonts = exports.getSupplementalGlyphMapForCalibri = exports.getSupplementalGlyphMapForArialBlack = exports.getStdFontNameToFileMap = exports.getStdFontMap = exports.getSerifFonts = exports.getNonStdFontMap = exports.getGlyphMapForStandardFonts = void 0;
 
 var _core_utils = __w_pdfjs_require__(8);
 
+var _fonts_utils = __w_pdfjs_require__(37);
+
 const getStdFontMap = (0, _core_utils.getLookupTableFactory)(function (t) {
+  t["Times-Roman"] = "Times-Roman";
+  t.Helvetica = "Helvetica";
+  t.Courier = "Courier";
+  t.Symbol = "Symbol";
+  t["Times-Bold"] = "Times-Bold";
+  t["Helvetica-Bold"] = "Helvetica-Bold";
+  t["Courier-Bold"] = "Courier-Bold";
+  t.ZapfDingbats = "ZapfDingbats";
+  t["Times-Italic"] = "Times-Italic";
+  t["Helvetica-Oblique"] = "Helvetica-Oblique";
+  t["Courier-Oblique"] = "Courier-Oblique";
+  t["Times-BoldItalic"] = "Times-BoldItalic";
+  t["Helvetica-BoldOblique"] = "Helvetica-BoldOblique";
+  t["Courier-BoldOblique"] = "Courier-BoldOblique";
   t.ArialNarrow = "Helvetica";
   t["ArialNarrow-Bold"] = "Helvetica-Bold";
   t["ArialNarrow-BoldItalic"] = "Helvetica-BoldOblique";
@@ -40012,7 +40148,6 @@ const getStdFontMap = (0, _core_utils.getLookupTableFactory)(function (t) {
   t["Arial-BoldMT"] = "Helvetica-Bold";
   t["Arial-ItalicMT"] = "Helvetica-Oblique";
   t.ArialMT = "Helvetica";
-  t["Courier-Bold"] = "Courier-Bold";
   t["Courier-BoldItalic"] = "Courier-BoldOblique";
   t["Courier-Italic"] = "Courier-Oblique";
   t.CourierNew = "Courier";
@@ -40023,12 +40158,8 @@ const getStdFontMap = (0, _core_utils.getLookupTableFactory)(function (t) {
   t["CourierNewPS-BoldMT"] = "Courier-Bold";
   t["CourierNewPS-ItalicMT"] = "Courier-Oblique";
   t.CourierNewPSMT = "Courier";
-  t.Helvetica = "Helvetica";
-  t["Helvetica-Bold"] = "Helvetica-Bold";
   t["Helvetica-BoldItalic"] = "Helvetica-BoldOblique";
-  t["Helvetica-BoldOblique"] = "Helvetica-BoldOblique";
   t["Helvetica-Italic"] = "Helvetica-Oblique";
-  t["Helvetica-Oblique"] = "Helvetica-Oblique";
   t["Symbol-Bold"] = "Symbol";
   t["Symbol-BoldItalic"] = "Symbol";
   t["Symbol-Italic"] = "Symbol";
@@ -40049,6 +40180,23 @@ const getStdFontMap = (0, _core_utils.getLookupTableFactory)(function (t) {
   t["TimesNewRomanPSMT-Italic"] = "Times-Italic";
 });
 exports.getStdFontMap = getStdFontMap;
+const getStdFontNameToFileMap = (0, _core_utils.getLookupTableFactory)(function (t) {
+  t.Courier = "FoxitFixed";
+  t["Courier-Bold"] = "FoxitFixedBold";
+  t["Courier-BoldOblique"] = "FoxitFixedBoldItalic";
+  t["Courier-Oblique"] = "FoxitFixedItalic";
+  t.Helvetica = "FoxitSans";
+  t["Helvetica-Bold"] = "FoxitSansBold";
+  t["Helvetica-BoldOblique"] = "FoxitSansBoldItalic";
+  t["Helvetica-Oblique"] = "FoxitSansItalic";
+  t["Times-Roman"] = "FoxitSerif";
+  t["Times-Bold"] = "FoxitSerifBold";
+  t["Times-BoldItalic"] = "FoxitSerifBoldItalic";
+  t["Times-Italic"] = "FoxitSerifItalic";
+  t.Symbol = "FoxitSymbol";
+  t.ZapfDingbats = "FoxitDingbats";
+});
+exports.getStdFontNameToFileMap = getStdFontNameToFileMap;
 const getNonStdFontMap = (0, _core_utils.getLookupTableFactory)(function (t) {
   t.Calibri = "Helvetica";
   t["Calibri-Bold"] = "Helvetica-Bold";
@@ -40721,6 +40869,12 @@ const getSupplementalGlyphMapForCalibri = (0, _core_utils.getLookupTableFactory)
 });
 exports.getSupplementalGlyphMapForCalibri = getSupplementalGlyphMapForCalibri;
 
+function getStandardFontName(name) {
+  const fontName = (0, _fonts_utils.normalizeFontName)(name);
+  const stdFontMap = getStdFontMap();
+  return stdFontMap[fontName];
+}
+
 /***/ }),
 /* 41 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
@@ -40894,7 +41048,12 @@ class CFFFont {
       return charCodeToGlyphId;
     }
 
-    const encoding = cff.encoding ? cff.encoding.encoding : null;
+    let encoding = cff.encoding ? cff.encoding.encoding : null;
+
+    if (properties.isInternalFont) {
+      encoding = properties.defaultEncoding;
+    }
+
     charCodeToGlyphId = (0, _fonts_utils.type1FontGlyphMapping)(properties, encoding, charsets);
     return charCodeToGlyphId;
   }
@@ -55708,7 +55867,7 @@ exports.XFAFactory = void 0;
 
 var _xfa_object = __w_pdfjs_require__(67);
 
-var _bind = __w_pdfjs_require__(70);
+var _bind = __w_pdfjs_require__(71);
 
 var _parser = __w_pdfjs_require__(75);
 
@@ -55774,13 +55933,15 @@ exports.XFAFactory = XFAFactory;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.XmlObject = exports.XFAObjectArray = exports.XFAObject = exports.XFAAttribute = exports.StringObject = exports.OptionObject = exports.Option10 = exports.Option01 = exports.IntegerObject = exports.ContentObject = exports.$uid = exports.$toStyle = exports.$toHTML = exports.$text = exports.$setValue = exports.$setSetAttributes = exports.$setId = exports.$searchNode = exports.$resolvePrototypes = exports.$removeChild = exports.$onText = exports.$onChildCheck = exports.$onChild = exports.$nsAttributes = exports.$nodeName = exports.$namespaceId = exports.$isTransparent = exports.$isDescendent = exports.$isDataValue = exports.$insertAt = exports.$indexOf = exports.$ids = exports.$hasSettableValue = exports.$hasItem = exports.$global = exports.$getRealChildrenByNameIt = exports.$getParent = exports.$getNextPage = exports.$getDataValue = exports.$getChildrenByNameIt = exports.$getChildrenByName = exports.$getChildrenByClass = exports.$getChildren = exports.$getAvailableSpace = exports.$getAttributeIt = exports.$flushHTML = exports.$finalize = exports.$extra = exports.$dump = exports.$data = exports.$content = exports.$consumed = exports.$clone = exports.$cleanup = exports.$clean = exports.$childrenToHTML = exports.$break = exports.$appendChild = exports.$addHTML = exports.$acceptWhitespace = void 0;
+exports.XmlObject = exports.XFAObjectArray = exports.XFAObject = exports.XFAAttribute = exports.StringObject = exports.OptionObject = exports.Option10 = exports.Option01 = exports.IntegerObject = exports.ContentObject = exports.$uid = exports.$toStyle = exports.$toHTML = exports.$text = exports.$setValue = exports.$setSetAttributes = exports.$setId = exports.$searchNode = exports.$root = exports.$resolvePrototypes = exports.$removeChild = exports.$onText = exports.$onChildCheck = exports.$onChild = exports.$nsAttributes = exports.$nodeName = exports.$namespaceId = exports.$isTransparent = exports.$isDescendent = exports.$isDataValue = exports.$isCDATAXml = exports.$insertAt = exports.$indexOf = exports.$ids = exports.$hasSettableValue = exports.$hasItem = exports.$global = exports.$getRealChildrenByNameIt = exports.$getParent = exports.$getNextPage = exports.$getDataValue = exports.$getChildrenByNameIt = exports.$getChildrenByName = exports.$getChildrenByClass = exports.$getChildren = exports.$getAvailableSpace = exports.$getAttributeIt = exports.$flushHTML = exports.$finalize = exports.$extra = exports.$dump = exports.$data = exports.$content = exports.$consumed = exports.$clone = exports.$cleanup = exports.$clean = exports.$childrenToHTML = exports.$break = exports.$appendChild = exports.$addHTML = exports.$acceptWhitespace = void 0;
 
 var _utils = __w_pdfjs_require__(68);
 
 var _util = __w_pdfjs_require__(2);
 
 var _namespaces = __w_pdfjs_require__(69);
+
+var _som = __w_pdfjs_require__(70);
 
 const $acceptWhitespace = Symbol();
 exports.$acceptWhitespace = $acceptWhitespace;
@@ -55844,6 +56005,8 @@ const $indexOf = Symbol();
 exports.$indexOf = $indexOf;
 const $insertAt = Symbol();
 exports.$insertAt = $insertAt;
+const $isCDATAXml = Symbol();
+exports.$isCDATAXml = $isCDATAXml;
 const $isDataValue = Symbol();
 exports.$isDataValue = $isDataValue;
 const $isDescendent = Symbol();
@@ -55865,6 +56028,8 @@ const $onText = Symbol();
 exports.$onText = $onText;
 const $removeChild = Symbol();
 exports.$removeChild = $removeChild;
+const $root = Symbol("root");
+exports.$root = $root;
 const $resolvePrototypes = Symbol();
 exports.$resolvePrototypes = $resolvePrototypes;
 const $searchNode = Symbol();
@@ -55911,6 +56076,8 @@ const _max = Symbol();
 const _options = Symbol();
 
 const _parent = Symbol("parent");
+
+const _resolvePrototypesHelper = Symbol();
 
 const _setAttributes = Symbol();
 
@@ -55971,6 +56138,10 @@ class XFAObject {
     return false;
   }
 
+  [$isCDATAXml]() {
+    return false;
+  }
+
   [$setId](ids) {
     if (this.id && this[$namespaceId] === _namespaces.NamespaceIds.template.id) {
       ids.set(this.id, this);
@@ -56023,7 +56194,7 @@ class XFAObject {
   }
 
   [$isTransparent]() {
-    return this.name === "";
+    return !this.name;
   }
 
   [$lastAttribute]() {
@@ -56187,9 +56358,7 @@ class XFAObject {
   }
 
   [$setSetAttributes](attributes) {
-    if (attributes.use || attributes.id) {
-      this[_setAttributes] = new Set(Object.keys(attributes));
-    }
+    this[_setAttributes] = new Set(Object.keys(attributes));
   }
 
   [_getUnsetAttributes](protoAttributes) {
@@ -56200,57 +56369,93 @@ class XFAObject {
 
   [$resolvePrototypes](ids, ancestors = new Set()) {
     for (const child of this[_children]) {
-      const proto = child[_getPrototype](ids, ancestors);
+      child[_resolvePrototypesHelper](ids, ancestors);
+    }
+  }
 
-      if (proto) {
-        child[_applyPrototype](proto, ids, ancestors);
-      } else {
-        child[$resolvePrototypes](ids, ancestors);
-      }
+  [_resolvePrototypesHelper](ids, ancestors) {
+    const proto = this[_getPrototype](ids, ancestors);
+
+    if (proto) {
+      this[_applyPrototype](proto, ids, ancestors);
+    } else {
+      this[$resolvePrototypes](ids, ancestors);
     }
   }
 
   [_getPrototype](ids, ancestors) {
     const {
-      use
+      use,
+      usehref
     } = this;
 
-    if (use && use.startsWith("#")) {
-      const id = use.slice(1);
-      const proto = ids.get(id);
-      this.use = "";
+    if (!use && !usehref) {
+      return null;
+    }
 
-      if (!proto) {
-        (0, _util.warn)(`XFA - Invalid prototype id: ${id}.`);
-        return null;
+    let proto = null;
+    let somExpression = null;
+    let id = null;
+    let ref = use;
+
+    if (usehref) {
+      ref = usehref;
+
+      if (usehref.startsWith("#som(") && usehref.endsWith(")")) {
+        somExpression = usehref.slice("#som(".length, usehref.length - 1);
+      } else if (usehref.startsWith(".#som(") && usehref.endsWith(")")) {
+        somExpression = usehref.slice(".#som(".length, usehref.length - 1);
+      } else if (usehref.startsWith("#")) {
+        id = usehref.slice(1);
+      } else if (usehref.startsWith(".#")) {
+        id = usehref.slice(2);
       }
+    } else if (use.startsWith("#")) {
+      id = use.slice(1);
+    } else {
+      somExpression = use;
+    }
 
-      if (proto[$nodeName] !== this[$nodeName]) {
-        (0, _util.warn)(`XFA - Incompatible prototype: ${proto[$nodeName]} !== ${this[$nodeName]}.`);
-        return null;
+    this.use = this.usehref = "";
+
+    if (id) {
+      proto = ids.get(id);
+    } else {
+      proto = (0, _som.searchNode)(ids.get($root), this, somExpression, true, false);
+
+      if (proto) {
+        proto = proto[0];
       }
+    }
 
-      if (ancestors.has(proto)) {
-        (0, _util.warn)(`XFA - Cycle detected in prototypes use.`);
-        return null;
-      }
+    if (!proto) {
+      (0, _util.warn)(`XFA - Invalid prototype reference: ${ref}.`);
+      return null;
+    }
 
-      ancestors.add(proto);
+    if (proto[$nodeName] !== this[$nodeName]) {
+      (0, _util.warn)(`XFA - Incompatible prototype: ${proto[$nodeName]} !== ${this[$nodeName]}.`);
+      return null;
+    }
 
-      const protoProto = proto[_getPrototype](ids, ancestors);
+    if (ancestors.has(proto)) {
+      (0, _util.warn)(`XFA - Cycle detected in prototypes use.`);
+      return null;
+    }
 
-      if (!protoProto) {
-        ancestors.delete(proto);
-        return proto;
-      }
+    ancestors.add(proto);
 
-      proto[_applyPrototype](protoProto, ids, ancestors);
+    const protoProto = proto[_getPrototype](ids, ancestors);
 
+    if (!protoProto) {
       ancestors.delete(proto);
       return proto;
     }
 
-    return null;
+    proto[_applyPrototype](protoProto, ids, ancestors);
+
+    ancestors.delete(proto);
+    return proto;
   }
 
   [_applyPrototype](proto, ids, ancestors) {
@@ -56284,7 +56489,7 @@ class XFAObject {
 
       if (value instanceof XFAObjectArray) {
         for (const child of value[_children]) {
-          child[$resolvePrototypes](ids, ancestors);
+          child[_resolvePrototypesHelper](ids, ancestors);
         }
 
         for (let i = value[_children].length, ii = protoValue[_children].length; i < ii; i++) {
@@ -56295,7 +56500,7 @@ class XFAObject {
 
             this[_children].push(child);
 
-            child[$resolvePrototypes](ids, newAncestors);
+            child[_resolvePrototypesHelper](ids, ancestors);
           } else {
             break;
           }
@@ -56306,6 +56511,11 @@ class XFAObject {
 
       if (value !== null) {
         value[$resolvePrototypes](ids, ancestors);
+
+        if (protoValue) {
+          value[_applyPrototype](protoValue, ids, ancestors);
+        }
+
         continue;
       }
 
@@ -56316,7 +56526,7 @@ class XFAObject {
 
         this[_children].push(child);
 
-        child[$resolvePrototypes](ids, newAncestors);
+        child[_resolvePrototypesHelper](ids, ancestors);
       }
     }
   }
@@ -56767,7 +56977,7 @@ exports.Option10 = Option10;
 
 /***/ }),
 /* 68 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
 
@@ -56784,6 +56994,9 @@ exports.getRatio = getRatio;
 exports.getRelevant = getRelevant;
 exports.getStringOption = getStringOption;
 exports.HTMLResult = void 0;
+
+var _util = __w_pdfjs_require__(2);
+
 const dimConverters = {
   pt: x => x,
   cm: x => x / 2.54 * 72,
@@ -56993,6 +57206,14 @@ function getBBox(data) {
 }
 
 class HTMLResult {
+  static get FAILURE() {
+    return (0, _util.shadow)(this, "FAILURE", new HTMLResult(false, null, null));
+  }
+
+  static get EMPTY() {
+    return (0, _util.shadow)(this, "EMPTY", new HTMLResult(true, null, null));
+  }
+
   constructor(success, html, bbox) {
     this.success = success;
     this.html = html;
@@ -57006,8 +57227,6 @@ class HTMLResult {
 }
 
 exports.HTMLResult = HTMLResult;
-HTMLResult.FAILURE = new HTMLResult(false, null, null);
-HTMLResult.EMPTY = new HTMLResult(true, null, null);
 
 /***/ }),
 /* 69 */
@@ -57094,13 +57313,347 @@ exports.NamespaceIds = NamespaceIds;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
+exports.createDataNode = createDataNode;
+exports.searchNode = searchNode;
+
+var _xfa_object = __w_pdfjs_require__(67);
+
+var _util = __w_pdfjs_require__(2);
+
+const namePattern = /^[^.[]+/;
+const indexPattern = /^[^\]]+/;
+const operators = {
+  dot: 0,
+  dotDot: 1,
+  dotHash: 2,
+  dotBracket: 3,
+  dotParen: 4
+};
+const shortcuts = new Map([["$data", (root, current) => root.datasets.data], ["$template", (root, current) => root.template], ["$connectionSet", (root, current) => root.connectionSet], ["$form", (root, current) => root.form], ["$layout", (root, current) => root.layout], ["$host", (root, current) => root.host], ["$dataWindow", (root, current) => root.dataWindow], ["$event", (root, current) => root.event], ["!", (root, current) => root.datasets], ["$xfa", (root, current) => root], ["xfa", (root, current) => root], ["$", (root, current) => current]]);
+const somCache = new WeakMap();
+
+function parseIndex(index) {
+  index = index.trim();
+
+  if (index === "*") {
+    return Infinity;
+  }
+
+  return parseInt(index, 10) || 0;
+}
+
+function parseExpression(expr, dotDotAllowed) {
+  let match = expr.match(namePattern);
+
+  if (!match) {
+    return null;
+  }
+
+  let [name] = match;
+  const parsed = [{
+    name,
+    cacheName: "." + name,
+    index: 0,
+    js: null,
+    formCalc: null,
+    operator: operators.dot
+  }];
+  let pos = name.length;
+
+  while (pos < expr.length) {
+    const spos = pos;
+    const char = expr.charAt(pos++);
+
+    if (char === "[") {
+      match = expr.slice(pos).match(indexPattern);
+
+      if (!match) {
+        (0, _util.warn)("XFA - Invalid index in SOM expression");
+        return null;
+      }
+
+      parsed[parsed.length - 1].index = parseIndex(match[0]);
+      pos += match[0].length + 1;
+      continue;
+    }
+
+    let operator;
+
+    switch (expr.charAt(pos)) {
+      case ".":
+        if (!dotDotAllowed) {
+          return null;
+        }
+
+        pos++;
+        operator = operators.dotDot;
+        break;
+
+      case "#":
+        pos++;
+        operator = operators.dotHash;
+        break;
+
+      case "[":
+        operator = operators.dotBracket;
+        break;
+
+      case "(":
+        operator = operators.dotParen;
+        break;
+
+      default:
+        operator = operators.dot;
+        break;
+    }
+
+    match = expr.slice(pos).match(namePattern);
+
+    if (!match) {
+      break;
+    }
+
+    [name] = match;
+    pos += name.length;
+    parsed.push({
+      name,
+      cacheName: expr.slice(spos, pos),
+      operator,
+      index: 0,
+      js: null,
+      formCalc: null
+    });
+  }
+
+  return parsed;
+}
+
+function searchNode(root, container, expr, dotDotAllowed = true, useCache = true) {
+  const parsed = parseExpression(expr, dotDotAllowed);
+
+  if (!parsed) {
+    return null;
+  }
+
+  const fn = shortcuts.get(parsed[0].name);
+  let i = 0;
+  let isQualified;
+
+  if (fn) {
+    isQualified = true;
+    root = [fn(root, container)];
+    i = 1;
+  } else {
+    isQualified = container === null;
+    root = [container || root];
+  }
+
+  for (let ii = parsed.length; i < ii; i++) {
+    const {
+      name,
+      cacheName,
+      operator,
+      index
+    } = parsed[i];
+    const nodes = [];
+
+    for (const node of root) {
+      if (!(node instanceof _xfa_object.XFAObject)) {
+        continue;
+      }
+
+      let children, cached;
+
+      if (useCache) {
+        cached = somCache.get(node);
+
+        if (!cached) {
+          cached = new Map();
+          somCache.set(node, cached);
+        }
+
+        children = cached.get(cacheName);
+      }
+
+      if (!children) {
+        switch (operator) {
+          case operators.dot:
+            children = node[_xfa_object.$getChildrenByName](name, false);
+            break;
+
+          case operators.dotDot:
+            children = node[_xfa_object.$getChildrenByName](name, true);
+            break;
+
+          case operators.dotHash:
+            children = node[_xfa_object.$getChildrenByClass](name);
+
+            if (children instanceof _xfa_object.XFAObjectArray) {
+              children = children.children;
+            } else {
+              children = [children];
+            }
+
+            break;
+
+          default:
+            break;
+        }
+
+        if (useCache) {
+          cached.set(cacheName, children);
+        }
+      }
+
+      if (children.length > 0) {
+        nodes.push(children);
+      }
+    }
+
+    if (nodes.length === 0 && !isQualified && i === 0) {
+      const parent = container[_xfa_object.$getParent]();
+
+      container = parent;
+
+      if (!container) {
+        return null;
+      }
+
+      i = -1;
+      root = [container];
+      continue;
+    }
+
+    if (isFinite(index)) {
+      root = nodes.filter(node => index < node.length).map(node => node[index]);
+    } else {
+      root = nodes.reduce((acc, node) => acc.concat(node), []);
+    }
+  }
+
+  if (root.length === 0) {
+    return null;
+  }
+
+  return root;
+}
+
+function createNodes(root, path) {
+  let node = null;
+
+  for (const {
+    name,
+    index
+  } of path) {
+    for (let i = 0; i <= index; i++) {
+      node = new _xfa_object.XmlObject(root[_xfa_object.$namespaceId], name);
+
+      root[_xfa_object.$appendChild](node);
+    }
+
+    root = node;
+  }
+
+  return node;
+}
+
+function createDataNode(root, container, expr) {
+  const parsed = parseExpression(expr);
+
+  if (!parsed) {
+    return null;
+  }
+
+  if (parsed.some(x => x.operator === operators.dotDot)) {
+    return null;
+  }
+
+  const fn = shortcuts.get(parsed[0].name);
+  let i = 0;
+
+  if (fn) {
+    root = fn(root, container);
+    i = 1;
+  } else {
+    root = container || root;
+  }
+
+  for (let ii = parsed.length; i < ii; i++) {
+    const {
+      name,
+      operator,
+      index
+    } = parsed[i];
+
+    if (!isFinite(index)) {
+      parsed[i].index = 0;
+      return createNodes(root, parsed.slice(i));
+    }
+
+    let children;
+
+    switch (operator) {
+      case operators.dot:
+        children = root[_xfa_object.$getChildrenByName](name, false);
+        break;
+
+      case operators.dotDot:
+        children = root[_xfa_object.$getChildrenByName](name, true);
+        break;
+
+      case operators.dotHash:
+        children = root[_xfa_object.$getChildrenByClass](name);
+
+        if (children instanceof _xfa_object.XFAObjectArray) {
+          children = children.children;
+        } else {
+          children = [children];
+        }
+
+        break;
+
+      default:
+        break;
+    }
+
+    if (children.length === 0) {
+      return createNodes(root, parsed.slice(i));
+    }
+
+    if (index < children.length) {
+      const child = children[index];
+
+      if (!(child instanceof _xfa_object.XFAObject)) {
+        (0, _util.warn)(`XFA - Cannot create a node.`);
+        return null;
+      }
+
+      root = child;
+    } else {
+      parsed[i].index = children.length - index;
+      return createNodes(root, parsed.slice(i));
+    }
+  }
+
+  return null;
+}
+
+/***/ }),
+/* 71 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
 exports.Binder = void 0;
 
 var _xfa_object = __w_pdfjs_require__(67);
 
-var _template = __w_pdfjs_require__(71);
+var _template = __w_pdfjs_require__(72);
 
-var _som = __w_pdfjs_require__(74);
+var _som = __w_pdfjs_require__(70);
 
 var _namespaces = __w_pdfjs_require__(69);
 
@@ -57589,6 +58142,10 @@ class Binder {
             match = new _xfa_object.XmlObject(dataNode[_xfa_object.$namespaceId], child.name);
 
             dataNode[_xfa_object.$appendChild](match);
+
+            this._bindElement(child, match);
+
+            continue;
           }
 
           match = [match];
@@ -57621,7 +58178,7 @@ class Binder {
 exports.Binder = Binder;
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -57635,15 +58192,15 @@ var _xfa_object = __w_pdfjs_require__(67);
 
 var _namespaces = __w_pdfjs_require__(69);
 
-var _html_utils = __w_pdfjs_require__(72);
-
 var _layout = __w_pdfjs_require__(73);
+
+var _html_utils = __w_pdfjs_require__(74);
 
 var _utils = __w_pdfjs_require__(68);
 
 var _util = __w_pdfjs_require__(2);
 
-var _som = __w_pdfjs_require__(74);
+var _som = __w_pdfjs_require__(70);
 
 const TEMPLATE_NS_ID = _namespaces.NamespaceIds.template.id;
 const MAX_ATTEMPTS_FOR_LRTB_LAYOUT = 2;
@@ -57670,25 +58227,93 @@ function getRoot(node) {
   return parent;
 }
 
+function getTransformedBBox(node) {
+  let w = node.w === "" ? NaN : node.w;
+  let h = node.h === "" ? NaN : node.h;
+  let [centerX, centerY] = [0, 0];
+
+  switch (node.anchorType || "") {
+    case "bottomCenter":
+      [centerX, centerY] = [w / 2, h];
+      break;
+
+    case "bottomLeft":
+      [centerX, centerY] = [0, h];
+      break;
+
+    case "bottomRight":
+      [centerX, centerY] = [w, h];
+      break;
+
+    case "middleCenter":
+      [centerX, centerY] = [w / 2, h / 2];
+      break;
+
+    case "middleLeft":
+      [centerX, centerY] = [0, h / 2];
+      break;
+
+    case "middleRight":
+      [centerX, centerY] = [w, h / 2];
+      break;
+
+    case "topCenter":
+      [centerX, centerY] = [w / 2, 0];
+      break;
+
+    case "topRight":
+      [centerX, centerY] = [w, 0];
+      break;
+  }
+
+  let x;
+  let y;
+
+  switch (node.rotate || 0) {
+    case 0:
+      [x, y] = [-centerX, -centerY];
+      break;
+
+    case 90:
+      [x, y] = [-centerY, centerX];
+      [w, h] = [h, -w];
+      break;
+
+    case 180:
+      [x, y] = [centerX, centerY];
+      [w, h] = [-w, -h];
+      break;
+
+    case 270:
+      [x, y] = [centerY, -centerX];
+      [w, h] = [-h, w];
+      break;
+  }
+
+  return [node.x + x + Math.min(0, w), node.y + y + Math.min(0, h), Math.abs(w), Math.abs(h)];
+}
+
 const NOTHING = 0;
 const NOSPACE = 1;
 const VALID = 2;
 
 function checkDimensions(node, space) {
-  if (node.w !== "" && Math.round(node.w + node.x - space.width) > 1) {
+  const [x, y, w, h] = getTransformedBBox(node);
+
+  if (node.w !== "" && Math.round(x + w - space.width) > 1) {
     const area = getRoot(node)[_xfa_object.$extra].currentContentArea;
 
-    if (node.w + node.x > area.w) {
+    if (x + w > area.w) {
       return NOTHING;
     }
 
     return NOSPACE;
   }
 
-  if (node.h !== "" && Math.round(node.h + node.y - space.height) > 1) {
+  if (node.h !== "" && Math.round(y + h - space.height) > 1) {
     const area = getRoot(node)[_xfa_object.$extra].currentContentArea;
 
-    if (node.h + node.y > area.h) {
+    if (y + h > area.h) {
       return NOTHING;
     }
 
@@ -57784,7 +58409,7 @@ class Area extends _xfa_object.XFAObject {
     const attributes = {
       style,
       id: this[_xfa_object.$uid],
-      class: "xfaArea"
+      class: ["xfaArea"]
     };
 
     if (this.name) {
@@ -57959,7 +58584,7 @@ class Border extends _xfa_object.XFAObject {
     this.margin = null;
   }
 
-  [_xfa_object.$toStyle](widths, margins) {
+  [_xfa_object.$toStyle]() {
     const edges = this.edge.children.slice();
 
     if (edges.length < 4) {
@@ -57970,46 +58595,35 @@ class Border extends _xfa_object.XFAObject {
       }
     }
 
-    widths = widths || [0, 0, 0, 0];
-
-    for (let i = 0; i < 4; i++) {
-      widths[i] = edges[i].thickness;
-    }
-
-    margins = margins || [0, 0, 0, 0];
     const edgeStyles = edges.map(node => {
       const style = node[_xfa_object.$toStyle]();
 
       style.color = style.color || "#000000";
       return style;
     });
-    let style;
+    const widths = edges.map(edge => edge.thickness);
+    const insets = [0, 0, 0, 0];
 
     if (this.margin) {
-      style = this.margin[_xfa_object.$toStyle]();
-      margins[0] = this.margin.topInset;
-      margins[1] = this.margin.rightInset;
-      margins[2] = this.margin.bottomInset;
-      margins[3] = this.margin.leftInset;
-    } else {
-      style = Object.create(null);
+      insets[0] = this.margin.topInset;
+      insets[1] = this.margin.rightInset;
+      insets[2] = this.margin.bottomInset;
+      insets[3] = this.margin.leftInset;
     }
 
-    let isForUi = false;
+    this[_xfa_object.$extra] = {
+      widths,
+      insets
+    };
+    const style = Object.create(null);
 
-    const parent = this[_xfa_object.$getParent]();
-
-    const grandParent = parent ? parent[_xfa_object.$getParent]() : null;
-
-    if (grandParent instanceof Ui) {
-      isForUi = true;
+    if (this.margin) {
+      Object.assign(style, this.margin[_xfa_object.$toStyle]());
     }
 
     if (this.fill) {
       Object.assign(style, this.fill[_xfa_object.$toStyle]());
     }
-
-    let hasRadius = false;
 
     if (this.corner.children.some(node => node.radius !== 0)) {
       const cornerStyles = this.corner.children.map(node => node[_xfa_object.$toStyle]());
@@ -58023,56 +58637,25 @@ class Border extends _xfa_object.XFAObject {
       }
 
       style.borderRadius = cornerStyles.map(s => s.radius).join(" ");
-      hasRadius = true;
     }
 
-    const firstEdge = edgeStyles[0];
+    switch (this.presence) {
+      case "invisible":
+      case "hidden":
+        style.borderStyle = "";
+        break;
 
-    if (!hasRadius && (this.edge.children.length <= 1 || edgeStyles.every(x => x.style === firstEdge.style && x.width === firstEdge.width && x.color === firstEdge.color) && margins.every(x => x === margins[0]))) {
-      let borderStyle;
+      case "inactive":
+        style.borderStyle = "none";
+        break;
 
-      switch (this.presence) {
-        case "invisible":
-        case "hidden":
-          borderStyle = "";
-          break;
-
-        case "inactive":
-          borderStyle = "none";
-          break;
-
-        default:
-          borderStyle = firstEdge.style;
-          break;
-      }
-
-      style.outline = `${firstEdge.width} ${firstEdge.color} ${borderStyle}`;
-      const offset = edges[0].thickness + margins[0];
-      style.outlineOffset = `-${(0, _html_utils.measureToString)(offset)}`;
-
-      if (isForUi) {
-        style.padding = `${(0, _html_utils.measureToString)(offset + 1)}`;
-      }
-    } else {
-      switch (this.presence) {
-        case "invisible":
-        case "hidden":
-          style.borderStyle = "";
-          break;
-
-        case "inactive":
-          style.borderStyle = "none";
-          break;
-
-        default:
-          style.borderStyle = edgeStyles.map(s => s.style).join(" ");
-          break;
-      }
-
-      style.borderWidth = edgeStyles.map(s => s.width).join(" ");
-      style.borderColor = edgeStyles.map(s => s.color).join(" ");
+      default:
+        style.borderStyle = edgeStyles.map(s => s.style).join(" ");
+        break;
     }
 
+    style.borderWidth = edgeStyles.map(s => s.width).join(" ");
+    style.borderColor = edgeStyles.map(s => s.color).join(" ");
     return style;
   }
 
@@ -58162,7 +58745,8 @@ class Button extends _xfa_object.XFAObject {
     return _utils.HTMLResult.success({
       name: "button",
       attributes: {
-        class: "xfaButton",
+        id: this[_xfa_object.$uid],
+        class: ["xfaButton"],
         style: {}
       },
       children: []
@@ -58255,7 +58839,7 @@ class Caption extends _xfa_object.XFAObject {
       name: "div",
       attributes: {
         style,
-        class: "xfaCaption"
+        class: ["xfaCaption"]
       },
       children
     });
@@ -58308,89 +58892,52 @@ class CheckButton extends _xfa_object.XFAObject {
   }
 
   [_xfa_object.$toHTML](availableSpace) {
-    const style = (0, _html_utils.toStyle)(this, "border", "margin");
+    const style = (0, _html_utils.toStyle)("margin");
     const size = (0, _html_utils.measureToString)(this.size);
     style.width = style.height = size;
-    let mark, radius;
-
-    if (this.shape === "square") {
-      mark = "▪";
-      radius = "10%";
-    } else {
-      mark = "●";
-      radius = "50%";
-    }
-
-    if (!style.borderRadius) {
-      style.borderRadius = radius;
-    }
-
-    if (this.mark !== "default") {
-      switch (this.mark) {
-        case "check":
-          mark = "✓";
-          break;
-
-        case "circle":
-          mark = "●";
-          break;
-
-        case "cross":
-          mark = "✕";
-          break;
-
-        case "diamond":
-          mark = "♦";
-          break;
-
-        case "square":
-          mark = "▪";
-          break;
-
-        case "star":
-          mark = "★";
-          break;
-      }
-    }
-
-    if (size !== "10px") {
-      style.fontSize = size;
-      style.lineHeight = size;
-      style.width = size;
-      style.height = size;
-    }
+    let type;
+    let className;
+    let groupId;
+    let id;
 
     const fieldId = this[_xfa_object.$getParent]()[_xfa_object.$getParent]()[_xfa_object.$uid];
-
-    const input = {
-      name: "input",
-      attributes: {
-        class: "xfaCheckbox",
-        fieldId,
-        type: "radio",
-        id: `${fieldId}-radio`
-      }
-    };
 
     const container = this[_xfa_object.$getParent]()[_xfa_object.$getParent]()[_xfa_object.$getParent]();
 
     if (container instanceof ExclGroup) {
-      input.attributes.name = container[_xfa_object.$uid];
+      groupId = container[_xfa_object.$uid];
+      type = "radio";
+      className = "xfaRadio";
+      id = `${fieldId}-radio`;
+    } else {
+      type = "checkbox";
+      className = "xfaCheckbox";
+    }
+
+    const input = {
+      name: "input",
+      attributes: {
+        class: [className],
+        style,
+        fieldId,
+        type
+      }
+    };
+
+    if (id) {
+      input.attributes.id = id;
+    }
+
+    if (groupId) {
+      input.attributes.name = groupId;
     }
 
     return _utils.HTMLResult.success({
       name: "label",
       attributes: {
-        class: "xfaLabel"
+        class: ["xfaLabel"]
       },
-      children: [input, {
-        name: "span",
-        attributes: {
-          class: "xfaCheckboxMark",
-          mark,
-          style
-        }
-      }]
+      children: [input]
     });
   }
 
@@ -58440,7 +58987,7 @@ class ChoiceList extends _xfa_object.XFAObject {
     }
 
     const selectAttributes = {
-      class: "xfaSelect",
+      class: ["xfaSelect"],
       fieldId: this[_xfa_object.$getParent]()[_xfa_object.$getParent]()[_xfa_object.$uid],
       style
     };
@@ -58452,7 +58999,7 @@ class ChoiceList extends _xfa_object.XFAObject {
     return _utils.HTMLResult.success({
       name: "label",
       attributes: {
-        class: "xfaLabel"
+        class: ["xfaLabel"]
       },
       children: [{
         name: "select",
@@ -58545,7 +59092,7 @@ class ContentArea extends _xfa_object.XFAObject {
       children: [],
       attributes: {
         style,
-        class: "xfaContentarea",
+        class: ["xfaContentarea"],
         id: this[_xfa_object.$uid]
       }
     });
@@ -58640,14 +59187,14 @@ class DateTimeEdit extends _xfa_object.XFAObject {
       attributes: {
         type: "text",
         fieldId: this[_xfa_object.$getParent]()[_xfa_object.$getParent]()[_xfa_object.$uid],
-        class: "xfaTextfield",
+        class: ["xfaTextfield"],
         style
       }
     };
     return _utils.HTMLResult.success({
       name: "label",
       attributes: {
-        class: "xfaLabel"
+        class: ["xfaLabel"]
       },
       children: [html]
     });
@@ -58819,7 +59366,7 @@ class Draw extends _xfa_object.XFAObject {
         break;
     }
 
-    const style = (0, _html_utils.toStyle)(this, "font", "hAlign", "dimensions", "position", "presence", "rotate", "anchorType", "borderMarginPadding");
+    const style = (0, _html_utils.toStyle)(this, "font", "hAlign", "dimensions", "position", "presence", "rotate", "anchorType", "border", "margin");
     const classNames = ["xfaDraw"];
 
     if (this.font) {
@@ -58829,7 +59376,7 @@ class Draw extends _xfa_object.XFAObject {
     const attributes = {
       style,
       id: this[_xfa_object.$uid],
-      class: classNames.join(" ")
+      class: classNames
     };
 
     if (this.name) {
@@ -58841,17 +59388,16 @@ class Draw extends _xfa_object.XFAObject {
       attributes,
       children: []
     };
-    const extra = (0, _html_utils.addExtraDivForBorder)(html);
     const bbox = (0, _html_utils.computeBbox)(this, html, availableSpace);
     const value = this.value ? this.value[_xfa_object.$toHTML](availableSpace).html : null;
 
     if (value === null) {
-      return _utils.HTMLResult.success(extra, bbox);
+      return _utils.HTMLResult.success((0, _html_utils.createWrapper)(this, html), bbox);
     }
 
     html.children.push(value);
 
-    if (value.attributes.class === "xfaRich") {
+    if (value.attributes.class.includes("xfaRich")) {
       if (this.h === "") {
         style.height = "auto";
       }
@@ -58892,7 +59438,7 @@ class Draw extends _xfa_object.XFAObject {
       }
     }
 
-    return _utils.HTMLResult.success(extra, bbox);
+    return _utils.HTMLResult.success((0, _html_utils.createWrapper)(this, html), bbox);
   }
 
 }
@@ -58904,7 +59450,7 @@ class Edge extends _xfa_object.XFAObject {
     this.id = attributes.id || "";
     this.presence = (0, _utils.getStringOption)(attributes.presence, ["visible", "hidden", "inactive", "invisible"]);
     this.stroke = (0, _utils.getStringOption)(attributes.stroke, ["solid", "dashDot", "dashDotDot", "dashed", "dotted", "embossed", "etched", "lowered", "raised"]);
-    this.thickness = Math.max(1, Math.round((0, _utils.getMeasurement)(attributes.thickness, "0.5pt")));
+    this.thickness = (0, _utils.getMeasurement)(attributes.thickness, "0.5pt");
     this.use = attributes.use || "";
     this.usehref = attributes.usehref || "";
     this.color = null;
@@ -58915,7 +59461,7 @@ class Edge extends _xfa_object.XFAObject {
     const style = (0, _html_utils.toStyle)(this, "visibility");
     Object.assign(style, {
       linecap: this.cap,
-      width: (0, _html_utils.measureToString)(Math.max(1, Math.round(this.thickness))),
+      width: (0, _html_utils.measureToString)(this.thickness),
       color: this.color ? this.color[_xfa_object.$toStyle]() : "#000000",
       style: ""
     });
@@ -59084,6 +59630,10 @@ class ExData extends _xfa_object.ContentObject {
     this.transferEncoding = (0, _utils.getStringOption)(attributes.transferEncoding, ["none", "base64", "package"]);
     this.use = attributes.use || "";
     this.usehref = attributes.usehref || "";
+  }
+
+  [_xfa_object.$isCDATAXml]() {
+    return this.contentType === "text/html";
   }
 
   [_xfa_object.$onChild](child) {
@@ -59273,7 +59823,7 @@ class ExclGroup extends _xfa_object.XFAObject {
       }
     }
 
-    const style = (0, _html_utils.toStyle)(this, "anchorType", "dimensions", "position", "presence", "borderMarginPadding", "hAlign");
+    const style = (0, _html_utils.toStyle)(this, "anchorType", "dimensions", "position", "presence", "border", "margin", "hAlign");
     const classNames = ["xfaExclgroup"];
     const cl = (0, _html_utils.layoutClass)(this);
 
@@ -59282,7 +59832,7 @@ class ExclGroup extends _xfa_object.XFAObject {
     }
 
     attributes.style = style;
-    attributes.class = classNames.join(" ");
+    attributes.class = classNames;
 
     if (this.name) {
       attributes.xfaName = this.name;
@@ -59309,6 +59859,10 @@ class ExclGroup extends _xfa_object.XFAObject {
     }
 
     if (failure) {
+      if (this.layout === "position") {
+        delete this[_xfa_object.$extra];
+      }
+
       return _utils.HTMLResult.FAILURE;
     }
 
@@ -59328,12 +59882,11 @@ class ExclGroup extends _xfa_object.XFAObject {
       style.height = (0, _html_utils.measureToString)(this[_xfa_object.$extra].height + marginV);
     }
 
-    let html = {
+    const html = {
       name: "div",
       attributes,
       children
     };
-    html = (0, _html_utils.addExtraDivForBorder)(html);
     let bbox;
 
     if (this.w !== "" && this.h !== "") {
@@ -59345,7 +59898,7 @@ class ExclGroup extends _xfa_object.XFAObject {
     }
 
     delete this[_xfa_object.$extra];
-    return _utils.HTMLResult.success(html, bbox);
+    return _utils.HTMLResult.success((0, _html_utils.createWrapper)(this, html), bbox);
   }
 
 }
@@ -59462,7 +60015,7 @@ class Field extends _xfa_object.XFAObject {
         break;
     }
 
-    const style = (0, _html_utils.toStyle)(this, "font", "dimensions", "position", "rotate", "anchorType", "presence", "borderMarginPadding", "hAlign");
+    const style = (0, _html_utils.toStyle)(this, "font", "dimensions", "position", "rotate", "anchorType", "presence", "margin", "hAlign");
     const classNames = ["xfaField"];
 
     if (this.font) {
@@ -59472,7 +60025,7 @@ class Field extends _xfa_object.XFAObject {
     const attributes = {
       style,
       id: this[_xfa_object.$uid],
-      class: classNames.join(" ")
+      class: classNames
     };
 
     if (this.name) {
@@ -59480,21 +60033,28 @@ class Field extends _xfa_object.XFAObject {
     }
 
     const children = [];
-    let html = {
+    const html = {
       name: "div",
       attributes,
       children
     };
+    const borderStyle = this.border ? this.border[_xfa_object.$toStyle]() : null;
     const bbox = (0, _html_utils.computeBbox)(this, html, availableSpace);
-    html = (0, _html_utils.addExtraDivForBorder)(html);
     const ui = this.ui ? this.ui[_xfa_object.$toHTML]().html : null;
 
     if (!ui) {
-      return _utils.HTMLResult.success(html, bbox);
+      Object.assign(style, borderStyle);
+      return _utils.HTMLResult.success((0, _html_utils.createWrapper)(this, html), bbox);
     }
 
     if (!ui.attributes.style) {
       ui.attributes.style = Object.create(null);
+    }
+
+    if (this.ui.button) {
+      Object.assign(ui.attributes.style, borderStyle);
+    } else {
+      Object.assign(style, borderStyle);
     }
 
     children.push(ui);
@@ -59502,7 +60062,7 @@ class Field extends _xfa_object.XFAObject {
     if (this.value) {
       if (this.ui.imageEdit) {
         ui.children.push(this.value[_xfa_object.$toHTML]().html);
-      } else if (ui.name !== "button") {
+      } else if (!this.ui.button) {
         const value = this.value[_xfa_object.$toHTML]().html;
 
         if (value) {
@@ -59518,13 +60078,10 @@ class Field extends _xfa_object.XFAObject {
     const caption = this.caption ? this.caption[_xfa_object.$toHTML]().html : null;
 
     if (!caption) {
-      return _utils.HTMLResult.success(html, bbox);
+      return _utils.HTMLResult.success((0, _html_utils.createWrapper)(this, html), bbox);
     }
 
-    if (ui.name === "button") {
-      ui.attributes.style.background = style.background;
-      delete style.background;
-
+    if (this.ui.button) {
       if (caption.name === "div") {
         caption.name = "span";
       }
@@ -59533,34 +60090,35 @@ class Field extends _xfa_object.XFAObject {
       return _utils.HTMLResult.success(html, bbox);
     }
 
+    if (!ui.attributes.class) {
+      ui.attributes.class = [];
+    }
+
     ui.children.splice(0, 0, caption);
 
     switch (this.caption.placement) {
       case "left":
-        ui.attributes.style.flexDirection = "row";
+        ui.attributes.class.push("xfaLeft");
         break;
 
       case "right":
-        ui.attributes.style.flexDirection = "row-reverse";
+        ui.attributes.class.push("xfaRight");
         break;
 
       case "top":
-        ui.attributes.style.alignItems = "start";
-        ui.attributes.style.flexDirection = "column";
+        ui.attributes.class.push("xfaTop");
         break;
 
       case "bottom":
-        ui.attributes.style.alignItems = "start";
-        ui.attributes.style.flexDirection = "column-reverse";
+        ui.attributes.class.push("xfaBottom");
         break;
 
       case "inline":
-        delete ui.attributes.class;
-        caption.attributes.style.float = "left";
+        ui.attributes.class.push("xfaInline");
         break;
     }
 
-    return _utils.HTMLResult.success(html, bbox);
+    return _utils.HTMLResult.success((0, _html_utils.createWrapper)(this, html), bbox);
   }
 
 }
@@ -59870,7 +60428,7 @@ class Image extends _xfa_object.StringObject {
       return _utils.HTMLResult.success({
         name: "img",
         attributes: {
-          class: "xfaImage",
+          class: ["xfaImage"],
           style: {},
           src: URL.createObjectURL(blob)
         }
@@ -60167,14 +60725,14 @@ class NumericEdit extends _xfa_object.XFAObject {
       attributes: {
         type: "text",
         fieldId: this[_xfa_object.$getParent]()[_xfa_object.$getParent]()[_xfa_object.$uid],
-        class: "xfaTextfield",
+        class: ["xfaTextfield"],
         style
       }
     };
     return _utils.HTMLResult.success({
       name: "label",
       attributes: {
-        class: "xfaLabel"
+        class: ["xfaLabel"]
       },
       children: [html]
     });
@@ -60959,10 +61517,6 @@ class Subform extends _xfa_object.XFAObject {
   }
 
   [_xfa_object.$toHTML](availableSpace) {
-    if (this.name === "helpText") {
-      return _utils.HTMLResult.EMPTY;
-    }
-
     if (this[_xfa_object.$extra] && this[_xfa_object.$extra].afterBreakAfter) {
       const ret = this[_xfa_object.$extra].afterBreakAfter;
       delete this[_xfa_object.$extra];
@@ -61032,7 +61586,7 @@ class Subform extends _xfa_object.XFAObject {
       }
     }
 
-    const style = (0, _html_utils.toStyle)(this, "anchorType", "dimensions", "position", "presence", "borderMarginPadding", "hAlign");
+    const style = (0, _html_utils.toStyle)(this, "anchorType", "dimensions", "position", "presence", "border", "margin", "hAlign");
     const classNames = ["xfaSubform"];
     const cl = (0, _html_utils.layoutClass)(this);
 
@@ -61041,7 +61595,7 @@ class Subform extends _xfa_object.XFAObject {
     }
 
     attributes.style = style;
-    attributes.class = classNames.join(" ");
+    attributes.class = classNames;
 
     if (this.name) {
       attributes.xfaName = this.name;
@@ -61068,6 +61622,10 @@ class Subform extends _xfa_object.XFAObject {
     }
 
     if (failure) {
+      if (this.layout === "position") {
+        delete this[_xfa_object.$extra];
+      }
+
       return _utils.HTMLResult.FAILURE;
     }
 
@@ -61087,12 +61645,11 @@ class Subform extends _xfa_object.XFAObject {
       style.height = (0, _html_utils.measureToString)(this[_xfa_object.$extra].height + marginV);
     }
 
-    let html = {
+    const html = {
       name: "div",
       attributes,
       children
     };
-    html = (0, _html_utils.addExtraDivForBorder)(html);
     let bbox;
 
     if (this.w !== "" && this.h !== "") {
@@ -61108,12 +61665,12 @@ class Subform extends _xfa_object.XFAObject {
 
       getRoot(this)[_xfa_object.$break](breakAfter);
 
-      this[_xfa_object.$extra].afterBreakAfter = _utils.HTMLResult.success(html, bbox);
+      this[_xfa_object.$extra].afterBreakAfter = _utils.HTMLResult.success((0, _html_utils.createWrapper)(this, html), bbox);
       return _utils.HTMLResult.FAILURE;
     }
 
     delete this[_xfa_object.$extra];
-    return _utils.HTMLResult.success(html, bbox);
+    return _utils.HTMLResult.success((0, _html_utils.createWrapper)(this, html), bbox);
   }
 
 }
@@ -61332,7 +61889,7 @@ class Template extends _xfa_object.XFAObject {
       }
 
       const contentAreas = pageArea.contentArea.children;
-      const htmlContentAreas = page.children.filter(node => node.attributes.class === "xfaContentarea");
+      const htmlContentAreas = page.children.filter(node => node.attributes.class.includes("xfaContentarea"));
 
       for (let i = 0, ii = contentAreas.length; i < ii; i++) {
         const contentArea = this[_xfa_object.$extra].currentContentArea = contentAreas[i];
@@ -61442,6 +61999,10 @@ class Text extends _xfa_object.ContentObject {
     this.usehref = attributes.usehref || "";
   }
 
+  [_xfa_object.$acceptWhitespace]() {
+    return true;
+  }
+
   [_xfa_object.$onChild](child) {
     if (child[_xfa_object.$namespaceId] === _namespaces.NamespaceIds.xhtml.id) {
       this[_xfa_object.$content] = child;
@@ -61452,12 +62013,20 @@ class Text extends _xfa_object.ContentObject {
     return false;
   }
 
+  [_xfa_object.$onText](str) {
+    if (this[_xfa_object.$content] instanceof _xfa_object.XFAObject) {
+      return;
+    }
+
+    super[_xfa_object.$onText](str);
+  }
+
   [_xfa_object.$toHTML](availableSpace) {
     if (typeof this[_xfa_object.$content] === "string") {
       const html = {
         name: "span",
         attributes: {
-          class: "xfaRich",
+          class: ["xfaRich"],
           style: {}
         },
         value: this[_xfa_object.$content]
@@ -61538,7 +62107,7 @@ class TextEdit extends _xfa_object.XFAObject {
         name: "textarea",
         attributes: {
           fieldId: this[_xfa_object.$getParent]()[_xfa_object.$getParent]()[_xfa_object.$uid],
-          class: "xfaTextfield",
+          class: ["xfaTextfield"],
           style
         }
       };
@@ -61548,7 +62117,7 @@ class TextEdit extends _xfa_object.XFAObject {
         attributes: {
           type: "text",
           fieldId: this[_xfa_object.$getParent]()[_xfa_object.$getParent]()[_xfa_object.$uid],
-          class: "xfaTextfield",
+          class: ["xfaTextfield"],
           style
         }
       };
@@ -61557,7 +62126,7 @@ class TextEdit extends _xfa_object.XFAObject {
     return _utils.HTMLResult.success({
       name: "label",
       attributes: {
-        class: "xfaLabel"
+        class: ["xfaLabel"]
       },
       children: [html]
     });
@@ -62296,7 +62865,7 @@ class TemplateNamespace {
 exports.TemplateNamespace = TemplateNamespace;
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -62304,8 +62873,183 @@ exports.TemplateNamespace = TemplateNamespace;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.addExtraDivForBorder = addExtraDivForBorder;
+exports.addHTML = addHTML;
+exports.flushHTML = flushHTML;
+exports.getAvailableSpace = getAvailableSpace;
+
+var _xfa_object = __w_pdfjs_require__(67);
+
+var _html_utils = __w_pdfjs_require__(74);
+
+function flushHTML(node) {
+  if (!node[_xfa_object.$extra]) {
+    return null;
+  }
+
+  const attributes = node[_xfa_object.$extra].attributes;
+  const html = {
+    name: "div",
+    attributes,
+    children: node[_xfa_object.$extra].children
+  };
+
+  if (node[_xfa_object.$extra].failingNode) {
+    const htmlFromFailing = node[_xfa_object.$extra].failingNode[_xfa_object.$flushHTML]();
+
+    if (htmlFromFailing) {
+      html.children.push(htmlFromFailing);
+    }
+  }
+
+  if (html.children.length === 0) {
+    return null;
+  }
+
+  node[_xfa_object.$extra].children = [];
+  delete node[_xfa_object.$extra].line;
+  return html;
+}
+
+function addHTML(node, html, bbox) {
+  const extra = node[_xfa_object.$extra];
+  const availableSpace = extra.availableSpace;
+
+  switch (node.layout) {
+    case "position":
+      {
+        const [x, y, w, h] = bbox;
+        extra.width = Math.max(extra.width, x + w);
+        extra.height = Math.max(extra.height, y + h);
+        extra.children.push(html);
+        break;
+      }
+
+    case "lr-tb":
+    case "rl-tb":
+      if (!extra.line || extra.attempt === 1) {
+        extra.line = {
+          name: "div",
+          attributes: {
+            class: [node.layout === "lr-tb" ? "xfaLr" : "xfaRl"]
+          },
+          children: []
+        };
+        extra.children.push(extra.line);
+      }
+
+      extra.line.children.push(html);
+
+      if (extra.attempt === 0) {
+        const [,, w, h] = bbox;
+        extra.currentWidth += w;
+        extra.height = Math.max(extra.height, extra.prevHeight + h);
+      } else {
+        const [,, w, h] = bbox;
+        extra.width = Math.max(extra.width, extra.currentWidth);
+        extra.currentWidth = w;
+        extra.prevHeight = extra.height;
+        extra.height += h;
+        extra.attempt = 0;
+      }
+
+      break;
+
+    case "rl-row":
+    case "row":
+      {
+        extra.children.push(html);
+        const [,, w, h] = bbox;
+        extra.width += w;
+        extra.height = Math.max(extra.height, h);
+        const height = (0, _html_utils.measureToString)(extra.height);
+
+        for (const child of extra.children) {
+          child.attributes.style.height = height;
+        }
+
+        break;
+      }
+
+    case "table":
+      {
+        const [,, w, h] = bbox;
+        extra.width = Math.min(availableSpace.width, Math.max(extra.width, w));
+        extra.height += h;
+        extra.children.push(html);
+        break;
+      }
+
+    case "tb":
+      {
+        const [,,, h] = bbox;
+        extra.width = availableSpace.width;
+        extra.height += h;
+        extra.children.push(html);
+        break;
+      }
+  }
+}
+
+function getAvailableSpace(node) {
+  const availableSpace = node[_xfa_object.$extra].availableSpace;
+  const [marginW, marginH] = node.margin ? [node.margin.leftInset + node.margin.rightInset, node.margin.topInset + node.margin.leftInset] : [0, 0];
+
+  switch (node.layout) {
+    case "lr-tb":
+    case "rl-tb":
+      switch (node[_xfa_object.$extra].attempt) {
+        case 0:
+          return {
+            width: availableSpace.width - marginW - node[_xfa_object.$extra].currentWidth,
+            height: availableSpace.height - marginH - node[_xfa_object.$extra].prevHeight
+          };
+
+        case 1:
+          return {
+            width: availableSpace.width - marginW,
+            height: availableSpace.height - marginH - node[_xfa_object.$extra].height
+          };
+
+        default:
+          return {
+            width: Infinity,
+            height: availableSpace.height - marginH - node[_xfa_object.$extra].prevHeight
+          };
+      }
+
+    case "rl-row":
+    case "row":
+      const width = node[_xfa_object.$extra].columnWidths.slice(node[_xfa_object.$extra].currentColumn).reduce((a, x) => a + x);
+
+      return {
+        width,
+        height: availableSpace.height - marginH
+      };
+
+    case "table":
+    case "tb":
+      return {
+        width: availableSpace.width - marginW,
+        height: availableSpace.height - marginH - node[_xfa_object.$extra].height
+      };
+
+    case "position":
+    default:
+      return availableSpace;
+  }
+}
+
+/***/ }),
+/* 74 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
 exports.computeBbox = computeBbox;
+exports.createWrapper = createWrapper;
 exports.fixDimensions = fixDimensions;
 exports.fixTextIndent = fixTextIndent;
 exports.getFonts = getFonts;
@@ -62483,58 +63227,25 @@ const converters = {
       }
     } else {
       switch (node.hAlign) {
-        case "right":
+        case "left":
+          style.alignSelf = "start";
+          break;
+
         case "center":
-          style.justifyContent = node.hAlign;
+          style.alignSelf = "center";
+          break;
+
+        case "right":
+          style.alignSelf = "end";
           break;
       }
     }
   },
 
-  borderMarginPadding(node, style) {
-    const borderWidths = [0, 0, 0, 0];
-    const borderInsets = [0, 0, 0, 0];
-    const marginNode = node.margin ? [node.margin.topInset, node.margin.rightInset, node.margin.bottomInset, node.margin.leftInset] : [0, 0, 0, 0];
-    let borderMargin;
-
-    if (node.border) {
-      Object.assign(style, node.border[_xfa_object.$toStyle](borderWidths, borderInsets));
-      borderMargin = style.margin;
-      delete style.margin;
-    }
-
-    if (borderWidths.every(x => x === 0)) {
-      if (marginNode.every(x => x === 0)) {
-        return;
-      }
-
-      Object.assign(style, node.margin[_xfa_object.$toStyle]());
-      style.padding = style.margin;
-      delete style.margin;
-      delete style.outline;
-      delete style.outlineOffset;
-      return;
-    }
-
+  margin(node, style) {
     if (node.margin) {
-      Object.assign(style, node.margin[_xfa_object.$toStyle]());
-      style.padding = style.margin;
-      delete style.margin;
+      style.margin = node.margin[_xfa_object.$toStyle]().margin;
     }
-
-    if (!style.borderWidth) {
-      return;
-    }
-
-    style.borderData = {
-      borderWidth: style.borderWidth,
-      borderColor: style.borderColor,
-      borderStyle: style.borderStyle,
-      margin: borderMargin
-    };
-    delete style.borderWidth;
-    delete style.borderColor;
-    delete style.borderStyle;
   }
 
 };
@@ -62768,90 +63479,90 @@ function toStyle(node, ...names) {
   return style;
 }
 
-function addExtraDivForBorder(html) {
-  const style = html.attributes.style;
-  const data = style.borderData;
-  const children = [];
-  const attributes = {
-    class: "xfaWrapper",
-    style: Object.create(null)
+function createWrapper(node, html) {
+  const {
+    attributes
+  } = html;
+  const {
+    style
+  } = attributes;
+  const wrapper = {
+    name: "div",
+    attributes: {
+      class: ["xfaWrapper"],
+      style: Object.create(null)
+    },
+    children: [html]
   };
+  attributes.class.push("xfaWrapped");
 
-  for (const key of ["top", "left"]) {
+  if (node.border) {
+    const {
+      widths,
+      insets
+    } = node.border[_xfa_object.$extra];
+    let shiftH = 0;
+    let shiftW = 0;
+
+    switch (node.border.hand) {
+      case "even":
+        shiftW = widths[0] / 2;
+        shiftH = widths[3] / 2;
+        break;
+
+      case "left":
+        shiftW = widths[0];
+        shiftH = widths[3];
+        break;
+    }
+
+    const insetsW = insets[1] + insets[3];
+    const insetsH = insets[0] + insets[2];
+    const border = {
+      name: "div",
+      attributes: {
+        class: ["xfaBorder"],
+        style: {
+          top: `${insets[0] - widths[0] + shiftW}px`,
+          left: `${insets[3] - widths[3] + shiftH}px`,
+          width: insetsW ? `calc(100% - ${insetsW}px)` : "100%",
+          height: insetsH ? `calc(100% - ${insetsH}px)` : "100%"
+        }
+      },
+      children: []
+    };
+
+    for (const key of ["border", "borderWidth", "borderColor", "borderRadius", "borderStyle"]) {
+      if (style[key] !== undefined) {
+        border.attributes.style[key] = style[key];
+        delete style[key];
+      }
+    }
+
+    wrapper.children.push(border);
+  }
+
+  for (const key of ["background", "backgroundClip", "top", "left", "width", "height", "minWidth", "minHeight", "maxWidth", "maxHeight", "transform", "transformOrigin"]) {
     if (style[key] !== undefined) {
-      attributes.style[key] = style[key];
+      wrapper.attributes.style[key] = style[key];
+      delete style[key];
     }
   }
 
-  delete style.top;
-  delete style.left;
-
   if (style.position === "absolute") {
-    attributes.style.position = "absolute";
+    wrapper.attributes.style.position = "absolute";
   } else {
-    attributes.style.position = "relative";
+    wrapper.attributes.style.position = "relative";
   }
 
   delete style.position;
 
-  if (style.justifyContent) {
-    attributes.style.justifyContent = style.justifyContent;
-    delete style.justifyContent;
+  if (style.alignSelf) {
+    wrapper.attributes.style.alignSelf = style.alignSelf;
+    delete style.alignSelf;
   }
 
-  if (data) {
-    delete style.borderData;
-    let insets;
-
-    if (data.margin) {
-      insets = data.margin.split(" ");
-      delete data.margin;
-    } else {
-      insets = ["0px", "0px", "0px", "0px"];
-    }
-
-    let width = "100%";
-    let height = width;
-
-    if (insets[1] !== "0px" || insets[3] !== "0px") {
-      width = `calc(100% - ${parseInt(insets[1]) + parseInt(insets[3])}px`;
-    }
-
-    if (insets[0] !== "0px" || insets[2] !== "0px") {
-      height = `calc(100% - ${parseInt(insets[0]) + parseInt(insets[2])}px`;
-    }
-
-    const borderStyle = {
-      top: insets[0],
-      left: insets[3],
-      width,
-      height
-    };
-
-    for (const [k, v] of Object.entries(data)) {
-      borderStyle[k] = v;
-    }
-
-    if (style.transform) {
-      borderStyle.transform = style.transform;
-    }
-
-    const borderDiv = {
-      name: "div",
-      attributes: {
-        class: "xfaBorderDiv",
-        style: borderStyle
-      }
-    };
-    children.push(borderDiv);
-  }
-
-  children.push(html);
-  return {
-    name: "div",
-    attributes,
-    children
-  };
+  return wrapper;
 }
 
 function fixTextIndent(styles) {
@@ -62864,9 +63575,9 @@ function fixTextIndent(styles) {
   const align = styles.textAlign || "left";
 
   if (align === "left" || align === "right") {
-    const name = "margin" + (align === "left" ? "Left" : "Right");
-    const margin = (0, _utils.getMeasurement)(styles[name], "0px");
-    styles[name] = `${margin - indent}pt`;
+    const name = "padding" + (align === "left" ? "Left" : "Right");
+    const padding = (0, _utils.getMeasurement)(styles[name], "0px");
+    styles[name] = `${padding - indent}px`;
   }
 }
 
@@ -62890,514 +63601,6 @@ function getFonts(family) {
   }
 
   return fonts.join(",");
-}
-
-/***/ }),
-/* 73 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.addHTML = addHTML;
-exports.flushHTML = flushHTML;
-exports.getAvailableSpace = getAvailableSpace;
-
-var _xfa_object = __w_pdfjs_require__(67);
-
-var _html_utils = __w_pdfjs_require__(72);
-
-function flushHTML(node) {
-  const attributes = node[_xfa_object.$extra].attributes;
-  const html = {
-    name: "div",
-    attributes,
-    children: node[_xfa_object.$extra].children
-  };
-
-  if (node[_xfa_object.$extra].failingNode) {
-    const htmlFromFailing = node[_xfa_object.$extra].failingNode[_xfa_object.$flushHTML]();
-
-    if (htmlFromFailing) {
-      html.children.push(htmlFromFailing);
-    }
-  }
-
-  if (html.children.length === 0) {
-    return null;
-  }
-
-  node[_xfa_object.$extra].children = [];
-  delete node[_xfa_object.$extra].line;
-  return html;
-}
-
-function addHTML(node, html, bbox) {
-  const extra = node[_xfa_object.$extra];
-  const availableSpace = extra.availableSpace;
-
-  switch (node.layout) {
-    case "position":
-      {
-        const [x, y, w, h] = bbox;
-        extra.width = Math.max(extra.width, x + w);
-        extra.height = Math.max(extra.height, y + h);
-        extra.children.push(html);
-        break;
-      }
-
-    case "lr-tb":
-    case "rl-tb":
-      if (!extra.line || extra.attempt === 1) {
-        extra.line = {
-          name: "div",
-          attributes: {
-            class: node.layout === "lr-tb" ? "xfaLr" : "xfaRl"
-          },
-          children: []
-        };
-        extra.children.push(extra.line);
-      }
-
-      extra.line.children.push(html);
-
-      if (extra.attempt === 0) {
-        const [,, w, h] = bbox;
-        extra.currentWidth += w;
-        extra.height = Math.max(extra.height, extra.prevHeight + h);
-      } else {
-        const [,, w, h] = bbox;
-        extra.width = Math.max(extra.width, extra.currentWidth);
-        extra.currentWidth = w;
-        extra.prevHeight = extra.height;
-        extra.height += h;
-        extra.attempt = 0;
-      }
-
-      break;
-
-    case "rl-row":
-    case "row":
-      {
-        extra.children.push(html);
-        const [,, w, h] = bbox;
-        extra.width += w;
-        extra.height = Math.max(extra.height, h);
-        const height = (0, _html_utils.measureToString)(extra.height);
-
-        for (const child of extra.children) {
-          if (child.attributes.class === "xfaWrapper") {
-            child.children[child.children.length - 1].attributes.style.height = height;
-          } else {
-            child.attributes.style.height = height;
-          }
-        }
-
-        break;
-      }
-
-    case "table":
-      {
-        const [,, w, h] = bbox;
-        extra.width = Math.min(availableSpace.width, Math.max(extra.width, w));
-        extra.height += h;
-        extra.children.push(html);
-        break;
-      }
-
-    case "tb":
-      {
-        const [,,, h] = bbox;
-        extra.width = availableSpace.width;
-        extra.height += h;
-        extra.children.push(html);
-        break;
-      }
-  }
-}
-
-function getAvailableSpace(node) {
-  const availableSpace = node[_xfa_object.$extra].availableSpace;
-
-  switch (node.layout) {
-    case "lr-tb":
-    case "rl-tb":
-      switch (node[_xfa_object.$extra].attempt) {
-        case 0:
-          return {
-            width: availableSpace.width - node[_xfa_object.$extra].currentWidth,
-            height: availableSpace.height - node[_xfa_object.$extra].prevHeight
-          };
-
-        case 1:
-          return {
-            width: availableSpace.width,
-            height: availableSpace.height - node[_xfa_object.$extra].height
-          };
-
-        default:
-          return {
-            width: Infinity,
-            height: availableSpace.height - node[_xfa_object.$extra].prevHeight
-          };
-      }
-
-    case "rl-row":
-    case "row":
-      const width = node[_xfa_object.$extra].columnWidths.slice(node[_xfa_object.$extra].currentColumn).reduce((a, x) => a + x);
-
-      return {
-        width,
-        height: availableSpace.height
-      };
-
-    case "table":
-    case "tb":
-      return {
-        width: availableSpace.width,
-        height: availableSpace.height - node[_xfa_object.$extra].height
-      };
-
-    case "position":
-    default:
-      return availableSpace;
-  }
-}
-
-/***/ }),
-/* 74 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.createDataNode = createDataNode;
-exports.searchNode = searchNode;
-
-var _xfa_object = __w_pdfjs_require__(67);
-
-var _util = __w_pdfjs_require__(2);
-
-const namePattern = /^[^.[]+/;
-const indexPattern = /^[^\]]+/;
-const operators = {
-  dot: 0,
-  dotDot: 1,
-  dotHash: 2,
-  dotBracket: 3,
-  dotParen: 4
-};
-const shortcuts = new Map([["$data", (root, current) => root.datasets.data], ["$template", (root, current) => root.template], ["$connectionSet", (root, current) => root.connectionSet], ["$form", (root, current) => root.form], ["$layout", (root, current) => root.layout], ["$host", (root, current) => root.host], ["$dataWindow", (root, current) => root.dataWindow], ["$event", (root, current) => root.event], ["!", (root, current) => root.datasets], ["$xfa", (root, current) => root], ["xfa", (root, current) => root], ["$", (root, current) => current]]);
-const somCache = new WeakMap();
-
-function parseIndex(index) {
-  index = index.trim();
-
-  if (index === "*") {
-    return Infinity;
-  }
-
-  return parseInt(index, 10) || 0;
-}
-
-function parseExpression(expr, dotDotAllowed) {
-  let match = expr.match(namePattern);
-
-  if (!match) {
-    return null;
-  }
-
-  let [name] = match;
-  const parsed = [{
-    name,
-    cacheName: "." + name,
-    index: 0,
-    js: null,
-    formCalc: null,
-    operator: operators.dot
-  }];
-  let pos = name.length;
-
-  while (pos < expr.length) {
-    const spos = pos;
-    const char = expr.charAt(pos++);
-
-    if (char === "[") {
-      match = expr.slice(pos).match(indexPattern);
-
-      if (!match) {
-        (0, _util.warn)("XFA - Invalid index in SOM expression");
-        return null;
-      }
-
-      parsed[parsed.length - 1].index = parseIndex(match[0]);
-      pos += match[0].length + 1;
-      continue;
-    }
-
-    let operator;
-
-    switch (expr.charAt(pos)) {
-      case ".":
-        if (!dotDotAllowed) {
-          return null;
-        }
-
-        pos++;
-        operator = operators.dotDot;
-        break;
-
-      case "#":
-        pos++;
-        operator = operators.dotHash;
-        break;
-
-      case "[":
-        operator = operators.dotBracket;
-        break;
-
-      case "(":
-        operator = operators.dotParen;
-        break;
-
-      default:
-        operator = operators.dot;
-        break;
-    }
-
-    match = expr.slice(pos).match(namePattern);
-
-    if (!match) {
-      break;
-    }
-
-    [name] = match;
-    pos += name.length;
-    parsed.push({
-      name,
-      cacheName: expr.slice(spos, pos),
-      operator,
-      index: 0,
-      js: null,
-      formCalc: null
-    });
-  }
-
-  return parsed;
-}
-
-function searchNode(root, container, expr, dotDotAllowed = true, useCache = true) {
-  const parsed = parseExpression(expr, dotDotAllowed);
-
-  if (!parsed) {
-    return null;
-  }
-
-  const fn = shortcuts.get(parsed[0].name);
-  let i = 0;
-  let isQualified;
-
-  if (fn) {
-    isQualified = true;
-    root = [fn(root, container)];
-    i = 1;
-  } else {
-    isQualified = container === null;
-    root = [container || root];
-  }
-
-  for (let ii = parsed.length; i < ii; i++) {
-    const {
-      name,
-      cacheName,
-      operator,
-      index
-    } = parsed[i];
-    const nodes = [];
-
-    for (const node of root) {
-      if (!(node instanceof _xfa_object.XFAObject)) {
-        continue;
-      }
-
-      let children, cached;
-
-      if (useCache) {
-        cached = somCache.get(node);
-
-        if (!cached) {
-          cached = new Map();
-          somCache.set(node, cached);
-        }
-
-        children = cached.get(cacheName);
-      }
-
-      if (!children) {
-        switch (operator) {
-          case operators.dot:
-            children = node[_xfa_object.$getChildrenByName](name, false);
-            break;
-
-          case operators.dotDot:
-            children = node[_xfa_object.$getChildrenByName](name, true);
-            break;
-
-          case operators.dotHash:
-            children = node[_xfa_object.$getChildrenByClass](name);
-
-            if (children instanceof _xfa_object.XFAObjectArray) {
-              children = children.children;
-            } else {
-              children = [children];
-            }
-
-            break;
-
-          default:
-            break;
-        }
-
-        if (useCache) {
-          cached.set(cacheName, children);
-        }
-      }
-
-      if (children.length > 0) {
-        nodes.push(children);
-      }
-    }
-
-    if (nodes.length === 0 && !isQualified && i === 0) {
-      const parent = container[_xfa_object.$getParent]();
-
-      container = parent;
-
-      if (!container) {
-        return null;
-      }
-
-      i = -1;
-      root = [container];
-      continue;
-    }
-
-    if (isFinite(index)) {
-      root = nodes.filter(node => index < node.length).map(node => node[index]);
-    } else {
-      root = nodes.reduce((acc, node) => acc.concat(node), []);
-    }
-  }
-
-  if (root.length === 0) {
-    return null;
-  }
-
-  return root;
-}
-
-function createNodes(root, path) {
-  let node = null;
-
-  for (const {
-    name,
-    index
-  } of path) {
-    for (let i = 0; i <= index; i++) {
-      node = new _xfa_object.XmlObject(root[_xfa_object.$namespaceId], name);
-
-      root[_xfa_object.$appendChild](node);
-    }
-
-    root = node;
-  }
-
-  return node;
-}
-
-function createDataNode(root, container, expr) {
-  const parsed = parseExpression(expr);
-
-  if (!parsed) {
-    return null;
-  }
-
-  if (parsed.some(x => x.operator === operators.dotDot)) {
-    return null;
-  }
-
-  const fn = shortcuts.get(parsed[0].name);
-  let i = 0;
-
-  if (fn) {
-    root = fn(root, container);
-    i = 1;
-  } else {
-    root = container || root;
-  }
-
-  for (let ii = parsed.length; i < ii; i++) {
-    const {
-      name,
-      operator,
-      index
-    } = parsed[i];
-
-    if (!isFinite(index)) {
-      parsed[i].index = 0;
-      return createNodes(root, parsed.slice(i));
-    }
-
-    let children;
-
-    switch (operator) {
-      case operators.dot:
-        children = root[_xfa_object.$getChildrenByName](name, false);
-        break;
-
-      case operators.dotDot:
-        children = root[_xfa_object.$getChildrenByName](name, true);
-        break;
-
-      case operators.dotHash:
-        children = root[_xfa_object.$getChildrenByClass](name);
-
-        if (children instanceof _xfa_object.XFAObjectArray) {
-          children = children.children;
-        } else {
-          children = [children];
-        }
-
-        break;
-
-      default:
-        break;
-    }
-
-    if (children.length === 0) {
-      return createNodes(root, parsed.slice(i));
-    }
-
-    if (index < children.length) {
-      const child = children[index];
-
-      if (!(child instanceof _xfa_object.XFAObject)) {
-        (0, _util.warn)(`XFA - Cannot create a node.`);
-        return null;
-      }
-
-      root = child;
-    } else {
-      parsed[i].index = children.length - index;
-      return createNodes(root, parsed.slice(i));
-    }
-  }
-
-  return null;
 }
 
 /***/ }),
@@ -63559,6 +63762,14 @@ class XFAParser extends _xml_parser.XMLParserBase {
   onEndElement(name) {
     const node = this._current;
 
+    if (node[_xfa_object.$isCDATAXml]() && typeof node[_xfa_object.$content] === "string") {
+      const parser = new XFAParser();
+      const root = parser.parse(node[_xfa_object.$content]);
+      node[_xfa_object.$content] = null;
+
+      node[_xfa_object.$onChild](root);
+    }
+
     node[_xfa_object.$finalize]();
 
     this._current = this._stack.pop();
@@ -63595,7 +63806,7 @@ var _xfa_object = __w_pdfjs_require__(67);
 
 var _setup = __w_pdfjs_require__(77);
 
-var _template = __w_pdfjs_require__(71);
+var _template = __w_pdfjs_require__(72);
 
 var _unknown = __w_pdfjs_require__(86);
 
@@ -63617,6 +63828,8 @@ class Root extends _xfa_object.XFAObject {
     super[_xfa_object.$finalize]();
 
     if (this.element.template instanceof _template.Template) {
+      this[_xfa_object.$ids].set(_xfa_object.$root, this.element);
+
       this.element.template[_xfa_object.$resolvePrototypes](this[_xfa_object.$ids]);
 
       this.element.template[_xfa_object.$ids] = this[_xfa_object.$ids];
@@ -63817,7 +64030,7 @@ var _signature = __w_pdfjs_require__(82);
 
 var _stylesheet = __w_pdfjs_require__(83);
 
-var _template = __w_pdfjs_require__(71);
+var _template = __w_pdfjs_require__(72);
 
 var _xdp = __w_pdfjs_require__(84);
 
@@ -66494,13 +66707,13 @@ var _xfa_object = __w_pdfjs_require__(67);
 
 var _namespaces = __w_pdfjs_require__(69);
 
-var _html_utils = __w_pdfjs_require__(72);
+var _html_utils = __w_pdfjs_require__(74);
 
 var _utils = __w_pdfjs_require__(68);
 
 const XHTML_NS_ID = _namespaces.NamespaceIds.xhtml.id;
 const VALID_STYLES = new Set(["color", "font", "font-family", "font-size", "font-stretch", "font-style", "font-weight", "margin", "margin-bottom", "margin-left", "margin-right", "margin-top", "letter-spacing", "line-height", "orphans", "page-break-after", "page-break-before", "page-break-inside", "tab-interval", "tab-stop", "text-align", "text-decoration", "text-indent", "vertical-align", "widows", "kerning-mode", "xfa-font-horizontal-scale", "xfa-font-vertical-scale", "xfa-spacerun", "xfa-tab-stops"]);
-const StyleMapping = new Map([["page-break-after", "breakAfter"], ["page-break-before", "breakBefore"], ["page-break-inside", "breakInside"], ["kerning-mode", value => value === "none" ? "none" : "normal"], ["xfa-font-horizontal-scale", value => `scaleX(${Math.max(0, Math.min(parseInt(value) / 100)).toFixed(2)})`], ["xfa-font-vertical-scale", value => `scaleY(${Math.max(0, Math.min(parseInt(value) / 100)).toFixed(2)})`], ["xfa-spacerun", ""], ["xfa-tab-stops", ""], ["font-size", value => (0, _html_utils.measureToString)(1 * (0, _utils.getMeasurement)(value))], ["letter-spacing", value => (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value))], ["line-height", value => (0, _html_utils.measureToString)(0.99 * (0, _utils.getMeasurement)(value))], ["margin", value => (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value))], ["margin-bottom", value => (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value))], ["margin-left", value => (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value))], ["margin-right", value => (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value))], ["margin-top", value => (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value))], ["text-indent", value => (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value))], ["font-family", value => (0, _html_utils.getFonts)(value)]]);
+const StyleMapping = new Map([["page-break-after", "breakAfter"], ["page-break-before", "breakBefore"], ["page-break-inside", "breakInside"], ["kerning-mode", value => value === "none" ? "none" : "normal"], ["xfa-font-horizontal-scale", value => `scaleX(${Math.max(0, Math.min(parseInt(value) / 100)).toFixed(2)})`], ["xfa-font-vertical-scale", value => `scaleY(${Math.max(0, Math.min(parseInt(value) / 100)).toFixed(2)})`], ["xfa-spacerun", ""], ["xfa-tab-stops", ""], ["font-size", value => (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value))], ["letter-spacing", value => (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value))], ["line-height", value => (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value))], ["margin", value => (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value))], ["margin-bottom", value => (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value))], ["margin-left", value => (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value))], ["margin-right", value => (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value))], ["margin-top", value => (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value))], ["text-indent", value => (0, _html_utils.measureToString)((0, _utils.getMeasurement)(value))], ["font-family", value => (0, _html_utils.getFonts)(value)]]);
 const spacesRegExp = /\s+/g;
 const crlfRegExp = /[\r\n]+/g;
 
@@ -66632,7 +66845,7 @@ class Body extends XhtmlObject {
     }
 
     html.name = "div";
-    html.attributes.class = "xfaRich";
+    html.attributes.class = ["xfaRich"];
     return res;
   }
 
@@ -66672,7 +66885,7 @@ class Html extends XhtmlObject {
       return _utils.HTMLResult.success({
         name: "div",
         attributes: {
-          class: "xfaRich",
+          class: ["xfaRich"],
           style: {}
         },
         value: this[_xfa_object.$content] || ""
@@ -66682,7 +66895,7 @@ class Html extends XhtmlObject {
     if (children.length === 1) {
       const child = children[0];
 
-      if (child.attributes && child.attributes.class === "xfaRich") {
+      if (child.attributes && child.attributes.class.includes("xfaRich")) {
         return _utils.HTMLResult.success(child);
       }
     }
@@ -66690,7 +66903,7 @@ class Html extends XhtmlObject {
     return _utils.HTMLResult.success({
       name: "div",
       attributes: {
-        class: "xfaRich",
+        class: ["xfaRich"],
         style: {}
       },
       children
@@ -68396,8 +68609,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.10.160';
-const pdfjsBuild = 'dc5c45f5c';
+const pdfjsVersion = '2.10.208';
+const pdfjsBuild = 'd42e8f5af';
 })();
 
 /******/ 	return __webpack_exports__;
