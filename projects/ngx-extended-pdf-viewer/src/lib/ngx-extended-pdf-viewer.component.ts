@@ -228,7 +228,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             if (this.ngxExtendedPdfViewerIncompletelyInitialized) {
               this.openPDF();
             } else {
-              this.openPDF2();
+              (async () => await this.openPDF2())();
             }
             // else openPDF is called later, so we do nothing to prevent loading the PDF file twice
           }
@@ -1324,9 +1324,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
   }
 
-  public openPDF2(): void {
+  public async openPDF2(): Promise<void> {
     this.overrideDefaultSettings();
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+
+    await PDFViewerApplication.close();
+
+    // #802 clear the form data; otherwise the "download" dialogs opens
+    PDFViewerApplication.pdfDocument.annotationStorage.resetModified();
+    this.formData = {};
+    this.formIdToFieldName = {};
+    this.formRadioButtonValueToId = {};
+
     const options: any = {
       password: this.password,
       verbosity: this.logLevel,
@@ -1362,7 +1371,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     PDFViewerApplication.eventBus.dispatch('switchcursortool', { tool: this.handTool ? 1 : 0 });
   }
 
-  public ngOnDestroy(): void {
+  public async ngOnDestroy(): Promise<void> {
     if (typeof window === 'undefined') {
       return; // fast escape for server side rendering
     }
@@ -1382,12 +1391,19 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.pinchOnMobileSupport = undefined;
       }
 
+      // #802 clear the form data; otherwise the "download" dialogs opens
+      PDFViewerApplication.pdfDocument.annotationStorage.resetModified();
+      this.formData = {};
+      this.formIdToFieldName = {};
+      this.formRadioButtonValueToId = {};
+
       if (PDFViewerApplication.cleanup) {
         PDFViewerApplication.cleanup();
       } else if (PDFViewerApplication._cleanup) {
         PDFViewerApplication._cleanup();
       }
-      PDFViewerApplication.close();
+
+      await PDFViewerApplication.close();
       if (PDFViewerApplication.printKeyDownListener) {
         removeEventListener('keydown', PDFViewerApplication.printKeyDownListener, true);
       }
@@ -1454,7 +1470,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     return false;
   }
 
-  public ngOnChanges(changes: SimpleChanges) {
+  public async ngOnChanges(changes: SimpleChanges) {
     if (typeof window === 'undefined') {
       return; // server side rendering
     }
@@ -1467,10 +1483,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           if (this.ngxExtendedPdfViewerIncompletelyInitialized) {
             this.openPDF();
           } else {
-            this.openPDF2();
+            await this.openPDF2();
           }
         } else {
-          PDFViewerApplication.close();
+          // #802 clear the form data; otherwise the "download" dialogs opens
+          PDFViewerApplication.pdfDocument.annotationStorage.resetModified();
+          this.formData = {};
+          this.formIdToFieldName = {};
+          this.formRadioButtonValueToId = {};
+
+          await PDFViewerApplication.close();
         }
       }
       if ('enableDragAndDrop' in changes) {
