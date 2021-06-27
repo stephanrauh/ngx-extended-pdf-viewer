@@ -42,11 +42,11 @@ export class PDFLinkService implements IPDFLinkService {
     /**
      * @param {PDFLinkServiceOptions} options
      */
-    constructor({ eventBus, externalLinkTarget, externalLinkRel, externalLinkEnabled, ignoreDestinationZoom, }?: PDFLinkServiceOptions);
+    constructor({ eventBus, externalLinkTarget, externalLinkRel, ignoreDestinationZoom, }?: PDFLinkServiceOptions);
     eventBus: any;
     externalLinkTarget: number;
     externalLinkRel: string;
-    externalLinkEnabled: any;
+    externalLinkEnabled: boolean;
     _ignoreDestinationZoom: boolean;
     baseUrl: any;
     pdfDocument: any;
