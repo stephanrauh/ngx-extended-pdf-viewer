@@ -1331,7 +1331,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     await PDFViewerApplication.close();
 
     // #802 clear the form data; otherwise the "download" dialogs opens
-    PDFViewerApplication.pdfDocument.annotationStorage.resetModified();
+    PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
     this.formData = {};
     this.formIdToFieldName = {};
     this.formRadioButtonValueToId = {};
@@ -1392,7 +1392,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
 
       // #802 clear the form data; otherwise the "download" dialogs opens
-      PDFViewerApplication.pdfDocument.annotationStorage.resetModified();
+      PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
       this.formData = {};
       this.formIdToFieldName = {};
       this.formRadioButtonValueToId = {};
