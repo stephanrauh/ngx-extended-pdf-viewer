@@ -26,7 +26,7 @@
     "@angular/platform-browser-dynamic": "^12.1.0",
     "@angular/router": "^12.1.0",
     "ngx-extended-pdf-viewer": "file:./dist/ngx-extended-pdf-viewer",
-    "rxjs": "^7.1.0",
+    "rxjs": "^7.2.0",
     "zone.js": "^0.11.4"
   },
   "devDependencies": {
