@@ -1,3 +1,4 @@
+export function fixupLangCode(langCode: any): any;
 export function getL10nFallback(key: any, args: any): any;
 export namespace NullL10n {
     function getLanguage(): Promise<string>;

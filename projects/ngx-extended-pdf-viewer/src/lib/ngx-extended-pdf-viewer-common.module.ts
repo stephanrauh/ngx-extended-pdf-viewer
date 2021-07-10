@@ -55,6 +55,7 @@ import { PdfLightThemeComponent } from './theme/pdf-light-theme/pdf-light-theme.
 import { PdfOriginalComponent } from './theme/pdf-original-theme/pdf-original.component';
 import { PdfDarkThemeComponent } from './theme/pdf-dark-theme/pdf-dark-theme.component';
 import { TranslatePipe } from './translate.pipe';
+import { NgxConsole } from './options/ngx-console';
 
 @NgModule({
   imports: [CommonModule, FormsModule],
