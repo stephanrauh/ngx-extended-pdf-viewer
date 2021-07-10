@@ -285,3 +285,4 @@
 - 9.0.4 #814 added a null-check before clearing the form data cache
 - 9.0.5 #818 added another null-check to prevent errors when `[src]` changes
 - 10.0.0-alpha.0 #823 improved the algorithm checking the height
+- 10.0.0-alpha.1 downgraded ng-packagr because it forgets to ship the CSS files
