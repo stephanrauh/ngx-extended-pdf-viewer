@@ -19,14 +19,7 @@ Bootstrap interferes with the printing algorithm of `pdf.js`. Guard it with a me
 Caveat: this trick only works with the SCSS version of both `styles.scss` and `bootstrap.scss`. It doesn't work with simple CSS. 
 
 ## Internet Explorer 11 (and old versions of the "evergreen browsers")
-`ngx-extended-pdf-viewer` is compatible to Internet Explorer 11:
-
-- add `pdf-es5.js`, `pdf-worker*.js`, and `viewer-es5.js` to the `scripts` section of the `angular.json` (instead of the smaller default files `pdf.js`, `pdf-worker.js`, and `viewer.js`). As for the `pdf-worker*.js` bit: it adds both the ES2015 version and the ES5 version of the service worker. That's a small performance boost on modern browsers, while still being compatible to IE11.
-- Don't forget to activate your polyfills. Or - even better - use the clever approach of the Angular CLI 7.3+ to import the polyfills automatically if and only if they are needed (see [my article on Angular 7.3 polyfills)](https://beyondjava.net/what-happened-to-the-polyfills). Otherwise, you'll end up with an error message like this:
-
-```
-SCRIPT438: Object doesn't support property or method `fill`
-```
+`ngx-extended-pdf-viewer` is *not* compatible to Internet Explorer 11. Older versions of the other browsers may have problems with the JavaScript code. If that happens, the PDF viewer  detects this and switches to good old ES5.
 
 ## There shall be only one viewer - or: beware of timing problems!
 The PDF viewer is very prone to timing problems:
