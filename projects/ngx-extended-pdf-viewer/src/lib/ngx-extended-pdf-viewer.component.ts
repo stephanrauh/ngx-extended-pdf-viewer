@@ -898,8 +898,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (typeof document !== 'undefined') {
       const container = document.getElementsByClassName('zoom')[0] as HTMLElement;
       if (container) {
-        if ((this.autoHeight || container.clientHeight === 0) && this._height.includes('%')) {
-          this.autoHeight = true;
+        if (container.clientHeight === 0) {
+          if (!this.autoHeight) {
+            console.warn("The height of the PDF viewer widget is zero pixels. Please check the height attribute. Is there a syntax error? Or are you using a percentage with a CSS framework that doesn't support this? The height is adjusted automatedly.")
+            this.autoHeight = true;
+          }
+        }
+        if (this.autoHeight) {
           const available = window.innerHeight;
           const rect = container.getBoundingClientRect();
           const top = rect.top;
