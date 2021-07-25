@@ -50,7 +50,7 @@ This library provides an embeddable PDF viewer component. It's different from ot
 - Color theming
 - And to customize the toolbars and menus according to your needs.
 
-Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 2.9, released in May 2021. If you're the daring one, you can also use the developer version 2.10. It's bleeding edge, so use it at own risk. Basically, the preview version helps me because I can add Mozilla's latest improvements in frequent, small increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but most of the time, the quality is production-ready.
+Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 2.10, released in July 2021. If you're the daring one, you can also use the developer version 2.11. It's bleeding edge, so use it at own risk. Basically, the preview version helps me because I can add Mozilla's latest improvements in frequent, small increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but most of the time, the quality is production-ready.
 
 ## Alternatives
 <details>

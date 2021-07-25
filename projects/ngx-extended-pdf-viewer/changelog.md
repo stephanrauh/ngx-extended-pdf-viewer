@@ -284,5 +284,6 @@
 - 9.0.3 #814 clear the form data cache when opening a second document; #802 stop opening the "download" dialog after closing a form; added an `await` to the calls of the `close()` method; call `close()` explicitely before opening a new PDF file (this might reduce error messages in the console)
 - 9.0.4 #814 added a null-check before clearing the form data cache
 - 9.0.5 #818 added another null-check to prevent errors when `[src]` changes
-- 10.0.0-alpha.0 #823 improved the algorithm checking the height
+- 10.0.0-alpha.0 #823 improved the algorithm checking the height. *Warning*: this version is broken!
 - 10.0.0-alpha.1 downgraded ng-packagr because it forgets to ship the CSS files
+- 10.0.0-alpha.2 #847 bumped up the default branch to pdf.js 2.10 and the bleeding-edge branch to pdf.js 2.11

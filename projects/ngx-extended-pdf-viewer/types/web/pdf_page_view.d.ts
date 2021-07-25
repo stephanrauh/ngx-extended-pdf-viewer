@@ -130,16 +130,27 @@ export class PDFPageView implements IRenderableView {
      * @private
      */
     private _resetZoomLayer;
-    reset(keepZoomLayer?: boolean, keepAnnotations?: boolean): void;
+    reset({ keepZoomLayer, keepAnnotationLayer, keepXfaLayer, }?: {
+        keepZoomLayer?: boolean | undefined;
+        keepAnnotationLayer?: boolean | undefined;
+        keepXfaLayer?: boolean | undefined;
+    }): void;
     loadingIconDiv: HTMLDivElement | undefined;
     update(scale: any, rotation: any, optionalContentConfigPromise?: any): void;
     /**
      * PLEASE NOTE: Most likely you want to use the `this.reset()` method,
      *              rather than calling this one directly.
      */
-    cancelRendering(keepAnnotations?: boolean): void;
+    cancelRendering({ keepAnnotationLayer, keepXfaLayer }?: {
+        keepAnnotationLayer?: boolean | undefined;
+        keepXfaLayer?: boolean | undefined;
+    }): void;
     _onTextLayerRendered: any;
-    cssTransform(target: any, redrawAnnotations?: boolean): void;
+    cssTransform({ target, redrawAnnotationLayer, redrawXfaLayer, }: {
+        target: any;
+        redrawAnnotationLayer?: boolean | undefined;
+        redrawXfaLayer?: boolean | undefined;
+    }): void;
     get width(): any;
     get height(): any;
     getPagePoint(x: any, y: any): any;
