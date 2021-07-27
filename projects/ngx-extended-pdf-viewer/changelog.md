@@ -287,3 +287,4 @@
 - 10.0.0-alpha.0 #823 improved the algorithm checking the height. *Warning*: this version is broken!
 - 10.0.0-alpha.1 downgraded ng-packagr because it forgets to ship the CSS files
 - 10.0.0-alpha.2 #847 bumped up the default branch to pdf.js 2.10 and the bleeding-edge branch to pdf.js 2.11
+- 10.0.0-alpha.3 #850 add the page number to the return value of `NgxExtendedPdfViewerService.getFormData()`
