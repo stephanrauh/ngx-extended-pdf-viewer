@@ -301,7 +301,7 @@ export class NgxExtendedPdfViewerService {
           const fieldRect: Array<number> = currentPage.getViewport({ scale: dpiRatio }).convertToViewportRectangle(a.rect);
 
           // add the corresponding input
-          result.push({ fieldAnnotation: a, fieldRect });
+          result.push({ fieldAnnotation: a, fieldRect, pageNumber: i });
         });
     }
     return result;
