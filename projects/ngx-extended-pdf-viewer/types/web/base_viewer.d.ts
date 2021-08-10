@@ -80,11 +80,6 @@ export type PDFViewerOptions = {
      * - Localization service.
      */
     l10n: any;
-    /**
-     * - Enable embedded script execution
-     * (also requires {scriptingManager} being set). The default value is `false`.
-     */
-    enableScripting?: boolean | undefined;
 };
 export type ScrollPageIntoViewParameters = {
     /**
@@ -135,9 +130,9 @@ export class BaseViewer implements IRenderableView {
     useOnlyCssZoom: boolean;
     maxCanvasPixels: number | undefined;
     l10n: any;
-    enableScripting: boolean;
     defaultRenderingQueue: boolean;
     renderingQueue: PDFRenderingQueue | undefined;
+    _doc: HTMLElement;
     scroll: {
         right: boolean;
         down: boolean;
@@ -154,6 +149,10 @@ export class BaseViewer implements IRenderableView {
      * @type {boolean} - True if all {PDFPageView} objects are initialized.
      */
     get pageViewsReady(): boolean;
+    /**
+     * @type {boolean}
+     */
+    get enableScripting(): boolean;
     /**
      * @param {number} val - The page number.
      */
@@ -472,8 +471,6 @@ import { PDFRenderingQueue } from "./pdf_rendering_queue.js";
  *   total pixels, i.e. width * height. Use -1 for no limit. The default value
  *   is 4096 * 4096 (16 mega-pixels).
  * @property {IL10n} l10n - Localization service.
- * @property {boolean} [enableScripting] - Enable embedded script execution
- *   (also requires {scriptingManager} being set). The default value is `false`.
  */
 declare function PDFPageViewBuffer(size: any): void;
 declare class PDFPageViewBuffer {
@@ -509,8 +506,6 @@ declare class PDFPageViewBuffer {
      *   total pixels, i.e. width * height. Use -1 for no limit. The default value
      *   is 4096 * 4096 (16 mega-pixels).
      * @property {IL10n} l10n - Localization service.
-     * @property {boolean} [enableScripting] - Enable embedded script execution
-     *   (also requires {scriptingManager} being set). The default value is `false`.
      */
     constructor(size: any);
     push: (view: any) => void;

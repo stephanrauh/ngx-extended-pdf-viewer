@@ -363,6 +363,14 @@ export namespace PermissionFlag {
  * @param {string} str
  */
 export function removeNullCharacters(str: string): string;
+export namespace RenderingIntentFlag {
+    export const ANY: number;
+    export const DISPLAY: number;
+    const PRINT_2: number;
+    export { PRINT_2 as PRINT };
+    export const ANNOTATION_FORMS: number;
+    export const OPLIST: number;
+}
 export function setVerbosityLevel(level: any): void;
 export function shadow(obj: any, prop: any, value: any): any;
 export namespace StreamType {
@@ -431,6 +439,7 @@ export namespace UNSUPPORTED_FEATURES {
     const errorFontBuildPath: string;
     const errorFontGetPath: string;
     const errorMarkedContent: string;
+    const errorContentSubStream: string;
 }
 export function utf8StringToString(str: any): string;
 export class Util {

@@ -206,9 +206,11 @@ export function noContextMenuHandler(evt: any): void;
 export function normalizeWheelEventDelta(evt: any): number;
 export function normalizeWheelEventDirection(evt: any): number;
 /**
- * Helper function to parse query string (e.g. ?param1=value&parm2=...).
+ * Helper function to parse query string (e.g. ?param1=value&param2=...).
+ * @param {string}
+ * @returns {Map}
  */
-export function parseQueryString(query: any): any;
+export function parseQueryString(query: any): Map<any, any>;
 export namespace PresentationModeState {
     const UNKNOWN: number;
     const NORMAL: number;

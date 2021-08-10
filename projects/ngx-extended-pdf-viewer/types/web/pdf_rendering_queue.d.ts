@@ -23,6 +23,10 @@ export class PDFRenderingQueue {
      */
     isHighestPriority(view: any): boolean;
     /**
+     * @returns {boolean}
+     */
+    hasViewer(): boolean;
+    /**
      * @param {Object} currentlyVisiblePages
      */
     renderHighestPriority(currentlyVisiblePages: Object): void;
