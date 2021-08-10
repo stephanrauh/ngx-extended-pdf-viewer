@@ -452,7 +452,7 @@ function isValidFetchUrl(url, baseUrl) {
     const {
       protocol
     } = baseUrl ? new URL(url, baseUrl) : new URL(url);
-    return protocol === "http:" || protocol === "https:";
+    return protocol === "http:" || protocol === "https:" || protocol === "capacitor:";
   } catch (ex) {
     return false;
   }
@@ -982,6 +982,7 @@ function _isValidProtocol(url) {
     case "ftp:":
     case "mailto:":
     case "tel:":
+    case "capacitor":
       return true;
 
     default:
@@ -13078,7 +13079,7 @@ class PDFNodeStream {
   constructor(source) {
     this.source = source;
     this.url = parseUrl(source.url);
-    this.isHttp = this.url.protocol === "http:" || this.url.protocol === "https:";
+    this.isHttp = this.url.protocol === "http:" || this.url.protocol === "https:" || this.url.protocol === "capacitor:";
     this.isFsUrl = this.url.protocol === "file:";
     this.httpHeaders = this.isHttp && source.httpHeaders || {};
     this._fullRequestReader = null;

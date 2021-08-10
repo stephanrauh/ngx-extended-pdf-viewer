@@ -13850,6 +13850,7 @@ function _isValidProtocol(url) {
     case "ftp:":
     case "mailto:":
     case "tel:":
+    case "capacitor":
       return true;
 
     default:

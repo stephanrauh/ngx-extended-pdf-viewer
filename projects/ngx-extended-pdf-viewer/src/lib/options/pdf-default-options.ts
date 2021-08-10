@@ -60,7 +60,8 @@ export let pdfDefaultOptions = {
       : './' + pdfDefaultOptions.assetsFolder + '/pdf.worker-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '.js',
 
   // options specific to ngx-extended-pdf-viewer (as opposed to being used by pdf.js)
-  doubleTapZoomFactor: 'page-width'
+  doubleTapZoomFactor: 'page-width',
+  enableScripting: true
 };
 
 if (typeof window !== 'undefined') {
