@@ -10058,7 +10058,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId: docId,
-    apiVersion: '2.10.539',
+    apiVersion: '2.10.542',
     source: {
       data: source.data,
       url: source.url,
@@ -12706,9 +12706,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.10.539';
+var version = '2.10.542';
 exports.version = version;
-var build = 'c9b145d99';
+var build = '84237172c';
 exports.build = build;
 
 /***/ }),
@@ -18932,20 +18932,20 @@ var WidgetAnnotationElement = /*#__PURE__*/function (_AnnotationElement3) {
           var hidden = event.detail.display % 2 === 1;
           event.target.style.visibility = hidden ? "hidden" : "visible";
 
-          _this5.annotationStorage.setValue(_this5.data.id, {
+          _this5.annotationStorage.setValue(_this5.data.id, _this5.data.fieldName, {
             hidden: hidden,
             print: event.detail.display === 0 || event.detail.display === 3
           });
         },
         print: function print(event) {
-          _this5.annotationStorage.setValue(_this5.data.id, {
+          _this5.annotationStorage.setValue(_this5.data.id, _this5.data.fieldName, {
             print: event.detail.print
           });
         },
         hidden: function hidden(event) {
           event.target.style.visibility = event.detail.hidden ? "hidden" : "visible";
 
-          _this5.annotationStorage.setValue(_this5.data.id, {
+          _this5.annotationStorage.setValue(_this5.data.id, _this5.data.fieldName, {
             hidden: event.detail.hidden
           });
         },
@@ -19037,7 +19037,7 @@ var TextWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem) 
             element[key] = value;
             var data = Object.create(null);
             data[keyInStorage] = value;
-            storage.setValue(element.getAttribute("id"), data);
+            storage.setValue(element.getAttribute("id"), this.data.fieldName, data);
           }
         }
       } catch (err) {
@@ -19105,11 +19105,12 @@ var TextWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem) 
               event.target.value = elementData.userValue;
             }
           });
+          var fieldName = this.data.fieldName;
           element.addEventListener("updatefromsandbox", function (jsEvent) {
             var actions = {
               value: function value(event) {
                 elementData.userValue = event.detail.value || "";
-                storage.setValue(id, this.data.fieldName, {
+                storage.setValue(id, fieldName, {
                   value: elementData.userValue.toString()
                 });
 
@@ -19124,7 +19125,7 @@ var TextWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem) 
                   event.target.value = elementData.formattedValue;
                 }
 
-                storage.setValue(id, this.data.fieldName, {
+                storage.setValue(id, fieldName, {
                   formattedValue: elementData.formattedValue
                 });
               },
@@ -19323,7 +19324,7 @@ var CheckboxWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationEl
 
       if (typeof value === "string") {
         value = value !== "Off";
-        storage.setValue(id, {
+        storage.setValue(id, this.data.fieldName, {
           value: value
         });
       }
@@ -19368,11 +19369,12 @@ var CheckboxWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationEl
       });
 
       if (this.enableScripting && this.hasJSActions) {
+        var fieldName = this.data.fieldName;
         element.addEventListener("updatefromsandbox", function (jsEvent) {
           var actions = {
             value: function value(event) {
               event.target.checked = event.detail.value !== "Off";
-              storage.setValue(id, this.data.fieldName, {
+              storage.setValue(id, fieldName, {
                 value: event.target.checked
               });
             }
@@ -19473,6 +19475,7 @@ var RadioButtonWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotatio
       if (this.enableScripting && this.hasJSActions) {
         var pdfButtonValue = data.buttonValue;
         element.addEventListener("updatefromsandbox", function (jsEvent) {
+          var fieldName = _this8.data.fieldName;
           var actions = {
             value: function value(event) {
               var checked = pdfButtonValue === event.detail.value;
@@ -19485,7 +19488,7 @@ var RadioButtonWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotatio
                   var radio = _step7.value;
                   var radioId = radio.getAttribute("id");
                   radio.checked = radioId === id && checked;
-                  storage.setValue(radioId, this.data.fieldName, {
+                  storage.setValue(radioId, fieldName, {
                     value: radio.checked
                   });
                 }
@@ -19629,6 +19632,7 @@ var ChoiceWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem
 
       if (this.enableScripting && this.hasJSActions) {
         selectElement.addEventListener("updatefromsandbox", function (jsEvent) {
+          var fieldName = _this9.data.fieldName;
           var actions = {
             value: function value(event) {
               var options = selectElement.options;
@@ -19637,7 +19641,7 @@ var ChoiceWidgetAnnotationElement = /*#__PURE__*/function (_WidgetAnnotationElem
               Array.prototype.forEach.call(options, function (option) {
                 option.selected = values.has(option.value);
               });
-              storage.setValue(id, this.data.fieldName, {
+              storage.setValue(id, fieldName, {
                 value: getValue(event, true)
               });
             },
@@ -26039,8 +26043,8 @@ var _svg = __w_pdfjs_require__(132);
 
 var _xfa_layer = __w_pdfjs_require__(133);
 
-var pdfjsVersion = '2.10.539';
-var pdfjsBuild = 'c9b145d99';
+var pdfjsVersion = '2.10.542';
+var pdfjsBuild = '84237172c';
 {
   if (_is_node.isNodeJS) {
     var _require = __w_pdfjs_require__(134),

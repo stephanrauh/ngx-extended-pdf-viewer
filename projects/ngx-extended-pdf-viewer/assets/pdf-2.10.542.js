@@ -1907,7 +1907,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.10.539',
+    apiVersion: '2.10.542',
     source: {
       data: source.data,
       url: source.url,
@@ -4000,9 +4000,9 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-const version = '2.10.539';
+const version = '2.10.542';
 exports.version = version;
-const build = 'c9b145d99';
+const build = '84237172c';
 exports.build = build;
 
 /***/ }),
@@ -9146,19 +9146,19 @@ class WidgetAnnotationElement extends AnnotationElement {
       display: event => {
         const hidden = event.detail.display % 2 === 1;
         event.target.style.visibility = hidden ? "hidden" : "visible";
-        this.annotationStorage.setValue(this.data.id, {
+        this.annotationStorage.setValue(this.data.id, this.data.fieldName, {
           hidden,
           print: event.detail.display === 0 || event.detail.display === 3
         });
       },
       print: event => {
-        this.annotationStorage.setValue(this.data.id, {
+        this.annotationStorage.setValue(this.data.id, this.data.fieldName, {
           print: event.detail.print
         });
       },
       hidden: event => {
         event.target.style.visibility = event.detail.hidden ? "hidden" : "visible";
-        this.annotationStorage.setValue(this.data.id, {
+        this.annotationStorage.setValue(this.data.id, this.data.fieldName, {
           hidden: event.detail.hidden
         });
       },
@@ -9231,7 +9231,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
         element[key] = value;
         const data = Object.create(null);
         data[keyInStorage] = value;
-        storage.setValue(element.getAttribute("id"), data);
+        storage.setValue(element.getAttribute("id"), this.data.fieldName, data);
       }
     }
   }
@@ -9288,11 +9288,12 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
             event.target.value = elementData.userValue;
           }
         });
+        const fieldName = this.data.fieldName;
         element.addEventListener("updatefromsandbox", jsEvent => {
           const actions = {
             value(event) {
               elementData.userValue = event.detail.value || "";
-              storage.setValue(id, this.data.fieldName, {
+              storage.setValue(id, fieldName, {
                 value: elementData.userValue.toString()
               });
 
@@ -9308,7 +9309,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
                 event.target.value = elementData.formattedValue;
               }
 
-              storage.setValue(id, this.data.fieldName, {
+              storage.setValue(id, fieldName, {
                 formattedValue: elementData.formattedValue
               });
             },
@@ -9484,7 +9485,7 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
 
     if (typeof value === "string") {
       value = value !== "Off";
-      storage.setValue(id, {
+      storage.setValue(id, this.data.fieldName, {
         value
       });
     }
@@ -9518,11 +9519,12 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
     });
 
     if (this.enableScripting && this.hasJSActions) {
+      const fieldName = this.data.fieldName;
       element.addEventListener("updatefromsandbox", jsEvent => {
         const actions = {
           value(event) {
             event.target.checked = event.detail.value !== "Off";
-            storage.setValue(id, this.data.fieldName, {
+            storage.setValue(id, fieldName, {
               value: event.target.checked
             });
           }
@@ -9601,6 +9603,7 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
     if (this.enableScripting && this.hasJSActions) {
       const pdfButtonValue = data.buttonValue;
       element.addEventListener("updatefromsandbox", jsEvent => {
+        const fieldName = this.data.fieldName;
         const actions = {
           value(event) {
             const checked = pdfButtonValue === event.detail.value;
@@ -9608,7 +9611,7 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
             for (const radio of document.getElementsByName(event.target.name)) {
               const radioId = radio.getAttribute("id");
               radio.checked = radioId === id && checked;
-              storage.setValue(radioId, this.data.fieldName, {
+              storage.setValue(radioId, fieldName, {
                 value: radio.checked
               });
             }
@@ -9705,6 +9708,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
 
     if (this.enableScripting && this.hasJSActions) {
       selectElement.addEventListener("updatefromsandbox", jsEvent => {
+        const fieldName = this.data.fieldName;
         const actions = {
           value(event) {
             const options = selectElement.options;
@@ -9713,7 +9717,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
             Array.prototype.forEach.call(options, option => {
               option.selected = values.has(option.value);
             });
-            storage.setValue(id, this.data.fieldName, {
+            storage.setValue(id, fieldName, {
               value: getValue(event, true)
             });
           },
@@ -14873,8 +14877,8 @@ var _svg = __w_pdfjs_require__(20);
 
 var _xfa_layer = __w_pdfjs_require__(21);
 
-const pdfjsVersion = '2.10.539';
-const pdfjsBuild = 'c9b145d99';
+const pdfjsVersion = '2.10.542';
+const pdfjsBuild = '84237172c';
 {
   if (_is_node.isNodeJS) {
     const {

@@ -11974,7 +11974,7 @@ var PDFScriptingManager = /*#__PURE__*/function () {
                         detail: detail
                       }));
                     } else {
-                      (_this$_pdfDocument = this._pdfDocument) === null || _this$_pdfDocument === void 0 ? void 0 : _this$_pdfDocument.annotationStorage.setValue(elementId, detail);
+                      (_this$_pdfDocument = this._pdfDocument) === null || _this$_pdfDocument === void 0 ? void 0 : _this$_pdfDocument.annotationStorage.setValue(elementId, undefined, detail);
                     }
                   }
                 } catch (err) {
@@ -13962,7 +13962,7 @@ var BaseViewer = /*#__PURE__*/function () {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    var viewerVersion = '2.10.539';
+    var viewerVersion = '2.10.542';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error("The API version \"".concat(_pdfjsLib.version, "\" does not match the Viewer version \"").concat(viewerVersion, "\"."));
@@ -29610,8 +29610,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-var pdfjsVersion = '2.10.539';
-var pdfjsBuild = 'c9b145d99';
+var pdfjsVersion = '2.10.542';
+var pdfjsBuild = '84237172c';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

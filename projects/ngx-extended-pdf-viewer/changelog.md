@@ -288,5 +288,5 @@
 - 10.0.0-alpha.1 downgraded ng-packagr because it forgets to ship the CSS files
 - 10.0.0-alpha.2 #847 bumped up the default branch to pdf.js 2.10 and the bleeding-edge branch to pdf.js 2.11
 - 10.0.0-alpha.3 #850 add the page number to the return value of `NgxExtendedPdfViewerService.getFormData()`
-- 10.0.0-alpha.4 #864 whitelist ftp:// and capacitor:// urls (bleeding edge branch only)
-- 10.0.0-alpha.5 #864 whitelist capacitor:// urls but stopped whitelisting ftp:// because the fetch API doesn't support ftp (both 2.10 and bleeding edge branch)
+- 10.0.0-alpha.4 #864 accept ftp:// and capacitor:// urls (bleeding edge branch only)
+- 10.0.0-alpha.5 #864 accept capacitor:// urls but ceased to accept ftp:// because the fetch API doesn't support ftp (both 2.10 and bleeding edge branch); #868 [formData] now updates when fields are updated by the scripting engine; #843 add an option to disable the scripting engine

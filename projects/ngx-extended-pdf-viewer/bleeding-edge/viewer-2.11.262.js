@@ -9013,7 +9013,7 @@ class PDFScriptingManager {
           detail
         }));
       } else {
-        this._pdfDocument?.annotationStorage.setValue(elementId, detail);
+        this._pdfDocument?.annotationStorage.setValue(elementId, undefined, detail);
       }
     }
   }

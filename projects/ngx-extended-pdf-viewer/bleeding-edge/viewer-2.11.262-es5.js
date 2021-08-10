@@ -11971,7 +11971,7 @@ var PDFScriptingManager = /*#__PURE__*/function () {
                         detail: detail
                       }));
                     } else {
-                      (_this$_pdfDocument = this._pdfDocument) === null || _this$_pdfDocument === void 0 ? void 0 : _this$_pdfDocument.annotationStorage.setValue(elementId, detail);
+                      (_this$_pdfDocument = this._pdfDocument) === null || _this$_pdfDocument === void 0 ? void 0 : _this$_pdfDocument.annotationStorage.setValue(elementId, undefined, detail);
                     }
                   }
                 } catch (err) {
