@@ -17,8 +17,12 @@ function fixVersionNumber(folder="assets") {
     }
     fs.renameSync(f+'pdf.js', f+`pdf-${pdfjsVersion}.js`);
     fs.renameSync(f+'pdf.min.js', f+`pdf-${pdfjsVersion}.min.js`);
+    try {
     fs.renameSync(f+'pdf-es5.js', f+`pdf-${pdfjsVersion}-es5.js`);
     fs.renameSync(f+'pdf-es5.min.js', f+`pdf-${pdfjsVersion}-es5.min.js`);
+    } catch (e) {
+      console.log("ES5 files are missing");
+    }
 
     try {
     fs.renameSync(f+'pdf.sandbox.js', f+`pdf.sandbox-${pdfjsVersion}.js`);
@@ -29,13 +33,21 @@ function fixVersionNumber(folder="assets") {
 
     fs.renameSync(f+'pdf.worker.js', f+`pdf.worker-${pdfjsVersion}.js`);
     fs.renameSync(f+'pdf.worker.min.js', f+`pdf.worker-${pdfjsVersion}.min.js`);
+    try {
     fs.renameSync(f+'pdf.worker-es5.js', f+`pdf.worker-${pdfjsVersion}-es5.js`);
     fs.renameSync(f+'pdf.worker-es5.min.js', f+`pdf.worker-${pdfjsVersion}-es5.min.js`);
+    } catch (e) {
+      console.log("ES5 files are missing");
+    }
 
     fs.renameSync(f+'viewer.js', f+`viewer-${pdfjsVersion}.js`);
     fs.renameSync(f+'viewer.min.js', f+`viewer-${pdfjsVersion}.min.js`);
+    try {
     fs.renameSync(f+'viewer-es5.js', f+`viewer-${pdfjsVersion}-es5.js`);
     fs.renameSync(f+'viewer-es5.min.js', f+`viewer-${pdfjsVersion}-es5.min.js`);
+    } catch (e) {
+      console.log("ES5 files are missing");
+    }
 
     if (folder === 'assets') {
       options = options.replace(/pdfjsVersion = \'.+\'/g, `pdfjsVersion = '${pdfjsVersion}'`);

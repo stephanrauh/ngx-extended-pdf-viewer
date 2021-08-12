@@ -25,6 +25,7 @@ declare const AbortException_base: any;
  */
 export class AbortException extends AbortException_base {
     [x: string]: any;
+    constructor(msg: any);
 }
 export namespace AnnotationActionEventType {
     const E: string;
@@ -211,6 +212,7 @@ declare const FormatError_base: any;
  */
 export class FormatError extends FormatError_base {
     [x: string]: any;
+    constructor(msg: any);
 }
 export function getModificationDate(date?: Date): string;
 export function getVerbosityLevel(): number;
@@ -224,6 +226,7 @@ export function info(msg: any): void;
 declare const InvalidPDFException_base: any;
 export class InvalidPDFException extends InvalidPDFException_base {
     [x: string]: any;
+    constructor(msg: any);
 }
 export function isArrayBuffer(v: any): boolean;
 export function isArrayEqual(arr1: any, arr2: any): boolean;
@@ -237,6 +240,7 @@ export function isString(v: any): boolean;
 declare const MissingPDFException_base: any;
 export class MissingPDFException extends MissingPDFException_base {
     [x: string]: any;
+    constructor(msg: any);
 }
 export function objectFromMap(map: any): any;
 export function objectSize(obj: any): number;

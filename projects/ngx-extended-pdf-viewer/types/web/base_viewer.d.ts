@@ -111,7 +111,6 @@ export class BaseViewer implements IRenderableView {
      * @param {PDFViewerOptions} options
      */
     constructor(options: PDFViewerOptions);
-    _name: string;
     container: HTMLDivElement;
     viewer: Element | null;
     /** #495 modified by ngx-extended-pdf-viewer */
@@ -324,7 +323,11 @@ export class BaseViewer implements IRenderableView {
             view: any;
         }[];
     };
-    _getVisiblePages(): Object;
+    _getVisiblePages(): Object | {
+        first: any;
+        last: any;
+        views: any[];
+    };
     /**
      * @param {number} pageNumber
      */

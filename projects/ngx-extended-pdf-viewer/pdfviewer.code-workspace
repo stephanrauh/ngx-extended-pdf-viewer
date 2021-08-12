@@ -11,15 +11,6 @@
     },
     {
       "path": "../../../pdfAnnotate"
-    },
-    {
-      "path": "../../../NAS-Website-v2"
-    },
-    {
-      "path": "../../../ngx-extended-pdf-viewer-issues/issue813-path-plus-iframe"
-    },
-    {
-      "path": "../../../fileviewer-app"
     }
   ],
   "settings": {

@@ -4,7 +4,7 @@ var fs = require('fs');
 function convertLanguage(language) {
   var PropertiesReader = require('properties-reader');
   var properties = PropertiesReader(`../projects/ngx-extended-pdf-viewer/${folder}/locale/${language}/viewer.properties`);
-  console.log(`${language} has ${properties.length} translations.`);
+  // console.log(`${language} has ${properties.length} translations.`);
   const result = {};
   properties.each(x => {
     const dot = x.indexOf('.');

@@ -27,7 +27,7 @@ for (let lang in languages) {
       console.log('The add-additional-translations script has already run for ' + lang);
     } else {
       const complete = original + '\n\n' + additional;
-      console.log('Added custom translations to ' + lang);
+      // console.log('Added custom translations to ' + lang);
       fs.writeFileSync(originalFilename, complete);
     }
   }
@@ -50,7 +50,7 @@ for (let lang in languages) {
 
       if (additions.length > 0) {
         const complete = originalLines + '\n\n# Translations added from pdf.js 2.8\n\n' + additions;
-        console.log('Added 2.8 translations to ' + lang);
+        // console.log('Added 2.8 translations to ' + lang);
         fs.writeFileSync(originalFilename, complete);
       }
     }
@@ -74,7 +74,7 @@ for (let lang in languages) {
 
     if (additions.length > 0) {
       const complete = originalLines + '\n\n# Translations added from the English translations of pdf.js 2.8\n\n' + additions;
-      console.log('Added English 2.8 translations to ' + lang);
+      // console.log('Added English 2.8 translations to ' + lang);
       fs.writeFileSync(originalFilename, complete);
     }
   }
