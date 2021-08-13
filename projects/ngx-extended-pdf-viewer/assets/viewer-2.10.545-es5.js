@@ -13838,7 +13838,13 @@ var PDFViewer = /*#__PURE__*/function (_BaseViewer) {
       }
 
       if (!stillFullyVisible) {
-        currentId = visiblePages[0].id;
+        var currentPageIsVisible = visiblePages.some(function (p) {
+          return currentId === p.id;
+        });
+
+        if (!currentPageIsVisible) {
+          currentId = visiblePages[0].id;
+        }
       }
 
       this._setCurrentPageNumber(currentId);
@@ -13962,7 +13968,7 @@ var BaseViewer = /*#__PURE__*/function () {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    var viewerVersion = '2.10.544';
+    var viewerVersion = '2.10.545';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error("The API version \"".concat(_pdfjsLib.version, "\" does not match the Viewer version \"").concat(viewerVersion, "\"."));
@@ -14088,6 +14094,10 @@ var BaseViewer = /*#__PURE__*/function () {
                 if (index === 0) {
                   width = div.offsetWidth;
                   height = div.offsetHeight;
+
+                  if (div.parentElement.parentElement.classList.contains("removePageBorders")) {
+                    height += 10;
+                  }
                 } else {
                   div.style.left = width + "px";
                   div.style.marginTop = -height + "px";
@@ -29685,8 +29695,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-var pdfjsVersion = '2.10.544';
-var pdfjsBuild = '73f4f883a';
+var pdfjsVersion = '2.10.545';
+var pdfjsBuild = '74d084759';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

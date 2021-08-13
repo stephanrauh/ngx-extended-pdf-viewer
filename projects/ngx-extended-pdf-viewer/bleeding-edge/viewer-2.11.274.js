@@ -10431,7 +10431,11 @@ class PDFViewer extends _base_viewer.BaseViewer {
     }
 
     if (!stillFullyVisible) {
-      currentId = visiblePages[0].id;
+      const currentPageIsVisible = visiblePages.some(p => currentId === p.id);
+
+      if (!currentPageIsVisible) {
+        currentId = visiblePages[0].id;
+      }
     }
 
     this._setCurrentPageNumber(currentId);
@@ -10656,6 +10660,10 @@ class BaseViewer {
               if (index === 0) {
                 width = div.offsetWidth;
                 height = div.offsetHeight;
+
+                if (div.parentElement.parentElement.classList.contains("removePageBorders")) {
+                  height += 10;
+                }
               } else {
                 div.style.left = width + "px";
                 div.style.marginTop = -height + "px";

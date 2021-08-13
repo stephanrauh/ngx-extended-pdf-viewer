@@ -10446,7 +10446,11 @@ class PDFViewer extends _base_viewer.BaseViewer {
     }
 
     if (!stillFullyVisible) {
-      currentId = visiblePages[0].id;
+      const currentPageIsVisible = visiblePages.some(p => currentId === p.id);
+
+      if (!currentPageIsVisible) {
+        currentId = visiblePages[0].id;
+      }
     }
 
     this._setCurrentPageNumber(currentId);
@@ -10549,7 +10553,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.10.544';
+    const viewerVersion = '2.10.545';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -10668,6 +10672,10 @@ class BaseViewer {
               if (index === 0) {
                 width = div.offsetWidth;
                 height = div.offsetHeight;
+
+                if (div.parentElement.parentElement.classList.contains("removePageBorders")) {
+                  height += 10;
+                }
               } else {
                 div.style.left = width + "px";
                 div.style.marginTop = -height + "px";
@@ -17620,8 +17628,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(3);
 
-const pdfjsVersion = '2.10.544';
-const pdfjsBuild = '73f4f883a';
+const pdfjsVersion = '2.10.545';
+const pdfjsBuild = '74d084759';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
