@@ -1179,7 +1179,7 @@ html[dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbar {
 }
 ngx-extended-pdf-viewer {
   #secondaryToolbarButtonContainer {
-    max-width: 200px;
+    width: 250px;
     max-height: 400px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -1505,8 +1505,7 @@ ngx-extended-pdf-viewer {
     padding: 3px 0 1px 0;
     height: auto;
     min-height: 25px;
-    width: auto;
-    min-width: 100%;
+    width: 200px;
     white-space: normal;
   }
 }

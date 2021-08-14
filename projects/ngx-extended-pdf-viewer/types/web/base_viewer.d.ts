@@ -324,6 +324,10 @@ export class BaseViewer implements IRenderableView {
         }[];
     };
     _getVisiblePages(): Object | {
+        views: never[];
+        first?: undefined;
+        last?: undefined;
+    } | {
         first: any;
         last: any;
         views: any[];
