@@ -42,7 +42,7 @@ import { Location } from '@angular/common';
 import { PinchOnMobileSupport } from './pinch-on-mobile-support';
 import { PdfThumbnailDrawnEvent } from './events/pdf-thumbnail-drawn-event';
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
-import { ScrollModeChangedEvent, ScrollModeType } from './options/pdf-viewer';
+import { PageViewModeType, ScrollModeChangedEvent, ScrollModeType } from './options/pdf-viewer';
 import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
 import { ProgressBarEvent } from './events/progress-bar-event';
 import { UnitToPx } from './unit-to-px';
@@ -124,8 +124,22 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Output()
   public formDataChange = new EventEmitter<FormDataType>();
 
+  public _pageViewMode: PageViewModeType = 'multiple';
+
+  public get pageViewMode(): PageViewModeType {
+    return this._pageViewMode;
+  }
+
   @Input()
-  public pageViewMode: 'single' | 'book' | 'multiple' | 'infinite-scroll' | string = 'multiple';
+  public set pageViewMode(viewMode: PageViewModeType) {
+    this._pageViewMode = viewMode;
+    if (viewMode === 'infinite-scroll') {
+      this.scrollMode = ScrollModeType.vertical;
+      this.spread = 'off';
+    } else if (viewMode !== 'multiple') {
+      this.scrollMode = ScrollModeType.vertical;
+    }
+  }
 
   @Output()
   public progress = new EventEmitter<ProgressBarEvent>();
@@ -420,10 +434,35 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public handToolChange = new EventEmitter<boolean>();
   @Input()
   public showHandToolButton = false;
+
+  private _showScrollingButton = true;
+
+  public get showScrollingButton() {
+    if (this.pageViewMode === 'multiple') {
+      return this._showScrollingButton;
+    }
+    return false;
+  }
+
   @Input()
-  public showScrollingButton = true;
+  public set showScrollingButton(val: any) {
+    this._showScrollingButton = val;
+  }
+
+  private _showSpreadButton = true;
+
+  public get showSpreadButton() {
+    if (this.pageViewMode !== 'infinite-scroll') {
+      return this._showSpreadButton;
+    }
+    return false;
+  }
+
   @Input()
-  public showSpreadButton = true;
+  public set showSpreadButton(val: any) {
+    this._showSpreadButton = val;
+  }
+
   @Input()
   public showPropertiesButton = true;
   @Input()
@@ -655,7 +694,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       widget.appendChild(link);
       (window as any).getFormValue = (key: string) => this.getFormValue(key);
       (window as any).setFormValue = (key: string, value: string) => this.setFormValue(key, value);
-      (window as any).assignFormIdAndFieldName = (key: string, fieldName: string, radioButtonField?: string) => this.assignFormIdAndFieldName(key, fieldName, radioButtonField);
+      (window as any).assignFormIdAndFieldName = (key: string, fieldName: string, radioButtonField?: string) =>
+        this.assignFormIdAndFieldName(key, fieldName, radioButtonField);
 
       this.onResize();
       this.loadPdfJs();
@@ -864,7 +904,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
 
         PDFViewerApplicationOptions.set('enableDragAndDrop', this.enableDragAndDrop);
-        let language = this.language === "" ? undefined: this.language;
+        let language = this.language === '' ? undefined : this.language;
         if (!language) {
           language = navigator.language;
         }
@@ -900,7 +940,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if (container) {
         if (container.clientHeight === 0) {
           if (!this.autoHeight) {
-            console.warn("The height of the PDF viewer widget is zero pixels. Please check the height attribute. Is there a syntax error? Or are you using a percentage with a CSS framework that doesn't support this? The height is adjusted automatedly.")
+            console.warn(
+              "The height of the PDF viewer widget is zero pixels. Please check the height attribute. Is there a syntax error? Or are you using a percentage with a CSS framework that doesn't support this? The height is adjusted automatedly."
+            );
             this.autoHeight = true;
           }
         }
@@ -991,7 +1033,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
       }
     } else {
-      if (this.textLayer) { // todo: is this a redundant check?
+      if (this.textLayer) {
+        // todo: is this a redundant check?
         if (options) {
           options.set('textLayerMode', pdfDefaultOptions.textLayerMode);
         }
@@ -1010,7 +1053,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             }
           });
         }
-      } else { // todo: is the else branch dead code?
+      } else {
+        // todo: is the else branch dead code?
         if (options) {
           options.set('textLayerMode', 0);
         }
@@ -1792,8 +1836,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (this.formIdToFieldName[key]) {
       // radiobuttons
       this.formData[this.formIdToFieldName[key]] = value;
-    }
-    else {
+    } else {
       this.formData[key] = value;
     }
 
@@ -1825,9 +1868,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
               storage.setValue(field.id, key, { value: formData[key] === field.value, emitMessage: false });
               const fields = document.querySelectorAll("input[name='" + key + "']");
               const fieldIdToActivate = this.formRadioButtonValueToId[formData[key]];
-              fields.forEach((field: HTMLInputElement)  => {
+              fields.forEach((field: HTMLInputElement) => {
                 field.checked = field.id === fieldIdToActivate;
-              })
+              });
             } else if (field.type === 'checkbox') {
               storage.setValue(field.id, key, { value: formData[key], emitMessage: false });
               field.checked = formData[key];
@@ -1854,7 +1897,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
                 }
               }
             }
-
           } else {
             const fieldName = this.formIdToFieldName[key];
             debugger;

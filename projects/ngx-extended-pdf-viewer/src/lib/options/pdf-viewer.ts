@@ -4,6 +4,15 @@ export enum ScrollModeType {
   wrapped = 2
 }
 
+export enum SpreadModeType {
+  UNKNOWN = -1,
+  NONE = 0, // Default value.
+  ODD = 1,
+  EVEN = 2,
+}
+
+export type PageViewModeType = 'single' | 'book' | 'multiple' | 'infinite-scroll';
+
 export interface ScrollModeChangedEvent {
   mode: ScrollModeType;
 }

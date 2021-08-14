@@ -4,7 +4,6 @@ const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSet
 
 export let pdfjsVersion = '2.10.545';
 export let pdfjsBleedingEdgeVersion = '2.11.274';
-
 export function getVersionSuffix(folder: string): string {
   if (folder && folder.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -51,9 +50,9 @@ export let pdfDefaultOptions = {
   workerPort: null,
   assetsFolder: 'assets',
   sandboxBundleSrc: () =>
-  _isIE11 || isEdge || needsES5
-    ? './' + pdfDefaultOptions.assetsFolder + '/pdf.sandbox-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '-es5.js'
-    : './' + pdfDefaultOptions.assetsFolder + '/pdf.sandbox-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '.js',
+    _isIE11 || isEdge || needsES5
+      ? './' + pdfDefaultOptions.assetsFolder + '/pdf.sandbox-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '-es5.js'
+      : './' + pdfDefaultOptions.assetsFolder + '/pdf.sandbox-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '.js',
   workerSrc: () =>
     _isIE11 || isEdge || needsES5
       ? './' + pdfDefaultOptions.assetsFolder + '/pdf.worker-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '-es5.js'
@@ -61,7 +60,7 @@ export let pdfDefaultOptions = {
 
   // options specific to ngx-extended-pdf-viewer (as opposed to being used by pdf.js)
   doubleTapZoomFactor: 'page-width',
-  enableScripting: true
+  enableScripting: true,
 };
 
 if (typeof window !== 'undefined') {

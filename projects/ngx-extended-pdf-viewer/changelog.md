@@ -291,4 +291,4 @@
 - 10.0.0-alpha.4 #864 accept ftp:// and capacitor:// urls (bleeding edge branch only)
 - 10.0.0-alpha.5 #864 accept capacitor:// urls but ceased to accept ftp:// because the fetch API doesn't support ftp (both 2.10 and bleeding edge branch); #868 [formData] now updates when fields are updated by the scripting engine; #843 add an option to disable the scripting engine
 - 10.0.0-alpha.6 #859 combine pageViewMode: single and spread: even
-- 10.0.0-alpha.7 #859 don't jump to another page when switching to another spread mode; align the pages correctly when [showBorders]="false"
+- 10.0.0-alpha.7 #859 don't jump to another page when switching to another spread mode; align the pages correctly when [showBorders]="false"; #874 deactivate scrollMode and spreadMode depending on the pageViewMode
