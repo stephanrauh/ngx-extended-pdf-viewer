@@ -697,7 +697,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       (window as any).assignFormIdAndFieldName = (key: string, fieldName: string, radioButtonField?: string) =>
         this.assignFormIdAndFieldName(key, fieldName, radioButtonField);
 
-      this.onResize();
       this.loadPdfJs();
     }
   }
@@ -885,6 +884,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if (!this.shuttingDown) {
         // hurried users sometimes reload the PDF before it has finished initializing
         // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
+        this.onResize();
         this.primaryMenuVisible = this.showToolbar;
         const hideSecondaryMenu = this.hideKebabMenuForSecondaryToolbar && !this.showSecondaryToolbarButton;
 
@@ -936,33 +936,33 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public checkHeight(): void {
     if (typeof document !== 'undefined') {
-      const container = document.getElementsByClassName('zoom')[0] as HTMLElement;
-      if (container) {
-        if (container.clientHeight === 0) {
-          if (!this.autoHeight) {
-            console.warn(
-              "The height of the PDF viewer widget is zero pixels. Please check the height attribute. Is there a syntax error? Or are you using a percentage with a CSS framework that doesn't support this? The height is adjusted automatedly."
-            );
-            this.autoHeight = true;
+        const container = document.getElementsByClassName('zoom')[0] as HTMLElement;
+        if (container) {
+          if (container.clientHeight === 0) {
+            if (!this.autoHeight) {
+              console.warn(
+                "The height of the PDF viewer widget is zero pixels. Please check the height attribute. Is there a syntax error? Or are you using a percentage with a CSS framework that doesn't support this? The height is adjusted automatedly."
+              );
+              this.autoHeight = true;
+            }
+          }
+          if (this.autoHeight) {
+            const available = window.innerHeight;
+            const rect = container.getBoundingClientRect();
+            const top = rect.top;
+            let maximumHeight = available - top;
+            // take the margins and paddings of the parent containers into account
+            let padding = this.calculateBorderMarging(container);
+            maximumHeight -= padding;
+            const factor = Number(this._height.replace('%', ''));
+            maximumHeight = (maximumHeight * factor) / 100;
+            if (maximumHeight > 100) {
+              this.minHeight = maximumHeight + 'px';
+            } else {
+              this.minHeight = '100px';
+            }
           }
         }
-        if (this.autoHeight) {
-          const available = window.innerHeight;
-          const rect = container.getBoundingClientRect();
-          const top = rect.top;
-          let maximumHeight = available - top;
-          // take the margins and paddings of the parent containers into account
-          let padding = this.calculateBorderMarging(container);
-          maximumHeight -= padding;
-          const factor = Number(this._height.replace('%', ''));
-          maximumHeight = (maximumHeight * factor) / 100;
-          if (maximumHeight > 100) {
-            this.minHeight = maximumHeight + 'px';
-          } else {
-            this.minHeight = '100px';
-          }
-        }
-      }
     }
   }
 
@@ -1143,7 +1143,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized = true;
     if (this._src) {
       this.ngxExtendedPdfViewerIncompletelyInitialized = false;
-      this.onResize();
       if (!this.listenToURL) {
         PDFViewerApplication.pdfLinkService.setHash = function () {};
       }
@@ -1311,7 +1310,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
       });
 
-      this.checkHeight();
+      setTimeout(() => this.checkHeight(), 100);
       // open a file in the viewer
       if (!!this._src) {
         const options: any = {
@@ -1356,17 +1355,21 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   private removeScrollbarInInititeScrollMode(): void {
     if (this.pageViewMode === 'infinite-scroll') {
       setTimeout(() => {
-        const viewer = document.getElementById('viewer');
-        if (viewer) {
-          const height = viewer.clientHeight + 17;
-          const zoom = document.getElementsByClassName('zoom')[0];
-          if (this.primaryMenuVisible) {
-            this.height = height + 35 + 'px';
-          } else {
-            this.height = height + 'px';
-          }
-          if (zoom) {
-            (<HTMLElement>zoom).style.height = this.height;
+        if (this.pageViewMode === 'infinite-scroll') {
+          const viewer = document.getElementById('viewer');
+          if (viewer) {
+            const height = viewer.clientHeight + 17;
+            const zoom = document.getElementsByClassName('zoom')[0];
+            if (this.primaryMenuVisible) {
+              this.height = height + 35 + 'px';
+            } else {
+              if (height > 17) {
+                this.height = height + 'px';
+              }
+            }
+            if (zoom) {
+              (<HTMLElement>zoom).style.height = this.height;
+            }
           }
         }
       });
@@ -1649,7 +1652,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
       setTimeout(() => this.calcViewerPositionTop());
     } // end of if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized)
-    this.onResize();
 
     if ('printResolution' in changes) {
       const options = PDFViewerApplicationOptions;
@@ -1730,6 +1732,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
 
     if ('height' in changes) {
+      if (!changes['height'].isFirstChange) {
+        this.onResize();
+      }
+
     }
   }
 
