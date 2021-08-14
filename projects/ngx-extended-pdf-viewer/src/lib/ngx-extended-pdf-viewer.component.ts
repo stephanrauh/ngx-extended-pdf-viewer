@@ -1730,13 +1730,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.dummyComponents.addMissingStandardWidgets();
       }
     }
-
-    if ('height' in changes) {
-      if (!changes['height'].isFirstChange) {
-        this.onResize();
-      }
-
-    }
   }
 
   private async setZoom() {
