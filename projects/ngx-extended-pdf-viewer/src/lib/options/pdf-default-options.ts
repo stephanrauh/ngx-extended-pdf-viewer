@@ -2,8 +2,8 @@ const _isIE11 = typeof window === 'undefined' ? false : !!(<any>window).MSInputM
 const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
-export let pdfjsVersion = '2.10.545';
-export let pdfjsBleedingEdgeVersion = '2.11.274';
+export let pdfjsVersion = '2.10.547';
+export let pdfjsBleedingEdgeVersion = '2.11.282';
 export function getVersionSuffix(folder: string): string {
   if (folder && folder.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -26,6 +26,7 @@ export let pdfDefaultOptions = {
   imageResourcesPath: './images/',
   maxCanvasPixels: 16777216,
   pdfBugEnabled: false,
+  rangeChunkSize: 65536,
   removePageBorders: false,
   renderer: 'canvas',
   renderInteractiveForms: true,
