@@ -162,13 +162,14 @@ export class BaseViewer implements IRenderableView {
     get currentPageNumber(): number;
     /** #495 modified by ngx-extended-pdf-viewer */
     hidePagesDependingOnpageViewMode(): void;
+    pageFlip: PageFlip | undefined;
+    _currentPageNumber: any;
     /** end of modification */
     /**
      * @returns {boolean} Whether the pageNumber is valid (within bounds).
      * @private
      */
     private _setCurrentPageNumber;
-    _currentPageNumber: any;
     /**
      * @param {string} val - The page label.
      */
@@ -446,6 +447,7 @@ export class BaseViewer implements IRenderableView {
     previousPage(): boolean;
 }
 import { PDFRenderingQueue } from "./pdf_rendering_queue.js";
+import { PageFlip } from "./page-flip.module";
 /**
  * @typedef {Object} PDFViewerOptions
  * @property {HTMLDivElement} container - The container for the viewer element.
