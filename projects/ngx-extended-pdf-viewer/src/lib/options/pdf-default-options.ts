@@ -3,7 +3,7 @@ const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.u
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
 export let pdfjsVersion = '2.10.549';
-export let pdfjsBleedingEdgeVersion = '2.11.283';
+export let pdfjsBleedingEdgeVersion = '2.11.318';
 export function getVersionSuffix(folder: string): string {
   if (folder && folder.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -29,7 +29,8 @@ export let pdfDefaultOptions = {
   rangeChunkSize: 65536,
   removePageBorders: false,
   renderer: 'canvas',
-  renderInteractiveForms: true,
+  renderInteractiveForms: true, // until pdf.js 2.10
+  renderForms: true, // since pdf.js 2.11
   sidebarViewOnLoad: -1,
   scrollModeOnLoad: -1,
   spreadModeOnLoad: -1,
