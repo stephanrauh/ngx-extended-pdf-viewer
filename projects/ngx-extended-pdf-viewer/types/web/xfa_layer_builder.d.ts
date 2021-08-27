@@ -35,10 +35,11 @@ export class XfaLayerBuilder {
     /**
      * @param {PageViewport} viewport
      * @param {string} intent (default value is 'display')
-     * @returns {Promise<void>} A promise that is resolved when rendering of the
-     *   annotations is complete.
+     * @returns {Promise<Object | void>} A promise that is resolved when rendering
+     *   of the XFA layer is complete. The first rendering will return an object
+     *   with a `textDivs` property that  can be used with the TextHighlighter.
      */
-    render(viewport: any, intent?: string): Promise<void>;
+    render(viewport: any, intent?: string): Promise<Object | void>;
     cancel(): void;
     hide(): void;
 }

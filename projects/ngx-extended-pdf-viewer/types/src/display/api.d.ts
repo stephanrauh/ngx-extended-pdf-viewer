@@ -1,4 +1,8 @@
 export type TypedArray = Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array;
+export type RefProxy = {
+    num: number;
+    gen: number;
+};
 /**
  * Document initialization / loading parameters object.
  */
@@ -12,7 +16,7 @@ export type DocumentInitParameters = {
      * typed arrays (Uint8Array) to improve the memory usage. If PDF data is
      * BASE64-encoded, use `atob()` to convert it to a binary string first.
      */
-    data?: string | number[] | Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array | undefined;
+    data?: string | number[] | TypedArray | undefined;
     /**
      * - Basic authentication headers.
      */
@@ -32,7 +36,7 @@ export type DocumentInitParameters = {
      * or all of the pdf data. Used by the extension since some data is already
      * loaded before the switch to range requests.
      */
-    initialData?: Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array | undefined;
+    initialData?: TypedArray | undefined;
     /**
      * - The PDF file length. It's used for progress
      * reports and range requests operations.
@@ -52,7 +56,7 @@ export type DocumentInitParameters = {
      * - The worker that will be used for loading and
      * parsing the PDF data.
      */
-    worker?: any;
+    worker?: PDFWorker | undefined;
     /**
      * - Controls the logging level; the constants
      * from {@link VerbosityLevel} should be used.
@@ -82,6 +86,33 @@ export type DocumentInitParameters = {
      */
     CMapReaderFactory?: Object | undefined;
     /**
+     * - When `true`, fonts that aren't
+     * embedded in the PDF document will fallback to a system font.
+     * The default value is `true` in web environments and `false` in Node.js;
+     * unless `disableFontFace === true` in which case this defaults to `false`
+     * regardless of the environment (to prevent completely broken fonts).
+     */
+    useSystemFonts?: boolean | undefined;
+    /**
+     * - The URL where the standard font
+     * files are located. Include the trailing slash.
+     */
+    standardFontDataUrl?: string | undefined;
+    /**
+     * - The factory that will be used
+     * when reading the standard font files. Providing a custom factory is useful
+     * for environments without Fetch API or `XMLHttpRequest` support, such as
+     * Node.js. The default value is {DOMStandardFontDataFactory}.
+     */
+    StandardFontDataFactory?: Object | undefined;
+    /**
+     * - Enable using the Fetch API in the
+     * worker-thread when reading CMap and standard font files. When `true`,
+     * the `CMapReaderFactory` and `StandardFontDataFactory` options are ignored.
+     * The default value is `true` in web environments and `false` in Node.js.
+     */
+    useWorkerFetch?: boolean | undefined;
+    /**
      * - Reject certain promises, e.g.
      * `getOperatorList`, `getTextContent`, and `RenderTask`, when the associated
      * PDF data cannot be successfully parsed, instead of attempting to recover
@@ -102,9 +133,10 @@ export type DocumentInitParameters = {
     isEvalSupported?: boolean | undefined;
     /**
      * - By default fonts are converted to
-     * OpenType fonts and loaded via `@font-face` rules. If disabled, fonts will
-     * be rendered using a built-in font renderer that constructs the glyphs with
-     * primitive path commands. The default value is `false`.
+     * OpenType fonts and loaded via the Font Loading API or `@font-face` rules.
+     * If disabled, fonts will be rendered using a built-in font renderer that
+     * constructs the glyphs with primitive path commands.
+     * The default value is `false` in web environments and `true` in Node.js.
      */
     disableFontFace?: boolean | undefined;
     /**
@@ -155,51 +187,57 @@ export type DocumentInitParameters = {
     pdfBug?: boolean | undefined;
 };
 export type IPDFStreamFactory = Function;
+export type OnProgressParameters = {
+    /**
+     * - Currently loaded number of bytes.
+     */
+    loaded: number;
+    /**
+     * - Total number of bytes in the PDF file.
+     */
+    total: number;
+};
+export type OutlineNode = {
+    title: string;
+    bold: boolean;
+    italic: boolean;
+    /**
+     * - The color in RGB format to use for
+     * display purposes.
+     */
+    color: Uint8ClampedArray;
+    dest: string | Array<any> | null;
+    url: string | null;
+    unsafeUrl: string | undefined;
+    newWindow: boolean | undefined;
+    count: number | undefined;
+    items: Array<OutlineNode>;
+};
 /**
- * The loading task controls the operations required to load a PDF document
- * (such as network requests) and provides a way to listen for completion,
- * after which individual pages can be rendered.
+ * Properties correspond to Table 321 of the PDF 32000-1:2008 spec.
  */
-export type PDFDocumentLoadingTask = {
+export type MarkInfo = {
+    Marked: boolean;
+    UserProperties: boolean;
+    Suspects: boolean;
+};
+export type PDFDocumentStats = {
     /**
-     * - Unique identifier for the document loading task.
+     * - Used stream types in the
+     * document (an item is set to true if specific stream ID was used in the
+     * document).
      */
-    docId: string;
+    streamTypes: {
+        [x: string]: boolean;
+    };
     /**
-     * - Whether the loading task is destroyed or not.
+     * - Used font types in the
+     * document (an item is set to true if specific font ID was used in the
+     * document).
      */
-    destroyed: boolean;
-    /**
-     * - Callback to request a password if a wrong
-     * or no password was provided. The callback receives two parameters: a
-     * function that should be called with the new password, and a reason (see
-     * {@link PasswordResponses}).
-     */
-    onPassword?: Function | undefined;
-    /**
-     * - Callback to be able to monitor the
-     * loading progress of the PDF file (necessary to implement e.g. a loading
-     * bar). The callback receives an {Object} with the properties `loaded`
-     * ({number}) and `total` ({number}) that indicate how many bytes are loaded.
-     */
-    onProgress?: Function | undefined;
-    /**
-     * - Callback for when an
-     * unsupported feature is used in the PDF document. The callback receives an
-     * {@link UNSUPPORTED_FEATURES} argument.
-     */
-    onUnsupportedFeature?: Function | undefined;
-    /**
-     * - Promise for document loading
-     * task completion.
-     */
-    promise: Promise<PDFDocumentProxy>;
-    /**
-     * - Abort all network requests and destroy
-     * the worker. Returns a promise that is resolved when destruction is
-     * completed.
-     */
-    destroy: Function;
+    fontTypes: {
+        [x: string]: boolean;
+    };
 };
 /**
  * Page getViewport parameters.
@@ -244,15 +282,22 @@ export type getTextContentParameters = {
      * same line {@link TextItem}'s. The default value is `false`.
      */
     disableCombineTextItems: boolean;
+    /**
+     * - When true include marked
+     * content items in the items array of TextContent. The default is `false`.
+     */
+    includeMarkedContent?: boolean | undefined;
 };
 /**
  * Page text content.
  */
 export type TextContent = {
     /**
-     * - Array of {@link TextItem} objects.
+     * - Array of
+     * {@link TextItem} and {@link TextMarkedContent} objects. TextMarkedContent
+     * items are included when includeMarkedContent is true.
      */
-    items: Array<TextItem>;
+    items: Array<TextItem | TextMarkedContent>;
     /**
      * - {@link TextStyle} objects,
      * indexed by font name.
@@ -289,6 +334,26 @@ export type TextItem = {
      * - Font name used by PDF.js for converted font.
      */
     fontName: string;
+    /**
+     * - Indicating if the text content is followed by a
+     * line-break.
+     */
+    hasEOL: boolean;
+};
+/**
+ * Page text marked content part.
+ */
+export type TextMarkedContent = {
+    /**
+     * - Either 'beginMarkedContent',
+     * 'beginMarkedContentProps', or 'endMarkedContent'.
+     */
+    type: string;
+    /**
+     * - The marked content identifier. Only used for type
+     * 'beginMarkedContentProps'.
+     */
+    id: string;
 };
 /**
  * Text style.
@@ -316,11 +381,11 @@ export type TextStyle = {
  */
 export type GetAnnotationsParameters = {
     /**
-     * - Determines the annotations that will be fetched,
-     * can be either 'display' (viewable annotations) or 'print' (printable
-     * annotations). If the parameter is omitted, all annotations are fetched.
+     * - Determines the annotations that are fetched,
+     * can be 'display' (viewable annotations), 'print' (printable annotations),
+     * or 'any' (all annotations). The default value is 'display'.
      */
-    intent: string;
+    intent?: string | undefined;
 };
 /**
  * Page render parameters.
@@ -336,21 +401,25 @@ export type RenderParameters = {
      */
     viewport: PageViewport;
     /**
-     * - Rendering intent, can be 'display' or 'print'.
-     * The default value is 'display'.
+     * - Rendering intent, can be 'display', 'print',
+     * or 'any'. The default value is 'display'.
      */
     intent?: string | undefined;
     /**
-     * - Enables WebGL accelerated rendering for
-     * some operations. The default value is `false`.
+     * Controls which annotations are rendered
+     * onto the canvas, for annotations with appearance-data; the values from
+     * {@link AnnotationMode} should be used. The following values are supported:
+     * - `AnnotationMode.DISABLE`, which disables all annotations.
+     * - `AnnotationMode.ENABLE`, which includes all possible annotations (thus
+     * it also depends on the `intent`-option, see above).
+     * - `AnnotationMode.ENABLE_FORMS`, which excludes annotations that contain
+     * interactive form elements (those will be rendered in the display layer).
+     * - `AnnotationMode.ENABLE_STORAGE`, which includes all possible annotations
+     * (as above) but where interactive form elements are updated with data
+     * from the {@link AnnotationStorage}-instance; useful e.g. for printing.
+     * The default value is `AnnotationMode.ENABLE`.
      */
-    enableWebGL?: boolean | undefined;
-    /**
-     * - Whether or not interactive
-     * form elements are rendered in the display layer. If so, we do not render
-     * them on the canvas as well.
-     */
-    renderInteractiveForms?: boolean | undefined;
+    annotationMode?: number | undefined;
     /**
      * - Additional transform, applied just
      * before viewport transform.
@@ -375,11 +444,6 @@ export type RenderParameters = {
      */
     background?: string | Object | undefined;
     /**
-     * - Storage for annotation
-     * data in forms.
-     */
-    annotationStorage?: AnnotationStorage | undefined;
-    /**
      * -
      * A promise that should resolve with an {@link OptionalContentConfig}
      * created from `PDFDocumentProxy.getOptionalContentConfig`. If `null`,
@@ -387,6 +451,60 @@ export type RenderParameters = {
      * states set.
      */
     optionalContentConfigPromise?: Promise<OptionalContentConfig> | undefined;
+};
+/**
+ * Page getOperatorList parameters.
+ */
+export type GetOperatorListParameters = {
+    /**
+     * - Rendering intent, can be 'display', 'print',
+     * or 'any'. The default value is 'display'.
+     */
+    intent?: string | undefined;
+    /**
+     * Controls which annotations are included
+     * in the operatorList, for annotations with appearance-data; the values from
+     * {@link AnnotationMode} should be used. The following values are supported:
+     * - `AnnotationMode.DISABLE`, which disables all annotations.
+     * - `AnnotationMode.ENABLE`, which includes all possible annotations (thus
+     * it also depends on the `intent`-option, see above).
+     * - `AnnotationMode.ENABLE_FORMS`, which excludes annotations that contain
+     * interactive form elements (those will be rendered in the display layer).
+     * - `AnnotationMode.ENABLE_STORAGE`, which includes all possible annotations
+     * (as above) but where interactive form elements are updated with data
+     * from the {@link AnnotationStorage}-instance; useful e.g. for printing.
+     * The default value is `AnnotationMode.ENABLE`.
+     */
+    annotationMode?: number | undefined;
+};
+/**
+ * Structure tree node. The root node will have a role "Root".
+ */
+export type StructTreeNode = {
+    /**
+     * - Array of
+     * {@link StructTreeNode} and {@link StructTreeContent} objects.
+     */
+    children: Array<StructTreeNode | StructTreeContent>;
+    /**
+     * - element's role, already mapped if a role map exists
+     * in the PDF.
+     */
+    role: string;
+};
+/**
+ * Structure tree content.
+ */
+export type StructTreeContent = {
+    /**
+     * - either "content" for page and stream structure
+     * elements or "object" for object references.
+     */
+    type: string;
+    /**
+     * - unique id that will map to the text layer.
+     */
+    id: string;
 };
 /**
  * PDF page operator list.
@@ -412,8 +530,8 @@ export type PDFWorkerParameters = {
      */
     port?: Object | undefined;
     /**
-     * - Controls the logging level; the
-     * constants from {@link VerbosityLevel} should be used.
+     * - Controls the logging level;
+     * the constants from {@link VerbosityLevel} should be used.
      */
     verbosity?: number | undefined;
 };
@@ -425,12 +543,20 @@ export const DefaultCanvasFactory: typeof DOMCanvasFactory | {
 export const DefaultCMapReaderFactory: typeof DOMCMapReaderFactory | {
     new (): {};
 };
+export const DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory | {
+    new (): {};
+};
 /**
  * @typedef { Int8Array | Uint8Array | Uint8ClampedArray |
  *            Int16Array | Uint16Array |
  *            Int32Array | Uint32Array | Float32Array |
  *            Float64Array
  * } TypedArray
+ */
+/**
+ * @typedef {Object} RefProxy
+ * @property {number} num
+ * @property {number} gen
  */
 /**
  * Document initialization / loading parameters object.
@@ -469,6 +595,21 @@ export const DefaultCMapReaderFactory: typeof DOMCMapReaderFactory | {
  *   reading built-in CMap files. Providing a custom factory is useful for
  *   environments without Fetch API or `XMLHttpRequest` support, such as
  *   Node.js. The default value is {DOMCMapReaderFactory}.
+ * @property {boolean} [useSystemFonts] - When `true`, fonts that aren't
+ *   embedded in the PDF document will fallback to a system font.
+ *   The default value is `true` in web environments and `false` in Node.js;
+ *   unless `disableFontFace === true` in which case this defaults to `false`
+ *   regardless of the environment (to prevent completely broken fonts).
+ * @property {string} [standardFontDataUrl] - The URL where the standard font
+ *   files are located. Include the trailing slash.
+ * @property {Object} [StandardFontDataFactory] - The factory that will be used
+ *   when reading the standard font files. Providing a custom factory is useful
+ *   for environments without Fetch API or `XMLHttpRequest` support, such as
+ *   Node.js. The default value is {DOMStandardFontDataFactory}.
+ * @property {boolean} [useWorkerFetch] - Enable using the Fetch API in the
+ *   worker-thread when reading CMap and standard font files. When `true`,
+ *   the `CMapReaderFactory` and `StandardFontDataFactory` options are ignored.
+ *   The default value is `true` in web environments and `false` in Node.js.
  * @property {boolean} [stopAtErrors] - Reject certain promises, e.g.
  *   `getOperatorList`, `getTextContent`, and `RenderTask`, when the associated
  *   PDF data cannot be successfully parsed, instead of attempting to recover
@@ -480,9 +621,10 @@ export const DefaultCMapReaderFactory: typeof DOMCMapReaderFactory | {
  *   as JavaScript. Primarily used to improve performance of font rendering, and
  *   when parsing PDF functions. The default value is `true`.
  * @property {boolean} [disableFontFace] - By default fonts are converted to
- *   OpenType fonts and loaded via `@font-face` rules. If disabled, fonts will
- *   be rendered using a built-in font renderer that constructs the glyphs with
- *   primitive path commands. The default value is `false`.
+ *   OpenType fonts and loaded via the Font Loading API or `@font-face` rules.
+ *   If disabled, fonts will be rendered using a built-in font renderer that
+ *   constructs the glyphs with primitive path commands.
+ *   The default value is `false` in web environments and `true` in Node.js.
  * @property {boolean} [fontExtraProperties] - Include additional properties,
  *   which are unused during rendering of PDF documents, when exporting the
  *   parsed font data from the worker-thread. This may be useful for debugging
@@ -578,13 +720,23 @@ export class PDFDocumentProxy {
      */
     get numPages(): number;
     /**
-     * @type {string} A (not guaranteed to be) unique ID to identify a PDF.
+     * @type {Array<string, string|null>} A (not guaranteed to be) unique ID to
+     *   identify the PDF document.
+     *   NOTE: The first element will always be defined for all PDF documents,
+     *   whereas the second element is only defined for *modified* PDF documents.
      */
-    get fingerprint(): string;
+    get fingerprints(): string[];
     /**
      * @type {boolean} True if only XFA form.
      */
     get isPureXfa(): boolean;
+    /**
+     * NOTE: This is (mostly) intended to support printing of XFA forms.
+     *
+     * @type {Object | null} An object representing a HTML tree structure
+     *   to render the XFA, or `null` when no XFA form exists.
+     */
+    get allXfaHtml(): Object | null;
     /**
      * @param {number} pageNumber - The page number to get. The first page is 1.
      * @returns {Promise<PDFPageProxy>} A promise that is resolved with
@@ -592,19 +744,11 @@ export class PDFDocumentProxy {
      */
     getPage(pageNumber: number): Promise<PDFPageProxy>;
     /**
-     * @param {{num: number, gen: number}} ref - The page reference. Must have
-     *   the `num` and `gen` properties.
-     * @returns {Promise<{num: number, gen: number}>} A promise that is resolved
-     *   with the page index (starting from zero) that is associated with the
-     *   reference.
+     * @param {RefProxy} ref - The page reference.
+     * @returns {Promise<number>} A promise that is resolved with the page index,
+     *   starting from zero, that is associated with the reference.
      */
-    getPageIndex(ref: {
-        num: number;
-        gen: number;
-    }): Promise<{
-        num: number;
-        gen: number;
-    }>;
+    getPageIndex(ref: RefProxy): Promise<number>;
     /**
      * @returns {Promise<Object<string, Array<any>>>} A promise that is resolved
      *   with a mapping from named destinations to references.
@@ -616,10 +760,11 @@ export class PDFDocumentProxy {
     }>;
     /**
      * @param {string} id - The named destination to get.
-     * @returns {Promise<Array<any>>} A promise that is resolved with all
-     *   information of the given named destination.
+     * @returns {Promise<Array<any> | null>} A promise that is resolved with all
+     *   information of the given named destination, or `null` when the named
+     *   destination is not present in the PDF file.
      */
-    getDestination(id: string): Promise<Array<any>>;
+    getDestination(id: string): Promise<Array<any> | null>;
     /**
      * @returns {Promise<Array<string> | null>} A promise that is resolved with
      *   an {Array} containing the page labels that correspond to the page
@@ -685,22 +830,7 @@ export class PDFDocumentProxy {
      * @returns {Promise<Array<OutlineNode>>} A promise that is resolved with an
      *   {Array} that is a tree outline (if it has one) of the PDF file.
      */
-    getOutline(): Promise<{
-        title: string;
-        bold: boolean;
-        italic: boolean;
-        /**
-         * - The color in RGB format to use for
-         * display purposes.
-         */
-        color: Uint8ClampedArray;
-        dest: string | Array<any> | null;
-        url: string | null;
-        unsafeUrl: string | undefined;
-        newWindow: boolean | undefined;
-        count: number | undefined;
-        items: any[];
-    }[]>;
+    getOutline(): Promise<Array<OutlineNode>>;
     /**
      * @returns {Promise<OptionalContentConfig>} A promise that is resolved with
      *   an {@link OptionalContentConfig} that contains all the optional content
@@ -736,11 +866,7 @@ export class PDFDocumentProxy {
      *   a {MarkInfo} object that contains the MarkInfo flags for the PDF
      *   document, or `null` when no MarkInfo values are present in the PDF file.
      */
-    getMarkInfo(): Promise<{
-        Marked: boolean;
-        UserProperties: boolean;
-        Suspects: boolean;
-    } | null>;
+    getMarkInfo(): Promise<MarkInfo | null>;
     /**
      * @returns {Promise<TypedArray>} A promise that is resolved with a
      *   {TypedArray} that has the raw data from the PDF.
@@ -768,24 +894,7 @@ export class PDFDocumentProxy {
      *   current statistics about document structures (see
      *   {@link PDFDocumentStats}).
      */
-    getStats(): Promise<{
-        /**
-         * - Used stream types in the
-         * document (an item is set to true if specific stream ID was used in the
-         * document).
-         */
-        streamTypes: {
-            [x: string]: boolean;
-        };
-        /**
-         * - Used font types in the
-         * document (an item is set to true if specific font ID was used in the
-         * document).
-         */
-        fontTypes: {
-            [x: string]: boolean;
-        };
-    }>;
+    getStats(): Promise<PDFDocumentStats>;
     /**
      * Cleans up resources allocated by the document on both the main and worker
      * threads.
@@ -802,11 +911,10 @@ export class PDFDocumentProxy {
     /**
      * Destroys the current document instance and terminates the worker.
      */
-    destroy(): any;
+    destroy(): Promise<void>;
     /**
      * @type {DocumentInitParameters} A subset of the current
-     *   {DocumentInitParameters}, which are either needed in the viewer and/or
-     *   whose default values may be affected by the `apiCompatibilityParams`.
+     *   {DocumentInitParameters}, which are needed in the viewer.
      */
     get loadingParams(): DocumentInitParameters;
     /**
@@ -814,12 +922,10 @@ export class PDFDocumentProxy {
      */
     get loadingTask(): PDFDocumentLoadingTask;
     /**
-     * @param {AnnotationStorage} annotationStorage - Storage for annotation
-     *   data in forms.
      * @returns {Promise<Uint8Array>} A promise that is resolved with a
      *   {Uint8Array} containing the full data of the saved document.
      */
-    saveDocument(annotationStorage: AnnotationStorage): Promise<Uint8Array>;
+    saveDocument(): Promise<Uint8Array>;
     /**
      * @returns {Promise<Array<Object> | null>} A promise that is resolved with an
      *   {Array<Object>} containing /AcroForm field data for the JS sandbox,
@@ -860,12 +966,16 @@ export class PDFDocumentProxy {
  *   whitespace with standard spaces (0x20). The default value is `false`.
  * @property {boolean} disableCombineTextItems - Do not attempt to combine
  *   same line {@link TextItem}'s. The default value is `false`.
+ * @property {boolean} [includeMarkedContent] - When true include marked
+ *   content items in the items array of TextContent. The default is `false`.
  */
 /**
  * Page text content.
  *
  * @typedef {Object} TextContent
- * @property {Array<TextItem>} items - Array of {@link TextItem} objects.
+ * @property {Array<TextItem | TextMarkedContent>} items - Array of
+ *   {@link TextItem} and {@link TextMarkedContent} objects. TextMarkedContent
+ *   items are included when includeMarkedContent is true.
  * @property {Object<string, TextStyle>} styles - {@link TextStyle} objects,
  *   indexed by font name.
  */
@@ -879,6 +989,17 @@ export class PDFDocumentProxy {
  * @property {number} width - Width in device space.
  * @property {number} height - Height in device space.
  * @property {string} fontName - Font name used by PDF.js for converted font.
+ * @property {boolean} hasEOL - Indicating if the text content is followed by a
+ *   line-break.
+ */
+/**
+ * Page text marked content part.
+ *
+ * @typedef {Object} TextMarkedContent
+ * @property {string} type - Either 'beginMarkedContent',
+ *   'beginMarkedContentProps', or 'endMarkedContent'.
+ * @property {string} id - The marked content identifier. Only used for type
+ *   'beginMarkedContentProps'.
  */
 /**
  * Text style.
@@ -893,9 +1014,9 @@ export class PDFDocumentProxy {
  * Page annotation parameters.
  *
  * @typedef {Object} GetAnnotationsParameters
- * @property {string} intent - Determines the annotations that will be fetched,
- *   can be either 'display' (viewable annotations) or 'print' (printable
- *   annotations). If the parameter is omitted, all annotations are fetched.
+ * @property {string} [intent] - Determines the annotations that are fetched,
+ *   can be 'display' (viewable annotations), 'print' (printable annotations),
+ *   or 'any' (all annotations). The default value is 'display'.
  */
 /**
  * Page render parameters.
@@ -904,13 +1025,20 @@ export class PDFDocumentProxy {
  * @property {Object} canvasContext - A 2D context of a DOM Canvas object.
  * @property {PageViewport} viewport - Rendering viewport obtained by calling
  *   the `PDFPageProxy.getViewport` method.
- * @property {string} [intent] - Rendering intent, can be 'display' or 'print'.
- *   The default value is 'display'.
- * @property {boolean} [enableWebGL] - Enables WebGL accelerated rendering for
- *   some operations. The default value is `false`.
- * @property {boolean} [renderInteractiveForms] - Whether or not interactive
- *   form elements are rendered in the display layer. If so, we do not render
- *   them on the canvas as well.
+ * @property {string} [intent] - Rendering intent, can be 'display', 'print',
+ *   or 'any'. The default value is 'display'.
+ * @property {number} [annotationMode] Controls which annotations are rendered
+ *   onto the canvas, for annotations with appearance-data; the values from
+ *   {@link AnnotationMode} should be used. The following values are supported:
+ *    - `AnnotationMode.DISABLE`, which disables all annotations.
+ *    - `AnnotationMode.ENABLE`, which includes all possible annotations (thus
+ *      it also depends on the `intent`-option, see above).
+ *    - `AnnotationMode.ENABLE_FORMS`, which excludes annotations that contain
+ *      interactive form elements (those will be rendered in the display layer).
+ *    - `AnnotationMode.ENABLE_STORAGE`, which includes all possible annotations
+ *      (as above) but where interactive form elements are updated with data
+ *      from the {@link AnnotationStorage}-instance; useful e.g. for printing.
+ *   The default value is `AnnotationMode.ENABLE`.
  * @property {Array<any>} [transform] - Additional transform, applied just
  *   before viewport transform.
  * @property {Object} [imageLayer] - An object that has `beginLayout`,
@@ -922,13 +1050,47 @@ export class PDFDocumentProxy {
  *   <color> value, a `CanvasGradient` object (a linear or radial gradient) or
  *   a `CanvasPattern` object (a repetitive image). The default value is
  *   'rgb(255,255,255)'.
- * @property {AnnotationStorage} [annotationStorage] - Storage for annotation
- *   data in forms.
  * @property {Promise<OptionalContentConfig>} [optionalContentConfigPromise] -
  *   A promise that should resolve with an {@link OptionalContentConfig}
  *   created from `PDFDocumentProxy.getOptionalContentConfig`. If `null`,
  *   the configuration will be fetched automatically with the default visibility
  *   states set.
+ */
+/**
+ * Page getOperatorList parameters.
+ *
+ * @typedef {Object} GetOperatorListParameters
+ * @property {string} [intent] - Rendering intent, can be 'display', 'print',
+ *   or 'any'. The default value is 'display'.
+ * @property {number} [annotationMode] Controls which annotations are included
+ *   in the operatorList, for annotations with appearance-data; the values from
+ *   {@link AnnotationMode} should be used. The following values are supported:
+ *    - `AnnotationMode.DISABLE`, which disables all annotations.
+ *    - `AnnotationMode.ENABLE`, which includes all possible annotations (thus
+ *      it also depends on the `intent`-option, see above).
+ *    - `AnnotationMode.ENABLE_FORMS`, which excludes annotations that contain
+ *      interactive form elements (those will be rendered in the display layer).
+ *    - `AnnotationMode.ENABLE_STORAGE`, which includes all possible annotations
+ *      (as above) but where interactive form elements are updated with data
+ *      from the {@link AnnotationStorage}-instance; useful e.g. for printing.
+ *   The default value is `AnnotationMode.ENABLE`.
+ */
+/**
+ * Structure tree node. The root node will have a role "Root".
+ *
+ * @typedef {Object} StructTreeNode
+ * @property {Array<StructTreeNode | StructTreeContent>} children - Array of
+ *   {@link StructTreeNode} and {@link StructTreeContent} objects.
+ * @property {string} role - element's role, already mapped if a role map exists
+ * in the PDF.
+ */
+/**
+ * Structure tree content.
+ *
+ * @typedef {Object} StructTreeContent
+ * @property {string} type - either "content" for page and stream structure
+ *   elements or "object" for object references.
+ * @property {string} id - unique id that will map to the text layer.
  */
 /**
  * PDF page operator list.
@@ -954,6 +1116,7 @@ export class PDFPageProxy {
     cleanupAfterRender: boolean;
     pendingCleanup: boolean;
     _intentStates: Map<any, any>;
+    _annotationPromises: Map<any, any>;
     destroyed: boolean;
     /**
      * @type {number} Page number of the page. First page is 1.
@@ -964,10 +1127,9 @@ export class PDFPageProxy {
      */
     get rotate(): number;
     /**
-     * @type {Object} The reference that points to this page. It has `num` and
-     *   `gen` properties.
+     * @type {RefProxy | null} The reference that points to this page.
      */
-    get ref(): Object;
+    get ref(): RefProxy | null;
     /**
      * @type {number} The default size of units in 1/72nds of an inch.
      */
@@ -989,8 +1151,6 @@ export class PDFPageProxy {
      *   {Array} of the annotation objects.
      */
     getAnnotations({ intent }?: GetAnnotationsParameters): Promise<Array<any>>;
-    _annotationsPromise: any;
-    _annotationsIntent: string | undefined;
     /**
      * @returns {Promise<Object>} A promise that is resolved with an
      *   {Object} with JS actions.
@@ -1006,21 +1166,23 @@ export class PDFPageProxy {
     /**
      * Begins the process of rendering a page to the desired context.
      *
-     * @param {RenderParameters} params Page render parameters.
+     * @param {RenderParameters} params - Page render parameters.
      * @returns {RenderTask} An object that contains a promise that is
      *   resolved when the page finishes rendering.
      */
-    render({ canvasContext, viewport, intent, enableWebGL, renderInteractiveForms, transform, imageLayer, canvasFactory, background, annotationStorage, optionalContentConfigPromise, }: RenderParameters): RenderTask;
+    render({ canvasContext, viewport, intent, annotationMode, transform, imageLayer, canvasFactory, background, optionalContentConfigPromise, }: RenderParameters, ...args: any[]): RenderTask;
     /**
+     * @param {GetOperatorListParameters} params - Page getOperatorList
+     *   parameters.
      * @returns {Promise<PDFOperatorList>} A promise resolved with an
-     *   {@link PDFOperatorList} object that represents page's operator list.
+     *   {@link PDFOperatorList} object that represents the page's operator list.
      */
-    getOperatorList(): Promise<PDFOperatorList>;
+    getOperatorList({ intent, annotationMode, }?: GetOperatorListParameters): Promise<PDFOperatorList>;
     /**
      * @param {getTextContentParameters} params - getTextContent parameters.
      * @returns {ReadableStream} Stream for reading text content chunks.
      */
-    streamTextContent({ normalizeWhitespace, disableCombineTextItems, }?: getTextContentParameters): ReadableStream;
+    streamTextContent({ normalizeWhitespace, disableCombineTextItems, includeMarkedContent, }?: getTextContentParameters): ReadableStream;
     /**
      * @param {getTextContentParameters} params - getTextContent parameters.
      * @returns {Promise<TextContent>} A promise that is resolved with a
@@ -1028,12 +1190,18 @@ export class PDFPageProxy {
      */
     getTextContent(params?: getTextContentParameters): Promise<TextContent>;
     /**
+     * @returns {Promise<StructTreeNode>} A promise that is resolved with a
+     *   {@link StructTreeNode} object that represents the page's structure tree,
+     *   or `null` when no structure tree is present for the current page.
+     */
+    getStructTree(): Promise<StructTreeNode>;
+    /**
      * Destroys the page object.
      * @private
      */
     private _destroy;
     _jsActionsPromise: any;
-    _xfaPromise: any;
+    _structTreePromise: any;
     /**
      * Cleans up resources allocated by the page.
      *
@@ -1069,14 +1237,62 @@ export class PDFPageProxy {
     get stats(): Object;
 }
 /**
- * @typedef {Object} PDFWorkerParameters
- * @property {string} [name] - The name of the worker.
- * @property {Object} [port] - The `workerPort` object.
- * @property {number} [verbosity] - Controls the logging level; the
- *   constants from {@link VerbosityLevel} should be used.
+ * PDF.js web worker abstraction that controls the instantiation of PDF
+ * documents. Message handlers are used to pass information from the main
+ * thread to the worker thread and vice versa. If the creation of a web
+ * worker is not possible, a "fake" worker will be used instead.
+ *
+ * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
-/** @type {any} */
-export const PDFWorker: any;
+export class PDFWorker {
+    static get _workerPorts(): any;
+    /**
+     * @param {PDFWorkerParameters} params - The worker initialization parameters.
+     */
+    static fromPort(params: PDFWorkerParameters): any;
+    /**
+     * The current `workerSrc`, when it exists.
+     * @type {string}
+     */
+    static get workerSrc(): string;
+    static get _mainThreadWorkerMessageHandler(): any;
+    static get _setupFakeWorkerGlobal(): any;
+    constructor({ name, port, verbosity, }?: {
+        name?: any;
+        port?: any;
+        verbosity?: number | undefined;
+    });
+    name: any;
+    destroyed: boolean;
+    postMessageTransfers: boolean;
+    verbosity: number;
+    _readyCapability: import("../shared/util.js").PromiseCapability;
+    _port: any;
+    _webWorker: Worker | null;
+    _messageHandler: MessageHandler | null;
+    /**
+     * Promise for worker initialization completion.
+     * @type {Promise<void>}
+     */
+    get promise(): Promise<void>;
+    /**
+     * The current `workerPort`, when it exists.
+     * @type {Worker}
+     */
+    get port(): Worker;
+    /**
+     * The current MessageHandler-instance.
+     * @type {MessageHandler}
+     */
+    get messageHandler(): MessageHandler;
+    _initializeFromPort(port: any): void;
+    _initialize(): void;
+    _setupFakeWorker(): void;
+    /**
+     * Destroys the worker instance.
+     */
+    destroy(): void;
+}
 /**
  * Sets the function that instantiates an {IPDFStream} as an alternative PDF
  * data transport.
@@ -1090,40 +1306,68 @@ export function setPDFNetworkStreamFactory(pdfNetworkStreamFactory: IPDFStreamFa
 /** @type {string} */
 export const version: string;
 import { PageViewport } from "./display_utils.js";
-import { AnnotationStorage } from "./annotation_storage.js";
 import { OptionalContentConfig } from "./optional_content_config.js";
 import { DOMCanvasFactory } from "./display_utils.js";
 import { DOMCMapReaderFactory } from "./display_utils.js";
+import { DOMStandardFontDataFactory } from "./display_utils.js";
+/**
+ * @typedef {Object} OnProgressParameters
+ * @property {number} loaded - Currently loaded number of bytes.
+ * @property {number} total - Total number of bytes in the PDF file.
+ */
 /**
  * The loading task controls the operations required to load a PDF document
  * (such as network requests) and provides a way to listen for completion,
  * after which individual pages can be rendered.
- *
- * @typedef {Object} PDFDocumentLoadingTask
- * @property {string} docId - Unique identifier for the document loading task.
- * @property {boolean} destroyed - Whether the loading task is destroyed or not.
- * @property {function} [onPassword] - Callback to request a password if a wrong
- *   or no password was provided. The callback receives two parameters: a
- *   function that should be called with the new password, and a reason (see
- *   {@link PasswordResponses}).
- * @property {function} [onProgress] - Callback to be able to monitor the
- *   loading progress of the PDF file (necessary to implement e.g. a loading
- *   bar). The callback receives an {Object} with the properties `loaded`
- *   ({number}) and `total` ({number}) that indicate how many bytes are loaded.
- * @property {function} [onUnsupportedFeature] - Callback for when an
- *   unsupported feature is used in the PDF document. The callback receives an
- *   {@link UNSUPPORTED_FEATURES} argument.
- * @property {Promise<PDFDocumentProxy>} promise - Promise for document loading
- *   task completion.
- * @property {function} destroy - Abort all network requests and destroy
- *   the worker. Returns a promise that is resolved when destruction is
- *   completed.
  */
-/**
- * @type {any}
- * @ignore
- */
-declare const PDFDocumentLoadingTask: any;
+declare class PDFDocumentLoadingTask {
+    static get idCounters(): any;
+    _capability: import("../shared/util.js").PromiseCapability;
+    _transport: any;
+    _worker: any;
+    /**
+     * Unique identifier for the document loading task.
+     * @type {string}
+     */
+    docId: string;
+    /**
+     * Whether the loading task is destroyed or not.
+     * @type {boolean}
+     */
+    destroyed: boolean;
+    /**
+     * Callback to request a password if a wrong or no password was provided.
+     * The callback receives two parameters: a function that should be called
+     * with the new password, and a reason (see {@link PasswordResponses}).
+     * @type {function}
+     */
+    onPassword: Function;
+    /**
+     * Callback to be able to monitor the loading progress of the PDF file
+     * (necessary to implement e.g. a loading bar).
+     * The callback receives an {@link OnProgressParameters} argument.
+     * @type {function}
+     */
+    onProgress: Function;
+    /**
+     * Callback for when an unsupported feature is used in the PDF document.
+     * The callback receives an {@link UNSUPPORTED_FEATURES} argument.
+     * @type {function}
+     */
+    onUnsupportedFeature: Function;
+    /**
+     * Promise for document loading task completion.
+     * @type {Promise<PDFDocumentProxy>}
+     */
+    get promise(): Promise<PDFDocumentProxy>;
+    /**
+     * Abort all network requests and destroy the worker.
+     * @returns {Promise<void>} A promise that is resolved when destruction is
+     *   completed.
+     */
+    destroy(): Promise<void>;
+}
+import { AnnotationStorage } from "./annotation_storage.js";
 import { info } from "../shared/util.js";
 import { Metadata } from "./metadata.js";
 import { StatTimer } from "./display_utils.js";
@@ -1181,4 +1425,5 @@ declare class RenderTask {
      */
     cancel(): void;
 }
+import { MessageHandler } from "../shared/message_handler.js";
 export {};

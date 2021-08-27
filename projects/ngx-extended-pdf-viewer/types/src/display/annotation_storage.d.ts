@@ -3,6 +3,7 @@
  */
 export class AnnotationStorage {
     _storage: Map<any, any>;
+    _timeStamp: number;
     _modified: boolean;
     onSetModified: any;
     onResetModified: any;
@@ -12,23 +13,21 @@ export class AnnotationStorage {
      * @public
      * @memberof AnnotationStorage
      * @param {string} key
+     * @param {string} fieldName name of the input field
      * @param {Object} defaultValue
      * @returns {Object}
      */
-    public getValue(key: string, defaultValue: Object): Object;
-    /**
-     * @deprecated
-     */
-    getOrCreateValue(key: any, defaultValue: any): any;
+    public getValue(key: string, fieldname: any, defaultValue: Object, radioButtonField?: any): Object;
     /**
      * Set the value for a given key
      *
      * @public
      * @memberof AnnotationStorage
      * @param {string} key
+     * @param {string} fieldName name of the input field
      * @param {Object} value
      */
-    public setValue(key: string, value: Object): void;
+    public setValue(key: string, fieldname: any, value: Object, radioButtonField?: any): void;
     getAll(): any;
     get size(): number;
     /**
@@ -41,4 +40,9 @@ export class AnnotationStorage {
      * @ignore
      */
     get serializable(): Map<any, any> | null;
+    /**
+     * PLEASE NOTE: Only intended for usage within the API itself.
+     * @ignore
+     */
+    get lastModified(): string;
 }

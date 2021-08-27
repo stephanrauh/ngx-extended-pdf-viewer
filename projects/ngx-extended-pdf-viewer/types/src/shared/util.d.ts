@@ -88,6 +88,12 @@ export namespace AnnotationMarkedState {
     const MARKED: string;
     const UNMARKED: string;
 }
+export namespace AnnotationMode {
+    const DISABLE: number;
+    const ENABLE: number;
+    const ENABLE_FORMS: number;
+    const ENABLE_STORAGE: number;
+}
 export namespace AnnotationReplyType {
     const GROUP: string;
     const REPLY: string;
@@ -372,7 +378,9 @@ export namespace RenderingIntentFlag {
     export const DISPLAY: number;
     const PRINT_2: number;
     export { PRINT_2 as PRINT };
-    export const ANNOTATION_FORMS: number;
+    export const ANNOTATIONS_FORMS: number;
+    export const ANNOTATIONS_STORAGE: number;
+    export const ANNOTATIONS_DISABLE: number;
     export const OPLIST: number;
 }
 export function setVerbosityLevel(level: any): void;

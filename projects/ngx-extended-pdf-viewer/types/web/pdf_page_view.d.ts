@@ -37,6 +37,14 @@ export type PDFPageViewOptions = {
      * The default value is `TextLayerMode.ENABLE`.
      */
     textLayerMode?: number | undefined;
+    /**
+     * - Controls if the annotation layer is
+     * created, and if interactive form elements or `AnnotationStorage`-data are
+     * being rendered. The constants from {@link AnnotationMode} should be used;
+     * see also {@link RenderParameters} and {@link GetOperatorListParameters}.
+     * The default value is `AnnotationMode.ENABLE_FORMS`.
+     */
+    annotationMode?: number | undefined;
     annotationLayerFactory: any;
     xfaLayerFactory: any;
     structTreeLayerFactory: any;
@@ -45,11 +53,6 @@ export type PDFPageViewOptions = {
      * for annotation icons. Include trailing slash.
      */
     imageResourcesPath?: string | undefined;
-    /**
-     * - Turns on rendering of
-     * interactive form elements. The default value is `true`.
-     */
-    renderInteractiveForms: boolean;
     /**
      * - 'canvas' or 'svg'. The default is 'canvas'.
      */
@@ -88,9 +91,9 @@ export class PDFPageView implements IRenderableView {
     pdfPageRotate: any;
     _optionalContentConfigPromise: Promise<any> | null;
     hasRestrictedScaling: boolean;
-    textLayerMode: number | undefined;
+    textLayerMode: number;
+    _annotationMode: any;
     imageResourcesPath: string;
-    renderInteractiveForms: boolean;
     useOnlyCssZoom: boolean;
     maxCanvasPixels: any;
     eventBus: any;
@@ -98,6 +101,7 @@ export class PDFPageView implements IRenderableView {
     textLayerFactory: any;
     annotationLayerFactory: any;
     xfaLayerFactory: any;
+    textHighlighter: any;
     structTreeLayerFactory: any;
     renderer: string;
     l10n: any;
@@ -127,6 +131,7 @@ export class PDFPageView implements IRenderableView {
      * @private
      */
     private _renderXfaLayer;
+    _buildXfaTextContentItems(textDivs: any): Promise<void>;
     /**
      * @private
      */

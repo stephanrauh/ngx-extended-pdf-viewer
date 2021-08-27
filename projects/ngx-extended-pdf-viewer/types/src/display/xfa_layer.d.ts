@@ -1,6 +1,9 @@
 export class XfaLayer {
-    static setAttributes(html: any, attrs: any): void;
-    static render(parameters: any): void;
+    static setupStorage(html: any, id: any, element: any, storage: any, intent: any): void;
+    static setAttributes(html: any, element: any, storage: any, intent: any): void;
+    static render(parameters: any): {
+        textDivs: Text[];
+    };
     /**
      * Update the xfa layer.
      *
