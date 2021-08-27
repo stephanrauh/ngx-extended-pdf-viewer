@@ -1878,10 +1878,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
               field.value = formData[key];
             }
           } else if (!field) {
-            const textarea = document.querySelector("textarea[name='" + key + "']");
+            const textarea = document.querySelector("textarea[name='" + key + "']") as HTMLTextAreaElement;
             if (textarea) {
               storage.setValue(textarea.id, key, { value: formData[key], emitMessage: false });
-              textarea.textContent = formData[key];
+              textarea.value = formData[key];
             } else {
               const dropdown = document.querySelector("select[name='" + key + "']") as HTMLSelectElement | null;
               if (dropdown) {
@@ -1918,10 +1918,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
               field.value = '';
             }
           } else if (!field) {
-            const textarea = document.querySelector("textarea[name='" + key + "']");
+            const textarea = document.querySelector("textarea[name='" + key + "']") as HTMLTextAreaElement;
             if (textarea) {
               storage.setValue(textarea.id, key, { value: undefined, emitMessage: false });
-              textarea.textContent = null;
+              textarea.value = '';
             }
           }
         }

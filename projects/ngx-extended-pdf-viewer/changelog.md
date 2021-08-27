@@ -293,3 +293,4 @@
 - 10.0.0-alpha.6 #859 combine pageViewMode: single and spread: even
 - 10.0.0-alpha.7 #859 don't jump to another page when switching to another spread mode; align the pages correctly when [showBorders]="false"; #874 deactivate scrollMode and spreadMode depending on the pageViewMode; #803 stop setting the height of the PDF viewer to 100px after leaving the infinite scroll demo
 - 10.0.0-alpha.8 #877 the pages should be aligned to the center in single-page mode; #716 implementing the book mode (early prototype)
+- 10.0.0-alpha.9 #889 fixed two-way binding for text areas in PDF forms
