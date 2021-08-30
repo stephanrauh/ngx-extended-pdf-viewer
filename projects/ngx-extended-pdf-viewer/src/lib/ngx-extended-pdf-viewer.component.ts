@@ -139,6 +139,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     } else if (viewMode !== 'multiple') {
       this.scrollMode = ScrollModeType.vertical;
     }
+    if (viewMode === 'book') {
+      this.showBorders = false;
+    }
   }
 
   @Output()

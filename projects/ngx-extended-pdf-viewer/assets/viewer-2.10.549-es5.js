@@ -13888,17 +13888,17 @@ var _annotation_layer_builder = __webpack_require__(33);
 
 var _l10n_utils = __webpack_require__(34);
 
-var _pdf_page_view = __webpack_require__(35);
+var _pageFlipModule = __webpack_require__(35);
+
+var _pdf_page_view = __webpack_require__(36);
 
 var _pdf_link_service = __webpack_require__(23);
 
-var _struct_tree_layer_builder = __webpack_require__(149);
+var _struct_tree_layer_builder = __webpack_require__(150);
 
-var _text_layer_builder = __webpack_require__(150);
+var _text_layer_builder = __webpack_require__(151);
 
-var _xfa_layer_builder = __webpack_require__(151);
-
-var _pageFlip = __webpack_require__(152);
+var _xfa_layer_builder = __webpack_require__(152);
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
@@ -14123,16 +14123,15 @@ var BaseViewer = /*#__PURE__*/function () {
           setTimeout(function () {
             if (!_this2.pageFlip) {
               var page1 = _this2._pages[0].div;
-              var viewerContainer = page1.parentElement.parentElement;
-              var requiredWidth = page1.clientWidth * 2;
-              var requiredHeight = page1.clientHeight;
-              var factorX = viewerContainer.clientWidth / requiredWidth * 0.95;
-              var factorY = viewerContainer.clientHeight / requiredHeight * 0.95;
-              var factor = Math.min(1, factorX, factorY);
               var htmlParentElement = page1.parentElement;
-              _this2.pageFlip = new _pageFlip.PageFlip(htmlParentElement, {
-                width: page1.clientWidth * factor,
-                height: page1.clientHeight * factor,
+              var viewer = htmlParentElement.parentElement;
+              viewer.style.width = 2 * page1.clientWidth + "px";
+              viewer.style.overflow = "hidden";
+              viewer.style.marginLeft = "auto";
+              viewer.style.marginRight = "auto";
+              _this2.pageFlip = new _pageFlipModule.PageFlip(htmlParentElement, {
+                width: page1.clientWidth,
+                height: page1.clientHeight,
                 showCover: true,
                 size: "fixed"
               });
@@ -14141,7 +14140,7 @@ var BaseViewer = /*#__PURE__*/function () {
 
               _this2.pageFlip.on("flip", function (e) {
                 if (_this2._currentPageNumber !== e.data + 1) {
-                  _this2._currentPageNumber = e.data + 1;
+                  _this2._setCurrentPageNumber(e.data + 1, false);
                 }
               });
             }
@@ -14192,24 +14191,6 @@ var BaseViewer = /*#__PURE__*/function () {
           this._ensurePdfPageLoaded(pageView).then(function () {
             _this3.renderingQueue.renderView(pageView);
           });
-
-          if (this.pageViewMode === "book") {
-            if (this.currentPageNumber > 2) {
-              var previousPage = this._pages[this.currentPageNumber - 2];
-
-              this._ensurePdfPageLoaded(previousPage).then(function () {
-                _this3.renderingQueue.renderView(previousPage);
-              });
-            }
-
-            if (this.currentPageNumber < this._pages.length) {
-              var nextPage = this._pages[this.currentPageNumber];
-
-              this._ensurePdfPageLoaded(nextPage).then(function () {
-                _this3.renderingQueue.renderView(nextPage);
-              });
-            }
-          }
         }
       }
 
@@ -14225,6 +14206,37 @@ var BaseViewer = /*#__PURE__*/function () {
       }
 
       return true;
+    }
+  }, {
+    key: "ensureAdjecentPagesAreLoaded",
+    value: function ensureAdjecentPagesAreLoaded() {
+      var _this4 = this;
+
+      if (this.currentPageNumber + 2 < this._pages.length) {
+        var nextPage = this._pages[this.currentPageNumber + 1];
+
+        if (nextPage.renderingState === _pdf_rendering_queue.RenderingStates.INITIAL) {
+          this._ensurePdfPageLoaded(nextPage).then(function () {
+            _this4.renderingQueue.renderView(nextPage);
+
+            console.log("rendered page " + (_this4.currentPageNumber + 1));
+          });
+        }
+      }
+
+      setTimeout(function () {
+        if (_this4.currentPageNumber + 3 < _this4._pages.length) {
+          var _nextPage = _this4._pages[_this4.currentPageNumber + 2];
+
+          if (_nextPage.renderingState === _pdf_rendering_queue.RenderingStates.INITIAL) {
+            _this4._ensurePdfPageLoaded(_nextPage).then(function () {
+              _this4.renderingQueue.renderView(_nextPage);
+
+              console.log("rendered page " + (_this4.currentPageNumber + 2));
+            });
+          }
+        }
+      }, 100);
     }
   }, {
     key: "currentPageLabel",
@@ -14358,7 +14370,7 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "setDocument",
     value: function setDocument(pdfDocument) {
-      var _this4 = this;
+      var _this5 = this;
 
       if (this.pdfDocument) {
         this.eventBus.dispatch("pagesdestroy", {
@@ -14390,98 +14402,98 @@ var BaseViewer = /*#__PURE__*/function () {
       var optionalContentConfigPromise = pdfDocument.getOptionalContentConfig();
 
       this._pagesCapability.promise.then(function () {
-        _this4.eventBus.dispatch("pagesloaded", {
-          source: _this4,
+        _this5.eventBus.dispatch("pagesloaded", {
+          source: _this5,
           pagesCount: pagesCount
         });
       });
 
       this._onBeforeDraw = function (evt) {
-        var pageView = _this4._pages[evt.pageNumber - 1];
+        var pageView = _this5._pages[evt.pageNumber - 1];
 
         if (!pageView) {
           return;
         }
 
-        _this4._buffer.push(pageView);
+        _this5._buffer.push(pageView);
       };
 
       this.eventBus._on("pagerender", this._onBeforeDraw);
 
       this._onAfterDraw = function (evt) {
-        if (evt.cssTransform || _this4._onePageRenderedCapability.settled) {
+        if (evt.cssTransform || _this5._onePageRenderedCapability.settled) {
           return;
         }
 
-        _this4._onePageRenderedCapability.resolve();
+        _this5._onePageRenderedCapability.resolve();
 
-        _this4.eventBus._off("pagerendered", _this4._onAfterDraw);
+        _this5.eventBus._off("pagerendered", _this5._onAfterDraw);
 
-        _this4._onAfterDraw = null;
+        _this5._onAfterDraw = null;
       };
 
       this.eventBus._on("pagerendered", this._onAfterDraw);
 
       firstPagePromise.then(function (firstPdfPage) {
-        _this4._firstPageCapability.resolve(firstPdfPage);
+        _this5._firstPageCapability.resolve(firstPdfPage);
 
-        _this4._optionalContentConfigPromise = optionalContentConfigPromise;
-        var scale = _this4.currentScale;
+        _this5._optionalContentConfigPromise = optionalContentConfigPromise;
+        var scale = _this5.currentScale;
         var viewport = firstPdfPage.getViewport({
           scale: scale * _ui_utils.CSS_UNITS
         });
-        var textLayerFactory = _this4.textLayerMode !== _ui_utils.TextLayerMode.DISABLE ? _this4 : null;
-        var xfaLayerFactory = isPureXfa ? _this4 : null;
+        var textLayerFactory = _this5.textLayerMode !== _ui_utils.TextLayerMode.DISABLE ? _this5 : null;
+        var xfaLayerFactory = isPureXfa ? _this5 : null;
 
         for (var pageNum = 1; pageNum <= pagesCount; ++pageNum) {
           var pageView = new _pdf_page_view.PDFPageView({
-            container: _this4._viewerElement,
-            eventBus: _this4.eventBus,
+            container: _this5._viewerElement,
+            eventBus: _this5.eventBus,
             id: pageNum,
             scale: scale,
             defaultViewport: viewport.clone(),
             optionalContentConfigPromise: optionalContentConfigPromise,
-            renderingQueue: _this4.renderingQueue,
+            renderingQueue: _this5.renderingQueue,
             textLayerFactory: textLayerFactory,
-            textLayerMode: _this4.textLayerMode,
-            annotationLayerFactory: _this4,
+            textLayerMode: _this5.textLayerMode,
+            annotationLayerFactory: _this5,
             xfaLayerFactory: xfaLayerFactory,
-            structTreeLayerFactory: _this4,
-            imageResourcesPath: _this4.imageResourcesPath,
-            removePageBorders: _this4.removePageBorders,
-            renderInteractiveForms: _this4.renderInteractiveForms,
-            renderer: _this4.renderer,
-            useOnlyCssZoom: _this4.useOnlyCssZoom,
-            maxCanvasPixels: _this4.maxCanvasPixels,
-            l10n: _this4.l10n
+            structTreeLayerFactory: _this5,
+            imageResourcesPath: _this5.imageResourcesPath,
+            removePageBorders: _this5.removePageBorders,
+            renderInteractiveForms: _this5.renderInteractiveForms,
+            renderer: _this5.renderer,
+            useOnlyCssZoom: _this5.useOnlyCssZoom,
+            maxCanvasPixels: _this5.maxCanvasPixels,
+            l10n: _this5.l10n
           });
 
-          _this4._pages.push(pageView);
+          _this5._pages.push(pageView);
         }
 
-        var firstPageView = _this4._pages[0];
+        var firstPageView = _this5._pages[0];
 
         if (firstPageView) {
           firstPageView.setPdfPage(firstPdfPage);
 
-          _this4.linkService.cachePageRef(1, firstPdfPage.ref);
+          _this5.linkService.cachePageRef(1, firstPdfPage.ref);
         }
 
-        if (_this4._spreadMode !== _ui_utils.SpreadMode.NONE) {
-          _this4._updateSpreadMode();
+        if (_this5._spreadMode !== _ui_utils.SpreadMode.NONE) {
+          _this5._updateSpreadMode();
         }
 
-        _this4._onePageRenderedOrForceFetch().then(function () {
-          if (_this4.findController) {
-            _this4.findController.setDocument(pdfDocument);
+        _this5._onePageRenderedOrForceFetch().then(function () {
+          if (_this5.findController) {
+            _this5.findController.setDocument(pdfDocument);
           }
 
-          if (_this4.enableScripting) {
-            _this4._scriptingManager.setDocument(pdfDocument);
+          if (_this5.enableScripting) {
+            _this5._scriptingManager.setDocument(pdfDocument);
           }
 
           if (pdfDocument.loadingParams.disableAutoFetch || pagesCount > 7500) {
-            _this4._pagesCapability.resolve();
+            _this5._pagesCapability.resolve();
 
             return;
           }
@@ -14489,29 +14501,29 @@ var BaseViewer = /*#__PURE__*/function () {
           var getPagesLeft = pagesCount - 1;
 
           if (getPagesLeft <= 0) {
-            _this4._pagesCapability.resolve();
+            _this5._pagesCapability.resolve();
 
             return;
           }
 
           var _loop = function _loop(_pageNum) {
             pdfDocument.getPage(_pageNum).then(function (pdfPage) {
-              var pageView = _this4._pages[_pageNum - 1];
+              var pageView = _this5._pages[_pageNum - 1];
 
               if (!pageView.pdfPage) {
                 pageView.setPdfPage(pdfPage);
               }
 
-              _this4.linkService.cachePageRef(_pageNum, pdfPage.ref);
+              _this5.linkService.cachePageRef(_pageNum, pdfPage.ref);
 
               if (--getPagesLeft === 0) {
-                _this4._pagesCapability.resolve();
+                _this5._pagesCapability.resolve();
               }
             }, function (reason) {
               console.error("Unable to get page ".concat(_pageNum, " to initialize viewer"), reason);
 
               if (--getPagesLeft === 0) {
-                _this4._pagesCapability.resolve();
+                _this5._pagesCapability.resolve();
               }
             });
           };
@@ -14521,14 +14533,14 @@ var BaseViewer = /*#__PURE__*/function () {
           }
         });
 
-        _this4.hidePagesDependingOnpageViewMode();
+        _this5.hidePagesDependingOnpageViewMode();
 
-        _this4.eventBus.dispatch("pagesinit", {
-          source: _this4
+        _this5.eventBus.dispatch("pagesinit", {
+          source: _this5
         });
 
-        if (_this4.defaultRenderingQueue) {
-          _this4.update();
+        if (_this5.defaultRenderingQueue) {
+          _this5.update();
         }
       })["catch"](function (reason) {
         console.error("Unable to initialize viewer", reason);
@@ -14779,7 +14791,7 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "scrollPageIntoView",
     value: function scrollPageIntoView(_ref3) {
-      var _this5 = this;
+      var _this6 = this;
 
       var pageNumber = _ref3.pageNumber,
           _ref3$destArray = _ref3.destArray,
@@ -14879,10 +14891,10 @@ var BaseViewer = /*#__PURE__*/function () {
       }
 
       this._ensurePdfPageLoaded(pageView).then(function () {
-        _this5.renderingQueue.renderView(pageView);
+        _this6.renderingQueue.renderView(pageView);
 
-        if (_this5.currentPageNumber !== pageNumber) {
-          _this5.currentPageNumber = pageNumber;
+        if (_this6.currentPageNumber !== pageNumber) {
+          _this6.currentPageNumber = pageNumber;
         }
       });
 
@@ -15036,7 +15048,7 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "_getVisiblePages",
     value: function _getVisiblePages() {
-      var _this6 = this;
+      var _this7 = this;
 
       if (this.pageViewMode === "single") {
         if (!this.pagesCount) {
@@ -15051,7 +15063,7 @@ var BaseViewer = /*#__PURE__*/function () {
           var pageViews = [];
           pageView.div.parentElement.childNodes.forEach(function (div) {
             var pageNumber = Number(div.getAttribute("data-page-number"));
-            var pv = _this6._pages[pageNumber - 1];
+            var pv = _this7._pages[pageNumber - 1];
             var element = pv.div;
             var view = {
               id: pv.id,
@@ -15136,7 +15148,7 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "_ensurePdfPageLoaded",
     value: function _ensurePdfPageLoaded(pageView) {
-      var _this7 = this;
+      var _this8 = this;
 
       if (pageView.pdfPage) {
         return Promise.resolve(pageView.pdfPage);
@@ -15151,13 +15163,13 @@ var BaseViewer = /*#__PURE__*/function () {
           pageView.setPdfPage(pdfPage);
         }
 
-        _this7._pagesRequests["delete"](pageView);
+        _this8._pagesRequests["delete"](pageView);
 
         return pdfPage;
       })["catch"](function (reason) {
         console.error("Unable to get page for page view", reason);
 
-        _this7._pagesRequests["delete"](pageView);
+        _this8._pagesRequests["delete"](pageView);
       });
 
       this._pagesRequests.set(pageView, promise);
@@ -15167,7 +15179,7 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "forceRendering",
     value: function forceRendering(currentlyVisiblePages) {
-      var _this8 = this;
+      var _this9 = this;
 
       var visiblePages = currentlyVisiblePages || this._getVisiblePages();
 
@@ -15176,7 +15188,7 @@ var BaseViewer = /*#__PURE__*/function () {
 
       if (pageView) {
         this._ensurePdfPageLoaded(pageView).then(function () {
-          _this8.renderingQueue.renderView(pageView);
+          _this9.renderingQueue.renderView(pageView);
         });
 
         return true;
@@ -15261,14 +15273,14 @@ var BaseViewer = /*#__PURE__*/function () {
   }, {
     key: "getPagesOverview",
     value: function getPagesOverview() {
-      var _this9 = this;
+      var _this10 = this;
 
       return this._pages.map(function (pageView) {
         var viewport = pageView.pdfPage.getViewport({
           scale: 1
         });
 
-        if (!_this9.enablePrintAutoRotate || (0, _ui_utils.isPortraitOrientation)(viewport)) {
+        if (!_this10.enablePrintAutoRotate || (0, _ui_utils.isPortraitOrientation)(viewport)) {
           return {
             width: viewport.width,
             height: viewport.height,
@@ -16024,6 +16036,2960 @@ exports.NullL10n = NullL10n;
 
 /***/ }),
 /* 35 */
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.PageFlip = void 0;
+
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Page = /*#__PURE__*/function () {
+  function Page(render, density) {
+    _classCallCheck(this, Page);
+
+    this.state = {
+      angle: 0,
+      area: [],
+      position: {
+        x: 0,
+        y: 0
+      },
+      hardAngle: 0,
+      hardDrawingAngle: 0
+    };
+    this.createdDensity = density;
+    this.nowDrawingDensity = this.createdDensity;
+    this.render = render;
+  }
+
+  _createClass(Page, [{
+    key: "setDensity",
+    value: function setDensity(density) {
+      this.createdDensity = density;
+      this.nowDrawingDensity = density;
+    }
+  }, {
+    key: "setDrawingDensity",
+    value: function setDrawingDensity(density) {
+      this.nowDrawingDensity = density;
+    }
+  }, {
+    key: "setPosition",
+    value: function setPosition(pagePos) {
+      this.state.position = pagePos;
+    }
+  }, {
+    key: "setAngle",
+    value: function setAngle(angle) {
+      this.state.angle = angle;
+    }
+  }, {
+    key: "setArea",
+    value: function setArea(area) {
+      this.state.area = area;
+    }
+  }, {
+    key: "setHardDrawingAngle",
+    value: function setHardDrawingAngle(angle) {
+      this.state.hardDrawingAngle = angle;
+    }
+  }, {
+    key: "setHardAngle",
+    value: function setHardAngle(angle) {
+      this.state.hardAngle = angle;
+      this.state.hardDrawingAngle = angle;
+    }
+  }, {
+    key: "setOrientation",
+    value: function setOrientation(orientation) {
+      this.orientation = orientation;
+    }
+  }, {
+    key: "getDrawingDensity",
+    value: function getDrawingDensity() {
+      return this.nowDrawingDensity;
+    }
+  }, {
+    key: "getDensity",
+    value: function getDensity() {
+      return this.createdDensity;
+    }
+  }, {
+    key: "getHardAngle",
+    value: function getHardAngle() {
+      return this.state.hardAngle;
+    }
+  }]);
+
+  return Page;
+}();
+
+var ImagePage = /*#__PURE__*/function (_Page) {
+  _inherits(ImagePage, _Page);
+
+  var _super = _createSuper(ImagePage);
+
+  function ImagePage(render, href, density) {
+    var _this;
+
+    _classCallCheck(this, ImagePage);
+
+    _this = _super.call(this, render, density);
+    _this.image = null;
+    _this.isLoad = false;
+    _this.loadingAngle = 0;
+    _this.image = new Image();
+    _this.image.src = href;
+    return _this;
+  }
+
+  _createClass(ImagePage, [{
+    key: "draw",
+    value: function draw(tempDensity) {
+      var ctx = this.render.getContext();
+      var pagePos = this.render.convertToGlobal(this.state.position);
+      var pageWidth = this.render.getRect().pageWidth;
+      var pageHeight = this.render.getRect().height;
+      ctx.save();
+      ctx.translate(pagePos.x, pagePos.y);
+      ctx.beginPath();
+
+      var _iterator = _createForOfIteratorHelper(this.state.area),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var p = _step.value;
+
+          if (p !== null) {
+            p = this.render.convertToGlobal(p);
+            ctx.lineTo(p.x - pagePos.x, p.y - pagePos.y);
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      ctx.rotate(this.state.angle);
+      ctx.clip();
+
+      if (!this.isLoad) {
+        this.drawLoader(ctx, {
+          x: 0,
+          y: 0
+        }, pageWidth, pageHeight);
+      } else {
+        ctx.drawImage(this.image, 0, 0, pageWidth, pageHeight);
+      }
+
+      ctx.restore();
+    }
+  }, {
+    key: "simpleDraw",
+    value: function simpleDraw(orient) {
+      var rect = this.render.getRect();
+      var ctx = this.render.getContext();
+      var pageWidth = rect.pageWidth;
+      var pageHeight = rect.height;
+      var x = orient === 1 ? rect.left + rect.pageWidth : rect.left;
+      var y = rect.top;
+
+      if (!this.isLoad) {
+        this.drawLoader(ctx, {
+          x: x,
+          y: y
+        }, pageWidth, pageHeight);
+      } else {
+        ctx.drawImage(this.image, x, y, pageWidth, pageHeight);
+      }
+    }
+  }, {
+    key: "drawLoader",
+    value: function drawLoader(ctx, shiftPos, pageWidth, pageHeight) {
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgb(200, 200, 200)';
+      ctx.fillStyle = 'rgb(255, 255, 255)';
+      ctx.lineWidth = 1;
+      ctx.rect(shiftPos.x + 1, shiftPos.y + 1, pageWidth - 1, pageHeight - 1);
+      ctx.stroke();
+      ctx.fill();
+      var middlePoint = {
+        x: shiftPos.x + pageWidth / 2,
+        y: shiftPos.y + pageHeight / 2
+      };
+      ctx.beginPath();
+      ctx.lineWidth = 10;
+      ctx.arc(middlePoint.x, middlePoint.y, 20, this.loadingAngle, 3 * Math.PI / 2 + this.loadingAngle);
+      ctx.stroke();
+      ctx.closePath();
+      this.loadingAngle += 0.07;
+
+      if (this.loadingAngle >= 2 * Math.PI) {
+        this.loadingAngle = 0;
+      }
+    }
+  }, {
+    key: "load",
+    value: function load() {
+      var _this2 = this;
+
+      if (!this.isLoad) this.image.onload = function () {
+        _this2.isLoad = true;
+      };
+    }
+  }, {
+    key: "newTemporaryCopy",
+    value: function newTemporaryCopy() {
+      return this;
+    }
+  }, {
+    key: "getTemporaryCopy",
+    value: function getTemporaryCopy() {
+      return this;
+    }
+  }, {
+    key: "hideTemporaryCopy",
+    value: function hideTemporaryCopy() {}
+  }]);
+
+  return ImagePage;
+}(Page);
+
+var PageCollection = /*#__PURE__*/function () {
+  function PageCollection(app, render) {
+    _classCallCheck(this, PageCollection);
+
+    this.pages = [];
+    this.currentPageIndex = 0;
+    this.currentSpreadIndex = 0;
+    this.landscapeSpread = [];
+    this.portraitSpread = [];
+    this.render = render;
+    this.app = app;
+    this.currentPageIndex = 0;
+    this.isShowCover = this.app.getSettings().showCover;
+  }
+
+  _createClass(PageCollection, [{
+    key: "destroy",
+    value: function destroy() {
+      this.pages = [];
+    }
+  }, {
+    key: "createSpread",
+    value: function createSpread() {
+      this.landscapeSpread = [];
+      this.portraitSpread = [];
+
+      for (var i = 0; i < this.pages.length; i++) {
+        this.portraitSpread.push([i]);
+      }
+
+      var start = 0;
+
+      if (this.isShowCover) {
+        this.pages[0].setDensity("hard");
+        this.landscapeSpread.push([start]);
+        start++;
+      }
+
+      for (var _i = start; _i < this.pages.length; _i += 2) {
+        if (_i < this.pages.length - 1) this.landscapeSpread.push([_i, _i + 1]);else {
+          this.landscapeSpread.push([_i]);
+
+          this.pages[_i].setDensity("hard");
+        }
+      }
+    }
+  }, {
+    key: "getSpread",
+    value: function getSpread() {
+      return this.render.getOrientation() === "landscape" ? this.landscapeSpread : this.portraitSpread;
+    }
+  }, {
+    key: "getSpreadIndexByPage",
+    value: function getSpreadIndexByPage(pageNum) {
+      var spread = this.getSpread();
+
+      for (var i = 0; i < spread.length; i++) {
+        if (pageNum === spread[i][0] || pageNum === spread[i][1]) return i;
+      }
+
+      return null;
+    }
+  }, {
+    key: "getPageCount",
+    value: function getPageCount() {
+      return this.pages.length;
+    }
+  }, {
+    key: "getPages",
+    value: function getPages() {
+      return this.pages;
+    }
+  }, {
+    key: "getPage",
+    value: function getPage(pageIndex) {
+      if (pageIndex >= 0 && pageIndex < this.pages.length) {
+        return this.pages[pageIndex];
+      }
+
+      throw new Error('Invalid page number');
+    }
+  }, {
+    key: "nextBy",
+    value: function nextBy(current) {
+      var idx = this.pages.indexOf(current);
+      if (idx < this.pages.length - 1) return this.pages[idx + 1];
+      return null;
+    }
+  }, {
+    key: "prevBy",
+    value: function prevBy(current) {
+      var idx = this.pages.indexOf(current);
+      if (idx > 0) return this.pages[idx - 1];
+      return null;
+    }
+  }, {
+    key: "getFlippingPage",
+    value: function getFlippingPage(direction) {
+      var current = this.currentSpreadIndex;
+
+      if (this.render.getOrientation() === "portrait") {
+        return direction === 0 ? this.pages[current].newTemporaryCopy() : this.pages[current - 1];
+      } else {
+        var spread = direction === 0 ? this.getSpread()[current + 1] : this.getSpread()[current - 1];
+        if (spread.length === 1) return this.pages[spread[0]];
+        return direction === 0 ? this.pages[spread[0]] : this.pages[spread[1]];
+      }
+    }
+  }, {
+    key: "getBottomPage",
+    value: function getBottomPage(direction) {
+      var current = this.currentSpreadIndex;
+
+      if (this.render.getOrientation() === "portrait") {
+        return direction === 0 ? this.pages[current + 1] : this.pages[current - 1];
+      } else {
+        var spread = direction === 0 ? this.getSpread()[current + 1] : this.getSpread()[current - 1];
+        if (spread.length === 1) return this.pages[spread[0]];
+        return direction === 0 ? this.pages[spread[1]] : this.pages[spread[0]];
+      }
+    }
+  }, {
+    key: "showNext",
+    value: function showNext() {
+      if (this.currentSpreadIndex < this.getSpread().length) {
+        this.currentSpreadIndex++;
+        this.showSpread();
+      }
+    }
+  }, {
+    key: "showPrev",
+    value: function showPrev() {
+      if (this.currentSpreadIndex > 0) {
+        this.currentSpreadIndex--;
+        this.showSpread();
+      }
+    }
+  }, {
+    key: "getCurrentPageIndex",
+    value: function getCurrentPageIndex() {
+      return this.currentPageIndex;
+    }
+  }, {
+    key: "show",
+    value: function show() {
+      var pageNum = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      if (pageNum === null) pageNum = this.currentPageIndex;
+      if (pageNum < 0 || pageNum >= this.pages.length) return;
+      var spreadIndex = this.getSpreadIndexByPage(pageNum);
+
+      if (spreadIndex !== null) {
+        this.currentSpreadIndex = spreadIndex;
+        this.showSpread();
+      }
+    }
+  }, {
+    key: "getCurrentSpreadIndex",
+    value: function getCurrentSpreadIndex() {
+      return this.currentSpreadIndex;
+    }
+  }, {
+    key: "setCurrentSpreadIndex",
+    value: function setCurrentSpreadIndex(newIndex) {
+      if (newIndex >= 0 && newIndex < this.getSpread().length) {
+        this.currentSpreadIndex = newIndex;
+      } else {
+        throw new Error('Invalid page');
+      }
+    }
+  }, {
+    key: "showSpread",
+    value: function showSpread() {
+      var spread = this.getSpread()[this.currentSpreadIndex];
+
+      if (spread.length === 2) {
+        this.render.setLeftPage(this.pages[spread[0]]);
+        this.render.setRightPage(this.pages[spread[1]]);
+      } else {
+        if (this.render.getOrientation() === "landscape") {
+          if (spread[0] === this.pages.length - 1) {
+            this.render.setLeftPage(this.pages[spread[0]]);
+            this.render.setRightPage(null);
+          } else {
+            this.render.setLeftPage(null);
+            this.render.setRightPage(this.pages[spread[0]]);
+          }
+        } else {
+          this.render.setLeftPage(null);
+          this.render.setRightPage(this.pages[spread[0]]);
+        }
+      }
+
+      this.currentPageIndex = spread[0];
+      this.app.updatePageIndex(this.currentPageIndex);
+    }
+  }]);
+
+  return PageCollection;
+}();
+
+var ImagePageCollection = /*#__PURE__*/function (_PageCollection) {
+  _inherits(ImagePageCollection, _PageCollection);
+
+  var _super2 = _createSuper(ImagePageCollection);
+
+  function ImagePageCollection(app, render, imagesHref) {
+    var _this3;
+
+    _classCallCheck(this, ImagePageCollection);
+
+    _this3 = _super2.call(this, app, render);
+    _this3.imagesHref = imagesHref;
+    return _this3;
+  }
+
+  _createClass(ImagePageCollection, [{
+    key: "load",
+    value: function load() {
+      var _iterator2 = _createForOfIteratorHelper(this.imagesHref),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var href = _step2.value;
+          var page = new ImagePage(this.render, href, "soft");
+          page.load();
+          this.pages.push(page);
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+
+      this.createSpread();
+    }
+  }]);
+
+  return ImagePageCollection;
+}(PageCollection);
+
+var Helper = /*#__PURE__*/function () {
+  function Helper() {
+    _classCallCheck(this, Helper);
+  }
+
+  _createClass(Helper, null, [{
+    key: "GetDistanceBetweenTwoPoint",
+    value: function GetDistanceBetweenTwoPoint(point1, point2) {
+      if (point1 === null || point2 === null) {
+        return Infinity;
+      }
+
+      return Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2));
+    }
+  }, {
+    key: "GetSegmentLength",
+    value: function GetSegmentLength(segment) {
+      return Helper.GetDistanceBetweenTwoPoint(segment[0], segment[1]);
+    }
+  }, {
+    key: "GetAngleBetweenTwoLine",
+    value: function GetAngleBetweenTwoLine(line1, line2) {
+      var A1 = line1[0].y - line1[1].y;
+      var A2 = line2[0].y - line2[1].y;
+      var B1 = line1[1].x - line1[0].x;
+      var B2 = line2[1].x - line2[0].x;
+      return Math.acos((A1 * A2 + B1 * B2) / (Math.sqrt(A1 * A1 + B1 * B1) * Math.sqrt(A2 * A2 + B2 * B2)));
+    }
+  }, {
+    key: "PointInRect",
+    value: function PointInRect(rect, pos) {
+      if (pos === null) {
+        return null;
+      }
+
+      if (pos.x >= rect.left && pos.x <= rect.width + rect.left && pos.y >= rect.top && pos.y <= rect.top + rect.height) {
+        return pos;
+      }
+
+      return null;
+    }
+  }, {
+    key: "GetRotatedPoint",
+    value: function GetRotatedPoint(transformedPoint, startPoint, angle) {
+      return {
+        x: transformedPoint.x * Math.cos(angle) + transformedPoint.y * Math.sin(angle) + startPoint.x,
+        y: transformedPoint.y * Math.cos(angle) - transformedPoint.x * Math.sin(angle) + startPoint.y
+      };
+    }
+  }, {
+    key: "LimitPointToCircle",
+    value: function LimitPointToCircle(startPoint, radius, limitedPoint) {
+      if (Helper.GetDistanceBetweenTwoPoint(startPoint, limitedPoint) <= radius) {
+        return limitedPoint;
+      }
+
+      var a = startPoint.x;
+      var b = startPoint.y;
+      var n = limitedPoint.x;
+      var m = limitedPoint.y;
+      var x = Math.sqrt(Math.pow(radius, 2) * Math.pow(a - n, 2) / (Math.pow(a - n, 2) + Math.pow(b - m, 2))) + a;
+
+      if (limitedPoint.x < 0) {
+        x *= -1;
+      }
+
+      var y = (x - a) * (b - m) / (a - n) + b;
+
+      if (a - n + b === 0) {
+        y = radius;
+      }
+
+      return {
+        x: x,
+        y: y
+      };
+    }
+  }, {
+    key: "GetIntersectBetweenTwoSegment",
+    value: function GetIntersectBetweenTwoSegment(rectBorder, one, two) {
+      return Helper.PointInRect(rectBorder, Helper.GetIntersectBeetwenTwoLine(one, two));
+    }
+  }, {
+    key: "GetIntersectBeetwenTwoLine",
+    value: function GetIntersectBeetwenTwoLine(one, two) {
+      var A1 = one[0].y - one[1].y;
+      var A2 = two[0].y - two[1].y;
+      var B1 = one[1].x - one[0].x;
+      var B2 = two[1].x - two[0].x;
+      var C1 = one[0].x * one[1].y - one[1].x * one[0].y;
+      var C2 = two[0].x * two[1].y - two[1].x * two[0].y;
+      var det1 = A1 * C2 - A2 * C1;
+      var det2 = B1 * C2 - B2 * C1;
+      var x = -((C1 * B2 - C2 * B1) / (A1 * B2 - A2 * B1));
+      var y = -((A1 * C2 - A2 * C1) / (A1 * B2 - A2 * B1));
+
+      if (isFinite(x) && isFinite(y)) {
+        return {
+          x: x,
+          y: y
+        };
+      } else {
+        if (Math.abs(det1 - det2) < 0.1) throw new Error('Segment included');
+      }
+
+      return null;
+    }
+  }, {
+    key: "GetCordsFromTwoPoint",
+    value: function GetCordsFromTwoPoint(pointOne, pointTwo) {
+      var sizeX = Math.abs(pointOne.x - pointTwo.x);
+      var sizeY = Math.abs(pointOne.y - pointTwo.y);
+      var lengthLine = Math.max(sizeX, sizeY);
+      var result = [pointOne];
+
+      function getCord(c1, c2, size, length, index) {
+        if (c2 > c1) {
+          return c1 + index * (size / length);
+        } else if (c2 < c1) {
+          return c1 - index * (size / length);
+        }
+
+        return c1;
+      }
+
+      for (var i = 1; i <= lengthLine; i += 1) {
+        result.push({
+          x: getCord(pointOne.x, pointTwo.x, sizeX, lengthLine, i),
+          y: getCord(pointOne.y, pointTwo.y, sizeY, lengthLine, i)
+        });
+      }
+
+      return result;
+    }
+  }]);
+
+  return Helper;
+}();
+
+var HTMLPage = /*#__PURE__*/function (_Page2) {
+  _inherits(HTMLPage, _Page2);
+
+  var _super3 = _createSuper(HTMLPage);
+
+  function HTMLPage(render, element, density) {
+    var _this4;
+
+    _classCallCheck(this, HTMLPage);
+
+    _this4 = _super3.call(this, render, density);
+    _this4.copiedElement = null;
+    _this4.temporaryCopy = null;
+    _this4.isLoad = false;
+    _this4.element = element;
+
+    _this4.element.classList.add('stf__item');
+
+    _this4.element.classList.add('--' + density);
+
+    return _this4;
+  }
+
+  _createClass(HTMLPage, [{
+    key: "newTemporaryCopy",
+    value: function newTemporaryCopy() {
+      if (this.nowDrawingDensity === "hard") {
+        return this;
+      }
+
+      if (this.temporaryCopy === null) {
+        this.copiedElement = this.element.cloneNode(true);
+        this.element.parentElement.appendChild(this.copiedElement);
+        this.temporaryCopy = new HTMLPage(this.render, this.copiedElement, this.nowDrawingDensity);
+      }
+
+      return this.getTemporaryCopy();
+    }
+  }, {
+    key: "getTemporaryCopy",
+    value: function getTemporaryCopy() {
+      return this.temporaryCopy;
+    }
+  }, {
+    key: "hideTemporaryCopy",
+    value: function hideTemporaryCopy() {
+      if (this.temporaryCopy !== null) {
+        this.copiedElement.remove();
+        this.copiedElement = null;
+        this.temporaryCopy = null;
+      }
+    }
+  }, {
+    key: "draw",
+    value: function draw(tempDensity) {
+      var density = tempDensity ? tempDensity : this.nowDrawingDensity;
+      var pagePos = this.render.convertToGlobal(this.state.position);
+      var pageWidth = this.render.getRect().pageWidth;
+      var pageHeight = this.render.getRect().height;
+      this.element.classList.remove('--simple');
+      var commonStyle = "\n            position: absolute;\n            display: block;\n            z-index: ".concat(this.element.style.zIndex, ";\n            left: 0;\n            top: 0;\n            width: ").concat(pageWidth, "px;\n            height: ").concat(pageHeight, "px;\n        ");
+      density === "hard" ? this.drawHard(commonStyle) : this.drawSoft(pagePos, commonStyle);
+    }
+  }, {
+    key: "drawHard",
+    value: function drawHard() {
+      var commonStyle = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      var pos = this.render.getRect().left + this.render.getRect().width / 2;
+      var angle = this.state.hardDrawingAngle;
+      var newStyle = commonStyle + "\n                backface-visibility: hidden;\n                -webkit-backface-visibility: hidden;\n                clip-path: none;\n                -webkit-clip-path: none;\n            " + (this.orientation === 0 ? "transform-origin: ".concat(this.render.getRect().pageWidth, "px 0;\n                   transform: translate3d(0, 0, 0) rotateY(").concat(angle, "deg);") : "transform-origin: 0 0;\n                   transform: translate3d(".concat(pos, "px, 0, 0) rotateY(").concat(angle, "deg);"));
+      this.element.style.cssText = newStyle;
+    }
+  }, {
+    key: "drawSoft",
+    value: function drawSoft(position) {
+      var commonStyle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+      var polygon = 'polygon( ';
+
+      var _iterator3 = _createForOfIteratorHelper(this.state.area),
+          _step3;
+
+      try {
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var p = _step3.value;
+
+          if (p !== null) {
+            var g = this.render.getDirection() === 1 ? {
+              x: -p.x + this.state.position.x,
+              y: p.y - this.state.position.y
+            } : {
+              x: p.x - this.state.position.x,
+              y: p.y - this.state.position.y
+            };
+            g = Helper.GetRotatedPoint(g, {
+              x: 0,
+              y: 0
+            }, this.state.angle);
+            polygon += g.x + 'px ' + g.y + 'px, ';
+          }
+        }
+      } catch (err) {
+        _iterator3.e(err);
+      } finally {
+        _iterator3.f();
+      }
+
+      polygon = polygon.slice(0, -2);
+      polygon += ')';
+      var newStyle = commonStyle + "transform-origin: 0 0; clip-path: ".concat(polygon, "; -webkit-clip-path: ").concat(polygon, ";") + (this.render.isSafari() && this.state.angle === 0 ? "transform: translate(".concat(position.x, "px, ").concat(position.y, "px);") : "transform: translate3d(".concat(position.x, "px, ").concat(position.y, "px, 0) rotate(").concat(this.state.angle, "rad);"));
+      this.element.style.cssText = newStyle;
+    }
+  }, {
+    key: "simpleDraw",
+    value: function simpleDraw(orient) {
+      var rect = this.render.getRect();
+      var pageWidth = rect.pageWidth;
+      var pageHeight = rect.height;
+      var x = orient === 1 ? rect.left + rect.pageWidth : rect.left;
+      var y = rect.top;
+      this.element.classList.add('--simple');
+      this.element.style.cssText = "\n            position: absolute;\n            display: block;\n            height: ".concat(pageHeight, "px;\n            left: ").concat(x, "px;\n            top: ").concat(y, "px;\n            width: ").concat(pageWidth, "px;\n            z-index: ").concat(this.render.getSettings().startZIndex + 1, ";");
+    }
+  }, {
+    key: "getElement",
+    value: function getElement() {
+      return this.element;
+    }
+  }, {
+    key: "load",
+    value: function load() {
+      this.isLoad = true;
+    }
+  }, {
+    key: "setOrientation",
+    value: function setOrientation(orientation) {
+      _get(_getPrototypeOf(HTMLPage.prototype), "setOrientation", this).call(this, orientation);
+
+      this.element.classList.remove('--left', '--right');
+      this.element.classList.add(orientation === 1 ? '--right' : '--left');
+    }
+  }, {
+    key: "setDrawingDensity",
+    value: function setDrawingDensity(density) {
+      this.element.classList.remove('--soft', '--hard');
+      this.element.classList.add('--' + density);
+
+      _get(_getPrototypeOf(HTMLPage.prototype), "setDrawingDensity", this).call(this, density);
+    }
+  }]);
+
+  return HTMLPage;
+}(Page);
+
+var HTMLPageCollection = /*#__PURE__*/function (_PageCollection2) {
+  _inherits(HTMLPageCollection, _PageCollection2);
+
+  var _super4 = _createSuper(HTMLPageCollection);
+
+  function HTMLPageCollection(app, render, element, items) {
+    var _this5;
+
+    _classCallCheck(this, HTMLPageCollection);
+
+    _this5 = _super4.call(this, app, render);
+    _this5.element = element;
+    _this5.pagesElement = items;
+    return _this5;
+  }
+
+  _createClass(HTMLPageCollection, [{
+    key: "load",
+    value: function load() {
+      var _iterator4 = _createForOfIteratorHelper(this.pagesElement),
+          _step4;
+
+      try {
+        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+          var pageElement = _step4.value;
+          var page = new HTMLPage(this.render, pageElement, pageElement.dataset['density'] === 'hard' ? "hard" : "soft");
+          page.load();
+          this.pages.push(page);
+        }
+      } catch (err) {
+        _iterator4.e(err);
+      } finally {
+        _iterator4.f();
+      }
+
+      this.createSpread();
+    }
+  }]);
+
+  return HTMLPageCollection;
+}(PageCollection);
+
+var FlipCalculation = /*#__PURE__*/function () {
+  function FlipCalculation(direction, corner, pageWidth, pageHeight) {
+    _classCallCheck(this, FlipCalculation);
+
+    this.direction = direction;
+    this.corner = corner;
+    this.topIntersectPoint = null;
+    this.sideIntersectPoint = null;
+    this.bottomIntersectPoint = null;
+    this.pageWidth = parseInt(pageWidth, 10);
+    this.pageHeight = parseInt(pageHeight, 10);
+  }
+
+  _createClass(FlipCalculation, [{
+    key: "calc",
+    value: function calc(localPos) {
+      try {
+        this.position = this.calcAngleAndPosition(localPos);
+        this.calculateIntersectPoint(this.position);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+  }, {
+    key: "getFlippingClipArea",
+    value: function getFlippingClipArea() {
+      var result = [];
+      var clipBottom = false;
+      result.push(this.rect.topLeft);
+      result.push(this.topIntersectPoint);
+
+      if (this.sideIntersectPoint === null) {
+        clipBottom = true;
+      } else {
+        result.push(this.sideIntersectPoint);
+        if (this.bottomIntersectPoint === null) clipBottom = false;
+      }
+
+      result.push(this.bottomIntersectPoint);
+
+      if (clipBottom || this.corner === "bottom") {
+        result.push(this.rect.bottomLeft);
+      }
+
+      return result;
+    }
+  }, {
+    key: "getBottomClipArea",
+    value: function getBottomClipArea() {
+      var result = [];
+      result.push(this.topIntersectPoint);
+
+      if (this.corner === "top") {
+        result.push({
+          x: this.pageWidth,
+          y: 0
+        });
+      } else {
+        if (this.topIntersectPoint !== null) {
+          result.push({
+            x: this.pageWidth,
+            y: 0
+          });
+        }
+
+        result.push({
+          x: this.pageWidth,
+          y: this.pageHeight
+        });
+      }
+
+      if (this.sideIntersectPoint !== null) {
+        if (Helper.GetDistanceBetweenTwoPoint(this.sideIntersectPoint, this.topIntersectPoint) >= 10) result.push(this.sideIntersectPoint);
+      } else {
+        if (this.corner === "top") {
+          result.push({
+            x: this.pageWidth,
+            y: this.pageHeight
+          });
+        }
+      }
+
+      result.push(this.bottomIntersectPoint);
+      result.push(this.topIntersectPoint);
+      return result;
+    }
+  }, {
+    key: "getAngle",
+    value: function getAngle() {
+      if (this.direction === 0) {
+        return -this.angle;
+      }
+
+      return this.angle;
+    }
+  }, {
+    key: "getRect",
+    value: function getRect() {
+      return this.rect;
+    }
+  }, {
+    key: "getPosition",
+    value: function getPosition() {
+      return this.position;
+    }
+  }, {
+    key: "getActiveCorner",
+    value: function getActiveCorner() {
+      if (this.direction === 0) {
+        return this.rect.topLeft;
+      }
+
+      return this.rect.topRight;
+    }
+  }, {
+    key: "getDirection",
+    value: function getDirection() {
+      return this.direction;
+    }
+  }, {
+    key: "getFlippingProgress",
+    value: function getFlippingProgress() {
+      return Math.abs((this.position.x - this.pageWidth) / (2 * this.pageWidth) * 100);
+    }
+  }, {
+    key: "getCorner",
+    value: function getCorner() {
+      return this.corner;
+    }
+  }, {
+    key: "getBottomPagePosition",
+    value: function getBottomPagePosition() {
+      if (this.direction === 1) {
+        return {
+          x: this.pageWidth,
+          y: 0
+        };
+      }
+
+      return {
+        x: 0,
+        y: 0
+      };
+    }
+  }, {
+    key: "getShadowStartPoint",
+    value: function getShadowStartPoint() {
+      if (this.corner === "top") {
+        return this.topIntersectPoint;
+      } else {
+        if (this.sideIntersectPoint !== null) return this.sideIntersectPoint;
+        return this.topIntersectPoint;
+      }
+    }
+  }, {
+    key: "getShadowAngle",
+    value: function getShadowAngle() {
+      var angle = Helper.GetAngleBetweenTwoLine(this.getSegmentToShadowLine(), [{
+        x: 0,
+        y: 0
+      }, {
+        x: this.pageWidth,
+        y: 0
+      }]);
+
+      if (this.direction === 0) {
+        return angle;
+      }
+
+      return Math.PI - angle;
+    }
+  }, {
+    key: "calcAngleAndPosition",
+    value: function calcAngleAndPosition(pos) {
+      var result = pos;
+      this.updateAngleAndGeometry(result);
+
+      if (this.corner === "top") {
+        result = this.checkPositionAtCenterLine(result, {
+          x: 0,
+          y: 0
+        }, {
+          x: 0,
+          y: this.pageHeight
+        });
+      } else {
+        result = this.checkPositionAtCenterLine(result, {
+          x: 0,
+          y: this.pageHeight
+        }, {
+          x: 0,
+          y: 0
+        });
+      }
+
+      if (Math.abs(result.x - this.pageWidth) < 1 && Math.abs(result.y) < 1) {
+        throw new Error('Point is too small');
+      }
+
+      return result;
+    }
+  }, {
+    key: "updateAngleAndGeometry",
+    value: function updateAngleAndGeometry(pos) {
+      this.angle = this.calculateAngle(pos);
+      this.rect = this.getPageRect(pos);
+    }
+  }, {
+    key: "calculateAngle",
+    value: function calculateAngle(pos) {
+      var left = this.pageWidth - pos.x + 1;
+      var top = this.corner === "bottom" ? this.pageHeight - pos.y : pos.y;
+      var angle = 2 * Math.acos(left / Math.sqrt(top * top + left * left));
+      if (top < 0) angle = -angle;
+      var da = Math.PI - angle;
+      if (!isFinite(angle) || da >= 0 && da < 0.003) throw new Error('The G point is too small');
+      if (this.corner === "bottom") angle = -angle;
+      return angle;
+    }
+  }, {
+    key: "getPageRect",
+    value: function getPageRect(localPos) {
+      if (this.corner === "top") {
+        return this.getRectFromBasePoint([{
+          x: 0,
+          y: 0
+        }, {
+          x: this.pageWidth,
+          y: 0
+        }, {
+          x: 0,
+          y: this.pageHeight
+        }, {
+          x: this.pageWidth,
+          y: this.pageHeight
+        }], localPos);
+      }
+
+      return this.getRectFromBasePoint([{
+        x: 0,
+        y: -this.pageHeight
+      }, {
+        x: this.pageWidth,
+        y: -this.pageHeight
+      }, {
+        x: 0,
+        y: 0
+      }, {
+        x: this.pageWidth,
+        y: 0
+      }], localPos);
+    }
+  }, {
+    key: "getRectFromBasePoint",
+    value: function getRectFromBasePoint(points, localPos) {
+      return {
+        topLeft: this.getRotatedPoint(points[0], localPos),
+        topRight: this.getRotatedPoint(points[1], localPos),
+        bottomLeft: this.getRotatedPoint(points[2], localPos),
+        bottomRight: this.getRotatedPoint(points[3], localPos)
+      };
+    }
+  }, {
+    key: "getRotatedPoint",
+    value: function getRotatedPoint(transformedPoint, startPoint) {
+      return {
+        x: transformedPoint.x * Math.cos(this.angle) + transformedPoint.y * Math.sin(this.angle) + startPoint.x,
+        y: transformedPoint.y * Math.cos(this.angle) - transformedPoint.x * Math.sin(this.angle) + startPoint.y
+      };
+    }
+  }, {
+    key: "calculateIntersectPoint",
+    value: function calculateIntersectPoint(pos) {
+      var boundRect = {
+        left: -1,
+        top: -1,
+        width: this.pageWidth + 2,
+        height: this.pageHeight + 2
+      };
+
+      if (this.corner === "top") {
+        this.topIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [pos, this.rect.topRight], [{
+          x: 0,
+          y: 0
+        }, {
+          x: this.pageWidth,
+          y: 0
+        }]);
+        this.sideIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [pos, this.rect.bottomLeft], [{
+          x: this.pageWidth,
+          y: 0
+        }, {
+          x: this.pageWidth,
+          y: this.pageHeight
+        }]);
+        this.bottomIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [this.rect.bottomLeft, this.rect.bottomRight], [{
+          x: 0,
+          y: this.pageHeight
+        }, {
+          x: this.pageWidth,
+          y: this.pageHeight
+        }]);
+      } else {
+        this.topIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [this.rect.topLeft, this.rect.topRight], [{
+          x: 0,
+          y: 0
+        }, {
+          x: this.pageWidth,
+          y: 0
+        }]);
+        this.sideIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [pos, this.rect.topLeft], [{
+          x: this.pageWidth,
+          y: 0
+        }, {
+          x: this.pageWidth,
+          y: this.pageHeight
+        }]);
+        this.bottomIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [this.rect.bottomLeft, this.rect.bottomRight], [{
+          x: 0,
+          y: this.pageHeight
+        }, {
+          x: this.pageWidth,
+          y: this.pageHeight
+        }]);
+      }
+    }
+  }, {
+    key: "checkPositionAtCenterLine",
+    value: function checkPositionAtCenterLine(checkedPos, centerOne, centerTwo) {
+      var result = checkedPos;
+      var tmp = Helper.LimitPointToCircle(centerOne, this.pageWidth, result);
+
+      if (result !== tmp) {
+        result = tmp;
+        this.updateAngleAndGeometry(result);
+      }
+
+      var rad = Math.sqrt(Math.pow(this.pageWidth, 2) + Math.pow(this.pageHeight, 2));
+      var checkPointOne = this.rect.bottomRight;
+      var checkPointTwo = this.rect.topLeft;
+
+      if (this.corner === "bottom") {
+        checkPointOne = this.rect.topRight;
+        checkPointTwo = this.rect.bottomLeft;
+      }
+
+      if (checkPointOne.x <= 0) {
+        var bottomPoint = Helper.LimitPointToCircle(centerTwo, rad, checkPointTwo);
+
+        if (bottomPoint !== result) {
+          result = bottomPoint;
+          this.updateAngleAndGeometry(result);
+        }
+      }
+
+      return result;
+    }
+  }, {
+    key: "getSegmentToShadowLine",
+    value: function getSegmentToShadowLine() {
+      var first = this.getShadowStartPoint();
+      var second = first !== this.sideIntersectPoint && this.sideIntersectPoint !== null ? this.sideIntersectPoint : this.bottomIntersectPoint;
+      return [first, second];
+    }
+  }]);
+
+  return FlipCalculation;
+}();
+
+var Flip = /*#__PURE__*/function () {
+  function Flip(render, app) {
+    _classCallCheck(this, Flip);
+
+    this.flippingPage = null;
+    this.bottomPage = null;
+    this.calc = null;
+    this.state = "read";
+    this.render = render;
+    this.app = app;
+  }
+
+  _createClass(Flip, [{
+    key: "fold",
+    value: function fold(globalPos) {
+      this.setState("user_fold");
+      if (this.calc === null) this.start(globalPos);
+      this["do"](this.render.convertToPage(globalPos));
+    }
+  }, {
+    key: "flip",
+    value: function flip(globalPos) {
+      if (this.app.getSettings().disableFlipByClick && !this.isPointOnCorners(globalPos)) return;
+      if (this.calc !== null) this.render.finishAnimation();
+      if (!this.start(globalPos)) return;
+      var rect = this.getBoundsRect();
+      this.setState("flipping");
+      var topMargins = rect.height / 10;
+      var yStart = this.calc.getCorner() === "bottom" ? rect.height - topMargins : topMargins;
+      var yDest = this.calc.getCorner() === "bottom" ? rect.height : 0;
+      this.calc.calc({
+        x: rect.pageWidth - topMargins,
+        y: yStart
+      });
+      this.animateFlippingTo({
+        x: rect.pageWidth - topMargins,
+        y: yStart
+      }, {
+        x: -rect.pageWidth,
+        y: yDest
+      }, true);
+    }
+  }, {
+    key: "start",
+    value: function start(globalPos) {
+      this.reset();
+      var bookPos = this.render.convertToBook(globalPos);
+      var rect = this.getBoundsRect();
+      var direction = this.getDirectionByPoint(bookPos);
+      var flipCorner = bookPos.y >= rect.height / 2 ? "bottom" : "top";
+      if (!this.checkDirection(direction)) return false;
+
+      try {
+        this.flippingPage = this.app.getPageCollection().getFlippingPage(direction);
+        this.bottomPage = this.app.getPageCollection().getBottomPage(direction);
+
+        if (this.render.getOrientation() === "landscape") {
+          if (direction === 1) {
+            var nextPage = this.app.getPageCollection().nextBy(this.flippingPage);
+
+            if (nextPage !== null) {
+              if (this.flippingPage.getDensity() !== nextPage.getDensity()) {
+                this.flippingPage.setDrawingDensity("hard");
+                nextPage.setDrawingDensity("hard");
+              }
+            }
+          } else {
+            var prevPage = this.app.getPageCollection().prevBy(this.flippingPage);
+
+            if (prevPage !== null) {
+              if (this.flippingPage.getDensity() !== prevPage.getDensity()) {
+                this.flippingPage.setDrawingDensity("hard");
+                prevPage.setDrawingDensity("hard");
+              }
+            }
+          }
+        }
+
+        this.render.setDirection(direction);
+        this.calc = new FlipCalculation(direction, flipCorner, rect.pageWidth.toString(10), rect.height.toString(10));
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+  }, {
+    key: "do",
+    value: function _do(pagePos) {
+      if (this.calc === null) return;
+
+      if (this.calc.calc(pagePos)) {
+        var progress = this.calc.getFlippingProgress();
+        this.bottomPage.setArea(this.calc.getBottomClipArea());
+        this.bottomPage.setPosition(this.calc.getBottomPagePosition());
+        this.bottomPage.setAngle(0);
+        this.bottomPage.setHardAngle(0);
+        this.flippingPage.setArea(this.calc.getFlippingClipArea());
+        this.flippingPage.setPosition(this.calc.getActiveCorner());
+        this.flippingPage.setAngle(this.calc.getAngle());
+
+        if (this.calc.getDirection() === 0) {
+          this.flippingPage.setHardAngle(90 * (200 - progress * 2) / 100);
+        } else {
+          this.flippingPage.setHardAngle(-90 * (200 - progress * 2) / 100);
+        }
+
+        this.render.setPageRect(this.calc.getRect());
+        this.render.setBottomPage(this.bottomPage);
+        this.render.setFlippingPage(this.flippingPage);
+        this.render.setShadowData(this.calc.getShadowStartPoint(), this.calc.getShadowAngle(), progress, this.calc.getDirection());
+      }
+    }
+  }, {
+    key: "flipToPage",
+    value: function flipToPage(page, corner) {
+      var current = this.app.getPageCollection().getCurrentSpreadIndex();
+      var next = this.app.getPageCollection().getSpreadIndexByPage(page);
+
+      try {
+        if (next > current) {
+          this.app.getPageCollection().setCurrentSpreadIndex(next - 1);
+          this.flipNext(corner);
+        }
+
+        if (next < current) {
+          this.app.getPageCollection().setCurrentSpreadIndex(next + 1);
+          this.flipPrev(corner);
+        }
+      } catch (e) {}
+    }
+  }, {
+    key: "flipNext",
+    value: function flipNext(corner) {
+      this.flip({
+        x: this.render.getRect().left + this.render.getRect().pageWidth * 2 - 10,
+        y: corner === "top" ? 1 : this.render.getRect().height - 2
+      });
+    }
+  }, {
+    key: "flipPrev",
+    value: function flipPrev(corner) {
+      this.flip({
+        x: 10,
+        y: corner === "top" ? 1 : this.render.getRect().height - 2
+      });
+    }
+  }, {
+    key: "stopMove",
+    value: function stopMove() {
+      if (this.calc === null) return;
+      var pos = this.calc.getPosition();
+      var rect = this.getBoundsRect();
+      var y = this.calc.getCorner() === "bottom" ? rect.height : 0;
+      if (pos.x <= 0) this.animateFlippingTo(pos, {
+        x: -rect.pageWidth,
+        y: y
+      }, true);else this.animateFlippingTo(pos, {
+        x: rect.pageWidth,
+        y: y
+      }, false);
+    }
+  }, {
+    key: "showCorner",
+    value: function showCorner(globalPos) {
+      if (!this.checkState("read", "fold_corner")) return;
+      var rect = this.getBoundsRect();
+      var pageWidth = rect.pageWidth;
+
+      if (this.isPointOnCorners(globalPos)) {
+        if (this.calc === null) {
+          if (!this.start(globalPos)) return;
+          this.setState("fold_corner");
+          this.calc.calc({
+            x: pageWidth - 1,
+            y: 1
+          });
+          var fixedCornerSize = 50;
+          var yStart = this.calc.getCorner() === "bottom" ? rect.height - 1 : 1;
+          var yDest = this.calc.getCorner() === "bottom" ? rect.height - fixedCornerSize : fixedCornerSize;
+          this.animateFlippingTo({
+            x: pageWidth - 1,
+            y: yStart
+          }, {
+            x: pageWidth - fixedCornerSize,
+            y: yDest
+          }, false, false);
+        } else {
+          this["do"](this.render.convertToPage(globalPos));
+        }
+      } else {
+        this.setState("read");
+        this.render.finishAnimation();
+        this.stopMove();
+      }
+    }
+  }, {
+    key: "animateFlippingTo",
+    value: function animateFlippingTo(start, dest, isTurned) {
+      var _this6 = this;
+
+      var needReset = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+      var points = Helper.GetCordsFromTwoPoint(start, dest);
+      var frames = [];
+
+      var _iterator5 = _createForOfIteratorHelper(points),
+          _step5;
+
+      try {
+        var _loop = function _loop() {
+          var p = _step5.value;
+          frames.push(function () {
+            return _this6["do"](p);
+          });
+        };
+
+        for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+          _loop();
+        }
+      } catch (err) {
+        _iterator5.e(err);
+      } finally {
+        _iterator5.f();
+      }
+
+      var duration = this.getAnimationDuration(points.length);
+      this.render.startAnimation(frames, duration, function () {
+        if (!_this6.calc) return;
+
+        if (isTurned) {
+          if (_this6.calc.getDirection() === 1) _this6.app.turnToPrevPage();else _this6.app.turnToNextPage();
+        }
+
+        if (needReset) {
+          _this6.render.setBottomPage(null);
+
+          _this6.render.setFlippingPage(null);
+
+          _this6.render.clearShadow();
+
+          _this6.setState("read");
+
+          _this6.reset();
+        }
+      });
+    }
+  }, {
+    key: "getCalculation",
+    value: function getCalculation() {
+      return this.calc;
+    }
+  }, {
+    key: "getState",
+    value: function getState() {
+      return this.state;
+    }
+  }, {
+    key: "setState",
+    value: function setState(newState) {
+      if (this.state !== newState) {
+        this.app.updateState(newState);
+        this.state = newState;
+      }
+    }
+  }, {
+    key: "getDirectionByPoint",
+    value: function getDirectionByPoint(touchPos) {
+      var rect = this.getBoundsRect();
+
+      if (this.render.getOrientation() === "portrait") {
+        if (touchPos.x - rect.pageWidth <= rect.width / 5) {
+          return 1;
+        }
+      } else if (touchPos.x < rect.width / 2) {
+        return 1;
+      }
+
+      return 0;
+    }
+  }, {
+    key: "getAnimationDuration",
+    value: function getAnimationDuration(size) {
+      var defaultTime = this.app.getSettings().flippingTime;
+      if (size >= 1000) return defaultTime;
+      return size / 1000 * defaultTime;
+    }
+  }, {
+    key: "checkDirection",
+    value: function checkDirection(direction) {
+      if (direction === 0) return this.app.getCurrentPageIndex() < this.app.getPageCount() - 1;
+      return this.app.getCurrentPageIndex() >= 1;
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      this.calc = null;
+      this.flippingPage = null;
+      this.bottomPage = null;
+    }
+  }, {
+    key: "getBoundsRect",
+    value: function getBoundsRect() {
+      return this.render.getRect();
+    }
+  }, {
+    key: "checkState",
+    value: function checkState() {
+      for (var _len = arguments.length, states = new Array(_len), _key = 0; _key < _len; _key++) {
+        states[_key] = arguments[_key];
+      }
+
+      for (var _i2 = 0, _states = states; _i2 < _states.length; _i2++) {
+        var state = _states[_i2];
+        if (this.state === state) return true;
+      }
+
+      return false;
+    }
+  }, {
+    key: "isPointOnCorners",
+    value: function isPointOnCorners(globalPos) {
+      var rect = this.getBoundsRect();
+      var pageWidth = rect.pageWidth;
+      var operatingDistance = Math.sqrt(Math.pow(pageWidth, 2) + Math.pow(rect.height, 2)) / 5;
+      var bookPos = this.render.convertToBook(globalPos);
+      return bookPos.x > 0 && bookPos.y > 0 && bookPos.x < rect.width && bookPos.y < rect.height && (bookPos.x < operatingDistance || bookPos.x > rect.width - operatingDistance) && (bookPos.y < operatingDistance || bookPos.y > rect.height - operatingDistance);
+    }
+  }]);
+
+  return Flip;
+}();
+
+var Render = /*#__PURE__*/function () {
+  function Render(app, setting) {
+    _classCallCheck(this, Render);
+
+    this.leftPage = null;
+    this.rightPage = null;
+    this.flippingPage = null;
+    this.bottomPage = null;
+    this.direction = null;
+    this.orientation = null;
+    this.shadow = null;
+    this.animation = null;
+    this.pageRect = null;
+    this.boundsRect = null;
+    this.timer = 0;
+    this.safari = false;
+    this.setting = setting;
+    this.app = app;
+    var regex = new RegExp('Version\\/[\\d\\.]+.*Safari/');
+    this.safari = regex.exec(window.navigator.userAgent) !== null;
+  }
+
+  _createClass(Render, [{
+    key: "render",
+    value: function render(timer) {
+      if (this.animation !== null) {
+        var frameIndex = Math.round((timer - this.animation.startedAt) / this.animation.durationFrame);
+
+        if (frameIndex < this.animation.frames.length) {
+          this.animation.frames[frameIndex]();
+        } else {
+          this.animation.onAnimateEnd();
+          this.animation = null;
+        }
+      }
+
+      this.timer = timer;
+      this.drawFrame();
+    }
+  }, {
+    key: "start",
+    value: function start() {
+      var _this7 = this;
+
+      this.update();
+
+      var loop = function loop(timer) {
+        _this7.render(timer);
+
+        requestAnimationFrame(loop);
+      };
+
+      requestAnimationFrame(loop);
+    }
+  }, {
+    key: "startAnimation",
+    value: function startAnimation(frames, duration, onAnimateEnd) {
+      this.finishAnimation();
+      this.animation = {
+        frames: frames,
+        duration: duration,
+        durationFrame: duration / frames.length,
+        onAnimateEnd: onAnimateEnd,
+        startedAt: this.timer
+      };
+    }
+  }, {
+    key: "finishAnimation",
+    value: function finishAnimation() {
+      if (this.animation !== null) {
+        this.animation.frames[this.animation.frames.length - 1]();
+
+        if (this.animation.onAnimateEnd !== null) {
+          this.animation.onAnimateEnd();
+        }
+      }
+
+      this.animation = null;
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      this.boundsRect = null;
+      var orientation = this.calculateBoundsRect();
+
+      if (this.orientation !== orientation) {
+        this.orientation = orientation;
+        this.app.updateOrientation(orientation);
+      }
+    }
+  }, {
+    key: "calculateBoundsRect",
+    value: function calculateBoundsRect() {
+      var orientation = "landscape";
+      var blockWidth = this.getBlockWidth();
+      var middlePoint = {
+        x: blockWidth / 2,
+        y: this.getBlockHeight() / 2
+      };
+      var ratio = this.setting.width / this.setting.height;
+      var pageWidth = this.setting.width;
+      var pageHeight = this.setting.height;
+      var left = middlePoint.x - pageWidth;
+
+      if (this.setting.size === "stretch") {
+        if (blockWidth < this.setting.minWidth * 2 && this.app.getSettings().usePortrait) orientation = "portrait";
+        pageWidth = orientation === "portrait" ? this.getBlockWidth() : this.getBlockWidth() / 2;
+        if (pageWidth > this.setting.maxWidth) pageWidth = this.setting.maxWidth;
+        pageHeight = pageWidth / ratio;
+
+        if (pageHeight > this.getBlockHeight()) {
+          pageHeight = this.getBlockHeight();
+          pageWidth = pageHeight * ratio;
+        }
+
+        left = orientation === "portrait" ? middlePoint.x - pageWidth / 2 - pageWidth : middlePoint.x - pageWidth;
+      } else {
+        if (blockWidth < pageWidth * 2) {
+          if (this.app.getSettings().usePortrait) {
+            orientation = "portrait";
+            left = middlePoint.x - pageWidth / 2 - pageWidth;
+          }
+        }
+      }
+
+      this.boundsRect = {
+        left: left,
+        top: middlePoint.y - pageHeight / 2,
+        width: pageWidth * 2,
+        height: pageHeight,
+        pageWidth: pageWidth
+      };
+      return orientation;
+    }
+  }, {
+    key: "setShadowData",
+    value: function setShadowData(pos, angle, progress, direction) {
+      if (!this.app.getSettings().drawShadow) return;
+      var maxShadowOpacity = 100 * this.getSettings().maxShadowOpacity;
+      this.shadow = {
+        pos: pos,
+        angle: angle,
+        width: this.getRect().pageWidth * 3 / 4 * progress / 100,
+        opacity: (100 - progress) * maxShadowOpacity / 100 / 100,
+        direction: direction,
+        progress: progress * 2
+      };
+    }
+  }, {
+    key: "clearShadow",
+    value: function clearShadow() {
+      this.shadow = null;
+    }
+  }, {
+    key: "getBlockWidth",
+    value: function getBlockWidth() {
+      return this.app.getUI().getDistElement().offsetWidth;
+    }
+  }, {
+    key: "getBlockHeight",
+    value: function getBlockHeight() {
+      return this.app.getUI().getDistElement().offsetHeight;
+    }
+  }, {
+    key: "getDirection",
+    value: function getDirection() {
+      return this.direction;
+    }
+  }, {
+    key: "getRect",
+    value: function getRect() {
+      if (this.boundsRect === null) this.calculateBoundsRect();
+      return this.boundsRect;
+    }
+  }, {
+    key: "getSettings",
+    value: function getSettings() {
+      return this.app.getSettings();
+    }
+  }, {
+    key: "getOrientation",
+    value: function getOrientation() {
+      return this.orientation;
+    }
+  }, {
+    key: "setPageRect",
+    value: function setPageRect(pageRect) {
+      this.pageRect = pageRect;
+    }
+  }, {
+    key: "setDirection",
+    value: function setDirection(direction) {
+      this.direction = direction;
+    }
+  }, {
+    key: "setRightPage",
+    value: function setRightPage(page) {
+      if (page !== null) page.setOrientation(1);
+      this.rightPage = page;
+    }
+  }, {
+    key: "setLeftPage",
+    value: function setLeftPage(page) {
+      if (page !== null) page.setOrientation(0);
+      this.leftPage = page;
+    }
+  }, {
+    key: "setBottomPage",
+    value: function setBottomPage(page) {
+      if (page !== null) page.setOrientation(this.direction === 1 ? 0 : 1);
+      this.bottomPage = page;
+    }
+  }, {
+    key: "setFlippingPage",
+    value: function setFlippingPage(page) {
+      if (page !== null) page.setOrientation(this.direction === 0 && this.orientation !== "portrait" ? 0 : 1);
+      this.flippingPage = page;
+    }
+  }, {
+    key: "convertToBook",
+    value: function convertToBook(pos) {
+      var rect = this.getRect();
+      return {
+        x: pos.x - rect.left,
+        y: pos.y - rect.top
+      };
+    }
+  }, {
+    key: "isSafari",
+    value: function isSafari() {
+      return this.safari;
+    }
+  }, {
+    key: "convertToPage",
+    value: function convertToPage(pos, direction) {
+      if (!direction) direction = this.direction;
+      var rect = this.getRect();
+      var x = direction === 0 ? pos.x - rect.left - rect.width / 2 : rect.width / 2 - pos.x + rect.left;
+      return {
+        x: x,
+        y: pos.y - rect.top
+      };
+    }
+  }, {
+    key: "convertToGlobal",
+    value: function convertToGlobal(pos, direction) {
+      if (!direction) direction = this.direction;
+      if (pos == null) return null;
+      var rect = this.getRect();
+      var x = direction === 0 ? pos.x + rect.left + rect.width / 2 : rect.width / 2 - pos.x + rect.left;
+      return {
+        x: x,
+        y: pos.y + rect.top
+      };
+    }
+  }, {
+    key: "convertRectToGlobal",
+    value: function convertRectToGlobal(rect, direction) {
+      if (!direction) direction = this.direction;
+      return {
+        topLeft: this.convertToGlobal(rect.topLeft, direction),
+        topRight: this.convertToGlobal(rect.topRight, direction),
+        bottomLeft: this.convertToGlobal(rect.bottomLeft, direction),
+        bottomRight: this.convertToGlobal(rect.bottomRight, direction)
+      };
+    }
+  }]);
+
+  return Render;
+}();
+
+var CanvasRender = /*#__PURE__*/function (_Render) {
+  _inherits(CanvasRender, _Render);
+
+  var _super5 = _createSuper(CanvasRender);
+
+  function CanvasRender(app, setting, inCanvas) {
+    var _this8;
+
+    _classCallCheck(this, CanvasRender);
+
+    _this8 = _super5.call(this, app, setting);
+    _this8.canvas = inCanvas;
+    _this8.ctx = inCanvas.getContext('2d');
+    return _this8;
+  }
+
+  _createClass(CanvasRender, [{
+    key: "getContext",
+    value: function getContext() {
+      return this.ctx;
+    }
+  }, {
+    key: "reload",
+    value: function reload() {}
+  }, {
+    key: "drawFrame",
+    value: function drawFrame() {
+      this.clear();
+      if (this.orientation !== "portrait") if (this.leftPage != null) this.leftPage.simpleDraw(0);
+      if (this.rightPage != null) this.rightPage.simpleDraw(1);
+      if (this.bottomPage != null) this.bottomPage.draw();
+      this.drawBookShadow();
+      if (this.flippingPage != null) this.flippingPage.draw();
+
+      if (this.shadow != null) {
+        this.drawOuterShadow();
+        this.drawInnerShadow();
+      }
+
+      var rect = this.getRect();
+
+      if (this.orientation === "portrait") {
+        this.ctx.beginPath();
+        this.ctx.rect(rect.left + rect.pageWidth, rect.top, rect.width, rect.height);
+        this.ctx.clip();
+      }
+    }
+  }, {
+    key: "drawBookShadow",
+    value: function drawBookShadow() {
+      var rect = this.getRect();
+      this.ctx.save();
+      this.ctx.beginPath();
+      var shadowSize = rect.width / 20;
+      this.ctx.rect(rect.left, rect.top, rect.width, rect.height);
+      var shadowPos = {
+        x: rect.left + rect.width / 2 - shadowSize / 2,
+        y: 0
+      };
+      this.ctx.translate(shadowPos.x, shadowPos.y);
+      var outerGradient = this.ctx.createLinearGradient(0, 0, shadowSize, 0);
+      outerGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+      outerGradient.addColorStop(0.4, 'rgba(0, 0, 0, 0.2)');
+      outerGradient.addColorStop(0.49, 'rgba(0, 0, 0, 0.1)');
+      outerGradient.addColorStop(0.5, 'rgba(0, 0, 0, 0.5)');
+      outerGradient.addColorStop(0.51, 'rgba(0, 0, 0, 0.4)');
+      outerGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      this.ctx.clip();
+      this.ctx.fillStyle = outerGradient;
+      this.ctx.fillRect(0, 0, shadowSize, rect.height * 2);
+      this.ctx.restore();
+    }
+  }, {
+    key: "drawOuterShadow",
+    value: function drawOuterShadow() {
+      var rect = this.getRect();
+      this.ctx.save();
+      this.ctx.beginPath();
+      this.ctx.rect(rect.left, rect.top, rect.width, rect.height);
+      var shadowPos = this.convertToGlobal({
+        x: this.shadow.pos.x,
+        y: this.shadow.pos.y
+      });
+      this.ctx.translate(shadowPos.x, shadowPos.y);
+      this.ctx.rotate(Math.PI + this.shadow.angle + Math.PI / 2);
+      var outerGradient = this.ctx.createLinearGradient(0, 0, this.shadow.width, 0);
+
+      if (this.shadow.direction === 0) {
+        this.ctx.translate(0, -100);
+        outerGradient.addColorStop(0, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
+        outerGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      } else {
+        this.ctx.translate(-this.shadow.width, -100);
+        outerGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+        outerGradient.addColorStop(1, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
+      }
+
+      this.ctx.clip();
+      this.ctx.fillStyle = outerGradient;
+      this.ctx.fillRect(0, 0, this.shadow.width, rect.height * 2);
+      this.ctx.restore();
+    }
+  }, {
+    key: "drawInnerShadow",
+    value: function drawInnerShadow() {
+      var rect = this.getRect();
+      this.ctx.save();
+      this.ctx.beginPath();
+      var shadowPos = this.convertToGlobal({
+        x: this.shadow.pos.x,
+        y: this.shadow.pos.y
+      });
+      var pageRect = this.convertRectToGlobal(this.pageRect);
+      this.ctx.moveTo(pageRect.topLeft.x, pageRect.topLeft.y);
+      this.ctx.lineTo(pageRect.topRight.x, pageRect.topRight.y);
+      this.ctx.lineTo(pageRect.bottomRight.x, pageRect.bottomRight.y);
+      this.ctx.lineTo(pageRect.bottomLeft.x, pageRect.bottomLeft.y);
+      this.ctx.translate(shadowPos.x, shadowPos.y);
+      this.ctx.rotate(Math.PI + this.shadow.angle + Math.PI / 2);
+      var isw = this.shadow.width * 3 / 4;
+      var innerGradient = this.ctx.createLinearGradient(0, 0, isw, 0);
+
+      if (this.shadow.direction === 0) {
+        this.ctx.translate(-isw, -100);
+        innerGradient.addColorStop(1, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
+        innerGradient.addColorStop(0.9, 'rgba(0, 0, 0, 0.05)');
+        innerGradient.addColorStop(0.7, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
+        innerGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+      } else {
+        this.ctx.translate(0, -100);
+        innerGradient.addColorStop(0, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
+        innerGradient.addColorStop(0.1, 'rgba(0, 0, 0, 0.05)');
+        innerGradient.addColorStop(0.3, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
+        innerGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      }
+
+      this.ctx.clip();
+      this.ctx.fillStyle = innerGradient;
+      this.ctx.fillRect(0, 0, isw, rect.height * 2);
+      this.ctx.restore();
+    }
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.ctx.fillStyle = 'white';
+      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+  }]);
+
+  return CanvasRender;
+}(Render);
+
+var UI = /*#__PURE__*/function () {
+  function UI(inBlock, app, setting) {
+    var _this9 = this;
+
+    _classCallCheck(this, UI);
+
+    this.touchPoint = null;
+    this.swipeTimeout = 250;
+
+    this.onResize = function () {
+      _this9.update();
+    };
+
+    this.onMouseDown = function (e) {
+      if (_this9.checkTarget(e.target)) {
+        var pos = _this9.getMousePos(e.clientX, e.clientY);
+
+        _this9.app.startUserTouch(pos);
+
+        e.preventDefault();
+      }
+    };
+
+    this.onTouchStart = function (e) {
+      if (_this9.checkTarget(e.target)) {
+        if (e.changedTouches.length > 0) {
+          var t = e.changedTouches[0];
+
+          var pos = _this9.getMousePos(t.clientX, t.clientY);
+
+          _this9.touchPoint = {
+            point: pos,
+            time: Date.now()
+          };
+          setTimeout(function () {
+            if (_this9.touchPoint !== null) {
+              _this9.app.startUserTouch(pos);
+            }
+          }, _this9.swipeTimeout);
+          if (!_this9.app.getSettings().mobileScrollSupport) e.preventDefault();
+        }
+      }
+    };
+
+    this.onMouseUp = function (e) {
+      var pos = _this9.getMousePos(e.clientX, e.clientY);
+
+      _this9.app.userStop(pos);
+    };
+
+    this.onMouseMove = function (e) {
+      var pos = _this9.getMousePos(e.clientX, e.clientY);
+
+      _this9.app.userMove(pos, false);
+    };
+
+    this.onTouchMove = function (e) {
+      if (e.changedTouches.length > 0) {
+        var t = e.changedTouches[0];
+
+        var pos = _this9.getMousePos(t.clientX, t.clientY);
+
+        if (_this9.app.getSettings().mobileScrollSupport) {
+          if (_this9.touchPoint !== null) {
+            if (Math.abs(_this9.touchPoint.point.x - pos.x) > 10 || _this9.app.getState() !== "read") {
+              if (e.cancelable) _this9.app.userMove(pos, true);
+            }
+          }
+
+          if (_this9.app.getState() !== "read") {
+            e.preventDefault();
+          }
+        } else {
+          _this9.app.userMove(pos, true);
+        }
+      }
+    };
+
+    this.onTouchEnd = function (e) {
+      if (e.changedTouches.length > 0) {
+        var t = e.changedTouches[0];
+
+        var pos = _this9.getMousePos(t.clientX, t.clientY);
+
+        var isSwipe = false;
+
+        if (_this9.touchPoint !== null) {
+          var dx = pos.x - _this9.touchPoint.point.x;
+          var distY = Math.abs(pos.y - _this9.touchPoint.point.y);
+
+          if (Math.abs(dx) > _this9.swipeDistance && distY < _this9.swipeDistance * 2 && Date.now() - _this9.touchPoint.time < _this9.swipeTimeout) {
+            if (dx > 0) {
+              _this9.app.flipPrev(_this9.touchPoint.point.y < _this9.app.getRender().getRect().height / 2 ? "top" : "bottom");
+            } else {
+              _this9.app.flipNext(_this9.touchPoint.point.y < _this9.app.getRender().getRect().height / 2 ? "top" : "bottom");
+            }
+
+            isSwipe = true;
+          }
+
+          _this9.touchPoint = null;
+        }
+
+        _this9.app.userStop(pos, isSwipe);
+      }
+    };
+
+    this.parentElement = inBlock;
+    inBlock.classList.add('stf__parent');
+    inBlock.insertAdjacentHTML('afterbegin', '<div class="stf__wrapper"></div>');
+    this.wrapper = inBlock.querySelector('.stf__wrapper');
+    this.app = app;
+    var k = this.app.getSettings().usePortrait ? 1 : 2;
+    inBlock.style.minWidth = setting.minWidth * k + 'px';
+    inBlock.style.minHeight = setting.minHeight + 'px';
+
+    if (setting.size === "fixed") {
+      inBlock.style.minWidth = setting.width * k + 'px';
+      inBlock.style.minHeight = setting.height + 'px';
+    }
+
+    if (setting.autoSize) {
+      inBlock.style.width = '100%';
+      inBlock.style.maxWidth = setting.maxWidth * 2 + 'px';
+    }
+
+    inBlock.style.display = 'block';
+    window.addEventListener('resize', this.onResize, false);
+    this.swipeDistance = setting.swipeDistance;
+  }
+
+  _createClass(UI, [{
+    key: "destroy",
+    value: function destroy() {
+      if (this.app.getSettings().useMouseEvents) this.removeHandlers();
+      this.distElement.remove();
+      this.wrapper.remove();
+    }
+  }, {
+    key: "getDistElement",
+    value: function getDistElement() {
+      return this.distElement;
+    }
+  }, {
+    key: "getWrapper",
+    value: function getWrapper() {
+      return this.wrapper;
+    }
+  }, {
+    key: "setOrientationStyle",
+    value: function setOrientationStyle(orientation) {
+      this.wrapper.classList.remove('--portrait', '--landscape');
+
+      if (orientation === "portrait") {
+        if (this.app.getSettings().autoSize) this.wrapper.style.paddingBottom = this.app.getSettings().height / this.app.getSettings().width * 100 + '%';
+        this.wrapper.classList.add('--portrait');
+      } else {
+        if (this.app.getSettings().autoSize) this.wrapper.style.paddingBottom = this.app.getSettings().height / (this.app.getSettings().width * 2) * 100 + '%';
+        this.wrapper.classList.add('--landscape');
+      }
+
+      this.update();
+    }
+  }, {
+    key: "removeHandlers",
+    value: function removeHandlers() {
+      window.removeEventListener('resize', this.onResize);
+      this.distElement.removeEventListener('mousedown', this.onMouseDown);
+      this.distElement.removeEventListener('touchstart', this.onTouchStart);
+      window.removeEventListener('mousemove', this.onMouseMove);
+      window.removeEventListener('touchmove', this.onTouchMove);
+      window.removeEventListener('mouseup', this.onMouseUp);
+      window.removeEventListener('touchend', this.onTouchEnd);
+    }
+  }, {
+    key: "setHandlers",
+    value: function setHandlers() {
+      window.addEventListener('resize', this.onResize, false);
+      if (!this.app.getSettings().useMouseEvents) return;
+      this.distElement.addEventListener('mousedown', this.onMouseDown);
+      this.distElement.addEventListener('touchstart', this.onTouchStart);
+      window.addEventListener('mousemove', this.onMouseMove);
+      window.addEventListener('touchmove', this.onTouchMove, {
+        passive: !this.app.getSettings().mobileScrollSupport
+      });
+      window.addEventListener('mouseup', this.onMouseUp);
+      window.addEventListener('touchend', this.onTouchEnd);
+    }
+  }, {
+    key: "getMousePos",
+    value: function getMousePos(x, y) {
+      var rect = this.distElement.getBoundingClientRect();
+      return {
+        x: x - rect.left,
+        y: y - rect.top
+      };
+    }
+  }, {
+    key: "checkTarget",
+    value: function checkTarget(targer) {
+      if (!this.app.getSettings().clickEventForward) return true;
+
+      if (['a', 'button'].includes(targer.tagName.toLowerCase())) {
+        return false;
+      }
+
+      return true;
+    }
+  }]);
+
+  return UI;
+}();
+
+var HTMLUI = /*#__PURE__*/function (_UI) {
+  _inherits(HTMLUI, _UI);
+
+  var _super6 = _createSuper(HTMLUI);
+
+  function HTMLUI(inBlock, app, setting, items) {
+    var _this10;
+
+    _classCallCheck(this, HTMLUI);
+
+    _this10 = _super6.call(this, inBlock, app, setting);
+
+    _this10.wrapper.insertAdjacentHTML('afterbegin', '<div class="stf__block"></div>');
+
+    _this10.distElement = inBlock.querySelector('.stf__block');
+    _this10.items = items;
+
+    var _iterator6 = _createForOfIteratorHelper(items),
+        _step6;
+
+    try {
+      for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+        var item = _step6.value;
+
+        _this10.distElement.appendChild(item);
+      }
+    } catch (err) {
+      _iterator6.e(err);
+    } finally {
+      _iterator6.f();
+    }
+
+    _this10.setHandlers();
+
+    return _this10;
+  }
+
+  _createClass(HTMLUI, [{
+    key: "clear",
+    value: function clear() {
+      var _iterator7 = _createForOfIteratorHelper(this.items),
+          _step7;
+
+      try {
+        for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
+          var item = _step7.value;
+          this.parentElement.appendChild(item);
+        }
+      } catch (err) {
+        _iterator7.e(err);
+      } finally {
+        _iterator7.f();
+      }
+    }
+  }, {
+    key: "updateItems",
+    value: function updateItems(items) {
+      this.removeHandlers();
+      this.distElement.innerHTML = '';
+
+      var _iterator8 = _createForOfIteratorHelper(items),
+          _step8;
+
+      try {
+        for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
+          var item = _step8.value;
+          this.distElement.appendChild(item);
+        }
+      } catch (err) {
+        _iterator8.e(err);
+      } finally {
+        _iterator8.f();
+      }
+
+      this.items = items;
+      this.setHandlers();
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      this.app.getRender().update();
+    }
+  }]);
+
+  return HTMLUI;
+}(UI);
+
+var CanvasUI = /*#__PURE__*/function (_UI2) {
+  _inherits(CanvasUI, _UI2);
+
+  var _super7 = _createSuper(CanvasUI);
+
+  function CanvasUI(inBlock, app, setting) {
+    var _this11;
+
+    _classCallCheck(this, CanvasUI);
+
+    _this11 = _super7.call(this, inBlock, app, setting);
+    _this11.wrapper.innerHTML = '<canvas class="stf__canvas"></canvas>';
+    _this11.canvas = inBlock.querySelectorAll('canvas')[0];
+    _this11.distElement = _this11.canvas;
+
+    _this11.resizeCanvas();
+
+    _this11.setHandlers();
+
+    return _this11;
+  }
+
+  _createClass(CanvasUI, [{
+    key: "resizeCanvas",
+    value: function resizeCanvas() {
+      var cs = getComputedStyle(this.canvas);
+      var width = parseInt(cs.getPropertyValue('width'), 10);
+      var height = parseInt(cs.getPropertyValue('height'), 10);
+      this.canvas.width = width;
+      this.canvas.height = height;
+    }
+  }, {
+    key: "getCanvas",
+    value: function getCanvas() {
+      return this.canvas;
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      this.resizeCanvas();
+      this.app.getRender().update();
+    }
+  }]);
+
+  return CanvasUI;
+}(UI);
+
+var EventObject = /*#__PURE__*/function () {
+  function EventObject() {
+    _classCallCheck(this, EventObject);
+
+    this.events = new Map();
+  }
+
+  _createClass(EventObject, [{
+    key: "on",
+    value: function on(eventName, callback) {
+      if (!this.events.has(eventName)) {
+        this.events.set(eventName, [callback]);
+      } else {
+        this.events.get(eventName).push(callback);
+      }
+
+      return this;
+    }
+  }, {
+    key: "off",
+    value: function off(event) {
+      this.events["delete"](event);
+    }
+  }, {
+    key: "trigger",
+    value: function trigger(eventName, app) {
+      var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+      if (!this.events.has(eventName)) return;
+
+      var _iterator9 = _createForOfIteratorHelper(this.events.get(eventName)),
+          _step9;
+
+      try {
+        for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
+          var callback = _step9.value;
+          callback({
+            data: data,
+            object: app
+          });
+        }
+      } catch (err) {
+        _iterator9.e(err);
+      } finally {
+        _iterator9.f();
+      }
+    }
+  }]);
+
+  return EventObject;
+}();
+
+var HTMLRender = /*#__PURE__*/function (_Render2) {
+  _inherits(HTMLRender, _Render2);
+
+  var _super8 = _createSuper(HTMLRender);
+
+  function HTMLRender(app, setting, element) {
+    var _this12;
+
+    _classCallCheck(this, HTMLRender);
+
+    _this12 = _super8.call(this, app, setting);
+    _this12.outerShadow = null;
+    _this12.innerShadow = null;
+    _this12.hardShadow = null;
+    _this12.hardInnerShadow = null;
+    _this12.element = element;
+
+    _this12.createShadows();
+
+    return _this12;
+  }
+
+  _createClass(HTMLRender, [{
+    key: "createShadows",
+    value: function createShadows() {
+      this.element.insertAdjacentHTML('beforeend', "<div class=\"stf__outerShadow\"></div>\n             <div class=\"stf__innerShadow\"></div>\n             <div class=\"stf__hardShadow\"></div>\n             <div class=\"stf__hardInnerShadow\"></div>");
+      this.outerShadow = this.element.querySelector('.stf__outerShadow');
+      this.innerShadow = this.element.querySelector('.stf__innerShadow');
+      this.hardShadow = this.element.querySelector('.stf__hardShadow');
+      this.hardInnerShadow = this.element.querySelector('.stf__hardInnerShadow');
+    }
+  }, {
+    key: "clearShadow",
+    value: function clearShadow() {
+      _get(_getPrototypeOf(HTMLRender.prototype), "clearShadow", this).call(this);
+
+      this.outerShadow.style.cssText = 'display: none';
+      this.innerShadow.style.cssText = 'display: none';
+      this.hardShadow.style.cssText = 'display: none';
+      this.hardInnerShadow.style.cssText = 'display: none';
+    }
+  }, {
+    key: "reload",
+    value: function reload() {
+      var testShadow = this.element.querySelector('.stf__outerShadow');
+
+      if (!testShadow) {
+        this.createShadows();
+      }
+    }
+  }, {
+    key: "drawHardInnerShadow",
+    value: function drawHardInnerShadow() {
+      var rect = this.getRect();
+      var progress = this.shadow.progress > 100 ? 200 - this.shadow.progress : this.shadow.progress;
+      var innerShadowSize = (100 - progress) * (2.5 * rect.pageWidth) / 100 + 20;
+      if (innerShadowSize > rect.pageWidth) innerShadowSize = rect.pageWidth;
+      var newStyle = "\n            display: block;\n            z-index: ".concat((this.getSettings().startZIndex + 5).toString(10), ";\n            width: ").concat(innerShadowSize, "px;\n            height: ").concat(rect.height, "px;\n            background: linear-gradient(to right,\n                rgba(0, 0, 0, ").concat(this.shadow.opacity * progress / 100, ") 5%,\n                rgba(0, 0, 0, 0) 100%);\n            left: ").concat(rect.left + rect.width / 2, "px;\n            transform-origin: 0 0;\n        ");
+      newStyle += this.getDirection() === 0 && this.shadow.progress > 100 || this.getDirection() === 1 && this.shadow.progress <= 100 ? "transform: translate3d(0, 0, 0);" : "transform: translate3d(0, 0, 0) rotateY(180deg);";
+      this.hardInnerShadow.style.cssText = newStyle;
+    }
+  }, {
+    key: "drawHardOuterShadow",
+    value: function drawHardOuterShadow() {
+      var rect = this.getRect();
+      var progress = this.shadow.progress > 100 ? 200 - this.shadow.progress : this.shadow.progress;
+      var shadowSize = (100 - progress) * (2.5 * rect.pageWidth) / 100 + 20;
+      if (shadowSize > rect.pageWidth) shadowSize = rect.pageWidth;
+      var newStyle = "\n            display: block;\n            z-index: ".concat((this.getSettings().startZIndex + 4).toString(10), ";\n            width: ").concat(shadowSize, "px;\n            height: ").concat(rect.height, "px;\n            background: linear-gradient(to left, rgba(0, 0, 0, ").concat(this.shadow.opacity, ") 5%, rgba(0, 0, 0, 0) 100%);\n            left: ").concat(rect.left + rect.width / 2, "px;\n            transform-origin: 0 0;\n        ");
+      newStyle += this.getDirection() === 0 && this.shadow.progress > 100 || this.getDirection() === 1 && this.shadow.progress <= 100 ? "transform: translate3d(0, 0, 0) rotateY(180deg);" : "transform: translate3d(0, 0, 0);";
+      this.hardShadow.style.cssText = newStyle;
+    }
+  }, {
+    key: "drawInnerShadow",
+    value: function drawInnerShadow() {
+      var rect = this.getRect();
+      var innerShadowSize = this.shadow.width * 3 / 4;
+      var shadowTranslate = this.getDirection() === 0 ? innerShadowSize : 0;
+      var shadowDirection = this.getDirection() === 0 ? 'to left' : 'to right';
+      var shadowPos = this.convertToGlobal(this.shadow.pos);
+      var angle = this.shadow.angle + 3 * Math.PI / 2;
+      var clip = [this.pageRect.topLeft, this.pageRect.topRight, this.pageRect.bottomRight, this.pageRect.bottomLeft];
+      var polygon = 'polygon( ';
+
+      for (var _i3 = 0, _clip = clip; _i3 < _clip.length; _i3++) {
+        var p = _clip[_i3];
+        var g = this.getDirection() === 1 ? {
+          x: -p.x + this.shadow.pos.x,
+          y: p.y - this.shadow.pos.y
+        } : {
+          x: p.x - this.shadow.pos.x,
+          y: p.y - this.shadow.pos.y
+        };
+        g = Helper.GetRotatedPoint(g, {
+          x: shadowTranslate,
+          y: 100
+        }, angle);
+        polygon += g.x + 'px ' + g.y + 'px, ';
+      }
+
+      polygon = polygon.slice(0, -2);
+      polygon += ')';
+      var newStyle = "\n            display: block;\n            z-index: ".concat((this.getSettings().startZIndex + 10).toString(10), ";\n            width: ").concat(innerShadowSize, "px;\n            height: ").concat(rect.height * 2, "px;\n            background: linear-gradient(").concat(shadowDirection, ",\n                rgba(0, 0, 0, ").concat(this.shadow.opacity, ") 5%,\n                rgba(0, 0, 0, 0.05) 15%,\n                rgba(0, 0, 0, ").concat(this.shadow.opacity, ") 35%,\n                rgba(0, 0, 0, 0) 100%);\n            transform-origin: ").concat(shadowTranslate, "px 100px;\n            transform: translate3d(").concat(shadowPos.x - shadowTranslate, "px, ").concat(shadowPos.y - 100, "px, 0) rotate(").concat(angle, "rad);\n            clip-path: ").concat(polygon, ";\n            -webkit-clip-path: ").concat(polygon, ";\n        ");
+      this.innerShadow.style.cssText = newStyle;
+    }
+  }, {
+    key: "drawOuterShadow",
+    value: function drawOuterShadow() {
+      var rect = this.getRect();
+      var shadowPos = this.convertToGlobal({
+        x: this.shadow.pos.x,
+        y: this.shadow.pos.y
+      });
+      var angle = this.shadow.angle + 3 * Math.PI / 2;
+      var shadowTranslate = this.getDirection() === 1 ? this.shadow.width : 0;
+      var shadowDirection = this.getDirection() === 0 ? 'to right' : 'to left';
+      var clip = [{
+        x: 0,
+        y: 0
+      }, {
+        x: rect.pageWidth,
+        y: 0
+      }, {
+        x: rect.pageWidth,
+        y: rect.height
+      }, {
+        x: 0,
+        y: rect.height
+      }];
+      var polygon = 'polygon( ';
+
+      for (var _i4 = 0, _clip2 = clip; _i4 < _clip2.length; _i4++) {
+        var p = _clip2[_i4];
+
+        if (p !== null) {
+          var g = this.getDirection() === 1 ? {
+            x: -p.x + this.shadow.pos.x,
+            y: p.y - this.shadow.pos.y
+          } : {
+            x: p.x - this.shadow.pos.x,
+            y: p.y - this.shadow.pos.y
+          };
+          g = Helper.GetRotatedPoint(g, {
+            x: shadowTranslate,
+            y: 100
+          }, angle);
+          polygon += g.x + 'px ' + g.y + 'px, ';
+        }
+      }
+
+      polygon = polygon.slice(0, -2);
+      polygon += ')';
+      var newStyle = "\n            display: block;\n            z-index: ".concat((this.getSettings().startZIndex + 10).toString(10), ";\n            width: ").concat(this.shadow.width, "px;\n            height: ").concat(rect.height * 2, "px;\n            background: linear-gradient(").concat(shadowDirection, ", rgba(0, 0, 0, ").concat(this.shadow.opacity, "), rgba(0, 0, 0, 0));\n            transform-origin: ").concat(shadowTranslate, "px 100px;\n            transform: translate3d(").concat(shadowPos.x - shadowTranslate, "px, ").concat(shadowPos.y - 100, "px, 0) rotate(").concat(angle, "rad);\n            clip-path: ").concat(polygon, ";\n            -webkit-clip-path: ").concat(polygon, ";\n        ");
+      this.outerShadow.style.cssText = newStyle;
+    }
+  }, {
+    key: "drawLeftPage",
+    value: function drawLeftPage() {
+      if (this.orientation === "portrait" || this.leftPage === null) return;
+
+      if (this.direction === 1 && this.flippingPage !== null && this.flippingPage.getDrawingDensity() === "hard") {
+        this.leftPage.getElement().style.zIndex = (this.getSettings().startZIndex + 5).toString(10);
+        this.leftPage.setHardDrawingAngle(180 + this.flippingPage.getHardAngle());
+        this.leftPage.draw(this.flippingPage.getDrawingDensity());
+      } else {
+        this.leftPage.simpleDraw(0);
+      }
+    }
+  }, {
+    key: "drawRightPage",
+    value: function drawRightPage() {
+      if (this.rightPage === null) return;
+
+      if (this.direction === 0 && this.flippingPage !== null && this.flippingPage.getDrawingDensity() === "hard") {
+        this.rightPage.getElement().style.zIndex = (this.getSettings().startZIndex + 5).toString(10);
+        this.rightPage.setHardDrawingAngle(180 + this.flippingPage.getHardAngle());
+        this.rightPage.draw(this.flippingPage.getDrawingDensity());
+      } else {
+        this.rightPage.simpleDraw(1);
+      }
+    }
+  }, {
+    key: "drawBottomPage",
+    value: function drawBottomPage() {
+      if (this.bottomPage === null) return;
+      var tempDensity = this.flippingPage != null ? this.flippingPage.getDrawingDensity() : null;
+
+      if (!(this.orientation === "portrait" && this.direction === 1)) {
+        this.bottomPage.getElement().style.zIndex = (this.getSettings().startZIndex + 3).toString(10);
+        this.bottomPage.draw(tempDensity);
+      }
+    }
+  }, {
+    key: "drawFrame",
+    value: function drawFrame() {
+      this.clear();
+      this.drawLeftPage();
+      this.drawRightPage();
+      this.drawBottomPage();
+
+      if (this.flippingPage != null) {
+        this.flippingPage.getElement().style.zIndex = (this.getSettings().startZIndex + 5).toString(10);
+        this.flippingPage.draw();
+      }
+
+      if (this.shadow != null && this.flippingPage !== null) {
+        if (this.flippingPage.getDrawingDensity() === "soft") {
+          this.drawOuterShadow();
+          this.drawInnerShadow();
+        } else {
+          this.drawHardOuterShadow();
+          this.drawHardInnerShadow();
+        }
+      }
+    }
+  }, {
+    key: "clear",
+    value: function clear() {
+      var _iterator10 = _createForOfIteratorHelper(this.app.getPageCollection().getPages()),
+          _step10;
+
+      try {
+        for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
+          var page = _step10.value;
+
+          if (page !== this.leftPage && page !== this.rightPage && page !== this.flippingPage && page !== this.bottomPage) {
+            page.getElement().style.cssText = 'display: none';
+          }
+
+          if (page.getTemporaryCopy() !== this.flippingPage) {
+            page.hideTemporaryCopy();
+          }
+        }
+      } catch (err) {
+        _iterator10.e(err);
+      } finally {
+        _iterator10.f();
+      }
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      _get(_getPrototypeOf(HTMLRender.prototype), "update", this).call(this);
+
+      if (this.rightPage !== null) {
+        this.rightPage.setOrientation(1);
+      }
+
+      if (this.leftPage !== null) {
+        this.leftPage.setOrientation(0);
+      }
+    }
+  }]);
+
+  return HTMLRender;
+}(Render);
+
+var Settings = /*#__PURE__*/function () {
+  function Settings() {
+    _classCallCheck(this, Settings);
+
+    this._default = {
+      startPage: 0,
+      size: "fixed",
+      width: 0,
+      height: 0,
+      minWidth: 0,
+      maxWidth: 0,
+      minHeight: 0,
+      maxHeight: 0,
+      drawShadow: true,
+      flippingTime: 1000,
+      usePortrait: true,
+      startZIndex: 0,
+      autoSize: true,
+      maxShadowOpacity: 1,
+      showCover: false,
+      mobileScrollSupport: true,
+      swipeDistance: 30,
+      clickEventForward: true,
+      useMouseEvents: true,
+      showPageCorners: true,
+      disableFlipByClick: false
+    };
+  }
+
+  _createClass(Settings, [{
+    key: "getSettings",
+    value: function getSettings(userSetting) {
+      var result = this._default;
+      Object.assign(result, userSetting);
+      if (result.size !== "stretch" && result.size !== "fixed") throw new Error('Invalid size type. Available only "fixed" and "stretch" value');
+      if (result.width <= 0 || result.height <= 0) throw new Error('Invalid width or height');
+      if (result.flippingTime <= 0) throw new Error('Invalid flipping time');
+
+      if (result.size === "stretch") {
+        if (result.minWidth <= 0) result.minWidth = 100;
+        if (result.maxWidth < result.minWidth) result.maxWidth = 2000;
+        if (result.minHeight <= 0) result.minHeight = 100;
+        if (result.maxHeight < result.minHeight) result.maxHeight = 2000;
+      } else {
+        result.minWidth = result.width;
+        result.maxWidth = result.width;
+        result.minHeight = result.height;
+        result.maxHeight = result.height;
+      }
+
+      return result;
+    }
+  }]);
+
+  return Settings;
+}();
+
+function styleInject(css, ref) {
+  if (ref === void 0) ref = {};
+  var insertAt = ref.insertAt;
+
+  if (!css || typeof document === 'undefined') {
+    return;
+  }
+
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+
+  if (insertAt === 'top') {
+    if (head.firstChild) {
+      head.insertBefore(style, head.firstChild);
+    } else {
+      head.appendChild(style);
+    }
+  } else {
+    head.appendChild(style);
+  }
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var css_248z = ".stf__parent {\n  position: relative;\n  display: block;\n  box-sizing: border-box;\n  transform: translateZ(0);\n\n  -ms-touch-action: pan-y;\n  touch-action: pan-y;\n}\n\n.sft__wrapper {\n  position: relative;\n  width: 100%;\n  box-sizing: border-box;\n}\n\n.stf__parent canvas {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  left: 0;\n  top: 0;\n}\n\n.stf__block {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  box-sizing: border-box;\n  perspective: 2000px;\n}\n\n.stf__item {\n  display: none;\n  position: absolute;\n  transform-style: preserve-3d;\n}\n\n.stf__outerShadow {\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n\n.stf__innerShadow {\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n\n.stf__hardShadow {\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n\n.stf__hardInnerShadow {\n  position: absolute;\n  left: 0;\n  top: 0;\n}";
+styleInject(css_248z);
+
+var PageFlip = /*#__PURE__*/function (_EventObject) {
+  _inherits(PageFlip, _EventObject);
+
+  var _super9 = _createSuper(PageFlip);
+
+  function PageFlip(inBlock, setting) {
+    var _this13;
+
+    _classCallCheck(this, PageFlip);
+
+    _this13 = _super9.call(this);
+    _this13.isUserTouch = false;
+    _this13.isUserMove = false;
+    _this13.setting = null;
+    _this13.pages = null;
+    _this13.setting = new Settings().getSettings(setting);
+    _this13.block = inBlock;
+    return _this13;
+  }
+
+  _createClass(PageFlip, [{
+    key: "destroy",
+    value: function destroy() {
+      this.ui.destroy();
+      this.block.remove();
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      this.render.update();
+      this.pages.show();
+    }
+  }, {
+    key: "loadFromImages",
+    value: function loadFromImages(imagesHref) {
+      var _this14 = this;
+
+      this.ui = new CanvasUI(this.block, this, this.setting);
+      var canvas = this.ui.getCanvas();
+      this.render = new CanvasRender(this, this.setting, canvas);
+      this.flipController = new Flip(this.render, this);
+      this.pages = new ImagePageCollection(this, this.render, imagesHref);
+      this.pages.load();
+      this.render.start();
+      this.pages.show(this.setting.startPage);
+      setTimeout(function () {
+        _this14.ui.update();
+
+        _this14.trigger('init', _this14, {
+          page: _this14.setting.startPage,
+          mode: _this14.render.getOrientation()
+        });
+      }, 1);
+    }
+  }, {
+    key: "loadFromHTML",
+    value: function loadFromHTML(items) {
+      var _this15 = this;
+
+      this.ui = new HTMLUI(this.block, this, this.setting, items);
+      this.render = new HTMLRender(this, this.setting, this.ui.getDistElement());
+      this.flipController = new Flip(this.render, this);
+      this.pages = new HTMLPageCollection(this, this.render, this.ui.getDistElement(), items);
+      this.pages.load();
+      this.render.start();
+      this.pages.show(this.setting.startPage);
+      setTimeout(function () {
+        _this15.ui.update();
+
+        _this15.trigger('init', _this15, {
+          page: _this15.setting.startPage,
+          mode: _this15.render.getOrientation()
+        });
+      }, 1);
+    }
+  }, {
+    key: "updateFromImages",
+    value: function updateFromImages(imagesHref) {
+      var current = this.pages.getCurrentPageIndex();
+      this.pages.destroy();
+      this.pages = new ImagePageCollection(this, this.render, imagesHref);
+      this.pages.load();
+      this.pages.show(current);
+      this.trigger('update', this, {
+        page: current,
+        mode: this.render.getOrientation()
+      });
+    }
+  }, {
+    key: "updateFromHtml",
+    value: function updateFromHtml(items) {
+      var current = this.pages.getCurrentPageIndex();
+      this.pages.destroy();
+      this.pages = new HTMLPageCollection(this, this.render, this.ui.getDistElement(), items);
+      this.pages.load();
+      this.ui.updateItems(items);
+      this.render.reload();
+      this.pages.show(current);
+      this.trigger('update', this, {
+        page: current,
+        mode: this.render.getOrientation()
+      });
+    }
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.pages.destroy();
+      this.ui.clear();
+    }
+  }, {
+    key: "turnToPrevPage",
+    value: function turnToPrevPage() {
+      this.pages.showPrev();
+    }
+  }, {
+    key: "turnToNextPage",
+    value: function turnToNextPage() {
+      this.pages.showNext();
+    }
+  }, {
+    key: "turnToPage",
+    value: function turnToPage(page) {
+      this.pages.show(page);
+    }
+  }, {
+    key: "flipNext",
+    value: function flipNext() {
+      var corner = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "top";
+      this.flipController.flipNext(corner);
+    }
+  }, {
+    key: "flipPrev",
+    value: function flipPrev() {
+      var corner = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "top";
+      this.flipController.flipPrev(corner);
+    }
+  }, {
+    key: "flip",
+    value: function flip(page) {
+      var corner = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "top";
+      this.flipController.flipToPage(page, corner);
+    }
+  }, {
+    key: "updateState",
+    value: function updateState(newState) {
+      this.trigger('changeState', this, newState);
+    }
+  }, {
+    key: "updatePageIndex",
+    value: function updatePageIndex(newPage) {
+      this.trigger('flip', this, newPage);
+    }
+  }, {
+    key: "updateOrientation",
+    value: function updateOrientation(newOrientation) {
+      this.ui.setOrientationStyle(newOrientation);
+      this.update();
+      this.trigger('changeOrientation', this, newOrientation);
+    }
+  }, {
+    key: "getPageCount",
+    value: function getPageCount() {
+      return this.pages.getPageCount();
+    }
+  }, {
+    key: "getCurrentPageIndex",
+    value: function getCurrentPageIndex() {
+      return this.pages.getCurrentPageIndex();
+    }
+  }, {
+    key: "getPage",
+    value: function getPage(pageIndex) {
+      return this.pages.getPage(pageIndex);
+    }
+  }, {
+    key: "getRender",
+    value: function getRender() {
+      return this.render;
+    }
+  }, {
+    key: "getFlipController",
+    value: function getFlipController() {
+      return this.flipController;
+    }
+  }, {
+    key: "getOrientation",
+    value: function getOrientation() {
+      return this.render.getOrientation();
+    }
+  }, {
+    key: "getBoundsRect",
+    value: function getBoundsRect() {
+      return this.render.getRect();
+    }
+  }, {
+    key: "getSettings",
+    value: function getSettings() {
+      return this.setting;
+    }
+  }, {
+    key: "getUI",
+    value: function getUI() {
+      return this.ui;
+    }
+  }, {
+    key: "getState",
+    value: function getState() {
+      return this.flipController.getState();
+    }
+  }, {
+    key: "getPageCollection",
+    value: function getPageCollection() {
+      return this.pages;
+    }
+  }, {
+    key: "startUserTouch",
+    value: function startUserTouch(pos) {
+      this.mousePosition = pos;
+      this.isUserTouch = true;
+      this.isUserMove = false;
+    }
+  }, {
+    key: "userMove",
+    value: function userMove(pos, isTouch) {
+      if (!this.isUserTouch && !isTouch && this.setting.showPageCorners) {
+        this.flipController.showCorner(pos);
+      } else if (this.isUserTouch) {
+        if (Helper.GetDistanceBetweenTwoPoint(this.mousePosition, pos) > 5) {
+          this.isUserMove = true;
+          this.flipController.fold(pos);
+        }
+      }
+    }
+  }, {
+    key: "userStop",
+    value: function userStop(pos) {
+      var isSwipe = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      if (this.isUserTouch) {
+        this.isUserTouch = false;
+
+        if (!isSwipe) {
+          if (!this.isUserMove) this.flipController.flip(pos);else this.flipController.stopMove();
+        }
+      }
+    }
+  }]);
+
+  return PageFlip;
+}(EventObject);
+
+exports.PageFlip = PageFlip;
+
+/***/ }),
+/* 36 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -16046,9 +19012,9 @@ var _pdf_rendering_queue = __webpack_require__(10);
 
 var _viewer_compatibility = __webpack_require__(2);
 
-var _canvasSize = _interopRequireDefault(__webpack_require__(36));
+var _canvasSize = _interopRequireDefault(__webpack_require__(37));
 
-var _util = __webpack_require__(37);
+var _util = __webpack_require__(38);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -16955,7 +19921,7 @@ var PDFPageView = /*#__PURE__*/function () {
 exports.PDFPageView = PDFPageView;
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -17400,7 +20366,7 @@ var _default = canvasSize;
 exports.default = _default;
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -17442,7 +20408,7 @@ exports.utf8StringToString = utf8StringToString;
 exports.warn = warn;
 exports.VerbosityLevel = exports.Util = exports.UNSUPPORTED_FEATURES = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.StreamType = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.IsLittleEndianCached = exports.IsEvalSupportedCached = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FontType = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
 
-__webpack_require__(38);
+__webpack_require__(39);
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
@@ -18462,7 +21428,7 @@ function createObjectURL(data) {
 }
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -18472,7 +21438,7 @@ var isNodeJS = false;
 
 if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked) {
   if (typeof globalThis === "undefined" || globalThis.Math !== Math) {
-    globalThis = __webpack_require__(39);
+    globalThis = __webpack_require__(40);
   }
 
   globalThis._pdfjsCompatibilityChecked = true;
@@ -18502,7 +21468,7 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
       return;
     }
 
-    globalThis.DOMMatrix = __webpack_require__(92);
+    globalThis.DOMMatrix = __webpack_require__(93);
   })();
 
   (function checkObjectFromEntries() {
@@ -18510,7 +21476,7 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
       return;
     }
 
-    __webpack_require__(93);
+    __webpack_require__(94);
   })();
 
   (function checkPromise() {
@@ -18518,7 +21484,7 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
       return;
     }
 
-    globalThis.Promise = __webpack_require__(120);
+    globalThis.Promise = __webpack_require__(121);
   })();
 
   (function checkReadableStream() {
@@ -18539,36 +21505,36 @@ if (typeof globalThis === "undefined" || !globalThis._pdfjsCompatibilityChecked)
       return;
     }
 
-    globalThis.ReadableStream = __webpack_require__(148).ReadableStream;
+    globalThis.ReadableStream = __webpack_require__(149).ReadableStream;
   })();
 }
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-__webpack_require__(40);
-module.exports = __webpack_require__(42);
-
-/***/ }),
-/* 40 */
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-var $ = __webpack_require__(41);
-var global = __webpack_require__(42);
-$({ global: true }, { globalThis: global });
+__webpack_require__(41);
+module.exports = __webpack_require__(43);
 
 /***/ }),
 /* 41 */
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+var $ = __webpack_require__(42);
+var global = __webpack_require__(43);
+$({ global: true }, { globalThis: global });
+
+/***/ }),
+/* 42 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var global = __webpack_require__(42);
-var getOwnPropertyDescriptor = __webpack_require__(43).f;
-var createNonEnumerableProperty = __webpack_require__(72);
-var redefine = __webpack_require__(75);
-var setGlobal = __webpack_require__(66);
-var copyConstructorProperties = __webpack_require__(81);
-var isForced = __webpack_require__(91);
+var global = __webpack_require__(43);
+var getOwnPropertyDescriptor = __webpack_require__(44).f;
+var createNonEnumerableProperty = __webpack_require__(73);
+var redefine = __webpack_require__(76);
+var setGlobal = __webpack_require__(67);
+var copyConstructorProperties = __webpack_require__(82);
+var isForced = __webpack_require__(92);
 module.exports = function (options, source) {
  var TARGET = options.target;
  var GLOBAL = options.global;
@@ -18603,7 +21569,7 @@ module.exports = function (options, source) {
 };
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ ((module) => {
 
 var check = function (it) {
@@ -18614,16 +21580,16 @@ module.exports = check(typeof globalThis == 'object' && globalThis) || check(typ
 }() || Function('return this')();
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-var DESCRIPTORS = __webpack_require__(44);
-var propertyIsEnumerableModule = __webpack_require__(46);
-var createPropertyDescriptor = __webpack_require__(47);
-var toIndexedObject = __webpack_require__(48);
-var toPropertyKey = __webpack_require__(52);
-var has = __webpack_require__(67);
-var IE8_DOM_DEFINE = __webpack_require__(70);
+var DESCRIPTORS = __webpack_require__(45);
+var propertyIsEnumerableModule = __webpack_require__(47);
+var createPropertyDescriptor = __webpack_require__(48);
+var toIndexedObject = __webpack_require__(49);
+var toPropertyKey = __webpack_require__(53);
+var has = __webpack_require__(68);
+var IE8_DOM_DEFINE = __webpack_require__(71);
 var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDescriptor(O, P) {
  O = toIndexedObject(O);
@@ -18638,10 +21604,10 @@ exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDes
 };
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var fails = __webpack_require__(45);
+var fails = __webpack_require__(46);
 module.exports = !fails(function () {
  return Object.defineProperty({}, 1, {
   get: function () {
@@ -18651,7 +21617,7 @@ module.exports = !fails(function () {
 });
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ ((module) => {
 
 module.exports = function (exec) {
@@ -18663,7 +21629,7 @@ module.exports = function (exec) {
 };
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -18677,7 +21643,7 @@ exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
 } : $propertyIsEnumerable;
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ ((module) => {
 
 module.exports = function (bitmap, value) {
@@ -18690,21 +21656,21 @@ module.exports = function (bitmap, value) {
 };
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var IndexedObject = __webpack_require__(49);
-var requireObjectCoercible = __webpack_require__(51);
+var IndexedObject = __webpack_require__(50);
+var requireObjectCoercible = __webpack_require__(52);
 module.exports = function (it) {
  return IndexedObject(requireObjectCoercible(it));
 };
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var fails = __webpack_require__(45);
-var classof = __webpack_require__(50);
+var fails = __webpack_require__(46);
+var classof = __webpack_require__(51);
 var split = ''.split;
 module.exports = fails(function () {
  return !Object('z').propertyIsEnumerable(0);
@@ -18713,7 +21679,7 @@ module.exports = fails(function () {
 } : Object;
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ ((module) => {
 
 var toString = {}.toString;
@@ -18722,7 +21688,7 @@ module.exports = function (it) {
 };
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ ((module) => {
 
 module.exports = function (it) {
@@ -18732,24 +21698,24 @@ module.exports = function (it) {
 };
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var toPrimitive = __webpack_require__(53);
-var isSymbol = __webpack_require__(55);
+var toPrimitive = __webpack_require__(54);
+var isSymbol = __webpack_require__(56);
 module.exports = function (argument) {
  var key = toPrimitive(argument, 'string');
  return isSymbol(key) ? key : String(key);
 };
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var isObject = __webpack_require__(54);
-var isSymbol = __webpack_require__(55);
-var ordinaryToPrimitive = __webpack_require__(61);
-var wellKnownSymbol = __webpack_require__(62);
+var isObject = __webpack_require__(55);
+var isSymbol = __webpack_require__(56);
+var ordinaryToPrimitive = __webpack_require__(62);
+var wellKnownSymbol = __webpack_require__(63);
 var TO_PRIMITIVE = wellKnownSymbol('toPrimitive');
 module.exports = function (input, pref) {
  if (!isObject(input) || isSymbol(input))
@@ -18770,7 +21736,7 @@ module.exports = function (input, pref) {
 };
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ ((module) => {
 
 module.exports = function (it) {
@@ -18778,11 +21744,11 @@ module.exports = function (it) {
 };
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var getBuiltIn = __webpack_require__(56);
-var USE_SYMBOL_AS_UID = __webpack_require__(57);
+var getBuiltIn = __webpack_require__(57);
+var USE_SYMBOL_AS_UID = __webpack_require__(58);
 module.exports = USE_SYMBOL_AS_UID ? function (it) {
  return typeof it == 'symbol';
 } : function (it) {
@@ -18791,10 +21757,10 @@ module.exports = USE_SYMBOL_AS_UID ? function (it) {
 };
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var global = __webpack_require__(42);
+var global = __webpack_require__(43);
 var aFunction = function (variable) {
  return typeof variable == 'function' ? variable : undefined;
 };
@@ -18803,29 +21769,29 @@ module.exports = function (namespace, method) {
 };
 
 /***/ }),
-/* 57 */
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var NATIVE_SYMBOL = __webpack_require__(58);
-module.exports = NATIVE_SYMBOL && !Symbol.sham && typeof Symbol.iterator == 'symbol';
-
-/***/ }),
 /* 58 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var V8_VERSION = __webpack_require__(59);
-var fails = __webpack_require__(45);
+var NATIVE_SYMBOL = __webpack_require__(59);
+module.exports = NATIVE_SYMBOL && !Symbol.sham && typeof Symbol.iterator == 'symbol';
+
+/***/ }),
+/* 59 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var V8_VERSION = __webpack_require__(60);
+var fails = __webpack_require__(46);
 module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
  var symbol = Symbol();
  return !String(symbol) || !(Object(symbol) instanceof Symbol) || !Symbol.sham && V8_VERSION && V8_VERSION < 41;
 });
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var global = __webpack_require__(42);
-var userAgent = __webpack_require__(60);
+var global = __webpack_require__(43);
+var userAgent = __webpack_require__(61);
 var process = global.process;
 var Deno = global.Deno;
 var versions = process && process.versions || Deno && Deno.version;
@@ -18845,17 +21811,17 @@ if (v8) {
 module.exports = version && +version;
 
 /***/ }),
-/* 60 */
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var getBuiltIn = __webpack_require__(56);
-module.exports = getBuiltIn('navigator', 'userAgent') || '';
-
-/***/ }),
 /* 61 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var isObject = __webpack_require__(54);
+var getBuiltIn = __webpack_require__(57);
+module.exports = getBuiltIn('navigator', 'userAgent') || '';
+
+/***/ }),
+/* 62 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var isObject = __webpack_require__(55);
 module.exports = function (input, pref) {
  var fn, val;
  if (pref === 'string' && typeof (fn = input.toString) == 'function' && !isObject(val = fn.call(input)))
@@ -18868,15 +21834,15 @@ module.exports = function (input, pref) {
 };
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var global = __webpack_require__(42);
-var shared = __webpack_require__(63);
-var has = __webpack_require__(67);
-var uid = __webpack_require__(69);
-var NATIVE_SYMBOL = __webpack_require__(58);
-var USE_SYMBOL_AS_UID = __webpack_require__(57);
+var global = __webpack_require__(43);
+var shared = __webpack_require__(64);
+var has = __webpack_require__(68);
+var uid = __webpack_require__(70);
+var NATIVE_SYMBOL = __webpack_require__(59);
+var USE_SYMBOL_AS_UID = __webpack_require__(58);
 var WellKnownSymbolsStore = shared('wks');
 var Symbol = global.Symbol;
 var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol : Symbol && Symbol.withoutSetter || uid;
@@ -18892,11 +21858,11 @@ module.exports = function (name) {
 };
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var IS_PURE = __webpack_require__(64);
-var store = __webpack_require__(65);
+var IS_PURE = __webpack_require__(65);
+var store = __webpack_require__(66);
 (module.exports = function (key, value) {
  return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
@@ -18906,26 +21872,26 @@ var store = __webpack_require__(65);
 });
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ ((module) => {
 
 module.exports = false;
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var global = __webpack_require__(42);
-var setGlobal = __webpack_require__(66);
+var global = __webpack_require__(43);
+var setGlobal = __webpack_require__(67);
 var SHARED = '__core-js_shared__';
 var store = global[SHARED] || setGlobal(SHARED, {});
 module.exports = store;
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var global = __webpack_require__(42);
+var global = __webpack_require__(43);
 module.exports = function (key, value) {
  try {
   Object.defineProperty(global, key, {
@@ -18940,26 +21906,26 @@ module.exports = function (key, value) {
 };
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var toObject = __webpack_require__(68);
+var toObject = __webpack_require__(69);
 var hasOwnProperty = {}.hasOwnProperty;
 module.exports = Object.hasOwn || function hasOwn(it, key) {
  return hasOwnProperty.call(toObject(it), key);
 };
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var requireObjectCoercible = __webpack_require__(51);
+var requireObjectCoercible = __webpack_require__(52);
 module.exports = function (argument) {
  return Object(requireObjectCoercible(argument));
 };
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ ((module) => {
 
 var id = 0;
@@ -18969,12 +21935,12 @@ module.exports = function (key) {
 };
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var DESCRIPTORS = __webpack_require__(44);
-var fails = __webpack_require__(45);
-var createElement = __webpack_require__(71);
+var DESCRIPTORS = __webpack_require__(45);
+var fails = __webpack_require__(46);
+var createElement = __webpack_require__(72);
 module.exports = !DESCRIPTORS && !fails(function () {
  return Object.defineProperty(createElement('div'), 'a', {
   get: function () {
@@ -18984,11 +21950,11 @@ module.exports = !DESCRIPTORS && !fails(function () {
 });
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var global = __webpack_require__(42);
-var isObject = __webpack_require__(54);
+var global = __webpack_require__(43);
+var isObject = __webpack_require__(55);
 var document = global.document;
 var EXISTS = isObject(document) && isObject(document.createElement);
 module.exports = function (it) {
@@ -18996,12 +21962,12 @@ module.exports = function (it) {
 };
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var DESCRIPTORS = __webpack_require__(44);
-var definePropertyModule = __webpack_require__(73);
-var createPropertyDescriptor = __webpack_require__(47);
+var DESCRIPTORS = __webpack_require__(45);
+var definePropertyModule = __webpack_require__(74);
+var createPropertyDescriptor = __webpack_require__(48);
 module.exports = DESCRIPTORS ? function (object, key, value) {
  return definePropertyModule.f(object, key, createPropertyDescriptor(1, value));
 } : function (object, key, value) {
@@ -19010,13 +21976,13 @@ module.exports = DESCRIPTORS ? function (object, key, value) {
 };
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-var DESCRIPTORS = __webpack_require__(44);
-var IE8_DOM_DEFINE = __webpack_require__(70);
-var anObject = __webpack_require__(74);
-var toPropertyKey = __webpack_require__(52);
+var DESCRIPTORS = __webpack_require__(45);
+var IE8_DOM_DEFINE = __webpack_require__(71);
+var anObject = __webpack_require__(75);
+var toPropertyKey = __webpack_require__(53);
 var $defineProperty = Object.defineProperty;
 exports.f = DESCRIPTORS ? $defineProperty : function defineProperty(O, P, Attributes) {
  anObject(O);
@@ -19035,10 +22001,10 @@ exports.f = DESCRIPTORS ? $defineProperty : function defineProperty(O, P, Attrib
 };
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var isObject = __webpack_require__(54);
+var isObject = __webpack_require__(55);
 module.exports = function (it) {
  if (!isObject(it)) {
   throw TypeError(String(it) + ' is not an object');
@@ -19047,15 +22013,15 @@ module.exports = function (it) {
 };
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var global = __webpack_require__(42);
-var createNonEnumerableProperty = __webpack_require__(72);
-var has = __webpack_require__(67);
-var setGlobal = __webpack_require__(66);
-var inspectSource = __webpack_require__(76);
-var InternalStateModule = __webpack_require__(77);
+var global = __webpack_require__(43);
+var createNonEnumerableProperty = __webpack_require__(73);
+var has = __webpack_require__(68);
+var setGlobal = __webpack_require__(67);
+var inspectSource = __webpack_require__(77);
+var InternalStateModule = __webpack_require__(78);
 var getInternalState = InternalStateModule.get;
 var enforceInternalState = InternalStateModule.enforce;
 var TEMPLATE = String(String).split('String');
@@ -19093,10 +22059,10 @@ var TEMPLATE = String(String).split('String');
 });
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var store = __webpack_require__(65);
+var store = __webpack_require__(66);
 var functionToString = Function.toString;
 if (typeof store.inspectSource != 'function') {
  store.inspectSource = function (it) {
@@ -19106,17 +22072,17 @@ if (typeof store.inspectSource != 'function') {
 module.exports = store.inspectSource;
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var NATIVE_WEAK_MAP = __webpack_require__(78);
-var global = __webpack_require__(42);
-var isObject = __webpack_require__(54);
-var createNonEnumerableProperty = __webpack_require__(72);
-var objectHas = __webpack_require__(67);
-var shared = __webpack_require__(65);
-var sharedKey = __webpack_require__(79);
-var hiddenKeys = __webpack_require__(80);
+var NATIVE_WEAK_MAP = __webpack_require__(79);
+var global = __webpack_require__(43);
+var isObject = __webpack_require__(55);
+var createNonEnumerableProperty = __webpack_require__(73);
+var objectHas = __webpack_require__(68);
+var shared = __webpack_require__(66);
+var sharedKey = __webpack_require__(80);
+var hiddenKeys = __webpack_require__(81);
 var OBJECT_ALREADY_INITIALIZED = 'Object already initialized';
 var WeakMap = global.WeakMap;
 var set, get, has;
@@ -19176,39 +22142,39 @@ module.exports = {
 };
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var global = __webpack_require__(42);
-var inspectSource = __webpack_require__(76);
+var global = __webpack_require__(43);
+var inspectSource = __webpack_require__(77);
 var WeakMap = global.WeakMap;
 module.exports = typeof WeakMap === 'function' && /native code/.test(inspectSource(WeakMap));
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var shared = __webpack_require__(63);
-var uid = __webpack_require__(69);
+var shared = __webpack_require__(64);
+var uid = __webpack_require__(70);
 var keys = shared('keys');
 module.exports = function (key) {
  return keys[key] || (keys[key] = uid(key));
 };
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ ((module) => {
 
 module.exports = {};
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var has = __webpack_require__(67);
-var ownKeys = __webpack_require__(82);
-var getOwnPropertyDescriptorModule = __webpack_require__(43);
-var definePropertyModule = __webpack_require__(73);
+var has = __webpack_require__(68);
+var ownKeys = __webpack_require__(83);
+var getOwnPropertyDescriptorModule = __webpack_require__(44);
+var definePropertyModule = __webpack_require__(74);
 module.exports = function (target, source) {
  var keys = ownKeys(source);
  var defineProperty = definePropertyModule.f;
@@ -19221,13 +22187,13 @@ module.exports = function (target, source) {
 };
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var getBuiltIn = __webpack_require__(56);
-var getOwnPropertyNamesModule = __webpack_require__(83);
-var getOwnPropertySymbolsModule = __webpack_require__(90);
-var anObject = __webpack_require__(74);
+var getBuiltIn = __webpack_require__(57);
+var getOwnPropertyNamesModule = __webpack_require__(84);
+var getOwnPropertySymbolsModule = __webpack_require__(91);
+var anObject = __webpack_require__(75);
 module.exports = getBuiltIn('Reflect', 'ownKeys') || function ownKeys(it) {
  var keys = getOwnPropertyNamesModule.f(anObject(it));
  var getOwnPropertySymbols = getOwnPropertySymbolsModule.f;
@@ -19235,24 +22201,24 @@ module.exports = getBuiltIn('Reflect', 'ownKeys') || function ownKeys(it) {
 };
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
-var internalObjectKeys = __webpack_require__(84);
-var enumBugKeys = __webpack_require__(89);
+var internalObjectKeys = __webpack_require__(85);
+var enumBugKeys = __webpack_require__(90);
 var hiddenKeys = enumBugKeys.concat('length', 'prototype');
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
  return internalObjectKeys(O, hiddenKeys);
 };
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var has = __webpack_require__(67);
-var toIndexedObject = __webpack_require__(48);
-var indexOf = __webpack_require__(85).indexOf;
-var hiddenKeys = __webpack_require__(80);
+var has = __webpack_require__(68);
+var toIndexedObject = __webpack_require__(49);
+var indexOf = __webpack_require__(86).indexOf;
+var hiddenKeys = __webpack_require__(81);
 module.exports = function (object, names) {
  var O = toIndexedObject(object);
  var i = 0;
@@ -19268,12 +22234,12 @@ module.exports = function (object, names) {
 };
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var toIndexedObject = __webpack_require__(48);
-var toLength = __webpack_require__(86);
-var toAbsoluteIndex = __webpack_require__(88);
+var toIndexedObject = __webpack_require__(49);
+var toLength = __webpack_require__(87);
+var toAbsoluteIndex = __webpack_require__(89);
 var createMethod = function (IS_INCLUDES) {
  return function ($this, el, fromIndex) {
   var O = toIndexedObject($this);
@@ -19300,17 +22266,17 @@ module.exports = {
 };
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var toInteger = __webpack_require__(87);
+var toInteger = __webpack_require__(88);
 var min = Math.min;
 module.exports = function (argument) {
  return argument > 0 ? min(toInteger(argument), 0x1FFFFFFFFFFFFF) : 0;
 };
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ ((module) => {
 
 var ceil = Math.ceil;
@@ -19320,10 +22286,10 @@ module.exports = function (argument) {
 };
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var toInteger = __webpack_require__(87);
+var toInteger = __webpack_require__(88);
 var max = Math.max;
 var min = Math.min;
 module.exports = function (index, length) {
@@ -19332,7 +22298,7 @@ module.exports = function (index, length) {
 };
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ ((module) => {
 
 module.exports = [
@@ -19346,16 +22312,16 @@ module.exports = [
 ];
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ ((__unused_webpack_module, exports) => {
 
 exports.f = Object.getOwnPropertySymbols;
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var fails = __webpack_require__(45);
+var fails = __webpack_require__(46);
 var replacement = /#|\.prototype\./;
 var isForced = function (feature, detection) {
  var value = data[normalize(feature)];
@@ -19370,7 +22336,7 @@ var POLYFILL = isForced.POLYFILL = 'P';
 module.exports = isForced;
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ ((module, exports, __webpack_require__) => {
 
 "use strict";
@@ -19816,25 +22782,25 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 });
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-__webpack_require__(94);
-__webpack_require__(109);
-var path = __webpack_require__(119);
+__webpack_require__(95);
+__webpack_require__(110);
+var path = __webpack_require__(120);
 module.exports = path.Object.fromEntries;
 
 /***/ }),
-/* 94 */
+/* 95 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var toIndexedObject = __webpack_require__(48);
-var addToUnscopables = __webpack_require__(95);
-var Iterators = __webpack_require__(100);
-var InternalStateModule = __webpack_require__(77);
-var defineIterator = __webpack_require__(101);
+var toIndexedObject = __webpack_require__(49);
+var addToUnscopables = __webpack_require__(96);
+var Iterators = __webpack_require__(101);
+var InternalStateModule = __webpack_require__(78);
+var defineIterator = __webpack_require__(102);
 var ARRAY_ITERATOR = 'Array Iterator';
 var setInternalState = InternalStateModule.set;
 var getInternalState = InternalStateModule.getterFor(ARRAY_ITERATOR);
@@ -19881,12 +22847,12 @@ addToUnscopables('values');
 addToUnscopables('entries');
 
 /***/ }),
-/* 95 */
+/* 96 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var wellKnownSymbol = __webpack_require__(62);
-var create = __webpack_require__(96);
-var definePropertyModule = __webpack_require__(73);
+var wellKnownSymbol = __webpack_require__(63);
+var create = __webpack_require__(97);
+var definePropertyModule = __webpack_require__(74);
 var UNSCOPABLES = wellKnownSymbol('unscopables');
 var ArrayPrototype = Array.prototype;
 if (ArrayPrototype[UNSCOPABLES] == undefined) {
@@ -19900,16 +22866,16 @@ module.exports = function (key) {
 };
 
 /***/ }),
-/* 96 */
+/* 97 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var anObject = __webpack_require__(74);
-var defineProperties = __webpack_require__(97);
-var enumBugKeys = __webpack_require__(89);
-var hiddenKeys = __webpack_require__(80);
-var html = __webpack_require__(99);
-var documentCreateElement = __webpack_require__(71);
-var sharedKey = __webpack_require__(79);
+var anObject = __webpack_require__(75);
+var defineProperties = __webpack_require__(98);
+var enumBugKeys = __webpack_require__(90);
+var hiddenKeys = __webpack_require__(81);
+var html = __webpack_require__(100);
+var documentCreateElement = __webpack_require__(72);
+var sharedKey = __webpack_require__(80);
 var GT = '>';
 var LT = '<';
 var PROTOTYPE = 'prototype';
@@ -19968,13 +22934,13 @@ module.exports = Object.create || function create(O, Properties) {
 };
 
 /***/ }),
-/* 97 */
+/* 98 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var DESCRIPTORS = __webpack_require__(44);
-var definePropertyModule = __webpack_require__(73);
-var anObject = __webpack_require__(74);
-var objectKeys = __webpack_require__(98);
+var DESCRIPTORS = __webpack_require__(45);
+var definePropertyModule = __webpack_require__(74);
+var anObject = __webpack_require__(75);
+var objectKeys = __webpack_require__(99);
 module.exports = DESCRIPTORS ? Object.defineProperties : function defineProperties(O, Properties) {
  anObject(O);
  var keys = objectKeys(Properties);
@@ -19987,45 +22953,45 @@ module.exports = DESCRIPTORS ? Object.defineProperties : function defineProperti
 };
 
 /***/ }),
-/* 98 */
+/* 99 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var internalObjectKeys = __webpack_require__(84);
-var enumBugKeys = __webpack_require__(89);
+var internalObjectKeys = __webpack_require__(85);
+var enumBugKeys = __webpack_require__(90);
 module.exports = Object.keys || function keys(O) {
  return internalObjectKeys(O, enumBugKeys);
 };
 
 /***/ }),
-/* 99 */
+/* 100 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var getBuiltIn = __webpack_require__(56);
+var getBuiltIn = __webpack_require__(57);
 module.exports = getBuiltIn('document', 'documentElement');
 
 /***/ }),
-/* 100 */
+/* 101 */
 /***/ ((module) => {
 
 module.exports = {};
 
 /***/ }),
-/* 101 */
+/* 102 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var $ = __webpack_require__(41);
-var createIteratorConstructor = __webpack_require__(102);
-var getPrototypeOf = __webpack_require__(104);
-var setPrototypeOf = __webpack_require__(107);
-var setToStringTag = __webpack_require__(106);
-var createNonEnumerableProperty = __webpack_require__(72);
-var redefine = __webpack_require__(75);
-var wellKnownSymbol = __webpack_require__(62);
-var IS_PURE = __webpack_require__(64);
-var Iterators = __webpack_require__(100);
-var IteratorsCore = __webpack_require__(103);
+var $ = __webpack_require__(42);
+var createIteratorConstructor = __webpack_require__(103);
+var getPrototypeOf = __webpack_require__(105);
+var setPrototypeOf = __webpack_require__(108);
+var setToStringTag = __webpack_require__(107);
+var createNonEnumerableProperty = __webpack_require__(73);
+var redefine = __webpack_require__(76);
+var wellKnownSymbol = __webpack_require__(63);
+var IS_PURE = __webpack_require__(65);
+var Iterators = __webpack_require__(101);
+var IteratorsCore = __webpack_require__(104);
 var IteratorPrototype = IteratorsCore.IteratorPrototype;
 var BUGGY_SAFARI_ITERATORS = IteratorsCore.BUGGY_SAFARI_ITERATORS;
 var ITERATOR = wellKnownSymbol('iterator');
@@ -20115,16 +23081,16 @@ module.exports = function (Iterable, NAME, IteratorConstructor, next, DEFAULT, I
 };
 
 /***/ }),
-/* 102 */
+/* 103 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var IteratorPrototype = __webpack_require__(103).IteratorPrototype;
-var create = __webpack_require__(96);
-var createPropertyDescriptor = __webpack_require__(47);
-var setToStringTag = __webpack_require__(106);
-var Iterators = __webpack_require__(100);
+var IteratorPrototype = __webpack_require__(104).IteratorPrototype;
+var create = __webpack_require__(97);
+var createPropertyDescriptor = __webpack_require__(48);
+var setToStringTag = __webpack_require__(107);
+var Iterators = __webpack_require__(101);
 var returnThis = function () {
  return this;
 };
@@ -20137,17 +23103,17 @@ module.exports = function (IteratorConstructor, NAME, next) {
 };
 
 /***/ }),
-/* 103 */
+/* 104 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var fails = __webpack_require__(45);
-var getPrototypeOf = __webpack_require__(104);
-var createNonEnumerableProperty = __webpack_require__(72);
-var has = __webpack_require__(67);
-var wellKnownSymbol = __webpack_require__(62);
-var IS_PURE = __webpack_require__(64);
+var fails = __webpack_require__(46);
+var getPrototypeOf = __webpack_require__(105);
+var createNonEnumerableProperty = __webpack_require__(73);
+var has = __webpack_require__(68);
+var wellKnownSymbol = __webpack_require__(63);
+var IS_PURE = __webpack_require__(65);
 var ITERATOR = wellKnownSymbol('iterator');
 var BUGGY_SAFARI_ITERATORS = false;
 var returnThis = function () {
@@ -20179,13 +23145,13 @@ module.exports = {
 };
 
 /***/ }),
-/* 104 */
+/* 105 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var has = __webpack_require__(67);
-var toObject = __webpack_require__(68);
-var sharedKey = __webpack_require__(79);
-var CORRECT_PROTOTYPE_GETTER = __webpack_require__(105);
+var has = __webpack_require__(68);
+var toObject = __webpack_require__(69);
+var sharedKey = __webpack_require__(80);
+var CORRECT_PROTOTYPE_GETTER = __webpack_require__(106);
 var IE_PROTO = sharedKey('IE_PROTO');
 var ObjectPrototype = Object.prototype;
 module.exports = CORRECT_PROTOTYPE_GETTER ? Object.getPrototypeOf : function (O) {
@@ -20199,10 +23165,10 @@ module.exports = CORRECT_PROTOTYPE_GETTER ? Object.getPrototypeOf : function (O)
 };
 
 /***/ }),
-/* 105 */
+/* 106 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var fails = __webpack_require__(45);
+var fails = __webpack_require__(46);
 module.exports = !fails(function () {
  function F() {
  }
@@ -20211,12 +23177,12 @@ module.exports = !fails(function () {
 });
 
 /***/ }),
-/* 106 */
+/* 107 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var defineProperty = __webpack_require__(73).f;
-var has = __webpack_require__(67);
-var wellKnownSymbol = __webpack_require__(62);
+var defineProperty = __webpack_require__(74).f;
+var has = __webpack_require__(68);
+var wellKnownSymbol = __webpack_require__(63);
 var TO_STRING_TAG = wellKnownSymbol('toStringTag');
 module.exports = function (it, TAG, STATIC) {
  if (it && !has(it = STATIC ? it : it.prototype, TO_STRING_TAG)) {
@@ -20228,11 +23194,11 @@ module.exports = function (it, TAG, STATIC) {
 };
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var anObject = __webpack_require__(74);
-var aPossiblePrototype = __webpack_require__(108);
+var anObject = __webpack_require__(75);
+var aPossiblePrototype = __webpack_require__(109);
 module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
  var CORRECT_SETTER = false;
  var test = {};
@@ -20255,10 +23221,10 @@ module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
 }() : undefined);
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var isObject = __webpack_require__(54);
+var isObject = __webpack_require__(55);
 module.exports = function (it) {
  if (!isObject(it) && it !== null) {
   throw TypeError("Can't set " + String(it) + ' as a prototype');
@@ -20267,12 +23233,12 @@ module.exports = function (it) {
 };
 
 /***/ }),
-/* 109 */
+/* 110 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-var $ = __webpack_require__(41);
-var iterate = __webpack_require__(110);
-var createProperty = __webpack_require__(118);
+var $ = __webpack_require__(42);
+var iterate = __webpack_require__(111);
+var createProperty = __webpack_require__(119);
 $({
  target: 'Object',
  stat: true
@@ -20287,15 +23253,15 @@ $({
 });
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var anObject = __webpack_require__(74);
-var isArrayIteratorMethod = __webpack_require__(111);
-var toLength = __webpack_require__(86);
-var bind = __webpack_require__(112);
-var getIteratorMethod = __webpack_require__(114);
-var iteratorClose = __webpack_require__(117);
+var anObject = __webpack_require__(75);
+var isArrayIteratorMethod = __webpack_require__(112);
+var toLength = __webpack_require__(87);
+var bind = __webpack_require__(113);
+var getIteratorMethod = __webpack_require__(115);
+var iteratorClose = __webpack_require__(118);
 var Result = function (stopped, result) {
  this.stopped = stopped;
  this.result = result;
@@ -20350,11 +23316,11 @@ module.exports = function (iterable, unboundFunction, options) {
 };
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var wellKnownSymbol = __webpack_require__(62);
-var Iterators = __webpack_require__(100);
+var wellKnownSymbol = __webpack_require__(63);
+var Iterators = __webpack_require__(101);
 var ITERATOR = wellKnownSymbol('iterator');
 var ArrayPrototype = Array.prototype;
 module.exports = function (it) {
@@ -20362,10 +23328,10 @@ module.exports = function (it) {
 };
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var aFunction = __webpack_require__(113);
+var aFunction = __webpack_require__(114);
 module.exports = function (fn, that, length) {
  aFunction(fn);
  if (that === undefined)
@@ -20394,7 +23360,7 @@ module.exports = function (fn, that, length) {
 };
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ ((module) => {
 
 module.exports = function (it) {
@@ -20405,12 +23371,12 @@ module.exports = function (it) {
 };
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var classof = __webpack_require__(115);
-var Iterators = __webpack_require__(100);
-var wellKnownSymbol = __webpack_require__(62);
+var classof = __webpack_require__(116);
+var Iterators = __webpack_require__(101);
+var wellKnownSymbol = __webpack_require__(63);
 var ITERATOR = wellKnownSymbol('iterator');
 module.exports = function (it) {
  if (it != undefined)
@@ -20418,12 +23384,12 @@ module.exports = function (it) {
 };
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var TO_STRING_TAG_SUPPORT = __webpack_require__(116);
-var classofRaw = __webpack_require__(50);
-var wellKnownSymbol = __webpack_require__(62);
+var TO_STRING_TAG_SUPPORT = __webpack_require__(117);
+var classofRaw = __webpack_require__(51);
+var wellKnownSymbol = __webpack_require__(63);
 var TO_STRING_TAG = wellKnownSymbol('toStringTag');
 var CORRECT_ARGUMENTS = classofRaw(function () {
  return arguments;
@@ -20440,20 +23406,20 @@ module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
 };
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var wellKnownSymbol = __webpack_require__(62);
+var wellKnownSymbol = __webpack_require__(63);
 var TO_STRING_TAG = wellKnownSymbol('toStringTag');
 var test = {};
 test[TO_STRING_TAG] = 'z';
 module.exports = String(test) === '[object z]';
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var anObject = __webpack_require__(74);
+var anObject = __webpack_require__(75);
 module.exports = function (iterator) {
  var returnMethod = iterator['return'];
  if (returnMethod !== undefined) {
@@ -20462,14 +23428,14 @@ module.exports = function (iterator) {
 };
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var toPropertyKey = __webpack_require__(52);
-var definePropertyModule = __webpack_require__(73);
-var createPropertyDescriptor = __webpack_require__(47);
+var toPropertyKey = __webpack_require__(53);
+var definePropertyModule = __webpack_require__(74);
+var createPropertyDescriptor = __webpack_require__(48);
 module.exports = function (object, key, value) {
  var propertyKey = toPropertyKey(key);
  if (propertyKey in object)
@@ -20479,41 +23445,41 @@ module.exports = function (object, key, value) {
 };
 
 /***/ }),
-/* 119 */
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var global = __webpack_require__(42);
-module.exports = global;
-
-/***/ }),
 /* 120 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-__webpack_require__(121);
-__webpack_require__(94);
-__webpack_require__(123);
-__webpack_require__(125);
-__webpack_require__(143);
-__webpack_require__(144);
-__webpack_require__(145);
-__webpack_require__(146);
-var path = __webpack_require__(119);
-module.exports = path.Promise;
+var global = __webpack_require__(43);
+module.exports = global;
 
 /***/ }),
 /* 121 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+__webpack_require__(122);
+__webpack_require__(95);
+__webpack_require__(124);
+__webpack_require__(126);
+__webpack_require__(144);
+__webpack_require__(145);
+__webpack_require__(146);
+__webpack_require__(147);
+var path = __webpack_require__(120);
+module.exports = path.Promise;
+
+/***/ }),
+/* 122 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var $ = __webpack_require__(41);
-var getPrototypeOf = __webpack_require__(104);
-var setPrototypeOf = __webpack_require__(107);
-var create = __webpack_require__(96);
-var createNonEnumerableProperty = __webpack_require__(72);
-var createPropertyDescriptor = __webpack_require__(47);
-var iterate = __webpack_require__(110);
-var toString = __webpack_require__(122);
+var $ = __webpack_require__(42);
+var getPrototypeOf = __webpack_require__(105);
+var setPrototypeOf = __webpack_require__(108);
+var create = __webpack_require__(97);
+var createNonEnumerableProperty = __webpack_require__(73);
+var createPropertyDescriptor = __webpack_require__(48);
+var iterate = __webpack_require__(111);
+var toString = __webpack_require__(123);
 var $AggregateError = function AggregateError(errors, message) {
  var that = this;
  if (!(that instanceof $AggregateError))
@@ -20536,10 +23502,10 @@ $AggregateError.prototype = create(Error.prototype, {
 $({ global: true }, { AggregateError: $AggregateError });
 
 /***/ }),
-/* 122 */
+/* 123 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var isSymbol = __webpack_require__(55);
+var isSymbol = __webpack_require__(56);
 module.exports = function (argument) {
  if (isSymbol(argument))
   throw TypeError('Cannot convert a Symbol value to a string');
@@ -20547,63 +23513,63 @@ module.exports = function (argument) {
 };
 
 /***/ }),
-/* 123 */
+/* 124 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-var TO_STRING_TAG_SUPPORT = __webpack_require__(116);
-var redefine = __webpack_require__(75);
-var toString = __webpack_require__(124);
+var TO_STRING_TAG_SUPPORT = __webpack_require__(117);
+var redefine = __webpack_require__(76);
+var toString = __webpack_require__(125);
 if (!TO_STRING_TAG_SUPPORT) {
  redefine(Object.prototype, 'toString', toString, { unsafe: true });
 }
 
 /***/ }),
-/* 124 */
+/* 125 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var TO_STRING_TAG_SUPPORT = __webpack_require__(116);
-var classof = __webpack_require__(115);
+var TO_STRING_TAG_SUPPORT = __webpack_require__(117);
+var classof = __webpack_require__(116);
 module.exports = TO_STRING_TAG_SUPPORT ? {}.toString : function toString() {
  return '[object ' + classof(this) + ']';
 };
 
 /***/ }),
-/* 125 */
+/* 126 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var $ = __webpack_require__(41);
-var IS_PURE = __webpack_require__(64);
-var global = __webpack_require__(42);
-var getBuiltIn = __webpack_require__(56);
-var NativePromise = __webpack_require__(126);
-var redefine = __webpack_require__(75);
-var redefineAll = __webpack_require__(127);
-var setPrototypeOf = __webpack_require__(107);
-var setToStringTag = __webpack_require__(106);
-var setSpecies = __webpack_require__(128);
-var isObject = __webpack_require__(54);
-var aFunction = __webpack_require__(113);
-var anInstance = __webpack_require__(129);
-var inspectSource = __webpack_require__(76);
-var iterate = __webpack_require__(110);
-var checkCorrectnessOfIteration = __webpack_require__(130);
-var speciesConstructor = __webpack_require__(131);
-var task = __webpack_require__(132).set;
-var microtask = __webpack_require__(135);
-var promiseResolve = __webpack_require__(138);
-var hostReportErrors = __webpack_require__(140);
-var newPromiseCapabilityModule = __webpack_require__(139);
-var perform = __webpack_require__(141);
-var InternalStateModule = __webpack_require__(77);
-var isForced = __webpack_require__(91);
-var wellKnownSymbol = __webpack_require__(62);
-var IS_BROWSER = __webpack_require__(142);
-var IS_NODE = __webpack_require__(134);
-var V8_VERSION = __webpack_require__(59);
+var $ = __webpack_require__(42);
+var IS_PURE = __webpack_require__(65);
+var global = __webpack_require__(43);
+var getBuiltIn = __webpack_require__(57);
+var NativePromise = __webpack_require__(127);
+var redefine = __webpack_require__(76);
+var redefineAll = __webpack_require__(128);
+var setPrototypeOf = __webpack_require__(108);
+var setToStringTag = __webpack_require__(107);
+var setSpecies = __webpack_require__(129);
+var isObject = __webpack_require__(55);
+var aFunction = __webpack_require__(114);
+var anInstance = __webpack_require__(130);
+var inspectSource = __webpack_require__(77);
+var iterate = __webpack_require__(111);
+var checkCorrectnessOfIteration = __webpack_require__(131);
+var speciesConstructor = __webpack_require__(132);
+var task = __webpack_require__(133).set;
+var microtask = __webpack_require__(136);
+var promiseResolve = __webpack_require__(139);
+var hostReportErrors = __webpack_require__(141);
+var newPromiseCapabilityModule = __webpack_require__(140);
+var perform = __webpack_require__(142);
+var InternalStateModule = __webpack_require__(78);
+var isForced = __webpack_require__(92);
+var wellKnownSymbol = __webpack_require__(63);
+var IS_BROWSER = __webpack_require__(143);
+var IS_NODE = __webpack_require__(135);
+var V8_VERSION = __webpack_require__(60);
 var SPECIES = wellKnownSymbol('species');
 var PROMISE = 'Promise';
 var getInternalState = InternalStateModule.get;
@@ -20958,17 +23924,17 @@ $({
 });
 
 /***/ }),
-/* 126 */
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var global = __webpack_require__(42);
-module.exports = global.Promise;
-
-/***/ }),
 /* 127 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var redefine = __webpack_require__(75);
+var global = __webpack_require__(43);
+module.exports = global.Promise;
+
+/***/ }),
+/* 128 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var redefine = __webpack_require__(76);
 module.exports = function (target, src, options) {
  for (var key in src)
   redefine(target, key, src[key], options);
@@ -20976,15 +23942,15 @@ module.exports = function (target, src, options) {
 };
 
 /***/ }),
-/* 128 */
+/* 129 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var getBuiltIn = __webpack_require__(56);
-var definePropertyModule = __webpack_require__(73);
-var wellKnownSymbol = __webpack_require__(62);
-var DESCRIPTORS = __webpack_require__(44);
+var getBuiltIn = __webpack_require__(57);
+var definePropertyModule = __webpack_require__(74);
+var wellKnownSymbol = __webpack_require__(63);
+var DESCRIPTORS = __webpack_require__(45);
 var SPECIES = wellKnownSymbol('species');
 module.exports = function (CONSTRUCTOR_NAME) {
  var Constructor = getBuiltIn(CONSTRUCTOR_NAME);
@@ -21000,7 +23966,7 @@ module.exports = function (CONSTRUCTOR_NAME) {
 };
 
 /***/ }),
-/* 129 */
+/* 130 */
 /***/ ((module) => {
 
 module.exports = function (it, Constructor, name) {
@@ -21011,10 +23977,10 @@ module.exports = function (it, Constructor, name) {
 };
 
 /***/ }),
-/* 130 */
+/* 131 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var wellKnownSymbol = __webpack_require__(62);
+var wellKnownSymbol = __webpack_require__(63);
 var ITERATOR = wellKnownSymbol('iterator');
 var SAFE_CLOSING = false;
 try {
@@ -21055,12 +24021,12 @@ module.exports = function (exec, SKIP_CLOSING) {
 };
 
 /***/ }),
-/* 131 */
+/* 132 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var anObject = __webpack_require__(74);
-var aFunction = __webpack_require__(113);
-var wellKnownSymbol = __webpack_require__(62);
+var anObject = __webpack_require__(75);
+var aFunction = __webpack_require__(114);
+var wellKnownSymbol = __webpack_require__(63);
 var SPECIES = wellKnownSymbol('species');
 module.exports = function (O, defaultConstructor) {
  var C = anObject(O).constructor;
@@ -21069,16 +24035,16 @@ module.exports = function (O, defaultConstructor) {
 };
 
 /***/ }),
-/* 132 */
+/* 133 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var global = __webpack_require__(42);
-var fails = __webpack_require__(45);
-var bind = __webpack_require__(112);
-var html = __webpack_require__(99);
-var createElement = __webpack_require__(71);
-var IS_IOS = __webpack_require__(133);
-var IS_NODE = __webpack_require__(134);
+var global = __webpack_require__(43);
+var fails = __webpack_require__(46);
+var bind = __webpack_require__(113);
+var html = __webpack_require__(100);
+var createElement = __webpack_require__(72);
+var IS_IOS = __webpack_require__(134);
+var IS_NODE = __webpack_require__(135);
 var set = global.setImmediate;
 var clear = global.clearImmediate;
 var process = global.process;
@@ -21161,31 +24127,31 @@ module.exports = {
 };
 
 /***/ }),
-/* 133 */
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var userAgent = __webpack_require__(60);
-module.exports = /(?:iphone|ipod|ipad).*applewebkit/i.test(userAgent);
-
-/***/ }),
 /* 134 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var classof = __webpack_require__(50);
-var global = __webpack_require__(42);
-module.exports = classof(global.process) == 'process';
+var userAgent = __webpack_require__(61);
+module.exports = /(?:iphone|ipod|ipad).*applewebkit/i.test(userAgent);
 
 /***/ }),
 /* 135 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var global = __webpack_require__(42);
-var getOwnPropertyDescriptor = __webpack_require__(43).f;
-var macrotask = __webpack_require__(132).set;
-var IS_IOS = __webpack_require__(133);
-var IS_IOS_PEBBLE = __webpack_require__(136);
-var IS_WEBOS_WEBKIT = __webpack_require__(137);
-var IS_NODE = __webpack_require__(134);
+var classof = __webpack_require__(51);
+var global = __webpack_require__(43);
+module.exports = classof(global.process) == 'process';
+
+/***/ }),
+/* 136 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var global = __webpack_require__(43);
+var getOwnPropertyDescriptor = __webpack_require__(44).f;
+var macrotask = __webpack_require__(133).set;
+var IS_IOS = __webpack_require__(134);
+var IS_IOS_PEBBLE = __webpack_require__(137);
+var IS_WEBOS_WEBKIT = __webpack_require__(138);
+var IS_NODE = __webpack_require__(135);
 var MutationObserver = global.MutationObserver || global.WebKitMutationObserver;
 var document = global.document;
 var process = global.process;
@@ -21254,27 +24220,27 @@ module.exports = queueMicrotask || function (fn) {
 };
 
 /***/ }),
-/* 136 */
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var userAgent = __webpack_require__(60);
-var global = __webpack_require__(42);
-module.exports = /iphone|ipod|ipad/i.test(userAgent) && global.Pebble !== undefined;
-
-/***/ }),
 /* 137 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var userAgent = __webpack_require__(60);
-module.exports = /web0s(?!.*chrome)/i.test(userAgent);
+var userAgent = __webpack_require__(61);
+var global = __webpack_require__(43);
+module.exports = /iphone|ipod|ipad/i.test(userAgent) && global.Pebble !== undefined;
 
 /***/ }),
 /* 138 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var anObject = __webpack_require__(74);
-var isObject = __webpack_require__(54);
-var newPromiseCapability = __webpack_require__(139);
+var userAgent = __webpack_require__(61);
+module.exports = /web0s(?!.*chrome)/i.test(userAgent);
+
+/***/ }),
+/* 139 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var anObject = __webpack_require__(75);
+var isObject = __webpack_require__(55);
+var newPromiseCapability = __webpack_require__(140);
 module.exports = function (C, x) {
  anObject(C);
  if (isObject(x) && x.constructor === C)
@@ -21286,12 +24252,12 @@ module.exports = function (C, x) {
 };
 
 /***/ }),
-/* 139 */
+/* 140 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var aFunction = __webpack_require__(113);
+var aFunction = __webpack_require__(114);
 var PromiseCapability = function (C) {
  var resolve, reject;
  this.promise = new C(function ($$resolve, $$reject) {
@@ -21308,10 +24274,10 @@ module.exports.f = function (C) {
 };
 
 /***/ }),
-/* 140 */
+/* 141 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var global = __webpack_require__(42);
+var global = __webpack_require__(43);
 module.exports = function (a, b) {
  var console = global.console;
  if (console && console.error) {
@@ -21320,7 +24286,7 @@ module.exports = function (a, b) {
 };
 
 /***/ }),
-/* 141 */
+/* 142 */
 /***/ ((module) => {
 
 module.exports = function (exec) {
@@ -21338,22 +24304,22 @@ module.exports = function (exec) {
 };
 
 /***/ }),
-/* 142 */
+/* 143 */
 /***/ ((module) => {
 
 module.exports = typeof window == 'object';
 
 /***/ }),
-/* 143 */
+/* 144 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var $ = __webpack_require__(41);
-var aFunction = __webpack_require__(113);
-var newPromiseCapabilityModule = __webpack_require__(139);
-var perform = __webpack_require__(141);
-var iterate = __webpack_require__(110);
+var $ = __webpack_require__(42);
+var aFunction = __webpack_require__(114);
+var newPromiseCapabilityModule = __webpack_require__(140);
+var perform = __webpack_require__(142);
+var iterate = __webpack_require__(111);
 $({
  target: 'Promise',
  stat: true
@@ -21402,17 +24368,17 @@ $({
 });
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var $ = __webpack_require__(41);
-var aFunction = __webpack_require__(113);
-var getBuiltIn = __webpack_require__(56);
-var newPromiseCapabilityModule = __webpack_require__(139);
-var perform = __webpack_require__(141);
-var iterate = __webpack_require__(110);
+var $ = __webpack_require__(42);
+var aFunction = __webpack_require__(114);
+var getBuiltIn = __webpack_require__(57);
+var newPromiseCapabilityModule = __webpack_require__(140);
+var perform = __webpack_require__(142);
+var iterate = __webpack_require__(111);
 var PROMISE_ANY_ERROR = 'No one promise resolved';
 $({
  target: 'Promise',
@@ -21456,19 +24422,19 @@ $({
 });
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var $ = __webpack_require__(41);
-var IS_PURE = __webpack_require__(64);
-var NativePromise = __webpack_require__(126);
-var fails = __webpack_require__(45);
-var getBuiltIn = __webpack_require__(56);
-var speciesConstructor = __webpack_require__(131);
-var promiseResolve = __webpack_require__(138);
-var redefine = __webpack_require__(75);
+var $ = __webpack_require__(42);
+var IS_PURE = __webpack_require__(65);
+var NativePromise = __webpack_require__(127);
+var fails = __webpack_require__(46);
+var getBuiltIn = __webpack_require__(57);
+var speciesConstructor = __webpack_require__(132);
+var promiseResolve = __webpack_require__(139);
+var redefine = __webpack_require__(76);
 var NON_GENERIC = !!NativePromise && fails(function () {
  NativePromise.prototype['finally'].call({
   then: function () {
@@ -21504,15 +24470,15 @@ if (!IS_PURE && typeof NativePromise == 'function') {
 }
 
 /***/ }),
-/* 146 */
+/* 147 */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
-var charAt = __webpack_require__(147).charAt;
-var toString = __webpack_require__(122);
-var InternalStateModule = __webpack_require__(77);
-var defineIterator = __webpack_require__(101);
+var charAt = __webpack_require__(148).charAt;
+var toString = __webpack_require__(123);
+var InternalStateModule = __webpack_require__(78);
+var defineIterator = __webpack_require__(102);
 var STRING_ITERATOR = 'String Iterator';
 var setInternalState = InternalStateModule.set;
 var getInternalState = InternalStateModule.getterFor(STRING_ITERATOR);
@@ -21541,12 +24507,12 @@ defineIterator(String, 'String', function (iterated) {
 });
 
 /***/ }),
-/* 147 */
+/* 148 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var toInteger = __webpack_require__(87);
-var toString = __webpack_require__(122);
-var requireObjectCoercible = __webpack_require__(51);
+var toInteger = __webpack_require__(88);
+var toString = __webpack_require__(123);
+var requireObjectCoercible = __webpack_require__(52);
 var createMethod = function (CONVERT_TO_STRING) {
  return function ($this, pos) {
   var S = toString(requireObjectCoercible($this));
@@ -21565,7 +24531,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 148 */
+/* 149 */
 /***/ (function(__unused_webpack_module, exports) {
 
 (function (global, factory) {
@@ -25485,7 +28451,7 @@ module.exports = {
 }));
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -25649,7 +28615,7 @@ var DefaultStructTreeLayerFactory = /*#__PURE__*/function () {
 exports.DefaultStructTreeLayerFactory = DefaultStructTreeLayerFactory;
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -26063,7 +29029,7 @@ var DefaultTextLayerFactory = /*#__PURE__*/function () {
 exports.DefaultTextLayerFactory = DefaultTextLayerFactory;
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -26201,2960 +29167,6 @@ var DefaultXfaLayerFactory = /*#__PURE__*/function () {
 }();
 
 exports.DefaultXfaLayerFactory = DefaultXfaLayerFactory;
-
-/***/ }),
-/* 152 */
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.PageFlip = void 0;
-
-function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
-
-function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var Page = /*#__PURE__*/function () {
-  function Page(render, density) {
-    _classCallCheck(this, Page);
-
-    this.state = {
-      angle: 0,
-      area: [],
-      position: {
-        x: 0,
-        y: 0
-      },
-      hardAngle: 0,
-      hardDrawingAngle: 0
-    };
-    this.createdDensity = density;
-    this.nowDrawingDensity = this.createdDensity;
-    this.render = render;
-  }
-
-  _createClass(Page, [{
-    key: "setDensity",
-    value: function setDensity(density) {
-      this.createdDensity = density;
-      this.nowDrawingDensity = density;
-    }
-  }, {
-    key: "setDrawingDensity",
-    value: function setDrawingDensity(density) {
-      this.nowDrawingDensity = density;
-    }
-  }, {
-    key: "setPosition",
-    value: function setPosition(pagePos) {
-      this.state.position = pagePos;
-    }
-  }, {
-    key: "setAngle",
-    value: function setAngle(angle) {
-      this.state.angle = angle;
-    }
-  }, {
-    key: "setArea",
-    value: function setArea(area) {
-      this.state.area = area;
-    }
-  }, {
-    key: "setHardDrawingAngle",
-    value: function setHardDrawingAngle(angle) {
-      this.state.hardDrawingAngle = angle;
-    }
-  }, {
-    key: "setHardAngle",
-    value: function setHardAngle(angle) {
-      this.state.hardAngle = angle;
-      this.state.hardDrawingAngle = angle;
-    }
-  }, {
-    key: "setOrientation",
-    value: function setOrientation(orientation) {
-      this.orientation = orientation;
-    }
-  }, {
-    key: "getDrawingDensity",
-    value: function getDrawingDensity() {
-      return this.nowDrawingDensity;
-    }
-  }, {
-    key: "getDensity",
-    value: function getDensity() {
-      return this.createdDensity;
-    }
-  }, {
-    key: "getHardAngle",
-    value: function getHardAngle() {
-      return this.state.hardAngle;
-    }
-  }]);
-
-  return Page;
-}();
-
-var ImagePage = /*#__PURE__*/function (_Page) {
-  _inherits(ImagePage, _Page);
-
-  var _super = _createSuper(ImagePage);
-
-  function ImagePage(render, href, density) {
-    var _this;
-
-    _classCallCheck(this, ImagePage);
-
-    _this = _super.call(this, render, density);
-    _this.image = null;
-    _this.isLoad = false;
-    _this.loadingAngle = 0;
-    _this.image = new Image();
-    _this.image.src = href;
-    return _this;
-  }
-
-  _createClass(ImagePage, [{
-    key: "draw",
-    value: function draw(tempDensity) {
-      var ctx = this.render.getContext();
-      var pagePos = this.render.convertToGlobal(this.state.position);
-      var pageWidth = this.render.getRect().pageWidth;
-      var pageHeight = this.render.getRect().height;
-      ctx.save();
-      ctx.translate(pagePos.x, pagePos.y);
-      ctx.beginPath();
-
-      var _iterator = _createForOfIteratorHelper(this.state.area),
-          _step;
-
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var p = _step.value;
-
-          if (p !== null) {
-            p = this.render.convertToGlobal(p);
-            ctx.lineTo(p.x - pagePos.x, p.y - pagePos.y);
-          }
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
-
-      ctx.rotate(this.state.angle);
-      ctx.clip();
-
-      if (!this.isLoad) {
-        this.drawLoader(ctx, {
-          x: 0,
-          y: 0
-        }, pageWidth, pageHeight);
-      } else {
-        ctx.drawImage(this.image, 0, 0, pageWidth, pageHeight);
-      }
-
-      ctx.restore();
-    }
-  }, {
-    key: "simpleDraw",
-    value: function simpleDraw(orient) {
-      var rect = this.render.getRect();
-      var ctx = this.render.getContext();
-      var pageWidth = rect.pageWidth;
-      var pageHeight = rect.height;
-      var x = orient === 1 ? rect.left + rect.pageWidth : rect.left;
-      var y = rect.top;
-
-      if (!this.isLoad) {
-        this.drawLoader(ctx, {
-          x: x,
-          y: y
-        }, pageWidth, pageHeight);
-      } else {
-        ctx.drawImage(this.image, x, y, pageWidth, pageHeight);
-      }
-    }
-  }, {
-    key: "drawLoader",
-    value: function drawLoader(ctx, shiftPos, pageWidth, pageHeight) {
-      ctx.beginPath();
-      ctx.strokeStyle = 'rgb(200, 200, 200)';
-      ctx.fillStyle = 'rgb(255, 255, 255)';
-      ctx.lineWidth = 1;
-      ctx.rect(shiftPos.x + 1, shiftPos.y + 1, pageWidth - 1, pageHeight - 1);
-      ctx.stroke();
-      ctx.fill();
-      var middlePoint = {
-        x: shiftPos.x + pageWidth / 2,
-        y: shiftPos.y + pageHeight / 2
-      };
-      ctx.beginPath();
-      ctx.lineWidth = 10;
-      ctx.arc(middlePoint.x, middlePoint.y, 20, this.loadingAngle, 3 * Math.PI / 2 + this.loadingAngle);
-      ctx.stroke();
-      ctx.closePath();
-      this.loadingAngle += 0.07;
-
-      if (this.loadingAngle >= 2 * Math.PI) {
-        this.loadingAngle = 0;
-      }
-    }
-  }, {
-    key: "load",
-    value: function load() {
-      var _this2 = this;
-
-      if (!this.isLoad) this.image.onload = function () {
-        _this2.isLoad = true;
-      };
-    }
-  }, {
-    key: "newTemporaryCopy",
-    value: function newTemporaryCopy() {
-      return this;
-    }
-  }, {
-    key: "getTemporaryCopy",
-    value: function getTemporaryCopy() {
-      return this;
-    }
-  }, {
-    key: "hideTemporaryCopy",
-    value: function hideTemporaryCopy() {}
-  }]);
-
-  return ImagePage;
-}(Page);
-
-var PageCollection = /*#__PURE__*/function () {
-  function PageCollection(app, render) {
-    _classCallCheck(this, PageCollection);
-
-    this.pages = [];
-    this.currentPageIndex = 0;
-    this.currentSpreadIndex = 0;
-    this.landscapeSpread = [];
-    this.portraitSpread = [];
-    this.render = render;
-    this.app = app;
-    this.currentPageIndex = 0;
-    this.isShowCover = this.app.getSettings().showCover;
-  }
-
-  _createClass(PageCollection, [{
-    key: "destroy",
-    value: function destroy() {
-      this.pages = [];
-    }
-  }, {
-    key: "createSpread",
-    value: function createSpread() {
-      this.landscapeSpread = [];
-      this.portraitSpread = [];
-
-      for (var i = 0; i < this.pages.length; i++) {
-        this.portraitSpread.push([i]);
-      }
-
-      var start = 0;
-
-      if (this.isShowCover) {
-        this.pages[0].setDensity("hard");
-        this.landscapeSpread.push([start]);
-        start++;
-      }
-
-      for (var _i = start; _i < this.pages.length; _i += 2) {
-        if (_i < this.pages.length - 1) this.landscapeSpread.push([_i, _i + 1]);else {
-          this.landscapeSpread.push([_i]);
-
-          this.pages[_i].setDensity("hard");
-        }
-      }
-    }
-  }, {
-    key: "getSpread",
-    value: function getSpread() {
-      return this.render.getOrientation() === "landscape" ? this.landscapeSpread : this.portraitSpread;
-    }
-  }, {
-    key: "getSpreadIndexByPage",
-    value: function getSpreadIndexByPage(pageNum) {
-      var spread = this.getSpread();
-
-      for (var i = 0; i < spread.length; i++) {
-        if (pageNum === spread[i][0] || pageNum === spread[i][1]) return i;
-      }
-
-      return null;
-    }
-  }, {
-    key: "getPageCount",
-    value: function getPageCount() {
-      return this.pages.length;
-    }
-  }, {
-    key: "getPages",
-    value: function getPages() {
-      return this.pages;
-    }
-  }, {
-    key: "getPage",
-    value: function getPage(pageIndex) {
-      if (pageIndex >= 0 && pageIndex < this.pages.length) {
-        return this.pages[pageIndex];
-      }
-
-      throw new Error('Invalid page number');
-    }
-  }, {
-    key: "nextBy",
-    value: function nextBy(current) {
-      var idx = this.pages.indexOf(current);
-      if (idx < this.pages.length - 1) return this.pages[idx + 1];
-      return null;
-    }
-  }, {
-    key: "prevBy",
-    value: function prevBy(current) {
-      var idx = this.pages.indexOf(current);
-      if (idx > 0) return this.pages[idx - 1];
-      return null;
-    }
-  }, {
-    key: "getFlippingPage",
-    value: function getFlippingPage(direction) {
-      var current = this.currentSpreadIndex;
-
-      if (this.render.getOrientation() === "portrait") {
-        return direction === 0 ? this.pages[current].newTemporaryCopy() : this.pages[current - 1];
-      } else {
-        var spread = direction === 0 ? this.getSpread()[current + 1] : this.getSpread()[current - 1];
-        if (spread.length === 1) return this.pages[spread[0]];
-        return direction === 0 ? this.pages[spread[0]] : this.pages[spread[1]];
-      }
-    }
-  }, {
-    key: "getBottomPage",
-    value: function getBottomPage(direction) {
-      var current = this.currentSpreadIndex;
-
-      if (this.render.getOrientation() === "portrait") {
-        return direction === 0 ? this.pages[current + 1] : this.pages[current - 1];
-      } else {
-        var spread = direction === 0 ? this.getSpread()[current + 1] : this.getSpread()[current - 1];
-        if (spread.length === 1) return this.pages[spread[0]];
-        return direction === 0 ? this.pages[spread[1]] : this.pages[spread[0]];
-      }
-    }
-  }, {
-    key: "showNext",
-    value: function showNext() {
-      if (this.currentSpreadIndex < this.getSpread().length) {
-        this.currentSpreadIndex++;
-        this.showSpread();
-      }
-    }
-  }, {
-    key: "showPrev",
-    value: function showPrev() {
-      if (this.currentSpreadIndex > 0) {
-        this.currentSpreadIndex--;
-        this.showSpread();
-      }
-    }
-  }, {
-    key: "getCurrentPageIndex",
-    value: function getCurrentPageIndex() {
-      return this.currentPageIndex;
-    }
-  }, {
-    key: "show",
-    value: function show() {
-      var pageNum = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-      if (pageNum === null) pageNum = this.currentPageIndex;
-      if (pageNum < 0 || pageNum >= this.pages.length) return;
-      var spreadIndex = this.getSpreadIndexByPage(pageNum);
-
-      if (spreadIndex !== null) {
-        this.currentSpreadIndex = spreadIndex;
-        this.showSpread();
-      }
-    }
-  }, {
-    key: "getCurrentSpreadIndex",
-    value: function getCurrentSpreadIndex() {
-      return this.currentSpreadIndex;
-    }
-  }, {
-    key: "setCurrentSpreadIndex",
-    value: function setCurrentSpreadIndex(newIndex) {
-      if (newIndex >= 0 && newIndex < this.getSpread().length) {
-        this.currentSpreadIndex = newIndex;
-      } else {
-        throw new Error('Invalid page');
-      }
-    }
-  }, {
-    key: "showSpread",
-    value: function showSpread() {
-      var spread = this.getSpread()[this.currentSpreadIndex];
-
-      if (spread.length === 2) {
-        this.render.setLeftPage(this.pages[spread[0]]);
-        this.render.setRightPage(this.pages[spread[1]]);
-      } else {
-        if (this.render.getOrientation() === "landscape") {
-          if (spread[0] === this.pages.length - 1) {
-            this.render.setLeftPage(this.pages[spread[0]]);
-            this.render.setRightPage(null);
-          } else {
-            this.render.setLeftPage(null);
-            this.render.setRightPage(this.pages[spread[0]]);
-          }
-        } else {
-          this.render.setLeftPage(null);
-          this.render.setRightPage(this.pages[spread[0]]);
-        }
-      }
-
-      this.currentPageIndex = spread[0];
-      this.app.updatePageIndex(this.currentPageIndex);
-    }
-  }]);
-
-  return PageCollection;
-}();
-
-var ImagePageCollection = /*#__PURE__*/function (_PageCollection) {
-  _inherits(ImagePageCollection, _PageCollection);
-
-  var _super2 = _createSuper(ImagePageCollection);
-
-  function ImagePageCollection(app, render, imagesHref) {
-    var _this3;
-
-    _classCallCheck(this, ImagePageCollection);
-
-    _this3 = _super2.call(this, app, render);
-    _this3.imagesHref = imagesHref;
-    return _this3;
-  }
-
-  _createClass(ImagePageCollection, [{
-    key: "load",
-    value: function load() {
-      var _iterator2 = _createForOfIteratorHelper(this.imagesHref),
-          _step2;
-
-      try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var href = _step2.value;
-          var page = new ImagePage(this.render, href, "soft");
-          page.load();
-          this.pages.push(page);
-        }
-      } catch (err) {
-        _iterator2.e(err);
-      } finally {
-        _iterator2.f();
-      }
-
-      this.createSpread();
-    }
-  }]);
-
-  return ImagePageCollection;
-}(PageCollection);
-
-var Helper = /*#__PURE__*/function () {
-  function Helper() {
-    _classCallCheck(this, Helper);
-  }
-
-  _createClass(Helper, null, [{
-    key: "GetDistanceBetweenTwoPoint",
-    value: function GetDistanceBetweenTwoPoint(point1, point2) {
-      if (point1 === null || point2 === null) {
-        return Infinity;
-      }
-
-      return Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2));
-    }
-  }, {
-    key: "GetSegmentLength",
-    value: function GetSegmentLength(segment) {
-      return Helper.GetDistanceBetweenTwoPoint(segment[0], segment[1]);
-    }
-  }, {
-    key: "GetAngleBetweenTwoLine",
-    value: function GetAngleBetweenTwoLine(line1, line2) {
-      var A1 = line1[0].y - line1[1].y;
-      var A2 = line2[0].y - line2[1].y;
-      var B1 = line1[1].x - line1[0].x;
-      var B2 = line2[1].x - line2[0].x;
-      return Math.acos((A1 * A2 + B1 * B2) / (Math.sqrt(A1 * A1 + B1 * B1) * Math.sqrt(A2 * A2 + B2 * B2)));
-    }
-  }, {
-    key: "PointInRect",
-    value: function PointInRect(rect, pos) {
-      if (pos === null) {
-        return null;
-      }
-
-      if (pos.x >= rect.left && pos.x <= rect.width + rect.left && pos.y >= rect.top && pos.y <= rect.top + rect.height) {
-        return pos;
-      }
-
-      return null;
-    }
-  }, {
-    key: "GetRotatedPoint",
-    value: function GetRotatedPoint(transformedPoint, startPoint, angle) {
-      return {
-        x: transformedPoint.x * Math.cos(angle) + transformedPoint.y * Math.sin(angle) + startPoint.x,
-        y: transformedPoint.y * Math.cos(angle) - transformedPoint.x * Math.sin(angle) + startPoint.y
-      };
-    }
-  }, {
-    key: "LimitPointToCircle",
-    value: function LimitPointToCircle(startPoint, radius, limitedPoint) {
-      if (Helper.GetDistanceBetweenTwoPoint(startPoint, limitedPoint) <= radius) {
-        return limitedPoint;
-      }
-
-      var a = startPoint.x;
-      var b = startPoint.y;
-      var n = limitedPoint.x;
-      var m = limitedPoint.y;
-      var x = Math.sqrt(Math.pow(radius, 2) * Math.pow(a - n, 2) / (Math.pow(a - n, 2) + Math.pow(b - m, 2))) + a;
-
-      if (limitedPoint.x < 0) {
-        x *= -1;
-      }
-
-      var y = (x - a) * (b - m) / (a - n) + b;
-
-      if (a - n + b === 0) {
-        y = radius;
-      }
-
-      return {
-        x: x,
-        y: y
-      };
-    }
-  }, {
-    key: "GetIntersectBetweenTwoSegment",
-    value: function GetIntersectBetweenTwoSegment(rectBorder, one, two) {
-      return Helper.PointInRect(rectBorder, Helper.GetIntersectBeetwenTwoLine(one, two));
-    }
-  }, {
-    key: "GetIntersectBeetwenTwoLine",
-    value: function GetIntersectBeetwenTwoLine(one, two) {
-      var A1 = one[0].y - one[1].y;
-      var A2 = two[0].y - two[1].y;
-      var B1 = one[1].x - one[0].x;
-      var B2 = two[1].x - two[0].x;
-      var C1 = one[0].x * one[1].y - one[1].x * one[0].y;
-      var C2 = two[0].x * two[1].y - two[1].x * two[0].y;
-      var det1 = A1 * C2 - A2 * C1;
-      var det2 = B1 * C2 - B2 * C1;
-      var x = -((C1 * B2 - C2 * B1) / (A1 * B2 - A2 * B1));
-      var y = -((A1 * C2 - A2 * C1) / (A1 * B2 - A2 * B1));
-
-      if (isFinite(x) && isFinite(y)) {
-        return {
-          x: x,
-          y: y
-        };
-      } else {
-        if (Math.abs(det1 - det2) < 0.1) throw new Error('Segment included');
-      }
-
-      return null;
-    }
-  }, {
-    key: "GetCordsFromTwoPoint",
-    value: function GetCordsFromTwoPoint(pointOne, pointTwo) {
-      var sizeX = Math.abs(pointOne.x - pointTwo.x);
-      var sizeY = Math.abs(pointOne.y - pointTwo.y);
-      var lengthLine = Math.max(sizeX, sizeY);
-      var result = [pointOne];
-
-      function getCord(c1, c2, size, length, index) {
-        if (c2 > c1) {
-          return c1 + index * (size / length);
-        } else if (c2 < c1) {
-          return c1 - index * (size / length);
-        }
-
-        return c1;
-      }
-
-      for (var i = 1; i <= lengthLine; i += 1) {
-        result.push({
-          x: getCord(pointOne.x, pointTwo.x, sizeX, lengthLine, i),
-          y: getCord(pointOne.y, pointTwo.y, sizeY, lengthLine, i)
-        });
-      }
-
-      return result;
-    }
-  }]);
-
-  return Helper;
-}();
-
-var HTMLPage = /*#__PURE__*/function (_Page2) {
-  _inherits(HTMLPage, _Page2);
-
-  var _super3 = _createSuper(HTMLPage);
-
-  function HTMLPage(render, element, density) {
-    var _this4;
-
-    _classCallCheck(this, HTMLPage);
-
-    _this4 = _super3.call(this, render, density);
-    _this4.copiedElement = null;
-    _this4.temporaryCopy = null;
-    _this4.isLoad = false;
-    _this4.element = element;
-
-    _this4.element.classList.add('stf__item');
-
-    _this4.element.classList.add('--' + density);
-
-    return _this4;
-  }
-
-  _createClass(HTMLPage, [{
-    key: "newTemporaryCopy",
-    value: function newTemporaryCopy() {
-      if (this.nowDrawingDensity === "hard") {
-        return this;
-      }
-
-      if (this.temporaryCopy === null) {
-        this.copiedElement = this.element.cloneNode(true);
-        this.element.parentElement.appendChild(this.copiedElement);
-        this.temporaryCopy = new HTMLPage(this.render, this.copiedElement, this.nowDrawingDensity);
-      }
-
-      return this.getTemporaryCopy();
-    }
-  }, {
-    key: "getTemporaryCopy",
-    value: function getTemporaryCopy() {
-      return this.temporaryCopy;
-    }
-  }, {
-    key: "hideTemporaryCopy",
-    value: function hideTemporaryCopy() {
-      if (this.temporaryCopy !== null) {
-        this.copiedElement.remove();
-        this.copiedElement = null;
-        this.temporaryCopy = null;
-      }
-    }
-  }, {
-    key: "draw",
-    value: function draw(tempDensity) {
-      var density = tempDensity ? tempDensity : this.nowDrawingDensity;
-      var pagePos = this.render.convertToGlobal(this.state.position);
-      var pageWidth = this.render.getRect().pageWidth;
-      var pageHeight = this.render.getRect().height;
-      this.element.classList.remove('--simple');
-      var commonStyle = "\n            display: block;\n            z-index: ".concat(this.element.style.zIndex, ";\n            left: 0;\n            top: 0;\n            width: ").concat(pageWidth, "px;\n            height: ").concat(pageHeight, "px;\n        ");
-      density === "hard" ? this.drawHard(commonStyle) : this.drawSoft(pagePos, commonStyle);
-    }
-  }, {
-    key: "drawHard",
-    value: function drawHard() {
-      var commonStyle = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-      var pos = this.render.getRect().left + this.render.getRect().width / 2;
-      var angle = this.state.hardDrawingAngle;
-      var newStyle = commonStyle + "\n                backface-visibility: hidden;\n                -webkit-backface-visibility: hidden;\n                clip-path: none;\n                -webkit-clip-path: none;\n            " + (this.orientation === 0 ? "transform-origin: ".concat(this.render.getRect().pageWidth, "px 0; \n                   transform: translate3d(0, 0, 0) rotateY(").concat(angle, "deg);") : "transform-origin: 0 0; \n                   transform: translate3d(".concat(pos, "px, 0, 0) rotateY(").concat(angle, "deg);"));
-      this.element.style.cssText = newStyle;
-    }
-  }, {
-    key: "drawSoft",
-    value: function drawSoft(position) {
-      var commonStyle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-      var polygon = 'polygon( ';
-
-      var _iterator3 = _createForOfIteratorHelper(this.state.area),
-          _step3;
-
-      try {
-        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-          var p = _step3.value;
-
-          if (p !== null) {
-            var g = this.render.getDirection() === 1 ? {
-              x: -p.x + this.state.position.x,
-              y: p.y - this.state.position.y
-            } : {
-              x: p.x - this.state.position.x,
-              y: p.y - this.state.position.y
-            };
-            g = Helper.GetRotatedPoint(g, {
-              x: 0,
-              y: 0
-            }, this.state.angle);
-            polygon += g.x + 'px ' + g.y + 'px, ';
-          }
-        }
-      } catch (err) {
-        _iterator3.e(err);
-      } finally {
-        _iterator3.f();
-      }
-
-      polygon = polygon.slice(0, -2);
-      polygon += ')';
-      var newStyle = commonStyle + "transform-origin: 0 0; clip-path: ".concat(polygon, "; -webkit-clip-path: ").concat(polygon, ";") + (this.render.isSafari() && this.state.angle === 0 ? "transform: translate(".concat(position.x, "px, ").concat(position.y, "px);") : "transform: translate3d(".concat(position.x, "px, ").concat(position.y, "px, 0) rotate(").concat(this.state.angle, "rad);"));
-      this.element.style.cssText = newStyle;
-    }
-  }, {
-    key: "simpleDraw",
-    value: function simpleDraw(orient) {
-      var rect = this.render.getRect();
-      var pageWidth = rect.pageWidth;
-      var pageHeight = rect.height;
-      var x = orient === 1 ? rect.left + rect.pageWidth : rect.left;
-      var y = rect.top;
-      this.element.classList.add('--simple');
-      this.element.style.cssText = "\n            position: absolute; \n            display: block; \n            height: ".concat(pageHeight, "px; \n            left: ").concat(x, "px; \n            top: ").concat(y, "px; \n            width: ").concat(pageWidth, "px; \n            z-index: ").concat(this.render.getSettings().startZIndex + 1, ";");
-    }
-  }, {
-    key: "getElement",
-    value: function getElement() {
-      return this.element;
-    }
-  }, {
-    key: "load",
-    value: function load() {
-      this.isLoad = true;
-    }
-  }, {
-    key: "setOrientation",
-    value: function setOrientation(orientation) {
-      _get(_getPrototypeOf(HTMLPage.prototype), "setOrientation", this).call(this, orientation);
-
-      this.element.classList.remove('--left', '--right');
-      this.element.classList.add(orientation === 1 ? '--right' : '--left');
-    }
-  }, {
-    key: "setDrawingDensity",
-    value: function setDrawingDensity(density) {
-      this.element.classList.remove('--soft', '--hard');
-      this.element.classList.add('--' + density);
-
-      _get(_getPrototypeOf(HTMLPage.prototype), "setDrawingDensity", this).call(this, density);
-    }
-  }]);
-
-  return HTMLPage;
-}(Page);
-
-var HTMLPageCollection = /*#__PURE__*/function (_PageCollection2) {
-  _inherits(HTMLPageCollection, _PageCollection2);
-
-  var _super4 = _createSuper(HTMLPageCollection);
-
-  function HTMLPageCollection(app, render, element, items) {
-    var _this5;
-
-    _classCallCheck(this, HTMLPageCollection);
-
-    _this5 = _super4.call(this, app, render);
-    _this5.element = element;
-    _this5.pagesElement = items;
-    return _this5;
-  }
-
-  _createClass(HTMLPageCollection, [{
-    key: "load",
-    value: function load() {
-      var _iterator4 = _createForOfIteratorHelper(this.pagesElement),
-          _step4;
-
-      try {
-        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-          var pageElement = _step4.value;
-          var page = new HTMLPage(this.render, pageElement, pageElement.dataset['density'] === 'hard' ? "hard" : "soft");
-          page.load();
-          this.pages.push(page);
-        }
-      } catch (err) {
-        _iterator4.e(err);
-      } finally {
-        _iterator4.f();
-      }
-
-      this.createSpread();
-    }
-  }]);
-
-  return HTMLPageCollection;
-}(PageCollection);
-
-var FlipCalculation = /*#__PURE__*/function () {
-  function FlipCalculation(direction, corner, pageWidth, pageHeight) {
-    _classCallCheck(this, FlipCalculation);
-
-    this.direction = direction;
-    this.corner = corner;
-    this.topIntersectPoint = null;
-    this.sideIntersectPoint = null;
-    this.bottomIntersectPoint = null;
-    this.pageWidth = parseInt(pageWidth, 10);
-    this.pageHeight = parseInt(pageHeight, 10);
-  }
-
-  _createClass(FlipCalculation, [{
-    key: "calc",
-    value: function calc(localPos) {
-      try {
-        this.position = this.calcAngleAndPosition(localPos);
-        this.calculateIntersectPoint(this.position);
-        return true;
-      } catch (e) {
-        return false;
-      }
-    }
-  }, {
-    key: "getFlippingClipArea",
-    value: function getFlippingClipArea() {
-      var result = [];
-      var clipBottom = false;
-      result.push(this.rect.topLeft);
-      result.push(this.topIntersectPoint);
-
-      if (this.sideIntersectPoint === null) {
-        clipBottom = true;
-      } else {
-        result.push(this.sideIntersectPoint);
-        if (this.bottomIntersectPoint === null) clipBottom = false;
-      }
-
-      result.push(this.bottomIntersectPoint);
-
-      if (clipBottom || this.corner === "bottom") {
-        result.push(this.rect.bottomLeft);
-      }
-
-      return result;
-    }
-  }, {
-    key: "getBottomClipArea",
-    value: function getBottomClipArea() {
-      var result = [];
-      result.push(this.topIntersectPoint);
-
-      if (this.corner === "top") {
-        result.push({
-          x: this.pageWidth,
-          y: 0
-        });
-      } else {
-        if (this.topIntersectPoint !== null) {
-          result.push({
-            x: this.pageWidth,
-            y: 0
-          });
-        }
-
-        result.push({
-          x: this.pageWidth,
-          y: this.pageHeight
-        });
-      }
-
-      if (this.sideIntersectPoint !== null) {
-        if (Helper.GetDistanceBetweenTwoPoint(this.sideIntersectPoint, this.topIntersectPoint) >= 10) result.push(this.sideIntersectPoint);
-      } else {
-        if (this.corner === "top") {
-          result.push({
-            x: this.pageWidth,
-            y: this.pageHeight
-          });
-        }
-      }
-
-      result.push(this.bottomIntersectPoint);
-      result.push(this.topIntersectPoint);
-      return result;
-    }
-  }, {
-    key: "getAngle",
-    value: function getAngle() {
-      if (this.direction === 0) {
-        return -this.angle;
-      }
-
-      return this.angle;
-    }
-  }, {
-    key: "getRect",
-    value: function getRect() {
-      return this.rect;
-    }
-  }, {
-    key: "getPosition",
-    value: function getPosition() {
-      return this.position;
-    }
-  }, {
-    key: "getActiveCorner",
-    value: function getActiveCorner() {
-      if (this.direction === 0) {
-        return this.rect.topLeft;
-      }
-
-      return this.rect.topRight;
-    }
-  }, {
-    key: "getDirection",
-    value: function getDirection() {
-      return this.direction;
-    }
-  }, {
-    key: "getFlippingProgress",
-    value: function getFlippingProgress() {
-      return Math.abs((this.position.x - this.pageWidth) / (2 * this.pageWidth) * 100);
-    }
-  }, {
-    key: "getCorner",
-    value: function getCorner() {
-      return this.corner;
-    }
-  }, {
-    key: "getBottomPagePosition",
-    value: function getBottomPagePosition() {
-      if (this.direction === 1) {
-        return {
-          x: this.pageWidth,
-          y: 0
-        };
-      }
-
-      return {
-        x: 0,
-        y: 0
-      };
-    }
-  }, {
-    key: "getShadowStartPoint",
-    value: function getShadowStartPoint() {
-      if (this.corner === "top") {
-        return this.topIntersectPoint;
-      } else {
-        if (this.sideIntersectPoint !== null) return this.sideIntersectPoint;
-        return this.topIntersectPoint;
-      }
-    }
-  }, {
-    key: "getShadowAngle",
-    value: function getShadowAngle() {
-      var angle = Helper.GetAngleBetweenTwoLine(this.getSegmentToShadowLine(), [{
-        x: 0,
-        y: 0
-      }, {
-        x: this.pageWidth,
-        y: 0
-      }]);
-
-      if (this.direction === 0) {
-        return angle;
-      }
-
-      return Math.PI - angle;
-    }
-  }, {
-    key: "calcAngleAndPosition",
-    value: function calcAngleAndPosition(pos) {
-      var result = pos;
-      this.updateAngleAndGeometry(result);
-
-      if (this.corner === "top") {
-        result = this.checkPositionAtCenterLine(result, {
-          x: 0,
-          y: 0
-        }, {
-          x: 0,
-          y: this.pageHeight
-        });
-      } else {
-        result = this.checkPositionAtCenterLine(result, {
-          x: 0,
-          y: this.pageHeight
-        }, {
-          x: 0,
-          y: 0
-        });
-      }
-
-      if (Math.abs(result.x - this.pageWidth) < 1 && Math.abs(result.y) < 1) {
-        throw new Error('Point is too small');
-      }
-
-      return result;
-    }
-  }, {
-    key: "updateAngleAndGeometry",
-    value: function updateAngleAndGeometry(pos) {
-      this.angle = this.calculateAngle(pos);
-      this.rect = this.getPageRect(pos);
-    }
-  }, {
-    key: "calculateAngle",
-    value: function calculateAngle(pos) {
-      var left = this.pageWidth - pos.x + 1;
-      var top = this.corner === "bottom" ? this.pageHeight - pos.y : pos.y;
-      var angle = 2 * Math.acos(left / Math.sqrt(top * top + left * left));
-      if (top < 0) angle = -angle;
-      var da = Math.PI - angle;
-      if (!isFinite(angle) || da >= 0 && da < 0.003) throw new Error('The G point is too small');
-      if (this.corner === "bottom") angle = -angle;
-      return angle;
-    }
-  }, {
-    key: "getPageRect",
-    value: function getPageRect(localPos) {
-      if (this.corner === "top") {
-        return this.getRectFromBasePoint([{
-          x: 0,
-          y: 0
-        }, {
-          x: this.pageWidth,
-          y: 0
-        }, {
-          x: 0,
-          y: this.pageHeight
-        }, {
-          x: this.pageWidth,
-          y: this.pageHeight
-        }], localPos);
-      }
-
-      return this.getRectFromBasePoint([{
-        x: 0,
-        y: -this.pageHeight
-      }, {
-        x: this.pageWidth,
-        y: -this.pageHeight
-      }, {
-        x: 0,
-        y: 0
-      }, {
-        x: this.pageWidth,
-        y: 0
-      }], localPos);
-    }
-  }, {
-    key: "getRectFromBasePoint",
-    value: function getRectFromBasePoint(points, localPos) {
-      return {
-        topLeft: this.getRotatedPoint(points[0], localPos),
-        topRight: this.getRotatedPoint(points[1], localPos),
-        bottomLeft: this.getRotatedPoint(points[2], localPos),
-        bottomRight: this.getRotatedPoint(points[3], localPos)
-      };
-    }
-  }, {
-    key: "getRotatedPoint",
-    value: function getRotatedPoint(transformedPoint, startPoint) {
-      return {
-        x: transformedPoint.x * Math.cos(this.angle) + transformedPoint.y * Math.sin(this.angle) + startPoint.x,
-        y: transformedPoint.y * Math.cos(this.angle) - transformedPoint.x * Math.sin(this.angle) + startPoint.y
-      };
-    }
-  }, {
-    key: "calculateIntersectPoint",
-    value: function calculateIntersectPoint(pos) {
-      var boundRect = {
-        left: -1,
-        top: -1,
-        width: this.pageWidth + 2,
-        height: this.pageHeight + 2
-      };
-
-      if (this.corner === "top") {
-        this.topIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [pos, this.rect.topRight], [{
-          x: 0,
-          y: 0
-        }, {
-          x: this.pageWidth,
-          y: 0
-        }]);
-        this.sideIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [pos, this.rect.bottomLeft], [{
-          x: this.pageWidth,
-          y: 0
-        }, {
-          x: this.pageWidth,
-          y: this.pageHeight
-        }]);
-        this.bottomIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [this.rect.bottomLeft, this.rect.bottomRight], [{
-          x: 0,
-          y: this.pageHeight
-        }, {
-          x: this.pageWidth,
-          y: this.pageHeight
-        }]);
-      } else {
-        this.topIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [this.rect.topLeft, this.rect.topRight], [{
-          x: 0,
-          y: 0
-        }, {
-          x: this.pageWidth,
-          y: 0
-        }]);
-        this.sideIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [pos, this.rect.topLeft], [{
-          x: this.pageWidth,
-          y: 0
-        }, {
-          x: this.pageWidth,
-          y: this.pageHeight
-        }]);
-        this.bottomIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [this.rect.bottomLeft, this.rect.bottomRight], [{
-          x: 0,
-          y: this.pageHeight
-        }, {
-          x: this.pageWidth,
-          y: this.pageHeight
-        }]);
-      }
-    }
-  }, {
-    key: "checkPositionAtCenterLine",
-    value: function checkPositionAtCenterLine(checkedPos, centerOne, centerTwo) {
-      var result = checkedPos;
-      var tmp = Helper.LimitPointToCircle(centerOne, this.pageWidth, result);
-
-      if (result !== tmp) {
-        result = tmp;
-        this.updateAngleAndGeometry(result);
-      }
-
-      var rad = Math.sqrt(Math.pow(this.pageWidth, 2) + Math.pow(this.pageHeight, 2));
-      var checkPointOne = this.rect.bottomRight;
-      var checkPointTwo = this.rect.topLeft;
-
-      if (this.corner === "bottom") {
-        checkPointOne = this.rect.topRight;
-        checkPointTwo = this.rect.bottomLeft;
-      }
-
-      if (checkPointOne.x <= 0) {
-        var bottomPoint = Helper.LimitPointToCircle(centerTwo, rad, checkPointTwo);
-
-        if (bottomPoint !== result) {
-          result = bottomPoint;
-          this.updateAngleAndGeometry(result);
-        }
-      }
-
-      return result;
-    }
-  }, {
-    key: "getSegmentToShadowLine",
-    value: function getSegmentToShadowLine() {
-      var first = this.getShadowStartPoint();
-      var second = first !== this.sideIntersectPoint && this.sideIntersectPoint !== null ? this.sideIntersectPoint : this.bottomIntersectPoint;
-      return [first, second];
-    }
-  }]);
-
-  return FlipCalculation;
-}();
-
-var Flip = /*#__PURE__*/function () {
-  function Flip(render, app) {
-    _classCallCheck(this, Flip);
-
-    this.flippingPage = null;
-    this.bottomPage = null;
-    this.calc = null;
-    this.state = "read";
-    this.render = render;
-    this.app = app;
-  }
-
-  _createClass(Flip, [{
-    key: "fold",
-    value: function fold(globalPos) {
-      this.setState("user_fold");
-      if (this.calc === null) this.start(globalPos);
-      this["do"](this.render.convertToPage(globalPos));
-    }
-  }, {
-    key: "flip",
-    value: function flip(globalPos) {
-      if (this.app.getSettings().disableFlipByClick && !this.isPointOnCorners(globalPos)) return;
-      if (this.calc !== null) this.render.finishAnimation();
-      if (!this.start(globalPos)) return;
-      var rect = this.getBoundsRect();
-      this.setState("flipping");
-      var topMargins = rect.height / 10;
-      var yStart = this.calc.getCorner() === "bottom" ? rect.height - topMargins : topMargins;
-      var yDest = this.calc.getCorner() === "bottom" ? rect.height : 0;
-      this.calc.calc({
-        x: rect.pageWidth - topMargins,
-        y: yStart
-      });
-      this.animateFlippingTo({
-        x: rect.pageWidth - topMargins,
-        y: yStart
-      }, {
-        x: -rect.pageWidth,
-        y: yDest
-      }, true);
-    }
-  }, {
-    key: "start",
-    value: function start(globalPos) {
-      this.reset();
-      var bookPos = this.render.convertToBook(globalPos);
-      var rect = this.getBoundsRect();
-      var direction = this.getDirectionByPoint(bookPos);
-      var flipCorner = bookPos.y >= rect.height / 2 ? "bottom" : "top";
-      if (!this.checkDirection(direction)) return false;
-
-      try {
-        this.flippingPage = this.app.getPageCollection().getFlippingPage(direction);
-        this.bottomPage = this.app.getPageCollection().getBottomPage(direction);
-
-        if (this.render.getOrientation() === "landscape") {
-          if (direction === 1) {
-            var nextPage = this.app.getPageCollection().nextBy(this.flippingPage);
-
-            if (nextPage !== null) {
-              if (this.flippingPage.getDensity() !== nextPage.getDensity()) {
-                this.flippingPage.setDrawingDensity("hard");
-                nextPage.setDrawingDensity("hard");
-              }
-            }
-          } else {
-            var prevPage = this.app.getPageCollection().prevBy(this.flippingPage);
-
-            if (prevPage !== null) {
-              if (this.flippingPage.getDensity() !== prevPage.getDensity()) {
-                this.flippingPage.setDrawingDensity("hard");
-                prevPage.setDrawingDensity("hard");
-              }
-            }
-          }
-        }
-
-        this.render.setDirection(direction);
-        this.calc = new FlipCalculation(direction, flipCorner, rect.pageWidth.toString(10), rect.height.toString(10));
-        return true;
-      } catch (e) {
-        return false;
-      }
-    }
-  }, {
-    key: "do",
-    value: function _do(pagePos) {
-      if (this.calc === null) return;
-
-      if (this.calc.calc(pagePos)) {
-        var progress = this.calc.getFlippingProgress();
-        this.bottomPage.setArea(this.calc.getBottomClipArea());
-        this.bottomPage.setPosition(this.calc.getBottomPagePosition());
-        this.bottomPage.setAngle(0);
-        this.bottomPage.setHardAngle(0);
-        this.flippingPage.setArea(this.calc.getFlippingClipArea());
-        this.flippingPage.setPosition(this.calc.getActiveCorner());
-        this.flippingPage.setAngle(this.calc.getAngle());
-
-        if (this.calc.getDirection() === 0) {
-          this.flippingPage.setHardAngle(90 * (200 - progress * 2) / 100);
-        } else {
-          this.flippingPage.setHardAngle(-90 * (200 - progress * 2) / 100);
-        }
-
-        this.render.setPageRect(this.calc.getRect());
-        this.render.setBottomPage(this.bottomPage);
-        this.render.setFlippingPage(this.flippingPage);
-        this.render.setShadowData(this.calc.getShadowStartPoint(), this.calc.getShadowAngle(), progress, this.calc.getDirection());
-      }
-    }
-  }, {
-    key: "flipToPage",
-    value: function flipToPage(page, corner) {
-      var current = this.app.getPageCollection().getCurrentSpreadIndex();
-      var next = this.app.getPageCollection().getSpreadIndexByPage(page);
-
-      try {
-        if (next > current) {
-          this.app.getPageCollection().setCurrentSpreadIndex(next - 1);
-          this.flipNext(corner);
-        }
-
-        if (next < current) {
-          this.app.getPageCollection().setCurrentSpreadIndex(next + 1);
-          this.flipPrev(corner);
-        }
-      } catch (e) {}
-    }
-  }, {
-    key: "flipNext",
-    value: function flipNext(corner) {
-      this.flip({
-        x: this.render.getRect().left + this.render.getRect().pageWidth * 2 - 10,
-        y: corner === "top" ? 1 : this.render.getRect().height - 2
-      });
-    }
-  }, {
-    key: "flipPrev",
-    value: function flipPrev(corner) {
-      this.flip({
-        x: 10,
-        y: corner === "top" ? 1 : this.render.getRect().height - 2
-      });
-    }
-  }, {
-    key: "stopMove",
-    value: function stopMove() {
-      if (this.calc === null) return;
-      var pos = this.calc.getPosition();
-      var rect = this.getBoundsRect();
-      var y = this.calc.getCorner() === "bottom" ? rect.height : 0;
-      if (pos.x <= 0) this.animateFlippingTo(pos, {
-        x: -rect.pageWidth,
-        y: y
-      }, true);else this.animateFlippingTo(pos, {
-        x: rect.pageWidth,
-        y: y
-      }, false);
-    }
-  }, {
-    key: "showCorner",
-    value: function showCorner(globalPos) {
-      if (!this.checkState("read", "fold_corner")) return;
-      var rect = this.getBoundsRect();
-      var pageWidth = rect.pageWidth;
-
-      if (this.isPointOnCorners(globalPos)) {
-        if (this.calc === null) {
-          if (!this.start(globalPos)) return;
-          this.setState("fold_corner");
-          this.calc.calc({
-            x: pageWidth - 1,
-            y: 1
-          });
-          var fixedCornerSize = 50;
-          var yStart = this.calc.getCorner() === "bottom" ? rect.height - 1 : 1;
-          var yDest = this.calc.getCorner() === "bottom" ? rect.height - fixedCornerSize : fixedCornerSize;
-          this.animateFlippingTo({
-            x: pageWidth - 1,
-            y: yStart
-          }, {
-            x: pageWidth - fixedCornerSize,
-            y: yDest
-          }, false, false);
-        } else {
-          this["do"](this.render.convertToPage(globalPos));
-        }
-      } else {
-        this.setState("read");
-        this.render.finishAnimation();
-        this.stopMove();
-      }
-    }
-  }, {
-    key: "animateFlippingTo",
-    value: function animateFlippingTo(start, dest, isTurned) {
-      var _this6 = this;
-
-      var needReset = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
-      var points = Helper.GetCordsFromTwoPoint(start, dest);
-      var frames = [];
-
-      var _iterator5 = _createForOfIteratorHelper(points),
-          _step5;
-
-      try {
-        var _loop = function _loop() {
-          var p = _step5.value;
-          frames.push(function () {
-            return _this6["do"](p);
-          });
-        };
-
-        for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
-          _loop();
-        }
-      } catch (err) {
-        _iterator5.e(err);
-      } finally {
-        _iterator5.f();
-      }
-
-      var duration = this.getAnimationDuration(points.length);
-      this.render.startAnimation(frames, duration, function () {
-        if (!_this6.calc) return;
-
-        if (isTurned) {
-          if (_this6.calc.getDirection() === 1) _this6.app.turnToPrevPage();else _this6.app.turnToNextPage();
-        }
-
-        if (needReset) {
-          _this6.render.setBottomPage(null);
-
-          _this6.render.setFlippingPage(null);
-
-          _this6.render.clearShadow();
-
-          _this6.setState("read");
-
-          _this6.reset();
-        }
-      });
-    }
-  }, {
-    key: "getCalculation",
-    value: function getCalculation() {
-      return this.calc;
-    }
-  }, {
-    key: "getState",
-    value: function getState() {
-      return this.state;
-    }
-  }, {
-    key: "setState",
-    value: function setState(newState) {
-      if (this.state !== newState) {
-        this.app.updateState(newState);
-        this.state = newState;
-      }
-    }
-  }, {
-    key: "getDirectionByPoint",
-    value: function getDirectionByPoint(touchPos) {
-      var rect = this.getBoundsRect();
-
-      if (this.render.getOrientation() === "portrait") {
-        if (touchPos.x - rect.pageWidth <= rect.width / 5) {
-          return 1;
-        }
-      } else if (touchPos.x < rect.width / 2) {
-        return 1;
-      }
-
-      return 0;
-    }
-  }, {
-    key: "getAnimationDuration",
-    value: function getAnimationDuration(size) {
-      var defaultTime = this.app.getSettings().flippingTime;
-      if (size >= 1000) return defaultTime;
-      return size / 1000 * defaultTime;
-    }
-  }, {
-    key: "checkDirection",
-    value: function checkDirection(direction) {
-      if (direction === 0) return this.app.getCurrentPageIndex() < this.app.getPageCount() - 1;
-      return this.app.getCurrentPageIndex() >= 1;
-    }
-  }, {
-    key: "reset",
-    value: function reset() {
-      this.calc = null;
-      this.flippingPage = null;
-      this.bottomPage = null;
-    }
-  }, {
-    key: "getBoundsRect",
-    value: function getBoundsRect() {
-      return this.render.getRect();
-    }
-  }, {
-    key: "checkState",
-    value: function checkState() {
-      for (var _len = arguments.length, states = new Array(_len), _key = 0; _key < _len; _key++) {
-        states[_key] = arguments[_key];
-      }
-
-      for (var _i2 = 0, _states = states; _i2 < _states.length; _i2++) {
-        var state = _states[_i2];
-        if (this.state === state) return true;
-      }
-
-      return false;
-    }
-  }, {
-    key: "isPointOnCorners",
-    value: function isPointOnCorners(globalPos) {
-      var rect = this.getBoundsRect();
-      var pageWidth = rect.pageWidth;
-      var operatingDistance = Math.sqrt(Math.pow(pageWidth, 2) + Math.pow(rect.height, 2)) / 5;
-      var bookPos = this.render.convertToBook(globalPos);
-      return bookPos.x > 0 && bookPos.y > 0 && bookPos.x < rect.width && bookPos.y < rect.height && (bookPos.x < operatingDistance || bookPos.x > rect.width - operatingDistance) && (bookPos.y < operatingDistance || bookPos.y > rect.height - operatingDistance);
-    }
-  }]);
-
-  return Flip;
-}();
-
-var Render = /*#__PURE__*/function () {
-  function Render(app, setting) {
-    _classCallCheck(this, Render);
-
-    this.leftPage = null;
-    this.rightPage = null;
-    this.flippingPage = null;
-    this.bottomPage = null;
-    this.direction = null;
-    this.orientation = null;
-    this.shadow = null;
-    this.animation = null;
-    this.pageRect = null;
-    this.boundsRect = null;
-    this.timer = 0;
-    this.safari = false;
-    this.setting = setting;
-    this.app = app;
-    var regex = new RegExp('Version\\/[\\d\\.]+.*Safari/');
-    this.safari = regex.exec(window.navigator.userAgent) !== null;
-  }
-
-  _createClass(Render, [{
-    key: "render",
-    value: function render(timer) {
-      if (this.animation !== null) {
-        var frameIndex = Math.round((timer - this.animation.startedAt) / this.animation.durationFrame);
-
-        if (frameIndex < this.animation.frames.length) {
-          this.animation.frames[frameIndex]();
-        } else {
-          this.animation.onAnimateEnd();
-          this.animation = null;
-        }
-      }
-
-      this.timer = timer;
-      this.drawFrame();
-    }
-  }, {
-    key: "start",
-    value: function start() {
-      var _this7 = this;
-
-      this.update();
-
-      var loop = function loop(timer) {
-        _this7.render(timer);
-
-        requestAnimationFrame(loop);
-      };
-
-      requestAnimationFrame(loop);
-    }
-  }, {
-    key: "startAnimation",
-    value: function startAnimation(frames, duration, onAnimateEnd) {
-      this.finishAnimation();
-      this.animation = {
-        frames: frames,
-        duration: duration,
-        durationFrame: duration / frames.length,
-        onAnimateEnd: onAnimateEnd,
-        startedAt: this.timer
-      };
-    }
-  }, {
-    key: "finishAnimation",
-    value: function finishAnimation() {
-      if (this.animation !== null) {
-        this.animation.frames[this.animation.frames.length - 1]();
-
-        if (this.animation.onAnimateEnd !== null) {
-          this.animation.onAnimateEnd();
-        }
-      }
-
-      this.animation = null;
-    }
-  }, {
-    key: "update",
-    value: function update() {
-      this.boundsRect = null;
-      var orientation = this.calculateBoundsRect();
-
-      if (this.orientation !== orientation) {
-        this.orientation = orientation;
-        this.app.updateOrientation(orientation);
-      }
-    }
-  }, {
-    key: "calculateBoundsRect",
-    value: function calculateBoundsRect() {
-      var orientation = "landscape";
-      var blockWidth = this.getBlockWidth();
-      var middlePoint = {
-        x: blockWidth / 2,
-        y: this.getBlockHeight() / 2
-      };
-      var ratio = this.setting.width / this.setting.height;
-      var pageWidth = this.setting.width;
-      var pageHeight = this.setting.height;
-      var left = middlePoint.x - pageWidth;
-
-      if (this.setting.size === "stretch") {
-        if (blockWidth < this.setting.minWidth * 2 && this.app.getSettings().usePortrait) orientation = "portrait";
-        pageWidth = orientation === "portrait" ? this.getBlockWidth() : this.getBlockWidth() / 2;
-        if (pageWidth > this.setting.maxWidth) pageWidth = this.setting.maxWidth;
-        pageHeight = pageWidth / ratio;
-
-        if (pageHeight > this.getBlockHeight()) {
-          pageHeight = this.getBlockHeight();
-          pageWidth = pageHeight * ratio;
-        }
-
-        left = orientation === "portrait" ? middlePoint.x - pageWidth / 2 - pageWidth : middlePoint.x - pageWidth;
-      } else {
-        if (blockWidth < pageWidth * 2) {
-          if (this.app.getSettings().usePortrait) {
-            orientation = "portrait";
-            left = middlePoint.x - pageWidth / 2 - pageWidth;
-          }
-        }
-      }
-
-      this.boundsRect = {
-        left: left,
-        top: middlePoint.y - pageHeight / 2,
-        width: pageWidth * 2,
-        height: pageHeight,
-        pageWidth: pageWidth
-      };
-      return orientation;
-    }
-  }, {
-    key: "setShadowData",
-    value: function setShadowData(pos, angle, progress, direction) {
-      if (!this.app.getSettings().drawShadow) return;
-      var maxShadowOpacity = 100 * this.getSettings().maxShadowOpacity;
-      this.shadow = {
-        pos: pos,
-        angle: angle,
-        width: this.getRect().pageWidth * 3 / 4 * progress / 100,
-        opacity: (100 - progress) * maxShadowOpacity / 100 / 100,
-        direction: direction,
-        progress: progress * 2
-      };
-    }
-  }, {
-    key: "clearShadow",
-    value: function clearShadow() {
-      this.shadow = null;
-    }
-  }, {
-    key: "getBlockWidth",
-    value: function getBlockWidth() {
-      return this.app.getUI().getDistElement().offsetWidth;
-    }
-  }, {
-    key: "getBlockHeight",
-    value: function getBlockHeight() {
-      return this.app.getUI().getDistElement().offsetHeight;
-    }
-  }, {
-    key: "getDirection",
-    value: function getDirection() {
-      return this.direction;
-    }
-  }, {
-    key: "getRect",
-    value: function getRect() {
-      if (this.boundsRect === null) this.calculateBoundsRect();
-      return this.boundsRect;
-    }
-  }, {
-    key: "getSettings",
-    value: function getSettings() {
-      return this.app.getSettings();
-    }
-  }, {
-    key: "getOrientation",
-    value: function getOrientation() {
-      return this.orientation;
-    }
-  }, {
-    key: "setPageRect",
-    value: function setPageRect(pageRect) {
-      this.pageRect = pageRect;
-    }
-  }, {
-    key: "setDirection",
-    value: function setDirection(direction) {
-      this.direction = direction;
-    }
-  }, {
-    key: "setRightPage",
-    value: function setRightPage(page) {
-      if (page !== null) page.setOrientation(1);
-      this.rightPage = page;
-    }
-  }, {
-    key: "setLeftPage",
-    value: function setLeftPage(page) {
-      if (page !== null) page.setOrientation(0);
-      this.leftPage = page;
-    }
-  }, {
-    key: "setBottomPage",
-    value: function setBottomPage(page) {
-      if (page !== null) page.setOrientation(this.direction === 1 ? 0 : 1);
-      this.bottomPage = page;
-    }
-  }, {
-    key: "setFlippingPage",
-    value: function setFlippingPage(page) {
-      if (page !== null) page.setOrientation(this.direction === 0 && this.orientation !== "portrait" ? 0 : 1);
-      this.flippingPage = page;
-    }
-  }, {
-    key: "convertToBook",
-    value: function convertToBook(pos) {
-      var rect = this.getRect();
-      return {
-        x: pos.x - rect.left,
-        y: pos.y - rect.top
-      };
-    }
-  }, {
-    key: "isSafari",
-    value: function isSafari() {
-      return this.safari;
-    }
-  }, {
-    key: "convertToPage",
-    value: function convertToPage(pos, direction) {
-      if (!direction) direction = this.direction;
-      var rect = this.getRect();
-      var x = direction === 0 ? pos.x - rect.left - rect.width / 2 : rect.width / 2 - pos.x + rect.left;
-      return {
-        x: x,
-        y: pos.y - rect.top
-      };
-    }
-  }, {
-    key: "convertToGlobal",
-    value: function convertToGlobal(pos, direction) {
-      if (!direction) direction = this.direction;
-      if (pos == null) return null;
-      var rect = this.getRect();
-      var x = direction === 0 ? pos.x + rect.left + rect.width / 2 : rect.width / 2 - pos.x + rect.left;
-      return {
-        x: x,
-        y: pos.y + rect.top
-      };
-    }
-  }, {
-    key: "convertRectToGlobal",
-    value: function convertRectToGlobal(rect, direction) {
-      if (!direction) direction = this.direction;
-      return {
-        topLeft: this.convertToGlobal(rect.topLeft, direction),
-        topRight: this.convertToGlobal(rect.topRight, direction),
-        bottomLeft: this.convertToGlobal(rect.bottomLeft, direction),
-        bottomRight: this.convertToGlobal(rect.bottomRight, direction)
-      };
-    }
-  }]);
-
-  return Render;
-}();
-
-var CanvasRender = /*#__PURE__*/function (_Render) {
-  _inherits(CanvasRender, _Render);
-
-  var _super5 = _createSuper(CanvasRender);
-
-  function CanvasRender(app, setting, inCanvas) {
-    var _this8;
-
-    _classCallCheck(this, CanvasRender);
-
-    _this8 = _super5.call(this, app, setting);
-    _this8.canvas = inCanvas;
-    _this8.ctx = inCanvas.getContext('2d');
-    return _this8;
-  }
-
-  _createClass(CanvasRender, [{
-    key: "getContext",
-    value: function getContext() {
-      return this.ctx;
-    }
-  }, {
-    key: "reload",
-    value: function reload() {}
-  }, {
-    key: "drawFrame",
-    value: function drawFrame() {
-      this.clear();
-      if (this.orientation !== "portrait") if (this.leftPage != null) this.leftPage.simpleDraw(0);
-      if (this.rightPage != null) this.rightPage.simpleDraw(1);
-      if (this.bottomPage != null) this.bottomPage.draw();
-      this.drawBookShadow();
-      if (this.flippingPage != null) this.flippingPage.draw();
-
-      if (this.shadow != null) {
-        this.drawOuterShadow();
-        this.drawInnerShadow();
-      }
-
-      var rect = this.getRect();
-
-      if (this.orientation === "portrait") {
-        this.ctx.beginPath();
-        this.ctx.rect(rect.left + rect.pageWidth, rect.top, rect.width, rect.height);
-        this.ctx.clip();
-      }
-    }
-  }, {
-    key: "drawBookShadow",
-    value: function drawBookShadow() {
-      var rect = this.getRect();
-      this.ctx.save();
-      this.ctx.beginPath();
-      var shadowSize = rect.width / 20;
-      this.ctx.rect(rect.left, rect.top, rect.width, rect.height);
-      var shadowPos = {
-        x: rect.left + rect.width / 2 - shadowSize / 2,
-        y: 0
-      };
-      this.ctx.translate(shadowPos.x, shadowPos.y);
-      var outerGradient = this.ctx.createLinearGradient(0, 0, shadowSize, 0);
-      outerGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-      outerGradient.addColorStop(0.4, 'rgba(0, 0, 0, 0.2)');
-      outerGradient.addColorStop(0.49, 'rgba(0, 0, 0, 0.1)');
-      outerGradient.addColorStop(0.5, 'rgba(0, 0, 0, 0.5)');
-      outerGradient.addColorStop(0.51, 'rgba(0, 0, 0, 0.4)');
-      outerGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      this.ctx.clip();
-      this.ctx.fillStyle = outerGradient;
-      this.ctx.fillRect(0, 0, shadowSize, rect.height * 2);
-      this.ctx.restore();
-    }
-  }, {
-    key: "drawOuterShadow",
-    value: function drawOuterShadow() {
-      var rect = this.getRect();
-      this.ctx.save();
-      this.ctx.beginPath();
-      this.ctx.rect(rect.left, rect.top, rect.width, rect.height);
-      var shadowPos = this.convertToGlobal({
-        x: this.shadow.pos.x,
-        y: this.shadow.pos.y
-      });
-      this.ctx.translate(shadowPos.x, shadowPos.y);
-      this.ctx.rotate(Math.PI + this.shadow.angle + Math.PI / 2);
-      var outerGradient = this.ctx.createLinearGradient(0, 0, this.shadow.width, 0);
-
-      if (this.shadow.direction === 0) {
-        this.ctx.translate(0, -100);
-        outerGradient.addColorStop(0, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
-        outerGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      } else {
-        this.ctx.translate(-this.shadow.width, -100);
-        outerGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-        outerGradient.addColorStop(1, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
-      }
-
-      this.ctx.clip();
-      this.ctx.fillStyle = outerGradient;
-      this.ctx.fillRect(0, 0, this.shadow.width, rect.height * 2);
-      this.ctx.restore();
-    }
-  }, {
-    key: "drawInnerShadow",
-    value: function drawInnerShadow() {
-      var rect = this.getRect();
-      this.ctx.save();
-      this.ctx.beginPath();
-      var shadowPos = this.convertToGlobal({
-        x: this.shadow.pos.x,
-        y: this.shadow.pos.y
-      });
-      var pageRect = this.convertRectToGlobal(this.pageRect);
-      this.ctx.moveTo(pageRect.topLeft.x, pageRect.topLeft.y);
-      this.ctx.lineTo(pageRect.topRight.x, pageRect.topRight.y);
-      this.ctx.lineTo(pageRect.bottomRight.x, pageRect.bottomRight.y);
-      this.ctx.lineTo(pageRect.bottomLeft.x, pageRect.bottomLeft.y);
-      this.ctx.translate(shadowPos.x, shadowPos.y);
-      this.ctx.rotate(Math.PI + this.shadow.angle + Math.PI / 2);
-      var isw = this.shadow.width * 3 / 4;
-      var innerGradient = this.ctx.createLinearGradient(0, 0, isw, 0);
-
-      if (this.shadow.direction === 0) {
-        this.ctx.translate(-isw, -100);
-        innerGradient.addColorStop(1, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
-        innerGradient.addColorStop(0.9, 'rgba(0, 0, 0, 0.05)');
-        innerGradient.addColorStop(0.7, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
-        innerGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-      } else {
-        this.ctx.translate(0, -100);
-        innerGradient.addColorStop(0, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
-        innerGradient.addColorStop(0.1, 'rgba(0, 0, 0, 0.05)');
-        innerGradient.addColorStop(0.3, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
-        innerGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      }
-
-      this.ctx.clip();
-      this.ctx.fillStyle = innerGradient;
-      this.ctx.fillRect(0, 0, isw, rect.height * 2);
-      this.ctx.restore();
-    }
-  }, {
-    key: "clear",
-    value: function clear() {
-      this.ctx.fillStyle = 'white';
-      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    }
-  }]);
-
-  return CanvasRender;
-}(Render);
-
-var UI = /*#__PURE__*/function () {
-  function UI(inBlock, app, setting) {
-    var _this9 = this;
-
-    _classCallCheck(this, UI);
-
-    this.touchPoint = null;
-    this.swipeTimeout = 250;
-
-    this.onResize = function () {
-      _this9.update();
-    };
-
-    this.onMouseDown = function (e) {
-      if (_this9.checkTarget(e.target)) {
-        var pos = _this9.getMousePos(e.clientX, e.clientY);
-
-        _this9.app.startUserTouch(pos);
-
-        e.preventDefault();
-      }
-    };
-
-    this.onTouchStart = function (e) {
-      if (_this9.checkTarget(e.target)) {
-        if (e.changedTouches.length > 0) {
-          var t = e.changedTouches[0];
-
-          var pos = _this9.getMousePos(t.clientX, t.clientY);
-
-          _this9.touchPoint = {
-            point: pos,
-            time: Date.now()
-          };
-          setTimeout(function () {
-            if (_this9.touchPoint !== null) {
-              _this9.app.startUserTouch(pos);
-            }
-          }, _this9.swipeTimeout);
-          if (!_this9.app.getSettings().mobileScrollSupport) e.preventDefault();
-        }
-      }
-    };
-
-    this.onMouseUp = function (e) {
-      var pos = _this9.getMousePos(e.clientX, e.clientY);
-
-      _this9.app.userStop(pos);
-    };
-
-    this.onMouseMove = function (e) {
-      var pos = _this9.getMousePos(e.clientX, e.clientY);
-
-      _this9.app.userMove(pos, false);
-    };
-
-    this.onTouchMove = function (e) {
-      if (e.changedTouches.length > 0) {
-        var t = e.changedTouches[0];
-
-        var pos = _this9.getMousePos(t.clientX, t.clientY);
-
-        if (_this9.app.getSettings().mobileScrollSupport) {
-          if (_this9.touchPoint !== null) {
-            if (Math.abs(_this9.touchPoint.point.x - pos.x) > 10 || _this9.app.getState() !== "read") {
-              if (e.cancelable) _this9.app.userMove(pos, true);
-            }
-          }
-
-          if (_this9.app.getState() !== "read") {
-            e.preventDefault();
-          }
-        } else {
-          _this9.app.userMove(pos, true);
-        }
-      }
-    };
-
-    this.onTouchEnd = function (e) {
-      if (e.changedTouches.length > 0) {
-        var t = e.changedTouches[0];
-
-        var pos = _this9.getMousePos(t.clientX, t.clientY);
-
-        var isSwipe = false;
-
-        if (_this9.touchPoint !== null) {
-          var dx = pos.x - _this9.touchPoint.point.x;
-          var distY = Math.abs(pos.y - _this9.touchPoint.point.y);
-
-          if (Math.abs(dx) > _this9.swipeDistance && distY < _this9.swipeDistance * 2 && Date.now() - _this9.touchPoint.time < _this9.swipeTimeout) {
-            if (dx > 0) {
-              _this9.app.flipPrev(_this9.touchPoint.point.y < _this9.app.getRender().getRect().height / 2 ? "top" : "bottom");
-            } else {
-              _this9.app.flipNext(_this9.touchPoint.point.y < _this9.app.getRender().getRect().height / 2 ? "top" : "bottom");
-            }
-
-            isSwipe = true;
-          }
-
-          _this9.touchPoint = null;
-        }
-
-        _this9.app.userStop(pos, isSwipe);
-      }
-    };
-
-    this.parentElement = inBlock;
-    inBlock.classList.add('stf__parent');
-    inBlock.insertAdjacentHTML('afterbegin', '<div class="stf__wrapper"></div>');
-    this.wrapper = inBlock.querySelector('.stf__wrapper');
-    this.app = app;
-    var k = this.app.getSettings().usePortrait ? 1 : 2;
-    inBlock.style.minWidth = setting.minWidth * k + 'px';
-    inBlock.style.minHeight = setting.minHeight + 'px';
-
-    if (setting.size === "fixed") {
-      inBlock.style.minWidth = setting.width * k + 'px';
-      inBlock.style.minHeight = setting.height + 'px';
-    }
-
-    if (setting.autoSize) {
-      inBlock.style.width = '100%';
-      inBlock.style.maxWidth = setting.maxWidth * 2 + 'px';
-    }
-
-    inBlock.style.display = 'block';
-    window.addEventListener('resize', this.onResize, false);
-    this.swipeDistance = setting.swipeDistance;
-  }
-
-  _createClass(UI, [{
-    key: "destroy",
-    value: function destroy() {
-      if (this.app.getSettings().useMouseEvents) this.removeHandlers();
-      this.distElement.remove();
-      this.wrapper.remove();
-    }
-  }, {
-    key: "getDistElement",
-    value: function getDistElement() {
-      return this.distElement;
-    }
-  }, {
-    key: "getWrapper",
-    value: function getWrapper() {
-      return this.wrapper;
-    }
-  }, {
-    key: "setOrientationStyle",
-    value: function setOrientationStyle(orientation) {
-      this.wrapper.classList.remove('--portrait', '--landscape');
-
-      if (orientation === "portrait") {
-        if (this.app.getSettings().autoSize) this.wrapper.style.paddingBottom = this.app.getSettings().height / this.app.getSettings().width * 100 + '%';
-        this.wrapper.classList.add('--portrait');
-      } else {
-        if (this.app.getSettings().autoSize) this.wrapper.style.paddingBottom = this.app.getSettings().height / (this.app.getSettings().width * 2) * 100 + '%';
-        this.wrapper.classList.add('--landscape');
-      }
-
-      this.update();
-    }
-  }, {
-    key: "removeHandlers",
-    value: function removeHandlers() {
-      window.removeEventListener('resize', this.onResize);
-      this.distElement.removeEventListener('mousedown', this.onMouseDown);
-      this.distElement.removeEventListener('touchstart', this.onTouchStart);
-      window.removeEventListener('mousemove', this.onMouseMove);
-      window.removeEventListener('touchmove', this.onTouchMove);
-      window.removeEventListener('mouseup', this.onMouseUp);
-      window.removeEventListener('touchend', this.onTouchEnd);
-    }
-  }, {
-    key: "setHandlers",
-    value: function setHandlers() {
-      window.addEventListener('resize', this.onResize, false);
-      if (!this.app.getSettings().useMouseEvents) return;
-      this.distElement.addEventListener('mousedown', this.onMouseDown);
-      this.distElement.addEventListener('touchstart', this.onTouchStart);
-      window.addEventListener('mousemove', this.onMouseMove);
-      window.addEventListener('touchmove', this.onTouchMove, {
-        passive: !this.app.getSettings().mobileScrollSupport
-      });
-      window.addEventListener('mouseup', this.onMouseUp);
-      window.addEventListener('touchend', this.onTouchEnd);
-    }
-  }, {
-    key: "getMousePos",
-    value: function getMousePos(x, y) {
-      var rect = this.distElement.getBoundingClientRect();
-      return {
-        x: x - rect.left,
-        y: y - rect.top
-      };
-    }
-  }, {
-    key: "checkTarget",
-    value: function checkTarget(targer) {
-      if (!this.app.getSettings().clickEventForward) return true;
-
-      if (['a', 'button'].includes(targer.tagName.toLowerCase())) {
-        return false;
-      }
-
-      return true;
-    }
-  }]);
-
-  return UI;
-}();
-
-var HTMLUI = /*#__PURE__*/function (_UI) {
-  _inherits(HTMLUI, _UI);
-
-  var _super6 = _createSuper(HTMLUI);
-
-  function HTMLUI(inBlock, app, setting, items) {
-    var _this10;
-
-    _classCallCheck(this, HTMLUI);
-
-    _this10 = _super6.call(this, inBlock, app, setting);
-
-    _this10.wrapper.insertAdjacentHTML('afterbegin', '<div class="stf__block"></div>');
-
-    _this10.distElement = inBlock.querySelector('.stf__block');
-    _this10.items = items;
-
-    var _iterator6 = _createForOfIteratorHelper(items),
-        _step6;
-
-    try {
-      for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
-        var item = _step6.value;
-
-        _this10.distElement.appendChild(item);
-      }
-    } catch (err) {
-      _iterator6.e(err);
-    } finally {
-      _iterator6.f();
-    }
-
-    _this10.setHandlers();
-
-    return _this10;
-  }
-
-  _createClass(HTMLUI, [{
-    key: "clear",
-    value: function clear() {
-      var _iterator7 = _createForOfIteratorHelper(this.items),
-          _step7;
-
-      try {
-        for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
-          var item = _step7.value;
-          this.parentElement.appendChild(item);
-        }
-      } catch (err) {
-        _iterator7.e(err);
-      } finally {
-        _iterator7.f();
-      }
-    }
-  }, {
-    key: "updateItems",
-    value: function updateItems(items) {
-      this.removeHandlers();
-      this.distElement.innerHTML = '';
-
-      var _iterator8 = _createForOfIteratorHelper(items),
-          _step8;
-
-      try {
-        for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
-          var item = _step8.value;
-          this.distElement.appendChild(item);
-        }
-      } catch (err) {
-        _iterator8.e(err);
-      } finally {
-        _iterator8.f();
-      }
-
-      this.items = items;
-      this.setHandlers();
-    }
-  }, {
-    key: "update",
-    value: function update() {
-      this.app.getRender().update();
-    }
-  }]);
-
-  return HTMLUI;
-}(UI);
-
-var CanvasUI = /*#__PURE__*/function (_UI2) {
-  _inherits(CanvasUI, _UI2);
-
-  var _super7 = _createSuper(CanvasUI);
-
-  function CanvasUI(inBlock, app, setting) {
-    var _this11;
-
-    _classCallCheck(this, CanvasUI);
-
-    _this11 = _super7.call(this, inBlock, app, setting);
-    _this11.wrapper.innerHTML = '<canvas class="stf__canvas"></canvas>';
-    _this11.canvas = inBlock.querySelectorAll('canvas')[0];
-    _this11.distElement = _this11.canvas;
-
-    _this11.resizeCanvas();
-
-    _this11.setHandlers();
-
-    return _this11;
-  }
-
-  _createClass(CanvasUI, [{
-    key: "resizeCanvas",
-    value: function resizeCanvas() {
-      var cs = getComputedStyle(this.canvas);
-      var width = parseInt(cs.getPropertyValue('width'), 10);
-      var height = parseInt(cs.getPropertyValue('height'), 10);
-      this.canvas.width = width;
-      this.canvas.height = height;
-    }
-  }, {
-    key: "getCanvas",
-    value: function getCanvas() {
-      return this.canvas;
-    }
-  }, {
-    key: "update",
-    value: function update() {
-      this.resizeCanvas();
-      this.app.getRender().update();
-    }
-  }]);
-
-  return CanvasUI;
-}(UI);
-
-var EventObject = /*#__PURE__*/function () {
-  function EventObject() {
-    _classCallCheck(this, EventObject);
-
-    this.events = new Map();
-  }
-
-  _createClass(EventObject, [{
-    key: "on",
-    value: function on(eventName, callback) {
-      if (!this.events.has(eventName)) {
-        this.events.set(eventName, [callback]);
-      } else {
-        this.events.get(eventName).push(callback);
-      }
-
-      return this;
-    }
-  }, {
-    key: "off",
-    value: function off(event) {
-      this.events["delete"](event);
-    }
-  }, {
-    key: "trigger",
-    value: function trigger(eventName, app) {
-      var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-      if (!this.events.has(eventName)) return;
-
-      var _iterator9 = _createForOfIteratorHelper(this.events.get(eventName)),
-          _step9;
-
-      try {
-        for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
-          var callback = _step9.value;
-          callback({
-            data: data,
-            object: app
-          });
-        }
-      } catch (err) {
-        _iterator9.e(err);
-      } finally {
-        _iterator9.f();
-      }
-    }
-  }]);
-
-  return EventObject;
-}();
-
-var HTMLRender = /*#__PURE__*/function (_Render2) {
-  _inherits(HTMLRender, _Render2);
-
-  var _super8 = _createSuper(HTMLRender);
-
-  function HTMLRender(app, setting, element) {
-    var _this12;
-
-    _classCallCheck(this, HTMLRender);
-
-    _this12 = _super8.call(this, app, setting);
-    _this12.outerShadow = null;
-    _this12.innerShadow = null;
-    _this12.hardShadow = null;
-    _this12.hardInnerShadow = null;
-    _this12.element = element;
-
-    _this12.createShadows();
-
-    return _this12;
-  }
-
-  _createClass(HTMLRender, [{
-    key: "createShadows",
-    value: function createShadows() {
-      this.element.insertAdjacentHTML('beforeend', "<div class=\"stf__outerShadow\"></div>\n             <div class=\"stf__innerShadow\"></div>\n             <div class=\"stf__hardShadow\"></div>\n             <div class=\"stf__hardInnerShadow\"></div>");
-      this.outerShadow = this.element.querySelector('.stf__outerShadow');
-      this.innerShadow = this.element.querySelector('.stf__innerShadow');
-      this.hardShadow = this.element.querySelector('.stf__hardShadow');
-      this.hardInnerShadow = this.element.querySelector('.stf__hardInnerShadow');
-    }
-  }, {
-    key: "clearShadow",
-    value: function clearShadow() {
-      _get(_getPrototypeOf(HTMLRender.prototype), "clearShadow", this).call(this);
-
-      this.outerShadow.style.cssText = 'display: none';
-      this.innerShadow.style.cssText = 'display: none';
-      this.hardShadow.style.cssText = 'display: none';
-      this.hardInnerShadow.style.cssText = 'display: none';
-    }
-  }, {
-    key: "reload",
-    value: function reload() {
-      var testShadow = this.element.querySelector('.stf__outerShadow');
-
-      if (!testShadow) {
-        this.createShadows();
-      }
-    }
-  }, {
-    key: "drawHardInnerShadow",
-    value: function drawHardInnerShadow() {
-      var rect = this.getRect();
-      var progress = this.shadow.progress > 100 ? 200 - this.shadow.progress : this.shadow.progress;
-      var innerShadowSize = (100 - progress) * (2.5 * rect.pageWidth) / 100 + 20;
-      if (innerShadowSize > rect.pageWidth) innerShadowSize = rect.pageWidth;
-      var newStyle = "\n            display: block;\n            z-index: ".concat((this.getSettings().startZIndex + 5).toString(10), ";\n            width: ").concat(innerShadowSize, "px;\n            height: ").concat(rect.height, "px;\n            background: linear-gradient(to right,\n                rgba(0, 0, 0, ").concat(this.shadow.opacity * progress / 100, ") 5%,\n                rgba(0, 0, 0, 0) 100%);\n            left: ").concat(rect.left + rect.width / 2, "px;\n            transform-origin: 0 0;\n        ");
-      newStyle += this.getDirection() === 0 && this.shadow.progress > 100 || this.getDirection() === 1 && this.shadow.progress <= 100 ? "transform: translate3d(0, 0, 0);" : "transform: translate3d(0, 0, 0) rotateY(180deg);";
-      this.hardInnerShadow.style.cssText = newStyle;
-    }
-  }, {
-    key: "drawHardOuterShadow",
-    value: function drawHardOuterShadow() {
-      var rect = this.getRect();
-      var progress = this.shadow.progress > 100 ? 200 - this.shadow.progress : this.shadow.progress;
-      var shadowSize = (100 - progress) * (2.5 * rect.pageWidth) / 100 + 20;
-      if (shadowSize > rect.pageWidth) shadowSize = rect.pageWidth;
-      var newStyle = "\n            display: block;\n            z-index: ".concat((this.getSettings().startZIndex + 4).toString(10), ";\n            width: ").concat(shadowSize, "px;\n            height: ").concat(rect.height, "px;\n            background: linear-gradient(to left, rgba(0, 0, 0, ").concat(this.shadow.opacity, ") 5%, rgba(0, 0, 0, 0) 100%);\n            left: ").concat(rect.left + rect.width / 2, "px;\n            transform-origin: 0 0;\n        ");
-      newStyle += this.getDirection() === 0 && this.shadow.progress > 100 || this.getDirection() === 1 && this.shadow.progress <= 100 ? "transform: translate3d(0, 0, 0) rotateY(180deg);" : "transform: translate3d(0, 0, 0);";
-      this.hardShadow.style.cssText = newStyle;
-    }
-  }, {
-    key: "drawInnerShadow",
-    value: function drawInnerShadow() {
-      var rect = this.getRect();
-      var innerShadowSize = this.shadow.width * 3 / 4;
-      var shadowTranslate = this.getDirection() === 0 ? innerShadowSize : 0;
-      var shadowDirection = this.getDirection() === 0 ? 'to left' : 'to right';
-      var shadowPos = this.convertToGlobal(this.shadow.pos);
-      var angle = this.shadow.angle + 3 * Math.PI / 2;
-      var clip = [this.pageRect.topLeft, this.pageRect.topRight, this.pageRect.bottomRight, this.pageRect.bottomLeft];
-      var polygon = 'polygon( ';
-
-      for (var _i3 = 0, _clip = clip; _i3 < _clip.length; _i3++) {
-        var p = _clip[_i3];
-        var g = this.getDirection() === 1 ? {
-          x: -p.x + this.shadow.pos.x,
-          y: p.y - this.shadow.pos.y
-        } : {
-          x: p.x - this.shadow.pos.x,
-          y: p.y - this.shadow.pos.y
-        };
-        g = Helper.GetRotatedPoint(g, {
-          x: shadowTranslate,
-          y: 100
-        }, angle);
-        polygon += g.x + 'px ' + g.y + 'px, ';
-      }
-
-      polygon = polygon.slice(0, -2);
-      polygon += ')';
-      var newStyle = "\n            display: block;\n            z-index: ".concat((this.getSettings().startZIndex + 10).toString(10), ";\n            width: ").concat(innerShadowSize, "px;\n            height: ").concat(rect.height * 2, "px;\n            background: linear-gradient(").concat(shadowDirection, ",\n                rgba(0, 0, 0, ").concat(this.shadow.opacity, ") 5%,\n                rgba(0, 0, 0, 0.05) 15%,\n                rgba(0, 0, 0, ").concat(this.shadow.opacity, ") 35%,\n                rgba(0, 0, 0, 0) 100%);\n            transform-origin: ").concat(shadowTranslate, "px 100px;\n            transform: translate3d(").concat(shadowPos.x - shadowTranslate, "px, ").concat(shadowPos.y - 100, "px, 0) rotate(").concat(angle, "rad);\n            clip-path: ").concat(polygon, ";\n            -webkit-clip-path: ").concat(polygon, ";\n        ");
-      this.innerShadow.style.cssText = newStyle;
-    }
-  }, {
-    key: "drawOuterShadow",
-    value: function drawOuterShadow() {
-      var rect = this.getRect();
-      var shadowPos = this.convertToGlobal({
-        x: this.shadow.pos.x,
-        y: this.shadow.pos.y
-      });
-      var angle = this.shadow.angle + 3 * Math.PI / 2;
-      var shadowTranslate = this.getDirection() === 1 ? this.shadow.width : 0;
-      var shadowDirection = this.getDirection() === 0 ? 'to right' : 'to left';
-      var clip = [{
-        x: 0,
-        y: 0
-      }, {
-        x: rect.pageWidth,
-        y: 0
-      }, {
-        x: rect.pageWidth,
-        y: rect.height
-      }, {
-        x: 0,
-        y: rect.height
-      }];
-      var polygon = 'polygon( ';
-
-      for (var _i4 = 0, _clip2 = clip; _i4 < _clip2.length; _i4++) {
-        var p = _clip2[_i4];
-
-        if (p !== null) {
-          var g = this.getDirection() === 1 ? {
-            x: -p.x + this.shadow.pos.x,
-            y: p.y - this.shadow.pos.y
-          } : {
-            x: p.x - this.shadow.pos.x,
-            y: p.y - this.shadow.pos.y
-          };
-          g = Helper.GetRotatedPoint(g, {
-            x: shadowTranslate,
-            y: 100
-          }, angle);
-          polygon += g.x + 'px ' + g.y + 'px, ';
-        }
-      }
-
-      polygon = polygon.slice(0, -2);
-      polygon += ')';
-      var newStyle = "\n            display: block;\n            z-index: ".concat((this.getSettings().startZIndex + 10).toString(10), ";\n            width: ").concat(this.shadow.width, "px;\n            height: ").concat(rect.height * 2, "px;\n            background: linear-gradient(").concat(shadowDirection, ", rgba(0, 0, 0, ").concat(this.shadow.opacity, "), rgba(0, 0, 0, 0));\n            transform-origin: ").concat(shadowTranslate, "px 100px;\n            transform: translate3d(").concat(shadowPos.x - shadowTranslate, "px, ").concat(shadowPos.y - 100, "px, 0) rotate(").concat(angle, "rad);\n            clip-path: ").concat(polygon, ";\n            -webkit-clip-path: ").concat(polygon, ";\n        ");
-      this.outerShadow.style.cssText = newStyle;
-    }
-  }, {
-    key: "drawLeftPage",
-    value: function drawLeftPage() {
-      if (this.orientation === "portrait" || this.leftPage === null) return;
-
-      if (this.direction === 1 && this.flippingPage !== null && this.flippingPage.getDrawingDensity() === "hard") {
-        this.leftPage.getElement().style.zIndex = (this.getSettings().startZIndex + 5).toString(10);
-        this.leftPage.setHardDrawingAngle(180 + this.flippingPage.getHardAngle());
-        this.leftPage.draw(this.flippingPage.getDrawingDensity());
-      } else {
-        this.leftPage.simpleDraw(0);
-      }
-    }
-  }, {
-    key: "drawRightPage",
-    value: function drawRightPage() {
-      if (this.rightPage === null) return;
-
-      if (this.direction === 0 && this.flippingPage !== null && this.flippingPage.getDrawingDensity() === "hard") {
-        this.rightPage.getElement().style.zIndex = (this.getSettings().startZIndex + 5).toString(10);
-        this.rightPage.setHardDrawingAngle(180 + this.flippingPage.getHardAngle());
-        this.rightPage.draw(this.flippingPage.getDrawingDensity());
-      } else {
-        this.rightPage.simpleDraw(1);
-      }
-    }
-  }, {
-    key: "drawBottomPage",
-    value: function drawBottomPage() {
-      if (this.bottomPage === null) return;
-      var tempDensity = this.flippingPage != null ? this.flippingPage.getDrawingDensity() : null;
-
-      if (!(this.orientation === "portrait" && this.direction === 1)) {
-        this.bottomPage.getElement().style.zIndex = (this.getSettings().startZIndex + 3).toString(10);
-        this.bottomPage.draw(tempDensity);
-      }
-    }
-  }, {
-    key: "drawFrame",
-    value: function drawFrame() {
-      this.clear();
-      this.drawLeftPage();
-      this.drawRightPage();
-      this.drawBottomPage();
-
-      if (this.flippingPage != null) {
-        this.flippingPage.getElement().style.zIndex = (this.getSettings().startZIndex + 5).toString(10);
-        this.flippingPage.draw();
-      }
-
-      if (this.shadow != null && this.flippingPage !== null) {
-        if (this.flippingPage.getDrawingDensity() === "soft") {
-          this.drawOuterShadow();
-          this.drawInnerShadow();
-        } else {
-          this.drawHardOuterShadow();
-          this.drawHardInnerShadow();
-        }
-      }
-    }
-  }, {
-    key: "clear",
-    value: function clear() {
-      var _iterator10 = _createForOfIteratorHelper(this.app.getPageCollection().getPages()),
-          _step10;
-
-      try {
-        for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
-          var page = _step10.value;
-
-          if (page !== this.leftPage && page !== this.rightPage && page !== this.flippingPage && page !== this.bottomPage) {
-            page.getElement().style.cssText = 'display: none';
-          }
-
-          if (page.getTemporaryCopy() !== this.flippingPage) {
-            page.hideTemporaryCopy();
-          }
-        }
-      } catch (err) {
-        _iterator10.e(err);
-      } finally {
-        _iterator10.f();
-      }
-    }
-  }, {
-    key: "update",
-    value: function update() {
-      _get(_getPrototypeOf(HTMLRender.prototype), "update", this).call(this);
-
-      if (this.rightPage !== null) {
-        this.rightPage.setOrientation(1);
-      }
-
-      if (this.leftPage !== null) {
-        this.leftPage.setOrientation(0);
-      }
-    }
-  }]);
-
-  return HTMLRender;
-}(Render);
-
-var Settings = /*#__PURE__*/function () {
-  function Settings() {
-    _classCallCheck(this, Settings);
-
-    this._default = {
-      startPage: 0,
-      size: "fixed",
-      width: 0,
-      height: 0,
-      minWidth: 0,
-      maxWidth: 0,
-      minHeight: 0,
-      maxHeight: 0,
-      drawShadow: true,
-      flippingTime: 1000,
-      usePortrait: true,
-      startZIndex: 0,
-      autoSize: true,
-      maxShadowOpacity: 1,
-      showCover: false,
-      mobileScrollSupport: true,
-      swipeDistance: 30,
-      clickEventForward: true,
-      useMouseEvents: true,
-      showPageCorners: true,
-      disableFlipByClick: false
-    };
-  }
-
-  _createClass(Settings, [{
-    key: "getSettings",
-    value: function getSettings(userSetting) {
-      var result = this._default;
-      Object.assign(result, userSetting);
-      if (result.size !== "stretch" && result.size !== "fixed") throw new Error('Invalid size type. Available only "fixed" and "stretch" value');
-      if (result.width <= 0 || result.height <= 0) throw new Error('Invalid width or height');
-      if (result.flippingTime <= 0) throw new Error('Invalid flipping time');
-
-      if (result.size === "stretch") {
-        if (result.minWidth <= 0) result.minWidth = 100;
-        if (result.maxWidth < result.minWidth) result.maxWidth = 2000;
-        if (result.minHeight <= 0) result.minHeight = 100;
-        if (result.maxHeight < result.minHeight) result.maxHeight = 2000;
-      } else {
-        result.minWidth = result.width;
-        result.maxWidth = result.width;
-        result.minHeight = result.height;
-        result.maxHeight = result.height;
-      }
-
-      return result;
-    }
-  }]);
-
-  return Settings;
-}();
-
-function styleInject(css, ref) {
-  if (ref === void 0) ref = {};
-  var insertAt = ref.insertAt;
-
-  if (!css || typeof document === 'undefined') {
-    return;
-  }
-
-  var head = document.head || document.getElementsByTagName('head')[0];
-  var style = document.createElement('style');
-  style.type = 'text/css';
-
-  if (insertAt === 'top') {
-    if (head.firstChild) {
-      head.insertBefore(style, head.firstChild);
-    } else {
-      head.appendChild(style);
-    }
-  } else {
-    head.appendChild(style);
-  }
-
-  if (style.styleSheet) {
-    style.styleSheet.cssText = css;
-  } else {
-    style.appendChild(document.createTextNode(css));
-  }
-}
-
-var css_248z = ".stf__parent {\n  position: relative;\n  display: block;\n  box-sizing: border-box;\n  transform: translateZ(0);\n\n  -ms-touch-action: pan-y;\n  touch-action: pan-y;\n}\n\n.sft__wrapper {\n  position: relative;\n  width: 100%;\n  box-sizing: border-box;\n}\n\n.stf__parent canvas {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  left: 0;\n  top: 0;\n}\n\n.stf__block {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  box-sizing: border-box;\n  perspective: 2000px;\n}\n\n.stf__item {\n  display: none;\n  position: absolute;\n  transform-style: preserve-3d;\n}\n\n.stf__outerShadow {\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n\n.stf__innerShadow {\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n\n.stf__hardShadow {\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n\n.stf__hardInnerShadow {\n  position: absolute;\n  left: 0;\n  top: 0;\n}";
-styleInject(css_248z);
-
-var PageFlip = /*#__PURE__*/function (_EventObject) {
-  _inherits(PageFlip, _EventObject);
-
-  var _super9 = _createSuper(PageFlip);
-
-  function PageFlip(inBlock, setting) {
-    var _this13;
-
-    _classCallCheck(this, PageFlip);
-
-    _this13 = _super9.call(this);
-    _this13.isUserTouch = false;
-    _this13.isUserMove = false;
-    _this13.setting = null;
-    _this13.pages = null;
-    _this13.setting = new Settings().getSettings(setting);
-    _this13.block = inBlock;
-    return _this13;
-  }
-
-  _createClass(PageFlip, [{
-    key: "destroy",
-    value: function destroy() {
-      this.ui.destroy();
-      this.block.remove();
-    }
-  }, {
-    key: "update",
-    value: function update() {
-      this.render.update();
-      this.pages.show();
-    }
-  }, {
-    key: "loadFromImages",
-    value: function loadFromImages(imagesHref) {
-      var _this14 = this;
-
-      this.ui = new CanvasUI(this.block, this, this.setting);
-      var canvas = this.ui.getCanvas();
-      this.render = new CanvasRender(this, this.setting, canvas);
-      this.flipController = new Flip(this.render, this);
-      this.pages = new ImagePageCollection(this, this.render, imagesHref);
-      this.pages.load();
-      this.render.start();
-      this.pages.show(this.setting.startPage);
-      setTimeout(function () {
-        _this14.ui.update();
-
-        _this14.trigger('init', _this14, {
-          page: _this14.setting.startPage,
-          mode: _this14.render.getOrientation()
-        });
-      }, 1);
-    }
-  }, {
-    key: "loadFromHTML",
-    value: function loadFromHTML(items) {
-      var _this15 = this;
-
-      this.ui = new HTMLUI(this.block, this, this.setting, items);
-      this.render = new HTMLRender(this, this.setting, this.ui.getDistElement());
-      this.flipController = new Flip(this.render, this);
-      this.pages = new HTMLPageCollection(this, this.render, this.ui.getDistElement(), items);
-      this.pages.load();
-      this.render.start();
-      this.pages.show(this.setting.startPage);
-      setTimeout(function () {
-        _this15.ui.update();
-
-        _this15.trigger('init', _this15, {
-          page: _this15.setting.startPage,
-          mode: _this15.render.getOrientation()
-        });
-      }, 1);
-    }
-  }, {
-    key: "updateFromImages",
-    value: function updateFromImages(imagesHref) {
-      var current = this.pages.getCurrentPageIndex();
-      this.pages.destroy();
-      this.pages = new ImagePageCollection(this, this.render, imagesHref);
-      this.pages.load();
-      this.pages.show(current);
-      this.trigger('update', this, {
-        page: current,
-        mode: this.render.getOrientation()
-      });
-    }
-  }, {
-    key: "updateFromHtml",
-    value: function updateFromHtml(items) {
-      var current = this.pages.getCurrentPageIndex();
-      this.pages.destroy();
-      this.pages = new HTMLPageCollection(this, this.render, this.ui.getDistElement(), items);
-      this.pages.load();
-      this.ui.updateItems(items);
-      this.render.reload();
-      this.pages.show(current);
-      this.trigger('update', this, {
-        page: current,
-        mode: this.render.getOrientation()
-      });
-    }
-  }, {
-    key: "clear",
-    value: function clear() {
-      this.pages.destroy();
-      this.ui.clear();
-    }
-  }, {
-    key: "turnToPrevPage",
-    value: function turnToPrevPage() {
-      this.pages.showPrev();
-    }
-  }, {
-    key: "turnToNextPage",
-    value: function turnToNextPage() {
-      this.pages.showNext();
-    }
-  }, {
-    key: "turnToPage",
-    value: function turnToPage(page) {
-      this.pages.show(page);
-    }
-  }, {
-    key: "flipNext",
-    value: function flipNext() {
-      var corner = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "top";
-      this.flipController.flipNext(corner);
-    }
-  }, {
-    key: "flipPrev",
-    value: function flipPrev() {
-      var corner = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "top";
-      this.flipController.flipPrev(corner);
-    }
-  }, {
-    key: "flip",
-    value: function flip(page) {
-      var corner = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "top";
-      this.flipController.flipToPage(page, corner);
-    }
-  }, {
-    key: "updateState",
-    value: function updateState(newState) {
-      this.trigger('changeState', this, newState);
-    }
-  }, {
-    key: "updatePageIndex",
-    value: function updatePageIndex(newPage) {
-      this.trigger('flip', this, newPage);
-    }
-  }, {
-    key: "updateOrientation",
-    value: function updateOrientation(newOrientation) {
-      this.ui.setOrientationStyle(newOrientation);
-      this.update();
-      this.trigger('changeOrientation', this, newOrientation);
-    }
-  }, {
-    key: "getPageCount",
-    value: function getPageCount() {
-      return this.pages.getPageCount();
-    }
-  }, {
-    key: "getCurrentPageIndex",
-    value: function getCurrentPageIndex() {
-      return this.pages.getCurrentPageIndex();
-    }
-  }, {
-    key: "getPage",
-    value: function getPage(pageIndex) {
-      return this.pages.getPage(pageIndex);
-    }
-  }, {
-    key: "getRender",
-    value: function getRender() {
-      return this.render;
-    }
-  }, {
-    key: "getFlipController",
-    value: function getFlipController() {
-      return this.flipController;
-    }
-  }, {
-    key: "getOrientation",
-    value: function getOrientation() {
-      return this.render.getOrientation();
-    }
-  }, {
-    key: "getBoundsRect",
-    value: function getBoundsRect() {
-      return this.render.getRect();
-    }
-  }, {
-    key: "getSettings",
-    value: function getSettings() {
-      return this.setting;
-    }
-  }, {
-    key: "getUI",
-    value: function getUI() {
-      return this.ui;
-    }
-  }, {
-    key: "getState",
-    value: function getState() {
-      return this.flipController.getState();
-    }
-  }, {
-    key: "getPageCollection",
-    value: function getPageCollection() {
-      return this.pages;
-    }
-  }, {
-    key: "startUserTouch",
-    value: function startUserTouch(pos) {
-      this.mousePosition = pos;
-      this.isUserTouch = true;
-      this.isUserMove = false;
-    }
-  }, {
-    key: "userMove",
-    value: function userMove(pos, isTouch) {
-      if (!this.isUserTouch && !isTouch && this.setting.showPageCorners) {
-        this.flipController.showCorner(pos);
-      } else if (this.isUserTouch) {
-        if (Helper.GetDistanceBetweenTwoPoint(this.mousePosition, pos) > 5) {
-          this.isUserMove = true;
-          this.flipController.fold(pos);
-        }
-      }
-    }
-  }, {
-    key: "userStop",
-    value: function userStop(pos) {
-      var isSwipe = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-      if (this.isUserTouch) {
-        this.isUserTouch = false;
-
-        if (!isSwipe) {
-          if (!this.isUserMove) this.flipController.flip(pos);else this.flipController.stopMove();
-        }
-      }
-    }
-  }]);
-
-  return PageFlip;
-}(EventObject);
-
-exports.PageFlip = PageFlip;
 
 /***/ }),
 /* 153 */
@@ -32234,7 +32246,7 @@ exports.PDFPrintService = PDFPrintService;
 
 var _app = __webpack_require__(3);
 
-var _canvasSize = _interopRequireDefault(__webpack_require__(36));
+var _canvasSize = _interopRequireDefault(__webpack_require__(37));
 
 var _print_utils = __webpack_require__(164);
 
@@ -32602,7 +32614,7 @@ exports.getXfaHtmlForPrinting = getXfaHtmlForPrinting;
 
 var _ui_utils = __webpack_require__(6);
 
-var _xfa_layer_builder = __webpack_require__(151);
+var _xfa_layer_builder = __webpack_require__(152);
 
 var _pdfjsLib = __webpack_require__(7);
 
