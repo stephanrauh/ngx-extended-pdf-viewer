@@ -1,7 +1,9 @@
+export type IPDFXfaLayerFactory = import("./interfaces").IPDFXfaLayerFactory;
 export type XfaLayerBuilderOptions = {
     pageDiv: HTMLDivElement;
     pdfPage: any;
     annotationStorage?: any;
+    xfaHtml?: Object | undefined;
 };
 /**
  * @implements IPDFXfaLayerFactory
@@ -20,16 +22,17 @@ export class DefaultXfaLayerFactory implements IPDFXfaLayerFactory {
  * @property {HTMLDivElement} pageDiv
  * @property {PDFPage} pdfPage
  * @property {AnnotationStorage} [annotationStorage]
+ * @property {Object} [xfaHtml]
  */
 export class XfaLayerBuilder {
     /**
      * @param {XfaLayerBuilderOptions} options
      */
-    constructor({ pageDiv, pdfPage, xfaHtml, annotationStorage }: XfaLayerBuilderOptions);
+    constructor({ pageDiv, pdfPage, annotationStorage, xfaHtml }: XfaLayerBuilderOptions);
     pageDiv: HTMLDivElement;
     pdfPage: any;
-    xfaHtml: any;
     annotationStorage: any;
+    xfaHtml: Object | undefined;
     div: HTMLDivElement | null;
     _cancelled: boolean;
     /**

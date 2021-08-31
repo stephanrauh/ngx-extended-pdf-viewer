@@ -6,7 +6,8 @@ export class PDFRenderingQueue {
     pdfThumbnailViewer: any;
     onIdle: any;
     highestPriorityPage: any;
-    idleTimeout: NodeJS.Timeout | null;
+    /** @type {number} */
+    idleTimeout: number;
     printing: boolean;
     isThumbnailViewEnabled: boolean;
     /**

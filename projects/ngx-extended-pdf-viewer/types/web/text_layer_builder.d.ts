@@ -1,3 +1,4 @@
+export type IPDFTextLayerFactory = import("./interfaces").IPDFTextLayerFactory;
 export type TextLayerBuilderOptions = {
     /**
      * - The text layer container.

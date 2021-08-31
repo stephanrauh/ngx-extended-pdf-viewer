@@ -1,3 +1,18 @@
+export type GetPageSizeInchesParameters = {
+    view: number[];
+    userUnit: number;
+    rotate: number;
+};
+export type PageSize = {
+    /**
+     * - In inches.
+     */
+    width: number;
+    /**
+     * - In inches.
+     */
+    height: number;
+};
 export type GetVisibleElementsParameters = {
     /**
      * - A container that can possibly scroll.
@@ -145,13 +160,22 @@ export function getActiveOrFocusedElement(): Element;
  */
 export function getOutputScale(ctx: any): Object;
 /**
- * Gets the size of the specified page, converted from PDF units to inches.
- * @param {Object} An Object containing the properties: {Array} `view`,
- *   {number} `userUnit`, and {number} `rotate`.
- * @returns {Object} An Object containing the properties: {number} `width`
- *   and {number} `height`, given in inches.
+ * @typedef {Object} GetPageSizeInchesParameters
+ * @property {number[]} view
+ * @property {number} userUnit
+ * @property {number} rotate
  */
-export function getPageSizeInches({ view, userUnit, rotate }: Object): Object;
+/**
+ * @typedef {Object} PageSize
+ * @property {number} width - In inches.
+ * @property {number} height - In inches.
+ */
+/**
+ * Gets the size of the specified page, converted from PDF units to inches.
+ * @param {GetPageSizeInchesParameters} params
+ * @returns {PageSize}
+ */
+export function getPageSizeInches({ view, userUnit, rotate }: GetPageSizeInchesParameters): PageSize;
 /**
  * @typedef {Object} GetVisibleElementsParameters
  * @property {HTMLElement} scrollEl - A container that can possibly scroll.

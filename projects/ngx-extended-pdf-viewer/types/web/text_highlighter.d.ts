@@ -1,4 +1,4 @@
-export type TextHighlighter = {
+export type TextHighlighterOptions = {
     findController: any;
     /**
      * - The application event bus.
@@ -10,7 +10,7 @@ export type TextHighlighter = {
     pageIndex: number;
 };
 /**
- * @typedef {Object} TextHighlighter
+ * @typedef {Object} TextHighlighterOptions
  * @property {PDFFindController} findController
  * @property {EventBus} eventBus - The application event bus.
  * @property {number} pageIndex - The page index.
@@ -20,15 +20,14 @@ export type TextHighlighter = {
  * either the text layer or XFA layer depending on the type of document.
  */
 export class TextHighlighter {
-    constructor({ findController, eventBus, pageIndex }: {
-        findController: any;
-        eventBus: any;
-        pageIndex: any;
-    });
+    /**
+     * @param {TextHighlighterOptions} options
+     */
+    constructor({ findController, eventBus, pageIndex }: TextHighlighterOptions);
     findController: any;
     matches: any[];
     eventBus: any;
-    pageIdx: any;
+    pageIdx: number;
     _onUpdateTextLayerMatches: ((evt: any) => void) | null;
     textDivs: Node[] | null;
     textContentItemsStr: string[] | null;

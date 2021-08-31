@@ -1,3 +1,4 @@
+export type IPDFLinkService = import("./interfaces").IPDFLinkService;
 export type PDFLinkServiceOptions = {
     /**
      * - The application event bus.

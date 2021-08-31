@@ -1,3 +1,4 @@
+export type IRenderableView = import("./interfaces").IRenderableView;
 export type PDFPageViewOptions = {
     /**
      * - The viewer element.
@@ -48,6 +49,7 @@ export type PDFPageViewOptions = {
     annotationLayerFactory: any;
     xfaLayerFactory: any;
     structTreeLayerFactory: any;
+    textHighlighterFactory?: Object | undefined;
     /**
      * - Path for image resources, mainly
      * for annotation icons. Include trailing slash.

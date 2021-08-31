@@ -1,3 +1,4 @@
+export type IPDFAnnotationLayerFactory = import("./interfaces").IPDFAnnotationLayerFactory;
 export type AnnotationLayerBuilderOptions = {
     pageDiv: HTMLDivElement;
     pdfPage: any;
