@@ -41,7 +41,7 @@ ngx-extended-pdf-viewer {
   }
 
   .textLayer .highlight {
-    position: inherit;
+    position: static;
     margin: -1px;
     padding: 1px;
     background-color: $highlight;
