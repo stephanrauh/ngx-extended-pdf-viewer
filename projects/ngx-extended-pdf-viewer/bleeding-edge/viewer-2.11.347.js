@@ -10661,10 +10661,6 @@ class BaseViewer {
             page.div.parentElement.childNodes.forEach((div, index) => {
               div.style.display = "inline-block";
             });
-
-            if (page.div.parentElement.childNodes.length === 1) {
-              page.div.style.left = page.div.offsetWidth / 2 + "px";
-            }
           }
         }
       });
