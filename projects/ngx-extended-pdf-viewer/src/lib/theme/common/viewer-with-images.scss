@@ -673,21 +673,21 @@ ngx-extended-pdf-viewer {
   }
 
   .pdfPresentationMode:-ms-fullscreen .pdfViewer .page {
-    margin-bottom: 100% !important;
+    margin-bottom: 100vh !important;
   }
 
   .pdfPresentationMode:-webkit-full-screen .pdfViewer .page {
-    margin-bottom: 100%;
+    margin-bottom: 100vh;
     border: 0;
   }
 
   .pdfPresentationMode:-moz-full-screen .pdfViewer .page {
-    margin-bottom: 100%;
+    margin-bottom: 100vh;
     border: 0;
   }
 
   .pdfPresentationMode:fullscreen .pdfViewer .page {
-    margin-bottom: 100%;
+    margin-bottom: 100vh;
     border: 0;
   }
 
