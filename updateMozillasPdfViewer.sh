@@ -1,11 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 cd ../mypdf.js
 
 FOLDER="assets"
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
-if [[ "$BRANCH" == "bleeding-edge" ]]; then
-  FOLDER="bleeding-edge"
+if [ "$BRANCH" == "bleeding-edge" ] || [ "$BRANCH" == "2.10" ]; then
+    FOLDER="bleeding-edge"
 fi
+
+echo Folder is "$FOLDER"
 
 gulp minified
 gulp minified-es5
