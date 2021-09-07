@@ -4,7 +4,7 @@
   "version": "10.0.0-alpha.11",
   "license": "Apache-2.0",
   "repository": {
-    "url": "https://github.com/stephanrauh/ngx-extended-pdf-viewer"
+    "url": "https://github.com/chan-dev/ngx-extended-pdf-viewer"
   },
   "author": {
     "name": "Stephan Rauh",
@@ -12,7 +12,7 @@
   },
   "homepage": "https://pdfviewer.net",
   "bugs": {
-    "url": "https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues"
+    "url": "https://github.com/chan-dev/ngx-extended-pdf-viewer/issues"
   },
   "keywords": [
     "PDF",
