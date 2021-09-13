@@ -21,7 +21,7 @@ export class PinchOnMobileSupport {
   }
 
   private isMobile() {
-    return 'ontouchstart' in document.documentElement;
+    return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || ((<any>navigator).msMaxTouchPoints > 0);
   }
 
   private onViewerTouchStart(event: TouchEvent): void {
@@ -37,7 +37,7 @@ export class PinchOnMobileSupport {
               this.startX = (event.touches[0].pageX + event.touches[1].pageX) / 2;
               this.startY = (event.touches[0].pageY + event.touches[1].pageY) / 2;
               this.initialPinchDistance = Math.hypot(event.touches[1].pageX - event.touches[0].pageX, event.touches[1].pageY - event.touches[0].pageY);
-              
+
               if (event.cancelable) {
                 event.preventDefault();
               }
@@ -80,7 +80,7 @@ export class PinchOnMobileSupport {
     }
     this.viewer.style.transform = `scale(${this.pinchScale})`;
     this.viewer.style.transformOrigin = `${originX}px ${originY}px`;
-    
+
     if (event.cancelable) {
       event.preventDefault();
     }
