@@ -17,6 +17,9 @@
     },
     {
       "path": "../../../page-flip-demo"
+    },
+    {
+      "path": "../../../ngx-extended-pdf-viewer-issues/issue813-path-plus-iframe"
     }
   ],
   "settings": {

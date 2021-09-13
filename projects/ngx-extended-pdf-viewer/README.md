@@ -292,6 +292,9 @@ Thanks to the awesome pdf.js team and all the users who've reported bugs and eve
 
 Reluctantly, I have to drop support for Internet Explorer 11. The base library, Mozilla's pdf.js, now generates binaries that are no longer compatible to Internet Explorer 11, and it seems there's no easy fix. That's a pity because IE11 support was the original use-case of the library and because I frequently get messages from developers who need IE11 support. The last version known to be compatible is 5.3. Version 7.3.2 should be compatible, too, but a user reported crashes.
 
+## Breaking changes in version 10.0
+- Version 10.0.0-alpha.11 fixes a bug that made relative URLs almost unpredictable when using the router. Now the `[src]` attribute uses the BASE_HREF of the application as base path. The downside is that probably many projects simply worked around the bug, so their relative URL are broken.
+
 ## Breaking changes in version 9.0
 - Version 9.0 updates pdf.js to version 2.9 (default branch) and 2.10 ("bleeding edge" branch). That shouldn't break your application. However, the pdf.js team has been very diligent during the versions 2.8 and 2.9, so it's possible one of the new features break your application.
 

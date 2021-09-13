@@ -15,6 +15,7 @@ import {
   ViewChild,
   OnInit,
 } from '@angular/core';
+import { APP_BASE_HREF } from '@angular/common';
 import { PagesLoadedEvent } from './events/pages-loaded-event';
 import { PageRenderedEvent } from './events/page-rendered-event';
 import { PdfDownloadedEvent } from './events/pdf-downloaded-event';
@@ -640,8 +641,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     @Inject(PLATFORM_ID) private platformId,
     private notificationService: PDFNotificationService,
     private location: Location,
-    private elementRef: ElementRef
-  ) {}
+    private elementRef: ElementRef,
+    @Inject(APP_BASE_HREF) public baseHref: string
+  ) {
+    console.log(baseHref);
+  }
 
   private iOSVersionRequiresES5(): boolean {
     const match = navigator.appVersion.match(/OS (\d+)_(\d+)_?(\d+)?/);
@@ -918,6 +922,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         PDFViewerApplicationOptions.set('pageViewMode', this.pageViewMode);
         PDFViewerApplicationOptions.set('verbosity', this.logLevel);
         PDFViewerApplicationOptions.set('initialZoom', this.zoom);
+        // PDFViewerApplicationOptions.set('basepath', this.baseHref);
 
         PDFViewerApplication.isViewerEmbedded = true;
         if (PDFViewerApplication.printKeyDownListener) {
@@ -939,33 +944,33 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public checkHeight(): void {
     if (typeof document !== 'undefined') {
-        const container = document.getElementsByClassName('zoom')[0] as HTMLElement;
-        if (container) {
-          if (container.clientHeight === 0) {
-            if (!this.autoHeight) {
-              console.warn(
-                "The height of the PDF viewer widget is zero pixels. Please check the height attribute. Is there a syntax error? Or are you using a percentage with a CSS framework that doesn't support this? The height is adjusted automatedly."
-              );
-              this.autoHeight = true;
-            }
-          }
-          if (this.autoHeight) {
-            const available = window.innerHeight;
-            const rect = container.getBoundingClientRect();
-            const top = rect.top;
-            let maximumHeight = available - top;
-            // take the margins and paddings of the parent containers into account
-            let padding = this.calculateBorderMarging(container);
-            maximumHeight -= padding;
-            const factor = Number(this._height.replace('%', ''));
-            maximumHeight = (maximumHeight * factor) / 100;
-            if (maximumHeight > 100) {
-              this.minHeight = maximumHeight + 'px';
-            } else {
-              this.minHeight = '100px';
-            }
+      const container = document.getElementsByClassName('zoom')[0] as HTMLElement;
+      if (container) {
+        if (container.clientHeight === 0) {
+          if (!this.autoHeight) {
+            console.warn(
+              "The height of the PDF viewer widget is zero pixels. Please check the height attribute. Is there a syntax error? Or are you using a percentage with a CSS framework that doesn't support this? The height is adjusted automatedly."
+            );
+            this.autoHeight = true;
           }
         }
+        if (this.autoHeight) {
+          const available = window.innerHeight;
+          const rect = container.getBoundingClientRect();
+          const top = rect.top;
+          let maximumHeight = available - top;
+          // take the margins and paddings of the parent containers into account
+          let padding = this.calculateBorderMarging(container);
+          maximumHeight -= padding;
+          const factor = Number(this._height.replace('%', ''));
+          maximumHeight = (maximumHeight * factor) / 100;
+          if (maximumHeight > 100) {
+            this.minHeight = maximumHeight + 'px';
+          } else {
+            this.minHeight = '100px';
+          }
+        }
+      }
     }
   }
 
@@ -1338,6 +1343,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             };
           }
         }
+        options.baseHref = this.baseHref;
         PDFViewerApplication.onError = (error: Error) => this.pdfLoadingFailed.emit(error);
         PDFViewerApplication.open(this._src, options).then(() => {
           this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount });
