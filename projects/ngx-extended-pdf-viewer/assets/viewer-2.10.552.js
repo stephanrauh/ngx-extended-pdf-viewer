@@ -10682,7 +10682,7 @@ class BaseViewer {
         const showIt = page.id === this.currentPageNumber;
 
         if (showIt) {
-          page.div.style.display = "block";
+          page.div.style.display = "inline-block";
 
           if (page.div.parentElement.classList.contains("spread")) {
             page.div.parentElement.childNodes.forEach((div, index) => {
@@ -11158,7 +11158,7 @@ class BaseViewer {
   }) {
     if (this.pageViewMode === "single") {
       this._pages.forEach(() => {
-        pageDiv.style.display = "block";
+        pageDiv.style.display = "inline-block";
       });
     }
 

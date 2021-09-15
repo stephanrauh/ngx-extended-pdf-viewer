@@ -296,4 +296,5 @@
 - 10.0.0-alpha.9 #889 fixed two-way binding for text areas in PDF forms
 - 10.0.0-alpha.10 #879 improved presentation mode; #881 In single-page mode, the first and the last page are now centered, even if they are displayed as a single page despite `[spread]="'even'" (or 'odd'), and even after zooming; #890 display multiple search results correctly
 - 10.0.0-alpha.11 #813 potentially breaking change: relative paths of `[src]` now are relative the the base href; former versions were relative to the current URL, which led to confusing bugs; #911 better support for Windows touch screens
+- 10.0.0-beta.1 #930 always center the first and last page in single-page-mode
 

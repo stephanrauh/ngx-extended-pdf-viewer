@@ -144,7 +144,11 @@ export class PDFPageView implements IRenderableView {
         keepXfaLayer?: boolean | undefined;
     }): void;
     loadingIconDiv: HTMLDivElement | undefined;
-    update(scale: any, rotation: any, optionalContentConfigPromise?: any): void;
+    update({ scale, rotation, optionalContentConfigPromise }: {
+        scale?: number | undefined;
+        rotation?: any;
+        optionalContentConfigPromise?: any;
+    }, ...args: any[]): void;
     /**
      * PLEASE NOTE: Most likely you want to use the `this.reset()` method,
      *              rather than calling this one directly.

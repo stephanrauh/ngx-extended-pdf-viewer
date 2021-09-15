@@ -14105,7 +14105,7 @@ var BaseViewer = /*#__PURE__*/function () {
           var showIt = page.id === _this2.currentPageNumber;
 
           if (showIt) {
-            page.div.style.display = "block";
+            page.div.style.display = "inline-block";
 
             if (page.div.parentElement.classList.contains("spread")) {
               page.div.parentElement.childNodes.forEach(function (div, index) {
@@ -14619,7 +14619,7 @@ var BaseViewer = /*#__PURE__*/function () {
 
       if (this.pageViewMode === "single") {
         this._pages.forEach(function () {
-          pageDiv.style.display = "block";
+          pageDiv.style.display = "inline-block";
         });
       }
 
