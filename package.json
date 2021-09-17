@@ -33,7 +33,7 @@
     "@angular-devkit/build-angular": "^12.2.5",
     "@angular/cli": "^12.2.5",
     "@angular/compiler-cli": "^12.2.5",
-    "@types/node": "^16.9.1",
+    "@types/node": "^16.9.2",
     "caniuse-lite": "^1.0.30001257",
     "codelyzer": "^6.0.2",
     "ng-packagr": "~12.0.8",
