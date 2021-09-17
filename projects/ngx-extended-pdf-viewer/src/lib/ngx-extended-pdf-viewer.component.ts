@@ -643,9 +643,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     private location: Location,
     private elementRef: ElementRef,
     @Inject(APP_BASE_HREF) public baseHref: string
-  ) {
-    console.log(baseHref);
-  }
+  ) { }
 
   private iOSVersionRequiresES5(): boolean {
     const match = navigator.appVersion.match(/OS (\d+)_(\d+)_?(\d+)?/);
@@ -922,7 +920,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         PDFViewerApplicationOptions.set('pageViewMode', this.pageViewMode);
         PDFViewerApplicationOptions.set('verbosity', this.logLevel);
         PDFViewerApplicationOptions.set('initialZoom', this.zoom);
-        // PDFViewerApplicationOptions.set('basepath', this.baseHref);
 
         PDFViewerApplication.isViewerEmbedded = true;
         if (PDFViewerApplication.printKeyDownListener) {
@@ -1419,6 +1416,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         };
       }
     }
+    options.baseHref = this.baseHref;
     PDFViewerApplication.open(this._src, options).then(
       () => {
         this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount });
