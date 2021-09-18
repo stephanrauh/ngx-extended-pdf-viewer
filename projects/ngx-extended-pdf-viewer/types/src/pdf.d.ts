@@ -1,3 +1,7 @@
+export type PDFDocumentLoadingTask = import("./display/api").PDFDocumentLoadingTask;
+export type PDFDocumentProxy = import("./display/api").PDFDocumentProxy;
+export type PDFPageProxy = import("./display/api").PDFPageProxy;
+export type RenderTask = import("./display/api").RenderTask;
 import { addLinkAttributes } from "./display/display_utils.js";
 import { getFilenameFromUrl } from "./display/display_utils.js";
 import { getPdfFilenameFromUrl } from "./display/display_utils.js";

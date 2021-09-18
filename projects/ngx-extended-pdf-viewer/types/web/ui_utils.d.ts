@@ -87,6 +87,11 @@ export function apiPageModeToSidebarView(mode: string): number;
  *                   the second one is a denominator.
  */
 export function approximateFraction(x: number): any[];
+/**
+ * NOTE: Only used to support various PDF viewer tests in `mozilla-central`.
+ */
+export class AutomationEventBus extends EventBus {
+}
 export const AutoPrintRegExp: RegExp;
 /**
  * Helper function for getVisibleElements.
@@ -118,9 +123,7 @@ export const DEFAULT_SCALE_VALUE: "auto";
  * and `off` methods. To raise an event, the `dispatch` method shall be used.
  */
 export class EventBus {
-    constructor(options: any);
     _listeners: any;
-    _isInAutomation: boolean | undefined;
     /**
      * @param {string} eventName
      * @param {function} listener

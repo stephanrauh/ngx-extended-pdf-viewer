@@ -705,6 +705,63 @@ export class PDFDataRangeTransport {
     abort(): void;
 }
 /**
+ * @typedef {Object} OnProgressParameters
+ * @property {number} loaded - Currently loaded number of bytes.
+ * @property {number} total - Total number of bytes in the PDF file.
+ */
+/**
+ * The loading task controls the operations required to load a PDF document
+ * (such as network requests) and provides a way to listen for completion,
+ * after which individual pages can be rendered.
+ */
+export class PDFDocumentLoadingTask {
+    static get idCounters(): any;
+    _capability: import("../shared/util.js").PromiseCapability;
+    _transport: any;
+    _worker: any;
+    /**
+     * Unique identifier for the document loading task.
+     * @type {string}
+     */
+    docId: string;
+    /**
+     * Whether the loading task is destroyed or not.
+     * @type {boolean}
+     */
+    destroyed: boolean;
+    /**
+     * Callback to request a password if a wrong or no password was provided.
+     * The callback receives two parameters: a function that should be called
+     * with the new password, and a reason (see {@link PasswordResponses}).
+     * @type {function}
+     */
+    onPassword: Function;
+    /**
+     * Callback to be able to monitor the loading progress of the PDF file
+     * (necessary to implement e.g. a loading bar).
+     * The callback receives an {@link OnProgressParameters} argument.
+     * @type {function}
+     */
+    onProgress: Function;
+    /**
+     * Callback for when an unsupported feature is used in the PDF document.
+     * The callback receives an {@link UNSUPPORTED_FEATURES} argument.
+     * @type {function}
+     */
+    onUnsupportedFeature: Function;
+    /**
+     * Promise for document loading task completion.
+     * @type {Promise<PDFDocumentProxy>}
+     */
+    get promise(): Promise<PDFDocumentProxy>;
+    /**
+     * Abort all network requests and destroy the worker.
+     * @returns {Promise<void>} A promise that is resolved when destruction is
+     *   completed.
+     */
+    destroy(): Promise<void>;
+}
+/**
  * Proxy to a `PDFDocument` in the worker thread.
  */
 export class PDFDocumentProxy {
@@ -1294,6 +1351,31 @@ export class PDFWorker {
     destroy(): void;
 }
 /**
+ * Allows controlling of the rendering tasks.
+ */
+export class RenderTask {
+    constructor(internalRenderTask: any);
+    _internalRenderTask: any;
+    /**
+     * Callback for incremental rendering -- a function that will be called
+     * each time the rendering is paused.  To continue rendering call the
+     * function that is the first argument to the callback.
+     * @type {function}
+     */
+    onContinue: Function;
+    /**
+     * Promise for rendering task completion.
+     * @type {Promise<void>}
+     */
+    get promise(): Promise<void>;
+    /**
+     * Cancels the rendering task. If the task is currently rendering it will
+     * not be cancelled until graphics pauses with a timeout. The promise that
+     * this object extends will be rejected when cancelled.
+     */
+    cancel(): void;
+}
+/**
  * Sets the function that instantiates an {IPDFStream} as an alternative PDF
  * data transport.
  *
@@ -1310,63 +1392,6 @@ import { OptionalContentConfig } from "./optional_content_config.js";
 import { DOMCanvasFactory } from "./display_utils.js";
 import { DOMCMapReaderFactory } from "./display_utils.js";
 import { DOMStandardFontDataFactory } from "./display_utils.js";
-/**
- * @typedef {Object} OnProgressParameters
- * @property {number} loaded - Currently loaded number of bytes.
- * @property {number} total - Total number of bytes in the PDF file.
- */
-/**
- * The loading task controls the operations required to load a PDF document
- * (such as network requests) and provides a way to listen for completion,
- * after which individual pages can be rendered.
- */
-declare class PDFDocumentLoadingTask {
-    static get idCounters(): any;
-    _capability: import("../shared/util.js").PromiseCapability;
-    _transport: any;
-    _worker: any;
-    /**
-     * Unique identifier for the document loading task.
-     * @type {string}
-     */
-    docId: string;
-    /**
-     * Whether the loading task is destroyed or not.
-     * @type {boolean}
-     */
-    destroyed: boolean;
-    /**
-     * Callback to request a password if a wrong or no password was provided.
-     * The callback receives two parameters: a function that should be called
-     * with the new password, and a reason (see {@link PasswordResponses}).
-     * @type {function}
-     */
-    onPassword: Function;
-    /**
-     * Callback to be able to monitor the loading progress of the PDF file
-     * (necessary to implement e.g. a loading bar).
-     * The callback receives an {@link OnProgressParameters} argument.
-     * @type {function}
-     */
-    onProgress: Function;
-    /**
-     * Callback for when an unsupported feature is used in the PDF document.
-     * The callback receives an {@link UNSUPPORTED_FEATURES} argument.
-     * @type {function}
-     */
-    onUnsupportedFeature: Function;
-    /**
-     * Promise for document loading task completion.
-     * @type {Promise<PDFDocumentProxy>}
-     */
-    get promise(): Promise<PDFDocumentProxy>;
-    /**
-     * Abort all network requests and destroy the worker.
-     * @returns {Promise<void>} A promise that is resolved when destruction is
-     *   completed.
-     */
-    destroy(): Promise<void>;
-}
 import { AnnotationStorage } from "./annotation_storage.js";
 import { info } from "../shared/util.js";
 import { Metadata } from "./metadata.js";
@@ -1399,31 +1424,6 @@ declare class PDFObjects {
      */
     resolve(objId: any, data: any): void;
     clear(): void;
-}
-/**
- * Allows controlling of the rendering tasks.
- */
-declare class RenderTask {
-    constructor(internalRenderTask: any);
-    _internalRenderTask: any;
-    /**
-     * Callback for incremental rendering -- a function that will be called
-     * each time the rendering is paused.  To continue rendering call the
-     * function that is the first argument to the callback.
-     * @type {function}
-     */
-    onContinue: Function;
-    /**
-     * Promise for rendering task completion.
-     * @type {Promise<void>}
-     */
-    get promise(): Promise<void>;
-    /**
-     * Cancels the rendering task. If the task is currently rendering it will
-     * not be cancelled until graphics pauses with a timeout. The promise that
-     * this object extends will be rejected when cancelled.
-     */
-    cancel(): void;
 }
 import { MessageHandler } from "../shared/message_handler.js";
 export {};
