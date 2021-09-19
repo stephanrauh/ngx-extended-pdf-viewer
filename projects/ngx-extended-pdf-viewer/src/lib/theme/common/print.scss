@@ -1,4 +1,8 @@
 @media print {
+  #printContainer {
+    position: static;
+  }
+
   body,
   html {
     overflow-y: visible !important;
