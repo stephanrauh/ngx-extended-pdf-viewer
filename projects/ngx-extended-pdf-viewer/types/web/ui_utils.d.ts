@@ -117,6 +117,7 @@ export function backtrackBeforeAllVisibleElements(index: number, views: any[], t
 export function binarySearchFirstItem(items: any, condition: any): number;
 export const CSS_UNITS: number;
 export const DEFAULT_SCALE: 1;
+export const DEFAULT_SCALE_DELTA: 1.1;
 export const DEFAULT_SCALE_VALUE: "auto";
 /**
  * Simple event bus for an application. Listeners are attached using the `on`

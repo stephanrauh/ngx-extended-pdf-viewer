@@ -459,6 +459,16 @@ export class BaseViewer {
      * @returns {boolean} Whether navigation occured.
      */
     previousPage(): boolean;
+    /**
+     * Increase the current zoom level one, or more, times.
+     * @param {number} [steps] - Defaults to zooming once.
+     */
+    increaseScale(steps?: number | undefined): void;
+    /**
+     * Decrease the current zoom level one, or more, times.
+     * @param {number} [steps] - Defaults to zooming once.
+     */
+    decreaseScale(steps?: number | undefined): void;
 }
 import { PDFRenderingQueue } from "./pdf_rendering_queue.js";
 import { PageFlip } from "./page-flip.module.js";
