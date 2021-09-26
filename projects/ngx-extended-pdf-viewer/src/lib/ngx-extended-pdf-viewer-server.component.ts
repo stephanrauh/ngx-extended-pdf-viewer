@@ -180,6 +180,9 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   @Input()
   public backgroundColor = '#e8e8eb';
 
+  @Input()
+  public pdfBackgroundColor = '#FFF';
+
   /** Allows the user to define the name of the file after clicking "download" */
   @Input()
   public filenameForDownload = 'document.pdf';

@@ -299,3 +299,4 @@
 - 10.0.0-beta.1 #930 always center the first and last page in single-page-mode
 - 10.0.0-beta.2 #929/#813 use the base href also for files loaded by modifying `[src]` (previously, only the first file was displayed properly); #907 remove the `?file=` query path option because it doesn't play well with `[src]`
 - 10.0.0 #923 stop removing the # from the URL; #929 / #813 fixed drag'n'drop; #914 enable pinch gestures on mobile devices
+- 10.0.1 #716 / #947 render the pages in book mode more reliably; #916 added `[pdfBackgroundColor]` to render the PDF file with a custom paper color (work in progress)

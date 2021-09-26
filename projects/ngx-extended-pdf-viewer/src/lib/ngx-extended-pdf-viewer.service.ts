@@ -249,6 +249,7 @@ export class NgxExtendedPdfViewerService {
     const renderContext = {
       canvasContext: ctx,
       viewport: drawViewport,
+      background: 'rgba(255, 0, 255, 0.3)'
     };
     const renderTask = pdfPage.render(renderContext);
 
