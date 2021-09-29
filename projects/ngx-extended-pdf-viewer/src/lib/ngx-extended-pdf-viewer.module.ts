@@ -2,7 +2,7 @@ import { NgxExtendedPdfViewerCommonModule } from './ngx-extended-pdf-viewer-comm
 import { PdfHandToolComponent } from './toolbar/pdf-hand-tool/pdf-hand-tool.component';
 // tslint:disable:max-line-length
 
-import { APP_BASE_HREF, CommonModule, Location, LocationStrategy, PathLocationStrategy, PlatformLocation } from '@angular/common';
+import { CommonModule} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
 import { NgModule } from '@angular/core';
@@ -175,20 +175,14 @@ if (typeof window !== 'undefined') {
   (window as any).isKeyIgnored = isKeyIgnored;
 }
 
-export function getBaseHref(platformLocation: PlatformLocation): string {
-  return platformLocation.getBaseHrefFromDOM();
-}
+
 
 @NgModule({
   imports: [NgxExtendedPdfViewerCommonModule, CommonModule, FormsModule],
   declarations: [
     NgxExtendedPdfViewerComponent,
   ],
-  providers: [{
-    provide: APP_BASE_HREF,
-    useFactory: getBaseHref,
-    deps: [PlatformLocation]
-  }],
+
   exports: [
     PdfZoomDropdownComponent,
     PdfContextMenuComponent,

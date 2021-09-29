@@ -15,7 +15,7 @@ import {
   ViewChild,
   OnInit,
 } from '@angular/core';
-import { APP_BASE_HREF } from '@angular/common';
+import { PlatformLocation } from '@angular/common';
 import { PagesLoadedEvent } from './events/pages-loaded-event';
 import { PageRenderedEvent } from './events/page-rendered-event';
 import { PdfDownloadedEvent } from './events/pdf-downloaded-event';
@@ -126,6 +126,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public formDataChange = new EventEmitter<FormDataType>();
 
   public _pageViewMode: PageViewModeType = 'multiple';
+
+  public baseHref: string;
 
   public get pageViewMode(): PageViewModeType {
     return this._pageViewMode;
@@ -645,8 +647,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     private notificationService: PDFNotificationService,
     private location: Location,
     private elementRef: ElementRef,
-    @Inject(APP_BASE_HREF) public baseHref: string
-  ) { }
+    private platformLocation: PlatformLocation
+  ) {
+    this.baseHref = this.platformLocation.getBaseHrefFromDOM();
+  }
 
   private iOSVersionRequiresES5(): boolean {
     const match = navigator.appVersion.match(/OS (\d+)_(\d+)_?(\d+)?/);
