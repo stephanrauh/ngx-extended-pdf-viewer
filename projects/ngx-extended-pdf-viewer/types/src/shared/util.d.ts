@@ -185,10 +185,11 @@ export function createPromiseCapability(): PromiseCapability;
  * Attempts to create a valid absolute URL.
  *
  * @param {URL|string} url - An absolute, or relative, URL.
- * @param {URL|string} baseUrl - An absolute URL.
+ * @param {URL|string} [baseUrl] - An absolute URL.
+ * @param {Object} [options]
  * @returns Either a valid {URL}, or `null` otherwise.
  */
-export function createValidAbsoluteUrl(url: URL | string, baseUrl: URL | string): URL | null;
+export function createValidAbsoluteUrl(url: URL | string, baseUrl?: string | URL | undefined, options?: Object | undefined): URL | null;
 export namespace DocumentActionEventType {
     const WC: string;
     const WS: string;

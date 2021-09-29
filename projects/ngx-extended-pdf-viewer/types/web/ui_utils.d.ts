@@ -115,7 +115,6 @@ export function backtrackBeforeAllVisibleElements(index: number, views: any[], t
  *                   or |items.length| if no such element exists.
  */
 export function binarySearchFirstItem(items: any, condition: any): number;
-export const CSS_UNITS: number;
 export const DEFAULT_SCALE: 1;
 export const DEFAULT_SCALE_DELTA: 1.1;
 export const DEFAULT_SCALE_VALUE: "auto";
@@ -137,7 +136,11 @@ export class EventBus {
      * @param {Object} [options]
      */
     off(eventName: string, listener: Function, options?: Object | undefined): void;
-    dispatch(eventName: any, ...args: any[]): void;
+    /**
+     * @param {string} eventName
+     * @param {Object} data
+     */
+    dispatch(eventName: string, data: Object): void;
     /**
      * @ignore
      */

@@ -139,6 +139,9 @@ export class BaseViewer {
         down: boolean;
         lastX: any;
         lastY: any;
+        /**
+         * Simple viewer control to display PDF content/pages.
+         */
         _eventHandler: (evt: any) => void;
     };
     presentationModeState: number;
@@ -388,9 +391,13 @@ export class BaseViewer {
      * @param {boolean} [enableScripting]
      * @param {Promise<boolean>} [hasJSActionsPromise]
      * @param {Object} [mouseState]
+     * @param {Promise<Object<string, Array<Object>> | null>}
+     *   [fieldObjectsPromise]
      * @returns {AnnotationLayerBuilder}
      */
-    createAnnotationLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any, annotationStorage?: any, imageResourcesPath?: string | undefined, renderForms?: boolean, l10n?: any, enableScripting?: boolean | undefined, hasJSActionsPromise?: Promise<boolean> | undefined, mouseState?: Object | undefined): AnnotationLayerBuilder;
+    createAnnotationLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any, annotationStorage?: any, imageResourcesPath?: string | undefined, renderForms?: boolean, l10n?: any, enableScripting?: boolean | undefined, hasJSActionsPromise?: Promise<boolean> | undefined, mouseState?: Object | undefined, fieldObjectsPromise?: Promise<{
+        [x: string]: Object[];
+    } | null> | undefined): AnnotationLayerBuilder;
     /**
      * @param {HTMLDivElement} pageDiv
      * @param {PDFPage} pdfPage

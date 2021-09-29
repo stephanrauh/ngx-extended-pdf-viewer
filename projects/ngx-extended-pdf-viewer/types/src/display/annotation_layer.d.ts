@@ -15,6 +15,7 @@ export type AnnotationElementParameters = {
     svgFactory: Object;
     enableScripting?: boolean | undefined;
     hasJSActions?: boolean | undefined;
+    fieldObjects?: Object | undefined;
     mouseState?: Object | undefined;
 };
 export type AnnotationLayerParameters = {

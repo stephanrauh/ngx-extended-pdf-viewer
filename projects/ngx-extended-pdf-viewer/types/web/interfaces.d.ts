@@ -43,9 +43,13 @@ export class IPDFAnnotationLayerFactory {
      * @param {boolean} [enableScripting]
      * @param {Promise<boolean>} [hasJSActionsPromise]
      * @param {Object} [mouseState]
+     * @param {Promise<Object<string, Array<Object>> | null>}
+     *   [fieldObjectsPromise]
      * @returns {AnnotationLayerBuilder}
      */
-    createAnnotationLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any, annotationStorage?: any, imageResourcesPath?: string | undefined, renderForms?: boolean, l10n?: IL10n, enableScripting?: boolean | undefined, hasJSActionsPromise?: Promise<boolean> | undefined, mouseState?: Object | undefined): any;
+    createAnnotationLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any, annotationStorage?: any, imageResourcesPath?: string | undefined, renderForms?: boolean, l10n?: IL10n, enableScripting?: boolean | undefined, hasJSActionsPromise?: Promise<boolean> | undefined, mouseState?: Object | undefined, fieldObjectsPromise?: Promise<{
+        [x: string]: Object[];
+    } | null> | undefined): any;
 }
 /**
  * @interface

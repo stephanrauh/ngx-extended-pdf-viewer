@@ -984,11 +984,13 @@ export class PDFDocumentProxy {
      */
     saveDocument(): Promise<Uint8Array>;
     /**
-     * @returns {Promise<Array<Object> | null>} A promise that is resolved with an
-     *   {Array<Object>} containing /AcroForm field data for the JS sandbox,
-     *   or `null` when no field data is present in the PDF file.
+     * @returns {Promise<Object<string, Array<Object>> | null>} A promise that is
+     *   resolved with an {Object} containing /AcroForm field data for the JS
+     *   sandbox, or `null` when no field data is present in the PDF file.
      */
-    getFieldObjects(): Promise<Array<Object> | null>;
+    getFieldObjects(): Promise<{
+        [x: string]: Array<Object>;
+    } | null>;
     /**
      * @returns {Promise<boolean>} A promise that is resolved with `true`
      *   if some /AcroForm fields have JavaScript actions.
