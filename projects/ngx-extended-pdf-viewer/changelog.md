@@ -301,3 +301,4 @@
 - 10.0.0 #923 stop removing the # from the URL; #929 / #813 fixed drag'n'drop; #914 enable pinch gestures on mobile devices
 - 10.0.1 #716 / #947 render the pages in book mode more reliably; #916 added `[pdfBackgroundColor]` to render the PDF file with a custom paper color (work in progress)
 - 10.0.2 Warning: form support is broken in the bleeding-edge branch! Also see #995. It's going to be fixed ASAP. Bugfixes: #940 stop prepending the base URL to the hash when using hash-based routing
+- 10.1.0 #995 fixed form support of the bleeding-edge branch; updated CSS; extracted several CSS files to make uptdating pdf.js easier; prepared the update to pdf.js 2.11

@@ -1858,8 +1858,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     } else {
       this.formData[key] = value;
     }
-
-    this.formDataChange.emit(this.formData);
+    this.ngZone.run(() => this.formDataChange.emit(this.formData));
   }
 
   public assignFormIdAndFieldName(key: string, fieldName: string | boolean, radioButtonField?: string): void {
