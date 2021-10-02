@@ -4,7 +4,6 @@ import { PdfHandToolComponent } from './toolbar/pdf-hand-tool/pdf-hand-tool.comp
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 import { PdfBookmarkComponent } from './toolbar/pdf-bookmark/pdf-bookmark.component';
 import { PdfContextMenuComponent } from './toolbar/pdf-context-menu/pdf-context-menu.component';
 import { PdfDocumentPropertiesOverlayComponent } from './document-properties/pdf-document-properties-overlay/pdf-document-properties-overlay.component';
@@ -111,7 +110,7 @@ import { NgxConsole } from './options/ngx-console';
     PdfLightThemeComponent,
     TranslatePipe,
   ],
-  providers: [NgxExtendedPdfViewerService, PDFNotificationService, Location],
+  providers: [PDFNotificationService, Location],
   exports: [
     PdfZoomDropdownComponent,
     PdfContextMenuComponent,

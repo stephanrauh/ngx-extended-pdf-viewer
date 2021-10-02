@@ -49,6 +49,7 @@ import { PdfZoomToolbarComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-too
 import { PdfSelectToolComponent } from './toolbar/pdf-select-tool/pdf-select-tool.component';
 import { PdfSidebarContentComponent } from './sidebar/pdf-sidebar/pdf-sidebar-content/pdf-sidebar-content.component';
 import { PdfSidebarToolbarComponent } from './sidebar/pdf-sidebar/pdf-sidebar-toolbar/pdf-sidebar-toolbar.component';
+import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 if (!Promise['allSettled']) {
   if (!!window['Zone'] && !window['__zone_symbol__Promise.allSettled']) {
     console.error(
@@ -182,7 +183,7 @@ if (typeof window !== 'undefined') {
   declarations: [
     NgxExtendedPdfViewerComponent,
   ],
-
+  providers: [NgxExtendedPdfViewerService],
   exports: [
     PdfZoomDropdownComponent,
     PdfContextMenuComponent,

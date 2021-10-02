@@ -2,18 +2,13 @@
   "name": "ngx-pdf-viewer-demo",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve --deployUrl=/path/ --host 10.0.1.3 --disable-host-check",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e",
+    "start": "npm run showcase && cd ../extended-pdf-viewer && ng s -o",
+    "build": "npm run showcase",
     "unix-package": "ng b ngx-extended-pdf-viewer && rm -r dist && ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json",
     "showcase": "npm run unix-package && rm -r ../extended-pdf-viewer-showcase/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../extended-pdf-viewer-showcase/node_modules/ngx-extended-pdf-viewer",
-    "issue": "npm run unix-package && rm -r ../ngx-extended-pdf-viewer-issues/issue914/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../ngx-extended-pdf-viewer-issues/issue914/node_modules/ngx-extended-pdf-viewer",
+    "issue": "npm run unix-package && rm -r ../ngx-extended-pdf-viewer-issues/issue609/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../ngx-extended-pdf-viewer-issues/issue609/node_modules/ngx-extended-pdf-viewer",
     "win-package": "ng b ngx-extended-pdf-viewer && rmdir dist /S && ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json",
-    "release": "npm run unix-package && cd dist/ngx-extended-pdf-viewer && npm publish && cd .. && cd .. && ./createTag.sh && node ./increase-version-number.js",
-    "cypress": "./node_modules/.bin/cypress open"
+    "release": "npm run unix-package && cd dist/ngx-extended-pdf-viewer && npm publish && cd .. && cd .. && ./createTag.sh && node ./increase-version-number.js"
   },
   "private": true,
   "dependencies": {

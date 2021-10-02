@@ -48,13 +48,14 @@ import { PdfSidebarContentComponent } from './sidebar/pdf-sidebar/pdf-sidebar-co
 import { PdfSidebarToolbarComponent } from './sidebar/pdf-sidebar/pdf-sidebar-toolbar/pdf-sidebar-toolbar.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer-server.service';
 
 @NgModule({
   imports: [NgxExtendedPdfViewerCommonModule, CommonModule, FormsModule],
   declarations: [
     NgxExtendedPdfViewerServerComponent,
   ],
-  providers: [],
+  providers: [NgxExtendedPdfViewerService],
   exports: [
     PdfZoomDropdownComponent,
     PdfContextMenuComponent,
