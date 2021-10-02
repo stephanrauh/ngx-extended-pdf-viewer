@@ -1,6 +1,0 @@
-Files takesn from https://www.princexml.com/samples/. They are published under a CC Attribution 4.0 International license (see https://github.com/yeslogic/prince-samples/blob/master/LICENSE.md)
-- fancy.pdf
-- icelandig-dictionary.pdf
-- invoicesample.pdf
-- magic.pdf
-- somatosensory.pdf
