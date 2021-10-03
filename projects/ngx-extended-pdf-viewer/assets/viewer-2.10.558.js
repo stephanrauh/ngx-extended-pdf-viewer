@@ -15642,31 +15642,20 @@ exports.PDFPageView = PDFPageView;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.default = void 0;
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
+exports["default"] = void 0;
 
 function ownKeys(object, enumerableOnly) {
   var keys = Object.keys(object);
 
   if (Object.getOwnPropertySymbols) {
     var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
+
+    if (enumerableOnly) {
+      symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      });
+    }
+
     keys.push.apply(keys, symbols);
   }
 
@@ -15691,6 +15680,21 @@ function _objectSpread2(target) {
   }
 
   return target;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
 }
 
 function _objectWithoutPropertiesLoose(source, excluded) {
@@ -15750,7 +15754,7 @@ function _iterableToArray(iter) {
 }
 
 function _iterableToArrayLimit(arr, i) {
-  var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]);
+  var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
 
   if (_i == null) return;
   var _arr = [];
@@ -15865,6 +15869,7 @@ var testSizes = {
   height: [8388607, 65535, 32767, 16384, 8192, 4096, 1],
   width: [4194303, 65535, 32767, 16384, 8192, 4096, 1]
 };
+var _excluded = ["onError", "onSuccess"];
 var defaults = {
   max: null,
   min: 1,
@@ -15912,7 +15917,7 @@ function handleMethod(settings) {
 
   var _onError = settings.onError,
       _onSuccess = settings.onSuccess,
-      settingsWithoutCallbacks = _objectWithoutProperties(settings, ["onError", "onSuccess"]);
+      settingsWithoutCallbacks = _objectWithoutProperties(settings, _excluded);
 
   var worker = null;
 
@@ -16072,8 +16077,7 @@ var canvasSize = {
     return handleMethod(settings);
   }
 };
-var _default = canvasSize;
-exports.default = _default;
+exports["default"] = canvasSize;
 
 /***/ }),
 /* 36 */

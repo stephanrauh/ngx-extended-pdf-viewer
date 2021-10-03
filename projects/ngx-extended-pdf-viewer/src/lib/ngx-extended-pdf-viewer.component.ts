@@ -48,6 +48,7 @@ import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
 import { ProgressBarEvent } from './events/progress-bar-event';
 import { UnitToPx } from './unit-to-px';
 import { PageRenderEvent } from './events/page-render-event';
+import { Annotation } from './Annotation';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 declare class ResizeObserver {
@@ -706,6 +707,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       widget.appendChild(link);
       (window as any).getFormValue = (key: string) => this.getFormValue(key);
       (window as any).setFormValue = (key: string, value: string) => this.setFormValue(key, value);
+      (window as any).registerAcroformAnnotations = (sortedAnnotations) => this.registerAcroformAnnotations(sortedAnnotations);
       (window as any).assignFormIdAndFieldName = (key: string, fieldName: string, radioButtonField?: string) =>
         this.assignFormIdAndFieldName(key, fieldName, radioButtonField);
 
@@ -928,7 +930,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         PDFViewerApplicationOptions.set('verbosity', this.logLevel);
         PDFViewerApplicationOptions.set('initialZoom', this.zoom);
         PDFViewerApplicationOptions.set('pdfBackgroundColor', this.pdfBackgroundColor);
-
 
         PDFViewerApplication.isViewerEmbedded = true;
         if (PDFViewerApplication.printKeyDownListener) {
@@ -1445,6 +1446,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
     (window as any).getFormValue = undefined;
     (window as any).setFormValue = undefined;
+    (window as any).registerAcroformAnnotations = undefined;
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     this.shuttingDown = true;
 
@@ -1843,7 +1845,30 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
   }
 
+  public registerAcroformAnnotations(sortedAnnotations: Array<Annotation>): void {
+    let ids: { [key: string]: Annotation } = {};
+    let duplicates: { [key: string]: Annotation } = {};
+    for (let a of sortedAnnotations) {
+      if (a.fieldName) {
+        if (ids[a.fieldName]) {
+          duplicates[a.fieldName] = a;
+        }
+        ids[a.fieldName] = a;
+      }
+    }
+    for (let a of sortedAnnotations) {
+      if (a.fieldName && duplicates[a.fieldName]) {
+        this.formIdToFieldName[a.id] = a.fieldName;
+      }
+    }
+  }
+
   public getFormValue(key: string): Object {
+    if (this.formData[key] === undefined) {
+      if (key.includes("/")) {
+        key = key.split("/")[0];
+      }
+    }
     return { value: this.formData[key] };
   }
 

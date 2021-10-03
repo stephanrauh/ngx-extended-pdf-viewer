@@ -92,6 +92,12 @@ export class IPDFLinkService {
      */
     goToPage(val: number | string): void;
     /**
+     * @param {HTMLAnchorElement} link
+     * @param {string} url
+     * @param {boolean} [newWindow]
+     */
+    addLinkAttributes(link: HTMLAnchorElement, url: string, newWindow?: boolean | undefined): void;
+    /**
      * @param dest - The PDF destination object.
      * @returns {string} The hyperlink to the PDF object.
      */
@@ -155,9 +161,11 @@ export class IPDFXfaLayerFactory {
     /**
      * @param {HTMLDivElement} pageDiv
      * @param {PDFPage} pdfPage
+     * @param {AnnotationStorage} [annotationStorage]
+     * @param {Object} [xfaHtml]
      * @returns {XfaLayerBuilder}
      */
-    createXfaLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any): any;
+    createXfaLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any, annotationStorage?: any, xfaHtml?: Object | undefined): any;
 }
 /**
  * @interface

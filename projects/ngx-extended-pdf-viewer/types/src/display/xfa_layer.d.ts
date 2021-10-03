@@ -1,6 +1,12 @@
 export class XfaLayer {
     static setupStorage(html: any, id: any, element: any, storage: any, intent: any): void;
-    static setAttributes(html: any, element: any, storage: any, intent: any): void;
+    static setAttributes({ html, element, storage, intent, linkService }: {
+        html: any;
+        element: any;
+        storage?: any;
+        intent: any;
+        linkService: any;
+    }): void;
     static render(parameters: any): {
         textDivs: Text[];
     };

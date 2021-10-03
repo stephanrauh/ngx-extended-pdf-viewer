@@ -10443,6 +10443,10 @@ class AnnotationLayer {
       sortedAnnotations.push(...popupAnnotations);
     }
 
+    if (window.registerAcroformAnnotations) {
+      window.registerAcroformAnnotations(sortedAnnotations);
+    }
+
     for (const data of sortedAnnotations) {
       const element = AnnotationElementFactory.create({
         data,
