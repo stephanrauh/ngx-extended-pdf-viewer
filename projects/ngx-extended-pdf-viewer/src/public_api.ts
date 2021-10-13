@@ -13,6 +13,7 @@ export * from './lib/pdf-document-properties-extractor';
 export * from './lib/options/pdf-default-options';
 export * from './lib/events/find-result';
 export * from './lib/options/link-target';
+export * from './lib/events/file-input-changed';
 export * from './lib/events/pages-loaded-event';
 export * from './lib/events/page-number-change';
 export * from './lib/events/page-rendered-event';
@@ -78,3 +79,4 @@ export * from './lib/options/pdf-viewer-application';
 export * from './lib/options/pdf-viewer-app-config';
 export * from './lib/options/pdf-viewer';
 export * from './lib/toolbar/pdf-rotate-page/pdf-rotate-page.component';
+

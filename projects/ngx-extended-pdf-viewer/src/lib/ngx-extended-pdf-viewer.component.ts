@@ -676,24 +676,27 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   private loadViewer(): void {
-    if (!window['pdfjs-dist/build/pdf']) {
-      setTimeout(() => this.loadViewer(), 25);
-    } else {
-      let needsES5 = this.needsES5();
-      const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
-      const script2 = document.createElement('script');
-      const assets = pdfDefaultOptions.assetsFolder;
-      const versionSuffix = getVersionSuffix(assets);
+    this.ngZone.runOutsideAngular(() => {
+      if (!window['pdfjs-dist/build/pdf']) {
+        setTimeout(() => this.loadViewer(), 25);
+      } else {
+        let needsES5 = this.needsES5();
+        const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
+        const script2 = document.createElement('script');
+        const assets = pdfDefaultOptions.assetsFolder;
+        const versionSuffix = getVersionSuffix(assets);
 
-      if (needsES5) {
-        console.log('Using the ES5 version of the PDF viewer.');
+        if (needsES5) {
+          console.log('Using the ES5 version of the PDF viewer.');
+        }
+
+        script2.src = this.location.normalize(needsES5 ? assets + '/viewer-' + versionSuffix + '-es5' + suffix : assets + '/viewer-' + versionSuffix + suffix);
+        script2.type = 'text/javascript';
+        script2.async = true;
+        document.getElementsByTagName('head')[0].appendChild(script2);
       }
+    })
 
-      script2.src = this.location.normalize(needsES5 ? assets + '/viewer-' + versionSuffix + '-es5' + suffix : assets + '/viewer-' + versionSuffix + suffix);
-      script2.type = 'text/javascript';
-      script2.async = true;
-      document.getElementsByTagName('head')[0].appendChild(script2);
-    }
   }
 
   ngOnInit() {
@@ -1352,9 +1355,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
         options.baseHref = this.baseHref;
         PDFViewerApplication.onError = (error: Error) => this.pdfLoadingFailed.emit(error);
-        PDFViewerApplication.open(this._src, options).then(() => {
-          this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount });
-          setTimeout(async () => await this.setZoom());
+        this.ngZone.runOutsideAngular(() => {
+          PDFViewerApplication.open(this._src, options).then(() => {
+            this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount });
+            setTimeout(async () => await this.setZoom());
+          });
         });
       }
       setTimeout(() => {

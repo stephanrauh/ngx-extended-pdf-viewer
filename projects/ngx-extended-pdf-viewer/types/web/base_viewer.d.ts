@@ -179,6 +179,13 @@ export class BaseViewer {
      */
     private _setCurrentPageNumber;
     _currentPageNumber: any;
+    /**
+     * Adds a page to the rendering queue
+     * @param {number} pageIndex Index of the page to render
+     * @returns {boolean} false, if the page has already been rendered
+     * or if it's out of range
+     */
+    addPageToRenderQueue(pageIndex?: number): boolean;
     ensureAdjecentPagesAreLoaded(): void;
     /**
      * @param {string} val - The page label.

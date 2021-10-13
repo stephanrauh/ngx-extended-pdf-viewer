@@ -16,6 +16,7 @@ export interface FindController {
   _pageMatchesColor: Array<number>;
   _pageMatchesLength: Array<number>;
 }
+
 export interface IPDFViewerApplication {
   appConfig: IPDFViewerAppConfig;
   _boundEvents: any;
@@ -42,8 +43,7 @@ export interface IPDFViewerApplication {
   cleanup(): void; // until pdf.js 2.7
   _cleanup(): void; // since pdf.js 2.8
   close(): void;
-  open(source: string | ArrayBuffer | {range: any} | any, options?: any): Promise<any>;
+  open(source: string | ArrayBuffer | { range: any } | any, options?: any): Promise<any>;
   unbindEvents(): void;
   unbindWindowEvents(): void;
 }
-

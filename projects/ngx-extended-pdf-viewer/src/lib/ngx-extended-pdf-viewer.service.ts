@@ -307,4 +307,40 @@ export class NgxExtendedPdfViewerService {
     }
     return result;
   }
+
+  /**
+   * Adds a page to the rendering queue
+   * @param {number} pageIndex Index of the page to render
+   * @returns {boolean} false, if the page has already been rendered
+   * or if it's out of range
+   */
+  public addPageToRenderQueue(pageIndex: number): boolean {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    return PDFViewerApplication.pdfViewer.addPageToRenderQueue(pageIndex);
+  }
+
+  public isRenderQueueEmpty(): boolean {
+    const scrolledDown = true;
+    const renderExtra = false;
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const nextPage = PDFViewerApplication.pdfViewer.renderingQueue.getHighestPriority(PDFViewerApplication.pdfViewer._getVisiblePages(), PDFViewerApplication.pdfViewer._pages, scrolledDown, renderExtra);
+    return !nextPage;
+  }
+
+  public hasPageBeenRendered(pageIndex: number): boolean {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const pages = PDFViewerApplication.pdfViewer._pages;
+    if (pages.length > pageIndex && pageIndex >= 0) {
+      const pageView = pages[pageIndex];
+      const isLoading = pageView.div.querySelector(".loadingIcon");
+      return isLoading;
+    }
+    return false;
+  }
+
+  public numberOfPages(): number {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const pages = PDFViewerApplication.pdfViewer._pages;
+    return pages.length;
+  }
 }
