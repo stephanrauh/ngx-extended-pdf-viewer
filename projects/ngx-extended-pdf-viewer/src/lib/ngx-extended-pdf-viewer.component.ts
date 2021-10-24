@@ -1251,8 +1251,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       });
       PDFViewerApplication.eventBus.on('fileinputchange', (x: FileInputChanged) => {
         this.ngZone.run(() => {
-          const path = x.fileInput.value.replace('C:\\fakepath\\', '');
-          this.srcChange.emit(path);
+          if (x.fileInput.files && x.fileInput.files.length >= 1) {
+            // drag and drop
+            this.srcChange.emit(x.fileInput.files[0].name);
+          } else {
+            // regular file open dialog
+            const path = x.fileInput?.value?.replace('C:\\fakepath\\', '');
+            this.srcChange.emit(path);
+          }
         });
       });
       PDFViewerApplication.eventBus.on('cursortoolchanged', (x: HandtoolChanged) => {
