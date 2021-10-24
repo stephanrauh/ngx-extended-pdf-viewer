@@ -1,3 +1,4 @@
+import { filter } from 'rxjs';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { PDFPrintRange } from './options/pdf-print-range';
 import { IPDFViewerApplication } from './options/pdf-viewer-application';
@@ -249,7 +250,7 @@ export class NgxExtendedPdfViewerService {
     const renderContext = {
       canvasContext: ctx,
       viewport: drawViewport,
-      background: 'rgba(255, 0, 255, 0.3)'
+//      background: 'rgba(255, 0, 255, 0.3)',
     };
     const renderTask = pdfPage.render(renderContext);
 
@@ -323,7 +324,12 @@ export class NgxExtendedPdfViewerService {
     const scrolledDown = true;
     const renderExtra = false;
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    const nextPage = PDFViewerApplication.pdfViewer.renderingQueue.getHighestPriority(PDFViewerApplication.pdfViewer._getVisiblePages(), PDFViewerApplication.pdfViewer._pages, scrolledDown, renderExtra);
+    const nextPage = PDFViewerApplication.pdfViewer.renderingQueue.getHighestPriority(
+      PDFViewerApplication.pdfViewer._getVisiblePages(),
+      PDFViewerApplication.pdfViewer._pages,
+      scrolledDown,
+      renderExtra
+    );
     return !nextPage;
   }
 
@@ -332,15 +338,28 @@ export class NgxExtendedPdfViewerService {
     const pages = PDFViewerApplication.pdfViewer._pages;
     if (pages.length > pageIndex && pageIndex >= 0) {
       const pageView = pages[pageIndex];
-      const isLoading = pageView.div.querySelector(".loadingIcon");
-      return isLoading;
+      const isLoading = pageView.div.querySelector('.loadingIcon');
+      return !isLoading;
     }
     return false;
+  }
+
+  public currentlyRenderedPages(): Array<number> {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const pages = PDFViewerApplication.pdfViewer._pages;
+    return pages.filter((page) => !page.div.querySelector('.loadingIcon')).map((page) => page.id);
   }
 
   public numberOfPages(): number {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const pages = PDFViewerApplication.pdfViewer._pages;
     return pages.length;
+  }
+
+  public getCurrentlyVisiblePageNumbers(): Array<number> {
+    const app = (window as any).PDFViewerApplication as IPDFViewerApplication;
+    const pages = (app.pdfViewer._getVisiblePages() as any).views as Array<any>;
+    const pageNumbers = pages?.map((page) => page.id);
+    return pageNumbers;
   }
 }
