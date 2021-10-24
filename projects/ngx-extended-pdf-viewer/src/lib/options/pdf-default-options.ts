@@ -23,14 +23,16 @@ export let pdfDefaultOptions = {
   externalLinkRel: 'noopener noreferrer nofollow',
   externalLinkTarget: 0,
   historyUpdateUrl: false,
+  ignoreDestinationZoom: false,
   imageResourcesPath: './images/',
   maxCanvasPixels: 16777216,
   pdfBugEnabled: false,
   rangeChunkSize: 65536,
   removePageBorders: false,
   renderer: 'canvas',
-  renderInteractiveForms: true, // until pdf.js 2.10
-  renderForms: true, // since pdf.js 2.11
+  renderInteractiveForms: true, // renamed - until pdf.js 2.10
+  renderForms: true, // renamed - since pdf.js 2.11
+  enableXfa: true,
   sidebarViewOnLoad: -1,
   scrollModeOnLoad: -1,
   spreadModeOnLoad: -1,
@@ -38,7 +40,7 @@ export let pdfDefaultOptions = {
   useOnlyCssZoom: false,
   viewOnLoad: 0,
   cMapPacked: true,
-  cMapUrl: () => './' + pdfDefaultOptions.assetsFolder + '/cmaps/',
+  cMapUrl: () => `./${pdfDefaultOptions.assetsFolder}/cmaps/`,
   disableAutoFetch: false,
   disableCreateObjectURL: false,
   disableFontFace: false,
