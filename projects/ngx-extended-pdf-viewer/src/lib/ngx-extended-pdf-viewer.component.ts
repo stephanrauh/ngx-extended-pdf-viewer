@@ -662,15 +662,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     return false;
   }
 
-  private needsES5(): Promise<boolean> {
-    return this.checkOpChainingSupport().then(opChainingSupport => {
-      const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
-      const isEdge = /Edge\/\d./i.test(navigator.userAgent);
-      const isIOs13OrBelow = this.iOSVersionRequiresES5();
-      let needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
-      needsES5 = needsES5 || isIE || isEdge || isIOs13OrBelow || !opChainingSupport || !this.ngxBrowserSupportsNullSafeChaining();
-      return needsES5;
-    });
+  private async needsES5(): Promise<boolean> {
+    const opChainingSupport = await this.checkOpChainingSupport();
+    const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
+    const isEdge = /Edge\/\d./i.test(navigator.userAgent);
+    const isIOs13OrBelow = this.iOSVersionRequiresES5();
+    let needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
+    return needsES5 || isIE || isEdge || isIOs13OrBelow || !opChainingSupport || !this.ngxBrowserSupportsNullSafeChaining();
   }
 
   private ngxBrowserSupportsNullSafeChaining(): boolean {
@@ -721,11 +719,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   private loadViewer(): void {
+    window['ngxZone'] = this.ngZone;
     this.ngZone.runOutsideAngular(() => {
       if (!window['pdfjs-dist/build/pdf']) {
         setTimeout(() => this.loadViewer(), 25);
       } else {
-        this.needsES5().then(needsES5 => {
+        this.needsES5().then((needsES5) => {
           if (needsES5) {
             console.log('Using the ES5 version of the PDF viewer.');
           }
@@ -757,22 +756,26 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   private loadPdfJs() {
-    if (!window['pdfjs-dist/build/pdf']) {
-      this.needsES5().then(needsES5 => {
-        if (this.minifiedJSLibraries) {
-          if (!pdfDefaultOptions.workerSrc().endsWith('.min.js')) {
-            const src = pdfDefaultOptions.workerSrc();
-            pdfDefaultOptions.workerSrc = () => src.replace('.js', '.min.js');
+    window['ngxZone'] = this.ngZone;
+    this.ngZone.runOutsideAngular(() => {
+      if (!window['pdfjs-dist/build/pdf']) {
+        this.needsES5().then((needsES5) => {
+          window['ngxZone'] = this.ngZone;
+          if (this.minifiedJSLibraries) {
+            if (!pdfDefaultOptions.workerSrc().endsWith('.min.js')) {
+              const src = pdfDefaultOptions.workerSrc();
+              pdfDefaultOptions.workerSrc = () => src.replace('.js', '.min.js');
+            }
           }
-        }
-        const pdfJsPath = this.getPdfJsPath('pdf', needsES5);
-        const script = this.createScriptElement(pdfJsPath);
-        document.getElementsByTagName('head')[0].appendChild(script);
-      });
-    }
-    if (!(window as any).webViewerLoad) {
-      this.loadViewer();
-    }
+          const pdfJsPath = this.getPdfJsPath('pdf', needsES5);
+          const script = this.createScriptElement(pdfJsPath);
+          document.getElementsByTagName('head')[0].appendChild(script);
+        });
+      }
+      if (!(window as any).webViewerLoad) {
+        this.loadViewer();
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -780,7 +783,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if (!this.shuttingDown) {
         // hurried users sometimes reload the PDF before it has finished initializing
         if ((window as any).webViewerLoad) {
-          this.doInitPDFViewer();
+          this.ngZone.runOutsideAngular(() => this.doInitPDFViewer());
         } else {
           setTimeout(() => this.ngAfterViewInit(), 50);
         }
@@ -944,7 +947,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           }
         }
         this.dummyComponents.addMissingStandardWidgets();
-        (<any>window).webViewerLoad();
+        this.ngZone.runOutsideAngular(() => (<any>window).webViewerLoad());
 
         const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
         PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
@@ -1909,8 +1912,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public getFormValue(key: string): Object {
     if (this.formData[key] === undefined) {
-      if (key.includes("/")) {
-        key = key.split("/")[0];
+      if (key.includes('/')) {
+        key = key.split('/')[0];
       }
     }
     return { value: this.formData[key] };
