@@ -1208,7 +1208,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       });
 
       PDFViewerApplication.eventBus.on('scrollmodechanged', (x: ScrollModeChangedEvent) => {
-        this.scrollModeChange.emit(x.mode);
+        this.ngZone.run(() => this.scrollModeChange.emit(x.mode));
       });
       PDFViewerApplication.eventBus.on('progress', (x: ProgressBarEvent) => {
         this.progress.emit(x);

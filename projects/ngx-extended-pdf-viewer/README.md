@@ -13,11 +13,9 @@
   CDN: <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">unpkg.com</a>
  </p>
 
-## About version 10.5.0
+## About version 11.0.0
 
-Version 10.5.0 is sort of an intermediate major version. It's a major improvement: it's a tremendous performance boost. But it doesn't introduce breaking changes, so there's no reason to increase the version number to 11. Like always, 10.5.0 solves a couple of minor bugs.
-
-A nice feature of version 10.5.0 is it features the final version of pdf.js 2.11, which, in turn, is officially babtized a pre-release. If you activate the "bleeding edge" branch, you'll get pdf.js 2.11. That version is going to be the default version of ngx-extended-pdf-viewer 11.0.0.
+Version 11.0.0 updates to pdf.js 2.11 (default) and 2.12 (bleeding-edge) branch. It also continues work on the performance, because some developers ask me to get rid the of current limit of several thousand pages.
 ## Showcase and manual
 
 There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook. 
@@ -55,7 +53,7 @@ This library provides an embeddable PDF viewer component. It's different from ot
 - Color theming
 - And to customize the toolbars and menus according to your needs.
 
-Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 2.10, released in July 2021. If you're the daring one, you can also use the developer version 2.11. It's bleeding edge, so use it at own risk. Basically, the preview version helps me because I can add Mozilla's latest improvements in frequent, small increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but most of the time, the quality is production-ready.
+Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 2.11, released in October 2021. If you're the daring one, you can also use the developer version 2.12. It's bleeding edge, so use it at own risk. Basically, the preview version helps me because I can add Mozilla's latest improvements in frequent, small increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but most of the time, the quality is production-ready.
 
 ## Alternatives
 <details>
@@ -89,7 +87,7 @@ Currently, the minimum required version is Angular 9. The idea is to support the
   ```
  This simply copies the entire assets folder. If you're concerned about disk memory, you can omit the subfolders `inline-locale-files` and `additional-locale`. If you need only one language, you can reduce the list to `locale.properties` and your language folder.
 
- If you want to use the developer preview of pdf.js 2.10, also import the "bleeding edge" files:
+ If you want to use the developer preview of pdf.js 2.12, also import the "bleeding edge" files:
 
   ```json
   "assets": [

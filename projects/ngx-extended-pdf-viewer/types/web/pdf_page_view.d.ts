@@ -3,7 +3,7 @@ export type PDFPageViewOptions = {
     /**
      * - The viewer element.
      */
-    container: HTMLDivElement;
+    container?: HTMLDivElement | undefined;
     /**
      * - The application event bus.
      */

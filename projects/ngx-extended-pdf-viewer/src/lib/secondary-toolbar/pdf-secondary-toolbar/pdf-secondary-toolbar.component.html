@@ -192,6 +192,19 @@
 
       <button
         type="button"
+        [class.invisible]="!showPageScrollMode || !showScrollingButton"
+        id="scrollPage"
+        class="secondaryToolbarButton scrollPage"
+        title="Use Page Scrolling"
+        data-l10n-id="scroll_page"
+      >
+      <svg style="width: 24px; height: 24px; margin-top: 3px">
+        <path fill="currentColor" d="M9.5 4c1 0 1.5.5 1.5 1.5v5c0 1-.5 1.5-1.5 1.5h-3c-1 0-1.5-.5-1.5-1.5v-5C5 4.5 5.5 4 6.5 4zM11 0v.5c0 1-.5 1.5-1.5 1.5h-3C5.5 2 5 1.5 5 .5V0h6zM11 16v-.5c0-1-.5-1.5-1.5-1.5h-3c-1 0-1.5.5-1.5 1.5v.5h6z"/>
+      </svg>
+      <span data-l10n-id="scroll_page">Page Scrolling</span>
+    </button>
+      <button
+        type="button"
         [class.invisible]="!showScrollingButton"
         id="scrollVertical"
         class="secondaryToolbarButton scrollVertical toggled"

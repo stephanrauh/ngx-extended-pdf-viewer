@@ -22,5 +22,6 @@ node index.js assets
 cd ..
 
 cd add-version-number-to-file-name
+node run-outside-ngzone.js
 node add-version-number.js
 cd ..

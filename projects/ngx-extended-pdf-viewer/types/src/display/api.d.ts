@@ -666,7 +666,7 @@ export const DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory |
 export function getDocument(src: string | URL | TypedArray | PDFDataRangeTransport | DocumentInitParameters): PDFDocumentLoadingTask;
 export class LoopbackPort {
     _listeners: any[];
-    _deferred: Promise<undefined>;
+    _deferred: Promise<void>;
     postMessage(obj: any, transfers: any): void;
     addEventListener(name: any, listener: any): void;
     removeEventListener(name: any, listener: any): void;

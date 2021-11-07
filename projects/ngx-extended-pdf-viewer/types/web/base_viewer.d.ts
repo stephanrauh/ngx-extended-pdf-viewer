@@ -139,9 +139,6 @@ export class BaseViewer {
         down: boolean;
         lastX: any;
         lastY: any;
-        /**
-         * Simple viewer control to display PDF content/pages.
-         */
         _eventHandler: (evt: any) => void;
     };
     presentationModeState: number;
@@ -227,10 +224,6 @@ export class BaseViewer {
     /**
      * @private
      */
-    private get _viewerElement();
-    /**
-     * @private
-     */
     private _onePageRenderedOrForceFetch;
     /**
      * @param pdfDocument {PDFDocument}
@@ -247,7 +240,6 @@ export class BaseViewer {
     _pages: any[] | undefined;
     _currentScale: any;
     _currentScaleValue: any;
-    _buffer: PDFPageViewBuffer | undefined;
     _location: {
         pageNumber: any;
         scale: any;
@@ -261,7 +253,9 @@ export class BaseViewer {
     _onePageRenderedCapability: any;
     _pagesCapability: any;
     _scrollMode: any;
+    _previousScrollMode: any;
     _spreadMode: any;
+    _ensurePageViewVisible(): void;
     _scrollUpdate(): void;
     _scrollIntoView({ pageDiv, pageSpot, pageNumber }: {
         pageDiv: any;
@@ -301,11 +295,9 @@ export class BaseViewer {
      */
     scrollPageIntoView({ pageNumber, destArray, allowNegativeOffset, ignoreDestinationZoom, }: ScrollPageIntoViewParameters): void;
     _updateLocation(firstPage: any): void;
-    _updateHelper(visiblePages: any): void;
     update(): void;
     containsElement(element: any): boolean;
     focus(): void;
-    get _isScrollModeHorizontal(): boolean;
     get _isContainerRtl(): boolean;
     get isInPresentationMode(): boolean;
     get isChangingPresentationMode(): boolean;
@@ -313,14 +305,14 @@ export class BaseViewer {
     get isVerticalScrollbarEnabled(): boolean;
     /**
      * Helper method for `this._getVisiblePages`. Should only ever be used when
-     * the viewer can only display a single page at a time, for example in:
-     *  - `PDFSinglePageViewer`.
-     *  - `PDFViewer` with Presentation Mode active.
+     * the viewer can only display a single page at a time, for example:
+     *  - When PresentationMode is active.
      */
     _getCurrentVisiblePage(): {
         views: never[];
         first?: undefined;
         last?: undefined;
+        ids?: undefined;
     } | {
         first: {
             id: any;
@@ -340,6 +332,7 @@ export class BaseViewer {
             y: any;
             view: any;
         }[];
+        ids: Set<any>;
     };
     _getVisiblePages(): Object | {
         views: never[];
@@ -357,7 +350,7 @@ export class BaseViewer {
     /**
      * @param {number} pageNumber
      */
-    isPageCached(pageNumber: number): boolean;
+    isPageCached(pageNumber: number): any;
     cleanup(): void;
     /**
      * @private
@@ -483,9 +476,8 @@ export class BaseViewer {
      * @param {number} [steps] - Defaults to zooming once.
      */
     decreaseScale(steps?: number | undefined): void;
+    #private;
 }
-import { PDFRenderingQueue } from "./pdf_rendering_queue.js";
-import { PageFlip } from "./page-flip.module.js";
 /**
  * @typedef {Object} PDFViewerOptions
  * @property {HTMLDivElement} container - The container for the viewer element.
@@ -522,59 +514,24 @@ import { PageFlip } from "./page-flip.module.js";
  *   is 4096 * 4096 (16 mega-pixels).
  * @property {IL10n} l10n - Localization service.
  */
-declare function PDFPageViewBuffer(size: any): void;
-declare class PDFPageViewBuffer {
-    /**
-     * @typedef {Object} PDFViewerOptions
-     * @property {HTMLDivElement} container - The container for the viewer element.
-     * @property {HTMLDivElement} [viewer] - The viewer element.
-     * @property {EventBus} eventBus - The application event bus.
-     * @property {IPDFLinkService} linkService - The navigation/linking service.
-     * @property {DownloadManager} [downloadManager] - The download manager
-     *   component.
-     * @property {PDFFindController} [findController] - The find controller
-     *   component.
-     * @property {PDFScriptingManager} [scriptingManager] - The scripting manager
-     *   component.
-     * @property {PDFRenderingQueue} [renderingQueue] - The rendering queue object.
-     * @property {boolean} [removePageBorders] - Removes the border shadow around
-     *   the pages. The default value is `false`.
-     * @property {number} [textLayerMode] - Controls if the text layer used for
-     *   selection and searching is created, and if the improved text selection
-     *   behaviour is enabled. The constants from {TextLayerMode} should be used.
-     *   The default value is `TextLayerMode.ENABLE`.
-     * @property {number} [annotationMode] - Controls if the annotation layer is
-     *   created, and if interactive form elements or `AnnotationStorage`-data are
-     *   being rendered. The constants from {@link AnnotationMode} should be used;
-     *   see also {@link RenderParameters} and {@link GetOperatorListParameters}.
-     *   The default value is `AnnotationMode.ENABLE_FORMS`.
-     * @property {string} [imageResourcesPath] - Path for image resources, mainly
-     *   mainly for annotation icons. Include trailing slash.
-     * @property {boolean} [enablePrintAutoRotate] - Enables automatic rotation of
-     *   landscape pages upon printing. The default is `false`.
-     * @property {string} renderer - 'canvas' or 'svg'. The default is 'canvas'.
-     * @property {boolean} [useOnlyCssZoom] - Enables CSS only zooming. The default
-     *   value is `false`.
-     * @property {number} [maxCanvasPixels] - The maximum supported canvas size in
-     *   total pixels, i.e. width * height. Use -1 for no limit. The default value
-     *   is 4096 * 4096 (16 mega-pixels).
-     * @property {IL10n} l10n - Localization service.
-     */
+export class PDFPageViewBuffer {
     constructor(size: any);
-    push: (view: any) => void;
+    push(view: any): void;
     /**
-     * After calling resize, the size of the buffer will be newSize. The optional
-     * parameter pagesToKeep is, if present, an array of pages to push to the back
-     * of the buffer, delaying their destruction. The size of pagesToKeep has no
-     * impact on the final size of the buffer; if pagesToKeep has length larger
-     * than newSize, some of those pages will be destroyed anyway.
+     * After calling resize, the size of the buffer will be `newSize`.
+     * The optional parameter `idsToKeep` is, if present, a Set of page-ids to
+     * push to the back of the buffer, delaying their destruction. The size of
+     * `idsToKeep` has no impact on the final size of the buffer; if `idsToKeep`
+     * is larger than `newSize`, some of those pages will be destroyed anyway.
      */
-    resize: (newSize: any, pagesToKeep: any) => void;
-    has: (view: any) => boolean;
+    resize(newSize: any, idsToKeep?: any): void;
+    has(view: any): boolean;
+    #private;
 }
+import { PDFRenderingQueue } from "./pdf_rendering_queue.js";
+import { PageFlip } from "./page-flip.module.js";
 import { TextHighlighter } from "./text_highlighter.js";
 import { TextLayerBuilder } from "./text_layer_builder.js";
 import { AnnotationLayerBuilder } from "./annotation_layer_builder.js";
 import { XfaLayerBuilder } from "./xfa_layer_builder.js";
 import { StructTreeLayerBuilder } from "./struct_tree_layer_builder.js";
-export {};

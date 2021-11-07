@@ -1,7 +1,8 @@
 export enum ScrollModeType {
   vertical = 0,
   horizontal = 1,
-  wrapped = 2
+  wrapped = 2,
+  page = 3
 }
 
 export enum SpreadModeType {
