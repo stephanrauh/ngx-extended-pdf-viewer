@@ -8,8 +8,9 @@ describe('PdfContextMenuComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PdfContextMenuComponent ]
-    })
+    declarations: [PdfContextMenuComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

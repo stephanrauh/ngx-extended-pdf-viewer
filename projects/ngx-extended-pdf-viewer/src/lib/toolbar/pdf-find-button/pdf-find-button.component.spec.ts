@@ -8,8 +8,9 @@ describe('PdfFindButtonComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PdfFindButtonComponent ]
-    })
+    declarations: [PdfFindButtonComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

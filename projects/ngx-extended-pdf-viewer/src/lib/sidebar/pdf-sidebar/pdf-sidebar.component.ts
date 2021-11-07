@@ -8,7 +8,7 @@ import { PdfThumbnailDrawnEvent } from '../../events/pdf-thumbnail-drawn-event';
 })
 export class PdfSidebarComponent {
   @Input()
-  public sidebarPositionTop: number;
+  public sidebarPositionTop: string | undefined;
 
   @Input()
   public sidebarVisible = true;

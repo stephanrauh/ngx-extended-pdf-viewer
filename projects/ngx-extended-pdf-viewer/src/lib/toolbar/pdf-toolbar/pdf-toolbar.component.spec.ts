@@ -8,8 +8,9 @@ describe('PdfToolbarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PdfToolbarComponent ]
-    })
+    declarations: [PdfToolbarComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

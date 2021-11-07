@@ -28,16 +28,6 @@
             "tsConfig": "projects/ngx-extended-pdf-viewer/tsconfig.spec.json",
             "karmaConfig": "projects/ngx-extended-pdf-viewer/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/ngx-extended-pdf-viewer/tsconfig.lib.json",
-              "projects/ngx-extended-pdf-viewer/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     }

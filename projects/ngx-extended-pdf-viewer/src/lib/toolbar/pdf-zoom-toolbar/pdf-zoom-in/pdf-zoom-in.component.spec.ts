@@ -8,8 +8,9 @@ describe('PdfZoomInComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PdfZoomInComponent ]
-    })
+    declarations: [PdfZoomInComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

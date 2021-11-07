@@ -8,8 +8,9 @@ describe('PdfDocumentPropertiesOverlayComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PdfDocumentPropertiesOverlayComponent ]
-    })
+    declarations: [PdfDocumentPropertiesOverlayComponent],
+    teardown: { destroyAfterEach: false }
+})
     .compileComponents();
   }));
 

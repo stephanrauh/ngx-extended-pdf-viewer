@@ -64,7 +64,7 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
   public showPropertiesButton = true;
 
   @Output()
-  public spreadChange = new EventEmitter<string>();
+  public spreadChange = new EventEmitter<'off' | 'even' | 'odd'>();
 
   @Output()
   public secondaryMenuIsEmpty = new EventEmitter<boolean>();
@@ -111,7 +111,7 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
     });
   }
 
-  public onSpreadChange(newSpread: string): void {
+  public onSpreadChange(newSpread: 'off' | 'odd' | 'even' ): void {
     this.spreadChange.emit(newSpread);
   }
 
