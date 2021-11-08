@@ -670,10 +670,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (needsES5 || isIE || isEdge || isIOs13OrBelow) {
       return true;
     }
-    return await this.checkOpChainingSupport();
+    return !await this.supportsOptionalChaining();
   }
 
-  private checkOpChainingSupport(): Promise<boolean> {
+  private supportsOptionalChaining(): Promise<boolean> {
     return new Promise((resolve) => {
       const support = (<any>window).supportsOptionalChaining;
       support !== undefined ? resolve(support) : resolve(this.addScriptOpChainingSupport());
