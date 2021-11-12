@@ -29,7 +29,7 @@
     "@angular/cli": "^13.0.1",
     "@angular/compiler-cli": "^13.0.0",
     "@types/node": "^16.11.6",
-    "caniuse-lite": "^1.0.30001278",
+    "caniuse-lite": "^1.0.30001280",
     "codelyzer": "^6.0.2",
     "ng-packagr": "~13.0.3",
     "properties-reader": "^2.2.0",
