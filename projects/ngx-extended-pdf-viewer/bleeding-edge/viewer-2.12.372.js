@@ -1428,7 +1428,11 @@ const PDFViewerApplication = {
 
       this._initializeAutoPrint(pdfDocument, openActionPromise);
     });
-    onePageRendered.then(() => {
+    onePageRendered.then(data => {
+      this.externalServices.reportTelemetry({
+        type: "pageInfo",
+        timestamp: data.timestamp
+      });
       pdfDocument.getOutline().then(outline => {
         if (pdfDocument !== this.pdfDocument) {
           return;
@@ -2375,7 +2379,6 @@ function webViewerResetPermissions() {
 
 function webViewerPageRendered({
   pageNumber,
-  timestamp,
   error
 }) {
   if (pageNumber === PDFViewerApplication.page) {
@@ -2397,10 +2400,6 @@ function webViewerPageRendered({
     });
   }
 
-  PDFViewerApplication.externalServices.reportTelemetry({
-    type: "pageInfo",
-    timestamp
-  });
   PDFViewerApplication.pdfDocument.getStats().then(function (stats) {
     PDFViewerApplication.externalServices.reportTelemetry({
       type: "documentStats",
@@ -11053,7 +11052,9 @@ class BaseViewer {
         return;
       }
 
-      this._onePageRenderedCapability.resolve();
+      this._onePageRenderedCapability.resolve({
+        timestamp: evt.timestamp
+      });
 
       this.eventBus._off("pagerendered", this._onAfterDraw);
 

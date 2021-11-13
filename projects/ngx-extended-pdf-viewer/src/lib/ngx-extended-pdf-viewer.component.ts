@@ -1522,11 +1522,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.formIdToFieldName = {};
       this.formRadioButtonValueToId = {};
 
-      if (PDFViewerApplication.cleanup) {
-        PDFViewerApplication.cleanup();
-      } else if (PDFViewerApplication._cleanup) {
-        PDFViewerApplication._cleanup();
-      }
+      PDFViewerApplication._cleanup();
 
       await PDFViewerApplication.close();
       if (PDFViewerApplication.printKeyDownListener) {

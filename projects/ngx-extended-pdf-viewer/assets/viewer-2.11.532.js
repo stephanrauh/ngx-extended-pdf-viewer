@@ -1007,93 +1007,95 @@ const PDFViewerApplication = {
   },
 
   async open(file, args) {
-    if (this.pdfLoadingTask) {
-      await this.close();
-    }
-
-    const workerParameters = _app_options.AppOptions.getAll(_app_options.OptionKind.WORKER);
-
-    for (const key in workerParameters) {
-      _pdfjsLib.GlobalWorkerOptions[key] = workerParameters[key];
-    }
-
-    const parameters = Object.create(null);
-
-    if (typeof file === "string") {
-      this.setTitleUsingUrl(file, file);
-      parameters.url = file;
-    } else if (file && "byteLength" in file) {
-      parameters.data = file;
-    } else if (file.url && file.originalUrl) {
-      this.setTitleUsingUrl(file.originalUrl, file.url);
-      parameters.url = file.url;
-    }
-
-    const apiParameters = _app_options.AppOptions.getAll(_app_options.OptionKind.API);
-
-    for (const key in apiParameters) {
-      let value = apiParameters[key];
-
-      if (key === "docBaseUrl" && !value) {}
-
-      parameters[key] = value;
-    }
-
-    if (args) {
-      for (const key in args) {
-        parameters[key] = args[key];
+    window.ngxZone.runOutsideAngular(async () => {
+      if (this.pdfLoadingTask) {
+        await this.close();
       }
-    }
 
-    const loadingTask = (0, _pdfjsLib.getDocument)(parameters);
-    this.pdfLoadingTask = loadingTask;
+      const workerParameters = _app_options.AppOptions.getAll(_app_options.OptionKind.WORKER);
 
-    loadingTask.onPassword = (updateCallback, reason) => {
-      this.pdfLinkService.externalLinkEnabled = false;
-      this.passwordPrompt.setUpdateCallback(updateCallback, reason);
-      this.passwordPrompt.open();
-    };
+      for (const key in workerParameters) {
+        _pdfjsLib.GlobalWorkerOptions[key] = workerParameters[key];
+      }
 
-    loadingTask.onProgress = ({
-      loaded,
-      total
-    }) => {
-      this.progress(loaded / total);
-      this.eventBus.dispatch("progress", {
-        source: this,
-        type: "load",
-        total,
+      const parameters = Object.create(null);
+
+      if (typeof file === "string") {
+        this.setTitleUsingUrl(file, file);
+        parameters.url = file;
+      } else if (file && "byteLength" in file) {
+        parameters.data = file;
+      } else if (file.url && file.originalUrl) {
+        this.setTitleUsingUrl(file.originalUrl, file.url);
+        parameters.url = file.url;
+      }
+
+      const apiParameters = _app_options.AppOptions.getAll(_app_options.OptionKind.API);
+
+      for (const key in apiParameters) {
+        let value = apiParameters[key];
+
+        if (key === "docBaseUrl" && !value) {}
+
+        parameters[key] = value;
+      }
+
+      if (args) {
+        for (const key in args) {
+          parameters[key] = args[key];
+        }
+      }
+
+      const loadingTask = (0, _pdfjsLib.getDocument)(parameters);
+      this.pdfLoadingTask = loadingTask;
+
+      loadingTask.onPassword = (updateCallback, reason) => {
+        this.pdfLinkService.externalLinkEnabled = false;
+        this.passwordPrompt.setUpdateCallback(updateCallback, reason);
+        this.passwordPrompt.open();
+      };
+
+      loadingTask.onProgress = ({
         loaded,
-        percent: 100 * loaded / total
-      });
-    };
-
-    loadingTask.onUnsupportedFeature = this.fallback.bind(this);
-    this.loadingBar.show();
-    return loadingTask.promise.then(pdfDocument => {
-      this.load(pdfDocument);
-    }, exception => {
-      if (loadingTask !== this.pdfLoadingTask) {
-        return undefined;
-      }
-
-      let key = "loading_error";
-
-      if (exception instanceof _pdfjsLib.InvalidPDFException) {
-        key = "invalid_file_error";
-      } else if (exception instanceof _pdfjsLib.MissingPDFException) {
-        key = "missing_file_error";
-      } else if (exception instanceof _pdfjsLib.UnexpectedResponseException) {
-        key = "unexpected_response_error";
-      }
-
-      return this.l10n.get(key).then(msg => {
-        this._documentError(msg, {
-          message: exception?.message
+        total
+      }) => {
+        this.progress(loaded / total);
+        this.eventBus.dispatch("progress", {
+          source: this,
+          type: "load",
+          total,
+          loaded,
+          percent: 100 * loaded / total
         });
+      };
 
-        this.onError(exception);
-        throw exception;
+      loadingTask.onUnsupportedFeature = this.fallback.bind(this);
+      this.loadingBar.show();
+      return loadingTask.promise.then(pdfDocument => {
+        this.load(pdfDocument);
+      }, exception => {
+        if (loadingTask !== this.pdfLoadingTask) {
+          return undefined;
+        }
+
+        let key = "loading_error";
+
+        if (exception instanceof _pdfjsLib.InvalidPDFException) {
+          key = "invalid_file_error";
+        } else if (exception instanceof _pdfjsLib.MissingPDFException) {
+          key = "missing_file_error";
+        } else if (exception instanceof _pdfjsLib.UnexpectedResponseException) {
+          key = "unexpected_response_error";
+        }
+
+        return this.l10n.get(key).then(msg => {
+          this._documentError(msg, {
+            message: exception?.message
+          });
+
+          this.onError(exception);
+          throw exception;
+        });
       });
     });
   },
@@ -3720,7 +3722,9 @@ function waitOnEventOrTimeout({
 }
 
 const animationStarted = new Promise(function (resolve) {
-  window.requestAnimationFrame(resolve);
+  window.ngxZone.runOutsideAngular(() => {
+    window.requestAnimationFrame(resolve);
+  });
 });
 exports.animationStarted = animationStarted;
 
@@ -10589,7 +10593,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.11.531';
+    const viewerVersion = '2.11.532';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -13805,11 +13809,15 @@ class Render {
     this.update();
 
     const loop = timer => {
-      this.render(timer);
-      requestAnimationFrame(loop);
+      window.ngxZone.runOutsideAngular(() => {
+        this.render(timer);
+        requestAnimationFrame(loop);
+      });
     };
 
-    requestAnimationFrame(loop);
+    window.ngxZone.runOutsideAngular(() => {
+      requestAnimationFrame(loop);
+    });
   }
 
   startAnimation(frames, duration, onAnimateEnd) {
@@ -20499,8 +20507,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.11.531';
-const pdfjsBuild = '9f0d208d5';
+const pdfjsVersion = '2.11.532';
+const pdfjsBuild = 'e64732807';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

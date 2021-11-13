@@ -1838,7 +1838,12 @@ var PDFViewerApplication = {
 
       _this12._initializeAutoPrint(pdfDocument, openActionPromise);
     });
-    onePageRendered.then(function () {
+    onePageRendered.then(function (data) {
+      _this12.externalServices.reportTelemetry({
+        type: "pageInfo",
+        timestamp: data.timestamp
+      });
+
       pdfDocument.getOutline().then(function (outline) {
         if (pdfDocument !== _this12.pdfDocument) {
           return;
@@ -3044,7 +3049,6 @@ function webViewerResetPermissions() {
 
 function webViewerPageRendered(_ref12) {
   var pageNumber = _ref12.pageNumber,
-      timestamp = _ref12.timestamp,
       error = _ref12.error;
 
   if (pageNumber === PDFViewerApplication.page) {
@@ -3066,10 +3070,6 @@ function webViewerPageRendered(_ref12) {
     });
   }
 
-  PDFViewerApplication.externalServices.reportTelemetry({
-    type: "pageInfo",
-    timestamp: timestamp
-  });
   PDFViewerApplication.pdfDocument.getStats().then(function (stats) {
     PDFViewerApplication.externalServices.reportTelemetry({
       type: "documentStats",
@@ -14781,7 +14781,9 @@ var BaseViewer = /*#__PURE__*/function () {
           return;
         }
 
-        _this6._onePageRenderedCapability.resolve();
+        _this6._onePageRenderedCapability.resolve({
+          timestamp: evt.timestamp
+        });
 
         _this6.eventBus._off("pagerendered", _this6._onAfterDraw);
 
