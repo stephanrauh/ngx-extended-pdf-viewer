@@ -334,15 +334,7 @@ export class BaseViewer {
         }[];
         ids: Set<any>;
     };
-    _getVisiblePages(): Object | {
-        views: never[];
-        first?: undefined;
-        last?: undefined;
-    } | {
-        first: any;
-        last: any;
-        views: any[];
-    };
+    _getVisiblePages(): Object;
     /**
      * @param {number} pageNumber
      */

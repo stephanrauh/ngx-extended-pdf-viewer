@@ -373,7 +373,7 @@ export namespace PermissionFlag {
 /**
  * @param {string} str
  */
-export function removeNullCharacters(str: string): string;
+export function removeNullCharacters(str: string, replaceInvisible?: boolean): string;
 export namespace RenderingIntentFlag {
     export const ANY: number;
     export const DISPLAY: number;

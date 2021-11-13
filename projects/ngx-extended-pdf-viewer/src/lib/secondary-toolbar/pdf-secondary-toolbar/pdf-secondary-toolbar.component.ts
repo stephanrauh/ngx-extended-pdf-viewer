@@ -11,7 +11,7 @@ import {
   HostListener,
   AfterViewInit,
 } from '@angular/core';
-import { firstValueFrom, take } from 'rxjs';
+import { take } from 'rxjs';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from './../../pdf-notification-service';
 
@@ -76,11 +76,10 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
   public showPageScrollMode = false;
 
   constructor(private element: ElementRef, public notificationService: PDFNotificationService) {
-    const subscription = this.notificationService.onPDFJSInit.subscribe(async () => {
+    this.notificationService.onPDFJSInit.pipe(take(1)).subscribe(async () => {
       this.onPdfJsInit();
-      const version = await firstValueFrom(notificationService.pdfjsVersion);
+      const version = await notificationService.pdfjsVersion.pipe(take(1)).toPromise() as string;
       this.showPageScrollMode = version >= '2.12';
-      subscription.unsubscribe();
     });
   }
 

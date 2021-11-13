@@ -49,6 +49,7 @@ import { ProgressBarEvent } from './events/progress-bar-event';
 import { UnitToPx } from './unit-to-px';
 import { PageRenderEvent } from './events/page-render-event';
 import { Annotation } from './Annotation';
+import { take } from 'rxjs';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 declare class ResizeObserver {
@@ -142,6 +143,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.spread = 'off';
     } else if (viewMode !== 'multiple') {
       this.scrollMode = ScrollModeType.vertical;
+    }
+    if (viewMode === 'single') {
+      // since pdf.js, our custom single-page-mode has been replaced by the standard scrollMode="page"
+      const version = this.notificationService.pdfjsVersion.getValue();
+      const showPageScrollMode = version >= '2.12';
+      if (showPageScrollMode) {
+        this.scrollMode = ScrollModeType.page;
+        this._pageViewMode = 'multiple';
+      }
     }
     if (viewMode === 'book') {
       this.showBorders = false;
