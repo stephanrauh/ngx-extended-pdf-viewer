@@ -1,17 +1,23 @@
+Window['ngxConsoleFilter'] = (level: string, message: any): boolean => {
+  return true;
+}
 export class NgxConsole {
-  public filter = (level: string, message: any): boolean => {
-    return false;
-  }
-
   public log(message: any): void {
-    console.log(message);
+    if (Window['ngxConsoleFilter']('log', message)) {
+      console.log(message);
+    }
   }
   public error(message: any): void {
-    console.error(message);
+    if (Window['ngxConsoleFilter']('error', message)) {
+      console.error(message);
+    }
+
   }
   public warn(message: any): void {
-    console.warn(message);
+    if (Window['ngxConsoleFilter']('warn', message)) {
+      console.warn(message);
+    }
   }
 }
 
-window['ngxConsole'] = new NgxConsole();
+Window['ngxConsole'] = new NgxConsole();

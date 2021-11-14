@@ -709,7 +709,7 @@ function loadScript(src) {
 }
 
 function deprecated(details) {
-  console.log("Deprecated API usage: " + details);
+  Window['ngxConsole'].log("Deprecated API usage: " + details);
 }
 
 var pdfDateStringRegex;
@@ -1834,13 +1834,13 @@ function getVerbosityLevel() {
 
 function info(msg) {
   if (verbosity >= VerbosityLevel.INFOS) {
-    console.log("Info: ".concat(msg));
+    Window['ngxConsole'].log("Info: ".concat(msg));
   }
 }
 
 function warn(msg) {
   if (verbosity >= VerbosityLevel.WARNINGS) {
-    console.log("Warning: ".concat(msg));
+    Window['ngxConsole'].log("Warning: ".concat(msg));
   }
 }
 

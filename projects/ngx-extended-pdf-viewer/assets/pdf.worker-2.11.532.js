@@ -726,7 +726,7 @@ class WorkerMessageHandler {
     });
     handler.on("showUnverifiedSignatures", function wphReady(data) {
       if (data) {
-        console.log("showUnverifiedSignatures=" + data + ". This is an incompletely implemented feature. Signatures cannot be validated, so use it at own risk.");
+        Window['ngxConsole'].log("showUnverifiedSignatures=" + data + ". This is an incompletely implemented feature. Signatures cannot be validated, so use it at own risk.");
       }
 
       self.showUnverifiedSignatures = data;
@@ -1150,13 +1150,13 @@ function getVerbosityLevel() {
 
 function info(msg) {
   if (verbosity >= VerbosityLevel.INFOS) {
-    console.log(`Info: ${msg}`);
+    Window['ngxConsole'].log(`Info: ${msg}`);
   }
 }
 
 function warn(msg) {
   if (verbosity >= VerbosityLevel.WARNINGS) {
-    console.log(`Warning: ${msg}`);
+    Window['ngxConsole'].log(`Warning: ${msg}`);
   }
 }
 
@@ -18003,7 +18003,7 @@ class AnnotationFactory {
 
           case "Sig":
             if (self.showUnverifiedSignatures) {
-              console.log("The PDF file contains a signature. Please take into account that it can't be verified yet. ngx-extended-pdf-viewer also displays forged signatures, so use this feature only if you're sure what you're doing.");
+              Window['ngxConsole'].log("The PDF file contains a signature. Please take into account that it can't be verified yet. ngx-extended-pdf-viewer also displays forged signatures, so use this feature only if you're sure what you're doing.");
               return new SignatureWidgetAnnotation(parameters);
             }
 
@@ -18857,7 +18857,7 @@ class WidgetAnnotation extends Annotation {
     if (data.fieldType === "Sig") {
       if (!self.showUnverifiedSignatures) {
         this.setFlags(_util.AnnotationFlag.HIDDEN);
-        console.log("The PDF file contains a signature. Please take into account that it can't be verified yet. By default, ngx-extended-pdf-viewer hides signatures until you configure it otherwise.");
+        Window['ngxConsole'].log("The PDF file contains a signature. Please take into account that it can't be verified yet. By default, ngx-extended-pdf-viewer hides signatures until you configure it otherwise.");
       }
     }
   }

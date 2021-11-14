@@ -495,7 +495,7 @@ function loadScript(src, removeScriptElement = false) {
 }
 
 function deprecated(details) {
-  console.log("Deprecated API usage: " + details);
+  Window['ngxConsole'].log("Deprecated API usage: " + details);
 }
 
 let pdfDateStringRegex;
@@ -962,13 +962,13 @@ function getVerbosityLevel() {
 
 function info(msg) {
   if (verbosity >= VerbosityLevel.INFOS) {
-    console.log(`Info: ${msg}`);
+    Window['ngxConsole'].log(`Info: ${msg}`);
   }
 }
 
 function warn(msg) {
   if (verbosity >= VerbosityLevel.WARNINGS) {
-    console.log(`Warning: ${msg}`);
+    Window['ngxConsole'].log(`Warning: ${msg}`);
   }
 }
 

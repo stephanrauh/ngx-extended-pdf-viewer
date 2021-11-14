@@ -669,7 +669,7 @@ var PDFViewerApplication = {
 
             case 2:
               if (_app_options.AppOptions._hasUserOptions()) {
-                console.warn("_readPreferences: The Preferences may override manually set AppOptions; " + 'please use the "disablePreferences"-option in order to prevent that.');
+                Window['ngxConsole'].warn("_readPreferences: The Preferences may override manually set AppOptions; " + 'please use the "disablePreferences"-option in order to prevent that.');
               }
 
               _context3.prev = 3;
@@ -688,7 +688,7 @@ var PDFViewerApplication = {
             case 11:
               _context3.prev = 11;
               _context3.t2 = _context3["catch"](3);
-              console.error("_readPreferences: \"".concat(_context3.t2 === null || _context3.t2 === void 0 ? void 0 : _context3.t2.message, "\"."));
+              Window['ngxConsole'].error("_readPreferences: \"".concat(_context3.t2 === null || _context3.t2 === void 0 ? void 0 : _context3.t2.message, "\"."));
 
             case 14:
             case "end":
@@ -807,7 +807,7 @@ var PDFViewerApplication = {
             case 31:
               _context4.prev = 31;
               _context4.t1 = _context4["catch"](26);
-              console.error("_parseHashParameters: \"".concat(_context4.t1.message, "\"."));
+              Window['ngxConsole'].error("_parseHashParameters: \"".concat(_context4.t1.message, "\"."));
 
             case 34:
             case "end":
@@ -880,7 +880,7 @@ var PDFViewerApplication = {
         }
       }
     } catch (reason) {
-      console.error("_forceCssTheme: \"".concat(reason === null || reason === void 0 ? void 0 : reason.message, "\"."));
+      Window['ngxConsole'].error("_forceCssTheme: \"".concat(reason === null || reason === void 0 ? void 0 : reason.message, "\"."));
     }
   },
   _initializeViewerComponents: function _initializeViewerComponents() {
@@ -1511,7 +1511,7 @@ var PDFViewerApplication = {
             case 17:
               _context11.prev = 17;
               _context11.t0 = _context11["catch"](7);
-              console.error("Error when saving the document: ".concat(_context11.t0.message));
+              Window['ngxConsole'].error("Error when saving the document: ".concat(_context11.t0.message));
               _context11.next = 22;
               return _this9.download({
                 sourceEventType: sourceEventType
@@ -2037,7 +2037,7 @@ var PDFViewerApplication = {
                   return false;
                 }
 
-                console.warn("Warning: JavaScript support is not enabled");
+                Window['ngxConsole'].warn("Warning: JavaScript support is not enabled");
 
                 _this15.fallback(_pdfjsLib.UNSUPPORTED_FEATURES.javaScript);
 
@@ -2141,8 +2141,8 @@ var PDFViewerApplication = {
               PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
 
               if (!PDFViewerApplicationOptions || PDFViewerApplicationOptions.get("verbosity") > 0) {
-                console.log("PDF viewer: ngx-extended-pdf-viewer running on pdf.js " + (window["pdfjs-dist/build/pdf"] ? window["pdfjs-dist/build/pdf"].version : " developer version (?)"));
-                console.log("PDF ".concat(pdfDocument.fingerprints[0], " [").concat(info.PDFFormatVersion, " ") + "".concat((info.Producer || "-").trim(), " / ").concat((info.Creator || "-").trim(), "] ") + "(PDF.js: ".concat(_pdfjsLib.version || "-") + "".concat(_this16.pdfViewer.enableWebGL ? " [WebGL]" : "", ") modified by ngx-extended-pdf-viewer)"));
+                Window['ngxConsole'].log("PDF viewer: ngx-extended-pdf-viewer running on pdf.js " + (window["pdfjs-dist/build/pdf"] ? window["pdfjs-dist/build/pdf"].version : " developer version (?)"));
+                Window['ngxConsole'].log("PDF ".concat(pdfDocument.fingerprints[0], " [").concat(info.PDFFormatVersion, " ") + "".concat((info.Producer || "-").trim(), " / ").concat((info.Creator || "-").trim(), "] ") + "(PDF.js: ".concat(_pdfjsLib.version || "-") + "".concat(_this16.pdfViewer.enableWebGL ? " [WebGL]" : "", ") modified by ngx-extended-pdf-viewer)"));
               }
 
               pdfTitle = info === null || info === void 0 ? void 0 : info.Title;
@@ -2162,20 +2162,20 @@ var PDFViewerApplication = {
 
               if (info.IsXFAPresent && !info.IsAcroFormPresent && !pdfDocument.isPureXfa) {
                 if (pdfDocument.loadingParams.enableXfa) {
-                  console.warn("Warning: XFA Foreground documents are not supported");
+                  Window['ngxConsole'].warn("Warning: XFA Foreground documents are not supported");
                 } else {
-                  console.warn("Warning: XFA support is not enabled");
+                  Window['ngxConsole'].warn("Warning: XFA support is not enabled");
                 }
 
                 _this16.fallback(_pdfjsLib.UNSUPPORTED_FEATURES.forms);
               } else if ((info.IsAcroFormPresent || info.IsXFAPresent) && !_this16.pdfViewer.renderForms) {
-                console.warn("Warning: Interactive form support is not enabled");
+                Window['ngxConsole'].warn("Warning: Interactive form support is not enabled");
 
                 _this16.fallback(_pdfjsLib.UNSUPPORTED_FEATURES.forms);
               }
 
               if (info.IsSignaturesPresent) {
-                console.warn("Warning: Digital signatures validation is not supported");
+                Window['ngxConsole'].warn("Warning: Digital signatures validation is not supported");
 
                 _this16.fallback(_pdfjsLib.UNSUPPORTED_FEATURES.signatures);
               }
@@ -2265,7 +2265,7 @@ var PDFViewerApplication = {
                 break;
               }
 
-              console.error("The number of Page Labels does not match the number of pages in the document.");
+              Window['ngxConsole'].error("The number of Page Labels does not match the number of pages in the document.");
               return _context17.abrupt("return");
 
             case 11:
@@ -2966,7 +2966,7 @@ function webViewerInitialized() {
     _app_options.AppOptions.set("disableFontFace", true);
 
     PDFViewerApplication.l10n.get("web_fonts_disabled").then(function (msg) {
-      console.warn(msg);
+      Window['ngxConsole'].warn(msg);
     });
   }
 
@@ -3082,7 +3082,7 @@ function webViewerPageMode(_ref13) {
       break;
 
     default:
-      console.error('Invalid "pagemode" hash parameter: ' + mode);
+      Window['ngxConsole'].error('Invalid "pagemode" hash parameter: ' + mode);
       return;
   }
 
@@ -4607,14 +4607,14 @@ function scrollIntoView(element, spot) {
   var infiniteScroll = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
   if (element.classList.contains("stf__item")) {
-    console.log("don't scroll in book mode");
+    Window['ngxConsole'].log("don't scroll in book mode");
     return;
   }
 
   var parent = element.offsetParent;
 
   if (!parent) {
-    console.error("offsetParent is not set -- cannot scroll");
+    Window['ngxConsole'].error("offsetParent is not set -- cannot scroll");
     return;
   }
 
@@ -5466,7 +5466,7 @@ var PDFCursorTools = /*#__PURE__*/function () {
 
         case CursorTool.ZOOM:
         default:
-          console.error("switchTool: \"".concat(tool, "\" is an unsupported value."));
+          Window['ngxConsole'].error("switchTool: \"".concat(tool, "\" is an unsupported value."));
           return;
       }
 
@@ -5861,7 +5861,7 @@ var PDFRenderingQueue = /*#__PURE__*/function () {
               return;
             }
 
-            console.error("renderView: \"".concat(reason, "\""));
+            Window['ngxConsole'].error("renderView: \"".concat(reason, "\""));
           });
           break;
       }
@@ -8041,7 +8041,7 @@ var PDFFindController = /*#__PURE__*/function () {
             _this2._pageDiffs[i] = _normalize4[1];
             extractTextCapability.resolve(i);
           }, function (reason) {
-            console.error("Unable to get text content for page ".concat(i + 1), reason);
+            Window['ngxConsole'].error("Unable to get text content for page ".concat(i + 1), reason);
             _this2._pageContents[i] = "";
             _this2._pageDiffs[i] = null;
             extractTextCapability.resolve(i);
@@ -8174,7 +8174,7 @@ var PDFFindController = /*#__PURE__*/function () {
     key: "_nextPageMatch",
     value: function _nextPageMatch() {
       if (this._resumePageIdx !== null) {
-        console.error("There can only be one pending page.");
+        Window['ngxConsole'].error("There can only be one pending page.");
       }
 
       var matches = null;
@@ -8885,7 +8885,7 @@ var PDFHistory = /*#__PURE__*/function () {
           updateUrl = _ref2$updateUrl === void 0 ? false : _ref2$updateUrl;
 
       if (!fingerprint || typeof fingerprint !== "string") {
-        console.error('PDFHistory.initialize: The "fingerprint" must be a non-empty string.');
+        Window['ngxConsole'].error('PDFHistory.initialize: The "fingerprint" must be a non-empty string.');
         return;
       }
 
@@ -8981,14 +8981,14 @@ var PDFHistory = /*#__PURE__*/function () {
       }
 
       if (namedDest && typeof namedDest !== "string") {
-        console.error("PDFHistory.push: " + "\"".concat(namedDest, "\" is not a valid namedDest parameter."));
+        Window['ngxConsole'].error("PDFHistory.push: " + "\"".concat(namedDest, "\" is not a valid namedDest parameter."));
         return;
       } else if (!Array.isArray(explicitDest)) {
-        console.error("PDFHistory.push: " + "\"".concat(explicitDest, "\" is not a valid explicitDest parameter."));
+        Window['ngxConsole'].error("PDFHistory.push: " + "\"".concat(explicitDest, "\" is not a valid explicitDest parameter."));
         return;
       } else if (!this._isValidPage(pageNumber)) {
         if (pageNumber !== null || this._destination) {
-          console.error("PDFHistory.push: " + "\"".concat(pageNumber, "\" is not a valid pageNumber parameter."));
+          Window['ngxConsole'].error("PDFHistory.push: " + "\"".concat(pageNumber, "\" is not a valid pageNumber parameter."));
           return;
         }
       }
@@ -9038,7 +9038,7 @@ var PDFHistory = /*#__PURE__*/function () {
       }
 
       if (!this._isValidPage(pageNumber)) {
-        console.error("PDFHistory.pushPage: \"".concat(pageNumber, "\" is not a valid page number."));
+        Window['ngxConsole'].error("PDFHistory.pushPage: \"".concat(pageNumber, "\" is not a valid page number."));
         return;
       }
 
@@ -9911,19 +9911,19 @@ var PDFLinkService = /*#__PURE__*/function () {
 
             _this._goToDestinationHelper(rawDest, namedDest, explicitDest);
           })["catch"](function () {
-            console.error("PDFLinkService._goToDestinationHelper: \"".concat(destRef, "\" is not ") + "a valid page reference, for dest=\"".concat(rawDest, "\"."));
+            Window['ngxConsole'].error("PDFLinkService._goToDestinationHelper: \"".concat(destRef, "\" is not ") + "a valid page reference, for dest=\"".concat(rawDest, "\"."));
           });
           return;
         }
       } else if (Number.isInteger(destRef)) {
         pageNumber = destRef + 1;
       } else {
-        console.error("PDFLinkService._goToDestinationHelper: \"".concat(destRef, "\" is not ") + "a valid destination reference, for dest=\"".concat(rawDest, "\"."));
+        Window['ngxConsole'].error("PDFLinkService._goToDestinationHelper: \"".concat(destRef, "\" is not ") + "a valid destination reference, for dest=\"".concat(rawDest, "\"."));
         return;
       }
 
       if (!pageNumber || pageNumber < 1 || pageNumber > this.pagesCount) {
-        console.error("PDFLinkService._goToDestinationHelper: \"".concat(pageNumber, "\" is not ") + "a valid page number, for dest=\"".concat(rawDest, "\"."));
+        Window['ngxConsole'].error("PDFLinkService._goToDestinationHelper: \"".concat(pageNumber, "\" is not ") + "a valid page number, for dest=\"".concat(rawDest, "\"."));
         return;
       }
 
@@ -9987,7 +9987,7 @@ var PDFLinkService = /*#__PURE__*/function () {
                   break;
                 }
 
-                console.error("PDFLinkService.goToDestination: \"".concat(explicitDest, "\" is not ") + "a valid destination array, for dest=\"".concat(dest, "\"."));
+                Window['ngxConsole'].error("PDFLinkService.goToDestination: \"".concat(explicitDest, "\" is not ") + "a valid destination array, for dest=\"".concat(dest, "\"."));
                 return _context.abrupt("return");
 
               case 16:
@@ -10017,7 +10017,7 @@ var PDFLinkService = /*#__PURE__*/function () {
       var pageNumber = typeof val === "string" && this.pdfViewer.pageLabelToPageNumber(val) || val | 0;
 
       if (!(Number.isInteger(pageNumber) && pageNumber > 0 && pageNumber <= this.pagesCount)) {
-        console.error("PDFLinkService.goToPage: \"".concat(val, "\" is not a valid page."));
+        Window['ngxConsole'].error("PDFLinkService.goToPage: \"".concat(val, "\" is not a valid page."));
         return;
       }
 
@@ -10107,14 +10107,14 @@ var PDFLinkService = /*#__PURE__*/function () {
               }, zoomArgs.length > 1 ? zoomArgs[1] | 0 : null];
             } else if (zoomArg === "FitR") {
               if (zoomArgs.length !== 5) {
-                console.error('PDFLinkService.setHash: Not enough parameters for "FitR".');
+                Window['ngxConsole'].error('PDFLinkService.setHash: Not enough parameters for "FitR".');
               } else {
                 dest = [null, {
                   name: zoomArg
                 }, zoomArgs[1] | 0, zoomArgs[2] | 0, zoomArgs[3] | 0, zoomArgs[4] | 0];
               }
             } else {
-              console.error("PDFLinkService.setHash: \"".concat(zoomArg, "\" is not ") + "a valid zoom value.");
+              Window['ngxConsole'].error("PDFLinkService.setHash: \"".concat(zoomArg, "\" is not ") + "a valid zoom value.");
             }
           }
         }
@@ -10155,7 +10155,7 @@ var PDFLinkService = /*#__PURE__*/function () {
           return;
         }
 
-        console.error("PDFLinkService.setHash: \"".concat(unescape(hash), "\" is not ") + "a valid destination.");
+        Window['ngxConsole'].error("PDFLinkService.setHash: \"".concat(unescape(hash), "\" is not ") + "a valid destination.");
       }
     }
   }, {
@@ -11606,7 +11606,7 @@ var PDFScriptingManager = /*#__PURE__*/function () {
               case 23:
                 _context2.prev = 23;
                 _context2.t0 = _context2["catch"](19);
-                console.error("PDFScriptingManager.setDocument: \"".concat(_context2.t0 === null || _context2.t0 === void 0 ? void 0 : _context2.t0.message, "\"."));
+                Window['ngxConsole'].error("PDFScriptingManager.setDocument: \"".concat(_context2.t0 === null || _context2.t0 === void 0 ? void 0 : _context2.t0.message, "\"."));
                 _context2.next = 28;
                 return this._destroyScripting();
 
@@ -11763,7 +11763,7 @@ var PDFScriptingManager = /*#__PURE__*/function () {
               case 51:
                 _context2.prev = 51;
                 _context2.t1 = _context2["catch"](40);
-                console.error("PDFScriptingManager.setDocument: \"".concat(_context2.t1 === null || _context2.t1 === void 0 ? void 0 : _context2.t1.message, "\"."));
+                Window['ngxConsole'].error("PDFScriptingManager.setDocument: \"".concat(_context2.t1 === null || _context2.t1 === void 0 ? void 0 : _context2.t1.message, "\"."));
                 _context2.next = 56;
                 return this._destroyScripting();
 
@@ -11982,7 +11982,7 @@ var PDFScriptingManager = /*#__PURE__*/function () {
                 return _context7.abrupt("break", 42);
 
               case 8:
-                console.error(value);
+                Window['ngxConsole'].error(value);
                 return _context7.abrupt("break", 42);
 
               case 10:
@@ -12005,7 +12005,7 @@ var PDFScriptingManager = /*#__PURE__*/function () {
                 return _context7.abrupt("break", 42);
 
               case 18:
-                console.log(value);
+                Window['ngxConsole'].log(value);
                 return _context7.abrupt("break", 42);
 
               case 20:
@@ -12630,7 +12630,7 @@ var PDFSidebar = /*#__PURE__*/function () {
           break;
 
         default:
-          console.error("PDFSidebar._switchView: \"".concat(view, "\" is not a valid view."));
+          Window['ngxConsole'].error("PDFSidebar._switchView: \"".concat(view, "\" is not a valid view."));
           return false;
       }
 
@@ -13108,7 +13108,7 @@ var PDFThumbnailViewer = /*#__PURE__*/function () {
       var thumbnailView = this._thumbnails[pageNumber - 1];
 
       if (!thumbnailView) {
-        console.error('scrollThumbnailIntoView: Invalid "pageNumber" parameter.');
+        Window['ngxConsole'].error('scrollThumbnailIntoView: Invalid "pageNumber" parameter.');
         return;
       }
 
@@ -13263,7 +13263,7 @@ var PDFThumbnailViewer = /*#__PURE__*/function () {
         var thumbnailView = _this2._thumbnails[_this2._currentPageNumber - 1];
         thumbnailView.div.classList.add(THUMBNAIL_SELECTED_CLASS);
       })["catch"](function (reason) {
-        console.error("Unable to initialize thumbnail viewer", reason);
+        Window['ngxConsole'].error("Unable to initialize thumbnail viewer", reason);
       });
     }
   }, {
@@ -13286,7 +13286,7 @@ var PDFThumbnailViewer = /*#__PURE__*/function () {
         this._pageLabels = null;
       } else if (!(Array.isArray(labels) && this.pdfDocument.numPages === labels.length)) {
         this._pageLabels = null;
-        console.error("PDFThumbnailViewer_setPageLabels: Invalid page labels.");
+        Window['ngxConsole'].error("PDFThumbnailViewer_setPageLabels: Invalid page labels.");
       } else {
         this._pageLabels = labels;
       }
@@ -13319,7 +13319,7 @@ var PDFThumbnailViewer = /*#__PURE__*/function () {
 
         return pdfPage;
       })["catch"](function (reason) {
-        console.error("Unable to get page for thumb view", reason);
+        Window['ngxConsole'].error("Unable to get page for thumb view", reason);
 
         _this3._pagesRequests["delete"](thumbView);
       });
@@ -13633,7 +13633,7 @@ var PDFThumbnailView = /*#__PURE__*/function () {
       var _this = this;
 
       if (this.renderingState !== _pdf_rendering_queue.RenderingStates.INITIAL) {
-        console.error("Must be in new state before drawing");
+        Window['ngxConsole'].error("Must be in new state before drawing");
         return Promise.resolve(undefined);
       }
 
@@ -14233,15 +14233,15 @@ var BaseViewer = /*#__PURE__*/function () {
       var flip = Math.abs(this._currentPageNumber - val) < 2;
 
       if (!this._setCurrentPageNumber(val, true)) {
-        console.error("currentPageNumber: \"".concat(val, "\" is not a valid page."));
+        Window['ngxConsole'].error("currentPageNumber: \"".concat(val, "\" is not a valid page."));
       }
 
       if (this.pageFlip) {
         if (flip) {
-          console.log("Flip");
+          Window['ngxConsole'].log("Flip");
           this.pageFlip.flip(val - 1);
         } else {
-          console.log("turn to page");
+          Window['ngxConsole'].log("turn to page");
           this.pageFlip.turnToPage(val - 1);
         }
       }
@@ -14393,14 +14393,14 @@ var BaseViewer = /*#__PURE__*/function () {
 
       if (!window.adjacentPagesLoader) {
         window.adjacentPagesLoader = function (evt) {
-          console.log("rendered", evt);
+          Window['ngxConsole'].log("rendered", evt);
 
           var pageView = _this5._pages[Math.min(_this5._pages.length - 1, _this5.currentPageNumber)];
 
           var isLoading = pageView.div.querySelector(".loadingIcon");
 
           if (isLoading) {
-            console.log("asking for the next page");
+            Window['ngxConsole'].log("asking for the next page");
 
             _this5._ensurePdfPageLoaded(pageView).then(function () {
               _this5.renderingQueue.renderView(pageView);
@@ -14410,7 +14410,7 @@ var BaseViewer = /*#__PURE__*/function () {
             isLoading = pageView.div.querySelector(".loadingIcon");
 
             if (isLoading) {
-              console.log("asking for the next + 1 page");
+              Window['ngxConsole'].log("asking for the next + 1 page");
 
               _this5._ensurePdfPageLoaded(pageView).then(function () {
                 _this5.renderingQueue.renderView(pageView);
@@ -14420,7 +14420,7 @@ var BaseViewer = /*#__PURE__*/function () {
               isLoading = pageView.div.querySelector(".loadingIcon");
 
               if (isLoading) {
-                console.log("asking for the next + 2 page");
+                Window['ngxConsole'].log("asking for the next + 2 page");
 
                 _this5._ensurePdfPageLoaded(pageView).then(function () {
                   _this5.renderingQueue.renderView(pageView);
@@ -14430,7 +14430,7 @@ var BaseViewer = /*#__PURE__*/function () {
                 isLoading = pageView.div.querySelector(".loadingIcon");
 
                 if (isLoading) {
-                  console.log("asking for the next + 3 page");
+                  Window['ngxConsole'].log("asking for the next + 3 page");
 
                   _this5._ensurePdfPageLoaded(pageView).then(function () {
                     _this5.renderingQueue.renderView(pageView);
@@ -14440,7 +14440,7 @@ var BaseViewer = /*#__PURE__*/function () {
                   isLoading = pageView.div.querySelector(".loadingIcon");
 
                   if (isLoading) {
-                    console.log("asking for the current page");
+                    Window['ngxConsole'].log("asking for the current page");
 
                     _this5._ensurePdfPageLoaded(pageView).then(function () {
                       _this5.renderingQueue.renderView(pageView);
@@ -14450,13 +14450,13 @@ var BaseViewer = /*#__PURE__*/function () {
                     isLoading = pageView.div.querySelector(".loadingIcon");
 
                     if (isLoading) {
-                      console.log("asking for the previous page");
+                      Window['ngxConsole'].log("asking for the previous page");
 
                       _this5._ensurePdfPageLoaded(pageView).then(function () {
                         _this5.renderingQueue.renderView(pageView);
                       });
                     } else {
-                      console.log("Finished preloading the pages");
+                      Window['ngxConsole'].log("Finished preloading the pages");
                     }
                   }
                 }
@@ -14493,7 +14493,7 @@ var BaseViewer = /*#__PURE__*/function () {
       }
 
       if (!this._setCurrentPageNumber(page, true)) {
-        console.error("currentPageLabel: \"".concat(val, "\" is not a valid page."));
+        Window['ngxConsole'].error("currentPageLabel: \"".concat(val, "\" is not a valid page."));
       }
     }
   }, {
@@ -14766,7 +14766,7 @@ var BaseViewer = /*#__PURE__*/function () {
                 _this6._pagesCapability.resolve();
               }
             }, function (reason) {
-              console.error("Unable to get page ".concat(_pageNum, " to initialize viewer"), reason);
+              Window['ngxConsole'].error("Unable to get page ".concat(_pageNum, " to initialize viewer"), reason);
 
               if (--getPagesLeft === 0) {
                 _this6._pagesCapability.resolve();
@@ -14789,7 +14789,7 @@ var BaseViewer = /*#__PURE__*/function () {
           _this6.update();
         }
       })["catch"](function (reason) {
-        console.error("Unable to initialize viewer", reason);
+        Window['ngxConsole'].error("Unable to initialize viewer", reason);
       });
     }
   }, {
@@ -14803,7 +14803,7 @@ var BaseViewer = /*#__PURE__*/function () {
         this._pageLabels = null;
       } else if (!(Array.isArray(labels) && this.pdfDocument.numPages === labels.length)) {
         this._pageLabels = null;
-        console.error("setPageLabels: Invalid page labels.");
+        Window['ngxConsole'].error("setPageLabels: Invalid page labels.");
       } else {
         this._pageLabels = labels;
       }
@@ -15016,7 +15016,7 @@ var BaseViewer = /*#__PURE__*/function () {
             break;
 
           default:
-            console.error("_setScale: \"".concat(value, "\" is an unknown zoom value."));
+            Window['ngxConsole'].error("_setScale: \"".concat(value, "\" is an unknown zoom value."));
             return;
         }
 
@@ -15071,7 +15071,7 @@ var BaseViewer = /*#__PURE__*/function () {
       var pageView = Number.isInteger(pageNumber) && this._pages[pageNumber - 1];
 
       if (!pageView) {
-        console.error("scrollPageIntoView: \"".concat(pageNumber, "\" is not a valid pageNumber parameter."));
+        Window['ngxConsole'].error("scrollPageIntoView: \"".concat(pageNumber, "\" is not a valid pageNumber parameter."));
         return;
       }
 
@@ -15141,7 +15141,7 @@ var BaseViewer = /*#__PURE__*/function () {
           break;
 
         default:
-          console.error("scrollPageIntoView: \"".concat(destArray[1].name, "\" is not a valid destination type."));
+          Window['ngxConsole'].error("scrollPageIntoView: \"".concat(destArray[1].name, "\" is not a valid destination type."));
           return;
       }
 
@@ -15363,7 +15363,7 @@ var BaseViewer = /*#__PURE__*/function () {
       }
 
       if (!(Number.isInteger(pageNumber) && pageNumber > 0 && pageNumber <= this.pagesCount)) {
-        console.error("isPageVisible: \"".concat(pageNumber, "\" is not a valid page."));
+        Window['ngxConsole'].error("isPageVisible: \"".concat(pageNumber, "\" is not a valid page."));
         return false;
       }
 
@@ -15379,7 +15379,7 @@ var BaseViewer = /*#__PURE__*/function () {
       }
 
       if (!(Number.isInteger(pageNumber) && pageNumber > 0 && pageNumber <= this.pagesCount)) {
-        console.error("isPageCached: \"".concat(pageNumber, "\" is not a valid page."));
+        Window['ngxConsole'].error("isPageCached: \"".concat(pageNumber, "\" is not a valid page."));
         return false;
       }
 
@@ -15431,7 +15431,7 @@ var BaseViewer = /*#__PURE__*/function () {
 
         return pdfPage;
       })["catch"](function (reason) {
-        console.error("Unable to get page for page view", reason);
+        Window['ngxConsole'].error("Unable to get page for page view", reason);
 
         _this9._pagesRequests["delete"](pageView);
       });
@@ -19740,7 +19740,7 @@ var PDFPageView = /*#__PURE__*/function () {
           optionalContentConfigPromise = _ref2$optionalContent === void 0 ? null : _ref2$optionalContent;
 
       if (_typeof(arguments[0]) !== "object") {
-        console.error("PDFPageView.update called with separate parameters, please use an object instead.");
+        Window['ngxConsole'].error("PDFPageView.update called with separate parameters, please use an object instead.");
         this.update({
           scale: arguments[0],
           rotation: arguments[1],
@@ -19930,7 +19930,7 @@ var PDFPageView = /*#__PURE__*/function () {
             break;
 
           default:
-            console.error("Bad rotation value.");
+            Window['ngxConsole'].error("Bad rotation value.");
             break;
         }
 
@@ -19969,7 +19969,7 @@ var PDFPageView = /*#__PURE__*/function () {
           _this2 = this;
 
       if (this.renderingState !== _pdf_rendering_queue.RenderingStates.INITIAL) {
-        console.error("Must be in new state before drawing");
+        Window['ngxConsole'].error("Must be in new state before drawing");
         this.reset();
       }
 
@@ -21276,13 +21276,13 @@ function getVerbosityLevel() {
 
 function info(msg) {
   if (verbosity >= VerbosityLevel.INFOS) {
-    console.log("Info: ".concat(msg));
+    Window['ngxConsole'].log("Info: ".concat(msg));
   }
 }
 
 function warn(msg) {
   if (verbosity >= VerbosityLevel.WARNINGS) {
-    console.log("Warning: ".concat(msg));
+    Window['ngxConsole'].log("Warning: ".concat(msg));
   }
 }
 
@@ -29241,7 +29241,7 @@ var TextHighlighter = /*#__PURE__*/function () {
         }
 
         if (i === textContentItemsStr.length) {
-          console.error("Could not find a matching mapping");
+          Window['ngxConsole'].error("Could not find a matching mapping");
         }
 
         var match = {
@@ -29742,7 +29742,7 @@ var XfaLayerBuilder = /*#__PURE__*/function () {
         parameters.div = _this.div;
         return _pdfjsLib.XfaLayer.render(parameters);
       })["catch"](function (error) {
-        console.error(error);
+        Window['ngxConsole'].error(error);
       });
     }
   }, {
@@ -31531,7 +31531,7 @@ var DownloadManager = /*#__PURE__*/function () {
     key: "downloadUrl",
     value: function downloadUrl(url, filename) {
       if (!(0, _pdfjsLib.createValidAbsoluteUrl)(url, "http://example.com")) {
-        console.error("downloadUrl - not a valid URL: ".concat(url));
+        Window['ngxConsole'].error("downloadUrl - not a valid URL: ".concat(url));
         return;
       }
 
@@ -31568,7 +31568,7 @@ var DownloadManager = /*#__PURE__*/function () {
           window.open(viewerUrl);
           return true;
         } catch (ex) {
-          console.error("openOrDownloadData: ".concat(ex));
+          Window['ngxConsole'].error("openOrDownloadData: ".concat(ex));
           URL.revokeObjectURL(blobUrl);
 
           this._openBlobUrls["delete"](element);
@@ -31817,7 +31817,7 @@ document.webL10n = function (window, document, undefined) {
         var PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
 
         if (!PDFViewerApplicationOptions || PDFViewerApplicationOptions.get("verbosity") > 0) {
-          console.warn("could not parse arguments for #" + l10nId);
+          Window['ngxConsole'].warn("could not parse arguments for #" + l10nId);
         }
       }
     }
@@ -31953,7 +31953,7 @@ document.webL10n = function (window, document, undefined) {
           var PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
 
           if (!PDFViewerApplicationOptions || PDFViewerApplicationOptions.get("verbosity") > 0) {
-            console.warn(url + " not found.");
+            Window['ngxConsole'].warn(url + " not found.");
           }
 
           callback();
@@ -32013,7 +32013,7 @@ document.webL10n = function (window, document, undefined) {
       var dict = getL10nDictionary();
 
       if (dict && dict.locales && dict.default_locale) {
-        console.log("The PDF viewer uses the pre-compiled language bundle stored in the HTML page.");
+        Window['ngxConsole'].log("The PDF viewer uses the pre-compiled language bundle stored in the HTML page.");
         gL10nData = dict.locales[originalCaseLang];
 
         if (!gL10nData) {
@@ -32034,7 +32034,7 @@ document.webL10n = function (window, document, undefined) {
 
         callback();
       } else {
-        console.log("Could not load the translation files for the PDF viewer. Check the flag useBrowserLocale, check the locales subfolder of the assets folder, or add the locale definition to the index.html");
+        Window['ngxConsole'].log("Could not load the translation files for the PDF viewer. Check the flag useBrowserLocale, check the locales subfolder of the assets folder, or add the locale definition to the index.html");
       }
 
       fireL10nReadyEvent(lang);
@@ -32063,8 +32063,8 @@ document.webL10n = function (window, document, undefined) {
           var PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
 
           if (!PDFViewerApplicationOptions || PDFViewerApplicationOptions.get("verbosity") > 0) {
-            console.warn(href + " not found.");
-            console.warn('"' + lang + '" resource not found');
+            Window['ngxConsole'].warn(href + " not found.");
+            Window['ngxConsole'].warn('"' + lang + '" resource not found');
           }
 
           gLanguage = "";
@@ -32408,7 +32408,7 @@ document.webL10n = function (window, document, undefined) {
       var PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
 
       if (!PDFViewerApplicationOptions || PDFViewerApplicationOptions.get("verbosity") > 0) {
-        console.warn("plural form unknown for [" + lang + "]");
+        Window['ngxConsole'].warn("plural form unknown for [" + lang + "]");
       }
 
       return function () {
@@ -32452,7 +32452,7 @@ document.webL10n = function (window, document, undefined) {
       var PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
 
       if (!PDFViewerApplicationOptions || PDFViewerApplicationOptions.get("verbosity") > 0) {
-        console.warn("Translation for the key #" + key + " is missing.");
+        Window['ngxConsole'].warn("Translation for the key #" + key + " is missing.");
       }
 
       if (!fallback) {
@@ -32507,7 +32507,7 @@ document.webL10n = function (window, document, undefined) {
         return gL10nData[arg];
       }
 
-      console.log("argument {{" + arg + "}} for #" + key + " is undefined.");
+      Window['ngxConsole'].log("argument {{" + arg + "}} for #" + key + " is undefined.");
       return matched_text;
     });
   }
@@ -32521,7 +32521,7 @@ document.webL10n = function (window, document, undefined) {
       var PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
 
       if (!PDFViewerApplicationOptions || PDFViewerApplicationOptions.get("verbosity") > 0) {
-        console.warn("#" + l10n.id + " is undefined.");
+        Window['ngxConsole'].warn("#" + l10n.id + " is undefined.");
       }
 
       return;
@@ -32965,7 +32965,7 @@ PDFPrintService.prototype = {
     }, this);
 
     if (!hasEqualPageSizes) {
-      console.warn("Not all pages have the same size. The printed " + "result may be incorrect!");
+      Window['ngxConsole'].warn("Not all pages have the same size. The printed " + "result may be incorrect!");
     }
 
     this.pageStyleSheet = document.createElement("style");
@@ -33097,7 +33097,7 @@ window.printPDF = function () {
   }
 
   if (activeService) {
-    console.warn("Ignored window.printPDF() because of a pending print job.");
+    Window['ngxConsole'].warn("Ignored window.printPDF() because of a pending print job.");
     return;
   }
 
@@ -33111,7 +33111,7 @@ window.printPDF = function () {
     dispatchEvent("beforeprint");
   } finally {
     if (!activeService) {
-      console.error("Expected print service to be initialized.");
+      Window['ngxConsole'].error("Expected print service to be initialized.");
       ensureOverlay().then(function () {
         if (overlayManager.active === "printServiceOverlay") {
           overlayManager.close("printServiceOverlay");
@@ -33514,7 +33514,7 @@ function webViewerLoad() {
   try {
     parent.document.dispatchEvent(event);
   } catch (ex) {
-    console.error("webviewerloaded: ".concat(ex));
+    Window['ngxConsole'].error("webviewerloaded: ".concat(ex));
     document.dispatchEvent(event);
   }
 

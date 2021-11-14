@@ -308,3 +308,4 @@
 - 11.0.0-alpha.1 now the default version of pdf.js is really 2.11.531 (the alpha.0 version accidentally delivered version 2.12.350)
 - 11.0.0-alpha.2 #998 add an additional log message to hunt down the Cypress bug
 - 11.0.0-alpha.3 #1013 lower the reqirements to RxJS 6; #1015 #995 removed the custom single-page-mode in favor of the new `[pageScrollMode]="3"` of pdf.js 2.12
+- 11.0.0-alpha.4 #804 allow users to filter log messages

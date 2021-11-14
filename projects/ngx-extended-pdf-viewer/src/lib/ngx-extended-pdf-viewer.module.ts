@@ -50,6 +50,10 @@ import { PdfSelectToolComponent } from './toolbar/pdf-select-tool/pdf-select-too
 import { PdfSidebarContentComponent } from './sidebar/pdf-sidebar/pdf-sidebar-content/pdf-sidebar-content.component';
 import { PdfSidebarToolbarComponent } from './sidebar/pdf-sidebar/pdf-sidebar-toolbar/pdf-sidebar-toolbar.component';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
+import { NgxConsole } from './options/ngx-console';
+
+new NgxConsole().log('');
+
 if (!Promise['allSettled']) {
   if (!!window['Zone'] && !window['__zone_symbol__Promise.allSettled']) {
     console.error(
