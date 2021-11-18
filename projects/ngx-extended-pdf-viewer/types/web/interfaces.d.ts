@@ -45,11 +45,13 @@ export class IPDFAnnotationLayerFactory {
      * @param {Object} [mouseState]
      * @param {Promise<Object<string, Array<Object>> | null>}
      *   [fieldObjectsPromise]
+     * @property {Map<string, Canvas> | null} [annotationCanvasMap] - Map some
+     *  annotation ids with canvases used to render them.
      * @returns {AnnotationLayerBuilder}
      */
     createAnnotationLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any, annotationStorage?: any, imageResourcesPath?: string | undefined, renderForms?: boolean, l10n?: IL10n, enableScripting?: boolean | undefined, hasJSActionsPromise?: Promise<boolean> | undefined, mouseState?: Object | undefined, fieldObjectsPromise?: Promise<{
         [x: string]: Object[];
-    } | null> | undefined): any;
+    } | null> | undefined, annotationCanvasMap?: any): any;
 }
 /**
  * @interface

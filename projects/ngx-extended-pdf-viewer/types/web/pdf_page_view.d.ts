@@ -117,6 +117,7 @@ export class PDFPageView implements IRenderableView {
     resume: (() => void) | null;
     _renderError: any;
     _isStandalone: boolean;
+    _annotationCanvasMap: any;
     annotationLayer: any;
     textLayer: any;
     zoomLayer: (Node & ParentNode) | null;

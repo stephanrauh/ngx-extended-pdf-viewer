@@ -1,5 +1,5 @@
 export class CanvasGraphics {
-    constructor(canvasCtx: any, commonObjs: any, objs: any, canvasFactory: any, imageLayer: any, optionalContentConfig: any);
+    constructor(canvasCtx: any, commonObjs: any, objs: any, canvasFactory: any, imageLayer: any, optionalContentConfig: any, annotationCanvasMap: any);
     ctx: any;
     current: CanvasExtraState;
     stateStack: any[];
@@ -25,6 +25,10 @@ export class CanvasGraphics {
     optionalContentConfig: any;
     cachedCanvases: CachedCanvases;
     cachedPatterns: Map<any, any>;
+    annotationCanvasMap: any;
+    viewportScale: number;
+    outputScaleX: number;
+    outputScaleY: number;
     _cachedGetSinglePixelWidth: number | null;
     beginDrawing({ transform, viewport, transparency, background, }: {
         transform: any;
@@ -119,7 +123,8 @@ export class CanvasGraphics {
     endGroup(group: any): void;
     beginAnnotations(): void;
     endAnnotations(): void;
-    beginAnnotation(id: any, rect: any, transform: any, matrix: any): void;
+    beginAnnotation(id: any, rect: any, transform: any, matrix: any, hasOwnCanvas: any): void;
+    annotationCanvas: any;
     endAnnotation(): void;
     paintImageMaskXObject(img: any): void;
     paintImageMaskXObjectRepeat(imgData: any, scaleX: any, skewX: number | undefined, skewY: number | undefined, scaleY: any, positions: any): void;

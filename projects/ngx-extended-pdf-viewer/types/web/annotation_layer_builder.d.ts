@@ -21,6 +21,7 @@ export type AnnotationLayerBuilderOptions = {
         [x: string]: Object[];
     } | null> | undefined;
     mouseState?: Object | undefined;
+    annotationCanvasMap?: Map<string, any> | undefined;
 };
 /**
  * @typedef {Object} AnnotationLayerBuilderOptions
@@ -38,12 +39,13 @@ export type AnnotationLayerBuilderOptions = {
  * @property {Promise<Object<string, Array<Object>> | null>}
  *   [fieldObjectsPromise]
  * @property {Object} [mouseState]
+ * @property {Map<string, Canvas>} [annotationCanvasMap]
  */
 export class AnnotationLayerBuilder {
     /**
      * @param {AnnotationLayerBuilderOptions} options
      */
-    constructor({ pageDiv, pdfPage, linkService, downloadManager, annotationStorage, imageResourcesPath, renderForms, l10n, enableScripting, hasJSActionsPromise, fieldObjectsPromise, mouseState, }: AnnotationLayerBuilderOptions);
+    constructor({ pageDiv, pdfPage, linkService, downloadManager, annotationStorage, imageResourcesPath, renderForms, l10n, enableScripting, hasJSActionsPromise, fieldObjectsPromise, mouseState, annotationCanvasMap, }: AnnotationLayerBuilderOptions);
     pageDiv: HTMLDivElement;
     pdfPage: any;
     linkService: any;
@@ -58,6 +60,7 @@ export class AnnotationLayerBuilder {
         [x: string]: Object[];
     } | null>;
     _mouseState: Object;
+    _annotationCanvasMap: Map<string, any>;
     div: HTMLDivElement | null;
     _cancelled: boolean;
     /**
@@ -87,9 +90,11 @@ export class DefaultAnnotationLayerFactory implements IPDFAnnotationLayerFactory
      * @param {Object} [mouseState]
      * @param {Promise<Object<string, Array<Object>> | null>}
      *   [fieldObjectsPromise]
+     * @param {Map<string, Canvas> | null} [annotationCanvasMap] - Map some
+     *  annotation ids with canvases used to render them.
      * @returns {AnnotationLayerBuilder}
      */
     createAnnotationLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any, annotationStorage?: any, imageResourcesPath?: string | undefined, renderForms?: boolean, l10n?: any, enableScripting?: boolean | undefined, hasJSActionsPromise?: Promise<boolean> | undefined, mouseState?: Object | undefined, fieldObjectsPromise?: Promise<{
         [x: string]: Object[];
-    } | null> | undefined): AnnotationLayerBuilder;
+    } | null> | undefined, annotationCanvasMap?: Map<string, any> | null | undefined): AnnotationLayerBuilder;
 }

@@ -451,6 +451,11 @@ export type RenderParameters = {
      * states set.
      */
     optionalContentConfigPromise?: Promise<OptionalContentConfig> | undefined;
+    /**
+     * - Map some annotation
+     * ids with canvases used to render them.
+     */
+    annotationCanvasMap?: Map<string, any> | undefined;
 };
 /**
  * Page getOperatorList parameters.
@@ -1114,6 +1119,8 @@ export class PDFDocumentProxy {
  *   created from `PDFDocumentProxy.getOptionalContentConfig`. If `null`,
  *   the configuration will be fetched automatically with the default visibility
  *   states set.
+ * @property {Map<string, Canvas>} [annotationCanvasMap] - Map some annotation
+ *   ids with canvases used to render them.
  */
 /**
  * Page getOperatorList parameters.
@@ -1229,7 +1236,7 @@ export class PDFPageProxy {
      * @returns {RenderTask} An object that contains a promise that is
      *   resolved when the page finishes rendering.
      */
-    render({ canvasContext, viewport, intent, annotationMode, transform, imageLayer, canvasFactory, background, optionalContentConfigPromise, }: RenderParameters, ...args: any[]): RenderTask;
+    render({ canvasContext, viewport, intent, annotationMode, transform, imageLayer, canvasFactory, background, optionalContentConfigPromise, annotationCanvasMap, }: RenderParameters, ...args: any[]): RenderTask;
     /**
      * @param {GetOperatorListParameters} params - Page getOperatorList
      *   parameters.

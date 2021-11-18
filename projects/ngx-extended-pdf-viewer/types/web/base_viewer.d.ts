@@ -255,7 +255,6 @@ export class BaseViewer {
     _scrollMode: any;
     _previousScrollMode: any;
     _spreadMode: any;
-    _ensurePageViewVisible(): void;
     _scrollUpdate(): void;
     _scrollIntoView({ pageDiv, pageSpot, pageNumber }: {
         pageDiv: any;
@@ -385,11 +384,12 @@ export class BaseViewer {
      * @param {Object} [mouseState]
      * @param {Promise<Object<string, Array<Object>> | null>}
      *   [fieldObjectsPromise]
+     * @param {Map<string, Canvas>} [annotationCanvasMap]
      * @returns {AnnotationLayerBuilder}
      */
     createAnnotationLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any, annotationStorage?: any, imageResourcesPath?: string | undefined, renderForms?: boolean, l10n?: any, enableScripting?: boolean | undefined, hasJSActionsPromise?: Promise<boolean> | undefined, mouseState?: Object | undefined, fieldObjectsPromise?: Promise<{
         [x: string]: Object[];
-    } | null> | undefined): AnnotationLayerBuilder;
+    } | null> | undefined, annotationCanvasMap?: Map<string, any> | undefined): AnnotationLayerBuilder;
     /**
      * @param {HTMLDivElement} pageDiv
      * @param {PDFPage} pdfPage
