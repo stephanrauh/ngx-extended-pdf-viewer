@@ -197,6 +197,24 @@ export type OnProgressParameters = {
      */
     total: number;
 };
+export type PDFDocumentStats = {
+    /**
+     * - Used stream types in the
+     * document (an item is set to true if specific stream ID was used in the
+     * document).
+     */
+    streamTypes: {
+        [x: string]: boolean;
+    };
+    /**
+     * - Used font types in the
+     * document (an item is set to true if specific font ID was used in the
+     * document).
+     */
+    fontTypes: {
+        [x: string]: boolean;
+    };
+};
 export type OutlineNode = {
     title: string;
     bold: boolean;
@@ -220,24 +238,6 @@ export type MarkInfo = {
     Marked: boolean;
     UserProperties: boolean;
     Suspects: boolean;
-};
-export type PDFDocumentStats = {
-    /**
-     * - Used stream types in the
-     * document (an item is set to true if specific stream ID was used in the
-     * document).
-     */
-    streamTypes: {
-        [x: string]: boolean;
-    };
-    /**
-     * - Used font types in the
-     * document (an item is set to true if specific font ID was used in the
-     * document).
-     */
-    fontTypes: {
-        [x: string]: boolean;
-    };
 };
 /**
  * Page getViewport parameters.
@@ -789,6 +789,20 @@ export class PDFDocumentProxy {
      */
     get fingerprints(): string[];
     /**
+     * @typedef {Object} PDFDocumentStats
+     * @property {Object<string, boolean>} streamTypes - Used stream types in the
+     *   document (an item is set to true if specific stream ID was used in the
+     *   document).
+     * @property {Object<string, boolean>} fontTypes - Used font types in the
+     *   document (an item is set to true if specific font ID was used in the
+     *   document).
+     */
+    /**
+     * @type {PDFDocumentStats | null} The current statistics about document
+     *   structures, or `null` when no statistics exists.
+     */
+    get stats(): PDFDocumentStats | null;
+    /**
      * @type {boolean} True if only XFA form.
      */
     get isPureXfa(): boolean;
@@ -942,21 +956,6 @@ export class PDFDocumentProxy {
     getDownloadInfo(): Promise<{
         length: number;
     }>;
-    /**
-     * @typedef {Object} PDFDocumentStats
-     * @property {Object<string, boolean>} streamTypes - Used stream types in the
-     *   document (an item is set to true if specific stream ID was used in the
-     *   document).
-     * @property {Object<string, boolean>} fontTypes - Used font types in the
-     *   document (an item is set to true if specific font ID was used in the
-     *   document).
-     */
-    /**
-     * @returns {Promise<PDFDocumentStats>} A promise this is resolved with
-     *   current statistics about document structures (see
-     *   {@link PDFDocumentStats}).
-     */
-    getStats(): Promise<PDFDocumentStats>;
     /**
      * Cleans up resources allocated by the document on both the main and worker
      * threads.
@@ -1330,7 +1329,6 @@ export class PDFWorker {
     });
     name: any;
     destroyed: boolean;
-    postMessageTransfers: boolean;
     verbosity: number;
     _readyCapability: import("../shared/util.js").PromiseCapability;
     _port: any;

@@ -167,6 +167,10 @@ export class PDFPageView implements IRenderableView {
     get width(): any;
     get height(): any;
     getPagePoint(x: any, y: any): any;
+    /**
+     * @ignore
+     */
+    toggleLoadingIconSpinner(viewVisible?: boolean): void;
     draw(): any;
     paintOnCanvas(canvasWrapper: any): {
         promise: any;

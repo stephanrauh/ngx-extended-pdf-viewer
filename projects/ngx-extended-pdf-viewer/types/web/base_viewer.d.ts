@@ -518,6 +518,7 @@ export class PDFPageViewBuffer {
      */
     resize(newSize: any, idsToKeep?: any): void;
     has(view: any): boolean;
+    [Symbol.iterator](): IterableIterator<any>;
     #private;
 }
 import { PDFRenderingQueue } from "./pdf_rendering_queue.js";
