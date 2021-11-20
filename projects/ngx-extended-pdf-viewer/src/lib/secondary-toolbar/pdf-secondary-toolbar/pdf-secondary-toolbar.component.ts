@@ -76,10 +76,10 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
   public showPageScrollMode = false;
 
   constructor(private element: ElementRef, public notificationService: PDFNotificationService) {
-    this.notificationService.onPDFJSInit.pipe(take(1)).subscribe(async () => {
+    const version = notificationService.pdfjsVersion;
+    this.showPageScrollMode = version >= '2.12';
+    this.notificationService.onPDFJSInit.pipe(take(1)).subscribe(() => {
       this.onPdfJsInit();
-      const version = await notificationService.pdfjsVersion.pipe(take(1)).toPromise() as string;
-      this.showPageScrollMode = version >= '2.12';
     });
   }
 

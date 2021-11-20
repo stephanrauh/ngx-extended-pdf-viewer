@@ -146,7 +146,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
     if (viewMode === 'single') {
       // since pdf.js, our custom single-page-mode has been replaced by the standard scrollMode="page"
-      const version = this.notificationService.pdfjsVersion.getValue();
+      const version = getVersionSuffix(pdfDefaultOptions.assetsFolder);
       const showPageScrollMode = version >= '2.12';
       if (showPageScrollMode) {
         this.scrollMode = ScrollModeType.page;
@@ -680,7 +680,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (needsES5 || isIE || isEdge || isIOs13OrBelow) {
       return true;
     }
-    return !await this.supportsOptionalChaining();
+    return !(await this.supportsOptionalChaining());
   }
 
   private supportsOptionalChaining(): Promise<boolean> {
