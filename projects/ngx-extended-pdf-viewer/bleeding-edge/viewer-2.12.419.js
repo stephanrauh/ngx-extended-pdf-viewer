@@ -5204,6 +5204,7 @@ class PDFFindBar {
     this.toggleButton = options.toggleButton;
     this.findField = options.findField;
     this.highlightAll = options.highlightAllCheckbox;
+    this.currentPage = options.findCurrentPageCheckbox;
     this.caseSensitive = options.caseSensitiveCheckbox;
     this.entireWord = options.entireWordCheckbox;
     this.findMsg = options.findMsg;
@@ -5282,6 +5283,7 @@ class PDFFindBar {
       ignoreAccents: this.ignoreAccents.checked,
       fuzzySearch: this.fuzzySearch.checked,
       highlightAll: this.highlightAll.checked,
+      currentPage: this.currentPage.checked,
       findPrevious: findPrev
     });
   }
@@ -5911,8 +5913,15 @@ class PDFFindController {
       entireWord,
       ignoreAccents,
       fuzzySearch,
-      phraseSearch
+      phraseSearch,
+      currentPage
     } = this._state;
+
+    if (currentPage) {
+      if (pageIndex !== this._linkService.page - 1) {
+        return;
+      }
+    }
 
     if (query.length === 0) {
       return;
@@ -6027,7 +6036,18 @@ class PDFFindController {
 
       this._updateAllPages();
 
-      for (let i = 0; i < numPages; i++) {
+      const {
+        currentPage
+      } = this.state;
+      let startPage = 0;
+      let finalPage = numPages - 1;
+
+      if (currentPage) {
+        startPage = this._linkService.page - 1;
+        finalPage = startPage;
+      }
+
+      for (let i = startPage; i <= finalPage; i++) {
         if (this._pendingFindMatches.has(i)) {
           continue;
         }
@@ -9867,7 +9887,6 @@ class PDFThumbnailViewer {
     this._pageLabels = null;
     this._pagesRotation = 0;
     this._optionalContentConfigPromise = null;
-    this._pagesRequests = new WeakMap();
     this._setImageDisabled = false;
     this.container.textContent = "";
   }
@@ -9953,32 +9972,23 @@ class PDFThumbnailViewer {
     }
   }
 
-  _ensurePdfPageLoaded(thumbView) {
+  async #ensurePdfPageLoaded(thumbView) {
     if (thumbView.pdfPage) {
-      return Promise.resolve(thumbView.pdfPage);
+      return thumbView.pdfPage;
     }
 
-    if (this._pagesRequests.has(thumbView)) {
-      return this._pagesRequests.get(thumbView);
-    }
+    try {
+      const pdfPage = await this.pdfDocument.getPage(thumbView.id);
 
-    const promise = this.pdfDocument.getPage(thumbView.id).then(pdfPage => {
       if (!thumbView.pdfPage) {
         thumbView.setPdfPage(pdfPage);
       }
 
-      this._pagesRequests.delete(thumbView);
-
       return pdfPage;
-    }).catch(reason => {
+    } catch (reason) {
       Window['ngxConsole'].error("Unable to get page for thumb view", reason);
-
-      this._pagesRequests.delete(thumbView);
-    });
-
-    this._pagesRequests.set(thumbView, promise);
-
-    return promise;
+      return null;
+    }
   }
 
   #getScrollAhead(visible) {
@@ -9998,10 +10008,9 @@ class PDFThumbnailViewer {
     const thumbView = this.renderingQueue.getHighestPriority(visibleThumbs, this._thumbnails, scrollAhead);
 
     if (thumbView) {
-      this._ensurePdfPageLoaded(thumbView).then(() => {
+      this.#ensurePdfPageLoaded(thumbView).then(() => {
         this.renderingQueue.renderView(thumbView);
       });
-
       return true;
     }
 
@@ -10581,7 +10590,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.12.414';
+    const viewerVersion = '2.12.419';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -10751,15 +10760,13 @@ class BaseViewer {
         pageView.div.parentElement.childNodes.forEach(div => {
           const pageNumber = Number(div.getAttribute("data-page-number"));
           const pv = this._pages[pageNumber - 1];
-
-          this._ensurePdfPageLoaded(pv).then(() => {
+          this.#ensurePdfPageLoaded(pv).then(() => {
             this.renderingQueue.renderView(pv);
           });
-
           div.style.display = "inline-block";
         });
       } else {
-        this._ensurePdfPageLoaded(pageView).then(() => {
+        this.#ensurePdfPageLoaded(pageView).then(() => {
           this.renderingQueue.renderView(pageView);
         });
 
@@ -10789,10 +10796,9 @@ class BaseViewer {
       const isLoading = pageView.div.querySelector(".loadingIcon");
 
       if (isLoading) {
-        this._ensurePdfPageLoaded(pageView).then(() => {
+        this.#ensurePdfPageLoaded(pageView).then(() => {
           this.renderingQueue.renderView(pageView);
         });
-
         return true;
       }
     }
@@ -10811,8 +10817,7 @@ class BaseViewer {
 
         if (isLoading) {
           Window['ngxConsole'].log("asking for the next page");
-
-          this._ensurePdfPageLoaded(pageView).then(() => {
+          this.#ensurePdfPageLoaded(pageView).then(() => {
             this.renderingQueue.renderView(pageView);
           });
         } else {
@@ -10821,8 +10826,7 @@ class BaseViewer {
 
           if (isLoading) {
             Window['ngxConsole'].log("asking for the next + 1 page");
-
-            this._ensurePdfPageLoaded(pageView).then(() => {
+            this.#ensurePdfPageLoaded(pageView).then(() => {
               this.renderingQueue.renderView(pageView);
             });
           } else {
@@ -10831,8 +10835,7 @@ class BaseViewer {
 
             if (isLoading) {
               Window['ngxConsole'].log("asking for the next + 2 page");
-
-              this._ensurePdfPageLoaded(pageView).then(() => {
+              this.#ensurePdfPageLoaded(pageView).then(() => {
                 this.renderingQueue.renderView(pageView);
               });
             } else {
@@ -10841,8 +10844,7 @@ class BaseViewer {
 
               if (isLoading) {
                 Window['ngxConsole'].log("asking for the next + 3 page");
-
-                this._ensurePdfPageLoaded(pageView).then(() => {
+                this.#ensurePdfPageLoaded(pageView).then(() => {
                   this.renderingQueue.renderView(pageView);
                 });
               } else {
@@ -10851,8 +10853,7 @@ class BaseViewer {
 
                 if (isLoading) {
                   Window['ngxConsole'].log("asking for the current page");
-
-                  this._ensurePdfPageLoaded(pageView).then(() => {
+                  this.#ensurePdfPageLoaded(pageView).then(() => {
                     this.renderingQueue.renderView(pageView);
                   });
                 } else {
@@ -10861,8 +10862,7 @@ class BaseViewer {
 
                   if (isLoading) {
                     Window['ngxConsole'].log("asking for the previous page");
-
-                    this._ensurePdfPageLoaded(pageView).then(() => {
+                    this.#ensurePdfPageLoaded(pageView).then(() => {
                       this.renderingQueue.renderView(pageView);
                     });
                   } else {
@@ -11208,7 +11208,6 @@ class BaseViewer {
     this._location = null;
     this._pagesRotation = 0;
     this._optionalContentConfigPromise = null;
-    this._pagesRequests = new WeakMap();
     this._firstPageCapability = (0, _pdfjsLib.createPromiseCapability)();
     this._onePageRenderedCapability = (0, _pdfjsLib.createPromiseCapability)();
     this._pagesCapability = (0, _pdfjsLib.createPromiseCapability)();
@@ -11579,7 +11578,7 @@ class BaseViewer {
       }
     }
 
-    this._ensurePdfPageLoaded(pageView).then(() => {
+    this.#ensurePdfPageLoaded(pageView).then(() => {
       this.renderingQueue.renderView(pageView);
 
       if (this.currentPageNumber !== pageNumber) {
@@ -11797,32 +11796,27 @@ class BaseViewer {
     }
   }
 
-  _ensurePdfPageLoaded(pageView) {
+  async #ensurePdfPageLoaded(pageView) {
     if (pageView.pdfPage) {
-      return Promise.resolve(pageView.pdfPage);
+      return pageView.pdfPage;
     }
 
-    if (this._pagesRequests.has(pageView)) {
-      return this._pagesRequests.get(pageView);
-    }
+    try {
+      const pdfPage = await this.pdfDocument.getPage(pageView.id);
 
-    const promise = this.pdfDocument.getPage(pageView.id).then(pdfPage => {
       if (!pageView.pdfPage) {
         pageView.setPdfPage(pdfPage);
       }
 
-      this._pagesRequests.delete(pageView);
+      if (!this.linkService._cachedPageNumber(pdfPage.ref)) {
+        this.linkService.cachePageRef(pageView.id, pdfPage.ref);
+      }
 
       return pdfPage;
-    }).catch(reason => {
+    } catch (reason) {
       Window['ngxConsole'].error("Unable to get page for page view", reason);
-
-      this._pagesRequests.delete(pageView);
-    });
-
-    this._pagesRequests.set(pageView, promise);
-
-    return promise;
+      return null;
+    }
   }
 
   #getScrollAhead(visible) {
@@ -11867,10 +11861,9 @@ class BaseViewer {
     this.#toggleLoadingIconSpinner(visiblePages.ids);
 
     if (pageView) {
-      this._ensurePdfPageLoaded(pageView).then(() => {
+      this.#ensurePdfPageLoaded(pageView).then(() => {
         this.renderingQueue.renderView(pageView);
       });
-
       return true;
     }
 
@@ -20564,8 +20557,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.12.414';
-const pdfjsBuild = '38491567c';
+const pdfjsVersion = '2.12.419';
+const pdfjsBuild = '83079f887';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -20683,6 +20676,7 @@ function getViewerConfiguration() {
       findField: document.getElementById("findInput"),
       findFieldMultiline: document.getElementById("findInputMultiline"),
       highlightAllCheckbox: document.getElementById("findHighlightAll"),
+      findCurrentPageCheckbox: document.getElementById("findCurrentPage"),
       caseSensitiveCheckbox: document.getElementById("findMatchCase"),
       entireWordCheckbox: document.getElementById("findEntireWord"),
       findMultipleSearchTextsCheckbox: document.getElementById("findMultipleSearchTexts"),

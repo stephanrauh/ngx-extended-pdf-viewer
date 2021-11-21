@@ -248,7 +248,6 @@ export class BaseViewer {
         rotation: any;
         pdfOpenParams: string;
     } | null | undefined;
-    _pagesRequests: WeakMap<object, any> | undefined;
     _firstPageCapability: any;
     _onePageRenderedCapability: any;
     _pagesCapability: any;
@@ -347,12 +346,6 @@ export class BaseViewer {
      * @private
      */
     private _cancelRendering;
-    /**
-     * @param {PDFPageView} pageView
-     * @returns {Promise} Returns a promise containing a {PDFPageProxy} object.
-     * @private
-     */
-    private _ensurePdfPageLoaded;
     forceRendering(currentlyVisiblePages: any): boolean;
     /**
      * @param {HTMLDivElement} textLayerDiv
