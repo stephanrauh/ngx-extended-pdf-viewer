@@ -311,4 +311,4 @@
 - 11.0.0-alpha.4 #804 allow users to filter log messages
 - 11.0.0-alpha.5 #1030 ignore tiny rounding difference when emitting `(zoomChange)`; #1035 fix the "Window is not defined" error message
 - 11.0.0-alpha.6 #1040 fixed the single-page mode of the bleeding-edge branch; #804 detect the worker thread more reliably
-- 11.0.0-alpha.7 #745 include the PDF content to the tab order, enabling users to scroll with the keyboard
+- 11.0.0-alpha.7 #745 include the PDF content to the tab order, enabling users to scroll with the keyboard; #832 added an option to search the current page only

@@ -60,6 +60,7 @@ const requiredIds = [
   'findInput',
   'findInputMultiline',
   'findHighlightAll',
+  'findCurrentPage',
   'findMatchCase',
   'findEntireWord',
   'findMultipleSearchTexts',

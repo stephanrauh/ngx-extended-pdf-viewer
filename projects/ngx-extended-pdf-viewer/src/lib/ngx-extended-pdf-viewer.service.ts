@@ -1,4 +1,3 @@
-import { filter } from 'rxjs';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { PDFPrintRange } from './options/pdf-print-range';
 import { IPDFViewerApplication } from './options/pdf-viewer-application';
@@ -10,6 +9,7 @@ export interface FindOptions {
   ignoreAccents?: boolean;
   findMultipleSearchTexts?: boolean;
   fuzzySearch?: boolean;
+  currentPage?: boolean; // search only in the current page
 }
 
 interface DrawContext {
@@ -45,6 +45,11 @@ export class NgxExtendedPdfViewerService {
       if (highlightAllCheckbox) {
         highlightAllCheckbox.checked = options.highlightAll || false;
       }
+      const findCurrentPagelCheckbox = document.getElementById('findCurrentPage') as HTMLInputElement;
+      if (findCurrentPagelCheckbox) {
+        findCurrentPagelCheckbox.checked = options.currentPage || false;
+      }
+
       const matchCaseCheckbox = document.getElementById('findMatchCase') as HTMLInputElement;
       if (matchCaseCheckbox) {
         matchCaseCheckbox.checked = options.matchCase || false;
