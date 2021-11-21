@@ -309,5 +309,6 @@
 - 11.0.0-alpha.2 #998 add an additional log message to hunt down the Cypress bug
 - 11.0.0-alpha.3 #1013 lower the reqirements to RxJS 6; #1015 #995 removed the custom single-page-mode in favor of the new `[pageScrollMode]="3"` of pdf.js 2.12
 - 11.0.0-alpha.4 #804 allow users to filter log messages
-- 11.0.0-aplha.5 #1030 ignore tiny rounding difference when emitting `(zoomChange)`; #1035 fix the "Window is not defined" error message
-- 11.0.0-aplha.6 #1040 fixed the single-page mode of the bleeding-edge branch; #804 detect the worker thread more reliably
+- 11.0.0-alpha.5 #1030 ignore tiny rounding difference when emitting `(zoomChange)`; #1035 fix the "Window is not defined" error message
+- 11.0.0-alpha.6 #1040 fixed the single-page mode of the bleeding-edge branch; #804 detect the worker thread more reliably
+- 11.0.0-alpha.7 #745 include the PDF content to the tab order, enabling users to scroll with the keyboard
