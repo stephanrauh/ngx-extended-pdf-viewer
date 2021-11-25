@@ -121,3 +121,39 @@ ngx-extended-pdf-viewer {
   }
 }
 
+ngx-extended-pdf-viewer #viewerContainer .pdfViewer.removePageBorders .spread .page {
+  margin: 0;
+}
+
+ngx-extended-pdf-viewer{
+  .relative-coords {
+    #viewerContainer {
+      overflow: hidden;
+      // position: relative;
+  
+      #viewer {
+        display: inline-block;
+        position: relative;
+  
+  
+        .spread {
+          // display: inline-block;
+          margin: 0;
+          .page {
+            display: inline-block;
+          }
+        }
+  
+        .page {
+          margin: 0;
+          border: 0;
+        }
+        .page.stf__item {
+          display: block;
+        }
+      }
+  
+    }
+  }
+  
+}

@@ -41,6 +41,7 @@ import { PdfCursorTools } from './options/pdf-cursor-tools';
 import { TextLayerRenderedEvent } from './events/textlayer-rendered';
 import { Location } from '@angular/common';
 import { PinchOnMobileSupport } from './pinch-on-mobile-support';
+import { RelativeCoordsSupport } from './relative-coords-support';
 import { PdfThumbnailDrawnEvent } from './events/pdf-thumbnail-drawn-event';
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 import { PageViewModeType, ScrollModeChangedEvent, ScrollModeType } from './options/pdf-viewer';
@@ -88,6 +89,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public root: ElementRef;
 
   private pinchOnMobileSupport: PinchOnMobileSupport | undefined;
+  private relativeCoordsSupport: RelativeCoordsSupport | undefined;
 
   /* UI templates */
   @Input()
@@ -223,6 +225,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public enablePinchOnMobile = false;
+
+  @Input()
+  public enableRelativeCoords = false;
 
   /** Use the minified (minifiedJSLibraries="true", which is the default) or the user-readable pdf.js library (minifiedJSLibraries="false") */
   @Input()
@@ -936,6 +941,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if (this.enablePinchOnMobile) {
         this.pinchOnMobileSupport = new PinchOnMobileSupport(this.ngZone);
       }
+      if (this.enableRelativeCoords) {
+        this.relativeCoordsSupport = new RelativeCoordsSupport(this.ngZone, this);
+      }
     };
     document.addEventListener('webviewerloaded', onLoaded);
 
@@ -1519,6 +1527,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.pinchOnMobileSupport.destroyPinchZoom();
         this.pinchOnMobileSupport = undefined;
       }
+      if (this.relativeCoordsSupport) {
+        this.relativeCoordsSupport.destroyRelativeCoords();
+        this.relativeCoordsSupport = undefined;
+      }
 
       // #802 clear the form data; otherwise the "download" dialogs opens
       PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
@@ -1711,6 +1723,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
               if (this.pinchOnMobileSupport) {
                 this.pinchOnMobileSupport.destroyPinchZoom();
                 this.pinchOnMobileSupport = undefined;
+              }
+            }
+          }
+        }
+      }
+      if ('enableRelativeCoords' in changes) {
+        if (!changes['enableRelativeCoords'].isFirstChange()) {
+          if (changes['enableRelativeCoords'].currentValue !== changes['enableRelativeCoords'].previousValue) {
+            if (this.enableRelativeCoords) {
+              this.relativeCoordsSupport = new RelativeCoordsSupport(this.ngZone, this);
+            } else {
+              if (this.relativeCoordsSupport) {
+                this.relativeCoordsSupport.destroyRelativeCoords();
+                this.relativeCoordsSupport = undefined;
               }
             }
           }
