@@ -1455,10 +1455,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.overrideDefaultSettings();
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
 
-    await PDFViewerApplication.close();
 
     // #802 clear the form data; otherwise the "download" dialogs opens
     PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
+
+    await PDFViewerApplication.close();
     this.formData = {};
     this.formIdToFieldName = {};
     this.formRadioButtonValueToId = {};
