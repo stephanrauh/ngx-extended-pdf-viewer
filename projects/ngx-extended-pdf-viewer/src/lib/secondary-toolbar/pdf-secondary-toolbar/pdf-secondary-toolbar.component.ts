@@ -11,7 +11,7 @@ import {
   HostListener,
   AfterViewInit,
 } from '@angular/core';
-import { take } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from './../../pdf-notification-service';
 

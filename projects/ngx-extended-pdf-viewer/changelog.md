@@ -314,3 +314,4 @@
 - 11.0.0-alpha.7 #745 include the PDF content to the tab order, enabling users to scroll with the keyboard; #832 added an option to search the current page only
 - 11.0.0-alpha.8
 - 11.0.0-alpha.9 #1033 drop support for Angular 8; #802 stop opening the "save" dialog after changing the `[src]` attribute
+- 11.0.0-akpha.10 #1058 use the correct import of the RxJS take operator
