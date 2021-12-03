@@ -315,3 +315,4 @@
 - 11.0.0-alpha.8
 - 11.0.0-alpha.9 #1033 drop support for Angular 8; #802 stop opening the "save" dialog after changing the `[src]` attribute
 - 11.0.0-alpha.10 #1058 use the correct import of the RxJS take operator
+- 11.0.0-alpha.11 #1063 detect if your browser support the logical assignment operators, and fall back to the ES5 version if it doesn't

@@ -733,7 +733,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       } else {
         this.needsES5().then((needsES5) => {
           if (needsES5) {
-            console.log('Using the ES5 version of the PDF viewer.');
+            if (!pdfDefaultOptions.needsES5) {
+              console.log("If you see the error message \"expected expression, got '='\" above: you can safely ignore it as long as you know what you're doing. It means your browser is out-of-date. Please update your browser to benefit from the latest security updates and to enjoy a faster PDF viewer.")
+            }
+            pdfDefaultOptions.needsES5 = true;
+            console.log('Using the ES5 version of the PDF viewer. Your PDF files show faster if you update your browser.');
+
           }
           const viewerPath = this.getPdfJsPath('viewer', needsES5);
           const script2 = this.createScriptElement(viewerPath);

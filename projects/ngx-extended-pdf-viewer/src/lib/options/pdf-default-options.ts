@@ -12,6 +12,7 @@ export function getVersionSuffix(folder: string): string {
 }
 
 export let pdfDefaultOptions = {
+  needsES5: _isIE11 || isEdge || needsES5,
   cursorToolOnLoad: 0,
   defaultUrl: '',
   defaultZoomValue: undefined,
@@ -54,13 +55,13 @@ export let pdfDefaultOptions = {
   workerPort: null,
   assetsFolder: 'assets',
   sandboxBundleSrc: () =>
-    _isIE11 || isEdge || needsES5
-      ? './' + pdfDefaultOptions.assetsFolder + '/pdf.sandbox-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '-es5.js'
-      : './' + pdfDefaultOptions.assetsFolder + '/pdf.sandbox-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '.js',
+    pdfDefaultOptions.needsES5
+      ? `./${pdfDefaultOptions.assetsFolder}/pdf.sandbox-${getVersionSuffix(pdfDefaultOptions.assetsFolder)}-es5.js`
+      : `./${pdfDefaultOptions.assetsFolder}/pdf.sandbox-${getVersionSuffix(pdfDefaultOptions.assetsFolder)}.js`,
   workerSrc: () =>
-    _isIE11 || isEdge || needsES5
-      ? './' + pdfDefaultOptions.assetsFolder + '/pdf.worker-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '-es5.js'
-      : './' + pdfDefaultOptions.assetsFolder + '/pdf.worker-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '.js',
+    pdfDefaultOptions.needsES5
+      ? `./${pdfDefaultOptions.assetsFolder}/pdf.worker-${getVersionSuffix(pdfDefaultOptions.assetsFolder)}-es5.js`
+      : `./${pdfDefaultOptions.assetsFolder}/pdf.worker-${getVersionSuffix(pdfDefaultOptions.assetsFolder)}.js`,
 
   // options specific to ngx-extended-pdf-viewer (as opposed to being used by pdf.js)
   doubleTapZoomFactor: 'page-width',
