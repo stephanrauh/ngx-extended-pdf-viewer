@@ -64,7 +64,7 @@ export class TextLayerBuilder {
         eventBus: any;
         pageIndex: any;
         viewport: any;
-        highlighter?: any;
+        highlighter?: null | undefined;
         enhanceTextSelection?: boolean | undefined;
     });
     textLayerDiv: any;

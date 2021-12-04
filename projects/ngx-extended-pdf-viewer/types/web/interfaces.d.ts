@@ -51,7 +51,7 @@ export class IPDFAnnotationLayerFactory {
      */
     createAnnotationLayerBuilder(pageDiv: HTMLDivElement, pdfPage: any, annotationStorage?: any, imageResourcesPath?: string | undefined, renderForms?: boolean, l10n?: IL10n, enableScripting?: boolean | undefined, hasJSActionsPromise?: Promise<boolean> | undefined, mouseState?: Object | undefined, fieldObjectsPromise?: Promise<{
         [x: string]: Object[];
-    } | null> | undefined, annotationCanvasMap?: any): any;
+    } | null> | undefined, annotationCanvasMap?: null): any;
 }
 /**
  * @interface

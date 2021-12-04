@@ -144,11 +144,11 @@ export class EventBus {
     /**
      * @ignore
      */
-    _on(eventName: any, listener: any, options?: any): void;
+    _on(eventName: any, listener: any, options?: null): void;
     /**
      * @ignore
      */
-    _off(eventName: any, listener: any, options?: any): void;
+    _off(eventName: any, listener: any, options?: null): void;
 }
 /**
  * Get the active or focused element in current DOM.
@@ -251,7 +251,7 @@ export class ProgressBar {
     });
     visible: boolean;
     div: Element | null;
-    bar: (Node & ParentNode) | null | undefined;
+    bar: ParentNode | null | undefined;
     height: any;
     width: any;
     units: any;

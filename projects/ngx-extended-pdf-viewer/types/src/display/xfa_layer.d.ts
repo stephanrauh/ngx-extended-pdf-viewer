@@ -3,7 +3,7 @@ export class XfaLayer {
     static setAttributes({ html, element, storage, intent, linkService }: {
         html: any;
         element: any;
-        storage?: any;
+        storage?: null | undefined;
         intent: any;
         linkService: any;
     }): void;

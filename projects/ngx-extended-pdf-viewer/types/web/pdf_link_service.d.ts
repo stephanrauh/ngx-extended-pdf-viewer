@@ -54,7 +54,7 @@ export class PDFLinkService implements IPDFLinkService {
     pdfViewer: any;
     pdfHistory: any;
     _pagesRefCache: any;
-    setDocument(pdfDocument: any, baseUrl?: any): void;
+    setDocument(pdfDocument: any, baseUrl?: null): void;
     setViewer(pdfViewer: any): void;
     setHistory(pdfHistory: any): void;
     /**

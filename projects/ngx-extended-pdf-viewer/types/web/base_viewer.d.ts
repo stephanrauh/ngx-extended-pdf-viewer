@@ -49,8 +49,8 @@ export type PDFViewerOptions = {
     /**
      * - Controls if the annotation layer is
      * created, and if interactive form elements or `AnnotationStorage`-data are
-     * being rendered. The constants from {@link AnnotationMode} should be used;
-     * see also {@link RenderParameters} and {@link GetOperatorListParameters}.
+     * being rendered. The constants from {@link AnnotationMode } should be used;
+     * see also {@link RenderParameters } and {@link GetOperatorListParameters }.
      * The default value is `AnnotationMode.ENABLE_FORMS`.
      */
     annotationMode?: number | undefined;
@@ -83,27 +83,6 @@ export type PDFViewerOptions = {
      * - Localization service.
      */
     l10n: any;
-};
-export type ScrollPageIntoViewParameters = {
-    /**
-     * - The page number.
-     */
-    pageNumber: number;
-    /**
-     * - The original PDF destination array, in the
-     * format: <page-ref> </XYZ|/FitXXX> <args..>
-     */
-    destArray?: any[] | undefined;
-    /**
-     * - Allow negative page offsets.
-     * The default value is `false`.
-     */
-    allowNegativeOffset?: boolean | undefined;
-    /**
-     * - Ignore the zoom argument in
-     * the destination array. The default value is `false`.
-     */
-    ignoreDestinationZoom?: boolean | undefined;
 };
 /**
  * Simple viewer control to display PDF content/pages.
@@ -230,6 +209,7 @@ export class BaseViewer {
      */
     setDocument(pdfDocument: any): void;
     pdfDocument: any;
+    _scrollMode: any;
     _optionalContentConfigPromise: any;
     /**
      * @param {Array|null} labels
@@ -251,14 +231,13 @@ export class BaseViewer {
     _firstPageCapability: any;
     _onePageRenderedCapability: any;
     _pagesCapability: any;
-    _scrollMode: any;
     _previousScrollMode: any;
     _spreadMode: any;
     _scrollUpdate(): void;
     _scrollIntoView({ pageDiv, pageSpot, pageNumber }: {
         pageDiv: any;
-        pageSpot?: any;
-        pageNumber?: any;
+        pageSpot?: null | undefined;
+        pageNumber?: null | undefined;
     }): void;
     _setScaleUpdatePages(newScale: any, newValue: any, noScroll?: boolean, preset?: boolean): void;
     /**
@@ -291,7 +270,27 @@ export class BaseViewer {
      * Scrolls page into view.
      * @param {ScrollPageIntoViewParameters} params
      */
-    scrollPageIntoView({ pageNumber, destArray, allowNegativeOffset, ignoreDestinationZoom, }: ScrollPageIntoViewParameters): void;
+    scrollPageIntoView({ pageNumber, destArray, allowNegativeOffset, ignoreDestinationZoom, }: {
+        /**
+         * - The page number.
+         */
+        pageNumber: number;
+        /**
+         * - The original PDF destination array, in the
+         * format: <page-ref> </XYZ|/FitXXX> <args..>
+         */
+        destArray?: any[] | undefined;
+        /**
+         * - Allow negative page offsets.
+         * The default value is `false`.
+         */
+        allowNegativeOffset?: boolean | undefined;
+        /**
+         * - Ignore the zoom argument in
+         * the destination array. The default value is `false`.
+         */
+        ignoreDestinationZoom?: boolean | undefined;
+    }): void;
     _updateLocation(firstPage: any): void;
     update(): void;
     containsElement(element: any): boolean;
@@ -425,7 +424,7 @@ export class BaseViewer {
      * @type {number} One of the values in {ScrollMode}.
      */
     get scrollMode(): number;
-    _updateScrollMode(pageNumber?: any): void;
+    _updateScrollMode(pageNumber?: null): void;
     /**
      * @param {number} mode - Group the pages in spreads, starting with odd- or
      *   even-number pages (unless `SpreadMode.NONE` is used).
@@ -436,7 +435,7 @@ export class BaseViewer {
      * @type {number} One of the values in {SpreadMode}.
      */
     get spreadMode(): number;
-    _updateSpreadMode(pageNumber?: any): void;
+    _updateSpreadMode(pageNumber?: null): void;
     /**
      * @private
      */
@@ -462,6 +461,10 @@ export class BaseViewer {
      */
     decreaseScale(steps?: number | undefined): void;
     #private;
+}
+export namespace PagesCountLimit {
+    const FORCE_SCROLL_MODE_PAGE: number;
+    const FORCE_LAZY_PAGE_INIT: number;
 }
 /**
  * @typedef {Object} PDFViewerOptions
@@ -509,7 +512,7 @@ export class PDFPageViewBuffer {
      * `idsToKeep` has no impact on the final size of the buffer; if `idsToKeep`
      * is larger than `newSize`, some of those pages will be destroyed anyway.
      */
-    resize(newSize: any, idsToKeep?: any): void;
+    resize(newSize: any, idsToKeep?: null): void;
     has(view: any): boolean;
     [Symbol.iterator](): IterableIterator<any>;
     #private;

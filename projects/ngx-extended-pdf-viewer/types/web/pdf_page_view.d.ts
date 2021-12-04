@@ -22,7 +22,7 @@ export type PDFPageViewOptions = {
     defaultViewport: any;
     /**
      * -
-     * A promise that is resolved with an {@link OptionalContentConfig} instance.
+     * A promise that is resolved with an {@link OptionalContentConfig } instance.
      * The default value is `null`.
      */
     optionalContentConfigPromise?: Promise<any> | undefined;
@@ -41,8 +41,8 @@ export type PDFPageViewOptions = {
     /**
      * - Controls if the annotation layer is
      * created, and if interactive form elements or `AnnotationStorage`-data are
-     * being rendered. The constants from {@link AnnotationMode} should be used;
-     * see also {@link RenderParameters} and {@link GetOperatorListParameters}.
+     * being rendered. The constants from {@link AnnotationMode } should be used;
+     * see also {@link RenderParameters } and {@link GetOperatorListParameters }.
      * The default value is `AnnotationMode.ENABLE_FORMS`.
      */
     annotationMode?: number | undefined;
@@ -120,7 +120,7 @@ export class PDFPageView implements IRenderableView {
     _annotationCanvasMap: any;
     annotationLayer: any;
     textLayer: any;
-    zoomLayer: (Node & ParentNode) | null;
+    zoomLayer: ParentNode | null;
     xfaLayer: any;
     structTreeLayer: any;
     div: HTMLDivElement;
@@ -147,8 +147,8 @@ export class PDFPageView implements IRenderableView {
     loadingIconDiv: HTMLDivElement | undefined;
     update({ scale, rotation, optionalContentConfigPromise }: {
         scale?: number | undefined;
-        rotation?: any;
-        optionalContentConfigPromise?: any;
+        rotation?: null | undefined;
+        optionalContentConfigPromise?: null | undefined;
     }, ...args: any[]): void;
     /**
      * PLEASE NOTE: Most likely you want to use the `this.reset()` method,
