@@ -18,6 +18,7 @@
 <ng-template #defaultFindbarButtons>
   <pdf-find-input-area [customFindbarInputArea]="customFindbarInputArea"></pdf-find-input-area>
   <pdf-findbar-options-one-container></pdf-findbar-options-one-container>
+  <pdf-find-range *ngIf="pdfJsVersion >= '2.12'"></pdf-find-range>
   <pdf-findbar-options-two-container></pdf-findbar-options-two-container>
   <pdf-findbar-options-three-container></pdf-findbar-options-three-container>
   <pdf-findbar-message-container></pdf-findbar-message-container>

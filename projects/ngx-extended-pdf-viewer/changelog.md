@@ -316,5 +316,5 @@
 - 11.0.0-alpha.9 #1033 drop support for Angular 8; #802 stop opening the "save" dialog after changing the `[src]` attribute
 - 11.0.0-alpha.10 #1058 use the correct import of the RxJS take operator
 - 11.0.0-alpha.11 #1063 detect if your browser support the logical assignment operators, and fall back to the ES5 version if it doesn't
-- 11.0.0-alpha.11 #1059 fix the "Window is not defined" bug; added missing translations for a few languages; update the build chain to Angular 13; stop versioning the generated files on GitHub (with the exception of the non-minified ESNext files)
-
+- 11.0.0-alpha.12 #1059 fix the "Window is not defined" bug; added missing translations for a few languages; update the build chain to Angular 13; stop versioning the generated files on GitHub (with the exception of the non-minified ESNext files)
+- 11.0.0-alpha.13 #832 added an option to enter a page range to the findbar; hide the new findbar options in the default branch (i.e. pdf.js 2.11)

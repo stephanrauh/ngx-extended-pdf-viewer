@@ -1,4 +1,5 @@
 import { Component, Input, TemplateRef } from '@angular/core';
+import { getVersionSuffix, pdfDefaultOptions } from '../../options/pdf-default-options';
 
 @Component({
   selector: 'pdf-findbar',
@@ -27,4 +28,6 @@ export class PdfFindbarComponent {
 
   @Input()
   public customFindbarButtons: TemplateRef<any>;
+
+  public pdfJsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
 }

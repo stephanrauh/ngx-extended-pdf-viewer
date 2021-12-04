@@ -51,6 +51,7 @@ import { PdfSidebarContentComponent } from './sidebar/pdf-sidebar/pdf-sidebar-co
 import { PdfSidebarToolbarComponent } from './sidebar/pdf-sidebar/pdf-sidebar-toolbar/pdf-sidebar-toolbar.component';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 import { NgxConsole } from './options/ngx-console';
+import { PdfFindRangeComponent } from './toolbar/pdf-findbar/pdf-find-range/pdf-find-range.component';
 
 new NgxConsole().log('');
 
@@ -212,6 +213,7 @@ if (typeof window !== 'undefined') {
     PdfFindbarOptionsOneContainerComponent,
     PdfFindMatchCaseComponent,
     PdfFindHighlightAllComponent,
+    PdfFindRangeComponent,
     PdfFindEntireWordComponent,
     PdfFindMultipleSearchTextsComponent,
     PdfFindIgnoreAccentsComponent,

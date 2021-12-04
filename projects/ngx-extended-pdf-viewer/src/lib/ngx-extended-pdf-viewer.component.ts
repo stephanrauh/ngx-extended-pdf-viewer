@@ -741,10 +741,26 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
           }
           const viewerPath = this.getPdfJsPath('viewer', needsES5);
-          const script2 = this.createScriptElement(viewerPath);
-          document.getElementsByTagName('head')[0].appendChild(script2);
+          const script = this.createScriptElement(viewerPath);
+          // script.onload = async () => await this.addFeatures(); // DEBUG CODE!!!
+          document.getElementsByTagName('head')[0].appendChild(script);
         });
       }
+    });
+  }
+
+  private addFeatures(): Promise<void> {
+    return new Promise((resolve) => {
+      const script = this.createScriptElement(pdfDefaultOptions.assetsFolder + '/additional-features.js');
+      script.onload = () => {
+        script.remove();
+      };
+      script.onerror = () => {
+        script.remove();
+        resolve();
+      };
+
+      document.body.appendChild(script);
     });
   }
 

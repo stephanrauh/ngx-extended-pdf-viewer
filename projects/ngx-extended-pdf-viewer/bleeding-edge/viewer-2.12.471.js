@@ -5205,6 +5205,7 @@ class PDFFindBar {
     this.findField = options.findField;
     this.highlightAll = options.highlightAllCheckbox;
     this.currentPage = options.findCurrentPageCheckbox;
+    this.pageRange = options.findPageRangeField;
     this.caseSensitive = options.caseSensitiveCheckbox;
     this.entireWord = options.entireWordCheckbox;
     this.findMsg = options.findMsg;
@@ -5264,6 +5265,12 @@ class PDFFindBar {
     this.fuzzySearch.addEventListener("click", () => {
       this.dispatchEvent("fuzzySearchChange");
     });
+    this.currentPage.addEventListener("click", () => {
+      this.dispatchEvent("currentPageChange");
+    });
+    this.pageRange.addEventListener("input", () => {
+      this.dispatchEvent("pageRangeChange");
+    });
 
     this.eventBus._on("resize", this._adjustWidth.bind(this));
   }
@@ -5284,6 +5291,7 @@ class PDFFindBar {
       fuzzySearch: this.fuzzySearch.checked,
       highlightAll: this.highlightAll.checked,
       currentPage: this.currentPage.checked,
+      pageRange: this.pageRange.value,
       findPrevious: findPrev
     });
   }
@@ -5904,6 +5912,60 @@ class PDFFindController {
     this._prepareMatches(matchesWithLength, this._pageMatches[pageIndex], this._pageMatchesLength[pageIndex], this._pageMatchesColor[pageIndex]);
   }
 
+  _isInPageRanges(page = 1, commaSeparatedRanges = "1,3,6-7") {
+    try {
+      if (!commaSeparatedRanges) {
+        return true;
+      }
+
+      const parts = commaSeparatedRanges.split(",");
+      return parts.some(range => this._isInPageRange(page, range));
+    } catch (e) {
+      return true;
+    }
+  }
+
+  _isInPageRange(page = 1, range = "6-7") {
+    try {
+      if (!range) {
+        return true;
+      }
+
+      if (range.includes("-")) {
+        const parts = range.split("-");
+        const from = parts[0].trim();
+
+        if (from.length > 0) {
+          if (page < Number(from)) {
+            return false;
+          }
+        }
+
+        const to = parts[1].trim();
+
+        if (to.length > 0) {
+          if (page > Number(to)) {
+            return false;
+          }
+        }
+      } else {
+        const from = range.trim();
+
+        if (from.length > 0) {
+          if (Number(from) === page) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    } catch (e) {
+      return true;
+    }
+  }
+
   _calculateMatch(pageIndex) {
     let pageContent = this._pageContents[pageIndex];
     const pageDiffs = this._pageDiffs[pageIndex];
@@ -5914,34 +5976,44 @@ class PDFFindController {
       ignoreAccents,
       fuzzySearch,
       phraseSearch,
-      currentPage
+      currentPage,
+      pageRange
     } = this._state;
+    let ignoreCurrentPage = false;
 
     if (currentPage) {
       if (pageIndex !== this._linkService.page - 1) {
-        return;
+        ignoreCurrentPage = true;
+        this._pageMatches[pageIndex] = [];
       }
+    }
+
+    if (!this._isInPageRanges(pageIndex + 1, pageRange)) {
+      ignoreCurrentPage = true;
+      this._pageMatches[pageIndex] = [];
     }
 
     if (query.length === 0) {
       return;
     }
 
-    if (!caseSensitive) {
-      pageContent = pageContent.toLowerCase();
-      query = query.toLowerCase();
-    }
-
-    if (fuzzySearch) {
-      if (query.length <= 2) {
-        this._calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, false);
-      } else {
-        this._calculateFuzzyMatch(query, pageIndex, pageContent, pageDiffs);
+    if (!ignoreCurrentPage) {
+      if (!caseSensitive) {
+        pageContent = pageContent.toLowerCase();
+        query = query.toLowerCase();
       }
-    } else if (phraseSearch) {
-      this._calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, entireWord, ignoreAccents);
-    } else {
-      this._calculateWordMatch(query, pageIndex, pageContent, pageDiffs, entireWord, ignoreAccents);
+
+      if (fuzzySearch) {
+        if (query.length <= 2) {
+          this._calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, false);
+        } else {
+          this._calculateFuzzyMatch(query, pageIndex, pageContent, pageDiffs);
+        }
+      } else if (phraseSearch) {
+        this._calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, entireWord, ignoreAccents);
+      } else {
+        this._calculateWordMatch(query, pageIndex, pageContent, pageDiffs, entireWord, ignoreAccents);
+      }
     }
 
     if (this._state.highlightAll) {
@@ -5959,6 +6031,8 @@ class PDFFindController {
     if (pageMatchesCount > 0) {
       this._matchesCountTotal += pageMatchesCount;
 
+      this._updateUIResultsCount();
+    } else if (pageIndex + 1 === this._pageContents.length && this._matchesCountTotal === 0) {
       this._updateUIResultsCount();
     }
   }
@@ -20712,6 +20786,7 @@ function getViewerConfiguration() {
       findFieldMultiline: document.getElementById("findInputMultiline"),
       highlightAllCheckbox: document.getElementById("findHighlightAll"),
       findCurrentPageCheckbox: document.getElementById("findCurrentPage"),
+      findPageRangeField: document.getElementById("findRange"),
       caseSensitiveCheckbox: document.getElementById("findMatchCase"),
       entireWordCheckbox: document.getElementById("findEntireWord"),
       findMultipleSearchTextsCheckbox: document.getElementById("findMultipleSearchTexts"),
