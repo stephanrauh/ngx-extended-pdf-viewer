@@ -18,6 +18,7 @@ export * from './lib/events/pages-loaded-event';
 export * from './lib/events/page-number-change';
 export * from './lib/events/page-rendered-event';
 export * from './lib/events/pages-loaded-event';
+export * from './lib/events/pdf-loading-starts-event';
 export * from './lib/events/pages-rotation-event';
 export * from './lib/events/pdf-downloaded-event';
 export * from './lib/events/pdf-loaded-event';

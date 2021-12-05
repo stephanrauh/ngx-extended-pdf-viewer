@@ -49,6 +49,7 @@ import { ProgressBarEvent } from './events/progress-bar-event';
 import { UnitToPx } from './unit-to-px';
 import { PageRenderEvent } from './events/page-render-event';
 import { Annotation } from './Annotation';
+import { PdfLoadingStartsEvent } from './events/pdf-loading-starts-event';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 declare class ResizeObserver {
@@ -568,6 +569,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Output()
   public pdfLoaded = new EventEmitter<PdfLoadedEvent>();
+
+  @Output()
+  public pdfLoadingStarts = new EventEmitter<PdfLoadingStartsEvent>();
 
   @Output()
   public pdfLoadingFailed = new EventEmitter<Error>();
@@ -1462,11 +1466,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
         options.baseHref = this.baseHref;
         PDFViewerApplication.onError = (error: Error) => this.pdfLoadingFailed.emit(error);
-        this.ngZone.runOutsideAngular(() => {
-          PDFViewerApplication.open(this._src, options).then(() => {
-            this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount });
-            setTimeout(async () => await this.setZoom());
-          });
+        this.ngZone.runOutsideAngular(async () => {
+          await PDFViewerApplication.open(this._src, options);
+          this.pdfLoadingStarts.emit({});
+          // await this.setZoom();
+          setTimeout(async () => await this.setZoom());
         });
       }
       setTimeout(() => {
@@ -2090,12 +2094,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
     for (let i = 1; i <= pdf.numPages; i++) {
       // track the current page
-      let currentPage: any = null;
       pdf
         .getPage(i)
         .then((p) => {
-          currentPage = p;
-
           // get the annotations of the current page
           return p.getAnnotations();
         })
@@ -2130,6 +2131,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             });
         });
     }
+    this.pdfLoaded.emit({pagesCount: pdf.numPages} as PdfLoadedEvent);
   }
 
   public async zoomToPageWidth(event: MouseEvent): Promise<void> {
