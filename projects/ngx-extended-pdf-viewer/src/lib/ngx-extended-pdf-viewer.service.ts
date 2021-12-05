@@ -10,6 +10,7 @@ export interface FindOptions {
   findMultipleSearchTexts?: boolean;
   fuzzySearch?: boolean;
   currentPage?: boolean; // search only in the current page
+  pageRange?: string; // page range definition, e.g. "2", "2,3,4", "5-6" or "2,5-6,7"
 }
 
 interface DrawContext {
@@ -45,9 +46,13 @@ export class NgxExtendedPdfViewerService {
       if (highlightAllCheckbox) {
         highlightAllCheckbox.checked = options.highlightAll || false;
       }
-      const findCurrentPagelCheckbox = document.getElementById('findCurrentPage') as HTMLInputElement;
-      if (findCurrentPagelCheckbox) {
-        findCurrentPagelCheckbox.checked = options.currentPage || false;
+      const findPageRange = document.getElementById('findRange') as HTMLInputElement;
+      if (findPageRange) {
+        findPageRange.value = options.pageRange || '';
+      }
+      const findCurrentPageCheckbox = document.getElementById('findCurrentPage') as HTMLInputElement;
+      if (findCurrentPageCheckbox) {
+        findCurrentPageCheckbox.checked = options.currentPage || false;
       }
 
       const matchCaseCheckbox = document.getElementById('findMatchCase') as HTMLInputElement;

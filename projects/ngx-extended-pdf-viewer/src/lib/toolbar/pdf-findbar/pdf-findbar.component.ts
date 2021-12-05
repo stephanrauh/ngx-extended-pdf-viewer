@@ -29,5 +29,35 @@ export class PdfFindbarComponent {
   @Input()
   public customFindbarButtons: TemplateRef<any>;
 
+  @Input()
+  public showFindHighlightAll = true;
+
+  @Input()
+  public showFindMatchCase = true;
+
+  @Input()
+  public showFindCurrentPageOnly = true;
+
+  @Input()
+  public showFindPageRange = true;
+
+  @Input()
+  public showFindEntireWord = true;
+
+  @Input()
+  public showFindEntirePhrase = true;
+
+  @Input()
+  public showFindIgnoreAccents = true;
+
+  @Input()
+  public showFindFuzzySearch = true;
+
+  @Input()
+  public showFindResultsCount = true;
+
+  @Input()
+  public showFindMessages = true;
+
   public pdfJsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
 }

@@ -53,7 +53,7 @@ export * from './lib/toolbar/pdf-findbar/pdf-search-input-field/pdf-search-input
 export * from './lib/toolbar/pdf-findbar/pdf-find-previous/pdf-find-previous.component';
 export * from './lib/toolbar/pdf-findbar/pdf-find-next/pdf-find-next.component';
 export * from './lib/toolbar/pdf-findbar/pdf-find-input-area/pdf-find-input-area.component';
-export * from './lib/toolbar/pdf-findbar/pdf-find-range/pdf-find-range.component';
+export * from './lib/toolbar/pdf-findbar/pdf-find-current-page-only/pdf-find-current-page-only.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-findbar-options-two-container.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-one-container/pdf-findbar-options-one-container.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-one-container/pdf-find-match-case/pdf-find-match-case.component';
@@ -65,6 +65,7 @@ export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-find-results-count/pdf-find-results-count.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-message-container/pdf-findbar-message-container.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-find-entire-phrase/pdf-find-entire-phrase.component';
+export * from './lib/toolbar/pdf-findbar/pdf-find-range/pdf-find-range.component';
 export * from './lib/toolbar/pdf-toolbar/pdf-toolbar.component';
 export * from './lib/toolbar/pdf-find-button/pdf-find-button.component';
 export * from './lib/toolbar/pdf-toggle-sidebar/pdf-toggle-sidebar.component';
