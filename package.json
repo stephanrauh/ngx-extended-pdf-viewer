@@ -31,7 +31,7 @@
     "@types/node": "^16.11.11",
     "caniuse-lite": "^1.0.30001284",
     "codelyzer": "^6.0.2",
-    "ng-packagr": "~13.0.8",
+    "ng-packagr": "~13.1.1",
     "properties-reader": "^2.2.0",
     "ts-node": "^10.4.0",
     "tslint": "^6.1.3",
