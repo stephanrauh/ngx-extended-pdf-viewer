@@ -2066,7 +2066,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.12.481',
+    apiVersion: '2.13.232',
     source: {
       data: source.data,
       url: source.url,
@@ -2715,7 +2715,6 @@ class PDFPageProxy {
 
   _destroy() {
     this.destroyed = true;
-    this._transport.pageCache[this._pageIndex] = null;
     const waitOn = [];
 
     for (const intentState of this._intentStates.values()) {
@@ -3351,6 +3350,9 @@ exports.PDFWorker = PDFWorker;
 
 class WorkerTransport {
   #docStats = null;
+  #pageCache = new Map();
+  #pagePromises = new Map();
+  #metadataPromise = null;
 
   constructor(messageHandler, loadingTask, networkStream, params) {
     this.messageHandler = messageHandler;
@@ -3386,8 +3388,6 @@ class WorkerTransport {
     this._networkStream = networkStream;
     this._fullReader = null;
     this._lastProgress = null;
-    this.pageCache = [];
-    this.pagePromises = [];
     this.downloadInfoCapability = (0, _util.createPromiseCapability)();
     this.setupMessageHandler();
   }
@@ -3465,14 +3465,12 @@ class WorkerTransport {
 
     const waitOn = [];
 
-    for (const page of this.pageCache) {
-      if (page) {
-        waitOn.push(page._destroy());
-      }
+    for (const page of this.#pageCache.values()) {
+      waitOn.push(page._destroy());
     }
 
-    this.pageCache.length = 0;
-    this.pagePromises.length = 0;
+    this.#pageCache.clear();
+    this.#pagePromises.clear();
 
     if (this.hasOwnProperty("annotationStorage")) {
       this.annotationStorage.resetModified();
@@ -3483,6 +3481,7 @@ class WorkerTransport {
     Promise.all(waitOn).then(() => {
       this.commonObjs.clear();
       this.fontLoader.clear();
+      this.#metadataPromise = null;
       this._getFieldObjectsPromise = null;
       this._hasJSActionsPromise = null;
 
@@ -3680,16 +3679,14 @@ class WorkerTransport {
         return;
       }
 
-      const page = this.pageCache[data.pageIndex];
+      const page = this.#pageCache.get(data.pageIndex);
 
       page._startRenderPage(data.transparency, data.cacheKey);
     });
-    messageHandler.on("commonobj", data => {
+    messageHandler.on("commonobj", ([id, type, exportedData]) => {
       if (this.destroyed) {
         return;
       }
-
-      const [id, type, exportedData] = data;
 
       if (this.commonObjs.has(id)) {
         return;
@@ -3746,13 +3743,12 @@ class WorkerTransport {
           throw new Error(`Got unknown common object type ${type}`);
       }
     });
-    messageHandler.on("obj", data => {
+    messageHandler.on("obj", ([id, pageIndex, type, imageData]) => {
       if (this.destroyed) {
         return;
       }
 
-      const [id, pageIndex, type, imageData] = data;
-      const pageProxy = this.pageCache[pageIndex];
+      const pageProxy = this.#pageCache.get(pageIndex);
 
       if (pageProxy.objs.has(id)) {
         return;
@@ -3841,10 +3837,11 @@ class WorkerTransport {
       return Promise.reject(new Error("Invalid page request"));
     }
 
-    const pageIndex = pageNumber - 1;
+    const pageIndex = pageNumber - 1,
+          cachedPromise = this.#pagePromises.get(pageIndex);
 
-    if (pageIndex in this.pagePromises) {
-      return this.pagePromises[pageIndex];
+    if (cachedPromise) {
+      return cachedPromise;
     }
 
     const promise = this.messageHandler.sendWithPromise("GetPage", {
@@ -3855,10 +3852,10 @@ class WorkerTransport {
       }
 
       const page = new PDFPageProxy(pageIndex, pageInfo, this, this._params.ownerDocument, this._params.pdfBug);
-      this.pageCache[pageIndex] = page;
+      this.#pageCache.set(pageIndex, page);
       return page;
     });
-    this.pagePromises[pageIndex] = promise;
+    this.#pagePromises.set(pageIndex, promise);
     return promise;
   }
 
@@ -3971,7 +3968,7 @@ class WorkerTransport {
   }
 
   getMetadata() {
-    return this.messageHandler.sendWithPromise("GetMetadata", null).then(results => {
+    return this.#metadataPromise ||= this.messageHandler.sendWithPromise("GetMetadata", null).then(results => {
       return {
         info: results[0],
         metadata: results[1] ? new _metadata.Metadata(results[1]) : null,
@@ -3992,17 +3989,11 @@ class WorkerTransport {
       return;
     }
 
-    for (let i = 0, ii = this.pageCache.length; i < ii; i++) {
-      const page = this.pageCache[i];
-
-      if (!page) {
-        continue;
-      }
-
+    for (const page of this.#pageCache.values()) {
       const cleanupSuccessful = page.cleanup();
 
       if (!cleanupSuccessful) {
-        throw new Error(`startCleanup: Page ${i + 1} is currently rendering.`);
+        throw new Error(`startCleanup: Page ${page.pageNumber} is currently rendering.`);
       }
     }
 
@@ -4012,6 +4003,7 @@ class WorkerTransport {
       this.fontLoader.clear();
     }
 
+    this.#metadataPromise = null;
     this._getFieldObjectsPromise = null;
     this._hasJSActionsPromise = null;
   }
@@ -4270,9 +4262,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.12.481';
+const version = '2.13.232';
 exports.version = version;
-const build = 'c864e8a5c';
+const build = '807a2304f';
 exports.build = build;
 
 /***/ }),
@@ -10928,7 +10920,7 @@ class PopupElement {
 
     if (this.richText?.str && (!this.contentsObj?.str || this.contentsObj.str === this.richText.str)) {
       _xfa_layer.XfaLayer.render({
-        xfa: this.richText.html,
+        xfaHtml: this.richText.html,
         intent: "richText",
         div: popup
       });
@@ -11774,7 +11766,7 @@ class XfaLayer {
   static render(parameters) {
     const storage = parameters.annotationStorage;
     const linkService = parameters.linkService;
-    const root = parameters.xfa;
+    const root = parameters.xfaHtml;
     const intent = parameters.intent || "display";
     const rootHtml = document.createElement(root.name);
 
@@ -16021,8 +16013,8 @@ var _svg = __w_pdfjs_require__(22);
 
 var _xfa_layer = __w_pdfjs_require__(20);
 
-const pdfjsVersion = '2.12.481';
-const pdfjsBuild = 'c864e8a5c';
+const pdfjsVersion = '2.13.232';
+const pdfjsBuild = '807a2304f';
 {
   if (_is_node.isNodeJS) {
     const {

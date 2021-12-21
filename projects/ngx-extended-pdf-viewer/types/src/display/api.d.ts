@@ -409,10 +409,10 @@ export type RenderParameters = {
      */
     optionalContentConfigPromise?: Promise<OptionalContentConfig> | undefined;
     /**
-     * - Map some annotation
-     * ids with canvases used to render them.
+     * - Map some
+     * annotation ids with canvases used to render them.
      */
-    annotationCanvasMap?: Map<string, any> | undefined;
+    annotationCanvasMap?: Map<string, HTMLCanvasElement> | undefined;
 };
 /**
  * Page getOperatorList parameters.
@@ -1111,8 +1111,8 @@ export class PDFDocumentProxy {
  *   created from `PDFDocumentProxy.getOptionalContentConfig`. If `null`,
  *   the configuration will be fetched automatically with the default visibility
  *   states set.
- * @property {Map<string, Canvas>} [annotationCanvasMap] - Map some annotation
- *   ids with canvases used to render them.
+ * @property {Map<string, HTMLCanvasElement>} [annotationCanvasMap] - Map some
+ *   annotation ids with canvases used to render them.
  */
 /**
  * Page getOperatorList parameters.
