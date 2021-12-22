@@ -9348,7 +9348,7 @@ class PDFSidebar {
     this._addEventListeners();
   }
 
-  reset() {
+  async reset() {
     this.isInitialViewSet = false;
 
     this._hideUINotification(true);
@@ -9401,11 +9401,11 @@ class PDFSidebar {
     }
   }
 
-  switchView(view, forceOpen = false) {
-    this._switchView(view, forceOpen);
+  async switchView(view, forceOpen = false) {
+    await this._switchView(view, forceOpen);
   }
 
-  _switchView(view, forceOpen = false) {
+  async _switchView(view, forceOpen = false) {
     const isViewChanged = view !== this.active;
     let shouldForceRendering = false;
 
@@ -9464,7 +9464,7 @@ class PDFSidebar {
     this._outlineOptionsContainer.classList.toggle("hidden", view !== _ui_utils.SidebarView.OUTLINE);
 
     if (forceOpen && !this.isOpen) {
-      this.open();
+      await this.open();
       return true;
     }
 
@@ -9481,11 +9481,12 @@ class PDFSidebar {
     return isViewChanged;
   }
 
-  open() {
+  async open() {
     if (this.isOpen) {
       return;
     }
 
+    await this.pdfThumbnailViewer.renderThumbnails();
     this.isOpen = true;
     this.toggleButton.classList.add("toggled");
     this.toggleButton.setAttribute("aria-expanded", "true");
@@ -9960,14 +9961,24 @@ class PDFThumbnailViewer {
     }
 
     this.pdfDocument = pdfDocument;
+  }
 
-    if (!pdfDocument) {
+  async renderThumbnails() {
+    if (!this.pdfDocument) {
       return;
     }
 
+    if (this.initialized) {
+      return;
+    }
+
+    this.initialized = true;
+    const pdfDocument = this.pdfDocument;
     const firstPagePromise = pdfDocument.getPage(1);
     const optionalContentConfigPromise = pdfDocument.getOptionalContentConfig();
-    firstPagePromise.then(firstPdfPage => {
+
+    try {
+      const firstPdfPage = await firstPagePromise;
       this._optionalContentConfigPromise = optionalContentConfigPromise;
       const pagesCount = pdfDocument.numPages;
       const viewport = firstPdfPage.getViewport({
@@ -10001,9 +10012,9 @@ class PDFThumbnailViewer {
 
       const thumbnailView = this._thumbnails[this._currentPageNumber - 1];
       thumbnailView.div.classList.add(THUMBNAIL_SELECTED_CLASS);
-    }).catch(reason => {
-      Window['ngxConsole'].error("Unable to initialize thumbnail viewer", reason);
-    });
+    } catch (reason) {
+      Window["ngxConsole"].error("Unable to initialize thumbnail viewer", reason);
+    }
   }
 
   _cancelRendering() {
@@ -10648,7 +10659,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.12.539';
+    const viewerVersion = '2.12.541';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -20638,8 +20649,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.12.539';
-const pdfjsBuild = 'f70cf89a6';
+const pdfjsVersion = '2.12.541';
+const pdfjsBuild = '05a4aa37b';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

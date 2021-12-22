@@ -318,3 +318,8 @@
 - 11.0.0-alpha.11 #1063 detect if your browser support the logical assignment operators, and fall back to the ES5 version if it doesn't
 - 11.0.0-alpha.12 #1059 fix the "Window is not defined" bug; added missing translations for a few languages; update the build chain to Angular 13; stop versioning the generated files on GitHub (with the exception of the non-minified ESNext files)
 - 11.0.0-alpha.13 #832 added an option to enter a page range to the findbar; hide the new findbar options in the default branch (i.e. pdf.js 2.11); add the "find in page range" feature to `NgxExtendedPdfViewerService.find()`; #1064 fires `(pdfLoaded)` after loading the document and fire `(pdfLoadingStarts)` before loading the document (the old timing was wrong)
+- 11.0.0-beta.1 #1055 improve performance by generating the thumbnails lazily; update to pdf.js 2.12 and 2.13
+- 11.0.0-beta.2 fixed an ExpressionChangedAfterItHasBeenCheckedError when the zoom setting changes
+- 11.0.0-beta.3 update the description on npm
+- 11.0.0-beta.4 update the description on npm
+- 11.0.0 #1055 copied the performance improvement to pdf.js 2.12; removed several checks that have become superfluous after updating to pdf.js 2.12/2.13
