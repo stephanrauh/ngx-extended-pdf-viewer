@@ -13,7 +13,7 @@
   CDN: <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">unpkg.com</a>
  </p>
 
-## Sneak preview to version 11.0.0 (soon to be released)
+## What's new in version 11?
 
 Version 11.0.0 updates to pdf.js 2.12 (default) and 2.13 (bleeding-edge) branch. It also continues work on the performance, because some developers ask me to get rid the of current limit of several thousand pages. In particular, the improved single-page views plus lazy loading of the thumbnails allows your to open PDF documents with more then 10.000 pages.
 
@@ -37,7 +37,7 @@ Would you like to participate in a popular open source project? It's easy: just 
 
 This library provides an embeddable PDF viewer component. It's different from other approaches like [ng2-pdf-viewer](https://vadimdez.github.io/ng2-pdf-viewer/) in that it shows the full suite of UI widgets. In other words, it strongly resembles the PDF viewer of your browser:
 
-<img src="https://beyondjava.net/blog/images/ngx-extended-pdf-viewer/example-screenshot.png">
+<img src="https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/example.png?raw=true">
 
 ## Features
 
@@ -60,7 +60,7 @@ This library provides an embeddable PDF viewer component. It's different from ot
 - Color theming
 - And to customize the toolbars and menus according to your needs.
 
-Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 2.11, released in October 2021. If you're the daring one, you can also use the developer version 2.12. It's bleeding edge, so use it at own risk. Basically, the preview version helps me because I can add Mozilla's latest improvements in frequent, small increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but most of the time, the quality is production-ready.
+Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 2.12, released in December 2021. If you're the daring one, you can also use the developer version 2.13. It's bleeding edge, so use it at own risk. Basically, the bleeding edge version helps me because I can add Mozilla's latest improvements in frequent, small increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but most of the time, the quality is production-ready.
 
 ## Alternatives
 <details>
