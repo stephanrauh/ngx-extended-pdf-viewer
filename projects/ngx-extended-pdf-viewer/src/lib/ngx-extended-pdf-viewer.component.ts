@@ -14,6 +14,7 @@ import {
   PLATFORM_ID,
   ViewChild,
   OnInit,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { PlatformLocation } from '@angular/common';
 import { PagesLoadedEvent } from './events/pages-loaded-event';
@@ -450,8 +451,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public showFindMessages = true;
 
-
-
   @Input()
   public showPagingButtons = true;
   @Input()
@@ -694,7 +693,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     private notificationService: PDFNotificationService,
     private location: Location,
     private elementRef: ElementRef,
-    private platformLocation: PlatformLocation
+    private platformLocation: PlatformLocation,
+    private cdr: ChangeDetectorRef
   ) {
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
   }
@@ -771,11 +771,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.needsES5().then((needsES5) => {
           if (needsES5) {
             if (!pdfDefaultOptions.needsES5) {
-              console.log("If you see the error message \"expected expression, got '='\" above: you can safely ignore it as long as you know what you're doing. It means your browser is out-of-date. Please update your browser to benefit from the latest security updates and to enjoy a faster PDF viewer.")
+              console.log(
+                "If you see the error message \"expected expression, got '='\" above: you can safely ignore it as long as you know what you're doing. It means your browser is out-of-date. Please update your browser to benefit from the latest security updates and to enjoy a faster PDF viewer."
+              );
             }
             pdfDefaultOptions.needsES5 = true;
             console.log('Using the ES5 version of the PDF viewer. Your PDF files show faster if you update your browser.');
-
           }
           const viewerPath = this.getPdfJsPath('viewer', needsES5);
           const script = this.createScriptElement(viewerPath);
@@ -1071,15 +1072,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           const top = rect.top;
           let maximumHeight = available - top;
           // take the margins and paddings of the parent containers into account
-          let padding = this.calculateBorderMarging(container);
+          const padding = this.calculateBorderMarging(container);
           maximumHeight -= padding;
           const factor = Number(this._height.replace('%', ''));
           maximumHeight = (maximumHeight * factor) / 100;
           if (maximumHeight > 100) {
-            this.minHeight = maximumHeight + 'px';
+            this.minHeight = `${maximumHeight}px`;
           } else {
             this.minHeight = '100px';
           }
+          this.cdr.markForCheck();
         }
       }
     }
@@ -1328,7 +1330,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           }
         }
 
-        this.currentZoomFactor.emit(x.scale);
+        setTimeout(() => {
+          this.currentZoomFactor.emit(x.scale);
+          this.cdr.markForCheck();
+        })
 
         const scale = (this.root.nativeElement as HTMLElement).querySelector('#scaleSelect') as HTMLSelectElement | undefined;
         let userZoomFactor = this.zoom;
@@ -1439,7 +1444,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
       });
 
-      setTimeout(() => this.checkHeight(), 100);
+      setTimeout(async () => await this.checkHeight(), 100);
       // open a file in the viewer
       if (!!this._src) {
         const options: any = {
@@ -1511,7 +1516,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public async openPDF2(): Promise<void> {
     this.overrideDefaultSettings();
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-
 
     // #802 clear the form data; otherwise the "download" dialogs opens
     PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
@@ -1868,55 +1872,59 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   private async setZoom() {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    // sometimes ngOnChanges calls this method before the page is initialized,
+    // so let's check if this.root is already defined
+    if (this.root) {
+      const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
 
-    let zoomAsNumber = this.zoom;
-    if (String(zoomAsNumber).endsWith('%')) {
-      zoomAsNumber = Number(String(zoomAsNumber).replace('%', '')) / 100;
-    } else if (!isNaN(Number(zoomAsNumber))) {
-      zoomAsNumber = Number(zoomAsNumber) / 100;
-    }
-    if (!zoomAsNumber) {
-      if (!PDFViewerApplication.store) {
-        // It's difficult to prevent calling this method to early, so we need this check.
-        // setZoom() is called later again, when the PDF document has been loaded and its
-        // fingerprint has been calculated.
-      } else {
-        const userSetting = await PDFViewerApplication.store.get('zoom');
-        if (userSetting) {
-          if (!isNaN(Number(userSetting))) {
-            zoomAsNumber = Number(userSetting) / 100;
-          } else {
-            zoomAsNumber = userSetting;
-          }
+      let zoomAsNumber = this.zoom;
+      if (String(zoomAsNumber).endsWith('%')) {
+        zoomAsNumber = Number(String(zoomAsNumber).replace('%', '')) / 100;
+      } else if (!isNaN(Number(zoomAsNumber))) {
+        zoomAsNumber = Number(zoomAsNumber) / 100;
+      }
+      if (!zoomAsNumber) {
+        if (!PDFViewerApplication.store) {
+          // It's difficult to prevent calling this method to early, so we need this check.
+          // setZoom() is called later again, when the PDF document has been loaded and its
+          // fingerprint has been calculated.
         } else {
-          zoomAsNumber = 'auto';
-        }
-      }
-    }
-
-    if (PDFViewerApplication) {
-      const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
-      PDFViewerApplicationOptions.set('defaultZoomValue', zoomAsNumber);
-    }
-
-    const scaleDropdownField = (this.root.nativeElement as HTMLElement).querySelector('#scaleSelect') as HTMLSelectElement | undefined;
-    if (scaleDropdownField) {
-      if (this.zoom === 'auto' || this.zoom === 'page-fit' || this.zoom === 'page-actual' || this.zoom === 'page-width') {
-        scaleDropdownField.value = this.zoom;
-      } else {
-        scaleDropdownField.value = 'custom';
-        for (const option of scaleDropdownField.options as any) {
-          if (option.value === 'custom') {
-            option.textContent = Math.round(Number(zoomAsNumber) * 100_000) / 1000 + '%';
-            continue;
+          const userSetting = await PDFViewerApplication.store.get('zoom');
+          if (userSetting) {
+            if (!isNaN(Number(userSetting))) {
+              zoomAsNumber = Number(userSetting) / 100;
+            } else {
+              zoomAsNumber = userSetting;
+            }
+          } else {
+            zoomAsNumber = 'auto';
           }
         }
       }
-    }
 
-    if (PDFViewerApplication.pdfViewer) {
-      PDFViewerApplication.pdfViewer.currentScaleValue = zoomAsNumber || 'auto';
+      if (PDFViewerApplication) {
+        const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
+        PDFViewerApplicationOptions.set('defaultZoomValue', zoomAsNumber);
+      }
+
+      const scaleDropdownField = (this.root.nativeElement as HTMLElement).querySelector('#scaleSelect') as HTMLSelectElement | undefined;
+      if (scaleDropdownField) {
+        if (this.zoom === 'auto' || this.zoom === 'page-fit' || this.zoom === 'page-actual' || this.zoom === 'page-width') {
+          scaleDropdownField.value = this.zoom;
+        } else {
+          scaleDropdownField.value = 'custom';
+          for (const option of scaleDropdownField.options as any) {
+            if (option.value === 'custom') {
+              option.textContent = `${Math.round(Number(zoomAsNumber) * 100_000) / 1000}%`;
+              continue;
+            }
+          }
+        }
+      }
+
+      if (PDFViewerApplication.pdfViewer) {
+        PDFViewerApplication.pdfViewer.currentScaleValue = zoomAsNumber || 'auto';
+      }
     }
   }
 
@@ -2131,7 +2139,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             });
         });
     }
-    this.pdfLoaded.emit({pagesCount: pdf.numPages} as PdfLoadedEvent);
+    this.pdfLoaded.emit({ pagesCount: pdf.numPages } as PdfLoadedEvent);
   }
 
   public async zoomToPageWidth(event: MouseEvent): Promise<void> {
