@@ -82,6 +82,8 @@ export class PDFThumbnailViewer {
      */
     setDocument(pdfDocument: PDFDocumentProxy): void;
     pdfDocument: import("../src/display/api").PDFDocumentProxy | undefined;
+    renderThumbnails(): Promise<void>;
+    initialized: boolean | undefined;
     /**
      * @private
      */

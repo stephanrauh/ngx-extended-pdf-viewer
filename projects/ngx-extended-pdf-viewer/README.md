@@ -13,13 +13,16 @@
   CDN: <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">unpkg.com</a>
  </p>
 
-## Sneak preview to version 11.0.0 (currently under development)
+## Sneak preview to version 11.0.0 (soon to be released)
 
-Version 11.0.0 updates to pdf.js 2.11 (default) and 2.12 (bleeding-edge) branch. It also continues work on the performance, because some developers ask me to get rid the of current limit of several thousand pages. The findbar offers two new options to limit the search to the current page or a an arbitrary range of pages.
+Version 11.0.0 updates to pdf.js 2.12 (default) and 2.13 (bleeding-edge) branch. It also continues work on the performance, because some developers ask me to get rid the of current limit of several thousand pages. In particular, the improved single-page views plus lazy loading of the thumbnails allows your to open PDF documents with more then 10.000 pages.
 
-It contains two potentially breaking changes:
+The findbar offers two new options to limit the search to the current page or a an arbitrary range of pages.
+
+Version 11 contains two potentially breaking changes:
 - The event `(pdfLoaded)` is now fired later. Until version 10.0, it was fired before loading the document. If you rely on the timing of the old event, use the new event `(pdfLoadingStarts)` instead.
 - I've removed some `div` tags from the findbar. Now it re-renders more smoothly on small screens. However, this might break your CSS rules if you've customized the findbar with CSS.
+
 ## Showcase and manual
 
 There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook. 
