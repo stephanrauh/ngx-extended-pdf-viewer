@@ -9468,6 +9468,8 @@ class PDFSidebar {
       return true;
     }
 
+    await this.pdfThumbnailViewer.renderThumbnails();
+
     if (shouldForceRendering) {
       this._updateThumbnailViewer();
 
@@ -9954,6 +9956,8 @@ class PDFThumbnailViewer {
   }
 
   setDocument(pdfDocument) {
+    this.initialized = false;
+
     if (this.pdfDocument) {
       this._cancelRendering();
 
