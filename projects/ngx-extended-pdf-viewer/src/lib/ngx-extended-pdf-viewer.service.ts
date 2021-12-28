@@ -1,3 +1,4 @@
+import { Subject } from 'rxjs';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { PDFPrintRange } from './options/pdf-print-range';
 import { IPDFViewerApplication } from './options/pdf-viewer-application';
@@ -25,6 +26,9 @@ export interface PDFExportScaleFactor {
 }
 
 export class NgxExtendedPdfViewerService {
+
+  public recalculateSize$ = new Subject<void>();
+
   constructor() {}
 
   public findMultiple(text: Array<string>, options: FindOptions = {}): boolean {
@@ -371,5 +375,9 @@ export class NgxExtendedPdfViewerService {
     const pages = (app.pdfViewer._getVisiblePages() as any).views as Array<any>;
     const pageNumbers = pages?.map((page) => page.id);
     return pageNumbers;
+  }
+
+  public recalculateSize(): void {
+    this.recalculateSize$.next();
   }
 }

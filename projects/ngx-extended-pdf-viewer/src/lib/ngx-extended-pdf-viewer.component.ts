@@ -51,6 +51,7 @@ import { UnitToPx } from './unit-to-px';
 import { PageRenderEvent } from './events/page-render-event';
 import { Annotation } from './Annotation';
 import { PdfLoadingStartsEvent } from './events/pdf-loading-starts-event';
+import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 declare class ResizeObserver {
@@ -690,9 +691,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     private location: Location,
     private elementRef: ElementRef,
     private platformLocation: PlatformLocation,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private service: NgxExtendedPdfViewerService
   ) {
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
+    this.service.recalculateSize$.subscribe(() => this.onResize());
   }
 
   private iOSVersionRequiresES5(): boolean {
@@ -2059,7 +2062,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             }
           } else {
             const fieldName = this.formIdToFieldName[key];
-            debugger;
           }
         }
       }
