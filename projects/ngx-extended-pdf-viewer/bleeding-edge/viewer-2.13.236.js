@@ -10657,13 +10657,14 @@ class BaseViewer {
   #enablePermissions = false;
   #previousContainerHeight = 0;
   #scrollModePageState = null;
+  #onVisibilityChange = null;
 
   constructor(options) {
     if (this.constructor === BaseViewer) {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.12.541';
+    const viewerVersion = '2.13.236';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -11085,11 +11086,24 @@ class BaseViewer {
   }
 
   #onePageRenderedOrForceFetch() {
-    if (!this.container.offsetParent || this._getVisiblePages().views.length === 0) {
+    if (document.visibilityState === "hidden" || !this.container.offsetParent || this._getVisiblePages().views.length === 0) {
       return Promise.resolve();
     }
 
-    return this._onePageRenderedCapability.promise;
+    const visibilityChangePromise = new Promise(resolve => {
+      this.#onVisibilityChange = () => {
+        if (document.visibilityState !== "hidden") {
+          return;
+        }
+
+        resolve();
+        document.removeEventListener("visibilitychange", this.#onVisibilityChange);
+        this.#onVisibilityChange = null;
+      };
+
+      document.addEventListener("visibilitychange", this.#onVisibilityChange);
+    });
+    return Promise.race([this._onePageRenderedCapability.promise, visibilityChangePromise]);
   }
 
   setDocument(pdfDocument) {
@@ -11163,6 +11177,11 @@ class BaseViewer {
       this.eventBus._off("pagerendered", this._onAfterDraw);
 
       this._onAfterDraw = null;
+
+      if (this.#onVisibilityChange) {
+        document.removeEventListener("visibilitychange", this.#onVisibilityChange);
+        this.#onVisibilityChange = null;
+      }
     };
 
     this.eventBus._on("pagerendered", this._onAfterDraw);
@@ -11352,6 +11371,11 @@ class BaseViewer {
       this.eventBus._off("pagerendered", this._onAfterDraw);
 
       this._onAfterDraw = null;
+    }
+
+    if (this.#onVisibilityChange) {
+      document.removeEventListener("visibilitychange", this.#onVisibilityChange);
+      this.#onVisibilityChange = null;
     }
 
     this.viewer.textContent = "";
@@ -11552,11 +11576,15 @@ class BaseViewer {
   }
 
   _setScale(value, noScroll = false) {
-    if (null === value) {
+    if (!value) {
       value = "auto";
     }
 
     let scale = parseFloat(value);
+
+    if (this._currentScale === scale) {
+      return;
+    }
 
     if (scale > 0) {
       this._setScaleUpdatePages(scale, value, noScroll, false);
@@ -15893,6 +15921,7 @@ class PDFPageView {
     const sfy = (0, _ui_utils.approximateFraction)(outputScale.sy);
     const width = (0, _ui_utils.roundToDivide)(viewport.width * outputScale.sx, sfx[0]);
     const height = (0, _ui_utils.roundToDivide)(viewport.height * outputScale.sy, sfy[0]);
+    let divisor = 1;
 
     if (width >= 4096 || height >= 4096) {
       if (!!this.maxWidth || !_canvasSize.default.test({
@@ -15900,23 +15929,24 @@ class PDFPageView {
         height
       })) {
         const max = this.determineMaxDimensions();
-        let divisor = Math.max(width / max, height / max);
-        const newScale = Math.floor(100 * this.scale / divisor) / 100;
-        divisor = this.scale / newScale;
-        this.scale = newScale;
-        const PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
-        PDFViewerApplicationOptions.set('maxZoom', newScale);
-        PDFViewerApplication.pdfViewer.currentScaleValue = this.scale;
-        viewport.width /= divisor;
-        viewport.height /= divisor;
-        (0, _util.warn)("Page " + this.id + ": Reduced the maximum zoom to " + newScale + " because the browser can't render larger canvases.");
+        divisor = Math.max(width / max, height / max);
+
+        if (divisor > 1) {
+          const newScale = Math.floor(100 * this.scale / divisor) / 100;
+          divisor = this.scale / newScale;
+          viewport.width /= divisor;
+          viewport.height /= divisor;
+          (0, _util.warn)(`Page ${this.id}: Reduced the maximum zoom to ${newScale} because the browser can't render larger canvases.`);
+        } else {
+          divisor = 1;
+        }
       }
     }
 
     canvas.width = (0, _ui_utils.roundToDivide)(viewport.width * outputScale.sx, sfx[0]);
     canvas.height = (0, _ui_utils.roundToDivide)(viewport.height * outputScale.sy, sfy[0]);
-    canvas.style.width = (0, _ui_utils.roundToDivide)(viewport.width, sfx[1]) + "px";
-    canvas.style.height = (0, _ui_utils.roundToDivide)(viewport.height, sfy[1]) + "px";
+    canvas.style.width = (0, _ui_utils.roundToDivide)(viewport.width * divisor, sfx[1]) + "px";
+    canvas.style.height = (0, _ui_utils.roundToDivide)(viewport.height * divisor, sfy[1]) + "px";
     this.paintedViewportMap.set(canvas, viewport);
     const transform = !outputScale.scaled ? null : [outputScale.sx, 0, 0, outputScale.sy, 0, 0];
     const renderContext = {
@@ -16009,7 +16039,7 @@ class PDFPageView {
 
     const checklist = [4096, 8192, 10836, 11180, 11402, 14188, 16384];
 
-    for (let width of checklist) {
+    for (const width of checklist) {
       if (!_canvasSize.default.test({
         width: width + 1,
         height: width + 1
@@ -20653,8 +20683,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.12.541';
-const pdfjsBuild = '05a4aa37b';
+const pdfjsVersion = '2.13.236';
+const pdfjsBuild = '4e75b3f56';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

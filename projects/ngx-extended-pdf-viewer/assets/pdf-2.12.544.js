@@ -2066,7 +2066,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.12.541',
+    apiVersion: '2.12.544',
     source: {
       data: source.data,
       url: source.url,
@@ -4262,9 +4262,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.12.541';
+const version = '2.12.544';
 exports.version = version;
-const build = '05a4aa37b';
+const build = 'dcf0c7118';
 exports.build = build;
 
 /***/ }),
@@ -4814,7 +4814,7 @@ class AnnotationStorage {
             obj = ngObj;
           }
 
-          this.setValue(key, undefined, obj);
+          this.setValue(key, undefined, obj, undefined, true);
         }
 
         if (obj === undefined && defaultValue !== undefined && defaultValue.value !== undefined && defaultValue.value !== "") {
@@ -4836,7 +4836,7 @@ class AnnotationStorage {
     return Object.assign(defaultValue, obj);
   }
 
-  setValue(key, fieldname, value, radioButtonField = undefined) {
+  setValue(key, fieldname, value, radioButtonField = undefined, isDefaultValue = false) {
     const obj = this._storage.get(key);
 
     let modified = false;
@@ -4849,7 +4849,9 @@ class AnnotationStorage {
         }
       }
     } else {
-      modified = true;
+      if (!isDefaultValue) {
+        modified = true;
+      }
 
       this._storage.set(key, value);
     }
@@ -16013,8 +16015,8 @@ var _svg = __w_pdfjs_require__(22);
 
 var _xfa_layer = __w_pdfjs_require__(20);
 
-const pdfjsVersion = '2.12.541';
-const pdfjsBuild = '05a4aa37b';
+const pdfjsVersion = '2.12.544';
+const pdfjsBuild = 'dcf0c7118';
 {
   if (_is_node.isNodeJS) {
     const {
