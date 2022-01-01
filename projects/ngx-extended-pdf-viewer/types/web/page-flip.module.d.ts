@@ -326,6 +326,7 @@ declare class HTMLRender extends Render {
      */
     drawBottomPage(): void;
     drawFrame(): void;
+    lastAngle: any;
     clear(): void;
 }
 /**

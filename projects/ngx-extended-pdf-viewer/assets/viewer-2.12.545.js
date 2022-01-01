@@ -10657,14 +10657,13 @@ class BaseViewer {
   #enablePermissions = false;
   #previousContainerHeight = 0;
   #scrollModePageState = null;
-  #onVisibilityChange = null;
 
   constructor(options) {
     if (this.constructor === BaseViewer) {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.13.236';
+    const viewerVersion = '2.12.545';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -10888,60 +10887,62 @@ class BaseViewer {
 
         let pageView = this._pages[Math.min(this._pages.length - 1, this.currentPageNumber)];
 
-        let isLoading = pageView.div.querySelector(".loadingIcon");
-
-        if (isLoading) {
-          Window['ngxConsole'].log("asking for the next page");
-          this.#ensurePdfPageLoaded(pageView).then(() => {
-            this.renderingQueue.renderView(pageView);
-          });
-        } else {
-          pageView = this._pages[Math.min(this._pages.length - 1, this.currentPageNumber + 1)];
-          isLoading = pageView.div.querySelector(".loadingIcon");
+        if (pageView) {
+          let isLoading = pageView.div.querySelector(".loadingIcon");
 
           if (isLoading) {
-            Window['ngxConsole'].log("asking for the next + 1 page");
+            Window['ngxConsole'].log("asking for the next page");
             this.#ensurePdfPageLoaded(pageView).then(() => {
               this.renderingQueue.renderView(pageView);
             });
           } else {
-            pageView = this._pages[Math.min(this._pages.length - 1, this.currentPageNumber + 2)];
+            pageView = this._pages[Math.min(this._pages.length - 1, this.currentPageNumber + 1)];
             isLoading = pageView.div.querySelector(".loadingIcon");
 
             if (isLoading) {
-              Window['ngxConsole'].log("asking for the next + 2 page");
+              Window['ngxConsole'].log("asking for the next + 1 page");
               this.#ensurePdfPageLoaded(pageView).then(() => {
                 this.renderingQueue.renderView(pageView);
               });
             } else {
-              pageView = this._pages[Math.min(this._pages.length - 1, this.currentPageNumber + 3)];
+              pageView = this._pages[Math.min(this._pages.length - 1, this.currentPageNumber + 2)];
               isLoading = pageView.div.querySelector(".loadingIcon");
 
               if (isLoading) {
-                Window['ngxConsole'].log("asking for the next + 3 page");
+                Window['ngxConsole'].log("asking for the next + 2 page");
                 this.#ensurePdfPageLoaded(pageView).then(() => {
                   this.renderingQueue.renderView(pageView);
                 });
               } else {
-                pageView = this._pages[Math.max(0, this.currentPageNumber - 1)];
+                pageView = this._pages[Math.min(this._pages.length - 1, this.currentPageNumber + 3)];
                 isLoading = pageView.div.querySelector(".loadingIcon");
 
                 if (isLoading) {
-                  Window['ngxConsole'].log("asking for the current page");
+                  Window['ngxConsole'].log("asking for the next + 3 page");
                   this.#ensurePdfPageLoaded(pageView).then(() => {
                     this.renderingQueue.renderView(pageView);
                   });
                 } else {
-                  pageView = this._pages[Math.max(0, this.currentPageNumber - 2)];
+                  pageView = this._pages[Math.max(0, this.currentPageNumber - 1)];
                   isLoading = pageView.div.querySelector(".loadingIcon");
 
                   if (isLoading) {
-                    Window['ngxConsole'].log("asking for the previous page");
+                    Window['ngxConsole'].log("asking for the current page");
                     this.#ensurePdfPageLoaded(pageView).then(() => {
                       this.renderingQueue.renderView(pageView);
                     });
                   } else {
-                    Window['ngxConsole'].log("Finished preloading the pages");
+                    pageView = this._pages[Math.max(0, this.currentPageNumber - 2)];
+                    isLoading = pageView.div.querySelector(".loadingIcon");
+
+                    if (isLoading) {
+                      Window['ngxConsole'].log("asking for the previous page");
+                      this.#ensurePdfPageLoaded(pageView).then(() => {
+                        this.renderingQueue.renderView(pageView);
+                      });
+                    } else {
+                      Window['ngxConsole'].log("Finished preloading the pages");
+                    }
                   }
                 }
               }
@@ -11086,24 +11087,11 @@ class BaseViewer {
   }
 
   #onePageRenderedOrForceFetch() {
-    if (document.visibilityState === "hidden" || !this.container.offsetParent || this._getVisiblePages().views.length === 0) {
+    if (!this.container.offsetParent || this._getVisiblePages().views.length === 0) {
       return Promise.resolve();
     }
 
-    const visibilityChangePromise = new Promise(resolve => {
-      this.#onVisibilityChange = () => {
-        if (document.visibilityState !== "hidden") {
-          return;
-        }
-
-        resolve();
-        document.removeEventListener("visibilitychange", this.#onVisibilityChange);
-        this.#onVisibilityChange = null;
-      };
-
-      document.addEventListener("visibilitychange", this.#onVisibilityChange);
-    });
-    return Promise.race([this._onePageRenderedCapability.promise, visibilityChangePromise]);
+    return this._onePageRenderedCapability.promise;
   }
 
   setDocument(pdfDocument) {
@@ -11177,11 +11165,6 @@ class BaseViewer {
       this.eventBus._off("pagerendered", this._onAfterDraw);
 
       this._onAfterDraw = null;
-
-      if (this.#onVisibilityChange) {
-        document.removeEventListener("visibilitychange", this.#onVisibilityChange);
-        this.#onVisibilityChange = null;
-      }
     };
 
     this.eventBus._on("pagerendered", this._onAfterDraw);
@@ -11371,11 +11354,6 @@ class BaseViewer {
       this.eventBus._off("pagerendered", this._onAfterDraw);
 
       this._onAfterDraw = null;
-    }
-
-    if (this.#onVisibilityChange) {
-      document.removeEventListener("visibilitychange", this.#onVisibilityChange);
-      this.#onVisibilityChange = null;
     }
 
     this.viewer.textContent = "";
@@ -11576,15 +11554,11 @@ class BaseViewer {
   }
 
   _setScale(value, noScroll = false) {
-    if (!value) {
+    if (null === value) {
       value = "auto";
     }
 
     let scale = parseFloat(value);
-
-    if (this._currentScale === scale) {
-      return;
-    }
 
     if (scale > 0) {
       this._setScaleUpdatePages(scale, value, noScroll, false);
@@ -14843,9 +14817,15 @@ class HTMLRender extends Render {
     if (this.orientation === "portrait" || this.leftPage === null) return;
 
     if (this.direction === 1 && this.flippingPage !== null && this.flippingPage.getDrawingDensity() === "hard") {
-      this.leftPage.getElement().style.zIndex = (this.getSettings().startZIndex + 5).toString(10);
-      this.leftPage.setHardDrawingAngle(180 + this.flippingPage.getHardAngle());
-      this.leftPage.draw(this.flippingPage.getDrawingDensity());
+      const angle = this.flippingPage.getHardAngle();
+
+      if (angle < -90) {
+        this.leftPage.getElement().style.zIndex = (this.getSettings().startZIndex + 5).toString(10);
+        this.leftPage.setHardDrawingAngle(180 + this.flippingPage.getHardAngle());
+        this.leftPage.draw(this.flippingPage.getDrawingDensity());
+      } else {
+        this.leftPage.getElement().style.display = "none";
+      }
     } else {
       this.leftPage.simpleDraw(0);
     }
@@ -14855,9 +14835,15 @@ class HTMLRender extends Render {
     if (this.rightPage === null) return;
 
     if (this.direction === 0 && this.flippingPage !== null && this.flippingPage.getDrawingDensity() === "hard") {
-      this.rightPage.getElement().style.zIndex = (this.getSettings().startZIndex + 5).toString(10);
-      this.rightPage.setHardDrawingAngle(180 + this.flippingPage.getHardAngle());
-      this.rightPage.draw(this.flippingPage.getDrawingDensity());
+      const angle = this.flippingPage.getHardAngle();
+
+      if (angle > 90) {
+        this.rightPage.getElement().style.zIndex = (this.getSettings().startZIndex + 5).toString(10);
+        this.rightPage.setHardDrawingAngle(180 + this.flippingPage.getHardAngle());
+        this.rightPage.draw(this.flippingPage.getDrawingDensity());
+      } else {
+        this.rightPage.getElement().style.display = "none";
+      }
     } else {
       this.rightPage.simpleDraw(1);
     }
@@ -14874,14 +14860,30 @@ class HTMLRender extends Render {
   }
 
   drawFrame() {
+    if (this.flippingPage !== null) {
+      if (this.flippingPage.getHardAngle() === this.lastAngle) {
+        return;
+      }
+
+      this.lastAngle = this.flippingPage.getHardAngle();
+    } else {
+      this.lastAngle = -1234;
+    }
+
     this.clear();
     this.drawLeftPage();
     this.drawRightPage();
     this.drawBottomPage();
 
     if (this.flippingPage != null) {
-      this.flippingPage.getElement().style.zIndex = (this.getSettings().startZIndex + 5).toString(10);
-      this.flippingPage.draw();
+      const angle = this.flippingPage.state.hardDrawingAngle;
+
+      if (angle <= 90) {
+        this.flippingPage.getElement().style.zIndex = (this.getSettings().startZIndex + 5).toString(10);
+        this.flippingPage.draw();
+      } else {
+        this.flippingPage.getElement().style.display = "none";
+      }
     }
 
     if (this.shadow != null && this.flippingPage !== null) {
@@ -15921,7 +15923,6 @@ class PDFPageView {
     const sfy = (0, _ui_utils.approximateFraction)(outputScale.sy);
     const width = (0, _ui_utils.roundToDivide)(viewport.width * outputScale.sx, sfx[0]);
     const height = (0, _ui_utils.roundToDivide)(viewport.height * outputScale.sy, sfy[0]);
-    let divisor = 1;
 
     if (width >= 4096 || height >= 4096) {
       if (!!this.maxWidth || !_canvasSize.default.test({
@@ -15929,24 +15930,23 @@ class PDFPageView {
         height
       })) {
         const max = this.determineMaxDimensions();
-        divisor = Math.max(width / max, height / max);
-
-        if (divisor > 1) {
-          const newScale = Math.floor(100 * this.scale / divisor) / 100;
-          divisor = this.scale / newScale;
-          viewport.width /= divisor;
-          viewport.height /= divisor;
-          (0, _util.warn)(`Page ${this.id}: Reduced the maximum zoom to ${newScale} because the browser can't render larger canvases.`);
-        } else {
-          divisor = 1;
-        }
+        let divisor = Math.max(width / max, height / max);
+        const newScale = Math.floor(100 * this.scale / divisor) / 100;
+        divisor = this.scale / newScale;
+        this.scale = newScale;
+        const PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
+        PDFViewerApplicationOptions.set('maxZoom', newScale);
+        PDFViewerApplication.pdfViewer.currentScaleValue = this.scale;
+        viewport.width /= divisor;
+        viewport.height /= divisor;
+        (0, _util.warn)("Page " + this.id + ": Reduced the maximum zoom to " + newScale + " because the browser can't render larger canvases.");
       }
     }
 
     canvas.width = (0, _ui_utils.roundToDivide)(viewport.width * outputScale.sx, sfx[0]);
     canvas.height = (0, _ui_utils.roundToDivide)(viewport.height * outputScale.sy, sfy[0]);
-    canvas.style.width = (0, _ui_utils.roundToDivide)(viewport.width * divisor, sfx[1]) + "px";
-    canvas.style.height = (0, _ui_utils.roundToDivide)(viewport.height * divisor, sfy[1]) + "px";
+    canvas.style.width = (0, _ui_utils.roundToDivide)(viewport.width, sfx[1]) + "px";
+    canvas.style.height = (0, _ui_utils.roundToDivide)(viewport.height, sfy[1]) + "px";
     this.paintedViewportMap.set(canvas, viewport);
     const transform = !outputScale.scaled ? null : [outputScale.sx, 0, 0, outputScale.sy, 0, 0];
     const renderContext = {
@@ -16039,7 +16039,7 @@ class PDFPageView {
 
     const checklist = [4096, 8192, 10836, 11180, 11402, 14188, 16384];
 
-    for (const width of checklist) {
+    for (let width of checklist) {
       if (!_canvasSize.default.test({
         width: width + 1,
         height: width + 1
@@ -20683,8 +20683,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.13.236';
-const pdfjsBuild = '4e75b3f56';
+const pdfjsVersion = '2.12.545';
+const pdfjsBuild = 'ed1c0b708';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
