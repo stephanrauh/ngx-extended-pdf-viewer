@@ -1,6 +1,13 @@
 <div id="toolbarSidebar">
   <div id="toolbarSidebarLeft">
-    <button type="button" id="viewThumbnail" class="toolbarButton toggled" title="Show Thumbnails" data-l10n-id="thumbs">
+    <button
+      type="button"
+      id="viewThumbnail"
+      class="toolbarButton toggled"
+      title="Show Thumbnails"
+      data-l10n-id="thumbs"
+      [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
+    >
       <span data-l10n-id="thumbs_label">Thumbnails</span>
       <svg style="width: 20px; height: 20px" viewBox="0 0 24 24">
         <path
@@ -17,6 +24,7 @@
       title="Show Document Outline (double-click to expand/collapse all items)"
       data-l10n-id="document_outline"
       hidden="true"
+      [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
     >
       <span data-l10n-id="document_outline_label">Document Outline</span>
       <svg style="width: 20px; height: 20px" viewBox="0 0 24 24">
@@ -24,7 +32,15 @@
       </svg>
     </button>
 
-    <button type="button" id="viewAttachments" class="toolbarButton" title="Show Attachments" data-l10n-id="attachments" hidden="true">
+    <button
+      type="button"
+      id="viewAttachments"
+      class="toolbarButton"
+      title="Show Attachments"
+      data-l10n-id="attachments"
+      hidden="true"
+      [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
+    >
       <span data-l10n-id="attachments_label">Attachments</span>
       <svg style="width: 20px; height: 20px" viewBox="0 0 24 24">
         <path
@@ -60,10 +76,14 @@
         title="Find Current Outline Item"
         tabindex="6"
         data-l10n-id="current_outline_item"
+        [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
       >
         <span data-l10n-id="current_outline_item_label">Current Outline Item</span>
         <svg style="width: 20px; height: 20px" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-          <path d="m14 9h-6c-1.3 0-1.3 2 0 2h6c1.3 0 1.3-2 0-2zm-5.2-8h-3.8c-1.3 0-1.3 2 0 2h1.7zm-6.8 0c-1 0-1.3 1-0.7 1.7 0.7 0.6 1.7 0.3 1.7-0.7 0-0.5-0.4-1-1-1zm3 8c-1 0-1.3 1-0.7 1.7 0.6 0.6 1.7 0.2 1.7-0.7 0-0.5-0.4-1-1-1zm0.3-4h-0.3c-1.4 0-1.4 2 0 2h2.3zm-3.3 0c-0.9 0-1.4 1-0.7 1.7 0.7 0.6 1.7 0.2 1.7-0.7 0-0.6-0.5-1-1-1zm12 8h-9c-1.3 0-1.3 2 0 2h9c1.3 0 1.3-2 0-2zm-12 0c-1 0-1.3 1-0.7 1.7 0.7 0.6 1.7 0.2 1.7-0.712 0-0.5-0.4-1-1-1z"/><path d="m7.37 4.838 3.93-3.911v2.138h3.629v3.546h-3.629v2.138l-3.93-3.911"/>
+          <path
+            d="m14 9h-6c-1.3 0-1.3 2 0 2h6c1.3 0 1.3-2 0-2zm-5.2-8h-3.8c-1.3 0-1.3 2 0 2h1.7zm-6.8 0c-1 0-1.3 1-0.7 1.7 0.7 0.6 1.7 0.3 1.7-0.7 0-0.5-0.4-1-1-1zm3 8c-1 0-1.3 1-0.7 1.7 0.6 0.6 1.7 0.2 1.7-0.7 0-0.5-0.4-1-1-1zm0.3-4h-0.3c-1.4 0-1.4 2 0 2h2.3zm-3.3 0c-0.9 0-1.4 1-0.7 1.7 0.7 0.6 1.7 0.2 1.7-0.7 0-0.6-0.5-1-1-1zm12 8h-9c-1.3 0-1.3 2 0 2h9c1.3 0 1.3-2 0-2zm-12 0c-1 0-1.3 1-0.7 1.7 0.7 0.6 1.7 0.2 1.7-0.712 0-0.5-0.4-1-1-1z"
+          />
+          <path d="m7.37 4.838 3.93-3.911v2.138h3.629v3.546h-3.629v2.138l-3.93-3.911" />
         </svg>
       </button>
     </div>

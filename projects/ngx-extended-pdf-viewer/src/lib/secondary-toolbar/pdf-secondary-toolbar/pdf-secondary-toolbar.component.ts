@@ -22,7 +22,7 @@ import { PDFNotificationService } from './../../pdf-notification-service';
 })
 export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterViewInit {
   @Input()
-  public customSecondaryToolbar: TemplateRef<any>;
+  public customSecondaryToolbar: TemplateRef<any> | undefined;
 
   @Input()
   public secondaryToolbarTop;

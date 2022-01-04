@@ -21,13 +21,13 @@ export class PdfFindbarComponent {
 
   /* UI templates */
   @Input()
-  public customFindbarInputArea: TemplateRef<any>;
+  public customFindbarInputArea: TemplateRef<any> | undefined;
 
   @Input()
   public customFindbar: TemplateRef<any>;
 
   @Input()
-  public customFindbarButtons: TemplateRef<any>;
+  public customFindbarButtons: TemplateRef<any>  | undefined;
 
   @Input()
   public showFindHighlightAll = true;

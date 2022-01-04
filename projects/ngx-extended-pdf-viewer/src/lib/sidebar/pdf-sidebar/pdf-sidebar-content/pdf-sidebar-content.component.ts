@@ -24,7 +24,7 @@ const THUMBNAIL_CANVAS_BORDER_WIDTH = 1; // px
 })
 export class PdfSidebarContentComponent implements OnDestroy {
   @Input()
-  public customThumbnail: TemplateRef<any>;
+  public customThumbnail: TemplateRef<any> | undefined;
 
   @ViewChild('thumbnailViewTemplate')
   public thumbnailViewTemplate: ElementRef;

@@ -7,7 +7,7 @@ import { Component, OnInit, Input, TemplateRef, Output, EventEmitter } from '@an
 })
 export class PdfToolbarComponent {
   @Input()
-  public customToolbar: TemplateRef<any>;
+  public customToolbar: TemplateRef<any> | undefined;
 
   @Input()
   public mobileFriendlyZoomScale = 1;

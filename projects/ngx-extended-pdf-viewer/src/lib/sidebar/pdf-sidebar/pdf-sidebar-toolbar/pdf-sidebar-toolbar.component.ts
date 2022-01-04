@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'pdf-sidebar-toolbar',
@@ -6,6 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pdf-sidebar-toolbar.component.css']
 })
 export class PdfSidebarToolbarComponent implements OnInit {
+
+
+  @Input()
+  public mobileFriendlyZoomScale = 1;
 
   constructor() { }
 

@@ -3,7 +3,7 @@ const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.u
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
 export const pdfjsVersion = '2.12.545';
-export const pdfjsBleedingEdgeVersion = '2.13.253';
+export const pdfjsBleedingEdgeVersion = '2.13.257';
 export function getVersionSuffix(folder: string): string {
   if (folder && folder.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -66,7 +66,8 @@ export let pdfDefaultOptions = {
   // options specific to ngx-extended-pdf-viewer (as opposed to being used by pdf.js)
   doubleTapZoomFactor: 'page-width',
   enableScripting: true,
-  defaultCacheSize: 50
+  defaultCacheSize: 50,
+  passwordPrompt: undefined,
 };
 
 if (typeof window !== 'undefined') {

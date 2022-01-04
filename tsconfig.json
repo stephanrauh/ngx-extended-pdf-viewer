@@ -15,5 +15,8 @@
     "paths": {
       "ngx-extended-pdf-viewer": ["dist/ngx-extended-pdf-viewer"]
     }
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true
   }
 }

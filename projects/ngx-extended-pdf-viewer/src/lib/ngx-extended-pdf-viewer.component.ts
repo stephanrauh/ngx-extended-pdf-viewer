@@ -481,6 +481,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public handTool = true;
   @Output()
   public handToolChange = new EventEmitter<boolean>();
+
   @Input()
   public showHandToolButton = false;
 

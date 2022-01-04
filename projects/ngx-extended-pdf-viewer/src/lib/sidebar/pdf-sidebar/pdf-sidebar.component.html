@@ -5,7 +5,7 @@
 <ng-template #defaultSidebar>
   <div id="sidebarContainer" [style.top]="sidebarPositionTop">
     <div id="additionalSidebarContainer" [style.display]="hideSidebarToolbar ? 'none' : ''">
-      <pdf-sidebar-toolbar></pdf-sidebar-toolbar>
+      <pdf-sidebar-toolbar [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"></pdf-sidebar-toolbar>
     </div>
     <pdf-sidebar-content
       [customThumbnail]="customThumbnail"

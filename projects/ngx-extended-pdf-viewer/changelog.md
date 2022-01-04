@@ -325,3 +325,4 @@
 - 11.0.0 #1055 copied the performance improvement to pdf.js 2.12; removed several checks that have become superfluous after updating to pdf.js 2.12/2.13
 - 11.0.1 #1104 repaired support for CMaps (e.g. far-eastern fonts); #1054 stop displaying the download dialog if the user didn't edit the form; added `NgxExtendedPdfViewerService.recalculateSize()` to re-calculate the PDF viewer height programmatically
 - 11.0.2 #716 fixed the book mode (now the front page is display correctly when turned); improved the performance of the book mode
+- 11.0.3 #763 allow developers to use custom password dialogs

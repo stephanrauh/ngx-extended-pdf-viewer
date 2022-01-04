@@ -12,11 +12,12 @@
         </div>
         <pdf-sidebar #pdfsidebar
                      [sidebarPositionTop]="sidebarPositionTop"
-                     [sidebarVisible]="sidebarVisible"
+                     [sidebarVisible]="sidebarVisible || false"
                      [showSidebarButton]="showSidebarButton"
                      [customSidebar]="customSidebar"
                      [customThumbnail]="customThumbnail"
-                     (thumbnailDrawn)="thumbnailDrawn.emit($event)">
+                     (thumbnailDrawn)="thumbnailDrawn.emit($event)"
+                     [mobileFriendlyZoomScale]="mobileFriendlyZoomScale">
         </pdf-sidebar>
         <div id="mainContainer">
           <pdf-dummy-components></pdf-dummy-components>
@@ -67,7 +68,7 @@
             [findbarLeft]="findbarLeft"
             [findbarTop]="findbarTop"
             [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
-            [showFindButton]="showFindButton"
+            [showFindButton]="showFindButton || false"
             [customFindbarInputArea]="customFindbarInputArea"
             [customFindbarButtons]="customFindbarButtons"
             [showFindCurrentPageOnly]="showFindCurrentPageOnly"
