@@ -779,7 +779,13 @@ const PDFViewerApplication = {
       });
     }
 
-    this.passwordPrompt = new _password_prompt.PasswordPrompt(appConfig.passwordOverlay, this.overlayManager, this.l10n, this.isViewerEmbedded);
+    let prompt = _app_options.AppOptions.get("passwordPrompt");
+
+    if (!prompt) {
+      prompt = new _password_prompt.PasswordPrompt(appConfig.passwordOverlay, this.overlayManager, this.l10n, this.isViewerEmbedded);
+    }
+
+    this.passwordPrompt = prompt;
     this.pdfOutlineViewer = new _pdf_outline_viewer.PDFOutlineViewer({
       container: appConfig.sidebar.outlineView,
       eventBus,
@@ -5792,6 +5798,10 @@ class PDFFindController {
   }
 
   _calculateMatch(pageIndex) {
+    if (!this.state) {
+      return;
+    }
+
     let pageContent = this._pageContents[pageIndex];
     const pageDiffs = this._pageDiffs[pageIndex];
     let query = this._query;
@@ -5873,26 +5883,30 @@ class PDFFindController {
       const extractTextCapability = (0, _pdfjsLib.createPromiseCapability)();
       this._extractTextPromises[i] = extractTextCapability.promise;
       promise = promise.then(() => {
-        return this._pdfDocument.getPage(i + 1).then(pdfPage => {
-          return pdfPage.getTextContent({
-            normalizeWhitespace: true
+        if (this._pdfDocument && this._extractTextPromises.length > 0) {
+          return this._pdfDocument.getPage(i + 1).then(pdfPage => {
+            return pdfPage.getTextContent({
+              normalizeWhitespace: true
+            });
+          }).then(textContent => {
+            const textItems = textContent.items;
+            const strBuf = [];
+
+            for (let j = 0, jj = textItems.length; j < jj; j++) {
+              strBuf.push(textItems[j].str);
+            }
+
+            [this._pageContents[i], this._pageDiffs[i]] = normalize(strBuf.join(""));
+            extractTextCapability.resolve(i);
+          }, reason => {
+            Window['ngxConsole'].error(`Unable to get text content for page ${i + 1}`, reason);
+            this._pageContents[i] = "";
+            this._pageDiffs[i] = null;
+            extractTextCapability.resolve(i);
           });
-        }).then(textContent => {
-          const textItems = textContent.items;
-          const strBuf = [];
+        }
 
-          for (let j = 0, jj = textItems.length; j < jj; j++) {
-            strBuf.push(textItems[j].str);
-          }
-
-          [this._pageContents[i], this._pageDiffs[i]] = normalize(strBuf.join(""));
-          extractTextCapability.resolve(i);
-        }, reason => {
-          Window['ngxConsole'].error(`Unable to get text content for page ${i + 1}`, reason);
-          this._pageContents[i] = "";
-          this._pageDiffs[i] = null;
-          extractTextCapability.resolve(i);
-        });
+        return Promise.resolve();
       });
     }
   }
@@ -10663,7 +10677,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.12.545';
+    const viewerVersion = '2.12.547';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -20683,8 +20697,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.12.545';
-const pdfjsBuild = 'ed1c0b708';
+const pdfjsVersion = '2.12.547';
+const pdfjsBuild = '12b4ece4b';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
