@@ -2,6 +2,7 @@ import { IPDFViewerApplicationOptions } from './pdf-viewer-application-options';
 import { IPDFViewerAppConfig } from './pdf-viewer-app-config';
 import { IPDFViewer } from './pdf-viewer';
 import { IEventBus } from './pdf-event-bus';
+import { PasswordPrompt } from './password-prompt';
 
 export interface IWebL10n {
   get(key: string, args: any, fallbackString: string): string;
@@ -28,6 +29,7 @@ export interface IPDFViewerApplication {
   onError: (error: Error) => void;
   page: number;
   pagesCount: number;
+  passwordPrompt: PasswordPrompt;
   pdfDocument: any;
   pdfLinkService: any;
   pdfSidebar: any;
