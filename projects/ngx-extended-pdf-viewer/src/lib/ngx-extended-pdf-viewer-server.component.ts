@@ -429,7 +429,8 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   @Input()
   public set mobileFriendlyZoom(zoom: string) {}
 
-  private shuttingDown = false;
+  @Input()
+  public wheelAction: 'scroll' | 'zoom' = 'scroll';
 
   public get sidebarPositionTop(): string {
     return '32px';

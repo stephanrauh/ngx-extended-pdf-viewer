@@ -611,6 +611,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public mobileFriendlyZoomScale = 1;
 
+  @Input()
+  public wheelAction: 'scroll' | 'zoom' = 'scroll';
+
   public toolbarMarginTop = '0px';
 
   public toolbarWidth = '100%';
@@ -1217,6 +1220,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     options.set('ignoreKeyboard', this.ignoreKeyboard);
     options.set('ignoreKeys', this.ignoreKeys);
     options.set('acceptKeys', this.acceptKeys);
+    options.set('wheelAction', this.wheelAction);
     this.activateTextlayerIfNecessary(options);
 
     if (this.scrollMode || this.scrollMode === ScrollModeType.vertical) {
@@ -1780,6 +1784,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             }
           }
         }
+      }
+
+      if ('wheelAction' in changes) {
+        PDFViewerApplicationOptions.set('wheelAction', this.wheelAction);
       }
 
       this.primaryMenuVisible = this.showToolbar;
