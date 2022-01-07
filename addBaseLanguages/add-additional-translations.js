@@ -49,7 +49,7 @@ for (let lang in languages) {
       }
 
       if (additions.length > 0) {
-        const complete = originalLines + '\n\n# Translations added from pdf.js 2.12\n\n' + additions;
+        const complete = originalLines + '\n\n# Translations added from pdf.js@next\n\n' + additions;
         // console.log('Added 2.8 translations to ' + lang);
         fs.writeFileSync(originalFilename, complete);
       }
@@ -73,7 +73,7 @@ for (let lang in languages) {
     }
 
     if (additions.length > 0) {
-      const complete = originalLines + '\n\n# Translations added from the English translations of pdf.js 2.12\n\n' + additions;
+      const complete = originalLines + '\n\n# Translations added from the English translations of pdf.js@next\n\n' + additions;
       // console.log('Added English 2.8 translations to ' + lang);
       fs.writeFileSync(originalFilename, complete);
     }
