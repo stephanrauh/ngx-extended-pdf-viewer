@@ -15,7 +15,7 @@ declare class PDFLinkService {
   public getAnchorUrl(targetUrl: string): string;
 }
 
-const THUMBNAIL_CANVAS_BORDER_WIDTH = 1; // px
+const THUMBNAIL_CANVAS_BORDER_WIDTH = 1; // one pixel
 
 @Component({
   selector: 'pdf-sidebar-content',
@@ -26,6 +26,12 @@ export class PdfSidebarContentComponent implements OnDestroy {
   @Input()
   public customThumbnail: TemplateRef<any> | undefined;
 
+  @Input()
+  public hideSidebarToolbar = false;
+
+  @Input()
+  public mobileFriendlyZoomScale = 1.0;
+
   @ViewChild('thumbnailViewTemplate')
   public thumbnailViewTemplate: ElementRef;
 
@@ -34,9 +40,17 @@ export class PdfSidebarContentComponent implements OnDestroy {
   @Output()
   public thumbnailDrawn = new EventEmitter<PdfThumbnailDrawnEvent>();
 
-  public top = '32px';
-
-  public _hideSidebarToolbar = false;
+  public get top(): string {
+    let top = 0;
+    if (!this.hideSidebarToolbar) {
+      console.log(this.mobileFriendlyZoomScale);
+      top = 32 * this.mobileFriendlyZoomScale;
+      if (top === 32) {
+        top = 33; // prevent the border of the sidebar toolbar from being cut off
+      }
+    }
+    return `${top}px`;
+  }
 
   constructor() {
     if (typeof window !== 'undefined') {
@@ -83,19 +97,19 @@ export class PdfSidebarContentComponent implements OnDestroy {
 
     const borderAdjustment = 2 * THUMBNAIL_CANVAS_BORDER_WIDTH;
 
-    const widthOfRing = pdfThumbnailView.canvasWidth + borderAdjustment + 'px';
-    const heightOfRing = pdfThumbnailView.canvasHeight + borderAdjustment + 'px';
+    const widthOfRing = `${pdfThumbnailView.canvasWidth + borderAdjustment}px`;
+    const heightOfRing = `${pdfThumbnailView.canvasHeight + borderAdjustment}px`;
 
     const newHtml = inner.split('WIDTH_OF_RING').join(widthOfRing).split('HEIGHT_OF_RING').join(heightOfRing).split('PAGE_NUMBER').join(id);
     const newElement = this.createElementFromHTML(newHtml);
     newElement.classList.remove('pdf-viewer-template');
 
     const anchor = newElement as HTMLAnchorElement;
-    anchor.href = linkService.getAnchorUrl('#page=' + id);
+    anchor.href = linkService.getAnchorUrl(`#page=${id}`);
     thumbPageTitlePromise.then((msg) => {
       anchor.title = msg;
     });
-    anchor.onclick = function () {
+    anchor.onclick = () => {
       linkService.page = id;
       return false;
     };
@@ -142,16 +156,6 @@ export class PdfSidebarContentComponent implements OnDestroy {
         }
         event.preventDefault();
       }
-    }
-  }
-
-  @Input()
-  public set hideSidebarToolbar(h: boolean) {
-    this._hideSidebarToolbar = h;
-    if (this._hideSidebarToolbar) {
-      this.top = '0';
-    } else {
-      this.top = '32px';
     }
   }
 }

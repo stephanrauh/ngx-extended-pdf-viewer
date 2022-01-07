@@ -2,6 +2,11 @@ button {
   margin-right: 4px !important;
 }
 
+button.toolbarButton {
+  width: 22px;
+  height: 22px;
+}
+
 div#toolbarSidebar > button:first-child {
   margin-left: 4px !important;
 }
