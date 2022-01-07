@@ -7,7 +7,7 @@
   <div class="html">
     <div class="loadingInProgress body" [style.backgroundColor]="backgroundColor">
       <div id="outerContainer" (window:resize)="onResize()">
-        <div class="free-floating-bar">
+        <div class="free-floating-bar" *ngIf="showFreeFloatingBar">
           <ng-content *ngTemplateOutlet="customFreeFloatingBar ? customFreeFloatingBar : defaultFreeFloatingBar"></ng-content>
         </div>
         <pdf-sidebar #pdfsidebar

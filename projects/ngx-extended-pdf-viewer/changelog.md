@@ -326,3 +326,4 @@
 - 11.0.1 #1104 repaired support for CMaps (e.g. far-eastern fonts); #1054 stop displaying the download dialog if the user didn't edit the form; added `NgxExtendedPdfViewerService.recalculateSize()` to re-calculate the PDF viewer height programmatically
 - 11.0.2 #716 fixed the book mode (now the front page is display correctly when turned); improved the performance of the book mode
 - 11.0.3 #763 allow developers to use custom password dialogs; #1012 implement a programmatic API to access the layers of the PDF file
+- 11.1.0 #956 if you're using a custom free floating toolbar, `[showFreeFloatingBar]` allows you to hide it

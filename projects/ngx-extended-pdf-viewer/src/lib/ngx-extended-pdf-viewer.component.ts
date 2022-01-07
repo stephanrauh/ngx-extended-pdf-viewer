@@ -117,6 +117,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public customFreeFloatingBar: TemplateRef<any> | undefined;
 
   @Input()
+  public showFreeFloatingBar = true;
+
+  @Input()
   public enableDragAndDrop = true;
 
   @Input()
