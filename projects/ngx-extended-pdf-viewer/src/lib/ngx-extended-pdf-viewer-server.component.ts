@@ -74,6 +74,9 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   public customFreeFloatingBar: TemplateRef<any>;
 
   @Input()
+  public showFreeFloatingBar = true;
+
+  @Input()
   public formData: FormDataType = {};
 
   @Output()
