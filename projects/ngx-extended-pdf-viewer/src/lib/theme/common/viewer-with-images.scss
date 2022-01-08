@@ -410,7 +410,7 @@ html[dir='rtl'] ngx-extended-pdf-viewer #sidebarContent {
 ngx-extended-pdf-viewer {
   #viewerContainer {
     overflow: auto;
-    -webkit-overflow-scrolling: touch;
+    -webkit-overflow-scrolling: auto; /* fixes #962 */
     position: absolute;
     top: 32px;
     right: 0;

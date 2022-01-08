@@ -327,3 +327,4 @@
 - 11.0.2 #716 fixed the book mode (now the front page is display correctly when turned); improved the performance of the book mode
 - 11.0.3 #763 allow developers to use custom password dialogs; #1012 implement a programmatic API to access the layers of the PDF file
 - 11.1.0 #956 if you're using a custom free floating toolbar, `[showFreeFloatingBar]` allows you to hide it; #1007 `[wheelAction]="'zoom'"` allows you to zoom with the mouse wheel without keeping the `CTRL` key pressed; #768 resize the toolbar of the sidebar when `[mobileFriendlyZoom]` is used
+- 11.1.1 #962 iOS bugfix: form input now remains visible after zooming

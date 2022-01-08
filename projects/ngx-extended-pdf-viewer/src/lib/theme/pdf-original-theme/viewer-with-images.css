@@ -630,7 +630,7 @@ html[dir='rtl'] #sidebarContent {
 
 #viewerContainer {
   overflow: auto;
-  -webkit-overflow-scrolling: touch;
+  -webkit-overflow-scrolling: auto; /* fixes #962 */
   position: absolute;
   top: 32px;
   right: 0;
