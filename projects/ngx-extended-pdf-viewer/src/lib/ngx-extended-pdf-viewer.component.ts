@@ -337,7 +337,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public backgroundColor = '#e8e8eb';
 
   @Input()
-  public pdfBackgroundColor = '#FFF';
+  public pdfBackground: string | ((page: number, pageLabel: string) => string | undefined) | undefined = '#FFF';
+
+  @Input()
+  public pdfBackgroundColorToReplace: string | ((page: number, pageLabel: string) => string | undefined) | undefined = '#ffffff';
 
   /** Allows the user to define the name of the file after clicking "download" */
   @Input()
@@ -1040,7 +1043,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         PDFViewerApplicationOptions.set('pageViewMode', this.pageViewMode);
         PDFViewerApplicationOptions.set('verbosity', this.logLevel);
         PDFViewerApplicationOptions.set('initialZoom', this.zoom);
-        PDFViewerApplicationOptions.set('pdfBackgroundColor', this.pdfBackgroundColor);
+        PDFViewerApplicationOptions.set('pdfBackgroundColor', this.pdfBackground);
+        PDFViewerApplicationOptions.set('pdfBackgroundColorToReplace', this.pdfBackgroundColorToReplace);
 
         PDFViewerApplication.isViewerEmbedded = true;
         if (PDFViewerApplication.printKeyDownListener) {
@@ -1877,8 +1881,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
     }
 
-    if ('pdfBackgroundColor' in changes) {
-      PDFViewerApplicationOptions.set('pdfBackgroundColor', this.pdfBackgroundColor);
+    if ('pdfBackgroundColor' in changes && !changes['pdfBackgroundColor '].isFirstChange()) {
+      PDFViewerApplicationOptions.set('pdfBackgroundColor', this.pdfBackground);
+    }
+    if ('pdfBackgroundColorToReplace' in changes && !changes['pdfBackgroundColorToReplace'].isFirstChange()) {
+      PDFViewerApplicationOptions.set('pdfBackgroundColorToReplace', this.pdfBackgroundColorToReplace);
     }
   }
 
