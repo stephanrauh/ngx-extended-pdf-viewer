@@ -43,537 +43,6 @@ return /******/ (() => { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.StatTimer = exports.RenderingCancelledException = exports.PixelsPerInch = exports.PageViewport = exports.PDFDateString = exports.LinkTarget = exports.DOMStandardFontDataFactory = exports.DOMSVGFactory = exports.DOMCanvasFactory = exports.DOMCMapReaderFactory = void 0;
-exports.addLinkAttributes = addLinkAttributes;
-exports.deprecated = deprecated;
-exports.getFilenameFromUrl = getFilenameFromUrl;
-exports.getPdfFilenameFromUrl = getPdfFilenameFromUrl;
-exports.getXfaPageViewport = getXfaPageViewport;
-exports.isDataScheme = isDataScheme;
-exports.isPdfFile = isPdfFile;
-exports.isValidFetchUrl = isValidFetchUrl;
-exports.loadScript = loadScript;
-
-var _util = __w_pdfjs_require__(2);
-
-var _base_factory = __w_pdfjs_require__(4);
-
-const DEFAULT_LINK_REL = "noopener noreferrer nofollow";
-const SVG_NS = "http://www.w3.org/2000/svg";
-const PixelsPerInch = {
-  CSS: 96.0,
-  PDF: 72.0,
-
-  get PDF_TO_CSS_UNITS() {
-    return (0, _util.shadow)(this, "PDF_TO_CSS_UNITS", this.CSS / this.PDF);
-  }
-
-};
-exports.PixelsPerInch = PixelsPerInch;
-
-class DOMCanvasFactory extends _base_factory.BaseCanvasFactory {
-  constructor({
-    ownerDocument = globalThis.document
-  } = {}) {
-    super();
-    this._document = ownerDocument;
-  }
-
-  _createCanvas(width, height) {
-    const canvas = this._document.createElement("canvas");
-
-    canvas.width = width;
-    canvas.height = height;
-    return canvas;
-  }
-
-}
-
-exports.DOMCanvasFactory = DOMCanvasFactory;
-
-async function fetchData(url, asTypedArray = false) {
-  if (isValidFetchUrl(url, document.baseURI)) {
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-
-    return asTypedArray ? new Uint8Array(await response.arrayBuffer()) : (0, _util.stringToBytes)(await response.text());
-  }
-
-  return new Promise((resolve, reject) => {
-    const request = new XMLHttpRequest();
-    request.open("GET", url, true);
-
-    if (asTypedArray) {
-      request.responseType = "arraybuffer";
-    }
-
-    request.onreadystatechange = () => {
-      if (request.readyState !== XMLHttpRequest.DONE) {
-        return;
-      }
-
-      if (request.status === 200 || request.status === 0) {
-        let data;
-
-        if (asTypedArray && request.response) {
-          data = new Uint8Array(request.response);
-        } else if (!asTypedArray && request.responseText) {
-          data = (0, _util.stringToBytes)(request.responseText);
-        }
-
-        if (data) {
-          resolve(data);
-          return;
-        }
-      }
-
-      reject(new Error(request.statusText));
-    };
-
-    request.send(null);
-  });
-}
-
-class DOMCMapReaderFactory extends _base_factory.BaseCMapReaderFactory {
-  _fetchData(url, compressionType) {
-    return fetchData(url, this.isCompressed).then(data => {
-      return {
-        cMapData: data,
-        compressionType
-      };
-    });
-  }
-
-}
-
-exports.DOMCMapReaderFactory = DOMCMapReaderFactory;
-
-class DOMStandardFontDataFactory extends _base_factory.BaseStandardFontDataFactory {
-  _fetchData(url) {
-    return fetchData(url, true);
-  }
-
-}
-
-exports.DOMStandardFontDataFactory = DOMStandardFontDataFactory;
-
-class DOMSVGFactory extends _base_factory.BaseSVGFactory {
-  _createSVG(type) {
-    return document.createElementNS(SVG_NS, type);
-  }
-
-}
-
-exports.DOMSVGFactory = DOMSVGFactory;
-
-class PageViewport {
-  constructor({
-    viewBox,
-    scale,
-    rotation,
-    offsetX = 0,
-    offsetY = 0,
-    dontFlip = false
-  }) {
-    this.viewBox = viewBox;
-    this.scale = scale;
-    this.rotation = rotation;
-    this.offsetX = offsetX;
-    this.offsetY = offsetY;
-    const centerX = (viewBox[2] + viewBox[0]) / 2;
-    const centerY = (viewBox[3] + viewBox[1]) / 2;
-    let rotateA, rotateB, rotateC, rotateD;
-    rotation %= 360;
-
-    if (rotation < 0) {
-      rotation += 360;
-    }
-
-    switch (rotation) {
-      case 180:
-        rotateA = -1;
-        rotateB = 0;
-        rotateC = 0;
-        rotateD = 1;
-        break;
-
-      case 90:
-        rotateA = 0;
-        rotateB = 1;
-        rotateC = 1;
-        rotateD = 0;
-        break;
-
-      case 270:
-        rotateA = 0;
-        rotateB = -1;
-        rotateC = -1;
-        rotateD = 0;
-        break;
-
-      case 0:
-        rotateA = 1;
-        rotateB = 0;
-        rotateC = 0;
-        rotateD = -1;
-        break;
-
-      default:
-        throw new Error("PageViewport: Invalid rotation, must be a multiple of 90 degrees.");
-    }
-
-    if (dontFlip) {
-      rotateC = -rotateC;
-      rotateD = -rotateD;
-    }
-
-    let offsetCanvasX, offsetCanvasY;
-    let width, height;
-
-    if (rotateA === 0) {
-      offsetCanvasX = Math.abs(centerY - viewBox[1]) * scale + offsetX;
-      offsetCanvasY = Math.abs(centerX - viewBox[0]) * scale + offsetY;
-      width = Math.abs(viewBox[3] - viewBox[1]) * scale;
-      height = Math.abs(viewBox[2] - viewBox[0]) * scale;
-    } else {
-      offsetCanvasX = Math.abs(centerX - viewBox[0]) * scale + offsetX;
-      offsetCanvasY = Math.abs(centerY - viewBox[1]) * scale + offsetY;
-      width = Math.abs(viewBox[2] - viewBox[0]) * scale;
-      height = Math.abs(viewBox[3] - viewBox[1]) * scale;
-    }
-
-    this.transform = [rotateA * scale, rotateB * scale, rotateC * scale, rotateD * scale, offsetCanvasX - rotateA * scale * centerX - rotateC * scale * centerY, offsetCanvasY - rotateB * scale * centerX - rotateD * scale * centerY];
-    this.width = width;
-    this.height = height;
-  }
-
-  clone({
-    scale = this.scale,
-    rotation = this.rotation,
-    offsetX = this.offsetX,
-    offsetY = this.offsetY,
-    dontFlip = false
-  } = {}) {
-    return new PageViewport({
-      viewBox: this.viewBox.slice(),
-      scale,
-      rotation,
-      offsetX,
-      offsetY,
-      dontFlip
-    });
-  }
-
-  convertToViewportPoint(x, y) {
-    return _util.Util.applyTransform([x, y], this.transform);
-  }
-
-  convertToViewportRectangle(rect) {
-    const topLeft = _util.Util.applyTransform([rect[0], rect[1]], this.transform);
-
-    const bottomRight = _util.Util.applyTransform([rect[2], rect[3]], this.transform);
-
-    return [topLeft[0], topLeft[1], bottomRight[0], bottomRight[1]];
-  }
-
-  convertToPdfPoint(x, y) {
-    return _util.Util.applyInverseTransform([x, y], this.transform);
-  }
-
-}
-
-exports.PageViewport = PageViewport;
-
-class RenderingCancelledException extends _util.BaseException {
-  constructor(msg, type) {
-    super(msg, "RenderingCancelledException");
-    this.type = type;
-  }
-
-}
-
-exports.RenderingCancelledException = RenderingCancelledException;
-const LinkTarget = {
-  NONE: 0,
-  SELF: 1,
-  BLANK: 2,
-  PARENT: 3,
-  TOP: 4
-};
-exports.LinkTarget = LinkTarget;
-
-function addLinkAttributes(link, {
-  url,
-  target,
-  rel,
-  enabled = true
-} = {}) {
-  (0, _util.assert)(url && typeof url === "string", 'addLinkAttributes: A valid "url" parameter must provided.');
-  const urlNullRemoved = (0, _util.removeNullCharacters)(url);
-
-  if (enabled) {
-    link.href = link.title = urlNullRemoved;
-  } else {
-    link.href = "";
-    link.title = `Disabled: ${urlNullRemoved}`;
-
-    link.onclick = () => {
-      return false;
-    };
-  }
-
-  let targetStr = "";
-
-  switch (target) {
-    case LinkTarget.NONE:
-      break;
-
-    case LinkTarget.SELF:
-      targetStr = "_self";
-      break;
-
-    case LinkTarget.BLANK:
-      targetStr = "_blank";
-      break;
-
-    case LinkTarget.PARENT:
-      targetStr = "_parent";
-      break;
-
-    case LinkTarget.TOP:
-      targetStr = "_top";
-      break;
-  }
-
-  link.target = targetStr;
-  link.rel = typeof rel === "string" ? rel : DEFAULT_LINK_REL;
-}
-
-function isDataScheme(url) {
-  const ii = url.length;
-  let i = 0;
-
-  while (i < ii && url[i].trim() === "") {
-    i++;
-  }
-
-  return url.substring(i, i + 5).toLowerCase() === "data:";
-}
-
-function isPdfFile(filename) {
-  return typeof filename === "string" && /\.pdf$/i.test(filename);
-}
-
-function getFilenameFromUrl(url) {
-  const anchor = url.indexOf("#");
-  const query = url.indexOf("?");
-  const end = Math.min(anchor > 0 ? anchor : url.length, query > 0 ? query : url.length);
-  return url.substring(url.lastIndexOf("/", end) + 1, end);
-}
-
-function getPdfFilenameFromUrl(url, defaultFilename = "document.pdf") {
-  if (window.PDFViewerApplication.appConfig.filenameForDownload) {
-    return window.PDFViewerApplication.appConfig.filenameForDownload;
-  }
-
-  if (typeof url !== "string") {
-    return defaultFilename;
-  }
-
-  if (isDataScheme(url)) {
-    (0, _util.warn)('getPdfFilenameFromUrl: ignore "data:"-URL for performance reasons.');
-    return defaultFilename;
-  }
-
-  const reURI = /^(?:(?:[^:]+:)?\/\/[^/]+)?([^?#]*)(\?[^#]*)?(#.*)?$/;
-  const reFilename = /[^/?#=]+\.pdf\b(?!.*\.pdf\b)/i;
-  const splitURI = reURI.exec(url);
-  let suggestedFilename = reFilename.exec(splitURI[1]) || reFilename.exec(splitURI[2]) || reFilename.exec(splitURI[3]);
-
-  if (suggestedFilename) {
-    suggestedFilename = suggestedFilename[0];
-
-    if (suggestedFilename.includes("%")) {
-      try {
-        suggestedFilename = reFilename.exec(decodeURIComponent(suggestedFilename))[0];
-      } catch (ex) {}
-    }
-  }
-
-  return suggestedFilename || defaultFilename;
-}
-
-class StatTimer {
-  constructor() {
-    this.started = Object.create(null);
-    this.times = [];
-  }
-
-  time(name) {
-    if (name in this.started) {
-      (0, _util.warn)(`Timer is already running for ${name}`);
-    }
-
-    this.started[name] = Date.now();
-  }
-
-  timeEnd(name) {
-    if (!(name in this.started)) {
-      (0, _util.warn)(`Timer has not been started for ${name}`);
-    }
-
-    this.times.push({
-      name,
-      start: this.started[name],
-      end: Date.now()
-    });
-    delete this.started[name];
-  }
-
-  toString() {
-    const outBuf = [];
-    let longest = 0;
-
-    for (const time of this.times) {
-      const name = time.name;
-
-      if (name.length > longest) {
-        longest = name.length;
-      }
-    }
-
-    for (const time of this.times) {
-      const duration = time.end - time.start;
-      outBuf.push(`${time.name.padEnd(longest)} ${duration}ms\n`);
-    }
-
-    return outBuf.join("");
-  }
-
-}
-
-exports.StatTimer = StatTimer;
-
-function isValidFetchUrl(url, baseUrl) {
-  try {
-    const {
-      protocol
-    } = baseUrl ? new URL(url, baseUrl) : new URL(url);
-    return protocol === "http:" || protocol === "https:" || protocol === "capacitor:";
-  } catch (ex) {
-    return false;
-  }
-}
-
-function loadScript(src, removeScriptElement = false) {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-
-    if (src.constructor.name === "Function") {
-      script.src = src();
-    } else {
-      script.src = src;
-    }
-
-    script.onload = function (evt) {
-      if (removeScriptElement) {
-        script.remove();
-      }
-
-      resolve(evt);
-    };
-
-    script.onerror = function (error) {
-      Window['ngxConsole'].log(error);
-      reject(new Error(`Cannot load script at: ${script.src}`));
-    };
-
-    (document.head || document.documentElement).appendChild(script);
-  });
-}
-
-function deprecated(details) {
-  Window['ngxConsole'].log("Deprecated API usage: " + details);
-}
-
-let pdfDateStringRegex;
-
-class PDFDateString {
-  static toDateObject(input) {
-    if (!input || !(0, _util.isString)(input)) {
-      return null;
-    }
-
-    if (!pdfDateStringRegex) {
-      pdfDateStringRegex = new RegExp("^D:" + "(\\d{4})" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "([Z|+|-])?" + "(\\d{2})?" + "'?" + "(\\d{2})?" + "'?");
-    }
-
-    const matches = pdfDateStringRegex.exec(input);
-
-    if (!matches) {
-      return null;
-    }
-
-    const year = parseInt(matches[1], 10);
-    let month = parseInt(matches[2], 10);
-    month = month >= 1 && month <= 12 ? month - 1 : 0;
-    let day = parseInt(matches[3], 10);
-    day = day >= 1 && day <= 31 ? day : 1;
-    let hour = parseInt(matches[4], 10);
-    hour = hour >= 0 && hour <= 23 ? hour : 0;
-    let minute = parseInt(matches[5], 10);
-    minute = minute >= 0 && minute <= 59 ? minute : 0;
-    let second = parseInt(matches[6], 10);
-    second = second >= 0 && second <= 59 ? second : 0;
-    const universalTimeRelation = matches[7] || "Z";
-    let offsetHour = parseInt(matches[8], 10);
-    offsetHour = offsetHour >= 0 && offsetHour <= 23 ? offsetHour : 0;
-    let offsetMinute = parseInt(matches[9], 10) || 0;
-    offsetMinute = offsetMinute >= 0 && offsetMinute <= 59 ? offsetMinute : 0;
-
-    if (universalTimeRelation === "-") {
-      hour += offsetHour;
-      minute += offsetMinute;
-    } else if (universalTimeRelation === "+") {
-      hour -= offsetHour;
-      minute -= offsetMinute;
-    }
-
-    return new Date(Date.UTC(year, month, day, hour, minute, second));
-  }
-
-}
-
-exports.PDFDateString = PDFDateString;
-
-function getXfaPageViewport(xfaPage, {
-  scale = 1,
-  rotation = 0
-}) {
-  const {
-    width,
-    height
-  } = xfaPage.attributes.style;
-  const viewBox = [0, 0, parseInt(width), parseInt(height)];
-  return new PageViewport({
-    viewBox,
-    scale,
-    rotation
-  });
-}
-
-/***/ }),
-/* 2 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
 exports.VerbosityLevel = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.UNSUPPORTED_FEATURES = exports.TextRenderingMode = exports.StreamType = exports.RenderingIntentFlag = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.IsLittleEndianCached = exports.IsEvalSupportedCached = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FontType = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMode = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
 exports.arrayByteLength = arrayByteLength;
 exports.arraysToBytes = arraysToBytes;
@@ -595,7 +64,6 @@ exports.isSameOrigin = isSameOrigin;
 exports.isString = isString;
 exports.objectFromMap = objectFromMap;
 exports.objectSize = objectSize;
-exports.removeNullCharacters = removeNullCharacters;
 exports.setVerbosityLevel = setVerbosityLevel;
 exports.shadow = shadow;
 exports.string32 = string32;
@@ -607,7 +75,7 @@ exports.unreachable = unreachable;
 exports.utf8StringToString = utf8StringToString;
 exports.warn = warn;
 
-__w_pdfjs_require__(3);
+__w_pdfjs_require__(2);
 
 const IDENTITY_MATRIX = [1, 0, 0, 1, 0, 0];
 exports.IDENTITY_MATRIX = IDENTITY_MATRIX;
@@ -1155,21 +623,6 @@ class AbortException extends BaseException {
 }
 
 exports.AbortException = AbortException;
-const NullCharactersRegExp = /\x00+/g;
-const InvisibleCharactersRegExp = /[\x01-\x1F]/g;
-
-function removeNullCharacters(str, replaceInvisible = false) {
-  if (typeof str !== "string") {
-    warn("The argument for removeNullCharacters must be a string.");
-    return str;
-  }
-
-  if (replaceInvisible) {
-    str = str.replace(InvisibleCharactersRegExp, " ");
-  }
-
-  return str.replace(NullCharactersRegExp, "");
-}
 
 function bytesToString(bytes) {
   assert(bytes !== null && typeof bytes === "object" && bytes.length !== undefined, "Invalid argument for bytesToString");
@@ -1608,7 +1061,7 @@ function createObjectURL(data, contentType = "", forceDataSchema = false) {
 }
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (() => {
 
 
@@ -1617,185 +1070,7 @@ const isNodeJS = false;
 ;
 
 /***/ }),
-/* 4 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.BaseStandardFontDataFactory = exports.BaseSVGFactory = exports.BaseCanvasFactory = exports.BaseCMapReaderFactory = void 0;
-
-var _util = __w_pdfjs_require__(2);
-
-class BaseCanvasFactory {
-  constructor() {
-    if (this.constructor === BaseCanvasFactory) {
-      (0, _util.unreachable)("Cannot initialize BaseCanvasFactory.");
-    }
-  }
-
-  create(width, height) {
-    if (width <= 0 || height <= 0) {
-      throw new Error("Invalid canvas size");
-    }
-
-    const canvas = this._createCanvas(width, height);
-
-    return {
-      canvas,
-      context: canvas.getContext("2d")
-    };
-  }
-
-  reset(canvasAndContext, width, height) {
-    if (!canvasAndContext.canvas) {
-      throw new Error("Canvas is not specified");
-    }
-
-    if (width <= 0 || height <= 0) {
-      throw new Error("Invalid canvas size");
-    }
-
-    canvasAndContext.canvas.width = width;
-    canvasAndContext.canvas.height = height;
-  }
-
-  destroy(canvasAndContext) {
-    if (!canvasAndContext.canvas) {
-      throw new Error("Canvas is not specified");
-    }
-
-    canvasAndContext.canvas.width = 0;
-    canvasAndContext.canvas.height = 0;
-    canvasAndContext.canvas = null;
-    canvasAndContext.context = null;
-  }
-
-  _createCanvas(width, height) {
-    (0, _util.unreachable)("Abstract method `_createCanvas` called.");
-  }
-
-}
-
-exports.BaseCanvasFactory = BaseCanvasFactory;
-
-class BaseCMapReaderFactory {
-  constructor({
-    baseUrl = null,
-    isCompressed = false
-  }) {
-    if (this.constructor === BaseCMapReaderFactory) {
-      (0, _util.unreachable)("Cannot initialize BaseCMapReaderFactory.");
-    }
-
-    this.baseUrl = baseUrl;
-    this.isCompressed = isCompressed;
-  }
-
-  async fetch({
-    name
-  }) {
-    if (!this.baseUrl) {
-      throw new Error('The CMap "baseUrl" parameter must be specified, ensure that ' + 'the "cMapUrl" and "cMapPacked" API parameters are provided.');
-    }
-
-    if (!name) {
-      throw new Error("CMap name must be specified.");
-    }
-
-    const url = this.baseUrl + name + (this.isCompressed ? ".bcmap" : "");
-    const compressionType = this.isCompressed ? _util.CMapCompressionType.BINARY : _util.CMapCompressionType.NONE;
-    return this._fetchData(url, compressionType).catch(reason => {
-      throw new Error(`Unable to load ${this.isCompressed ? "binary " : ""}CMap at: ${url}`);
-    });
-  }
-
-  _fetchData(url, compressionType) {
-    (0, _util.unreachable)("Abstract method `_fetchData` called.");
-  }
-
-}
-
-exports.BaseCMapReaderFactory = BaseCMapReaderFactory;
-
-class BaseStandardFontDataFactory {
-  constructor({
-    baseUrl = null
-  }) {
-    if (this.constructor === BaseStandardFontDataFactory) {
-      (0, _util.unreachable)("Cannot initialize BaseStandardFontDataFactory.");
-    }
-
-    this.baseUrl = baseUrl;
-  }
-
-  async fetch({
-    filename
-  }) {
-    if (!this.baseUrl) {
-      throw new Error('The standard font "baseUrl" parameter must be specified, ensure that ' + 'the "standardFontDataUrl" API parameter is provided.');
-    }
-
-    if (!filename) {
-      throw new Error("Font filename must be specified.");
-    }
-
-    const url = `${this.baseUrl}${filename}`;
-    return this._fetchData(url).catch(reason => {
-      throw new Error(`Unable to load font data at: ${url}`);
-    });
-  }
-
-  _fetchData(url) {
-    (0, _util.unreachable)("Abstract method `_fetchData` called.");
-  }
-
-}
-
-exports.BaseStandardFontDataFactory = BaseStandardFontDataFactory;
-
-class BaseSVGFactory {
-  constructor() {
-    if (this.constructor === BaseSVGFactory) {
-      (0, _util.unreachable)("Cannot initialize BaseSVGFactory.");
-    }
-  }
-
-  create(width, height) {
-    if (width <= 0 || height <= 0) {
-      throw new Error("Invalid SVG dimensions");
-    }
-
-    const svg = this._createSVG("svg:svg");
-
-    svg.setAttribute("version", "1.1");
-    svg.setAttribute("width", `${width}px`);
-    svg.setAttribute("height", `${height}px`);
-    svg.setAttribute("preserveAspectRatio", "none");
-    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-    return svg;
-  }
-
-  createElement(type) {
-    if (typeof type !== "string") {
-      throw new Error("Invalid SVG element type");
-    }
-
-    return this._createSVG(type);
-  }
-
-  _createSVG(type) {
-    (0, _util.unreachable)("Abstract method `_createSVG` called.");
-  }
-
-}
-
-exports.BaseSVGFactory = BaseSVGFactory;
-
-/***/ }),
-/* 5 */
+/* 3 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -1808,9 +1083,9 @@ exports.getDocument = getDocument;
 exports.setPDFNetworkStreamFactory = setPDFNetworkStreamFactory;
 exports.version = void 0;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
-var _display_utils = __w_pdfjs_require__(1);
+var _display_utils = __w_pdfjs_require__(4);
 
 var _font_loader = __w_pdfjs_require__(6);
 
@@ -4272,6 +3547,658 @@ const build = '629bf0655';
 exports.build = build;
 
 /***/ }),
+/* 4 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.StatTimer = exports.RenderingCancelledException = exports.PixelsPerInch = exports.PageViewport = exports.PDFDateString = exports.DOMStandardFontDataFactory = exports.DOMSVGFactory = exports.DOMCanvasFactory = exports.DOMCMapReaderFactory = void 0;
+exports.deprecated = deprecated;
+exports.getFilenameFromUrl = getFilenameFromUrl;
+exports.getPdfFilenameFromUrl = getPdfFilenameFromUrl;
+exports.getXfaPageViewport = getXfaPageViewport;
+exports.isDataScheme = isDataScheme;
+exports.isPdfFile = isPdfFile;
+exports.isValidFetchUrl = isValidFetchUrl;
+exports.loadScript = loadScript;
+
+var _base_factory = __w_pdfjs_require__(5);
+
+var _util = __w_pdfjs_require__(1);
+
+const SVG_NS = "http://www.w3.org/2000/svg";
+const PixelsPerInch = {
+  CSS: 96.0,
+  PDF: 72.0,
+
+  get PDF_TO_CSS_UNITS() {
+    return (0, _util.shadow)(this, "PDF_TO_CSS_UNITS", this.CSS / this.PDF);
+  }
+
+};
+exports.PixelsPerInch = PixelsPerInch;
+
+class DOMCanvasFactory extends _base_factory.BaseCanvasFactory {
+  constructor({
+    ownerDocument = globalThis.document
+  } = {}) {
+    super();
+    this._document = ownerDocument;
+  }
+
+  _createCanvas(width, height) {
+    const canvas = this._document.createElement("canvas");
+
+    canvas.width = width;
+    canvas.height = height;
+    return canvas;
+  }
+
+}
+
+exports.DOMCanvasFactory = DOMCanvasFactory;
+
+async function fetchData(url, asTypedArray = false) {
+  if (isValidFetchUrl(url, document.baseURI)) {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    return asTypedArray ? new Uint8Array(await response.arrayBuffer()) : (0, _util.stringToBytes)(await response.text());
+  }
+
+  return new Promise((resolve, reject) => {
+    const request = new XMLHttpRequest();
+    request.open("GET", url, true);
+
+    if (asTypedArray) {
+      request.responseType = "arraybuffer";
+    }
+
+    request.onreadystatechange = () => {
+      if (request.readyState !== XMLHttpRequest.DONE) {
+        return;
+      }
+
+      if (request.status === 200 || request.status === 0) {
+        let data;
+
+        if (asTypedArray && request.response) {
+          data = new Uint8Array(request.response);
+        } else if (!asTypedArray && request.responseText) {
+          data = (0, _util.stringToBytes)(request.responseText);
+        }
+
+        if (data) {
+          resolve(data);
+          return;
+        }
+      }
+
+      reject(new Error(request.statusText));
+    };
+
+    request.send(null);
+  });
+}
+
+class DOMCMapReaderFactory extends _base_factory.BaseCMapReaderFactory {
+  _fetchData(url, compressionType) {
+    return fetchData(url, this.isCompressed).then(data => {
+      return {
+        cMapData: data,
+        compressionType
+      };
+    });
+  }
+
+}
+
+exports.DOMCMapReaderFactory = DOMCMapReaderFactory;
+
+class DOMStandardFontDataFactory extends _base_factory.BaseStandardFontDataFactory {
+  _fetchData(url) {
+    return fetchData(url, true);
+  }
+
+}
+
+exports.DOMStandardFontDataFactory = DOMStandardFontDataFactory;
+
+class DOMSVGFactory extends _base_factory.BaseSVGFactory {
+  _createSVG(type) {
+    return document.createElementNS(SVG_NS, type);
+  }
+
+}
+
+exports.DOMSVGFactory = DOMSVGFactory;
+
+class PageViewport {
+  constructor({
+    viewBox,
+    scale,
+    rotation,
+    offsetX = 0,
+    offsetY = 0,
+    dontFlip = false
+  }) {
+    this.viewBox = viewBox;
+    this.scale = scale;
+    this.rotation = rotation;
+    this.offsetX = offsetX;
+    this.offsetY = offsetY;
+    const centerX = (viewBox[2] + viewBox[0]) / 2;
+    const centerY = (viewBox[3] + viewBox[1]) / 2;
+    let rotateA, rotateB, rotateC, rotateD;
+    rotation %= 360;
+
+    if (rotation < 0) {
+      rotation += 360;
+    }
+
+    switch (rotation) {
+      case 180:
+        rotateA = -1;
+        rotateB = 0;
+        rotateC = 0;
+        rotateD = 1;
+        break;
+
+      case 90:
+        rotateA = 0;
+        rotateB = 1;
+        rotateC = 1;
+        rotateD = 0;
+        break;
+
+      case 270:
+        rotateA = 0;
+        rotateB = -1;
+        rotateC = -1;
+        rotateD = 0;
+        break;
+
+      case 0:
+        rotateA = 1;
+        rotateB = 0;
+        rotateC = 0;
+        rotateD = -1;
+        break;
+
+      default:
+        throw new Error("PageViewport: Invalid rotation, must be a multiple of 90 degrees.");
+    }
+
+    if (dontFlip) {
+      rotateC = -rotateC;
+      rotateD = -rotateD;
+    }
+
+    let offsetCanvasX, offsetCanvasY;
+    let width, height;
+
+    if (rotateA === 0) {
+      offsetCanvasX = Math.abs(centerY - viewBox[1]) * scale + offsetX;
+      offsetCanvasY = Math.abs(centerX - viewBox[0]) * scale + offsetY;
+      width = Math.abs(viewBox[3] - viewBox[1]) * scale;
+      height = Math.abs(viewBox[2] - viewBox[0]) * scale;
+    } else {
+      offsetCanvasX = Math.abs(centerX - viewBox[0]) * scale + offsetX;
+      offsetCanvasY = Math.abs(centerY - viewBox[1]) * scale + offsetY;
+      width = Math.abs(viewBox[2] - viewBox[0]) * scale;
+      height = Math.abs(viewBox[3] - viewBox[1]) * scale;
+    }
+
+    this.transform = [rotateA * scale, rotateB * scale, rotateC * scale, rotateD * scale, offsetCanvasX - rotateA * scale * centerX - rotateC * scale * centerY, offsetCanvasY - rotateB * scale * centerX - rotateD * scale * centerY];
+    this.width = width;
+    this.height = height;
+  }
+
+  clone({
+    scale = this.scale,
+    rotation = this.rotation,
+    offsetX = this.offsetX,
+    offsetY = this.offsetY,
+    dontFlip = false
+  } = {}) {
+    return new PageViewport({
+      viewBox: this.viewBox.slice(),
+      scale,
+      rotation,
+      offsetX,
+      offsetY,
+      dontFlip
+    });
+  }
+
+  convertToViewportPoint(x, y) {
+    return _util.Util.applyTransform([x, y], this.transform);
+  }
+
+  convertToViewportRectangle(rect) {
+    const topLeft = _util.Util.applyTransform([rect[0], rect[1]], this.transform);
+
+    const bottomRight = _util.Util.applyTransform([rect[2], rect[3]], this.transform);
+
+    return [topLeft[0], topLeft[1], bottomRight[0], bottomRight[1]];
+  }
+
+  convertToPdfPoint(x, y) {
+    return _util.Util.applyInverseTransform([x, y], this.transform);
+  }
+
+}
+
+exports.PageViewport = PageViewport;
+
+class RenderingCancelledException extends _util.BaseException {
+  constructor(msg, type) {
+    super(msg, "RenderingCancelledException");
+    this.type = type;
+  }
+
+}
+
+exports.RenderingCancelledException = RenderingCancelledException;
+
+function isDataScheme(url) {
+  const ii = url.length;
+  let i = 0;
+
+  while (i < ii && url[i].trim() === "") {
+    i++;
+  }
+
+  return url.substring(i, i + 5).toLowerCase() === "data:";
+}
+
+function isPdfFile(filename) {
+  return typeof filename === "string" && /\.pdf$/i.test(filename);
+}
+
+function getFilenameFromUrl(url) {
+  const anchor = url.indexOf("#");
+  const query = url.indexOf("?");
+  const end = Math.min(anchor > 0 ? anchor : url.length, query > 0 ? query : url.length);
+  return url.substring(url.lastIndexOf("/", end) + 1, end);
+}
+
+function getPdfFilenameFromUrl(url, defaultFilename = "document.pdf") {
+  if (window.PDFViewerApplication.appConfig.filenameForDownload) {
+    return window.PDFViewerApplication.appConfig.filenameForDownload;
+  }
+
+  if (typeof url !== "string") {
+    return defaultFilename;
+  }
+
+  if (isDataScheme(url)) {
+    (0, _util.warn)('getPdfFilenameFromUrl: ignore "data:"-URL for performance reasons.');
+    return defaultFilename;
+  }
+
+  const reURI = /^(?:(?:[^:]+:)?\/\/[^/]+)?([^?#]*)(\?[^#]*)?(#.*)?$/;
+  const reFilename = /[^/?#=]+\.pdf\b(?!.*\.pdf\b)/i;
+  const splitURI = reURI.exec(url);
+  let suggestedFilename = reFilename.exec(splitURI[1]) || reFilename.exec(splitURI[2]) || reFilename.exec(splitURI[3]);
+
+  if (suggestedFilename) {
+    suggestedFilename = suggestedFilename[0];
+
+    if (suggestedFilename.includes("%")) {
+      try {
+        suggestedFilename = reFilename.exec(decodeURIComponent(suggestedFilename))[0];
+      } catch (ex) {}
+    }
+  }
+
+  return suggestedFilename || defaultFilename;
+}
+
+class StatTimer {
+  constructor() {
+    this.started = Object.create(null);
+    this.times = [];
+  }
+
+  time(name) {
+    if (name in this.started) {
+      (0, _util.warn)(`Timer is already running for ${name}`);
+    }
+
+    this.started[name] = Date.now();
+  }
+
+  timeEnd(name) {
+    if (!(name in this.started)) {
+      (0, _util.warn)(`Timer has not been started for ${name}`);
+    }
+
+    this.times.push({
+      name,
+      start: this.started[name],
+      end: Date.now()
+    });
+    delete this.started[name];
+  }
+
+  toString() {
+    const outBuf = [];
+    let longest = 0;
+
+    for (const time of this.times) {
+      const name = time.name;
+
+      if (name.length > longest) {
+        longest = name.length;
+      }
+    }
+
+    for (const time of this.times) {
+      const duration = time.end - time.start;
+      outBuf.push(`${time.name.padEnd(longest)} ${duration}ms\n`);
+    }
+
+    return outBuf.join("");
+  }
+
+}
+
+exports.StatTimer = StatTimer;
+
+function isValidFetchUrl(url, baseUrl) {
+  try {
+    const {
+      protocol
+    } = baseUrl ? new URL(url, baseUrl) : new URL(url);
+    return protocol === "http:" || protocol === "https:" || protocol === "capacitor:";
+  } catch (ex) {
+    return false;
+  }
+}
+
+function loadScript(src, removeScriptElement = false) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+
+    if (src.constructor.name === "Function") {
+      script.src = src();
+    } else {
+      script.src = src;
+    }
+
+    script.onload = function (evt) {
+      if (removeScriptElement) {
+        script.remove();
+      }
+
+      resolve(evt);
+    };
+
+    script.onerror = function (error) {
+      Window['ngxConsole'].log(error);
+      reject(new Error(`Cannot load script at: ${script.src}`));
+    };
+
+    (document.head || document.documentElement).appendChild(script);
+  });
+}
+
+function deprecated(details) {
+  Window['ngxConsole'].log("Deprecated API usage: " + details);
+}
+
+let pdfDateStringRegex;
+
+class PDFDateString {
+  static toDateObject(input) {
+    if (!input || !(0, _util.isString)(input)) {
+      return null;
+    }
+
+    if (!pdfDateStringRegex) {
+      pdfDateStringRegex = new RegExp("^D:" + "(\\d{4})" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "([Z|+|-])?" + "(\\d{2})?" + "'?" + "(\\d{2})?" + "'?");
+    }
+
+    const matches = pdfDateStringRegex.exec(input);
+
+    if (!matches) {
+      return null;
+    }
+
+    const year = parseInt(matches[1], 10);
+    let month = parseInt(matches[2], 10);
+    month = month >= 1 && month <= 12 ? month - 1 : 0;
+    let day = parseInt(matches[3], 10);
+    day = day >= 1 && day <= 31 ? day : 1;
+    let hour = parseInt(matches[4], 10);
+    hour = hour >= 0 && hour <= 23 ? hour : 0;
+    let minute = parseInt(matches[5], 10);
+    minute = minute >= 0 && minute <= 59 ? minute : 0;
+    let second = parseInt(matches[6], 10);
+    second = second >= 0 && second <= 59 ? second : 0;
+    const universalTimeRelation = matches[7] || "Z";
+    let offsetHour = parseInt(matches[8], 10);
+    offsetHour = offsetHour >= 0 && offsetHour <= 23 ? offsetHour : 0;
+    let offsetMinute = parseInt(matches[9], 10) || 0;
+    offsetMinute = offsetMinute >= 0 && offsetMinute <= 59 ? offsetMinute : 0;
+
+    if (universalTimeRelation === "-") {
+      hour += offsetHour;
+      minute += offsetMinute;
+    } else if (universalTimeRelation === "+") {
+      hour -= offsetHour;
+      minute -= offsetMinute;
+    }
+
+    return new Date(Date.UTC(year, month, day, hour, minute, second));
+  }
+
+}
+
+exports.PDFDateString = PDFDateString;
+
+function getXfaPageViewport(xfaPage, {
+  scale = 1,
+  rotation = 0
+}) {
+  const {
+    width,
+    height
+  } = xfaPage.attributes.style;
+  const viewBox = [0, 0, parseInt(width), parseInt(height)];
+  return new PageViewport({
+    viewBox,
+    scale,
+    rotation
+  });
+}
+
+/***/ }),
+/* 5 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.BaseStandardFontDataFactory = exports.BaseSVGFactory = exports.BaseCanvasFactory = exports.BaseCMapReaderFactory = void 0;
+
+var _util = __w_pdfjs_require__(1);
+
+class BaseCanvasFactory {
+  constructor() {
+    if (this.constructor === BaseCanvasFactory) {
+      (0, _util.unreachable)("Cannot initialize BaseCanvasFactory.");
+    }
+  }
+
+  create(width, height) {
+    if (width <= 0 || height <= 0) {
+      throw new Error("Invalid canvas size");
+    }
+
+    const canvas = this._createCanvas(width, height);
+
+    return {
+      canvas,
+      context: canvas.getContext("2d")
+    };
+  }
+
+  reset(canvasAndContext, width, height) {
+    if (!canvasAndContext.canvas) {
+      throw new Error("Canvas is not specified");
+    }
+
+    if (width <= 0 || height <= 0) {
+      throw new Error("Invalid canvas size");
+    }
+
+    canvasAndContext.canvas.width = width;
+    canvasAndContext.canvas.height = height;
+  }
+
+  destroy(canvasAndContext) {
+    if (!canvasAndContext.canvas) {
+      throw new Error("Canvas is not specified");
+    }
+
+    canvasAndContext.canvas.width = 0;
+    canvasAndContext.canvas.height = 0;
+    canvasAndContext.canvas = null;
+    canvasAndContext.context = null;
+  }
+
+  _createCanvas(width, height) {
+    (0, _util.unreachable)("Abstract method `_createCanvas` called.");
+  }
+
+}
+
+exports.BaseCanvasFactory = BaseCanvasFactory;
+
+class BaseCMapReaderFactory {
+  constructor({
+    baseUrl = null,
+    isCompressed = false
+  }) {
+    if (this.constructor === BaseCMapReaderFactory) {
+      (0, _util.unreachable)("Cannot initialize BaseCMapReaderFactory.");
+    }
+
+    this.baseUrl = baseUrl;
+    this.isCompressed = isCompressed;
+  }
+
+  async fetch({
+    name
+  }) {
+    if (!this.baseUrl) {
+      throw new Error('The CMap "baseUrl" parameter must be specified, ensure that ' + 'the "cMapUrl" and "cMapPacked" API parameters are provided.');
+    }
+
+    if (!name) {
+      throw new Error("CMap name must be specified.");
+    }
+
+    const url = this.baseUrl + name + (this.isCompressed ? ".bcmap" : "");
+    const compressionType = this.isCompressed ? _util.CMapCompressionType.BINARY : _util.CMapCompressionType.NONE;
+    return this._fetchData(url, compressionType).catch(reason => {
+      throw new Error(`Unable to load ${this.isCompressed ? "binary " : ""}CMap at: ${url}`);
+    });
+  }
+
+  _fetchData(url, compressionType) {
+    (0, _util.unreachable)("Abstract method `_fetchData` called.");
+  }
+
+}
+
+exports.BaseCMapReaderFactory = BaseCMapReaderFactory;
+
+class BaseStandardFontDataFactory {
+  constructor({
+    baseUrl = null
+  }) {
+    if (this.constructor === BaseStandardFontDataFactory) {
+      (0, _util.unreachable)("Cannot initialize BaseStandardFontDataFactory.");
+    }
+
+    this.baseUrl = baseUrl;
+  }
+
+  async fetch({
+    filename
+  }) {
+    if (!this.baseUrl) {
+      throw new Error('The standard font "baseUrl" parameter must be specified, ensure that ' + 'the "standardFontDataUrl" API parameter is provided.');
+    }
+
+    if (!filename) {
+      throw new Error("Font filename must be specified.");
+    }
+
+    const url = `${this.baseUrl}${filename}`;
+    return this._fetchData(url).catch(reason => {
+      throw new Error(`Unable to load font data at: ${url}`);
+    });
+  }
+
+  _fetchData(url) {
+    (0, _util.unreachable)("Abstract method `_fetchData` called.");
+  }
+
+}
+
+exports.BaseStandardFontDataFactory = BaseStandardFontDataFactory;
+
+class BaseSVGFactory {
+  constructor() {
+    if (this.constructor === BaseSVGFactory) {
+      (0, _util.unreachable)("Cannot initialize BaseSVGFactory.");
+    }
+  }
+
+  create(width, height) {
+    if (width <= 0 || height <= 0) {
+      throw new Error("Invalid SVG dimensions");
+    }
+
+    const svg = this._createSVG("svg:svg");
+
+    svg.setAttribute("version", "1.1");
+    svg.setAttribute("width", `${width}px`);
+    svg.setAttribute("height", `${height}px`);
+    svg.setAttribute("preserveAspectRatio", "none");
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    return svg;
+  }
+
+  createElement(type) {
+    if (typeof type !== "string") {
+      throw new Error("Invalid SVG element type");
+    }
+
+    return this._createSVG(type);
+  }
+
+  _createSVG(type) {
+    (0, _util.unreachable)("Abstract method `_createSVG` called.");
+  }
+
+}
+
+exports.BaseSVGFactory = BaseSVGFactory;
+
+/***/ }),
 /* 6 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
@@ -4282,7 +4209,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.FontLoader = exports.FontFaceObject = void 0;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
 class BaseFontLoader {
   constructor({
@@ -4694,11 +4621,11 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.NodeStandardFontDataFactory = exports.NodeCanvasFactory = exports.NodeCMapReaderFactory = void 0;
 
-var _base_factory = __w_pdfjs_require__(4);
+var _base_factory = __w_pdfjs_require__(5);
 
 var _is_node = __w_pdfjs_require__(8);
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
 let NodeCanvasFactory = class {
   constructor() {
@@ -4789,7 +4716,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.AnnotationStorage = void 0;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
 class AnnotationStorage {
   constructor() {
@@ -4932,11 +4859,11 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.CanvasGraphics = void 0;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
 var _pattern_helper = __w_pdfjs_require__(11);
 
-var _display_utils = __w_pdfjs_require__(1);
+var _display_utils = __w_pdfjs_require__(4);
 
 const MIN_FONT_SIZE = 16;
 const MAX_FONT_SIZE = 100;
@@ -7650,7 +7577,7 @@ Object.defineProperty(exports, "__esModule", ({
 exports.TilingPattern = exports.PathType = void 0;
 exports.getShadingPattern = getShadingPattern;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
 const PathType = {
   FILL: "Fill",
@@ -8221,7 +8148,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.MessageHandler = void 0;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
 const CallbackKind = {
   UNKNOWN: 0,
@@ -8708,7 +8635,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.Metadata = void 0;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
 class Metadata {
   #metadataMap;
@@ -8753,7 +8680,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.OptionalContentConfig = void 0;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
 class OptionalContentGroup {
   constructor(name, intent) {
@@ -8974,9 +8901,9 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.PDFDataTransportStream = void 0;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
-var _display_utils = __w_pdfjs_require__(1);
+var _display_utils = __w_pdfjs_require__(4);
 
 class PDFDataTransportStream {
   constructor(params, pdfDataRangeTransport) {
@@ -9393,9 +9320,9 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.AnnotationLayer = void 0;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
-var _display_utils = __w_pdfjs_require__(1);
+var _display_utils = __w_pdfjs_require__(4);
 
 var _annotation_storage = __w_pdfjs_require__(9);
 
@@ -11669,7 +11596,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.XfaLayer = void 0;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
 var _xfa_text = __w_pdfjs_require__(17);
 
@@ -11923,7 +11850,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.renderTextLayer = renderTextLayer;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
 const MAX_TEXT_DIVS_TO_RENDER = 100000;
 const DEFAULT_FONT_SIZE = 30;
@@ -12708,9 +12635,9 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.SVGGraphics = void 0;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
-var _display_utils = __w_pdfjs_require__(1);
+var _display_utils = __w_pdfjs_require__(4);
 
 let SVGGraphics = class {
   constructor() {
@@ -14215,7 +14142,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.PDFNodeStream = void 0;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
 var _network_utils = __w_pdfjs_require__(24);
 
@@ -14684,11 +14611,11 @@ exports.extractFilenameFromHeader = extractFilenameFromHeader;
 exports.validateRangeRequestCapabilities = validateRangeRequestCapabilities;
 exports.validateResponseStatus = validateResponseStatus;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
 var _content_disposition = __w_pdfjs_require__(25);
 
-var _display_utils = __w_pdfjs_require__(1);
+var _display_utils = __w_pdfjs_require__(4);
 
 function validateRangeRequestCapabilities({
   getResponseHeader,
@@ -14774,7 +14701,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.getFilenameFromContentDispositionHeader = getFilenameFromContentDispositionHeader;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
 function getFilenameFromContentDispositionHeader(contentDisposition) {
   let needsEncodingFixup = true;
@@ -14961,7 +14888,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.PDFNetworkStream = void 0;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
 var _network_utils = __w_pdfjs_require__(24);
 
@@ -15502,7 +15429,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.PDFFetchStream = void 0;
 
-var _util = __w_pdfjs_require__(2);
+var _util = __w_pdfjs_require__(1);
 
 var _network_utils = __w_pdfjs_require__(24);
 
@@ -15843,12 +15770,6 @@ Object.defineProperty(exports, "InvalidPDFException", ({
     return _util.InvalidPDFException;
   }
 }));
-Object.defineProperty(exports, "LinkTarget", ({
-  enumerable: true,
-  get: function () {
-    return _display_utils.LinkTarget;
-  }
-}));
 Object.defineProperty(exports, "LoopbackPort", ({
   enumerable: true,
   get: function () {
@@ -15945,12 +15866,6 @@ Object.defineProperty(exports, "XfaLayer", ({
     return _xfa_layer.XfaLayer;
   }
 }));
-Object.defineProperty(exports, "addLinkAttributes", ({
-  enumerable: true,
-  get: function () {
-    return _display_utils.addLinkAttributes;
-  }
-}));
 Object.defineProperty(exports, "build", ({
   enumerable: true,
   get: function () {
@@ -16011,12 +15926,6 @@ Object.defineProperty(exports, "loadScript", ({
     return _display_utils.loadScript;
   }
 }));
-Object.defineProperty(exports, "removeNullCharacters", ({
-  enumerable: true,
-  get: function () {
-    return _util.removeNullCharacters;
-  }
-}));
 Object.defineProperty(exports, "renderTextLayer", ({
   enumerable: true,
   get: function () {
@@ -16036,11 +15945,11 @@ Object.defineProperty(exports, "version", ({
   }
 }));
 
-var _display_utils = __w_pdfjs_require__(1);
+var _util = __w_pdfjs_require__(1);
 
-var _util = __w_pdfjs_require__(2);
+var _api = __w_pdfjs_require__(3);
 
-var _api = __w_pdfjs_require__(5);
+var _display_utils = __w_pdfjs_require__(4);
 
 var _annotation_layer = __w_pdfjs_require__(18);
 

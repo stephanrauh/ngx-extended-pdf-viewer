@@ -370,10 +370,6 @@ export namespace PermissionFlag {
     export const ASSEMBLE: number;
     export const PRINT_HIGH_QUALITY: number;
 }
-/**
- * @param {string} str
- */
-export function removeNullCharacters(str: string, replaceInvisible?: boolean): string;
 export namespace RenderingIntentFlag {
     export const ANY: number;
     export const DISPLAY: number;

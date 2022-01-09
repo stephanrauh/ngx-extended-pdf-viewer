@@ -338,7 +338,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public backgroundColor = '#e8e8eb';
 
   @Input()
-  public pdfBackground: PdfBackground = '#FFF';
+  public pdfBackground: PdfBackground = undefined;
 
   @Input()
   public pdfBackgroundColorToReplace: string | ((page: number, pageLabel: string) => string | undefined) | undefined = '#ffffff';
