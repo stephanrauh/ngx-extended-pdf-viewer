@@ -30,12 +30,15 @@ export class CanvasGraphics {
     outputScaleX: number;
     outputScaleY: number;
     _cachedGetSinglePixelWidth: number | null;
-    beginDrawing({ transform, viewport, transparency, background, }: {
+    beginDrawing({ transform, viewport, transparency, background, backgroundColorToReplace, }: {
         transform: any;
         viewport: any;
         transparency?: boolean | undefined;
         background?: null | undefined;
+        backgroundColorToReplace?: null | undefined;
     }): void;
+    background: any;
+    backgroundColorToReplace: any;
     compositeCtx: any;
     transparentCanvas: any;
     _combinedScaleFactor: number | undefined;

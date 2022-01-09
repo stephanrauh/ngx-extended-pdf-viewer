@@ -8,6 +8,7 @@ export * from './lib/ngx-extended-pdf-viewer.service';
 export * from './lib/pdf-notification-service';
 export * from './lib/options/optional_content_config';
 export * from './lib/options/password-prompt';
+export * from './lib/options/pdf-background';
 export * from './lib/options/pdf-print-range';
 export * from './lib/ngx-extended-pdf-viewer.module';
 export * from './lib/ngx-extended-pdf-viewer-server.module';

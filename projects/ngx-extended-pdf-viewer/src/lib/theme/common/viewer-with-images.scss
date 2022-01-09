@@ -1502,7 +1502,8 @@ ngx-extended-pdf-viewer {
   }
 }
 
-ngx-extended-pdf-viewer .html .unverified-signature-warning {
+ngx-extended-pdf-viewer .html .unverified-signature-warning,
+ngx-extended-pdf-viewer .html .modified-background-warning {
   width: 100%;
   background-color: #ff5353;
   font-size: 12px;

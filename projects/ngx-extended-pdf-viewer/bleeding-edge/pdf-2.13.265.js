@@ -2066,7 +2066,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.12.548',
+    apiVersion: '2.13.265',
     source: {
       data: source.data,
       url: source.url,
@@ -2480,6 +2480,7 @@ class PDFPageProxy {
     imageLayer = null,
     canvasFactory = null,
     background = null,
+    backgroundColorToReplace = null,
     optionalContentConfigPromise = null,
     annotationCanvasMap = null
   }) {
@@ -2578,7 +2579,8 @@ class PDFPageProxy {
         viewport,
         transform,
         imageLayer,
-        background
+        background,
+        backgroundColorToReplace
       },
       objs: this.objs,
       commonObjs: this.commonObjs,
@@ -4160,14 +4162,16 @@ class InternalRenderTask {
       viewport,
       transform,
       imageLayer,
-      background
+      background,
+      backgroundColorToReplace
     } = this.params;
     this.gfx = new _canvas.CanvasGraphics(canvasContext, this.commonObjs, this.objs, this.canvasFactory, imageLayer, optionalContentConfig, this.annotationCanvasMap);
     this.gfx.beginDrawing({
       transform,
       viewport,
       transparency,
-      background
+      background,
+      backgroundColorToReplace
     });
     this.operatorListIdx = 0;
     this.graphicsReady = true;
@@ -4262,9 +4266,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.12.548';
+const version = '2.13.265';
 exports.version = version;
-const build = '6e574ae71';
+const build = '629bf0655';
 exports.build = build;
 
 /***/ }),
@@ -5897,14 +5901,27 @@ class CanvasGraphics {
     transform,
     viewport,
     transparency = false,
-    background = null
+    background = null,
+    backgroundColorToReplace = null
   }) {
     const width = this.ctx.canvas.width;
     const height = this.ctx.canvas.height;
     this.ctx.save();
-    this.ctx.fillStyle = background || "rgb(255, 255, 255)";
-    this.ctx.fillRect(0, 0, width, height);
+
+    if (typeof background === "function") {
+      background({
+        context: this.ctx,
+        width,
+        height
+      });
+    } else {
+      this.ctx.fillStyle = background || "rgb(255, 255, 255)";
+      this.ctx.fillRect(0, 0, width, height);
+      this.background = background;
+    }
+
     this.ctx.restore();
+    this.backgroundColorToReplace = backgroundColorToReplace;
 
     if (transparency) {
       const transparentCanvas = this.cachedCanvases.getCanvas("transparent", width, height, true);
@@ -6418,7 +6435,19 @@ class CanvasGraphics {
   fill(consumePath) {
     consumePath = typeof consumePath !== "undefined" ? consumePath : true;
     const ctx = this.ctx;
-    const fillColor = this.current.fillColor;
+    let draw = true;
+    let fillColor = this.current.fillColor;
+
+    if (this.backgroundColorToReplace) {
+      if (fillColor === this.backgroundColorToReplace) {
+        if (this.background && typeof this.background !== 'function') {
+          fillColor = this.background;
+        } else {
+          draw = false;
+        }
+      }
+    }
+
     const isPatternFill = this.current.patternFill;
     let needRestore = false;
 
@@ -6430,12 +6459,14 @@ class CanvasGraphics {
 
     const intersect = this.current.getClippedPathBoundingBox();
 
-    if (this.contentVisible && intersect !== null) {
-      if (this.pendingEOFill) {
-        ctx.fill("evenodd");
-        this.pendingEOFill = false;
-      } else {
-        ctx.fill();
+    if (draw) {
+      if (this.contentVisible && intersect !== null) {
+        if (this.pendingEOFill) {
+          ctx.fill("evenodd");
+          this.pendingEOFill = false;
+        } else {
+          ctx.fill();
+        }
       }
     }
 
@@ -6963,7 +6994,15 @@ class CanvasGraphics {
   }
 
   setFillRGBColor(r, g, b) {
-    const color = _util.Util.makeHexColor(r, g, b);
+    let color = _util.Util.makeHexColor(r, g, b);
+
+    if (this.backgroundColorToReplace) {
+      if (color === this.backgroundColorToReplace) {
+        if (this.background && typeof this.background !== 'function') {
+          color = this.background;
+        } else {}
+      }
+    }
 
     this.ctx.fillStyle = color;
     this.current.fillColor = color;
@@ -16015,8 +16054,8 @@ var _svg = __w_pdfjs_require__(22);
 
 var _xfa_layer = __w_pdfjs_require__(20);
 
-const pdfjsVersion = '2.12.548';
-const pdfjsBuild = '6e574ae71';
+const pdfjsVersion = '2.13.265';
+const pdfjsBuild = '629bf0655';
 {
   if (_is_node.isNodeJS) {
     const {

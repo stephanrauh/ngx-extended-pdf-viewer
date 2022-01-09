@@ -10682,7 +10682,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.12.548';
+    const viewerVersion = '2.12.549';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -15968,13 +15968,40 @@ class PDFPageView {
     canvas.style.height = (0, _ui_utils.roundToDivide)(viewport.height, sfy[1]) + "px";
     this.paintedViewportMap.set(canvas, viewport);
     const transform = !outputScale.scaled ? null : [outputScale.sx, 0, 0, outputScale.sy, 0, 0];
+    let background = PDFViewerApplicationOptions.get("pdfBackgroundColor");
+
+    if (typeof background === "function") {
+      const backgroundColor = background({
+        pageNumber: this.id,
+        pageLabel: this.pageLabel
+      });
+
+      if (backgroundColor) {
+        background = backgroundColor;
+      }
+    }
+
+    let backgroundColorToReplace = background ? PDFViewerApplicationOptions.get("pdfBackgroundColorToReplace") : null;
+
+    if (typeof backgroundColorToReplace === "function") {
+      const colorToReplace = backgroundColorToReplace({
+        pageNumber: this.id,
+        pageLabel: this.pageLabel
+      });
+
+      if (colorToReplace) {
+        backgroundColorToReplace = colorToReplace;
+      }
+    }
+
     const renderContext = {
       canvasContext: ctx,
       transform,
       viewport: this.viewport,
       annotationMode: this.#annotationMode,
       optionalContentConfigPromise: this._optionalContentConfigPromise,
-      background: PDFViewerApplicationOptions.get("pdfBackgroundColor"),
+      background,
+      backgroundColorToReplace,
       annotationCanvasMap: this._annotationCanvasMap
     };
     const renderTask = this.pdfPage.render(renderContext);
@@ -20702,8 +20729,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.12.548';
-const pdfjsBuild = '6e574ae71';
+const pdfjsVersion = '2.12.549';
+const pdfjsBuild = 'feef0baf4';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

@@ -28,6 +28,7 @@ import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component
 import { ScrollModeType } from './options/pdf-viewer';
 import { ProgressBarEvent } from './events/progress-bar-event';
 import { FormDataType } from './ngx-extended-pdf-viewer.component';
+import { PdfBackground } from './options/pdf-background';
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
@@ -184,7 +185,7 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   public backgroundColor = '#e8e8eb';
 
   @Input()
-  public pdfBackground: string | undefined = '#FFF';
+  public pdfBackground: PdfBackground = '#ffffff';
 
   @Input()
   public pdfBackgroundColorToReplace: string = '#ffffff';

@@ -43,7 +43,6 @@ export class PdfSidebarContentComponent implements OnDestroy {
   public get top(): string {
     let top = 0;
     if (!this.hideSidebarToolbar) {
-      console.log(this.mobileFriendlyZoomScale);
       top = 32 * this.mobileFriendlyZoomScale;
       if (top === 32) {
         top = 33; // prevent the border of the sidebar toolbar from being cut off

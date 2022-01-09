@@ -52,6 +52,7 @@ import { PageRenderEvent } from './events/page-render-event';
 import { Annotation } from './Annotation';
 import { PdfLoadingStartsEvent } from './events/pdf-loading-starts-event';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
+import { PdfBackground } from './options/pdf-background';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 declare class ResizeObserver {
@@ -337,7 +338,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public backgroundColor = '#e8e8eb';
 
   @Input()
-  public pdfBackground: string | ((page: number, pageLabel: string) => string | undefined) | undefined = '#FFF';
+  public pdfBackground: PdfBackground = '#FFF';
 
   @Input()
   public pdfBackgroundColorToReplace: string | ((page: number, pageLabel: string) => string | undefined) | undefined = '#ffffff';

@@ -8,7 +8,9 @@
     "showcase": "npm run unix-package && rm -r -f ../extended-pdf-viewer-showcase/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../extended-pdf-viewer-showcase/node_modules/ngx-extended-pdf-viewer",
     "issue": "npm run unix-package && rm -r ../ngx-extended-pdf-viewer-issues/issue609/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../ngx-extended-pdf-viewer-issues/issue609/node_modules/ngx-extended-pdf-viewer",
     "win-package": "ng b ngx-extended-pdf-viewer && rmdir dist /S && ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json",
-    "release": "npm run unix-package && cd dist/ngx-extended-pdf-viewer && npm publish && cd .. && cd .. && ./createTag.sh && node ./increase-version-number.js"
+    "release": "npm run unix-package && cd dist/ngx-extended-pdf-viewer && npm publish && cd .. && cd .. && ./createTag.sh && node ./increase-version-number.js",
+    "quick": "cd ../ngx-extended-pdf-viewer && ./quick.sh && npm run showcase && cd ../extended-pdf-viewer-showcase && ng s --host 0.0.0.0",
+    "full": "cd ../ngx-extended-pdf-viewer && ./updateMozillasPdfViewer.sh && npm run showcase && cd ../extended-pdf-viewer-showcase && ng s --host 0.0.0.0"
   },
   "private": true,
   "dependencies": {
