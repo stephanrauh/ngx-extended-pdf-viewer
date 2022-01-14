@@ -132,7 +132,7 @@ class WorkerMessageHandler {
     const WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.12.549';
+    const workerVersion = '2.13.288';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -765,7 +765,6 @@ exports.isSameOrigin = isSameOrigin;
 exports.isString = isString;
 exports.objectFromMap = objectFromMap;
 exports.objectSize = objectSize;
-exports.removeNullCharacters = removeNullCharacters;
 exports.setVerbosityLevel = setVerbosityLevel;
 exports.shadow = shadow;
 exports.string32 = string32;
@@ -1325,21 +1324,6 @@ class AbortException extends BaseException {
 }
 
 exports.AbortException = AbortException;
-const NullCharactersRegExp = /\x00+/g;
-const InvisibleCharactersRegExp = /[\x01-\x1F]/g;
-
-function removeNullCharacters(str, replaceInvisible = false) {
-  if (typeof str !== "string") {
-    warn("The argument for removeNullCharacters must be a string.");
-    return str;
-  }
-
-  if (replaceInvisible) {
-    str = str.replace(InvisibleCharactersRegExp, " ");
-  }
-
-  return str.replace(NullCharactersRegExp, "");
-}
 
 function bytesToString(bytes) {
   assert(bytes !== null && typeof bytes === "object" && bytes.length !== undefined, "Invalid argument for bytesToString");
@@ -1639,22 +1623,35 @@ exports.Util = Util;
 const PDFStringTranslateTable = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x2d8, 0x2c7, 0x2c6, 0x2d9, 0x2dd, 0x2db, 0x2da, 0x2dc, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x2022, 0x2020, 0x2021, 0x2026, 0x2014, 0x2013, 0x192, 0x2044, 0x2039, 0x203a, 0x2212, 0x2030, 0x201e, 0x201c, 0x201d, 0x2018, 0x2019, 0x201a, 0x2122, 0xfb01, 0xfb02, 0x141, 0x152, 0x160, 0x178, 0x17d, 0x131, 0x142, 0x153, 0x161, 0x17e, 0, 0x20ac];
 
 function stringToPDFString(str) {
-  const length = str.length,
-        strBuf = [];
+  if (str[0] >= "\xEF") {
+    let encoding;
 
-  if (str[0] === "\xFE" && str[1] === "\xFF") {
-    for (let i = 2; i < length; i += 2) {
-      strBuf.push(String.fromCharCode(str.charCodeAt(i) << 8 | str.charCodeAt(i + 1)));
+    if (str[0] === "\xFE" && str[1] === "\xFF") {
+      encoding = "utf-16be";
+    } else if (str[0] === "\xFF" && str[1] === "\xFE") {
+      encoding = "utf-16le";
+    } else if (str[0] === "\xEF" && str[1] === "\xBB" && str[2] === "\xBF") {
+      encoding = "utf-8";
     }
-  } else if (str[0] === "\xFF" && str[1] === "\xFE") {
-    for (let i = 2; i < length; i += 2) {
-      strBuf.push(String.fromCharCode(str.charCodeAt(i + 1) << 8 | str.charCodeAt(i)));
+
+    if (encoding) {
+      try {
+        const decoder = new TextDecoder(encoding, {
+          fatal: true
+        });
+        const buffer = stringToBytes(str);
+        return decoder.decode(buffer);
+      } catch (ex) {
+        warn(`stringToPDFString: "${ex}".`);
+      }
     }
-  } else {
-    for (let i = 0; i < length; ++i) {
-      const code = PDFStringTranslateTable[str.charCodeAt(i)];
-      strBuf.push(code ? String.fromCharCode(code) : str.charAt(i));
-    }
+  }
+
+  const strBuf = [];
+
+  for (let i = 0, ii = str.length; i < ii; i++) {
+    const code = PDFStringTranslateTable[str.charCodeAt(i)];
+    strBuf.push(code ? String.fromCharCode(code) : str.charAt(i));
   }
 
   return strBuf.join("");
@@ -4778,25 +4775,38 @@ class PDFDocument {
   async _getLinearizationPage(pageIndex) {
     const {
       catalog,
-      linearization
+      linearization,
+      xref
     } = this;
 
     const ref = _primitives.Ref.get(linearization.objectNumberFirst, 0);
 
     try {
-      const obj = await this.xref.fetchAsync(ref);
+      const obj = await xref.fetchAsync(ref);
 
-      if ((0, _primitives.isDict)(obj, "Page") || (0, _primitives.isDict)(obj) && !obj.has("Type") && obj.has("Contents")) {
-        if (ref && !catalog.pageKidsCountCache.has(ref)) {
-          catalog.pageKidsCountCache.put(ref, 1);
+      if (obj instanceof _primitives.Dict) {
+        let type = obj.getRaw("Type");
+
+        if (type instanceof _primitives.Ref) {
+          type = await xref.fetchAsync(type);
         }
 
-        return [obj, ref];
+        if ((0, _primitives.isName)(type, "Page") || !obj.has("Type") && !obj.has("Kids")) {
+          if (!catalog.pageKidsCountCache.has(ref)) {
+            catalog.pageKidsCountCache.put(ref, 1);
+          }
+
+          if (!catalog.pageIndexCache.has(ref)) {
+            catalog.pageIndexCache.put(ref, 0);
+          }
+
+          return [obj, ref];
+        }
       }
 
       throw new _util.FormatError("The Linearization dictionary doesn't point to a valid Page dictionary.");
     } catch (reason) {
-      (0, _util.info)(reason);
+      (0, _util.warn)(`_getLinearizationPage: "${reason.message}".`);
       return catalog.getPageDict(pageIndex);
     }
   }
@@ -4901,7 +4911,7 @@ class PDFDocument {
       let pagesTree;
 
       try {
-        pagesTree = await pdfManager.ensureCatalog("getAllPageDicts", [recoveryMode]);
+        pagesTree = await catalog.getAllPageDicts(recoveryMode);
       } catch (reasonAll) {
         if (reasonAll instanceof _core_utils.XRefEntryException && !recoveryMode) {
           throw new _core_utils.XRefParseException();
@@ -18764,7 +18774,7 @@ class AnnotationBorderStyle {
       return;
     }
 
-    if (Number.isInteger(width)) {
+    if (typeof width === "number") {
       if (width > 0) {
         const maxWidth = (rect[2] - rect[0]) / 2;
         const maxHeight = (rect[3] - rect[1]) / 2;
@@ -23831,8 +23841,8 @@ class PartialEvaluator {
       return {
         str,
         dir: bidiResult.dir,
-        width: textChunk.totalWidth,
-        height: textChunk.totalHeight,
+        width: Math.abs(textChunk.totalWidth),
+        height: Math.abs(textChunk.totalHeight),
         transform: textChunk.transform,
         fontName: textChunk.fontName,
         hasEOL: textChunk.hasEOL
@@ -23898,8 +23908,9 @@ class PartialEvaluator {
       if (textState.font.vertical) {
         const advanceY = (lastPosY - posY) / textContentItem.textAdvanceScale;
         const advanceX = posX - lastPosX;
+        const textOrientation = Math.sign(textContentItem.height);
 
-        if (advanceY < textContentItem.negativeSpaceMax) {
+        if (advanceY < textOrientation * textContentItem.negativeSpaceMax) {
           if (Math.abs(advanceX) > 0.5 * textContentItem.width) {
             appendEOL();
             return;
@@ -23914,15 +23925,15 @@ class PartialEvaluator {
           return;
         }
 
-        if (advanceY <= textContentItem.trackingSpaceMin) {
+        if (advanceY <= textOrientation * textContentItem.trackingSpaceMin) {
           textContentItem.height += advanceY;
-        } else if (!addFakeSpaces(advanceY, textContentItem.prevTransform)) {
+        } else if (!addFakeSpaces(advanceY, textContentItem.prevTransform, textOrientation)) {
           if (textContentItem.str.length === 0) {
             textContent.items.push({
               str: " ",
               dir: "ltr",
               width: 0,
-              height: advanceY,
+              height: Math.abs(advanceY),
               transform: textContentItem.prevTransform,
               fontName: textContentItem.fontName,
               hasEOL: false
@@ -23937,8 +23948,9 @@ class PartialEvaluator {
 
       const advanceX = (posX - lastPosX) / textContentItem.textAdvanceScale;
       const advanceY = posY - lastPosY;
+      const textOrientation = Math.sign(textContentItem.width);
 
-      if (advanceX < textContentItem.negativeSpaceMax) {
+      if (advanceX < textOrientation * textContentItem.negativeSpaceMax) {
         if (Math.abs(advanceY) > 0.5 * textContentItem.height) {
           appendEOL();
           return;
@@ -23953,14 +23965,14 @@ class PartialEvaluator {
         return;
       }
 
-      if (advanceX <= textContentItem.trackingSpaceMin) {
+      if (advanceX <= textOrientation * textContentItem.trackingSpaceMin) {
         textContentItem.width += advanceX;
-      } else if (!addFakeSpaces(advanceX, textContentItem.prevTransform)) {
+      } else if (!addFakeSpaces(advanceX, textContentItem.prevTransform, textOrientation)) {
         if (textContentItem.str.length === 0) {
           textContent.items.push({
             str: " ",
             dir: "ltr",
-            width: advanceX,
+            width: Math.abs(advanceX),
             height: 0,
             transform: textContentItem.prevTransform,
             fontName: textContentItem.fontName,
@@ -24071,8 +24083,8 @@ class PartialEvaluator {
       }
     }
 
-    function addFakeSpaces(width, transf) {
-      if (textContentItem.spaceInFlowMin <= width && width <= textContentItem.spaceInFlowMax) {
+    function addFakeSpaces(width, transf, textOrientation) {
+      if (textOrientation * textContentItem.spaceInFlowMin <= width && width <= textOrientation * textContentItem.spaceInFlowMax) {
         if (textContentItem.initialized) {
           textContentItem.str.push(" ");
         }
@@ -24092,8 +24104,8 @@ class PartialEvaluator {
       textContent.items.push({
         str: " ",
         dir: "ltr",
-        width,
-        height,
+        width: Math.abs(width),
+        height: Math.abs(height),
         transform: transf || getCurrentTextTransform(),
         fontName,
         hasEOL: false
@@ -54129,8 +54141,7 @@ class Catalog {
     });
   }
 
-  getPageDict(pageIndex) {
-    const capability = (0, _util.createPromiseCapability)();
+  async getPageDict(pageIndex) {
     const nodesToVisit = [this.toplevelPagesDict];
     const visitedNodes = new _primitives.RefSet();
 
@@ -54141,125 +54152,115 @@ class Catalog {
     }
 
     const xref = this.xref,
-          pageKidsCountCache = this.pageKidsCountCache;
+          pageKidsCountCache = this.pageKidsCountCache,
+          pageIndexCache = this.pageIndexCache;
     let currentPageIndex = 0;
 
-    function next() {
-      while (nodesToVisit.length) {
-        const currentNode = nodesToVisit.pop();
+    while (nodesToVisit.length) {
+      const currentNode = nodesToVisit.pop();
 
-        if (currentNode instanceof _primitives.Ref) {
-          const count = pageKidsCountCache.get(currentNode);
+      if (currentNode instanceof _primitives.Ref) {
+        const count = pageKidsCountCache.get(currentNode);
 
-          if (count >= 0 && currentPageIndex + count <= pageIndex) {
-            currentPageIndex += count;
-            continue;
+        if (count >= 0 && currentPageIndex + count <= pageIndex) {
+          currentPageIndex += count;
+          continue;
+        }
+
+        if (visitedNodes.has(currentNode)) {
+          throw new _util.FormatError("Pages tree contains circular reference.");
+        }
+
+        visitedNodes.put(currentNode);
+        const obj = await xref.fetchAsync(currentNode);
+
+        if (obj instanceof _primitives.Dict) {
+          let type = obj.getRaw("Type");
+
+          if (type instanceof _primitives.Ref) {
+            type = await xref.fetchAsync(type);
           }
 
-          if (visitedNodes.has(currentNode)) {
-            capability.reject(new _util.FormatError("Pages tree contains circular reference."));
-            return;
-          }
-
-          visitedNodes.put(currentNode);
-          xref.fetchAsync(currentNode).then(function (obj) {
-            if ((0, _primitives.isDict)(obj, "Page") || (0, _primitives.isDict)(obj) && !obj.has("Kids")) {
-              if (currentNode && !pageKidsCountCache.has(currentNode)) {
-                pageKidsCountCache.put(currentNode, 1);
-              }
-
-              if (pageIndex === currentPageIndex) {
-                capability.resolve([obj, currentNode]);
-              } else {
-                currentPageIndex++;
-                next();
-              }
-
-              return;
+          if ((0, _primitives.isName)(type, "Page") || !obj.has("Kids")) {
+            if (!pageKidsCountCache.has(currentNode)) {
+              pageKidsCountCache.put(currentNode, 1);
             }
 
-            nodesToVisit.push(obj);
-            next();
-          }, capability.reject);
-          return;
-        }
-
-        if (!(currentNode instanceof _primitives.Dict)) {
-          capability.reject(new _util.FormatError("Page dictionary kid reference points to wrong type of object."));
-          return;
-        }
-
-        let count;
-
-        try {
-          count = currentNode.get("Count");
-        } catch (ex) {
-          if (ex instanceof _core_utils.MissingDataException) {
-            throw ex;
-          }
-        }
-
-        if (Number.isInteger(count) && count >= 0) {
-          const objId = currentNode.objId;
-
-          if (objId && !pageKidsCountCache.has(objId)) {
-            pageKidsCountCache.put(objId, count);
-          }
-
-          if (currentPageIndex + count <= pageIndex) {
-            currentPageIndex += count;
-            continue;
-          }
-        }
-
-        let kids;
-
-        try {
-          kids = currentNode.get("Kids");
-        } catch (ex) {
-          if (ex instanceof _core_utils.MissingDataException) {
-            throw ex;
-          }
-        }
-
-        if (!Array.isArray(kids)) {
-          let type;
-
-          try {
-            type = currentNode.get("Type");
-          } catch (ex) {
-            if (ex instanceof _core_utils.MissingDataException) {
-              throw ex;
+            if (!pageIndexCache.has(currentNode)) {
+              pageIndexCache.put(currentNode, currentPageIndex);
             }
-          }
 
-          if ((0, _primitives.isName)(type, "Page") || !currentNode.has("Type") && currentNode.has("Contents")) {
             if (currentPageIndex === pageIndex) {
-              capability.resolve([currentNode, null]);
-              return;
+              return [obj, currentNode];
             }
 
             currentPageIndex++;
             continue;
           }
-
-          capability.reject(new _util.FormatError("Page dictionary kids object is not an array."));
-          return;
         }
 
-        for (let last = kids.length - 1; last >= 0; last--) {
-          nodesToVisit.push(kids[last]);
+        nodesToVisit.push(obj);
+        continue;
+      }
+
+      if (!(currentNode instanceof _primitives.Dict)) {
+        throw new _util.FormatError("Page dictionary kid reference points to wrong type of object.");
+      }
+
+      const {
+        objId
+      } = currentNode;
+      let count = currentNode.getRaw("Count");
+
+      if (count instanceof _primitives.Ref) {
+        count = await xref.fetchAsync(count);
+      }
+
+      if (Number.isInteger(count) && count >= 0) {
+        if (objId && !pageKidsCountCache.has(objId)) {
+          pageKidsCountCache.put(objId, count);
+        }
+
+        if (currentPageIndex + count <= pageIndex) {
+          currentPageIndex += count;
+          continue;
         }
       }
 
-      capability.reject(new Error(`Page index ${pageIndex} not found.`));
+      let kids = currentNode.getRaw("Kids");
+
+      if (kids instanceof _primitives.Ref) {
+        kids = await xref.fetchAsync(kids);
+      }
+
+      if (!Array.isArray(kids)) {
+        let type = currentNode.getRaw("Type");
+
+        if (type instanceof _primitives.Ref) {
+          type = await xref.fetchAsync(type);
+        }
+
+        if ((0, _primitives.isName)(type, "Page") || !currentNode.has("Kids")) {
+          if (currentPageIndex === pageIndex) {
+            return [currentNode, null];
+          }
+
+          currentPageIndex++;
+          continue;
+        }
+
+        throw new _util.FormatError("Page dictionary kids object is not an array.");
+      }
+
+      for (let last = kids.length - 1; last >= 0; last--) {
+        nodesToVisit.push(kids[last]);
+      }
     }
 
-    next();
-    return capability.promise;
+    throw new Error(`Page index ${pageIndex} not found.`);
   }
 
-  getAllPageDicts(recoveryMode = false) {
+  async getAllPageDicts(recoveryMode = false) {
     const queue = [{
       currentNode: this.toplevelPagesDict,
       posInKids: 0
@@ -54272,14 +54273,24 @@ class Catalog {
       visitedNodes.put(pagesRef);
     }
 
-    const map = new Map();
+    const map = new Map(),
+          xref = this.xref,
+          pageIndexCache = this.pageIndexCache;
     let pageIndex = 0;
 
     function addPageDict(pageDict, pageRef) {
+      if (pageRef && !pageIndexCache.has(pageRef)) {
+        pageIndexCache.put(pageRef, pageIndex);
+      }
+
       map.set(pageIndex++, [pageDict, pageRef]);
     }
 
     function addPageError(error) {
+      if (error instanceof _core_utils.XRefEntryException && !recoveryMode) {
+        throw error;
+      }
+
       map.set(pageIndex++, [error, null]);
     }
 
@@ -54289,21 +54300,15 @@ class Catalog {
         currentNode,
         posInKids
       } = queueItem;
-      let kids;
+      let kids = currentNode.getRaw("Kids");
 
-      try {
-        kids = currentNode.get("Kids");
-      } catch (ex) {
-        if (ex instanceof _core_utils.MissingDataException) {
-          throw ex;
+      if (kids instanceof _primitives.Ref) {
+        try {
+          kids = await xref.fetchAsync(kids);
+        } catch (ex) {
+          addPageError(ex);
+          break;
         }
-
-        if (ex instanceof _core_utils.XRefEntryException && !recoveryMode) {
-          throw ex;
-        }
-
-        addPageError(ex);
-        break;
       }
 
       if (!Array.isArray(kids)) {
@@ -54320,27 +54325,19 @@ class Catalog {
       let obj;
 
       if (kidObj instanceof _primitives.Ref) {
-        try {
-          obj = this.xref.fetch(kidObj);
-        } catch (ex) {
-          if (ex instanceof _core_utils.MissingDataException) {
-            throw ex;
-          }
-
-          if (ex instanceof _core_utils.XRefEntryException && !recoveryMode) {
-            throw ex;
-          }
-
-          addPageError(ex);
-          break;
-        }
-
         if (visitedNodes.has(kidObj)) {
           addPageError(new _util.FormatError("Pages tree contains circular reference."));
           break;
         }
 
         visitedNodes.put(kidObj);
+
+        try {
+          obj = await xref.fetchAsync(kidObj);
+        } catch (ex) {
+          addPageError(ex);
+          break;
+        }
       } else {
         obj = kidObj;
       }
@@ -54350,7 +54347,18 @@ class Catalog {
         break;
       }
 
-      if ((0, _primitives.isDict)(obj, "Page") || !obj.has("Kids")) {
+      let type = obj.getRaw("Type");
+
+      if (type instanceof _primitives.Ref) {
+        try {
+          type = await xref.fetchAsync(type);
+        } catch (ex) {
+          addPageError(ex);
+          break;
+        }
+      }
+
+      if ((0, _primitives.isName)(type, "Page") || !obj.has("Kids")) {
         addPageDict(obj, kidObj instanceof _primitives.Ref ? kidObj : null);
       } else {
         queue.push({
@@ -73595,8 +73603,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.12.549';
-const pdfjsBuild = 'feef0baf4';
+const pdfjsVersion = '2.13.288';
+const pdfjsBuild = 'de1d45802';
 })();
 
 /******/ 	return __webpack_exports__;

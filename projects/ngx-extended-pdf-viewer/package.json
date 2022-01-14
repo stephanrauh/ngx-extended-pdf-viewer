@@ -6,6 +6,14 @@
   "repository": {
     "url": "https://github.com/stephanrauh/ngx-extended-pdf-viewer"
   },
+  "schematics": "./schematics/collection.json",
+  "ng-add": {
+    "save": "dependencies"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.schematics.json",
+    "postbuild": "copyfiles schematics/*/schema.json schematics/*/files/** schematics/collection.json ../../dist/ngx-extended-pdf-viewer/"
+  },
   "author": {
     "name": "Stephan Rauh",
     "url": "https://www.beyondjava.net"
@@ -29,5 +37,9 @@
   },
   "dependencies": {
     "lodash.deburr": "^4.1.0"
+  },
+  "devDependencies": {
+    "copyfiles": "file:../../node_modules/copyfiles",
+    "typescript": "file:../../node_modules/typescript"
   }
 }
