@@ -329,3 +329,4 @@
 - 11.1.0 #956 if you're using a custom free floating toolbar, `[showFreeFloatingBar]` allows you to hide it; #1007 `[wheelAction]="'zoom'"` allows you to zoom with the mouse wheel without keeping the `CTRL` key pressed; #768 resize the toolbar of the sidebar when `[mobileFriendlyZoom]` is used
 - 11.1.1 #962 iOS bugfix: form input now remains visible after zooming; #1118 detect if the browser supports private class attributes; #916 allow developers to draw the PDF file on a custom "paper" (i.e. a custom background - which can be a simple color or a complex algorithms drawing a background image) (work in progress)
 - 11.1.2 #998 support for Cypress tests
+- 11.2.0-alpha.0 #1065 implement `ng add ngx-extended-pdf-viewer`
