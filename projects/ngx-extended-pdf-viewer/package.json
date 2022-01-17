@@ -12,7 +12,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.schematics.json",
-    "postbuild": "copyfiles schematics/*/schema.json schematics/*/files/** schematics/collection.json ../../dist/ngx-extended-pdf-viewer/"
+    "postbuild": "copyfiles schematics/collection.json schematics/*/schema.json schematics/*/files/**/**/* ../../dist/ngx-extended-pdf-viewer/"
   },
   "author": {
     "name": "Stephan Rauh",
