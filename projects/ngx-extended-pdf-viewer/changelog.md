@@ -85,10 +85,10 @@
 - 1.5.1 #136 made the `defaultOptions` accessible to IE11 users can configure the worker thread URL; fixed the error message "Invalid pages rotation angle."
 - 1.5.2 #142 now the PDF viewer can be used in a form
 - 1.5.3 #148 override any custom settings of `overflow-y` on `<html>` and `<body>` when printing (because `overflow-y: hidden` used to clip the print output); preliminary fix of #147
-- 1.6.0-rc.0 continued fixing #147: modified behaviour of (page); make a difference between [(page)] and  [(pageLabel)]; 
-- 1.6.0-rc.1 #150 stop loading a generic translation file (e.g. "en.properties") if there's a more specific translation file (e.g. "en-GB.properties") 
+- 1.6.0-rc.0 continued fixing #147: modified behaviour of (page); make a difference between [(page)] and [(pageLabel)];
+- 1.6.0-rc.1 #150 stop loading a generic translation file (e.g. "en.properties") if there's a more specific translation file (e.g. "en-GB.properties")
 - 1.6.0-rc.2 #150 stop loading a generic translation file (e.g. "en.properties") if there's a more specific translation file (e.g. "en-GB.properties") (this time for real)
-- 1.6.0 #137 Now both `(currentZoomFactor)` and `(zoomChange)` react to the keyboard events CTRL + "+" and CTRL + "-". Caveat:  after selecting one of the text settings of the dropdown menu (i.e. "page fit", "actual page", and so on), the `(zoomChange)` event fires twice. Another caveat: this change might be a breaking change (although I don't think so, but it's a major internal change).
+- 1.6.0 #137 Now both `(currentZoomFactor)` and `(zoomChange)` react to the keyboard events CTRL + "+" and CTRL + "-". Caveat: after selecting one of the text settings of the dropdown menu (i.e. "page fit", "actual page", and so on), the `(zoomChange)` event fires twice. Another caveat: this change might be a breaking change (although I don't think so, but it's a major internal change).
 - 1.6.1 #152 now the viewer can print even if it's embedded in a Bootstrap modal. Most likely, this also fixes problems with other frameworks.
 - 1.6.2 #152 improved compatibility with Bootstrap (and many other scenarios). Now the sidebar does show on the left-hand side of the PDF viewer when it's hidden. Plus, the box model of the sidebar now is always the browser default (i.e. "content-box"), even if Bootstrap or another framework tries to modify that.
 - 1.7.0 Announced compatiblity to Angular 9. #154 added a polyfill for IE11.
@@ -112,7 +112,7 @@
 - 2.0.0-alpha.0 #188 load the pdf.js files lazily by default; #186, #179, and #157 refactor the HTML code in order to make it easier to customize the toolbar (work in progress)
 - 2.0.0-alpha.1 #194 add an option to display the PDF file without the border. Kudos to Balaji Sivaraman for contributing this pull request!
 - 2.0.0-alpha.2 #194 renamed the option to `[showBorders]="'true'"`. Kudos to Balaji Sivaraman for contributing this pull request!
-- 2.0.0-alpha.3 #201 added an option to find multiple texts. 
+- 2.0.0-alpha.3 #201 added an option to find multiple texts.
 - 2.0.0-alpha.4 #201 improved the option to find multiple texts and added the programmatic API
 - 2.0.0-alpha.5 #201 polished the option to find multiple texts
 - 2.0.0-alpha.6 #206 fixed a bug that prevented the findbar from being shown; running the search again when opening the find bar for the second time
@@ -123,10 +123,10 @@
 - 2.0.0-alpha.11 #211 remove the gloss effect of the zoom dropdown in Safari; remove the duplicate drop-down-arrays (which may or may not have been caused by updating @angular/material)
 - 2.0.0-alpha.12 #213 compatibility to Angular Universal
 - 2.0.0-alpha.13 #179 and #159 preliminary support for customizing the UI (activated [customFindbarButtons])
-- 2.0.0-alpha.14 #179 and #159 improved support for customizing the UI (`[customToolbar]`, `[customFindbarButtonscustomFindbarInputArea]`,  `[customSecondaryToolbar]`). If everything went according to the plan, you shouldn't notice any difference unless you're using the new features.
+- 2.0.0-alpha.14 #179 and #159 improved support for customizing the UI (`[customToolbar]`, `[customFindbarButtonscustomFindbarInputArea]`, `[customSecondaryToolbar]`). If everything went according to the plan, you shouldn't notice any difference unless you're using the new features.
 - 2.0.0-alpha.15 #179 and #159 add the new components to the public API
 - 2.0.0-alpha.16 #226 prevent a NPE that sometimes shows when the PDF viewer is hidden and shown again.
-- 2.0.0-alpha.17 #227 add `[enablePrint]`. Setting this options prevents printing entirely. 
+- 2.0.0-alpha.17 #227 add `[enablePrint]`. Setting this options prevents printing entirely.
 - 2.0.0-alpha.18 #179 and #159 add dummy versions of missing widgets automatically to make customization easier
 - 2.0.0-beta.0 #186 replaced some toolbar icons by Material Design icons to distinguish the design from the native Firefox PDF viewer
 - 2.0.0-beta.1 #192 add interfaces for the underlying PDF viewer; #186 reduced the margins and paddings around the buttons
@@ -143,7 +143,7 @@
 - 3.0.0-beta.1 #241 calculate the tab index programmatically; #233 made the find buttons visible again
 - 3.0.0-beta.2 #239 improved IE11 compatibility; #246 fixed a broken SVG image; #235 activate or deactivate buttons depending on the UI state in IE11
 - 3.0.0-beta.3 #248 IE11 compatibility
-- 3.0.0-beta.4 #248 update the state of the "first page", "last page", and the "rotate page" buttons 
+- 3.0.0-beta.4 #248 update the state of the "first page", "last page", and the "rotate page" buttons
 - 3.0.0-beta.5 #253 corrected a wrong interface; #251 slightly improved icon alignment (but responsive CSS is still broken with certain resolutions, so it's subject to change)
 - 3.0.0-beta.6 #235 improved and simplified the responsive CSS; got rid of the property `[ignoreResponsiveCSS]`
 - 3.0.0-beta.7 #235 hide and show the hand tool button and the select tool button only if the text layer is available
@@ -162,7 +162,7 @@
 - 3.3.0 #265 added `enablePinchOnMobile` (experimental / work in progress); #290 added `pdf-hand-tool` and `pdf-select-tool` to the public API; #289 added an error message if zone.js is outdated
 - 3.3.1 #290 added `pdf-hand-tool` and `pdf-select-tool` to the public API
 - 3.3.2 #294 added a check if the DOM element is there before checking its height; added a few fields to the `IPDFViewerApplication` interface
-- 3.3.3 #294 accept string values for `[page]` 
+- 3.3.3 #294 accept string values for `[page]`
 - 3.3.4 #325 fixed an IE5 bug that disabled the "find" feature
 - 3.3.5 #293 fixed the event `(zoomChange)`
 - 3.4.0 #285 added an option to use the developer version of pdf.js 2.5 in order to display images correctly
@@ -211,7 +211,7 @@
 - 5.0.0-beta.2 #479 `showSecondaryToolbarButton` did exactly the opposite of what it was meant to do; #457 restored the sourcemaps of the minified files of pdf.js
 - 5.0.0-beta.3 updated the "bleeding edge" branch to pdf.js 2.7.52
 - 5.0.0 #483 fixed a bug that prevented to save PDF forms with the data entered by the user
-- 5.0.1 #488 fixed the URL of the CMap files 
+- 5.0.1 #488 fixed the URL of the CMap files
 - 5.1.0 #495 implemented `[(scrollMode)]`; implemented `pageViewMode="single"`; updated the bleeding-edge branch
 - 5.2.0-alpha.0 #499 and #511 implemented a proof of concept for `[(formData)]` (which is going to be renamed `[(formData)])` after deciding what the final API looks like)
 - 5.2.0 #499 and #511 implemented `[(formData)]`
@@ -267,7 +267,7 @@
 - 9.0.0-alpha.0 #700 re-worked the print CSS
 - 9.0.0-alpha.1 #90 #543 if `[zoom]` is undefined or omitted, the zoom, page number, and rotation are taken from `localStore`. In other words: if you've viewed the document before, your settings are restored. #255 stop reporting the "worker is terminated" message. #707 fixed the exception occurring in Brave on iOS with active fingerprinting protection; #645 added the `(pageRender)` event which is sent when a page is about to be rendered (as opposed to `(pageRendered)`, which is sent when the page has finished rendering); #629 download Blobs and base64 files on Chrome on iOS; #90 respect the rotation the user choose previously when re-opening a PDF document; #652 added `pdfDefaultOptions.doubleTapZoomFactor` to enable custom scalings on double-tap
 - 9.0.0-alpha.2 #681 make sure there's always an `outlineOptionsContainer` even if the custom sidebar doesn't need it
-- 9.0.0-alpha.3 #712 #714 fixed two annoying bug that sometimes caused crashes when using pinch gestures on mobile devices; updated the bleeding edge to the final version 2.8 of pdf.js; #645 make the cleanup() method more resilient - if you can't clean up the page proxy, clean it up after finishing the render task; don't report errors if the PDF viewer is destroyed while it's still rendering the sidebar; #707 show the progress bar when loading 
+- 9.0.0-alpha.3 #712 #714 fixed two annoying bug that sometimes caused crashes when using pinch gestures on mobile devices; updated the bleeding edge to the final version 2.8 of pdf.js; #645 make the cleanup() method more resilient - if you can't clean up the page proxy, clean it up after finishing the render task; don't report errors if the PDF viewer is destroyed while it's still rendering the sidebar; #707 show the progress bar when loading
 - 9.0.0-alpha.4 #732 allow `[base64Src]` to be undefined (so it can be filled asynchronously with the result of a REST call)
 - 9.0.0-alpha.5 #740 support for CSP
 - 9.0.0-alpha.6 #748 delay the initialization of the PDF viewer if the PDF file is loaded lazily
@@ -284,7 +284,7 @@
 - 9.0.3 #814 clear the form data cache when opening a second document; #802 stop opening the "download" dialog after closing a form; added an `await` to the calls of the `close()` method; call `close()` explicitely before opening a new PDF file (this might reduce error messages in the console)
 - 9.0.4 #814 added a null-check before clearing the form data cache
 - 9.0.5 #818 added another null-check to prevent errors when `[src]` changes
-- 10.0.0-alpha.0 #823 improved the algorithm checking the height. *Warning*: this version is broken!
+- 10.0.0-alpha.0 #823 improved the algorithm checking the height. _Warning_: this version is broken!
 - 10.0.0-alpha.1 downgraded ng-packagr because it forgets to ship the CSS files
 - 10.0.0-alpha.2 #847 bumped up the default branch to pdf.js 2.10 and the bleeding-edge branch to pdf.js 2.11
 - 10.0.0-alpha.3 #850 add the page number to the return value of `NgxExtendedPdfViewerService.getFormData()`
@@ -330,3 +330,5 @@
 - 11.1.1 #962 iOS bugfix: form input now remains visible after zooming; #1118 detect if the browser supports private class attributes; #916 allow developers to draw the PDF file on a custom "paper" (i.e. a custom background - which can be a simple color or a complex algorithms drawing a background image) (work in progress)
 - 11.1.2 #998 support for Cypress tests
 - 11.2.0-alpha.0 #1065 implement `ng add ngx-extended-pdf-viewer`
+- 11.2.0-alpha.1 #1065 implement `ng add ngx-extended-pdf-viewer`
+- 11.2.0-alpha.2 #1065 implement `ng add ngx-extended-pdf-viewer`
