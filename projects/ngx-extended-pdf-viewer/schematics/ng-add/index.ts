@@ -128,9 +128,20 @@ function addDeclarationToNgModule(options: ModuleOptions): Rule {
 
     const componentPath = `/src/${options.path}/${strings.dasherize(options.name)}.component`;
     const relativePath = buildRelativePath(modulePath, componentPath);
-    const changes = addDeclarationToModule(source as any, modulePath, strings.classify(`${options.name}Component`), relativePath);
+    const componentChanges = addDeclarationToModule(source as any, modulePath, strings.classify(`${options.name}Component`), relativePath);
+    const moduleChanges = addImportToModule(
+      source as any,
+      'ngx-extended-pdf-viewer',
+      strings.classify(`NgxExtendedPdfViewerModule`),
+      'ngx-extended-pdf-viewer'
+    );
     const recorder = host.beginUpdate(modulePath);
-    for (const change of changes) {
+    for (const change of componentChanges) {
+      if (change instanceof InsertChange) {
+        recorder.insertLeft(change.pos, change.toAdd);
+      }
+    }
+    for (const change of moduleChanges) {
       if (change instanceof InsertChange) {
         recorder.insertLeft(change.pos, change.toAdd);
       }

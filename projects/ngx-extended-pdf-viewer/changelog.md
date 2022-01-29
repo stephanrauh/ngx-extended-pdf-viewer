@@ -331,4 +331,4 @@
 - 11.1.2 #998 support for Cypress tests
 - 11.2.0-alpha.0 #1065 implement `ng add ngx-extended-pdf-viewer`
 - 11.2.0-alpha.1 #1065 implement `ng add ngx-extended-pdf-viewer`
-- 11.2.0-alpha.2 #1065 implement `ng add ngx-extended-pdf-viewer`
+- 11.2.0-alpha.2 #1065 first fully functional implementation of the schematic `ng add ngx-extended-pdf-viewer`
