@@ -3,7 +3,7 @@ cd ../mypdf.js
 
 FOLDER="assets"
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
-if [[ "$BRANCH" == "bleeding-edge" ]]; then
+if [ "$BRANCH" == "bleeding-edge" ]; then
   FOLDER="bleeding-edge"
 fi
 

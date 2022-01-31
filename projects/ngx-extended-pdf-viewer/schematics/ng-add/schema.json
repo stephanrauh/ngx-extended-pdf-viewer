@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "NgxExtendedPdfViewerSchematics",
+  "title": "Add ngx-extended-pdf-viewer to an existing Angular project",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "The name of the project.",
+      "x-prompt": "Name of the project: (default: root-level project)"
+    },
+    "defaultProject": {
+      "type": "string",
+      "description": "Default project name.",
+      "$default": {
+        "$source": "projectName"
+      }
+    },
+    "stable": {
+      "type": "boolean",
+      "description": "Do you want to use the stable version? (Chose 'no' to use the 'bleeding-edge' version)",
+      "x-prompt": "Do you want to use the stable version? (Chose 'no' to use the 'bleeding-edge' version)"
+    },
+    "exampleComponent": {
+      "type": "boolean",
+      "description": "Do you want to generate an example component using ngx-extended-pdf-viewer? (Default: yes)",
+      "x-prompt": "Do you want to generate an example component using ngx-extended-pdf-viewer? (Default: yes)"
+    }
+  }
+}

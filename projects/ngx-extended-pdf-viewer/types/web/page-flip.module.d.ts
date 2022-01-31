@@ -214,7 +214,7 @@ declare class EventObject {
      * @param {string} event - Event name
      */
     off(event: string): void;
-    trigger(eventName: any, app: any, data?: any): void;
+    trigger(eventName: any, app: any, data?: null): void;
 }
 /**
  * Сlass representing a collection of pages as images on the canvas
@@ -326,6 +326,7 @@ declare class HTMLRender extends Render {
      */
     drawBottomPage(): void;
     drawFrame(): void;
+    lastAngle: any;
     clear(): void;
 }
 /**

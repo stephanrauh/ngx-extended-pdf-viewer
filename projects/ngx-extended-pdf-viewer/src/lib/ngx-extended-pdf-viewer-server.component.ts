@@ -28,6 +28,7 @@ import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component
 import { ScrollModeType } from './options/pdf-viewer';
 import { ProgressBarEvent } from './events/progress-bar-event';
 import { FormDataType } from './ngx-extended-pdf-viewer.component';
+import { PdfBackground } from './options/pdf-background';
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
@@ -72,6 +73,9 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
 
   @Input()
   public customFreeFloatingBar: TemplateRef<any>;
+
+  @Input()
+  public showFreeFloatingBar = true;
 
   @Input()
   public formData: FormDataType = {};
@@ -181,7 +185,10 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   public backgroundColor = '#e8e8eb';
 
   @Input()
-  public pdfBackgroundColor = '#FFF';
+  public pdfBackground: PdfBackground = '#ffffff';
+
+  @Input()
+  public pdfBackgroundColorToReplace: string = '#ffffff';
 
   /** Allows the user to define the name of the file after clicking "download" */
   @Input()
@@ -247,6 +254,37 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
 
   @Input()
   public showFindButton: boolean | undefined = undefined;
+
+  @Input()
+  public showFindHighlightAll = true;
+
+  @Input()
+  public showFindMatchCase = true;
+
+  @Input()
+  public showFindCurrentPageOnly = true;
+
+  @Input()
+  public showFindPageRange = true;
+
+  @Input()
+  public showFindEntireWord = true;
+
+  @Input()
+  public showFindEntirePhrase = true;
+
+  @Input()
+  public showFindIgnoreAccents = true;
+
+  @Input()
+  public showFindFuzzySearch = true;
+
+  @Input()
+  public showFindResultsCount = true;
+
+  @Input()
+  public showFindMessages = true;
+
   @Input()
   public showPagingButtons = true;
   @Input()
@@ -395,7 +433,8 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   @Input()
   public set mobileFriendlyZoom(zoom: string) {}
 
-  private shuttingDown = false;
+  @Input()
+  public wheelAction: 'scroll' | 'zoom' = 'scroll';
 
   public get sidebarPositionTop(): string {
     return '32px';

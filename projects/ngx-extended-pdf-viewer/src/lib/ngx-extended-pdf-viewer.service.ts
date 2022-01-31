@@ -1,4 +1,6 @@
+import { Subject } from 'rxjs';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
+import { PdfLayer } from './options/optional_content_config';
 import { PDFPrintRange } from './options/pdf-print-range';
 import { IPDFViewerApplication } from './options/pdf-viewer-application';
 
@@ -10,6 +12,7 @@ export interface FindOptions {
   findMultipleSearchTexts?: boolean;
   fuzzySearch?: boolean;
   currentPage?: boolean; // search only in the current page
+  pageRange?: string; // page range definition, e.g. "2", "2,3,4", "5-6" or "2,5-6,7"
 }
 
 interface DrawContext {
@@ -24,6 +27,8 @@ export interface PDFExportScaleFactor {
 }
 
 export class NgxExtendedPdfViewerService {
+  public recalculateSize$ = new Subject<void>();
+
   constructor() {}
 
   public findMultiple(text: Array<string>, options: FindOptions = {}): boolean {
@@ -45,9 +50,13 @@ export class NgxExtendedPdfViewerService {
       if (highlightAllCheckbox) {
         highlightAllCheckbox.checked = options.highlightAll || false;
       }
-      const findCurrentPagelCheckbox = document.getElementById('findCurrentPage') as HTMLInputElement;
-      if (findCurrentPagelCheckbox) {
-        findCurrentPagelCheckbox.checked = options.currentPage || false;
+      const findPageRange = document.getElementById('findRange') as HTMLInputElement;
+      if (findPageRange) {
+        findPageRange.value = options.pageRange || '';
+      }
+      const findCurrentPageCheckbox = document.getElementById('findCurrentPage') as HTMLInputElement;
+      if (findCurrentPageCheckbox) {
+        findCurrentPageCheckbox.checked = options.currentPage || false;
       }
 
       const matchCaseCheckbox = document.getElementById('findMatchCase') as HTMLInputElement;
@@ -255,7 +264,7 @@ export class NgxExtendedPdfViewerService {
     const renderContext = {
       canvasContext: ctx,
       viewport: drawViewport,
-//      background: 'rgba(255, 0, 255, 0.3)',
+      //      background: 'rgba(255, 0, 255, 0.3)',
     };
     const renderTask = pdfPage.render(renderContext);
 
@@ -366,5 +375,47 @@ export class NgxExtendedPdfViewerService {
     const pages = (app.pdfViewer._getVisiblePages() as any).views as Array<any>;
     const pageNumbers = pages?.map((page) => page.id);
     return pageNumbers;
+  }
+
+  public recalculateSize(): void {
+    this.recalculateSize$.next();
+  }
+
+  public async listLayers(): Promise<Array<PdfLayer> | undefined> {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+
+    const optionalContentConfig = await PDFViewerApplication.pdfViewer.optionalContentConfigPromise;
+    if (optionalContentConfig) {
+      const levelData = optionalContentConfig.getOrder();
+      console.log(levelData);
+      const layerIds = levelData.filter((groupId) => typeof groupId !== 'object');
+      return layerIds.map((layerId) => {
+        const config = optionalContentConfig.getGroup(layerId);
+        return {
+          layerId: layerId,
+          name: config.name,
+          visible: config.visible,
+        } as PdfLayer;
+      });
+    }
+    return undefined;
+  }
+
+  public async toggleLayer(layerId: string): Promise<void> {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const optionalContentConfig = await PDFViewerApplication.pdfViewer.optionalContentConfigPromise;
+    if (optionalContentConfig) {
+      let isVisible = optionalContentConfig.isVisible(layerId);
+      const checkbox = document.querySelector(`input[id='${layerId}']`);
+      if (checkbox) {
+        isVisible = (checkbox as HTMLInputElement).checked;
+        (checkbox as HTMLInputElement).checked = !isVisible;
+      }
+      optionalContentConfig.setVisibility(layerId, !isVisible);
+      PDFViewerApplication.eventBus.dispatch('optionalcontentconfig', {
+        source: this,
+        promise: Promise.resolve(optionalContentConfig),
+      });
+    }
   }
 }

@@ -1,4 +1,5 @@
 import { Component, Input, TemplateRef } from '@angular/core';
+import { getVersionSuffix, pdfDefaultOptions } from '../../options/pdf-default-options';
 
 @Component({
   selector: 'pdf-findbar',
@@ -20,11 +21,43 @@ export class PdfFindbarComponent {
 
   /* UI templates */
   @Input()
-  public customFindbarInputArea: TemplateRef<any>;
+  public customFindbarInputArea: TemplateRef<any> | undefined;
 
   @Input()
   public customFindbar: TemplateRef<any>;
 
   @Input()
-  public customFindbarButtons: TemplateRef<any>;
+  public customFindbarButtons: TemplateRef<any>  | undefined;
+
+  @Input()
+  public showFindHighlightAll = true;
+
+  @Input()
+  public showFindMatchCase = true;
+
+  @Input()
+  public showFindCurrentPageOnly = true;
+
+  @Input()
+  public showFindPageRange = true;
+
+  @Input()
+  public showFindEntireWord = true;
+
+  @Input()
+  public showFindEntirePhrase = true;
+
+  @Input()
+  public showFindIgnoreAccents = true;
+
+  @Input()
+  public showFindFuzzySearch = true;
+
+  @Input()
+  public showFindResultsCount = true;
+
+  @Input()
+  public showFindMessages = true;
+
+  public pdfJsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
 }

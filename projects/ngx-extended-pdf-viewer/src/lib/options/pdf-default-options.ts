@@ -2,8 +2,8 @@ const _isIE11 = typeof window === 'undefined' ? false : !!(<any>window).MSInputM
 const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
-export let pdfjsVersion = '2.12.414';
-export let pdfjsBleedingEdgeVersion = '2.12.419';
+export const pdfjsVersion = '2.12.550';
+export const pdfjsBleedingEdgeVersion = '2.13.288';
 export function getVersionSuffix(folder: string): string {
   if (folder && folder.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -12,6 +12,7 @@ export function getVersionSuffix(folder: string): string {
 }
 
 export let pdfDefaultOptions = {
+  needsES5: _isIE11 || isEdge || needsES5,
   cursorToolOnLoad: 0,
   defaultUrl: '',
   defaultZoomValue: undefined,
@@ -54,18 +55,19 @@ export let pdfDefaultOptions = {
   workerPort: null,
   assetsFolder: 'assets',
   sandboxBundleSrc: () =>
-    _isIE11 || isEdge || needsES5
-      ? './' + pdfDefaultOptions.assetsFolder + '/pdf.sandbox-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '-es5.js'
-      : './' + pdfDefaultOptions.assetsFolder + '/pdf.sandbox-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '.js',
+    pdfDefaultOptions.needsES5
+      ? `./${pdfDefaultOptions.assetsFolder}/pdf.sandbox-${getVersionSuffix(pdfDefaultOptions.assetsFolder)}-es5.js`
+      : `./${pdfDefaultOptions.assetsFolder}/pdf.sandbox-${getVersionSuffix(pdfDefaultOptions.assetsFolder)}.js`,
   workerSrc: () =>
-    _isIE11 || isEdge || needsES5
-      ? './' + pdfDefaultOptions.assetsFolder + '/pdf.worker-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '-es5.js'
-      : './' + pdfDefaultOptions.assetsFolder + '/pdf.worker-' + getVersionSuffix(pdfDefaultOptions.assetsFolder) + '.js',
+    pdfDefaultOptions.needsES5
+      ? `./${pdfDefaultOptions.assetsFolder}/pdf.worker-${getVersionSuffix(pdfDefaultOptions.assetsFolder)}-es5.js`
+      : `./${pdfDefaultOptions.assetsFolder}/pdf.worker-${getVersionSuffix(pdfDefaultOptions.assetsFolder)}.js`,
 
   // options specific to ngx-extended-pdf-viewer (as opposed to being used by pdf.js)
   doubleTapZoomFactor: 'page-width',
   enableScripting: true,
-  defaultCacheSize: 50
+  defaultCacheSize: 50,
+  passwordPrompt: undefined,
 };
 
 if (typeof window !== 'undefined') {

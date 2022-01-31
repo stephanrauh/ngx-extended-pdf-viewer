@@ -14,13 +14,16 @@ export class PdfSidebarComponent {
   public sidebarVisible = true;
 
   @Input()
+  public mobileFriendlyZoomScale = 1;
+
+  @Input()
   public showSidebarButton = true;
 
   @Input()
-  public customSidebar: TemplateRef<any>;
+  public customSidebar: TemplateRef<any> | undefined;
 
   @Input()
-  public customThumbnail: TemplateRef<any>;
+  public customThumbnail: TemplateRef<any> | undefined;
 
   @Output()
   public thumbnailDrawn = new EventEmitter<PdfThumbnailDrawnEvent>();

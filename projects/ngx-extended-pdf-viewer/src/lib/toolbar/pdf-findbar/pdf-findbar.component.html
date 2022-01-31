@@ -17,8 +17,14 @@
 
 <ng-template #defaultFindbarButtons>
   <pdf-find-input-area [customFindbarInputArea]="customFindbarInputArea"></pdf-find-input-area>
-  <pdf-findbar-options-one-container></pdf-findbar-options-one-container>
-  <pdf-findbar-options-two-container></pdf-findbar-options-two-container>
-  <pdf-findbar-options-three-container></pdf-findbar-options-three-container>
-  <pdf-findbar-message-container></pdf-findbar-message-container>
+  <pdf-find-highlight-all [class.hidden]="!showFindHighlightAll"></pdf-find-highlight-all>
+  <pdf-find-match-case [class.hidden]="!showFindMatchCase"></pdf-find-match-case>
+  <pdf-find-current-page-only [class.hidden]="!showFindCurrentPageOnly" *ngIf="pdfJsVersion >= '2.12'"></pdf-find-current-page-only>
+  <pdf-find-range [class.hidden]="!showFindPageRange" *ngIf="pdfJsVersion >= '2.12'"></pdf-find-range>
+  <pdf-find-entire-word [class.hidden]="!showFindEntireWord"></pdf-find-entire-word>
+  <pdf-find-entire-phrase [class.hidden]="!showFindEntirePhrase"></pdf-find-entire-phrase>
+  <pdf-find-ignore-accents [class.hidden]="!showFindIgnoreAccents"></pdf-find-ignore-accents>
+  <pdf-find-fuzzily [class.hidden]="!showFindFuzzySearch"></pdf-find-fuzzily>
+  <pdf-find-results-count [class.hidden]="!showFindResultsCount"></pdf-find-results-count>
+  <pdf-findbar-message-container [class.hidden]="!showFindMessages"></pdf-findbar-message-container>
 </ng-template>

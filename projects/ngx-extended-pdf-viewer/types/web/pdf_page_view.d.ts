@@ -1,4 +1,13 @@
+export type PageViewport = import("../src/display/display_utils").PageViewport;
+export type OptionalContentConfig = import("../src/display/optional_content_config").OptionalContentConfig;
+export type EventBus = import("./event_utils").EventBus;
+export type IL10n = import("./interfaces").IL10n;
+export type IPDFAnnotationLayerFactory = import("./interfaces").IPDFAnnotationLayerFactory;
+export type IPDFStructTreeLayerFactory = import("./interfaces").IPDFStructTreeLayerFactory;
+export type IPDFTextLayerFactory = import("./interfaces").IPDFTextLayerFactory;
+export type IPDFXfaLayerFactory = import("./interfaces").IL10n;
 export type IRenderableView = import("./interfaces").IRenderableView;
+export type PDFRenderingQueue = import("./pdf_rendering_queue").PDFRenderingQueue;
 export type PDFPageViewOptions = {
     /**
      * - The viewer element.
@@ -7,7 +16,7 @@ export type PDFPageViewOptions = {
     /**
      * - The application event bus.
      */
-    eventBus: any;
+    eventBus: EventBus;
     /**
      * - The page unique ID (normally its number).
      */
@@ -19,18 +28,18 @@ export type PDFPageViewOptions = {
     /**
      * - The page viewport.
      */
-    defaultViewport: any;
+    defaultViewport: PageViewport;
     /**
      * -
-     * A promise that is resolved with an {@link OptionalContentConfig} instance.
+     * A promise that is resolved with an {@link OptionalContentConfig } instance.
      * The default value is `null`.
      */
-    optionalContentConfigPromise?: Promise<any> | undefined;
+    optionalContentConfigPromise?: Promise<import("../src/display/optional_content_config").OptionalContentConfig> | undefined;
     /**
      * - The rendering queue object.
      */
-    renderingQueue: any;
-    textLayerFactory: any;
+    renderingQueue: PDFRenderingQueue;
+    textLayerFactory: IPDFTextLayerFactory;
     /**
      * - Controls if the text layer used for
      * selection and searching is created, and if the improved text selection
@@ -41,14 +50,14 @@ export type PDFPageViewOptions = {
     /**
      * - Controls if the annotation layer is
      * created, and if interactive form elements or `AnnotationStorage`-data are
-     * being rendered. The constants from {@link AnnotationMode} should be used;
-     * see also {@link RenderParameters} and {@link GetOperatorListParameters}.
+     * being rendered. The constants from {@link AnnotationMode } should be used;
+     * see also {@link RenderParameters } and {@link GetOperatorListParameters }.
      * The default value is `AnnotationMode.ENABLE_FORMS`.
      */
     annotationMode?: number | undefined;
-    annotationLayerFactory: any;
-    xfaLayerFactory: any;
-    structTreeLayerFactory: any;
+    annotationLayerFactory: IPDFAnnotationLayerFactory;
+    xfaLayerFactory: IPDFXfaLayerFactory;
+    structTreeLayerFactory: IPDFStructTreeLayerFactory;
     textHighlighterFactory?: Object | undefined;
     /**
      * - Path for image resources, mainly
@@ -73,7 +82,7 @@ export type PDFPageViewOptions = {
     /**
      * - Localization service.
      */
-    l10n: any;
+    l10n: IL10n;
 };
 /**
  * @implements {IRenderableView}
@@ -89,24 +98,23 @@ export class PDFPageView implements IRenderableView {
     pageLabel: string | null;
     rotation: number;
     scale: number;
-    viewport: any;
-    pdfPageRotate: any;
-    _optionalContentConfigPromise: Promise<any> | null;
+    viewport: import("../src/display/display_utils").PageViewport;
+    pdfPageRotate: number;
+    _optionalContentConfigPromise: Promise<import("../src/display/optional_content_config").OptionalContentConfig> | null;
     hasRestrictedScaling: boolean;
     textLayerMode: number;
-    _annotationMode: any;
     imageResourcesPath: string;
     useOnlyCssZoom: boolean;
     maxCanvasPixels: any;
-    eventBus: any;
-    renderingQueue: any;
-    textLayerFactory: any;
-    annotationLayerFactory: any;
-    xfaLayerFactory: any;
+    eventBus: import("./event_utils").EventBus;
+    renderingQueue: import("./pdf_rendering_queue").PDFRenderingQueue;
+    textLayerFactory: import("./interfaces").IPDFTextLayerFactory;
+    annotationLayerFactory: import("./interfaces").IPDFAnnotationLayerFactory;
+    xfaLayerFactory: import("./interfaces").IL10n;
     textHighlighter: any;
-    structTreeLayerFactory: any;
+    structTreeLayerFactory: import("./interfaces").IPDFStructTreeLayerFactory;
     renderer: string;
-    l10n: any;
+    l10n: import("./interfaces").IL10n;
     paintTask: {
         promise: any;
         onRenderContinue(cont: any): void;
@@ -119,8 +127,8 @@ export class PDFPageView implements IRenderableView {
     _isStandalone: boolean;
     _annotationCanvasMap: any;
     annotationLayer: any;
-    textLayer: any;
-    zoomLayer: (Node & ParentNode) | null;
+    textLayer: import("./text_layer_builder.js").TextLayerBuilder | null;
+    zoomLayer: ParentNode | null;
     xfaLayer: any;
     structTreeLayer: any;
     div: HTMLDivElement;
@@ -147,8 +155,8 @@ export class PDFPageView implements IRenderableView {
     loadingIconDiv: HTMLDivElement | undefined;
     update({ scale, rotation, optionalContentConfigPromise }: {
         scale?: number | undefined;
-        rotation?: any;
-        optionalContentConfigPromise?: any;
+        rotation?: null | undefined;
+        optionalContentConfigPromise?: null | undefined;
     }, ...args: any[]): void;
     /**
      * PLEASE NOTE: Most likely you want to use the `this.reset()` method,
@@ -164,9 +172,9 @@ export class PDFPageView implements IRenderableView {
         redrawAnnotationLayer?: boolean | undefined;
         redrawXfaLayer?: boolean | undefined;
     }): void;
-    get width(): any;
-    get height(): any;
-    getPagePoint(x: any, y: any): any;
+    get width(): number;
+    get height(): number;
+    getPagePoint(x: any, y: any): Object;
     /**
      * @ignore
      */
@@ -191,4 +199,5 @@ export class PDFPageView implements IRenderableView {
     setPageLabel(label: string | null): void;
     determineMaxDimensions(): number;
     maxWidth: number | undefined;
+    #private;
 }

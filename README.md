@@ -17,7 +17,7 @@
 
 Bringing Mozilla's pdf.js to the Angular world. That's not only the core PDF viewer, but also the UI.
 
-[Follow this link](projects/ngx-extended-pdf-viewer/README.md) for a detailed description of how to use the PDF viewer.
+[Follow this link](https://pdfviewer.net) to see the showcase and the setup instructions.
 
 ## Showcase and manual
 

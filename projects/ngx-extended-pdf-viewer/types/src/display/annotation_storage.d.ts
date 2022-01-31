@@ -17,7 +17,7 @@ export class AnnotationStorage {
      * @param {Object} defaultValue
      * @returns {Object}
      */
-    public getValue(key: string, fieldname: any, defaultValue: Object, radioButtonField?: any): Object;
+    public getValue(key: string, fieldname: any, defaultValue: Object, radioButtonField?: undefined): Object;
     /**
      * Set the value for a given key
      *
@@ -27,7 +27,7 @@ export class AnnotationStorage {
      * @param {string} fieldName name of the input field
      * @param {Object} value
      */
-    public setValue(key: string, fieldname: any, value: Object, radioButtonField?: any): void;
+    public setValue(key: string, fieldname: any, value: Object, radioButtonField?: undefined, isDefaultValue?: boolean): void;
     getAll(): any;
     get size(): number;
     /**

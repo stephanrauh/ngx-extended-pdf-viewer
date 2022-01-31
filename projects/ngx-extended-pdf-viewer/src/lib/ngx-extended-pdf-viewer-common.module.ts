@@ -55,6 +55,8 @@ import { PdfOriginalComponent } from './theme/pdf-original-theme/pdf-original.co
 import { PdfDarkThemeComponent } from './theme/pdf-dark-theme/pdf-dark-theme.component';
 import { TranslatePipe } from './translate.pipe';
 import { NgxConsole } from './options/ngx-console';
+import { PdfFindCurrentPageOnlyComponent } from './toolbar/pdf-findbar/pdf-find-current-page-only/pdf-find-current-page-only.component';
+import { PdfFindRangeComponent } from './toolbar/pdf-findbar/pdf-find-range/pdf-find-range.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule],
@@ -90,6 +92,8 @@ import { NgxConsole } from './options/ngx-console';
     PdfFindbarOptionsThreeContainerComponent,
     PdfFindResultsCountComponent,
     PdfFindbarMessageContainerComponent,
+    PdfFindRangeComponent,
+    PdfFindCurrentPageOnlyComponent,
     PdfToolbarComponent,
     PdfFindButtonComponent,
     PdfToggleSidebarComponent,
@@ -141,6 +145,8 @@ import { NgxConsole } from './options/ngx-console';
     PdfFindbarOptionsThreeContainerComponent,
     PdfFindResultsCountComponent,
     PdfFindbarMessageContainerComponent,
+    PdfFindRangeComponent,
+    PdfFindCurrentPageOnlyComponent,
     PdfHandToolComponent,
     PdfRotatePageComponent,
     PdfSelectToolComponent,

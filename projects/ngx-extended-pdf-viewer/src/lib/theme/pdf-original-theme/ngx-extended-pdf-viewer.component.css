@@ -1,9 +1,3 @@
-#viewerContainer {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  position: absolute;
-}
-
 .invisible {
   display: none !important;
 }

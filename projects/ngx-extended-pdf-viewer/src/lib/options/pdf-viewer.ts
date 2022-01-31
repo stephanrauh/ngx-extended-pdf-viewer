@@ -1,3 +1,5 @@
+import { OptionalContentConfig } from "./optional_content_config";
+
 export enum ScrollModeType {
   vertical = 0,
   horizontal = 1,
@@ -32,4 +34,5 @@ export interface IPDFViewer {
   _pages: Array<any>;
   addPageToRenderQueue(pageIndex: number): boolean;
   _getVisiblePages(): Array<any>;
+  optionalContentConfigPromise: Promise<OptionalContentConfig> | null;
 }

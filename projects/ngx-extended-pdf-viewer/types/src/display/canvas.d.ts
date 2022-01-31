@@ -30,12 +30,15 @@ export class CanvasGraphics {
     outputScaleX: number;
     outputScaleY: number;
     _cachedGetSinglePixelWidth: number | null;
-    beginDrawing({ transform, viewport, transparency, background, }: {
+    beginDrawing({ transform, viewport, transparency, background, backgroundColorToReplace, }: {
         transform: any;
         viewport: any;
         transparency?: boolean | undefined;
-        background?: any;
+        background?: null | undefined;
+        backgroundColorToReplace?: null | undefined;
     }): void;
+    background: any;
+    backgroundColorToReplace: any;
     compositeCtx: any;
     transparentCanvas: any;
     _combinedScaleFactor: number | undefined;
@@ -113,7 +116,7 @@ export class CanvasGraphics {
     setFillColorN(...args: any[]): void;
     setStrokeRGBColor(r: any, g: any, b: any): void;
     setFillRGBColor(r: any, g: any, b: any): void;
-    _getPattern(objId: any, matrix?: any): any;
+    _getPattern(objId: any, matrix?: null): any;
     shadingFill(objId: any): void;
     beginInlineImage(): void;
     beginImageData(): void;
@@ -180,11 +183,11 @@ declare class CanvasExtraState {
     maxX: any;
     maxY: any;
     updateCurvePathMinMax(transform: any, x0: any, y0: any, x1: any, y1: any, x2: any, y2: any, x3: any, y3: any): void;
-    getPathBoundingBox(pathType?: string, transform?: any): any[];
+    getPathBoundingBox(pathType?: string, transform?: null): any[];
     updateClipFromPath(): void;
     startNewPathAndClipBox(box: any): void;
     clipBox: any;
-    getClippedPathBoundingBox(pathType?: string, transform?: any): any[] | null;
+    getClippedPathBoundingBox(pathType?: string, transform?: null): any[] | null;
 }
 declare class CachedCanvases {
     constructor(canvasFactory: any);

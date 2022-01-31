@@ -1,3 +1,6 @@
 button.toolbarButton#findNext {
   margin-top: 0;
+  margin-left: -4px !important;
+  margin-right: 3px !important;
+  width: 24px;
 }
