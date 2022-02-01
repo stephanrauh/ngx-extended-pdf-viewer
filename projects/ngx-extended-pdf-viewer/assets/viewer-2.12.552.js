@@ -251,6 +251,12 @@ const defaultOptions = {
 }
 const userOptions = Object.create(null);
 
+if (globalThis.pdfDefaultOptions) {
+  for (const key in globalThis.pdfDefaultOptions) {
+    userOptions[key] = globalThis.pdfDefaultOptions[key];
+  }
+}
+
 class AppOptions {
   constructor() {
     throw new Error("Cannot initialize AppOptions.");
@@ -10682,7 +10688,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.12.550';
+    const viewerVersion = '2.12.552';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -18880,7 +18886,7 @@ exports.Toolbar = Toolbar;
 
 /***/ }),
 /* 44 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -18888,6 +18894,9 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.ViewHistory = void 0;
+
+var _app_options = __webpack_require__(1);
+
 const DEFAULT_VIEW_HISTORY_CACHE_SIZE = 20;
 
 class ViewHistory {
@@ -18927,11 +18936,19 @@ class ViewHistory {
   }
 
   async _writeToStorage() {
+    if (_app_options.AppOptions.get("disableHistory")) {
+      return;
+    }
+
     const databaseStr = JSON.stringify(this.database);
     localStorage.setItem("pdfjs.history", databaseStr);
   }
 
   async _readFromStorage() {
+    if (_app_options.AppOptions.get("disableHistory")) {
+      return undefined;
+    }
+
     return localStorage.getItem("pdfjs.history");
   }
 
@@ -20729,8 +20746,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.12.550';
-const pdfjsBuild = '79c874286';
+const pdfjsVersion = '2.12.552';
+const pdfjsBuild = '5cc5cd329';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

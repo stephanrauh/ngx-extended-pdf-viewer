@@ -2,6 +2,7 @@ export type PDFDocumentLoadingTask = import("./display/api").PDFDocumentLoadingT
 export type PDFDocumentProxy = import("./display/api").PDFDocumentProxy;
 export type PDFPageProxy = import("./display/api").PDFPageProxy;
 export type RenderTask = import("./display/api").RenderTask;
+export type PageViewport = import("./display/display_utils").PageViewport;
 import { AnnotationLayer } from "./display/annotation_layer.js";
 import { AnnotationMode } from "./shared/util.js";
 import { build } from "./display/api.js";

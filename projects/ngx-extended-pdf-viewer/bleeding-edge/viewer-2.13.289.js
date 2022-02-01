@@ -3,7 +3,7 @@ window.ngxZone.runOutsideAngular(() => {
  * @licstart The following is the entire license notice for the
  * Javascript code in this page
  *
- * Copyright 2021 Mozilla Foundation
+ * Copyright 2022 Mozilla Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -250,6 +250,12 @@ const defaultOptions = {
   defaultOptions.renderer.kind += OptionKind.PREFERENCE;
 }
 const userOptions = Object.create(null);
+
+if (globalThis.pdfDefaultOptions) {
+  for (const key in globalThis.pdfDefaultOptions) {
+    userOptions[key] = globalThis.pdfDefaultOptions[key];
+  }
+}
 
 class AppOptions {
   constructor() {
@@ -1191,6 +1197,12 @@ const PDFViewerApplication = {
     this._unblockDocumentLoadEvent();
 
     this._otherError(message, moreInfo);
+
+    this.eventBus.dispatch("documenterror", {
+      source: this,
+      message,
+      reason: moreInfo?.message ?? null
+    });
   },
 
   _otherError(message, moreInfo = null) {
@@ -2797,11 +2809,12 @@ function webViewerWheel(evt) {
       return;
     }
 
-    const previousScale = pdfViewer.currentScale;
+    const deltaMode = evt.deltaMode;
     const delta = (0, _ui_utils.normalizeWheelEventDirection)(evt);
+    const previousScale = pdfViewer.currentScale;
     let ticks = 0;
 
-    if (evt.deltaMode === WheelEvent.DOM_DELTA_LINE || evt.deltaMode === WheelEvent.DOM_DELTA_PAGE) {
+    if (deltaMode === WheelEvent.DOM_DELTA_LINE || deltaMode === WheelEvent.DOM_DELTA_PAGE) {
       if (Math.abs(delta) >= 1) {
         ticks = Math.sign(delta);
       } else {
@@ -10749,7 +10762,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.13.288';
+    const viewerVersion = '2.13.289';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -17235,7 +17248,10 @@ class AbortException extends BaseException {
 exports.AbortException = AbortException;
 
 function bytesToString(bytes) {
-  assert(bytes !== null && typeof bytes === "object" && bytes.length !== undefined, "Invalid argument for bytesToString");
+  if (typeof bytes !== "object" || bytes === null || bytes.length === undefined) {
+    unreachable("Invalid argument for bytesToString");
+  }
+
   const length = bytes.length;
   const MAX_ARGUMENT_COUNT = 8192;
 
@@ -17255,7 +17271,10 @@ function bytesToString(bytes) {
 }
 
 function stringToBytes(str) {
-  assert(typeof str === "string", "Invalid argument for stringToBytes");
+  if (typeof str !== "string") {
+    unreachable("Invalid argument for stringToBytes");
+  }
+
   const length = str.length;
   const bytes = new Uint8Array(length);
 
@@ -17271,8 +17290,11 @@ function arrayByteLength(arr) {
     return arr.length;
   }
 
-  assert(arr.byteLength !== undefined, "arrayByteLength - invalid argument.");
-  return arr.byteLength;
+  if (arr.byteLength !== undefined) {
+    return arr.byteLength;
+  }
+
+  unreachable("Invalid argument for arrayByteLength");
 }
 
 function arraysToBytes(arr) {
@@ -18973,7 +18995,7 @@ exports.Toolbar = Toolbar;
 
 /***/ }),
 /* 44 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -18981,6 +19003,9 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.ViewHistory = void 0;
+
+var _app_options = __webpack_require__(1);
+
 const DEFAULT_VIEW_HISTORY_CACHE_SIZE = 20;
 
 class ViewHistory {
@@ -19020,11 +19045,19 @@ class ViewHistory {
   }
 
   async _writeToStorage() {
+    if (_app_options.AppOptions.get("disableHistory")) {
+      return;
+    }
+
     const databaseStr = JSON.stringify(this.database);
     localStorage.setItem("pdfjs.history", databaseStr);
   }
 
   async _readFromStorage() {
+    if (_app_options.AppOptions.get("disableHistory")) {
+      return undefined;
+    }
+
     return localStorage.getItem("pdfjs.history");
   }
 
@@ -20348,7 +20381,7 @@ class GenericScripting {
 
   async dispatchEventInSandbox(event) {
     const sandbox = await this._ready;
-    sandbox.dispatchEvent(event);
+    setTimeout(() => sandbox.dispatchEvent(event), 0);
   }
 
   async destroySandbox() {
@@ -20822,8 +20855,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.13.288';
-const pdfjsBuild = 'de1d45802';
+const pdfjsVersion = '2.13.289';
+const pdfjsBuild = '799908d33';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
