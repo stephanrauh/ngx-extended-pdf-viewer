@@ -8,8 +8,7 @@ if [ "$BRANCH" == "bleeding-edge" ]; then
 fi
 
 gulp minified
-gulp minified-es5
-
+gulp minified-legacy
 
 cd ../ngx-extended-pdf-viewer
 # cd inlineImageFiles

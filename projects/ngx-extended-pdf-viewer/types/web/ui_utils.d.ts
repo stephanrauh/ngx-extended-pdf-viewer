@@ -93,7 +93,7 @@ export function backtrackBeforeAllVisibleElements(index: number, views: any[], t
  * @returns {number} Index of the first array element to pass the test,
  *                   or |items.length| if no such element exists.
  */
-export function binarySearchFirstItem(items: any, condition: any): number;
+export function binarySearchFirstItem(items: any, condition: any, start?: number): number;
 export const DEFAULT_SCALE: 1;
 export const DEFAULT_SCALE_DELTA: 1.1;
 export const DEFAULT_SCALE_VALUE: "auto";
