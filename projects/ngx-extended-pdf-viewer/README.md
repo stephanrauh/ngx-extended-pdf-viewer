@@ -13,15 +13,12 @@
   CDN: <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">unpkg.com</a>
  </p>
 
-## What's new in version 11?
+## What's new in version 12?
 
-Version 11.0.0 updates to pdf.js 2.12 (default) and 2.13 (bleeding-edge) branch. It also continues work on the performance, because some developers ask me to get rid the of current limit of several thousand pages. In particular, the improved single-page views plus lazy loading of the thumbnails allows your to open PDF documents with more then 10.000 pages.
-
-The findbar offers two new options to limit the search to the current page or a an arbitrary range of pages.
-
-Version 11 contains two potentially breaking changes:
-- The event `(pdfLoaded)` is now fired later. Until version 10.0, it was fired before loading the document. If you rely on the timing of the old event, use the new event `(pdfLoadingStarts)` instead.
-- I've removed some `div` tags from the findbar. Now it re-renders more smoothly on small screens. However, this might break your CSS rules if you've customized the findbar with CSS.
+Version 12 has a small but breaking change. If you're two-way binding with a form that contains checkboxes that behave like radiobuttons
+(and yes - I know that's a long list of conditions!), ngx-extended-pdf-viewer reported simply true or false if one of the checkbox
+is checked. You couldn't tell which checkbox was checked. Now that's fixed. ngx-extended-pdf-viewer uses the "export value", as
+intended by the author of the PDF file.
 
 ## Showcase and manual
 

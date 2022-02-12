@@ -164,7 +164,6 @@ export namespace CMapCompressionType {
     export const BINARY: number;
     export const STREAM: number;
 }
-export function createObjectURL(data: any, contentType?: string, forceDataSchema?: boolean): string;
 /**
  * Promise Capability object.
  *

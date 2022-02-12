@@ -2066,7 +2066,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.12.554',
+    apiVersion: '2.12.556',
     source: {
       data: source.data,
       url: source.url,
@@ -4266,9 +4266,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.12.554';
+const version = '2.12.556';
 exports.version = version;
-const build = 'ba9a4348a';
+const build = '756ce4f2d';
 exports.build = build;
 
 /***/ }),
@@ -4871,6 +4871,8 @@ class AnnotationStorage {
             window.setFormValue(fieldname, value.items);
           } else if (value.emitMessage === false) {} else if (value.radioValue) {
             window.setFormValue(fieldname, value.radioValue);
+          } else if (value.exportValue) {
+            window.setFormValue(fieldname, value.exportValue);
           } else {
             for (const val of Object.values(value)) {
               window.setFormValue(fieldname, val);
@@ -10468,12 +10470,14 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
         }
 
         storage.setValue(checkbox.id, this.data.fieldName, {
-          value: curChecked
+          value: curChecked,
+          emitMessage: false
         });
       }
 
       storage.setValue(id, this.data.fieldName, {
-        value: checked
+        value: checked,
+        exportValue: checked ? data.exportValue : null
       });
     });
     element.addEventListener("resetform", event => {
@@ -16054,8 +16058,8 @@ var _svg = __w_pdfjs_require__(22);
 
 var _xfa_layer = __w_pdfjs_require__(20);
 
-const pdfjsVersion = '2.12.554';
-const pdfjsBuild = 'ba9a4348a';
+const pdfjsVersion = '2.12.556';
+const pdfjsBuild = '756ce4f2d';
 {
   if (_is_node.isNodeJS) {
     const {

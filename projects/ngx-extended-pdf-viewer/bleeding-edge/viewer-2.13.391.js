@@ -4944,14 +4944,14 @@ class PasswordPrompt {
     this._isViewerEmbedded = isViewerEmbedded;
     this.updateCallback = null;
     this.reason = null;
-    this.submitButton.addEventListener("click", this.verify.bind(this));
-    this.cancelButton.addEventListener("click", this.close.bind(this));
+    this.submitButton.addEventListener("click", this.#verify.bind(this));
+    this.cancelButton.addEventListener("click", this.#cancel.bind(this));
     this.input.addEventListener("keydown", e => {
       if (e.keyCode === 13) {
-        this.verify();
+        this.#verify();
       }
     });
-    this.overlayManager.register(this.overlayName, this.container, this.close.bind(this), true);
+    this.overlayManager.register(this.overlayName, this.container, this.#cancel.bind(this), true);
   }
 
   async open() {
@@ -4974,13 +4974,18 @@ class PasswordPrompt {
     });
   }
 
-  verify() {
+  #verify() {
     const password = this.input.value;
 
     if (password?.length > 0) {
       this.close();
       this.updateCallback(password);
     }
+  }
+
+  #cancel() {
+    this.close();
+    this.updateCallback(new Error("PasswordPrompt cancelled."));
   }
 
   setUpdateCallback(updateCallback, reason) {
@@ -10741,7 +10746,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.13.379';
+    const viewerVersion = '2.13.391';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -16649,7 +16654,6 @@ exports.arrayByteLength = arrayByteLength;
 exports.arraysToBytes = arraysToBytes;
 exports.assert = assert;
 exports.bytesToString = bytesToString;
-exports.createObjectURL = createObjectURL;
 exports.createPromiseCapability = createPromiseCapability;
 exports.createValidAbsoluteUrl = createValidAbsoluteUrl;
 exports.escapeString = escapeString;
@@ -17657,30 +17661,6 @@ function createPromiseCapability() {
     };
   });
   return capability;
-}
-
-function createObjectURL(data, contentType = "", forceDataSchema = false) {
-  if (URL.createObjectURL && typeof Blob !== "undefined" && !forceDataSchema) {
-    return URL.createObjectURL(new Blob([data], {
-      type: contentType
-    }));
-  }
-
-  const digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-  let buffer = `data:${contentType};base64,`;
-
-  for (let i = 0, ii = data.length; i < ii; i += 3) {
-    const b1 = data[i] & 0xff;
-    const b2 = data[i + 1] & 0xff;
-    const b3 = data[i + 2] & 0xff;
-    const d1 = b1 >> 2,
-          d2 = (b1 & 3) << 4 | b2 >> 4;
-    const d3 = i + 1 < ii ? (b2 & 0xf) << 2 | b3 >> 6 : 64;
-    const d4 = i + 2 < ii ? b3 & 0x3f : 64;
-    buffer += digits[d1] + digits[d2] + digits[d3] + digits[d4];
-  }
-
-  return buffer;
 }
 
 /***/ }),
@@ -20833,8 +20813,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.13.379';
-const pdfjsBuild = '5eca9492e';
+const pdfjsVersion = '2.13.391';
+const pdfjsBuild = 'd7ed2b702';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
