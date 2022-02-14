@@ -2215,12 +2215,9 @@ let validateFileURL;
         return;
       }
 
-      const {
-        origin,
-        protocol
-      } = new URL(file, window.location.href);
+      const fileOrigin = new URL(file, window.location.href).origin;
 
-      if (origin !== viewerOrigin && protocol !== "blob:") {
+      if (fileOrigin !== viewerOrigin) {
         throw new Error("file origin does not match viewer's");
       }
     } catch (ex) {
@@ -10746,7 +10743,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.13.391';
+    const viewerVersion = '2.13.407';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -11907,6 +11904,12 @@ class BaseViewer {
   }
 
   update() {
+    if (this.scrollMode === _ui_utils.ScrollMode.PAGE) {
+      this.viewer.classList.add("singlePageView");
+    } else {
+      this.viewer.classList.remove("singlePageView");
+    }
+
     const visible = this._getVisiblePages();
 
     const visiblePages = visible.views,
@@ -20813,8 +20816,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.13.391';
-const pdfjsBuild = 'd7ed2b702';
+const pdfjsVersion = '2.13.407';
+const pdfjsBuild = 'cc58c3e9a';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

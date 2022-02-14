@@ -336,3 +336,4 @@
 - 11.2.0-alpha.4 #1166 make sure that the legacy ES5 builds are compatible with a wide range of browsers (but not IE11); added the attribute `[forceUsingLegacyES5]` as a last resort to solve browser compatibility issues; reduced the memory footprint of the minified `viewer*.min.js` files
 - 11.2.0 #1182 stop printing the empty console message
 - 12.0.0-alpha.0 #1183 support checkboxes that are radiobuttons in disguise correctly
+- 12.0.0-alpha.1 #1201 remove the margin in single-page mode (this CSS rule got lost in version 11.0.0-alpha.3)

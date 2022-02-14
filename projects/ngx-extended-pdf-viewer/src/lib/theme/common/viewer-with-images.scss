@@ -73,13 +73,8 @@ ngx-extended-pdf-viewer {
     border: none;
   }
 
-  .pdfViewer.singlePageView {
-    display: inline-block;
-  }
-
   .pdfViewer.singlePageView .page {
     margin: 0;
-    border: none;
   }
 
   .html .pdfViewer.scrollHorizontal,

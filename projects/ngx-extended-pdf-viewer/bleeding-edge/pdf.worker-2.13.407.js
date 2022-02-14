@@ -134,7 +134,7 @@ class WorkerMessageHandler {
     const WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.13.391';
+    const workerVersion = '2.13.407';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -151,7 +151,13 @@ class WorkerMessageHandler {
     }
 
     if (typeof ReadableStream === "undefined") {
-      throw new Error("The browser/environment lacks native support for critical " + "functionality used by the PDF.js library (e.g. `ReadableStream`); " + "please use a `legacy`-build instead.");
+      const partialMsg = "The browser/environment lacks native support for critical " + "functionality used by the PDF.js library (e.g. `ReadableStream`); ";
+
+      if (isNodeJS) {
+        throw new Error(partialMsg + "please use a `legacy`-build instead.");
+      }
+
+      throw new Error(partialMsg + "please update to a supported browser.");
     }
 
     const docId = docParams.docId;
@@ -4028,7 +4034,8 @@ class Page {
         resources: this.resources,
         includeMarkedContent,
         combineTextItems,
-        sink
+        sink,
+        viewBox: this.view
       });
     });
   }
@@ -23747,7 +23754,8 @@ class PartialEvaluator {
     combineTextItems = false,
     includeMarkedContent = false,
     sink,
-    seenStyles = new Set()
+    seenStyles = new Set(),
+    viewBox
   }) {
     resources = resources || _primitives.Dict.empty;
     stateManager = stateManager || new StateManager(new TextState());
@@ -23904,18 +23912,25 @@ class PartialEvaluator {
     }
 
     function compareWithLastPosition() {
-      if (!combineTextItems || !textState.font || !textContentItem.prevTransform) {
-        return;
-      }
-
       const currentTransform = getCurrentTextTransform();
       let posX = currentTransform[4];
       let posY = currentTransform[5];
+      const shiftedX = posX - viewBox[0];
+      const shiftedY = posY - viewBox[1];
+
+      if (shiftedX < 0 || shiftedX > viewBox[2] || shiftedY < 0 || shiftedY > viewBox[3]) {
+        return false;
+      }
+
+      if (!combineTextItems || !textState.font || !textContentItem.prevTransform) {
+        return true;
+      }
+
       let lastPosX = textContentItem.prevTransform[4];
       let lastPosY = textContentItem.prevTransform[5];
 
       if (lastPosX === posX && lastPosY === posY) {
-        return;
+        return true;
       }
 
       let rotate = -1;
@@ -23957,16 +23972,16 @@ class PartialEvaluator {
         if (advanceY < textOrientation * textContentItem.negativeSpaceMax) {
           if (Math.abs(advanceX) > 0.5 * textContentItem.width) {
             appendEOL();
-            return;
+            return true;
           }
 
           flushTextContentItem();
-          return;
+          return true;
         }
 
         if (Math.abs(advanceX) > textContentItem.width) {
           appendEOL();
-          return;
+          return true;
         }
 
         if (advanceY <= textOrientation * textContentItem.trackingSpaceMin) {
@@ -23987,7 +24002,7 @@ class PartialEvaluator {
           }
         }
 
-        return;
+        return true;
       }
 
       const advanceX = (posX - lastPosX) / textContentItem.textAdvanceScale;
@@ -23997,16 +24012,16 @@ class PartialEvaluator {
       if (advanceX < textOrientation * textContentItem.negativeSpaceMax) {
         if (Math.abs(advanceY) > 0.5 * textContentItem.height) {
           appendEOL();
-          return;
+          return true;
         }
 
         flushTextContentItem();
-        return;
+        return true;
       }
 
       if (Math.abs(advanceY) > textContentItem.height) {
         appendEOL();
-        return;
+        return true;
       }
 
       if (advanceX <= textOrientation * textContentItem.trackingSpaceMin) {
@@ -24026,6 +24041,8 @@ class PartialEvaluator {
           textContentItem.width += advanceX;
         }
       }
+
+      return true;
     }
 
     function buildTextContentItem({
@@ -24079,7 +24096,10 @@ class PartialEvaluator {
           continue;
         }
 
-        compareWithLastPosition();
+        if (!compareWithLastPosition()) {
+          continue;
+        }
+
         const textChunk = ensureTextContentItem();
 
         if (glyph.isZeroWidthDiacritic) {
@@ -24458,7 +24478,8 @@ class PartialEvaluator {
                 combineTextItems,
                 includeMarkedContent,
                 sink: sinkWrapper,
-                seenStyles
+                seenStyles,
+                viewBox
               }).then(function () {
                 if (!sinkWrapper.enqueueInvoked) {
                   emptyXObjectCache.set(name, xobj.dict.objId, true);
@@ -73827,8 +73848,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.13.391';
-const pdfjsBuild = 'd7ed2b702';
+const pdfjsVersion = '2.13.407';
+const pdfjsBuild = 'cc58c3e9a';
 })();
 
 /******/ 	return __webpack_exports__;

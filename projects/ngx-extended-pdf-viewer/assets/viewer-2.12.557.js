@@ -10688,7 +10688,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.12.556';
+    const viewerVersion = '2.12.557';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -11822,6 +11822,12 @@ class BaseViewer {
   }
 
   update() {
+    if (this.scrollMode === _ui_utils.ScrollMode.PAGE) {
+      this.viewer.classList.add("singlePageView");
+    } else {
+      this.viewer.classList.remove("singlePageView");
+    }
+
     const visible = this._getVisiblePages();
 
     const visiblePages = visible.views,
@@ -20746,8 +20752,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.12.556';
-const pdfjsBuild = '756ce4f2d';
+const pdfjsVersion = '2.12.557';
+const pdfjsBuild = 'ab5a01e2b';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
