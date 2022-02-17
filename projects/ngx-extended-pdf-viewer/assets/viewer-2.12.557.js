@@ -11765,8 +11765,10 @@ class BaseViewer {
     this.#ensurePdfPageLoaded(pageView).then(() => {
       this.renderingQueue.renderView(pageView);
 
-      if (this.currentPageNumber !== pageNumber) {
-        this.currentPageNumber = pageNumber;
+      if (this.pageViewMode === "single") {
+        if (this.currentPageNumber !== pageNumber) {
+          this.currentPageNumber = pageNumber;
+        }
       }
     });
 
