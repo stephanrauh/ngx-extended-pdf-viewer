@@ -1338,7 +1338,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.13.408',
+    apiVersion: '2.13.439',
     source: {
       data: source.data,
       url: source.url,
@@ -3209,32 +3209,31 @@ class WorkerTransport {
 }
 
 class PDFObjects {
-  constructor() {
-    this._objs = Object.create(null);
-  }
+  #objs = Object.create(null);
 
-  _ensureObj(objId) {
-    if (this._objs[objId]) {
-      return this._objs[objId];
+  #ensureObj(objId) {
+    const obj = this.#objs[objId];
+
+    if (obj) {
+      return obj;
     }
 
-    return this._objs[objId] = {
+    return this.#objs[objId] = {
       capability: (0, _util.createPromiseCapability)(),
-      data: null,
-      resolved: false
+      data: null
     };
   }
 
   get(objId, callback = null) {
     if (callback) {
-      this._ensureObj(objId).capability.promise.then(callback);
-
+      const obj = this.#ensureObj(objId);
+      obj.capability.promise.then(() => callback(obj.data));
       return null;
     }
 
-    const obj = this._objs[objId];
+    const obj = this.#objs[objId];
 
-    if (!obj || !obj.resolved) {
+    if (!obj?.capability.settled) {
       throw new Error(`Requesting object that isn't resolved yet ${objId}.`);
     }
 
@@ -3242,20 +3241,18 @@ class PDFObjects {
   }
 
   has(objId) {
-    const obj = this._objs[objId];
-    return obj?.resolved || false;
+    const obj = this.#objs[objId];
+    return obj?.capability.settled || false;
   }
 
-  resolve(objId, data) {
-    const obj = this._ensureObj(objId);
-
-    obj.resolved = true;
+  resolve(objId, data = null) {
+    const obj = this.#ensureObj(objId);
     obj.data = data;
-    obj.capability.resolve(data);
+    obj.capability.resolve();
   }
 
   clear() {
-    this._objs = Object.create(null);
+    this.#objs = Object.create(null);
   }
 
 }
@@ -3454,9 +3451,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.13.408';
+const version = '2.13.439';
 exports.version = version;
-const build = 'e5e95d17f';
+const build = 'f038568c6';
 exports.build = build;
 
 /***/ }),
@@ -3483,15 +3480,13 @@ var _base_factory = __w_pdfjs_require__(5);
 var _util = __w_pdfjs_require__(1);
 
 const SVG_NS = "http://www.w3.org/2000/svg";
-const PixelsPerInch = {
-  CSS: 96.0,
-  PDF: 72.0,
 
-  get PDF_TO_CSS_UNITS() {
-    return (0, _util.shadow)(this, "PDF_TO_CSS_UNITS", this.CSS / this.PDF);
-  }
+class PixelsPerInch {
+  static CSS = 96.0;
+  static PDF = 72.0;
+  static PDF_TO_CSS_UNITS = this.CSS / this.PDF;
+}
 
-};
 exports.PixelsPerInch = PixelsPerInch;
 
 class DOMCanvasFactory extends _base_factory.BaseCanvasFactory {
@@ -4922,6 +4917,10 @@ function mirrorContextOperations(ctx, destCtx) {
 }
 
 function addContextCurrentTransform(ctx) {
+  if (ctx._transformStack) {
+    ctx._transformStack = [];
+  }
+
   if (ctx.mozCurrentTransform) {
     return;
   }
@@ -4976,6 +4975,10 @@ function addContextCurrentTransform(ctx) {
   };
 
   ctx.restore = function ctxRestore() {
+    if (this._transformStack.length === 0) {
+      (0, _util.warn)("Tried to restore a ctx when the stack was already empty.");
+    }
+
     const prev = this._transformStack.pop();
 
     if (prev) {
@@ -5849,7 +5852,7 @@ class CanvasGraphics {
   }
 
   endDrawing() {
-    while (this.stateStack.length || this.current.activeSMask !== null) {
+    while (this.stateStack.length || this.inSMaskMode) {
       this.restore();
     }
 
@@ -6054,8 +6057,12 @@ class CanvasGraphics {
     }
   }
 
+  get inSMaskMode() {
+    return !!this.suspendedCtx;
+  }
+
   checkSMaskState() {
-    const inSMaskMode = !!this.suspendedCtx;
+    const inSMaskMode = this.inSMaskMode;
 
     if (this.current.activeSMask && !inSMaskMode) {
       this.beginSMaskMode();
@@ -6065,7 +6072,7 @@ class CanvasGraphics {
   }
 
   beginSMaskMode() {
-    if (this.suspendedCtx) {
+    if (this.inSMaskMode) {
       throw new Error("beginSMaskMode called while already in smask mode");
     }
 
@@ -6083,7 +6090,7 @@ class CanvasGraphics {
   }
 
   endSMaskMode() {
-    if (!this.suspendedCtx) {
+    if (!this.inSMaskMode) {
       throw new Error("endSMaskMode called while not in smask mode");
     }
 
@@ -6091,7 +6098,6 @@ class CanvasGraphics {
 
     copyCtxState(this.ctx, this.suspendedCtx);
     this.ctx = this.suspendedCtx;
-    this.current.activeSMask = null;
     this.suspendedCtx = null;
   }
 
@@ -6119,20 +6125,33 @@ class CanvasGraphics {
   }
 
   save() {
-    this.ctx.save();
+    if (this.inSMaskMode) {
+      copyCtxState(this.ctx, this.suspendedCtx);
+      this.suspendedCtx.save();
+    } else {
+      this.ctx.save();
+    }
+
     const old = this.current;
     this.stateStack.push(old);
     this.current = old.clone();
   }
 
   restore() {
-    if (this.stateStack.length === 0 && this.current.activeSMask) {
+    if (this.stateStack.length === 0 && this.inSMaskMode) {
       this.endSMaskMode();
     }
 
     if (this.stateStack.length !== 0) {
       this.current = this.stateStack.pop();
-      this.ctx.restore();
+
+      if (this.inSMaskMode) {
+        this.suspendedCtx.restore();
+        copyCtxState(this.suspendedCtx, this.ctx);
+      } else {
+        this.ctx.restore();
+      }
+
       this.checkSMaskState();
       this.pendingClip = null;
       this._cachedGetSinglePixelWidth = null;
@@ -6955,10 +6974,9 @@ class CanvasGraphics {
     }
 
     this.save();
-    const suspendedCtx = this.suspendedCtx;
 
-    if (this.current.activeSMask) {
-      this.suspendedCtx = null;
+    if (this.inSMaskMode) {
+      this.endSMaskMode();
       this.current.activeSMask = null;
     }
 
@@ -7039,10 +7057,7 @@ class CanvasGraphics {
     copyCtxState(currentCtx, groupCtx);
     this.ctx = groupCtx;
     this.setGState([["BM", "source-over"], ["ca", 1], ["CA", 1]]);
-    this.groupStack.push({
-      ctx: currentCtx,
-      suspendedCtx
-    });
+    this.groupStack.push(currentCtx);
     this.groupLevel++;
   }
 
@@ -7053,16 +7068,9 @@ class CanvasGraphics {
 
     this.groupLevel--;
     const groupCtx = this.ctx;
-    const {
-      ctx,
-      suspendedCtx
-    } = this.groupStack.pop();
+    const ctx = this.groupStack.pop();
     this.ctx = ctx;
     this.ctx.imageSmoothingEnabled = false;
-
-    if (suspendedCtx) {
-      this.suspendedCtx = suspendedCtx;
-    }
 
     if (group.smask) {
       this.tempSMask = this.smaskStack.pop();
@@ -7942,6 +7950,7 @@ class TilingPattern {
 
     tmpCtx.translate(-(dimx.scale * adjustedX0), -(dimy.scale * adjustedY0));
     graphics.transform(dimx.scale, 0, 0, dimy.scale, 0, 0);
+    tmpCtx.save();
     this.clipBbox(graphics, adjustedX0, adjustedY0, adjustedX1, adjustedY1);
     graphics.baseTransform = graphics.ctx.mozCurrentTransform.slice();
     graphics.executeOperatorList(operatorList);
@@ -15907,8 +15916,8 @@ var _svg = __w_pdfjs_require__(22);
 
 var _xfa_layer = __w_pdfjs_require__(20);
 
-const pdfjsVersion = '2.13.408';
-const pdfjsBuild = 'e5e95d17f';
+const pdfjsVersion = '2.13.439';
+const pdfjsBuild = 'f038568c6';
 {
   if (_is_node.isNodeJS) {
     const {

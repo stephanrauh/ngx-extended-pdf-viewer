@@ -807,6 +807,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   ngOnInit() {
+    window['setNgxExtendedPdfViewerSource'] = (url: string) => {
+      this._src = url;
+      console.log(url);
+      this.srcChange.emit(url);
+    }
+
     if (isPlatformBrowser(this.platformId)) {
       const link = document.createElement('link');
       link.href = this.localeFolderPath + '/locale.properties';

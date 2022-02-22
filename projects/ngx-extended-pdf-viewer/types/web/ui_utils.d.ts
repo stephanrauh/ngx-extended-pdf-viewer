@@ -107,13 +107,6 @@ export const DEFAULT_SCALE_VALUE: "auto";
  */
 export function getActiveOrFocusedElement(): Element;
 /**
- * Returns scale factor for the canvas. It makes sense for the HiDPI displays.
- * @returns {Object} The object with horizontal (sx) and vertical (sy)
- *                   scales. The scaled property is set to false if scaling is
- *                   not required, true otherwise.
- */
-export function getOutputScale(ctx: any): Object;
-/**
  * @typedef {Object} GetPageSizeInchesParameters
  * @property {number[]} view
  * @property {number} userUnit
@@ -178,6 +171,23 @@ export const MIN_SCALE: 0.1;
 export function noContextMenuHandler(evt: any): void;
 export function normalizeWheelEventDelta(evt: any): number;
 export function normalizeWheelEventDirection(evt: any): number;
+/**
+ * Scale factors for the canvas, necessary with HiDPI displays.
+ */
+export class OutputScale {
+    /**
+     * @type {number} Horizontal scale.
+     */
+    sx: number;
+    /**
+     * @type {number} Vertical scale.
+     */
+    sy: number;
+    /**
+     * @type {boolean} Returns `true` when scaling is required, `false` otherwise.
+     */
+    get scaled(): boolean;
+}
 /**
  * Helper function to parse query string (e.g. ?param1=value&param2=...).
  * @param {string}

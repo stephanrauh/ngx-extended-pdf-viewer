@@ -3,7 +3,7 @@ window.ngxZone.runOutsideAngular(() => {
  * @licstart The following is the entire license notice for the
  * Javascript code in this page
  *
- * Copyright 2022 Mozilla Foundation
+ * Copyright 2021 Mozilla Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,13 @@ exports.compatibilityParams = compatibilityParams;
   const maxTouchPoints = typeof navigator !== "undefined" && navigator.maxTouchPoints || 1;
   const isAndroid = /Android/.test(userAgent);
   const isIOS = /\b(iPad|iPhone|iPod)(?=;)/.test(userAgent) || platform === "MacIntel" && maxTouchPoints > 1;
+  const isIOSChrome = /CriOS/.test(userAgent);
+
+  (function checkOnBlobSupport() {
+    if (isIOSChrome) {
+      compatibilityParams.disableCreateObjectURL = true;
+    }
+  })();
 
   (function checkCanvasSizeLimitation() {
     if (isIOS || isAndroid) {
@@ -345,23 +352,23 @@ var _pdfjsLib = __webpack_require__(5);
 
 var _pdf_cursor_tools = __webpack_require__(6);
 
-var _pdf_link_service = __webpack_require__(8);
+var _overlay_manager = __webpack_require__(8);
 
-var _overlay_manager = __webpack_require__(9);
+var _password_prompt = __webpack_require__(9);
 
-var _password_prompt = __webpack_require__(10);
+var _pdf_attachment_viewer = __webpack_require__(10);
 
-var _pdf_attachment_viewer = __webpack_require__(11);
+var _pdf_document_properties = __webpack_require__(12);
 
-var _pdf_document_properties = __webpack_require__(13);
+var _pdf_find_bar = __webpack_require__(13);
 
-var _pdf_find_bar = __webpack_require__(14);
+var _pdf_find_controller = __webpack_require__(14);
 
-var _pdf_find_controller = __webpack_require__(15);
+var _pdf_history = __webpack_require__(18);
 
-var _pdf_history = __webpack_require__(19);
+var _pdf_layer_viewer = __webpack_require__(19);
 
-var _pdf_layer_viewer = __webpack_require__(20);
+var _pdf_link_service = __webpack_require__(20);
 
 var _pdf_outline_viewer = __webpack_require__(21);
 
@@ -511,8 +518,8 @@ const PDFViewerApplication = {
 
     await this._initializeL10n();
 
-    if (this.isViewerEmbedded && _app_options.AppOptions.get("externalLinkTarget") === _pdf_link_service.LinkTarget.NONE) {
-      _app_options.AppOptions.set("externalLinkTarget", _pdf_link_service.LinkTarget.TOP);
+    if (this.isViewerEmbedded && _app_options.AppOptions.get("externalLinkTarget") === _pdfjsLib.LinkTarget.NONE) {
+      _app_options.AppOptions.set("externalLinkTarget", _pdfjsLib.LinkTarget.TOP);
     }
 
     await this._initializeViewerComponents();
@@ -676,7 +683,16 @@ const PDFViewerApplication = {
       appConfig,
       externalServices
     } = this;
-    const eventBus = externalServices.isInAutomation ? new _event_utils.AutomationEventBus() : new _event_utils.EventBus();
+    let eventBus;
+
+    if (appConfig.eventBus) {
+      eventBus = appConfig.eventBus;
+    } else if (externalServices.isInAutomation) {
+      eventBus = new _event_utils.AutomationEventBus();
+    } else {
+      eventBus = new _event_utils.EventBus();
+    }
+
     this.eventBus = eventBus;
     this.overlayManager = new _overlay_manager.OverlayManager();
     const pdfRenderingQueue = new _pdf_rendering_queue.PDFRenderingQueue();
@@ -855,7 +871,7 @@ const PDFViewerApplication = {
   },
 
   get supportsFullscreen() {
-    return (0, _pdfjsLib.shadow)(this, "supportsFullscreen", document.fullscreenEnabled || document.webkitFullscreenEnabled);
+    return (0, _pdfjsLib.shadow)(this, "supportsFullscreen", document.fullscreenEnabled || document.mozFullScreenEnabled || document.webkitFullscreenEnabled);
   },
 
   get supportsIntegratedFind() {
@@ -1190,12 +1206,6 @@ const PDFViewerApplication = {
     this._unblockDocumentLoadEvent();
 
     this._otherError(message, moreInfo);
-
-    this.eventBus.dispatch("documenterror", {
-      source: this,
-      message,
-      reason: moreInfo?.message ?? null
-    });
   },
 
   _otherError(message, moreInfo = null) {
@@ -2215,9 +2225,12 @@ let validateFileURL;
         return;
       }
 
-      const fileOrigin = new URL(file, window.location.href).origin;
+      const {
+        origin,
+        protocol
+      } = new URL(file, window.location.href);
 
-      if (fileOrigin !== viewerOrigin) {
+      if (origin !== viewerOrigin && protocol !== "blob:") {
         throw new Error("file origin does not match viewer's");
       }
     } catch (ex) {
@@ -2557,16 +2570,33 @@ let webViewerFileInputChange, webViewerOpenFile;
     }
 
     const file = evt.fileInput.files[0];
-    let url = URL.createObjectURL(file);
 
-    if (file.name) {
-      url = {
-        url,
-        originalUrl: file.name
+    if (!_app_options.compatibilityParams.disableCreateObjectURL) {
+      let url = URL.createObjectURL(file);
+
+      if (file.name) {
+        url = {
+          url,
+          originalUrl: file.name
+        };
+      }
+
+      PDFViewerApplication.open(url);
+
+      if (window["setNgxExtendedPdfViewerSource"]) {
+        window["setNgxExtendedPdfViewerSource"](file.name ? file.name : url);
+      }
+    } else {
+      PDFViewerApplication.setTitleUsingUrl(file.name);
+      const fileReader = new FileReader();
+
+      fileReader.onload = function webViewerChangeFileReaderOnload(event) {
+        const buffer = event.target.result;
+        PDFViewerApplication.open(new Uint8Array(buffer));
       };
-    }
 
-    PDFViewerApplication.open(url);
+      fileReader.readAsArrayBuffer(file);
+    }
   };
 
   webViewerOpenFile = function (evt) {
@@ -2678,8 +2708,7 @@ function webViewerFindFromUrlHash(evt) {
     ignoreAccents: false,
     fuzzySearch: false,
     highlightAll: true,
-    findPrevious: false,
-    matchDiacritics: true
+    findPrevious: false
   });
 }
 
@@ -2787,12 +2816,11 @@ function webViewerWheel(evt) {
       return;
     }
 
-    const deltaMode = evt.deltaMode;
-    const delta = (0, _ui_utils.normalizeWheelEventDirection)(evt);
     const previousScale = pdfViewer.currentScale;
+    const delta = (0, _ui_utils.normalizeWheelEventDirection)(evt);
     let ticks = 0;
 
-    if (deltaMode === WheelEvent.DOM_DELTA_LINE || deltaMode === WheelEvent.DOM_DELTA_PAGE) {
+    if (evt.deltaMode === WheelEvent.DOM_DELTA_LINE || evt.deltaMode === WheelEvent.DOM_DELTA_PAGE) {
       if (Math.abs(delta) >= 1) {
         ticks = Math.sign(delta);
       } else {
@@ -3187,7 +3215,6 @@ exports.noContextMenuHandler = noContextMenuHandler;
 exports.normalizeWheelEventDelta = normalizeWheelEventDelta;
 exports.normalizeWheelEventDirection = normalizeWheelEventDirection;
 exports.parseQueryString = parseQueryString;
-exports.removeNullCharacters = removeNullCharacters;
 exports.roundToDivide = roundToDivide;
 exports.scrollIntoView = scrollIntoView;
 exports.watchScroll = watchScroll;
@@ -3370,24 +3397,8 @@ function parseQueryString(query) {
   return params;
 }
 
-const NullCharactersRegExp = /\x00/g;
-const InvisibleCharactersRegExp = /[\x01-\x1F]/g;
-
-function removeNullCharacters(str, replaceInvisible = false) {
-  if (typeof str !== "string") {
-    console.error(`The argument must be a string.`);
-    return str;
-  }
-
-  if (replaceInvisible) {
-    str = str.replace(InvisibleCharactersRegExp, " ");
-  }
-
-  return str.replace(NullCharactersRegExp, "");
-}
-
-function binarySearchFirstItem(items, condition, start = 0) {
-  let minIndex = start;
+function binarySearchFirstItem(items, condition) {
+  let minIndex = 0;
   let maxIndex = items.length - 1;
 
   if (maxIndex < 0 || !condition(items[maxIndex])) {
@@ -4274,539 +4285,6 @@ function isOverPerfectScrollbar(x, y, divName) {
 
 /***/ }),
 /* 8 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.SimpleLinkService = exports.PDFLinkService = exports.LinkTarget = void 0;
-
-var _ui_utils = __webpack_require__(3);
-
-const DEFAULT_LINK_REL = "noopener noreferrer nofollow";
-const LinkTarget = {
-  NONE: 0,
-  SELF: 1,
-  BLANK: 2,
-  PARENT: 3,
-  TOP: 4
-};
-exports.LinkTarget = LinkTarget;
-
-function addLinkAttributes(link, {
-  url,
-  target,
-  rel,
-  enabled = true
-} = {}) {
-  if (!url || typeof url !== "string") {
-    throw new Error('A valid "url" parameter must provided.');
-  }
-
-  const urlNullRemoved = (0, _ui_utils.removeNullCharacters)(url);
-
-  if (enabled) {
-    link.href = link.title = urlNullRemoved;
-  } else {
-    link.href = "";
-    link.title = `Disabled: ${urlNullRemoved}`;
-
-    link.onclick = () => {
-      return false;
-    };
-  }
-
-  let targetStr = "";
-
-  switch (target) {
-    case LinkTarget.NONE:
-      break;
-
-    case LinkTarget.SELF:
-      targetStr = "_self";
-      break;
-
-    case LinkTarget.BLANK:
-      targetStr = "_blank";
-      break;
-
-    case LinkTarget.PARENT:
-      targetStr = "_parent";
-      break;
-
-    case LinkTarget.TOP:
-      targetStr = "_top";
-      break;
-  }
-
-  link.target = targetStr;
-  link.rel = typeof rel === "string" ? rel : DEFAULT_LINK_REL;
-}
-
-class PDFLinkService {
-  #pagesRefCache = new Map();
-
-  constructor({
-    eventBus,
-    externalLinkTarget = null,
-    externalLinkRel = null,
-    ignoreDestinationZoom = false
-  } = {}) {
-    this.eventBus = eventBus;
-    this.externalLinkTarget = externalLinkTarget;
-    this.externalLinkRel = externalLinkRel;
-    this.externalLinkEnabled = true;
-    this._ignoreDestinationZoom = ignoreDestinationZoom;
-    this.baseUrl = null;
-    this.pdfDocument = null;
-    this.pdfViewer = null;
-    this.pdfHistory = null;
-  }
-
-  setDocument(pdfDocument, baseUrl = null) {
-    this.baseUrl = baseUrl;
-    this.pdfDocument = pdfDocument;
-    this.#pagesRefCache.clear();
-  }
-
-  setViewer(pdfViewer) {
-    this.pdfViewer = pdfViewer;
-  }
-
-  setHistory(pdfHistory) {
-    this.pdfHistory = pdfHistory;
-  }
-
-  get pagesCount() {
-    return this.pdfDocument ? this.pdfDocument.numPages : 0;
-  }
-
-  get page() {
-    return this.pdfViewer.currentPageNumber;
-  }
-
-  set page(value) {
-    this.pdfViewer.currentPageNumber = value;
-  }
-
-  get rotation() {
-    return this.pdfViewer.pagesRotation;
-  }
-
-  set rotation(value) {
-    this.pdfViewer.pagesRotation = value;
-  }
-
-  #goToDestinationHelper(rawDest, namedDest = null, explicitDest) {
-    const destRef = explicitDest[0];
-    let pageNumber;
-
-    if (typeof destRef === "object" && destRef !== null) {
-      pageNumber = this._cachedPageNumber(destRef);
-
-      if (!pageNumber) {
-        this.pdfDocument.getPageIndex(destRef).then(pageIndex => {
-          this.cachePageRef(pageIndex + 1, destRef);
-          this.#goToDestinationHelper(rawDest, namedDest, explicitDest);
-        }).catch(() => {
-          Window['ngxConsole'].error(`PDFLinkService.#goToDestinationHelper: "${destRef}" is not ` + `a valid page reference, for dest="${rawDest}".`);
-        });
-        return;
-      }
-    } else if (Number.isInteger(destRef)) {
-      pageNumber = destRef + 1;
-    } else {
-      Window['ngxConsole'].error(`PDFLinkService.#goToDestinationHelper: "${destRef}" is not ` + `a valid destination reference, for dest="${rawDest}".`);
-      return;
-    }
-
-    if (!pageNumber || pageNumber < 1 || pageNumber > this.pagesCount) {
-      Window['ngxConsole'].error(`PDFLinkService.#goToDestinationHelper: "${pageNumber}" is not ` + `a valid page number, for dest="${rawDest}".`);
-      return;
-    }
-
-    if (this.pdfHistory) {
-      this.pdfHistory.pushCurrentPosition();
-      this.pdfHistory.push({
-        namedDest,
-        explicitDest,
-        pageNumber
-      });
-    }
-
-    this.pdfViewer.scrollPageIntoView({
-      pageNumber,
-      destArray: explicitDest,
-      ignoreDestinationZoom: this._ignoreDestinationZoom
-    });
-  }
-
-  async goToDestination(dest) {
-    if (!this.pdfDocument) {
-      return;
-    }
-
-    let namedDest, explicitDest;
-
-    if (typeof dest === "string") {
-      namedDest = dest;
-      explicitDest = await this.pdfDocument.getDestination(dest);
-    } else {
-      namedDest = null;
-      explicitDest = await dest;
-    }
-
-    if (!Array.isArray(explicitDest)) {
-      Window['ngxConsole'].error(`PDFLinkService.goToDestination: "${explicitDest}" is not ` + `a valid destination array, for dest="${dest}".`);
-      return;
-    }
-
-    this.#goToDestinationHelper(dest, namedDest, explicitDest);
-  }
-
-  goToPage(val) {
-    if (!this.pdfDocument) {
-      return;
-    }
-
-    const pageNumber = typeof val === "string" && this.pdfViewer.pageLabelToPageNumber(val) || val | 0;
-
-    if (!(Number.isInteger(pageNumber) && pageNumber > 0 && pageNumber <= this.pagesCount)) {
-      Window['ngxConsole'].error(`PDFLinkService.goToPage: "${val}" is not a valid page.`);
-      return;
-    }
-
-    if (this.pdfHistory) {
-      this.pdfHistory.pushCurrentPosition();
-      this.pdfHistory.pushPage(pageNumber);
-    }
-
-    this.pdfViewer.scrollPageIntoView({
-      pageNumber
-    });
-  }
-
-  addLinkAttributes(link, url, newWindow = false) {
-    addLinkAttributes(link, {
-      url,
-      target: newWindow ? LinkTarget.BLANK : this.externalLinkTarget,
-      rel: this.externalLinkRel,
-      enabled: this.externalLinkEnabled
-    });
-  }
-
-  getDestinationHash(dest) {
-    if (typeof dest === "string") {
-      if (dest.length > 0) {
-        return this.getAnchorUrl("#" + escape(dest));
-      }
-    } else if (Array.isArray(dest)) {
-      const str = JSON.stringify(dest);
-
-      if (str.length > 0) {
-        return this.getAnchorUrl("#" + escape(str));
-      }
-    }
-
-    return this.getAnchorUrl("");
-  }
-
-  getAnchorUrl(anchor) {
-    return (this.baseUrl || "") + anchor;
-  }
-
-  setHash(hash) {
-    if (!this.pdfDocument) {
-      return;
-    }
-
-    let pageNumber, dest;
-
-    if (hash.includes("=")) {
-      const params = (0, _ui_utils.parseQueryString)(hash);
-
-      if (params.has("search")) {
-        this.eventBus.dispatch("findfromurlhash", {
-          source: this,
-          query: params.get("search").replace(/"/g, ""),
-          phraseSearch: params.get("phrase") === "true"
-        });
-      }
-
-      if (params.has("page")) {
-        pageNumber = params.get("page") | 0 || 1;
-      }
-
-      if (params.has("zoom")) {
-        const zoomArgs = params.get("zoom").split(",");
-        const zoomArg = zoomArgs[0];
-        const zoomArgNumber = parseFloat(zoomArg);
-
-        if (!zoomArg.includes("Fit")) {
-          dest = [null, {
-            name: "XYZ"
-          }, zoomArgs.length > 1 ? zoomArgs[1] | 0 : null, zoomArgs.length > 2 ? zoomArgs[2] | 0 : null, zoomArgNumber ? zoomArgNumber / 100 : zoomArg];
-        } else {
-          if (zoomArg === "Fit" || zoomArg === "FitB") {
-            dest = [null, {
-              name: zoomArg
-            }];
-          } else if (zoomArg === "FitH" || zoomArg === "FitBH" || zoomArg === "FitV" || zoomArg === "FitBV") {
-            dest = [null, {
-              name: zoomArg
-            }, zoomArgs.length > 1 ? zoomArgs[1] | 0 : null];
-          } else if (zoomArg === "FitR") {
-            if (zoomArgs.length !== 5) {
-              Window['ngxConsole'].error('PDFLinkService.setHash: Not enough parameters for "FitR".');
-            } else {
-              dest = [null, {
-                name: zoomArg
-              }, zoomArgs[1] | 0, zoomArgs[2] | 0, zoomArgs[3] | 0, zoomArgs[4] | 0];
-            }
-          } else {
-            Window['ngxConsole'].error(`PDFLinkService.setHash: "${zoomArg}" is not a valid zoom value.`);
-          }
-        }
-      }
-
-      if (dest) {
-        this.pdfViewer.scrollPageIntoView({
-          pageNumber: pageNumber || this.page,
-          destArray: dest,
-          allowNegativeOffset: true
-        });
-      } else if (pageNumber) {
-        this.page = pageNumber;
-      }
-
-      if (params.has("pagemode")) {
-        this.eventBus.dispatch("pagemode", {
-          source: this,
-          mode: params.get("pagemode")
-        });
-      }
-
-      if (params.has("nameddest")) {
-        this.goToDestination(params.get("nameddest"));
-      }
-    } else {
-      dest = unescape(hash);
-
-      try {
-        dest = JSON.parse(dest);
-
-        if (!Array.isArray(dest)) {
-          dest = dest.toString();
-        }
-      } catch (ex) {}
-
-      if (typeof dest === "string" || PDFLinkService.#isValidExplicitDestination(dest)) {
-        this.goToDestination(dest);
-        return;
-      }
-
-      Window['ngxConsole'].error(`PDFLinkService.setHash: "${unescape(hash)}" is not a valid destination.`);
-    }
-  }
-
-  executeNamedAction(action) {
-    switch (action) {
-      case "GoBack":
-        this.pdfHistory?.back();
-        break;
-
-      case "GoForward":
-        this.pdfHistory?.forward();
-        break;
-
-      case "NextPage":
-        this.pdfViewer.nextPage();
-        break;
-
-      case "PrevPage":
-        this.pdfViewer.previousPage();
-        break;
-
-      case "LastPage":
-        this.page = this.pagesCount;
-        break;
-
-      case "FirstPage":
-        this.page = 1;
-        break;
-
-      default:
-        break;
-    }
-
-    this.eventBus.dispatch("namedaction", {
-      source: this,
-      action
-    });
-  }
-
-  cachePageRef(pageNum, pageRef) {
-    if (!pageRef) {
-      return;
-    }
-
-    const refStr = pageRef.gen === 0 ? `${pageRef.num}R` : `${pageRef.num}R${pageRef.gen}`;
-    this.#pagesRefCache.set(refStr, pageNum);
-  }
-
-  _cachedPageNumber(pageRef) {
-    if (!pageRef) {
-      return null;
-    }
-
-    const refStr = pageRef.gen === 0 ? `${pageRef.num}R` : `${pageRef.num}R${pageRef.gen}`;
-    return this.#pagesRefCache.get(refStr) || null;
-  }
-
-  isPageVisible(pageNumber) {
-    return this.pdfViewer.isPageVisible(pageNumber);
-  }
-
-  isPageCached(pageNumber) {
-    return this.pdfViewer.isPageCached(pageNumber);
-  }
-
-  static #isValidExplicitDestination(dest) {
-    if (!Array.isArray(dest)) {
-      return false;
-    }
-
-    const destLength = dest.length;
-
-    if (destLength < 2) {
-      return false;
-    }
-
-    const page = dest[0];
-
-    if (!(typeof page === "object" && Number.isInteger(page.num) && Number.isInteger(page.gen)) && !(Number.isInteger(page) && page >= 0)) {
-      return false;
-    }
-
-    const zoom = dest[1];
-
-    if (!(typeof zoom === "object" && typeof zoom.name === "string")) {
-      return false;
-    }
-
-    let allowNull = true;
-
-    switch (zoom.name) {
-      case "XYZ":
-        if (destLength !== 5) {
-          return false;
-        }
-
-        break;
-
-      case "Fit":
-      case "FitB":
-        return destLength === 2;
-
-      case "FitH":
-      case "FitBH":
-      case "FitV":
-      case "FitBV":
-        if (destLength !== 3) {
-          return false;
-        }
-
-        break;
-
-      case "FitR":
-        if (destLength !== 6) {
-          return false;
-        }
-
-        allowNull = false;
-        break;
-
-      default:
-        return false;
-    }
-
-    for (let i = 2; i < destLength; i++) {
-      const param = dest[i];
-
-      if (!(typeof param === "number" || allowNull && param === null)) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-}
-
-exports.PDFLinkService = PDFLinkService;
-
-class SimpleLinkService {
-  constructor() {
-    this.externalLinkEnabled = true;
-  }
-
-  get pagesCount() {
-    return 0;
-  }
-
-  get page() {
-    return 0;
-  }
-
-  set page(value) {}
-
-  get rotation() {
-    return 0;
-  }
-
-  set rotation(value) {}
-
-  async goToDestination(dest) {}
-
-  goToPage(val) {}
-
-  addLinkAttributes(link, url, newWindow = false) {
-    addLinkAttributes(link, {
-      url,
-      enabled: this.externalLinkEnabled
-    });
-  }
-
-  getDestinationHash(dest) {
-    return "#";
-  }
-
-  getAnchorUrl(hash) {
-    return "#";
-  }
-
-  setHash(hash) {}
-
-  executeNamedAction(action) {}
-
-  cachePageRef(pageNum, pageRef) {}
-
-  isPageVisible(pageNumber) {
-    return true;
-  }
-
-  isPageCached(pageNumber) {
-    return true;
-  }
-
-}
-
-exports.SimpleLinkService = SimpleLinkService;
-
-/***/ }),
-/* 9 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -4916,7 +4394,7 @@ class OverlayManager {
 exports.OverlayManager = OverlayManager;
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -4941,14 +4419,14 @@ class PasswordPrompt {
     this._isViewerEmbedded = isViewerEmbedded;
     this.updateCallback = null;
     this.reason = null;
-    this.submitButton.addEventListener("click", this.#verify.bind(this));
-    this.cancelButton.addEventListener("click", this.#cancel.bind(this));
+    this.submitButton.addEventListener("click", this.verify.bind(this));
+    this.cancelButton.addEventListener("click", this.close.bind(this));
     this.input.addEventListener("keydown", e => {
       if (e.keyCode === 13) {
-        this.#verify();
+        this.verify();
       }
     });
-    this.overlayManager.register(this.overlayName, this.container, this.#cancel.bind(this), true);
+    this.overlayManager.register(this.overlayName, this.container, this.close.bind(this), true);
   }
 
   async open() {
@@ -4971,18 +4449,13 @@ class PasswordPrompt {
     });
   }
 
-  #verify() {
+  verify() {
     const password = this.input.value;
 
     if (password?.length > 0) {
       this.close();
       this.updateCallback(password);
     }
-  }
-
-  #cancel() {
-    this.close();
-    this.updateCallback(new Error("PasswordPrompt cancelled."));
   }
 
   setUpdateCallback(updateCallback, reason) {
@@ -4995,7 +4468,7 @@ class PasswordPrompt {
 exports.PasswordPrompt = PasswordPrompt;
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -5007,7 +4480,7 @@ exports.PDFAttachmentViewer = void 0;
 
 var _pdfjsLib = __webpack_require__(5);
 
-var _base_tree_viewer = __webpack_require__(12);
+var _base_tree_viewer = __webpack_require__(11);
 
 class PDFAttachmentViewer extends _base_tree_viewer.BaseTreeViewer {
   constructor(options) {
@@ -5150,7 +4623,7 @@ class PDFAttachmentViewer extends _base_tree_viewer.BaseTreeViewer {
 exports.PDFAttachmentViewer = PDFAttachmentViewer;
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -5160,7 +4633,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.BaseTreeViewer = void 0;
 
-var _ui_utils = __webpack_require__(3);
+var _pdfjsLib = __webpack_require__(5);
 
 const TREEITEM_OFFSET_TOP = -100;
 const TREEITEM_SELECTED_CLASS = "selected";
@@ -5193,7 +4666,7 @@ class BaseTreeViewer {
   }
 
   _normalizeTextContent(str) {
-    return (0, _ui_utils.removeNullCharacters)(str, true) || "\u2013";
+    return (0, _pdfjsLib.removeNullCharacters)(str, true) || "\u2013";
   }
 
   _addToggleButton(div, hidden = false) {
@@ -5284,7 +4757,7 @@ class BaseTreeViewer {
 exports.BaseTreeViewer = BaseTreeViewer;
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -5556,7 +5029,7 @@ class PDFDocumentProperties {
 exports.PDFDocumentProperties = PDFDocumentProperties;
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -5566,7 +5039,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.PDFFindBar = void 0;
 
-var _pdf_find_controller = __webpack_require__(15);
+var _pdf_find_controller = __webpack_require__(14);
 
 const MATCHES_COUNT_LIMIT = 1000;
 
@@ -5580,7 +5053,6 @@ class PDFFindBar {
     this.currentPage = options.findCurrentPageCheckbox;
     this.pageRange = options.findPageRangeField;
     this.caseSensitive = options.caseSensitiveCheckbox;
-    this.matchDiacritics = options.matchDiacriticsCheckbox;
     this.entireWord = options.entireWordCheckbox;
     this.findMsg = options.findMsg;
     this.findResultsCount = options.findResultsCount;
@@ -5645,9 +5117,6 @@ class PDFFindBar {
     this.pageRange.addEventListener("input", () => {
       this.dispatchEvent("pageRangeChange");
     });
-    this.matchDiacritics.addEventListener("click", () => {
-      this.dispatchEvent("diacriticmatchingchange");
-    });
 
     this.eventBus._on("resize", this._adjustWidth.bind(this));
   }
@@ -5669,8 +5138,7 @@ class PDFFindBar {
       highlightAll: this.highlightAll.checked,
       currentPage: this.currentPage.checked,
       pageRange: this.pageRange.value,
-      findPrevious: findPrev,
-      matchDiacritics: this.matchDiacritics.checked
+      findPrevious: findPrev
     });
   }
 
@@ -5731,6 +5199,7 @@ class PDFFindBar {
 
     matchCountMsg.then(msg => {
       this.findResultsCount.textContent = msg;
+      this.findResultsCount.classList.toggle("hidden", !total);
 
       this._adjustWidth();
     });
@@ -5792,7 +5261,7 @@ class PDFFindBar {
 exports.PDFFindBar = PDFFindBar;
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -5804,11 +5273,11 @@ exports.PDFFindController = exports.FindState = void 0;
 
 var _pdfjsLib = __webpack_require__(5);
 
-var _index = __webpack_require__(16);
+var _index = __webpack_require__(15);
 
-var _pdf_find_utils = __webpack_require__(17);
+var _pdf_find_utils = __webpack_require__(16);
 
-var _levenshtein = __webpack_require__(18);
+var _levenshtein = __webpack_require__(17);
 
 var _ui_utils = __webpack_require__(3);
 
@@ -6431,7 +5900,9 @@ class PDFFindController {
       promise = promise.then(() => {
         if (this._pdfDocument && this._extractTextPromises.length > 0) {
           return this._pdfDocument.getPage(i + 1).then(pdfPage => {
-            return pdfPage.getTextContent();
+            return pdfPage.getTextContent({
+              normalizeWhitespace: true
+            });
           }).then(textContent => {
             const textItems = textContent.items;
             const strBuf = [];
@@ -6707,7 +6178,7 @@ class PDFFindController {
 exports.PDFFindController = PDFFindController;
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -6963,7 +6434,7 @@ function deburr(string) {
 }
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -7058,7 +6529,7 @@ function getCharacterType(charCode) {
 }
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -7170,7 +6641,7 @@ class Levenshtein {
 exports.Levenshtein = Levenshtein;
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -7784,7 +7255,7 @@ function isDestArraysEqual(firstDest, secondDest) {
 }
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -7794,7 +7265,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.PDFLayerViewer = void 0;
 
-var _base_tree_viewer = __webpack_require__(12);
+var _base_tree_viewer = __webpack_require__(11);
 
 class PDFLayerViewer extends _base_tree_viewer.BaseTreeViewer {
   constructor(options) {
@@ -7968,6 +7439,481 @@ class PDFLayerViewer extends _base_tree_viewer.BaseTreeViewer {
 exports.PDFLayerViewer = PDFLayerViewer;
 
 /***/ }),
+/* 20 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.SimpleLinkService = exports.PDFLinkService = void 0;
+
+var _pdfjsLib = __webpack_require__(5);
+
+var _ui_utils = __webpack_require__(3);
+
+class PDFLinkService {
+  constructor({
+    eventBus,
+    externalLinkTarget = null,
+    externalLinkRel = null,
+    ignoreDestinationZoom = false
+  } = {}) {
+    this.eventBus = eventBus;
+    this.externalLinkTarget = externalLinkTarget;
+    this.externalLinkRel = externalLinkRel;
+    this.externalLinkEnabled = true;
+    this._ignoreDestinationZoom = ignoreDestinationZoom;
+    this.baseUrl = null;
+    this.pdfDocument = null;
+    this.pdfViewer = null;
+    this.pdfHistory = null;
+    this._pagesRefCache = null;
+  }
+
+  setDocument(pdfDocument, baseUrl = null) {
+    this.baseUrl = baseUrl;
+    this.pdfDocument = pdfDocument;
+    this._pagesRefCache = Object.create(null);
+  }
+
+  setViewer(pdfViewer) {
+    this.pdfViewer = pdfViewer;
+  }
+
+  setHistory(pdfHistory) {
+    this.pdfHistory = pdfHistory;
+  }
+
+  get pagesCount() {
+    return this.pdfDocument ? this.pdfDocument.numPages : 0;
+  }
+
+  get page() {
+    return this.pdfViewer.currentPageNumber;
+  }
+
+  set page(value) {
+    this.pdfViewer.currentPageNumber = value;
+  }
+
+  get rotation() {
+    return this.pdfViewer.pagesRotation;
+  }
+
+  set rotation(value) {
+    this.pdfViewer.pagesRotation = value;
+  }
+
+  _goToDestinationHelper(rawDest, namedDest = null, explicitDest) {
+    const destRef = explicitDest[0];
+    let pageNumber;
+
+    if (typeof destRef === "object" && destRef !== null) {
+      pageNumber = this._cachedPageNumber(destRef);
+
+      if (!pageNumber) {
+        this.pdfDocument.getPageIndex(destRef).then(pageIndex => {
+          this.cachePageRef(pageIndex + 1, destRef);
+
+          this._goToDestinationHelper(rawDest, namedDest, explicitDest);
+        }).catch(() => {
+          Window['ngxConsole'].error(`PDFLinkService._goToDestinationHelper: "${destRef}" is not ` + `a valid page reference, for dest="${rawDest}".`);
+        });
+        return;
+      }
+    } else if (Number.isInteger(destRef)) {
+      pageNumber = destRef + 1;
+    } else {
+      Window['ngxConsole'].error(`PDFLinkService._goToDestinationHelper: "${destRef}" is not ` + `a valid destination reference, for dest="${rawDest}".`);
+      return;
+    }
+
+    if (!pageNumber || pageNumber < 1 || pageNumber > this.pagesCount) {
+      Window['ngxConsole'].error(`PDFLinkService._goToDestinationHelper: "${pageNumber}" is not ` + `a valid page number, for dest="${rawDest}".`);
+      return;
+    }
+
+    if (this.pdfHistory) {
+      this.pdfHistory.pushCurrentPosition();
+      this.pdfHistory.push({
+        namedDest,
+        explicitDest,
+        pageNumber
+      });
+    }
+
+    this.pdfViewer.scrollPageIntoView({
+      pageNumber,
+      destArray: explicitDest,
+      ignoreDestinationZoom: this._ignoreDestinationZoom
+    });
+  }
+
+  async goToDestination(dest) {
+    if (!this.pdfDocument) {
+      return;
+    }
+
+    let namedDest, explicitDest;
+
+    if (typeof dest === "string") {
+      namedDest = dest;
+      explicitDest = await this.pdfDocument.getDestination(dest);
+    } else {
+      namedDest = null;
+      explicitDest = await dest;
+    }
+
+    if (!Array.isArray(explicitDest)) {
+      Window['ngxConsole'].error(`PDFLinkService.goToDestination: "${explicitDest}" is not ` + `a valid destination array, for dest="${dest}".`);
+      return;
+    }
+
+    this._goToDestinationHelper(dest, namedDest, explicitDest);
+  }
+
+  goToPage(val) {
+    if (!this.pdfDocument) {
+      return;
+    }
+
+    const pageNumber = typeof val === "string" && this.pdfViewer.pageLabelToPageNumber(val) || val | 0;
+
+    if (!(Number.isInteger(pageNumber) && pageNumber > 0 && pageNumber <= this.pagesCount)) {
+      Window['ngxConsole'].error(`PDFLinkService.goToPage: "${val}" is not a valid page.`);
+      return;
+    }
+
+    if (this.pdfHistory) {
+      this.pdfHistory.pushCurrentPosition();
+      this.pdfHistory.pushPage(pageNumber);
+    }
+
+    this.pdfViewer.scrollPageIntoView({
+      pageNumber
+    });
+  }
+
+  addLinkAttributes(link, url, newWindow = false) {
+    (0, _pdfjsLib.addLinkAttributes)(link, {
+      url,
+      target: newWindow ? _pdfjsLib.LinkTarget.BLANK : this.externalLinkTarget,
+      rel: this.externalLinkRel,
+      enabled: this.externalLinkEnabled
+    });
+  }
+
+  getDestinationHash(dest) {
+    if (typeof dest === "string") {
+      if (dest.length > 0) {
+        return this.getAnchorUrl("#" + escape(dest));
+      }
+    } else if (Array.isArray(dest)) {
+      const str = JSON.stringify(dest);
+
+      if (str.length > 0) {
+        return this.getAnchorUrl("#" + escape(str));
+      }
+    }
+
+    return this.getAnchorUrl("");
+  }
+
+  getAnchorUrl(anchor) {
+    return (this.baseUrl || "") + anchor;
+  }
+
+  setHash(hash) {
+    if (!this.pdfDocument) {
+      return;
+    }
+
+    let pageNumber, dest;
+
+    if (hash.includes("=")) {
+      const params = (0, _ui_utils.parseQueryString)(hash);
+
+      if (params.has("search")) {
+        this.eventBus.dispatch("findfromurlhash", {
+          source: this,
+          query: params.get("search").replace(/"/g, ""),
+          phraseSearch: params.get("phrase") === "true"
+        });
+      }
+
+      if (params.has("page")) {
+        pageNumber = params.get("page") | 0 || 1;
+      }
+
+      if (params.has("zoom")) {
+        const zoomArgs = params.get("zoom").split(",");
+        const zoomArg = zoomArgs[0];
+        const zoomArgNumber = parseFloat(zoomArg);
+
+        if (!zoomArg.includes("Fit")) {
+          dest = [null, {
+            name: "XYZ"
+          }, zoomArgs.length > 1 ? zoomArgs[1] | 0 : null, zoomArgs.length > 2 ? zoomArgs[2] | 0 : null, zoomArgNumber ? zoomArgNumber / 100 : zoomArg];
+        } else {
+          if (zoomArg === "Fit" || zoomArg === "FitB") {
+            dest = [null, {
+              name: zoomArg
+            }];
+          } else if (zoomArg === "FitH" || zoomArg === "FitBH" || zoomArg === "FitV" || zoomArg === "FitBV") {
+            dest = [null, {
+              name: zoomArg
+            }, zoomArgs.length > 1 ? zoomArgs[1] | 0 : null];
+          } else if (zoomArg === "FitR") {
+            if (zoomArgs.length !== 5) {
+              Window['ngxConsole'].error('PDFLinkService.setHash: Not enough parameters for "FitR".');
+            } else {
+              dest = [null, {
+                name: zoomArg
+              }, zoomArgs[1] | 0, zoomArgs[2] | 0, zoomArgs[3] | 0, zoomArgs[4] | 0];
+            }
+          } else {
+            Window['ngxConsole'].error(`PDFLinkService.setHash: "${zoomArg}" is not ` + "a valid zoom value.");
+          }
+        }
+      }
+
+      if (dest) {
+        this.pdfViewer.scrollPageIntoView({
+          pageNumber: pageNumber || this.page,
+          destArray: dest,
+          allowNegativeOffset: true
+        });
+      } else if (pageNumber) {
+        this.page = pageNumber;
+      }
+
+      if (params.has("pagemode")) {
+        this.eventBus.dispatch("pagemode", {
+          source: this,
+          mode: params.get("pagemode")
+        });
+      }
+
+      if (params.has("nameddest")) {
+        this.goToDestination(params.get("nameddest"));
+      }
+    } else {
+      dest = unescape(hash);
+
+      try {
+        dest = JSON.parse(dest);
+
+        if (!Array.isArray(dest)) {
+          dest = dest.toString();
+        }
+      } catch (ex) {}
+
+      if (typeof dest === "string" || isValidExplicitDestination(dest)) {
+        this.goToDestination(dest);
+        return;
+      }
+
+      Window['ngxConsole'].error(`PDFLinkService.setHash: "${unescape(hash)}" is not ` + "a valid destination.");
+    }
+  }
+
+  executeNamedAction(action) {
+    switch (action) {
+      case "GoBack":
+        this.pdfHistory?.back();
+        break;
+
+      case "GoForward":
+        this.pdfHistory?.forward();
+        break;
+
+      case "NextPage":
+        this.pdfViewer.nextPage();
+        break;
+
+      case "PrevPage":
+        this.pdfViewer.previousPage();
+        break;
+
+      case "LastPage":
+        this.page = this.pagesCount;
+        break;
+
+      case "FirstPage":
+        this.page = 1;
+        break;
+
+      default:
+        break;
+    }
+
+    this.eventBus.dispatch("namedaction", {
+      source: this,
+      action
+    });
+  }
+
+  cachePageRef(pageNum, pageRef) {
+    if (!pageRef) {
+      return;
+    }
+
+    const refStr = pageRef.gen === 0 ? `${pageRef.num}R` : `${pageRef.num}R${pageRef.gen}`;
+    this._pagesRefCache[refStr] = pageNum;
+  }
+
+  _cachedPageNumber(pageRef) {
+    if (!pageRef) {
+      return null;
+    }
+
+    const refStr = pageRef.gen === 0 ? `${pageRef.num}R` : `${pageRef.num}R${pageRef.gen}`;
+    return this._pagesRefCache?.[refStr] || null;
+  }
+
+  isPageVisible(pageNumber) {
+    return this.pdfViewer.isPageVisible(pageNumber);
+  }
+
+  isPageCached(pageNumber) {
+    return this.pdfViewer.isPageCached(pageNumber);
+  }
+
+}
+
+exports.PDFLinkService = PDFLinkService;
+
+function isValidExplicitDestination(dest) {
+  if (!Array.isArray(dest)) {
+    return false;
+  }
+
+  const destLength = dest.length;
+
+  if (destLength < 2) {
+    return false;
+  }
+
+  const page = dest[0];
+
+  if (!(typeof page === "object" && Number.isInteger(page.num) && Number.isInteger(page.gen)) && !(Number.isInteger(page) && page >= 0)) {
+    return false;
+  }
+
+  const zoom = dest[1];
+
+  if (!(typeof zoom === "object" && typeof zoom.name === "string")) {
+    return false;
+  }
+
+  let allowNull = true;
+
+  switch (zoom.name) {
+    case "XYZ":
+      if (destLength !== 5) {
+        return false;
+      }
+
+      break;
+
+    case "Fit":
+    case "FitB":
+      return destLength === 2;
+
+    case "FitH":
+    case "FitBH":
+    case "FitV":
+    case "FitBV":
+      if (destLength !== 3) {
+        return false;
+      }
+
+      break;
+
+    case "FitR":
+      if (destLength !== 6) {
+        return false;
+      }
+
+      allowNull = false;
+      break;
+
+    default:
+      return false;
+  }
+
+  for (let i = 2; i < destLength; i++) {
+    const param = dest[i];
+
+    if (!(typeof param === "number" || allowNull && param === null)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+class SimpleLinkService {
+  constructor() {
+    this.externalLinkEnabled = true;
+  }
+
+  get pagesCount() {
+    return 0;
+  }
+
+  get page() {
+    return 0;
+  }
+
+  set page(value) {}
+
+  get rotation() {
+    return 0;
+  }
+
+  set rotation(value) {}
+
+  async goToDestination(dest) {}
+
+  goToPage(val) {}
+
+  addLinkAttributes(link, url, newWindow = false) {
+    (0, _pdfjsLib.addLinkAttributes)(link, {
+      url,
+      enabled: this.externalLinkEnabled
+    });
+  }
+
+  getDestinationHash(dest) {
+    return "#";
+  }
+
+  getAnchorUrl(hash) {
+    return "#";
+  }
+
+  setHash(hash) {}
+
+  executeNamedAction(action) {}
+
+  cachePageRef(pageNum, pageRef) {}
+
+  isPageVisible(pageNumber) {
+    return true;
+  }
+
+  isPageCached(pageNumber) {
+    return true;
+  }
+
+}
+
+exports.SimpleLinkService = SimpleLinkService;
+
+/***/ }),
 /* 21 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
@@ -7978,7 +7924,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.PDFOutlineViewer = void 0;
 
-var _base_tree_viewer = __webpack_require__(12);
+var _base_tree_viewer = __webpack_require__(11);
 
 var _pdfjsLib = __webpack_require__(5);
 
@@ -8354,6 +8300,8 @@ class PDFPresentationMode {
 
     if (this.container.requestFullscreen) {
       this.container.requestFullscreen();
+    } else if (this.container.mozRequestFullScreen) {
+      this.container.mozRequestFullScreen();
     } else if (this.container.webkitRequestFullscreen) {
       document.body.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
 
@@ -8405,7 +8353,7 @@ class PDFPresentationMode {
   }
 
   get isFullscreen() {
-    return !!(document.fullscreenElement || document.webkitIsFullScreen);
+    return !!(document.fullscreenElement || document.mozFullScreen || document.webkitIsFullScreen);
   }
 
   _notifyStateChange() {
@@ -8710,11 +8658,13 @@ class PDFPresentationMode {
   _addFullscreenChangeListeners() {
     this.fullscreenChangeBind = this._fullscreenChange.bind(this);
     window.addEventListener("fullscreenchange", this.fullscreenChangeBind);
+    window.addEventListener("mozfullscreenchange", this.fullscreenChangeBind);
     window.addEventListener("webkitfullscreenchange", this.fullscreenChangeBind);
   }
 
   _removeFullscreenChangeListeners() {
     window.removeEventListener("fullscreenchange", this.fullscreenChangeBind);
+    window.removeEventListener("mozfullscreenchange", this.fullscreenChangeBind);
     window.removeEventListener("webkitfullscreenchange", this.fullscreenChangeBind);
     delete this.fullscreenChangeBind;
   }
@@ -10645,7 +10595,7 @@ var _pdf_page_view = __webpack_require__(34);
 
 var _pdf_rendering_queue = __webpack_require__(23);
 
-var _pdf_link_service = __webpack_require__(8);
+var _pdf_link_service = __webpack_require__(20);
 
 var _struct_tree_layer_builder = __webpack_require__(38);
 
@@ -10660,7 +10610,7 @@ const ENABLE_PERMISSIONS_CLASS = "enablePermissions";
 const PagesCountLimit = {
   FORCE_SCROLL_MODE_PAGE: 15000,
   FORCE_LAZY_PAGE_INIT: 7500,
-  PAUSE_EAGER_PAGE_INIT: 250
+  PAUSE_EAGER_PAGE_INIT: 500
 };
 exports.PagesCountLimit = PagesCountLimit;
 
@@ -10736,14 +10686,13 @@ class BaseViewer {
   #enablePermissions = false;
   #previousContainerHeight = 0;
   #scrollModePageState = null;
-  #onVisibilityChange = null;
 
   constructor(options) {
     if (this.constructor === BaseViewer) {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.13.408';
+    const viewerVersion = '2.12.558';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -11167,24 +11116,11 @@ class BaseViewer {
   }
 
   #onePageRenderedOrForceFetch() {
-    if (document.visibilityState === "hidden" || !this.container.offsetParent || this._getVisiblePages().views.length === 0) {
+    if (!this.container.offsetParent || this._getVisiblePages().views.length === 0) {
       return Promise.resolve();
     }
 
-    const visibilityChangePromise = new Promise(resolve => {
-      this.#onVisibilityChange = () => {
-        if (document.visibilityState !== "hidden") {
-          return;
-        }
-
-        resolve();
-        document.removeEventListener("visibilitychange", this.#onVisibilityChange);
-        this.#onVisibilityChange = null;
-      };
-
-      document.addEventListener("visibilitychange", this.#onVisibilityChange);
-    });
-    return Promise.race([this._onePageRenderedCapability.promise, visibilityChangePromise]);
+    return this._onePageRenderedCapability.promise;
   }
 
   setDocument(pdfDocument) {
@@ -11258,11 +11194,6 @@ class BaseViewer {
       this.eventBus._off("pagerendered", this._onAfterDraw);
 
       this._onAfterDraw = null;
-
-      if (this.#onVisibilityChange) {
-        document.removeEventListener("visibilitychange", this.#onVisibilityChange);
-        this.#onVisibilityChange = null;
-      }
     };
 
     this.eventBus._on("pagerendered", this._onAfterDraw);
@@ -11452,11 +11383,6 @@ class BaseViewer {
       this.eventBus._off("pagerendered", this._onAfterDraw);
 
       this._onAfterDraw = null;
-    }
-
-    if (this.#onVisibilityChange) {
-      document.removeEventListener("visibilitychange", this.#onVisibilityChange);
-      this.#onVisibilityChange = null;
     }
 
     this.viewer.textContent = "";
@@ -11657,15 +11583,11 @@ class BaseViewer {
   }
 
   _setScale(value, noScroll = false) {
-    if (!value) {
+    if (null === value) {
       value = "auto";
     }
 
     let scale = parseFloat(value);
-
-    if (this._currentScale === scale) {
-      return;
-    }
 
     if (scale > 0) {
       this._setScaleUpdatePages(scale, value, noScroll, false);
@@ -12082,7 +12004,7 @@ class BaseViewer {
         pageView.setPdfPage(pdfPage);
       }
 
-      if (!this.linkService._cachedPageNumber?.(pdfPage.ref)) {
+      if (!this.linkService._cachedPageNumber(pdfPage.ref)) {
         this.linkService.cachePageRef(pageView.id, pdfPage.ref);
       }
 
@@ -15911,6 +15833,7 @@ class PDFPageView {
       return finishPaintTask(null).then(() => {
         if (textLayer) {
           const readableStream = pdfPage.streamTextContent({
+            normalizeWhitespace: true,
             includeMarkedContent: true
           });
           textLayer.setTextContentStream(readableStream);
@@ -16037,7 +15960,6 @@ class PDFPageView {
     const sfy = (0, _ui_utils.approximateFraction)(outputScale.sy);
     const width = (0, _ui_utils.roundToDivide)(viewport.width * outputScale.sx, sfx[0]);
     const height = (0, _ui_utils.roundToDivide)(viewport.height * outputScale.sy, sfy[0]);
-    let divisor = 1;
 
     if (width >= 4096 || height >= 4096) {
       if (!!this.maxWidth || !_canvasSize.default.test({
@@ -16045,24 +15967,23 @@ class PDFPageView {
         height
       })) {
         const max = this.determineMaxDimensions();
-        divisor = Math.max(width / max, height / max);
-
-        if (divisor > 1) {
-          const newScale = Math.floor(100 * this.scale / divisor) / 100;
-          divisor = this.scale / newScale;
-          viewport.width /= divisor;
-          viewport.height /= divisor;
-          (0, _util.warn)(`Page ${this.id}: Reduced the maximum zoom to ${newScale} because the browser can't render larger canvases.`);
-        } else {
-          divisor = 1;
-        }
+        let divisor = Math.max(width / max, height / max);
+        const newScale = Math.floor(100 * this.scale / divisor) / 100;
+        divisor = this.scale / newScale;
+        this.scale = newScale;
+        const PDFViewerApplicationOptions = window.PDFViewerApplicationOptions;
+        PDFViewerApplicationOptions.set('maxZoom', newScale);
+        PDFViewerApplication.pdfViewer.currentScaleValue = this.scale;
+        viewport.width /= divisor;
+        viewport.height /= divisor;
+        (0, _util.warn)("Page " + this.id + ": Reduced the maximum zoom to " + newScale + " because the browser can't render larger canvases.");
       }
     }
 
     canvas.width = (0, _ui_utils.roundToDivide)(viewport.width * outputScale.sx, sfx[0]);
     canvas.height = (0, _ui_utils.roundToDivide)(viewport.height * outputScale.sy, sfy[0]);
-    canvas.style.width = (0, _ui_utils.roundToDivide)(viewport.width * divisor, sfx[1]) + "px";
-    canvas.style.height = (0, _ui_utils.roundToDivide)(viewport.height * divisor, sfy[1]) + "px";
+    canvas.style.width = (0, _ui_utils.roundToDivide)(viewport.width, sfx[1]) + "px";
+    canvas.style.height = (0, _ui_utils.roundToDivide)(viewport.height, sfy[1]) + "px";
     this.paintedViewportMap.set(canvas, viewport);
     const transform = !outputScale.scaled ? null : [outputScale.sx, 0, 0, outputScale.sy, 0, 0];
     let background = PDFViewerApplicationOptions.get("pdfBackgroundColor");
@@ -16140,7 +16061,7 @@ class PDFPageView {
       annotationMode: this.#annotationMode
     }).then(opList => {
       ensureNotCancelled();
-      const svgGfx = new _pdfjsLib.SVGGraphics(pdfPage.commonObjs, pdfPage.objs);
+      const svgGfx = new _pdfjsLib.SVGGraphics(pdfPage.commonObjs, pdfPage.objs, _app_options.compatibilityParams.disableCreateObjectURL);
       return svgGfx.getSVG(opList, actualSizeViewport).then(svg => {
         ensureNotCancelled();
         this.svg = svg;
@@ -16182,7 +16103,7 @@ class PDFPageView {
 
     const checklist = [4096, 8192, 10836, 11180, 11402, 14188, 16384];
 
-    for (const width of checklist) {
+    for (let width of checklist) {
       if (!_canvasSize.default.test({
         width: width + 1,
         height: width + 1
@@ -16659,6 +16580,7 @@ exports.arrayByteLength = arrayByteLength;
 exports.arraysToBytes = arraysToBytes;
 exports.assert = assert;
 exports.bytesToString = bytesToString;
+exports.createObjectURL = createObjectURL;
 exports.createPromiseCapability = createPromiseCapability;
 exports.createValidAbsoluteUrl = createValidAbsoluteUrl;
 exports.escapeString = escapeString;
@@ -16674,6 +16596,7 @@ exports.isSameOrigin = isSameOrigin;
 exports.isString = isString;
 exports.objectFromMap = objectFromMap;
 exports.objectSize = objectSize;
+exports.removeNullCharacters = removeNullCharacters;
 exports.setVerbosityLevel = setVerbosityLevel;
 exports.shadow = shadow;
 exports.string32 = string32;
@@ -17233,12 +17156,24 @@ class AbortException extends BaseException {
 }
 
 exports.AbortException = AbortException;
+const NullCharactersRegExp = /\x00+/g;
+const InvisibleCharactersRegExp = /[\x01-\x1F]/g;
 
-function bytesToString(bytes) {
-  if (typeof bytes !== "object" || bytes === null || bytes.length === undefined) {
-    unreachable("Invalid argument for bytesToString");
+function removeNullCharacters(str, replaceInvisible = false) {
+  if (typeof str !== "string") {
+    warn("The argument for removeNullCharacters must be a string.");
+    return str;
   }
 
+  if (replaceInvisible) {
+    str = str.replace(InvisibleCharactersRegExp, " ");
+  }
+
+  return str.replace(NullCharactersRegExp, "");
+}
+
+function bytesToString(bytes) {
+  assert(bytes !== null && typeof bytes === "object" && bytes.length !== undefined, "Invalid argument for bytesToString");
   const length = bytes.length;
   const MAX_ARGUMENT_COUNT = 8192;
 
@@ -17258,10 +17193,7 @@ function bytesToString(bytes) {
 }
 
 function stringToBytes(str) {
-  if (typeof str !== "string") {
-    unreachable("Invalid argument for stringToBytes");
-  }
-
+  assert(typeof str === "string", "Invalid argument for stringToBytes");
   const length = str.length;
   const bytes = new Uint8Array(length);
 
@@ -17277,11 +17209,8 @@ function arrayByteLength(arr) {
     return arr.length;
   }
 
-  if (arr.byteLength !== undefined) {
-    return arr.byteLength;
-  }
-
-  unreachable("Invalid argument for arrayByteLength");
+  assert(arr.byteLength !== undefined, "arrayByteLength - invalid argument.");
+  return arr.byteLength;
 }
 
 function arraysToBytes(arr) {
@@ -17541,35 +17470,22 @@ exports.Util = Util;
 const PDFStringTranslateTable = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x2d8, 0x2c7, 0x2c6, 0x2d9, 0x2dd, 0x2db, 0x2da, 0x2dc, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x2022, 0x2020, 0x2021, 0x2026, 0x2014, 0x2013, 0x192, 0x2044, 0x2039, 0x203a, 0x2212, 0x2030, 0x201e, 0x201c, 0x201d, 0x2018, 0x2019, 0x201a, 0x2122, 0xfb01, 0xfb02, 0x141, 0x152, 0x160, 0x178, 0x17d, 0x131, 0x142, 0x153, 0x161, 0x17e, 0, 0x20ac];
 
 function stringToPDFString(str) {
-  if (str[0] >= "\xEF") {
-    let encoding;
+  const length = str.length,
+        strBuf = [];
 
-    if (str[0] === "\xFE" && str[1] === "\xFF") {
-      encoding = "utf-16be";
-    } else if (str[0] === "\xFF" && str[1] === "\xFE") {
-      encoding = "utf-16le";
-    } else if (str[0] === "\xEF" && str[1] === "\xBB" && str[2] === "\xBF") {
-      encoding = "utf-8";
+  if (str[0] === "\xFE" && str[1] === "\xFF") {
+    for (let i = 2; i < length; i += 2) {
+      strBuf.push(String.fromCharCode(str.charCodeAt(i) << 8 | str.charCodeAt(i + 1)));
     }
-
-    if (encoding) {
-      try {
-        const decoder = new TextDecoder(encoding, {
-          fatal: true
-        });
-        const buffer = stringToBytes(str);
-        return decoder.decode(buffer);
-      } catch (ex) {
-        warn(`stringToPDFString: "${ex}".`);
-      }
+  } else if (str[0] === "\xFF" && str[1] === "\xFE") {
+    for (let i = 2; i < length; i += 2) {
+      strBuf.push(String.fromCharCode(str.charCodeAt(i + 1) << 8 | str.charCodeAt(i)));
     }
-  }
-
-  const strBuf = [];
-
-  for (let i = 0, ii = str.length; i < ii; i++) {
-    const code = PDFStringTranslateTable[str.charCodeAt(i)];
-    strBuf.push(code ? String.fromCharCode(code) : str.charAt(i));
+  } else {
+    for (let i = 0; i < length; ++i) {
+      const code = PDFStringTranslateTable[str.charCodeAt(i)];
+      strBuf.push(code ? String.fromCharCode(code) : str.charAt(i));
+    }
   }
 
   return strBuf.join("");
@@ -17666,6 +17582,30 @@ function createPromiseCapability() {
     };
   });
   return capability;
+}
+
+function createObjectURL(data, contentType = "", forceDataSchema = false) {
+  if (URL.createObjectURL && typeof Blob !== "undefined" && !forceDataSchema) {
+    return URL.createObjectURL(new Blob([data], {
+      type: contentType
+    }));
+  }
+
+  const digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+  let buffer = `data:${contentType};base64,`;
+
+  for (let i = 0, ii = data.length; i < ii; i += 3) {
+    const b1 = data[i] & 0xff;
+    const b2 = data[i + 1] & 0xff;
+    const b3 = data[i + 2] & 0xff;
+    const d1 = b1 >> 2,
+          d2 = (b1 & 3) << 4 | b2 >> 4;
+    const d3 = i + 1 < ii ? (b2 & 0xf) << 2 | b3 >> 6 : 64;
+    const d4 = i + 2 < ii ? b3 & 0x3f : 64;
+    buffer += digits[d1] + digits[d2] + digits[d3] + digits[d4];
+  }
+
+  return buffer;
 }
 
 /***/ }),
@@ -19308,9 +19248,7 @@ class DownloadManager {
   }
 
   downloadData(data, filename, contentType) {
-    const blobUrl = URL.createObjectURL(new Blob([data], {
-      type: contentType
-    }));
+    const blobUrl = (0, _pdfjsLib.createObjectURL)(data, contentType, _app_options.compatibilityParams.disableCreateObjectURL);
     download(blobUrl, filename);
   }
 
@@ -19318,7 +19256,7 @@ class DownloadManager {
     const isPdfData = (0, _pdfjsLib.isPdfFile)(filename);
     const contentType = isPdfData ? "application/pdf" : "";
 
-    if (isPdfData) {
+    if (isPdfData && !_app_options.compatibilityParams.disableCreateObjectURL) {
       let blobUrl = this._openBlobUrls.get(element);
 
       if (!blobUrl) {
@@ -20346,7 +20284,7 @@ class GenericScripting {
 
   async dispatchEventInSandbox(event) {
     const sandbox = await this._ready;
-    setTimeout(() => sandbox.dispatchEvent(event), 0);
+    sandbox.dispatchEvent(event);
   }
 
   async destroySandbox() {
@@ -20374,6 +20312,8 @@ var _pdfjsLib = __webpack_require__(5);
 var _app = __webpack_require__(2);
 
 var _canvasSize = _interopRequireDefault(__webpack_require__(35));
+
+var _app_options = __webpack_require__(1);
 
 var _print_utils = __webpack_require__(52);
 
@@ -20544,7 +20484,7 @@ PDFPrintService.prototype = {
     const img = document.createElement("img");
     const scratchCanvas = this.scratchCanvas;
 
-    if ("toBlob" in scratchCanvas) {
+    if ("toBlob" in scratchCanvas && !_app_options.compatibilityParams.disableCreateObjectURL) {
       scratchCanvas.toBlob(function (blob) {
         img.src = URL.createObjectURL(blob);
       });
@@ -20737,7 +20677,7 @@ exports.getXfaHtmlForPrinting = getXfaHtmlForPrinting;
 
 var _pdfjsLib = __webpack_require__(5);
 
-var _pdf_link_service = __webpack_require__(8);
+var _pdf_link_service = __webpack_require__(20);
 
 var _xfa_layer_builder = __webpack_require__(41);
 
@@ -20818,8 +20758,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.13.408';
-const pdfjsBuild = 'e5e95d17f';
+const pdfjsVersion = '2.12.558';
+const pdfjsBuild = 'faa10a282';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -20870,6 +20810,7 @@ function getViewerConfiguration() {
     appContainer: document.body,
     mainContainer: document.getElementById("viewerContainer"),
     viewerContainer: document.getElementById("viewer"),
+    eventBus: null,
     toolbar: {
       container: document.getElementById("toolbarViewer"),
       numPages: document.getElementById("numPages"),
@@ -20939,7 +20880,6 @@ function getViewerConfiguration() {
       findCurrentPageCheckbox: document.getElementById("findCurrentPage"),
       findPageRangeField: document.getElementById("findRange"),
       caseSensitiveCheckbox: document.getElementById("findMatchCase"),
-      matchDiacriticsCheckbox: document.getElementById("findMatchDiacritics"),
       entireWordCheckbox: document.getElementById("findEntireWord"),
       findMultipleSearchTextsCheckbox: document.getElementById("findMultipleSearchTexts"),
       ignoreAccentsCheckbox: document.getElementById("findIgnoreAccents"),

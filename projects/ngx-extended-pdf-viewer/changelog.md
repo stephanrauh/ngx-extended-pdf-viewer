@@ -337,3 +337,4 @@
 - 11.2.0 #1182 stop printing the empty console message
 - 12.0.0-alpha.0 #1183 support checkboxes that are radiobuttons in disguise correctly
 - 12.0.0-alpha.1 #1201 remove the margin in single-page mode (this CSS rule got lost in version 11.0.0-alpha.3); #1204 stop scrolling away from the target position of internal links
+- 12.0.0-alpha.2 #1197 Allow programmers to clear the PDF programmatically even if the user has opened it

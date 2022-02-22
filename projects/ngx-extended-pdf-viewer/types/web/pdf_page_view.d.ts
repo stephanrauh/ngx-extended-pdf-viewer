@@ -186,7 +186,7 @@ export class PDFPageView implements IRenderableView {
         cancel(): void;
     };
     canvas: HTMLCanvasElement | undefined;
-    outputScale: Object | undefined;
+    outputScale: OutputScale | undefined;
     paintOnSvg(wrapper: any): {
         promise: any;
         onRenderContinue(cont: any): void;
@@ -201,3 +201,4 @@ export class PDFPageView implements IRenderableView {
     maxWidth: number | undefined;
     #private;
 }
+import { OutputScale } from "./ui_utils.js";

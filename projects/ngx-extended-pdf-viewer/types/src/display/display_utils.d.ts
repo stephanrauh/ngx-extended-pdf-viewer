@@ -195,9 +195,10 @@ export class PDFDateString {
      */
     static toDateObject(input: string): Date | null;
 }
-export namespace PixelsPerInch {
-    const CSS: number;
-    const PDF: number;
+export class PixelsPerInch {
+    static CSS: number;
+    static PDF: number;
+    static PDF_TO_CSS_UNITS: number;
 }
 declare const RenderingCancelledException_base: any;
 export class RenderingCancelledException extends RenderingCancelledException_base {
