@@ -43,7 +43,7 @@ export class UnitToPx {
   }
 
   public static toPx(length): number {
-    const unitRe = /^\s*([+-]?[\d\.]*)\s*(.*)\s*$/i;
+    const unitRe = /^\s*([+-]?[\d\.]*)\s*(.*)\s*$/i; // NOSONAR
     const match = unitRe.exec(length);
     if (match != null && match.length > 2) {
       const bare = match[1] === '';

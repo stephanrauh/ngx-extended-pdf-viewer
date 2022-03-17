@@ -345,7 +345,7 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   }
 
   @Input()
-  public set page(p: number | undefined) {}
+  public set page(p: number | undefined) {} // NOSONAR
 
   @Output()
   public pageChange = new EventEmitter<number | undefined>();
@@ -431,7 +431,7 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
    * This attribute is a string with a percent character at the end (e.g. "150%").
    */
   @Input()
-  public set mobileFriendlyZoom(zoom: string) {}
+  public set mobileFriendlyZoom(zoom: string) {} // NOSONAR
 
   @Input()
   public wheelAction: 'scroll' | 'zoom' = 'scroll';

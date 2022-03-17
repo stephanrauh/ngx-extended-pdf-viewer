@@ -76,7 +76,7 @@ body[data-pdfjsprinting] #printContainer, body[data-pdfjsprinting] #printContain
   background-color: rgb(255, 0, 0);
 }
 
-textLayer .highlight.color4 {
+.textLayer .highlight.color4 {
   background-color: rgb(255, 94, 0, 0.4);
 }
 .textLayer .highlight.color4.selected {

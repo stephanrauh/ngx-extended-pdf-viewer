@@ -8,6 +8,7 @@
   </a>
   <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg"></a>
   <a href="https://openbase.io/js/ngx-extended-pdf-viewer?utm_source=embedded&utm_medium=badge&utm_campaign=rate-badge"><img src="https://badges.openbase.io/js/rating/ngx-extended-pdf-viewer.svg"></a>
+  [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=stephanrauh_ngx-extended-pdf-viewer&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=stephanrauh_ngx-extended-pdf-viewer)
   </p>
   <p>
   CDN: <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">unpkg.com</a>
@@ -19,6 +20,8 @@ Version 12 has a small but breaking change. If you're two-way binding with a for
 (and yes - I know that's a long list of conditions!), ngx-extended-pdf-viewer reported simply true or false if one of the checkbox
 is checked. You couldn't tell which checkbox was checked. Now that's fixed. ngx-extended-pdf-viewer uses the "export value", as
 intended by the author of the PDF file.
+
+Version 12 also updates to pdf.js 2.13, with one exception: it doesn't include the latest improvements of the find bar yet.
 
 ## Showcase and manual
 
@@ -57,7 +60,7 @@ This library provides an embeddable PDF viewer component. It's different from ot
 - Color theming
 - And to customize the toolbars and menus according to your needs.
 
-Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 2.12, released in December 2021. If you're the daring one, you can also use the developer version 2.13. It's bleeding edge, so use it at own risk. Basically, the bleeding edge version helps me because I can add Mozilla's latest improvements in frequent, small increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but most of the time, the quality is production-ready.
+Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 2.13, released in February 2022. If you're the daring one, you can also use the developer version 2.14. It's bleeding edge, so use it at own risk. Basically, the bleeding edge version helps me because I can add Mozilla's latest improvements in frequent, small increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but most of the time, the quality is production-ready.
 
 ## Alternatives
 <details>

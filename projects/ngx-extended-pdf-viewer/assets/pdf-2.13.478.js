@@ -57,10 +57,7 @@ exports.info = info;
 exports.isArrayBuffer = isArrayBuffer;
 exports.isArrayEqual = isArrayEqual;
 exports.isAscii = isAscii;
-exports.isBool = isBool;
-exports.isNum = isNum;
 exports.isSameOrigin = isSameOrigin;
-exports.isString = isString;
 exports.objectFromMap = objectFromMap;
 exports.objectSize = objectSize;
 exports.setVerbosityLevel = setVerbosityLevel;
@@ -999,18 +996,6 @@ function utf8StringToString(str) {
   return unescape(encodeURIComponent(str));
 }
 
-function isBool(v) {
-  return typeof v === "boolean";
-}
-
-function isNum(v) {
-  return typeof v === "number";
-}
-
-function isString(v) {
-  return typeof v === "string";
-}
-
 function isArrayBuffer(v) {
   return typeof v === "object" && v !== null && v.byteLength !== undefined;
 }
@@ -1338,7 +1323,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.13.439',
+    apiVersion: '2.13.478',
     source: {
       data: source.data,
       url: source.url,
@@ -3024,7 +3009,7 @@ class WorkerTransport {
 
   getPage(pageNumber) {
     if (!Number.isInteger(pageNumber) || pageNumber <= 0 || pageNumber > this._numPages) {
-      return Promise.reject(new Error("Invalid page request"));
+      return Promise.reject(new Error("Invalid page request."));
     }
 
     const pageIndex = pageNumber - 1,
@@ -3050,8 +3035,13 @@ class WorkerTransport {
   }
 
   getPageIndex(ref) {
+    if (typeof ref !== "object" || ref === null || !Number.isInteger(ref.num) || ref.num < 0 || !Number.isInteger(ref.gen) || ref.gen < 0) {
+      return Promise.reject(new Error("Invalid pageIndex request."));
+    }
+
     return this.messageHandler.sendWithPromise("GetPageIndex", {
-      ref
+      num: ref.num,
+      gen: ref.gen
     });
   }
 
@@ -3451,9 +3441,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.13.439';
+const version = '2.13.478';
 exports.version = version;
-const build = 'f038568c6';
+const build = '1794405c8';
 exports.build = build;
 
 /***/ }),
@@ -3866,7 +3856,7 @@ let pdfDateStringRegex;
 
 class PDFDateString {
   static toDateObject(input) {
-    if (!input || !(0, _util.isString)(input)) {
+    if (!input || typeof input !== "string") {
       return null;
     }
 
@@ -6670,7 +6660,7 @@ class CanvasGraphics {
     for (i = 0; i < glyphsLength; ++i) {
       const glyph = glyphs[i];
 
-      if ((0, _util.isNum)(glyph)) {
+      if (typeof glyph === "number") {
         x += spacingDir * glyph * fontSize / 1000;
         continue;
       }
@@ -6776,7 +6766,7 @@ class CanvasGraphics {
     for (i = 0; i < glyphsLength; ++i) {
       glyph = glyphs[i];
 
-      if ((0, _util.isNum)(glyph)) {
+      if (typeof glyph === "number") {
         spacingLength = spacingDir * glyph * fontSize / 1000;
         this.ctx.translate(spacingLength, 0);
         current.x += spacingLength * textHScale;
@@ -8093,8 +8083,7 @@ const StreamKind = {
 
 function wrapReason(reason) {
   if (!(reason instanceof Error || typeof reason === "object" && reason !== null)) {
-    (0, _util.warn)('wrapReason: Expected "reason" to be a (possibly cloned) Error.');
-    return reason;
+    (0, _util.unreachable)('wrapReason: Expected "reason" to be a (possibly cloned) Error.');
   }
 
   switch (reason.name) {
@@ -13308,7 +13297,7 @@ exports.SVGGraphics = SVGGraphics;
         if (glyph === null) {
           x += fontDirection * wordSpacing;
           continue;
-        } else if ((0, _util.isNum)(glyph)) {
+        } else if (typeof glyph === "number") {
           x += spacingDir * glyph * fontSize / 1000;
           continue;
         }
@@ -15916,8 +15905,8 @@ var _svg = __w_pdfjs_require__(22);
 
 var _xfa_layer = __w_pdfjs_require__(20);
 
-const pdfjsVersion = '2.13.439';
-const pdfjsBuild = 'f038568c6';
+const pdfjsVersion = '2.13.478';
+const pdfjsBuild = '1794405c8';
 {
   if (_is_node.isNodeJS) {
     const {

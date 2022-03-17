@@ -134,7 +134,7 @@ class WorkerMessageHandler {
     const WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.13.439';
+    const workerVersion = '2.13.478';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -420,10 +420,8 @@ class WorkerMessageHandler {
         });
       });
     });
-    handler.on("GetPageIndex", function wphSetupGetPageIndex({
-      ref
-    }) {
-      const pageRef = _primitives.Ref.get(ref.num, ref.gen);
+    handler.on("GetPageIndex", function wphSetupGetPageIndex(data) {
+      const pageRef = _primitives.Ref.get(data.num, data.gen);
 
       return pdfManager.ensureCatalog("getPageIndex", [pageRef]);
     });
@@ -573,7 +571,7 @@ class WorkerMessageHandler {
 
           if (xrefInfo instanceof _primitives.Dict) {
             xrefInfo.forEach((key, value) => {
-              if ((0, _util.isString)(key) && (0, _util.isString)(value)) {
+              if (typeof value === "string") {
                 infoObj[key] = (0, _util.stringToPDFString)(value);
               }
             });
@@ -765,10 +763,7 @@ exports.info = info;
 exports.isArrayBuffer = isArrayBuffer;
 exports.isArrayEqual = isArrayEqual;
 exports.isAscii = isAscii;
-exports.isBool = isBool;
-exports.isNum = isNum;
 exports.isSameOrigin = isSameOrigin;
-exports.isString = isString;
 exports.objectFromMap = objectFromMap;
 exports.objectSize = objectSize;
 exports.setVerbosityLevel = setVerbosityLevel;
@@ -1705,18 +1700,6 @@ function stringToUTF8String(str) {
 
 function utf8StringToString(str) {
   return unescape(encodeURIComponent(str));
-}
-
-function isBool(v) {
-  return typeof v === "boolean";
-}
-
-function isNum(v) {
-  return typeof v === "number";
-}
-
-function isString(v) {
-  return typeof v === "string";
 }
 
 function isArrayBuffer(v) {
@@ -3803,7 +3786,7 @@ class Page {
   get userUnit() {
     let obj = this.pageDict.get("UserUnit");
 
-    if (!(0, _util.isNum)(obj) || obj <= 0) {
+    if (typeof obj !== "number" || obj <= 0) {
       obj = DEFAULT_USER_UNIT;
     }
 
@@ -4646,17 +4629,6 @@ class PDFDocument {
   }
 
   get documentInfo() {
-    const DocumentInfoValidators = {
-      Title: _util.isString,
-      Author: _util.isString,
-      Subject: _util.isString,
-      Keywords: _util.isString,
-      Creator: _util.isString,
-      Producer: _util.isString,
-      CreationDate: _util.isString,
-      ModDate: _util.isString,
-      Trapped: _primitives.isName
-    };
     let version = this._version;
 
     if (typeof version !== "string" || !PDF_HEADER_VERSION_REGEXP.test(version)) {
@@ -4686,25 +4658,60 @@ class PDFDocument {
       (0, _util.info)("The document information dictionary is invalid.");
     }
 
-    if (infoDict instanceof _primitives.Dict) {
-      for (const key of infoDict.getKeys()) {
-        const value = infoDict.get(key);
+    if (!(infoDict instanceof _primitives.Dict)) {
+      return (0, _util.shadow)(this, "documentInfo", docInfo);
+    }
 
-        if (DocumentInfoValidators[key]) {
-          if (DocumentInfoValidators[key](value)) {
-            docInfo[key] = typeof value !== "string" ? value : (0, _util.stringToPDFString)(value);
-          } else {
-            (0, _util.info)(`Bad value in document info for "${key}".`);
+    for (const key of infoDict.getKeys()) {
+      const value = infoDict.get(key);
+
+      switch (key) {
+        case "Title":
+        case "Author":
+        case "Subject":
+        case "Keywords":
+        case "Creator":
+        case "Producer":
+        case "CreationDate":
+        case "ModDate":
+          if (typeof value === "string") {
+            docInfo[key] = (0, _util.stringToPDFString)(value);
+            continue;
           }
-        } else if (typeof key === "string") {
+
+          break;
+
+        case "Trapped":
+          if (value instanceof _primitives.Name) {
+            docInfo[key] = value;
+            continue;
+          }
+
+          break;
+
+        default:
           let customValue;
 
-          if ((0, _util.isString)(value)) {
-            customValue = (0, _util.stringToPDFString)(value);
-          } else if (value instanceof _primitives.Name || (0, _util.isNum)(value) || (0, _util.isBool)(value)) {
-            customValue = value;
-          } else {
-            (0, _util.info)(`Unsupported value in document info for (custom) "${key}".`);
+          switch (typeof value) {
+            case "string":
+              customValue = (0, _util.stringToPDFString)(value);
+              break;
+
+            case "number":
+            case "boolean":
+              customValue = value;
+              break;
+
+            default:
+              if (value instanceof _primitives.Name) {
+                customValue = value;
+              }
+
+              break;
+          }
+
+          if (customValue === undefined) {
+            (0, _util.warn)(`Bad value, for custom key "${key}", in Info: ${value}.`);
             continue;
           }
 
@@ -4713,8 +4720,10 @@ class PDFDocument {
           }
 
           docInfo.Custom[key] = customValue;
-        }
+          continue;
       }
+
+      (0, _util.warn)(`Bad value, for key "${key}", in Info: ${value}.`);
     }
 
     return (0, _util.shadow)(this, "documentInfo", docInfo);
@@ -18553,7 +18562,7 @@ class Annotation {
   }
 
   setModificationDate(modificationDate) {
-    this.modificationDate = (0, _util.isString)(modificationDate) ? modificationDate : null;
+    this.modificationDate = typeof modificationDate === "string" ? modificationDate : null;
   }
 
   setFlags(flags) {
@@ -18933,7 +18942,7 @@ class MarkupAnnotation extends Annotation {
   }
 
   setCreationDate(creationDate) {
-    this.creationDate = (0, _util.isString)(creationDate) ? creationDate : null;
+    this.creationDate = typeof creationDate === "string" ? creationDate : null;
   }
 
   _setDefaultAppearance({
@@ -19068,7 +19077,7 @@ class WidgetAnnotation extends Annotation {
       dict,
       key: "DA"
     }) || params.acroForm.get("DA");
-    this._defaultAppearance = (0, _util.isString)(defaultAppearance) ? defaultAppearance : "";
+    this._defaultAppearance = typeof defaultAppearance === "string" ? defaultAppearance : "";
     data.defaultAppearanceData = (0, _default_appearance.parseDefaultAppearance)(this._defaultAppearance);
     const fieldType = (0, _core_utils.getInheritableProperty)({
       dict,
@@ -19113,10 +19122,10 @@ class WidgetAnnotation extends Annotation {
 
   _decodeFormValue(formValue) {
     if (Array.isArray(formValue)) {
-      return formValue.filter(item => (0, _util.isString)(item)).map(item => (0, _util.stringToPDFString)(item));
+      return formValue.filter(item => typeof item === "string").map(item => (0, _util.stringToPDFString)(item));
     } else if (formValue instanceof _primitives.Name) {
       return (0, _util.stringToPDFString)(formValue.name);
-    } else if ((0, _util.isString)(formValue)) {
+    } else if (typeof formValue === "string") {
       return (0, _util.stringToPDFString)(formValue);
     }
 
@@ -19470,7 +19479,7 @@ class TextWidgetAnnotation extends WidgetAnnotation {
     this._hasText = true;
     const dict = params.dict;
 
-    if (!(0, _util.isString)(this.data.fieldValue)) {
+    if (typeof this.data.fieldValue !== "string") {
       this.data.fieldValue = "";
     }
 
@@ -20046,7 +20055,7 @@ class ChoiceWidgetAnnotation extends WidgetAnnotation {
       }
     }
 
-    if ((0, _util.isString)(this.data.fieldValue)) {
+    if (typeof this.data.fieldValue === "string") {
       this.data.fieldValue = [this.data.fieldValue];
     } else if (!this.data.fieldValue) {
       this.data.fieldValue = [];
@@ -22376,7 +22385,7 @@ class PartialEvaluator {
     const w = dict.get("W", "Width");
     const h = dict.get("H", "Height");
 
-    if (!(w && (0, _util.isNum)(w)) || !(h && (0, _util.isNum)(h))) {
+    if (!(w && typeof w === "number") || !(h && typeof h === "number")) {
       (0, _util.warn)("Image dimensions are missing, or not numbers.");
       return;
     }
@@ -23417,9 +23426,9 @@ class PartialEvaluator {
             for (i = 0; i < arrLength; ++i) {
               const arrItem = arr[i];
 
-              if ((0, _util.isString)(arrItem)) {
+              if (typeof arrItem === "string") {
                 Array.prototype.push.apply(combinedGlyphs, self.handleText(arrItem, state));
-              } else if ((0, _util.isNum)(arrItem)) {
+              } else if (typeof arrItem === "number") {
                 combinedGlyphs.push(arrItem);
               }
             }
@@ -24660,7 +24669,7 @@ class PartialEvaluator {
           for (let j = 0, jj = diffEncoding.length; j < jj; j++) {
             const data = xref.fetchIfRef(diffEncoding[j]);
 
-            if ((0, _util.isNum)(data)) {
+            if (typeof data === "number") {
               index = data;
             } else if (data instanceof _primitives.Name) {
               differences[index++] = data.name;
@@ -25083,7 +25092,7 @@ class PartialEvaluator {
 
     const glyphWidths = Metrics[lookupName];
 
-    if ((0, _util.isNum)(glyphWidths)) {
+    if (typeof glyphWidths === "number") {
       defaultWidth = glyphWidths;
       monospace = true;
     } else {
@@ -25177,7 +25186,7 @@ class PartialEvaluator {
 
               if (diffEntry instanceof _primitives.Name) {
                 diffBuf[j] = diffEntry.name;
-              } else if ((0, _util.isNum)(diffEntry) || diffEntry instanceof _primitives.Ref) {
+              } else if (typeof diffEntry === "number" || diffEntry instanceof _primitives.Ref) {
                 diffBuf[j] = diffEntry.toString();
               }
             }
@@ -25204,7 +25213,7 @@ class PartialEvaluator {
         const widthsBuf = [];
 
         for (const entry of widths) {
-          if ((0, _util.isNum)(entry) || entry instanceof _primitives.Ref) {
+          if (typeof entry === "number" || entry instanceof _primitives.Ref) {
             widthsBuf.push(entry.toString());
           }
         }
@@ -25220,13 +25229,13 @@ class PartialEvaluator {
           const widthsBuf = [];
 
           for (const entry of compositeWidths) {
-            if ((0, _util.isNum)(entry) || entry instanceof _primitives.Ref) {
+            if (typeof entry === "number" || entry instanceof _primitives.Ref) {
               widthsBuf.push(entry.toString());
             } else if (Array.isArray(entry)) {
               const subWidthsBuf = [];
 
               for (const element of entry) {
-                if ((0, _util.isNum)(element) || element instanceof _primitives.Ref) {
+                if (typeof element === "number" || element instanceof _primitives.Ref) {
                   subWidthsBuf.push(element.toString());
                 }
               }
@@ -25341,11 +25350,11 @@ class PartialEvaluator {
     let fontName = descriptor.get("FontName");
     let baseFont = dict.get("BaseFont");
 
-    if ((0, _util.isString)(fontName)) {
+    if (typeof fontName === "string") {
       fontName = _primitives.Name.get(fontName);
     }
 
-    if ((0, _util.isString)(baseFont)) {
+    if (typeof baseFont === "string") {
       baseFont = _primitives.Name.get(baseFont);
     }
 
@@ -26901,7 +26910,7 @@ const CMapFactory = function CMapFactoryClosure() {
   }
 
   function expectString(obj) {
-    if (!(0, _util.isString)(obj)) {
+    if (typeof obj !== "string") {
       throw new _util.FormatError("Malformed CMap: expected string.");
     }
   }
@@ -26952,7 +26961,7 @@ const CMapFactory = function CMapFactoryClosure() {
       const high = strToInt(obj);
       obj = lexer.getObj();
 
-      if (Number.isInteger(obj) || (0, _util.isString)(obj)) {
+      if (Number.isInteger(obj) || typeof obj === "string") {
         const dstLow = Number.isInteger(obj) ? String.fromCharCode(obj) : obj;
         cMap.mapBfRange(low, high, dstLow);
       } else if ((0, _primitives.isCmd)(obj, "[")) {
@@ -27030,14 +27039,14 @@ const CMapFactory = function CMapFactoryClosure() {
         return;
       }
 
-      if (!(0, _util.isString)(obj)) {
+      if (typeof obj !== "string") {
         break;
       }
 
       const low = strToInt(obj);
       obj = lexer.getObj();
 
-      if (!(0, _util.isString)(obj)) {
+      if (typeof obj !== "string") {
         break;
       }
 
@@ -27059,7 +27068,7 @@ const CMapFactory = function CMapFactoryClosure() {
   function parseCMapName(cMap, lexer) {
     const obj = lexer.getObj();
 
-    if (obj instanceof _primitives.Name && (0, _util.isString)(obj.name)) {
+    if (obj instanceof _primitives.Name) {
       cMap.name = obj.name;
     }
   }
@@ -28579,7 +28588,7 @@ class Linearization {
     const linDict = parser.getObj();
     let obj, length;
 
-    if (!(Number.isInteger(obj1) && Number.isInteger(obj2) && (0, _primitives.isCmd)(obj3, "obj") && linDict instanceof _primitives.Dict && (0, _util.isNum)(obj = linDict.get("Linearized")) && obj > 0)) {
+    if (!(Number.isInteger(obj1) && Number.isInteger(obj2) && (0, _primitives.isCmd)(obj3, "obj") && linDict instanceof _primitives.Dict && typeof (obj = linDict.get("Linearized")) === "number" && obj > 0)) {
       return null;
     } else if ((length = getInt(linDict, "L")) !== stream.length) {
       throw new Error('The "L" parameter in the linearization dictionary ' + "does not equal the stream length.");
@@ -34487,10 +34496,6 @@ class JpxImage {
               unsupported.push("selectiveArithmeticCodingBypass");
             }
 
-            if (cod.resetContextProbabilities) {
-              unsupported.push("resetContextProbabilities");
-            }
-
             if (cod.terminationOnEachCodingPass) {
               unsupported.push("terminationOnEachCodingPass");
             }
@@ -35435,7 +35440,7 @@ function parseTilePackets(context, data, offset, dataLength) {
   return position;
 }
 
-function copyCoefficients(coefficients, levelWidth, levelHeight, subband, delta, mb, reversible, segmentationSymbolUsed) {
+function copyCoefficients(coefficients, levelWidth, levelHeight, subband, delta, mb, reversible, segmentationSymbolUsed, resetContextProbabilities) {
   const x0 = subband.tbx0;
   const y0 = subband.tby0;
   const width = subband.tbx1 - subband.tbx0;
@@ -35502,6 +35507,10 @@ function copyCoefficients(coefficients, levelWidth, levelHeight, subband, delta,
           break;
       }
 
+      if (resetContextProbabilities) {
+        bitModel.reset();
+      }
+
       currentCodingpassType = (currentCodingpassType + 1) % 3;
     }
 
@@ -35556,6 +35565,7 @@ function transformTile(context, tile, c) {
   const scalarExpounded = quantizationParameters.scalarExpounded;
   const guardBits = quantizationParameters.guardBits;
   const segmentationSymbolUsed = codingStyleParameters.segmentationSymbolUsed;
+  const resetContextProbabilities = codingStyleParameters.resetContextProbabilities;
   const precision = context.components[c].precision;
   const reversible = codingStyleParameters.reversibleTransformation;
   const transform = reversible ? new ReversibleTransform() : new IrreversibleTransform();
@@ -35584,7 +35594,7 @@ function transformTile(context, tile, c) {
       const gainLog2 = SubbandsGainLog2[subband.type];
       const delta = reversible ? 1 : 2 ** (precision + gainLog2 - epsilon) * (1 + mu / 2048);
       const mb = guardBits + epsilon - 1;
-      copyCoefficients(coefficients, width, height, subband, delta, mb, reversible, segmentationSymbolUsed);
+      copyCoefficients(coefficients, width, height, subband, delta, mb, reversible, segmentationSymbolUsed, resetContextProbabilities);
     }
 
     subbandCoefficients.push({
@@ -39577,7 +39587,11 @@ class Font {
     }
 
     width = this.widths[widthCode];
-    width = (0, _util.isNum)(width) ? width : this.defaultWidth;
+
+    if (typeof width !== "number") {
+      width = this.defaultWidth;
+    }
+
     const vmetric = this.vmetrics && this.vmetrics[widthCode];
     let unicode = this.toUnicode.get(charcode) || charcode;
 
@@ -50220,7 +50234,7 @@ class PostScriptEvaluator {
           b = stack.pop();
           a = stack.pop();
 
-          if ((0, _util.isBool)(a) && (0, _util.isBool)(b)) {
+          if (typeof a === "boolean" && typeof b === "boolean") {
             stack.push(a && b);
           } else {
             stack.push(a & b);
@@ -50374,7 +50388,7 @@ class PostScriptEvaluator {
         case "not":
           a = stack.pop();
 
-          if ((0, _util.isBool)(a)) {
+          if (typeof a === "boolean") {
             stack.push(!a);
           } else {
             stack.push(~a);
@@ -50386,7 +50400,7 @@ class PostScriptEvaluator {
           b = stack.pop();
           a = stack.pop();
 
-          if ((0, _util.isBool)(a) && (0, _util.isBool)(b)) {
+          if (typeof a === "boolean" && typeof b === "boolean") {
             stack.push(a || b);
           } else {
             stack.push(a | b);
@@ -50439,7 +50453,7 @@ class PostScriptEvaluator {
           b = stack.pop();
           a = stack.pop();
 
-          if ((0, _util.isBool)(a) && (0, _util.isBool)(b)) {
+          if (typeof a === "boolean" && typeof b === "boolean") {
             stack.push(a !== b);
           } else {
             stack.push(a ^ b);
@@ -51788,7 +51802,7 @@ class MurmurHash3_64 {
   update(input) {
     let data, length;
 
-    if ((0, _util.isString)(input)) {
+    if (typeof input === "string") {
       data = new Uint8Array(input.length * 2);
       length = 0;
 
@@ -53418,7 +53432,7 @@ class Catalog {
 
       const value = obj.get(key);
 
-      if (!(0, _util.isBool)(value)) {
+      if (typeof value !== "boolean") {
         continue;
       }
 
@@ -53600,7 +53614,7 @@ class Catalog {
 
     let flags = encrypt.get("P");
 
-    if (!(0, _util.isNum)(flags)) {
+    if (typeof flags !== "number") {
       return null;
     }
 
@@ -53652,8 +53666,8 @@ class Catalog {
         const group = this.xref.fetchIfRef(groupRef);
         groups.push({
           id: groupRef.toString(),
-          name: (0, _util.isString)(group.get("Name")) ? (0, _util.stringToPDFString)(group.get("Name")) : null,
-          intent: (0, _util.isString)(group.get("Intent")) ? (0, _util.stringToPDFString)(group.get("Intent")) : null
+          name: typeof group.get("Name") === "string" ? (0, _util.stringToPDFString)(group.get("Name")) : null,
+          intent: typeof group.get("Intent") === "string" ? (0, _util.stringToPDFString)(group.get("Intent")) : null
         });
       }
 
@@ -53768,8 +53782,8 @@ class Catalog {
           parsedOrderRefs = new _primitives.RefSet(),
           MAX_NESTED_LEVELS = 10;
     return {
-      name: (0, _util.isString)(config.get("Name")) ? (0, _util.stringToPDFString)(config.get("Name")) : null,
-      creator: (0, _util.isString)(config.get("Creator")) ? (0, _util.stringToPDFString)(config.get("Creator")) : null,
+      name: typeof config.get("Name") === "string" ? (0, _util.stringToPDFString)(config.get("Name")) : null,
+      creator: typeof config.get("Creator") === "string" ? (0, _util.stringToPDFString)(config.get("Creator")) : null,
       baseState: config.get("BaseState") instanceof _primitives.Name ? config.get("BaseState").name : null,
       on: parseOnOff(config.get("ON")),
       off: parseOnOff(config.get("OFF")),
@@ -53922,7 +53936,7 @@ class Catalog {
         if (labelDict.has("P")) {
           const p = labelDict.get("P");
 
-          if (!(0, _util.isString)(p)) {
+          if (typeof p !== "string") {
             throw new _util.FormatError("Invalid prefix in PageLabel dictionary.");
           }
 
@@ -54027,47 +54041,34 @@ class Catalog {
   }
 
   get viewerPreferences() {
-    const ViewerPreferencesValidators = {
-      HideToolbar: _util.isBool,
-      HideMenubar: _util.isBool,
-      HideWindowUI: _util.isBool,
-      FitWindow: _util.isBool,
-      CenterWindow: _util.isBool,
-      DisplayDocTitle: _util.isBool,
-      NonFullScreenPageMode: _primitives.isName,
-      Direction: _primitives.isName,
-      ViewArea: _primitives.isName,
-      ViewClip: _primitives.isName,
-      PrintArea: _primitives.isName,
-      PrintClip: _primitives.isName,
-      PrintScaling: _primitives.isName,
-      Duplex: _primitives.isName,
-      PickTrayByPDFSize: _util.isBool,
-      PrintPageRange: Array.isArray,
-      NumCopies: Number.isInteger
-    };
-
     const obj = this._catDict.get("ViewerPreferences");
+
+    if (!(obj instanceof _primitives.Dict)) {
+      return (0, _util.shadow)(this, "viewerPreferences", null);
+    }
 
     let prefs = null;
 
-    if (obj instanceof _primitives.Dict) {
-      for (const key in ViewerPreferencesValidators) {
-        if (!obj.has(key)) {
-          continue;
-        }
+    for (const key of obj.getKeys()) {
+      const value = obj.get(key);
+      let prefValue;
 
-        const value = obj.get(key);
+      switch (key) {
+        case "HideToolbar":
+        case "HideMenubar":
+        case "HideWindowUI":
+        case "FitWindow":
+        case "CenterWindow":
+        case "DisplayDocTitle":
+        case "PickTrayByPDFSize":
+          if (typeof value === "boolean") {
+            prefValue = value;
+          }
 
-        if (!ViewerPreferencesValidators[key](value)) {
-          (0, _util.info)(`Bad value in ViewerPreferences for "${key}".`);
-          continue;
-        }
+          break;
 
-        let prefValue;
-
-        switch (key) {
-          case "NonFullScreenPageMode":
+        case "NonFullScreenPageMode":
+          if (value instanceof _primitives.Name) {
             switch (value.name) {
               case "UseNone":
               case "UseOutlines":
@@ -54079,10 +54080,12 @@ class Catalog {
               default:
                 prefValue = "UseNone";
             }
+          }
 
-            break;
+          break;
 
-          case "Direction":
+        case "Direction":
+          if (value instanceof _primitives.Name) {
             switch (value.name) {
               case "L2R":
               case "R2L":
@@ -54092,13 +54095,15 @@ class Catalog {
               default:
                 prefValue = "L2R";
             }
+          }
 
-            break;
+          break;
 
-          case "ViewArea":
-          case "ViewClip":
-          case "PrintArea":
-          case "PrintClip":
+        case "ViewArea":
+        case "ViewClip":
+        case "PrintArea":
+        case "PrintClip":
+          if (value instanceof _primitives.Name) {
             switch (value.name) {
               case "MediaBox":
               case "CropBox":
@@ -54111,10 +54116,12 @@ class Catalog {
               default:
                 prefValue = "CropBox";
             }
+          }
 
-            break;
+          break;
 
-          case "PrintScaling":
+        case "PrintScaling":
+          if (value instanceof _primitives.Name) {
             switch (value.name) {
               case "None":
               case "AppDefault":
@@ -54124,10 +54131,12 @@ class Catalog {
               default:
                 prefValue = "AppDefault";
             }
+          }
 
-            break;
+          break;
 
-          case "Duplex":
+        case "Duplex":
+          if (value instanceof _primitives.Name) {
             switch (value.name) {
               case "Simplex":
               case "DuplexFlipShortEdge":
@@ -54138,16 +54147,12 @@ class Catalog {
               default:
                 prefValue = "None";
             }
+          }
 
-            break;
+          break;
 
-          case "PrintPageRange":
-            const length = value.length;
-
-            if (length % 2 !== 0) {
-              break;
-            }
-
+        case "PrintPageRange":
+          if (Array.isArray(value) && value.length % 2 === 0) {
             const isValid = value.every((page, i, arr) => {
               return Number.isInteger(page) && page > 0 && (i === 0 || page >= arr[i - 1]) && page <= this.numPages;
             });
@@ -54155,34 +54160,32 @@ class Catalog {
             if (isValid) {
               prefValue = value;
             }
-
-            break;
-
-          case "NumCopies":
-            if (value > 0) {
-              prefValue = value;
-            }
-
-            break;
-
-          default:
-            if (typeof value !== "boolean") {
-              throw new _util.FormatError(`viewerPreferences - expected a boolean value for: ${key}`);
-            }
-
-            prefValue = value;
-        }
-
-        if (prefValue !== undefined) {
-          if (!prefs) {
-            prefs = Object.create(null);
           }
 
-          prefs[key] = prefValue;
-        } else {
-          (0, _util.info)(`Bad value in ViewerPreferences for "${key}".`);
-        }
+          break;
+
+        case "NumCopies":
+          if (Number.isInteger(value) && value > 0) {
+            prefValue = value;
+          }
+
+          break;
+
+        default:
+          (0, _util.warn)(`Ignoring non-standard key in ViewerPreferences: ${key}.`);
+          continue;
       }
+
+      if (prefValue === undefined) {
+        (0, _util.warn)(`Bad value, for key "${key}", in ViewerPreferences: ${value}.`);
+        continue;
+      }
+
+      if (!prefs) {
+        prefs = Object.create(null);
+      }
+
+      prefs[key] = prefValue;
     }
 
     return (0, _util.shadow)(this, "viewerPreferences", prefs);
@@ -54749,14 +54752,14 @@ class Catalog {
       switch (actionName) {
         case "ResetForm":
           const flags = action.get("Flags");
-          const include = (((0, _util.isNum)(flags) ? flags : 0) & 1) === 0;
+          const include = ((typeof flags === "number" ? flags : 0) & 1) === 0;
           const fields = [];
           const refs = [];
 
           for (const obj of action.get("Fields") || []) {
             if (obj instanceof _primitives.Ref) {
               refs.push(obj.toString());
-            } else if ((0, _util.isString)(obj)) {
+            } else if (typeof obj === "string") {
               fields.push((0, _util.stringToPDFString)(obj));
             }
           }
@@ -54787,7 +54790,7 @@ class Catalog {
 
           if (urlDict instanceof _primitives.Dict) {
             url = urlDict.get("F") || null;
-          } else if ((0, _util.isString)(urlDict)) {
+          } else if (typeof urlDict === "string") {
             url = urlDict;
           }
 
@@ -54798,10 +54801,10 @@ class Catalog {
               remoteDest = remoteDest.name;
             }
 
-            if ((0, _util.isString)(url)) {
+            if (typeof url === "string") {
               const baseUrl = url.split("#")[0];
 
-              if ((0, _util.isString)(remoteDest)) {
+              if (typeof remoteDest === "string") {
                 url = baseUrl + "#" + remoteDest;
               } else if (Array.isArray(remoteDest)) {
                 url = baseUrl + "#" + JSON.stringify(remoteDest);
@@ -54811,7 +54814,7 @@ class Catalog {
 
           const newWindow = action.get("NewWindow");
 
-          if ((0, _util.isBool)(newWindow)) {
+          if (typeof newWindow === "boolean") {
             resultObj.newWindow = newWindow;
           }
 
@@ -54832,7 +54835,7 @@ class Catalog {
 
           if (jsAction instanceof _base_stream.BaseStream) {
             js = jsAction.getString();
-          } else if ((0, _util.isString)(jsAction)) {
+          } else if (typeof jsAction === "string") {
             js = jsAction;
           }
 
@@ -54856,7 +54859,7 @@ class Catalog {
       dest = destDict.get("Dest");
     }
 
-    if ((0, _util.isString)(url)) {
+    if (typeof url === "string") {
       const absoluteUrl = (0, _util.createValidAbsoluteUrl)(url, docBaseUrl, {
         addDefaultProtocol: true,
         tryConvertEncoding: true
@@ -54874,7 +54877,7 @@ class Catalog {
         dest = dest.name;
       }
 
-      if ((0, _util.isString)(dest) || Array.isArray(dest)) {
+      if (typeof dest === "string" || Array.isArray(dest)) {
         resultObj.dest = dest;
       }
     }
@@ -56181,13 +56184,13 @@ class StructTreePage {
       parent.children.push(obj);
       const alt = node.dict.get("Alt");
 
-      if ((0, _util.isString)(alt)) {
+      if (typeof alt === "string") {
         obj.alt = (0, _util.stringToPDFString)(alt);
       }
 
       const lang = node.dict.get("Lang");
 
-      if ((0, _util.isString)(lang)) {
+      if (typeof lang === "string") {
         obj.lang = (0, _util.stringToPDFString)(lang);
       }
 
@@ -73180,8 +73183,7 @@ const StreamKind = {
 
 function wrapReason(reason) {
   if (!(reason instanceof Error || typeof reason === "object" && reason !== null)) {
-    (0, _util.warn)('wrapReason: Expected "reason" to be a (possibly cloned) Error.');
-    return reason;
+    (0, _util.unreachable)('wrapReason: Expected "reason" to be a (possibly cloned) Error.');
   }
 
   switch (reason.name) {
@@ -73860,8 +73862,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.13.439';
-const pdfjsBuild = 'f038568c6';
+const pdfjsVersion = '2.13.478';
+const pdfjsBuild = '1794405c8';
 })();
 
 /******/ 	return __webpack_exports__;

@@ -237,12 +237,9 @@ export class InvalidPDFException extends InvalidPDFException_base {
 export function isArrayBuffer(v: any): boolean;
 export function isArrayEqual(arr1: any, arr2: any): boolean;
 export function isAscii(str: any): boolean;
-export function isBool(v: any): boolean;
 export namespace IsEvalSupportedCached { }
 export namespace IsLittleEndianCached { }
-export function isNum(v: any): boolean;
 export function isSameOrigin(baseUrl: any, otherUrl: any): boolean;
-export function isString(v: any): boolean;
 declare const MissingPDFException_base: any;
 export class MissingPDFException extends MissingPDFException_base {
     [x: string]: any;
