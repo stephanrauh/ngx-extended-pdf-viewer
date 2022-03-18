@@ -157,7 +157,7 @@ export class PDFPageView implements IRenderableView {
         scale?: number | undefined;
         rotation?: null | undefined;
         optionalContentConfigPromise?: null | undefined;
-    }, ...args: any[]): void;
+    }): void;
     /**
      * PLEASE NOTE: Most likely you want to use the `this.reset()` method,
      *              rather than calling this one directly.

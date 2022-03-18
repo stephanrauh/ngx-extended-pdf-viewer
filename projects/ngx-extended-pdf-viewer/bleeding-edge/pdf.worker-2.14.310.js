@@ -134,7 +134,7 @@ class WorkerMessageHandler {
     const WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.13.477';
+    const workerVersion = '2.14.310';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -389,7 +389,7 @@ class WorkerMessageHandler {
       };
       let cMapUrl = evaluatorOptions.cMapUrl;
 
-      if (cMapUrl.constructor.name === "Function") {
+      if (cMapUrl?.constructor.name === "Function") {
         evaluatorOptions.cMapUrl = cMapUrl();
       }
 
@@ -763,7 +763,6 @@ exports.info = info;
 exports.isArrayBuffer = isArrayBuffer;
 exports.isArrayEqual = isArrayEqual;
 exports.isAscii = isAscii;
-exports.isSameOrigin = isSameOrigin;
 exports.objectFromMap = objectFromMap;
 exports.objectSize = objectSize;
 exports.setVerbosityLevel = setVerbosityLevel;
@@ -1163,23 +1162,6 @@ function assert(cond, msg) {
   if (!cond) {
     unreachable(msg);
   }
-}
-
-function isSameOrigin(baseUrl, otherUrl) {
-  let base;
-
-  try {
-    base = new URL(baseUrl);
-
-    if (!base.origin || base.origin === "null") {
-      return false;
-    }
-  } catch (e) {
-    return false;
-  }
-
-  const other = new URL(otherUrl, base);
-  return base.origin === other.origin;
 }
 
 function _isValidProtocol(url) {
@@ -3653,8 +3635,6 @@ var _primitives = __w_pdfjs_require__(4);
 
 var _xfa_fonts = __w_pdfjs_require__(11);
 
-var _stream = __w_pdfjs_require__(9);
-
 var _annotation = __w_pdfjs_require__(21);
 
 var _base_stream = __w_pdfjs_require__(8);
@@ -3666,6 +3646,8 @@ var _catalog = __w_pdfjs_require__(63);
 var _cleanup_helper = __w_pdfjs_require__(65);
 
 var _parser = __w_pdfjs_require__(26);
+
+var _stream = __w_pdfjs_require__(9);
 
 var _object_loader = __w_pdfjs_require__(70);
 
@@ -4141,17 +4123,7 @@ function find(stream, signature, limit = 1024, backwards = false) {
 }
 
 class PDFDocument {
-  constructor(pdfManager, arg) {
-    let stream;
-
-    if (arg instanceof _base_stream.BaseStream) {
-      stream = arg;
-    } else if ((0, _util.isArrayBuffer)(arg)) {
-      stream = new _stream.Stream(arg);
-    } else {
-      throw new Error("PDFDocument: Unknown argument type");
-    }
-
+  constructor(pdfManager, stream) {
     if (stream.length <= 0) {
       throw new _util.InvalidPDFException("The PDF file is empty, i.e. its size is zero bytes.");
     }
@@ -22206,7 +22178,7 @@ class PartialEvaluator {
     let data;
     let cMapUrl = this.options.cMapUrl;
 
-    if (cMapUrl.constructor.name === "Function") {
+    if (cMapUrl?.constructor.name === "Function") {
       cMapUrl = cMapUrl();
     }
 
@@ -22393,8 +22365,14 @@ class PartialEvaluator {
     const maxImageSize = this.options.maxImageSize;
 
     if (maxImageSize !== -1 && w * h > maxImageSize) {
-      (0, _util.warn)("Image exceeded maximum allowed size and was removed.");
-      return;
+      const msg = "Image exceeded maximum allowed size and was removed.";
+
+      if (this.options.ignoreErrors) {
+        (0, _util.warn)(msg);
+        return;
+      }
+
+      throw new Error(msg);
     }
 
     let optionalContent;
@@ -38533,6 +38511,27 @@ class Font {
       locaEntries.sort((a, b) => {
         return a.index - b.index;
       });
+
+      for (i = 0; i < numGlyphs; i++) {
+        const {
+          offset,
+          endOffset
+        } = locaEntries[i];
+
+        if (offset !== 0 || endOffset !== 0) {
+          break;
+        }
+
+        const nextOffset = locaEntries[i + 1].offset;
+
+        if (nextOffset === 0) {
+          continue;
+        }
+
+        locaEntries[i].endOffset = nextOffset;
+        break;
+      }
+
       const missingGlyphs = Object.create(null);
       let writeOffset = 0;
       itemEncode(locaData, 0, writeOffset);
@@ -73862,8 +73861,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.13.477';
-const pdfjsBuild = 'ba670cab3';
+const pdfjsVersion = '2.14.310';
+const pdfjsBuild = 'f70b50172';
 })();
 
 /******/ 	return __webpack_exports__;

@@ -239,7 +239,6 @@ export function isArrayEqual(arr1: any, arr2: any): boolean;
 export function isAscii(str: any): boolean;
 export namespace IsEvalSupportedCached { }
 export namespace IsLittleEndianCached { }
-export function isSameOrigin(baseUrl: any, otherUrl: any): boolean;
 declare const MissingPDFException_base: any;
 export class MissingPDFException extends MissingPDFException_base {
     [x: string]: any;

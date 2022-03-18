@@ -1350,6 +1350,11 @@ export class PDFWorker {
      */
     destroy(): void;
 }
+export namespace PDFWorkerUtil {
+    const isWorkerDisabled: boolean;
+    const fallbackWorkerSrc: null;
+    const fakeWorkerId: number;
+}
 /**
  * Allows controlling of the rendering tasks.
  */
