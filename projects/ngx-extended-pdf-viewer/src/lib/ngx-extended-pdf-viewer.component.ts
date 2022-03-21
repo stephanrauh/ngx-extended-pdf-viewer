@@ -1315,7 +1315,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           if (!this.shuttingDown) {
             // hurried users sometimes reload the PDF before it has finished initializing
             if (this.nameddest) {
-              PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
+              PDFViewerApplication.pdfLinkService.goToDestination(this.nameddest);
             } else if (this.page) {
               PDFViewerApplication.page = Number(this.page);
             } else if (this.pageLabel) {
@@ -1765,7 +1765,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
       if ('nameddest' in changes) {
         if (this.nameddest) {
-          PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
+          PDFViewerApplication.pdfLinkService.goToDestination(this.nameddest);
         }
       }
 
