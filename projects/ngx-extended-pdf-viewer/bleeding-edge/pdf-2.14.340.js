@@ -1313,7 +1313,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.14.310',
+    apiVersion: '2.14.340',
     source: {
       data: source.data,
       url: source.url,
@@ -1342,17 +1342,13 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 }
 
 class PDFDocumentLoadingTask {
-  static get idCounters() {
-    return (0, _util.shadow)(this, "idCounters", {
-      doc: 0
-    });
-  }
+  static #docId = 0;
 
   constructor() {
     this._capability = (0, _util.createPromiseCapability)();
     this._transport = null;
     this._worker = null;
-    this.docId = `d${PDFDocumentLoadingTask.idCounters.doc++}`;
+    this.docId = `d${PDFDocumentLoadingTask.#docId++}`;
     this.destroyed = false;
     this.onPassword = null;
     this.onProgress = null;
@@ -2260,16 +2256,14 @@ exports.PDFWorkerUtil = PDFWorkerUtil;
 }
 
 class PDFWorker {
-  static get _workerPorts() {
-    return (0, _util.shadow)(this, "_workerPorts", new WeakMap());
-  }
+  static #workerPorts = new WeakMap();
 
   constructor({
     name = null,
     port = null,
     verbosity = (0, _util.getVerbosityLevel)()
   } = {}) {
-    if (port && PDFWorker._workerPorts.has(port)) {
+    if (port && PDFWorker.#workerPorts.has(port)) {
       throw new Error("Cannot use more than one PDFWorker per port.");
     }
 
@@ -2282,7 +2276,7 @@ class PDFWorker {
     this._messageHandler = null;
 
     if (port) {
-      PDFWorker._workerPorts.set(port, this);
+      PDFWorker.#workerPorts.set(port, this);
 
       this._initializeFromPort(port);
 
@@ -2385,15 +2379,8 @@ class PDFWorker {
         });
 
         const sendTest = () => {
-          const testObj = new Uint8Array([255]);
-
-          try {
-            messageHandler.send("test", testObj, [testObj.buffer]);
-          } catch (ex) {
-            (0, _util.warn)("Cannot use postMessage transfers.");
-            testObj[0] = 0;
-            messageHandler.send("test", testObj);
-          }
+          const testObj = new Uint8Array();
+          messageHandler.send("test", testObj, [testObj.buffer]);
         };
 
         sendTest();
@@ -2446,8 +2433,7 @@ class PDFWorker {
       this._webWorker = null;
     }
 
-    PDFWorker._workerPorts.delete(this._port);
-
+    PDFWorker.#workerPorts.delete(this._port);
     this._port = null;
 
     if (this._messageHandler) {
@@ -2462,8 +2448,8 @@ class PDFWorker {
       throw new Error("PDFWorker.fromPort - invalid method signature.");
     }
 
-    if (this._workerPorts.has(params.port)) {
-      return this._workerPorts.get(params.port);
+    if (this.#workerPorts.has(params.port)) {
+      return this.#workerPorts.get(params.port);
     }
 
     return new PDFWorker(params);
@@ -3274,9 +3260,7 @@ class RenderTask {
 exports.RenderTask = RenderTask;
 
 class InternalRenderTask {
-  static get canvasInUse() {
-    return (0, _util.shadow)(this, "canvasInUse", new WeakSet());
-  }
+  static #canvasInUse = new WeakSet();
 
   constructor({
     callback,
@@ -3327,11 +3311,11 @@ class InternalRenderTask {
     }
 
     if (this._canvas) {
-      if (InternalRenderTask.canvasInUse.has(this._canvas)) {
+      if (InternalRenderTask.#canvasInUse.has(this._canvas)) {
         throw new Error("Cannot use the same canvas during multiple render() operations. " + "Use different canvas or ensure previous operations were " + "cancelled or completed.");
       }
 
-      InternalRenderTask.canvasInUse.add(this._canvas);
+      InternalRenderTask.#canvasInUse.add(this._canvas);
     }
 
     if (this._pdfBug && globalThis.StepperManager?.enabled) {
@@ -3373,7 +3357,7 @@ class InternalRenderTask {
     }
 
     if (this._canvas) {
-      InternalRenderTask.canvasInUse.delete(this._canvas);
+      InternalRenderTask.#canvasInUse.delete(this._canvas);
     }
 
     this.callback(error || new _display_utils.RenderingCancelledException(`Rendering cancelled, page ${this._pageIndex + 1}`, "canvas"));
@@ -3439,7 +3423,7 @@ class InternalRenderTask {
         this.gfx.endDrawing();
 
         if (this._canvas) {
-          InternalRenderTask.canvasInUse.delete(this._canvas);
+          InternalRenderTask.#canvasInUse.delete(this._canvas);
         }
 
         this.callback();
@@ -3449,9 +3433,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.14.310';
+const version = '2.14.340';
 exports.version = version;
-const build = 'f70b50172';
+const build = 'add97cd2c';
 exports.build = build;
 
 /***/ }),
@@ -15955,8 +15939,8 @@ var _svg = __w_pdfjs_require__(22);
 
 var _xfa_layer = __w_pdfjs_require__(20);
 
-const pdfjsVersion = '2.14.310';
-const pdfjsBuild = 'f70b50172';
+const pdfjsVersion = '2.14.340';
+const pdfjsBuild = 'add97cd2c';
 {
   if (_is_node.isNodeJS) {
     const {
