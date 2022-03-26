@@ -1177,7 +1177,6 @@ function getDocument(src) {
     params[key] = value;
   }
 
-  params.rangeChunkSize = params.rangeChunkSize || DEFAULT_RANGE_CHUNK_SIZE;
   params.CMapReaderFactory = params.CMapReaderFactory || DefaultCMapReaderFactory;
   params.StandardFontDataFactory = params.StandardFontDataFactory || DefaultStandardFontDataFactory;
   params.ignoreErrors = params.stopAtErrors !== true;
@@ -1185,11 +1184,15 @@ function getDocument(src) {
   params.pdfBug = params.pdfBug === true;
   params.enableXfa = params.enableXfa === true;
 
+  if (!Number.isInteger(params.rangeChunkSize) || params.rangeChunkSize < 1) {
+    params.rangeChunkSize = DEFAULT_RANGE_CHUNK_SIZE;
+  }
+
   if (typeof params.docBaseUrl !== "string" || (0, _display_utils.isDataScheme)(params.docBaseUrl)) {
     params.docBaseUrl = null;
   }
 
-  if (!Number.isInteger(params.maxImageSize)) {
+  if (!Number.isInteger(params.maxImageSize) || params.maxImageSize < -1) {
     params.maxImageSize = -1;
   }
 
@@ -1217,7 +1220,7 @@ function getDocument(src) {
     params.useSystemFonts = !_is_node.isNodeJS && !params.disableFontFace;
   }
 
-  if (typeof params.ownerDocument === "undefined") {
+  if (typeof params.ownerDocument !== "object" || params.ownerDocument === null) {
     params.ownerDocument = globalThis.document;
   }
 
@@ -1313,7 +1316,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.14.363',
+    apiVersion: '2.14.371',
     source: {
       data: source.data,
       url: source.url,
@@ -3433,9 +3436,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.14.363';
+const version = '2.14.371';
 exports.version = version;
-const build = '09b645823';
+const build = '2dff47f99';
 exports.build = build;
 
 /***/ }),
@@ -14612,7 +14615,6 @@ function validateRangeRequestCapabilities({
   rangeChunkSize,
   disableRange
 }) {
-  (0, _util.assert)(rangeChunkSize > 0, "Range chunk size must be larger than zero");
   const returnValues = {
     allowRangeRequests: false,
     suggestedLength: undefined
@@ -15939,8 +15941,8 @@ var _svg = __w_pdfjs_require__(22);
 
 var _xfa_layer = __w_pdfjs_require__(20);
 
-const pdfjsVersion = '2.14.363';
-const pdfjsBuild = '09b645823';
+const pdfjsVersion = '2.14.371';
+const pdfjsBuild = '2dff47f99';
 {
   if (_is_node.isNodeJS) {
     const {

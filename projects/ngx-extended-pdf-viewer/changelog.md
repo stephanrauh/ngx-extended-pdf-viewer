@@ -340,3 +340,5 @@
 - 12.0.0-alpha.2 #1197 Allow programmers to clear the PDF programmatically even if the user has opened it
 - 12.0.0-alpha.3 update to pdf.js 2.13.216; #1142 compatibility to iOS 14
 - 12.0.0 updated the bleeding-edge branch
+- 12.0.1 #1257 fixed the `[namedDest]` attribute
+- 12.0.2 #1242 fixed Acroform date fields with custom formats
