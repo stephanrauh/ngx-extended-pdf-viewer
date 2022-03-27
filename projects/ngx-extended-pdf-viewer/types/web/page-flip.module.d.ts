@@ -14,7 +14,7 @@ export class PageFlip extends EventObject {
     constructor(inBlock: HTMLElement, setting: Object);
     isUserTouch: boolean;
     isUserMove: boolean;
-    setting: any;
+    setting: FlipSetting;
     pages: ImagePageCollection | HTMLPageCollection | null;
     block: HTMLElement;
     /**
@@ -75,26 +75,26 @@ export class PageFlip extends EventObject {
      *
      * @param {FlipCorner} corner - Active page corner when turning
      */
-    flipNext(corner?: any): void;
+    flipNext(corner?: FlipCorner): void;
     /**
      * Turn to the prev page (with animation)
      *
      * @param {FlipCorner} corner - Active page corner when turning
      */
-    flipPrev(corner?: any): void;
+    flipPrev(corner?: FlipCorner): void;
     /**
      * Turn to the specified page number (with animation)
      *
      * @param {number} page - New page number
      * @param {FlipCorner} corner - Active page corner when turning
      */
-    flip(page: number, corner?: any): void;
+    flip(page: number, corner?: FlipCorner): void;
     /**
      * Call a state change event trigger
      *
      * @param {FlippingState} newState - New  state of the object
      */
-    updateState(newState: any): void;
+    updateState(newState: FlippingState): void;
     /**
      * Call a page number change event trigger
      *
@@ -106,7 +106,7 @@ export class PageFlip extends EventObject {
      *
      * @param {Orientation} newOrientation - New page orientation (portrait, landscape)
      */
-    updateOrientation(newOrientation: any): void;
+    updateOrientation(newOrientation: Orientation): void;
     /**
      * Get the total number of pages in a book
      *
@@ -143,19 +143,19 @@ export class PageFlip extends EventObject {
      *
      * @returns {Orientation} Сurrent orientation: portrait or landscape
      */
-    getOrientation(): any;
+    getOrientation(): Orientation;
     /**
      * Get current book sizes and position
      *
      * @returns {PageRect}
      */
-    getBoundsRect(): any;
+    getBoundsRect(): PageRect;
     /**
      * Get configuration object
      *
      * @returns {FlipSetting}
      */
-    getSettings(): any;
+    getSettings(): FlipSetting;
     /**
      * Get UI object
      *
@@ -167,7 +167,7 @@ export class PageFlip extends EventObject {
      *
      * @returns {FlippingState}
      */
-    getState(): any;
+    getState(): FlippingState;
     /**
      * Get page collection
      *
@@ -179,7 +179,7 @@ export class PageFlip extends EventObject {
      *
      * @param {Point} pos - Touch position in coordinates relative to the book
      */
-    startUserTouch(pos: any): void;
+    startUserTouch(pos: Point): void;
     mousePosition: any;
     /**
      * Called when a finger / mouse moves
@@ -187,14 +187,14 @@ export class PageFlip extends EventObject {
      * @param {Point} pos - Touch position in coordinates relative to the book
      * @param {boolean} isTouch - True if there was a touch event, not a mouse click
      */
-    userMove(pos: any, isTouch: boolean): void;
+    userMove(pos: Point, isTouch: boolean): void;
     /**
      * Сalled when the user has stopped touching
      *
      * @param {Point} pos - Touch end position in coordinates relative to the book
      * @param {boolean} isSwipe - true if there was a mobile swipe event
      */
-    userStop(pos: any, isSwipe?: boolean): void;
+    userStop(pos: Point, isSwipe?: boolean): void;
 }
 /**
  * A class implementing a basic event model
@@ -207,7 +207,7 @@ declare class EventObject {
      * @param {string} eventName
      * @param {EventCallback} callback
      */
-    on(eventName: string, callback: any): EventObject;
+    on(eventName: string, callback: EventCallback): EventObject;
     /**
      * Removing all handlers from an event
      *
@@ -289,7 +289,7 @@ declare class HTMLRender extends Render {
      * @param {FlipSetting} setting - Configuration object
      * @param {HTMLElement} element - Parent HTML Element
      */
-    constructor(app: PageFlip, setting: any, element: HTMLElement);
+    constructor(app: PageFlip, setting: FlipSetting, element: HTMLElement);
     outerShadow: Element | null;
     innerShadow: Element | null;
     hardShadow: Element | null;
@@ -359,32 +359,32 @@ declare class Flip {
      *
      * @returns {boolean} True if flipping is possible, false otherwise
      */
-    start(globalPos: any): boolean;
+    start(globalPos: Point): boolean;
     /**
      * Perform calculations for the current page position. Pass data to render object
      *
      * @param {Point} pagePos - Touch Point Coordinates (relative active page)
      */
-    do(pagePos: any): void;
+    do(pagePos: Point): void;
     /**
      * Turn to the specified page number (with animation)
      *
      * @param {number} page - New page number
      * @param {FlipCorner} corner - Active page corner when turning
      */
-    flipToPage(page: number, corner: any): void;
+    flipToPage(page: number, corner: FlipCorner): void;
     /**
      * Turn to the next page (with animation)
      *
      * @param {FlipCorner} corner - Active page corner when turning
      */
-    flipNext(corner: any): void;
+    flipNext(corner: FlipCorner): void;
     /**
      * Turn to the prev page (with animation)
      *
      * @param {FlipCorner} corner - Active page corner when turning
      */
-    flipPrev(corner: any): void;
+    flipPrev(corner: FlipCorner): void;
     /**
      * Called when the user has stopped flipping
      */
@@ -404,7 +404,7 @@ declare class Flip {
      * @param {boolean} isTurned - will the page turn over, or just bring it back
      * @param {boolean} needReset - reset the flipping process at the end of the animation
      */
-    animateFlippingTo(start: any, dest: any, isTurned: boolean, needReset?: boolean): void;
+    animateFlippingTo(start: Point, dest: Point, isTurned: boolean, needReset?: boolean): void;
     /**
      * Get the current calculations object
      */
@@ -445,19 +445,19 @@ declare class Page {
      *
      * @param {PageDensity} density
      */
-    setDensity(density: any): void;
+    setDensity(density: PageDensity): void;
     /**
      * Set temp page density to next render
      *
      * @param {PageDensity}  density
      */
-    setDrawingDensity(density: any): void;
+    setDrawingDensity(density: PageDensity): void;
     /**
      * Set page position
      *
      * @param {Point} pagePos
      */
-    setPosition(pagePos: any): void;
+    setPosition(pagePos: Point): void;
     /**
      * Set page angle
      *
@@ -469,7 +469,7 @@ declare class Page {
      *
      * @param {Point[]} area
      */
-    setArea(area: any[]): void;
+    setArea(area: Point[]): void;
     /**
      * Rotate angle for hard pages to next render
      *
@@ -487,7 +487,7 @@ declare class Page {
      *
      * @param {PageOrientation} orientation
      */
-    setOrientation(orientation: any): void;
+    setOrientation(orientation: PageOrientation): void;
     orientation: any;
     /**
      * Get temp page density
@@ -521,19 +521,19 @@ declare class Render {
     orientation: any;
     /** Сurrent state of the shadows */
     shadow: {
-        pos: any;
+        pos: Point;
         angle: number;
         width: number;
         opacity: number;
-        direction: any;
+        direction: FlipDirection;
         progress: number;
     } | null;
     /** Сurrent animation process */
     animation: {
-        frames: any[];
+        frames: FrameAction[];
         duration: number;
         durationFrame: number;
-        onAnimateEnd: any;
+        onAnimateEnd: AnimationSuccessAction;
         startedAt: number;
     } | null;
     /** Page borders while flipping */
@@ -573,7 +573,7 @@ declare class Render {
      * @param {number} duration - total animation duration
      * @param {AnimationSuccessAction} onAnimateEnd - Animation callback function
      */
-    startAnimation(frames: any[], duration: number, onAnimateEnd: any): void;
+    startAnimation(frames: FrameAction[], duration: number, onAnimateEnd: AnimationSuccessAction): void;
     /**
      * End the current animation process and call the callback
      */
@@ -594,7 +594,7 @@ declare class Render {
      * @param {number} progress - Flipping progress in percent (0 - 100)
      * @param {FlipDirection} direction - Flipping Direction, the direction of the shadow gradients
      */
-    setShadowData(pos: any, angle: number, progress: number, direction: any): void;
+    setShadowData(pos: Point, angle: number, progress: number, direction: FlipDirection): void;
     /**
      * Clear shadow
      */
@@ -669,7 +669,7 @@ declare class Render {
      * @param {Point} pos - Global coordinates relative to the window
      * @returns {Point} Coordinates relative to the book
      */
-    convertToBook(pos: any): any;
+    convertToBook(pos: Point): Point;
     isSafari(): boolean;
     /**
      * Coordinate conversion function. Window coordinates -> to current coordinates of the working page
@@ -679,7 +679,7 @@ declare class Render {
      *
      * @returns {Point} Coordinates relative to the work page
      */
-    convertToPage(pos: any, direction: any): any;
+    convertToPage(pos: Point, direction: FlipDirection): Point;
     /**
      * Coordinate conversion function. Coordinates relative to the work page -> Window coordinates
      *
@@ -688,7 +688,7 @@ declare class Render {
      *
      * @returns {Point} Global coordinates relative to the window
      */
-    convertToGlobal(pos: any, direction: any): any;
+    convertToGlobal(pos: Point, direction: FlipDirection): Point;
     /**
      * Casting the coordinates of the corners of the rectangle in the coordinates relative to the window
      *
@@ -697,7 +697,7 @@ declare class Render {
      *
      * @returns {RectPoints} Coordinates of the corners of the rectangle relative to the window
      */
-    convertRectToGlobal(rect: any, direction: any): any;
+    convertRectToGlobal(rect: RectPoints, direction: FlipDirection): RectPoints;
 }
 /**
  * UI Class, represents work with DOM
@@ -710,7 +710,7 @@ declare class UI {
      * @param {PageFlip} app - PageFlip instanse
      * @param {FlipSetting} setting - Configuration object
      */
-    constructor(inBlock: HTMLElement, app: PageFlip, setting: any);
+    constructor(inBlock: HTMLElement, app: PageFlip, setting: FlipSetting);
     touchPoint: {
         point: {
             x: number;
@@ -751,7 +751,7 @@ declare class UI {
      *
      * @param {Orientation} orientation - New book orientation
      */
-    setOrientationStyle(orientation: any): void;
+    setOrientationStyle(orientation: Orientation): void;
     removeHandlers(): void;
     setHandlers(): void;
     /**
@@ -833,13 +833,13 @@ declare class PageCollection {
      *
      * @param {FlipDirection} direction
      */
-    getFlippingPage(direction: any): any;
+    getFlippingPage(direction: FlipDirection): any;
     /**
      * Get Next page at the time of flipping
      *
      * @param {FlipDirection}  direction
      */
-    getBottomPage(direction: any): any;
+    getBottomPage(direction: FlipDirection): any;
     /**
      * Show next spread
      */
@@ -884,9 +884,9 @@ declare class FlipCalculation {
      * @param pageWidth - Current page width
      * @param pageHeight - Current page height
      */
-    constructor(direction: any, corner: any, pageWidth: any, pageHeight: any);
-    direction: any;
-    corner: any;
+    constructor(direction: FlipDirection, corner: FlipCorner, pageWidth: any, pageHeight: any);
+    direction: FlipDirection;
+    corner: FlipCorner;
     /** The point of intersection of the page with the borders of the book */
     topIntersectPoint: any;
     sideIntersectPoint: any;
@@ -900,20 +900,20 @@ declare class FlipCalculation {
      *
      * @returns {boolean} True - if the calculations were successful, false if errors occurred
      */
-    calc(localPos: any): boolean;
+    calc(localPos: Point): boolean;
     position: any;
     /**
      * Get the crop area for the flipping page
      *
      * @returns {Point[]} Polygon page
      */
-    getFlippingClipArea(): any[];
+    getFlippingClipArea(): Point[];
     /**
      * Get the crop area for the page that is below the page to be flipped
      *
      * @returns {Point[]} Polygon page
      */
-    getBottomClipArea(): any[];
+    getBottomClipArea(): Point[];
     /**
      * Get page rotation angle
      */
@@ -953,7 +953,7 @@ declare class FlipCalculation {
     /**
      * Get flipping direction
      */
-    getDirection(): any;
+    getDirection(): FlipDirection;
     /**
      * Get flipping progress (0-100)
      */
@@ -961,7 +961,7 @@ declare class FlipCalculation {
     /**
      * Get flipping corner position (top, bottom)
      */
-    getCorner(): any;
+    getCorner(): FlipCorner;
     /**
      * Get start position for the page that is below the page to be flipped
      */

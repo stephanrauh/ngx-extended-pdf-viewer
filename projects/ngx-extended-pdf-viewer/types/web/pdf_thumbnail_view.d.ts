@@ -14,13 +14,13 @@ export type PDFThumbnailViewOptions = {
     /**
      * - The page viewport.
      */
-    defaultViewport: any;
+    defaultViewport: PageViewport;
     /**
      * -
      * A promise that is resolved with an {@link OptionalContentConfig } instance.
      * The default value is `null`.
      */
-    optionalContentConfigPromise?: Promise<any> | undefined;
+    optionalContentConfigPromise?: Promise<OptionalContentConfig> | undefined;
     /**
      * - The navigation/linking service.
      */
@@ -48,9 +48,9 @@ export class PDFThumbnailView implements IRenderableView {
     pageLabel: string | null;
     pdfPage: any;
     rotation: number;
-    viewport: any;
+    viewport: PageViewport;
     pdfPageRotate: any;
-    _optionalContentConfigPromise: Promise<any> | null;
+    _optionalContentConfigPromise: Promise<OptionalContentConfig> | null;
     linkService: import("./interfaces").IPDFLinkService;
     renderingQueue: import("./pdf_rendering_queue").PDFRenderingQueue;
     renderTask: any;

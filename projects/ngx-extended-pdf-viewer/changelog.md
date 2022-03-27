@@ -341,4 +341,5 @@
 - 12.0.0-alpha.3 update to pdf.js 2.13.216; #1142 compatibility to iOS 14
 - 12.0.0 updated the bleeding-edge branch
 - 12.0.1 #1257 fixed the `[namedDest]` attribute
-- 12.0.2 #1242 fixed Acroform date fields with custom formats
+- 12.0.2 #1242 fixed Acroform date fields with custom formats 
+- 12.0.3 #1243 tentative solution to trigger custom validation when leaving a field using the mouse
