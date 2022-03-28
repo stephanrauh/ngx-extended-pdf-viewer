@@ -31,7 +31,7 @@ export interface IPDFViewerApplication {
   pagesCount: number;
   passwordPrompt: PasswordPrompt;
   pdfDocument: any;
-  pdfLinkService: any;
+  pdfLinkService: any; /* PDFLinkService;*/
   pdfSidebar: any;
   pdfViewer: IPDFViewer;
   printKeyDownListener: undefined | ((this: Window, ev: KeyboardEvent) => any);

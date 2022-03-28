@@ -63,6 +63,7 @@ const requiredIds = [
   'findCurrentPage',
   'findRange',
   'findMatchCase',
+  'findMatchDiacritics',
   'findEntireWord',
   'findMultipleSearchTexts',
   'findIgnoreAccents',

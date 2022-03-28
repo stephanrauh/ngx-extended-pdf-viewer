@@ -2,11 +2,11 @@ export type PDFDocumentLoadingTask = import("./display/api").PDFDocumentLoadingT
 export type PDFDocumentProxy = import("./display/api").PDFDocumentProxy;
 export type PDFPageProxy = import("./display/api").PDFPageProxy;
 export type RenderTask = import("./display/api").RenderTask;
+export type PageViewport = import("./display/display_utils").PageViewport;
 import { AnnotationLayer } from "./display/annotation_layer.js";
 import { AnnotationMode } from "./shared/util.js";
 import { build } from "./display/api.js";
 import { CMapCompressionType } from "./shared/util.js";
-import { createObjectURL } from "./shared/util.js";
 import { createPromiseCapability } from "./shared/util.js";
 import { createValidAbsoluteUrl } from "./shared/util.js";
 import { getDocument } from "./display/api.js";
@@ -36,4 +36,4 @@ import { Util } from "./shared/util.js";
 import { VerbosityLevel } from "./shared/util.js";
 import { version } from "./display/api.js";
 import { XfaLayer } from "./display/xfa_layer.js";
-export { AnnotationLayer, AnnotationMode, build, CMapCompressionType, createObjectURL, createPromiseCapability, createValidAbsoluteUrl, getDocument, getFilenameFromUrl, getPdfFilenameFromUrl, getXfaPageViewport, GlobalWorkerOptions, InvalidPDFException, isPdfFile, loadScript, LoopbackPort, MissingPDFException, OPS, PasswordResponses, PDFDataRangeTransport, PDFDateString, PDFWorker, PermissionFlag, PixelsPerInch, RenderingCancelledException, renderTextLayer, shadow, SVGGraphics, UnexpectedResponseException, UNSUPPORTED_FEATURES, Util, VerbosityLevel, version, XfaLayer };
+export { AnnotationLayer, AnnotationMode, build, CMapCompressionType, createPromiseCapability, createValidAbsoluteUrl, getDocument, getFilenameFromUrl, getPdfFilenameFromUrl, getXfaPageViewport, GlobalWorkerOptions, InvalidPDFException, isPdfFile, loadScript, LoopbackPort, MissingPDFException, OPS, PasswordResponses, PDFDataRangeTransport, PDFDateString, PDFWorker, PermissionFlag, PixelsPerInch, RenderingCancelledException, renderTextLayer, shadow, SVGGraphics, UnexpectedResponseException, UNSUPPORTED_FEATURES, Util, VerbosityLevel, version, XfaLayer };

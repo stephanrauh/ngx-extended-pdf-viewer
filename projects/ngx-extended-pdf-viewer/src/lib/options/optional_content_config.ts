@@ -1,5 +1,4 @@
 export interface OptionalContentConfig {
-    constructor(data: any);
     name: any;
     creator: any;
     _order: any;

@@ -3,7 +3,7 @@ window.ngxZone.runOutsideAngular(() => {
  * @licstart The following is the entire license notice for the
  * Javascript code in this page
  *
- * Copyright 2021 Mozilla Foundation
+ * Copyright 2022 Mozilla Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,6 @@ exports.arrayByteLength = arrayByteLength;
 exports.arraysToBytes = arraysToBytes;
 exports.assert = assert;
 exports.bytesToString = bytesToString;
-exports.createObjectURL = createObjectURL;
 exports.createPromiseCapability = createPromiseCapability;
 exports.createValidAbsoluteUrl = createValidAbsoluteUrl;
 exports.escapeString = escapeString;
@@ -58,10 +57,7 @@ exports.info = info;
 exports.isArrayBuffer = isArrayBuffer;
 exports.isArrayEqual = isArrayEqual;
 exports.isAscii = isAscii;
-exports.isBool = isBool;
-exports.isNum = isNum;
 exports.isSameOrigin = isSameOrigin;
-exports.isString = isString;
 exports.objectFromMap = objectFromMap;
 exports.objectSize = objectSize;
 exports.setVerbosityLevel = setVerbosityLevel;
@@ -625,7 +621,10 @@ class AbortException extends BaseException {
 exports.AbortException = AbortException;
 
 function bytesToString(bytes) {
-  assert(bytes !== null && typeof bytes === "object" && bytes.length !== undefined, "Invalid argument for bytesToString");
+  if (typeof bytes !== "object" || bytes === null || bytes.length === undefined) {
+    unreachable("Invalid argument for bytesToString");
+  }
+
   const length = bytes.length;
   const MAX_ARGUMENT_COUNT = 8192;
 
@@ -645,7 +644,10 @@ function bytesToString(bytes) {
 }
 
 function stringToBytes(str) {
-  assert(typeof str === "string", "Invalid argument for stringToBytes");
+  if (typeof str !== "string") {
+    unreachable("Invalid argument for stringToBytes");
+  }
+
   const length = str.length;
   const bytes = new Uint8Array(length);
 
@@ -661,8 +663,11 @@ function arrayByteLength(arr) {
     return arr.length;
   }
 
-  assert(arr.byteLength !== undefined, "arrayByteLength - invalid argument.");
-  return arr.byteLength;
+  if (arr.byteLength !== undefined) {
+    return arr.byteLength;
+  }
+
+  unreachable("Invalid argument for arrayByteLength");
 }
 
 function arraysToBytes(arr) {
@@ -991,18 +996,6 @@ function utf8StringToString(str) {
   return unescape(encodeURIComponent(str));
 }
 
-function isBool(v) {
-  return typeof v === "boolean";
-}
-
-function isNum(v) {
-  return typeof v === "number";
-}
-
-function isString(v) {
-  return typeof v === "string";
-}
-
 function isArrayBuffer(v) {
   return typeof v === "object" && v !== null && v.byteLength !== undefined;
 }
@@ -1047,30 +1040,6 @@ function createPromiseCapability() {
     };
   });
   return capability;
-}
-
-function createObjectURL(data, contentType = "", forceDataSchema = false) {
-  if (URL.createObjectURL && typeof Blob !== "undefined" && !forceDataSchema) {
-    return URL.createObjectURL(new Blob([data], {
-      type: contentType
-    }));
-  }
-
-  const digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-  let buffer = `data:${contentType};base64,`;
-
-  for (let i = 0, ii = data.length; i < ii; i += 3) {
-    const b1 = data[i] & 0xff;
-    const b2 = data[i + 1] & 0xff;
-    const b3 = data[i + 2] & 0xff;
-    const d1 = b1 >> 2,
-          d2 = (b1 & 3) << 4 | b2 >> 4;
-    const d3 = i + 1 < ii ? (b2 & 0xf) << 2 | b3 >> 6 : 64;
-    const d4 = i + 2 < ii ? b3 & 0x3f : 64;
-    buffer += digits[d1] + digits[d2] + digits[d3] + digits[d4];
-  }
-
-  return buffer;
 }
 
 /***/ }),
@@ -1354,7 +1323,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.13.288',
+    apiVersion: '2.13.481',
     source: {
       data: source.data,
       url: source.url,
@@ -1945,14 +1914,12 @@ class PDFPageProxy {
   }
 
   streamTextContent({
-    normalizeWhitespace = false,
     disableCombineTextItems = false,
     includeMarkedContent = false
   } = {}) {
     const TEXT_CONTENT_CHUNK_SIZE = 100;
     return this._transport.messageHandler.sendWithStream("GetTextContent", {
       pageIndex: this._pageIndex,
-      normalizeWhitespace: normalizeWhitespace === true,
       combineTextItems: disableCombineTextItems !== true,
       includeMarkedContent: includeMarkedContent === true
     }, {
@@ -2233,94 +2200,8 @@ class LoopbackPort {
   }
 
   postMessage(obj, transfers) {
-    function cloneValue(object) {
-      if (globalThis.structuredClone) {
-        return globalThis.structuredClone(object, transfers);
-      }
-
-      function fallbackCloneValue(value) {
-        if (typeof value === "function" || typeof value === "symbol" || value instanceof URL) {
-          throw new Error(`LoopbackPort.postMessage - cannot clone: ${value?.toString()}`);
-        }
-
-        if (typeof value !== "object" || value === null) {
-          return value;
-        }
-
-        if (cloned.has(value)) {
-          return cloned.get(value);
-        }
-
-        let buffer, result;
-
-        if ((buffer = value.buffer) && (0, _util.isArrayBuffer)(buffer)) {
-          if (transfers?.includes(buffer)) {
-            result = new value.constructor(buffer, value.byteOffset, value.byteLength);
-          } else {
-            result = new value.constructor(value);
-          }
-
-          cloned.set(value, result);
-          return result;
-        }
-
-        if (value instanceof Map) {
-          result = new Map();
-          cloned.set(value, result);
-
-          for (const [key, val] of value) {
-            result.set(key, fallbackCloneValue(val));
-          }
-
-          return result;
-        }
-
-        if (value instanceof Set) {
-          result = new Set();
-          cloned.set(value, result);
-
-          for (const val of value) {
-            result.add(fallbackCloneValue(val));
-          }
-
-          return result;
-        }
-
-        result = Array.isArray(value) ? [] : Object.create(null);
-        cloned.set(value, result);
-
-        for (const i in value) {
-          let desc,
-              p = value;
-
-          while (!(desc = Object.getOwnPropertyDescriptor(p, i))) {
-            p = Object.getPrototypeOf(p);
-          }
-
-          if (typeof desc.value === "undefined") {
-            continue;
-          }
-
-          if (typeof desc.value === "function") {
-            if (i === 'cMapUrl') {
-              result[i] = cloneValue(desc.value());
-            } else if (!value.hasOwnProperty?.(i)) {
-              continue;
-            }
-          }
-
-          result[i] = fallbackCloneValue(desc.value);
-        }
-
-        return result;
-      }
-
-      const cloned = new WeakMap();
-      return fallbackCloneValue(object);
-    }
-
     const event = {
-      data: cloneValue(obj)
+      data: structuredClone(obj, transfers)
     };
 
     this._deferred.then(() => {
@@ -2941,9 +2822,13 @@ class WorkerTransport {
 
       if (loadingTask.onPassword) {
         const updatePassword = password => {
-          this._passwordCapability.resolve({
-            password
-          });
+          if (password instanceof Error) {
+            this._passwordCapability.reject(password);
+          } else {
+            this._passwordCapability.resolve({
+              password
+            });
+          }
         };
 
         try {
@@ -3124,7 +3009,7 @@ class WorkerTransport {
 
   getPage(pageNumber) {
     if (!Number.isInteger(pageNumber) || pageNumber <= 0 || pageNumber > this._numPages) {
-      return Promise.reject(new Error("Invalid page request"));
+      return Promise.reject(new Error("Invalid page request."));
     }
 
     const pageIndex = pageNumber - 1,
@@ -3150,8 +3035,13 @@ class WorkerTransport {
   }
 
   getPageIndex(ref) {
+    if (typeof ref !== "object" || ref === null || !Number.isInteger(ref.num) || ref.num < 0 || !Number.isInteger(ref.gen) || ref.gen < 0) {
+      return Promise.reject(new Error("Invalid pageIndex request."));
+    }
+
     return this.messageHandler.sendWithPromise("GetPageIndex", {
-      ref
+      num: ref.num,
+      gen: ref.gen
     });
   }
 
@@ -3309,32 +3199,31 @@ class WorkerTransport {
 }
 
 class PDFObjects {
-  constructor() {
-    this._objs = Object.create(null);
-  }
+  #objs = Object.create(null);
 
-  _ensureObj(objId) {
-    if (this._objs[objId]) {
-      return this._objs[objId];
+  #ensureObj(objId) {
+    const obj = this.#objs[objId];
+
+    if (obj) {
+      return obj;
     }
 
-    return this._objs[objId] = {
+    return this.#objs[objId] = {
       capability: (0, _util.createPromiseCapability)(),
-      data: null,
-      resolved: false
+      data: null
     };
   }
 
   get(objId, callback = null) {
     if (callback) {
-      this._ensureObj(objId).capability.promise.then(callback);
-
+      const obj = this.#ensureObj(objId);
+      obj.capability.promise.then(() => callback(obj.data));
       return null;
     }
 
-    const obj = this._objs[objId];
+    const obj = this.#objs[objId];
 
-    if (!obj || !obj.resolved) {
+    if (!obj?.capability.settled) {
       throw new Error(`Requesting object that isn't resolved yet ${objId}.`);
     }
 
@@ -3342,20 +3231,18 @@ class PDFObjects {
   }
 
   has(objId) {
-    const obj = this._objs[objId];
-    return obj?.resolved || false;
+    const obj = this.#objs[objId];
+    return obj?.capability.settled || false;
   }
 
-  resolve(objId, data) {
-    const obj = this._ensureObj(objId);
-
-    obj.resolved = true;
+  resolve(objId, data = null) {
+    const obj = this.#ensureObj(objId);
     obj.data = data;
-    obj.capability.resolve(data);
+    obj.capability.resolve();
   }
 
   clear() {
-    this._objs = Object.create(null);
+    this.#objs = Object.create(null);
   }
 
 }
@@ -3554,9 +3441,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.13.288';
+const version = '2.13.481';
 exports.version = version;
-const build = 'de1d45802';
+const build = 'b0b1da27a';
 exports.build = build;
 
 /***/ }),
@@ -3583,15 +3470,13 @@ var _base_factory = __w_pdfjs_require__(5);
 var _util = __w_pdfjs_require__(1);
 
 const SVG_NS = "http://www.w3.org/2000/svg";
-const PixelsPerInch = {
-  CSS: 96.0,
-  PDF: 72.0,
 
-  get PDF_TO_CSS_UNITS() {
-    return (0, _util.shadow)(this, "PDF_TO_CSS_UNITS", this.CSS / this.PDF);
-  }
+class PixelsPerInch {
+  static CSS = 96.0;
+  static PDF = 72.0;
+  static PDF_TO_CSS_UNITS = this.CSS / this.PDF;
+}
 
-};
 exports.PixelsPerInch = PixelsPerInch;
 
 class DOMCanvasFactory extends _base_factory.BaseCanvasFactory {
@@ -3971,7 +3856,7 @@ let pdfDateStringRegex;
 
 class PDFDateString {
   static toDateObject(input) {
-    if (!input || !(0, _util.isString)(input)) {
+    if (!input || typeof input !== "string") {
       return null;
     }
 
@@ -4811,6 +4696,8 @@ class AnnotationStorage {
             window.setFormValue(fieldname, value.items);
           } else if (value.emitMessage === false) {} else if (value.radioValue) {
             window.setFormValue(fieldname, value.radioValue);
+          } else if (value.exportValue) {
+            window.setFormValue(fieldname, value.exportValue);
           } else {
             for (const val of Object.values(value)) {
               window.setFormValue(fieldname, val);
@@ -5020,6 +4907,10 @@ function mirrorContextOperations(ctx, destCtx) {
 }
 
 function addContextCurrentTransform(ctx) {
+  if (ctx._transformStack) {
+    ctx._transformStack = [];
+  }
+
   if (ctx.mozCurrentTransform) {
     return;
   }
@@ -5074,6 +4965,10 @@ function addContextCurrentTransform(ctx) {
   };
 
   ctx.restore = function ctxRestore() {
+    if (this._transformStack.length === 0) {
+      (0, _util.warn)("Tried to restore a ctx when the stack was already empty.");
+    }
+
     const prev = this._transformStack.pop();
 
     if (prev) {
@@ -5947,7 +5842,7 @@ class CanvasGraphics {
   }
 
   endDrawing() {
-    while (this.stateStack.length || this.current.activeSMask !== null) {
+    while (this.stateStack.length || this.inSMaskMode) {
       this.restore();
     }
 
@@ -6152,8 +6047,12 @@ class CanvasGraphics {
     }
   }
 
+  get inSMaskMode() {
+    return !!this.suspendedCtx;
+  }
+
   checkSMaskState() {
-    const inSMaskMode = !!this.suspendedCtx;
+    const inSMaskMode = this.inSMaskMode;
 
     if (this.current.activeSMask && !inSMaskMode) {
       this.beginSMaskMode();
@@ -6163,7 +6062,7 @@ class CanvasGraphics {
   }
 
   beginSMaskMode() {
-    if (this.suspendedCtx) {
+    if (this.inSMaskMode) {
       throw new Error("beginSMaskMode called while already in smask mode");
     }
 
@@ -6181,7 +6080,7 @@ class CanvasGraphics {
   }
 
   endSMaskMode() {
-    if (!this.suspendedCtx) {
+    if (!this.inSMaskMode) {
       throw new Error("endSMaskMode called while not in smask mode");
     }
 
@@ -6189,7 +6088,6 @@ class CanvasGraphics {
 
     copyCtxState(this.ctx, this.suspendedCtx);
     this.ctx = this.suspendedCtx;
-    this.current.activeSMask = null;
     this.suspendedCtx = null;
   }
 
@@ -6217,20 +6115,33 @@ class CanvasGraphics {
   }
 
   save() {
-    this.ctx.save();
+    if (this.inSMaskMode) {
+      copyCtxState(this.ctx, this.suspendedCtx);
+      this.suspendedCtx.save();
+    } else {
+      this.ctx.save();
+    }
+
     const old = this.current;
     this.stateStack.push(old);
     this.current = old.clone();
   }
 
   restore() {
-    if (this.stateStack.length === 0 && this.current.activeSMask) {
+    if (this.stateStack.length === 0 && this.inSMaskMode) {
       this.endSMaskMode();
     }
 
     if (this.stateStack.length !== 0) {
       this.current = this.stateStack.pop();
-      this.ctx.restore();
+
+      if (this.inSMaskMode) {
+        this.suspendedCtx.restore();
+        copyCtxState(this.suspendedCtx, this.ctx);
+      } else {
+        this.ctx.restore();
+      }
+
       this.checkSMaskState();
       this.pendingClip = null;
       this._cachedGetSinglePixelWidth = null;
@@ -6350,7 +6261,7 @@ class CanvasGraphics {
         if (lineWidth < 0 && -lineWidth >= this.current.lineWidth) {
           ctx.save();
           ctx.resetTransform();
-          ctx.lineWidth = Math.round(this._combinedScaleFactor);
+          ctx.lineWidth = Math.floor(this._combinedScaleFactor);
           ctx.stroke();
           ctx.restore();
         } else {
@@ -6618,7 +6529,7 @@ class CanvasGraphics {
       if (fillStrokeMode === _util.TextRenderingMode.STROKE || fillStrokeMode === _util.TextRenderingMode.FILL_STROKE) {
         if (resetLineWidthToOne) {
           ctx.resetTransform();
-          ctx.lineWidth = Math.round(this._combinedScaleFactor);
+          ctx.lineWidth = Math.floor(this._combinedScaleFactor);
         }
 
         ctx.stroke();
@@ -6635,7 +6546,7 @@ class CanvasGraphics {
           ctx.save();
           ctx.moveTo(x, y);
           ctx.resetTransform();
-          ctx.lineWidth = Math.round(this._combinedScaleFactor);
+          ctx.lineWidth = Math.floor(this._combinedScaleFactor);
           ctx.strokeText(character, 0, 0);
           ctx.restore();
         } else {
@@ -6749,7 +6660,7 @@ class CanvasGraphics {
     for (i = 0; i < glyphsLength; ++i) {
       const glyph = glyphs[i];
 
-      if ((0, _util.isNum)(glyph)) {
+      if (typeof glyph === "number") {
         x += spacingDir * glyph * fontSize / 1000;
         continue;
       }
@@ -6855,7 +6766,7 @@ class CanvasGraphics {
     for (i = 0; i < glyphsLength; ++i) {
       glyph = glyphs[i];
 
-      if ((0, _util.isNum)(glyph)) {
+      if (typeof glyph === "number") {
         spacingLength = spacingDir * glyph * fontSize / 1000;
         this.ctx.translate(spacingLength, 0);
         current.x += spacingLength * textHScale;
@@ -7053,10 +6964,9 @@ class CanvasGraphics {
     }
 
     this.save();
-    const suspendedCtx = this.suspendedCtx;
 
-    if (this.current.activeSMask) {
-      this.suspendedCtx = null;
+    if (this.inSMaskMode) {
+      this.endSMaskMode();
       this.current.activeSMask = null;
     }
 
@@ -7137,10 +7047,7 @@ class CanvasGraphics {
     copyCtxState(currentCtx, groupCtx);
     this.ctx = groupCtx;
     this.setGState([["BM", "source-over"], ["ca", 1], ["CA", 1]]);
-    this.groupStack.push({
-      ctx: currentCtx,
-      suspendedCtx
-    });
+    this.groupStack.push(currentCtx);
     this.groupLevel++;
   }
 
@@ -7151,16 +7058,9 @@ class CanvasGraphics {
 
     this.groupLevel--;
     const groupCtx = this.ctx;
-    const {
-      ctx,
-      suspendedCtx
-    } = this.groupStack.pop();
+    const ctx = this.groupStack.pop();
     this.ctx = ctx;
     this.ctx.imageSmoothingEnabled = false;
-
-    if (suspendedCtx) {
-      this.suspendedCtx = suspendedCtx;
-    }
 
     if (group.smask) {
       this.tempSMask = this.smaskStack.pop();
@@ -8040,6 +7940,7 @@ class TilingPattern {
 
     tmpCtx.translate(-(dimx.scale * adjustedX0), -(dimy.scale * adjustedY0));
     graphics.transform(dimx.scale, 0, 0, dimy.scale, 0, 0);
+    tmpCtx.save();
     this.clipBbox(graphics, adjustedX0, adjustedY0, adjustedX1, adjustedY1);
     graphics.baseTransform = graphics.ctx.mozCurrentTransform.slice();
     graphics.executeOperatorList(operatorList);
@@ -8182,8 +8083,7 @@ const StreamKind = {
 
 function wrapReason(reason) {
   if (!(reason instanceof Error || typeof reason === "object" && reason !== null)) {
-    (0, _util.warn)('wrapReason: Expected "reason" to be a (possibly cloned) Error.');
-    return reason;
+    (0, _util.unreachable)('wrapReason: Expected "reason" to be a (possibly cloned) Error.');
   }
 
   switch (reason.name) {
@@ -9346,6 +9246,13 @@ var _xfa_layer = __w_pdfjs_require__(20);
 const DEFAULT_TAB_INDEX = 1000;
 const GetElementsByNameSet = new WeakSet();
 
+function getRectDims(rect) {
+  return {
+    width: rect[2] - rect[0],
+    height: rect[3] - rect[1]
+  };
+}
+
 class AnnotationElementFactory {
   static create(parameters) {
     const subtype = parameters.data.annotationType;
@@ -9467,8 +9374,10 @@ class AnnotationElement {
           page = this.page,
           viewport = this.viewport;
     const container = document.createElement("section");
-    let width = data.rect[2] - data.rect[0];
-    let height = data.rect[3] - data.rect[1];
+    let {
+      width,
+      height
+    } = getRectDims(data.rect);
     container.setAttribute("data-annotation-id", data.id);
 
     const rect = _util.Util.normalizeRect([data.rect[0], page.view[3] - data.rect[1] + page.view[1], data.rect[2], page.view[3] - data.rect[3] + page.view[1]]);
@@ -9997,7 +9906,7 @@ class WidgetAnnotationElement extends AnnotationElement {
           detail: {
             id: this.data.id,
             name: eventName,
-            value: event.target.checked
+            value: valueGetter(event)
           }
         });
       });
@@ -10132,9 +10041,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
       const textContent = storedData.valueAsString || storedData.value || "";
       const elementData = {
         userValue: null,
-        formattedValue: null,
-        beforeInputSelectionRange: null,
-        beforeInputValue: null
+        formattedValue: null
       };
 
       if (this.data.multiLine) {
@@ -10170,7 +10077,6 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
         }
 
         event.target.scrollLeft = 0;
-        elementData.beforeInputSelectionRange = null;
       };
 
       if (this.enableScripting && this.hasJSActions) {
@@ -10218,7 +10124,6 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
           this._dispatchEventFromSandbox(actions, jsEvent);
         });
         element.addEventListener("keydown", event => {
-          elementData.beforeInputValue = event.target.value;
           let commitKey = -1;
 
           if (event.key === "Escape") {
@@ -10250,8 +10155,9 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
         const _blurListener = blurListener;
         blurListener = null;
         element.addEventListener("blur", event => {
+          elementData.userValue = event.target.value;
+
           if (this._mouseState.isDown) {
-            elementData.userValue = event.target.value;
             this.linkService.eventBus?.dispatch("dispatcheventinsandbox", {
               source: this,
               detail: {
@@ -10268,38 +10174,29 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
 
           _blurListener(event);
         });
-        element.addEventListener("mousedown", event => {
-          elementData.beforeInputValue = event.target.value;
-          elementData.beforeInputSelectionRange = null;
-        });
-        element.addEventListener("keyup", event => {
-          if (event.target.selectionStart === event.target.selectionEnd) {
-            elementData.beforeInputSelectionRange = null;
-          }
-        });
-        element.addEventListener("select", event => {
-          elementData.beforeInputSelectionRange = [event.target.selectionStart, event.target.selectionEnd];
-        });
 
         if (this.data.actions?.Keystroke) {
-          element.addEventListener("input", event => {
-            let selStart = -1;
-            let selEnd = -1;
-
-            if (elementData.beforeInputSelectionRange) {
-              [selStart, selEnd] = elementData.beforeInputSelectionRange;
-            }
-
+          element.addEventListener("beforeinput", event => {
+            elementData.formattedValue = "";
+            const {
+              data,
+              target
+            } = event;
+            const {
+              value,
+              selectionStart,
+              selectionEnd
+            } = target;
             this.linkService.eventBus?.dispatch("dispatcheventinsandbox", {
               source: this,
               detail: {
                 id,
                 name: "Keystroke",
-                value: elementData.beforeInputValue,
-                change: event.data,
+                value,
+                change: data,
                 willCommit: false,
-                selStart,
-                selEnd
+                selStart: selectionStart,
+                selEnd: selectionEnd
               }
             });
           });
@@ -10408,12 +10305,14 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
         }
 
         storage.setValue(checkbox.id, this.data.fieldName, {
-          value: curChecked
+          value: curChecked,
+          emitMessage: false
         });
       }
 
       storage.setValue(id, this.data.fieldName, {
-        value: checked
+        value: checked,
+        exportValue: checked ? data.exportValue : null
       });
     });
     element.addEventListener("resetform", event => {
@@ -11014,8 +10913,10 @@ class LineAnnotationElement extends AnnotationElement {
   render() {
     this.container.className = "lineAnnotation";
     const data = this.data;
-    const width = data.rect[2] - data.rect[0];
-    const height = data.rect[3] - data.rect[1];
+    const {
+      width,
+      height
+    } = getRectDims(data.rect);
     const svg = this.svgFactory.create(width, height);
     const line = this.svgFactory.createElement("svg:line");
     line.setAttribute("x1", data.rect[2] - data.lineCoordinates[0]);
@@ -11047,8 +10948,10 @@ class SquareAnnotationElement extends AnnotationElement {
   render() {
     this.container.className = "squareAnnotation";
     const data = this.data;
-    const width = data.rect[2] - data.rect[0];
-    const height = data.rect[3] - data.rect[1];
+    const {
+      width,
+      height
+    } = getRectDims(data.rect);
     const svg = this.svgFactory.create(width, height);
     const borderWidth = data.borderStyle.width;
     const square = this.svgFactory.createElement("svg:rect");
@@ -11081,8 +10984,10 @@ class CircleAnnotationElement extends AnnotationElement {
   render() {
     this.container.className = "circleAnnotation";
     const data = this.data;
-    const width = data.rect[2] - data.rect[0];
-    const height = data.rect[3] - data.rect[1];
+    const {
+      width,
+      height
+    } = getRectDims(data.rect);
     const svg = this.svgFactory.create(width, height);
     const borderWidth = data.borderStyle.width;
     const circle = this.svgFactory.createElement("svg:ellipse");
@@ -11117,8 +11022,10 @@ class PolylineAnnotationElement extends AnnotationElement {
   render() {
     this.container.className = this.containerClassName;
     const data = this.data;
-    const width = data.rect[2] - data.rect[0];
-    const height = data.rect[3] - data.rect[1];
+    const {
+      width,
+      height
+    } = getRectDims(data.rect);
     const svg = this.svgFactory.create(width, height);
     let points = [];
 
@@ -11188,8 +11095,10 @@ class InkAnnotationElement extends AnnotationElement {
   render() {
     this.container.className = this.containerClassName;
     const data = this.data;
-    const width = data.rect[2] - data.rect[0];
-    const height = data.rect[3] - data.rect[1];
+    const {
+      width,
+      height
+    } = getRectDims(data.rect);
     const svg = this.svgFactory.create(width, height);
 
     for (const inkList of data.inkLists) {
@@ -11387,6 +11296,15 @@ class AnnotationLayer {
 
     for (const data of parameters.annotations) {
       if (!data) {
+        continue;
+      }
+
+      const {
+        width,
+        height
+      } = getRectDims(data.rect);
+
+      if (width <= 0 || height <= 0) {
         continue;
       }
 
@@ -12670,6 +12588,30 @@ exports.SVGGraphics = SVGGraphics;
   const LINE_CAP_STYLES = ["butt", "round", "square"];
   const LINE_JOIN_STYLES = ["miter", "round", "bevel"];
 
+  const createObjectURL = function (data, contentType = "", forceDataSchema = false) {
+    if (URL.createObjectURL && typeof Blob !== "undefined" && !forceDataSchema) {
+      return URL.createObjectURL(new Blob([data], {
+        type: contentType
+      }));
+    }
+
+    const digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+    let buffer = `data:${contentType};base64,`;
+
+    for (let i = 0, ii = data.length; i < ii; i += 3) {
+      const b1 = data[i] & 0xff;
+      const b2 = data[i + 1] & 0xff;
+      const b3 = data[i + 2] & 0xff;
+      const d1 = b1 >> 2,
+            d2 = (b1 & 3) << 4 | b2 >> 4;
+      const d3 = i + 1 < ii ? (b2 & 0xf) << 2 | b3 >> 6 : 64;
+      const d4 = i + 2 < ii ? b3 & 0x3f : 64;
+      buffer += digits[d1] + digits[d2] + digits[d3] + digits[d4];
+    }
+
+    return buffer;
+  };
+
   const convertImgDataToPng = function () {
     const PNG_HEADER = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
     const CHUNK_WRAPPER_SIZE = 12;
@@ -12840,7 +12782,7 @@ exports.SVGGraphics = SVGGraphics;
       writePngChunk("IDATA", idat, data, offset);
       offset += CHUNK_WRAPPER_SIZE + idat.length;
       writePngChunk("IEND", new Uint8Array(0), data, offset);
-      return (0, _util.createObjectURL)(data, "image/png", forceDataSchema);
+      return createObjectURL(data, "image/png", forceDataSchema);
     }
 
     return function convertImgDataToPng(imgData, forceDataSchema, isMask) {
@@ -13355,7 +13297,7 @@ exports.SVGGraphics = SVGGraphics;
         if (glyph === null) {
           x += fontDirection * wordSpacing;
           continue;
-        } else if ((0, _util.isNum)(glyph)) {
+        } else if (typeof glyph === "number") {
           x += spacingDir * glyph * fontSize / 1000;
           continue;
         }
@@ -13478,7 +13420,7 @@ exports.SVGGraphics = SVGGraphics;
         this.defs.appendChild(this.cssStyle);
       }
 
-      const url = (0, _util.createObjectURL)(fontObj.data, fontObj.mimetype, this.forceDataSchema);
+      const url = createObjectURL(fontObj.data, fontObj.mimetype, this.forceDataSchema);
       this.cssStyle.textContent += `@font-face { font-family: "${fontObj.loadedName}";` + ` src: url(${url}); }\n`;
     }
 
@@ -14762,14 +14704,7 @@ function getFilenameFromContentDispositionHeader(contentDisposition) {
         const buffer = (0, _util.stringToBytes)(value);
         value = decoder.decode(buffer);
         needsEncodingFixup = false;
-      } catch (e) {
-        if (/^utf-?8$/i.test(encoding)) {
-          try {
-            value = decodeURIComponent(escape(value));
-            needsEncodingFixup = false;
-          } catch (err) {}
-        }
-      }
+      } catch (e) {}
     }
 
     return value;
@@ -15885,12 +15820,6 @@ Object.defineProperty(exports, "build", ({
     return _api.build;
   }
 }));
-Object.defineProperty(exports, "createObjectURL", ({
-  enumerable: true,
-  get: function () {
-    return _util.createObjectURL;
-  }
-}));
 Object.defineProperty(exports, "createPromiseCapability", ({
   enumerable: true,
   get: function () {
@@ -15976,8 +15905,8 @@ var _svg = __w_pdfjs_require__(22);
 
 var _xfa_layer = __w_pdfjs_require__(20);
 
-const pdfjsVersion = '2.13.288';
-const pdfjsBuild = 'de1d45802';
+const pdfjsVersion = '2.13.481';
+const pdfjsBuild = 'b0b1da27a';
 {
   if (_is_node.isNodeJS) {
     const {

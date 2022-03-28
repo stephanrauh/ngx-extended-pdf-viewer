@@ -15,4 +15,16 @@ class ClassWithPrivateField {
   #privateField;
 }
 
+// Does your browser doesn't support private methods?
+class ClassWithPrivateMethod {
+  #privateMethod() {
+    return true;
+  }
+
+  constructor() {
+    this.#privateMethod();
+  }
+}
+new ClassWithPrivateMethod();
+
 window.supportsOptionalChaining = optionalChaining?.support;

@@ -61,12 +61,31 @@ export class DOMCanvasFactory extends BaseCanvasFactory {
         ownerDocument?: Document | undefined;
     });
     _document: Document;
+    /**
+     * @ignore
+     */
+    _createCanvas(width: any, height: any): HTMLCanvasElement;
 }
 export class DOMCMapReaderFactory extends BaseCMapReaderFactory {
+    /**
+     * @ignore
+     */
+    _fetchData(url: any, compressionType: any): Promise<{
+        cMapData: any;
+        compressionType: any;
+    }>;
 }
 export class DOMStandardFontDataFactory extends BaseStandardFontDataFactory {
+    /**
+     * @ignore
+     */
+    _fetchData(url: any): Promise<any>;
 }
 export class DOMSVGFactory extends BaseSVGFactory {
+    /**
+     * @ignore
+     */
+    _createSVG(type: any): any;
 }
 /**
  * Gets the filename from a given URL.
@@ -195,9 +214,10 @@ export class PDFDateString {
      */
     static toDateObject(input: string): Date | null;
 }
-export namespace PixelsPerInch {
-    const CSS: number;
-    const PDF: number;
+export class PixelsPerInch {
+    static CSS: number;
+    static PDF: number;
+    static PDF_TO_CSS_UNITS: number;
 }
 declare const RenderingCancelledException_base: any;
 export class RenderingCancelledException extends RenderingCancelledException_base {

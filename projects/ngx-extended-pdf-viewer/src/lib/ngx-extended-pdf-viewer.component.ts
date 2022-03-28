@@ -342,6 +342,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public useBrowserLocale = false;
 
   @Input()
+  public forceUsingLegacyES5 = false;
+
+  @Input()
   public backgroundColor = '#e8e8eb';
 
   @Input()
@@ -730,7 +733,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const isEdge = /Edge\/\d./i.test(navigator.userAgent);
     const isIOs13OrBelow = this.iOSVersionRequiresES5();
     let needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
-    if (needsES5 || isIE || isEdge || isIOs13OrBelow) {
+    if (needsES5 || isIE || isEdge || isIOs13OrBelow || this.forceUsingLegacyES5) {
       return true;
     }
     return !(await this.supportsOptionalChaining());
@@ -786,15 +789,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         setTimeout(() => this.loadViewer(), 25);
       } else {
         this.needsES5().then((needsES5) => {
-          if (needsES5) {
-            if (!pdfDefaultOptions.needsES5) {
-              console.log(
-                "If you see the error message \"expected expression, got '='\" above: you can safely ignore it as long as you know what you're doing. It means your browser is out-of-date. Please update your browser to benefit from the latest security updates and to enjoy a faster PDF viewer."
-              );
-            }
-            pdfDefaultOptions.needsES5 = true;
-            console.log('Using the ES5 version of the PDF viewer. Your PDF files show faster if you update your browser.');
-          }
           const viewerPath = this.getPdfJsPath('viewer', needsES5);
           const script = this.createScriptElement(viewerPath);
           // script.onload = async () => await this.addFeatures(); // DEBUG CODE!!!
@@ -820,6 +814,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   ngOnInit() {
+    window['setNgxExtendedPdfViewerSource'] = (url: string) => {
+      this._src = url;
+      console.log(url);
+      this.srcChange.emit(url);
+    }
+
     if (isPlatformBrowser(this.platformId)) {
       const link = document.createElement('link');
       link.href = this.localeFolderPath + '/locale.properties';
@@ -843,6 +843,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.ngZone.runOutsideAngular(() => {
       if (!window['pdfjs-dist/build/pdf']) {
         this.needsES5().then((needsES5) => {
+          if (needsES5) {
+            if (!pdfDefaultOptions.needsES5) {
+              console.log(
+                "If you see the error message \"expected expression, got '='\" above: you can safely ignore it as long as you know what you're doing. It means your browser is out-of-date. Please update your browser to benefit from the latest security updates and to enjoy a faster PDF viewer."
+              );
+            }
+            pdfDefaultOptions.needsES5 = true;
+            console.log('Using the ES5 version of the PDF viewer. Your PDF files show faster if you update your browser.');
+          }
           window['ngxZone'] = this.ngZone;
           if (this.minifiedJSLibraries) {
             if (!pdfDefaultOptions.workerSrc().endsWith('.min.js')) {
@@ -1316,7 +1325,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           if (!this.shuttingDown) {
             // hurried users sometimes reload the PDF before it has finished initializing
             if (this.nameddest) {
-              PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
+              PDFViewerApplication.pdfLinkService.goToDestination(this.nameddest);
             } else if (this.page) {
               PDFViewerApplication.page = Number(this.page);
             } else if (this.pageLabel) {
@@ -1770,7 +1779,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
       if ('nameddest' in changes) {
         if (this.nameddest) {
-          PDFViewerApplication.pdfLinkService.navigateTo(this.nameddest);
+          PDFViewerApplication.pdfLinkService.goToDestination(this.nameddest);
         }
       }
 

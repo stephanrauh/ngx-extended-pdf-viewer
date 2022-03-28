@@ -312,7 +312,7 @@
 - 11.0.0-alpha.5 #1030 ignore tiny rounding difference when emitting `(zoomChange)`; #1035 fix the "Window is not defined" error message
 - 11.0.0-alpha.6 #1040 fixed the single-page mode of the bleeding-edge branch; #804 detect the worker thread more reliably
 - 11.0.0-alpha.7 #745 include the PDF content to the tab order, enabling users to scroll with the keyboard; #832 added an option to search the current page only
-- 11.0.0-alpha.8
+- 11.0.0-alpha.8 #1033 drop support of pre-Ivy Angular
 - 11.0.0-alpha.9 #1033 drop support for Angular 8; #802 stop opening the "save" dialog after changing the `[src]` attribute
 - 11.0.0-alpha.10 #1058 use the correct import of the RxJS take operator
 - 11.0.0-alpha.11 #1063 detect if your browser support the logical assignment operators, and fall back to the ES5 version if it doesn't
@@ -332,3 +332,14 @@
 - 11.2.0-alpha.0 #1065 implement `ng add ngx-extended-pdf-viewer`
 - 11.2.0-alpha.1 #1065 implement `ng add ngx-extended-pdf-viewer`
 - 11.2.0-alpha.2 #1065 first fully functional implementation of the schematic `ng add ngx-extended-pdf-viewer`
+- 11.2.0-alpha.3 #1163 modify the semantics of `pdfDefaultOptions.disableHistory`: now you can use this flag to prevent storing default user settings of PDF files
+- 11.2.0-alpha.4 #1166 make sure that the legacy ES5 builds are compatible with a wide range of browsers (but not IE11); added the attribute `[forceUsingLegacyES5]` as a last resort to solve browser compatibility issues; reduced the memory footprint of the minified `viewer*.min.js` files
+- 11.2.0 #1182 stop printing the empty console message
+- 12.0.0-alpha.0 #1183 support checkboxes that are radiobuttons in disguise correctly
+- 12.0.0-alpha.1 #1201 remove the margin in single-page mode (this CSS rule got lost in version 11.0.0-alpha.3); #1204 stop scrolling away from the target position of internal links
+- 12.0.0-alpha.2 #1197 Allow programmers to clear the PDF programmatically even if the user has opened it
+- 12.0.0-alpha.3 update to pdf.js 2.13.216; #1142 compatibility to iOS 14
+- 12.0.0 updated the bleeding-edge branch
+- 12.0.1 #1257 fixed the `[namedDest]` attribute
+- 12.0.2 #1242 fixed Acroform date fields with custom formats 
+- 12.0.3 #1243 tentative solution to trigger custom validation when leaving a field using the mouse

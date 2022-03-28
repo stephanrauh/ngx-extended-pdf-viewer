@@ -8,20 +8,28 @@
   </a>
   <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg"></a>
   <a href="https://openbase.io/js/ngx-extended-pdf-viewer?utm_source=embedded&utm_medium=badge&utm_campaign=rate-badge"><img src="https://badges.openbase.io/js/rating/ngx-extended-pdf-viewer.svg"></a>
+  <a href="https://sonarcloud.io/summary/new_code?id=stephanrauh_ngx-extended-pdf-viewer"><img src="https://sonarcloud.io/api/project_badges/measure?project=stephanrauh_ngx-extended-pdf-viewer&metric=alert_status"></a>
   </p>
   <p>
   CDN: <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">unpkg.com</a>
  </p>
 
-## What's new in version 11?
+## Bringing PDF to the Angular world
 
-Version 11.0.0 updates to pdf.js 2.12 (default) and 2.13 (bleeding-edge) branch. It also continues work on the performance, because some developers ask me to get rid the of current limit of several thousand pages. In particular, the improved single-page views plus lazy loading of the thumbnails allows your to open PDF documents with more then 10.000 pages.
+This library provides an embeddable PDF viewer component. It's different from other approaches like [ng2-pdf-viewer](https://vadimdez.github.io/ng2-pdf-viewer/) in that it shows the full suite of UI widgets. In other words, it strongly resembles the PDF viewer of your browser:
 
-The findbar offers two new options to limit the search to the current page or a an arbitrary range of pages.
+<img src="https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/example.png?raw=true">
 
-Version 11 contains two potentially breaking changes:
-- The event `(pdfLoaded)` is now fired later. Until version 10.0, it was fired before loading the document. If you rely on the timing of the old event, use the new event `(pdfLoadingStarts)` instead.
-- I've removed some `div` tags from the findbar. Now it re-renders more smoothly on small screens. However, this might break your CSS rules if you've customized the findbar with CSS.
+## What's new in version 12?
+
+Version 12 has a small but breaking change. Actually, it's a fix repairing a nonsense implementation, but I can't rule out you're relying on the bug. Here we go: If you're two-way binding with a form that contains checkboxes that behave like radiobuttons
+(I know that's a long list of conditions!), previous versions of ngx-extended-pdf-viewer reported simply true or false if one of the checkbox
+is checked. You couldn't tell which checkbox was checked. Now that's fixed. ngx-extended-pdf-viewer uses the "export value", as
+intended by the author of the PDF file.
+
+Version 12 also updates to pdf.js 2.13, with one exception: it doesn't include the latest improvements of the find bar yet. The "bleeding edge" version has been updated to pdf.js 2.14, which is the developer version (something like a nightly build).
+
+As of version 12.0.0, I recommend using the stable branch of pdf.js instead of using the bleeding edge branch. The bleeding edge branch is the developer version of pdf.js, so it's not recommended to use it in production, anyways. However, the last few commits caused merge conflicts that may or may not have side effects. Handle with caution. That said, I encourage you to use the bleeding edge version every once in a while in development, because that way you can help me find bugs early. Just keep in mind I've called that branch "bleeding edge" for a reason.
 
 ## Showcase and manual
 
@@ -33,15 +41,10 @@ There's also a detailed <a href="https://github.com/stephanrauh/ngx-extended-pdf
 
 Would you like to participate in a popular open source project? It's easy: just open a ticket so we can discuss the change, create a fork, and send me a pull request. Contributions to the showcase are as welcome as contributions to the core library itself.
 
-## Bringing PDF to the Angular world
-
-This library provides an embeddable PDF viewer component. It's different from other approaches like [ng2-pdf-viewer](https://vadimdez.github.io/ng2-pdf-viewer/) in that it shows the full suite of UI widgets. In other words, it strongly resembles the PDF viewer of your browser:
-
-<img src="https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/example.png?raw=true">
-
 ## Features
 
-- Searching (including a programmatic API)
+- Enhanced searching (e.g. fuzzy search, limiting search to a page rage, multiple search terms, finding ignoring diacritics)
+- programmatic API for many features, such as searching
 - Printing
 - Support for forms, including two-way binding
 - (Limited) support for signatures (lacking verification of the signature, so use on your own risk!)
@@ -52,15 +55,18 @@ This library provides an embeddable PDF viewer component. It's different from ot
 - Full-screen mode
 - Various selection tools
 - Standard display or even / odd spreads (like a book)
-- Multiple event listeners
-- Several approaches to scrolling (vertical, horizontal, "wrapped" scrolling)
+- Book mode with animated page turn animations
+- Single page mode (supporting giant PDF documents of 30000+ pages)
+- Infinite scrolling
+- Plus several other approaches to scrolling (vertical, horizontal, "wrapped" scrolling)
+- A wide range of event listeners
 - Internationalization (providing translations to several dozen languages)
 - Direct access to the core API of pdf.js (including TypeScript definition files)
 - The ability to deactivate (i.e. hide) every button, menu item, and the context menu
 - Color theming
-- And to customize the toolbars and menus according to your needs.
+- And to customize the toolbars, the side bar, and the menus according to your needs.
 
-Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 2.12, released in December 2021. If you're the daring one, you can also use the developer version 2.13. It's bleeding edge, so use it at own risk. Basically, the bleeding edge version helps me because I can add Mozilla's latest improvements in frequent, small increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but most of the time, the quality is production-ready.
+Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 2.13, released in February 2022. If you're the daring one, you can also use the developer version 2.14. It's bleeding edge, so use it at own risk. Basically, the bleeding edge version helps me because I can add Mozilla's latest improvements in frequent, small increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but most of the time, the quality is production-ready.
 
 ## Alternatives
 <details>
@@ -77,64 +83,16 @@ As a rule of thumb, I recommend cloning the [showcase project from GitHub](https
 
 Currently, the minimum required version is Angular 9. The idea is to support the four most current versions of Angular, which gives you roughly two years to update.
 
-1.  Install the library with `npm i ngx-extended-pdf-viewer --save`
-    
-2. Open the file `angular.json` (or `.angular-cli.json` if you're using an older version of Angular) and configure Angular to copy the `assets` folder of the library into the `assets` folder of your application:
-  ```json
-    "assets": [
-      "src/favicon.ico",
-      "src/assets",
-      {
-        "glob": "**/*",
-        "input": "node_modules/ngx-extended-pdf-viewer/assets/",
-        "output": "/assets/"
-      }
-    ],
-    "scripts": []
-  ```
- This simply copies the entire assets folder. If you're concerned about disk memory, you can omit the subfolders `inline-locale-files` and `additional-locale`. If you need only one language, you can reduce the list to `locale.properties` and your language folder.
-
- If you want to use the developer preview of pdf.js 2.12, also import the "bleeding edge" files:
-
-  ```json
-  "assets": [
-    "src/favicon.ico",
-    "src/assets",
-    {
-      "glob": "**/*",
-      "input": "node_modules/ngx-extended-pdf-viewer/assets/",
-      "output": "/assets/"
-    },
-    {
-      "glob": "**/*",
-      "input": "node_modules/ngx-extended-pdf-viewer/bleeding-edge/",
-      "output": "/bleeding-edge/"
-    }
-  ],
-  "scripts": []
-  ```
-
-  You will also need to add those lines to your component : 
-  - An import statement
-  ```ts
-  import { pdfDefaultOptions } from 'ngx-extended-pdf-viewer';
-  ```
-  - A line in your constructor
-  ```ts 
-  pdfDefaultOptions.assetsFolder = 'bleeding-edge';
-  ```
-
-  _Hint:_ There are two ways to define the language files needed for the labels of the buttons and screen elements. The second method is described below in the "internationalization" section.
-
-3.  Now you can display the PDF file like so:
+1. run `npm add ngx-extended-pdf-viewer` and accept all the defaults
+2. Now there's an example component, but it isn't part of your application yet. You can either add the example component to your application or copy the relevant line to you HTML template:
   ```html
-  <ngx-extended-pdf-viewer [src]="'assets/example.pdf'" useBrowserLocale="true" height="80vh"></ngx-extended-pdf-viewer>
+  <ngx-extended-pdf-viewer [src]="'assets/example.pdf'" useBrowserLocale="true"></ngx-extended-pdf-viewer>
   ```
 
-4. If you want to display a PDF file you have downloaded from a server, you probably have a `Blob` or a Base64 encoded string. `Blobs` can be passed directly to the attribute `[src]`. Base64 string must be passed to the attribute `[base64Src]` instead.
+If you're running a non-standard configuration, have a look at <a href="https://pdfviewer.net/extended-pdf-viewer/getting-started">the getting-started page"</a> of the showcase.
 
 ## Configuration, options, and events
-Do you miss a configuration option? File an issue on the [project bug tracker](https://github.com/stephanrauh/ExploringAngular/tree/main/embedding-pdf). If the base library [pdf.js](https://mozilla.github.io/pdf.js/) supports the requested option, I'll probably add it. BTW, you can speed up the process by providing a code snippet telling me how to implement the feature or by submitting a pull request.
+Missing a configuration option? File an issue on the [project bug tracker](https://github.com/stephanrauh/ExploringAngular/tree/main/embedding-pdf). If your request makes sense to me and if I can implement it in my (limited) leisure time, I'll add it. BTW, you can speed up the process by providing a code snippet telling me how to implement the feature or by submitting a pull request.
 
 *Hint*: If you're missing an attribute, also have a look at the [default options page of the showcase](https://pdfviewer.net/extended-pdf-viewer/default-options)</a>. That's a collection of less used attributes.
 
@@ -307,43 +265,6 @@ Thanks to the awesome pdf.js team and all the users who've reported bugs and eve
 ## Internet Explorer 11 is no longer supported
 
 Reluctantly, I have to drop support for Internet Explorer 11. The base library, Mozilla's pdf.js, now generates binaries that are no longer compatible to Internet Explorer 11, and it seems there's no easy fix. That's a pity because IE11 support was the original use-case of the library and because I frequently get messages from developers who need IE11 support. The last version known to be compatible is 5.3. Version 7.3.2 should be compatible, too, but a user reported crashes.
-
-## Breaking changes in version 10.0
-- Version 10.0.0-alpha.11 fixes a bug that made relative URLs almost unpredictable when using the router. Now the `[src]` attribute uses the BASE_HREF of the application as base path. The downside is that probably many projects simply worked around the bug, so their relative URL are broken.
-
-## Breaking changes in version 9.0
-- Version 9.0 updates pdf.js to version 2.9 (default branch) and 2.10 ("bleeding edge" branch). That shouldn't break your application. However, the pdf.js team has been very diligent during the versions 2.8 and 2.9, so it's possible one of the new features break your application.
-
-- I've re-implemented form support. However, it was already broken in version 8, so it's hard to call this a breaking change. The good news: form support with two-way binding works again.
-
-- Version 9.0 drops compatibility to Angular 8 and below. The minimum required version is 9.0. Maybe it also works with Angular 8, but there's no guarantee.
-
-- The library should work with and without Ivy (the new compiler of Angular), but I frequently see a warning concerning Ivy, so I'm not sure yet. If you run into trouble (usually error messages with a greek letter theta), please open an issue.
-
-- I went over the print CSS rules. Now you should be able to print without additional CSS rules. In particular, *remove* this rule because it breaks printing:
-```css
-@media print {
-    #printContainer>div {
-        display: inline;  /* must be flex since version 9.0.0 */
-    }
-}
-```
-- The z-indexes in the CSS rules of the PDF viewer have been drastically increased. If you use a z-index to display custom widgets above the PDF viewer, this may be a breaking change.
-- If you omit `[zoom]` or assign `undefined` to it, the user's last choice of the scale factor is used. Before 9.0.0, it was always set to `auto`. Note that this feature only work when the document is initially loaded. If the user loads a document using the upload button of the PDF viewer, the zoom setting isn't changed, even if there's a zoom setting store in `localStorage`.
-- If you omit `[zoom]`, the PDF file is shown roughly half a second later, depending on the PDF file and the network connection. However, at least one user reports the PDF file shows only after a long wait, and sometimes it doesn't show at all. If you run into the same problem, please add your insight at https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/748. Possible workaround: set `[zoom]` or set `[listenToURL]="true"`.
-- The event `(updateFindMatchesCount)` is now also fired when there's not find result. Before 9.0.0, it only fired when there was at least on find result, so you didn't notice when the user enters a word that's not there.
-## Other potentially breaking changes
-Version 8.0 introduces a few minor CSS changes. If your layout is broken, check the version history of the *.scss files.
-
-Version 7.1. is a pure bug-fix release. It's extremely unlikely, but it might cause difficulties if the PDF viewer is destroyed and immediately re-created. Should you run into this, adding a delay of a single millisecond fixes this (or even a `setTimeout()` without the delay parameter). 
-
-Version 7.0 fixes several bugs concerning `[(zoom)]`. Now `(zoom)` also emits the text values ("page-fit", "auto", "page-width", "page-actual"). When you open
-a new PDF document, the old value of `[zoom]` is used for the new document. This was always the intended behavior, but it's possible it breaks applications relying
-on the bugs.
-
-The JavaScript files have been renamed. Now the version number is part of the file name.
-
-Version 7.0 also removes several attributes and methods that have been deprecated a long time ago.
 
 ## Changelog
 See https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/main/projects/ngx-extended-pdf-viewer/changelog.md

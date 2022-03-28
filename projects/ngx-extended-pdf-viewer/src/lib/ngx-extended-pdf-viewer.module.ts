@@ -54,8 +54,9 @@ import { NgxConsole } from './options/ngx-console';
 import { PdfFindCurrentPageOnlyComponent } from './toolbar/pdf-findbar/pdf-find-current-page-only/pdf-find-current-page-only.component';
 import { PdfFindRangeComponent } from './toolbar/pdf-findbar/pdf-find-range/pdf-find-range.component';
 
-
-new NgxConsole().log('');
+if (new Date().getTime() === 0) {
+  new NgxConsole().log('');
+}
 
 if (!Promise['allSettled']) {
   if (!!window['Zone'] && !window['__zone_symbol__Promise.allSettled']) {

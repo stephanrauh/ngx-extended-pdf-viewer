@@ -29,6 +29,7 @@ export class CanvasGraphics {
     viewportScale: number;
     outputScaleX: number;
     outputScaleY: number;
+    _cachedScaleForStroking: number[] | null;
     _cachedGetSinglePixelWidth: number | null;
     beginDrawing({ transform, viewport, transparency, background, backgroundColorToReplace, }: {
         transform: any;
@@ -41,7 +42,6 @@ export class CanvasGraphics {
     backgroundColorToReplace: any;
     compositeCtx: any;
     transparentCanvas: any;
-    _combinedScaleFactor: number | undefined;
     executeOperatorList(operatorList: any, executionStartIdx: any, continueCallback: any, stepper: any): any;
     endDrawing(): void;
     _scaleImage(img: any, inverseTransform: any): {
@@ -62,6 +62,7 @@ export class CanvasGraphics {
     setRenderingIntent(intent: any): void;
     setFlatness(flatness: any): void;
     setGState(states: any): void;
+    get inSMaskMode(): boolean;
     checkSMaskState(): void;
     /**
      * Soft mask mode takes the current main drawing canvas and replaces it with
@@ -104,7 +105,7 @@ export class CanvasGraphics {
     setLeadingMoveText(x: any, y: any): void;
     setTextMatrix(a: any, b: any, c: any, d: any, e: any, f: any): void;
     nextLine(): void;
-    paintChar(character: any, x: any, y: any, patternTransform: any, resetLineWidthToOne: any): void;
+    paintChar(character: any, x: any, y: any, patternTransform: any): void;
     pendingTextPaths: any[] | undefined;
     get isFontSubpixelAAEnabled(): any;
     showText(glyphs: any): void;
@@ -146,6 +147,8 @@ export class CanvasGraphics {
     endCompat(): void;
     consumePath(clipBox: any): void;
     getSinglePixelWidth(): number;
+    getScaleForStroking(): number[];
+    rescaleAndStroke(saveRestore: any): void;
     getCanvasPosition(x: any, y: any): any[];
     isContentVisible(): boolean;
 }
