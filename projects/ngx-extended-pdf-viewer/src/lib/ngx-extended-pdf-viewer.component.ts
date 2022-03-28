@@ -92,7 +92,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public root: ElementRef;
 
   private pinchOnMobileSupport: PinchOnMobileSupport | undefined;
-  private relativeCoordsSupport: RelativeCoordsSupport | undefined;
+  public relativeCoordsSupport: RelativeCoordsSupport | undefined;
 
   /* UI templates */
   @Input()
@@ -229,7 +229,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public enablePinchOnMobile = false;
 
   @Input()
-  public enableRelativeCoords = false;
+  public enableRelativeCoords: boolean = false;
+  @Input()
+  public relativeCoordsOptions: Object = { };
 
   /** Use the minified (minifiedJSLibraries="true", which is the default) or the user-readable pdf.js library (minifiedJSLibraries="false") */
   @Input()
@@ -1010,7 +1012,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.pinchOnMobileSupport = new PinchOnMobileSupport(this.ngZone);
       }
       if (this.enableRelativeCoords) {
-        this.relativeCoordsSupport = new RelativeCoordsSupport(this.ngZone, this);
+        this.relativeCoordsSupport = new RelativeCoordsSupport(this.ngZone, this, this.relativeCoordsOptions);
       }
     };
     document.addEventListener('webviewerloaded', onLoaded);
@@ -1806,7 +1808,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         if (!changes['enableRelativeCoords'].isFirstChange()) {
           if (changes['enableRelativeCoords'].currentValue !== changes['enableRelativeCoords'].previousValue) {
             if (this.enableRelativeCoords) {
-              this.relativeCoordsSupport = new RelativeCoordsSupport(this.ngZone, this);
+              this.relativeCoordsSupport = new RelativeCoordsSupport(this.ngZone, this, this.relativeCoordsOptions);
             } else {
               if (this.relativeCoordsSupport) {
                 this.relativeCoordsSupport.destroyRelativeCoords();
