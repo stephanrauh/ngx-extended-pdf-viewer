@@ -304,6 +304,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
    */
   private autoHeight = false;
 
+  @Input()
   public minHeight: string | undefined = undefined;
 
   private _height = '100%';
