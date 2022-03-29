@@ -343,3 +343,4 @@
 - 12.0.1 #1257 fixed the `[namedDest]` attribute
 - 12.0.2 #1242 fixed Acroform date fields with custom formats 
 - 12.0.3 #1243 tentative solution to trigger custom validation when leaving a field using the mouse
+- 12.1.0 #1120 narrowed the scope of a CSS rule to make customizing easier; #1143 allow developers to set `[minHeight]`
