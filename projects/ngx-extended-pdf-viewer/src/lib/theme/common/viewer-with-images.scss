@@ -175,7 +175,8 @@ ngx-extended-pdf-viewer {
     border: 0;
   }
 
-  .html * {
+  .html .toolbar *,
+  .html .treeItem * {
     padding: 0;
     margin: 0;
   }
