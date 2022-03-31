@@ -626,6 +626,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public toolbarWidth = '100%';
 
+  private toolbar: HTMLElement | undefined = undefined;
+  public onToolbarLoaded(toolbarElement: HTMLElement): void {
+      this.toolbar = toolbarElement;
+  }
+
   public toolbarWidthInPixels = 100;
 
   public secondaryToolbarTop: string | undefined = undefined;
@@ -673,11 +678,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   private shuttingDown = false;
 
   public calcViewerPositionTop(): void {
-    const toolbar = document.getElementsByClassName('toolbar')[0] as HTMLElement;
-    if (toolbar === undefined) {
+    if (this.toolbar === undefined) {
       return;
     }
-    let top = toolbar.getBoundingClientRect().height;
+    let top = this.toolbar.getBoundingClientRect().height;
     this.viewerPositionTop = top + 'px';
 
     const factor = top / 33;
@@ -688,7 +692,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
     const findButton = document.getElementById('viewFind');
     if (findButton) {
-      const containerPositionLeft = toolbar.getBoundingClientRect().left;
+      const containerPositionLeft = this.toolbar.getBoundingClientRect().left;
       const findButtonPosition = findButton.getBoundingClientRect();
       const left = findButtonPosition.left - containerPositionLeft;
       this.findbarLeft = left + 'px';
