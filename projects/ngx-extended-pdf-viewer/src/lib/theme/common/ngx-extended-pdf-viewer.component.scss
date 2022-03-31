@@ -47,7 +47,7 @@ ngx-extended-pdf-viewer {
   }
 }
 
-html[dir='ltr'] ngx-extended-pdf-viewer .overlayButton,
+html[dir='ltr'] ngx-extended-pdf-viewer .dialogButton,
 html[dir='ltr'] ngx-extended-pdf-viewer .toolbarButton {
   margin: 3px 0 4px 0;
 }
@@ -70,7 +70,7 @@ html[dir='rtl'] ngx-extended-pdf-viewer #secondaryToolbarToggle {
 ngx-extended-pdf-viewer {
   .toolbarButton,
   .secondaryToolbarButton,
-  .overlayButton {
+  .dialogButton {
     padding-left: 0;
     padding-right: 0;
   }
