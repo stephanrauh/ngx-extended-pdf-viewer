@@ -20,7 +20,8 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 <img src="https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/example.png?raw=true">
 
-## What's new in version 12?
+## What's new in version 12 and 13?
+Due to an internal change of pdf.js, I had to modify both the HTML templates and the CSS rules of the dialogs. This may be a breaking change, especially if you've customized the appearance of the viewer, so it's time to increment the major version number. That's why I'm releasing version 13 shortly after publishing version 12.
 
 Version 12 has a small but breaking change. Actually, it's a fix repairing a nonsense implementation, but I can't rule out you're relying on the bug. Here we go: If you're two-way binding with a form that contains checkboxes that behave like radiobuttons
 (I know that's a long list of conditions!), previous versions of ngx-extended-pdf-viewer reported simply true or false if one of the checkbox

@@ -134,7 +134,7 @@ class WorkerMessageHandler {
     const WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.13.481';
+    const workerVersion = '2.13.482';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -18192,6 +18192,8 @@ var _writer = __w_pdfjs_require__(71);
 
 var _factory = __w_pdfjs_require__(74);
 
+const LINE_FACTOR = 1.35;
+
 class AnnotationFactory {
   static create(xref, ref, pdfManager, idFactory, collectFields) {
     return Promise.all([pdfManager.ensureCatalog("acroForm"), collectFields ? this._getPageIndex(xref, ref, pdfManager) : -1]).then(([acroForm, pageIndex]) => pdfManager.ensure(this, "_create", [xref, ref, pdfManager, idFactory, acroForm, collectFields, pageIndex]));
@@ -19185,6 +19187,10 @@ class WidgetAnnotation extends Annotation {
       return null;
     }
 
+    if (Array.isArray(value) && Array.isArray(this.data.fieldValue) && value.length === this.data.fieldValue.length && value.every((x, i) => x === this.data.fieldValue[i])) {
+      return null;
+    }
+
     let appearance = await this._getAppearance(evaluator, task, annotationStorage);
 
     if (appearance === null) {
@@ -19218,7 +19224,9 @@ class WidgetAnnotation extends Annotation {
       appearance = newTransform.encryptString(appearance);
     }
 
-    dict.set("V", (0, _util.isAscii)(value) ? value : (0, _util.stringToUTF16BEString)(value));
+    const encoder = val => (0, _util.isAscii)(val) ? val : (0, _util.stringToUTF16BEString)(val);
+
+    dict.set("V", Array.isArray(value) ? value.map(encoder) : encoder(value));
     dict.set("AP", AP);
     dict.set("M", `D:${(0, _util.getModificationDate)()}`);
     const appearanceDict = new _primitives.Dict(xref);
@@ -19340,8 +19348,6 @@ class WidgetAnnotation extends Annotation {
     if (!fontSize) {
       const roundWithTwoDigits = x => Math.floor(x * 100) / 100;
 
-      const LINE_FACTOR = 1.35;
-
       if (lineCount === -1) {
         const textWidth = this._getTextWidth(text, font);
 
@@ -19410,12 +19416,13 @@ class WidgetAnnotation extends Annotation {
   }
 
   _renderText(text, font, fontSize, totalWidth, alignment, hPadding, vPadding) {
-    const width = this._getTextWidth(text, font) * fontSize;
     let shift;
 
     if (alignment === 1) {
+      const width = this._getTextWidth(text, font) * fontSize;
       shift = (totalWidth - width) / 2;
     } else if (alignment === 2) {
+      const width = this._getTextWidth(text, font) * fontSize;
       shift = totalWidth - width - hPadding;
     } else {
       shift = hPadding;
@@ -20086,6 +20093,115 @@ class ChoiceWidgetAnnotation extends WidgetAnnotation {
       fillColor: this.data.backgroundColor,
       type
     };
+  }
+
+  async _getAppearance(evaluator, task, annotationStorage) {
+    if (this.data.combo) {
+      return super._getAppearance(evaluator, task, annotationStorage);
+    }
+
+    if (!annotationStorage) {
+      return null;
+    }
+
+    const storageEntry = annotationStorage.get(this.data.id);
+    let exportedValue = storageEntry && storageEntry.value;
+
+    if (exportedValue === undefined) {
+      return null;
+    }
+
+    if (!Array.isArray(exportedValue)) {
+      exportedValue = [exportedValue];
+    }
+
+    const defaultPadding = 2;
+    const hPadding = defaultPadding;
+    const totalHeight = this.data.rect[3] - this.data.rect[1];
+    const totalWidth = this.data.rect[2] - this.data.rect[0];
+    const lineCount = this.data.options.length;
+    const valueIndices = [];
+
+    for (let i = 0; i < lineCount; i++) {
+      const {
+        exportValue
+      } = this.data.options[i];
+
+      if (exportedValue.includes(exportValue)) {
+        valueIndices.push(i);
+      }
+    }
+
+    if (!this._defaultAppearance) {
+      this.data.defaultAppearanceData = (0, _default_appearance.parseDefaultAppearance)(this._defaultAppearance = "/Helvetica 0 Tf 0 g");
+    }
+
+    const font = await this._getFontData(evaluator, task);
+    let defaultAppearance;
+    let {
+      fontSize
+    } = this.data.defaultAppearanceData;
+
+    if (!fontSize) {
+      const lineHeight = (totalHeight - defaultPadding) / lineCount;
+      let lineWidth = -1;
+      let value;
+
+      for (const {
+        displayValue
+      } of this.data.options) {
+        const width = this._getTextWidth(displayValue);
+
+        if (width > lineWidth) {
+          lineWidth = width;
+          value = displayValue;
+        }
+      }
+
+      [defaultAppearance, fontSize] = this._computeFontSize(lineHeight, totalWidth - 2 * hPadding, value, font, -1);
+    } else {
+      defaultAppearance = this._defaultAppearance;
+    }
+
+    const lineHeight = fontSize * LINE_FACTOR;
+    const vPadding = (lineHeight - fontSize) / 2;
+    const numberOfVisibleLines = Math.floor(totalHeight / lineHeight);
+    let firstIndex;
+
+    if (valueIndices.length === 1) {
+      const valuePosition = valueIndices[0];
+      const indexInPage = valuePosition % numberOfVisibleLines;
+      firstIndex = valuePosition - indexInPage;
+    } else {
+      firstIndex = valueIndices.length ? valueIndices[0] : 0;
+    }
+
+    const end = Math.min(firstIndex + numberOfVisibleLines + 1, lineCount);
+    const buf = ["/Tx BMC q", `1 1 ${totalWidth} ${totalHeight} re W n`];
+
+    if (valueIndices.length) {
+      buf.push("0.600006 0.756866 0.854904 rg");
+
+      for (const index of valueIndices) {
+        if (firstIndex <= index && index < end) {
+          buf.push(`1 ${totalHeight - (index - firstIndex + 1) * lineHeight} ${totalWidth} ${lineHeight} re f`);
+        }
+      }
+    }
+
+    buf.push("BT", defaultAppearance, `1 0 0 1 0 ${totalHeight} Tm`);
+
+    for (let i = firstIndex; i < end; i++) {
+      const {
+        displayValue
+      } = this.data.options[i];
+      const hpadding = i === firstIndex ? hPadding : 0;
+      const vpadding = i === firstIndex ? vPadding : 0;
+      buf.push(this._renderText(displayValue, font, fontSize, totalWidth, 0, hpadding, -lineHeight + vpadding));
+    }
+
+    buf.push("ET Q EMC");
+    return buf.join("\n");
   }
 
 }
@@ -73862,8 +73978,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.13.481';
-const pdfjsBuild = 'b0b1da27a';
+const pdfjsVersion = '2.13.482';
+const pdfjsBuild = '586079477';
 })();
 
 /******/ 	return __webpack_exports__;

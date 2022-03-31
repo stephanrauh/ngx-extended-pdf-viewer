@@ -1323,7 +1323,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.13.481',
+    apiVersion: '2.13.482',
     source: {
       data: source.data,
       url: source.url,
@@ -3441,9 +3441,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.13.481';
+const version = '2.13.482';
 exports.version = version;
-const build = 'b0b1da27a';
+const build = '586079477';
 exports.build = build;
 
 /***/ }),
@@ -9616,11 +9616,7 @@ class LinkAnnotationElement extends AnnotationElement {
     const link = document.createElement("a");
 
     if (data.url) {
-      if (!linkService.addLinkAttributes) {
-        (0, _util.warn)("LinkAnnotationElement.render - missing `addLinkAttributes`-method on the `linkService`-instance.");
-      }
-
-      linkService.addLinkAttributes?.(link, data.url, data.newWindow);
+      linkService.addLinkAttributes(link, data.url, data.newWindow);
     } else if (data.action) {
       this._bindNamedAction(link, data.action);
     } else if (data.dest) {
@@ -10472,10 +10468,9 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
     this.container.className = "choiceWidgetAnnotation";
     const storage = this.annotationStorage;
     const id = this.data.id;
-    const fieldvalue = storage.getValue(id, this.data.fieldName, {
-      value: this.data.fieldValue.length > 0 ? this.data.fieldValue[0] : undefined
-    }).value;
-    this.data.fieldValue = fieldvalue;
+    const storedData = storage.getValue(id, this.data.fieldName, {
+      value: this.data.fieldValue
+    });
     let {
       fontSize
     } = this.data.defaultAppearanceData;
@@ -10518,7 +10513,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
         optionElement.style.fontSize = fontSizeStyle;
       }
 
-      if (this.data.fieldValue.includes(option.exportValue)) {
+      if (storedData.value.includes(option.exportValue)) {
         optionElement.setAttribute("selected", true);
       }
 
@@ -10688,7 +10683,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
     } else {
       selectElement.addEventListener("input", event => {
         storage.setValue(id, this.data.fieldName, {
-          value: getValue(event),
+          value: getValue(event, true),
           radioValue: getValue(event, true)
         });
       });
@@ -15905,8 +15900,8 @@ var _svg = __w_pdfjs_require__(22);
 
 var _xfa_layer = __w_pdfjs_require__(20);
 
-const pdfjsVersion = '2.13.481';
-const pdfjsBuild = 'b0b1da27a';
+const pdfjsVersion = '2.13.482';
+const pdfjsBuild = '586079477';
 {
   if (_is_node.isNodeJS) {
     const {
