@@ -344,6 +344,9 @@
 - 12.0.2 #1242 fixed Acroform date fields with custom formats 
 - 12.0.3 #1243 tentative solution to trigger custom validation when leaving a field using the mouse
 - 12.1.0 #1120 narrowed the scope of a CSS rule to make customizing easier; #1143 allow developers to set `[minHeight]`
+- 12.1.1 #1120 #1278 corrected a layout glitch cause by narrowing the CSS rules
 - 13.0.0-alpha.0 #1120 narrowed the scope of a CSS rule; modified the HTML templates and the CSS code to reflect internal changes of pdf.js
 - 13.0.0-alpha.1 #1254 now AcroForm ChoiceWidgets are printed correctly
 - 13.0.0-alpha.2 #1268 Use the 'toolbar' from the pdf-toolbar component instead of using the first 'toolbar' in document. This way, developers can use the CSS class `toolbar` outside the PDF viewer. 
+- 13.0.0-alpha.3 #1120 #1278 corrected a layout glitch cause by narrowing the CSS rules (cherry-picked from version 12.1.1)
+

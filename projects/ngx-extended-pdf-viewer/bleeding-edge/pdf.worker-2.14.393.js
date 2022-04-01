@@ -134,7 +134,7 @@ class WorkerMessageHandler {
     const WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.14.389';
+    const workerVersion = '2.14.393';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -54125,13 +54125,7 @@ class Catalog {
           const baseCharCode = style === "a" ? A_LOWER_CASE : A_UPPER_CASE;
           const letterIndex = currentIndex - 1;
           const character = String.fromCharCode(baseCharCode + letterIndex % LIMIT);
-          const charBuf = [];
-
-          for (let j = 0, jj = letterIndex / LIMIT | 0; j <= jj; j++) {
-            charBuf.push(character);
-          }
-
-          currentLabel = charBuf.join("");
+          currentLabel = character.repeat(Math.floor(letterIndex / LIMIT) + 1);
           break;
 
         default:
@@ -74007,8 +74001,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.14.389';
-const pdfjsBuild = '66383548e';
+const pdfjsVersion = '2.14.393';
+const pdfjsBuild = '9ada511a0';
 })();
 
 /******/ 	return __webpack_exports__;
