@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-/** List of all field that can be customized */
+/** List of all fields that can be customized */
 const requiredIds = [
   'toolbarViewer',
   'numPages',
