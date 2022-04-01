@@ -47,5 +47,4 @@ Thumbs.db
 
 # generated files
 *.map
-*-es5.js
-*.min.js
+
