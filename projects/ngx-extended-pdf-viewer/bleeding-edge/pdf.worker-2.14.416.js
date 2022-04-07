@@ -29,7 +29,7 @@
 		exports["pdfjs-dist/build/pdf.worker"] = factory();
 	else
 		root["pdfjs-dist/build/pdf.worker"] = root.pdfjsWorker = factory();
-})(this, function() {
+})(this, () => {
 return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ([
@@ -54,9 +54,9 @@ var _cleanup_helper = __w_pdfjs_require__(65);
 
 var _writer = __w_pdfjs_require__(71);
 
-var _message_handler = __w_pdfjs_require__(99);
+var _message_handler = __w_pdfjs_require__(100);
 
-var _worker_stream = __w_pdfjs_require__(100);
+var _worker_stream = __w_pdfjs_require__(101);
 
 var _core_utils = __w_pdfjs_require__(7);
 
@@ -134,7 +134,7 @@ class WorkerMessageHandler {
     const WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.14.393';
+    const workerVersion = '2.14.416';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -3641,6 +3641,8 @@ var _catalog = __w_pdfjs_require__(63);
 
 var _cleanup_helper = __w_pdfjs_require__(65);
 
+var _dataset_reader = __w_pdfjs_require__(98);
+
 var _parser = __w_pdfjs_require__(26);
 
 var _stream = __w_pdfjs_require__(9);
@@ -3657,7 +3659,7 @@ var _struct_tree = __w_pdfjs_require__(69);
 
 var _factory = __w_pdfjs_require__(74);
 
-var _xref = __w_pdfjs_require__(98);
+var _xref = __w_pdfjs_require__(99);
 
 const DEFAULT_USER_UNIT = 1.0;
 const LETTER_SIZE_MEDIABOX = [0, 0, 612, 792];
@@ -4306,7 +4308,7 @@ class PDFDocument {
     });
   }
 
-  get xfaData() {
+  get _xfaStreams() {
     const acroForm = this.catalog.acroForm;
 
     if (!acroForm) {
@@ -4326,13 +4328,8 @@ class PDFDocument {
     };
 
     if (xfa instanceof _base_stream.BaseStream && !xfa.isEmpty) {
-      try {
-        entries["xdp:xdp"] = (0, _util.stringToUTF8String)(xfa.getString());
-        return entries;
-      } catch (_) {
-        (0, _util.warn)("XFA - Invalid utf-8 string.");
-        return null;
-      }
+      entries["xdp:xdp"] = xfa;
+      return entries;
     }
 
     if (!Array.isArray(xfa) || xfa.length === 0) {
@@ -4360,15 +4357,64 @@ class PDFDocument {
         continue;
       }
 
+      entries[name] = data;
+    }
+
+    return entries;
+  }
+
+  get xfaDatasets() {
+    const streams = this._xfaStreams;
+
+    if (!streams) {
+      return (0, _util.shadow)(this, "xfaDatasets", null);
+    }
+
+    for (const key of ["datasets", "xdp:xdp"]) {
+      const stream = streams[key];
+
+      if (!stream) {
+        continue;
+      }
+
       try {
-        entries[name] = (0, _util.stringToUTF8String)(data.getString());
+        const str = (0, _util.stringToUTF8String)(stream.getString());
+        const data = {
+          [key]: str
+        };
+        return (0, _util.shadow)(this, "xfaDatasets", new _dataset_reader.DatasetReader(data));
+      } catch (_) {
+        (0, _util.warn)("XFA - Invalid utf-8 string.");
+        break;
+      }
+    }
+
+    return (0, _util.shadow)(this, "xfaDatasets", null);
+  }
+
+  get xfaData() {
+    const streams = this._xfaStreams;
+
+    if (!streams) {
+      return null;
+    }
+
+    const data = Object.create(null);
+
+    for (const [key, stream] of Object.entries(streams)) {
+      if (!stream) {
+        continue;
+      }
+
+      try {
+        data[key] = (0, _util.stringToUTF8String)(stream.getString());
       } catch (_) {
         (0, _util.warn)("XFA - Invalid utf-8 string.");
         return null;
       }
     }
 
-    return entries;
+    return data;
   }
 
   get xfaFactory() {
@@ -18164,10 +18210,10 @@ const LINE_FACTOR = 1.35;
 
 class AnnotationFactory {
   static create(xref, ref, pdfManager, idFactory, collectFields) {
-    return Promise.all([pdfManager.ensureCatalog("acroForm"), collectFields ? this._getPageIndex(xref, ref, pdfManager) : -1]).then(([acroForm, pageIndex]) => pdfManager.ensure(this, "_create", [xref, ref, pdfManager, idFactory, acroForm, collectFields, pageIndex]));
+    return Promise.all([pdfManager.ensureCatalog("acroForm"), pdfManager.ensureDoc("xfaDatasets"), collectFields ? this._getPageIndex(xref, ref, pdfManager) : -1]).then(([acroForm, xfaDatasets, pageIndex]) => pdfManager.ensure(this, "_create", [xref, ref, pdfManager, idFactory, acroForm, xfaDatasets, collectFields, pageIndex]));
   }
 
-  static _create(xref, ref, pdfManager, idFactory, acroForm, collectFields, pageIndex = -1) {
+  static _create(xref, ref, pdfManager, idFactory, acroForm, xfaDatasets, collectFields, pageIndex = -1) {
     const dict = xref.fetchIfRef(ref);
 
     if (!(dict instanceof _primitives.Dict)) {
@@ -18185,6 +18231,7 @@ class AnnotationFactory {
       id,
       pdfManager,
       acroForm: acroForm instanceof _primitives.Dict ? acroForm : _primitives.Dict.empty,
+      xfaDatasets,
       collectFields,
       pageIndex
     };
@@ -19025,7 +19072,7 @@ class WidgetAnnotation extends Annotation {
       data.actions = (0, _core_utils.collectActions)(params.xref, dict, _util.AnnotationActionEventType);
     }
 
-    const fieldValue = (0, _core_utils.getInheritableProperty)({
+    let fieldValue = (0, _core_utils.getInheritableProperty)({
       dict,
       key: "V",
       getArray: true
@@ -19037,6 +19084,15 @@ class WidgetAnnotation extends Annotation {
       getArray: true
     });
     data.defaultFieldValue = this._decodeFormValue(defaultFieldValue);
+
+    if (fieldValue === undefined && params.xfaDatasets) {
+      const path = this._title.str;
+
+      if (path) {
+        this._hasValueFromXFA = true;
+        data.fieldValue = fieldValue = params.xfaDatasets.getValue(path);
+      }
+    }
 
     if (fieldValue === undefined && data.defaultFieldValue !== null) {
       data.fieldValue = data.defaultFieldValue;
@@ -19144,18 +19200,18 @@ class WidgetAnnotation extends Annotation {
   }
 
   async save(evaluator, task, annotationStorage) {
-    if (!annotationStorage) {
-      return null;
-    }
-
-    const storageEntry = annotationStorage.get(this.data.id);
-    const value = storageEntry && storageEntry.value;
+    const storageEntry = annotationStorage ? annotationStorage.get(this.data.id) : undefined;
+    let value = storageEntry && storageEntry.value;
 
     if (value === this.data.fieldValue || value === undefined) {
-      return null;
+      if (!this._hasValueFromXFA) {
+        return null;
+      }
+
+      value = value || this.data.fieldValue;
     }
 
-    if (Array.isArray(value) && Array.isArray(this.data.fieldValue) && value.length === this.data.fieldValue.length && value.every((x, i) => x === this.data.fieldValue[i])) {
+    if (!this._hasValueFromXFA && Array.isArray(value) && Array.isArray(this.data.fieldValue) && value.length === this.data.fieldValue.length && value.every((x, i) => x === this.data.fieldValue[i])) {
       return null;
     }
 
@@ -19222,15 +19278,23 @@ class WidgetAnnotation extends Annotation {
   async _getAppearance(evaluator, task, annotationStorage) {
     const isPassword = this.hasFieldFlag(_util.AnnotationFieldFlag.PASSWORD);
 
-    if (!annotationStorage || isPassword) {
+    if (isPassword) {
       return null;
     }
 
-    const storageEntry = annotationStorage.get(this.data.id);
+    const storageEntry = annotationStorage ? annotationStorage.get(this.data.id) : undefined;
     let value = storageEntry && storageEntry.value;
 
     if (value === undefined) {
-      return null;
+      if (!this._hasValueFromXFA || this.appearance) {
+        return null;
+      }
+
+      value = this.data.fieldValue;
+
+      if (!value) {
+        return "";
+      }
     }
 
     value = value.trim();
@@ -55807,6 +55871,10 @@ class SimpleDOMNode {
     }).join("");
   }
 
+  get children() {
+    return this.childNodes || [];
+  }
+
   hasChildNodes() {
     return this.childNodes && this.childNodes.length > 0;
   }
@@ -55983,12 +56051,14 @@ class SimpleXMLParser extends XMLParserBase {
     const lastElement = this._currentFragment[this._currentFragment.length - 1];
 
     if (!lastElement) {
-      return;
+      return null;
     }
 
     for (let i = 0, ii = lastElement.childNodes.length; i < ii; i++) {
       lastElement.childNodes[i].parentNode = lastElement;
     }
+
+    return lastElement;
   }
 
   onError(code) {
@@ -72413,6 +72483,92 @@ exports.UnknownNamespace = UnknownNamespace;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
+exports.DatasetReader = void 0;
+
+var _util = __w_pdfjs_require__(2);
+
+var _core_utils = __w_pdfjs_require__(7);
+
+var _xml_parser = __w_pdfjs_require__(68);
+
+function decodeString(str) {
+  try {
+    return (0, _util.stringToUTF8String)(str);
+  } catch (ex) {
+    (0, _util.warn)(`UTF-8 decoding failed: "${ex}".`);
+    return str;
+  }
+}
+
+class DatasetXMLParser extends _xml_parser.SimpleXMLParser {
+  constructor(options) {
+    super(options);
+    this.node = null;
+  }
+
+  onEndElement(name) {
+    const node = super.onEndElement(name);
+
+    if (node && name === "xfa:datasets") {
+      this.node = node;
+      throw new Error("Aborting DatasetXMLParser.");
+    }
+  }
+
+}
+
+class DatasetReader {
+  constructor(data) {
+    if (data.datasets) {
+      this.node = new _xml_parser.SimpleXMLParser({
+        hasAttributes: true
+      }).parseFromString(data.datasets).documentElement;
+    } else {
+      const parser = new DatasetXMLParser({
+        hasAttributes: true
+      });
+
+      try {
+        parser.parseFromString(data["xdp:xdp"]);
+      } catch (_) {}
+
+      this.node = parser.node;
+    }
+  }
+
+  getValue(path) {
+    if (!this.node || !path) {
+      return "";
+    }
+
+    const node = this.node.searchNode((0, _core_utils.parseXFAPath)(path), 0);
+
+    if (!node) {
+      return "";
+    }
+
+    const first = node.firstChild;
+
+    if (first && first.nodeName === "value") {
+      return node.children.map(child => decodeString(child.textContent));
+    }
+
+    return decodeString(node.textContent);
+  }
+
+}
+
+exports.DatasetReader = DatasetReader;
+
+/***/ }),
+/* 99 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
 exports.XRef = void 0;
 
 var _util = __w_pdfjs_require__(2);
@@ -73291,7 +73447,7 @@ class XRef {
 exports.XRef = XRef;
 
 /***/ }),
-/* 99 */
+/* 100 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -73777,7 +73933,7 @@ class MessageHandler {
 exports.MessageHandler = MessageHandler;
 
 /***/ }),
-/* 100 */
+/* 101 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -74001,8 +74157,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.14.393';
-const pdfjsBuild = '9ada511a0';
+const pdfjsVersion = '2.14.416';
+const pdfjsBuild = '30609f91d';
 })();
 
 /******/ 	return __webpack_exports__;

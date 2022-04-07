@@ -7,6 +7,8 @@ const requiredIds = [
   'pageNumber',
   'scaleSelectContainer',
   'customScaleOption',
+  'scaleSelect',
+  'scrollPage',
   'previous',
   'next',
   'zoomIn',
@@ -108,7 +110,7 @@ const requiredIds = [
 
 @Component({
   selector: 'pdf-dummy-components',
-  templateUrl: './pdf-dummy-components.component.html'
+  templateUrl: './pdf-dummy-components.component.html',
 })
 export class PdfDummyComponentsComponent {
   private dummyComponentsContainer: Element;
@@ -125,7 +127,7 @@ export class PdfDummyComponentsComponent {
       }
     }
 
-    requiredIds.forEach(id => {
+    requiredIds.forEach((id) => {
       if (this.needsDummyWidget(id)) {
         const dummy = document.createElement('span');
         dummy.id = id;

@@ -1,4 +1,3 @@
-import { IPDFViewerApplicationOptions } from './pdf-viewer-application-options';
 import { IPDFViewerAppConfig } from './pdf-viewer-app-config';
 import { IPDFViewer } from './pdf-viewer';
 import { IEventBus } from './pdf-event-bus';
