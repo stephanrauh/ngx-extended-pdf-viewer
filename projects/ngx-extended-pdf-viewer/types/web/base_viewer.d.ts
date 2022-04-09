@@ -316,37 +316,6 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFStructTreeLay
     get isChangingPresentationMode(): boolean;
     get isHorizontalScrollbarEnabled(): boolean;
     get isVerticalScrollbarEnabled(): boolean;
-    /**
-     * Helper method for `this._getVisiblePages`. Should only ever be used when
-     * the viewer can only display a single page at a time, for example:
-     *  - When PresentationMode is active.
-     */
-    _getCurrentVisiblePage(): {
-        views: never[];
-        first?: undefined;
-        last?: undefined;
-        ids?: undefined;
-    } | {
-        first: {
-            id: any;
-            x: any;
-            y: any;
-            view: any;
-        };
-        last: {
-            id: any;
-            x: any;
-            y: any;
-            view: any;
-        };
-        views: {
-            id: any;
-            x: any;
-            y: any;
-            view: any;
-        }[];
-        ids: Set<any>;
-    };
     _getVisiblePages(): Object;
     /**
      * @param {number} pageNumber

@@ -197,6 +197,10 @@ export namespace DocumentActionEventType {
     const DP: string;
 }
 export function escapeString(str: any): any;
+export class FeatureTest {
+    static get isLittleEndian(): any;
+    static get isEvalSupported(): any;
+}
 export const FONT_IDENTITY_MATRIX: number[];
 export namespace FontType {
     const UNKNOWN: string;
@@ -237,8 +241,6 @@ export class InvalidPDFException extends InvalidPDFException_base {
 export function isArrayBuffer(v: any): boolean;
 export function isArrayEqual(arr1: any, arr2: any): boolean;
 export function isAscii(str: any): boolean;
-export namespace IsEvalSupportedCached { }
-export namespace IsLittleEndianCached { }
 declare const MissingPDFException_base: any;
 export class MissingPDFException extends MissingPDFException_base {
     [x: string]: any;
