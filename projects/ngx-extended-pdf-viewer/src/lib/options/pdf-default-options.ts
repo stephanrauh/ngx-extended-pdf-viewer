@@ -2,7 +2,7 @@ const _isIE11 = typeof window === 'undefined' ? false : !!(<any>window).MSInputM
 const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
-export const pdfjsVersion = '2.14.417';
+export const pdfjsVersion = '2.13.483';
 export const pdfjsBleedingEdgeVersion = '2.14.424';
 export function getVersionSuffix(folder: string): string {
   if (folder && folder.includes('bleeding-edge')) {
@@ -62,12 +62,15 @@ export let pdfDefaultOptions = {
     pdfDefaultOptions.needsES5
       ? `./${pdfDefaultOptions.assetsFolder}/pdf.worker-${getVersionSuffix(pdfDefaultOptions.assetsFolder)}-es5.js`
       : `./${pdfDefaultOptions.assetsFolder}/pdf.worker-${getVersionSuffix(pdfDefaultOptions.assetsFolder)}.js`,
+  standardFontDataUrl: () =>
+      `../${pdfDefaultOptions.assetsFolder}/standard_fonts/`,
 
   // options specific to ngx-extended-pdf-viewer (as opposed to being used by pdf.js)
   doubleTapZoomFactor: 'page-width',
   enableScripting: true,
   defaultCacheSize: 50,
   passwordPrompt: undefined,
+
 };
 
 if (typeof window !== 'undefined') {

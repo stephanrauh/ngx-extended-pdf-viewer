@@ -1197,6 +1197,10 @@ function getDocument(src) {
     params.cMapUrl = null;
   }
 
+  if (typeof params.standardFontDataUrl === "function") {
+    params.standardFontDataUrl = params.standardFontDataUrl();
+  }
+
   if (typeof params.standardFontDataUrl !== "string") {
     params.standardFontDataUrl = null;
   }

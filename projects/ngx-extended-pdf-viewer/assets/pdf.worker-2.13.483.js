@@ -29,7 +29,7 @@
 		exports["pdfjs-dist/build/pdf.worker"] = factory();
 	else
 		root["pdfjs-dist/build/pdf.worker"] = root.pdfjsWorker = factory();
-})(this, () => {
+})(this, function() {
 return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ([
@@ -54,9 +54,9 @@ var _cleanup_helper = __w_pdfjs_require__(65);
 
 var _writer = __w_pdfjs_require__(71);
 
-var _message_handler = __w_pdfjs_require__(100);
+var _message_handler = __w_pdfjs_require__(99);
 
-var _worker_stream = __w_pdfjs_require__(101);
+var _worker_stream = __w_pdfjs_require__(100);
 
 var _core_utils = __w_pdfjs_require__(7);
 
@@ -117,7 +117,7 @@ class WorkerMessageHandler {
       }
 
       testMessageProcessed = true;
-      handler.send("test", data instanceof Uint8Array);
+      handler.send("test", data instanceof Uint8Array && data[0] === 255);
     });
     handler.on("configure", function wphConfigure(data) {
       (0, _util.setVerbosityLevel)(data.verbosity);
@@ -134,7 +134,7 @@ class WorkerMessageHandler {
     const WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.14.417';
+    const workerVersion = '2.13.483';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -389,7 +389,7 @@ class WorkerMessageHandler {
       };
       let cMapUrl = evaluatorOptions.cMapUrl;
 
-      if (cMapUrl?.constructor.name === "Function") {
+      if (cMapUrl.constructor.name === "Function") {
         evaluatorOptions.cMapUrl = cMapUrl();
       }
 
@@ -763,6 +763,7 @@ exports.info = info;
 exports.isArrayBuffer = isArrayBuffer;
 exports.isArrayEqual = isArrayEqual;
 exports.isAscii = isAscii;
+exports.isSameOrigin = isSameOrigin;
 exports.objectFromMap = objectFromMap;
 exports.objectSize = objectSize;
 exports.setVerbosityLevel = setVerbosityLevel;
@@ -1162,6 +1163,23 @@ function assert(cond, msg) {
   if (!cond) {
     unreachable(msg);
   }
+}
+
+function isSameOrigin(baseUrl, otherUrl) {
+  let base;
+
+  try {
+    base = new URL(baseUrl);
+
+    if (!base.origin || base.origin === "null") {
+      return false;
+    }
+  } catch (e) {
+    return false;
+  }
+
+  const other = new URL(otherUrl, base);
+  return base.origin === other.origin;
 }
 
 function _isValidProtocol(url) {
@@ -2038,8 +2056,10 @@ class RefSet {
     this._set.delete(ref.toString());
   }
 
-  [Symbol.iterator]() {
-    return this._set.values();
+  forEach(callback) {
+    for (const ref of this._set.values()) {
+      callback(ref);
+    }
   }
 
   clear() {
@@ -2075,8 +2095,10 @@ class RefSetCache {
     this._map.set(ref.toString(), this.get(aliasRef));
   }
 
-  [Symbol.iterator]() {
-    return this._map.values();
+  forEach(callback) {
+    for (const value of this._map.values()) {
+      callback(value);
+    }
   }
 
   clear() {
@@ -3631,6 +3653,8 @@ var _primitives = __w_pdfjs_require__(4);
 
 var _xfa_fonts = __w_pdfjs_require__(11);
 
+var _stream = __w_pdfjs_require__(9);
+
 var _annotation = __w_pdfjs_require__(21);
 
 var _base_stream = __w_pdfjs_require__(8);
@@ -3641,11 +3665,7 @@ var _catalog = __w_pdfjs_require__(63);
 
 var _cleanup_helper = __w_pdfjs_require__(65);
 
-var _dataset_reader = __w_pdfjs_require__(98);
-
 var _parser = __w_pdfjs_require__(26);
-
-var _stream = __w_pdfjs_require__(9);
 
 var _object_loader = __w_pdfjs_require__(70);
 
@@ -3659,7 +3679,7 @@ var _struct_tree = __w_pdfjs_require__(69);
 
 var _factory = __w_pdfjs_require__(74);
 
-var _xref = __w_pdfjs_require__(99);
+var _xref = __w_pdfjs_require__(98);
 
 const DEFAULT_USER_UNIT = 1.0;
 const LETTER_SIZE_MEDIABOX = [0, 0, 612, 792];
@@ -4121,7 +4141,17 @@ function find(stream, signature, limit = 1024, backwards = false) {
 }
 
 class PDFDocument {
-  constructor(pdfManager, stream) {
+  constructor(pdfManager, arg) {
+    let stream;
+
+    if (arg instanceof _base_stream.BaseStream) {
+      stream = arg;
+    } else if ((0, _util.isArrayBuffer)(arg)) {
+      stream = new _stream.Stream(arg);
+    } else {
+      throw new Error("PDFDocument: Unknown argument type");
+    }
+
     if (stream.length <= 0) {
       throw new _util.InvalidPDFException("The PDF file is empty, i.e. its size is zero bytes.");
     }
@@ -4308,7 +4338,7 @@ class PDFDocument {
     });
   }
 
-  get _xfaStreams() {
+  get xfaData() {
     const acroForm = this.catalog.acroForm;
 
     if (!acroForm) {
@@ -4328,8 +4358,13 @@ class PDFDocument {
     };
 
     if (xfa instanceof _base_stream.BaseStream && !xfa.isEmpty) {
-      entries["xdp:xdp"] = xfa;
-      return entries;
+      try {
+        entries["xdp:xdp"] = (0, _util.stringToUTF8String)(xfa.getString());
+        return entries;
+      } catch (_) {
+        (0, _util.warn)("XFA - Invalid utf-8 string.");
+        return null;
+      }
     }
 
     if (!Array.isArray(xfa) || xfa.length === 0) {
@@ -4357,64 +4392,15 @@ class PDFDocument {
         continue;
       }
 
-      entries[name] = data;
-    }
-
-    return entries;
-  }
-
-  get xfaDatasets() {
-    const streams = this._xfaStreams;
-
-    if (!streams) {
-      return (0, _util.shadow)(this, "xfaDatasets", null);
-    }
-
-    for (const key of ["datasets", "xdp:xdp"]) {
-      const stream = streams[key];
-
-      if (!stream) {
-        continue;
-      }
-
       try {
-        const str = (0, _util.stringToUTF8String)(stream.getString());
-        const data = {
-          [key]: str
-        };
-        return (0, _util.shadow)(this, "xfaDatasets", new _dataset_reader.DatasetReader(data));
-      } catch (_) {
-        (0, _util.warn)("XFA - Invalid utf-8 string.");
-        break;
-      }
-    }
-
-    return (0, _util.shadow)(this, "xfaDatasets", null);
-  }
-
-  get xfaData() {
-    const streams = this._xfaStreams;
-
-    if (!streams) {
-      return null;
-    }
-
-    const data = Object.create(null);
-
-    for (const [key, stream] of Object.entries(streams)) {
-      if (!stream) {
-        continue;
-      }
-
-      try {
-        data[key] = (0, _util.stringToUTF8String)(stream.getString());
+        entries[name] = (0, _util.stringToUTF8String)(data.getString());
       } catch (_) {
         (0, _util.warn)("XFA - Invalid utf-8 string.");
         return null;
       }
     }
 
-    return data;
+    return entries;
   }
 
   get xfaFactory() {
@@ -18210,10 +18196,10 @@ const LINE_FACTOR = 1.35;
 
 class AnnotationFactory {
   static create(xref, ref, pdfManager, idFactory, collectFields) {
-    return Promise.all([pdfManager.ensureCatalog("acroForm"), pdfManager.ensureDoc("xfaDatasets"), collectFields ? this._getPageIndex(xref, ref, pdfManager) : -1]).then(([acroForm, xfaDatasets, pageIndex]) => pdfManager.ensure(this, "_create", [xref, ref, pdfManager, idFactory, acroForm, xfaDatasets, collectFields, pageIndex]));
+    return Promise.all([pdfManager.ensureCatalog("acroForm"), collectFields ? this._getPageIndex(xref, ref, pdfManager) : -1]).then(([acroForm, pageIndex]) => pdfManager.ensure(this, "_create", [xref, ref, pdfManager, idFactory, acroForm, collectFields, pageIndex]));
   }
 
-  static _create(xref, ref, pdfManager, idFactory, acroForm, xfaDatasets, collectFields, pageIndex = -1) {
+  static _create(xref, ref, pdfManager, idFactory, acroForm, collectFields, pageIndex = -1) {
     const dict = xref.fetchIfRef(ref);
 
     if (!(dict instanceof _primitives.Dict)) {
@@ -18231,7 +18217,6 @@ class AnnotationFactory {
       id,
       pdfManager,
       acroForm: acroForm instanceof _primitives.Dict ? acroForm : _primitives.Dict.empty,
-      xfaDatasets,
       collectFields,
       pageIndex
     };
@@ -19072,7 +19057,7 @@ class WidgetAnnotation extends Annotation {
       data.actions = (0, _core_utils.collectActions)(params.xref, dict, _util.AnnotationActionEventType);
     }
 
-    let fieldValue = (0, _core_utils.getInheritableProperty)({
+    const fieldValue = (0, _core_utils.getInheritableProperty)({
       dict,
       key: "V",
       getArray: true
@@ -19084,15 +19069,6 @@ class WidgetAnnotation extends Annotation {
       getArray: true
     });
     data.defaultFieldValue = this._decodeFormValue(defaultFieldValue);
-
-    if (fieldValue === undefined && params.xfaDatasets) {
-      const path = this._title.str;
-
-      if (path) {
-        this._hasValueFromXFA = true;
-        data.fieldValue = fieldValue = params.xfaDatasets.getValue(path);
-      }
-    }
 
     if (fieldValue === undefined && data.defaultFieldValue !== null) {
       data.fieldValue = data.defaultFieldValue;
@@ -19200,18 +19176,18 @@ class WidgetAnnotation extends Annotation {
   }
 
   async save(evaluator, task, annotationStorage) {
-    const storageEntry = annotationStorage ? annotationStorage.get(this.data.id) : undefined;
-    let value = storageEntry && storageEntry.value;
-
-    if (value === this.data.fieldValue || value === undefined) {
-      if (!this._hasValueFromXFA) {
-        return null;
-      }
-
-      value = value || this.data.fieldValue;
+    if (!annotationStorage) {
+      return null;
     }
 
-    if (!this._hasValueFromXFA && Array.isArray(value) && Array.isArray(this.data.fieldValue) && value.length === this.data.fieldValue.length && value.every((x, i) => x === this.data.fieldValue[i])) {
+    const storageEntry = annotationStorage.get(this.data.id);
+    const value = storageEntry && storageEntry.value;
+
+    if (value === this.data.fieldValue || value === undefined) {
+      return null;
+    }
+
+    if (Array.isArray(value) && Array.isArray(this.data.fieldValue) && value.length === this.data.fieldValue.length && value.every((x, i) => x === this.data.fieldValue[i])) {
       return null;
     }
 
@@ -19278,23 +19254,15 @@ class WidgetAnnotation extends Annotation {
   async _getAppearance(evaluator, task, annotationStorage) {
     const isPassword = this.hasFieldFlag(_util.AnnotationFieldFlag.PASSWORD);
 
-    if (isPassword) {
+    if (!annotationStorage || isPassword) {
       return null;
     }
 
-    const storageEntry = annotationStorage ? annotationStorage.get(this.data.id) : undefined;
+    const storageEntry = annotationStorage.get(this.data.id);
     let value = storageEntry && storageEntry.value;
 
     if (value === undefined) {
-      if (!this._hasValueFromXFA || this.appearance) {
-        return null;
-      }
-
-      value = this.data.fieldValue;
-
-      if (!value) {
-        return "";
-      }
+      return null;
     }
 
     value = value.trim();
@@ -22338,10 +22306,9 @@ class PartialEvaluator {
       }
     }
 
-    for (const ref of processed) {
+    processed.forEach(ref => {
       nonBlendModesSet.put(ref);
-    }
-
+    });
     return false;
   }
 
@@ -22355,7 +22322,7 @@ class PartialEvaluator {
     let data;
     let cMapUrl = this.options.cMapUrl;
 
-    if (cMapUrl?.constructor.name === "Function") {
+    if (cMapUrl.constructor.name === "Function") {
       cMapUrl = cMapUrl();
     }
 
@@ -22542,14 +22509,8 @@ class PartialEvaluator {
     const maxImageSize = this.options.maxImageSize;
 
     if (maxImageSize !== -1 && w * h > maxImageSize) {
-      const msg = "Image exceeded maximum allowed size and was removed.";
-
-      if (this.options.ignoreErrors) {
-        (0, _util.warn)(msg);
-        return;
-      }
-
-      throw new Error(msg);
+      (0, _util.warn)("Image exceeded maximum allowed size and was removed.");
+      return;
     }
 
     let optionalContent;
@@ -23940,29 +23901,11 @@ class PartialEvaluator {
       spaceInFlowMax: 0,
       trackingSpaceMin: Infinity,
       negativeSpaceMax: -Infinity,
-      notASpace: -Infinity,
       transform: null,
       fontName: null,
       hasEOL: false
     };
-    const twoLastChars = [" ", " "];
-    let twoLastCharsPos = 0;
-
-    function saveLastChar(char) {
-      const nextPos = (twoLastCharsPos + 1) % 2;
-      const ret = twoLastChars[twoLastCharsPos] !== " " && twoLastChars[nextPos] === " ";
-      twoLastChars[twoLastCharsPos] = char;
-      twoLastCharsPos = nextPos;
-      return ret;
-    }
-
-    function resetLastChars() {
-      twoLastChars[0] = twoLastChars[1] = " ";
-      twoLastCharsPos = 0;
-    }
-
     const TRACKING_SPACE_FACTOR = 0.1;
-    const NOT_A_SPACE_FACTOR = 0.03;
     const NEGATIVE_SPACE_FACTOR = -0.2;
     const SPACE_IN_FLOW_MIN_FACTOR = 0.1;
     const SPACE_IN_FLOW_MAX_FACTOR = 0.6;
@@ -24025,7 +23968,6 @@ class PartialEvaluator {
       const scaleCtmX = Math.hypot(textState.ctm[0], textState.ctm[1]);
       textContentItem.textAdvanceScale = scaleCtmX * scaleLineX;
       textContentItem.trackingSpaceMin = textState.fontSize * TRACKING_SPACE_FACTOR;
-      textContentItem.notASpace = textState.fontSize * NOT_A_SPACE_FACTOR;
       textContentItem.negativeSpaceMax = textState.fontSize * NEGATIVE_SPACE_FACTOR;
       textContentItem.spaceInFlowMin = textState.fontSize * SPACE_IN_FLOW_MIN_FACTOR;
       textContentItem.spaceInFlowMax = textState.fontSize * SPACE_IN_FLOW_MAX_FACTOR;
@@ -24156,7 +24098,6 @@ class PartialEvaluator {
             return true;
           }
 
-          resetLastChars();
           flushTextContentItem();
           return true;
         }
@@ -24166,15 +24107,10 @@ class PartialEvaluator {
           return true;
         }
 
-        if (advanceY <= textOrientation * textContentItem.notASpace) {
-          resetLastChars();
-        }
-
         if (advanceY <= textOrientation * textContentItem.trackingSpaceMin) {
           textContentItem.height += advanceY;
         } else if (!addFakeSpaces(advanceY, textContentItem.prevTransform, textOrientation)) {
           if (textContentItem.str.length === 0) {
-            resetLastChars();
             textContent.items.push({
               str: " ",
               dir: "ltr",
@@ -24202,7 +24138,6 @@ class PartialEvaluator {
           return true;
         }
 
-        resetLastChars();
         flushTextContentItem();
         return true;
       }
@@ -24212,15 +24147,10 @@ class PartialEvaluator {
         return true;
       }
 
-      if (advanceX <= textOrientation * textContentItem.notASpace) {
-        resetLastChars();
-      }
-
       if (advanceX <= textOrientation * textContentItem.trackingSpaceMin) {
         textContentItem.width += advanceX;
       } else if (!addFakeSpaces(advanceX, textContentItem.prevTransform, textOrientation)) {
         if (textContentItem.str.length === 0) {
-          resetLastChars();
           textContent.items.push({
             str: " ",
             dir: "ltr",
@@ -24277,7 +24207,7 @@ class PartialEvaluator {
 
         let scaledDim = glyphWidth * scale;
 
-        if (glyph.isWhitespace) {
+        if (glyph.isWhitespace && (i === 0 || i + 1 === ii || glyphs[i - 1].isWhitespace || glyphs[i + 1].isWhitespace || extraSpacing)) {
           if (!font.vertical) {
             charSpacing += scaledDim + textState.wordSpacing;
             textState.translateTextMatrix(charSpacing * textState.textHScale, 0);
@@ -24286,7 +24216,6 @@ class PartialEvaluator {
             textState.translateTextMatrix(0, -charSpacing);
           }
 
-          saveLastChar(" ");
           continue;
         }
 
@@ -24314,15 +24243,14 @@ class PartialEvaluator {
           textChunk.prevTransform = getCurrentTextTransform();
         }
 
-        let glyphUnicode = glyph.unicode;
-        glyphUnicode = NormalizedUnicodes[glyphUnicode] || glyphUnicode;
-        glyphUnicode = (0, _unicode.reverseIfRtl)(glyphUnicode);
-
-        if (saveLastChar(glyphUnicode)) {
+        if (glyph.isWhitespace) {
           textChunk.str.push(" ");
+        } else {
+          let glyphUnicode = glyph.unicode;
+          glyphUnicode = NormalizedUnicodes[glyphUnicode] || glyphUnicode;
+          glyphUnicode = (0, _unicode.reverseIfRtl)(glyphUnicode);
+          textChunk.str.push(glyphUnicode);
         }
-
-        textChunk.str.push(glyphUnicode);
 
         if (charSpacing) {
           if (!font.vertical) {
@@ -24335,8 +24263,6 @@ class PartialEvaluator {
     }
 
     function appendEOL() {
-      resetLastChars();
-
       if (textContentItem.initialized) {
         textContentItem.hasEOL = true;
         flushTextContentItem();
@@ -24356,7 +24282,6 @@ class PartialEvaluator {
     function addFakeSpaces(width, transf, textOrientation) {
       if (textOrientation * textContentItem.spaceInFlowMin <= width && width <= textOrientation * textContentItem.spaceInFlowMax) {
         if (textContentItem.initialized) {
-          resetLastChars();
           textContentItem.str.push(" ");
         }
 
@@ -24372,7 +24297,6 @@ class PartialEvaluator {
       }
 
       flushTextContentItem();
-      resetLastChars();
       textContent.items.push({
         str: " ",
         dir: "ltr",
@@ -38725,27 +38649,6 @@ class Font {
       locaEntries.sort((a, b) => {
         return a.index - b.index;
       });
-
-      for (i = 0; i < numGlyphs; i++) {
-        const {
-          offset,
-          endOffset
-        } = locaEntries[i];
-
-        if (offset !== 0 || endOffset !== 0) {
-          break;
-        }
-
-        const nextOffset = locaEntries[i + 1].offset;
-
-        if (nextOffset === 0) {
-          continue;
-        }
-
-        locaEntries[i].endOffset = nextOffset;
-        break;
-      }
-
       const missingGlyphs = Object.create(null);
       let writeOffset = 0;
       itemEncode(locaData, 0, writeOffset);
@@ -51567,9 +51470,9 @@ class GlobalImageCache {
   get _byteSize() {
     let byteSize = 0;
 
-    for (const imageData of this._imageCache) {
+    this._imageCache.forEach(imageData => {
       byteSize += imageData.byteSize;
-    }
+    });
 
     return byteSize;
   }
@@ -54189,7 +54092,13 @@ class Catalog {
           const baseCharCode = style === "a" ? A_LOWER_CASE : A_UPPER_CASE;
           const letterIndex = currentIndex - 1;
           const character = String.fromCharCode(baseCharCode + letterIndex % LIMIT);
-          currentLabel = character.repeat(Math.floor(letterIndex / LIMIT) + 1);
+          const charBuf = [];
+
+          for (let j = 0, jj = letterIndex / LIMIT | 0; j <= jj; j++) {
+            charBuf.push(character);
+          }
+
+          currentLabel = charBuf.join("");
           break;
 
         default:
@@ -54544,34 +54453,42 @@ class Catalog {
     return (0, _util.shadow)(this, "jsActions", actions);
   }
 
-  async fontFallback(id, handler) {
-    const translatedFonts = await Promise.all(this.fontCache);
-
-    for (const translatedFont of translatedFonts) {
-      if (translatedFont.loadedName === id) {
-        translatedFont.fallback(handler);
-        return;
+  fontFallback(id, handler) {
+    const promises = [];
+    this.fontCache.forEach(function (promise) {
+      promises.push(promise);
+    });
+    return Promise.all(promises).then(translatedFonts => {
+      for (const translatedFont of translatedFonts) {
+        if (translatedFont.loadedName === id) {
+          translatedFont.fallback(handler);
+          return;
+        }
       }
-    }
+    });
   }
 
-  async cleanup(manuallyTriggered = false) {
+  cleanup(manuallyTriggered = false) {
     (0, _cleanup_helper.clearGlobalCaches)();
     this.globalImageCache.clear(manuallyTriggered);
     this.pageKidsCountCache.clear();
     this.pageIndexCache.clear();
     this.nonBlendModesSet.clear();
-    const translatedFonts = await Promise.all(this.fontCache);
+    const promises = [];
+    this.fontCache.forEach(function (promise) {
+      promises.push(promise);
+    });
+    return Promise.all(promises).then(translatedFonts => {
+      for (const {
+        dict
+      } of translatedFonts) {
+        delete dict.cacheKey;
+      }
 
-    for (const {
-      dict
-    } of translatedFonts) {
-      delete dict.cacheKey;
-    }
-
-    this.fontCache.clear();
-    this.builtInCMapCache.clear();
-    this.standardFontDataCache.clear();
+      this.fontCache.clear();
+      this.builtInCMapCache.clear();
+      this.standardFontDataCache.clear();
+    });
   }
 
   async getPageDict(pageIndex) {
@@ -55871,10 +55788,6 @@ class SimpleDOMNode {
     }).join("");
   }
 
-  get children() {
-    return this.childNodes || [];
-  }
-
   hasChildNodes() {
     return this.childNodes && this.childNodes.length > 0;
   }
@@ -56051,14 +55964,12 @@ class SimpleXMLParser extends XMLParserBase {
     const lastElement = this._currentFragment[this._currentFragment.length - 1];
 
     if (!lastElement) {
-      return null;
+      return;
     }
 
     for (let i = 0, ii = lastElement.childNodes.length; i < ii; i++) {
       lastElement.childNodes[i].parentNode = lastElement;
     }
-
-    return lastElement;
   }
 
   onError(code) {
@@ -56759,11 +56670,7 @@ function writeXFADataForAcroform(str, newRefs) {
     const node = xml.documentElement.searchNode((0, _core_utils.parseXFAPath)(path), 0);
 
     if (node) {
-      if (Array.isArray(value)) {
-        node.childNodes = value.map(val => new _xml_parser.SimpleDOMNode("value", val));
-      } else {
-        node.childNodes = [new _xml_parser.SimpleDOMNode("#text", value)];
-      }
+      node.childNodes = [new _xml_parser.SimpleDOMNode("#text", value)];
     } else {
       (0, _util.warn)(`Node not found for path: ${path}`);
     }
@@ -72483,92 +72390,6 @@ exports.UnknownNamespace = UnknownNamespace;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.DatasetReader = void 0;
-
-var _util = __w_pdfjs_require__(2);
-
-var _core_utils = __w_pdfjs_require__(7);
-
-var _xml_parser = __w_pdfjs_require__(68);
-
-function decodeString(str) {
-  try {
-    return (0, _util.stringToUTF8String)(str);
-  } catch (ex) {
-    (0, _util.warn)(`UTF-8 decoding failed: "${ex}".`);
-    return str;
-  }
-}
-
-class DatasetXMLParser extends _xml_parser.SimpleXMLParser {
-  constructor(options) {
-    super(options);
-    this.node = null;
-  }
-
-  onEndElement(name) {
-    const node = super.onEndElement(name);
-
-    if (node && name === "xfa:datasets") {
-      this.node = node;
-      throw new Error("Aborting DatasetXMLParser.");
-    }
-  }
-
-}
-
-class DatasetReader {
-  constructor(data) {
-    if (data.datasets) {
-      this.node = new _xml_parser.SimpleXMLParser({
-        hasAttributes: true
-      }).parseFromString(data.datasets).documentElement;
-    } else {
-      const parser = new DatasetXMLParser({
-        hasAttributes: true
-      });
-
-      try {
-        parser.parseFromString(data["xdp:xdp"]);
-      } catch (_) {}
-
-      this.node = parser.node;
-    }
-  }
-
-  getValue(path) {
-    if (!this.node || !path) {
-      return "";
-    }
-
-    const node = this.node.searchNode((0, _core_utils.parseXFAPath)(path), 0);
-
-    if (!node) {
-      return "";
-    }
-
-    const first = node.firstChild;
-
-    if (first && first.nodeName === "value") {
-      return node.children.map(child => decodeString(child.textContent));
-    }
-
-    return decodeString(node.textContent);
-  }
-
-}
-
-exports.DatasetReader = DatasetReader;
-
-/***/ }),
-/* 99 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
 exports.XRef = void 0;
 
 var _util = __w_pdfjs_require__(2);
@@ -73447,7 +73268,7 @@ class XRef {
 exports.XRef = XRef;
 
 /***/ }),
-/* 100 */
+/* 99 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -73933,7 +73754,7 @@ class MessageHandler {
 exports.MessageHandler = MessageHandler;
 
 /***/ }),
-/* 101 */
+/* 100 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -74157,8 +73978,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.14.417';
-const pdfjsBuild = '7e9c2bd11';
+const pdfjsVersion = '2.13.483';
+const pdfjsBuild = '3bb57cd5f';
 })();
 
 /******/ 	return __webpack_exports__;

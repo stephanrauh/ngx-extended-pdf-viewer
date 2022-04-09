@@ -350,4 +350,5 @@
 - 13.0.0-alpha.2 #1268 Use the 'toolbar' from the pdf-toolbar component instead of using the first 'toolbar' in document. This way, developers can use the CSS class `toolbar` outside the PDF viewer. 
 - 13.0.0-alpha.3 #1120 #1278 corrected a layout glitch cause by narrowing the CSS rules (cherry-picked from version 12.1.1)
 - 13.0.0-alpha.4 #1293 #1282 added the *.min.js files again that were missing in 13.0.0-alpha.3
+- 13.0.0-alpha.5 #1292 Include the 14 standard font files
 
