@@ -1,15 +1,17 @@
-button svg {
-  margin-top: -2px;
-}
-
 :host:focus {
-outline: none;
+  outline: none;
 }
 
 button:focus {
-outline: none;
+  outline: none;
 }
 
 svg:focus {
-outline: none;
+  outline: none;
+}
+
+button#sidebarToggle {
+  height: 24px;
+  width: 24px;
+  margin-right: 5px !important;
 }

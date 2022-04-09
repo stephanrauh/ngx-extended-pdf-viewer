@@ -1,7 +1,3 @@
-button svg {
-    margin-top: -2px;
-}
-
 :host:focus {
   outline: none;
 }
