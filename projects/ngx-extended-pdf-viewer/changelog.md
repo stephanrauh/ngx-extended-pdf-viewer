@@ -345,3 +345,4 @@
 - 12.0.3 #1243 tentative solution to trigger custom validation when leaving a field using the mouse
 - 12.1.0 #1120 narrowed the scope of a CSS rule to make customizing easier; #1143 allow developers to set `[minHeight]`
 - 12.1.1 #1120 #1278 corrected a layout glitch cause by narrowing the CSS rules
+- 12.1.2 #1292 added the 14 standard fonts; #1279 fixed the vertical layout of the primary toolbar
