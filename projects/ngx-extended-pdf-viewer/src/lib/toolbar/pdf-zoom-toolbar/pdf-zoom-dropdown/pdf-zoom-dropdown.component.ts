@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, Input, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 
 interface ZoomLevel {
   id: string;
@@ -13,7 +13,6 @@ interface ZoomLevel {
   styleUrls: ['./pdf-zoom-dropdown.component.css'],
 })
 export class PdfZoomDropdownComponent implements OnInit {
-
   public _zoomLevels: Array<ZoomLevel> = [];
   // ['auto', 'page-actual', 'page-fit', 'page-width', 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
 
@@ -21,7 +20,6 @@ export class PdfZoomDropdownComponent implements OnInit {
   public set zoomLevels(levels: Array<string | number>) {
     this._zoomLevels = levels.map((l) => this.valueToZoomLevel(l));
   }
-
 
   @ViewChild('sizeSelector') sizeSelector: any;
 

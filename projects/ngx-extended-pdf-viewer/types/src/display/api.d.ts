@@ -1165,6 +1165,7 @@ export class PDFPageProxy {
     /** @type {PDFObjects} */
     commonObjs: PDFObjects;
     objs: PDFObjects;
+    _bitmaps: Set<any>;
     cleanupAfterRender: boolean;
     pendingCleanup: boolean;
     _intentStates: Map<any, any>;

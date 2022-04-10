@@ -31,6 +31,7 @@ export class CanvasGraphics {
     outputScaleY: number;
     _cachedScaleForStroking: number[] | null;
     _cachedGetSinglePixelWidth: number | null;
+    getObject(data: any, fallback?: null): any;
     beginDrawing({ transform, viewport, transparency, background, backgroundColorToReplace, }: {
         transform: any;
         viewport: any;
@@ -131,7 +132,7 @@ export class CanvasGraphics {
     annotationCanvas: any;
     endAnnotation(): void;
     paintImageMaskXObject(img: any): void;
-    paintImageMaskXObjectRepeat(imgData: any, scaleX: any, skewX: number | undefined, skewY: number | undefined, scaleY: any, positions: any): void;
+    paintImageMaskXObjectRepeat(img: any, scaleX: any, skewX: number | undefined, skewY: number | undefined, scaleY: any, positions: any): void;
     paintImageMaskXObjectGroup(images: any): void;
     paintImageXObject(objId: any): void;
     paintImageXObjectRepeat(objId: any, scaleX: any, scaleY: any, positions: any): void;

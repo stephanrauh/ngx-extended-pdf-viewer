@@ -10649,7 +10649,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.14.426';
+    const viewerVersion = '2.14.427';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -17209,6 +17209,10 @@ class FeatureTest {
     return shadow(this, "isEvalSupported", isEvalSupported());
   }
 
+  static get isOffscreenCanvasSupported() {
+    return shadow(this, "isOffscreenCanvasSupported", typeof OffscreenCanvas !== "undefined");
+  }
+
 }
 
 exports.FeatureTest = FeatureTest;
@@ -20674,8 +20678,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.14.426';
-const pdfjsBuild = '38629f02a';
+const pdfjsVersion = '2.14.427';
+const pdfjsBuild = 'ae6577252';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

@@ -14,8 +14,6 @@ export interface PDFExportScaleFactor {
 }
 
 export class NgxExtendedPdfViewerService {
-  constructor() {}
-
   public findMultiple(text: Array<string>, options: FindOptions = {}): boolean {
     return false;
   }

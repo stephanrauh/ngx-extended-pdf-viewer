@@ -1,34 +1,35 @@
 import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
   Input,
   OnChanges,
   OnDestroy,
+  OnInit,
   Output,
-  EventEmitter,
-  ChangeDetectionStrategy,
-  HostListener,
+  SimpleChanges,
   TemplateRef,
   ViewChild,
-  OnInit,
-  SimpleChanges,
 } from '@angular/core';
-import { PagesLoadedEvent } from './events/pages-loaded-event';
+import { FindResultMatchesCount, FindState } from './events/find-result';
 import { PageRenderedEvent } from './events/page-rendered-event';
+import { PagesLoadedEvent } from './events/pages-loaded-event';
 import { PdfDownloadedEvent } from './events/pdf-downloaded-event';
 import { PdfLoadedEvent } from './events/pdf-loaded-event';
-import { pdfDefaultOptions } from './options/pdf-default-options';
-import { VerbosityLevel } from './options/verbosity-level';
-import { FindState, FindResultMatchesCount } from './events/find-result';
-import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
-import { AfterViewInit, ElementRef } from '@angular/core';
-import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
-import { TextLayerRenderedEvent } from './events/textlayer-rendered';
 import { PdfThumbnailDrawnEvent } from './events/pdf-thumbnail-drawn-event';
-import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
-import { ScrollModeType } from './options/pdf-viewer';
 import { ProgressBarEvent } from './events/progress-bar-event';
+import { TextLayerRenderedEvent } from './events/textlayer-rendered';
 import { FormDataType } from './ngx-extended-pdf-viewer.component';
 import { PdfBackground } from './options/pdf-background';
+import { pdfDefaultOptions } from './options/pdf-default-options';
+import { ScrollModeType } from './options/pdf-viewer';
+import { VerbosityLevel } from './options/verbosity-level';
+import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
+import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
+import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
@@ -440,7 +441,6 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
     return '32px';
   }
 
-  constructor() {}
   ngOnChanges(changes: SimpleChanges): void {}
 
   ngOnInit() {}

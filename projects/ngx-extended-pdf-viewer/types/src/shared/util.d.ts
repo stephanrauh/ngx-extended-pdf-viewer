@@ -200,6 +200,7 @@ export function escapeString(str: any): any;
 export class FeatureTest {
     static get isLittleEndian(): any;
     static get isEvalSupported(): any;
+    static get isOffscreenCanvasSupported(): any;
 }
 export const FONT_IDENTITY_MATRIX: number[];
 export namespace FontType {

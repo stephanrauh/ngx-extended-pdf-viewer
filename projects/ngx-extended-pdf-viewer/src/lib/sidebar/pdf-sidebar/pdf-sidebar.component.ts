@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, AfterContentInit, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter, ViewEncapsulation, NgZone, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { PdfThumbnailDrawnEvent } from '../../events/pdf-thumbnail-drawn-event';
 
 @Component({

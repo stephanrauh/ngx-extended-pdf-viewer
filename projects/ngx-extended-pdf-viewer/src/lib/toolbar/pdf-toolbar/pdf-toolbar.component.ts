@@ -1,10 +1,9 @@
-import { ElementRef } from '@angular/core';
-import { Component, Input, TemplateRef, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'pdf-toolbar',
   templateUrl: './pdf-toolbar.component.html',
-  styleUrls: ['./pdf-toolbar.component.css']
+  styleUrls: ['./pdf-toolbar.component.css'],
 })
 export class PdfToolbarComponent {
   @Input()
@@ -70,6 +69,4 @@ export class PdfToolbarComponent {
   constructor(elementRef: ElementRef) {
     this.onToolbarLoaded.emit(elementRef.nativeElement.getElementsByClassName('toolbar')[0] as HTMLElement);
   }
-  
-
 }

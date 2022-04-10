@@ -1,5 +1,5 @@
+import { Component } from '@angular/core';
 import { PdfFindbarService } from './../pdf-findbar-service';
-import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'pdf-search-input-field',

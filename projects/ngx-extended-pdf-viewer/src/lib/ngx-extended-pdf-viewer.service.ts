@@ -29,8 +29,6 @@ export interface PDFExportScaleFactor {
 export class NgxExtendedPdfViewerService {
   public recalculateSize$ = new Subject<void>();
 
-  constructor() {}
-
   public findMultiple(text: Array<string>, options: FindOptions = {}): boolean {
     options = {
       ...options,
