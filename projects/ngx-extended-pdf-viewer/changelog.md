@@ -352,3 +352,4 @@
 - 13.0.0-alpha.4 #1293 #1282 added the \*.min.js files again that were missing in 13.0.0-alpha.3
 - 13.0.0-alpha.5 #1292 Include the 14 standard font files
 - 13.0.0-alpha.6 #1279 fixed the vertical layout of the primary toolbar; #1296 fixed the initialization of the PDF viewer; #1131 limit the scope of the CSS rules dedicated to printing PDF files to pdf.js
+- 13.0.0-alpha.7 #1267 stop showing the print preview below the application when printing

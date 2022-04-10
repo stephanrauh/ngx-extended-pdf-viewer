@@ -1,6 +1,11 @@
+#printContainer {
+  display: none;
+}
+
 @media print {
   #printContainer {
     position: static;
+    display: block;
   }
 
   body[data-pdfjsprinting],
