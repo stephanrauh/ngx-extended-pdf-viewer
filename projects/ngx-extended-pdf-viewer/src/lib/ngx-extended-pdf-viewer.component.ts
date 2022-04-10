@@ -1948,7 +1948,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           for (const option of scaleDropdownField.options as any) {
             if (option.value === 'custom') {
               option.textContent = `${Math.round(Number(zoomAsNumber) * 100_000) / 1000}%`;
-              continue;
             }
           }
         }

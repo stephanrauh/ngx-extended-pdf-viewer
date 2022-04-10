@@ -3,14 +3,14 @@
     position: static;
   }
 
-  body,
+  body[data-pdfjsprinting],
   html {
     overflow-y: visible !important;
     margin: 0;
     padding: 0;
   }
 
-  body {
+  body[data-pdfjsprinting] {
     background: rgba(0, 0, 0, 0) none;
     height: 100%;
     width: 100%;
@@ -73,15 +73,11 @@
     }
   }
 
-  html {
+  body[data-pdfjsprinting] {
     overflow-y: visible !important;
   }
 
-  body {
-    overflow-y: visible !important;
-  }
-
-  html.cdk-global-scrollblock {
+  html[data-pdfjsprinting].cdk-global-scrollblock {
     width: initial;
     position: initial;
   }
