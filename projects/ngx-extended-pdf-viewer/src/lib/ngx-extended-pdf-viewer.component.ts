@@ -648,6 +648,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public get mobileFriendlyZoom() {
     return this._mobileFriendlyZoom;
   }
+
+  public get pdfJsVersion(): string {
+    return getVersionSuffix(pdfDefaultOptions.assetsFolder);
+  }
+
   /**
    * This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
    * This attribute is a string with a percent character at the end (e.g. "150%").
