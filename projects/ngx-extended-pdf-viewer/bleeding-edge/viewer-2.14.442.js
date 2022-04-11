@@ -993,6 +993,7 @@ const PDFViewerApplication = {
   },
 
   async open(file, args) {
+    window.adjacentPagesLoader = undefined;
     window.ngxZone.runOutsideAngular(async () => {
       if (this.pdfLoadingTask) {
         await this.close();
