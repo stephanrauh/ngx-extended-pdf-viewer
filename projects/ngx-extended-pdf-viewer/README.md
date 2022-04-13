@@ -25,6 +25,8 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 Due to an internal change of pdf.js, I had to modify both the HTML templates and the CSS rules of the dialogs. This may be a breaking change, especially if you've customized the appearance of the viewer, so it's time to increment the major version number. That's why I'm releasing version 13 shortly after publishing version 12.
 
+Starting with version 13, rolling the mouse wheel only zooms the PDF file if the mouse is hovering above the PDF document. Previous versions also zoomed if the mouse was somewhere else. Thanks to GitHub user newq for pointing this out. It's good to be rid of this nuisance!
+
 Since version 12, the viewer stops supporting the full-screen mode in Safari. That probably includes every browser on iPhones and iPads.
 
 Version 12 has a small but breaking change. Actually, it's a fix repairing a nonsense implementation, but I can't rule out you're relying on the bug. Here we go: If you're two-way binding with a form that contains checkboxes that behave like radiobuttons

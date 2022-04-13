@@ -2727,6 +2727,13 @@ function setZoomDisabledTimeout() {
 }
 
 function webViewerWheel(evt) {
+  const element = document.getElementById("viewerContainer");
+  const hover = element.parentNode.querySelector(":hover");
+
+  if (hover !== element) {
+    return;
+  }
+
   const {
     pdfViewer,
     supportedMouseWheelZoomModifierKeys

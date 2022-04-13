@@ -2765,6 +2765,13 @@ function setZoomDisabledTimeout() {
 }
 
 function webViewerWheel(evt) {
+  const element = document.getElementById("viewerContainer");
+  const hover = element.parentNode.querySelector(":hover");
+
+  if (hover !== element) {
+    return;
+  }
+
   const {
     pdfViewer,
     supportedMouseWheelZoomModifierKeys
@@ -10701,7 +10708,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.13.486';
+    const viewerVersion = '2.13.487';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -20763,8 +20770,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.13.486';
-const pdfjsBuild = '7aa899234';
+const pdfjsVersion = '2.13.487';
+const pdfjsBuild = 'b9ba0262f';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
