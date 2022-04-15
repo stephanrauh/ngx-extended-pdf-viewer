@@ -30,7 +30,7 @@ window.ngxZone.runOutsideAngular(() => {
 		exports["pdfjs-dist/build/pdf"] = factory();
 	else
 		root["pdfjs-dist/build/pdf"] = root.pdfjsLib = factory();
-})(this, function() {
+})(this, () => {
 return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ([
@@ -1324,7 +1324,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
   const standardFontDataUrl = typeof source.standardFontDataUrl === "function" ? source.standardFontDataUrl() : source.standardFontDataUrl;
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.13.488',
+    apiVersion: '2.13.489',
     source: {
       data: source.data,
       url: source.url,
@@ -3442,9 +3442,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.13.488';
+const version = '2.13.489';
 exports.version = version;
-const build = '0fcb96f84';
+const build = 'c73d19e7a';
 exports.build = build;
 
 /***/ }),
@@ -15901,8 +15901,8 @@ var _svg = __w_pdfjs_require__(22);
 
 var _xfa_layer = __w_pdfjs_require__(20);
 
-const pdfjsVersion = '2.13.488';
-const pdfjsBuild = '0fcb96f84';
+const pdfjsVersion = '2.13.489';
+const pdfjsBuild = 'c73d19e7a';
 {
   if (_is_node.isNodeJS) {
     const {

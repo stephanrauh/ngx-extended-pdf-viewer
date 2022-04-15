@@ -459,7 +459,7 @@ export class Util {
     static apply3dTransform(m: any, v: any): number[];
     static singularValueDecompose2dScale(m: any): number[];
     static normalizeRect(rect: any): any;
-    static intersect(rect1: any, rect2: any): any[] | null;
+    static intersect(rect1: any, rect2: any): number[] | null;
     static bezierBoundingBox(x0: any, y0: any, x1: any, y1: any, x2: any, y2: any, x3: any, y3: any): number[];
 }
 export namespace VerbosityLevel {

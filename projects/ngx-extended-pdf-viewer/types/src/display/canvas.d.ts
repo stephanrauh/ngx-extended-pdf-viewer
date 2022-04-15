@@ -191,7 +191,7 @@ declare class CanvasExtraState {
     updateClipFromPath(): void;
     startNewPathAndClipBox(box: any): void;
     clipBox: any;
-    getClippedPathBoundingBox(pathType?: string, transform?: null): any[] | null;
+    getClippedPathBoundingBox(pathType?: string, transform?: null): number[] | null;
 }
 declare class CachedCanvases {
     constructor(canvasFactory: any);

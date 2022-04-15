@@ -1709,6 +1709,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           this.formIdToFieldName = {};
           this.formRadioButtonValueToId = {};
 
+          let inputField = PDFViewerApplication.appConfig?.openFileInput;
+          if (!inputField) {
+            inputField = document.querySelector('#fileInput') as HTMLInputElement;
+          }
+          if (inputField) {
+            inputField.value = '';
+          }
+
           await PDFViewerApplication.close();
         }
       }

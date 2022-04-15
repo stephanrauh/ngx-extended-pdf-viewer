@@ -10708,7 +10708,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.13.488';
+    const viewerVersion = '2.13.489';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -18827,14 +18827,16 @@ class Toolbar {
     }).then(msg => {
       let predefinedValueFound = false;
 
-      for (const option of items.scaleSelect.options) {
-        if (option.value !== pageScaleValue) {
-          option.selected = false;
-          continue;
-        }
+      if (items.scaleSelect.options) {
+        for (const option of items.scaleSelect.options) {
+          if (option.value !== pageScaleValue) {
+            option.selected = false;
+            continue;
+          }
 
-        option.selected = true;
-        predefinedValueFound = true;
+          option.selected = true;
+          predefinedValueFound = true;
+        }
       }
 
       if (!predefinedValueFound) {
@@ -20777,8 +20779,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.13.488';
-const pdfjsBuild = '0fcb96f84';
+const pdfjsVersion = '2.13.489';
+const pdfjsBuild = 'c73d19e7a';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

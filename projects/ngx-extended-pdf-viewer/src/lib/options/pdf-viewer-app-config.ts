@@ -11,4 +11,5 @@ export interface IPDFViewerAppConfig {
    * @ignore
    */
   /* static */ _hasUserOptions(): boolean;
+  openFileInput?: HTMLInputElement; // since pdf.js 2.14
 }
