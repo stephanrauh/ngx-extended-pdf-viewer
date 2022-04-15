@@ -11,6 +11,7 @@
     "release": "npm run unix-package && cd dist/ngx-extended-pdf-viewer && npm publish && cd .. && cd .. && ./createTag.sh && node ./increase-version-number.js",
     "quick": "cd ../ngx-extended-pdf-viewer && ./quick.sh && npm run showcase && cd ../extended-pdf-viewer-showcase && ng s --host 0.0.0.0",
     "full": "cd ../ngx-extended-pdf-viewer && ./updateMozillasPdfViewer.sh && npm run showcase && cd ../extended-pdf-viewer-showcase && ng s --host 0.0.0.0",
+    "ts": "cd ../ngx-extended-pdf-viewer && npm run showcase && cd ../extended-pdf-viewer-showcase && ng s --host 0.0.0.0",
     "config": "ng build ngx-extended-pdf-viewer && cd projects/ngx-extended-pdf-viewer && npm run build && cd ../.. && npm link ./dist/ngx-extended-pdf-viewer && cd ../test && git stash && npm link ngx-extended-pdf-viewer && ng generate ngx-extended-pdf-viewer:config --name schubidoo",
     "add": "ng build ngx-extended-pdf-viewer && cd projects/ngx-extended-pdf-viewer && npm run build && cd ../.. && npm link ./dist/ngx-extended-pdf-viewer && cd ../test && git stash && npm i && npm link ngx-extended-pdf-viewer && ng add ngx-extended-pdf-viewer"
   },

@@ -10633,7 +10633,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.14.443';
+    const viewerVersion = '2.14.444';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -18860,7 +18860,10 @@ class ViewHistory {
     }
 
     const databaseStr = JSON.stringify(this.database);
-    localStorage.setItem("pdfjs.history", databaseStr);
+
+    try {
+      localStorage.setItem("pdfjs.history", databaseStr);
+    } catch (safariSecurityException) {}
   }
 
   async _readFromStorage() {
@@ -18868,7 +18871,11 @@ class ViewHistory {
       return undefined;
     }
 
-    return localStorage.getItem("pdfjs.history");
+    try {
+      return localStorage.getItem("pdfjs.history");
+    } catch (safariSecurityException) {
+      return undefined;
+    }
   }
 
   async set(name, val) {
@@ -20666,8 +20673,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.14.443';
-const pdfjsBuild = '322230704';
+const pdfjsVersion = '2.14.444';
+const pdfjsBuild = 'e2b341c5e';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
