@@ -357,3 +357,4 @@
 - 13.0.0-alpha.9 #1302 now the mousewheel only zooms if the mouse is above the PDF document; the same with trackpad pinch gestures, but pinch gestures on mobile devices probably don't benefit from this improvement yet
 - 13.0.0-alpha.10 #1313 tolerate browsers blocking the localStorage gracefully; #1300 make sure the optionalChaining check also works if run twice
 - 13.0.0-alpha.11 #1197 allow users to open the same PDF again after clearing it by setting `src=""`; #1315 allow developers to use a theme without the scaling dropdown
+- 13.0.0-alpha.12 #916 export images with transparency

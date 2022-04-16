@@ -232,19 +232,19 @@ export class NgxExtendedPdfViewerService {
     return textInfo.items.map((info) => info.str).join('');
   }
 
-  public getPageAsImage(pageNumber: number, scale: PDFExportScaleFactor): Promise<any> {
+  public getPageAsImage(pageNumber: number, scale: PDFExportScaleFactor, background?: string, backgroundColorToReplace: string = '#FFFFFF'): Promise<any> {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const pdfDocument = PDFViewerApplication.pdfDocument;
     const pagePromise: Promise<any> = pdfDocument.getPage(pageNumber);
     const imagePromise = (pdfPage) =>
       new Promise<any>((resolve, reject) => {
-        resolve(this.draw(pdfPage, scale));
+        resolve(this.draw(pdfPage, scale, background, backgroundColorToReplace));
       });
 
     return pagePromise.then(imagePromise);
   }
 
-  private draw(pdfPage: any, scale: PDFExportScaleFactor): Promise<HTMLCanvasElement> {
+  private draw(pdfPage: any, scale: PDFExportScaleFactor, background?: string, backgroundColorToReplace: string = '#FFFFFF'): Promise<HTMLCanvasElement> {
     let zoomFactor = 1;
     if (scale.scale) {
       zoomFactor = scale.scale;
@@ -262,7 +262,8 @@ export class NgxExtendedPdfViewerService {
     const renderContext = {
       canvasContext: ctx,
       viewport: drawViewport,
-      //      background: 'rgba(255, 0, 255, 0.3)',
+      background,
+      backgroundColorToReplace,
     };
     const renderTask = pdfPage.render(renderContext);
 
@@ -276,7 +277,7 @@ export class NgxExtendedPdfViewerService {
 
   private getPageDrawContext(width: number, height: number): DrawContext {
     const canvas = document.createElement('canvas') as HTMLCanvasElement;
-    const ctx = canvas.getContext('2d', { alpha: false });
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) {
       // tslint:disable-next-line: quotemark
       throw new Error("Couldn't create the 2d context");
