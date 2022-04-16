@@ -13,14 +13,10 @@
  * limitations under the License.
  */
 
- :root {
-  --xfa-unfocused-field-background: url("data:image/svg+xml;charset=UTF-8,<svg width='1px' height='1px' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill:rgba(0, 54, 255, 0.13);'/></svg>");
-}
-
 .xfaLayer .highlight {
   margin: -1px;
   padding: 1px;
-  background-color: rgba(239, 203, 237, 1);
+  background-color: var(--xfa-layer-highlight);
   border-radius: 4px;
 }
 
@@ -41,11 +37,11 @@
 }
 
 .xfaLayer .highlight.selected {
-  background-color: rgba(203, 223, 203, 1);
+  background-color: var(--xfa-highlight-selected-background-color);
 }
 
 .xfaLayer ::selection {
-  background: rgba(0, 0, 255, 1);
+  background: var(--xfa-selection-background-color);
 }
 
 .xfaPage {
@@ -223,6 +219,9 @@
 .xfaLink {
   width: 100%;
   height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .xfaCheckbox,

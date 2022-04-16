@@ -10,6 +10,8 @@ import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-
 import { PdfSidebarContentComponent } from './sidebar/pdf-sidebar/pdf-sidebar-content/pdf-sidebar-content.component';
 import { PdfSidebarToolbarComponent } from './sidebar/pdf-sidebar/pdf-sidebar-toolbar/pdf-sidebar-toolbar.component';
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
+import { PdfAcroformDarkThemeComponent } from './theme/acroform-dark-theme/pdf-acroform-dark-theme.component';
+import { PdfAcroformDefaultThemeComponent } from './theme/acroform-default-theme/pdf-acroform-default-theme.component';
 import { PdfDarkThemeComponent } from './theme/pdf-dark-theme/pdf-dark-theme.component';
 import { PdfLightThemeComponent } from './theme/pdf-light-theme/pdf-light-theme.component';
 import { PdfOriginalComponent } from './theme/pdf-original-theme/pdf-original.component';
@@ -111,6 +113,8 @@ import { TranslatePipe } from './translate.pipe';
     PdfDarkThemeComponent,
     PdfLightThemeComponent,
     TranslatePipe,
+    PdfAcroformDefaultThemeComponent,
+    PdfAcroformDarkThemeComponent,
   ],
   providers: [PDFNotificationService, Location],
   exports: [
@@ -165,6 +169,8 @@ import { TranslatePipe } from './translate.pipe';
     TranslatePipe,
     DynamicCssComponent,
     PdfDummyComponentsComponent,
+    PdfAcroformDefaultThemeComponent,
+    PdfAcroformDarkThemeComponent,
   ],
 })
 export class NgxExtendedPdfViewerCommonModule {}
