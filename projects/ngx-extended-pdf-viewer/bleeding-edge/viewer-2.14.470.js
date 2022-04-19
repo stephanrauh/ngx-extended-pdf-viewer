@@ -386,7 +386,7 @@ var _toolbar = __webpack_require__(43);
 var _view_history = __webpack_require__(44);
 
 const DISABLE_AUTO_FETCH_LOADING_BAR_TIMEOUT = 5000;
-const FORCE_PAGES_LOADED_TIMEOUT = 10000;
+const FORCE_PAGES_LOADED_TIMEOUT = 10;
 const WHEEL_ZOOM_DISABLED_TIMEOUT = 1000;
 const ViewOnLoad = {
   UNKNOWN: -1,
@@ -10633,7 +10633,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.14.469';
+    const viewerVersion = '2.14.470';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -20661,8 +20661,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.14.469';
-const pdfjsBuild = '4cbd941ed';
+const pdfjsVersion = '2.14.470';
+const pdfjsBuild = '3e0a23d71';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

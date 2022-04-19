@@ -358,4 +358,5 @@
 - 13.0.0-alpha.10 #1313 tolerate browsers blocking the localStorage gracefully; #1300 make sure the optionalChaining check also works if run twice
 - 13.0.0-alpha.11 #1197 allow users to open the same PDF again after clearing it by setting `src=""`; #1315 allow developers to use a theme without the scaling dropdown
 - 13.0.0-alpha.12 #916 export images with transparency
-- 13.0.0-alpha.13 #590 allow developers to switch dynamically scroll modes; fixed the path of the tree icons of the sidebar
+- 13.0.0-alpha.13 #590 allow developers to switch dynamically scroll modes; fixed the URL of the tree icons of the sidebar; #1316 temporary workaround to speed up rendering; warning: this version accidentally uses pdf.js 2.14 for both the default branch and the bleeding edge branch
+- 13.0.0-alpha.14 identical to alpha.13, but with the correct JS files

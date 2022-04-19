@@ -43,7 +43,7 @@ return /******/ (() => { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.VerbosityLevel = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.UNSUPPORTED_FEATURES = exports.TextRenderingMode = exports.StreamType = exports.RenderingIntentFlag = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.IsLittleEndianCached = exports.IsEvalSupportedCached = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FontType = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMode = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
+exports.VerbosityLevel = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.UNSUPPORTED_FEATURES = exports.TextRenderingMode = exports.StreamType = exports.RenderingIntentFlag = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FontType = exports.FeatureTest = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMode = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
 exports.arrayByteLength = arrayByteLength;
 exports.arraysToBytes = arraysToBytes;
 exports.assert = assert;
@@ -57,7 +57,6 @@ exports.info = info;
 exports.isArrayBuffer = isArrayBuffer;
 exports.isArrayEqual = isArrayEqual;
 exports.isAscii = isAscii;
-exports.isSameOrigin = isSameOrigin;
 exports.objectFromMap = objectFromMap;
 exports.objectSize = objectSize;
 exports.setVerbosityLevel = setVerbosityLevel;
@@ -459,23 +458,6 @@ function assert(cond, msg) {
   }
 }
 
-function isSameOrigin(baseUrl, otherUrl) {
-  let base;
-
-  try {
-    base = new URL(baseUrl);
-
-    if (!base.origin || base.origin === "null") {
-      return false;
-    }
-  } catch (e) {
-    return false;
-  }
-
-  const other = new URL(otherUrl, base);
-  return base.origin === other.origin;
-}
-
 function _isValidProtocol(url) {
   if (!url) {
     return false;
@@ -730,14 +712,6 @@ function isLittleEndian() {
   return view32[0] === 1;
 }
 
-const IsLittleEndianCached = {
-  get value() {
-    return shadow(this, "value", isLittleEndian());
-  }
-
-};
-exports.IsLittleEndianCached = IsLittleEndianCached;
-
 function isEvalSupported() {
   try {
     new Function("");
@@ -747,13 +721,22 @@ function isEvalSupported() {
   }
 }
 
-const IsEvalSupportedCached = {
-  get value() {
-    return shadow(this, "value", isEvalSupported());
+class FeatureTest {
+  static get isLittleEndian() {
+    return shadow(this, "isLittleEndian", isLittleEndian());
   }
 
-};
-exports.IsEvalSupportedCached = IsEvalSupportedCached;
+  static get isEvalSupported() {
+    return shadow(this, "isEvalSupported", isEvalSupported());
+  }
+
+  static get isOffscreenCanvasSupported() {
+    return shadow(this, "isOffscreenCanvasSupported", typeof OffscreenCanvas !== "undefined");
+  }
+
+}
+
+exports.FeatureTest = FeatureTest;
 const hexNumbers = [...Array(256).keys()].map(n => n.toString(16).padStart(2, "0"));
 
 class Util {
@@ -825,31 +808,21 @@ class Util {
   }
 
   static intersect(rect1, rect2) {
-    function compare(a, b) {
-      return a - b;
-    }
+    const xLow = Math.max(Math.min(rect1[0], rect1[2]), Math.min(rect2[0], rect2[2]));
+    const xHigh = Math.min(Math.max(rect1[0], rect1[2]), Math.max(rect2[0], rect2[2]));
 
-    const orderedX = [rect1[0], rect1[2], rect2[0], rect2[2]].sort(compare);
-    const orderedY = [rect1[1], rect1[3], rect2[1], rect2[3]].sort(compare);
-    const result = [];
-    rect1 = Util.normalizeRect(rect1);
-    rect2 = Util.normalizeRect(rect2);
-
-    if (orderedX[0] === rect1[0] && orderedX[1] === rect2[0] || orderedX[0] === rect2[0] && orderedX[1] === rect1[0]) {
-      result[0] = orderedX[1];
-      result[2] = orderedX[2];
-    } else {
+    if (xLow > xHigh) {
       return null;
     }
 
-    if (orderedY[0] === rect1[1] && orderedY[1] === rect2[1] || orderedY[0] === rect2[1] && orderedY[1] === rect1[1]) {
-      result[1] = orderedY[1];
-      result[3] = orderedY[2];
-    } else {
+    const yLow = Math.max(Math.min(rect1[1], rect1[3]), Math.min(rect2[1], rect2[3]));
+    const yHigh = Math.min(Math.max(rect1[1], rect1[3]), Math.max(rect2[1], rect2[3]));
+
+    if (yLow > yHigh) {
       return null;
     }
 
-    return result;
+    return [xLow, yLow, xHigh, yHigh];
   }
 
   static bezierBoundingBox(x0, y0, x1, y1, x2, y2, x3, y3) {
@@ -1060,7 +1033,7 @@ const isNodeJS = false;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.build = exports.RenderTask = exports.PDFWorker = exports.PDFPageProxy = exports.PDFDocumentProxy = exports.PDFDocumentLoadingTask = exports.PDFDataRangeTransport = exports.LoopbackPort = exports.DefaultStandardFontDataFactory = exports.DefaultCanvasFactory = exports.DefaultCMapReaderFactory = void 0;
+exports.build = exports.RenderTask = exports.PDFWorkerUtil = exports.PDFWorker = exports.PDFPageProxy = exports.PDFDocumentProxy = exports.PDFDocumentLoadingTask = exports.PDFDataRangeTransport = exports.LoopbackPort = exports.DefaultStandardFontDataFactory = exports.DefaultCanvasFactory = exports.DefaultCMapReaderFactory = void 0;
 exports.getDocument = getDocument;
 exports.setPDFNetworkStreamFactory = setPDFNetworkStreamFactory;
 exports.version = void 0;
@@ -1077,19 +1050,19 @@ var _annotation_storage = __w_pdfjs_require__(9);
 
 var _canvas = __w_pdfjs_require__(10);
 
-var _worker_options = __w_pdfjs_require__(12);
+var _worker_options = __w_pdfjs_require__(13);
 
 var _is_node = __w_pdfjs_require__(8);
 
-var _message_handler = __w_pdfjs_require__(13);
+var _message_handler = __w_pdfjs_require__(14);
 
-var _metadata = __w_pdfjs_require__(14);
+var _metadata = __w_pdfjs_require__(15);
 
-var _optional_content_config = __w_pdfjs_require__(15);
+var _optional_content_config = __w_pdfjs_require__(16);
 
-var _transport_stream = __w_pdfjs_require__(16);
+var _transport_stream = __w_pdfjs_require__(17);
 
-var _xfa_text = __w_pdfjs_require__(17);
+var _xfa_text = __w_pdfjs_require__(18);
 
 const DEFAULT_RANGE_CHUNK_SIZE = 65536;
 const RENDERING_CANCELLED_TIMEOUT = 100;
@@ -1195,7 +1168,6 @@ function getDocument(src) {
     params[key] = value;
   }
 
-  params.rangeChunkSize = params.rangeChunkSize || DEFAULT_RANGE_CHUNK_SIZE;
   params.CMapReaderFactory = params.CMapReaderFactory || DefaultCMapReaderFactory;
   params.StandardFontDataFactory = params.StandardFontDataFactory || DefaultStandardFontDataFactory;
   params.ignoreErrors = params.stopAtErrors !== true;
@@ -1203,12 +1175,28 @@ function getDocument(src) {
   params.pdfBug = params.pdfBug === true;
   params.enableXfa = params.enableXfa === true;
 
+  if (!Number.isInteger(params.rangeChunkSize) || params.rangeChunkSize < 1) {
+    params.rangeChunkSize = DEFAULT_RANGE_CHUNK_SIZE;
+  }
+
   if (typeof params.docBaseUrl !== "string" || (0, _display_utils.isDataScheme)(params.docBaseUrl)) {
     params.docBaseUrl = null;
   }
 
-  if (!Number.isInteger(params.maxImageSize)) {
+  if (!Number.isInteger(params.maxImageSize) || params.maxImageSize < -1) {
     params.maxImageSize = -1;
+  }
+
+  if (typeof params.cMapUrl !== "string") {
+    params.cMapUrl = null;
+  }
+
+  if (typeof params.standardFontDataUrl === "function") {
+    params.standardFontDataUrl = params.standardFontDataUrl();
+  }
+
+  if (typeof params.standardFontDataUrl !== "string") {
+    params.standardFontDataUrl = null;
   }
 
   if (typeof params.useWorkerFetch !== "boolean") {
@@ -1227,7 +1215,7 @@ function getDocument(src) {
     params.useSystemFonts = !_is_node.isNodeJS && !params.disableFontFace;
   }
 
-  if (typeof params.ownerDocument === "undefined") {
+  if (typeof params.ownerDocument !== "object" || params.ownerDocument === null) {
     params.ownerDocument = globalThis.document;
   }
 
@@ -1317,14 +1305,13 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   let cMapUrl = source.cMapUrl;
 
-  if (cMapUrl.constructor.name === "Function") {
+  if (cMapUrl?.constructor.name === "Function") {
     cMapUrl = cMapUrl();
   }
 
-  const standardFontDataUrl = typeof source.standardFontDataUrl === "function" ? source.standardFontDataUrl() : source.standardFontDataUrl;
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.13.489',
+    apiVersion: '2.14.470',
     source: {
       data: source.data,
       url: source.url,
@@ -1342,7 +1329,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
     enableXfa: source.enableXfa,
     useSystemFonts: source.useSystemFonts,
     cMapUrl: source.useWorkerFetch ? cMapUrl : null,
-    standardFontDataUrl: source.useWorkerFetch ? standardFontDataUrl : null
+    standardFontDataUrl: source.useWorkerFetch ? source.standardFontDataUrl : null
   });
 
   if (worker.destroyed) {
@@ -1353,17 +1340,13 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 }
 
 class PDFDocumentLoadingTask {
-  static get idCounters() {
-    return (0, _util.shadow)(this, "idCounters", {
-      doc: 0
-    });
-  }
+  static #docId = 0;
 
   constructor() {
     this._capability = (0, _util.createPromiseCapability)();
     this._transport = null;
     this._worker = null;
-    this.docId = `d${PDFDocumentLoadingTask.idCounters.doc++}`;
+    this.docId = `d${PDFDocumentLoadingTask.#docId++}`;
     this.destroyed = false;
     this.onPassword = null;
     this.onProgress = null;
@@ -1635,6 +1618,7 @@ class PDFPageProxy {
     this._pdfBug = pdfBug;
     this.commonObjs = transport.commonObjs;
     this.objs = new PDFObjects();
+    this._bitmaps = new Set();
     this.cleanupAfterRender = false;
     this.pendingCleanup = false;
     this._intentStates = new Map();
@@ -1994,6 +1978,12 @@ class PDFPageProxy {
 
     this.objs.clear();
 
+    for (const bitmap of this._bitmaps) {
+      bitmap.close();
+    }
+
+    this._bitmaps.clear();
+
     this._annotationPromises.clear();
 
     this._jsActionsPromise = null;
@@ -2038,6 +2028,12 @@ class PDFPageProxy {
     if (resetStats && this._stats) {
       this._stats = new _display_utils.StatTimer();
     }
+
+    for (const bitmap of this._bitmaps) {
+      bitmap.close();
+    }
+
+    this._bitmaps.clear();
 
     this.pendingCleanup = false;
     return true;
@@ -2234,6 +2230,7 @@ const PDFWorkerUtil = {
   fallbackWorkerSrc: null,
   fakeWorkerId: 0
 };
+exports.PDFWorkerUtil = PDFWorkerUtil;
 {
   if (_is_node.isNodeJS && typeof require === "function") {
     PDFWorkerUtil.isWorkerDisabled = true;
@@ -2246,6 +2243,23 @@ const PDFWorkerUtil = {
     }
   }
 
+  PDFWorkerUtil.isSameOrigin = function (baseUrl, otherUrl) {
+    let base;
+
+    try {
+      base = new URL(baseUrl);
+
+      if (!base.origin || base.origin === "null") {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+
+    const other = new URL(otherUrl, base);
+    return base.origin === other.origin;
+  };
+
   PDFWorkerUtil.createCDNWrapper = function (url) {
     const wrapper = `importScripts("${url}");`;
     return URL.createObjectURL(new Blob([wrapper]));
@@ -2253,16 +2267,14 @@ const PDFWorkerUtil = {
 }
 
 class PDFWorker {
-  static get _workerPorts() {
-    return (0, _util.shadow)(this, "_workerPorts", new WeakMap());
-  }
+  static #workerPorts = new WeakMap();
 
   constructor({
     name = null,
     port = null,
     verbosity = (0, _util.getVerbosityLevel)()
   } = {}) {
-    if (port && PDFWorker._workerPorts.has(port)) {
+    if (port && PDFWorker.#workerPorts.has(port)) {
       throw new Error("Cannot use more than one PDFWorker per port.");
     }
 
@@ -2275,7 +2287,7 @@ class PDFWorker {
     this._messageHandler = null;
 
     if (port) {
-      PDFWorker._workerPorts.set(port, this);
+      PDFWorker.#workerPorts.set(port, this);
 
       this._initializeFromPort(port);
 
@@ -2311,7 +2323,7 @@ class PDFWorker {
       let workerSrc = PDFWorker.workerSrc;
 
       try {
-        if (!(0, _util.isSameOrigin)(window.location.href, workerSrc)) {
+        if (!PDFWorkerUtil.isSameOrigin(window.location.href, workerSrc)) {
           workerSrc = PDFWorkerUtil.createCDNWrapper(new URL(workerSrc, window.location).href);
         }
 
@@ -2378,15 +2390,8 @@ class PDFWorker {
         });
 
         const sendTest = () => {
-          const testObj = new Uint8Array([255]);
-
-          try {
-            messageHandler.send("test", testObj, [testObj.buffer]);
-          } catch (ex) {
-            (0, _util.warn)("Cannot use postMessage transfers.");
-            testObj[0] = 0;
-            messageHandler.send("test", testObj);
-          }
+          const testObj = new Uint8Array();
+          messageHandler.send("test", testObj, [testObj.buffer]);
         };
 
         sendTest();
@@ -2439,8 +2444,7 @@ class PDFWorker {
       this._webWorker = null;
     }
 
-    PDFWorker._workerPorts.delete(this._port);
-
+    PDFWorker.#workerPorts.delete(this._port);
     this._port = null;
 
     if (this._messageHandler) {
@@ -2455,8 +2459,8 @@ class PDFWorker {
       throw new Error("PDFWorker.fromPort - invalid method signature.");
     }
 
-    if (this._workerPorts.has(params.port)) {
-      return this._workerPorts.get(params.port);
+    if (this.#workerPorts.has(params.port)) {
+      return this.#workerPorts.get(params.port);
     }
 
     return new PDFWorker(params);
@@ -2541,7 +2545,7 @@ class WorkerTransport {
     if (!params.useWorkerFetch) {
       let cMapUrl = params.cMapUrl;
 
-      if (cMapUrl.constructor.name === "Function") {
+      if (cMapUrl?.constructor.name === "Function") {
         cMapUrl = cMapUrl();
       }
 
@@ -2935,8 +2939,25 @@ class WorkerTransport {
           pageProxy.objs.resolve(id, imageData);
           const MAX_IMAGE_SIZE_TO_STORE = 8000000;
 
-          if (imageData?.data?.length > MAX_IMAGE_SIZE_TO_STORE) {
-            pageProxy.cleanupAfterRender = true;
+          if (imageData) {
+            let length;
+
+            if (imageData.bitmap) {
+              const {
+                bitmap,
+                width,
+                height
+              } = imageData;
+              length = width * height * 4;
+
+              pageProxy._bitmaps.add(bitmap);
+            } else {
+              length = imageData.data?.length || 0;
+            }
+
+            if (length > MAX_IMAGE_SIZE_TO_STORE) {
+              pageProxy.cleanupAfterRender = true;
+            }
           }
 
           break;
@@ -3267,9 +3288,7 @@ class RenderTask {
 exports.RenderTask = RenderTask;
 
 class InternalRenderTask {
-  static get canvasInUse() {
-    return (0, _util.shadow)(this, "canvasInUse", new WeakSet());
-  }
+  static #canvasInUse = new WeakSet();
 
   constructor({
     callback,
@@ -3320,11 +3339,11 @@ class InternalRenderTask {
     }
 
     if (this._canvas) {
-      if (InternalRenderTask.canvasInUse.has(this._canvas)) {
+      if (InternalRenderTask.#canvasInUse.has(this._canvas)) {
         throw new Error("Cannot use the same canvas during multiple render() operations. " + "Use different canvas or ensure previous operations were " + "cancelled or completed.");
       }
 
-      InternalRenderTask.canvasInUse.add(this._canvas);
+      InternalRenderTask.#canvasInUse.add(this._canvas);
     }
 
     if (this._pdfBug && globalThis.StepperManager?.enabled) {
@@ -3366,7 +3385,7 @@ class InternalRenderTask {
     }
 
     if (this._canvas) {
-      InternalRenderTask.canvasInUse.delete(this._canvas);
+      InternalRenderTask.#canvasInUse.delete(this._canvas);
     }
 
     this.callback(error || new _display_utils.RenderingCancelledException(`Rendering cancelled, page ${this._pageIndex + 1}`, "canvas"));
@@ -3432,7 +3451,7 @@ class InternalRenderTask {
         this.gfx.endDrawing();
 
         if (this._canvas) {
-          InternalRenderTask.canvasInUse.delete(this._canvas);
+          InternalRenderTask.#canvasInUse.delete(this._canvas);
         }
 
         this.callback();
@@ -3442,9 +3461,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.13.489';
+const version = '2.14.470';
 exports.version = version;
-const build = 'c73d19e7a';
+const build = '3e0a23d71';
 exports.build = build;
 
 /***/ }),
@@ -4483,7 +4502,7 @@ class FontFaceObject {
       return this.compiledGlyphs[character] = function (c, size) {};
     }
 
-    if (this.isEvalSupported && _util.IsEvalSupportedCached.value) {
+    if (this.isEvalSupported && _util.FeatureTest.isEvalSupported) {
       const jsBuf = [];
 
       for (const current of cmds) {
@@ -4763,6 +4782,8 @@ exports.CanvasGraphics = void 0;
 var _util = __w_pdfjs_require__(1);
 
 var _pattern_helper = __w_pdfjs_require__(11);
+
+var _image_utils = __w_pdfjs_require__(12);
 
 var _display_utils = __w_pdfjs_require__(4);
 
@@ -5373,7 +5394,7 @@ function putBinaryImageData(ctx, imgData, transferMaps = null) {
     const dest32DataLength = dest32.length;
     const fullSrcDiff = width + 7 >> 3;
     let white = 0xffffffff;
-    let black = _util.IsLittleEndianCached.value ? 0xff000000 : 0x000000ff;
+    let black = _util.FeatureTest.isLittleEndian ? 0xff000000 : 0x000000ff;
 
     if (transferMapGray) {
       if (transferMapGray[0] === 0xff && transferMapGray[0xff] === 0) {
@@ -5517,6 +5538,11 @@ function putBinaryImageData(ctx, imgData, transferMaps = null) {
 }
 
 function putBinaryImageMask(ctx, imgData) {
+  if (imgData.bitmap) {
+    ctx.drawImage(imgData.bitmap, 0, 0);
+    return;
+  }
+
   const height = imgData.height,
         width = imgData.width;
   const partialChunkHeight = height % FULL_CHUNK_HEIGHT;
@@ -5529,24 +5555,15 @@ function putBinaryImageMask(ctx, imgData) {
 
   for (let i = 0; i < totalChunks; i++) {
     const thisChunkHeight = i < fullChunks ? FULL_CHUNK_HEIGHT : partialChunkHeight;
-    let destPos = 3;
-
-    for (let j = 0; j < thisChunkHeight; j++) {
-      let elem,
-          mask = 0;
-
-      for (let k = 0; k < width; k++) {
-        if (!mask) {
-          elem = src[srcPos++];
-          mask = 128;
-        }
-
-        dest[destPos] = elem & mask ? 0 : 255;
-        destPos += 4;
-        mask >>= 1;
-      }
-    }
-
+    ({
+      srcPos
+    } = (0, _image_utils.applyMaskImageData)({
+      src,
+      srcPos,
+      dest,
+      width,
+      height: thisChunkHeight
+    }));
     ctx.putImageData(chunkImgData, 0, i * FULL_CHUNK_HEIGHT);
   }
 }
@@ -5730,7 +5747,16 @@ class CanvasGraphics {
       addContextCurrentTransform(canvasCtx);
     }
 
+    this._cachedScaleForStroking = null;
     this._cachedGetSinglePixelWidth = null;
+  }
+
+  getObject(data, fallback = null) {
+    if (typeof data === "string") {
+      return data.startsWith("g_") ? this.commonObjs.get(data) : this.objs.get(data);
+    }
+
+    return fallback;
   }
 
   beginDrawing({
@@ -5780,7 +5806,6 @@ class CanvasGraphics {
     this.ctx.transform.apply(this.ctx, viewport.transform);
     this.viewportScale = viewport.scale;
     this.baseTransform = this.ctx.mozCurrentTransform.slice();
-    this._combinedScaleFactor = Math.hypot(this.baseTransform[0], this.baseTransform[2]);
 
     if (this.imageLayer) {
       this.imageLayer.beginLayout();
@@ -5955,6 +5980,10 @@ class CanvasGraphics {
   }
 
   setLineWidth(width) {
+    if (width !== this.current.lineWidth) {
+      this._cachedScaleForStroking = null;
+    }
+
     this.current.lineWidth = width;
     this.ctx.lineWidth = width;
   }
@@ -6145,12 +6174,14 @@ class CanvasGraphics {
 
       this.checkSMaskState();
       this.pendingClip = null;
+      this._cachedScaleForStroking = null;
       this._cachedGetSinglePixelWidth = null;
     }
   }
 
   transform(a, b, c, d, e, f) {
     this.ctx.transform(a, b, c, d, e, f);
+    this._cachedScaleForStroking = null;
     this._cachedGetSinglePixelWidth = null;
   }
 
@@ -6250,25 +6281,12 @@ class CanvasGraphics {
 
     if (this.contentVisible) {
       if (typeof strokeColor === "object" && strokeColor?.getPattern) {
-        const lineWidth = this.getSinglePixelWidth();
         ctx.save();
         ctx.strokeStyle = strokeColor.getPattern(ctx, this, ctx.mozCurrentTransformInverse, _pattern_helper.PathType.STROKE);
-        ctx.lineWidth = Math.max(lineWidth, this.current.lineWidth);
-        ctx.stroke();
+        this.rescaleAndStroke(false);
         ctx.restore();
       } else {
-        const lineWidth = this.getSinglePixelWidth();
-
-        if (lineWidth < 0 && -lineWidth >= this.current.lineWidth) {
-          ctx.save();
-          ctx.resetTransform();
-          ctx.lineWidth = Math.floor(this._combinedScaleFactor);
-          ctx.stroke();
-          ctx.restore();
-        } else {
-          ctx.lineWidth = Math.max(lineWidth, this.current.lineWidth);
-          ctx.stroke();
-        }
+        this.rescaleAndStroke(true);
       }
     }
 
@@ -6498,7 +6516,7 @@ class CanvasGraphics {
     this.moveText(0, this.current.leading);
   }
 
-  paintChar(character, x, y, patternTransform, resetLineWidthToOne) {
+  paintChar(character, x, y, patternTransform) {
     const ctx = this.ctx;
     const current = this.current;
     const font = current.font;
@@ -6528,11 +6546,6 @@ class CanvasGraphics {
       }
 
       if (fillStrokeMode === _util.TextRenderingMode.STROKE || fillStrokeMode === _util.TextRenderingMode.FILL_STROKE) {
-        if (resetLineWidthToOne) {
-          ctx.resetTransform();
-          ctx.lineWidth = Math.floor(this._combinedScaleFactor);
-        }
-
         ctx.stroke();
       }
 
@@ -6543,16 +6556,7 @@ class CanvasGraphics {
       }
 
       if (fillStrokeMode === _util.TextRenderingMode.STROKE || fillStrokeMode === _util.TextRenderingMode.FILL_STROKE) {
-        if (resetLineWidthToOne) {
-          ctx.save();
-          ctx.moveTo(x, y);
-          ctx.resetTransform();
-          ctx.lineWidth = Math.floor(this._combinedScaleFactor);
-          ctx.strokeText(character, 0, 0);
-          ctx.restore();
-        } else {
-          ctx.strokeText(character, x, y);
-        }
+        ctx.strokeText(character, x, y);
       }
     }
 
@@ -6634,16 +6638,13 @@ class CanvasGraphics {
     }
 
     let lineWidth = current.lineWidth;
-    let resetLineWidthToOne = false;
     const scale = current.textMatrixScale;
 
     if (scale === 0 || lineWidth === 0) {
       const fillStrokeMode = current.textRenderingMode & _util.TextRenderingMode.FILL_STROKE_MASK;
 
       if (fillStrokeMode === _util.TextRenderingMode.STROKE || fillStrokeMode === _util.TextRenderingMode.FILL_STROKE) {
-        this._cachedGetSinglePixelWidth = null;
         lineWidth = this.getSinglePixelWidth();
-        resetLineWidthToOne = lineWidth < 0;
       }
     } else {
       lineWidth /= scale;
@@ -6703,12 +6704,12 @@ class CanvasGraphics {
         if (simpleFillText && !accent) {
           ctx.fillText(character, scaledX, scaledY);
         } else {
-          this.paintChar(character, scaledX, scaledY, patternTransform, resetLineWidthToOne);
+          this.paintChar(character, scaledX, scaledY, patternTransform);
 
           if (accent) {
             const scaledAccentX = scaledX + fontSize * accent.offset.x / fontSizeScale;
             const scaledAccentY = scaledY - fontSize * accent.offset.y / fontSizeScale;
-            this.paintChar(accent.fontChar, scaledAccentX, scaledAccentY, patternTransform, resetLineWidthToOne);
+            this.paintChar(accent.fontChar, scaledAccentX, scaledAccentY, patternTransform);
           }
         }
       }
@@ -6758,6 +6759,7 @@ class CanvasGraphics {
       return;
     }
 
+    this._cachedScaleForStroking = null;
     this._cachedGetSinglePixelWidth = null;
     ctx.save();
     ctx.transform.apply(ctx, current.textMatrix);
@@ -7121,8 +7123,9 @@ class CanvasGraphics {
           canvas,
           context
         } = this.annotationCanvas;
-        canvas.style.width = `calc(${width}px * var(--viewport-scale-factor))`;
-        canvas.style.height = `calc(${height}px * var(--viewport-scale-factor))`;
+        const viewportScaleFactorStr = `var(--zoom-factor) * ${_display_utils.PixelsPerInch.PDF_TO_CSS_UNITS}`;
+        canvas.style.width = `calc(${width}px * ${viewportScaleFactorStr})`;
+        canvas.style.height = `calc(${height}px * ${viewportScaleFactorStr})`;
         this.annotationCanvasMap.set(id, canvas);
         this.annotationCanvas.savedCtx = this.ctx;
         this.ctx = context;
@@ -7157,6 +7160,7 @@ class CanvasGraphics {
       return;
     }
 
+    img = this.getObject(img.data, img);
     const ctx = this.ctx;
     const width = img.width,
           height = img.height;
@@ -7189,17 +7193,18 @@ class CanvasGraphics {
     this.compose();
   }
 
-  paintImageMaskXObjectRepeat(imgData, scaleX, skewX = 0, skewY = 0, scaleY, positions) {
+  paintImageMaskXObjectRepeat(img, scaleX, skewX = 0, skewY = 0, scaleY, positions) {
     if (!this.contentVisible) {
       return;
     }
 
+    img = this.getObject(img.data, img);
     const ctx = this.ctx;
     ctx.save();
     const currentTransform = ctx.mozCurrentTransform;
     ctx.transform(scaleX, skewX, skewY, scaleY, 0, 0);
 
-    const mask = this._createMaskCanvas(imgData);
+    const mask = this._createMaskCanvas(img);
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
 
@@ -7251,7 +7256,7 @@ class CanvasGraphics {
       return;
     }
 
-    const imgData = objId.startsWith("g_") ? this.commonObjs.get(objId) : this.objs.get(objId);
+    const imgData = this.getObject(objId);
 
     if (!imgData) {
       (0, _util.warn)("Dependent image isn't ready yet");
@@ -7266,7 +7271,7 @@ class CanvasGraphics {
       return;
     }
 
-    const imgData = objId.startsWith("g_") ? this.commonObjs.get(objId) : this.objs.get(objId);
+    const imgData = this.getObject(objId);
 
     if (!imgData) {
       (0, _util.warn)("Dependent image isn't ready yet");
@@ -7435,23 +7440,98 @@ class CanvasGraphics {
   }
 
   getSinglePixelWidth() {
-    if (this._cachedGetSinglePixelWidth === null) {
+    if (!this._cachedGetSinglePixelWidth) {
       const m = this.ctx.mozCurrentTransform;
-      const absDet = Math.abs(m[0] * m[3] - m[2] * m[1]);
-      const sqNorm1 = m[0] ** 2 + m[2] ** 2;
-      const sqNorm2 = m[1] ** 2 + m[3] ** 2;
-      const pixelHeight = Math.sqrt(Math.max(sqNorm1, sqNorm2)) / absDet;
 
-      if (sqNorm1 !== sqNorm2 && this._combinedScaleFactor * pixelHeight > 1) {
-        this._cachedGetSinglePixelWidth = -(this._combinedScaleFactor * pixelHeight);
-      } else if (absDet > Number.EPSILON) {
-        this._cachedGetSinglePixelWidth = pixelHeight;
+      if (m[1] === 0 && m[2] === 0) {
+        this._cachedGetSinglePixelWidth = 1 / Math.min(Math.abs(m[0]), Math.abs(m[3]));
       } else {
-        this._cachedGetSinglePixelWidth = 1;
+        const absDet = Math.abs(m[0] * m[3] - m[2] * m[1]);
+        const normX = Math.hypot(m[0], m[2]);
+        const normY = Math.hypot(m[1], m[3]);
+        this._cachedGetSinglePixelWidth = Math.max(normX, normY) / absDet;
       }
     }
 
     return this._cachedGetSinglePixelWidth;
+  }
+
+  getScaleForStroking() {
+    if (!this._cachedScaleForStroking) {
+      const {
+        lineWidth
+      } = this.current;
+      const m = this.ctx.mozCurrentTransform;
+      let scaleX, scaleY;
+
+      if (m[1] === 0 && m[2] === 0) {
+        const normX = Math.abs(m[0]);
+        const normY = Math.abs(m[3]);
+
+        if (lineWidth === 0) {
+          scaleX = 1 / normX;
+          scaleY = 1 / normY;
+        } else {
+          const scaledXLineWidth = normX * lineWidth;
+          const scaledYLineWidth = normY * lineWidth;
+          scaleX = scaledXLineWidth < 1 ? 1 / scaledXLineWidth : 1;
+          scaleY = scaledYLineWidth < 1 ? 1 / scaledYLineWidth : 1;
+        }
+      } else {
+        const absDet = Math.abs(m[0] * m[3] - m[2] * m[1]);
+        const normX = Math.hypot(m[0], m[1]);
+        const normY = Math.hypot(m[2], m[3]);
+
+        if (lineWidth === 0) {
+          scaleX = normY / absDet;
+          scaleY = normX / absDet;
+        } else {
+          const baseArea = lineWidth * absDet;
+          scaleX = normY > baseArea ? normY / baseArea : 1;
+          scaleY = normX > baseArea ? normX / baseArea : 1;
+        }
+      }
+
+      this._cachedScaleForStroking = [scaleX, scaleY];
+    }
+
+    return this._cachedScaleForStroking;
+  }
+
+  rescaleAndStroke(saveRestore) {
+    const {
+      ctx
+    } = this;
+    const {
+      lineWidth
+    } = this.current;
+    const [scaleX, scaleY] = this.getScaleForStroking();
+    ctx.lineWidth = lineWidth || 1;
+
+    if (scaleX === 1 && scaleY === 1) {
+      ctx.stroke();
+      return;
+    }
+
+    let savedMatrix, savedDashes, savedDashOffset;
+
+    if (saveRestore) {
+      savedMatrix = ctx.mozCurrentTransform.slice();
+      savedDashes = ctx.getLineDash().slice();
+      savedDashOffset = ctx.lineDashOffset;
+    }
+
+    ctx.scale(scaleX, scaleY);
+    const scale = Math.max(scaleX, scaleY);
+    ctx.setLineDash(ctx.getLineDash().map(x => x / scale));
+    ctx.lineDashOffset /= scale;
+    ctx.stroke();
+
+    if (saveRestore) {
+      ctx.setTransform(...savedMatrix);
+      ctx.setLineDash(savedDashes);
+      ctx.lineDashOffset = savedDashOffset;
+    }
   }
 
   getCanvasPosition(x, y) {
@@ -8039,6 +8119,65 @@ exports.TilingPattern = TilingPattern;
 
 /***/ }),
 /* 12 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.applyMaskImageData = applyMaskImageData;
+
+var _util = __w_pdfjs_require__(1);
+
+function applyMaskImageData({
+  src,
+  srcPos = 0,
+  dest,
+  destPos = 0,
+  width,
+  height,
+  inverseDecode = false
+}) {
+  const opaque = _util.FeatureTest.isLittleEndian ? 0xff000000 : 0x000000ff;
+  const [zeroMapping, oneMapping] = !inverseDecode ? [opaque, 0] : [0, opaque];
+  const widthInSource = width >> 3;
+  const widthRemainder = width & 7;
+  const srcLength = src.length;
+  dest = new Uint32Array(dest.buffer);
+
+  for (let i = 0; i < height; i++) {
+    for (const max = srcPos + widthInSource; srcPos < max; srcPos++) {
+      const elem = srcPos < srcLength ? src[srcPos] : 255;
+      dest[destPos++] = elem & 0b10000000 ? oneMapping : zeroMapping;
+      dest[destPos++] = elem & 0b1000000 ? oneMapping : zeroMapping;
+      dest[destPos++] = elem & 0b100000 ? oneMapping : zeroMapping;
+      dest[destPos++] = elem & 0b10000 ? oneMapping : zeroMapping;
+      dest[destPos++] = elem & 0b1000 ? oneMapping : zeroMapping;
+      dest[destPos++] = elem & 0b100 ? oneMapping : zeroMapping;
+      dest[destPos++] = elem & 0b10 ? oneMapping : zeroMapping;
+      dest[destPos++] = elem & 0b1 ? oneMapping : zeroMapping;
+    }
+
+    if (widthRemainder === 0) {
+      continue;
+    }
+
+    const elem = srcPos < srcLength ? src[srcPos++] : 255;
+
+    for (let j = 0; j < widthRemainder; j++) {
+      dest[destPos++] = elem & 1 << 7 - j ? oneMapping : zeroMapping;
+    }
+  }
+
+  return {
+    srcPos,
+    destPos
+  };
+}
+
+/***/ }),
+/* 13 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -8053,7 +8192,7 @@ GlobalWorkerOptions.workerPort = GlobalWorkerOptions.workerPort === undefined ? 
 GlobalWorkerOptions.workerSrc = GlobalWorkerOptions.workerSrc === undefined ? "" : GlobalWorkerOptions.workerSrc;
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -8539,7 +8678,7 @@ class MessageHandler {
 exports.MessageHandler = MessageHandler;
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -8584,7 +8723,7 @@ class Metadata {
 exports.Metadata = Metadata;
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -8805,7 +8944,7 @@ class OptionalContentConfig {
 exports.OptionalContentConfig = OptionalContentConfig;
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -9160,7 +9299,7 @@ class PDFDataTransportStreamRangeReader {
 }
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -9224,7 +9363,7 @@ class XfaText {
 exports.XfaText = XfaText;
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -9240,9 +9379,9 @@ var _display_utils = __w_pdfjs_require__(4);
 
 var _annotation_storage = __w_pdfjs_require__(9);
 
-var _scripting_utils = __w_pdfjs_require__(19);
+var _scripting_utils = __w_pdfjs_require__(20);
 
-var _xfa_layer = __w_pdfjs_require__(20);
+var _xfa_layer = __w_pdfjs_require__(21);
 
 const DEFAULT_TAB_INDEX = 1000;
 const GetElementsByNameSet = new WeakSet();
@@ -11445,7 +11584,7 @@ class AnnotationLayer {
 exports.AnnotationLayer = AnnotationLayer;
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -11513,7 +11652,7 @@ class ColorConverters {
 exports.ColorConverters = ColorConverters;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -11523,9 +11662,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.XfaLayer = void 0;
 
-var _util = __w_pdfjs_require__(1);
-
-var _xfa_text = __w_pdfjs_require__(17);
+var _xfa_text = __w_pdfjs_require__(18);
 
 class XfaLayer {
   static setupStorage(html, id, element, storage, intent) {
@@ -11646,11 +11783,7 @@ class XfaLayer {
     }
 
     if (isHTMLAnchorElement) {
-      if (!linkService.addLinkAttributes) {
-        (0, _util.warn)("XfaLayer.setAttribute - missing `addLinkAttributes`-method on the `linkService`-instance.");
-      }
-
-      linkService.addLinkAttributes?.(html, attributes.href, attributes.newWindow);
+      linkService.addLinkAttributes(html, attributes.href, attributes.newWindow);
     }
 
     if (storage && attributes.dataId) {
@@ -11767,7 +11900,7 @@ class XfaLayer {
 exports.XfaLayer = XfaLayer;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -12552,7 +12685,7 @@ function renderTextLayer(renderParameters) {
 }
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -14083,7 +14216,7 @@ exports.SVGGraphics = SVGGraphics;
 }
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -14095,7 +14228,7 @@ exports.PDFNodeStream = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
-var _network_utils = __w_pdfjs_require__(24);
+var _network_utils = __w_pdfjs_require__(25);
 
 ;
 
@@ -14549,7 +14682,7 @@ class PDFNodeStreamFsRangeReader extends BaseRangeReader {
 }
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -14564,7 +14697,7 @@ exports.validateResponseStatus = validateResponseStatus;
 
 var _util = __w_pdfjs_require__(1);
 
-var _content_disposition = __w_pdfjs_require__(25);
+var _content_disposition = __w_pdfjs_require__(26);
 
 var _display_utils = __w_pdfjs_require__(4);
 
@@ -14574,7 +14707,6 @@ function validateRangeRequestCapabilities({
   rangeChunkSize,
   disableRange
 }) {
-  (0, _util.assert)(rangeChunkSize > 0, "Range chunk size must be larger than zero");
   const returnValues = {
     allowRangeRequests: false,
     suggestedLength: undefined
@@ -14642,7 +14774,7 @@ function validateResponseStatus(status) {
 }
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -14822,7 +14954,7 @@ function getFilenameFromContentDispositionHeader(contentDisposition) {
 }
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -14834,7 +14966,7 @@ exports.PDFNetworkStream = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
-var _network_utils = __w_pdfjs_require__(24);
+var _network_utils = __w_pdfjs_require__(25);
 
 ;
 const OK_RESPONSE = 200;
@@ -15363,7 +15495,7 @@ class PDFNetworkStreamRangeRequestReader {
 }
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -15375,7 +15507,7 @@ exports.PDFFetchStream = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
-var _network_utils = __w_pdfjs_require__(24);
+var _network_utils = __w_pdfjs_require__(25);
 
 ;
 
@@ -15889,25 +16021,25 @@ var _api = __w_pdfjs_require__(3);
 
 var _display_utils = __w_pdfjs_require__(4);
 
-var _annotation_layer = __w_pdfjs_require__(18);
+var _annotation_layer = __w_pdfjs_require__(19);
 
-var _worker_options = __w_pdfjs_require__(12);
+var _worker_options = __w_pdfjs_require__(13);
 
 var _is_node = __w_pdfjs_require__(8);
 
-var _text_layer = __w_pdfjs_require__(21);
+var _text_layer = __w_pdfjs_require__(22);
 
-var _svg = __w_pdfjs_require__(22);
+var _svg = __w_pdfjs_require__(23);
 
-var _xfa_layer = __w_pdfjs_require__(20);
+var _xfa_layer = __w_pdfjs_require__(21);
 
-const pdfjsVersion = '2.13.489';
-const pdfjsBuild = 'c73d19e7a';
+const pdfjsVersion = '2.14.470';
+const pdfjsBuild = '3e0a23d71';
 {
   if (_is_node.isNodeJS) {
     const {
       PDFNodeStream
-    } = __w_pdfjs_require__(23);
+    } = __w_pdfjs_require__(24);
 
     (0, _api.setPDFNetworkStreamFactory)(params => {
       return new PDFNodeStream(params);
@@ -15915,11 +16047,11 @@ const pdfjsBuild = 'c73d19e7a';
   } else {
     const {
       PDFNetworkStream
-    } = __w_pdfjs_require__(26);
+    } = __w_pdfjs_require__(27);
 
     const {
       PDFFetchStream
-    } = __w_pdfjs_require__(27);
+    } = __w_pdfjs_require__(28);
 
     (0, _api.setPDFNetworkStreamFactory)(params => {
       if ((0, _display_utils.isValidFetchUrl)(params.url)) {
