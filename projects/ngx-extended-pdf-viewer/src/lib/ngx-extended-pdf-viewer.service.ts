@@ -297,7 +297,7 @@ export class NgxExtendedPdfViewerService {
     return new Blob([data], { type: 'application/pdf' });
   }
 
-  public async getFormData(): Promise<Array<Object>> {
+  public async getFormData(currentFormValues = true): Promise<Array<Object>> {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const pdf /*: PDFDocumentProxy */ = PDFViewerApplication.pdfDocument;
     // screen DPI / PDF DPI
@@ -310,12 +310,29 @@ export class NgxExtendedPdfViewerService {
 
       annotations
         .filter((a) => a.subtype === 'Widget') // get the form field annotations only
+        .map((a) => ({ ...a })) // only expose copies of the annotations to avoid side-effects
         .forEach((a) => {
           // get the rectangle that represent the single field
           // and resize it according to the current DPI
           const fieldRect: Array<number> = currentPage.getViewport({ scale: dpiRatio }).convertToViewportRectangle(a.rect);
 
           // add the corresponding input
+          if (currentFormValues && a.fieldName) {
+            try {
+              if (a.exportValue) {
+                const currentValue = PDFViewerApplication.pdfDocument.annotationStorage.getValue(a.id, a.fieldName + '/' + a.exportValue, '');
+                a.value = currentValue?.value;
+              } else if (a.radioButton) {
+                const currentValue = PDFViewerApplication.pdfDocument.annotationStorage.getValue(a.id, a.fieldName + '/' + a.fieldValue, '');
+                a.value = currentValue?.value;
+              } else {
+                const currentValue = PDFViewerApplication.pdfDocument.annotationStorage.getValue(a.id, a.fieldName, '');
+                a.value = currentValue?.value;
+              }
+            } catch (exception) {
+              debugger;
+            }
+          }
           result.push({ fieldAnnotation: a, fieldRect, pageNumber: i });
         });
     }
