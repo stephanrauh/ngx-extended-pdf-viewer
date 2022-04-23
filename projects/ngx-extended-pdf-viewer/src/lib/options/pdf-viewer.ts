@@ -1,10 +1,10 @@
-import { OptionalContentConfig } from "./optional_content_config";
+import { OptionalContentConfig } from './optional_content_config';
 
 export enum ScrollModeType {
   vertical = 0,
   horizontal = 1,
   wrapped = 2,
-  page = 3
+  page = 3,
 }
 
 export enum SpreadModeType {
@@ -35,4 +35,5 @@ export interface IPDFViewer {
   addPageToRenderQueue(pageIndex: number): boolean;
   _getVisiblePages(): Array<any>;
   optionalContentConfigPromise: Promise<OptionalContentConfig> | null;
+  _scrollPageIntoView({ pageDiv: HTMLElement, pageSpot: any, pageNumber: number }): void;
 }

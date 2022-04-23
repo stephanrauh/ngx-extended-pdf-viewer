@@ -434,4 +434,33 @@ export class NgxExtendedPdfViewerService {
       });
     }
   }
+
+  public scrollPageIntoView(pageNumber: number, pageSpot?: { top?: number | string; left?: number | string }): void {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const viewer = PDFViewerApplication.pdfViewer as any;
+    const pageDiv = PDFViewerApplication.pdfViewer._pages[pageNumber - 1].div;
+
+    if (pageSpot) {
+      const targetPageSpot = { ...pageSpot };
+      if (typeof targetPageSpot.top === 'string') {
+        if (targetPageSpot.top.endsWith('%')) {
+          const percent = Number(targetPageSpot.top.replace('%', ''));
+          const viewerHeight = viewer.container.querySelector('.page')?.clientHeight;
+          const height = pageDiv.clientHeight ? pageDiv.clientHeight : viewerHeight;
+          targetPageSpot.top = (percent * height) / 100;
+        }
+      }
+      if (typeof targetPageSpot.left === 'string') {
+        if (targetPageSpot.left.endsWith('%')) {
+          const percent = Number(targetPageSpot.left.replace('%', ''));
+          const viewerWidth = viewer.container.querySelector('.page')?.clientWidth;
+          const width = pageDiv.clientWidth ? pageDiv.clientWidth : viewerWidth;
+          targetPageSpot.left = (percent * width) / 100;
+        }
+      }
+      viewer._scrollIntoView({ pageDiv, pageNumber, pageSpot: targetPageSpot });
+    } else {
+      viewer._scrollIntoView({ pageDiv, pageNumber });
+    }
+  }
 }
