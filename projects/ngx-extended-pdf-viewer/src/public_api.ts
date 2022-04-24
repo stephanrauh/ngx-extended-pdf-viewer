@@ -2,7 +2,6 @@
  * Public API Surface of ngx-extended-pdf-viewer
  */
 
-export * from './lib/document-properties/pdf-document-properties-overlay/pdf-document-properties-overlay.component';
 export * from './lib/events/file-input-changed';
 export * from './lib/events/find-result';
 export * from './lib/events/invalid-pdf-exception';
@@ -33,6 +32,11 @@ export * from './lib/options/pdf-viewer';
 export * from './lib/options/pdf-viewer-app-config';
 export * from './lib/options/pdf-viewer-application';
 export * from './lib/options/verbosity-level';
+export * from './lib/pdf-dialog/pdf-document-properties-dialog/pdf-document-properties-dialog.component';
+export * from './lib/pdf-dialog/pdf-error-message/pdf-error-message.component';
+// export * from './lib/pdf-dialog/pdf-error-message/pdf-error-message.component';
+export * from './lib/pdf-dialog/pdf-password-dialog/pdf-password-dialog.component';
+export * from './lib/pdf-dialog/pdf-prepare-printing-dialog/pdf-prepare-printing-dialog.component';
 export * from './lib/pdf-document-properties-extractor';
 export * from './lib/pdf-notification-service';
 export * from './lib/secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';

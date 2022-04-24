@@ -2,10 +2,13 @@ import { CommonModule } from '@angular/common';
 // tslint:disable:max-line-length
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { PdfDocumentPropertiesOverlayComponent } from './document-properties/pdf-document-properties-overlay/pdf-document-properties-overlay.component';
 import { NgxExtendedPdfViewerCommonModule } from './ngx-extended-pdf-viewer-common.module';
 import { NgxExtendedPdfViewerServerComponent } from './ngx-extended-pdf-viewer-server.component';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer-server.service';
+import { PdfDocumentPropertiesDialogComponent } from './pdf-dialog/pdf-document-properties-dialog/pdf-document-properties-dialog.component';
+import { PdfErrorMessageComponent } from './pdf-dialog/pdf-error-message/pdf-error-message.component';
+import { PdfPasswordDialogComponent } from './pdf-dialog/pdf-password-dialog/pdf-password-dialog.component';
+import { PdfPreparePrintingDialogComponent } from './pdf-dialog/pdf-prepare-printing-dialog/pdf-prepare-printing-dialog.component';
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
 import { PdfSidebarContentComponent } from './sidebar/pdf-sidebar/pdf-sidebar-content/pdf-sidebar-content.component';
 import { PdfSidebarToolbarComponent } from './sidebar/pdf-sidebar/pdf-sidebar-toolbar/pdf-sidebar-toolbar.component';
@@ -70,7 +73,6 @@ import { PdfZoomToolbarComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-too
     PdfSidebarContentComponent,
     PdfSidebarToolbarComponent,
     PdfSecondaryToolbarComponent,
-    PdfDocumentPropertiesOverlayComponent,
     PdfSearchInputFieldComponent,
     PdfFindPreviousComponent,
     PdfFindNextComponent,
@@ -102,6 +104,10 @@ import { PdfZoomToolbarComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-too
     NgxExtendedPdfViewerServerComponent,
     PdfAcroformDefaultThemeComponent,
     PdfAcroformDarkThemeComponent,
+    PdfDocumentPropertiesDialogComponent,
+    PdfPasswordDialogComponent,
+    PdfPreparePrintingDialogComponent,
+    PdfErrorMessageComponent,
   ],
 })
 export class NgxExtendedPdfViewerServerModule {}

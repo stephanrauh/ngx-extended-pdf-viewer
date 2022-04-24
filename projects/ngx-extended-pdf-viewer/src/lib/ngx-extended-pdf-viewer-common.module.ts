@@ -2,8 +2,11 @@
 import { CommonModule, Location } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { PdfDocumentPropertiesOverlayComponent } from './document-properties/pdf-document-properties-overlay/pdf-document-properties-overlay.component';
 import { DynamicCssComponent } from './dynamic-css/dynamic-css.component';
+import { PdfDocumentPropertiesDialogComponent } from './pdf-dialog/pdf-document-properties-dialog/pdf-document-properties-dialog.component';
+import { PdfErrorMessageComponent } from './pdf-dialog/pdf-error-message/pdf-error-message.component';
+import { PdfPasswordDialogComponent } from './pdf-dialog/pdf-password-dialog/pdf-password-dialog.component';
+import { PdfPreparePrintingDialogComponent } from './pdf-dialog/pdf-prepare-printing-dialog/pdf-prepare-printing-dialog.component';
 import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
 import { PDFNotificationService } from './pdf-notification-service';
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
@@ -76,7 +79,6 @@ import { TranslatePipe } from './translate.pipe';
     PdfHandToolComponent,
     PdfSelectToolComponent,
     PdfSecondaryToolbarComponent,
-    PdfDocumentPropertiesOverlayComponent,
     PdfSearchInputFieldComponent,
     PdfFindPreviousComponent,
     PdfFindNextComponent,
@@ -115,6 +117,10 @@ import { TranslatePipe } from './translate.pipe';
     TranslatePipe,
     PdfAcroformDefaultThemeComponent,
     PdfAcroformDarkThemeComponent,
+    PdfDocumentPropertiesDialogComponent,
+    PdfPasswordDialogComponent,
+    PdfPreparePrintingDialogComponent,
+    PdfErrorMessageComponent,
   ],
   providers: [PDFNotificationService, Location],
   exports: [
@@ -132,7 +138,6 @@ import { TranslatePipe } from './translate.pipe';
     PdfSidebarContentComponent,
     PdfSidebarToolbarComponent,
     PdfSecondaryToolbarComponent,
-    PdfDocumentPropertiesOverlayComponent,
     PdfSearchInputFieldComponent,
     PdfFindPreviousComponent,
     PdfFindNextComponent,
@@ -171,6 +176,10 @@ import { TranslatePipe } from './translate.pipe';
     PdfDummyComponentsComponent,
     PdfAcroformDefaultThemeComponent,
     PdfAcroformDarkThemeComponent,
+    PdfDocumentPropertiesDialogComponent,
+    PdfPasswordDialogComponent,
+    PdfPreparePrintingDialogComponent,
+    PdfErrorMessageComponent,
   ],
 })
 export class NgxExtendedPdfViewerCommonModule {}

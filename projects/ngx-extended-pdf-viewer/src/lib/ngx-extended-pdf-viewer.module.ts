@@ -2,12 +2,15 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { PdfDocumentPropertiesOverlayComponent } from './document-properties/pdf-document-properties-overlay/pdf-document-properties-overlay.component';
 import { NgxExtendedPdfViewerCommonModule } from './ngx-extended-pdf-viewer-common.module';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 import { NgxConsole } from './options/ngx-console';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
+import { PdfDocumentPropertiesDialogComponent } from './pdf-dialog/pdf-document-properties-dialog/pdf-document-properties-dialog.component';
+import { PdfErrorMessageComponent } from './pdf-dialog/pdf-error-message/pdf-error-message.component';
+import { PdfPasswordDialogComponent } from './pdf-dialog/pdf-password-dialog/pdf-password-dialog.component';
+import { PdfPreparePrintingDialogComponent } from './pdf-dialog/pdf-prepare-printing-dialog/pdf-prepare-printing-dialog.component';
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
 import { PdfSidebarContentComponent } from './sidebar/pdf-sidebar/pdf-sidebar-content/pdf-sidebar-content.component';
 import { PdfSidebarToolbarComponent } from './sidebar/pdf-sidebar/pdf-sidebar-toolbar/pdf-sidebar-toolbar.component';
@@ -204,7 +207,6 @@ if (typeof window !== 'undefined') {
     PdfSidebarContentComponent,
     PdfSidebarToolbarComponent,
     PdfSecondaryToolbarComponent,
-    PdfDocumentPropertiesOverlayComponent,
     PdfSearchInputFieldComponent,
     PdfFindPreviousComponent,
     PdfFindNextComponent,
@@ -238,6 +240,10 @@ if (typeof window !== 'undefined') {
     NgxExtendedPdfViewerComponent,
     PdfAcroformDefaultThemeComponent,
     PdfAcroformDarkThemeComponent,
+    PdfDocumentPropertiesDialogComponent,
+    PdfPasswordDialogComponent,
+    PdfPreparePrintingDialogComponent,
+    PdfErrorMessageComponent,
   ],
 })
 export class NgxExtendedPdfViewerModule {}
