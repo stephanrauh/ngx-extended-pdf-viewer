@@ -5,127 +5,131 @@
 <pdf-acroform-default-theme *ngIf="formTheme === 'light'"></pdf-acroform-default-theme>
 
 <pdf-dynamic-css [zoom]="mobileFriendlyZoomScale" [width]="toolbarWidthInPixels"></pdf-dynamic-css>
-<div class="zoom" [style.height]="minHeight ? minHeight : height" #root>
-  <div class="html">
-    <div class="loadingInProgress body" [style.backgroundColor]="backgroundColor">
-      <div id="outerContainer" (window:resize)="onResize()">
-        <div class="free-floating-bar" *ngIf="showFreeFloatingBar">
-          <ng-content *ngTemplateOutlet="customFreeFloatingBar ? customFreeFloatingBar : defaultFreeFloatingBar"></ng-content>
-        </div>
-        <pdf-sidebar
-          #pdfsidebar
-          [sidebarPositionTop]="sidebarPositionTop"
-          [sidebarVisible]="sidebarVisible || false"
-          [showSidebarButton]="showSidebarButton"
-          [customSidebar]="customSidebar"
-          [customThumbnail]="customThumbnail"
-          (thumbnailDrawn)="thumbnailDrawn.emit($event)"
-          [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
-        >
-        </pdf-sidebar>
-        <div id="mainContainer">
-          <pdf-dummy-components></pdf-dummy-components>
+<ng-content *ngTemplateOutlet="customPdfViewer ? customPdfViewer : defaultPdfViewer"></ng-content>
 
-          <pdf-toolbar
-            [customToolbar]="customToolbar"
-            [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
-            [primaryMenuVisible]="primaryMenuVisible"
-            [showBookmarkButton]="showBookmarkButton"
-            [showDownloadButton]="showDownloadButton"
-            [showFindButton]="showFindButton"
-            [showHandToolButton]="showHandToolButton"
-            [showOpenFileButton]="showOpenFileButton"
-            [showPrintButton]="showPrintButton && enablePrint"
-            [showPagingButtons]="showPagingButtons"
-            [showPresentationModeButton]="showPresentationModeButton"
-            [showRotateButton]="showRotateButton"
-            [showSecondaryToolbarButton]="showSecondaryToolbarButton && !hideKebabMenuForSecondaryToolbar"
-            [showSidebarButton]="showSidebarButton"
-            [showZoomButtons]="showZoomButtons"
-            [textLayer]="textLayer"
-            [toolbarMarginTop]="toolbarMarginTop"
-            [toolbarWidth]="toolbarWidth"
-            (onToolbarLoaded)="(onToolbarLoaded)"
-            [zoomLevels]="zoomLevels"
-          ></pdf-toolbar>
-
-          <pdf-secondary-toolbar
-            #pdfSecondaryToolbarComponent
-            [customSecondaryToolbar]="customSecondaryToolbar"
-            [secondaryToolbarTop]="secondaryToolbarTop"
-            [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
-            [showPresentationModeButton]="showPresentationModeButton"
-            [showOpenFileButton]="showOpenFileButton"
-            [showPrintButton]="showPrintButton && enablePrint"
-            [showDownloadButton]="showDownloadButton"
-            [showBookmarkButton]="showBookmarkButton"
-            [showPagingButtons]="showPagingButtons"
-            [showRotateButton]="showRotateButton"
-            [showHandToolButton]="showHandToolButton"
-            [showScrollingButton]="showScrollingButton"
-            [showSpreadButton]="showSpreadButton"
-            [showPropertiesButton]="showPropertiesButton"
-            (spreadChange)="onSpreadChange($event)"
-            (secondaryMenuIsEmpty)="onSecondaryMenuIsEmpty($event)"
-          >
-          </pdf-secondary-toolbar>
-
-          <pdf-findbar
-            [findbarLeft]="findbarLeft"
-            [findbarTop]="findbarTop"
-            [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
-            [showFindButton]="showFindButton || false"
-            [customFindbarInputArea]="customFindbarInputArea"
-            [customFindbarButtons]="customFindbarButtons"
-            [showFindCurrentPageOnly]="showFindCurrentPageOnly"
-            [showFindEntirePhrase]="showFindEntirePhrase"
-            [showFindEntireWord]="showFindEntireWord"
-            [showFindFuzzySearch]="showFindFuzzySearch"
-            [showFindHighlightAll]="showFindHighlightAll"
-            [showFindIgnoreAccents]="showFindIgnoreAccents"
-            [showFindMatchCase]="showFindMatchCase"
-            [showFindMessages]="showFindMessages"
-            [showFindPageRange]="showFindPageRange"
-            [showFindResultsCount]="showFindResultsCount"
-          >
-          </pdf-findbar>
-
-          <pdf-context-menu></pdf-context-menu>
-
-          <div id="viewerContainer" [style.top]="viewerPositionTop" [style.backgroundColor]="backgroundColor" tabindex="0">
-            <div class="unverified-signature-warning" *ngIf="hasSignature && showUnverifiedSignatures">
-              {{
-                'unverified_signature_warning'
-                  | translate
-                    : "This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid."
-                  | async
-              }}
-            </div>
-            <div class="modified-background-warning" *ngIf="pdfBackground">
-              {{
-                'modified_background_warning'
-                  | translate: 'This PDF is rendered with a custom background. It does not look the way its author intended it to look.'
-                  | async
-              }}
-            </div>
-            <div id="viewer" class="pdfViewer" (dblclick)="zoomToPageWidth($event)"></div>
+<ng-template #defaultPdfViewer>
+  <div class="zoom" [style.height]="minHeight ? minHeight : height" #root>
+    <div class="html">
+      <div class="loadingInProgress body" [style.backgroundColor]="backgroundColor">
+        <div id="outerContainer" (window:resize)="onResize()">
+          <div class="free-floating-bar" *ngIf="showFreeFloatingBar">
+            <ng-content *ngTemplateOutlet="customFreeFloatingBar ? customFreeFloatingBar : defaultFreeFloatingBar"></ng-content>
           </div>
-          <pdf-error-message></pdf-error-message>
-        </div>
-        <!-- mainContainer -->
+          <pdf-sidebar
+            #pdfsidebar
+            [sidebarPositionTop]="sidebarPositionTop"
+            [sidebarVisible]="sidebarVisible || false"
+            [showSidebarButton]="showSidebarButton"
+            [customSidebar]="customSidebar"
+            [customThumbnail]="customThumbnail"
+            (thumbnailDrawn)="thumbnailDrawn.emit($event)"
+            [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+          >
+          </pdf-sidebar>
+          <div id="mainContainer">
+            <pdf-dummy-components></pdf-dummy-components>
 
-        <div id="dialogContainer">
-          <pdf-password-dialog></pdf-password-dialog>
-          <pdf-document-properties-dialog></pdf-document-properties-dialog>
-          <pdf-prepare-printing-dialog></pdf-prepare-printing-dialog>
+            <pdf-toolbar
+              [customToolbar]="customToolbar"
+              [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+              [primaryMenuVisible]="primaryMenuVisible"
+              [showBookmarkButton]="showBookmarkButton"
+              [showDownloadButton]="showDownloadButton"
+              [showFindButton]="showFindButton"
+              [showHandToolButton]="showHandToolButton"
+              [showOpenFileButton]="showOpenFileButton"
+              [showPrintButton]="showPrintButton && enablePrint"
+              [showPagingButtons]="showPagingButtons"
+              [showPresentationModeButton]="showPresentationModeButton"
+              [showRotateButton]="showRotateButton"
+              [showSecondaryToolbarButton]="showSecondaryToolbarButton && !hideKebabMenuForSecondaryToolbar"
+              [showSidebarButton]="showSidebarButton"
+              [showZoomButtons]="showZoomButtons"
+              [textLayer]="textLayer"
+              [toolbarMarginTop]="toolbarMarginTop"
+              [toolbarWidth]="toolbarWidth"
+              (onToolbarLoaded)="(onToolbarLoaded)"
+              [zoomLevels]="zoomLevels"
+            ></pdf-toolbar>
+
+            <pdf-secondary-toolbar
+              #pdfSecondaryToolbarComponent
+              [customSecondaryToolbar]="customSecondaryToolbar"
+              [secondaryToolbarTop]="secondaryToolbarTop"
+              [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+              [showPresentationModeButton]="showPresentationModeButton"
+              [showOpenFileButton]="showOpenFileButton"
+              [showPrintButton]="showPrintButton && enablePrint"
+              [showDownloadButton]="showDownloadButton"
+              [showBookmarkButton]="showBookmarkButton"
+              [showPagingButtons]="showPagingButtons"
+              [showRotateButton]="showRotateButton"
+              [showHandToolButton]="showHandToolButton"
+              [showScrollingButton]="showScrollingButton"
+              [showSpreadButton]="showSpreadButton"
+              [showPropertiesButton]="showPropertiesButton"
+              (spreadChange)="onSpreadChange($event)"
+              (secondaryMenuIsEmpty)="onSecondaryMenuIsEmpty($event)"
+            >
+            </pdf-secondary-toolbar>
+
+            <pdf-findbar
+              [findbarLeft]="findbarLeft"
+              [findbarTop]="findbarTop"
+              [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+              [showFindButton]="showFindButton || false"
+              [customFindbarInputArea]="customFindbarInputArea"
+              [customFindbarButtons]="customFindbarButtons"
+              [showFindCurrentPageOnly]="showFindCurrentPageOnly"
+              [showFindEntirePhrase]="showFindEntirePhrase"
+              [showFindEntireWord]="showFindEntireWord"
+              [showFindFuzzySearch]="showFindFuzzySearch"
+              [showFindHighlightAll]="showFindHighlightAll"
+              [showFindIgnoreAccents]="showFindIgnoreAccents"
+              [showFindMatchCase]="showFindMatchCase"
+              [showFindMessages]="showFindMessages"
+              [showFindPageRange]="showFindPageRange"
+              [showFindResultsCount]="showFindResultsCount"
+            >
+            </pdf-findbar>
+
+            <pdf-context-menu></pdf-context-menu>
+
+            <div id="viewerContainer" [style.top]="viewerPositionTop" [style.backgroundColor]="backgroundColor" tabindex="0">
+              <div class="unverified-signature-warning" *ngIf="hasSignature && showUnverifiedSignatures">
+                {{
+                  'unverified_signature_warning'
+                    | translate
+                      : "This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid."
+                    | async
+                }}
+              </div>
+              <div class="modified-background-warning" *ngIf="pdfBackground">
+                {{
+                  'modified_background_warning'
+                    | translate: 'This PDF is rendered with a custom background. It does not look the way its author intended it to look.'
+                    | async
+                }}
+              </div>
+              <div id="viewer" class="pdfViewer" (dblclick)="zoomToPageWidth($event)"></div>
+            </div>
+            <pdf-error-message></pdf-error-message>
+          </div>
+          <!-- mainContainer -->
+
+          <div id="dialogContainer">
+            <pdf-password-dialog></pdf-password-dialog>
+            <pdf-document-properties-dialog></pdf-document-properties-dialog>
+            <pdf-prepare-printing-dialog></pdf-prepare-printing-dialog>
+          </div>
+          <!-- dialogContainer -->
         </div>
-        <!-- dialogContainer -->
+        <!-- outerContainer -->
+        <input *ngIf="!pdfJsVersion.startsWith('2.13')" type="file" id="fileInput" class="hidden" />
+        <div id="printContainer"></div>
       </div>
-      <!-- outerContainer -->
-      <input *ngIf="!pdfJsVersion.startsWith('2.13')" type="file" id="fileInput" class="hidden" />
-      <div id="printContainer"></div>
     </div>
   </div>
-</div>
+</ng-template>
 
 <ng-template #defaultFreeFloatingBar> </ng-template>

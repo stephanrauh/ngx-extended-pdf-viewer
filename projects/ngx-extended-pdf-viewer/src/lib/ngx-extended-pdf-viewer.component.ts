@@ -105,6 +105,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public customFindbarButtons: TemplateRef<any> | undefined;
 
   @Input()
+  public customPdfViewer: TemplateRef<any> | undefined;
+
+  @Input()
   public customSecondaryToolbar: TemplateRef<any> | undefined;
 
   @Input()
