@@ -362,3 +362,4 @@
 - 13.0.0-alpha.14 identical to alpha.13, but with the correct JS files
 - 13.0.0-alpha.15 #1319 `NgxExtendedPdfViewerService.getFormData(true)` now also reads the user input; `NgxExtendedPdfViewerService.getFormData(false)` uses the old logic, which only read the values stored in the PDF file
 - 13.0.0-alpha.16 #1301 add an API to allow to scroll within a page
+- 13.0.0-alpha.17 #899 add `[customPdfViewer]` to allow developers to modify the entire UI
