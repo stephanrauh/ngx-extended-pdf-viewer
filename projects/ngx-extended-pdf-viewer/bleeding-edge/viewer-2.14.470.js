@@ -1,7 +1,7 @@
 window.ngxZone.runOutsideAngular(() => {
 /**
  * @licstart The following is the entire license notice for the
- * Javascript code in this page
+ * JavaScript code in this page
  *
  * Copyright 2022 Mozilla Foundation
  *
@@ -18,7 +18,7 @@ window.ngxZone.runOutsideAngular(() => {
  * limitations under the License.
  *
  * @licend The above is the entire license notice for the
- * Javascript code in this page
+ * JavaScript code in this page
  */
 
 /******/ (() => { // webpackBootstrap
@@ -497,6 +497,7 @@ const PDFViewerApplication = {
   _docStats: null,
   _wheelUnusedTicks: 0,
   _idleCallbacks: new Set(),
+  _PDFBug: null,
 
   async initialize(appConfig) {
     this.preferences = this.externalServices.createPreferences();
@@ -554,11 +555,18 @@ const PDFViewerApplication = {
       return;
     }
 
-    const params = (0, _ui_utils.parseQueryString)(hash),
-          waitOn = [];
+    const {
+      mainContainer,
+      viewerContainer
+    } = this.appConfig,
+          params = (0, _ui_utils.parseQueryString)(hash);
 
     if (params.get("disableworker") === "true") {
-      waitOn.push(loadFakeWorker());
+      try {
+        await loadFakeWorker();
+      } catch (ex) {
+        console.error(`_parseHashParameters: "${ex.message}".`);
+      }
     }
 
     if (params.has("disablerange")) {
@@ -595,8 +603,16 @@ const PDFViewerApplication = {
         case "visible":
         case "shadow":
         case "hover":
-          const viewer = this.appConfig.viewerContainer;
-          viewer.classList.add(`textLayer-${params.get("textlayer")}`);
+          viewerContainer.classList.add(`textLayer-${params.get("textlayer")}`);
+
+          try {
+            await loadPDFBug(this);
+
+            this._PDFBug.loadCSS();
+          } catch (ex) {
+            console.error(`_parseHashParameters: "${ex.message}".`);
+          }
+
           break;
       }
     }
@@ -607,21 +623,20 @@ const PDFViewerApplication = {
       _app_options.AppOptions.set("fontExtraProperties", true);
 
       const enabled = params.get("pdfbug").split(",");
-      waitOn.push(initPDFBug(enabled));
+
+      try {
+        await loadPDFBug(this);
+
+        this._PDFBug.init({
+          OPS: _pdfjsLib.OPS
+        }, mainContainer, enabled);
+      } catch (ex) {
+        console.error(`_parseHashParameters: "${ex.message}".`);
+      }
     }
 
     if (params.has("locale")) {
       _app_options.AppOptions.set("locale", params.get("locale"));
-    }
-
-    if (waitOn.length === 0) {
-      return;
-    }
-
-    try {
-      await Promise.all(waitOn);
-    } catch (reason) {
-      Window['ngxConsole'].error(`_parseHashParameters: "${reason.message}".`);
     }
   },
 
@@ -989,6 +1004,7 @@ const PDFViewerApplication = {
     this.findBar?.reset();
     this.toolbar.reset();
     this.secondaryToolbar.reset();
+    this._PDFBug?.cleanup();
     await Promise.all(promises);
   },
 
@@ -2211,18 +2227,14 @@ async function loadFakeWorker() {
   await (0, _pdfjsLib.loadScript)(_pdfjsLib.PDFWorker.workerSrc);
 }
 
-async function initPDFBug(enabledTabs) {
+async function loadPDFBug(self) {
   const {
-    debuggerScriptPath,
-    mainContainer
-  } = PDFViewerApplication.appConfig;
+    debuggerScriptPath
+  } = self.appConfig;
   const {
     PDFBug
   } = await import(debuggerScriptPath);
-  PDFBug.init({
-    OPS: _pdfjsLib.OPS
-  }, mainContainer, enabledTabs);
-  PDFViewerApplication._PDFBug = PDFBug;
+  self._PDFBug = PDFBug;
 }
 
 function reportPageStatsPDFBug({
@@ -9905,9 +9917,9 @@ class PDFThumbnailViewer {
   }
 
   cleanup() {
-    for (let i = 0, ii = this._thumbnails.length; i < ii; i++) {
-      if (this._thumbnails[i] && this._thumbnails[i].renderingState !== _ui_utils.RenderingStates.FINISHED) {
-        this._thumbnails[i].reset();
+    for (const thumbnail of this._thumbnails) {
+      if (thumbnail.renderingState !== _ui_utils.RenderingStates.FINISHED) {
+        thumbnail.reset();
       }
     }
 
@@ -9991,10 +10003,8 @@ class PDFThumbnailViewer {
   }
 
   _cancelRendering() {
-    for (let i = 0, ii = this._thumbnails.length; i < ii; i++) {
-      if (this._thumbnails[i]) {
-        this._thumbnails[i].cancelRendering();
-      }
+    for (const thumbnail of this._thumbnails) {
+      thumbnail.cancelRendering();
     }
   }
 
@@ -10783,7 +10793,7 @@ class BaseViewer {
   _setCurrentPageNumber(val, resetCurrentPageView = false) {
     if (this._currentPageNumber === val) {
       if (resetCurrentPageView) {
-        this._resetCurrentPageView();
+        this.#resetCurrentPageView();
       }
 
       return true;
@@ -10828,7 +10838,7 @@ class BaseViewer {
     });
 
     if (resetCurrentPageView) {
-      this._resetCurrentPageView();
+      this.#resetCurrentPageView();
     }
 
     return true;
@@ -11402,7 +11412,8 @@ class BaseViewer {
         pageIndexSet.add(pageNumber - 1);
       }
 
-      let spread = null;
+      const spread = document.createElement("div");
+      spread.className = "spread";
 
       for (const i of pageIndexSet) {
         const pageView = this._pages[i];
@@ -11411,18 +11422,11 @@ class BaseViewer {
           continue;
         }
 
-        if (spread === null) {
-          spread = document.createElement("div");
-          spread.className = "spread";
-          viewer.appendChild(spread);
-        } else if (i % 2 === parity) {
-          spread = spread.cloneNode(false);
-          viewer.appendChild(spread);
-        }
-
         spread.appendChild(pageView.div);
         state.pages.push(pageView);
       }
+
+      viewer.appendChild(spread);
     }
 
     state.scrollDown = pageNumber >= state.previousPageNumber;
@@ -11439,13 +11443,11 @@ class BaseViewer {
 
   _scrollIntoView({
     pageDiv,
-    pageSpot = null,
-    pageNumber = null
+    pageNumber,
+    pageSpot = null
   }) {
     if (this._scrollMode === _ui_utils.ScrollMode.PAGE) {
-      if (pageNumber) {
-        this._setCurrentPageNumber(pageNumber);
-      }
+      this._setCurrentPageNumber(pageNumber);
 
       this.#ensurePageViewVisible();
       this.update();
@@ -11611,15 +11613,18 @@ class BaseViewer {
     }
   }
 
-  _resetCurrentPageView() {
+  #resetCurrentPageView() {
+    const pageNumber = this._currentPageNumber;
+
     if (this.isInPresentationMode) {
       this._setScale(this._currentScaleValue, true);
     }
 
-    const pageView = this._pages[this._currentPageNumber - 1];
+    const pageView = this._pages[pageNumber - 1];
 
     this._scrollIntoView({
-      pageDiv: pageView.div
+      pageDiv: pageView.div,
+      pageNumber
     });
   }
 
@@ -11816,29 +11821,22 @@ class BaseViewer {
     const newCacheSize = Math.max(bufferSize, 2 * numVisiblePages + 1);
     this.#buffer.resize(newCacheSize, visible.ids);
     this.renderingQueue.renderHighestPriority(visible);
+    const isSimpleLayout = this._spreadMode === _ui_utils.SpreadMode.NONE && (this._scrollMode === _ui_utils.ScrollMode.PAGE || this._scrollMode === _ui_utils.ScrollMode.VERTICAL);
+    const currentId = this._currentPageNumber;
+    let stillFullyVisible = false;
 
-    if (!this.isInPresentationMode) {
-      const isSimpleLayout = this._spreadMode === _ui_utils.SpreadMode.NONE && (this._scrollMode === _ui_utils.ScrollMode.PAGE || this._scrollMode === _ui_utils.ScrollMode.VERTICAL);
-      let currentId = this._currentPageNumber;
-      let stillFullyVisible = false;
-
-      for (const page of visiblePages) {
-        if (page.percent < 100) {
-          break;
-        }
-
-        if (page.id === currentId && isSimpleLayout) {
-          stillFullyVisible = true;
-          break;
-        }
+    for (const page of visiblePages) {
+      if (page.percent < 100) {
+        break;
       }
 
-      if (!stillFullyVisible) {
-        currentId = visiblePages[0].id;
+      if (page.id === currentId && isSimpleLayout) {
+        stillFullyVisible = true;
+        break;
       }
-
-      this._setCurrentPageNumber(currentId);
     }
+
+    this._setCurrentPageNumber(stillFullyVisible ? currentId : visiblePages[0].id);
 
     this._updateLocation(visible.first);
 
@@ -11918,18 +11916,16 @@ class BaseViewer {
   }
 
   cleanup() {
-    for (let i = 0, ii = this._pages.length; i < ii; i++) {
-      if (this._pages[i] && this._pages[i].renderingState !== _ui_utils.RenderingStates.FINISHED) {
-        this._pages[i].reset();
+    for (const pageView of this._pages) {
+      if (pageView.renderingState !== _ui_utils.RenderingStates.FINISHED) {
+        pageView.reset();
       }
     }
   }
 
   _cancelRendering() {
-    for (let i = 0, ii = this._pages.length; i < ii; i++) {
-      if (this._pages[i]) {
-        this._pages[i].cancelRendering();
-      }
+    for (const pageView of this._pages) {
+      pageView.cancelRendering();
     }
   }
 
@@ -12224,8 +12220,8 @@ class BaseViewer {
       viewer.textContent = "";
 
       if (this._spreadMode === _ui_utils.SpreadMode.NONE) {
-        for (let i = 0, ii = pages.length; i < ii; ++i) {
-          viewer.appendChild(pages[i].div);
+        for (const pageView of this._pages) {
+          viewer.appendChild(pageView.div);
         }
       } else {
         const parity = this._spreadMode - 1;
@@ -17201,6 +17197,60 @@ const hexNumbers = [...Array(256).keys()].map(n => n.toString(16).padStart(2, "0
 class Util {
   static makeHexColor(r, g, b) {
     return `#${hexNumbers[r]}${hexNumbers[g]}${hexNumbers[b]}`;
+  }
+
+  static scaleMinMax(transform, minMax) {
+    let temp;
+
+    if (transform[0]) {
+      if (transform[0] < 0) {
+        temp = minMax[0];
+        minMax[0] = minMax[1];
+        minMax[1] = temp;
+      }
+
+      minMax[0] *= transform[0];
+      minMax[1] *= transform[0];
+
+      if (transform[3] < 0) {
+        temp = minMax[2];
+        minMax[2] = minMax[3];
+        minMax[3] = temp;
+      }
+
+      minMax[2] *= transform[3];
+      minMax[3] *= transform[3];
+    } else {
+      temp = minMax[0];
+      minMax[0] = minMax[2];
+      minMax[2] = temp;
+      temp = minMax[1];
+      minMax[1] = minMax[3];
+      minMax[3] = temp;
+
+      if (transform[1] < 0) {
+        temp = minMax[2];
+        minMax[2] = minMax[3];
+        minMax[3] = temp;
+      }
+
+      minMax[2] *= transform[1];
+      minMax[3] *= transform[1];
+
+      if (transform[2] < 0) {
+        temp = minMax[0];
+        minMax[0] = minMax[1];
+        minMax[1] = temp;
+      }
+
+      minMax[0] *= transform[2];
+      minMax[1] *= transform[2];
+    }
+
+    minMax[0] += transform[4];
+    minMax[1] += transform[4];
+    minMax[2] += transform[5];
+    minMax[3] += transform[5];
   }
 
   static transform(m1, m2) {

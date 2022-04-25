@@ -1,7 +1,7 @@
 window.ngxZone.runOutsideAngular(() => {
 /**
  * @licstart The following is the entire license notice for the
- * Javascript code in this page
+ * JavaScript code in this page
  *
  * Copyright 2022 Mozilla Foundation
  *
@@ -18,7 +18,7 @@ window.ngxZone.runOutsideAngular(() => {
  * limitations under the License.
  *
  * @licend The above is the entire license notice for the
- * Javascript code in this page
+ * JavaScript code in this page
  */
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -742,6 +742,60 @@ const hexNumbers = [...Array(256).keys()].map(n => n.toString(16).padStart(2, "0
 class Util {
   static makeHexColor(r, g, b) {
     return `#${hexNumbers[r]}${hexNumbers[g]}${hexNumbers[b]}`;
+  }
+
+  static scaleMinMax(transform, minMax) {
+    let temp;
+
+    if (transform[0]) {
+      if (transform[0] < 0) {
+        temp = minMax[0];
+        minMax[0] = minMax[1];
+        minMax[1] = temp;
+      }
+
+      minMax[0] *= transform[0];
+      minMax[1] *= transform[0];
+
+      if (transform[3] < 0) {
+        temp = minMax[2];
+        minMax[2] = minMax[3];
+        minMax[3] = temp;
+      }
+
+      minMax[2] *= transform[3];
+      minMax[3] *= transform[3];
+    } else {
+      temp = minMax[0];
+      minMax[0] = minMax[2];
+      minMax[2] = temp;
+      temp = minMax[1];
+      minMax[1] = minMax[3];
+      minMax[3] = temp;
+
+      if (transform[1] < 0) {
+        temp = minMax[2];
+        minMax[2] = minMax[3];
+        minMax[3] = temp;
+      }
+
+      minMax[2] *= transform[1];
+      minMax[3] *= transform[1];
+
+      if (transform[2] < 0) {
+        temp = minMax[0];
+        minMax[0] = minMax[1];
+        minMax[1] = temp;
+      }
+
+      minMax[0] *= transform[2];
+      minMax[1] *= transform[2];
+    }
+
+    minMax[0] += transform[4];
+    minMax[1] += transform[4];
+    minMax[2] += transform[5];
+    minMax[3] += transform[5];
   }
 
   static transform(m1, m2) {
@@ -5072,6 +5126,10 @@ class CachedCanvases {
     return canvasEntry;
   }
 
+  delete(id) {
+    delete this.cache[id];
+  }
+
   clear() {
     for (const id in this.cache) {
       const canvasEntry = this.cache[id];
@@ -5303,11 +5361,38 @@ class CanvasExtraState {
     this.maxY = Math.max(this.maxY, y);
   }
 
-  updateCurvePathMinMax(transform, x0, y0, x1, y1, x2, y2, x3, y3) {
+  updateRectMinMax(transform, rect) {
+    const p1 = _util.Util.applyTransform(rect, transform);
+
+    const p2 = _util.Util.applyTransform(rect.slice(2), transform);
+
+    this.minX = Math.min(this.minX, p1[0], p2[0]);
+    this.minY = Math.min(this.minY, p1[1], p2[1]);
+    this.maxX = Math.max(this.maxX, p1[0], p2[0]);
+    this.maxY = Math.max(this.maxY, p1[1], p2[1]);
+  }
+
+  updateScalingPathMinMax(transform, minMax) {
+    _util.Util.scaleMinMax(transform, minMax);
+
+    this.minX = Math.min(this.minX, minMax[0]);
+    this.maxX = Math.max(this.maxX, minMax[1]);
+    this.minY = Math.min(this.minY, minMax[2]);
+    this.maxY = Math.max(this.maxY, minMax[3]);
+  }
+
+  updateCurvePathMinMax(transform, x0, y0, x1, y1, x2, y2, x3, y3, minMax) {
     const box = _util.Util.bezierBoundingBox(x0, y0, x1, y1, x2, y2, x3, y3);
 
-    this.updatePathMinMax(transform, box[0], box[1]);
-    this.updatePathMinMax(transform, box[2], box[3]);
+    if (minMax) {
+      minMax[0] = Math.min(minMax[0], box[0], box[2]);
+      minMax[1] = Math.max(minMax[1], box[0], box[2]);
+      minMax[2] = Math.min(minMax[2], box[1], box[3]);
+      minMax[3] = Math.max(minMax[3], box[1], box[3]);
+      return;
+    }
+
+    this.updateRectMinMax(transform, box);
   }
 
   getPathBoundingBox(pathType = _pattern_helper.PathType.FILL, transform = null) {
@@ -5335,6 +5420,10 @@ class CanvasExtraState {
     const intersect = _util.Util.intersect(this.clipBox, this.getPathBoundingBox());
 
     this.startNewPathAndClipBox(intersect || [0, 0, 0, 0]);
+  }
+
+  isEmptyClip() {
+    return this.minX === Infinity;
   }
 
   startNewPathAndClipBox(box) {
@@ -5749,6 +5838,7 @@ class CanvasGraphics {
 
     this._cachedScaleForStroking = null;
     this._cachedGetSinglePixelWidth = null;
+    this._cachedBitmapsMap = new Map();
   }
 
   getObject(data, fallback = null) {
@@ -5886,6 +5976,18 @@ class CanvasGraphics {
     this.cachedCanvases.clear();
     this.cachedPatterns.clear();
 
+    for (const cache of this._cachedBitmapsMap.values()) {
+      for (const canvas of cache.values()) {
+        if (typeof HTMLCanvasElement !== "undefined" && canvas instanceof HTMLCanvasElement) {
+          canvas.width = canvas.height = 0;
+        }
+      }
+
+      cache.clear();
+    }
+
+    this._cachedBitmapsMap.clear();
+
     if (this.imageLayer) {
       this.imageLayer.endLayout();
     }
@@ -5915,7 +6017,7 @@ class CanvasGraphics {
         heightScale /= paintHeight / newHeight;
       }
 
-      tmpCanvas = this.cachedCanvases.getCanvas(tmpCanvasId, newWidth, newHeight);
+      tmpCanvas = this.cachedCanvases.getCanvas(tmpCanvasId, newWidth, newHeight, false);
       tmpCtx = tmpCanvas.context;
       tmpCtx.clearRect(0, 0, newWidth, newHeight);
       tmpCtx.drawImage(img, 0, 0, paintWidth, paintHeight, 0, 0, newWidth, newHeight);
@@ -5934,16 +6036,48 @@ class CanvasGraphics {
 
   _createMaskCanvas(img) {
     const ctx = this.ctx;
-    const width = img.width,
-          height = img.height;
+    const {
+      width,
+      height
+    } = img;
     const fillColor = this.current.fillColor;
     const isPatternFill = this.current.patternFill;
-    const maskCanvas = this.cachedCanvases.getCanvas("maskCanvas", width, height);
-    const maskCtx = maskCanvas.context;
-    putBinaryImageMask(maskCtx, img);
-    const objToCanvas = ctx.mozCurrentTransform;
+    const currentTransform = ctx.mozCurrentTransform;
+    let cache, cacheKey, scaled, maskCanvas;
 
-    let maskToCanvas = _util.Util.transform(objToCanvas, [1 / width, 0, 0, -1 / height, 0, 0]);
+    if ((img.bitmap || img.data) && img.count > 1) {
+      const mainKey = img.bitmap || img.data.buffer;
+      const withoutTranslation = currentTransform.slice(0, 4);
+      cacheKey = JSON.stringify(isPatternFill ? withoutTranslation : [withoutTranslation, fillColor]);
+      cache = this._cachedBitmapsMap.get(mainKey);
+
+      if (!cache) {
+        cache = new Map();
+
+        this._cachedBitmapsMap.set(mainKey, cache);
+      }
+
+      const cachedImage = cache.get(cacheKey);
+
+      if (cachedImage && !isPatternFill) {
+        const offsetX = Math.round(Math.min(currentTransform[0], currentTransform[2]) + currentTransform[4]);
+        const offsetY = Math.round(Math.min(currentTransform[1], currentTransform[3]) + currentTransform[5]);
+        return {
+          canvas: cachedImage,
+          offsetX,
+          offsetY
+        };
+      }
+
+      scaled = cachedImage;
+    }
+
+    if (!scaled) {
+      maskCanvas = this.cachedCanvases.getCanvas("maskCanvas", width, height, false);
+      putBinaryImageMask(maskCanvas.context, img);
+    }
+
+    let maskToCanvas = _util.Util.transform(currentTransform, [1 / width, 0, 0, -1 / height, 0, 0]);
 
     maskToCanvas = _util.Util.transform(maskToCanvas, [1, 0, 0, 1, 0, -height]);
 
@@ -5962,16 +6096,29 @@ class CanvasGraphics {
     fillCtx.translate(-offsetX, -offsetY);
     fillCtx.transform.apply(fillCtx, maskToCanvas);
 
-    const scaled = this._scaleImage(maskCanvas.canvas, fillCtx.mozCurrentTransformInverse);
+    if (!scaled) {
+      scaled = this._scaleImage(maskCanvas.canvas, fillCtx.mozCurrentTransformInverse);
+      scaled = scaled.img;
+
+      if (cache && isPatternFill) {
+        cache.set(cacheKey, scaled);
+      }
+    }
 
     fillCtx.imageSmoothingEnabled = getImageSmoothingEnabled(fillCtx.mozCurrentTransform, img.interpolate);
-    fillCtx.drawImage(scaled.img, 0, 0, scaled.img.width, scaled.img.height, 0, 0, width, height);
+    fillCtx.drawImage(scaled, 0, 0, scaled.width, scaled.height, 0, 0, width, height);
     fillCtx.globalCompositeOperation = "source-in";
 
     const inverse = _util.Util.transform(fillCtx.mozCurrentTransformInverse, [1, 0, 0, 1, -offsetX, -offsetY]);
 
     fillCtx.fillStyle = isPatternFill ? fillColor.getPattern(ctx, this, inverse, _pattern_helper.PathType.FILL) : fillColor;
     fillCtx.fillRect(0, 0, width, height);
+
+    if (cache && !isPatternFill) {
+      this.cachedCanvases.delete("fillCanvas");
+      cache.set(cacheKey, fillCanvas.canvas);
+    }
+
     return {
       canvas: fillCanvas.canvas,
       offsetX: Math.round(offsetX),
@@ -6185,12 +6332,15 @@ class CanvasGraphics {
     this._cachedGetSinglePixelWidth = null;
   }
 
-  constructPath(ops, args) {
+  constructPath(ops, args, minMax) {
     const ctx = this.ctx;
     const current = this.current;
     let x = current.x,
         y = current.y;
     let startX, startY;
+    const currentTransform = ctx.mozCurrentTransform;
+    const isScalingMatrix = currentTransform[0] === 0 && currentTransform[3] === 0 || currentTransform[1] === 0 && currentTransform[2] === 0;
+    const minMaxForBezier = isScalingMatrix ? minMax.slice(0) : null;
 
     for (let i = 0, j = 0, ii = ops.length; i < ii; i++) {
       switch (ops[i] | 0) {
@@ -6211,8 +6361,10 @@ class CanvasGraphics {
             ctx.lineTo(x, yh);
           }
 
-          current.updatePathMinMax(ctx.mozCurrentTransform, x, y);
-          current.updatePathMinMax(ctx.mozCurrentTransform, xw, yh);
+          if (!isScalingMatrix) {
+            current.updateRectMinMax(currentTransform, [x, y, xw, yh]);
+          }
+
           ctx.closePath();
           break;
 
@@ -6220,14 +6372,22 @@ class CanvasGraphics {
           x = args[j++];
           y = args[j++];
           ctx.moveTo(x, y);
-          current.updatePathMinMax(ctx.mozCurrentTransform, x, y);
+
+          if (!isScalingMatrix) {
+            current.updatePathMinMax(currentTransform, x, y);
+          }
+
           break;
 
         case _util.OPS.lineTo:
           x = args[j++];
           y = args[j++];
           ctx.lineTo(x, y);
-          current.updatePathMinMax(ctx.mozCurrentTransform, x, y);
+
+          if (!isScalingMatrix) {
+            current.updatePathMinMax(currentTransform, x, y);
+          }
+
           break;
 
         case _util.OPS.curveTo:
@@ -6236,7 +6396,7 @@ class CanvasGraphics {
           x = args[j + 4];
           y = args[j + 5];
           ctx.bezierCurveTo(args[j], args[j + 1], args[j + 2], args[j + 3], x, y);
-          current.updateCurvePathMinMax(ctx.mozCurrentTransform, startX, startY, args[j], args[j + 1], args[j + 2], args[j + 3], x, y);
+          current.updateCurvePathMinMax(currentTransform, startX, startY, args[j], args[j + 1], args[j + 2], args[j + 3], x, y, minMaxForBezier);
           j += 6;
           break;
 
@@ -6244,7 +6404,7 @@ class CanvasGraphics {
           startX = x;
           startY = y;
           ctx.bezierCurveTo(x, y, args[j], args[j + 1], args[j + 2], args[j + 3]);
-          current.updateCurvePathMinMax(ctx.mozCurrentTransform, startX, startY, x, y, args[j], args[j + 1], args[j + 2], args[j + 3]);
+          current.updateCurvePathMinMax(currentTransform, startX, startY, x, y, args[j], args[j + 1], args[j + 2], args[j + 3], minMaxForBezier);
           x = args[j + 2];
           y = args[j + 3];
           j += 4;
@@ -6256,7 +6416,7 @@ class CanvasGraphics {
           x = args[j + 2];
           y = args[j + 3];
           ctx.bezierCurveTo(args[j], args[j + 1], x, y, x, y);
-          current.updateCurvePathMinMax(ctx.mozCurrentTransform, startX, startY, args[j], args[j + 1], x, y, x, y);
+          current.updateCurvePathMinMax(currentTransform, startX, startY, args[j], args[j + 1], x, y, x, y, minMaxForBezier);
           j += 4;
           break;
 
@@ -6264,6 +6424,10 @@ class CanvasGraphics {
           ctx.closePath();
           break;
       }
+    }
+
+    if (isScalingMatrix) {
+      current.updateScalingPathMinMax(currentTransform, minMaxForBezier);
     }
 
     current.setCurrentPoint(x, y);
@@ -6575,7 +6739,7 @@ class CanvasGraphics {
   get isFontSubpixelAAEnabled() {
     const {
       context: ctx
-    } = this.cachedCanvases.getCanvas("isFontSubpixelAAEnabled", 10, 10);
+    } = this.cachedCanvases.getCanvas("isFontSubpixelAAEnabled", 10, 10, false);
     ctx.scale(1.5, 1);
     ctx.fillText("I", 0, 10);
     const data = ctx.getImageData(0, 0, 10, 10).data;
@@ -6808,7 +6972,7 @@ class CanvasGraphics {
 
   setCharWidthAndBounds(xWidth, yWidth, llx, lly, urx, ury) {
     this.ctx.rect(llx, lly, urx - llx, ury - lly);
-    this.clip();
+    this.ctx.clip();
     this.endPath();
   }
 
@@ -6945,8 +7109,7 @@ class CanvasGraphics {
       const width = bbox[2] - bbox[0];
       const height = bbox[3] - bbox[1];
       this.ctx.rect(bbox[0], bbox[1], width, height);
-      this.current.updatePathMinMax(this.ctx.mozCurrentTransform, bbox[0], bbox[1]);
-      this.current.updatePathMinMax(this.ctx.mozCurrentTransform, bbox[2], bbox[3]);
+      this.current.updateRectMinMax(this.ctx.mozCurrentTransform, bbox);
       this.clip();
       this.endPath();
     }
@@ -7135,7 +7298,7 @@ class CanvasGraphics {
       } else {
         resetCtxToDefault(this.ctx);
         this.ctx.rect(rect[0], rect[1], width, height);
-        this.clip();
+        this.ctx.clip();
         this.endPath();
       }
     }
@@ -7160,7 +7323,9 @@ class CanvasGraphics {
       return;
     }
 
+    const count = img.count;
     img = this.getObject(img.data, img);
+    img.count = count;
     const ctx = this.ctx;
     const width = img.width,
           height = img.height;
@@ -7233,7 +7398,7 @@ class CanvasGraphics {
       const image = images[i];
       const width = image.width,
             height = image.height;
-      const maskCanvas = this.cachedCanvases.getCanvas("maskCanvas", width, height);
+      const maskCanvas = this.cachedCanvases.getCanvas("maskCanvas", width, height, false);
       const maskCtx = maskCanvas.context;
       maskCtx.save();
       putBinaryImageMask(maskCtx, image);
@@ -7310,7 +7475,7 @@ class CanvasGraphics {
     if (typeof HTMLElement === "function" && imgData instanceof HTMLElement || !imgData.data) {
       imgToPaint = imgData;
     } else {
-      const tmpCanvas = this.cachedCanvases.getCanvas("inlineImage", width, height);
+      const tmpCanvas = this.cachedCanvases.getCanvas("inlineImage", width, height, false);
       const tmpCtx = tmpCanvas.context;
       putBinaryImageData(tmpCtx, imgData, this.current.transferMaps);
       imgToPaint = tmpCanvas.canvas;
@@ -7344,7 +7509,7 @@ class CanvasGraphics {
     const ctx = this.ctx;
     const w = imgData.width;
     const h = imgData.height;
-    const tmpCanvas = this.cachedCanvases.getCanvas("inlineImage", w, h);
+    const tmpCanvas = this.cachedCanvases.getCanvas("inlineImage", w, h, false);
     const tmpCtx = tmpCanvas.context;
     putBinaryImageData(tmpCtx, imgData, this.current.transferMaps);
 
@@ -7415,6 +7580,8 @@ class CanvasGraphics {
   endCompat() {}
 
   consumePath(clipBox) {
+    const isEmpty = this.current.isEmptyClip();
+
     if (this.pendingClip) {
       this.current.updateClipFromPath();
     }
@@ -7426,10 +7593,12 @@ class CanvasGraphics {
     const ctx = this.ctx;
 
     if (this.pendingClip) {
-      if (this.pendingClip === EO_CLIP) {
-        ctx.clip("evenodd");
-      } else {
-        ctx.clip();
+      if (!isEmpty) {
+        if (this.pendingClip === EO_CLIP) {
+          ctx.clip("evenodd");
+        } else {
+          ctx.clip();
+        }
       }
 
       this.pendingClip = null;
@@ -8056,6 +8225,7 @@ class TilingPattern {
     const bboxWidth = x1 - x0;
     const bboxHeight = y1 - y0;
     graphics.ctx.rect(x0, y0, bboxWidth, bboxHeight);
+    graphics.current.updateRectMinMax(graphics.ctx.mozCurrentTransform, [x0, y0, x1, y1]);
     graphics.clip();
     graphics.endPath();
   }

@@ -451,6 +451,7 @@ export namespace UNSUPPORTED_FEATURES {
 export function utf8StringToString(str: any): string;
 export class Util {
     static makeHexColor(r: any, g: any, b: any): string;
+    static scaleMinMax(transform: any, minMax: any): void;
     static transform(m1: any, m2: any): any[];
     static applyTransform(p: any, m: any): any[];
     static applyInverseTransform(p: any, m: any): number[];
