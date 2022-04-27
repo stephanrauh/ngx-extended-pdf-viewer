@@ -364,3 +364,4 @@
 - 13.0.0-alpha.16 #1301 add an API to allow to scroll within a page
 - 13.0.0-alpha.17 #899 add `[customPdfViewer]` to allow developers to modify the entire UI
 - 13.0.0-alpha.18 fixed the README.md; updated the bleeding edge of pdf.js
+- 13.0.0 updated the bleeding edge of pdf.js

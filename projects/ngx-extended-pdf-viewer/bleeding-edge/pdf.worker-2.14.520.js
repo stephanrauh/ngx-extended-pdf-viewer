@@ -134,7 +134,7 @@ class WorkerMessageHandler {
     const WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.14.470';
+    const workerVersion = '2.14.520';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -54255,7 +54255,7 @@ class Catalog {
         const dest = fetchDestination(value);
 
         if (dest) {
-          dests[key] = dest;
+          dests[(0, _util.stringToPDFString)(key)] = dest;
         }
       }
     } else if (obj instanceof _primitives.Dict) {
@@ -54682,7 +54682,7 @@ class Catalog {
           xfaImages = new _primitives.Dict(this.xref);
         }
 
-        xfaImages.set(key, value);
+        xfaImages.set((0, _util.stringToPDFString)(key), value);
       }
     }
 
@@ -54722,7 +54722,7 @@ class Catalog {
       const nameTree = new _name_number_tree.NameTree(obj.getRaw("JavaScript"), this.xref);
 
       for (const [key, value] of nameTree.getAll()) {
-        appendIfJavaScriptDict(key, value);
+        appendIfJavaScriptDict((0, _util.stringToPDFString)(key), value);
       }
     }
 
@@ -55373,9 +55373,11 @@ class NameOrNumberTree {
       if (obj.has("Kids")) {
         const kids = obj.get("Kids");
 
-        for (let i = 0, ii = kids.length; i < ii; i++) {
-          const kid = kids[i];
+        if (!Array.isArray(kids)) {
+          continue;
+        }
 
+        for (const kid of kids) {
           if (processed.has(kid)) {
             throw new _util.FormatError(`Duplicate entry in "${this._type}" tree.`);
           }
@@ -55436,7 +55438,7 @@ class NameOrNumberTree {
         } else if (key > xref.fetchIfRef(limits[1])) {
           l = m + 1;
         } else {
-          kidsOrEntries = xref.fetchIfRef(kids[m]);
+          kidsOrEntries = kid;
           break;
         }
       }
@@ -74396,8 +74398,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.14.470';
-const pdfjsBuild = '3e0a23d71';
+const pdfjsVersion = '2.14.520';
+const pdfjsBuild = 'c8901dbed';
 })();
 
 /******/ 	return __webpack_exports__;

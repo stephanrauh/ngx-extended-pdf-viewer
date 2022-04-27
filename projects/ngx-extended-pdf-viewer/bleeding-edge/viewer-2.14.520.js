@@ -10643,7 +10643,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.14.470';
+    const viewerVersion = '2.14.520';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -18214,10 +18214,6 @@ class SecondaryToolbar {
       eventName: "presentationmode",
       close: true
     }, {
-      element: options.openFileButton,
-      eventName: "openfile",
-      close: true
-    }, {
       element: options.printButton,
       eventName: "print",
       close: true
@@ -18313,6 +18309,11 @@ class SecondaryToolbar {
       eventName: "documentproperties",
       close: true
     }];
+    this.buttons.push({
+      element: options.openFileButton,
+      eventName: "openfile",
+      close: true
+    });
     this.items = {
       firstPage: options.firstPageButton,
       lastPage: options.lastPageButton,
@@ -18582,9 +18583,6 @@ class Toolbar {
       element: options.zoomOut,
       eventName: "zoomout"
     }, {
-      element: options.openFile,
-      eventName: "openfile"
-    }, {
       element: options.print,
       eventName: "print"
     }, {
@@ -18597,6 +18595,10 @@ class Toolbar {
       element: options.viewBookmark,
       eventName: null
     }];
+    this.buttons.push({
+      element: options.openFile,
+      eventName: "openfile"
+    });
     this.items = {
       numPages: options.numPages,
       pageNumber: options.pageNumber,
@@ -20711,8 +20713,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.14.470';
-const pdfjsBuild = '3e0a23d71';
+const pdfjsVersion = '2.14.520';
+const pdfjsBuild = 'c8901dbed';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
