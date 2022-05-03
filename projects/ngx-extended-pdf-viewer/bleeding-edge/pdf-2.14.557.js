@@ -1365,7 +1365,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.14.520',
+    apiVersion: '2.14.557',
     source: {
       data: source.data,
       url: source.url,
@@ -3515,9 +3515,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.14.520';
+const version = '2.14.557';
 exports.version = version;
-const build = 'c8901dbed';
+const build = '5acf993eb';
 exports.build = build;
 
 /***/ }),
@@ -4739,6 +4739,10 @@ class AnnotationStorage {
     return Object.assign(defaultValue, obj);
   }
 
+  getRawValue(key) {
+    return this._storage.get(key);
+  }
+
   setValue(key, fieldname, value, radioButtonField = undefined, isDefaultValue = false) {
     const obj = this._storage.get(key);
 
@@ -4838,6 +4842,8 @@ var _util = __w_pdfjs_require__(1);
 var _pattern_helper = __w_pdfjs_require__(11);
 
 var _image_utils = __w_pdfjs_require__(12);
+
+var _is_node = __w_pdfjs_require__(8);
 
 var _display_utils = __w_pdfjs_require__(4);
 
@@ -5140,21 +5146,65 @@ class CachedCanvases {
 
 }
 
+function drawImageAtIntegerCoords(ctx, srcImg, srcX, srcY, srcW, srcH, destX, destY, destW, destH) {
+  const [a, b, c, d, tx, ty] = ctx.mozCurrentTransform;
+
+  if (b === 0 && c === 0) {
+    const tlX = destX * a + tx;
+    const rTlX = Math.round(tlX);
+    const tlY = destY * d + ty;
+    const rTlY = Math.round(tlY);
+    const brX = (destX + destW) * a + tx;
+    const rWidth = Math.abs(Math.round(brX) - rTlX) || 1;
+    const brY = (destY + destH) * d + ty;
+    const rHeight = Math.abs(Math.round(brY) - rTlY) || 1;
+    ctx.setTransform(Math.sign(a), 0, 0, Math.sign(d), rTlX, rTlY);
+    ctx.drawImage(srcImg, srcX, srcY, srcW, srcH, 0, 0, rWidth, rHeight);
+    ctx.setTransform(a, b, c, d, tx, ty);
+    return [rWidth, rHeight];
+  }
+
+  if (a === 0 && d === 0) {
+    const tlX = destY * c + tx;
+    const rTlX = Math.round(tlX);
+    const tlY = destX * b + ty;
+    const rTlY = Math.round(tlY);
+    const brX = (destY + destH) * c + tx;
+    const rWidth = Math.abs(Math.round(brX) - rTlX) || 1;
+    const brY = (destX + destW) * b + ty;
+    const rHeight = Math.abs(Math.round(brY) - rTlY) || 1;
+    ctx.setTransform(0, Math.sign(b), Math.sign(c), 0, rTlX, rTlY);
+    ctx.drawImage(srcImg, srcX, srcY, srcW, srcH, 0, 0, rHeight, rWidth);
+    ctx.setTransform(a, b, c, d, tx, ty);
+    return [rHeight, rWidth];
+  }
+
+  ctx.drawImage(srcImg, srcX, srcY, srcW, srcH, destX, destY, destW, destH);
+  const scaleX = Math.hypot(a, b);
+  const scaleY = Math.hypot(c, d);
+  return [scaleX * destW, scaleY * destH];
+}
+
 function compileType3Glyph(imgData) {
+  const {
+    width,
+    height
+  } = imgData;
+
+  if (!COMPILE_TYPE3_GLYPHS || width > MAX_SIZE_TO_COMPILE || height > MAX_SIZE_TO_COMPILE) {
+    return null;
+  }
+
   const POINT_TO_PROCESS_LIMIT = 1000;
   const POINT_TYPES = new Uint8Array([0, 2, 4, 0, 1, 0, 5, 4, 8, 10, 0, 8, 0, 2, 1, 0]);
-  const width = imgData.width,
-        height = imgData.height,
-        width1 = width + 1;
-  let i, ii, j, j0;
-  const points = new Uint8Array(width1 * (height + 1));
-  const lineSize = width + 7 & ~7,
-        data0 = imgData.data;
-  const data = new Uint8Array(lineSize * height);
-  let pos = 0;
+  const width1 = width + 1;
+  let points = new Uint8Array(width1 * (height + 1));
+  let i, j, j0;
+  const lineSize = width + 7 & ~7;
+  let data = new Uint8Array(lineSize * height),
+      pos = 0;
 
-  for (i = 0, ii = data0.length; i < ii; i++) {
-    const elem = data0[i];
+  for (const elem of imgData.data) {
     let mask = 128;
 
     while (mask > 0) {
@@ -5244,7 +5294,13 @@ function compileType3Glyph(imgData) {
   }
 
   const steps = new Int32Array([0, width1, -1, 0, -width1, 0, 0, 0, 1]);
-  const outlines = [];
+  let path, outlines, coords;
+
+  if (!_is_node.isNodeJS) {
+    path = new Path2D();
+  } else {
+    outlines = [];
+  }
 
   for (i = 0; count && i <= height; i++) {
     let p = i * width1;
@@ -5258,7 +5314,12 @@ function compileType3Glyph(imgData) {
       continue;
     }
 
-    const coords = [p % width1, i];
+    if (path) {
+      path.moveTo(p % width1, i);
+    } else {
+      coords = [p % width1, i];
+    }
+
     const p0 = p;
     let type = points[p];
 
@@ -5279,33 +5340,48 @@ function compileType3Glyph(imgData) {
         points[p] &= type >> 2 | type << 2;
       }
 
-      coords.push(p % width1, p / width1 | 0);
+      if (path) {
+        path.lineTo(p % width1, p / width1 | 0);
+      } else {
+        coords.push(p % width1, p / width1 | 0);
+      }
 
       if (!points[p]) {
         --count;
       }
     } while (p0 !== p);
 
-    outlines.push(coords);
+    if (!path) {
+      outlines.push(coords);
+    }
+
     --i;
   }
+
+  data = null;
+  points = null;
 
   const drawOutline = function (c) {
     c.save();
     c.scale(1 / width, -1 / height);
     c.translate(0, -height);
-    c.beginPath();
 
-    for (let k = 0, kk = outlines.length; k < kk; k++) {
-      const o = outlines[k];
-      c.moveTo(o[0], o[1]);
+    if (path) {
+      c.fill(path);
+    } else {
+      c.beginPath();
 
-      for (let l = 2, ll = o.length; l < ll; l += 2) {
-        c.lineTo(o[l], o[l + 1]);
+      for (const o of outlines) {
+        c.moveTo(o[0], o[1]);
+
+        for (let l = 2, ll = o.length; l < ll; l += 2) {
+          c.lineTo(o[l], o[l + 1]);
+        }
       }
+
+      c.fill();
     }
 
-    c.fill();
     c.beginPath();
     c.restore();
   };
@@ -6087,8 +6163,8 @@ class CanvasGraphics {
 
     const rect = _util.Util.normalizeRect([cord1[0], cord1[1], cord2[0], cord2[1]]);
 
-    const drawnWidth = Math.ceil(rect[2] - rect[0]);
-    const drawnHeight = Math.ceil(rect[3] - rect[1]);
+    const drawnWidth = Math.round(rect[2] - rect[0]) || 1;
+    const drawnHeight = Math.round(rect[3] - rect[1]) || 1;
     const fillCanvas = this.cachedCanvases.getCanvas("fillCanvas", drawnWidth, drawnHeight, true);
     const fillCtx = fillCanvas.context;
     const offsetX = Math.min(cord1[0], cord2[0]);
@@ -6106,7 +6182,7 @@ class CanvasGraphics {
     }
 
     fillCtx.imageSmoothingEnabled = getImageSmoothingEnabled(fillCtx.mozCurrentTransform, img.interpolate);
-    fillCtx.drawImage(scaled, 0, 0, scaled.width, scaled.height, 0, 0, width, height);
+    drawImageAtIntegerCoords(fillCtx, scaled, 0, 0, scaled.width, scaled.height, 0, 0, width, height);
     fillCtx.globalCompositeOperation = "source-in";
 
     const inverse = _util.Util.transform(fillCtx.mozCurrentTransformInverse, [1, 0, 0, 1, -offsetX, -offsetY]);
@@ -7327,25 +7403,17 @@ class CanvasGraphics {
     img = this.getObject(img.data, img);
     img.count = count;
     const ctx = this.ctx;
-    const width = img.width,
-          height = img.height;
     const glyph = this.processingType3;
 
-    if (COMPILE_TYPE3_GLYPHS && glyph && glyph.compiled === undefined) {
-      if (width <= MAX_SIZE_TO_COMPILE && height <= MAX_SIZE_TO_COMPILE) {
-        glyph.compiled = compileType3Glyph({
-          data: img.data,
-          width,
-          height
-        });
-      } else {
-        glyph.compiled = null;
+    if (glyph) {
+      if (glyph.compiled === undefined) {
+        glyph.compiled = compileType3Glyph(img);
       }
-    }
 
-    if (glyph?.compiled) {
-      glyph.compiled(ctx);
-      return;
+      if (glyph.compiled) {
+        glyph.compiled(ctx);
+        return;
+      }
     }
 
     const mask = this._createMaskCanvas(img);
@@ -7409,7 +7477,7 @@ class CanvasGraphics {
       ctx.save();
       ctx.transform.apply(ctx, image.transform);
       ctx.scale(1, -1);
-      ctx.drawImage(maskCanvas.canvas, 0, 0, width, height, 0, -1, 1, 1);
+      drawImageAtIntegerCoords(ctx, maskCanvas.canvas, 0, 0, width, height, 0, -1, 1, 1);
       ctx.restore();
     }
 
@@ -7484,7 +7552,7 @@ class CanvasGraphics {
     const scaled = this._scaleImage(imgToPaint, ctx.mozCurrentTransformInverse);
 
     ctx.imageSmoothingEnabled = getImageSmoothingEnabled(ctx.mozCurrentTransform, imgData.interpolate);
-    ctx.drawImage(scaled.img, 0, 0, scaled.paintWidth, scaled.paintHeight, 0, -height, width, height);
+    const [rWidth, rHeight] = drawImageAtIntegerCoords(ctx, scaled.img, 0, 0, scaled.paintWidth, scaled.paintHeight, 0, -height, width, height);
 
     if (this.imageLayer) {
       const position = this.getCanvasPosition(0, -height);
@@ -7492,8 +7560,8 @@ class CanvasGraphics {
         imgData,
         left: position[0],
         top: position[1],
-        width: width / ctx.mozCurrentTransformInverse[0],
-        height: height / ctx.mozCurrentTransformInverse[3]
+        width: rWidth,
+        height: rHeight
       });
     }
 
@@ -7518,7 +7586,7 @@ class CanvasGraphics {
       ctx.save();
       ctx.transform.apply(ctx, entry.transform);
       ctx.scale(1, -1);
-      ctx.drawImage(tmpCanvas.canvas, entry.x, entry.y, entry.w, entry.h, 0, -1, 1, 1);
+      drawImageAtIntegerCoords(ctx, tmpCanvas.canvas, entry.x, entry.y, entry.w, entry.h, 0, -1, 1, 1);
 
       if (this.imageLayer) {
         const position = this.getCanvasPosition(entry.x, entry.y);
@@ -7742,6 +7810,8 @@ exports.getShadingPattern = getShadingPattern;
 
 var _util = __w_pdfjs_require__(1);
 
+var _is_node = __w_pdfjs_require__(8);
+
 const PathType = {
   FILL: "Fill",
   STROKE: "Stroke",
@@ -7750,7 +7820,7 @@ const PathType = {
 exports.PathType = PathType;
 
 function applyBoundingBox(ctx, bbox) {
-  if (!bbox || typeof Path2D === "undefined") {
+  if (!bbox || _is_node.isNodeJS) {
     return;
   }
 
@@ -9776,6 +9846,113 @@ class AnnotationElement {
     return container;
   }
 
+  get _commonActions() {
+    const setColor = (jsName, styleName, event) => {
+      const color = event.detail[jsName];
+      event.target.style[styleName] = _scripting_utils.ColorConverters[`${color[0]}_HTML`](color.slice(1));
+    };
+
+    return (0, _util.shadow)(this, "_commonActions", {
+      display: event => {
+        const hidden = event.detail.display % 2 === 1;
+        event.target.style.visibility = hidden ? "hidden" : "visible";
+        this.annotationStorage.setValue(this.data.id, {
+          hidden,
+          print: event.detail.display === 0 || event.detail.display === 3
+        });
+      },
+      print: event => {
+        this.annotationStorage.setValue(this.data.id, {
+          print: event.detail.print
+        });
+      },
+      hidden: event => {
+        event.target.style.visibility = event.detail.hidden ? "hidden" : "visible";
+        this.annotationStorage.setValue(this.data.id, {
+          hidden: event.detail.hidden
+        });
+      },
+      focus: event => {
+        setTimeout(() => event.target.focus({
+          preventScroll: false
+        }), 0);
+      },
+      userName: event => {
+        event.target.title = event.detail.userName;
+      },
+      readonly: event => {
+        if (event.detail.readonly) {
+          event.target.setAttribute("readonly", "");
+        } else {
+          event.target.removeAttribute("readonly");
+        }
+      },
+      required: event => {
+        if (event.detail.required) {
+          event.target.setAttribute("required", "");
+        } else {
+          event.target.removeAttribute("required");
+        }
+      },
+      bgColor: event => {
+        setColor("bgColor", "backgroundColor", event);
+      },
+      fillColor: event => {
+        setColor("fillColor", "backgroundColor", event);
+      },
+      fgColor: event => {
+        setColor("fgColor", "color", event);
+      },
+      textColor: event => {
+        setColor("textColor", "color", event);
+      },
+      borderColor: event => {
+        setColor("borderColor", "borderColor", event);
+      },
+      strokeColor: event => {
+        setColor("strokeColor", "borderColor", event);
+      }
+    });
+  }
+
+  _dispatchEventFromSandbox(actions, jsEvent) {
+    const commonActions = this._commonActions;
+
+    for (const name of Object.keys(jsEvent.detail)) {
+      const action = actions[name] || commonActions[name];
+
+      if (action) {
+        action(jsEvent);
+      }
+    }
+  }
+
+  _setDefaultPropertiesFromJS(element) {
+    if (!this.enableScripting) {
+      return;
+    }
+
+    const storedData = this.annotationStorage.getRawValue(this.data.id);
+
+    if (!storedData) {
+      return;
+    }
+
+    const commonActions = this._commonActions;
+
+    for (const [actionName, detail] of Object.entries(storedData)) {
+      const action = commonActions[actionName];
+
+      if (action) {
+        action({
+          detail,
+          target: element
+        });
+        delete storedData[actionName];
+      }
+    }
+  }
+
   _createQuadrilaterals(ignoreBorder = false) {
     if (!this.data.quadPoints) {
       return null;
@@ -10088,8 +10265,7 @@ class LinkAnnotationElement extends AnnotationElement {
             {
               const value = field.defaultValue || "";
               storage.setValue(id, {
-                value,
-                valueAsString: value
+                value
               });
               break;
             }
@@ -10232,83 +10408,6 @@ class WidgetAnnotationElement extends AnnotationElement {
     element.style.backgroundColor = color === null ? "transparent" : _util.Util.makeHexColor(color[0], color[1], color[2]);
   }
 
-  _dispatchEventFromSandbox(actions, jsEvent) {
-    const setColor = (jsName, styleName, event) => {
-      const color = event.detail[jsName];
-      event.target.style[styleName] = _scripting_utils.ColorConverters[`${color[0]}_HTML`](color.slice(1));
-    };
-
-    const commonActions = {
-      display: event => {
-        const hidden = event.detail.display % 2 === 1;
-        event.target.style.visibility = hidden ? "hidden" : "visible";
-        this.annotationStorage.setValue(this.data.id, this.data.fieldName, {
-          hidden,
-          print: event.detail.display === 0 || event.detail.display === 3
-        });
-      },
-      print: event => {
-        this.annotationStorage.setValue(this.data.id, this.data.fieldName, {
-          print: event.detail.print
-        });
-      },
-      hidden: event => {
-        event.target.style.visibility = event.detail.hidden ? "hidden" : "visible";
-        this.annotationStorage.setValue(this.data.id, this.data.fieldName, {
-          hidden: event.detail.hidden
-        });
-      },
-      focus: event => {
-        setTimeout(() => event.target.focus({
-          preventScroll: false
-        }), 0);
-      },
-      userName: event => {
-        event.target.title = event.detail.userName;
-      },
-      readonly: event => {
-        if (event.detail.readonly) {
-          event.target.setAttribute("readonly", "");
-        } else {
-          event.target.removeAttribute("readonly");
-        }
-      },
-      required: event => {
-        if (event.detail.required) {
-          event.target.setAttribute("required", "");
-        } else {
-          event.target.removeAttribute("required");
-        }
-      },
-      bgColor: event => {
-        setColor("bgColor", "backgroundColor", event);
-      },
-      fillColor: event => {
-        setColor("fillColor", "backgroundColor", event);
-      },
-      fgColor: event => {
-        setColor("fgColor", "color", event);
-      },
-      textColor: event => {
-        setColor("textColor", "color", event);
-      },
-      borderColor: event => {
-        setColor("borderColor", "borderColor", event);
-      },
-      strokeColor: event => {
-        setColor("strokeColor", "borderColor", event);
-      }
-    };
-
-    for (const name of Object.keys(jsEvent.detail)) {
-      const action = actions[name] || commonActions[name];
-
-      if (action) {
-        action(jsEvent);
-      }
-    }
-  }
-
 }
 
 class TextWidgetAnnotationElement extends WidgetAnnotationElement {
@@ -10341,13 +10440,13 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
 
     if (this.renderForms) {
       const storedData = storage.getValue(id, this.data.fieldName, {
-        value: this.data.fieldValue,
-        valueAsString: this.data.fieldValue
+        value: this.data.fieldValue
       });
-      const textContent = storedData.valueAsString || storedData.value || "";
+      const textContent = storedData.formattedValue || storedData.value || "";
       const elementData = {
         userValue: null,
-        formattedValue: null
+        formattedValue: null,
+        valueOnFocus: ""
       };
 
       if (this.data.multiLine) {
@@ -10372,14 +10471,18 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
         this.setPropertyOnSiblings(element, "value", event.target.value, "value");
       });
       element.addEventListener("resetform", event => {
-        const defaultValue = this.data.defaultFieldValue || "";
+        const defaultValue = this.data.defaultFieldValue ?? "";
         element.value = elementData.userValue = defaultValue;
-        delete elementData.formattedValue;
+        elementData.formattedValue = null;
       });
 
       let blurListener = event => {
-        if (elementData.formattedValue) {
-          event.target.value = elementData.formattedValue;
+        const {
+          formattedValue
+        } = elementData;
+
+        if (formattedValue !== null && formattedValue !== undefined) {
+          event.target.value = formattedValue;
         }
 
         event.target.scrollLeft = 0;
@@ -10390,39 +10493,37 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
           if (elementData.userValue) {
             event.target.value = elementData.userValue;
           }
+
+          elementData.valueOnFocus = event.target.value;
         });
         const fieldName = this.data.fieldName;
         element.addEventListener("updatefromsandbox", jsEvent => {
           const actions = {
             value(event) {
-              elementData.userValue = event.detail.value || "";
+              elementData.userValue = event.detail.value ?? "";
               storage.setValue(id, fieldName, {
                 value: elementData.userValue.toString()
               });
-
-              if (!elementData.formattedValue) {
-                event.target.value = elementData.userValue;
-              }
+              event.target.value = elementData.userValue;
             },
 
-            valueAsString(event) {
-              elementData.formattedValue = event.detail.valueAsString || "";
+            formattedValue(event) {
+              const {
+                formattedValue
+              } = event.detail;
+              elementData.formattedValue = formattedValue;
 
-              if (event.target !== document.activeElement) {
-                event.target.value = elementData.formattedValue;
+              if (formattedValue !== null && formattedValue !== undefined && event.target !== document.activeElement) {
+                event.target.value = formattedValue;
               }
 
               storage.setValue(id, fieldName, {
-                formattedValue: elementData.formattedValue
+                formattedValue
               });
             },
 
             selRange(event) {
-              const [selStart, selEnd] = event.detail.selRange;
-
-              if (selStart >= 0 && selEnd < event.target.value.length) {
-                event.target.setSelectionRange(selStart, selEnd);
-              }
+              event.target.setSelectionRange(...event.detail.selRange);
             }
 
           };
@@ -10444,13 +10545,21 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
             return;
           }
 
-          elementData.userValue = event.target.value;
+          const {
+            value
+          } = event.target;
+
+          if (elementData.valueOnFocus === value) {
+            return;
+          }
+
+          elementData.userValue = value;
           this.linkService.eventBus?.dispatch("dispatcheventinsandbox", {
             source: this,
             detail: {
               id,
               name: "Keystroke",
-              value: event.target.value,
+              value,
               willCommit: true,
               commitKey,
               selStart: event.target.selectionStart,
@@ -10461,15 +10570,18 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
         const _blurListener = blurListener;
         blurListener = null;
         element.addEventListener("blur", event => {
-          elementData.userValue = event.target.value;
+          const {
+            value
+          } = event.target;
+          elementData.userValue = value;
 
-          if (this._mouseState.isDown) {
+          if (this._mouseState.isDown && elementData.valueOnFocus !== value) {
             this.linkService.eventBus?.dispatch("dispatcheventinsandbox", {
               source: this,
               detail: {
                 id,
                 name: "Keystroke",
-                value: event.target.value,
+                value,
                 willCommit: true,
                 commitKey: 1,
                 selStart: event.target.selectionStart,
@@ -10483,7 +10595,6 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
 
         if (this.data.actions?.Keystroke) {
           element.addEventListener("beforeinput", event => {
-            elementData.formattedValue = "";
             const {
               data,
               target
@@ -10493,16 +10604,58 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
               selectionStart,
               selectionEnd
             } = target;
+            let selStart = selectionStart,
+                selEnd = selectionEnd;
+
+            switch (event.inputType) {
+              case "deleteWordBackward":
+                {
+                  const match = value.substring(0, selectionStart).match(/\w*[^\w]*$/);
+
+                  if (match) {
+                    selStart -= match[0].length;
+                  }
+
+                  break;
+                }
+
+              case "deleteWordForward":
+                {
+                  const match = value.substring(selectionStart).match(/^[^\w]*\w*/);
+
+                  if (match) {
+                    selEnd += match[0].length;
+                  }
+
+                  break;
+                }
+
+              case "deleteContentBackward":
+                if (selectionStart === selectionEnd) {
+                  selStart -= 1;
+                }
+
+                break;
+
+              case "deleteContentForward":
+                if (selectionStart === selectionEnd) {
+                  selEnd += 1;
+                }
+
+                break;
+            }
+
+            event.preventDefault();
             this.linkService.eventBus?.dispatch("dispatcheventinsandbox", {
               source: this,
               detail: {
                 id,
                 name: "Keystroke",
                 value,
-                change: data,
+                change: data || "",
                 willCommit: false,
-                selStart: selectionStart,
-                selEnd: selectionEnd
+                selStart,
+                selEnd
               }
             });
           });
@@ -10535,6 +10688,8 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
     this._setTextStyle(element);
 
     this._setBackgroundColor(element);
+
+    this._setDefaultPropertiesFromJS(element);
 
     this.container.appendChild(element);
     return this.container;
@@ -10647,6 +10802,8 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
 
     this._setBackgroundColor(element);
 
+    this._setDefaultPropertiesFromJS(element);
+
     this.container.appendChild(element);
     return this.container;
   }
@@ -10741,6 +10898,8 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
 
     this._setBackgroundColor(element);
 
+    this._setDefaultPropertiesFromJS(element);
+
     this.container.appendChild(element);
     return this.container;
   }
@@ -10761,6 +10920,8 @@ class PushButtonWidgetAnnotationElement extends LinkAnnotationElement {
     if (this.data.alternativeText) {
       container.title = this.data.alternativeText;
     }
+
+    this._setDefaultPropertiesFromJS(container);
 
     return container;
   }
@@ -11000,6 +11161,8 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
     }
 
     this._setBackgroundColor(selectElement);
+
+    this._setDefaultPropertiesFromJS(selectElement);
 
     this.container.appendChild(selectElement);
     return this.container;
@@ -16203,8 +16366,8 @@ var _svg = __w_pdfjs_require__(23);
 
 var _xfa_layer = __w_pdfjs_require__(21);
 
-const pdfjsVersion = '2.14.520';
-const pdfjsBuild = 'c8901dbed';
+const pdfjsVersion = '2.14.557';
+const pdfjsBuild = '5acf993eb';
 {
   if (_is_node.isNodeJS) {
     const {

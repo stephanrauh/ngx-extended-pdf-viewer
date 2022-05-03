@@ -2330,19 +2330,15 @@ function webViewerInitialized() {
   }, true);
 
   try {
-    webViewerOpenFileViaURL(file);
+    if (file) {
+      PDFViewerApplication.open(file);
+    } else {
+      PDFViewerApplication._hideViewBookmark();
+    }
   } catch (reason) {
     PDFViewerApplication.l10n.get("loading_error").then(msg => {
       PDFViewerApplication._documentError(msg, reason);
     });
-  }
-}
-
-function webViewerOpenFileViaURL(file) {
-  if (file) {
-    PDFViewerApplication.open(file);
-  } else {
-    PDFViewerApplication._hideViewBookmark();
   }
 }
 
@@ -2524,9 +2520,8 @@ function webViewerHashchange(evt) {
   }
 }
 
-let webViewerFileInputChange, webViewerOpenFile;
 {
-  webViewerFileInputChange = function (evt) {
+  var webViewerFileInputChange = function (evt) {
     if (PDFViewerApplication.pdfViewer?.isInPresentationMode) {
       return;
     }
@@ -2548,7 +2543,7 @@ let webViewerFileInputChange, webViewerOpenFile;
     }
   };
 
-  webViewerOpenFile = function (evt) {
+  var webViewerOpenFile = function (evt) {
     const fileInput = PDFViewerApplication.appConfig.openFileInput;
     fileInput.click();
   };
@@ -10643,7 +10638,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.14.520';
+    const viewerVersion = '2.14.557';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -20713,8 +20708,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.14.520';
-const pdfjsBuild = 'c8901dbed';
+const pdfjsVersion = '2.14.557';
+const pdfjsBuild = '5acf993eb';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

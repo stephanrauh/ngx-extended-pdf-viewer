@@ -19,6 +19,15 @@ export class AnnotationStorage {
      */
     public getValue(key: string, fieldname: any, defaultValue: Object, radioButtonField?: undefined): Object;
     /**
+     * Get the value for a given key.
+     *
+     * @public
+     * @memberof AnnotationStorage
+     * @param {string} key
+     * @returns {Object}
+     */
+    public getRawValue(key: string): Object;
+    /**
      * Set the value for a given key
      *
      * @public
