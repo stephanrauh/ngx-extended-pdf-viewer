@@ -23,7 +23,7 @@
     "@angular/core": "^13.3.2",
     "@angular/forms": "^13.3.2",
     "@angular/platform-browser": "^13.3.2",
-    "@angular/platform-browser-dynamic": "^13.3.2",
+    "@angular/platform-browser-dynamic": "^13.3.8",
     "@angular/router": "^13.3.2",
     "@schematics/angular": "^13.3.2",
     "rxjs": "^7.5.5",
