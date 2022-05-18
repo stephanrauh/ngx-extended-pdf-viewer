@@ -1,15 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'pdf-zoom-out',
   templateUrl: './pdf-zoom-out.component.html',
-  styleUrls: ['./pdf-zoom-out.component.css']
+  styleUrls: ['./pdf-zoom-out.component.css'],
 })
-export class PdfZoomOutComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-}
+export class PdfZoomOutComponent {}

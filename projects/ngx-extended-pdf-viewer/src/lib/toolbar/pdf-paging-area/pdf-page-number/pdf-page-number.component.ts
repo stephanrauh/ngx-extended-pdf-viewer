@@ -1,15 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'pdf-page-number',
   templateUrl: './pdf-page-number.component.html',
-  styleUrls: ['./pdf-page-number.component.css']
+  styleUrls: ['./pdf-page-number.component.css'],
 })
-export class PdfPageNumberComponent implements OnInit {
+export class PdfPageNumberComponent {
   @Input()
   public showPagingButtons = true;
-
-  constructor() {}
-
-  ngOnInit() {}
 }

@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, TemplateRef, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'pdf-toolbar',
   templateUrl: './pdf-toolbar.component.html',
-  styleUrls: ['./pdf-toolbar.component.css']
+  styleUrls: ['./pdf-toolbar.component.css'],
 })
 export class PdfToolbarComponent {
   @Input()
@@ -63,5 +63,10 @@ export class PdfToolbarComponent {
   @Input()
   public zoomLevels = ['auto', 'page-actual', 'page-fit', 'page-width', 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
 
-  constructor() {}
+  @Output()
+  public onToolbarLoaded = new EventEmitter<HTMLElement>();
+
+  constructor(elementRef: ElementRef) {
+    this.onToolbarLoaded.emit(elementRef.nativeElement.getElementsByClassName('toolbar')[0] as HTMLElement);
+  }
 }

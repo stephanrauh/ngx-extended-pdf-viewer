@@ -250,10 +250,10 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFStructTreeLay
     _previousScrollMode: any;
     _spreadMode: any;
     _scrollUpdate(): void;
-    _scrollIntoView({ pageDiv, pageSpot, pageNumber }: {
+    _scrollIntoView({ pageDiv, pageNumber, pageSpot }: {
         pageDiv: any;
+        pageNumber: any;
         pageSpot?: null | undefined;
-        pageNumber?: null | undefined;
     }): void;
     _setScaleUpdatePages(newScale: any, newValue: any, noScroll?: boolean, preset?: boolean): void;
     /**
@@ -261,11 +261,6 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFStructTreeLay
      */
     private get _pageWidthScaleFactor();
     _setScale(value: any, noScroll?: boolean): void;
-    /**
-     * Refreshes page view: scrolls to the current page and updates the scale.
-     * @private
-     */
-    private _resetCurrentPageView;
     /**
      * @param {string} label - The page label.
      * @returns {number|null} The page number corresponding to the page label,
@@ -316,37 +311,6 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFStructTreeLay
     get isChangingPresentationMode(): boolean;
     get isHorizontalScrollbarEnabled(): boolean;
     get isVerticalScrollbarEnabled(): boolean;
-    /**
-     * Helper method for `this._getVisiblePages`. Should only ever be used when
-     * the viewer can only display a single page at a time, for example:
-     *  - When PresentationMode is active.
-     */
-    _getCurrentVisiblePage(): {
-        views: never[];
-        first?: undefined;
-        last?: undefined;
-        ids?: undefined;
-    } | {
-        first: {
-            id: any;
-            x: any;
-            y: any;
-            view: any;
-        };
-        last: {
-            id: any;
-            x: any;
-            y: any;
-            view: any;
-        };
-        views: {
-            id: any;
-            x: any;
-            y: any;
-            view: any;
-        }[];
-        ids: Set<any>;
-    };
     _getVisiblePages(): Object;
     /**
      * @param {number} pageNumber

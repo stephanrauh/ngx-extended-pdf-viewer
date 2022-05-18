@@ -14,8 +14,6 @@
  */
 
 ngx-extended-pdf-viewer {
-  @import "../common/annotation-layer-builder.scss";
-  @import "../common/xfa_layer_builder.scss";
   @import "../common/text-layer-builder.scss";
 }
 
@@ -175,7 +173,8 @@ ngx-extended-pdf-viewer {
     border: 0;
   }
 
-  .html * {
+  .html .toolbar *,
+  .html .treeItem * {
     padding: 0;
     margin: 0;
   }
@@ -667,7 +666,6 @@ ngx-extended-pdf-viewer {
     max-height: 400px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    margin-bottom: -4px;
   }
 
   #secondaryToolbarButtonContainer.hiddenScrollModeButtons > .scrollModeButtons,
@@ -803,7 +801,7 @@ html[dir="rtl"] #toolbarSidebarRight *{
 ngx-extended-pdf-viewer {
   .toolbarButton,
   .secondaryToolbarButton,
-  .overlayButton {
+  .dialogButton {
     border: 0 none;
     background: none;
     width: 32px;
@@ -819,7 +817,7 @@ ngx-extended-pdf-viewer {
 
   .toolbarButton[disabled],
   .secondaryToolbarButton[disabled],
-  .overlayButton[disabled] {
+  .dialogButton[disabled] {
     opacity: 0.5;
   }
 }
@@ -828,13 +826,13 @@ ngx-extended-pdf-viewer {
   .toolbarButton,
   .dropdownToolbarButton,
   .secondaryToolbarButton,
-  .overlayButton {
+  .dialogButton {
     border: 1px solid $fullscreen-background;
     color: $text-color;
   }
   .toolbarButton,
   .secondaryToolbarButton,
-  .overlayButton {
+  .dialogButton {
     min-width: 16px;
     padding: 2px 6px 0;
     border-radius: 2px;
@@ -850,17 +848,17 @@ ngx-extended-pdf-viewer {
 }
 
 html[dir='ltr'] ngx-extended-pdf-viewer .toolbarButton,
-html[dir='ltr'] ngx-extended-pdf-viewer .overlayButton {
+html[dir='ltr'] ngx-extended-pdf-viewer .dialogButton {
   margin: 3px 2px 4px 0;
 }
 
 html[dir='rtl'] ngx-extended-pdf-viewer .toolbarButton,
-html[dir='rtl'] ngx-extended-pdf-viewer .overlayButton {
+html[dir='rtl'] ngx-extended-pdf-viewer .dialogButton {
   margin: 3px 0 4px 2px;
 }
 
 ngx-extended-pdf-viewer {
-  .overlayButton {
+  .dialogButton {
     background-color: $window-background;
     background-clip: padding-box;
     border: 1px solid $border-dark;
@@ -1019,7 +1017,7 @@ html[dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbarButton > span {
   padding-left: 4px;
 }
 
-ngx-extended-pdf-viewer {
+ngx-extended-pdf-viewer .html {
   .toolbarField {
     padding: 3px 6px;
     margin: 4px 0 4px 0;
@@ -1223,13 +1221,13 @@ ngx-extended-pdf-viewer {
     width: 0;
   }
   .treeItemToggler::before {
-    content: url(../../../../assets/images/treeitem-expanded.svg);
+    content: url(../assets/images/treeitem-expanded.svg);
     display: inline-block;
     position: absolute;
     max-width: 16px;
   }
   .treeItemToggler.treeItemsHidden::before {
-    content: url(../../../../assets/images/treeitem-collapsed.svg);
+    content: url(../assets/images/treeitem-collapsed.svg);
     max-width: 16px;
   }
 }
@@ -1311,83 +1309,93 @@ ngx-extended-pdf-viewer {
     margin: 3px;
     width: 98%;
   }
-
-  .overlayButton {
+  .dialogButton {
     width: auto;
-    margin: 3px 4px 2px 4px !important;
-    padding: 2px 6px 3px 6px;
+    margin: 3px 4px 2px !important;
+    padding: 2px 11px;
+    color: $text-color;
+    background-color: $toolbar-background;
+    border: $toolbar-background !important;
   }
 
-  #overlayContainer {
-    display: table;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: $window-background;
-    z-index: 40000;
-  }
-  #overlayContainer > * {
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  #overlayContainer > .container {
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-  }
-
-  #overlayContainer > .container .dialog {
-    display: inline-block;
+  dialog {
+    margin: auto;
     padding: 15px;
     border-spacing: 4px;
     color: $text-color;
     font-size: 12px;
     line-height: 14px;
     background-color: $toolbar-background;
+    border: 1px solid rgba(0, 0, 0, 0.5);
     border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  }
+  dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.2);
+    user-select: none;
   }
 
-  .dialog > .row {
+  dialog > .row {
     display: table-row;
   }
 
-  .dialog > .row > * {
+  dialog > .row > * {
     display: table-cell;
   }
 
-  .dialog .toolbarField {
+  dialog .toolbarField {
     margin: 5px 0;
   }
 
-  .dialog .buttonRow {
+  dialog .separator {
+    display: block;
+    margin: 4px 0;
+    height: 1px;
+    width: 100%;
+    background-color: $border-dark;
+  }
+
+  dialog .buttonRow {
     text-align: center;
     vertical-align: middle;
   }
 
-  .dialog :link {
-    color: $page-background;
+  dialog :link {
+    color: rgba(255, 255, 255, 1);
   }
 
-  #passwordOverlay > .dialog {
+  #passwordDialog {
     text-align: center;
   }
-  #passwordOverlay .toolbarField {
+  #passwordDialog .toolbarField {
     width: 200px;
   }
 
-  #documentPropertiesOverlay > .dialog {
+  #documentPropertiesDialog {
     text-align: left;
   }
-  #documentPropertiesOverlay .row > * {
+  #documentPropertiesDialog .row > * {
     min-width: 100px;
+    text-align: start;
+  }
+  #documentPropertiesDialog .row > span {
+    width: 125px;
+    word-wrap: break-word;
+  }
+  #documentPropertiesDialog .row > p {
+    max-width: 225px;
+    word-wrap: break-word;
+  }
+  #documentPropertiesDialog .buttonRow {
+    margin-top: 10px;
   }
 }
-html[dir='ltr'] ngx-extended-pdf-viewer #documentPropertiesOverlay .row > * {
+
+html[dir='ltr'] ngx-extended-pdf-viewer #documentPropertiesDialog .row > * {
   text-align: left;
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer #documentPropertiesOverlay .row > * {
+html[dir='rtl'] ngx-extended-pdf-viewer #documentPropertiesDialog .row > * {
   text-align: right;
 }
 
@@ -1402,15 +1410,15 @@ html[dir='rtl'] ngx-extended-pdf-viewer #documentPropertiesOverlay .row > * {
 }
 
 ngx-extended-pdf-viewer {
-  #documentPropertiesOverlay .row > span {
+  #documentPropertiesDialog .row > span {
     width: 125px;
     word-wrap: break-word;
   }
-  #documentPropertiesOverlay .row > p {
+  #documentPropertiesDialog .row > p {
     max-width: 225px;
     word-wrap: break-word;
   }
-  #documentPropertiesOverlay .buttonRow {
+  #documentPropertiesDialog .buttonRow {
     margin-top: 10px;
   }
 

@@ -96,3 +96,8 @@ ngx-extended-pdf-viewer {
 .hidden-by-fullscreen {
   display: none !important;
 }
+
+:root {
+  --scrollbar-color: rgba(121, 121, 123, 1);
+  --scrollbar-bg-color: rgba(35, 35, 39, 1);
+}

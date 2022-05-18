@@ -1,15 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'pdf-findbar-options-one-container',
   templateUrl: './pdf-findbar-options-one-container.component.html',
-  styleUrls: ['./pdf-findbar-options-one-container.component.css']
+  styleUrls: ['./pdf-findbar-options-one-container.component.css'],
 })
-export class PdfFindbarOptionsOneContainerComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-}
+export class PdfFindbarOptionsOneContainerComponent {}

@@ -1,59 +1,59 @@
+import { isPlatformBrowser, Location, PlatformLocation } from '@angular/common';
 import {
-  Component,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  OnDestroy,
-  Output,
-  EventEmitter,
+  AfterViewInit,
   ChangeDetectionStrategy,
-  HostListener,
-  NgZone,
-  TemplateRef,
-  Inject,
-  PLATFORM_ID,
-  ViewChild,
-  OnInit,
   ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Inject,
+  Input,
+  NgZone,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  PLATFORM_ID,
+  SimpleChanges,
+  TemplateRef,
+  ViewChild,
 } from '@angular/core';
-import { PlatformLocation } from '@angular/common';
-import { PagesLoadedEvent } from './events/pages-loaded-event';
-import { PageRenderedEvent } from './events/page-rendered-event';
-import { PdfDownloadedEvent } from './events/pdf-downloaded-event';
-import { PdfLoadedEvent } from './events/pdf-loaded-event';
-import { getVersionSuffix, pdfDefaultOptions } from './options/pdf-default-options';
-import { ScaleChangingEvent } from './events/scale-changing-event';
-import { PagesRotationEvent } from './events/pages-rotation-event';
+import { Annotation } from './Annotation';
+import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
 import { FileInputChanged } from './events/file-input-changed';
-import { SidebarviewChange } from './events/sidebarview-changed';
+import { FindResult, FindResultMatchesCount, FindState } from './events/find-result';
 import { HandtoolChanged } from './events/handtool-changed';
 import { PageNumberChange } from './events/page-number-change';
-import { ServiceWorkerOptionsType } from './options/service-worker-options';
-import { VerbosityLevel } from './options/verbosity-level';
-import { FindState, FindResultMatchesCount, FindResult } from './events/find-result';
-import { isPlatformBrowser } from '@angular/common';
-import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
-import { AfterViewInit, ElementRef } from '@angular/core';
-import { IPDFViewerApplication } from './options/pdf-viewer-application';
-import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
-import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
-import { PDFNotificationService } from './pdf-notification-service';
-import { PdfCursorTools } from './options/pdf-cursor-tools';
-import { TextLayerRenderedEvent } from './events/textlayer-rendered';
-import { Location } from '@angular/common';
-import { PinchOnMobileSupport } from './pinch-on-mobile-support';
-import { RelativeCoordsSupport } from './relative-coords-support';
-import { PdfThumbnailDrawnEvent } from './events/pdf-thumbnail-drawn-event';
-import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
-import { PageViewModeType, ScrollModeChangedEvent, ScrollModeType } from './options/pdf-viewer';
-import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
-import { ProgressBarEvent } from './events/progress-bar-event';
-import { UnitToPx } from './unit-to-px';
 import { PageRenderEvent } from './events/page-render-event';
-import { Annotation } from './Annotation';
+import { PageRenderedEvent } from './events/page-rendered-event';
+import { PagesLoadedEvent } from './events/pages-loaded-event';
+import { PagesRotationEvent } from './events/pages-rotation-event';
+import { PdfDownloadedEvent } from './events/pdf-downloaded-event';
+import { PdfLoadedEvent } from './events/pdf-loaded-event';
 import { PdfLoadingStartsEvent } from './events/pdf-loading-starts-event';
+import { PdfThumbnailDrawnEvent } from './events/pdf-thumbnail-drawn-event';
+import { ProgressBarEvent } from './events/progress-bar-event';
+import { ScaleChangingEvent } from './events/scale-changing-event';
+import { SidebarviewChange } from './events/sidebarview-changed';
+import { TextLayerRenderedEvent } from './events/textlayer-rendered';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 import { PdfBackground } from './options/pdf-background';
+import { PdfCursorTools } from './options/pdf-cursor-tools';
+import { getVersionSuffix, pdfDefaultOptions } from './options/pdf-default-options';
+import { PageViewModeType, ScrollModeChangedEvent, ScrollModeType } from './options/pdf-viewer';
+import { IPDFViewerApplication } from './options/pdf-viewer-application';
+import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
+import { ServiceWorkerOptionsType } from './options/service-worker-options';
+import { VerbosityLevel } from './options/verbosity-level';
+import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
+import { PDFNotificationService } from './pdf-notification-service';
+import { PinchOnMobileSupport } from './pinch-on-mobile-support';
+import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
+import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
+import { UnitToPx } from './unit-to-px';
+
+import { RelativeCoordsSupport } from './relative-coords-support';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 declare class ResizeObserver {
@@ -106,6 +106,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public customFindbarButtons: TemplateRef<any> | undefined;
+
+  @Input()
+  public customPdfViewer: TemplateRef<any> | undefined;
 
   @Input()
   public customSecondaryToolbar: TemplateRef<any> | undefined;
@@ -311,6 +314,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
    */
   private autoHeight = false;
 
+  @Input()
   public minHeight: string | undefined = undefined;
 
   private _height = '100%';
@@ -484,6 +488,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public theme: 'dark' | 'light' | 'custom' | string = 'light';
 
   @Input()
+  public formTheme: 'dark' | 'light' | 'custom' | string = 'light';
+
+  @Input()
   public showToolbar = true;
 
   @Input()
@@ -632,6 +639,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public toolbarWidth = '100%';
 
+  private toolbar: HTMLElement | undefined = undefined;
+  public onToolbarLoaded(toolbarElement: HTMLElement): void {
+    this.toolbar = toolbarElement;
+  }
+
   public toolbarWidthInPixels = 100;
 
   public secondaryToolbarTop: string | undefined = undefined;
@@ -650,6 +662,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public get mobileFriendlyZoom() {
     return this._mobileFriendlyZoom;
   }
+
+  public get pdfJsVersion(): string {
+    return getVersionSuffix(pdfDefaultOptions.assetsFolder);
+  }
+
   /**
    * This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
    * This attribute is a string with a percent character at the end (e.g. "150%").
@@ -679,11 +696,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   private shuttingDown = false;
 
   public calcViewerPositionTop(): void {
-    const toolbar = document.getElementsByClassName('toolbar')[0] as HTMLElement;
-    if (toolbar === undefined) {
+    if (this.toolbar === undefined) {
       return;
     }
-    let top = toolbar.getBoundingClientRect().height;
+    let top = this.toolbar.getBoundingClientRect().height;
     this.viewerPositionTop = top + 'px';
 
     const factor = top / 33;
@@ -694,7 +710,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
     const findButton = document.getElementById('viewFind');
     if (findButton) {
-      const containerPositionLeft = toolbar.getBoundingClientRect().left;
+      const containerPositionLeft = this.toolbar.getBoundingClientRect().left;
       const findButtonPosition = findButton.getBoundingClientRect();
       const left = findButtonPosition.left - containerPositionLeft;
       this.findbarLeft = left + 'px';
@@ -818,7 +834,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this._src = url;
       console.log(url);
       this.srcChange.emit(url);
-    }
+    };
 
     if (isPlatformBrowser(this.platformId)) {
       const link = document.createElement('link');
@@ -987,7 +1003,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         );
       }
     }
-    const callback = (e) => {
+    const callback = () => {
       document.removeEventListener('localized', callback);
       this.initTimeout = setTimeout(() => {
         if (!this.shuttingDown) {
@@ -1000,11 +1016,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }, this.delayFirstView);
     };
 
-    window.addEventListener('afterprint', (event) => {
+    window.addEventListener('afterprint', () => {
       this.afterPrint.emit();
     });
 
-    window.addEventListener('beforeprint', (event) => {
+    window.addEventListener('beforeprint', () => {
       this.beforePrint.emit();
     });
 
@@ -1364,7 +1380,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         setTimeout(() => {
           this.currentZoomFactor.emit(x.scale);
           this.cdr.markForCheck();
-        })
+        });
 
         const scale = (this.root.nativeElement as HTMLElement).querySelector('#scaleSelect') as HTMLSelectElement | undefined;
         let userZoomFactor = this.zoom;
@@ -1714,6 +1730,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           this.formIdToFieldName = {};
           this.formRadioButtonValueToId = {};
 
+          let inputField = PDFViewerApplication.appConfig?.openFileInput;
+          if (!inputField) {
+            inputField = document.querySelector('#fileInput') as HTMLInputElement;
+          }
+          if (inputField) {
+            inputField.value = '';
+          }
+
           await PDFViewerApplication.close();
         }
       }
@@ -1764,7 +1788,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
       if ('scrollMode' in changes) {
         if (this.scrollMode || this.scrollMode === ScrollModeType.vertical) {
-          PDFViewerApplication.pdfViewer.scrollMode = Number(this.scrollMode);
+          PDFViewerApplication.eventBus.dispatch('', { mode: this.scrollMode });
         }
       }
       if ('sidebarVisible' in changes) {
@@ -1972,7 +1996,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           for (const option of scaleDropdownField.options as any) {
             if (option.value === 'custom') {
               option.textContent = `${Math.round(Number(zoomAsNumber) * 100_000) / 1000}%`;
-              continue;
             }
           }
         }

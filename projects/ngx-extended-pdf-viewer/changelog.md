@@ -341,5 +341,27 @@
 - 12.0.0-alpha.3 update to pdf.js 2.13.216; #1142 compatibility to iOS 14
 - 12.0.0 updated the bleeding-edge branch
 - 12.0.1 #1257 fixed the `[namedDest]` attribute
-- 12.0.2 #1242 fixed Acroform date fields with custom formats 
+- 12.0.2 #1242 fixed Acroform date fields with custom formats
 - 12.0.3 #1243 tentative solution to trigger custom validation when leaving a field using the mouse
+- 12.1.0 #1120 narrowed the scope of a CSS rule to make customizing easier; #1143 allow developers to set `[minHeight]`
+- 12.1.1 #1120 #1278 corrected a layout glitch cause by narrowing the CSS rules
+- 13.0.0-alpha.0 #1120 narrowed the scope of a CSS rule; modified the HTML templates and the CSS code to reflect internal changes of pdf.js
+- 13.0.0-alpha.1 #1254 now AcroForm ChoiceWidgets are printed correctly
+- 13.0.0-alpha.2 #1268 Use the 'toolbar' from the pdf-toolbar component instead of using the first 'toolbar' in document. This way, developers can use the CSS class `toolbar` outside the PDF viewer.
+- 13.0.0-alpha.3 #1120 #1278 corrected a layout glitch cause by narrowing the CSS rules (cherry-picked from version 12.1.1)
+- 13.0.0-alpha.4 #1293 #1282 added the \*.min.js files again that were missing in 13.0.0-alpha.3
+- 13.0.0-alpha.5 #1292 Include the 14 standard font files
+- 13.0.0-alpha.6 #1279 fixed the vertical layout of the primary toolbar; #1296 fixed the initialization of the PDF viewer; #1131 limit the scope of the CSS rules dedicated to printing PDF files to pdf.js
+- 13.0.0-alpha.7 #1267 stop showing the print preview below the application when printing; #1121 stop the secondary toolbar from spilling over; #1203 reset `window.adjacentPagesLoader` after loading a new document (because the old implementation populates the pages of the previous document when turning a page)
+- 13.0.0-alpha.8 #1303 repaired printing (which broke a couple of days ago)
+- 13.0.0-alpha.9 #1302 now the mousewheel only zooms if the mouse is above the PDF document; the same with trackpad pinch gestures, but pinch gestures on mobile devices probably don't benefit from this improvement yet
+- 13.0.0-alpha.10 #1313 tolerate browsers blocking the localStorage gracefully; #1300 make sure the optionalChaining check also works if run twice
+- 13.0.0-alpha.11 #1197 allow users to open the same PDF again after clearing it by setting `src=""`; #1315 allow developers to use a theme without the scaling dropdown
+- 13.0.0-alpha.12 #916 export images with transparency
+- 13.0.0-alpha.13 #590 allow developers to switch dynamically scroll modes; fixed the URL of the tree icons of the sidebar; #1316 temporary workaround to speed up rendering; warning: this version accidentally uses pdf.js 2.14 for both the default branch and the bleeding edge branch
+- 13.0.0-alpha.14 identical to alpha.13, but with the correct JS files
+- 13.0.0-alpha.15 #1319 `NgxExtendedPdfViewerService.getFormData(true)` now also reads the user input; `NgxExtendedPdfViewerService.getFormData(false)` uses the old logic, which only read the values stored in the PDF file
+- 13.0.0-alpha.16 #1301 add an API to allow to scroll within a page
+- 13.0.0-alpha.17 #899 add `[customPdfViewer]` to allow developers to modify the entire UI
+- 13.0.0-alpha.18 fixed the README.md; updated the bleeding edge of pdf.js
+- 13.0.0 updated the bleeding edge of pdf.js

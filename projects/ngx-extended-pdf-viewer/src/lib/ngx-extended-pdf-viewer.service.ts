@@ -29,8 +29,6 @@ export interface PDFExportScaleFactor {
 export class NgxExtendedPdfViewerService {
   public recalculateSize$ = new Subject<void>();
 
-  constructor() {}
-
   public findMultiple(text: Array<string>, options: FindOptions = {}): boolean {
     options = {
       ...options,
@@ -234,19 +232,19 @@ export class NgxExtendedPdfViewerService {
     return textInfo.items.map((info) => info.str).join('');
   }
 
-  public getPageAsImage(pageNumber: number, scale: PDFExportScaleFactor): Promise<any> {
+  public getPageAsImage(pageNumber: number, scale: PDFExportScaleFactor, background?: string, backgroundColorToReplace: string = '#FFFFFF'): Promise<any> {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const pdfDocument = PDFViewerApplication.pdfDocument;
     const pagePromise: Promise<any> = pdfDocument.getPage(pageNumber);
     const imagePromise = (pdfPage) =>
       new Promise<any>((resolve, reject) => {
-        resolve(this.draw(pdfPage, scale));
+        resolve(this.draw(pdfPage, scale, background, backgroundColorToReplace));
       });
 
     return pagePromise.then(imagePromise);
   }
 
-  private draw(pdfPage: any, scale: PDFExportScaleFactor): Promise<HTMLCanvasElement> {
+  private draw(pdfPage: any, scale: PDFExportScaleFactor, background?: string, backgroundColorToReplace: string = '#FFFFFF'): Promise<HTMLCanvasElement> {
     let zoomFactor = 1;
     if (scale.scale) {
       zoomFactor = scale.scale;
@@ -264,7 +262,8 @@ export class NgxExtendedPdfViewerService {
     const renderContext = {
       canvasContext: ctx,
       viewport: drawViewport,
-      //      background: 'rgba(255, 0, 255, 0.3)',
+      background,
+      backgroundColorToReplace,
     };
     const renderTask = pdfPage.render(renderContext);
 
@@ -278,7 +277,7 @@ export class NgxExtendedPdfViewerService {
 
   private getPageDrawContext(width: number, height: number): DrawContext {
     const canvas = document.createElement('canvas') as HTMLCanvasElement;
-    const ctx = canvas.getContext('2d', { alpha: false });
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) {
       // tslint:disable-next-line: quotemark
       throw new Error("Couldn't create the 2d context");
@@ -298,7 +297,7 @@ export class NgxExtendedPdfViewerService {
     return new Blob([data], { type: 'application/pdf' });
   }
 
-  public async getFormData(): Promise<Array<Object>> {
+  public async getFormData(currentFormValues = true): Promise<Array<Object>> {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const pdf /*: PDFDocumentProxy */ = PDFViewerApplication.pdfDocument;
     // screen DPI / PDF DPI
@@ -311,12 +310,29 @@ export class NgxExtendedPdfViewerService {
 
       annotations
         .filter((a) => a.subtype === 'Widget') // get the form field annotations only
+        .map((a) => ({ ...a })) // only expose copies of the annotations to avoid side-effects
         .forEach((a) => {
           // get the rectangle that represent the single field
           // and resize it according to the current DPI
           const fieldRect: Array<number> = currentPage.getViewport({ scale: dpiRatio }).convertToViewportRectangle(a.rect);
 
           // add the corresponding input
+          if (currentFormValues && a.fieldName) {
+            try {
+              if (a.exportValue) {
+                const currentValue = PDFViewerApplication.pdfDocument.annotationStorage.getValue(a.id, a.fieldName + '/' + a.exportValue, '');
+                a.value = currentValue?.value;
+              } else if (a.radioButton) {
+                const currentValue = PDFViewerApplication.pdfDocument.annotationStorage.getValue(a.id, a.fieldName + '/' + a.fieldValue, '');
+                a.value = currentValue?.value;
+              } else {
+                const currentValue = PDFViewerApplication.pdfDocument.annotationStorage.getValue(a.id, a.fieldName, '');
+                a.value = currentValue?.value;
+              }
+            } catch (exception) {
+              debugger;
+            }
+          }
           result.push({ fieldAnnotation: a, fieldRect, pageNumber: i });
         });
     }
@@ -416,6 +432,35 @@ export class NgxExtendedPdfViewerService {
         source: this,
         promise: Promise.resolve(optionalContentConfig),
       });
+    }
+  }
+
+  public scrollPageIntoView(pageNumber: number, pageSpot?: { top?: number | string; left?: number | string }): void {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const viewer = PDFViewerApplication.pdfViewer as any;
+    const pageDiv = PDFViewerApplication.pdfViewer._pages[pageNumber - 1].div;
+
+    if (pageSpot) {
+      const targetPageSpot = { ...pageSpot };
+      if (typeof targetPageSpot.top === 'string') {
+        if (targetPageSpot.top.endsWith('%')) {
+          const percent = Number(targetPageSpot.top.replace('%', ''));
+          const viewerHeight = viewer.container.querySelector('.page')?.clientHeight;
+          const height = pageDiv.clientHeight ? pageDiv.clientHeight : viewerHeight;
+          targetPageSpot.top = (percent * height) / 100;
+        }
+      }
+      if (typeof targetPageSpot.left === 'string') {
+        if (targetPageSpot.left.endsWith('%')) {
+          const percent = Number(targetPageSpot.left.replace('%', ''));
+          const viewerWidth = viewer.container.querySelector('.page')?.clientWidth;
+          const width = pageDiv.clientWidth ? pageDiv.clientWidth : viewerWidth;
+          targetPageSpot.left = (percent * width) / 100;
+        }
+      }
+      viewer._scrollIntoView({ pageDiv, pageNumber, pageSpot: targetPageSpot });
+    } else {
+      viewer._scrollIntoView({ pageDiv, pageNumber });
     }
   }
 }

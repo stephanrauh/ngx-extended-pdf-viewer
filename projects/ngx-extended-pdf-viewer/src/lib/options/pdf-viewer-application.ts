@@ -1,8 +1,7 @@
-import { IPDFViewerApplicationOptions } from './pdf-viewer-application-options';
-import { IPDFViewerAppConfig } from './pdf-viewer-app-config';
-import { IPDFViewer } from './pdf-viewer';
-import { IEventBus } from './pdf-event-bus';
 import { PasswordPrompt } from './password-prompt';
+import { IEventBus } from './pdf-event-bus';
+import { IPDFViewer } from './pdf-viewer';
+import { IPDFViewerAppConfig } from './pdf-viewer-app-config';
 
 export interface IWebL10n {
   get(key: string, args: any, fallbackString: string): string;
@@ -31,7 +30,7 @@ export interface IPDFViewerApplication {
   pagesCount: number;
   passwordPrompt: PasswordPrompt;
   pdfDocument: any;
-  pdfLinkService: any; /* PDFLinkService;*/
+  pdfLinkService: any /* PDFLinkService;*/;
   pdfSidebar: any;
   pdfViewer: IPDFViewer;
   printKeyDownListener: undefined | ((this: Window, ev: KeyboardEvent) => any);
