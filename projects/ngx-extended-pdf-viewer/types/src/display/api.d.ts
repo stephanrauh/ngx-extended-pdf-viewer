@@ -394,8 +394,17 @@ export type RenderParameters = {
      * <color> value, a `CanvasGradient` object (a linear or radial gradient) or
      * a `CanvasPattern` object (a repetitive image). The default value is
      * 'rgb(255,255,255)'.
+     *
+     * NOTE: This option may be partially, or completely, ignored when the
+     * `pageColors`-option is used.
      */
     background?: string | Object | undefined;
+    /**
+     * - Overwrites background and foreground colors
+     * with user defined ones in order to improve readability in high contrast
+     * mode.
+     */
+    pageColors?: Object | undefined;
     /**
      * -
      * A promise that should resolve with an {@link OptionalContentConfig }created from `PDFDocumentProxy.getOptionalContentConfig`. If `null`,
@@ -494,15 +503,9 @@ export type PDFWorkerParameters = {
 };
 /** @type {string} */
 export const build: string;
-export const DefaultCanvasFactory: typeof DOMCanvasFactory | {
-    new (): {};
-};
-export const DefaultCMapReaderFactory: typeof DOMCMapReaderFactory | {
-    new (): {};
-};
-export const DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory | {
-    new (): {};
-};
+export let DefaultCanvasFactory: typeof DOMCanvasFactory;
+export let DefaultCMapReaderFactory: typeof DOMCMapReaderFactory;
+export let DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
 /**
  * @typedef { Int8Array | Uint8Array | Uint8ClampedArray |
  *            Int16Array | Uint16Array |
@@ -1099,6 +1102,12 @@ export class PDFDocumentProxy {
  *   <color> value, a `CanvasGradient` object (a linear or radial gradient) or
  *   a `CanvasPattern` object (a repetitive image). The default value is
  *   'rgb(255,255,255)'.
+ *
+ *   NOTE: This option may be partially, or completely, ignored when the
+ *   `pageColors`-option is used.
+ * @property {Object} [pageColors] - Overwrites background and foreground colors
+ *   with user defined ones in order to improve readability in high contrast
+ *   mode.
  * @property {Promise<OptionalContentConfig>} [optionalContentConfigPromise] -
  *   A promise that should resolve with an {@link OptionalContentConfig}
  *   created from `PDFDocumentProxy.getOptionalContentConfig`. If `null`,
@@ -1223,7 +1232,7 @@ export class PDFPageProxy {
      * @returns {RenderTask} An object that contains a promise that is
      *   resolved when the page finishes rendering.
      */
-    render({ canvasContext, viewport, intent, annotationMode, transform, imageLayer, canvasFactory, background, backgroundColorToReplace, optionalContentConfigPromise, annotationCanvasMap, }: RenderParameters, ...args: any[]): RenderTask;
+    render({ canvasContext, viewport, intent, annotationMode, transform, imageLayer, canvasFactory, background, backgroundColorToReplace, optionalContentConfigPromise, annotationCanvasMap, pageColors, }: RenderParameters, ...args: any[]): RenderTask;
     /**
      * @param {GetOperatorListParameters} params - Page getOperatorList
      *   parameters.

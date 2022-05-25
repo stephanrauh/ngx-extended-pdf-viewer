@@ -365,3 +365,4 @@
 - 13.0.0-alpha.17 #899 add `[customPdfViewer]` to allow developers to modify the entire UI
 - 13.0.0-alpha.18 fixed the README.md; updated the bleeding edge of pdf.js
 - 13.0.0 updated the bleeding edge of pdf.js
+- 13.5.0-alpha.0 prepare updating to pdf.js 2.14 (stable branch) and 2.15 (bleeding edge branch); #1376 allow developers to use a custom zoom with custom themes that don't have the scale select dropdown (followup of #1315)

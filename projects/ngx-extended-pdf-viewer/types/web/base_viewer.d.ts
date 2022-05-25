@@ -99,6 +99,12 @@ export type PDFViewerOptions = {
      * when they exist. The default value is `false`.
      */
     enablePermissions?: boolean | undefined;
+    /**
+     * - Overwrites background and foreground colors
+     * with user defined ones in order to improve readability in high contrast
+     * mode.
+     */
+    pageColors?: Object | undefined;
 };
 /**
  * Simple viewer control to display PDF content/pages.
@@ -130,6 +136,7 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFStructTreeLay
     useOnlyCssZoom: boolean;
     maxCanvasPixels: number | undefined;
     l10n: import("./interfaces").IL10n;
+    pageColors: Object | null;
     defaultRenderingQueue: boolean;
     renderingQueue: PDFRenderingQueue | undefined;
     _doc: HTMLElement;
@@ -250,11 +257,6 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFStructTreeLay
     _previousScrollMode: any;
     _spreadMode: any;
     _scrollUpdate(): void;
-    _scrollIntoView({ pageDiv, pageNumber, pageSpot }: {
-        pageDiv: any;
-        pageNumber: any;
-        pageSpot?: null | undefined;
-    }): void;
     _setScaleUpdatePages(newScale: any, newValue: any, noScroll?: boolean, preset?: boolean): void;
     /**
      * @private
@@ -440,6 +442,7 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFStructTreeLay
      * @param {number} [steps] - Defaults to zooming once.
      */
     decreaseScale(steps?: number | undefined): void;
+    updateContainerHeightCss(): void;
     #private;
 }
 export namespace PagesCountLimit {
@@ -484,6 +487,9 @@ export namespace PagesCountLimit {
  * @property {IL10n} l10n - Localization service.
  * @property {boolean} [enablePermissions] - Enables PDF document permissions,
  *   when they exist. The default value is `false`.
+ * @property {Object} [pageColors] - Overwrites background and foreground colors
+ *   with user defined ones in order to improve readability in high contrast
+ *   mode.
  */
 export class PDFPageViewBuffer {
     constructor(size: any);

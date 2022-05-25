@@ -134,7 +134,7 @@ class WorkerMessageHandler {
     const WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.14.557';
+    const workerVersion = '2.15.297';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -18644,6 +18644,37 @@ class Annotation {
     this.color = getRgbColor(color);
   }
 
+  setLineEndings(lineEndings) {
+    this.lineEndings = ["None", "None"];
+
+    if (Array.isArray(lineEndings) && lineEndings.length === 2) {
+      for (let i = 0; i < 2; i++) {
+        const obj = lineEndings[i];
+
+        if (obj instanceof _primitives.Name) {
+          switch (obj.name) {
+            case "None":
+              continue;
+
+            case "Square":
+            case "Circle":
+            case "Diamond":
+            case "OpenArrow":
+            case "ClosedArrow":
+            case "Butt":
+            case "ROpenArrow":
+            case "RClosedArrow":
+            case "Slash":
+              this.lineEndings[i] = obj.name;
+              continue;
+          }
+        }
+
+        (0, _util.warn)(`Ignoring invalid lineEnding: ${obj}`);
+      }
+    }
+  }
+
   setBorderAndBackgroundColors(mk) {
     if (mk instanceof _primitives.Dict) {
       this.borderColor = getRgbColor(mk.getArray("BC"), null);
@@ -19339,6 +19370,7 @@ class WidgetAnnotation extends Annotation {
       }
     }
 
+    (0, _util.assert)(typeof value === "string", "Expected `value` to be a string.");
     value = value.trim();
 
     if (value === "") {
@@ -20416,15 +20448,20 @@ class FreeTextAnnotation extends MarkupAnnotation {
 class LineAnnotation extends MarkupAnnotation {
   constructor(parameters) {
     super(parameters);
+    const {
+      dict
+    } = parameters;
     this.data.annotationType = _util.AnnotationType.LINE;
-    const lineCoordinates = parameters.dict.getArray("L");
+    const lineCoordinates = dict.getArray("L");
     this.data.lineCoordinates = _util.Util.normalizeRect(lineCoordinates);
+    this.setLineEndings(dict.getArray("LE"));
+    this.data.lineEndings = this.lineEndings;
 
     if (!this.appearance) {
       const strokeColor = this.color ? Array.from(this.color).map(c => c / 255) : [0, 0, 0];
-      const strokeAlpha = parameters.dict.get("CA");
+      const strokeAlpha = dict.get("CA");
       let fillColor = null,
-          interiorColor = parameters.dict.getArray("IC");
+          interiorColor = dict.getArray("IC");
 
       if (interiorColor) {
         interiorColor = getRgbColor(interiorColor, null);
@@ -20566,9 +20603,18 @@ class CircleAnnotation extends MarkupAnnotation {
 class PolylineAnnotation extends MarkupAnnotation {
   constructor(parameters) {
     super(parameters);
+    const {
+      dict
+    } = parameters;
     this.data.annotationType = _util.AnnotationType.POLYLINE;
     this.data.vertices = [];
-    const rawVertices = parameters.dict.getArray("Vertices");
+
+    if (!(this instanceof PolygonAnnotation)) {
+      this.setLineEndings(dict.getArray("LE"));
+      this.data.lineEndings = this.lineEndings;
+    }
+
+    const rawVertices = dict.getArray("Vertices");
 
     if (!Array.isArray(rawVertices)) {
       return;
@@ -20583,7 +20629,7 @@ class PolylineAnnotation extends MarkupAnnotation {
 
     if (!this.appearance) {
       const strokeColor = this.color ? Array.from(this.color).map(c => c / 255) : [0, 0, 0];
-      const strokeAlpha = parameters.dict.get("CA");
+      const strokeAlpha = dict.get("CA");
       const borderWidth = this.borderStyle.width || 1,
             borderAdjust = 2 * borderWidth;
       const bbox = [Infinity, Infinity, -Infinity, -Infinity];
@@ -31883,9 +31929,7 @@ class SimpleSegmentVisitor {
     const buffer = new Uint8ClampedArray(rowSize * info.height);
 
     if (info.defaultPixelValue) {
-      for (let i = 0, ii = buffer.length; i < ii; i++) {
-        buffer[i] = 0xff;
-      }
+      buffer.fill(0xff);
     }
 
     this.buffer = buffer;
@@ -38405,12 +38449,13 @@ class Font {
       }
 
       const format = file.getUint16();
-      file.skip(2 + 2);
       let hasShortCmap = false;
       const mappings = [];
       let j, glyphId;
 
       if (format === 0) {
+        file.skip(2 + 2);
+
         for (j = 0; j < 256; j++) {
           const index = file.getByte();
 
@@ -38426,6 +38471,7 @@ class Font {
 
         hasShortCmap = true;
       } else if (format === 2) {
+        file.skip(2 + 2);
         const subHeaderKeys = [];
         let maxSubHeaderKey = 0;
 
@@ -38474,6 +38520,7 @@ class Font {
           }
         }
       } else if (format === 4) {
+        file.skip(2 + 2);
         const segCount = file.getUint16() >> 1;
         file.skip(6);
         const segments = [];
@@ -38539,6 +38586,7 @@ class Font {
           }
         }
       } else if (format === 6) {
+        file.skip(2 + 2);
         const firstCode = file.getUint16();
         const entryCount = file.getUint16();
 
@@ -38549,6 +38597,22 @@ class Font {
             charCode,
             glyphId
           });
+        }
+      } else if (format === 12) {
+        file.skip(2 + 4 + 4);
+        const nGroups = file.getInt32() >>> 0;
+
+        for (j = 0; j < nGroups; j++) {
+          const startCharCode = file.getInt32() >>> 0;
+          const endCharCode = file.getInt32() >>> 0;
+          let glyphCode = file.getInt32() >>> 0;
+
+          for (let charCode = startCharCode; charCode <= endCharCode; charCode++) {
+            mappings.push({
+              charCode,
+              glyphId: glyphCode++
+            });
+          }
         }
       } else {
         (0, _util.warn)("cmap table has unsupported format: " + format);
@@ -74401,7 +74465,7 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.14.557';
+const pdfjsVersion = '2.15.297';
 const pdfjsBuild = '5acf993eb';
 })();
 

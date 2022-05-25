@@ -3,7 +3,6 @@
  */
 export class AnnotationStorage {
     _storage: Map<any, any>;
-    _timeStamp: number;
     _modified: boolean;
     onSetModified: any;
     onResetModified: any;
@@ -53,5 +52,5 @@ export class AnnotationStorage {
      * PLEASE NOTE: Only intended for usage within the API itself.
      * @ignore
      */
-    get lastModified(): string;
+    get hash(): string;
 }
