@@ -58,7 +58,7 @@ Put all of them in the same parent folder. pdf.js needs to be built first, follo
 
 ## Living on the bleeding edge
 
-I maintain two different versions of pdf.js. There's the branch I call stable, and there's the "bleeding edge" branch. The stable branch has a numeric name. At the time of writing, that's 2.13. The stable branch is based on the latest release of pdf.js.
+I maintain two different versions of pdf.js. There's the branch I call stable, and there's the "bleeding edge" branch. The stable branch has a numeric name. At the time of writing, that's 2.14. The stable branch is based on the latest release of pdf.js.
 
 The branch I call "bleeding edge" is based on the latest developer commits of pdf.js. Generally speaking, pdf.js has an extraordinary high quality, so it's unlikely you run into trouble using this version. There's a "but": when the Mozilla team modifies some source code I've also modified, I always have a hard time merging the two branches and adding the improvements from both sides. So I can't guarantee the "bleeding edge" branch to work. It does, 99% of the time, but don't take my word for it. Nonetheless, I'd like to encourage you to use it in development (but never in production!) because this way you can help me spot errors early.
 

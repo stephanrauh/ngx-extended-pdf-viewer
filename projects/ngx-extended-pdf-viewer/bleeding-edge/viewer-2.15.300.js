@@ -3169,6 +3169,7 @@ exports.apiPageModeToSidebarView = apiPageModeToSidebarView;
 exports.approximateFraction = approximateFraction;
 exports.backtrackBeforeAllVisibleElements = backtrackBeforeAllVisibleElements;
 exports.binarySearchFirstItem = binarySearchFirstItem;
+exports.docStyle = void 0;
 exports.getActiveOrFocusedElement = getActiveOrFocusedElement;
 exports.getPageSizeInches = getPageSizeInches;
 exports.getVisibleElements = getVisibleElements;
@@ -3652,6 +3653,8 @@ const animationStarted = new Promise(function (resolve) {
   });
 });
 exports.animationStarted = animationStarted;
+const docStyle = document.documentElement.style;
+exports.docStyle = docStyle;
 
 function clamp(v, min, max) {
   return Math.min(Math.max(v, min), max);
@@ -3683,8 +3686,7 @@ class ProgressBar {
       this.div.classList.remove("indeterminate");
     }
 
-    const doc = document.documentElement;
-    doc.style.setProperty("--progressBar-percent", `${this._percent}%`);
+    docStyle.setProperty("--progressBar-percent", `${this._percent}%`);
   }
 
   get percent() {
@@ -3706,8 +3708,7 @@ class ProgressBar {
     const scrollbarWidth = container.offsetWidth - viewer.offsetWidth;
 
     if (scrollbarWidth > 0) {
-      const doc = document.documentElement;
-      doc.style.setProperty("--progressBar-end-offset", `${scrollbarWidth}px`);
+      docStyle.setProperty("--progressBar-end-offset", `${scrollbarWidth}px`);
     }
   }
 
@@ -10639,7 +10640,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.15.297';
+    const viewerVersion = '2.15.300';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -10691,7 +10692,6 @@ class BaseViewer {
       this.renderingQueue = options.renderingQueue;
     }
 
-    this._doc = document.documentElement;
     this.scroll = (0, _ui_utils.watchScroll)(this.container, this._scrollUpdate.bind(this));
     this.presentationModeState = _ui_utils.PresentationModeState.UNKNOWN;
     this._onBeforeDraw = this._onAfterDraw = null;
@@ -10752,15 +10752,15 @@ class BaseViewer {
     const flip = Math.abs(this._currentPageNumber - val) < 2;
 
     if (!this._setCurrentPageNumber(val, true)) {
-      Window['ngxConsole'].error(`currentPageNumber: "${val}" is not a valid page.`);
+      Window["ngxConsole"].error(`currentPageNumber: "${val}" is not a valid page.`);
     }
 
     if (this.pageFlip) {
       if (flip) {
-        Window['ngxConsole'].log("Flip");
+        Window["ngxConsole"].log("Flip");
         this.pageFlip.flip(val - 1);
       } else {
-        Window['ngxConsole'].log("turn to page");
+        Window["ngxConsole"].log("turn to page");
         this.pageFlip.turnToPage(val - 1);
       }
     }
@@ -10870,7 +10870,7 @@ class BaseViewer {
   ensureAdjecentPagesAreLoaded() {
     if (!window.adjacentPagesLoader) {
       window.adjacentPagesLoader = evt => {
-        Window['ngxConsole'].log("rendered", evt);
+        Window["ngxConsole"].log("rendered", evt);
 
         let pageView = this._pages[Math.min(this._pages.length - 1, this.currentPageNumber)];
 
@@ -10878,7 +10878,7 @@ class BaseViewer {
           let isLoading = pageView.div.querySelector(".loadingIcon");
 
           if (isLoading) {
-            Window['ngxConsole'].log("asking for the next page");
+            Window["ngxConsole"].log("asking for the next page");
             this.#ensurePdfPageLoaded(pageView).then(() => {
               this.renderingQueue.renderView(pageView);
             });
@@ -10887,7 +10887,7 @@ class BaseViewer {
             isLoading = pageView.div.querySelector(".loadingIcon");
 
             if (isLoading) {
-              Window['ngxConsole'].log("asking for the next + 1 page");
+              Window["ngxConsole"].log("asking for the next + 1 page");
               this.#ensurePdfPageLoaded(pageView).then(() => {
                 this.renderingQueue.renderView(pageView);
               });
@@ -10896,7 +10896,7 @@ class BaseViewer {
               isLoading = pageView.div.querySelector(".loadingIcon");
 
               if (isLoading) {
-                Window['ngxConsole'].log("asking for the next + 2 page");
+                Window["ngxConsole"].log("asking for the next + 2 page");
                 this.#ensurePdfPageLoaded(pageView).then(() => {
                   this.renderingQueue.renderView(pageView);
                 });
@@ -10905,7 +10905,7 @@ class BaseViewer {
                 isLoading = pageView.div.querySelector(".loadingIcon");
 
                 if (isLoading) {
-                  Window['ngxConsole'].log("asking for the next + 3 page");
+                  Window["ngxConsole"].log("asking for the next + 3 page");
                   this.#ensurePdfPageLoaded(pageView).then(() => {
                     this.renderingQueue.renderView(pageView);
                   });
@@ -10914,7 +10914,7 @@ class BaseViewer {
                   isLoading = pageView.div.querySelector(".loadingIcon");
 
                   if (isLoading) {
-                    Window['ngxConsole'].log("asking for the current page");
+                    Window["ngxConsole"].log("asking for the current page");
                     this.#ensurePdfPageLoaded(pageView).then(() => {
                       this.renderingQueue.renderView(pageView);
                     });
@@ -10923,12 +10923,12 @@ class BaseViewer {
                     isLoading = pageView.div.querySelector(".loadingIcon");
 
                     if (isLoading) {
-                      Window['ngxConsole'].log("asking for the previous page");
+                      Window["ngxConsole"].log("asking for the previous page");
                       this.#ensurePdfPageLoaded(pageView).then(() => {
                         this.renderingQueue.renderView(pageView);
                       });
                     } else {
-                      Window['ngxConsole'].log("Finished preloading the pages");
+                      Window["ngxConsole"].log("Finished preloading the pages");
                     }
                   }
                 }
@@ -10964,7 +10964,7 @@ class BaseViewer {
     }
 
     if (!this._setCurrentPageNumber(page, true)) {
-      Window['ngxConsole'].error(`currentPageLabel: "${val}" is not a valid page.`);
+      Window["ngxConsole"].error(`currentPageLabel: "${val}" is not a valid page.`);
     }
   }
 
@@ -11270,7 +11270,7 @@ class BaseViewer {
               this._pagesCapability.resolve();
             }
           }, reason => {
-            Window['ngxConsole'].error(`Unable to get page ${pageNum} to initialize viewer`, reason);
+            Window["ngxConsole"].error(`Unable to get page ${pageNum} to initialize viewer`, reason);
 
             if (--getPagesLeft === 0) {
               this._pagesCapability.resolve();
@@ -11302,7 +11302,7 @@ class BaseViewer {
         this.update();
       }
     }).catch(reason => {
-      Window['ngxConsole'].error("Unable to initialize viewer", reason);
+      Window["ngxConsole"].error("Unable to initialize viewer", reason);
 
       this._pagesCapability.reject(reason);
     });
@@ -11317,7 +11317,7 @@ class BaseViewer {
       this._pageLabels = null;
     } else if (!(Array.isArray(labels) && this.pdfDocument.numPages === labels.length)) {
       this._pageLabels = null;
-      Window['ngxConsole'].error(`setPageLabels: Invalid page labels.`);
+      Window["ngxConsole"].error(`setPageLabels: Invalid page labels.`);
     } else {
       this._pageLabels = labels;
     }
@@ -11444,6 +11444,45 @@ class BaseViewer {
     this.update();
   }
 
+  scrollPagePosIntoView(pageNumber, pageSpot) {
+    const pageDiv = this._pages[pageNumber - 1].div;
+
+    if (pageSpot) {
+      const targetPageSpot = { ...pageSpot
+      };
+
+      if (typeof targetPageSpot.top === "string") {
+        if (targetPageSpot.top.endsWith("%")) {
+          const percent = Number(targetPageSpot.top.replace("%", ""));
+          const viewerHeight = this.viewer.querySelector(".page")?.clientHeight;
+          let height = pageDiv.clientHeight ? pageDiv.clientHeight : viewerHeight;
+          const visibleWindowHeight = this.viewer.parentElement.clientHeight;
+          height = Math.max(0, height - visibleWindowHeight);
+          targetPageSpot.top = percent * height / 100;
+        }
+      }
+
+      if (typeof targetPageSpot.left === "string") {
+        if (targetPageSpot.left.endsWith("%")) {
+          const percent = Number(targetPageSpot.left.replace("%", ""));
+          const viewerWidth = this.viewer.querySelector(".page")?.clientWidth;
+          const width = pageDiv.clientWidth ? pageDiv.clientWidth : viewerWidth;
+          targetPageSpot.left = percent * width / 100;
+        }
+      }
+
+      this.#scrollIntoView({
+        div: pageDiv,
+        id: pageNumber
+      }, targetPageSpot);
+    } else {
+      this.#scrollIntoView({
+        pageDiv,
+        pageNumber
+      });
+    }
+  }
+
   #scrollIntoView(pageView, pageSpot = null) {
     const {
       div,
@@ -11473,7 +11512,7 @@ class BaseViewer {
       }
     }
 
-    (0, _ui_utils.scrollIntoView)(pageDiv, pageSpot, false, this.pageViewMode === "infinite-scroll");
+    (0, _ui_utils.scrollIntoView)(div, pageSpot, false, this.pageViewMode === "infinite-scroll");
   }
 
   #isSameScale(newScale) {
@@ -11495,7 +11534,7 @@ class BaseViewer {
       return;
     }
 
-    this._doc.style.setProperty("--zoom-factor", newScale);
+    _ui_utils.docStyle.setProperty("--zoom-factor", newScale);
 
     const updateArgs = {
       scale: newScale
@@ -11603,7 +11642,7 @@ class BaseViewer {
           break;
 
         default:
-          Window['ngxConsole'].error(`_setScale: "${value}" is an unknown zoom value.`);
+          Window["ngxConsole"].error(`_setScale: "${value}" is an unknown zoom value.`);
           return;
       }
 
@@ -11648,7 +11687,7 @@ class BaseViewer {
     const pageView = Number.isInteger(pageNumber) && this._pages[pageNumber - 1];
 
     if (!pageView) {
-      Window['ngxConsole'].error(`scrollPageIntoView: "${pageNumber}" is not a valid pageNumber parameter.`);
+      Window["ngxConsole"].error(`scrollPageIntoView: "${pageNumber}" is not a valid pageNumber parameter.`);
       return;
     }
 
@@ -11718,7 +11757,7 @@ class BaseViewer {
         break;
 
       default:
-        Window['ngxConsole'].error(`scrollPageIntoView: "${destArray[1].name}" is not a valid destination type.`);
+        Window["ngxConsole"].error(`scrollPageIntoView: "${destArray[1].name}" is not a valid destination type.`);
         return;
     }
 
@@ -11879,7 +11918,7 @@ class BaseViewer {
     }
 
     if (!(Number.isInteger(pageNumber) && pageNumber > 0 && pageNumber <= this.pagesCount)) {
-      Window['ngxConsole'].error(`isPageVisible: "${pageNumber}" is not a valid page.`);
+      Window["ngxConsole"].error(`isPageVisible: "${pageNumber}" is not a valid page.`);
       return false;
     }
 
@@ -11892,7 +11931,7 @@ class BaseViewer {
     }
 
     if (!(Number.isInteger(pageNumber) && pageNumber > 0 && pageNumber <= this.pagesCount)) {
-      Window['ngxConsole'].error(`isPageCached: "${pageNumber}" is not a valid page.`);
+      Window["ngxConsole"].error(`isPageCached: "${pageNumber}" is not a valid page.`);
       return false;
     }
 
@@ -11932,7 +11971,7 @@ class BaseViewer {
 
       return pdfPage;
     } catch (reason) {
-      Window['ngxConsole'].error("Unable to get page for page view", reason);
+      Window["ngxConsole"].error("Unable to get page for page view", reason);
       return null;
     }
   }
@@ -12436,7 +12475,7 @@ class BaseViewer {
     if (height !== this.#previousContainerHeight) {
       this.#previousContainerHeight = height;
 
-      this._doc.style.setProperty("--viewer-container-height", `${height}px`);
+      _ui_utils.docStyle.setProperty("--viewer-container-height", `${height}px`);
     }
   }
 
@@ -20686,8 +20725,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.15.297';
-const pdfjsBuild = '5acf993eb';
+const pdfjsVersion = '2.15.300';
+const pdfjsBuild = '7bdde9450';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

@@ -1376,7 +1376,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.15.297',
+    apiVersion: '2.15.300',
     source: {
       data: source.data,
       url: source.url,
@@ -3530,9 +3530,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.15.297';
+const version = '2.15.300';
 exports.version = version;
-const build = '5acf993eb';
+const build = '7bdde9450';
 exports.build = build;
 
 /***/ }),
@@ -6027,11 +6027,14 @@ class CanvasGraphics {
       }
     } else {
       if (background) this.background = background;
-      this.backgroundColor = backgroundColor;
+      this.backgroundColor = background;
     }
 
-    this.ctx.fillStyle = this.backgroundColor || defaultBackgroundColor;
-    this.ctx.fillRect(0, 0, width, height);
+    if (typeof background !== "function") {
+      this.ctx.fillStyle = this.backgroundColor || defaultBackgroundColor;
+      this.ctx.fillRect(0, 0, width, height);
+    }
+
     this.ctx.restore();
     this.backgroundColorToReplace = backgroundColorToReplace;
 
@@ -16525,8 +16528,8 @@ var _svg = __w_pdfjs_require__(24);
 
 var _xfa_layer = __w_pdfjs_require__(22);
 
-const pdfjsVersion = '2.15.297';
-const pdfjsBuild = '5acf993eb';
+const pdfjsVersion = '2.15.300';
+const pdfjsBuild = '7bdde9450';
 {
   if (_is_node.isNodeJS) {
     const {

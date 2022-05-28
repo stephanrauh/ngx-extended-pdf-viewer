@@ -366,3 +366,4 @@
 - 13.0.0-alpha.18 fixed the README.md; updated the bleeding edge of pdf.js
 - 13.0.0 updated the bleeding edge of pdf.js
 - 13.5.0-alpha.0 prepare updating to pdf.js 2.14 (stable branch) and 2.15 (bleeding edge branch); #1376 allow developers to use a custom zoom with custom themes that don't have the scale select dropdown (followup of #1315)
+- 13.5.0 updated to pdf.js 2.14 (stable branch) and 2.15 (bleeding edge branch); lots minor bug fixes, most of them caused by updating to pdf.js 2.14: #916 fixed the programmatic custom background; fixed [scrollMode]; repaired `scrollPageIntoView()`; improved `scrollPageIntoView(42, {top: '100%})` (the previous release scrolled to far); fixed `[spreadMode]`; now the secondary toolbar button is hidden or shown more reliable

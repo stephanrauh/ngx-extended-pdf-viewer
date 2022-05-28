@@ -139,7 +139,6 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFStructTreeLay
     pageColors: Object | null;
     defaultRenderingQueue: boolean;
     renderingQueue: PDFRenderingQueue | undefined;
-    _doc: HTMLElement;
     scroll: {
         right: boolean;
         down: boolean;
@@ -257,6 +256,7 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFStructTreeLay
     _previousScrollMode: any;
     _spreadMode: any;
     _scrollUpdate(): void;
+    scrollPagePosIntoView(pageNumber: any, pageSpot: any): void;
     _setScaleUpdatePages(newScale: any, newValue: any, noScroll?: boolean, preset?: boolean): void;
     /**
      * @private
@@ -283,7 +283,7 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFStructTreeLay
      * Scrolls page into view.
      * @param {ScrollPageIntoViewParameters} params
      */
-    scrollPageIntoView({ pageNumber, destArray, allowNegativeOffset, ignoreDestinationZoom, }: {
+    scrollPageIntoView({ pageNumber, destArray, allowNegativeOffset, ignoreDestinationZoom }: {
         /**
          * - The page number.
          */
