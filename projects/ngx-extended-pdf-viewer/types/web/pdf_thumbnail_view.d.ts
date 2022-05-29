@@ -34,6 +34,12 @@ export type PDFThumbnailViewOptions = {
      * - Localization service.
      */
     l10n: IL10n;
+    /**
+     * - Overwrites background and foreground colors
+     * with user defined ones in order to improve readability in high contrast
+     * mode.
+     */
+    pageColors?: Object | undefined;
 };
 /**
  * @implements {IRenderableView}
@@ -42,7 +48,7 @@ export class PDFThumbnailView implements IRenderableView {
     /**
      * @param {PDFThumbnailViewOptions} options
      */
-    constructor({ container, id, defaultViewport, optionalContentConfigPromise, linkService, renderingQueue, checkSetImageDisabled, l10n, }: PDFThumbnailViewOptions);
+    constructor({ container, id, defaultViewport, optionalContentConfigPromise, linkService, renderingQueue, checkSetImageDisabled, l10n, pageColors, }: PDFThumbnailViewOptions);
     id: number;
     renderingId: string;
     pageLabel: string | null;
@@ -51,6 +57,7 @@ export class PDFThumbnailView implements IRenderableView {
     viewport: PageViewport;
     pdfPageRotate: any;
     _optionalContentConfigPromise: Promise<OptionalContentConfig> | null;
+    pageColors: Object | null;
     linkService: import("./interfaces").IPDFLinkService;
     renderingQueue: import("./pdf_rendering_queue").PDFRenderingQueue;
     renderTask: any;
@@ -106,6 +113,9 @@ export class PDFThumbnailView implements IRenderableView {
  * @property {PDFRenderingQueue} renderingQueue - The rendering queue object.
  * @property {function} checkSetImageDisabled
  * @property {IL10n} l10n - Localization service.
+ * @property {Object} [pageColors] - Overwrites background and foreground colors
+ *   with user defined ones in order to improve readability in high contrast
+ *   mode.
  */
 export class TempImageFactory {
     static "__#9@#tempCanvas": null;

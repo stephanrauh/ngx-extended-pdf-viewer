@@ -33,9 +33,8 @@ export class IDownloadManager {
      * @param {Blob} blob
      * @param {string} url
      * @param {string} filename
-     * @param {string} [sourceEventType]
      */
-    download(blob: Blob, url: string, filename: string, sourceEventType?: string | undefined): void;
+    download(blob: Blob, url: string, filename: string): void;
 }
 /**
  * @interface
