@@ -3,6 +3,7 @@ export type OptionalContentConfig = import("../src/display/optional_content_conf
 export type EventBus = import("./event_utils").EventBus;
 export type IL10n = import("./interfaces").IL10n;
 export type IPDFAnnotationLayerFactory = import("./interfaces").IPDFAnnotationLayerFactory;
+export type IPDFAnnotationEditorLayerFactory = import("./interfaces").IPDFAnnotationEditorLayerFactory;
 export type IPDFStructTreeLayerFactory = import("./interfaces").IPDFStructTreeLayerFactory;
 export type IPDFTextLayerFactory = import("./interfaces").IPDFTextLayerFactory;
 export type IPDFXfaLayerFactory = import("./interfaces").IL10n;
@@ -56,6 +57,7 @@ export type PDFPageViewOptions = {
      */
     annotationMode?: number | undefined;
     annotationLayerFactory: IPDFAnnotationLayerFactory;
+    annotationEditorLayerFactory: IPDFAnnotationEditorLayerFactory;
     xfaLayerFactory: IPDFXfaLayerFactory;
     structTreeLayerFactory: IPDFStructTreeLayerFactory;
     textHighlighterFactory?: Object | undefined;
@@ -117,6 +119,7 @@ export class PDFPageView implements IRenderableView {
     renderingQueue: import("./pdf_rendering_queue").PDFRenderingQueue;
     textLayerFactory: import("./interfaces").IPDFTextLayerFactory;
     annotationLayerFactory: import("./interfaces").IPDFAnnotationLayerFactory;
+    annotationEditorLayerFactory: import("./interfaces").IPDFAnnotationEditorLayerFactory;
     xfaLayerFactory: import("./interfaces").IL10n;
     textHighlighter: any;
     structTreeLayerFactory: import("./interfaces").IPDFStructTreeLayerFactory;
@@ -134,6 +137,7 @@ export class PDFPageView implements IRenderableView {
     _isStandalone: boolean;
     _annotationCanvasMap: any;
     annotationLayer: any;
+    annotationEditorLayer: any;
     textLayer: import("./text_layer_builder.js").TextLayerBuilder | null;
     zoomLayer: ParentNode | null;
     xfaLayer: any;
@@ -148,15 +152,20 @@ export class PDFPageView implements IRenderableView {
     /**
      * @private
      */
+    private _renderAnnotationEditorLayer;
+    /**
+     * @private
+     */
     private _renderXfaLayer;
     _buildXfaTextContentItems(textDivs: any): Promise<void>;
     /**
      * @private
      */
     private _resetZoomLayer;
-    reset({ keepZoomLayer, keepAnnotationLayer, keepXfaLayer, }?: {
+    reset({ keepZoomLayer, keepAnnotationLayer, keepAnnotationEditorLayer, keepXfaLayer, }?: {
         keepZoomLayer?: boolean | undefined;
         keepAnnotationLayer?: boolean | undefined;
+        keepAnnotationEditorLayer?: boolean | undefined;
         keepXfaLayer?: boolean | undefined;
     }): void;
     loadingIconDiv: HTMLDivElement | undefined;
@@ -169,14 +178,16 @@ export class PDFPageView implements IRenderableView {
      * PLEASE NOTE: Most likely you want to use the `this.reset()` method,
      *              rather than calling this one directly.
      */
-    cancelRendering({ keepAnnotationLayer, keepXfaLayer }?: {
+    cancelRendering({ keepAnnotationLayer, keepAnnotationEditorLayer, keepXfaLayer, }?: {
         keepAnnotationLayer?: boolean | undefined;
+        keepAnnotationEditorLayer?: boolean | undefined;
         keepXfaLayer?: boolean | undefined;
     }): void;
     _onTextLayerRendered: any;
-    cssTransform({ target, redrawAnnotationLayer, redrawXfaLayer, }: {
+    cssTransform({ target, redrawAnnotationLayer, redrawAnnotationEditorLayer, redrawXfaLayer, }: {
         target: any;
         redrawAnnotationLayer?: boolean | undefined;
+        redrawAnnotationEditorLayer?: boolean | undefined;
         redrawXfaLayer?: boolean | undefined;
     }): void;
     get width(): number;

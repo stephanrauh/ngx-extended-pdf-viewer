@@ -366,6 +366,7 @@
 - 13.0.0-alpha.18 fixed the README.md; updated the bleeding edge of pdf.js
 - 13.0.0 updated the bleeding edge of pdf.js
 - 13.5.0-alpha.0 prepare updating to pdf.js 2.14 (stable branch) and 2.15 (bleeding edge branch); #1376 allow developers to use a custom zoom with custom themes that don't have the scale select dropdown (followup of #1315)
-- 13.5.0-alpha.1 updated to pdf.js 2.14 (stable branch) and 2.15 (bleeding edge branch); lots minor bug fixes, most of them caused by updating to pdf.js 2.14: #916 fixed the programmatic custom background; fixed [scrollMode]; repaired `scrollPageIntoView()`; improved `scrollPageIntoView(42, {top: '100%})` (the previous release scrolled to far); fixed `[spreadMode]`; now the secondary toolbar button is hidden or shown more reliable
+- 13.5.0-alpha.1 updated to pdf.js 2.14 (stable branch) and 2.15 (bleeding edge branch); lots minor bug fixes, most of them caused by updating to pdf.js 2.14: #916 fixed the programmatic custom background; fixed [scrollMode]; repaired `scrollPageIntoView()`; improved `scrollPageIntoView(42, {top: '100%'})` (the previous release scrolled to far); fixed `[spreadMode]`; now the secondary toolbar button is hidden or shown more reliable
 - 13.5.0 dependency updates
 - 13.5.1 corrected the version number of stable branch of pdf.js; fixed a bug that basically is caused by the showcase demo showing custom thumbnails; merged the latest changes of pdf.js into the bleeding-edge branch
+- 13.5.2 #1401 repaired `(pdfLoadingFailed)`; #1313 tolerate browsers blocking the localStorage gracefully; #1399 inlined two graphics to allow using the pdf viewer in arbitrary context paths; preview to an annotation editor for users (bleeding edge only)

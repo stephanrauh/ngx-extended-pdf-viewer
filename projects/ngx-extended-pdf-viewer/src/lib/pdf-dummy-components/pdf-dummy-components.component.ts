@@ -106,6 +106,9 @@ const requiredIds = [
   'viewLayers',
   'viewThumbnail',
   'viewOutline',
+  'editorModeButtons',
+  'editorNone',
+  'editorFreeText',
 ];
 
 @Component({

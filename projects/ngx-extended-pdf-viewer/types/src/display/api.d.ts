@@ -675,7 +675,7 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#2@#docId": number;
+    static "__#9@#docId": number;
     _capability: import("../shared/util.js").PromiseCapability;
     _transport: any;
     _worker: any;
@@ -935,10 +935,10 @@ export class PDFDocumentProxy {
         Suspects: boolean;
     } | null>;
     /**
-     * @returns {Promise<TypedArray>} A promise that is resolved with a
-     *   {TypedArray} that has the raw data from the PDF.
+     * @returns {Promise<Uint8Array>} A promise that is resolved with a
+     *   {Uint8Array} that has the raw data from the PDF.
      */
-    getData(): Promise<TypedArray>;
+    getData(): Promise<Uint8Array>;
     /**
      * @returns {Promise<{ length: number }>} A promise that is resolved when the
      *   document's data is loaded. It is resolved with an {Object} that contains
@@ -1313,7 +1313,7 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#3@#workerPorts": WeakMap<object, any>;
+    static "__#10@#workerPorts": WeakMap<object, any>;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */

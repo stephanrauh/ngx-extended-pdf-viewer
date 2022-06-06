@@ -50,6 +50,11 @@ export namespace AnnotationBorderStyleType {
     const INSET: number;
     const UNDERLINE: number;
 }
+export const AnnotationEditorPrefix: "pdfjs_internal_editor_";
+export namespace AnnotationEditorType {
+    const NONE: number;
+    const FREETEXT: number;
+}
 export namespace AnnotationFieldFlag {
     const READONLY: number;
     const REQUIRED: number;
@@ -99,11 +104,12 @@ export namespace AnnotationReplyType {
     const REPLY: string;
 }
 export namespace AnnotationReviewState {
-    const ACCEPTED: string;
-    const REJECTED: string;
-    const CANCELLED: string;
-    const COMPLETED: string;
-    const NONE: string;
+    export const ACCEPTED: string;
+    export const REJECTED: string;
+    export const CANCELLED: string;
+    export const COMPLETED: string;
+    const NONE_1: string;
+    export { NONE_1 as NONE };
 }
 export namespace AnnotationStateModelType {
     const MARKED_1: string;
@@ -113,7 +119,8 @@ export namespace AnnotationStateModelType {
 export namespace AnnotationType {
     export const TEXT: number;
     export const LINK: number;
-    export const FREETEXT: number;
+    const FREETEXT_1: number;
+    export { FREETEXT_1 as FREETEXT };
     export const LINE: number;
     export const SQUARE: number;
     export const CIRCLE: number;
@@ -159,8 +166,8 @@ export function assert(cond: any, msg: any): void;
 export const BaseException: any;
 export function bytesToString(bytes: any): string;
 export namespace CMapCompressionType {
-    const NONE_1: number;
-    export { NONE_1 as NONE };
+    const NONE_2: number;
+    export { NONE_2 as NONE };
     export const BINARY: number;
     export const STREAM: number;
 }

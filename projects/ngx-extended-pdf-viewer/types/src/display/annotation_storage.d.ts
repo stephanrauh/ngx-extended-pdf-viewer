@@ -27,6 +27,11 @@ export class AnnotationStorage {
      */
     public getRawValue(key: string): Object;
     /**
+     * Remove a value from the storage.
+     * @param {string} key
+     */
+    removeKey(key: string): void;
+    /**
      * Set the value for a given key
      *
      * @public
