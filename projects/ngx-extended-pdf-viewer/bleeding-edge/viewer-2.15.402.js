@@ -48,6 +48,12 @@ exports.compatibilityParams = compatibilityParams;
       compatibilityParams.maxCanvasPixels = 5242880;
     }
   })();
+
+  (function checkResizeObserver() {
+    if (typeof ResizeObserver === "undefined") {
+      compatibilityParams.annotationEditorEnabled = false;
+    }
+  })();
 }
 const OptionKind = {
   VIEWER: 0x02,
@@ -252,6 +258,7 @@ const defaultOptions = {
     value: "../build/pdf.sandbox.js",
     kind: OptionKind.VIEWER
   };
+  defaultOptions.annotationEditorEnabled.compatibility = compatibilityParams.annotationEditorEnabled;
   defaultOptions.renderer.kind += OptionKind.PREFERENCE;
 }
 const userOptions = Object.create(null);
@@ -2590,11 +2597,7 @@ function webViewerPresentationMode() {
 }
 
 function webViewerSwitchAnnotationEditorMode(evt) {
-  if (evt.toggle) {
-    PDFViewerApplication.pdfViewer.annotionEditorEnabled = true;
-  } else {
-    PDFViewerApplication.pdfViewer.annotationEditorMode = evt.mode;
-  }
+  PDFViewerApplication.pdfViewer.annotationEditorMode = evt.mode;
 }
 
 function webViewerPrint() {
@@ -10656,7 +10659,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.15.350';
+    const viewerVersion = '2.15.402';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -16085,6 +16088,7 @@ class PDFPageView {
     };
     const viewport = this.viewport;
     const canvas = document.createElement("canvas");
+    canvas.setAttribute("role", "presentation");
     canvas.hidden = true;
     let isCanvasHidden = true;
 
@@ -16745,7 +16749,7 @@ exports["default"] = canvasSize;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.VerbosityLevel = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.UNSUPPORTED_FEATURES = exports.TextRenderingMode = exports.StreamType = exports.RenderingIntentFlag = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.LINE_FACTOR = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FontType = exports.FeatureTest = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMode = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationEditorType = exports.AnnotationEditorPrefix = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
+exports.VerbosityLevel = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.UNSUPPORTED_FEATURES = exports.TextRenderingMode = exports.StreamType = exports.RenderingIntentFlag = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.LINE_FACTOR = exports.LINE_DESCENT_FACTOR = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FontType = exports.FeatureTest = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMode = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationEditorType = exports.AnnotationEditorPrefix = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
 exports.arrayByteLength = arrayByteLength;
 exports.arraysToBytes = arraysToBytes;
 exports.assert = assert;
@@ -16780,6 +16784,8 @@ const FONT_IDENTITY_MATRIX = [0.001, 0, 0, 0.001, 0, 0];
 exports.FONT_IDENTITY_MATRIX = FONT_IDENTITY_MATRIX;
 const LINE_FACTOR = 1.35;
 exports.LINE_FACTOR = LINE_FACTOR;
+const LINE_DESCENT_FACTOR = 0.35;
+exports.LINE_DESCENT_FACTOR = LINE_DESCENT_FACTOR;
 const RenderingIntentFlag = {
   ANY: 0x01,
   DISPLAY: 0x02,
@@ -16801,7 +16807,8 @@ const AnnotationEditorPrefix = "pdfjs_internal_editor_";
 exports.AnnotationEditorPrefix = AnnotationEditorPrefix;
 const AnnotationEditorType = {
   NONE: 0,
-  FREETEXT: 3
+  FREETEXT: 3,
+  INK: 15
 };
 exports.AnnotationEditorType = AnnotationEditorType;
 const PermissionFlag = {
@@ -18842,6 +18849,12 @@ class Toolbar {
       eventDetails: {
         mode: _pdfjsLib.AnnotationEditorType.FREETEXT
       }
+    }, {
+      element: options.editorInkButton,
+      eventName: "switchannotationeditormode",
+      eventDetails: {
+        mode: _pdfjsLib.AnnotationEditorType.INK
+      }
     }];
     this.buttons.push({
       element: options.openFile,
@@ -18857,7 +18870,8 @@ class Toolbar {
       zoomIn: options.zoomIn,
       zoomOut: options.zoomOut,
       editorNoneButton: options.editorNoneButton,
-      editorFreeTextButton: options.editorFreeTextButton
+      editorFreeTextButton: options.editorFreeTextButton,
+      editorInkButton: options.editorInkButton
     };
     this._wasLocalized = false;
     this.reset();
@@ -18979,10 +18993,11 @@ class Toolbar {
 
   #bindEditorToolsListener({
     editorNoneButton,
-    editorFreeTextButton
+    editorFreeTextButton,
+    editorInkButton
   }) {
     this.eventBus._on("annotationeditormodechanged", evt => {
-      const editorButtons = [[_pdfjsLib.AnnotationEditorType.NONE, editorNoneButton], [_pdfjsLib.AnnotationEditorType.FREETEXT, editorFreeTextButton]];
+      const editorButtons = [[_pdfjsLib.AnnotationEditorType.NONE, editorNoneButton], [_pdfjsLib.AnnotationEditorType.FREETEXT, editorFreeTextButton], [_pdfjsLib.AnnotationEditorType.INK, editorInkButton]];
 
       for (const [mode, button] of editorButtons) {
         const checked = mode === evt.mode;
@@ -19078,10 +19093,12 @@ class Toolbar {
   updateEditorModeButtonsState(disabled = false) {
     const {
       editorNoneButton,
-      editorFreeTextButton
+      editorFreeTextButton,
+      editorInkButton
     } = this.items;
     editorNoneButton.disabled = disabled;
     editorFreeTextButton.disabled = disabled;
+    editorInkButton.disabled = disabled;
   }
 
   async #adjustScaleWidth() {
@@ -20649,7 +20666,7 @@ PDFPrintService.prototype = {
     }, this);
 
     if (!hasEqualPageSizes) {
-      Window['ngxConsole'].warn("Not all pages have the same size. The printed " + "result may be incorrect!");
+      Window["ngxConsole"].warn("Not all pages have the same size. The printed " + "result may be incorrect!");
     }
 
     this.pageStyleSheet = document.createElement("style");
@@ -20758,7 +20775,8 @@ PDFPrintService.prototype = {
         }
 
         print.call(window);
-        setTimeout(resolve, 20);
+        const isIOS = navigator.platform && ["iPad Simulator", "iPhone Simulator", "iPod Simulator", "iPad", "iPhone", "iPod"].includes(navigator.platform) || navigator.userAgent.includes("Mac") && "ontouchend" in document;
+        setTimeout(resolve, isIOS ? 1500 : 20);
       }, 0);
     });
   },
@@ -20782,7 +20800,7 @@ window.printPDF = function () {
   }
 
   if (activeService) {
-    Window['ngxConsole'].warn("Ignored window.printPDF() because of a pending print job.");
+    Window["ngxConsole"].warn("Ignored window.printPDF() because of a pending print job.");
     return;
   }
 
@@ -20796,7 +20814,7 @@ window.printPDF = function () {
     dispatchEvent("beforeprint");
   } finally {
     if (!activeService) {
-      Window['ngxConsole'].error("Expected print service to be initialized.");
+      Window["ngxConsole"].error("Expected print service to be initialized.");
       ensureOverlay().then(function () {
         if (overlayManager.active === dialog) {
           overlayManager.close(dialog);
@@ -20807,7 +20825,7 @@ window.printPDF = function () {
 
     const activeServiceOnEntry = activeService;
     activeService.renderPages().then(function () {
-      const progressIndicator = document.getElementById("printServiceOverlay");
+      const progressIndicator = document.getElementById("printServiceDialog");
 
       if (progressIndicator) {
         progressIndicator.classList.add("hidden");
@@ -21006,8 +21024,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.15.350';
-const pdfjsBuild = '668f30413';
+const pdfjsVersion = '2.15.402';
+const pdfjsBuild = 'a01c7eb17';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
@@ -21074,6 +21092,7 @@ function getViewerConfiguration() {
       editorModeButtons: document.getElementById("editorModeButtons"),
       editorNoneButton: document.getElementById("editorNone"),
       editorFreeTextButton: document.getElementById("editorFreeText"),
+      editorInkButton: document.getElementById("editorInk"),
       presentationModeButton: document.getElementById("presentationMode"),
       download: document.getElementById("download"),
       viewBookmark: document.getElementById("viewBookmark")

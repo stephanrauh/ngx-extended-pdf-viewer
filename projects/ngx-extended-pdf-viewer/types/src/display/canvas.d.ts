@@ -156,6 +156,7 @@ export class CanvasGraphics {
     rescaleAndStroke(saveRestore: any): void;
     getCanvasPosition(x: any, y: any): any[];
     isContentVisible(): boolean;
+    #private;
 }
 declare class CanvasExtraState {
     constructor(width: any, height: any);

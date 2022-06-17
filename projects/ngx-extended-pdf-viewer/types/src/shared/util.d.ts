@@ -54,6 +54,7 @@ export const AnnotationEditorPrefix: "pdfjs_internal_editor_";
 export namespace AnnotationEditorType {
     const NONE: number;
     const FREETEXT: number;
+    const INK: number;
 }
 export namespace AnnotationFieldFlag {
     const READONLY: number;
@@ -133,7 +134,8 @@ export namespace AnnotationType {
     export const STRIKEOUT: number;
     export const STAMP: number;
     export const CARET: number;
-    export const INK: number;
+    const INK_1: number;
+    export { INK_1 as INK };
     export const POPUP: number;
     export const FILEATTACHMENT: number;
     export const SOUND: number;
@@ -249,6 +251,7 @@ export class InvalidPDFException extends InvalidPDFException_base {
 export function isArrayBuffer(v: any): boolean;
 export function isArrayEqual(arr1: any, arr2: any): boolean;
 export function isAscii(str: any): boolean;
+export const LINE_DESCENT_FACTOR: 0.35;
 export const LINE_FACTOR: 1.35;
 declare const MissingPDFException_base: any;
 export class MissingPDFException extends MissingPDFException_base {

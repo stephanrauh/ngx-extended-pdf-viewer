@@ -84,6 +84,11 @@ export class AnnotationEditor {
      */
     setDims(width: number, height: number): void;
     /**
+     * Get the translation used to position this editor when it's created.
+     * @returns {Array<number>}
+     */
+    getInitialTranslation(): Array<number>;
+    /**
      * Render this editor in a div.
      * @returns {HTMLDivElement}
      */

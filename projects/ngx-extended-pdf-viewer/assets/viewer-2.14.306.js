@@ -10656,7 +10656,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.14.304';
+    const viewerVersion = '2.14.306';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -20394,7 +20394,7 @@ PDFPrintService.prototype = {
     }, this);
 
     if (!hasEqualPageSizes) {
-      Window['ngxConsole'].warn("Not all pages have the same size. The printed " + "result may be incorrect!");
+      Window["ngxConsole"].warn("Not all pages have the same size. The printed " + "result may be incorrect!");
     }
 
     this.pageStyleSheet = document.createElement("style");
@@ -20503,7 +20503,8 @@ PDFPrintService.prototype = {
         }
 
         print.call(window);
-        setTimeout(resolve, 20);
+        const isIOS = navigator.platform && ["iPad Simulator", "iPhone Simulator", "iPod Simulator", "iPad", "iPhone", "iPod"].includes(navigator.platform) || navigator.userAgent.includes("Mac") && "ontouchend" in document;
+        setTimeout(resolve, isIOS ? 1500 : 20);
       }, 0);
     });
   },
@@ -20527,7 +20528,7 @@ window.printPDF = function () {
   }
 
   if (activeService) {
-    Window['ngxConsole'].warn("Ignored window.printPDF() because of a pending print job.");
+    Window["ngxConsole"].warn("Ignored window.printPDF() because of a pending print job.");
     return;
   }
 
@@ -20541,7 +20542,7 @@ window.printPDF = function () {
     dispatchEvent("beforeprint");
   } finally {
     if (!activeService) {
-      Window['ngxConsole'].error("Expected print service to be initialized.");
+      Window["ngxConsole"].error("Expected print service to be initialized.");
       ensureOverlay().then(function () {
         if (overlayManager.active === dialog) {
           overlayManager.close(dialog);
@@ -20552,7 +20553,7 @@ window.printPDF = function () {
 
     const activeServiceOnEntry = activeService;
     activeService.renderPages().then(function () {
-      const progressIndicator = document.getElementById("printServiceOverlay");
+      const progressIndicator = document.getElementById("printServiceDialog");
 
       if (progressIndicator) {
         progressIndicator.classList.add("hidden");
@@ -20751,8 +20752,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.14.304';
-const pdfjsBuild = '4f9b25b55';
+const pdfjsVersion = '2.14.306';
+const pdfjsBuild = '7087da99f';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

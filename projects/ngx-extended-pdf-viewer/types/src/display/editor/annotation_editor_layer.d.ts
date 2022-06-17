@@ -25,7 +25,7 @@ export type AnnotationEditorLayerOptions = {
  * Manage all the different editors on a page.
  */
 export class AnnotationEditorLayer {
-    static _l10nInitialized: boolean;
+    static _initialized: boolean;
     static _keyboardManager: KeyboardManager;
     /**
      * @param {AnnotationEditorLayerOptions} options

@@ -13,10 +13,10 @@ export type TextLayerRenderParameters = {
      */
     textContentStream?: ReadableStream<any> | undefined;
     /**
-     * - The DOM node that will contain the
-     * text runs.
+     * - The DOM node that
+     * will contain the text runs.
      */
-    container: DocumentFragment;
+    container: DocumentFragment | HTMLElement;
     /**
      * - The target
      * viewport to properly layout the text runs.
