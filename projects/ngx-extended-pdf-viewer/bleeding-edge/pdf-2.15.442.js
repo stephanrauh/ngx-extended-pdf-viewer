@@ -1388,7 +1388,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.15.402',
+    apiVersion: '2.15.442',
     source: {
       data: source.data,
       url: source.url,
@@ -3546,9 +3546,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.15.402';
+const version = '2.15.442';
 exports.version = version;
-const build = 'a01c7eb17';
+const build = 'f5f455ab3';
 exports.build = build;
 
 /***/ }),
@@ -3949,7 +3949,7 @@ function loadScript(src, removeScriptElement = false) {
       reject(new Error(`Cannot load script at: ${script.src}`));
     };
 
-    (document.head || document.documentElement).appendChild(script);
+    (document.head || document.documentElement).append(script);
   });
 }
 
@@ -4245,7 +4245,7 @@ class BaseFontLoader {
       styleElement = this.styleElement = this._document.createElement("style");
       styleElement.id = `PDFJS_FONT_STYLE_TAG_${this.docId}`;
 
-      this._document.documentElement.getElementsByTagName("head")[0].appendChild(styleElement);
+      this._document.documentElement.getElementsByTagName("head")[0].append(styleElement);
     }
 
     const styleSheet = styleElement.sheet;
@@ -4474,10 +4474,10 @@ exports.FontLoader = FontLoader;
 
         span.textContent = "Hi";
         span.style.fontFamily = name;
-        div.appendChild(span);
+        div.append(span);
       }
 
-      this._document.body.appendChild(div);
+      this._document.body.append(div);
 
       isFontReady(loadTestFontId, () => {
         div.remove();
@@ -4825,6 +4825,14 @@ class AnnotationEditor {
     this.isAttachedToDOM = false;
   }
 
+  setInBackground() {
+    this.div.classList.add("background");
+  }
+
+  setInForeground() {
+    this.div.classList.remove("background");
+  }
+
   focusin() {
     this.parent.setActiveEditor(this);
   }
@@ -4841,14 +4849,16 @@ class AnnotationEditor {
     }
 
     event.preventDefault();
+    this.commitOrRemove();
+    this.parent.setActiveEditor(null);
+  }
 
+  commitOrRemove() {
     if (this.isEmpty()) {
       this.remove();
     } else {
       this.commit();
     }
-
-    this.parent.setActiveEditor(null);
   }
 
   mousedown(event) {
@@ -4885,7 +4895,6 @@ class AnnotationEditor {
     this.div = document.createElement("div");
     this.div.className = this.name;
     this.div.setAttribute("id", this.id);
-    this.div.draggable = true;
     this.div.tabIndex = 100;
     const [tx, ty] = this.getInitialTranslation();
     this.x = Math.round(this.x + tx);
@@ -5013,7 +5022,7 @@ class CommandManager {
   #position = NaN;
   #start = 0;
 
-  add(cmd, undo) {
+  add(cmd, undo, mustExec) {
     const save = [cmd, undo];
     const next = (this.#position + 1) % this.#maxSize;
 
@@ -5029,7 +5038,10 @@ class CommandManager {
     }
 
     this.#setCommands(save);
-    cmd();
+
+    if (mustExec) {
+      cmd();
+    }
   }
 
   undo() {
@@ -5210,6 +5222,10 @@ class AnnotationEditorUIManager {
       this.#disableAll();
     } else {
       this.#enableAll();
+
+      for (const layer of this.#allLayers) {
+        layer.updateMode(mode);
+      }
     }
   }
 
@@ -5269,8 +5285,8 @@ class AnnotationEditorUIManager {
     this.#commandManager.redo();
   }
 
-  addCommands(cmd, undo) {
-    this.#commandManager.add(cmd, undo);
+  addCommands(cmd, undo, mustExec) {
+    this.#commandManager.add(cmd, undo, mustExec);
   }
 
   get allowClick() {
@@ -5307,7 +5323,7 @@ class AnnotationEditorUIManager {
         }
       };
 
-      this.addCommands(cmd, undo);
+      this.addCommands(cmd, undo, true);
     } else {
       if (!this.#activeEditor) {
         return;
@@ -5324,7 +5340,7 @@ class AnnotationEditorUIManager {
       };
     }
 
-    this.addCommands(cmd, undo);
+    this.addCommands(cmd, undo, true);
   }
 
   copy() {
@@ -5346,7 +5362,7 @@ class AnnotationEditorUIManager {
         layer.addOrRebuild(editor);
       };
 
-      this.addCommands(cmd, undo);
+      this.addCommands(cmd, undo, true);
     }
   }
 
@@ -5365,7 +5381,7 @@ class AnnotationEditorUIManager {
       editor.remove();
     };
 
-    this.addCommands(cmd, undo);
+    this.addCommands(cmd, undo, true);
   }
 
   selectAll() {
@@ -8061,10 +8077,6 @@ class CanvasGraphics {
     }
   }
 
-  beginAnnotations() {}
-
-  endAnnotations() {}
-
   beginAnnotation(id, rect, transform, matrix, hasOwnCanvas) {
     this.#restoreInitialState();
     resetCtxToDefault(this.ctx, this.foregroundColor);
@@ -10442,6 +10454,7 @@ var _display_utils = __w_pdfjs_require__(4);
 
 class AnnotationEditorLayer {
   #boundClick;
+  #boundMouseover;
   #editors = new Map();
   #uiManager;
   static _initialized = false;
@@ -10459,6 +10472,7 @@ class AnnotationEditorLayer {
     this.pageIndex = options.pageIndex;
     this.div = options.div;
     this.#boundClick = this.click.bind(this);
+    this.#boundMouseover = this.mouseover.bind(this);
 
     for (const editor of this.#uiManager.getEditors(options.pageIndex)) {
       this.add(editor);
@@ -10467,8 +10481,24 @@ class AnnotationEditorLayer {
     this.#uiManager.addLayer(this);
   }
 
-  addCommands(cmd, undo) {
-    this.#uiManager.addCommands(cmd, undo);
+  updateMode(mode) {
+    if (mode === _util.AnnotationEditorType.INK) {
+      this.div.addEventListener("mouseover", this.#boundMouseover);
+      this.div.removeEventListener("click", this.#boundClick);
+    } else {
+      this.div.removeEventListener("mouseover", this.#boundMouseover);
+    }
+  }
+
+  mouseover(event) {
+    if (event.target === this.div && event.buttons === 0) {
+      const editor = this.#createAndAddNewEditor(event);
+      editor.setInBackground();
+    }
+  }
+
+  addCommands(cmd, undo, mustExec) {
+    this.#uiManager.addCommands(cmd, undo, mustExec);
   }
 
   undo() {
@@ -10512,6 +10542,18 @@ class AnnotationEditorLayer {
   }
 
   setActiveEditor(editor) {
+    const currentActive = this.#uiManager.getActive();
+
+    if (currentActive === editor) {
+      return;
+    }
+
+    this.#uiManager.setActiveEditor(editor);
+
+    if (currentActive && currentActive !== editor) {
+      currentActive.commitOrRemove();
+    }
+
     if (editor) {
       this.unselectAll();
       this.div.removeEventListener("click", this.#boundClick);
@@ -10519,8 +10561,6 @@ class AnnotationEditorLayer {
       this.#uiManager.allowClick = false;
       this.div.addEventListener("click", this.#boundClick);
     }
-
-    this.#uiManager.setActiveEditor(editor);
   }
 
   attach(editor) {
@@ -10541,7 +10581,6 @@ class AnnotationEditorLayer {
     if (this.#uiManager.isActive(editor) || this.#editors.size === 0) {
       this.setActiveEditor(null);
       this.#uiManager.allowClick = true;
-      this.div.focus();
     }
   }
 
@@ -10557,7 +10596,7 @@ class AnnotationEditorLayer {
 
     if (editor.div && editor.isAttachedToDOM) {
       editor.div.remove();
-      this.div.appendChild(editor.div);
+      this.div.append(editor.div);
     }
   }
 
@@ -10569,7 +10608,7 @@ class AnnotationEditorLayer {
 
     if (!editor.isAttachedToDOM) {
       const div = editor.render();
-      this.div.appendChild(div);
+      this.div.append(div);
       editor.isAttachedToDOM = true;
     }
 
@@ -10593,7 +10632,19 @@ class AnnotationEditorLayer {
       editor.remove();
     };
 
-    this.addCommands(cmd, undo);
+    this.addCommands(cmd, undo, true);
+  }
+
+  addUndoableEditor(editor) {
+    const cmd = () => {
+      this.addOrRebuild(editor);
+    };
+
+    const undo = () => {
+      editor.remove();
+    };
+
+    this.addCommands(cmd, undo, false);
   }
 
   getNextId() {
@@ -10612,12 +10663,7 @@ class AnnotationEditorLayer {
     return null;
   }
 
-  click(event) {
-    if (!this.#uiManager.allowClick) {
-      this.#uiManager.allowClick = true;
-      return;
-    }
-
+  #createAndAddNewEditor(event) {
     const id = this.getNextId();
     const editor = this.#createNewEditor({
       parent: this,
@@ -10627,8 +10673,19 @@ class AnnotationEditorLayer {
     });
 
     if (editor) {
-      this.addANewEditor(editor);
+      this.add(editor);
     }
+
+    return editor;
+  }
+
+  click(event) {
+    if (!this.#uiManager.allowClick) {
+      this.#uiManager.allowClick = true;
+      return;
+    }
+
+    this.#createAndAddNewEditor(event);
   }
 
   drop(event) {
@@ -10721,6 +10778,7 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   #color;
   #content = "";
   #contentHTML = "";
+  #hasAlreadyBeenCommitted = false;
   #fontSize;
   static _freeTextDefaultContent = "";
   static _l10nPromise;
@@ -10737,7 +10795,7 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   static initialize(l10n) {
     this._l10nPromise = l10n.get("freetext_default_content");
     const style = getComputedStyle(document.documentElement);
-    this._internalPadding = parseFloat(style.getPropertyValue("--freetext-padding"), 10);
+    this._internalPadding = parseFloat(style.getPropertyValue("--freetext-padding"));
   }
 
   copy() {
@@ -10820,6 +10878,11 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   }
 
   commit() {
+    if (!this.#hasAlreadyBeenCommitted) {
+      this.#hasAlreadyBeenCommitted = true;
+      this.parent.addUndoableEditor(this);
+    }
+
     this.disableEditMode();
     this.#contentHTML = this.editorDiv.innerHTML;
     this.#content = this.#extractText().trimEnd();
@@ -10855,10 +10918,10 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     } = this.editorDiv;
     style.fontSize = `calc(${this.#fontSize}px * var(--zoom-factor))`;
     style.color = this.#color;
-    this.div.appendChild(this.editorDiv);
+    this.div.append(this.editorDiv);
     this.overlayDiv = document.createElement("div");
     this.overlayDiv.classList.add("overlay", "enabled");
-    this.div.appendChild(this.overlayDiv);
+    this.div.append(this.overlayDiv);
     (0, _tools.bindEvents)(this, this.div, ["dblclick"]);
 
     if (this.width) {
@@ -10909,15 +10972,15 @@ var _editor = __w_pdfjs_require__(8);
 var _fit_curve = __w_pdfjs_require__(25);
 
 class InkEditor extends _editor.AnnotationEditor {
-  #aspectRatio;
-  #baseHeight;
-  #baseWidth;
+  #aspectRatio = 0;
+  #baseHeight = 0;
+  #baseWidth = 0;
   #boundCanvasMousemove;
   #boundCanvasMouseleave;
   #boundCanvasMouseup;
   #boundCanvasMousedown;
-  #disableEditing;
-  #observer;
+  #disableEditing = false;
+  #observer = null;
 
   constructor(params) {
     super({ ...params,
@@ -10930,10 +10993,6 @@ class InkEditor extends _editor.AnnotationEditor {
     this.currentPath = [];
     this.scaleFactor = 1;
     this.translationX = this.translationY = 0;
-    this.#baseWidth = this.#baseHeight = 0;
-    this.#aspectRatio = 0;
-    this.#disableEditing = false;
-    this.#observer = null;
     this.x = 0;
     this.y = 0;
     this.#boundCanvasMousemove = this.canvasMousemove.bind(this);
@@ -10988,16 +11047,16 @@ class InkEditor extends _editor.AnnotationEditor {
       return;
     }
 
-    super.remove();
     this.canvas.width = this.canvas.heigth = 0;
     this.canvas.remove();
     this.canvas = null;
     this.#observer.disconnect();
     this.#observer = null;
+    super.remove();
   }
 
   enableEditMode() {
-    if (this.#disableEditing) {
+    if (this.#disableEditing || this.canvas === null) {
       return;
     }
 
@@ -11015,13 +11074,14 @@ class InkEditor extends _editor.AnnotationEditor {
 
     super.disableEditMode();
     this.canvas.style.cursor = "auto";
-    this.div.draggable = true;
+    this.div.draggable = !this.isEmpty();
     this.div.classList.remove("editing");
     this.canvas.removeEventListener("mousedown", this.#boundCanvasMousedown);
     this.canvas.removeEventListener("mouseup", this.#boundCanvasMouseup);
   }
 
   onceAdded() {
+    this.div.draggable = !this.isEmpty();
     this.div.focus();
   }
 
@@ -11079,11 +11139,16 @@ class InkEditor extends _editor.AnnotationEditor {
       if (this.paths.length === 0) {
         this.remove();
       } else {
+        if (!this.canvas) {
+          this.#createCanvas();
+          this.#createObserver();
+        }
+
         this.#fitToContent();
       }
     };
 
-    this.parent.addCommands(cmd, undo);
+    this.parent.addCommands(cmd, undo, true);
   }
 
   #redraw() {
@@ -11114,6 +11179,7 @@ class InkEditor extends _editor.AnnotationEditor {
     }
 
     this.disableEditMode();
+    this.setInForeground();
     this.#disableEditing = true;
     this.div.classList.add("disabled");
     this.#fitToContent();
@@ -11129,6 +11195,7 @@ class InkEditor extends _editor.AnnotationEditor {
       return;
     }
 
+    this.setInForeground();
     event.stopPropagation();
     this.canvas.addEventListener("mouseleave", this.#boundCanvasMouseleave);
     this.canvas.addEventListener("mousemove", this.#boundCanvasMousemove);
@@ -11144,11 +11211,13 @@ class InkEditor extends _editor.AnnotationEditor {
     if (this.isInEditMode() && this.currentPath.length !== 0) {
       event.stopPropagation();
       this.#endDrawing(event);
+      this.setInBackground();
     }
   }
 
   canvasMouseleave(event) {
     this.#endDrawing(event);
+    this.setInBackground();
   }
 
   #endDrawing(event) {
@@ -11160,7 +11229,7 @@ class InkEditor extends _editor.AnnotationEditor {
   #createCanvas() {
     this.canvas = document.createElement("canvas");
     this.canvas.className = "inkEditorCanvas";
-    this.div.appendChild(this.canvas);
+    this.div.append(this.canvas);
     this.ctx = this.canvas.getContext("2d");
   }
 
@@ -11508,7 +11577,7 @@ function generateAndReport(points, paramsOrig, paramsPrime, leftTangent, rightTa
 function generateBezier(points, parameters, leftTangent, rightTangent) {
   let a, tmp, u, ux;
   const firstPoint = points[0];
-  const lastPoint = points[points.length - 1];
+  const lastPoint = points.at(-1);
   const bezCurve = [firstPoint, null, null, lastPoint];
   const A = maths.zeros_Xx2x2(parameters.length);
 
@@ -11988,7 +12057,7 @@ class AnnotationElement {
     return (0, _util.shadow)(this, "_commonActions", {
       display: event => {
         const hidden = event.detail.display % 2 === 1;
-        event.target.style.visibility = hidden ? "hidden" : "visible";
+        this.container.style.visibility = hidden ? "hidden" : "visible";
         this.annotationStorage.setValue(this.data.id, {
           hidden,
           print: event.detail.display === 0 || event.detail.display === 3
@@ -12000,7 +12069,7 @@ class AnnotationElement {
         });
       },
       hidden: event => {
-        event.target.style.visibility = event.detail.hidden ? "hidden" : "visible";
+        this.container.style.visibility = event.detail.hidden ? "hidden" : "visible";
         this.annotationStorage.setValue(this.data.id, {
           hidden: event.detail.hidden
         });
@@ -12111,7 +12180,7 @@ class AnnotationElement {
       trigger = document.createElement("div");
       trigger.style.height = container.style.height;
       trigger.style.width = container.style.width;
-      container.appendChild(trigger);
+      container.append(trigger);
     }
 
     const popupElement = new PopupElement({
@@ -12126,7 +12195,7 @@ class AnnotationElement {
     });
     const popup = popupElement.render();
     popup.style.left = container.style.width;
-    container.appendChild(popup);
+    container.append(popup);
   }
 
   _renderQuadrilaterals(className) {
@@ -12230,6 +12299,7 @@ class LinkAnnotationElement extends AnnotationElement {
       linkService
     } = this;
     const link = document.createElement("a");
+    link.setAttribute("id", data.id);
     let isBound = false;
 
     if (data.url) {
@@ -12264,7 +12334,7 @@ class LinkAnnotationElement extends AnnotationElement {
     if (this.quadrilaterals) {
       return this._renderQuadrilaterals("linkAnnotation").map((quadrilateral, index) => {
         const linkElement = index === 0 ? link : link.cloneNode();
-        quadrilateral.appendChild(linkElement);
+        quadrilateral.append(linkElement);
         return quadrilateral;
       });
     }
@@ -12272,7 +12342,7 @@ class LinkAnnotationElement extends AnnotationElement {
     this.container.className = "linkAnnotation";
 
     if (isBound) {
-      this.container.appendChild(link);
+      this.container.append(link);
     }
 
     return this.container;
@@ -12485,7 +12555,7 @@ class TextAnnotationElement extends AnnotationElement {
       this._createPopup(image, this.data);
     }
 
-    this.container.appendChild(image);
+    this.container.append(image);
     return this.container;
   }
 
@@ -12878,7 +12948,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
 
     this._setDefaultPropertiesFromJS(element);
 
-    this.container.appendChild(element);
+    this.container.append(element);
     return this.container;
   }
 
@@ -12975,7 +13045,7 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
 
     this._setDefaultPropertiesFromJS(element);
 
-    this.container.appendChild(element);
+    this.container.append(element);
     return this.container;
   }
 
@@ -13074,7 +13144,7 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
 
     this._setDefaultPropertiesFromJS(element);
 
-    this.container.appendChild(element);
+    this.container.append(element);
     return this.container;
   }
 
@@ -13095,7 +13165,15 @@ class PushButtonWidgetAnnotationElement extends LinkAnnotationElement {
       container.title = this.data.alternativeText;
     }
 
-    this._setDefaultPropertiesFromJS(container);
+    if (this.enableScripting && this.hasJSActions) {
+      const linkElement = container.lastChild;
+
+      this._setDefaultPropertiesFromJS(linkElement);
+
+      linkElement.addEventListener("updatefromsandbox", jsEvent => {
+        this._dispatchEventFromSandbox({}, jsEvent);
+      });
+    }
 
     return container;
   }
@@ -13159,7 +13237,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
         addAnEmptyEntry = false;
       }
 
-      selectElement.appendChild(optionElement);
+      selectElement.append(optionElement);
     }
 
     let removeEmptyEntry = null;
@@ -13169,7 +13247,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
       noneOptionElement.value = " ";
       noneOptionElement.setAttribute("hidden", true);
       noneOptionElement.setAttribute("selected", true);
-      selectElement.insertBefore(noneOptionElement, selectElement.firstChild);
+      selectElement.prepend(noneOptionElement);
 
       removeEmptyEntry = () => {
         noneOptionElement.remove();
@@ -13260,10 +13338,17 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
               displayValue,
               exportValue
             } = event.detail.insert;
+            const selectChild = selectElement.children[index];
             const optionElement = document.createElement("option");
             optionElement.textContent = displayValue;
             optionElement.value = exportValue;
-            selectElement.insertBefore(optionElement, selectElement.children[index]);
+
+            if (selectChild) {
+              selectChild.before(optionElement);
+            } else {
+              selectElement.append(optionElement);
+            }
+
             storage.setValue(id, this.data.fieldName, {
               value: getValue(event, true),
               items: getItems(event)
@@ -13287,7 +13372,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
               const optionElement = document.createElement("option");
               optionElement.textContent = displayValue;
               optionElement.value = exportValue;
-              selectElement.appendChild(optionElement);
+              selectElement.append(optionElement);
             }
 
             if (selectElement.options.length > 0) {
@@ -13358,7 +13443,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
 
     this._setDefaultPropertiesFromJS(selectElement);
 
-    this.container.appendChild(selectElement);
+    this.container.append(selectElement);
     return this.container;
   }
 
@@ -13405,7 +13490,7 @@ class PopupAnnotationElement extends AnnotationElement {
     this.container.style.transformOrigin = `${-popupLeft}px ${-popupTop}px`;
     this.container.style.left = `${popupLeft}px`;
     this.container.style.top = `${popupTop}px`;
-    this.container.appendChild(popup.render());
+    this.container.append(popup.render());
     return this.container;
   }
 
@@ -13444,7 +13529,7 @@ class PopupElement {
     const title = document.createElement("h1");
     title.dir = this.titleObj.dir;
     title.textContent = this.titleObj.str;
-    popup.appendChild(title);
+    popup.append(title);
 
     const dateObject = _display_utils.PDFDateString.toDateObject(this.modificationDate);
 
@@ -13457,7 +13542,7 @@ class PopupElement {
         date: dateObject.toLocaleDateString(),
         time: dateObject.toLocaleTimeString()
       });
-      popup.appendChild(modificationDate);
+      popup.append(modificationDate);
     }
 
     if (this.richText?.str && (!this.contentsObj?.str || this.contentsObj.str === this.richText.str)) {
@@ -13471,7 +13556,7 @@ class PopupElement {
     } else {
       const contents = this._formatContents(this.contentsObj);
 
-      popup.appendChild(contents);
+      popup.append(contents);
     }
 
     if (!Array.isArray(this.trigger)) {
@@ -13485,7 +13570,7 @@ class PopupElement {
     }
 
     popup.addEventListener("click", this._hide.bind(this, true));
-    wrapper.appendChild(popup);
+    wrapper.append(popup);
     return wrapper;
   }
 
@@ -13500,10 +13585,10 @@ class PopupElement {
 
     for (let i = 0, ii = lines.length; i < ii; ++i) {
       const line = lines[i];
-      p.appendChild(document.createTextNode(line));
+      p.append(document.createTextNode(line));
 
       if (i < ii - 1) {
-        p.appendChild(document.createElement("br"));
+        p.append(document.createElement("br"));
       }
     }
 
@@ -13588,7 +13673,7 @@ class LineAnnotationElement extends AnnotationElement {
     line.setAttribute("stroke-width", data.borderStyle.width || 1);
     line.setAttribute("stroke", "transparent");
     line.setAttribute("fill", "transparent");
-    svg.appendChild(line);
+    svg.append(line);
     this.container.append(svg);
 
     this._createPopup(line, data);
@@ -13624,7 +13709,7 @@ class SquareAnnotationElement extends AnnotationElement {
     square.setAttribute("stroke-width", borderWidth || 1);
     square.setAttribute("stroke", "transparent");
     square.setAttribute("fill", "transparent");
-    svg.appendChild(square);
+    svg.append(square);
     this.container.append(svg);
 
     this._createPopup(square, data);
@@ -13660,7 +13745,7 @@ class CircleAnnotationElement extends AnnotationElement {
     circle.setAttribute("stroke-width", borderWidth || 1);
     circle.setAttribute("stroke", "transparent");
     circle.setAttribute("fill", "transparent");
-    svg.appendChild(circle);
+    svg.append(circle);
     this.container.append(svg);
 
     this._createPopup(circle, data);
@@ -13703,7 +13788,7 @@ class PolylineAnnotationElement extends AnnotationElement {
     polyline.setAttribute("stroke-width", data.borderStyle.width || 1);
     polyline.setAttribute("stroke", "transparent");
     polyline.setAttribute("fill", "transparent");
-    svg.appendChild(polyline);
+    svg.append(polyline);
     this.container.append(svg);
 
     this._createPopup(polyline, data);
@@ -13781,7 +13866,7 @@ class InkAnnotationElement extends AnnotationElement {
 
       this._createPopup(polyline, data);
 
-      svg.appendChild(polyline);
+      svg.append(polyline);
     }
 
     this.container.append(svg);
@@ -13940,7 +14025,7 @@ class FileAttachmentAnnotationElement extends AnnotationElement {
       this._createPopup(trigger, this.data);
     }
 
-    this.container.appendChild(trigger);
+    this.container.append(trigger);
     return this.container;
   }
 
@@ -14016,13 +14101,13 @@ class AnnotationLayer {
 
         if (Array.isArray(rendered)) {
           for (const renderedElement of rendered) {
-            div.appendChild(renderedElement);
+            div.append(renderedElement);
           }
         } else {
           if (element instanceof PopupAnnotationElement) {
             div.prepend(rendered);
           } else {
-            div.appendChild(rendered);
+            div.append(rendered);
           }
         }
       }
@@ -14096,11 +14181,11 @@ class AnnotationLayer {
       } = element;
 
       if (!firstChild) {
-        element.appendChild(canvas);
+        element.append(canvas);
       } else if (firstChild.nodeName === "CANVAS") {
-        element.replaceChild(canvas, firstChild);
+        firstChild.replaceWith(canvas);
       } else {
-        element.insertBefore(canvas, firstChild);
+        firstChild.before(canvas);
       }
     }
 
@@ -14338,7 +14423,7 @@ class XfaLayer {
 
     const stack = [[root, -1, rootHtml]];
     const rootDiv = parameters.div;
-    rootDiv.appendChild(rootHtml);
+    rootDiv.append(rootHtml);
 
     if (parameters.viewport) {
       const transform = `matrix(${parameters.viewport.transform.join(",")})`;
@@ -14352,14 +14437,14 @@ class XfaLayer {
     const textDivs = [];
 
     while (stack.length > 0) {
-      const [parent, i, html] = stack[stack.length - 1];
+      const [parent, i, html] = stack.at(-1);
 
       if (i + 1 === parent.children.length) {
         stack.pop();
         continue;
       }
 
-      const child = parent.children[++stack[stack.length - 1][1]];
+      const child = parent.children[++stack.at(-1)[1]];
 
       if (child === null) {
         continue;
@@ -14372,7 +14457,7 @@ class XfaLayer {
       if (name === "#text") {
         const node = document.createTextNode(child.value);
         textDivs.push(node);
-        html.appendChild(node);
+        html.append(node);
         continue;
       }
 
@@ -14384,7 +14469,7 @@ class XfaLayer {
         childHtml = document.createElement(name);
       }
 
-      html.appendChild(childHtml);
+      html.append(childHtml);
 
       if (child.attributes) {
         this.setAttributes({
@@ -14405,7 +14490,7 @@ class XfaLayer {
           textDivs.push(node);
         }
 
-        childHtml.appendChild(node);
+        childHtml.append(node);
       }
     }
 
@@ -14437,6 +14522,7 @@ exports.XfaLayer = XfaLayer;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
+exports.TextLayerRenderTask = void 0;
 exports.renderTextLayer = renderTextLayer;
 
 var _util = __w_pdfjs_require__(1);
@@ -14851,7 +14937,7 @@ function expandBoundsLTR(width, bounds) {
       const useBoundary = affectedBoundary.x2 > boundary.x2 ? affectedBoundary : boundary;
 
       if (lastBoundary === useBoundary) {
-        changedHorizon[changedHorizon.length - 1].end = horizonPart.end;
+        changedHorizon.at(-1).end = horizonPart.end;
       } else {
         changedHorizon.push({
           start: horizonPart.start,
@@ -14872,7 +14958,7 @@ function expandBoundsLTR(width, bounds) {
     }
 
     if (boundary.y2 < horizon[j].end) {
-      changedHorizon[changedHorizon.length - 1].end = boundary.y2;
+      changedHorizon.at(-1).end = boundary.y2;
       changedHorizon.push({
         start: boundary.y2,
         end: horizon[j].end,
@@ -14996,7 +15082,7 @@ class TextLayerRenderTask {
             this._container.setAttribute("id", `${items[i].id}`);
           }
 
-          parent.appendChild(this._container);
+          parent.append(this._container);
         } else if (items[i].type === "endMarkedContent") {
           this._container = this._container.parentNode;
         }
@@ -15058,14 +15144,14 @@ class TextLayerRenderTask {
     }
 
     if (textDivProperties.hasText) {
-      this._container.appendChild(textDiv);
+      this._container.append(textDiv);
     }
 
     if (textDivProperties.hasEOL) {
       const br = document.createElement("br");
       br.setAttribute("role", "presentation");
 
-      this._container.appendChild(br);
+      this._container.append(br);
     }
   }
 
@@ -15195,6 +15281,8 @@ class TextLayerRenderTask {
   }
 
 }
+
+exports.TextLayerRenderTask = TextLayerRenderTask;
 
 function renderTextLayer(renderParameters) {
   const task = new TextLayerRenderTask({
@@ -15505,7 +15593,7 @@ exports.SVGGraphics = SVGGraphics;
           items: []
         });
         tmp.push(opTree);
-        opTree = opTree[opTree.length - 1].items;
+        opTree = opTree.at(-1).items;
         continue;
       }
 
@@ -15901,7 +15989,7 @@ exports.SVGGraphics = SVGGraphics;
       current.tspan.setAttributeNS(null, "font-size", `${pf(current.fontSize)}px`);
       current.tspan.setAttributeNS(null, "y", pf(-current.y));
       current.txtElement = this.svgFactory.createElement("svg:text");
-      current.txtElement.appendChild(current.tspan);
+      current.txtElement.append(current.tspan);
     }
 
     beginText() {
@@ -16055,10 +16143,10 @@ exports.SVGGraphics = SVGGraphics;
 
       current.txtElement.setAttributeNS(null, "transform", `${pm(textMatrix)} scale(${pf(textHScale)}, -1)`);
       current.txtElement.setAttributeNS(XML_NS, "xml:space", "preserve");
-      current.txtElement.appendChild(current.tspan);
-      current.txtgrp.appendChild(current.txtElement);
+      current.txtElement.append(current.tspan);
+      current.txtgrp.append(current.txtElement);
 
-      this._ensureTransformGroup().appendChild(current.txtElement);
+      this._ensureTransformGroup().append(current.txtElement);
     }
 
     setLeadingMoveText(x, y) {
@@ -16074,7 +16162,7 @@ exports.SVGGraphics = SVGGraphics;
       if (!this.cssStyle) {
         this.cssStyle = this.svgFactory.createElement("svg:style");
         this.cssStyle.setAttributeNS(null, "type", "text/css");
-        this.defs.appendChild(this.cssStyle);
+        this.defs.append(this.cssStyle);
       }
 
       const url = createObjectURL(fontObj.data, fontObj.mimetype, this.forceDataSchema);
@@ -16204,7 +16292,7 @@ exports.SVGGraphics = SVGGraphics;
         rect.setAttributeNS(null, "fill-opacity", this.current.fillAlpha);
       }
 
-      this._ensureTransformGroup().appendChild(rect);
+      this._ensureTransformGroup().append(rect);
     }
 
     _makeColorN_Pattern(args) {
@@ -16258,8 +16346,8 @@ exports.SVGGraphics = SVGGraphics;
       this.transformMatrix = transformMatrix;
       this.current.fillColor = fillColor;
       this.current.strokeColor = strokeColor;
-      tiling.appendChild(bbox.childNodes[0]);
-      this.defs.appendChild(tiling);
+      tiling.append(bbox.childNodes[0]);
+      this.defs.append(tiling);
       return `url(#${tilingId})`;
     }
 
@@ -16311,10 +16399,10 @@ exports.SVGGraphics = SVGGraphics;
             const stop = this.svgFactory.createElement("svg:stop");
             stop.setAttributeNS(null, "offset", colorStop[0]);
             stop.setAttributeNS(null, "stop-color", colorStop[1]);
-            gradient.appendChild(stop);
+            gradient.append(stop);
           }
 
-          this.defs.appendChild(gradient);
+          this.defs.append(gradient);
           return `url(#${shadingId})`;
 
         case "Mesh":
@@ -16399,7 +16487,7 @@ exports.SVGGraphics = SVGGraphics;
       } else {
         current.path = this.svgFactory.createElement("svg:path");
 
-        this._ensureTransformGroup().appendChild(current.path);
+        this._ensureTransformGroup().append(current.path);
       }
 
       current.path.setAttributeNS(null, "d", d);
@@ -16434,8 +16522,8 @@ exports.SVGGraphics = SVGGraphics;
       }
 
       this.pendingClip = null;
-      clipPath.appendChild(clipElement);
-      this.defs.appendChild(clipPath);
+      clipPath.append(clipElement);
+      this.defs.append(clipPath);
 
       if (current.activeClipUrl) {
         current.clipGroup = null;
@@ -16619,7 +16707,7 @@ exports.SVGGraphics = SVGGraphics;
       rect.setAttributeNS(null, "height", "1px");
       rect.setAttributeNS(null, "fill", this.current.fillColor);
 
-      this._ensureTransformGroup().appendChild(rect);
+      this._ensureTransformGroup().append(rect);
     }
 
     paintImageXObject(objId) {
@@ -16653,9 +16741,9 @@ exports.SVGGraphics = SVGGraphics;
       imgEl.setAttributeNS(null, "transform", `scale(${pf(1 / width)} ${pf(-1 / height)})`);
 
       if (mask) {
-        mask.appendChild(imgEl);
+        mask.append(imgEl);
       } else {
-        this._ensureTransformGroup().appendChild(imgEl);
+        this._ensureTransformGroup().append(imgEl);
       }
     }
 
@@ -16674,9 +16762,9 @@ exports.SVGGraphics = SVGGraphics;
       rect.setAttributeNS(null, "height", pf(height));
       rect.setAttributeNS(null, "fill", fillColor);
       rect.setAttributeNS(null, "mask", `url(#${current.maskId})`);
-      this.defs.appendChild(mask);
+      this.defs.append(mask);
 
-      this._ensureTransformGroup().appendChild(rect);
+      this._ensureTransformGroup().append(rect);
 
       this.paintInlineImageXObject(imgData, mask);
     }
@@ -16705,11 +16793,11 @@ exports.SVGGraphics = SVGGraphics;
     _initialize(viewport) {
       const svg = this.svgFactory.create(viewport.width, viewport.height);
       const definitions = this.svgFactory.createElement("svg:defs");
-      svg.appendChild(definitions);
+      svg.append(definitions);
       this.defs = definitions;
       const rootGroup = this.svgFactory.createElement("svg:g");
       rootGroup.setAttributeNS(null, "transform", pm(viewport.transform));
-      svg.appendChild(rootGroup);
+      svg.append(rootGroup);
       this.svg = rootGroup;
       return svg;
     }
@@ -16718,7 +16806,7 @@ exports.SVGGraphics = SVGGraphics;
       if (!this.current.clipGroup) {
         const clipGroup = this.svgFactory.createElement("svg:g");
         clipGroup.setAttributeNS(null, "clip-path", this.current.activeClipUrl);
-        this.svg.appendChild(clipGroup);
+        this.svg.append(clipGroup);
         this.current.clipGroup = clipGroup;
       }
 
@@ -16731,9 +16819,9 @@ exports.SVGGraphics = SVGGraphics;
         this.tgrp.setAttributeNS(null, "transform", pm(this.transformMatrix));
 
         if (this.current.activeClipUrl) {
-          this._ensureClipGroup().appendChild(this.tgrp);
+          this._ensureClipGroup().append(this.tgrp);
         } else {
-          this.svg.appendChild(this.tgrp);
+          this.svg.append(this.tgrp);
         }
       }
 
@@ -18583,8 +18671,8 @@ var _svg = __w_pdfjs_require__(30);
 
 var _xfa_layer = __w_pdfjs_require__(28);
 
-const pdfjsVersion = '2.15.402';
-const pdfjsBuild = 'a01c7eb17';
+const pdfjsVersion = '2.15.442';
+const pdfjsBuild = 'f5f455ab3';
 {
   if (_is_node.isNodeJS) {
     const {

@@ -43,6 +43,14 @@ export class AnnotationEditor {
     y: number;
     isAttachedToDOM: boolean;
     /**
+     * This editor will be behind the others.
+     */
+    setInBackground(): void;
+    /**
+     * This editor will be in the foreground.
+     */
+    setInForeground(): void;
+    /**
      * onfocus callback.
      */
     focusin(): void;
@@ -52,6 +60,7 @@ export class AnnotationEditor {
      * @returns {undefined}
      */
     focusout(event: FocusEvent): undefined;
+    commitOrRemove(): void;
     /**
      * Get the pointer coordinates in order to correctly translate the
      * div in case of drag-and-drop.

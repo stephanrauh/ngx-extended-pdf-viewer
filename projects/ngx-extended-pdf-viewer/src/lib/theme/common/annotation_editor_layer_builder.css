@@ -78,8 +78,38 @@
   outline: var(--focus-outline);
 }
 
-.annotationEditorLayer .freeTextEditor:hover:not(:focus-within) {
+.annotationEditorLayer .inkEditor:not(:focus) {
+  resize: none;
+}
+
+.annotationEditorLayer .freeTextEditor:hover:not(:focus-within),
+.annotationEditorLayer .inkEditor:hover:not(:focus) {
   outline: var(--hover-outline);
+}
+
+.annotationEditorLayer .inkEditor.disabled:focus {
+  resize: horizontal;
+}
+
+.annotationEditorLayer .inkEditor {
+  position: absolute;
+  background: transparent;
+  border-radius: 3px;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.annotationEditorLayer .background {
+  z-index: 0;
+}
+
+.annotationEditorLayer .inkEditor:focus {
+
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .annotationEditorLayer .selectedEditor {

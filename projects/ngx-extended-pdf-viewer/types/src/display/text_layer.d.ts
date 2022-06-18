@@ -50,7 +50,7 @@ export type TextLayerRenderParameters = {
  * @returns {TextLayerRenderTask}
  */
 export function renderTextLayer(renderParameters: TextLayerRenderParameters): TextLayerRenderTask;
-declare class TextLayerRenderTask {
+export class TextLayerRenderTask {
     constructor({ textContent, textContentStream, container, viewport, textDivs, textContentItemsStr, enhanceTextSelection, }: {
         textContent: any;
         textContentStream: any;
@@ -105,4 +105,3 @@ declare class TextLayerRenderTask {
      */
     expandTextDivs(expandDivs?: boolean | undefined): void;
 }
-export {};

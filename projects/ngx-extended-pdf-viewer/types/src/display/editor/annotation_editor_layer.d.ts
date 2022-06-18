@@ -35,11 +35,23 @@ export class AnnotationEditorLayer {
     pageIndex: number;
     div: HTMLDivElement;
     /**
+     * The mode has changed: it must be updated.
+     * @param {number} mode
+     */
+    updateMode(mode: number): void;
+    /**
+     * Mouseover callback.
+     * @param {MouseEvent} event
+     */
+    mouseover(event: MouseEvent): void;
+    /**
      * Add some commands into the CommandManager (undo/redo stuff).
      * @param {function} cmd
      * @param {function} undo
+     * @param {boolean} mustExec - If true the command is executed after having
+     *   been added.
      */
-    addCommands(cmd: Function, undo: Function): void;
+    addCommands(cmd: Function, undo: Function, mustExec: boolean): void;
     /**
      * Undo the last command.
      */
@@ -110,6 +122,11 @@ export class AnnotationEditorLayer {
      * @param {AnnotationEditor} editor
      */
     addANewEditor(editor: AnnotationEditor): void;
+    /**
+     * Add a new editor and make this addition undoable.
+     * @param {AnnotationEditor} editor
+     */
+    addUndoableEditor(editor: AnnotationEditor): void;
     /**
      * Get an id for an editor.
      * @returns {string}

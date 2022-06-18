@@ -68,8 +68,9 @@ export class AnnotationEditorUIManager {
      * Add a command to execute (cmd) and another one to undo it.
      * @param {function} cmd
      * @param {function} undo
+     * @param {boolean} mustExec
      */
-    addCommands(cmd: Function, undo: Function): void;
+    addCommands(cmd: Function, undo: Function, mustExec: boolean): void;
     /**
      * @param {boolean} allow
      */
