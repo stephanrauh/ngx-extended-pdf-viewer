@@ -2,15 +2,9 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/ngx-extended-pdf-viewer",
   "deleteDestPath": false,
-  "assets": [
-    "changelog.md",
-    "assets",
-    "bleeding-edge"
-  ],
+  "assets": ["changelog.md", "assets", "bleeding-edge"],
   "lib": {
     "entryFile": "src/public_api.ts"
   },
-  "allowedNonPeerDependencies": [
-    "lodash.deburr"
-  ]
+  "allowedNonPeerDependencies": ["lodash.deburr"]
 }

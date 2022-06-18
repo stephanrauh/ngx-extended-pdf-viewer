@@ -370,3 +370,5 @@
 - 13.5.0 dependency updates
 - 13.5.1 corrected the version number of stable branch of pdf.js; fixed a bug that basically is caused by the showcase demo showing custom thumbnails; merged the latest changes of pdf.js into the bleeding-edge branch
 - 13.5.2 #1401 repaired `(pdfLoadingFailed)`; #1313 tolerate browsers blocking the localStorage gracefully; #1399 inlined two graphics to allow using the pdf viewer in arbitrary context paths; preview to an annotation editor for users (bleeding edge only)
+- 13.5.3 #83 tentative fix of the print which was broken on iOS devices
+- 14.0.0 update to Angular 14; raised the minimum required Angular version to 11.1.0
