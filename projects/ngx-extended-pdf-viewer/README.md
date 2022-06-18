@@ -21,6 +21,10 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 <img src="https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/example.png?raw=true">
 
+## What's new in version 14?
+
+Well... nothing. Version 14 was meant to be build with Angular 14, so increasing the version number seemed like a good idea. Unfortunately, building with Angular 14 also means you can't use the library with Angular 12 or 13. So I went back to Angular 13. You can't delete published versions from npm for a good reason, so we end up with a major version without any new features.
+
 ## What's new in version 12 and 13?
 
 Due to an internal change of pdf.js, I had to modify both the HTML templates and the CSS rules of the dialogs. This may be a breaking change, especially if you've customized the appearance of the viewer, so it's time to increment the major version number. That's why I'm releasing version 13 shortly after publishing version 12.
@@ -36,7 +40,7 @@ intended by the author of the PDF file.
 
 Version 12 also updates to pdf.js 2.13, with one exception: it doesn't include the latest improvements of the find bar yet. The "bleeding edge" version has been updated to pdf.js 2.14, which is the developer version (something like a nightly build).
 
-As of version 12.0.0, I recommend using the stable branch of pdf.js instead of using the bleeding edge branch. The bleeding edge branch is the developer version of pdf.js, so it's not recommended to use it in production, anyways. However, the last few commits caused merge conflicts that may or may not have side effects. Handle with caution. That said, I encourage you to use the bleeding edge version every once in a while in development, because that way you can help me find bugs early. Just keep in mind I've called that branch "bleeding edge" for a reason.
+As of version 14.0.0, I recommend using the stable branch of pdf.js instead of using the bleeding edge branch. The bleeding edge branch is the developer version of pdf.js, so it's not recommended to use it in production, anyways. However, the last few commits caused merge conflicts that may or may not have side effects. Handle with caution. That said, I encourage you to use the bleeding edge version every once in a while in development, because that way you can help me find bugs early. Just keep in mind I've called that branch "bleeding edge" for a reason.
 
 ## Showcase and manual
 
@@ -91,7 +95,7 @@ You might also try to use the native PDF viewer of your browser. That's a valid 
 
 As a rule of thumb, I recommend cloning the [showcase project from GitHub](https://github.com/stephanrauh/extended-pdf-viewer-showcase) before doing anything else. It's a standard Angular CLI application, so you'll get it up and running in less than ten minutes. It's a good starting point to do your own experiments. Maybe even more important: you'll learn if the library works on your machine. (Of course, it does, but it's always good to double-check!)
 
-Currently, the minimum required version is Angular 9. The idea is to support the four most current versions of Angular, which gives you roughly two years to update.
+Currently, the minimum required version is Angular 12. The idea is to support the four most current versions of Angular, which gives you roughly two years to update. However, supporting so many version isn't always possible.
 
 1. run `npm add ngx-extended-pdf-viewer` and accept all the defaults
 2. Now there's an example component, but it isn't part of your application yet. You can either add the example component to your application or copy the relevant line to you HTML template:
