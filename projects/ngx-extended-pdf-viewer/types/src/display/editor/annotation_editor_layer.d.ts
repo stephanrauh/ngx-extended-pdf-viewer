@@ -175,11 +175,6 @@ export class AnnotationEditorLayer {
      * @returns {number}
      */
     get scaleFactor(): number;
-    /**
-     * Get the zoom factor.
-     * @returns {number}
-     */
-    get zoomFactor(): number;
     #private;
 }
 import { KeyboardManager } from "./tools.js";

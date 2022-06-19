@@ -33,7 +33,7 @@ export class FreeTextEditor extends AnnotationEditor {
     serialize(): {
         annotationType: number;
         color: number[];
-        fontSize: number;
+        fontSize: any;
         value: string;
         pageIndex: number;
         rect: any[];

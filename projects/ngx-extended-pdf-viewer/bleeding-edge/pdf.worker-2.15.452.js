@@ -134,7 +134,7 @@ class WorkerMessageHandler {
     const WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.15.442';
+    const workerVersion = '2.15.452';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -18646,6 +18646,7 @@ class Annotation {
     this.setBorderStyle(dict);
     this.setAppearance(dict);
     this.setBorderAndBackgroundColors(dict.get("MK"));
+    this._hasOwnCanvas = false;
     this._streams = [];
 
     if (this.appearance) {
@@ -18663,8 +18664,7 @@ class Annotation {
       id: params.id,
       modificationDate: this.modificationDate,
       rect: this.rectangle,
-      subtype: params.subtype,
-      hasOwnCanvas: false
+      subtype: params.subtype
     };
 
     if (params.collectFields) {
@@ -18928,7 +18928,7 @@ class Annotation {
   getOperatorList(evaluator, task, intent, renderForms, annotationStorage) {
     const data = this.data;
     let appearance = this.appearance;
-    const isUsingOwnCanvas = data.hasOwnCanvas && intent & _util.RenderingIntentFlag.DISPLAY;
+    const isUsingOwnCanvas = this._hasOwnCanvas && intent & _util.RenderingIntentFlag.DISPLAY;
 
     if (!appearance) {
       if (!isUsingOwnCanvas) {
@@ -19924,7 +19924,7 @@ class ButtonWidgetAnnotation extends WidgetAnnotation {
     } else if (this.data.radioButton) {
       this._processRadioButton(params);
     } else if (this.data.pushButton) {
-      this.data.hasOwnCanvas = true;
+      this._hasOwnCanvas = true;
 
       this._processPushButton(params);
     } else {
@@ -32338,13 +32338,13 @@ class SimpleSegmentVisitor {
       this.symbols = symbols = {};
     }
 
-    let inputSymbols = [];
+    const inputSymbols = [];
 
-    for (let i = 0, ii = referredSegments.length; i < ii; i++) {
-      const referredSymbols = symbols[referredSegments[i]];
+    for (const referredSegment of referredSegments) {
+      const referredSymbols = symbols[referredSegment];
 
       if (referredSymbols) {
-        inputSymbols = inputSymbols.concat(referredSymbols);
+        inputSymbols.push(...referredSymbols);
       }
     }
 
@@ -32356,13 +32356,13 @@ class SimpleSegmentVisitor {
     const regionInfo = region.info;
     let huffmanTables, huffmanInput;
     const symbols = this.symbols;
-    let inputSymbols = [];
+    const inputSymbols = [];
 
-    for (let i = 0, ii = referredSegments.length; i < ii; i++) {
-      const referredSymbols = symbols[referredSegments[i]];
+    for (const referredSegment of referredSegments) {
+      const referredSymbols = symbols[referredSegment];
 
       if (referredSymbols) {
-        inputSymbols = inputSymbols.concat(referredSymbols);
+        inputSymbols.push(...referredSymbols);
       }
     }
 
@@ -41839,10 +41839,12 @@ class CFFCompiler {
     const output = {
       data: [],
       length: 0,
-      add: function CFFCompiler_add(data) {
+
+      add(data) {
         this.data = this.data.concat(data);
         this.length = this.data.length;
       }
+
     };
     const header = this.compileHeader(cff.header);
     output.add(header);
@@ -42076,7 +42078,7 @@ class CFFCompiler {
   }
 
   compileDict(dict, offsetTracker) {
-    let out = [];
+    const out = [];
     const order = dict.order;
 
     for (let i = 0; i < order.length; ++i) {
@@ -42108,7 +42110,7 @@ class CFFCompiler {
         switch (type) {
           case "num":
           case "sid":
-            out = out.concat(this.encodeNumber(value));
+            out.push(...this.encodeNumber(value));
             break;
 
           case "offset":
@@ -42118,15 +42120,15 @@ class CFFCompiler {
               offsetTracker.track(name, out.length);
             }
 
-            out = out.concat([0x1d, 0, 0, 0, 0]);
+            out.push(0x1d, 0, 0, 0, 0);
             break;
 
           case "array":
           case "delta":
-            out = out.concat(this.encodeNumber(value));
+            out.push(...this.encodeNumber(value));
 
             for (let k = 1, kk = values.length; k < kk; ++k) {
-              out = out.concat(this.encodeNumber(values[k]));
+              out.push(...this.encodeNumber(values[k]));
             }
 
             break;
@@ -42136,7 +42138,7 @@ class CFFCompiler {
         }
       }
 
-      out = out.concat(dict.opcodes[key]);
+      out.push(...dict.opcodes[key]);
     }
 
     return out;
@@ -63124,7 +63126,7 @@ class ChoiceList extends _xfa_object.XFAObject {
 
     const fontSize = field.font && field.font.size || 10;
     const optionStyle = {
-      fontSize: `calc(${fontSize}px * var(--zoom-factor))`
+      fontSize: `calc(${fontSize}px * var(--scale-factor))`
     };
     const children = [];
 
@@ -72675,6 +72677,10 @@ function mapStyle(styleStr, node, richText) {
     style.verticalAlign = (0, _html_utils.measureToString)(Math.sign((0, _utils.getMeasurement)(style.verticalAlign)) * fontSize * VERTICAL_FACTOR);
   }
 
+  if (richText && style.fontSize) {
+    style.fontSize = `calc(${style.fontSize} * var(--scale-factor))`;
+  }
+
   (0, _html_utils.fixTextIndent)(style);
   return style;
 }
@@ -74837,8 +74843,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.15.442';
-const pdfjsBuild = 'f5f455ab3';
+const pdfjsVersion = '2.15.452';
+const pdfjsBuild = '494d73fe5';
 })();
 
 /******/ 	return __webpack_exports__;

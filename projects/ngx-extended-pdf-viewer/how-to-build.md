@@ -68,3 +68,9 @@ Compiling the "bleeding edge" branch of pdf.js is easy:
 1. `git checkout bleeding-edge`
 1. `cd ../ngx-extended-pdf-viewer``
 1. `./updateMozillasPdfViewer.sh && npm run showcase`
+
+## Dockerized smoke tests
+
+The folder `compatibility-tests` contains tiny test suites. They are meant to be run after publishing a new version. They build an new greenfield projects in Docker and check if the PDF file renders correctly.
+
+Currently, these test must be run manually. CD to one of the `AngularXX` folders and run the script `test.sh`.

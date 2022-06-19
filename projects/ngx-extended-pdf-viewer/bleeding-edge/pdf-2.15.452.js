@@ -1388,7 +1388,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.15.442',
+    apiVersion: '2.15.452',
     source: {
       data: source.data,
       url: source.url,
@@ -3546,9 +3546,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.15.442';
+const version = '2.15.452';
 exports.version = version;
-const build = 'f5f455ab3';
+const build = '494d73fe5';
 exports.build = build;
 
 /***/ }),
@@ -4170,7 +4170,7 @@ class BaseSVGFactory {
     }
   }
 
-  create(width, height) {
+  create(width, height, skipDimensions = false) {
     if (width <= 0 || height <= 0) {
       throw new Error("Invalid SVG dimensions");
     }
@@ -4178,8 +4178,12 @@ class BaseSVGFactory {
     const svg = this._createSVG("svg:svg");
 
     svg.setAttribute("version", "1.1");
-    svg.setAttribute("width", `${width}px`);
-    svg.setAttribute("height", `${height}px`);
+
+    if (!skipDimensions) {
+      svg.setAttribute("width", `${width}px`);
+      svg.setAttribute("height", `${height}px`);
+    }
+
     svg.setAttribute("preserveAspectRatio", "none");
     svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
     return svg;
@@ -8112,9 +8116,6 @@ class CanvasGraphics {
           canvas,
           context
         } = this.annotationCanvas;
-        const viewportScaleFactorStr = `var(--zoom-factor) * ${_display_utils.PixelsPerInch.PDF_TO_CSS_UNITS}`;
-        canvas.style.width = `calc(${width}px * ${viewportScaleFactorStr})`;
-        canvas.style.height = `calc(${height}px * ${viewportScaleFactorStr})`;
         this.annotationCanvasMap.set(id, canvas);
         this.annotationCanvas.savedCtx = this.ctx;
         this.ctx = context;
@@ -10450,8 +10451,6 @@ var _freetext = __w_pdfjs_require__(23);
 
 var _ink = __w_pdfjs_require__(24);
 
-var _display_utils = __w_pdfjs_require__(4);
-
 class AnnotationEditorLayer {
   #boundClick;
   #boundMouseover;
@@ -10747,10 +10746,6 @@ class AnnotationEditorLayer {
     return this.viewport.scale;
   }
 
-  get zoomFactor() {
-    return this.viewport.scale / _display_utils.PixelsPerInch.PDF_TO_CSS_UNITS;
-  }
-
 }
 
 exports.AnnotationEditorLayer = AnnotationEditorLayer;
@@ -10771,8 +10766,6 @@ var _util = __w_pdfjs_require__(1);
 var _editor = __w_pdfjs_require__(8);
 
 var _tools = __w_pdfjs_require__(9);
-
-var _display_utils = __w_pdfjs_require__(4);
 
 class FreeTextEditor extends _editor.AnnotationEditor {
   #color;
@@ -10815,7 +10808,7 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   }
 
   getInitialTranslation() {
-    return [-FreeTextEditor._internalPadding * this.parent.zoomFactor, -(FreeTextEditor._internalPadding + this.#fontSize) * this.parent.zoomFactor];
+    return [-FreeTextEditor._internalPadding * this.parent.scaleFactor, -(FreeTextEditor._internalPadding + this.#fontSize) * this.parent.scaleFactor];
   }
 
   rebuild() {
@@ -10916,7 +10909,7 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     const {
       style
     } = this.editorDiv;
-    style.fontSize = `calc(${this.#fontSize}px * var(--zoom-factor))`;
+    style.fontSize = `${this.#fontSize}%`;
     style.color = this.#color;
     this.div.append(this.editorDiv);
     this.overlayDiv = document.createElement("div");
@@ -10934,7 +10927,7 @@ class FreeTextEditor extends _editor.AnnotationEditor {
 
   serialize() {
     const rect = this.editorDiv.getBoundingClientRect();
-    const padding = FreeTextEditor._internalPadding * this.parent.zoomFactor;
+    const padding = FreeTextEditor._internalPadding * this.parent.scaleFactor;
 
     const [x1, y1] = _util.Util.applyTransform([this.x + padding, this.y + padding + rect.height], this.parent.inverseViewportTransform);
 
@@ -10943,7 +10936,7 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     return {
       annotationType: _util.AnnotationEditorType.FREETEXT,
       color: [0, 0, 0],
-      fontSize: this.#fontSize / _display_utils.PixelsPerInch.PDF_TO_CSS_UNITS,
+      fontSize: this.#fontSize,
       value: this.#content,
       pageIndex: this.parent.pageIndex,
       rect: [x1, y1, x2, y2]
@@ -11956,48 +11949,24 @@ class AnnotationElement {
           page = this.page,
           viewport = this.viewport;
     const container = document.createElement("section");
-    let {
+    const {
       width,
       height
     } = getRectDims(data.rect);
+    const [pageLLx, pageLLy, pageURx, pageURy] = viewport.viewBox;
+    const pageWidth = pageURx - pageLLx;
+    const pageHeight = pageURy - pageLLy;
     container.setAttribute("data-annotation-id", data.id);
 
     const rect = _util.Util.normalizeRect([data.rect[0], page.view[3] - data.rect[1] + page.view[1], data.rect[2], page.view[3] - data.rect[3] + page.view[1]]);
 
-    if (data.hasOwnCanvas) {
-      const transform = viewport.transform.slice();
-
-      const [scaleX, scaleY] = _util.Util.singularValueDecompose2dScale(transform);
-
-      width = Math.ceil(width * scaleX);
-      height = Math.ceil(height * scaleY);
-      rect[0] *= scaleX;
-      rect[1] *= scaleY;
-
-      for (let i = 0; i < 4; i++) {
-        transform[i] = Math.sign(transform[i]);
-      }
-
-      container.style.transform = `matrix(${transform.join(",")})`;
-    } else {
-      container.style.transform = `matrix(${viewport.transform.join(",")})`;
-    }
-
-    container.style.transformOrigin = `${-rect[0]}px ${-rect[1]}px`;
-
     if (!ignoreBorder && data.borderStyle.width > 0) {
       container.style.borderWidth = `${data.borderStyle.width}px`;
-
-      if (data.borderStyle.style !== _util.AnnotationBorderStyleType.UNDERLINE) {
-        width -= 2 * data.borderStyle.width;
-        height -= 2 * data.borderStyle.width;
-      }
-
       const horizontalRadius = data.borderStyle.horizontalCornerRadius;
       const verticalRadius = data.borderStyle.verticalCornerRadius;
 
       if (horizontalRadius > 0 || verticalRadius > 0) {
-        const radius = `${horizontalRadius}px / ${verticalRadius}px`;
+        const radius = `calc(${horizontalRadius}px * var(--scale-factor)) / calc(${verticalRadius}px * var(--scale-factor))`;
         container.style.borderRadius = radius;
       }
 
@@ -12035,16 +12004,10 @@ class AnnotationElement {
       }
     }
 
-    container.style.left = `${rect[0]}px`;
-    container.style.top = `${rect[1]}px`;
-
-    if (data.hasOwnCanvas) {
-      container.style.width = container.style.height = "auto";
-    } else {
-      container.style.width = `${width}px`;
-      container.style.height = `${height}px`;
-    }
-
+    container.style.left = `${100 * (rect[0] - pageLLx) / pageWidth}%`;
+    container.style.top = `${100 * (rect[1] - pageLLy) / pageHeight}%`;
+    container.style.width = `${100 * width / pageWidth}%`;
+    container.style.height = `${100 * height / pageHeight}%`;
     return container;
   }
 
@@ -12194,7 +12157,7 @@ class AnnotationElement {
       hideWrapper: true
     });
     const popup = popupElement.render();
-    popup.style.left = container.style.width;
+    popup.style.left = "100%";
     container.append(popup);
   }
 
@@ -12231,7 +12194,7 @@ class AnnotationElement {
           }
 
           const exportValue = typeof exportValues === "string" ? exportValues : null;
-          const domElement = document.getElementById(id);
+          const domElement = document.querySelector(`[data-element-id="${id}"]`);
 
           if (domElement && !GetElementsByNameSet.has(domElement)) {
             (0, _util.warn)(`_getElementsByName - element not allowed: ${id}`);
@@ -12299,7 +12262,7 @@ class LinkAnnotationElement extends AnnotationElement {
       linkService
     } = this;
     const link = document.createElement("a");
-    link.setAttribute("id", data.id);
+    link.setAttribute("data-element-id", data.id);
     let isBound = false;
 
     if (data.url) {
@@ -12505,9 +12468,12 @@ class LinkAnnotationElement extends AnnotationElement {
             continue;
         }
 
-        const domElement = document.getElementById(id);
+        const domElement = document.querySelector(`[data-element-id="${id}"]`);
 
-        if (!domElement || !GetElementsByNameSet.has(domElement)) {
+        if (!domElement) {
+          continue;
+        } else if (!GetElementsByNameSet.has(domElement)) {
+          (0, _util.warn)(`_bindResetFormAction - element not allowed: ${id}`);
           continue;
         }
 
@@ -12542,8 +12508,6 @@ class TextAnnotationElement extends AnnotationElement {
   render() {
     this.container.className = "textAnnotation";
     const image = document.createElement("img");
-    image.style.height = this.container.style.height;
-    image.style.width = this.container.style.width;
     image.src = this.imageResourcesPath + "annotation-" + this.data.name.toLowerCase() + ".svg";
     image.alt = "[{{type}} Annotation]";
     image.dataset.l10nId = "text_annotation_type";
@@ -12626,17 +12590,19 @@ class WidgetAnnotationElement extends AnnotationElement {
     } = this.data.defaultAppearanceData;
     const fontSize = this.data.defaultAppearanceData.fontSize || DEFAULT_FONT_SIZE;
     const style = element.style;
+    let computedFontSize;
 
     if (this.data.multiLine) {
       const height = Math.abs(this.data.rect[3] - this.data.rect[1]);
       const numberOfLines = Math.round(height / (_util.LINE_FACTOR * fontSize)) || 1;
       const lineHeight = height / numberOfLines;
-      style.fontSize = `${Math.min(fontSize, Math.round(lineHeight / _util.LINE_FACTOR))}px`;
+      computedFontSize = Math.min(fontSize, Math.round(lineHeight / _util.LINE_FACTOR));
     } else {
       const height = Math.abs(this.data.rect[3] - this.data.rect[1]);
-      style.fontSize = `${Math.min(fontSize, Math.round(height / _util.LINE_FACTOR))}px`;
+      computedFontSize = Math.min(fontSize, Math.round(height / _util.LINE_FACTOR));
     }
 
+    style.fontSize = `${computedFontSize}%`;
     style.color = _util.Util.makeHexColor(fontColor[0], fontColor[1], fontColor[2]);
 
     if (this.data.textAlignment !== null) {
@@ -12690,7 +12656,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
       });
       const textContent = storedData.formattedValue || storedData.value || "";
       const elementData = {
-        userValue: null,
+        userValue: textContent,
         formattedValue: null,
         valueOnFocus: ""
       };
@@ -12713,11 +12679,10 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
       }
 
       GetElementsByNameSet.add(element);
+      element.setAttribute("data-element-id", id);
       element.disabled = this.data.readOnly;
       element.name = this.data.fieldName;
       element.tabIndex = DEFAULT_TAB_INDEX;
-      elementData.userValue = textContent;
-      element.setAttribute("id", id);
 
       this._setRequired(element, this.data.required);
 
@@ -12933,7 +12898,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
         const fieldWidth = this.data.rect[2] - this.data.rect[0];
         const combWidth = fieldWidth / this.data.maxLen;
         element.classList.add("comb");
-        element.style.letterSpacing = `calc(${combWidth}px - 1ch)`;
+        element.style.letterSpacing = `calc(${combWidth}px * var(--scale-factor) - 1ch)`;
       }
     } else {
       element = document.createElement("div");
@@ -12979,6 +12944,7 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
     this.container.className = "buttonWidgetAnnotation checkBox";
     const element = document.createElement("input");
     GetElementsByNameSet.add(element);
+    element.setAttribute("data-element-id", id);
     element.disabled = data.readOnly;
 
     this._setRequired(element, this.data.required);
@@ -12990,7 +12956,6 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
       element.setAttribute("checked", true);
     }
 
-    element.setAttribute("id", id);
     element.setAttribute("exportValue", data.exportValue);
     element.tabIndex = DEFAULT_TAB_INDEX;
     element.addEventListener("change", event => {
@@ -13076,6 +13041,7 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
 
     const element = document.createElement("input");
     GetElementsByNameSet.add(element);
+    element.setAttribute("data-element-id", id);
     element.disabled = data.readOnly;
 
     this._setRequired(element, this.data.required);
@@ -13087,7 +13053,6 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
       element.setAttribute("checked", true);
     }
 
-    element.setAttribute("id", id);
     element.tabIndex = DEFAULT_TAB_INDEX;
     element.addEventListener("change", event => {
       const {
@@ -13194,16 +13159,14 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
     const storedData = storage.getValue(id, this.data.fieldName, {
       value: this.data.fieldValue
     });
-    const fontSize = this.data.defaultAppearanceData.fontSize || DEFAULT_FONT_SIZE;
-    const fontSizeStyle = `calc(${fontSize}px * var(--zoom-factor))`;
     const selectElement = document.createElement("select");
     GetElementsByNameSet.add(selectElement);
+    selectElement.setAttribute("data-element-id", id);
     selectElement.disabled = this.data.readOnly;
 
     this._setRequired(selectElement, this.data.required);
 
     selectElement.name = this.data.fieldName;
-    selectElement.setAttribute("id", id);
     selectElement.tabIndex = DEFAULT_TAB_INDEX;
     let addAnEmptyEntry = this.data.combo && this.data.options.length > 0;
 
@@ -13227,10 +13190,6 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
       const optionElement = document.createElement("option");
       optionElement.textContent = option.displayValue;
       optionElement.value = option.exportValue;
-
-      if (this.data.combo) {
-        optionElement.style.fontSize = fontSizeStyle;
-      }
 
       if (storedData.value.includes(option.exportValue)) {
         optionElement.setAttribute("selected", true);
@@ -13487,9 +13446,11 @@ class PopupAnnotationElement extends AnnotationElement {
 
     const popupLeft = rect[0] + this.data.parentRect[2] - this.data.parentRect[0];
     const popupTop = rect[1];
-    this.container.style.transformOrigin = `${-popupLeft}px ${-popupTop}px`;
-    this.container.style.left = `${popupLeft}px`;
-    this.container.style.top = `${popupTop}px`;
+    const [pageLLx, pageLLy, pageURx, pageURy] = this.viewport.viewBox;
+    const pageWidth = pageURx - pageLLx;
+    const pageHeight = pageURy - pageLLy;
+    this.container.style.left = `${100 * (popupLeft - pageLLx) / pageWidth}%`;
+    this.container.style.top = `${100 * (popupTop - pageLLy) / pageHeight}%`;
     this.container.append(popup.render());
     return this.container;
   }
@@ -13664,7 +13625,7 @@ class LineAnnotationElement extends AnnotationElement {
       width,
       height
     } = getRectDims(data.rect);
-    const svg = this.svgFactory.create(width, height);
+    const svg = this.svgFactory.create(width, height, true);
     const line = this.svgFactory.createElement("svg:line");
     line.setAttribute("x1", data.rect[2] - data.lineCoordinates[0]);
     line.setAttribute("y1", data.rect[3] - data.lineCoordinates[1]);
@@ -13699,7 +13660,7 @@ class SquareAnnotationElement extends AnnotationElement {
       width,
       height
     } = getRectDims(data.rect);
-    const svg = this.svgFactory.create(width, height);
+    const svg = this.svgFactory.create(width, height, true);
     const borderWidth = data.borderStyle.width;
     const square = this.svgFactory.createElement("svg:rect");
     square.setAttribute("x", borderWidth / 2);
@@ -13735,7 +13696,7 @@ class CircleAnnotationElement extends AnnotationElement {
       width,
       height
     } = getRectDims(data.rect);
-    const svg = this.svgFactory.create(width, height);
+    const svg = this.svgFactory.create(width, height, true);
     const borderWidth = data.borderStyle.width;
     const circle = this.svgFactory.createElement("svg:ellipse");
     circle.setAttribute("cx", width / 2);
@@ -13773,7 +13734,7 @@ class PolylineAnnotationElement extends AnnotationElement {
       width,
       height
     } = getRectDims(data.rect);
-    const svg = this.svgFactory.create(width, height);
+    const svg = this.svgFactory.create(width, height, true);
     let points = [];
 
     for (const coordinate of data.vertices) {
@@ -13846,7 +13807,7 @@ class InkAnnotationElement extends AnnotationElement {
       width,
       height
     } = getRectDims(data.rect);
-    const svg = this.svgFactory.create(width, height);
+    const svg = this.svgFactory.create(width, height, true);
 
     for (const inkList of data.inkLists) {
       let points = [];
@@ -14118,50 +14079,32 @@ class AnnotationLayer {
 
   static update(parameters) {
     const {
-      page,
-      viewport,
-      annotations,
       annotationCanvasMap,
       div
     } = parameters;
-    const transform = viewport.transform;
-    const matrix = `matrix(${transform.join(",")})`;
-    let scale, ownMatrix;
-
-    for (const data of annotations) {
-      const elements = div.querySelectorAll(`[data-annotation-id="${data.id}"]`);
-
-      if (elements) {
-        for (const element of elements) {
-          if (data.hasOwnCanvas) {
-            const rect = _util.Util.normalizeRect([data.rect[0], page.view[3] - data.rect[1] + page.view[1], data.rect[2], page.view[3] - data.rect[3] + page.view[1]]);
-
-            if (!ownMatrix) {
-              scale = Math.abs(transform[0] || transform[1]);
-              const ownTransform = transform.slice();
-
-              for (let i = 0; i < 4; i++) {
-                ownTransform[i] = Math.sign(ownTransform[i]);
-              }
-
-              ownMatrix = `matrix(${ownTransform.join(",")})`;
-            }
-
-            const left = rect[0] * scale;
-            const top = rect[1] * scale;
-            element.style.left = `${left}px`;
-            element.style.top = `${top}px`;
-            element.style.transformOrigin = `${-left}px ${-top}px`;
-            element.style.transform = ownMatrix;
-          } else {
-            element.style.transform = matrix;
-          }
-        }
-      }
-    }
-
     this.#setAnnotationCanvasMap(div, annotationCanvasMap);
     div.hidden = false;
+  }
+
+  static setDimensions(div, viewport) {
+    const {
+      width,
+      height,
+      rotation
+    } = viewport;
+    const {
+      style
+    } = div;
+
+    if (rotation === 0 || rotation === 180) {
+      style.width = `${width}px`;
+      style.height = `${height}px`;
+    } else {
+      style.width = `${height}px`;
+      style.height = `${width}px`;
+    }
+
+    div.setAttribute("data-annotation-rotation", rotation);
   }
 
   static #setAnnotationCanvasMap(div, annotationCanvasMap) {
@@ -14993,7 +14936,7 @@ function expandBoundsLTR(width, bounds) {
       }
     }
 
-    Array.prototype.splice.apply(horizon, [i, j - i + 1].concat(changedHorizon));
+    Array.prototype.splice.apply(horizon, [i, j - i + 1, ...changedHorizon]);
   }
 
   for (const horizonPart of horizon) {
@@ -18671,8 +18614,8 @@ var _svg = __w_pdfjs_require__(30);
 
 var _xfa_layer = __w_pdfjs_require__(28);
 
-const pdfjsVersion = '2.15.442';
-const pdfjsBuild = 'f5f455ab3';
+const pdfjsVersion = '2.15.452';
+const pdfjsBuild = '494d73fe5';
 {
   if (_is_node.isNodeJS) {
     const {

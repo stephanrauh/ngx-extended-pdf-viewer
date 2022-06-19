@@ -79,6 +79,7 @@ export class AnnotationLayer {
      * @memberof AnnotationLayer
      */
     public static update(parameters: AnnotationLayerParameters): void;
+    static setDimensions(div: any, viewport: any): void;
     static "__#18@#setAnnotationCanvasMap"(div: any, annotationCanvasMap: any): void;
 }
 import { AnnotationStorage } from "./annotation_storage.js";

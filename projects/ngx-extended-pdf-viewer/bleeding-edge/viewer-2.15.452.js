@@ -9138,7 +9138,7 @@ class PDFScriptingManager {
     const ids = siblings ? [id, ...siblings] : [id];
 
     for (const elementId of ids) {
-      const element = document.getElementById(elementId);
+      const element = document.querySelector(`[data-element-id="${elementId}"]`);
 
       if (element) {
         element.dispatchEvent(new CustomEvent("updatefromsandbox", {
@@ -10655,7 +10655,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.15.442';
+    const viewerVersion = '2.15.452';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -10722,11 +10722,6 @@ class BaseViewer {
     }
 
     this.updateContainerHeightCss();
-    Promise.resolve().then(() => {
-      this.eventBus.dispatch("baseviewerinit", {
-        source: this
-      });
-    });
   }
 
   get pagesCount() {
@@ -11563,7 +11558,7 @@ class BaseViewer {
       return;
     }
 
-    _ui_utils.docStyle.setProperty("--zoom-factor", newScale);
+    _ui_utils.docStyle.setProperty("--scale-factor", newScale * _pdfjsLib.PixelsPerInch.PDF_TO_CSS_UNITS);
 
     const updateArgs = {
       scale: newScale
@@ -12853,9 +12848,14 @@ class AnnotationLayerBuilder {
     };
 
     if (this.div) {
+      _pdfjsLib.AnnotationLayer.setDimensions(this.div, viewport);
+
       _pdfjsLib.AnnotationLayer.update(parameters);
     } else {
       this.div = document.createElement("div");
+
+      _pdfjsLib.AnnotationLayer.setDimensions(this.div, viewport);
+
       this.div.className = "annotationLayer";
       this.pageDiv.append(this.div);
       parameters.div = this.div;
@@ -15673,7 +15673,7 @@ class PDFPageView {
     });
 
     if (this._isStandalone) {
-      _ui_utils.docStyle.setProperty("--zoom-factor", this.scale);
+      _ui_utils.docStyle.setProperty("--scale-factor", this.viewport.scale);
     }
 
     if (this.svg) {
@@ -21020,8 +21020,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.15.442';
-const pdfjsBuild = 'f5f455ab3';
+const pdfjsVersion = '2.15.452';
+const pdfjsBuild = '494d73fe5';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
