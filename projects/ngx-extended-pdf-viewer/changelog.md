@@ -375,3 +375,4 @@
 - 14.0.1 going back to Angular 13 after detecting that ng-packr 14 break compatibility to Angular 12 + 13
 - 14.0.2 raised the minimum required version of Angular to 12 (Note that Angular 11.1.0 is reported to be compatible, but my compatibility tests failed)
 - 14.0.3 updated the README.md
+- 14.0.4 #1429 Class loadingInProgress now vanishes after page load

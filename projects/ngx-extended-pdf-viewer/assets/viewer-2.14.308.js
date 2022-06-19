@@ -3741,7 +3741,7 @@ class ProgressBar {
       this.bar.classList.add("hidden");
     }
 
-    document.body.classList.remove("loadingInProgress");
+    document.querySelector(".body").classList.remove("loadingInProgress");
   }
 
   show() {
@@ -10656,7 +10656,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.14.307';
+    const viewerVersion = '2.14.308';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -20752,8 +20752,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.14.307';
-const pdfjsBuild = 'a3693889e';
+const pdfjsVersion = '2.14.308';
+const pdfjsBuild = 'd0f2c2c8e';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
