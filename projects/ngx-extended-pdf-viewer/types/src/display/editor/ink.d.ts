@@ -72,7 +72,8 @@ export class InkEditor extends AnnotationEditor {
             points: number[];
         }[];
         pageIndex: number;
-        rect: any[];
+        rect: number[];
+        rotation: any;
     };
     #private;
 }

@@ -36,7 +36,8 @@ export class FreeTextEditor extends AnnotationEditor {
         fontSize: any;
         value: string;
         pageIndex: number;
-        rect: any[];
+        rect: number[];
+        rotation: any;
     };
     #private;
 }

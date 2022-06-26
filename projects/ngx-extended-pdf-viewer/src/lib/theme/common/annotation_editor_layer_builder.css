@@ -13,30 +13,41 @@
  * limitations under the License.
  */
 
-:root {
+ :root {
   --focus-outline: solid 2px red;
   --hover-outline: dashed 2px blue;
   --freetext-line-height: 1.35;
   --freetext-padding: 2px;
 }
 
+[data-editor-rotation="90"] {
+  transform: rotate(90deg);
+}
+[data-editor-rotation="180"] {
+  transform: rotate(180deg);
+}
+[data-editor-rotation="270"] {
+  transform: rotate(270deg);
+}
+
 .annotationEditorLayer {
   background: transparent;
-  width: 100%;
-  height: 100%;
   position: absolute;
   top: 0;
   left: 0;
+  font-size: calc(100px * var(--scale-factor));
+  transform-origin: 0 0;
 }
 
 .annotationEditorLayer .freeTextEditor {
   position: absolute;
   background: transparent;
   border-radius: 3px;
-  padding: calc(var(--freetext-padding) * var(--zoom-factor));
+  padding: calc(var(--freetext-padding) * var(--scale-factor));
   resize: none;
   width: auto;
   height: auto;
+  transform-origin: 0 0;
 }
 
 .annotationEditorLayer .freeTextEditor .internal {
@@ -99,6 +110,7 @@
   width: 100%;
   height: 100%;
   z-index: 1;
+  transform-origin: 0 0;
 }
 
 .annotationEditorLayer .background {
@@ -106,7 +118,17 @@
 }
 
 .annotationEditorLayer .inkEditor:focus {
+  outline: var(--focus-outline);
+  resize: both;
+}
 
+.annotationEditorLayer .inkEditor.editing {
+  resize: none;
+}
+
+.annotationEditorLayer .inkEditor .inkEditorCanvas {
+  position: absolute;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;

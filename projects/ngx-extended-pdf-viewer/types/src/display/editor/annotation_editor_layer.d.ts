@@ -164,7 +164,6 @@ export class AnnotationEditorLayer {
      */
     render(parameters: Object): void;
     viewport: any;
-    inverseViewportTransform: number[] | undefined;
     /**
      * Update the main editor.
      * @param {Object} parameters
@@ -175,6 +174,16 @@ export class AnnotationEditorLayer {
      * @returns {number}
      */
     get scaleFactor(): number;
+    /**
+     * Get page dimensions.
+     * @returns {Object} dimensions.
+     */
+    get pageDimensions(): Object;
+    get viewportBaseDimensions(): any[];
+    /**
+     * Set the dimensions of the main div.
+     */
+    setDimensions(): void;
     #private;
 }
 import { KeyboardManager } from "./tools.js";

@@ -125,6 +125,11 @@ export class AnnotationEditorUIManager {
      */
     getActive(): AnnotationEditor | null;
     /**
+     * Check if there is an active editor.
+     * @returns {boolean}
+     */
+    hasActive(): boolean;
+    /**
      * Get the current editor mode.
      * @returns {number}
      */

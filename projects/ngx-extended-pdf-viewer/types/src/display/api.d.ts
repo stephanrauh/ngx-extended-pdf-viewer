@@ -417,6 +417,7 @@ export type RenderParameters = {
      * annotation ids with canvases used to render them.
      */
     annotationCanvasMap?: Map<string, HTMLCanvasElement> | undefined;
+    printAnnotationStorage?: PrintAnnotationStorage | undefined;
 };
 /**
  * Page getOperatorList parameters.
@@ -442,6 +443,7 @@ export type GetOperatorListParameters = {
      * The default value is `AnnotationMode.ENABLE`.
      */
     annotationMode?: number | undefined;
+    printAnnotationStorage?: PrintAnnotationStorage | undefined;
 };
 /**
  * Structure tree node. The root node will have a role "Root".
@@ -675,7 +677,7 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#11@#docId": number;
+    static "__#13@#docId": number;
     _capability: import("../shared/util.js").PromiseCapability;
     _transport: any;
     _worker: any;
@@ -1115,6 +1117,7 @@ export class PDFDocumentProxy {
  *   states set.
  * @property {Map<string, HTMLCanvasElement>} [annotationCanvasMap] - Map some
  *   annotation ids with canvases used to render them.
+ * @property {PrintAnnotationStorage} [printAnnotationStorage]
  */
 /**
  * Page getOperatorList parameters.
@@ -1134,6 +1137,7 @@ export class PDFDocumentProxy {
  *      (as above) but where interactive form elements are updated with data
  *      from the {@link AnnotationStorage}-instance; useful e.g. for printing.
  *   The default value is `AnnotationMode.ENABLE`.
+ * @property {PrintAnnotationStorage} [printAnnotationStorage]
  */
 /**
  * Structure tree node. The root node will have a role "Root".
@@ -1232,14 +1236,14 @@ export class PDFPageProxy {
      * @returns {RenderTask} An object that contains a promise that is
      *   resolved when the page finishes rendering.
      */
-    render({ canvasContext, viewport, intent, annotationMode, transform, imageLayer, canvasFactory, background, backgroundColorToReplace, optionalContentConfigPromise, annotationCanvasMap, pageColors, }: RenderParameters, ...args: any[]): RenderTask;
+    render({ canvasContext, viewport, intent, annotationMode, transform, imageLayer, canvasFactory, background, backgroundColorToReplace, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, }: RenderParameters, ...args: any[]): RenderTask;
     /**
      * @param {GetOperatorListParameters} params - Page getOperatorList
      *   parameters.
      * @returns {Promise<PDFOperatorList>} A promise resolved with an
      *   {@link PDFOperatorList} object that represents the page's operator list.
      */
-    getOperatorList({ intent, annotationMode, }?: GetOperatorListParameters): Promise<PDFOperatorList>;
+    getOperatorList({ intent, annotationMode, printAnnotationStorage, }?: GetOperatorListParameters): Promise<PDFOperatorList>;
     /**
      * NOTE: All occurrences of whitespace will be replaced by
      * standard spaces (0x20).
@@ -1313,7 +1317,7 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#12@#workerPorts": WeakMap<object, any>;
+    static "__#14@#workerPorts": WeakMap<object, any>;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */
@@ -1404,6 +1408,7 @@ export function setPDFNetworkStreamFactory(pdfNetworkStreamFactory: IPDFStreamFa
 export const version: string;
 import { PageViewport } from "./display_utils.js";
 import { OptionalContentConfig } from "./optional_content_config.js";
+import { PrintAnnotationStorage } from "./annotation_storage.js";
 import { DOMCanvasFactory } from "./display_utils.js";
 import { DOMCMapReaderFactory } from "./display_utils.js";
 import { DOMStandardFontDataFactory } from "./display_utils.js";

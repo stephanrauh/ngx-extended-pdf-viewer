@@ -6,7 +6,7 @@ export type IPDFAnnotationLayerFactory = import("./interfaces").IPDFAnnotationLa
 export type IPDFAnnotationEditorLayerFactory = import("./interfaces").IPDFAnnotationEditorLayerFactory;
 export type IPDFStructTreeLayerFactory = import("./interfaces").IPDFStructTreeLayerFactory;
 export type IPDFTextLayerFactory = import("./interfaces").IPDFTextLayerFactory;
-export type IPDFXfaLayerFactory = import("./interfaces").IL10n;
+export type IPDFXfaLayerFactory = import("./interfaces").IPDFXfaLayerFactory;
 export type IRenderableView = import("./interfaces").IRenderableView;
 export type PDFRenderingQueue = import("./pdf_rendering_queue").PDFRenderingQueue;
 export type PDFPageViewOptions = {
@@ -120,7 +120,7 @@ export class PDFPageView implements IRenderableView {
     textLayerFactory: import("./interfaces").IPDFTextLayerFactory;
     annotationLayerFactory: import("./interfaces").IPDFAnnotationLayerFactory;
     annotationEditorLayerFactory: import("./interfaces").IPDFAnnotationEditorLayerFactory;
-    xfaLayerFactory: import("./interfaces").IL10n;
+    xfaLayerFactory: import("./interfaces").IPDFXfaLayerFactory;
     textHighlighter: any;
     structTreeLayerFactory: import("./interfaces").IPDFStructTreeLayerFactory;
     renderer: string;
@@ -140,7 +140,7 @@ export class PDFPageView implements IRenderableView {
     annotationEditorLayer: any;
     textLayer: import("./text_layer_builder.js").TextLayerBuilder | null;
     zoomLayer: ParentNode | null;
-    xfaLayer: any;
+    xfaLayer: import("./xfa_layer_builder.js").XfaLayerBuilder | null;
     structTreeLayer: any;
     div: HTMLDivElement;
     setPdfPage(pdfPage: any): void;

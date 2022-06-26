@@ -41,6 +41,7 @@ export class AnnotationEditor {
     div: HTMLDivElement | null;
     x: number;
     y: number;
+    rotation: any;
     isAttachedToDOM: boolean;
     /**
      * This editor will be behind the others.
@@ -62,30 +63,32 @@ export class AnnotationEditor {
     focusout(event: FocusEvent): undefined;
     commitOrRemove(): void;
     /**
-     * Get the pointer coordinates in order to correctly translate the
-     * div in case of drag-and-drop.
-     * @param {MouseEvent} event
-     */
-    mousedown(event: MouseEvent): void;
-    mouseX: number | undefined;
-    mouseY: number | undefined;
-    /**
      * We use drag-and-drop in order to move an editor on a page.
      * @param {DragEvent} event
      */
     dragstart(event: DragEvent): void;
+    startX: number | undefined;
+    startY: number | undefined;
     /**
      * Set the editor position within its parent.
      * @param {number} x
      * @param {number} y
+     * @param {number} tx - x-translation in screen coordinates.
+     * @param {number} ty - y-translation in screen coordinates.
      */
-    setAt(x: number, y: number): void;
+    setAt(x: number, y: number, tx: number, ty: number): void;
     /**
      * Translate the editor position within its parent.
+     * @param {number} x - x-translation in screen coordinates.
+     * @param {number} y - y-translation in screen coordinates.
+     */
+    translate(x: number, y: number): void;
+    /**
+     * Convert a screen translation into a page one.
      * @param {number} x
      * @param {number} y
      */
-    translate(x: number, y: number): void;
+    screenToPageTranslation(x: number, y: number): number[];
     /**
      * Set the dimensions of this editor.
      * @param {number} width
@@ -102,15 +105,11 @@ export class AnnotationEditor {
      * @returns {HTMLDivElement}
      */
     render(): HTMLDivElement;
+    getRect(tx: any, ty: any): number[];
     /**
      * Executed once this editor has been rendered.
      */
     onceAdded(): void;
-    /**
-     * Apply the current transform (zoom) to this editor.
-     * @param {Array<number>} transform
-     */
-    transform(transform: Array<number>): void;
     /**
      * Check if the editor contains something.
      * @returns {boolean}

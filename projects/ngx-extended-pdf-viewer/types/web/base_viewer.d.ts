@@ -169,10 +169,6 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFAnnotationEdi
     /**
      * @type {boolean}
      */
-    get enableAnnotationEditor(): boolean;
-    /**
-     * @type {boolean}
-     */
     get enableScripting(): boolean;
     /**
      * @param {number} val - The page number.
@@ -466,8 +462,11 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFAnnotationEdi
     /**
      * @param {number} mode - AnnotationEditor mode (None, FreeText, Ink, ...)
      */
-    set annotationEditorMode(arg: number);
-    get annotationEditorMode(): number;
+    set annotationEditorMode(arg: number | null);
+    /**
+     * @type {number | null}
+     */
+    get annotationEditorMode(): number | null;
     #private;
 }
 export namespace PagesCountLimit {
