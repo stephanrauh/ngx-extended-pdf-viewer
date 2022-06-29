@@ -376,4 +376,4 @@
 - 14.0.2 raised the minimum required version of Angular to 12 (Note that Angular 11.1.0 is reported to be compatible, but my compatibility tests failed)
 - 14.0.3 updated the README.md
 - 14.0.4 #1429 Class loadingInProgress now vanishes after page load
-- 14.0.5 #8 prevent the browser from filling input field with password or user names
+- 14.0.5 #8 prevent the browser from filling input field with password or user names; #1433 fixed the CSS code highlighting find results covering multiple spans (the middle sections appeared at random positions)
