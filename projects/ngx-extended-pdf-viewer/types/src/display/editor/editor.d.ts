@@ -181,5 +181,16 @@ export class AnnotationEditor {
      * Unselect this editor.
      */
     unselect(): void;
+    /**
+     * Update some parameters which have been changed through the UI.
+     * @param {number} type
+     * @param {*} value
+     */
+    updateParams(type: number, value: any): void;
+    /**
+     * Get some properties to update in the UI.
+     * @returns {Object}
+     */
+    get propertiesToUpdate(): Object;
     #private;
 }

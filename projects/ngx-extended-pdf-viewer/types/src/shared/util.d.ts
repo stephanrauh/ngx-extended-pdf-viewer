@@ -50,8 +50,15 @@ export namespace AnnotationBorderStyleType {
     const INSET: number;
     const UNDERLINE: number;
 }
+export namespace AnnotationEditorParamsType {
+    const FREETEXT_SIZE: number;
+    const FREETEXT_COLOR: number;
+    const INK_COLOR: number;
+    const INK_THICKNESS: number;
+}
 export const AnnotationEditorPrefix: "pdfjs_internal_editor_";
 export namespace AnnotationEditorType {
+    const DISABLE: number;
     const NONE: number;
     const FREETEXT: number;
     const INK: number;
@@ -95,10 +102,11 @@ export namespace AnnotationMarkedState {
     const UNMARKED: string;
 }
 export namespace AnnotationMode {
-    const DISABLE: number;
-    const ENABLE: number;
-    const ENABLE_FORMS: number;
-    const ENABLE_STORAGE: number;
+    const DISABLE_1: number;
+    export { DISABLE_1 as DISABLE };
+    export const ENABLE: number;
+    export const ENABLE_FORMS: number;
+    export const ENABLE_STORAGE: number;
 }
 export namespace AnnotationReplyType {
     const GROUP: string;

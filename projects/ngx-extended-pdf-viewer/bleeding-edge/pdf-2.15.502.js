@@ -43,7 +43,7 @@ return /******/ (() => { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.VerbosityLevel = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.UNSUPPORTED_FEATURES = exports.TextRenderingMode = exports.StreamType = exports.RenderingIntentFlag = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.LINE_FACTOR = exports.LINE_DESCENT_FACTOR = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FontType = exports.FeatureTest = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMode = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationEditorType = exports.AnnotationEditorPrefix = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
+exports.VerbosityLevel = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.UNSUPPORTED_FEATURES = exports.TextRenderingMode = exports.StreamType = exports.RenderingIntentFlag = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.LINE_FACTOR = exports.LINE_DESCENT_FACTOR = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FontType = exports.FeatureTest = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMode = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationEditorType = exports.AnnotationEditorPrefix = exports.AnnotationEditorParamsType = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
 exports.arrayByteLength = arrayByteLength;
 exports.arraysToBytes = arraysToBytes;
 exports.assert = assert;
@@ -100,11 +100,19 @@ exports.AnnotationMode = AnnotationMode;
 const AnnotationEditorPrefix = "pdfjs_internal_editor_";
 exports.AnnotationEditorPrefix = AnnotationEditorPrefix;
 const AnnotationEditorType = {
+  DISABLE: -1,
   NONE: 0,
   FREETEXT: 3,
   INK: 15
 };
 exports.AnnotationEditorType = AnnotationEditorType;
+const AnnotationEditorParamsType = {
+  FREETEXT_SIZE: 0,
+  FREETEXT_COLOR: 1,
+  INK_COLOR: 2,
+  INK_THICKNESS: 3
+};
+exports.AnnotationEditorParamsType = AnnotationEditorParamsType;
 const PermissionFlag = {
   PRINT: 0x04,
   MODIFY_CONTENTS: 0x08,
@@ -1388,7 +1396,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.15.452',
+    apiVersion: '2.15.502',
     source: {
       data: source.data,
       url: source.url,
@@ -3551,9 +3559,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.15.452';
+const version = '2.15.502';
 exports.version = version;
-const build = '494d73fe5';
+const build = '3fc109399';
 exports.build = build;
 
 /***/ }),
@@ -3982,6 +3990,12 @@ class AnnotationEditor {
     }
   }
 
+  updateParams(type, value) {}
+
+  get propertiesToUpdate() {
+    return {};
+  }
+
 }
 
 exports.AnnotationEditor = AnnotationEditor;
@@ -4021,8 +4035,34 @@ class CommandManager {
   #position = NaN;
   #start = 0;
 
-  add(cmd, undo, mustExec) {
-    const save = [cmd, undo];
+  add({
+    cmd,
+    undo,
+    mustExec,
+    type = NaN,
+    overwriteIfSameType = false,
+    keepUndo = false
+  }) {
+    const save = {
+      cmd,
+      undo,
+      type
+    };
+
+    if (overwriteIfSameType && !isNaN(this.#position) && this.#commands[this.#position].type === type) {
+      if (keepUndo) {
+        save.undo = this.#commands[this.#position].undo;
+      }
+
+      this.#commands[this.#position] = save;
+
+      if (mustExec) {
+        cmd();
+      }
+
+      return;
+    }
+
     const next = (this.#position + 1) % this.#maxSize;
 
     if (next !== this.#start) {
@@ -4048,7 +4088,7 @@ class CommandManager {
       return;
     }
 
-    this.#commands[this.#position][1]();
+    this.#commands[this.#position].undo();
 
     if (this.#position === this.#start) {
       this.#position = NaN;
@@ -4060,7 +4100,7 @@ class CommandManager {
   redo() {
     if (isNaN(this.#position)) {
       if (this.#start < this.#commands.length) {
-        this.#commands[this.#start][0]();
+        this.#commands[this.#start].cmd();
         this.#position = this.#start;
       }
 
@@ -4070,7 +4110,7 @@ class CommandManager {
     const next = (this.#position + 1) % this.#maxSize;
 
     if (next !== this.#start && next < this.#commands.length) {
-      this.#commands[next][0]();
+      this.#commands[next].cmd();
       this.#position = next;
     }
   }
@@ -4191,10 +4231,32 @@ class AnnotationEditorUIManager {
   #allowClick = true;
   #clipboardManager = new ClipboardManager();
   #commandManager = new CommandManager();
+  #editorTypes = null;
+  #eventBus = null;
   #idManager = new IdManager();
   #isAllSelected = false;
   #isEnabled = false;
   #mode = _util.AnnotationEditorType.NONE;
+  #previousActiveEditor = null;
+
+  constructor(eventBus) {
+    this.#eventBus = eventBus;
+  }
+
+  #dispatchUpdateUI(details) {
+    this.#eventBus.dispatch("annotationeditorparamschanged", {
+      source: this,
+      details
+    });
+  }
+
+  registerEditorTypes(types) {
+    this.#editorTypes = types;
+
+    for (const editorType of this.#editorTypes) {
+      this.#dispatchUpdateUI(editorType.defaultPropertiesToUpdate);
+    }
+  }
 
   getId() {
     return this.#idManager.getId();
@@ -4225,6 +4287,25 @@ class AnnotationEditorUIManager {
       for (const layer of this.#allLayers) {
         layer.updateMode(mode);
       }
+    }
+  }
+
+  updateToolbar(mode) {
+    if (mode === this.#mode) {
+      return;
+    }
+
+    this.#eventBus.dispatch("switchannotationeditormode", {
+      source: this,
+      mode
+    });
+  }
+
+  updateParams(type, value) {
+    (this.#activeEditor || this.#previousActiveEditor)?.updateParams(type, value);
+
+    for (const editorType of this.#editorTypes) {
+      editorType.updateDefaultParams(type, value);
     }
   }
 
@@ -4273,7 +4354,24 @@ class AnnotationEditorUIManager {
   }
 
   setActiveEditor(editor) {
+    if (this.#activeEditor === editor) {
+      return;
+    }
+
+    this.#previousActiveEditor = this.#activeEditor;
     this.#activeEditor = editor;
+
+    if (editor) {
+      this.#dispatchUpdateUI(editor.propertiesToUpdate);
+    } else {
+      if (this.#previousActiveEditor) {
+        this.#dispatchUpdateUI(this.#previousActiveEditor.propertiesToUpdate);
+      } else {
+        for (const editorType of this.#editorTypes) {
+          this.#dispatchUpdateUI(editorType.defaultPropertiesToUpdate);
+        }
+      }
+    }
   }
 
   undo() {
@@ -4284,8 +4382,8 @@ class AnnotationEditorUIManager {
     this.#commandManager.redo();
   }
 
-  addCommands(cmd, undo, mustExec) {
-    this.#commandManager.add(cmd, undo, mustExec);
+  addCommands(params) {
+    this.#commandManager.add(params);
   }
 
   get allowClick() {
@@ -4322,7 +4420,11 @@ class AnnotationEditorUIManager {
         }
       };
 
-      this.addCommands(cmd, undo, true);
+      this.addCommands({
+        cmd,
+        undo,
+        mustExec: true
+      });
     } else {
       if (!this.#activeEditor) {
         return;
@@ -4339,7 +4441,11 @@ class AnnotationEditorUIManager {
       };
     }
 
-    this.addCommands(cmd, undo, true);
+    this.addCommands({
+      cmd,
+      undo,
+      mustExec: true
+    });
   }
 
   copy() {
@@ -4361,7 +4467,11 @@ class AnnotationEditorUIManager {
         layer.addOrRebuild(editor);
       };
 
-      this.addCommands(cmd, undo, true);
+      this.addCommands({
+        cmd,
+        undo,
+        mustExec: true
+      });
     }
   }
 
@@ -4380,7 +4490,11 @@ class AnnotationEditorUIManager {
       editor.remove();
     };
 
-    this.addCommands(cmd, undo, true);
+    this.addCommands({
+      cmd,
+      undo,
+      mustExec: true
+    });
   }
 
   selectAll() {
@@ -4557,6 +4671,7 @@ exports.StatTimer = exports.RenderingCancelledException = exports.PixelsPerInch 
 exports.deprecated = deprecated;
 exports.getFilenameFromUrl = getFilenameFromUrl;
 exports.getPdfFilenameFromUrl = getPdfFilenameFromUrl;
+exports.getRGB = getRGB;
 exports.getXfaPageViewport = getXfaPageViewport;
 exports.isDataScheme = isDataScheme;
 exports.isPdfFile = isPdfFile;
@@ -5014,6 +5129,20 @@ function getXfaPageViewport(xfaPage, {
     scale,
     rotation
   });
+}
+
+function getRGB(color) {
+  if (color.startsWith("#")) {
+    const colorRGB = parseInt(color.slice(1), 16);
+    return [(colorRGB & 0xff0000) >> 16, (colorRGB & 0x00ff00) >> 8, colorRGB & 0x0000ff];
+  }
+
+  if (color.startsWith("rgb(")) {
+    return color.slice(4, -1).split(",").map(x => parseInt(x));
+  }
+
+  (0, _util.warn)(`Not a valid color format: "${color}"`);
+  return [0, 0, 0];
 }
 
 /***/ }),
@@ -5623,13 +5752,13 @@ exports.CanvasGraphics = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
+var _display_utils = __w_pdfjs_require__(8);
+
 var _pattern_helper = __w_pdfjs_require__(12);
 
 var _image_utils = __w_pdfjs_require__(14);
 
 var _is_node = __w_pdfjs_require__(13);
-
-var _display_utils = __w_pdfjs_require__(8);
 
 const MIN_FONT_SIZE = 16;
 const MAX_FONT_SIZE = 100;
@@ -6742,10 +6871,7 @@ class CanvasGraphics {
       if (fg === "#000000" && bg === "#ffffff" || fg === bg || !isValidDefaultBg) {
         this.foregroundColor = this.backgroundColor = null;
       } else {
-        const cB = parseInt(defaultBg.slice(1), 16);
-        const rB = (cB && 0xff0000) >> 16;
-        const gB = (cB && 0x00ff00) >> 8;
-        const bB = cB && 0x0000ff;
+        const [rB, gB, bB] = (0, _display_utils.getRGB)(defaultBg);
 
         const newComp = x => {
           x /= 255;
@@ -10529,6 +10655,8 @@ class AnnotationEditorLayer {
       AnnotationEditorLayer._initialized = true;
 
       _freetext.FreeTextEditor.initialize(options.l10n);
+
+      options.uiManager.registerEditorTypes([_freetext.FreeTextEditor, _ink.InkEditor]);
     }
 
     this.#uiManager = options.uiManager;
@@ -10545,12 +10673,25 @@ class AnnotationEditorLayer {
     this.#uiManager.addLayer(this);
   }
 
+  updateToolbar(mode) {
+    this.#uiManager.updateToolbar(mode);
+  }
+
   updateMode(mode) {
-    if (mode === _util.AnnotationEditorType.INK) {
-      this.div.addEventListener("mouseover", this.#boundMouseover);
-      this.div.removeEventListener("click", this.#boundClick);
-    } else {
-      this.div.removeEventListener("mouseover", this.#boundMouseover);
+    switch (mode) {
+      case _util.AnnotationEditorType.INK:
+        this.div.addEventListener("mouseover", this.#boundMouseover);
+        this.div.removeEventListener("click", this.#boundClick);
+        break;
+
+      case _util.AnnotationEditorType.FREETEXT:
+        this.div.removeEventListener("mouseover", this.#boundMouseover);
+        this.div.addEventListener("click", this.#boundClick);
+        break;
+
+      default:
+        this.div.removeEventListener("mouseover", this.#boundMouseover);
+        this.div.removeEventListener("click", this.#boundClick);
     }
 
     this.setActiveEditor(null);
@@ -10563,8 +10704,8 @@ class AnnotationEditorLayer {
     }
   }
 
-  addCommands(cmd, undo, mustExec) {
-    this.#uiManager.addCommands(cmd, undo, mustExec);
+  addCommands(params) {
+    this.#uiManager.addCommands(params);
   }
 
   undo() {
@@ -10624,7 +10765,7 @@ class AnnotationEditorLayer {
       this.unselectAll();
       this.div.removeEventListener("click", this.#boundClick);
     } else {
-      this.#uiManager.allowClick = false;
+      this.#uiManager.allowClick = this.#uiManager.getMode() === _util.AnnotationEditorType.INK;
       this.div.addEventListener("click", this.#boundClick);
     }
   }
@@ -10702,7 +10843,11 @@ class AnnotationEditorLayer {
       editor.remove();
     };
 
-    this.addCommands(cmd, undo, true);
+    this.addCommands({
+      cmd,
+      undo,
+      mustExec: true
+    });
   }
 
   addUndoableEditor(editor) {
@@ -10714,7 +10859,11 @@ class AnnotationEditorLayer {
       editor.remove();
     };
 
-    this.addCommands(cmd, undo, false);
+    this.addCommands({
+      cmd,
+      undo,
+      mustExec: false
+    });
   }
 
   getNextId() {
@@ -10865,6 +11014,8 @@ var _editor = __w_pdfjs_require__(5);
 
 var _tools = __w_pdfjs_require__(6);
 
+var _display_utils = __w_pdfjs_require__(8);
+
 class FreeTextEditor extends _editor.AnnotationEditor {
   #color;
   #content = "";
@@ -10874,13 +11025,15 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   static _freeTextDefaultContent = "";
   static _l10nPromise;
   static _internalPadding = 0;
+  static _defaultFontSize = 10;
+  static _defaultColor = "CanvasText";
 
   constructor(params) {
     super({ ...params,
       name: "freeTextEditor"
     });
-    this.#color = params.color || "CanvasText";
-    this.#fontSize = params.fontSize || 10;
+    this.#color = params.color || FreeTextEditor._defaultColor;
+    this.#fontSize = params.fontSize || FreeTextEditor._defaultFontSize;
   }
 
   static initialize(l10n) {
@@ -10906,6 +11059,79 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     return editor;
   }
 
+  static updateDefaultParams(type, value) {
+    switch (type) {
+      case _util.AnnotationEditorParamsType.FREETEXT_SIZE:
+        FreeTextEditor._defaultFontSize = value;
+        break;
+
+      case _util.AnnotationEditorParamsType.FREETEXT_COLOR:
+        FreeTextEditor._defaultColor = value;
+        break;
+    }
+  }
+
+  updateParams(type, value) {
+    switch (type) {
+      case _util.AnnotationEditorParamsType.FREETEXT_SIZE:
+        this.#updateFontSize(value);
+        break;
+
+      case _util.AnnotationEditorParamsType.FREETEXT_COLOR:
+        this.#updateColor(value);
+        break;
+    }
+  }
+
+  static get defaultPropertiesToUpdate() {
+    return [[_util.AnnotationEditorParamsType.FREETEXT_SIZE, FreeTextEditor._defaultFontSize], [_util.AnnotationEditorParamsType.FREETEXT_COLOR, FreeTextEditor._defaultColor]];
+  }
+
+  get propertiesToUpdate() {
+    return [[_util.AnnotationEditorParamsType.FREETEXT_SIZE, this.#fontSize], [_util.AnnotationEditorParamsType.FREETEXT_COLOR, this.#color]];
+  }
+
+  #updateFontSize(fontSize) {
+    const setFontsize = size => {
+      this.editorDiv.style.fontSize = `calc(${size}px * var(--scale-factor))`;
+      this.translate(0, -(size - this.#fontSize) * this.parent.scaleFactor);
+      this.#fontSize = size;
+      this.#setEditorDimensions();
+    };
+
+    const savedFontsize = this.#fontSize;
+    this.parent.addCommands({
+      cmd: () => {
+        setFontsize(fontSize);
+      },
+      undo: () => {
+        setFontsize(savedFontsize);
+      },
+      mustExec: true,
+      type: _util.AnnotationEditorParamsType.FREETEXT_SIZE,
+      overwriteIfSameType: true,
+      keepUndo: true
+    });
+  }
+
+  #updateColor(color) {
+    const savedColor = this.#color;
+    this.parent.addCommands({
+      cmd: () => {
+        this.#color = color;
+        this.editorDiv.style.color = color;
+      },
+      undo: () => {
+        this.#color = savedColor;
+        this.editorDiv.style.color = savedColor;
+      },
+      mustExec: true,
+      type: _util.AnnotationEditorParamsType.FREETEXT_COLOR,
+      overwriteIfSameType: true,
+      keepUndo: true
+    });
+  }
+
   getInitialTranslation() {
     return [-FreeTextEditor._internalPadding * this.parent.scaleFactor, -(FreeTextEditor._internalPadding + this.#fontSize) * this.parent.scaleFactor];
   }
@@ -10921,14 +11147,17 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   }
 
   enableEditMode() {
+    this.parent.updateToolbar(_util.AnnotationEditorType.FREETEXT);
     super.enableEditMode();
     this.overlayDiv.classList.remove("enabled");
+    this.editorDiv.contentEditable = true;
     this.div.draggable = false;
   }
 
   disableEditMode() {
     super.disableEditMode();
     this.overlayDiv.classList.add("enabled");
+    this.editorDiv.contentEditable = false;
     this.div.draggable = true;
   }
 
@@ -10969,6 +11198,13 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     return buffer.join("\n");
   }
 
+  #setEditorDimensions() {
+    const [parentWidth, parentHeight] = this.parent.viewportBaseDimensions;
+    const rect = this.div.getBoundingClientRect();
+    this.width = rect.width / parentWidth;
+    this.height = rect.height / parentHeight;
+  }
+
   commit() {
     if (!this.#hasAlreadyBeenCommitted) {
       this.#hasAlreadyBeenCommitted = true;
@@ -10978,10 +11214,7 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     this.disableEditMode();
     this.#contentHTML = this.editorDiv.innerHTML;
     this.#content = this.#extractText().trimEnd();
-    const [parentWidth, parentHeight] = this.parent.viewportBaseDimensions;
-    const style = getComputedStyle(this.div);
-    this.width = parseFloat(style.width) / parentWidth;
-    this.height = parseFloat(style.height) / parentHeight;
+    this.#setEditorDimensions();
   }
 
   shouldGetKeyboardEvents() {
@@ -11016,7 +11249,7 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     const {
       style
     } = this.editorDiv;
-    style.fontSize = `${this.#fontSize}%`;
+    style.fontSize = `calc(${this.#fontSize}px * var(--scale-factor))`;
     style.color = this.#color;
     this.div.append(this.editorDiv);
     this.overlayDiv = document.createElement("div");
@@ -11028,6 +11261,7 @@ class FreeTextEditor extends _editor.AnnotationEditor {
       const [parentWidth, parentHeight] = this.parent.viewportBaseDimensions;
       this.setAt(baseX * parentWidth, baseY * parentHeight, this.width * parentWidth, this.height * parentHeight);
       this.editorDiv.innerHTML = this.#contentHTML;
+      this.div.draggable = true;
     }
 
     return this.div;
@@ -11036,9 +11270,10 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   serialize() {
     const padding = FreeTextEditor._internalPadding * this.parent.scaleFactor;
     const rect = this.getRect(padding, padding);
+    const color = (0, _display_utils.getRGB)(getComputedStyle(this.editorDiv).color);
     return {
       annotationType: _util.AnnotationEditorType.FREETEXT,
-      color: [0, 0, 0],
+      color,
       fontSize: this.#fontSize,
       value: this.#content,
       pageIndex: this.parent.pageIndex,
@@ -11068,6 +11303,8 @@ var _editor = __w_pdfjs_require__(5);
 
 var _fit_curve = __w_pdfjs_require__(25);
 
+var _display_utils = __w_pdfjs_require__(8);
+
 class InkEditor extends _editor.AnnotationEditor {
   #aspectRatio = 0;
   #baseHeight = 0;
@@ -11080,13 +11317,15 @@ class InkEditor extends _editor.AnnotationEditor {
   #observer = null;
   #realWidth = 0;
   #realHeight = 0;
+  static _defaultThickness = 1;
+  static _defaultColor = "CanvasText";
 
   constructor(params) {
     super({ ...params,
       name: "inkEditor"
     });
-    this.color = params.color || "CanvasText";
-    this.thickness = params.thickness || 1;
+    this.color = params.color || InkEditor._defaultColor;
+    this.thickness = params.thickness || InkEditor._defaultThickness;
     this.paths = [];
     this.bezierPath2D = [];
     this.currentPath = [];
@@ -11123,6 +11362,74 @@ class InkEditor extends _editor.AnnotationEditor {
     editor.#realWidth = this.#realWidth;
     editor.#realHeight = this.#realHeight;
     return editor;
+  }
+
+  static updateDefaultParams(type, value) {
+    switch (type) {
+      case _util.AnnotationEditorParamsType.INK_THICKNESS:
+        InkEditor._defaultThickness = value;
+        break;
+
+      case _util.AnnotationEditorParamsType.INK_COLOR:
+        InkEditor._defaultColor = value;
+        break;
+    }
+  }
+
+  updateParams(type, value) {
+    switch (type) {
+      case _util.AnnotationEditorParamsType.INK_THICKNESS:
+        this.#updateThickness(value);
+        break;
+
+      case _util.AnnotationEditorParamsType.INK_COLOR:
+        this.#updateColor(value);
+        break;
+    }
+  }
+
+  static get defaultPropertiesToUpdate() {
+    return [[_util.AnnotationEditorParamsType.INK_THICKNESS, InkEditor._defaultThickness], [_util.AnnotationEditorParamsType.INK_COLOR, InkEditor._defaultColor]];
+  }
+
+  get propertiesToUpdate() {
+    return [[_util.AnnotationEditorParamsType.INK_THICKNESS, this.thickness], [_util.AnnotationEditorParamsType.INK_COLOR, this.color]];
+  }
+
+  #updateThickness(thickness) {
+    const savedThickness = this.thickness;
+    this.parent.addCommands({
+      cmd: () => {
+        this.thickness = thickness;
+        this.#fitToContent();
+      },
+      undo: () => {
+        this.thickness = savedThickness;
+        this.#fitToContent();
+      },
+      mustExec: true,
+      type: _util.AnnotationEditorParamsType.INK_THICKNESS,
+      overwriteIfSameType: true,
+      keepUndo: true
+    });
+  }
+
+  #updateColor(color) {
+    const savedColor = this.color;
+    this.parent.addCommands({
+      cmd: () => {
+        this.color = color;
+        this.#redraw();
+      },
+      undo: () => {
+        this.color = savedColor;
+        this.#redraw();
+      },
+      mustExec: true,
+      type: _util.AnnotationEditorParamsType.INK_COLOR,
+      overwriteIfSameType: true,
+      keepUndo: true
+    });
   }
 
   rebuild() {
@@ -11215,7 +11522,7 @@ class InkEditor extends _editor.AnnotationEditor {
   #setStroke() {
     this.ctx.lineWidth = this.thickness * this.parent.scaleFactor / this.scaleFactor;
     this.ctx.lineCap = "round";
-    this.ctx.lineJoin = "miter";
+    this.ctx.lineJoin = "round";
     this.ctx.miterLimit = 10;
     this.ctx.strokeStyle = this.color;
   }
@@ -11271,7 +11578,11 @@ class InkEditor extends _editor.AnnotationEditor {
       }
     };
 
-    this.parent.addCommands(cmd, undo, true);
+    this.parent.addCommands({
+      cmd,
+      undo,
+      mustExec: true
+    });
   }
 
   #redraw() {
@@ -11593,9 +11904,10 @@ class InkEditor extends _editor.AnnotationEditor {
   serialize() {
     const rect = this.getRect(0, 0);
     const height = this.rotation % 180 === 0 ? rect[3] - rect[1] : rect[2] - rect[0];
+    const color = (0, _display_utils.getRGB)(this.ctx.strokeStyle);
     return {
       annotationType: _util.AnnotationEditorType.INK,
-      color: [0, 0, 0],
+      color,
       thickness: this.thickness,
       paths: this.#serializePaths(this.scaleFactor / this.parent.scaleFactor, this.translationX, this.translationY, height),
       pageIndex: this.parent.pageIndex,
@@ -18561,6 +18873,12 @@ Object.defineProperty(exports, "AnnotationEditorLayer", ({
     return _annotation_editor_layer.AnnotationEditorLayer;
   }
 }));
+Object.defineProperty(exports, "AnnotationEditorParamsType", ({
+  enumerable: true,
+  get: function () {
+    return _util.AnnotationEditorParamsType;
+  }
+}));
 Object.defineProperty(exports, "AnnotationEditorType", ({
   enumerable: true,
   get: function () {
@@ -18794,8 +19112,8 @@ var _svg = __w_pdfjs_require__(30);
 
 var _xfa_layer = __w_pdfjs_require__(28);
 
-const pdfjsVersion = '2.15.452';
-const pdfjsBuild = '494d73fe5';
+const pdfjsVersion = '2.15.502';
+const pdfjsBuild = '3fc109399';
 {
   if (_is_node.isNodeJS) {
     const {

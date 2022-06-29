@@ -67,10 +67,11 @@ export type PDFViewerOptions = {
      */
     annotationMode?: number | undefined;
     /**
-     * - Enables the creation and
-     * editing of new Annotations.
+     * - Enables the creation and editing
+     * of new Annotations. The constants from {@link AnnotationEditorType } should
+     * be used. The default value is `AnnotationEditorType.DISABLE`.
      */
-    annotationEditorEnabled?: boolean | undefined;
+    annotationEditorMode?: boolean | undefined;
     /**
      * - Path for image resources, mainly
      * mainly for annotation icons. Include trailing slash.
@@ -462,11 +463,12 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFAnnotationEdi
     /**
      * @param {number} mode - AnnotationEditor mode (None, FreeText, Ink, ...)
      */
-    set annotationEditorMode(arg: number | null);
+    set annotationEditorMode(arg: number);
     /**
-     * @type {number | null}
+     * @type {number}
      */
-    get annotationEditorMode(): number | null;
+    get annotationEditorMode(): number;
+    set annotationEditorParams(arg: any);
     #private;
 }
 export namespace PagesCountLimit {
@@ -498,8 +500,9 @@ export namespace PagesCountLimit {
  *   being rendered. The constants from {@link AnnotationMode} should be used;
  *   see also {@link RenderParameters} and {@link GetOperatorListParameters}.
  *   The default value is `AnnotationMode.ENABLE_FORMS`.
- * @property {boolean} [annotationEditorEnabled] - Enables the creation and
- *   editing of new Annotations.
+ * @property {boolean} [annotationEditorMode] - Enables the creation and editing
+ *   of new Annotations. The constants from {@link AnnotationEditorType} should
+ *   be used. The default value is `AnnotationEditorType.DISABLE`.
  * @property {string} [imageResourcesPath] - Path for image resources, mainly
  *   mainly for annotation icons. Include trailing slash.
  * @property {boolean} [enablePrintAutoRotate] - Enables automatic rotation of

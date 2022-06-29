@@ -101,6 +101,7 @@ export function getFilenameFromUrl(url: string): string;
  * @returns {string} Guessed PDF filename.
  */
 export function getPdfFilenameFromUrl(url: string, defaultFilename?: string): string;
+export function getRGB(color: any): any;
 /**
  * NOTE: This is (mostly) intended to support printing of XFA forms.
  */

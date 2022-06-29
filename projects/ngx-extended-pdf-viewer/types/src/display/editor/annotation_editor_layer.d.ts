@@ -35,6 +35,12 @@ export class AnnotationEditorLayer {
     pageIndex: number;
     div: HTMLDivElement;
     /**
+     * Update the toolbar if it's required to reflect the tool currently used.
+     * @param {number} mode
+     * @returns {undefined}
+     */
+    updateToolbar(mode: number): undefined;
+    /**
      * The mode has changed: it must be updated.
      * @param {number} mode
      */
@@ -46,12 +52,9 @@ export class AnnotationEditorLayer {
     mouseover(event: MouseEvent): void;
     /**
      * Add some commands into the CommandManager (undo/redo stuff).
-     * @param {function} cmd
-     * @param {function} undo
-     * @param {boolean} mustExec - If true the command is executed after having
-     *   been added.
+     * @param {Object} params
      */
-    addCommands(cmd: Function, undo: Function, mustExec: boolean): void;
+    addCommands(params: Object): void;
     /**
      * Undo the last command.
      */

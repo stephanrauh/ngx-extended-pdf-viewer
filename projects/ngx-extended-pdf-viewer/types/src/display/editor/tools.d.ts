@@ -9,6 +9,8 @@ export type AnnotationEditorLayer = import("./annotation_editor_layer.js").Annot
  * some action like copy/paste, undo/redo, ...
  */
 export class AnnotationEditorUIManager {
+    constructor(eventBus: any);
+    registerEditorTypes(types: any): void;
     /**
      * Get an id.
      * @returns {string}
@@ -29,6 +31,18 @@ export class AnnotationEditorUIManager {
      * @param {number} mode
      */
     updateMode(mode: number): void;
+    /**
+     * Update the toolbar if it's required to reflect the tool currently used.
+     * @param {number} mode
+     * @returns {undefined}
+     */
+    updateToolbar(mode: number): undefined;
+    /**
+     * Update a parameter in the current editor or globally.
+     * @param {number} type
+     * @param {*} value
+     */
+    updateParams(type: number, value: any): void;
     /**
      * Get all the editors belonging to a give page.
      * @param {number} pageIndex
@@ -66,11 +80,9 @@ export class AnnotationEditorUIManager {
     redo(): void;
     /**
      * Add a command to execute (cmd) and another one to undo it.
-     * @param {function} cmd
-     * @param {function} undo
-     * @param {boolean} mustExec
+     * @param {Object} params
      */
-    addCommands(cmd: Function, undo: Function, mustExec: boolean): void;
+    addCommands(params: Object): void;
     /**
      * @param {boolean} allow
      */
