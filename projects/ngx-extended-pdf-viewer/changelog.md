@@ -377,3 +377,4 @@
 - 14.0.3 updated the README.md
 - 14.0.4 #1429 Class loadingInProgress now vanishes after page load
 - 14.0.5 #8 prevent the browser from filling input field with password or user names; #1433 fixed the CSS code highlighting find results covering multiple spans (the middle sections appeared at random positions)
+- 14.0.6 #1434 show the print progress dialog in PrimeNG modals even after closing and re-opening the modal

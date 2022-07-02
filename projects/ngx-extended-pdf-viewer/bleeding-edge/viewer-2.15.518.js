@@ -3695,7 +3695,7 @@ const animationStarted = new Promise(function (resolve) {
   });
 });
 exports.animationStarted = animationStarted;
-const docStyle = document.documentElement.style;
+const docStyle = document.querySelector(".html")?.style ?? document.documentElement.style;
 exports.docStyle = docStyle;
 
 function clamp(v, min, max) {
@@ -4968,6 +4968,7 @@ class OverlayManager {
 
     this.#active = dialog;
     dialog.showModal();
+    dialog.classList.remove("hidden");
   }
 
   async close(dialog = this.#active) {
@@ -10756,7 +10757,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.15.517';
+    const viewerVersion = '2.15.518';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -21028,7 +21029,7 @@ function abort() {
 }
 
 function renderProgress(index, total, l10n, eventBus) {
-  dialog ||= document.getElementById("printServiceDialog");
+  dialog = document.getElementById("printServiceDialog");
   const progress = Math.round(100 * index / total);
   const progressBar = dialog.querySelector("progress");
   const progressPerc = dialog.querySelector(".relative-progress");
@@ -21081,7 +21082,7 @@ function ensureOverlay() {
       throw new Error("The overlay manager has not yet been initialized.");
     }
 
-    dialog ||= document.getElementById("printServiceDialog");
+    dialog = document.getElementById("printServiceDialog");
     overlayPromise = overlayManager.register(dialog, true);
     document.getElementById("printCancel").onclick = abort;
     dialog.addEventListener("close", abort);
@@ -21198,8 +21199,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.15.517';
-const pdfjsBuild = 'dac018a64';
+const pdfjsVersion = '2.15.518';
+const pdfjsBuild = 'baeb62f56';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

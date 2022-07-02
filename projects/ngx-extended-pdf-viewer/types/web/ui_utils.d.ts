@@ -97,7 +97,7 @@ export function binarySearchFirstItem(items: any, condition: any, start?: number
 export const DEFAULT_SCALE: 1;
 export const DEFAULT_SCALE_DELTA: 1.1;
 export const DEFAULT_SCALE_VALUE: "auto";
-export const docStyle: CSSStyleDeclaration | null;
+export const docStyle: any;
 /**
  * Get the active or focused element in current DOM.
  *

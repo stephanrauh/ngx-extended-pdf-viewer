@@ -4861,6 +4861,7 @@ class OverlayManager {
 
     this.#active = dialog;
     dialog.showModal();
+    dialog.classList.remove("hidden");
   }
 
   async close(dialog = this.#active) {
@@ -10656,7 +10657,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.14.308';
+    const viewerVersion = '2.14.309';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -20582,7 +20583,7 @@ function abort() {
 }
 
 function renderProgress(index, total, l10n, eventBus) {
-  dialog ||= document.getElementById("printServiceDialog");
+  dialog = document.getElementById("printServiceDialog");
   const progress = Math.round(100 * index / total);
   const progressBar = dialog.querySelector("progress");
   const progressPerc = dialog.querySelector(".relative-progress");
@@ -20635,7 +20636,7 @@ function ensureOverlay() {
       throw new Error("The overlay manager has not yet been initialized.");
     }
 
-    dialog ||= document.getElementById("printServiceDialog");
+    dialog = document.getElementById("printServiceDialog");
     overlayPromise = overlayManager.register(dialog, true);
     document.getElementById("printCancel").onclick = abort;
     dialog.addEventListener("close", abort);
@@ -20752,8 +20753,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.14.308';
-const pdfjsBuild = 'd0f2c2c8e';
+const pdfjsVersion = '2.14.309';
+const pdfjsBuild = '565af6722';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 
