@@ -84,12 +84,6 @@ $sidebar-width: 200px;
 $sidebar-transition-duration: 200ms;
 $sidebar-transition-timing-function: ease;
 
-ngx-extended-pdf-viewer {
-  .fancyDropdownToolbarButton::after {
-    content: url("data:image/svg+xml; utf8, <svg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path fill='rgb(217, 217, 217)' d='M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z' /></svg>");
-  }
-}
-
 @import "../common/viewer-with-images.scss";
 @import '../common/ngx-extended-pdf-viewer.component.scss';
 

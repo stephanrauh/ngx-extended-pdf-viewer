@@ -1,5 +1,5 @@
 export class CanvasGraphics {
-    constructor(canvasCtx: any, commonObjs: any, objs: any, canvasFactory: any, imageLayer: any, optionalContentConfig: any, annotationCanvasMap: any);
+    constructor(canvasCtx: any, commonObjs: any, objs: any, canvasFactory: any, imageLayer: any, optionalContentConfig: any, annotationCanvasMap: any, pageColors: any);
     ctx: any;
     current: CanvasExtraState;
     stateStack: any[];
@@ -29,6 +29,8 @@ export class CanvasGraphics {
     viewportScale: number;
     outputScaleX: number;
     outputScaleY: number;
+    backgroundColor: any;
+    foregroundColor: any;
     _cachedScaleForStroking: number[] | null;
     _cachedGetSinglePixelWidth: number | null;
     _cachedBitmapsMap: Map<any, any>;
@@ -40,6 +42,7 @@ export class CanvasGraphics {
         background?: null | undefined;
         backgroundColorToReplace?: null | undefined;
     }): void;
+    selectColor: ((r: any, g: any, b: any) => any) | undefined;
     background: any;
     backgroundColorToReplace: any;
     compositeCtx: any;
@@ -127,8 +130,6 @@ export class CanvasGraphics {
     paintFormXObjectEnd(): void;
     beginGroup(group: any): void;
     endGroup(group: any): void;
-    beginAnnotations(): void;
-    endAnnotations(): void;
     beginAnnotation(id: any, rect: any, transform: any, matrix: any, hasOwnCanvas: any): void;
     annotationCanvas: any;
     endAnnotation(): void;
@@ -153,6 +154,7 @@ export class CanvasGraphics {
     rescaleAndStroke(saveRestore: any): void;
     getCanvasPosition(x: any, y: any): any[];
     isContentVisible(): boolean;
+    #private;
 }
 declare class CanvasExtraState {
     constructor(width: any, height: any);

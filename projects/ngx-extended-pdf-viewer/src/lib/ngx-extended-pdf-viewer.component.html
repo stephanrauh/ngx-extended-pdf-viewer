@@ -52,6 +52,32 @@
               [zoomLevels]="zoomLevels"
             ></pdf-toolbar>
 
+            <div class="editorParamsToolbar hidden doorHangerRight" id="editorFreeTextParamsToolbar">
+              <div class="editorParamsToolbarContainer">
+                <div class="editorParamsSetter">
+                  <label for="editorFreeTextColor" class="editorParamsLabel" data-l10n-id="editor_free_text_font_color">Font Color</label>
+                  <input type="color" id="editorFreeTextColor" class="editorParamsColor" tabindex="100">
+                </div>
+                <div class="editorParamsSetter">
+                  <label for="editorFreeTextFontSize" class="editorParamsLabel" data-l10n-id="editor_free_text_font_size">Font Size</label>
+                  <input type="range" id="editorFreeTextFontSize" class="editorParamsSlider" value="10" min="5" max="100" step="1" tabindex="101">
+                </div>
+              </div>
+            </div>
+
+            <div class="editorParamsToolbar hidden doorHangerRight" id="editorInkParamsToolbar">
+              <div class="editorParamsToolbarContainer">
+                <div class="editorParamsSetter">
+                  <label for="editorInkColor" class="editorParamsLabel" data-l10n-id="editor_ink_line_color">Line Color</label>
+                  <input type="color" id="editorInkColor" class="editorParamsColor" tabindex="102">
+                </div>
+                <div class="editorParamsSetter">
+                  <label for="editorInkThickness" class="editorParamsLabel" data-l10n-id="editor_ink_line_thickness">Line Thickness</label>
+                  <input type="range" id="editorInkThickness" class="editorParamsSlider" value="1" min="1" max="20" step="1" tabindex="103">
+                </div>
+              </div>
+            </div>
+
             <pdf-secondary-toolbar
               #pdfSecondaryToolbarComponent
               [customSecondaryToolbar]="customSecondaryToolbar"
@@ -125,7 +151,7 @@
           <!-- dialogContainer -->
         </div>
         <!-- outerContainer -->
-        <input *ngIf="!pdfJsVersion.startsWith('2.13')" type="file" id="fileInput" class="hidden" />
+        <input type="file" id="fileInput" class="hidden" />
         <div id="printContainer"></div>
       </div>
     </div>

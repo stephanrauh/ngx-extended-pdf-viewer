@@ -1788,7 +1788,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
       if ('scrollMode' in changes) {
         if (this.scrollMode || this.scrollMode === ScrollModeType.vertical) {
-          PDFViewerApplication.eventBus.dispatch('', { mode: this.scrollMode });
+          PDFViewerApplication.pdfViewer.scrollMode = this.scrollMode;
         }
       }
       if ('sidebarVisible' in changes) {
@@ -1993,9 +1993,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           scaleDropdownField.value = this.zoom;
         } else {
           scaleDropdownField.value = 'custom';
-          for (const option of scaleDropdownField.options as any) {
-            if (option.value === 'custom') {
-              option.textContent = `${Math.round(Number(zoomAsNumber) * 100_000) / 1000}%`;
+          if (scaleDropdownField.options) {
+            for (const option of scaleDropdownField.options as any) {
+              if (option.value === 'custom') {
+                option.textContent = `${Math.round(Number(zoomAsNumber) * 100_000) / 1000}%`;
+              }
             }
           }
         }

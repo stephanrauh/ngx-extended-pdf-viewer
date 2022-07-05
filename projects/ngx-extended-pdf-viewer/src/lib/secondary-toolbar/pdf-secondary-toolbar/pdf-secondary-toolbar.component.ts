@@ -1,15 +1,15 @@
 import {
+  AfterViewInit,
   Component,
-  OnInit,
-  Input,
-  Output,
+  ElementRef,
   EventEmitter,
+  HostListener,
+  Input,
   OnChanges,
+  OnDestroy,
+  Output,
   SimpleChanges,
   TemplateRef,
-  ElementRef,
-  HostListener,
-  AfterViewInit,
 } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
@@ -20,7 +20,7 @@ import { PDFNotificationService } from './../../pdf-notification-service';
   templateUrl: './pdf-secondary-toolbar.component.html',
   styleUrls: ['./pdf-secondary-toolbar.component.css'],
 })
-export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterViewInit {
+export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input()
   public customSecondaryToolbar: TemplateRef<any> | undefined;
 
@@ -73,6 +73,8 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
 
   public disableNextPage = true;
 
+  private mutationObserver: MutationObserver | undefined;
+
   constructor(private element: ElementRef, public notificationService: PDFNotificationService) {
     this.notificationService.onPDFJSInit.pipe(take(1)).subscribe(() => {
       this.onPdfJsInit();
@@ -106,7 +108,7 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
     });
   }
 
-  public onSpreadChange(newSpread: 'off' | 'odd' | 'even' ): void {
+  public onSpreadChange(newSpread: 'off' | 'odd' | 'even'): void {
     this.spreadChange.emit(newSpread);
   }
 
@@ -120,11 +122,28 @@ export class PdfSecondaryToolbarComponent implements OnInit, OnChanges, AfterVie
   }
 
   public ngAfterViewInit() {
-    setTimeout(() => this.checkVisibility());
+    const targetNode = this.element.nativeElement as HTMLElement;
+
+    const config = { attributes: true, childList: true, subtree: true };
+
+    this.mutationObserver = new MutationObserver((mutationList: MutationRecord[], observer) => {
+      for (const mutation of mutationList) {
+        if (mutation.type === 'attributes') {
+          if (mutation.attributeName === 'class') {
+            this.checkVisibility();
+          }
+        }
+      }
+    });
+
+    this.mutationObserver.observe(targetNode, config);
   }
 
-  public ngOnInit() {
-    setTimeout(() => this.checkVisibility());
+  public ngOnDestroy(): void {
+    if (this.mutationObserver) {
+      this.mutationObserver.disconnect;
+      this.mutationObserver = undefined;
+    }
   }
 
   public checkVisibility(): void {

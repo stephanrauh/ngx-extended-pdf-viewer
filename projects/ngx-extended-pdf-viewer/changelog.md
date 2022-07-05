@@ -365,3 +365,16 @@
 - 13.0.0-alpha.17 #899 add `[customPdfViewer]` to allow developers to modify the entire UI
 - 13.0.0-alpha.18 fixed the README.md; updated the bleeding edge of pdf.js
 - 13.0.0 updated the bleeding edge of pdf.js
+- 13.5.0-alpha.0 prepare updating to pdf.js 2.14 (stable branch) and 2.15 (bleeding edge branch); #1376 allow developers to use a custom zoom with custom themes that don't have the scale select dropdown (followup of #1315)
+- 13.5.0-alpha.1 updated to pdf.js 2.14 (stable branch) and 2.15 (bleeding edge branch); lots minor bug fixes, most of them caused by updating to pdf.js 2.14: #916 fixed the programmatic custom background; fixed [scrollMode]; repaired `scrollPageIntoView()`; improved `scrollPageIntoView(42, {top: '100%'})` (the previous release scrolled to far); fixed `[spreadMode]`; now the secondary toolbar button is hidden or shown more reliable
+- 13.5.0 dependency updates
+- 13.5.1 corrected the version number of stable branch of pdf.js; fixed a bug that basically is caused by the showcase demo showing custom thumbnails; merged the latest changes of pdf.js into the bleeding-edge branch
+- 13.5.2 #1401 repaired `(pdfLoadingFailed)`; #1313 tolerate browsers blocking the localStorage gracefully; #1399 inlined two graphics to allow using the pdf viewer in arbitrary context paths; preview to an annotation editor for users (bleeding edge only)
+- 13.5.3 #83 tentative fix of the print which was broken on iOS devices
+- 14.0.0 update to Angular 14; raised the minimum required Angular version to 11.1.0
+- 14.0.1 going back to Angular 13 after detecting that ng-packr 14 break compatibility to Angular 12 + 13
+- 14.0.2 raised the minimum required version of Angular to 12 (Note that Angular 11.1.0 is reported to be compatible, but my compatibility tests failed)
+- 14.0.3 updated the README.md
+- 14.0.4 #1429 Class loadingInProgress now vanishes after page load
+- 14.0.5 #8 prevent the browser from filling input field with password or user names; #1433 fixed the CSS code highlighting find results covering multiple spans (the middle sections appeared at random positions)
+- 14.0.6 #1434 show the print progress dialog in PrimeNG modals even after closing and re-opening the modal

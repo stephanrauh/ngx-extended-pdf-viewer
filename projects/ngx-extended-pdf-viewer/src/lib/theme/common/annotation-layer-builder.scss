@@ -13,9 +13,34 @@
  * limitations under the License.
  */
 
+ :root {
+  --annotation-unfocused-field-background: url("data:image/svg+xml;charset=UTF-8,<svg width='1px' height='1px' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill:rgba(0, 54, 255, 0.13);'/></svg>");
+}
+
+@media (forced-colors: active) {
+  .annotationLayer .textWidgetAnnotation input:required,
+  .annotationLayer .textWidgetAnnotation textarea:required,
+  .annotationLayer .choiceWidgetAnnotation select:required,
+  .annotationLayer .buttonWidgetAnnotation.checkBox input:required,
+  .annotationLayer .buttonWidgetAnnotation.radioButton input:required {
+    outline: 1.5px solid selectedItem;
+  }
+}
+
+.annotationLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  transform-origin: 0 0;
+}
+
 .annotationLayer section {
   position: absolute;
   text-align: initial;
+  pointer-events: auto;
+  box-sizing: border-box;
+  transform-origin: 0 0;
 }
 
 .annotationLayer .linkAnnotation > a,
@@ -29,22 +54,22 @@
 }
 
 .annotationLayer .buttonWidgetAnnotation.pushButton > canvas {
-  position: relative;
-  top: 0;
-  left: 0;
-  z-index: -1;
+  width: 100%;
+  height: 100%;
 }
 
 .annotationLayer .linkAnnotation > a:hover,
 .annotationLayer .buttonWidgetAnnotation.pushButton > a:hover {
   opacity: 0.2;
-  background: var( --form-anchor-hover-color);
-  box-shadow: 0 2px 10px var( --form-anchor-hover-color);
+  background: rgba(255, 255, 0, 1);
+  box-shadow: 0 2px 10px rgba(255, 255, 0, 1);
 }
 
 .annotationLayer .textAnnotation img {
   position: absolute;
   cursor: pointer;
+  width: 100%;
+  height: 100%;
 }
 
 .annotationLayer .textWidgetAnnotation input,
@@ -55,14 +80,19 @@
   background-image: var(--annotation-unfocused-field-background);
   border: 1px solid transparent;
   box-sizing: border-box;
-  font-size: 9px;
+  font: calc(9px * var(--scale-factor)) sans-serif;
   height: 100%;
   margin: 0;
-  padding: 0 3px;
   vertical-align: top;
   width: 100%;
-  background-color: var(--form-widget-background-color);
-  color: var(--form-widget-color);
+}
+
+.annotationLayer .textWidgetAnnotation input:required,
+.annotationLayer .textWidgetAnnotation textarea:required,
+.annotationLayer .choiceWidgetAnnotation select:required,
+.annotationLayer .buttonWidgetAnnotation.checkBox input:required,
+.annotationLayer .buttonWidgetAnnotation.radioButton input:required {
+  outline: 1.5px solid red;
 }
 
 .annotationLayer .choiceWidgetAnnotation select option {
@@ -74,8 +104,6 @@
 }
 
 .annotationLayer .textWidgetAnnotation textarea {
-  font: message-box;
-  font-size: 9px;
   resize: none;
 }
 
@@ -94,7 +122,7 @@
 .annotationLayer .choiceWidgetAnnotation select:hover,
 .annotationLayer .buttonWidgetAnnotation.checkBox input:hover,
 .annotationLayer .buttonWidgetAnnotation.radioButton input:hover {
-  border: 1px solid var(--form-widget-border-color);
+  border: 1px solid rgba(0, 0, 0, 1);
 }
 
 .annotationLayer .textWidgetAnnotation input:focus,
@@ -117,7 +145,7 @@
 .annotationLayer .buttonWidgetAnnotation.checkBox input:checked:before,
 .annotationLayer .buttonWidgetAnnotation.checkBox input:checked:after,
 .annotationLayer .buttonWidgetAnnotation.radioButton input:checked:before {
-  background-color: var(--form-check-color);
+  background-color: CanvasText;
   content: "";
   display: block;
   position: absolute;
@@ -165,32 +193,40 @@
 .annotationLayer .buttonWidgetAnnotation.checkBox input,
 .annotationLayer .buttonWidgetAnnotation.radioButton input {
   appearance: none;
-  padding: 0;
+}
+
+.annotationLayer .popupTriggerArea {
+  height: 100%;
+  width: 100%;
 }
 
 .annotationLayer .popupWrapper {
   position: absolute;
-  width: 20em;
+  font-size: calc(9px * var(--scale-factor));
+  width: 100%;
+  min-width: calc(180px * var(--scale-factor));
+  pointer-events: none;
 }
 
 .annotationLayer .popup {
   position: absolute;
   z-index: 200;
-  max-width: 20em;
-  background-color: var(--annotation-popup-background-color);
-  box-shadow: 0 2px 5px var(--annotation-popup-shadow-color);
-  border-radius: 2px;
-  padding: 6px;
-  margin-left: 5px;
+  max-width: calc(180px * var(--scale-factor));
+  background-color: rgba(255, 255, 153, 1);
+  box-shadow: 0 calc(2px * var(--scale-factor)) calc(5px * var(--scale-factor))
+    rgba(136, 136, 136, 1);
+  border-radius: calc(2px * var(--scale-factor));
+  padding: calc(6px * var(--scale-factor));
+  margin-left: calc(5px * var(--scale-factor));
   cursor: pointer;
   font: message-box;
-  font-size: 9px;
   white-space: normal;
   word-wrap: break-word;
+  pointer-events: auto;
 }
 
 .annotationLayer .popup > * {
-  font-size: 9px;
+  font-size: calc(9px * var(--scale-factor));
 }
 
 .annotationLayer .popup h1 {
@@ -199,17 +235,18 @@
 
 .annotationLayer .popupDate {
   display: inline-block;
-  margin-left: 5px;
+  margin-left: calc(5px * var(--scale-factor));
 }
 
 .annotationLayer .popupContent {
-  border-top: 1px solid var(--annotation-popup-border-top-color);
-  margin-top: 2px;
-  padding-top: 2px;
+  border-top: 1px solid rgba(51, 51, 51, 1);
+  margin-top: calc(2px * var(--scale-factor));
+  padding-top: calc(2px * var(--scale-factor));
 }
 
 .annotationLayer .richText > * {
   white-space: pre-wrap;
+  font-size: calc(9px * var(--scale-factor));
 }
 
 .annotationLayer .highlightAnnotation,
@@ -227,4 +264,10 @@
 .annotationLayer .stampAnnotation,
 .annotationLayer .fileAttachmentAnnotation {
   cursor: pointer;
+}
+
+.annotationLayer section svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }

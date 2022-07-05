@@ -97,6 +97,7 @@ export function binarySearchFirstItem(items: any, condition: any, start?: number
 export const DEFAULT_SCALE: 1;
 export const DEFAULT_SCALE_DELTA: 1.1;
 export const DEFAULT_SCALE_VALUE: "auto";
+export const docStyle: any;
 /**
  * Get the active or focused element in current DOM.
  *
@@ -201,25 +202,18 @@ export namespace PresentationModeState {
     const FULLSCREEN: number;
 }
 export class ProgressBar {
-    constructor(id: any, { height, width, units }?: {
-        height: any;
-        width: any;
-        units: any;
-    });
+    constructor(id: any, ...args: any[]);
     visible: boolean;
     div: Element | null;
     bar: ParentNode | null | undefined;
-    height: any;
-    width: any;
-    units: any;
     set percent(arg: any);
     get percent(): any;
-    _updateBar(): void;
     _indeterminate: boolean | undefined;
     _percent: any;
     setWidth(viewer: any): void;
     hide(): void;
     show(): void;
+    #private;
 }
 /**
  * @param {string} str

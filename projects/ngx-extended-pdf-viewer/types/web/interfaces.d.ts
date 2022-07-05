@@ -1,6 +1,7 @@
 export type PDFPageProxy = import("../src/display/api").PDFPageProxy;
 export type PageViewport = import("../src/display/display_utils").PageViewport;
 export type AnnotationLayerBuilder = import("./annotation_layer_builder").AnnotationLayerBuilder;
+export type AnnotationEditorLayerBuilder = import("./annotation_editor_layer_builder").AnnotationEditorLayerBuilder;
 export type EventBus = import("./event_utils").EventBus;
 export type StructTreeLayerBuilder = any;
 export type TextHighlighter = import("./text_highlighter").TextHighlighter;
@@ -33,9 +34,8 @@ export class IDownloadManager {
      * @param {Blob} blob
      * @param {string} url
      * @param {string} filename
-     * @param {string} [sourceEventType]
      */
-    download(blob: Blob, url: string, filename: string, sourceEventType?: string | undefined): void;
+    download(blob: Blob, url: string, filename: string): void;
 }
 /**
  * @interface
@@ -69,6 +69,20 @@ export class IL10n {
 /**
  * @interface
  */
+export class IPDFAnnotationEditorLayerFactory {
+    /**
+     * @param {HTMLDivElement} pageDiv
+     * @param {PDFPageProxy} pdfPage
+     * @param {IL10n} l10n
+     * @param {AnnotationStorage} [annotationStorage] - Storage for annotation
+     *   data in forms.
+     * @returns {AnnotationEditorLayerBuilder}
+     */
+    createAnnotationEditorLayerBuilder(pageDiv: HTMLDivElement, pdfPage: PDFPageProxy, l10n?: IL10n, annotationStorage?: any): AnnotationEditorLayerBuilder;
+}
+/**
+ * @interface
+ */
 export class IPDFAnnotationLayerFactory {
     /**
      * @param {HTMLDivElement} pageDiv
@@ -95,6 +109,7 @@ export class IPDFAnnotationLayerFactory {
 /** @typedef {import("../src/display/api").PDFPageProxy} PDFPageProxy */
 /** @typedef {import("../src/display/display_utils").PageViewport} PageViewport */
 /** @typedef {import("./annotation_layer_builder").AnnotationLayerBuilder} AnnotationLayerBuilder */
+/** @typedef {import("./annotation_editor_layer_builder").AnnotationEditorLayerBuilder} AnnotationEditorLayerBuilder */
 /** @typedef {import("./event_utils").EventBus} EventBus */
 /** @typedef {import("./struct_tree_builder").StructTreeLayerBuilder} StructTreeLayerBuilder */
 /** @typedef {import("./text_highlighter").TextHighlighter} TextHighlighter */

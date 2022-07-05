@@ -5,6 +5,7 @@ export type EventBus = import("./event_utils").EventBus;
 export type IDownloadManager = import("./interfaces").IDownloadManager;
 export type IL10n = import("./interfaces").IL10n;
 export type IPDFAnnotationLayerFactory = import("./interfaces").IPDFAnnotationLayerFactory;
+export type IPDFAnnotationEditorLayerFactory = import("./interfaces").IPDFAnnotationEditorLayerFactory;
 export type IPDFLinkService = import("./interfaces").IPDFLinkService;
 export type IPDFStructTreeLayerFactory = import("./interfaces").IPDFStructTreeLayerFactory;
 export type IPDFTextLayerFactory = import("./interfaces").IPDFTextLayerFactory;
@@ -66,6 +67,12 @@ export type PDFViewerOptions = {
      */
     annotationMode?: number | undefined;
     /**
+     * - Enables the creation and editing
+     * of new Annotations. The constants from {@link AnnotationEditorType } should
+     * be used. The default value is `AnnotationEditorType.DISABLE`.
+     */
+    annotationEditorMode?: boolean | undefined;
+    /**
      * - Path for image resources, mainly
      * mainly for annotation icons. Include trailing slash.
      */
@@ -99,16 +106,23 @@ export type PDFViewerOptions = {
      * when they exist. The default value is `false`.
      */
     enablePermissions?: boolean | undefined;
+    /**
+     * - Overwrites background and foreground colors
+     * with user defined ones in order to improve readability in high contrast
+     * mode.
+     */
+    pageColors?: Object | undefined;
 };
 /**
  * Simple viewer control to display PDF content/pages.
  *
  * @implements {IPDFAnnotationLayerFactory}
+ * @implements {IPDFAnnotationEditorLayerFactory}
  * @implements {IPDFStructTreeLayerFactory}
  * @implements {IPDFTextLayerFactory}
  * @implements {IPDFXfaLayerFactory}
  */
-export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFStructTreeLayerFactory, IPDFTextLayerFactory, IPDFXfaLayerFactory {
+export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFAnnotationEditorLayerFactory, IPDFStructTreeLayerFactory, IPDFTextLayerFactory, IPDFXfaLayerFactory {
     /**
      * @param {PDFViewerOptions} options
      */
@@ -130,9 +144,9 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFStructTreeLay
     useOnlyCssZoom: boolean;
     maxCanvasPixels: number | undefined;
     l10n: import("./interfaces").IL10n;
+    pageColors: Object | null;
     defaultRenderingQueue: boolean;
     renderingQueue: PDFRenderingQueue | undefined;
-    _doc: HTMLElement;
     scroll: {
         right: boolean;
         down: boolean;
@@ -250,11 +264,7 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFStructTreeLay
     _previousScrollMode: any;
     _spreadMode: any;
     _scrollUpdate(): void;
-    _scrollIntoView({ pageDiv, pageNumber, pageSpot }: {
-        pageDiv: any;
-        pageNumber: any;
-        pageSpot?: null | undefined;
-    }): void;
+    scrollPagePosIntoView(pageNumber: any, pageSpot: any): void;
     _setScaleUpdatePages(newScale: any, newValue: any, noScroll?: boolean, preset?: boolean): void;
     /**
      * @private
@@ -281,7 +291,7 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFStructTreeLay
      * Scrolls page into view.
      * @param {ScrollPageIntoViewParameters} params
      */
-    scrollPageIntoView({ pageNumber, destArray, allowNegativeOffset, ignoreDestinationZoom, }: {
+    scrollPageIntoView({ pageNumber, destArray, allowNegativeOffset, ignoreDestinationZoom }: {
         /**
          * - The page number.
          */
@@ -365,6 +375,15 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFStructTreeLay
     /**
      * @param {HTMLDivElement} pageDiv
      * @param {PDFPageProxy} pdfPage
+     * @param {IL10n} l10n
+     * @param {AnnotationStorage} [annotationStorage] - Storage for annotation
+     *   data in forms.
+     * @returns {AnnotationEditorLayerBuilder}
+     */
+    createAnnotationEditorLayerBuilder(pageDiv: HTMLDivElement, pdfPage: PDFPageProxy, l10n: IL10n, annotationStorage?: any): AnnotationEditorLayerBuilder;
+    /**
+     * @param {HTMLDivElement} pageDiv
+     * @param {PDFPageProxy} pdfPage
      * @param {AnnotationStorage} [annotationStorage] - Storage for annotation
      *   data in forms.
      * @returns {XfaLayerBuilder}
@@ -440,6 +459,16 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFStructTreeLay
      * @param {number} [steps] - Defaults to zooming once.
      */
     decreaseScale(steps?: number | undefined): void;
+    updateContainerHeightCss(): void;
+    /**
+     * @param {number} mode - AnnotationEditor mode (None, FreeText, Ink, ...)
+     */
+    set annotationEditorMode(arg: number);
+    /**
+     * @type {number}
+     */
+    get annotationEditorMode(): number;
+    set annotationEditorParams(arg: any);
     #private;
 }
 export namespace PagesCountLimit {
@@ -471,6 +500,9 @@ export namespace PagesCountLimit {
  *   being rendered. The constants from {@link AnnotationMode} should be used;
  *   see also {@link RenderParameters} and {@link GetOperatorListParameters}.
  *   The default value is `AnnotationMode.ENABLE_FORMS`.
+ * @property {boolean} [annotationEditorMode] - Enables the creation and editing
+ *   of new Annotations. The constants from {@link AnnotationEditorType} should
+ *   be used. The default value is `AnnotationEditorType.DISABLE`.
  * @property {string} [imageResourcesPath] - Path for image resources, mainly
  *   mainly for annotation icons. Include trailing slash.
  * @property {boolean} [enablePrintAutoRotate] - Enables automatic rotation of
@@ -484,6 +516,9 @@ export namespace PagesCountLimit {
  * @property {IL10n} l10n - Localization service.
  * @property {boolean} [enablePermissions] - Enables PDF document permissions,
  *   when they exist. The default value is `false`.
+ * @property {Object} [pageColors] - Overwrites background and foreground colors
+ *   with user defined ones in order to improve readability in high contrast
+ *   mode.
  */
 export class PDFPageViewBuffer {
     constructor(size: any);
@@ -505,5 +540,6 @@ import { PageFlip } from "./page-flip.module.js";
 import { TextHighlighter } from "./text_highlighter.js";
 import { TextLayerBuilder } from "./text_layer_builder.js";
 import { AnnotationLayerBuilder } from "./annotation_layer_builder.js";
+import { AnnotationEditorLayerBuilder } from "./annotation_editor_layer_builder.js";
 import { XfaLayerBuilder } from "./xfa_layer_builder.js";
 import { StructTreeLayerBuilder } from "./struct_tree_layer_builder.js";

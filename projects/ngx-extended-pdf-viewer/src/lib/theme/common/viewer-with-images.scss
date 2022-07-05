@@ -42,6 +42,16 @@ ngx-extended-pdf-viewer {
     }
   }
 
+  [data-main-rotation="90"] {
+    transform: rotate(90deg) translateY(-100%);
+  }
+  [data-main-rotation="180"] {
+    transform: rotate(180deg) translate(-100%, -100%);
+  }
+  [data-main-rotation="270"] {
+    transform: rotate(270deg) translateX(-100%);
+  }
+
   .pdfViewer {
     padding-bottom: var(--pdfViewer-padding-bottom);
   }
@@ -1202,9 +1212,15 @@ html[dir='rtl'] ngx-extended-pdf-viewer .treeItem > a {
 }
 
 ngx-extended-pdf-viewer {
-  #layersView .treeItem > a > * {
+  #layersView .treeItem > a * {
     cursor: pointer;
   }
+
+  #layersView .treeItem > a > label > input {
+    float: inline-start;
+    margin-top: 1px;
+  }
+
 }
 html[dir='ltr'] ngx-extended-pdf-viewer #layersView .treeItem > a > label {
   padding-left: 4px;
@@ -1221,13 +1237,13 @@ ngx-extended-pdf-viewer {
     width: 0;
   }
   .treeItemToggler::before {
-    content: url(../assets/images/treeitem-expanded.svg);
+    content: url("data:image/svg+xml; utf8, <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><path d='M10 13l4-7H6z'/></svg>");
     display: inline-block;
     position: absolute;
     max-width: 16px;
   }
   .treeItemToggler.treeItemsHidden::before {
-    content: url(../assets/images/treeitem-collapsed.svg);
+    content: url("data:image/svg+xml; utf8, <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><path d='M13 9L6 5v8z'/></svg>");
     max-width: 16px;
   }
 }
