@@ -17,7 +17,7 @@ import {
   PLATFORM_ID,
   SimpleChanges,
   TemplateRef,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { Annotation } from './Annotation';
 import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
@@ -234,7 +234,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public enableRelativeCoords: boolean = false;
   @Input()
-  public relativeCoordsOptions: Object = { };
+  public relativeCoordsOptions: Object = {};
 
   /** Use the minified (minifiedJSLibraries="true", which is the default) or the user-readable pdf.js library (minifiedJSLibraries="false") */
   @Input()
@@ -1312,7 +1312,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (this._src) {
       this.ngxExtendedPdfViewerIncompletelyInitialized = false;
       if (!this.listenToURL) {
-        PDFViewerApplication.pdfLinkService.setHash = function () {};
+        PDFViewerApplication.pdfLinkService.setHash = function () { };
       }
       this.initTimeout = null;
       this.selectCursorTool();
@@ -2000,6 +2000,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
               }
             }
           }
+
         }
       }
 

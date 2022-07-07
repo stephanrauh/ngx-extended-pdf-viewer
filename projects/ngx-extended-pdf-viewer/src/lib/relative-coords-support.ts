@@ -1,11 +1,11 @@
 import { NgZone } from '@angular/core';
-import { PagesLoadedEvent, SpreadModeType } from '../public_api';
+import { PagesLoadedEvent } from '../public_api';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
 
 export class RelativeCoordsSupport {
 
-  private options:any = { 
+  private options: any = {
     debug: false,
     moveEnabled: true,
     disableEventHandling: false,
@@ -19,16 +19,16 @@ export class RelativeCoordsSupport {
   private startLeft = 0;
   private startTop = 0;
 
-  private state: "idle" | "move" | "zoom" =  "idle";
+  private state: "idle" | "move" | "zoom" = "idle";
   private initialPinchDistance = 0;
   private currentScale = 1.0;
 
-  private pointEnd:any = {
+  private pointEnd: any = {
 
   }
 
   // private transformScale = -1;
-  
+
   private boundOnViewerTouchStart: any;
   private boundOnViewerTouchMove: any;
   private boundOnViewerTouchEnd: any;
@@ -46,10 +46,10 @@ export class RelativeCoordsSupport {
   }
 
 
-  constructor(private _zone: NgZone, private component:NgxExtendedPdfViewerComponent, options:any) {
-    options = options || { };
+  constructor(private _zone: NgZone, private component: NgxExtendedPdfViewerComponent, options: any) {
+    options = options || {};
     Object.keys(this.options).forEach(attribut => {
-      if (options[attribut] === undefined) options[attribut] = this.options[attribut] ;
+      if (options[attribut] === undefined) options[attribut] = this.options[attribut];
     });
     this.options = options;
 
@@ -106,10 +106,10 @@ export class RelativeCoordsSupport {
 
     if (event.touches.length === 1) {
       let touch = event.touches[0]
-      if (this.options.moveEnabled && this.isInsideContainer([ touch ]) && this.state == "idle" ) {
+      if (this.options.moveEnabled && this.isInsideContainer([touch]) && this.state == "idle") {
         const viewerContainer = document.getElementById('viewerContainer') as HTMLDivElement;
         const rect = viewerContainer.getBoundingClientRect();
- 
+
         let pageX = touch.pageX - rect.left;
         let pageY = touch.pageY - rect.top;
 
@@ -117,17 +117,17 @@ export class RelativeCoordsSupport {
 
         this.startX = pageX;
         this.startY = pageY;
-        
+
         let left = parseFloat(getComputedStyle(this.viewer).left) || 0;
         let top = parseFloat(getComputedStyle(this.viewer).top) || 0;
-        
-       
+
+
 
         if (this.debug.enabled) {
-          console.log("TouchStart: " 
+          console.log("TouchStart: "
             + this.debug.nf.format(pageX) + " / " + this.debug.nf.format(pageY)
             + ", startX/Y: " + this.debug.nf.format(this.startX) + " / " + this.debug.nf.format(this.startY)
-            + ", startLeft/Top: " + this.debug.nf.format(this.startLeft) + " -> " +  this.debug.nf.format(left)  + " / " + this.debug.nf.format(this.startTop) + " -> " +  this.debug.nf.format(top)
+            + ", startLeft/Top: " + this.debug.nf.format(this.startLeft) + " -> " + this.debug.nf.format(left) + " / " + this.debug.nf.format(this.startTop) + " -> " + this.debug.nf.format(top)
             + ", state: " + this.state,
             ", dims: ", this.getDimensions(this.viewer)
           );
@@ -145,7 +145,7 @@ export class RelativeCoordsSupport {
       } else {
         // console.log("TouchStart: isInside: " +  this.isInsideContainer([ touch ]) + ", state: " + this.state);
       }
-    
+
 
     }
   }
@@ -158,13 +158,13 @@ export class RelativeCoordsSupport {
 
   //   let page = PDFViewerApplication.page;
   //   let pageCount = PDFViewerApplication.pdfViewer._pages.length;
-    
+
   //   let spreadMode = PDFViewerApplication.pdfViewer.spreadMode as SpreadModeType;
 
   //   let pages = [ page ];
-    
+
   //   if (page == 1) return pages;
-   
+
   //   let isSpread = spreadMode == SpreadModeType.EVEN || SpreadModeType.ODD;
   //   // console.log("isSpread: " + isSpread+ ", pages: " + pages.join(","));
   //   if (!isSpread) return pages;
@@ -180,7 +180,8 @@ export class RelativeCoordsSupport {
   //   return  pages;
   // }
 
-  private debugPoint(x:number, y:number, viewer:boolean = false) {
+  private debugPoint(x: number, y: number, viewer: boolean = false) {
+    if (!this.options.debugPoint) return;
     const viewerContainer = document.getElementById('viewerContainer') as HTMLDivElement;
     let id = 'debug-point' + (viewer ? "-viewer" : "");
 
@@ -193,8 +194,8 @@ export class RelativeCoordsSupport {
       point.style.width = size + "px";
       point.style.height = size + "px";
       point.style.borderRadius = "100px";
-      
-      point.style.backgroundColor = viewer ? "red" : "blue"; 
+
+      point.style.backgroundColor = viewer ? "red" : "blue";
 
       if (!viewer) viewerContainer.appendChild(point);
       else this.viewer.appendChild(point);
@@ -202,7 +203,7 @@ export class RelativeCoordsSupport {
 
 
 
-    
+
     let dims = this.getDimensions(this.viewer);
 
     if (viewer) {
@@ -224,14 +225,14 @@ export class RelativeCoordsSupport {
       this.debug.x = x;
       this.debug.y = y;
 
-      
+
       // console.log("debugPoint.cont: " + this.debug.nf.format(x) + " / " + this.debug.nf.format(y) + " | " + this.debug.nf.format(x / dims.parent.width * 100) + " % /  " + this.debug.nf.format(y / dims.parent.height * 100) + " %, dims: ", dims.parent);
 
     }
 
 
-    point.style.left = (x-(size/2)) + "px";
-    point.style.top = (y-(size/2)) + "px";
+    point.style.left = (x - (size / 2)) + "px";
+    point.style.top = (y - (size / 2)) + "px";
 
 
   }
@@ -251,7 +252,7 @@ export class RelativeCoordsSupport {
 
       if (event.touches.length == 1 && this.state == "move") {
         const touch = event.touches[0];
-       
+
 
         let pageX = touch.pageX - rect.left + viewerContainer.scrollLeft;
         let pageY = touch.pageY - rect.top + viewerContainer.scrollTop;
@@ -269,13 +270,13 @@ export class RelativeCoordsSupport {
         top = constrain.top;
 
         if (this.debug.enabled) {
-          console.log("TouchMove: " 
+          console.log("TouchMove: "
             + this.debug.nf.format(pageX) + " / " + this.debug.nf.format(pageY)
             + ", startX/Y: " + this.debug.nf.format(this.startX) + " / " + this.debug.nf.format(this.startY)
             + ", diff: " + this.debug.nf.format(diffX) + " / " + this.debug.nf.format(diffY)
             + ", l/t: " + this.debug.nf.format(left) + " / " + this.debug.nf.format(top)
-            + ", viewer.w/h: " + this.debug.nf.format(vr.width) + " / " + this.debug.nf.format(vr.height) 
-            
+            + ", viewer.w/h: " + this.debug.nf.format(vr.width) + " / " + this.debug.nf.format(vr.height)
+
           );
         }
 
@@ -300,7 +301,7 @@ export class RelativeCoordsSupport {
 
     this.moveX = pageX;
     this.moveY = pageY;
-    
+
 
     let dims = this.getDimensions(this.viewer, { pageX: pageX, pageY: pageY })
 
@@ -316,7 +317,7 @@ export class RelativeCoordsSupport {
     // pageX = dims.scaled.width * dims.point.v.xp;
     // pageY = dims.scaled.height * dims.point.v.yp;
 
-    
+
     // let originX = pageX; // + viewerContainer.scrollLeft; // this.startX + container.scrollLeft;
     // let originY = pageY; // + viewerContainer.scrollTop ; //this.startY + container.scrollTop;
 
@@ -324,8 +325,8 @@ export class RelativeCoordsSupport {
     const originY = dims.scaled.height * dims.point.v.yp;
 
 
-    if (this.debug.enabled) this.debugPoint(this.moveX - rect.left , this.moveY - rect.top);
-    
+    if (this.debug.enabled) this.debugPoint(this.moveX - rect.left, this.moveY - rect.top);
+
     let prevScale = this.currentScale;
     this.currentScale = pinchDistance / this.initialPinchDistance;
     let minZoom = Number(PDFViewerApplicationOptions.get('minZoom'));
@@ -345,23 +346,23 @@ export class RelativeCoordsSupport {
       this.currentScale = maxZoom / currentZoom;
     }
 
-    
+
 
 
     if (this.debug.enabled) {
-      console.log("TouchMove PINCH: " 
+      console.log("TouchMove PINCH: "
         + ", startX/Y: " + this.debug.nf.format(this.startX) + " / " + this.debug.nf.format(this.startY)
         + ", moveX/Y: " + + this.debug.nf.format(this.moveX) + " / " + this.debug.nf.format(this.moveY)
         + ", rect.l/t: " + this.debug.nf.format(rect.left) + " / " + this.debug.nf.format(rect.top)
-        + ", viewer.l/t: " + this.debug.nf.format(vr.left) + " / " + this.debug.nf.format(vr.top) 
+        + ", viewer.l/t: " + this.debug.nf.format(vr.left) + " / " + this.debug.nf.format(vr.top)
         // + ", viewerContainer.sl/st: " + this.debug.nf.format(viewerContainer.scrollLeft) + " / " + this.debug.nf.format(viewerContainer.scrollTop)
-        + ", originX/Y: " + this.debug.nf.format(originX) + " / " + this.debug.nf.format(originY) 
+        + ", originX/Y: " + this.debug.nf.format(originX) + " / " + this.debug.nf.format(originY)
 
-        + ", viewer.w/h: " + this.debug.nf.format(vr.width) + " / " + this.debug.nf.format(vr.height) 
+        + ", viewer.w/h: " + this.debug.nf.format(vr.width) + " / " + this.debug.nf.format(vr.height)
         + ", currentScale: " + this.debug.nf.format(prevScale) + " -> " + this.debug.nf.format(this.currentScale)
         + ", dims: ", dims
-        
-        
+
+
       );
     }
 
@@ -382,11 +383,11 @@ export class RelativeCoordsSupport {
   private onViewerTouchEnd(event: TouchEvent): void {
     if (this.options.disableEventHandling) return;
 
-    if (this.debug.enabled)  console.log("onViewerTouchEnd"
-      +", vts: " + this.getViewerTransformScale("onViewerTouchEnd")
+    if (this.debug.enabled) console.log("onViewerTouchEnd"
+      + ", vts: " + this.getViewerTransformScale("onViewerTouchEnd")
       + ', state: ' + this.state
       + ", initialPinchDistance: " + this.initialPinchDistance
-      );
+    );
 
     const PDFViewerApplication: any = (window as any).PDFViewerApplication;
 
@@ -402,14 +403,14 @@ export class RelativeCoordsSupport {
     let tl = event.changedTouches.length;
     let pageX = this.moveX;
     let pageY = this.moveY;
-    
+
     if (tl > 1) {
       pageX = (event.changedTouches[1].pageX + event.changedTouches[0].pageX) / 2;
-      pageY =  (event.changedTouches[1].pageY + event.changedTouches[0].pageY) / 2;
-      
-    } 
+      pageY = (event.changedTouches[1].pageY + event.changedTouches[0].pageY) / 2;
+
+    }
     else {
-      if (this.debug.enabled)  console.log("end.moveX/Y: " + this.moveX + " -> " + pageX + ", moveY: " + this.moveY + " -> " + pageY + ", tl: " + tl);
+      if (this.debug.enabled) console.log("end.moveX/Y: " + this.moveX + " -> " + pageX + ", moveY: " + this.moveY + " -> " + pageY + ", tl: " + tl);
     }
 
     // this.currentScale = 1;
@@ -417,64 +418,64 @@ export class RelativeCoordsSupport {
 
 
     let now = new Date().getTime();
-      if (this.pointEnd.time) {
-        let pe = this.pointEnd;
-        
-        let diff = now - pe.time;
-        // console.log("pointEnd.diff: " + diff);
+    if (this.pointEnd.time) {
+      let pe = this.pointEnd;
 
-        if (pe.pageX == pageX && pe.pageY == pageY && diff < 300) {
-         
-          let PDFViewerApplication: any = (window as any).PDFViewerApplication;
-          let currentScale = PDFViewerApplication.pdfViewer.currentScale;
-          let scaleFactor = 1.4;
+      let diff = now - pe.time;
+      // console.log("pointEnd.diff: " + diff);
 
-          let newScale = this.isZooming() ? (currentScale / scaleFactor) : (currentScale * scaleFactor);
+      if (pe.pageX == pageX && pe.pageY == pageY && diff < 300) {
 
-          // let newScale = currentScale * 1.2;
-          console.log("pointEnd.point mateches, new scale: " + newScale);
+        let PDFViewerApplication: any = (window as any).PDFViewerApplication;
+        let currentScale = PDFViewerApplication.pdfViewer.currentScale;
+        let scaleFactor = 1.4;
 
-          if (this.initialPinchDistance <= 0  || this.state == "move") {
-            if (event.cancelable) {
-              event.preventDefault();
-            }
-            event.stopPropagation();
+        let newScale = this.isZooming() ? (currentScale / scaleFactor) : (currentScale * scaleFactor);
+
+        // let newScale = currentScale * 1.2;
+        // if (this.debug.enabled) console.log("pointEnd.point mateches, new scale: " + newScale);
+
+        if (this.initialPinchDistance <= 0 || this.state == "move") {
+          if (event.cancelable) {
+            event.preventDefault();
           }
-
-          setTimeout(() => {
-
-            this.setViewerScale(newScale);
-            this.pointEnd = { };
-          }, 5);
-
-          return;
+          event.stopPropagation();
         }
 
-      }
+        setTimeout(() => {
 
-      this.pointEnd = {
-        time: now,
-        pageX: pageX,
-        pageY: pageY
-      }
+          this.setViewerScale(newScale);
+          this.pointEnd = {};
+        }, 5);
 
-
-      if(this.state == "move") {
-        this.resetPinchZoomParams();
         return;
       }
-      
-      if (this.initialPinchDistance <= 0 ) {
-        this.resetPinchZoomParams();
-        return;
-      }
+
+    }
+
+    this.pointEnd = {
+      time: now,
+      pageX: pageX,
+      pageY: pageY
+    }
+
+
+    if (this.state == "move") {
+      this.resetPinchZoomParams();
+      return;
+    }
+
+    if (this.initialPinchDistance <= 0) {
+      this.resetPinchZoomParams();
+      return;
+    }
 
 
     let currentScale = PDFViewerApplication.pdfViewer.currentScale;
     let newScale = currentScale * this.currentScale;
     // let scaleChange = 1 + (newScale - currentScale) / currentScale;
-   
-   
+
+
     const container = document.getElementById('viewerContainer') as HTMLDivElement;
     const rect = container.getBoundingClientRect();
     const viewerRect = this.viewer.getBoundingClientRect();
@@ -485,9 +486,9 @@ export class RelativeCoordsSupport {
     if (this.debug.enabled) this.debugPoint(pageX, pageY);
 
 
-    
+
     if (this.debug.enabled) {
-      console.log("TouchEnd: " 
+      console.log("TouchEnd: "
         + ", scale: " + this.debug.nf.format(currentScale) + " -> " + this.debug.nf.format(newScale) + ", cs: " + this.currentScale
 
         + ", pageX/Y: " + this.debug.nf.format(pageX) + " / " + this.debug.nf.format(pageY)
@@ -496,19 +497,19 @@ export class RelativeCoordsSupport {
         // + ", diffs: " + this.debug.nf.format(diffXs) + " / " + this.debug.nf.format(diffYs)
 
         // + ", l/t: " + this.debug.nf.format(viewerRect.left) + " -> " +this.debug.nf.format(left) + " / " + this.debug.nf.format(viewerRect.top) + " -> " +this.debug.nf.format(top)
-        + ", viewer.w/h: " + this.debug.nf.format(viewerRect.width) + " / " + this.debug.nf.format(viewerRect.height) 
+        + ", viewer.w/h: " + this.debug.nf.format(viewerRect.width) + " / " + this.debug.nf.format(viewerRect.height)
         + ", dims: ", dims
-        
+
       );
     }
 
 
-    this.setViewerScale(newScale, { resetTransform: true }); 
+    this.setViewerScale(newScale, { resetTransform: true });
 
 
     this.resetPinchZoomParams();
 
-  // }, 50);
+    // }, 50);
 
     if (event.cancelable) {
       event.preventDefault();
@@ -517,10 +518,10 @@ export class RelativeCoordsSupport {
 
 
     // if (tl == 1) {
-      // let pageX = event.changedTouches[0].pageX;
-      // let pageY = event.changedTouches[0].pageY;
-      
-      
+    // let pageX = event.changedTouches[0].pageX;
+    // let pageY = event.changedTouches[0].pageY;
+
+
 
     // }
   }
@@ -530,12 +531,12 @@ export class RelativeCoordsSupport {
     if (this.options.disableEventHandling) return;
 
     let isInside = this.isInsideContainer([event])
-    if (!isInside) return; 
+    if (!isInside) return;
 
-    if (!this.options.moveEnabled ) return;
+    if (!this.options.moveEnabled) return;
 
     let dims = this.getDimensions(this.viewer, event);
-    
+
     // this.zoomToPoint(event, event.pageX, event.pageY);
     if (this.debug.enabled) {
       this.debugPoint(dims.point.c.x, dims.point.c.y);
@@ -545,7 +546,7 @@ export class RelativeCoordsSupport {
 
     this.startX = dims.point.c.x;
     this.startY = dims.point.c.y;
-    
+
     this.startLeft = parseFloat(getComputedStyle(this.viewer).left) || 0;
     this.startTop = parseFloat(getComputedStyle(this.viewer).top) || 0
 
@@ -562,11 +563,11 @@ export class RelativeCoordsSupport {
 
     if (this.state != "move") {
       // console.log("mousemove: state!=move: " + this.state);
-      return; 
+      return;
     }
-    
+
     let dims = this.getDimensions(this.viewer, event);
-    
+
 
     if (this.debug.enabled) this.debugPoint(dims.point.c.x, dims.point.c.y);
 
@@ -586,12 +587,12 @@ export class RelativeCoordsSupport {
 
 
     if (this.debug.enabled) {
-      console.log("mousemove: " 
+      console.log("mousemove: "
         + this.debug.nf.format(dims.point.c.x) + " / " + this.debug.nf.format(dims.point.c.y)
         + ", diff: " + this.debug.nf.format(diffX) + " / " + this.debug.nf.format(diffY)
         + ", l/t: " + this.debug.nf.format(left) + " / " + this.debug.nf.format(top)
       );
-    } 
+    }
 
     if (event.cancelable) {
       event.preventDefault();
@@ -607,7 +608,7 @@ export class RelativeCoordsSupport {
     if (this.debug.enabled) console.log("mouseup: " + this.debug.nf.format(event.pageX) + " / " + this.debug.nf.format(event.pageY) + "; inside: " + isInside);
     // document.removeEventListener("mousemove", event);
 
-    if (!isInside) return; 
+    if (!isInside) return;
 
     this.resetPinchZoomParams();
 
@@ -623,23 +624,23 @@ export class RelativeCoordsSupport {
     let now = new Date().getTime();
     if (this.pointEnd.time) {
       let pe = this.pointEnd;
-      
+
       let diff = now - pe.time;
       // console.log("pointEnd.diff: " + diff);
 
       if (pe.pageX == pageX && pe.pageY == pageY && diff < 300) {
-        
+
         let PDFViewerApplication: any = (window as any).PDFViewerApplication;
         let currentScale = PDFViewerApplication.pdfViewer.currentScale;
         let scaleFactor = 1.4;
 
         let newScale = this.isZooming() ? (currentScale / scaleFactor) : (currentScale * scaleFactor);
-        console.log("pointEnd.point mateches, isZ: "+this.isZooming() +", new scale: " + currentScale + " -> " + newScale);
+        // if (this.debug.enabled) console.log("pointEnd.point mateches, isZ: "+this.isZooming() +", new scale: " + currentScale + " -> " + newScale);
 
         setTimeout(() => {
 
           this.setViewerScale(newScale);
-          this.pointEnd = { };
+          this.pointEnd = {};
         }, 5);
 
         return;
@@ -681,8 +682,8 @@ export class RelativeCoordsSupport {
     }
   }
 
-  
-  private  getDimensions(elem: HTMLElement, point?:({ pageX:number, pageY:number})) {
+
+  private getDimensions(elem: HTMLElement, point?: ({ pageX: number, pageY: number })) {
     const parent = elem.parentNode as HTMLElement
     const style = window.getComputedStyle(elem)
     const parentStyle = window.getComputedStyle(parent)
@@ -692,8 +693,8 @@ export class RelativeCoordsSupport {
 
     const vts = this.getViewerTransformScale("getDimensions");
     const vto = this.getViewerTransformOrigin();
-  
-    let res:any = {
+
+    let res: any = {
       elem: {
         style,
         width: rectElem.width,
@@ -713,7 +714,7 @@ export class RelativeCoordsSupport {
         bottom: rectElem.bottom - rectParent.top,
         right: rectElem.right - rectParent.left,
       },
-     
+
       parent: {
         style: parentStyle,
         width: rectParent.width,
@@ -740,7 +741,7 @@ export class RelativeCoordsSupport {
         vto: vto,
         width: sw,
         height: sh,
-        
+
         left: res.rel.left + wd / 2,
         right: res.rel.right - wd / 2,
         top: res.rel.top + hd / 2,
@@ -779,19 +780,19 @@ export class RelativeCoordsSupport {
         yp: cyp
       }
     }
-  
 
-    
+
+
 
     return res;
   }
 
-    
+
 
   //   return res;
   // }
 
-  private  getDimDiff(start: any, end: any) {
+  private getDimDiff(start: any, end: any) {
     // let se = start.elem;
     // let ee = end.elem;
     // let sp = start.parent;
@@ -816,19 +817,19 @@ export class RelativeCoordsSupport {
       },
     }
 
-    let res:any = { };
-    for (let type of [ "elem", "parent", "rel", "scaled"]) {
+    let res: any = {};
+    for (let type of ["elem", "parent", "rel", "scaled"]) {
       let s = input[type].start;
       let e = input[type].end;
 
-      res[type] = { };
-      
-      for (let prop of [ "width", "height", "top", "bottom", "left", "right"]) {
+      res[type] = {};
+
+      for (let prop of ["width", "height", "top", "bottom", "left", "right"]) {
         let sv = s[prop];
         let ev = e[prop];
         let diff = ev - sv;
 
-        res[type][prop+ "Label"] =  this.debug.nf.format(sv)  + " -> " +  this.debug.nf.format(ev)  + ", diff: " + this.debug.nf.format(diff) + " ("+this.debug.nf.format(diff / sv * 100.0)+" %)";
+        res[type][prop + "Label"] = this.debug.nf.format(sv) + " -> " + this.debug.nf.format(ev) + ", diff: " + this.debug.nf.format(diff) + " (" + this.debug.nf.format(diff / sv * 100.0) + " %)";
         res[type][prop] = diff;
       }
     }
@@ -839,33 +840,33 @@ export class RelativeCoordsSupport {
   }
 
 
-  private constrain(p:({ left:number, top:number })): ({left:number, top:number}) {
+  private constrain(p: ({ left: number, top: number })): ({ left: number, top: number }) {
     const dims = this.getDimensions(this.viewer)
 
     let isScaled = dims.scaled.vts !== undefined && dims.scaled.vts != 1.0;
-    
+
     let minX = p.left, maxX = p.left, minY = p.top, maxY = p.top;
 
     if (dims.elem.width <= dims.parent.width) {
       // inside
       minX = 0;
-      maxX = (dims.parent.width - dims.elem.width ) 
+      maxX = (dims.parent.width - dims.elem.width)
     } else {
       // outside
-      minX = -(dims.elem.width - dims.parent.width );
+      minX = -(dims.elem.width - dims.parent.width);
       maxX = 0;
 
     }
     if (dims.elem.height <= dims.parent.height) {
       // inside
       minY = 0;
-      maxY = (dims.parent.height - dims.elem.height) ;
-        
+      maxY = (dims.parent.height - dims.elem.height);
+
     } else {
       // outside
       minY = -(dims.elem.height - dims.parent.height);
       maxY = 0;
-      
+
     }
 
     if (isScaled) {
@@ -875,22 +876,22 @@ export class RelativeCoordsSupport {
 
       minX += dims.scaled.wd * xp;
       maxX += dims.scaled.wd * xp;
-      
+
       minY += dims.scaled.hd * yp;
       maxY += dims.scaled.hd * yp;
     }
-  
-    
-    
+
+
+
     let cLeft = Math.max(Math.min(p.left, maxX), minX)
     let cTop = Math.max(Math.min(p.top, maxY), minY)
 
-    if (this.debug.enabled) console.log("constrain, left:  " + p.left + " -> " + cLeft + " ("+minX + "-"+maxX+")" + ", top: " + p.top + " -> " + cTop + " ("+minY + "-"+maxY+"), dims: ", dims);
+    // if (this.debug.enabled) console.log("constrain, left:  " + p.left + " -> " + cLeft + " ("+minX + "-"+maxX+")" + ", top: " + p.top + " -> " + cTop + " ("+minY + "-"+maxY+"), dims: ", dims);
 
     return { left: cLeft, top: cTop };
   }
-  
-  private isInsideContainer(points:({ pageX:number, pageY:number, target: any})[]) {
+
+  private isInsideContainer(points: ({ pageX: number, pageY: number, target: any })[]) {
     const viewerContainer = document.getElementById('viewerContainer') as HTMLDivElement;
     const rect = viewerContainer.getBoundingClientRect();
 
@@ -913,7 +914,7 @@ export class RelativeCoordsSupport {
 
       let pageX = point.pageX; // + viewerContainer.scrollLeft;
       let pageY = point.pageY; // + viewerContainer.scrollTop;
-      
+
 
       let inside = false;
       if (pageX >= rect.left && pageX <= rect.right) {
@@ -930,10 +931,10 @@ export class RelativeCoordsSupport {
     return true;
   }
 
-  private getViewerTransformScale(src:string) {
+  private getViewerTransformScale(src: string) {
     let tf = getComputedStyle(this.viewer).transform;
 
-    if ( tf == "none" || tf.indexOf("(") < 0 ) {
+    if (tf == "none" || tf.indexOf("(") < 0) {
       let vts = 1.0;
 
       // if (this.transformScale > 0.0) {
@@ -941,14 +942,14 @@ export class RelativeCoordsSupport {
       // }
 
       // if (this.debug.enabled) console.log("getViewerTransformScale, tf: " + tf + ", indexOf (: " + tf.indexOf("(") + ", src: " + src + ", vts: " + vts);
-      
+
       return vts;
     }
 
     let isScale = tf.indexOf("scale") >= 0;
     let transformScale = parseFloat(
-      tf.substring(tf.indexOf("(")+1, 
-      tf.indexOf(isScale ? ")" : ","))
+      tf.substring(tf.indexOf("(") + 1,
+        tf.indexOf(isScale ? ")" : ","))
     );
     // if (this.debug.enabled) console.log("getViewerTransformScale, tf: " + tf + ", indexOf (: " + tf.indexOf("(") + ", transformScale: " + transformScale + ", src: " + src);
     return transformScale;
@@ -964,34 +965,34 @@ export class RelativeCoordsSupport {
     return { x: parseFloat(parts[0]), y: parseFloat(parts[1]) };
   }
 
-  public checkContraint():boolean {
+  public checkContraint(): boolean {
     const dims = this.getDimensions(this.viewer);
-    let constrain:any = this.constrain({ left: dims.elem.left, top: dims.elem.top });
+    let constrain: any = this.constrain({ left: dims.elem.left, top: dims.elem.top });
     return constrain.left != dims.elem.left && constrain.top != dims.elem.top;
   }
 
-  public updateViewerPosition(forceUpdate:boolean = false) {
+  public updateViewerPosition(forceUpdate: boolean = false) {
     let viewerContainer = document.getElementById('viewerContainer') as HTMLDivElement;
     this.viewer = document.getElementById('viewer') as HTMLDivElement;
 
     const dims = this.getDimensions(this.viewer);
-    
 
-    let constrain:any = this.constrain({ left: dims.elem.left, top: dims.elem.top }); // ;
+
+    let constrain: any = this.constrain({ left: dims.elem.left, top: dims.elem.top }); // ;
     let transformScale = this.getViewerTransformScale("updateViewerPosition");
 
     // if (transformScale == 1.0)
 
     if (this.debug.enabled) {
-      console.log("updateViewerPosition"
-        + ", updateLeft: " + (dims.elem.width <= dims.parent.width) 
-        + ", updateTop: " + (dims.elem.height <= dims.parent.height)
-        + ", checkContraint: " + this.checkContraint()
-        + ", transformScale: " + transformScale 
-        + ", dims: ", dims);
+      // console.log("updateViewerPosition"
+      //   + ", updateLeft: " + (dims.elem.width <= dims.parent.width) 
+      //   + ", updateTop: " + (dims.elem.height <= dims.parent.height)
+      //   + ", checkContraint: " + this.checkContraint()
+      //   + ", transformScale: " + transformScale 
+      //   + ", dims: ", dims);
 
-    } 
-    let point:({ left:number|undefined, top:number|undefined}) = {
+    }
+    let point: ({ left: number | undefined, top: number | undefined }) = {
       left: undefined,
       top: undefined
     }
@@ -1014,10 +1015,10 @@ export class RelativeCoordsSupport {
       this.viewer.style.left = point.left + "px";
       this.viewer.style.top = point.top + "px";
     }
-    
+
   }
 
-  private setViewerScale(newScale, options:any = { }) {
+  private setViewerScale(newScale, options: any = {}) {
     let vtsSource = getComputedStyle(this.viewer).transform;
     if (this.debug.enabled) console.log("setViewerScale, newScale: " + newScale + ", vtsSource: " + vtsSource);
 
@@ -1025,45 +1026,45 @@ export class RelativeCoordsSupport {
     // let resetTransform = options.resetTransform === undefined || options.resetTransform === true; 
 
     let vts = this.getViewerTransformScale("setViewerScale");
-    
-   
+
+
     let dims = this.getDimensions(this.viewer);
     // let dimsAfterTransformReset = dims; 
 
-    let reset:any = { left: undefined, top: undefined };
+    let reset: any = { left: undefined, top: undefined };
 
     if (vts != 1.0) { // resetTransform && 
 
-        if (vtsSource != "none") {
+      if (vtsSource != "none") {
 
-          reset.left = dims.rel.left; 
-          reset.top = dims.rel.top;
-        }
+        reset.left = dims.rel.left;
+        reset.top = dims.rel.top;
+      }
 
-        this.viewer.style.transform = 'none';
-        this.viewer.style.transformOrigin = 'unset';
+      this.viewer.style.transform = 'none';
+      this.viewer.style.transformOrigin = 'unset';
 
-        // this.transformScale = -1;
-        // dimsAfterTransformReset = this.getDimensions(this.viewer);
+      // this.transformScale = -1;
+      // dimsAfterTransformReset = this.getDimensions(this.viewer);
 
     }
 
     let PDFViewerApplication: any = (window as any).PDFViewerApplication;
     let currentScale = PDFViewerApplication.pdfViewer.currentScale;
-    
+
     if (origin == undefined) {
       origin = { x: dims.elem.width / 2, y: dims.elem.height / 2 };
     }
 
-    let oxp = origin.x / dims.elem.width  ;
-    let oyp = origin.y / dims.elem.height ;
-   
+    let oxp = origin.x / dims.elem.width;
+    let oyp = origin.y / dims.elem.height;
+
     if (this.debug.enabled) {
-      console.log("setViewerScale, currentScale: " + this.debug.nf.format(currentScale) + " -> " + this.debug.nf.format(newScale) + ", vts: " + this.debug.nf.format(vts) + " ("+vtsSource+")"
-        + ", origin: "+ this.debug.nf.format(origin.x) + " ("+this.debug.nf.format(oxp* 100)+") / " + this.debug.nf.format(origin.y) + " ("+this.debug.nf.format(oyp* 100)+")"
-        + ", debug.x/Y: " + this.debug.nf.format( this.debug.x) + " / " +  + this.debug.nf.format( this.debug.y)
+      console.log("setViewerScale, currentScale: " + this.debug.nf.format(currentScale) + " -> " + this.debug.nf.format(newScale) + ", vts: " + this.debug.nf.format(vts) + " (" + vtsSource + ")"
+        + ", origin: " + this.debug.nf.format(origin.x) + " (" + this.debug.nf.format(oxp * 100) + ") / " + this.debug.nf.format(origin.y) + " (" + this.debug.nf.format(oyp * 100) + ")"
+        + ", debug.x/Y: " + this.debug.nf.format(this.debug.x) + " / " + + this.debug.nf.format(this.debug.y)
         + ", isZooming: " + this.isZooming()
-        +", dims: ", dims);
+        + ", dims: ", dims);
     }
 
     PDFViewerApplication.pdfViewer._setScale(newScale, true);
@@ -1071,13 +1072,13 @@ export class RelativeCoordsSupport {
     let dimsAfter = this.getDimensions(this.viewer);
     let dimDiff = this.getDimDiff(dims, dimsAfter);
 
-    let dimsCorr:any = {
+    let dimsCorr: any = {
       left: parseFloat(getComputedStyle(this.viewer).left) || 0,
       top: parseFloat(getComputedStyle(this.viewer).top) || 0,
     }
     dimsCorr.leftDiff = - (dimDiff.elem.width * oxp);
     dimsCorr.topDiff = - (dimDiff.elem.height * oyp);
-    
+
     dimsCorr.leftNext = dimsCorr.left + dimsCorr.leftDiff;
     dimsCorr.topNext = dimsCorr.top + dimsCorr.topDiff;
 
@@ -1086,12 +1087,12 @@ export class RelativeCoordsSupport {
         console.log("dimsCorr.leftNext: " + this.debug.nf.format(dimsCorr.leftNext) + " -> " + this.debug.nf.format(reset.left));
         console.log("dimsCorr.topNext: " + this.debug.nf.format(dimsCorr.topNext) + " -> " + this.debug.nf.format(reset.top));
       }
-     
+
       dimsCorr.leftNext = reset.left;
       dimsCorr.topNext = reset.top;
 
     }
-    
+
     this.viewer.style.left = dimsCorr.leftNext + "px";
     this.viewer.style.top = dimsCorr.topNext + "px";
 
@@ -1099,8 +1100,8 @@ export class RelativeCoordsSupport {
       console.log("setViewerScale2, newCurrentScale: " + this.debug.nf.format(PDFViewerApplication.pdfViewer.currentScale)
         + ", isZooming: " + this.isZooming()
         + ", dimsAfter: ", dimsAfter,
-          ", dimDiff: ", dimDiff,
-          ", dimsCorr: ", dimsCorr
+        ", dimDiff: ", dimDiff,
+        ", dimsCorr: ", dimsCorr
       );
     }
 
@@ -1113,13 +1114,13 @@ export class RelativeCoordsSupport {
     let currentScale = PDFViewerApplication.pdfViewer.currentScale;
 
     let czf = Math.round(currentScale * 10000);
-    
+
     let minZoom = Math.round(Number(PDFViewerApplicationOptions.get('minZoom')) * 10000);
     //  console.log("isZooming, czf: "  + czf + ", minZoom: " + minZoom + "; isZ: " + (czf > minZoom));
     return czf > minZoom;
   }
 
-  onViewerWheel(event:Event) {
+  onViewerWheel(event: Event) {
     if (this.options.disableEventHandling) return;
     if (this.debug.enabled) console.log("onWheel: event: ", event);
 
@@ -1144,9 +1145,9 @@ export class RelativeCoordsSupport {
 
     if (this.debug.enabled) console.log("initializeRelativeCoords: isMobile: " + this.isMobile());
 
-    let onContainerScoll = (event:Event) => {
+    let onContainerScoll = (event: Event) => {
       //console.log("onContainerScoll: l/t: " + viewerContainer.scrollLeft + " / " + viewerContainer.scrollTop + ", event: " , event);
-      if (viewerContainer.scrollLeft != 0 || viewerContainer.scrollTop != 0) viewerContainer.scroll({ left: 0, top: 0})
+      if (viewerContainer.scrollLeft != 0 || viewerContainer.scrollTop != 0) viewerContainer.scroll({ left: 0, top: 0 })
     }
 
     viewerContainer.addEventListener('scroll', onContainerScoll);
@@ -1167,7 +1168,7 @@ export class RelativeCoordsSupport {
         // console.log("pageChange: pages: ", this.getCurrentPagesInView())
         this.updateViewerPosition(true);
       }, 10);
-      
+
     });
     // this.component.zoomChange.subscribe(async (event: any) => {
     //   console.log("zoomChange: event: ", event);
@@ -1181,43 +1182,43 @@ export class RelativeCoordsSupport {
 
       // let onWheel = 
 
-      
+
       this._zone.runOutsideAngular(() => {
         // Panning support on desktop
         document.addEventListener('mousedown', this.boundOnViewerMouseDown);
         document.addEventListener('mousemove', this.boundOnViewerMouseMove, { passive: false });
         document.addEventListener('mouseup', this.boundOnViewerMouseUp);
-        
+
         window.addEventListener("wheel", this.boundOnViewerWheel, { passive: false });
-      
+
       });
-      
-  
+
+
     } else {
 
       this._zone.runOutsideAngular(() => {
         document.addEventListener('touchstart', this.boundOnViewerTouchStart);
         document.addEventListener('touchmove', this.boundOnViewerTouchMove, { passive: false });
         document.addEventListener('touchend', this.boundOnViewerTouchEnd);
-        
+
       });
 
-      
+
     }
 
 
-        
+
 
     if (this.debug.enabled) {
 
-      let onKeyup = (event:KeyboardEvent) => {
+      let onKeyup = (event: KeyboardEvent) => {
         console.log("onKeyup: event.key: " + event.key);
         let dims = this.getDimensions(this.viewer);
         const PDFViewerApplication: any = (window as any).PDFViewerApplication;
 
         if (event.key == "q") {
-          
-        
+
+
 
           this.viewer.style.transform = `none`;
           this.viewer.style.transformOrigin = `unset`;
@@ -1227,16 +1228,16 @@ export class RelativeCoordsSupport {
           console.log("dimsAfter: ", dimsAfter.scaled);
           console.log("dimsDiff: ", this.getDimDiff(dims, dimsAfter).scaled);
 
-        } else  if (event.key == "w") {
+        } else if (event.key == "w") {
           let originX = this.debug.x || dims.parent.width / 2;
           let originY = this.debug.y || dims.parent.height / 2;
-          originX -= dims.elem.left -  dims.parent.left ;
-          originY -= dims.elem.top -  dims.parent.top ;
+          originX -= dims.elem.left - dims.parent.left;
+          originY -= dims.elem.top - dims.parent.top;
           this.currentScale = 1.3;
 
           console.log("originX/Y: " + originX + " / " + originY + ", scale: " + this.currentScale + "; dims: ", dims);
           console.log("originX/Y (%): " + this.debug.nf.format(originX / dims.elem.width * 100) + " / " + this.debug.nf.format(originY / dims.elem.height * 100));
-          
+
 
           this.viewer.style.transform = `scale(${this.currentScale})`;
           this.viewer.style.transformOrigin = `${originX}px ${originY}px`;
@@ -1245,17 +1246,17 @@ export class RelativeCoordsSupport {
           console.log("dimsAfter: ", dimsAfter.elem);
           console.log("dimsDiff: ", this.getDimDiff(dims, dimsAfter).elem);
 
-        } else  if (event.key == "e") {
+        } else if (event.key == "e") {
 
           // this.viewer.style.transform = `none`;
           // this.viewer.style.transformOrigin = `unset`;
 
-          
+
           let currentScale = PDFViewerApplication.pdfViewer.currentScale;
           let newScale = currentScale * this.currentScale;
 
           console.log("currentScale: " + currentScale + " -> " + newScale + ", cs: " + this.currentScale + ", dims: ", dims);
-          
+
 
           // PDFViewerApplication.pdfViewer._setScale(newScale, true);
           this.setViewerScale(newScale, { resetTransform: true });
@@ -1265,12 +1266,12 @@ export class RelativeCoordsSupport {
           console.log("dimsAfter: ", dimsAfter.elem);
           console.log("dimsDiff: ", this.getDimDiff(dims, dimsAfter).elem);
 
-        // } else  if (event.key == "r") { // Rotate
-        } else  if (event.key == "s") {
-          let originX = this.debug.x || dims.parent.width / 2; 
-          let originY = this.debug.y || dims.parent.height / 2; 
-          originX -= dims.elem.left -  dims.parent.left ;
-          originY -= dims.elem.top -  dims.parent.top ;
+          // } else  if (event.key == "r") { // Rotate
+        } else if (event.key == "s") {
+          let originX = this.debug.x || dims.parent.width / 2;
+          let originY = this.debug.y || dims.parent.height / 2;
+          originX -= dims.elem.left - dims.parent.left;
+          originY -= dims.elem.top - dims.parent.top;
 
           // reset pdfViewer.scale
           let currentScale = PDFViewerApplication.pdfViewer.currentScale;
@@ -1278,16 +1279,16 @@ export class RelativeCoordsSupport {
           // console.log("currentScale: " + currentScale + " -> " + prevScale + ", originX/Y: " + originX + " / " + originY);
           console.log("originX/Y: " + originX + " / " + originY + ", scale: " + currentScale + " -> " + prevScale + ", t.cs: " + this.currentScale + "; dims: ", dims);
           console.log("originX/Y (%): " + (originX / dims.elem.width) + " / " + (originY / dims.elem.height));
-          
+
           // PDFViewerApplication.pdfViewer._setScale(prevScale, true);
           if (currentScale != prevScale) this.setViewerScale(prevScale);
 
 
-          originX = this.debug.x || dims.parent.width / 2; 
-          originY = this.debug.y || dims.parent.height / 2; 
+          originX = this.debug.x || dims.parent.width / 2;
+          originY = this.debug.y || dims.parent.height / 2;
           let dimsAfter = this.getDimensions(this.viewer);
-          originX -= dimsAfter.elem.left -  dimsAfter.parent.left ;
-          originY -= dimsAfter.elem.top -  dimsAfter.parent.top ;
+          originX -= dimsAfter.elem.left - dimsAfter.parent.left;
+          originY -= dimsAfter.elem.top - dimsAfter.parent.top;
 
           console.log("originX/Y: " + originX + " / " + originY + ", scale: " + currentScale + " -> " + prevScale + ", t.cs: " + this.currentScale + "; dimsAfter: ", dimsAfter);
           console.log("originX/Y (%): " + (originX / dimsAfter.elem.width) + " / " + (originY / dimsAfter.elem.height));
@@ -1295,13 +1296,13 @@ export class RelativeCoordsSupport {
           this.viewer.style.transform = `scale(${this.currentScale})`;
           this.viewer.style.transformOrigin = `${originX}px ${originY}px`;
 
-        } else  if (event.key == "t") {
+        } else if (event.key == "t") {
 
           // bare PDF.js-zoom
           let originX = this.debug.x || dims.parent.width / 2;
           let originY = this.debug.y || dims.parent.height / 2;
-          originX -= dims.elem.left -  dims.parent.left ;
-          originY -= dims.elem.top -  dims.parent.top ;
+          originX -= dims.elem.left - dims.parent.left;
+          originY -= dims.elem.top - dims.parent.top;
 
           if (this.currentScale == 1.0) this.currentScale = 1.3;
 
@@ -1309,14 +1310,14 @@ export class RelativeCoordsSupport {
           let newScale = currentScale * this.currentScale;
           this.setViewerScale(newScale, { origin: { x: originX, y: originY } });
 
-          
-          
-        } else  if (event.key == "y") {
-        
+
+
+        } else if (event.key == "y") {
+
           let originX = this.debug.x || dims.parent.width / 2;
           let originY = this.debug.y || dims.parent.height / 2;
-          originX -= dims.elem.left -  dims.parent.left ;
-          originY -= dims.elem.top -  dims.parent.top ;
+          originX -= dims.elem.left - dims.parent.left;
+          originY -= dims.elem.top - dims.parent.top;
 
           let currentScale = PDFViewerApplication.pdfViewer.currentScale;
           let prevScale = currentScale / this.currentScale;
@@ -1330,39 +1331,39 @@ export class RelativeCoordsSupport {
 
           // console.log("dimsAfter: ", dimsAfter.elem);
           // console.log("dimsDiff: ", this.getDimDiff(dims, dimsAfter).elem);
-        
-          
-        } else  if (event.key == "u") {
+
+
+        } else if (event.key == "u") {
           this.updateViewerPosition();
 
-        } else  if (event.key == "i") {
+        } else if (event.key == "i") {
           let corrLeft = 200;
           console.log("beforeCorr: ", this.getDimensions(this.viewer).elem);
           console.log("this.viewer.style: ", this.viewer.style);
-          console.log("this.viewer.style.left: " + this.viewer.style.left  + " -> " + corrLeft);
+          console.log("this.viewer.style.left: " + this.viewer.style.left + " -> " + corrLeft);
           this.viewer.style.left = corrLeft + "px";
           console.log("afterCorr: ", this.getDimensions(this.viewer).elem);
           console.log("this.viewer.style: ", this.viewer.style);
 
-        } else  if (event.key == "o") {
+        } else if (event.key == "o") {
 
-          let originX = this.debug.x || dims.parent.width / 2; 
-          let originY = this.debug.y || dims.parent.height / 2; 
-          originX -= dims.elem.left -  dims.parent.left ;
-          originY -= dims.elem.top -  dims.parent.top ;
+          let originX = this.debug.x || dims.parent.width / 2;
+          let originY = this.debug.y || dims.parent.height / 2;
+          originX -= dims.elem.left - dims.parent.left;
+          originY -= dims.elem.top - dims.parent.top;
 
           console.log("originX/Y: " + originX + " / " + originY + ", scale: " + this.currentScale);
 
           this.viewer.style.transform = `scale(${this.currentScale})`;
           this.viewer.style.transformOrigin = `${originX}px ${originY}px`;
 
-        } else  if (event.key == "p") {
-          
+        } else if (event.key == "p") {
+
 
           console.log("dims: ", dims);
           // let originX = this.debug.x || dims.parent.width / 2; 
           // let originY = this.debug.y || dims.parent.height / 2; 
-        
+
 
           console.log("getViewerTransformScale: ", this.getViewerTransformScale("key == p"));
 
@@ -1374,17 +1375,17 @@ export class RelativeCoordsSupport {
           console.log("dimsDiff: ", this.getDimDiff(dims, dimsAfter));
 
 
-        } else  if (event.key == "f") {
-     
+        } else if (event.key == "f") {
 
-        } else  if (event.key == "d") {
-          
+
+        } else if (event.key == "d") {
+
           console.log("dims: ", this.getDimensions(this.viewer));
 
-        } else  if (event.key == "z") {
+        } else if (event.key == "z") {
 
-        } else  if (event.key == "x") {
-    
+        } else if (event.key == "x") {
+
         }
       };
 
@@ -1401,9 +1402,9 @@ export class RelativeCoordsSupport {
       document.removeEventListener('mousedown', this.boundOnViewerMouseDown);
       document.removeEventListener('mousemove', this.boundOnViewerMouseMove);
       document.removeEventListener('mouseup', this.boundOnViewerMouseUp);
-      
+
       window.removeEventListener("wheel", this.boundOnViewerWheel);
-      
+
       return;
     }
     document.removeEventListener('touchstart', this.boundOnViewerTouchStart);
