@@ -46,6 +46,11 @@ export class AnnotationEditorLayer {
      */
     updateMode(mode: number): void;
     /**
+     * Set the editing state.
+     * @param {boolean} isEditing
+     */
+    setEditingState(isEditing: boolean): void;
+    /**
      * Mouseover callback.
      * @param {MouseEvent} event
      */
@@ -67,7 +72,7 @@ export class AnnotationEditorLayer {
      * Suppress the selected editor or all editors.
      * @returns {undefined}
      */
-    suppress(): undefined;
+    delete(): undefined;
     /**
      * Copy the selected editor.
      */

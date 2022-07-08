@@ -123,6 +123,10 @@ const defaultOptions = {
     value: 16777216,
     kind: OptionKind.VIEWER
   },
+  forcePageColors: {
+    value: false,
+    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+  },
   pageColorsBackground: {
     value: "Canvas",
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
@@ -467,6 +471,10 @@ class DefaultExternalServices {
     return (0, _pdfjsLib.shadow)(this, "isInAutomation", false);
   }
 
+  static updateEditorStates(data) {
+    throw new Error("Not implemented: updateEditorStates");
+  }
+
 }
 
 exports.DefaultExternalServices = DefaultExternalServices;
@@ -741,10 +749,10 @@ const PDFViewerApplication = {
 
     const annotationEditorMode = _app_options.AppOptions.get("annotationEditorMode");
 
-    const pageColors = {
+    const pageColors = _app_options.AppOptions.get("forcePageColors") || window.matchMedia("(forced-colors: active)").matches ? {
       background: _app_options.AppOptions.get("pageColorsBackground"),
       foreground: _app_options.AppOptions.get("pageColorsForeground")
-    };
+    } : null;
     this.pdfViewer = new _pdf_viewer.PDFViewer({
       container,
       viewer,
@@ -918,7 +926,7 @@ const PDFViewerApplication = {
   },
 
   initializeLoadingBar() {
-    const bar = new _ui_utils.ProgressBar("#loadingBar");
+    const bar = new _ui_utils.ProgressBar("loadingBar");
     bar.hide();
     return (0, _pdfjsLib.shadow)(this, "loadingBar", bar);
   },
@@ -1298,23 +1306,28 @@ const PDFViewerApplication = {
 
     const percent = Math.round(level * 100);
 
-    if (percent > this.loadingBar.percent || isNaN(percent)) {
-      this.loadingBar.percent = percent;
-      const disableAutoFetch = this.pdfDocument ? this.pdfDocument.loadingParams.disableAutoFetch : _app_options.AppOptions.get("disableAutoFetch");
-
-      if (disableAutoFetch && percent) {
-        if (this.disableAutoFetchLoadingBarTimeout) {
-          clearTimeout(this.disableAutoFetchLoadingBarTimeout);
-          this.disableAutoFetchLoadingBarTimeout = null;
-        }
-
-        this.loadingBar.show();
-        this.disableAutoFetchLoadingBarTimeout = setTimeout(() => {
-          this.loadingBar.hide();
-          this.disableAutoFetchLoadingBarTimeout = null;
-        }, DISABLE_AUTO_FETCH_LOADING_BAR_TIMEOUT);
-      }
+    if (percent <= this.loadingBar.percent) {
+      return;
     }
+
+    this.loadingBar.percent = percent;
+
+    const disableAutoFetch = this.pdfDocument?.loadingParams.disableAutoFetch ?? _app_options.AppOptions.get("disableAutoFetch");
+
+    if (!disableAutoFetch || isNaN(percent)) {
+      return;
+    }
+
+    if (this.disableAutoFetchLoadingBarTimeout) {
+      clearTimeout(this.disableAutoFetchLoadingBarTimeout);
+      this.disableAutoFetchLoadingBarTimeout = null;
+    }
+
+    this.loadingBar.show();
+    this.disableAutoFetchLoadingBarTimeout = setTimeout(() => {
+      this.loadingBar.hide();
+      this.disableAutoFetchLoadingBarTimeout = null;
+    }, DISABLE_AUTO_FETCH_LOADING_BAR_TIMEOUT);
   },
 
   load(pdfDocument) {
@@ -3184,6 +3197,10 @@ function beforeUnload(evt) {
   return false;
 }
 
+function webViewerAnnotationEditorStatesChanged(data) {
+  PDFViewerApplication.externalServices.updateEditorStates(data);
+}
+
 const PDFPrintServiceFactory = {
   instance: {
     supportsPrinting: false,
@@ -3695,7 +3712,7 @@ const animationStarted = new Promise(function (resolve) {
   });
 });
 exports.animationStarted = animationStarted;
-const docStyle = document.querySelector(".html")?.style ?? document.documentElement.style;
+const docStyle = document.documentElement.style;
 exports.docStyle = docStyle;
 
 function clamp(v, min, max) {
@@ -3703,42 +3720,33 @@ function clamp(v, min, max) {
 }
 
 class ProgressBar {
+  #classList = null;
+  #percent = 0;
+  #visible = true;
+
   constructor(id) {
     if (arguments.length > 1) {
       throw new Error("ProgressBar no longer accepts any additional options, " + "please use CSS rules to modify its appearance instead.");
     }
 
-    this.visible = true;
-    this.div = document.querySelector(id + " .progress");
-
-    if (this.div) {
-      this.bar = this.div.parentNode;
-    }
-
-    this.percent = 0;
-  }
-
-  #updateBar() {
-    if (this._indeterminate) {
-      this.div.classList.add("indeterminate");
-      return;
-    }
-
-    if (this.div) {
-      this.div.classList.remove("indeterminate");
-    }
-
-    docStyle.setProperty("--progressBar-percent", `${this._percent}%`);
+    const bar = document.getElementById(id);
+    this.#classList = bar.classList;
   }
 
   get percent() {
-    return this._percent;
+    return this.#percent;
   }
 
   set percent(val) {
-    this._indeterminate = isNaN(val);
-    this._percent = clamp(val, 0, 100);
-    this.#updateBar();
+    this.#percent = clamp(val, 0, 100);
+
+    if (isNaN(val)) {
+      this.#classList.add("indeterminate");
+      return;
+    }
+
+    this.#classList.remove("indeterminate");
+    docStyle.setProperty("--progressBar-percent", `${this.#percent}%`);
   }
 
   setWidth(viewer) {
@@ -3755,28 +3763,21 @@ class ProgressBar {
   }
 
   hide() {
-    if (!this.visible) {
+    if (!this.#visible) {
       return;
     }
 
-    this.visible = false;
-    this.div = document.querySelector(".body #mainContainer .progress");
-
-    if (this.div) {
-      this.bar = this.div.parentNode;
-      this.bar.classList.add("hidden");
-    }
-
-    document.querySelector(".body").classList.remove("loadingInProgress");
+    this.#visible = false;
+    this.#classList.add("hidden");
   }
 
   show() {
-    if (this.visible) {
+    if (this.#visible) {
       return;
     }
 
-    this.visible = true;
-    this.bar.classList.remove("hidden");
+    this.#visible = true;
+    this.#classList.remove("hidden");
   }
 
 }
@@ -8362,6 +8363,8 @@ exports.PDFPresentationMode = void 0;
 
 var _ui_utils = __webpack_require__(3);
 
+var _pdfjsLib = __webpack_require__(4);
+
 const DELAY_BEFORE_HIDING_CONTROLS = 3000;
 const ACTIVE_SELECTOR = "pdfPresentationMode";
 const CONTROLS_SELECTOR = "pdfPresentationModeControls";
@@ -8405,12 +8408,17 @@ class PDFPresentationMode {
       pageNumber: pdfViewer.currentPageNumber,
       scaleValue: pdfViewer.currentScaleValue,
       scrollMode: pdfViewer.scrollMode,
-      spreadMode: null
+      spreadMode: null,
+      annotationEditorMode: null
     };
 
     if (pdfViewer.spreadMode !== _ui_utils.SpreadMode.NONE && !(pdfViewer.pageViewsReady && pdfViewer.hasEqualPageSizes)) {
       console.warn("Ignoring Spread modes when entering PresentationMode, " + "since the document may contain varying page sizes.");
       this.#args.spreadMode = pdfViewer.spreadMode;
+    }
+
+    if (pdfViewer.annotationEditorMode !== _pdfjsLib.AnnotationEditorType.DISABLE) {
+      this.#args.annotationEditorMode = pdfViewer.annotationEditorMode;
     }
 
     try {
@@ -8479,6 +8487,10 @@ class PDFPresentationMode {
 
       this.pdfViewer.currentPageNumber = this.#args.pageNumber;
       this.pdfViewer.currentScaleValue = "page-fit";
+
+      if (this.#args.annotationEditorMode !== null) {
+        this.pdfViewer.annotationEditorMode = _pdfjsLib.AnnotationEditorType.NONE;
+      }
     }, 0);
     this.#addWindowListeners();
     this.#showControls();
@@ -8500,6 +8512,11 @@ class PDFPresentationMode {
 
       this.pdfViewer.currentScaleValue = this.#args.scaleValue;
       this.pdfViewer.currentPageNumber = pageNumber;
+
+      if (this.#args.annotationEditorMode !== null) {
+        this.pdfViewer.annotationEditorMode = this.#args.annotationEditorMode;
+      }
+
       this.#args = null;
     }, 0);
     this.#removeWindowListeners();
@@ -10757,7 +10774,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.15.518';
+    const viewerVersion = '2.15.521';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -11233,6 +11250,11 @@ class BaseViewer {
       if (this._scriptingManager) {
         this._scriptingManager.setDocument(null);
       }
+
+      if (this.#annotationEditorUIManager) {
+        this.#annotationEditorUIManager.destroy();
+        this.#annotationEditorUIManager = null;
+      }
     }
 
     this.pdfDocument = pdfDocument;
@@ -11477,7 +11499,6 @@ class BaseViewer {
   }
 
   _resetView() {
-    this.#annotationEditorUIManager = null;
     this._pages = [];
     this._currentPageNumber = 1;
     this._currentScale = _ui_utils.UNKNOWN_SCALE;
@@ -12639,7 +12660,7 @@ class BaseViewer {
   }
 
   get annotationEditorMode() {
-    return this.#annotationEditorMode;
+    return this.#annotationEditorUIManager ? this.#annotationEditorMode : _pdfjsLib.AnnotationEditorType.DISABLE;
   }
 
   set annotationEditorMode(mode) {
@@ -12849,7 +12870,7 @@ const DEFAULT_L10N_STRINGS = {
   printing_not_supported: "Warning: Printing is not fully supported by this browser.",
   printing_not_ready: "Warning: The PDF is not fully loaded for printing.",
   web_fonts_disabled: "Web fonts are disabled: unable to use embedded PDF fonts.",
-  freetext_default_content: "Enter text…"
+  free_text_default_content: "Enter text…"
 };
 
 function getL10nFallback(key, args) {
@@ -12992,14 +13013,9 @@ class AnnotationLayerBuilder {
     };
 
     if (this.div) {
-      _pdfjsLib.AnnotationLayer.setDimensions(this.div, viewport);
-
       _pdfjsLib.AnnotationLayer.update(parameters);
     } else {
       this.div = document.createElement("div");
-
-      _pdfjsLib.AnnotationLayer.setDimensions(this.div, viewport);
-
       this.div.className = "annotationLayer";
       this.pageDiv.append(this.div);
       parameters.div = this.div;
@@ -19523,6 +19539,7 @@ class BasePreferences {
     "externalLinkTarget": 0,
     "historyUpdateUrl": false,
     "ignoreDestinationZoom": false,
+    "forcePageColors": false,
     "pageColorsBackground": "Canvas",
     "pageColorsForeground": "CanvasText",
     "pdfBugEnabled": false,
@@ -21199,8 +21216,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.15.518';
-const pdfjsBuild = 'baeb62f56';
+const pdfjsVersion = '2.15.521';
+const pdfjsBuild = 'ffe636bce';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

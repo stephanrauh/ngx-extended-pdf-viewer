@@ -134,7 +134,7 @@ class WorkerMessageHandler {
     const WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.15.518';
+    const workerVersion = '2.15.521';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -3853,7 +3853,9 @@ class Page {
   }
 
   get resources() {
-    return (0, _util.shadow)(this, "resources", this._getInheritableProperty("Resources") || _primitives.Dict.empty);
+    const resources = this._getInheritableProperty("Resources");
+
+    return (0, _util.shadow)(this, "resources", resources instanceof _primitives.Dict ? resources : _primitives.Dict.empty);
   }
 
   _getBoundingBox(name) {
@@ -26659,7 +26661,12 @@ class TranslatedFont {
     const charProcs = this.dict.get("CharProcs");
     const fontResources = this.dict.get("Resources") || resources;
     const charProcOperatorList = Object.create(null);
-    const isEmptyBBox = !translatedFont.bbox || (0, _util.isArrayEqual)(translatedFont.bbox, [0, 0, 0, 0]);
+
+    const fontBBox = _util.Util.normalizeRect(translatedFont.bbox || [0, 0, 0, 0]),
+          width = fontBBox[2] - fontBBox[0],
+          height = fontBBox[3] - fontBBox[1];
+
+    const fontBBoxSize = Math.hypot(width, height);
 
     for (const key of charProcs.getKeys()) {
       loadCharProcsPromise = loadCharProcsPromise.then(() => {
@@ -26672,7 +26679,7 @@ class TranslatedFont {
           operatorList
         }).then(() => {
           if (operatorList.fnArray[0] === _util.OPS.setCharWidthAndBounds) {
-            this._removeType3ColorOperators(operatorList, isEmptyBBox);
+            this._removeType3ColorOperators(operatorList, fontBBoxSize);
           }
 
           charProcOperatorList[key] = operatorList.getIR();
@@ -26699,15 +26706,17 @@ class TranslatedFont {
     return this.type3Loaded;
   }
 
-  _removeType3ColorOperators(operatorList, isEmptyBBox = false) {
+  _removeType3ColorOperators(operatorList, fontBBoxSize = NaN) {
     const charBBox = _util.Util.normalizeRect(operatorList.argsArray[0].slice(2)),
           width = charBBox[2] - charBBox[0],
           height = charBBox[3] - charBBox[1];
 
+    const charBBoxSize = Math.hypot(width, height);
+
     if (width === 0 || height === 0) {
       operatorList.fnArray.splice(0, 1);
       operatorList.argsArray.splice(0, 1);
-    } else if (isEmptyBBox) {
+    } else if (fontBBoxSize === 0 || Math.round(charBBoxSize / fontBBoxSize) >= 10) {
       if (!this._bbox) {
         this._bbox = [Infinity, Infinity, -Infinity, -Infinity];
       }
@@ -75217,8 +75226,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.15.518';
-const pdfjsBuild = 'baeb62f56';
+const pdfjsVersion = '2.15.521';
+const pdfjsBuild = 'ffe636bce';
 })();
 
 /******/ 	return __webpack_exports__;

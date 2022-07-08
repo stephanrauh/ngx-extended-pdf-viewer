@@ -10,6 +10,21 @@ export type AnnotationEditorLayer = import("./annotation_editor_layer.js").Annot
  */
 export class AnnotationEditorUIManager {
     constructor(eventBus: any);
+    destroy(): void;
+    /**
+     * Execute an action for a given name.
+     * For example, the user can click on the "Undo" entry in the context menu
+     * and it'll trigger the undo action.
+     * @param {Object} details
+     */
+    onEditingAction(details: Object): void;
+    /**
+     * Set the editing state.
+     * It can be useful to temporarily disable it when the user is editing a
+     * FreeText annotation.
+     * @param {boolean} isEditing
+     */
+    setEditingState(isEditing: boolean): void;
     registerEditorTypes(types: any): void;
     /**
      * Get an id.
@@ -98,25 +113,22 @@ export class AnnotationEditorUIManager {
      */
     unselect(): void;
     /**
-     * Suppress some editors from the given layer.
-     * @param {AnnotationEditorLayer} layer
+     * Delete the current editor or all.
      */
-    suppress(layer: AnnotationEditorLayer): void;
+    delete(): void;
     /**
      * Copy the selected editor.
      */
     copy(): void;
     /**
      * Cut the selected editor.
-     * @param {AnnotationEditorLayer}
      */
-    cut(layer: any): void;
+    cut(): void;
     /**
      * Paste a previously copied editor.
-     * @param {AnnotationEditorLayer}
      * @returns {undefined}
      */
-    paste(layer: any): undefined;
+    paste(): undefined;
     /**
      * Select all the editors.
      */
@@ -149,6 +161,27 @@ export class AnnotationEditorUIManager {
     #private;
 }
 export function bindEvents(obj: any, element: any, names: any): void;
+export class ColorManager {
+    static _colorsMapping: Map<string, number[]>;
+    get _colors(): any;
+    /**
+     * In High Contrast Mode, the color on the screen is not always the
+     * real color used in the pdf.
+     * For example in some cases white can appear to be black but when saving
+     * we want to have white.
+     * @param {string} color
+     * @returns {Array<number>}
+     */
+    convert(color: string): Array<number>;
+    /**
+     * An input element must have its color value as a hex string
+     * and not as color name.
+     * So this function converts a name into an hex string.
+     * @param {string} name
+     * @returns {string}
+     */
+    getHexCode(name: string): string;
+}
 /**
  * Class to handle the different keyboards shortcuts we can have on mac or
  * non-mac OSes.

@@ -87,6 +87,7 @@ export class DOMSVGFactory extends BaseSVGFactory {
      */
     _createSVG(type: any): any;
 }
+export function getColorValues(colors: any): void;
 /**
  * Gets the filename from a given URL.
  * @param {string} url

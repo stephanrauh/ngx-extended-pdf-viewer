@@ -28,6 +28,8 @@ export type AnnotationEditorParameters = {
  * Base class for editors.
  */
 export class AnnotationEditor {
+    static _colorManager: ColorManager;
+    static get _defaultLineColor(): any;
     /**
      * @param {AnnotationEditorParameters} parameters
      */
@@ -105,6 +107,11 @@ export class AnnotationEditor {
      * @returns {HTMLDivElement}
      */
     render(): HTMLDivElement;
+    /**
+     * Onmousedown callback.
+     * @param {MouseEvent} event
+     */
+    mousedown(event: MouseEvent): void;
     getRect(tx: any, ty: any): number[];
     /**
      * Executed once this editor has been rendered.
@@ -194,3 +201,4 @@ export class AnnotationEditor {
     get propertiesToUpdate(): Object;
     #private;
 }
+import { ColorManager } from "./tools.js";

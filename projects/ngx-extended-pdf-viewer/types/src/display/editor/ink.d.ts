@@ -2,10 +2,10 @@
  * Basic draw editor in order to generate an Ink annotation.
  */
 export class InkEditor extends AnnotationEditor {
+    static _defaultColor: null;
     static _defaultThickness: number;
-    static _defaultColor: string;
     static updateDefaultParams(type: any, value: any): void;
-    static get defaultPropertiesToUpdate(): (string | number)[][];
+    static get defaultPropertiesToUpdate(): any[][];
     constructor(params: any);
     color: any;
     thickness: any;
@@ -73,7 +73,7 @@ export class InkEditor extends AnnotationEditor {
     /** @inheritdoc */
     serialize(): {
         annotationType: number;
-        color: any;
+        color: number[];
         thickness: any;
         paths: {
             bezier: number[];
@@ -86,3 +86,4 @@ export class InkEditor extends AnnotationEditor {
     #private;
 }
 import { AnnotationEditor } from "./editor.js";
+export { fitCurve };

@@ -5,11 +5,11 @@ export class FreeTextEditor extends AnnotationEditor {
     static _freeTextDefaultContent: string;
     static _l10nPromise: any;
     static _internalPadding: number;
+    static _defaultColor: null;
     static _defaultFontSize: number;
-    static _defaultColor: string;
     static initialize(l10n: any): void;
     static updateDefaultParams(type: any, value: any): void;
-    static get defaultPropertiesToUpdate(): (string | number)[][];
+    static get defaultPropertiesToUpdate(): any[][];
     constructor(params: any);
     /** @inheritdoc */
     copy(): FreeTextEditor;
@@ -23,6 +23,8 @@ export class FreeTextEditor extends AnnotationEditor {
     enableEditMode(): void;
     /** @inheritdoc */
     disableEditMode(): void;
+    /** @inheritdoc */
+    remove(): void;
     /**
      * Commit the content we have in this editor.
      * @returns {undefined}
@@ -40,7 +42,7 @@ export class FreeTextEditor extends AnnotationEditor {
     /** @inheritdoc */
     serialize(): {
         annotationType: number;
-        color: any;
+        color: number[];
         fontSize: any;
         value: string;
         pageIndex: number;
