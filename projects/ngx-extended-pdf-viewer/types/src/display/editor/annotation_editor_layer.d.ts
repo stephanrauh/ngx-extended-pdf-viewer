@@ -44,17 +44,13 @@ export class AnnotationEditorLayer {
      * The mode has changed: it must be updated.
      * @param {number} mode
      */
-    updateMode(mode: number): void;
+    updateMode(mode?: number): void;
+    addInkEditorIfNeeded(isCommitting: any): void;
     /**
      * Set the editing state.
      * @param {boolean} isEditing
      */
     setEditingState(isEditing: boolean): void;
-    /**
-     * Mouseover callback.
-     * @param {MouseEvent} event
-     */
-    mouseover(event: MouseEvent): void;
     /**
      * Add some commands into the CommandManager (undo/redo stuff).
      * @param {Object} params
