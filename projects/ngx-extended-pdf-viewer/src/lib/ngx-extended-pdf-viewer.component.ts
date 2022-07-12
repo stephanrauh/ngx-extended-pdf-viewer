@@ -75,9 +75,6 @@ export interface FormDataType {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
-  private static CSS_CACHE: string | undefined = undefined;
-  private static activeInstances = 0;
-
   public static ngxExtendedPdfViewerInitialized = false;
   public ngxExtendedPdfViewerIncompletelyInitialized = true;
 
@@ -844,8 +841,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       (window as any).registerAcroformAnnotations = (sortedAnnotations) => this.registerAcroformAnnotations(sortedAnnotations);
       (window as any).assignFormIdAndFieldName = (key: string, fieldName: string, radioButtonField?: string) =>
         this.assignFormIdAndFieldName(key, fieldName, radioButtonField);
-
-      this.addCachedCSS();
 
       this.loadPdfJs();
     }
@@ -1670,41 +1665,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         } else if (e && e.id === 'fileInput') {
           body[0].removeChild(e);
         }
-      }
-    }
-    NgxExtendedPdfViewerComponent.activeInstances--;
-    if (NgxExtendedPdfViewerComponent.activeInstances === 0) {
-      const head = document.getElementsByTagName('head');
-      if (head[0]) {
-        const topLevelElements = head[0].children;
-        for (let i = topLevelElements.length - 1; i >= 0; i--) {
-          const e = topLevelElements.item(i);
-          if (e?.textContent?.includes('ngx-extended-pdf-viewer')) {
-            NgxExtendedPdfViewerComponent.CSS_CACHE = e.textContent;
-            head[0].removeChild(e);
-          }
-        }
-      }
-    }
-  }
-
-  private addCachedCSS() {
-    NgxExtendedPdfViewerComponent.activeInstances++;
-    if (NgxExtendedPdfViewerComponent.CSS_CACHE) {
-      // check if the CSS is already there
-      const head = document.getElementsByTagName('head');
-      if (head[0]) {
-        const topLevelElements = head[0].children;
-        for (let i = topLevelElements.length - 1; i >= 0; i--) {
-          const e = topLevelElements.item(i);
-          if (e?.textContent?.includes('ngx-extended-pdf-viewer')) {
-            // CSS rule is already there -> do nothing
-            return;
-          }
-        }
-        const style = document.createElement('style');
-        style.textContent = NgxExtendedPdfViewerComponent.CSS_CACHE;
-        head[0].appendChild(style);
       }
     }
   }
