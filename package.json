@@ -28,7 +28,7 @@
     "@angular/router": "^13.3.11",
     "@schematics/angular": "^13.3.8",
     "rxjs": "^7.5.5",
-    "zone.js": "^0.11.6"
+    "zone.js": "^0.11.7"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^13.3.8",
