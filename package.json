@@ -37,7 +37,7 @@
     "@types/node": "^17.0.45",
     "codelyzer": "^6.0.2",
     "copyfiles": "^2.4.1",
-    "ng-packagr": "~13.3.1",
+    "ng-packagr": "~14.1.0",
     "properties-reader": "^2.2.0",
     "sass": "^1.54.0",
     "ts-node": "^10.9.1",
