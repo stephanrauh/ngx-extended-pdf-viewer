@@ -83,10 +83,6 @@ export type PDFViewerOptions = {
      */
     enablePrintAutoRotate?: boolean | undefined;
     /**
-     * - 'canvas' or 'svg'. The default is 'canvas'.
-     */
-    renderer: string;
-    /**
      * - Enables CSS only zooming. The default
      * value is `false`.
      */
@@ -140,7 +136,7 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFAnnotationEdi
     textLayerMode: number;
     imageResourcesPath: string;
     enablePrintAutoRotate: boolean;
-    renderer: string;
+    renderer: any;
     useOnlyCssZoom: boolean;
     maxCanvasPixels: number | undefined;
     l10n: import("./interfaces").IL10n;
@@ -507,7 +503,6 @@ export namespace PagesCountLimit {
  *   mainly for annotation icons. Include trailing slash.
  * @property {boolean} [enablePrintAutoRotate] - Enables automatic rotation of
  *   landscape pages upon printing. The default is `false`.
- * @property {string} renderer - 'canvas' or 'svg'. The default is 'canvas'.
  * @property {boolean} [useOnlyCssZoom] - Enables CSS only zooming. The default
  *   value is `false`.
  * @property {number} [maxCanvasPixels] - The maximum supported canvas size in

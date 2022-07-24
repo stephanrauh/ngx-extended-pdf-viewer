@@ -9,8 +9,21 @@ export type AnnotationEditorLayer = import("./annotation_editor_layer.js").Annot
  * some action like copy/paste, undo/redo, ...
  */
 export class AnnotationEditorUIManager {
-    constructor(eventBus: any);
+    static _keyboardManager: KeyboardManager;
+    constructor(container: any, eventBus: any);
     destroy(): void;
+    onPageChanging({ pageNumber }: {
+        pageNumber: any;
+    }): void;
+    onTextLayerRendered({ pageNumber }: {
+        pageNumber: any;
+    }): void;
+    focusMainContainer(): void;
+    /**
+     * Keydown callback.
+     * @param {KeyboardEvent} event
+     */
+    keydown(event: KeyboardEvent): void;
     /**
      * Execute an action for a given name.
      * For example, the user can click on the "Undo" entry in the context menu
@@ -86,6 +99,27 @@ export class AnnotationEditorUIManager {
      */
     setActiveEditor(editor: AnnotationEditor): void;
     /**
+     * Add or remove an editor the current selection.
+     * @param {AnnotationEditor} editor
+     */
+    toggleSelected(editor: AnnotationEditor): void;
+    /**
+     * Set the last selected editor.
+     * @param {AnnotationEditor} editor
+     */
+    setSelected(editor: AnnotationEditor): void;
+    /**
+     * Check if the editor is selected.
+     * @param {AnnotationEditor} editor
+     */
+    isSelected(editor: AnnotationEditor): boolean;
+    /**
+     * Unselect an editor.
+     * @param {AnnotationEditor} editor
+     */
+    unselect(editor: AnnotationEditor): void;
+    get hasSelection(): boolean;
+    /**
      * Undo the last command.
      */
     undo(): void;
@@ -98,20 +132,6 @@ export class AnnotationEditorUIManager {
      * @param {Object} params
      */
     addCommands(params: Object): void;
-    /**
-     * @param {boolean} allow
-     */
-    set allowClick(arg: boolean);
-    /**
-     * When set to true a click on the current layer will trigger
-     * an editor creation.
-     * @return {boolean}
-     */
-    get allowClick(): boolean;
-    /**
-     * Unselect the current editor.
-     */
-    unselect(): void;
     /**
      * Delete the current editor or all.
      */
@@ -134,7 +154,7 @@ export class AnnotationEditorUIManager {
      */
     selectAll(): void;
     /**
-     * Unselect all the editors.
+     * Unselect all the selected editors.
      */
     unselectAll(): void;
     /**
@@ -148,11 +168,6 @@ export class AnnotationEditorUIManager {
      * @returns {AnnotationEditor|null}
      */
     getActive(): AnnotationEditor | null;
-    /**
-     * Check if there is an active editor.
-     * @returns {boolean}
-     */
-    hasActive(): boolean;
     /**
      * Get the current editor mode.
      * @returns {number}
@@ -183,6 +198,56 @@ export class ColorManager {
     getHexCode(name: string): string;
 }
 /**
+ * Class to handle undo/redo.
+ * Commands are just saved in a buffer.
+ * If we hit some memory issues we could likely use a circular buffer.
+ * It has to be used as a singleton.
+ */
+export class CommandManager {
+    constructor(maxSize?: number);
+    /**
+     * @typedef {Object} addOptions
+     * @property {function} cmd
+     * @property {function} undo
+     * @property {boolean} mustExec
+     * @property {number} type
+     * @property {boolean} overwriteIfSameType
+     * @property {boolean} keepUndo
+     */
+    /**
+     * Add a new couple of commands to be used in case of redo/undo.
+     * @param {addOptions} options
+     */
+    add({ cmd, undo, mustExec, type, overwriteIfSameType, keepUndo, }: {
+        cmd: Function;
+        undo: Function;
+        mustExec: boolean;
+        type: number;
+        overwriteIfSameType: boolean;
+        keepUndo: boolean;
+    }): void;
+    /**
+     * Undo the last command.
+     */
+    undo(): void;
+    /**
+     * Redo the last command.
+     */
+    redo(): void;
+    /**
+     * Check if there is something to undo.
+     * @returns {boolean}
+     */
+    hasSomethingToUndo(): boolean;
+    /**
+     * Check if there is something to redo.
+     * @returns {boolean}
+     */
+    hasSomethingToRedo(): boolean;
+    destroy(): void;
+    #private;
+}
+/**
  * Class to handle the different keyboards shortcuts we can have on mac or
  * non-mac OSes.
  */
@@ -200,11 +265,11 @@ export class KeyboardManager {
     allKeys: Set<any>;
     /**
      * Execute a callback, if any, for a given keyboard event.
-     * The page is used as `this` in the callback.
-     * @param {AnnotationEditorLayer} page.
+     * The self is used as `this` in the callback.
+     * @param {Object} self.
      * @param {KeyboardEvent} event
      * @returns
      */
-    exec(page: any, event: KeyboardEvent): void;
+    exec(self: any, event: KeyboardEvent): void;
     #private;
 }

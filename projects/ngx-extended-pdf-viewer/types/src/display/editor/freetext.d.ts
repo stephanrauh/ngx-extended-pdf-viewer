@@ -1,3 +1,4 @@
+export type AnnotationEditorLayer = import("./annotation_editor_layer.js").AnnotationEditorLayer;
 /**
  * Basic text editor in order to create a FreeTex annotation.
  */
@@ -7,24 +8,16 @@ export class FreeTextEditor extends AnnotationEditor {
     static _internalPadding: number;
     static _defaultColor: null;
     static _defaultFontSize: number;
+    static _keyboardManager: KeyboardManager;
     static initialize(l10n: any): void;
     static updateDefaultParams(type: any, value: any): void;
     static get defaultPropertiesToUpdate(): any[][];
+    /** @inheritdoc */
+    static deserialize(data: any, parent: any): AnnotationEditor;
     constructor(params: any);
     /** @inheritdoc */
-    copy(): FreeTextEditor;
-    /** @inheritdoc */
     updateParams(type: any, value: any): void;
-    /** @inheritdoc */
     get propertiesToUpdate(): any[][];
-    /** @inheritdoc */
-    rebuild(): void;
-    /** @inheritdoc */
-    enableEditMode(): void;
-    /** @inheritdoc */
-    disableEditMode(): void;
-    /** @inheritdoc */
-    remove(): void;
     /**
      * Commit the content we have in this editor.
      * @returns {undefined}
@@ -35,10 +28,19 @@ export class FreeTextEditor extends AnnotationEditor {
      * @param {MouseEvent} event
      */
     dblclick(event: MouseEvent): void;
+    /**
+     * onkeydown callback.
+     * @param {KeyboardEvent} event
+     */
+    keydown(event: KeyboardEvent): void;
+    editorDivKeydown(event: any): void;
+    editorDivFocus(event: any): void;
+    editorDivBlur(event: any): void;
     /** @inheritdoc */
     render(): HTMLDivElement | null;
     editorDiv: HTMLDivElement | undefined;
     overlayDiv: HTMLDivElement | undefined;
+    get contentDiv(): HTMLDivElement | undefined;
     /** @inheritdoc */
     serialize(): {
         annotationType: number;
@@ -52,3 +54,4 @@ export class FreeTextEditor extends AnnotationEditor {
     #private;
 }
 import { AnnotationEditor } from "./editor.js";
+import { KeyboardManager } from "./tools.js";

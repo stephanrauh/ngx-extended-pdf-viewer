@@ -75,7 +75,7 @@ export namespace LinkTarget {
  * @implements {IPDFLinkService}
  */
 export class PDFLinkService implements IPDFLinkService {
-    static "__#24@#isValidExplicitDestination"(dest: any): boolean;
+    static "__#25@#isValidExplicitDestination"(dest: any): boolean;
     /**
      * @param {PDFLinkServiceOptions} options
      */

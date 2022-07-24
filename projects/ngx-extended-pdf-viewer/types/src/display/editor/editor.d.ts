@@ -29,7 +29,17 @@ export type AnnotationEditorParameters = {
  */
 export class AnnotationEditor {
     static _colorManager: ColorManager;
+    static _zIndex: number;
     static get _defaultLineColor(): any;
+    /**
+     * Deserialize the editor.
+     * The result of the deserialization is a new editor.
+     *
+     * @param {Object} data
+     * @param {AnnotationEditorLayer} parent
+     * @returns {AnnotationEditor}
+     */
+    static deserialize(data: Object, parent: AnnotationEditorLayer): AnnotationEditor;
     /**
      * @param {AnnotationEditorParameters} parameters
      */
@@ -56,13 +66,12 @@ export class AnnotationEditor {
     /**
      * onfocus callback.
      */
-    focusin(): void;
+    focusin(event: any): void;
     /**
      * onblur callback.
      * @param {FocusEvent} event
-     * @returns {undefined}
      */
-    focusout(event: FocusEvent): undefined;
+    focusout(event: FocusEvent): void;
     commitOrRemove(): void;
     /**
      * We use drag-and-drop in order to move an editor on a page.
@@ -108,11 +117,12 @@ export class AnnotationEditor {
      */
     render(): HTMLDivElement;
     /**
-     * Onmousedown callback.
-     * @param {MouseEvent} event
+     * Onpointerdown callback.
+     * @param {PointerEvent} event
      */
-    mousedown(event: MouseEvent): void;
+    pointerdown(event: PointerEvent): void;
     getRect(tx: any, ty: any): number[];
+    getRectInCurrentCoords(rect: any, pageHeight: any): any[];
     /**
      * Executed once this editor has been rendered.
      */
@@ -124,14 +134,12 @@ export class AnnotationEditor {
     isEmpty(): boolean;
     /**
      * Enable edit mode.
-     * @returns {undefined}
      */
-    enableEditMode(): undefined;
+    enableEditMode(): void;
     /**
      * Disable edit mode.
-     * @returns {undefined}
      */
-    disableEditMode(): undefined;
+    disableEditMode(): void;
     /**
      * Check if the editor is edited.
      * @returns {boolean}
@@ -144,15 +152,6 @@ export class AnnotationEditor {
      */
     shouldGetKeyboardEvents(): boolean;
     /**
-     * Copy the elements of an editor in order to be able to build
-     * a new one from these data.
-     * It's used on ctrl+c action.
-     *
-     * To implement in subclasses.
-     * @returns {AnnotationEditor}
-     */
-    copy(): AnnotationEditor;
-    /**
      * Check if this editor needs to be rebuilt or not.
      * @returns {boolean}
      */
@@ -161,25 +160,21 @@ export class AnnotationEditor {
      * Rebuild the editor in case it has been removed on undo.
      *
      * To implement in subclasses.
-     * @returns {undefined}
      */
-    rebuild(): undefined;
+    rebuild(): void;
     /**
      * Serialize the editor.
      * The result of the serialization will be used to construct a
      * new annotation to add to the pdf document.
      *
      * To implement in subclasses.
-     * @returns {undefined}
      */
-    serialize(): undefined;
+    serialize(): void;
     /**
      * Remove this editor.
      * It's used on ctrl+backspace action.
-     *
-     * @returns {undefined}
      */
-    remove(): undefined;
+    remove(): void;
     /**
      * Select this editor.
      */
@@ -195,10 +190,39 @@ export class AnnotationEditor {
      */
     updateParams(type: number, value: any): void;
     /**
+     * When the user disables the editing mode some editors can change some of
+     * their properties.
+     */
+    disableEditing(): void;
+    /**
+     * When the user enables the editing mode some editors can change some of
+     * their properties.
+     */
+    enableEditing(): void;
+    /**
+     * Get the id to use in aria-owns when a link is done in the text layer.
+     * @returns {string}
+     */
+    getIdForTextLayer(): string;
+    /**
      * Get some properties to update in the UI.
      * @returns {Object}
      */
     get propertiesToUpdate(): Object;
+    /**
+     * Get the div which really contains the displayed content.
+     */
+    get contentDiv(): HTMLDivElement | null;
+    /**
+     * When set to true, it means that this editor is currently edited.
+     * @param {boolean} value
+     */
+    set isEditing(arg: boolean);
+    /**
+     * If true then the editor is currently edited.
+     * @type {boolean}
+     */
+    get isEditing(): boolean;
     #private;
 }
 import { ColorManager } from "./tools.js";

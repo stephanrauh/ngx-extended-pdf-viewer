@@ -1107,6 +1107,717 @@ const isNodeJS = false;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
+exports.StatTimer = exports.RenderingCancelledException = exports.PixelsPerInch = exports.PageViewport = exports.PDFDateString = exports.DOMStandardFontDataFactory = exports.DOMSVGFactory = exports.DOMCanvasFactory = exports.DOMCMapReaderFactory = void 0;
+exports.binarySearchFirstItem = binarySearchFirstItem;
+exports.deprecated = deprecated;
+exports.getColorValues = getColorValues;
+exports.getFilenameFromUrl = getFilenameFromUrl;
+exports.getPdfFilenameFromUrl = getPdfFilenameFromUrl;
+exports.getRGB = getRGB;
+exports.getXfaPageViewport = getXfaPageViewport;
+exports.isDataScheme = isDataScheme;
+exports.isPdfFile = isPdfFile;
+exports.isValidFetchUrl = isValidFetchUrl;
+exports.loadScript = loadScript;
+
+var _base_factory = __w_pdfjs_require__(4);
+
+var _util = __w_pdfjs_require__(1);
+
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+class PixelsPerInch {
+  static CSS = 96.0;
+  static PDF = 72.0;
+  static PDF_TO_CSS_UNITS = this.CSS / this.PDF;
+}
+
+exports.PixelsPerInch = PixelsPerInch;
+
+class DOMCanvasFactory extends _base_factory.BaseCanvasFactory {
+  constructor({
+    ownerDocument = globalThis.document
+  } = {}) {
+    super();
+    this._document = ownerDocument;
+  }
+
+  _createCanvas(width, height) {
+    const canvas = this._document.createElement("canvas");
+
+    canvas.width = width;
+    canvas.height = height;
+    return canvas;
+  }
+
+}
+
+exports.DOMCanvasFactory = DOMCanvasFactory;
+
+async function fetchData(url, asTypedArray = false) {
+  if (isValidFetchUrl(url, document.baseURI)) {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    return asTypedArray ? new Uint8Array(await response.arrayBuffer()) : (0, _util.stringToBytes)(await response.text());
+  }
+
+  return new Promise((resolve, reject) => {
+    const request = new XMLHttpRequest();
+    request.open("GET", url, true);
+
+    if (asTypedArray) {
+      request.responseType = "arraybuffer";
+    }
+
+    request.onreadystatechange = () => {
+      if (request.readyState !== XMLHttpRequest.DONE) {
+        return;
+      }
+
+      if (request.status === 200 || request.status === 0) {
+        let data;
+
+        if (asTypedArray && request.response) {
+          data = new Uint8Array(request.response);
+        } else if (!asTypedArray && request.responseText) {
+          data = (0, _util.stringToBytes)(request.responseText);
+        }
+
+        if (data) {
+          resolve(data);
+          return;
+        }
+      }
+
+      reject(new Error(request.statusText));
+    };
+
+    request.send(null);
+  });
+}
+
+class DOMCMapReaderFactory extends _base_factory.BaseCMapReaderFactory {
+  _fetchData(url, compressionType) {
+    return fetchData(url, this.isCompressed).then(data => {
+      return {
+        cMapData: data,
+        compressionType
+      };
+    });
+  }
+
+}
+
+exports.DOMCMapReaderFactory = DOMCMapReaderFactory;
+
+class DOMStandardFontDataFactory extends _base_factory.BaseStandardFontDataFactory {
+  _fetchData(url) {
+    return fetchData(url, true);
+  }
+
+}
+
+exports.DOMStandardFontDataFactory = DOMStandardFontDataFactory;
+
+class DOMSVGFactory extends _base_factory.BaseSVGFactory {
+  _createSVG(type) {
+    return document.createElementNS(SVG_NS, type);
+  }
+
+}
+
+exports.DOMSVGFactory = DOMSVGFactory;
+
+class PageViewport {
+  constructor({
+    viewBox,
+    scale,
+    rotation,
+    offsetX = 0,
+    offsetY = 0,
+    dontFlip = false
+  }) {
+    this.viewBox = viewBox;
+    this.scale = scale;
+    this.rotation = rotation;
+    this.offsetX = offsetX;
+    this.offsetY = offsetY;
+    const centerX = (viewBox[2] + viewBox[0]) / 2;
+    const centerY = (viewBox[3] + viewBox[1]) / 2;
+    let rotateA, rotateB, rotateC, rotateD;
+    rotation %= 360;
+
+    if (rotation < 0) {
+      rotation += 360;
+    }
+
+    switch (rotation) {
+      case 180:
+        rotateA = -1;
+        rotateB = 0;
+        rotateC = 0;
+        rotateD = 1;
+        break;
+
+      case 90:
+        rotateA = 0;
+        rotateB = 1;
+        rotateC = 1;
+        rotateD = 0;
+        break;
+
+      case 270:
+        rotateA = 0;
+        rotateB = -1;
+        rotateC = -1;
+        rotateD = 0;
+        break;
+
+      case 0:
+        rotateA = 1;
+        rotateB = 0;
+        rotateC = 0;
+        rotateD = -1;
+        break;
+
+      default:
+        throw new Error("PageViewport: Invalid rotation, must be a multiple of 90 degrees.");
+    }
+
+    if (dontFlip) {
+      rotateC = -rotateC;
+      rotateD = -rotateD;
+    }
+
+    let offsetCanvasX, offsetCanvasY;
+    let width, height;
+
+    if (rotateA === 0) {
+      offsetCanvasX = Math.abs(centerY - viewBox[1]) * scale + offsetX;
+      offsetCanvasY = Math.abs(centerX - viewBox[0]) * scale + offsetY;
+      width = Math.abs(viewBox[3] - viewBox[1]) * scale;
+      height = Math.abs(viewBox[2] - viewBox[0]) * scale;
+    } else {
+      offsetCanvasX = Math.abs(centerX - viewBox[0]) * scale + offsetX;
+      offsetCanvasY = Math.abs(centerY - viewBox[1]) * scale + offsetY;
+      width = Math.abs(viewBox[2] - viewBox[0]) * scale;
+      height = Math.abs(viewBox[3] - viewBox[1]) * scale;
+    }
+
+    this.transform = [rotateA * scale, rotateB * scale, rotateC * scale, rotateD * scale, offsetCanvasX - rotateA * scale * centerX - rotateC * scale * centerY, offsetCanvasY - rotateB * scale * centerX - rotateD * scale * centerY];
+    this.width = width;
+    this.height = height;
+  }
+
+  clone({
+    scale = this.scale,
+    rotation = this.rotation,
+    offsetX = this.offsetX,
+    offsetY = this.offsetY,
+    dontFlip = false
+  } = {}) {
+    return new PageViewport({
+      viewBox: this.viewBox.slice(),
+      scale,
+      rotation,
+      offsetX,
+      offsetY,
+      dontFlip
+    });
+  }
+
+  convertToViewportPoint(x, y) {
+    return _util.Util.applyTransform([x, y], this.transform);
+  }
+
+  convertToViewportRectangle(rect) {
+    const topLeft = _util.Util.applyTransform([rect[0], rect[1]], this.transform);
+
+    const bottomRight = _util.Util.applyTransform([rect[2], rect[3]], this.transform);
+
+    return [topLeft[0], topLeft[1], bottomRight[0], bottomRight[1]];
+  }
+
+  convertToPdfPoint(x, y) {
+    return _util.Util.applyInverseTransform([x, y], this.transform);
+  }
+
+}
+
+exports.PageViewport = PageViewport;
+
+class RenderingCancelledException extends _util.BaseException {
+  constructor(msg, type) {
+    super(msg, "RenderingCancelledException");
+    this.type = type;
+  }
+
+}
+
+exports.RenderingCancelledException = RenderingCancelledException;
+
+function isDataScheme(url) {
+  const ii = url.length;
+  let i = 0;
+
+  while (i < ii && url[i].trim() === "") {
+    i++;
+  }
+
+  return url.substring(i, i + 5).toLowerCase() === "data:";
+}
+
+function isPdfFile(filename) {
+  return typeof filename === "string" && /\.pdf$/i.test(filename);
+}
+
+function getFilenameFromUrl(url) {
+  const anchor = url.indexOf("#");
+  const query = url.indexOf("?");
+  const end = Math.min(anchor > 0 ? anchor : url.length, query > 0 ? query : url.length);
+  return url.substring(url.lastIndexOf("/", end) + 1, end);
+}
+
+function getPdfFilenameFromUrl(url, defaultFilename = "document.pdf") {
+  if (window.PDFViewerApplication.appConfig.filenameForDownload) {
+    return window.PDFViewerApplication.appConfig.filenameForDownload;
+  }
+
+  if (typeof url !== "string") {
+    return defaultFilename;
+  }
+
+  if (isDataScheme(url)) {
+    (0, _util.warn)('getPdfFilenameFromUrl: ignore "data:"-URL for performance reasons.');
+    return defaultFilename;
+  }
+
+  const reURI = /^(?:(?:[^:]+:)?\/\/[^/]+)?([^?#]*)(\?[^#]*)?(#.*)?$/;
+  const reFilename = /[^/?#=]+\.pdf\b(?!.*\.pdf\b)/i;
+  const splitURI = reURI.exec(url);
+  let suggestedFilename = reFilename.exec(splitURI[1]) || reFilename.exec(splitURI[2]) || reFilename.exec(splitURI[3]);
+
+  if (suggestedFilename) {
+    suggestedFilename = suggestedFilename[0];
+
+    if (suggestedFilename.includes("%")) {
+      try {
+        suggestedFilename = reFilename.exec(decodeURIComponent(suggestedFilename))[0];
+      } catch (ex) {}
+    }
+  }
+
+  return suggestedFilename || defaultFilename;
+}
+
+class StatTimer {
+  constructor() {
+    this.started = Object.create(null);
+    this.times = [];
+  }
+
+  time(name) {
+    if (name in this.started) {
+      (0, _util.warn)(`Timer is already running for ${name}`);
+    }
+
+    this.started[name] = Date.now();
+  }
+
+  timeEnd(name) {
+    if (!(name in this.started)) {
+      (0, _util.warn)(`Timer has not been started for ${name}`);
+    }
+
+    this.times.push({
+      name,
+      start: this.started[name],
+      end: Date.now()
+    });
+    delete this.started[name];
+  }
+
+  toString() {
+    const outBuf = [];
+    let longest = 0;
+
+    for (const time of this.times) {
+      const name = time.name;
+
+      if (name.length > longest) {
+        longest = name.length;
+      }
+    }
+
+    for (const time of this.times) {
+      const duration = time.end - time.start;
+      outBuf.push(`${time.name.padEnd(longest)} ${duration}ms\n`);
+    }
+
+    return outBuf.join("");
+  }
+
+}
+
+exports.StatTimer = StatTimer;
+
+function isValidFetchUrl(url, baseUrl) {
+  try {
+    const {
+      protocol
+    } = baseUrl ? new URL(url, baseUrl) : new URL(url);
+    return protocol === "http:" || protocol === "https:" || protocol === "capacitor:";
+  } catch (ex) {
+    return false;
+  }
+}
+
+function loadScript(src, removeScriptElement = false) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+
+    if (src.constructor.name === "Function") {
+      script.src = src();
+    } else {
+      script.src = src;
+    }
+
+    script.onload = function (evt) {
+      if (removeScriptElement) {
+        script.remove();
+      }
+
+      resolve(evt);
+    };
+
+    script.onerror = function (error) {
+      Window['ngxConsole'].log(error);
+      reject(new Error(`Cannot load script at: ${script.src}`));
+    };
+
+    (document.head || document.documentElement).append(script);
+  });
+}
+
+function deprecated(details) {
+  Window['ngxConsole'].log("Deprecated API usage: " + details);
+}
+
+let pdfDateStringRegex;
+
+class PDFDateString {
+  static toDateObject(input) {
+    if (!input || typeof input !== "string") {
+      return null;
+    }
+
+    if (!pdfDateStringRegex) {
+      pdfDateStringRegex = new RegExp("^D:" + "(\\d{4})" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "([Z|+|-])?" + "(\\d{2})?" + "'?" + "(\\d{2})?" + "'?");
+    }
+
+    const matches = pdfDateStringRegex.exec(input);
+
+    if (!matches) {
+      return null;
+    }
+
+    const year = parseInt(matches[1], 10);
+    let month = parseInt(matches[2], 10);
+    month = month >= 1 && month <= 12 ? month - 1 : 0;
+    let day = parseInt(matches[3], 10);
+    day = day >= 1 && day <= 31 ? day : 1;
+    let hour = parseInt(matches[4], 10);
+    hour = hour >= 0 && hour <= 23 ? hour : 0;
+    let minute = parseInt(matches[5], 10);
+    minute = minute >= 0 && minute <= 59 ? minute : 0;
+    let second = parseInt(matches[6], 10);
+    second = second >= 0 && second <= 59 ? second : 0;
+    const universalTimeRelation = matches[7] || "Z";
+    let offsetHour = parseInt(matches[8], 10);
+    offsetHour = offsetHour >= 0 && offsetHour <= 23 ? offsetHour : 0;
+    let offsetMinute = parseInt(matches[9], 10) || 0;
+    offsetMinute = offsetMinute >= 0 && offsetMinute <= 59 ? offsetMinute : 0;
+
+    if (universalTimeRelation === "-") {
+      hour += offsetHour;
+      minute += offsetMinute;
+    } else if (universalTimeRelation === "+") {
+      hour -= offsetHour;
+      minute -= offsetMinute;
+    }
+
+    return new Date(Date.UTC(year, month, day, hour, minute, second));
+  }
+
+}
+
+exports.PDFDateString = PDFDateString;
+
+function getXfaPageViewport(xfaPage, {
+  scale = 1,
+  rotation = 0
+}) {
+  const {
+    width,
+    height
+  } = xfaPage.attributes.style;
+  const viewBox = [0, 0, parseInt(width), parseInt(height)];
+  return new PageViewport({
+    viewBox,
+    scale,
+    rotation
+  });
+}
+
+function getRGB(color) {
+  if (color.startsWith("#")) {
+    const colorRGB = parseInt(color.slice(1), 16);
+    return [(colorRGB & 0xff0000) >> 16, (colorRGB & 0x00ff00) >> 8, colorRGB & 0x0000ff];
+  }
+
+  if (color.startsWith("rgb(")) {
+    return color.slice(4, -1).split(",").map(x => parseInt(x));
+  }
+
+  (0, _util.warn)(`Not a valid color format: "${color}"`);
+  return [0, 0, 0];
+}
+
+function getColorValues(colors) {
+  const span = document.createElement("span");
+  span.style.visibility = "hidden";
+  document.body.append(span);
+
+  for (const name of colors.keys()) {
+    span.style.color = name;
+    const computedColor = window.getComputedStyle(span).color;
+    colors.set(name, getRGB(computedColor));
+  }
+
+  span.remove();
+}
+
+function binarySearchFirstItem(items, condition, start = 0) {
+  let minIndex = start;
+  let maxIndex = items.length - 1;
+
+  if (maxIndex < 0 || !condition(items[maxIndex])) {
+    return items.length;
+  }
+
+  if (condition(items[minIndex])) {
+    return minIndex;
+  }
+
+  while (minIndex < maxIndex) {
+    const currentIndex = minIndex + maxIndex >> 1;
+    const currentItem = items[currentIndex];
+
+    if (condition(currentItem)) {
+      maxIndex = currentIndex;
+    } else {
+      minIndex = currentIndex + 1;
+    }
+  }
+
+  return minIndex;
+}
+
+/***/ }),
+/* 4 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.BaseStandardFontDataFactory = exports.BaseSVGFactory = exports.BaseCanvasFactory = exports.BaseCMapReaderFactory = void 0;
+
+var _util = __w_pdfjs_require__(1);
+
+class BaseCanvasFactory {
+  constructor() {
+    if (this.constructor === BaseCanvasFactory) {
+      (0, _util.unreachable)("Cannot initialize BaseCanvasFactory.");
+    }
+  }
+
+  create(width, height) {
+    if (width <= 0 || height <= 0) {
+      throw new Error("Invalid canvas size");
+    }
+
+    const canvas = this._createCanvas(width, height);
+
+    return {
+      canvas,
+      context: canvas.getContext("2d")
+    };
+  }
+
+  reset(canvasAndContext, width, height) {
+    if (!canvasAndContext.canvas) {
+      throw new Error("Canvas is not specified");
+    }
+
+    if (width <= 0 || height <= 0) {
+      throw new Error("Invalid canvas size");
+    }
+
+    canvasAndContext.canvas.width = width;
+    canvasAndContext.canvas.height = height;
+  }
+
+  destroy(canvasAndContext) {
+    if (!canvasAndContext.canvas) {
+      throw new Error("Canvas is not specified");
+    }
+
+    canvasAndContext.canvas.width = 0;
+    canvasAndContext.canvas.height = 0;
+    canvasAndContext.canvas = null;
+    canvasAndContext.context = null;
+  }
+
+  _createCanvas(width, height) {
+    (0, _util.unreachable)("Abstract method `_createCanvas` called.");
+  }
+
+}
+
+exports.BaseCanvasFactory = BaseCanvasFactory;
+
+class BaseCMapReaderFactory {
+  constructor({
+    baseUrl = null,
+    isCompressed = false
+  }) {
+    if (this.constructor === BaseCMapReaderFactory) {
+      (0, _util.unreachable)("Cannot initialize BaseCMapReaderFactory.");
+    }
+
+    this.baseUrl = baseUrl;
+    this.isCompressed = isCompressed;
+  }
+
+  async fetch({
+    name
+  }) {
+    if (!this.baseUrl) {
+      throw new Error('The CMap "baseUrl" parameter must be specified, ensure that ' + 'the "cMapUrl" and "cMapPacked" API parameters are provided.');
+    }
+
+    if (!name) {
+      throw new Error("CMap name must be specified.");
+    }
+
+    const url = this.baseUrl + name + (this.isCompressed ? ".bcmap" : "");
+    const compressionType = this.isCompressed ? _util.CMapCompressionType.BINARY : _util.CMapCompressionType.NONE;
+    return this._fetchData(url, compressionType).catch(reason => {
+      throw new Error(`Unable to load ${this.isCompressed ? "binary " : ""}CMap at: ${url}`);
+    });
+  }
+
+  _fetchData(url, compressionType) {
+    (0, _util.unreachable)("Abstract method `_fetchData` called.");
+  }
+
+}
+
+exports.BaseCMapReaderFactory = BaseCMapReaderFactory;
+
+class BaseStandardFontDataFactory {
+  constructor({
+    baseUrl = null
+  }) {
+    if (this.constructor === BaseStandardFontDataFactory) {
+      (0, _util.unreachable)("Cannot initialize BaseStandardFontDataFactory.");
+    }
+
+    this.baseUrl = baseUrl;
+  }
+
+  async fetch({
+    filename
+  }) {
+    if (!this.baseUrl) {
+      throw new Error('The standard font "baseUrl" parameter must be specified, ensure that ' + 'the "standardFontDataUrl" API parameter is provided.');
+    }
+
+    if (!filename) {
+      throw new Error("Font filename must be specified.");
+    }
+
+    const url = `${this.baseUrl}${filename}`;
+    return this._fetchData(url).catch(reason => {
+      throw new Error(`Unable to load font data at: ${url}`);
+    });
+  }
+
+  _fetchData(url) {
+    (0, _util.unreachable)("Abstract method `_fetchData` called.");
+  }
+
+}
+
+exports.BaseStandardFontDataFactory = BaseStandardFontDataFactory;
+
+class BaseSVGFactory {
+  constructor() {
+    if (this.constructor === BaseSVGFactory) {
+      (0, _util.unreachable)("Cannot initialize BaseSVGFactory.");
+    }
+  }
+
+  create(width, height, skipDimensions = false) {
+    if (width <= 0 || height <= 0) {
+      throw new Error("Invalid SVG dimensions");
+    }
+
+    const svg = this._createSVG("svg:svg");
+
+    svg.setAttribute("version", "1.1");
+
+    if (!skipDimensions) {
+      svg.setAttribute("width", `${width}px`);
+      svg.setAttribute("height", `${height}px`);
+    }
+
+    svg.setAttribute("preserveAspectRatio", "none");
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    return svg;
+  }
+
+  createElement(type) {
+    if (typeof type !== "string") {
+      throw new Error("Invalid SVG element type");
+    }
+
+    return this._createSVG(type);
+  }
+
+  _createSVG(type) {
+    (0, _util.unreachable)("Abstract method `_createSVG` called.");
+  }
+
+}
+
+exports.BaseSVGFactory = BaseSVGFactory;
+
+/***/ }),
+/* 5 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
 exports.build = exports.RenderTask = exports.PDFWorkerUtil = exports.PDFWorker = exports.PDFPageProxy = exports.PDFDocumentProxy = exports.PDFDocumentLoadingTask = exports.PDFDataRangeTransport = exports.LoopbackPort = exports.DefaultStandardFontDataFactory = exports.DefaultCanvasFactory = exports.DefaultCMapReaderFactory = void 0;
 exports.getDocument = getDocument;
 exports.setPDFNetworkStreamFactory = setPDFNetworkStreamFactory;
@@ -1114,9 +1825,9 @@ exports.version = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
-var _annotation_storage = __w_pdfjs_require__(4);
+var _annotation_storage = __w_pdfjs_require__(6);
 
-var _display_utils = __w_pdfjs_require__(7);
+var _display_utils = __w_pdfjs_require__(3);
 
 var _font_loader = __w_pdfjs_require__(10);
 
@@ -3565,7 +4276,7 @@ const build = '4c6d97c69';
 exports.build = build;
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -3577,7 +4288,7 @@ exports.PrintAnnotationStorage = exports.AnnotationStorage = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
-var _editor = __w_pdfjs_require__(5);
+var _editor = __w_pdfjs_require__(7);
 
 var _murmurhash = __w_pdfjs_require__(9);
 
@@ -3773,7 +4484,7 @@ class PrintAnnotationStorage extends AnnotationStorage {
 exports.PrintAnnotationStorage = PrintAnnotationStorage;
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -3783,13 +4494,19 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.AnnotationEditor = void 0;
 
+var _tools = __w_pdfjs_require__(8);
+
 var _util = __w_pdfjs_require__(1);
 
-var _tools = __w_pdfjs_require__(6);
-
 class AnnotationEditor {
+  #boundFocusin = this.focusin.bind(this);
+  #boundFocusout = this.focusout.bind(this);
+  #hasBeenSelected = false;
+  #isEditing = false;
   #isInEditMode = false;
+  #zIndex = AnnotationEditor._zIndex++;
   static _colorManager = new _tools.ColorManager();
+  static _zIndex = 1;
 
   constructor(parameters) {
     if (this.constructor === AnnotationEditor) {
@@ -3814,15 +4531,19 @@ class AnnotationEditor {
   }
 
   setInBackground() {
-    this.div.classList.add("background");
+    this.div.style.zIndex = 0;
   }
 
   setInForeground() {
-    this.div.classList.remove("background");
+    this.div.style.zIndex = this.#zIndex;
   }
 
-  focusin() {
-    this.parent.setActiveEditor(this);
+  focusin(event) {
+    if (!this.#hasBeenSelected) {
+      this.parent.setSelected(this);
+    } else {
+      this.#hasBeenSelected = false;
+    }
   }
 
   focusout(event) {
@@ -3837,10 +4558,9 @@ class AnnotationEditor {
     }
 
     event.preventDefault();
-    this.commitOrRemove();
 
-    if (!target?.id?.startsWith(_util.AnnotationEditorPrefix)) {
-      this.parent.setActiveEditor(null);
+    if (!this.parent.isMultipleSelection) {
+      this.commitOrRemove();
     }
   }
 
@@ -3913,17 +4633,28 @@ class AnnotationEditor {
     this.div.setAttribute("data-editor-rotation", (360 - this.rotation) % 360);
     this.div.className = this.name;
     this.div.setAttribute("id", this.id);
-    this.div.tabIndex = 100;
+    this.div.setAttribute("tabIndex", 0);
+    this.setInForeground();
+    this.div.addEventListener("focusin", this.#boundFocusin);
+    this.div.addEventListener("focusout", this.#boundFocusout);
     const [tx, ty] = this.getInitialTranslation();
     this.translate(tx, ty);
-    (0, _tools.bindEvents)(this, this.div, ["dragstart", "focusin", "focusout", "mousedown"]);
+    (0, _tools.bindEvents)(this, this.div, ["dragstart", "pointerdown"]);
     return this.div;
   }
 
-  mousedown(event) {
+  pointerdown(event) {
     if (event.button !== 0) {
       event.preventDefault();
     }
+
+    if (event.ctrlKey || event.shiftKey) {
+      this.parent.toggleSelected(this);
+    } else {
+      this.parent.setSelected(this);
+    }
+
+    this.#hasBeenSelected = true;
   }
 
   getRect(tx, ty) {
@@ -3954,6 +4685,29 @@ class AnnotationEditor {
     }
   }
 
+  getRectInCurrentCoords(rect, pageHeight) {
+    const [x1, y1, x2, y2] = rect;
+    const width = x2 - x1;
+    const height = y2 - y1;
+
+    switch (this.rotation) {
+      case 0:
+        return [x1, pageHeight - y2, width, height];
+
+      case 90:
+        return [x1, pageHeight - y1, height, width];
+
+      case 180:
+        return [x2, pageHeight - y1, width, height];
+
+      case 270:
+        return [x2, pageHeight - y2, height, width];
+
+      default:
+        throw new Error("Invalid rotation");
+    }
+  }
+
   onceAdded() {}
 
   isEmpty() {
@@ -3976,23 +4730,37 @@ class AnnotationEditor {
     return false;
   }
 
-  copy() {
-    (0, _util.unreachable)("An editor must be copyable");
-  }
-
   needsToBeRebuilt() {
     return this.div && !this.isAttachedToDOM;
   }
 
   rebuild() {
-    (0, _util.unreachable)("An editor must be rebuildable");
+    this.div?.addEventListener("focusin", this.#boundFocusin);
   }
 
   serialize() {
     (0, _util.unreachable)("An editor must be serializable");
   }
 
+  static deserialize(data, parent) {
+    const editor = new this.prototype.constructor({
+      parent,
+      id: parent.getNextId()
+    });
+    editor.rotation = data.rotation;
+    const [pageWidth, pageHeight] = parent.pageDimensions;
+    const [x, y, width, height] = editor.getRectInCurrentCoords(data.rect, pageHeight);
+    editor.x = x / pageWidth;
+    editor.y = y / pageHeight;
+    editor.width = width / pageWidth;
+    editor.height = height / pageHeight;
+    return editor;
+  }
+
   remove() {
+    this.div.removeEventListener("focusin", this.#boundFocusin);
+    this.div.removeEventListener("focusout", this.#boundFocusout);
+
     if (!this.isEmpty()) {
       this.commit();
     }
@@ -4001,21 +4769,44 @@ class AnnotationEditor {
   }
 
   select() {
-    if (this.div) {
-      this.div.classList.add("selectedEditor");
-    }
+    this.div?.classList.add("selectedEditor");
   }
 
   unselect() {
-    if (this.div) {
-      this.div.classList.remove("selectedEditor");
-    }
+    this.div?.classList.remove("selectedEditor");
   }
 
   updateParams(type, value) {}
 
+  disableEditing() {}
+
+  enableEditing() {}
+
+  getIdForTextLayer() {
+    return this.id;
+  }
+
   get propertiesToUpdate() {
     return {};
+  }
+
+  get contentDiv() {
+    return this.div;
+  }
+
+  get isEditing() {
+    return this.#isEditing;
+  }
+
+  set isEditing(value) {
+    this.#isEditing = value;
+
+    if (value) {
+      this.parent.setSelected(this);
+      this.parent.setActiveEditor(this);
+    } else {
+      this.parent.setActiveEditor(null);
+    }
   }
 
 }
@@ -4023,7 +4814,7 @@ class AnnotationEditor {
 exports.AnnotationEditor = AnnotationEditor;
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -4031,12 +4822,12 @@ exports.AnnotationEditor = AnnotationEditor;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.KeyboardManager = exports.ColorManager = exports.AnnotationEditorUIManager = void 0;
+exports.KeyboardManager = exports.CommandManager = exports.ColorManager = exports.AnnotationEditorUIManager = void 0;
 exports.bindEvents = bindEvents;
 
 var _util = __w_pdfjs_require__(1);
 
-var _display_utils = __w_pdfjs_require__(7);
+var _display_utils = __w_pdfjs_require__(3);
 
 function bindEvents(obj, element, names) {
   for (const name of names) {
@@ -4055,9 +4846,12 @@ class IdManager {
 
 class CommandManager {
   #commands = [];
-  #maxSize = 100;
-  #position = NaN;
-  #start = 0;
+  #maxSize;
+  #position = -1;
+
+  constructor(maxSize = 128) {
+    this.#maxSize = maxSize;
+  }
 
   add({
     cmd,
@@ -4067,109 +4861,68 @@ class CommandManager {
     overwriteIfSameType = false,
     keepUndo = false
   }) {
+    if (mustExec) {
+      cmd();
+    }
+
     const save = {
       cmd,
       undo,
       type
     };
 
-    if (overwriteIfSameType && !isNaN(this.#position) && this.#commands[this.#position].type === type) {
+    if (this.#position === -1) {
+      this.#position = 0;
+      this.#commands.push(save);
+      return;
+    }
+
+    if (overwriteIfSameType && this.#commands[this.#position].type === type) {
       if (keepUndo) {
         save.undo = this.#commands[this.#position].undo;
       }
 
       this.#commands[this.#position] = save;
-
-      if (mustExec) {
-        cmd();
-      }
-
       return;
     }
 
-    const next = (this.#position + 1) % this.#maxSize;
+    const next = this.#position + 1;
 
-    if (next !== this.#start) {
-      if (this.#start < next) {
-        this.#commands = this.#commands.slice(this.#start, next);
-      } else {
-        this.#commands = this.#commands.slice(this.#start).concat(this.#commands.slice(0, next));
+    if (next === this.#maxSize) {
+      this.#commands.splice(0, 1);
+    } else {
+      this.#position = next;
+
+      if (next < this.#commands.length) {
+        this.#commands.splice(next);
       }
-
-      this.#start = 0;
-      this.#position = this.#commands.length - 1;
     }
 
-    this.#setCommands(save);
-
-    if (mustExec) {
-      cmd();
-    }
+    this.#commands.push(save);
   }
 
   undo() {
-    if (isNaN(this.#position)) {
+    if (this.#position === -1) {
       return;
     }
 
     this.#commands[this.#position].undo();
-
-    if (this.#position === this.#start) {
-      this.#position = NaN;
-    } else {
-      this.#position = (this.#maxSize + this.#position - 1) % this.#maxSize;
-    }
+    this.#position -= 1;
   }
 
   redo() {
-    if (isNaN(this.#position)) {
-      if (this.#start < this.#commands.length) {
-        this.#commands[this.#start].cmd();
-        this.#position = this.#start;
-      }
-
-      return;
-    }
-
-    const next = (this.#position + 1) % this.#maxSize;
-
-    if (next !== this.#start && next < this.#commands.length) {
-      this.#commands[next].cmd();
-      this.#position = next;
+    if (this.#position < this.#commands.length - 1) {
+      this.#position += 1;
+      this.#commands[this.#position].cmd();
     }
   }
 
   hasSomethingToUndo() {
-    return !isNaN(this.#position);
+    return this.#position !== -1;
   }
 
   hasSomethingToRedo() {
-    if (isNaN(this.#position) && this.#start < this.#commands.length) {
-      return true;
-    }
-
-    const next = (this.#position + 1) % this.#maxSize;
-    return next !== this.#start && next < this.#commands.length;
-  }
-
-  #setCommands(cmds) {
-    if (this.#commands.length < this.#maxSize) {
-      this.#commands.push(cmds);
-      this.#position = isNaN(this.#position) ? 0 : this.#position + 1;
-      return;
-    }
-
-    if (isNaN(this.#position)) {
-      this.#position = this.#start;
-    } else {
-      this.#position = (this.#position + 1) % this.#maxSize;
-
-      if (this.#position === this.#start) {
-        this.#start = (this.#start + 1) % this.#maxSize;
-      }
-    }
-
-    this.#commands[this.#position] = cmds;
+    return this.#position < this.#commands.length - 1;
   }
 
   destroy() {
@@ -4177,6 +4930,8 @@ class CommandManager {
   }
 
 }
+
+exports.CommandManager = CommandManager;
 
 class KeyboardManager {
   constructor(callbacks) {
@@ -4231,7 +4986,7 @@ class KeyboardManager {
     return str;
   }
 
-  exec(page, event) {
+  exec(self, event) {
     if (!this.allKeys.has(event.key)) {
       return;
     }
@@ -4242,7 +4997,7 @@ class KeyboardManager {
       return;
     }
 
-    callback.bind(page)();
+    callback.bind(self)();
     event.preventDefault();
   }
 
@@ -4251,24 +5006,36 @@ class KeyboardManager {
 exports.KeyboardManager = KeyboardManager;
 
 class ClipboardManager {
-  constructor() {
-    this.element = null;
-  }
+  #elements = null;
 
   copy(element) {
-    this.element = element.copy();
+    if (!element) {
+      return;
+    }
+
+    if (Array.isArray(element)) {
+      this.#elements = element.map(el => el.serialize());
+    } else {
+      this.#elements = [element.serialize()];
+    }
+
+    this.#elements = this.#elements.filter(el => !!el);
+
+    if (this.#elements.length === 0) {
+      this.#elements = null;
+    }
   }
 
   paste() {
-    return this.element?.copy() || null;
+    return this.#elements;
   }
 
   isEmpty() {
-    return this.element === null;
+    return this.#elements === null;
   }
 
   destroy() {
-    this.element = null;
+    this.#elements = null;
   }
 
 }
@@ -4316,17 +5083,19 @@ class AnnotationEditorUIManager {
   #activeEditor = null;
   #allEditors = new Map();
   #allLayers = new Map();
-  #allowClick = true;
   #clipboardManager = new ClipboardManager();
   #commandManager = new CommandManager();
+  #currentPageIndex = 0;
   #editorTypes = null;
   #eventBus = null;
   #idManager = new IdManager();
-  #isAllSelected = false;
   #isEnabled = false;
   #mode = _util.AnnotationEditorType.NONE;
-  #previousActiveEditor = null;
+  #selectedEditors = new Set();
+  #boundKeydown = this.keydown.bind(this);
   #boundOnEditingAction = this.onEditingAction.bind(this);
+  #boundOnPageChanging = this.onPageChanging.bind(this);
+  #boundOnTextLayerRendered = this.onTextLayerRendered.bind(this);
   #previousStates = {
     isEditing: false,
     isEmpty: true,
@@ -4335,15 +5104,28 @@ class AnnotationEditorUIManager {
     hasSomethingToRedo: false,
     hasSelectedEditor: false
   };
+  #container = null;
+  static _keyboardManager = new KeyboardManager([[["ctrl+a", "mac+meta+a"], AnnotationEditorUIManager.prototype.selectAll], [["ctrl+c", "mac+meta+c"], AnnotationEditorUIManager.prototype.copy], [["ctrl+v", "mac+meta+v"], AnnotationEditorUIManager.prototype.paste], [["ctrl+x", "mac+meta+x"], AnnotationEditorUIManager.prototype.cut], [["ctrl+z", "mac+meta+z"], AnnotationEditorUIManager.prototype.undo], [["ctrl+y", "ctrl+shift+Z", "mac+meta+shift+Z"], AnnotationEditorUIManager.prototype.redo], [["Backspace", "alt+Backspace", "ctrl+Backspace", "shift+Backspace", "mac+Backspace", "mac+alt+Backspace", "mac+ctrl+Backspace", "Delete", "ctrl+Delete", "shift+Delete"], AnnotationEditorUIManager.prototype.delete], [["Escape"], AnnotationEditorUIManager.prototype.unselectAll]]);
 
-  constructor(eventBus) {
+  constructor(container, eventBus) {
+    this.#container = container;
     this.#eventBus = eventBus;
 
     this.#eventBus._on("editingaction", this.#boundOnEditingAction);
+
+    this.#eventBus._on("pagechanging", this.#boundOnPageChanging);
+
+    this.#eventBus._on("textlayerrendered", this.#boundOnTextLayerRendered);
   }
 
   destroy() {
+    this.#removeKeyboardManager();
+
     this.#eventBus._off("editingaction", this.#boundOnEditingAction);
+
+    this.#eventBus._off("pagechanging", this.#boundOnPageChanging);
+
+    this.#eventBus._off("textlayerrendered", this.#boundOnTextLayerRendered);
 
     for (const layer of this.#allLayers.values()) {
       layer.destroy();
@@ -4352,8 +5134,41 @@ class AnnotationEditorUIManager {
     this.#allLayers.clear();
     this.#allEditors.clear();
     this.#activeEditor = null;
+    this.#selectedEditors.clear();
     this.#clipboardManager.destroy();
     this.#commandManager.destroy();
+  }
+
+  onPageChanging({
+    pageNumber
+  }) {
+    this.#currentPageIndex = pageNumber - 1;
+  }
+
+  onTextLayerRendered({
+    pageNumber
+  }) {
+    const pageIndex = pageNumber - 1;
+    const layer = this.#allLayers.get(pageIndex);
+    layer?.onTextLayerRendered();
+  }
+
+  focusMainContainer() {
+    this.#container.focus();
+  }
+
+  #addKeyboardManager() {
+    this.#container.addEventListener("keydown", this.#boundKeydown);
+  }
+
+  #removeKeyboardManager() {
+    this.#container.removeEventListener("keydown", this.#boundKeydown);
+  }
+
+  keydown(event) {
+    if (!this.getActive()?.shouldGetKeyboardEvents()) {
+      AnnotationEditorUIManager._keyboardManager.exec(this, event);
+    }
   }
 
   onEditingAction(details) {
@@ -4382,6 +5197,7 @@ class AnnotationEditorUIManager {
 
   setEditingState(isEditing) {
     if (isEditing) {
+      this.#addKeyboardManager();
       this.#dispatchUpdateStates({
         isEditing: this.#mode !== _util.AnnotationEditorType.NONE,
         isEmpty: this.#isEmpty(),
@@ -4391,6 +5207,7 @@ class AnnotationEditorUIManager {
         hasEmptyClipboard: this.#clipboardManager.isEmpty()
       });
     } else {
+      this.#removeKeyboardManager();
       this.#dispatchUpdateStates({
         isEditing: false
       });
@@ -4451,7 +5268,9 @@ class AnnotationEditorUIManager {
   }
 
   updateParams(type, value) {
-    (this.#activeEditor || this.#previousActiveEditor)?.updateParams(type, value);
+    for (const editor of this.#selectedEditors) {
+      editor.updateParams(type, value);
+    }
 
     for (const editorType of this.#editorTypes) {
       editorType.updateDefaultParams(type, value);
@@ -4469,6 +5288,8 @@ class AnnotationEditorUIManager {
   }
 
   #disableAll() {
+    this.unselectAll();
+
     if (this.#isEnabled) {
       this.#isEnabled = false;
 
@@ -4500,6 +5321,7 @@ class AnnotationEditorUIManager {
 
   removeEditor(editor) {
     this.#allEditors.delete(editor.id);
+    this.unselect(editor);
   }
 
   #addEditorToLayer(editor) {
@@ -4517,27 +5339,61 @@ class AnnotationEditorUIManager {
       return;
     }
 
-    this.#previousActiveEditor = this.#activeEditor;
     this.#activeEditor = editor;
 
     if (editor) {
       this.#dispatchUpdateUI(editor.propertiesToUpdate);
-      this.#dispatchUpdateStates({
-        hasSelectedEditor: true
-      });
-    } else {
-      this.#dispatchUpdateStates({
-        hasSelectedEditor: false
-      });
+    }
+  }
 
-      if (this.#previousActiveEditor) {
-        this.#dispatchUpdateUI(this.#previousActiveEditor.propertiesToUpdate);
-      } else {
-        for (const editorType of this.#editorTypes) {
-          this.#dispatchUpdateUI(editorType.defaultPropertiesToUpdate);
-        }
+  toggleSelected(editor) {
+    if (this.#selectedEditors.has(editor)) {
+      this.#selectedEditors.delete(editor);
+      editor.unselect();
+      this.#dispatchUpdateStates({
+        hasSelectedEditor: this.hasSelection
+      });
+      return;
+    }
+
+    this.#selectedEditors.add(editor);
+    editor.select();
+    this.#dispatchUpdateUI(editor.propertiesToUpdate);
+    this.#dispatchUpdateStates({
+      hasSelectedEditor: true
+    });
+  }
+
+  setSelected(editor) {
+    for (const ed of this.#selectedEditors) {
+      if (ed !== editor) {
+        ed.unselect();
       }
     }
+
+    this.#selectedEditors.clear();
+    this.#selectedEditors.add(editor);
+    editor.select();
+    this.#dispatchUpdateUI(editor.propertiesToUpdate);
+    this.#dispatchUpdateStates({
+      hasSelectedEditor: true
+    });
+  }
+
+  isSelected(editor) {
+    return this.#selectedEditors.has(editor);
+  }
+
+  unselect(editor) {
+    editor.unselect();
+    this.#selectedEditors.delete(editor);
+    this.#dispatchUpdateStates({
+      hasSelectedEditor: this.hasSelection
+    });
+  }
+
+  get hasSelection() {
+    return this.#selectedEditors.size !== 0;
   }
 
   undo() {
@@ -4581,62 +5437,28 @@ class AnnotationEditorUIManager {
     return false;
   }
 
-  get allowClick() {
-    return this.#allowClick;
-  }
-
-  set allowClick(allow) {
-    this.#allowClick = allow;
-  }
-
-  unselect() {
-    if (this.#activeEditor) {
-      this.#activeEditor.parent.setActiveEditor(null);
-    }
-
-    this.#allowClick = true;
-  }
-
   delete() {
-    let cmd, undo;
-
-    if (this.#isAllSelected) {
-      const editors = Array.from(this.#allEditors.values());
-
-      cmd = () => {
-        for (const editor of editors) {
-          if (!editor.isEmpty()) {
-            editor.remove();
-          }
-        }
-      };
-
-      undo = () => {
-        for (const editor of editors) {
-          this.#addEditorToLayer(editor);
-        }
-      };
-
-      this.addCommands({
-        cmd,
-        undo,
-        mustExec: true
-      });
-    } else {
-      if (!this.#activeEditor) {
-        return;
-      }
-
-      const editor = this.#activeEditor;
-
-      cmd = () => {
-        editor.remove();
-      };
-
-      undo = () => {
-        this.#addEditorToLayer(editor);
-      };
+    if (this.#activeEditor) {
+      this.#activeEditor.commitOrRemove();
     }
+
+    if (!this.hasSelection) {
+      return;
+    }
+
+    const editors = [...this.#selectedEditors];
+
+    const cmd = () => {
+      for (const editor of editors) {
+        editor.remove();
+      }
+    };
+
+    const undo = () => {
+      for (const editor of editors) {
+        this.#addEditorToLayer(editor);
+      }
+    };
 
     this.addCommands({
       cmd,
@@ -4647,7 +5469,23 @@ class AnnotationEditorUIManager {
 
   copy() {
     if (this.#activeEditor) {
-      this.#clipboardManager.copy(this.#activeEditor);
+      this.#activeEditor.commitOrRemove();
+    }
+
+    if (this.hasSelection) {
+      const editors = [];
+
+      for (const editor of this.#selectedEditors) {
+        if (!editor.isEmpty()) {
+          editors.push(editor);
+        }
+      }
+
+      if (editors.length === 0) {
+        return;
+      }
+
+      this.#clipboardManager.copy(editors);
       this.#dispatchUpdateStates({
         hasEmptyClipboard: false
       });
@@ -4655,39 +5493,31 @@ class AnnotationEditorUIManager {
   }
 
   cut() {
-    if (this.#activeEditor) {
-      this.#clipboardManager.copy(this.#activeEditor);
-      const editor = this.#activeEditor;
-
-      const cmd = () => {
-        editor.remove();
-      };
-
-      const undo = () => {
-        this.#addEditorToLayer(editor);
-      };
-
-      this.addCommands({
-        cmd,
-        undo,
-        mustExec: true
-      });
-    }
+    this.copy();
+    this.delete();
   }
 
   paste() {
-    const editor = this.#clipboardManager.paste();
-
-    if (!editor) {
+    if (this.#clipboardManager.isEmpty()) {
       return;
     }
 
+    this.unselectAll();
+    const layer = this.#allLayers.get(this.#currentPageIndex);
+    const newEditors = this.#clipboardManager.paste().map(data => layer.deserialize(data));
+
     const cmd = () => {
-      this.#addEditorToLayer(editor);
+      for (const editor of newEditors) {
+        this.#addEditorToLayer(editor);
+      }
+
+      this.#selectEditors(newEditors);
     };
 
     const undo = () => {
-      editor.remove();
+      for (const editor of newEditors) {
+        editor.remove();
+      }
     };
 
     this.addCommands({
@@ -4697,10 +5527,15 @@ class AnnotationEditorUIManager {
     });
   }
 
-  selectAll() {
-    this.#isAllSelected = true;
+  #selectEditors(editors) {
+    this.#selectedEditors.clear();
 
-    for (const editor of this.#allEditors.values()) {
+    for (const editor of editors) {
+      if (editor.isEmpty()) {
+        continue;
+      }
+
+      this.#selectedEditors.add(editor);
       editor.select();
     }
 
@@ -4709,15 +5544,31 @@ class AnnotationEditorUIManager {
     });
   }
 
-  unselectAll() {
-    this.#isAllSelected = false;
+  selectAll() {
+    for (const editor of this.#selectedEditors) {
+      editor.commit();
+    }
 
-    for (const editor of this.#allEditors.values()) {
+    this.#selectEditors(this.#allEditors.values());
+  }
+
+  unselectAll() {
+    if (this.#activeEditor) {
+      this.#activeEditor.commitOrRemove();
+      return;
+    }
+
+    if (this.#selectEditors.size === 0) {
+      return;
+    }
+
+    for (const editor of this.#selectedEditors) {
       editor.unselect();
     }
 
+    this.#selectedEditors.clear();
     this.#dispatchUpdateStates({
-      hasSelectedEditor: this.hasActive()
+      hasSelectedEditor: false
     });
   }
 
@@ -4729,10 +5580,6 @@ class AnnotationEditorUIManager {
     return this.#activeEditor;
   }
 
-  hasActive() {
-    return this.#activeEditor !== null;
-  }
-
   getMode() {
     return this.#mode;
   }
@@ -4740,690 +5587,6 @@ class AnnotationEditorUIManager {
 }
 
 exports.AnnotationEditorUIManager = AnnotationEditorUIManager;
-
-/***/ }),
-/* 7 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.StatTimer = exports.RenderingCancelledException = exports.PixelsPerInch = exports.PageViewport = exports.PDFDateString = exports.DOMStandardFontDataFactory = exports.DOMSVGFactory = exports.DOMCanvasFactory = exports.DOMCMapReaderFactory = void 0;
-exports.deprecated = deprecated;
-exports.getColorValues = getColorValues;
-exports.getFilenameFromUrl = getFilenameFromUrl;
-exports.getPdfFilenameFromUrl = getPdfFilenameFromUrl;
-exports.getRGB = getRGB;
-exports.getXfaPageViewport = getXfaPageViewport;
-exports.isDataScheme = isDataScheme;
-exports.isPdfFile = isPdfFile;
-exports.isValidFetchUrl = isValidFetchUrl;
-exports.loadScript = loadScript;
-
-var _base_factory = __w_pdfjs_require__(8);
-
-var _util = __w_pdfjs_require__(1);
-
-const SVG_NS = "http://www.w3.org/2000/svg";
-
-class PixelsPerInch {
-  static CSS = 96.0;
-  static PDF = 72.0;
-  static PDF_TO_CSS_UNITS = this.CSS / this.PDF;
-}
-
-exports.PixelsPerInch = PixelsPerInch;
-
-class DOMCanvasFactory extends _base_factory.BaseCanvasFactory {
-  constructor({
-    ownerDocument = globalThis.document
-  } = {}) {
-    super();
-    this._document = ownerDocument;
-  }
-
-  _createCanvas(width, height) {
-    const canvas = this._document.createElement("canvas");
-
-    canvas.width = width;
-    canvas.height = height;
-    return canvas;
-  }
-
-}
-
-exports.DOMCanvasFactory = DOMCanvasFactory;
-
-async function fetchData(url, asTypedArray = false) {
-  if (isValidFetchUrl(url, document.baseURI)) {
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-
-    return asTypedArray ? new Uint8Array(await response.arrayBuffer()) : (0, _util.stringToBytes)(await response.text());
-  }
-
-  return new Promise((resolve, reject) => {
-    const request = new XMLHttpRequest();
-    request.open("GET", url, true);
-
-    if (asTypedArray) {
-      request.responseType = "arraybuffer";
-    }
-
-    request.onreadystatechange = () => {
-      if (request.readyState !== XMLHttpRequest.DONE) {
-        return;
-      }
-
-      if (request.status === 200 || request.status === 0) {
-        let data;
-
-        if (asTypedArray && request.response) {
-          data = new Uint8Array(request.response);
-        } else if (!asTypedArray && request.responseText) {
-          data = (0, _util.stringToBytes)(request.responseText);
-        }
-
-        if (data) {
-          resolve(data);
-          return;
-        }
-      }
-
-      reject(new Error(request.statusText));
-    };
-
-    request.send(null);
-  });
-}
-
-class DOMCMapReaderFactory extends _base_factory.BaseCMapReaderFactory {
-  _fetchData(url, compressionType) {
-    return fetchData(url, this.isCompressed).then(data => {
-      return {
-        cMapData: data,
-        compressionType
-      };
-    });
-  }
-
-}
-
-exports.DOMCMapReaderFactory = DOMCMapReaderFactory;
-
-class DOMStandardFontDataFactory extends _base_factory.BaseStandardFontDataFactory {
-  _fetchData(url) {
-    return fetchData(url, true);
-  }
-
-}
-
-exports.DOMStandardFontDataFactory = DOMStandardFontDataFactory;
-
-class DOMSVGFactory extends _base_factory.BaseSVGFactory {
-  _createSVG(type) {
-    return document.createElementNS(SVG_NS, type);
-  }
-
-}
-
-exports.DOMSVGFactory = DOMSVGFactory;
-
-class PageViewport {
-  constructor({
-    viewBox,
-    scale,
-    rotation,
-    offsetX = 0,
-    offsetY = 0,
-    dontFlip = false
-  }) {
-    this.viewBox = viewBox;
-    this.scale = scale;
-    this.rotation = rotation;
-    this.offsetX = offsetX;
-    this.offsetY = offsetY;
-    const centerX = (viewBox[2] + viewBox[0]) / 2;
-    const centerY = (viewBox[3] + viewBox[1]) / 2;
-    let rotateA, rotateB, rotateC, rotateD;
-    rotation %= 360;
-
-    if (rotation < 0) {
-      rotation += 360;
-    }
-
-    switch (rotation) {
-      case 180:
-        rotateA = -1;
-        rotateB = 0;
-        rotateC = 0;
-        rotateD = 1;
-        break;
-
-      case 90:
-        rotateA = 0;
-        rotateB = 1;
-        rotateC = 1;
-        rotateD = 0;
-        break;
-
-      case 270:
-        rotateA = 0;
-        rotateB = -1;
-        rotateC = -1;
-        rotateD = 0;
-        break;
-
-      case 0:
-        rotateA = 1;
-        rotateB = 0;
-        rotateC = 0;
-        rotateD = -1;
-        break;
-
-      default:
-        throw new Error("PageViewport: Invalid rotation, must be a multiple of 90 degrees.");
-    }
-
-    if (dontFlip) {
-      rotateC = -rotateC;
-      rotateD = -rotateD;
-    }
-
-    let offsetCanvasX, offsetCanvasY;
-    let width, height;
-
-    if (rotateA === 0) {
-      offsetCanvasX = Math.abs(centerY - viewBox[1]) * scale + offsetX;
-      offsetCanvasY = Math.abs(centerX - viewBox[0]) * scale + offsetY;
-      width = Math.abs(viewBox[3] - viewBox[1]) * scale;
-      height = Math.abs(viewBox[2] - viewBox[0]) * scale;
-    } else {
-      offsetCanvasX = Math.abs(centerX - viewBox[0]) * scale + offsetX;
-      offsetCanvasY = Math.abs(centerY - viewBox[1]) * scale + offsetY;
-      width = Math.abs(viewBox[2] - viewBox[0]) * scale;
-      height = Math.abs(viewBox[3] - viewBox[1]) * scale;
-    }
-
-    this.transform = [rotateA * scale, rotateB * scale, rotateC * scale, rotateD * scale, offsetCanvasX - rotateA * scale * centerX - rotateC * scale * centerY, offsetCanvasY - rotateB * scale * centerX - rotateD * scale * centerY];
-    this.width = width;
-    this.height = height;
-  }
-
-  clone({
-    scale = this.scale,
-    rotation = this.rotation,
-    offsetX = this.offsetX,
-    offsetY = this.offsetY,
-    dontFlip = false
-  } = {}) {
-    return new PageViewport({
-      viewBox: this.viewBox.slice(),
-      scale,
-      rotation,
-      offsetX,
-      offsetY,
-      dontFlip
-    });
-  }
-
-  convertToViewportPoint(x, y) {
-    return _util.Util.applyTransform([x, y], this.transform);
-  }
-
-  convertToViewportRectangle(rect) {
-    const topLeft = _util.Util.applyTransform([rect[0], rect[1]], this.transform);
-
-    const bottomRight = _util.Util.applyTransform([rect[2], rect[3]], this.transform);
-
-    return [topLeft[0], topLeft[1], bottomRight[0], bottomRight[1]];
-  }
-
-  convertToPdfPoint(x, y) {
-    return _util.Util.applyInverseTransform([x, y], this.transform);
-  }
-
-}
-
-exports.PageViewport = PageViewport;
-
-class RenderingCancelledException extends _util.BaseException {
-  constructor(msg, type) {
-    super(msg, "RenderingCancelledException");
-    this.type = type;
-  }
-
-}
-
-exports.RenderingCancelledException = RenderingCancelledException;
-
-function isDataScheme(url) {
-  const ii = url.length;
-  let i = 0;
-
-  while (i < ii && url[i].trim() === "") {
-    i++;
-  }
-
-  return url.substring(i, i + 5).toLowerCase() === "data:";
-}
-
-function isPdfFile(filename) {
-  return typeof filename === "string" && /\.pdf$/i.test(filename);
-}
-
-function getFilenameFromUrl(url) {
-  const anchor = url.indexOf("#");
-  const query = url.indexOf("?");
-  const end = Math.min(anchor > 0 ? anchor : url.length, query > 0 ? query : url.length);
-  return url.substring(url.lastIndexOf("/", end) + 1, end);
-}
-
-function getPdfFilenameFromUrl(url, defaultFilename = "document.pdf") {
-  if (window.PDFViewerApplication.appConfig.filenameForDownload) {
-    return window.PDFViewerApplication.appConfig.filenameForDownload;
-  }
-
-  if (typeof url !== "string") {
-    return defaultFilename;
-  }
-
-  if (isDataScheme(url)) {
-    (0, _util.warn)('getPdfFilenameFromUrl: ignore "data:"-URL for performance reasons.');
-    return defaultFilename;
-  }
-
-  const reURI = /^(?:(?:[^:]+:)?\/\/[^/]+)?([^?#]*)(\?[^#]*)?(#.*)?$/;
-  const reFilename = /[^/?#=]+\.pdf\b(?!.*\.pdf\b)/i;
-  const splitURI = reURI.exec(url);
-  let suggestedFilename = reFilename.exec(splitURI[1]) || reFilename.exec(splitURI[2]) || reFilename.exec(splitURI[3]);
-
-  if (suggestedFilename) {
-    suggestedFilename = suggestedFilename[0];
-
-    if (suggestedFilename.includes("%")) {
-      try {
-        suggestedFilename = reFilename.exec(decodeURIComponent(suggestedFilename))[0];
-      } catch (ex) {}
-    }
-  }
-
-  return suggestedFilename || defaultFilename;
-}
-
-class StatTimer {
-  constructor() {
-    this.started = Object.create(null);
-    this.times = [];
-  }
-
-  time(name) {
-    if (name in this.started) {
-      (0, _util.warn)(`Timer is already running for ${name}`);
-    }
-
-    this.started[name] = Date.now();
-  }
-
-  timeEnd(name) {
-    if (!(name in this.started)) {
-      (0, _util.warn)(`Timer has not been started for ${name}`);
-    }
-
-    this.times.push({
-      name,
-      start: this.started[name],
-      end: Date.now()
-    });
-    delete this.started[name];
-  }
-
-  toString() {
-    const outBuf = [];
-    let longest = 0;
-
-    for (const time of this.times) {
-      const name = time.name;
-
-      if (name.length > longest) {
-        longest = name.length;
-      }
-    }
-
-    for (const time of this.times) {
-      const duration = time.end - time.start;
-      outBuf.push(`${time.name.padEnd(longest)} ${duration}ms\n`);
-    }
-
-    return outBuf.join("");
-  }
-
-}
-
-exports.StatTimer = StatTimer;
-
-function isValidFetchUrl(url, baseUrl) {
-  try {
-    const {
-      protocol
-    } = baseUrl ? new URL(url, baseUrl) : new URL(url);
-    return protocol === "http:" || protocol === "https:" || protocol === "capacitor:";
-  } catch (ex) {
-    return false;
-  }
-}
-
-function loadScript(src, removeScriptElement = false) {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-
-    if (src.constructor.name === "Function") {
-      script.src = src();
-    } else {
-      script.src = src;
-    }
-
-    script.onload = function (evt) {
-      if (removeScriptElement) {
-        script.remove();
-      }
-
-      resolve(evt);
-    };
-
-    script.onerror = function (error) {
-      Window['ngxConsole'].log(error);
-      reject(new Error(`Cannot load script at: ${script.src}`));
-    };
-
-    (document.head || document.documentElement).append(script);
-  });
-}
-
-function deprecated(details) {
-  Window['ngxConsole'].log("Deprecated API usage: " + details);
-}
-
-let pdfDateStringRegex;
-
-class PDFDateString {
-  static toDateObject(input) {
-    if (!input || typeof input !== "string") {
-      return null;
-    }
-
-    if (!pdfDateStringRegex) {
-      pdfDateStringRegex = new RegExp("^D:" + "(\\d{4})" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "([Z|+|-])?" + "(\\d{2})?" + "'?" + "(\\d{2})?" + "'?");
-    }
-
-    const matches = pdfDateStringRegex.exec(input);
-
-    if (!matches) {
-      return null;
-    }
-
-    const year = parseInt(matches[1], 10);
-    let month = parseInt(matches[2], 10);
-    month = month >= 1 && month <= 12 ? month - 1 : 0;
-    let day = parseInt(matches[3], 10);
-    day = day >= 1 && day <= 31 ? day : 1;
-    let hour = parseInt(matches[4], 10);
-    hour = hour >= 0 && hour <= 23 ? hour : 0;
-    let minute = parseInt(matches[5], 10);
-    minute = minute >= 0 && minute <= 59 ? minute : 0;
-    let second = parseInt(matches[6], 10);
-    second = second >= 0 && second <= 59 ? second : 0;
-    const universalTimeRelation = matches[7] || "Z";
-    let offsetHour = parseInt(matches[8], 10);
-    offsetHour = offsetHour >= 0 && offsetHour <= 23 ? offsetHour : 0;
-    let offsetMinute = parseInt(matches[9], 10) || 0;
-    offsetMinute = offsetMinute >= 0 && offsetMinute <= 59 ? offsetMinute : 0;
-
-    if (universalTimeRelation === "-") {
-      hour += offsetHour;
-      minute += offsetMinute;
-    } else if (universalTimeRelation === "+") {
-      hour -= offsetHour;
-      minute -= offsetMinute;
-    }
-
-    return new Date(Date.UTC(year, month, day, hour, minute, second));
-  }
-
-}
-
-exports.PDFDateString = PDFDateString;
-
-function getXfaPageViewport(xfaPage, {
-  scale = 1,
-  rotation = 0
-}) {
-  const {
-    width,
-    height
-  } = xfaPage.attributes.style;
-  const viewBox = [0, 0, parseInt(width), parseInt(height)];
-  return new PageViewport({
-    viewBox,
-    scale,
-    rotation
-  });
-}
-
-function getRGB(color) {
-  if (color.startsWith("#")) {
-    const colorRGB = parseInt(color.slice(1), 16);
-    return [(colorRGB & 0xff0000) >> 16, (colorRGB & 0x00ff00) >> 8, colorRGB & 0x0000ff];
-  }
-
-  if (color.startsWith("rgb(")) {
-    return color.slice(4, -1).split(",").map(x => parseInt(x));
-  }
-
-  (0, _util.warn)(`Not a valid color format: "${color}"`);
-  return [0, 0, 0];
-}
-
-function getColorValues(colors) {
-  const span = document.createElement("span");
-  span.style.visibility = "hidden";
-  document.body.append(span);
-
-  for (const name of colors.keys()) {
-    span.style.color = name;
-    const computedColor = window.getComputedStyle(span).color;
-    colors.set(name, getRGB(computedColor));
-  }
-
-  span.remove();
-}
-
-/***/ }),
-/* 8 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.BaseStandardFontDataFactory = exports.BaseSVGFactory = exports.BaseCanvasFactory = exports.BaseCMapReaderFactory = void 0;
-
-var _util = __w_pdfjs_require__(1);
-
-class BaseCanvasFactory {
-  constructor() {
-    if (this.constructor === BaseCanvasFactory) {
-      (0, _util.unreachable)("Cannot initialize BaseCanvasFactory.");
-    }
-  }
-
-  create(width, height) {
-    if (width <= 0 || height <= 0) {
-      throw new Error("Invalid canvas size");
-    }
-
-    const canvas = this._createCanvas(width, height);
-
-    return {
-      canvas,
-      context: canvas.getContext("2d")
-    };
-  }
-
-  reset(canvasAndContext, width, height) {
-    if (!canvasAndContext.canvas) {
-      throw new Error("Canvas is not specified");
-    }
-
-    if (width <= 0 || height <= 0) {
-      throw new Error("Invalid canvas size");
-    }
-
-    canvasAndContext.canvas.width = width;
-    canvasAndContext.canvas.height = height;
-  }
-
-  destroy(canvasAndContext) {
-    if (!canvasAndContext.canvas) {
-      throw new Error("Canvas is not specified");
-    }
-
-    canvasAndContext.canvas.width = 0;
-    canvasAndContext.canvas.height = 0;
-    canvasAndContext.canvas = null;
-    canvasAndContext.context = null;
-  }
-
-  _createCanvas(width, height) {
-    (0, _util.unreachable)("Abstract method `_createCanvas` called.");
-  }
-
-}
-
-exports.BaseCanvasFactory = BaseCanvasFactory;
-
-class BaseCMapReaderFactory {
-  constructor({
-    baseUrl = null,
-    isCompressed = false
-  }) {
-    if (this.constructor === BaseCMapReaderFactory) {
-      (0, _util.unreachable)("Cannot initialize BaseCMapReaderFactory.");
-    }
-
-    this.baseUrl = baseUrl;
-    this.isCompressed = isCompressed;
-  }
-
-  async fetch({
-    name
-  }) {
-    if (!this.baseUrl) {
-      throw new Error('The CMap "baseUrl" parameter must be specified, ensure that ' + 'the "cMapUrl" and "cMapPacked" API parameters are provided.');
-    }
-
-    if (!name) {
-      throw new Error("CMap name must be specified.");
-    }
-
-    const url = this.baseUrl + name + (this.isCompressed ? ".bcmap" : "");
-    const compressionType = this.isCompressed ? _util.CMapCompressionType.BINARY : _util.CMapCompressionType.NONE;
-    return this._fetchData(url, compressionType).catch(reason => {
-      throw new Error(`Unable to load ${this.isCompressed ? "binary " : ""}CMap at: ${url}`);
-    });
-  }
-
-  _fetchData(url, compressionType) {
-    (0, _util.unreachable)("Abstract method `_fetchData` called.");
-  }
-
-}
-
-exports.BaseCMapReaderFactory = BaseCMapReaderFactory;
-
-class BaseStandardFontDataFactory {
-  constructor({
-    baseUrl = null
-  }) {
-    if (this.constructor === BaseStandardFontDataFactory) {
-      (0, _util.unreachable)("Cannot initialize BaseStandardFontDataFactory.");
-    }
-
-    this.baseUrl = baseUrl;
-  }
-
-  async fetch({
-    filename
-  }) {
-    if (!this.baseUrl) {
-      throw new Error('The standard font "baseUrl" parameter must be specified, ensure that ' + 'the "standardFontDataUrl" API parameter is provided.');
-    }
-
-    if (!filename) {
-      throw new Error("Font filename must be specified.");
-    }
-
-    const url = `${this.baseUrl}${filename}`;
-    return this._fetchData(url).catch(reason => {
-      throw new Error(`Unable to load font data at: ${url}`);
-    });
-  }
-
-  _fetchData(url) {
-    (0, _util.unreachable)("Abstract method `_fetchData` called.");
-  }
-
-}
-
-exports.BaseStandardFontDataFactory = BaseStandardFontDataFactory;
-
-class BaseSVGFactory {
-  constructor() {
-    if (this.constructor === BaseSVGFactory) {
-      (0, _util.unreachable)("Cannot initialize BaseSVGFactory.");
-    }
-  }
-
-  create(width, height, skipDimensions = false) {
-    if (width <= 0 || height <= 0) {
-      throw new Error("Invalid SVG dimensions");
-    }
-
-    const svg = this._createSVG("svg:svg");
-
-    svg.setAttribute("version", "1.1");
-
-    if (!skipDimensions) {
-      svg.setAttribute("width", `${width}px`);
-      svg.setAttribute("height", `${height}px`);
-    }
-
-    svg.setAttribute("preserveAspectRatio", "none");
-    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-    return svg;
-  }
-
-  createElement(type) {
-    if (typeof type !== "string") {
-      throw new Error("Invalid SVG element type");
-    }
-
-    return this._createSVG(type);
-  }
-
-  _createSVG(type) {
-    (0, _util.unreachable)("Abstract method `_createSVG` called.");
-  }
-
-}
-
-exports.BaseSVGFactory = BaseSVGFactory;
 
 /***/ }),
 /* 9 */
@@ -5975,7 +6138,7 @@ exports.CanvasGraphics = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
-var _display_utils = __w_pdfjs_require__(7);
+var _display_utils = __w_pdfjs_require__(3);
 
 var _pattern_helper = __w_pdfjs_require__(12);
 
@@ -7820,8 +7983,7 @@ class CanvasGraphics {
     ctx.save();
     ctx.beginPath();
 
-    for (let i = 0; i < paths.length; i++) {
-      const path = paths[i];
+    for (const path of paths) {
       ctx.setTransform.apply(ctx, path.transform);
       ctx.translate(path.x, path.y);
       path.addToPath(ctx, path.fontSize);
@@ -10376,7 +10538,7 @@ exports.PDFDataTransportStream = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
-var _display_utils = __w_pdfjs_require__(7);
+var _display_utils = __w_pdfjs_require__(3);
 
 class PDFDataTransportStream {
   constructor(params, pdfDataRangeTransport) {
@@ -10793,7 +10955,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.NodeStandardFontDataFactory = exports.NodeCanvasFactory = exports.NodeCMapReaderFactory = void 0;
 
-var _base_factory = __w_pdfjs_require__(8);
+var _base_factory = __w_pdfjs_require__(4);
 
 ;
 
@@ -10857,27 +11019,35 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.AnnotationEditorLayer = void 0;
 
-var _tools = __w_pdfjs_require__(6);
-
 var _util = __w_pdfjs_require__(1);
+
+var _display_utils = __w_pdfjs_require__(3);
+
+var _tools = __w_pdfjs_require__(8);
 
 var _freetext = __w_pdfjs_require__(23);
 
 var _ink = __w_pdfjs_require__(24);
 
 class AnnotationEditorLayer {
-  #boundClick;
+  #allowClick = false;
+  #boundPointerup = this.pointerup.bind(this);
+  #boundPointerdown = this.pointerdown.bind(this);
   #editors = new Map();
   #isCleaningUp = false;
+  #textLayerMap = new WeakMap();
+  #textNodes = new Map();
   #uiManager;
+  #waitingEditors = new Set();
   static _initialized = false;
-  static _keyboardManager = new _tools.KeyboardManager([[["ctrl+a", "mac+meta+a"], AnnotationEditorLayer.prototype.selectAll], [["ctrl+c", "mac+meta+c"], AnnotationEditorLayer.prototype.copy], [["ctrl+v", "mac+meta+v"], AnnotationEditorLayer.prototype.paste], [["ctrl+x", "mac+meta+x"], AnnotationEditorLayer.prototype.cut], [["ctrl+z", "mac+meta+z"], AnnotationEditorLayer.prototype.undo], [["ctrl+y", "ctrl+shift+Z", "mac+meta+shift+Z"], AnnotationEditorLayer.prototype.redo], [["Backspace", "alt+Backspace", "ctrl+Backspace", "shift+Backspace", "mac+Backspace", "mac+alt+Backspace", "mac+ctrl+Backspace", "Delete", "ctrl+Delete", "shift+Delete"], AnnotationEditorLayer.prototype.delete]]);
 
   constructor(options) {
     if (!AnnotationEditorLayer._initialized) {
       AnnotationEditorLayer._initialized = true;
 
       _freetext.FreeTextEditor.initialize(options.l10n);
+
+      _ink.InkEditor.initialize(options.l10n);
 
       options.uiManager.registerEditorTypes([_freetext.FreeTextEditor, _ink.InkEditor]);
     }
@@ -10886,13 +11056,36 @@ class AnnotationEditorLayer {
     this.annotationStorage = options.annotationStorage;
     this.pageIndex = options.pageIndex;
     this.div = options.div;
-    this.#boundClick = this.click.bind(this);
+    this.#uiManager.addLayer(this);
+  }
 
-    for (const editor of this.#uiManager.getEditors(options.pageIndex)) {
-      this.add(editor);
+  get textLayerElements() {
+    const textLayer = this.div.parentNode.getElementsByClassName("textLayer").item(0);
+
+    if (!textLayer) {
+      return (0, _util.shadow)(this, "textLayerElements", null);
     }
 
-    this.#uiManager.addLayer(this);
+    let textChildren = this.#textLayerMap.get(textLayer);
+
+    if (textChildren) {
+      return textChildren;
+    }
+
+    textChildren = textLayer.querySelectorAll(`span[role="presentation"]`);
+
+    if (textChildren.length === 0) {
+      return (0, _util.shadow)(this, "textLayerElements", null);
+    }
+
+    textChildren = Array.from(textChildren);
+    textChildren.sort(AnnotationEditorLayer.#compareElementPositions);
+    this.#textLayerMap.set(textLayer, textChildren);
+    return textChildren;
+  }
+
+  get #hasTextLayer() {
+    return !!this.div.parentNode.querySelector(".textLayer .endOfContent");
   }
 
   updateToolbar(mode) {
@@ -10904,9 +11097,12 @@ class AnnotationEditorLayer {
 
     if (mode === _util.AnnotationEditorType.INK) {
       this.addInkEditorIfNeeded(false);
+      this.disableClick();
+    } else {
+      this.enableClick();
     }
 
-    this.setActiveEditor(null);
+    this.#uiManager.unselectAll();
   }
 
   addInkEditorIfNeeded(isCommitting) {
@@ -10938,44 +11134,20 @@ class AnnotationEditorLayer {
     this.#uiManager.addCommands(params);
   }
 
-  undo() {
-    this.#uiManager.undo();
-  }
-
-  redo() {
-    this.#uiManager.redo();
-  }
-
-  delete() {
-    this.#uiManager.delete();
-  }
-
-  copy() {
-    this.#uiManager.copy();
-  }
-
-  cut() {
-    this.#uiManager.cut();
-  }
-
-  paste() {
-    this.#uiManager.paste();
-  }
-
-  selectAll() {
-    this.#uiManager.selectAll();
-  }
-
-  unselectAll() {
-    this.#uiManager.unselectAll();
-  }
-
   enable() {
     this.div.style.pointerEvents = "auto";
+
+    for (const editor of this.#editors.values()) {
+      editor.enableEditing();
+    }
   }
 
   disable() {
     this.div.style.pointerEvents = "none";
+
+    for (const editor of this.#editors.values()) {
+      editor.disableEditing();
+    }
   }
 
   setActiveEditor(editor) {
@@ -10986,19 +11158,16 @@ class AnnotationEditorLayer {
     }
 
     this.#uiManager.setActiveEditor(editor);
+  }
 
-    if (currentActive && currentActive !== editor) {
-      currentActive.commitOrRemove();
-    }
+  enableClick() {
+    this.div.addEventListener("pointerdown", this.#boundPointerdown);
+    this.div.addEventListener("pointerup", this.#boundPointerup);
+  }
 
-    this.#uiManager.allowClick = this.#uiManager.getMode() === _util.AnnotationEditorType.INK;
-
-    if (editor) {
-      this.unselectAll();
-      this.div.removeEventListener("click", this.#boundClick);
-    } else {
-      this.div.addEventListener("click", this.#boundClick);
-    }
+  disableClick() {
+    this.div.removeEventListener("pointerdown", this.#boundPointerdown);
+    this.div.removeEventListener("pointerup", this.#boundPointerup);
   }
 
   attach(editor) {
@@ -11007,19 +11176,23 @@ class AnnotationEditorLayer {
 
   detach(editor) {
     this.#editors.delete(editor.id);
+    this.removePointerInTextLayer(editor);
   }
 
   remove(editor) {
     this.#uiManager.removeEditor(editor);
     this.detach(editor);
     this.annotationStorage.removeKey(editor.id);
-    editor.div.remove();
-    editor.isAttachedToDOM = false;
+    editor.div.style.display = "none";
+    setTimeout(() => {
+      editor.div.style.display = "";
+      editor.div.remove();
+      editor.isAttachedToDOM = false;
 
-    if (this.#uiManager.isActive(editor) || this.#editors.size === 0) {
-      this.setActiveEditor(null);
-      this.#uiManager.allowClick = true;
-    }
+      if (document.activeElement === document.body) {
+        this.#uiManager.focusMainContainer();
+      }
+    }, 0);
 
     if (!this.#isCleaningUp) {
       this.addInkEditorIfNeeded(false);
@@ -11031,18 +11204,129 @@ class AnnotationEditorLayer {
       return;
     }
 
-    if (this.#uiManager.isActive(editor)) {
-      editor.parent.setActiveEditor(null);
-    }
-
     this.attach(editor);
     editor.pageIndex = this.pageIndex;
-    editor.parent.detach(editor);
+    editor.parent?.detach(editor);
     editor.parent = this;
 
     if (editor.div && editor.isAttachedToDOM) {
       editor.div.remove();
       this.div.append(editor.div);
+    }
+  }
+
+  static #compareElementPositions(e1, e2) {
+    const rect1 = e1.getBoundingClientRect();
+    const rect2 = e2.getBoundingClientRect();
+
+    if (rect1.y + rect1.height <= rect2.y) {
+      return -1;
+    }
+
+    if (rect2.y + rect2.height <= rect1.y) {
+      return +1;
+    }
+
+    const centerX1 = rect1.x + rect1.width / 2;
+    const centerX2 = rect2.x + rect2.width / 2;
+    return centerX1 - centerX2;
+  }
+
+  onTextLayerRendered() {
+    this.#textNodes.clear();
+
+    for (const editor of this.#waitingEditors) {
+      if (editor.isAttachedToDOM) {
+        this.addPointerInTextLayer(editor);
+      }
+    }
+
+    this.#waitingEditors.clear();
+  }
+
+  removePointerInTextLayer(editor) {
+    if (!this.#hasTextLayer) {
+      this.#waitingEditors.delete(editor);
+      return;
+    }
+
+    const {
+      id
+    } = editor;
+    const node = this.#textNodes.get(id);
+
+    if (!node) {
+      return;
+    }
+
+    this.#textNodes.delete(id);
+    let owns = node.getAttribute("aria-owns");
+
+    if (owns?.includes(id)) {
+      owns = owns.split(" ").filter(x => x !== id).join(" ");
+
+      if (owns) {
+        node.setAttribute("aria-owns", owns);
+      } else {
+        node.removeAttribute("aria-owns");
+        node.setAttribute("role", "presentation");
+      }
+    }
+  }
+
+  addPointerInTextLayer(editor) {
+    if (!this.#hasTextLayer) {
+      this.#waitingEditors.add(editor);
+      return;
+    }
+
+    this.removePointerInTextLayer(editor);
+    const children = this.textLayerElements;
+
+    if (!children) {
+      return;
+    }
+
+    const {
+      contentDiv
+    } = editor;
+    const id = editor.getIdForTextLayer();
+    const index = (0, _display_utils.binarySearchFirstItem)(children, node => AnnotationEditorLayer.#compareElementPositions(contentDiv, node) < 0);
+    const node = children[Math.max(0, index - 1)];
+    const owns = node.getAttribute("aria-owns");
+
+    if (!owns?.includes(id)) {
+      node.setAttribute("aria-owns", owns ? `${owns} ${id}` : id);
+    }
+
+    node.removeAttribute("role");
+    this.#textNodes.set(id, node);
+  }
+
+  moveDivInDOM(editor) {
+    this.addPointerInTextLayer(editor);
+    const {
+      div,
+      contentDiv
+    } = editor;
+
+    if (!this.div.hasChildNodes()) {
+      this.div.append(div);
+      return;
+    }
+
+    const children = Array.from(this.div.childNodes).filter(node => node !== div);
+
+    if (children.length === 0) {
+      return;
+    }
+
+    const index = (0, _display_utils.binarySearchFirstItem)(children, node => AnnotationEditorLayer.#compareElementPositions(contentDiv, node) < 0);
+
+    if (index === 0) {
+      children[0].before(div);
+    } else {
+      children[index - 1].after(div);
     }
   }
 
@@ -11058,6 +11342,7 @@ class AnnotationEditorLayer {
       editor.isAttachedToDOM = true;
     }
 
+    this.moveDivInDOM(editor);
     editor.onceAdded();
   }
 
@@ -11117,6 +11402,18 @@ class AnnotationEditorLayer {
     return null;
   }
 
+  deserialize(data) {
+    switch (data.annotationType) {
+      case _util.AnnotationEditorType.FREETEXT:
+        return _freetext.FreeTextEditor.deserialize(data, this);
+
+      case _util.AnnotationEditorType.INK:
+        return _ink.InkEditor.deserialize(data, this);
+    }
+
+    return null;
+  }
+
   #createAndAddNewEditor(event) {
     const id = this.getNextId();
     const editor = this.#createNewEditor({
@@ -11133,13 +11430,42 @@ class AnnotationEditorLayer {
     return editor;
   }
 
-  click(event) {
-    if (!this.#uiManager.allowClick) {
-      this.#uiManager.allowClick = true;
+  setSelected(editor) {
+    this.#uiManager.setSelected(editor);
+  }
+
+  toggleSelected(editor) {
+    this.#uiManager.toggleSelected(editor);
+  }
+
+  isSelected(editor) {
+    return this.#uiManager.isSelected(editor);
+  }
+
+  unselect(editor) {
+    this.#uiManager.unselect(editor);
+  }
+
+  pointerup(event) {
+    if (event.target !== this.div) {
+      return;
+    }
+
+    if (!this.#allowClick) {
+      this.#allowClick = true;
       return;
     }
 
     this.#createAndAddNewEditor(event);
+  }
+
+  pointerdown(event) {
+    if (event.target !== this.div) {
+      return;
+    }
+
+    const editor = this.#uiManager.getActive();
+    this.#allowClick = !editor || editor.isEmpty();
   }
 
   drop(event) {
@@ -11157,27 +11483,30 @@ class AnnotationEditorLayer {
     const endX = event.clientX - rect.x;
     const endY = event.clientY - rect.y;
     editor.translate(endX - editor.startX, endY - editor.startY);
+    this.moveDivInDOM(editor);
+    editor.div.focus();
   }
 
   dragover(event) {
     event.preventDefault();
   }
 
-  keydown(event) {
-    if (!this.#uiManager.getActive()?.shouldGetKeyboardEvents()) {
-      AnnotationEditorLayer._keyboardManager.exec(this, event);
-    }
-  }
-
   destroy() {
+    if (this.#uiManager.getActive()?.parent === this) {
+      this.#uiManager.setActiveEditor(null);
+    }
+
     for (const editor of this.#editors.values()) {
+      this.removePointerInTextLayer(editor);
       editor.isAttachedToDOM = false;
       editor.div.remove();
       editor.parent = null;
-      this.div = null;
     }
 
+    this.#textNodes.clear();
+    this.div = null;
     this.#editors.clear();
+    this.#waitingEditors.clear();
     this.#uiManager.removeLayer(this);
   }
 
@@ -11195,14 +11524,17 @@ class AnnotationEditorLayer {
 
   render(parameters) {
     this.viewport = parameters.viewport;
-    (0, _tools.bindEvents)(this, this.div, ["dragover", "drop", "keydown"]);
-    this.div.addEventListener("click", this.#boundClick);
+    (0, _tools.bindEvents)(this, this.div, ["dragover", "drop"]);
     this.setDimensions();
+
+    for (const editor of this.#uiManager.getEditors(this.pageIndex)) {
+      this.add(editor);
+    }
+
     this.updateMode();
   }
 
   update(parameters) {
-    this.setActiveEditor(null);
     this.viewport = parameters.viewport;
     this.setDimensions();
     this.updateMode();
@@ -11259,11 +11591,14 @@ exports.FreeTextEditor = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
-var _editor = __w_pdfjs_require__(5);
+var _tools = __w_pdfjs_require__(8);
 
-var _tools = __w_pdfjs_require__(6);
+var _editor = __w_pdfjs_require__(7);
 
 class FreeTextEditor extends _editor.AnnotationEditor {
+  #boundEditorDivBlur = this.editorDivBlur.bind(this);
+  #boundEditorDivFocus = this.editorDivFocus.bind(this);
+  #boundEditorDivKeydown = this.editorDivKeydown.bind(this);
   #color;
   #content = "";
   #contentHTML = "";
@@ -11274,6 +11609,7 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   static _internalPadding = 0;
   static _defaultColor = null;
   static _defaultFontSize = 10;
+  static _keyboardManager = new _tools.KeyboardManager([[["ctrl+Enter", "mac+meta+Enter", "Escape", "mac+Escape"], FreeTextEditor.prototype.commitOrRemove]]);
 
   constructor(params) {
     super({ ...params,
@@ -11284,26 +11620,9 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   }
 
   static initialize(l10n) {
-    this._l10nPromise = l10n.get("free_text_default_content");
+    this._l10nPromise = new Map(["free_text_default_content", "editor_free_text_aria_label"].map(str => [str, l10n.get(str)]));
     const style = getComputedStyle(document.documentElement);
     this._internalPadding = parseFloat(style.getPropertyValue("--freetext-padding"));
-  }
-
-  copy() {
-    const [width, height] = this.parent.viewportBaseDimensions;
-    const editor = new FreeTextEditor({
-      parent: this.parent,
-      id: this.parent.getNextId(),
-      x: this.x * width,
-      y: this.y * height
-    });
-    editor.width = this.width;
-    editor.height = this.height;
-    editor.#color = this.#color;
-    editor.#fontSize = this.#fontSize;
-    editor.#content = this.#content;
-    editor.#contentHTML = this.#contentHTML;
-    return editor;
   }
 
   static updateDefaultParams(type, value) {
@@ -11384,6 +11703,8 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   }
 
   rebuild() {
+    super.rebuild();
+
     if (this.div === null) {
       return;
     }
@@ -11400,6 +11721,9 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     this.overlayDiv.classList.remove("enabled");
     this.editorDiv.contentEditable = true;
     this.div.draggable = false;
+    this.editorDiv.addEventListener("keydown", this.#boundEditorDivKeydown);
+    this.editorDiv.addEventListener("focus", this.#boundEditorDivFocus);
+    this.editorDiv.addEventListener("blur", this.#boundEditorDivBlur);
   }
 
   disableEditMode() {
@@ -11408,11 +11732,23 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     this.overlayDiv.classList.add("enabled");
     this.editorDiv.contentEditable = false;
     this.div.draggable = true;
+    this.editorDiv.removeEventListener("keydown", this.#boundEditorDivKeydown);
+    this.editorDiv.removeEventListener("focus", this.#boundEditorDivFocus);
+    this.editorDiv.removeEventListener("blur", this.#boundEditorDivBlur);
+    this.isEditing = false;
+  }
+
+  focusin(event) {
+    super.focusin(event);
+
+    if (event.target !== this.editorDiv) {
+      this.editorDiv.focus();
+    }
   }
 
   onceAdded() {
     if (this.width) {
-      this.div.focus();
+      this.parent.setActiveEditor(this);
       return;
     }
 
@@ -11425,6 +11761,7 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   }
 
   remove() {
+    this.isEditing = false;
     this.parent.setEditingState(true);
     super.remove();
   }
@@ -11480,6 +11817,39 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     this.editorDiv.focus();
   }
 
+  keydown(event) {
+    if (event.target === this.div && event.key === "Enter") {
+      this.enableEditMode();
+      this.editorDiv.focus();
+    }
+  }
+
+  editorDivKeydown(event) {
+    FreeTextEditor._keyboardManager.exec(this, event);
+  }
+
+  editorDivFocus(event) {
+    this.isEditing = true;
+  }
+
+  editorDivBlur(event) {
+    this.isEditing = false;
+  }
+
+  disableEditing() {
+    this.editorDiv.setAttribute("role", "comment");
+    this.editorDiv.removeAttribute("aria-multiline");
+  }
+
+  enableEditing() {
+    this.editorDiv.setAttribute("role", "textbox");
+    this.editorDiv.setAttribute("aria-multiline", true);
+  }
+
+  getIdForTextLayer() {
+    return this.editorDiv.id;
+  }
+
   render() {
     if (this.div) {
       return this.div;
@@ -11494,10 +11864,13 @@ class FreeTextEditor extends _editor.AnnotationEditor {
 
     super.render();
     this.editorDiv = document.createElement("div");
-    this.editorDiv.tabIndex = 0;
     this.editorDiv.className = "internal";
+    this.editorDiv.setAttribute("id", `${this.id}-editor`);
+    this.enableEditing();
 
-    FreeTextEditor._l10nPromise.then(msg => this.editorDiv.setAttribute("default-content", msg));
+    FreeTextEditor._l10nPromise.get("editor_free_text_aria_label").then(msg => this.editorDiv?.setAttribute("aria-label", msg));
+
+    FreeTextEditor._l10nPromise.get("free_text_default_content").then(msg => this.editorDiv?.setAttribute("default-content", msg));
 
     this.editorDiv.contentEditable = true;
     const {
@@ -11509,16 +11882,33 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     this.overlayDiv = document.createElement("div");
     this.overlayDiv.classList.add("overlay", "enabled");
     this.div.append(this.overlayDiv);
-    (0, _tools.bindEvents)(this, this.div, ["dblclick"]);
+    (0, _tools.bindEvents)(this, this.div, ["dblclick", "keydown"]);
 
     if (this.width) {
       const [parentWidth, parentHeight] = this.parent.viewportBaseDimensions;
       this.setAt(baseX * parentWidth, baseY * parentHeight, this.width * parentWidth, this.height * parentHeight);
       this.editorDiv.innerHTML = this.#contentHTML;
       this.div.draggable = true;
+      this.editorDiv.contentEditable = false;
+    } else {
+      this.div.draggable = false;
+      this.editorDiv.contentEditable = true;
     }
 
     return this.div;
+  }
+
+  get contentDiv() {
+    return this.editorDiv;
+  }
+
+  static deserialize(data, parent) {
+    const editor = super.deserialize(data, parent);
+    editor.#fontSize = data.fontSize;
+    editor.#color = _util.Util.makeHexColor(...data.color);
+    editor.#content = data.value;
+    editor.#contentHTML = data.value.split("\n").map(line => `<div>${line}</div>`).join("");
+    return editor;
   }
 
   serialize() {
@@ -11565,7 +11955,7 @@ Object.defineProperty(exports, "fitCurve", ({
 
 var _util = __w_pdfjs_require__(1);
 
-var _editor = __w_pdfjs_require__(5);
+var _editor = __w_pdfjs_require__(7);
 
 var _pdfjsFitCurve = __w_pdfjs_require__(25);
 
@@ -11575,10 +11965,10 @@ class InkEditor extends _editor.AnnotationEditor {
   #aspectRatio = 0;
   #baseHeight = 0;
   #baseWidth = 0;
-  #boundCanvasMousemove;
-  #boundCanvasMouseleave;
-  #boundCanvasMouseup;
-  #boundCanvasMousedown;
+  #boundCanvasPointermove = this.canvasPointermove.bind(this);
+  #boundCanvasPointerleave = this.canvasPointerleave.bind(this);
+  #boundCanvasPointerup = this.canvasPointerup.bind(this);
+  #boundCanvasPointerdown = this.canvasPointerdown.bind(this);
   #disableEditing = false;
   #isCanvasInitialized = false;
   #observer = null;
@@ -11586,6 +11976,7 @@ class InkEditor extends _editor.AnnotationEditor {
   #realHeight = 0;
   static _defaultColor = null;
   static _defaultThickness = 1;
+  static _l10nPromise;
 
   constructor(params) {
     super({ ...params,
@@ -11600,35 +11991,10 @@ class InkEditor extends _editor.AnnotationEditor {
     this.translationX = this.translationY = 0;
     this.x = 0;
     this.y = 0;
-    this.#boundCanvasMousemove = this.canvasMousemove.bind(this);
-    this.#boundCanvasMouseleave = this.canvasMouseleave.bind(this);
-    this.#boundCanvasMouseup = this.canvasMouseup.bind(this);
-    this.#boundCanvasMousedown = this.canvasMousedown.bind(this);
   }
 
-  copy() {
-    const editor = new InkEditor({
-      parent: this.parent,
-      id: this.parent.getNextId()
-    });
-    editor.x = this.x;
-    editor.y = this.y;
-    editor.width = this.width;
-    editor.height = this.height;
-    editor.color = this.color;
-    editor.thickness = this.thickness;
-    editor.paths = this.paths.slice();
-    editor.bezierPath2D = this.bezierPath2D.slice();
-    editor.scaleFactor = this.scaleFactor;
-    editor.translationX = this.translationX;
-    editor.translationY = this.translationY;
-    editor.#aspectRatio = this.#aspectRatio;
-    editor.#baseWidth = this.#baseWidth;
-    editor.#baseHeight = this.#baseHeight;
-    editor.#disableEditing = this.#disableEditing;
-    editor.#realWidth = this.#realWidth;
-    editor.#realHeight = this.#realHeight;
-    return editor;
+  static initialize(l10n) {
+    this._l10nPromise = new Map(["editor_ink_canvas_aria_label", "editor_ink_aria_label"].map(str => [str, l10n.get(str)]));
   }
 
   static updateDefaultParams(type, value) {
@@ -11660,7 +12026,7 @@ class InkEditor extends _editor.AnnotationEditor {
   }
 
   get propertiesToUpdate() {
-    return [[_util.AnnotationEditorParamsType.INK_THICKNESS, this.thickness], [_util.AnnotationEditorParamsType.INK_COLOR, this.color]];
+    return [[_util.AnnotationEditorParamsType.INK_THICKNESS, this.thickness || InkEditor._defaultThickness], [_util.AnnotationEditorParamsType.INK_COLOR, this.color || InkEditor._defaultColor || _editor.AnnotationEditor._defaultLineColor]];
   }
 
   #updateThickness(thickness) {
@@ -11668,11 +12034,11 @@ class InkEditor extends _editor.AnnotationEditor {
     this.parent.addCommands({
       cmd: () => {
         this.thickness = thickness;
-        this.#fitToContent();
+        this.#fitToContent(true);
       },
       undo: () => {
         this.thickness = savedThickness;
-        this.#fitToContent();
+        this.#fitToContent(true);
       },
       mustExec: true,
       type: _util.AnnotationEditorParamsType.INK_THICKNESS,
@@ -11700,6 +12066,8 @@ class InkEditor extends _editor.AnnotationEditor {
   }
 
   rebuild() {
+    super.rebuild();
+
     if (this.div === null) {
       return;
     }
@@ -11741,8 +12109,8 @@ class InkEditor extends _editor.AnnotationEditor {
 
     super.enableEditMode();
     this.div.draggable = false;
-    this.canvas.addEventListener("mousedown", this.#boundCanvasMousedown);
-    this.canvas.addEventListener("mouseup", this.#boundCanvasMouseup);
+    this.canvas.addEventListener("pointerdown", this.#boundCanvasPointerdown);
+    this.canvas.addEventListener("pointerup", this.#boundCanvasPointerup);
   }
 
   disableEditMode() {
@@ -11753,8 +12121,8 @@ class InkEditor extends _editor.AnnotationEditor {
     super.disableEditMode();
     this.div.draggable = !this.isEmpty();
     this.div.classList.remove("editing");
-    this.canvas.removeEventListener("mousedown", this.#boundCanvasMousedown);
-    this.canvas.removeEventListener("mouseup", this.#boundCanvasMouseup);
+    this.canvas.removeEventListener("pointerdown", this.#boundCanvasPointerdown);
+    this.canvas.removeEventListener("pointerup", this.#boundCanvasPointerup);
   }
 
   onceAdded() {
@@ -11796,6 +12164,8 @@ class InkEditor extends _editor.AnnotationEditor {
   }
 
   #startDrawing(x, y) {
+    this.isEditing = true;
+
     if (!this.#isCanvasInitialized) {
       this.#isCanvasInitialized = true;
       this.#setCanvasDims();
@@ -11828,7 +12198,7 @@ class InkEditor extends _editor.AnnotationEditor {
       bezier = [[xy, xy.slice(), xy.slice(), xy]];
     }
 
-    const path2D = this.#buildPath2D(bezier);
+    const path2D = InkEditor.#buildPath2D(bezier);
     this.currentPath.length = 0;
 
     const cmd = () => {
@@ -11888,37 +12258,45 @@ class InkEditor extends _editor.AnnotationEditor {
       return;
     }
 
+    this.isEditing = false;
     this.disableEditMode();
     this.setInForeground();
     this.#disableEditing = true;
     this.div.classList.add("disabled");
     this.#fitToContent();
     this.parent.addInkEditorIfNeeded(true);
+    this.parent.moveDivInDOM(this);
+    this.div.focus();
   }
 
-  focusin() {
-    super.focusin();
+  focusin(event) {
+    super.focusin(event);
     this.enableEditMode();
   }
 
-  canvasMousedown(event) {
+  canvasPointerdown(event) {
     if (event.button !== 0 || !this.isInEditMode() || this.#disableEditing) {
       return;
     }
 
     this.setInForeground();
+
+    if (event.type !== "mouse") {
+      this.div.focus();
+    }
+
     event.stopPropagation();
-    this.canvas.addEventListener("mouseleave", this.#boundCanvasMouseleave);
-    this.canvas.addEventListener("mousemove", this.#boundCanvasMousemove);
+    this.canvas.addEventListener("pointerleave", this.#boundCanvasPointerleave);
+    this.canvas.addEventListener("pointermove", this.#boundCanvasPointermove);
     this.#startDrawing(event.offsetX, event.offsetY);
   }
 
-  canvasMousemove(event) {
+  canvasPointermove(event) {
     event.stopPropagation();
     this.#draw(event.offsetX, event.offsetY);
   }
 
-  canvasMouseup(event) {
+  canvasPointerup(event) {
     if (event.button !== 0) {
       return;
     }
@@ -11930,21 +12308,24 @@ class InkEditor extends _editor.AnnotationEditor {
     }
   }
 
-  canvasMouseleave(event) {
+  canvasPointerleave(event) {
     this.#endDrawing(event);
     this.setInBackground();
   }
 
   #endDrawing(event) {
     this.#stopDrawing(event.offsetX, event.offsetY);
-    this.canvas.removeEventListener("mouseleave", this.#boundCanvasMouseleave);
-    this.canvas.removeEventListener("mousemove", this.#boundCanvasMousemove);
+    this.canvas.removeEventListener("pointerleave", this.#boundCanvasPointerleave);
+    this.canvas.removeEventListener("pointermove", this.#boundCanvasPointermove);
   }
 
   #createCanvas() {
     this.canvas = document.createElement("canvas");
     this.canvas.width = this.canvas.height = 0;
     this.canvas.className = "inkEditorCanvas";
+
+    InkEditor._l10nPromise.get("editor_ink_canvas_aria_label").then(msg => this.canvas?.setAttribute("aria-label", msg));
+
     this.div.append(this.canvas);
     this.ctx = this.canvas.getContext("2d");
   }
@@ -11973,18 +12354,22 @@ class InkEditor extends _editor.AnnotationEditor {
     }
 
     super.render();
+
+    InkEditor._l10nPromise.get("editor_ink_aria_label").then(msg => this.div?.setAttribute("aria-label", msg));
+
     const [x, y, w, h] = this.#getInitialBBox();
     this.setAt(x, y, 0, 0);
     this.setDims(w, h);
     this.#createCanvas();
 
     if (this.width) {
-      this.#isCanvasInitialized = true;
       const [parentWidth, parentHeight] = this.parent.viewportBaseDimensions;
       this.setAt(baseX * parentWidth, baseY * parentHeight, this.width * parentWidth, this.height * parentHeight);
-      this.setDims(this.width * parentWidth, this.height * parentHeight);
+      this.#isCanvasInitialized = true;
       this.#setCanvasDims();
+      this.setDims(this.width * parentWidth, this.height * parentHeight);
       this.#redraw();
+      this.#setMinDims();
       this.div.classList.add("disabled");
     } else {
       this.div.classList.add("editing");
@@ -12001,8 +12386,8 @@ class InkEditor extends _editor.AnnotationEditor {
     }
 
     const [parentWidth, parentHeight] = this.parent.viewportBaseDimensions;
-    this.canvas.width = this.width * parentWidth;
-    this.canvas.height = this.height * parentHeight;
+    this.canvas.width = Math.ceil(this.width * parentWidth);
+    this.canvas.height = Math.ceil(this.height * parentHeight);
     this.#updateTransform();
   }
 
@@ -12028,10 +12413,7 @@ class InkEditor extends _editor.AnnotationEditor {
     this.height = height / parentHeight;
 
     if (this.#disableEditing) {
-      const padding = this.#getPadding();
-      const scaleFactorW = (width - padding) / this.#baseWidth;
-      const scaleFactorH = (height - padding) / this.#baseHeight;
-      this.scaleFactor = Math.min(scaleFactorW, scaleFactorH);
+      this.#setScaleFactor(width, height);
     }
 
     this.#setCanvasDims();
@@ -12039,12 +12421,19 @@ class InkEditor extends _editor.AnnotationEditor {
     this.canvas.style.visibility = "visible";
   }
 
+  #setScaleFactor(width, height) {
+    const padding = this.#getPadding();
+    const scaleFactorW = (width - padding) / this.#baseWidth;
+    const scaleFactorH = (height - padding) / this.#baseHeight;
+    this.scaleFactor = Math.min(scaleFactorW, scaleFactorH);
+  }
+
   #updateTransform() {
     const padding = this.#getPadding() / 2;
     this.ctx.setTransform(this.scaleFactor, 0, 0, this.scaleFactor, this.translationX * this.scaleFactor + padding, this.translationY * this.scaleFactor + padding);
   }
 
-  #buildPath2D(bezier) {
+  static #buildPath2D(bezier) {
     const path2D = new Path2D();
 
     for (let i = 0, ii = bezier.length; i < ii; i++) {
@@ -12156,10 +12545,10 @@ class InkEditor extends _editor.AnnotationEditor {
   }
 
   #getPadding() {
-    return Math.ceil(this.thickness * this.parent.scaleFactor);
+    return this.#disableEditing ? Math.ceil(this.thickness * this.parent.scaleFactor) : 0;
   }
 
-  #fitToContent() {
+  #fitToContent(thicknessChanged = false) {
     if (this.isEmpty()) {
       return;
     }
@@ -12171,14 +12560,29 @@ class InkEditor extends _editor.AnnotationEditor {
 
     const bbox = this.#getBbox();
     const padding = this.#getPadding();
-    this.#baseWidth = bbox[2] - bbox[0];
-    this.#baseHeight = bbox[3] - bbox[1];
+    this.#baseWidth = Math.max(RESIZER_SIZE, bbox[2] - bbox[0]);
+    this.#baseHeight = Math.max(RESIZER_SIZE, bbox[3] - bbox[1]);
     const width = Math.ceil(padding + this.#baseWidth * this.scaleFactor);
     const height = Math.ceil(padding + this.#baseHeight * this.scaleFactor);
     const [parentWidth, parentHeight] = this.parent.viewportBaseDimensions;
     this.width = width / parentWidth;
     this.height = height / parentHeight;
     this.#aspectRatio = width / height;
+    this.#setMinDims();
+    const prevTranslationX = this.translationX;
+    const prevTranslationY = this.translationY;
+    this.translationX = -bbox[0];
+    this.translationY = -bbox[1];
+    this.#setCanvasDims();
+    this.#redraw();
+    this.#realWidth = width;
+    this.#realHeight = height;
+    this.setDims(width, height);
+    const unscaledPadding = thicknessChanged ? 0 : padding / this.scaleFactor / 2;
+    this.translate(prevTranslationX - this.translationX - unscaledPadding, prevTranslationY - this.translationY - unscaledPadding);
+  }
+
+  #setMinDims() {
     const {
       style
     } = this.div;
@@ -12190,17 +12594,51 @@ class InkEditor extends _editor.AnnotationEditor {
       style.minWidth = `${RESIZER_SIZE}px`;
       style.minHeight = `${Math.round(RESIZER_SIZE / this.#aspectRatio)}px`;
     }
+  }
 
-    const prevTranslationX = this.translationX;
-    const prevTranslationY = this.translationY;
-    this.translationX = -bbox[0];
-    this.translationY = -bbox[1];
-    this.#setCanvasDims();
-    this.#redraw();
-    this.#realWidth = width;
-    this.#realHeight = height;
-    this.setDims(width, height);
-    this.translate(prevTranslationX - this.translationX, prevTranslationY - this.translationY);
+  static deserialize(data, parent) {
+    const editor = super.deserialize(data, parent);
+    editor.thickness = data.thickness;
+    editor.color = _util.Util.makeHexColor(...data.color);
+    const [pageWidth, pageHeight] = parent.pageDimensions;
+    const width = editor.width * pageWidth;
+    const height = editor.height * pageHeight;
+    const scaleFactor = parent.scaleFactor;
+    const padding = data.thickness / 2;
+    editor.#aspectRatio = width / height;
+    editor.#disableEditing = true;
+    editor.#realWidth = Math.round(width);
+    editor.#realHeight = Math.round(height);
+
+    for (const {
+      bezier
+    } of data.paths) {
+      const path = [];
+      editor.paths.push(path);
+      let p0 = scaleFactor * (bezier[0] - padding);
+      let p1 = scaleFactor * (height - bezier[1] - padding);
+
+      for (let i = 2, ii = bezier.length; i < ii; i += 6) {
+        const p10 = scaleFactor * (bezier[i] - padding);
+        const p11 = scaleFactor * (height - bezier[i + 1] - padding);
+        const p20 = scaleFactor * (bezier[i + 2] - padding);
+        const p21 = scaleFactor * (height - bezier[i + 3] - padding);
+        const p30 = scaleFactor * (bezier[i + 4] - padding);
+        const p31 = scaleFactor * (height - bezier[i + 5] - padding);
+        path.push([[p0, p1], [p10, p11], [p20, p21], [p30, p31]]);
+        p0 = p30;
+        p1 = p31;
+      }
+
+      const path2D = this.#buildPath2D(path);
+      editor.bezierPath2D.push(path2D);
+    }
+
+    const bbox = editor.#getBbox();
+    editor.#baseWidth = bbox[2] - bbox[0];
+    editor.#baseHeight = bbox[3] - bbox[1];
+    editor.#setScaleFactor(width, height);
+    return editor;
   }
 
   serialize() {
@@ -12619,9 +13057,9 @@ exports.AnnotationLayer = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
-var _display_utils = __w_pdfjs_require__(7);
+var _display_utils = __w_pdfjs_require__(3);
 
-var _annotation_storage = __w_pdfjs_require__(4);
+var _annotation_storage = __w_pdfjs_require__(6);
 
 var _scripting_utils = __w_pdfjs_require__(28);
 
@@ -15330,7 +15768,7 @@ exports.renderTextLayer = renderTextLayer;
 
 var _util = __w_pdfjs_require__(1);
 
-var _display_utils = __w_pdfjs_require__(7);
+var _display_utils = __w_pdfjs_require__(3);
 
 const MAX_TEXT_DIVS_TO_RENDER = 100000;
 const DEFAULT_FONT_SIZE = 30;
@@ -16120,9 +16558,11 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.SVGGraphics = void 0;
 
+var _display_utils = __w_pdfjs_require__(3);
+
 var _util = __w_pdfjs_require__(1);
 
-var _display_utils = __w_pdfjs_require__(7);
+var _is_node = __w_pdfjs_require__(13);
 
 let SVGGraphics = class {
   constructor() {
@@ -16463,6 +16903,7 @@ exports.SVGGraphics = SVGGraphics;
   let shadingCount = 0;
   exports.SVGGraphics = SVGGraphics = class {
     constructor(commonObjs, objs, forceDataSchema = false) {
+      (0, _display_utils.deprecated)("The SVG back-end is no longer maintained and *may* be removed in the future.");
       this.svgFactory = new _display_utils.DOMSVGFactory();
       this.current = new SVGExtraState();
       this.transformMatrix = _util.IDENTITY_MATRIX;
@@ -18124,7 +18565,7 @@ var _util = __w_pdfjs_require__(1);
 
 var _content_disposition = __w_pdfjs_require__(34);
 
-var _display_utils = __w_pdfjs_require__(7);
+var _display_utils = __w_pdfjs_require__(3);
 
 function validateRangeRequestCapabilities({
   getResponseHeader,
@@ -19391,6 +19832,12 @@ Object.defineProperty(exports, "XfaLayer", ({
     return _xfa_layer.XfaLayer;
   }
 }));
+Object.defineProperty(exports, "binarySearchFirstItem", ({
+  enumerable: true,
+  get: function () {
+    return _display_utils.binarySearchFirstItem;
+  }
+}));
 Object.defineProperty(exports, "build", ({
   enumerable: true,
   get: function () {
@@ -19466,13 +19913,13 @@ Object.defineProperty(exports, "version", ({
 
 var _util = __w_pdfjs_require__(1);
 
-var _api = __w_pdfjs_require__(3);
+var _display_utils = __w_pdfjs_require__(3);
 
-var _display_utils = __w_pdfjs_require__(7);
+var _api = __w_pdfjs_require__(5);
 
 var _annotation_editor_layer = __w_pdfjs_require__(22);
 
-var _tools = __w_pdfjs_require__(6);
+var _tools = __w_pdfjs_require__(8);
 
 var _annotation_layer = __w_pdfjs_require__(27);
 

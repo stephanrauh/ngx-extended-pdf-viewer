@@ -67,10 +67,6 @@ export type PDFPageViewOptions = {
      */
     imageResourcesPath?: string | undefined;
     /**
-     * - 'canvas' or 'svg'. The default is 'canvas'.
-     */
-    renderer: string;
-    /**
      * - Enables CSS only zooming. The default
      * value is `false`.
      */
@@ -123,7 +119,7 @@ export class PDFPageView implements IRenderableView {
     xfaLayerFactory: import("./interfaces").IPDFXfaLayerFactory;
     textHighlighter: any;
     structTreeLayerFactory: import("./interfaces").IPDFStructTreeLayerFactory;
-    renderer: string;
+    renderer: any;
     l10n: import("./interfaces").IL10n;
     paintTask: {
         promise: any;

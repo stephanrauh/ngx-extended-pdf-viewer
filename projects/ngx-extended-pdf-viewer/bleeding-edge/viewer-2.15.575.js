@@ -3215,7 +3215,7 @@ exports.PDFPrintServiceFactory = PDFPrintServiceFactory;
 
 /***/ }),
 /* 3 */
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -3227,7 +3227,6 @@ exports.apiPageLayoutToViewerModes = apiPageLayoutToViewerModes;
 exports.apiPageModeToSidebarView = apiPageModeToSidebarView;
 exports.approximateFraction = approximateFraction;
 exports.backtrackBeforeAllVisibleElements = backtrackBeforeAllVisibleElements;
-exports.binarySearchFirstItem = binarySearchFirstItem;
 exports.docStyle = void 0;
 exports.getActiveOrFocusedElement = getActiveOrFocusedElement;
 exports.getPageSizeInches = getPageSizeInches;
@@ -3244,6 +3243,9 @@ exports.removeNullCharacters = removeNullCharacters;
 exports.roundToDivide = roundToDivide;
 exports.scrollIntoView = scrollIntoView;
 exports.watchScroll = watchScroll;
+
+var _pdfjsLib = __webpack_require__(4);
+
 const DEFAULT_SCALE_VALUE = "auto";
 exports.DEFAULT_SCALE_VALUE = DEFAULT_SCALE_VALUE;
 const DEFAULT_SCALE = 1.0;
@@ -3442,32 +3444,6 @@ function removeNullCharacters(str, replaceInvisible = false) {
   return str.replace(NullCharactersRegExp, "");
 }
 
-function binarySearchFirstItem(items, condition, start = 0) {
-  let minIndex = start;
-  let maxIndex = items.length - 1;
-
-  if (maxIndex < 0 || !condition(items[maxIndex])) {
-    return items.length;
-  }
-
-  if (condition(items[minIndex])) {
-    return minIndex;
-  }
-
-  while (minIndex < maxIndex) {
-    const currentIndex = minIndex + maxIndex >> 1;
-    const currentItem = items[currentIndex];
-
-    if (condition(currentItem)) {
-      maxIndex = currentIndex;
-    } else {
-      minIndex = currentIndex + 1;
-    }
-  }
-
-  return minIndex;
-}
-
 function approximateFraction(x) {
   if (Math.floor(x) === x) {
     return [x, 1];
@@ -3590,7 +3566,7 @@ function getVisibleElements({
   const visible = [],
         ids = new Set(),
         numViews = views.length;
-  let firstVisibleElementInd = binarySearchFirstItem(views, horizontal ? isElementNextAfterViewHorizontally : isElementBottomAfterViewTop);
+  let firstVisibleElementInd = (0, _pdfjsLib.binarySearchFirstItem)(views, horizontal ? isElementNextAfterViewHorizontally : isElementBottomAfterViewTop);
 
   if (firstVisibleElementInd > 0 && firstVisibleElementInd < numViews && !horizontal) {
     firstVisibleElementInd = backtrackBeforeAllVisibleElements(firstVisibleElementInd, views, top);
@@ -11342,7 +11318,7 @@ class BaseViewer {
             source: this,
             mode
           });
-          this.#annotationEditorUIManager = new _pdfjsLib.AnnotationEditorUIManager(this.eventBus);
+          this.#annotationEditorUIManager = new _pdfjsLib.AnnotationEditorUIManager(this.container, this.eventBus);
 
           if (mode !== _pdfjsLib.AnnotationEditorType.NONE) {
             this.#annotationEditorUIManager.updateMode(mode);
@@ -12756,12 +12732,14 @@ class AnnotationEditorLayerBuilder {
     this.div = document.createElement("div");
     this.div.className = "annotationEditorLayer";
     this.div.tabIndex = 0;
+    this.pageDiv.append(this.div);
     this.annotationEditorLayer = new _pdfjsLib.AnnotationEditorLayer({
       uiManager: this.#uiManager,
       div: this.div,
       annotationStorage: this.annotationStorage,
       pageIndex: this.pdfPage._pageIndex,
-      l10n: this.l10n
+      l10n: this.l10n,
+      viewport: clonedViewport
     });
     const parameters = {
       viewport: clonedViewport,
@@ -12770,11 +12748,11 @@ class AnnotationEditorLayerBuilder {
       intent
     };
     this.annotationEditorLayer.render(parameters);
-    this.pageDiv.append(this.div);
   }
 
   cancel() {
     this._cancelled = true;
+    this.destroy();
   }
 
   hide() {
@@ -12799,8 +12777,8 @@ class AnnotationEditorLayerBuilder {
     }
 
     this.pageDiv = null;
-    this.div.remove();
     this.annotationEditorLayer.destroy();
+    this.div.remove();
   }
 
 }
@@ -12870,7 +12848,10 @@ const DEFAULT_L10N_STRINGS = {
   printing_not_supported: "Warning: Printing is not fully supported by this browser.",
   printing_not_ready: "Warning: The PDF is not fully loaded for printing.",
   web_fonts_disabled: "Web fonts are disabled: unable to use embedded PDF fonts.",
-  free_text_default_content: "Enter text…"
+  free_text_default_content: "Enter text…",
+  editor_free_text_aria_label: "FreeText Editor",
+  editor_ink_aria_label: "Ink Editor",
+  editor_ink_canvas_aria_label: "User-created image"
 };
 
 function getL10nFallback(key, args) {
