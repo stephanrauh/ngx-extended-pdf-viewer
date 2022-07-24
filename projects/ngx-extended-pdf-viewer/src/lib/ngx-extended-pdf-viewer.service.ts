@@ -330,7 +330,7 @@ export class NgxExtendedPdfViewerService {
                 a.value = currentValue?.value;
               }
             } catch (exception) {
-              debugger;
+              // just ignore it
             }
           }
           result.push({ fieldAnnotation: a, fieldRect, pageNumber: i });

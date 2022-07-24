@@ -16,7 +16,6 @@ export class PdfLightThemeComponent implements OnInit, OnDestroy {
   }
 
   private injectStyle() {
-    debugger;
     const styles = this.document.createElement('STYLE') as HTMLStyleElement;
     styles.id = 'pdf-theme-css';
     styles.innerHTML = css;
@@ -24,7 +23,6 @@ export class PdfLightThemeComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    debugger;
     const styles = this.document.getElementById('pdf-theme-css') as HTMLElement;
     if (styles && styles.parentElement) {
       (styles.parentElement as any).removeChild(styles);
