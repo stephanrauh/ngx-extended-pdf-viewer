@@ -381,3 +381,4 @@
 - 14.0.7 #1447 remove the global CSS when the viewer is removed from the DOM, and restore it when the viewer is created again (workaround of the Angular bug https://github.com/angular/angular/issues/16670)
 - 14.5.0-alpha.0 #1447 replace ViewEncapsulation.None by a home-brewn CSS injection engine because the CSS was never removed removing destroying ngx-extended-pdf-viewer from memory
 - 14.5.0 #1447 updated the README.md
+- 14.5.1 removed debugger statements; updated the bleeding-edge branch of pdf.js; removed an unused dependency
