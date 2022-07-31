@@ -74,6 +74,10 @@ export class AnnotationEditor {
     focusout(event: FocusEvent): void;
     commitOrRemove(): void;
     /**
+     * Commit the data contained in this editor.
+     */
+    commit(): void;
+    /**
      * We use drag-and-drop in order to move an editor on a page.
      * @param {DragEvent} event
      */

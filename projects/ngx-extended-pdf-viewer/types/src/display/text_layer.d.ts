@@ -79,6 +79,7 @@ export class TextLayerRenderTask {
     _capability: import("../shared/util.js").PromiseCapability;
     _renderTimer: any;
     _bounds: any[];
+    _devicePixelRatio: number;
     /**
      * Promise for textLayer rendering task completion.
      * @type {Promise<void>}

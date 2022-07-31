@@ -677,7 +677,7 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#14@#docId": number;
+    static "__#16@#docId": number;
     _capability: import("../shared/util.js").PromiseCapability;
     _transport: any;
     _worker: any;
@@ -1317,7 +1317,7 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#15@#workerPorts": WeakMap<object, any>;
+    static "__#17@#workerPorts": WeakMap<object, any>;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */
@@ -1374,7 +1374,6 @@ export namespace PDFWorkerUtil {
  */
 export class RenderTask {
     constructor(internalRenderTask: any);
-    _internalRenderTask: any;
     /**
      * Callback for incremental rendering -- a function that will be called
      * each time the rendering is paused.  To continue rendering call the
@@ -1393,6 +1392,12 @@ export class RenderTask {
      * this object extends will be rejected when cancelled.
      */
     cancel(): void;
+    /**
+     * Whether form fields are rendered separately from the main operatorList.
+     * @type {boolean}
+     */
+    get separateAnnots(): boolean;
+    #private;
 }
 /**
  * Sets the function that instantiates an {IPDFStream} as an alternative PDF

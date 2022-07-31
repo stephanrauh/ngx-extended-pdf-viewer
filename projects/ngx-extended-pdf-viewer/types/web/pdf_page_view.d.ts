@@ -125,12 +125,13 @@ export class PDFPageView implements IRenderableView {
         promise: any;
         onRenderContinue(cont: any): void;
         cancel(): void;
+        readonly separateAnnots: any;
     } | null;
     paintedViewportMap: WeakMap<object, any>;
     renderingState: number;
     resume: (() => void) | null;
     _renderError: any;
-    _isStandalone: boolean;
+    _isStandalone: boolean | undefined;
     _annotationCanvasMap: any;
     annotationLayer: any;
     annotationEditorLayer: any;
@@ -198,6 +199,7 @@ export class PDFPageView implements IRenderableView {
         promise: any;
         onRenderContinue(cont: any): void;
         cancel(): void;
+        readonly separateAnnots: any;
     };
     canvas: HTMLCanvasElement | undefined;
     outputScale: OutputScale | undefined;
@@ -205,6 +207,7 @@ export class PDFPageView implements IRenderableView {
         promise: any;
         onRenderContinue(cont: any): void;
         cancel(): void;
+        readonly separateAnnots: boolean;
     };
     svg: any;
     /**
@@ -213,6 +216,11 @@ export class PDFPageView implements IRenderableView {
     setPageLabel(label: string | null): void;
     determineMaxDimensions(): number;
     maxWidth: number | undefined;
+    /**
+     * For use by the `PDFThumbnailView.setImage`-method.
+     * @ignore
+     */
+    get thumbnailCanvas(): HTMLCanvasElement | null | undefined;
     #private;
 }
 import { OutputScale } from "./ui_utils.js";

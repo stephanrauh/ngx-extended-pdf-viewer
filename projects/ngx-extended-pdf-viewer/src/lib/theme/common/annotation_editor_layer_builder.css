@@ -138,3 +138,15 @@
   height: 100%;
   touch-action: none;
 }
+
+#editorNone::before {
+  mask-image: var(--toolbarButton-editorNone-icon);
+}
+
+#editorFreeText::before {
+  mask-image: var(--toolbarButton-editorFreeText-icon);
+}
+
+#editorInk::before {
+  mask-image: var(--toolbarButton-editorInk-icon);
+}

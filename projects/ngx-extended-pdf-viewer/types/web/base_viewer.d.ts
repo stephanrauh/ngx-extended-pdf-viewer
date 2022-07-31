@@ -333,63 +333,143 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFAnnotationEdi
     private _cancelRendering;
     forceRendering(currentlyVisiblePages: any): boolean;
     /**
-     * @param {HTMLDivElement} textLayerDiv
-     * @param {number} pageIndex
-     * @param {PageViewport} viewport
-     * @param {boolean} enhanceTextSelection
-     * @param {EventBus} eventBus
-     * @param {TextHighlighter} highlighter
+     * @typedef {Object} CreateTextLayerBuilderParameters
+     * @property {HTMLDivElement} textLayerDiv
+     * @property {number} pageIndex
+     * @property {PageViewport} viewport
+     * @property {boolean} [enhanceTextSelection]
+     * @property {EventBus} eventBus
+     * @property {TextHighlighter} highlighter
+     */
+    /**
+     * @param {CreateTextLayerBuilderParameters}
      * @returns {TextLayerBuilder}
      */
-    createTextLayerBuilder(textLayerDiv: HTMLDivElement, pageIndex: number, viewport: PageViewport, enhanceTextSelection: boolean | undefined, eventBus: EventBus, highlighter: TextHighlighter): TextLayerBuilder;
+    createTextLayerBuilder({ textLayerDiv, pageIndex, viewport, enhanceTextSelection, eventBus, highlighter, }: {
+        textLayerDiv: HTMLDivElement;
+        pageIndex: number;
+        viewport: PageViewport;
+        enhanceTextSelection?: boolean | undefined;
+        eventBus: EventBus;
+        highlighter: TextHighlighter;
+    }): TextLayerBuilder;
     /**
-     * @param {number} pageIndex
-     * @param {EventBus} eventBus
+     * @typedef {Object} CreateTextHighlighterParameters
+     * @property {number} pageIndex
+     * @property {EventBus} eventBus
+     */
+    /**
+     * @param {CreateTextHighlighterParameters}
      * @returns {TextHighlighter}
      */
-    createTextHighlighter(pageIndex: number, eventBus: EventBus): TextHighlighter;
+    createTextHighlighter({ pageIndex, eventBus }: {
+        pageIndex: number;
+        eventBus: EventBus;
+    }): TextHighlighter;
     /**
-     * @param {HTMLDivElement} pageDiv
-     * @param {PDFPageProxy} pdfPage
-     * @param {AnnotationStorage} [annotationStorage] - Storage for annotation
+     * @typedef {Object} CreateAnnotationLayerBuilderParameters
+     * @property {HTMLDivElement} pageDiv
+     * @property {PDFPageProxy} pdfPage
+     * @property {AnnotationStorage} [annotationStorage] - Storage for annotation
      *   data in forms.
-     * @param {string} [imageResourcesPath] - Path for image resources, mainly
+     * @property {string} [imageResourcesPath] - Path for image resources, mainly
      *   for annotation icons. Include trailing slash.
-     * @param {boolean} renderForms
-     * @param {IL10n} l10n
-     * @param {boolean} [enableScripting]
-     * @param {Promise<boolean>} [hasJSActionsPromise]
-     * @param {Object} [mouseState]
-     * @param {Promise<Object<string, Array<Object>> | null>}
+     * @property {boolean} renderForms
+     * @property {IL10n} l10n
+     * @property {boolean} [enableScripting]
+     * @property {Promise<boolean>} [hasJSActionsPromise]
+     * @property {Object} [mouseState]
+     * @property {Promise<Object<string, Array<Object>> | null>}
      *   [fieldObjectsPromise]
-     * @param {Map<string, HTMLCanvasElement>} [annotationCanvasMap]
+     * @property {Map<string, HTMLCanvasElement>} [annotationCanvasMap] - Map some
+     *   annotation ids with canvases used to render them.
+     */
+    /**
+     * @param {CreateAnnotationLayerBuilderParameters}
      * @returns {AnnotationLayerBuilder}
      */
-    createAnnotationLayerBuilder(pageDiv: HTMLDivElement, pdfPage: PDFPageProxy, annotationStorage?: any, imageResourcesPath?: string | undefined, renderForms?: boolean, l10n?: IL10n, enableScripting?: boolean | undefined, hasJSActionsPromise?: Promise<boolean> | undefined, mouseState?: Object | undefined, fieldObjectsPromise?: Promise<{
-        [x: string]: Object[];
-    } | null> | undefined, annotationCanvasMap?: Map<string, HTMLCanvasElement> | undefined): AnnotationLayerBuilder;
+    createAnnotationLayerBuilder({ pageDiv, pdfPage, annotationStorage, imageResourcesPath, renderForms, l10n, enableScripting, hasJSActionsPromise, mouseState, fieldObjectsPromise, annotationCanvasMap, }: {
+        pageDiv: HTMLDivElement;
+        pdfPage: PDFPageProxy;
+        /**
+         * - Storage for annotation
+         * data in forms.
+         */
+        annotationStorage?: any;
+        /**
+         * - Path for image resources, mainly
+         * for annotation icons. Include trailing slash.
+         */
+        imageResourcesPath?: string | undefined;
+        renderForms: boolean;
+        l10n: IL10n;
+        enableScripting?: boolean | undefined;
+        hasJSActionsPromise?: Promise<boolean> | undefined;
+        mouseState?: Object | undefined;
+        fieldObjectsPromise?: Promise<{
+            [x: string]: Object[];
+        } | null> | undefined;
+        /**
+         * - Map some
+         * annotation ids with canvases used to render them.
+         */
+        annotationCanvasMap?: Map<string, HTMLCanvasElement> | undefined;
+    }): AnnotationLayerBuilder;
     /**
-     * @param {HTMLDivElement} pageDiv
-     * @param {PDFPageProxy} pdfPage
-     * @param {IL10n} l10n
-     * @param {AnnotationStorage} [annotationStorage] - Storage for annotation
+     * @typedef {Object} CreateAnnotationEditorLayerBuilderParameters
+     * @property {AnnotationEditorUIManager} [uiManager]
+     * @property {HTMLDivElement} pageDiv
+     * @property {PDFPageProxy} pdfPage
+     * @property {IL10n} l10n
+     * @property {AnnotationStorage} [annotationStorage] - Storage for annotation
      *   data in forms.
+     */
+    /**
+     * @param {CreateAnnotationEditorLayerBuilderParameters}
      * @returns {AnnotationEditorLayerBuilder}
      */
-    createAnnotationEditorLayerBuilder(pageDiv: HTMLDivElement, pdfPage: PDFPageProxy, l10n: IL10n, annotationStorage?: any): AnnotationEditorLayerBuilder;
+    createAnnotationEditorLayerBuilder({ uiManager, pageDiv, pdfPage, l10n, annotationStorage, }: {
+        uiManager?: any;
+        pageDiv: HTMLDivElement;
+        pdfPage: PDFPageProxy;
+        l10n: IL10n;
+        /**
+         * - Storage for annotation
+         * data in forms.
+         */
+        annotationStorage?: any;
+    }): AnnotationEditorLayerBuilder;
     /**
-     * @param {HTMLDivElement} pageDiv
-     * @param {PDFPageProxy} pdfPage
-     * @param {AnnotationStorage} [annotationStorage] - Storage for annotation
+     * @typedef {Object} CreateXfaLayerBuilderParameters
+     * @property {HTMLDivElement} pageDiv
+     * @property {PDFPageProxy} pdfPage
+     * @property {AnnotationStorage} [annotationStorage] - Storage for annotation
      *   data in forms.
+     */
+    /**
+     * @param {CreateXfaLayerBuilderParameters}
      * @returns {XfaLayerBuilder}
      */
-    createXfaLayerBuilder(pageDiv: HTMLDivElement, pdfPage: PDFPageProxy, annotationStorage?: any): XfaLayerBuilder;
+    createXfaLayerBuilder({ pageDiv, pdfPage, annotationStorage, }: {
+        pageDiv: HTMLDivElement;
+        pdfPage: PDFPageProxy;
+        /**
+         * - Storage for annotation
+         * data in forms.
+         */
+        annotationStorage?: any;
+    }): XfaLayerBuilder;
     /**
-     * @param {PDFPageProxy} pdfPage
+     * @typedef {Object} CreateStructTreeLayerBuilderParameters
+     * @property {PDFPageProxy} pdfPage
+     */
+    /**
+     * @param {CreateStructTreeLayerBuilderParameters}
      * @returns {StructTreeLayerBuilder}
      */
-    createStructTreeLayerBuilder(pdfPage: PDFPageProxy): StructTreeLayerBuilder;
+    createStructTreeLayerBuilder({ pdfPage }: {
+        pdfPage: PDFPageProxy;
+    }): StructTreeLayerBuilder;
     /**
      * @type {boolean} Whether all pages of the PDF document have identical
      *   widths and heights.

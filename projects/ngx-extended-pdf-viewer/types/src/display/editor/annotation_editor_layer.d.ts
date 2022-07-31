@@ -7,7 +7,7 @@ export type AnnotationEditorLayerOptions = {
     div: HTMLDivElement;
     uiManager: AnnotationEditorUIManager;
     enabled: boolean;
-    annotationStorag: AnnotationStorage;
+    annotationStorage: AnnotationStorage;
     pageIndex: number;
     l10n: any;
 };
@@ -17,7 +17,7 @@ export type AnnotationEditorLayerOptions = {
  * @property {HTMLDivElement} div
  * @property {AnnotationEditorUIManager} uiManager
  * @property {boolean} enabled
- * @property {AnnotationStorage} annotationStorag
+ * @property {AnnotationStorage} annotationStorage
  * @property {number} pageIndex
  * @property {IL10n} l10n
  */
@@ -39,7 +39,7 @@ export class AnnotationEditorLayer {
      * @param {AnnotationEditorLayerOptions} options
      */
     constructor(options: AnnotationEditorLayerOptions);
-    annotationStorage: any;
+    annotationStorage: import("../annotation_storage.js").AnnotationStorage;
     pageIndex: number;
     div: HTMLDivElement;
     get textLayerElements(): any;
@@ -112,6 +112,11 @@ export class AnnotationEditorLayer {
      * @param {AnnotationEditor} editor
      */
     add(editor: AnnotationEditor): void;
+    /**
+     * Add an editor in the annotation storage.
+     * @param {AnnotationEditor} editor
+     */
+    addToAnnotationStorage(editor: AnnotationEditor): void;
     /**
      * Add or rebuild depending if it has been removed or not.
      * @param {AnnotationEditor} editor

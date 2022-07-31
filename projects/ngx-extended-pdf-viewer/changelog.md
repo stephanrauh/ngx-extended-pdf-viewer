@@ -382,3 +382,4 @@
 - 14.5.0-alpha.0 #1447 replace ViewEncapsulation.None by a home-brewn CSS injection engine because the CSS was never removed removing destroying ngx-extended-pdf-viewer from memory
 - 14.5.0 #1447 updated the README.md
 - 14.5.1 removed debugger statements; updated the bleeding-edge branch of pdf.js; removed an unused dependency
+- 14.5.2 prepared updating to pdf.js 2.15; #1463 restored support for Japanese fonts; removed a redundant null check from `file-info.component.html`

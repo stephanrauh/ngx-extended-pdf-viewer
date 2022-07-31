@@ -273,3 +273,9 @@ export class KeyboardManager {
     exec(self: any, event: KeyboardEvent): void;
     #private;
 }
+/**
+ * Convert a number between 0 and 100 into an hex number between 0 and 255.
+ * @param {number} opacity
+ * @return {string}
+ */
+export function opacityToHex(opacity: number): string;

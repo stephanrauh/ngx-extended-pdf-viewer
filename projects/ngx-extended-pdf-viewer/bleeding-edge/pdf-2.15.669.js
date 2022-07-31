@@ -107,10 +107,12 @@ const AnnotationEditorType = {
 };
 exports.AnnotationEditorType = AnnotationEditorType;
 const AnnotationEditorParamsType = {
-  FREETEXT_SIZE: 0,
-  FREETEXT_COLOR: 1,
-  INK_COLOR: 2,
-  INK_THICKNESS: 3
+  FREETEXT_SIZE: 1,
+  FREETEXT_COLOR: 2,
+  FREETEXT_OPACITY: 3,
+  INK_COLOR: 11,
+  INK_THICKNESS: 12,
+  INK_OPACITY: 13
 };
 exports.AnnotationEditorParamsType = AnnotationEditorParamsType;
 const PermissionFlag = {
@@ -1583,6 +1585,10 @@ function getRGB(color) {
     return color.slice(4, -1).split(",").map(x => parseInt(x));
   }
 
+  if (color.startsWith("rgba(")) {
+    return color.slice(5, -1).split(",").map(x => parseInt(x)).slice(0, 3);
+  }
+
   (0, _util.warn)(`Not a valid color format: "${color}"`);
   return [0, 0, 0];
 }
@@ -1983,7 +1989,9 @@ function getDocument(src) {
     params.maxImageSize = -1;
   }
 
-  if (typeof params.cMapUrl !== "string") {
+  if (typeof params.cMapUrl === "function") {
+    params.cMapUrl = params.cMapUrl();
+  } else if (typeof params.cMapUrl !== "string") {
     params.cMapUrl = null;
   }
 
@@ -2107,7 +2115,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.15.623',
+    apiVersion: '2.15.669',
     source: {
       data: source.data,
       url: source.url,
@@ -2579,7 +2587,8 @@ class PDFPageProxy {
       intentState.operatorList = {
         fnArray: [],
         argsArray: [],
-        lastChunk: false
+        lastChunk: false,
+        separateAnnots: null
       };
 
       if (this._stats) {
@@ -2689,7 +2698,8 @@ class PDFPageProxy {
       intentState.operatorList = {
         fnArray: [],
         argsArray: [],
-        lastChunk: false
+        lastChunk: false,
+        separateAnnots: null
       };
 
       if (this._stats) {
@@ -2866,6 +2876,7 @@ class PDFPageProxy {
     }
 
     intentState.operatorList.lastChunk = operatorListChunk.lastChunk;
+    intentState.operatorList.separateAnnots = operatorListChunk.separateAnnots;
 
     for (const internalRenderTask of intentState.renderTasks) {
       internalRenderTask.operatorListChanged();
@@ -4077,17 +4088,34 @@ class PDFObjects {
 }
 
 class RenderTask {
+  #internalRenderTask = null;
+
   constructor(internalRenderTask) {
-    this._internalRenderTask = internalRenderTask;
+    this.#internalRenderTask = internalRenderTask;
     this.onContinue = null;
   }
 
   get promise() {
-    return this._internalRenderTask.capability.promise;
+    return this.#internalRenderTask.capability.promise;
   }
 
   cancel() {
-    this._internalRenderTask.cancel();
+    this.#internalRenderTask.cancel();
+  }
+
+  get separateAnnots() {
+    const {
+      separateAnnots
+    } = this.#internalRenderTask.operatorList;
+
+    if (!separateAnnots) {
+      return false;
+    }
+
+    const {
+      annotationCanvasMap
+    } = this.#internalRenderTask;
+    return separateAnnots.form || separateAnnots.canvas && annotationCanvasMap?.size > 0;
   }
 
 }
@@ -4270,9 +4298,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.15.623';
+const version = '2.15.669';
 exports.version = version;
-const build = 'cf7776620';
+const build = '2b22624ec';
 exports.build = build;
 
 /***/ }),
@@ -4393,6 +4421,10 @@ class AnnotationStorage {
         }
       }
     }
+  }
+
+  has(key) {
+    return this._storage.has(key);
   }
 
   getAll() {
@@ -4572,6 +4604,10 @@ class AnnotationEditor {
     }
   }
 
+  commit() {
+    this.parent.addToAnnotationStorage(this);
+  }
+
   dragstart(event) {
     const rect = this.parent.div.getBoundingClientRect();
     this.startX = event.clientX - rect.x;
@@ -4644,11 +4680,14 @@ class AnnotationEditor {
   }
 
   pointerdown(event) {
-    if (event.button !== 0) {
+    const isMac = _tools.KeyboardManager.platform.isMac;
+
+    if (event.button !== 0 || event.ctrlKey && isMac) {
       event.preventDefault();
+      return;
     }
 
-    if (event.ctrlKey || event.shiftKey) {
+    if (event.ctrlKey && !isMac || event.shiftKey || event.metaKey && isMac) {
       this.parent.toggleSelected(this);
     } else {
       this.parent.setSelected(this);
@@ -4824,6 +4863,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.KeyboardManager = exports.CommandManager = exports.ColorManager = exports.AnnotationEditorUIManager = void 0;
 exports.bindEvents = bindEvents;
+exports.opacityToHex = opacityToHex;
 
 var _util = __w_pdfjs_require__(1);
 
@@ -4833,6 +4873,10 @@ function bindEvents(obj, element, names) {
   for (const name of names) {
     element.addEventListener(name, obj[name].bind(obj));
   }
+}
+
+function opacityToHex(opacity) {
+  return Math.round(Math.min(255, Math.max(1, 255 * opacity))).toString(16).padStart(2, "0");
 }
 
 class IdManager {
@@ -4846,6 +4890,7 @@ class IdManager {
 
 class CommandManager {
   #commands = [];
+  #locked = false;
   #maxSize;
   #position = -1;
 
@@ -4865,6 +4910,10 @@ class CommandManager {
       cmd();
     }
 
+    if (this.#locked) {
+      return;
+    }
+
     const save = {
       cmd,
       undo,
@@ -4872,6 +4921,10 @@ class CommandManager {
     };
 
     if (this.#position === -1) {
+      if (this.#commands.length > 0) {
+        this.#commands.length = 0;
+      }
+
       this.#position = 0;
       this.#commands.push(save);
       return;
@@ -4906,14 +4959,18 @@ class CommandManager {
       return;
     }
 
+    this.#locked = true;
     this.#commands[this.#position].undo();
+    this.#locked = false;
     this.#position -= 1;
   }
 
   redo() {
     if (this.#position < this.#commands.length - 1) {
       this.#position += 1;
+      this.#locked = true;
       this.#commands[this.#position].cmd();
+      this.#locked = false;
     }
   }
 
@@ -4998,6 +5055,7 @@ class KeyboardManager {
     }
 
     callback.bind(self)();
+    event.stopPropagation();
     event.preventDefault();
   }
 
@@ -5105,7 +5163,7 @@ class AnnotationEditorUIManager {
     hasSelectedEditor: false
   };
   #container = null;
-  static _keyboardManager = new KeyboardManager([[["ctrl+a", "mac+meta+a"], AnnotationEditorUIManager.prototype.selectAll], [["ctrl+c", "mac+meta+c"], AnnotationEditorUIManager.prototype.copy], [["ctrl+v", "mac+meta+v"], AnnotationEditorUIManager.prototype.paste], [["ctrl+x", "mac+meta+x"], AnnotationEditorUIManager.prototype.cut], [["ctrl+z", "mac+meta+z"], AnnotationEditorUIManager.prototype.undo], [["ctrl+y", "ctrl+shift+Z", "mac+meta+shift+Z"], AnnotationEditorUIManager.prototype.redo], [["Backspace", "alt+Backspace", "ctrl+Backspace", "shift+Backspace", "mac+Backspace", "mac+alt+Backspace", "mac+ctrl+Backspace", "Delete", "ctrl+Delete", "shift+Delete"], AnnotationEditorUIManager.prototype.delete], [["Escape"], AnnotationEditorUIManager.prototype.unselectAll]]);
+  static _keyboardManager = new KeyboardManager([[["ctrl+a", "mac+meta+a"], AnnotationEditorUIManager.prototype.selectAll], [["ctrl+c", "mac+meta+c"], AnnotationEditorUIManager.prototype.copy], [["ctrl+v", "mac+meta+v"], AnnotationEditorUIManager.prototype.paste], [["ctrl+x", "mac+meta+x"], AnnotationEditorUIManager.prototype.cut], [["ctrl+z", "mac+meta+z"], AnnotationEditorUIManager.prototype.undo], [["ctrl+y", "ctrl+shift+Z", "mac+meta+shift+Z"], AnnotationEditorUIManager.prototype.redo], [["Backspace", "alt+Backspace", "ctrl+Backspace", "shift+Backspace", "mac+Backspace", "mac+alt+Backspace", "mac+ctrl+Backspace", "Delete", "ctrl+Delete", "shift+Delete"], AnnotationEditorUIManager.prototype.delete], [["Escape", "mac+Escape"], AnnotationEditorUIManager.prototype.unselectAll]]);
 
   constructor(container, eventBus) {
     this.#container = container;
@@ -10317,21 +10375,39 @@ exports.OptionalContentConfig = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
+const INTERNAL = Symbol("INTERNAL");
+
 class OptionalContentGroup {
+  #visible = true;
+
   constructor(name, intent) {
-    this.visible = true;
     this.name = name;
     this.intent = intent;
+  }
+
+  get visible() {
+    return this.#visible;
+  }
+
+  _setVisible(internal, visible) {
+    if (internal !== INTERNAL) {
+      (0, _util.unreachable)("Internal method `_setVisible` called.");
+    }
+
+    this.#visible = visible;
   }
 
 }
 
 class OptionalContentConfig {
+  #cachedHasInitialVisibility = true;
+  #groups = new Map();
+  #initialVisibility = null;
+  #order = null;
+
   constructor(data) {
     this.name = null;
     this.creator = null;
-    this._order = null;
-    this._groups = new Map();
 
     if (data === null) {
       return;
@@ -10339,28 +10415,34 @@ class OptionalContentConfig {
 
     this.name = data.name;
     this.creator = data.creator;
-    this._order = data.order;
+    this.#order = data.order;
 
     for (const group of data.groups) {
-      this._groups.set(group.id, new OptionalContentGroup(group.name, group.intent));
+      this.#groups.set(group.id, new OptionalContentGroup(group.name, group.intent));
     }
 
     if (data.baseState === "OFF") {
-      for (const group of this._groups) {
-        group.visible = false;
+      for (const group of this.#groups.values()) {
+        group._setVisible(INTERNAL, false);
       }
     }
 
     for (const on of data.on) {
-      this._groups.get(on).visible = true;
+      this.#groups.get(on)._setVisible(INTERNAL, true);
     }
 
     for (const off of data.off) {
-      this._groups.get(off).visible = false;
+      this.#groups.get(off)._setVisible(INTERNAL, false);
+    }
+
+    this.#initialVisibility = new Map();
+
+    for (const [id, group] of this.#groups) {
+      this.#initialVisibility.set(id, group.visible);
     }
   }
 
-  _evaluateVisibilityExpression(array) {
+  #evaluateVisibilityExpression(array) {
     const length = array.length;
 
     if (length < 2) {
@@ -10374,9 +10456,9 @@ class OptionalContentConfig {
       let state;
 
       if (Array.isArray(element)) {
-        state = this._evaluateVisibilityExpression(element);
-      } else if (this._groups.has(element)) {
-        state = this._groups.get(element).visible;
+        state = this.#evaluateVisibilityExpression(element);
+      } else if (this.#groups.has(element)) {
+        state = this.#groups.get(element).visible;
       } else {
         (0, _util.warn)(`Optional content group not found: ${element}`);
         return true;
@@ -10409,7 +10491,7 @@ class OptionalContentConfig {
   }
 
   isVisible(group) {
-    if (this._groups.size === 0) {
+    if (this.#groups.size === 0) {
       return true;
     }
 
@@ -10419,25 +10501,25 @@ class OptionalContentConfig {
     }
 
     if (group.type === "OCG") {
-      if (!this._groups.has(group.id)) {
+      if (!this.#groups.has(group.id)) {
         (0, _util.warn)(`Optional content group not found: ${group.id}`);
         return true;
       }
 
-      return this._groups.get(group.id).visible;
+      return this.#groups.get(group.id).visible;
     } else if (group.type === "OCMD") {
       if (group.expression) {
-        return this._evaluateVisibilityExpression(group.expression);
+        return this.#evaluateVisibilityExpression(group.expression);
       }
 
       if (!group.policy || group.policy === "AnyOn") {
         for (const id of group.ids) {
-          if (!this._groups.has(id)) {
+          if (!this.#groups.has(id)) {
             (0, _util.warn)(`Optional content group not found: ${id}`);
             return true;
           }
 
-          if (this._groups.get(id).visible) {
+          if (this.#groups.get(id).visible) {
             return true;
           }
         }
@@ -10445,12 +10527,12 @@ class OptionalContentConfig {
         return false;
       } else if (group.policy === "AllOn") {
         for (const id of group.ids) {
-          if (!this._groups.has(id)) {
+          if (!this.#groups.has(id)) {
             (0, _util.warn)(`Optional content group not found: ${id}`);
             return true;
           }
 
-          if (!this._groups.get(id).visible) {
+          if (!this.#groups.get(id).visible) {
             return false;
           }
         }
@@ -10458,12 +10540,12 @@ class OptionalContentConfig {
         return true;
       } else if (group.policy === "AnyOff") {
         for (const id of group.ids) {
-          if (!this._groups.has(id)) {
+          if (!this.#groups.has(id)) {
             (0, _util.warn)(`Optional content group not found: ${id}`);
             return true;
           }
 
-          if (!this._groups.get(id).visible) {
+          if (!this.#groups.get(id).visible) {
             return true;
           }
         }
@@ -10471,12 +10553,12 @@ class OptionalContentConfig {
         return false;
       } else if (group.policy === "AllOff") {
         for (const id of group.ids) {
-          if (!this._groups.has(id)) {
+          if (!this.#groups.has(id)) {
             (0, _util.warn)(`Optional content group not found: ${id}`);
             return true;
           }
 
-          if (this._groups.get(id).visible) {
+          if (this.#groups.get(id).visible) {
             return false;
           }
         }
@@ -10493,32 +10575,50 @@ class OptionalContentConfig {
   }
 
   setVisibility(id, visible = true) {
-    if (!this._groups.has(id)) {
+    if (!this.#groups.has(id)) {
       (0, _util.warn)(`Optional content group not found: ${id}`);
       return;
     }
 
-    this._groups.get(id).visible = !!visible;
+    this.#groups.get(id)._setVisible(INTERNAL, !!visible);
+
+    this.#cachedHasInitialVisibility = null;
+  }
+
+  get hasInitialVisibility() {
+    if (this.#cachedHasInitialVisibility !== null) {
+      return this.#cachedHasInitialVisibility;
+    }
+
+    for (const [id, group] of this.#groups) {
+      const visible = this.#initialVisibility.get(id);
+
+      if (group.visible !== visible) {
+        return this.#cachedHasInitialVisibility = false;
+      }
+    }
+
+    return this.#cachedHasInitialVisibility = true;
   }
 
   getOrder() {
-    if (!this._groups.size) {
+    if (!this.#groups.size) {
       return null;
     }
 
-    if (this._order) {
-      return this._order.slice();
+    if (this.#order) {
+      return this.#order.slice();
     }
 
-    return Array.from(this._groups.keys());
+    return [...this.#groups.keys()];
   }
 
   getGroups() {
-    return this._groups.size > 0 ? (0, _util.objectFromMap)(this._groups) : null;
+    return this.#groups.size > 0 ? (0, _util.objectFromMap)(this.#groups) : null;
   }
 
   getGroup(id) {
-    return this._groups.get(id) || null;
+    return this.#groups.get(id) || null;
   }
 
 }
@@ -11021,9 +11121,9 @@ exports.AnnotationEditorLayer = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
-var _display_utils = __w_pdfjs_require__(3);
-
 var _tools = __w_pdfjs_require__(8);
+
+var _display_utils = __w_pdfjs_require__(3);
 
 var _freetext = __w_pdfjs_require__(23);
 
@@ -11332,7 +11432,7 @@ class AnnotationEditorLayer {
 
   add(editor) {
     this.#changeParent(editor);
-    this.annotationStorage.setValue(editor.id, editor);
+    this.addToAnnotationStorage(editor);
     this.#uiManager.addEditor(editor);
     this.attach(editor);
 
@@ -11344,6 +11444,12 @@ class AnnotationEditorLayer {
 
     this.moveDivInDOM(editor);
     editor.onceAdded();
+  }
+
+  addToAnnotationStorage(editor) {
+    if (!editor.isEmpty() && !this.annotationStorage.has(editor.id)) {
+      this.annotationStorage.setValue(editor.id, editor);
+    }
   }
 
   addOrRebuild(editor) {
@@ -11447,6 +11553,12 @@ class AnnotationEditorLayer {
   }
 
   pointerup(event) {
+    const isMac = _tools.KeyboardManager.platform.isMac;
+
+    if (event.button !== 0 || event.ctrlKey && isMac) {
+      return;
+    }
+
     if (event.target !== this.div) {
       return;
     }
@@ -11460,6 +11572,12 @@ class AnnotationEditorLayer {
   }
 
   pointerdown(event) {
+    const isMac = _tools.KeyboardManager.platform.isMac;
+
+    if (event.button !== 0 || event.ctrlKey && isMac) {
+      return;
+    }
+
     if (event.target !== this.div) {
       return;
     }
@@ -11715,6 +11833,10 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   }
 
   enableEditMode() {
+    if (this.isInEditMode()) {
+      return;
+    }
+
     this.parent.setEditingState(false);
     this.parent.updateToolbar(_util.AnnotationEditorType.FREETEXT);
     super.enableEditMode();
@@ -11727,6 +11849,10 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   }
 
   disableEditMode() {
+    if (!this.isInEditMode()) {
+      return;
+    }
+
     this.parent.setEditingState(true);
     super.disableEditMode();
     this.overlayDiv.classList.add("enabled");
@@ -11735,6 +11861,7 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     this.editorDiv.removeEventListener("keydown", this.#boundEditorDivKeydown);
     this.editorDiv.removeEventListener("focus", this.#boundEditorDivFocus);
     this.editorDiv.removeEventListener("blur", this.#boundEditorDivBlur);
+    this.div.focus();
     this.isEditing = false;
   }
 
@@ -11748,7 +11875,6 @@ class FreeTextEditor extends _editor.AnnotationEditor {
 
   onceAdded() {
     if (this.width) {
-      this.parent.setActiveEditor(this);
       return;
     }
 
@@ -11757,7 +11883,7 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   }
 
   isEmpty() {
-    return this.editorDiv.innerText.trim() === "";
+    return !this.editorDiv || this.editorDiv.innerText.trim() === "";
   }
 
   remove() {
@@ -11797,6 +11923,8 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   }
 
   commit() {
+    super.commit();
+
     if (!this.#hasAlreadyBeenCommitted) {
       this.#hasAlreadyBeenCommitted = true;
       this.parent.addUndoableEditor(this);
@@ -11959,6 +12087,8 @@ var _editor = __w_pdfjs_require__(7);
 
 var _pdfjsFitCurve = __w_pdfjs_require__(25);
 
+var _tools = __w_pdfjs_require__(8);
+
 const RESIZER_SIZE = 16;
 
 class InkEditor extends _editor.AnnotationEditor {
@@ -11971,10 +12101,13 @@ class InkEditor extends _editor.AnnotationEditor {
   #boundCanvasPointerdown = this.canvasPointerdown.bind(this);
   #disableEditing = false;
   #isCanvasInitialized = false;
+  #lastPoint = null;
   #observer = null;
   #realWidth = 0;
   #realHeight = 0;
+  #requestFrameCallback = null;
   static _defaultColor = null;
+  static _defaultOpacity = 1;
   static _defaultThickness = 1;
   static _l10nPromise;
 
@@ -11984,6 +12117,7 @@ class InkEditor extends _editor.AnnotationEditor {
     });
     this.color = params.color || null;
     this.thickness = params.thickness || null;
+    this.opacity = params.opacity || null;
     this.paths = [];
     this.bezierPath2D = [];
     this.currentPath = [];
@@ -12006,6 +12140,10 @@ class InkEditor extends _editor.AnnotationEditor {
       case _util.AnnotationEditorParamsType.INK_COLOR:
         InkEditor._defaultColor = value;
         break;
+
+      case _util.AnnotationEditorParamsType.INK_OPACITY:
+        InkEditor._defaultOpacity = value / 100;
+        break;
     }
   }
 
@@ -12018,15 +12156,19 @@ class InkEditor extends _editor.AnnotationEditor {
       case _util.AnnotationEditorParamsType.INK_COLOR:
         this.#updateColor(value);
         break;
+
+      case _util.AnnotationEditorParamsType.INK_OPACITY:
+        this.#updateOpacity(value);
+        break;
     }
   }
 
   static get defaultPropertiesToUpdate() {
-    return [[_util.AnnotationEditorParamsType.INK_THICKNESS, InkEditor._defaultThickness], [_util.AnnotationEditorParamsType.INK_COLOR, InkEditor._defaultColor || _editor.AnnotationEditor._defaultLineColor]];
+    return [[_util.AnnotationEditorParamsType.INK_THICKNESS, InkEditor._defaultThickness], [_util.AnnotationEditorParamsType.INK_COLOR, InkEditor._defaultColor || _editor.AnnotationEditor._defaultLineColor], [_util.AnnotationEditorParamsType.INK_OPACITY, Math.round(InkEditor._defaultOpacity * 100)]];
   }
 
   get propertiesToUpdate() {
-    return [[_util.AnnotationEditorParamsType.INK_THICKNESS, this.thickness || InkEditor._defaultThickness], [_util.AnnotationEditorParamsType.INK_COLOR, this.color || InkEditor._defaultColor || _editor.AnnotationEditor._defaultLineColor]];
+    return [[_util.AnnotationEditorParamsType.INK_THICKNESS, this.thickness || InkEditor._defaultThickness], [_util.AnnotationEditorParamsType.INK_COLOR, this.color || InkEditor._defaultColor || _editor.AnnotationEditor._defaultLineColor], [_util.AnnotationEditorParamsType.INK_OPACITY, Math.round(100 * (this.opacity ?? InkEditor._defaultOpacity))]];
   }
 
   #updateThickness(thickness) {
@@ -12034,11 +12176,11 @@ class InkEditor extends _editor.AnnotationEditor {
     this.parent.addCommands({
       cmd: () => {
         this.thickness = thickness;
-        this.#fitToContent(true);
+        this.#fitToContent();
       },
       undo: () => {
         this.thickness = savedThickness;
-        this.#fitToContent(true);
+        this.#fitToContent();
       },
       mustExec: true,
       type: _util.AnnotationEditorParamsType.INK_THICKNESS,
@@ -12060,6 +12202,25 @@ class InkEditor extends _editor.AnnotationEditor {
       },
       mustExec: true,
       type: _util.AnnotationEditorParamsType.INK_COLOR,
+      overwriteIfSameType: true,
+      keepUndo: true
+    });
+  }
+
+  #updateOpacity(opacity) {
+    opacity /= 100;
+    const savedOpacity = this.opacity;
+    this.parent.addCommands({
+      cmd: () => {
+        this.opacity = opacity;
+        this.#redraw();
+      },
+      undo: () => {
+        this.opacity = savedOpacity;
+        this.#redraw();
+      },
+      mustExec: true,
+      type: _util.AnnotationEditorParamsType.INK_OPACITY,
       overwriteIfSameType: true,
       keepUndo: true
     });
@@ -12160,7 +12321,7 @@ class InkEditor extends _editor.AnnotationEditor {
     this.ctx.lineCap = "round";
     this.ctx.lineJoin = "round";
     this.ctx.miterLimit = 10;
-    this.ctx.strokeStyle = this.color;
+    this.ctx.strokeStyle = `${this.color}${(0, _tools.opacityToHex)(this.opacity)}`;
   }
 
   #startDrawing(x, y) {
@@ -12171,27 +12332,64 @@ class InkEditor extends _editor.AnnotationEditor {
       this.#setCanvasDims();
       this.thickness ||= InkEditor._defaultThickness;
       this.color ||= InkEditor._defaultColor || _editor.AnnotationEditor._defaultLineColor;
+      this.opacity ??= InkEditor._defaultOpacity;
     }
 
     this.currentPath.push([x, y]);
+    this.#lastPoint = null;
     this.#setStroke();
     this.ctx.beginPath();
     this.ctx.moveTo(x, y);
+
+    this.#requestFrameCallback = () => {
+      if (!this.#requestFrameCallback) {
+        return;
+      }
+
+      if (this.#lastPoint) {
+        if (this.isEmpty()) {
+          this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+          this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        } else {
+          this.#redraw();
+        }
+
+        this.ctx.lineTo(...this.#lastPoint);
+        this.#lastPoint = null;
+        this.ctx.stroke();
+      }
+
+      window.requestAnimationFrame(this.#requestFrameCallback);
+    };
+
+    window.requestAnimationFrame(this.#requestFrameCallback);
   }
 
   #draw(x, y) {
+    const [lastX, lastY] = this.currentPath.at(-1);
+
+    if (x === lastX && y === lastY) {
+      return;
+    }
+
     this.currentPath.push([x, y]);
-    this.ctx.lineTo(x, y);
-    this.ctx.stroke();
+    this.#lastPoint = [x, y];
   }
 
   #stopDrawing(x, y) {
+    this.ctx.closePath();
+    this.#requestFrameCallback = null;
     x = Math.min(Math.max(x, 0), this.canvas.width);
     y = Math.min(Math.max(y, 0), this.canvas.height);
-    this.currentPath.push([x, y]);
+    const [lastX, lastY] = this.currentPath.at(-1);
+
+    if (x !== lastX || y !== lastY) {
+      this.currentPath.push([x, y]);
+    }
+
     let bezier;
 
-    if (this.currentPath.length !== 2 || this.currentPath[0][0] !== x || this.currentPath[0][1] !== y) {
+    if (this.currentPath.length !== 1) {
       bezier = (0, _pdfjsFitCurve.fitCurve)(this.currentPath, 30, null);
     } else {
       const xy = [x, y];
@@ -12231,21 +12429,18 @@ class InkEditor extends _editor.AnnotationEditor {
   }
 
   #redraw() {
-    this.#setStroke();
-
     if (this.isEmpty()) {
       this.#updateTransform();
       return;
     }
 
-    const [parentWidth, parentHeight] = this.parent.viewportBaseDimensions;
+    this.#setStroke();
     const {
-      ctx,
-      height,
-      width
+      canvas,
+      ctx
     } = this;
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, width * parentWidth, height * parentHeight);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     this.#updateTransform();
 
     for (const path of this.bezierPath2D) {
@@ -12258,12 +12453,13 @@ class InkEditor extends _editor.AnnotationEditor {
       return;
     }
 
+    super.commit();
     this.isEditing = false;
     this.disableEditMode();
     this.setInForeground();
     this.#disableEditing = true;
     this.div.classList.add("disabled");
-    this.#fitToContent();
+    this.#fitToContent(true);
     this.parent.addInkEditorIfNeeded(true);
     this.parent.moveDivInDOM(this);
     this.div.focus();
@@ -12317,6 +12513,7 @@ class InkEditor extends _editor.AnnotationEditor {
     this.#stopDrawing(event.offsetX, event.offsetY);
     this.canvas.removeEventListener("pointerleave", this.#boundCanvasPointerleave);
     this.canvas.removeEventListener("pointermove", this.#boundCanvasPointermove);
+    this.parent.addToAnnotationStorage(this);
   }
 
   #createCanvas() {
@@ -12548,7 +12745,7 @@ class InkEditor extends _editor.AnnotationEditor {
     return this.#disableEditing ? Math.ceil(this.thickness * this.parent.scaleFactor) : 0;
   }
 
-  #fitToContent(thicknessChanged = false) {
+  #fitToContent(firstTime = false) {
     if (this.isEmpty()) {
       return;
     }
@@ -12578,7 +12775,7 @@ class InkEditor extends _editor.AnnotationEditor {
     this.#realWidth = width;
     this.#realHeight = height;
     this.setDims(width, height);
-    const unscaledPadding = thicknessChanged ? 0 : padding / this.scaleFactor / 2;
+    const unscaledPadding = firstTime ? padding / this.scaleFactor / 2 : 0;
     this.translate(prevTranslationX - this.translationX - unscaledPadding, prevTranslationY - this.translationY - unscaledPadding);
   }
 
@@ -12600,6 +12797,7 @@ class InkEditor extends _editor.AnnotationEditor {
     const editor = super.deserialize(data, parent);
     editor.thickness = data.thickness;
     editor.color = _util.Util.makeHexColor(...data.color);
+    editor.opacity = data.opacity;
     const [pageWidth, pageHeight] = parent.pageDimensions;
     const width = editor.width * pageWidth;
     const height = editor.height * pageHeight;
@@ -12655,6 +12853,7 @@ class InkEditor extends _editor.AnnotationEditor {
       annotationType: _util.AnnotationEditorType.INK,
       color,
       thickness: this.thickness,
+      opacity: this.opacity,
       paths: this.#serializePaths(this.scaleFactor / this.parent.scaleFactor, this.translationX, this.translationY, height),
       pageIndex: this.parent.pageIndex,
       rect,
@@ -15845,12 +16044,14 @@ function appendText(task, geom, styles, ctx) {
     paddingLeft: 0,
     paddingRight: 0,
     paddingTop: 0,
-    scale: 1
+    scale: 1,
+    fontSize: 0
   } : {
     angle: 0,
     canvasWidth: 0,
     hasText: geom.str !== "",
-    hasEOL: geom.hasEOL
+    hasEOL: geom.hasEOL,
+    fontSize: 0
   };
 
   task._textDivs.push(textDiv);
@@ -15880,6 +16081,7 @@ function appendText(task, geom, styles, ctx) {
   textDiv.style.top = `${top}px`;
   textDiv.style.fontSize = `${fontHeight}px`;
   textDiv.style.fontFamily = style.fontFamily;
+  textDivProperties.fontSize = fontHeight;
   textDiv.setAttribute("role", "presentation");
   textDiv.textContent = geom.str;
   textDiv.dir = geom.dir;
@@ -16281,6 +16483,7 @@ class TextLayerRenderTask {
     this._capability = (0, _util.createPromiseCapability)();
     this._renderTimer = null;
     this._bounds = [];
+    this._devicePixelRatio = globalThis.devicePixelRatio || 1;
 
     this._capability.promise.finally(() => {
       if (!this._enhanceTextSelection) {
@@ -16350,12 +16553,14 @@ class TextLayerRenderTask {
 
     if (textDivProperties.canvasWidth !== 0 && textDivProperties.hasText) {
       const {
-        fontSize,
         fontFamily
       } = textDiv.style;
+      const {
+        fontSize
+      } = textDivProperties;
 
       if (fontSize !== this._layoutTextLastFontSize || fontFamily !== this._layoutTextLastFontFamily) {
-        this._layoutTextCtx.font = `${fontSize} ${fontFamily}`;
+        this._layoutTextCtx.font = `${fontSize * this._devicePixelRatio}px ${fontFamily}`;
         this._layoutTextLastFontSize = fontSize;
         this._layoutTextLastFontFamily = fontFamily;
       }
@@ -16366,8 +16571,7 @@ class TextLayerRenderTask {
         } = this._layoutTextCtx.measureText(textDiv.textContent);
 
         if (width > 0) {
-          textDivProperties.scale = textDivProperties.canvasWidth / width;
-          const scale = textDivProperties.canvasWidth / width;
+          const scale = this._devicePixelRatio * textDivProperties.canvasWidth / width;
 
           if (this._enhanceTextSelection) {
             textDivProperties.scale = scale;
@@ -19933,8 +20137,8 @@ var _svg = __w_pdfjs_require__(31);
 
 var _xfa_layer = __w_pdfjs_require__(29);
 
-const pdfjsVersion = '2.15.623';
-const pdfjsBuild = 'cf7776620';
+const pdfjsVersion = '2.15.669';
+const pdfjsBuild = '2b22624ec';
 {
   if (_is_node.isNodeJS) {
     const {

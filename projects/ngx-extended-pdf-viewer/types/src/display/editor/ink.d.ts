@@ -3,6 +3,7 @@
  */
 export class InkEditor extends AnnotationEditor {
     static _defaultColor: null;
+    static _defaultOpacity: number;
     static _defaultThickness: number;
     static _l10nPromise: any;
     static initialize(l10n: any): void;
@@ -19,6 +20,7 @@ export class InkEditor extends AnnotationEditor {
     constructor(params: any);
     color: any;
     thickness: any;
+    opacity: any;
     paths: any[];
     bezierPath2D: any[];
     currentPath: any[];
@@ -30,10 +32,6 @@ export class InkEditor extends AnnotationEditor {
     /** @inheritdoc */
     get propertiesToUpdate(): any[][];
     canvas: HTMLCanvasElement | null | undefined;
-    /**
-     * Commit the curves we have in this editor.
-     */
-    commit(): void;
     /**
      * onpointerdown callback for the canvas we're drawing on.
      * @param {PointerEvent} event
@@ -70,6 +68,7 @@ export class InkEditor extends AnnotationEditor {
         annotationType: number;
         color: number[];
         thickness: any;
+        opacity: any;
         paths: {
             bezier: number[];
             points: number[];
