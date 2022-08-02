@@ -17,7 +17,7 @@ import {
   PLATFORM_ID,
   SimpleChanges,
   TemplateRef,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { Annotation } from './Annotation';
 import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
@@ -52,6 +52,8 @@ import { PinchOnMobileSupport } from './pinch-on-mobile-support';
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 import { UnitToPx } from './unit-to-px';
+
+import { RelativeCoordsSupport } from './relative-coords-support';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 declare class ResizeObserver {
@@ -90,6 +92,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public root: ElementRef;
 
   private pinchOnMobileSupport: PinchOnMobileSupport | undefined;
+  public relativeCoordsSupport: RelativeCoordsSupport | undefined;
 
   /* UI templates */
   @Input()
@@ -227,6 +230,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public enablePinchOnMobile = false;
+
+  @Input()
+  public enableRelativeCoords: boolean = false;
+  @Input()
+  public relativeCoordsOptions: Object = {};
 
   /** Use the minified (minifiedJSLibraries="true", which is the default) or the user-readable pdf.js library (minifiedJSLibraries="false") */
   @Input()
@@ -1028,6 +1036,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if (this.enablePinchOnMobile) {
         this.pinchOnMobileSupport = new PinchOnMobileSupport(this.ngZone);
       }
+      if (this.enableRelativeCoords) {
+        this.relativeCoordsSupport = new RelativeCoordsSupport(this.ngZone, this, this.relativeCoordsOptions);
+      }
     };
     document.addEventListener('webviewerloaded', onLoaded);
 
@@ -1301,7 +1312,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (this._src) {
       this.ngxExtendedPdfViewerIncompletelyInitialized = false;
       if (!this.listenToURL) {
-        PDFViewerApplication.pdfLinkService.setHash = function () {};
+        PDFViewerApplication.pdfLinkService.setHash = function () { };
       }
       this.initTimeout = null;
       this.selectCursorTool();
@@ -1618,6 +1629,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.pinchOnMobileSupport.destroyPinchZoom();
         this.pinchOnMobileSupport = undefined;
       }
+      if (this.relativeCoordsSupport) {
+        this.relativeCoordsSupport.destroyRelativeCoords();
+        this.relativeCoordsSupport = undefined;
+      }
 
       // #802 clear the form data; otherwise the "download" dialogs opens
       PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
@@ -1823,6 +1838,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           }
         }
       }
+      if ('enableRelativeCoords' in changes) {
+        if (!changes['enableRelativeCoords'].isFirstChange()) {
+          if (changes['enableRelativeCoords'].currentValue !== changes['enableRelativeCoords'].previousValue) {
+            if (this.enableRelativeCoords) {
+              this.relativeCoordsSupport = new RelativeCoordsSupport(this.ngZone, this, this.relativeCoordsOptions);
+            } else {
+              if (this.relativeCoordsSupport) {
+                this.relativeCoordsSupport.destroyRelativeCoords();
+                this.relativeCoordsSupport = undefined;
+              }
+            }
+          }
+        }
+      }
 
       if ('wheelAction' in changes) {
         PDFViewerApplicationOptions.set('wheelAction', this.wheelAction);
@@ -1975,6 +2004,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
               }
             }
           }
+
         }
       }
 
