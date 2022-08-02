@@ -53,8 +53,10 @@ export namespace AnnotationBorderStyleType {
 export namespace AnnotationEditorParamsType {
     const FREETEXT_SIZE: number;
     const FREETEXT_COLOR: number;
+    const FREETEXT_OPACITY: number;
     const INK_COLOR: number;
     const INK_THICKNESS: number;
+    const INK_OPACITY: number;
 }
 export const AnnotationEditorPrefix: "pdfjs_internal_editor_";
 export namespace AnnotationEditorType {

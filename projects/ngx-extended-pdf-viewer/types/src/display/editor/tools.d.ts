@@ -9,7 +9,35 @@ export type AnnotationEditorLayer = import("./annotation_editor_layer.js").Annot
  * some action like copy/paste, undo/redo, ...
  */
 export class AnnotationEditorUIManager {
-    constructor(eventBus: any);
+    static _keyboardManager: KeyboardManager;
+    constructor(container: any, eventBus: any);
+    destroy(): void;
+    onPageChanging({ pageNumber }: {
+        pageNumber: any;
+    }): void;
+    onTextLayerRendered({ pageNumber }: {
+        pageNumber: any;
+    }): void;
+    focusMainContainer(): void;
+    /**
+     * Keydown callback.
+     * @param {KeyboardEvent} event
+     */
+    keydown(event: KeyboardEvent): void;
+    /**
+     * Execute an action for a given name.
+     * For example, the user can click on the "Undo" entry in the context menu
+     * and it'll trigger the undo action.
+     * @param {Object} details
+     */
+    onEditingAction(details: Object): void;
+    /**
+     * Set the editing state.
+     * It can be useful to temporarily disable it when the user is editing a
+     * FreeText annotation.
+     * @param {boolean} isEditing
+     */
+    setEditingState(isEditing: boolean): void;
     registerEditorTypes(types: any): void;
     /**
      * Get an id.
@@ -71,6 +99,27 @@ export class AnnotationEditorUIManager {
      */
     setActiveEditor(editor: AnnotationEditor): void;
     /**
+     * Add or remove an editor the current selection.
+     * @param {AnnotationEditor} editor
+     */
+    toggleSelected(editor: AnnotationEditor): void;
+    /**
+     * Set the last selected editor.
+     * @param {AnnotationEditor} editor
+     */
+    setSelected(editor: AnnotationEditor): void;
+    /**
+     * Check if the editor is selected.
+     * @param {AnnotationEditor} editor
+     */
+    isSelected(editor: AnnotationEditor): boolean;
+    /**
+     * Unselect an editor.
+     * @param {AnnotationEditor} editor
+     */
+    unselect(editor: AnnotationEditor): void;
+    get hasSelection(): boolean;
+    /**
      * Undo the last command.
      */
     undo(): void;
@@ -84,45 +133,28 @@ export class AnnotationEditorUIManager {
      */
     addCommands(params: Object): void;
     /**
-     * @param {boolean} allow
+     * Delete the current editor or all.
      */
-    set allowClick(arg: boolean);
-    /**
-     * When set to true a click on the current layer will trigger
-     * an editor creation.
-     * @return {boolean}
-     */
-    get allowClick(): boolean;
-    /**
-     * Unselect the current editor.
-     */
-    unselect(): void;
-    /**
-     * Suppress some editors from the given layer.
-     * @param {AnnotationEditorLayer} layer
-     */
-    suppress(layer: AnnotationEditorLayer): void;
+    delete(): void;
     /**
      * Copy the selected editor.
      */
     copy(): void;
     /**
      * Cut the selected editor.
-     * @param {AnnotationEditorLayer}
      */
-    cut(layer: any): void;
+    cut(): void;
     /**
      * Paste a previously copied editor.
-     * @param {AnnotationEditorLayer}
      * @returns {undefined}
      */
-    paste(layer: any): undefined;
+    paste(): undefined;
     /**
      * Select all the editors.
      */
     selectAll(): void;
     /**
-     * Unselect all the editors.
+     * Unselect all the selected editors.
      */
     unselectAll(): void;
     /**
@@ -137,11 +169,6 @@ export class AnnotationEditorUIManager {
      */
     getActive(): AnnotationEditor | null;
     /**
-     * Check if there is an active editor.
-     * @returns {boolean}
-     */
-    hasActive(): boolean;
-    /**
      * Get the current editor mode.
      * @returns {number}
      */
@@ -149,6 +176,77 @@ export class AnnotationEditorUIManager {
     #private;
 }
 export function bindEvents(obj: any, element: any, names: any): void;
+export class ColorManager {
+    static _colorsMapping: Map<string, number[]>;
+    get _colors(): any;
+    /**
+     * In High Contrast Mode, the color on the screen is not always the
+     * real color used in the pdf.
+     * For example in some cases white can appear to be black but when saving
+     * we want to have white.
+     * @param {string} color
+     * @returns {Array<number>}
+     */
+    convert(color: string): Array<number>;
+    /**
+     * An input element must have its color value as a hex string
+     * and not as color name.
+     * So this function converts a name into an hex string.
+     * @param {string} name
+     * @returns {string}
+     */
+    getHexCode(name: string): string;
+}
+/**
+ * Class to handle undo/redo.
+ * Commands are just saved in a buffer.
+ * If we hit some memory issues we could likely use a circular buffer.
+ * It has to be used as a singleton.
+ */
+export class CommandManager {
+    constructor(maxSize?: number);
+    /**
+     * @typedef {Object} addOptions
+     * @property {function} cmd
+     * @property {function} undo
+     * @property {boolean} mustExec
+     * @property {number} type
+     * @property {boolean} overwriteIfSameType
+     * @property {boolean} keepUndo
+     */
+    /**
+     * Add a new couple of commands to be used in case of redo/undo.
+     * @param {addOptions} options
+     */
+    add({ cmd, undo, mustExec, type, overwriteIfSameType, keepUndo, }: {
+        cmd: Function;
+        undo: Function;
+        mustExec: boolean;
+        type: number;
+        overwriteIfSameType: boolean;
+        keepUndo: boolean;
+    }): void;
+    /**
+     * Undo the last command.
+     */
+    undo(): void;
+    /**
+     * Redo the last command.
+     */
+    redo(): void;
+    /**
+     * Check if there is something to undo.
+     * @returns {boolean}
+     */
+    hasSomethingToUndo(): boolean;
+    /**
+     * Check if there is something to redo.
+     * @returns {boolean}
+     */
+    hasSomethingToRedo(): boolean;
+    destroy(): void;
+    #private;
+}
 /**
  * Class to handle the different keyboards shortcuts we can have on mac or
  * non-mac OSes.
@@ -167,11 +265,17 @@ export class KeyboardManager {
     allKeys: Set<any>;
     /**
      * Execute a callback, if any, for a given keyboard event.
-     * The page is used as `this` in the callback.
-     * @param {AnnotationEditorLayer} page.
+     * The self is used as `this` in the callback.
+     * @param {Object} self.
      * @param {KeyboardEvent} event
      * @returns
      */
-    exec(page: any, event: KeyboardEvent): void;
+    exec(self: any, event: KeyboardEvent): void;
     #private;
 }
+/**
+ * Convert a number between 0 and 100 into an hex number between 0 and 255.
+ * @param {number} opacity
+ * @return {string}
+ */
+export function opacityToHex(opacity: number): string;

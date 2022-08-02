@@ -390,7 +390,7 @@ ngx-extended-pdf-viewer {
     right: 0;
     bottom: 0;
     left: 0;
-    min-width: 320px;
+    min-width: 350px;
   }
 
   #sidebarContent {
@@ -505,7 +505,8 @@ html[dir='rtl'] ngx-extended-pdf-viewer #sidebarResizer {
 ngx-extended-pdf-viewer {
   #toolbarContainer,
   .findbar,
-  .secondaryToolbar {
+  .secondaryToolbar,
+  .editorParamsToolbar  {
     position: relative;
     min-height: 32px;
     background-color: $toolbar-background;
@@ -579,7 +580,8 @@ ngx-extended-pdf-viewer {
   }
 
   .findbar,
-  .secondaryToolbar {
+  .secondaryToolbar,
+  .editorParamsToolbar {
     top: 40px;
     position: absolute;
     z-index: 10000;
@@ -587,7 +589,6 @@ ngx-extended-pdf-viewer {
     min-width: 16px;
     padding: 0 6px 0 6px;
     margin: 4px 2px 4px 2px;
-    color: $text-color;
     font-size: 12px;
     line-height: 14px;
     text-align: left;
@@ -657,7 +658,8 @@ html[dir='rtl'] ngx-extended-pdf-viewer #findInput[data-status='pending'] {
 }
 
 html[dir='rtl'] ngx-extended-pdf-viewer ngx-extended-pdf-viewer {
-  .secondaryToolbar {
+  .secondaryToolbar,
+  .editorParamsToolbar {
     padding: 6px;
     height: auto;
     z-index: 3000;
@@ -671,6 +673,55 @@ html[dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbar {
   left: 4px;
 }
 ngx-extended-pdf-viewer {
+  editorParamsToolbarContainer {
+    width: 220px;
+    margin-bottom: -4px;
+  }
+
+  .editorParamsToolbarContainer > .editorParamsSetter {
+    min-height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 10px;
+  }
+
+  .editorParamsToolbarContainer .editorParamsLabel {
+    padding-inline-end: 10px;
+    flex: none;
+    color: var(--main-color);
+  }
+
+  .editorParamsToolbarContainer .editorParamsColor {
+    width: 32px;
+    height: 32px;
+    flex: none;
+  }
+
+  .editorParamsToolbarContainer .editorParamsSlider {
+    background-color: transparent;
+    width: 90px;
+    flex: 0 1 0;
+  }
+
+  .editorParamsToolbarContainer .editorParamsSlider::-moz-range-progress {
+    background-color: black;
+  }
+
+  /*#if !MOZCENTRAL*/
+  .editorParamsToolbarContainer .editorParamsSlider::-webkit-slider-runnable-track,
+  /*#endif*/
+  .editorParamsToolbarContainer .editorParamsSlider::-moz-range-track {
+    background-color: black;
+  }
+
+  /*#if !MOZCENTRAL*/
+  .editorParamsToolbarContainer .editorParamsSlider::-webkit-slider-thumb,
+  /*#endif*/
+  .editorParamsToolbarContainer .editorParamsSlider::-moz-range-thumb {
+    background-color: white;
+  }
+
   #secondaryToolbarButtonContainer {
     width: 250px;
     max-height: 400px;
@@ -681,6 +732,16 @@ ngx-extended-pdf-viewer {
   #secondaryToolbarButtonContainer.hiddenScrollModeButtons > .scrollModeButtons,
   #secondaryToolbarButtonContainer.hiddenSpreadModeButtons > .spreadModeButtons {
     display: none !important;
+  }
+
+  #editorInkParamsToolbar {
+    inset-inline-end: 40px;
+    background-color: var(--toolbar-bg-color);
+  }
+
+  #editorFreeTextParamsToolbar {
+    inset-inline-end: 68px;
+    background-color: var(--toolbar-bg-color);
   }
 
   .doorHanger,

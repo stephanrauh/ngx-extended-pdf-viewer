@@ -46,6 +46,12 @@ export class AnnotationStorage {
      * @param {Object} value
      */
     public setValue(key: string, fieldname: any, value: Object, radioButtonField?: undefined, isDefaultValue?: boolean): void;
+    /**
+     * Check if the storage contains the given key.
+     * @param {string} key
+     * @returns {boolean}
+     */
+    has(key: string): boolean;
     getAll(): any;
     get size(): number;
     resetModified(): void;

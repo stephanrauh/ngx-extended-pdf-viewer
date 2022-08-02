@@ -1612,6 +1612,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (typeof window === 'undefined') {
       return; // fast escape for server side rendering
     }
+
     (window as any).getFormValue = undefined;
     (window as any).setFormValue = undefined;
     (window as any).registerAcroformAnnotations = undefined;
@@ -1948,6 +1949,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
     if ('pdfBackgroundColorToReplace' in changes && !changes['pdfBackgroundColorToReplace'].isFirstChange()) {
       PDFViewerApplicationOptions.set('pdfBackgroundColorToReplace', this.pdfBackgroundColorToReplace);
+    }
+    if ('pageViewMode' in changes && !changes['pageViewMode'].isFirstChange()) {
+      this.removeScrollbarInInititeScrollMode();
     }
   }
 

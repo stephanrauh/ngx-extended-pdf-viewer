@@ -1252,7 +1252,9 @@ function getDocument(src) {
     params.maxImageSize = -1;
   }
 
-  if (typeof params.cMapUrl !== "string") {
+  if (typeof params.cMapUrl === "function") {
+    params.cMapUrl = params.cMapUrl();
+  } else if (typeof params.cMapUrl !== "string") {
     params.cMapUrl = null;
   }
 
@@ -1376,7 +1378,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.14.309',
+    apiVersion: '2.14.311',
     source: {
       data: source.data,
       url: source.url,
@@ -3530,9 +3532,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.14.309';
+const version = '2.14.311';
 exports.version = version;
-const build = '565af6722';
+const build = '25a1b7c2d';
 exports.build = build;
 
 /***/ }),
@@ -16528,8 +16530,8 @@ var _svg = __w_pdfjs_require__(24);
 
 var _xfa_layer = __w_pdfjs_require__(22);
 
-const pdfjsVersion = '2.14.309';
-const pdfjsBuild = '565af6722';
+const pdfjsVersion = '2.14.311';
+const pdfjsBuild = '25a1b7c2d';
 {
   if (_is_node.isNodeJS) {
     const {

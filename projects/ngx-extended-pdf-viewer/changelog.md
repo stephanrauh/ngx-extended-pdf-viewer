@@ -378,3 +378,9 @@
 - 14.0.4 #1429 Class loadingInProgress now vanishes after page load
 - 14.0.5 #8 prevent the browser from filling input field with password or user names; #1433 fixed the CSS code highlighting find results covering multiple spans (the middle sections appeared at random positions)
 - 14.0.6 #1434 show the print progress dialog in PrimeNG modals even after closing and re-opening the modal
+- 14.0.7 #1447 remove the global CSS when the viewer is removed from the DOM, and restore it when the viewer is created again (workaround of the Angular bug https://github.com/angular/angular/issues/16670)
+- 14.5.0-alpha.0 #1447 replace ViewEncapsulation.None by a home-brewn CSS injection engine because the CSS was never removed removing destroying ngx-extended-pdf-viewer from memory
+- 14.5.0 #1447 updated the README.md
+- 14.5.1 removed debugger statements; updated the bleeding-edge branch of pdf.js; removed an unused dependency
+- 14.5.2 prepared updating to pdf.js 2.15; #1463 restored support for Japanese fonts; removed a redundant null check from `file-info.component.html`
+- 14.5.3 #1449 allow for finding text across multiple lines (might break other special cases, such as searching for 1/2 or 3/4)

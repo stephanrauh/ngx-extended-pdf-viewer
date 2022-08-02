@@ -7,7 +7,7 @@ export type AnnotationEditorLayerOptions = {
     div: HTMLDivElement;
     uiManager: AnnotationEditorUIManager;
     enabled: boolean;
-    annotationStorag: AnnotationStorage;
+    annotationStorage: AnnotationStorage;
     pageIndex: number;
     l10n: any;
 };
@@ -17,7 +17,7 @@ export type AnnotationEditorLayerOptions = {
  * @property {HTMLDivElement} div
  * @property {AnnotationEditorUIManager} uiManager
  * @property {boolean} enabled
- * @property {AnnotationStorage} annotationStorag
+ * @property {AnnotationStorage} annotationStorage
  * @property {number} pageIndex
  * @property {IL10n} l10n
  */
@@ -26,69 +26,44 @@ export type AnnotationEditorLayerOptions = {
  */
 export class AnnotationEditorLayer {
     static _initialized: boolean;
-    static _keyboardManager: KeyboardManager;
+    /**
+     * Compare the positions of two elements, it must correspond to
+     * the visual ordering.
+     *
+     * @param {HTMLElement} e1
+     * @param {HTMLElement} e2
+     * @returns {number}
+     */
+    static "__#3@#compareElementPositions"(e1: HTMLElement, e2: HTMLElement): number;
     /**
      * @param {AnnotationEditorLayerOptions} options
      */
     constructor(options: AnnotationEditorLayerOptions);
-    annotationStorage: any;
+    annotationStorage: import("../annotation_storage.js").AnnotationStorage;
     pageIndex: number;
     div: HTMLDivElement;
+    get textLayerElements(): any;
     /**
      * Update the toolbar if it's required to reflect the tool currently used.
      * @param {number} mode
-     * @returns {undefined}
      */
-    updateToolbar(mode: number): undefined;
+    updateToolbar(mode: number): void;
     /**
      * The mode has changed: it must be updated.
      * @param {number} mode
      */
-    updateMode(mode: number): void;
+    updateMode(mode?: number): void;
+    addInkEditorIfNeeded(isCommitting: any): void;
     /**
-     * Mouseover callback.
-     * @param {MouseEvent} event
+     * Set the editing state.
+     * @param {boolean} isEditing
      */
-    mouseover(event: MouseEvent): void;
+    setEditingState(isEditing: boolean): void;
     /**
      * Add some commands into the CommandManager (undo/redo stuff).
      * @param {Object} params
      */
     addCommands(params: Object): void;
-    /**
-     * Undo the last command.
-     */
-    undo(): void;
-    /**
-     * Redo the last command.
-     */
-    redo(): void;
-    /**
-     * Suppress the selected editor or all editors.
-     * @returns {undefined}
-     */
-    suppress(): undefined;
-    /**
-     * Copy the selected editor.
-     */
-    copy(): void;
-    /**
-     * Cut the selected editor.
-     */
-    cut(): void;
-    /**
-     * Paste a previously copied editor.
-     * @returns {undefined}
-     */
-    paste(): undefined;
-    /**
-     * Select all the editors.
-     */
-    selectAll(): void;
-    /**
-     * Unselect all the editors.
-     */
-    unselectAll(): void;
     /**
      * Enable pointer events on the main div in order to enable
      * editor creation.
@@ -103,6 +78,8 @@ export class AnnotationEditorLayer {
      * @param {AnnotationEditor} editor
      */
     setActiveEditor(editor: AnnotationEditor): void;
+    enableClick(): void;
+    disableClick(): void;
     attach(editor: any): void;
     detach(editor: any): void;
     /**
@@ -111,10 +88,35 @@ export class AnnotationEditorLayer {
      */
     remove(editor: AnnotationEditor): void;
     /**
+     * Function called when the text layer has finished rendering.
+     */
+    onTextLayerRendered(): void;
+    /**
+     * Remove an aria-owns id from a node in the text layer.
+     * @param {AnnotationEditor} editor
+     */
+    removePointerInTextLayer(editor: AnnotationEditor): void;
+    /**
+     * Find the text node which is the nearest and add an aria-owns attribute
+     * in order to correctly position this editor in the text flow.
+     * @param {AnnotationEditor} editor
+     */
+    addPointerInTextLayer(editor: AnnotationEditor): void;
+    /**
+     * Move a div in the DOM in order to respect the visual order.
+     * @param {HTMLDivElement} div
+     */
+    moveDivInDOM(editor: any): void;
+    /**
      * Add a new editor in the current view.
      * @param {AnnotationEditor} editor
      */
     add(editor: AnnotationEditor): void;
+    /**
+     * Add an editor in the annotation storage.
+     * @param {AnnotationEditor} editor
+     */
+    addToAnnotationStorage(editor: AnnotationEditor): void;
     /**
      * Add or rebuild depending if it has been removed or not.
      * @param {AnnotationEditor} editor
@@ -136,27 +138,51 @@ export class AnnotationEditorLayer {
      */
     getNextId(): string;
     /**
-     * Mouseclick callback.
-     * @param {MouseEvent} event
-     * @returns {undefined}
+     * Create a new editor
+     * @param {Object} data
+     * @returns {AnnotationEditor}
      */
-    click(event: MouseEvent): undefined;
+    deserialize(data: Object): AnnotationEditor;
+    /**
+     * Set the last selected editor.
+     * @param {AnnotationEditor} editor
+     */
+    setSelected(editor: AnnotationEditor): void;
+    /**
+     * Add or remove an editor the current selection.
+     * @param {AnnotationEditor} editor
+     */
+    toggleSelected(editor: AnnotationEditor): void;
+    /**
+     * Check if the editor is selected.
+     * @param {AnnotationEditor} editor
+     */
+    isSelected(editor: AnnotationEditor): boolean;
+    /**
+     * Unselect an editor.
+     * @param {AnnotationEditor} editor
+     */
+    unselect(editor: AnnotationEditor): void;
+    /**
+     * Pointerup callback.
+     * @param {PointerEvent} event
+     */
+    pointerup(event: PointerEvent): void;
+    /**
+     * Pointerdown callback.
+     * @param {PointerEvent} event
+     */
+    pointerdown(event: PointerEvent): void;
     /**
      * Drag callback.
      * @param {DragEvent} event
-     * @returns {undefined}
      */
-    drop(event: DragEvent): undefined;
+    drop(event: DragEvent): void;
     /**
      * Dragover callback.
      * @param {DragEvent} event
      */
     dragover(event: DragEvent): void;
-    /**
-     * Keydown callback.
-     * @param {KeyboardEvent} event
-     */
-    keydown(event: KeyboardEvent): void;
     /**
      * Destroy the main editor.
      */
@@ -189,4 +215,3 @@ export class AnnotationEditorLayer {
     setDimensions(): void;
     #private;
 }
-import { KeyboardManager } from "./tools.js";

@@ -5783,7 +5783,8 @@ const CHARACTERS_TO_NORMALIZE = {
   "\u201F": '"',
   "\u00BC": "1/4",
   "\u00BD": "1/2",
-  "\u00BE": "3/4"
+  "\u00BE": "3/4",
+  "\n": " "
 };
 let normalizationRegex = null;
 
@@ -5795,10 +5796,12 @@ function normalize(text) {
 
   let diffs = null;
   const normalizedText = text.replace(normalizationRegex, function (ch, index) {
-    const normalizedCh = CHARACTERS_TO_NORMALIZE[ch],
-          diff = normalizedCh.length - ch.length;
+    const normalizedCh = CHARACTERS_TO_NORMALIZE[ch];
+    const diff = normalizedCh.length - ch.length;
 
-    if (diff !== 0) {
+    if (ch === "\n") {
+      (diffs ||= []).push([index - 1, 1]);
+    } else if (diff !== 0) {
       (diffs ||= []).push([index, diff]);
     }
 
@@ -5817,11 +5820,11 @@ function getOriginalIndex(matchIndex, diffs = null) {
   for (const [index, diff] of diffs) {
     const currentIndex = index + totalDiff;
 
-    if (currentIndex >= matchIndex) {
+    if (index >= matchIndex) {
       break;
     }
 
-    if (currentIndex + diff > matchIndex) {
+    if (index + diff > matchIndex) {
       totalDiff += matchIndex - currentIndex;
       break;
     }
@@ -6387,6 +6390,10 @@ class PDFFindController {
 
             for (let j = 0, jj = textItems.length; j < jj; j++) {
               strBuf.push(textItems[j].str);
+
+              if (textItems[j].hasEOL) {
+                strBuf.push("\n");
+              }
             }
 
             [this._pageContents[i], this._pageDiffs[i]] = normalize(strBuf.join(""));
@@ -10657,7 +10664,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.14.309';
+    const viewerVersion = '2.14.311';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -20753,8 +20760,8 @@ var _app_options = __webpack_require__(1);
 
 var _app = __webpack_require__(2);
 
-const pdfjsVersion = '2.14.309';
-const pdfjsBuild = '565af6722';
+const pdfjsVersion = '2.14.311';
+const pdfjsBuild = '25a1b7c2d';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 

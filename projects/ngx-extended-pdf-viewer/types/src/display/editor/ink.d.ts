@@ -2,13 +2,25 @@
  * Basic draw editor in order to generate an Ink annotation.
  */
 export class InkEditor extends AnnotationEditor {
+    static _defaultColor: null;
+    static _defaultOpacity: number;
     static _defaultThickness: number;
-    static _defaultColor: string;
+    static _l10nPromise: any;
+    static initialize(l10n: any): void;
     static updateDefaultParams(type: any, value: any): void;
-    static get defaultPropertiesToUpdate(): (string | number)[][];
+    static get defaultPropertiesToUpdate(): any[][];
+    /**
+     * Convert the output of fitCurve in some Path2D.
+     * @param {Arra<Array<number>} bezier
+     * @returns {Path2D}
+     */
+    static "__#2@#buildPath2D"(bezier: Arra<number[]>): Path2D;
+    /** @inheritdoc */
+    static deserialize(data: any, parent: any): AnnotationEditor;
     constructor(params: any);
     color: any;
     thickness: any;
+    opacity: any;
     paths: any[];
     bezierPath2D: any[];
     currentPath: any[];
@@ -16,49 +28,30 @@ export class InkEditor extends AnnotationEditor {
     translationX: number;
     translationY: number;
     /** @inheritdoc */
-    copy(): InkEditor;
-    /** @inheritdoc */
     updateParams(type: any, value: any): void;
     /** @inheritdoc */
     get propertiesToUpdate(): any[][];
-    /** @inheritdoc */
-    rebuild(): void;
-    /** @inheritdoc */
-    remove(): void;
     canvas: HTMLCanvasElement | null | undefined;
-    /** @inheritdoc */
-    enableEditMode(): void;
-    /** @inheritdoc */
-    disableEditMode(): void;
     /**
-     * Commit the curves we have in this editor.
-     * @returns {undefined}
+     * onpointerdown callback for the canvas we're drawing on.
+     * @param {PointerEvent} event
      */
-    commit(): undefined;
+    canvasPointerdown(event: PointerEvent): void;
     /**
-     * onmousedown callback for the canvas we're drawing on.
-     * @param {MouseEvent} event
-     * @returns {undefined}
+     * onpointermove callback for the canvas we're drawing on.
+     * @param {PointerEvent} event
      */
-    canvasMousedown(event: MouseEvent): undefined;
+    canvasPointermove(event: PointerEvent): void;
     /**
-     * onmousemove callback for the canvas we're drawing on.
-     * @param {MouseEvent} event
-     * @returns {undefined}
+     * onpointerup callback for the canvas we're drawing on.
+     * @param {PointerEvent} event
      */
-    canvasMousemove(event: MouseEvent): undefined;
+    canvasPointerup(event: PointerEvent): void;
     /**
-     * onmouseup callback for the canvas we're drawing on.
-     * @param {MouseEvent} event
-     * @returns {undefined}
+     * onpointerleave callback for the canvas we're drawing on.
+     * @param {PointerEvent} event
      */
-    canvasMouseup(event: MouseEvent): undefined;
-    /**
-     * onmouseleave callback for the canvas we're drawing on.
-     * @param {MouseEvent} event
-     * @returns {undefined}
-     */
-    canvasMouseleave(event: MouseEvent): undefined;
+    canvasPointerleave(event: PointerEvent): void;
     ctx: CanvasRenderingContext2D | null | undefined;
     /** @inheritdoc */
     render(): HTMLDivElement | null;
@@ -73,8 +66,9 @@ export class InkEditor extends AnnotationEditor {
     /** @inheritdoc */
     serialize(): {
         annotationType: number;
-        color: any;
+        color: number[];
         thickness: any;
+        opacity: any;
         paths: {
             bezier: number[];
             points: number[];
@@ -82,7 +76,8 @@ export class InkEditor extends AnnotationEditor {
         pageIndex: number;
         rect: number[];
         rotation: any;
-    };
+    } | null;
     #private;
 }
 import { AnnotationEditor } from "./editor.js";
+export { fitCurve };

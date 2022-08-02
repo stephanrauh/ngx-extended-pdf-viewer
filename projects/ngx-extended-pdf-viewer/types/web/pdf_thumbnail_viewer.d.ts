@@ -64,7 +64,6 @@ export class PDFThumbnailViewer {
         lastY: any;
         _eventHandler: (evt: any) => void;
     };
-    _setImageDisabled: boolean;
     /**
      * @private
      */
@@ -86,7 +85,6 @@ export class PDFThumbnailViewer {
     private _resetView;
     _thumbnails: any[] | undefined;
     _pageLabels: any[] | null | undefined;
-    _optionalContentConfigPromise: Promise<import("../src/display/optional_content_config.js").OptionalContentConfig> | null | undefined;
     /**
      * @param {PDFDocumentProxy} pdfDocument
      */
