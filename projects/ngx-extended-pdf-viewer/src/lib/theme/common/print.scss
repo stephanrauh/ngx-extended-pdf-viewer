@@ -78,10 +78,6 @@
     }
   }
 
-  body[data-pdfjsprinting] {
-    overflow-y: visible !important;
-  }
-
   html[data-pdfjsprinting].cdk-global-scrollblock {
     width: initial;
     position: initial;

@@ -193,7 +193,7 @@ export class NgxExtendedPdfViewerService {
       }
     }
     if (printRange.excluded) {
-      let e = printRange.excluded as Array<number>;
+      const e = printRange.excluded as Array<number>;
       if (e.some((p) => p === page)) {
         return false;
       }
@@ -212,16 +212,8 @@ export class NgxExtendedPdfViewerService {
 
     const pagePromise: Promise<any> = pdfDocument.getPage(pageNumber);
 
-    const extractTextSnippets = (pdfPage) =>
-      new Promise<any>((resolve, reject) => {
-        const textSnippets = pdfPage.getTextContent();
-        resolve(textSnippets);
-      });
-    const combineTextSnippets = (textSnippets) =>
-      new Promise<string>((resolve, reject) => {
-        const text = this.convertTextInfoToText(textSnippets);
-        resolve(text);
-      });
+    const extractTextSnippets = (pdfPage) => Promise.resolve(pdfPage.getTextContent());
+    const combineTextSnippets = (textSnippets) => Promise.resolve(this.convertTextInfoToText(textSnippets));
     return pagePromise.then(extractTextSnippets).then(combineTextSnippets);
   }
 
@@ -229,17 +221,14 @@ export class NgxExtendedPdfViewerService {
     if (!textInfo) {
       return '';
     }
-    return textInfo.items.map((info) => info.str).join('');
+    return textInfo.items.map((info: { str: any }) => info.str).join('');
   }
 
   public getPageAsImage(pageNumber: number, scale: PDFExportScaleFactor, background?: string, backgroundColorToReplace: string = '#FFFFFF'): Promise<any> {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const pdfDocument = PDFViewerApplication.pdfDocument;
     const pagePromise: Promise<any> = pdfDocument.getPage(pageNumber);
-    const imagePromise = (pdfPage) =>
-      new Promise<any>((resolve, reject) => {
-        resolve(this.draw(pdfPage, scale, background, backgroundColorToReplace));
-      });
+    const imagePromise = (pdfPage) => Promise.resolve(this.draw(pdfPage, scale, background, backgroundColorToReplace));
 
     return pagePromise.then(imagePromise);
   }
@@ -267,16 +256,13 @@ export class NgxExtendedPdfViewerService {
     };
     const renderTask = pdfPage.render(renderContext);
 
-    const dataUrlPromise = () =>
-      new Promise<string>((resolve, reject) => {
-        resolve(canvas.toDataURL());
-      });
+    const dataUrlPromise = () => Promise.resolve(canvas.toDataURL());
 
     return renderTask.promise.then(dataUrlPromise);
   }
 
   private getPageDrawContext(width: number, height: number): DrawContext {
-    const canvas = document.createElement('canvas') as HTMLCanvasElement;
+    const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) {
       // tslint:disable-next-line: quotemark
@@ -285,8 +271,8 @@ export class NgxExtendedPdfViewerService {
 
     canvas.width = width;
     canvas.height = height;
-    canvas.style.width = width + 'px';
-    canvas.style.height = height + 'px';
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
 
     return { ctx, canvas };
   }
@@ -389,8 +375,7 @@ export class NgxExtendedPdfViewerService {
   public getCurrentlyVisiblePageNumbers(): Array<number> {
     const app = (window as any).PDFViewerApplication as IPDFViewerApplication;
     const pages = (app.pdfViewer._getVisiblePages() as any).views as Array<any>;
-    const pageNumbers = pages?.map((page) => page.id);
-    return pageNumbers;
+    return pages?.map((page) => page.id);
   }
 
   public recalculateSize(): void {

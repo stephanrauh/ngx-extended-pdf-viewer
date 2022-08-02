@@ -14,7 +14,6 @@ interface ZoomLevel {
 })
 export class PdfZoomDropdownComponent {
   public _zoomLevels: Array<ZoomLevel> = [];
-  // ['auto', 'page-actual', 'page-fit', 'page-width', 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
 
   @Input()
   public set zoomLevels(levels: Array<string | number>) {

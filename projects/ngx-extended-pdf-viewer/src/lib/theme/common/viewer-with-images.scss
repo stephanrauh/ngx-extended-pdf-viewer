@@ -673,7 +673,7 @@ html[dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbar {
   left: 4px;
 }
 ngx-extended-pdf-viewer {
-  editorParamsToolbarContainer {
+  .editorParamsToolbarContainer {
     width: 220px;
     margin-bottom: -4px;
   }
@@ -942,7 +942,7 @@ ngx-extended-pdf-viewer {
 
   .toolbarButton.toggled,
   .secondaryToolbarButton.toggled {
-    background-color: $window-background;;
+    background-color: $window-background;
     border-color: $border-dark;
   }
 }

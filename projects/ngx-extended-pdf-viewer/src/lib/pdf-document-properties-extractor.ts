@@ -34,27 +34,22 @@ export class PdfDocumentPropertiesExtractor {
   );
 
   public async getDocumentProperties(): Promise<any> {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any)
-      .PDFViewerApplication;
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const pdfDocument = PDFViewerApplication.pdfDocument;
 
     const result: any = {};
     return pdfDocument
       .getMetadata()
-      .then(({ info, metadata, contentDispositionFilename }) => {
+      .then(({ info, _metadata, contentDispositionFilename }) => {
         result.author = info.Author;
-        result.creationDate = this.toDateObject(
-          info.CreationDate
-        );
+        result.creationDate = this.toDateObject(info.CreationDate);
         result.creator = info.Creator;
         result.keywords = info.Keywords;
         result.linearized = info.IsLinearized;
-        result.modificationDate = this.toDateObject(
-          info.ModDate
-        );
+        result.modificationDate = this.toDateObject(info.ModDate);
         result.pdfFormatVersion = info.PDFFormatVersion;
         result.producer = info.Producer;
-      result.subject = info.Subject;
+        result.subject = info.Subject;
         result.title = info.Title;
         if (contentDispositionFilename) {
           result.fileName = contentDispositionFilename;
@@ -69,10 +64,6 @@ export class PdfDocumentPropertiesExtractor {
 
   /** shamelessly copied from pdf.js */
   private toDateObject(input: string | any): Date | null {
-    // if (!input ||  typeof input !== "string")) {
-    //  return null;
-    //  }
-
     // Optional fields that don't satisfy the requirements from the regular
     // expression (such as incorrect digit counts or numbers that are out of
     // range) will fall back the defaults from the specification.

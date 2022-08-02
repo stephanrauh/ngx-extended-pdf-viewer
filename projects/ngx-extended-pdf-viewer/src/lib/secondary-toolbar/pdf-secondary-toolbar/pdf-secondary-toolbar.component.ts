@@ -141,7 +141,7 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
 
   public ngOnDestroy(): void {
     if (this.mutationObserver) {
-      this.mutationObserver.disconnect;
+      this.mutationObserver.disconnect();
       this.mutationObserver = undefined;
     }
   }
