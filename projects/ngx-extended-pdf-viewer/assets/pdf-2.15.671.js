@@ -2115,7 +2115,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.15.670',
+    apiVersion: '2.15.671',
     source: {
       data: source.data,
       url: source.url,
@@ -4298,9 +4298,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.15.670';
+const version = '2.15.671';
 exports.version = version;
-const build = '2eed62d08';
+const build = '4f3c0e00a';
 exports.build = build;
 
 /***/ }),
@@ -20137,8 +20137,8 @@ var _svg = __w_pdfjs_require__(31);
 
 var _xfa_layer = __w_pdfjs_require__(29);
 
-const pdfjsVersion = '2.15.670';
-const pdfjsBuild = '2eed62d08';
+const pdfjsVersion = '2.15.671';
+const pdfjsBuild = '4f3c0e00a';
 {
   if (_is_node.isNodeJS) {
     const {

@@ -21,6 +21,10 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 <img src="https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/example.png?raw=true">
 
+## What's new in version 15?
+
+Version 15 - currently in its alpha stage - updates to pdf.js 2.15. It also includes a preview version of `enableRelativeCoords`, which intends to make the pinch gesture on mobile devices more intuitive.
+
 ## What's new in version 14.5?
 
 Version 14.5 replaces the way the PDF viewer injects it global CSS rules. Until version 14.0.x, most CSS rules were injected using a regular component with ViewEncapsulation.None. However, it turned out that this CSS code is never removed. In rare cases, the remaining CSS rules cause problems. Printing, in particular, was broken because of a global `@page` setting. Version 14.5.0 fixes this. I've increased the version number to indicate there a tiny probability it's a breaking change - but I don't think it is one.

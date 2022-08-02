@@ -384,3 +384,4 @@
 - 14.5.1 removed debugger statements; updated the bleeding-edge branch of pdf.js; removed an unused dependency
 - 14.5.2 prepared updating to pdf.js 2.15; #1463 restored support for Japanese fonts; removed a redundant null check from `file-info.component.html`
 - 14.5.3 #1449 allow for finding text across multiple lines (might break other special cases, such as searching for 1/2 or 3/4)
+- 15.0.0-alpha.0 #1470 update to pdf.js 2.15 / 2.16; #918 add an experimental preview of the attribute `[enableRelativeCoords]="true"` to improve pinch gestures
