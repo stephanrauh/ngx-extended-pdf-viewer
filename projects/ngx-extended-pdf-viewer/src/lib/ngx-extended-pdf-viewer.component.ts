@@ -17,7 +17,7 @@ import {
   PLATFORM_ID,
   SimpleChanges,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { Annotation } from './Annotation';
 import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
@@ -271,7 +271,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             if (this.ngxExtendedPdfViewerIncompletelyInitialized) {
               this.openPDF();
             } else {
-              (async () => await this.openPDF2())();
+              (async () => this.openPDF2())();
             }
             // else openPDF is called later, so we do nothing to prevent loading the PDF file twice
           }
@@ -807,7 +807,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.needsES5().then((needsES5) => {
           const viewerPath = this.getPdfJsPath('viewer', needsES5);
           const script = this.createScriptElement(viewerPath);
-          // script.onload = async () => await this.addFeatures(); // DEBUG CODE!!!
           document.getElementsByTagName('head')[0].appendChild(script);
         });
       }
@@ -1312,7 +1311,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (this._src) {
       this.ngxExtendedPdfViewerIncompletelyInitialized = false;
       if (!this.listenToURL) {
-        PDFViewerApplication.pdfLinkService.setHash = function () { };
+        PDFViewerApplication.pdfLinkService.setHash = function () {};
       }
       this.initTimeout = null;
       this.selectCursorTool();
@@ -1491,7 +1490,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
       });
 
-      setTimeout(async () => await this.checkHeight(), 100);
+      setTimeout(async () => this.checkHeight(), 100);
       // open a file in the viewer
       if (!!this._src) {
         const options: any = {
@@ -1522,7 +1521,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           await PDFViewerApplication.open(this._src, options);
           this.pdfLoadingStarts.emit({});
           // await this.setZoom();
-          setTimeout(async () => await this.setZoom());
+          setTimeout(async () => this.setZoom());
         });
       }
       setTimeout(() => {
@@ -1747,7 +1746,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
 
       if ('zoom' in changes) {
-        (async () => await this.setZoom())();
+        (async () => this.setZoom())();
       }
 
       if ('maxZoom' in changes) {
@@ -2004,7 +2003,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
               }
             }
           }
-
         }
       }
 
