@@ -11,6 +11,7 @@ export class AnnotationStorage {
     _modified: boolean;
     onSetModified: any;
     onResetModified: any;
+    onAnnotationEditor: any;
     /**
      * Get the value for a given key if it exists, or return the default value.
      *
@@ -64,6 +65,7 @@ export class AnnotationStorage {
      * @ignore
      */
     get serializable(): Map<any, any> | null;
+    get hasAnnotationEditors(): boolean;
     #private;
 }
 /**

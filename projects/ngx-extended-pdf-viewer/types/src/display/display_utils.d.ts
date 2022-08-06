@@ -98,6 +98,8 @@ export class DOMSVGFactory extends BaseSVGFactory {
     _createSVG(type: any): any;
 }
 export function getColorValues(colors: any): void;
+export function getCurrentTransform(ctx: any): any[];
+export function getCurrentTransformInverse(ctx: any): any[];
 /**
  * Gets the filename from a given URL.
  * @param {string} url
