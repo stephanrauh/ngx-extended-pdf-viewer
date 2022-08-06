@@ -11,6 +11,14 @@ export function getVersionSuffix(folder: string): string {
   return pdfjsVersion;
 }
 
+function assetsUrl(url: string): string {
+  if (url.includes('://')) {
+    // the assets folder is on an absolute path (like https://example.com/assets)
+    return url;
+  }
+  return `./${url}`;
+}
+
 export let pdfDefaultOptions = {
   needsES5: _isIE11 || isEdge || needsES5,
   cursorToolOnLoad: 0,
@@ -41,7 +49,7 @@ export let pdfDefaultOptions = {
   useOnlyCssZoom: false,
   viewOnLoad: 0,
   cMapPacked: true,
-  cMapUrl: () => `./${pdfDefaultOptions.assetsFolder}/cmaps/`,
+  cMapUrl: () => `${assetsUrl(pdfDefaultOptions.assetsFolder)}/cmaps/`,
   disableAutoFetch: false,
   disableCreateObjectURL: false,
   disableFontFace: false,
@@ -56,13 +64,13 @@ export let pdfDefaultOptions = {
   assetsFolder: 'assets',
   sandboxBundleSrc: () =>
     pdfDefaultOptions.needsES5
-      ? `./${pdfDefaultOptions.assetsFolder}/pdf.sandbox-${getVersionSuffix(pdfDefaultOptions.assetsFolder)}-es5.js`
-      : `./${pdfDefaultOptions.assetsFolder}/pdf.sandbox-${getVersionSuffix(pdfDefaultOptions.assetsFolder)}.js`,
+      ? `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.sandbox-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}-es5.js`
+      : `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.sandbox-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}.js`,
   workerSrc: () =>
     pdfDefaultOptions.needsES5
-      ? `./${pdfDefaultOptions.assetsFolder}/pdf.worker-${getVersionSuffix(pdfDefaultOptions.assetsFolder)}-es5.js`
-      : `./${pdfDefaultOptions.assetsFolder}/pdf.worker-${getVersionSuffix(pdfDefaultOptions.assetsFolder)}.js`,
-  standardFontDataUrl: () => `../${pdfDefaultOptions.assetsFolder}/standard_fonts/`,
+      ? `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.worker-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}-es5.js`
+      : `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.worker-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}.js`,
+  standardFontDataUrl: () => `../${assetsUrl(pdfDefaultOptions.assetsFolder)}/standard_fonts/`,
 
   // options specific to ngx-extended-pdf-viewer (as opposed to being used by pdf.js)
   doubleTapZoomFactor: 'page-width',
