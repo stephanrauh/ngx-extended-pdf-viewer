@@ -3,7 +3,7 @@ const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.u
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
 export const pdfjsVersion = '2.15.671';
-export const pdfjsBleedingEdgeVersion = '2.16.323';
+export const pdfjsBleedingEdgeVersion = '2.16.351';
 export function getVersionSuffix(folder: string): string {
   if (folder && folder.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -11,7 +11,7 @@ export function getVersionSuffix(folder: string): string {
   return pdfjsVersion;
 }
 
-function assetsUrl(url: string): string {
+export function assetsUrl(url: string): string {
   if (url.includes('://')) {
     // the assets folder is on an absolute path (like https://example.com/assets)
     return url;

@@ -40,7 +40,7 @@ import { TextLayerRenderedEvent } from './events/textlayer-rendered';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 import { PdfBackground } from './options/pdf-background';
 import { PdfCursorTools } from './options/pdf-cursor-tools';
-import { getVersionSuffix, pdfDefaultOptions } from './options/pdf-default-options';
+import { assetsUrl, getVersionSuffix, pdfDefaultOptions } from './options/pdf-default-options';
 import { PageViewModeType, ScrollModeChangedEvent, ScrollModeType } from './options/pdf-viewer';
 import { IPDFViewerApplication } from './options/pdf-viewer-application';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
@@ -375,11 +375,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   /** Allows the user to put the viewer's svg images into an arbitrary folder */
   @Input()
-  public imageResourcesPath = './' + pdfDefaultOptions.assetsFolder + '/images/';
+  public imageResourcesPath = assetsUrl(pdfDefaultOptions.assetsFolder) + '/images/';
 
   /** Allows the user to put their locale folder into an arbitrary folder */
   @Input()
-  public localeFolderPath = './' + pdfDefaultOptions.assetsFolder + '/locale';
+  public localeFolderPath = assetsUrl(pdfDefaultOptions.assetsFolder) + '/locale';
 
   /** Override the default locale. This must be the complete locale name, such as "es-ES". The string is allowed to be all lowercase.
    */
