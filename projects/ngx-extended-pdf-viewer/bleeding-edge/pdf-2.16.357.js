@@ -23,11 +23,14 @@ window.ngxZone.runOutsideAngular(() => {
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
+		root["pdfjs-dist/build/pdf"] = module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
+		{
 		define("pdfjs-dist/build/pdf", [], factory);
+	  	root["pdfjs-dist/build/pdf"] = root.pdfjsLib = factory();
+		}
 	else if(typeof exports === 'object')
-		exports["pdfjs-dist/build/pdf"] = factory();
+		root["pdfjs-dist/build/pdf"] = exports["pdfjs-dist/build/pdf"] = factory();
 	else
 		root["pdfjs-dist/build/pdf"] = root.pdfjsLib = factory();
 })(globalThis, () => {
@@ -2141,7 +2144,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.16.351',
+    apiVersion: '2.16.357',
     source: {
       data: source.data,
       url: source.url,
@@ -4324,9 +4327,9 @@ class InternalRenderTask {
 
 }
 
-const version = '2.16.351';
+const version = '2.16.357';
 exports.version = version;
-const build = 'a88f145ac';
+const build = '22dd0ba01';
 exports.build = build;
 
 /***/ }),
@@ -11630,7 +11633,6 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   #boundEditorDivKeydown = this.editorDivKeydown.bind(this);
   #color;
   #content = "";
-  #contentHTML = "";
   #hasAlreadyBeenCommitted = false;
   #fontSize;
   static _freeTextDefaultContent = "";
@@ -11845,7 +11847,6 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     }
 
     this.disableEditMode();
-    this.#contentHTML = this.editorDiv.innerHTML;
     this.#content = this.#extractText().trimEnd();
     this.#setEditorDimensions();
   }
@@ -11929,7 +11930,13 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     if (this.width) {
       const [parentWidth, parentHeight] = this.parent.viewportBaseDimensions;
       this.setAt(baseX * parentWidth, baseY * parentHeight, this.width * parentWidth, this.height * parentHeight);
-      this.editorDiv.innerHTML = this.#contentHTML;
+
+      for (const line of this.#content.split("\n")) {
+        const div = document.createElement("div");
+        div.append(line ? document.createTextNode(line) : document.createElement("br"));
+        this.editorDiv.append(div);
+      }
+
       this.div.draggable = true;
       this.editorDiv.contentEditable = false;
     } else {
@@ -11949,7 +11956,6 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     editor.#fontSize = data.fontSize;
     editor.#color = _util.Util.makeHexColor(...data.color);
     editor.#content = data.value;
-    editor.#contentHTML = data.value.split("\n").map(line => `<div>${line}</div>`).join("");
     return editor;
   }
 
@@ -20052,8 +20058,8 @@ var _svg = __w_pdfjs_require__(31);
 
 var _xfa_layer = __w_pdfjs_require__(29);
 
-const pdfjsVersion = '2.16.351';
-const pdfjsBuild = 'a88f145ac';
+const pdfjsVersion = '2.16.357';
+const pdfjsBuild = '22dd0ba01';
 {
   if (_is_node.isNodeJS) {
     const {
