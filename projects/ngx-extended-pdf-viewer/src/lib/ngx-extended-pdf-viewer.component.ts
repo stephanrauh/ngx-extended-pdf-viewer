@@ -74,6 +74,7 @@ export interface FormDataType {
 @Component({
   selector: 'ngx-extended-pdf-viewer',
   templateUrl: './ngx-extended-pdf-viewer.component.html',
+  styleUrls: ['./ngx-extended-pdf-viewer.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
@@ -640,6 +641,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public toolbarWidth = '100%';
 
   private toolbar: HTMLElement | undefined = undefined;
+
   public onToolbarLoaded(toolbarElement: HTMLElement): void {
     this.toolbar = toolbarElement;
   }
@@ -697,6 +699,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public calcViewerPositionTop(): void {
     if (this.toolbar === undefined) {
+      this.sidebarPositionTop = '0px';
       return;
     }
     let top = this.toolbar.getBoundingClientRect().height;
@@ -704,7 +707,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
     const factor = top / 33;
 
-    this.sidebarPositionTop = (33 + 33 * (factor - 1)).toString() + 'px';
+    if (this.primaryMenuVisible) {
+      this.sidebarPositionTop = (33 + 33 * (factor - 1)).toString() + 'px';
+    } else {
+      this.sidebarPositionTop = '0px';
+    }
     this.secondaryToolbarTop = (33 + 38 * (factor - 1)).toString() + 'px';
     this.findbarTop = (34 + 54 * (factor - 1)).toString() + 'px';
 
@@ -1952,6 +1959,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if ('pageViewMode' in changes && !changes['pageViewMode'].isFirstChange()) {
       this.removeScrollbarInInititeScrollMode();
     }
+    this.calcViewerPositionTop();
   }
 
   private async setZoom() {
