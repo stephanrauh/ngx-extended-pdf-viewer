@@ -387,3 +387,4 @@
 - 15.0.0-alpha.0 #1470 update to pdf.js 2.15 / 2.16; #918 add an experimental preview of the attribute `[enableRelativeCoords]="true"` to improve pinch gestures
 - 15.0.0-alpha.1 #1478 allow for absolute asset URLs on a remote server
 - 15.0.0-alpha.2 #1427 allow for AMD modules
+- 15.0.0-alpha.3 #1498 allows the PDF viewer to use the free space if the toolbar is hidden

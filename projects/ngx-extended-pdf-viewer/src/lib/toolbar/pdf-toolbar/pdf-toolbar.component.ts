@@ -1,11 +1,11 @@
-import { Component, ElementRef, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'pdf-toolbar',
   templateUrl: './pdf-toolbar.component.html',
   styleUrls: ['./pdf-toolbar.component.css'],
 })
-export class PdfToolbarComponent {
+export class PdfToolbarComponent implements AfterViewInit {
   @Input()
   public customToolbar: TemplateRef<any> | undefined;
 
@@ -66,7 +66,8 @@ export class PdfToolbarComponent {
   @Output()
   public onToolbarLoaded = new EventEmitter<HTMLElement>();
 
-  constructor(elementRef: ElementRef) {
-    this.onToolbarLoaded.emit(elementRef.nativeElement.getElementsByClassName('toolbar')[0] as HTMLElement);
+  constructor(private elementRef: ElementRef) {}
+  ngAfterViewInit(): void {
+    this.onToolbarLoaded.emit(this.elementRef.nativeElement.getElementsByClassName('toolbar')[0] as HTMLElement);
   }
 }

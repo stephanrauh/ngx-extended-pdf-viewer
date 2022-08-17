@@ -134,7 +134,7 @@ class WorkerMessageHandler {
     const WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.16.357';
+    const workerVersion = '2.16.389';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -28002,961 +28002,966 @@ const MAX_SUBR_NESTING = 10;
 const CFFStandardStrings = [".notdef", "space", "exclam", "quotedbl", "numbersign", "dollar", "percent", "ampersand", "quoteright", "parenleft", "parenright", "asterisk", "plus", "comma", "hyphen", "period", "slash", "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "colon", "semicolon", "less", "equal", "greater", "question", "at", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "bracketleft", "backslash", "bracketright", "asciicircum", "underscore", "quoteleft", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "braceleft", "bar", "braceright", "asciitilde", "exclamdown", "cent", "sterling", "fraction", "yen", "florin", "section", "currency", "quotesingle", "quotedblleft", "guillemotleft", "guilsinglleft", "guilsinglright", "fi", "fl", "endash", "dagger", "daggerdbl", "periodcentered", "paragraph", "bullet", "quotesinglbase", "quotedblbase", "quotedblright", "guillemotright", "ellipsis", "perthousand", "questiondown", "grave", "acute", "circumflex", "tilde", "macron", "breve", "dotaccent", "dieresis", "ring", "cedilla", "hungarumlaut", "ogonek", "caron", "emdash", "AE", "ordfeminine", "Lslash", "Oslash", "OE", "ordmasculine", "ae", "dotlessi", "lslash", "oslash", "oe", "germandbls", "onesuperior", "logicalnot", "mu", "trademark", "Eth", "onehalf", "plusminus", "Thorn", "onequarter", "divide", "brokenbar", "degree", "thorn", "threequarters", "twosuperior", "registered", "minus", "eth", "multiply", "threesuperior", "copyright", "Aacute", "Acircumflex", "Adieresis", "Agrave", "Aring", "Atilde", "Ccedilla", "Eacute", "Ecircumflex", "Edieresis", "Egrave", "Iacute", "Icircumflex", "Idieresis", "Igrave", "Ntilde", "Oacute", "Ocircumflex", "Odieresis", "Ograve", "Otilde", "Scaron", "Uacute", "Ucircumflex", "Udieresis", "Ugrave", "Yacute", "Ydieresis", "Zcaron", "aacute", "acircumflex", "adieresis", "agrave", "aring", "atilde", "ccedilla", "eacute", "ecircumflex", "edieresis", "egrave", "iacute", "icircumflex", "idieresis", "igrave", "ntilde", "oacute", "ocircumflex", "odieresis", "ograve", "otilde", "scaron", "uacute", "ucircumflex", "udieresis", "ugrave", "yacute", "ydieresis", "zcaron", "exclamsmall", "Hungarumlautsmall", "dollaroldstyle", "dollarsuperior", "ampersandsmall", "Acutesmall", "parenleftsuperior", "parenrightsuperior", "twodotenleader", "onedotenleader", "zerooldstyle", "oneoldstyle", "twooldstyle", "threeoldstyle", "fouroldstyle", "fiveoldstyle", "sixoldstyle", "sevenoldstyle", "eightoldstyle", "nineoldstyle", "commasuperior", "threequartersemdash", "periodsuperior", "questionsmall", "asuperior", "bsuperior", "centsuperior", "dsuperior", "esuperior", "isuperior", "lsuperior", "msuperior", "nsuperior", "osuperior", "rsuperior", "ssuperior", "tsuperior", "ff", "ffi", "ffl", "parenleftinferior", "parenrightinferior", "Circumflexsmall", "hyphensuperior", "Gravesmall", "Asmall", "Bsmall", "Csmall", "Dsmall", "Esmall", "Fsmall", "Gsmall", "Hsmall", "Ismall", "Jsmall", "Ksmall", "Lsmall", "Msmall", "Nsmall", "Osmall", "Psmall", "Qsmall", "Rsmall", "Ssmall", "Tsmall", "Usmall", "Vsmall", "Wsmall", "Xsmall", "Ysmall", "Zsmall", "colonmonetary", "onefitted", "rupiah", "Tildesmall", "exclamdownsmall", "centoldstyle", "Lslashsmall", "Scaronsmall", "Zcaronsmall", "Dieresissmall", "Brevesmall", "Caronsmall", "Dotaccentsmall", "Macronsmall", "figuredash", "hypheninferior", "Ogoneksmall", "Ringsmall", "Cedillasmall", "questiondownsmall", "oneeighth", "threeeighths", "fiveeighths", "seveneighths", "onethird", "twothirds", "zerosuperior", "foursuperior", "fivesuperior", "sixsuperior", "sevensuperior", "eightsuperior", "ninesuperior", "zeroinferior", "oneinferior", "twoinferior", "threeinferior", "fourinferior", "fiveinferior", "sixinferior", "seveninferior", "eightinferior", "nineinferior", "centinferior", "dollarinferior", "periodinferior", "commainferior", "Agravesmall", "Aacutesmall", "Acircumflexsmall", "Atildesmall", "Adieresissmall", "Aringsmall", "AEsmall", "Ccedillasmall", "Egravesmall", "Eacutesmall", "Ecircumflexsmall", "Edieresissmall", "Igravesmall", "Iacutesmall", "Icircumflexsmall", "Idieresissmall", "Ethsmall", "Ntildesmall", "Ogravesmall", "Oacutesmall", "Ocircumflexsmall", "Otildesmall", "Odieresissmall", "OEsmall", "Oslashsmall", "Ugravesmall", "Uacutesmall", "Ucircumflexsmall", "Udieresissmall", "Yacutesmall", "Thornsmall", "Ydieresissmall", "001.000", "001.001", "001.002", "001.003", "Black", "Bold", "Book", "Light", "Medium", "Regular", "Roman", "Semibold"];
 exports.CFFStandardStrings = CFFStandardStrings;
 const NUM_STANDARD_CFF_STRINGS = 391;
+const CharstringValidationData = [null, {
+  id: "hstem",
+  min: 2,
+  stackClearing: true,
+  stem: true
+}, null, {
+  id: "vstem",
+  min: 2,
+  stackClearing: true,
+  stem: true
+}, {
+  id: "vmoveto",
+  min: 1,
+  stackClearing: true
+}, {
+  id: "rlineto",
+  min: 2,
+  resetStack: true
+}, {
+  id: "hlineto",
+  min: 1,
+  resetStack: true
+}, {
+  id: "vlineto",
+  min: 1,
+  resetStack: true
+}, {
+  id: "rrcurveto",
+  min: 6,
+  resetStack: true
+}, null, {
+  id: "callsubr",
+  min: 1,
+  undefStack: true
+}, {
+  id: "return",
+  min: 0,
+  undefStack: true
+}, null, null, {
+  id: "endchar",
+  min: 0,
+  stackClearing: true
+}, null, null, null, {
+  id: "hstemhm",
+  min: 2,
+  stackClearing: true,
+  stem: true
+}, {
+  id: "hintmask",
+  min: 0,
+  stackClearing: true
+}, {
+  id: "cntrmask",
+  min: 0,
+  stackClearing: true
+}, {
+  id: "rmoveto",
+  min: 2,
+  stackClearing: true
+}, {
+  id: "hmoveto",
+  min: 1,
+  stackClearing: true
+}, {
+  id: "vstemhm",
+  min: 2,
+  stackClearing: true,
+  stem: true
+}, {
+  id: "rcurveline",
+  min: 8,
+  resetStack: true
+}, {
+  id: "rlinecurve",
+  min: 8,
+  resetStack: true
+}, {
+  id: "vvcurveto",
+  min: 4,
+  resetStack: true
+}, {
+  id: "hhcurveto",
+  min: 4,
+  resetStack: true
+}, null, {
+  id: "callgsubr",
+  min: 1,
+  undefStack: true
+}, {
+  id: "vhcurveto",
+  min: 4,
+  resetStack: true
+}, {
+  id: "hvcurveto",
+  min: 4,
+  resetStack: true
+}];
+const CharstringValidationData12 = [null, null, null, {
+  id: "and",
+  min: 2,
+  stackDelta: -1
+}, {
+  id: "or",
+  min: 2,
+  stackDelta: -1
+}, {
+  id: "not",
+  min: 1,
+  stackDelta: 0
+}, null, null, null, {
+  id: "abs",
+  min: 1,
+  stackDelta: 0
+}, {
+  id: "add",
+  min: 2,
+  stackDelta: -1,
 
-const CFFParser = function CFFParserClosure() {
-  const CharstringValidationData = [null, {
-    id: "hstem",
-    min: 2,
-    stackClearing: true,
-    stem: true
-  }, null, {
-    id: "vstem",
-    min: 2,
-    stackClearing: true,
-    stem: true
-  }, {
-    id: "vmoveto",
-    min: 1,
-    stackClearing: true
-  }, {
-    id: "rlineto",
-    min: 2,
-    resetStack: true
-  }, {
-    id: "hlineto",
-    min: 1,
-    resetStack: true
-  }, {
-    id: "vlineto",
-    min: 1,
-    resetStack: true
-  }, {
-    id: "rrcurveto",
-    min: 6,
-    resetStack: true
-  }, null, {
-    id: "callsubr",
-    min: 1,
-    undefStack: true
-  }, {
-    id: "return",
-    min: 0,
-    undefStack: true
-  }, null, null, {
-    id: "endchar",
-    min: 0,
-    stackClearing: true
-  }, null, null, null, {
-    id: "hstemhm",
-    min: 2,
-    stackClearing: true,
-    stem: true
-  }, {
-    id: "hintmask",
-    min: 0,
-    stackClearing: true
-  }, {
-    id: "cntrmask",
-    min: 0,
-    stackClearing: true
-  }, {
-    id: "rmoveto",
-    min: 2,
-    stackClearing: true
-  }, {
-    id: "hmoveto",
-    min: 1,
-    stackClearing: true
-  }, {
-    id: "vstemhm",
-    min: 2,
-    stackClearing: true,
-    stem: true
-  }, {
-    id: "rcurveline",
-    min: 8,
-    resetStack: true
-  }, {
-    id: "rlinecurve",
-    min: 8,
-    resetStack: true
-  }, {
-    id: "vvcurveto",
-    min: 4,
-    resetStack: true
-  }, {
-    id: "hhcurveto",
-    min: 4,
-    resetStack: true
-  }, null, {
-    id: "callgsubr",
-    min: 1,
-    undefStack: true
-  }, {
-    id: "vhcurveto",
-    min: 4,
-    resetStack: true
-  }, {
-    id: "hvcurveto",
-    min: 4,
-    resetStack: true
-  }];
-  const CharstringValidationData12 = [null, null, null, {
-    id: "and",
-    min: 2,
-    stackDelta: -1
-  }, {
-    id: "or",
-    min: 2,
-    stackDelta: -1
-  }, {
-    id: "not",
-    min: 1,
-    stackDelta: 0
-  }, null, null, null, {
-    id: "abs",
-    min: 1,
-    stackDelta: 0
-  }, {
-    id: "add",
-    min: 2,
-    stackDelta: -1,
-    stackFn: function stack_div(stack, index) {
-      stack[index - 2] = stack[index - 2] + stack[index - 1];
-    }
-  }, {
-    id: "sub",
-    min: 2,
-    stackDelta: -1,
-    stackFn: function stack_div(stack, index) {
-      stack[index - 2] = stack[index - 2] - stack[index - 1];
-    }
-  }, {
-    id: "div",
-    min: 2,
-    stackDelta: -1,
-    stackFn: function stack_div(stack, index) {
-      stack[index - 2] = stack[index - 2] / stack[index - 1];
-    }
-  }, null, {
-    id: "neg",
-    min: 1,
-    stackDelta: 0,
-    stackFn: function stack_div(stack, index) {
-      stack[index - 1] = -stack[index - 1];
-    }
-  }, {
-    id: "eq",
-    min: 2,
-    stackDelta: -1
-  }, null, null, {
-    id: "drop",
-    min: 1,
-    stackDelta: -1
-  }, null, {
-    id: "put",
-    min: 2,
-    stackDelta: -2
-  }, {
-    id: "get",
-    min: 1,
-    stackDelta: 0
-  }, {
-    id: "ifelse",
-    min: 4,
-    stackDelta: -3
-  }, {
-    id: "random",
-    min: 0,
-    stackDelta: 1
-  }, {
-    id: "mul",
-    min: 2,
-    stackDelta: -1,
-    stackFn: function stack_div(stack, index) {
-      stack[index - 2] = stack[index - 2] * stack[index - 1];
-    }
-  }, null, {
-    id: "sqrt",
-    min: 1,
-    stackDelta: 0
-  }, {
-    id: "dup",
-    min: 1,
-    stackDelta: 1
-  }, {
-    id: "exch",
-    min: 2,
-    stackDelta: 0
-  }, {
-    id: "index",
-    min: 2,
-    stackDelta: 0
-  }, {
-    id: "roll",
-    min: 3,
-    stackDelta: -2
-  }, null, null, null, {
-    id: "hflex",
-    min: 7,
-    resetStack: true
-  }, {
-    id: "flex",
-    min: 13,
-    resetStack: true
-  }, {
-    id: "hflex1",
-    min: 9,
-    resetStack: true
-  }, {
-    id: "flex1",
-    min: 11,
-    resetStack: true
-  }];
+  stackFn(stack, index) {
+    stack[index - 2] = stack[index - 2] + stack[index - 1];
+  }
 
-  class CFFParser {
-    constructor(file, properties, seacAnalysisEnabled) {
-      this.bytes = file.getBytes();
-      this.properties = properties;
-      this.seacAnalysisEnabled = !!seacAnalysisEnabled;
+}, {
+  id: "sub",
+  min: 2,
+  stackDelta: -1,
+
+  stackFn(stack, index) {
+    stack[index - 2] = stack[index - 2] - stack[index - 1];
+  }
+
+}, {
+  id: "div",
+  min: 2,
+  stackDelta: -1,
+
+  stackFn(stack, index) {
+    stack[index - 2] = stack[index - 2] / stack[index - 1];
+  }
+
+}, null, {
+  id: "neg",
+  min: 1,
+  stackDelta: 0,
+
+  stackFn(stack, index) {
+    stack[index - 1] = -stack[index - 1];
+  }
+
+}, {
+  id: "eq",
+  min: 2,
+  stackDelta: -1
+}, null, null, {
+  id: "drop",
+  min: 1,
+  stackDelta: -1
+}, null, {
+  id: "put",
+  min: 2,
+  stackDelta: -2
+}, {
+  id: "get",
+  min: 1,
+  stackDelta: 0
+}, {
+  id: "ifelse",
+  min: 4,
+  stackDelta: -3
+}, {
+  id: "random",
+  min: 0,
+  stackDelta: 1
+}, {
+  id: "mul",
+  min: 2,
+  stackDelta: -1,
+
+  stackFn(stack, index) {
+    stack[index - 2] = stack[index - 2] * stack[index - 1];
+  }
+
+}, null, {
+  id: "sqrt",
+  min: 1,
+  stackDelta: 0
+}, {
+  id: "dup",
+  min: 1,
+  stackDelta: 1
+}, {
+  id: "exch",
+  min: 2,
+  stackDelta: 0
+}, {
+  id: "index",
+  min: 2,
+  stackDelta: 0
+}, {
+  id: "roll",
+  min: 3,
+  stackDelta: -2
+}, null, null, null, {
+  id: "hflex",
+  min: 7,
+  resetStack: true
+}, {
+  id: "flex",
+  min: 13,
+  resetStack: true
+}, {
+  id: "hflex1",
+  min: 9,
+  resetStack: true
+}, {
+  id: "flex1",
+  min: 11,
+  resetStack: true
+}];
+
+class CFFParser {
+  constructor(file, properties, seacAnalysisEnabled) {
+    this.bytes = file.getBytes();
+    this.properties = properties;
+    this.seacAnalysisEnabled = !!seacAnalysisEnabled;
+  }
+
+  parse() {
+    const properties = this.properties;
+    const cff = new CFF();
+    this.cff = cff;
+    const header = this.parseHeader();
+    const nameIndex = this.parseIndex(header.endPos);
+    const topDictIndex = this.parseIndex(nameIndex.endPos);
+    const stringIndex = this.parseIndex(topDictIndex.endPos);
+    const globalSubrIndex = this.parseIndex(stringIndex.endPos);
+    const topDictParsed = this.parseDict(topDictIndex.obj.get(0));
+    const topDict = this.createDict(CFFTopDict, topDictParsed, cff.strings);
+    cff.header = header.obj;
+    cff.names = this.parseNameIndex(nameIndex.obj);
+    cff.strings = this.parseStringIndex(stringIndex.obj);
+    cff.topDict = topDict;
+    cff.globalSubrIndex = globalSubrIndex.obj;
+    this.parsePrivateDict(cff.topDict);
+    cff.isCIDFont = topDict.hasName("ROS");
+    const charStringOffset = topDict.getByName("CharStrings");
+    const charStringIndex = this.parseIndex(charStringOffset).obj;
+    const fontMatrix = topDict.getByName("FontMatrix");
+
+    if (fontMatrix) {
+      properties.fontMatrix = fontMatrix;
     }
 
-    parse() {
-      const properties = this.properties;
-      const cff = new CFF();
-      this.cff = cff;
-      const header = this.parseHeader();
-      const nameIndex = this.parseIndex(header.endPos);
-      const topDictIndex = this.parseIndex(nameIndex.endPos);
-      const stringIndex = this.parseIndex(topDictIndex.endPos);
-      const globalSubrIndex = this.parseIndex(stringIndex.endPos);
-      const topDictParsed = this.parseDict(topDictIndex.obj.get(0));
-      const topDict = this.createDict(CFFTopDict, topDictParsed, cff.strings);
-      cff.header = header.obj;
-      cff.names = this.parseNameIndex(nameIndex.obj);
-      cff.strings = this.parseStringIndex(stringIndex.obj);
-      cff.topDict = topDict;
-      cff.globalSubrIndex = globalSubrIndex.obj;
-      this.parsePrivateDict(cff.topDict);
-      cff.isCIDFont = topDict.hasName("ROS");
-      const charStringOffset = topDict.getByName("CharStrings");
-      const charStringIndex = this.parseIndex(charStringOffset).obj;
-      const fontMatrix = topDict.getByName("FontMatrix");
+    const fontBBox = topDict.getByName("FontBBox");
 
-      if (fontMatrix) {
-        properties.fontMatrix = fontMatrix;
+    if (fontBBox) {
+      properties.ascent = Math.max(fontBBox[3], fontBBox[1]);
+      properties.descent = Math.min(fontBBox[1], fontBBox[3]);
+      properties.ascentScaled = true;
+    }
+
+    let charset, encoding;
+
+    if (cff.isCIDFont) {
+      const fdArrayIndex = this.parseIndex(topDict.getByName("FDArray")).obj;
+
+      for (let i = 0, ii = fdArrayIndex.count; i < ii; ++i) {
+        const dictRaw = fdArrayIndex.get(i);
+        const fontDict = this.createDict(CFFTopDict, this.parseDict(dictRaw), cff.strings);
+        this.parsePrivateDict(fontDict);
+        cff.fdArray.push(fontDict);
       }
 
-      const fontBBox = topDict.getByName("FontBBox");
+      encoding = null;
+      charset = this.parseCharsets(topDict.getByName("charset"), charStringIndex.count, cff.strings, true);
+      cff.fdSelect = this.parseFDSelect(topDict.getByName("FDSelect"), charStringIndex.count);
+    } else {
+      charset = this.parseCharsets(topDict.getByName("charset"), charStringIndex.count, cff.strings, false);
+      encoding = this.parseEncoding(topDict.getByName("Encoding"), properties, cff.strings, charset.charset);
+    }
 
-      if (fontBBox) {
-        properties.ascent = Math.max(fontBBox[3], fontBBox[1]);
-        properties.descent = Math.min(fontBBox[1], fontBBox[3]);
-        properties.ascentScaled = true;
+    cff.charset = charset;
+    cff.encoding = encoding;
+    const charStringsAndSeacs = this.parseCharStrings({
+      charStrings: charStringIndex,
+      localSubrIndex: topDict.privateDict.subrsIndex,
+      globalSubrIndex: globalSubrIndex.obj,
+      fdSelect: cff.fdSelect,
+      fdArray: cff.fdArray,
+      privateDict: topDict.privateDict
+    });
+    cff.charStrings = charStringsAndSeacs.charStrings;
+    cff.seacs = charStringsAndSeacs.seacs;
+    cff.widths = charStringsAndSeacs.widths;
+    return cff;
+  }
+
+  parseHeader() {
+    let bytes = this.bytes;
+    const bytesLength = bytes.length;
+    let offset = 0;
+
+    while (offset < bytesLength && bytes[offset] !== 1) {
+      ++offset;
+    }
+
+    if (offset >= bytesLength) {
+      throw new _util.FormatError("Invalid CFF header");
+    }
+
+    if (offset !== 0) {
+      (0, _util.info)("cff data is shifted");
+      bytes = bytes.subarray(offset);
+      this.bytes = bytes;
+    }
+
+    const major = bytes[0];
+    const minor = bytes[1];
+    const hdrSize = bytes[2];
+    const offSize = bytes[3];
+    const header = new CFFHeader(major, minor, hdrSize, offSize);
+    return {
+      obj: header,
+      endPos: hdrSize
+    };
+  }
+
+  parseDict(dict) {
+    let pos = 0;
+
+    function parseOperand() {
+      let value = dict[pos++];
+
+      if (value === 30) {
+        return parseFloatOperand();
+      } else if (value === 28) {
+        value = dict[pos++];
+        value = (value << 24 | dict[pos++] << 16) >> 16;
+        return value;
+      } else if (value === 29) {
+        value = dict[pos++];
+        value = value << 8 | dict[pos++];
+        value = value << 8 | dict[pos++];
+        value = value << 8 | dict[pos++];
+        return value;
+      } else if (value >= 32 && value <= 246) {
+        return value - 139;
+      } else if (value >= 247 && value <= 250) {
+        return (value - 247) * 256 + dict[pos++] + 108;
+      } else if (value >= 251 && value <= 254) {
+        return -((value - 251) * 256) - dict[pos++] - 108;
       }
 
-      let charset, encoding;
+      (0, _util.warn)('CFFParser_parseDict: "' + value + '" is a reserved command.');
+      return NaN;
+    }
 
-      if (cff.isCIDFont) {
-        const fdArrayIndex = this.parseIndex(topDict.getByName("FDArray")).obj;
+    function parseFloatOperand() {
+      let str = "";
+      const eof = 15;
+      const lookup = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "E", "E-", null, "-"];
+      const length = dict.length;
 
-        for (let i = 0, ii = fdArrayIndex.count; i < ii; ++i) {
-          const dictRaw = fdArrayIndex.get(i);
-          const fontDict = this.createDict(CFFTopDict, this.parseDict(dictRaw), cff.strings);
-          this.parsePrivateDict(fontDict);
-          cff.fdArray.push(fontDict);
+      while (pos < length) {
+        const b = dict[pos++];
+        const b1 = b >> 4;
+        const b2 = b & 15;
+
+        if (b1 === eof) {
+          break;
         }
 
-        encoding = null;
-        charset = this.parseCharsets(topDict.getByName("charset"), charStringIndex.count, cff.strings, true);
-        cff.fdSelect = this.parseFDSelect(topDict.getByName("FDSelect"), charStringIndex.count);
+        str += lookup[b1];
+
+        if (b2 === eof) {
+          break;
+        }
+
+        str += lookup[b2];
+      }
+
+      return parseFloat(str);
+    }
+
+    let operands = [];
+    const entries = [];
+    pos = 0;
+    const end = dict.length;
+
+    while (pos < end) {
+      let b = dict[pos];
+
+      if (b <= 21) {
+        if (b === 12) {
+          b = b << 8 | dict[++pos];
+        }
+
+        entries.push([b, operands]);
+        operands = [];
+        ++pos;
       } else {
-        charset = this.parseCharsets(topDict.getByName("charset"), charStringIndex.count, cff.strings, false);
-        encoding = this.parseEncoding(topDict.getByName("Encoding"), properties, cff.strings, charset.charset);
+        operands.push(parseOperand());
       }
-
-      cff.charset = charset;
-      cff.encoding = encoding;
-      const charStringsAndSeacs = this.parseCharStrings({
-        charStrings: charStringIndex,
-        localSubrIndex: topDict.privateDict.subrsIndex,
-        globalSubrIndex: globalSubrIndex.obj,
-        fdSelect: cff.fdSelect,
-        fdArray: cff.fdArray,
-        privateDict: topDict.privateDict
-      });
-      cff.charStrings = charStringsAndSeacs.charStrings;
-      cff.seacs = charStringsAndSeacs.seacs;
-      cff.widths = charStringsAndSeacs.widths;
-      return cff;
     }
 
-    parseHeader() {
-      let bytes = this.bytes;
-      const bytesLength = bytes.length;
-      let offset = 0;
+    return entries;
+  }
 
-      while (offset < bytesLength && bytes[offset] !== 1) {
-        ++offset;
+  parseIndex(pos) {
+    const cffIndex = new CFFIndex();
+    const bytes = this.bytes;
+    const count = bytes[pos++] << 8 | bytes[pos++];
+    const offsets = [];
+    let end = pos;
+    let i, ii;
+
+    if (count !== 0) {
+      const offsetSize = bytes[pos++];
+      const startPos = pos + (count + 1) * offsetSize - 1;
+
+      for (i = 0, ii = count + 1; i < ii; ++i) {
+        let offset = 0;
+
+        for (let j = 0; j < offsetSize; ++j) {
+          offset <<= 8;
+          offset += bytes[pos++];
+        }
+
+        offsets.push(startPos + offset);
       }
 
-      if (offset >= bytesLength) {
-        throw new _util.FormatError("Invalid CFF header");
-      }
-
-      if (offset !== 0) {
-        (0, _util.info)("cff data is shifted");
-        bytes = bytes.subarray(offset);
-        this.bytes = bytes;
-      }
-
-      const major = bytes[0];
-      const minor = bytes[1];
-      const hdrSize = bytes[2];
-      const offSize = bytes[3];
-      const header = new CFFHeader(major, minor, hdrSize, offSize);
-      return {
-        obj: header,
-        endPos: hdrSize
-      };
+      end = offsets[count];
     }
 
-    parseDict(dict) {
-      let pos = 0;
+    for (i = 0, ii = offsets.length - 1; i < ii; ++i) {
+      const offsetStart = offsets[i];
+      const offsetEnd = offsets[i + 1];
+      cffIndex.add(bytes.subarray(offsetStart, offsetEnd));
+    }
 
-      function parseOperand() {
-        let value = dict[pos++];
+    return {
+      obj: cffIndex,
+      endPos: end
+    };
+  }
 
-        if (value === 30) {
-          return parseFloatOperand();
-        } else if (value === 28) {
-          value = dict[pos++];
-          value = (value << 24 | dict[pos++] << 16) >> 16;
-          return value;
-        } else if (value === 29) {
-          value = dict[pos++];
-          value = value << 8 | dict[pos++];
-          value = value << 8 | dict[pos++];
-          value = value << 8 | dict[pos++];
-          return value;
-        } else if (value >= 32 && value <= 246) {
-          return value - 139;
-        } else if (value >= 247 && value <= 250) {
-          return (value - 247) * 256 + dict[pos++] + 108;
-        } else if (value >= 251 && value <= 254) {
-          return -((value - 251) * 256) - dict[pos++] - 108;
-        }
+  parseNameIndex(index) {
+    const names = [];
 
-        (0, _util.warn)('CFFParser_parseDict: "' + value + '" is a reserved command.');
-        return NaN;
-      }
+    for (let i = 0, ii = index.count; i < ii; ++i) {
+      const name = index.get(i);
+      names.push((0, _util.bytesToString)(name));
+    }
 
-      function parseFloatOperand() {
-        let str = "";
-        const eof = 15;
-        const lookup = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "E", "E-", null, "-"];
-        const length = dict.length;
+    return names;
+  }
 
-        while (pos < length) {
-          const b = dict[pos++];
-          const b1 = b >> 4;
-          const b2 = b & 15;
+  parseStringIndex(index) {
+    const strings = new CFFStrings();
 
-          if (b1 === eof) {
-            break;
-          }
+    for (let i = 0, ii = index.count; i < ii; ++i) {
+      const data = index.get(i);
+      strings.add((0, _util.bytesToString)(data));
+    }
 
-          str += lookup[b1];
+    return strings;
+  }
 
-          if (b2 === eof) {
-            break;
-          }
+  createDict(Type, dict, strings) {
+    const cffDict = new Type(strings);
 
-          str += lookup[b2];
-        }
+    for (let i = 0, ii = dict.length; i < ii; ++i) {
+      const pair = dict[i];
+      const key = pair[0];
+      const value = pair[1];
+      cffDict.setByKey(key, value);
+    }
 
-        return parseFloat(str);
-      }
+    return cffDict;
+  }
 
-      let operands = [];
-      const entries = [];
-      pos = 0;
-      const end = dict.length;
+  parseCharString(state, data, localSubrIndex, globalSubrIndex) {
+    if (!data || state.callDepth > MAX_SUBR_NESTING) {
+      return false;
+    }
 
-      while (pos < end) {
-        let b = dict[pos];
+    let stackSize = state.stackSize;
+    const stack = state.stack;
+    const length = data.length;
 
-        if (b <= 21) {
-          if (b === 12) {
-            b = b << 8 | dict[++pos];
-          }
+    for (let j = 0; j < length;) {
+      const value = data[j++];
+      let validationCommand = null;
 
-          entries.push([b, operands]);
-          operands = [];
-          ++pos;
+      if (value === 12) {
+        const q = data[j++];
+
+        if (q === 0) {
+          data[j - 2] = 139;
+          data[j - 1] = 22;
+          stackSize = 0;
         } else {
-          operands.push(parseOperand());
+          validationCommand = CharstringValidationData12[q];
         }
-      }
+      } else if (value === 28) {
+        stack[stackSize] = (data[j] << 24 | data[j + 1] << 16) >> 16;
+        j += 2;
+        stackSize++;
+      } else if (value === 14) {
+        if (stackSize >= 4) {
+          stackSize -= 4;
 
-      return entries;
-    }
-
-    parseIndex(pos) {
-      const cffIndex = new CFFIndex();
-      const bytes = this.bytes;
-      const count = bytes[pos++] << 8 | bytes[pos++];
-      const offsets = [];
-      let end = pos;
-      let i, ii;
-
-      if (count !== 0) {
-        const offsetSize = bytes[pos++];
-        const startPos = pos + (count + 1) * offsetSize - 1;
-
-        for (i = 0, ii = count + 1; i < ii; ++i) {
-          let offset = 0;
-
-          for (let j = 0; j < offsetSize; ++j) {
-            offset <<= 8;
-            offset += bytes[pos++];
+          if (this.seacAnalysisEnabled) {
+            state.seac = stack.slice(stackSize, stackSize + 4);
+            return false;
           }
-
-          offsets.push(startPos + offset);
         }
 
-        end = offsets[count];
-      }
+        validationCommand = CharstringValidationData[value];
+      } else if (value >= 32 && value <= 246) {
+        stack[stackSize] = value - 139;
+        stackSize++;
+      } else if (value >= 247 && value <= 254) {
+        stack[stackSize] = value < 251 ? (value - 247 << 8) + data[j] + 108 : -(value - 251 << 8) - data[j] - 108;
+        j++;
+        stackSize++;
+      } else if (value === 255) {
+        stack[stackSize] = (data[j] << 24 | data[j + 1] << 16 | data[j + 2] << 8 | data[j + 3]) / 65536;
+        j += 4;
+        stackSize++;
+      } else if (value === 19 || value === 20) {
+        state.hints += stackSize >> 1;
+        j += state.hints + 7 >> 3;
+        stackSize %= 2;
+        validationCommand = CharstringValidationData[value];
+      } else if (value === 10 || value === 29) {
+        let subrsIndex;
 
-      for (i = 0, ii = offsets.length - 1; i < ii; ++i) {
-        const offsetStart = offsets[i];
-        const offsetEnd = offsets[i + 1];
-        cffIndex.add(bytes.subarray(offsetStart, offsetEnd));
-      }
+        if (value === 10) {
+          subrsIndex = localSubrIndex;
+        } else {
+          subrsIndex = globalSubrIndex;
+        }
 
-      return {
-        obj: cffIndex,
-        endPos: end
-      };
-    }
-
-    parseNameIndex(index) {
-      const names = [];
-
-      for (let i = 0, ii = index.count; i < ii; ++i) {
-        const name = index.get(i);
-        names.push((0, _util.bytesToString)(name));
-      }
-
-      return names;
-    }
-
-    parseStringIndex(index) {
-      const strings = new CFFStrings();
-
-      for (let i = 0, ii = index.count; i < ii; ++i) {
-        const data = index.get(i);
-        strings.add((0, _util.bytesToString)(data));
-      }
-
-      return strings;
-    }
-
-    createDict(Type, dict, strings) {
-      const cffDict = new Type(strings);
-
-      for (let i = 0, ii = dict.length; i < ii; ++i) {
-        const pair = dict[i];
-        const key = pair[0];
-        const value = pair[1];
-        cffDict.setByKey(key, value);
-      }
-
-      return cffDict;
-    }
-
-    parseCharString(state, data, localSubrIndex, globalSubrIndex) {
-      if (!data || state.callDepth > MAX_SUBR_NESTING) {
-        return false;
-      }
-
-      let stackSize = state.stackSize;
-      const stack = state.stack;
-      const length = data.length;
-
-      for (let j = 0; j < length;) {
-        const value = data[j++];
-        let validationCommand = null;
-
-        if (value === 12) {
-          const q = data[j++];
-
-          if (q === 0) {
-            data[j - 2] = 139;
-            data[j - 1] = 22;
-            stackSize = 0;
-          } else {
-            validationCommand = CharstringValidationData12[q];
-          }
-        } else if (value === 28) {
-          stack[stackSize] = (data[j] << 24 | data[j + 1] << 16) >> 16;
-          j += 2;
-          stackSize++;
-        } else if (value === 14) {
-          if (stackSize >= 4) {
-            stackSize -= 4;
-
-            if (this.seacAnalysisEnabled) {
-              state.seac = stack.slice(stackSize, stackSize + 4);
-              return false;
-            }
-          }
-
+        if (!subrsIndex) {
           validationCommand = CharstringValidationData[value];
-        } else if (value >= 32 && value <= 246) {
-          stack[stackSize] = value - 139;
-          stackSize++;
-        } else if (value >= 247 && value <= 254) {
-          stack[stackSize] = value < 251 ? (value - 247 << 8) + data[j] + 108 : -(value - 251 << 8) - data[j] - 108;
-          j++;
-          stackSize++;
-        } else if (value === 255) {
-          stack[stackSize] = (data[j] << 24 | data[j + 1] << 16 | data[j + 2] << 8 | data[j + 3]) / 65536;
-          j += 4;
-          stackSize++;
-        } else if (value === 19 || value === 20) {
+          (0, _util.warn)("Missing subrsIndex for " + validationCommand.id);
+          return false;
+        }
+
+        let bias = 32768;
+
+        if (subrsIndex.count < 1240) {
+          bias = 107;
+        } else if (subrsIndex.count < 33900) {
+          bias = 1131;
+        }
+
+        const subrNumber = stack[--stackSize] + bias;
+
+        if (subrNumber < 0 || subrNumber >= subrsIndex.count || isNaN(subrNumber)) {
+          validationCommand = CharstringValidationData[value];
+          (0, _util.warn)("Out of bounds subrIndex for " + validationCommand.id);
+          return false;
+        }
+
+        state.stackSize = stackSize;
+        state.callDepth++;
+        const valid = this.parseCharString(state, subrsIndex.get(subrNumber), localSubrIndex, globalSubrIndex);
+
+        if (!valid) {
+          return false;
+        }
+
+        state.callDepth--;
+        stackSize = state.stackSize;
+        continue;
+      } else if (value === 11) {
+        state.stackSize = stackSize;
+        return true;
+      } else if (value === 0 && j === data.length) {
+        data[j - 1] = 14;
+        validationCommand = CharstringValidationData[14];
+      } else {
+        validationCommand = CharstringValidationData[value];
+      }
+
+      if (validationCommand) {
+        if (validationCommand.stem) {
           state.hints += stackSize >> 1;
-          j += state.hints + 7 >> 3;
-          stackSize %= 2;
-          validationCommand = CharstringValidationData[value];
-        } else if (value === 10 || value === 29) {
-          let subrsIndex;
 
-          if (value === 10) {
-            subrsIndex = localSubrIndex;
-          } else {
-            subrsIndex = globalSubrIndex;
+          if (value === 3 || value === 23) {
+            state.hasVStems = true;
+          } else if (state.hasVStems && (value === 1 || value === 18)) {
+            (0, _util.warn)("CFF stem hints are in wrong order");
+            data[j - 1] = value === 1 ? 3 : 23;
           }
-
-          if (!subrsIndex) {
-            validationCommand = CharstringValidationData[value];
-            (0, _util.warn)("Missing subrsIndex for " + validationCommand.id);
-            return false;
-          }
-
-          let bias = 32768;
-
-          if (subrsIndex.count < 1240) {
-            bias = 107;
-          } else if (subrsIndex.count < 33900) {
-            bias = 1131;
-          }
-
-          const subrNumber = stack[--stackSize] + bias;
-
-          if (subrNumber < 0 || subrNumber >= subrsIndex.count || isNaN(subrNumber)) {
-            validationCommand = CharstringValidationData[value];
-            (0, _util.warn)("Out of bounds subrIndex for " + validationCommand.id);
-            return false;
-          }
-
-          state.stackSize = stackSize;
-          state.callDepth++;
-          const valid = this.parseCharString(state, subrsIndex.get(subrNumber), localSubrIndex, globalSubrIndex);
-
-          if (!valid) {
-            return false;
-          }
-
-          state.callDepth--;
-          stackSize = state.stackSize;
-          continue;
-        } else if (value === 11) {
-          state.stackSize = stackSize;
-          return true;
-        } else if (value === 0 && j === data.length) {
-          data[j - 1] = 14;
-          validationCommand = CharstringValidationData[14];
-        } else {
-          validationCommand = CharstringValidationData[value];
         }
 
-        if (validationCommand) {
-          if (validationCommand.stem) {
-            state.hints += stackSize >> 1;
+        if ("min" in validationCommand) {
+          if (!state.undefStack && stackSize < validationCommand.min) {
+            (0, _util.warn)("Not enough parameters for " + validationCommand.id + "; actual: " + stackSize + ", expected: " + validationCommand.min);
 
-            if (value === 3 || value === 23) {
-              state.hasVStems = true;
-            } else if (state.hasVStems && (value === 1 || value === 18)) {
-              (0, _util.warn)("CFF stem hints are in wrong order");
-              data[j - 1] = value === 1 ? 3 : 23;
+            if (stackSize === 0) {
+              data[j - 1] = 14;
+              return true;
             }
+
+            return false;
+          }
+        }
+
+        if (state.firstStackClearing && validationCommand.stackClearing) {
+          state.firstStackClearing = false;
+          stackSize -= validationCommand.min;
+
+          if (stackSize >= 2 && validationCommand.stem) {
+            stackSize %= 2;
+          } else if (stackSize > 1) {
+            (0, _util.warn)("Found too many parameters for stack-clearing command");
           }
 
-          if ("min" in validationCommand) {
-            if (!state.undefStack && stackSize < validationCommand.min) {
-              (0, _util.warn)("Not enough parameters for " + validationCommand.id + "; actual: " + stackSize + ", expected: " + validationCommand.min);
+          if (stackSize > 0) {
+            state.width = stack[stackSize - 1];
+          }
+        }
 
-              if (stackSize === 0) {
-                data[j - 1] = 14;
-                return true;
-              }
-
-              return false;
-            }
+        if ("stackDelta" in validationCommand) {
+          if ("stackFn" in validationCommand) {
+            validationCommand.stackFn(stack, stackSize);
           }
 
-          if (state.firstStackClearing && validationCommand.stackClearing) {
-            state.firstStackClearing = false;
-            stackSize -= validationCommand.min;
-
-            if (stackSize >= 2 && validationCommand.stem) {
-              stackSize %= 2;
-            } else if (stackSize > 1) {
-              (0, _util.warn)("Found too many parameters for stack-clearing command");
-            }
-
-            if (stackSize > 0) {
-              state.width = stack[stackSize - 1];
-            }
-          }
-
-          if ("stackDelta" in validationCommand) {
-            if ("stackFn" in validationCommand) {
-              validationCommand.stackFn(stack, stackSize);
-            }
-
-            stackSize += validationCommand.stackDelta;
-          } else if (validationCommand.stackClearing) {
-            stackSize = 0;
-          } else if (validationCommand.resetStack) {
-            stackSize = 0;
-            state.undefStack = false;
-          } else if (validationCommand.undefStack) {
-            stackSize = 0;
-            state.undefStack = true;
-            state.firstStackClearing = false;
-          }
+          stackSize += validationCommand.stackDelta;
+        } else if (validationCommand.stackClearing) {
+          stackSize = 0;
+        } else if (validationCommand.resetStack) {
+          stackSize = 0;
+          state.undefStack = false;
+        } else if (validationCommand.undefStack) {
+          stackSize = 0;
+          state.undefStack = true;
+          state.firstStackClearing = false;
         }
       }
-
-      state.stackSize = stackSize;
-      return true;
     }
 
-    parseCharStrings({
-      charStrings,
-      localSubrIndex,
-      globalSubrIndex,
-      fdSelect,
-      fdArray,
-      privateDict
-    }) {
-      const seacs = [];
-      const widths = [];
-      const count = charStrings.count;
+    state.stackSize = stackSize;
+    return true;
+  }
 
-      for (let i = 0; i < count; i++) {
-        const charstring = charStrings.get(i);
-        const state = {
-          callDepth: 0,
-          stackSize: 0,
-          stack: [],
-          undefStack: true,
-          hints: 0,
-          firstStackClearing: true,
-          seac: null,
-          width: null,
-          hasVStems: false
-        };
-        let valid = true;
-        let localSubrToUse = null;
-        let privateDictToUse = privateDict;
+  parseCharStrings({
+    charStrings,
+    localSubrIndex,
+    globalSubrIndex,
+    fdSelect,
+    fdArray,
+    privateDict
+  }) {
+    const seacs = [];
+    const widths = [];
+    const count = charStrings.count;
 
-        if (fdSelect && fdArray.length) {
-          const fdIndex = fdSelect.getFDIndex(i);
+    for (let i = 0; i < count; i++) {
+      const charstring = charStrings.get(i);
+      const state = {
+        callDepth: 0,
+        stackSize: 0,
+        stack: [],
+        undefStack: true,
+        hints: 0,
+        firstStackClearing: true,
+        seac: null,
+        width: null,
+        hasVStems: false
+      };
+      let valid = true;
+      let localSubrToUse = null;
+      let privateDictToUse = privateDict;
 
-          if (fdIndex === -1) {
-            (0, _util.warn)("Glyph index is not in fd select.");
-            valid = false;
-          }
+      if (fdSelect && fdArray.length) {
+        const fdIndex = fdSelect.getFDIndex(i);
 
-          if (fdIndex >= fdArray.length) {
-            (0, _util.warn)("Invalid fd index for glyph index.");
-            valid = false;
-          }
+        if (fdIndex === -1) {
+          (0, _util.warn)("Glyph index is not in fd select.");
+          valid = false;
+        }
 
-          if (valid) {
-            privateDictToUse = fdArray[fdIndex].privateDict;
-            localSubrToUse = privateDictToUse.subrsIndex;
-          }
-        } else if (localSubrIndex) {
-          localSubrToUse = localSubrIndex;
+        if (fdIndex >= fdArray.length) {
+          (0, _util.warn)("Invalid fd index for glyph index.");
+          valid = false;
         }
 
         if (valid) {
-          valid = this.parseCharString(state, charstring, localSubrToUse, globalSubrIndex);
+          privateDictToUse = fdArray[fdIndex].privateDict;
+          localSubrToUse = privateDictToUse.subrsIndex;
         }
-
-        if (state.width !== null) {
-          const nominalWidth = privateDictToUse.getByName("nominalWidthX");
-          widths[i] = nominalWidth + state.width;
-        } else {
-          const defaultWidth = privateDictToUse.getByName("defaultWidthX");
-          widths[i] = defaultWidth;
-        }
-
-        if (state.seac !== null) {
-          seacs[i] = state.seac;
-        }
-
-        if (!valid) {
-          charStrings.set(i, new Uint8Array([14]));
-        }
+      } else if (localSubrIndex) {
+        localSubrToUse = localSubrIndex;
       }
 
-      return {
-        charStrings,
-        seacs,
-        widths
-      };
+      if (valid) {
+        valid = this.parseCharString(state, charstring, localSubrToUse, globalSubrIndex);
+      }
+
+      if (state.width !== null) {
+        const nominalWidth = privateDictToUse.getByName("nominalWidthX");
+        widths[i] = nominalWidth + state.width;
+      } else {
+        const defaultWidth = privateDictToUse.getByName("defaultWidthX");
+        widths[i] = defaultWidth;
+      }
+
+      if (state.seac !== null) {
+        seacs[i] = state.seac;
+      }
+
+      if (!valid) {
+        charStrings.set(i, new Uint8Array([14]));
+      }
     }
 
-    emptyPrivateDictionary(parentDict) {
-      const privateDict = this.createDict(CFFPrivateDict, [], parentDict.strings);
-      parentDict.setByKey(18, [0, 0]);
-      parentDict.privateDict = privateDict;
+    return {
+      charStrings,
+      seacs,
+      widths
+    };
+  }
+
+  emptyPrivateDictionary(parentDict) {
+    const privateDict = this.createDict(CFFPrivateDict, [], parentDict.strings);
+    parentDict.setByKey(18, [0, 0]);
+    parentDict.privateDict = privateDict;
+  }
+
+  parsePrivateDict(parentDict) {
+    if (!parentDict.hasName("Private")) {
+      this.emptyPrivateDictionary(parentDict);
+      return;
     }
 
-    parsePrivateDict(parentDict) {
-      if (!parentDict.hasName("Private")) {
-        this.emptyPrivateDictionary(parentDict);
-        return;
-      }
+    const privateOffset = parentDict.getByName("Private");
 
-      const privateOffset = parentDict.getByName("Private");
-
-      if (!Array.isArray(privateOffset) || privateOffset.length !== 2) {
-        parentDict.removeByName("Private");
-        return;
-      }
-
-      const size = privateOffset[0];
-      const offset = privateOffset[1];
-
-      if (size === 0 || offset >= this.bytes.length) {
-        this.emptyPrivateDictionary(parentDict);
-        return;
-      }
-
-      const privateDictEnd = offset + size;
-      const dictData = this.bytes.subarray(offset, privateDictEnd);
-      const dict = this.parseDict(dictData);
-      const privateDict = this.createDict(CFFPrivateDict, dict, parentDict.strings);
-      parentDict.privateDict = privateDict;
-
-      if (!privateDict.getByName("Subrs")) {
-        return;
-      }
-
-      const subrsOffset = privateDict.getByName("Subrs");
-      const relativeOffset = offset + subrsOffset;
-
-      if (subrsOffset === 0 || relativeOffset >= this.bytes.length) {
-        this.emptyPrivateDictionary(parentDict);
-        return;
-      }
-
-      const subrsIndex = this.parseIndex(relativeOffset);
-      privateDict.subrsIndex = subrsIndex.obj;
+    if (!Array.isArray(privateOffset) || privateOffset.length !== 2) {
+      parentDict.removeByName("Private");
+      return;
     }
 
-    parseCharsets(pos, length, strings, cid) {
-      if (pos === 0) {
-        return new CFFCharset(true, CFFCharsetPredefinedTypes.ISO_ADOBE, _charsets.ISOAdobeCharset);
-      } else if (pos === 1) {
-        return new CFFCharset(true, CFFCharsetPredefinedTypes.EXPERT, _charsets.ExpertCharset);
-      } else if (pos === 2) {
-        return new CFFCharset(true, CFFCharsetPredefinedTypes.EXPERT_SUBSET, _charsets.ExpertSubsetCharset);
+    const size = privateOffset[0];
+    const offset = privateOffset[1];
+
+    if (size === 0 || offset >= this.bytes.length) {
+      this.emptyPrivateDictionary(parentDict);
+      return;
+    }
+
+    const privateDictEnd = offset + size;
+    const dictData = this.bytes.subarray(offset, privateDictEnd);
+    const dict = this.parseDict(dictData);
+    const privateDict = this.createDict(CFFPrivateDict, dict, parentDict.strings);
+    parentDict.privateDict = privateDict;
+
+    if (!privateDict.getByName("Subrs")) {
+      return;
+    }
+
+    const subrsOffset = privateDict.getByName("Subrs");
+    const relativeOffset = offset + subrsOffset;
+
+    if (subrsOffset === 0 || relativeOffset >= this.bytes.length) {
+      this.emptyPrivateDictionary(parentDict);
+      return;
+    }
+
+    const subrsIndex = this.parseIndex(relativeOffset);
+    privateDict.subrsIndex = subrsIndex.obj;
+  }
+
+  parseCharsets(pos, length, strings, cid) {
+    if (pos === 0) {
+      return new CFFCharset(true, CFFCharsetPredefinedTypes.ISO_ADOBE, _charsets.ISOAdobeCharset);
+    } else if (pos === 1) {
+      return new CFFCharset(true, CFFCharsetPredefinedTypes.EXPERT, _charsets.ExpertCharset);
+    } else if (pos === 2) {
+      return new CFFCharset(true, CFFCharsetPredefinedTypes.EXPERT_SUBSET, _charsets.ExpertSubsetCharset);
+    }
+
+    const bytes = this.bytes;
+    const start = pos;
+    const format = bytes[pos++];
+    const charset = [cid ? 0 : ".notdef"];
+    let id, count, i;
+    length -= 1;
+
+    switch (format) {
+      case 0:
+        for (i = 0; i < length; i++) {
+          id = bytes[pos++] << 8 | bytes[pos++];
+          charset.push(cid ? id : strings.get(id));
+        }
+
+        break;
+
+      case 1:
+        while (charset.length <= length) {
+          id = bytes[pos++] << 8 | bytes[pos++];
+          count = bytes[pos++];
+
+          for (i = 0; i <= count; i++) {
+            charset.push(cid ? id++ : strings.get(id++));
+          }
+        }
+
+        break;
+
+      case 2:
+        while (charset.length <= length) {
+          id = bytes[pos++] << 8 | bytes[pos++];
+          count = bytes[pos++] << 8 | bytes[pos++];
+
+          for (i = 0; i <= count; i++) {
+            charset.push(cid ? id++ : strings.get(id++));
+          }
+        }
+
+        break;
+
+      default:
+        throw new _util.FormatError("Unknown charset format");
+    }
+
+    const end = pos;
+    const raw = bytes.subarray(start, end);
+    return new CFFCharset(false, format, charset, raw);
+  }
+
+  parseEncoding(pos, properties, strings, charset) {
+    const encoding = Object.create(null);
+    const bytes = this.bytes;
+    let predefined = false;
+    let format, i, ii;
+    let raw = null;
+
+    function readSupplement() {
+      const supplementsCount = bytes[pos++];
+
+      for (i = 0; i < supplementsCount; i++) {
+        const code = bytes[pos++];
+        const sid = (bytes[pos++] << 8) + (bytes[pos++] & 0xff);
+        encoding[code] = charset.indexOf(strings.get(sid));
       }
+    }
 
-      const bytes = this.bytes;
-      const start = pos;
-      const format = bytes[pos++];
-      const charset = [cid ? 0 : ".notdef"];
-      let id, count, i;
-      length -= 1;
+    if (pos === 0 || pos === 1) {
+      predefined = true;
+      format = pos;
+      const baseEncoding = pos ? _encodings.ExpertEncoding : _encodings.StandardEncoding;
 
-      switch (format) {
+      for (i = 0, ii = charset.length; i < ii; i++) {
+        const index = baseEncoding.indexOf(charset[i]);
+
+        if (index !== -1) {
+          encoding[index] = i;
+        }
+      }
+    } else {
+      const dataStart = pos;
+      format = bytes[pos++];
+
+      switch (format & 0x7f) {
         case 0:
-          for (i = 0; i < length; i++) {
-            id = bytes[pos++] << 8 | bytes[pos++];
-            charset.push(cid ? id : strings.get(id));
+          const glyphsCount = bytes[pos++];
+
+          for (i = 1; i <= glyphsCount; i++) {
+            encoding[bytes[pos++]] = i;
           }
 
           break;
 
         case 1:
-          while (charset.length <= length) {
-            id = bytes[pos++] << 8 | bytes[pos++];
-            count = bytes[pos++];
+          const rangesCount = bytes[pos++];
+          let gid = 1;
 
-            for (i = 0; i <= count; i++) {
-              charset.push(cid ? id++ : strings.get(id++));
-            }
-          }
+          for (i = 0; i < rangesCount; i++) {
+            const start = bytes[pos++];
+            const left = bytes[pos++];
 
-          break;
-
-        case 2:
-          while (charset.length <= length) {
-            id = bytes[pos++] << 8 | bytes[pos++];
-            count = bytes[pos++] << 8 | bytes[pos++];
-
-            for (i = 0; i <= count; i++) {
-              charset.push(cid ? id++ : strings.get(id++));
+            for (let j = start; j <= start + left; j++) {
+              encoding[j] = gid++;
             }
           }
 
           break;
 
         default:
-          throw new _util.FormatError("Unknown charset format");
+          throw new _util.FormatError(`Unknown encoding format: ${format} in CFF`);
       }
 
-      const end = pos;
-      const raw = bytes.subarray(start, end);
-      return new CFFCharset(false, format, charset, raw);
+      const dataEnd = pos;
+
+      if (format & 0x80) {
+        bytes[dataStart] &= 0x7f;
+        readSupplement();
+      }
+
+      raw = bytes.subarray(dataStart, dataEnd);
     }
 
-    parseEncoding(pos, properties, strings, charset) {
-      const encoding = Object.create(null);
-      const bytes = this.bytes;
-      let predefined = false;
-      let format, i, ii;
-      let raw = null;
-
-      function readSupplement() {
-        const supplementsCount = bytes[pos++];
-
-        for (i = 0; i < supplementsCount; i++) {
-          const code = bytes[pos++];
-          const sid = (bytes[pos++] << 8) + (bytes[pos++] & 0xff);
-          encoding[code] = charset.indexOf(strings.get(sid));
-        }
-      }
-
-      if (pos === 0 || pos === 1) {
-        predefined = true;
-        format = pos;
-        const baseEncoding = pos ? _encodings.ExpertEncoding : _encodings.StandardEncoding;
-
-        for (i = 0, ii = charset.length; i < ii; i++) {
-          const index = baseEncoding.indexOf(charset[i]);
-
-          if (index !== -1) {
-            encoding[index] = i;
-          }
-        }
-      } else {
-        const dataStart = pos;
-        format = bytes[pos++];
-
-        switch (format & 0x7f) {
-          case 0:
-            const glyphsCount = bytes[pos++];
-
-            for (i = 1; i <= glyphsCount; i++) {
-              encoding[bytes[pos++]] = i;
-            }
-
-            break;
-
-          case 1:
-            const rangesCount = bytes[pos++];
-            let gid = 1;
-
-            for (i = 0; i < rangesCount; i++) {
-              const start = bytes[pos++];
-              const left = bytes[pos++];
-
-              for (let j = start; j <= start + left; j++) {
-                encoding[j] = gid++;
-              }
-            }
-
-            break;
-
-          default:
-            throw new _util.FormatError(`Unknown encoding format: ${format} in CFF`);
-        }
-
-        const dataEnd = pos;
-
-        if (format & 0x80) {
-          bytes[dataStart] &= 0x7f;
-          readSupplement();
-        }
-
-        raw = bytes.subarray(dataStart, dataEnd);
-      }
-
-      format &= 0x7f;
-      return new CFFEncoding(predefined, format, encoding, raw);
-    }
-
-    parseFDSelect(pos, length) {
-      const bytes = this.bytes;
-      const format = bytes[pos++];
-      const fdSelect = [];
-      let i;
-
-      switch (format) {
-        case 0:
-          for (i = 0; i < length; ++i) {
-            const id = bytes[pos++];
-            fdSelect.push(id);
-          }
-
-          break;
-
-        case 3:
-          const rangesCount = bytes[pos++] << 8 | bytes[pos++];
-
-          for (i = 0; i < rangesCount; ++i) {
-            let first = bytes[pos++] << 8 | bytes[pos++];
-
-            if (i === 0 && first !== 0) {
-              (0, _util.warn)("parseFDSelect: The first range must have a first GID of 0" + " -- trying to recover.");
-              first = 0;
-            }
-
-            const fdIndex = bytes[pos++];
-            const next = bytes[pos] << 8 | bytes[pos + 1];
-
-            for (let j = first; j < next; ++j) {
-              fdSelect.push(fdIndex);
-            }
-          }
-
-          pos += 2;
-          break;
-
-        default:
-          throw new _util.FormatError(`parseFDSelect: Unknown format "${format}".`);
-      }
-
-      if (fdSelect.length !== length) {
-        throw new _util.FormatError("parseFDSelect: Invalid font data.");
-      }
-
-      return new CFFFDSelect(format, fdSelect);
-    }
-
+    format &= 0x7f;
+    return new CFFEncoding(predefined, format, encoding, raw);
   }
 
-  return CFFParser;
-}();
+  parseFDSelect(pos, length) {
+    const bytes = this.bytes;
+    const format = bytes[pos++];
+    const fdSelect = [];
+    let i;
+
+    switch (format) {
+      case 0:
+        for (i = 0; i < length; ++i) {
+          const id = bytes[pos++];
+          fdSelect.push(id);
+        }
+
+        break;
+
+      case 3:
+        const rangesCount = bytes[pos++] << 8 | bytes[pos++];
+
+        for (i = 0; i < rangesCount; ++i) {
+          let first = bytes[pos++] << 8 | bytes[pos++];
+
+          if (i === 0 && first !== 0) {
+            (0, _util.warn)("parseFDSelect: The first range must have a first GID of 0" + " -- trying to recover.");
+            first = 0;
+          }
+
+          const fdIndex = bytes[pos++];
+          const next = bytes[pos] << 8 | bytes[pos + 1];
+
+          for (let j = first; j < next; ++j) {
+            fdSelect.push(fdIndex);
+          }
+        }
+
+        pos += 2;
+        break;
+
+      default:
+        throw new _util.FormatError(`parseFDSelect: Unknown format "${format}".`);
+    }
+
+    if (fdSelect.length !== length) {
+      throw new _util.FormatError("parseFDSelect: Invalid font data.");
+    }
+
+    return new CFFFDSelect(format, fdSelect);
+  }
+
+}
 
 exports.CFFParser = CFFParser;
 
@@ -29183,45 +29188,34 @@ class CFFDict {
 
 }
 
-const CFFTopDict = function CFFTopDictClosure() {
-  const layout = [[[12, 30], "ROS", ["sid", "sid", "num"], null], [[12, 20], "SyntheticBase", "num", null], [0, "version", "sid", null], [1, "Notice", "sid", null], [[12, 0], "Copyright", "sid", null], [2, "FullName", "sid", null], [3, "FamilyName", "sid", null], [4, "Weight", "sid", null], [[12, 1], "isFixedPitch", "num", 0], [[12, 2], "ItalicAngle", "num", 0], [[12, 3], "UnderlinePosition", "num", -100], [[12, 4], "UnderlineThickness", "num", 50], [[12, 5], "PaintType", "num", 0], [[12, 6], "CharstringType", "num", 2], [[12, 7], "FontMatrix", ["num", "num", "num", "num", "num", "num"], [0.001, 0, 0, 0.001, 0, 0]], [13, "UniqueID", "num", null], [5, "FontBBox", ["num", "num", "num", "num"], [0, 0, 0, 0]], [[12, 8], "StrokeWidth", "num", 0], [14, "XUID", "array", null], [15, "charset", "offset", 0], [16, "Encoding", "offset", 0], [17, "CharStrings", "offset", 0], [18, "Private", ["offset", "offset"], null], [[12, 21], "PostScript", "sid", null], [[12, 22], "BaseFontName", "sid", null], [[12, 23], "BaseFontBlend", "delta", null], [[12, 31], "CIDFontVersion", "num", 0], [[12, 32], "CIDFontRevision", "num", 0], [[12, 33], "CIDFontType", "num", 0], [[12, 34], "CIDCount", "num", 8720], [[12, 35], "UIDBase", "num", null], [[12, 37], "FDSelect", "offset", null], [[12, 36], "FDArray", "offset", null], [[12, 38], "FontName", "sid", null]];
-  let tables = null;
+const CFFTopDictLayout = [[[12, 30], "ROS", ["sid", "sid", "num"], null], [[12, 20], "SyntheticBase", "num", null], [0, "version", "sid", null], [1, "Notice", "sid", null], [[12, 0], "Copyright", "sid", null], [2, "FullName", "sid", null], [3, "FamilyName", "sid", null], [4, "Weight", "sid", null], [[12, 1], "isFixedPitch", "num", 0], [[12, 2], "ItalicAngle", "num", 0], [[12, 3], "UnderlinePosition", "num", -100], [[12, 4], "UnderlineThickness", "num", 50], [[12, 5], "PaintType", "num", 0], [[12, 6], "CharstringType", "num", 2], [[12, 7], "FontMatrix", ["num", "num", "num", "num", "num", "num"], [0.001, 0, 0, 0.001, 0, 0]], [13, "UniqueID", "num", null], [5, "FontBBox", ["num", "num", "num", "num"], [0, 0, 0, 0]], [[12, 8], "StrokeWidth", "num", 0], [14, "XUID", "array", null], [15, "charset", "offset", 0], [16, "Encoding", "offset", 0], [17, "CharStrings", "offset", 0], [18, "Private", ["offset", "offset"], null], [[12, 21], "PostScript", "sid", null], [[12, 22], "BaseFontName", "sid", null], [[12, 23], "BaseFontBlend", "delta", null], [[12, 31], "CIDFontVersion", "num", 0], [[12, 32], "CIDFontRevision", "num", 0], [[12, 33], "CIDFontType", "num", 0], [[12, 34], "CIDCount", "num", 8720], [[12, 35], "UIDBase", "num", null], [[12, 37], "FDSelect", "offset", null], [[12, 36], "FDArray", "offset", null], [[12, 38], "FontName", "sid", null]];
 
-  class CFFTopDict extends CFFDict {
-    constructor(strings) {
-      if (tables === null) {
-        tables = CFFDict.createTables(layout);
-      }
-
-      super(tables, strings);
-      this.privateDict = null;
-    }
-
+class CFFTopDict extends CFFDict {
+  static get tables() {
+    return (0, _util.shadow)(this, "tables", this.createTables(CFFTopDictLayout));
   }
 
-  return CFFTopDict;
-}();
+  constructor(strings) {
+    super(CFFTopDict.tables, strings);
+    this.privateDict = null;
+  }
+
+}
 
 exports.CFFTopDict = CFFTopDict;
+const CFFPrivateDictLayout = [[6, "BlueValues", "delta", null], [7, "OtherBlues", "delta", null], [8, "FamilyBlues", "delta", null], [9, "FamilyOtherBlues", "delta", null], [[12, 9], "BlueScale", "num", 0.039625], [[12, 10], "BlueShift", "num", 7], [[12, 11], "BlueFuzz", "num", 1], [10, "StdHW", "num", null], [11, "StdVW", "num", null], [[12, 12], "StemSnapH", "delta", null], [[12, 13], "StemSnapV", "delta", null], [[12, 14], "ForceBold", "num", 0], [[12, 17], "LanguageGroup", "num", 0], [[12, 18], "ExpansionFactor", "num", 0.06], [[12, 19], "initialRandomSeed", "num", 0], [20, "defaultWidthX", "num", 0], [21, "nominalWidthX", "num", 0], [19, "Subrs", "offset", null]];
 
-const CFFPrivateDict = function CFFPrivateDictClosure() {
-  const layout = [[6, "BlueValues", "delta", null], [7, "OtherBlues", "delta", null], [8, "FamilyBlues", "delta", null], [9, "FamilyOtherBlues", "delta", null], [[12, 9], "BlueScale", "num", 0.039625], [[12, 10], "BlueShift", "num", 7], [[12, 11], "BlueFuzz", "num", 1], [10, "StdHW", "num", null], [11, "StdVW", "num", null], [[12, 12], "StemSnapH", "delta", null], [[12, 13], "StemSnapV", "delta", null], [[12, 14], "ForceBold", "num", 0], [[12, 17], "LanguageGroup", "num", 0], [[12, 18], "ExpansionFactor", "num", 0.06], [[12, 19], "initialRandomSeed", "num", 0], [20, "defaultWidthX", "num", 0], [21, "nominalWidthX", "num", 0], [19, "Subrs", "offset", null]];
-  let tables = null;
-
-  class CFFPrivateDict extends CFFDict {
-    constructor(strings) {
-      if (tables === null) {
-        tables = CFFDict.createTables(layout);
-      }
-
-      super(tables, strings);
-      this.subrsIndex = null;
-    }
-
+class CFFPrivateDict extends CFFDict {
+  static get tables() {
+    return (0, _util.shadow)(this, "tables", this.createTables(CFFPrivateDictLayout));
   }
 
-  return CFFPrivateDict;
-}();
+  constructor(strings) {
+    super(CFFPrivateDict.tables, strings);
+    this.subrsIndex = null;
+  }
+
+}
 
 exports.CFFPrivateDict = CFFPrivateDict;
 const CFFCharsetPredefinedTypes = {
@@ -29766,7 +29760,7 @@ class CFFCompiler {
     const count = objects.length;
 
     if (count === 0) {
-      return [0, 0, 0];
+      return [0, 0];
     }
 
     const data = [count >> 8 & 0xff, count & 0xff];
@@ -51793,422 +51787,418 @@ class PostScriptEvaluator {
 
 exports.PostScriptEvaluator = PostScriptEvaluator;
 
-const PostScriptCompiler = function PostScriptCompilerClosure() {
-  class AstNode {
-    constructor(type) {
-      this.type = type;
-    }
-
-    visit(visitor) {
-      (0, _util.unreachable)("abstract method");
-    }
-
+class AstNode {
+  constructor(type) {
+    this.type = type;
   }
 
-  class AstArgument extends AstNode {
-    constructor(index, min, max) {
-      super("args");
-      this.index = index;
-      this.min = min;
-      this.max = max;
-    }
-
-    visit(visitor) {
-      visitor.visitArgument(this);
-    }
-
+  visit(visitor) {
+    (0, _util.unreachable)("abstract method");
   }
 
-  class AstLiteral extends AstNode {
-    constructor(number) {
-      super("literal");
-      this.number = number;
-      this.min = number;
-      this.max = number;
-    }
+}
 
-    visit(visitor) {
-      visitor.visitLiteral(this);
-    }
-
+class AstArgument extends AstNode {
+  constructor(index, min, max) {
+    super("args");
+    this.index = index;
+    this.min = min;
+    this.max = max;
   }
 
-  class AstBinaryOperation extends AstNode {
-    constructor(op, arg1, arg2, min, max) {
-      super("binary");
-      this.op = op;
-      this.arg1 = arg1;
-      this.arg2 = arg2;
-      this.min = min;
-      this.max = max;
-    }
-
-    visit(visitor) {
-      visitor.visitBinaryOperation(this);
-    }
-
+  visit(visitor) {
+    visitor.visitArgument(this);
   }
 
-  class AstMin extends AstNode {
-    constructor(arg, max) {
-      super("max");
-      this.arg = arg;
-      this.min = arg.min;
-      this.max = max;
-    }
+}
 
-    visit(visitor) {
-      visitor.visitMin(this);
-    }
-
+class AstLiteral extends AstNode {
+  constructor(number) {
+    super("literal");
+    this.number = number;
+    this.min = number;
+    this.max = number;
   }
 
-  class AstVariable extends AstNode {
-    constructor(index, min, max) {
-      super("var");
-      this.index = index;
-      this.min = min;
-      this.max = max;
-    }
-
-    visit(visitor) {
-      visitor.visitVariable(this);
-    }
-
+  visit(visitor) {
+    visitor.visitLiteral(this);
   }
 
-  class AstVariableDefinition extends AstNode {
-    constructor(variable, arg) {
-      super("definition");
-      this.variable = variable;
-      this.arg = arg;
-    }
+}
 
-    visit(visitor) {
-      visitor.visitVariableDefinition(this);
-    }
-
+class AstBinaryOperation extends AstNode {
+  constructor(op, arg1, arg2, min, max) {
+    super("binary");
+    this.op = op;
+    this.arg1 = arg1;
+    this.arg2 = arg2;
+    this.min = min;
+    this.max = max;
   }
 
-  class ExpressionBuilderVisitor {
-    constructor() {
-      this.parts = [];
-    }
-
-    visitArgument(arg) {
-      this.parts.push("Math.max(", arg.min, ", Math.min(", arg.max, ", src[srcOffset + ", arg.index, "]))");
-    }
-
-    visitVariable(variable) {
-      this.parts.push("v", variable.index);
-    }
-
-    visitLiteral(literal) {
-      this.parts.push(literal.number);
-    }
-
-    visitBinaryOperation(operation) {
-      this.parts.push("(");
-      operation.arg1.visit(this);
-      this.parts.push(" ", operation.op, " ");
-      operation.arg2.visit(this);
-      this.parts.push(")");
-    }
-
-    visitVariableDefinition(definition) {
-      this.parts.push("var ");
-      definition.variable.visit(this);
-      this.parts.push(" = ");
-      definition.arg.visit(this);
-      this.parts.push(";");
-    }
-
-    visitMin(max) {
-      this.parts.push("Math.min(");
-      max.arg.visit(this);
-      this.parts.push(", ", max.max, ")");
-    }
-
-    toString() {
-      return this.parts.join("");
-    }
-
+  visit(visitor) {
+    visitor.visitBinaryOperation(this);
   }
 
-  function buildAddOperation(num1, num2) {
-    if (num2.type === "literal" && num2.number === 0) {
+}
+
+class AstMin extends AstNode {
+  constructor(arg, max) {
+    super("max");
+    this.arg = arg;
+    this.min = arg.min;
+    this.max = max;
+  }
+
+  visit(visitor) {
+    visitor.visitMin(this);
+  }
+
+}
+
+class AstVariable extends AstNode {
+  constructor(index, min, max) {
+    super("var");
+    this.index = index;
+    this.min = min;
+    this.max = max;
+  }
+
+  visit(visitor) {
+    visitor.visitVariable(this);
+  }
+
+}
+
+class AstVariableDefinition extends AstNode {
+  constructor(variable, arg) {
+    super("definition");
+    this.variable = variable;
+    this.arg = arg;
+  }
+
+  visit(visitor) {
+    visitor.visitVariableDefinition(this);
+  }
+
+}
+
+class ExpressionBuilderVisitor {
+  constructor() {
+    this.parts = [];
+  }
+
+  visitArgument(arg) {
+    this.parts.push("Math.max(", arg.min, ", Math.min(", arg.max, ", src[srcOffset + ", arg.index, "]))");
+  }
+
+  visitVariable(variable) {
+    this.parts.push("v", variable.index);
+  }
+
+  visitLiteral(literal) {
+    this.parts.push(literal.number);
+  }
+
+  visitBinaryOperation(operation) {
+    this.parts.push("(");
+    operation.arg1.visit(this);
+    this.parts.push(" ", operation.op, " ");
+    operation.arg2.visit(this);
+    this.parts.push(")");
+  }
+
+  visitVariableDefinition(definition) {
+    this.parts.push("var ");
+    definition.variable.visit(this);
+    this.parts.push(" = ");
+    definition.arg.visit(this);
+    this.parts.push(";");
+  }
+
+  visitMin(max) {
+    this.parts.push("Math.min(");
+    max.arg.visit(this);
+    this.parts.push(", ", max.max, ")");
+  }
+
+  toString() {
+    return this.parts.join("");
+  }
+
+}
+
+function buildAddOperation(num1, num2) {
+  if (num2.type === "literal" && num2.number === 0) {
+    return num1;
+  }
+
+  if (num1.type === "literal" && num1.number === 0) {
+    return num2;
+  }
+
+  if (num2.type === "literal" && num1.type === "literal") {
+    return new AstLiteral(num1.number + num2.number);
+  }
+
+  return new AstBinaryOperation("+", num1, num2, num1.min + num2.min, num1.max + num2.max);
+}
+
+function buildMulOperation(num1, num2) {
+  if (num2.type === "literal") {
+    if (num2.number === 0) {
+      return new AstLiteral(0);
+    } else if (num2.number === 1) {
       return num1;
+    } else if (num1.type === "literal") {
+      return new AstLiteral(num1.number * num2.number);
     }
+  }
 
-    if (num1.type === "literal" && num1.number === 0) {
+  if (num1.type === "literal") {
+    if (num1.number === 0) {
+      return new AstLiteral(0);
+    } else if (num1.number === 1) {
       return num2;
     }
-
-    if (num2.type === "literal" && num1.type === "literal") {
-      return new AstLiteral(num1.number + num2.number);
-    }
-
-    return new AstBinaryOperation("+", num1, num2, num1.min + num2.min, num1.max + num2.max);
   }
 
-  function buildMulOperation(num1, num2) {
-    if (num2.type === "literal") {
-      if (num2.number === 0) {
-        return new AstLiteral(0);
-      } else if (num2.number === 1) {
-        return num1;
-      } else if (num1.type === "literal") {
-        return new AstLiteral(num1.number * num2.number);
-      }
-    }
+  const min = Math.min(num1.min * num2.min, num1.min * num2.max, num1.max * num2.min, num1.max * num2.max);
+  const max = Math.max(num1.min * num2.min, num1.min * num2.max, num1.max * num2.min, num1.max * num2.max);
+  return new AstBinaryOperation("*", num1, num2, min, max);
+}
 
-    if (num1.type === "literal") {
-      if (num1.number === 0) {
-        return new AstLiteral(0);
-      } else if (num1.number === 1) {
-        return num2;
-      }
-    }
-
-    const min = Math.min(num1.min * num2.min, num1.min * num2.max, num1.max * num2.min, num1.max * num2.max);
-    const max = Math.max(num1.min * num2.min, num1.min * num2.max, num1.max * num2.min, num1.max * num2.max);
-    return new AstBinaryOperation("*", num1, num2, min, max);
-  }
-
-  function buildSubOperation(num1, num2) {
-    if (num2.type === "literal") {
-      if (num2.number === 0) {
-        return num1;
-      } else if (num1.type === "literal") {
-        return new AstLiteral(num1.number - num2.number);
-      }
-    }
-
-    if (num2.type === "binary" && num2.op === "-" && num1.type === "literal" && num1.number === 1 && num2.arg1.type === "literal" && num2.arg1.number === 1) {
-      return num2.arg2;
-    }
-
-    return new AstBinaryOperation("-", num1, num2, num1.min - num2.max, num1.max - num2.min);
-  }
-
-  function buildMinOperation(num1, max) {
-    if (num1.min >= max) {
-      return new AstLiteral(max);
-    } else if (num1.max <= max) {
+function buildSubOperation(num1, num2) {
+  if (num2.type === "literal") {
+    if (num2.number === 0) {
       return num1;
+    } else if (num1.type === "literal") {
+      return new AstLiteral(num1.number - num2.number);
     }
-
-    return new AstMin(num1, max);
   }
 
-  class PostScriptCompiler {
-    compile(code, domain, range) {
-      const stack = [];
-      const instructions = [];
-      const inputSize = domain.length >> 1,
-            outputSize = range.length >> 1;
-      let lastRegister = 0;
-      let n, j;
-      let num1, num2, ast1, ast2, tmpVar, item;
+  if (num2.type === "binary" && num2.op === "-" && num1.type === "literal" && num1.number === 1 && num2.arg1.type === "literal" && num2.arg1.number === 1) {
+    return num2.arg2;
+  }
 
-      for (let i = 0; i < inputSize; i++) {
-        stack.push(new AstArgument(i, domain[i * 2], domain[i * 2 + 1]));
+  return new AstBinaryOperation("-", num1, num2, num1.min - num2.max, num1.max - num2.min);
+}
+
+function buildMinOperation(num1, max) {
+  if (num1.min >= max) {
+    return new AstLiteral(max);
+  } else if (num1.max <= max) {
+    return num1;
+  }
+
+  return new AstMin(num1, max);
+}
+
+class PostScriptCompiler {
+  compile(code, domain, range) {
+    const stack = [];
+    const instructions = [];
+    const inputSize = domain.length >> 1,
+          outputSize = range.length >> 1;
+    let lastRegister = 0;
+    let n, j;
+    let num1, num2, ast1, ast2, tmpVar, item;
+
+    for (let i = 0; i < inputSize; i++) {
+      stack.push(new AstArgument(i, domain[i * 2], domain[i * 2 + 1]));
+    }
+
+    for (let i = 0, ii = code.length; i < ii; i++) {
+      item = code[i];
+
+      if (typeof item === "number") {
+        stack.push(new AstLiteral(item));
+        continue;
       }
 
-      for (let i = 0, ii = code.length; i < ii; i++) {
-        item = code[i];
-
-        if (typeof item === "number") {
-          stack.push(new AstLiteral(item));
-          continue;
-        }
-
-        switch (item) {
-          case "add":
-            if (stack.length < 2) {
-              return null;
-            }
-
-            num2 = stack.pop();
-            num1 = stack.pop();
-            stack.push(buildAddOperation(num1, num2));
-            break;
-
-          case "cvr":
-            if (stack.length < 1) {
-              return null;
-            }
-
-            break;
-
-          case "mul":
-            if (stack.length < 2) {
-              return null;
-            }
-
-            num2 = stack.pop();
-            num1 = stack.pop();
-            stack.push(buildMulOperation(num1, num2));
-            break;
-
-          case "sub":
-            if (stack.length < 2) {
-              return null;
-            }
-
-            num2 = stack.pop();
-            num1 = stack.pop();
-            stack.push(buildSubOperation(num1, num2));
-            break;
-
-          case "exch":
-            if (stack.length < 2) {
-              return null;
-            }
-
-            ast1 = stack.pop();
-            ast2 = stack.pop();
-            stack.push(ast1, ast2);
-            break;
-
-          case "pop":
-            if (stack.length < 1) {
-              return null;
-            }
-
-            stack.pop();
-            break;
-
-          case "index":
-            if (stack.length < 1) {
-              return null;
-            }
-
-            num1 = stack.pop();
-
-            if (num1.type !== "literal") {
-              return null;
-            }
-
-            n = num1.number;
-
-            if (n < 0 || !Number.isInteger(n) || stack.length < n) {
-              return null;
-            }
-
-            ast1 = stack[stack.length - n - 1];
-
-            if (ast1.type === "literal" || ast1.type === "var") {
-              stack.push(ast1);
-              break;
-            }
-
-            tmpVar = new AstVariable(lastRegister++, ast1.min, ast1.max);
-            stack[stack.length - n - 1] = tmpVar;
-            stack.push(tmpVar);
-            instructions.push(new AstVariableDefinition(tmpVar, ast1));
-            break;
-
-          case "dup":
-            if (stack.length < 1) {
-              return null;
-            }
-
-            if (typeof code[i + 1] === "number" && code[i + 2] === "gt" && code[i + 3] === i + 7 && code[i + 4] === "jz" && code[i + 5] === "pop" && code[i + 6] === code[i + 1]) {
-              num1 = stack.pop();
-              stack.push(buildMinOperation(num1, code[i + 1]));
-              i += 6;
-              break;
-            }
-
-            ast1 = stack.at(-1);
-
-            if (ast1.type === "literal" || ast1.type === "var") {
-              stack.push(ast1);
-              break;
-            }
-
-            tmpVar = new AstVariable(lastRegister++, ast1.min, ast1.max);
-            stack[stack.length - 1] = tmpVar;
-            stack.push(tmpVar);
-            instructions.push(new AstVariableDefinition(tmpVar, ast1));
-            break;
-
-          case "roll":
-            if (stack.length < 2) {
-              return null;
-            }
-
-            num2 = stack.pop();
-            num1 = stack.pop();
-
-            if (num2.type !== "literal" || num1.type !== "literal") {
-              return null;
-            }
-
-            j = num2.number;
-            n = num1.number;
-
-            if (n <= 0 || !Number.isInteger(n) || !Number.isInteger(j) || stack.length < n) {
-              return null;
-            }
-
-            j = (j % n + n) % n;
-
-            if (j === 0) {
-              break;
-            }
-
-            Array.prototype.push.apply(stack, stack.splice(stack.length - n, n - j));
-            break;
-
-          default:
+      switch (item) {
+        case "add":
+          if (stack.length < 2) {
             return null;
-        }
+          }
+
+          num2 = stack.pop();
+          num1 = stack.pop();
+          stack.push(buildAddOperation(num1, num2));
+          break;
+
+        case "cvr":
+          if (stack.length < 1) {
+            return null;
+          }
+
+          break;
+
+        case "mul":
+          if (stack.length < 2) {
+            return null;
+          }
+
+          num2 = stack.pop();
+          num1 = stack.pop();
+          stack.push(buildMulOperation(num1, num2));
+          break;
+
+        case "sub":
+          if (stack.length < 2) {
+            return null;
+          }
+
+          num2 = stack.pop();
+          num1 = stack.pop();
+          stack.push(buildSubOperation(num1, num2));
+          break;
+
+        case "exch":
+          if (stack.length < 2) {
+            return null;
+          }
+
+          ast1 = stack.pop();
+          ast2 = stack.pop();
+          stack.push(ast1, ast2);
+          break;
+
+        case "pop":
+          if (stack.length < 1) {
+            return null;
+          }
+
+          stack.pop();
+          break;
+
+        case "index":
+          if (stack.length < 1) {
+            return null;
+          }
+
+          num1 = stack.pop();
+
+          if (num1.type !== "literal") {
+            return null;
+          }
+
+          n = num1.number;
+
+          if (n < 0 || !Number.isInteger(n) || stack.length < n) {
+            return null;
+          }
+
+          ast1 = stack[stack.length - n - 1];
+
+          if (ast1.type === "literal" || ast1.type === "var") {
+            stack.push(ast1);
+            break;
+          }
+
+          tmpVar = new AstVariable(lastRegister++, ast1.min, ast1.max);
+          stack[stack.length - n - 1] = tmpVar;
+          stack.push(tmpVar);
+          instructions.push(new AstVariableDefinition(tmpVar, ast1));
+          break;
+
+        case "dup":
+          if (stack.length < 1) {
+            return null;
+          }
+
+          if (typeof code[i + 1] === "number" && code[i + 2] === "gt" && code[i + 3] === i + 7 && code[i + 4] === "jz" && code[i + 5] === "pop" && code[i + 6] === code[i + 1]) {
+            num1 = stack.pop();
+            stack.push(buildMinOperation(num1, code[i + 1]));
+            i += 6;
+            break;
+          }
+
+          ast1 = stack.at(-1);
+
+          if (ast1.type === "literal" || ast1.type === "var") {
+            stack.push(ast1);
+            break;
+          }
+
+          tmpVar = new AstVariable(lastRegister++, ast1.min, ast1.max);
+          stack[stack.length - 1] = tmpVar;
+          stack.push(tmpVar);
+          instructions.push(new AstVariableDefinition(tmpVar, ast1));
+          break;
+
+        case "roll":
+          if (stack.length < 2) {
+            return null;
+          }
+
+          num2 = stack.pop();
+          num1 = stack.pop();
+
+          if (num2.type !== "literal" || num1.type !== "literal") {
+            return null;
+          }
+
+          j = num2.number;
+          n = num1.number;
+
+          if (n <= 0 || !Number.isInteger(n) || !Number.isInteger(j) || stack.length < n) {
+            return null;
+          }
+
+          j = (j % n + n) % n;
+
+          if (j === 0) {
+            break;
+          }
+
+          Array.prototype.push.apply(stack, stack.splice(stack.length - n, n - j));
+          break;
+
+        default:
+          return null;
       }
-
-      if (stack.length !== outputSize) {
-        return null;
-      }
-
-      const result = [];
-
-      for (const instruction of instructions) {
-        const statementBuilder = new ExpressionBuilderVisitor();
-        instruction.visit(statementBuilder);
-        result.push(statementBuilder.toString());
-      }
-
-      for (let i = 0, ii = stack.length; i < ii; i++) {
-        const expr = stack[i],
-              statementBuilder = new ExpressionBuilderVisitor();
-        expr.visit(statementBuilder);
-        const min = range[i * 2],
-              max = range[i * 2 + 1];
-        const out = [statementBuilder.toString()];
-
-        if (min > expr.min) {
-          out.unshift("Math.max(", min, ", ");
-          out.push(")");
-        }
-
-        if (max < expr.max) {
-          out.unshift("Math.min(", max, ", ");
-          out.push(")");
-        }
-
-        out.unshift("dest[destOffset + ", i, "] = ");
-        out.push(";");
-        result.push(out.join(""));
-      }
-
-      return result.join("\n");
     }
 
+    if (stack.length !== outputSize) {
+      return null;
+    }
+
+    const result = [];
+
+    for (const instruction of instructions) {
+      const statementBuilder = new ExpressionBuilderVisitor();
+      instruction.visit(statementBuilder);
+      result.push(statementBuilder.toString());
+    }
+
+    for (let i = 0, ii = stack.length; i < ii; i++) {
+      const expr = stack[i],
+            statementBuilder = new ExpressionBuilderVisitor();
+      expr.visit(statementBuilder);
+      const min = range[i * 2],
+            max = range[i * 2 + 1];
+      const out = [statementBuilder.toString()];
+
+      if (min > expr.min) {
+        out.unshift("Math.max(", min, ", ");
+        out.push(")");
+      }
+
+      if (max < expr.max) {
+        out.unshift("Math.min(", max, ", ");
+        out.push(")");
+      }
+
+      out.unshift("dest[destOffset + ", i, "] = ");
+      out.push(";");
+      result.push(out.join(""));
+    }
+
+    return result.join("\n");
   }
 
-  return PostScriptCompiler;
-}();
+}
 
 exports.PostScriptCompiler = PostScriptCompiler;
 
@@ -75443,8 +75433,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.16.357';
-const pdfjsBuild = '22dd0ba01';
+const pdfjsVersion = '2.16.389';
+const pdfjsBuild = 'b834a0ca6';
 })();
 
 /******/ 	return __webpack_exports__;

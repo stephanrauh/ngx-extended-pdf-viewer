@@ -55,6 +55,7 @@ export type PageViewportCloneParameters = {
      */
     dontFlip?: boolean | undefined;
 };
+export const AnnotationPrefix: "pdfjs_internal_id_";
 /**
  * Use binary search to find the index of the first item in a given array which
  * passes a given condition. The items are expected to be sorted in the sense
