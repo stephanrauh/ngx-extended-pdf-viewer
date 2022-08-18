@@ -388,3 +388,4 @@
 - 15.0.0-alpha.1 #1478 allow for absolute asset URLs on a remote server
 - 15.0.0-alpha.2 #1427 allow for AMD modules
 - 15.0.0-alpha.3 #1498 allows the PDF viewer to use the free space if the toolbar is hidden
+- 15.0.0-alpha.4 #1499 hide the toolbar earlier if `[showToolbar]` is set to `false`

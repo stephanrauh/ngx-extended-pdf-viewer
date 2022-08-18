@@ -857,6 +857,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.assignFormIdAndFieldName(key, fieldName, radioButtonField);
 
       this.loadPdfJs();
+      this.hideToolbarIfItIsEmpty();
     }
   }
 
@@ -1055,14 +1056,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         // hurried users sometimes reload the PDF before it has finished initializing
         // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
         this.onResize();
-        this.primaryMenuVisible = this.showToolbar;
-        const hideSecondaryMenu = this.hideKebabMenuForSecondaryToolbar && !this.showSecondaryToolbarButton;
-
-        if (hideSecondaryMenu) {
-          if (!this.isPrimaryMenuVisible()) {
-            this.primaryMenuVisible = false;
-          }
-        }
+        this.hideToolbarIfItIsEmpty();
         this.dummyComponents.addMissingStandardWidgets();
         this.ngZone.runOutsideAngular(() => (<any>window).webViewerLoad());
 
@@ -1099,6 +1093,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
       }
     }, 0);
+  }
+
+  private hideToolbarIfItIsEmpty() {
+    this.primaryMenuVisible = this.showToolbar;
+    if (!this.showSecondaryToolbarButton || this.hideKebabMenuForSecondaryToolbar) {
+      if (!this.isPrimaryMenuVisible()) {
+        this.primaryMenuVisible = false;
+      }
+    }
   }
 
   /** Notifies every widget that implements onLibraryInit() that the PDF viewer objects are available */
@@ -1863,12 +1866,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         PDFViewerApplicationOptions.set('wheelAction', this.wheelAction);
       }
 
-      this.primaryMenuVisible = this.showToolbar;
-      if (!this.showSecondaryToolbarButton || this.hideKebabMenuForSecondaryToolbar) {
-        if (!this.isPrimaryMenuVisible()) {
-          this.primaryMenuVisible = false;
-        }
-      }
+      this.hideToolbarIfItIsEmpty();
       setTimeout(() => this.calcViewerPositionTop());
     } // end of if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized)
 
