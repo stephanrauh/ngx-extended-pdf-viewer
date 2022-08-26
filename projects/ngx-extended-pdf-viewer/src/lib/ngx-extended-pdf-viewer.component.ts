@@ -703,7 +703,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       return;
     }
     let top = this.toolbar.getBoundingClientRect().height;
-    this.viewerPositionTop = top + 'px';
+    if (top < 33) {
+      this.viewerPositionTop = '33px';
+    } else {
+      this.viewerPositionTop = top + 'px';
+    }
 
     const factor = top / 33;
 
@@ -1957,7 +1961,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if ('pageViewMode' in changes && !changes['pageViewMode'].isFirstChange()) {
       this.removeScrollbarInInititeScrollMode();
     }
-    this.calcViewerPositionTop();
+    setTimeout(() => this.calcViewerPositionTop());
   }
 
   private async setZoom() {

@@ -809,6 +809,7 @@ ngx-extended-pdf-viewer {
     font-style: italic;
     color: $error-color;
   }
+  #findResultsCount:empty,
   #findMsg:empty {
     display: none;
   }

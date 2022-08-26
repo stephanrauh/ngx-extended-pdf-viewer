@@ -389,3 +389,4 @@
 - 15.0.0-alpha.2 #1427 allow for AMD modules
 - 15.0.0-alpha.3 #1498 allows the PDF viewer to use the free space if the toolbar is hidden
 - 15.0.0-alpha.4 #1499 hide the toolbar earlier if `[showToolbar]` is set to `false`
+- 15.0.0-alpha.5 #1498 tentative bug fix that shifts the viewer to the correct position if there's no toolbar; #1507 show the find result again; #1511 stop showing the password prompt in the page number input field
