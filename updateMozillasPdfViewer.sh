@@ -1,14 +1,32 @@
 #!/bin/sh
 cd ../mypdf.js
 
+rm -r build
+
 FOLDER="assets"
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 if [ "$BRANCH" == "bleeding-edge" ]; then
   FOLDER="bleeding-edge"
 fi
 
-gulp minified
-gulp minified-legacy
+gulp minified-legacy &
+gulp minified &
+wait
+
+mv build/minified/web/pdf.viewer.js build/minified/web/viewer.min.js
+
+mv build/minified-legacy/web/pdf.viewer.js build/minified-legacy/web/viewer-es5.min.js
+mv build/minified-legacy/web/viewer.js build/minified-legacy/web/viewer-es5.js
+
+mv build/minified-legacy/build/pdf.js build/minified-legacy/build/pdf-es5.js
+mv build/minified-legacy/build/pdf.min.js build/minified-legacy/build/pdf-es5.min.js
+
+mv build/minified-legacy/build/pdf.sandbox.js build/minified-legacy/build/pdf.sandbox-es5.js
+mv build/minified-legacy/build/pdf.sandbox.min.js build/minified-legacy/build/pdf.sandbox-es5.min.js
+
+mv build/minified-legacy/build/pdf.worker.js build/minified-legacy/build/pdf.worker-es5.js
+mv build/minified-legacy/build/pdf.worker.min.js build/minified-legacy/build/pdf.worker-es5.min.js
+
 
 cd ../ngx-extended-pdf-viewer
 # cd inlineImageFiles

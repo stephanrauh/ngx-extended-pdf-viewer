@@ -59,7 +59,9 @@ export class PDFThumbnailViewer {
     pageColors: Object | null;
     scroll: {
         right: boolean;
-        down: boolean;
+        down: boolean; /**
+         * @private
+         */
         lastX: any;
         lastY: any;
         _eventHandler: (evt: any) => void;

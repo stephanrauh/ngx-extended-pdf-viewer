@@ -1112,749 +1112,6 @@ const isNodeJS = false;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.StatTimer = exports.RenderingCancelledException = exports.PixelsPerInch = exports.PageViewport = exports.PDFDateString = exports.DOMStandardFontDataFactory = exports.DOMSVGFactory = exports.DOMCanvasFactory = exports.DOMCMapReaderFactory = exports.AnnotationPrefix = void 0;
-exports.binarySearchFirstItem = binarySearchFirstItem;
-exports.deprecated = deprecated;
-exports.getColorValues = getColorValues;
-exports.getCurrentTransform = getCurrentTransform;
-exports.getCurrentTransformInverse = getCurrentTransformInverse;
-exports.getFilenameFromUrl = getFilenameFromUrl;
-exports.getPdfFilenameFromUrl = getPdfFilenameFromUrl;
-exports.getRGB = getRGB;
-exports.getXfaPageViewport = getXfaPageViewport;
-exports.isDataScheme = isDataScheme;
-exports.isPdfFile = isPdfFile;
-exports.isValidFetchUrl = isValidFetchUrl;
-exports.loadScript = loadScript;
-
-var _base_factory = __w_pdfjs_require__(4);
-
-var _util = __w_pdfjs_require__(1);
-
-const SVG_NS = "http://www.w3.org/2000/svg";
-const AnnotationPrefix = "pdfjs_internal_id_";
-exports.AnnotationPrefix = AnnotationPrefix;
-
-class PixelsPerInch {
-  static CSS = 96.0;
-  static PDF = 72.0;
-  static PDF_TO_CSS_UNITS = this.CSS / this.PDF;
-}
-
-exports.PixelsPerInch = PixelsPerInch;
-
-class DOMCanvasFactory extends _base_factory.BaseCanvasFactory {
-  constructor({
-    ownerDocument = globalThis.document
-  } = {}) {
-    super();
-    this._document = ownerDocument;
-  }
-
-  _createCanvas(width, height) {
-    const canvas = this._document.createElement("canvas");
-
-    canvas.width = width;
-    canvas.height = height;
-    return canvas;
-  }
-
-}
-
-exports.DOMCanvasFactory = DOMCanvasFactory;
-
-async function fetchData(url, asTypedArray = false) {
-  if (isValidFetchUrl(url, document.baseURI)) {
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-
-    return asTypedArray ? new Uint8Array(await response.arrayBuffer()) : (0, _util.stringToBytes)(await response.text());
-  }
-
-  return new Promise((resolve, reject) => {
-    const request = new XMLHttpRequest();
-    request.open("GET", url, true);
-
-    if (asTypedArray) {
-      request.responseType = "arraybuffer";
-    }
-
-    request.onreadystatechange = () => {
-      if (request.readyState !== XMLHttpRequest.DONE) {
-        return;
-      }
-
-      if (request.status === 200 || request.status === 0) {
-        let data;
-
-        if (asTypedArray && request.response) {
-          data = new Uint8Array(request.response);
-        } else if (!asTypedArray && request.responseText) {
-          data = (0, _util.stringToBytes)(request.responseText);
-        }
-
-        if (data) {
-          resolve(data);
-          return;
-        }
-      }
-
-      reject(new Error(request.statusText));
-    };
-
-    request.send(null);
-  });
-}
-
-class DOMCMapReaderFactory extends _base_factory.BaseCMapReaderFactory {
-  _fetchData(url, compressionType) {
-    return fetchData(url, this.isCompressed).then(data => {
-      return {
-        cMapData: data,
-        compressionType
-      };
-    });
-  }
-
-}
-
-exports.DOMCMapReaderFactory = DOMCMapReaderFactory;
-
-class DOMStandardFontDataFactory extends _base_factory.BaseStandardFontDataFactory {
-  _fetchData(url) {
-    return fetchData(url, true);
-  }
-
-}
-
-exports.DOMStandardFontDataFactory = DOMStandardFontDataFactory;
-
-class DOMSVGFactory extends _base_factory.BaseSVGFactory {
-  _createSVG(type) {
-    return document.createElementNS(SVG_NS, type);
-  }
-
-}
-
-exports.DOMSVGFactory = DOMSVGFactory;
-
-class PageViewport {
-  constructor({
-    viewBox,
-    scale,
-    rotation,
-    offsetX = 0,
-    offsetY = 0,
-    dontFlip = false
-  }) {
-    this.viewBox = viewBox;
-    this.scale = scale;
-    this.rotation = rotation;
-    this.offsetX = offsetX;
-    this.offsetY = offsetY;
-    const centerX = (viewBox[2] + viewBox[0]) / 2;
-    const centerY = (viewBox[3] + viewBox[1]) / 2;
-    let rotateA, rotateB, rotateC, rotateD;
-    rotation %= 360;
-
-    if (rotation < 0) {
-      rotation += 360;
-    }
-
-    switch (rotation) {
-      case 180:
-        rotateA = -1;
-        rotateB = 0;
-        rotateC = 0;
-        rotateD = 1;
-        break;
-
-      case 90:
-        rotateA = 0;
-        rotateB = 1;
-        rotateC = 1;
-        rotateD = 0;
-        break;
-
-      case 270:
-        rotateA = 0;
-        rotateB = -1;
-        rotateC = -1;
-        rotateD = 0;
-        break;
-
-      case 0:
-        rotateA = 1;
-        rotateB = 0;
-        rotateC = 0;
-        rotateD = -1;
-        break;
-
-      default:
-        throw new Error("PageViewport: Invalid rotation, must be a multiple of 90 degrees.");
-    }
-
-    if (dontFlip) {
-      rotateC = -rotateC;
-      rotateD = -rotateD;
-    }
-
-    let offsetCanvasX, offsetCanvasY;
-    let width, height;
-
-    if (rotateA === 0) {
-      offsetCanvasX = Math.abs(centerY - viewBox[1]) * scale + offsetX;
-      offsetCanvasY = Math.abs(centerX - viewBox[0]) * scale + offsetY;
-      width = Math.abs(viewBox[3] - viewBox[1]) * scale;
-      height = Math.abs(viewBox[2] - viewBox[0]) * scale;
-    } else {
-      offsetCanvasX = Math.abs(centerX - viewBox[0]) * scale + offsetX;
-      offsetCanvasY = Math.abs(centerY - viewBox[1]) * scale + offsetY;
-      width = Math.abs(viewBox[2] - viewBox[0]) * scale;
-      height = Math.abs(viewBox[3] - viewBox[1]) * scale;
-    }
-
-    this.transform = [rotateA * scale, rotateB * scale, rotateC * scale, rotateD * scale, offsetCanvasX - rotateA * scale * centerX - rotateC * scale * centerY, offsetCanvasY - rotateB * scale * centerX - rotateD * scale * centerY];
-    this.width = width;
-    this.height = height;
-  }
-
-  clone({
-    scale = this.scale,
-    rotation = this.rotation,
-    offsetX = this.offsetX,
-    offsetY = this.offsetY,
-    dontFlip = false
-  } = {}) {
-    return new PageViewport({
-      viewBox: this.viewBox.slice(),
-      scale,
-      rotation,
-      offsetX,
-      offsetY,
-      dontFlip
-    });
-  }
-
-  convertToViewportPoint(x, y) {
-    return _util.Util.applyTransform([x, y], this.transform);
-  }
-
-  convertToViewportRectangle(rect) {
-    const topLeft = _util.Util.applyTransform([rect[0], rect[1]], this.transform);
-
-    const bottomRight = _util.Util.applyTransform([rect[2], rect[3]], this.transform);
-
-    return [topLeft[0], topLeft[1], bottomRight[0], bottomRight[1]];
-  }
-
-  convertToPdfPoint(x, y) {
-    return _util.Util.applyInverseTransform([x, y], this.transform);
-  }
-
-}
-
-exports.PageViewport = PageViewport;
-
-class RenderingCancelledException extends _util.BaseException {
-  constructor(msg, type) {
-    super(msg, "RenderingCancelledException");
-    this.type = type;
-  }
-
-}
-
-exports.RenderingCancelledException = RenderingCancelledException;
-
-function isDataScheme(url) {
-  const ii = url.length;
-  let i = 0;
-
-  while (i < ii && url[i].trim() === "") {
-    i++;
-  }
-
-  return url.substring(i, i + 5).toLowerCase() === "data:";
-}
-
-function isPdfFile(filename) {
-  return typeof filename === "string" && /\.pdf$/i.test(filename);
-}
-
-function getFilenameFromUrl(url) {
-  const anchor = url.indexOf("#");
-  const query = url.indexOf("?");
-  const end = Math.min(anchor > 0 ? anchor : url.length, query > 0 ? query : url.length);
-  return url.substring(url.lastIndexOf("/", end) + 1, end);
-}
-
-function getPdfFilenameFromUrl(url, defaultFilename = "document.pdf") {
-  if (window.PDFViewerApplication.appConfig.filenameForDownload) {
-    return window.PDFViewerApplication.appConfig.filenameForDownload;
-  }
-
-  if (typeof url !== "string") {
-    return defaultFilename;
-  }
-
-  if (isDataScheme(url)) {
-    (0, _util.warn)('getPdfFilenameFromUrl: ignore "data:"-URL for performance reasons.');
-    return defaultFilename;
-  }
-
-  const reURI = /^(?:(?:[^:]+:)?\/\/[^/]+)?([^?#]*)(\?[^#]*)?(#.*)?$/;
-  const reFilename = /[^/?#=]+\.pdf\b(?!.*\.pdf\b)/i;
-  const splitURI = reURI.exec(url);
-  let suggestedFilename = reFilename.exec(splitURI[1]) || reFilename.exec(splitURI[2]) || reFilename.exec(splitURI[3]);
-
-  if (suggestedFilename) {
-    suggestedFilename = suggestedFilename[0];
-
-    if (suggestedFilename.includes("%")) {
-      try {
-        suggestedFilename = reFilename.exec(decodeURIComponent(suggestedFilename))[0];
-      } catch (ex) {}
-    }
-  }
-
-  return suggestedFilename || defaultFilename;
-}
-
-class StatTimer {
-  constructor() {
-    this.started = Object.create(null);
-    this.times = [];
-  }
-
-  time(name) {
-    if (name in this.started) {
-      (0, _util.warn)(`Timer is already running for ${name}`);
-    }
-
-    this.started[name] = Date.now();
-  }
-
-  timeEnd(name) {
-    if (!(name in this.started)) {
-      (0, _util.warn)(`Timer has not been started for ${name}`);
-    }
-
-    this.times.push({
-      name,
-      start: this.started[name],
-      end: Date.now()
-    });
-    delete this.started[name];
-  }
-
-  toString() {
-    const outBuf = [];
-    let longest = 0;
-
-    for (const time of this.times) {
-      const name = time.name;
-
-      if (name.length > longest) {
-        longest = name.length;
-      }
-    }
-
-    for (const time of this.times) {
-      const duration = time.end - time.start;
-      outBuf.push(`${time.name.padEnd(longest)} ${duration}ms\n`);
-    }
-
-    return outBuf.join("");
-  }
-
-}
-
-exports.StatTimer = StatTimer;
-
-function isValidFetchUrl(url, baseUrl) {
-  try {
-    const {
-      protocol
-    } = baseUrl ? new URL(url, baseUrl) : new URL(url);
-    return protocol === "http:" || protocol === "https:" || protocol === "capacitor:";
-  } catch (ex) {
-    return false;
-  }
-}
-
-function loadScript(src, removeScriptElement = false) {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-
-    if (src.constructor.name === "Function") {
-      script.src = src();
-    } else {
-      script.src = src;
-    }
-
-    script.onload = function (evt) {
-      if (removeScriptElement) {
-        script.remove();
-      }
-
-      resolve(evt);
-    };
-
-    script.onerror = function (error) {
-      Window['ngxConsole'].log(error);
-      reject(new Error(`Cannot load script at: ${script.src}`));
-    };
-
-    (document.head || document.documentElement).append(script);
-  });
-}
-
-function deprecated(details) {
-  Window['ngxConsole'].log("Deprecated API usage: " + details);
-}
-
-let pdfDateStringRegex;
-
-class PDFDateString {
-  static toDateObject(input) {
-    if (!input || typeof input !== "string") {
-      return null;
-    }
-
-    if (!pdfDateStringRegex) {
-      pdfDateStringRegex = new RegExp("^D:" + "(\\d{4})" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "([Z|+|-])?" + "(\\d{2})?" + "'?" + "(\\d{2})?" + "'?");
-    }
-
-    const matches = pdfDateStringRegex.exec(input);
-
-    if (!matches) {
-      return null;
-    }
-
-    const year = parseInt(matches[1], 10);
-    let month = parseInt(matches[2], 10);
-    month = month >= 1 && month <= 12 ? month - 1 : 0;
-    let day = parseInt(matches[3], 10);
-    day = day >= 1 && day <= 31 ? day : 1;
-    let hour = parseInt(matches[4], 10);
-    hour = hour >= 0 && hour <= 23 ? hour : 0;
-    let minute = parseInt(matches[5], 10);
-    minute = minute >= 0 && minute <= 59 ? minute : 0;
-    let second = parseInt(matches[6], 10);
-    second = second >= 0 && second <= 59 ? second : 0;
-    const universalTimeRelation = matches[7] || "Z";
-    let offsetHour = parseInt(matches[8], 10);
-    offsetHour = offsetHour >= 0 && offsetHour <= 23 ? offsetHour : 0;
-    let offsetMinute = parseInt(matches[9], 10) || 0;
-    offsetMinute = offsetMinute >= 0 && offsetMinute <= 59 ? offsetMinute : 0;
-
-    if (universalTimeRelation === "-") {
-      hour += offsetHour;
-      minute += offsetMinute;
-    } else if (universalTimeRelation === "+") {
-      hour -= offsetHour;
-      minute -= offsetMinute;
-    }
-
-    return new Date(Date.UTC(year, month, day, hour, minute, second));
-  }
-
-}
-
-exports.PDFDateString = PDFDateString;
-
-function getXfaPageViewport(xfaPage, {
-  scale = 1,
-  rotation = 0
-}) {
-  const {
-    width,
-    height
-  } = xfaPage.attributes.style;
-  const viewBox = [0, 0, parseInt(width), parseInt(height)];
-  return new PageViewport({
-    viewBox,
-    scale,
-    rotation
-  });
-}
-
-function getRGB(color) {
-  if (color.startsWith("#")) {
-    const colorRGB = parseInt(color.slice(1), 16);
-    return [(colorRGB & 0xff0000) >> 16, (colorRGB & 0x00ff00) >> 8, colorRGB & 0x0000ff];
-  }
-
-  if (color.startsWith("rgb(")) {
-    return color.slice(4, -1).split(",").map(x => parseInt(x));
-  }
-
-  if (color.startsWith("rgba(")) {
-    return color.slice(5, -1).split(",").map(x => parseInt(x)).slice(0, 3);
-  }
-
-  (0, _util.warn)(`Not a valid color format: "${color}"`);
-  return [0, 0, 0];
-}
-
-function getColorValues(colors) {
-  const span = document.createElement("span");
-  span.style.visibility = "hidden";
-  document.body.append(span);
-
-  for (const name of colors.keys()) {
-    span.style.color = name;
-    const computedColor = window.getComputedStyle(span).color;
-    colors.set(name, getRGB(computedColor));
-  }
-
-  span.remove();
-}
-
-function binarySearchFirstItem(items, condition, start = 0) {
-  let minIndex = start;
-  let maxIndex = items.length - 1;
-
-  if (maxIndex < 0 || !condition(items[maxIndex])) {
-    return items.length;
-  }
-
-  if (condition(items[minIndex])) {
-    return minIndex;
-  }
-
-  while (minIndex < maxIndex) {
-    const currentIndex = minIndex + maxIndex >> 1;
-    const currentItem = items[currentIndex];
-
-    if (condition(currentItem)) {
-      maxIndex = currentIndex;
-    } else {
-      minIndex = currentIndex + 1;
-    }
-  }
-
-  return minIndex;
-}
-
-function getCurrentTransform(ctx) {
-  const {
-    a,
-    b,
-    c,
-    d,
-    e,
-    f
-  } = ctx.getTransform();
-  return [a, b, c, d, e, f];
-}
-
-function getCurrentTransformInverse(ctx) {
-  const {
-    a,
-    b,
-    c,
-    d,
-    e,
-    f
-  } = ctx.getTransform().invertSelf();
-  return [a, b, c, d, e, f];
-}
-
-/***/ }),
-/* 4 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.BaseStandardFontDataFactory = exports.BaseSVGFactory = exports.BaseCanvasFactory = exports.BaseCMapReaderFactory = void 0;
-
-var _util = __w_pdfjs_require__(1);
-
-class BaseCanvasFactory {
-  constructor() {
-    if (this.constructor === BaseCanvasFactory) {
-      (0, _util.unreachable)("Cannot initialize BaseCanvasFactory.");
-    }
-  }
-
-  create(width, height) {
-    if (width <= 0 || height <= 0) {
-      throw new Error("Invalid canvas size");
-    }
-
-    const canvas = this._createCanvas(width, height);
-
-    return {
-      canvas,
-      context: canvas.getContext("2d")
-    };
-  }
-
-  reset(canvasAndContext, width, height) {
-    if (!canvasAndContext.canvas) {
-      throw new Error("Canvas is not specified");
-    }
-
-    if (width <= 0 || height <= 0) {
-      throw new Error("Invalid canvas size");
-    }
-
-    canvasAndContext.canvas.width = width;
-    canvasAndContext.canvas.height = height;
-  }
-
-  destroy(canvasAndContext) {
-    if (!canvasAndContext.canvas) {
-      throw new Error("Canvas is not specified");
-    }
-
-    canvasAndContext.canvas.width = 0;
-    canvasAndContext.canvas.height = 0;
-    canvasAndContext.canvas = null;
-    canvasAndContext.context = null;
-  }
-
-  _createCanvas(width, height) {
-    (0, _util.unreachable)("Abstract method `_createCanvas` called.");
-  }
-
-}
-
-exports.BaseCanvasFactory = BaseCanvasFactory;
-
-class BaseCMapReaderFactory {
-  constructor({
-    baseUrl = null,
-    isCompressed = false
-  }) {
-    if (this.constructor === BaseCMapReaderFactory) {
-      (0, _util.unreachable)("Cannot initialize BaseCMapReaderFactory.");
-    }
-
-    this.baseUrl = baseUrl;
-    this.isCompressed = isCompressed;
-  }
-
-  async fetch({
-    name
-  }) {
-    if (!this.baseUrl) {
-      throw new Error('The CMap "baseUrl" parameter must be specified, ensure that ' + 'the "cMapUrl" and "cMapPacked" API parameters are provided.');
-    }
-
-    if (!name) {
-      throw new Error("CMap name must be specified.");
-    }
-
-    const url = this.baseUrl + name + (this.isCompressed ? ".bcmap" : "");
-    const compressionType = this.isCompressed ? _util.CMapCompressionType.BINARY : _util.CMapCompressionType.NONE;
-    return this._fetchData(url, compressionType).catch(reason => {
-      throw new Error(`Unable to load ${this.isCompressed ? "binary " : ""}CMap at: ${url}`);
-    });
-  }
-
-  _fetchData(url, compressionType) {
-    (0, _util.unreachable)("Abstract method `_fetchData` called.");
-  }
-
-}
-
-exports.BaseCMapReaderFactory = BaseCMapReaderFactory;
-
-class BaseStandardFontDataFactory {
-  constructor({
-    baseUrl = null
-  }) {
-    if (this.constructor === BaseStandardFontDataFactory) {
-      (0, _util.unreachable)("Cannot initialize BaseStandardFontDataFactory.");
-    }
-
-    this.baseUrl = baseUrl;
-  }
-
-  async fetch({
-    filename
-  }) {
-    if (!this.baseUrl) {
-      throw new Error('The standard font "baseUrl" parameter must be specified, ensure that ' + 'the "standardFontDataUrl" API parameter is provided.');
-    }
-
-    if (!filename) {
-      throw new Error("Font filename must be specified.");
-    }
-
-    const url = `${this.baseUrl}${filename}`;
-    return this._fetchData(url).catch(reason => {
-      throw new Error(`Unable to load font data at: ${url}`);
-    });
-  }
-
-  _fetchData(url) {
-    (0, _util.unreachable)("Abstract method `_fetchData` called.");
-  }
-
-}
-
-exports.BaseStandardFontDataFactory = BaseStandardFontDataFactory;
-
-class BaseSVGFactory {
-  constructor() {
-    if (this.constructor === BaseSVGFactory) {
-      (0, _util.unreachable)("Cannot initialize BaseSVGFactory.");
-    }
-  }
-
-  create(width, height, skipDimensions = false) {
-    if (width <= 0 || height <= 0) {
-      throw new Error("Invalid SVG dimensions");
-    }
-
-    const svg = this._createSVG("svg:svg");
-
-    svg.setAttribute("version", "1.1");
-
-    if (!skipDimensions) {
-      svg.setAttribute("width", `${width}px`);
-      svg.setAttribute("height", `${height}px`);
-    }
-
-    svg.setAttribute("preserveAspectRatio", "none");
-    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-    return svg;
-  }
-
-  createElement(type) {
-    if (typeof type !== "string") {
-      throw new Error("Invalid SVG element type");
-    }
-
-    return this._createSVG(type);
-  }
-
-  _createSVG(type) {
-    (0, _util.unreachable)("Abstract method `_createSVG` called.");
-  }
-
-}
-
-exports.BaseSVGFactory = BaseSVGFactory;
-
-/***/ }),
-/* 5 */
-/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
 exports.build = exports.RenderTask = exports.PDFWorkerUtil = exports.PDFWorker = exports.PDFPageProxy = exports.PDFDocumentProxy = exports.PDFDocumentLoadingTask = exports.PDFDataRangeTransport = exports.LoopbackPort = exports.DefaultStandardFontDataFactory = exports.DefaultCanvasFactory = exports.DefaultCMapReaderFactory = void 0;
 exports.getDocument = getDocument;
 exports.setPDFNetworkStreamFactory = setPDFNetworkStreamFactory;
@@ -1862,9 +1119,9 @@ exports.version = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
-var _annotation_storage = __w_pdfjs_require__(6);
+var _annotation_storage = __w_pdfjs_require__(4);
 
-var _display_utils = __w_pdfjs_require__(3);
+var _display_utils = __w_pdfjs_require__(7);
 
 var _font_loader = __w_pdfjs_require__(10);
 
@@ -2146,7 +1403,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '2.16.389',
+    apiVersion: '3.0.331',
     source: {
       data: source.data,
       url: source.url,
@@ -3166,8 +2423,10 @@ class PDFWorker {
   }
 
   _initialize() {
-    if (typeof Worker !== "undefined" && !PDFWorkerUtil.isWorkerDisabled && !PDFWorker._mainThreadWorkerMessageHandler) {
-      let workerSrc = PDFWorker.workerSrc;
+    if (!PDFWorkerUtil.isWorkerDisabled && !PDFWorker._mainThreadWorkerMessageHandler) {
+      let {
+        workerSrc
+      } = PDFWorker;
 
       try {
         if (!PDFWorkerUtil.isSameOrigin(window.location.href, workerSrc)) {
@@ -4329,13 +3588,13 @@ class InternalRenderTask {
 
 }
 
-const version = '2.16.389';
+const version = '3.0.331';
 exports.version = version;
-const build = 'b834a0ca6';
+const build = '42b59754c';
 exports.build = build;
 
 /***/ }),
-/* 6 */
+/* 4 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -4347,7 +3606,7 @@ exports.PrintAnnotationStorage = exports.AnnotationStorage = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
-var _editor = __w_pdfjs_require__(7);
+var _editor = __w_pdfjs_require__(5);
 
 var _murmurhash = __w_pdfjs_require__(9);
 
@@ -4404,11 +3663,21 @@ class AnnotationStorage {
     return this._storage.get(key);
   }
 
-  removeKey(key) {
+  remove(key) {
     this._storage.delete(key);
 
     if (this._storage.size === 0) {
       this.resetModified();
+    }
+
+    if (typeof this.onAnnotationEditor === "function") {
+      for (const value of this._storage.values()) {
+        if (value instanceof _editor.AnnotationEditor) {
+          return;
+        }
+      }
+
+      this.onAnnotationEditor(null);
     }
   }
 
@@ -4513,16 +3782,6 @@ class AnnotationStorage {
     return clone;
   }
 
-  get hasAnnotationEditors() {
-    for (const value of this._storage.values()) {
-      if (value instanceof _editor.AnnotationEditor) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
   static getHash(map) {
     if (!map) {
       return "";
@@ -4562,7 +3821,7 @@ class PrintAnnotationStorage extends AnnotationStorage {
 exports.PrintAnnotationStorage = PrintAnnotationStorage;
 
 /***/ }),
-/* 7 */
+/* 5 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -4572,7 +3831,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.AnnotationEditor = void 0;
 
-var _tools = __w_pdfjs_require__(8);
+var _tools = __w_pdfjs_require__(6);
 
 var _util = __w_pdfjs_require__(1);
 
@@ -4895,7 +4154,7 @@ class AnnotationEditor {
 exports.AnnotationEditor = AnnotationEditor;
 
 /***/ }),
-/* 8 */
+/* 6 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -4909,7 +4168,7 @@ exports.opacityToHex = opacityToHex;
 
 var _util = __w_pdfjs_require__(1);
 
-var _display_utils = __w_pdfjs_require__(3);
+var _display_utils = __w_pdfjs_require__(7);
 
 function bindEvents(obj, element, names) {
   for (const name of names) {
@@ -5676,6 +4935,722 @@ class AnnotationEditorUIManager {
 exports.AnnotationEditorUIManager = AnnotationEditorUIManager;
 
 /***/ }),
+/* 7 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.StatTimer = exports.RenderingCancelledException = exports.PixelsPerInch = exports.PageViewport = exports.PDFDateString = exports.DOMStandardFontDataFactory = exports.DOMSVGFactory = exports.DOMCanvasFactory = exports.DOMCMapReaderFactory = exports.AnnotationPrefix = void 0;
+exports.deprecated = deprecated;
+exports.getColorValues = getColorValues;
+exports.getCurrentTransform = getCurrentTransform;
+exports.getCurrentTransformInverse = getCurrentTransformInverse;
+exports.getFilenameFromUrl = getFilenameFromUrl;
+exports.getPdfFilenameFromUrl = getPdfFilenameFromUrl;
+exports.getRGB = getRGB;
+exports.getXfaPageViewport = getXfaPageViewport;
+exports.isDataScheme = isDataScheme;
+exports.isPdfFile = isPdfFile;
+exports.isValidFetchUrl = isValidFetchUrl;
+exports.loadScript = loadScript;
+
+var _base_factory = __w_pdfjs_require__(8);
+
+var _util = __w_pdfjs_require__(1);
+
+const SVG_NS = "http://www.w3.org/2000/svg";
+const AnnotationPrefix = "pdfjs_internal_id_";
+exports.AnnotationPrefix = AnnotationPrefix;
+
+class PixelsPerInch {
+  static CSS = 96.0;
+  static PDF = 72.0;
+  static PDF_TO_CSS_UNITS = this.CSS / this.PDF;
+}
+
+exports.PixelsPerInch = PixelsPerInch;
+
+class DOMCanvasFactory extends _base_factory.BaseCanvasFactory {
+  constructor({
+    ownerDocument = globalThis.document
+  } = {}) {
+    super();
+    this._document = ownerDocument;
+  }
+
+  _createCanvas(width, height) {
+    const canvas = this._document.createElement("canvas");
+
+    canvas.width = width;
+    canvas.height = height;
+    return canvas;
+  }
+
+}
+
+exports.DOMCanvasFactory = DOMCanvasFactory;
+
+async function fetchData(url, asTypedArray = false) {
+  if (isValidFetchUrl(url, document.baseURI)) {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    return asTypedArray ? new Uint8Array(await response.arrayBuffer()) : (0, _util.stringToBytes)(await response.text());
+  }
+
+  return new Promise((resolve, reject) => {
+    const request = new XMLHttpRequest();
+    request.open("GET", url, true);
+
+    if (asTypedArray) {
+      request.responseType = "arraybuffer";
+    }
+
+    request.onreadystatechange = () => {
+      if (request.readyState !== XMLHttpRequest.DONE) {
+        return;
+      }
+
+      if (request.status === 200 || request.status === 0) {
+        let data;
+
+        if (asTypedArray && request.response) {
+          data = new Uint8Array(request.response);
+        } else if (!asTypedArray && request.responseText) {
+          data = (0, _util.stringToBytes)(request.responseText);
+        }
+
+        if (data) {
+          resolve(data);
+          return;
+        }
+      }
+
+      reject(new Error(request.statusText));
+    };
+
+    request.send(null);
+  });
+}
+
+class DOMCMapReaderFactory extends _base_factory.BaseCMapReaderFactory {
+  _fetchData(url, compressionType) {
+    return fetchData(url, this.isCompressed).then(data => {
+      return {
+        cMapData: data,
+        compressionType
+      };
+    });
+  }
+
+}
+
+exports.DOMCMapReaderFactory = DOMCMapReaderFactory;
+
+class DOMStandardFontDataFactory extends _base_factory.BaseStandardFontDataFactory {
+  _fetchData(url) {
+    return fetchData(url, true);
+  }
+
+}
+
+exports.DOMStandardFontDataFactory = DOMStandardFontDataFactory;
+
+class DOMSVGFactory extends _base_factory.BaseSVGFactory {
+  _createSVG(type) {
+    return document.createElementNS(SVG_NS, type);
+  }
+
+}
+
+exports.DOMSVGFactory = DOMSVGFactory;
+
+class PageViewport {
+  constructor({
+    viewBox,
+    scale,
+    rotation,
+    offsetX = 0,
+    offsetY = 0,
+    dontFlip = false
+  }) {
+    this.viewBox = viewBox;
+    this.scale = scale;
+    this.rotation = rotation;
+    this.offsetX = offsetX;
+    this.offsetY = offsetY;
+    const centerX = (viewBox[2] + viewBox[0]) / 2;
+    const centerY = (viewBox[3] + viewBox[1]) / 2;
+    let rotateA, rotateB, rotateC, rotateD;
+    rotation %= 360;
+
+    if (rotation < 0) {
+      rotation += 360;
+    }
+
+    switch (rotation) {
+      case 180:
+        rotateA = -1;
+        rotateB = 0;
+        rotateC = 0;
+        rotateD = 1;
+        break;
+
+      case 90:
+        rotateA = 0;
+        rotateB = 1;
+        rotateC = 1;
+        rotateD = 0;
+        break;
+
+      case 270:
+        rotateA = 0;
+        rotateB = -1;
+        rotateC = -1;
+        rotateD = 0;
+        break;
+
+      case 0:
+        rotateA = 1;
+        rotateB = 0;
+        rotateC = 0;
+        rotateD = -1;
+        break;
+
+      default:
+        throw new Error("PageViewport: Invalid rotation, must be a multiple of 90 degrees.");
+    }
+
+    if (dontFlip) {
+      rotateC = -rotateC;
+      rotateD = -rotateD;
+    }
+
+    let offsetCanvasX, offsetCanvasY;
+    let width, height;
+
+    if (rotateA === 0) {
+      offsetCanvasX = Math.abs(centerY - viewBox[1]) * scale + offsetX;
+      offsetCanvasY = Math.abs(centerX - viewBox[0]) * scale + offsetY;
+      width = Math.abs(viewBox[3] - viewBox[1]) * scale;
+      height = Math.abs(viewBox[2] - viewBox[0]) * scale;
+    } else {
+      offsetCanvasX = Math.abs(centerX - viewBox[0]) * scale + offsetX;
+      offsetCanvasY = Math.abs(centerY - viewBox[1]) * scale + offsetY;
+      width = Math.abs(viewBox[2] - viewBox[0]) * scale;
+      height = Math.abs(viewBox[3] - viewBox[1]) * scale;
+    }
+
+    this.transform = [rotateA * scale, rotateB * scale, rotateC * scale, rotateD * scale, offsetCanvasX - rotateA * scale * centerX - rotateC * scale * centerY, offsetCanvasY - rotateB * scale * centerX - rotateD * scale * centerY];
+    this.width = width;
+    this.height = height;
+  }
+
+  clone({
+    scale = this.scale,
+    rotation = this.rotation,
+    offsetX = this.offsetX,
+    offsetY = this.offsetY,
+    dontFlip = false
+  } = {}) {
+    return new PageViewport({
+      viewBox: this.viewBox.slice(),
+      scale,
+      rotation,
+      offsetX,
+      offsetY,
+      dontFlip
+    });
+  }
+
+  convertToViewportPoint(x, y) {
+    return _util.Util.applyTransform([x, y], this.transform);
+  }
+
+  convertToViewportRectangle(rect) {
+    const topLeft = _util.Util.applyTransform([rect[0], rect[1]], this.transform);
+
+    const bottomRight = _util.Util.applyTransform([rect[2], rect[3]], this.transform);
+
+    return [topLeft[0], topLeft[1], bottomRight[0], bottomRight[1]];
+  }
+
+  convertToPdfPoint(x, y) {
+    return _util.Util.applyInverseTransform([x, y], this.transform);
+  }
+
+}
+
+exports.PageViewport = PageViewport;
+
+class RenderingCancelledException extends _util.BaseException {
+  constructor(msg, type) {
+    super(msg, "RenderingCancelledException");
+    this.type = type;
+  }
+
+}
+
+exports.RenderingCancelledException = RenderingCancelledException;
+
+function isDataScheme(url) {
+  const ii = url.length;
+  let i = 0;
+
+  while (i < ii && url[i].trim() === "") {
+    i++;
+  }
+
+  return url.substring(i, i + 5).toLowerCase() === "data:";
+}
+
+function isPdfFile(filename) {
+  return typeof filename === "string" && /\.pdf$/i.test(filename);
+}
+
+function getFilenameFromUrl(url) {
+  const anchor = url.indexOf("#");
+  const query = url.indexOf("?");
+  const end = Math.min(anchor > 0 ? anchor : url.length, query > 0 ? query : url.length);
+  return url.substring(url.lastIndexOf("/", end) + 1, end);
+}
+
+function getPdfFilenameFromUrl(url, defaultFilename = "document.pdf") {
+  if (window.PDFViewerApplication.appConfig.filenameForDownload) {
+    return window.PDFViewerApplication.appConfig.filenameForDownload;
+  }
+
+  if (typeof url !== "string") {
+    return defaultFilename;
+  }
+
+  if (isDataScheme(url)) {
+    (0, _util.warn)('getPdfFilenameFromUrl: ignore "data:"-URL for performance reasons.');
+    return defaultFilename;
+  }
+
+  const reURI = /^(?:(?:[^:]+:)?\/\/[^/]+)?([^?#]*)(\?[^#]*)?(#.*)?$/;
+  const reFilename = /[^/?#=]+\.pdf\b(?!.*\.pdf\b)/i;
+  const splitURI = reURI.exec(url);
+  let suggestedFilename = reFilename.exec(splitURI[1]) || reFilename.exec(splitURI[2]) || reFilename.exec(splitURI[3]);
+
+  if (suggestedFilename) {
+    suggestedFilename = suggestedFilename[0];
+
+    if (suggestedFilename.includes("%")) {
+      try {
+        suggestedFilename = reFilename.exec(decodeURIComponent(suggestedFilename))[0];
+      } catch (ex) {}
+    }
+  }
+
+  return suggestedFilename || defaultFilename;
+}
+
+class StatTimer {
+  constructor() {
+    this.started = Object.create(null);
+    this.times = [];
+  }
+
+  time(name) {
+    if (name in this.started) {
+      (0, _util.warn)(`Timer is already running for ${name}`);
+    }
+
+    this.started[name] = Date.now();
+  }
+
+  timeEnd(name) {
+    if (!(name in this.started)) {
+      (0, _util.warn)(`Timer has not been started for ${name}`);
+    }
+
+    this.times.push({
+      name,
+      start: this.started[name],
+      end: Date.now()
+    });
+    delete this.started[name];
+  }
+
+  toString() {
+    const outBuf = [];
+    let longest = 0;
+
+    for (const time of this.times) {
+      const name = time.name;
+
+      if (name.length > longest) {
+        longest = name.length;
+      }
+    }
+
+    for (const time of this.times) {
+      const duration = time.end - time.start;
+      outBuf.push(`${time.name.padEnd(longest)} ${duration}ms\n`);
+    }
+
+    return outBuf.join("");
+  }
+
+}
+
+exports.StatTimer = StatTimer;
+
+function isValidFetchUrl(url, baseUrl) {
+  try {
+    const {
+      protocol
+    } = baseUrl ? new URL(url, baseUrl) : new URL(url);
+    return protocol === "http:" || protocol === "https:" || protocol === "capacitor:";
+  } catch (ex) {
+    return false;
+  }
+}
+
+function loadScript(src, removeScriptElement = false) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+
+    if (src.constructor.name === "Function") {
+      script.src = src();
+    } else {
+      script.src = src;
+    }
+
+    script.onload = function (evt) {
+      if (removeScriptElement) {
+        script.remove();
+      }
+
+      resolve(evt);
+    };
+
+    script.onerror = function (error) {
+      Window['ngxConsole'].log(error);
+      reject(new Error(`Cannot load script at: ${script.src}`));
+    };
+
+    (document.head || document.documentElement).append(script);
+  });
+}
+
+function deprecated(details) {
+  Window['ngxConsole'].log("Deprecated API usage: " + details);
+}
+
+let pdfDateStringRegex;
+
+class PDFDateString {
+  static toDateObject(input) {
+    if (!input || typeof input !== "string") {
+      return null;
+    }
+
+    if (!pdfDateStringRegex) {
+      pdfDateStringRegex = new RegExp("^D:" + "(\\d{4})" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "([Z|+|-])?" + "(\\d{2})?" + "'?" + "(\\d{2})?" + "'?");
+    }
+
+    const matches = pdfDateStringRegex.exec(input);
+
+    if (!matches) {
+      return null;
+    }
+
+    const year = parseInt(matches[1], 10);
+    let month = parseInt(matches[2], 10);
+    month = month >= 1 && month <= 12 ? month - 1 : 0;
+    let day = parseInt(matches[3], 10);
+    day = day >= 1 && day <= 31 ? day : 1;
+    let hour = parseInt(matches[4], 10);
+    hour = hour >= 0 && hour <= 23 ? hour : 0;
+    let minute = parseInt(matches[5], 10);
+    minute = minute >= 0 && minute <= 59 ? minute : 0;
+    let second = parseInt(matches[6], 10);
+    second = second >= 0 && second <= 59 ? second : 0;
+    const universalTimeRelation = matches[7] || "Z";
+    let offsetHour = parseInt(matches[8], 10);
+    offsetHour = offsetHour >= 0 && offsetHour <= 23 ? offsetHour : 0;
+    let offsetMinute = parseInt(matches[9], 10) || 0;
+    offsetMinute = offsetMinute >= 0 && offsetMinute <= 59 ? offsetMinute : 0;
+
+    if (universalTimeRelation === "-") {
+      hour += offsetHour;
+      minute += offsetMinute;
+    } else if (universalTimeRelation === "+") {
+      hour -= offsetHour;
+      minute -= offsetMinute;
+    }
+
+    return new Date(Date.UTC(year, month, day, hour, minute, second));
+  }
+
+}
+
+exports.PDFDateString = PDFDateString;
+
+function getXfaPageViewport(xfaPage, {
+  scale = 1,
+  rotation = 0
+}) {
+  const {
+    width,
+    height
+  } = xfaPage.attributes.style;
+  const viewBox = [0, 0, parseInt(width), parseInt(height)];
+  return new PageViewport({
+    viewBox,
+    scale,
+    rotation
+  });
+}
+
+function getRGB(color) {
+  if (color.startsWith("#")) {
+    const colorRGB = parseInt(color.slice(1), 16);
+    return [(colorRGB & 0xff0000) >> 16, (colorRGB & 0x00ff00) >> 8, colorRGB & 0x0000ff];
+  }
+
+  if (color.startsWith("rgb(")) {
+    return color.slice(4, -1).split(",").map(x => parseInt(x));
+  }
+
+  if (color.startsWith("rgba(")) {
+    return color.slice(5, -1).split(",").map(x => parseInt(x)).slice(0, 3);
+  }
+
+  (0, _util.warn)(`Not a valid color format: "${color}"`);
+  return [0, 0, 0];
+}
+
+function getColorValues(colors) {
+  const span = document.createElement("span");
+  span.style.visibility = "hidden";
+  document.body.append(span);
+
+  for (const name of colors.keys()) {
+    span.style.color = name;
+    const computedColor = window.getComputedStyle(span).color;
+    colors.set(name, getRGB(computedColor));
+  }
+
+  span.remove();
+}
+
+function getCurrentTransform(ctx) {
+  const {
+    a,
+    b,
+    c,
+    d,
+    e,
+    f
+  } = ctx.getTransform();
+  return [a, b, c, d, e, f];
+}
+
+function getCurrentTransformInverse(ctx) {
+  const {
+    a,
+    b,
+    c,
+    d,
+    e,
+    f
+  } = ctx.getTransform().invertSelf();
+  return [a, b, c, d, e, f];
+}
+
+/***/ }),
+/* 8 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.BaseStandardFontDataFactory = exports.BaseSVGFactory = exports.BaseCanvasFactory = exports.BaseCMapReaderFactory = void 0;
+
+var _util = __w_pdfjs_require__(1);
+
+class BaseCanvasFactory {
+  constructor() {
+    if (this.constructor === BaseCanvasFactory) {
+      (0, _util.unreachable)("Cannot initialize BaseCanvasFactory.");
+    }
+  }
+
+  create(width, height) {
+    if (width <= 0 || height <= 0) {
+      throw new Error("Invalid canvas size");
+    }
+
+    const canvas = this._createCanvas(width, height);
+
+    return {
+      canvas,
+      context: canvas.getContext("2d")
+    };
+  }
+
+  reset(canvasAndContext, width, height) {
+    if (!canvasAndContext.canvas) {
+      throw new Error("Canvas is not specified");
+    }
+
+    if (width <= 0 || height <= 0) {
+      throw new Error("Invalid canvas size");
+    }
+
+    canvasAndContext.canvas.width = width;
+    canvasAndContext.canvas.height = height;
+  }
+
+  destroy(canvasAndContext) {
+    if (!canvasAndContext.canvas) {
+      throw new Error("Canvas is not specified");
+    }
+
+    canvasAndContext.canvas.width = 0;
+    canvasAndContext.canvas.height = 0;
+    canvasAndContext.canvas = null;
+    canvasAndContext.context = null;
+  }
+
+  _createCanvas(width, height) {
+    (0, _util.unreachable)("Abstract method `_createCanvas` called.");
+  }
+
+}
+
+exports.BaseCanvasFactory = BaseCanvasFactory;
+
+class BaseCMapReaderFactory {
+  constructor({
+    baseUrl = null,
+    isCompressed = false
+  }) {
+    if (this.constructor === BaseCMapReaderFactory) {
+      (0, _util.unreachable)("Cannot initialize BaseCMapReaderFactory.");
+    }
+
+    this.baseUrl = baseUrl;
+    this.isCompressed = isCompressed;
+  }
+
+  async fetch({
+    name
+  }) {
+    if (!this.baseUrl) {
+      throw new Error('The CMap "baseUrl" parameter must be specified, ensure that ' + 'the "cMapUrl" and "cMapPacked" API parameters are provided.');
+    }
+
+    if (!name) {
+      throw new Error("CMap name must be specified.");
+    }
+
+    const url = this.baseUrl + name + (this.isCompressed ? ".bcmap" : "");
+    const compressionType = this.isCompressed ? _util.CMapCompressionType.BINARY : _util.CMapCompressionType.NONE;
+    return this._fetchData(url, compressionType).catch(reason => {
+      throw new Error(`Unable to load ${this.isCompressed ? "binary " : ""}CMap at: ${url}`);
+    });
+  }
+
+  _fetchData(url, compressionType) {
+    (0, _util.unreachable)("Abstract method `_fetchData` called.");
+  }
+
+}
+
+exports.BaseCMapReaderFactory = BaseCMapReaderFactory;
+
+class BaseStandardFontDataFactory {
+  constructor({
+    baseUrl = null
+  }) {
+    if (this.constructor === BaseStandardFontDataFactory) {
+      (0, _util.unreachable)("Cannot initialize BaseStandardFontDataFactory.");
+    }
+
+    this.baseUrl = baseUrl;
+  }
+
+  async fetch({
+    filename
+  }) {
+    if (!this.baseUrl) {
+      throw new Error('The standard font "baseUrl" parameter must be specified, ensure that ' + 'the "standardFontDataUrl" API parameter is provided.');
+    }
+
+    if (!filename) {
+      throw new Error("Font filename must be specified.");
+    }
+
+    const url = `${this.baseUrl}${filename}`;
+    return this._fetchData(url).catch(reason => {
+      throw new Error(`Unable to load font data at: ${url}`);
+    });
+  }
+
+  _fetchData(url) {
+    (0, _util.unreachable)("Abstract method `_fetchData` called.");
+  }
+
+}
+
+exports.BaseStandardFontDataFactory = BaseStandardFontDataFactory;
+
+class BaseSVGFactory {
+  constructor() {
+    if (this.constructor === BaseSVGFactory) {
+      (0, _util.unreachable)("Cannot initialize BaseSVGFactory.");
+    }
+  }
+
+  create(width, height, skipDimensions = false) {
+    if (width <= 0 || height <= 0) {
+      throw new Error("Invalid SVG dimensions");
+    }
+
+    const svg = this._createSVG("svg:svg");
+
+    svg.setAttribute("version", "1.1");
+
+    if (!skipDimensions) {
+      svg.setAttribute("width", `${width}px`);
+      svg.setAttribute("height", `${height}px`);
+    }
+
+    svg.setAttribute("preserveAspectRatio", "none");
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    return svg;
+  }
+
+  createElement(type) {
+    if (typeof type !== "string") {
+      throw new Error("Invalid SVG element type");
+    }
+
+    return this._createSVG(type);
+  }
+
+  _createSVG(type) {
+    (0, _util.unreachable)("Abstract method `_createSVG` called.");
+  }
+
+}
+
+exports.BaseSVGFactory = BaseSVGFactory;
+
+/***/ }),
 /* 9 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
@@ -6223,9 +6198,9 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.CanvasGraphics = void 0;
 
-var _util = __w_pdfjs_require__(1);
+var _display_utils = __w_pdfjs_require__(7);
 
-var _display_utils = __w_pdfjs_require__(3);
+var _util = __w_pdfjs_require__(1);
 
 var _pattern_helper = __w_pdfjs_require__(12);
 
@@ -7228,6 +7203,7 @@ class CanvasGraphics {
     this.baseTransform = (0, _display_utils.getCurrentTransform)(this.ctx);
 
     if (this.imageLayer) {
+      (0, _display_utils.deprecated)("The `imageLayer` functionality will be removed in the future.");
       this.imageLayer.beginLayout();
     }
   }
@@ -8804,11 +8780,12 @@ class CanvasGraphics {
     const [rWidth, rHeight] = drawImageAtIntegerCoords(ctx, scaled.img, 0, 0, scaled.paintWidth, scaled.paintHeight, 0, -height, width, height);
 
     if (this.imageLayer) {
-      const position = this.getCanvasPosition(0, -height);
+      const [left, top] = _util.Util.applyTransform([0, -height], (0, _display_utils.getCurrentTransform)(this.ctx));
+
       this.imageLayer.appendImage({
         imgData,
-        left: position[0],
-        top: position[1],
+        left,
+        top,
         width: rWidth,
         height: rHeight
       });
@@ -8837,11 +8814,12 @@ class CanvasGraphics {
       drawImageAtIntegerCoords(ctx, tmpCanvas.canvas, entry.x, entry.y, entry.w, entry.h, 0, -1, 1, 1);
 
       if (this.imageLayer) {
-        const position = this.getCanvasPosition(entry.x, entry.y);
+        const [left, top] = _util.Util.applyTransform([entry.x, entry.y], (0, _display_utils.getCurrentTransform)(this.ctx));
+
         this.imageLayer.appendImage({
           imgData,
-          left: position[0],
-          top: position[1],
+          left,
+          top,
           width: w,
           height: h
         });
@@ -9019,11 +8997,6 @@ class CanvasGraphics {
     }
   }
 
-  getCanvasPosition(x, y) {
-    const transform = (0, _display_utils.getCurrentTransform)(this.ctx);
-    return [transform[0] * x + transform[2] * y + transform[4], transform[1] * x + transform[3] * y + transform[5]];
-  }
-
   isContentVisible() {
     for (let i = this.markedContentStack.length - 1; i >= 0; i--) {
       if (!this.markedContentStack[i].visible) {
@@ -9058,7 +9031,7 @@ exports.getShadingPattern = getShadingPattern;
 
 var _util = __w_pdfjs_require__(1);
 
-var _display_utils = __w_pdfjs_require__(3);
+var _display_utils = __w_pdfjs_require__(7);
 
 var _is_node = __w_pdfjs_require__(13);
 
@@ -10501,7 +10474,7 @@ exports.PDFDataTransportStream = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
-var _display_utils = __w_pdfjs_require__(3);
+var _display_utils = __w_pdfjs_require__(7);
 
 class PDFDataTransportStream {
   constructor(params, pdfDataRangeTransport) {
@@ -10918,7 +10891,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.NodeStandardFontDataFactory = exports.NodeCanvasFactory = exports.NodeCMapReaderFactory = void 0;
 
-var _base_factory = __w_pdfjs_require__(4);
+var _base_factory = __w_pdfjs_require__(8);
 
 ;
 
@@ -10982,7 +10955,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.AnnotationEditorLayer = void 0;
 
-var _tools = __w_pdfjs_require__(8);
+var _tools = __w_pdfjs_require__(6);
 
 var _util = __w_pdfjs_require__(1);
 
@@ -11114,7 +11087,7 @@ class AnnotationEditorLayer {
   remove(editor) {
     this.#uiManager.removeEditor(editor);
     this.detach(editor);
-    this.annotationStorage.removeKey(editor.id);
+    this.annotationStorage.remove(editor.id);
     editor.div.style.display = "none";
     setTimeout(() => {
       editor.div.style.display = "";
@@ -11435,9 +11408,9 @@ exports.FreeTextEditor = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
-var _tools = __w_pdfjs_require__(8);
+var _tools = __w_pdfjs_require__(6);
 
-var _editor = __w_pdfjs_require__(7);
+var _editor = __w_pdfjs_require__(5);
 
 class FreeTextEditor extends _editor.AnnotationEditor {
   #boundEditorDivBlur = this.editorDivBlur.bind(this);
@@ -11811,11 +11784,11 @@ Object.defineProperty(exports, "fitCurve", ({
 
 var _util = __w_pdfjs_require__(1);
 
-var _editor = __w_pdfjs_require__(7);
+var _editor = __w_pdfjs_require__(5);
 
 var _pdfjsFitCurve = __w_pdfjs_require__(25);
 
-var _tools = __w_pdfjs_require__(8);
+var _tools = __w_pdfjs_require__(6);
 
 const RESIZER_SIZE = 16;
 
@@ -12985,9 +12958,9 @@ exports.AnnotationLayer = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
-var _display_utils = __w_pdfjs_require__(3);
+var _display_utils = __w_pdfjs_require__(7);
 
-var _annotation_storage = __w_pdfjs_require__(6);
+var _annotation_storage = __w_pdfjs_require__(4);
 
 var _scripting_utils = __w_pdfjs_require__(28);
 
@@ -13323,10 +13296,13 @@ class AnnotationElement {
       const action = commonActions[actionName];
 
       if (action) {
-        action({
-          detail,
+        const eventProxy = {
+          detail: {
+            [actionName]: detail
+          },
           target: element
-        });
+        };
+        action(eventProxy);
         delete storedData[actionName];
       }
     }
@@ -13871,7 +13847,15 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
       const storedData = storage.getValue(id, this.data.fieldName, {
         value: this.data.fieldValue
       });
-      const textContent = storedData.formattedValue || storedData.value || "";
+      let textContent = storedData.formattedValue || storedData.value || "";
+      const maxLen = storage.getValue(id, {
+        charLimit: this.data.maxLen
+      }).charLimit;
+
+      if (maxLen && textContent.length > maxLen) {
+        textContent = textContent.slice(0, maxLen);
+      }
+
       const elementData = {
         userValue: textContent,
         formattedValue: null,
@@ -13902,6 +13886,10 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
       element.tabIndex = DEFAULT_TAB_INDEX;
 
       this._setRequired(element, this.data.required);
+
+      if (maxLen) {
+        element.maxLength = maxLen;
+      }
 
       element.addEventListener("input", event => {
         storage.setValue(id, this.data.fieldName, {
@@ -13963,8 +13951,46 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
 
             selRange(event) {
               event.target.setSelectionRange(...event.detail.selRange);
-            }
+            },
 
+            charLimit: event => {
+              const {
+                charLimit
+              } = event.detail;
+              const {
+                target
+              } = event;
+
+              if (charLimit === 0) {
+                target.removeAttribute("maxLength");
+                return;
+              }
+
+              target.setAttribute("maxLength", charLimit);
+              let value = elementData.userValue;
+
+              if (!value || value.length <= charLimit) {
+                return;
+              }
+
+              value = value.slice(0, charLimit);
+              target.value = elementData.userValue = value;
+              storage.setValue(id, {
+                value
+              });
+              this.linkService.eventBus?.dispatch("dispatcheventinsandbox", {
+                source: this,
+                detail: {
+                  id,
+                  name: "Keystroke",
+                  value,
+                  willCommit: true,
+                  commitKey: 1,
+                  selStart: target.selectionStart,
+                  selEnd: target.selectionEnd
+                }
+              });
+            }
           };
 
           this._dispatchEventFromSandbox(actions, jsEvent);
@@ -14107,13 +14133,9 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
         element.addEventListener("blur", blurListener);
       }
 
-      if (this.data.maxLen !== null) {
-        element.maxLength = this.data.maxLen;
-      }
-
       if (this.data.comb) {
         const fieldWidth = this.data.rect[2] - this.data.rect[0];
-        const combWidth = fieldWidth / this.data.maxLen;
+        const combWidth = fieldWidth / maxLen;
         element.classList.add("comb");
         element.style.letterSpacing = `calc(${combWidth}px * var(--scale-factor) - 1ch)`;
       }
@@ -15709,7 +15731,7 @@ exports.renderTextLayer = renderTextLayer;
 
 var _util = __w_pdfjs_require__(1);
 
-var _display_utils = __w_pdfjs_require__(3);
+var _display_utils = __w_pdfjs_require__(7);
 
 const MAX_TEXT_DIVS_TO_RENDER = 100000;
 const DEFAULT_FONT_SIZE = 30;
@@ -16504,7 +16526,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.SVGGraphics = void 0;
 
-var _display_utils = __w_pdfjs_require__(3);
+var _display_utils = __w_pdfjs_require__(7);
 
 var _util = __w_pdfjs_require__(1);
 
@@ -18511,7 +18533,7 @@ var _util = __w_pdfjs_require__(1);
 
 var _content_disposition = __w_pdfjs_require__(34);
 
-var _display_utils = __w_pdfjs_require__(3);
+var _display_utils = __w_pdfjs_require__(7);
 
 function validateRangeRequestCapabilities({
   getResponseHeader,
@@ -19327,7 +19349,7 @@ function createFetchOptions(headers, withCredentials, abortController) {
   return {
     method: "GET",
     headers,
-    signal: abortController?.signal,
+    signal: abortController.signal,
     mode: "cors",
     credentials: withCredentials ? "include" : "same-origin",
     redirect: "follow"
@@ -19412,10 +19434,7 @@ class PDFFetchStreamReader {
       this._disableRange = true;
     }
 
-    if (typeof AbortController !== "undefined") {
-      this._abortController = new AbortController();
-    }
-
+    this._abortController = new AbortController();
     this._isStreamingSupported = !source.disableStream;
     this._isRangeSupported = !source.disableRange;
     this._headers = createHeaders(this._stream.httpHeaders);
@@ -19508,9 +19527,7 @@ class PDFFetchStreamReader {
       this._reader.cancel(reason);
     }
 
-    if (this._abortController) {
-      this._abortController.abort();
-    }
+    this._abortController.abort();
   }
 
 }
@@ -19524,11 +19541,7 @@ class PDFFetchStreamRangeReader {
     this._withCredentials = source.withCredentials || false;
     this._readCapability = (0, _util.createPromiseCapability)();
     this._isStreamingSupported = !source.disableStream;
-
-    if (typeof AbortController !== "undefined") {
-      this._abortController = new AbortController();
-    }
-
+    this._abortController = new AbortController();
     this._headers = createHeaders(this._stream.httpHeaders);
 
     this._headers.append("Range", `bytes=${begin}-${end - 1}`);
@@ -19584,9 +19597,7 @@ class PDFFetchStreamRangeReader {
       this._reader.cancel(reason);
     }
 
-    if (this._abortController) {
-      this._abortController.abort();
-    }
+    this._abortController.abort();
   }
 
 }
@@ -19778,12 +19789,6 @@ Object.defineProperty(exports, "XfaLayer", ({
     return _xfa_layer.XfaLayer;
   }
 }));
-Object.defineProperty(exports, "binarySearchFirstItem", ({
-  enumerable: true,
-  get: function () {
-    return _display_utils.binarySearchFirstItem;
-  }
-}));
 Object.defineProperty(exports, "build", ({
   enumerable: true,
   get: function () {
@@ -19859,13 +19864,13 @@ Object.defineProperty(exports, "version", ({
 
 var _util = __w_pdfjs_require__(1);
 
-var _display_utils = __w_pdfjs_require__(3);
+var _api = __w_pdfjs_require__(3);
 
-var _api = __w_pdfjs_require__(5);
+var _display_utils = __w_pdfjs_require__(7);
 
 var _annotation_editor_layer = __w_pdfjs_require__(22);
 
-var _tools = __w_pdfjs_require__(8);
+var _tools = __w_pdfjs_require__(6);
 
 var _annotation_layer = __w_pdfjs_require__(27);
 
@@ -19879,8 +19884,8 @@ var _svg = __w_pdfjs_require__(31);
 
 var _xfa_layer = __w_pdfjs_require__(29);
 
-const pdfjsVersion = '2.16.389';
-const pdfjsBuild = 'b834a0ca6';
+const pdfjsVersion = '3.0.331';
+const pdfjsBuild = '42b59754c';
 {
   if (_is_node.isNodeJS) {
     const {
@@ -19914,5 +19919,4 @@ const pdfjsBuild = 'b834a0ca6';
 /******/ })()
 ;
 });
-
 });

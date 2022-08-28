@@ -14,7 +14,7 @@
  */
 
  :root {
-  --focus-outline: solid 2px red;
+  --focus-outline: solid 2px blue;
   --hover-outline: dashed 2px blue;
   --freetext-line-height: 1.35;
   --freetext-padding: 2px;
@@ -137,10 +137,6 @@
   width: 100%;
   height: 100%;
   touch-action: none;
-}
-
-#editorNone::before {
-  mask-image: var(--toolbarButton-editorNone-icon);
 }
 
 #editorFreeText::before {

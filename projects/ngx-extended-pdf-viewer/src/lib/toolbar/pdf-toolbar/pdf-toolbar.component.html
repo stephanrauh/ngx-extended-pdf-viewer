@@ -21,13 +21,6 @@
     <pdf-zoom-toolbar [showZoomButtons]="showZoomButtons" [zoomLevels]="zoomLevels"></pdf-zoom-toolbar>
     <div id="toolbarViewerRight">
       <div id="editorModeButtons" class="splitToolbarButton hidden" role="radiogroup">
-        <button id="editorNone" class="toolbarButton" title="Disable Annotation Editing" role="radio"
-          aria-checked="false" data-l10n-id="editor_none">
-          <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M12.07 5L9.24 7.83L19 17.59L17.58 19L7.82 9.25L5 12.07V5Z" />
-          </svg>
-          <span data-l10n-id="editor_none_label">Disable Editing</span>
-        </button>
         <button id="editorFreeText" class="toolbarButton" title="Add FreeText Annotation" role="radio"
           aria-checked="false" data-l10n-id="editor_free_text">
           <svg style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -50,6 +43,9 @@
           <span data-l10n-id="editor_ink_label">Ink Annotation</span>
         </button>
       </div>
+      <!-- Should be visible when the "editorModeButtons" are visible. -->
+      <div id="editorModeSeparator" class="verticalToolbarSeparator hidden"></div>
+
 
       <pdf-hand-tool [showHandToolButton]="showHandToolButton"></pdf-hand-tool>
       <pdf-select-tool [showSelectToolButton]="showHandToolButton"></pdf-select-tool>

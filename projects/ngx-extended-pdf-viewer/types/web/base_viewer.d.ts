@@ -554,6 +554,7 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFAnnotationEdi
      */
     get annotationEditorMode(): number;
     set annotationEditorParams(arg: any);
+    refresh(): void;
     #private;
 }
 export namespace PagesCountLimit {

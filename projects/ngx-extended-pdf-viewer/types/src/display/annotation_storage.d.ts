@@ -36,7 +36,7 @@ export class AnnotationStorage {
      * Remove a value from the storage.
      * @param {string} key
      */
-    removeKey(key: string): void;
+    remove(key: string): void;
     /**
      * Set the value for a given key
      *
@@ -65,7 +65,6 @@ export class AnnotationStorage {
      * @ignore
      */
     get serializable(): Map<any, any> | null;
-    get hasAnnotationEditors(): boolean;
     #private;
 }
 /**

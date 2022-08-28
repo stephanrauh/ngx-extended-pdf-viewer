@@ -152,7 +152,6 @@ export class CanvasGraphics {
     getSinglePixelWidth(): number;
     getScaleForStroking(): number[];
     rescaleAndStroke(saveRestore: any): void;
-    getCanvasPosition(x: any, y: any): any[];
     isContentVisible(): boolean;
     #private;
 }
