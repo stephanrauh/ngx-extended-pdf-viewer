@@ -390,4 +390,4 @@
 - 15.0.0-alpha.3 #1498 allows the PDF viewer to use the free space if the toolbar is hidden
 - 15.0.0-alpha.4 #1499 hide the toolbar earlier if `[showToolbar]` is set to `false`
 - 15.0.0-alpha.5 #1498 tentative bug fix that shifts the viewer to the correct position if there's no toolbar; #1507 show the find result again; #1511 stop showing the password prompt in the page number input field
-- 15.0.0-alpha.6 #1501 stop printing error message if the text highlighter is initialized twice
+- 15.0.0-alpha.6 #1501 stop printing error message if the text highlighter is initialized twice; updated to pdf.js 2.16 (default branch) and pdf.js 3.0 (bleeding edge branch); #1516 fix broken two-way binding of forms (work in progress)

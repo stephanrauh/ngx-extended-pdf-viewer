@@ -23,7 +23,7 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 ## What's new in version 15?
 
-Version 15 - currently in its alpha stage - updates to pdf.js 2.15. It also includes a preview version of `enableRelativeCoords`, which intends to make the pinch gesture on mobile devices more intuitive.
+Version 15 - currently in its alpha stage - updates to pdf.js 2.16 (default branch) and pdf.js 3.0 (bleeding edge branch). It also includes a preview version of `enableRelativeCoords`, which intends to make the pinch gesture on mobile devices more intuitive.
 
 ## What's new in version 14.5?
 

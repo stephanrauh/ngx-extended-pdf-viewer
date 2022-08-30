@@ -109,6 +109,7 @@ const requiredIds = [
   'editorModeButtons',
   'editorNone',
   'editorFreeText',
+  'editorInk',
 ];
 
 @Component({

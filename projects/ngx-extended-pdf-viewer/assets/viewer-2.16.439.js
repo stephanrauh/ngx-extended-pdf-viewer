@@ -10853,7 +10853,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '3.0.331';
+    const viewerVersion = '2.16.439';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -19246,7 +19246,7 @@ class SecondaryToolbar {
       close,
       eventDetails
     } of this.buttons) {
-      element.addEventListener("click", evt => {
+      element?.addEventListener("click", evt => {
         if (eventName !== null) {
           const details = {
             source: this
@@ -19537,7 +19537,7 @@ class Toolbar {
       eventName,
       eventDetails
     } of this.buttons) {
-      element.addEventListener("click", evt => {
+      element?.addEventListener("click", evt => {
         if (eventName !== null) {
           const details = {
             source: this
@@ -21646,8 +21646,8 @@ var _pdf_link_service = __webpack_require__(3);
 
 var _app = __webpack_require__(4);
 
-const pdfjsVersion = '3.0.331';
-const pdfjsBuild = '42b59754c';
+const pdfjsVersion = '2.16.439';
+const pdfjsBuild = '0e4354154';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,

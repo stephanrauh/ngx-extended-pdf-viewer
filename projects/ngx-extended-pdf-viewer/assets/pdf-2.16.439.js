@@ -1403,7 +1403,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '3.0.331',
+    apiVersion: '2.16.439',
     source: {
       data: source.data,
       url: source.url,
@@ -3588,9 +3588,9 @@ class InternalRenderTask {
 
 }
 
-const version = '3.0.331';
+const version = '2.16.439';
 exports.version = version;
-const build = '42b59754c';
+const build = '0e4354154';
 exports.build = build;
 
 /***/ }),
@@ -13848,7 +13848,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
         value: this.data.fieldValue
       });
       let textContent = storedData.formattedValue || storedData.value || "";
-      const maxLen = storage.getValue(id, {
+      const maxLen = storage.getValue(id, this.data.fieldName, {
         charLimit: this.data.maxLen
       }).charLimit;
 
@@ -14764,9 +14764,9 @@ class PopupElement {
     }
 
     for (const element of this.trigger) {
-      element.addEventListener("click", this._toggle.bind(this));
-      element.addEventListener("mouseover", this._show.bind(this, false));
-      element.addEventListener("mouseout", this._hide.bind(this, false));
+      element?.addEventListener("click", this._toggle.bind(this));
+      element?.addEventListener("mouseover", this._show.bind(this, false));
+      element?.addEventListener("mouseout", this._hide.bind(this, false));
     }
 
     popup.addEventListener("click", this._hide.bind(this, true));
@@ -19884,8 +19884,8 @@ var _svg = __w_pdfjs_require__(31);
 
 var _xfa_layer = __w_pdfjs_require__(29);
 
-const pdfjsVersion = '3.0.331';
-const pdfjsBuild = '42b59754c';
+const pdfjsVersion = '2.16.439';
+const pdfjsBuild = '0e4354154';
 {
   if (_is_node.isNodeJS) {
     const {
