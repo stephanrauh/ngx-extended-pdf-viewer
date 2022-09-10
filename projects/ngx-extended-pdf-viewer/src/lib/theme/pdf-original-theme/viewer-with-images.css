@@ -576,10 +576,6 @@ html[dir='rtl'] #sidebarContainer {
   right: calc(0px - var(--sidebar-width));
 }
 
-.loadingInProgress #sidebarContainer {
-  top: 36px;
-}
-
 #outerContainer.sidebarResizing #sidebarContainer {
   /* Improve responsiveness and avoid visual glitches when the sidebar is resized. */
   transition-duration: 0s;
@@ -1703,9 +1699,6 @@ html[dir="rtl"] .treeItemToggler::before {
   z-index: 5;
   padding: 3px;
   font-size: 0.8em;
-}
-.loadingInProgress #errorWrapper {
-  top: 37px;
 }
 
 #errorMessageLeft {
