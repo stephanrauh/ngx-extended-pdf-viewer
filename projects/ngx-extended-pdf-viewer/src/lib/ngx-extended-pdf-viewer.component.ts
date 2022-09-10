@@ -1390,7 +1390,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         if (x.presetValue !== 'auto' && x.presetValue !== 'page-fit' && x.presetValue !== 'page-actual' && x.presetValue !== 'page-width') {
           // ignore rounding differences
           if (Math.abs(x.previousScale - x.scale) > 0.000001) {
-            this.zoom = x.scale;
+            this.zoom = x.scale * 100;
             this.zoomChange.emit(x.scale * 100);
           }
         } else if (x.previousPresetValue !== x.presetValue) {

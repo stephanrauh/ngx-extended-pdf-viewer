@@ -2279,7 +2279,7 @@ const PDFViewerApplication = {
         total
       }) => {
         this.progress(loaded / total);
-        this.eventBus.dispatch("progress", {
+        this.eventBus?.dispatch("progress", {
           source: this,
           type: "load",
           total,
@@ -2518,7 +2518,7 @@ const PDFViewerApplication = {
       this.downloadComplete = true;
       this.loadingBar.hide();
       firstPagePromise.then(() => {
-        this.eventBus.dispatch("documentloaded", {
+        this.eventBus?.dispatch("documentloaded", {
           source: this
         });
       });
@@ -2888,7 +2888,7 @@ const PDFViewerApplication = {
       generator: generatorId,
       formType
     });
-    this.eventBus.dispatch("metadataloaded", {
+    this.eventBus?.dispatch("metadataloaded", {
       source: this
     });
   },
@@ -10853,7 +10853,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.16.441';
+    const viewerVersion = '2.16.442';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -21652,8 +21652,8 @@ var _pdf_link_service = __webpack_require__(3);
 
 var _app = __webpack_require__(4);
 
-const pdfjsVersion = '2.16.441';
-const pdfjsBuild = 'fe9c5f8f9';
+const pdfjsVersion = '2.16.442';
+const pdfjsBuild = 'dd7fcdded';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,

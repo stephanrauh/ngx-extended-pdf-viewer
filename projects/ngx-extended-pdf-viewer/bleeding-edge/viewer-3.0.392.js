@@ -2297,7 +2297,7 @@ const PDFViewerApplication = {
         total
       }) => {
         this.progress(loaded / total);
-        this.eventBus.dispatch("progress", {
+        this.eventBus?.dispatch("progress", {
           source: this,
           type: "load",
           total,
@@ -2536,7 +2536,7 @@ const PDFViewerApplication = {
       this.downloadComplete = true;
       this.loadingBar.hide();
       firstPagePromise.then(() => {
-        this.eventBus.dispatch("documentloaded", {
+        this.eventBus?.dispatch("documentloaded", {
           source: this
         });
       });
@@ -2880,7 +2880,7 @@ const PDFViewerApplication = {
       generator: generatorId,
       formType
     });
-    this.eventBus.dispatch("metadataloaded", {
+    this.eventBus?.dispatch("metadataloaded", {
       source: this
     });
   },
