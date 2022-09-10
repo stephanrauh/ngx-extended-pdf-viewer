@@ -1382,35 +1382,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         });
       });
       PDFViewerApplication.eventBus.on('scalechanging', (x: ScaleChangingEvent) => {
-        {
-          const scale = (this.root.nativeElement as HTMLElement).querySelector('#scaleSelect') as HTMLSelectElement | undefined;
-          let userZoomFactor = '';
-          if (scale) {
-            userZoomFactor = scale.value;
-          }
-        }
-
         setTimeout(() => {
           this.currentZoomFactor.emit(x.scale);
           this.cdr.markForCheck();
         });
 
-        const scale = (this.root.nativeElement as HTMLElement).querySelector('#scaleSelect') as HTMLSelectElement | undefined;
-        let userZoomFactor = this.zoom;
-        if (scale) {
-          userZoomFactor = scale.value;
-        }
-        if (userZoomFactor !== 'auto' && userZoomFactor !== 'page-fit' && userZoomFactor !== 'page-actual' && userZoomFactor !== 'page-width') {
-          const before = this.zoom as number;
-          const after = x.scale * 100;
+        if (x.presetValue !== 'auto' && x.presetValue !== 'page-fit' && x.presetValue !== 'page-actual' && x.presetValue !== 'page-width') {
           // ignore rounding differences
-          if (Math.abs(before - after) > 0.000001) {
-            this.zoom = after;
+          if (Math.abs(x.previousScale - x.scale) > 0.000001) {
+            this.zoom = x.scale;
             this.zoomChange.emit(x.scale * 100);
           }
-        } else if (this.zoom !== userZoomFactor) {
+        } else if (x.previousPresetValue !== x.presetValue) {
           // called when the user selects one of the text values of the zoom select dropdown
-          this.zoomChange.emit(userZoomFactor);
+          this.zoomChange.emit(x.presetValue);
         }
       });
 
@@ -2123,11 +2108,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           const field = document.querySelector("input[name='" + key + "']") as HTMLElement;
           if (field instanceof HTMLInputElement) {
             if (field.type === 'radio') {
-              storage.setValue(field.id, key, { value: formData[key] === field.value, emitMessage: false });
               const fields = document.querySelectorAll("input[name='" + key + "']");
               const fieldIdToActivate = this.formRadioButtonValueToId[formData[key]];
               fields.forEach((field: HTMLInputElement) => {
-                field.checked = field.id === fieldIdToActivate;
+                const shortId = field.id.replace('pdfjs_internal_id_', '');
+                field.checked = shortId === fieldIdToActivate;
+                for (let v in this.formRadioButtonValueToId) {
+                  if (v) {
+                    if (this.formRadioButtonValueToId[v] === shortId) {
+                      storage.setValue(shortId, key, { value: formData[key] === v, emitMessage: false });
+                    }
+                  }
+                }
               });
             } else if (field.type === 'checkbox') {
               storage.setValue(field.id, key, { value: formData[key], emitMessage: false });
