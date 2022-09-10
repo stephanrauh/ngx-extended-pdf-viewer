@@ -103,8 +103,7 @@ const RendererType = {
 exports.RendererType = RendererType;
 const TextLayerMode = {
   DISABLE: 0,
-  ENABLE: 1,
-  ENABLE_ENHANCE: 2
+  ENABLE: 1
 };
 exports.TextLayerMode = TextLayerMode;
 const ScrollMode = {
@@ -536,10 +535,6 @@ class ProgressBar {
   #visible = true;
 
   constructor(id) {
-    if (arguments.length > 1) {
-      throw new Error("ProgressBar no longer accepts any additional options, " + "please use CSS rules to modify its appearance instead.");
-    }
-
     const bar = document.getElementById(id);
     this.#classList = bar.classList;
   }
@@ -1350,6 +1345,48 @@ class PDFLinkService {
     });
   }
 
+  async executeSetOCGState(action) {
+    const pdfDocument = this.pdfDocument;
+    const optionalContentConfig = await this.pdfViewer.optionalContentConfigPromise;
+
+    if (pdfDocument !== this.pdfDocument) {
+      return;
+    }
+
+    let operator;
+
+    for (const elem of action.state) {
+      switch (elem) {
+        case "ON":
+        case "OFF":
+        case "Toggle":
+          operator = elem;
+          continue;
+      }
+
+      switch (operator) {
+        case "ON":
+          optionalContentConfig.setVisibility(elem, true);
+          break;
+
+        case "OFF":
+          optionalContentConfig.setVisibility(elem, false);
+          break;
+
+        case "Toggle":
+          const group = optionalContentConfig.getGroup(elem);
+
+          if (group) {
+            optionalContentConfig.setVisibility(elem, !group.visible);
+          }
+
+          break;
+      }
+    }
+
+    this.pdfViewer.optionalContentConfigPromise = Promise.resolve(optionalContentConfig);
+  }
+
   cachePageRef(pageNum, pageRef) {
     if (!pageRef) {
       return;
@@ -1494,6 +1531,8 @@ class SimpleLinkService {
 
   executeNamedAction(action) {}
 
+  executeSetOCGState(action) {}
+
   cachePageRef(pageNum, pageRef) {}
 
   isPageVisible(pageNumber) {
@@ -1565,11 +1604,11 @@ var _pdf_thumbnail_viewer = __webpack_require__(28);
 
 var _pdf_viewer = __webpack_require__(30);
 
-var _secondary_toolbar = __webpack_require__(45);
+var _secondary_toolbar = __webpack_require__(43);
 
-var _toolbar = __webpack_require__(46);
+var _toolbar = __webpack_require__(44);
 
-var _view_history = __webpack_require__(47);
+var _view_history = __webpack_require__(45);
 
 const DISABLE_AUTO_FETCH_LOADING_BAR_TIMEOUT = 5000;
 const FORCE_PAGES_LOADED_TIMEOUT = 10;
@@ -1687,7 +1726,6 @@ const PDFViewerApplication = {
   _saveInProgress: false,
   _docStats: null,
   _wheelUnusedTicks: 0,
-  _idleCallbacks: new Set(),
   _PDFBug: null,
   _hasAnnotationEditors: false,
   _title: document.title,
@@ -2141,24 +2179,7 @@ const PDFViewerApplication = {
   },
 
   _hideViewBookmark() {
-    const {
-      toolbar,
-      secondaryToolbar
-    } = this.appConfig;
-    toolbar.viewBookmark.hidden = true;
-    secondaryToolbar.viewBookmarkButton.hidden = true;
-  },
-
-  _cancelIdleCallbacks() {
-    if (!this._idleCallbacks.size) {
-      return;
-    }
-
-    for (const callback of this._idleCallbacks) {
-      window.cancelIdleCallback(callback);
-    }
-
-    this._idleCallbacks.clear();
+    this.appConfig.secondaryToolbar.viewBookmarkButton.hidden = true;
   },
 
   async close() {
@@ -2207,9 +2228,6 @@ const PDFViewerApplication = {
     this._saveInProgress = false;
     this._docStats = null;
     this._hasAnnotationEditors = false;
-
-    this._cancelIdleCallbacks();
-
     promises.push(this.pdfScriptingManager.destroyPromise);
     this.setTitle();
     this.pdfSidebar.reset();
@@ -2690,18 +2708,6 @@ const PDFViewerApplication = {
           pdfDocument
         });
       });
-
-      if ("requestIdleCallback" in window) {
-        const callback = window.requestIdleCallback(() => {
-          this._collectTelemetry(pdfDocument);
-
-          this._idleCallbacks.delete(callback);
-        }, {
-          timeout: 1000
-        });
-
-        this._idleCallbacks.add(callback);
-      }
     });
 
     this._initializePageLabels(pdfDocument);
@@ -2743,20 +2749,6 @@ const PDFViewerApplication = {
       numPages: this.pagesCount,
       URL: this.url
     };
-  },
-
-  async _collectTelemetry(pdfDocument) {
-    const markInfo = await this.pdfDocument.getMarkInfo();
-
-    if (pdfDocument !== this.pdfDocument) {
-      return;
-    }
-
-    const tagged = markInfo?.Marked || false;
-    this.externalServices.reportTelemetry({
-      type: "tagged",
-      tagged
-    });
   },
 
   async _initializeAutoPrint(pdfDocument, openActionPromise) {
@@ -3595,7 +3587,6 @@ function webViewerInitialized() {
   }
 
   if (!PDFViewerApplication.supportsFullscreen) {
-    appConfig.toolbar.presentationModeButton.classList.add("hidden");
     appConfig.secondaryToolbar.presentationModeButton.classList.add("hidden");
   }
 
@@ -3756,7 +3747,6 @@ function webViewerUpdateViewarea({
   }
 
   const href = PDFViewerApplication.pdfLinkService.getAnchorUrl(location.pdfOpenParams);
-  PDFViewerApplication.appConfig.toolbar.viewBookmark.href = href;
   PDFViewerApplication.appConfig.secondaryToolbar.viewBookmarkButton.href = href;
   const currentPage = PDFViewerApplication.pdfViewer.getPageView(PDFViewerApplication.page - 1);
   const loading = currentPage?.renderingState !== _ui_utils.RenderingStates.FINISHED;
@@ -7949,7 +7939,13 @@ class PDFLayerViewer extends _base_tree_viewer.BaseTreeViewer {
     super(options);
     this.l10n = options.l10n;
 
-    this.eventBus._on("resetlayers", this._resetLayers.bind(this));
+    this.eventBus._on("optionalcontentconfigchanged", evt => {
+      this.#updateLayers(evt.promise);
+    });
+
+    this.eventBus._on("resetlayers", () => {
+      this.#updateLayers();
+    });
 
     this.eventBus._on("togglelayerstree", this._toggleAllTreeItems.bind(this));
   }
@@ -7957,6 +7953,7 @@ class PDFLayerViewer extends _base_tree_viewer.BaseTreeViewer {
   reset() {
     super.reset();
     this._optionalContentConfig = null;
+    this._optionalContentHash = null;
   }
 
   _dispatchEvent(layersCount) {
@@ -7973,6 +7970,7 @@ class PDFLayerViewer extends _base_tree_viewer.BaseTreeViewer {
     const setVisibility = () => {
       this._optionalContentConfig.setVisibility(groupId, input.checked);
 
+      this._optionalContentHash = this._optionalContentConfig.getHash();
       this.eventBus.dispatch("optionalcontentconfig", {
         source: this,
         promise: Promise.resolve(this._optionalContentConfig)
@@ -8037,6 +8035,7 @@ class PDFLayerViewer extends _base_tree_viewer.BaseTreeViewer {
       return;
     }
 
+    this._optionalContentHash = optionalContentConfig.getHash();
     const fragment = document.createDocumentFragment(),
           queue = [{
       parent: fragment,
@@ -8093,16 +8092,29 @@ class PDFLayerViewer extends _base_tree_viewer.BaseTreeViewer {
     this._finishRendering(fragment, layersCount, hasAnyNesting);
   }
 
-  async _resetLayers() {
+  async #updateLayers(promise = null) {
     if (!this._optionalContentConfig) {
       return;
     }
 
-    const optionalContentConfig = await this._pdfDocument.getOptionalContentConfig();
-    this.eventBus.dispatch("optionalcontentconfig", {
-      source: this,
-      promise: Promise.resolve(optionalContentConfig)
-    });
+    const pdfDocument = this._pdfDocument;
+    const optionalContentConfig = await (promise || pdfDocument.getOptionalContentConfig());
+
+    if (pdfDocument !== this._pdfDocument) {
+      return;
+    }
+
+    if (promise) {
+      if (optionalContentConfig.getHash() === this._optionalContentHash) {
+        return;
+      }
+    } else {
+      this.eventBus.dispatch("optionalcontentconfig", {
+        source: this,
+        promise: Promise.resolve(optionalContentConfig)
+      });
+    }
+
     this.render({
       optionalContentConfig,
       pdfDocument: this._pdfDocument
@@ -8189,7 +8201,9 @@ class PDFOutlineViewer extends _base_tree_viewer.BaseTreeViewer {
   _bindLink(element, {
     url,
     newWindow,
-    dest
+    action,
+    dest,
+    setOCGState
   }) {
     const {
       linkService
@@ -8197,6 +8211,28 @@ class PDFOutlineViewer extends _base_tree_viewer.BaseTreeViewer {
 
     if (url) {
       linkService.addLinkAttributes(element, url, newWindow);
+      return;
+    }
+
+    if (action) {
+      element.href = linkService.getAnchorUrl("");
+
+      element.onclick = () => {
+        linkService.executeNamedAction(action);
+        return false;
+      };
+
+      return;
+    }
+
+    if (setOCGState) {
+      element.href = linkService.getAnchorUrl("");
+
+      element.onclick = () => {
+        linkService.executeSetOCGState(setOCGState);
+        return false;
+      };
+
       return;
     }
 
@@ -10196,12 +10232,7 @@ class PDFThumbnailViewer {
         this._thumbnails.push(thumbnail);
       }
 
-      const firstThumbnailView = this._thumbnails[0];
-
-      if (firstThumbnailView) {
-        firstThumbnailView.setPdfPage(firstPdfPage);
-      }
-
+      this._thumbnails[0]?.setPdfPage(firstPdfPage);
       const thumbnailView = this._thumbnails[this._currentPageNumber - 1];
       thumbnailView.div.classList.add(THUMBNAIL_SELECTED_CLASS);
     }).catch(reason => {
@@ -10693,72 +10724,31 @@ exports.PDFThumbnailView = PDFThumbnailView;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.PDFViewer = exports.PDFSinglePageViewer = void 0;
-
-var _ui_utils = __webpack_require__(1);
-
-var _base_viewer = __webpack_require__(31);
-
-class PDFViewer extends _base_viewer.BaseViewer {}
-
-exports.PDFViewer = PDFViewer;
-
-class PDFSinglePageViewer extends _base_viewer.BaseViewer {
-  _resetView() {
-    super._resetView();
-
-    this._scrollMode = _ui_utils.ScrollMode.PAGE;
-    this._spreadMode = _ui_utils.SpreadMode.NONE;
-  }
-
-  set scrollMode(mode) {}
-
-  _updateScrollMode() {}
-
-  set spreadMode(mode) {}
-
-  _updateSpreadMode() {}
-
-}
-
-exports.PDFSinglePageViewer = PDFSinglePageViewer;
-
-/***/ }),
-/* 31 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.PagesCountLimit = exports.PDFPageViewBuffer = exports.BaseViewer = void 0;
+exports.PagesCountLimit = exports.PDFViewer = exports.PDFPageViewBuffer = void 0;
 
 var _pdfjsLib = __webpack_require__(5);
 
 var _ui_utils = __webpack_require__(1);
 
-var _annotation_editor_layer_builder = __webpack_require__(32);
+var _annotation_editor_layer_builder = __webpack_require__(31);
 
-var _annotation_layer_builder = __webpack_require__(34);
+var _annotation_layer_builder = __webpack_require__(33);
 
-var _l10n_utils = __webpack_require__(33);
+var _l10n_utils = __webpack_require__(32);
 
-var _pageFlipModule = __webpack_require__(35);
-
-var _pdf_page_view = __webpack_require__(36);
+var _pdf_page_view = __webpack_require__(34);
 
 var _pdf_rendering_queue = __webpack_require__(24);
 
 var _pdf_link_service = __webpack_require__(3);
 
-var _struct_tree_layer_builder = __webpack_require__(41);
+var _struct_tree_layer_builder = __webpack_require__(39);
 
-var _text_highlighter = __webpack_require__(42);
+var _text_highlighter = __webpack_require__(40);
 
-var _text_layer_builder = __webpack_require__(43);
+var _text_layer_builder = __webpack_require__(41);
 
-var _xfa_layer_builder = __webpack_require__(44);
+var _xfa_layer_builder = __webpack_require__(42);
 
 const DEFAULT_CACHE_SIZE = 10;
 const ENABLE_PERMISSIONS_CLASS = "enablePermissions";
@@ -10838,7 +10828,7 @@ class PDFPageViewBuffer {
 
 exports.PDFPageViewBuffer = PDFPageViewBuffer;
 
-class BaseViewer {
+class PDFViewer {
   #buffer = null;
   #annotationEditorMode = _pdfjsLib.AnnotationEditorType.DISABLE;
   #annotationEditorUIManager = null;
@@ -10849,11 +10839,7 @@ class BaseViewer {
   #onVisibilityChange = null;
 
   constructor(options) {
-    if (this.constructor === BaseViewer) {
-      throw new Error("Cannot initialize BaseViewer.");
-    }
-
-    const viewerVersion = '3.0.332';
+    const viewerVersion = '3.0.392';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -10861,7 +10847,6 @@ class BaseViewer {
 
     this.container = options.container;
     this.viewer = options.viewer || options.container.firstElementChild;
-    this.pageViewMode = options.pageViewMode || "multiple";
 
     if (!(this.container?.tagName.toUpperCase() === "DIV" && this.viewer?.tagName.toUpperCase() === "DIV")) {
       throw new Error("Invalid `container` and/or `viewer` option.");
@@ -10891,7 +10876,7 @@ class BaseViewer {
 
     if (this.pageColors && !(CSS.supports("color", this.pageColors.background) && CSS.supports("color", this.pageColors.foreground))) {
       if (this.pageColors.background || this.pageColors.foreground) {
-        console.warn("BaseViewer: Ignoring `pageColors`-option, since the browser doesn't support the values used.");
+        console.warn("PDFViewer: Ignoring `pageColors`-option, since the browser doesn't support the values used.");
       }
 
       this.pageColors = null;
@@ -10958,51 +10943,8 @@ class BaseViewer {
       return;
     }
 
-    const flip = Math.abs(this._currentPageNumber - val) < 2;
-
     if (!this._setCurrentPageNumber(val, true)) {
-      Window["ngxConsole"].error(`currentPageNumber: "${val}" is not a valid page.`);
-    }
-
-    if (this.pageFlip) {
-      if (flip) {
-        Window["ngxConsole"].log("Flip");
-        this.pageFlip.flip(val - 1);
-      } else {
-        Window["ngxConsole"].log("turn to page");
-        this.pageFlip.turnToPage(val - 1);
-      }
-    }
-  }
-
-  hidePagesDependingOnpageViewMode() {
-    if (this.pageViewMode === "book") {
-      if (!this.pageFlip) {
-        setTimeout(() => {
-          if (!this.pageFlip) {
-            const page1 = this._pages[0].div;
-            const htmlParentElement = page1.parentElement;
-            const viewer = htmlParentElement.parentElement;
-            viewer.style.width = 2 * page1.clientWidth + "px";
-            viewer.style.overflow = "hidden";
-            viewer.style.marginLeft = "auto";
-            viewer.style.marginRight = "auto";
-            this.pageFlip = new _pageFlipModule.PageFlip(htmlParentElement, {
-              width: page1.clientWidth,
-              height: page1.clientHeight,
-              showCover: true,
-              size: "fixed"
-            });
-            this.pageFlip.loadFromHTML(document.querySelectorAll(".page"));
-            this.ensureAdjecentPagesAreLoaded();
-            this.pageFlip.on("flip", e => {
-              if (this._currentPageNumber !== e.data + 1) {
-                this._setCurrentPageNumber(e.data + 1, false);
-              }
-            });
-          }
-        }, 100);
-      }
+      console.error(`currentPageNumber: "${val}" is not a valid page.`);
     }
   }
 
@@ -11021,31 +10963,6 @@ class BaseViewer {
 
     const previous = this._currentPageNumber;
     this._currentPageNumber = val;
-    this.hidePagesDependingOnpageViewMode();
-
-    if (this.pageViewMode === "book" || this.pageViewMode === "infinite-scroll") {
-      const pageView = this._pages[this.currentPageNumber - 1];
-
-      if (pageView.div.parentElement.classList.contains("spread")) {
-        pageView.div.parentElement.childNodes.forEach(div => {
-          const pageNumber = Number(div.getAttribute("data-page-number"));
-          const pv = this._pages[pageNumber - 1];
-          this.#ensurePdfPageLoaded(pv).then(() => {
-            this.renderingQueue.renderView(pv);
-          });
-          div.style.display = "inline-block";
-        });
-      } else {
-        this.#ensurePdfPageLoaded(pageView).then(() => {
-          this.renderingQueue.renderView(pageView);
-        });
-
-        if (this.pageViewMode === "book") {
-          this.ensureAdjecentPagesAreLoaded();
-        }
-      }
-    }
-
     this.eventBus.dispatch("pagechanging", {
       source: this,
       pageNumber: val,
@@ -11058,99 +10975,6 @@ class BaseViewer {
     }
 
     return true;
-  }
-
-  addPageToRenderQueue(pageIndex = 0) {
-    if (pageIndex >= 0 && pageIndex <= this._pages.length - 1) {
-      const pageView = this._pages[pageIndex];
-      const isLoading = pageView.div.querySelector(".loadingIcon");
-
-      if (isLoading) {
-        this.#ensurePdfPageLoaded(pageView).then(() => {
-          this.renderingQueue.renderView(pageView);
-        });
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  ensureAdjecentPagesAreLoaded() {
-    if (!window.adjacentPagesLoader) {
-      window.adjacentPagesLoader = evt => {
-        Window["ngxConsole"].log("rendered", evt);
-
-        let pageView = this._pages[Math.min(this._pages.length - 1, this.currentPageNumber)];
-
-        if (pageView) {
-          let isLoading = pageView.div.querySelector(".loadingIcon");
-
-          if (isLoading) {
-            Window["ngxConsole"].log("asking for the next page");
-            this.#ensurePdfPageLoaded(pageView).then(() => {
-              this.renderingQueue.renderView(pageView);
-            });
-          } else {
-            pageView = this._pages[Math.min(this._pages.length - 1, this.currentPageNumber + 1)];
-            isLoading = pageView.div.querySelector(".loadingIcon");
-
-            if (isLoading) {
-              Window["ngxConsole"].log("asking for the next + 1 page");
-              this.#ensurePdfPageLoaded(pageView).then(() => {
-                this.renderingQueue.renderView(pageView);
-              });
-            } else {
-              pageView = this._pages[Math.min(this._pages.length - 1, this.currentPageNumber + 2)];
-              isLoading = pageView.div.querySelector(".loadingIcon");
-
-              if (isLoading) {
-                Window["ngxConsole"].log("asking for the next + 2 page");
-                this.#ensurePdfPageLoaded(pageView).then(() => {
-                  this.renderingQueue.renderView(pageView);
-                });
-              } else {
-                pageView = this._pages[Math.min(this._pages.length - 1, this.currentPageNumber + 3)];
-                isLoading = pageView.div.querySelector(".loadingIcon");
-
-                if (isLoading) {
-                  Window["ngxConsole"].log("asking for the next + 3 page");
-                  this.#ensurePdfPageLoaded(pageView).then(() => {
-                    this.renderingQueue.renderView(pageView);
-                  });
-                } else {
-                  pageView = this._pages[Math.max(0, this.currentPageNumber - 1)];
-                  isLoading = pageView.div.querySelector(".loadingIcon");
-
-                  if (isLoading) {
-                    Window["ngxConsole"].log("asking for the current page");
-                    this.#ensurePdfPageLoaded(pageView).then(() => {
-                      this.renderingQueue.renderView(pageView);
-                    });
-                  } else {
-                    pageView = this._pages[Math.max(0, this.currentPageNumber - 2)];
-                    isLoading = pageView.div.querySelector(".loadingIcon");
-
-                    if (isLoading) {
-                      Window["ngxConsole"].log("asking for the previous page");
-                      this.#ensurePdfPageLoaded(pageView).then(() => {
-                        this.renderingQueue.renderView(pageView);
-                      });
-                    } else {
-                      Window["ngxConsole"].log("Finished preloading the pages");
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      };
-
-      this.eventBus._on("pagerendered", window.adjacentPagesLoader);
-    }
-
-    window.adjacentPagesLoader();
   }
 
   get currentPageLabel() {
@@ -11173,7 +10997,7 @@ class BaseViewer {
     }
 
     if (!this._setCurrentPageNumber(page, true)) {
-      Window["ngxConsole"].error(`currentPageLabel: "${val}" is not a valid page.`);
+      console.error(`currentPageLabel: "${val}" is not a valid page.`);
     }
   }
 
@@ -11322,13 +11146,8 @@ class BaseViewer {
 
       this._resetView();
 
-      if (this.findController) {
-        this.findController.setDocument(null);
-      }
-
-      if (this._scriptingManager) {
-        this._scriptingManager.setDocument(null);
-      }
+      this.findController?.setDocument(null);
+      this._scriptingManager?.setDocument(null);
 
       if (this.#annotationEditorUIManager) {
         this.#annotationEditorUIManager.destroy();
@@ -11455,7 +11274,6 @@ class BaseViewer {
           textHighlighterFactory: this,
           structTreeLayerFactory: this,
           imageResourcesPath: this.imageResourcesPath,
-          removePageBorders: this.removePageBorders,
           renderer: this.renderer,
           useOnlyCssZoom: this.useOnlyCssZoom,
           maxCanvasPixels: this.maxCanvasPixels,
@@ -11480,13 +11298,8 @@ class BaseViewer {
       }
 
       this.#onePageRenderedOrForceFetch().then(async () => {
-        if (this.findController) {
-          this.findController.setDocument(pdfDocument);
-        }
-
-        if (this._scriptingManager) {
-          this._scriptingManager.setDocument(pdfDocument);
-        }
+        this.findController?.setDocument(pdfDocument);
+        this._scriptingManager?.setDocument(pdfDocument);
 
         if (this.#annotationEditorUIManager) {
           this.eventBus.dispatch("annotationeditormodechanged", {
@@ -11523,7 +11336,7 @@ class BaseViewer {
               this._pagesCapability.resolve();
             }
           }, reason => {
-            Window["ngxConsole"].error(`Unable to get page ${pageNum} to initialize viewer`, reason);
+            console.error(`Unable to get page ${pageNum} to initialize viewer`, reason);
 
             if (--getPagesLeft === 0) {
               this._pagesCapability.resolve();
@@ -11535,7 +11348,6 @@ class BaseViewer {
           }
         }
       });
-      this.hidePagesDependingOnpageViewMode();
       this.eventBus.dispatch("pagesinit", {
         source: this
       });
@@ -11555,7 +11367,7 @@ class BaseViewer {
         this.update();
       }
     }).catch(reason => {
-      Window["ngxConsole"].error("Unable to initialize viewer", reason);
+      console.error("Unable to initialize viewer", reason);
 
       this._pagesCapability.reject(reason);
     });
@@ -11570,7 +11382,7 @@ class BaseViewer {
       this._pageLabels = null;
     } else if (!(Array.isArray(labels) && this.pdfDocument.numPages === labels.length)) {
       this._pageLabels = null;
-      Window["ngxConsole"].error(`setPageLabels: Invalid page labels.`);
+      console.error(`setPageLabels: Invalid page labels.`);
     } else {
       this._pageLabels = labels;
     }
@@ -11586,8 +11398,7 @@ class BaseViewer {
     this._currentScale = _ui_utils.UNKNOWN_SCALE;
     this._currentScaleValue = null;
     this._pageLabels = null;
-    const bufferSize = Number(PDFViewerApplicationOptions.get("defaultCacheSize")) || DEFAULT_CACHE_SIZE;
-    this.#buffer = new PDFPageViewBuffer(bufferSize);
+    this.#buffer = new PDFPageViewBuffer(DEFAULT_CACHE_SIZE);
     this._location = null;
     this._pagesRotation = 0;
     this._optionalContentConfigPromise = null;
@@ -11692,50 +11503,7 @@ class BaseViewer {
     this.update();
   }
 
-  scrollPagePosIntoView(pageNumber, pageSpot) {
-    const pageDiv = this._pages[pageNumber - 1].div;
-
-    if (pageSpot) {
-      const targetPageSpot = { ...pageSpot
-      };
-
-      if (typeof targetPageSpot.top === "string") {
-        if (targetPageSpot.top.endsWith("%")) {
-          const percent = Number(targetPageSpot.top.replace("%", ""));
-          const viewerHeight = this.viewer.querySelector(".page")?.clientHeight;
-          let height = pageDiv.clientHeight ? pageDiv.clientHeight : viewerHeight;
-          const visibleWindowHeight = this.viewer.parentElement.clientHeight;
-          height = Math.max(0, height - visibleWindowHeight);
-          targetPageSpot.top = percent * height / 100;
-        }
-      }
-
-      if (typeof targetPageSpot.left === "string") {
-        if (targetPageSpot.left.endsWith("%")) {
-          const percent = Number(targetPageSpot.left.replace("%", ""));
-          const viewerWidth = this.viewer.querySelector(".page")?.clientWidth;
-          const width = pageDiv.clientWidth ? pageDiv.clientWidth : viewerWidth;
-          targetPageSpot.left = percent * width / 100;
-        }
-      }
-
-      this.#scrollIntoView({
-        div: pageDiv,
-        id: pageNumber
-      }, targetPageSpot);
-    } else {
-      this.#scrollIntoView({
-        pageDiv,
-        pageNumber
-      });
-    }
-  }
-
   #scrollIntoView(pageView, pageSpot = null) {
-    if (!pageView) {
-      return;
-    }
-
     const {
       div,
       id
@@ -11764,7 +11532,7 @@ class BaseViewer {
       }
     }
 
-    (0, _ui_utils.scrollIntoView)(div, pageSpot, false, this.pageViewMode === "infinite-scroll");
+    (0, _ui_utils.scrollIntoView)(div, pageSpot);
   }
 
   #isSameScale(newScale) {
@@ -11838,15 +11606,7 @@ class BaseViewer {
   }
 
   _setScale(value, noScroll = false) {
-    if (!value) {
-      value = "auto";
-    }
-
     let scale = parseFloat(value);
-
-    if (this._currentScale === scale) {
-      return;
-    }
 
     if (scale > 0) {
       this._setScaleUpdatePages(scale, value, noScroll, false);
@@ -11894,7 +11654,7 @@ class BaseViewer {
           break;
 
         default:
-          Window["ngxConsole"].error(`_setScale: "${value}" is an unknown zoom value.`);
+          console.error(`_setScale: "${value}" is an unknown zoom value.`);
           return;
       }
 
@@ -11939,7 +11699,7 @@ class BaseViewer {
     const pageView = Number.isInteger(pageNumber) && this._pages[pageNumber - 1];
 
     if (!pageView) {
-      Window["ngxConsole"].error(`scrollPageIntoView: "${pageNumber}" is not a valid pageNumber parameter.`);
+      console.error(`scrollPageIntoView: "${pageNumber}" is not a valid pageNumber parameter.`);
       return;
     }
 
@@ -12009,7 +11769,7 @@ class BaseViewer {
         break;
 
       default:
-        Window["ngxConsole"].error(`scrollPageIntoView: "${destArray[1].name}" is not a valid destination type.`);
+        console.error(`scrollPageIntoView: "${destArray[1].name}" is not a valid destination type.`);
         return;
     }
 
@@ -12020,16 +11780,6 @@ class BaseViewer {
         this.currentScaleValue = _ui_utils.DEFAULT_SCALE_VALUE;
       }
     }
-
-    this.#ensurePdfPageLoaded(pageView).then(() => {
-      this.renderingQueue.renderView(pageView);
-
-      if (this.pageViewMode === "single") {
-        if (this.currentPageNumber !== pageNumber) {
-          this.currentPageNumber = pageNumber;
-        }
-      }
-    });
 
     if (scale === "page-fit" && !destArray[4]) {
       this.#scrollIntoView(pageView);
@@ -12078,12 +11828,6 @@ class BaseViewer {
   }
 
   update() {
-    if (this.scrollMode === _ui_utils.ScrollMode.PAGE) {
-      this.viewer.classList.add("singlePageView");
-    } else {
-      this.viewer.classList.remove("singlePageView");
-    }
-
     const visible = this._getVisiblePages();
 
     const visiblePages = visible.views,
@@ -12093,8 +11837,7 @@ class BaseViewer {
       return;
     }
 
-    const bufferSize = Number(PDFViewerApplicationOptions.get("defaultCacheSize")) || DEFAULT_CACHE_SIZE;
-    const newCacheSize = Math.max(bufferSize, 2 * numVisiblePages + 1);
+    const newCacheSize = Math.max(DEFAULT_CACHE_SIZE, 2 * numVisiblePages + 1);
     this.#buffer.resize(newCacheSize, visible.ids);
     this.renderingQueue.renderHighestPriority(visible);
     const isSimpleLayout = this._spreadMode === _ui_utils.SpreadMode.NONE && (this._scrollMode === _ui_utils.ScrollMode.PAGE || this._scrollMode === _ui_utils.ScrollMode.VERTICAL);
@@ -12120,7 +11863,6 @@ class BaseViewer {
       source: this,
       location: this._location
     });
-    this.hidePagesDependingOnpageViewMode();
   }
 
   containsElement(element) {
@@ -12170,7 +11912,7 @@ class BaseViewer {
     }
 
     if (!(Number.isInteger(pageNumber) && pageNumber > 0 && pageNumber <= this.pagesCount)) {
-      Window["ngxConsole"].error(`isPageVisible: "${pageNumber}" is not a valid page.`);
+      console.error(`isPageVisible: "${pageNumber}" is not a valid page.`);
       return false;
     }
 
@@ -12183,7 +11925,7 @@ class BaseViewer {
     }
 
     if (!(Number.isInteger(pageNumber) && pageNumber > 0 && pageNumber <= this.pagesCount)) {
-      Window["ngxConsole"].error(`isPageCached: "${pageNumber}" is not a valid page.`);
+      console.error(`isPageCached: "${pageNumber}" is not a valid page.`);
       return false;
     }
 
@@ -12223,7 +11965,7 @@ class BaseViewer {
 
       return pdfPage;
     } catch (reason) {
-      Window["ngxConsole"].error("Unable to get page for page view", reason);
+      console.error("Unable to get page for page view", reason);
       return null;
     }
   }
@@ -12283,7 +12025,6 @@ class BaseViewer {
     textLayerDiv,
     pageIndex,
     viewport,
-    enhanceTextSelection = false,
     eventBus,
     highlighter,
     accessibilityManager = null
@@ -12293,7 +12034,6 @@ class BaseViewer {
       eventBus,
       pageIndex,
       viewport,
-      enhanceTextSelection: this.isInPresentationMode ? false : enhanceTextSelection,
       highlighter,
       accessibilityManager
     });
@@ -12569,8 +12309,6 @@ class BaseViewer {
       }
     }
 
-    this.hidePagesDependingOnpageViewMode();
-
     if (!pageNumber) {
       return;
     }
@@ -12740,34 +12478,24 @@ class BaseViewer {
 
   increaseScale(steps = 1) {
     let newScale = this._currentScale;
-    let maxScale = Number(PDFViewerApplicationOptions.get("maxZoom"));
-
-    if (!maxScale) {
-      maxScale = _ui_utils.MAX_SCALE;
-    }
 
     do {
       newScale = (newScale * _ui_utils.DEFAULT_SCALE_DELTA).toFixed(2);
       newScale = Math.ceil(newScale * 10) / 10;
-      newScale = Math.min(maxScale, newScale);
-    } while (--steps > 0 && newScale < maxScale);
+      newScale = Math.min(_ui_utils.MAX_SCALE, newScale);
+    } while (--steps > 0 && newScale < _ui_utils.MAX_SCALE);
 
     this.currentScaleValue = newScale;
   }
 
   decreaseScale(steps = 1) {
     let newScale = this._currentScale;
-    let minScale = Number(PDFViewerApplicationOptions.get("minZoom"));
-
-    if (!minScale) {
-      minScale = _ui_utils.MIN_SCALE;
-    }
 
     do {
       newScale = (newScale / _ui_utils.DEFAULT_SCALE_DELTA).toFixed(2);
       newScale = Math.floor(newScale * 10) / 10;
-      newScale = Math.max(minScale, newScale);
-    } while (--steps > 0 && newScale > minScale);
+      newScale = Math.max(_ui_utils.MIN_SCALE, newScale);
+    } while (--steps > 0 && newScale > _ui_utils.MIN_SCALE);
 
     this.currentScaleValue = newScale;
   }
@@ -12838,10 +12566,10 @@ class BaseViewer {
 
 }
 
-exports.BaseViewer = BaseViewer;
+exports.PDFViewer = PDFViewer;
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -12853,7 +12581,7 @@ exports.AnnotationEditorLayerBuilder = void 0;
 
 var _pdfjsLib = __webpack_require__(5);
 
-var _l10n_utils = __webpack_require__(33);
+var _l10n_utils = __webpack_require__(32);
 
 class AnnotationEditorLayerBuilder {
   #uiManager;
@@ -12949,7 +12677,7 @@ class AnnotationEditorLayerBuilder {
 exports.AnnotationEditorLayerBuilder = AnnotationEditorLayerBuilder;
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -13011,9 +12739,9 @@ const DEFAULT_L10N_STRINGS = {
   printing_not_supported: "Warning: Printing is not fully supported by this browser.",
   printing_not_ready: "Warning: The PDF is not fully loaded for printing.",
   web_fonts_disabled: "Web fonts are disabled: unable to use embedded PDF fonts.",
-  free_text_default_content: "Enter text…",
-  editor_free_text_aria_label: "FreeText Editor",
-  editor_ink_aria_label: "Ink Editor",
+  free_text2_default_content: "Start typing…",
+  editor_free_text2_aria_label: "Text Editor",
+  editor_ink2_aria_label: "Draw Editor",
   editor_ink_canvas_aria_label: "User-created image"
 };
 
@@ -13081,7 +12809,7 @@ const NullL10n = {
 exports.NullL10n = NullL10n;
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -13093,7 +12821,7 @@ exports.AnnotationLayerBuilder = void 0;
 
 var _pdfjsLib = __webpack_require__(5);
 
-var _l10n_utils = __webpack_require__(33);
+var _l10n_utils = __webpack_require__(32);
 
 class AnnotationLayerBuilder {
   constructor({
@@ -13190,2508 +12918,7 @@ class AnnotationLayerBuilder {
 exports.AnnotationLayerBuilder = AnnotationLayerBuilder;
 
 /***/ }),
-/* 35 */
-/***/ ((__unused_webpack_module, exports) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.PageFlip = void 0;
-
-class Page {
-  constructor(render, density) {
-    this.state = {
-      angle: 0,
-      area: [],
-      position: {
-        x: 0,
-        y: 0
-      },
-      hardAngle: 0,
-      hardDrawingAngle: 0
-    };
-    this.createdDensity = density;
-    this.nowDrawingDensity = this.createdDensity;
-    this.render = render;
-  }
-
-  setDensity(density) {
-    this.createdDensity = density;
-    this.nowDrawingDensity = density;
-  }
-
-  setDrawingDensity(density) {
-    this.nowDrawingDensity = density;
-  }
-
-  setPosition(pagePos) {
-    this.state.position = pagePos;
-  }
-
-  setAngle(angle) {
-    this.state.angle = angle;
-  }
-
-  setArea(area) {
-    this.state.area = area;
-  }
-
-  setHardDrawingAngle(angle) {
-    this.state.hardDrawingAngle = angle;
-  }
-
-  setHardAngle(angle) {
-    this.state.hardAngle = angle;
-    this.state.hardDrawingAngle = angle;
-  }
-
-  setOrientation(orientation) {
-    this.orientation = orientation;
-  }
-
-  getDrawingDensity() {
-    return this.nowDrawingDensity;
-  }
-
-  getDensity() {
-    return this.createdDensity;
-  }
-
-  getHardAngle() {
-    return this.state.hardAngle;
-  }
-
-}
-
-class ImagePage extends Page {
-  constructor(render, href, density) {
-    super(render, density);
-    this.image = null;
-    this.isLoad = false;
-    this.loadingAngle = 0;
-    this.image = new Image();
-    this.image.src = href;
-  }
-
-  draw(tempDensity) {
-    const ctx = this.render.getContext();
-    const pagePos = this.render.convertToGlobal(this.state.position);
-    const pageWidth = this.render.getRect().pageWidth;
-    const pageHeight = this.render.getRect().height;
-    ctx.save();
-    ctx.translate(pagePos.x, pagePos.y);
-    ctx.beginPath();
-
-    for (let p of this.state.area) {
-      if (p !== null) {
-        p = this.render.convertToGlobal(p);
-        ctx.lineTo(p.x - pagePos.x, p.y - pagePos.y);
-      }
-    }
-
-    ctx.rotate(this.state.angle);
-    ctx.clip();
-
-    if (!this.isLoad) {
-      this.drawLoader(ctx, {
-        x: 0,
-        y: 0
-      }, pageWidth, pageHeight);
-    } else {
-      ctx.drawImage(this.image, 0, 0, pageWidth, pageHeight);
-    }
-
-    ctx.restore();
-  }
-
-  simpleDraw(orient) {
-    const rect = this.render.getRect();
-    const ctx = this.render.getContext();
-    const pageWidth = rect.pageWidth;
-    const pageHeight = rect.height;
-    const x = orient === 1 ? rect.left + rect.pageWidth : rect.left;
-    const y = rect.top;
-
-    if (!this.isLoad) {
-      this.drawLoader(ctx, {
-        x,
-        y
-      }, pageWidth, pageHeight);
-    } else {
-      ctx.drawImage(this.image, x, y, pageWidth, pageHeight);
-    }
-  }
-
-  drawLoader(ctx, shiftPos, pageWidth, pageHeight) {
-    ctx.beginPath();
-    ctx.strokeStyle = 'rgb(200, 200, 200)';
-    ctx.fillStyle = 'rgb(255, 255, 255)';
-    ctx.lineWidth = 1;
-    ctx.rect(shiftPos.x + 1, shiftPos.y + 1, pageWidth - 1, pageHeight - 1);
-    ctx.stroke();
-    ctx.fill();
-    const middlePoint = {
-      x: shiftPos.x + pageWidth / 2,
-      y: shiftPos.y + pageHeight / 2
-    };
-    ctx.beginPath();
-    ctx.lineWidth = 10;
-    ctx.arc(middlePoint.x, middlePoint.y, 20, this.loadingAngle, 3 * Math.PI / 2 + this.loadingAngle);
-    ctx.stroke();
-    ctx.closePath();
-    this.loadingAngle += 0.07;
-
-    if (this.loadingAngle >= 2 * Math.PI) {
-      this.loadingAngle = 0;
-    }
-  }
-
-  load() {
-    if (!this.isLoad) this.image.onload = () => {
-      this.isLoad = true;
-    };
-  }
-
-  newTemporaryCopy() {
-    return this;
-  }
-
-  getTemporaryCopy() {
-    return this;
-  }
-
-  hideTemporaryCopy() {}
-
-}
-
-class PageCollection {
-  constructor(app, render) {
-    this.pages = [];
-    this.currentPageIndex = 0;
-    this.currentSpreadIndex = 0;
-    this.landscapeSpread = [];
-    this.portraitSpread = [];
-    this.render = render;
-    this.app = app;
-    this.currentPageIndex = 0;
-    this.isShowCover = this.app.getSettings().showCover;
-  }
-
-  destroy() {
-    this.pages = [];
-  }
-
-  createSpread() {
-    this.landscapeSpread = [];
-    this.portraitSpread = [];
-
-    for (let i = 0; i < this.pages.length; i++) {
-      this.portraitSpread.push([i]);
-    }
-
-    let start = 0;
-
-    if (this.isShowCover) {
-      this.pages[0].setDensity("hard");
-      this.landscapeSpread.push([start]);
-      start++;
-    }
-
-    for (let i = start; i < this.pages.length; i += 2) {
-      if (i < this.pages.length - 1) this.landscapeSpread.push([i, i + 1]);else {
-        this.landscapeSpread.push([i]);
-        this.pages[i].setDensity("hard");
-      }
-    }
-  }
-
-  getSpread() {
-    return this.render.getOrientation() === "landscape" ? this.landscapeSpread : this.portraitSpread;
-  }
-
-  getSpreadIndexByPage(pageNum) {
-    const spread = this.getSpread();
-
-    for (let i = 0; i < spread.length; i++) if (pageNum === spread[i][0] || pageNum === spread[i][1]) return i;
-
-    return null;
-  }
-
-  getPageCount() {
-    return this.pages.length;
-  }
-
-  getPages() {
-    return this.pages;
-  }
-
-  getPage(pageIndex) {
-    if (pageIndex >= 0 && pageIndex < this.pages.length) {
-      return this.pages[pageIndex];
-    }
-
-    throw new Error('Invalid page number');
-  }
-
-  nextBy(current) {
-    const idx = this.pages.indexOf(current);
-    if (idx < this.pages.length - 1) return this.pages[idx + 1];
-    return null;
-  }
-
-  prevBy(current) {
-    const idx = this.pages.indexOf(current);
-    if (idx > 0) return this.pages[idx - 1];
-    return null;
-  }
-
-  getFlippingPage(direction) {
-    const current = this.currentSpreadIndex;
-
-    if (this.render.getOrientation() === "portrait") {
-      return direction === 0 ? this.pages[current].newTemporaryCopy() : this.pages[current - 1];
-    } else {
-      const spread = direction === 0 ? this.getSpread()[current + 1] : this.getSpread()[current - 1];
-      if (spread.length === 1) return this.pages[spread[0]];
-      return direction === 0 ? this.pages[spread[0]] : this.pages[spread[1]];
-    }
-  }
-
-  getBottomPage(direction) {
-    const current = this.currentSpreadIndex;
-
-    if (this.render.getOrientation() === "portrait") {
-      return direction === 0 ? this.pages[current + 1] : this.pages[current - 1];
-    } else {
-      const spread = direction === 0 ? this.getSpread()[current + 1] : this.getSpread()[current - 1];
-      if (spread.length === 1) return this.pages[spread[0]];
-      return direction === 0 ? this.pages[spread[1]] : this.pages[spread[0]];
-    }
-  }
-
-  showNext() {
-    if (this.currentSpreadIndex < this.getSpread().length) {
-      this.currentSpreadIndex++;
-      this.showSpread();
-    }
-  }
-
-  showPrev() {
-    if (this.currentSpreadIndex > 0) {
-      this.currentSpreadIndex--;
-      this.showSpread();
-    }
-  }
-
-  getCurrentPageIndex() {
-    return this.currentPageIndex;
-  }
-
-  show(pageNum = null) {
-    if (pageNum === null) pageNum = this.currentPageIndex;
-    if (pageNum < 0 || pageNum >= this.pages.length) return;
-    const spreadIndex = this.getSpreadIndexByPage(pageNum);
-
-    if (spreadIndex !== null) {
-      this.currentSpreadIndex = spreadIndex;
-      this.showSpread();
-    }
-  }
-
-  getCurrentSpreadIndex() {
-    return this.currentSpreadIndex;
-  }
-
-  setCurrentSpreadIndex(newIndex) {
-    if (newIndex >= 0 && newIndex < this.getSpread().length) {
-      this.currentSpreadIndex = newIndex;
-    } else {
-      throw new Error('Invalid page');
-    }
-  }
-
-  showSpread() {
-    const spread = this.getSpread()[this.currentSpreadIndex];
-
-    if (spread.length === 2) {
-      this.render.setLeftPage(this.pages[spread[0]]);
-      this.render.setRightPage(this.pages[spread[1]]);
-    } else {
-      if (this.render.getOrientation() === "landscape") {
-        if (spread[0] === this.pages.length - 1) {
-          this.render.setLeftPage(this.pages[spread[0]]);
-          this.render.setRightPage(null);
-        } else {
-          this.render.setLeftPage(null);
-          this.render.setRightPage(this.pages[spread[0]]);
-        }
-      } else {
-        this.render.setLeftPage(null);
-        this.render.setRightPage(this.pages[spread[0]]);
-      }
-    }
-
-    this.currentPageIndex = spread[0];
-    this.app.updatePageIndex(this.currentPageIndex);
-  }
-
-}
-
-class ImagePageCollection extends PageCollection {
-  constructor(app, render, imagesHref) {
-    super(app, render);
-    this.imagesHref = imagesHref;
-  }
-
-  load() {
-    for (const href of this.imagesHref) {
-      const page = new ImagePage(this.render, href, "soft");
-      page.load();
-      this.pages.push(page);
-    }
-
-    this.createSpread();
-  }
-
-}
-
-class Helper {
-  static GetDistanceBetweenTwoPoint(point1, point2) {
-    if (point1 === null || point2 === null) {
-      return Infinity;
-    }
-
-    return Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2));
-  }
-
-  static GetSegmentLength(segment) {
-    return Helper.GetDistanceBetweenTwoPoint(segment[0], segment[1]);
-  }
-
-  static GetAngleBetweenTwoLine(line1, line2) {
-    const A1 = line1[0].y - line1[1].y;
-    const A2 = line2[0].y - line2[1].y;
-    const B1 = line1[1].x - line1[0].x;
-    const B2 = line2[1].x - line2[0].x;
-    return Math.acos((A1 * A2 + B1 * B2) / (Math.sqrt(A1 * A1 + B1 * B1) * Math.sqrt(A2 * A2 + B2 * B2)));
-  }
-
-  static PointInRect(rect, pos) {
-    if (pos === null) {
-      return null;
-    }
-
-    if (pos.x >= rect.left && pos.x <= rect.width + rect.left && pos.y >= rect.top && pos.y <= rect.top + rect.height) {
-      return pos;
-    }
-
-    return null;
-  }
-
-  static GetRotatedPoint(transformedPoint, startPoint, angle) {
-    return {
-      x: transformedPoint.x * Math.cos(angle) + transformedPoint.y * Math.sin(angle) + startPoint.x,
-      y: transformedPoint.y * Math.cos(angle) - transformedPoint.x * Math.sin(angle) + startPoint.y
-    };
-  }
-
-  static LimitPointToCircle(startPoint, radius, limitedPoint) {
-    if (Helper.GetDistanceBetweenTwoPoint(startPoint, limitedPoint) <= radius) {
-      return limitedPoint;
-    }
-
-    const a = startPoint.x;
-    const b = startPoint.y;
-    const n = limitedPoint.x;
-    const m = limitedPoint.y;
-    let x = Math.sqrt(Math.pow(radius, 2) * Math.pow(a - n, 2) / (Math.pow(a - n, 2) + Math.pow(b - m, 2))) + a;
-
-    if (limitedPoint.x < 0) {
-      x *= -1;
-    }
-
-    let y = (x - a) * (b - m) / (a - n) + b;
-
-    if (a - n + b === 0) {
-      y = radius;
-    }
-
-    return {
-      x,
-      y
-    };
-  }
-
-  static GetIntersectBetweenTwoSegment(rectBorder, one, two) {
-    return Helper.PointInRect(rectBorder, Helper.GetIntersectBeetwenTwoLine(one, two));
-  }
-
-  static GetIntersectBeetwenTwoLine(one, two) {
-    const A1 = one[0].y - one[1].y;
-    const A2 = two[0].y - two[1].y;
-    const B1 = one[1].x - one[0].x;
-    const B2 = two[1].x - two[0].x;
-    const C1 = one[0].x * one[1].y - one[1].x * one[0].y;
-    const C2 = two[0].x * two[1].y - two[1].x * two[0].y;
-    const det1 = A1 * C2 - A2 * C1;
-    const det2 = B1 * C2 - B2 * C1;
-    const x = -((C1 * B2 - C2 * B1) / (A1 * B2 - A2 * B1));
-    const y = -((A1 * C2 - A2 * C1) / (A1 * B2 - A2 * B1));
-
-    if (isFinite(x) && isFinite(y)) {
-      return {
-        x,
-        y
-      };
-    } else {
-      if (Math.abs(det1 - det2) < 0.1) throw new Error('Segment included');
-    }
-
-    return null;
-  }
-
-  static GetCordsFromTwoPoint(pointOne, pointTwo) {
-    const sizeX = Math.abs(pointOne.x - pointTwo.x);
-    const sizeY = Math.abs(pointOne.y - pointTwo.y);
-    const lengthLine = Math.max(sizeX, sizeY);
-    const result = [pointOne];
-
-    function getCord(c1, c2, size, length, index) {
-      if (c2 > c1) {
-        return c1 + index * (size / length);
-      } else if (c2 < c1) {
-        return c1 - index * (size / length);
-      }
-
-      return c1;
-    }
-
-    for (let i = 1; i <= lengthLine; i += 1) {
-      result.push({
-        x: getCord(pointOne.x, pointTwo.x, sizeX, lengthLine, i),
-        y: getCord(pointOne.y, pointTwo.y, sizeY, lengthLine, i)
-      });
-    }
-
-    return result;
-  }
-
-}
-
-class HTMLPage extends Page {
-  constructor(render, element, density) {
-    super(render, density);
-    this.copiedElement = null;
-    this.temporaryCopy = null;
-    this.isLoad = false;
-    this.element = element;
-    this.element.classList.add('stf__item');
-    this.element.classList.add('--' + density);
-  }
-
-  newTemporaryCopy() {
-    if (this.nowDrawingDensity === "hard") {
-      return this;
-    }
-
-    if (this.temporaryCopy === null) {
-      this.copiedElement = this.element.cloneNode(true);
-      this.element.parentElement.appendChild(this.copiedElement);
-      this.temporaryCopy = new HTMLPage(this.render, this.copiedElement, this.nowDrawingDensity);
-    }
-
-    return this.getTemporaryCopy();
-  }
-
-  getTemporaryCopy() {
-    return this.temporaryCopy;
-  }
-
-  hideTemporaryCopy() {
-    if (this.temporaryCopy !== null) {
-      this.copiedElement.remove();
-      this.copiedElement = null;
-      this.temporaryCopy = null;
-    }
-  }
-
-  draw(tempDensity) {
-    const density = tempDensity ? tempDensity : this.nowDrawingDensity;
-    const pagePos = this.render.convertToGlobal(this.state.position);
-    const pageWidth = this.render.getRect().pageWidth;
-    const pageHeight = this.render.getRect().height;
-    this.element.classList.remove('--simple');
-    const commonStyle = `
-            position: absolute;
-            display: block;
-            z-index: ${this.element.style.zIndex};
-            left: 0;
-            top: 0;
-            width: ${pageWidth}px;
-            height: ${pageHeight}px;
-        `;
-    density === "hard" ? this.drawHard(commonStyle) : this.drawSoft(pagePos, commonStyle);
-  }
-
-  drawHard(commonStyle = '') {
-    const pos = this.render.getRect().left + this.render.getRect().width / 2;
-    const angle = this.state.hardDrawingAngle;
-    const newStyle = commonStyle + `
-                backface-visibility: hidden;
-                -webkit-backface-visibility: hidden;
-                clip-path: none;
-                -webkit-clip-path: none;
-            ` + (this.orientation === 0 ? `transform-origin: ${this.render.getRect().pageWidth}px 0;
-                   transform: translate3d(0, 0, 0) rotateY(${angle}deg);` : `transform-origin: 0 0;
-                   transform: translate3d(${pos}px, 0, 0) rotateY(${angle}deg);`);
-    this.element.style.cssText = newStyle;
-  }
-
-  drawSoft(position, commonStyle = '') {
-    let polygon = 'polygon( ';
-
-    for (const p of this.state.area) {
-      if (p !== null) {
-        let g = this.render.getDirection() === 1 ? {
-          x: -p.x + this.state.position.x,
-          y: p.y - this.state.position.y
-        } : {
-          x: p.x - this.state.position.x,
-          y: p.y - this.state.position.y
-        };
-        g = Helper.GetRotatedPoint(g, {
-          x: 0,
-          y: 0
-        }, this.state.angle);
-        polygon += g.x + 'px ' + g.y + 'px, ';
-      }
-    }
-
-    polygon = polygon.slice(0, -2);
-    polygon += ')';
-    const newStyle = commonStyle + `transform-origin: 0 0; clip-path: ${polygon}; -webkit-clip-path: ${polygon};` + (this.render.isSafari() && this.state.angle === 0 ? `transform: translate(${position.x}px, ${position.y}px);` : `transform: translate3d(${position.x}px, ${position.y}px, 0) rotate(${this.state.angle}rad);`);
-    this.element.style.cssText = newStyle;
-  }
-
-  simpleDraw(orient) {
-    const rect = this.render.getRect();
-    const pageWidth = rect.pageWidth;
-    const pageHeight = rect.height;
-    const x = orient === 1 ? rect.left + rect.pageWidth : rect.left;
-    const y = rect.top;
-    this.element.classList.add('--simple');
-    this.element.style.cssText = `
-            position: absolute;
-            display: block;
-            height: ${pageHeight}px;
-            left: ${x}px;
-            top: ${y}px;
-            width: ${pageWidth}px;
-            z-index: ${this.render.getSettings().startZIndex + 1};`;
-  }
-
-  getElement() {
-    return this.element;
-  }
-
-  load() {
-    this.isLoad = true;
-  }
-
-  setOrientation(orientation) {
-    super.setOrientation(orientation);
-    this.element.classList.remove('--left', '--right');
-    this.element.classList.add(orientation === 1 ? '--right' : '--left');
-  }
-
-  setDrawingDensity(density) {
-    this.element.classList.remove('--soft', '--hard');
-    this.element.classList.add('--' + density);
-    super.setDrawingDensity(density);
-  }
-
-}
-
-class HTMLPageCollection extends PageCollection {
-  constructor(app, render, element, items) {
-    super(app, render);
-    this.element = element;
-    this.pagesElement = items;
-  }
-
-  load() {
-    for (const pageElement of this.pagesElement) {
-      const page = new HTMLPage(this.render, pageElement, pageElement.dataset['density'] === 'hard' ? "hard" : "soft");
-      page.load();
-      this.pages.push(page);
-    }
-
-    this.createSpread();
-  }
-
-}
-
-class FlipCalculation {
-  constructor(direction, corner, pageWidth, pageHeight) {
-    this.direction = direction;
-    this.corner = corner;
-    this.topIntersectPoint = null;
-    this.sideIntersectPoint = null;
-    this.bottomIntersectPoint = null;
-    this.pageWidth = parseInt(pageWidth, 10);
-    this.pageHeight = parseInt(pageHeight, 10);
-  }
-
-  calc(localPos) {
-    try {
-      this.position = this.calcAngleAndPosition(localPos);
-      this.calculateIntersectPoint(this.position);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  getFlippingClipArea() {
-    const result = [];
-    let clipBottom = false;
-    result.push(this.rect.topLeft);
-    result.push(this.topIntersectPoint);
-
-    if (this.sideIntersectPoint === null) {
-      clipBottom = true;
-    } else {
-      result.push(this.sideIntersectPoint);
-      if (this.bottomIntersectPoint === null) clipBottom = false;
-    }
-
-    result.push(this.bottomIntersectPoint);
-
-    if (clipBottom || this.corner === "bottom") {
-      result.push(this.rect.bottomLeft);
-    }
-
-    return result;
-  }
-
-  getBottomClipArea() {
-    const result = [];
-    result.push(this.topIntersectPoint);
-
-    if (this.corner === "top") {
-      result.push({
-        x: this.pageWidth,
-        y: 0
-      });
-    } else {
-      if (this.topIntersectPoint !== null) {
-        result.push({
-          x: this.pageWidth,
-          y: 0
-        });
-      }
-
-      result.push({
-        x: this.pageWidth,
-        y: this.pageHeight
-      });
-    }
-
-    if (this.sideIntersectPoint !== null) {
-      if (Helper.GetDistanceBetweenTwoPoint(this.sideIntersectPoint, this.topIntersectPoint) >= 10) result.push(this.sideIntersectPoint);
-    } else {
-      if (this.corner === "top") {
-        result.push({
-          x: this.pageWidth,
-          y: this.pageHeight
-        });
-      }
-    }
-
-    result.push(this.bottomIntersectPoint);
-    result.push(this.topIntersectPoint);
-    return result;
-  }
-
-  getAngle() {
-    if (this.direction === 0) {
-      return -this.angle;
-    }
-
-    return this.angle;
-  }
-
-  getRect() {
-    return this.rect;
-  }
-
-  getPosition() {
-    return this.position;
-  }
-
-  getActiveCorner() {
-    if (this.direction === 0) {
-      return this.rect.topLeft;
-    }
-
-    return this.rect.topRight;
-  }
-
-  getDirection() {
-    return this.direction;
-  }
-
-  getFlippingProgress() {
-    return Math.abs((this.position.x - this.pageWidth) / (2 * this.pageWidth) * 100);
-  }
-
-  getCorner() {
-    return this.corner;
-  }
-
-  getBottomPagePosition() {
-    if (this.direction === 1) {
-      return {
-        x: this.pageWidth,
-        y: 0
-      };
-    }
-
-    return {
-      x: 0,
-      y: 0
-    };
-  }
-
-  getShadowStartPoint() {
-    if (this.corner === "top") {
-      return this.topIntersectPoint;
-    } else {
-      if (this.sideIntersectPoint !== null) return this.sideIntersectPoint;
-      return this.topIntersectPoint;
-    }
-  }
-
-  getShadowAngle() {
-    const angle = Helper.GetAngleBetweenTwoLine(this.getSegmentToShadowLine(), [{
-      x: 0,
-      y: 0
-    }, {
-      x: this.pageWidth,
-      y: 0
-    }]);
-
-    if (this.direction === 0) {
-      return angle;
-    }
-
-    return Math.PI - angle;
-  }
-
-  calcAngleAndPosition(pos) {
-    let result = pos;
-    this.updateAngleAndGeometry(result);
-
-    if (this.corner === "top") {
-      result = this.checkPositionAtCenterLine(result, {
-        x: 0,
-        y: 0
-      }, {
-        x: 0,
-        y: this.pageHeight
-      });
-    } else {
-      result = this.checkPositionAtCenterLine(result, {
-        x: 0,
-        y: this.pageHeight
-      }, {
-        x: 0,
-        y: 0
-      });
-    }
-
-    if (Math.abs(result.x - this.pageWidth) < 1 && Math.abs(result.y) < 1) {
-      throw new Error('Point is too small');
-    }
-
-    return result;
-  }
-
-  updateAngleAndGeometry(pos) {
-    this.angle = this.calculateAngle(pos);
-    this.rect = this.getPageRect(pos);
-  }
-
-  calculateAngle(pos) {
-    const left = this.pageWidth - pos.x + 1;
-    const top = this.corner === "bottom" ? this.pageHeight - pos.y : pos.y;
-    let angle = 2 * Math.acos(left / Math.sqrt(top * top + left * left));
-    if (top < 0) angle = -angle;
-    const da = Math.PI - angle;
-    if (!isFinite(angle) || da >= 0 && da < 0.003) throw new Error('The G point is too small');
-    if (this.corner === "bottom") angle = -angle;
-    return angle;
-  }
-
-  getPageRect(localPos) {
-    if (this.corner === "top") {
-      return this.getRectFromBasePoint([{
-        x: 0,
-        y: 0
-      }, {
-        x: this.pageWidth,
-        y: 0
-      }, {
-        x: 0,
-        y: this.pageHeight
-      }, {
-        x: this.pageWidth,
-        y: this.pageHeight
-      }], localPos);
-    }
-
-    return this.getRectFromBasePoint([{
-      x: 0,
-      y: -this.pageHeight
-    }, {
-      x: this.pageWidth,
-      y: -this.pageHeight
-    }, {
-      x: 0,
-      y: 0
-    }, {
-      x: this.pageWidth,
-      y: 0
-    }], localPos);
-  }
-
-  getRectFromBasePoint(points, localPos) {
-    return {
-      topLeft: this.getRotatedPoint(points[0], localPos),
-      topRight: this.getRotatedPoint(points[1], localPos),
-      bottomLeft: this.getRotatedPoint(points[2], localPos),
-      bottomRight: this.getRotatedPoint(points[3], localPos)
-    };
-  }
-
-  getRotatedPoint(transformedPoint, startPoint) {
-    return {
-      x: transformedPoint.x * Math.cos(this.angle) + transformedPoint.y * Math.sin(this.angle) + startPoint.x,
-      y: transformedPoint.y * Math.cos(this.angle) - transformedPoint.x * Math.sin(this.angle) + startPoint.y
-    };
-  }
-
-  calculateIntersectPoint(pos) {
-    const boundRect = {
-      left: -1,
-      top: -1,
-      width: this.pageWidth + 2,
-      height: this.pageHeight + 2
-    };
-
-    if (this.corner === "top") {
-      this.topIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [pos, this.rect.topRight], [{
-        x: 0,
-        y: 0
-      }, {
-        x: this.pageWidth,
-        y: 0
-      }]);
-      this.sideIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [pos, this.rect.bottomLeft], [{
-        x: this.pageWidth,
-        y: 0
-      }, {
-        x: this.pageWidth,
-        y: this.pageHeight
-      }]);
-      this.bottomIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [this.rect.bottomLeft, this.rect.bottomRight], [{
-        x: 0,
-        y: this.pageHeight
-      }, {
-        x: this.pageWidth,
-        y: this.pageHeight
-      }]);
-    } else {
-      this.topIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [this.rect.topLeft, this.rect.topRight], [{
-        x: 0,
-        y: 0
-      }, {
-        x: this.pageWidth,
-        y: 0
-      }]);
-      this.sideIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [pos, this.rect.topLeft], [{
-        x: this.pageWidth,
-        y: 0
-      }, {
-        x: this.pageWidth,
-        y: this.pageHeight
-      }]);
-      this.bottomIntersectPoint = Helper.GetIntersectBetweenTwoSegment(boundRect, [this.rect.bottomLeft, this.rect.bottomRight], [{
-        x: 0,
-        y: this.pageHeight
-      }, {
-        x: this.pageWidth,
-        y: this.pageHeight
-      }]);
-    }
-  }
-
-  checkPositionAtCenterLine(checkedPos, centerOne, centerTwo) {
-    let result = checkedPos;
-    const tmp = Helper.LimitPointToCircle(centerOne, this.pageWidth, result);
-
-    if (result !== tmp) {
-      result = tmp;
-      this.updateAngleAndGeometry(result);
-    }
-
-    const rad = Math.sqrt(Math.pow(this.pageWidth, 2) + Math.pow(this.pageHeight, 2));
-    let checkPointOne = this.rect.bottomRight;
-    let checkPointTwo = this.rect.topLeft;
-
-    if (this.corner === "bottom") {
-      checkPointOne = this.rect.topRight;
-      checkPointTwo = this.rect.bottomLeft;
-    }
-
-    if (checkPointOne.x <= 0) {
-      const bottomPoint = Helper.LimitPointToCircle(centerTwo, rad, checkPointTwo);
-
-      if (bottomPoint !== result) {
-        result = bottomPoint;
-        this.updateAngleAndGeometry(result);
-      }
-    }
-
-    return result;
-  }
-
-  getSegmentToShadowLine() {
-    const first = this.getShadowStartPoint();
-    const second = first !== this.sideIntersectPoint && this.sideIntersectPoint !== null ? this.sideIntersectPoint : this.bottomIntersectPoint;
-    return [first, second];
-  }
-
-}
-
-class Flip {
-  constructor(render, app) {
-    this.flippingPage = null;
-    this.bottomPage = null;
-    this.calc = null;
-    this.state = "read";
-    this.render = render;
-    this.app = app;
-  }
-
-  fold(globalPos) {
-    this.setState("user_fold");
-    if (this.calc === null) this.start(globalPos);
-    this.do(this.render.convertToPage(globalPos));
-  }
-
-  flip(globalPos) {
-    if (this.app.getSettings().disableFlipByClick && !this.isPointOnCorners(globalPos)) return;
-    if (this.calc !== null) this.render.finishAnimation();
-    if (!this.start(globalPos)) return;
-    const rect = this.getBoundsRect();
-    this.setState("flipping");
-    const topMargins = rect.height / 10;
-    const yStart = this.calc.getCorner() === "bottom" ? rect.height - topMargins : topMargins;
-    const yDest = this.calc.getCorner() === "bottom" ? rect.height : 0;
-    this.calc.calc({
-      x: rect.pageWidth - topMargins,
-      y: yStart
-    });
-    this.animateFlippingTo({
-      x: rect.pageWidth - topMargins,
-      y: yStart
-    }, {
-      x: -rect.pageWidth,
-      y: yDest
-    }, true);
-  }
-
-  start(globalPos) {
-    this.reset();
-    const bookPos = this.render.convertToBook(globalPos);
-    const rect = this.getBoundsRect();
-    const direction = this.getDirectionByPoint(bookPos);
-    const flipCorner = bookPos.y >= rect.height / 2 ? "bottom" : "top";
-    if (!this.checkDirection(direction)) return false;
-
-    try {
-      this.flippingPage = this.app.getPageCollection().getFlippingPage(direction);
-      this.bottomPage = this.app.getPageCollection().getBottomPage(direction);
-
-      if (this.render.getOrientation() === "landscape") {
-        if (direction === 1) {
-          const nextPage = this.app.getPageCollection().nextBy(this.flippingPage);
-
-          if (nextPage !== null) {
-            if (this.flippingPage.getDensity() !== nextPage.getDensity()) {
-              this.flippingPage.setDrawingDensity("hard");
-              nextPage.setDrawingDensity("hard");
-            }
-          }
-        } else {
-          const prevPage = this.app.getPageCollection().prevBy(this.flippingPage);
-
-          if (prevPage !== null) {
-            if (this.flippingPage.getDensity() !== prevPage.getDensity()) {
-              this.flippingPage.setDrawingDensity("hard");
-              prevPage.setDrawingDensity("hard");
-            }
-          }
-        }
-      }
-
-      this.render.setDirection(direction);
-      this.calc = new FlipCalculation(direction, flipCorner, rect.pageWidth.toString(10), rect.height.toString(10));
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  do(pagePos) {
-    if (this.calc === null) return;
-
-    if (this.calc.calc(pagePos)) {
-      const progress = this.calc.getFlippingProgress();
-      this.bottomPage.setArea(this.calc.getBottomClipArea());
-      this.bottomPage.setPosition(this.calc.getBottomPagePosition());
-      this.bottomPage.setAngle(0);
-      this.bottomPage.setHardAngle(0);
-      this.flippingPage.setArea(this.calc.getFlippingClipArea());
-      this.flippingPage.setPosition(this.calc.getActiveCorner());
-      this.flippingPage.setAngle(this.calc.getAngle());
-
-      if (this.calc.getDirection() === 0) {
-        this.flippingPage.setHardAngle(90 * (200 - progress * 2) / 100);
-      } else {
-        this.flippingPage.setHardAngle(-90 * (200 - progress * 2) / 100);
-      }
-
-      this.render.setPageRect(this.calc.getRect());
-      this.render.setBottomPage(this.bottomPage);
-      this.render.setFlippingPage(this.flippingPage);
-      this.render.setShadowData(this.calc.getShadowStartPoint(), this.calc.getShadowAngle(), progress, this.calc.getDirection());
-    }
-  }
-
-  flipToPage(page, corner) {
-    const current = this.app.getPageCollection().getCurrentSpreadIndex();
-    const next = this.app.getPageCollection().getSpreadIndexByPage(page);
-
-    try {
-      if (next > current) {
-        this.app.getPageCollection().setCurrentSpreadIndex(next - 1);
-        this.flipNext(corner);
-      }
-
-      if (next < current) {
-        this.app.getPageCollection().setCurrentSpreadIndex(next + 1);
-        this.flipPrev(corner);
-      }
-    } catch (e) {}
-  }
-
-  flipNext(corner) {
-    this.flip({
-      x: this.render.getRect().left + this.render.getRect().pageWidth * 2 - 10,
-      y: corner === "top" ? 1 : this.render.getRect().height - 2
-    });
-  }
-
-  flipPrev(corner) {
-    this.flip({
-      x: 10,
-      y: corner === "top" ? 1 : this.render.getRect().height - 2
-    });
-  }
-
-  stopMove() {
-    if (this.calc === null) return;
-    const pos = this.calc.getPosition();
-    const rect = this.getBoundsRect();
-    const y = this.calc.getCorner() === "bottom" ? rect.height : 0;
-    if (pos.x <= 0) this.animateFlippingTo(pos, {
-      x: -rect.pageWidth,
-      y
-    }, true);else this.animateFlippingTo(pos, {
-      x: rect.pageWidth,
-      y
-    }, false);
-  }
-
-  showCorner(globalPos) {
-    if (!this.checkState("read", "fold_corner")) return;
-    const rect = this.getBoundsRect();
-    const pageWidth = rect.pageWidth;
-
-    if (this.isPointOnCorners(globalPos)) {
-      if (this.calc === null) {
-        if (!this.start(globalPos)) return;
-        this.setState("fold_corner");
-        this.calc.calc({
-          x: pageWidth - 1,
-          y: 1
-        });
-        const fixedCornerSize = 50;
-        const yStart = this.calc.getCorner() === "bottom" ? rect.height - 1 : 1;
-        const yDest = this.calc.getCorner() === "bottom" ? rect.height - fixedCornerSize : fixedCornerSize;
-        this.animateFlippingTo({
-          x: pageWidth - 1,
-          y: yStart
-        }, {
-          x: pageWidth - fixedCornerSize,
-          y: yDest
-        }, false, false);
-      } else {
-        this.do(this.render.convertToPage(globalPos));
-      }
-    } else {
-      this.setState("read");
-      this.render.finishAnimation();
-      this.stopMove();
-    }
-  }
-
-  animateFlippingTo(start, dest, isTurned, needReset = true) {
-    const points = Helper.GetCordsFromTwoPoint(start, dest);
-    const frames = [];
-
-    for (const p of points) frames.push(() => this.do(p));
-
-    const duration = this.getAnimationDuration(points.length);
-    this.render.startAnimation(frames, duration, () => {
-      if (!this.calc) return;
-
-      if (isTurned) {
-        if (this.calc.getDirection() === 1) this.app.turnToPrevPage();else this.app.turnToNextPage();
-      }
-
-      if (needReset) {
-        this.render.setBottomPage(null);
-        this.render.setFlippingPage(null);
-        this.render.clearShadow();
-        this.setState("read");
-        this.reset();
-      }
-    });
-  }
-
-  getCalculation() {
-    return this.calc;
-  }
-
-  getState() {
-    return this.state;
-  }
-
-  setState(newState) {
-    if (this.state !== newState) {
-      this.app.updateState(newState);
-      this.state = newState;
-    }
-  }
-
-  getDirectionByPoint(touchPos) {
-    const rect = this.getBoundsRect();
-
-    if (this.render.getOrientation() === "portrait") {
-      if (touchPos.x - rect.pageWidth <= rect.width / 5) {
-        return 1;
-      }
-    } else if (touchPos.x < rect.width / 2) {
-      return 1;
-    }
-
-    return 0;
-  }
-
-  getAnimationDuration(size) {
-    const defaultTime = this.app.getSettings().flippingTime;
-    if (size >= 1000) return defaultTime;
-    return size / 1000 * defaultTime;
-  }
-
-  checkDirection(direction) {
-    if (direction === 0) return this.app.getCurrentPageIndex() < this.app.getPageCount() - 1;
-    return this.app.getCurrentPageIndex() >= 1;
-  }
-
-  reset() {
-    this.calc = null;
-    this.flippingPage = null;
-    this.bottomPage = null;
-  }
-
-  getBoundsRect() {
-    return this.render.getRect();
-  }
-
-  checkState(...states) {
-    for (const state of states) {
-      if (this.state === state) return true;
-    }
-
-    return false;
-  }
-
-  isPointOnCorners(globalPos) {
-    const rect = this.getBoundsRect();
-    const pageWidth = rect.pageWidth;
-    const operatingDistance = Math.sqrt(Math.pow(pageWidth, 2) + Math.pow(rect.height, 2)) / 5;
-    const bookPos = this.render.convertToBook(globalPos);
-    return bookPos.x > 0 && bookPos.y > 0 && bookPos.x < rect.width && bookPos.y < rect.height && (bookPos.x < operatingDistance || bookPos.x > rect.width - operatingDistance) && (bookPos.y < operatingDistance || bookPos.y > rect.height - operatingDistance);
-  }
-
-}
-
-class Render {
-  constructor(app, setting) {
-    this.leftPage = null;
-    this.rightPage = null;
-    this.flippingPage = null;
-    this.bottomPage = null;
-    this.direction = null;
-    this.orientation = null;
-    this.shadow = null;
-    this.animation = null;
-    this.pageRect = null;
-    this.boundsRect = null;
-    this.timer = 0;
-    this.safari = false;
-    this.setting = setting;
-    this.app = app;
-    const regex = new RegExp('Version\\/[\\d\\.]+.*Safari/');
-    this.safari = regex.exec(window.navigator.userAgent) !== null;
-  }
-
-  render(timer) {
-    if (this.animation !== null) {
-      const frameIndex = Math.round((timer - this.animation.startedAt) / this.animation.durationFrame);
-
-      if (frameIndex < this.animation.frames.length) {
-        this.animation.frames[frameIndex]();
-      } else {
-        this.animation.onAnimateEnd();
-        this.animation = null;
-      }
-    }
-
-    this.timer = timer;
-    this.drawFrame();
-  }
-
-  start() {
-    this.update();
-
-    const loop = timer => {
-      window.ngxZone.runOutsideAngular(() => {
-        this.render(timer);
-        requestAnimationFrame(loop);
-      });
-    };
-
-    window.ngxZone.runOutsideAngular(() => {
-      requestAnimationFrame(loop);
-    });
-  }
-
-  startAnimation(frames, duration, onAnimateEnd) {
-    this.finishAnimation();
-    this.animation = {
-      frames,
-      duration,
-      durationFrame: duration / frames.length,
-      onAnimateEnd,
-      startedAt: this.timer
-    };
-  }
-
-  finishAnimation() {
-    if (this.animation !== null) {
-      this.animation.frames[this.animation.frames.length - 1]();
-
-      if (this.animation.onAnimateEnd !== null) {
-        this.animation.onAnimateEnd();
-      }
-    }
-
-    this.animation = null;
-  }
-
-  update() {
-    this.boundsRect = null;
-    const orientation = this.calculateBoundsRect();
-
-    if (this.orientation !== orientation) {
-      this.orientation = orientation;
-      this.app.updateOrientation(orientation);
-    }
-  }
-
-  calculateBoundsRect() {
-    let orientation = "landscape";
-    const blockWidth = this.getBlockWidth();
-    const middlePoint = {
-      x: blockWidth / 2,
-      y: this.getBlockHeight() / 2
-    };
-    const ratio = this.setting.width / this.setting.height;
-    let pageWidth = this.setting.width;
-    let pageHeight = this.setting.height;
-    let left = middlePoint.x - pageWidth;
-
-    if (this.setting.size === "stretch") {
-      if (blockWidth < this.setting.minWidth * 2 && this.app.getSettings().usePortrait) orientation = "portrait";
-      pageWidth = orientation === "portrait" ? this.getBlockWidth() : this.getBlockWidth() / 2;
-      if (pageWidth > this.setting.maxWidth) pageWidth = this.setting.maxWidth;
-      pageHeight = pageWidth / ratio;
-
-      if (pageHeight > this.getBlockHeight()) {
-        pageHeight = this.getBlockHeight();
-        pageWidth = pageHeight * ratio;
-      }
-
-      left = orientation === "portrait" ? middlePoint.x - pageWidth / 2 - pageWidth : middlePoint.x - pageWidth;
-    } else {
-      if (blockWidth < pageWidth * 2) {
-        if (this.app.getSettings().usePortrait) {
-          orientation = "portrait";
-          left = middlePoint.x - pageWidth / 2 - pageWidth;
-        }
-      }
-    }
-
-    this.boundsRect = {
-      left,
-      top: middlePoint.y - pageHeight / 2,
-      width: pageWidth * 2,
-      height: pageHeight,
-      pageWidth: pageWidth
-    };
-    return orientation;
-  }
-
-  setShadowData(pos, angle, progress, direction) {
-    if (!this.app.getSettings().drawShadow) return;
-    const maxShadowOpacity = 100 * this.getSettings().maxShadowOpacity;
-    this.shadow = {
-      pos,
-      angle,
-      width: this.getRect().pageWidth * 3 / 4 * progress / 100,
-      opacity: (100 - progress) * maxShadowOpacity / 100 / 100,
-      direction,
-      progress: progress * 2
-    };
-  }
-
-  clearShadow() {
-    this.shadow = null;
-  }
-
-  getBlockWidth() {
-    return this.app.getUI().getDistElement().offsetWidth;
-  }
-
-  getBlockHeight() {
-    return this.app.getUI().getDistElement().offsetHeight;
-  }
-
-  getDirection() {
-    return this.direction;
-  }
-
-  getRect() {
-    if (this.boundsRect === null) this.calculateBoundsRect();
-    return this.boundsRect;
-  }
-
-  getSettings() {
-    return this.app.getSettings();
-  }
-
-  getOrientation() {
-    return this.orientation;
-  }
-
-  setPageRect(pageRect) {
-    this.pageRect = pageRect;
-  }
-
-  setDirection(direction) {
-    this.direction = direction;
-  }
-
-  setRightPage(page) {
-    if (page !== null) page.setOrientation(1);
-    this.rightPage = page;
-  }
-
-  setLeftPage(page) {
-    if (page !== null) page.setOrientation(0);
-    this.leftPage = page;
-  }
-
-  setBottomPage(page) {
-    if (page !== null) page.setOrientation(this.direction === 1 ? 0 : 1);
-    this.bottomPage = page;
-  }
-
-  setFlippingPage(page) {
-    if (page !== null) page.setOrientation(this.direction === 0 && this.orientation !== "portrait" ? 0 : 1);
-    this.flippingPage = page;
-  }
-
-  convertToBook(pos) {
-    const rect = this.getRect();
-    return {
-      x: pos.x - rect.left,
-      y: pos.y - rect.top
-    };
-  }
-
-  isSafari() {
-    return this.safari;
-  }
-
-  convertToPage(pos, direction) {
-    if (!direction) direction = this.direction;
-    const rect = this.getRect();
-    const x = direction === 0 ? pos.x - rect.left - rect.width / 2 : rect.width / 2 - pos.x + rect.left;
-    return {
-      x,
-      y: pos.y - rect.top
-    };
-  }
-
-  convertToGlobal(pos, direction) {
-    if (!direction) direction = this.direction;
-    if (pos == null) return null;
-    const rect = this.getRect();
-    const x = direction === 0 ? pos.x + rect.left + rect.width / 2 : rect.width / 2 - pos.x + rect.left;
-    return {
-      x,
-      y: pos.y + rect.top
-    };
-  }
-
-  convertRectToGlobal(rect, direction) {
-    if (!direction) direction = this.direction;
-    return {
-      topLeft: this.convertToGlobal(rect.topLeft, direction),
-      topRight: this.convertToGlobal(rect.topRight, direction),
-      bottomLeft: this.convertToGlobal(rect.bottomLeft, direction),
-      bottomRight: this.convertToGlobal(rect.bottomRight, direction)
-    };
-  }
-
-}
-
-class CanvasRender extends Render {
-  constructor(app, setting, inCanvas) {
-    super(app, setting);
-    this.canvas = inCanvas;
-    this.ctx = inCanvas.getContext('2d');
-  }
-
-  getContext() {
-    return this.ctx;
-  }
-
-  reload() {}
-
-  drawFrame() {
-    this.clear();
-    if (this.orientation !== "portrait") if (this.leftPage != null) this.leftPage.simpleDraw(0);
-    if (this.rightPage != null) this.rightPage.simpleDraw(1);
-    if (this.bottomPage != null) this.bottomPage.draw();
-    this.drawBookShadow();
-    if (this.flippingPage != null) this.flippingPage.draw();
-
-    if (this.shadow != null) {
-      this.drawOuterShadow();
-      this.drawInnerShadow();
-    }
-
-    const rect = this.getRect();
-
-    if (this.orientation === "portrait") {
-      this.ctx.beginPath();
-      this.ctx.rect(rect.left + rect.pageWidth, rect.top, rect.width, rect.height);
-      this.ctx.clip();
-    }
-  }
-
-  drawBookShadow() {
-    const rect = this.getRect();
-    this.ctx.save();
-    this.ctx.beginPath();
-    const shadowSize = rect.width / 20;
-    this.ctx.rect(rect.left, rect.top, rect.width, rect.height);
-    const shadowPos = {
-      x: rect.left + rect.width / 2 - shadowSize / 2,
-      y: 0
-    };
-    this.ctx.translate(shadowPos.x, shadowPos.y);
-    const outerGradient = this.ctx.createLinearGradient(0, 0, shadowSize, 0);
-    outerGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-    outerGradient.addColorStop(0.4, 'rgba(0, 0, 0, 0.2)');
-    outerGradient.addColorStop(0.49, 'rgba(0, 0, 0, 0.1)');
-    outerGradient.addColorStop(0.5, 'rgba(0, 0, 0, 0.5)');
-    outerGradient.addColorStop(0.51, 'rgba(0, 0, 0, 0.4)');
-    outerGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    this.ctx.clip();
-    this.ctx.fillStyle = outerGradient;
-    this.ctx.fillRect(0, 0, shadowSize, rect.height * 2);
-    this.ctx.restore();
-  }
-
-  drawOuterShadow() {
-    const rect = this.getRect();
-    this.ctx.save();
-    this.ctx.beginPath();
-    this.ctx.rect(rect.left, rect.top, rect.width, rect.height);
-    const shadowPos = this.convertToGlobal({
-      x: this.shadow.pos.x,
-      y: this.shadow.pos.y
-    });
-    this.ctx.translate(shadowPos.x, shadowPos.y);
-    this.ctx.rotate(Math.PI + this.shadow.angle + Math.PI / 2);
-    const outerGradient = this.ctx.createLinearGradient(0, 0, this.shadow.width, 0);
-
-    if (this.shadow.direction === 0) {
-      this.ctx.translate(0, -100);
-      outerGradient.addColorStop(0, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
-      outerGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    } else {
-      this.ctx.translate(-this.shadow.width, -100);
-      outerGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-      outerGradient.addColorStop(1, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
-    }
-
-    this.ctx.clip();
-    this.ctx.fillStyle = outerGradient;
-    this.ctx.fillRect(0, 0, this.shadow.width, rect.height * 2);
-    this.ctx.restore();
-  }
-
-  drawInnerShadow() {
-    const rect = this.getRect();
-    this.ctx.save();
-    this.ctx.beginPath();
-    const shadowPos = this.convertToGlobal({
-      x: this.shadow.pos.x,
-      y: this.shadow.pos.y
-    });
-    const pageRect = this.convertRectToGlobal(this.pageRect);
-    this.ctx.moveTo(pageRect.topLeft.x, pageRect.topLeft.y);
-    this.ctx.lineTo(pageRect.topRight.x, pageRect.topRight.y);
-    this.ctx.lineTo(pageRect.bottomRight.x, pageRect.bottomRight.y);
-    this.ctx.lineTo(pageRect.bottomLeft.x, pageRect.bottomLeft.y);
-    this.ctx.translate(shadowPos.x, shadowPos.y);
-    this.ctx.rotate(Math.PI + this.shadow.angle + Math.PI / 2);
-    const isw = this.shadow.width * 3 / 4;
-    const innerGradient = this.ctx.createLinearGradient(0, 0, isw, 0);
-
-    if (this.shadow.direction === 0) {
-      this.ctx.translate(-isw, -100);
-      innerGradient.addColorStop(1, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
-      innerGradient.addColorStop(0.9, 'rgba(0, 0, 0, 0.05)');
-      innerGradient.addColorStop(0.7, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
-      innerGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-    } else {
-      this.ctx.translate(0, -100);
-      innerGradient.addColorStop(0, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
-      innerGradient.addColorStop(0.1, 'rgba(0, 0, 0, 0.05)');
-      innerGradient.addColorStop(0.3, 'rgba(0, 0, 0, ' + this.shadow.opacity + ')');
-      innerGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    }
-
-    this.ctx.clip();
-    this.ctx.fillStyle = innerGradient;
-    this.ctx.fillRect(0, 0, isw, rect.height * 2);
-    this.ctx.restore();
-  }
-
-  clear() {
-    this.ctx.fillStyle = 'white';
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-  }
-
-}
-
-class UI {
-  constructor(inBlock, app, setting) {
-    this.touchPoint = null;
-    this.swipeTimeout = 250;
-
-    this.onResize = () => {
-      this.update();
-    };
-
-    this.onMouseDown = e => {
-      if (this.checkTarget(e.target)) {
-        const pos = this.getMousePos(e.clientX, e.clientY);
-        this.app.startUserTouch(pos);
-        e.preventDefault();
-      }
-    };
-
-    this.onTouchStart = e => {
-      if (this.checkTarget(e.target)) {
-        if (e.changedTouches.length > 0) {
-          const t = e.changedTouches[0];
-          const pos = this.getMousePos(t.clientX, t.clientY);
-          this.touchPoint = {
-            point: pos,
-            time: Date.now()
-          };
-          setTimeout(() => {
-            if (this.touchPoint !== null) {
-              this.app.startUserTouch(pos);
-            }
-          }, this.swipeTimeout);
-          if (!this.app.getSettings().mobileScrollSupport) e.preventDefault();
-        }
-      }
-    };
-
-    this.onMouseUp = e => {
-      const pos = this.getMousePos(e.clientX, e.clientY);
-      this.app.userStop(pos);
-    };
-
-    this.onMouseMove = e => {
-      const pos = this.getMousePos(e.clientX, e.clientY);
-      this.app.userMove(pos, false);
-    };
-
-    this.onTouchMove = e => {
-      if (e.changedTouches.length > 0) {
-        const t = e.changedTouches[0];
-        const pos = this.getMousePos(t.clientX, t.clientY);
-
-        if (this.app.getSettings().mobileScrollSupport) {
-          if (this.touchPoint !== null) {
-            if (Math.abs(this.touchPoint.point.x - pos.x) > 10 || this.app.getState() !== "read") {
-              if (e.cancelable) this.app.userMove(pos, true);
-            }
-          }
-
-          if (this.app.getState() !== "read") {
-            e.preventDefault();
-          }
-        } else {
-          this.app.userMove(pos, true);
-        }
-      }
-    };
-
-    this.onTouchEnd = e => {
-      if (e.changedTouches.length > 0) {
-        const t = e.changedTouches[0];
-        const pos = this.getMousePos(t.clientX, t.clientY);
-        let isSwipe = false;
-
-        if (this.touchPoint !== null) {
-          const dx = pos.x - this.touchPoint.point.x;
-          const distY = Math.abs(pos.y - this.touchPoint.point.y);
-
-          if (Math.abs(dx) > this.swipeDistance && distY < this.swipeDistance * 2 && Date.now() - this.touchPoint.time < this.swipeTimeout) {
-            if (dx > 0) {
-              this.app.flipPrev(this.touchPoint.point.y < this.app.getRender().getRect().height / 2 ? "top" : "bottom");
-            } else {
-              this.app.flipNext(this.touchPoint.point.y < this.app.getRender().getRect().height / 2 ? "top" : "bottom");
-            }
-
-            isSwipe = true;
-          }
-
-          this.touchPoint = null;
-        }
-
-        this.app.userStop(pos, isSwipe);
-      }
-    };
-
-    this.parentElement = inBlock;
-    inBlock.classList.add('stf__parent');
-    inBlock.insertAdjacentHTML('afterbegin', '<div class="stf__wrapper"></div>');
-    this.wrapper = inBlock.querySelector('.stf__wrapper');
-    this.app = app;
-    const k = this.app.getSettings().usePortrait ? 1 : 2;
-    inBlock.style.minWidth = setting.minWidth * k + 'px';
-    inBlock.style.minHeight = setting.minHeight + 'px';
-
-    if (setting.size === "fixed") {
-      inBlock.style.minWidth = setting.width * k + 'px';
-      inBlock.style.minHeight = setting.height + 'px';
-    }
-
-    if (setting.autoSize) {
-      inBlock.style.width = '100%';
-      inBlock.style.maxWidth = setting.maxWidth * 2 + 'px';
-    }
-
-    inBlock.style.display = 'block';
-    window.addEventListener('resize', this.onResize, false);
-    this.swipeDistance = setting.swipeDistance;
-  }
-
-  destroy() {
-    if (this.app.getSettings().useMouseEvents) this.removeHandlers();
-    this.distElement.remove();
-    this.wrapper.remove();
-  }
-
-  getDistElement() {
-    return this.distElement;
-  }
-
-  getWrapper() {
-    return this.wrapper;
-  }
-
-  setOrientationStyle(orientation) {
-    this.wrapper.classList.remove('--portrait', '--landscape');
-
-    if (orientation === "portrait") {
-      if (this.app.getSettings().autoSize) this.wrapper.style.paddingBottom = this.app.getSettings().height / this.app.getSettings().width * 100 + '%';
-      this.wrapper.classList.add('--portrait');
-    } else {
-      if (this.app.getSettings().autoSize) this.wrapper.style.paddingBottom = this.app.getSettings().height / (this.app.getSettings().width * 2) * 100 + '%';
-      this.wrapper.classList.add('--landscape');
-    }
-
-    this.update();
-  }
-
-  removeHandlers() {
-    window.removeEventListener('resize', this.onResize);
-    this.distElement.removeEventListener('mousedown', this.onMouseDown);
-    this.distElement.removeEventListener('touchstart', this.onTouchStart);
-    window.removeEventListener('mousemove', this.onMouseMove);
-    window.removeEventListener('touchmove', this.onTouchMove);
-    window.removeEventListener('mouseup', this.onMouseUp);
-    window.removeEventListener('touchend', this.onTouchEnd);
-  }
-
-  setHandlers() {
-    window.addEventListener('resize', this.onResize, false);
-    if (!this.app.getSettings().useMouseEvents) return;
-    this.distElement.addEventListener('mousedown', this.onMouseDown);
-    this.distElement.addEventListener('touchstart', this.onTouchStart);
-    window.addEventListener('mousemove', this.onMouseMove);
-    window.addEventListener('touchmove', this.onTouchMove, {
-      passive: !this.app.getSettings().mobileScrollSupport
-    });
-    window.addEventListener('mouseup', this.onMouseUp);
-    window.addEventListener('touchend', this.onTouchEnd);
-  }
-
-  getMousePos(x, y) {
-    const rect = this.distElement.getBoundingClientRect();
-    return {
-      x: x - rect.left,
-      y: y - rect.top
-    };
-  }
-
-  checkTarget(targer) {
-    if (!this.app.getSettings().clickEventForward) return true;
-
-    if (['a', 'button'].includes(targer.tagName.toLowerCase())) {
-      return false;
-    }
-
-    return true;
-  }
-
-}
-
-class HTMLUI extends UI {
-  constructor(inBlock, app, setting, items) {
-    super(inBlock, app, setting);
-    this.wrapper.insertAdjacentHTML('afterbegin', '<div class="stf__block"></div>');
-    this.distElement = inBlock.querySelector('.stf__block');
-    this.items = items;
-
-    for (const item of items) {
-      this.distElement.appendChild(item);
-    }
-
-    this.setHandlers();
-  }
-
-  clear() {
-    for (const item of this.items) {
-      this.parentElement.appendChild(item);
-    }
-  }
-
-  updateItems(items) {
-    this.removeHandlers();
-    this.distElement.innerHTML = '';
-
-    for (const item of items) {
-      this.distElement.appendChild(item);
-    }
-
-    this.items = items;
-    this.setHandlers();
-  }
-
-  update() {
-    this.app.getRender().update();
-  }
-
-}
-
-class CanvasUI extends UI {
-  constructor(inBlock, app, setting) {
-    super(inBlock, app, setting);
-    this.wrapper.innerHTML = '<canvas class="stf__canvas"></canvas>';
-    this.canvas = inBlock.querySelectorAll('canvas')[0];
-    this.distElement = this.canvas;
-    this.resizeCanvas();
-    this.setHandlers();
-  }
-
-  resizeCanvas() {
-    const cs = getComputedStyle(this.canvas);
-    const width = parseInt(cs.getPropertyValue('width'), 10);
-    const height = parseInt(cs.getPropertyValue('height'), 10);
-    this.canvas.width = width;
-    this.canvas.height = height;
-  }
-
-  getCanvas() {
-    return this.canvas;
-  }
-
-  update() {
-    this.resizeCanvas();
-    this.app.getRender().update();
-  }
-
-}
-
-class EventObject {
-  constructor() {
-    this.events = new Map();
-  }
-
-  on(eventName, callback) {
-    if (!this.events.has(eventName)) {
-      this.events.set(eventName, [callback]);
-    } else {
-      this.events.get(eventName).push(callback);
-    }
-
-    return this;
-  }
-
-  off(event) {
-    this.events.delete(event);
-  }
-
-  trigger(eventName, app, data = null) {
-    if (!this.events.has(eventName)) return;
-
-    for (const callback of this.events.get(eventName)) {
-      callback({
-        data,
-        object: app
-      });
-    }
-  }
-
-}
-
-class HTMLRender extends Render {
-  constructor(app, setting, element) {
-    super(app, setting);
-    this.outerShadow = null;
-    this.innerShadow = null;
-    this.hardShadow = null;
-    this.hardInnerShadow = null;
-    this.element = element;
-    this.createShadows();
-  }
-
-  createShadows() {
-    this.element.insertAdjacentHTML('beforeend', `<div class="stf__outerShadow"></div>
-             <div class="stf__innerShadow"></div>
-             <div class="stf__hardShadow"></div>
-             <div class="stf__hardInnerShadow"></div>`);
-    this.outerShadow = this.element.querySelector('.stf__outerShadow');
-    this.innerShadow = this.element.querySelector('.stf__innerShadow');
-    this.hardShadow = this.element.querySelector('.stf__hardShadow');
-    this.hardInnerShadow = this.element.querySelector('.stf__hardInnerShadow');
-  }
-
-  clearShadow() {
-    super.clearShadow();
-    this.outerShadow.style.cssText = 'display: none';
-    this.innerShadow.style.cssText = 'display: none';
-    this.hardShadow.style.cssText = 'display: none';
-    this.hardInnerShadow.style.cssText = 'display: none';
-  }
-
-  reload() {
-    const testShadow = this.element.querySelector('.stf__outerShadow');
-
-    if (!testShadow) {
-      this.createShadows();
-    }
-  }
-
-  drawHardInnerShadow() {
-    const rect = this.getRect();
-    const progress = this.shadow.progress > 100 ? 200 - this.shadow.progress : this.shadow.progress;
-    let innerShadowSize = (100 - progress) * (2.5 * rect.pageWidth) / 100 + 20;
-    if (innerShadowSize > rect.pageWidth) innerShadowSize = rect.pageWidth;
-    let newStyle = `
-            display: block;
-            z-index: ${(this.getSettings().startZIndex + 5).toString(10)};
-            width: ${innerShadowSize}px;
-            height: ${rect.height}px;
-            background: linear-gradient(to right,
-                rgba(0, 0, 0, ${this.shadow.opacity * progress / 100}) 5%,
-                rgba(0, 0, 0, 0) 100%);
-            left: ${rect.left + rect.width / 2}px;
-            transform-origin: 0 0;
-        `;
-    newStyle += this.getDirection() === 0 && this.shadow.progress > 100 || this.getDirection() === 1 && this.shadow.progress <= 100 ? `transform: translate3d(0, 0, 0);` : `transform: translate3d(0, 0, 0) rotateY(180deg);`;
-    this.hardInnerShadow.style.cssText = newStyle;
-  }
-
-  drawHardOuterShadow() {
-    const rect = this.getRect();
-    const progress = this.shadow.progress > 100 ? 200 - this.shadow.progress : this.shadow.progress;
-    let shadowSize = (100 - progress) * (2.5 * rect.pageWidth) / 100 + 20;
-    if (shadowSize > rect.pageWidth) shadowSize = rect.pageWidth;
-    let newStyle = `
-            display: block;
-            z-index: ${(this.getSettings().startZIndex + 4).toString(10)};
-            width: ${shadowSize}px;
-            height: ${rect.height}px;
-            background: linear-gradient(to left, rgba(0, 0, 0, ${this.shadow.opacity}) 5%, rgba(0, 0, 0, 0) 100%);
-            left: ${rect.left + rect.width / 2}px;
-            transform-origin: 0 0;
-        `;
-    newStyle += this.getDirection() === 0 && this.shadow.progress > 100 || this.getDirection() === 1 && this.shadow.progress <= 100 ? `transform: translate3d(0, 0, 0) rotateY(180deg);` : `transform: translate3d(0, 0, 0);`;
-    this.hardShadow.style.cssText = newStyle;
-  }
-
-  drawInnerShadow() {
-    const rect = this.getRect();
-    const innerShadowSize = this.shadow.width * 3 / 4;
-    const shadowTranslate = this.getDirection() === 0 ? innerShadowSize : 0;
-    const shadowDirection = this.getDirection() === 0 ? 'to left' : 'to right';
-    const shadowPos = this.convertToGlobal(this.shadow.pos);
-    const angle = this.shadow.angle + 3 * Math.PI / 2;
-    const clip = [this.pageRect.topLeft, this.pageRect.topRight, this.pageRect.bottomRight, this.pageRect.bottomLeft];
-    let polygon = 'polygon( ';
-
-    for (const p of clip) {
-      let g = this.getDirection() === 1 ? {
-        x: -p.x + this.shadow.pos.x,
-        y: p.y - this.shadow.pos.y
-      } : {
-        x: p.x - this.shadow.pos.x,
-        y: p.y - this.shadow.pos.y
-      };
-      g = Helper.GetRotatedPoint(g, {
-        x: shadowTranslate,
-        y: 100
-      }, angle);
-      polygon += g.x + 'px ' + g.y + 'px, ';
-    }
-
-    polygon = polygon.slice(0, -2);
-    polygon += ')';
-    const newStyle = `
-            display: block;
-            z-index: ${(this.getSettings().startZIndex + 10).toString(10)};
-            width: ${innerShadowSize}px;
-            height: ${rect.height * 2}px;
-            background: linear-gradient(${shadowDirection},
-                rgba(0, 0, 0, ${this.shadow.opacity}) 5%,
-                rgba(0, 0, 0, 0.05) 15%,
-                rgba(0, 0, 0, ${this.shadow.opacity}) 35%,
-                rgba(0, 0, 0, 0) 100%);
-            transform-origin: ${shadowTranslate}px 100px;
-            transform: translate3d(${shadowPos.x - shadowTranslate}px, ${shadowPos.y - 100}px, 0) rotate(${angle}rad);
-            clip-path: ${polygon};
-            -webkit-clip-path: ${polygon};
-        `;
-    this.innerShadow.style.cssText = newStyle;
-  }
-
-  drawOuterShadow() {
-    const rect = this.getRect();
-    const shadowPos = this.convertToGlobal({
-      x: this.shadow.pos.x,
-      y: this.shadow.pos.y
-    });
-    const angle = this.shadow.angle + 3 * Math.PI / 2;
-    const shadowTranslate = this.getDirection() === 1 ? this.shadow.width : 0;
-    const shadowDirection = this.getDirection() === 0 ? 'to right' : 'to left';
-    const clip = [{
-      x: 0,
-      y: 0
-    }, {
-      x: rect.pageWidth,
-      y: 0
-    }, {
-      x: rect.pageWidth,
-      y: rect.height
-    }, {
-      x: 0,
-      y: rect.height
-    }];
-    let polygon = 'polygon( ';
-
-    for (const p of clip) {
-      if (p !== null) {
-        let g = this.getDirection() === 1 ? {
-          x: -p.x + this.shadow.pos.x,
-          y: p.y - this.shadow.pos.y
-        } : {
-          x: p.x - this.shadow.pos.x,
-          y: p.y - this.shadow.pos.y
-        };
-        g = Helper.GetRotatedPoint(g, {
-          x: shadowTranslate,
-          y: 100
-        }, angle);
-        polygon += g.x + 'px ' + g.y + 'px, ';
-      }
-    }
-
-    polygon = polygon.slice(0, -2);
-    polygon += ')';
-    const newStyle = `
-            display: block;
-            z-index: ${(this.getSettings().startZIndex + 10).toString(10)};
-            width: ${this.shadow.width}px;
-            height: ${rect.height * 2}px;
-            background: linear-gradient(${shadowDirection}, rgba(0, 0, 0, ${this.shadow.opacity}), rgba(0, 0, 0, 0));
-            transform-origin: ${shadowTranslate}px 100px;
-            transform: translate3d(${shadowPos.x - shadowTranslate}px, ${shadowPos.y - 100}px, 0) rotate(${angle}rad);
-            clip-path: ${polygon};
-            -webkit-clip-path: ${polygon};
-        `;
-    this.outerShadow.style.cssText = newStyle;
-  }
-
-  drawLeftPage() {
-    if (this.orientation === "portrait" || this.leftPage === null) return;
-
-    if (this.direction === 1 && this.flippingPage !== null && this.flippingPage.getDrawingDensity() === "hard") {
-      const angle = this.flippingPage.getHardAngle();
-
-      if (angle < -90) {
-        this.leftPage.getElement().style.zIndex = (this.getSettings().startZIndex + 5).toString(10);
-        this.leftPage.setHardDrawingAngle(180 + this.flippingPage.getHardAngle());
-        this.leftPage.draw(this.flippingPage.getDrawingDensity());
-      } else {
-        this.leftPage.getElement().style.display = "none";
-      }
-    } else {
-      this.leftPage.simpleDraw(0);
-    }
-  }
-
-  drawRightPage() {
-    if (this.rightPage === null) return;
-
-    if (this.direction === 0 && this.flippingPage !== null && this.flippingPage.getDrawingDensity() === "hard") {
-      const angle = this.flippingPage.getHardAngle();
-
-      if (angle > 90) {
-        this.rightPage.getElement().style.zIndex = (this.getSettings().startZIndex + 5).toString(10);
-        this.rightPage.setHardDrawingAngle(180 + this.flippingPage.getHardAngle());
-        this.rightPage.draw(this.flippingPage.getDrawingDensity());
-      } else {
-        this.rightPage.getElement().style.display = "none";
-      }
-    } else {
-      this.rightPage.simpleDraw(1);
-    }
-  }
-
-  drawBottomPage() {
-    if (this.bottomPage === null) return;
-    const tempDensity = this.flippingPage != null ? this.flippingPage.getDrawingDensity() : null;
-
-    if (!(this.orientation === "portrait" && this.direction === 1)) {
-      this.bottomPage.getElement().style.zIndex = (this.getSettings().startZIndex + 3).toString(10);
-      this.bottomPage.draw(tempDensity);
-    }
-  }
-
-  drawFrame() {
-    if (this.flippingPage !== null) {
-      if (this.flippingPage.getHardAngle() === this.lastAngle) {
-        return;
-      }
-
-      this.lastAngle = this.flippingPage.getHardAngle();
-    } else {
-      this.lastAngle = -1234;
-    }
-
-    this.clear();
-    this.drawLeftPage();
-    this.drawRightPage();
-    this.drawBottomPage();
-
-    if (this.flippingPage != null) {
-      const angle = this.flippingPage.state.hardDrawingAngle;
-
-      if (angle <= 90) {
-        this.flippingPage.getElement().style.zIndex = (this.getSettings().startZIndex + 5).toString(10);
-        this.flippingPage.draw();
-      } else {
-        this.flippingPage.getElement().style.display = "none";
-      }
-    }
-
-    if (this.shadow != null && this.flippingPage !== null) {
-      if (this.flippingPage.getDrawingDensity() === "soft") {
-        this.drawOuterShadow();
-        this.drawInnerShadow();
-      } else {
-        this.drawHardOuterShadow();
-        this.drawHardInnerShadow();
-      }
-    }
-  }
-
-  clear() {
-    for (const page of this.app.getPageCollection().getPages()) {
-      if (page !== this.leftPage && page !== this.rightPage && page !== this.flippingPage && page !== this.bottomPage) {
-        const style = page.getElement().style;
-
-        if (style.display !== 'none') {
-          style.cssText = 'display: none';
-        }
-      }
-
-      if (page.getTemporaryCopy() !== this.flippingPage) {
-        page.hideTemporaryCopy();
-      }
-    }
-  }
-
-  update() {
-    super.update();
-
-    if (this.rightPage !== null) {
-      this.rightPage.setOrientation(1);
-    }
-
-    if (this.leftPage !== null) {
-      this.leftPage.setOrientation(0);
-    }
-  }
-
-}
-
-class Settings {
-  constructor() {
-    this._default = {
-      startPage: 0,
-      size: "fixed",
-      width: 0,
-      height: 0,
-      minWidth: 0,
-      maxWidth: 0,
-      minHeight: 0,
-      maxHeight: 0,
-      drawShadow: true,
-      flippingTime: 1000,
-      usePortrait: true,
-      startZIndex: 0,
-      autoSize: true,
-      maxShadowOpacity: 1,
-      showCover: false,
-      mobileScrollSupport: true,
-      swipeDistance: 30,
-      clickEventForward: true,
-      useMouseEvents: true,
-      showPageCorners: true,
-      disableFlipByClick: false
-    };
-  }
-
-  getSettings(userSetting) {
-    const result = this._default;
-    Object.assign(result, userSetting);
-    if (result.size !== "stretch" && result.size !== "fixed") throw new Error('Invalid size type. Available only "fixed" and "stretch" value');
-    if (result.width <= 0 || result.height <= 0) throw new Error('Invalid width or height');
-    if (result.flippingTime <= 0) throw new Error('Invalid flipping time');
-
-    if (result.size === "stretch") {
-      if (result.minWidth <= 0) result.minWidth = 100;
-      if (result.maxWidth < result.minWidth) result.maxWidth = 2000;
-      if (result.minHeight <= 0) result.minHeight = 100;
-      if (result.maxHeight < result.minHeight) result.maxHeight = 2000;
-    } else {
-      result.minWidth = result.width;
-      result.maxWidth = result.width;
-      result.minHeight = result.height;
-      result.maxHeight = result.height;
-    }
-
-    return result;
-  }
-
-}
-
-function styleInject(css, ref) {
-  if (ref === void 0) ref = {};
-  var insertAt = ref.insertAt;
-
-  if (!css || typeof document === 'undefined') {
-    return;
-  }
-
-  var head = document.head || document.getElementsByTagName('head')[0];
-  var style = document.createElement('style');
-  style.type = 'text/css';
-
-  if (insertAt === 'top') {
-    if (head.firstChild) {
-      head.insertBefore(style, head.firstChild);
-    } else {
-      head.appendChild(style);
-    }
-  } else {
-    head.appendChild(style);
-  }
-
-  if (style.styleSheet) {
-    style.styleSheet.cssText = css;
-  } else {
-    style.appendChild(document.createTextNode(css));
-  }
-}
-
-var css_248z = ".stf__parent {\n  position: relative;\n  display: block;\n  box-sizing: border-box;\n  transform: translateZ(0);\n\n  -ms-touch-action: pan-y;\n  touch-action: pan-y;\n}\n\n.sft__wrapper {\n  position: relative;\n  width: 100%;\n  box-sizing: border-box;\n}\n\n.stf__parent canvas {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  left: 0;\n  top: 0;\n}\n\n.stf__block {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  box-sizing: border-box;\n  perspective: 2000px;\n}\n\n.stf__item {\n  display: none;\n  position: absolute;\n  transform-style: preserve-3d;\n}\n\n.stf__outerShadow {\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n\n.stf__innerShadow {\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n\n.stf__hardShadow {\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n\n.stf__hardInnerShadow {\n  position: absolute;\n  left: 0;\n  top: 0;\n}";
-styleInject(css_248z);
-
-class PageFlip extends EventObject {
-  constructor(inBlock, setting) {
-    super();
-    this.isUserTouch = false;
-    this.isUserMove = false;
-    this.setting = null;
-    this.pages = null;
-    this.setting = new Settings().getSettings(setting);
-    this.block = inBlock;
-  }
-
-  destroy() {
-    this.ui.destroy();
-    this.block.remove();
-  }
-
-  update() {
-    this.render.update();
-    this.pages.show();
-  }
-
-  loadFromImages(imagesHref) {
-    this.ui = new CanvasUI(this.block, this, this.setting);
-    const canvas = this.ui.getCanvas();
-    this.render = new CanvasRender(this, this.setting, canvas);
-    this.flipController = new Flip(this.render, this);
-    this.pages = new ImagePageCollection(this, this.render, imagesHref);
-    this.pages.load();
-    this.render.start();
-    this.pages.show(this.setting.startPage);
-    setTimeout(() => {
-      this.ui.update();
-      this.trigger('init', this, {
-        page: this.setting.startPage,
-        mode: this.render.getOrientation()
-      });
-    }, 1);
-  }
-
-  loadFromHTML(items) {
-    this.ui = new HTMLUI(this.block, this, this.setting, items);
-    this.render = new HTMLRender(this, this.setting, this.ui.getDistElement());
-    this.flipController = new Flip(this.render, this);
-    this.pages = new HTMLPageCollection(this, this.render, this.ui.getDistElement(), items);
-    this.pages.load();
-    this.render.start();
-    this.pages.show(this.setting.startPage);
-    setTimeout(() => {
-      this.ui.update();
-      this.trigger('init', this, {
-        page: this.setting.startPage,
-        mode: this.render.getOrientation()
-      });
-    }, 1);
-  }
-
-  updateFromImages(imagesHref) {
-    const current = this.pages.getCurrentPageIndex();
-    this.pages.destroy();
-    this.pages = new ImagePageCollection(this, this.render, imagesHref);
-    this.pages.load();
-    this.pages.show(current);
-    this.trigger('update', this, {
-      page: current,
-      mode: this.render.getOrientation()
-    });
-  }
-
-  updateFromHtml(items) {
-    const current = this.pages.getCurrentPageIndex();
-    this.pages.destroy();
-    this.pages = new HTMLPageCollection(this, this.render, this.ui.getDistElement(), items);
-    this.pages.load();
-    this.ui.updateItems(items);
-    this.render.reload();
-    this.pages.show(current);
-    this.trigger('update', this, {
-      page: current,
-      mode: this.render.getOrientation()
-    });
-  }
-
-  clear() {
-    this.pages.destroy();
-    this.ui.clear();
-  }
-
-  turnToPrevPage() {
-    this.pages.showPrev();
-  }
-
-  turnToNextPage() {
-    this.pages.showNext();
-  }
-
-  turnToPage(page) {
-    this.pages.show(page);
-  }
-
-  flipNext(corner = "top") {
-    this.flipController.flipNext(corner);
-  }
-
-  flipPrev(corner = "top") {
-    this.flipController.flipPrev(corner);
-  }
-
-  flip(page, corner = "top") {
-    this.flipController.flipToPage(page, corner);
-  }
-
-  updateState(newState) {
-    this.trigger('changeState', this, newState);
-  }
-
-  updatePageIndex(newPage) {
-    this.trigger('flip', this, newPage);
-  }
-
-  updateOrientation(newOrientation) {
-    this.ui.setOrientationStyle(newOrientation);
-    this.update();
-    this.trigger('changeOrientation', this, newOrientation);
-  }
-
-  getPageCount() {
-    return this.pages.getPageCount();
-  }
-
-  getCurrentPageIndex() {
-    return this.pages.getCurrentPageIndex();
-  }
-
-  getPage(pageIndex) {
-    return this.pages.getPage(pageIndex);
-  }
-
-  getRender() {
-    return this.render;
-  }
-
-  getFlipController() {
-    return this.flipController;
-  }
-
-  getOrientation() {
-    return this.render.getOrientation();
-  }
-
-  getBoundsRect() {
-    return this.render.getRect();
-  }
-
-  getSettings() {
-    return this.setting;
-  }
-
-  getUI() {
-    return this.ui;
-  }
-
-  getState() {
-    return this.flipController.getState();
-  }
-
-  getPageCollection() {
-    return this.pages;
-  }
-
-  startUserTouch(pos) {
-    this.mousePosition = pos;
-    this.isUserTouch = true;
-    this.isUserMove = false;
-  }
-
-  userMove(pos, isTouch) {
-    if (!this.isUserTouch && !isTouch && this.setting.showPageCorners) {
-      this.flipController.showCorner(pos);
-    } else if (this.isUserTouch) {
-      if (Helper.GetDistanceBetweenTwoPoint(this.mousePosition, pos) > 5) {
-        this.isUserMove = true;
-        this.flipController.fold(pos);
-      }
-    }
-  }
-
-  userStop(pos, isSwipe = false) {
-    if (this.isUserTouch) {
-      this.isUserTouch = false;
-
-      if (!isSwipe) {
-        if (!this.isUserMove) this.flipController.flip(pos);else this.flipController.stopMove();
-      }
-    }
-  }
-
-}
-
-exports.PageFlip = PageFlip;
-
-/***/ }),
-/* 36 */
+/* 34 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -15707,13 +12934,13 @@ var _ui_utils = __webpack_require__(1);
 
 var _app_options = __webpack_require__(2);
 
-var _l10n_utils = __webpack_require__(33);
+var _l10n_utils = __webpack_require__(32);
 
-var _text_accessibility = __webpack_require__(37);
+var _text_accessibility = __webpack_require__(35);
 
-var _canvasSize = _interopRequireDefault(__webpack_require__(38));
+var _canvasSize = _interopRequireDefault(__webpack_require__(36));
 
-var _util = __webpack_require__(39);
+var _util = __webpack_require__(37);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -15815,10 +13042,7 @@ class PDFPageView {
 
   destroy() {
     this.reset();
-
-    if (this.pdfPage) {
-      this.pdfPage.cleanup();
-    }
+    this.pdfPage?.cleanup();
   }
 
   async _renderAnnotationLayer() {
@@ -16272,7 +13496,6 @@ class PDFPageView {
         textLayerDiv,
         pageIndex: this.id - 1,
         viewport: this.viewport,
-        enhanceTextSelection: this.textLayerMode === _ui_utils.TextLayerMode.ENABLE_ENHANCE,
         eventBus: this.eventBus,
         highlighter: this.textHighlighter,
         accessibilityManager: this._accessibilityManager
@@ -16675,7 +13898,7 @@ class PDFPageView {
 exports.PDFPageView = PDFPageView;
 
 /***/ }),
-/* 37 */
+/* 35 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -16880,7 +14103,7 @@ class TextAccessibilityManager {
 exports.TextAccessibilityManager = TextAccessibilityManager;
 
 /***/ }),
-/* 38 */
+/* 36 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -17326,7 +14549,7 @@ var canvasSize = {
 exports["default"] = canvasSize;
 
 /***/ }),
-/* 39 */
+/* 37 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -17361,7 +14584,7 @@ exports.unreachable = unreachable;
 exports.utf8StringToString = utf8StringToString;
 exports.warn = warn;
 
-__webpack_require__(40);
+__webpack_require__(38);
 
 const IDENTITY_MATRIX = [1, 0, 0, 1, 0, 0];
 exports.IDENTITY_MATRIX = IDENTITY_MATRIX;
@@ -18383,7 +15606,7 @@ function createPromiseCapability() {
 }
 
 /***/ }),
-/* 40 */
+/* 38 */
 /***/ (() => {
 
 
@@ -18392,7 +15615,7 @@ const isNodeJS = false;
 ;
 
 /***/ }),
-/* 41 */
+/* 39 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -18511,7 +15734,7 @@ class StructTreeLayerBuilder {
 exports.StructTreeLayerBuilder = StructTreeLayerBuilder;
 
 /***/ }),
-/* 42 */
+/* 40 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -18786,7 +16009,7 @@ class TextHighlighter {
 exports.TextHighlighter = TextHighlighter;
 
 /***/ }),
-/* 43 */
+/* 41 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -18798,8 +16021,6 @@ exports.TextLayerBuilder = void 0;
 
 var _pdfjsLib = __webpack_require__(5);
 
-const EXPAND_DIVS_TIMEOUT = 300;
-
 class TextLayerBuilder {
   constructor({
     textLayerDiv,
@@ -18807,7 +16028,6 @@ class TextLayerBuilder {
     pageIndex,
     viewport,
     highlighter = null,
-    enhanceTextSelection = false,
     accessibilityManager = null
   }) {
     this.textLayerDiv = textLayerDiv;
@@ -18821,21 +16041,15 @@ class TextLayerBuilder {
     this.textDivs = [];
     this.textLayerRenderTask = null;
     this.highlighter = highlighter;
-    this.enhanceTextSelection = enhanceTextSelection;
     this.accessibilityManager = accessibilityManager;
-
-    this._bindMouse();
+    this.#bindMouse();
   }
 
-  _finishRendering() {
+  #finishRendering() {
     this.renderingDone = true;
-
-    if (!this.enhanceTextSelection) {
-      const endOfContent = document.createElement("div");
-      endOfContent.className = "endOfContent";
-      this.textLayerDiv.append(endOfContent);
-    }
-
+    const endOfContent = document.createElement("div");
+    endOfContent.className = "endOfContent";
+    this.textLayerDiv.append(endOfContent);
     this.eventBus.dispatch("textlayerrendered", {
       source: this,
       pageNumber: this.pageNumber,
@@ -18860,14 +16074,11 @@ class TextLayerBuilder {
       viewport: this.viewport,
       textDivs: this.textDivs,
       textContentItemsStr: this.textContentItemsStr,
-      timeout,
-      enhanceTextSelection: this.enhanceTextSelection
+      timeout
     });
     this.textLayerRenderTask.promise.then(() => {
       this.textLayerDiv.append(textLayerFrag);
-
-      this._finishRendering();
-
+      this.#finishRendering();
       this.highlighter?.enable();
       this.accessibilityManager?.enable();
     }, function (reason) {});
@@ -18893,21 +16104,9 @@ class TextLayerBuilder {
     this.textContent = textContent;
   }
 
-  _bindMouse() {
+  #bindMouse() {
     const div = this.textLayerDiv;
-    let expandDivsTimer = null;
     div.addEventListener("mousedown", evt => {
-      if (this.enhanceTextSelection && this.textLayerRenderTask) {
-        this.textLayerRenderTask.expandTextDivs(true);
-
-        if (expandDivsTimer) {
-          clearTimeout(expandDivsTimer);
-          expandDivsTimer = null;
-        }
-
-        return;
-      }
-
       const end = div.querySelector(".endOfContent");
 
       if (!end) {
@@ -18915,7 +16114,7 @@ class TextLayerBuilder {
       }
 
       let adjustTop = evt.target !== div;
-      adjustTop = adjustTop && window.getComputedStyle(end).getPropertyValue("-moz-user-select") !== "none";
+      adjustTop &&= getComputedStyle(end).getPropertyValue("-moz-user-select") !== "none";
 
       if (adjustTop) {
         const divBounds = div.getBoundingClientRect();
@@ -18926,17 +16125,6 @@ class TextLayerBuilder {
       end.classList.add("active");
     });
     div.addEventListener("mouseup", () => {
-      if (this.enhanceTextSelection && this.textLayerRenderTask) {
-        expandDivsTimer = setTimeout(() => {
-          if (this.textLayerRenderTask) {
-            this.textLayerRenderTask.expandTextDivs(false);
-          }
-
-          expandDivsTimer = null;
-        }, EXPAND_DIVS_TIMEOUT);
-        return;
-      }
-
       const end = div.querySelector(".endOfContent");
 
       if (!end) {
@@ -18953,7 +16141,7 @@ class TextLayerBuilder {
 exports.TextLayerBuilder = TextLayerBuilder;
 
 /***/ }),
-/* 44 */
+/* 42 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -19051,7 +16239,7 @@ class XfaLayerBuilder {
 exports.XfaLayerBuilder = XfaLayerBuilder;
 
 /***/ }),
-/* 45 */
+/* 43 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -19065,7 +16253,7 @@ var _ui_utils = __webpack_require__(1);
 
 var _pdf_cursor_tools = __webpack_require__(7);
 
-var _base_viewer = __webpack_require__(31);
+var _pdf_viewer = __webpack_require__(30);
 
 class SecondaryToolbar {
   constructor(options, eventBus) {
@@ -19306,7 +16494,7 @@ class SecondaryToolbar {
       scrollVerticalButton.setAttribute("aria-checked", isVertical);
       scrollHorizontalButton.setAttribute("aria-checked", isHorizontal);
       scrollWrappedButton.setAttribute("aria-checked", isWrapped);
-      const forceScrollModePage = this.pagesCount > _base_viewer.PagesCountLimit.FORCE_SCROLL_MODE_PAGE;
+      const forceScrollModePage = this.pagesCount > _pdf_viewer.PagesCountLimit.FORCE_SCROLL_MODE_PAGE;
       scrollPageButton.disabled = forceScrollModePage;
       scrollVerticalButton.disabled = forceScrollModePage;
       scrollHorizontalButton.disabled = forceScrollModePage;
@@ -19392,7 +16580,7 @@ class SecondaryToolbar {
 exports.SecondaryToolbar = SecondaryToolbar;
 
 /***/ }),
-/* 46 */
+/* 44 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -19431,14 +16619,8 @@ class Toolbar {
       element: options.print,
       eventName: "print"
     }, {
-      element: options.presentationModeButton,
-      eventName: "presentationmode"
-    }, {
       element: options.download,
       eventName: "download"
-    }, {
-      element: options.viewBookmark,
-      eventName: null
     }, {
       element: options.editorFreeTextButton,
       eventName: "switchannotationeditormode",
@@ -19759,7 +16941,7 @@ class Toolbar {
 exports.Toolbar = Toolbar;
 
 /***/ }),
-/* 47 */
+/* 45 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -19872,7 +17054,7 @@ class ViewHistory {
 exports.ViewHistory = ViewHistory;
 
 /***/ }),
-/* 48 */
+/* 46 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -19884,13 +17066,13 @@ exports.GenericCom = void 0;
 
 var _app = __webpack_require__(4);
 
-var _preferences = __webpack_require__(49);
+var _preferences = __webpack_require__(47);
 
-var _download_manager = __webpack_require__(50);
+var _download_manager = __webpack_require__(48);
 
-var _genericl10n = __webpack_require__(51);
+var _genericl10n = __webpack_require__(49);
 
-var _generic_scripting = __webpack_require__(53);
+var _generic_scripting = __webpack_require__(51);
 
 ;
 const GenericCom = {};
@@ -19939,7 +17121,7 @@ class GenericExternalServices extends _app.DefaultExternalServices {
 _app.PDFViewerApplication.externalServices = GenericExternalServices;
 
 /***/ }),
-/* 49 */
+/* 47 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -20080,7 +17262,7 @@ class BasePreferences {
 exports.BasePreferences = BasePreferences;
 
 /***/ }),
-/* 50 */
+/* 48 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -20177,7 +17359,7 @@ class DownloadManager {
 exports.DownloadManager = DownloadManager;
 
 /***/ }),
-/* 51 */
+/* 49 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -20187,9 +17369,9 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.GenericL10n = void 0;
 
-__webpack_require__(52);
+__webpack_require__(50);
 
-var _l10n_utils = __webpack_require__(33);
+var _l10n_utils = __webpack_require__(32);
 
 const webL10n = document.webL10n;
 
@@ -20228,7 +17410,7 @@ class GenericL10n {
 exports.GenericL10n = GenericL10n;
 
 /***/ }),
-/* 52 */
+/* 50 */
 /***/ (() => {
 
 
@@ -21106,7 +18288,7 @@ document.webL10n = function (window, document, undefined) {
 }(window, document);
 
 /***/ }),
-/* 53 */
+/* 51 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -21174,7 +18356,7 @@ class GenericScripting {
 exports.GenericScripting = GenericScripting;
 
 /***/ }),
-/* 54 */
+/* 52 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -21188,9 +18370,9 @@ var _pdfjsLib = __webpack_require__(5);
 
 var _app = __webpack_require__(4);
 
-var _canvasSize = _interopRequireDefault(__webpack_require__(38));
+var _canvasSize = _interopRequireDefault(__webpack_require__(36));
 
-var _print_utils = __webpack_require__(55);
+var _print_utils = __webpack_require__(53);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21548,7 +18730,7 @@ _app.PDFPrintServiceFactory.instance = {
 };
 
 /***/ }),
-/* 55 */
+/* 53 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -21562,7 +18744,7 @@ var _pdfjsLib = __webpack_require__(5);
 
 var _pdf_link_service = __webpack_require__(3);
 
-var _xfa_layer_builder = __webpack_require__(44);
+var _xfa_layer_builder = __webpack_require__(42);
 
 function getXfaHtmlForPrinting(printContainer, pdfDocument) {
   const xfaHtml = pdfDocument.allXfaHtml;
@@ -21646,8 +18828,8 @@ var _pdf_link_service = __webpack_require__(3);
 
 var _app = __webpack_require__(4);
 
-const pdfjsVersion = '3.0.332';
-const pdfjsBuild = '9791805c8';
+const pdfjsVersion = '3.0.392';
+const pdfjsBuild = 'db3529bb4';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
@@ -21685,11 +18867,11 @@ if (!HTMLCollection.prototype[Symbol.iterator]) {
 ;
 ;
 {
-  __webpack_require__(48);
+  __webpack_require__(46);
 }
 ;
 {
-  __webpack_require__(54);
+  __webpack_require__(52);
 }
 
 function getViewerConfiguration() {
@@ -21723,18 +18905,16 @@ function getViewerConfiguration() {
       editorFreeTextParamsToolbar: document.getElementById("editorFreeTextParamsToolbar"),
       editorInkButton: document.getElementById("editorInk"),
       editorInkParamsToolbar: document.getElementById("editorInkParamsToolbar"),
-      presentationModeButton: document.getElementById("presentationMode"),
-      download: document.getElementById("download"),
-      viewBookmark: document.getElementById("viewBookmark")
+      download: document.getElementById("download")
     },
     secondaryToolbar: {
       toolbar: document.getElementById("secondaryToolbar"),
       toggleButton: document.getElementById("secondaryToolbarToggle"),
-      presentationModeButton: document.getElementById("secondaryPresentationMode"),
+      presentationModeButton: document.getElementById("presentationMode"),
       openFileButton: document.getElementById("secondaryOpenFile"),
       printButton: document.getElementById("secondaryPrint"),
       downloadButton: document.getElementById("secondaryDownload"),
-      viewBookmarkButton: document.getElementById("secondaryViewBookmark"),
+      viewBookmarkButton: document.getElementById("viewBookmark"),
       firstPageButton: document.getElementById("firstPage"),
       lastPageButton: document.getElementById("lastPage"),
       pageRotateCwButton: document.getElementById("pageRotateCw"),

@@ -1,6 +1,7 @@
 export type PDFDocumentProxy = import("../src/display/api").PDFDocumentProxy;
 export type PDFPageProxy = import("../src/display/api").PDFPageProxy;
 export type PageViewport = import("../src/display/display_utils").PageViewport;
+export type OptionalContentConfig = import("../src/display/optional_content_config").OptionalContentConfig;
 export type EventBus = import("./event_utils").EventBus;
 export type IDownloadManager = import("./interfaces").IDownloadManager;
 export type IL10n = import("./interfaces").IL10n;
@@ -54,9 +55,8 @@ export type PDFViewerOptions = {
     removePageBorders?: boolean | undefined;
     /**
      * - Controls if the text layer used for
-     * selection and searching is created, and if the improved text selection
-     * behaviour is enabled. The constants from {TextLayerMode} should be used.
-     * The default value is `TextLayerMode.ENABLE`.
+     * selection and searching is created. The constants from {TextLayerMode}
+     * should be used. The default value is `TextLayerMode.ENABLE`.
      */
     textLayerMode?: number | undefined;
     /**
@@ -237,7 +237,7 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFAnnotationEdi
     setDocument(pdfDocument: PDFDocumentProxy): void;
     pdfDocument: import("../src/display/api").PDFDocumentProxy | undefined;
     _scrollMode: any;
-    _optionalContentConfigPromise: Promise<any> | null | undefined;
+    _optionalContentConfigPromise: Promise<import("../src/display/optional_content_config").OptionalContentConfig> | null | undefined;
     /**
      * @param {Array|null} labels
      */
@@ -338,7 +338,6 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFAnnotationEdi
      * @property {HTMLDivElement} textLayerDiv
      * @property {number} pageIndex
      * @property {PageViewport} viewport
-     * @property {boolean} [enhanceTextSelection]
      * @property {EventBus} eventBus
      * @property {TextHighlighter} highlighter
      * @property {TextAccessibilityManager} [accessibilityManager]
@@ -347,11 +346,10 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFAnnotationEdi
      * @param {CreateTextLayerBuilderParameters}
      * @returns {TextLayerBuilder}
      */
-    createTextLayerBuilder({ textLayerDiv, pageIndex, viewport, enhanceTextSelection, eventBus, highlighter, accessibilityManager, }: {
+    createTextLayerBuilder({ textLayerDiv, pageIndex, viewport, eventBus, highlighter, accessibilityManager, }: {
         textLayerDiv: HTMLDivElement;
         pageIndex: number;
         viewport: PageViewport;
-        enhanceTextSelection?: boolean | undefined;
         eventBus: EventBus;
         highlighter: TextHighlighter;
         accessibilityManager?: import("./text_accessibility.js").TextAccessibilityManager | undefined;
@@ -493,11 +491,11 @@ export class BaseViewer implements IPDFAnnotationLayerFactory, IPDFAnnotationEdi
      * @param {Promise<OptionalContentConfig>} promise - A promise that is
      *   resolved with an {@link OptionalContentConfig} instance.
      */
-    set optionalContentConfigPromise(arg: Promise<any>);
+    set optionalContentConfigPromise(arg: Promise<import("../src/display/optional_content_config").OptionalContentConfig | null>);
     /**
      * @type {Promise<OptionalContentConfig | null>}
      */
-    get optionalContentConfigPromise(): Promise<any>;
+    get optionalContentConfigPromise(): Promise<import("../src/display/optional_content_config").OptionalContentConfig | null>;
     /**
      * @param {number} mode - The direction in which the document pages should be
      *   laid out within the scrolling container.
@@ -578,9 +576,8 @@ export namespace PagesCountLimit {
  * @property {boolean} [removePageBorders] - Removes the border shadow around
  *   the pages. The default value is `false`.
  * @property {number} [textLayerMode] - Controls if the text layer used for
- *   selection and searching is created, and if the improved text selection
- *   behaviour is enabled. The constants from {TextLayerMode} should be used.
- *   The default value is `TextLayerMode.ENABLE`.
+ *   selection and searching is created. The constants from {TextLayerMode}
+ *   should be used. The default value is `TextLayerMode.ENABLE`.
  * @property {number} [annotationMode] - Controls if the annotation layer is
  *   created, and if interactive form elements or `AnnotationStorage`-data are
  *   being rendered. The constants from {@link AnnotationMode} should be used;

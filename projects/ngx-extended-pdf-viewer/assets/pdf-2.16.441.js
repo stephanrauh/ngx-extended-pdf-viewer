@@ -1403,7 +1403,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '3.0.332',
+    apiVersion: '2.16.441',
     source: {
       data: source.data,
       url: source.url,
@@ -3588,9 +3588,9 @@ class InternalRenderTask {
 
 }
 
-const version = '3.0.332';
+const version = '2.16.441';
 exports.version = version;
-const build = '9791805c8';
+const build = 'fe9c5f8f9';
 exports.build = build;
 
 /***/ }),
@@ -13205,19 +13205,19 @@ class AnnotationElement {
       display: event => {
         const hidden = event.detail.display % 2 === 1;
         this.container.style.visibility = hidden ? "hidden" : "visible";
-        this.annotationStorage.setValue(this.data.id, {
+        this.annotationStorage.setValue(this.data.id, this.data.fieldName, {
           hidden,
           print: event.detail.display === 0 || event.detail.display === 3
         });
       },
       print: event => {
-        this.annotationStorage.setValue(this.data.id, {
+        this.annotationStorage.setValue(this.data.id, this.data.fieldName, {
           print: event.detail.print
         });
       },
       hidden: event => {
         this.container.style.visibility = event.detail.hidden ? "hidden" : "visible";
-        this.annotationStorage.setValue(this.data.id, {
+        this.annotationStorage.setValue(this.data.id, this.data.fieldName, {
           hidden: event.detail.hidden
         });
       },
@@ -13260,7 +13260,7 @@ class AnnotationElement {
       rotation: event => {
         const angle = event.detail.rotation;
         this.setRotation(angle);
-        this.annotationStorage.setValue(this.data.id, {
+        this.annotationStorage.setValue(this.data.id, this.data.fieldName, {
           rotation: angle
         });
       }
@@ -13631,7 +13631,7 @@ class LinkAnnotationElement extends AnnotationElement {
           case "text":
             {
               const value = field.defaultValue || "";
-              storage.setValue(id, {
+              storage.setValue(id, this.data.fieldName, {
                 value
               });
               break;
@@ -13641,7 +13641,7 @@ class LinkAnnotationElement extends AnnotationElement {
           case "radiobutton":
             {
               const value = field.defaultValue === field.exportValues;
-              storage.setValue(id, {
+              storage.setValue(id, this.data.fieldName, {
                 value
               });
               break;
@@ -13651,7 +13651,7 @@ class LinkAnnotationElement extends AnnotationElement {
           case "listbox":
             {
               const value = field.defaultValue || "";
-              storage.setValue(id, {
+              storage.setValue(id, this.data.fieldName, {
                 value
               });
               break;
@@ -13975,7 +13975,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
 
               value = value.slice(0, charLimit);
               target.value = elementData.userValue = value;
-              storage.setValue(id, {
+              storage.setValue(id, this.data.fieldName, {
                 value
               });
               this.linkService.eventBus?.dispatch("dispatcheventinsandbox", {
@@ -19884,8 +19884,8 @@ var _svg = __w_pdfjs_require__(31);
 
 var _xfa_layer = __w_pdfjs_require__(29);
 
-const pdfjsVersion = '3.0.332';
-const pdfjsBuild = '9791805c8';
+const pdfjsVersion = '2.16.441';
+const pdfjsBuild = 'fe9c5f8f9';
 {
   if (_is_node.isNodeJS) {
     const {

@@ -381,11 +381,6 @@ export type RenderParameters = {
      */
     transform?: any[] | undefined;
     /**
-     * - An object that has `beginLayout`,
-     * `endLayout` and `appendImage` functions.
-     */
-    imageLayer?: Object | undefined;
-    /**
      * - The factory instance that will be used
      * when creating canvases. The default value is {new DOMCanvasFactory()}.
      */
@@ -687,7 +682,7 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#16@#docId": number;
+    static "__#15@#docId": number;
     _capability: import("../shared/util.js").PromiseCapability;
     _transport: any;
     _worker: any;
@@ -948,9 +943,14 @@ export class PDFDocumentProxy {
     } | null>;
     /**
      * @returns {Promise<Uint8Array>} A promise that is resolved with a
-     *   {Uint8Array} that has the raw data from the PDF.
+     *   {Uint8Array} containing the raw data of the PDF document.
      */
     getData(): Promise<Uint8Array>;
+    /**
+     * @returns {Promise<Uint8Array>} A promise that is resolved with a
+     *   {Uint8Array} containing the full data of the saved document.
+     */
+    saveDocument(): Promise<Uint8Array>;
     /**
      * @returns {Promise<{ length: number }>} A promise that is resolved when the
      *   document's data is loaded. It is resolved with an {Object} that contains
@@ -985,11 +985,6 @@ export class PDFDocumentProxy {
      * @type {PDFDocumentLoadingTask} The loadingTask for the current document.
      */
     get loadingTask(): PDFDocumentLoadingTask;
-    /**
-     * @returns {Promise<Uint8Array>} A promise that is resolved with a
-     *   {Uint8Array} containing the full data of the saved document.
-     */
-    saveDocument(): Promise<Uint8Array>;
     /**
      * @returns {Promise<Object<string, Array<Object>> | null>} A promise that is
      *   resolved with an {Object} containing /AcroForm field data for the JS
@@ -1105,8 +1100,6 @@ export class PDFDocumentProxy {
  *   The default value is `AnnotationMode.ENABLE`.
  * @property {Array<any>} [transform] - Additional transform, applied just
  *   before viewport transform.
- * @property {Object} [imageLayer] - An object that has `beginLayout`,
- *   `endLayout` and `appendImage` functions.
  * @property {Object} [canvasFactory] - The factory instance that will be used
  *   when creating canvases. The default value is {new DOMCanvasFactory()}.
  * @property {Object | string} [background] - Background to use for the canvas.
@@ -1246,7 +1239,7 @@ export class PDFPageProxy {
      * @returns {RenderTask} An object that contains a promise that is
      *   resolved when the page finishes rendering.
      */
-    render({ canvasContext, viewport, intent, annotationMode, transform, imageLayer, canvasFactory, background, backgroundColorToReplace, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, }: RenderParameters, ...args: any[]): RenderTask;
+    render({ canvasContext, viewport, intent, annotationMode, transform, canvasFactory, background, backgroundColorToReplace, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, }: RenderParameters): RenderTask;
     /**
      * @param {GetOperatorListParameters} params - Page getOperatorList
      *   parameters.
@@ -1327,7 +1320,7 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#17@#workerPorts": WeakMap<object, any>;
+    static "__#16@#workerPorts": WeakMap<object, any>;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */

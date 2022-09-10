@@ -10853,7 +10853,7 @@ class BaseViewer {
       throw new Error("Cannot initialize BaseViewer.");
     }
 
-    const viewerVersion = '2.16.439';
+    const viewerVersion = '2.16.441';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -11772,6 +11772,8 @@ class BaseViewer {
   }
 
   _setScaleUpdatePages(newScale, newValue, noScroll = false, preset = false) {
+    const previousScale = isNaN(Number(this.currentScale)) ? undefined : Number(this.currentScale);
+    const previousScaleValue = this.currentScaleValue;
     this._currentScaleValue = newValue.toString();
 
     if (this.#isSameScale(newScale)) {
@@ -11779,7 +11781,9 @@ class BaseViewer {
         this.eventBus.dispatch("scalechanging", {
           source: this,
           scale: newScale,
-          presetValue: newValue
+          presetValue: newValue,
+          previousScale,
+          previousPresetValue: previousScaleValue
         });
       }
 
@@ -11819,7 +11823,9 @@ class BaseViewer {
     this.eventBus.dispatch("scalechanging", {
       source: this,
       scale: newScale,
-      presetValue: preset ? newValue : undefined
+      presetValue: preset ? newValue : undefined,
+      previousScale,
+      previousPresetValue: previousScaleValue
     });
 
     if (this.defaultRenderingQueue) {
@@ -21646,8 +21652,8 @@ var _pdf_link_service = __webpack_require__(3);
 
 var _app = __webpack_require__(4);
 
-const pdfjsVersion = '2.16.439';
-const pdfjsBuild = '0e4354154';
+const pdfjsVersion = '2.16.441';
+const pdfjsBuild = 'fe9c5f8f9';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,

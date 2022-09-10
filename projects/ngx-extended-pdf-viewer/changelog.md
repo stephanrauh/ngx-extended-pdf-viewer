@@ -393,4 +393,4 @@
 - 15.0.0-alpha.6 #1501 stop printing error message if the text highlighter is initialized twice; updated to pdf.js 2.16 (default branch) and pdf.js 3.0 (bleeding edge branch); #1516 fix broken two-way binding of forms (work in progress)
 - 15.0.0-alpha.7 #1516 fix broken two-way binding of forms
 - 15.0.0-alpha.8 #1527 fixed (zoom)
-- 15.0.0-beta.0 #1513 removed the code dealing with the CSS class `loadingInProgress`
+- 15.0.0-beta.0 #1513 removed the code dealing with the CSS class `loadingInProgress`; #1500 remove `enhanceTextSelection`
