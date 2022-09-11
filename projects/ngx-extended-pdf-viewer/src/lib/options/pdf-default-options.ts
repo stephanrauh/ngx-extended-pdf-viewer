@@ -3,7 +3,7 @@ const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.u
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
 export const pdfjsVersion = '2.16.442';
-export const pdfjsBleedingEdgeVersion = '3.0.392';
+export const pdfjsBleedingEdgeVersion = '3.0.394';
 export function getVersionSuffix(folder: string): string {
   if (folder && folder.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -49,7 +49,7 @@ export let pdfDefaultOptions = {
   useOnlyCssZoom: false,
   viewOnLoad: 0,
   cMapPacked: true,
-  cMapUrl: () => `${assetsUrl(pdfDefaultOptions.assetsFolder)}/cmaps/`,
+  cMapUrl: () => `../${assetsUrl(pdfDefaultOptions.assetsFolder)}/cmaps/`,
   disableAutoFetch: false,
   disableCreateObjectURL: false,
   disableFontFace: false,
