@@ -23,32 +23,11 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 ## What's new in version 15?
 
-Version 15 - currently in its alpha stage - updates to pdf.js 2.16 (default branch) and pdf.js 3.0 (bleeding edge branch). It also includes a preview version of `enableRelativeCoords`, which intends to make the pinch gesture on mobile devices more intuitive.
+Version 15 updates to pdf.js 2.16 (default branch) and pdf.js 3.0 (bleeding edge branch). It also plays nicely with other libraries which are using the AMD module system, and it supports documents a wider range of documents using East-Asian fonts than previous versions. Plus, it ships with a couple of bug fixes.
 
 ## What's new in version 14.5?
 
 Version 14.5 replaces the way the PDF viewer injects it global CSS rules. Until version 14.0.x, most CSS rules were injected using a regular component with ViewEncapsulation.None. However, it turned out that this CSS code is never removed. In rare cases, the remaining CSS rules cause problems. Printing, in particular, was broken because of a global `@page` setting. Version 14.5.0 fixes this. I've increased the version number to indicate there a tiny probability it's a breaking change - but I don't think it is one.
-
-## What's new in version 14?
-
-Well... nothing. Version 14 was meant to be build with Angular 14, so increasing the version number seemed like a good idea. Unfortunately, building with Angular 14 also means you can't use the library with Angular 12 or 13. So I went back to Angular 13. You can't delete published versions from npm for a good reason, so we end up with a major version without any new features.
-
-## What's new in version 12 and 13?
-
-Due to an internal change of pdf.js, I had to modify both the HTML templates and the CSS rules of the dialogs. This may be a breaking change, especially if you've customized the appearance of the viewer, so it's time to increment the major version number. That's why I'm releasing version 13 shortly after publishing version 12.
-
-Starting with version 13, rolling the mouse wheel only zooms the PDF file if the mouse is hovering above the PDF document. Previous versions also zoomed if the mouse was somewhere else. Thanks to GitHub user newq for pointing this out. It's good to be rid of this nuisance!
-
-Since version 12, the viewer stops supporting the full-screen mode in Safari. That probably includes every browser on iPhones and iPads.
-
-Version 12 has a small but breaking change. Actually, it's a fix repairing a nonsense implementation, but I can't rule out you're relying on the bug. Here we go: If you're two-way binding with a form that contains checkboxes that behave like radiobuttons
-(I know that's a long list of conditions!), previous versions of ngx-extended-pdf-viewer reported simply true or false if one of the checkbox
-is checked. You couldn't tell which checkbox was checked. Now that's fixed. ngx-extended-pdf-viewer uses the "export value", as
-intended by the author of the PDF file.
-
-Version 12 also updates to pdf.js 2.13, with one exception: it doesn't include the latest improvements of the find bar yet. The "bleeding edge" version has been updated to pdf.js 2.14, which is the developer version (something like a nightly build).
-
-As of version 14.0.0, I recommend using the stable branch of pdf.js instead of using the bleeding edge branch. The bleeding edge branch is the developer version of pdf.js, so it's not recommended to use it in production, anyways. However, the last few commits caused merge conflicts that may or may not have side effects. Handle with caution. That said, I encourage you to use the bleeding edge version every once in a while in development, because that way you can help me find bugs early. Just keep in mind I've called that branch "bleeding edge" for a reason.
 
 ## Showcase and manual
 

@@ -600,6 +600,13 @@ export class PDFViewer implements IPDFAnnotationLayerFactory, IPDFAnnotationEdit
     get annotationEditorMode(): number;
     set annotationEditorParams(arg: any);
     refresh(): void;
+    /**
+     * Adds a page to the rendering queue
+     * @param {number} pageIndex Index of the page to render
+     * @returns {boolean} false, if the page has already been rendered
+     * or if it's out of range
+     */
+    addPageToRenderQueue(pageIndex?: number): boolean;
     #private;
 }
 import { PDFRenderingQueue } from "./pdf_rendering_queue.js";

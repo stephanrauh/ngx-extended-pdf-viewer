@@ -5119,6 +5119,7 @@ class PasswordPrompt {
     if (this.overlayManager.active === this.dialog) {
       this.overlayManager.close(this.dialog);
       this.input.value = "";
+      this.input.type = "hidden";
     }
   }
 
@@ -10839,7 +10840,7 @@ class PDFViewer {
   #onVisibilityChange = null;
 
   constructor(options) {
-    const viewerVersion = '3.0.392';
+    const viewerVersion = '3.0.395';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -12562,6 +12563,22 @@ class PDFViewer {
     }
 
     this.update();
+  }
+
+  addPageToRenderQueue(pageIndex = 0) {
+    if (pageIndex >= 0 && pageIndex <= this._pages.length - 1) {
+      const pageView = this._pages[pageIndex];
+      const isLoading = pageView.div.querySelector(".loadingIcon");
+
+      if (isLoading) {
+        this.#ensurePdfPageLoaded(pageView).then(() => {
+          this.renderingQueue.renderView(pageView);
+        });
+        return true;
+      }
+    }
+
+    return false;
   }
 
 }
@@ -18828,8 +18845,8 @@ var _pdf_link_service = __webpack_require__(3);
 
 var _app = __webpack_require__(4);
 
-const pdfjsVersion = '3.0.392';
-const pdfjsBuild = 'db3529bb4';
+const pdfjsVersion = '3.0.395';
+const pdfjsBuild = '0ec25318a';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
