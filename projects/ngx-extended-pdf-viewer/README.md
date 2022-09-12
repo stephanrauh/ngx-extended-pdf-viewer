@@ -4,15 +4,21 @@
   <a href="https://www.npmjs.com/package/ngx-extended-pdf-viewer">
     <img src="https://img.shields.io/npm/dm/ngx-extended-pdf-viewer.svg?style=flat" alt="downloads">
   </a>
+  <a href="https://pdfviewer.net">
+    <img src="https://img.shields.io/badge/showcase-pdfviewer.net-blue">
+  </a>
   <a href="https://badge.fury.io/js/ngx-extended-pdf-viewer">
     <img src="https://badge.fury.io/js/ngx-extended-pdf-viewer.svg" alt="npm version">
   </a>
   <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg"></a>
   <a href="https://openbase.io/js/ngx-extended-pdf-viewer?utm_source=embedded&utm_medium=badge&utm_campaign=rate-badge"><img src="https://badges.openbase.io/js/rating/ngx-extended-pdf-viewer.svg"></a>
   <a href="https://sonarcloud.io/summary/new_code?id=stephanrauh_ngx-extended-pdf-viewer"><img src="https://sonarcloud.io/api/project_badges/measure?project=stephanrauh_ngx-extended-pdf-viewer&metric=alert_status"></a>
-  </p>
-  <p>
-  CDN: <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">unpkg.com</a>
+  <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">
+    <img src="https://img.shields.io/badge/cdn-unpkg.com-orange">
+  </a>
+  <a href="https://www.beyondjava.net">
+    <img src="https://img.shields.io/badge/blog-beyondjava.net-blue">
+  </a>
  </p>
 
 ## Bringing PDF to the Angular world
@@ -68,6 +74,8 @@ Not to mention the ability to display PDF files, running on a customized version
 
 ## Alternatives
 
+Even I have to admit my pet project doesn't match every requirement. There are several alternatives out there. Feel free to expand the description to learn what other developers have in store for you:
+
 <details>
   <summary><b>Expand to learn more about the other options to display PDF files in Angular</b></summary>
   If you only need the base functionality, I'll happily pass you to <a href="https://github.com/vadimdez/ng2-pdf-viewer/" target="#">the project of Vadym Yatsyuk</a>. Vadym does a great job delivering a no-nonsense PDF viewer. However, if you need something that can easily pass as the native viewer on a gloomy day, ngx-extended-pdf-viewer is your friend.
@@ -80,7 +88,7 @@ You might also try to use the native PDF viewer of your browser. That's a valid 
 
 ## How to use the library
 
-As a rule of thumb, I recommend cloning the [showcase project from GitHub](https://github.com/stephanrauh/extended-pdf-viewer-showcase) before doing anything else. It's a standard Angular CLI application, so you'll get it up and running in less than ten minutes. It's a good starting point to do your own experiments. Maybe even more important: you'll learn if the library works on your machine. (Of course, it does, but it's always good to double-check!)
+As a rule of thumb, I recommend cloning the [showcase project from GitHub](https://github.com/stephanrauh/extended-pdf-viewer-showcase) before doing anything else. It's a standard Angular CLI application, so you'll get it up and running in less than ten minutes. It's a good starting point to do your own experiments. Maybe even more important: you'll learn whether the library works on your machine. (Of course, it does, but it's always good to double-check!)
 
 Currently, the minimum required version is Angular 12. The idea is to support the four most current versions of Angular, which gives you roughly two years to update. However, supporting so many version isn't always possible.
 
