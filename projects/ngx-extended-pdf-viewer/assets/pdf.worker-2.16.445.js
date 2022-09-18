@@ -134,7 +134,7 @@ class WorkerMessageHandler {
     const WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '2.16.443';
+    const workerVersion = '2.16.445';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -31089,6 +31089,10 @@ const getGlyphMapForStandardFonts = (0, _core_utils.getLookupTableFactory)(funct
   t[169] = 171;
   t[170] = 187;
   t[171] = 8230;
+  t[179] = 8220;
+  t[180] = 8221;
+  t[181] = 8216;
+  t[182] = 8217;
   t[200] = 193;
   t[203] = 205;
   t[210] = 218;
@@ -31358,18 +31362,21 @@ exports.getSupplementalGlyphMapForArialBlack = getSupplementalGlyphMapForArialBl
 const getSupplementalGlyphMapForCalibri = (0, _core_utils.getLookupTableFactory)(function (t) {
   t[1] = 32;
   t[4] = 65;
+  t[5] = 192;
   t[6] = 193;
   t[17] = 66;
   t[18] = 67;
   t[21] = 268;
   t[24] = 68;
   t[28] = 69;
+  t[29] = 200;
   t[30] = 201;
   t[32] = 282;
   t[38] = 70;
   t[39] = 71;
   t[44] = 72;
   t[47] = 73;
+  t[48] = 204;
   t[49] = 205;
   t[58] = 74;
   t[60] = 75;
@@ -31377,6 +31384,7 @@ const getSupplementalGlyphMapForCalibri = (0, _core_utils.getLookupTableFactory)
   t[68] = 77;
   t[69] = 78;
   t[75] = 79;
+  t[76] = 210;
   t[87] = 80;
   t[89] = 81;
   t[90] = 82;
@@ -31393,6 +31401,7 @@ const getSupplementalGlyphMapForCalibri = (0, _core_utils.getLookupTableFactory)
   t[127] = 90;
   t[129] = 381;
   t[258] = 97;
+  t[259] = 224;
   t[260] = 225;
   t[268] = 261;
   t[271] = 98;
@@ -31401,6 +31410,7 @@ const getSupplementalGlyphMapForCalibri = (0, _core_utils.getLookupTableFactory)
   t[275] = 269;
   t[282] = 100;
   t[286] = 101;
+  t[287] = 232;
   t[288] = 233;
   t[290] = 283;
   t[295] = 281;
@@ -31408,6 +31418,7 @@ const getSupplementalGlyphMapForCalibri = (0, _core_utils.getLookupTableFactory)
   t[336] = 103;
   t[346] = 104;
   t[349] = 105;
+  t[350] = 236;
   t[351] = 237;
   t[361] = 106;
   t[364] = 107;
@@ -31416,6 +31427,7 @@ const getSupplementalGlyphMapForCalibri = (0, _core_utils.getLookupTableFactory)
   t[373] = 109;
   t[374] = 110;
   t[381] = 111;
+  t[382] = 242;
   t[383] = 243;
   t[393] = 112;
   t[395] = 113;
@@ -63500,8 +63512,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '2.16.443';
-const pdfjsBuild = '55714c71f';
+const pdfjsVersion = '2.16.445';
+const pdfjsBuild = '357ab615d';
 })();
 
 /******/ 	return __webpack_exports__;
