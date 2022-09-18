@@ -690,7 +690,7 @@ const OptionKind = {
 exports.OptionKind = OptionKind;
 const defaultOptions = {
   annotationEditorMode: {
-    value: -1,
+    value: 0,
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
   },
   annotationMode: {
@@ -2007,9 +2007,9 @@ const PDFViewerApplication = {
 
     if (annotationEditorMode !== _pdfjsLib.AnnotationEditorType.DISABLE) {
       this.annotationEditorParams = new _annotation_editor_params.AnnotationEditorParams(appConfig.annotationEditorParams, eventBus);
-
+    } else {
       for (const element of [document.getElementById("editorModeButtons"), document.getElementById("editorModeSeparator")]) {
-        element.classList.remove("hidden");
+        element.hidden = true;
       }
     }
 
@@ -2022,7 +2022,7 @@ const PDFViewerApplication = {
       cursorToolOnLoad: _app_options.AppOptions.get("cursorToolOnLoad")
     });
     this.toolbar = new _toolbar.Toolbar(appConfig.toolbar, eventBus, this.l10n);
-    this.secondaryToolbar = new _secondary_toolbar.SecondaryToolbar(appConfig.secondaryToolbar, eventBus);
+    this.secondaryToolbar = new _secondary_toolbar.SecondaryToolbar(appConfig.secondaryToolbar, eventBus, this.externalServices);
 
     if (this.supportsFullscreen) {
       this.pdfPresentationMode = new _pdf_presentation_mode.PDFPresentationMode({
@@ -2171,7 +2171,8 @@ const PDFViewerApplication = {
       return;
     }
 
-    document.title = `${this._hasAnnotationEditors ? "* " : ""}${title}`;
+    const editorIndicator = this._hasAnnotationEditors && !this.pdfRenderingQueue.printing;
+    document.title = `${editorIndicator ? "* " : ""}${title}`;
   },
 
   get _docFilename() {
@@ -3086,6 +3087,7 @@ const PDFViewerApplication = {
     const printService = PDFPrintServiceFactory.instance.createPrintService(this.pdfDocument, pagesOverview, printContainer, printResolution, optionalContentConfigPromise, this._printAnnotationStoragePromise, this.l10n, this.pdfViewer.eventBus);
     this.printService = printService;
     this.forceRendering();
+    this.setTitle();
     printService.layout();
     this.externalServices.reportTelemetry({
       type: "print"
@@ -3117,6 +3119,7 @@ const PDFViewerApplication = {
     }
 
     this.forceRendering();
+    this.setTitle();
   },
 
   rotatePages(delta) {
@@ -3455,11 +3458,10 @@ const PDFViewerApplication = {
 
 };
 exports.PDFViewerApplication = PDFViewerApplication;
-let validateFileURL;
 {
   const HOSTED_VIEWER_ORIGINS = ["null", "http://mozilla.github.io", "https://mozilla.github.io"];
 
-  validateFileURL = function (file) {
+  var validateFileURL = function (file) {
     if (!file) {
       return;
     }
@@ -3754,13 +3756,13 @@ function webViewerUpdateViewarea({
 }
 
 function webViewerScrollModeChanged(evt) {
-  if (PDFViewerApplication.isInitialViewSet) {
+  if (PDFViewerApplication.isInitialViewSet && !PDFViewerApplication.pdfViewer.isInPresentationMode) {
     PDFViewerApplication.store?.set("scrollMode", evt.mode).catch(() => {});
   }
 }
 
 function webViewerSpreadModeChanged(evt) {
-  if (PDFViewerApplication.isInitialViewSet) {
+  if (PDFViewerApplication.isInitialViewSet && !PDFViewerApplication.pdfViewer.isInPresentationMode) {
     PDFViewerApplication.store?.set("spreadMode", evt.mode).catch(() => {});
   }
 }
@@ -4239,6 +4241,12 @@ function webViewerKeyDown(evt) {
       case 80:
         PDFViewerApplication.requestPresentationMode();
         handled = true;
+        PDFViewerApplication.externalServices.reportTelemetry({
+          type: "buttons",
+          data: {
+            id: "presentationModeKeyboard"
+          }
+        });
         break;
 
       case 71:
@@ -4699,8 +4707,12 @@ class PDFCursorTools {
         case _ui_utils.PresentationModeState.NORMAL:
           {
             const previouslyActive = this.activeBeforePresentationMode;
-            this.activeBeforePresentationMode = null;
-            this.switchTool(previouslyActive);
+
+            if (previouslyActive !== null) {
+              this.activeBeforePresentationMode = null;
+              this.switchTool(previouslyActive);
+            }
+
             break;
           }
       }
@@ -10831,7 +10843,7 @@ exports.PDFPageViewBuffer = PDFPageViewBuffer;
 
 class PDFViewer {
   #buffer = null;
-  #annotationEditorMode = _pdfjsLib.AnnotationEditorType.DISABLE;
+  #annotationEditorMode = _pdfjsLib.AnnotationEditorType.NONE;
   #annotationEditorUIManager = null;
   #annotationMode = _pdfjsLib.AnnotationMode.ENABLE_FORMS;
   #enablePermissions = false;
@@ -10865,7 +10877,7 @@ class PDFViewer {
     this.removePageBorders = options.removePageBorders || false;
     this.textLayerMode = options.textLayerMode ?? _ui_utils.TextLayerMode.ENABLE;
     this.#annotationMode = options.annotationMode ?? _pdfjsLib.AnnotationMode.ENABLE_FORMS;
-    this.#annotationEditorMode = options.annotationEditorMode ?? _pdfjsLib.AnnotationEditorType.DISABLE;
+    this.#annotationEditorMode = options.annotationEditorMode ?? _pdfjsLib.AnnotationEditorType.NONE;
     this.imageResourcesPath = options.imageResourcesPath || "";
     this.enablePrintAutoRotate = options.enablePrintAutoRotate || false;
     this.renderer = options.renderer || _ui_utils.RendererType.CANVAS;
@@ -16273,7 +16285,7 @@ var _pdf_cursor_tools = __webpack_require__(7);
 var _pdf_viewer = __webpack_require__(30);
 
 class SecondaryToolbar {
-  constructor(options, eventBus) {
+  constructor(options, eventBus, externalServices) {
     this.toolbar = options.toolbar;
     this.toggleButton = options.toggleButton;
     this.buttons = [{
@@ -16388,6 +16400,7 @@ class SecondaryToolbar {
       pageRotateCcw: options.pageRotateCcwButton
     };
     this.eventBus = eventBus;
+    this.externalServices = externalServices;
     this.opened = false;
     this.#bindClickListeners();
     this.#bindCursorToolsListener(options);
@@ -16467,6 +16480,13 @@ class SecondaryToolbar {
         if (close) {
           this.close();
         }
+
+        this.externalServices.reportTelemetry({
+          type: "buttons",
+          data: {
+            id: element.id
+          }
+        });
       });
     }
   }
@@ -17152,7 +17172,7 @@ var _app_options = __webpack_require__(2);
 
 class BasePreferences {
   #defaults = Object.freeze({
-    "annotationEditorMode": -1,
+    "annotationEditorMode": 0,
     "annotationMode": 2,
     "cursorToolOnLoad": 0,
     "defaultZoomValue": "",
@@ -18892,15 +18912,6 @@ if (!HTMLCollection.prototype[Symbol.iterator]) {
 }
 
 function getViewerConfiguration() {
-  let errorWrapper = null;
-  errorWrapper = {
-    container: document.getElementById("errorWrapper"),
-    errorMessage: document.getElementById("errorMessage"),
-    closeButton: document.getElementById("errorClose"),
-    errorMoreInfo: document.getElementById("errorMoreInfo"),
-    moreInfoButton: document.getElementById("errorShowMore"),
-    lessInfoButton: document.getElementById("errorShowLess")
-  };
   return {
     appContainer: document.body,
     mainContainer: document.getElementById("viewerContainer"),
@@ -19019,7 +19030,14 @@ function getViewerConfiguration() {
       editorInkThickness: document.getElementById("editorInkThickness"),
       editorInkOpacity: document.getElementById("editorInkOpacity")
     },
-    errorWrapper,
+    errorWrapper: {
+      container: document.getElementById("errorWrapper"),
+      errorMessage: document.getElementById("errorMessage"),
+      closeButton: document.getElementById("errorClose"),
+      errorMoreInfo: document.getElementById("errorMoreInfo"),
+      moreInfoButton: document.getElementById("errorShowMore"),
+      lessInfoButton: document.getElementById("errorShowLess")
+    },
     printContainer: document.getElementById("printContainer"),
     openFileInput: document.getElementById("fileInput"),
     debuggerScriptPath: "./debugger.js"

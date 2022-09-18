@@ -70,7 +70,7 @@ export type PDFViewerOptions = {
     /**
      * - Enables the creation and editing
      * of new Annotations. The constants from {@link AnnotationEditorType } should
-     * be used. The default value is `AnnotationEditorType.DISABLE`.
+     * be used. The default value is `AnnotationEditorType.NONE`.
      */
     annotationEditorMode?: number | undefined;
     /**
@@ -140,7 +140,7 @@ export namespace PagesCountLimit {
  *   The default value is `AnnotationMode.ENABLE_FORMS`.
  * @property {number} [annotationEditorMode] - Enables the creation and editing
  *   of new Annotations. The constants from {@link AnnotationEditorType} should
- *   be used. The default value is `AnnotationEditorType.DISABLE`.
+ *   be used. The default value is `AnnotationEditorType.NONE`.
  * @property {string} [imageResourcesPath] - Path for image resources, mainly
  *   mainly for annotation icons. Include trailing slash.
  * @property {boolean} [enablePrintAutoRotate] - Enables automatic rotation of
