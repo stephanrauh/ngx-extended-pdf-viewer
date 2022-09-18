@@ -221,6 +221,21 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public delayFirstView = 0;
 
+  private _showEditor = false; // this.pdfJsVersion >= '3.0';
+
+  public get showEditor() {
+    return this._showEditor;
+  }
+
+  @Input()
+  public set showEditor(visible: boolean) {
+    if (this.pdfJsVersion >= '3.0') {
+      this._showEditor = visible;
+    } else {
+      console.log('The PDF editor requires at least pdf.js 3.0.');
+    }
+  }
+
   /** store the timeout id so it can be canceled if user leaves the page before the PDF is shown */
   private initTimeout: any;
 

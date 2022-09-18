@@ -27,7 +27,7 @@
 
             <pdf-toolbar [customToolbar]="customToolbar" [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
               [primaryMenuVisible]="primaryMenuVisible" [showBookmarkButton]="showBookmarkButton"
-              [showDownloadButton]="showDownloadButton" [showFindButton]="showFindButton"
+              [showDownloadButton]="showDownloadButton" [showEditor]="showEditor" [showFindButton]="showFindButton"
               [showHandToolButton]="showHandToolButton" [showOpenFileButton]="showOpenFileButton"
               [showPrintButton]="showPrintButton && enablePrint" [showPagingButtons]="showPagingButtons"
               [showPresentationModeButton]="showPresentationModeButton" [showRotateButton]="showRotateButton"
@@ -52,21 +52,27 @@
               </div>
             </div>
 
-            <div class="editorParamsToolbar hidden doorHangerRight" id="editorInkParamsToolbar">
+            <div class="editorParamsToolbar hidden doorHangerRight" id="editorInkParamsToolbar" *ngIf="showEditor">
               <div class="editorParamsToolbarContainer">
                 <div class="editorParamsSetter">
-                  <label for="editorInkColor" class="editorParamsLabel" data-l10n-id="editor_ink_line_color">Line
-                    Color</label>
+                  <label for="editorInkColor" class="editorParamsLabel" data-l10n-id="editor_ink_color">Color</label>
                   <input type="color" id="editorInkColor" class="editorParamsColor" tabindex="102">
                 </div>
                 <div class="editorParamsSetter">
                   <label for="editorInkThickness" class="editorParamsLabel"
-                    data-l10n-id="editor_ink_line_thickness">Line Thickness</label>
+                    data-l10n-id="editor_ink_thickness">Thickness</label>
                   <input type="range" id="editorInkThickness" class="editorParamsSlider" value="1" min="1" max="20"
                     step="1" tabindex="103">
                 </div>
+                <div class="editorParamsSetter">
+                  <label for="editorInkOpacity" class="editorParamsLabel"
+                    data-l10n-id="editor_ink_opacity">Opacity</label>
+                  <input type="range" id="editorInkOpacity" class="editorParamsSlider" value="100" min="1" max="100"
+                    step="1" tabindex="104">
+                </div>
               </div>
             </div>
+
 
             <pdf-secondary-toolbar #pdfSecondaryToolbarComponent [customSecondaryToolbar]="customSecondaryToolbar"
               [secondaryToolbarTop]="secondaryToolbarTop" [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"

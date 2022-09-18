@@ -22,6 +22,9 @@ export class PdfToolbarComponent implements AfterViewInit {
   public showDownloadButton = true;
 
   @Input()
+  public showEditor = false;
+
+  @Input()
   public showFindButton: boolean | undefined = undefined;
 
   @Input()
