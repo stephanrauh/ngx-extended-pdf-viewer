@@ -395,4 +395,6 @@
 - 15.0.0-alpha.8 #1527 fixed (zoom)
 - 15.0.0-beta.0 #1513 removed the code dealing with the CSS class `loadingInProgress`; #1500 remove `enhanceTextSelection`; #1513 stop throwing errors when the user opens a PDF file before the previous PDF file has finished rendering
 - 15.0.0 #1528 bugfix concerning pdf.js 3.0: moved `addPageToRenderQueue()` to the class `PdfViewer`; #1485 fixed the path for cMapUrl, which caused a bug when displaying many far-Eastern documents; #8 empty the password field and set the type to "hidden" in order to prevent browsers from wrongly detecting the input fields of the application as input fields for the user name
-- 15.0.1 #1519 display apostrophes correctly; #1471 prepare activating the PDF editor
+- 15.0.1 updated the README
+- 15.0.2 updated the README
+- 15.0.3 #1519 display apostrophes correctly; #1471 prepare activating the PDF editor
