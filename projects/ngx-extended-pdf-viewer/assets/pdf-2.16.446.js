@@ -1403,7 +1403,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '3.0.395',
+    apiVersion: '2.16.446',
     source: {
       data: source.data,
       url: source.url,
@@ -1546,6 +1546,22 @@ class PDFDocumentProxy {
   constructor(pdfInfo, transport) {
     this._pdfInfo = pdfInfo;
     this._transport = transport;
+    Object.defineProperty(this, "fingerprint", {
+      get() {
+        (0, _display_utils.deprecated)("`PDFDocumentProxy.fingerprint`, " + "please use `PDFDocumentProxy.fingerprints` instead.");
+        return this.fingerprints[0];
+      }
+
+    });
+    Object.defineProperty(this, "getStats", {
+      value: async () => {
+        (0, _display_utils.deprecated)("`PDFDocumentProxy.getStats`, " + "please use the `PDFDocumentProxy.stats`-getter instead.");
+        return this.stats || {
+          streamTypes: {},
+          fontTypes: {}
+        };
+      }
+    });
   }
 
   get annotationStorage() {
@@ -1644,10 +1660,6 @@ class PDFDocumentProxy {
     return this._transport.getData();
   }
 
-  saveDocument() {
-    return this._transport.saveDocument();
-  }
-
   getDownloadInfo() {
     return this._transport.downloadInfoCapability.promise;
   }
@@ -1666,6 +1678,14 @@ class PDFDocumentProxy {
 
   get loadingTask() {
     return this._transport.loadingTask;
+  }
+
+  saveDocument() {
+    if (this._transport.annotationStorage.size <= 0) {
+      (0, _display_utils.deprecated)("saveDocument called while `annotationStorage` is empty, " + "please use the getData-method instead.");
+    }
+
+    return this._transport.saveDocument();
   }
 
   getFieldObjects() {
@@ -1750,6 +1770,32 @@ class PDFPageProxy {
       promise = this._transport.getAnnotations(this._pageIndex, intentArgs.renderingIntent);
 
       this._annotationPromises.set(intentArgs.cacheKey, promise);
+
+      promise = promise.then(annotations => {
+        for (const annotation of annotations) {
+          if (annotation.titleObj !== undefined) {
+            Object.defineProperty(annotation, "title", {
+              get() {
+                (0, _display_utils.deprecated)("`title`-property on annotation, please use `titleObj` instead.");
+                return annotation.titleObj.str;
+              }
+
+            });
+          }
+
+          if (annotation.contentsObj !== undefined) {
+            Object.defineProperty(annotation, "contents", {
+              get() {
+                (0, _display_utils.deprecated)("`contents`-property on annotation, please use `contentsObj` instead.");
+                return annotation.contentsObj.str;
+              }
+
+            });
+          }
+        }
+
+        return annotations;
+      });
     }
 
     return promise;
@@ -1769,6 +1815,7 @@ class PDFPageProxy {
     intent = "display",
     annotationMode = _util.AnnotationMode.ENABLE,
     transform = null,
+    imageLayer = null,
     canvasFactory = null,
     background = null,
     backgroundColorToReplace = null,
@@ -1777,7 +1824,25 @@ class PDFPageProxy {
     pageColors = null,
     printAnnotationStorage = null
   }) {
-    this._stats?.time("Overall");
+    if (arguments[0]?.renderInteractiveForms !== undefined) {
+      (0, _display_utils.deprecated)("render no longer accepts the `renderInteractiveForms`-option, " + "please use the `annotationMode`-option instead.");
+
+      if (arguments[0].renderInteractiveForms === true && annotationMode === _util.AnnotationMode.ENABLE) {
+        annotationMode = _util.AnnotationMode.ENABLE_FORMS;
+      }
+    }
+
+    if (arguments[0]?.includeAnnotationStorage !== undefined) {
+      (0, _display_utils.deprecated)("render no longer accepts the `includeAnnotationStorage`-option, " + "please use the `annotationMode`-option instead.");
+
+      if (arguments[0].includeAnnotationStorage === true && annotationMode === _util.AnnotationMode.ENABLE) {
+        annotationMode = _util.AnnotationMode.ENABLE_STORAGE;
+      }
+    }
+
+    if (this._stats) {
+      this._stats.time("Overall");
+    }
 
     const intentArgs = this._transport.getRenderingIntent(intent, annotationMode, printAnnotationStorage);
 
@@ -1813,7 +1878,10 @@ class PDFPageProxy {
         lastChunk: false,
         separateAnnots: null
       };
-      this._stats?.time("Page Request");
+
+      if (this._stats) {
+        this._stats.time("Page Request");
+      }
 
       this._pumpOperatorList(intentArgs);
     }
@@ -1838,8 +1906,11 @@ class PDFPageProxy {
         internalRenderTask.capability.resolve();
       }
 
-      this._stats?.timeEnd("Rendering");
-      this._stats?.timeEnd("Overall");
+      if (this._stats) {
+        this._stats.timeEnd("Rendering");
+
+        this._stats.timeEnd("Overall");
+      }
     };
 
     const internalRenderTask = new InternalRenderTask({
@@ -1848,6 +1919,7 @@ class PDFPageProxy {
         canvasContext,
         viewport,
         transform,
+        imageLayer,
         background,
         backgroundColorToReplace
       },
@@ -1869,7 +1941,10 @@ class PDFPageProxy {
         return;
       }
 
-      this._stats?.time("Rendering");
+      if (this._stats) {
+        this._stats.time("Rendering");
+      }
+
       internalRenderTask.initializeGraphics({
         transparency,
         optionalContentConfig
@@ -1914,7 +1989,10 @@ class PDFPageProxy {
         lastChunk: false,
         separateAnnots: null
       };
-      this._stats?.time("Page Request");
+
+      if (this._stats) {
+        this._stats.time("Page Request");
+      }
 
       this._pumpOperatorList(intentArgs);
     }
@@ -2070,8 +2148,13 @@ class PDFPageProxy {
       return;
     }
 
-    this._stats?.timeEnd("Page Request");
-    intentState.displayReadyCapability?.resolve(transparency);
+    if (this._stats) {
+      this._stats.timeEnd("Page Request");
+    }
+
+    if (intentState.displayReadyCapability) {
+      intentState.displayReadyCapability.resolve(transparency);
+    }
   }
 
   _renderPageChunk(operatorListChunk, intentState) {
@@ -2337,10 +2420,6 @@ class PDFWorker {
     this._messageHandler.on("ready", function () {});
 
     this._readyCapability.resolve();
-
-    this._messageHandler.send("configure", {
-      verbosity: this.verbosity
-    });
   }
 
   _initialize() {
@@ -2544,6 +2623,12 @@ class PDFWorker {
 }
 
 exports.PDFWorker = PDFWorker;
+{
+  PDFWorker.getWorkerSrc = function () {
+    (0, _display_utils.deprecated)("`PDFWorker.getWorkerSrc()`, please use `PDFWorker.workerSrc` instead.");
+    return this.workerSrc;
+  };
+}
 
 class WorkerTransport {
   #docStats = null;
@@ -3052,21 +3137,6 @@ class WorkerTransport {
     return this.messageHandler.sendWithPromise("GetData", null);
   }
 
-  saveDocument() {
-    if (this.annotationStorage.size <= 0) {
-      (0, _util.warn)("saveDocument called while `annotationStorage` is empty, " + "please use the getData-method instead.");
-    }
-
-    return this.messageHandler.sendWithPromise("SaveDocument", {
-      isPureXfa: !!this._htmlForXfa,
-      numPages: this._numPages,
-      annotationStorage: this.annotationStorage.serializable,
-      filename: this._fullReader?.filename ?? null
-    }).finally(() => {
-      this.annotationStorage.resetModified();
-    });
-  }
-
   getPage(pageNumber) {
     if (!Number.isInteger(pageNumber) || pageNumber <= 0 || pageNumber > this._numPages) {
       return Promise.reject(new Error("Invalid page request."));
@@ -3109,6 +3179,17 @@ class WorkerTransport {
     return this.messageHandler.sendWithPromise("GetAnnotations", {
       pageIndex,
       intent
+    });
+  }
+
+  saveDocument() {
+    return this.messageHandler.sendWithPromise("SaveDocument", {
+      isPureXfa: !!this._htmlForXfa,
+      numPages: this._numPages,
+      annotationStorage: this.annotationStorage.serializable,
+      filename: this._fullReader?.filename ?? null
+    }).finally(() => {
+      this.annotationStorage.resetModified();
     });
   }
 
@@ -3402,10 +3483,11 @@ class InternalRenderTask {
       canvasContext,
       viewport,
       transform,
+      imageLayer,
       background,
       backgroundColorToReplace
     } = this.params;
-    this.gfx = new _canvas.CanvasGraphics(canvasContext, this.commonObjs, this.objs, this.canvasFactory, optionalContentConfig, this.annotationCanvasMap, this.pageColors);
+    this.gfx = new _canvas.CanvasGraphics(canvasContext, this.commonObjs, this.objs, this.canvasFactory, imageLayer, optionalContentConfig, this.annotationCanvasMap, this.pageColors);
     this.gfx.beginDrawing({
       transform,
       viewport,
@@ -3415,13 +3497,19 @@ class InternalRenderTask {
     });
     this.operatorListIdx = 0;
     this.graphicsReady = true;
-    this.graphicsReadyCallback?.();
+
+    if (this.graphicsReadyCallback) {
+      this.graphicsReadyCallback();
+    }
   }
 
   cancel(error = null) {
     this.running = false;
     this.cancelled = true;
-    this.gfx?.endDrawing();
+
+    if (this.gfx) {
+      this.gfx.endDrawing();
+    }
 
     if (this._canvas) {
       InternalRenderTask.#canvasInUse.delete(this._canvas);
@@ -3439,7 +3527,9 @@ class InternalRenderTask {
       return;
     }
 
-    this.stepper?.updateOperatorList(this.operatorList);
+    if (this.stepper) {
+      this.stepper.updateOperatorList(this.operatorList);
+    }
 
     if (this.running) {
       return;
@@ -3498,9 +3588,9 @@ class InternalRenderTask {
 
 }
 
-const version = '3.0.395';
+const version = '2.16.446';
 exports.version = version;
-const build = '0ec25318a';
+const build = '7e3678741';
 exports.build = build;
 
 /***/ }),
@@ -4274,6 +4364,41 @@ class KeyboardManager {
 
 exports.KeyboardManager = KeyboardManager;
 
+class ClipboardManager {
+  #elements = null;
+
+  copy(element) {
+    if (!element) {
+      return;
+    }
+
+    if (Array.isArray(element)) {
+      this.#elements = element.map(el => el.serialize());
+    } else {
+      this.#elements = [element.serialize()];
+    }
+
+    this.#elements = this.#elements.filter(el => !!el);
+
+    if (this.#elements.length === 0) {
+      this.#elements = null;
+    }
+  }
+
+  paste() {
+    return this.#elements;
+  }
+
+  isEmpty() {
+    return this.#elements === null;
+  }
+
+  destroy() {
+    this.#elements = null;
+  }
+
+}
+
 class ColorManager {
   static _colorsMapping = new Map([["CanvasText", [0, 0, 0]], ["Canvas", [255, 255, 255]]]);
 
@@ -4317,6 +4442,7 @@ class AnnotationEditorUIManager {
   #activeEditor = null;
   #allEditors = new Map();
   #allLayers = new Map();
+  #clipboardManager = new ClipboardManager();
   #commandManager = new CommandManager();
   #currentPageIndex = 0;
   #editorTypes = null;
@@ -4325,21 +4451,19 @@ class AnnotationEditorUIManager {
   #isEnabled = false;
   #mode = _util.AnnotationEditorType.NONE;
   #selectedEditors = new Set();
-  #boundCopy = this.copy.bind(this);
-  #boundCut = this.cut.bind(this);
-  #boundPaste = this.paste.bind(this);
   #boundKeydown = this.keydown.bind(this);
   #boundOnEditingAction = this.onEditingAction.bind(this);
   #boundOnPageChanging = this.onPageChanging.bind(this);
   #previousStates = {
     isEditing: false,
     isEmpty: true,
+    hasEmptyClipboard: true,
     hasSomethingToUndo: false,
     hasSomethingToRedo: false,
     hasSelectedEditor: false
   };
   #container = null;
-  static _keyboardManager = new KeyboardManager([[["ctrl+a", "mac+meta+a"], AnnotationEditorUIManager.prototype.selectAll], [["ctrl+z", "mac+meta+z"], AnnotationEditorUIManager.prototype.undo], [["ctrl+y", "ctrl+shift+Z", "mac+meta+shift+Z"], AnnotationEditorUIManager.prototype.redo], [["Backspace", "alt+Backspace", "ctrl+Backspace", "shift+Backspace", "mac+Backspace", "mac+alt+Backspace", "mac+ctrl+Backspace", "Delete", "ctrl+Delete", "shift+Delete"], AnnotationEditorUIManager.prototype.delete], [["Escape", "mac+Escape"], AnnotationEditorUIManager.prototype.unselectAll]]);
+  static _keyboardManager = new KeyboardManager([[["ctrl+a", "mac+meta+a"], AnnotationEditorUIManager.prototype.selectAll], [["ctrl+c", "mac+meta+c"], AnnotationEditorUIManager.prototype.copy], [["ctrl+v", "mac+meta+v"], AnnotationEditorUIManager.prototype.paste], [["ctrl+x", "mac+meta+x"], AnnotationEditorUIManager.prototype.cut], [["ctrl+z", "mac+meta+z"], AnnotationEditorUIManager.prototype.undo], [["ctrl+y", "ctrl+shift+Z", "mac+meta+shift+Z"], AnnotationEditorUIManager.prototype.redo], [["Backspace", "alt+Backspace", "ctrl+Backspace", "shift+Backspace", "mac+Backspace", "mac+alt+Backspace", "mac+ctrl+Backspace", "Delete", "ctrl+Delete", "shift+Delete"], AnnotationEditorUIManager.prototype.delete], [["Escape", "mac+Escape"], AnnotationEditorUIManager.prototype.unselectAll]]);
 
   constructor(container, eventBus) {
     this.#container = container;
@@ -4365,6 +4489,7 @@ class AnnotationEditorUIManager {
     this.#allEditors.clear();
     this.#activeEditor = null;
     this.#selectedEditors.clear();
+    this.#clipboardManager.destroy();
     this.#commandManager.destroy();
   }
 
@@ -4386,108 +4511,6 @@ class AnnotationEditorUIManager {
     this.#container.removeEventListener("keydown", this.#boundKeydown);
   }
 
-  #addCopyPasteListeners() {
-    document.addEventListener("copy", this.#boundCopy);
-    document.addEventListener("cut", this.#boundCut);
-    document.addEventListener("paste", this.#boundPaste);
-  }
-
-  #removeCopyPasteListeners() {
-    document.removeEventListener("copy", this.#boundCopy);
-    document.removeEventListener("cut", this.#boundCut);
-    document.removeEventListener("paste", this.#boundPaste);
-  }
-
-  copy(event) {
-    event.preventDefault();
-
-    if (this.#activeEditor) {
-      this.#activeEditor.commitOrRemove();
-    }
-
-    if (!this.hasSelection) {
-      return;
-    }
-
-    const editors = [];
-
-    for (const editor of this.#selectedEditors) {
-      if (!editor.isEmpty()) {
-        editors.push(editor.serialize());
-      }
-    }
-
-    if (editors.length === 0) {
-      return;
-    }
-
-    event.clipboardData.setData("application/pdfjs", JSON.stringify(editors));
-  }
-
-  cut(event) {
-    this.copy(event);
-    this.delete();
-  }
-
-  paste(event) {
-    event.preventDefault();
-    let data = event.clipboardData.getData("application/pdfjs");
-
-    if (!data) {
-      return;
-    }
-
-    try {
-      data = JSON.parse(data);
-    } catch (ex) {
-      (0, _util.warn)(`paste: "${ex.message}".`);
-      return;
-    }
-
-    if (!Array.isArray(data)) {
-      return;
-    }
-
-    this.unselectAll();
-    const layer = this.#allLayers.get(this.#currentPageIndex);
-
-    try {
-      const newEditors = [];
-
-      for (const editor of data) {
-        const deserializedEditor = layer.deserialize(editor);
-
-        if (!deserializedEditor) {
-          return;
-        }
-
-        newEditors.push(deserializedEditor);
-      }
-
-      const cmd = () => {
-        for (const editor of newEditors) {
-          this.#addEditorToLayer(editor);
-        }
-
-        this.#selectEditors(newEditors);
-      };
-
-      const undo = () => {
-        for (const editor of newEditors) {
-          editor.remove();
-        }
-      };
-
-      this.addCommands({
-        cmd,
-        undo,
-        mustExec: true
-      });
-    } catch (ex) {
-      (0, _util.warn)(`paste: "${ex.message}".`);
-    }
-  }
-
   keydown(event) {
     if (!this.getActive()?.shouldGetKeyboardEvents()) {
       AnnotationEditorUIManager._keyboardManager.exec(this, event);
@@ -4495,7 +4518,7 @@ class AnnotationEditorUIManager {
   }
 
   onEditingAction(details) {
-    if (["undo", "redo", "delete", "selectAll"].includes(details.name)) {
+    if (["undo", "redo", "cut", "copy", "paste", "delete", "selectAll"].includes(details.name)) {
       this[details.name]();
     }
   }
@@ -4521,17 +4544,16 @@ class AnnotationEditorUIManager {
   setEditingState(isEditing) {
     if (isEditing) {
       this.#addKeyboardManager();
-      this.#addCopyPasteListeners();
       this.#dispatchUpdateStates({
         isEditing: this.#mode !== _util.AnnotationEditorType.NONE,
         isEmpty: this.#isEmpty(),
         hasSomethingToUndo: this.#commandManager.hasSomethingToUndo(),
         hasSomethingToRedo: this.#commandManager.hasSomethingToRedo(),
-        hasSelectedEditor: false
+        hasSelectedEditor: false,
+        hasEmptyClipboard: this.#clipboardManager.isEmpty()
       });
     } else {
       this.#removeKeyboardManager();
-      this.#removeCopyPasteListeners();
       this.#dispatchUpdateStates({
         isEditing: false
       });
@@ -4592,10 +4614,6 @@ class AnnotationEditorUIManager {
   }
 
   updateParams(type, value) {
-    if (!this.#editorTypes) {
-      return;
-    }
-
     for (const editor of this.#selectedEditors) {
       editor.updateParams(type, value);
     }
@@ -4785,6 +4803,66 @@ class AnnotationEditorUIManager {
     const undo = () => {
       for (const editor of editors) {
         this.#addEditorToLayer(editor);
+      }
+    };
+
+    this.addCommands({
+      cmd,
+      undo,
+      mustExec: true
+    });
+  }
+
+  copy() {
+    if (this.#activeEditor) {
+      this.#activeEditor.commitOrRemove();
+    }
+
+    if (this.hasSelection) {
+      const editors = [];
+
+      for (const editor of this.#selectedEditors) {
+        if (!editor.isEmpty()) {
+          editors.push(editor);
+        }
+      }
+
+      if (editors.length === 0) {
+        return;
+      }
+
+      this.#clipboardManager.copy(editors);
+      this.#dispatchUpdateStates({
+        hasEmptyClipboard: false
+      });
+    }
+  }
+
+  cut() {
+    this.copy();
+    this.delete();
+  }
+
+  paste() {
+    if (this.#clipboardManager.isEmpty()) {
+      return;
+    }
+
+    this.unselectAll();
+    const layer = this.#allLayers.get(this.#currentPageIndex);
+    const newEditors = this.#clipboardManager.paste().map(data => layer.deserialize(data));
+
+    const cmd = () => {
+      for (const editor of newEditors) {
+        this.#addEditorToLayer(editor);
+      }
+
+      this.#selectEditors(newEditors);
+    };
+
+    const undo = () => {
+      for (const editor of newEditors) {
+        editor.remove();
       }
     };
 
@@ -6026,7 +6104,10 @@ class FontFaceObject {
       nativeFontFace = new FontFace(this.cssFontInfo.fontFamily, this.data, css);
     }
 
-    this.fontRegistry?.registerFont(this);
+    if (this.fontRegistry) {
+      this.fontRegistry.registerFont(this);
+    }
+
     return nativeFontFace;
   }
 
@@ -6051,7 +6132,10 @@ class FontFaceObject {
       rule = `@font-face {font-family:"${this.cssFontInfo.fontFamily}";${css}src:${url}}`;
     }
 
-    this.fontRegistry?.registerFont(this, url);
+    if (this.fontRegistry) {
+      this.fontRegistry.registerFont(this, url);
+    }
+
     return rule;
   }
 
@@ -6114,9 +6198,9 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.CanvasGraphics = void 0;
 
-var _util = __w_pdfjs_require__(1);
-
 var _display_utils = __w_pdfjs_require__(7);
+
+var _util = __w_pdfjs_require__(1);
 
 var _pattern_helper = __w_pdfjs_require__(12);
 
@@ -6992,7 +7076,7 @@ const NORMAL_CLIP = {};
 const EO_CLIP = {};
 
 class CanvasGraphics {
-  constructor(canvasCtx, commonObjs, objs, canvasFactory, optionalContentConfig, annotationCanvasMap, pageColors) {
+  constructor(canvasCtx, commonObjs, objs, canvasFactory, imageLayer, optionalContentConfig, annotationCanvasMap, pageColors) {
     this.ctx = canvasCtx;
     this.current = new CanvasExtraState(this.ctx.canvas.width, this.ctx.canvas.height);
     this.stateStack = [];
@@ -7003,6 +7087,7 @@ class CanvasGraphics {
     this.commonObjs = commonObjs;
     this.objs = objs;
     this.canvasFactory = canvasFactory;
+    this.imageLayer = imageLayer;
     this.groupStack = [];
     this.processingType3 = null;
     this.baseTransform = null;
@@ -7116,6 +7201,11 @@ class CanvasGraphics {
     this.ctx.transform(...viewport.transform);
     this.viewportScale = viewport.scale;
     this.baseTransform = (0, _display_utils.getCurrentTransform)(this.ctx);
+
+    if (this.imageLayer) {
+      (0, _display_utils.deprecated)("The `imageLayer` functionality will be removed in the future.");
+      this.imageLayer.beginLayout();
+    }
   }
 
   executeOperatorList(operatorList, executionStartIdx, continueCallback, stepper) {
@@ -7206,6 +7296,10 @@ class CanvasGraphics {
     }
 
     this._cachedBitmapsMap.clear();
+
+    if (this.imageLayer) {
+      this.imageLayer.endLayout();
+    }
   }
 
   _scaleImage(img, inverseTransform) {
@@ -8683,7 +8777,20 @@ class CanvasGraphics {
     const scaled = this._scaleImage(imgToPaint, (0, _display_utils.getCurrentTransformInverse)(ctx));
 
     ctx.imageSmoothingEnabled = getImageSmoothingEnabled((0, _display_utils.getCurrentTransform)(ctx), imgData.interpolate);
-    drawImageAtIntegerCoords(ctx, scaled.img, 0, 0, scaled.paintWidth, scaled.paintHeight, 0, -height, width, height);
+    const [rWidth, rHeight] = drawImageAtIntegerCoords(ctx, scaled.img, 0, 0, scaled.paintWidth, scaled.paintHeight, 0, -height, width, height);
+
+    if (this.imageLayer) {
+      const [left, top] = _util.Util.applyTransform([0, -height], (0, _display_utils.getCurrentTransform)(this.ctx));
+
+      this.imageLayer.appendImage({
+        imgData,
+        left,
+        top,
+        width: rWidth,
+        height: rHeight
+      });
+    }
+
     this.compose();
     this.restore();
   }
@@ -8705,6 +8812,19 @@ class CanvasGraphics {
       ctx.transform(...entry.transform);
       ctx.scale(1, -1);
       drawImageAtIntegerCoords(ctx, tmpCanvas.canvas, entry.x, entry.y, entry.w, entry.h, 0, -1, 1, 1);
+
+      if (this.imageLayer) {
+        const [left, top] = _util.Util.applyTransform([entry.x, entry.y], (0, _display_utils.getCurrentTransform)(this.ctx));
+
+        this.imageLayer.appendImage({
+          imgData,
+          left,
+          top,
+          width: w,
+          height: h
+        });
+      }
+
       ctx.restore();
     }
 
@@ -10091,8 +10211,6 @@ exports.OptionalContentConfig = void 0;
 
 var _util = __w_pdfjs_require__(1);
 
-var _murmurhash = __w_pdfjs_require__(9);
-
 const INTERNAL = Symbol("INTERNAL");
 
 class OptionalContentGroup {
@@ -10118,9 +10236,9 @@ class OptionalContentGroup {
 }
 
 class OptionalContentConfig {
-  #cachedGetHash = null;
+  #cachedHasInitialVisibility = true;
   #groups = new Map();
-  #initialHash = null;
+  #initialVisibility = null;
   #order = null;
 
   constructor(data) {
@@ -10153,7 +10271,11 @@ class OptionalContentConfig {
       this.#groups.get(off)._setVisible(INTERNAL, false);
     }
 
-    this.#initialHash = this.getHash();
+    this.#initialVisibility = new Map();
+
+    for (const [id, group] of this.#groups) {
+      this.#initialVisibility.set(id, group.visible);
+    }
   }
 
   #evaluateVisibilityExpression(array) {
@@ -10296,11 +10418,23 @@ class OptionalContentConfig {
 
     this.#groups.get(id)._setVisible(INTERNAL, !!visible);
 
-    this.#cachedGetHash = null;
+    this.#cachedHasInitialVisibility = null;
   }
 
   get hasInitialVisibility() {
-    return this.getHash() === this.#initialHash;
+    if (this.#cachedHasInitialVisibility !== null) {
+      return this.#cachedHasInitialVisibility;
+    }
+
+    for (const [id, group] of this.#groups) {
+      const visible = this.#initialVisibility.get(id);
+
+      if (group.visible !== visible) {
+        return this.#cachedHasInitialVisibility = false;
+      }
+    }
+
+    return this.#cachedHasInitialVisibility = true;
   }
 
   getOrder() {
@@ -10321,20 +10455,6 @@ class OptionalContentConfig {
 
   getGroup(id) {
     return this.#groups.get(id) || null;
-  }
-
-  getHash() {
-    if (this.#cachedGetHash !== null) {
-      return this.#cachedGetHash;
-    }
-
-    const hash = new _murmurhash.MurmurHash3_64();
-
-    for (const [id, group] of this.#groups) {
-      hash.update(`${id}:${group.visible}`);
-    }
-
-    return this.#cachedGetHash = hash.hexdigest();
   }
 
 }
@@ -10454,7 +10574,10 @@ class PDFDataTransportStream {
   }
 
   _onProgressiveDone() {
-    this._fullRequestReader?.progressiveDone();
+    if (this._fullRequestReader) {
+      this._fullRequestReader.progressiveDone();
+    }
+
     this._progressiveDone = true;
   }
 
@@ -10488,7 +10611,9 @@ class PDFDataTransportStream {
   }
 
   cancelAllRequests(reason) {
-    this._fullRequestReader?.cancel(reason);
+    if (this._fullRequestReader) {
+      this._fullRequestReader.cancel(reason);
+    }
 
     for (const reader of this._rangeReaders.slice(0)) {
       reader.cancel(reason);
@@ -10883,8 +11008,6 @@ class AnnotationEditorLayer {
     }
 
     this.#uiManager.unselectAll();
-    this.div.classList.toggle("freeTextEditing", mode === _util.AnnotationEditorType.FREETEXT);
-    this.div.classList.toggle("inkEditing", mode === _util.AnnotationEditorType.INK);
   }
 
   addInkEditorIfNeeded(isCommitting) {
@@ -11314,7 +11437,7 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   }
 
   static initialize(l10n) {
-    this._l10nPromise = new Map(["free_text2_default_content", "editor_free_text2_aria_label"].map(str => [str, l10n.get(str)]));
+    this._l10nPromise = new Map(["free_text_default_content", "editor_free_text_aria_label"].map(str => [str, l10n.get(str)]));
     const style = getComputedStyle(document.documentElement);
     this._internalPadding = parseFloat(style.getPropertyValue("--freetext-padding"));
   }
@@ -11423,7 +11546,6 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     this.editorDiv.addEventListener("keydown", this.#boundEditorDivKeydown);
     this.editorDiv.addEventListener("focus", this.#boundEditorDivFocus);
     this.editorDiv.addEventListener("blur", this.#boundEditorDivBlur);
-    this.parent.div.classList.remove("freeTextEditing");
   }
 
   disableEditMode() {
@@ -11442,7 +11564,6 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     this.editorDiv.removeEventListener("blur", this.#boundEditorDivBlur);
     this.div.focus();
     this.isEditing = false;
-    this.parent.div.classList.add("freeTextEditing");
   }
 
   focusin(event) {
@@ -11469,7 +11590,6 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   remove() {
     this.isEditing = false;
     this.parent.setEditingState(true);
-    this.parent.div.classList.add("freeTextEditing");
     super.remove();
   }
 
@@ -11572,9 +11692,9 @@ class FreeTextEditor extends _editor.AnnotationEditor {
     this.editorDiv.setAttribute("id", `${this.id}-editor`);
     this.enableEditing();
 
-    FreeTextEditor._l10nPromise.get("editor_free_text2_aria_label").then(msg => this.editorDiv?.setAttribute("aria-label", msg));
+    FreeTextEditor._l10nPromise.get("editor_free_text_aria_label").then(msg => this.editorDiv?.setAttribute("aria-label", msg));
 
-    FreeTextEditor._l10nPromise.get("free_text2_default_content").then(msg => this.editorDiv?.setAttribute("default-content", msg));
+    FreeTextEditor._l10nPromise.get("free_text_default_content").then(msg => this.editorDiv?.setAttribute("default-content", msg));
 
     this.editorDiv.contentEditable = true;
     const {
@@ -11710,7 +11830,7 @@ class InkEditor extends _editor.AnnotationEditor {
   }
 
   static initialize(l10n) {
-    this._l10nPromise = new Map(["editor_ink_canvas_aria_label", "editor_ink2_aria_label"].map(str => [str, l10n.get(str)]));
+    this._l10nPromise = new Map(["editor_ink_canvas_aria_label", "editor_ink_aria_label"].map(str => [str, l10n.get(str)]));
   }
 
   static updateDefaultParams(type, value) {
@@ -12134,7 +12254,7 @@ class InkEditor extends _editor.AnnotationEditor {
 
     super.render();
 
-    InkEditor._l10nPromise.get("editor_ink2_aria_label").then(msg => this.div?.setAttribute("aria-label", msg));
+    InkEditor._l10nPromise.get("editor_ink_aria_label").then(msg => this.div?.setAttribute("aria-label", msg));
 
     const [x, y, w, h] = this.#getInitialBBox();
     this.setAt(x, y, 0, 0);
@@ -13152,7 +13272,10 @@ class AnnotationElement {
 
     for (const name of Object.keys(jsEvent.detail)) {
       const action = actions[name] || commonActions[name];
-      action?.(jsEvent);
+
+      if (action) {
+        action(jsEvent);
+      }
     }
   }
 
@@ -13342,9 +13465,6 @@ class LinkAnnotationElement extends AnnotationElement {
       this._bindNamedAction(link, data.action);
 
       isBound = true;
-    } else if (data.setOCGState) {
-      this.#bindSetOCGState(link, data.setOCGState);
-      isBound = true;
     } else if (data.dest) {
       this._bindLink(link, data.dest);
 
@@ -13411,17 +13531,6 @@ class LinkAnnotationElement extends AnnotationElement {
     link.className = "internalLink";
   }
 
-  #bindSetOCGState(link, action) {
-    link.href = this.linkService.getAnchorUrl("");
-
-    link.onclick = () => {
-      this.linkService.executeSetOCGState(action);
-      return false;
-    };
-
-    link.className = "internalLink";
-  }
-
   _bindJSAction(link, data) {
     link.href = this.linkService.getAnchorUrl("");
     const map = new Map([["Action", "onclick"], ["Mouse Up", "onmouseup"], ["Mouse Down", "onmousedown"]]);
@@ -13472,7 +13581,10 @@ class LinkAnnotationElement extends AnnotationElement {
     }
 
     link.onclick = () => {
-      otherClickAction?.();
+      if (otherClickAction) {
+        otherClickAction();
+      }
+
       const {
         fields: resetFormFields,
         refs: resetFormRefs,
@@ -14536,21 +14648,23 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
 }
 
 class PopupAnnotationElement extends AnnotationElement {
-  static IGNORE_TYPES = new Set(["Line", "Square", "Circle", "PolyLine", "Polygon", "Ink"]);
-
   constructor(parameters) {
-    const {
-      data
-    } = parameters;
-    const isRenderable = !PopupAnnotationElement.IGNORE_TYPES.has(data.parentType) && !!(data.titleObj?.str || data.contentsObj?.str || data.richText?.str);
+    const isRenderable = !!(parameters.data.titleObj?.str || parameters.data.contentsObj?.str || parameters.data.richText?.str);
     super(parameters, {
       isRenderable
     });
   }
 
   render() {
+    const IGNORE_TYPES = ["Line", "Square", "Circle", "PolyLine", "Polygon", "Ink"];
     this.container.className = "popupAnnotation";
-    const parentElements = this.layer.querySelectorAll(`[data-annotation-id="${this.data.parentId}"]`);
+
+    if (IGNORE_TYPES.includes(this.data.parentType)) {
+      return this.container;
+    }
+
+    const selector = `[data-annotation-id="${this.data.parentId}"]`;
+    const parentElements = this.layer.querySelectorAll(selector);
 
     if (parentElements.length === 0) {
       return this.container;
@@ -15617,10 +15731,13 @@ exports.renderTextLayer = renderTextLayer;
 
 var _util = __w_pdfjs_require__(1);
 
+var _display_utils = __w_pdfjs_require__(7);
+
 const MAX_TEXT_DIVS_TO_RENDER = 100000;
 const DEFAULT_FONT_SIZE = 30;
 const DEFAULT_FONT_ASCENT = 0.8;
 const ascentCache = new Map();
+const AllWhitespaceRegexp = /^\s+$/g;
 
 function getAscent(fontFamily, ctx) {
   const cachedAscent = ascentCache.get(fontFamily);
@@ -15681,7 +15798,19 @@ function getAscent(fontFamily, ctx) {
 
 function appendText(task, geom, styles, ctx) {
   const textDiv = document.createElement("span");
-  const textDivProperties = {
+  const textDivProperties = task._enhanceTextSelection ? {
+    angle: 0,
+    canvasWidth: 0,
+    hasText: geom.str !== "",
+    hasEOL: geom.hasEOL,
+    originalTransform: null,
+    paddingBottom: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
+    scale: 1,
+    fontSize: 0
+  } : {
     angle: 0,
     canvasWidth: 0,
     hasText: geom.str !== "",
@@ -15731,7 +15860,7 @@ function appendText(task, geom, styles, ctx) {
 
   let shouldScaleText = false;
 
-  if (geom.str.length > 1) {
+  if (geom.str.length > 1 || task._enhanceTextSelection && AllWhitespaceRegexp.test(geom.str)) {
     shouldScaleText = true;
   } else if (geom.str !== " " && geom.transform[0] !== geom.transform[3]) {
     const absScaleX = Math.abs(geom.transform[0]),
@@ -15754,6 +15883,37 @@ function appendText(task, geom, styles, ctx) {
 
   if (task._textContentStream) {
     task._layoutText(textDiv);
+  }
+
+  if (task._enhanceTextSelection && textDivProperties.hasText) {
+    let angleCos = 1,
+        angleSin = 0;
+
+    if (angle !== 0) {
+      angleCos = Math.cos(angle);
+      angleSin = Math.sin(angle);
+    }
+
+    const divWidth = (style.vertical ? geom.height : geom.width) * task._viewport.scale;
+    const divHeight = fontHeight;
+    let m, b;
+
+    if (angle !== 0) {
+      m = [angleCos, angleSin, -angleSin, angleCos, left, top];
+      b = _util.Util.getAxialAlignedBoundingBox([0, 0, divWidth, divHeight], m);
+    } else {
+      b = [left, top, left + divWidth, top + divHeight];
+    }
+
+    task._bounds.push({
+      left: b[0],
+      top: b[1],
+      right: b[2],
+      bottom: b[3],
+      div: textDiv,
+      size: [divWidth, divHeight],
+      m
+    });
   }
 }
 
@@ -15782,6 +15942,278 @@ function render(task) {
   capability.resolve();
 }
 
+function findPositiveMin(ts, offset, count) {
+  let result = 0;
+
+  for (let i = 0; i < count; i++) {
+    const t = ts[offset++];
+
+    if (t > 0) {
+      result = result ? Math.min(t, result) : t;
+    }
+  }
+
+  return result;
+}
+
+function expand(task) {
+  const bounds = task._bounds;
+  const viewport = task._viewport;
+  const expanded = expandBounds(viewport.width, viewport.height, bounds);
+
+  for (let i = 0; i < expanded.length; i++) {
+    const div = bounds[i].div;
+
+    const divProperties = task._textDivProperties.get(div);
+
+    if (divProperties.angle === 0) {
+      divProperties.paddingLeft = bounds[i].left - expanded[i].left;
+      divProperties.paddingTop = bounds[i].top - expanded[i].top;
+      divProperties.paddingRight = expanded[i].right - bounds[i].right;
+      divProperties.paddingBottom = expanded[i].bottom - bounds[i].bottom;
+
+      task._textDivProperties.set(div, divProperties);
+
+      continue;
+    }
+
+    const e = expanded[i],
+          b = bounds[i];
+    const m = b.m,
+          c = m[0],
+          s = m[1];
+    const points = [[0, 0], [0, b.size[1]], [b.size[0], 0], b.size];
+    const ts = new Float64Array(64);
+
+    for (let j = 0, jj = points.length; j < jj; j++) {
+      const t = _util.Util.applyTransform(points[j], m);
+
+      ts[j + 0] = c && (e.left - t[0]) / c;
+      ts[j + 4] = s && (e.top - t[1]) / s;
+      ts[j + 8] = c && (e.right - t[0]) / c;
+      ts[j + 12] = s && (e.bottom - t[1]) / s;
+      ts[j + 16] = s && (e.left - t[0]) / -s;
+      ts[j + 20] = c && (e.top - t[1]) / c;
+      ts[j + 24] = s && (e.right - t[0]) / -s;
+      ts[j + 28] = c && (e.bottom - t[1]) / c;
+      ts[j + 32] = c && (e.left - t[0]) / -c;
+      ts[j + 36] = s && (e.top - t[1]) / -s;
+      ts[j + 40] = c && (e.right - t[0]) / -c;
+      ts[j + 44] = s && (e.bottom - t[1]) / -s;
+      ts[j + 48] = s && (e.left - t[0]) / s;
+      ts[j + 52] = c && (e.top - t[1]) / -c;
+      ts[j + 56] = s && (e.right - t[0]) / s;
+      ts[j + 60] = c && (e.bottom - t[1]) / -c;
+    }
+
+    const boxScale = 1 + Math.min(Math.abs(c), Math.abs(s));
+    divProperties.paddingLeft = findPositiveMin(ts, 32, 16) / boxScale;
+    divProperties.paddingTop = findPositiveMin(ts, 48, 16) / boxScale;
+    divProperties.paddingRight = findPositiveMin(ts, 0, 16) / boxScale;
+    divProperties.paddingBottom = findPositiveMin(ts, 16, 16) / boxScale;
+
+    task._textDivProperties.set(div, divProperties);
+  }
+}
+
+function expandBounds(width, height, boxes) {
+  const bounds = boxes.map(function (box, i) {
+    return {
+      x1: box.left,
+      y1: box.top,
+      x2: box.right,
+      y2: box.bottom,
+      index: i,
+      x1New: undefined,
+      x2New: undefined
+    };
+  });
+  expandBoundsLTR(width, bounds);
+  const expanded = new Array(boxes.length);
+
+  for (const b of bounds) {
+    const i = b.index;
+    expanded[i] = {
+      left: b.x1New,
+      top: 0,
+      right: b.x2New,
+      bottom: 0
+    };
+  }
+
+  boxes.map(function (box, i) {
+    const e = expanded[i],
+          b = bounds[i];
+    b.x1 = box.top;
+    b.y1 = width - e.right;
+    b.x2 = box.bottom;
+    b.y2 = width - e.left;
+    b.index = i;
+    b.x1New = undefined;
+    b.x2New = undefined;
+  });
+  expandBoundsLTR(height, bounds);
+
+  for (const b of bounds) {
+    const i = b.index;
+    expanded[i].top = b.x1New;
+    expanded[i].bottom = b.x2New;
+  }
+
+  return expanded;
+}
+
+function expandBoundsLTR(width, bounds) {
+  bounds.sort(function (a, b) {
+    return a.x1 - b.x1 || a.index - b.index;
+  });
+  const fakeBoundary = {
+    x1: -Infinity,
+    y1: -Infinity,
+    x2: 0,
+    y2: Infinity,
+    index: -1,
+    x1New: 0,
+    x2New: 0
+  };
+  const horizon = [{
+    start: -Infinity,
+    end: Infinity,
+    boundary: fakeBoundary
+  }];
+
+  for (const boundary of bounds) {
+    let i = 0;
+
+    while (i < horizon.length && horizon[i].end <= boundary.y1) {
+      i++;
+    }
+
+    let j = horizon.length - 1;
+
+    while (j >= 0 && horizon[j].start >= boundary.y2) {
+      j--;
+    }
+
+    let horizonPart, affectedBoundary;
+    let q,
+        k,
+        maxXNew = -Infinity;
+
+    for (q = i; q <= j; q++) {
+      horizonPart = horizon[q];
+      affectedBoundary = horizonPart.boundary;
+      let xNew;
+
+      if (affectedBoundary.x2 > boundary.x1) {
+        xNew = affectedBoundary.index > boundary.index ? affectedBoundary.x1New : boundary.x1;
+      } else if (affectedBoundary.x2New === undefined) {
+        xNew = (affectedBoundary.x2 + boundary.x1) / 2;
+      } else {
+        xNew = affectedBoundary.x2New;
+      }
+
+      if (xNew > maxXNew) {
+        maxXNew = xNew;
+      }
+    }
+
+    boundary.x1New = maxXNew;
+
+    for (q = i; q <= j; q++) {
+      horizonPart = horizon[q];
+      affectedBoundary = horizonPart.boundary;
+
+      if (affectedBoundary.x2New === undefined) {
+        if (affectedBoundary.x2 > boundary.x1) {
+          if (affectedBoundary.index > boundary.index) {
+            affectedBoundary.x2New = affectedBoundary.x2;
+          }
+        } else {
+          affectedBoundary.x2New = maxXNew;
+        }
+      } else if (affectedBoundary.x2New > maxXNew) {
+        affectedBoundary.x2New = Math.max(maxXNew, affectedBoundary.x2);
+      }
+    }
+
+    const changedHorizon = [];
+    let lastBoundary = null;
+
+    for (q = i; q <= j; q++) {
+      horizonPart = horizon[q];
+      affectedBoundary = horizonPart.boundary;
+      const useBoundary = affectedBoundary.x2 > boundary.x2 ? affectedBoundary : boundary;
+
+      if (lastBoundary === useBoundary) {
+        changedHorizon.at(-1).end = horizonPart.end;
+      } else {
+        changedHorizon.push({
+          start: horizonPart.start,
+          end: horizonPart.end,
+          boundary: useBoundary
+        });
+        lastBoundary = useBoundary;
+      }
+    }
+
+    if (horizon[i].start < boundary.y1) {
+      changedHorizon[0].start = boundary.y1;
+      changedHorizon.unshift({
+        start: horizon[i].start,
+        end: boundary.y1,
+        boundary: horizon[i].boundary
+      });
+    }
+
+    if (boundary.y2 < horizon[j].end) {
+      changedHorizon.at(-1).end = boundary.y2;
+      changedHorizon.push({
+        start: boundary.y2,
+        end: horizon[j].end,
+        boundary: horizon[j].boundary
+      });
+    }
+
+    for (q = i; q <= j; q++) {
+      horizonPart = horizon[q];
+      affectedBoundary = horizonPart.boundary;
+
+      if (affectedBoundary.x2New !== undefined) {
+        continue;
+      }
+
+      let used = false;
+
+      for (k = i - 1; !used && k >= 0 && horizon[k].start >= affectedBoundary.y1; k--) {
+        used = horizon[k].boundary === affectedBoundary;
+      }
+
+      for (k = j + 1; !used && k < horizon.length && horizon[k].end <= affectedBoundary.y2; k++) {
+        used = horizon[k].boundary === affectedBoundary;
+      }
+
+      for (k = 0; !used && k < changedHorizon.length; k++) {
+        used = changedHorizon[k].boundary === affectedBoundary;
+      }
+
+      if (!used) {
+        affectedBoundary.x2New = maxXNew;
+      }
+    }
+
+    Array.prototype.splice.apply(horizon, [i, j - i + 1, ...changedHorizon]);
+  }
+
+  for (const horizonPart of horizon) {
+    const affectedBoundary = horizonPart.boundary;
+
+    if (affectedBoundary.x2New === undefined) {
+      affectedBoundary.x2New = Math.max(width, affectedBoundary.x2);
+    }
+  }
+}
+
 class TextLayerRenderTask {
   constructor({
     textContent,
@@ -15789,8 +16221,13 @@ class TextLayerRenderTask {
     container,
     viewport,
     textDivs,
-    textContentItemsStr
+    textContentItemsStr,
+    enhanceTextSelection
   }) {
+    if (enhanceTextSelection) {
+      (0, _display_utils.deprecated)("The `enhanceTextSelection` functionality will be removed in the future.");
+    }
+
     this._textContent = textContent;
     this._textContentStream = textContentStream;
     this._container = container;
@@ -15798,6 +16235,7 @@ class TextLayerRenderTask {
     this._viewport = viewport;
     this._textDivs = textDivs || [];
     this._textContentItemsStr = textContentItemsStr || [];
+    this._enhanceTextSelection = !!enhanceTextSelection;
     this._fontInspectorEnabled = !!globalThis.FontInspector?.enabled;
     this._reader = null;
     this._layoutTextLastFontSize = null;
@@ -15812,7 +16250,9 @@ class TextLayerRenderTask {
     this._devicePixelRatio = globalThis.devicePixelRatio || 1;
 
     this._capability.promise.finally(() => {
-      this._textDivProperties = null;
+      if (!this._enhanceTextSelection) {
+        this._textDivProperties = null;
+      }
 
       if (this._layoutTextCtx) {
         this._layoutTextCtx.canvas.width = 0;
@@ -15895,7 +16335,13 @@ class TextLayerRenderTask {
         } = this._layoutTextCtx.measureText(textDiv.textContent);
 
         if (width > 0) {
-          transform = `scaleX(${this._devicePixelRatio * textDivProperties.canvasWidth / width}`;
+          const scale = this._devicePixelRatio * textDivProperties.canvasWidth / width;
+
+          if (this._enhanceTextSelection) {
+            textDivProperties.scale = scale;
+          }
+
+          transform = `scaleX(${scale})`;
         }
       } catch (fingerprintIsBlockedException) {}
     }
@@ -15905,6 +16351,10 @@ class TextLayerRenderTask {
     }
 
     if (transform.length > 0) {
+      if (this._enhanceTextSelection) {
+        textDivProperties.originalTransform = transform;
+      }
+
       textDiv.style.transform = transform;
     }
 
@@ -15977,6 +16427,74 @@ class TextLayerRenderTask {
     }, this._capability.reject);
   }
 
+  expandTextDivs(expandDivs = false) {
+    if (!this._enhanceTextSelection || !this._renderingDone) {
+      return;
+    }
+
+    if (this._bounds !== null) {
+      expand(this);
+      this._bounds = null;
+    }
+
+    const transformBuf = [],
+          paddingBuf = [];
+
+    for (let i = 0, ii = this._textDivs.length; i < ii; i++) {
+      const div = this._textDivs[i];
+
+      const divProps = this._textDivProperties.get(div);
+
+      if (!divProps.hasText) {
+        continue;
+      }
+
+      if (expandDivs) {
+        transformBuf.length = 0;
+        paddingBuf.length = 0;
+
+        if (divProps.originalTransform) {
+          transformBuf.push(divProps.originalTransform);
+        }
+
+        if (divProps.paddingTop > 0) {
+          paddingBuf.push(`${divProps.paddingTop}px`);
+          transformBuf.push(`translateY(${-divProps.paddingTop}px)`);
+        } else {
+          paddingBuf.push(0);
+        }
+
+        if (divProps.paddingRight > 0) {
+          paddingBuf.push(`${divProps.paddingRight / divProps.scale}px`);
+        } else {
+          paddingBuf.push(0);
+        }
+
+        if (divProps.paddingBottom > 0) {
+          paddingBuf.push(`${divProps.paddingBottom}px`);
+        } else {
+          paddingBuf.push(0);
+        }
+
+        if (divProps.paddingLeft > 0) {
+          paddingBuf.push(`${divProps.paddingLeft / divProps.scale}px`);
+          transformBuf.push(`translateX(${-divProps.paddingLeft / divProps.scale}px)`);
+        } else {
+          paddingBuf.push(0);
+        }
+
+        div.style.padding = paddingBuf.join(" ");
+
+        if (transformBuf.length) {
+          div.style.transform = transformBuf.join(" ");
+        }
+      } else {
+        div.style.padding = null;
+        div.style.transform = divProps.originalTransform;
+      }
+    }
+  }
+
 }
 
 exports.TextLayerRenderTask = TextLayerRenderTask;
@@ -15988,7 +16506,8 @@ function renderTextLayer(renderParameters) {
     container: renderParameters.container,
     viewport: renderParameters.viewport,
     textDivs: renderParameters.textDivs,
-    textContentItemsStr: renderParameters.textContentItemsStr
+    textContentItemsStr: renderParameters.textContentItemsStr,
+    enhanceTextSelection: renderParameters.enhanceTextSelection
   });
 
   task._render(renderParameters.timeout);
@@ -17363,7 +17882,10 @@ exports.SVGGraphics = SVGGraphics;
     }
 
     eoFill() {
-      this.current.element?.setAttributeNS(null, "fill-rule", "evenodd");
+      if (this.current.element) {
+        this.current.element.setAttributeNS(null, "fill-rule", "evenodd");
+      }
+
       this.fill();
     }
 
@@ -17373,7 +17895,10 @@ exports.SVGGraphics = SVGGraphics;
     }
 
     eoFillStroke() {
-      this.current.element?.setAttributeNS(null, "fill-rule", "evenodd");
+      if (this.current.element) {
+        this.current.element.setAttributeNS(null, "fill-rule", "evenodd");
+      }
+
       this.fillStroke();
     }
 
@@ -17603,7 +18128,9 @@ class PDFNodeStream {
   }
 
   cancelAllRequests(reason) {
-    this._fullRequestReader?.cancel(reason);
+    if (this._fullRequestReader) {
+      this._fullRequestReader.cancel(reason);
+    }
 
     for (const reader of this._rangeRequestReaders.slice(0)) {
       reader.cancel(reason);
@@ -17776,9 +18303,13 @@ class BaseRangeReader {
     }
 
     this._loaded += chunk.length;
-    this.onProgress?.({
-      loaded: this._loaded
-    });
+
+    if (this.onProgress) {
+      this.onProgress({
+        loaded: this._loaded
+      });
+    }
+
     const buffer = new Uint8Array(chunk).buffer;
     return {
       value: buffer,
@@ -18873,7 +19404,9 @@ class PDFFetchStream {
   }
 
   cancelAllRequests(reason) {
-    this._fullRequestReader?.cancel(reason);
+    if (this._fullRequestReader) {
+      this._fullRequestReader.cancel(reason);
+    }
 
     for (const reader of this._rangeRequestReaders.slice(0)) {
       reader.cancel(reason);
@@ -18990,7 +19523,9 @@ class PDFFetchStreamReader {
   }
 
   cancel(reason) {
-    this._reader?.cancel(reason);
+    if (this._reader) {
+      this._reader.cancel(reason);
+    }
 
     this._abortController.abort();
   }
@@ -19043,9 +19578,13 @@ class PDFFetchStreamRangeReader {
     }
 
     this._loaded += value.byteLength;
-    this.onProgress?.({
-      loaded: this._loaded
-    });
+
+    if (this.onProgress) {
+      this.onProgress({
+        loaded: this._loaded
+      });
+    }
+
     const buffer = new Uint8Array(value).buffer;
     return {
       value: buffer,
@@ -19054,7 +19593,9 @@ class PDFFetchStreamRangeReader {
   }
 
   cancel(reason) {
-    this._reader?.cancel(reason);
+    if (this._reader) {
+      this._reader.cancel(reason);
+    }
 
     this._abortController.abort();
   }
@@ -19343,8 +19884,8 @@ var _svg = __w_pdfjs_require__(31);
 
 var _xfa_layer = __w_pdfjs_require__(29);
 
-const pdfjsVersion = '3.0.395';
-const pdfjsBuild = '0ec25318a';
+const pdfjsVersion = '2.16.446';
+const pdfjsBuild = '7e3678741';
 {
   if (_is_node.isNodeJS) {
     const {

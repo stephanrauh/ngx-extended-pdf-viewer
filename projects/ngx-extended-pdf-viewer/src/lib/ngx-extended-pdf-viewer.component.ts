@@ -1346,18 +1346,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.selectCursorTool();
 
       PDFViewerApplication.eventBus.on('textlayerrendered', (x: TextLayerRenderedEvent) => {
-        this.textLayerRendered.emit(x);
+        this.ngZone.run(() => this.textLayerRendered.emit(x));
       });
 
       PDFViewerApplication.eventBus.on('scrollmodechanged', (x: ScrollModeChangedEvent) => {
         this.ngZone.run(() => this.scrollModeChange.emit(x.mode));
       });
       PDFViewerApplication.eventBus.on('progress', (x: ProgressBarEvent) => {
-        this.progress.emit(x);
+        this.ngZone.run(() => this.progress.emit(x));
       });
 
       PDFViewerApplication.eventBus.on('pagesloaded', async (x: PagesLoadedEvent) => {
-        this.pagesLoaded.emit(x);
+        this.ngZone.run(() => this.pagesLoaded.emit(x));
         this.removeScrollbarInInititeScrollMode();
         if (this.rotation !== undefined && this.rotation !== null) {
           const r = Number(this.rotation);
