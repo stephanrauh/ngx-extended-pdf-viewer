@@ -113,7 +113,7 @@ export class PDFFindController {
     _calculateFuzzyMatch(query: any, pageIndex: any, pageContent: any, pageDiffs: any): void;
     _calculatePhraseMatch(query: any, pageIndex: any, pageContent: any, pageDiffs: any, entireWord: any, ignoreAccents: any): void;
     _calculateWordMatch(query: any, pageIndex: any, pageContent: any, pageDiffs: any, entireWord: any, ignoreAccents: any): void;
-    _isInPageRanges(page?: number, commaSeparatedRanges?: string): boolean;
+    _isInPageRanges(page: number | undefined, commaSeparatedRanges: any): any;
     _isInPageRange(page?: number, range?: string): boolean;
     _calculateMatch(pageIndex: any): void;
     _extractText(): void;

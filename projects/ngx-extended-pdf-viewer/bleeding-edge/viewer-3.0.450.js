@@ -6445,7 +6445,7 @@ class PDFFindController {
     this._prepareMatches(matchesWithLength, this._pageMatches[pageIndex], this._pageMatchesLength[pageIndex], this._pageMatchesColor[pageIndex]);
   }
 
-  _isInPageRanges(page = 1, commaSeparatedRanges = "1,3,6-7") {
+  _isInPageRanges(page = 1, commaSeparatedRanges) {
     try {
       if (!commaSeparatedRanges) {
         return true;
@@ -10856,7 +10856,7 @@ class PDFViewer {
   #onVisibilityChange = null;
 
   constructor(options) {
-    const viewerVersion = '3.0.427';
+    const viewerVersion = '3.0.450';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -18871,8 +18871,8 @@ var _pdf_link_service = __webpack_require__(3);
 
 var _app = __webpack_require__(4);
 
-const pdfjsVersion = '3.0.427';
-const pdfjsBuild = '881dc5aaa';
+const pdfjsVersion = '3.0.450';
+const pdfjsBuild = '2630ff144';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
