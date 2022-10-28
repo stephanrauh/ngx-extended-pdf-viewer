@@ -134,7 +134,7 @@ class WorkerMessageHandler {
     const WorkerTasks = [];
     const verbosity = (0, _util.getVerbosityLevel)();
     const apiVersion = docParams.apiVersion;
-    const workerVersion = '3.0.450';
+    const workerVersion = '2.16.447';
 
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
@@ -13229,7 +13229,7 @@ class PartialEvaluator {
 
   isSerifFont(baseFontName) {
     const fontNameWoStyle = baseFontName.split("-")[0];
-    return fontNameWoStyle in (0, _standard_fonts.getSerifFonts)() || /serif/gi.test(fontNameWoStyle);
+    return fontNameWoStyle in (0, _standard_fonts.getSerifFonts)() || fontNameWoStyle.search(/serif/gi) !== -1;
   }
 
   getBaseFontMetrics(name) {
@@ -25113,10 +25113,6 @@ function adjustToUnicode(properties, builtInEncoding) {
     return;
   }
 
-  if (properties.hasIncludedToUnicodeMap) {
-    return;
-  }
-
   if (builtInEncoding === properties.defaultEncoding) {
     return;
   }
@@ -25129,7 +25125,11 @@ function adjustToUnicode(properties, builtInEncoding) {
         glyphsUnicodeMap = (0, _glyphlist.getGlyphsUnicode)();
 
   for (const charCode in builtInEncoding) {
-    if (properties.hasEncoding) {
+    if (properties.hasIncludedToUnicodeMap) {
+      if (properties.toUnicode.has(charCode)) {
+        continue;
+      }
+    } else if (properties.hasEncoding) {
       if (properties.differences.length === 0 || properties.differences[charCode] !== undefined) {
         continue;
       }
@@ -25910,10 +25910,10 @@ class Font {
       }
     }
 
-    this.bold = /bold/gi.test(fontName);
-    this.italic = /oblique|italic/gi.test(fontName);
-    this.black = /Black/g.test(name);
-    const isNarrow = /Narrow/g.test(name);
+    this.bold = fontName.search(/bold/gi) !== -1;
+    this.italic = fontName.search(/oblique/gi) !== -1 || fontName.search(/italic/gi) !== -1;
+    this.black = name.search(/Black/g) !== -1;
+    const isNarrow = name.search(/Narrow/g) !== -1;
     this.remeasure = (!isStandardFont || isNarrow) && Object.keys(this.widths).length > 0;
 
     if ((isStandardFont || isMappedToStandardFont) && type === "CIDFontType2" && this.cidEncoding.startsWith("Identity-")) {
@@ -36544,8 +36544,6 @@ exports.Type1Font = void 0;
 
 var _cff_parser = __w_pdfjs_require__(34);
 
-var _util = __w_pdfjs_require__(2);
-
 var _fonts_utils = __w_pdfjs_require__(37);
 
 var _core_utils = __w_pdfjs_require__(5);
@@ -36553,6 +36551,8 @@ var _core_utils = __w_pdfjs_require__(5);
 var _stream = __w_pdfjs_require__(9);
 
 var _type1_parser = __w_pdfjs_require__(48);
+
+var _util = __w_pdfjs_require__(2);
 
 function findBlock(streamBytes, signature, startIndex) {
   const streamBytesLength = streamBytes.length;
@@ -36648,11 +36648,6 @@ function getHeaderBlock(stream, suggestedLength) {
 
 function getEexecBlock(stream, suggestedLength) {
   const eexecBytes = stream.getBytes();
-
-  if (eexecBytes.length === 0) {
-    throw new _util.FormatError("getEexecBlock - no font program found.");
-  }
-
   return {
     stream: new _stream.Stream(eexecBytes),
     length: eexecBytes.length
@@ -45634,8 +45629,7 @@ class Catalog {
 
       const data = {
         url: null,
-        dest: null,
-        action: null
+        dest: null
       };
       Catalog.parseDestDictionary({
         destDict: outlineDict,
@@ -45653,12 +45647,10 @@ class Catalog {
       }
 
       const outlineItem = {
-        action: data.action,
         dest: data.dest,
         url: data.url,
         unsafeUrl: data.unsafeUrl,
         newWindow: data.newWindow,
-        setOCGState: data.setOCGState,
         title: (0, _util.stringToPDFString)(title),
         color: rgbColor,
         count: Number.isInteger(count) ? count : undefined,
@@ -46936,40 +46928,6 @@ class Catalog {
             resultObj.action = namedAction.name;
           }
 
-          break;
-
-        case "SetOCGState":
-          const state = action.get("State");
-          const preserveRB = action.get("PreserveRB");
-
-          if (!Array.isArray(state) || state.length === 0) {
-            break;
-          }
-
-          const stateArr = [];
-
-          for (const elem of state) {
-            if (elem instanceof _primitives.Name) {
-              switch (elem.name) {
-                case "ON":
-                case "OFF":
-                case "Toggle":
-                  stateArr.push(elem.name);
-                  break;
-              }
-            } else if (elem instanceof _primitives.Ref) {
-              stateArr.push(elem.toString());
-            }
-          }
-
-          if (stateArr.length !== state.length) {
-            break;
-          }
-
-          resultObj.setOCGState = {
-            state: stateArr,
-            preserveRB: typeof preserveRB === "boolean" ? preserveRB : true
-          };
           break;
 
         case "JavaScript":
@@ -59688,7 +59646,7 @@ class Rename extends _xfa_object.ContentObject {
   [_xfa_object.$finalize]() {
     this[_xfa_object.$content] = this[_xfa_object.$content].trim();
 
-    if (this[_xfa_object.$content].toLowerCase().startsWith("xml") || new RegExp("[\\p{L}_][\\p{L}\\d._\\p{M}-]*", "u").test(this[_xfa_object.$content])) {
+    if (this[_xfa_object.$content].toLowerCase().startsWith("xml") || this[_xfa_object.$content].match(new RegExp("[\\p{L}_][\\p{L}\\d._\\p{M}-]*", "u"))) {
       (0, _util.warn)("XFA - Rename: invalid XFA name");
     }
   }
@@ -63554,8 +63512,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
 
 var _worker = __w_pdfjs_require__(1);
 
-const pdfjsVersion = '3.0.450';
-const pdfjsBuild = '2630ff144';
+const pdfjsVersion = '2.16.447';
+const pdfjsBuild = 'c22775cf6';
 })();
 
 /******/ 	return __webpack_exports__;

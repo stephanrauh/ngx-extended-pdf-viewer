@@ -400,3 +400,5 @@
 - 15.0.3 #1519 display apostrophes correctly; #1471 prepare activating the PDF editor
 - 15.0.4 #1537 fixed a bug preventing printing high-resolution PDF files; added `ngZone.run()` to several events to make sure Angular is aware of the events
 - 15.0.5 #1540 now the find algorithm covers every page when using a custom findbar (previously only a pages 1, 3, 6, and 7 were searched)
+- 15.0.6 #1555 now find next/find previous wraps around correctly when "current page only" is selected
+- 15.0.7 #1547 added the button type to the document properties dialog to prevent the default behaviour

@@ -6703,7 +6703,21 @@ class PDFFindController {
         return;
       }
 
-      this._advanceOffsetPage(previous);
+      if (this.state.currentPage) {
+        if (previous) {
+          offset.matchIdx = numPageMatches - 1;
+        } else {
+          offset.matchIdx = 0;
+        }
+
+        this._updateMatch(true);
+
+        this._updateUIState(FindState.WRAPPED);
+
+        return;
+      } else {
+        this._advanceOffsetPage(previous);
+      }
     }
 
     this._nextPageMatch();
@@ -10856,7 +10870,7 @@ class PDFViewer {
   #onVisibilityChange = null;
 
   constructor(options) {
-    const viewerVersion = '3.0.450';
+    const viewerVersion = '3.0.451';
 
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
@@ -18871,8 +18885,8 @@ var _pdf_link_service = __webpack_require__(3);
 
 var _app = __webpack_require__(4);
 
-const pdfjsVersion = '3.0.450';
-const pdfjsBuild = '2630ff144';
+const pdfjsVersion = '3.0.451';
+const pdfjsBuild = '50fb7c8a0';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
