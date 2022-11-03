@@ -133,6 +133,13 @@ export type DocumentInitParameters = {
      */
     isEvalSupported?: boolean | undefined;
     /**
+     * - Determines if we can use
+     * `OffscreenCanvas` in the worker. Primarily used to improve performance of
+     * image conversion/rendering.
+     * The default value is `true` in web environments and `false` in Node.js.
+     */
+    isOffscreenCanvasSupported?: boolean | undefined;
+    /**
      * - By default fonts are converted to
      * OpenType fonts and loaded via the Font Loading API or `@font-face` rules.
      * If disabled, fonts will be rendered using a built-in font renderer that
@@ -582,6 +589,10 @@ export let DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
  * @property {boolean} [isEvalSupported] - Determines if we can evaluate strings
  *   as JavaScript. Primarily used to improve performance of font rendering, and
  *   when parsing PDF functions. The default value is `true`.
+ * @property {boolean} [isOffscreenCanvasSupported] - Determines if we can use
+ *   `OffscreenCanvas` in the worker. Primarily used to improve performance of
+ *   image conversion/rendering.
+ *   The default value is `true` in web environments and `false` in Node.js.
  * @property {boolean} [disableFontFace] - By default fonts are converted to
  *   OpenType fonts and loaded via the Font Loading API or `@font-face` rules.
  *   If disabled, fonts will be rendered using a built-in font renderer that
@@ -632,12 +643,11 @@ export let DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
  */
 export function getDocument(src: GetDocumentParameters): PDFDocumentLoadingTask;
 export class LoopbackPort {
-    _listeners: any[];
-    _deferred: Promise<void>;
     postMessage(obj: any, transfers: any): void;
     addEventListener(name: any, listener: any): void;
     removeEventListener(name: any, listener: any): void;
     terminate(): void;
+    #private;
 }
 /**
  * Abstract class to support range requests file loading.
@@ -1320,7 +1330,7 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#16@#workerPorts": WeakMap<object, any>;
+    static "__#17@#workerPorts": WeakMap<object, any>;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */

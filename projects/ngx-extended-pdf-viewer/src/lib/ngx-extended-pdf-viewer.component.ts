@@ -1106,6 +1106,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           window.addEventListener('keydown', PDFViewerApplication.printKeyDownListener, true);
         }
 
+        const body = document.getElementsByTagName('body');
+        if (body[0]) {
+          const topLevelElements = body[0].children;
+          for (let i = topLevelElements.length - 1; i >= 0; i--) {
+            const e = topLevelElements.item(i);
+            if (e && e.id === 'printContainer') {
+              body[0].removeChild(e);
+            }
+          }
+        }
         const pc = document.getElementById('printContainer');
         if (pc) {
           document.getElementsByTagName('body')[0].appendChild(pc);
@@ -1681,19 +1691,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
         (PDFViewerApplication.eventBus as any) = null;
       });
-    }
-
-    const body = document.getElementsByTagName('body');
-    if (body[0]) {
-      const topLevelElements = body[0].children;
-      for (let i = topLevelElements.length - 1; i >= 0; i--) {
-        const e = topLevelElements.item(i);
-        if (e && e.id === 'printContainer') {
-          body[0].removeChild(e);
-        } else if (e && e.id === 'fileInput') {
-          body[0].removeChild(e);
-        }
-      }
     }
   }
 

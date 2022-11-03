@@ -188,6 +188,8 @@ export class PDFViewer implements IPDFAnnotationLayerFactory, IPDFAnnotationEdit
     constructor(options: PDFViewerOptions);
     container: HTMLDivElement;
     viewer: Element | null;
+    /** #495 modified by ngx-extended-pdf-viewer */
+    pageViewMode: any;
     eventBus: import("./event_utils").EventBus;
     linkService: import("./interfaces").IPDFLinkService;
     downloadManager: import("./interfaces").IDownloadManager | null;
@@ -236,12 +238,24 @@ export class PDFViewer implements IPDFAnnotationLayerFactory, IPDFAnnotationEdit
      * @type {number}
      */
     get currentPageNumber(): number;
+    /** #495 modified by ngx-extended-pdf-viewer */
+    hidePagesDependingOnpageViewMode(): void;
+    pageFlip: PageFlip | undefined;
+    /** end of modification */
     /**
      * @returns {boolean} Whether the pageNumber is valid (within bounds).
      * @private
      */
     private _setCurrentPageNumber;
     _currentPageNumber: any;
+    /**
+     * Adds a page to the rendering queue
+     * @param {number} pageIndex Index of the page to render
+     * @returns {boolean} false, if the page has already been rendered
+     * or if it's out of range
+     */
+    addPageToRenderQueue(pageIndex?: number): boolean;
+    ensureAdjecentPagesAreLoaded(): void;
     /**
      * @param {string} val - The page label.
      */
@@ -309,6 +323,7 @@ export class PDFViewer implements IPDFAnnotationLayerFactory, IPDFAnnotationEdit
     _previousScrollMode: any;
     _spreadMode: any;
     _scrollUpdate(): void;
+    scrollPagePosIntoView(pageNumber: any, pageSpot: any): void;
     _setScaleUpdatePages(newScale: any, newValue: any, noScroll?: boolean, preset?: boolean): void;
     /**
      * @private
@@ -600,16 +615,10 @@ export class PDFViewer implements IPDFAnnotationLayerFactory, IPDFAnnotationEdit
     get annotationEditorMode(): number;
     set annotationEditorParams(arg: any);
     refresh(): void;
-    /**
-     * Adds a page to the rendering queue
-     * @param {number} pageIndex Index of the page to render
-     * @returns {boolean} false, if the page has already been rendered
-     * or if it's out of range
-     */
-    addPageToRenderQueue(pageIndex?: number): boolean;
     #private;
 }
 import { PDFRenderingQueue } from "./pdf_rendering_queue.js";
+import { PageFlip } from "./page-flip.module.js";
 import { TextHighlighter } from "./text_highlighter.js";
 import { TextLayerBuilder } from "./text_layer_builder.js";
 import { AnnotationLayerBuilder } from "./annotation_layer_builder.js";
