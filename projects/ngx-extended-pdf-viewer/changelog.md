@@ -403,4 +403,4 @@
 - 15.0.6 #1555 now find next/find previous wraps around correctly when "current page only" is selected
 - 15.0.7 #1547 added the button type to the document properties dialog to prevent the default behaviour
 - 15.0.8 #1538 moved the modifications of ngx-extended-pdf-viewer from the BaseViewer class to the PdfViewer class; #1571 now you can print even after hiding an instance of ngx-extended-pdf-viewer and immediately after that showing a new instance of the PDF viewer
-- 15.0.9 #1576 fix [scrollMode]
+- 15.0.9 #1576 fix [scrollMode]; #1575 entering a page number into the input field now triggers page turning in book mode

@@ -1011,9 +1011,24 @@ class PDFLinkService {
       this.pdfHistory.pushCurrentPosition();
       this.pdfHistory.pushPage(pageNumber);
     }
-    this.pdfViewer.scrollPageIntoView({
-      pageNumber
-    });
+    if (this.pdfViewer.pageViewMode === "book") {
+      if (this.pdfViewer.pageFlip) {
+        this.pdfViewer.ensureAdjecentPagesAreLoaded();
+        const evenPage = this.pdfViewer.currentPageNumber - this.pdfViewer.currentPageNumber % 2;
+        const evenTargetPage = pageNumber - pageNumber % 2;
+        if (evenPage === evenTargetPage - 2) {
+          this.pdfViewer.pageFlip.flipNext();
+        } else if (evenPage === evenTargetPage + 2) {
+          this.pdfViewer.pageFlip.flipPrev();
+        } else {
+          this.pdfViewer.pageFlip.turnToPage(pageNumber - 1);
+        }
+      }
+    } else {
+      this.pdfViewer.scrollPageIntoView({
+        pageNumber
+      });
+    }
   }
   addLinkAttributes(link, url, newWindow = false) {
     addLinkAttributes(link, {
