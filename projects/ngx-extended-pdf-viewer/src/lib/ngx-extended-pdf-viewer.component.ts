@@ -1799,7 +1799,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
       if ('scrollMode' in changes) {
         if (this.scrollMode || this.scrollMode === ScrollModeType.vertical) {
-          PDFViewerApplication.pdfViewer.scrollMode = this.scrollMode;
+          if (PDFViewerApplication.pdfViewer.scrollMode !== Number(this.scrollMode)) {
+            PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(this.scrollMode) });
+          }
         }
       }
       if ('sidebarVisible' in changes) {
