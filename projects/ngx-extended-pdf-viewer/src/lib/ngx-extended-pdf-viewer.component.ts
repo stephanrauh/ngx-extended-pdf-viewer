@@ -862,13 +862,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     };
 
     if (isPlatformBrowser(this.platformId)) {
-      const link = document.createElement('link');
-      link.href = this.localeFolderPath + '/locale.properties';
-      link.setAttribute('origin', 'ngx-extended-pdf-viewer');
-      link.rel = 'resource';
-      link.type = 'application/l10n';
-      const widget: HTMLElement = this.elementRef.nativeElement;
-      widget.appendChild(link);
       (window as any).getFormValue = (key: string) => this.getFormValue(key);
       (window as any).setFormValue = (key: string, value: string) => this.setFormValue(key, value);
       (window as any).registerAcroformAnnotations = (sortedAnnotations) => this.registerAcroformAnnotations(sortedAnnotations);
