@@ -406,4 +406,5 @@
 - 15.0.9 #1576 fix [scrollMode]; #1575 entering a page number into the input field now triggers page turning in book mode
 - 15.0.10 #1585 fix two-way binding for XFA forms
 - 15.0.11 #1583 fix `[useBrowserLocale]="false"`
-- 15.1.0 #1594 declare compatability to Angular 15
+- 15.0.12 #1594 declare compatibility to Angular 15
+- 15.1.0 #1599 sensible defaults for `useBrowserLocale`
