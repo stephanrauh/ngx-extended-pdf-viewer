@@ -1115,19 +1115,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         console.error('The easiest way to do this is to add them to the index.html.');
         console.error('The PDF viewer ignores your setting and loads the default translations.');
       }
-      debugger;
       const link = this.renderer.createElement('link');
       link.rel = 'resource';
       link.type = 'application/l10n';
       link.href = this.localeFolderPath + '/locale.properties';
       link.setAttribute('origin', 'ngx-extended-pdf-viewer');
       this.renderer.appendChild(this.elementRef.nativeElement, link);
-      //      document.querySelector('body')?.appendChild(link);
-      // <link *ngIf="useBrowserLocale"
-      // rel="resource"
-      // type="application/l10n"
-      // [attr.xhref]="localeFolderPath + '/locale.properties'"
-      // origin="ngx-extended-pdf-viewer" />
     } else if (this.useBrowserLocale && langCount > 0) {
       const o = langLinks[0].attributes['origin'];
       if (o && o.value !== 'ngx-extended-pdf-viewer') {
