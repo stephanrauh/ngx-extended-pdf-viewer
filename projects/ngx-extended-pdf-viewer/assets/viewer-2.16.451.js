@@ -4752,7 +4752,7 @@ class PDFFindBar {
     this.eventBus.dispatch("find", {
       source: this,
       type,
-      query: this.findFieldMultiline.classList.contains("hidden") ? this.findField.value : this.findFieldMultiline.value,
+      query: this.findFieldMultiline.classList.contains("hidden") ? this.findField.value : this.findFieldMultiline.value + "\n",
       phraseSearch: !this.multipleSearchTexts.checked,
       caseSensitive: this.caseSensitive.checked,
       entireWord: this.entireWord.checked,
@@ -5089,7 +5089,9 @@ class PDFFindController {
   get _query() {
     if (this._state.query !== this._rawQuery) {
       this._rawQuery = this._state.query;
-      [this._normalizedQuery] = normalize(this._state.query);
+      const queries = this._state.query.split("\n");
+      const normalizedQueries = queries.map(q => normalize(q)[0]);
+      this._normalizedQuery = normalizedQueries.join("\n");
     }
     return this._normalizedQuery;
   }
@@ -5390,7 +5392,7 @@ class PDFFindController {
                 strBuf.push("\n");
               }
             }
-            [this._pageContents[i], this._pageDiffs[i]] = normalize(strBuf.join(""));
+            [this._pageContents[i], this._pageDiffs[i]] = normalize(strBuf.join(""), false);
             extractTextCapability.resolve(i);
           }, reason => {
             Window['ngxConsole'].error(`Unable to get text content for page ${i + 1}`, reason);
@@ -8837,7 +8839,7 @@ class BaseViewer {
     if (this.constructor === BaseViewer) {
       throw new Error("Cannot initialize BaseViewer.");
     }
-    const viewerVersion = '2.16.450';
+    const viewerVersion = '2.16.451';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -15398,7 +15400,8 @@ class TextHighlighter {
       const begin = match.begin;
       const end = match.end;
       const isSelected = isSelectedPage && i === selectedMatchIdx;
-      const highlightSuffix = (isSelected ? " selected" : "") + " color" + match.color;
+      const colorNumber = match.color % 5;
+      const highlightSuffix = (isSelected ? " selected" : "") + " color" + colorNumber;
       let selectedLeft = 0;
       if (!prevEnd || begin.divIdx !== prevEnd.divIdx) {
         if (prevEnd !== null) {
@@ -17927,8 +17930,8 @@ var _ui_utils = __webpack_require__(1);
 var _app_options = __webpack_require__(2);
 var _pdf_link_service = __webpack_require__(3);
 var _app = __webpack_require__(4);
-const pdfjsVersion = '2.16.450';
-const pdfjsBuild = '61e0f7db4';
+const pdfjsVersion = '2.16.451';
+const pdfjsBuild = '979acd2cc';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,

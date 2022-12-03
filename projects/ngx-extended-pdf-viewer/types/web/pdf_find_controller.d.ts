@@ -97,6 +97,7 @@ export class PDFFindController {
      */
     get _query(): string;
     _rawQuery: any;
+    _normalizedQuery: any;
     _shouldDirtyMatch(state: any): boolean;
     /**
      * Helper for multi-term search that fills the `matchesWithLength` array

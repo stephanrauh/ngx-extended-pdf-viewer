@@ -22,6 +22,7 @@ export interface IPDFViewerApplication {
   _boundEvents: any;
   enablePrint: boolean;
   eventBus: IEventBus;
+  findBar: any;
   findController: FindController;
   isViewerEmbedded: boolean;
   l10n: IWebL10n;
