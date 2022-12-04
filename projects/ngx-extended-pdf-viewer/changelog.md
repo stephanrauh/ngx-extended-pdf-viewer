@@ -409,3 +409,4 @@
 - 15.0.12 #1594 declare compatibility to Angular 15
 - 15.1.0 #1599 sensible defaults for `useBrowserLocale`; the attribute is now deprecated, because the viewer detects whether you've embedded the language file in the HTML file or not
 - 15.1.1 #1599 removed the attribute `[useBrowserLocale]` from the schematics; #1607 / #1602 repaired the multi-word search and `ngxExtendedPdfViewerService.findMultiple()`
+- 15.2.0 #1546 added the attribute `type="button"` to every button in order to prevent accidental form submits; #1487 add `[(activeSidebarView)]` to allow developers to define the default sidebar view

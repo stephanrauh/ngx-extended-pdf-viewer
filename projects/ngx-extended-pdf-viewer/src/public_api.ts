@@ -28,6 +28,7 @@ export * from './lib/options/password-prompt';
 export * from './lib/options/pdf-background';
 export * from './lib/options/pdf-default-options';
 export * from './lib/options/pdf-print-range';
+export * from './lib/options/pdf-sidebar-views';
 export * from './lib/options/pdf-viewer';
 export * from './lib/options/pdf-viewer-app-config';
 export * from './lib/options/pdf-viewer-application';

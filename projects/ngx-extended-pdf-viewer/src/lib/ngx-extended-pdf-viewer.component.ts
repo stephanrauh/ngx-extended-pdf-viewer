@@ -54,6 +54,7 @@ import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 import { UnitToPx } from './unit-to-px';
 
+import { PdfSidebarView } from './options/pdf-sidebar-views';
 import { RelativeCoordsSupport } from './relative-coords-support';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
@@ -457,6 +458,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public sidebarVisible: boolean | undefined = undefined;
+
+  @Input()
+  public activeSidebarView: PdfSidebarView = PdfSidebarView.OUTLINE;
+
+  @Output()
+  public activeSidebarViewChange = new EventEmitter<PdfSidebarView>();
 
   @Output()
   public sidebarVisibleChange = new EventEmitter<boolean>();
@@ -1316,9 +1323,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (sidebarVisible !== undefined) {
       PDFViewerApplication.sidebarViewOnLoad = sidebarVisible ? 1 : 0;
       if (PDFViewerApplication.appConfig) {
-        PDFViewerApplication.appConfig.sidebarViewOnLoad = sidebarVisible ? 1 : 0;
+        PDFViewerApplication.appConfig.sidebarViewOnLoad = sidebarVisible ? this.activeSidebarView : 0;
       }
-      options.set('sidebarViewOnLoad', this.sidebarVisible ? 1 : 0);
+      options.set('sidebarViewOnLoad', this.sidebarVisible ? this.activeSidebarView : 0);
     }
     if (this.spread === 'even') {
       options.set('spreadModeOnLoad', 2);
@@ -1455,6 +1462,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       PDFViewerApplication.eventBus.on('sidebarviewchanged', (x: SidebarviewChange) => {
         this.ngZone.run(() => {
           this.sidebarVisibleChange.emit(x.view > 0);
+          if (x.view > 0) {
+            this.activeSidebarViewChange.emit(x.view);
+          }
           if (this.sidebarComponent) {
             this.sidebarComponent.showToolbarWhenNecessary();
           }
@@ -1809,9 +1819,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           }
         }
       }
-      if ('sidebarVisible' in changes) {
+      if ('sidebarVisible' in changes || 'activeSidebarView' in changes) {
         if (this.sidebarVisible) {
-          PDFViewerApplication.pdfSidebar.open();
+          //          PDFViewerApplication.pdfSidebar.open();
+          const view = Number(this.activeSidebarView);
+          if (view === 1 || view === 2 || view === 3 || view === 4) {
+            PDFViewerApplication.pdfSidebar.switchView(view, true);
+          } else {
+            console.error('[activeSidebarView] must be an integer value between 1 and 4');
+          }
         } else {
           PDFViewerApplication.pdfSidebar.close();
         }
