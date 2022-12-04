@@ -27,14 +27,14 @@
     "@angular/platform-browser-dynamic": "^13.3.12",
     "@schematics/angular": "^13.3.8",
     "@types/estree": "^1.0.0",
-    "rxjs": "^7.5.7",
+    "rxjs": "^7.6.0",
     "zone.js": "^0.11.8"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^13.3.10",
     "@angular/cli": "^13.3.10",
     "@angular/compiler-cli": "^13.3.12",
-    "@types/node": "^18.11.9",
+    "@types/node": "^18.11.10",
     "copyfiles": "^2.4.1",
     "ng-packagr": "~13.3.1",
     "properties-reader": "^2.2.0",
