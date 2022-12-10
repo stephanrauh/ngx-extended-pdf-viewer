@@ -1050,6 +1050,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           this.afterLibraryInit();
           this.openPDF();
           this.assignTabindexes();
+          if (this.replaceBrowserPrint) {
+            window.print = (window as any).printPDF;
+          }
         }
       }, this.delayFirstView);
     };
@@ -1076,9 +1079,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
       if (this.enableRelativeCoords) {
         this.relativeCoordsSupport = new RelativeCoordsSupport(this.ngZone, this, this.relativeCoordsOptions);
-      }
-      if (this.replaceBrowserPrint) {
-        window.print = (window as any).printPDF;
       }
     };
     document.addEventListener('webviewerloaded', onLoaded);
@@ -2027,7 +2027,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
     if ('replaceBrowserPrint' in changes) {
       if (this.replaceBrowserPrint) {
-        window.print = (window as any).printPDF;
+        if ((window as any).printPDF) {
+          window.print = (window as any).printPDF;
+        }
       } else {
         const originalPrint = NgxExtendedPdfViewerComponent.originalPrint;
         if (originalPrint && !originalPrint.toString().includes('printPdf')) {
