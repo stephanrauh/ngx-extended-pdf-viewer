@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { addTrustedHTML } from '../sanitized-css-injector';
 import { css } from './colors-css';
 
 @Component({
@@ -18,7 +19,7 @@ export class PdfDarkThemeComponent implements OnInit, OnDestroy {
   private injectStyle() {
     const styles = this.document.createElement('STYLE') as HTMLStyleElement;
     styles.id = 'pdf-theme-css';
-    styles.innerHTML = css;
+    addTrustedHTML(styles, css);
     this.renderer.appendChild(this.document.head, styles);
   }
 

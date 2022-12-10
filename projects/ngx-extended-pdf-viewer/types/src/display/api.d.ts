@@ -1342,7 +1342,7 @@ export class PDFWorker {
     static get workerSrc(): string;
     static get _mainThreadWorkerMessageHandler(): any;
     static get _setupFakeWorkerGlobal(): any;
-    constructor({ name, port, verbosity, }?: {
+    constructor({ name, port, verbosity }?: {
         name?: null | undefined;
         port?: null | undefined;
         verbosity?: number | undefined;
@@ -1376,6 +1376,7 @@ export class PDFWorker {
      * Destroys the worker instance.
      */
     destroy(): void;
+    #private;
 }
 export namespace PDFWorkerUtil {
     const isWorkerDisabled: boolean;

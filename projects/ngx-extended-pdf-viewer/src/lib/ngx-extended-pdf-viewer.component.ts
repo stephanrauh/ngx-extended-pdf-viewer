@@ -54,6 +54,7 @@ import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 import { UnitToPx } from './unit-to-px';
 
+import { TrustedTypesWindow } from 'trusted-types/lib';
 import { AnnotationEditorLayerRenderedEvent } from './events/annotation-editor-layer-rendered-event';
 import { AnnotationLayerRenderedEvent } from './events/annotation-layer-rendered-event';
 import { AttachmentLoadedEvent } from './events/attachment-loaded-event';
@@ -855,7 +856,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const script = document.createElement('script');
     script.async = true;
     script.type = 'text/javascript';
-    script.src = this.location.normalize(sourcePath);
+    const ttWindow = window as unknown as TrustedTypesWindow;
+    if (ttWindow.trustedTypes) {
+      const sanitizer = ttWindow.trustedTypes.createPolicy('foo', {
+        createScriptURL: (input) => input,
+      });
+      script.src = sanitizer.createScriptURL(this.location.normalize(sourcePath)) as any;
+    } else {
+      script.src = this.location.normalize(sourcePath);
+    }
 
     return script;
   }

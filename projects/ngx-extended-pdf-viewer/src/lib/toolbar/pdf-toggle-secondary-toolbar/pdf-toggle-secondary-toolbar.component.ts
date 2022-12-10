@@ -8,4 +8,9 @@ import { Component, Input } from '@angular/core';
 export class PdfToggleSecondaryToolbarComponent {
   @Input()
   public showSecondaryToolbarButton = true;
+
+  public onClick(event: Event): boolean {
+    event.preventDefault();
+    return false;
+  }
 }

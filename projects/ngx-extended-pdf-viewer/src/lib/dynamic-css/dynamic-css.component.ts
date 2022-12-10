@@ -1,10 +1,11 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { addTrustedHTML } from '../theme/sanitized-css-injector';
 
 @Component({
   selector: 'pdf-dynamic-css',
   templateUrl: './dynamic-css.component.html',
-  styleUrls: ['./dynamic-css.component.css']
+  styleUrls: ['./dynamic-css.component.css'],
 })
 export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
@@ -164,7 +165,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   }
 }
   `;
-}
+  }
 
   constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: any) {}
 
@@ -186,14 +187,15 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
 
     const styles = this.document.getElementById('pdf-dynamic-css');
     if (styles) {
-      styles.innerHTML = this.style;
+      addTrustedHTML(styles, this.style);
     }
   }
 
   private injectStyle() {
     const styles = this.document.createElement('STYLE') as HTMLStyleElement;
     styles.id = 'pdf-dynamic-css';
-    styles.innerHTML = this.style;
+    addTrustedHTML(styles, this.style);
+
     this.renderer.appendChild(this.document.head, styles);
   }
 
