@@ -54,6 +54,12 @@ import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 import { UnitToPx } from './unit-to-px';
 
+import { AnnotationEditorLayerRenderedEvent } from './events/annotation-editor-layer-rendered-event';
+import { AnnotationLayerRenderedEvent } from './events/annotation-layer-rendered-event';
+import { AttachmentLoadedEvent } from './events/attachment-loaded-event';
+import { LayersLoadedEvent } from './events/layers-loaded-event';
+import { OutlineLoadedEvent } from './events/outline-loaded-event';
+import { XfaLayerRenderedEvent } from './events/xfa-layer-rendered-event';
 import { PdfSidebarView } from './options/pdf-sidebar-views';
 import { RelativeCoordsSupport } from './relative-coords-support';
 
@@ -80,6 +86,8 @@ export interface FormDataType {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+  private static originalPrint = window.print;
+
   public static ngxExtendedPdfViewerInitialized = false;
   public ngxExtendedPdfViewerIncompletelyInitialized = true;
 
@@ -223,7 +231,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public delayFirstView = 0;
 
-  private _showEditor = false; // this.pdfJsVersion >= '3.0';
+  private _showEditor = this.pdfJsVersion >= '3.0';
 
   public get showEditor() {
     return this._showEditor;
@@ -270,6 +278,24 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Output()
   public rotationChange = new EventEmitter<0 | 90 | 180 | 270>();
+
+  @Output()
+  public annotationLayerRendered = new EventEmitter<AnnotationLayerRenderedEvent>();
+
+  @Output()
+  public annotationEditorLayerRendered = new EventEmitter<AnnotationEditorLayerRenderedEvent>();
+
+  @Output()
+  public xfaLayerRendered = new EventEmitter<XfaLayerRenderedEvent>();
+
+  @Output()
+  public outlineLoaded = new EventEmitter<OutlineLoadedEvent>();
+
+  @Output()
+  public attachmentsloaded = new EventEmitter<AttachmentLoadedEvent>();
+
+  @Output()
+  public layersloaded = new EventEmitter<LayersLoadedEvent>();
 
   public hasSignature: boolean;
 
@@ -423,6 +449,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   /** allows you to pass a password to read password-protected files */
   @Input()
   public password: string | undefined = undefined;
+
+  @Input()
+  public replaceBrowserPrint = this.pdfJsVersion >= '3.0';
 
   public _showSidebarButton = true;
 
@@ -1048,6 +1077,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if (this.enableRelativeCoords) {
         this.relativeCoordsSupport = new RelativeCoordsSupport(this.ngZone, this, this.relativeCoordsOptions);
       }
+      if (this.replaceBrowserPrint) {
+        window.print = (window as any).printPDF;
+      }
     };
     document.addEventListener('webviewerloaded', onLoaded);
 
@@ -1491,6 +1523,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
       PDFViewerApplication.eventBus.on('layersloaded', hideSidebarToolbar);
 
+      PDFViewerApplication.eventBus.on('annotationLayerRendered', (event) => this.annotationLayerRendered.emit(event));
+      PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', (event) => this.annotationEditorLayerRendered.emit(event));
+      PDFViewerApplication.eventBus.on('xfalayerrendered', (event) => this.xfaLayerRendered.emit(event));
+      PDFViewerApplication.eventBus.on('outlineLoaded', (event) => this.outlineLoaded.emit(event));
+      PDFViewerApplication.eventBus.on('attachmentsloaded', (event) => this.attachmentsloaded.emit(event));
+      PDFViewerApplication.eventBus.on('layersloaded', (event) => this.layersloaded.emit(event));
+
       PDFViewerApplication.eventBus.on('updatefindcontrolstate', (x: FindResult) => {
         if (x.state === FindState.NOT_FOUND) {
           this.updateFindMatchesCount.emit({ current: 0, total: 0 });
@@ -1649,6 +1688,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public async ngOnDestroy(): Promise<void> {
     if (typeof window === 'undefined') {
       return; // fast escape for server side rendering
+    }
+
+    const originalPrint = NgxExtendedPdfViewerComponent.originalPrint;
+    if (originalPrint && !originalPrint.toString().includes('printPdf')) {
+      window.print = originalPrint;
     }
 
     (window as any).getFormValue = undefined;
@@ -1980,6 +2024,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
     if ('pageViewMode' in changes && !changes['pageViewMode'].isFirstChange()) {
       this.removeScrollbarInInititeScrollMode();
+    }
+    if ('replaceBrowserPrint' in changes) {
+      if (this.replaceBrowserPrint) {
+        window.print = (window as any).printPDF;
+      } else {
+        const originalPrint = NgxExtendedPdfViewerComponent.originalPrint;
+        if (originalPrint && !originalPrint.toString().includes('printPdf')) {
+          window.print = originalPrint;
+        }
+      }
     }
     setTimeout(() => this.calcViewerPositionTop());
   }

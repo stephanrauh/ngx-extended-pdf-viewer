@@ -2,9 +2,14 @@
  * Public API Surface of ngx-extended-pdf-viewer
  */
 
+export * from './lib/events/annotation-editor-layer-rendered-event';
+export * from './lib/events/annotation-layer-rendered-event';
+export * from './lib/events/attachment-loaded-event';
 export * from './lib/events/file-input-changed';
 export * from './lib/events/find-result';
 export * from './lib/events/invalid-pdf-exception';
+export * from './lib/events/layers-loaded-event';
+export * from './lib/events/outline-loaded-event';
 export * from './lib/events/page-number-change';
 export * from './lib/events/page-rendered-event';
 export * from './lib/events/pages-loaded-event';
@@ -17,6 +22,7 @@ export * from './lib/events/progress-bar-event';
 export * from './lib/events/scale-changing-event';
 export * from './lib/events/sidebarview-changed';
 export * from './lib/events/textlayer-rendered';
+export * from './lib/events/xfa-layer-rendered-event';
 export * from './lib/ngx-extended-pdf-viewer-server.component';
 export * from './lib/ngx-extended-pdf-viewer-server.module';
 export * from './lib/ngx-extended-pdf-viewer.component';
