@@ -14,17 +14,27 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
+import { AnnotationEditorLayerRenderedEvent } from './events/annotation-editor-layer-rendered-event';
+import { AnnotationLayerRenderedEvent } from './events/annotation-layer-rendered-event';
+import { AttachmentLoadedEvent } from './events/attachment-loaded-event';
+
 import { FindResultMatchesCount, FindState } from './events/find-result';
+import { LayersLoadedEvent } from './events/layers-loaded-event';
+import { OutlineLoadedEvent } from './events/outline-loaded-event';
+import { PageRenderEvent } from './events/page-render-event';
 import { PageRenderedEvent } from './events/page-rendered-event';
 import { PagesLoadedEvent } from './events/pages-loaded-event';
 import { PdfDownloadedEvent } from './events/pdf-downloaded-event';
 import { PdfLoadedEvent } from './events/pdf-loaded-event';
+import { PdfLoadingStartsEvent } from './events/pdf-loading-starts-event';
 import { PdfThumbnailDrawnEvent } from './events/pdf-thumbnail-drawn-event';
 import { ProgressBarEvent } from './events/progress-bar-event';
 import { TextLayerRenderedEvent } from './events/textlayer-rendered';
+import { XfaLayerRenderedEvent } from './events/xfa-layer-rendered-event';
 import { FormDataType } from './ngx-extended-pdf-viewer.component';
 import { PdfBackground } from './options/pdf-background';
 import { pdfDefaultOptions } from './options/pdf-default-options';
+import { PdfSidebarView } from './options/pdf-sidebar-views';
 import { ScrollModeType } from './options/pdf-viewer';
 import { VerbosityLevel } from './options/verbosity-level';
 import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
@@ -64,6 +74,9 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   public customFindbarButtons: TemplateRef<any> | undefined = undefined;
 
   @Input()
+  public customPdfViewer: TemplateRef<any> | undefined;
+
+  @Input()
   public customSecondaryToolbar: TemplateRef<any>;
 
   @Input()
@@ -77,6 +90,9 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
 
   @Input()
   public showFreeFloatingBar = true;
+
+  @Input()
+  public enableDragAndDrop = true;
 
   @Input()
   public formData: FormDataType = {};
@@ -135,6 +151,9 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   @Input()
   public delayFirstView = 0;
 
+  @Input()
+  public showEditor: boolean;
+
   /** store the timeout id so it can be canceled if user leaves the page before the PDF is shown */
   private initTimeout: any;
 
@@ -145,6 +164,12 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
 
   @Input()
   public enablePinchOnMobile = false;
+
+  @Input()
+  public enableRelativeCoords: boolean = false;
+
+  @Input()
+  public relativeCoordsOptions: Object = {};
 
   /** Use the minified (minifiedJSLibraries="true", which is the default) or the user-readable pdf.js library (minifiedJSLibraries="false") */
   @Input()
@@ -163,13 +188,34 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   @Output()
   public rotationChange = new EventEmitter<0 | 90 | 180 | 270>();
 
+  @Output()
+  public annotationLayerRendered = new EventEmitter<AnnotationLayerRenderedEvent>();
+
+  @Output()
+  public annotationEditorLayerRendered = new EventEmitter<AnnotationEditorLayerRenderedEvent>();
+
+  @Output()
+  public xfaLayerRendered = new EventEmitter<XfaLayerRenderedEvent>();
+
+  @Output()
+  public outlineLoaded = new EventEmitter<OutlineLoadedEvent>();
+
+  @Output()
+  public attachmentsloaded = new EventEmitter<AttachmentLoadedEvent>();
+
+  @Output()
+  public layersloaded = new EventEmitter<LayersLoadedEvent>();
+
   public hasSignature: boolean;
 
   @Input()
-  public set src(url: string | ArrayBuffer | Blob | Uint8Array | { range: any }) {}
+  public set src(url: string | ArrayBuffer | Blob | Uint8Array | URL | { range: any }) {}
 
   @Input()
-  public set base64Src(base64: string) {}
+  public set base64Src(base64: string | null | undefined) {}
+
+  @Input()
+  public minHeight: string | undefined = undefined;
 
   @Input()
   public set height(h: string) {}
@@ -183,13 +229,16 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   public useBrowserLocale = false;
 
   @Input()
+  public forceUsingLegacyES5 = false;
+
+  @Input()
   public backgroundColor = '#e8e8eb';
 
   @Input()
   public pdfBackground: PdfBackground = '#ffffff';
 
   @Input()
-  public pdfBackgroundColorToReplace: string = '#ffffff';
+  public pdfBackgroundColorToReplace: string | ((page: number, pageLabel: string) => string | undefined) | undefined = '#ffffff';
 
   /** Allows the user to define the name of the file after clicking "download" */
   @Input()
@@ -232,6 +281,9 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   @Input()
   public password: string | undefined = undefined;
 
+  @Input()
+  public replaceBrowserPrint: boolean;
+
   /** pdf.js can show signatures, but fails to verify them. So they are switched off by default.
    * Set "[showUnverifiedSignatures]"="true" to display e-signatures nonetheless.
    */
@@ -252,6 +304,12 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
 
   @Output()
   public sidebarVisibleChange = new EventEmitter<boolean>();
+
+  @Input()
+  public activeSidebarView: PdfSidebarView = PdfSidebarView.OUTLINE;
+
+  @Output()
+  public activeSidebarViewChange = new EventEmitter<PdfSidebarView>();
 
   @Input()
   public showFindButton: boolean | undefined = undefined;
@@ -288,21 +346,30 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
 
   @Input()
   public showPagingButtons = true;
+
   @Input()
   public showZoomButtons = true;
+
   @Input()
   public showPresentationModeButton = false;
+
   @Input()
   public showOpenFileButton = true;
+
   @Input()
   public showPrintButton = true;
+
   @Input()
   public showDownloadButton = true;
+
   @Input()
   public showBookmarkButton = true;
 
   @Input()
   public theme: 'dark' | 'light' | 'custom' = 'light';
+
+  @Input()
+  public formTheme: 'dark' | 'light' | 'custom' | string = 'light';
 
   @Input()
   public showToolbar = true;
@@ -315,18 +382,25 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
 
   @Input()
   public showRotateButton = true;
+
   @Input()
   public handTool = true;
+
   @Output()
   public handToolChange = new EventEmitter<boolean>();
+
   @Input()
   public showHandToolButton = false;
+
   @Input()
   public showScrollingButton = true;
+
   @Input()
   public showSpreadButton = true;
+
   @Input()
   public showPropertiesButton = true;
+
   @Input()
   public showBorders = true;
 
@@ -361,6 +435,9 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   public pagesLoaded = new EventEmitter<PagesLoadedEvent>();
 
   @Output()
+  public pageRender = new EventEmitter<PageRenderEvent>();
+
+  @Output()
   public pageRendered = new EventEmitter<PageRenderedEvent>();
 
   @Output()
@@ -368,6 +445,9 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
 
   @Output()
   public pdfLoaded = new EventEmitter<PdfLoadedEvent>();
+
+  @Output()
+  public pdfLoadingStarts = new EventEmitter<PdfLoadingStartsEvent>();
 
   @Output()
   public pdfLoadingFailed = new EventEmitter<Error>();
@@ -403,9 +483,12 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   /** This attributes allows you to increase the size of the UI elements so you can use them on small mobile devices.
    * This attribute is a string with a percent character at the end (e.g. "150%").
    */
-  @Input() _mobileFriendlyZoom = '100%';
+  public _mobileFriendlyZoom = '100%';
 
   public mobileFriendlyZoomScale = 1;
+
+  @Input()
+  public wheelAction: 'scroll' | 'zoom' = 'scroll';
 
   public toolbarMarginTop = '0px';
 
@@ -433,9 +516,6 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
    */
   @Input()
   public set mobileFriendlyZoom(zoom: string) {} // NOSONAR
-
-  @Input()
-  public wheelAction: 'scroll' | 'zoom' = 'scroll';
 
   public get sidebarPositionTop(): string {
     return '32px';

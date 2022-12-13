@@ -411,3 +411,4 @@
 - 15.1.1 #1599 removed the attribute `[useBrowserLocale]` from the schematics; #1607 / #1602 repaired the multi-word search and `ngxExtendedPdfViewerService.findMultiple()`
 - 15.2.0 #1546 added the attribute `type="button"` to every button in order to prevent accidental form submits; #1487 add `[(activeSidebarView)]` to allow developers to define the default sidebar view
 - 15.2.1 #1536 add event listeners: `(annotationLayerRendered)`, `(annotationEditorLayerRendered)`, `(xfaLayerRendered)`, `(outlineLoaded)`, `(attachmentsloaded)`, and `(layersloaded)`; #1609 implement `[replaceBrowserPrint]`; #1512 support for "require-trusted-types-for" (work in progress - doesn't work yet)
+- 15.2.2 #1623 stop the viewer from accessing the dummy component container if it doesn't exist for some reason; #1626 fix `(outlineLoaded)`; #1622 add the latest attributes to the SSR component and deal with window.print() correctly in SSR mode

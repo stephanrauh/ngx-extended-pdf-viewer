@@ -260,6 +260,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public enableRelativeCoords: boolean = false;
+
   @Input()
   public relativeCoordsOptions: Object = {};
 
@@ -489,14 +490,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public sidebarVisible: boolean | undefined = undefined;
 
+  @Output()
+  public sidebarVisibleChange = new EventEmitter<boolean>();
+
   @Input()
   public activeSidebarView: PdfSidebarView = PdfSidebarView.OUTLINE;
 
   @Output()
   public activeSidebarViewChange = new EventEmitter<PdfSidebarView>();
-
-  @Output()
-  public sidebarVisibleChange = new EventEmitter<boolean>();
 
   @Input()
   public showFindButton: boolean | undefined = undefined;
@@ -533,16 +534,22 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public showPagingButtons = true;
+
   @Input()
   public showZoomButtons = true;
+
   @Input()
   public showPresentationModeButton = false;
+
   @Input()
   public showOpenFileButton = true;
+
   @Input()
   public showPrintButton = true;
+
   @Input()
   public showDownloadButton = true;
+
   @Input()
   public showBookmarkButton = true;
 
@@ -563,8 +570,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public showRotateButton = true;
+
   @Input()
   public handTool = true;
+
   @Output()
   public handToolChange = new EventEmitter<boolean>();
 
@@ -601,6 +610,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public showPropertiesButton = true;
+
   @Input()
   public showBorders = true;
 
@@ -690,7 +700,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   /** This attribute allows you to increase the size of the UI elements so you can use them on small mobile devices.
    * This attribute is a string with a percent character at the end (e.g. "150%").
    */
-  @Input() _mobileFriendlyZoom: string = '100%';
+  public _mobileFriendlyZoom: string = '100%';
 
   public mobileFriendlyZoomScale = 1;
 
@@ -1535,7 +1545,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       PDFViewerApplication.eventBus.on('annotationLayerRendered', (event) => this.annotationLayerRendered.emit(event));
       PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', (event) => this.annotationEditorLayerRendered.emit(event));
       PDFViewerApplication.eventBus.on('xfalayerrendered', (event) => this.xfaLayerRendered.emit(event));
-      PDFViewerApplication.eventBus.on('outlineLoaded', (event) => this.outlineLoaded.emit(event));
+      PDFViewerApplication.eventBus.on('outlineloaded', (event) => this.outlineLoaded.emit(event));
       PDFViewerApplication.eventBus.on('attachmentsloaded', (event) => this.attachmentsloaded.emit(event));
       PDFViewerApplication.eventBus.on('layersloaded', (event) => this.layersloaded.emit(event));
 
@@ -1700,7 +1710,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
 
     const originalPrint = NgxExtendedPdfViewerComponent.originalPrint;
-    if (originalPrint && !originalPrint.toString().includes('printPdf')) {
+    if (window && originalPrint && !originalPrint.toString().includes('printPdf')) {
       window.print = originalPrint;
     }
 

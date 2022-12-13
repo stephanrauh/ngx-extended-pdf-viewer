@@ -120,12 +120,14 @@ export class PdfDummyComponentsComponent {
   public addMissingStandardWidgets(): void {
     this.dummyComponentsContainer = document.getElementsByClassName('dummy-pdf-viewer-components')[0];
     const container = this.dummyComponentsContainer as HTMLElement;
-    if (container) {
-      for (let i = 0; i < container.children.length; i++) {
-        const child = container.firstChild;
-        if (child) {
-          container.removeChild(child);
-        }
+    if (!container) {
+      return;
+    }
+
+    for (let i = 0; i < container.children.length; i++) {
+      const child = container.firstChild;
+      if (child) {
+        container.removeChild(child);
       }
     }
 
