@@ -154,6 +154,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public baseHref: string;
 
+  /** This flag prevents trying to load a file twice if the user uploads it using the file upload dialog or via drag'n'drop */
+  private srcChangeTriggeredByUser: boolean = false;
+
   public get pageViewMode(): PageViewModeType {
     return this._pageViewMode;
   }
@@ -923,6 +926,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     window['setNgxExtendedPdfViewerSource'] = (url: string) => {
       this._src = url;
       console.log(url);
+      this.srcChangeTriggeredByUser = true;
       this.srcChange.emit(url);
     };
 
@@ -1806,28 +1810,32 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
     if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
       if ('src' in changes || 'base64Src' in changes) {
-        if (!!this._src) {
-          if (this.ngxExtendedPdfViewerIncompletelyInitialized) {
-            this.openPDF();
-          } else {
-            await this.openPDF2();
-          }
+        if (this.srcChangeTriggeredByUser) {
+          this.srcChangeTriggeredByUser = false;
         } else {
-          // #802 clear the form data; otherwise the "download" dialogs opens
-          PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
-          this.formData = {};
-          this.formIdToFieldName = {};
-          this.formRadioButtonValueToId = {};
+          if (!!this._src) {
+            if (this.ngxExtendedPdfViewerIncompletelyInitialized) {
+              this.openPDF();
+            } else {
+              await this.openPDF2();
+            }
+          } else {
+            // #802 clear the form data; otherwise the "download" dialogs opens
+            PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
+            this.formData = {};
+            this.formIdToFieldName = {};
+            this.formRadioButtonValueToId = {};
 
-          let inputField = PDFViewerApplication.appConfig?.openFileInput;
-          if (!inputField) {
-            inputField = document.querySelector('#fileInput') as HTMLInputElement;
-          }
-          if (inputField) {
-            inputField.value = '';
-          }
+            let inputField = PDFViewerApplication.appConfig?.openFileInput;
+            if (!inputField) {
+              inputField = document.querySelector('#fileInput') as HTMLInputElement;
+            }
+            if (inputField) {
+              inputField.value = '';
+            }
 
-          await PDFViewerApplication.close();
+            await PDFViewerApplication.close();
+          }
         }
       }
       if ('enableDragAndDrop' in changes) {
