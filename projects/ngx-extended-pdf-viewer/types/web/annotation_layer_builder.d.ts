@@ -25,9 +25,8 @@ export type AnnotationLayerBuilderOptions = {
     fieldObjectsPromise?: Promise<{
         [x: string]: Object[];
     } | null> | undefined;
-    mouseState?: Object | undefined;
     annotationCanvasMap?: Map<string, HTMLCanvasElement> | undefined;
-    accessibilityManager: any;
+    accessibilityManager?: any;
 };
 /**
  * @typedef {Object} AnnotationLayerBuilderOptions
@@ -44,15 +43,14 @@ export type AnnotationLayerBuilderOptions = {
  * @property {Promise<boolean>} [hasJSActionsPromise]
  * @property {Promise<Object<string, Array<Object>> | null>}
  *   [fieldObjectsPromise]
- * @property {Object} [mouseState]
  * @property {Map<string, HTMLCanvasElement>} [annotationCanvasMap]
- * @property {TextAccessibilityManager} accessibilityManager
+ * @property {TextAccessibilityManager} [accessibilityManager]
  */
 export class AnnotationLayerBuilder {
     /**
      * @param {AnnotationLayerBuilderOptions} options
      */
-    constructor({ pageDiv, pdfPage, linkService, downloadManager, annotationStorage, imageResourcesPath, renderForms, l10n, enableScripting, hasJSActionsPromise, fieldObjectsPromise, mouseState, annotationCanvasMap, accessibilityManager, }: AnnotationLayerBuilderOptions);
+    constructor({ pageDiv, pdfPage, linkService, downloadManager, annotationStorage, imageResourcesPath, renderForms, l10n, enableScripting, hasJSActionsPromise, fieldObjectsPromise, annotationCanvasMap, accessibilityManager, }: AnnotationLayerBuilderOptions);
     pageDiv: HTMLDivElement;
     pdfPage: import("../src/display/api").PDFPageProxy;
     linkService: import("./interfaces").IPDFLinkService;
@@ -66,11 +64,11 @@ export class AnnotationLayerBuilder {
     _fieldObjectsPromise: Promise<{
         [x: string]: Object[];
     } | null>;
-    _mouseState: Object;
     _annotationCanvasMap: Map<string, HTMLCanvasElement>;
     _accessibilityManager: any;
     div: HTMLDivElement | null;
     _cancelled: boolean;
+    _eventBus: any;
     /**
      * @param {PageViewport} viewport
      * @param {string} intent (default value is 'display')
@@ -80,4 +78,5 @@ export class AnnotationLayerBuilder {
     render(viewport: PageViewport, intent?: string): Promise<void>;
     cancel(): void;
     hide(): void;
+    #private;
 }

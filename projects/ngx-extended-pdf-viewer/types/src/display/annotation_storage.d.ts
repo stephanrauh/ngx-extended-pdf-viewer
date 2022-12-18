@@ -7,31 +7,23 @@ export class AnnotationStorage {
      * @ignore
      */
     static getHash(map: any): string;
-    _storage: Map<any, any>;
-    _modified: boolean;
     onSetModified: any;
     onResetModified: any;
     onAnnotationEditor: any;
     /**
      * Get the value for a given key if it exists, or return the default value.
-     *
-     * @public
-     * @memberof AnnotationStorage
      * @param {string} key
      * @param {string} fieldName name of the input field
      * @param {Object} defaultValue
      * @returns {Object}
      */
-    public getValue(key: string, fieldname: any, defaultValue: Object, radioButtonField?: undefined): Object;
+    getValue(key: string, fieldname: any, defaultValue: Object, radioButtonField?: undefined): Object;
     /**
      * Get the value for a given key.
-     *
-     * @public
-     * @memberof AnnotationStorage
      * @param {string} key
      * @returns {Object}
      */
-    public getRawValue(key: string): Object;
+    getRawValue(key: string): Object;
     /**
      * Remove a value from the storage.
      * @param {string} key
@@ -39,14 +31,11 @@ export class AnnotationStorage {
     remove(key: string): void;
     /**
      * Set the value for a given key
-     *
-     * @public
-     * @memberof AnnotationStorage
      * @param {string} key
      * @param {string} fieldName name of the input field
      * @param {Object} value
      */
-    public setValue(key: string, fieldname: any, value: Object, radioButtonField?: undefined, isDefaultValue?: boolean): void;
+    setValue(key: string, fieldname: any, value: Object, radioButtonField?: undefined, isDefaultValue?: boolean): void;
     /**
      * Check if the storage contains the given key.
      * @param {string} key

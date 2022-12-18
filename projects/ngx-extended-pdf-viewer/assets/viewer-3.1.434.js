@@ -942,6 +942,9 @@ class PDFLinkService {
   set rotation(value) {
     this.pdfViewer.pagesRotation = value;
   }
+  get isInPresentationMode() {
+    return this.pdfViewer.isInPresentationMode;
+  }
   #goToDestinationHelper(rawDest, namedDest = null, explicitDest) {
     const destRef = explicitDest[0];
     let pageNumber;
@@ -1282,6 +1285,9 @@ class SimpleLinkService {
     return 0;
   }
   set rotation(value) {}
+  get isInPresentationMode() {
+    return false;
+  }
   async goToDestination(dest) {}
   goToPage(val) {}
   addLinkAttributes(link, url, newWindow = false) {
@@ -1902,6 +1908,9 @@ const PDFViewerApplication = {
       const loadingTask = (0, _pdfjsLib.getDocument)(parameters);
       this.pdfLoadingTask = loadingTask;
       loadingTask.onPassword = (updateCallback, reason) => {
+        if (this.isViewerEmbedded) {
+          this._unblockDocumentLoadEvent();
+        }
         this.pdfLinkService.externalLinkEnabled = false;
         this.passwordPrompt.setUpdateCallback(updateCallback, reason);
         this.passwordPrompt.open();
@@ -3625,9 +3634,7 @@ function waitOnEventOrTimeout({
   });
 }
 class EventBus {
-  constructor() {
-    this._listeners = Object.create(null);
-  }
+  #listeners = Object.create(null);
   on(eventName, listener, options = null) {
     this._on(eventName, listener, {
       external: true,
@@ -3641,7 +3648,7 @@ class EventBus {
     });
   }
   dispatch(eventName, data) {
-    const eventListeners = this._listeners[eventName];
+    const eventListeners = this.#listeners[eventName];
     if (!eventListeners || eventListeners.length === 0) {
       return;
     }
@@ -3668,7 +3675,7 @@ class EventBus {
     }
   }
   _on(eventName, listener, options = null) {
-    const eventListeners = this._listeners[eventName] ||= [];
+    const eventListeners = this.#listeners[eventName] ||= [];
     eventListeners.push({
       listener,
       external: options?.external === true,
@@ -3676,7 +3683,7 @@ class EventBus {
     });
   }
   _off(eventName, listener, options = null) {
-    const eventListeners = this._listeners[eventName];
+    const eventListeners = this.#listeners[eventName];
     if (!eventListeners) {
       return;
     }
@@ -4277,7 +4284,7 @@ class PDFAttachmentViewer extends _base_tree_viewer.BaseTreeViewer {
     for (const name of names) {
       const item = attachments[name];
       const content = item.content,
-        filename = (0, _pdfjsLib.getFilenameFromUrl)(item.filename);
+        filename = (0, _pdfjsLib.getFilenameFromUrl)(item.filename, true);
       const div = document.createElement("div");
       div.className = "treeItem";
       const element = document.createElement("a");
@@ -7131,16 +7138,17 @@ class PDFPresentationMode {
       evt.preventDefault();
       return;
     }
-    if (evt.button === 0) {
-      const isInternalLink = evt.target.href && evt.target.classList.contains("internalLink");
-      if (!isInternalLink) {
-        evt.preventDefault();
-        if (evt.shiftKey) {
-          this.pdfViewer.previousPage();
-        } else {
-          this.pdfViewer.nextPage();
-        }
-      }
+    if (evt.button !== 0) {
+      return;
+    }
+    if (evt.target.href && evt.target.parentNode?.hasAttribute("data-internal-link")) {
+      return;
+    }
+    evt.preventDefault();
+    if (evt.shiftKey) {
+      this.pdfViewer.previousPage();
+    } else {
+      this.pdfViewer.nextPage();
     }
   }
   #contextMenu() {
@@ -8831,7 +8839,7 @@ class PDFViewer {
   #scrollModePageState = null;
   #onVisibilityChange = null;
   constructor(options) {
-    const viewerVersion = '3.0.631';
+    const viewerVersion = '3.1.434';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -9542,8 +9550,10 @@ class PDFViewer {
       div,
       id
     } = pageView;
-    if (this._scrollMode === _ui_utils.ScrollMode.PAGE) {
+    if (this._currentPageNumber !== id) {
       this._setCurrentPageNumber(id);
+    }
+    if (this._scrollMode === _ui_utils.ScrollMode.PAGE) {
       this.#ensurePageViewVisible();
       this.update();
     }
@@ -9562,6 +9572,9 @@ class PDFViewer {
       }
     }
     (0, _ui_utils.scrollIntoView)(div, pageSpot, false, this.pageViewMode === "infinite-scroll");
+    if (!this._currentScaleValue && this._location) {
+      this._location = null;
+    }
   }
   #isSameScale(newScale) {
     return newScale === this._currentScale || Math.abs(newScale - this._currentScale) < 1e-15;
@@ -10646,7 +10659,9 @@ Object.defineProperty(exports, "__esModule", ({
 exports.AnnotationLayerBuilder = void 0;
 var _pdfjsLib = __webpack_require__(5);
 var _l10n_utils = __webpack_require__(32);
+var _ui_utils = __webpack_require__(1);
 class AnnotationLayerBuilder {
+  #onPresentationModeChanged = null;
   constructor({
     pageDiv,
     pdfPage,
@@ -10679,6 +10694,7 @@ class AnnotationLayerBuilder {
     this._accessibilityManager = accessibilityManager;
     this.div = null;
     this._cancelled = false;
+    this._eventBus = linkService.eventBus;
   }
   async render(viewport, intent = "display") {
     const [annotations, hasJSActions = false, fieldObjects = null] = await Promise.all([this.pdfPage.getAnnotations({
@@ -10715,16 +10731,50 @@ class AnnotationLayerBuilder {
       parameters.div = this.div;
       _pdfjsLib.AnnotationLayer.render(parameters);
       this.l10n.translate(this.div);
+      if (this.linkService.isInPresentationMode) {
+        this.#updatePresentationModeState(_ui_utils.PresentationModeState.FULLSCREEN);
+      }
+      if (!this.#onPresentationModeChanged) {
+        this.#onPresentationModeChanged = evt => {
+          this.#updatePresentationModeState(evt.state);
+        };
+        this._eventBus?._on("presentationmodechanged", this.#onPresentationModeChanged);
+      }
     }
   }
   cancel() {
     this._cancelled = true;
+    if (this.#onPresentationModeChanged) {
+      this._eventBus?._off("presentationmodechanged", this.#onPresentationModeChanged);
+      this.#onPresentationModeChanged = null;
+    }
   }
   hide() {
     if (!this.div) {
       return;
     }
     this.div.hidden = true;
+  }
+  #updatePresentationModeState(state) {
+    if (!this.div) {
+      return;
+    }
+    let disableFormElements = false;
+    switch (state) {
+      case _ui_utils.PresentationModeState.FULLSCREEN:
+        disableFormElements = true;
+        break;
+      case _ui_utils.PresentationModeState.NORMAL:
+        break;
+      default:
+        return;
+    }
+    for (const section of this.div.childNodes) {
+      if (section.hasAttribute("data-internal-link")) {
+        continue;
+      }
+      section.inert = disableFormElements;
+    }
   }
 }
 exports.AnnotationLayerBuilder = AnnotationLayerBuilder;
@@ -14200,20 +14250,18 @@ exports["default"] = canvasSize;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.VerbosityLevel = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.UNSUPPORTED_FEATURES = exports.TextRenderingMode = exports.StreamType = exports.RenderingIntentFlag = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.LINE_FACTOR = exports.LINE_DESCENT_FACTOR = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FontType = exports.FeatureTest = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMode = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationEditorType = exports.AnnotationEditorPrefix = exports.AnnotationEditorParamsType = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
+exports.VerbosityLevel = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.UNSUPPORTED_FEATURES = exports.TextRenderingMode = exports.StreamType = exports.RenderingIntentFlag = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.LINE_FACTOR = exports.LINE_DESCENT_FACTOR = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FontType = exports.FeatureTest = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.BASELINE_FACTOR = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMode = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationEditorType = exports.AnnotationEditorPrefix = exports.AnnotationEditorParamsType = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
 exports.arrayByteLength = arrayByteLength;
 exports.arraysToBytes = arraysToBytes;
 exports.assert = assert;
 exports.bytesToString = bytesToString;
 exports.createPromiseCapability = createPromiseCapability;
 exports.createValidAbsoluteUrl = createValidAbsoluteUrl;
-exports.escapeString = escapeString;
 exports.getModificationDate = getModificationDate;
 exports.getVerbosityLevel = getVerbosityLevel;
 exports.info = info;
 exports.isArrayBuffer = isArrayBuffer;
 exports.isArrayEqual = isArrayEqual;
-exports.isAscii = isAscii;
 exports.objectFromMap = objectFromMap;
 exports.objectSize = objectSize;
 exports.setVerbosityLevel = setVerbosityLevel;
@@ -14221,7 +14269,6 @@ exports.shadow = shadow;
 exports.string32 = string32;
 exports.stringToBytes = stringToBytes;
 exports.stringToPDFString = stringToPDFString;
-exports.stringToUTF16BEString = stringToUTF16BEString;
 exports.stringToUTF8String = stringToUTF8String;
 exports.unreachable = unreachable;
 exports.utf8StringToString = utf8StringToString;
@@ -14235,10 +14282,13 @@ const LINE_FACTOR = 1.35;
 exports.LINE_FACTOR = LINE_FACTOR;
 const LINE_DESCENT_FACTOR = 0.35;
 exports.LINE_DESCENT_FACTOR = LINE_DESCENT_FACTOR;
+const BASELINE_FACTOR = LINE_DESCENT_FACTOR / LINE_FACTOR;
+exports.BASELINE_FACTOR = BASELINE_FACTOR;
 const RenderingIntentFlag = {
   ANY: 0x01,
   DISPLAY: 0x02,
   PRINT: 0x04,
+  SAVE: 0x08,
   ANNOTATIONS_FORMS: 0x10,
   ANNOTATIONS_STORAGE: 0x20,
   ANNOTATIONS_DISABLE: 0x40,
@@ -14663,10 +14713,10 @@ function createValidAbsoluteUrl(url, baseUrl = null, options = null) {
   } catch (ex) {}
   return null;
 }
-function shadow(obj, prop, value) {
+function shadow(obj, prop, value, nonSerializable = false) {
   Object.defineProperty(obj, prop, {
     value,
-    enumerable: true,
+    enumerable: !nonSerializable,
     configurable: true,
     writable: false
   });
@@ -15028,27 +15078,6 @@ function stringToPDFString(str) {
     strBuf.push(code ? String.fromCharCode(code) : str.charAt(i));
   }
   return strBuf.join("");
-}
-function escapeString(str) {
-  return str.replace(/([()\\\n\r])/g, match => {
-    if (match === "\n") {
-      return "\\n";
-    } else if (match === "\r") {
-      return "\\r";
-    }
-    return `\\${match}`;
-  });
-}
-function isAscii(str) {
-  return /^[\x00-\x7F]*$/.test(str);
-}
-function stringToUTF16BEString(str) {
-  const buf = ["\xFE\xFF"];
-  for (let i = 0, ii = str.length; i < ii; i++) {
-    const char = str.charCodeAt(i);
-    buf.push(String.fromCharCode(char >> 8 & 0xff), String.fromCharCode(char & 0xff));
-  }
-  return buf.join("");
 }
 function stringToUTF8String(str) {
   return decodeURIComponent(escape(str));
@@ -16543,9 +16572,7 @@ function download(blobUrl, filename) {
   a.remove();
 }
 class DownloadManager {
-  constructor() {
-    this._openBlobUrls = new WeakMap();
-  }
+  #openBlobUrls = new WeakMap();
   downloadUrl(url, filename) {
     if (!(0, _pdfjsLib.createValidAbsoluteUrl)(url, "http://example.com")) {
       Window['ngxConsole'].error(`downloadUrl - not a valid URL: ${url}`);
@@ -16563,12 +16590,12 @@ class DownloadManager {
     const isPdfData = (0, _pdfjsLib.isPdfFile)(filename);
     const contentType = isPdfData ? "application/pdf" : "";
     if (isPdfData) {
-      let blobUrl = this._openBlobUrls.get(element);
+      let blobUrl = this.#openBlobUrls.get(element);
       if (!blobUrl) {
         blobUrl = URL.createObjectURL(new Blob([data], {
           type: contentType
         }));
-        this._openBlobUrls.set(element, blobUrl);
+        this.#openBlobUrls.set(element, blobUrl);
       }
       let viewerUrl;
       viewerUrl = "?file=" + encodeURIComponent(blobUrl + "#" + filename);
@@ -16578,7 +16605,7 @@ class DownloadManager {
       } catch (ex) {
         Window['ngxConsole'].error(`openOrDownloadData: ${ex}`);
         URL.revokeObjectURL(blobUrl);
-        this._openBlobUrls.delete(element);
+        this.#openBlobUrls.delete(element);
       }
     }
     this.downloadData(data, filename, contentType);
@@ -17857,8 +17884,8 @@ var _ui_utils = __webpack_require__(1);
 var _app_options = __webpack_require__(2);
 var _pdf_link_service = __webpack_require__(3);
 var _app = __webpack_require__(4);
-const pdfjsVersion = '3.0.631';
-const pdfjsBuild = 'ad52d26ea';
+const pdfjsVersion = '3.1.434';
+const pdfjsBuild = 'ec9b52298';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,

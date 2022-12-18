@@ -60,5 +60,5 @@ export class TextHighlighter {
         };
     }[];
     _renderMatches(matches: any): void;
-    _updateMatches(): void;
+    _updateMatches(reset?: boolean): void;
 }
