@@ -1294,7 +1294,6 @@ export class PDFPageProxy {
      * @private
      */
     private _destroy;
-    _jsActionsPromise: any;
     /**
      * Cleans up resources allocated by the page.
      *

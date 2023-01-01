@@ -412,4 +412,6 @@
 - 15.2.0 #1546 added the attribute `type="button"` to every button in order to prevent accidental form submits; #1487 add `[(activeSidebarView)]` to allow developers to define the default sidebar view
 - 15.2.1 #1536 add event listeners: `(annotationLayerRendered)`, `(annotationEditorLayerRendered)`, `(xfaLayerRendered)`, `(outlineLoaded)`, `(attachmentsloaded)`, and `(layersloaded)`; #1609 implement `[replaceBrowserPrint]`; #1512 support for "require-trusted-types-for" (work in progress - doesn't work yet)
 - 15.2.2 #1623 stop the viewer from accessing the dummy component container if it doesn't exist for some reason; #1626 fix `(outlineLoaded)`; #1622 add the latest attributes to the SSR component and deal with window.print() correctly in SSR mode
-- 16.0.0-alpha.0 updated to pdf.js 3.1/3.2 (bleeding edge); #1631 File upload doesn't work under exotic circumstances
+- 16.0.0-alpha.0 updated to pdf.js 3.1 (stable branch)/3.2 (bleeding edge); #1631 File upload doesn't work under exotic circumstances
+- 16.0.0-alpha.1 Caveat: printing is broken on Chrome!; #1635 + #1592 Now the modifications of the editor are included in the print and download again
+- 16.0.0-alpha.2 update to pdf.js 3.2 (stable branch)/3.3 (bleeding edge)

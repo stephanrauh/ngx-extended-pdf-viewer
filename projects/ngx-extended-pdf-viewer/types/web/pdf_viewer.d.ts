@@ -320,12 +320,16 @@ export class PDFViewer {
     _spreadMode: any;
     _scrollUpdate(): void;
     scrollPagePosIntoView(pageNumber: any, pageSpot: any): void;
-    _setScaleUpdatePages(newScale: any, newValue: any, noScroll?: boolean, preset?: boolean): void;
+    _setScaleUpdatePages(newScale: any, newValue: any, { noScroll, preset, drawingDelay }: {
+        noScroll?: boolean | undefined;
+        preset?: boolean | undefined;
+        drawingDelay?: number | undefined;
+    }): void;
     /**
      * @private
      */
     private get _pageWidthScaleFactor();
-    _setScale(value: any, noScroll?: boolean): void;
+    _setScale(value: any, options: any): void;
     /**
      * @param {string} label - The page label.
      * @returns {number|null} The page number corresponding to the page label,
@@ -449,13 +453,15 @@ export class PDFViewer {
     /**
      * Increase the current zoom level one, or more, times.
      * @param {number} [steps] - Defaults to zooming once.
+     * @param {Object|null} [options]
      */
-    increaseScale(steps?: number | undefined): void;
+    increaseScale(steps?: number | undefined, options?: Object | null | undefined): void;
     /**
      * Decrease the current zoom level one, or more, times.
      * @param {number} [steps] - Defaults to zooming once.
+     * @param {Object|null} [options]
      */
-    decreaseScale(steps?: number | undefined): void;
+    decreaseScale(steps?: number | undefined, options?: Object | null | undefined): void;
     get containerTopLeft(): number[];
     /**
      * @param {number} mode - AnnotationEditor mode (None, FreeText, Ink, ...)
@@ -466,7 +472,7 @@ export class PDFViewer {
      */
     get annotationEditorMode(): number;
     set annotationEditorParams(arg: any);
-    refresh(): void;
+    refresh(noUpdate?: boolean, updateArgs?: any): void;
     #private;
 }
 import { PDFRenderingQueue } from "./pdf_rendering_queue.js";

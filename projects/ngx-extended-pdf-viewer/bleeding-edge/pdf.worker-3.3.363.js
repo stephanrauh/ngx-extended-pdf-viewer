@@ -118,7 +118,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = '3.2.475';
+    const workerVersion = '3.3.363';
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
     }
@@ -51574,19 +51574,18 @@ class XRef {
       }
       return skipped;
     }
+    const gEndobjRegExp = /\b(endobj|\d+\s+\d+\s+obj|xref|trailer)\b/g;
+    const gStartxrefRegExp = /\b(startxref|\d+\s+\d+\s+obj)\b/g;
     const objRegExp = /^(\d+)\s+(\d+)\s+obj\b/;
-    const endobjRegExp = /\bendobj[\b\s]$/;
-    const nestedObjRegExp = /\s+(\d+\s+\d+\s+obj[\b\s<])$/;
-    const CHECK_CONTENT_LENGTH = 25;
     const trailerBytes = new Uint8Array([116, 114, 97, 105, 108, 101, 114]);
     const startxrefBytes = new Uint8Array([115, 116, 97, 114, 116, 120, 114, 101, 102]);
-    const objBytes = new Uint8Array([111, 98, 106]);
     const xrefBytes = new Uint8Array([47, 88, 82, 101, 102]);
     this.entries.length = 0;
     this._cacheMap.clear();
     const stream = this.stream;
     stream.pos = 0;
     const buffer = stream.getBytes(),
+      bufferStr = (0, _util.bytesToString)(buffer),
       length = buffer.length;
     let position = stream.start;
     const trailers = [],
@@ -51616,8 +51615,8 @@ class XRef {
       } else if (m = objRegExp.exec(token)) {
         const num = m[1] | 0,
           gen = m[2] | 0;
+        const startPos = position + token.length;
         let contentLength,
-          startPos = position + token.length,
           updateEntries = false;
         if (!this.entries[num]) {
           updateEntries = true;
@@ -51643,22 +51642,17 @@ class XRef {
             uncompressed: true
           };
         }
-        while (startPos < length) {
-          const endPos = startPos + skipUntil(buffer, startPos, objBytes) + 4;
+        gEndobjRegExp.lastIndex = startPos;
+        const match = gEndobjRegExp.exec(bufferStr);
+        if (match) {
+          const endPos = gEndobjRegExp.lastIndex + 1;
           contentLength = endPos - position;
-          const checkPos = Math.max(endPos - CHECK_CONTENT_LENGTH, startPos);
-          const tokenStr = (0, _util.bytesToString)(buffer.subarray(checkPos, endPos));
-          if (endobjRegExp.test(tokenStr)) {
-            break;
-          } else {
-            const objToken = nestedObjRegExp.exec(tokenStr);
-            if (objToken && objToken[1]) {
-              (0, _util.warn)('indexObjects: Found new "obj" inside of another "obj", ' + 'caused by missing "endobj" -- trying to recover.');
-              contentLength -= objToken[1].length;
-              break;
-            }
+          if (match[1] !== "endobj") {
+            (0, _util.warn)(`indexObjects: Found "${match[1]}" inside of another "obj", ` + 'caused by missing "endobj" -- trying to recover.');
+            contentLength -= match[1].length + 1;
           }
-          startPos = endPos;
+        } else {
+          contentLength = length - position;
         }
         const content = buffer.subarray(position, position + contentLength);
         const xrefTagOffset = skipUntil(content, 0, xrefBytes);
@@ -51669,17 +51663,19 @@ class XRef {
         position += contentLength;
       } else if (token.startsWith("trailer") && (token.length === 7 || /\s/.test(token[7]))) {
         trailers.push(position);
-        const contentLength = skipUntil(buffer, position, startxrefBytes);
-        if (position + contentLength >= length) {
-          const endPos = position + skipUntil(buffer, position, objBytes) + 4;
-          const checkPos = Math.max(endPos - CHECK_CONTENT_LENGTH, position);
-          const tokenStr = (0, _util.bytesToString)(buffer.subarray(checkPos, endPos));
-          const objToken = nestedObjRegExp.exec(tokenStr);
-          if (objToken && objToken[1]) {
-            (0, _util.warn)('indexObjects: Found first "obj" after "trailer", ' + 'caused by missing "startxref" -- trying to recover.');
-            position = endPos - objToken[1].length;
-            continue;
+        const startPos = position + token.length;
+        let contentLength;
+        gStartxrefRegExp.lastIndex = startPos;
+        const match = gStartxrefRegExp.exec(bufferStr);
+        if (match) {
+          const endPos = gStartxrefRegExp.lastIndex + 1;
+          contentLength = endPos - position;
+          if (match[1] !== "startxref") {
+            (0, _util.warn)(`indexObjects: Found "${match[1]}" after "trailer", ` + 'caused by missing "startxref" -- trying to recover.');
+            contentLength -= match[1].length + 1;
           }
+        } else {
+          contentLength = length - position;
         }
         position += contentLength;
       } else {
@@ -52568,8 +52564,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
   }
 }));
 var _worker = __w_pdfjs_require__(1);
-const pdfjsVersion = '3.2.475';
-const pdfjsBuild = 'ac545fd71';
+const pdfjsVersion = '3.3.363';
+const pdfjsBuild = '3695d55aa';
 })();
 
 /******/ 	return __webpack_exports__;

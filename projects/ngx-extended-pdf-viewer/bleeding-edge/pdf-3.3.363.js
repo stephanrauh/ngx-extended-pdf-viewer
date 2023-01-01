@@ -1176,7 +1176,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
   }
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '3.2.475',
+    apiVersion: '3.3.363',
     data: source.data,
     password: source.password,
     disableAutoFetch: source.disableAutoFetch,
@@ -1457,7 +1457,7 @@ class PDFPageProxy {
     return this._transport.getAnnotations(this._pageIndex, intentArgs.renderingIntent);
   }
   getJSActions() {
-    return this._jsActionsPromise ||= this._transport.getPageJSActions(this._pageIndex);
+    return this._transport.getPageJSActions(this._pageIndex);
   }
   get isPureXfa() {
     return (0, _util.shadow)(this, "isPureXfa", !!this._transport._htmlForXfa);
@@ -1667,7 +1667,6 @@ class PDFPageProxy {
       bitmap.close();
     }
     this._bitmaps.clear();
-    this._jsActionsPromise = null;
     this.pendingCleanup = false;
     return Promise.all(waitOn);
   }
@@ -1692,7 +1691,6 @@ class PDFPageProxy {
     }
     this._intentStates.clear();
     this.objs.clear();
-    this._jsActionsPromise = null;
     if (resetStats && this._stats) {
       this._stats = new _display_utils.StatTimer();
     }
@@ -1784,6 +1782,10 @@ class PDFPageProxy {
     if (!intentState.streamReader) {
       return;
     }
+    if (intentState.streamReaderCancelTimeout) {
+      clearTimeout(intentState.streamReaderCancelTimeout);
+      intentState.streamReaderCancelTimeout = null;
+    }
     if (!force) {
       if (intentState.renderTasks.size > 0) {
         return;
@@ -1793,16 +1795,13 @@ class PDFPageProxy {
         if (reason.extraDelay > 0 && reason.extraDelay < 1000) {
           delay += reason.extraDelay;
         }
-        if (intentState.streamReaderCancelTimeout) {
-          clearTimeout(intentState.streamReaderCancelTimeout);
-        }
         intentState.streamReaderCancelTimeout = setTimeout(() => {
+          intentState.streamReaderCancelTimeout = null;
           this._abortOperatorList({
             intentState,
             reason,
             force: true
           });
-          intentState.streamReaderCancelTimeout = null;
         }, delay);
         return;
       }
@@ -2870,9 +2869,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.2.475';
+const version = '3.3.363';
 exports.version = version;
-const build = 'ac545fd71';
+const build = '3695d55aa';
 exports.build = build;
 
 /***/ }),
@@ -3664,7 +3663,7 @@ class AnnotationEditorUIManager {
   }
   addToAnnotationStorage(editor) {
     if (!editor.isEmpty() && this.#annotationStorage && !this.#annotationStorage.has(editor.id)) {
-      this.#annotationStorage.setValue(editor.id, editor);
+      this.#annotationStorage.setValue(editor.id, null, editor);
     }
   }
   #addKeyboardManager() {
@@ -15993,8 +15992,8 @@ var _worker_options = __w_pdfjs_require__(14);
 var _is_node = __w_pdfjs_require__(10);
 var _svg = __w_pdfjs_require__(30);
 var _xfa_layer = __w_pdfjs_require__(29);
-const pdfjsVersion = '3.2.475';
-const pdfjsBuild = 'ac545fd71';
+const pdfjsVersion = '3.3.363';
+const pdfjsBuild = '3695d55aa';
 {
   if (_is_node.isNodeJS) {
     const {
