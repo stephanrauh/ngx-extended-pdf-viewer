@@ -1176,7 +1176,7 @@ async function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
   }
   const workerId = await worker.messageHandler.sendWithPromise("GetDocRequest", {
     docId,
-    apiVersion: '3.3.363',
+    apiVersion: '3.3.364',
     data: source.data,
     password: source.password,
     disableAutoFetch: source.disableAutoFetch,
@@ -2869,9 +2869,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.3.363';
+const version = '3.3.364';
 exports.version = version;
-const build = '3695d55aa';
+const build = '3d8954cfe';
 exports.build = build;
 
 /***/ }),
@@ -12254,7 +12254,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
                 options[0].selected = true;
               }
             }
-            storage.setValue(id, this.data.fieldName, {
+            storage.setValue(id, fieldName, {
               value: getValue(true),
               items: getItems(event)
             });
@@ -12264,7 +12264,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
             while (selectElement.length !== 0) {
               selectElement.remove(0);
             }
-            storage.setValue(id, this.data.fieldName, {
+            storage.setValue(id, fieldName, {
               value: null,
               items: []
             });
@@ -12285,7 +12285,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
             } else {
               selectElement.append(optionElement);
             }
-            storage.setValue(id, this.data.fieldName, {
+            storage.setValue(id, fieldName, {
               value: getValue(true),
               items: getItems(event)
             });
@@ -12311,7 +12311,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
             if (selectElement.options.length > 0) {
               selectElement.options[0].selected = true;
             }
-            storage.setValue(id, this.data.fieldName, {
+            storage.setValue(id, fieldName, {
               value: getValue(true),
               items: getItems(event)
             });
@@ -12322,7 +12322,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
             for (const option of event.target.options) {
               option.selected = indices.has(option.index);
             }
-            storage.setValue(id, this.data.fieldName, {
+            storage.setValue(id, fieldName, {
               value: getValue(true)
             });
             selectedValues = getValue(false);
@@ -12354,8 +12354,9 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
       });
       this._setEventListeners(selectElement, [["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "Mouse Up"], ["input", "Action"]], event => event.target.checked);
     } else {
+      const fieldName = this.data.fieldName;
       selectElement.addEventListener("input", function (event) {
-        storage.setValue(id, this.data.fieldName, {
+        storage.setValue(id, fieldName, {
           value: getValue(true),
           radioValue: getValue(true)
         });
@@ -15992,8 +15993,8 @@ var _worker_options = __w_pdfjs_require__(14);
 var _is_node = __w_pdfjs_require__(10);
 var _svg = __w_pdfjs_require__(30);
 var _xfa_layer = __w_pdfjs_require__(29);
-const pdfjsVersion = '3.3.363';
-const pdfjsBuild = '3695d55aa';
+const pdfjsVersion = '3.3.364';
+const pdfjsBuild = '3d8954cfe';
 {
   if (_is_node.isNodeJS) {
     const {

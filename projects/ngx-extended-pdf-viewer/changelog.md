@@ -415,3 +415,4 @@
 - 16.0.0-alpha.0 updated to pdf.js 3.1 (stable branch)/3.2 (bleeding edge); #1631 File upload doesn't work under exotic circumstances
 - 16.0.0-alpha.1 Caveat: printing is broken on Chrome!; #1635 + #1592 Now the modifications of the editor are included in the print and download again
 - 16.0.0-alpha.2 update to pdf.js 3.2 (stable branch)/3.3 (bleeding edge); bugs are tracked at https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/1577
+- 16.0.0-alpha.3 #1648 fixed a NPE when reading a dropdown or a multiple-choice select box in a form; #1645 added new options to make the double-tap zoom configurable: pdfDefaultOptions.doubleTapZoomsInHandMode, pdfDefaultOptions.doubleTapZoomsInTextSelectionMode, and pdfDefaultOptions.doubleTapResetsZoomOnSecondDoubleTap

@@ -1510,6 +1510,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       });
       PDFViewerApplication.eventBus.on('cursortoolchanged', (x: HandtoolChanged) => {
         this.ngZone.run(() => {
+          this.handTool = x.tool === PdfCursorTools.HAND;
           this.handToolChange.emit(x.tool === PdfCursorTools.HAND);
         });
       });
@@ -2346,20 +2347,32 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   public async zoomToPageWidth(event: MouseEvent): Promise<void> {
+    if (this.handTool) {
+      if (!pdfDefaultOptions.doubleTapZoomsInHandMode) {
+        return;
+      }
+    } else {
+      if (!pdfDefaultOptions.doubleTapZoomsInTextSelectionMode) {
+        return;
+      }
+    }
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const desiredCenterY = event.clientY;
     const previousScale = (PDFViewerApplication.pdfViewer as any).currentScale;
+
     if (this.zoom !== pdfDefaultOptions.doubleTapZoomFactor && this.zoom + '%' !== pdfDefaultOptions.doubleTapZoomFactor) {
       this.previousZoom = this.zoom;
       this.zoom = pdfDefaultOptions.doubleTapZoomFactor; // by default: 'page-width';
       await this.setZoom();
-    } else {
+    } else if (pdfDefaultOptions.doubleTapResetsZoomOnSecondDoubleTap) {
       if (this.previousZoom) {
         this.zoom = this.previousZoom;
       } else {
         this.zoom = 'page-width';
       }
       await this.setZoom();
+    } else {
+      return;
     }
 
     const currentScale = (PDFViewerApplication.pdfViewer as any).currentScale;
