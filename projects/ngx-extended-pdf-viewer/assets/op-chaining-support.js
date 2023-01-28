@@ -13,7 +13,8 @@ new (function () {
 
     // Does your browser doesn't support private methods?
     #privateMethod() {
-      return true;
+      // check the the browser supports string.at()
+      return 'hello'.at(4);
     }
 
     supportsOptionalChaining() {

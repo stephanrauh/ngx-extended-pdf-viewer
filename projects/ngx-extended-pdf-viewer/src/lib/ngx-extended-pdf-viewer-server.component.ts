@@ -363,9 +363,6 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   public showDownloadButton = true;
 
   @Input()
-  public showBookmarkButton = true;
-
-  @Input()
   public theme: 'dark' | 'light' | 'custom' = 'light';
 
   @Input()

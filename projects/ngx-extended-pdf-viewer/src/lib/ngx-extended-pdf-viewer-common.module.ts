@@ -18,9 +18,9 @@ import { PdfAcroformDefaultThemeComponent } from './theme/acroform-default-theme
 import { PdfDarkThemeComponent } from './theme/pdf-dark-theme/pdf-dark-theme.component';
 import { PdfLightThemeComponent } from './theme/pdf-light-theme/pdf-light-theme.component';
 import { PdfOriginalComponent } from './theme/pdf-original-theme/pdf-original.component';
-import { PdfBookmarkComponent } from './toolbar/pdf-bookmark/pdf-bookmark.component';
 import { PdfContextMenuComponent } from './toolbar/pdf-context-menu/pdf-context-menu.component';
 import { PdfDownloadComponent } from './toolbar/pdf-download/pdf-download.component';
+import { PdfEditorComponent } from './toolbar/pdf-editor/pdf-editor.component';
 import { PdfFindButtonComponent } from './toolbar/pdf-find-button/pdf-find-button.component';
 import { PdfFindCurrentPageOnlyComponent } from './toolbar/pdf-findbar/pdf-find-current-page-only/pdf-find-current-page-only.component';
 import { PdfFindInputAreaComponent } from './toolbar/pdf-findbar/pdf-find-input-area/pdf-find-input-area.component';
@@ -71,7 +71,7 @@ import { TranslatePipe } from './translate.pipe';
     PdfOpenFileComponent,
     PdfPrintComponent,
     PdfDownloadComponent,
-    PdfBookmarkComponent,
+    PdfEditorComponent,
     PdfZoomToolbarComponent,
     PdfPagingAreaComponent,
     PdfFindbarComponent,
@@ -130,7 +130,7 @@ import { TranslatePipe } from './translate.pipe';
     PdfOpenFileComponent,
     PdfPrintComponent,
     PdfDownloadComponent,
-    PdfBookmarkComponent,
+    PdfEditorComponent,
     PdfZoomToolbarComponent,
     PdfPagingAreaComponent,
     PdfFindbarComponent,

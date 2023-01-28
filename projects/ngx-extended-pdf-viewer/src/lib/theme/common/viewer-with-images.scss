@@ -183,12 +183,6 @@ ngx-extended-pdf-viewer {
     border: 0;
   }
 
-  .html .toolbar *,
-  .html .treeItem * {
-    padding: 0;
-    margin: 0;
-  }
-
   .html {
     height: 100%;
     width: 100%;
@@ -902,7 +896,6 @@ ngx-extended-pdf-viewer {
   .secondaryToolbarButton,
   .dialogButton {
     min-width: 16px;
-    padding: 2px 6px 0;
     border-radius: 2px;
     font-size: 12px;
     line-height: 14px;
@@ -1010,24 +1003,6 @@ html[dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbarButton::before {
 }
 
 ngx-extended-pdf-viewer {
-  .toolbarButton.bookmark,
-  .secondaryToolbarButton.bookmark {
-    box-sizing: border-box;
-    outline: none;
-    padding-top: 4px;
-    text-decoration: none;
-  }
-  .secondaryToolbarButton.bookmark {
-    padding-top: 5px;
-  }
-
-  .bookmark[href='#'] {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-}
-
-ngx-extended-pdf-viewer {
   .toolbarButton.pdfSidebarNotification::after {
     position: absolute;
     display: inline-block;
@@ -1067,14 +1042,6 @@ html[dir='ltr'] ngx-extended-pdf-viewer .secondaryToolbarButton {
 html[dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbarButton {
   padding-right: 24px;
   text-align: right;
-}
-
-html[dir='ltr'] ngx-extended-pdf-viewer .secondaryToolbarButton.bookmark {
-  padding-left: 27px;
-}
-
-html[dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbarButton.bookmark {
-  padding-right: 27px;
 }
 
 html[dir='ltr'] ngx-extended-pdf-viewer .secondaryToolbarButton > span {

@@ -43,9 +43,6 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
   public showDownloadButton = true;
 
   @Input()
-  public showBookmarkButton = true;
-
-  @Input()
   public showPagingButtons = true;
 
   @Input()

@@ -13,3 +13,7 @@ button:focus {
 svg:focus {
   outline: none;
 }
+
+button {
+  padding: 0;
+}

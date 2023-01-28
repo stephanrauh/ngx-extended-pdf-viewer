@@ -406,7 +406,7 @@ export class NgxExtendedPdfViewerService {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const optionalContentConfig = await PDFViewerApplication.pdfViewer.optionalContentConfigPromise;
     if (optionalContentConfig) {
-      let isVisible = optionalContentConfig.isVisible(layerId);
+      let isVisible = optionalContentConfig.getGroup(layerId).visible;
       const checkbox = document.querySelector(`input[id='${layerId}']`);
       if (checkbox) {
         isVisible = (checkbox as HTMLInputElement).checked;

@@ -15,3 +15,7 @@ button#sidebarToggle {
   width: 24px;
   margin-right: 5px !important;
 }
+
+button {
+  padding: 0;
+}

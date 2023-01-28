@@ -1,3 +1,5 @@
+import { PdfLayer } from './options/optional_content_config';
+
 export interface FindOptions {
   highlightAll?: boolean;
   matchCase?: boolean;
@@ -48,6 +50,15 @@ export class NgxExtendedPdfViewerService {
     return '';
   }
 
+  public async getPageAsImage(
+    pageNumber: number,
+    scale: PDFExportScaleFactor,
+    background?: string,
+    backgroundColorToReplace: string = '#FFFFFF'
+  ): Promise<any> {
+    return;
+  }
+
   public async getCurrentDocumentAsBlob(): Promise<Blob> {
     return new Blob([], { type: 'application/pdf' });
   }
@@ -74,4 +85,14 @@ export class NgxExtendedPdfViewerService {
   public getCurrentlyVisiblePageNumbers(): Array<number> {
     return [];
   }
+
+  public recalculateSize(): void {}
+
+  public async listLayers(): Promise<Array<PdfLayer> | undefined> {
+    return;
+  }
+
+  public async toggleLayer(layerId: string): Promise<void> {}
+
+  public scrollPageIntoView(pageNumber: number, pageSpot?: { top?: number | string; left?: number | string }): void {}
 }

@@ -32,7 +32,9 @@ This library provides an embeddable PDF viewer component. It's different from ot
 Version 16 updates to pdf.js 3.2 (default branch) and pdf.js 3.3 (bleeding edge branch). This means the PDF editor is active by default now.
 
 _Breaking changes:_
-I've refined the double-tap action. A few months before Apple removed the double-tap zoom feature from iOS, I'd implemented it in ngx-extended-pdf-viewer. Nowadays, it confuses most people, but I didn't want to remove it entirely. Some people (like me) still like it. So I've added a couple of options to the `pdfDefaultOptions` object allowing you to deactivate or fine-tune the feature. By default, it's inactive in text selection mode, and active in hand mode. By default, the second double-tap is ignored now. In previous versions, it used to toggle back to the previous zoom level. Starting with version 16, you need to explicitely opt-in to this.
+
+- I've refined the double-tap action. A few months before Apple removed the double-tap zoom feature from iOS, I'd implemented it in ngx-extended-pdf-viewer. Nowadays, it confuses most people, but I didn't want to remove it entirely. Some people (like me) still like it. So I've added a couple of options to the `pdfDefaultOptions` object allowing you to deactivate or fine-tune the feature. By default, it's inactive in text selection mode, and active in hand mode. By default, the second double-tap is ignored now. In previous versions, it used to toggle back to the previous zoom level. Starting with version 16, you need to explicitly opt-in to this.
+- The bookmark button is gone. It didn't play well with Angular routing, so I removed it.
 
 ## What's new in version 15?
 

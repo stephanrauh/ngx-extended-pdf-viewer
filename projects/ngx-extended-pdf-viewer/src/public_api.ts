@@ -54,9 +54,9 @@ export * from './lib/theme/acroform-dark-theme/pdf-acroform-dark-theme.component
 export * from './lib/theme/acroform-default-theme/pdf-acroform-default-theme.component';
 export * from './lib/theme/pdf-dark-theme/pdf-dark-theme.component';
 export * from './lib/theme/pdf-light-theme/pdf-light-theme.component';
-export * from './lib/toolbar/pdf-bookmark/pdf-bookmark.component';
 export * from './lib/toolbar/pdf-context-menu/pdf-context-menu.component';
 export * from './lib/toolbar/pdf-download/pdf-download.component';
+export * from './lib/toolbar/pdf-editor/pdf-editor.component';
 export * from './lib/toolbar/pdf-find-button/pdf-find-button.component';
 export * from './lib/toolbar/pdf-findbar/pdf-find-current-page-only/pdf-find-current-page-only.component';
 export * from './lib/toolbar/pdf-findbar/pdf-find-input-area/pdf-find-input-area.component';

@@ -235,20 +235,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public delayFirstView = 0;
 
-  private _showEditor = this.pdfJsVersion >= '3.0';
-
-  public get showEditor() {
-    return this._showEditor;
-  }
-
+  /** Shows or hides the editor buttons */
   @Input()
-  public set showEditor(visible: boolean) {
-    if (this.pdfJsVersion >= '3.0') {
-      this._showEditor = visible;
-    } else {
-      console.log('The PDF editor requires at least pdf.js 3.0.');
-    }
-  }
+  public showEditor = true;
 
   /** store the timeout id so it can be canceled if user leaves the page before the PDF is shown */
   private initTimeout: any;
@@ -552,9 +541,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public showDownloadButton = true;
-
-  @Input()
-  public showBookmarkButton = true;
 
   @Input()
   public theme: 'dark' | 'light' | 'custom' | string = 'light';
@@ -1718,6 +1704,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (window && originalPrint && !originalPrint.toString().includes('printPdf')) {
       window.print = originalPrint;
     }
+    const printContainer = document.querySelector('#printContainer');
+    if (printContainer) {
+      printContainer.parentElement?.removeChild(printContainer);
+    }
 
     (window as any).getFormValue = undefined;
     (window as any).setFormValue = undefined;
@@ -1780,7 +1770,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   private isPrimaryMenuVisible(): boolean {
     if (this.showToolbar) {
       const visible =
-        this.showBookmarkButton ||
         this.showDownloadButton ||
         this.showFindButton ||
         this.showOpenFileButton ||
