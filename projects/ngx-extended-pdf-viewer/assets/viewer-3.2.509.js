@@ -1717,8 +1717,11 @@ const PDFViewerApplication = {
         eventBus
       });
     }
-    if (appConfig.passwordOverlay) {
-      this.passwordPrompt = new _password_prompt.PasswordPrompt(appConfig.passwordOverlay, this.overlayManager, this.l10n, this.isViewerEmbedded);
+    let prompt = _app_options.AppOptions.get("passwordPrompt");
+    if (!prompt) {
+      if (appConfig.passwordOverlay) {
+        prompt = new _password_prompt.PasswordPrompt(appConfig.passwordOverlay, this.overlayManager, this.l10n, this.isViewerEmbedded);
+      }
     }
     this.passwordPrompt = prompt;
     if (appConfig.sidebar?.outlineView) {
@@ -5308,11 +5311,18 @@ class PDFFindController {
       if (pageIndex !== this._linkService.page - 1) {
         ignoreCurrentPage = true;
         this._pageMatches[pageIndex] = [];
+        this._pageMatchesLength[pageIndex] = [];
+        this._pageMatchesColor[pageIndex] = [];
+        if (pageIndex > this._linkService.page - 1) {
+          this._offset.wrapped = true;
+        }
       }
     }
     if (!this._isInPageRanges(pageIndex + 1, pageRange)) {
       ignoreCurrentPage = true;
       this._pageMatches[pageIndex] = [];
+      this._pageMatchesLength[pageIndex] = [];
+      this._pageMatchesColor[pageIndex] = [];
     }
     if (query.length === 0) {
       return;
@@ -8806,7 +8816,7 @@ class PDFViewer {
   #onVisibilityChange = null;
   #scaleTimeoutId = null;
   constructor(options) {
-    const viewerVersion = '3.2.508';
+    const viewerVersion = '3.2.509';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -17936,8 +17946,8 @@ var _ui_utils = __webpack_require__(1);
 var _app_options = __webpack_require__(2);
 var _pdf_link_service = __webpack_require__(3);
 var _app = __webpack_require__(4);
-const pdfjsVersion = '3.2.508';
-const pdfjsBuild = '08c1df783';
+const pdfjsVersion = '3.2.509';
+const pdfjsBuild = '22daeb0e9';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
