@@ -16659,10 +16659,8 @@ class DownloadManager {
         }));
         this.#openBlobUrls.set(element, blobUrl);
       }
-      let viewerUrl;
-      viewerUrl = "?file=" + encodeURIComponent(blobUrl + "#" + filename);
       try {
-        window.open(viewerUrl);
+        window.open(blobUrl);
         return true;
       } catch (ex) {
         Window['ngxConsole'].error(`openOrDownloadData: ${ex}`);

@@ -5311,18 +5311,11 @@ class PDFFindController {
       if (pageIndex !== this._linkService.page - 1) {
         ignoreCurrentPage = true;
         this._pageMatches[pageIndex] = [];
-        this._pageMatchesLength[pageIndex] = [];
-        this._pageMatchesColor[pageIndex] = [];
-        if (pageIndex > this._linkService.page - 1) {
-          this._offset.wrapped = true;
-        }
       }
     }
     if (!this._isInPageRanges(pageIndex + 1, pageRange)) {
       ignoreCurrentPage = true;
       this._pageMatches[pageIndex] = [];
-      this._pageMatchesLength[pageIndex] = [];
-      this._pageMatchesColor[pageIndex] = [];
     }
     if (query.length === 0) {
       return;
@@ -8816,7 +8809,7 @@ class PDFViewer {
   #onVisibilityChange = null;
   #scaleTimeoutId = null;
   constructor(options) {
-    const viewerVersion = '3.2.509';
+    const viewerVersion = '3.2.510';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -16659,10 +16652,8 @@ class DownloadManager {
         }));
         this.#openBlobUrls.set(element, blobUrl);
       }
-      let viewerUrl;
-      viewerUrl = "?file=" + encodeURIComponent(blobUrl + "#" + filename);
       try {
-        window.open(viewerUrl);
+        window.open(blobUrl);
         return true;
       } catch (ex) {
         Window['ngxConsole'].error(`openOrDownloadData: ${ex}`);
@@ -17946,8 +17937,8 @@ var _ui_utils = __webpack_require__(1);
 var _app_options = __webpack_require__(2);
 var _pdf_link_service = __webpack_require__(3);
 var _app = __webpack_require__(4);
-const pdfjsVersion = '3.2.509';
-const pdfjsBuild = '22daeb0e9';
+const pdfjsVersion = '3.2.510';
+const pdfjsBuild = 'd7e332d92';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
