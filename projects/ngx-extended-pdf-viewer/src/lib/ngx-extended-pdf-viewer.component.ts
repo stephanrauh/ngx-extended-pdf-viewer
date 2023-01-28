@@ -1533,7 +1533,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
       PDFViewerApplication.eventBus.on('layersloaded', hideSidebarToolbar);
 
-      PDFViewerApplication.eventBus.on('annotationLayerRendered', (event) => this.annotationLayerRendered.emit(event));
+      PDFViewerApplication.eventBus.on('annotationlayerrendered', (event) => this.annotationLayerRendered.emit(event));
       PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', (event) => this.annotationEditorLayerRendered.emit(event));
       PDFViewerApplication.eventBus.on('xfalayerrendered', (event) => this.xfaLayerRendered.emit(event));
       PDFViewerApplication.eventBus.on('outlineloaded', (event) => this.outlineLoaded.emit(event));

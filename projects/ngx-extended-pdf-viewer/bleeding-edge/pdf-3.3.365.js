@@ -2871,7 +2871,7 @@ class InternalRenderTask {
 }
 const version = '3.3.365';
 exports.version = version;
-const build = 'f2da50e7b';
+const build = 'b1594f07a';
 exports.build = build;
 
 /***/ }),
@@ -4561,7 +4561,9 @@ class BaseCanvasFactory {
     const canvas = this._createCanvas(width, height);
     return {
       canvas,
-      context: canvas.getContext("2d")
+      context: canvas.getContext("2d", {
+        willReadFrequently: true
+      })
     };
   }
   reset(canvasAndContext, width, height) {
@@ -15994,7 +15996,7 @@ var _is_node = __w_pdfjs_require__(10);
 var _svg = __w_pdfjs_require__(30);
 var _xfa_layer = __w_pdfjs_require__(29);
 const pdfjsVersion = '3.3.365';
-const pdfjsBuild = 'f2da50e7b';
+const pdfjsBuild = 'b1594f07a';
 {
   if (_is_node.isNodeJS) {
     const {
