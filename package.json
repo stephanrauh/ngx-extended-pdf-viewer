@@ -38,7 +38,7 @@
     "@angular/compiler-cli": "^13.3.12",
     "@types/node": "^18.11.18",
     "copyfiles": "^2.4.1",
-    "ng-packagr": "~13.3.1",
+    "ng-packagr": "~15.1.1",
     "properties-reader": "^2.2.0",
     "sass": "^1.57.1",
     "ts-node": "^10.9.1",
