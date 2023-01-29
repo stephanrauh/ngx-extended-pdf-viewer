@@ -694,7 +694,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public mobileFriendlyZoomScale = 1;
 
   @Input()
-  public wheelAction: 'scroll' | 'zoom' = 'scroll';
+  public wheelAction: 'scroll' | 'zoom' | 'always-zoom' = 'scroll';
 
   public toolbarMarginTop = '0px';
 
@@ -1083,7 +1083,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const onLoaded = () => {
       this.overrideDefaultSettings();
       document.removeEventListener('webviewerloaded', onLoaded);
-      if (this.enablePinchOnMobile) {
+      if (this.enablePinchOnMobile && this.pdfJsVersion < '3.3') {
         this.pinchOnMobileSupport = new PinchOnMobileSupport(this.ngZone);
       }
       if (this.enableRelativeCoords) {
@@ -1606,7 +1606,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         options.baseHref = this.baseHref;
         PDFViewerApplication.onError = (error: Error) => this.pdfLoadingFailed.emit(error);
         this.ngZone.runOutsideAngular(async () => {
-          await PDFViewerApplication.open(this._src, options);
+          if (getVersionSuffix(pdfDefaultOptions.assetsFolder) >= '3.3') {
+            options.url = this._src;
+            await PDFViewerApplication.open(options);
+          } else {
+            await PDFViewerApplication.open(this._src, options);
+          }
           this.pdfLoadingStarts.emit({});
           // await this.setZoom();
           setTimeout(async () => this.setZoom());
@@ -1682,12 +1687,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
     }
     options.baseHref = this.baseHref;
-    PDFViewerApplication.open(this._src, options).then(
-      () => {
-        this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount });
-      },
-      (error: Error) => this.pdfLoadingFailed.emit(error)
-    );
+    try {
+      if (getVersionSuffix(pdfDefaultOptions.assetsFolder) >= '3.3') {
+        options.url = this._src;
+        await PDFViewerApplication.open(options);
+      } else {
+        await PDFViewerApplication.open(this._src, options);
+      }
+      this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount });
+    } catch (error) {
+      this.pdfLoadingFailed.emit(error);
+    }
   }
 
   private selectCursorTool() {
@@ -1882,7 +1892,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
       if ('sidebarVisible' in changes || 'activeSidebarView' in changes) {
         if (this.sidebarVisible) {
-          //          PDFViewerApplication.pdfSidebar.open();
           const view = Number(this.activeSidebarView);
           if (view === 1 || view === 2 || view === 3 || view === 4) {
             PDFViewerApplication.pdfSidebar.switchView(view, true);

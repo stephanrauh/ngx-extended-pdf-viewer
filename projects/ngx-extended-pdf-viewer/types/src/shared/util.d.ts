@@ -222,20 +222,6 @@ export class FeatureTest {
     static get platform(): any;
 }
 export const FONT_IDENTITY_MATRIX: number[];
-export namespace FontType {
-    const UNKNOWN: string;
-    const TYPE1: string;
-    const TYPE1STANDARD: string;
-    const TYPE1C: string;
-    const CIDFONTTYPE0: string;
-    const CIDFONTTYPE0C: string;
-    const TRUETYPE: string;
-    const CIDFONTTYPE2: string;
-    const TYPE3: string;
-    const OPENTYPE: string;
-    const TYPE0: string;
-    const MMTYPE1: string;
-}
 declare const FormatError_base: any;
 /**
  * Error caused during parsing PDF data.
@@ -398,19 +384,6 @@ export namespace RenderingIntentFlag {
 }
 export function setVerbosityLevel(level: any): void;
 export function shadow(obj: any, prop: any, value: any, nonSerializable?: boolean): any;
-export namespace StreamType {
-    const UNKNOWN_1: string;
-    export { UNKNOWN_1 as UNKNOWN };
-    export const FLATE: string;
-    export const LZW: string;
-    export const DCT: string;
-    export const JPX: string;
-    export const JBIG: string;
-    export const A85: string;
-    export const AHX: string;
-    export const CCF: string;
-    export const RLX: string;
-}
 export function string32(value: any): string;
 export function stringToBytes(str: any): Uint8Array;
 export function stringToPDFString(str: any): string;
@@ -441,28 +414,28 @@ export class UnknownErrorException extends UnknownErrorException_base {
     details: any;
 }
 export function unreachable(msg: any): void;
-export namespace UNSUPPORTED_FEATURES {
-    const forms: string;
-    const javaScript: string;
-    const signatures: string;
-    const smask: string;
-    const shadingPattern: string;
-    const errorTilingPattern: string;
-    const errorExtGState: string;
-    const errorXObject: string;
-    const errorFontLoadType3: string;
-    const errorFontState: string;
-    const errorFontMissing: string;
-    const errorFontTranslate: string;
-    const errorColorSpace: string;
-    const errorOperatorList: string;
-    const errorFontToUnicode: string;
-    const errorFontLoadNative: string;
-    const errorFontBuildPath: string;
-    const errorFontGetPath: string;
-    const errorMarkedContent: string;
-    const errorContentSubStream: string;
-}
+export const UNSUPPORTED_FEATURES: {
+    forms: string;
+    javaScript: string;
+    signatures: string;
+    smask: string;
+    shadingPattern: string;
+    errorTilingPattern: string;
+    errorExtGState: string;
+    errorXObject: string;
+    errorFontLoadType3: string;
+    errorFontState: string;
+    errorFontMissing: string;
+    errorFontTranslate: string;
+    errorColorSpace: string;
+    errorOperatorList: string;
+    errorFontToUnicode: string;
+    errorFontLoadNative: string;
+    errorFontBuildPath: string;
+    errorFontGetPath: string;
+    errorMarkedContent: string;
+    errorContentSubStream: string;
+} | null;
 export function utf8StringToString(str: any): string;
 export class Util {
     static makeHexColor(r: any, g: any, b: any): string;

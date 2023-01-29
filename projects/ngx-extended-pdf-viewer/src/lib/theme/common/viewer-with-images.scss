@@ -137,6 +137,11 @@ ngx-extended-pdf-viewer {
     display: none;
   }
 
+  .pdfViewer .page canvas[zooming] {
+    width: 100%;
+    height: 100%;
+  }
+
   .pdfViewer .page .loadingIcon {
     position: absolute;
     display: block;

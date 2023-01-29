@@ -14,8 +14,12 @@ export type DocumentInitParameters = {
     url?: string | URL | undefined;
     /**
      * - Binary PDF data.
-     * Use typed arrays (Uint8Array) to improve the memory usage. If PDF data is
+     * Use TypedArrays (Uint8Array) to improve the memory usage. If PDF data is
      * BASE64-encoded, use `atob()` to convert it to a binary string first.
+     *
+     * NOTE: If TypedArrays are used they will generally be transferred to the
+     * worker-thread. This will help reduce main-thread memory usage, however
+     * it will take ownership of the TypedArrays.
      */
     data?: BinaryData | undefined;
     /**
@@ -32,12 +36,6 @@ export type DocumentInitParameters = {
      * - For decrypting password-protected PDFs.
      */
     password?: string | undefined;
-    /**
-     * - A typed array with the first portion
-     * or all of the pdf data. Used by the extension since some data is already
-     * loaded before the switch to range requests.
-     */
-    initialData?: TypedArray | undefined;
     /**
      * - The PDF file length. It's used for progress
      * reports and range requests operations.
@@ -194,8 +192,6 @@ export type DocumentInitParameters = {
      */
     pdfBug?: boolean | undefined;
 };
-export type GetDocumentParameters = string | URL | TypedArray | ArrayBuffer | PDFDataRangeTransport | DocumentInitParameters;
-export type IPDFStreamFactory = Function;
 export type OnProgressParameters = {
     /**
      * - Currently loaded number of bytes.
@@ -533,16 +529,17 @@ export let DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
  * @typedef {Object} DocumentInitParameters
  * @property {string | URL} [url] - The URL of the PDF.
  * @property {BinaryData} [data] - Binary PDF data.
- *   Use typed arrays (Uint8Array) to improve the memory usage. If PDF data is
+ *   Use TypedArrays (Uint8Array) to improve the memory usage. If PDF data is
  *   BASE64-encoded, use `atob()` to convert it to a binary string first.
+ *
+ *   NOTE: If TypedArrays are used they will generally be transferred to the
+ *   worker-thread. This will help reduce main-thread memory usage, however
+ *   it will take ownership of the TypedArrays.
  * @property {Object} [httpHeaders] - Basic authentication headers.
  * @property {boolean} [withCredentials] - Indicates whether or not
  *   cross-site Access-Control requests should be made using credentials such
  *   as cookies or authorization headers. The default is `false`.
  * @property {string} [password] - For decrypting password-protected PDFs.
- * @property {TypedArray} [initialData] - A typed array with the first portion
- *   or all of the pdf data. Used by the extension since some data is already
- *   loaded before the switch to range requests.
  * @property {number} [length] - The PDF file length. It's used for progress
  *   reports and range requests operations.
  * @property {PDFDataRangeTransport} [range] - Allows for using a custom range
@@ -625,23 +622,18 @@ export let DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
  *   (see `web/debugger.js`). The default value is `false`.
  */
 /**
- * @typedef { string | URL | TypedArray | ArrayBuffer |
- *            PDFDataRangeTransport | DocumentInitParameters
- * } GetDocumentParameters
- */
-/**
  * This is the main entry point for loading a PDF and interacting with it.
  *
  * NOTE: If a URL is used to fetch the PDF data a standard Fetch API call (or
  * XHR as fallback) is used, which means it must follow same origin rules,
  * e.g. no cross-domain requests without CORS.
  *
- * @param {GetDocumentParameters}
+ * @param {string | URL | TypedArray | ArrayBuffer | DocumentInitParameters}
  *   src - Can be a URL where a PDF file is located, a typed array (Uint8Array)
  *         already populated with data, or a parameter object.
  * @returns {PDFDocumentLoadingTask}
  */
-export function getDocument(src: GetDocumentParameters): PDFDocumentLoadingTask;
+export function getDocument(src: string | URL | TypedArray | ArrayBuffer | DocumentInitParameters): PDFDocumentLoadingTask;
 export class LoopbackPort {
     postMessage(obj: any, transfers: any): void;
     addEventListener(name: any, listener: any): void;
@@ -651,17 +643,21 @@ export class LoopbackPort {
 }
 /**
  * Abstract class to support range requests file loading.
+ *
+ * NOTE: The TypedArrays passed to the constructor and relevant methods below
+ * will generally be transferred to the worker-thread. This will help reduce
+ * main-thread memory usage, however it will take ownership of the TypedArrays.
  */
 export class PDFDataRangeTransport {
     /**
      * @param {number} length
-     * @param {Uint8Array} initialData
+     * @param {Uint8Array|null} initialData
      * @param {boolean} [progressiveDone]
      * @param {string} [contentDispositionFilename]
      */
-    constructor(length: number, initialData: Uint8Array, progressiveDone?: boolean | undefined, contentDispositionFilename?: string | undefined);
+    constructor(length: number, initialData: Uint8Array | null, progressiveDone?: boolean | undefined, contentDispositionFilename?: string | undefined);
     length: number;
-    initialData: Uint8Array;
+    initialData: Uint8Array | null;
     progressiveDone: boolean;
     contentDispositionFilename: string;
     _rangeListeners: any[];
@@ -669,16 +665,43 @@ export class PDFDataRangeTransport {
     _progressiveReadListeners: any[];
     _progressiveDoneListeners: any[];
     _readyCapability: import("../shared/util.js").PromiseCapability;
-    addRangeListener(listener: any): void;
-    addProgressListener(listener: any): void;
-    addProgressiveReadListener(listener: any): void;
-    addProgressiveDoneListener(listener: any): void;
-    onDataRange(begin: any, chunk: any): void;
-    onDataProgress(loaded: any, total: any): void;
-    onDataProgressiveRead(chunk: any): void;
+    /**
+     * @param {function} listener
+     */
+    addRangeListener(listener: Function): void;
+    /**
+     * @param {function} listener
+     */
+    addProgressListener(listener: Function): void;
+    /**
+     * @param {function} listener
+     */
+    addProgressiveReadListener(listener: Function): void;
+    /**
+     * @param {function} listener
+     */
+    addProgressiveDoneListener(listener: Function): void;
+    /**
+     * @param {number} begin
+     * @param {Uint8Array|null} chunk
+     */
+    onDataRange(begin: number, chunk: Uint8Array | null): void;
+    /**
+     * @param {number} loaded
+     * @param {number|undefined} total
+     */
+    onDataProgress(loaded: number, total: number | undefined): void;
+    /**
+     * @param {Uint8Array|null} chunk
+     */
+    onDataProgressiveRead(chunk: Uint8Array | null): void;
     onDataProgressiveDone(): void;
     transportReady(): void;
-    requestDataRange(begin: any, end: any): void;
+    /**
+     * @param {number} begin
+     * @param {number} end
+     */
+    requestDataRange(begin: number, end: number): void;
     abort(): void;
 }
 /**
@@ -766,37 +789,6 @@ export class PDFDocumentProxy {
      *   whereas the second element is only defined for *modified* PDF documents.
      */
     get fingerprints(): string[];
-    /**
-     * @typedef {Object} PDFDocumentStats
-     * @property {Object<string, boolean>} streamTypes - Used stream types in the
-     *   document (an item is set to true if specific stream ID was used in the
-     *   document).
-     * @property {Object<string, boolean>} fontTypes - Used font types in the
-     *   document (an item is set to true if specific font ID was used in the
-     *   document).
-     */
-    /**
-     * @type {PDFDocumentStats | null} The current statistics about document
-     *   structures, or `null` when no statistics exists.
-     */
-    get stats(): {
-        /**
-         * - Used stream types in the
-         * document (an item is set to true if specific stream ID was used in the
-         * document).
-         */
-        streamTypes: {
-            [x: string]: boolean;
-        };
-        /**
-         * - Used font types in the
-         * document (an item is set to true if specific font ID was used in the
-         * document).
-         */
-        fontTypes: {
-            [x: string]: boolean;
-        };
-    } | null;
     /**
      * @type {boolean} True if only XFA form.
      */
@@ -1422,16 +1414,6 @@ export class RenderTask {
     get separateAnnots(): boolean;
     #private;
 }
-/**
- * Sets the function that instantiates an {IPDFStream} as an alternative PDF
- * data transport.
- *
- * @param {IPDFStreamFactory} pdfNetworkStreamFactory - The factory function
- *   that takes document initialization parameters (including a "url") and
- *   returns a promise which is resolved with an instance of {IPDFStream}.
- * @ignore
- */
-export function setPDFNetworkStreamFactory(pdfNetworkStreamFactory: IPDFStreamFactory): void;
 /** @type {string} */
 export const version: string;
 import { PageViewport } from "./display_utils.js";

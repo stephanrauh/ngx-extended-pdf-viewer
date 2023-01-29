@@ -203,6 +203,7 @@ export class ProgressBar {
     set percent(arg: number);
     get percent(): number;
     setWidth(viewer: any): void;
+    setDisableAutoFetch(delay?: number): void;
     hide(): void;
     show(): void;
     #private;

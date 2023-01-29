@@ -452,16 +452,14 @@ export class PDFViewer {
     previousPage(): boolean;
     /**
      * Increase the current zoom level one, or more, times.
-     * @param {number} [steps] - Defaults to zooming once.
      * @param {Object|null} [options]
      */
-    increaseScale(steps?: number | undefined, options?: Object | null | undefined): void;
+    increaseScale(options?: Object | null | undefined): void;
     /**
      * Decrease the current zoom level one, or more, times.
-     * @param {number} [steps] - Defaults to zooming once.
      * @param {Object|null} [options]
      */
-    decreaseScale(steps?: number | undefined, options?: Object | null | undefined): void;
+    decreaseScale(options?: Object | null | undefined): void;
     get containerTopLeft(): number[];
     /**
      * @param {number} mode - AnnotationEditor mode (None, FreeText, Ink, ...)

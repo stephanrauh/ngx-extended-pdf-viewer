@@ -1,8 +1,15 @@
 /** @implements {IPDFStream} */
 export class PDFDataTransportStream implements IPDFStream {
-    constructor(params: any, pdfDataRangeTransport: any);
+    constructor({ length, initialData, progressiveDone, contentDispositionFilename, disableRange, disableStream, }: {
+        length: any;
+        initialData: any;
+        progressiveDone?: boolean | undefined;
+        contentDispositionFilename?: null | undefined;
+        disableRange?: boolean | undefined;
+        disableStream?: boolean | undefined;
+    }, pdfDataRangeTransport: any);
     _queuedChunks: ArrayBuffer[];
-    _progressiveDone: any;
+    _progressiveDone: boolean;
     _contentDispositionFilename: any;
     _pdfDataRangeTransport: any;
     _isStreamingSupported: boolean;
@@ -10,7 +17,10 @@ export class PDFDataTransportStream implements IPDFStream {
     _contentLength: any;
     _fullRequestReader: any;
     _rangeReaders: any[];
-    _onReceiveData(args: any): void;
+    _onReceiveData({ begin, chunk }: {
+        begin: any;
+        chunk: any;
+    }): void;
     get _progressiveDataLength(): any;
     _onProgress(evt: any): void;
     _onProgressiveDone(): void;
