@@ -1,6 +1,7 @@
-import { IPDFViewerApplication } from './../options/pdf-viewer-application';
+import { PDFPageView } from '../options/pdf_page_view';
+
 export interface AnnotationLayerRenderedEvent {
-  source: IPDFViewerApplication;
+  source: PDFPageView;
   pageNumber: number;
   error?: any;
 }

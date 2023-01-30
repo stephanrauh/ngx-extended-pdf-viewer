@@ -1,6 +1,7 @@
-import { IPDFViewerApplication } from '../options/pdf-viewer-application';
+import { PDFOutlineViewer } from '../options/pdf_outline_viewer';
+
 export interface OutlineLoadedEvent {
-  source: IPDFViewerApplication;
+  source: PDFOutlineViewer;
   outlineCount: number;
   currentOutlineItemPromise: Promise<boolean>;
 }

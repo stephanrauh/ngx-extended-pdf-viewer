@@ -1,5 +1,5 @@
-import { IPDFViewerApplication } from '../options/pdf-viewer-application';
+import { PDFAttachmentViewer } from '../options/pdf_attachment_viewer';
 export interface AttachmentLoadedEvent {
-  source: IPDFViewerApplication;
+  source: PDFAttachmentViewer;
   attachmentsCount: number;
 }
