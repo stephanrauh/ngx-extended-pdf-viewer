@@ -80,6 +80,14 @@ export interface FormDataType {
   [fieldName: string]: string | number | boolean | string[];
 }
 
+function isIOS() {
+  return (
+    ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod'].includes(navigator.platform) ||
+    // iPad on iOS 13 detection
+    (navigator.userAgent.includes('Mac') && 'ontouchend' in document)
+  );
+}
+
 @Component({
   selector: 'ngx-extended-pdf-viewer',
   templateUrl: './ngx-extended-pdf-viewer.component.html',
@@ -560,8 +568,21 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public showRotateButton = true;
 
+  private _handTool = !isIOS();
+
   @Input()
-  public handTool = true;
+  public set handTool(handTool: boolean) {
+    if (isIOS() && handTool) {
+      console.log(
+        "On iOS, the handtool doesn't work reliably. Plus, you don't need it because touch gestures allow you to distinguish easily between swiping and selecting text. Therefore, the library ignores your setting."
+      );
+      return;
+    }
+  }
+
+  public get handTool(): boolean {
+    return this._handTool;
+  }
 
   @Output()
   public handToolChange = new EventEmitter<boolean>();

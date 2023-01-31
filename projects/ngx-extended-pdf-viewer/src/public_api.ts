@@ -38,6 +38,7 @@ export * from './lib/options/pdf-sidebar-views';
 export * from './lib/options/pdf-viewer';
 export * from './lib/options/pdf-viewer-app-config';
 export * from './lib/options/pdf-viewer-application';
+export * from './lib/options/pdf_page_view';
 export * from './lib/options/verbosity-level';
 export * from './lib/pdf-dialog/pdf-document-properties-dialog/pdf-document-properties-dialog.component';
 export * from './lib/pdf-dialog/pdf-error-message/pdf-error-message.component';
