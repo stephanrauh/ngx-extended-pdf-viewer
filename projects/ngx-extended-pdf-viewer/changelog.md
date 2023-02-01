@@ -420,3 +420,4 @@
 - 16.0.0-alpha.5 #1624 show the "not found" message when finding (or not-finding) a search term when "current page only" or "page range" is selected; merged pdf.js 3.3 into the bleeding edge branch; #1007 deprecated `[wheelAction]` because it stops working in pdf.js 3.3 or higher; #1663 Corrected the type of the `source` attribute of many events fired by pdf.js (caveat: this version is broken!)
 - 16.0.0-alpha.6 added a forgotten export to the public_api.ts
 - 16.0.0-alpha.7 #1096 deactivate `[handTool]="true"` on iOS because it breaks scrolling and because it isn't necessary on mobile devices
+- 16.0.0-alpha.8 #1529 repaired `pdfDefaultOptions.rangeChunkSize`

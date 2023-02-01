@@ -1629,8 +1629,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.ngZone.runOutsideAngular(async () => {
           if (getVersionSuffix(pdfDefaultOptions.assetsFolder) >= '3.3') {
             options.url = this._src;
+            options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
             await PDFViewerApplication.open(options);
           } else {
+            options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
             await PDFViewerApplication.open(this._src, options);
           }
           this.pdfLoadingStarts.emit({});
@@ -1711,8 +1713,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     try {
       if (getVersionSuffix(pdfDefaultOptions.assetsFolder) >= '3.3') {
         options.url = this._src;
+        options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
         await PDFViewerApplication.open(options);
       } else {
+        options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
         await PDFViewerApplication.open(this._src, options);
       }
       this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount });
