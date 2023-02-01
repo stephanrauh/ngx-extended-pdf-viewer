@@ -994,6 +994,7 @@ function getDocument(src) {
     throw new Error("Invalid parameter object: need either .data, .range or .url");
   }
   const task = new PDFDocumentLoadingTask();
+  const baseHref = src.baseHref;
   const params = Object.create(null);
   let rangeTransport = null,
     worker = null;
@@ -1006,7 +1007,11 @@ function getDocument(src) {
           continue;
         }
         try {
-          params[key] = new URL(val, window.location).href;
+          if (baseHref) {
+            params[key] = new URL(val, window.location.origin + baseHref).href;
+          } else {
+            params[key] = new URL(val, window.location).href;
+          }
           continue;
         } catch (ex) {
           if (_is_node.isNodeJS && typeof val === "string") {
