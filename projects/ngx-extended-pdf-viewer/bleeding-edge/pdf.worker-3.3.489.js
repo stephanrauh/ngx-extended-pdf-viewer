@@ -118,7 +118,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = '3.3.488';
+    const workerVersion = '3.3.489';
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
     }
@@ -52536,8 +52536,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
   }
 }));
 var _worker = __w_pdfjs_require__(1);
-const pdfjsVersion = '3.3.488';
-const pdfjsBuild = '3c6e0e383';
+const pdfjsVersion = '3.3.489';
+const pdfjsBuild = '6e69c2724';
 })();
 
 /******/ 	return __webpack_exports__;

@@ -1,4 +1,4 @@
-docker build --no-cache -t ng13 .
+docker build --no-cache -t ng13 . --no-cache
 container_id=$(docker run --rm -d -p 4200:80 ng13)
 cd ../playwright/tests
 npm i

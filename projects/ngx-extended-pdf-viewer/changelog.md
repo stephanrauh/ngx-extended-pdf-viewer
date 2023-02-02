@@ -421,3 +421,4 @@
 - 16.0.0-alpha.6 added a forgotten export to the public_api.ts
 - 16.0.0-alpha.7 #1096 deactivate `[handTool]="true"` on iOS because it breaks scrolling and because it isn't necessary on mobile devices
 - 16.0.0-alpha.8 #1529 repaired `pdfDefaultOptions.rangeChunkSize`
+- 16.0.0-alpha.9 #1096 restored support for Angular 12 running on TypeScript 4.2
