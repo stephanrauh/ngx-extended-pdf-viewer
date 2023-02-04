@@ -29,7 +29,9 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 ## What's new in version 16?
 
-Version 16 updates to pdf.js 3.2 (default branch) and pdf.js 3.3 (bleeding edge branch). This means the PDF editor is active by default now.
+- Version 16 updates to pdf.js 3.3 (default branch) and pdf.js 3.4 (bleeding edge branch).
+- The PDF editor is active by default now.
+- Pinch gestures now zoom smoothly. The attributes `enablePinchOnMobile`, `relativeCoordsOptions`, and `enableRelativeCoords` are no longer neccessary. I've removed them.
 
 _Breaking changes:_
 
@@ -41,15 +43,13 @@ _Breaking changes:_
 
 Version 15 updates to pdf.js 2.16 (default branch) and pdf.js 3.0 (bleeding edge branch). It also plays nicely with other libraries which are using the AMD module system, and it supports documents a wider range of documents using East-Asian fonts than previous versions. Plus, it ships with a couple of bug fixes.
 
-## What's new in version 14.5?
+## Full changelog
 
-Version 14.5 replaces the way the PDF viewer injects it global CSS rules. Until version 14.0.x, most CSS rules were injected using a regular component with ViewEncapsulation.None. However, it turned out that this CSS code is never removed. In rare cases, the remaining CSS rules cause problems. Printing, in particular, was broken because of a global `@page` setting. Version 14.5.0 fixes this. I've increased the version number to indicate there a tiny probability it's a breaking change - but I don't think it is one.
+There's also a detailed <a href="https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/main/projects/ngx-extended-pdf-viewer/changelog.md">changelog</a>.
 
 ## Showcase and manual
 
 There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook.
-
-There's also a detailed <a href="https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/main/projects/ngx-extended-pdf-viewer/changelog.md">changelog</a>. If you're interested in breaking changes when updating to the latest version, scroll to the end of this page.
 
 ## Contributors welcome!
 

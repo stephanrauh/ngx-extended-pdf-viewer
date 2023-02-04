@@ -162,15 +162,6 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   @Input()
   public logLevel = VerbosityLevel.WARNINGS;
 
-  @Input()
-  public enablePinchOnMobile = false;
-
-  @Input()
-  public enableRelativeCoords: boolean = false;
-
-  @Input()
-  public relativeCoordsOptions: Object = {};
-
   /** Use the minified (minifiedJSLibraries="true", which is the default) or the user-readable pdf.js library (minifiedJSLibraries="false") */
   @Input()
   public minifiedJSLibraries = true;

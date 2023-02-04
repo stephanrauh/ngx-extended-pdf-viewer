@@ -256,12 +256,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public logLevel = VerbosityLevel.WARNINGS;
 
   @Input()
-  public enablePinchOnMobile = false;
-
-  @Input()
-  public enableRelativeCoords: boolean = false;
-
-  @Input()
   public relativeCoordsOptions: Object = {};
 
   /** Use the minified (minifiedJSLibraries="true", which is the default) or the user-readable pdf.js library (minifiedJSLibraries="false") */
@@ -1104,12 +1098,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const onLoaded = () => {
       this.overrideDefaultSettings();
       document.removeEventListener('webviewerloaded', onLoaded);
-      if (this.enablePinchOnMobile && this.pdfJsVersion < '3.3') {
-        this.pinchOnMobileSupport = new PinchOnMobileSupport(this.ngZone);
-      }
-      if (this.enableRelativeCoords) {
-        this.relativeCoordsSupport = new RelativeCoordsSupport(this.ngZone, this, this.relativeCoordsOptions);
-      }
     };
     document.addEventListener('webviewerloaded', onLoaded);
 
@@ -1949,35 +1937,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           PDFViewerApplication.spreadModeOnLoad = 0;
           PDFViewerApplication.pdfViewer.spreadMode = 0;
           this.onSpreadChange('off');
-        }
-      }
-
-      if ('enablePinchOnMobile' in changes) {
-        if (!changes['enablePinchOnMobile'].isFirstChange()) {
-          if (changes['enablePinchOnMobile'].currentValue !== changes['enablePinchOnMobile'].previousValue) {
-            if (this.enablePinchOnMobile) {
-              this.pinchOnMobileSupport = new PinchOnMobileSupport(this.ngZone);
-            } else {
-              if (this.pinchOnMobileSupport) {
-                this.pinchOnMobileSupport.destroyPinchZoom();
-                this.pinchOnMobileSupport = undefined;
-              }
-            }
-          }
-        }
-      }
-      if ('enableRelativeCoords' in changes) {
-        if (!changes['enableRelativeCoords'].isFirstChange()) {
-          if (changes['enableRelativeCoords'].currentValue !== changes['enableRelativeCoords'].previousValue) {
-            if (this.enableRelativeCoords) {
-              this.relativeCoordsSupport = new RelativeCoordsSupport(this.ngZone, this, this.relativeCoordsOptions);
-            } else {
-              if (this.relativeCoordsSupport) {
-                this.relativeCoordsSupport.destroyRelativeCoords();
-                this.relativeCoordsSupport = undefined;
-              }
-            }
-          }
         }
       }
 
