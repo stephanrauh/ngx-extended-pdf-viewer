@@ -423,4 +423,4 @@
 - 16.0.0-alpha.8 #1529 repaired `pdfDefaultOptions.rangeChunkSize`
 - 16.0.0-alpha.9 #1096 restored support for Angular 12 running on TypeScript 4.2
 - 16.0.0-beta.0 updated to pdf.js 3.3 (stable branch); #1577 updated the CSS code; #1551 enabled `enablePrintAutoRotate` by default
-- 16.0.0-beta.1 #1669 restore support for BLOBs and base64 files; updated the bleeding edge branch to the latest version of pdf.js 3.4
+- 16.0.0-beta.1 #1669 restore support for BLOBs and base64 files; updated the bleeding edge branch to the latest version of pdf.js 3.4; #1670 updated both `pdfDefaultOptions` and the corresponding page of the showcase

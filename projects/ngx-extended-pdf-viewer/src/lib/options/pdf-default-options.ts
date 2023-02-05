@@ -19,44 +19,65 @@ export function assetsUrl(url: string): string {
   return `./${url}`;
 }
 
+const AnnotationMode = {
+  DISABLE: 0,
+  ENABLE: 1,
+  ENABLE_FORMS: 2,
+  ENABLE_STORAGE: 3,
+};
+
+const AnnotationEditorType = {
+  DISABLE: -1,
+  NONE: 0,
+  FREETEXT: 3,
+  INK: 15,
+};
+
 export let pdfDefaultOptions = {
   needsES5: _isIE11 || isEdge || needsES5,
+  annotationEditorMode: 0,
+  annotationMode: 2,
+  defaultZoomDelay: 400, // milliseconds
   cursorToolOnLoad: 0,
   defaultUrl: '',
   defaultZoomValue: undefined,
   disableHistory: false,
   disablePageLabels: false,
+  enablePermissions: false,
   docBaseUrl: '',
   enablePrintAutoRotate: true,
-  enableWebGL: false,
-  eventBusDispatchToDOM: false,
   externalLinkRel: 'noopener noreferrer nofollow',
   externalLinkTarget: 0,
   historyUpdateUrl: false,
   ignoreDestinationZoom: false,
   imageResourcesPath: './images/',
   maxCanvasPixels: 16777216,
+  forcePageColors: false,
+  pageColorsBackground: 'Canvas',
+  pageColorsForeground: 'CanvasText',
   pdfBugEnabled: false,
+  printResolution: 150,
   rangeChunkSize: 65536,
   removePageBorders: false,
   renderer: 'canvas',
-  renderInteractiveForms: true, // renamed - until pdf.js 2.10
-  renderForms: true, // renamed - since pdf.js 2.11
+  renderForms: true,
   enableXfa: true,
+  fontExtraProperties: false,
   sidebarViewOnLoad: -1,
   scrollModeOnLoad: -1,
   spreadModeOnLoad: -1,
   textLayerMode: 1,
   useOnlyCssZoom: false,
+  // viewerCssTheme: 0, // not supported by ngx-extended-pdf-viewer
   viewOnLoad: 0,
   cMapPacked: true,
   cMapUrl: () => `../${assetsUrl(pdfDefaultOptions.assetsFolder)}/cmaps/`,
   disableAutoFetch: false,
-  disableCreateObjectURL: false,
   disableFontFace: false,
   disableRange: false,
   disableStream: false,
   isEvalSupported: true,
+  isOffscreenCanvasSupported: true,
   maxImageSize: -1,
   pdfBug: false,
   postMessageTransfers: true,
@@ -81,7 +102,7 @@ export let pdfDefaultOptions = {
   enableScripting: true,
   defaultCacheSize: 50,
   passwordPrompt: undefined,
-  annotationEditorEnabled: pdfjsVersion >= '3.0',
+  locale: navigator.language || 'en-US', //
 };
 
 if (typeof window !== 'undefined') {
