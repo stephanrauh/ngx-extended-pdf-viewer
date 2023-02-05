@@ -153,7 +153,6 @@ export class PDFPageView implements IRenderableView {
         keepXfaLayer?: boolean | undefined;
         keepTextLayer?: boolean | undefined;
     }): void;
-    loadingIconDiv: HTMLDivElement | undefined;
     update({ scale, rotation, optionalContentConfigPromise, drawingDelay, }: {
         scale?: number | undefined;
         rotation?: null | undefined;

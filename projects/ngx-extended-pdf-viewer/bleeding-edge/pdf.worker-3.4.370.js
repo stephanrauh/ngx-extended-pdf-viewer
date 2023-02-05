@@ -118,7 +118,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = '3.3.489';
+    const workerVersion = '3.4.370';
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
     }
@@ -25734,6 +25734,7 @@ const getGlyphMapForStandardFonts = (0, _core_utils.getLookupTableFactory)(funct
   t[182] = 8217;
   t[200] = 193;
   t[203] = 205;
+  t[207] = 211;
   t[210] = 218;
   t[223] = 711;
   t[224] = 321;
@@ -39623,7 +39624,7 @@ class MetadataParser {
         }
         throw new Error(`_repair: ${name} isn't defined.`);
       });
-      const charBuf = [];
+      const charBuf = [">"];
       for (let i = 0, ii = bytes.length; i < ii; i += 2) {
         const code = bytes.charCodeAt(i) * 256 + bytes.charCodeAt(i + 1);
         if (code >= 32 && code < 127 && code !== 60 && code !== 62 && code !== 38) {
@@ -39632,7 +39633,7 @@ class MetadataParser {
           charBuf.push("&#x" + (0x10000 + code).toString(16).substring(1) + ";");
         }
       }
-      return ">" + charBuf.join("");
+      return charBuf.join("");
     });
   }
   _getSequence(entry) {
@@ -52536,8 +52537,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
   }
 }));
 var _worker = __w_pdfjs_require__(1);
-const pdfjsVersion = '3.3.489';
-const pdfjsBuild = '6e69c2724';
+const pdfjsVersion = '3.4.370';
+const pdfjsBuild = 'b3b0d8eb0';
 })();
 
 /******/ 	return __webpack_exports__;

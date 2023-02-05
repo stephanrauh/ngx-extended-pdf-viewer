@@ -40,6 +40,7 @@ export class AnnotationEditorLayer {
     constructor(options: AnnotationEditorLayerOptions);
     pageIndex: number;
     div: HTMLDivElement;
+    get isEmpty(): boolean;
     /**
      * Update the toolbar if it's required to reflect the tool currently used.
      * @param {number} mode

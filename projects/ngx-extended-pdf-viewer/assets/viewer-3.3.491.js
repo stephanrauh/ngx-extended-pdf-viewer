@@ -1851,25 +1851,7 @@ const PDFViewerApplication = {
   initPassiveLoading() {
     throw new Error("Not implemented: initPassiveLoading");
   },
-  setTitleUsingUrl(url = "", downloadUrl = null) {
-    this.url = url;
-    this.baseUrl = url.split("#")[0];
-    if (downloadUrl) {
-      this._downloadUrl = downloadUrl === url ? this.baseUrl : downloadUrl.split("#")[0];
-    }
-    if ((0, _pdfjsLib.isDataScheme)(url)) {
-      this._hideViewBookmark();
-    }
-    let title = (0, _pdfjsLib.getPdfFilenameFromUrl)(url, "");
-    if (!title) {
-      try {
-        title = decodeURIComponent((0, _pdfjsLib.getFilenameFromUrl)(url)) || url;
-      } catch (ex) {
-        title = url;
-      }
-    }
-    this.setTitle(title);
-  },
+  setTitleUsingUrl(url = "", downloadUrl = null) {},
   setTitle(title = this._title) {
     this._title = title;
     if (this.isViewerEmbedded) {
@@ -9010,7 +8992,7 @@ class PDFViewer {
   #onVisibilityChange = null;
   #scaleTimeoutId = null;
   constructor(options) {
-    const viewerVersion = '3.3.489';
+    const viewerVersion = '3.3.491';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -18140,8 +18122,8 @@ var _ui_utils = __webpack_require__(1);
 var _app_options = __webpack_require__(2);
 var _pdf_link_service = __webpack_require__(3);
 var _app = __webpack_require__(4);
-const pdfjsVersion = '3.3.489';
-const pdfjsBuild = '6e69c2724';
+const pdfjsVersion = '3.3.491';
+const pdfjsBuild = '5cc8ef0b7';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,

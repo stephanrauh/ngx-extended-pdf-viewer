@@ -1721,11 +1721,13 @@ const PDFViewerApplication = {
         return this._docFilename;
       });
     }
-    this.pdfCursorTools = new _pdf_cursor_tools.PDFCursorTools({
-      container,
-      eventBus,
-      cursorToolOnLoad: _app_options.AppOptions.get("cursorToolOnLoad")
-    });
+    if (appConfig.secondaryToolbar?.cursorHandToolButton) {
+      this.pdfCursorTools = new _pdf_cursor_tools.PDFCursorTools({
+        container,
+        eventBus,
+        cursorToolOnLoad: _app_options.AppOptions.get("cursorToolOnLoad")
+      });
+    }
     if (appConfig.toolbar) {
       this.toolbar = new _toolbar.Toolbar(appConfig.toolbar, eventBus, this.l10n);
     }
@@ -1851,25 +1853,7 @@ const PDFViewerApplication = {
   initPassiveLoading() {
     throw new Error("Not implemented: initPassiveLoading");
   },
-  setTitleUsingUrl(url = "", downloadUrl = null) {
-    this.url = url;
-    this.baseUrl = url.split("#")[0];
-    if (downloadUrl) {
-      this._downloadUrl = downloadUrl === url ? this.baseUrl : downloadUrl.split("#")[0];
-    }
-    if ((0, _pdfjsLib.isDataScheme)(url)) {
-      this._hideViewBookmark();
-    }
-    let title = (0, _pdfjsLib.getPdfFilenameFromUrl)(url, "");
-    if (!title) {
-      try {
-        title = decodeURIComponent((0, _pdfjsLib.getFilenameFromUrl)(url)) || url;
-      } catch (ex) {
-        title = url;
-      }
-    }
-    this.setTitle(title);
-  },
+  setTitleUsingUrl(url = "", downloadUrl = null) {},
   setTitle(title = this._title) {
     this._title = title;
     if (this.isViewerEmbedded) {
@@ -1958,11 +1942,8 @@ const PDFViewerApplication = {
       if (this.pdfLoadingTask) {
         await this.close();
       }
-      const workerParameters = _app_options.AppOptions.getAll(_app_options.OptionKind.WORKER);
-      for (const key in workerParameters) {
-        _pdfjsLib.GlobalWorkerOptions[key] = workerParameters[key];
-      }
-      const parameters = Object.create(null);
+      const workerParams = _app_options.AppOptions.getAll(_app_options.OptionKind.WORKER);
+      Object.assign(_pdfjsLib.GlobalWorkerOptions, workerParams);
       if (args.url) {
         if (args.originalUrl) {
           this.setTitleUsingUrl(args.originalUrl, args.url);
@@ -1971,16 +1952,12 @@ const PDFViewerApplication = {
           this.setTitleUsingUrl(args.url, args.url);
         }
       }
-      const apiParameters = _app_options.AppOptions.getAll(_app_options.OptionKind.API);
-      for (const key in apiParameters) {
-        let value = apiParameters[key];
-        if (key === "docBaseUrl") {}
-        parameters[key] = value;
-      }
-      for (const key in args) {
-        parameters[key] = args[key];
-      }
-      const loadingTask = (0, _pdfjsLib.getDocument)(parameters);
+      const apiParams = _app_options.AppOptions.getAll(_app_options.OptionKind.API);
+      const params = {
+        ...apiParams,
+        ...args
+      };
+      const loadingTask = (0, _pdfjsLib.getDocument)(params);
       this.pdfLoadingTask = loadingTask;
       loadingTask.onPassword = (updateCallback, reason) => {
         if (this.isViewerEmbedded) {
@@ -3770,45 +3747,6 @@ const PDFPrintServiceFactory = {
   }
 };
 exports.PDFPrintServiceFactory = PDFPrintServiceFactory;
-function css(el) {
-  const sheets = document.styleSheets,
-    ret = [];
-  el.matches = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector || el.oMatchesSelector;
-  debugger;
-  for (const i in sheets) {
-    const rules = sheets[i].rules || sheets[i].cssRules;
-    for (const r in rules) {
-      if (el.matches(rules[r].selectorText)) {
-        ret.push(rules[r].cssText);
-      }
-    }
-  }
-  return ret;
-}
-function findActiveRules(el = document.getElementsByTagName("ngx-extended-pdf-viewer")[0], rules = []) {
-  for (const sub of el.children) {
-    const additionalRules = css(sub);
-    if (additionalRules) {
-      for (const r of additionalRules) {
-        if (!rules.includes(r)) {
-          rules.push(r);
-        }
-      }
-    }
-    findActiveRules(sub, rules);
-  }
-  return rules;
-}
-function findEveryCSSRule() {
-  const rules = findActiveRules();
-  let sourcecode = "";
-  for (const r of rules) {
-    sourcecode += r + "\n";
-  }
-  console.log(sourcecode);
-}
-window.css = css;
-window.findEveryCSSRule = findEveryCSSRule;
 
 /***/ }),
 /* 5 */
@@ -9049,7 +8987,7 @@ class PDFViewer {
   #onVisibilityChange = null;
   #scaleTimeoutId = null;
   constructor(options) {
-    const viewerVersion = '3.3.489';
+    const viewerVersion = '3.4.370';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -9068,12 +9006,12 @@ class PDFViewer {
     this.downloadManager = options.downloadManager || null;
     this.findController = options.findController || null;
     this._scriptingManager = options.scriptingManager || null;
-    this.removePageBorders = options.removePageBorders || false;
     this.textLayerMode = options.textLayerMode ?? _ui_utils.TextLayerMode.ENABLE;
     this.#annotationMode = options.annotationMode ?? _pdfjsLib.AnnotationMode.ENABLE_FORMS;
     this.#annotationEditorMode = options.annotationEditorMode ?? _pdfjsLib.AnnotationEditorType.NONE;
     this.imageResourcesPath = options.imageResourcesPath || "";
     this.enablePrintAutoRotate = options.enablePrintAutoRotate || false;
+    this.removePageBorders = options.removePageBorders || false;
     this.renderer = options.renderer || _ui_utils.RendererType.CANVAS;
     this.useOnlyCssZoom = options.useOnlyCssZoom || false;
     this.isOffscreenCanvasSupported = options.isOffscreenCanvasSupported ?? true;
@@ -10018,8 +9956,11 @@ class PDFViewer {
         y = destArray[3];
         width = destArray[4] - x;
         height = destArray[5] - y;
-        const hPadding = this.removePageBorders ? 0 : _ui_utils.SCROLLBAR_PADDING;
-        const vPadding = this.removePageBorders ? 0 : _ui_utils.VERTICAL_PADDING;
+        let hPadding = _ui_utils.SCROLLBAR_PADDING,
+          vPadding = _ui_utils.VERTICAL_PADDING;
+        if (this.removePageBorders) {
+          hPadding = vPadding = 0;
+        }
         widthScale = (this.container.clientWidth - hPadding) / width / _pdfjsLib.PixelsPerInch.PDF_TO_CSS_UNITS;
         heightScale = (this.container.clientHeight - vPadding) / height / _pdfjsLib.PixelsPerInch.PDF_TO_CSS_UNITS;
         scale = Math.min(Math.abs(widthScale), Math.abs(heightScale));
@@ -10681,7 +10622,6 @@ const DEFAULT_L10N_STRINGS = {
   page_scale_auto: "Automatic Zoom",
   page_scale_actual: "Actual Size",
   page_scale_percent: "{{scale}}%",
-  loading: "Loading…",
   loading_error: "An error occurred while loading the PDF.",
   invalid_file_error: "Invalid or corrupted PDF file.",
   missing_file_error: "Missing PDF file.",
@@ -12899,6 +12839,7 @@ const DEFAULT_LAYER_PROPERTIES = () => {
 class PDFPageView {
   #annotationMode = _pdfjsLib.AnnotationMode.ENABLE_FORMS;
   #layerProperties = null;
+  #loadingId = null;
   #previousRotation = null;
   #renderingState = _ui_utils.RenderingStates.INITIAL;
   #useThumbnailCanvas = {
@@ -12973,20 +12914,28 @@ class PDFPageView {
     return this.#renderingState;
   }
   set renderingState(state) {
+    if (state === this.#renderingState) {
+      return;
+    }
     this.#renderingState = state;
+    if (this.#loadingId) {
+      clearTimeout(this.#loadingId);
+      this.#loadingId = null;
+    }
     switch (state) {
-      case _ui_utils.RenderingStates.INITIAL:
       case _ui_utils.RenderingStates.PAUSED:
-        this.loadingIconDiv?.classList.add("notVisible");
+        this.div.classList.remove("loading");
         break;
       case _ui_utils.RenderingStates.RUNNING:
-        this.loadingIconDiv?.classList.remove("notVisible");
+        this.div.classList.add("loadingIcon");
+        this.#loadingId = setTimeout(() => {
+          this.div.classList.add("loading");
+          this.#loadingId = null;
+        }, 0);
         break;
+      case _ui_utils.RenderingStates.INITIAL:
       case _ui_utils.RenderingStates.FINISHED:
-        if (this.loadingIconDiv) {
-          this.loadingIconDiv.remove();
-          delete this.loadingIconDiv;
-        }
+        this.div.classList.remove("loadingIcon", "loading");
         break;
     }
   }
@@ -13167,7 +13116,6 @@ class PDFPageView {
         case annotationEditorLayerNode:
         case xfaLayerNode:
         case textLayerNode:
-        case this.loadingIconDiv:
           continue;
       }
       node.remove();
@@ -13197,15 +13145,6 @@ class PDFPageView {
     if (this.svg) {
       this.paintedViewportMap.delete(this.svg);
       delete this.svg;
-    }
-    if (!this.loadingIconDiv) {
-      this.loadingIconDiv = document.createElement("div");
-      this.loadingIconDiv.className = "loadingIcon notVisible";
-      this.loadingIconDiv.setAttribute("role", "img");
-      this.l10n.get("loading").then(msg => {
-        this.loadingIconDiv?.setAttribute("aria-label", msg);
-      });
-      div.append(this.loadingIconDiv);
     }
   }
   update({
@@ -13808,6 +13747,7 @@ class AnnotationEditorLayerBuilder {
     const div = this.div = document.createElement("div");
     div.className = "annotationEditorLayer";
     div.tabIndex = 0;
+    div.hidden = true;
     this.pageDiv.append(div);
     this.annotationEditorLayer = new _pdfjsLib.AnnotationEditorLayer({
       uiManager: this.#uiManager,
@@ -13824,6 +13764,7 @@ class AnnotationEditorLayerBuilder {
       intent
     };
     this.annotationEditorLayer.render(parameters);
+    this.show();
   }
   cancel() {
     this._cancelled = true;
@@ -13841,7 +13782,7 @@ class AnnotationEditorLayerBuilder {
     this.div.hidden = true;
   }
   show() {
-    if (!this.div) {
+    if (!this.div || this.annotationEditorLayer.isEmpty) {
       return;
     }
     this.div.hidden = false;
@@ -16571,7 +16512,8 @@ class Toolbar {
     }
     maxWidth += 0.3 * scaleSelectWidth;
     if (maxWidth > scaleSelectWidth) {
-      _ui_utils.docStyle.setProperty("--scale-select-width", `${maxWidth}px`);
+      const container = items.scaleSelect.parentNode;
+      container.style.setProperty("--scale-select-width", `${maxWidth}px`);
     }
     canvas.width = 0;
     canvas.height = 0;
@@ -18179,8 +18121,8 @@ var _ui_utils = __webpack_require__(1);
 var _app_options = __webpack_require__(2);
 var _pdf_link_service = __webpack_require__(3);
 var _app = __webpack_require__(4);
-const pdfjsVersion = '3.3.489';
-const pdfjsBuild = '6e69c2724';
+const pdfjsVersion = '3.4.370';
+const pdfjsBuild = 'b3b0d8eb0';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,

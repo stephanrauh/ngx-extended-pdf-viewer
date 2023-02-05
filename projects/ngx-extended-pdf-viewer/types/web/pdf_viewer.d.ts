@@ -190,10 +190,10 @@ export class PDFViewer {
     downloadManager: import("./interfaces").IDownloadManager | null;
     findController: any;
     _scriptingManager: any;
-    removePageBorders: boolean;
     textLayerMode: number;
     imageResourcesPath: string;
     enablePrintAutoRotate: boolean;
+    removePageBorders: boolean | undefined;
     renderer: any;
     useOnlyCssZoom: boolean;
     isOffscreenCanvasSupported: boolean;
