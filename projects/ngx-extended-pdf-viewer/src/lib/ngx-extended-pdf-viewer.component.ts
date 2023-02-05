@@ -1615,14 +1615,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         options.baseHref = this.baseHref;
         PDFViewerApplication.onError = (error: Error) => this.pdfLoadingFailed.emit(error);
         this.ngZone.runOutsideAngular(async () => {
-          if (getVersionSuffix(pdfDefaultOptions.assetsFolder) >= '3.3') {
+          if (typeof this._src === 'string') {
             options.url = this._src;
-            options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
-            await PDFViewerApplication.open(options);
-          } else {
-            options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
-            await PDFViewerApplication.open(this._src, options);
+          } else if (this._src instanceof ArrayBuffer) {
+            options.data = this._src;
+          } else if (this._src instanceof Uint8Array) {
+            options.data = this._src;
           }
+          options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
+          await PDFViewerApplication.open(options);
           this.pdfLoadingStarts.emit({});
           // await this.setZoom();
           setTimeout(async () => this.setZoom());
@@ -1699,14 +1700,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
     options.baseHref = this.baseHref;
     try {
-      if (getVersionSuffix(pdfDefaultOptions.assetsFolder) >= '3.3') {
+      if (typeof this._src === 'string') {
         options.url = this._src;
-        options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
-        await PDFViewerApplication.open(options);
-      } else {
-        options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
-        await PDFViewerApplication.open(this._src, options);
+      } else if (this._src instanceof ArrayBuffer) {
+        options.data = this._src;
+      } else if (this._src instanceof Uint8Array) {
+        options.data = this._src;
       }
+      options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
+      await PDFViewerApplication.open(options);
       this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount });
     } catch (error) {
       this.pdfLoadingFailed.emit(error);
