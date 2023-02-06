@@ -572,6 +572,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       );
       return;
     }
+    this._handTool = handTool;
   }
 
   public get handTool(): boolean {
