@@ -18,7 +18,7 @@ import {
   Renderer2,
   SimpleChanges,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { Annotation } from './Annotation';
 import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
@@ -211,7 +211,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public scrollModeChange = new EventEmitter<ScrollModeType>();
 
   @Input()
-  public authorization: Object | undefined = undefined;
+  public authorization: Object | boolean | undefined = undefined;
 
   @Input()
   public httpHeaders: Object | undefined = undefined;
@@ -1413,7 +1413,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (this._src) {
       this.ngxExtendedPdfViewerIncompletelyInitialized = false;
       if (!this.listenToURL) {
-        PDFViewerApplication.pdfLinkService.setHash = function () { };
+        PDFViewerApplication.pdfLinkService.setHash = function () {};
       }
       this.initTimeout = null;
       this.selectCursorTool();
@@ -1604,7 +1604,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         if (this.authorization) {
           options.withCredentials = true;
 
-          if (typeof this.authorization != "boolean") {
+          if (typeof this.authorization != 'boolean') {
             if (!options.httpHeaders) options.httpHeaders = {};
 
             options.httpHeaders.Authorization = this.authorization;
@@ -1687,7 +1687,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (this.authorization) {
       options.withCredentials = true;
 
-      if (typeof this.authorization != "boolean") {
+      if (typeof this.authorization != 'boolean') {
         if (!options.httpHeaders) options.httpHeaders = {};
 
         options.httpHeaders.Authorization = this.authorization;

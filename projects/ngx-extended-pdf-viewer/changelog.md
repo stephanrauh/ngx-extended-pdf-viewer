@@ -426,3 +426,4 @@
 - 16.0.0-beta.1 #1669 restore support for BLOBs and base64 files; updated the bleeding edge branch to the latest version of pdf.js 3.4; #1670 updated both `pdfDefaultOptions` and the corresponding page of the showcase
 - 16.0.0 dependency updates
 - 16.0.1 #1663 fixed `[handTool]`
+- 16.0.2 #1676 / #635 allow users to enable `withCredentials` without having to provide an `Authorization` header. In other words, you can now make the network API to include the credentials headers or cookies even if they aren't stored in the `authorization` header.
