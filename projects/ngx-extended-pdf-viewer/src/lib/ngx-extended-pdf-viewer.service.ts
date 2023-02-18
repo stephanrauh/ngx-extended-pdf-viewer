@@ -2,7 +2,7 @@ import { Subject } from 'rxjs';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { PdfLayer } from './options/optional_content_config';
 import { PDFPrintRange } from './options/pdf-print-range';
-import { IPDFViewerApplication } from './options/pdf-viewer-application';
+import { IPDFViewerApplication, TextItem, TextMarkedContent } from './options/pdf-viewer-application';
 
 export interface FindOptions {
   highlightAll?: boolean;
@@ -206,22 +206,23 @@ export class NgxExtendedPdfViewerService {
     return true;
   }
 
-  public getPageAsText(pageNumber: number): Promise<string> {
+  public async getPageAsText(pageNumber: number): Promise<string> {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const pdfDocument = PDFViewerApplication.pdfDocument;
 
-    const pagePromise: Promise<any> = pdfDocument.getPage(pageNumber);
-
-    const extractTextSnippets = (pdfPage) => Promise.resolve(pdfPage.getTextContent());
-    const combineTextSnippets = (textSnippets) => Promise.resolve(this.convertTextInfoToText(textSnippets));
-    return pagePromise.then(extractTextSnippets).then(combineTextSnippets);
+    const page = await pdfDocument.getPage(pageNumber);
+    const textSnippets = (await page.getTextContent()).items;
+    return this.convertTextInfoToText(textSnippets);
   }
 
-  private convertTextInfoToText(textInfo: any): string {
-    if (!textInfo) {
+  private convertTextInfoToText(textInfoItems: Array<TextItem | TextMarkedContent>): string {
+    if (!textInfoItems) {
       return '';
     }
-    return textInfo.items.map((info: { str: any }) => info.str).join('');
+    return textInfoItems
+      .filter((info) => !info['type'])
+      .map((info: TextItem) => (info.hasEOL ? info.str + '\n' : info.str))
+      .join('');
   }
 
   public getPageAsImage(pageNumber: number, scale: PDFExportScaleFactor, background?: string, backgroundColorToReplace: string = '#FFFFFF'): Promise<any> {
@@ -279,7 +280,7 @@ export class NgxExtendedPdfViewerService {
 
   public async getCurrentDocumentAsBlob(): Promise<Blob> {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    const data = await PDFViewerApplication.pdfDocument.saveDocument(PDFViewerApplication.pdfDocument.annotationStorage);
+    const data = await PDFViewerApplication.pdfDocument.saveDocument(); // (PDFViewerApplication.pdfDocument.annotationStorage);
     return new Blob([data], { type: 'application/pdf' });
   }
 
@@ -306,13 +307,13 @@ export class NgxExtendedPdfViewerService {
           if (currentFormValues && a.fieldName) {
             try {
               if (a.exportValue) {
-                const currentValue = PDFViewerApplication.pdfDocument.annotationStorage.getValue(a.id, a.fieldName + '/' + a.exportValue, '');
+                const currentValue: any = PDFViewerApplication.pdfDocument.annotationStorage.getValue(a.id, a.fieldName + '/' + a.exportValue, '');
                 a.value = currentValue?.value;
               } else if (a.radioButton) {
-                const currentValue = PDFViewerApplication.pdfDocument.annotationStorage.getValue(a.id, a.fieldName + '/' + a.fieldValue, '');
+                const currentValue: any = PDFViewerApplication.pdfDocument.annotationStorage.getValue(a.id, a.fieldName + '/' + a.fieldValue, '');
                 a.value = currentValue?.value;
               } else {
-                const currentValue = PDFViewerApplication.pdfDocument.annotationStorage.getValue(a.id, a.fieldName, '');
+                const currentValue: any = PDFViewerApplication.pdfDocument.annotationStorage.getValue(a.id, a.fieldName, '');
                 a.value = currentValue?.value;
               }
             } catch (exception) {
