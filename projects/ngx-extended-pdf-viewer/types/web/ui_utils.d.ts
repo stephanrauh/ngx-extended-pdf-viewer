@@ -91,6 +91,11 @@ export function backtrackBeforeAllVisibleElements(index: number, views: any[], t
  *                   or |items.length| if no such element exists.
  */
 export function binarySearchFirstItem(items: any, condition: any, start?: number): number;
+export namespace CursorTool {
+    const SELECT: number;
+    const HAND: number;
+    const ZOOM: number;
+}
 export const DEFAULT_SCALE: 1;
 export const DEFAULT_SCALE_DELTA: 1.1;
 export const DEFAULT_SCALE_VALUE: "auto";

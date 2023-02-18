@@ -1,5 +1,4 @@
 export type PDFDocumentProxy = import("../src/display/api").PDFDocumentProxy;
-export type EventBus = import("./event_utils").EventBus;
 export type IL10n = import("./interfaces").IL10n;
 export type IPDFLinkService = import("./interfaces").IPDFLinkService;
 export type PDFRenderingQueue = import("./pdf_rendering_queue").PDFRenderingQueue;
@@ -9,10 +8,6 @@ export type PDFThumbnailViewerOptions = {
      * elements.
      */
     container: HTMLDivElement;
-    /**
-     * - The application event bus.
-     */
-    eventBus: EventBus;
     /**
      * - The navigation/linking service.
      */
@@ -36,7 +31,6 @@ export type PDFThumbnailViewerOptions = {
  * @typedef {Object} PDFThumbnailViewerOptions
  * @property {HTMLDivElement} container - The container for the thumbnail
  *   elements.
- * @property {EventBus} eventBus - The application event bus.
  * @property {IPDFLinkService} linkService - The navigation/linking service.
  * @property {PDFRenderingQueue} renderingQueue - The rendering queue object.
  * @property {IL10n} l10n - Localization service.
@@ -51,7 +45,7 @@ export class PDFThumbnailViewer {
     /**
      * @param {PDFThumbnailViewerOptions} options
      */
-    constructor({ container, eventBus, linkService, renderingQueue, l10n, pageColors, }: PDFThumbnailViewerOptions);
+    constructor({ container, linkService, renderingQueue, l10n, pageColors }: PDFThumbnailViewerOptions);
     container: HTMLDivElement;
     linkService: import("./interfaces").IPDFLinkService;
     renderingQueue: import("./pdf_rendering_queue").PDFRenderingQueue;

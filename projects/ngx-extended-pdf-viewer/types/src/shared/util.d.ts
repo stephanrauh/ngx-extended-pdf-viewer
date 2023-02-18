@@ -158,19 +158,6 @@ export namespace AnnotationType {
     export const THREED: number;
     export const REDACT: number;
 }
-/**
- * Gets length of the array (Array, Uint8Array, or string) in bytes.
- * @param {Array<any>|Uint8Array|string} arr
- * @returns {number}
- */
-export function arrayByteLength(arr: Array<any> | Uint8Array | string): number;
-/**
- * Combines array items (arrays) into single Uint8Array object.
- * @param {Array<Array<any>|Uint8Array|string>} arr - the array of the arrays
- *   (Array, Uint8Array, or string).
- * @returns {Uint8Array}
- */
-export function arraysToBytes(arr: Array<Array<any> | Uint8Array | string>): Uint8Array;
 export function assert(cond: any, msg: any): void;
 /**
  * @type {any}
