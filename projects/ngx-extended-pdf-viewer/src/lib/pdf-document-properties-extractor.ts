@@ -38,28 +38,24 @@ export class PdfDocumentPropertiesExtractor {
     const pdfDocument = PDFViewerApplication.pdfDocument;
 
     const result: any = {};
-    return pdfDocument
-      .getMetadata()
-      .then(({ info, _metadata, contentDispositionFilename }) => {
-        result.author = info.Author;
-        result.creationDate = this.toDateObject(info.CreationDate);
-        result.creator = info.Creator;
-        result.keywords = info.Keywords;
-        result.linearized = info.IsLinearized;
-        result.modificationDate = this.toDateObject(info.ModDate);
-        result.pdfFormatVersion = info.PDFFormatVersion;
-        result.producer = info.Producer;
-        result.subject = info.Subject;
-        result.title = info.Title;
-        if (contentDispositionFilename) {
-          result.fileName = contentDispositionFilename;
-        }
-        return pdfDocument.getDownloadInfo();
-      })
-      .then(({ length }) => {
-        result.maybeFileSize = length;
-        return result;
-      });
+    const md = await pdfDocument.getMetadata();
+    const info = md.info as unknown as any;
+
+    result.author = info.Author;
+    result.creationDate = this.toDateObject(info.CreationDate);
+    result.creator = info.Creator;
+    result.keywords = info.Keywords;
+    result.linearized = info.IsLinearized;
+    result.modificationDate = this.toDateObject(info.ModDate);
+    result.pdfFormatVersion = info.PDFFormatVersion;
+    result.producer = info.Producer;
+    result.subject = info.Subject;
+    result.title = info.Title;
+    if (md['contentDispositionFilename']) {
+      result.fileName = md['contentDispositionFilename'];
+    }
+    result.maybeFileSize = await (await pdfDocument.getDownloadInfo()).length;
+    return result;
   }
 
   /** shamelessly copied from pdf.js */
