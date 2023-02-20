@@ -26,6 +26,23 @@ export interface PDFExportScaleFactor {
   scale?: number;
 }
 
+export interface Line {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  direction: 'ltr' | 'rtl' | 'both' | undefined;
+  text: string;
+}
+export interface Section {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  direction: 'ltr' | 'rtl' | 'both' | undefined;
+  lines: Array<Line>;
+}
+
 export class NgxExtendedPdfViewerService {
   public recalculateSize$ = new Subject<void>();
 
@@ -204,6 +221,68 @@ export class NgxExtendedPdfViewerService {
       }
     }
     return true;
+  }
+
+  public async getPageAsLines(pageNumber: number): Promise<Array<Line>> {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const pdfDocument = PDFViewerApplication.pdfDocument;
+
+    const page = await pdfDocument.getPage(pageNumber);
+    const textSnippets = (await page.getTextContent()).items //
+      .filter((info) => !info['type']); // ignore the TextMarkedContent items
+
+    const snippets = textSnippets as Array<TextItem>;
+
+    let minX = Number.MAX_SAFE_INTEGER;
+    let minY = Number.MAX_SAFE_INTEGER;
+    let maxX = Number.MIN_SAFE_INTEGER;
+    let maxY = Number.MIN_SAFE_INTEGER;
+    let countLTR = 0;
+    let countRTL = 0;
+    let text = '';
+    let lines = new Array<Line>();
+    for (let i = 0; i < snippets.length; i++) {
+      const currentSnippet = snippets[i];
+      if (!currentSnippet.hasEOL) {
+        const x = currentSnippet.transform[4];
+        const y = -currentSnippet.transform[5];
+        const width = currentSnippet.width;
+        const height = currentSnippet.height;
+        minX = Math.min(minX, x);
+        minY = Math.min(minY, y);
+        maxX = Math.max(maxX, x + width);
+        maxY = Math.max(maxY, y + height);
+        text += currentSnippet.str;
+        if (currentSnippet.dir === 'rtl') {
+          countRTL++;
+        }
+        if (currentSnippet.dir === 'ltr') {
+          countLTR++;
+        }
+      }
+
+      let addIt = i === snippets.length - 1 || currentSnippet.hasEOL;
+      if (addIt) {
+        const direction = countLTR > 0 ? (countRTL > 0 ? 'both' : 'ltr') : countRTL > 0 ? 'rtl' : undefined;
+        const line = {
+          direction,
+          x: minX,
+          y: minY,
+          width: maxX - minX,
+          height: maxY - minY,
+          text: text.trim(),
+        } as Line;
+        lines.push(line);
+        minX = Number.MAX_SAFE_INTEGER;
+        minY = Number.MAX_SAFE_INTEGER;
+        maxX = Number.MIN_SAFE_INTEGER;
+        maxY = Number.MIN_SAFE_INTEGER;
+        countLTR = 0;
+        countRTL = 0;
+        text = '';
+      }
+    }
+    return lines;
   }
 
   public async getPageAsText(pageNumber: number): Promise<string> {
