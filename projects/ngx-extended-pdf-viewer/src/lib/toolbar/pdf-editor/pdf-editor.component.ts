@@ -7,5 +7,8 @@ import { Component, Input } from '@angular/core';
 })
 export class PdfEditorComponent {
   @Input()
-  public showEditor = true;
+  public showEditorDraw = true;
+
+  @Input()
+  public showEditorText = true;
 }

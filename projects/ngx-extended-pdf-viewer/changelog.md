@@ -427,4 +427,4 @@
 - 16.0.0 dependency updates
 - 16.0.1 #1663 fixed `[handTool]`
 - 16.0.2 #1676 / #635 allow users to enable `withCredentials` without having to provide an `Authorization` header. In other words, you can now make the network API to include the credentials headers or cookies even if they aren't stored in the `authorization` header.
-- 16.1.0 #1687 add line endings to the text export (`getPageAsText()`); updated the bleeding edge branch; added type definitions for PdfDocumentProxy
+- 16.1.0 #1687 add line endings to the text export (`getPageAsText()`); updated the bleeding edge branch; added type definitions for PdfDocumentProxy; #1677 allow developers to hide both editor buttons independently (as opposed to either hiding or showing both of them)
