@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
   selector: 'pdf-toggle-secondary-toolbar',
@@ -7,7 +8,7 @@ import { Component, Input } from '@angular/core';
 })
 export class PdfToggleSecondaryToolbarComponent {
   @Input()
-  public showSecondaryToolbarButton = true;
+  public showSecondaryToolbarButton: ResponsiveVisibility = true;
 
   public onClick(event: Event): boolean {
     event.preventDefault();

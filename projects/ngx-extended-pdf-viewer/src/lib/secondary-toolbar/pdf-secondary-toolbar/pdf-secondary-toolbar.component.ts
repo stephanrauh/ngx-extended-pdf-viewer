@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
+import { ResponsiveVisibility } from '../../responsive-visibility';
 import { PDFNotificationService } from './../../pdf-notification-service';
 
 @Component({
@@ -31,34 +32,34 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
   public mobileFriendlyZoomScale: number;
 
   @Input()
-  public showPresentationModeButton = true;
+  public showPresentationModeButton: ResponsiveVisibility = true;
 
   @Input()
-  public showOpenFileButton = true;
+  public showOpenFileButton: ResponsiveVisibility = true;
 
   @Input()
-  public showPrintButton = true;
+  public showPrintButton: ResponsiveVisibility = true;
 
   @Input()
-  public showDownloadButton = true;
+  public showDownloadButton: ResponsiveVisibility = true;
 
   @Input()
-  public showPagingButtons = true;
+  public showPagingButtons: ResponsiveVisibility = true;
 
   @Input()
-  public showRotateButton = true;
+  public showRotateButton: ResponsiveVisibility = true;
 
   @Input()
-  public showHandToolButton = true;
+  public showHandToolButton: ResponsiveVisibility = true;
 
   @Input()
-  public showScrollingButton = true;
+  public showScrollingButton: ResponsiveVisibility = true;
 
   @Input()
-  public showSpreadButton = true;
+  public showSpreadButton: ResponsiveVisibility = true;
 
   @Input()
-  public showPropertiesButton = true;
+  public showPropertiesButton: ResponsiveVisibility = true;
 
   @Output()
   public spreadChange = new EventEmitter<'off' | 'even' | 'odd'>();

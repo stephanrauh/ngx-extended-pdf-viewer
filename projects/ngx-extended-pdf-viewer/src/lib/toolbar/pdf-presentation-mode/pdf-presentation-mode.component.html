@@ -1,11 +1,9 @@
-<button type="button"
-        [class.invisible]="!showPresentationModeButton"
-        id="presentationMode"
-        class="toolbarButton hiddenLargeView"
-        title="Switch to Presentation Mode"
-        data-l10n-id="presentation_mode">
+<button type="button" id="presentationMode" class="toolbarButton"
+  [class]="showPresentationModeButton | responsiveCSSClass: 'hiddenLargeView'" title="Switch to Presentation Mode"
+  data-l10n-id="presentation_mode">
   <svg style="width:27px;height:27px" viewBox="0 0 24 24">
-    <path fill="currentColor" d="M5,5H10V7H7V10H5V5M14,5H19V10H17V7H14V5M17,14H19V19H14V17H17V14M10,17V19H5V14H7V17H10Z" />
+    <path fill="currentColor"
+      d="M5,5H10V7H7V10H5V5M14,5H19V10H17V7H14V5M17,14H19V19H14V17H17V14M10,17V19H5V14H7V17H10Z" />
   </svg>
   <span data-l10n-id="presentation_mode_label">Presentation Mode</span>
-  </button>
+</button>

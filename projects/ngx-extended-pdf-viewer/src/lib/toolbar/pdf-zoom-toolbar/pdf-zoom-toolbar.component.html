@@ -1,7 +1,6 @@
-<div [class.invisible]="!showZoomButtons" id="toolbarViewerMiddle">
+<div id="toolbarViewerMiddle" [class]="showZoomButtons | responsiveCSSClass: ''">
   <pdf-zoom-out></pdf-zoom-out>
   <pdf-zoom-in></pdf-zoom-in>
-  <pdf-zoom-dropdown
-      style="width: unset; max-width: unset;padding-top:3px" [zoomLevels]="zoomLevels">
+  <pdf-zoom-dropdown style="width: unset; max-width: unset;padding-top:3px" [zoomLevels]="zoomLevels">
   </pdf-zoom-dropdown>
 </div>

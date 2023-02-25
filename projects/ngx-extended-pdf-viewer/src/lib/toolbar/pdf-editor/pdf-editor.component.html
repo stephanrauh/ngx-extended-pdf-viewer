@@ -1,7 +1,8 @@
 <div id="editorModeButtons" class="splitToolbarButton toggled hiddenTinyView" role="radiogroup"
-  *ngIf="showEditorDraw || showEditorText">
+  *ngIf="!!showEditorDraw || !!showEditorText">
   <button id="editorFreeText" class="toolbarButton" disabled="disabled" title="Text" role="radio" type="button"
-    aria-checked="false" tabindex="34" data-l10n-id="editor_free_text2" *ngIf="showEditorText">
+    aria-checked="false" tabindex="34" data-l10n-id="editor_free_text2"
+    [class]="showEditorText | responsiveCSSClass: 'hiddenTinyView'">
     <span data-l10n-id="editor_free_text2_label">Text</span>
     <svg style="width:20px;height:20px" viewBox="0 0 24 24">
       <path fill="currentColor"
@@ -9,7 +10,8 @@
     </svg>
   </button>
   <button id="editorInk" class="toolbarButton" disabled="disabled" title="Draw" role="radio" aria-checked="false"
-    type="button" tabindex="35" data-l10n-id="editor_ink2" *ngIf="showEditorDraw">
+    type="button" tabindex="35" data-l10n-id="editor_ink2"
+    [class]="showEditorDraw | responsiveCSSClass: 'hiddenTinyView'">
     <span data-l10n-id="editor_ink2_label">Draw</span>
     <svg style="width:20px;height:20px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
       xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 16 16">
@@ -23,4 +25,5 @@
   </button>
 </div>
 
-<div id="editorModeSeparator" class="verticalToolbarSeparator hiddenTinyView"></div>
+<div id="editorModeSeparator" class="verticalToolbarSeparator hiddenTinyView"
+  *ngIf="!!showEditorDraw || !!showEditorText"></div>

@@ -1,16 +1,17 @@
-import { PDFNotificationService } from './../../pdf-notification-service';
-import { Component, Input, ViewChild, ElementRef } from '@angular/core';
-import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { UpdateUIStateEvent } from '../../events/update-ui-state-event';
+import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
+import { ResponsiveVisibility } from '../../responsive-visibility';
+import { PDFNotificationService } from './../../pdf-notification-service';
 
 @Component({
   selector: 'pdf-rotate-page',
   templateUrl: './pdf-rotate-page.component.html',
-  styleUrls: ['./pdf-rotate-page.component.css']
+  styleUrls: ['./pdf-rotate-page.component.css'],
 })
-export class PdfRotatePageComponent  {
+export class PdfRotatePageComponent {
   @Input()
-  public showRotateButton = true;
+  public showRotateButton: ResponsiveVisibility = true;
 
   public disableRotate = true;
 
@@ -42,7 +43,6 @@ export class PdfRotatePageComponent  {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     PDFViewerApplication.eventBus.dispatch('rotateccw');
   }
-
 
   public onPdfJsInit(): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;

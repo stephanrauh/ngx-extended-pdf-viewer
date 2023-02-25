@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
   selector: 'pdf-editor',
@@ -7,8 +8,8 @@ import { Component, Input } from '@angular/core';
 })
 export class PdfEditorComponent {
   @Input()
-  public showEditorDraw = true;
+  public showEditorDraw: ResponsiveVisibility = true;
 
   @Input()
-  public showEditorText = true;
+  public showEditorText: ResponsiveVisibility = true;
 }

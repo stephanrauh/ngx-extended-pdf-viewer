@@ -9,6 +9,7 @@ import { PdfPasswordDialogComponent } from './pdf-dialog/pdf-password-dialog/pdf
 import { PdfPreparePrintingDialogComponent } from './pdf-dialog/pdf-prepare-printing-dialog/pdf-prepare-printing-dialog.component';
 import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
 import { PDFNotificationService } from './pdf-notification-service';
+import { NegativeResponsiveCSSClassPipe, ResponsiveCSSClassPipe } from './responsive-visibility';
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
 import { PdfSidebarContentComponent } from './sidebar/pdf-sidebar/pdf-sidebar-content/pdf-sidebar-content.component';
 import { PdfSidebarToolbarComponent } from './sidebar/pdf-sidebar/pdf-sidebar-toolbar/pdf-sidebar-toolbar.component';
@@ -121,6 +122,8 @@ import { TranslatePipe } from './translate.pipe';
     PdfPasswordDialogComponent,
     PdfPreparePrintingDialogComponent,
     PdfErrorMessageComponent,
+    ResponsiveCSSClassPipe,
+    NegativeResponsiveCSSClassPipe,
   ],
   providers: [PDFNotificationService, Location],
   exports: [
@@ -180,6 +183,8 @@ import { TranslatePipe } from './translate.pipe';
     PdfPasswordDialogComponent,
     PdfPreparePrintingDialogComponent,
     PdfErrorMessageComponent,
+    ResponsiveCSSClassPipe,
+    NegativeResponsiveCSSClassPipe,
   ],
 })
 export class NgxExtendedPdfViewerCommonModule {}

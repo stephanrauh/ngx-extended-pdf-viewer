@@ -1,11 +1,12 @@
 import { Component, Input } from '@angular/core';
+import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
   selector: 'pdf-open-file',
   templateUrl: './pdf-open-file.component.html',
-  styleUrls: ['./pdf-open-file.component.css']
+  styleUrls: ['./pdf-open-file.component.css'],
 })
-export class PdfOpenFileComponent  {
+export class PdfOpenFileComponent {
   @Input()
-  public showOpenFileButton = true;
+  public showOpenFileButton: ResponsiveVisibility = true;
 }

@@ -47,6 +47,7 @@ export * from './lib/pdf-dialog/pdf-password-dialog/pdf-password-dialog.componen
 export * from './lib/pdf-dialog/pdf-prepare-printing-dialog/pdf-prepare-printing-dialog.component';
 export * from './lib/pdf-document-properties-extractor';
 export * from './lib/pdf-notification-service';
+export * from './lib/responsive-visibility';
 export * from './lib/secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
 export * from './lib/sidebar/pdf-sidebar/pdf-sidebar-content/pdf-sidebar-content.component';
 export * from './lib/sidebar/pdf-sidebar/pdf-sidebar-toolbar/pdf-sidebar-toolbar.component';

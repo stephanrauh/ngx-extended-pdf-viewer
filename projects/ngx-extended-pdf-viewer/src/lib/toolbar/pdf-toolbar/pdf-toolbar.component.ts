@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
   selector: 'pdf-toolbar',
@@ -16,46 +17,46 @@ export class PdfToolbarComponent implements AfterViewInit {
   public primaryMenuVisible = true;
 
   @Input()
-  public showBookmarkButton = true;
+  public showBookmarkButton: ResponsiveVisibility = true;
 
   @Input()
-  public showDownloadButton = true;
+  public showDownloadButton: ResponsiveVisibility = true;
 
   @Input()
-  public showEditorDraw = false;
+  public showEditorDraw: ResponsiveVisibility = false;
 
   @Input()
-  public showEditorText = false;
+  public showEditorText: ResponsiveVisibility = false;
 
   @Input()
   public showFindButton: boolean | undefined = undefined;
 
   @Input()
-  public showHandToolButton = true;
+  public showHandToolButton: ResponsiveVisibility = true;
 
   @Input()
-  public showOpenFileButton = true;
+  public showOpenFileButton: ResponsiveVisibility = true;
 
   @Input()
-  public showPrintButton = true;
+  public showPrintButton: ResponsiveVisibility = true;
 
   @Input()
-  public showPagingButtons = true;
+  public showPagingButtons: ResponsiveVisibility = true;
 
   @Input()
-  public showPresentationModeButton = false;
+  public showPresentationModeButton: ResponsiveVisibility = false;
 
   @Input()
-  public showRotateButton = true;
+  public showRotateButton: ResponsiveVisibility = true;
 
   @Input()
-  public showSecondaryToolbarButton = true;
+  public showSecondaryToolbarButton: ResponsiveVisibility = true;
 
   @Input()
-  public showSidebarButton = true;
+  public showSidebarButton: ResponsiveVisibility = true;
 
   @Input()
-  public showZoomButtons = true;
+  public showZoomButtons: ResponsiveVisibility = true;
 
   @Input()
   public textLayer: boolean | undefined = undefined;
@@ -73,6 +74,7 @@ export class PdfToolbarComponent implements AfterViewInit {
   public onToolbarLoaded = new EventEmitter<HTMLElement>();
 
   constructor(private elementRef: ElementRef) {}
+
   ngAfterViewInit(): void {
     this.onToolbarLoaded.emit(this.elementRef.nativeElement.getElementsByClassName('toolbar')[0] as HTMLElement);
   }

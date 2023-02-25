@@ -63,6 +63,7 @@ import { OutlineLoadedEvent } from './events/outline-loaded-event';
 import { XfaLayerRenderedEvent } from './events/xfa-layer-rendered-event';
 import { PdfSidebarView } from './options/pdf-sidebar-views';
 import { RelativeCoordsSupport } from './relative-coords-support';
+import { ResponsiveVisibility } from './responsive-visibility';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 declare class ResizeObserver {
@@ -254,10 +255,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   @Input()
-  public showEditorText = true;
+  public showEditorText: ResponsiveVisibility = true;
 
   @Input()
-  public showEditorDraw = true;
+  public showEditorDraw: ResponsiveVisibility = true;
 
   /** store the timeout id so it can be canceled if user leaves the page before the PDF is shown */
   private initTimeout: any;
@@ -539,22 +540,22 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public showFindMessages = true;
 
   @Input()
-  public showPagingButtons = true;
+  public showPagingButtons: ResponsiveVisibility = true;
 
   @Input()
-  public showZoomButtons = true;
+  public showZoomButtons: ResponsiveVisibility = true;
 
   @Input()
-  public showPresentationModeButton = false;
+  public showPresentationModeButton: ResponsiveVisibility = false;
 
   @Input()
-  public showOpenFileButton = true;
+  public showOpenFileButton: ResponsiveVisibility = true;
 
   @Input()
-  public showPrintButton = true;
+  public showPrintButton: ResponsiveVisibility = true;
 
   @Input()
-  public showDownloadButton = true;
+  public showDownloadButton: ResponsiveVisibility = true;
 
   @Input()
   public theme: 'dark' | 'light' | 'custom' | string = 'light';
@@ -572,7 +573,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public hideKebabMenuForSecondaryToolbar = false;
 
   @Input()
-  public showRotateButton = true;
+  public showRotateButton: ResponsiveVisibility = true;
 
   private _handTool = !isIOS();
 
@@ -595,7 +596,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public handToolChange = new EventEmitter<boolean>();
 
   @Input()
-  public showHandToolButton = false;
+  public showHandToolButton: ResponsiveVisibility = false;
 
   private _showScrollingButton = true;
 

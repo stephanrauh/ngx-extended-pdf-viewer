@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
   selector: 'pdf-download',
@@ -7,5 +8,5 @@ import { Component, Input } from '@angular/core';
 })
 export class PdfDownloadComponent {
   @Input()
-  public showDownloadButton = true;
+  public showDownloadButton: ResponsiveVisibility = true;
 }

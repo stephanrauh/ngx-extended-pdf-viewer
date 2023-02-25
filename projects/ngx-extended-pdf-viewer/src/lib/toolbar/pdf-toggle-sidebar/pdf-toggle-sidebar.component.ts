@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
   selector: 'pdf-toggle-sidebar',
@@ -7,5 +8,5 @@ import { Component, Input } from '@angular/core';
 })
 export class PdfToggleSidebarComponent {
   @Input()
-  public showSidebarButton = true;
+  public showSidebarButton: ResponsiveVisibility = true;
 }
