@@ -38,6 +38,7 @@ import { PdfSidebarView } from './options/pdf-sidebar-views';
 import { ScrollModeType } from './options/pdf-viewer';
 import { VerbosityLevel } from './options/verbosity-level';
 import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
+import { ResponsiveVisibility } from './responsive-visibility';
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 
@@ -288,7 +289,7 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
     return true;
   }
   @Input()
-  public set showSidebarButton(show: boolean) {}
+  public set showSidebarButton(show: ResponsiveVisibility) {}
 
   @Input()
   public sidebarVisible: boolean | undefined = undefined;
@@ -303,7 +304,7 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   public activeSidebarViewChange = new EventEmitter<PdfSidebarView>();
 
   @Input()
-  public showFindButton: boolean | undefined = undefined;
+  public showFindButton: ResponsiveVisibility | undefined = undefined;
 
   @Input()
   public showFindHighlightAll = true;
@@ -336,22 +337,22 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   public showFindMessages = true;
 
   @Input()
-  public showPagingButtons = true;
+  public showPagingButtons: ResponsiveVisibility = true;
 
   @Input()
-  public showZoomButtons = true;
+  public showZoomButtons: ResponsiveVisibility = true;
 
   @Input()
-  public showPresentationModeButton = false;
+  public showPresentationModeButton: ResponsiveVisibility = false;
 
   @Input()
-  public showOpenFileButton = true;
+  public showOpenFileButton: ResponsiveVisibility = true;
 
   @Input()
-  public showPrintButton = true;
+  public showPrintButton: ResponsiveVisibility = true;
 
   @Input()
-  public showDownloadButton = true;
+  public showDownloadButton: ResponsiveVisibility = true;
 
   @Input()
   public theme: 'dark' | 'light' | 'custom' = 'light';
@@ -363,13 +364,13 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   public showToolbar = true;
 
   @Input()
-  public showSecondaryToolbarButton = true;
+  public showSecondaryToolbarButton: ResponsiveVisibility = true;
 
   /** Set by the event (secondaryMenuIsEmpty) */
   public hideKebabMenuForSecondaryToolbar = false;
 
   @Input()
-  public showRotateButton = true;
+  public showRotateButton: ResponsiveVisibility = true;
 
   @Input()
   public handTool = true;
@@ -378,16 +379,16 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
   public handToolChange = new EventEmitter<boolean>();
 
   @Input()
-  public showHandToolButton = false;
+  public showHandToolButton: ResponsiveVisibility = false;
 
   @Input()
-  public showScrollingButton = true;
+  public showScrollingButton: ResponsiveVisibility = true;
 
   @Input()
-  public showSpreadButton = true;
+  public showSpreadButton: ResponsiveVisibility = true;
 
   @Input()
-  public showPropertiesButton = true;
+  public showPropertiesButton: ResponsiveVisibility = true;
 
   @Input()
   public showBorders = true;

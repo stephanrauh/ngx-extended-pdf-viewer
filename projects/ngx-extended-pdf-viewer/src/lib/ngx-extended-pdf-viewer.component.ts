@@ -462,7 +462,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public replaceBrowserPrint = this.pdfJsVersion >= '3.0';
 
-  public _showSidebarButton = true;
+  public _showSidebarButton: ResponsiveVisibility = true;
 
   public viewerPositionTop = '32px';
 
@@ -479,7 +479,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     return this._showSidebarButton;
   }
   @Input()
-  public set showSidebarButton(show: boolean) {
+  public set showSidebarButton(show: ResponsiveVisibility) {
     this._showSidebarButton = show;
     const isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
     let factor = 1;
@@ -507,7 +507,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public activeSidebarViewChange = new EventEmitter<PdfSidebarView>();
 
   @Input()
-  public showFindButton: boolean | undefined = undefined;
+  public showFindButton: ResponsiveVisibility | undefined = undefined;
 
   @Input()
   public showFindHighlightAll = true;
@@ -598,7 +598,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public showHandToolButton: ResponsiveVisibility = false;
 
-  private _showScrollingButton = true;
+  private _showScrollingButton: ResponsiveVisibility = true;
 
   public get showScrollingButton() {
     if (this.pageViewMode === 'multiple') {
@@ -608,11 +608,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   @Input()
-  public set showScrollingButton(val: any) {
+  public set showScrollingButton(val: ResponsiveVisibility) {
     this._showScrollingButton = val;
   }
 
-  private _showSpreadButton = true;
+  private _showSpreadButton: ResponsiveVisibility = true;
 
   public get showSpreadButton() {
     if (this.pageViewMode !== 'infinite-scroll') {
@@ -622,12 +622,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   @Input()
-  public set showSpreadButton(val: any) {
+  public set showSpreadButton(val: ResponsiveVisibility) {
     this._showSpreadButton = val;
   }
 
   @Input()
-  public showPropertiesButton = true;
+  public showPropertiesButton: ResponsiveVisibility = true;
 
   @Input()
   public showBorders = true;

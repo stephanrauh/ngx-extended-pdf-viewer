@@ -118,7 +118,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = '3.4.474';
+    const workerVersion = '3.5.375';
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
     }
@@ -4918,7 +4918,10 @@ class Annotation {
         visited.put(loopDict.objId);
       }
       if (loopDict.has("T")) {
-        fieldName.unshift((0, _util.stringToPDFString)(loopDict.get("T")));
+        const t = (0, _util.stringToPDFString)(loopDict.get("T"));
+        if (!t.startsWith("#")) {
+          fieldName.unshift(t);
+        }
       }
     }
     return fieldName.join(".");
@@ -5416,7 +5419,7 @@ class WidgetAnnotation extends Annotation {
       }
     }
     const xfa = {
-      path: (0, _util.stringToPDFString)(dict.get("T") || ""),
+      path: this.data.fieldName,
       value
     };
     const encoder = val => {
@@ -5961,7 +5964,7 @@ class ButtonWidgetAnnotation extends WidgetAnnotation {
       value = this.data.fieldValue === this.data.exportValue;
     }
     const xfa = {
-      path: (0, _util.stringToPDFString)(dict.get("T") || ""),
+      path: this.data.fieldName,
       value: value ? this.data.exportValue : ""
     };
     const name = _primitives.Name.get(value ? this.data.exportValue : "Off");
@@ -6013,7 +6016,7 @@ class ButtonWidgetAnnotation extends WidgetAnnotation {
       rotation = this.rotation;
     }
     const xfa = {
-      path: (0, _util.stringToPDFString)(dict.get("T") || ""),
+      path: this.data.fieldName,
       value: value ? this.data.buttonValue : ""
     };
     const name = _primitives.Name.get(value ? this.data.buttonValue : "Off");
@@ -36085,7 +36088,11 @@ function writeXFADataForAcroform(str, newRefs) {
     if (!path) {
       continue;
     }
-    const node = xml.documentElement.searchNode((0, _core_utils.parseXFAPath)(path), 0);
+    const nodePath = (0, _core_utils.parseXFAPath)(path);
+    let node = xml.documentElement.searchNode(nodePath, 0);
+    if (!node && nodePath.length > 1) {
+      node = xml.documentElement.searchNode([nodePath.at(-1)], 0);
+    }
     if (node) {
       if (Array.isArray(value)) {
         node.childNodes = value.map(val => new _xml_parser.SimpleDOMNode("value", val));
@@ -52573,8 +52580,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
   }
 }));
 var _worker = __w_pdfjs_require__(1);
-const pdfjsVersion = '3.4.474';
-const pdfjsBuild = '560384a18';
+const pdfjsVersion = '3.5.375';
+const pdfjsBuild = 'aa4fdc992';
 })();
 
 /******/ 	return __webpack_exports__;

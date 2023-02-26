@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { PdfThumbnailDrawnEvent } from '../../events/pdf-thumbnail-drawn-event';
+import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
   selector: 'pdf-sidebar',
@@ -17,7 +18,7 @@ export class PdfSidebarComponent {
   public mobileFriendlyZoomScale = 1;
 
   @Input()
-  public showSidebarButton = true;
+  public showSidebarButton: ResponsiveVisibility = true;
 
   @Input()
   public customSidebar: TemplateRef<any> | undefined;

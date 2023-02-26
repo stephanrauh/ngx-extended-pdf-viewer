@@ -2,6 +2,20 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 export type ResponsiveVisibility = boolean | 'always-visible' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
+export class PdfBreakpoints {
+  static xs = 490;
+
+  static sm = 560;
+
+  static md = 610;
+
+  static lg = 660;
+
+  static xl = 740;
+
+  static xxl = 830;
+}
+
 @Pipe({ name: 'responsiveCSSClass' })
 export class ResponsiveCSSClassPipe implements PipeTransform {
   transform(visible: ResponsiveVisibility | undefined, defaultClass: string): string {

@@ -29,6 +29,7 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 ## What's new in version 16?
 
+- Version 16.2 updates to pdf.js 3.4 (default branch) and pdf.js 3.5 (bleeding edge branch).
 - Version 16 updates to pdf.js 3.3 (default branch) and pdf.js 3.4 (bleeding edge branch).
 - The PDF editor is active by default now.
 - Pinch gestures now zoom smoothly. The attributes `enablePinchOnMobile`, `relativeCoordsOptions`, and `enableRelativeCoords` are no longer neccessary. I've removed them.

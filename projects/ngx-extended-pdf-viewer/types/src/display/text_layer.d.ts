@@ -104,6 +104,7 @@ export class TextLayerRenderTask {
     _rootContainer: any;
     _textDivs: any;
     _textContentItemsStr: any;
+    _isOffscreenCanvasSupported: any;
     _fontInspectorEnabled: boolean;
     _reader: any;
     _textDivProperties: any;

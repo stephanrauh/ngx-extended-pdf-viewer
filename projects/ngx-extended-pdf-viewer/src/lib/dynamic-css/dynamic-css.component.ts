@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { PdfBreakpoints } from '../responsive-visibility';
 import { addTrustedHTML } from '../theme/sanitized-css-injector';
 
 @Component({
@@ -38,7 +39,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   }
 }
 
-@media all and (max-width: 840px) {
+@media all and (max-width: ${this.xxl}) {
   #sidebarContent {
     background-color: rgba(0, 0, 0, 0.7);
   }
@@ -178,12 +179,12 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
     const partialViewScale = fullWith / this.width;
     const scaleFactor = partialViewScale * (this.zoom ? this.zoom : 1);
 
-    this.xs = scaleFactor * 490;
-    this.sm = scaleFactor * 560;
-    this.md = scaleFactor * 610;
-    this.lg = scaleFactor * 660;
-    this.xl = scaleFactor * 740;
-    this.xxl = scaleFactor * 830;
+    this.xs = scaleFactor * PdfBreakpoints.xs;
+    this.sm = scaleFactor * PdfBreakpoints.sm;
+    this.md = scaleFactor * PdfBreakpoints.md;
+    this.lg = scaleFactor * PdfBreakpoints.lg;
+    this.xl = scaleFactor * PdfBreakpoints.xl;
+    this.xxl = scaleFactor * PdfBreakpoints.xxl;
 
     const styles = this.document.getElementById('pdf-dynamic-css');
     if (styles) {

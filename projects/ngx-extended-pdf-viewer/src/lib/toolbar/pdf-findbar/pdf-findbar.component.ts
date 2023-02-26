@@ -1,14 +1,15 @@
 import { Component, Input, TemplateRef } from '@angular/core';
 import { getVersionSuffix, pdfDefaultOptions } from '../../options/pdf-default-options';
+import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
   selector: 'pdf-findbar',
   templateUrl: './pdf-findbar.component.html',
-  styleUrls: ['./pdf-findbar.component.css']
+  styleUrls: ['./pdf-findbar.component.css'],
 })
 export class PdfFindbarComponent {
   @Input()
-  public showFindButton = true;
+  public showFindButton: ResponsiveVisibility = true;
 
   @Input()
   public mobileFriendlyZoomScale: number;
@@ -27,7 +28,7 @@ export class PdfFindbarComponent {
   public customFindbar: TemplateRef<any>;
 
   @Input()
-  public customFindbarButtons: TemplateRef<any>  | undefined;
+  public customFindbarButtons: TemplateRef<any> | undefined;
 
   @Input()
   public showFindHighlightAll = true;
