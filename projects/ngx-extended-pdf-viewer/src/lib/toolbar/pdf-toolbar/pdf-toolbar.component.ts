@@ -23,10 +23,10 @@ export class PdfToolbarComponent implements AfterViewInit {
   public showDownloadButton: ResponsiveVisibility = true;
 
   @Input()
-  public showEditorDraw: ResponsiveVisibility = false;
+  public showDrawEditor: ResponsiveVisibility = false;
 
   @Input()
-  public showEditorText: ResponsiveVisibility = false;
+  public showTextEditor: ResponsiveVisibility = false;
 
   @Input()
   public showFindButton: boolean | undefined = undefined;
