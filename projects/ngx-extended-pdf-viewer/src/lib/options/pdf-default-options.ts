@@ -3,7 +3,7 @@ const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.u
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
 export const pdfjsVersion = '3.4.492';
-export const pdfjsBleedingEdgeVersion = '3.5.375';
+export const pdfjsBleedingEdgeVersion = '3.5.376';
 export function getVersionSuffix(folder: string): string {
   if (folder && folder.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -32,6 +32,13 @@ const AnnotationEditorType = {
   FREETEXT: 3,
   INK: 15,
 };
+
+function getDefaultLanguage(): string {
+  if (typeof navigator !== 'undefined') {
+    return navigator?.language || 'en-US';
+  }
+  return 'en-US';
+}
 
 export let pdfDefaultOptions = {
   needsES5: _isIE11 || isEdge || needsES5,
@@ -102,7 +109,7 @@ export let pdfDefaultOptions = {
   enableScripting: true,
   defaultCacheSize: 50,
   passwordPrompt: undefined,
-  locale: navigator.language || 'en-US', //
+  locale: getDefaultLanguage(),
 };
 
 if (typeof window !== 'undefined') {

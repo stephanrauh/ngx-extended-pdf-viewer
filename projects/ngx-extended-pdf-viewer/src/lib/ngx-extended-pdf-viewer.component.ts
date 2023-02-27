@@ -49,7 +49,6 @@ import { ServiceWorkerOptionsType } from './options/service-worker-options';
 import { VerbosityLevel } from './options/verbosity-level';
 import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
 import { PDFNotificationService } from './pdf-notification-service';
-import { PinchOnMobileSupport } from './pinch-on-mobile-support';
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 import { UnitToPx } from './unit-to-px';
@@ -62,7 +61,6 @@ import { LayersLoadedEvent } from './events/layers-loaded-event';
 import { OutlineLoadedEvent } from './events/outline-loaded-event';
 import { XfaLayerRenderedEvent } from './events/xfa-layer-rendered-event';
 import { PdfSidebarView } from './options/pdf-sidebar-views';
-import { RelativeCoordsSupport } from './relative-coords-support';
 import { ResponsiveVisibility } from './responsive-visibility';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
@@ -96,7 +94,7 @@ function isIOS() {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
-  private static originalPrint = window.print;
+  private static originalPrint = typeof window !== 'undefined' ? window.print : undefined;
 
   public static ngxExtendedPdfViewerInitialized = false;
   public ngxExtendedPdfViewerIncompletelyInitialized = true;
@@ -111,9 +109,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @ViewChild('root')
   public root: ElementRef;
-
-  private pinchOnMobileSupport: PinchOnMobileSupport | undefined;
-  public relativeCoordsSupport: RelativeCoordsSupport | undefined;
 
   /* UI templates */
   @Input()
@@ -1754,15 +1749,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.initTimeout = undefined;
     }
     if (PDFViewerApplication) {
-      if (this.pinchOnMobileSupport) {
-        this.pinchOnMobileSupport.destroyPinchZoom();
-        this.pinchOnMobileSupport = undefined;
-      }
-      if (this.relativeCoordsSupport) {
-        this.relativeCoordsSupport.destroyRelativeCoords();
-        this.relativeCoordsSupport = undefined;
-      }
-
       // #802 clear the form data; otherwise the "download" dialogs opens
       PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
       this.formData = {};
