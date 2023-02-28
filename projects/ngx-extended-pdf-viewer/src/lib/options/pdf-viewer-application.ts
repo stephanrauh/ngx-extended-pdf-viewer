@@ -127,7 +127,7 @@ export type DocumentInitParameters = {
    * worker-thread. This will help reduce main-thread memory usage, however
    * it will take ownership of the TypedArrays.
    */
-  data?: BinaryData | undefined;
+  data?: ArrayBuffer | ArrayBufferView | undefined;
   /**
    * - Basic authentication headers.
    */
