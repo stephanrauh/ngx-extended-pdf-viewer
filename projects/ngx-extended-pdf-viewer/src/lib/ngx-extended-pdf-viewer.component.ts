@@ -1790,6 +1790,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (this.showToolbar) {
       const visible =
         this.showDownloadButton ||
+        this.showDrawEditor ||
+        this.showTextEditor ||
         this.showFindButton ||
         this.showOpenFileButton ||
         this.showPagingButtons ||
