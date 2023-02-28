@@ -110,6 +110,7 @@ export let pdfDefaultOptions = {
   defaultCacheSize: 50,
   passwordPrompt: undefined,
   locale: getDefaultLanguage(),
+  activateWillReadFrequentlyFlag: false,
 };
 
 if (typeof window !== 'undefined') {

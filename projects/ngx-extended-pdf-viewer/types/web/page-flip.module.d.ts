@@ -269,7 +269,6 @@ declare class CanvasUI extends UI {
 declare class CanvasRender extends Render {
     constructor(app: any, setting: any, inCanvas: any);
     canvas: any;
-    ctx: any;
     getContext(): any;
     reload(): void;
     drawFrame(): void;

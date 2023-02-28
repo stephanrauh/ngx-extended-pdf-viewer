@@ -54,7 +54,7 @@ export class InkEditor extends AnnotationEditor {
      * @param {PointerEvent} event
      */
     canvasPointerleave(event: PointerEvent): void;
-    ctx: CanvasRenderingContext2D | null | undefined;
+    ctx: RenderingContext | null | undefined;
     /** @inheritdoc */
     render(): HTMLDivElement | null;
     /**
