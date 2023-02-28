@@ -431,4 +431,4 @@
 - 16.2.0 updated to pdf.js 3.4 (stable branch) and 3.5 (bleeding edge branch); #1677 allow developers to modify the responsive design breakpoints
 - 16.2.1 #1694 and #1622 repaired server side rendering
 - 16.2.2 #1096 improved compatibility to Angular 12
-- 16.2.3 #1695 show to toolbar if only the editor buttons are visible
+- 16.2.3 #1695 show the toolbar if only the editor buttons are visible; #1682 don't try to open a file that hasn't been loaded yet

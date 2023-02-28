@@ -1707,8 +1707,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         options.url = this._src;
       } else if (this._src instanceof ArrayBuffer) {
         options.data = this._src;
+        if (this._src.byteLength === 0) {
+          // sometimes ngOnInit() calls openPdf2 too early
+          // so let's ignore empty arrays
+          return;
+        }
       } else if (this._src instanceof Uint8Array) {
         options.data = this._src;
+        if (this._src.length === 0) {
+          // sometimes ngOnInit() calls openPdf2 too early
+          // so let's ignore empty arrays
+          return;
+        }
       }
       options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
       await PDFViewerApplication.open(options);
