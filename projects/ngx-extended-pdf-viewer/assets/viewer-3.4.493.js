@@ -8773,14 +8773,21 @@ class TempImageFactory {
     const tempCanvas = this.#tempCanvas ||= document.createElement("canvas");
     tempCanvas.width = width;
     tempCanvas.height = height;
-    const ctx = tempCanvas.getContext("2d", {
+    const options1 = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+      willReadFrequently: true,
       alpha: false
-    });
+    } : {
+      alpha: false
+    };
+    const options2 = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+      willReadFrequently: true
+    } : undefined;
+    const ctx = tempCanvas.getContext("2d", options1);
     ctx.save();
     ctx.fillStyle = "rgb(255, 255, 255)";
     ctx.fillRect(0, 0, width, height);
     ctx.restore();
-    return [tempCanvas, tempCanvas.getContext("2d")];
+    return [tempCanvas, tempCanvas.getContext("2d", options2)];
   }
   static destroyCanvas() {
     const tempCanvas = this.#tempCanvas;
@@ -8911,9 +8918,13 @@ class PDFThumbnailView {
   }
   _getPageDrawContext(upscaleFactor = 1) {
     const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d", {
+    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+      willReadFrequently: true,
       alpha: false
-    });
+    } : {
+      alpha: false
+    };
+    const ctx = canvas.getContext("2d", options);
     const outputScale = new _ui_utils.OutputScale();
     canvas.width = upscaleFactor * this.canvasWidth * outputScale.sx | 0;
     canvas.height = upscaleFactor * this.canvasHeight * outputScale.sy | 0;
@@ -9174,7 +9185,7 @@ class PDFViewer {
   #onVisibilityChange = null;
   #scaleTimeoutId = null;
   constructor(options) {
-    const viewerVersion = '3.4.492';
+    const viewerVersion = '3.4.493';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -10949,7 +10960,10 @@ class ImagePage extends Page {
     this.image.src = href;
   }
   draw(tempDensity) {
-    const ctx = this.render.getContext();
+    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+      willReadFrequently: true
+    } : undefined;
+    const ctx = canvas.getContext("2d", options);
     const pagePos = this.render.convertToGlobal(this.state.position);
     const pageWidth = this.render.getRect().pageWidth;
     const pageHeight = this.render.getRect().height;
@@ -10976,7 +10990,10 @@ class ImagePage extends Page {
   }
   simpleDraw(orient) {
     const rect = this.render.getRect();
-    const ctx = this.render.getContext();
+    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+      willReadFrequently: true
+    } : undefined;
+    const ctx = canvas.getContext("2d", options);
     const pageWidth = rect.pageWidth;
     const pageHeight = rect.height;
     const x = orient === 1 ? rect.left + rect.pageWidth : rect.left;
@@ -12150,7 +12167,10 @@ class CanvasRender extends Render {
   constructor(app, setting, inCanvas) {
     super(app, setting);
     this.canvas = inCanvas;
-    this.ctx = inCanvas.getContext('2d');
+    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+      willReadFrequently: true
+    } : undefined;
+    const ctx = canvas.getContext("2d", options);
   }
   getContext() {
     return this.ctx;
@@ -13715,9 +13735,13 @@ class PDFPageView {
     };
     canvasWrapper.append(canvas);
     this.canvas = canvas;
-    const ctx = canvas.getContext("2d", {
+    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+      willReadFrequently: true,
       alpha: false
-    });
+    } : {
+      alpha: false
+    };
+    const ctx = canvas.getContext("2d", options);
     const outputScale = this.outputScale = new _ui_utils.OutputScale();
     if (this.useOnlyCssZoom) {
       const actualSizeViewport = viewport.clone({
@@ -16657,9 +16681,13 @@ class Toolbar {
     const style = getComputedStyle(items.scaleSelect);
     const scaleSelectWidth = parseFloat(style.getPropertyValue("--scale-select-width"));
     const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d", {
+    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+      willReadFrequently: true,
       alpha: false
-    });
+    } : {
+      alpha: false
+    };
+    const ctx = canvas.getContext("2d", options);
     ctx.font = `${style.fontSize} ${style.fontFamily}`;
     let maxWidth = 0;
     for (const predefinedValue of await predefinedValuesPromise) {
@@ -17870,7 +17898,10 @@ function renderPage(activeServiceOnEntry, pdfDocument, pageNumber, size, printRe
   PRINT_UNITS *= scale;
   scratchCanvas.width = Math.floor(size.width * PRINT_UNITS);
   scratchCanvas.height = Math.floor(size.height * PRINT_UNITS);
-  const ctx = scratchCanvas.getContext("2d");
+  const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+    willReadFrequently: true
+  } : undefined;
+  const ctx = scratchCanvas.getContext("2d", options);
   ctx.save();
   ctx.fillStyle = "rgb(255, 255, 255)";
   ctx.fillRect(0, 0, scratchCanvas.width, scratchCanvas.height);
@@ -18233,8 +18264,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(5);
 var _pdf_link_service = __webpack_require__(7);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.4.492';
-const pdfjsBuild = '7bf2558a8';
+const pdfjsVersion = '3.4.493';
+const pdfjsBuild = '7b85cf0e7';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,

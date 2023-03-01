@@ -432,4 +432,4 @@
 - 16.2.1 #1694 and #1622 repaired server side rendering
 - 16.2.2 #1096 improved compatibility to Angular 12
 - 16.2.3 #1695 show the toolbar if only the editor buttons are visible; #1682 don't try to open a file that hasn't been loaded yet; #1659 tentatively add `pdfDefaultOptions.activateWillReadFrequentlyFlag` to deal with rendering issues of Chrome on Windows
-- 16.2.4 #1651 added an Elivs operator to two lines endangered by NPEs
+- 16.2.4 #1651 added an Elivs operator to two lines endangered by NPEs; add `pdfDefaultOptions.activateWillReadFrequentlyFlag` to deal with rendering issues of Chrome on Windows

@@ -1009,7 +1009,7 @@ function getDocument(src) {
   const docId = task.docId;
   const fetchDocParams = {
     docId,
-    apiVersion: '3.4.492',
+    apiVersion: '3.4.493',
     data,
     password,
     disableAutoFetch,
@@ -2771,9 +2771,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.4.492';
+const version = '3.4.493';
 exports.version = version;
-const build = '7bf2558a8';
+const build = '7b85cf0e7';
 exports.build = build;
 
 /***/ }),
@@ -4466,9 +4466,13 @@ class BaseCanvasFactory {
       throw new Error("Invalid canvas size");
     }
     const canvas = this._createCanvas(width, height);
+    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+      willReadFrequently: true
+    } : undefined;
+    const context = canvas.getContext("2d", options);
     return {
       canvas,
-      context: canvas.getContext("2d")
+      context
     };
   }
   reset(canvasAndContext, width, height) {
@@ -4821,7 +4825,10 @@ class FontLoader {
     const canvas = this._document.createElement("canvas");
     canvas.width = 1;
     canvas.height = 1;
-    const ctx = canvas.getContext("2d");
+    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+      willReadFrequently: true
+    } : undefined;
+    const ctx = canvas.getContext("2d", options);
     let called = 0;
     function isFontReady(name, callback) {
       if (++called > 30) {
@@ -10031,16 +10038,18 @@ const DEFAULT_FONT_ASCENT = 0.8;
 const ascentCache = new Map();
 function getCtx(size, isOffscreenCanvasSupported) {
   let ctx;
+  const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+    willReadFrequently: true,
+    alpha: false
+  } : {
+    alpha: false
+  };
   if (isOffscreenCanvasSupported && _util.FeatureTest.isOffscreenCanvasSupported) {
-    ctx = new OffscreenCanvas(size, size).getContext("2d", {
-      alpha: false
-    });
+    ctx = new OffscreenCanvas(size, size).getContext("2d", options);
   } else {
     const canvas = document.createElement("canvas");
     canvas.width = canvas.height = size;
-    ctx = canvas.getContext("2d", {
-      alpha: false
-    });
+    ctx = canvas.getContext("2d", options);
   }
   return ctx;
 }
@@ -11467,7 +11476,10 @@ class InkEditor extends _editor.AnnotationEditor {
     this.canvas.className = "inkEditorCanvas";
     InkEditor._l10nPromise.get("editor_ink_canvas_aria_label").then(msg => this.canvas?.setAttribute("aria-label", msg));
     this.div.append(this.canvas);
-    this.ctx = this.canvas.getContext("2d");
+    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+      willReadFrequently: true
+    } : undefined;
+    this.ctx = this.canvas.getContext("2d", options);
   }
   #createObserver() {
     let timeoutId = null;
@@ -15930,8 +15942,8 @@ var _annotation_layer = __w_pdfjs_require__(32);
 var _worker_options = __w_pdfjs_require__(14);
 var _svg = __w_pdfjs_require__(35);
 var _xfa_layer = __w_pdfjs_require__(34);
-const pdfjsVersion = '3.4.492';
-const pdfjsBuild = '7bf2558a8';
+const pdfjsVersion = '3.4.493';
+const pdfjsBuild = '7b85cf0e7';
 })();
 
 /******/ 	return __webpack_exports__;
