@@ -2,7 +2,7 @@ import { Subject } from 'rxjs';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { PdfLayer } from './options/optional_content_config';
 import { PDFPrintRange } from './options/pdf-print-range';
-import { IPDFViewerApplication, TextItem, TextMarkedContent } from './options/pdf-viewer-application';
+import { IPDFViewerApplication, PDFDocumentProxy, TextItem, TextMarkedContent } from './options/pdf-viewer-application';
 
 export interface FindOptions {
   highlightAll?: boolean;
@@ -365,11 +365,11 @@ export class NgxExtendedPdfViewerService {
 
   public async getFormData(currentFormValues = true): Promise<Array<Object>> {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    const pdf /*: PDFDocumentProxy */ = PDFViewerApplication.pdfDocument;
+    const pdf: PDFDocumentProxy | undefined = PDFViewerApplication.pdfDocument;
     // screen DPI / PDF DPI
     const dpiRatio = 96 / 72;
     const result: Array<Object> = [];
-    for (let i = 1; i <= pdf.numPages; i++) {
+    for (let i = 1; i <= pdf?.numPages; i++) {
       // track the current page
       const currentPage /* : PDFPageProxy */ = await pdf.getPage(i);
       const annotations = await currentPage.getAnnotations();

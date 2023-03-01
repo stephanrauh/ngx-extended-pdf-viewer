@@ -2294,7 +2294,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
     this.buttonValues = {};
 
-    for (let i = 1; i <= pdf.numPages; i++) {
+    for (let i = 1; i <= pdf?.numPages; i++) {
       // track the current page
       pdf
         .getPage(i)
@@ -2333,7 +2333,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             });
         });
     }
-    this.pdfLoaded.emit({ pagesCount: pdf.numPages } as PdfLoadedEvent);
+    this.pdfLoaded.emit({ pagesCount: pdf?.numPages } as PdfLoadedEvent);
   }
 
   public async zoomToPageWidth(event: MouseEvent): Promise<void> {
