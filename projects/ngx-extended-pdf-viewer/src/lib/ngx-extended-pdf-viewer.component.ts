@@ -1210,6 +1210,19 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   public checkHeight(): void {
+    if (this._height) {
+      if (isNaN(Number(this._height.replace('%', '')))) {
+        // The height is defined with one of the units vh, vw, em, rem, etc.
+        // So the height check isn't necessary.
+        return;
+      }
+    }
+    if (document.querySelector('[data-pdfjsprinting]')) {
+      // #1702 workaround to a Firefox bug: when printing, container.clientHeight is temporarily 0,
+      // causing ngx-extended-pdf-viewer to default to 100 pixels height. So it's better
+      // to do nothing.
+      return;
+    }
     if (typeof document !== 'undefined') {
       const container = document.getElementsByClassName('zoom')[0] as HTMLElement;
       if (container) {
