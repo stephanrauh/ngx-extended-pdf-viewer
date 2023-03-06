@@ -15,7 +15,7 @@ export class InkEditor extends AnnotationEditor {
      * @param {Arra<Array<number>} bezier
      * @returns {Path2D}
      */
-    static "__#2@#buildPath2D"(bezier: Arra<number[]>): Path2D;
+    static "__#3@#buildPath2D"(bezier: Arra<number[]>): Path2D;
     /** @inheritdoc */
     static deserialize(data: any, parent: any, uiManager: any): AnnotationEditor;
     constructor(params: any);

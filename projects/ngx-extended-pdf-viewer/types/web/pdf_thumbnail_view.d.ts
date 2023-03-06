@@ -115,7 +115,7 @@ export class PDFThumbnailView implements IRenderableView {
  *   mode.
  */
 export class TempImageFactory {
-    static "__#32@#tempCanvas": null;
+    static "__#33@#tempCanvas": null;
     static getCanvas(width: any, height: any): (HTMLCanvasElement | RenderingContext | null)[];
     static destroyCanvas(): void;
 }

@@ -88,6 +88,23 @@ export class DOMSVGFactory extends BaseSVGFactory {
      */
     _createSVG(type: any): any;
 }
+/**
+ * FilterFactory aims to create some SVG filters we can use when drawing an
+ * image (or whatever) on a canvas.
+ * Filters aren't applied with ctx.putImageData because it just overwrites the
+ * underlying pixels.
+ * With these filters, it's possible for example to apply some transfer maps on
+ * an image without the need to apply them on the pixel arrays: the renderer
+ * does the magic for us.
+ */
+export class FilterFactory {
+    constructor({ ownerDocument }?: {
+        ownerDocument?: Document | undefined;
+    });
+    addFilter(maps: any): any;
+    destroy(): void;
+    #private;
+}
 export function getColorValues(colors: any): void;
 export function getCurrentTransform(ctx: any): any[];
 export function getCurrentTransformInverse(ctx: any): any[];

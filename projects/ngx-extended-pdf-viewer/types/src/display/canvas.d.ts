@@ -1,5 +1,5 @@
 export class CanvasGraphics {
-    constructor(canvasCtx: any, commonObjs: any, objs: any, canvasFactory: any, { optionalContentConfig, markedContentStack }: {
+    constructor(canvasCtx: any, commonObjs: any, objs: any, canvasFactory: any, filterFactory: any, { optionalContentConfig, markedContentStack }: {
         optionalContentConfig: any;
         markedContentStack?: null | undefined;
     }, annotationCanvasMap: any, pageColors: any);
@@ -13,6 +13,7 @@ export class CanvasGraphics {
     commonObjs: any;
     objs: any;
     canvasFactory: any;
+    filterFactory: any;
     groupStack: any[];
     processingType3: any;
     baseTransform: any;
@@ -140,6 +141,7 @@ export class CanvasGraphics {
     paintImageMaskXObjectGroup(images: any): void;
     paintImageXObject(objId: any): void;
     paintImageXObjectRepeat(objId: any, scaleX: any, scaleY: any, positions: any): void;
+    applyTransferMapsToBitmap(imgData: any): any;
     paintInlineImageXObject(imgData: any): void;
     paintInlineImageXObjectGroup(imgData: any, map: any): void;
     paintSolidColorImageMask(): void;

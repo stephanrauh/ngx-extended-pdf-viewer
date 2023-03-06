@@ -191,6 +191,16 @@ export type DocumentInitParameters = {
      * (see `web/debugger.js`). The default value is `false`.
      */
     pdfBug?: boolean | undefined;
+    /**
+     * - The factory instance that will be used
+     * when creating canvases. The default value is {new DOMCanvasFactory()}.
+     */
+    canvasFactory?: Object | undefined;
+    /**
+     * - A factory instance that will be used
+     * to create SVG filters when rendering some images on the main canvas.
+     */
+    filterFactory?: Object | undefined;
 };
 export type OnProgressParameters = {
     /**
@@ -620,6 +630,10 @@ export let DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
  *   disabling of pre-fetching to work correctly.
  * @property {boolean} [pdfBug] - Enables special hooks for debugging PDF.js
  *   (see `web/debugger.js`). The default value is `false`.
+ * @property {Object} [canvasFactory] - The factory instance that will be used
+ *   when creating canvases. The default value is {new DOMCanvasFactory()}.
+ * @property {Object} [filterFactory] - A factory instance that will be used
+ *   to create SVG filters when rendering some images on the main canvas.
  */
 /**
  * This is the main entry point for loading a PDF and interacting with it.
@@ -715,7 +729,7 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#15@#docId": number;
+    static "__#16@#docId": number;
     _capability: import("../shared/util.js").PromiseCapability;
     _transport: any;
     _worker: any;
@@ -1179,10 +1193,9 @@ export class PDFDocumentProxy {
  * Proxy to a `PDFPage` in the worker thread.
  */
 export class PDFPageProxy {
-    constructor(pageIndex: any, pageInfo: any, transport: any, ownerDocument: any, pdfBug?: boolean);
+    constructor(pageIndex: any, pageInfo: any, transport: any, pdfBug?: boolean);
     _pageIndex: any;
     _pageInfo: any;
-    _ownerDocument: any;
     _transport: any;
     _stats: StatTimer | null;
     _pdfBug: boolean;
@@ -1328,7 +1341,7 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#17@#workerPorts": WeakMap<object, any>;
+    static "__#18@#workerPorts": WeakMap<object, any>;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */
