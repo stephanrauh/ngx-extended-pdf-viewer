@@ -1,13 +1,16 @@
+import { isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
   HostListener,
+  Inject,
   Input,
   OnChanges,
   OnDestroy,
   Output,
+  PLATFORM_ID,
   SimpleChanges,
   TemplateRef,
 } from '@angular/core';
@@ -73,7 +76,7 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
 
   private mutationObserver: MutationObserver | undefined;
 
-  constructor(private element: ElementRef, public notificationService: PDFNotificationService) {
+  constructor(private element: ElementRef, public notificationService: PDFNotificationService, @Inject(PLATFORM_ID) private platformId) {
     this.notificationService.onPDFJSInit.pipe(take(1)).subscribe(() => {
       this.onPdfJsInit();
     });
@@ -120,21 +123,23 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
   }
 
   public ngAfterViewInit() {
-    const targetNode = this.element.nativeElement as HTMLElement;
+    if (isPlatformBrowser(this.platformId)) {
+      const targetNode = this.element.nativeElement as HTMLElement;
 
-    const config = { attributes: true, childList: true, subtree: true };
+      const config = { attributes: true, childList: true, subtree: true };
 
-    this.mutationObserver = new MutationObserver((mutationList: MutationRecord[], observer) => {
-      for (const mutation of mutationList) {
-        if (mutation.type === 'attributes') {
-          if (mutation.attributeName === 'class') {
-            this.checkVisibility();
+      this.mutationObserver = new MutationObserver((mutationList: MutationRecord[], observer) => {
+        for (const mutation of mutationList) {
+          if (mutation.type === 'attributes') {
+            if (mutation.attributeName === 'class') {
+              this.checkVisibility();
+            }
           }
         }
-      }
-    });
+      });
 
-    this.mutationObserver.observe(targetNode, config);
+      this.mutationObserver.observe(targetNode, config);
+    }
   }
 
   public ngOnDestroy(): void {
