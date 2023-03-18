@@ -76,6 +76,23 @@ export class DOMCMapReaderFactory extends BaseCMapReaderFactory {
         compressionType: any;
     }>;
 }
+/**
+ * FilterFactory aims to create some SVG filters we can use when drawing an
+ * image (or whatever) on a canvas.
+ * Filters aren't applied with ctx.putImageData because it just overwrites the
+ * underlying pixels.
+ * With these filters, it's possible for example to apply some transfer maps on
+ * an image without the need to apply them on the pixel arrays: the renderer
+ * does the magic for us.
+ */
+export class DOMFilterFactory extends BaseFilterFactory {
+    constructor({ docId, ownerDocument }?: {
+        docId: any;
+        ownerDocument?: Document | undefined;
+    });
+    addFilter(maps: any): any;
+    #private;
+}
 export class DOMStandardFontDataFactory extends BaseStandardFontDataFactory {
     /**
      * @ignore
@@ -87,23 +104,6 @@ export class DOMSVGFactory extends BaseSVGFactory {
      * @ignore
      */
     _createSVG(type: any): any;
-}
-/**
- * FilterFactory aims to create some SVG filters we can use when drawing an
- * image (or whatever) on a canvas.
- * Filters aren't applied with ctx.putImageData because it just overwrites the
- * underlying pixels.
- * With these filters, it's possible for example to apply some transfer maps on
- * an image without the need to apply them on the pixel arrays: the renderer
- * does the magic for us.
- */
-export class FilterFactory {
-    constructor({ ownerDocument }?: {
-        ownerDocument?: Document | undefined;
-    });
-    addFilter(maps: any): any;
-    destroy(): void;
-    #private;
 }
 export function getColorValues(colors: any): void;
 export function getCurrentTransform(ctx: any): any[];
@@ -198,12 +198,12 @@ export class PageViewport {
      * converting PDF location into canvas pixel coordinates.
      * @param {number} x - The x-coordinate.
      * @param {number} y - The y-coordinate.
-     * @returns {Object} Object containing `x` and `y` properties of the
+     * @returns {Array} Array containing `x`- and `y`-coordinates of the
      *   point in the viewport coordinate space.
      * @see {@link convertToPdfPoint}
      * @see {@link convertToViewportRectangle}
      */
-    convertToViewportPoint(x: number, y: number): Object;
+    convertToViewportPoint(x: number, y: number): any[];
     /**
      * Converts PDF rectangle to the viewport coordinates.
      * @param {Array} rect - The xMin, yMin, xMax and yMax coordinates.
@@ -217,11 +217,11 @@ export class PageViewport {
      * for converting canvas pixel location into PDF one.
      * @param {number} x - The x-coordinate.
      * @param {number} y - The y-coordinate.
-     * @returns {Object} Object containing `x` and `y` properties of the
+     * @returns {Array} Array containing `x`- and `y`-coordinates of the
      *   point in the PDF coordinate space.
      * @see {@link convertToViewportPoint}
      */
-    convertToPdfPoint(x: number, y: number): Object;
+    convertToPdfPoint(x: number, y: number): any[];
 }
 export class PDFDateString {
     /**
@@ -270,6 +270,7 @@ export class StatTimer {
 }
 import { BaseCanvasFactory } from "./base_factory.js";
 import { BaseCMapReaderFactory } from "./base_factory.js";
+import { BaseFilterFactory } from "./base_factory.js";
 import { BaseStandardFontDataFactory } from "./base_factory.js";
 import { BaseSVGFactory } from "./base_factory.js";
 export {};

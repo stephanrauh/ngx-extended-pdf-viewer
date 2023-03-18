@@ -141,6 +141,7 @@ export class CanvasGraphics {
     paintImageMaskXObjectGroup(images: any): void;
     paintImageXObject(objId: any): void;
     paintImageXObjectRepeat(objId: any, scaleX: any, scaleY: any, positions: any): void;
+    applyTransferMapsToCanvas(ctx: any): any;
     applyTransferMapsToBitmap(imgData: any): any;
     paintInlineImageXObject(imgData: any): void;
     paintInlineImageXObjectGroup(imgData: any, map: any): void;
@@ -184,7 +185,7 @@ declare class CanvasExtraState {
     strokeAlpha: number;
     lineWidth: number;
     activeSMask: any;
-    transferMaps: any;
+    transferMaps: string;
     clone(): any;
     setCurrentPoint(x: any, y: any): void;
     updatePathMinMax(transform: any, x: any, y: any): void;

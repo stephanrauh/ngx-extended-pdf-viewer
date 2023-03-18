@@ -180,7 +180,7 @@ export class PDFPageView implements IRenderableView {
     }): void;
     get width(): number;
     get height(): number;
-    getPagePoint(x: any, y: any): Object;
+    getPagePoint(x: any, y: any): any[];
     draw(): any;
     paintOnCanvas(canvasWrapper: any): {
         promise: any;

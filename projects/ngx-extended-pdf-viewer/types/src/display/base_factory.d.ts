@@ -25,6 +25,10 @@ export class BaseCMapReaderFactory {
      */
     _fetchData(url: any, compressionType: any): void;
 }
+export class BaseFilterFactory {
+    addFilter(maps: any): string;
+    destroy(): void;
+}
 export class BaseStandardFontDataFactory {
     constructor({ baseUrl }: {
         baseUrl?: null | undefined;

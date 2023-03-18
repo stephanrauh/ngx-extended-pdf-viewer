@@ -1,6 +1,10 @@
 import { TrustedTypesWindow } from 'trusted-types/lib';
 
 export function addTrustedHTML(styles: HTMLStyleElement, css: string) {
+  if (typeof window === 'undefined') {
+    // server-side rendering
+    return;
+  }
   const ttWindow = window as unknown as TrustedTypesWindow;
   if (ttWindow.trustedTypes) {
     // Create a policy that can create TrustedHTML values

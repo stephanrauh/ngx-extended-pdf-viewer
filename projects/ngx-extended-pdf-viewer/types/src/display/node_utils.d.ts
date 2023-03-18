@@ -13,6 +13,8 @@ export class NodeCMapReaderFactory extends BaseCMapReaderFactory {
         compressionType: any;
     }>;
 }
+export class NodeFilterFactory extends BaseFilterFactory {
+}
 export class NodeStandardFontDataFactory extends BaseStandardFontDataFactory {
     /**
      * @ignore
@@ -21,4 +23,5 @@ export class NodeStandardFontDataFactory extends BaseStandardFontDataFactory {
 }
 import { BaseCanvasFactory } from "./base_factory.js";
 import { BaseCMapReaderFactory } from "./base_factory.js";
+import { BaseFilterFactory } from "./base_factory.js";
 import { BaseStandardFontDataFactory } from "./base_factory.js";

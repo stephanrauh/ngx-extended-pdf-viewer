@@ -138,6 +138,12 @@ export type DocumentInitParameters = {
      */
     isOffscreenCanvasSupported?: boolean | undefined;
     /**
+     * - The integer value is used to
+     * know when an image must be resized (uses `OffscreenCanvas` in the worker).
+     * If it's -1 then a possibly slow algorithm is used to guess the max value.
+     */
+    canvasMaxAreaInBytes?: boolean | undefined;
+    /**
      * - By default fonts are converted to
      * OpenType fonts and loaded via the Font Loading API or `@font-face` rules.
      * If disabled, fonts will be rendered using a built-in font renderer that
@@ -360,9 +366,10 @@ export type GetAnnotationsParameters = {
  */
 export type RenderParameters = {
     /**
-     * - A 2D context of a DOM Canvas object.
+     * - A 2D context of a DOM
+     * Canvas object.
      */
-    canvasContext: Object;
+    canvasContext: CanvasRenderingContext2D;
     /**
      * - Rendering viewport obtained by calling
      * the `PDFPageProxy.getViewport` method.
@@ -517,6 +524,7 @@ export type PDFWorkerParameters = {
 export const build: string;
 export let DefaultCanvasFactory: typeof DOMCanvasFactory;
 export let DefaultCMapReaderFactory: typeof DOMCMapReaderFactory;
+export let DefaultFilterFactory: typeof DOMFilterFactory;
 export let DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
 /**
  * @typedef { Int8Array | Uint8Array | Uint8ClampedArray |
@@ -600,6 +608,9 @@ export let DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
  *   `OffscreenCanvas` in the worker. Primarily used to improve performance of
  *   image conversion/rendering.
  *   The default value is `true` in web environments and `false` in Node.js.
+ * @property {boolean} [canvasMaxAreaInBytes] - The integer value is used to
+ *   know when an image must be resized (uses `OffscreenCanvas` in the worker).
+ *   If it's -1 then a possibly slow algorithm is used to guess the max value.
  * @property {boolean} [disableFontFace] - By default fonts are converted to
  *   OpenType fonts and loaded via the Font Loading API or `@font-face` rules.
  *   If disabled, fonts will be rendered using a built-in font renderer that
@@ -758,17 +769,6 @@ export class PDFDocumentLoadingTask {
      */
     onProgress: Function;
     /**
-     * Callback for when an unsupported feature is used in the PDF document.
-     * The callback receives an {@link UNSUPPORTED_FEATURES} argument.
-     * @type {function}
-     */
-    set onUnsupportedFeature(arg: Function | null);
-    /**
-     * @type {function | null} The current callback used with unsupported
-     * features.
-     */
-    get onUnsupportedFeature(): Function | null;
-    /**
      * Promise for document loading task completion.
      * @type {Promise<PDFDocumentProxy>}
      */
@@ -779,7 +779,6 @@ export class PDFDocumentLoadingTask {
      *   completed.
      */
     destroy(): Promise<void>;
-    #private;
 }
 /**
  * Proxy to a `PDFDocument` in the worker thread.
@@ -792,6 +791,10 @@ export class PDFDocumentProxy {
      * @type {AnnotationStorage} Storage for annotation data in forms.
      */
     get annotationStorage(): AnnotationStorage;
+    /**
+     * @type {Object} The filter factory instance.
+     */
+    get filterFactory(): Object;
     /**
      * @type {number} Total number of pages in the PDF file.
      */
@@ -1103,7 +1106,8 @@ export class PDFDocumentProxy {
  * Page render parameters.
  *
  * @typedef {Object} RenderParameters
- * @property {Object} canvasContext - A 2D context of a DOM Canvas object.
+ * @property {CanvasRenderingContext2D} canvasContext - A 2D context of a DOM
+ *   Canvas object.
  * @property {PageViewport} viewport - Rendering viewport obtained by calling
  *   the `PDFPageProxy.getViewport` method.
  * @property {string} [intent] - Rendering intent, can be 'display', 'print',
@@ -1202,8 +1206,7 @@ export class PDFPageProxy {
     /** @type {PDFObjects} */
     commonObjs: PDFObjects;
     objs: PDFObjects;
-    cleanupAfterRender: boolean;
-    pendingCleanup: boolean;
+    _maybeCleanupAfterRender: boolean;
     _intentStates: Map<any, any>;
     destroyed: boolean;
     /**
@@ -1307,11 +1310,6 @@ export class PDFPageProxy {
      */
     cleanup(resetStats?: boolean | undefined): boolean;
     /**
-     * Attempts to clean up if rendering is in a state where that's possible.
-     * @private
-     */
-    private _tryCleanup;
-    /**
      * @private
      */
     private _startRenderPage;
@@ -1331,6 +1329,7 @@ export class PDFPageProxy {
      * @type {Object} Returns page stats, if enabled; returns `null` otherwise.
      */
     get stats(): Object;
+    #private;
 }
 /**
  * PDF.js web worker abstraction that controls the instantiation of PDF
@@ -1341,7 +1340,7 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#18@#workerPorts": WeakMap<object, any>;
+    static "__#19@#workerPorts": WeakMap<object, any>;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */
@@ -1433,6 +1432,7 @@ import { OptionalContentConfig } from "./optional_content_config.js";
 import { PrintAnnotationStorage } from "./annotation_storage.js";
 import { DOMCanvasFactory } from "./display_utils.js";
 import { DOMCMapReaderFactory } from "./display_utils.js";
+import { DOMFilterFactory } from "./display_utils.js";
 import { DOMStandardFontDataFactory } from "./display_utils.js";
 import { AnnotationStorage } from "./annotation_storage.js";
 import { info } from "../shared/util.js";

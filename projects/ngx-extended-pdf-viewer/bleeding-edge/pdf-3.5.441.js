@@ -46,7 +46,7 @@ return /******/ (() => { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.VerbosityLevel = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.UNSUPPORTED_FEATURES = exports.TextRenderingMode = exports.RenderingIntentFlag = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.LINE_FACTOR = exports.LINE_DESCENT_FACTOR = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FeatureTest = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.BASELINE_FACTOR = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMode = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationEditorType = exports.AnnotationEditorPrefix = exports.AnnotationEditorParamsType = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
+exports.VerbosityLevel = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.RenderingIntentFlag = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.MAX_IMAGE_SIZE_TO_CACHE = exports.LINE_FACTOR = exports.LINE_DESCENT_FACTOR = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FeatureTest = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.BASELINE_FACTOR = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMode = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationEditorType = exports.AnnotationEditorPrefix = exports.AnnotationEditorParamsType = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
 exports.assert = assert;
 exports.bytesToString = bytesToString;
 exports.createPromiseCapability = createPromiseCapability;
@@ -72,6 +72,8 @@ const IDENTITY_MATRIX = [1, 0, 0, 1, 0, 0];
 exports.IDENTITY_MATRIX = IDENTITY_MATRIX;
 const FONT_IDENTITY_MATRIX = [0.001, 0, 0, 0.001, 0, 0];
 exports.FONT_IDENTITY_MATRIX = FONT_IDENTITY_MATRIX;
+const MAX_IMAGE_SIZE_TO_CACHE = 10e6;
+exports.MAX_IMAGE_SIZE_TO_CACHE = MAX_IMAGE_SIZE_TO_CACHE;
 const LINE_FACTOR = 1.35;
 exports.LINE_FACTOR = LINE_FACTOR;
 const LINE_DESCENT_FACTOR = 0.35;
@@ -371,29 +373,6 @@ const OPS = {
   constructPath: 91
 };
 exports.OPS = OPS;
-const UNSUPPORTED_FEATURES = {
-  forms: "forms",
-  javaScript: "javaScript",
-  signatures: "signatures",
-  smask: "smask",
-  shadingPattern: "shadingPattern",
-  errorTilingPattern: "errorTilingPattern",
-  errorExtGState: "errorExtGState",
-  errorXObject: "errorXObject",
-  errorFontLoadType3: "errorFontLoadType3",
-  errorFontState: "errorFontState",
-  errorFontMissing: "errorFontMissing",
-  errorFontTranslate: "errorFontTranslate",
-  errorColorSpace: "errorColorSpace",
-  errorOperatorList: "errorOperatorList",
-  errorFontToUnicode: "errorFontToUnicode",
-  errorFontLoadNative: "errorFontLoadNative",
-  errorFontBuildPath: "errorFontBuildPath",
-  errorFontGetPath: "errorFontGetPath",
-  errorMarkedContent: "errorMarkedContent",
-  errorContentSubStream: "errorContentSubStream"
-};
-exports.UNSUPPORTED_FEATURES = UNSUPPORTED_FEATURES;
 const PasswordResponses = {
   NEED_PASSWORD: 1,
   INCORRECT_PASSWORD: 2
@@ -876,7 +855,7 @@ function createPromiseCapability() {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.build = exports.RenderTask = exports.PDFWorkerUtil = exports.PDFWorker = exports.PDFPageProxy = exports.PDFDocumentProxy = exports.PDFDocumentLoadingTask = exports.PDFDataRangeTransport = exports.LoopbackPort = exports.DefaultStandardFontDataFactory = exports.DefaultCanvasFactory = exports.DefaultCMapReaderFactory = void 0;
+exports.build = exports.RenderTask = exports.PDFWorkerUtil = exports.PDFWorker = exports.PDFPageProxy = exports.PDFDocumentProxy = exports.PDFDocumentLoadingTask = exports.PDFDataRangeTransport = exports.LoopbackPort = exports.DefaultStandardFontDataFactory = exports.DefaultFilterFactory = exports.DefaultCanvasFactory = exports.DefaultCMapReaderFactory = void 0;
 exports.getDocument = getDocument;
 exports.version = void 0;
 var _util = __w_pdfjs_require__(1);
@@ -893,6 +872,7 @@ var _transport_stream = __w_pdfjs_require__(18);
 var _xfa_text = __w_pdfjs_require__(19);
 const DEFAULT_RANGE_CHUNK_SIZE = 65536;
 const RENDERING_CANCELLED_TIMEOUT = 100;
+const DELAYED_CLEANUP_TIMEOUT = 5000;
 const ServiceWorkerOptions = {
   showUnverifiedSignatures: false
 };
@@ -901,16 +881,20 @@ let DefaultCanvasFactory = _display_utils.DOMCanvasFactory;
 exports.DefaultCanvasFactory = DefaultCanvasFactory;
 let DefaultCMapReaderFactory = _display_utils.DOMCMapReaderFactory;
 exports.DefaultCMapReaderFactory = DefaultCMapReaderFactory;
+let DefaultFilterFactory = _display_utils.DOMFilterFactory;
+exports.DefaultFilterFactory = DefaultFilterFactory;
 let DefaultStandardFontDataFactory = _display_utils.DOMStandardFontDataFactory;
 exports.DefaultStandardFontDataFactory = DefaultStandardFontDataFactory;
 if (_is_node.isNodeJS) {
   const {
     NodeCanvasFactory,
     NodeCMapReaderFactory,
+    NodeFilterFactory,
     NodeStandardFontDataFactory
   } = __w_pdfjs_require__(20);
   exports.DefaultCanvasFactory = DefaultCanvasFactory = NodeCanvasFactory;
   exports.DefaultCMapReaderFactory = DefaultCMapReaderFactory = NodeCMapReaderFactory;
+  exports.DefaultFilterFactory = DefaultFilterFactory = NodeFilterFactory;
   exports.DefaultStandardFontDataFactory = DefaultStandardFontDataFactory = NodeStandardFontDataFactory;
 }
 let createPDFNetworkStream;
@@ -951,6 +935,9 @@ function getDocument(src) {
     throw new Error("Invalid parameter object: need either .data, .range or .url");
   }
   const task = new PDFDocumentLoadingTask();
+  const {
+    docId
+  } = task;
   const url = src.url ? getUrlProp(src.url, src.baseHref) : null;
   const data = src.data ? getDataProp(src.data) : null;
   const httpHeaders = src.httpHeaders || null;
@@ -970,6 +957,7 @@ function getDocument(src) {
   const maxImageSize = Number.isInteger(src.maxImageSize) && src.maxImageSize > -1 ? src.maxImageSize : -1;
   const isEvalSupported = src.isEvalSupported !== false;
   const isOffscreenCanvasSupported = typeof src.isOffscreenCanvasSupported === "boolean" ? src.isOffscreenCanvasSupported : !_is_node.isNodeJS;
+  const canvasMaxAreaInBytes = Number.isInteger(src.canvasMaxAreaInBytes) ? src.canvasMaxAreaInBytes : -1;
   const disableFontFace = typeof src.disableFontFace === "boolean" ? src.disableFontFace : _is_node.isNodeJS;
   const fontExtraProperties = src.fontExtraProperties === true;
   const enableXfa = src.enableXfa === true;
@@ -984,7 +972,8 @@ function getDocument(src) {
   const canvasFactory = src.canvasFactory || new DefaultCanvasFactory({
     ownerDocument
   });
-  const filterFactory = src.filterFactory || new _display_utils.FilterFactory({
+  const filterFactory = src.filterFactory || new DefaultFilterFactory({
+    docId,
     ownerDocument
   });
   const styleElement = null;
@@ -1010,10 +999,9 @@ function getDocument(src) {
     worker = workerParams.port ? PDFWorker.fromPort(workerParams) : new PDFWorker(workerParams);
     task._worker = worker;
   }
-  const docId = task.docId;
   const fetchDocParams = {
     docId,
-    apiVersion: '3.5.393',
+    apiVersion: '3.5.441',
     data,
     password,
     disableAutoFetch,
@@ -1027,6 +1015,7 @@ function getDocument(src) {
       ignoreErrors,
       isEvalSupported,
       isOffscreenCanvasSupported,
+      canvasMaxAreaInBytes,
       fontExtraProperties,
       useSystemFonts,
       cMapUrl: useWorkerFetch ? cMapUrl : null,
@@ -1131,7 +1120,6 @@ function getDataProp(val) {
 }
 class PDFDocumentLoadingTask {
   static #docId = 0;
-  #onUnsupportedFeature = null;
   constructor() {
     this._capability = (0, _util.createPromiseCapability)();
     this._transport = null;
@@ -1140,13 +1128,6 @@ class PDFDocumentLoadingTask {
     this.destroyed = false;
     this.onPassword = null;
     this.onProgress = null;
-  }
-  get onUnsupportedFeature() {
-    return this.#onUnsupportedFeature;
-  }
-  set onUnsupportedFeature(callback) {
-    (0, _display_utils.deprecated)("The PDFDocumentLoadingTask onUnsupportedFeature property will be removed in the future.");
-    this.#onUnsupportedFeature = callback;
   }
   get promise() {
     return this._capability.promise;
@@ -1228,6 +1209,9 @@ class PDFDocumentProxy {
   }
   get annotationStorage() {
     return this._transport.annotationStorage;
+  }
+  get filterFactory() {
+    return this._transport.filterFactory;
   }
   get numPages() {
     return this._pdfInfo.numPages;
@@ -1325,6 +1309,8 @@ class PDFDocumentProxy {
 }
 exports.PDFDocumentProxy = PDFDocumentProxy;
 class PDFPageProxy {
+  #delayedCleanupTimeout = null;
+  #pendingCleanup = false;
   constructor(pageIndex, pageInfo, transport, pdfBug = false) {
     this._pageIndex = pageIndex;
     this._pageInfo = pageInfo;
@@ -1333,8 +1319,7 @@ class PDFPageProxy {
     this._pdfBug = pdfBug;
     this.commonObjs = transport.commonObjs;
     this.objs = new PDFObjects();
-    this.cleanupAfterRender = false;
-    this.pendingCleanup = false;
+    this._maybeCleanupAfterRender = false;
     this._intentStates = new Map();
     this.destroyed = false;
   }
@@ -1403,7 +1388,8 @@ class PDFPageProxy {
     }
     this._stats?.time("Overall");
     const intentArgs = this._transport.getRenderingIntent(intent, annotationMode, printAnnotationStorage);
-    this.pendingCleanup = false;
+    this.#pendingCleanup = false;
+    this.#abortDelayedCleanup();
     if (!optionalContentConfigPromise) {
       optionalContentConfigPromise = this._transport.getOptionalContentConfig();
     }
@@ -1430,10 +1416,10 @@ class PDFPageProxy {
     }
     const complete = error => {
       intentState.renderTasks.delete(internalRenderTask);
-      if (this.cleanupAfterRender || intentPrint) {
-        this.pendingCleanup = true;
+      if (this._maybeCleanupAfterRender || intentPrint) {
+        this.#pendingCleanup = true;
       }
-      this._tryCleanup();
+      this.#tryCleanup(!intentPrint);
       if (error) {
         internalRenderTask.capability.reject(error);
         this._abortOperatorList({
@@ -1468,18 +1454,14 @@ class PDFPageProxy {
     });
     (intentState.renderTasks ||= new Set()).add(internalRenderTask);
     const renderTask = internalRenderTask.task;
-    Promise.all([intentState.displayReadyCapability.promise, optionalContentConfigPromise]).then(([{
-      transparency,
-      isOffscreenCanvasSupported
-    }, optionalContentConfig]) => {
-      if (this.pendingCleanup) {
+    Promise.all([intentState.displayReadyCapability.promise, optionalContentConfigPromise]).then(([transparency, optionalContentConfig]) => {
+      if (this.#pendingCleanup) {
         complete();
         return;
       }
       this._stats?.time("Rendering");
       internalRenderTask.initializeGraphics({
         transparency,
-        isOffscreenCanvasSupported,
         optionalContentConfig
       });
       internalRenderTask.operatorListChanged();
@@ -1587,18 +1569,28 @@ class PDFPageProxy {
       }
     }
     this.objs.clear();
-    this.pendingCleanup = false;
+    this.#pendingCleanup = false;
+    this.#abortDelayedCleanup();
     return Promise.all(waitOn);
   }
   cleanup(resetStats = false) {
-    this.pendingCleanup = true;
-    if (!this._tryCleanup(resetStats)) {
-      this.cleanupAfterRender = true;
+    this.#pendingCleanup = true;
+    const success = this.#tryCleanup(false);
+    if (resetStats && success) {
+      this._stats &&= new _display_utils.StatTimer();
     }
-    return true;
+    return success;
   }
-  _tryCleanup(resetStats = false) {
-    if (!this.pendingCleanup) {
+  #tryCleanup(delayed = false) {
+    this.#abortDelayedCleanup();
+    if (!this.#pendingCleanup) {
+      return false;
+    }
+    if (delayed) {
+      this.#delayedCleanupTimeout = setTimeout(() => {
+        this.#delayedCleanupTimeout = null;
+        this.#tryCleanup(false);
+      }, DELAYED_CLEANUP_TIMEOUT);
       return false;
     }
     for (const {
@@ -1611,22 +1603,22 @@ class PDFPageProxy {
     }
     this._intentStates.clear();
     this.objs.clear();
-    if (resetStats && this._stats) {
-      this._stats = new _display_utils.StatTimer();
-    }
-    this.pendingCleanup = false;
+    this.#pendingCleanup = false;
     return true;
   }
-  _startRenderPage(transparency, isOffscreenCanvasSupported, cacheKey) {
+  #abortDelayedCleanup() {
+    if (this.#delayedCleanupTimeout) {
+      clearTimeout(this.#delayedCleanupTimeout);
+      this.#delayedCleanupTimeout = null;
+    }
+  }
+  _startRenderPage(transparency, cacheKey) {
     const intentState = this._intentStates.get(cacheKey);
     if (!intentState) {
       return;
     }
     this._stats?.timeEnd("Page Request");
-    intentState.displayReadyCapability?.resolve({
-      transparency,
-      isOffscreenCanvasSupported
-    });
+    intentState.displayReadyCapability?.resolve(transparency);
   }
   _renderPageChunk(operatorListChunk, intentState) {
     for (let i = 0, ii = operatorListChunk.length; i < ii; i++) {
@@ -1639,7 +1631,7 @@ class PDFPageProxy {
       internalRenderTask.operatorListChanged();
     }
     if (operatorListChunk.lastChunk) {
-      this._tryCleanup();
+      this.#tryCleanup(true);
     }
   }
   _pumpOperatorList({
@@ -1680,7 +1672,7 @@ class PDFPageProxy {
           for (const internalRenderTask of intentState.renderTasks) {
             internalRenderTask.operatorListChanged();
           }
-          this._tryCleanup();
+          this.#tryCleanup(true);
         }
         if (intentState.displayReadyCapability) {
           intentState.displayReadyCapability.reject(reason);
@@ -2018,7 +2010,6 @@ class WorkerTransport {
     this.loadingTask = loadingTask;
     this.commonObjs = new PDFObjects();
     this.fontLoader = new _font_loader.FontLoader({
-      onUnsupportedFeature: this._onUnsupportedFeature.bind(this),
       ownerDocument: params.ownerDocument,
       styleElement: params.styleElement
     });
@@ -2284,7 +2275,7 @@ class WorkerTransport {
         return;
       }
       const page = this.#pageCache.get(data.pageIndex);
-      page._startRenderPage(data.transparency, data.isOffscreenCanvasSupported, data.cacheKey);
+      page._startRenderPage(data.transparency, data.cacheKey);
     });
     messageHandler.on("commonobj", ([id, type, exportedData]) => {
       if (this.destroyed) {
@@ -2314,7 +2305,6 @@ class WorkerTransport {
             isEvalSupported: params.isEvalSupported,
             disableFontFace: params.disableFontFace,
             ignoreErrors: params.ignoreErrors,
-            onUnsupportedFeature: this._onUnsupportedFeature.bind(this),
             fontRegistry
           });
           this.fontLoader.bind(font).catch(reason => {
@@ -2330,6 +2320,7 @@ class WorkerTransport {
           break;
         case "FontPath":
         case "Image":
+        case "Pattern":
           this.commonObjs.resolve(id, exportedData);
           break;
         default:
@@ -2347,7 +2338,6 @@ class WorkerTransport {
       switch (type) {
         case "Image":
           pageProxy.objs.resolve(id, imageData);
-          const MAX_IMAGE_SIZE_TO_STORE = 8000000;
           if (imageData) {
             let length;
             if (imageData.bitmap) {
@@ -2359,8 +2349,8 @@ class WorkerTransport {
             } else {
               length = imageData.data?.length || 0;
             }
-            if (length > MAX_IMAGE_SIZE_TO_STORE) {
-              pageProxy.cleanupAfterRender = true;
+            if (length > _util.MAX_IMAGE_SIZE_TO_CACHE) {
+              pageProxy._maybeCleanupAfterRender = true;
             }
           }
           break;
@@ -2380,7 +2370,6 @@ class WorkerTransport {
         total: data.total
       });
     });
-    messageHandler.on("UnsupportedFeature", this._onUnsupportedFeature.bind(this));
     messageHandler.on("FetchBuiltInCMap", data => {
       if (this.destroyed) {
         return Promise.reject(new Error("Worker was destroyed."));
@@ -2399,14 +2388,6 @@ class WorkerTransport {
       }
       return this.standardFontDataFactory.fetch(data);
     });
-  }
-  _onUnsupportedFeature({
-    featureId
-  }) {
-    if (this.destroyed) {
-      return;
-    }
-    this.loadingTask.onUnsupportedFeature?.(featureId);
   }
   getData() {
     return this.messageHandler.sendWithPromise("GetData", null);
@@ -2690,7 +2671,6 @@ class InternalRenderTask {
   }
   initializeGraphics({
     transparency = false,
-    isOffscreenCanvasSupported = false,
     optionalContentConfig
   }) {
     if (this.cancelled) {
@@ -2714,7 +2694,7 @@ class InternalRenderTask {
       background,
       backgroundColorToReplace
     } = this.params;
-    this.gfx = new _canvas.CanvasGraphics(canvasContext, this.commonObjs, this.objs, this.canvasFactory, isOffscreenCanvasSupported ? this.filterFactory : null, {
+    this.gfx = new _canvas.CanvasGraphics(canvasContext, this.commonObjs, this.objs, this.canvasFactory, this.filterFactory, {
       optionalContentConfig
     }, this.annotationCanvasMap, this.pageColors);
     this.gfx.beginDrawing({
@@ -2789,9 +2769,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.5.393';
+const version = '3.5.441';
 exports.version = version;
-const build = '1b931096b';
+const build = '8e24542d7';
 exports.build = build;
 
 /***/ }),
@@ -3995,7 +3975,7 @@ exports.AnnotationEditorUIManager = AnnotationEditorUIManager;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.StatTimer = exports.RenderingCancelledException = exports.PixelsPerInch = exports.PageViewport = exports.PDFDateString = exports.FilterFactory = exports.DOMStandardFontDataFactory = exports.DOMSVGFactory = exports.DOMCanvasFactory = exports.DOMCMapReaderFactory = exports.AnnotationPrefix = void 0;
+exports.StatTimer = exports.RenderingCancelledException = exports.PixelsPerInch = exports.PageViewport = exports.PDFDateString = exports.DOMStandardFontDataFactory = exports.DOMSVGFactory = exports.DOMFilterFactory = exports.DOMCanvasFactory = exports.DOMCMapReaderFactory = exports.AnnotationPrefix = void 0;
 exports.deprecated = deprecated;
 exports.getColorValues = getColorValues;
 exports.getCurrentTransform = getCurrentTransform;
@@ -4020,14 +4000,18 @@ class PixelsPerInch {
   static PDF_TO_CSS_UNITS = this.CSS / this.PDF;
 }
 exports.PixelsPerInch = PixelsPerInch;
-class FilterFactory {
+class DOMFilterFactory extends _base_factory.BaseFilterFactory {
   #_cache;
   #_defs;
+  #docId;
   #document;
   #id = 0;
   constructor({
+    docId,
     ownerDocument = globalThis.document
   } = {}) {
+    super();
+    this.#docId = docId;
     this.#document = ownerDocument;
   }
   get #cache() {
@@ -4035,20 +4019,29 @@ class FilterFactory {
   }
   get #defs() {
     if (!this.#_defs) {
+      const div = this.#document.createElement("div");
+      const {
+        style
+      } = div;
+      style.visibility = "hidden";
+      style.contain = "strict";
+      style.width = style.height = 0;
+      style.position = "absolute";
+      style.top = style.left = 0;
+      style.zIndex = -1;
       const svg = this.#document.createElementNS(SVG_NS, "svg");
       svg.setAttribute("width", 0);
       svg.setAttribute("height", 0);
-      svg.style.visibility = "hidden";
-      svg.style.contain = "strict";
       this.#_defs = this.#document.createElementNS(SVG_NS, "defs");
+      div.append(svg);
       svg.append(this.#_defs);
-      this.#document.body.append(svg);
+      this.#document.body.append(div);
     }
     return this.#_defs;
   }
   addFilter(maps) {
     if (!maps) {
-      return "";
+      return "none";
     }
     let value = this.#cache.get(maps);
     if (value) {
@@ -4082,7 +4075,7 @@ class FilterFactory {
       this.#cache.set(maps, value);
       return value;
     }
-    const id = `transfer_map_${this.#id++}`;
+    const id = `g_${this.#docId}_transfer_map_${this.#id++}`;
     const url = `url(#${id})`;
     this.#cache.set(maps, url);
     this.#cache.set(key, url);
@@ -4109,7 +4102,7 @@ class FilterFactory {
   }
   destroy() {
     if (this.#_defs) {
-      this.#_defs.parentNode.remove();
+      this.#_defs.parentNode.parentNode.remove();
       this.#_defs = null;
     }
     if (this.#_cache) {
@@ -4119,7 +4112,7 @@ class FilterFactory {
     this.#id = 0;
   }
 }
-exports.FilterFactory = FilterFactory;
+exports.DOMFilterFactory = DOMFilterFactory;
 class DOMCanvasFactory extends _base_factory.BaseCanvasFactory {
   constructor({
     ownerDocument = globalThis.document
@@ -4571,8 +4564,20 @@ function setLayerDimensions(div, viewport, mustFlip = false, mustRotate = true) 
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.BaseStandardFontDataFactory = exports.BaseSVGFactory = exports.BaseCanvasFactory = exports.BaseCMapReaderFactory = void 0;
+exports.BaseStandardFontDataFactory = exports.BaseSVGFactory = exports.BaseFilterFactory = exports.BaseCanvasFactory = exports.BaseCMapReaderFactory = void 0;
 var _util = __w_pdfjs_require__(1);
+class BaseFilterFactory {
+  constructor() {
+    if (this.constructor === BaseFilterFactory) {
+      (0, _util.unreachable)("Cannot initialize BaseFilterFactory.");
+    }
+  }
+  addFilter(maps) {
+    return "none";
+  }
+  destroy() {}
+}
+exports.BaseFilterFactory = BaseFilterFactory;
 class BaseCanvasFactory {
   constructor() {
     if (this.constructor === BaseCanvasFactory) {
@@ -4826,11 +4831,9 @@ var _util = __w_pdfjs_require__(1);
 var _is_node = __w_pdfjs_require__(10);
 class FontLoader {
   constructor({
-    onUnsupportedFeature,
     ownerDocument = globalThis.document,
     styleElement = null
   }) {
-    this._onUnsupportedFeature = onUnsupportedFeature;
     this._document = ownerDocument;
     this.nativeFontFaces = [];
     this.styleElement = null;
@@ -4871,9 +4874,6 @@ class FontLoader {
         try {
           await nativeFontFace.loaded;
         } catch (ex) {
-          this._onUnsupportedFeature({
-            featureId: _util.UNSUPPORTED_FEATURES.errorFontLoadNative
-          });
           (0, _util.warn)(`Failed to load font '${nativeFontFace.family}': '${ex}'.`);
           font.disableFontFace = true;
           throw ex;
@@ -5004,7 +5004,6 @@ class FontFaceObject {
     isEvalSupported = true,
     disableFontFace = false,
     ignoreErrors = false,
-    onUnsupportedFeature,
     fontRegistry = null
   }) {
     this.compiledGlyphs = Object.create(null);
@@ -5014,7 +5013,6 @@ class FontFaceObject {
     this.isEvalSupported = isEvalSupported !== false;
     this.disableFontFace = disableFontFace === true;
     this.ignoreErrors = ignoreErrors === true;
-    this._onUnsupportedFeature = onUnsupportedFeature;
     this.fontRegistry = fontRegistry;
   }
   createNativeFontFace() {
@@ -5066,9 +5064,6 @@ class FontFaceObject {
       if (!this.ignoreErrors) {
         throw ex;
       }
-      this._onUnsupportedFeature({
-        featureId: _util.UNSUPPORTED_FEATURES.errorFontGetPath
-      });
       (0, _util.warn)(`getPathGenerator - ignoring character: "${ex}".`);
       return this.compiledGlyphs[character] = function (c, size) {};
     }
@@ -5119,6 +5114,7 @@ var _util = __w_pdfjs_require__(1);
 var _display_utils = __w_pdfjs_require__(6);
 var _pattern_helper = __w_pdfjs_require__(12);
 var _image_utils = __w_pdfjs_require__(13);
+var _is_node = __w_pdfjs_require__(10);
 const MIN_FONT_SIZE = 16;
 const MAX_FONT_SIZE = 100;
 const MAX_GROUP_SIZE = 4096;
@@ -5441,7 +5437,7 @@ class CanvasExtraState {
     this.strokeAlpha = 1;
     this.lineWidth = 1;
     this.activeSMask = null;
-    this.transferMaps = null;
+    this.transferMaps = "none";
     this.startNewPathAndClipBox([0, 0, width, height]);
   }
   clone() {
@@ -5520,7 +5516,7 @@ class CanvasExtraState {
     return _util.Util.intersect(this.clipBox, this.getPathBoundingBox(pathType, transform));
   }
 }
-function putBinaryImageData(ctx, imgData, transferMaps = null) {
+function putBinaryImageData(ctx, imgData) {
   if (typeof ImageData !== "undefined" && imgData instanceof ImageData) {
     ctx.putImageData(imgData, 0, 0);
     return;
@@ -5536,35 +5532,13 @@ function putBinaryImageData(ctx, imgData, transferMaps = null) {
   const src = imgData.data;
   const dest = chunkImgData.data;
   let i, j, thisChunkHeight, elemsInThisChunk;
-  let transferMapRed, transferMapGreen, transferMapBlue, transferMapGray;
-  if (transferMaps) {
-    switch (transferMaps.length) {
-      case 1:
-        transferMapRed = transferMaps[0];
-        transferMapGreen = transferMaps[0];
-        transferMapBlue = transferMaps[0];
-        transferMapGray = transferMaps[0];
-        break;
-      case 4:
-        transferMapRed = transferMaps[0];
-        transferMapGreen = transferMaps[1];
-        transferMapBlue = transferMaps[2];
-        transferMapGray = transferMaps[3];
-        break;
-    }
-  }
   if (imgData.kind === _util.ImageKind.GRAYSCALE_1BPP) {
     const srcLength = src.byteLength;
     const dest32 = new Uint32Array(dest.buffer, 0, dest.byteLength >> 2);
     const dest32DataLength = dest32.length;
     const fullSrcDiff = width + 7 >> 3;
-    let white = 0xffffffff;
-    let black = _util.FeatureTest.isLittleEndian ? 0xff000000 : 0x000000ff;
-    if (transferMapGray) {
-      if (transferMapGray[0] === 0xff && transferMapGray[0xff] === 0) {
-        [white, black] = [black, white];
-      }
-    }
+    const white = 0xffffffff;
+    const black = _util.FeatureTest.isLittleEndian ? 0xff000000 : 0x000000ff;
     for (i = 0; i < totalChunks; i++) {
       thisChunkHeight = i < fullChunks ? FULL_CHUNK_HEIGHT : partialChunkHeight;
       destPos = 0;
@@ -5601,48 +5575,20 @@ function putBinaryImageData(ctx, imgData, transferMaps = null) {
       ctx.putImageData(chunkImgData, 0, i * FULL_CHUNK_HEIGHT);
     }
   } else if (imgData.kind === _util.ImageKind.RGBA_32BPP) {
-    const hasTransferMaps = !!(transferMapRed || transferMapGreen || transferMapBlue);
     j = 0;
     elemsInThisChunk = width * FULL_CHUNK_HEIGHT * 4;
     for (i = 0; i < fullChunks; i++) {
       dest.set(src.subarray(srcPos, srcPos + elemsInThisChunk));
       srcPos += elemsInThisChunk;
-      if (hasTransferMaps) {
-        for (let k = 0; k < elemsInThisChunk; k += 4) {
-          if (transferMapRed) {
-            dest[k + 0] = transferMapRed[dest[k + 0]];
-          }
-          if (transferMapGreen) {
-            dest[k + 1] = transferMapGreen[dest[k + 1]];
-          }
-          if (transferMapBlue) {
-            dest[k + 2] = transferMapBlue[dest[k + 2]];
-          }
-        }
-      }
       ctx.putImageData(chunkImgData, 0, j);
       j += FULL_CHUNK_HEIGHT;
     }
     if (i < totalChunks) {
       elemsInThisChunk = width * partialChunkHeight * 4;
       dest.set(src.subarray(srcPos, srcPos + elemsInThisChunk));
-      if (hasTransferMaps) {
-        for (let k = 0; k < elemsInThisChunk; k += 4) {
-          if (transferMapRed) {
-            dest[k + 0] = transferMapRed[dest[k + 0]];
-          }
-          if (transferMapGreen) {
-            dest[k + 1] = transferMapGreen[dest[k + 1]];
-          }
-          if (transferMapBlue) {
-            dest[k + 2] = transferMapBlue[dest[k + 2]];
-          }
-        }
-      }
       ctx.putImageData(chunkImgData, 0, j);
     }
   } else if (imgData.kind === _util.ImageKind.RGB_24BPP) {
-    const hasTransferMaps = !!(transferMapRed || transferMapGreen || transferMapBlue);
     thisChunkHeight = FULL_CHUNK_HEIGHT;
     elemsInThisChunk = width * thisChunkHeight;
     for (i = 0; i < totalChunks; i++) {
@@ -5656,19 +5602,6 @@ function putBinaryImageData(ctx, imgData, transferMaps = null) {
         dest[destPos++] = src[srcPos++];
         dest[destPos++] = src[srcPos++];
         dest[destPos++] = 255;
-      }
-      if (hasTransferMaps) {
-        for (let k = 0; k < destPos; k += 4) {
-          if (transferMapRed) {
-            dest[k + 0] = transferMapRed[dest[k + 0]];
-          }
-          if (transferMapGreen) {
-            dest[k + 1] = transferMapGreen[dest[k + 1]];
-          }
-          if (transferMapBlue) {
-            dest[k + 2] = transferMapBlue[dest[k + 2]];
-          }
-        }
       }
       ctx.putImageData(chunkImgData, 0, i * FULL_CHUNK_HEIGHT);
     }
@@ -5706,7 +5639,7 @@ function putBinaryImageMask(ctx, imgData) {
   }
 }
 function copyCtxState(sourceCtx, destCtx) {
-  const properties = ["strokeStyle", "fillStyle", "fillRule", "globalAlpha", "lineWidth", "lineCap", "lineJoin", "miterLimit", "globalCompositeOperation", "font"];
+  const properties = ["strokeStyle", "fillStyle", "fillRule", "globalAlpha", "lineWidth", "lineCap", "lineJoin", "miterLimit", "globalCompositeOperation", "font", "filter"];
   for (const property of properties) {
     if (sourceCtx[property] !== undefined) {
       destCtx[property] = sourceCtx[property];
@@ -5730,6 +5663,9 @@ function resetCtxToDefault(ctx, foregroundColor) {
   if (ctx.setLineDash !== undefined) {
     ctx.setLineDash([]);
     ctx.lineDashOffset = 0;
+  }
+  if (!_is_node.isNodeJS) {
+    ctx.filter = "none";
   }
 }
 function composeSMaskBackdrop(bytes, r0, g0, b0) {
@@ -6020,11 +5956,11 @@ class CanvasGraphics {
       let newWidth = paintWidth,
         newHeight = paintHeight;
       if (widthScale > 2 && paintWidth > 1) {
-        newWidth = Math.ceil(paintWidth / 2);
+        newWidth = paintWidth >= 16384 ? Math.floor(paintWidth / 2) - 1 || 1 : Math.ceil(paintWidth / 2);
         widthScale /= paintWidth / newWidth;
       }
       if (heightScale > 2 && paintHeight > 1) {
-        newHeight = Math.ceil(paintHeight / 2);
+        newHeight = paintHeight >= 16384 ? Math.floor(paintHeight / 2) - 1 || 1 : Math.ceil(paintHeight) / 2;
         heightScale /= paintHeight / newHeight;
       }
       tmpCanvas = this.cachedCanvases.getCanvas(tmpCanvasId, newWidth, newHeight);
@@ -6180,7 +6116,7 @@ class CanvasGraphics {
           this.checkSMaskState();
           break;
         case "TR":
-          this.current.transferMaps = this.filterFactory ? this.filterFactory.addFilter(value) : value;
+          this.ctx.filter = this.current.transferMaps = this.filterFactory.addFilter(value);
           break;
       }
     }
@@ -6859,7 +6795,7 @@ class CanvasGraphics {
     if (this.cachedPatterns.has(objId)) {
       pattern = this.cachedPatterns.get(objId);
     } else {
-      pattern = (0, _pattern_helper.getShadingPattern)(this.objs.get(objId));
+      pattern = (0, _pattern_helper.getShadingPattern)(this.getObject(objId));
       this.cachedPatterns.set(objId, pattern);
     }
     if (matrix) {
@@ -7189,8 +7125,17 @@ class CanvasGraphics {
     }
     this.paintInlineImageXObjectGroup(imgData, map);
   }
+  applyTransferMapsToCanvas(ctx) {
+    if (this.current.transferMaps === "none") {
+      return ctx.canvas;
+    }
+    ctx.filter = this.current.transferMaps;
+    ctx.drawImage(ctx.canvas, 0, 0);
+    ctx.filter = "none";
+    return ctx.canvas;
+  }
   applyTransferMapsToBitmap(imgData) {
-    if (!this.current.transferMaps) {
+    if (this.current.transferMaps === "none") {
       return imgData.bitmap;
     }
     const {
@@ -7202,7 +7147,7 @@ class CanvasGraphics {
     const tmpCtx = tmpCanvas.context;
     tmpCtx.filter = this.current.transferMaps;
     tmpCtx.drawImage(bitmap, 0, 0);
-    tmpCtx.filter = "";
+    tmpCtx.filter = "none";
     return tmpCanvas.canvas;
   }
   paintInlineImageXObject(imgData) {
@@ -7213,6 +7158,9 @@ class CanvasGraphics {
     const height = imgData.height;
     const ctx = this.ctx;
     this.save();
+    if (!_is_node.isNodeJS) {
+      ctx.filter = "none";
+    }
     ctx.scale(1 / width, -1 / height);
     let imgToPaint;
     if (imgData.bitmap) {
@@ -7222,8 +7170,8 @@ class CanvasGraphics {
     } else {
       const tmpCanvas = this.cachedCanvases.getCanvas("inlineImage", width, height);
       const tmpCtx = tmpCanvas.context;
-      putBinaryImageData(tmpCtx, imgData, this.current.transferMaps);
-      imgToPaint = tmpCanvas.canvas;
+      putBinaryImageData(tmpCtx, imgData);
+      imgToPaint = this.applyTransferMapsToCanvas(tmpCtx);
     }
     const scaled = this._scaleImage(imgToPaint, (0, _display_utils.getCurrentTransformInverse)(ctx));
     ctx.imageSmoothingEnabled = getImageSmoothingEnabled((0, _display_utils.getCurrentTransform)(ctx), imgData.interpolate);
@@ -7238,14 +7186,14 @@ class CanvasGraphics {
     const ctx = this.ctx;
     let imgToPaint;
     if (imgData.bitmap) {
-      imgToPaint = this.applyTransferMapsToBitmap(imgData);
+      imgToPaint = imgData.bitmap;
     } else {
       const w = imgData.width;
       const h = imgData.height;
       const tmpCanvas = this.cachedCanvases.getCanvas("inlineImage", w, h);
       const tmpCtx = tmpCanvas.context;
-      putBinaryImageData(tmpCtx, imgData, this.current.transferMaps);
-      imgToPaint = tmpCanvas.canvas;
+      putBinaryImageData(tmpCtx, imgData);
+      imgToPaint = this.applyTransferMapsToCanvas(tmpCtx);
     }
     for (const entry of map) {
       ctx.save();
@@ -8988,7 +8936,7 @@ exports.XfaText = XfaText;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.NodeStandardFontDataFactory = exports.NodeCanvasFactory = exports.NodeCMapReaderFactory = void 0;
+exports.NodeStandardFontDataFactory = exports.NodeFilterFactory = exports.NodeCanvasFactory = exports.NodeCMapReaderFactory = void 0;
 var _base_factory = __w_pdfjs_require__(7);
 ;
 const fetchData = function (url) {
@@ -9003,6 +8951,8 @@ const fetchData = function (url) {
     });
   });
 };
+class NodeFilterFactory extends _base_factory.BaseFilterFactory {}
+exports.NodeFilterFactory = NodeFilterFactory;
 class NodeCanvasFactory extends _base_factory.BaseCanvasFactory {
   _createCanvas(width, height) {
     const Canvas = require("canvas");
@@ -10564,6 +10514,15 @@ function renderTextLayer(params) {
     (0, _display_utils.deprecated)("The TextLayerRender `textContent`/`textContentStream` parameters " + "will be removed in the future, please use `textContentSource` instead.");
     params.textContentSource = params.textContent || params.textContentStream;
   }
+  const {
+    container,
+    viewport
+  } = params;
+  const style = getComputedStyle(container);
+  const scaleFactor = parseFloat(style.getPropertyValue("--scale-factor"));
+  if (!scaleFactor || Math.abs(scaleFactor - viewport.scale) > 1e-15) {
+    console.error("The `--scale-factor` CSS-variable must be set, " + "to the same value as `viewport.scale`, " + "either on the `container`-element itself or higher up in the DOM.");
+  }
   const task = new TextLayerRenderTask(params);
   task._render();
   return task;
@@ -11300,7 +11259,6 @@ var _editor = __w_pdfjs_require__(4);
 var _pdfjsFitCurve = __w_pdfjs_require__(30);
 var _tools = __w_pdfjs_require__(5);
 const RESIZER_SIZE = 16;
-const TIME_TO_WAIT_BEFORE_FIXING_DIMS = 100;
 class InkEditor extends _editor.AnnotationEditor {
   #aspectRatio = 0;
   #baseHeight = 0;
@@ -11693,17 +11651,9 @@ class InkEditor extends _editor.AnnotationEditor {
     this.ctx = this.canvas.getContext("2d", options);
   }
   #createObserver() {
-    let timeoutId = null;
     this.#observer = new ResizeObserver(entries => {
       const rect = entries[0].contentRect;
       if (rect.width && rect.height) {
-        if (timeoutId !== null) {
-          clearTimeout(timeoutId);
-        }
-        timeoutId = setTimeout(() => {
-          this.fixDims();
-          timeoutId = null;
-        }, TIME_TO_WAIT_BEFORE_FIXING_DIMS);
         this.setDimensions(rect.width, rect.height);
       }
     });
@@ -11771,6 +11721,7 @@ class InkEditor extends _editor.AnnotationEditor {
     this.#setCanvasDims();
     this.#redraw();
     this.canvas.style.visibility = "visible";
+    this.fixDims();
   }
   #setScaleFactor(width, height) {
     const padding = this.#getPadding();
@@ -14260,6 +14211,9 @@ class AnnotationLayer {
       window.registerAcroformAnnotations(annotations);
     }
     for (const data of annotations) {
+      if (data.noHTML) {
+        continue;
+      }
       if (data.annotationType !== _util.AnnotationType.POPUP) {
         const {
           width,
@@ -15954,12 +15908,6 @@ Object.defineProperty(exports, "FeatureTest", ({
     return _util.FeatureTest;
   }
 }));
-Object.defineProperty(exports, "FilterFactory", ({
-  enumerable: true,
-  get: function () {
-    return _display_utils.FilterFactory;
-  }
-}));
 Object.defineProperty(exports, "GlobalWorkerOptions", ({
   enumerable: true,
   get: function () {
@@ -16030,12 +15978,6 @@ Object.defineProperty(exports, "SVGGraphics", ({
   enumerable: true,
   get: function () {
     return _svg.SVGGraphics;
-  }
-}));
-Object.defineProperty(exports, "UNSUPPORTED_FEATURES", ({
-  enumerable: true,
-  get: function () {
-    return _util.UNSUPPORTED_FEATURES;
   }
 }));
 Object.defineProperty(exports, "UnexpectedResponseException", ({
@@ -16162,8 +16104,8 @@ var _annotation_layer = __w_pdfjs_require__(32);
 var _worker_options = __w_pdfjs_require__(14);
 var _svg = __w_pdfjs_require__(35);
 var _xfa_layer = __w_pdfjs_require__(34);
-const pdfjsVersion = '3.5.393';
-const pdfjsBuild = '1b931096b';
+const pdfjsVersion = '3.5.441';
+const pdfjsBuild = '8e24542d7';
 })();
 
 /******/ 	return __webpack_exports__;

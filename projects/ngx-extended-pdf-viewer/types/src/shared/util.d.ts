@@ -235,6 +235,7 @@ export function isArrayBuffer(v: any): boolean;
 export function isArrayEqual(arr1: any, arr2: any): boolean;
 export const LINE_DESCENT_FACTOR: 0.35;
 export const LINE_FACTOR: 1.35;
+export const MAX_IMAGE_SIZE_TO_CACHE: 10000000;
 declare const MissingPDFException_base: any;
 export class MissingPDFException extends MissingPDFException_base {
     [x: string]: any;
@@ -401,28 +402,6 @@ export class UnknownErrorException extends UnknownErrorException_base {
     details: any;
 }
 export function unreachable(msg: any): void;
-export const UNSUPPORTED_FEATURES: {
-    forms: string;
-    javaScript: string;
-    signatures: string;
-    smask: string;
-    shadingPattern: string;
-    errorTilingPattern: string;
-    errorExtGState: string;
-    errorXObject: string;
-    errorFontLoadType3: string;
-    errorFontState: string;
-    errorFontMissing: string;
-    errorFontTranslate: string;
-    errorColorSpace: string;
-    errorOperatorList: string;
-    errorFontToUnicode: string;
-    errorFontLoadNative: string;
-    errorFontBuildPath: string;
-    errorFontGetPath: string;
-    errorMarkedContent: string;
-    errorContentSubStream: string;
-} | null;
 export function utf8StringToString(str: any): string;
 export class Util {
     static makeHexColor(r: any, g: any, b: any): string;
