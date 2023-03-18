@@ -80,6 +80,10 @@ export interface FormDataType {
 }
 
 function isIOS() {
+  if (typeof window === 'undefined') {
+    // server-side rendering
+    return false;
+  }
   return (
     ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod'].includes(navigator.platform) ||
     // iPad on iOS 13 detection
@@ -344,7 +348,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public set base64Src(base64: string | null | undefined) {
     if (base64) {
-      const binary_string = window.atob(base64);
+      if (typeof window === 'undefined') {
+        // server-side rendering
+        return;
+      }
+      const binary_string = atob(base64);
       const len = binary_string.length;
       const bytes = new Uint8Array(len);
       for (let i = 0; i < len; i++) {
@@ -475,18 +483,23 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
   @Input()
   public set showSidebarButton(show: ResponsiveVisibility) {
+    if (typeof window === 'undefined') {
+      // server-side rendering
+      this._showSidebarButton = false;
+      return;
+    }
     this._showSidebarButton = show;
-    const isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
-    let factor = 1;
-    if (isIE) {
-      factor = Number((this._mobileFriendlyZoom || '100').replace('%', '')) / 100;
-    }
-
     if (this._showSidebarButton) {
+      const isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
+      let factor = 1;
+      if (isIE) {
+        factor = Number((this._mobileFriendlyZoom || '100').replace('%', '')) / 100;
+      }
+
       this.findbarLeft = (68 * factor).toString() + 'px';
-    } else {
-      this.findbarLeft = '0px';
+      return;
     }
+    this.findbarLeft = '0px';
   }
 
   @Input()
@@ -832,6 +845,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   private iOSVersionRequiresES5(): boolean {
+    if (typeof window === 'undefined') {
+      // server-side rendering
+      return false;
+    }
     const match = navigator.appVersion.match(/OS (\d+)_(\d+)_?(\d+)?/);
     if (match !== undefined && match !== null) {
       return parseInt(match[1], 10) < 14;
@@ -841,6 +858,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   private async needsES5(): Promise<boolean> {
+    if (typeof window === 'undefined') {
+      // server-side rendering
+      return false;
+    }
     const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
     const isEdge = /Edge\/\d./i.test(navigator.userAgent);
     const isIOs13OrBelow = this.iOSVersionRequiresES5();
@@ -933,14 +954,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   ngOnInit() {
-    window['setNgxExtendedPdfViewerSource'] = (url: string) => {
-      this._src = url;
-      console.log(url);
-      this.srcChangeTriggeredByUser = true;
-      this.srcChange.emit(url);
-    };
-
     if (isPlatformBrowser(this.platformId)) {
+      window['setNgxExtendedPdfViewerSource'] = (url: string) => {
+        this._src = url;
+        console.log(url);
+        this.srcChangeTriggeredByUser = true;
+        this.srcChange.emit(url);
+      };
+
       this.addTranslationsUnlessProvidedByTheUser();
       (window as any).getFormValue = (key: string) => this.getFormValue(key);
       (window as any).setFormValue = (key: string, value: string) => this.setFormValue(key, value);
@@ -1072,6 +1093,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   private doInitPDFViewer() {
     if (typeof window === 'undefined') {
+      // server-side rendering
       return;
     }
     const callback = () => {
@@ -1130,8 +1152,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
         PDFViewerApplicationOptions.set('enableDragAndDrop', this.enableDragAndDrop);
         let language = this.language === '' ? undefined : this.language;
+        debugger;
         if (!language) {
-          language = navigator.language;
+          if (typeof window === 'undefined') {
+            // server-side rendering
+            language = 'en';
+          } else {
+            language = navigator.language;
+          }
         }
         PDFViewerApplicationOptions.set('locale', language);
         PDFViewerApplicationOptions.set('imageResourcesPath', this.imageResourcesPath);
@@ -1240,7 +1268,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           const top = rect.top;
           let maximumHeight = available - top;
           // take the margins and paddings of the parent containers into account
-          const padding = this.calculateBorderMarging(container);
+          const padding = this.calculateBorderMargin(container);
           maximumHeight -= padding;
           const factor = Number(this._height.replace('%', ''));
           maximumHeight = (maximumHeight * factor) / 100;
@@ -1255,7 +1283,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
   }
 
-  private calculateBorderMarging(container: HTMLElement | null): number {
+  private calculateBorderMargin(container: HTMLElement | null): number {
     if (container) {
       const computedStyle = window.getComputedStyle(container);
 
@@ -1264,7 +1292,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if (container.style.zIndex) {
         return padding + margin;
       }
-      return padding + margin + this.calculateBorderMarging(container.parentElement);
+      return padding + margin + this.calculateBorderMargin(container.parentElement);
     }
     return 0;
   }
@@ -2056,7 +2084,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if ('pageViewMode' in changes && !changes['pageViewMode'].isFirstChange()) {
       this.removeScrollbarInInititeScrollMode();
     }
-    if ('replaceBrowserPrint' in changes) {
+    if ('replaceBrowserPrint' in changes && typeof window !== 'undefined') {
       if (this.replaceBrowserPrint) {
         if ((window as any).printPDF) {
           window.print = (window as any).printPDF;

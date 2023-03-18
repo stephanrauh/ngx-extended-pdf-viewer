@@ -159,6 +159,7 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
 
   private checkVisibilityRecursively(e: HTMLElement): number {
     if (typeof window === 'undefined') {
+      // server-side rendering
       return 0;
     }
     if (e.style.display === 'none') {

@@ -130,6 +130,10 @@ export class PdfSidebarContentComponent implements OnDestroy {
   }
 
   private getTrustedHtml(html: string) {
+    if (typeof window === 'undefined') {
+      // server-side rendering
+      return html;
+    }
     const ttWindow = window as unknown as TrustedTypesWindow;
     if (ttWindow.trustedTypes) {
       // Create a policy that can create TrustedHTML values
