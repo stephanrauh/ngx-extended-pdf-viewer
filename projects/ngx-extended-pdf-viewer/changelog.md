@@ -436,3 +436,4 @@
 - 16.2.5 #1702 added a work-around hiding a bug of Firefox 109/110 that causes the PDF window to shrink after printing
 - 16.2.6 #1622 improved compatibility to server-side rendering
 - 16.2.7 #1622 improved compatibility to server-side rendering
+- 16.2.8 removed debug code

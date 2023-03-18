@@ -1152,7 +1152,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
         PDFViewerApplicationOptions.set('enableDragAndDrop', this.enableDragAndDrop);
         let language = this.language === '' ? undefined : this.language;
-        debugger;
         if (!language) {
           if (typeof window === 'undefined') {
             // server-side rendering
