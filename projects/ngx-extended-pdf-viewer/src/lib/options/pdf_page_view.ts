@@ -1,3 +1,5 @@
+import { PageViewport } from './pdf-page-view-port';
+
 /**
  * @implements {IRenderableView}
  */
@@ -59,4 +61,5 @@ export interface PDFPageView {
    * For use by the `PDFThumbnailView.setImage`-method.
    * @ignore
    */
+  viewport: PageViewport;
 }

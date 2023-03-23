@@ -1,4 +1,4 @@
-import { PageViewport } from '../options/pdf-page-view-port';
+import { PDFPageView } from '../options/pdf_page_view';
 
 export type PageViewportParameters = {
   /**
@@ -31,16 +31,8 @@ export type PageViewportParameters = {
   dontFlip?: boolean | undefined;
 };
 
-export interface TextLayerBuilder {
-  textLayerDiv: HTMLDivElement;
-  textContentItemsStr: Array<string>;
-  renderingDone: boolean;
-  textDivs: Array<HTMLSpanElement>;
-  viewPort: PageViewport;
-}
-
 export interface TextLayerRenderedEvent {
-  source: TextLayerBuilder;
+  source: PDFPageView;
   pageNumber: number;
   numTextDivs: number;
 }
