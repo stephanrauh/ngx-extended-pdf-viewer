@@ -1,7 +1,6 @@
 /*
  * Public API Surface of ngx-extended-pdf-viewer
  */
-
 export * from './lib/events/annotation-editor-layer-rendered-event';
 export * from './lib/events/annotation-layer-rendered-event';
 export * from './lib/events/attachment-loaded-event';
@@ -33,6 +32,7 @@ export * from './lib/options/optional_content_config';
 export * from './lib/options/password-prompt';
 export * from './lib/options/pdf-background';
 export * from './lib/options/pdf-default-options';
+export * from './lib/options/pdf-page-view-port';
 export * from './lib/options/pdf-print-range';
 export * from './lib/options/pdf-sidebar-views';
 export * from './lib/options/pdf-viewer';
