@@ -483,7 +483,7 @@ export class NgxExtendedPdfViewerServerComponent implements OnInit, AfterViewIni
 
   public toolbarWidth = '100%';
 
-  public toolbarWidthInPixels = 100;
+  public toolbarWidthInPixels = 3.14159265359; // magic number indicating the toolbar size hasn't been determined yet
 
   public secondaryToolbarTop: string | undefined = undefined;
 

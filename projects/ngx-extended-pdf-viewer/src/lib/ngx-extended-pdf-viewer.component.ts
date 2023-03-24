@@ -743,7 +743,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.toolbar = toolbarElement;
   }
 
-  public toolbarWidthInPixels = 100;
+  public toolbarWidthInPixels = 3.14159265359; // magic number indicating the toolbar size hasn't been determined yet
 
   public secondaryToolbarTop: string | undefined = undefined;
 
@@ -842,6 +842,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   ) {
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
     this.service.recalculateSize$.subscribe(() => this.onResize());
+    if (isPlatformBrowser(this.platformId)) {
+      this.toolbarWidth = String(document.body.clientWidth);
+    }
   }
 
   private iOSVersionRequiresES5(): boolean {
@@ -957,7 +960,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (isPlatformBrowser(this.platformId)) {
       window['setNgxExtendedPdfViewerSource'] = (url: string) => {
         this._src = url;
-        console.log(url);
         this.srcChangeTriggeredByUser = true;
         this.srcChange.emit(url);
       };

@@ -468,7 +468,6 @@ export class NgxExtendedPdfViewerService {
     const optionalContentConfig = await PDFViewerApplication.pdfViewer.optionalContentConfigPromise;
     if (optionalContentConfig) {
       const levelData = optionalContentConfig.getOrder();
-      console.log(levelData);
       const layerIds = levelData.filter((groupId) => typeof groupId !== 'object');
       return layerIds.map((layerId) => {
         const config = optionalContentConfig.getGroup(layerId);

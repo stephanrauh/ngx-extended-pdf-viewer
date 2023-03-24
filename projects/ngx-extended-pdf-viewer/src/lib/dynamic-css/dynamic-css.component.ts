@@ -1,5 +1,5 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { PdfBreakpoints } from '../responsive-visibility';
 import { addTrustedHTML } from '../theme/sanitized-css-injector';
 
@@ -13,7 +13,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   public zoom = 1.0;
 
   @Input()
-  public width = 100;
+  public width = 3.14159265359;
 
   public xs = 490;
 
@@ -168,7 +168,11 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   `;
   }
 
-  constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: any) {}
+  constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: Document, @Inject(PLATFORM_ID) private platformId) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.width = document.body.clientWidth;
+    }
+  }
 
   ngOnInit() {
     this.injectStyle();
@@ -186,18 +190,22 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
     this.xl = scaleFactor * PdfBreakpoints.xl;
     this.xxl = scaleFactor * PdfBreakpoints.xxl;
 
-    const styles = this.document.getElementById('pdf-dynamic-css');
+    const styles = this.document.getElementById('pdf-dynamic-css') as HTMLStyleElement;
     if (styles) {
       addTrustedHTML(styles, this.style);
     }
   }
 
   private injectStyle() {
-    const styles = this.document.createElement('STYLE') as HTMLStyleElement;
-    styles.id = 'pdf-dynamic-css';
-    addTrustedHTML(styles, this.style);
+    if (this.width === 3.14159265359) {
+      setTimeout(() => this.ngOnChanges(), 1);
+    } else {
+      const styles = this.document.createElement('STYLE') as HTMLStyleElement;
+      styles.id = 'pdf-dynamic-css';
+      addTrustedHTML(styles, this.style);
 
-    this.renderer.appendChild(this.document.head, styles);
+      this.renderer.appendChild(this.document.head, styles);
+    }
   }
 
   public ngOnDestroy() {
