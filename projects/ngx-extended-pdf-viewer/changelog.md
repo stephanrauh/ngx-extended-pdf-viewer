@@ -438,3 +438,6 @@
 - 16.2.7 #1622 improved compatibility to server-side rendering
 - 16.2.8 removed debug code
 - 16.2.9 #1725 corrected the type definition of the `TextLayerRenderedEvent`; #1724 added `PageViewport` to the list of exported types again
+- 16.2.10 #1622 improved compatibility to server-side rendering (don't use this version for production)
+- 16.2.11 #1622 improved compatibility to server-side rendering (don't use this version for production)
+- 16.2.12 #1622 improved compatibility to server-side rendering
