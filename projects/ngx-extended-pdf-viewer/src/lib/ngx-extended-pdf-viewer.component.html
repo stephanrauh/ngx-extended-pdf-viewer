@@ -29,6 +29,7 @@
             <pdf-dummy-components></pdf-dummy-components>
 
             <pdf-toolbar
+              [class.server-side-rendering]="serverSideRendering"
               [customToolbar]="customToolbar"
               [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
               [primaryMenuVisible]="primaryMenuVisible"
@@ -52,7 +53,7 @@
               [zoomLevels]="zoomLevels"
             ></pdf-toolbar>
 
-            <div class="editorParamsToolbar hidden doorHangerRight" id="editorFreeTextParamsToolbar">
+            <div class="editorParamsToolbar hidden doorHangerRight" id="editorFreeTextParamsToolbar" [class.server-side-rendering]="serverSideRendering">
               <div class="editorParamsToolbarContainer">
                 <div class="editorParamsSetter">
                   <label for="editorFreeTextColor" class="editorParamsLabel" data-l10n-id="editor_free_text_color">Font Color</label>
@@ -65,7 +66,7 @@
               </div>
             </div>
 
-            <div class="editorParamsToolbar hidden doorHangerRight" id="editorInkParamsToolbar">
+            <div class="editorParamsToolbar hidden doorHangerRight" id="editorInkParamsToolbar" [class.server-side-rendering]="serverSideRendering">
               <div class="editorParamsToolbarContainer">
                 <div class="editorParamsSetter">
                   <label for="editorInkColor" class="editorParamsLabel" data-l10n-id="editor_ink_color">Color</label>
@@ -84,6 +85,7 @@
 
             <pdf-secondary-toolbar
               #pdfSecondaryToolbarComponent
+              [class.server-side-rendering]="serverSideRendering"
               [customSecondaryToolbar]="customSecondaryToolbar"
               [secondaryToolbarTop]="secondaryToolbarTop"
               [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
@@ -103,6 +105,7 @@
             </pdf-secondary-toolbar>
 
             <pdf-findbar
+              [class.server-side-rendering]="serverSideRendering"
               [findbarLeft]="findbarLeft"
               [findbarTop]="findbarTop"
               [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
@@ -157,7 +160,7 @@
           <!-- dialogContainer -->
         </div>
         <!-- outerContainer -->
-        <input type="file" id="fileInput" class="hidden" />
+        <input type="file" id="fileInput" class="hidden" [class.server-side-rendering]="serverSideRendering" />
         <div id="printContainer"></div>
       </div>
     </div>

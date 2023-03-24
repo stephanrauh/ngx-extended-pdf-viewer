@@ -794,6 +794,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   private shuttingDown = false;
 
+  public serverSideRendering = true;
+
   public calcViewerPositionTop(): void {
     if (this.toolbar === undefined) {
       this.sidebarPositionTop = '0px';
@@ -843,6 +845,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
     this.service.recalculateSize$.subscribe(() => this.onResize());
     if (isPlatformBrowser(this.platformId)) {
+      this.serverSideRendering = false;
       this.toolbarWidth = String(document.body.clientWidth);
     }
   }
