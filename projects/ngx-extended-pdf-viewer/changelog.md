@@ -443,3 +443,4 @@
 - 16.2.12 #1622 improved compatibility to server-side rendering
 - 16.2.13 #1622 hide the toolbars and the menus when rendering on the server
 - 16.2.14 #1622 hide the toolbars and the menus when rendering on the server
+- 16.2.15 #1725 added `textLayerBuilder` to the `PDFPageView` interface

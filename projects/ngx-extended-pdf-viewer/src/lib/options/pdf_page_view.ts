@@ -1,4 +1,5 @@
 import { PageViewport } from './pdf-page-view-port';
+import { TextLayerBuilder } from './text-layer-builder';
 
 /**
  * @implements {IRenderableView}
@@ -16,6 +17,7 @@ export interface PDFPageView {
   pdfPageRotate: number;
   hasRestrictedScaling: boolean;
   textLayerMode: number;
+  textLayer: TextLayerBuilder | null;
   imageResourcesPath: string;
   useOnlyCssZoom: boolean;
   isOffscreenCanvasSupported: boolean;
