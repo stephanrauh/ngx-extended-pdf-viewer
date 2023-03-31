@@ -5113,158 +5113,24 @@ const CHARACTERS_TO_NORMALIZE = {
   "\u00BE": "3/4",
   "\n": " "
 };
-const DIACRITICS_EXCEPTION = new Set([0x3099, 0x309a, 0x094d, 0x09cd, 0x0a4d, 0x0acd, 0x0b4d, 0x0bcd, 0x0c4d, 0x0ccd, 0x0d3b, 0x0d3c, 0x0d4d, 0x0dca, 0x0e3a, 0x0eba, 0x0f84, 0x1039, 0x103a, 0x1714, 0x1734, 0x17d2, 0x1a60, 0x1b44, 0x1baa, 0x1bab, 0x1bf2, 0x1bf3, 0x2d7f, 0xa806, 0xa82c, 0xa8c4, 0xa953, 0xa9c0, 0xaaf6, 0xabed, 0x0c56, 0x0f71, 0x0f72, 0x0f7a, 0x0f7b, 0x0f7c, 0x0f7d, 0x0f80, 0x0f74]);
-let DIACRITICS_EXCEPTION_STR;
-const DIACRITICS_REG_EXP = /\p{M}+/gu;
-const SPECIAL_CHARS_REG_EXP = /([.*+?^${}()|[\]\\])|(\p{P})|(\s+)|(\p{M})|(\p{L})/gu;
-const NOT_DIACRITIC_FROM_END_REG_EXP = /([^\p{M}])\p{M}*$/u;
-const NOT_DIACRITIC_FROM_START_REG_EXP = /^\p{M}*([^\p{M}])/u;
-const SYLLABLES_REG_EXP = /[\uAC00-\uD7AF\uFA6C\uFACF-\uFAD1\uFAD5-\uFAD7]+/g;
-const SYLLABLES_LENGTHS = new Map();
-const FIRST_CHAR_SYLLABLES_REG_EXP = "[\\u1100-\\u1112\\ud7a4-\\ud7af\\ud84a\\ud84c\\ud850\\ud854\\ud857\\ud85f]";
-const NFKC_CHARS_TO_NORMALIZE = new Map();
-let noSyllablesRegExp = null;
-let withSyllablesRegExp = null;
+let normalizationRegex = null;
 function normalize(text) {
-  const syllablePositions = [];
-  let m;
-  while ((m = SYLLABLES_REG_EXP.exec(text)) !== null) {
-    let {
-      index
-    } = m;
-    for (const char of m[0]) {
-      let len = SYLLABLES_LENGTHS.get(char);
-      if (!len) {
-        len = char.normalize("NFD").length;
-        SYLLABLES_LENGTHS.set(char, len);
-      }
-      syllablePositions.push([len, index++]);
-    }
-  }
-  let normalizationRegex;
-  if (syllablePositions.length === 0 && noSyllablesRegExp) {
-    normalizationRegex = noSyllablesRegExp;
-  } else if (syllablePositions.length > 0 && withSyllablesRegExp) {
-    normalizationRegex = withSyllablesRegExp;
-  } else {
+  if (!normalizationRegex) {
     const replace = Object.keys(CHARACTERS_TO_NORMALIZE).join("");
-    const toNormalizeWithNFKC = "\u2460-\u2473" + "\u24b6-\u24ff" + "\u3244-\u32bf" + "\u32d0-\u32fe" + "\uff00-\uffef";
-    const CJK = "(?:\\p{Ideographic}|[\u3040-\u30FF])";
-    const HKDiacritics = "(?:\u3099|\u309A)";
-    const regexp = `([${replace}])|([${toNormalizeWithNFKC}])|(${HKDiacritics}\\n)|(\\p{M}+(?:-\\n)?)|(\\S-\\n)|(${CJK}\\n)|(\\n)`;
-    if (syllablePositions.length === 0) {
-      normalizationRegex = noSyllablesRegExp = new RegExp(regexp + "|(\\u0000)", "gum");
-    } else {
-      normalizationRegex = withSyllablesRegExp = new RegExp(regexp + `|(${FIRST_CHAR_SYLLABLES_REG_EXP})`, "gum");
-    }
+    normalizationRegex = new RegExp(`[${replace}]`, "g");
   }
-  const rawDiacriticsPositions = [];
-  while ((m = DIACRITICS_REG_EXP.exec(text)) !== null) {
-    rawDiacriticsPositions.push([m[0].length, m.index]);
-  }
-  let normalized = text.normalize("NFD");
-  const positions = [[0, 0]];
-  let rawDiacriticsIndex = 0;
-  let syllableIndex = 0;
-  let shift = 0;
-  let shiftOrigin = 0;
-  let eol = 0;
-  let hasDiacritics = false;
-  normalized = normalized.replace(normalizationRegex, (match, p1, p2, p3, p4, p5, p6, p7, p8, i) => {
-    i -= shiftOrigin;
-    if (p1) {
-      const replacement = CHARACTERS_TO_NORMALIZE[p1];
-      const jj = replacement.length;
-      for (let j = 1; j < jj; j++) {
-        positions.push([i - shift + j, shift - j]);
-      }
-      shift -= jj - 1;
-      return replacement;
+  let diffs = null;
+  const normalizedText = text.replace(normalizationRegex, function (ch, index) {
+    const normalizedCh = CHARACTERS_TO_NORMALIZE[ch];
+    const diff = normalizedCh.length - ch.length;
+    if (ch === "\n") {
+      (diffs ||= []).push([index - 1, 1]);
+    } else if (diff !== 0) {
+      (diffs ||= []).push([index, diff]);
     }
-    if (p2) {
-      let replacement = NFKC_CHARS_TO_NORMALIZE.get(p2);
-      if (!replacement) {
-        replacement = p2.normalize("NFKC");
-        NFKC_CHARS_TO_NORMALIZE.set(p2, replacement);
-      }
-      const jj = replacement.length;
-      for (let j = 1; j < jj; j++) {
-        positions.push([i - shift + j, shift - j]);
-      }
-      shift -= jj - 1;
-      return replacement;
-    }
-    if (p3) {
-      hasDiacritics = true;
-      if (i + eol === rawDiacriticsPositions[rawDiacriticsIndex]?.[1]) {
-        ++rawDiacriticsIndex;
-      } else {
-        positions.push([i - 1 - shift + 1, shift - 1]);
-        shift -= 1;
-        shiftOrigin += 1;
-      }
-      positions.push([i - shift + 1, shift]);
-      shiftOrigin += 1;
-      eol += 1;
-      return p3.charAt(0);
-    }
-    if (p4) {
-      const hasTrailingDashEOL = p4.endsWith("\n");
-      const len = hasTrailingDashEOL ? p4.length - 2 : p4.length;
-      hasDiacritics = true;
-      let jj = len;
-      if (i + eol === rawDiacriticsPositions[rawDiacriticsIndex]?.[1]) {
-        jj -= rawDiacriticsPositions[rawDiacriticsIndex][0];
-        ++rawDiacriticsIndex;
-      }
-      for (let j = 1; j <= jj; j++) {
-        positions.push([i - 1 - shift + j, shift - j]);
-      }
-      shift -= jj;
-      shiftOrigin += jj;
-      if (hasTrailingDashEOL) {
-        i += len - 1;
-        positions.push([i - shift + 1, 1 + shift]);
-        shift += 1;
-        shiftOrigin += 1;
-        eol += 1;
-        return p4.slice(0, len);
-      }
-      return p4;
-    }
-    if (p5) {
-      positions.push([i - shift + 1, 1 + shift]);
-      shift += 1;
-      shiftOrigin += 1;
-      eol += 1;
-      return p5.charAt(0);
-    }
-    if (p6) {
-      positions.push([i - shift + 1, shift]);
-      shiftOrigin += 1;
-      eol += 1;
-      return p6.charAt(0);
-    }
-    if (p7) {
-      positions.push([i - shift + 1, shift - 1]);
-      shift -= 1;
-      shiftOrigin += 1;
-      eol += 1;
-      return " ";
-    }
-    if (i + eol === syllablePositions[syllableIndex]?.[1]) {
-      const newCharLen = syllablePositions[syllableIndex][0] - 1;
-      ++syllableIndex;
-      for (let j = 1; j <= newCharLen; j++) {
-        positions.push([i - (shift - j), shift - j]);
-      }
-      shift -= newCharLen;
-      shiftOrigin += newCharLen;
-    }
-    return p8;
+    return normalizedCh;
   });
-  positions.push([normalized.length, shift]);
-  return [normalized, positions, hasDiacritics];
+  return [normalizedText, diffs];
 }
 function getOriginalIndex(matchIndex, diffs = null) {
   if (!diffs) {
@@ -9185,7 +9051,7 @@ class PDFViewer {
   #onVisibilityChange = null;
   #scaleTimeoutId = null;
   constructor(options) {
-    const viewerVersion = '3.4.493';
+    const viewerVersion = '3.4.494';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -18264,8 +18130,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(5);
 var _pdf_link_service = __webpack_require__(7);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.4.493';
-const pdfjsBuild = '7b85cf0e7';
+const pdfjsVersion = '3.4.494';
+const pdfjsBuild = '4dc51f005';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
