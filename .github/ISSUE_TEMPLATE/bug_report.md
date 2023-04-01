@@ -1,3 +1,12 @@
+---
+name: Bug report
+about: Most bugs don't happen on my machine, so I need your help.
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 **I need your help!**
 This project is becoming more popular by the day. I'm drowning in a flood of new issues and bug tickets. So I probably need your help to solve the issue. While we're at it: would you like to hunt down the bug yourself and to send me a pull request?
 
