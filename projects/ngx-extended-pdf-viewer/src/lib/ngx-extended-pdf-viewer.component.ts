@@ -20,7 +20,6 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { Annotation } from './Annotation';
 import { PdfDocumentLoadedEvent } from './events/document-loaded-event';
 import { FileInputChanged } from './events/file-input-changed';
 import { FindResult, FindResultMatchesCount, FindState } from './events/find-result';
@@ -39,11 +38,10 @@ import { ScaleChangingEvent } from './events/scale-changing-event';
 import { SidebarviewChange } from './events/sidebarview-changed';
 import { TextLayerRenderedEvent } from './events/textlayer-rendered';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
-import { PdfBackground } from './options/pdf-background';
 import { PdfCursorTools } from './options/pdf-cursor-tools';
 import { assetsUrl, getVersionSuffix, pdfDefaultOptions } from './options/pdf-default-options';
 import { PageViewModeType, ScrollModeChangedEvent, ScrollModeType } from './options/pdf-viewer';
-import { IPDFViewerApplication } from './options/pdf-viewer-application';
+import { IPDFViewerApplication, PDFDocumentProxy } from './options/pdf-viewer-application';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
 import { ServiceWorkerOptionsType } from './options/service-worker-options';
 import { VerbosityLevel } from './options/verbosity-level';
@@ -60,6 +58,7 @@ import { AttachmentLoadedEvent } from './events/attachment-loaded-event';
 import { LayersLoadedEvent } from './events/layers-loaded-event';
 import { OutlineLoadedEvent } from './events/outline-loaded-event';
 import { XfaLayerRenderedEvent } from './events/xfa-layer-rendered-event';
+import { NgxFormSupport } from './ngx-form-support';
 import { PdfSidebarView } from './options/pdf-sidebar-views';
 import { ResponsiveVisibility } from './responsive-visibility';
 
@@ -76,7 +75,7 @@ interface ElementAndPosition {
 }
 
 export interface FormDataType {
-  [fieldName: string]: string | number | boolean | string[];
+  [fieldName: string]: null | string | number | boolean | string[];
 }
 
 function isIOS() {
@@ -102,6 +101,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public static ngxExtendedPdfViewerInitialized = false;
   public ngxExtendedPdfViewerIncompletelyInitialized = true;
+
+  private formSupport = new NgxFormSupport();
 
   /**
    * The dummy components are inserted automatically when the user customizes the toolbar
@@ -149,14 +150,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public enableDragAndDrop = true;
 
   @Input()
-  public formData: FormDataType = {};
-
-  /** Maps the internal ids of the annotations of pdf.js to their field name */
-  private formIdToFieldName = {};
-  private formRadioButtonValueToId = {};
+  public set formData(formData: FormDataType) {
+    this.formSupport.formData = formData;
+  }
 
   @Output()
-  public formDataChange = new EventEmitter<FormDataType>();
+  public get formDataChange() {
+    return this.formSupport.formDataChange;
+  }
 
   public _pageViewMode: PageViewModeType = 'multiple';
 
@@ -414,12 +415,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public backgroundColor = '#e8e8eb';
-
-  @Input()
-  public pdfBackground: PdfBackground = undefined;
-
-  @Input()
-  public pdfBackgroundColorToReplace: string | ((page: number, pageLabel: string) => string | undefined) | undefined = '#ffffff';
 
   /** Allows the user to define the name of the file after clicking "download" */
   @Input()
@@ -755,9 +750,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   // dirty IE11 hack - temporary solution
   public findbarLeft: string | undefined = undefined;
 
-  // Additional PDF Form Field Types #567: Used to store the exported values of radio and checkbox buttons
-  public buttonValues: any = {};
-
   public get mobileFriendlyZoom() {
     return this._mobileFriendlyZoom;
   }
@@ -961,26 +953,21 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      window['setNgxExtendedPdfViewerSource'] = (url: string) => {
+      globalThis['setNgxExtendedPdfViewerSource'] = (url: string) => {
         this._src = url;
         this.srcChangeTriggeredByUser = true;
         this.srcChange.emit(url);
       };
 
       this.addTranslationsUnlessProvidedByTheUser();
-      (window as any).getFormValue = (key: string) => this.getFormValue(key);
-      (window as any).setFormValue = (key: string, value: string) => this.setFormValue(key, value);
-      (window as any).registerAcroformAnnotations = (sortedAnnotations) => this.registerAcroformAnnotations(sortedAnnotations);
-      (window as any).assignFormIdAndFieldName = (key: string, fieldName: string, radioButtonField?: string) =>
-        this.assignFormIdAndFieldName(key, fieldName, radioButtonField);
-
+      this.formSupport.registerFormSupportWithPdfjs(this.ngZone);
       this.loadPdfJs();
       this.hideToolbarIfItIsEmpty();
     }
   }
 
   private loadPdfJs() {
-    window['ngxZone'] = this.ngZone;
+    globalThis['ngxZone'] = this.ngZone;
     this.ngZone.runOutsideAngular(() => {
       if (!window['pdfjs-dist/build/pdf']) {
         this.needsES5().then((needsES5) => {
@@ -1172,8 +1159,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         PDFViewerApplicationOptions.set('pageViewMode', this.pageViewMode);
         PDFViewerApplicationOptions.set('verbosity', this.logLevel);
         PDFViewerApplicationOptions.set('initialZoom', this.zoom);
-        PDFViewerApplicationOptions.set('pdfBackgroundColor', this.pdfBackground);
-        PDFViewerApplicationOptions.set('pdfBackgroundColorToReplace', this.pdfBackgroundColorToReplace);
 
         PDFViewerApplication.isViewerEmbedded = true;
         if (PDFViewerApplication.printKeyDownListener) {
@@ -1578,7 +1563,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
       PDFViewerApplication.eventBus.on('documentloaded', (pdfLoadedEvent: PdfDocumentLoadedEvent) => {
         this.ngZone.run(() => {
-          this.loadComplete(pdfLoadedEvent.source.pdfDocument);
+          this.scrollSignatureWarningIntoView(pdfLoadedEvent.source.pdfDocument);
         });
       });
 
@@ -1723,9 +1708,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
 
     await PDFViewerApplication.close();
-    this.formData = {};
-    this.formIdToFieldName = {};
-    this.formRadioButtonValueToId = {};
+    this.formSupport.reset();
 
     const options: any = {
       password: this.password,
@@ -1792,8 +1775,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       printContainer.parentElement?.removeChild(printContainer);
     }
 
-    (window as any).getFormValue = undefined;
-    (window as any).setFormValue = undefined;
+    (window as any).getFormValueFromAngular = undefined;
     (window as any).registerAcroformAnnotations = undefined;
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     this.shuttingDown = true;
@@ -1806,9 +1788,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (PDFViewerApplication) {
       // #802 clear the form data; otherwise the "download" dialogs opens
       PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
-      this.formData = {};
-      this.formIdToFieldName = {};
-      this.formRadioButtonValueToId = {};
+      this.formSupport.reset();
 
       PDFViewerApplication._cleanup();
 
@@ -1888,9 +1868,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           } else {
             // #802 clear the form data; otherwise the "download" dialogs opens
             PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
-            this.formData = {};
-            this.formIdToFieldName = {};
-            this.formRadioButtonValueToId = {};
+            this.formSupport.reset();
 
             let inputField = PDFViewerApplication.appConfig?.openFileInput;
             if (!inputField) {
@@ -2059,7 +2037,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
     if ('formData' in changes) {
       if (!changes['formData'].isFirstChange()) {
-        this.updateFormFields(this.formData, changes['formData'].previousValue);
+        this.formSupport.updateFormFieldsInPdfCalledByNgOnChanges(changes['formData'].previousValue);
       }
     }
 
@@ -2079,12 +2057,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
     }
 
-    if ('pdfBackgroundColor' in changes && !changes['pdfBackgroundColor '].isFirstChange()) {
-      PDFViewerApplicationOptions.set('pdfBackgroundColor', this.pdfBackground);
-    }
-    if ('pdfBackgroundColorToReplace' in changes && !changes['pdfBackgroundColorToReplace'].isFirstChange()) {
-      PDFViewerApplicationOptions.set('pdfBackgroundColorToReplace', this.pdfBackgroundColorToReplace);
-    }
     if ('pageViewMode' in changes && !changes['pageViewMode'].isFirstChange()) {
       this.removeScrollbarInInititeScrollMode();
     }
@@ -2199,184 +2171,26 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
   }
 
-  public registerAcroformAnnotations(sortedAnnotations: Array<Annotation>): void {
-    let ids: { [key: string]: Annotation } = {};
-    let duplicates: { [key: string]: Annotation } = {};
-    for (let a of sortedAnnotations) {
-      if (a.fieldName) {
-        if (ids[a.fieldName]) {
-          duplicates[a.fieldName] = a;
-        }
-        ids[a.fieldName] = a;
-      }
-    }
-    for (let a of sortedAnnotations) {
-      if (a.fieldName && duplicates[a.fieldName]) {
-        this.formIdToFieldName[a.id] = a.fieldName;
-      }
-    }
-  }
-
-  public getFormValue(key: string): Object {
-    if (this.formData[key] === undefined) {
-      if (key.includes('/')) {
-        key = key.split('/')[0];
-      }
-    }
-    return { value: this.formData[key] };
-  }
-
-  public setFormValue(key: string, value: string): void {
-    if (!this.formData) {
-      this.formData = {};
-    }
-
-    if (this.formIdToFieldName[key]) {
-      // radiobuttons
-      this.formData[this.formIdToFieldName[key]] = value;
-    } else {
-      this.formData[key] = value;
-    }
-    this.ngZone.run(() => this.formDataChange.emit(this.formData));
-  }
-
-  public assignFormIdAndFieldName(key: string, fieldName: string | boolean, radioButtonField?: string): void {
-    this.formIdToFieldName[key] = fieldName;
-    if (radioButtonField) {
-      this.formRadioButtonValueToId[radioButtonField] = key;
-    }
-  }
-
-  public updateFormFields(formData: Object, previousFormData: Object) {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-
-    if (!PDFViewerApplication || !PDFViewerApplication.pdfDocument || !PDFViewerApplication.pdfDocument.annotationStorage) {
-      // ngOnChanges calls this method too early - so just ignore it
-      return;
-    }
-    const storage = PDFViewerApplication.pdfDocument.annotationStorage;
-
-    for (const key in formData) {
-      if (formData.hasOwnProperty(key)) {
-        if (formData[key] !== previousFormData[key]) {
-          const field = document.querySelector("input[name='" + key + "']") as HTMLElement;
-          if (field instanceof HTMLInputElement) {
-            if (field.type === 'radio') {
-              const fields = document.querySelectorAll("input[name='" + key + "']");
-              const fieldIdToActivate = this.formRadioButtonValueToId[formData[key]];
-              fields.forEach((field: HTMLInputElement) => {
-                const shortId = field.id.replace('pdfjs_internal_id_', '');
-                field.checked = shortId === fieldIdToActivate;
-                for (let v in this.formRadioButtonValueToId) {
-                  if (v) {
-                    if (this.formRadioButtonValueToId[v] === shortId) {
-                      storage.setValue(shortId, key, { value: formData[key] === v, emitMessage: false });
-                    }
-                  }
-                }
-              });
-            } else if (field.type === 'checkbox') {
-              storage.setValue(field.id, key, { value: formData[key], emitMessage: false });
-              field.checked = formData[key];
-            } else {
-              storage.setValue(field.id, key, { value: formData[key], emitMessage: false });
-              field.value = formData[key];
-            }
-          } else if (!field) {
-            const textarea = document.querySelector("textarea[name='" + key + "']") as HTMLTextAreaElement;
-            if (textarea) {
-              storage.setValue(textarea.id, key, { value: formData[key], emitMessage: false });
-              textarea.value = formData[key];
-            } else {
-              const dropdown = document.querySelector("select[name='" + key + "']") as HTMLSelectElement | null;
-              if (dropdown) {
-                storage.setValue(dropdown.id, key, { value: formData[key], emitMessage: false });
-                if (dropdown.multiple) {
-                  const options = this.formData[key] as string[];
-                  for (let i = 0; i < dropdown.options.length; i++) {
-                    dropdown.options[i].selected = options.indexOf(dropdown.options[i].value) >= 0;
-                  }
-                } else {
-                  dropdown.value = formData[key];
-                }
-              }
-            }
-          } else {
-            const fieldName = this.formIdToFieldName[key];
-          }
-        }
-      }
-    }
-
-    for (const key in previousFormData) {
-      if (previousFormData.hasOwnProperty(key)) {
-        if (!formData.hasOwnProperty(key)) {
-          const field = document.querySelector("input[name='" + key + "']") as HTMLElement;
-          if (field instanceof HTMLInputElement) {
-            // this entry has been deleted
-            if (field.type === 'checkbox') {
-              storage.setValue(field.id, key, { value: false, emitMessage: false });
-              field.checked = false;
-            } else {
-              storage.setValue(field.id, key, { value: undefined, emitMessage: false });
-              field.value = '';
-            }
-          } else if (!field) {
-            const textarea = document.querySelector("textarea[name='" + key + "']") as HTMLTextAreaElement;
-            if (textarea) {
-              storage.setValue(textarea.id, key, { value: undefined, emitMessage: false });
-              textarea.value = '';
-            }
-          }
-        }
-      }
-    }
-  }
-
-  public loadComplete(pdf: any /* PDFDocumentProxy */): void {
+  public async scrollSignatureWarningIntoView(pdf: PDFDocumentProxy): Promise<void> {
     /** This method has been inspired by https://medium.com/factory-mind/angular-pdf-forms-fa72b15c3fbd. Thanks, Jonny Fox! */
     this.hasSignature = false;
 
-    this.buttonValues = {};
-
     for (let i = 1; i <= pdf?.numPages; i++) {
       // track the current page
-      pdf
-        .getPage(i)
-        .then((p) => {
-          // get the annotations of the current page
-          return p.getAnnotations();
-        })
-        .then((annotations) => {
-          // ugly cast due to missing typescript definitions
-          // please contribute to complete @types/pdfjs-dist
+      const page = await pdf.getPage(i);
+      const annotations = await page.getAnnotations();
 
-          annotations
-            .filter((a) => a.subtype === 'Widget') // get the form field annotation only
-            .forEach((a) => {
-              // Additional PDF Form Field Types #567: Store the exportValue for the check boxes and buttonValue for radio buttons for quick reference
-              if (a.checkBox) this.buttonValues[a.id] = a.exportValue;
-              else if (a.radioButton) this.buttonValues[a.id] = a.buttonValue;
-
-              if (a.fieldType === 'Sig') {
-                this.ngZone.run(() => {
-                  this.hasSignature = true;
-                  setTimeout(() => {
-                    const viewerContainer = document.querySelector('#viewerContainer') as HTMLElement;
-                    viewerContainer.scrollBy(0, -32);
-                  });
-                });
-              }
-              /*
-              // get the rectangle that represent the single field
-              // and resize it according to the current DPI
-              const fieldRect = currentPage.getViewport(dpiRatio).convertToViewportRectangle(a.rect);
-
-              // add the corresponding input
-              this.addInput(a, fieldRect);
-              */
+      annotations.forEach((a) => {
+        if (a.fieldType === 'Sig') {
+          this.ngZone.run(() => {
+            this.hasSignature = true;
+            setTimeout(() => {
+              const viewerContainer = document.querySelector('#viewerContainer') as HTMLElement;
+              viewerContainer.scrollBy(0, -32);
             });
-        });
+          });
+        }
+      });
     }
     this.pdfLoaded.emit({ pagesCount: pdf?.numPages } as PdfLoadedEvent);
   }

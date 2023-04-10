@@ -445,3 +445,4 @@
 - 16.2.14 #1622 hide the toolbars and the menus when rendering on the server
 - 16.2.15 #1725 added `textLayerBuilder` to the `PDFPageView` interface
 - 16.2.16 #1732 display the page border on Safari on every page (used to be shown on the first page only); #1720 now the correct text is highlighted again when finding (was broken since 16.1.0)
+- 17.0.0-alpha.0 #1735 removed the custom PDF backgrounds

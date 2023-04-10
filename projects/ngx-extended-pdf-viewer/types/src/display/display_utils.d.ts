@@ -91,6 +91,7 @@ export class DOMFilterFactory extends BaseFilterFactory {
         ownerDocument?: Document | undefined;
     });
     addFilter(maps: any): any;
+    addHCMFilter(fgColor: any, bgColor: any): any;
     #private;
 }
 export class DOMStandardFontDataFactory extends BaseStandardFontDataFactory {

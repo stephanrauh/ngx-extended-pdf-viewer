@@ -27,7 +27,8 @@ export class BaseCMapReaderFactory {
 }
 export class BaseFilterFactory {
     addFilter(maps: any): string;
-    destroy(): void;
+    addHCMFilter(fgColor: any, bgColor: any): string;
+    destroy(keepHCM?: boolean): void;
 }
 export class BaseStandardFontDataFactory {
     constructor({ baseUrl }: {

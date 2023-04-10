@@ -27,6 +27,17 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 <img src="https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/example.png?raw=true">
 
+## What's going to be new in version 17?
+
+Version 17 removes a couple of features. The growing popularity of the library and the rapid evolution of the base library pdf.js result in a flood of issues and hard-to-solve merge conflicts. To solve that problem, I'll remove some of the features that proved to cause too much works.
+
+Features to be removed:
+
+- Custom PDF backgrounds
+- Extended find bar. Pdf.js has added some of the features and supports an incredible support of languages and character sets, so it's better to abandon my implementation in favor of their implementation. This means that fuzzy search, multiple search teams, and the distinction between phrase search and word search are gone.
+
+If you need one of these feature - well, this is an open-source library. Contributors are welcome. It's just that I have to prune the library as long as I'm the only contributor.
+
 ## What's new in version 16?
 
 - Version 16.2 updates to pdf.js 3.4 (default branch) and pdf.js 3.5 (bleeding edge branch).

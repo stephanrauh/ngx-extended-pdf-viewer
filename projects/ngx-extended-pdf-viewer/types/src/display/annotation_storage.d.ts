@@ -13,11 +13,10 @@ export class AnnotationStorage {
     /**
      * Get the value for a given key if it exists, or return the default value.
      * @param {string} key
-     * @param {string} fieldName name of the input field
      * @param {Object} defaultValue
      * @returns {Object}
      */
-    getValue(key: string, fieldname: any, defaultValue: Object, radioButtonField?: undefined): Object;
+    getValue(key: string, defaultValue: Object): Object;
     /**
      * Get the value for a given key.
      * @param {string} key
@@ -32,10 +31,9 @@ export class AnnotationStorage {
     /**
      * Set the value for a given key
      * @param {string} key
-     * @param {string} fieldName name of the input field
      * @param {Object} value
      */
-    setValue(key: string, fieldname: any, value: Object, radioButtonField?: undefined, isDefaultValue?: boolean): void;
+    setValue(key: string, value: Object): void;
     /**
      * Check if the storage contains the given key.
      * @param {string} key

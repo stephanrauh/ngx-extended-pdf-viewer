@@ -2,7 +2,7 @@ export class CanvasGraphics {
     constructor(canvasCtx: any, commonObjs: any, objs: any, canvasFactory: any, filterFactory: any, { optionalContentConfig, markedContentStack }: {
         optionalContentConfig: any;
         markedContentStack?: null | undefined;
-    }, annotationCanvasMap: any, pageColors: any);
+    }, annotationCanvasMap: any);
     ctx: any;
     current: CanvasExtraState;
     stateStack: any[];
@@ -32,26 +32,20 @@ export class CanvasGraphics {
     viewportScale: number;
     outputScaleX: number;
     outputScaleY: number;
-    backgroundColor: any;
-    foregroundColor: any;
     _cachedScaleForStroking: number[] | null;
     _cachedGetSinglePixelWidth: number | null;
     _cachedBitmapsMap: Map<any, any>;
     getObject(data: any, fallback?: null): any;
-    beginDrawing({ transform, viewport, transparency, background, backgroundColorToReplace, }: {
+    beginDrawing({ transform, viewport, transparency, background, }: {
         transform: any;
         viewport: any;
         transparency?: boolean | undefined;
         background?: null | undefined;
-        backgroundColorToReplace?: null | undefined;
     }): void;
-    selectColor: ((r: any, g: any, b: any) => any) | undefined;
-    background: any;
-    backgroundColorToReplace: any;
     compositeCtx: any;
     transparentCanvas: any;
     executeOperatorList(operatorList: any, executionStartIdx: any, continueCallback: any, stepper: any): any;
-    endDrawing(): void;
+    endDrawing(pageColors?: null): void;
     _scaleImage(img: any, inverseTransform: any): {
         img: any;
         paintWidth: any;

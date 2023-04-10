@@ -15,7 +15,7 @@
     "types": [],
     "lib": [
       "dom",
-      "es2016"
+      "es2017"
     ]
   },
   "angularCompilerOptions": {

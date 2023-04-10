@@ -252,11 +252,6 @@ export type GetViewportParameters = {
  */
 export type getTextContentParameters = {
     /**
-     * - Do not attempt to combine
-     * same line {@link TextItem }'s. The default value is `false`.
-     */
-    disableCombineTextItems: boolean;
-    /**
      * - When true include marked
      * content items in the items array of TextContent. The default is `false`.
      */
@@ -401,12 +396,8 @@ export type RenderParameters = {
      */
     transform?: any[] | undefined;
     /**
-     * - The factory instance that will be used
-     * when creating canvases. The default value is {new DOMCanvasFactory()}.
-     */
-    canvasFactory?: Object | undefined;
-    /**
-     * - Background to use for the canvas.
+     * - Background
+     * to use for the canvas.
      * Any valid `canvas.fillStyle` can be used: a `DOMString` parsed as CSS
      * <color> value, a `CanvasGradient` object (a linear or radial gradient) or
      * a `CanvasPattern` object (a repetitive image). The default value is
@@ -415,7 +406,7 @@ export type RenderParameters = {
      * NOTE: This option may be partially, or completely, ignored when the
      * `pageColors`-option is used.
      */
-    background?: string | Object | undefined;
+    background?: string | CanvasGradient | CanvasPattern | undefined;
     /**
      * - Overwrites background and foreground colors
      * with user defined ones in order to improve readability in high contrast
@@ -513,7 +504,7 @@ export type PDFWorkerParameters = {
     /**
      * - The `workerPort` object.
      */
-    port?: Object | undefined;
+    port?: Worker | undefined;
     /**
      * - Controls the logging level;
      * the constants from {@link VerbosityLevel } should be used.
@@ -660,7 +651,7 @@ export let DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
  */
 export function getDocument(src: string | URL | TypedArray | ArrayBuffer | DocumentInitParameters): PDFDocumentLoadingTask;
 export class LoopbackPort {
-    postMessage(obj: any, transfers: any): void;
+    postMessage(obj: any, transfer: any): void;
     addEventListener(name: any, listener: any): void;
     removeEventListener(name: any, listener: any): void;
     terminate(): void;
@@ -1048,8 +1039,6 @@ export class PDFDocumentProxy {
  * Page getTextContent parameters.
  *
  * @typedef {Object} getTextContentParameters
- * @property {boolean} disableCombineTextItems - Do not attempt to combine
- *   same line {@link TextItem}'s. The default value is `false`.
  * @property {boolean} [includeMarkedContent] - When true include marked
  *   content items in the items array of TextContent. The default is `false`.
  */
@@ -1126,9 +1115,8 @@ export class PDFDocumentProxy {
  *   The default value is `AnnotationMode.ENABLE`.
  * @property {Array<any>} [transform] - Additional transform, applied just
  *   before viewport transform.
- * @property {Object} [canvasFactory] - The factory instance that will be used
- *   when creating canvases. The default value is {new DOMCanvasFactory()}.
- * @property {Object | string} [background] - Background to use for the canvas.
+ * @property {CanvasGradient | CanvasPattern | string} [background] - Background
+ *   to use for the canvas.
  *   Any valid `canvas.fillStyle` can be used: a `DOMString` parsed as CSS
  *   <color> value, a `CanvasGradient` object (a linear or radial gradient) or
  *   a `CanvasPattern` object (a repetitive image). The default value is
@@ -1265,7 +1253,7 @@ export class PDFPageProxy {
      * @returns {RenderTask} An object that contains a promise that is
      *   resolved when the page finishes rendering.
      */
-    render({ canvasContext, viewport, intent, annotationMode, transform, canvasFactory, background, backgroundColorToReplace, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, }: RenderParameters): RenderTask;
+    render({ canvasContext, viewport, intent, annotationMode, transform, background, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, }: RenderParameters, ...args: any[]): RenderTask;
     /**
      * @param {GetOperatorListParameters} params - Page getOperatorList
      *   parameters.
@@ -1280,7 +1268,7 @@ export class PDFPageProxy {
      * @param {getTextContentParameters} params - getTextContent parameters.
      * @returns {ReadableStream} Stream for reading text content chunks.
      */
-    streamTextContent({ disableCombineTextItems, includeMarkedContent, }?: getTextContentParameters): ReadableStream;
+    streamTextContent({ includeMarkedContent }?: getTextContentParameters): ReadableStream;
     /**
      * NOTE: All occurrences of whitespace will be replaced by
      * standard spaces (0x20).
@@ -1326,9 +1314,10 @@ export class PDFPageProxy {
      */
     private _abortOperatorList;
     /**
-     * @type {Object} Returns page stats, if enabled; returns `null` otherwise.
+     * @type {StatTimer | null} Returns page stats, if enabled; returns `null`
+     *   otherwise.
      */
-    get stats(): Object;
+    get stats(): StatTimer | null;
     #private;
 }
 /**

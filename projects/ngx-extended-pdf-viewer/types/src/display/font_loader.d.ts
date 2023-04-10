@@ -1,15 +1,15 @@
 export class FontFaceObject {
-    constructor(translatedData: any, { isEvalSupported, disableFontFace, ignoreErrors, fontRegistry, }: {
+    constructor(translatedData: any, { isEvalSupported, disableFontFace, ignoreErrors, inspectFont, }: {
         isEvalSupported?: boolean | undefined;
         disableFontFace?: boolean | undefined;
         ignoreErrors?: boolean | undefined;
-        fontRegistry?: null | undefined;
+        inspectFont?: null | undefined;
     });
     compiledGlyphs: any;
     isEvalSupported: boolean;
     disableFontFace: boolean;
     ignoreErrors: boolean;
-    fontRegistry: any;
+    _inspectFont: any;
     createNativeFontFace(): FontFace | null;
     createFontFaceRule(): string | null;
     getPathGenerator(objs: any, character: any): any;

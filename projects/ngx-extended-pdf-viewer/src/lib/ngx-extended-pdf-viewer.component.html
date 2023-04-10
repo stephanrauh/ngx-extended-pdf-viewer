@@ -137,15 +137,6 @@
                     | async
                 }}
               </div>
-              <div class="modified-background-warning" *ngIf="pdfBackground">
-                {{
-                  'modified_background_warning'
-                    | translate
-                      : 'This PDF is rendered with a custom background. It does not look the way its author
-                intended it to look.'
-                    | async
-                }}
-              </div>
               <div id="viewer" class="pdfViewer" (dblclick)="zoomToPageWidth($event)"></div>
             </div>
             <pdf-error-message></pdf-error-message>

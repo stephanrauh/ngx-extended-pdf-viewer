@@ -217,7 +217,7 @@ export class ProgressBar {
  * @param {string} str
  * @param {boolean} [replaceInvisible]
  */
-export function removeNullCharacters(str: string, replaceInvisible?: boolean | undefined): string;
+export function removeNullCharacters(str: string, replaceInvisible?: boolean | undefined): any;
 export const RendererType: {
     CANVAS: string;
     SVG: string;
