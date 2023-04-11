@@ -46,7 +46,7 @@ return /******/ (() => { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.VerbosityLevel = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.UNSUPPORTED_FEATURES = exports.TextRenderingMode = exports.RenderingIntentFlag = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.LINE_FACTOR = exports.LINE_DESCENT_FACTOR = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FeatureTest = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.BASELINE_FACTOR = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMode = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationEditorType = exports.AnnotationEditorPrefix = exports.AnnotationEditorParamsType = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
+exports.VerbosityLevel = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.RenderingIntentFlag = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.MAX_IMAGE_SIZE_TO_CACHE = exports.LINE_FACTOR = exports.LINE_DESCENT_FACTOR = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FeatureTest = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.BASELINE_FACTOR = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMode = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationEditorType = exports.AnnotationEditorPrefix = exports.AnnotationEditorParamsType = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
 exports.assert = assert;
 exports.bytesToString = bytesToString;
 exports.createPromiseCapability = createPromiseCapability;
@@ -72,6 +72,8 @@ const IDENTITY_MATRIX = [1, 0, 0, 1, 0, 0];
 exports.IDENTITY_MATRIX = IDENTITY_MATRIX;
 const FONT_IDENTITY_MATRIX = [0.001, 0, 0, 0.001, 0, 0];
 exports.FONT_IDENTITY_MATRIX = FONT_IDENTITY_MATRIX;
+const MAX_IMAGE_SIZE_TO_CACHE = 10e6;
+exports.MAX_IMAGE_SIZE_TO_CACHE = MAX_IMAGE_SIZE_TO_CACHE;
 const LINE_FACTOR = 1.35;
 exports.LINE_FACTOR = LINE_FACTOR;
 const LINE_DESCENT_FACTOR = 0.35;
@@ -371,29 +373,6 @@ const OPS = {
   constructPath: 91
 };
 exports.OPS = OPS;
-const UNSUPPORTED_FEATURES = {
-  forms: "forms",
-  javaScript: "javaScript",
-  signatures: "signatures",
-  smask: "smask",
-  shadingPattern: "shadingPattern",
-  errorTilingPattern: "errorTilingPattern",
-  errorExtGState: "errorExtGState",
-  errorXObject: "errorXObject",
-  errorFontLoadType3: "errorFontLoadType3",
-  errorFontState: "errorFontState",
-  errorFontMissing: "errorFontMissing",
-  errorFontTranslate: "errorFontTranslate",
-  errorColorSpace: "errorColorSpace",
-  errorOperatorList: "errorOperatorList",
-  errorFontToUnicode: "errorFontToUnicode",
-  errorFontLoadNative: "errorFontLoadNative",
-  errorFontBuildPath: "errorFontBuildPath",
-  errorFontGetPath: "errorFontGetPath",
-  errorMarkedContent: "errorMarkedContent",
-  errorContentSubStream: "errorContentSubStream"
-};
-exports.UNSUPPORTED_FEATURES = UNSUPPORTED_FEATURES;
 const PasswordResponses = {
   NEED_PASSWORD: 1,
   INCORRECT_PASSWORD: 2
@@ -876,7 +855,7 @@ function createPromiseCapability() {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.build = exports.RenderTask = exports.PDFWorkerUtil = exports.PDFWorker = exports.PDFPageProxy = exports.PDFDocumentProxy = exports.PDFDocumentLoadingTask = exports.PDFDataRangeTransport = exports.LoopbackPort = exports.DefaultStandardFontDataFactory = exports.DefaultCanvasFactory = exports.DefaultCMapReaderFactory = void 0;
+exports.build = exports.RenderTask = exports.PDFWorkerUtil = exports.PDFWorker = exports.PDFPageProxy = exports.PDFDocumentProxy = exports.PDFDocumentLoadingTask = exports.PDFDataRangeTransport = exports.LoopbackPort = exports.DefaultStandardFontDataFactory = exports.DefaultFilterFactory = exports.DefaultCanvasFactory = exports.DefaultCMapReaderFactory = void 0;
 exports.getDocument = getDocument;
 exports.version = void 0;
 var _util = __w_pdfjs_require__(1);
@@ -893,6 +872,7 @@ var _transport_stream = __w_pdfjs_require__(18);
 var _xfa_text = __w_pdfjs_require__(19);
 const DEFAULT_RANGE_CHUNK_SIZE = 65536;
 const RENDERING_CANCELLED_TIMEOUT = 100;
+const DELAYED_CLEANUP_TIMEOUT = 5000;
 const ServiceWorkerOptions = {
   showUnverifiedSignatures: false
 };
@@ -901,16 +881,20 @@ let DefaultCanvasFactory = _display_utils.DOMCanvasFactory;
 exports.DefaultCanvasFactory = DefaultCanvasFactory;
 let DefaultCMapReaderFactory = _display_utils.DOMCMapReaderFactory;
 exports.DefaultCMapReaderFactory = DefaultCMapReaderFactory;
+let DefaultFilterFactory = _display_utils.DOMFilterFactory;
+exports.DefaultFilterFactory = DefaultFilterFactory;
 let DefaultStandardFontDataFactory = _display_utils.DOMStandardFontDataFactory;
 exports.DefaultStandardFontDataFactory = DefaultStandardFontDataFactory;
 if (_is_node.isNodeJS) {
   const {
     NodeCanvasFactory,
     NodeCMapReaderFactory,
+    NodeFilterFactory,
     NodeStandardFontDataFactory
   } = __w_pdfjs_require__(20);
   exports.DefaultCanvasFactory = DefaultCanvasFactory = NodeCanvasFactory;
   exports.DefaultCMapReaderFactory = DefaultCMapReaderFactory = NodeCMapReaderFactory;
+  exports.DefaultFilterFactory = DefaultFilterFactory = NodeFilterFactory;
   exports.DefaultStandardFontDataFactory = DefaultStandardFontDataFactory = NodeStandardFontDataFactory;
 }
 let createPDFNetworkStream;
@@ -943,20 +927,17 @@ function getDocument(src) {
     src = {
       data: src
     };
-  } else if (src instanceof PDFDataRangeTransport) {
-    (0, _display_utils.deprecated)("`PDFDataRangeTransport`-instance, " + "please use a parameter object with `range`-property instead.");
-    src = {
-      range: src
-    };
-  } else {
-    if (typeof src !== "object") {
-      throw new Error("Invalid parameter in getDocument, " + "need either string, URL, TypedArray, or parameter object.");
-    }
+  }
+  if (typeof src !== "object") {
+    throw new Error("Invalid parameter in getDocument, need parameter object.");
   }
   if (!src.url && !src.data && !src.range) {
     throw new Error("Invalid parameter object: need either .data, .range or .url");
   }
   const task = new PDFDocumentLoadingTask();
+  const {
+    docId
+  } = task;
   const url = src.url ? getUrlProp(src.url, src.baseHref) : null;
   const data = src.data ? getDataProp(src.data) : null;
   const httpHeaders = src.httpHeaders || null;
@@ -976,6 +957,7 @@ function getDocument(src) {
   const maxImageSize = Number.isInteger(src.maxImageSize) && src.maxImageSize > -1 ? src.maxImageSize : -1;
   const isEvalSupported = src.isEvalSupported !== false;
   const isOffscreenCanvasSupported = typeof src.isOffscreenCanvasSupported === "boolean" ? src.isOffscreenCanvasSupported : !_is_node.isNodeJS;
+  const canvasMaxAreaInBytes = Number.isInteger(src.canvasMaxAreaInBytes) ? src.canvasMaxAreaInBytes : -1;
   const disableFontFace = typeof src.disableFontFace === "boolean" ? src.disableFontFace : _is_node.isNodeJS;
   const fontExtraProperties = src.fontExtraProperties === true;
   const enableXfa = src.enableXfa === true;
@@ -987,17 +969,28 @@ function getDocument(src) {
   const length = rangeTransport ? rangeTransport.length : src.length ?? NaN;
   const useSystemFonts = typeof src.useSystemFonts === "boolean" ? src.useSystemFonts : !_is_node.isNodeJS && !disableFontFace;
   const useWorkerFetch = typeof src.useWorkerFetch === "boolean" ? src.useWorkerFetch : CMapReaderFactory === _display_utils.DOMCMapReaderFactory && StandardFontDataFactory === _display_utils.DOMStandardFontDataFactory && (0, _display_utils.isValidFetchUrl)(cMapUrl, document.baseURI) && (0, _display_utils.isValidFetchUrl)(standardFontDataUrl, document.baseURI);
+  const canvasFactory = src.canvasFactory || new DefaultCanvasFactory({
+    ownerDocument
+  });
+  const filterFactory = src.filterFactory || new DefaultFilterFactory({
+    docId,
+    ownerDocument
+  });
   const styleElement = null;
   (0, _util.setVerbosityLevel)(verbosity);
-  const transportFactory = useWorkerFetch ? null : {
-    cMapReaderFactory: new CMapReaderFactory({
+  const transportFactory = {
+    canvasFactory,
+    filterFactory
+  };
+  if (!useWorkerFetch) {
+    transportFactory.cMapReaderFactory = new CMapReaderFactory({
       baseUrl: cMapUrl,
       isCompressed: cMapPacked
-    }),
-    standardFontDataFactory: new StandardFontDataFactory({
+    });
+    transportFactory.standardFontDataFactory = new StandardFontDataFactory({
       baseUrl: standardFontDataUrl
-    })
-  };
+    });
+  }
   if (!worker) {
     const workerParams = {
       verbosity,
@@ -1006,10 +999,9 @@ function getDocument(src) {
     worker = workerParams.port ? PDFWorker.fromPort(workerParams) : new PDFWorker(workerParams);
     task._worker = worker;
   }
-  const docId = task.docId;
   const fetchDocParams = {
     docId,
-    apiVersion: '3.4.494',
+    apiVersion: '3.5.526',
     data,
     password,
     disableAutoFetch,
@@ -1023,6 +1015,7 @@ function getDocument(src) {
       ignoreErrors,
       isEvalSupported,
       isOffscreenCanvasSupported,
+      canvasMaxAreaInBytes,
       fontExtraProperties,
       useSystemFonts,
       cMapUrl: useWorkerFetch ? cMapUrl : null,
@@ -1127,7 +1120,6 @@ function getDataProp(val) {
 }
 class PDFDocumentLoadingTask {
   static #docId = 0;
-  #onUnsupportedFeature = null;
   constructor() {
     this._capability = (0, _util.createPromiseCapability)();
     this._transport = null;
@@ -1136,13 +1128,6 @@ class PDFDocumentLoadingTask {
     this.destroyed = false;
     this.onPassword = null;
     this.onProgress = null;
-  }
-  get onUnsupportedFeature() {
-    return this.#onUnsupportedFeature;
-  }
-  set onUnsupportedFeature(callback) {
-    (0, _display_utils.deprecated)("The PDFDocumentLoadingTask onUnsupportedFeature property will be removed in the future.");
-    this.#onUnsupportedFeature = callback;
   }
   get promise() {
     return this._capability.promise;
@@ -1224,6 +1209,9 @@ class PDFDocumentProxy {
   }
   get annotationStorage() {
     return this._transport.annotationStorage;
+  }
+  get filterFactory() {
+    return this._transport.filterFactory;
   }
   get numPages() {
     return this._pdfInfo.numPages;
@@ -1321,17 +1309,17 @@ class PDFDocumentProxy {
 }
 exports.PDFDocumentProxy = PDFDocumentProxy;
 class PDFPageProxy {
-  constructor(pageIndex, pageInfo, transport, ownerDocument, pdfBug = false) {
+  #delayedCleanupTimeout = null;
+  #pendingCleanup = false;
+  constructor(pageIndex, pageInfo, transport, pdfBug = false) {
     this._pageIndex = pageIndex;
     this._pageInfo = pageInfo;
-    this._ownerDocument = ownerDocument;
     this._transport = transport;
     this._stats = pdfBug ? new _display_utils.StatTimer() : null;
     this._pdfBug = pdfBug;
     this.commonObjs = transport.commonObjs;
     this.objs = new PDFObjects();
-    this.cleanupAfterRender = false;
-    this.pendingCleanup = false;
+    this._maybeCleanupAfterRender = false;
     this._intentStates = new Map();
     this.destroyed = false;
   }
@@ -1387,17 +1375,19 @@ class PDFPageProxy {
     intent = "display",
     annotationMode = _util.AnnotationMode.ENABLE,
     transform = null,
-    canvasFactory = null,
     background = null,
-    backgroundColorToReplace = null,
     optionalContentConfigPromise = null,
     annotationCanvasMap = null,
     pageColors = null,
     printAnnotationStorage = null
   }) {
+    if (arguments[0]?.canvasFactory) {
+      throw new Error("render no longer accepts the `canvasFactory`-option, " + "please pass it to the `getDocument`-function instead.");
+    }
     this._stats?.time("Overall");
     const intentArgs = this._transport.getRenderingIntent(intent, annotationMode, printAnnotationStorage);
-    this.pendingCleanup = false;
+    this.#pendingCleanup = false;
+    this.#abortDelayedCleanup();
     if (!optionalContentConfigPromise) {
       optionalContentConfigPromise = this._transport.getOptionalContentConfig();
     }
@@ -1410,9 +1400,6 @@ class PDFPageProxy {
       clearTimeout(intentState.streamReaderCancelTimeout);
       intentState.streamReaderCancelTimeout = null;
     }
-    const canvasFactoryInstance = canvasFactory || new DefaultCanvasFactory({
-      ownerDocument: this._ownerDocument
-    });
     const intentPrint = !!(intentArgs.renderingIntent & _util.RenderingIntentFlag.PRINT);
     if (!intentState.displayReadyCapability) {
       intentState.displayReadyCapability = (0, _util.createPromiseCapability)();
@@ -1427,10 +1414,10 @@ class PDFPageProxy {
     }
     const complete = error => {
       intentState.renderTasks.delete(internalRenderTask);
-      if (this.cleanupAfterRender || intentPrint) {
-        this.pendingCleanup = true;
+      if (this._maybeCleanupAfterRender || intentPrint) {
+        this.#pendingCleanup = true;
       }
-      this._tryCleanup();
+      this.#tryCleanup(!intentPrint);
       if (error) {
         internalRenderTask.capability.reject(error);
         this._abortOperatorList({
@@ -1449,15 +1436,15 @@ class PDFPageProxy {
         canvasContext,
         viewport,
         transform,
-        background,
-        backgroundColorToReplace
+        background
       },
       objs: this.objs,
       commonObjs: this.commonObjs,
       annotationCanvasMap,
       operatorList: intentState.operatorList,
       pageIndex: this._pageIndex,
-      canvasFactory: canvasFactoryInstance,
+      canvasFactory: this._transport.canvasFactory,
+      filterFactory: this._transport.filterFactory,
       useRequestAnimationFrame: !intentPrint,
       pdfBug: this._pdfBug,
       pageColors
@@ -1465,7 +1452,7 @@ class PDFPageProxy {
     (intentState.renderTasks ||= new Set()).add(internalRenderTask);
     const renderTask = internalRenderTask.task;
     Promise.all([intentState.displayReadyCapability.promise, optionalContentConfigPromise]).then(([transparency, optionalContentConfig]) => {
-      if (this.pendingCleanup) {
+      if (this.#pendingCleanup) {
         complete();
         return;
       }
@@ -1513,13 +1500,11 @@ class PDFPageProxy {
     return intentState.opListReadCapability.promise;
   }
   streamTextContent({
-    disableCombineTextItems = false,
     includeMarkedContent = false
   } = {}) {
     const TEXT_CONTENT_CHUNK_SIZE = 100;
     return this._transport.messageHandler.sendWithStream("GetTextContent", {
       pageIndex: this._pageIndex,
-      combineTextItems: disableCombineTextItems !== true,
       includeMarkedContent: includeMarkedContent === true
     }, {
       highWaterMark: TEXT_CONTENT_CHUNK_SIZE,
@@ -1579,18 +1564,28 @@ class PDFPageProxy {
       }
     }
     this.objs.clear();
-    this.pendingCleanup = false;
+    this.#pendingCleanup = false;
+    this.#abortDelayedCleanup();
     return Promise.all(waitOn);
   }
   cleanup(resetStats = false) {
-    this.pendingCleanup = true;
-    if (!this._tryCleanup(resetStats)) {
-      this.cleanupAfterRender = true;
+    this.#pendingCleanup = true;
+    const success = this.#tryCleanup(false);
+    if (resetStats && success) {
+      this._stats &&= new _display_utils.StatTimer();
     }
-    return true;
+    return success;
   }
-  _tryCleanup(resetStats = false) {
-    if (!this.pendingCleanup) {
+  #tryCleanup(delayed = false) {
+    this.#abortDelayedCleanup();
+    if (!this.#pendingCleanup) {
+      return false;
+    }
+    if (delayed) {
+      this.#delayedCleanupTimeout = setTimeout(() => {
+        this.#delayedCleanupTimeout = null;
+        this.#tryCleanup(false);
+      }, DELAYED_CLEANUP_TIMEOUT);
       return false;
     }
     for (const {
@@ -1603,11 +1598,14 @@ class PDFPageProxy {
     }
     this._intentStates.clear();
     this.objs.clear();
-    if (resetStats && this._stats) {
-      this._stats = new _display_utils.StatTimer();
-    }
-    this.pendingCleanup = false;
+    this.#pendingCleanup = false;
     return true;
+  }
+  #abortDelayedCleanup() {
+    if (this.#delayedCleanupTimeout) {
+      clearTimeout(this.#delayedCleanupTimeout);
+      this.#delayedCleanupTimeout = null;
+    }
   }
   _startRenderPage(transparency, cacheKey) {
     const intentState = this._intentStates.get(cacheKey);
@@ -1628,7 +1626,7 @@ class PDFPageProxy {
       internalRenderTask.operatorListChanged();
     }
     if (operatorListChunk.lastChunk) {
-      this._tryCleanup();
+      this.#tryCleanup(true);
     }
   }
   _pumpOperatorList({
@@ -1669,7 +1667,7 @@ class PDFPageProxy {
           for (const internalRenderTask of intentState.renderTasks) {
             internalRenderTask.operatorListChanged();
           }
-          this._tryCleanup();
+          this.#tryCleanup(true);
         }
         if (intentState.displayReadyCapability) {
           intentState.displayReadyCapability.reject(reason);
@@ -1735,9 +1733,11 @@ exports.PDFPageProxy = PDFPageProxy;
 class LoopbackPort {
   #listeners = new Set();
   #deferred = Promise.resolve();
-  postMessage(obj, transfers) {
+  postMessage(obj, transfer) {
     const event = {
-      data: structuredClone(obj, transfers)
+      data: structuredClone(obj, transfer ? {
+        transfer
+      } : null)
     };
     this.#deferred.then(() => {
       for (const listener of this.#listeners) {
@@ -2007,13 +2007,14 @@ class WorkerTransport {
     this.loadingTask = loadingTask;
     this.commonObjs = new PDFObjects();
     this.fontLoader = new _font_loader.FontLoader({
-      onUnsupportedFeature: this._onUnsupportedFeature.bind(this),
       ownerDocument: params.ownerDocument,
       styleElement: params.styleElement
     });
     this._params = params;
-    this.cMapReaderFactory = factory?.cMapReaderFactory;
-    this.standardFontDataFactory = factory?.standardFontDataFactory;
+    this.canvasFactory = factory.canvasFactory;
+    this.filterFactory = factory.filterFactory;
+    this.cMapReaderFactory = factory.cMapReaderFactory;
+    this.standardFontDataFactory = factory.standardFontDataFactory;
     this.destroyed = false;
     this.destroyCapability = null;
     this._passwordCapability = null;
@@ -2100,6 +2101,7 @@ class WorkerTransport {
       this.commonObjs.clear();
       this.fontLoader.clear();
       this.#methodPromises.clear();
+      this.filterFactory.destroy();
       if (this._networkStream) {
         this._networkStream.cancelAllRequests(new _util.AbortException("Worker was terminated."));
       }
@@ -2288,20 +2290,12 @@ class WorkerTransport {
             this.commonObjs.resolve(id, exportedError);
             break;
           }
-          let fontRegistry = null;
-          if (params.pdfBug && globalThis.FontInspector?.enabled) {
-            fontRegistry = {
-              registerFont(font, url) {
-                globalThis.FontInspector.fontAdded(font, url);
-              }
-            };
-          }
+          const inspectFont = params.pdfBug && globalThis.FontInspector?.enabled ? (font, url) => globalThis.FontInspector.fontAdded(font, url) : null;
           const font = new _font_loader.FontFaceObject(exportedData, {
             isEvalSupported: params.isEvalSupported,
             disableFontFace: params.disableFontFace,
             ignoreErrors: params.ignoreErrors,
-            onUnsupportedFeature: this._onUnsupportedFeature.bind(this),
-            fontRegistry
+            inspectFont
           });
           this.fontLoader.bind(font).catch(reason => {
             return messageHandler.sendWithPromise("FontFallback", {
@@ -2316,6 +2310,7 @@ class WorkerTransport {
           break;
         case "FontPath":
         case "Image":
+        case "Pattern":
           this.commonObjs.resolve(id, exportedData);
           break;
         default:
@@ -2333,7 +2328,6 @@ class WorkerTransport {
       switch (type) {
         case "Image":
           pageProxy.objs.resolve(id, imageData);
-          const MAX_IMAGE_SIZE_TO_STORE = 8000000;
           if (imageData) {
             let length;
             if (imageData.bitmap) {
@@ -2345,8 +2339,8 @@ class WorkerTransport {
             } else {
               length = imageData.data?.length || 0;
             }
-            if (length > MAX_IMAGE_SIZE_TO_STORE) {
-              pageProxy.cleanupAfterRender = true;
+            if (length > _util.MAX_IMAGE_SIZE_TO_CACHE) {
+              pageProxy._maybeCleanupAfterRender = true;
             }
           }
           break;
@@ -2366,7 +2360,6 @@ class WorkerTransport {
         total: data.total
       });
     });
-    messageHandler.on("UnsupportedFeature", this._onUnsupportedFeature.bind(this));
     messageHandler.on("FetchBuiltInCMap", data => {
       if (this.destroyed) {
         return Promise.reject(new Error("Worker was destroyed."));
@@ -2385,14 +2378,6 @@ class WorkerTransport {
       }
       return this.standardFontDataFactory.fetch(data);
     });
-  }
-  _onUnsupportedFeature({
-    featureId
-  }) {
-    if (this.destroyed) {
-      return;
-    }
-    this.loadingTask.onUnsupportedFeature?.(featureId);
   }
   getData() {
     return this.messageHandler.sendWithPromise("GetData", null);
@@ -2425,7 +2410,7 @@ class WorkerTransport {
       if (this.destroyed) {
         throw new Error("Transport destroyed");
       }
-      const page = new PDFPageProxy(pageIndex, pageInfo, this, this._params.ownerDocument, this._params.pdfBug);
+      const page = new PDFPageProxy(pageIndex, pageInfo, this, this._params.pdfBug);
       this.#pageCache.set(pageIndex, page);
       return page;
     });
@@ -2548,6 +2533,7 @@ class WorkerTransport {
       this.fontLoader.clear();
     }
     this.#methodPromises.clear();
+    this.filterFactory.destroy(true);
   }
   get loadingParams() {
     const {
@@ -2640,6 +2626,7 @@ class InternalRenderTask {
     operatorList,
     pageIndex,
     canvasFactory,
+    filterFactory,
     useRequestAnimationFrame = false,
     pdfBug = false,
     pageColors = null
@@ -2653,6 +2640,7 @@ class InternalRenderTask {
     this.operatorList = operatorList;
     this._pageIndex = pageIndex;
     this.canvasFactory = canvasFactory;
+    this.filterFactory = filterFactory;
     this._pdfBug = pdfBug;
     this.pageColors = pageColors;
     this.running = false;
@@ -2693,18 +2681,16 @@ class InternalRenderTask {
       canvasContext,
       viewport,
       transform,
-      background,
-      backgroundColorToReplace
+      background
     } = this.params;
-    this.gfx = new _canvas.CanvasGraphics(canvasContext, this.commonObjs, this.objs, this.canvasFactory, {
+    this.gfx = new _canvas.CanvasGraphics(canvasContext, this.commonObjs, this.objs, this.canvasFactory, this.filterFactory, {
       optionalContentConfig
-    }, this.annotationCanvasMap, this.pageColors);
+    }, this.annotationCanvasMap);
     this.gfx.beginDrawing({
       transform,
       viewport,
       transparency,
-      background,
-      backgroundColorToReplace
+      background
     });
     this.operatorListIdx = 0;
     this.graphicsReady = true;
@@ -2713,7 +2699,7 @@ class InternalRenderTask {
   cancel(error = null, extraDelay = 0) {
     this.running = false;
     this.cancelled = true;
-    this.gfx?.endDrawing();
+    this.gfx?.endDrawing(this.pageColors);
     if (this._canvas) {
       InternalRenderTask.#canvasInUse.delete(this._canvas);
     }
@@ -2762,7 +2748,7 @@ class InternalRenderTask {
     if (this.operatorListIdx === this.operatorList.argsArray.length) {
       this.running = false;
       if (this.operatorList.lastChunk) {
-        this.gfx.endDrawing();
+        this.gfx.endDrawing(this.pageColors);
         if (this._canvas) {
           InternalRenderTask.#canvasInUse.delete(this._canvas);
         }
@@ -2771,9 +2757,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.4.494';
+const version = '3.5.526';
 exports.version = version;
-const build = '4dc51f005';
+const build = 'ffbe26d49';
 exports.build = build;
 
 /***/ }),
@@ -2797,38 +2783,12 @@ class AnnotationStorage {
     this.onResetModified = null;
     this.onAnnotationEditor = null;
   }
-  getValue(key, fieldname, defaultValue, radioButtonField = undefined) {
-    let obj = this.#storage.get(key);
-    if (obj === undefined) {
-      if (window.getFormValue) {
-        window.assignFormIdAndFieldName(key, fieldname, radioButtonField);
-        const ngObj = window.getFormValue(fieldname);
-        if (ngObj !== undefined && ngObj.value !== undefined) {
-          if (radioButtonField) {
-            const value = {
-              value: ngObj.value === radioButtonField
-            };
-            obj = value;
-          } else {
-            obj = ngObj;
-          }
-          this.setValue(key, undefined, obj, undefined, true);
-        }
-        if (obj === undefined && defaultValue !== undefined && defaultValue.value !== undefined && defaultValue.value !== "") {
-          if (radioButtonField) {
-            if (defaultValue.value) {
-              window.setFormValue(fieldname, radioButtonField);
-            }
-          } else {
-            window.setFormValue(fieldname, defaultValue.value);
-          }
-        }
-      }
-    }
-    if (obj === undefined) {
+  getValue(key, defaultValue) {
+    const value = this.#storage.get(key);
+    if (value === undefined) {
       return defaultValue;
     }
-    return Object.assign(defaultValue, obj);
+    return Object.assign(defaultValue, value);
   }
   getRawValue(key) {
     return this.#storage.get(key);
@@ -2847,41 +2807,22 @@ class AnnotationStorage {
       this.onAnnotationEditor(null);
     }
   }
-  setValue(key, fieldname, value, radioButtonField = undefined, isDefaultValue = false) {
+  setValue(key, value) {
     const obj = this.#storage.get(key);
     let modified = false;
     if (obj !== undefined) {
       for (const [entry, val] of Object.entries(value)) {
-        if (entry !== "radioValue" && entry !== "emitMessage" && obj[entry] !== val) {
+        if (obj[entry] !== val) {
           modified = true;
           obj[entry] = val;
         }
       }
     } else {
-      if (!isDefaultValue) {
-        modified = true;
-      }
+      modified = true;
       this.#storage.set(key, value);
     }
     if (modified) {
       this.#setModified();
-      if (fieldname?.constructor.name !== "FreeTextEditor") {
-        if (fieldname || radioButtonField) {
-          if (window.setFormValue) {
-            if (value.items) {
-              window.setFormValue(fieldname, value.items);
-            } else if (value.emitMessage === false) {} else if (value.radioValue) {
-              window.setFormValue(fieldname, value.radioValue);
-            } else if (value.exportValue) {
-              window.setFormValue(fieldname, value.exportValue);
-            } else {
-              for (const val of Object.values(value)) {
-                window.setFormValue(fieldname, val);
-              }
-            }
-          }
-        }
-      }
     }
     if (value instanceof _editor.AnnotationEditor && typeof this.onAnnotationEditor === "function") {
       this.onAnnotationEditor(value.constructor._type);
@@ -3977,7 +3918,7 @@ exports.AnnotationEditorUIManager = AnnotationEditorUIManager;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.StatTimer = exports.RenderingCancelledException = exports.PixelsPerInch = exports.PageViewport = exports.PDFDateString = exports.DOMStandardFontDataFactory = exports.DOMSVGFactory = exports.DOMCanvasFactory = exports.DOMCMapReaderFactory = exports.AnnotationPrefix = void 0;
+exports.StatTimer = exports.RenderingCancelledException = exports.PixelsPerInch = exports.PageViewport = exports.PDFDateString = exports.DOMStandardFontDataFactory = exports.DOMSVGFactory = exports.DOMFilterFactory = exports.DOMCanvasFactory = exports.DOMCMapReaderFactory = exports.AnnotationPrefix = void 0;
 exports.deprecated = deprecated;
 exports.getColorValues = getColorValues;
 exports.getCurrentTransform = getCurrentTransform;
@@ -4002,6 +3943,181 @@ class PixelsPerInch {
   static PDF_TO_CSS_UNITS = this.CSS / this.PDF;
 }
 exports.PixelsPerInch = PixelsPerInch;
+class DOMFilterFactory extends _base_factory.BaseFilterFactory {
+  #_cache;
+  #_defs;
+  #docId;
+  #document;
+  #hcmFilter;
+  #hcmKey;
+  #hcmUrl;
+  #id = 0;
+  constructor({
+    docId,
+    ownerDocument = globalThis.document
+  } = {}) {
+    super();
+    this.#docId = docId;
+    this.#document = ownerDocument;
+  }
+  get #cache() {
+    return this.#_cache ||= new Map();
+  }
+  get #defs() {
+    if (!this.#_defs) {
+      const div = this.#document.createElement("div");
+      const {
+        style
+      } = div;
+      style.visibility = "hidden";
+      style.contain = "strict";
+      style.width = style.height = 0;
+      style.position = "absolute";
+      style.top = style.left = 0;
+      style.zIndex = -1;
+      const svg = this.#document.createElementNS(SVG_NS, "svg");
+      svg.setAttribute("width", 0);
+      svg.setAttribute("height", 0);
+      this.#_defs = this.#document.createElementNS(SVG_NS, "defs");
+      div.append(svg);
+      svg.append(this.#_defs);
+      this.#document.body.append(div);
+    }
+    return this.#_defs;
+  }
+  #appendFeFunc(feComponentTransfer, func, table) {
+    const feFunc = this.#document.createElementNS(SVG_NS, func);
+    feFunc.setAttribute("type", "discrete");
+    feFunc.setAttribute("tableValues", table);
+    feComponentTransfer.append(feFunc);
+  }
+  addFilter(maps) {
+    if (!maps) {
+      return "none";
+    }
+    let value = this.#cache.get(maps);
+    if (value) {
+      return value;
+    }
+    let tableR, tableG, tableB, key;
+    if (maps.length === 1) {
+      const mapR = maps[0];
+      const buffer = new Array(256);
+      for (let i = 0; i < 256; i++) {
+        buffer[i] = mapR[i] / 255;
+      }
+      key = tableR = tableG = tableB = buffer.join(",");
+    } else {
+      const [mapR, mapG, mapB] = maps;
+      const bufferR = new Array(256);
+      const bufferG = new Array(256);
+      const bufferB = new Array(256);
+      for (let i = 0; i < 256; i++) {
+        bufferR[i] = mapR[i] / 255;
+        bufferG[i] = mapG[i] / 255;
+        bufferB[i] = mapB[i] / 255;
+      }
+      tableR = bufferR.join(",");
+      tableG = bufferG.join(",");
+      tableB = bufferB.join(",");
+      key = `${tableR}${tableG}${tableB}`;
+    }
+    value = this.#cache.get(key);
+    if (value) {
+      this.#cache.set(maps, value);
+      return value;
+    }
+    const id = `g_${this.#docId}_transfer_map_${this.#id++}`;
+    const url = `url(#${id})`;
+    this.#cache.set(maps, url);
+    this.#cache.set(key, url);
+    const filter = this.#document.createElementNS(SVG_NS, "filter", SVG_NS);
+    filter.setAttribute("id", id);
+    filter.setAttribute("color-interpolation-filters", "sRGB");
+    const feComponentTransfer = this.#document.createElementNS(SVG_NS, "feComponentTransfer");
+    filter.append(feComponentTransfer);
+    this.#appendFeFunc(feComponentTransfer, "feFuncR", tableR);
+    this.#appendFeFunc(feComponentTransfer, "feFuncG", tableG);
+    this.#appendFeFunc(feComponentTransfer, "feFuncB", tableB);
+    this.#defs.append(filter);
+    return url;
+  }
+  addHCMFilter(fgColor, bgColor) {
+    const key = `${fgColor}-${bgColor}`;
+    if (this.#hcmKey === key) {
+      return this.#hcmUrl;
+    }
+    this.#hcmKey = key;
+    this.#hcmUrl = "none";
+    this.#hcmFilter?.remove();
+    if (!fgColor || !bgColor) {
+      return this.#hcmUrl;
+    }
+    this.#defs.style.color = fgColor;
+    fgColor = getComputedStyle(this.#defs).getPropertyValue("color");
+    const fgRGB = getRGB(fgColor);
+    fgColor = _util.Util.makeHexColor(...fgRGB);
+    this.#defs.style.color = bgColor;
+    bgColor = getComputedStyle(this.#defs).getPropertyValue("color");
+    const bgRGB = getRGB(bgColor);
+    bgColor = _util.Util.makeHexColor(...bgRGB);
+    this.#defs.style.color = "";
+    if (fgColor === "#000000" && bgColor === "#ffffff" || fgColor === bgColor) {
+      return this.#hcmUrl;
+    }
+    const map = new Array(256);
+    for (let i = 0; i <= 255; i++) {
+      const x = i / 255;
+      map[i] = x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4;
+    }
+    const table = map.join(",");
+    const id = `g_${this.#docId}_hcm_filter`;
+    const filter = this.#hcmFilter = this.#document.createElementNS(SVG_NS, "filter", SVG_NS);
+    filter.setAttribute("id", id);
+    filter.setAttribute("color-interpolation-filters", "sRGB");
+    let feComponentTransfer = this.#document.createElementNS(SVG_NS, "feComponentTransfer");
+    filter.append(feComponentTransfer);
+    this.#appendFeFunc(feComponentTransfer, "feFuncR", table);
+    this.#appendFeFunc(feComponentTransfer, "feFuncG", table);
+    this.#appendFeFunc(feComponentTransfer, "feFuncB", table);
+    const feColorMatrix = this.#document.createElementNS(SVG_NS, "feColorMatrix");
+    feColorMatrix.setAttribute("type", "matrix");
+    feColorMatrix.setAttribute("values", "0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 0 0 0 1 0");
+    filter.append(feColorMatrix);
+    feComponentTransfer = this.#document.createElementNS(SVG_NS, "feComponentTransfer");
+    filter.append(feComponentTransfer);
+    const getSteps = (c, n) => {
+      const start = fgRGB[c] / 255;
+      const end = bgRGB[c] / 255;
+      const arr = new Array(n + 1);
+      for (let i = 0; i <= n; i++) {
+        arr[i] = start + i / n * (end - start);
+      }
+      return arr.join(",");
+    };
+    this.#appendFeFunc(feComponentTransfer, "feFuncR", getSteps(0, 5));
+    this.#appendFeFunc(feComponentTransfer, "feFuncG", getSteps(1, 5));
+    this.#appendFeFunc(feComponentTransfer, "feFuncB", getSteps(2, 5));
+    this.#defs.append(filter);
+    this.#hcmUrl = `url(#${id})`;
+    return this.#hcmUrl;
+  }
+  destroy(keepHCM = false) {
+    if (keepHCM && this.#hcmUrl) {
+      return;
+    }
+    if (this.#_defs) {
+      this.#_defs.parentNode.parentNode.remove();
+      this.#_defs = null;
+    }
+    if (this.#_cache) {
+      this.#_cache.clear();
+      this.#_cache = null;
+    }
+    this.#id = 0;
+  }
+}
+exports.DOMFilterFactory = DOMFilterFactory;
 class DOMCanvasFactory extends _base_factory.BaseCanvasFactory {
   constructor({
     ownerDocument = globalThis.document
@@ -4453,8 +4569,23 @@ function setLayerDimensions(div, viewport, mustFlip = false, mustRotate = true) 
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.BaseStandardFontDataFactory = exports.BaseSVGFactory = exports.BaseCanvasFactory = exports.BaseCMapReaderFactory = void 0;
+exports.BaseStandardFontDataFactory = exports.BaseSVGFactory = exports.BaseFilterFactory = exports.BaseCanvasFactory = exports.BaseCMapReaderFactory = void 0;
 var _util = __w_pdfjs_require__(1);
+class BaseFilterFactory {
+  constructor() {
+    if (this.constructor === BaseFilterFactory) {
+      (0, _util.unreachable)("Cannot initialize BaseFilterFactory.");
+    }
+  }
+  addFilter(maps) {
+    return "none";
+  }
+  addHCMFilter(fgColor, bgColor) {
+    return "none";
+  }
+  destroy(keepHCM = false) {}
+}
+exports.BaseFilterFactory = BaseFilterFactory;
 class BaseCanvasFactory {
   constructor() {
     if (this.constructor === BaseCanvasFactory) {
@@ -4708,11 +4839,9 @@ var _util = __w_pdfjs_require__(1);
 var _is_node = __w_pdfjs_require__(10);
 class FontLoader {
   constructor({
-    onUnsupportedFeature,
     ownerDocument = globalThis.document,
     styleElement = null
   }) {
-    this._onUnsupportedFeature = onUnsupportedFeature;
     this._document = ownerDocument;
     this.nativeFontFaces = [];
     this.styleElement = null;
@@ -4753,9 +4882,6 @@ class FontLoader {
         try {
           await nativeFontFace.loaded;
         } catch (ex) {
-          this._onUnsupportedFeature({
-            featureId: _util.UNSUPPORTED_FEATURES.errorFontLoadNative
-          });
           (0, _util.warn)(`Failed to load font '${nativeFontFace.family}': '${ex}'.`);
           font.disableFontFace = true;
           throw ex;
@@ -4886,8 +5012,7 @@ class FontFaceObject {
     isEvalSupported = true,
     disableFontFace = false,
     ignoreErrors = false,
-    onUnsupportedFeature,
-    fontRegistry = null
+    inspectFont = null
   }) {
     this.compiledGlyphs = Object.create(null);
     for (const i in translatedData) {
@@ -4896,8 +5021,7 @@ class FontFaceObject {
     this.isEvalSupported = isEvalSupported !== false;
     this.disableFontFace = disableFontFace === true;
     this.ignoreErrors = ignoreErrors === true;
-    this._onUnsupportedFeature = onUnsupportedFeature;
-    this.fontRegistry = fontRegistry;
+    this._inspectFont = inspectFont;
   }
   createNativeFontFace() {
     if (!this.data || this.disableFontFace) {
@@ -4915,7 +5039,7 @@ class FontFaceObject {
       }
       nativeFontFace = new FontFace(this.cssFontInfo.fontFamily, this.data, css);
     }
-    this.fontRegistry?.registerFont(this);
+    this._inspectFont?.(this);
     return nativeFontFace;
   }
   createFontFaceRule() {
@@ -4934,7 +5058,7 @@ class FontFaceObject {
       }
       rule = `@font-face {font-family:"${this.cssFontInfo.fontFamily}";${css}src:${url}}`;
     }
-    this.fontRegistry?.registerFont(this, url);
+    this._inspectFont?.(this, url);
     return rule;
   }
   getPathGenerator(objs, character) {
@@ -4948,9 +5072,6 @@ class FontFaceObject {
       if (!this.ignoreErrors) {
         throw ex;
       }
-      this._onUnsupportedFeature({
-        featureId: _util.UNSUPPORTED_FEATURES.errorFontGetPath
-      });
       (0, _util.warn)(`getPathGenerator - ignoring character: "${ex}".`);
       return this.compiledGlyphs[character] = function (c, size) {};
     }
@@ -5001,6 +5122,7 @@ var _util = __w_pdfjs_require__(1);
 var _display_utils = __w_pdfjs_require__(6);
 var _pattern_helper = __w_pdfjs_require__(12);
 var _image_utils = __w_pdfjs_require__(13);
+var _is_node = __w_pdfjs_require__(10);
 const MIN_FONT_SIZE = 16;
 const MAX_FONT_SIZE = 100;
 const MAX_GROUP_SIZE = 4096;
@@ -5323,7 +5445,7 @@ class CanvasExtraState {
     this.strokeAlpha = 1;
     this.lineWidth = 1;
     this.activeSMask = null;
-    this.transferMaps = null;
+    this.transferMaps = "none";
     this.startNewPathAndClipBox([0, 0, width, height]);
   }
   clone() {
@@ -5402,7 +5524,7 @@ class CanvasExtraState {
     return _util.Util.intersect(this.clipBox, this.getPathBoundingBox(pathType, transform));
   }
 }
-function putBinaryImageData(ctx, imgData, transferMaps = null) {
+function putBinaryImageData(ctx, imgData) {
   if (typeof ImageData !== "undefined" && imgData instanceof ImageData) {
     ctx.putImageData(imgData, 0, 0);
     return;
@@ -5418,35 +5540,13 @@ function putBinaryImageData(ctx, imgData, transferMaps = null) {
   const src = imgData.data;
   const dest = chunkImgData.data;
   let i, j, thisChunkHeight, elemsInThisChunk;
-  let transferMapRed, transferMapGreen, transferMapBlue, transferMapGray;
-  if (transferMaps) {
-    switch (transferMaps.length) {
-      case 1:
-        transferMapRed = transferMaps[0];
-        transferMapGreen = transferMaps[0];
-        transferMapBlue = transferMaps[0];
-        transferMapGray = transferMaps[0];
-        break;
-      case 4:
-        transferMapRed = transferMaps[0];
-        transferMapGreen = transferMaps[1];
-        transferMapBlue = transferMaps[2];
-        transferMapGray = transferMaps[3];
-        break;
-    }
-  }
   if (imgData.kind === _util.ImageKind.GRAYSCALE_1BPP) {
     const srcLength = src.byteLength;
     const dest32 = new Uint32Array(dest.buffer, 0, dest.byteLength >> 2);
     const dest32DataLength = dest32.length;
     const fullSrcDiff = width + 7 >> 3;
-    let white = 0xffffffff;
-    let black = _util.FeatureTest.isLittleEndian ? 0xff000000 : 0x000000ff;
-    if (transferMapGray) {
-      if (transferMapGray[0] === 0xff && transferMapGray[0xff] === 0) {
-        [white, black] = [black, white];
-      }
-    }
+    const white = 0xffffffff;
+    const black = _util.FeatureTest.isLittleEndian ? 0xff000000 : 0x000000ff;
     for (i = 0; i < totalChunks; i++) {
       thisChunkHeight = i < fullChunks ? FULL_CHUNK_HEIGHT : partialChunkHeight;
       destPos = 0;
@@ -5483,48 +5583,20 @@ function putBinaryImageData(ctx, imgData, transferMaps = null) {
       ctx.putImageData(chunkImgData, 0, i * FULL_CHUNK_HEIGHT);
     }
   } else if (imgData.kind === _util.ImageKind.RGBA_32BPP) {
-    const hasTransferMaps = !!(transferMapRed || transferMapGreen || transferMapBlue);
     j = 0;
     elemsInThisChunk = width * FULL_CHUNK_HEIGHT * 4;
     for (i = 0; i < fullChunks; i++) {
       dest.set(src.subarray(srcPos, srcPos + elemsInThisChunk));
       srcPos += elemsInThisChunk;
-      if (hasTransferMaps) {
-        for (let k = 0; k < elemsInThisChunk; k += 4) {
-          if (transferMapRed) {
-            dest[k + 0] = transferMapRed[dest[k + 0]];
-          }
-          if (transferMapGreen) {
-            dest[k + 1] = transferMapGreen[dest[k + 1]];
-          }
-          if (transferMapBlue) {
-            dest[k + 2] = transferMapBlue[dest[k + 2]];
-          }
-        }
-      }
       ctx.putImageData(chunkImgData, 0, j);
       j += FULL_CHUNK_HEIGHT;
     }
     if (i < totalChunks) {
       elemsInThisChunk = width * partialChunkHeight * 4;
       dest.set(src.subarray(srcPos, srcPos + elemsInThisChunk));
-      if (hasTransferMaps) {
-        for (let k = 0; k < elemsInThisChunk; k += 4) {
-          if (transferMapRed) {
-            dest[k + 0] = transferMapRed[dest[k + 0]];
-          }
-          if (transferMapGreen) {
-            dest[k + 1] = transferMapGreen[dest[k + 1]];
-          }
-          if (transferMapBlue) {
-            dest[k + 2] = transferMapBlue[dest[k + 2]];
-          }
-        }
-      }
       ctx.putImageData(chunkImgData, 0, j);
     }
   } else if (imgData.kind === _util.ImageKind.RGB_24BPP) {
-    const hasTransferMaps = !!(transferMapRed || transferMapGreen || transferMapBlue);
     thisChunkHeight = FULL_CHUNK_HEIGHT;
     elemsInThisChunk = width * thisChunkHeight;
     for (i = 0; i < totalChunks; i++) {
@@ -5538,19 +5610,6 @@ function putBinaryImageData(ctx, imgData, transferMaps = null) {
         dest[destPos++] = src[srcPos++];
         dest[destPos++] = src[srcPos++];
         dest[destPos++] = 255;
-      }
-      if (hasTransferMaps) {
-        for (let k = 0; k < destPos; k += 4) {
-          if (transferMapRed) {
-            dest[k + 0] = transferMapRed[dest[k + 0]];
-          }
-          if (transferMapGreen) {
-            dest[k + 1] = transferMapGreen[dest[k + 1]];
-          }
-          if (transferMapBlue) {
-            dest[k + 2] = transferMapBlue[dest[k + 2]];
-          }
-        }
       }
       ctx.putImageData(chunkImgData, 0, i * FULL_CHUNK_HEIGHT);
     }
@@ -5576,18 +5635,19 @@ function putBinaryImageMask(ctx, imgData) {
     const thisChunkHeight = i < fullChunks ? FULL_CHUNK_HEIGHT : partialChunkHeight;
     ({
       srcPos
-    } = (0, _image_utils.applyMaskImageData)({
+    } = (0, _image_utils.convertBlackAndWhiteToRGBA)({
       src,
       srcPos,
       dest,
       width,
-      height: thisChunkHeight
+      height: thisChunkHeight,
+      nonBlackColor: 0
     }));
     ctx.putImageData(chunkImgData, 0, i * FULL_CHUNK_HEIGHT);
   }
 }
 function copyCtxState(sourceCtx, destCtx) {
-  const properties = ["strokeStyle", "fillStyle", "fillRule", "globalAlpha", "lineWidth", "lineCap", "lineJoin", "miterLimit", "globalCompositeOperation", "font"];
+  const properties = ["strokeStyle", "fillStyle", "fillRule", "globalAlpha", "lineWidth", "lineCap", "lineJoin", "miterLimit", "globalCompositeOperation", "font", "filter"];
   for (const property of properties) {
     if (sourceCtx[property] !== undefined) {
       destCtx[property] = sourceCtx[property];
@@ -5598,8 +5658,8 @@ function copyCtxState(sourceCtx, destCtx) {
     destCtx.lineDashOffset = sourceCtx.lineDashOffset;
   }
 }
-function resetCtxToDefault(ctx, foregroundColor) {
-  ctx.strokeStyle = ctx.fillStyle = foregroundColor || "#000000";
+function resetCtxToDefault(ctx) {
+  ctx.strokeStyle = ctx.fillStyle = "#000000";
   ctx.fillRule = "nonzero";
   ctx.globalAlpha = 1;
   ctx.lineWidth = 1;
@@ -5611,6 +5671,9 @@ function resetCtxToDefault(ctx, foregroundColor) {
   if (ctx.setLineDash !== undefined) {
     ctx.setLineDash([]);
     ctx.lineDashOffset = 0;
+  }
+  if (!_is_node.isNodeJS) {
+    ctx.filter = "none";
   }
 }
 function composeSMaskBackdrop(bytes, r0, g0, b0) {
@@ -5701,10 +5764,10 @@ const LINE_JOIN_STYLES = ["miter", "round", "bevel"];
 const NORMAL_CLIP = {};
 const EO_CLIP = {};
 class CanvasGraphics {
-  constructor(canvasCtx, commonObjs, objs, canvasFactory, {
+  constructor(canvasCtx, commonObjs, objs, canvasFactory, filterFactory, {
     optionalContentConfig,
     markedContentStack = null
-  }, annotationCanvasMap, pageColors) {
+  }, annotationCanvasMap) {
     this.ctx = canvasCtx;
     this.current = new CanvasExtraState(this.ctx.canvas.width, this.ctx.canvas.height);
     this.stateStack = [];
@@ -5715,6 +5778,7 @@ class CanvasGraphics {
     this.commonObjs = commonObjs;
     this.objs = objs;
     this.canvasFactory = canvasFactory;
+    this.filterFactory = filterFactory;
     this.groupStack = [];
     this.processingType3 = null;
     this.baseTransform = null;
@@ -5733,8 +5797,6 @@ class CanvasGraphics {
     this.viewportScale = 1;
     this.outputScaleX = 1;
     this.outputScaleY = 1;
-    this.backgroundColor = pageColors?.background || null;
-    this.foregroundColor = pageColors?.foreground || null;
     this._cachedScaleForStroking = null;
     this._cachedGetSinglePixelWidth = null;
     this._cachedBitmapsMap = new Map();
@@ -5749,53 +5811,14 @@ class CanvasGraphics {
     transform,
     viewport,
     transparency = false,
-    background = null,
-    backgroundColorToReplace = null
+    background = null
   }) {
     const width = this.ctx.canvas.width;
     const height = this.ctx.canvas.height;
-    const defaultBackgroundColor = background || "#ffffff";
-    this.ctx.save();
-    if (typeof background === "function") {
-      background({
-        context: this.ctx,
-        width,
-        height
-      });
-    } else if (this.foregroundColor && this.backgroundColor) {
-      this.ctx.fillStyle = this.foregroundColor;
-      const fg = this.foregroundColor = this.ctx.fillStyle;
-      this.ctx.fillStyle = this.backgroundColor;
-      const bg = this.backgroundColor = this.ctx.fillStyle;
-      let isValidDefaultBg = true;
-      let defaultBg = defaultBackgroundColor;
-      this.ctx.fillStyle = defaultBackgroundColor;
-      defaultBg = this.ctx.fillStyle;
-      isValidDefaultBg = typeof defaultBg === "string" && /^#[0-9A-Fa-f]{6}$/.test(defaultBg);
-      if (fg === "#000000" && bg === "#ffffff" || fg === bg || !isValidDefaultBg) {
-        this.foregroundColor = this.backgroundColor = null;
-      } else {
-        const [rB, gB, bB] = (0, _display_utils.getRGB)(defaultBg);
-        const newComp = x => {
-          x /= 255;
-          return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4;
-        };
-        const lumB = Math.round(0.2126 * newComp(rB) + 0.7152 * newComp(gB) + 0.0722 * newComp(bB));
-        this.selectColor = (r, g, b) => {
-          const lumC = 0.2126 * newComp(r) + 0.7152 * newComp(g) + 0.0722 * newComp(b);
-          return Math.round(lumC) === lumB ? bg : fg;
-        };
-      }
-    } else {
-      if (background) this.background = background;
-      this.backgroundColor = background;
-    }
-    if (typeof background !== "function") {
-      this.ctx.fillStyle = this.backgroundColor || defaultBackgroundColor;
-      this.ctx.fillRect(0, 0, width, height);
-    }
-    this.ctx.restore();
-    this.backgroundColorToReplace = backgroundColorToReplace;
+    const savedFillStyle = this.ctx.fillStyle;
+    this.ctx.fillStyle = background || "#ffffff";
+    this.ctx.fillRect(0, 0, width, height);
+    this.ctx.fillStyle = savedFillStyle;
     if (transparency) {
       const transparentCanvas = this.cachedCanvases.getCanvas("transparent", width, height);
       this.compositeCtx = this.ctx;
@@ -5805,7 +5828,7 @@ class CanvasGraphics {
       this.ctx.transform(...(0, _display_utils.getCurrentTransform)(this.compositeCtx));
     }
     this.ctx.save();
-    resetCtxToDefault(this.ctx, this.foregroundColor);
+    resetCtxToDefault(this.ctx);
     if (transform) {
       this.ctx.transform(...transform);
       this.outputScaleX = transform[0];
@@ -5873,7 +5896,7 @@ class CanvasGraphics {
       this.transparentCanvas = null;
     }
   }
-  endDrawing() {
+  endDrawing(pageColors = null) {
     this.#restoreInitialState();
     this.cachedCanvases.clear();
     this.cachedPatterns.clear();
@@ -5886,6 +5909,15 @@ class CanvasGraphics {
       cache.clear();
     }
     this._cachedBitmapsMap.clear();
+    if (pageColors) {
+      const hcmFilterId = this.filterFactory.addHCMFilter(pageColors.foreground, pageColors.background);
+      if (hcmFilterId !== "none") {
+        const savedFilter = this.ctx.filter;
+        this.ctx.filter = hcmFilterId;
+        this.ctx.drawImage(this.ctx.canvas, 0, 0);
+        this.ctx.filter = savedFilter;
+      }
+    }
   }
   _scaleImage(img, inverseTransform) {
     const width = img.width;
@@ -5900,11 +5932,11 @@ class CanvasGraphics {
       let newWidth = paintWidth,
         newHeight = paintHeight;
       if (widthScale > 2 && paintWidth > 1) {
-        newWidth = Math.ceil(paintWidth / 2);
+        newWidth = paintWidth >= 16384 ? Math.floor(paintWidth / 2) - 1 || 1 : Math.ceil(paintWidth / 2);
         widthScale /= paintWidth / newWidth;
       }
       if (heightScale > 2 && paintHeight > 1) {
-        newHeight = Math.ceil(paintHeight / 2);
+        newHeight = paintHeight >= 16384 ? Math.floor(paintHeight / 2) - 1 || 1 : Math.ceil(paintHeight) / 2;
         heightScale /= paintHeight / newHeight;
       }
       tmpCanvas = this.cachedCanvases.getCanvas(tmpCanvasId, newWidth, newHeight);
@@ -6060,7 +6092,8 @@ class CanvasGraphics {
           this.checkSMaskState();
           break;
         case "TR":
-          this.current.transferMaps = value;
+          this.ctx.filter = this.current.transferMaps = this.filterFactory.addFilter(value);
+          break;
       }
     }
   }
@@ -6266,17 +6299,7 @@ class CanvasGraphics {
   }
   fill(consumePath = true) {
     const ctx = this.ctx;
-    let draw = true;
-    let fillColor = this.current.fillColor;
-    if (this.backgroundColorToReplace) {
-      if (fillColor === this.backgroundColorToReplace) {
-        if (this.background && typeof this.background !== 'function') {
-          fillColor = this.background;
-        } else {
-          draw = false;
-        }
-      }
-    }
+    const fillColor = this.current.fillColor;
     const isPatternFill = this.current.patternFill;
     let needRestore = false;
     if (isPatternFill) {
@@ -6285,14 +6308,12 @@ class CanvasGraphics {
       needRestore = true;
     }
     const intersect = this.current.getClippedPathBoundingBox();
-    if (draw) {
-      if (this.contentVisible && intersect !== null) {
-        if (this.pendingEOFill) {
-          ctx.fill("evenodd");
-          this.pendingEOFill = false;
-        } else {
-          ctx.fill();
-        }
+    if (this.contentVisible && intersect !== null) {
+      if (this.pendingEOFill) {
+        ctx.fill("evenodd");
+        this.pendingEOFill = false;
+      } else {
+        ctx.fill();
       }
     }
     if (needRestore) {
@@ -6696,7 +6717,7 @@ class CanvasGraphics {
       const baseTransform = this.baseTransform || (0, _display_utils.getCurrentTransform)(this.ctx);
       const canvasGraphicsFactory = {
         createCanvasGraphics: ctx => {
-          return new CanvasGraphics(ctx, this.commonObjs, this.objs, this.canvasFactory, {
+          return new CanvasGraphics(ctx, this.commonObjs, this.objs, this.canvasFactory, this.filterFactory, {
             optionalContentConfig: this.optionalContentConfig,
             markedContentStack: this.markedContentStack
           });
@@ -6716,19 +6737,12 @@ class CanvasGraphics {
     this.current.patternFill = true;
   }
   setStrokeRGBColor(r, g, b) {
-    const color = this.selectColor?.(r, g, b) || _util.Util.makeHexColor(r, g, b);
+    const color = _util.Util.makeHexColor(r, g, b);
     this.ctx.strokeStyle = color;
     this.current.strokeColor = color;
   }
   setFillRGBColor(r, g, b) {
-    let color = this.selectColor?.(r, g, b) || _util.Util.makeHexColor(r, g, b);
-    if (this.backgroundColorToReplace) {
-      if (color === this.backgroundColorToReplace) {
-        if (this.background && typeof this.background !== 'function') {
-          color = this.background;
-        } else {}
-      }
-    }
+    const color = _util.Util.makeHexColor(r, g, b);
     this.ctx.fillStyle = color;
     this.current.fillColor = color;
     this.current.patternFill = false;
@@ -6738,7 +6752,7 @@ class CanvasGraphics {
     if (this.cachedPatterns.has(objId)) {
       pattern = this.cachedPatterns.get(objId);
     } else {
-      pattern = (0, _pattern_helper.getShadingPattern)(this.objs.get(objId));
+      pattern = (0, _pattern_helper.getShadingPattern)(this.getObject(objId));
       this.cachedPatterns.set(objId, pattern);
     }
     if (matrix) {
@@ -6907,7 +6921,7 @@ class CanvasGraphics {
   }
   beginAnnotation(id, rect, transform, matrix, hasOwnCanvas) {
     this.#restoreInitialState();
-    resetCtxToDefault(this.ctx, this.foregroundColor);
+    resetCtxToDefault(this.ctx);
     this.ctx.save();
     this.save();
     if (this.baseTransform) {
@@ -6939,9 +6953,9 @@ class CanvasGraphics {
         this.annotationCanvas.savedCtx = this.ctx;
         this.ctx = context;
         this.ctx.setTransform(scaleX, 0, 0, -scaleY, 0, height * scaleY);
-        resetCtxToDefault(this.ctx, this.foregroundColor);
+        resetCtxToDefault(this.ctx);
       } else {
-        resetCtxToDefault(this.ctx, this.foregroundColor);
+        resetCtxToDefault(this.ctx);
         this.ctx.rect(rect[0], rect[1], width, height);
         this.ctx.clip();
         this.endPath();
@@ -7068,6 +7082,30 @@ class CanvasGraphics {
     }
     this.paintInlineImageXObjectGroup(imgData, map);
   }
+  applyTransferMapsToCanvas(ctx) {
+    if (this.current.transferMaps !== "none") {
+      ctx.filter = this.current.transferMaps;
+      ctx.drawImage(ctx.canvas, 0, 0);
+      ctx.filter = "none";
+    }
+    return ctx.canvas;
+  }
+  applyTransferMapsToBitmap(imgData) {
+    if (this.current.transferMaps === "none") {
+      return imgData.bitmap;
+    }
+    const {
+      bitmap,
+      width,
+      height
+    } = imgData;
+    const tmpCanvas = this.cachedCanvases.getCanvas("inlineImage", width, height);
+    const tmpCtx = tmpCanvas.context;
+    tmpCtx.filter = this.current.transferMaps;
+    tmpCtx.drawImage(bitmap, 0, 0);
+    tmpCtx.filter = "none";
+    return tmpCanvas.canvas;
+  }
   paintInlineImageXObject(imgData) {
     if (!this.contentVisible) {
       return;
@@ -7076,15 +7114,20 @@ class CanvasGraphics {
     const height = imgData.height;
     const ctx = this.ctx;
     this.save();
+    if (!_is_node.isNodeJS) {
+      ctx.filter = "none";
+    }
     ctx.scale(1 / width, -1 / height);
     let imgToPaint;
-    if (typeof HTMLElement === "function" && imgData instanceof HTMLElement || !imgData.data) {
+    if (imgData.bitmap) {
+      imgToPaint = this.applyTransferMapsToBitmap(imgData);
+    } else if (typeof HTMLElement === "function" && imgData instanceof HTMLElement || !imgData.data) {
       imgToPaint = imgData;
     } else {
       const tmpCanvas = this.cachedCanvases.getCanvas("inlineImage", width, height);
       const tmpCtx = tmpCanvas.context;
-      putBinaryImageData(tmpCtx, imgData, this.current.transferMaps);
-      imgToPaint = tmpCanvas.canvas;
+      putBinaryImageData(tmpCtx, imgData);
+      imgToPaint = this.applyTransferMapsToCanvas(tmpCtx);
     }
     const scaled = this._scaleImage(imgToPaint, (0, _display_utils.getCurrentTransformInverse)(ctx));
     ctx.imageSmoothingEnabled = getImageSmoothingEnabled((0, _display_utils.getCurrentTransform)(ctx), imgData.interpolate);
@@ -7097,16 +7140,22 @@ class CanvasGraphics {
       return;
     }
     const ctx = this.ctx;
-    const w = imgData.width;
-    const h = imgData.height;
-    const tmpCanvas = this.cachedCanvases.getCanvas("inlineImage", w, h);
-    const tmpCtx = tmpCanvas.context;
-    putBinaryImageData(tmpCtx, imgData, this.current.transferMaps);
+    let imgToPaint;
+    if (imgData.bitmap) {
+      imgToPaint = imgData.bitmap;
+    } else {
+      const w = imgData.width;
+      const h = imgData.height;
+      const tmpCanvas = this.cachedCanvases.getCanvas("inlineImage", w, h);
+      const tmpCtx = tmpCanvas.context;
+      putBinaryImageData(tmpCtx, imgData);
+      imgToPaint = this.applyTransferMapsToCanvas(tmpCtx);
+    }
     for (const entry of map) {
       ctx.save();
       ctx.transform(...entry.transform);
       ctx.scale(1, -1);
-      drawImageAtIntegerCoords(ctx, tmpCanvas.canvas, entry.x, entry.y, entry.w, entry.h, 0, -1, 1, 1);
+      drawImageAtIntegerCoords(ctx, imgToPaint, entry.x, entry.y, entry.w, entry.h, 0, -1, 1, 1);
       ctx.restore();
     }
     this.compose();
@@ -7729,23 +7778,35 @@ exports.TilingPattern = TilingPattern;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.applyMaskImageData = applyMaskImageData;
+exports.convertBlackAndWhiteToRGBA = convertBlackAndWhiteToRGBA;
+exports.convertToRGBA = convertToRGBA;
+exports.grayToRGBA = grayToRGBA;
 var _util = __w_pdfjs_require__(1);
-function applyMaskImageData({
+function convertToRGBA(params) {
+  switch (params.kind) {
+    case _util.ImageKind.GRAYSCALE_1BPP:
+      return convertBlackAndWhiteToRGBA(params);
+    case _util.ImageKind.RGB_24BPP:
+      return convertRGBToRGBA(params);
+  }
+  return null;
+}
+function convertBlackAndWhiteToRGBA({
   src,
   srcPos = 0,
   dest,
-  destPos = 0,
   width,
   height,
+  nonBlackColor = 0xffffffff,
   inverseDecode = false
 }) {
-  const opaque = _util.FeatureTest.isLittleEndian ? 0xff000000 : 0x000000ff;
-  const [zeroMapping, oneMapping] = !inverseDecode ? [opaque, 0] : [0, opaque];
+  const black = _util.FeatureTest.isLittleEndian ? 0xff000000 : 0x000000ff;
+  const [zeroMapping, oneMapping] = inverseDecode ? [nonBlackColor, black] : [black, nonBlackColor];
   const widthInSource = width >> 3;
   const widthRemainder = width & 7;
   const srcLength = src.length;
   dest = new Uint32Array(dest.buffer);
+  let destPos = 0;
   for (let i = 0; i < height; i++) {
     for (const max = srcPos + widthInSource; srcPos < max; srcPos++) {
       const elem = srcPos < srcLength ? src[srcPos] : 255;
@@ -7770,6 +7831,60 @@ function applyMaskImageData({
     srcPos,
     destPos
   };
+}
+function convertRGBToRGBA({
+  src,
+  srcPos = 0,
+  dest,
+  destPos = 0,
+  width,
+  height
+}) {
+  let i = 0;
+  const len32 = src.length >> 2;
+  const src32 = new Uint32Array(src.buffer, srcPos, len32);
+  if (_util.FeatureTest.isLittleEndian) {
+    for (; i < len32 - 2; i += 3, destPos += 4) {
+      const s1 = src32[i];
+      const s2 = src32[i + 1];
+      const s3 = src32[i + 2];
+      dest[destPos] = s1 | 0xff000000;
+      dest[destPos + 1] = s1 >>> 24 | s2 << 8 | 0xff000000;
+      dest[destPos + 2] = s2 >>> 16 | s3 << 16 | 0xff000000;
+      dest[destPos + 3] = s3 >>> 8 | 0xff000000;
+    }
+    for (let j = i * 4, jj = src.length; j < jj; j += 3) {
+      dest[destPos++] = src[j] | src[j + 1] << 8 | src[j + 2] << 16 | 0xff000000;
+    }
+  } else {
+    for (; i < len32 - 2; i += 3, destPos += 4) {
+      const s1 = src32[i];
+      const s2 = src32[i + 1];
+      const s3 = src32[i + 2];
+      dest[destPos] = s1 | 0xff;
+      dest[destPos + 1] = s1 << 24 | s2 >>> 8 | 0xff;
+      dest[destPos + 2] = s2 << 16 | s3 >>> 16 | 0xff;
+      dest[destPos + 3] = s3 << 8 | 0xff;
+    }
+    for (let j = i * 4, jj = src.length; j < jj; j += 3) {
+      dest[destPos++] = src[j] << 24 | src[j + 1] << 16 | src[j + 2] << 8 | 0xff;
+    }
+  }
+  return {
+    srcPos,
+    destPos
+  };
+}
+function grayToRGBA(src, dest) {
+  if (_util.FeatureTest.isLittleEndian) {
+    for (let i = 0, ii = src.length; i < ii; i++) {
+      dest[i] = src[i] * 0x10101 | 0xff000000;
+    }
+  } else {
+    for (let i = 0, ii = src.length; i < ii; i++) {
+      dest[i] = src[i] * 0x1010100 | 0x000000ff;
+    }
+  }
 }
 
 /***/ }),
@@ -8777,7 +8892,7 @@ exports.XfaText = XfaText;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.NodeStandardFontDataFactory = exports.NodeCanvasFactory = exports.NodeCMapReaderFactory = void 0;
+exports.NodeStandardFontDataFactory = exports.NodeFilterFactory = exports.NodeCanvasFactory = exports.NodeCMapReaderFactory = void 0;
 var _base_factory = __w_pdfjs_require__(7);
 ;
 const fetchData = function (url) {
@@ -8792,6 +8907,8 @@ const fetchData = function (url) {
     });
   });
 };
+class NodeFilterFactory extends _base_factory.BaseFilterFactory {}
+exports.NodeFilterFactory = NodeFilterFactory;
 class NodeCanvasFactory extends _base_factory.BaseCanvasFactory {
   _createCanvas(width, height) {
     const Canvas = require("canvas");
@@ -9342,7 +9459,7 @@ function getFilenameFromContentDispositionHeader(contentDisposition) {
           parts[i] = parts[i].slice(0, quotindex);
           parts.length = i + 1;
         }
-        parts[i] = parts[i].replace(/\\(.)/g, "$1");
+        parts[i] = parts[i].replaceAll(/\\(.)/g, "$1");
       }
       value = parts.join('"');
     }
@@ -9362,10 +9479,10 @@ function getFilenameFromContentDispositionHeader(contentDisposition) {
     if (!value.startsWith("=?") || /[\x00-\x19\x80-\xff]/.test(value)) {
       return value;
     }
-    return value.replace(/=\?([\w-]*)\?([QqBb])\?((?:[^?]|\?(?!=))*)\?=/g, function (matches, charset, encoding, text) {
+    return value.replaceAll(/=\?([\w-]*)\?([QqBb])\?((?:[^?]|\?(?!=))*)\?=/g, function (matches, charset, encoding, text) {
       if (encoding === "q" || encoding === "Q") {
-        text = text.replace(/_/g, " ");
-        text = text.replace(/=([0-9a-fA-F]{2})/g, function (match, hex) {
+        text = text.replaceAll("_", " ");
+        text = text.replaceAll(/=([0-9a-fA-F]{2})/g, function (match, hex) {
           return String.fromCharCode(parseInt(hex, 16));
         });
         return textdecode(charset, text);
@@ -10353,6 +10470,16 @@ function renderTextLayer(params) {
     (0, _display_utils.deprecated)("The TextLayerRender `textContent`/`textContentStream` parameters " + "will be removed in the future, please use `textContentSource` instead.");
     params.textContentSource = params.textContent || params.textContentStream;
   }
+  const {
+    container,
+    viewport
+  } = params;
+  const style = getComputedStyle(container);
+  const visibility = style.getPropertyValue("visibility");
+  const scaleFactor = parseFloat(style.getPropertyValue("--scale-factor"));
+  if (visibility === "visible" && (!scaleFactor || Math.abs(scaleFactor - viewport.scale) > 1e-15)) {
+    console.error("The `--scale-factor` CSS-variable must be set, " + "to the same value as `viewport.scale`, " + "either on the `container`-element itself or higher up in the DOM.");
+  }
   const task = new TextLayerRenderTask(params);
   task._render();
   return task;
@@ -11089,7 +11216,6 @@ var _editor = __w_pdfjs_require__(4);
 var _pdfjsFitCurve = __w_pdfjs_require__(30);
 var _tools = __w_pdfjs_require__(5);
 const RESIZER_SIZE = 16;
-const TIME_TO_WAIT_BEFORE_FIXING_DIMS = 100;
 class InkEditor extends _editor.AnnotationEditor {
   #aspectRatio = 0;
   #baseHeight = 0;
@@ -11482,17 +11608,9 @@ class InkEditor extends _editor.AnnotationEditor {
     this.ctx = this.canvas.getContext("2d", options);
   }
   #createObserver() {
-    let timeoutId = null;
     this.#observer = new ResizeObserver(entries => {
       const rect = entries[0].contentRect;
       if (rect.width && rect.height) {
-        if (timeoutId !== null) {
-          clearTimeout(timeoutId);
-        }
-        timeoutId = setTimeout(() => {
-          this.fixDims();
-          timeoutId = null;
-        }, TIME_TO_WAIT_BEFORE_FIXING_DIMS);
         this.setDimensions(rect.width, rect.height);
       }
     });
@@ -11560,6 +11678,7 @@ class InkEditor extends _editor.AnnotationEditor {
     this.#setCanvasDims();
     this.#redraw();
     this.canvas.style.visibility = "visible";
+    this.fixDims();
   }
   #setScaleFactor(width, height) {
     const padding = this.#getPadding();
@@ -12196,6 +12315,9 @@ class AnnotationElement {
     } = this;
     const container = document.createElement("section");
     container.setAttribute("data-annotation-id", data.id);
+    if (data.noRotate) {
+      container.classList.add("norotate");
+    }
     const {
       pageWidth,
       pageHeight,
@@ -12287,19 +12409,19 @@ class AnnotationElement {
       display: event => {
         const hidden = event.detail.display % 2 === 1;
         this.container.style.visibility = hidden ? "hidden" : "visible";
-        this.annotationStorage.setValue(this.data.id, this.data.fieldName, {
+        this.annotationStorage.setValue(this.data.id, {
           hidden,
           print: event.detail.display === 0 || event.detail.display === 3
         });
       },
       print: event => {
-        this.annotationStorage.setValue(this.data.id, this.data.fieldName, {
+        this.annotationStorage.setValue(this.data.id, {
           print: event.detail.print
         });
       },
       hidden: event => {
         this.container.style.visibility = event.detail.hidden ? "hidden" : "visible";
-        this.annotationStorage.setValue(this.data.id, this.data.fieldName, {
+        this.annotationStorage.setValue(this.data.id, {
           hidden: event.detail.hidden
         });
       },
@@ -12342,7 +12464,7 @@ class AnnotationElement {
       rotation: event => {
         const angle = event.detail.rotation;
         this.setRotation(angle);
-        this.annotationStorage.setValue(this.data.id, this.data.fieldName, {
+        this.annotationStorage.setValue(this.data.id, {
           rotation: angle
         });
       }
@@ -12399,7 +12521,7 @@ class AnnotationElement {
     }
     if (!trigger) {
       trigger = document.createElement("div");
-      trigger.className = "popupTriggerArea";
+      trigger.classList.add("popupTriggerArea");
       container.append(trigger);
     }
     const popupElement = new PopupElement({
@@ -12418,7 +12540,7 @@ class AnnotationElement {
   }
   _renderQuadrilaterals(className) {
     for (const quadrilateral of this.quadrilaterals) {
-      quadrilateral.className = className;
+      quadrilateral.classList.add(className);
     }
     return this.quadrilaterals;
   }
@@ -12528,7 +12650,7 @@ class LinkAnnotationElement extends AnnotationElement {
         return quadrilateral;
       });
     }
-    this.container.className = "linkAnnotation";
+    this.container.classList.add("linkAnnotation");
     if (isBound) {
       this.container.append(link);
     }
@@ -12651,7 +12773,10 @@ class LinkAnnotationElement extends AnnotationElement {
           case "text":
             {
               const value = field.defaultValue || "";
-              storage.setValue(id, this.data.fieldName, {
+              storage.setValue(id, {
+                value
+              });
+              window.updateAngularFormValue(id, {
                 value
               });
               break;
@@ -12660,7 +12785,10 @@ class LinkAnnotationElement extends AnnotationElement {
           case "radiobutton":
             {
               const value = field.defaultValue === field.exportValues;
-              storage.setValue(id, this.data.fieldName, {
+              storage.setValue(id, {
+                value
+              });
+              window.updateAngularFormValue(id, {
                 value
               });
               break;
@@ -12669,7 +12797,10 @@ class LinkAnnotationElement extends AnnotationElement {
           case "listbox":
             {
               const value = field.defaultValue || "";
-              storage.setValue(id, this.data.fieldName, {
+              storage.setValue(id, {
+                value
+              });
+              window.updateAngularFormValue(id, {
                 value
               });
               break;
@@ -12708,7 +12839,7 @@ class TextAnnotationElement extends AnnotationElement {
     });
   }
   render() {
-    this.container.className = "textAnnotation";
+    this.container.classList.add("textAnnotation");
     const image = document.createElement("img");
     image.src = this.imageResourcesPath + "annotation-" + this.data.name.toLowerCase() + ".svg";
     image.alt = "[{{type}} Annotation]";
@@ -12822,7 +12953,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
       if (element.domElement) {
         element.domElement[key] = value;
       }
-      storage.setValue(element.id, this.data.fieldName, {
+      storage.setValue(element.id, {
         [keyInStorage]: value
       });
     }
@@ -12830,14 +12961,15 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
   render() {
     const storage = this.annotationStorage;
     const id = this.data.id;
-    this.container.className = "textWidgetAnnotation";
+    this.container.classList.add("textWidgetAnnotation");
     let element = null;
     if (this.renderForms) {
-      const storedData = storage.getValue(id, this.data.fieldName, {
+      const angularData = window.getFormValueFromAngular(this.data.fieldName);
+      const storedData = angularData.value ? angularData : storage.getValue(id, {
         value: this.data.fieldValue
       });
       let textContent = storedData.formattedValue || storedData.value || "";
-      const maxLen = storage.getValue(id, this.data.fieldName, {
+      const maxLen = storage.getValue(id, {
         charLimit: this.data.maxLen
       }).charLimit;
       if (maxLen && textContent.length > maxLen) {
@@ -12873,7 +13005,10 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
         element.maxLength = maxLen;
       }
       element.addEventListener("input", event => {
-        storage.setValue(id, this.data.fieldName, {
+        storage.setValue(id, {
+          value: event.target.value
+        });
+        window.updateAngularFormValue(id, {
           value: event.target.value
         });
         this.setPropertyOnSiblings(element, "value", event.target.value, "value");
@@ -12892,6 +13027,10 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
         }
         event.target.scrollLeft = 0;
       };
+      window.registerAcroformField(id, element, storedData.value);
+      element.addEventListener("updateFromAngular", newvalue => storage.setValue(id, {
+        value: newvalue.detail
+      }));
       if (this.enableScripting && this.hasJSActions) {
         element.addEventListener("focus", event => {
           const {
@@ -12903,12 +13042,14 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
           elementData.lastCommittedValue = target.value;
           elementData.commitKey = 1;
         });
-        const fieldName = this.data.fieldName;
         element.addEventListener("updatefromsandbox", jsEvent => {
           const actions = {
             value(event) {
               elementData.userValue = event.detail.value ?? "";
-              storage.setValue(id, fieldName, {
+              storage.setValue(id, {
+                value: elementData.userValue.toString()
+              });
+              window.updateAngularFormValue(id, {
                 value: elementData.userValue.toString()
               });
               event.target.value = elementData.userValue;
@@ -12921,7 +13062,10 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
               if (formattedValue !== null && formattedValue !== undefined && event.target !== document.activeElement) {
                 event.target.value = formattedValue;
               }
-              storage.setValue(id, fieldName, {
+              storage.setValue(id, {
+                formattedValue
+              });
+              window.updateAngularFormValue(id, {
                 formattedValue
               });
             },
@@ -12946,7 +13090,10 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
               }
               value = value.slice(0, charLimit);
               target.value = elementData.userValue = value;
-              storage.setValue(id, this.data.fieldName, {
+              storage.setValue(id, {
+                value
+              });
+              window.updateAngularFormValue(id, {
                 value
               });
               this.linkService.eventBus?.dispatch("dispatcheventinsandbox", {
@@ -13116,16 +13263,24 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
     const storage = this.annotationStorage;
     const data = this.data;
     const id = data.id;
-    let value = storage.getValue(id, `${this.data.fieldName}/${this.data.exportValue}`, {
+    const angularData = window.getFormValueFromAngular(this.data.fieldName);
+    let angularValue = undefined;
+    if (angularData) {
+      angularValue = angularData.value === true || angularData.value === data.exportValue;
+    }
+    let value = angularValue !== undefined ? angularValue : storage.getValue(id, {
       value: data.exportValue === data.fieldValue
     }).value;
     if (typeof value === "string") {
       value = value !== "Off";
-      storage.setValue(id, this.data.fieldName, {
+      storage.setValue(id, {
+        value
+      });
+      window.updateAngularFormValue(id, {
         value
       });
     }
-    this.container.className = "buttonWidgetAnnotation checkBox";
+    this.container.classList.add("buttonWidgetAnnotation", "checkBox");
     const element = document.createElement("input");
     GetElementsByNameSet.add(element);
     element.setAttribute("data-element-id", id);
@@ -13148,28 +13303,38 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
         if (checkbox.domElement) {
           checkbox.domElement.checked = curChecked;
         }
-        storage.setValue(checkbox.id, this.data.fieldName, {
-          value: curChecked,
-          emitMessage: false
+        storage.setValue(checkbox.id, {
+          value: curChecked
+        });
+        window.updateAngularFormValue(id, {
+          value: curChecked
         });
       }
-      storage.setValue(id, this.data.fieldName, {
-        value: checked,
-        exportValue: checked ? data.exportValue : null
+      storage.setValue(id, {
+        value: checked
+      });
+      window.updateAngularFormValue(id, {
+        value: checked
       });
     });
     element.addEventListener("resetform", event => {
       const defaultValue = data.defaultFieldValue || "Off";
       event.target.checked = defaultValue === data.exportValue;
     });
+    window.registerAcroformField(id, element, value ? data.exportValue : false);
+    element.addEventListener("updateFromAngular", newvalue => storage.setValue(id, {
+      value: newvalue.detail
+    }));
     if (this.enableScripting && this.hasJSActions) {
-      const fieldName = this.data.fieldName;
       element.addEventListener("updatefromsandbox", jsEvent => {
         const actions = {
           value(event) {
             event.target.checked = event.detail.value !== "Off";
-            storage.setValue(id, fieldName, {
+            storage.setValue(id, {
               value: event.target.checked
+            });
+            window.updateAngularFormValue(id, {
+              value: event.target.value
             });
           }
         };
@@ -13190,18 +13355,23 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
     });
   }
   render() {
-    this.container.className = "buttonWidgetAnnotation radioButton";
+    this.container.classList.add("buttonWidgetAnnotation", "radioButton");
     const storage = this.annotationStorage;
     const data = this.data;
     const id = data.id;
-    let value = storage.getValue(id, this.data.fieldName, {
+    const angularData = window.getFormValueFromAngular(this.data.fieldName);
+    let value = angularData.value ?? storage.getValue(id, {
       value: data.fieldValue === data.buttonValue
-    }, this.data.buttonValue).value;
+    }).value;
     if (typeof value === "string") {
-      value = value !== data.buttonValue;
-      storage.setValue(id, this.data.fieldName, {
+      value = value === data.buttonValue;
+      storage.setValue(id, {
         value
-      }, this.data.buttonValue);
+      });
+    } else if (value) {
+      window.updateAngularFormValue(id, {
+        value: data.buttonValue
+      });
     }
     const element = document.createElement("input");
     GetElementsByNameSet.add(element);
@@ -13220,24 +13390,31 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
         checked
       } = event.target;
       for (const radio of this._getElementsByName(name, id)) {
-        storage.setValue(radio.id, this.data.fieldName, {
-          value: false,
-          emitMessage: false
+        storage.setValue(radio.id, {
+          value: false
+        });
+        window.updateAngularFormValue(radio.id, {
+          value: false
         });
       }
-      storage.setValue(id, this.data.fieldName, {
-        value: checked,
-        radioValue: this.data.buttonValue
+      storage.setValue(id, {
+        value: checked
+      });
+      window.updateAngularFormValue(id, {
+        value: checked
       });
     });
     element.addEventListener("resetform", event => {
       const defaultValue = data.defaultFieldValue;
       event.target.checked = defaultValue !== null && defaultValue !== undefined && defaultValue === data.buttonValue;
     });
+    window.registerAcroformField(id, element, value ? data.buttonValue : undefined, data.buttonValue);
+    element.addEventListener("updateFromAngular", newvalue => storage.setValue(id, {
+      value: newvalue.detail
+    }));
     if (this.enableScripting && this.hasJSActions) {
       const pdfButtonValue = data.buttonValue;
       element.addEventListener("updatefromsandbox", jsEvent => {
-        const fieldName = this.data.fieldName;
         const actions = {
           value: event => {
             const checked = pdfButtonValue === event.detail.value;
@@ -13246,7 +13423,10 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
               if (radio.domElement) {
                 radio.domElement.checked = curChecked;
               }
-              storage.setValue(radio.id, fieldName, {
+              storage.setValue(radio.id, {
+                value: curChecked
+              });
+              window.updateAngularFormValue(id, {
                 value: curChecked
               });
             }
@@ -13270,7 +13450,7 @@ class PushButtonWidgetAnnotationElement extends LinkAnnotationElement {
   }
   render() {
     const container = super.render();
-    container.className = "buttonWidgetAnnotation pushButton";
+    container.classList.add("buttonWidgetAnnotation", "pushButton");
     if (this.data.alternativeText) {
       container.title = this.data.alternativeText;
     }
@@ -13291,10 +13471,11 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
     });
   }
   render() {
-    this.container.className = "choiceWidgetAnnotation";
+    this.container.classList.add("choiceWidgetAnnotation");
     const storage = this.annotationStorage;
     const id = this.data.id;
-    const storedData = storage.getValue(id, this.data.fieldName, {
+    const angularData = window.getFormValueFromAngular(this.data.fieldName);
+    const storedData = angularData.value ? angularData : storage.getValue(id, {
       value: this.data.fieldValue
     });
     const selectElement = document.createElement("select");
@@ -13362,9 +13543,12 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
         };
       });
     };
+    window.registerAcroformField(id, selectElement, selectedValues);
+    selectElement.addEventListener("updateFromAngular", newvalue => storage.setValue(id, {
+      value: newvalue.detail
+    }));
     if (this.enableScripting && this.hasJSActions) {
       selectElement.addEventListener("updatefromsandbox", jsEvent => {
-        const fieldName = this.data.fieldName;
         const actions = {
           value(event) {
             removeEmptyEntry?.();
@@ -13373,10 +13557,13 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
             for (const option of selectElement.options) {
               option.selected = values.has(option.value);
             }
-            storage.setValue(id, fieldName, {
+            storage.setValue(id, {
               value: getValue(true)
             });
             selectedValues = getValue(false);
+            window.updateAngularFormValue(id, {
+              value: selectedValues
+            });
           },
           multipleSelection(event) {
             selectElement.multiple = true;
@@ -13392,7 +13579,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
                 options[0].selected = true;
               }
             }
-            storage.setValue(id, fieldName, {
+            storage.setValue(id, {
               value: getValue(true),
               items: getItems(event)
             });
@@ -13402,11 +13589,14 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
             while (selectElement.length !== 0) {
               selectElement.remove(0);
             }
-            storage.setValue(id, fieldName, {
+            storage.setValue(id, {
               value: null,
               items: []
             });
             selectedValues = getValue(false);
+            window.updateAngularFormValue(id, {
+              value: selectedValues
+            });
           },
           insert(event) {
             const {
@@ -13423,11 +13613,14 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
             } else {
               selectElement.append(optionElement);
             }
-            storage.setValue(id, fieldName, {
+            storage.setValue(id, {
               value: getValue(true),
               items: getItems(event)
             });
             selectedValues = getValue(false);
+            window.updateAngularFormValue(id, {
+              value: selectedValues
+            });
           },
           items(event) {
             const {
@@ -13449,21 +13642,27 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
             if (selectElement.options.length > 0) {
               selectElement.options[0].selected = true;
             }
-            storage.setValue(id, fieldName, {
+            storage.setValue(id, {
               value: getValue(true),
               items: getItems(event)
             });
             selectedValues = getValue(false);
+            window.updateAngularFormValue(id, {
+              value: selectedValues
+            });
           },
           indices(event) {
             const indices = new Set(event.detail.indices);
             for (const option of event.target.options) {
               option.selected = indices.has(option.index);
             }
-            storage.setValue(id, fieldName, {
+            storage.setValue(id, {
               value: getValue(true)
             });
             selectedValues = getValue(false);
+            window.updateAngularFormValue(id, {
+              value: selectedValues
+            });
           },
           editable(event) {
             event.target.disabled = !event.detail.editable;
@@ -13474,6 +13673,9 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
       selectElement.addEventListener("input", event => {
         const exportValue = getValue(true);
         storage.setValue(id, {
+          value: exportValue
+        });
+        window.updateAngularFormValue(id, {
           value: exportValue
         });
         event.preventDefault();
@@ -13492,11 +13694,12 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
       });
       this._setEventListeners(selectElement, [["focus", "Focus"], ["blur", "Blur"], ["mousedown", "Mouse Down"], ["mouseenter", "Mouse Enter"], ["mouseleave", "Mouse Exit"], ["mouseup", "Mouse Up"], ["input", "Action"], ["input", "Validate"]], event => event.target.value);
     } else {
-      const fieldName = this.data.fieldName;
       selectElement.addEventListener("input", function (event) {
-        storage.setValue(id, fieldName, {
-          value: getValue(true),
-          radioValue: getValue(true)
+        storage.setValue(id, {
+          value: getValue(true)
+        });
+        window.updateAngularFormValue(id, {
+          value: getValue(true)
         });
       });
     }
@@ -13521,7 +13724,7 @@ class PopupAnnotationElement extends AnnotationElement {
     });
   }
   render() {
-    this.container.className = "popupAnnotation";
+    this.container.classList.add("popupAnnotation");
     const parentElements = this.layer.querySelectorAll(`[data-annotation-id="${this.data.parentId}"]`);
     if (parentElements.length === 0) {
       return this.container;
@@ -13566,11 +13769,11 @@ class PopupElement {
   render() {
     const BACKGROUND_ENLIGHT = 0.7;
     const wrapper = document.createElement("div");
-    wrapper.className = "popupWrapper";
+    wrapper.classList.add("popupWrapper");
     this.hideElement = this.hideWrapper ? wrapper : this.container;
     this.hideElement.hidden = true;
     const popup = document.createElement("div");
-    popup.className = "popup";
+    popup.classList.add("popup");
     const color = this.color;
     if (color) {
       const r = BACKGROUND_ENLIGHT * (255 - color[0]) + color[0];
@@ -13585,7 +13788,7 @@ class PopupElement {
     const dateObject = _display_utils.PDFDateString.toDateObject(this.modificationDate);
     if (dateObject) {
       const modificationDate = document.createElement("span");
-      modificationDate.className = "popupDate";
+      modificationDate.classList.add("popupDate");
       modificationDate.textContent = "{{date}}, {{time}}";
       modificationDate.dataset.l10nId = "annotation_date_string";
       modificationDate.dataset.l10nArgs = JSON.stringify({
@@ -13600,7 +13803,7 @@ class PopupElement {
         intent: "richText",
         div: popup
       });
-      popup.lastChild.className = "richText popupContent";
+      popup.lastChild.classList.add("richText", "popupContent");
     } else {
       const contents = this._formatContents(this.contentsObj);
       popup.append(contents);
@@ -13609,9 +13812,9 @@ class PopupElement {
       this.trigger = [this.trigger];
     }
     for (const element of this.trigger) {
-      element?.addEventListener("click", this._toggle.bind(this));
-      element?.addEventListener("mouseover", this._show.bind(this, false));
-      element?.addEventListener("mouseout", this._hide.bind(this, false));
+      element.addEventListener("click", this._toggle.bind(this));
+      element.addEventListener("mouseover", this._show.bind(this, false));
+      element.addEventListener("mouseout", this._hide.bind(this, false));
     }
     popup.addEventListener("click", this._hide.bind(this, true));
     wrapper.append(popup);
@@ -13622,7 +13825,7 @@ class PopupElement {
     dir
   }) {
     const p = document.createElement("p");
-    p.className = "popupContent";
+    p.classList.add("popupContent");
     p.dir = dir;
     const lines = str.split(/(?:\r\n?|\n)/);
     for (let i = 0, ii = lines.length; i < ii; ++i) {
@@ -13670,10 +13873,10 @@ class FreeTextAnnotationElement extends AnnotationElement {
     this.textContent = parameters.data.textContent;
   }
   render() {
-    this.container.className = "freeTextAnnotation";
+    this.container.classList.add("freeTextAnnotation");
     if (this.textContent) {
       const content = document.createElement("div");
-      content.className = "annotationTextContent";
+      content.classList.add("annotationTextContent");
       content.setAttribute("role", "comment");
       for (const line of this.textContent) {
         const lineSpan = document.createElement("span");
@@ -13697,7 +13900,7 @@ class LineAnnotationElement extends AnnotationElement {
     });
   }
   render() {
-    this.container.className = "lineAnnotation";
+    this.container.classList.add("lineAnnotation");
     const data = this.data;
     const {
       width,
@@ -13727,7 +13930,7 @@ class SquareAnnotationElement extends AnnotationElement {
     });
   }
   render() {
-    this.container.className = "squareAnnotation";
+    this.container.classList.add("squareAnnotation");
     const data = this.data;
     const {
       width,
@@ -13758,7 +13961,7 @@ class CircleAnnotationElement extends AnnotationElement {
     });
   }
   render() {
-    this.container.className = "circleAnnotation";
+    this.container.classList.add("circleAnnotation");
     const data = this.data;
     const {
       width,
@@ -13791,7 +13994,7 @@ class PolylineAnnotationElement extends AnnotationElement {
     this.svgElementName = "svg:polyline";
   }
   render() {
-    this.container.className = this.containerClassName;
+    this.container.classList.add(this.containerClassName);
     const data = this.data;
     const {
       width,
@@ -13832,7 +14035,7 @@ class CaretAnnotationElement extends AnnotationElement {
     });
   }
   render() {
-    this.container.className = "caretAnnotation";
+    this.container.classList.add("caretAnnotation");
     if (!this.data.hasPopup) {
       this._createPopup(null, this.data);
     }
@@ -13850,7 +14053,7 @@ class InkAnnotationElement extends AnnotationElement {
     this.svgElementName = "svg:polyline";
   }
   render() {
-    this.container.className = this.containerClassName;
+    this.container.classList.add(this.containerClassName);
     const data = this.data;
     const {
       width,
@@ -13893,7 +14096,7 @@ class HighlightAnnotationElement extends AnnotationElement {
     if (this.quadrilaterals) {
       return this._renderQuadrilaterals("highlightAnnotation");
     }
-    this.container.className = "highlightAnnotation";
+    this.container.classList.add("highlightAnnotation");
     return this.container;
   }
 }
@@ -13913,7 +14116,7 @@ class UnderlineAnnotationElement extends AnnotationElement {
     if (this.quadrilaterals) {
       return this._renderQuadrilaterals("underlineAnnotation");
     }
-    this.container.className = "underlineAnnotation";
+    this.container.classList.add("underlineAnnotation");
     return this.container;
   }
 }
@@ -13933,7 +14136,7 @@ class SquigglyAnnotationElement extends AnnotationElement {
     if (this.quadrilaterals) {
       return this._renderQuadrilaterals("squigglyAnnotation");
     }
-    this.container.className = "squigglyAnnotation";
+    this.container.classList.add("squigglyAnnotation");
     return this.container;
   }
 }
@@ -13953,7 +14156,7 @@ class StrikeOutAnnotationElement extends AnnotationElement {
     if (this.quadrilaterals) {
       return this._renderQuadrilaterals("strikeoutAnnotation");
     }
-    this.container.className = "strikeoutAnnotation";
+    this.container.classList.add("strikeoutAnnotation");
     return this.container;
   }
 }
@@ -13966,7 +14169,7 @@ class StampAnnotationElement extends AnnotationElement {
     });
   }
   render() {
-    this.container.className = "stampAnnotation";
+    this.container.classList.add("stampAnnotation");
     if (!this.data.hasPopup) {
       this._createPopup(null, this.data);
     }
@@ -13991,7 +14194,7 @@ class FileAttachmentAnnotationElement extends AnnotationElement {
     });
   }
   render() {
-    this.container.className = "fileAttachmentAnnotation";
+    this.container.classList.add("fileAttachmentAnnotation");
     let trigger;
     if (this.data.hasAppearance) {
       trigger = document.createElement("div");
@@ -13999,7 +14202,7 @@ class FileAttachmentAnnotationElement extends AnnotationElement {
       trigger = document.createElement("img");
       trigger.src = `${this.imageResourcesPath}annotation-${/paperclip/i.test(this.data.name) ? "paperclip" : "pushpin"}.svg`;
     }
-    trigger.className = "popupTriggerArea";
+    trigger.classList.add("popupTriggerArea");
     trigger.addEventListener("dblclick", this._download.bind(this));
     if (!this.data.hasPopup && (this.data.titleObj?.str || this.data.contentsObj?.str || this.data.richText)) {
       this._createPopup(trigger, this.data);
@@ -14042,10 +14245,10 @@ class AnnotationLayer {
       fieldObjects: params.fieldObjects
     };
     let zIndex = 0;
-    if (window.registerAcroformAnnotations) {
-      window.registerAcroformAnnotations(annotations);
-    }
     for (const data of annotations) {
+      if (data.noHTML) {
+        continue;
+      }
       if (data.annotationType !== _util.AnnotationType.POPUP) {
         const {
           width,
@@ -14186,18 +14389,14 @@ exports.XfaLayer = void 0;
 var _xfa_text = __w_pdfjs_require__(19);
 class XfaLayer {
   static setupStorage(html, id, element, storage, intent) {
-    let fieldname = id;
-    let ancestor = html;
-    while (ancestor) {
-      if (ancestor.getAttribute("xfaname")) {
-        fieldname = ancestor.getAttribute("xfaname");
-        break;
-      }
-      ancestor = ancestor.parentElement;
-    }
-    const storedData = storage.getValue(id, fieldname, {
+    const angularData = window.getFormValueFromAngular(html);
+    const storedData = angularData.value ? angularData : storage.getValue(id, {
       value: null
     });
+    window.registerXFAField(html, storedData);
+    html.addEventListener("updateFromAngular", value => storage.setValue(id, {
+      value: value.detail
+    }));
     switch (element.name) {
       case "textarea":
         if (storedData.value !== null) {
@@ -14207,7 +14406,10 @@ class XfaLayer {
           break;
         }
         html.addEventListener("input", event => {
-          storage.setValue(id, fieldname, {
+          window.updateAngularFormValue(html, {
+            value: event.target.value
+          });
+          storage.setValue(id, {
             value: event.target.value
           });
         });
@@ -14223,7 +14425,10 @@ class XfaLayer {
             break;
           }
           html.addEventListener("change", event => {
-            storage.setValue(id, fieldname, {
+            window.updateAngularFormValue(html, {
+              value: event.target.checked ? event.target.getAttribute("xfaOn") : event.target.getAttribute("xfaOff")
+            });
+            storage.setValue(id, {
               value: event.target.checked ? event.target.getAttribute("xfaOn") : event.target.getAttribute("xfaOff")
             });
           });
@@ -14235,7 +14440,10 @@ class XfaLayer {
             break;
           }
           html.addEventListener("input", event => {
-            storage.setValue(id, fieldname, {
+            window.updateAngularFormValue(html, {
+              value: event.target.value
+            });
+            storage.setValue(id, {
               value: event.target.value
             });
           });
@@ -14252,7 +14460,10 @@ class XfaLayer {
         html.addEventListener("input", event => {
           const options = event.target.options;
           const value = options.selectedIndex === -1 ? "" : options[options.selectedIndex].value;
-          storage.setValue(id, fieldname, {
+          window.updateAngularFormValue(html, {
+            value
+          });
+          storage.setValue(id, {
             value
           });
         });
@@ -15812,12 +16023,6 @@ Object.defineProperty(exports, "SVGGraphics", ({
     return _svg.SVGGraphics;
   }
 }));
-Object.defineProperty(exports, "UNSUPPORTED_FEATURES", ({
-  enumerable: true,
-  get: function () {
-    return _util.UNSUPPORTED_FEATURES;
-  }
-}));
 Object.defineProperty(exports, "UnexpectedResponseException", ({
   enumerable: true,
   get: function () {
@@ -15942,8 +16147,8 @@ var _annotation_layer = __w_pdfjs_require__(32);
 var _worker_options = __w_pdfjs_require__(14);
 var _svg = __w_pdfjs_require__(35);
 var _xfa_layer = __w_pdfjs_require__(34);
-const pdfjsVersion = '3.4.494';
-const pdfjsBuild = '4dc51f005';
+const pdfjsVersion = '3.5.526';
+const pdfjsBuild = 'ffbe26d49';
 })();
 
 /******/ 	return __webpack_exports__;
