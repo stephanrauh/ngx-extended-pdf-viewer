@@ -147,8 +147,7 @@ export class NgxFormSupport {
     return fieldName.substring(0, fieldName.length - 1);
   }
 
-  private updateAngularFormValueCalledByPdfjs(key: string | HTMLElement, value: { value: string }): void {
-    let change = false;
+  private updateAngularFormValueCalledByPdfjs(key: string | HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement, value: { value: string }): void {
     if (!this.formData) {
       this.formData = {};
     }
@@ -158,40 +157,7 @@ export class NgxFormSupport {
       const fullKey = acroFormKey ?? Object.values(this.formIdToFullFieldName).find((k) => k === key || k.endsWith('.' + key));
       if (fullKey) {
         const field = this.formIdToField[key];
-        if (field instanceof HTMLInputElement && field.type === 'checkbox') {
-          const exportValue = field.getAttribute('exportvalue');
-          if (exportValue) {
-            if (value.value) {
-              if (this.formData[fullKey] !== exportValue) {
-                this.formData[fullKey] = exportValue;
-                change = true;
-              }
-            } else {
-              if (this.formData[fullKey] !== false) {
-                this.formData[fullKey] = false;
-                change = true;
-              }
-            }
-          } else {
-            if (this.formData[fullKey] !== value.value) {
-              this.formData[fullKey] = value.value;
-              change = true;
-            }
-          }
-        } else if (field instanceof HTMLInputElement && field.type === 'radio') {
-          const exportValue = this.formIdToField[key].getAttribute('exportvalue');
-          if (value.value) {
-            if (this.formData[fullKey] !== exportValue) {
-              this.formData[fullKey] = exportValue;
-              change = true;
-            }
-          }
-        } else {
-          if (this.formData[fullKey] !== value.value) {
-            this.formData[fullKey] = value.value;
-            change = true;
-          }
-        }
+        let change = this.doUpdateAngularFormValue(field, value, fullKey);
         if (change) {
           this.ngZone.run(() => this.formDataChange.emit(this.formData));
         }
@@ -199,8 +165,58 @@ export class NgxFormSupport {
         console.error("Couldn't find the field with the name " + key);
       }
     } else {
-      console.error('TODO');
+      let change = false;
+      const shortFieldName = this.findXFAName(key);
+      if (this.formData.hasOwnProperty(shortFieldName)) {
+        change = this.doUpdateAngularFormValue(key, value, shortFieldName);
+      }
+      const fullFieldName = this.findFullXFAName(key);
+      if (fullFieldName !== shortFieldName) {
+        change ||= this.doUpdateAngularFormValue(key, value, fullFieldName);
+      }
+      if (change) {
+        this.ngZone.run(() => this.formDataChange.emit(this.formData));
+      }
     }
+  }
+
+  private doUpdateAngularFormValue(field: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, value: { value: string }, fullKey: string) {
+    let change = false;
+    if (field instanceof HTMLInputElement && field.type === 'checkbox') {
+      const exportValue = field.getAttribute('exportvalue');
+      if (exportValue) {
+        if (value.value) {
+          if (this.formData[fullKey] !== exportValue) {
+            this.formData[fullKey] = exportValue;
+            change = true;
+          }
+        } else {
+          if (this.formData[fullKey] !== false) {
+            this.formData[fullKey] = false;
+            change = true;
+          }
+        }
+      } else {
+        if (this.formData[fullKey] !== value.value) {
+          this.formData[fullKey] = value.value;
+          change = true;
+        }
+      }
+    } else if (field instanceof HTMLInputElement && field.type === 'radio') {
+      const exportValue = field.getAttribute('exportvalue') ?? field.getAttribute('xfaon');
+      if (value.value) {
+        if (this.formData[fullKey] !== exportValue) {
+          this.formData[fullKey] = exportValue;
+          change = true;
+        }
+      }
+    } else {
+      if (this.formData[fullKey] !== value.value) {
+        this.formData[fullKey] = value.value;
+        change = true;
+      }
+    }
+    return change;
   }
 
   public updateFormFieldsInPdfCalledByNgOnChanges(previousFormData: Object) {
