@@ -108,7 +108,11 @@ export class NgxFormSupport {
     if (element instanceof HTMLElement) {
       const fieldName = this.findXFAName(element);
       if (fieldName) {
-        key = fieldName;
+        if (this.formData.hasOwnProperty(fieldName)) {
+          key = fieldName;
+        } else {
+          key = this.findFullXFAName(element);
+        }
       } else {
         console.error("Couldn't find the field name or XFA name of the form field", element);
         return { value: null };
@@ -120,11 +124,16 @@ export class NgxFormSupport {
   }
 
   private findXFAName(element: HTMLElement): string {
-    let parentElement = element;
+    let parentElement: HTMLElement | null | undefined = element;
     while (!parentElement.getAttribute('xfaname') && parentElement.parentElement) {
       parentElement = parentElement.parentElement;
     }
-    let fieldName = parentElement.getAttribute('xfaname');
+    if (element instanceof HTMLInputElement && element.type === 'radio') {
+      do {
+        parentElement = parentElement?.parentElement;
+      } while (!parentElement?.getAttribute('xfaname') && parentElement);
+    }
+    let fieldName = parentElement?.getAttribute('xfaname');
     if (!fieldName) {
       throw new Error("Couldn't find the xfaname of the field");
     }
@@ -144,7 +153,12 @@ export class NgxFormSupport {
     if (!fieldName) {
       throw new Error("Couldn't find the xfaname of the field");
     }
-    return fieldName.substring(0, fieldName.length - 1);
+    fieldName = fieldName.substring(0, fieldName.length - 1);
+    if (element instanceof HTMLInputElement && element.type === 'radio') {
+      // ignore the last part of the xfaName because it's actually the value of the field
+      return fieldName.substring(0, fieldName.lastIndexOf('.'));
+    }
+    return fieldName;
   }
 
   private updateAngularFormValueCalledByPdfjs(key: string | HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement, value: { value: string }): void {
@@ -256,7 +270,10 @@ export class NgxFormSupport {
   private setFieldValueAndUpdateAnnotationStorage(key: string, newValue: any) {
     const radios = this.findRadioButtonGroup(key);
     if (radios) {
-      radios.forEach((r) => (r.checked = r.getAttribute('exportValue') === newValue));
+      radios.forEach((r) => {
+        const activeValue = r.getAttribute('exportValue') ?? r.getAttribute('xfaon');
+        r.checked = activeValue === newValue;
+      });
       const updateFromAngular = new CustomEvent('updateFromAngular', {
         detail: newValue,
       });
@@ -313,10 +330,12 @@ export class NgxFormSupport {
     const matchingEntries = Object.entries(this.formIdToFullFieldName).filter((entry) => entry[1] === fieldName || entry[1].endsWith('.' + fieldName));
     if (matchingEntries.length > 1) {
       console.log(
-        `More than one field name matches the field name ${fieldName}. Please use the one of the qualified field name.`,
+        `More than one field name matches the field name ${fieldName}. Please use the one of these qualified field names:`,
         matchingEntries.map((f) => f[1])
       );
-      console.log('ngx-extended-pdf-viewer uses the first matching field (which may not be the topmost field on your PDF form): ' + matchingEntries[0][0]);
+      console.log(
+        'ngx-extended-pdf-viewer uses the first matching field (which may or may not be the topmost field on your PDF form): ' + matchingEntries[0][0]
+      );
     } else if (matchingEntries.length === 0) {
       console.log("Couldn't find the field " + fieldName);
       return undefined;

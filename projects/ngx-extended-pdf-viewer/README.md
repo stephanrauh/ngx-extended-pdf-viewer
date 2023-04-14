@@ -27,16 +27,19 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 <img src="https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/example.png?raw=true">
 
-## What's going to be new in version 17?
+## Breaking changes ahead! What's new in Version 17?
 
-Version 17 removes a couple of features. The growing popularity of the library and the rapid evolution of the base library pdf.js result in a flood of issues and hard-to-solve merge conflicts. To solve that problem, I'll remove some of the features that proved to cause too much works.
+Version 17 ships with a revamped form support. Along the way, I've polished some rough edges, which is a breaking change if you rely on the old (and incorrect) behavior. In particular, checkboxes now send the value defined by the author of the PDF file. For instance, if the author defined the checkbox to have the values "Y" and "N", now `(formData)` emits these values. Until version 16, it emitted a boolean value. Another improvement (or breaking change, depending on your application) is that `[formData]` now is used to initialize the fields of the PDF file. Earlier versions forced you to use a delayed initialization with a timeout. Version 17 allows you to drop this cumbersome workaround.
 
-Features to be removed:
+Plus, version 17 removes a couple of features. The growing popularity of the library and the rapid evolution of the base library pdf.js result in a flood of issues and hard-to-solve merge conflicts. To solve that problem, I'll remove some of the features that proved to cause too much works.
 
-- Custom PDF backgrounds
-- Extended find bar. Pdf.js has added some of the features and supports an incredible support of languages and character sets, so it's better to abandon my implementation in favor of their implementation. This means that fuzzy search, multiple search teams, and the distinction between phrase search and word search are gone.
+In particular, I've removed the custom PDF backgrounds. The pdf.js team have worked a lot on the code I'd modified to implement the custom backgrounds. I didn't manage to resolve the merge conflict, nor do I have enough spare time to re-implement the feature, so I decided to drop it.
 
-If you need one of these feature - well, this is an open-source library. Contributors are welcome. It's just that I have to prune the library as long as I'm the only contributor.
+Another feature I'm probably dropping is the extended find bar. The base library now ships most of the features I've added a couple of years ago, and their implementation is better. Just think of the wide range of languages and character sets pdf.js supports. To be honest, that's a merge conflict I didn't resolve since 14 month, so it's unlikely I'm ever going to solve it. So it's better to abandon my implementation in favor of their implementation. This means that fuzzy search, multiple search teams, and the distinction between phrase search and word search are gone.
+
+If you need one of these features - well, this is an open-source library. Contributors are welcome. It's just that I have to prune the library as long as I'm the only contributor.
+
+Version 17 is currently in the alpha stage. It should be a fine version, but the modifications require an extended period of testing.
 
 ## What's new in version 16?
 
@@ -69,13 +72,13 @@ Would you like to participate in a popular open source project? It's easy: just 
 
 ## Features
 
-- Enhanced searching (e.g. fuzzy search, limiting search to a page rage, multiple search terms, finding ignoring diacritics)
 - programmatic API for many features, such as searching
 - Printing
 - Support for forms, including two-way binding
+- XFA forms are also supported (with a few limitations)
 - (Limited) support for signatures (lacking verification of the signature, so use on your own risk!)
 - Sidebar with thumbnails, outlines, and attachments (and each of them both optional and customizable)
-- Rotating
+- Rotating pages
 - Download (including form data) and upload
 - Zoom (with optional two-way binding to an attribute)
 - Full-screen mode
@@ -90,9 +93,9 @@ Would you like to participate in a popular open source project? It's easy: just 
 - Direct access to the core API of pdf.js (including TypeScript definition files)
 - The ability to deactivate (i.e. hide) every button, menu item, and the context menu
 - Color theming
-- And to customize the toolbars, the side bar, and the menus according to your needs.
+- And customizing the toolbars, the side bar, and the menus according to your needs.
 
-Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 2.13, released in February 2022. If you're the daring one, you can also use the developer version 2.14. It's bleeding edge, so use it at own risk. Basically, the bleeding edge version helps me because I can add Mozilla's latest improvements in frequent, small increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but most of the time, the quality is production-ready.
+Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 3.5, released in April 2023. If you're the daring one, you can also use the developer version 3.6. It's bleeding edge, so use it at own risk. Basically, the bleeding edge version helps me because I can add Mozilla's latest improvements in frequent, small increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but most of the time, the quality is production-ready.
 
 ## Alternatives
 

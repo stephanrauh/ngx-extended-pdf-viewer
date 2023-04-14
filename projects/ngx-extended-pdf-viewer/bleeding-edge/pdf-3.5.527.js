@@ -1001,7 +1001,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.5.526',
+    apiVersion: '3.5.527',
     data,
     password,
     disableAutoFetch,
@@ -2757,9 +2757,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.5.526';
+const version = '3.5.527';
 exports.version = version;
-const build = 'ffbe26d49';
+const build = 'e9d86b5a4';
 exports.build = build;
 
 /***/ }),
@@ -14390,6 +14390,9 @@ var _xfa_text = __w_pdfjs_require__(19);
 class XfaLayer {
   static setupStorage(html, id, element, storage, intent) {
     const angularData = window.getFormValueFromAngular(html);
+    if (angularData.value) {
+      storage.setValue(id, angularData);
+    }
     const storedData = angularData.value ? angularData : storage.getValue(id, {
       value: null
     });
@@ -14418,7 +14421,7 @@ class XfaLayer {
         if (element.attributes.type === "radio" || element.attributes.type === "checkbox") {
           if (storedData.value === element.attributes.xfaOn) {
             html.setAttribute("checked", true);
-          } else if (storedData.value === element.attributes.xfaOff) {
+          } else {
             html.removeAttribute("checked");
           }
           if (intent === "print") {
@@ -14451,9 +14454,12 @@ class XfaLayer {
         break;
       case "select":
         if (storedData.value !== null) {
+          element.attributes.value = storedData.value;
           for (const option of element.children) {
             if (option.attributes.value === storedData.value) {
               option.attributes.selected = true;
+            } else {
+              delete option.attributes.selected;
             }
           }
         }
@@ -16147,8 +16153,8 @@ var _annotation_layer = __w_pdfjs_require__(32);
 var _worker_options = __w_pdfjs_require__(14);
 var _svg = __w_pdfjs_require__(35);
 var _xfa_layer = __w_pdfjs_require__(34);
-const pdfjsVersion = '3.5.526';
-const pdfjsBuild = 'ffbe26d49';
+const pdfjsVersion = '3.5.527';
+const pdfjsBuild = 'e9d86b5a4';
 })();
 
 /******/ 	return __webpack_exports__;
