@@ -118,7 +118,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = '3.5.528';
+    const workerVersion = '3.5.529';
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
     }
@@ -7253,10 +7253,7 @@ class FakeUnicodeFont {
     this.lastChar = -Infinity;
     this.fontFamily = fontFamily;
     const canvas = new OffscreenCanvas(1, 1);
-    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
-      willReadFrequently: true
-    } : undefined;
-    this.ctxMeasure = canvas.getContext("2d", options);
+    this.ctxMeasure = canvas.getContext("2d");
     if (!FakeUnicodeFont._fontNameId) {
       FakeUnicodeFont._fontNameId = 1;
     }
@@ -36022,10 +36019,7 @@ class PDFImage {
         });
       }
       const canvas = new OffscreenCanvas(width, height);
-      const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
-        willReadFrequently: true
-      } : undefined;
-      const ctx = canvas.getContext("2d", options);
+      const ctx = canvas.getContext("2d");
       const imgData = ctx.createImageData(width, height);
       (0, _image_utils.convertBlackAndWhiteToRGBA)({
         src: imgArray,
@@ -53091,8 +53085,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
   }
 }));
 var _worker = __w_pdfjs_require__(1);
-const pdfjsVersion = '3.5.528';
-const pdfjsBuild = '97fe1fa13';
+const pdfjsVersion = '3.5.529';
+const pdfjsBuild = '5796c90b6';
 })();
 
 /******/ 	return __webpack_exports__;
