@@ -32,7 +32,7 @@
     "@types/estree": "^1.0.0",
     "@types/trusted-types": "^2.0.3",
     "dompurify": "^2.4.5",
-    "rxjs": "^7.8.0",
+    "rxjs": "^7.8.1",
     "zone.js": "^0.11.8"
   },
   "devDependencies": {
