@@ -45,12 +45,13 @@ export class PDFThumbnailViewer {
     /**
      * @param {PDFThumbnailViewerOptions} options
      */
-    constructor({ container, linkService, renderingQueue, l10n, pageColors }: PDFThumbnailViewerOptions);
+    constructor({ container, linkService, renderingQueue, l10n, pageColors, eventBus }: PDFThumbnailViewerOptions);
     container: HTMLDivElement;
     linkService: import("./interfaces").IPDFLinkService;
     renderingQueue: import("./pdf_rendering_queue").PDFRenderingQueue;
     l10n: import("./interfaces").IL10n;
     pageColors: Object | null;
+    eventBus: any;
     scroll: {
         right: boolean;
         down: boolean;

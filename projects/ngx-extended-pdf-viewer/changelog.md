@@ -447,3 +447,5 @@
 - 16.2.16 #1732 display the page border on Safari on every page (used to be shown on the first page only); #1720 now the correct text is highlighted again when finding (was broken since 16.1.0)
 - 17.0.0-alpha.0 #1735 removed the custom PDF backgrounds
 - 17.0.0-alpha.1 #1739 stop using the `window` object in the worker thread (fixes a bug introduced with #1659)
+- 17.0.0-alpha.2 #1696 fixed and simplified book mode; repaired the methods `hasPageBeenRendered()` and `currentlyRenderedPages()`
+- 17.0.0-alpha.3 #1711 adds the `AnnotationLayerBuilder` to the public API

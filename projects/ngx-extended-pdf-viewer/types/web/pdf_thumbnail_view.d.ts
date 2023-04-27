@@ -47,7 +47,7 @@ export class PDFThumbnailView implements IRenderableView {
     /**
      * @param {PDFThumbnailViewOptions} options
      */
-    constructor({ container, id, defaultViewport, optionalContentConfigPromise, linkService, renderingQueue, l10n, pageColors, }: PDFThumbnailViewOptions);
+    constructor({ container, id, defaultViewport, optionalContentConfigPromise, linkService, renderingQueue, l10n, pageColors, eventBus, }: PDFThumbnailViewOptions);
     id: number;
     renderingId: string;
     pageLabel: string | null;
@@ -59,6 +59,7 @@ export class PDFThumbnailView implements IRenderableView {
     pageColors: Object | null;
     linkService: import("./interfaces").IPDFLinkService;
     renderingQueue: import("./pdf_rendering_queue").PDFRenderingQueue;
+    eventBus: any;
     renderTask: any;
     renderingState: number;
     resume: (() => void) | null;

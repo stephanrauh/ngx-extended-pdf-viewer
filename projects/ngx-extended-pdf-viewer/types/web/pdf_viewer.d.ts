@@ -251,7 +251,8 @@ export class PDFViewer {
      * or if it's out of range
      */
     addPageToRenderQueue(pageIndex?: number): boolean;
-    ensureAdjecentPagesAreLoaded(): void;
+    ensureAdjecentPagesAreLoaded(): Promise<void>;
+    adjacentPagesLoader(self: any): void;
     /**
      * @param {string} val - The page label.
      */

@@ -441,7 +441,8 @@ const PDFViewerApplication = {
         renderingQueue: pdfRenderingQueue,
         linkService: pdfLinkService,
         l10n: this.l10n,
-        pageColors
+        pageColors,
+        eventBus
       });
       pdfRenderingQueue.setThumbnailViewer(this.pdfThumbnailViewer);
     }
@@ -2607,8 +2608,7 @@ class OutputScale {
 }
 exports.OutputScale = OutputScale;
 function scrollIntoView(element, spot, scrollMatches = false, infiniteScroll = false) {
-  if (element.classList.contains("stf__item")) {
-    Window['ngxConsole'].log("don't scroll in book mode");
+  if (element.classList.contains("stf__item") || element.parentElement?.classList.contains("stf__item") || element.parentElement?.parentElement?.classList.contains("stf__item")) {
     return;
   }
   let parent = element.offsetParent;
@@ -8408,13 +8408,15 @@ class PDFThumbnailViewer {
     linkService,
     renderingQueue,
     l10n,
-    pageColors
+    pageColors,
+    eventBus
   }) {
     this.container = container;
     this.linkService = linkService;
     this.renderingQueue = renderingQueue;
     this.l10n = l10n;
     this.pageColors = pageColors || null;
+    this.eventBus = eventBus;
     if (this.pageColors && !(CSS.supports("color", this.pageColors.background) && CSS.supports("color", this.pageColors.foreground))) {
       if (this.pageColors.background || this.pageColors.foreground) {
         Window["ngxConsole"].warn("PDFThumbnailViewer: Ignoring `pageColors`-option, since the browser doesn't support the values used.");
@@ -8545,7 +8547,8 @@ class PDFThumbnailViewer {
           linkService: this.linkService,
           renderingQueue: this.renderingQueue,
           l10n: this.l10n,
-          pageColors: this.pageColors
+          pageColors: this.pageColors,
+          eventBus: this.eventBus
         });
         this._thumbnails.push(thumbnail);
       }
@@ -8672,7 +8675,8 @@ class PDFThumbnailView {
     linkService,
     renderingQueue,
     l10n,
-    pageColors
+    pageColors,
+    eventBus
   }) {
     this.id = id;
     this.renderingId = "thumbnail" + id;
@@ -8685,6 +8689,7 @@ class PDFThumbnailView {
     this.pageColors = pageColors || null;
     this.linkService = linkService;
     this.renderingQueue = renderingQueue;
+    this.eventBus = eventBus;
     this.renderTask = null;
     this.renderingState = _ui_utils.RenderingStates.INITIAL;
     this.resume = null;
@@ -8843,6 +8848,7 @@ class PDFThumbnailView {
       if (error) {
         throw error;
       }
+      this.eventBus.dispatch("thumbnailRendered", this.id);
     };
     const {
       ctx,
@@ -9048,7 +9054,7 @@ class PDFViewer {
   #onVisibilityChange = null;
   #scaleTimeoutId = null;
   constructor(options) {
-    const viewerVersion = '3.5.529';
+    const viewerVersion = '3.5.530';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -9132,16 +9138,14 @@ class PDFViewer {
     if (!this.pdfDocument) {
       return;
     }
-    const flip = Math.abs(this._currentPageNumber - val) < 2;
+    const flip = Math.abs(this._currentPageNumber - val) <= 2;
     if (!this._setCurrentPageNumber(val, true)) {
       Window["ngxConsole"].error(`currentPageNumber: "${val}" is not a valid page.`);
     }
     if (this.pageFlip) {
       if (flip) {
-        Window["ngxConsole"].log("Flip");
         this.pageFlip.flip(val - 1);
       } else {
-        Window["ngxConsole"].log("turn to page");
         this.pageFlip.turnToPage(val - 1);
       }
     }
@@ -9223,7 +9227,7 @@ class PDFViewer {
   addPageToRenderQueue(pageIndex = 0) {
     if (pageIndex >= 0 && pageIndex <= this._pages.length - 1) {
       const pageView = this._pages[pageIndex];
-      const isLoading = pageView.div.querySelector(".loadingIcon");
+      const isLoading = pageView.renderingState === _ui_utils.RenderingStates.INITIAL;
       if (isLoading) {
         this.#ensurePdfPageLoaded(pageView).then(() => {
           this.renderingQueue.renderView(pageView);
@@ -9233,71 +9237,43 @@ class PDFViewer {
     }
     return false;
   }
-  ensureAdjecentPagesAreLoaded() {
-    if (!window.adjacentPagesLoader) {
-      window.adjacentPagesLoader = evt => {
-        Window["ngxConsole"].log("rendered", evt);
-        let pageView = this._pages[Math.min(this._pages.length - 1, this.currentPageNumber)];
-        if (pageView) {
-          let isLoading = pageView.div.querySelector(".loadingIcon");
-          if (isLoading) {
-            Window["ngxConsole"].log("asking for the next page");
-            this.#ensurePdfPageLoaded(pageView).then(() => {
-              this.renderingQueue.renderView(pageView);
-            });
-          } else {
-            pageView = this._pages[Math.min(this._pages.length - 1, this.currentPageNumber + 1)];
-            isLoading = pageView.div.querySelector(".loadingIcon");
-            if (isLoading) {
-              Window["ngxConsole"].log("asking for the next + 1 page");
-              this.#ensurePdfPageLoaded(pageView).then(() => {
-                this.renderingQueue.renderView(pageView);
-              });
-            } else {
-              pageView = this._pages[Math.min(this._pages.length - 1, this.currentPageNumber + 2)];
-              isLoading = pageView.div.querySelector(".loadingIcon");
-              if (isLoading) {
-                Window["ngxConsole"].log("asking for the next + 2 page");
-                this.#ensurePdfPageLoaded(pageView).then(() => {
-                  this.renderingQueue.renderView(pageView);
-                });
-              } else {
-                pageView = this._pages[Math.min(this._pages.length - 1, this.currentPageNumber + 3)];
-                isLoading = pageView.div.querySelector(".loadingIcon");
-                if (isLoading) {
-                  Window["ngxConsole"].log("asking for the next + 3 page");
-                  this.#ensurePdfPageLoaded(pageView).then(() => {
-                    this.renderingQueue.renderView(pageView);
-                  });
-                } else {
-                  pageView = this._pages[Math.max(0, this.currentPageNumber - 1)];
-                  isLoading = pageView.div.querySelector(".loadingIcon");
-                  if (isLoading) {
-                    Window["ngxConsole"].log("asking for the current page");
-                    this.#ensurePdfPageLoaded(pageView).then(() => {
-                      this.renderingQueue.renderView(pageView);
-                    });
-                  } else {
-                    pageView = this._pages[Math.max(0, this.currentPageNumber - 2)];
-                    isLoading = pageView.div.querySelector(".loadingIcon");
-                    if (isLoading) {
-                      Window["ngxConsole"].log("asking for the previous page");
-                      this.#ensurePdfPageLoaded(pageView).then(() => {
-                        this.renderingQueue.renderView(pageView);
-                      });
-                    } else {
-                      Window["ngxConsole"].log("Finished preloading the pages");
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      };
-      this.eventBus._on("pagerendered", window.adjacentPagesLoader);
+  async ensureAdjecentPagesAreLoaded() {
+    const advances = [0, 1, -1, 2, -2];
+    for (const advance of advances) {
+      const pageIndex = this.currentPageNumber + advance;
+      if (pageIndex >= 0 && pageIndex < this._pages.length) {
+        const pageView = this._pages[pageIndex];
+        await this.#ensurePdfPageLoaded(pageView);
+      }
     }
-    window.adjacentPagesLoader();
+    const loader = () => this.adjacentPagesLoader(loader);
+    this.eventBus._on("pagerendered", loader);
+    this.eventBus._on("thumbnailRendered", loader);
+  }
+  adjacentPagesLoader(self) {
+    const advances = [0, 1, -1, 2, -2];
+    const isAlreadyRendering = this._pages.some(pageView => pageView.renderingState === _ui_utils.RenderingStates.RUNNING);
+    if (isAlreadyRendering) {
+      return;
+    }
+    const pausedRendering = this._pages.find(pageView => pageView.renderingState === _ui_utils.RenderingStates.PAUSED);
+    if (pausedRendering) {
+      this.renderingQueue.renderView(pausedRendering);
+      return;
+    }
+    for (const advance of advances) {
+      const pageIndex = this.currentPageNumber + advance;
+      if (pageIndex >= 0 && pageIndex < this._pages.length) {
+        const pageView = this._pages[pageIndex];
+        const needsToBeRendered = pageView.renderingState === _ui_utils.RenderingStates.INITIAL;
+        if (needsToBeRendered) {
+          this.renderingQueue.renderView(pageView);
+          return;
+        }
+      }
+    }
+    this.eventBus._off("pagerendered", self);
+    this.eventBus._off("thumbnailRendered", self);
   }
   get currentPageLabel() {
     return this._pageLabels?.[this._currentPageNumber - 1] ?? null;
@@ -10391,6 +10367,9 @@ class PDFViewer {
     this.update();
   }
   _getPageAdvance(currentPageNumber, previous = false) {
+    if (this.pageViewMode === "book") {
+      return 2;
+    }
     switch (this._scrollMode) {
       case _ui_utils.ScrollMode.WRAPPED:
         {
@@ -18082,8 +18061,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(5);
 var _pdf_link_service = __webpack_require__(7);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.5.529';
-const pdfjsBuild = '5796c90b6';
+const pdfjsVersion = '3.5.530';
+const pdfjsBuild = 'f3478321b';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,

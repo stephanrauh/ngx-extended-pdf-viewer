@@ -1,3 +1,4 @@
+import { AnnotationLayerBuilder } from './annotation-layer-builder';
 import { PageViewport } from './pdf-page-view-port';
 import { TextLayerBuilder } from './text-layer-builder';
 
@@ -18,6 +19,7 @@ export interface PDFPageView {
   hasRestrictedScaling: boolean;
   textLayerMode: number;
   textLayer: TextLayerBuilder | null;
+  annotationLayer: AnnotationLayerBuilder;
   imageResourcesPath: string;
   useOnlyCssZoom: boolean;
   isOffscreenCanvasSupported: boolean;

@@ -434,7 +434,7 @@ export class NgxExtendedPdfViewerService {
     const pages = PDFViewerApplication.pdfViewer._pages;
     if (pages.length > pageIndex && pageIndex >= 0) {
       const pageView = pages[pageIndex];
-      const isLoading = pageView.div.querySelector('.loadingIcon');
+      const isLoading = pageView.renderingState === 3;
       return !isLoading;
     }
     return false;
@@ -443,7 +443,7 @@ export class NgxExtendedPdfViewerService {
   public currentlyRenderedPages(): Array<number> {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const pages = PDFViewerApplication.pdfViewer._pages;
-    return pages.filter((page) => !page.div.querySelector('.loadingIcon')).map((page) => page.id);
+    return pages.filter((page) => page.renderingState === 3).map((page) => page.id);
   }
 
   public numberOfPages(): number {
