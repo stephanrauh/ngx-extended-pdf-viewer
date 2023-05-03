@@ -28,7 +28,7 @@
     "@angular/forms": "^13.4.0",
     "@angular/platform-browser": "^13.3.11",
     "@angular/platform-browser-dynamic": "^13.4.0",
-    "@schematics/angular": "^13.3.8",
+    "@schematics/angular": "^16.0.0",
     "@types/estree": "^1.0.0",
     "@types/trusted-types": "^2.0.3",
     "dompurify": "^2.4.5",
