@@ -24,7 +24,7 @@
     "@angular/animations": "^13.3.11",
     "@angular/common": "^13.3.11",
     "@angular/compiler": "^13.3.11",
-    "@angular/core": "^13.3.11",
+    "@angular/core": "^15.2.9",
     "@angular/forms": "^13.4.0",
     "@angular/platform-browser": "^13.3.11",
     "@angular/platform-browser-dynamic": "^13.4.0",
