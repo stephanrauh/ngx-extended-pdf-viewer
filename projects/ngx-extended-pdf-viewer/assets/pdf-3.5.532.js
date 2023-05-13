@@ -1001,7 +1001,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.5.531',
+    apiVersion: '3.5.532',
     data,
     password,
     disableAutoFetch,
@@ -2757,9 +2757,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.5.531';
+const version = '3.5.532';
 exports.version = version;
-const build = '8a8ae1e8a';
+const build = '07cc88cbb';
 exports.build = build;
 
 /***/ }),
@@ -13265,7 +13265,7 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
     const id = data.id;
     const angularData = window.getFormValueFromAngular(this.data.fieldName);
     let angularValue = undefined;
-    if (angularData) {
+    if (angularData.value) {
       angularValue = angularData.value === true || angularData.value === data.exportValue;
     }
     let value = angularValue !== undefined ? angularValue : storage.getValue(id, {
@@ -16153,8 +16153,8 @@ var _annotation_layer = __w_pdfjs_require__(32);
 var _worker_options = __w_pdfjs_require__(14);
 var _svg = __w_pdfjs_require__(35);
 var _xfa_layer = __w_pdfjs_require__(34);
-const pdfjsVersion = '3.5.531';
-const pdfjsBuild = '8a8ae1e8a';
+const pdfjsVersion = '3.5.532';
+const pdfjsBuild = '07cc88cbb';
 })();
 
 /******/ 	return __webpack_exports__;

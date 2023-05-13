@@ -449,3 +449,4 @@
 - 17.0.0-alpha.1 #1739 stop using the `window` object in the worker thread (fixes a bug introduced with #1659)
 - 17.0.0-alpha.2 #1696 fixed and simplified book mode; repaired the methods `hasPageBeenRendered()` and `currentlyRenderedPages()`
 - 17.0.0-alpha.3 #1711 adds the `AnnotationLayerBuilder` to the public API
+- 17.0.0-alpha.4 #1760 display the initial state of checkboxes correctly
