@@ -1423,13 +1423,14 @@ const PDFViewerApplication = {
     window.addEventListener("wheel", webViewerWheel, {
       passive: false
     });
-    window.addEventListener("touchstart", webViewerTouchStart, {
+    const mainContainer = document.getElementById("mainContainer");
+    mainContainer.addEventListener("touchstart", webViewerTouchStart, {
       passive: false
     });
-    window.addEventListener("touchmove", webViewerTouchMove, {
+    mainContainer.addEventListener("touchmove", webViewerTouchMove, {
       passive: false
     });
-    window.addEventListener("touchend", webViewerTouchEnd, {
+    mainContainer.addEventListener("touchend", webViewerTouchEnd, {
       passive: false
     });
     window.addEventListener("click", webViewerClick);
@@ -1501,13 +1502,14 @@ const PDFViewerApplication = {
     window.removeEventListener("wheel", webViewerWheel, {
       passive: false
     });
-    window.removeEventListener("touchstart", webViewerTouchStart, {
+    const mainContainer = document.getElementById("mainContainer");
+    mainContainer.removeEventListener("touchstart", webViewerTouchStart, {
       passive: false
     });
-    window.removeEventListener("touchmove", webViewerTouchMove, {
+    mainContainer.removeEventListener("touchmove", webViewerTouchMove, {
       passive: false
     });
-    window.removeEventListener("touchend", webViewerTouchEnd, {
+    mainContainer.removeEventListener("touchend", webViewerTouchEnd, {
       passive: false
     });
     window.removeEventListener("click", webViewerClick);

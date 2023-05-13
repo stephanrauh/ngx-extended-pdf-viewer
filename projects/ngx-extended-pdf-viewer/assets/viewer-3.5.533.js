@@ -1423,13 +1423,14 @@ const PDFViewerApplication = {
     window.addEventListener("wheel", webViewerWheel, {
       passive: false
     });
-    window.addEventListener("touchstart", webViewerTouchStart, {
+    const mainContainer = document.getElementById("mainContainer");
+    mainContainer.addEventListener("touchstart", webViewerTouchStart, {
       passive: false
     });
-    window.addEventListener("touchmove", webViewerTouchMove, {
+    mainContainer.addEventListener("touchmove", webViewerTouchMove, {
       passive: false
     });
-    window.addEventListener("touchend", webViewerTouchEnd, {
+    mainContainer.addEventListener("touchend", webViewerTouchEnd, {
       passive: false
     });
     window.addEventListener("click", webViewerClick);
@@ -1501,13 +1502,14 @@ const PDFViewerApplication = {
     window.removeEventListener("wheel", webViewerWheel, {
       passive: false
     });
-    window.removeEventListener("touchstart", webViewerTouchStart, {
+    const mainContainer = document.getElementById("mainContainer");
+    mainContainer.removeEventListener("touchstart", webViewerTouchStart, {
       passive: false
     });
-    window.removeEventListener("touchmove", webViewerTouchMove, {
+    mainContainer.removeEventListener("touchmove", webViewerTouchMove, {
       passive: false
     });
-    window.removeEventListener("touchend", webViewerTouchEnd, {
+    mainContainer.removeEventListener("touchend", webViewerTouchEnd, {
       passive: false
     });
     window.removeEventListener("click", webViewerClick);
@@ -9054,7 +9056,7 @@ class PDFViewer {
   #onVisibilityChange = null;
   #scaleTimeoutId = null;
   constructor(options) {
-    const viewerVersion = '3.5.532';
+    const viewerVersion = '3.5.533';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -18061,8 +18063,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(5);
 var _pdf_link_service = __webpack_require__(7);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.5.532';
-const pdfjsBuild = '07cc88cbb';
+const pdfjsVersion = '3.5.533';
+const pdfjsBuild = '24f86d8b8';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
