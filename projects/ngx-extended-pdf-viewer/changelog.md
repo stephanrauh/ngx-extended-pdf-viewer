@@ -451,4 +451,5 @@
 - 17.0.0-alpha.3 #1711 adds the `AnnotationLayerBuilder` to the public API
 - 17.0.0-alpha.4 (no changes)
 - 17.0.0-alpha.5 #1760 display the initial state of checkboxes correctly
-- 17.0.0-alpha.6 #1733 bind the touchevents to the PDF viewer `<div>` instead of binding it 
+- 17.0.0-alpha.6 #1733 bind the touchevents to the PDF viewer `<div>` instead of binding it
+- 17.0.0-alpha.7 #1767 prevent a crash that sometimes happened when running the PDF viewer in a modal window (caused by #1733)
