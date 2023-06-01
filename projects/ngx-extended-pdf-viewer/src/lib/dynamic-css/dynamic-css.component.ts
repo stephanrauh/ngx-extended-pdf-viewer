@@ -174,11 +174,11 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.injectStyle();
   }
 
-  ngOnChanges() {
+  public ngOnChanges() {
     const fullWith = this.document.body.clientWidth;
     const partialViewScale = fullWith / this.width;
     const scaleFactor = partialViewScale * (this.zoom ? this.zoom : 1);
@@ -190,21 +190,20 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
     this.xl = scaleFactor * PdfBreakpoints.xl;
     this.xxl = scaleFactor * PdfBreakpoints.xxl;
 
-    const styles = this.document.getElementById('pdf-dynamic-css') as HTMLStyleElement;
-    if (styles) {
+    let styles = this.document.getElementById('pdf-dynamic-css') as HTMLStyleElement;
+    if (!styles) {
+      styles = this.document.createElement('STYLE') as HTMLStyleElement;
+      styles.id = 'pdf-dynamic-css';
       addTrustedHTML(styles, this.style);
+
+      this.renderer.appendChild(this.document.head, styles);
     }
+    addTrustedHTML(styles, this.style);
   }
 
   private injectStyle() {
     if (this.width === 3.14159265359) {
       setTimeout(() => this.ngOnChanges(), 1);
-    } else {
-      const styles = this.document.createElement('STYLE') as HTMLStyleElement;
-      styles.id = 'pdf-dynamic-css';
-      addTrustedHTML(styles, this.style);
-
-      this.renderer.appendChild(this.document.head, styles);
     }
   }
 

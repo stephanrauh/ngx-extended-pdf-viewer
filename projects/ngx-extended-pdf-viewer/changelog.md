@@ -453,3 +453,4 @@
 - 17.0.0-alpha.5 #1760 display the initial state of checkboxes correctly
 - 17.0.0-alpha.6 #1733 bind the touchevents to the PDF viewer `<div>` instead of binding it
 - 17.0.0-alpha.7 #1767 prevent a crash that sometimes happened when running the PDF viewer in a modal window (caused by #1733)
+- 17.0.0-alpha.8 #1762 repair responsive design (which was broken since 16.2.6)
