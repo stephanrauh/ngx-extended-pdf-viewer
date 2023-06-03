@@ -106,17 +106,17 @@ export class NgxExtendedPdfViewerService {
 
           // todo dirty hack!
           inputField.classList.remove('hidden');
-          (document.getElementById('findInput') as HTMLInputElement).classList.add('hidden');
-          (document.getElementById('individualWordsModeLabel') as HTMLInputElement).classList.remove('hidden');
-          (document.getElementById('individualWordsMode') as HTMLInputElement).classList.remove('hidden');
+          (document.getElementById('findInput') as HTMLInputElement)?.classList.add('hidden');
+          (document.getElementById('individualWordsModeLabel') as HTMLInputElement)?.classList.remove('hidden');
+          (document.getElementById('individualWordsMode') as HTMLInputElement)?.classList.remove('hidden');
           // end of the dirty hack
         } else if (inputField instanceof HTMLInputElement) {
           inputField.value = text;
           // todo dirty hack!
           inputField.classList.remove('hidden');
-          (document.getElementById('findInputMultiline') as HTMLInputElement).classList.add('hidden');
-          (document.getElementById('individualWordsModeLabel') as HTMLInputElement).classList.add('hidden');
-          (document.getElementById('individualWordsMode') as HTMLInputElement).classList.add('hidden');
+          (document.getElementById('findInputMultiline') as HTMLInputElement)?.classList.add('hidden');
+          (document.getElementById('individualWordsModeLabel') as HTMLInputElement)?.classList.add('hidden');
+          (document.getElementById('individualWordsMode') as HTMLInputElement)?.classList.add('hidden');
           // end of the dirty hack
         }
         inputField.dispatchEvent(new Event('input'));
