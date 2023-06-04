@@ -391,8 +391,8 @@ function info(msg) {
   if (verbosity >= VerbosityLevel.INFOS) {
     if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
       console.log(`Info: ${msg}`);
-    } else if (Window && Window['ngxConsole']) {
-      Window['ngxConsole'].log(`Info: ${msg}`);
+    } else if (Window && globalThis.ngxConsole) {
+      globalThis.ngxConsole.log(`Info: ${msg}`);
     } else {
       console.log(`Info: ${msg}`);
     }
@@ -403,7 +403,7 @@ function warn(msg) {
     if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
       console.log(`Warning: ${msg}`);
     } else if (Window && Window["ngxConsole"]) {
-      Window["ngxConsole"].log(`Warning: ${msg}`);
+      globalThis.ngxConsole.log(`Warning: ${msg}`);
     } else {
       console.log(`Warning: ${msg}`);
     }
@@ -1001,7 +1001,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.5.534',
+    apiVersion: '3.5.535',
     data,
     password,
     disableAutoFetch,
@@ -2757,9 +2757,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.5.534';
+const version = '3.5.535';
 exports.version = version;
-const build = '36edc560b';
+const build = 'fd055ef23';
 exports.build = build;
 
 /***/ }),
@@ -4425,14 +4425,14 @@ function loadScript(src, removeScriptElement = false) {
       resolve(evt);
     };
     script.onerror = function (error) {
-      Window['ngxConsole'].log(error);
+      globalThis.ngxConsole.log(error);
       reject(new Error(`Cannot load script at: ${script.src}`));
     };
     (document.head || document.documentElement).append(script);
   });
 }
 function deprecated(details) {
-  Window['ngxConsole'].log("Deprecated API usage: " + details);
+  globalThis.ngxConsole.log("Deprecated API usage: " + details);
 }
 let pdfDateStringRegex;
 class PDFDateString {
@@ -16153,8 +16153,8 @@ var _annotation_layer = __w_pdfjs_require__(32);
 var _worker_options = __w_pdfjs_require__(14);
 var _svg = __w_pdfjs_require__(35);
 var _xfa_layer = __w_pdfjs_require__(34);
-const pdfjsVersion = '3.5.534';
-const pdfjsBuild = '36edc560b';
+const pdfjsVersion = '3.5.535';
+const pdfjsBuild = 'fd055ef23';
 })();
 
 /******/ 	return __webpack_exports__;

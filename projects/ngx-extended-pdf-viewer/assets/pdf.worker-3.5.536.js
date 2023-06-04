@@ -118,7 +118,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = '3.5.532';
+    const workerVersion = '3.5.536';
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
     }
@@ -1015,8 +1015,8 @@ function info(msg) {
   if (verbosity >= VerbosityLevel.INFOS) {
     if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
       console.log(`Info: ${msg}`);
-    } else if (Window && Window['ngxConsole']) {
-      Window['ngxConsole'].log(`Info: ${msg}`);
+    } else if (Window && globalThis.ngxConsole) {
+      globalThis.ngxConsole.log(`Info: ${msg}`);
     } else {
       console.log(`Info: ${msg}`);
     }
@@ -1027,7 +1027,7 @@ function warn(msg) {
     if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
       console.log(`Warning: ${msg}`);
     } else if (Window && Window["ngxConsole"]) {
-      Window["ngxConsole"].log(`Warning: ${msg}`);
+      globalThis.ngxConsole.log(`Warning: ${msg}`);
     } else {
       console.log(`Warning: ${msg}`);
     }
@@ -53085,8 +53085,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
   }
 }));
 var _worker = __w_pdfjs_require__(1);
-const pdfjsVersion = '3.5.532';
-const pdfjsBuild = '3940b83f3';
+const pdfjsVersion = '3.5.536';
+const pdfjsBuild = 'f6f1204b4';
 })();
 
 /******/ 	return __webpack_exports__;
