@@ -1,22 +1,22 @@
-Window['ngxConsoleFilter'] = (_level: string, _message: any): boolean => {
+globalThis['ngxConsoleFilter'] = (_level: string, _message: any): boolean => {
   return true;
 };
 export class NgxConsole {
   public log(message: any): void {
-    if (Window['ngxConsoleFilter']('log', message)) {
+    if (globalThis['ngxConsoleFilter']('log', message)) {
       console.log(message);
     }
   }
   public error(message: any): void {
-    if (Window['ngxConsoleFilter']('error', message)) {
+    if (globalThis['ngxConsoleFilter']('error', message)) {
       console.error(message);
     }
   }
   public warn(message: any): void {
-    if (Window['ngxConsoleFilter']('warn', message)) {
+    if (globalThis['ngxConsoleFilter']('warn', message)) {
       console.warn(message);
     }
   }
 }
 
-Window['ngxConsole'] = new NgxConsole();
+globalThis['ngxConsole'] = new NgxConsole();
