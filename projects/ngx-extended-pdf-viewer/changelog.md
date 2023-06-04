@@ -454,4 +454,4 @@
 - 17.0.0-alpha.6 #1733 bind the touchevents to the PDF viewer `<div>` instead of binding it
 - 17.0.0-alpha.7 #1767 prevent a crash that sometimes happened when running the PDF viewer in a modal window (caused by #1733)
 - 17.0.0-alpha.8 #1762 repair responsive design (which was broken since 16.2.6)
-- 17.0.0-alpha.9 #1766 allow for custom find dialogs without the "individual words" checkbox
+- 17.0.0-alpha.9 #1766 allow for custom find dialogs without the "individual words" checkbox; #1672 re-activated filtering the console output (was broken after implementing support for server-side rendering); #1680 / #1663 implement `disableForms` to disable AcroForm and XFA forms

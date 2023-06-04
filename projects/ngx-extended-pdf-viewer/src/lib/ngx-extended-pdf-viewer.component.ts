@@ -154,6 +154,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.formSupport.formData = formData;
   }
 
+  @Input()
+  public disableForms = false;
+
   @Output()
   public get formDataChange() {
     return this.formSupport.formDataChange;
@@ -1581,7 +1584,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
       PDFViewerApplication.eventBus.on('layersloaded', hideSidebarToolbar);
 
-      PDFViewerApplication.eventBus.on('annotationlayerrendered', (event) => this.annotationLayerRendered.emit(event));
+      PDFViewerApplication.eventBus.on('annotationlayerrendered', (event: AnnotationLayerRenderedEvent) => {
+        this.annotationLayerRendered.emit(event);
+        this.enableOrDisableForms(event.source.div, true);
+      });
       PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', (event) => this.annotationEditorLayerRendered.emit(event));
       PDFViewerApplication.eventBus.on('xfalayerrendered', (event) => this.xfaLayerRendered.emit(event));
       PDFViewerApplication.eventBus.on('outlineloaded', (event) => this.outlineLoaded.emit(event));
@@ -2072,6 +2078,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
       }
     }
+    if ('disableForms' in changes) {
+      this.enableOrDisableForms(this.elementRef.nativeElement, false);
+    }
     setTimeout(() => this.calcViewerPositionTop());
   }
 
@@ -2229,5 +2238,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const rect = (PDFViewerApplication.pdfViewer as any).container.getBoundingClientRect();
     const dy = desiredCenterY - rect.top;
     (PDFViewerApplication.pdfViewer as any).container.scrollTop += dy * scaleCorrectionFactor;
+  }
+
+  private enableOrDisableForms(div: HTMLElement, doNotEnable: boolean) {
+    if (!this.disableForms && doNotEnable) {
+      return;
+    }
+    const xfaLayers = Array.from(div.querySelectorAll('.xfaLayer'));
+    const acroFormLayers = Array.from(div.querySelectorAll('.annotationLayer'));
+    const layers = xfaLayers.concat(...acroFormLayers);
+    layers.forEach((layer) => layer.querySelectorAll('input').forEach((x) => (x.disabled = this.disableForms)));
+    layers.forEach((layer) => layer.querySelectorAll('select').forEach((x) => (x.disabled = this.disableForms)));
+    layers.forEach((layer) => layer.querySelectorAll('textarea').forEach((x) => (x.disabled = this.disableForms)));
   }
 }
