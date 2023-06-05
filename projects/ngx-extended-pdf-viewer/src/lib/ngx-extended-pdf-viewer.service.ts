@@ -504,4 +504,9 @@ export class NgxExtendedPdfViewerService {
     const viewer = PDFViewerApplication.pdfViewer as any;
     viewer.scrollPagePosIntoView(pageNumber, pageSpot);
   }
+
+  public async export(): Promise<Blob> {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    return await PDFViewerApplication.export();
+  }
 }

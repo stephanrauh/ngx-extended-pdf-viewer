@@ -1073,8 +1073,9 @@ export interface IPDFViewerApplication {
   viewer: HTMLDivElement;
 
   _cleanup(): void;
-  close(): void;
+  close(): Promise<void>;
   open(source: string | ArrayBuffer | { range: any } | any, options?: any): Promise<any>;
   unbindEvents(): void;
   unbindWindowEvents(): void;
+  export(): Promise<Blob>;
 }

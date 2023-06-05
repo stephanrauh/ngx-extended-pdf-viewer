@@ -809,6 +809,44 @@ const PDFViewerApplication = {
       this.download();
     }
   },
+  async _exportWithAnnotations() {
+    if (this._saveInProgress) {
+      throw new Error(`Already downloading`);
+    }
+    this._saveInProgress = true;
+    await this.pdfScriptingManager.dispatchWillSave();
+    try {
+      this._ensureDownloadComplete();
+      const data = await this.pdfDocument.saveDocument();
+      const blob = new Blob([data], {
+        type: "application/pdf"
+      });
+      return blob;
+    } catch (reason) {
+      throw new Error(`Error when saving the document: ${reason.message}`);
+    } finally {
+      await this.pdfScriptingManager.dispatchDidSave();
+      this._saveInProgress = false;
+    }
+  },
+  async _exportWithoutAnnotations() {
+    try {
+      this._ensureDownloadComplete();
+      const data = await this.pdfDocument.getData();
+      const blob = new Blob([data], {
+        type: "application/pdf"
+      });
+      return blob;
+    } catch (reason) {
+      throw new Error(`Error when saving the document: ${reason.message}`);
+    }
+  },
+  async export() {
+    if (this.pdfDocument?.annotationStorage.size > 0) {
+      return this._exportWithAnnotations();
+    }
+    return this._exportWithoutAnnotations();
+  },
   _documentError(message, moreInfo = null) {
     this._unblockDocumentLoadEvent();
     this._otherError(message, moreInfo);
@@ -9058,7 +9096,7 @@ class PDFViewer {
   #onVisibilityChange = null;
   #scaleTimeoutId = null;
   constructor(options) {
-    const viewerVersion = '3.5.536';
+    const viewerVersion = '3.5.537';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -18065,8 +18103,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(5);
 var _pdf_link_service = __webpack_require__(7);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.5.536';
-const pdfjsBuild = 'f6f1204b4';
+const pdfjsVersion = '3.5.537';
+const pdfjsBuild = '9cc62e13a';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,

@@ -1415,7 +1415,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (sidebarVisible !== undefined) {
       PDFViewerApplication.sidebarViewOnLoad = sidebarVisible ? 1 : 0;
       if (PDFViewerApplication.appConfig) {
-        PDFViewerApplication.appConfig.sidebarViewOnLoad = sidebarVisible ? this.activeSidebarView : 0;
+        PDFViewerApplication.appConfig.sidebarViewOnLoad = sidebarVisible ? this.activeSidebarView : PdfSidebarView.NONE;
       }
       options.set('sidebarViewOnLoad', this.sidebarVisible ? this.activeSidebarView : 0);
     }
