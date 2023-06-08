@@ -359,8 +359,7 @@ export class NgxExtendedPdfViewerService {
 
   public async getCurrentDocumentAsBlob(): Promise<Blob> {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    const data = await PDFViewerApplication.pdfDocument.saveDocument(); // (PDFViewerApplication.pdfDocument.annotationStorage);
-    return new Blob([data], { type: 'application/pdf' });
+    return await PDFViewerApplication.export();
   }
 
   public async getFormData(currentFormValues = true): Promise<Array<Object>> {
@@ -503,10 +502,5 @@ export class NgxExtendedPdfViewerService {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const viewer = PDFViewerApplication.pdfViewer as any;
     viewer.scrollPagePosIntoView(pageNumber, pageSpot);
-  }
-
-  public async export(): Promise<Blob> {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    return await PDFViewerApplication.export();
   }
 }
