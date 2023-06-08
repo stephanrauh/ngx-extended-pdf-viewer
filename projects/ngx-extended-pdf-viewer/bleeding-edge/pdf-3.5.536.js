@@ -1001,7 +1001,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.5.535',
+    apiVersion: '3.5.536',
     data,
     password,
     disableAutoFetch,
@@ -2757,9 +2757,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.5.535';
+const version = '3.5.536';
 exports.version = version;
-const build = 'fd055ef23';
+const build = 'd3d797fc9';
 exports.build = build;
 
 /***/ }),
@@ -16153,8 +16153,8 @@ var _annotation_layer = __w_pdfjs_require__(32);
 var _worker_options = __w_pdfjs_require__(14);
 var _svg = __w_pdfjs_require__(35);
 var _xfa_layer = __w_pdfjs_require__(34);
-const pdfjsVersion = '3.5.535';
-const pdfjsBuild = 'fd055ef23';
+const pdfjsVersion = '3.5.536';
+const pdfjsBuild = 'd3d797fc9';
 })();
 
 /******/ 	return __webpack_exports__;
