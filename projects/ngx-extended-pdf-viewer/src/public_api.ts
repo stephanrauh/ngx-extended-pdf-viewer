@@ -51,7 +51,6 @@ export * from './lib/secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolb
 export * from './lib/sidebar/pdf-sidebar/pdf-sidebar-content/pdf-sidebar-content.component';
 export * from './lib/sidebar/pdf-sidebar/pdf-sidebar-toolbar/pdf-sidebar-toolbar.component';
 export * from './lib/sidebar/pdf-sidebar/pdf-sidebar.component';
-export * from './lib/theme/acroform-dark-theme/pdf-acroform-dark-theme.component';
 export * from './lib/theme/acroform-default-theme/pdf-acroform-default-theme.component';
 export * from './lib/theme/pdf-dark-theme/pdf-dark-theme.component';
 export * from './lib/theme/pdf-light-theme/pdf-light-theme.component';

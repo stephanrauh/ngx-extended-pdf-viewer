@@ -455,4 +455,5 @@
 - 17.0.0-alpha.7 #1767 prevent a crash that sometimes happened when running the PDF viewer in a modal window (caused by #1733)
 - 17.0.0-alpha.8 #1762 repair responsive design (which was broken since 16.2.6)
 - 17.0.0-alpha.9 #1766 allow for custom find dialogs without the "individual words" checkbox; #1672 re-activated filtering the console output (was broken after implementing support for server-side rendering); #1680 / #1663 implement `disableForms` to disable AcroForm and XFA forms
-- 17.0.0-alpha.10 #1685 add a programmatic API exporting the PDF file as a Blob
+- 17.0.0-alpha.10
+- 17.0.0-beta.0 #1735 removed the `[formTheme]` attribute

@@ -567,9 +567,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public theme: 'dark' | 'light' | 'custom' | string = 'light';
 
   @Input()
-  public formTheme: 'dark' | 'light' | 'custom' | string = 'light';
-
-  @Input()
   public showToolbar = true;
 
   @Input()

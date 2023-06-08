@@ -9,16 +9,11 @@ const print = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/com
 fs.writeFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-dark-theme/colors-css.ts', cssToTs(dark.css + ' ' + print.css));
 fs.writeFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-light-theme/colors-css.ts', cssToTs(light.css + ' ' + print.css));
 
-const acroformDefault = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/acroform-default-theme/pdf-acroform-default-colors.scss', options);
-const acroformDark = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/acroform-dark-theme/pdf-acroform-dark-colors.scss', options);
 const annotationLayerBuilder = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/annotation-layer-builder.scss', options);
 const xfaLayerBuilder = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/xfa_layer_builder.scss', options);
 const annotationEditorLayerBuilder = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/annotation_editor_layer_builder.css', options);
 
-const acroDarkCSS = [acroformDark.css, annotationLayerBuilder.css, xfaLayerBuilder.css, annotationEditorLayerBuilder.css].join(' ');
-fs.writeFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/acroform-dark-theme/pdf-acroform-dark-colors-css.ts', cssToTs(acroDarkCSS));
-
-const acroLightCSS = [acroformDefault.css, annotationLayerBuilder.css, xfaLayerBuilder.css, annotationEditorLayerBuilder.css].join(' ');
+const acroLightCSS = [annotationLayerBuilder.css, xfaLayerBuilder.css, annotationEditorLayerBuilder.css].join(' ');
 fs.writeFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/acroform-default-theme/pdf-acroform-default-colors-css.ts', cssToTs(acroLightCSS));
 
 function cssToTs(css: string): string {

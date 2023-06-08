@@ -15,7 +15,6 @@ import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-
 import { PdfSidebarContentComponent } from './sidebar/pdf-sidebar/pdf-sidebar-content/pdf-sidebar-content.component';
 import { PdfSidebarToolbarComponent } from './sidebar/pdf-sidebar/pdf-sidebar-toolbar/pdf-sidebar-toolbar.component';
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
-import { PdfAcroformDarkThemeComponent } from './theme/acroform-dark-theme/pdf-acroform-dark-theme.component';
 import { PdfAcroformDefaultThemeComponent } from './theme/acroform-default-theme/pdf-acroform-default-theme.component';
 import { PdfContextMenuComponent } from './toolbar/pdf-context-menu/pdf-context-menu.component';
 import { PdfDownloadComponent } from './toolbar/pdf-download/pdf-download.component';
@@ -239,7 +238,6 @@ if (typeof window !== 'undefined') {
     PdfZoomOutComponent,
     NgxExtendedPdfViewerComponent,
     PdfAcroformDefaultThemeComponent,
-    PdfAcroformDarkThemeComponent,
     PdfDocumentPropertiesDialogComponent,
     PdfPasswordDialogComponent,
     PdfPreparePrintingDialogComponent,

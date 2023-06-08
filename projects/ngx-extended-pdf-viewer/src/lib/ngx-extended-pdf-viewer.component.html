@@ -1,7 +1,6 @@
 <pdf-dark-theme *ngIf="theme === 'dark'"></pdf-dark-theme>
 <pdf-light-theme *ngIf="theme === 'light'"></pdf-light-theme>
-<pdf-acroform-dark-theme *ngIf="formTheme === 'dark'"></pdf-acroform-dark-theme>
-<pdf-acroform-default-theme *ngIf="formTheme === 'light'"></pdf-acroform-default-theme>
+<pdf-acroform-default-theme></pdf-acroform-default-theme>
 
 <pdf-dynamic-css [zoom]="mobileFriendlyZoomScale" [width]="toolbarWidthInPixels"></pdf-dynamic-css>
 <ng-content *ngTemplateOutlet="customPdfViewer ? customPdfViewer : defaultPdfViewer"></ng-content>
