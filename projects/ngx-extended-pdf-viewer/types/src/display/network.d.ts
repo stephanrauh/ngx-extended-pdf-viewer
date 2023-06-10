@@ -17,7 +17,6 @@ declare class NetworkManager {
     isHttp: boolean;
     httpHeaders: any;
     withCredentials: any;
-    getXhr: any;
     currXhrId: number;
     pendingRequests: any;
     requestRange(begin: any, end: any, listeners: any): number;
@@ -35,7 +34,7 @@ declare class PDFNetworkStreamFullRequestReader implements IPDFStreamReader {
     _manager: any;
     _url: any;
     _fullRequestId: any;
-    _headersReceivedCapability: import("../shared/util.js").PromiseCapability;
+    _headersReceivedCapability: PromiseCapability;
     _disableRange: any;
     _contentLength: any;
     _rangeChunkSize: any;
@@ -80,4 +79,5 @@ declare class PDFNetworkStreamRangeRequestReader implements IPDFStreamRangeReade
     read(): Promise<any>;
     cancel(reason: any): void;
 }
+import { PromiseCapability } from "../shared/util.js";
 export {};

@@ -46,16 +46,16 @@ return /******/ (() => { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.VerbosityLevel = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.RenderingIntentFlag = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.MAX_IMAGE_SIZE_TO_CACHE = exports.LINE_FACTOR = exports.LINE_DESCENT_FACTOR = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FeatureTest = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.BASELINE_FACTOR = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMode = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationEditorType = exports.AnnotationEditorPrefix = exports.AnnotationEditorParamsType = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
+exports.VerbosityLevel = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.RenderingIntentFlag = exports.PromiseCapability = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.MAX_IMAGE_SIZE_TO_CACHE = exports.LINE_FACTOR = exports.LINE_DESCENT_FACTOR = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FeatureTest = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.BASELINE_FACTOR = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMode = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationEditorType = exports.AnnotationEditorPrefix = exports.AnnotationEditorParamsType = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
 exports.assert = assert;
 exports.bytesToString = bytesToString;
-exports.createPromiseCapability = createPromiseCapability;
 exports.createValidAbsoluteUrl = createValidAbsoluteUrl;
 exports.getModificationDate = getModificationDate;
 exports.getVerbosityLevel = getVerbosityLevel;
 exports.info = info;
 exports.isArrayBuffer = isArrayBuffer;
 exports.isArrayEqual = isArrayEqual;
+exports.normalizeUnicode = normalizeUnicode;
 exports.objectFromMap = objectFromMap;
 exports.objectSize = objectSize;
 exports.setVerbosityLevel = setVerbosityLevel;
@@ -418,10 +418,7 @@ function assert(cond, msg) {
   }
 }
 function _isValidProtocol(url) {
-  if (!url) {
-    return false;
-  }
-  switch (url.protocol) {
+  switch (url?.protocol) {
     case "http:":
     case "https:":
     case "ftp:":
@@ -441,7 +438,7 @@ function createValidAbsoluteUrl(url, baseUrl = null, options = null) {
     if (options && typeof url === "string") {
       if (options.addDefaultProtocol && url.startsWith("www.")) {
         const dots = url.match(/\./g);
-        if (dots && dots.length >= 2) {
+        if (dots?.length >= 2) {
           url = `http://${url}`;
         }
       }
@@ -526,7 +523,7 @@ class AbortException extends BaseException {
 }
 exports.AbortException = AbortException;
 function bytesToString(bytes) {
-  if (typeof bytes !== "object" || bytes === null || bytes.length === undefined) {
+  if (typeof bytes !== "object" || bytes?.length === undefined) {
     unreachable("Invalid argument for bytesToString");
   }
   const length = bytes.length;
@@ -808,7 +805,7 @@ function utf8StringToString(str) {
   return unescape(encodeURIComponent(str));
 }
 function isArrayBuffer(v) {
-  return typeof v === "object" && v !== null && v.byteLength !== undefined;
+  return typeof v === "object" && v?.byteLength !== undefined;
 }
 function isArrayEqual(arr1, arr2) {
   if (arr1.length !== arr2.length) {
@@ -825,25 +822,35 @@ function getModificationDate(date = new Date()) {
   const buffer = [date.getUTCFullYear().toString(), (date.getUTCMonth() + 1).toString().padStart(2, "0"), date.getUTCDate().toString().padStart(2, "0"), date.getUTCHours().toString().padStart(2, "0"), date.getUTCMinutes().toString().padStart(2, "0"), date.getUTCSeconds().toString().padStart(2, "0")];
   return buffer.join("");
 }
-function createPromiseCapability() {
-  const capability = Object.create(null);
-  let isSettled = false;
-  Object.defineProperty(capability, "settled", {
-    get() {
-      return isSettled;
-    }
+class PromiseCapability {
+  #settled = false;
+  constructor() {
+    this.promise = new Promise((resolve, reject) => {
+      this.resolve = data => {
+        this.#settled = true;
+        resolve(data);
+      };
+      this.reject = reason => {
+        this.#settled = true;
+        reject(reason);
+      };
+    });
+  }
+  get settled() {
+    return this.#settled;
+  }
+}
+exports.PromiseCapability = PromiseCapability;
+let NormalizeRegex = null;
+let NormalizationMap = null;
+function normalizeUnicode(str) {
+  if (!NormalizeRegex) {
+    NormalizeRegex = /([\u00a0\u00b5\u037e\u0eb3\u2000-\u200a\u202f\u2126\ufb00-\ufb04\ufb06\ufb20-\ufb36\ufb38-\ufb3c\ufb3e\ufb40-\ufb41\ufb43-\ufb44\ufb46-\ufba1\ufba4-\ufba9\ufbae-\ufbb1\ufbd3-\ufbdc\ufbde-\ufbe7\ufbea-\ufbf8\ufbfc-\ufbfd\ufc00-\ufc5d\ufc64-\ufcf1\ufcf5-\ufd3d\ufd88\ufdf4\ufdfa-\ufdfb\ufe71\ufe77\ufe79\ufe7b\ufe7d]+)|(\ufb05+)/gu;
+    NormalizationMap = new Map([["ﬅ", "ſt"]]);
+  }
+  return str.replaceAll(NormalizeRegex, (_, p1, p2) => {
+    return p1 ? p1.normalize("NFKC") : NormalizationMap.get(p2);
   });
-  capability.promise = new Promise(function (resolve, reject) {
-    capability.resolve = function (data) {
-      isSettled = true;
-      resolve(data);
-    };
-    capability.reject = function (reason) {
-      isSettled = true;
-      reject(reason);
-    };
-  });
-  return capability;
 }
 
 /***/ }),
@@ -1001,7 +1008,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.5.536',
+    apiVersion: '3.6.569',
     data,
     password,
     disableAutoFetch,
@@ -1121,7 +1128,7 @@ function getDataProp(val) {
 class PDFDocumentLoadingTask {
   static #docId = 0;
   constructor() {
-    this._capability = (0, _util.createPromiseCapability)();
+    this._capability = new _util.PromiseCapability();
     this._transport = null;
     this._worker = null;
     this.docId = `d${PDFDocumentLoadingTask.#docId++}`;
@@ -1153,7 +1160,7 @@ class PDFDataRangeTransport {
     this._progressListeners = [];
     this._progressiveReadListeners = [];
     this._progressiveDoneListeners = [];
-    this._readyCapability = (0, _util.createPromiseCapability)();
+    this._readyCapability = new _util.PromiseCapability();
   }
   addRangeListener(listener) {
     this._rangeListeners.push(listener);
@@ -1402,7 +1409,7 @@ class PDFPageProxy {
     }
     const intentPrint = !!(intentArgs.renderingIntent & _util.RenderingIntentFlag.PRINT);
     if (!intentState.displayReadyCapability) {
-      intentState.displayReadyCapability = (0, _util.createPromiseCapability)();
+      intentState.displayReadyCapability = new _util.PromiseCapability();
       intentState.operatorList = {
         fnArray: [],
         argsArray: [],
@@ -1486,7 +1493,7 @@ class PDFPageProxy {
     if (!intentState.opListReadCapability) {
       opListTask = Object.create(null);
       opListTask.operatorListChanged = operatorListChanged;
-      intentState.opListReadCapability = (0, _util.createPromiseCapability)();
+      intentState.opListReadCapability = new _util.PromiseCapability();
       (intentState.renderTasks ||= new Set()).add(opListTask);
       intentState.operatorList = {
         fnArray: [],
@@ -1500,12 +1507,14 @@ class PDFPageProxy {
     return intentState.opListReadCapability.promise;
   }
   streamTextContent({
-    includeMarkedContent = false
+    includeMarkedContent = false,
+    disableNormalization = false
   } = {}) {
     const TEXT_CONTENT_CHUNK_SIZE = 100;
     return this._transport.messageHandler.sendWithStream("GetTextContent", {
       pageIndex: this._pageIndex,
-      includeMarkedContent: includeMarkedContent === true
+      includeMarkedContent: includeMarkedContent === true,
+      disableNormalization: disableNormalization === true
     }, {
       highWaterMark: TEXT_CONTENT_CHUNK_SIZE,
       size(textContent) {
@@ -1803,7 +1812,7 @@ class PDFWorker {
     this.name = name;
     this.destroyed = false;
     this.verbosity = verbosity;
-    this._readyCapability = (0, _util.createPromiseCapability)();
+    this._readyCapability = new _util.PromiseCapability();
     this._port = null;
     this._webWorker = null;
     this._messageHandler = null;
@@ -2021,7 +2030,7 @@ class WorkerTransport {
     this._networkStream = networkStream;
     this._fullReader = null;
     this._lastProgress = null;
-    this.downloadInfoCapability = (0, _util.createPromiseCapability)();
+    this.downloadInfoCapability = new _util.PromiseCapability();
     this.setupMessageHandler();
   }
   #cacheSimpleMethod(name, data = null) {
@@ -2082,7 +2091,7 @@ class WorkerTransport {
       return this.destroyCapability.promise;
     }
     this.destroyed = true;
-    this.destroyCapability = (0, _util.createPromiseCapability)();
+    this.destroyCapability = new _util.PromiseCapability();
     if (this._passwordCapability) {
       this._passwordCapability.reject(new Error("Worker was destroyed during onPassword callback"));
     }
@@ -2153,7 +2162,7 @@ class WorkerTransport {
       };
     });
     messageHandler.on("ReaderHeadersReady", data => {
-      const headersCapability = (0, _util.createPromiseCapability)();
+      const headersCapability = new _util.PromiseCapability();
       const fullReader = this._fullReader;
       fullReader.headersReady.then(() => {
         if (!fullReader.isStreamingSupported || !fullReader.isRangeSupported) {
@@ -2239,7 +2248,7 @@ class WorkerTransport {
       loadingTask._capability.reject(reason);
     });
     messageHandler.on("PasswordRequest", exception => {
-      this._passwordCapability = (0, _util.createPromiseCapability)();
+      this._passwordCapability = new _util.PromiseCapability();
       if (loadingTask.onPassword) {
         const updatePassword = password => {
           if (password instanceof Error) {
@@ -2554,7 +2563,7 @@ class PDFObjects {
       return obj;
     }
     return this.#objs[objId] = {
-      capability: (0, _util.createPromiseCapability)(),
+      capability: new _util.PromiseCapability(),
       data: null
     };
   }
@@ -2648,7 +2657,7 @@ class InternalRenderTask {
     this.graphicsReady = false;
     this._useRequestAnimationFrame = useRequestAnimationFrame === true && typeof window !== "undefined";
     this.cancelled = false;
-    this.capability = (0, _util.createPromiseCapability)();
+    this.capability = new _util.PromiseCapability();
     this.task = new RenderTask(this);
     this._cancelBound = this.cancel.bind(this);
     this._continueBound = this._continue.bind(this);
@@ -2685,7 +2694,7 @@ class InternalRenderTask {
     } = this.params;
     this.gfx = new _canvas.CanvasGraphics(canvasContext, this.commonObjs, this.objs, this.canvasFactory, this.filterFactory, {
       optionalContentConfig
-    }, this.annotationCanvasMap);
+    }, this.annotationCanvasMap, this.pageColors);
     this.gfx.beginDrawing({
       transform,
       viewport,
@@ -2699,7 +2708,7 @@ class InternalRenderTask {
   cancel(error = null, extraDelay = 0) {
     this.running = false;
     this.cancelled = true;
-    this.gfx?.endDrawing(this.pageColors);
+    this.gfx?.endDrawing();
     if (this._canvas) {
       InternalRenderTask.#canvasInUse.delete(this._canvas);
     }
@@ -2707,9 +2716,7 @@ class InternalRenderTask {
   }
   operatorListChanged() {
     if (!this.graphicsReady) {
-      if (!this.graphicsReadyCallback) {
-        this.graphicsReadyCallback = this._continueBound;
-      }
+      this.graphicsReadyCallback ||= this._continueBound;
       return;
     }
     this.stepper?.updateOperatorList(this.operatorList);
@@ -2757,9 +2764,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.5.536';
+const version = '3.6.569';
 exports.version = version;
-const build = 'd3d797fc9';
+const build = '778949a48';
 exports.build = build;
 
 /***/ }),
@@ -2944,6 +2951,7 @@ class AnnotationEditor {
       }
     } = this.parent.viewport;
     this.rotation = rotation;
+    this.pageRotation = (360 + rotation - this._uiManager.viewParameters.rotation) % 360;
     this.pageDimensions = [pageWidth, pageHeight];
     this.pageTranslation = [pageX, pageY];
     const [width, height] = this.parentDimensions;
@@ -3045,7 +3053,7 @@ class AnnotationEditor {
     return this._uiManager.viewParameters.realScale;
   }
   get parentRotation() {
-    return this._uiManager.viewParameters.rotation;
+    return (this._uiManager.viewParameters.rotation + this.pageRotation) % 360;
   }
   get parentDimensions() {
     const {
@@ -3511,7 +3519,7 @@ class AnnotationEditorUIManager {
   }
   addToAnnotationStorage(editor) {
     if (!editor.isEmpty() && this.#annotationStorage && !this.#annotationStorage.has(editor.id)) {
-      this.#annotationStorage.setValue(editor.id, null, editor);
+      this.#annotationStorage.setValue(editor.id, editor);
     }
   }
   #addKeyboardManager() {
@@ -5767,7 +5775,7 @@ class CanvasGraphics {
   constructor(canvasCtx, commonObjs, objs, canvasFactory, filterFactory, {
     optionalContentConfig,
     markedContentStack = null
-  }, annotationCanvasMap) {
+  }, annotationCanvasMap, pageColors) {
     this.ctx = canvasCtx;
     this.current = new CanvasExtraState(this.ctx.canvas.width, this.ctx.canvas.height);
     this.stateStack = [];
@@ -5797,6 +5805,7 @@ class CanvasGraphics {
     this.viewportScale = 1;
     this.outputScaleX = 1;
     this.outputScaleY = 1;
+    this.pageColors = pageColors;
     this._cachedScaleForStroking = null;
     this._cachedGetSinglePixelWidth = null;
     this._cachedBitmapsMap = new Map();
@@ -5896,7 +5905,7 @@ class CanvasGraphics {
       this.transparentCanvas = null;
     }
   }
-  endDrawing(pageColors = null) {
+  endDrawing() {
     this.#restoreInitialState();
     this.cachedCanvases.clear();
     this.cachedPatterns.clear();
@@ -5909,8 +5918,11 @@ class CanvasGraphics {
       cache.clear();
     }
     this._cachedBitmapsMap.clear();
-    if (pageColors) {
-      const hcmFilterId = this.filterFactory.addHCMFilter(pageColors.foreground, pageColors.background);
+    this.#drawFilter();
+  }
+  #drawFilter() {
+    if (this.pageColors) {
+      const hcmFilterId = this.filterFactory.addHCMFilter(this.pageColors.foreground, this.pageColors.background);
       if (hcmFilterId !== "none") {
         const savedFilter = this.ctx.filter;
         this.ctx.filter = hcmFilterId;
@@ -6952,6 +6964,7 @@ class CanvasGraphics {
         this.annotationCanvasMap.set(id, canvas);
         this.annotationCanvas.savedCtx = this.ctx;
         this.ctx = context;
+        this.ctx.save();
         this.ctx.setTransform(scaleX, 0, 0, -scaleY, 0, height * scaleY);
         resetCtxToDefault(this.ctx);
       } else {
@@ -6967,6 +6980,8 @@ class CanvasGraphics {
   }
   endAnnotation() {
     if (this.annotationCanvas) {
+      this.ctx.restore();
+      this.#drawFilter();
       this.ctx = this.annotationCanvas.savedCtx;
       delete this.annotationCanvas.savedCtx;
       delete this.annotationCanvas;
@@ -7639,9 +7654,7 @@ const PaintType = {
   UNCOLORED: 2
 };
 class TilingPattern {
-  static get MAX_PATTERN_SIZE() {
-    return (0, _util.shadow)(this, "MAX_PATTERN_SIZE", 3000);
-  }
+  static MAX_PATTERN_SIZE = 3000;
   constructor(IR, color, ctx, canvasGraphicsFactory, baseTransform) {
     this.operatorList = IR[2];
     this.matrix = IR[3] || [1, 0, 0, 1, 0, 0];
@@ -7965,7 +7978,7 @@ class MessageHandler {
         return;
       }
       if (data.stream) {
-        this._processStreamMessage(data);
+        this.#processStreamMessage(data);
         return;
       }
       if (data.callback) {
@@ -8013,7 +8026,7 @@ class MessageHandler {
         return;
       }
       if (data.streamId) {
-        this._createStreamSink(data);
+        this.#createStreamSink(data);
         return;
       }
       action(data.data);
@@ -8037,7 +8050,7 @@ class MessageHandler {
   }
   sendWithPromise(actionName, data, transfers) {
     const callbackId = this.callbackId++;
-    const capability = (0, _util.createPromiseCapability)();
+    const capability = new _util.PromiseCapability();
     this.callbackCapabilities[callbackId] = capability;
     try {
       this.comObj.postMessage({
@@ -8059,7 +8072,7 @@ class MessageHandler {
       comObj = this.comObj;
     return new ReadableStream({
       start: controller => {
-        const startCapability = (0, _util.createPromiseCapability)();
+        const startCapability = new _util.PromiseCapability();
         this.streamControllers[streamId] = {
           controller,
           startCall: startCapability,
@@ -8078,7 +8091,7 @@ class MessageHandler {
         return startCapability.promise;
       },
       pull: controller => {
-        const pullCapability = (0, _util.createPromiseCapability)();
+        const pullCapability = new _util.PromiseCapability();
         this.streamControllers[streamId].pullCall = pullCapability;
         comObj.postMessage({
           sourceName,
@@ -8091,7 +8104,7 @@ class MessageHandler {
       },
       cancel: reason => {
         (0, _util.assert)(reason instanceof Error, "cancel must have a valid reason");
-        const cancelCapability = (0, _util.createPromiseCapability)();
+        const cancelCapability = new _util.PromiseCapability();
         this.streamControllers[streamId].cancelCall = cancelCapability;
         this.streamControllers[streamId].isClosed = true;
         comObj.postMessage({
@@ -8105,7 +8118,7 @@ class MessageHandler {
       }
     }, queueingStrategy);
   }
-  _createStreamSink(data) {
+  #createStreamSink(data) {
     const streamId = data.streamId,
       sourceName = this.sourceName,
       targetName = data.sourceName,
@@ -8120,7 +8133,7 @@ class MessageHandler {
         const lastDesiredSize = this.desiredSize;
         this.desiredSize -= size;
         if (lastDesiredSize > 0 && this.desiredSize <= 0) {
-          this.sinkCapability = (0, _util.createPromiseCapability)();
+          this.sinkCapability = new _util.PromiseCapability();
           this.ready = this.sinkCapability.promise;
         }
         comObj.postMessage({
@@ -8158,7 +8171,7 @@ class MessageHandler {
           reason: wrapReason(reason)
         });
       },
-      sinkCapability: (0, _util.createPromiseCapability)(),
+      sinkCapability: new _util.PromiseCapability(),
       onPull: null,
       onCancel: null,
       isCancelled: false,
@@ -8188,7 +8201,7 @@ class MessageHandler {
       });
     });
   }
-  _processStreamMessage(data) {
+  #processStreamMessage(data) {
     const streamId = data.streamId,
       sourceName = this.sourceName,
       targetName = data.sourceName,
@@ -8226,7 +8239,7 @@ class MessageHandler {
         }
         streamSink.desiredSize = data.desiredSize;
         new Promise(function (resolve) {
-          resolve(streamSink.onPull && streamSink.onPull());
+          resolve(streamSink.onPull?.());
         }).then(function () {
           comObj.postMessage({
             sourceName,
@@ -8259,12 +8272,12 @@ class MessageHandler {
         }
         streamController.isClosed = true;
         streamController.controller.close();
-        this._deleteStreamController(streamController, streamId);
+        this.#deleteStreamController(streamController, streamId);
         break;
       case StreamKind.ERROR:
         (0, _util.assert)(streamController, "error should have stream controller");
         streamController.controller.error(wrapReason(data.reason));
-        this._deleteStreamController(streamController, streamId);
+        this.#deleteStreamController(streamController, streamId);
         break;
       case StreamKind.CANCEL_COMPLETE:
         if (data.success) {
@@ -8272,14 +8285,14 @@ class MessageHandler {
         } else {
           streamController.cancelCall.reject(wrapReason(data.reason));
         }
-        this._deleteStreamController(streamController, streamId);
+        this.#deleteStreamController(streamController, streamId);
         break;
       case StreamKind.CANCEL:
         if (!streamSink) {
           break;
         }
         new Promise(function (resolve) {
-          resolve(streamSink.onCancel && streamSink.onCancel(wrapReason(data.reason)));
+          resolve(streamSink.onCancel?.(wrapReason(data.reason)));
         }).then(function () {
           comObj.postMessage({
             sourceName,
@@ -8305,8 +8318,8 @@ class MessageHandler {
         throw new Error("Unexpected stream case");
     }
   }
-  async _deleteStreamController(streamController, streamId) {
-    await Promise.allSettled([streamController.startCall && streamController.startCall.promise, streamController.pullCall && streamController.pullCall.promise, streamController.cancelCall && streamController.cancelCall.promise]);
+  async #deleteStreamController(streamController, streamId) {
+    await Promise.allSettled([streamController.startCall?.promise, streamController.pullCall?.promise, streamController.cancelCall?.promise]);
     delete this.streamControllers[streamId];
   }
   destroy() {
@@ -8741,7 +8754,7 @@ class PDFDataTransportStreamReader {
         done: true
       };
     }
-    const requestCapability = (0, _util.createPromiseCapability)();
+    const requestCapability = new _util.PromiseCapability();
     this._requests.push(requestCapability);
     return requestCapability.promise;
   }
@@ -8813,7 +8826,7 @@ class PDFDataTransportStreamRangeReader {
         done: true
       };
     }
-    const requestCapability = (0, _util.createPromiseCapability)();
+    const requestCapability = new _util.PromiseCapability();
     this._requests.push(requestCapability);
     return requestCapability.promise;
   }
@@ -9017,8 +9030,8 @@ class BaseFullReader {
     this._isStreamingSupported = !source.disableStream;
     this._isRangeSupported = !source.disableRange;
     this._readableStream = null;
-    this._readCapability = (0, _util.createPromiseCapability)();
-    this._headersCapability = (0, _util.createPromiseCapability)();
+    this._readCapability = new _util.PromiseCapability();
+    this._headersCapability = new _util.PromiseCapability();
   }
   get headersReady() {
     return this._headersCapability.promise;
@@ -9048,7 +9061,7 @@ class BaseFullReader {
     }
     const chunk = this._readableStream.read();
     if (chunk === null) {
-      this._readCapability = (0, _util.createPromiseCapability)();
+      this._readCapability = new _util.PromiseCapability();
       return this.read();
     }
     this._loaded += chunk.length;
@@ -9102,7 +9115,7 @@ class BaseRangeReader {
     this.onProgress = null;
     this._loaded = 0;
     this._readableStream = null;
-    this._readCapability = (0, _util.createPromiseCapability)();
+    this._readCapability = new _util.PromiseCapability();
     const source = stream.source;
     this._isStreamingSupported = !source.disableStream;
   }
@@ -9122,7 +9135,7 @@ class BaseRangeReader {
     }
     const chunk = this._readableStream.read();
     if (chunk === null) {
-      this._readCapability = (0, _util.createPromiseCapability)();
+      this._readCapability = new _util.PromiseCapability();
       return this.read();
     }
     this._loaded += chunk.length;
@@ -9524,9 +9537,6 @@ class NetworkManager {
     this.isHttp = /^https?:/i.test(url);
     this.httpHeaders = this.isHttp && args.httpHeaders || Object.create(null);
     this.withCredentials = args.withCredentials || false;
-    this.getXhr = args.getXhr || function NetworkManager_getXhr() {
-      return new XMLHttpRequest();
-    };
     this.currXhrId = 0;
     this.pendingRequests = Object.create(null);
   }
@@ -9544,7 +9554,7 @@ class NetworkManager {
     return this.request(listeners);
   }
   request(args) {
-    const xhr = this.getXhr();
+    const xhr = new XMLHttpRequest();
     const xhrId = this.currXhrId++;
     const pendingRequest = this.pendingRequests[xhrId] = {
       xhr
@@ -9689,7 +9699,7 @@ class PDFNetworkStreamFullRequestReader {
     };
     this._url = source.url;
     this._fullRequestId = manager.requestFull(args);
-    this._headersReceivedCapability = (0, _util.createPromiseCapability)();
+    this._headersReceivedCapability = new _util.PromiseCapability();
     this._disableRange = source.disableRange || false;
     this._contentLength = source.length;
     this._rangeChunkSize = source.rangeChunkSize;
@@ -9801,7 +9811,7 @@ class PDFNetworkStreamFullRequestReader {
         done: true
       };
     }
-    const requestCapability = (0, _util.createPromiseCapability)();
+    const requestCapability = new _util.PromiseCapability();
     this._requests.push(requestCapability);
     return requestCapability.promise;
   }
@@ -9898,7 +9908,7 @@ class PDFNetworkStreamRangeRequestReader {
         done: true
       };
     }
-    const requestCapability = (0, _util.createPromiseCapability)();
+    const requestCapability = new _util.PromiseCapability();
     this._requests.push(requestCapability);
     return requestCapability.promise;
   }
@@ -10003,7 +10013,7 @@ class PDFFetchStreamReader {
     const source = stream.source;
     this._withCredentials = source.withCredentials || false;
     this._contentLength = source.length;
-    this._headersCapability = (0, _util.createPromiseCapability)();
+    this._headersCapability = new _util.PromiseCapability();
     this._disableRange = source.disableRange || false;
     this._rangeChunkSize = source.rangeChunkSize;
     if (!this._rangeChunkSize && !this._disableRange) {
@@ -10090,7 +10100,7 @@ class PDFFetchStreamRangeReader {
     this._loaded = 0;
     const source = stream.source;
     this._withCredentials = source.withCredentials || false;
-    this._readCapability = (0, _util.createPromiseCapability)();
+    this._readCapability = new _util.PromiseCapability();
     this._isStreamingSupported = !source.disableStream;
     this._abortController = new AbortController();
     this._headers = createHeaders(this._stream.httpHeaders);
@@ -10361,7 +10371,7 @@ class TextLayerRenderTask {
     this._reader = null;
     this._textDivProperties = textDivProperties || new WeakMap();
     this._canceled = false;
-    this._capability = (0, _util.createPromiseCapability)();
+    this._capability = new _util.PromiseCapability();
     this._layoutTextParams = {
       prevFontSize: null,
       prevFontFamily: null,
@@ -10429,7 +10439,7 @@ class TextLayerRenderTask {
     }
   }
   _render() {
-    const capability = (0, _util.createPromiseCapability)();
+    const capability = new _util.PromiseCapability();
     let styleCache = Object.create(null);
     if (this._isReadableStream) {
       const pump = () => {
@@ -10477,7 +10487,7 @@ function renderTextLayer(params) {
   const style = getComputedStyle(container);
   const visibility = style.getPropertyValue("visibility");
   const scaleFactor = parseFloat(style.getPropertyValue("--scale-factor"));
-  if (visibility === "visible" && (!scaleFactor || Math.abs(scaleFactor - viewport.scale) > 1e-15)) {
+  if (visibility === "visible" && (!scaleFactor || Math.abs(scaleFactor - viewport.scale) > 1e-5)) {
     console.error("The `--scale-factor` CSS-variable must be set, " + "to the same value as `viewport.scale`, " + "either on the `container`-element itself or higher up in the DOM.");
   }
   const task = new TextLayerRenderTask(params);
@@ -12516,7 +12526,7 @@ class AnnotationElement {
   _createPopup(trigger, data) {
     let container = this.container;
     if (this.quadrilaterals) {
-      trigger = trigger || this.quadrilaterals;
+      trigger ||= this.quadrilaterals;
       container = this.quadrilaterals[0];
     }
     if (!trigger) {
@@ -12861,6 +12871,14 @@ class WidgetAnnotationElement extends AnnotationElement {
     }
     return this.container;
   }
+  showElementAndHideCanvas(element) {
+    if (this.data.hasOwnCanvas) {
+      if (element.previousSibling?.nodeName === "CANVAS") {
+        element.previousSibling.hidden = true;
+      }
+      element.hidden = false;
+    }
+  }
   _getKeyModifier(event) {
     const {
       isWin,
@@ -12995,6 +13013,9 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
           element.style.overflowX = "hidden";
         }
       }
+      if (this.data.hasOwnCanvas) {
+        element.hidden = true;
+      }
       GetElementsByNameSet.add(element);
       element.setAttribute("data-element-id", id);
       element.disabled = this.data.readOnly;
@@ -13043,6 +13064,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
           elementData.commitKey = 1;
         });
         element.addEventListener("updatefromsandbox", jsEvent => {
+          this.showElementAndHideCanvas(jsEvent.target);
           const actions = {
             value(event) {
               elementData.userValue = event.detail.value ?? "";
@@ -16017,6 +16039,12 @@ Object.defineProperty(exports, "PixelsPerInch", ({
     return _display_utils.PixelsPerInch;
   }
 }));
+Object.defineProperty(exports, "PromiseCapability", ({
+  enumerable: true,
+  get: function () {
+    return _util.PromiseCapability;
+  }
+}));
 Object.defineProperty(exports, "RenderingCancelledException", ({
   enumerable: true,
   get: function () {
@@ -16057,12 +16085,6 @@ Object.defineProperty(exports, "build", ({
   enumerable: true,
   get: function () {
     return _api.build;
-  }
-}));
-Object.defineProperty(exports, "createPromiseCapability", ({
-  enumerable: true,
-  get: function () {
-    return _util.createPromiseCapability;
   }
 }));
 Object.defineProperty(exports, "createValidAbsoluteUrl", ({
@@ -16113,6 +16135,12 @@ Object.defineProperty(exports, "loadScript", ({
     return _display_utils.loadScript;
   }
 }));
+Object.defineProperty(exports, "normalizeUnicode", ({
+  enumerable: true,
+  get: function () {
+    return _util.normalizeUnicode;
+  }
+}));
 Object.defineProperty(exports, "renderTextLayer", ({
   enumerable: true,
   get: function () {
@@ -16153,8 +16181,8 @@ var _annotation_layer = __w_pdfjs_require__(32);
 var _worker_options = __w_pdfjs_require__(14);
 var _svg = __w_pdfjs_require__(35);
 var _xfa_layer = __w_pdfjs_require__(34);
-const pdfjsVersion = '3.5.536';
-const pdfjsBuild = 'd3d797fc9';
+const pdfjsVersion = '3.6.569';
+const pdfjsBuild = '778949a48';
 })();
 
 /******/ 	return __webpack_exports__;

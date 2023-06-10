@@ -39,8 +39,8 @@ declare class BaseFullReader {
     _isStreamingSupported: boolean;
     _isRangeSupported: boolean;
     _readableStream: any;
-    _readCapability: import("../shared/util.js").PromiseCapability;
-    _headersCapability: import("../shared/util.js").PromiseCapability;
+    _readCapability: PromiseCapability;
+    _headersCapability: PromiseCapability;
     get headersReady(): Promise<any>;
     get filename(): any;
     get contentLength(): any;
@@ -59,7 +59,7 @@ declare class BaseRangeReader {
     onProgress: any;
     _loaded: number;
     _readableStream: any;
-    _readCapability: import("../shared/util.js").PromiseCapability;
+    _readCapability: PromiseCapability;
     _isStreamingSupported: boolean;
     get isStreamingSupported(): boolean;
     read(): any;
@@ -67,4 +67,5 @@ declare class BaseRangeReader {
     _error(reason: any): void;
     _setReadableStream(readableStream: any): void;
 }
+import { PromiseCapability } from "../shared/util.js";
 export {};

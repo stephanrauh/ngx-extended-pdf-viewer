@@ -60,6 +60,7 @@ export class AnnotationEditor {
     name: any;
     div: HTMLDivElement | null;
     rotation: any;
+    pageRotation: number;
     pageDimensions: any[];
     pageTranslation: any[];
     x: number;
@@ -123,7 +124,7 @@ export class AnnotationEditor {
      */
     screenToPageTranslation(x: number, y: number): number[];
     get parentScale(): any;
-    get parentRotation(): any;
+    get parentRotation(): number;
     get parentDimensions(): number[];
     /**
      * Set the dimensions of this editor.

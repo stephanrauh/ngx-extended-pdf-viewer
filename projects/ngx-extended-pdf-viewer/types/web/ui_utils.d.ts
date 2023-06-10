@@ -218,10 +218,6 @@ export class ProgressBar {
  * @param {boolean} [replaceInvisible]
  */
 export function removeNullCharacters(str: string, replaceInvisible?: boolean | undefined): any;
-export const RendererType: {
-    CANVAS: string;
-    SVG: string;
-} | null;
 export namespace RenderingStates {
     const INITIAL: number;
     const RUNNING: number;
@@ -232,14 +228,19 @@ export function roundToDivide(x: any, div: any): any;
 export const SCROLLBAR_PADDING: 40;
 /**
  * Scrolls specified element into view of its parent.
- * @param {Object} element - The element to be visible.
- * @param {Object} spot - An object with optional top and left properties,
+ * @param {HTMLElement} element - The element to be visible.
+ * @param {Object} [spot] - An object with optional top and left properties,
  *   specifying the offset from the top left edge.
+ * @param {number} [spot.left]
+ * @param {number} [spot.top]
  * @param {boolean} [scrollMatches] - When scrolling search results into view,
  *   ignore elements that either: Contains marked content identifiers,
  *   or have the CSS-rule `overflow: hidden;` set. The default value is `false`.
  */
-export function scrollIntoView(element: Object, spot: Object, scrollMatches?: boolean | undefined, infiniteScroll?: boolean): void;
+export function scrollIntoView(element: HTMLElement, spot?: {
+    left?: number | undefined;
+    top?: number | undefined;
+} | undefined, scrollMatches?: boolean | undefined, infiniteScroll?: boolean): void;
 export namespace ScrollMode {
     const UNKNOWN_1: number;
     export { UNKNOWN_1 as UNKNOWN };
@@ -268,7 +269,9 @@ export namespace SpreadMode {
 export namespace TextLayerMode {
     const DISABLE: number;
     const ENABLE: number;
+    const ENABLE_PERMISSIONS: number;
 }
+export function toggleCheckedBtn(button: any, toggle: any, view?: null): void;
 export const UNKNOWN_SCALE: 0;
 export const VERTICAL_PADDING: 5;
 /**

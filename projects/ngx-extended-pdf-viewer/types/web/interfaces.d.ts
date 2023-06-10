@@ -8,8 +8,9 @@ export class IDownloadManager {
     /**
      * @param {string} url
      * @param {string} filename
+     * @param {Object} [options]
      */
-    downloadUrl(url: string, filename: string): void;
+    downloadUrl(url: string, filename: string, options?: Object | undefined): void;
     /**
      * @param {Uint8Array} data
      * @param {string} filename
@@ -27,8 +28,9 @@ export class IDownloadManager {
      * @param {Blob} blob
      * @param {string} url
      * @param {string} filename
+     * @param {Object} [options]
      */
-    download(blob: Blob, url: string, filename: string): void;
+    download(blob: Blob, url: string, filename: string, options?: Object | undefined): void;
 }
 /**
  * @interface

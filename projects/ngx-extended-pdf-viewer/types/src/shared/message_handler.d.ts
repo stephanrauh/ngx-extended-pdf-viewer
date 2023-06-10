@@ -38,17 +38,6 @@ export class MessageHandler {
      * @returns {ReadableStream} ReadableStream to read data in chunks.
      */
     sendWithStream(actionName: string, data: JSON, queueingStrategy: Object, transfers?: any[] | undefined): ReadableStream;
-    /**
-     * @private
-     */
-    private _createStreamSink;
-    /**
-     * @private
-     */
-    private _processStreamMessage;
-    /**
-     * @private
-     */
-    private _deleteStreamController;
     destroy(): void;
+    #private;
 }

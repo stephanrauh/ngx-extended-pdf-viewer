@@ -2,7 +2,7 @@ export class CanvasGraphics {
     constructor(canvasCtx: any, commonObjs: any, objs: any, canvasFactory: any, filterFactory: any, { optionalContentConfig, markedContentStack }: {
         optionalContentConfig: any;
         markedContentStack?: null | undefined;
-    }, annotationCanvasMap: any);
+    }, annotationCanvasMap: any, pageColors: any);
     ctx: any;
     current: CanvasExtraState;
     stateStack: any[];
@@ -32,6 +32,7 @@ export class CanvasGraphics {
     viewportScale: number;
     outputScaleX: number;
     outputScaleY: number;
+    pageColors: any;
     _cachedScaleForStroking: number[] | null;
     _cachedGetSinglePixelWidth: number | null;
     _cachedBitmapsMap: Map<any, any>;
@@ -45,7 +46,7 @@ export class CanvasGraphics {
     compositeCtx: any;
     transparentCanvas: any;
     executeOperatorList(operatorList: any, executionStartIdx: any, continueCallback: any, stepper: any): any;
-    endDrawing(pageColors?: null): void;
+    endDrawing(): void;
     _scaleImage(img: any, inverseTransform: any): {
         img: any;
         paintWidth: any;

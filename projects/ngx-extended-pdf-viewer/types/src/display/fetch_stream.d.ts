@@ -20,7 +20,7 @@ declare class PDFFetchStreamReader implements IPDFStreamReader {
     _filename: string | null;
     _withCredentials: any;
     _contentLength: any;
-    _headersCapability: import("../shared/util.js").PromiseCapability;
+    _headersCapability: PromiseCapability;
     _disableRange: any;
     _rangeChunkSize: any;
     _abortController: AbortController;
@@ -49,7 +49,7 @@ declare class PDFFetchStreamRangeReader implements IPDFStreamRangeReader {
     _reader: ReadableStreamDefaultReader<Uint8Array> | null;
     _loaded: number;
     _withCredentials: any;
-    _readCapability: import("../shared/util.js").PromiseCapability;
+    _readCapability: PromiseCapability;
     _isStreamingSupported: boolean;
     _abortController: AbortController;
     _headers: Headers;
@@ -64,4 +64,5 @@ declare class PDFFetchStreamRangeReader implements IPDFStreamRangeReader {
     }>;
     cancel(reason: any): void;
 }
+import { PromiseCapability } from "../shared/util.js";
 export {};

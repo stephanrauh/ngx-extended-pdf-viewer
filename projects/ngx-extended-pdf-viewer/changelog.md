@@ -457,3 +457,4 @@
 - 17.0.0-alpha.9 #1766 allow for custom find dialogs without the "individual words" checkbox; #1672 re-activated filtering the console output (was broken after implementing support for server-side rendering); #1680 / #1663 implement `disableForms` to disable AcroForm and XFA forms
 - 17.0.0-alpha.10 #1685 add a programmatic API exporting the PDF file as a Blob
 - 17.0.0-beta.0 #1735 removed the `[formTheme]` attribute; #1735 / #1007 remove `[wheelAction]`; #1685 removed the programmatic API exporting the PDF file as a Blob because it was already there under a different name (`NgxExtendedPdfViewerService.getCurrentDocumentAsBlob()`)
+- 17.0.0-beta.1 #1679 / #1772 include the editor annotations (free text and ink) when downloading / exporting the PDF file; update the bleeding edge branch to pdf.js 3.6

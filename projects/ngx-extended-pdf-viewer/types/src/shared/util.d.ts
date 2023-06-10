@@ -1,24 +1,3 @@
-/**
- * Promise Capability object.
- */
-export type PromiseCapability = {
-    /**
-     * - A Promise object.
-     */
-    promise: Promise<any>;
-    /**
-     * - If the Promise has been fulfilled/rejected.
-     */
-    settled: boolean;
-    /**
-     * - Fulfills the Promise.
-     */
-    resolve: Function;
-    /**
-     * - Rejects the Promise.
-     */
-    reject: Function;
-};
 declare const AbortException_base: any;
 /**
  * Error used to indicate task cancellation.
@@ -171,22 +150,6 @@ export namespace CMapCompressionType {
     export const BINARY: number;
 }
 /**
- * Promise Capability object.
- *
- * @typedef {Object} PromiseCapability
- * @property {Promise<any>} promise - A Promise object.
- * @property {boolean} settled - If the Promise has been fulfilled/rejected.
- * @property {function} resolve - Fulfills the Promise.
- * @property {function} reject - Rejects the Promise.
- */
-/**
- * Creates a promise capability object.
- * @alias createPromiseCapability
- *
- * @returns {PromiseCapability}
- */
-export function createPromiseCapability(): PromiseCapability;
-/**
  * Attempts to create a valid absolute URL.
  *
  * @param {URL|string} url - An absolute, or relative, URL.
@@ -241,6 +204,7 @@ export class MissingPDFException extends MissingPDFException_base {
     [x: string]: any;
     constructor(msg: any);
 }
+export function normalizeUnicode(str: any): any;
 export function objectFromMap(map: any): any;
 export function objectSize(obj: any): number;
 export namespace OPS {
@@ -358,6 +322,25 @@ export namespace PermissionFlag {
     export const COPY_FOR_ACCESSIBILITY: number;
     export const ASSEMBLE: number;
     export const PRINT_HIGH_QUALITY: number;
+}
+export class PromiseCapability {
+    /**
+     * @type {Promise<any>} The Promise object.
+     */
+    promise: Promise<any>;
+    /**
+     * @type {function} Fulfills the Promise.
+     */
+    resolve: Function;
+    /**
+     * @type {function} Rejects the Promise.
+     */
+    reject: Function;
+    /**
+     * @type {boolean} If the Promise has been fulfilled/rejected.
+     */
+    get settled(): boolean;
+    #private;
 }
 export namespace RenderingIntentFlag {
     export const ANY: number;

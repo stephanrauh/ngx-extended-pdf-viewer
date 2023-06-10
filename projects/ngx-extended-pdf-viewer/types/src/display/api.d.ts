@@ -256,6 +256,11 @@ export type getTextContentParameters = {
      * content items in the items array of TextContent. The default is `false`.
      */
     includeMarkedContent?: boolean | undefined;
+    /**
+     * - When true the text is *not*
+     * normalized in the worker-thread. The default is `false`.
+     */
+    disableNormalization?: boolean | undefined;
 };
 /**
  * Page text content.
@@ -680,7 +685,7 @@ export class PDFDataRangeTransport {
     _progressListeners: any[];
     _progressiveReadListeners: any[];
     _progressiveDoneListeners: any[];
-    _readyCapability: import("../shared/util.js").PromiseCapability;
+    _readyCapability: PromiseCapability;
     /**
      * @param {function} listener
      */
@@ -731,8 +736,8 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#16@#docId": number;
-    _capability: import("../shared/util.js").PromiseCapability;
+    static "__#18@#docId": number;
+    _capability: PromiseCapability;
     _transport: any;
     _worker: any;
     /**
@@ -1041,6 +1046,8 @@ export class PDFDocumentProxy {
  * @typedef {Object} getTextContentParameters
  * @property {boolean} [includeMarkedContent] - When true include marked
  *   content items in the items array of TextContent. The default is `false`.
+ * @property {boolean} [disableNormalization] - When true the text is *not*
+ *   normalized in the worker-thread. The default is `false`.
  */
 /**
  * Page text content.
@@ -1268,7 +1275,7 @@ export class PDFPageProxy {
      * @param {getTextContentParameters} params - getTextContent parameters.
      * @returns {ReadableStream} Stream for reading text content chunks.
      */
-    streamTextContent({ includeMarkedContent }?: getTextContentParameters): ReadableStream;
+    streamTextContent({ includeMarkedContent, disableNormalization, }?: getTextContentParameters): ReadableStream;
     /**
      * NOTE: All occurrences of whitespace will be replaced by
      * standard spaces (0x20).
@@ -1329,7 +1336,7 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#19@#workerPorts": WeakMap<object, any>;
+    static "__#21@#workerPorts": WeakMap<object, any>;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */
@@ -1349,7 +1356,7 @@ export class PDFWorker {
     name: any;
     destroyed: boolean;
     verbosity: number;
-    _readyCapability: import("../shared/util.js").PromiseCapability;
+    _readyCapability: PromiseCapability;
     _port: any;
     _webWorker: Worker | null;
     _messageHandler: MessageHandler | null;
@@ -1423,6 +1430,7 @@ import { DOMCanvasFactory } from "./display_utils.js";
 import { DOMCMapReaderFactory } from "./display_utils.js";
 import { DOMFilterFactory } from "./display_utils.js";
 import { DOMStandardFontDataFactory } from "./display_utils.js";
+import { PromiseCapability } from "../shared/util.js";
 import { AnnotationStorage } from "./annotation_storage.js";
 import { info } from "../shared/util.js";
 import { Metadata } from "./metadata.js";

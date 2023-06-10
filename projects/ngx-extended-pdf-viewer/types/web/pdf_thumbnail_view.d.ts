@@ -63,11 +63,14 @@ export class PDFThumbnailView implements IRenderableView {
     renderTask: any;
     renderingState: number;
     resume: (() => void) | null;
-    canvasWidth: number;
-    canvasHeight: number;
-    scale: number;
     l10n: import("./interfaces").IL10n;
     createThumbnail(pdfThumbnailView: any, linkService: any, id: any, container: any, thumbPageTitlePromise: any): void;
+    anchor: HTMLAnchorElement | undefined;
+    div: HTMLDivElement | undefined;
+    _placeholderImg: HTMLDivElement | undefined;
+    canvasWidth: number | undefined;
+    canvasHeight: number | undefined;
+    scale: number | undefined;
     setPdfPage(pdfPage: any): void;
     reset(): void;
     update({ rotation }: {
@@ -87,7 +90,7 @@ export class PDFThumbnailView implements IRenderableView {
      */
     private _convertCanvasToImage;
     image: HTMLImageElement | undefined;
-    draw(): any;
+    draw(): Promise<any>;
     setImage(pageView: any): void;
     /**
      * @private
@@ -99,6 +102,7 @@ export class PDFThumbnailView implements IRenderableView {
      * @param {string|null} label
      */
     setPageLabel(label: string | null): void;
+    #private;
 }
 /**
  * @typedef {Object} PDFThumbnailViewOptions
@@ -116,7 +120,7 @@ export class PDFThumbnailView implements IRenderableView {
  *   mode.
  */
 export class TempImageFactory {
-    static "__#34@#tempCanvas": null;
+    static "__#36@#tempCanvas": null;
     static getCanvas(width: any, height: any): (HTMLCanvasElement | RenderingContext | null)[];
     static destroyCanvas(): void;
 }

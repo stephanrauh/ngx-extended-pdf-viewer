@@ -29,10 +29,11 @@ export type TextLayerBuilderOptions = {
  * contain text that matches the PDF text they are overlaying.
  */
 export class TextLayerBuilder {
-    constructor({ highlighter, accessibilityManager, isOffscreenCanvasSupported, }: {
+    constructor({ highlighter, accessibilityManager, isOffscreenCanvasSupported, enablePermissions, }: {
         highlighter?: null | undefined;
         accessibilityManager?: null | undefined;
         isOffscreenCanvasSupported?: boolean | undefined;
+        enablePermissions?: boolean | undefined;
     });
     textContentItemsStr: any[];
     renderingDone: boolean;

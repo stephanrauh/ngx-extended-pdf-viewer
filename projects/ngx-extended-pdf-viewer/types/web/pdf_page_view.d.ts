@@ -104,7 +104,6 @@ export class PDFPageView implements IRenderableView {
     pdfPageRotate: number;
     _optionalContentConfigPromise: Promise<import("../src/display/optional_content_config").OptionalContentConfig> | null;
     hasRestrictedScaling: boolean;
-    textLayerMode: number;
     imageResourcesPath: string;
     useOnlyCssZoom: boolean;
     isOffscreenCanvasSupported: boolean;
@@ -112,22 +111,14 @@ export class PDFPageView implements IRenderableView {
     pageColors: Object | null;
     eventBus: import("./event_utils").EventBus;
     renderingQueue: import("./pdf_rendering_queue").PDFRenderingQueue | undefined;
-    renderer: any;
     l10n: {
         getLanguage(): Promise<string>;
         getDirection(): Promise<string>;
         get(key: any, args?: null, fallback?: any): Promise<any>;
         translate(element: any): Promise<void>;
     };
-    paintTask: {
-        promise: any;
-        onRenderContinue(cont: any): void;
-        cancel(extraDelay?: number): void;
-        readonly separateAnnots: any;
-    } | null;
-    paintedViewportMap: WeakMap<object, any>;
+    renderTask: any;
     resume: (() => void) | null;
-    _renderError: any;
     _isStandalone: boolean | undefined;
     _annotationCanvasMap: any;
     annotationLayer: AnnotationLayerBuilder | null;
@@ -153,10 +144,32 @@ export class PDFPageView implements IRenderableView {
         keepXfaLayer?: boolean | undefined;
         keepTextLayer?: boolean | undefined;
     }): void;
+    /**
+     * @typedef {Object} PDFPageViewUpdateParameters
+     * @property {number} [scale] The new scale, if specified.
+     * @property {number} [rotation] The new rotation, if specified.
+     * @property {Promise<OptionalContentConfig>} [optionalContentConfigPromise]
+     *   A promise that is resolved with an {@link OptionalContentConfig}
+     *   instance. The default value is `null`.
+     * @property {number} [drawingDelay]
+     */
+    /**
+     * Update e.g. the scale and/or rotation of the page.
+     * @param {PDFPageViewUpdateParameters}
+     */
     update({ scale, rotation, optionalContentConfigPromise, drawingDelay, }: {
+        /**
+         * The new scale, if specified.
+         */
         scale?: number | undefined;
-        rotation?: null | undefined;
-        optionalContentConfigPromise?: null | undefined;
+        /**
+         * The new rotation, if specified.
+         */
+        rotation?: number | undefined;
+        /**
+         * A promise that is resolved with an {@link OptionalContentConfig }instance. The default value is `null`.
+         */
+        optionalContentConfigPromise?: Promise<import("../src/display/optional_content_config").OptionalContentConfig> | undefined;
         drawingDelay?: number | undefined;
     }): void;
     /**
@@ -181,22 +194,9 @@ export class PDFPageView implements IRenderableView {
     get width(): number;
     get height(): number;
     getPagePoint(x: any, y: any): any[];
-    draw(): any;
-    paintOnCanvas(canvasWrapper: any): {
-        promise: any;
-        onRenderContinue(cont: any): void;
-        cancel(extraDelay?: number): void;
-        readonly separateAnnots: any;
-    };
+    draw(): Promise<any>;
     canvas: HTMLCanvasElement | undefined;
     outputScale: OutputScale | undefined;
-    paintOnSvg(wrapper: any): {
-        promise: any;
-        onRenderContinue(cont: any): void;
-        cancel(): void;
-        readonly separateAnnots: boolean;
-    };
-    svg: any;
     /**
      * @param {string|null} label
      */

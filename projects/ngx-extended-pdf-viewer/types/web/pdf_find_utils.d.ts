@@ -13,3 +13,4 @@ export namespace CharacterType {
  * https://hg.mozilla.org/mozilla-central/file/tip/intl/lwbrk/WordBreaker.cpp
  */
 export function getCharacterType(charCode: any): number;
+export function getNormalizeWithNFKC(): any;

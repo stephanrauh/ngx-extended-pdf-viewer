@@ -109,7 +109,7 @@ export class TextLayerRenderTask {
     _reader: any;
     _textDivProperties: any;
     _canceled: boolean;
-    _capability: import("../shared/util.js").PromiseCapability;
+    _capability: PromiseCapability;
     _layoutTextParams: {
         prevFontSize: null;
         prevFontFamily: null;
@@ -148,3 +148,4 @@ export class TextLayerRenderTask {
  * @returns {undefined}
  */
 export function updateTextLayer({ container, viewport, textDivs, textDivProperties, isOffscreenCanvasSupported, mustRotate, mustRescale, }: TextLayerUpdateParameters): undefined;
+import { PromiseCapability } from "../shared/util.js";
