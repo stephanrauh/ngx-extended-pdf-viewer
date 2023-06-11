@@ -11,7 +11,7 @@ export class InkEditor extends AnnotationEditor {
     static updateDefaultParams(type: any, value: any): void;
     static get defaultPropertiesToUpdate(): any[][];
     /**
-     * Convert the output of fitCurve in some Path2D.
+     * Convert into a Path2D.
      * @param {Arra<Array<number>} bezier
      * @returns {Path2D}
      */
@@ -24,6 +24,7 @@ export class InkEditor extends AnnotationEditor {
     opacity: any;
     paths: any[];
     bezierPath2D: any[];
+    allRawPaths: any[];
     currentPath: any[];
     scaleFactor: number;
     translationX: number;
@@ -39,6 +40,11 @@ export class InkEditor extends AnnotationEditor {
      * @param {PointerEvent} event
      */
     canvasPointerdown(event: PointerEvent): void;
+    /**
+     * oncontextmenu callback for the canvas we're drawing on.
+     * @param {PointerEvent} event
+     */
+    canvasContextMenu(event: PointerEvent): void;
     /**
      * onpointermove callback for the canvas we're drawing on.
      * @param {PointerEvent} event
@@ -82,4 +88,3 @@ export class InkEditor extends AnnotationEditor {
     #private;
 }
 import { AnnotationEditor } from "./editor.js";
-export { fitCurve };

@@ -70,7 +70,7 @@ export type AnnotationLayerParameters = {
  * @property {TextAccessibilityManager} [accessibilityManager]
  */
 export class AnnotationLayer {
-    static "__#28@#appendElement"(element: any, id: any, div: any, accessibilityManager: any): void;
+    static "__#29@#appendElement"(element: any, id: any, div: any, accessibilityManager: any): void;
     /**
      * Render a new annotation layer with all annotation elements.
      *
@@ -85,6 +85,6 @@ export class AnnotationLayer {
      * @memberof AnnotationLayer
      */
     static update(params: AnnotationLayerParameters): void;
-    static "__#28@#setAnnotationCanvasMap"(div: any, annotationCanvasMap: any): void;
+    static "__#29@#setAnnotationCanvasMap"(div: any, annotationCanvasMap: any): void;
 }
 import { AnnotationStorage } from "./annotation_storage.js";

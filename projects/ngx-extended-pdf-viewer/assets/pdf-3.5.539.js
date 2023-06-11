@@ -402,7 +402,7 @@ function warn(msg) {
   if (verbosity >= VerbosityLevel.WARNINGS) {
     if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
       console.log(`Warning: ${msg}`);
-    } else if (Window && Window["ngxConsole"]) {
+    } else if (Window && globalThis.ngxConsole) {
       globalThis.ngxConsole.log(`Warning: ${msg}`);
     } else {
       console.log(`Warning: ${msg}`);
@@ -1001,7 +1001,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.5.538',
+    apiVersion: '3.5.539',
     data,
     password,
     disableAutoFetch,
@@ -2757,9 +2757,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.5.538';
+const version = '3.5.539';
 exports.version = version;
-const build = '8f3da7093';
+const build = '3901db129';
 exports.build = build;
 
 /***/ }),
@@ -16153,8 +16153,8 @@ var _annotation_layer = __w_pdfjs_require__(32);
 var _worker_options = __w_pdfjs_require__(14);
 var _svg = __w_pdfjs_require__(35);
 var _xfa_layer = __w_pdfjs_require__(34);
-const pdfjsVersion = '3.5.538';
-const pdfjsBuild = '8f3da7093';
+const pdfjsVersion = '3.5.539';
+const pdfjsBuild = '3901db129';
 })();
 
 /******/ 	return __webpack_exports__;

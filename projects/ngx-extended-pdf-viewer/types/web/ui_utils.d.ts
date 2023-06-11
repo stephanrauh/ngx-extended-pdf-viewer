@@ -272,6 +272,7 @@ export namespace TextLayerMode {
     const ENABLE_PERMISSIONS: number;
 }
 export function toggleCheckedBtn(button: any, toggle: any, view?: null): void;
+export function toggleExpandedBtn(button: any, toggle: any, view?: null): void;
 export const UNKNOWN_SCALE: 0;
 export const VERTICAL_PADDING: 5;
 /**

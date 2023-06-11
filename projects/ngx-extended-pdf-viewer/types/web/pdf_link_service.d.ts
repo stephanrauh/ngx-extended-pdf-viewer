@@ -75,7 +75,7 @@ export namespace LinkTarget {
  * @implements {IPDFLinkService}
  */
 export class PDFLinkService implements IPDFLinkService {
-    static "__#33@#isValidExplicitDestination"(dest: any): boolean;
+    static "__#34@#isValidExplicitDestination"(dest: any): boolean;
     /**
      * @param {PDFLinkServiceOptions} options
      */
@@ -168,14 +168,6 @@ export class PDFLinkService implements IPDFLinkService {
      * @ignore
      */
     _cachedPageNumber(pageRef: any): any;
-    /**
-     * @param {number} pageNumber
-     */
-    isPageVisible(pageNumber: number): any;
-    /**
-     * @param {number} pageNumber
-     */
-    isPageCached(pageNumber: number): any;
     #private;
 }
 /**
@@ -248,12 +240,4 @@ export class SimpleLinkService implements IPDFLinkService {
      * @param {Object} pageRef - reference to the page.
      */
     cachePageRef(pageNum: number, pageRef: Object): void;
-    /**
-     * @param {number} pageNumber
-     */
-    isPageVisible(pageNumber: number): boolean;
-    /**
-     * @param {number} pageNumber
-     */
-    isPageCached(pageNumber: number): boolean;
 }

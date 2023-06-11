@@ -210,13 +210,20 @@ export class PDFViewer {
         down: boolean;
         lastX: any;
         lastY: any;
-        _eventHandler: (evt: any) => void;
+        _eventHandler: (evt: any) => void; /**
+         * After calling resize, the size of the buffer will be `newSize`.
+         * The optional parameter `idsToKeep` is, if present, a Set of page-ids to
+         * push to the back of the buffer, delaying their destruction. The size of
+         * `idsToKeep` has no impact on the final size of the buffer; if `idsToKeep`
+         * is larger than `newSize`, some of those pages will be destroyed anyway.
+         */
     };
     presentationModeState: number;
     _onBeforeDraw: ((evt: any) => void) | null;
     _onAfterDraw: any;
     get pagesCount(): number;
     getPageView(index: any): any;
+    getCachedPageViews(): Set<any>;
     /**
      * @type {boolean} - True if all {PDFPageView} objects are initialized.
      */
@@ -376,14 +383,6 @@ export class PDFViewer {
     get isHorizontalScrollbarEnabled(): boolean;
     get isVerticalScrollbarEnabled(): boolean;
     _getVisiblePages(): Object;
-    /**
-     * @param {number} pageNumber
-     */
-    isPageVisible(pageNumber: number): any;
-    /**
-     * @param {number} pageNumber
-     */
-    isPageCached(pageNumber: number): any;
     cleanup(): void;
     /**
      * @private

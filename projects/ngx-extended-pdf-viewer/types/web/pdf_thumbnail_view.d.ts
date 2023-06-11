@@ -1,3 +1,4 @@
+export type EventBus = import("./event_utils").EventBus;
 export type IL10n = import("./interfaces").IL10n;
 export type IPDFLinkService = import("./interfaces").IPDFLinkService;
 export type IRenderableView = import("./interfaces").IRenderableView;
@@ -7,6 +8,10 @@ export type PDFThumbnailViewOptions = {
      * - The viewer element.
      */
     container: HTMLDivElement;
+    /**
+     * - The application event bus.
+     */
+    eventBus: EventBus;
     /**
      * - The thumbnail's unique ID (normally its number).
      */
@@ -47,7 +52,7 @@ export class PDFThumbnailView implements IRenderableView {
     /**
      * @param {PDFThumbnailViewOptions} options
      */
-    constructor({ container, id, defaultViewport, optionalContentConfigPromise, linkService, renderingQueue, l10n, pageColors, eventBus, }: PDFThumbnailViewOptions);
+    constructor({ container, eventBus, id, defaultViewport, optionalContentConfigPromise, linkService, renderingQueue, l10n, pageColors, }: PDFThumbnailViewOptions);
     id: number;
     renderingId: string;
     pageLabel: string | null;
@@ -57,17 +62,17 @@ export class PDFThumbnailView implements IRenderableView {
     pdfPageRotate: any;
     _optionalContentConfigPromise: Promise<OptionalContentConfig> | null;
     pageColors: Object | null;
+    eventBus: import("./event_utils").EventBus;
     linkService: import("./interfaces").IPDFLinkService;
     renderingQueue: import("./pdf_rendering_queue").PDFRenderingQueue;
-    eventBus: any;
     renderTask: any;
     renderingState: number;
     resume: (() => void) | null;
     l10n: import("./interfaces").IL10n;
+    _placeholderImg: any;
     createThumbnail(pdfThumbnailView: any, linkService: any, id: any, container: any, thumbPageTitlePromise: any): void;
     anchor: HTMLAnchorElement | undefined;
     div: HTMLDivElement | undefined;
-    _placeholderImg: HTMLDivElement | undefined;
     canvasWidth: number | undefined;
     canvasHeight: number | undefined;
     scale: number | undefined;
@@ -107,6 +112,7 @@ export class PDFThumbnailView implements IRenderableView {
 /**
  * @typedef {Object} PDFThumbnailViewOptions
  * @property {HTMLDivElement} container - The viewer element.
+ * @property {EventBus} eventBus - The application event bus.
  * @property {number} id - The thumbnail's unique ID (normally its number).
  * @property {PageViewport} defaultViewport - The page viewport.
  * @property {Promise<OptionalContentConfig>} [optionalContentConfigPromise] -
@@ -120,7 +126,7 @@ export class PDFThumbnailView implements IRenderableView {
  *   mode.
  */
 export class TempImageFactory {
-    static "__#36@#tempCanvas": null;
+    static "__#37@#tempCanvas": null;
     static getCanvas(width: any, height: any): (HTMLCanvasElement | RenderingContext | null)[];
     static destroyCanvas(): void;
 }

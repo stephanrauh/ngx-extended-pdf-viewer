@@ -33,7 +33,7 @@ export class CanvasGraphics {
     outputScaleX: number;
     outputScaleY: number;
     pageColors: any;
-    _cachedScaleForStroking: number[] | null;
+    _cachedScaleForStroking: number[];
     _cachedGetSinglePixelWidth: number | null;
     _cachedBitmapsMap: Map<any, any>;
     getObject(data: any, fallback?: null): any;
@@ -109,7 +109,6 @@ export class CanvasGraphics {
     setTextMatrix(a: any, b: any, c: any, d: any, e: any, f: any): void;
     nextLine(): void;
     paintChar(character: any, x: any, y: any, patternTransform: any): void;
-    pendingTextPaths: any[] | undefined;
     get isFontSubpixelAAEnabled(): any;
     showText(glyphs: any): void;
     showType3Text(glyphs: any): void;

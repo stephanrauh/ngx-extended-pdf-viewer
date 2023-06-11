@@ -141,14 +141,6 @@ export class IPDFLinkService {
      * @param {Object} pageRef - reference to the page.
      */
     cachePageRef(pageNum: number, pageRef: Object): void;
-    /**
-     * @param {number} pageNumber
-     */
-    isPageVisible(pageNumber: number): void;
-    /**
-     * @param {number} pageNumber
-     */
-    isPageCached(pageNumber: number): void;
 }
 /**
  * @interface

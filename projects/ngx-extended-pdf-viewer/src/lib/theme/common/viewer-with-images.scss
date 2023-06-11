@@ -1142,8 +1142,8 @@ ngx-extended-pdf-viewer .html {
   .pdf-js-version-3-7 .thumbnail {
     /* Define these variables here, and not in :root, since the individual
      thumbnails may have different sizes. */
-     --thumbnail-width: 0;
-     --thumbnail-height: 0;
+     /* --thumbnail-width: 0; */
+     /* --thumbnail-height: 0; */
      width: var(--thumbnail-width);
      height: var(--thumbnail-height);
      padding: 1px;
