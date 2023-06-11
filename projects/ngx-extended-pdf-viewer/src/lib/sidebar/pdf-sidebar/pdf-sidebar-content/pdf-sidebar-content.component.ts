@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild } from '@angular/core';
 import { TrustedTypesWindow } from 'trusted-types/lib';
 import { PdfThumbnailDrawnEvent } from '../../../events/pdf-thumbnail-drawn-event';
-
+import { getVersionSuffix, pdfDefaultOptions } from '../../../options/pdf-default-options';
 declare class PDFThumbnailView {
   anchor: HTMLAnchorElement;
   div: HTMLElement;
@@ -34,12 +34,24 @@ export class PdfSidebarContentComponent implements OnDestroy {
   public mobileFriendlyZoomScale = 1.0;
 
   @ViewChild('thumbnailViewTemplate')
-  public thumbnailViewTemplate: ElementRef;
+  public thumbnailViewTemplate35: ElementRef;
+
+  @ViewChild('thumbnailViewTemplate37')
+  public thumbnailViewTemplate37: ElementRef;
+
+  public pdfJsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
 
   private linkService: PDFLinkService | undefined;
 
   @Output()
   public thumbnailDrawn = new EventEmitter<PdfThumbnailDrawnEvent>();
+
+  public get thumbnailViewTemplate(): ElementRef {
+    if (this.pdfJsVersion < '3.7') {
+      return this.thumbnailViewTemplate35;
+    }
+    return this.thumbnailViewTemplate37;
+  }
 
   public get top(): string {
     let top = 0;
@@ -83,7 +95,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
     id: number,
     container: HTMLDivElement,
     thumbPageTitlePromise: Promise<string>
-  ) {
+  ): HTMLImageElement | undefined {
     this.linkService = linkService;
     const template = this.thumbnailViewTemplate;
     // get the inner HTML without the attributes and classes added by Angular
@@ -115,8 +127,15 @@ export class PdfSidebarContentComponent implements OnDestroy {
     };
     pdfThumbnailView.anchor = anchor;
 
-    const ring = newElement.getElementsByClassName('image-container')[0] as HTMLElement;
-    pdfThumbnailView.ring = ring;
+    let img: HTMLImageElement | undefined;
+    if (this.pdfJsVersion < '3.7') {
+      console.log('Old');
+      const ring = newElement.getElementsByClassName('image-container')[0] as HTMLElement;
+      pdfThumbnailView.ring = ring;
+    } else {
+      console.log('New');
+      img = newElement.getElementsByTagName('img')[0];
+    }
     pdfThumbnailView.div = newElement.getElementsByClassName('thumbnail')[0] as HTMLElement;
 
     container.appendChild(newElement);
@@ -127,6 +146,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
       pageId: id,
     };
     this.thumbnailDrawn.emit(thumbnailDrawnEvent);
+    return img;
   }
 
   private getTrustedHtml(html: string) {

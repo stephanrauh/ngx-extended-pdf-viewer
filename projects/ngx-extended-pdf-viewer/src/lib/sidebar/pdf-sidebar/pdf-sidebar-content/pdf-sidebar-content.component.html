@@ -1,7 +1,11 @@
 <div id="sidebarContent" [style.top]="top">
-  <div #thumbnailViewTemplate>
+  <div #thumbnailViewTemplate *ngIf="pdfJsVersion < '3.7'">
     <ng-content *ngTemplateOutlet="customThumbnail ? customThumbnail : defaultThumbnail"></ng-content>
   </div>
+  <div #thumbnailViewTemplate37 *ngIf="pdfJsVersion > '3.7'">
+    <ng-content *ngTemplateOutlet="customThumbnail ? customThumbnail : defaultThumbnail37"></ng-content>
+  </div>
+
   <div id="thumbnailView" (keydown)="onKeyDown($event)"></div>
   <div id="outlineView" class="hidden"></div>
   <div id="attachmentsView" class="hidden"></div>
@@ -10,11 +14,19 @@
 
 <ng-template #defaultThumbnail>
   <a class="pdf-viewer-template">
-    <div class="thumbnail" data-page-number="$page">
+    <div class="thumbnail" data-page-number="PAGE_NUMBER">
       <div class="thumbnailSelectionRing image-container" style="width: WIDTH_OF_RING; height: HEIGHT_OF_RING">
         <!-- image is automatically inserted here -->
         <!-- <img class="thumbnailImage" style="width: 98px; height: 73px;" /> -->
       </div>
+    </div>
+  </a>
+</ng-template>
+
+<ng-template #defaultThumbnail37>
+  <a class="pdf-viewer-template">
+    <div class="thumbnail" data-page-number="PAGE_NUMBER">
+      <img class="thumbnailImage" />
     </div>
   </a>
 </ng-template>

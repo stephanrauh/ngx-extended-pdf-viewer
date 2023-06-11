@@ -461,7 +461,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public password: string | undefined = undefined;
 
   @Input()
-  public replaceBrowserPrint = this.pdfJsVersion >= '3.0';
+  public replaceBrowserPrint = true;
 
   public _showSidebarButton: ResponsiveVisibility = true;
 
@@ -753,6 +753,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public get pdfJsVersion(): string {
     return getVersionSuffix(pdfDefaultOptions.assetsFolder);
+  }
+
+  public get majorMinorPdfJsVersion(): string {
+    const fullVersion = this.pdfJsVersion;
+    const pos = fullVersion.lastIndexOf('.');
+    return fullVersion.substring(0, pos).replace('.', '-');
   }
 
   /**

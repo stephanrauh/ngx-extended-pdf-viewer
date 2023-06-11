@@ -1137,6 +1137,19 @@ ngx-extended-pdf-viewer .html {
   .thumbnail {
     margin: 0 10px 5px 10px;
   }
+
+
+  .pdf-js-version-3-7 .thumbnail {
+    /* Define these variables here, and not in :root, since the individual
+     thumbnails may have different sizes. */
+     --thumbnail-width: 0;
+     --thumbnail-height: 0;
+     width: var(--thumbnail-width);
+     height: var(--thumbnail-height);
+     padding: 1px;
+     border: 7px solid transparent;
+     border-radius: 2px;
+  }
 }
 html[dir='ltr'] ngx-extended-pdf-viewer .thumbnail {
   float: left;
@@ -1168,6 +1181,11 @@ ngx-extended-pdf-viewer {
     background-clip: content-box;
   }
 
+  .pdf-js-version-3-7 .thumbnailImage {
+    width: var(--thumbnail-width);
+    height: var(--thumbnail-height);
+  }
+
   .thumbnailSelectionRing {
     border-radius: 2px;
     padding: 7px;
@@ -1181,6 +1199,16 @@ ngx-extended-pdf-viewer {
     background-color: $thumbnail-selection-ring;
     background-clip: padding-box;
     color: $page-background;
+  }
+
+  .pdf-js-version-3-7 .thumbnail.selected {
+    border-color: $thumbnail-selection-ring !important;
+  }
+
+  .pdf-js-version-3-7 .thumbnail:not([data-loaded]) > .thumbnailImage {
+    width: calc(var(--thumbnail-width) - 2px);
+    height: calc(var(--thumbnail-height) - 2px);
+    border: 1px dashed rgba(132, 132, 132, 1);
   }
 
   #outlineView,

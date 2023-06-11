@@ -8,7 +8,7 @@
 <ng-template #defaultPdfViewer>
   <div class="zoom" [style.height]="minHeight ? minHeight : height" #root>
     <div class="html">
-      <div class="body" [style.backgroundColor]="backgroundColor">
+      <div class="body pdf-js-version-{{ majorMinorPdfJsVersion }}" [style.backgroundColor]="backgroundColor">
         <div id="outerContainer" (window:resize)="onResize()">
           <div class="free-floating-bar" *ngIf="showFreeFloatingBar">
             <ng-content *ngTemplateOutlet="customFreeFloatingBar ? customFreeFloatingBar : defaultFreeFloatingBar"> </ng-content>
