@@ -31,36 +31,27 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 Version 17 ships with a revamped form support. Along the way, I've polished some rough edges, which is a breaking change if you rely on the old (and incorrect) behavior. In particular, checkboxes now send the value defined by the author of the PDF file. For instance, if the author defined the checkbox to have the values "Y" and "N", now `(formData)` emits these values. Until version 16, it emitted a boolean value. Another improvement (or breaking change, depending on your application) is that `[formData]` now is used to initialize the fields of the PDF file. Earlier versions forced you to use a delayed initialization with a timeout. Version 17 allows you to drop this cumbersome workaround.
 
+Book mode is back again. It was broken in version 16.
+
+When you add a text or a drawing to the PDF file using the new editor functions, these additions now show in the download and in print.
+
 Plus, version 17 removes a couple of features. The growing popularity of the library and the rapid evolution of the base library pdf.js result in a flood of issues and hard-to-solve merge conflicts. To solve that problem, I'll remove some of the features that proved to cause too much works.
 
 In particular, I've removed the custom PDF backgrounds. The pdf.js team have worked a lot on the code I'd modified to implement the custom backgrounds. I didn't manage to resolve the merge conflict, nor do I have enough spare time to re-implement the feature, so I decided to drop it.
 
-Another feature I'm probably dropping is the extended find bar. The base library now ships most of the features I've added a couple of years ago, and their implementation is better. Just think of the wide range of languages and character sets pdf.js supports. To be honest, that's a merge conflict I didn't resolve since 14 month, so it's unlikely I'm ever going to solve it. So it's better to abandon my implementation in favor of their implementation. This means that fuzzy search, multiple search teams, and the distinction between phrase search and word search are gone.
+Other features I've dropped are `[formTheme]` and `[wheelAction]`. Both of them ceased to work some time ago without anybody complaining.
 
 If you need one of these features - well, this is an open-source library. Contributors are welcome. It's just that I have to prune the library as long as I'm the only contributor.
 
-Version 17 is currently in the alpha stage. It should be a fine version, but the modifications require an extended period of testing.
-
-## What's new in version 16?
-
-- Version 16.2 updates to pdf.js 3.4 (default branch) and pdf.js 3.5 (bleeding edge branch).
-- Version 16 updates to pdf.js 3.3 (default branch) and pdf.js 3.4 (bleeding edge branch).
-- The PDF editor is active by default now.
-- Pinch gestures now zoom smoothly. The attributes `enablePinchOnMobile`, `relativeCoordsOptions`, and `enableRelativeCoords` are no longer neccessary. I've removed them.
-
-_Breaking changes:_
-
-- I've refined the double-tap action. A few months before Apple removed the double-tap zoom feature from iOS, I'd implemented it in ngx-extended-pdf-viewer. Nowadays, it confuses most people, but I didn't want to remove it entirely. Some people (like me) still like it. So I've added a couple of options to the `pdfDefaultOptions` object allowing you to deactivate or fine-tune the feature. By default, it's inactive in text selection mode, and active in hand mode. By default, the second double-tap is ignored now. In previous versions, it used to toggle back to the previous zoom level. Starting with version 16, you need to explicitly opt-in to this.
-- The bookmark button is gone. It didn't play well with Angular routing, so I removed it.
-- I've modified some of the CSS rules of the toolbar to the individual buttons. The goal is to make customizing simpler, but of course, if your custom toolbar relies on the old CSS rule, you may see layout glitches.
-
-## What's new in version 15?
-
-Version 15 updates to pdf.js 2.16 (default branch) and pdf.js 3.0 (bleeding edge branch). It also plays nicely with other libraries which are using the AMD module system, and it supports documents a wider range of documents using East-Asian fonts than previous versions. Plus, it ships with a couple of bug fixes.
+The base library is now pdf.js 3.5 in the stable branch and pdf.js 3.7 in the "bleeding edge" branch.
 
 ## Full changelog
 
 There's also a detailed <a href="https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/main/projects/ngx-extended-pdf-viewer/changelog.md">changelog</a>.
+
+## Announcement: version 18 is going to drop the extended find bar
+
+A feature I'm about to drop in version 18 is the extended find bar. The base library now ships most of the features I've added a couple of years ago, and their implementation is better. Just think of the wide range of languages and character sets pdf.js supports. To be honest, that's a merge conflict I didn't resolve since 14 month, so it's unlikely I'm ever going to solve it. So it's better to abandon my implementation in favor of their implementation. This means that fuzzy search, multiple search teams, and the distinction between phrase search and word search are gone.
 
 ## Showcase and manual
 
@@ -95,7 +86,7 @@ Would you like to participate in a popular open source project? It's easy: just 
 - Color theming
 - And customizing the toolbars, the side bar, and the menus according to your needs.
 
-Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 3.5, released in April 2023. If you're the daring one, you can also use the developer version 3.6. It's bleeding edge, so use it at own risk. Basically, the bleeding edge version helps me because I can add Mozilla's latest improvements in frequent, small increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but most of the time, the quality is production-ready.
+Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 3.5, released in April 2023. If you're the daring one, you can also use the developer version 3.7. It's bleeding edge, so use it at own risk. Basically, the bleeding edge version helps me because I can add Mozilla's latest improvements in frequent, small increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but most of the time, the quality is production-ready.
 
 ## Alternatives
 

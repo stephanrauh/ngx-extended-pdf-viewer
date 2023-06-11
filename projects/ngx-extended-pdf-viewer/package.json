@@ -1,7 +1,7 @@
 {
   "name": "ngx-extended-pdf-viewer",
   "description": "Embedding PDF files in your Angular application. Highly configurable viewer including the toolbar, sidebar, and all the features you're used to.",
-  "version": "17.0.0-beta.2",
+  "version": "17.0.0",
   "license": "Apache-2.0",
   "repository": {
     "url": "https://github.com/stephanrauh/ngx-extended-pdf-viewer"
@@ -28,7 +28,7 @@
     "PDF viewer",
     "Angular",
     "ng2",
-    "Angular 12 - 15",
+    "Angular 12 - 16",
     "customizable PDF viewer"
   ],
   "peerDependencies": {
