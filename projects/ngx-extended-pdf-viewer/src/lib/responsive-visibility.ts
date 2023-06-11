@@ -11,9 +11,9 @@ export class PdfBreakpoints {
 
   static lg = 660;
 
-  static xl = 740;
+  static xl = 780;
 
-  static xxl = 830;
+  static xxl = 900;
 }
 
 @Pipe({ name: 'responsiveCSSClass' })

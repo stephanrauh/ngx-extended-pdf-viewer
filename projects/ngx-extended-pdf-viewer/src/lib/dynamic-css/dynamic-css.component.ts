@@ -105,7 +105,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   }
 }
 
-@media all and (max-width: ${this.xs}px) {
+@media all and (max-width: ${this.sm}px) {
   #scaleSelectContainer {
     display: none;
   }
