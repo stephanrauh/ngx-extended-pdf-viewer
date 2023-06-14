@@ -129,11 +129,9 @@ export class PdfSidebarContentComponent implements OnDestroy {
 
     let img: HTMLImageElement | undefined;
     if (this.pdfJsVersion < '3.7') {
-      console.log('Old');
       const ring = newElement.getElementsByClassName('image-container')[0] as HTMLElement;
       pdfThumbnailView.ring = ring;
     } else {
-      console.log('New');
       img = newElement.getElementsByTagName('img')[0];
     }
     pdfThumbnailView.div = newElement.getElementsByClassName('thumbnail')[0] as HTMLElement;
