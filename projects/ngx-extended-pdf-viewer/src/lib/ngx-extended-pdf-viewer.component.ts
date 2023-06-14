@@ -247,16 +247,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public delayFirstView = 0;
 
-  /** Shows or hides the editor buttons */
-  @Input()
-  public set showEditor(showMe: boolean) {
-    console.log(
-      "The attribute [showEditor] is deprecated. It's going to be removed with ngx-extended-pdf-viewer 17. Please use [showTextEditor] and [showDrawEditor], which give your a more fine-grained control over the toolbar."
-    );
-    this.showDrawEditor = showMe;
-    this.showTextEditor = showMe;
-  }
-
   @Input()
   public showTextEditor: ResponsiveVisibility = true;
 
