@@ -17,7 +17,9 @@
     "add": "ng build ngx-extended-pdf-viewer && cd projects/ngx-extended-pdf-viewer && npm run build && cd ../.. && npm link ./dist/ngx-extended-pdf-viewer && cd ../test && git stash && npm i && npm link ngx-extended-pdf-viewer && ng add ngx-extended-pdf-viewer",
     "test:ng12": "cd compatibility-tests/Angular12 && ./test.sh",
     "test:ng13": "cd compatibility-tests/Angular13 && ./test.sh",
-    "test:ng14": "cd compatibility-tests/Angular14 && ./test.sh"
+    "test:ng14": "cd compatibility-tests/Angular14 && ./test.sh",
+    "test:ng15": "cd compatibility-tests/Angular15 && ./test.sh",
+    "test:ng16": "cd compatibility-tests/Angular16 && ./test.sh"
   },
   "private": true,
   "dependencies": {

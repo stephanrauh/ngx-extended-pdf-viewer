@@ -11,7 +11,7 @@ test.describe('Smoketest', () => {
     await page.locator('[data-page-number]="19" > canvas');
     await expect(page.locator('small')).toContainText('Copyright hint: the PDF file has been published by');
     await expect(page.locator('#primaryPageRotateCw')).not.toBeDisabled();
-    await expect(page.locator('[data-page-number="19"]')).toBeVisible();
+    await expect(page.locator('.page[data-page-number="19"]')).toBeVisible();
     await page.waitForSelector(':nth-match(.page canvas,1)');
     await expect(page.locator('.visiblePageIsLoading')).not.toBeVisible();
     // await expect(page.locator(':nth-match(.loadingInProgress,1)')).not.toBeVisible();
