@@ -3345,6 +3345,11 @@ class CommandManager {
   destroy() {
     this.#commands = null;
   }
+  reset() {
+    this.#commands = [];
+    this.#position = -1;
+    this.#locked = false;
+  }
 }
 exports.CommandManager = CommandManager;
 class KeyboardManager {
@@ -3563,18 +3568,27 @@ class AnnotationEditorUIManager {
   }
   paste(event) {
     event.preventDefault();
-    let data = event.clipboardData.getData("application/pdfjs");
+    const data = event.clipboardData.getData("application/pdfjs");
+    this.addSerializedEditor(data);
+  }
+  addSerializedEditor(data, activateEditorIfNecessary = false) {
     if (!data) {
       return;
     }
     try {
-      data = JSON.parse(data);
+      if (typeof data === "string") {
+        data = JSON.parse(data);
+      }
     } catch (ex) {
       (0, _util.warn)(`paste: "${ex.message}".`);
       return;
     }
     if (!Array.isArray(data)) {
       return;
+    }
+    const previousMode = this.#mode;
+    if (activateEditorIfNecessary && previousMode === _util.AnnotationEditorType.NONE) {
+      this.updateMode(_util.AnnotationEditorType.FREETEXT);
     }
     this.unselectAll();
     const layer = this.#allLayers.get(this.#currentPageIndex);
@@ -3605,6 +3619,9 @@ class AnnotationEditorUIManager {
       });
     } catch (ex) {
       (0, _util.warn)(`paste: "${ex.message}".`);
+    }
+    if (activateEditorIfNecessary && previousMode !== this.#mode) {
+      this.updateMode(previousMode);
     }
   }
   keydown(event) {
@@ -3913,6 +3930,23 @@ class AnnotationEditorUIManager {
   }
   getMode() {
     return this.#mode;
+  }
+  removeEditors(filterFunction = () => true) {
+    let hasChanged = false;
+    this.#allEditors.forEach(editor => {
+      if (filterFunction(editor.serialize())) {
+        editor.remove();
+        hasChanged = true;
+      }
+    });
+    if (hasChanged) {
+      this.#dispatchUpdateStates({
+        hasSomethingToUndo: false,
+        hasSomethingToRedo: false,
+        isEmpty: this.#isEmpty()
+      });
+      this.#commandManager.reset();
+    }
   }
 }
 exports.AnnotationEditorUIManager = AnnotationEditorUIManager;

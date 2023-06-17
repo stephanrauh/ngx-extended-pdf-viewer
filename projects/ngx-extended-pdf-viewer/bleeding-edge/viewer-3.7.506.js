@@ -10636,6 +10636,23 @@ class PDFViewer {
       this.update();
     }
   }
+  getSerializedAnnotations() {
+    const rawAnnotations = this.pdfDocument.annotationStorage.getAll();
+    if (rawAnnotations) {
+      const annotations = Object.values(rawAnnotations);
+      return annotations.map(a => a.serialize());
+    }
+    return null;
+  }
+  addEditorAnnotation(data) {
+    if (!Array.isArray(data)) {
+      data = [data];
+    }
+    this.#annotationEditorUIManager.addSerializedEditor(data, true);
+  }
+  removeEditorAnnotations(filter = () => true) {
+    this.#annotationEditorUIManager.removeEditors(filter);
+  }
 }
 exports.PDFViewer = PDFViewer;
 

@@ -479,6 +479,9 @@ export class PDFViewer {
     get annotationEditorMode(): number;
     set annotationEditorParams(arg: any);
     refresh(noUpdate?: boolean, updateArgs?: any): void;
+    getSerializedAnnotations(): any[] | null;
+    addEditorAnnotation(data: any): void;
+    removeEditorAnnotations(filter?: () => boolean): void;
     #private;
 }
 import { PDFRenderingQueue } from "./pdf_rendering_queue.js";

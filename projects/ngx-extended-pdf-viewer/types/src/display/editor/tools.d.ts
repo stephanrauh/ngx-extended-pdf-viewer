@@ -48,6 +48,7 @@ export class AnnotationEditorUIManager {
      * @param {ClipboardEvent} event
      */
     paste(event: ClipboardEvent): void;
+    addSerializedEditor(data: any, activateEditorIfNecessary?: boolean): void;
     /**
      * Keydown callback.
      * @param {KeyboardEvent} event
@@ -192,6 +193,7 @@ export class AnnotationEditorUIManager {
      * @returns {number}
      */
     getMode(): number;
+    removeEditors(filterFunction?: () => boolean): void;
     #private;
 }
 export function bindEvents(obj: any, element: any, names: any): void;
@@ -264,6 +266,7 @@ export class CommandManager {
      */
     hasSomethingToRedo(): boolean;
     destroy(): void;
+    reset(): void;
     #private;
 }
 /**

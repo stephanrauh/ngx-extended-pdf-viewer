@@ -36,4 +36,7 @@ export interface IPDFViewer {
   _getVisiblePages(): Array<any>;
   optionalContentConfigPromise: Promise<OptionalContentConfig> | null;
   _scrollPageIntoView({ pageDiv: HTMLElement, pageSpot: any, pageNumber: number }): void;
+  getSerializedAnnotations(): string[] | null; // #1783 added by ngx-extended-pdf-viewer
+  addEditorAnnotation(serialized: string | object): void; // #1783 added by ngx-extended-pdf-viewer
+  removeEditorAnnotations(filter?: (serialized: object) => boolean): void; // #1783 added by ngx-extended-pdf-viewer
 }

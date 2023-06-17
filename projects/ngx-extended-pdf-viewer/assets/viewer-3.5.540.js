@@ -9096,7 +9096,7 @@ class PDFViewer {
   #onVisibilityChange = null;
   #scaleTimeoutId = null;
   constructor(options) {
-    const viewerVersion = '3.5.539';
+    const viewerVersion = '3.5.540';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -10648,6 +10648,23 @@ class PDFViewer {
     if (!noUpdate) {
       this.update();
     }
+  }
+  getSerializedAnnotations() {
+    const rawAnnotations = this.pdfDocument.annotationStorage.getAll();
+    if (rawAnnotations) {
+      const annotations = Object.values(rawAnnotations);
+      return annotations.map(a => a.serialize());
+    }
+    return null;
+  }
+  addEditorAnnotation(data) {
+    if (!Array.isArray(data)) {
+      data = [data];
+    }
+    this.#annotationEditorUIManager.addSerializedEditor(data, true);
+  }
+  removeEditorAnnotations(filter = () => true) {
+    this.#annotationEditorUIManager.removeEditors(filter);
   }
 }
 exports.PDFViewer = PDFViewer;
@@ -18103,8 +18120,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(5);
 var _pdf_link_service = __webpack_require__(7);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.5.539';
-const pdfjsBuild = '3901db129';
+const pdfjsVersion = '3.5.540';
+const pdfjsBuild = '525bb7c10';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,

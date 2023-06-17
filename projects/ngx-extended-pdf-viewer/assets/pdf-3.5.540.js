@@ -1001,7 +1001,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.5.539',
+    apiVersion: '3.5.540',
     data,
     password,
     disableAutoFetch,
@@ -2757,9 +2757,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.5.539';
+const version = '3.5.540';
 exports.version = version;
-const build = '3901db129';
+const build = '525bb7c10';
 exports.build = build;
 
 /***/ }),
@@ -3337,6 +3337,11 @@ class CommandManager {
   destroy() {
     this.#commands = null;
   }
+  reset() {
+    this.#commands = [];
+    this.#position = -1;
+    this.#locked = false;
+  }
 }
 exports.CommandManager = CommandManager;
 class KeyboardManager {
@@ -3555,18 +3560,27 @@ class AnnotationEditorUIManager {
   }
   paste(event) {
     event.preventDefault();
-    let data = event.clipboardData.getData("application/pdfjs");
+    const data = event.clipboardData.getData("application/pdfjs");
+    this.addSerializedEditor(data);
+  }
+  addSerializedEditor(data, activateEditorIfNecessary = false) {
     if (!data) {
       return;
     }
     try {
-      data = JSON.parse(data);
+      if (typeof data === "string") {
+        data = JSON.parse(data);
+      }
     } catch (ex) {
       (0, _util.warn)(`paste: "${ex.message}".`);
       return;
     }
     if (!Array.isArray(data)) {
       return;
+    }
+    const previousMode = this.#mode;
+    if (activateEditorIfNecessary && previousMode === _util.AnnotationEditorType.NONE) {
+      this.updateMode(_util.AnnotationEditorType.FREETEXT);
     }
     this.unselectAll();
     const layer = this.#allLayers.get(this.#currentPageIndex);
@@ -3597,6 +3611,9 @@ class AnnotationEditorUIManager {
       });
     } catch (ex) {
       (0, _util.warn)(`paste: "${ex.message}".`);
+    }
+    if (activateEditorIfNecessary && previousMode !== this.#mode) {
+      this.updateMode(previousMode);
     }
   }
   keydown(event) {
@@ -3905,6 +3922,23 @@ class AnnotationEditorUIManager {
   }
   getMode() {
     return this.#mode;
+  }
+  removeEditors(filterFunction = () => true) {
+    let hasChanged = false;
+    this.#allEditors.forEach(editor => {
+      if (filterFunction(editor.serialize())) {
+        editor.remove();
+        hasChanged = true;
+      }
+    });
+    if (hasChanged) {
+      this.#dispatchUpdateStates({
+        hasSomethingToUndo: false,
+        hasSomethingToRedo: false,
+        isEmpty: this.#isEmpty()
+      });
+      this.#commandManager.reset();
+    }
   }
 }
 exports.AnnotationEditorUIManager = AnnotationEditorUIManager;
@@ -16153,8 +16187,8 @@ var _annotation_layer = __w_pdfjs_require__(32);
 var _worker_options = __w_pdfjs_require__(14);
 var _svg = __w_pdfjs_require__(35);
 var _xfa_layer = __w_pdfjs_require__(34);
-const pdfjsVersion = '3.5.539';
-const pdfjsBuild = '3901db129';
+const pdfjsVersion = '3.5.540';
+const pdfjsBuild = '525bb7c10';
 })();
 
 /******/ 	return __webpack_exports__;

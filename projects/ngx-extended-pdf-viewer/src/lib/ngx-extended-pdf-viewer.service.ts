@@ -503,4 +503,19 @@ export class NgxExtendedPdfViewerService {
     const viewer = PDFViewerApplication.pdfViewer as any;
     viewer.scrollPagePosIntoView(pageNumber, pageSpot);
   }
+
+  public getSerializedAnnotations(): string[] | null {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    return PDFViewerApplication.pdfViewer.getSerializedAnnotations();
+  }
+
+  public addEditorAnnotation(serializedAnnotation: string | object): void {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    PDFViewerApplication.pdfViewer.addEditorAnnotation(serializedAnnotation);
+  }
+
+  public removeEditorAnnotations(filter?: (serialized: object) => boolean): void {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    PDFViewerApplication.pdfViewer.removeEditorAnnotations(filter);
+  }
 }
