@@ -1,4 +1,5 @@
 import { OptionalContentConfig } from './optional_content_config';
+import { PDFPageView } from './pdf_page_view';
 
 export enum ScrollModeType {
   vertical = 0,
@@ -22,6 +23,35 @@ export interface ScrollModeChangedEvent {
 export interface IPDFRenderingQueue {
   getHighestPriority(visiblePage: Array<any>, pages: Array<any>, scrolledDown: boolean, preRenderExtra: boolean);
 }
+
+export type FreeTextEditorAnnotation = {
+  annotationType: 3;
+  color: Array<number>; // an array of three integer numbers
+  fontSize: number;
+  value: string;
+  pageIndex: number;
+  rect: Array<number>; // rect[1] is the y position; rect[2] is the x position
+  rotation: 0 | 90 | 180 | 270; // in degrees
+};
+
+export type BezierPath = {
+  bezier: Array<number>;
+  points: Array<number>;
+};
+
+export type InkEditorAnnotation = {
+  annotationType: 15;
+  color: Array<number>; // an array of three integer numbers
+  thickness: number;
+  opacity: number;
+  paths: Array<BezierPath>;
+  pageIndex: number;
+  rect: Array<number>; // [left, bottom, right, top]
+  rotation: 0 | 90 | 180 | 270; // in degrees
+};
+
+export type EditorAnnotation = InkEditorAnnotation | FreeTextEditorAnnotation;
+
 export interface IPDFViewer {
   currentPageLabel: string | undefined;
   currentPageNumber: number;
@@ -31,12 +61,13 @@ export interface IPDFViewer {
   renderingQueue: IPDFRenderingQueue;
   scrollMode: ScrollModeType;
   spreadMode: 0 | 1 | 2;
-  _pages: Array<any>;
+  _pages: Array<PDFPageView>;
   addPageToRenderQueue(pageIndex: number): boolean;
   _getVisiblePages(): Array<any>;
   optionalContentConfigPromise: Promise<OptionalContentConfig> | null;
   _scrollPageIntoView({ pageDiv: HTMLElement, pageSpot: any, pageNumber: number }): void;
-  getSerializedAnnotations(): string[] | null; // #1783 added by ngx-extended-pdf-viewer
-  addEditorAnnotation(serialized: string | object): void; // #1783 added by ngx-extended-pdf-viewer
-  removeEditorAnnotations(filter?: (serialized: object) => boolean): void; // #1783 added by ngx-extended-pdf-viewer
+  getSerializedAnnotations(): EditorAnnotation[] | null; // #1783 added by ngx-extended-pdf-viewer
+  addEditorAnnotation(serialized: string | EditorAnnotation): void; // #1783 added by ngx-extended-pdf-viewer
+  removeEditorAnnotations(filter?: (serialized: EditorAnnotation) => boolean): void; // #1783 added by ngx-extended-pdf-viewer
+  getPageView(index: number): PDFPageView;
 }

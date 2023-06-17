@@ -26,6 +26,7 @@ export interface PDFPageView {
   maxCanvasPixels: any;
   pageColors: Object | null;
   renderer: any;
+  renderingState: number;
   l10n: {
     getLanguage(): Promise<string>;
     getDirection(): Promise<string>;
@@ -53,6 +54,8 @@ export interface PDFPageView {
 
   getPagePoint(x: any, y: any): Object;
   draw(): any;
+  reset(): void;
+  textHighlighter: any;
 
   canvas: HTMLCanvasElement | undefined;
 

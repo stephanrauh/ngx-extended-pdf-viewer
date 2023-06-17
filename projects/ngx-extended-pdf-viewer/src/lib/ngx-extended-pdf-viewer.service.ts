@@ -1,4 +1,5 @@
 import { Subject } from 'rxjs';
+import { EditorAnnotation } from '../public_api';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { PdfLayer } from './options/optional_content_config';
 import { PDFPrintRange } from './options/pdf-print-range';
@@ -504,12 +505,12 @@ export class NgxExtendedPdfViewerService {
     viewer.scrollPagePosIntoView(pageNumber, pageSpot);
   }
 
-  public getSerializedAnnotations(): string[] | null {
+  public getSerializedAnnotations(): EditorAnnotation[] | null {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     return PDFViewerApplication.pdfViewer.getSerializedAnnotations();
   }
 
-  public addEditorAnnotation(serializedAnnotation: string | object): void {
+  public addEditorAnnotation(serializedAnnotation: string | EditorAnnotation): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     PDFViewerApplication.pdfViewer.addEditorAnnotation(serializedAnnotation);
   }
