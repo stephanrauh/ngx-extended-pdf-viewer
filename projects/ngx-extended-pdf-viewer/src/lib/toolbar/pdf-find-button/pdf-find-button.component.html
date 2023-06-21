@@ -1,7 +1,6 @@
 <button
   type="button"
-  [class]="textLayer ? '' : 'invisible'"
-  [class]="showFindButton | responsiveCSSClass : ''"
+  [class]="showFindButton | responsiveCSSClass : (textLayer ? '' : 'invisible')"
   class="toolbarButton"
   id="viewFind"
   title="Find in Document"
