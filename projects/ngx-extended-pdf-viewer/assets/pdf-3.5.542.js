@@ -46,16 +46,16 @@ return /******/ (() => { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.VerbosityLevel = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.RenderingIntentFlag = exports.PromiseCapability = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.MAX_IMAGE_SIZE_TO_CACHE = exports.LINE_FACTOR = exports.LINE_DESCENT_FACTOR = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FeatureTest = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.BASELINE_FACTOR = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMode = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationEditorType = exports.AnnotationEditorPrefix = exports.AnnotationEditorParamsType = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
+exports.VerbosityLevel = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.RenderingIntentFlag = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.PageActionEventType = exports.OPS = exports.MissingPDFException = exports.MAX_IMAGE_SIZE_TO_CACHE = exports.LINE_FACTOR = exports.LINE_DESCENT_FACTOR = exports.InvalidPDFException = exports.ImageKind = exports.IDENTITY_MATRIX = exports.FormatError = exports.FeatureTest = exports.FONT_IDENTITY_MATRIX = exports.DocumentActionEventType = exports.CMapCompressionType = exports.BaseException = exports.BASELINE_FACTOR = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMode = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationEditorType = exports.AnnotationEditorPrefix = exports.AnnotationEditorParamsType = exports.AnnotationBorderStyleType = exports.AnnotationActionEventType = exports.AbortException = void 0;
 exports.assert = assert;
 exports.bytesToString = bytesToString;
+exports.createPromiseCapability = createPromiseCapability;
 exports.createValidAbsoluteUrl = createValidAbsoluteUrl;
 exports.getModificationDate = getModificationDate;
 exports.getVerbosityLevel = getVerbosityLevel;
 exports.info = info;
 exports.isArrayBuffer = isArrayBuffer;
 exports.isArrayEqual = isArrayEqual;
-exports.normalizeUnicode = normalizeUnicode;
 exports.objectFromMap = objectFromMap;
 exports.objectSize = objectSize;
 exports.setVerbosityLevel = setVerbosityLevel;
@@ -418,7 +418,10 @@ function assert(cond, msg) {
   }
 }
 function _isValidProtocol(url) {
-  switch (url?.protocol) {
+  if (!url) {
+    return false;
+  }
+  switch (url.protocol) {
     case "http:":
     case "https:":
     case "ftp:":
@@ -438,7 +441,7 @@ function createValidAbsoluteUrl(url, baseUrl = null, options = null) {
     if (options && typeof url === "string") {
       if (options.addDefaultProtocol && url.startsWith("www.")) {
         const dots = url.match(/\./g);
-        if (dots?.length >= 2) {
+        if (dots && dots.length >= 2) {
           url = `http://${url}`;
         }
       }
@@ -523,7 +526,7 @@ class AbortException extends BaseException {
 }
 exports.AbortException = AbortException;
 function bytesToString(bytes) {
-  if (typeof bytes !== "object" || bytes?.length === undefined) {
+  if (typeof bytes !== "object" || bytes === null || bytes.length === undefined) {
     unreachable("Invalid argument for bytesToString");
   }
   const length = bytes.length;
@@ -805,7 +808,7 @@ function utf8StringToString(str) {
   return unescape(encodeURIComponent(str));
 }
 function isArrayBuffer(v) {
-  return typeof v === "object" && v?.byteLength !== undefined;
+  return typeof v === "object" && v !== null && v.byteLength !== undefined;
 }
 function isArrayEqual(arr1, arr2) {
   if (arr1.length !== arr2.length) {
@@ -822,35 +825,25 @@ function getModificationDate(date = new Date()) {
   const buffer = [date.getUTCFullYear().toString(), (date.getUTCMonth() + 1).toString().padStart(2, "0"), date.getUTCDate().toString().padStart(2, "0"), date.getUTCHours().toString().padStart(2, "0"), date.getUTCMinutes().toString().padStart(2, "0"), date.getUTCSeconds().toString().padStart(2, "0")];
   return buffer.join("");
 }
-class PromiseCapability {
-  #settled = false;
-  constructor() {
-    this.promise = new Promise((resolve, reject) => {
-      this.resolve = data => {
-        this.#settled = true;
-        resolve(data);
-      };
-      this.reject = reason => {
-        this.#settled = true;
-        reject(reason);
-      };
-    });
-  }
-  get settled() {
-    return this.#settled;
-  }
-}
-exports.PromiseCapability = PromiseCapability;
-let NormalizeRegex = null;
-let NormalizationMap = null;
-function normalizeUnicode(str) {
-  if (!NormalizeRegex) {
-    NormalizeRegex = /([\u00a0\u00b5\u037e\u0eb3\u2000-\u200a\u202f\u2126\ufb00-\ufb04\ufb06\ufb20-\ufb36\ufb38-\ufb3c\ufb3e\ufb40-\ufb41\ufb43-\ufb44\ufb46-\ufba1\ufba4-\ufba9\ufbae-\ufbb1\ufbd3-\ufbdc\ufbde-\ufbe7\ufbea-\ufbf8\ufbfc-\ufbfd\ufc00-\ufc5d\ufc64-\ufcf1\ufcf5-\ufd3d\ufd88\ufdf4\ufdfa-\ufdfb\ufe71\ufe77\ufe79\ufe7b\ufe7d]+)|(\ufb05+)/gu;
-    NormalizationMap = new Map([["ﬅ", "ſt"]]);
-  }
-  return str.replaceAll(NormalizeRegex, (_, p1, p2) => {
-    return p1 ? p1.normalize("NFKC") : NormalizationMap.get(p2);
+function createPromiseCapability() {
+  const capability = Object.create(null);
+  let isSettled = false;
+  Object.defineProperty(capability, "settled", {
+    get() {
+      return isSettled;
+    }
   });
+  capability.promise = new Promise(function (resolve, reject) {
+    capability.resolve = function (data) {
+      isSettled = true;
+      resolve(data);
+    };
+    capability.reject = function (reason) {
+      isSettled = true;
+      reject(reason);
+    };
+  });
+  return capability;
 }
 
 /***/ }),
@@ -1008,7 +1001,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.7.507',
+    apiVersion: '3.5.542',
     data,
     password,
     disableAutoFetch,
@@ -1128,7 +1121,7 @@ function getDataProp(val) {
 class PDFDocumentLoadingTask {
   static #docId = 0;
   constructor() {
-    this._capability = new _util.PromiseCapability();
+    this._capability = (0, _util.createPromiseCapability)();
     this._transport = null;
     this._worker = null;
     this.docId = `d${PDFDocumentLoadingTask.#docId++}`;
@@ -1160,7 +1153,7 @@ class PDFDataRangeTransport {
     this._progressListeners = [];
     this._progressiveReadListeners = [];
     this._progressiveDoneListeners = [];
-    this._readyCapability = new _util.PromiseCapability();
+    this._readyCapability = (0, _util.createPromiseCapability)();
   }
   addRangeListener(listener) {
     this._rangeListeners.push(listener);
@@ -1409,7 +1402,7 @@ class PDFPageProxy {
     }
     const intentPrint = !!(intentArgs.renderingIntent & _util.RenderingIntentFlag.PRINT);
     if (!intentState.displayReadyCapability) {
-      intentState.displayReadyCapability = new _util.PromiseCapability();
+      intentState.displayReadyCapability = (0, _util.createPromiseCapability)();
       intentState.operatorList = {
         fnArray: [],
         argsArray: [],
@@ -1493,7 +1486,7 @@ class PDFPageProxy {
     if (!intentState.opListReadCapability) {
       opListTask = Object.create(null);
       opListTask.operatorListChanged = operatorListChanged;
-      intentState.opListReadCapability = new _util.PromiseCapability();
+      intentState.opListReadCapability = (0, _util.createPromiseCapability)();
       (intentState.renderTasks ||= new Set()).add(opListTask);
       intentState.operatorList = {
         fnArray: [],
@@ -1507,14 +1500,12 @@ class PDFPageProxy {
     return intentState.opListReadCapability.promise;
   }
   streamTextContent({
-    includeMarkedContent = false,
-    disableNormalization = false
+    includeMarkedContent = false
   } = {}) {
     const TEXT_CONTENT_CHUNK_SIZE = 100;
     return this._transport.messageHandler.sendWithStream("GetTextContent", {
       pageIndex: this._pageIndex,
-      includeMarkedContent: includeMarkedContent === true,
-      disableNormalization: disableNormalization === true
+      includeMarkedContent: includeMarkedContent === true
     }, {
       highWaterMark: TEXT_CONTENT_CHUNK_SIZE,
       size(textContent) {
@@ -1812,7 +1803,7 @@ class PDFWorker {
     this.name = name;
     this.destroyed = false;
     this.verbosity = verbosity;
-    this._readyCapability = new _util.PromiseCapability();
+    this._readyCapability = (0, _util.createPromiseCapability)();
     this._port = null;
     this._webWorker = null;
     this._messageHandler = null;
@@ -2030,7 +2021,7 @@ class WorkerTransport {
     this._networkStream = networkStream;
     this._fullReader = null;
     this._lastProgress = null;
-    this.downloadInfoCapability = new _util.PromiseCapability();
+    this.downloadInfoCapability = (0, _util.createPromiseCapability)();
     this.setupMessageHandler();
   }
   #cacheSimpleMethod(name, data = null) {
@@ -2091,7 +2082,7 @@ class WorkerTransport {
       return this.destroyCapability.promise;
     }
     this.destroyed = true;
-    this.destroyCapability = new _util.PromiseCapability();
+    this.destroyCapability = (0, _util.createPromiseCapability)();
     if (this._passwordCapability) {
       this._passwordCapability.reject(new Error("Worker was destroyed during onPassword callback"));
     }
@@ -2162,7 +2153,7 @@ class WorkerTransport {
       };
     });
     messageHandler.on("ReaderHeadersReady", data => {
-      const headersCapability = new _util.PromiseCapability();
+      const headersCapability = (0, _util.createPromiseCapability)();
       const fullReader = this._fullReader;
       fullReader.headersReady.then(() => {
         if (!fullReader.isStreamingSupported || !fullReader.isRangeSupported) {
@@ -2248,7 +2239,7 @@ class WorkerTransport {
       loadingTask._capability.reject(reason);
     });
     messageHandler.on("PasswordRequest", exception => {
-      this._passwordCapability = new _util.PromiseCapability();
+      this._passwordCapability = (0, _util.createPromiseCapability)();
       if (loadingTask.onPassword) {
         const updatePassword = password => {
           if (password instanceof Error) {
@@ -2563,7 +2554,7 @@ class PDFObjects {
       return obj;
     }
     return this.#objs[objId] = {
-      capability: new _util.PromiseCapability(),
+      capability: (0, _util.createPromiseCapability)(),
       data: null
     };
   }
@@ -2657,7 +2648,7 @@ class InternalRenderTask {
     this.graphicsReady = false;
     this._useRequestAnimationFrame = useRequestAnimationFrame === true && typeof window !== "undefined";
     this.cancelled = false;
-    this.capability = new _util.PromiseCapability();
+    this.capability = (0, _util.createPromiseCapability)();
     this.task = new RenderTask(this);
     this._cancelBound = this.cancel.bind(this);
     this._continueBound = this._continue.bind(this);
@@ -2694,7 +2685,7 @@ class InternalRenderTask {
     } = this.params;
     this.gfx = new _canvas.CanvasGraphics(canvasContext, this.commonObjs, this.objs, this.canvasFactory, this.filterFactory, {
       optionalContentConfig
-    }, this.annotationCanvasMap, this.pageColors);
+    }, this.annotationCanvasMap);
     this.gfx.beginDrawing({
       transform,
       viewport,
@@ -2708,7 +2699,7 @@ class InternalRenderTask {
   cancel(error = null, extraDelay = 0) {
     this.running = false;
     this.cancelled = true;
-    this.gfx?.endDrawing();
+    this.gfx?.endDrawing(this.pageColors);
     if (this._canvas) {
       InternalRenderTask.#canvasInUse.delete(this._canvas);
     }
@@ -2716,7 +2707,9 @@ class InternalRenderTask {
   }
   operatorListChanged() {
     if (!this.graphicsReady) {
-      this.graphicsReadyCallback ||= this._continueBound;
+      if (!this.graphicsReadyCallback) {
+        this.graphicsReadyCallback = this._continueBound;
+      }
       return;
     }
     this.stepper?.updateOperatorList(this.operatorList);
@@ -2764,9 +2757,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.7.507';
+const version = '3.5.542';
 exports.version = version;
-const build = '3709bd0e5';
+const build = 'd96b52dac';
 exports.build = build;
 
 /***/ }),
@@ -2951,7 +2944,6 @@ class AnnotationEditor {
       }
     } = this.parent.viewport;
     this.rotation = rotation;
-    this.pageRotation = (360 + rotation - this._uiManager.viewParameters.rotation) % 360;
     this.pageDimensions = [pageWidth, pageHeight];
     this.pageTranslation = [pageX, pageY];
     const [width, height] = this.parentDimensions;
@@ -3053,7 +3045,7 @@ class AnnotationEditor {
     return this._uiManager.viewParameters.realScale;
   }
   get parentRotation() {
-    return (this._uiManager.viewParameters.rotation + this.pageRotation) % 360;
+    return this._uiManager.viewParameters.rotation;
   }
   get parentDimensions() {
     const {
@@ -4482,7 +4474,9 @@ class PDFDateString {
     if (!input || typeof input !== "string") {
       return null;
     }
-    pdfDateStringRegex ||= new RegExp("^D:" + "(\\d{4})" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "([Z|+|-])?" + "(\\d{2})?" + "'?" + "(\\d{2})?" + "'?");
+    if (!pdfDateStringRegex) {
+      pdfDateStringRegex = new RegExp("^D:" + "(\\d{4})" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "(\\d{2})?" + "([Z|+|-])?" + "(\\d{2})?" + "'?" + "(\\d{2})?" + "'?");
+    }
     const matches = pdfDateStringRegex.exec(input);
     if (!matches) {
       return null;
@@ -4878,24 +4872,19 @@ exports.FontLoader = exports.FontFaceObject = void 0;
 var _util = __w_pdfjs_require__(1);
 var _is_node = __w_pdfjs_require__(10);
 class FontLoader {
-  #systemFonts = new Set();
   constructor({
     ownerDocument = globalThis.document,
     styleElement = null
   }) {
     this._document = ownerDocument;
-    this.nativeFontFaces = new Set();
+    this.nativeFontFaces = [];
     this.styleElement = null;
     this.loadingRequests = [];
     this.loadTestFontId = 0;
   }
   addNativeFontFace(nativeFontFace) {
-    this.nativeFontFaces.add(nativeFontFace);
+    this.nativeFontFaces.push(nativeFontFace);
     this._document.fonts.add(nativeFontFace);
-  }
-  removeNativeFontFace(nativeFontFace) {
-    this.nativeFontFaces.delete(nativeFontFace);
-    this._document.fonts.delete(nativeFontFace);
   }
   insertRule(rule) {
     if (!this.styleElement) {
@@ -4909,46 +4898,17 @@ class FontLoader {
     for (const nativeFontFace of this.nativeFontFaces) {
       this._document.fonts.delete(nativeFontFace);
     }
-    this.nativeFontFaces.clear();
-    this.#systemFonts.clear();
+    this.nativeFontFaces.length = 0;
     if (this.styleElement) {
       this.styleElement.remove();
       this.styleElement = null;
     }
   }
-  async loadSystemFont(info) {
-    if (!info || this.#systemFonts.has(info.loadedName)) {
-      return;
-    }
-    (0, _util.assert)(!this.disableFontFace, "loadSystemFont shouldn't be called when `disableFontFace` is set.");
-    if (this.isFontLoadingAPISupported) {
-      const {
-        loadedName,
-        src,
-        style
-      } = info;
-      const fontFace = new FontFace(loadedName, src, style);
-      this.addNativeFontFace(fontFace);
-      try {
-        await fontFace.load();
-        this.#systemFonts.add(loadedName);
-      } catch {
-        (0, _util.warn)(`Cannot load system font: ${info.baseFontName}, installing it could help to improve PDF rendering.`);
-        this.removeNativeFontFace(fontFace);
-      }
-      return;
-    }
-    (0, _util.unreachable)("Not implemented: loadSystemFont without the Font Loading API.");
-  }
   async bind(font) {
-    if (font.attached || font.missingFile && !font.systemFontInfo) {
+    if (font.attached || font.missingFile) {
       return;
     }
     font.attached = true;
-    if (font.systemFontInfo) {
-      await this.loadSystemFont(font.systemFontInfo);
-      return;
-    }
     if (this.isFontLoadingAPISupported) {
       const nativeFontFace = font.createNativeFontFace();
       if (nativeFontFace) {
@@ -5841,7 +5801,7 @@ class CanvasGraphics {
   constructor(canvasCtx, commonObjs, objs, canvasFactory, filterFactory, {
     optionalContentConfig,
     markedContentStack = null
-  }, annotationCanvasMap, pageColors) {
+  }, annotationCanvasMap) {
     this.ctx = canvasCtx;
     this.current = new CanvasExtraState(this.ctx.canvas.width, this.ctx.canvas.height);
     this.stateStack = [];
@@ -5871,8 +5831,7 @@ class CanvasGraphics {
     this.viewportScale = 1;
     this.outputScaleX = 1;
     this.outputScaleY = 1;
-    this.pageColors = pageColors;
-    this._cachedScaleForStroking = [-1, 0];
+    this._cachedScaleForStroking = null;
     this._cachedGetSinglePixelWidth = null;
     this._cachedBitmapsMap = new Map();
   }
@@ -5971,7 +5930,7 @@ class CanvasGraphics {
       this.transparentCanvas = null;
     }
   }
-  endDrawing() {
+  endDrawing(pageColors = null) {
     this.#restoreInitialState();
     this.cachedCanvases.clear();
     this.cachedPatterns.clear();
@@ -5984,11 +5943,8 @@ class CanvasGraphics {
       cache.clear();
     }
     this._cachedBitmapsMap.clear();
-    this.#drawFilter();
-  }
-  #drawFilter() {
-    if (this.pageColors) {
-      const hcmFilterId = this.filterFactory.addHCMFilter(this.pageColors.foreground, this.pageColors.background);
+    if (pageColors) {
+      const hcmFilterId = this.filterFactory.addHCMFilter(pageColors.foreground, pageColors.background);
       if (hcmFilterId !== "none") {
         const savedFilter = this.ctx.filter;
         this.ctx.filter = hcmFilterId;
@@ -6104,7 +6060,7 @@ class CanvasGraphics {
   }
   setLineWidth(width) {
     if (width !== this.current.lineWidth) {
-      this._cachedScaleForStroking[0] = -1;
+      this._cachedScaleForStroking = null;
     }
     this.current.lineWidth = width;
     this.ctx.lineWidth = width;
@@ -6256,13 +6212,13 @@ class CanvasGraphics {
       }
       this.checkSMaskState();
       this.pendingClip = null;
-      this._cachedScaleForStroking[0] = -1;
+      this._cachedScaleForStroking = null;
       this._cachedGetSinglePixelWidth = null;
     }
   }
   transform(a, b, c, d, e, f) {
     this.ctx.transform(a, b, c, d, e, f);
-    this._cachedScaleForStroking[0] = -1;
+    this._cachedScaleForStroking = null;
     this._cachedGetSinglePixelWidth = null;
   }
   constructPath(ops, args, minMax) {
@@ -6491,7 +6447,6 @@ class CanvasGraphics {
       return;
     }
     const name = fontObj.loadedName || "sans-serif";
-    const typeface = fontObj.systemFontInfo?.css || `"${name}", ${fontObj.fallbackName}`;
     let bold = "normal";
     if (fontObj.black) {
       bold = "900";
@@ -6499,6 +6454,7 @@ class CanvasGraphics {
       bold = "bold";
     }
     const italic = fontObj.italic ? "italic" : "normal";
+    const typeface = `"${name}", ${fontObj.fallbackName}`;
     let browserFontSize = size;
     if (size < MIN_FONT_SIZE) {
       browserFontSize = MIN_FONT_SIZE;
@@ -6568,7 +6524,7 @@ class CanvasGraphics {
       }
     }
     if (isAddToPathSet) {
-      const paths = this.pendingTextPaths ||= [];
+      const paths = this.pendingTextPaths || (this.pendingTextPaths = []);
       paths.push({
         transform: (0, _display_utils.getCurrentTransform)(ctx),
         x,
@@ -6746,7 +6702,7 @@ class CanvasGraphics {
     if (isTextInvisible || fontSize === 0) {
       return;
     }
-    this._cachedScaleForStroking[0] = -1;
+    this._cachedScaleForStroking = null;
     this._cachedGetSinglePixelWidth = null;
     ctx.save();
     ctx.transform(...current.textMatrix);
@@ -7030,7 +6986,6 @@ class CanvasGraphics {
         this.annotationCanvasMap.set(id, canvas);
         this.annotationCanvas.savedCtx = this.ctx;
         this.ctx = context;
-        this.ctx.save();
         this.ctx.setTransform(scaleX, 0, 0, -scaleY, 0, height * scaleY);
         resetCtxToDefault(this.ctx);
       } else {
@@ -7046,8 +7001,6 @@ class CanvasGraphics {
   }
   endAnnotation() {
     if (this.annotationCanvas) {
-      this.ctx.restore();
-      this.#drawFilter();
       this.ctx = this.annotationCanvas.savedCtx;
       delete this.annotationCanvas.savedCtx;
       delete this.annotationCanvas;
@@ -7310,28 +7263,16 @@ class CanvasGraphics {
     return this._cachedGetSinglePixelWidth;
   }
   getScaleForStroking() {
-    if (this._cachedScaleForStroking[0] === -1) {
+    if (!this._cachedScaleForStroking) {
       const {
         lineWidth
       } = this.current;
-      const {
-        a,
-        b,
-        c,
-        d
-      } = this.ctx.getTransform();
+      const m = (0, _display_utils.getCurrentTransform)(this.ctx);
       let scaleX, scaleY;
-      if (b === 0 && c === 0) {
-        const normX = Math.abs(a);
-        const normY = Math.abs(d);
-        if (normX === normY) {
-          if (lineWidth === 0) {
-            scaleX = scaleY = 1 / normX;
-          } else {
-            const scaledLineWidth = normX * lineWidth;
-            scaleX = scaleY = scaledLineWidth < 1 ? 1 / scaledLineWidth : 1;
-          }
-        } else if (lineWidth === 0) {
+      if (m[1] === 0 && m[2] === 0) {
+        const normX = Math.abs(m[0]);
+        const normY = Math.abs(m[3]);
+        if (lineWidth === 0) {
           scaleX = 1 / normX;
           scaleY = 1 / normY;
         } else {
@@ -7341,9 +7282,9 @@ class CanvasGraphics {
           scaleY = scaledYLineWidth < 1 ? 1 / scaledYLineWidth : 1;
         }
       } else {
-        const absDet = Math.abs(a * d - b * c);
-        const normX = Math.hypot(a, b);
-        const normY = Math.hypot(c, d);
+        const absDet = Math.abs(m[0] * m[3] - m[2] * m[1]);
+        const normX = Math.hypot(m[0], m[1]);
+        const normY = Math.hypot(m[2], m[3]);
         if (lineWidth === 0) {
           scaleX = normY / absDet;
           scaleY = normX / absDet;
@@ -7353,8 +7294,7 @@ class CanvasGraphics {
           scaleY = normX > baseArea ? normX / baseArea : 1;
         }
       }
-      this._cachedScaleForStroking[0] = scaleX;
-      this._cachedScaleForStroking[1] = scaleY;
+      this._cachedScaleForStroking = [scaleX, scaleY];
     }
     return this._cachedScaleForStroking;
   }
@@ -7371,19 +7311,21 @@ class CanvasGraphics {
       ctx.stroke();
       return;
     }
-    const dashes = ctx.getLineDash();
+    let savedMatrix, savedDashes, savedDashOffset;
     if (saveRestore) {
-      ctx.save();
+      savedMatrix = (0, _display_utils.getCurrentTransform)(ctx);
+      savedDashes = ctx.getLineDash().slice();
+      savedDashOffset = ctx.lineDashOffset;
     }
     ctx.scale(scaleX, scaleY);
-    if (dashes.length > 0) {
-      const scale = Math.max(scaleX, scaleY);
-      ctx.setLineDash(dashes.map(x => x / scale));
-      ctx.lineDashOffset /= scale;
-    }
+    const scale = Math.max(scaleX, scaleY);
+    ctx.setLineDash(ctx.getLineDash().map(x => x / scale));
+    ctx.lineDashOffset /= scale;
     ctx.stroke();
     if (saveRestore) {
-      ctx.restore();
+      ctx.setTransform(...savedMatrix);
+      ctx.setLineDash(savedDashes);
+      ctx.lineDashOffset = savedDashOffset;
     }
   }
   isContentVisible() {
@@ -7731,7 +7673,9 @@ const PaintType = {
   UNCOLORED: 2
 };
 class TilingPattern {
-  static MAX_PATTERN_SIZE = 3000;
+  static get MAX_PATTERN_SIZE() {
+    return (0, _util.shadow)(this, "MAX_PATTERN_SIZE", 3000);
+  }
   constructor(IR, color, ctx, canvasGraphicsFactory, baseTransform) {
     this.operatorList = IR[2];
     this.matrix = IR[3] || [1, 0, 0, 1, 0, 0];
@@ -8055,7 +7999,7 @@ class MessageHandler {
         return;
       }
       if (data.stream) {
-        this.#processStreamMessage(data);
+        this._processStreamMessage(data);
         return;
       }
       if (data.callback) {
@@ -8103,7 +8047,7 @@ class MessageHandler {
         return;
       }
       if (data.streamId) {
-        this.#createStreamSink(data);
+        this._createStreamSink(data);
         return;
       }
       action(data.data);
@@ -8127,7 +8071,7 @@ class MessageHandler {
   }
   sendWithPromise(actionName, data, transfers) {
     const callbackId = this.callbackId++;
-    const capability = new _util.PromiseCapability();
+    const capability = (0, _util.createPromiseCapability)();
     this.callbackCapabilities[callbackId] = capability;
     try {
       this.comObj.postMessage({
@@ -8149,7 +8093,7 @@ class MessageHandler {
       comObj = this.comObj;
     return new ReadableStream({
       start: controller => {
-        const startCapability = new _util.PromiseCapability();
+        const startCapability = (0, _util.createPromiseCapability)();
         this.streamControllers[streamId] = {
           controller,
           startCall: startCapability,
@@ -8168,7 +8112,7 @@ class MessageHandler {
         return startCapability.promise;
       },
       pull: controller => {
-        const pullCapability = new _util.PromiseCapability();
+        const pullCapability = (0, _util.createPromiseCapability)();
         this.streamControllers[streamId].pullCall = pullCapability;
         comObj.postMessage({
           sourceName,
@@ -8181,7 +8125,7 @@ class MessageHandler {
       },
       cancel: reason => {
         (0, _util.assert)(reason instanceof Error, "cancel must have a valid reason");
-        const cancelCapability = new _util.PromiseCapability();
+        const cancelCapability = (0, _util.createPromiseCapability)();
         this.streamControllers[streamId].cancelCall = cancelCapability;
         this.streamControllers[streamId].isClosed = true;
         comObj.postMessage({
@@ -8195,7 +8139,7 @@ class MessageHandler {
       }
     }, queueingStrategy);
   }
-  #createStreamSink(data) {
+  _createStreamSink(data) {
     const streamId = data.streamId,
       sourceName = this.sourceName,
       targetName = data.sourceName,
@@ -8210,7 +8154,7 @@ class MessageHandler {
         const lastDesiredSize = this.desiredSize;
         this.desiredSize -= size;
         if (lastDesiredSize > 0 && this.desiredSize <= 0) {
-          this.sinkCapability = new _util.PromiseCapability();
+          this.sinkCapability = (0, _util.createPromiseCapability)();
           this.ready = this.sinkCapability.promise;
         }
         comObj.postMessage({
@@ -8248,7 +8192,7 @@ class MessageHandler {
           reason: wrapReason(reason)
         });
       },
-      sinkCapability: new _util.PromiseCapability(),
+      sinkCapability: (0, _util.createPromiseCapability)(),
       onPull: null,
       onCancel: null,
       isCancelled: false,
@@ -8278,7 +8222,7 @@ class MessageHandler {
       });
     });
   }
-  #processStreamMessage(data) {
+  _processStreamMessage(data) {
     const streamId = data.streamId,
       sourceName = this.sourceName,
       targetName = data.sourceName,
@@ -8316,7 +8260,7 @@ class MessageHandler {
         }
         streamSink.desiredSize = data.desiredSize;
         new Promise(function (resolve) {
-          resolve(streamSink.onPull?.());
+          resolve(streamSink.onPull && streamSink.onPull());
         }).then(function () {
           comObj.postMessage({
             sourceName,
@@ -8349,12 +8293,12 @@ class MessageHandler {
         }
         streamController.isClosed = true;
         streamController.controller.close();
-        this.#deleteStreamController(streamController, streamId);
+        this._deleteStreamController(streamController, streamId);
         break;
       case StreamKind.ERROR:
         (0, _util.assert)(streamController, "error should have stream controller");
         streamController.controller.error(wrapReason(data.reason));
-        this.#deleteStreamController(streamController, streamId);
+        this._deleteStreamController(streamController, streamId);
         break;
       case StreamKind.CANCEL_COMPLETE:
         if (data.success) {
@@ -8362,14 +8306,14 @@ class MessageHandler {
         } else {
           streamController.cancelCall.reject(wrapReason(data.reason));
         }
-        this.#deleteStreamController(streamController, streamId);
+        this._deleteStreamController(streamController, streamId);
         break;
       case StreamKind.CANCEL:
         if (!streamSink) {
           break;
         }
         new Promise(function (resolve) {
-          resolve(streamSink.onCancel?.(wrapReason(data.reason)));
+          resolve(streamSink.onCancel && streamSink.onCancel(wrapReason(data.reason)));
         }).then(function () {
           comObj.postMessage({
             sourceName,
@@ -8395,8 +8339,8 @@ class MessageHandler {
         throw new Error("Unexpected stream case");
     }
   }
-  async #deleteStreamController(streamController, streamId) {
-    await Promise.allSettled([streamController.startCall?.promise, streamController.pullCall?.promise, streamController.cancelCall?.promise]);
+  async _deleteStreamController(streamController, streamId) {
+    await Promise.allSettled([streamController.startCall && streamController.startCall.promise, streamController.pullCall && streamController.pullCall.promise, streamController.cancelCall && streamController.cancelCall.promise]);
     delete this.streamControllers[streamId];
   }
   destroy() {
@@ -8831,7 +8775,7 @@ class PDFDataTransportStreamReader {
         done: true
       };
     }
-    const requestCapability = new _util.PromiseCapability();
+    const requestCapability = (0, _util.createPromiseCapability)();
     this._requests.push(requestCapability);
     return requestCapability.promise;
   }
@@ -8903,7 +8847,7 @@ class PDFDataTransportStreamRangeReader {
         done: true
       };
     }
-    const requestCapability = new _util.PromiseCapability();
+    const requestCapability = (0, _util.createPromiseCapability)();
     this._requests.push(requestCapability);
     return requestCapability.promise;
   }
@@ -9107,8 +9051,8 @@ class BaseFullReader {
     this._isStreamingSupported = !source.disableStream;
     this._isRangeSupported = !source.disableRange;
     this._readableStream = null;
-    this._readCapability = new _util.PromiseCapability();
-    this._headersCapability = new _util.PromiseCapability();
+    this._readCapability = (0, _util.createPromiseCapability)();
+    this._headersCapability = (0, _util.createPromiseCapability)();
   }
   get headersReady() {
     return this._headersCapability.promise;
@@ -9138,7 +9082,7 @@ class BaseFullReader {
     }
     const chunk = this._readableStream.read();
     if (chunk === null) {
-      this._readCapability = new _util.PromiseCapability();
+      this._readCapability = (0, _util.createPromiseCapability)();
       return this.read();
     }
     this._loaded += chunk.length;
@@ -9192,7 +9136,7 @@ class BaseRangeReader {
     this.onProgress = null;
     this._loaded = 0;
     this._readableStream = null;
-    this._readCapability = new _util.PromiseCapability();
+    this._readCapability = (0, _util.createPromiseCapability)();
     const source = stream.source;
     this._isStreamingSupported = !source.disableStream;
   }
@@ -9212,7 +9156,7 @@ class BaseRangeReader {
     }
     const chunk = this._readableStream.read();
     if (chunk === null) {
-      this._readCapability = new _util.PromiseCapability();
+      this._readCapability = (0, _util.createPromiseCapability)();
       return this.read();
     }
     this._loaded += chunk.length;
@@ -9614,6 +9558,9 @@ class NetworkManager {
     this.isHttp = /^https?:/i.test(url);
     this.httpHeaders = this.isHttp && args.httpHeaders || Object.create(null);
     this.withCredentials = args.withCredentials || false;
+    this.getXhr = args.getXhr || function NetworkManager_getXhr() {
+      return new XMLHttpRequest();
+    };
     this.currXhrId = 0;
     this.pendingRequests = Object.create(null);
   }
@@ -9631,7 +9578,7 @@ class NetworkManager {
     return this.request(listeners);
   }
   request(args) {
-    const xhr = new XMLHttpRequest();
+    const xhr = this.getXhr();
     const xhrId = this.currXhrId++;
     const pendingRequest = this.pendingRequests[xhrId] = {
       xhr
@@ -9776,7 +9723,7 @@ class PDFNetworkStreamFullRequestReader {
     };
     this._url = source.url;
     this._fullRequestId = manager.requestFull(args);
-    this._headersReceivedCapability = new _util.PromiseCapability();
+    this._headersReceivedCapability = (0, _util.createPromiseCapability)();
     this._disableRange = source.disableRange || false;
     this._contentLength = source.length;
     this._rangeChunkSize = source.rangeChunkSize;
@@ -9888,7 +9835,7 @@ class PDFNetworkStreamFullRequestReader {
         done: true
       };
     }
-    const requestCapability = new _util.PromiseCapability();
+    const requestCapability = (0, _util.createPromiseCapability)();
     this._requests.push(requestCapability);
     return requestCapability.promise;
   }
@@ -9985,7 +9932,7 @@ class PDFNetworkStreamRangeRequestReader {
         done: true
       };
     }
-    const requestCapability = new _util.PromiseCapability();
+    const requestCapability = (0, _util.createPromiseCapability)();
     this._requests.push(requestCapability);
     return requestCapability.promise;
   }
@@ -10090,7 +10037,7 @@ class PDFFetchStreamReader {
     const source = stream.source;
     this._withCredentials = source.withCredentials || false;
     this._contentLength = source.length;
-    this._headersCapability = new _util.PromiseCapability();
+    this._headersCapability = (0, _util.createPromiseCapability)();
     this._disableRange = source.disableRange || false;
     this._rangeChunkSize = source.rangeChunkSize;
     if (!this._rangeChunkSize && !this._disableRange) {
@@ -10177,7 +10124,7 @@ class PDFFetchStreamRangeReader {
     this._loaded = 0;
     const source = stream.source;
     this._withCredentials = source.withCredentials || false;
-    this._readCapability = new _util.PromiseCapability();
+    this._readCapability = (0, _util.createPromiseCapability)();
     this._isStreamingSupported = !source.disableStream;
     this._abortController = new AbortController();
     this._headers = createHeaders(this._stream.httpHeaders);
@@ -10448,7 +10395,7 @@ class TextLayerRenderTask {
     this._reader = null;
     this._textDivProperties = textDivProperties || new WeakMap();
     this._canceled = false;
-    this._capability = new _util.PromiseCapability();
+    this._capability = (0, _util.createPromiseCapability)();
     this._layoutTextParams = {
       prevFontSize: null,
       prevFontFamily: null,
@@ -10516,7 +10463,7 @@ class TextLayerRenderTask {
     }
   }
   _render() {
-    const capability = new _util.PromiseCapability();
+    const capability = (0, _util.createPromiseCapability)();
     let styleCache = Object.create(null);
     if (this._isReadableStream) {
       const pump = () => {
@@ -10564,7 +10511,7 @@ function renderTextLayer(params) {
   const style = getComputedStyle(container);
   const visibility = style.getPropertyValue("visibility");
   const scaleFactor = parseFloat(style.getPropertyValue("--scale-factor"));
-  if (visibility === "visible" && (!scaleFactor || Math.abs(scaleFactor - viewport.scale) > 1e-5)) {
+  if (visibility === "visible" && (!scaleFactor || Math.abs(scaleFactor - viewport.scale) > 1e-15)) {
     console.error("The `--scale-factor` CSS-variable must be set, " + "to the same value as `viewport.scale`, " + "either on the `container`-element itself or higher up in the DOM.");
   }
   const task = new TextLayerRenderTask(params);
@@ -11292,23 +11239,28 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.InkEditor = void 0;
+Object.defineProperty(exports, "fitCurve", ({
+  enumerable: true,
+  get: function () {
+    return _pdfjsFitCurve.fitCurve;
+  }
+}));
 var _util = __w_pdfjs_require__(1);
 var _editor = __w_pdfjs_require__(4);
+var _pdfjsFitCurve = __w_pdfjs_require__(30);
 var _tools = __w_pdfjs_require__(5);
 const RESIZER_SIZE = 16;
 class InkEditor extends _editor.AnnotationEditor {
   #aspectRatio = 0;
   #baseHeight = 0;
   #baseWidth = 0;
-  #boundCanvasContextMenu = this.canvasContextMenu.bind(this);
   #boundCanvasPointermove = this.canvasPointermove.bind(this);
   #boundCanvasPointerleave = this.canvasPointerleave.bind(this);
   #boundCanvasPointerup = this.canvasPointerup.bind(this);
   #boundCanvasPointerdown = this.canvasPointerdown.bind(this);
-  #currentPath2D = new Path2D();
   #disableEditing = false;
-  #hasSomethingToDraw = false;
   #isCanvasInitialized = false;
+  #lastPoint = null;
   #observer = null;
   #realWidth = 0;
   #realHeight = 0;
@@ -11328,7 +11280,6 @@ class InkEditor extends _editor.AnnotationEditor {
     this.opacity = params.opacity || null;
     this.paths = [];
     this.bezierPath2D = [];
-    this.allRawPaths = [];
     this.currentPath = [];
     this.scaleFactor = 1;
     this.translationX = this.translationY = 0;
@@ -11472,6 +11423,7 @@ class InkEditor extends _editor.AnnotationEditor {
     super.enableEditMode();
     this.div.draggable = false;
     this.canvas.addEventListener("pointerdown", this.#boundCanvasPointerdown);
+    this.canvas.addEventListener("pointerup", this.#boundCanvasPointerup);
   }
   disableEditMode() {
     if (!this.isInEditMode() || this.canvas === null) {
@@ -11481,6 +11433,7 @@ class InkEditor extends _editor.AnnotationEditor {
     this.div.draggable = !this.isEmpty();
     this.div.classList.remove("editing");
     this.canvas.removeEventListener("pointerdown", this.#boundCanvasPointerdown);
+    this.canvas.removeEventListener("pointerup", this.#boundCanvasPointerup);
   }
   onceAdded() {
     this.div.draggable = !this.isEmpty();
@@ -11520,11 +11473,6 @@ class InkEditor extends _editor.AnnotationEditor {
     ctx.strokeStyle = `${color}${(0, _tools.opacityToHex)(opacity)}`;
   }
   #startDrawing(x, y) {
-    this.canvas.addEventListener("contextmenu", this.#boundCanvasContextMenu);
-    this.canvas.addEventListener("pointerleave", this.#boundCanvasPointerleave);
-    this.canvas.addEventListener("pointermove", this.#boundCanvasPointermove);
-    this.canvas.addEventListener("pointerup", this.#boundCanvasPointerup);
-    this.canvas.removeEventListener("pointerdown", this.#boundCanvasPointerdown);
     this.isEditing = true;
     if (!this.#isCanvasInitialized) {
       this.#isCanvasInitialized = true;
@@ -11534,68 +11482,61 @@ class InkEditor extends _editor.AnnotationEditor {
       this.opacity ??= InkEditor._defaultOpacity;
     }
     this.currentPath.push([x, y]);
-    this.#hasSomethingToDraw = false;
+    this.#lastPoint = null;
     this.#setStroke();
+    this.ctx.beginPath();
+    this.ctx.moveTo(x, y);
     this.#requestFrameCallback = () => {
-      this.#drawPoints();
-      if (this.#requestFrameCallback) {
-        window.requestAnimationFrame(this.#requestFrameCallback);
+      if (!this.#requestFrameCallback) {
+        return;
       }
+      if (this.#lastPoint) {
+        if (this.isEmpty()) {
+          this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+          this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        } else {
+          this.#redraw();
+        }
+        this.ctx.lineTo(...this.#lastPoint);
+        this.#lastPoint = null;
+        this.ctx.stroke();
+      }
+      window.requestAnimationFrame(this.#requestFrameCallback);
     };
     window.requestAnimationFrame(this.#requestFrameCallback);
   }
   #draw(x, y) {
     const [lastX, lastY] = this.currentPath.at(-1);
-    if (this.currentPath.length > 1 && x === lastX && y === lastY) {
+    if (x === lastX && y === lastY) {
       return;
     }
-    const currentPath = this.currentPath;
-    let path2D = this.#currentPath2D;
-    currentPath.push([x, y]);
-    this.#hasSomethingToDraw = true;
-    if (currentPath.length <= 2) {
-      path2D.moveTo(...currentPath[0]);
-      path2D.lineTo(x, y);
-      return;
-    }
-    if (currentPath.length === 3) {
-      this.#currentPath2D = path2D = new Path2D();
-      path2D.moveTo(...currentPath[0]);
-    }
-    this.#makeBezierCurve(path2D, ...currentPath.at(-3), ...currentPath.at(-2), x, y);
-  }
-  #endPath() {
-    if (this.currentPath.length === 0) {
-      return;
-    }
-    const lastPoint = this.currentPath.at(-1);
-    this.#currentPath2D.lineTo(...lastPoint);
+    this.currentPath.push([x, y]);
+    this.#lastPoint = [x, y];
   }
   #stopDrawing(x, y) {
+    this.ctx.closePath();
     this.#requestFrameCallback = null;
     x = Math.min(Math.max(x, 0), this.canvas.width);
     y = Math.min(Math.max(y, 0), this.canvas.height);
-    this.#draw(x, y);
-    this.#endPath();
+    const [lastX, lastY] = this.currentPath.at(-1);
+    if (x !== lastX || y !== lastY) {
+      this.currentPath.push([x, y]);
+    }
     let bezier;
     if (this.currentPath.length !== 1) {
-      bezier = this.#generateBezierPoints();
+      bezier = (0, _pdfjsFitCurve.fitCurve)(this.currentPath, 30, null);
     } else {
       const xy = [x, y];
       bezier = [[xy, xy.slice(), xy.slice(), xy]];
     }
-    const path2D = this.#currentPath2D;
-    const currentPath = this.currentPath;
-    this.currentPath = [];
-    this.#currentPath2D = new Path2D();
+    const path2D = InkEditor.#buildPath2D(bezier);
+    this.currentPath.length = 0;
     const cmd = () => {
-      this.allRawPaths.push(currentPath);
       this.paths.push(bezier);
       this.bezierPath2D.push(path2D);
       this.rebuild();
     };
     const undo = () => {
-      this.allRawPaths.pop();
       this.paths.pop();
       this.bezierPath2D.pop();
       if (this.paths.length === 0) {
@@ -11613,62 +11554,6 @@ class InkEditor extends _editor.AnnotationEditor {
       undo,
       mustExec: true
     });
-  }
-  #drawPoints() {
-    if (!this.#hasSomethingToDraw) {
-      return;
-    }
-    this.#hasSomethingToDraw = false;
-    const thickness = Math.ceil(this.thickness * this.parentScale);
-    const lastPoints = this.currentPath.slice(-3);
-    const x = lastPoints.map(xy => xy[0]);
-    const y = lastPoints.map(xy => xy[1]);
-    const xMin = Math.min(...x) - thickness;
-    const xMax = Math.max(...x) + thickness;
-    const yMin = Math.min(...y) - thickness;
-    const yMax = Math.max(...y) + thickness;
-    const {
-      ctx
-    } = this;
-    ctx.save();
-    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    for (const path of this.bezierPath2D) {
-      ctx.stroke(path);
-    }
-    ctx.stroke(this.#currentPath2D);
-    ctx.restore();
-  }
-  #makeBezierCurve(path2D, x0, y0, x1, y1, x2, y2) {
-    const prevX = (x0 + x1) / 2;
-    const prevY = (y0 + y1) / 2;
-    const x3 = (x1 + x2) / 2;
-    const y3 = (y1 + y2) / 2;
-    path2D.bezierCurveTo(prevX + 2 * (x1 - prevX) / 3, prevY + 2 * (y1 - prevY) / 3, x3 + 2 * (x1 - x3) / 3, y3 + 2 * (y1 - y3) / 3, x3, y3);
-  }
-  #generateBezierPoints() {
-    const path = this.currentPath;
-    if (path.length <= 2) {
-      return [[path[0], path[0], path.at(-1), path.at(-1)]];
-    }
-    const bezierPoints = [];
-    let i;
-    let [x0, y0] = path[0];
-    for (i = 1; i < path.length - 2; i++) {
-      const [x1, y1] = path[i];
-      const [x2, y2] = path[i + 1];
-      const x3 = (x1 + x2) / 2;
-      const y3 = (y1 + y2) / 2;
-      const control1 = [x0 + 2 * (x1 - x0) / 3, y0 + 2 * (y1 - y0) / 3];
-      const control2 = [x3 + 2 * (x1 - x3) / 3, y3 + 2 * (y1 - y3) / 3];
-      bezierPoints.push([[x0, y0], control1, control2, [x3, y3]]);
-      [x0, y0] = [x3, y3];
-    }
-    const [x1, y1] = path[i];
-    const [x2, y2] = path[i + 1];
-    const control1 = [x0 + 2 * (x1 - x0) / 3, y0 + 2 * (y1 - y0) / 3];
-    const control2 = [x2 + 2 * (x1 - x2) / 3, y2 + 2 * (y1 - y2) / 3];
-    bezierPoints.push([[x0, y0], control1, control2, [x2, y2]]);
-    return bezierPoints;
   }
   #redraw() {
     if (this.isEmpty()) {
@@ -11713,37 +11598,37 @@ class InkEditor extends _editor.AnnotationEditor {
       return;
     }
     this.setInForeground();
-    event.preventDefault();
     if (event.type !== "mouse") {
       this.div.focus();
     }
+    event.stopPropagation();
+    this.canvas.addEventListener("pointerleave", this.#boundCanvasPointerleave);
+    this.canvas.addEventListener("pointermove", this.#boundCanvasPointermove);
     this.#startDrawing(event.offsetX, event.offsetY);
   }
-  canvasContextMenu(event) {
-    event.preventDefault();
-  }
   canvasPointermove(event) {
-    event.preventDefault();
+    event.stopPropagation();
     this.#draw(event.offsetX, event.offsetY);
   }
   canvasPointerup(event) {
-    event.preventDefault();
-    this.#endDrawing(event);
+    if (event.button !== 0) {
+      return;
+    }
+    if (this.isInEditMode() && this.currentPath.length !== 0) {
+      event.stopPropagation();
+      this.#endDrawing(event);
+      this.setInBackground();
+    }
   }
   canvasPointerleave(event) {
     this.#endDrawing(event);
+    this.setInBackground();
   }
   #endDrawing(event) {
+    this.#stopDrawing(event.offsetX, event.offsetY);
     this.canvas.removeEventListener("pointerleave", this.#boundCanvasPointerleave);
     this.canvas.removeEventListener("pointermove", this.#boundCanvasPointermove);
-    this.canvas.removeEventListener("pointerup", this.#boundCanvasPointerup);
-    this.canvas.addEventListener("pointerdown", this.#boundCanvasPointerdown);
-    setTimeout(() => {
-      this.canvas.removeEventListener("contextmenu", this.#boundCanvasContextMenu);
-    }, 10);
-    this.#stopDrawing(event.offsetX, event.offsetY);
     this.addToAnnotationStorage();
-    this.setInBackground();
   }
   #createCanvas() {
     this.canvas = document.createElement("canvas");
@@ -12047,12 +11932,320 @@ exports.InkEditor = InkEditor;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
+exports.fitCurve = void 0;
+const fitCurve = __w_pdfjs_require__(31);
+exports.fitCurve = fitCurve;
+
+/***/ }),
+/* 31 */
+/***/ ((module) => {
+
+
+
+function fitCurve(points, maxError, progressCallback) {
+  if (!Array.isArray(points)) {
+    throw new TypeError("First argument should be an array");
+  }
+  points.forEach(point => {
+    if (!Array.isArray(point) || point.some(item => typeof item !== 'number') || point.length !== points[0].length) {
+      throw Error("Each point should be an array of numbers. Each point should have the same amount of numbers.");
+    }
+  });
+  points = points.filter((point, i) => i === 0 || !point.every((val, j) => val === points[i - 1][j]));
+  if (points.length < 2) {
+    return [];
+  }
+  const len = points.length;
+  const leftTangent = createTangent(points[1], points[0]);
+  const rightTangent = createTangent(points[len - 2], points[len - 1]);
+  return fitCubic(points, leftTangent, rightTangent, maxError, progressCallback);
+}
+function fitCubic(points, leftTangent, rightTangent, error, progressCallback) {
+  const MaxIterations = 20;
+  var bezCurve, u, uPrime, maxError, prevErr, splitPoint, prevSplit, centerVector, toCenterTangent, fromCenterTangent, beziers, dist, i;
+  if (points.length === 2) {
+    dist = maths.vectorLen(maths.subtract(points[0], points[1])) / 3.0;
+    bezCurve = [points[0], maths.addArrays(points[0], maths.mulItems(leftTangent, dist)), maths.addArrays(points[1], maths.mulItems(rightTangent, dist)), points[1]];
+    return [bezCurve];
+  }
+  u = chordLengthParameterize(points);
+  [bezCurve, maxError, splitPoint] = generateAndReport(points, u, u, leftTangent, rightTangent, progressCallback);
+  if (maxError === 0 || maxError < error) {
+    return [bezCurve];
+  }
+  if (maxError < error * error) {
+    uPrime = u;
+    prevErr = maxError;
+    prevSplit = splitPoint;
+    for (i = 0; i < MaxIterations; i++) {
+      uPrime = reparameterize(bezCurve, points, uPrime);
+      [bezCurve, maxError, splitPoint] = generateAndReport(points, u, uPrime, leftTangent, rightTangent, progressCallback);
+      if (maxError < error) {
+        return [bezCurve];
+      } else if (splitPoint === prevSplit) {
+        let errChange = maxError / prevErr;
+        if (errChange > .9999 && errChange < 1.0001) {
+          break;
+        }
+      }
+      prevErr = maxError;
+      prevSplit = splitPoint;
+    }
+  }
+  beziers = [];
+  centerVector = maths.subtract(points[splitPoint - 1], points[splitPoint + 1]);
+  if (centerVector.every(val => val === 0)) {
+    centerVector = maths.subtract(points[splitPoint - 1], points[splitPoint]);
+    [centerVector[0], centerVector[1]] = [-centerVector[1], centerVector[0]];
+  }
+  toCenterTangent = maths.normalize(centerVector);
+  fromCenterTangent = maths.mulItems(toCenterTangent, -1);
+  beziers = beziers.concat(fitCubic(points.slice(0, splitPoint + 1), leftTangent, toCenterTangent, error, progressCallback));
+  beziers = beziers.concat(fitCubic(points.slice(splitPoint), fromCenterTangent, rightTangent, error, progressCallback));
+  return beziers;
+}
+;
+function generateAndReport(points, paramsOrig, paramsPrime, leftTangent, rightTangent, progressCallback) {
+  var bezCurve, maxError, splitPoint;
+  bezCurve = generateBezier(points, paramsPrime, leftTangent, rightTangent, progressCallback);
+  [maxError, splitPoint] = computeMaxError(points, bezCurve, paramsOrig);
+  if (progressCallback) {
+    progressCallback({
+      bez: bezCurve,
+      points: points,
+      params: paramsOrig,
+      maxErr: maxError,
+      maxPoint: splitPoint
+    });
+  }
+  return [bezCurve, maxError, splitPoint];
+}
+function generateBezier(points, parameters, leftTangent, rightTangent) {
+  var bezCurve,
+    A,
+    a,
+    C,
+    X,
+    det_C0_C1,
+    det_C0_X,
+    det_X_C1,
+    alpha_l,
+    alpha_r,
+    epsilon,
+    segLength,
+    i,
+    len,
+    tmp,
+    u,
+    ux,
+    firstPoint = points[0],
+    lastPoint = points[points.length - 1];
+  bezCurve = [firstPoint, null, null, lastPoint];
+  A = maths.zeros_Xx2x2(parameters.length);
+  for (i = 0, len = parameters.length; i < len; i++) {
+    u = parameters[i];
+    ux = 1 - u;
+    a = A[i];
+    a[0] = maths.mulItems(leftTangent, 3 * u * (ux * ux));
+    a[1] = maths.mulItems(rightTangent, 3 * ux * (u * u));
+  }
+  C = [[0, 0], [0, 0]];
+  X = [0, 0];
+  for (i = 0, len = points.length; i < len; i++) {
+    u = parameters[i];
+    a = A[i];
+    C[0][0] += maths.dot(a[0], a[0]);
+    C[0][1] += maths.dot(a[0], a[1]);
+    C[1][0] += maths.dot(a[0], a[1]);
+    C[1][1] += maths.dot(a[1], a[1]);
+    tmp = maths.subtract(points[i], bezier.q([firstPoint, firstPoint, lastPoint, lastPoint], u));
+    X[0] += maths.dot(a[0], tmp);
+    X[1] += maths.dot(a[1], tmp);
+  }
+  det_C0_C1 = C[0][0] * C[1][1] - C[1][0] * C[0][1];
+  det_C0_X = C[0][0] * X[1] - C[1][0] * X[0];
+  det_X_C1 = X[0] * C[1][1] - X[1] * C[0][1];
+  alpha_l = det_C0_C1 === 0 ? 0 : det_X_C1 / det_C0_C1;
+  alpha_r = det_C0_C1 === 0 ? 0 : det_C0_X / det_C0_C1;
+  segLength = maths.vectorLen(maths.subtract(firstPoint, lastPoint));
+  epsilon = 1.0e-6 * segLength;
+  if (alpha_l < epsilon || alpha_r < epsilon) {
+    bezCurve[1] = maths.addArrays(firstPoint, maths.mulItems(leftTangent, segLength / 3.0));
+    bezCurve[2] = maths.addArrays(lastPoint, maths.mulItems(rightTangent, segLength / 3.0));
+  } else {
+    bezCurve[1] = maths.addArrays(firstPoint, maths.mulItems(leftTangent, alpha_l));
+    bezCurve[2] = maths.addArrays(lastPoint, maths.mulItems(rightTangent, alpha_r));
+  }
+  return bezCurve;
+}
+;
+function reparameterize(bezier, points, parameters) {
+  return parameters.map((p, i) => newtonRaphsonRootFind(bezier, points[i], p));
+}
+;
+function newtonRaphsonRootFind(bez, point, u) {
+  var d = maths.subtract(bezier.q(bez, u), point),
+    qprime = bezier.qprime(bez, u),
+    numerator = maths.mulMatrix(d, qprime),
+    denominator = maths.sum(maths.squareItems(qprime)) + 2 * maths.mulMatrix(d, bezier.qprimeprime(bez, u));
+  if (denominator === 0) {
+    return u;
+  } else {
+    return u - numerator / denominator;
+  }
+}
+;
+function chordLengthParameterize(points) {
+  var u = [],
+    currU,
+    prevU,
+    prevP;
+  points.forEach((p, i) => {
+    currU = i ? prevU + maths.vectorLen(maths.subtract(p, prevP)) : 0;
+    u.push(currU);
+    prevU = currU;
+    prevP = p;
+  });
+  u = u.map(x => x / prevU);
+  return u;
+}
+;
+function computeMaxError(points, bez, parameters) {
+  var dist, maxDist, splitPoint, v, i, count, point, t;
+  maxDist = 0;
+  splitPoint = Math.floor(points.length / 2);
+  const t_distMap = mapTtoRelativeDistances(bez, 10);
+  for (i = 0, count = points.length; i < count; i++) {
+    point = points[i];
+    t = find_t(bez, parameters[i], t_distMap, 10);
+    v = maths.subtract(bezier.q(bez, t), point);
+    dist = v[0] * v[0] + v[1] * v[1];
+    if (dist > maxDist) {
+      maxDist = dist;
+      splitPoint = i;
+    }
+  }
+  return [maxDist, splitPoint];
+}
+;
+var mapTtoRelativeDistances = function (bez, B_parts) {
+  var B_t_curr;
+  var B_t_dist = [0];
+  var B_t_prev = bez[0];
+  var sumLen = 0;
+  for (var i = 1; i <= B_parts; i++) {
+    B_t_curr = bezier.q(bez, i / B_parts);
+    sumLen += maths.vectorLen(maths.subtract(B_t_curr, B_t_prev));
+    B_t_dist.push(sumLen);
+    B_t_prev = B_t_curr;
+  }
+  B_t_dist = B_t_dist.map(x => x / sumLen);
+  return B_t_dist;
+};
+function find_t(bez, param, t_distMap, B_parts) {
+  if (param < 0) {
+    return 0;
+  }
+  if (param > 1) {
+    return 1;
+  }
+  var lenMax, lenMin, tMax, tMin, t;
+  for (var i = 1; i <= B_parts; i++) {
+    if (param <= t_distMap[i]) {
+      tMin = (i - 1) / B_parts;
+      tMax = i / B_parts;
+      lenMin = t_distMap[i - 1];
+      lenMax = t_distMap[i];
+      t = (param - lenMin) / (lenMax - lenMin) * (tMax - tMin) + tMin;
+      break;
+    }
+  }
+  return t;
+}
+function createTangent(pointA, pointB) {
+  return maths.normalize(maths.subtract(pointA, pointB));
+}
+class maths {
+  static zeros_Xx2x2(x) {
+    var zs = [];
+    while (x--) {
+      zs.push([0, 0]);
+    }
+    return zs;
+  }
+  static mulItems(items, multiplier) {
+    return items.map(x => x * multiplier);
+  }
+  static mulMatrix(m1, m2) {
+    return m1.reduce((sum, x1, i) => sum + x1 * m2[i], 0);
+  }
+  static subtract(arr1, arr2) {
+    return arr1.map((x1, i) => x1 - arr2[i]);
+  }
+  static addArrays(arr1, arr2) {
+    return arr1.map((x1, i) => x1 + arr2[i]);
+  }
+  static addItems(items, addition) {
+    return items.map(x => x + addition);
+  }
+  static sum(items) {
+    return items.reduce((sum, x) => sum + x);
+  }
+  static dot(m1, m2) {
+    return maths.mulMatrix(m1, m2);
+  }
+  static vectorLen(v) {
+    return Math.hypot(...v);
+  }
+  static divItems(items, divisor) {
+    return items.map(x => x / divisor);
+  }
+  static squareItems(items) {
+    return items.map(x => x * x);
+  }
+  static normalize(v) {
+    return this.divItems(v, this.vectorLen(v));
+  }
+}
+class bezier {
+  static q(ctrlPoly, t) {
+    var tx = 1.0 - t;
+    var pA = maths.mulItems(ctrlPoly[0], tx * tx * tx),
+      pB = maths.mulItems(ctrlPoly[1], 3 * tx * tx * t),
+      pC = maths.mulItems(ctrlPoly[2], 3 * tx * t * t),
+      pD = maths.mulItems(ctrlPoly[3], t * t * t);
+    return maths.addArrays(maths.addArrays(pA, pB), maths.addArrays(pC, pD));
+  }
+  static qprime(ctrlPoly, t) {
+    var tx = 1.0 - t;
+    var pA = maths.mulItems(maths.subtract(ctrlPoly[1], ctrlPoly[0]), 3 * tx * tx),
+      pB = maths.mulItems(maths.subtract(ctrlPoly[2], ctrlPoly[1]), 6 * tx * t),
+      pC = maths.mulItems(maths.subtract(ctrlPoly[3], ctrlPoly[2]), 3 * t * t);
+    return maths.addArrays(maths.addArrays(pA, pB), pC);
+  }
+  static qprimeprime(ctrlPoly, t) {
+    return maths.addArrays(maths.mulItems(maths.addArrays(maths.subtract(ctrlPoly[2], maths.mulItems(ctrlPoly[1], 2)), ctrlPoly[0]), 6 * (1.0 - t)), maths.mulItems(maths.addArrays(maths.subtract(ctrlPoly[3], maths.mulItems(ctrlPoly[2], 2)), ctrlPoly[1]), 6 * t));
+  }
+}
+module.exports = fitCurve;
+module.exports.fitCubic = fitCubic;
+module.exports.createTangent = createTangent;
+
+/***/ }),
+/* 32 */
+/***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
 exports.AnnotationLayer = void 0;
 var _util = __w_pdfjs_require__(1);
 var _display_utils = __w_pdfjs_require__(6);
 var _annotation_storage = __w_pdfjs_require__(3);
-var _scripting_utils = __w_pdfjs_require__(31);
-var _xfa_layer = __w_pdfjs_require__(32);
+var _scripting_utils = __w_pdfjs_require__(33);
+var _xfa_layer = __w_pdfjs_require__(34);
 const DEFAULT_TAB_INDEX = 1000;
 const DEFAULT_FONT_SIZE = 9;
 const GetElementsByNameSet = new WeakSet();
@@ -12357,7 +12550,7 @@ class AnnotationElement {
   _createPopup(trigger, data) {
     let container = this.container;
     if (this.quadrilaterals) {
-      trigger ||= this.quadrilaterals;
+      trigger = trigger || this.quadrilaterals;
       container = this.quadrilaterals[0];
     }
     if (!trigger) {
@@ -12702,14 +12895,6 @@ class WidgetAnnotationElement extends AnnotationElement {
     }
     return this.container;
   }
-  showElementAndHideCanvas(element) {
-    if (this.data.hasOwnCanvas) {
-      if (element.previousSibling?.nodeName === "CANVAS") {
-        element.previousSibling.hidden = true;
-      }
-      element.hidden = false;
-    }
-  }
   _getKeyModifier(event) {
     const {
       isWin,
@@ -12817,39 +13002,32 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
       const storedData = angularData.value ? angularData : storage.getValue(id, {
         value: this.data.fieldValue
       });
-      let textContent = storedData.value || "";
+      let textContent = storedData.formattedValue || storedData.value || "";
       const maxLen = storage.getValue(id, {
         charLimit: this.data.maxLen
       }).charLimit;
       if (maxLen && textContent.length > maxLen) {
         textContent = textContent.slice(0, maxLen);
       }
-      let fieldFormattedValues = storedData.formattedValue || this.data.textContent?.join("\n") || null;
-      if (fieldFormattedValues && this.data.comb) {
-        fieldFormattedValues = fieldFormattedValues.replaceAll(/\s+/g, "");
-      }
       const elementData = {
         userValue: textContent,
-        formattedValue: fieldFormattedValues,
+        formattedValue: null,
         lastCommittedValue: null,
         commitKey: 1
       };
       if (this.data.multiLine) {
         element = document.createElement("textarea");
-        element.textContent = fieldFormattedValues ?? textContent;
+        element.textContent = textContent;
         if (this.data.doNotScroll) {
           element.style.overflowY = "hidden";
         }
       } else {
         element = document.createElement("input");
         element.type = "text";
-        element.setAttribute("value", fieldFormattedValues ?? textContent);
+        element.setAttribute("value", textContent);
         if (this.data.doNotScroll) {
           element.style.overflowX = "hidden";
         }
-      }
-      if (this.data.hasOwnCanvas) {
-        element.hidden = true;
       }
       GetElementsByNameSet.add(element);
       element.setAttribute("data-element-id", id);
@@ -12868,7 +13046,6 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
           value: event.target.value
         });
         this.setPropertyOnSiblings(element, "value", event.target.value, "value");
-        elementData.formattedValue = null;
       });
       element.addEventListener("resetform", event => {
         const defaultValue = this.data.defaultFieldValue ?? "";
@@ -12900,7 +13077,6 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
           elementData.commitKey = 1;
         });
         element.addEventListener("updatefromsandbox", jsEvent => {
-          this.showElementAndHideCanvas(jsEvent.target);
           const actions = {
             value(event) {
               elementData.userValue = event.detail.value ?? "";
@@ -14179,7 +14355,7 @@ class AnnotationLayer {
 exports.AnnotationLayer = AnnotationLayer;
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -14235,7 +14411,7 @@ class ColorConverters {
 exports.ColorConverters = ColorConverters;
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -14468,7 +14644,7 @@ class XfaLayer {
 exports.XfaLayer = XfaLayer;
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ ((__unused_webpack_module, exports, __w_pdfjs_require__) => {
 
 
@@ -15875,12 +16051,6 @@ Object.defineProperty(exports, "PixelsPerInch", ({
     return _display_utils.PixelsPerInch;
   }
 }));
-Object.defineProperty(exports, "PromiseCapability", ({
-  enumerable: true,
-  get: function () {
-    return _util.PromiseCapability;
-  }
-}));
 Object.defineProperty(exports, "RenderingCancelledException", ({
   enumerable: true,
   get: function () {
@@ -15921,6 +16091,12 @@ Object.defineProperty(exports, "build", ({
   enumerable: true,
   get: function () {
     return _api.build;
+  }
+}));
+Object.defineProperty(exports, "createPromiseCapability", ({
+  enumerable: true,
+  get: function () {
+    return _util.createPromiseCapability;
   }
 }));
 Object.defineProperty(exports, "createValidAbsoluteUrl", ({
@@ -15971,12 +16147,6 @@ Object.defineProperty(exports, "loadScript", ({
     return _display_utils.loadScript;
   }
 }));
-Object.defineProperty(exports, "normalizeUnicode", ({
-  enumerable: true,
-  get: function () {
-    return _util.normalizeUnicode;
-  }
-}));
 Object.defineProperty(exports, "renderTextLayer", ({
   enumerable: true,
   get: function () {
@@ -16013,12 +16183,12 @@ var _display_utils = __w_pdfjs_require__(6);
 var _text_layer = __w_pdfjs_require__(26);
 var _annotation_editor_layer = __w_pdfjs_require__(27);
 var _tools = __w_pdfjs_require__(5);
-var _annotation_layer = __w_pdfjs_require__(30);
+var _annotation_layer = __w_pdfjs_require__(32);
 var _worker_options = __w_pdfjs_require__(14);
-var _svg = __w_pdfjs_require__(33);
-var _xfa_layer = __w_pdfjs_require__(32);
-const pdfjsVersion = '3.7.507';
-const pdfjsBuild = '3709bd0e5';
+var _svg = __w_pdfjs_require__(35);
+var _xfa_layer = __w_pdfjs_require__(34);
+const pdfjsVersion = '3.5.542';
+const pdfjsBuild = 'd96b52dac';
 })();
 
 /******/ 	return __webpack_exports__;

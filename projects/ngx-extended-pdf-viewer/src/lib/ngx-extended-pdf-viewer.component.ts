@@ -503,6 +503,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public activeSidebarViewChange = new EventEmitter<PdfSidebarView>();
 
   @Input()
+  public findbarVisible = false;
+
+  @Output()
+  public findbarVisibleChange = new EventEmitter<boolean>();
+
+  @Input()
+  public propertiesDialogVisible = false;
+
+  @Output()
+  public propertiesDialogVisibleChange = new EventEmitter<boolean>();
+
+  @Input()
   public showFindButton: ResponsiveVisibility | undefined = undefined;
 
   @Input()
@@ -1458,6 +1470,22 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       PDFViewerApplication.eventBus.on('progress', (x: ProgressBarEvent) => {
         this.ngZone.run(() => this.progress.emit(x));
       });
+      PDFViewerApplication.eventBus.on('findbarclose', () => {
+        this.findbarVisible = false;
+        this.ngZone.run(() => this.findbarVisibleChange.emit(false));
+      });
+      PDFViewerApplication.eventBus.on('findbaropen', () => {
+        this.findbarVisible = true;
+        this.ngZone.run(() => this.findbarVisibleChange.emit(true));
+      });
+      PDFViewerApplication.eventBus.on('propertiesdialogclose', () => {
+        this.propertiesDialogVisible = false;
+        this.ngZone.run(() => this.propertiesDialogVisibleChange.emit(false));
+      });
+      PDFViewerApplication.eventBus.on('propertiesdialogopen', () => {
+        this.propertiesDialogVisible = true;
+        this.ngZone.run(() => this.propertiesDialogVisibleChange.emit(true));
+      });
 
       PDFViewerApplication.eventBus.on('pagesloaded', async (x: PagesLoadedEvent) => {
         this.ngZone.run(() => this.pagesLoaded.emit(x));
@@ -1556,6 +1584,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       PDFViewerApplication.eventBus.on('documentloaded', (pdfLoadedEvent: PdfDocumentLoadedEvent) => {
         this.ngZone.run(() => {
           this.scrollSignatureWarningIntoView(pdfLoadedEvent.source.pdfDocument);
+          if (this.findbarVisible) {
+            PDFViewerApplication.findBar.open();
+          }
+          if (this.propertiesDialogVisible) {
+            PDFViewerApplication.pdfDocumentProperties.open();
+          }
         });
       });
 
@@ -1879,6 +1913,22 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
       if ('enableDragAndDrop' in changes) {
         PDFViewerApplicationOptions.set('enableDragAndDrop', this.enableDragAndDrop);
+      }
+
+      if ('findbarVisible' in changes) {
+        if (this.findbarVisible) {
+          PDFViewerApplication.findBar.open();
+        } else {
+          PDFViewerApplication.findBar.close();
+        }
+      }
+
+      if ('propertiesDialogVisible' in changes) {
+        if (this.propertiesDialogVisible) {
+          PDFViewerApplication.pdfDocumentProperties.open();
+        } else {
+          PDFViewerApplication.pdfDocumentProperties.close();
+        }
       }
 
       if ('zoom' in changes) {

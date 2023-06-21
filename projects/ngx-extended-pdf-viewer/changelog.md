@@ -462,3 +462,4 @@
 - 17.0.1 #1790 removed forgotten debug messages; #1787 provisional fix: the find button shows even though `[showFindButton]="false"` if the document has a text layer; #1677 removed the attribute `[showEditor]` which has been replaced by `[showDrawEditor]` and `[showTextEditor]`, as announced on February, 26th 2023
 - 17.1.0-alpha.0 #1783 add an API to export annotations and to add freetext and ink editors
 - 17.1.0 #1793 don't print the version number on the console when [logLevel]="0"; #1787 bugfix: the find button shows even though `[showFindButton]="false"` if the document has a text layer
+- 17.2.0 #1773 implemented `[(findbarVisible)]` and `[(propertiesDialogVisible)]`

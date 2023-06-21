@@ -1048,6 +1048,7 @@ export interface PDFDocumentProxy {
 }
 
 export interface IPDFViewerApplication {
+  pdfDocumentProperties: any;
   appConfig: IPDFViewerAppConfig;
   _boundEvents: any;
   enablePrint: boolean;
