@@ -1,5 +1,5 @@
 #stage 1
-FROM node:14-alpine as node
+FROM node:16-alpine as node
 WORKDIR /app
 RUN npm install -g @angular/cli@12
 RUN ng new demo

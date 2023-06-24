@@ -1,7 +1,6 @@
 #stage 1
 FROM node:16-alpine as node
 WORKDIR /app
-# COPY . .
 RUN npm install -g @angular/cli@14
 RUN ng new demo
 RUN cd demo && ng add ngx-extended-pdf-viewer --defaults --force --skip-confirmation
