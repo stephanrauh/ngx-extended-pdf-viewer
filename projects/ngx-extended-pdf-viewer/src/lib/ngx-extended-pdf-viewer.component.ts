@@ -1583,6 +1583,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
       PDFViewerApplication.eventBus.on('documentloaded', (pdfLoadedEvent: PdfDocumentLoadedEvent) => {
         this.ngZone.run(() => {
+          const pages = pdfLoadedEvent.source.pagesCount;
+          this.pageLabel = undefined;
+          if (this.page && this.page >= pages) {
+            this.page = pages;
+          }
           this.scrollSignatureWarningIntoView(pdfLoadedEvent.source.pdfDocument);
           if (this.findbarVisible) {
             PDFViewerApplication.findBar.open();
