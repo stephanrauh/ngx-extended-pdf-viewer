@@ -4,5 +4,15 @@
   <a href="https://www.beyondjava.net/page/beyondjava-conference">BeyondJava.net</a> under a
   <a target="#" rel="license" href="https://creativecommons.org/licenses/by-nc-nd/3.0/de/">Creative Commons
     Attribution-NonCommercial-NoDerivs 3.0 Germany License.<br /></a> </small>
-<ngx-extended-pdf-viewer [src]="'/assets/pdfs/Bootstrap-vs-Material-Design-vs-Prime-vs-Tailwind.pdf'"
-  [useBrowserLocale]="true"> </ngx-extended-pdf-viewer>
+<button id="page-button" (click)="page=page+1">next page</button><span>{{page}}</span>
+<button id="rotate-button" (click)="rotation=90">rotate</button><span>{{rotation}}</span>
+<button id="zoom-button" (click)="zoom=100">zoom=100</button><span>{{zoom}}</span>
+<button id="zoom-auto-button" (click)="zoom='auto'">zoom='auto'</button>
+<button id="spread-button" (click)="spread='odd'">spread=odd</button><span>{{spread}}</span>
+<ngx-extended-pdf-viewer
+  [src]="'/assets/pdfs/Bootstrap-vs-Material-Design-vs-Prime-vs-Tailwind.pdf'"
+  [(page)]="page"
+  [(zoom)]="zoom"
+  [(rotation)]="rotation"
+  [(spread)]="spread"
+  > </ngx-extended-pdf-viewer>
