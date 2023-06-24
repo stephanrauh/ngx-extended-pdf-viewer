@@ -19,7 +19,8 @@
     "test:ng13": "cd compatibility-tests/Angular13 && ./test.sh",
     "test:ng14": "cd compatibility-tests/Angular14 && ./test.sh",
     "test:ng15": "cd compatibility-tests/Angular15 && ./test.sh",
-    "test:ng16": "cd compatibility-tests/Angular16 && ./test.sh"
+    "test:ng16": "cd compatibility-tests/Angular16 && ./test.sh",
+    "test:ng16-esbuild": "cd compatibility-tests/Angular16-esbuild && ./test.sh"
   },
   "private": true,
   "dependencies": {
