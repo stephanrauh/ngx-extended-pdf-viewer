@@ -246,7 +246,7 @@ export class PDFViewer {
     get currentPageNumber(): number;
     /** #495 modified by ngx-extended-pdf-viewer */
     hidePagesDependingOnpageViewMode(): void;
-    pageFlip: PageFlip | undefined;
+    pageFlip: PageFlip | null | undefined;
     /** end of modification */
     /**
      * @returns {boolean} Whether the pageNumber is valid (within bounds).
@@ -482,6 +482,8 @@ export class PDFViewer {
     getSerializedAnnotations(): any[] | null;
     addEditorAnnotation(data: any): void;
     removeEditorAnnotations(filter?: () => boolean): void;
+    destroyBookMode(): void;
+    stopRendering(): void;
     #private;
 }
 import { PDFRenderingQueue } from "./pdf_rendering_queue.js";

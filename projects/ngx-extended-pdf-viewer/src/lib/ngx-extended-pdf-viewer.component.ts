@@ -175,22 +175,57 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public set pageViewMode(viewMode: PageViewModeType) {
-    this._pageViewMode = viewMode;
-    if (viewMode === 'infinite-scroll') {
-      this.scrollMode = ScrollModeType.vertical;
-      this.spread = 'off';
-    } else if (viewMode !== 'multiple') {
-      this.scrollMode = ScrollModeType.vertical;
-    }
-    if (viewMode === 'single') {
-      // since pdf.js, our custom single-page-mode has been replaced by the standard scrollMode="page"
-      this.scrollMode = ScrollModeType.page;
-      this._pageViewMode = 'multiple';
-    }
-    if (viewMode === 'book') {
-      this.showBorders = false;
+    const hasChanged = this._pageViewMode !== viewMode;
+    if (hasChanged) {
+      const mustRedraw = this._pageViewMode === 'book' || viewMode === 'book';
+      this._pageViewMode = viewMode;
+      const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
+      PDFViewerApplicationOptions.set('pageViewMode', this.pageViewMode);
+      const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+      PDFViewerApplication.pdfViewer.pageViewMode = this._pageViewMode;
+      PDFViewerApplication.findController.pageViewMode = this._pageViewMode;
+      if (viewMode === 'infinite-scroll') {
+        if (this.scrollMode === ScrollModeType.page || this.scrollMode === ScrollModeType.horizontal) {
+          this.scrollMode = ScrollModeType.vertical;
+        }
+      } else if (viewMode !== 'multiple') {
+        this.scrollMode = ScrollModeType.vertical;
+      } else {
+        if (this.scrollMode === ScrollModeType.page) {
+          this.scrollMode = ScrollModeType.vertical;
+        }
+      }
+      if (viewMode === 'single') {
+        // since pdf.js, our custom single-page-mode has been replaced by the standard scrollMode="page"
+        this.scrollMode = ScrollModeType.page;
+        this._pageViewMode = 'multiple';
+      }
+      if (viewMode === 'book') {
+        this.showBorders = false;
+        if (this.scrollMode !== ScrollModeType.vertical) {
+          this.scrollMode = ScrollModeType.vertical;
+        }
+      }
+      if (mustRedraw) {
+        if (viewMode !== 'book') {
+          const ngx = this.elementRef.nativeElement as HTMLElement;
+          const viewerContainer = ngx.querySelector('#viewerContainer') as HTMLDivElement;
+          viewerContainer.style.width = '';
+          viewerContainer.style.overflow = '';
+          viewerContainer.style.marginRight = '';
+          viewerContainer.style.marginLeft = '';
+          const viewer = ngx.querySelector('#viewer') as HTMLDivElement;
+          viewer.style.maxWidth = '';
+          viewer.style.minWidth = '';
+        }
+
+        this.openPDF2();
+      }
     }
   }
+
+  @Output()
+  public pageViewModeChange = new EventEmitter<PageViewModeType>();
 
   @Output()
   public progress = new EventEmitter<ProgressBarEvent>();
@@ -208,8 +243,27 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Output()
   public srcChange = new EventEmitter<string>();
 
+  private _scrollMode: ScrollModeType | undefined = undefined;
+
+  public get scrollMode(): ScrollModeType | undefined {
+    return this._scrollMode;
+  }
+
   @Input()
-  public scrollMode: ScrollModeType | undefined = undefined;
+  public set scrollMode(value: ScrollModeType | undefined) {
+    if (this._scrollMode !== value) {
+      this._scrollMode = value;
+      if (this._scrollMode === ScrollModeType.page) {
+        if (this.pageViewMode !== 'single') {
+          this._pageViewMode = 'single';
+          this.pageViewModeChange.emit(this.pageViewMode);
+        }
+      } else if (this.pageViewMode === 'single' || this._scrollMode === ScrollModeType.horizontal) {
+        this._pageViewMode = 'multiple';
+        this.pageViewModeChange.emit(this.pageViewMode);
+      }
+    }
+  }
 
   @Output()
   public scrollModeChange = new EventEmitter<ScrollModeType>();
@@ -367,10 +421,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public minHeight: string | undefined = undefined;
 
-  private _height = '100%';
+  private _height: string | undefined = '100%';
 
   @Input()
-  public set height(h: string) {
+  public set height(h) {
     this.minHeight = undefined;
     this.autoHeight = false;
     if (h) {
@@ -1264,8 +1318,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           // take the margins and paddings of the parent containers into account
           const padding = this.calculateBorderMargin(container);
           maximumHeight -= padding;
-          const factor = Number(this._height.replace('%', ''));
-          maximumHeight = (maximumHeight * factor) / 100;
           if (maximumHeight > 100) {
             this.minHeight = `${maximumHeight}px`;
           } else {
@@ -1489,7 +1541,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
       PDFViewerApplication.eventBus.on('pagesloaded', async (x: PagesLoadedEvent) => {
         this.ngZone.run(() => this.pagesLoaded.emit(x));
-        this.removeScrollbarInInititeScrollMode();
+        this.removeScrollbarInInfiniteScrollMode(false);
         if (this.rotation !== undefined && this.rotation !== null) {
           const r = Number(this.rotation);
           if (r === 0 || r === 90 || r === 180 || r === 270) {
@@ -1513,7 +1565,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
         this.ngZone.run(() => {
           this.pageRendered.emit(x);
-          this.removeScrollbarInInititeScrollMode();
+          this.removeScrollbarInInfiniteScrollMode(false);
         });
       });
       PDFViewerApplication.eventBus.on('pagerender', (x: PageRenderEvent) => {
@@ -1710,33 +1762,40 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
   }
 
-  private removeScrollbarInInititeScrollMode(): void {
-    if (this.pageViewMode === 'infinite-scroll') {
-      setTimeout(() => {
-        if (this.pageViewMode === 'infinite-scroll') {
-          const viewer = document.getElementById('viewer');
-          if (viewer) {
+  private removeScrollbarInInfiniteScrollMode(restoreHeight: boolean): void {
+    if (this.pageViewMode === 'infinite-scroll' || restoreHeight) {
+      const viewer = document.getElementById('viewer');
+      const zoom = document.getElementsByClassName('zoom')[0];
+      if (viewer) {
+        setTimeout(() => {
+          if (this.pageViewMode === 'infinite-scroll') {
             const height = viewer.clientHeight + 17;
-            const zoom = document.getElementsByClassName('zoom')[0];
             if (this.primaryMenuVisible) {
               this.height = height + 35 + 'px';
-            } else {
-              if (height > 17) {
-                this.height = height + 'px';
-              }
+            } else if (height > 17) {
+              this.height = height + 'px';
+            } else if (this.height === undefined) {
+              this.height = '100%';
             }
             if (zoom) {
               (<HTMLElement>zoom).style.height = this.height;
             }
+          } else if (restoreHeight) {
+            this.autoHeight = true;
+            this._height = undefined;
+            this.checkHeight();
           }
-        }
-      });
+        });
+      }
     }
   }
 
   public async openPDF2(): Promise<void> {
     this.overrideDefaultSettings();
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    PDFViewerApplication.pdfViewer.destroyBookMode();
+    PDFViewerApplication.pdfViewer.stopRendering();
+    PDFViewerApplication.pdfThumbnailViewer.stopRendering();
 
     // #802 clear the form data; otherwise the "download" dialogs opens
     PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
@@ -1800,6 +1859,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       return; // fast escape for server side rendering
     }
 
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    PDFViewerApplication.pdfViewer.destroyBookMode();
+    PDFViewerApplication.pdfViewer.stopRendering();
+    PDFViewerApplication.pdfThumbnailViewer.stopRendering();
+
     const originalPrint = NgxExtendedPdfViewerComponent.originalPrint;
     if (window && originalPrint && !originalPrint.toString().includes('printPdf')) {
       window.print = originalPrint;
@@ -1811,7 +1875,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
     (window as any).getFormValueFromAngular = undefined;
     (window as any).registerAcroformAnnotations = undefined;
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     this.shuttingDown = true;
 
     NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized = false;
@@ -2104,7 +2167,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
 
     if ('pageViewMode' in changes && !changes['pageViewMode'].isFirstChange()) {
-      this.removeScrollbarInInititeScrollMode();
+      const restoreHeight = changes['pageViewMode'].previousValue === 'infinite-scroll';
+      // add a short delay wait until the setter has been called
+      // and to avoid the ExpressionChangedAfterItHasBeenCheckedError
+      setTimeout(() => {
+        this._pageViewMode = changes['pageViewMode'].currentValue;
+        this.removeScrollbarInInfiniteScrollMode(restoreHeight);
+        PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(this.scrollMode) });
+      });
     }
     if ('replaceBrowserPrint' in changes && typeof window !== 'undefined') {
       if (this.replaceBrowserPrint) {
@@ -2196,7 +2266,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.checkHeight();
     }
     try {
-      const observer = new ResizeObserver(() => this.removeScrollbarInInititeScrollMode());
+      const observer = new ResizeObserver(() => this.removeScrollbarInInfiniteScrollMode(false));
       const viewer = document.getElementById('viewer');
       if (viewer) {
         observer.observe(viewer);

@@ -60,6 +60,7 @@ export interface IPDFViewer {
   removePageBorders: boolean;
   renderingQueue: IPDFRenderingQueue;
   scrollMode: ScrollModeType;
+  pageViewMode: PageViewModeType;
   spreadMode: 0 | 1 | 2;
   _pages: Array<PDFPageView>;
   addPageToRenderQueue(pageIndex: number): boolean;
@@ -70,4 +71,6 @@ export interface IPDFViewer {
   addEditorAnnotation(serialized: string | EditorAnnotation): void; // #1783 added by ngx-extended-pdf-viewer
   removeEditorAnnotations(filter?: (serialized: EditorAnnotation) => boolean): void; // #1783 added by ngx-extended-pdf-viewer
   getPageView(index: number): PDFPageView;
+  destroyBookMode(): void;
+  stopRendering(): void;
 }

@@ -3,7 +3,7 @@ import { PasswordPrompt } from './password-prompt';
 import { AnnotationStorage, PrintAnnotationStorage } from './pdf-annotation-storage';
 import { IEventBus } from './pdf-event-bus';
 import { PageViewport } from './pdf-page-view-port';
-import { IPDFViewer } from './pdf-viewer';
+import { IPDFViewer, PageViewModeType } from './pdf-viewer';
 import { IPDFViewerAppConfig } from './pdf-viewer-app-config';
 
 export interface IWebL10n {
@@ -30,6 +30,7 @@ export interface FindController {
   _pageMatches: Array<any>;
   _pageMatchesColor: Array<number>;
   _pageMatchesLength: Array<number>;
+  pageViewMode: PageViewModeType;
 }
 
 export interface Metadata {
@@ -1048,6 +1049,7 @@ export interface PDFDocumentProxy {
 }
 
 export interface IPDFViewerApplication {
+  pdfThumbnailViewer: any;
   pdfDocumentProperties: any;
   appConfig: IPDFViewerAppConfig;
   _boundEvents: any;
