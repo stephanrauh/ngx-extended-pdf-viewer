@@ -1,13 +1,2 @@
-<input
-  [class]="showPagingButtons | responsiveCSSClass : ''"
-  type="number"
-  id="pageNumber"
-  class="toolbarField pageNumber"
-  title="Page"
-  value="1"
-  size="4"
-  min="1"
-  data-l10n-id="page"
-  autocomplete="off"
-/>
-<span [class]="showPagingButtons | responsiveCSSClass : ''" id="numPages" class="toolbarLabel hiddenXLView"></span>
+<input type="number" id="pageNumber" class="toolbarField pageNumber" title="Page" value="1" size="4" min="1" data-l10n-id="page" autocomplete="off" />
+<span [class]="showPagingButtons | responsiveCSSClass : 'hiddenTinyView'" id="numPages" class="toolbarLabel"></span>

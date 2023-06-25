@@ -15,6 +15,8 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   public width = 3.14159265359;
 
+  public xxs = 455;
+
   public xs = 490;
 
   public sm = 560;
@@ -162,6 +164,16 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
     display: none;
   }
   #outerContainer .visibleTinyView {
+    display: inherit;
+  }
+}
+
+@media all and (max-width: ${this.xxs}px) {
+  #outerContainer .hiddenXXSView,
+  #outerContainer .hiddenXXSView * {
+    display: none;
+  }
+  #outerContainer .visibleXXSView {
     display: inherit;
   }
 }
