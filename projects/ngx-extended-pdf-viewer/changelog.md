@@ -464,3 +464,4 @@
 - 17.1.0 #1793 don't print the version number on the console when [logLevel]="0"; #1787 bugfix: the find button shows even though `[showFindButton]="false"` if the document has a text layer
 - 17.2.0 #1773 implemented `[(findbarVisible)]` and `[(propertiesDialogVisible)]`
 - 17.3.0 #1699 stop complaining about invalid page numbers when opening a document that has less pages than the previous document; #1415 allow `[pageViewMode]` to update dynamically and implement `(pageViewMode)`
+- 17.3.1 #1798 guard the message "The height of the PDF viewer widget is zero pixels." with a log level check; #1709 adjustments for small screens
