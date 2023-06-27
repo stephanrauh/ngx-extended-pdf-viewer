@@ -428,7 +428,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.minHeight = undefined;
     this.autoHeight = false;
     if (h) {
-      this._height = h;
+      if (h === 'auto') {
+        this.autoHeight = true;
+        this._height = undefined;
+      } else {
+        this._height = h;
+      }
     } else {
       this.height = '100%';
     }
@@ -1307,8 +1312,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             console.warn(
               "The height of the PDF viewer widget is zero pixels. Please check the height attribute. Is there a syntax error? Or are you using a percentage with a CSS framework that doesn't support this? The height is adjusted automatedly."
             );
-            this.autoHeight = true;
           }
+          this.autoHeight = true;
         }
         if (this.autoHeight) {
           const available = window.innerHeight;
