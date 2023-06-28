@@ -1865,9 +1865,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
 
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.pdfViewer.destroyBookMode();
-    PDFViewerApplication.pdfViewer.stopRendering();
-    PDFViewerApplication.pdfThumbnailViewer.stopRendering();
+    PDFViewerApplication?.pdfViewer.destroyBookMode();
+    PDFViewerApplication?.pdfViewer.stopRendering();
+    PDFViewerApplication?.pdfThumbnailViewer.stopRendering();
 
     const originalPrint = NgxExtendedPdfViewerComponent.originalPrint;
     if (window && originalPrint && !originalPrint.toString().includes('printPdf')) {
@@ -1894,7 +1894,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
       PDFViewerApplication._cleanup();
 
-      await PDFViewerApplication.close();
+      try {
+        await PDFViewerApplication.close();
+      } catch (error) {
+        // just ignore it
+        // for example, the secondary toolbar may have not been initialized yet, so
+        // trying to destroy it result in errors
+      }
       if (PDFViewerApplication.printKeyDownListener) {
         removeEventListener('keydown', PDFViewerApplication.printKeyDownListener, true);
       }
