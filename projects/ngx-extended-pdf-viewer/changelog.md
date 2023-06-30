@@ -466,3 +466,4 @@
 - 17.3.0 #1699 stop complaining about invalid page numbers when opening a document that has less pages than the previous document; #1415 allow `[pageViewMode]` to update dynamically and implement `(pageViewMode)`
 - 17.3.1 #1798 guard the message "The height of the PDF viewer widget is zero pixels." with a log level check; #1709 adjustments for small screens; #1799 bugfix: PDFViewerApplicationOptions is stored in the window object, not in globalThis
 - 17.3.2 #1799 even if the PDF viewer is destroy before being able to load it's JavaScript code, it shouldn't throw an exception.
+- 17.3.3 #1799 less errors when closing the PDF viewer before it has finished initializing

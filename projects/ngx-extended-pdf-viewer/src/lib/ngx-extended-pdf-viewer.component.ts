@@ -1865,9 +1865,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
 
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication?.pdfViewer.destroyBookMode();
-    PDFViewerApplication?.pdfViewer.stopRendering();
-    PDFViewerApplication?.pdfThumbnailViewer.stopRendering();
+    PDFViewerApplication?.pdfViewer?.destroyBookMode();
+    PDFViewerApplication?.pdfViewer?.stopRendering();
+    PDFViewerApplication?.pdfThumbnailViewer?.stopRendering();
 
     const originalPrint = NgxExtendedPdfViewerComponent.originalPrint;
     if (window && originalPrint && !originalPrint.toString().includes('printPdf')) {
