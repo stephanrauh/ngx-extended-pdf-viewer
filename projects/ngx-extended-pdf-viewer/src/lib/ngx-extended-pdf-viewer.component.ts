@@ -1526,7 +1526,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       });
 
       PDFViewerApplication.eventBus.on('annotationeditormodechanged', (x: AnnotationEditorEditorModeChangedEvent) => {
-        // We're using a timeout here to make sure the editor is already visible
+        // we're using a timeout here to make sure the editor is already visible
         // when the event is caught. Pdf.js fires it a bit early.
         setTimeout(() => this.annotationEditorModeChanged.emit(x));
         if (x.mode === 0) {

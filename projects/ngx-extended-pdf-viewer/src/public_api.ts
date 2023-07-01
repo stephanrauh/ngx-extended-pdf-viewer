@@ -2,6 +2,7 @@
  * Public API Surface of ngx-extended-pdf-viewer
  */
 export * from './lib/events/annotation-editor-layer-rendered-event';
+export * from './lib/events/annotation-editor-mode-changed-event';
 export * from './lib/events/annotation-layer-rendered-event';
 export * from './lib/events/attachment-loaded-event';
 export * from './lib/events/file-input-changed';
