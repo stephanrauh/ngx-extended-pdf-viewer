@@ -858,7 +858,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public calcViewerPositionTop(): void {
     if (this.toolbar === undefined) {
-      this.sidebarPositionTop = '0px';
+      this.sidebarPositionTop = '0';
       return;
     }
     let top = this.toolbar.getBoundingClientRect().height;
@@ -873,10 +873,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (this.primaryMenuVisible) {
       this.sidebarPositionTop = (33 + 33 * (factor - 1)).toString() + 'px';
     } else {
-      this.sidebarPositionTop = '0px';
+      this.sidebarPositionTop = '0';
     }
     this.secondaryToolbarTop = (33 + 38 * (factor - 1)).toString() + 'px';
-    this.findbarTop = (34 + 54 * (factor - 1)).toString() + 'px';
+    this.findbarTop = (33 + 38 * (factor - 1)).toString() + 'px';
 
     const findButton = document.getElementById('viewFind');
     if (findButton) {
@@ -887,7 +887,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     } else if (this.showSidebarButton) {
       this.findbarLeft = 34 + (32 * factor).toString() + 'px';
     } else {
-      this.findbarLeft = '0px';
+      this.findbarLeft = '0';
     }
   }
 
