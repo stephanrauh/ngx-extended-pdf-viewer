@@ -53,6 +53,7 @@ import { UnitToPx } from './unit-to-px';
 
 import { TrustedTypesWindow } from 'trusted-types/lib';
 import { AnnotationEditorLayerRenderedEvent } from './events/annotation-editor-layer-rendered-event';
+import { AnnotationEditorEditorModeChangedEvent } from './events/annotation-editor-mode-changed-event';
 import { AnnotationLayerRenderedEvent } from './events/annotation-layer-rendered-event';
 import { AttachmentLoadedEvent } from './events/attachment-loaded-event';
 import { LayersLoadedEvent } from './events/layers-loaded-event';
@@ -756,6 +757,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Output()
   public textLayerRendered = new EventEmitter<TextLayerRenderedEvent>();
+
+  @Output()
+  public annotationEditorModeChanged = new EventEmitter<AnnotationEditorEditorModeChangedEvent>();
 
   @Output()
   public updateFindMatchesCount = new EventEmitter<FindResultMatchesCount>();
@@ -1519,6 +1523,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
       PDFViewerApplication.eventBus.on('textlayerrendered', (x: TextLayerRenderedEvent) => {
         this.ngZone.run(() => this.textLayerRendered.emit(x));
+      });
+
+      PDFViewerApplication.eventBus.on('annotationeditormodechanged', (x: AnnotationEditorEditorModeChangedEvent) => {
+        // We're using a timeout here to make sure the editor is already visible
+        // when the event is caught. Pdf.js fires it a bit early.
+        setTimeout(() => this.annotationEditorModeChanged.emit(x));
+        if (x.mode === 0) {
+          document.body.classList.remove('ngx-extended-pdf-viewer-prevent-touch-move');
+        } else {
+          document.body.classList.add('ngx-extended-pdf-viewer-prevent-touch-move');
+        }
       });
 
       PDFViewerApplication.eventBus.on('scrollmodechanged', (x: ScrollModeChangedEvent) => {

@@ -467,3 +467,4 @@
 - 17.3.1 #1798 guard the message "The height of the PDF viewer widget is zero pixels." with a log level check; #1709 adjustments for small screens; #1799 bugfix: PDFViewerApplicationOptions is stored in the window object, not in globalThis
 - 17.3.2 #1799 even if the PDF viewer is destroy before being able to load it's JavaScript code, it shouldn't throw an exception.
 - 17.3.3 #1799 less errors when closing the PDF viewer before it has finished initializing
+- 17.4.0-alpha.0 #1796 implemented `(annotationEditorModeChanged)` and added the CSS class `ngx-extended-pdf-viewer-prevent-touch-move` that's added to the body to prevent scrolling when the text or ink editor is used
