@@ -2,17 +2,18 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { pdfDefaultOptions } from 'ngx-extended-pdf-viewer';
 
 @Component({
-  selector: 'ng-on-destroy-example',
-  templateUrl: './ng-on-destroy.component.html',
-  styleUrls: ['./ng-on-destroy.component.css'],
+  selector: 'absolute-asset-path',
+  templateUrl: './absolute-asset-path.component.html',
+  styleUrls: ['./absolute-asset-path.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NgOnDestroyComponent {
+export class AbsoluteAssetsPathComponent {
   public visible = false;
 
   constructor() {
+    pdfDefaultOptions.assetsFolder = 'http://localhost:4200/assets';
     if (window.location.search.includes('bleeding-edge')) {
-      pdfDefaultOptions.assetsFolder = 'bleeding-edge';
+      pdfDefaultOptions.assetsFolder = 'http://localhost:4200/bleeding-edge';
     }
   }
 

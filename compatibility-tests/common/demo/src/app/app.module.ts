@@ -7,13 +7,19 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { AppRoutingModule } from './app-routing.module';
 import { SmoketestComponent } from './smoketest/smoketest.component';
 import { NgOnDestroyComponent } from './ng-on-destroy/ng-on-destroy.component';
+import { AbsoluteAssetsPathComponent } from './absolute-asset-path/absolute-asset-path.component';
+import { StandardFontsAndCmapsComponent } from './standard-fonts-and-cmaps/standard-fonts-and-cmaps.component';
+import { IndexComponent } from './index/index.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AbsoluteAssetsPathComponent,
     ExamplePdfViewerComponent,
+    NgOnDestroyComponent,
     SmoketestComponent,
-    NgOnDestroyComponent
+    StandardFontsAndCmapsComponent,
+    IndexComponent,
   ],
   imports: [
     BrowserModule,

@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { pdfDefaultOptions } from 'ngx-extended-pdf-viewer';
 
 @Component({
-  selector: 'ng-on-destroy-example',
-  templateUrl: './ng-on-destroy.component.html',
-  styleUrls: ['./ng-on-destroy.component.css'],
+  selector: 'standard-fonts-and-cmaps',
+  templateUrl: './standard-fonts-and-cmaps.component.html',
+  styleUrls: ['./standard-fonts-and-cmaps.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NgOnDestroyComponent {
+export class StandardFontsAndCmapsComponent {
   public visible = false;
 
   constructor() {
