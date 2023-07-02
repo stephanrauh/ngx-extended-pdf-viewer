@@ -11,12 +11,14 @@ export function getVersionSuffix(folder: string): string {
   return pdfjsVersion;
 }
 
-export function assetsUrl(url: string): string {
+export function assetsUrl(url: string, postfixIfPathIsRelativ = ''): string {
   if (url.includes('://')) {
     // the assets folder is on an absolute path (like https://example.com/assets)
+    console.log('External ' + url);
     return url;
   }
-  return `./${url}`;
+  console.log('Internal ' + url);
+  return `./${url + postfixIfPathIsRelativ}`;
 }
 
 const AnnotationMode = {
@@ -78,7 +80,7 @@ export let pdfDefaultOptions = {
   // viewerCssTheme: 0, // not supported by ngx-extended-pdf-viewer
   viewOnLoad: 0,
   cMapPacked: true,
-  cMapUrl: () => `../${assetsUrl(pdfDefaultOptions.assetsFolder)}/cmaps/`,
+  cMapUrl: () => `${assetsUrl(pdfDefaultOptions.assetsFolder, '/..')}/cmaps/`,
   disableAutoFetch: false,
   disableFontFace: false,
   disableRange: false,
@@ -99,7 +101,7 @@ export let pdfDefaultOptions = {
     pdfDefaultOptions.needsES5
       ? `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.worker-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}-es5.js`
       : `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.worker-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}.js`,
-  standardFontDataUrl: () => `../${assetsUrl(pdfDefaultOptions.assetsFolder)}/standard_fonts/`,
+  standardFontDataUrl: () => `${assetsUrl(pdfDefaultOptions.assetsFolder, '/..')}/standard_fonts/`,
 
   // options specific to ngx-extended-pdf-viewer (as opposed to being used by pdf.js)
   doubleTapZoomFactor: 'page-width',
