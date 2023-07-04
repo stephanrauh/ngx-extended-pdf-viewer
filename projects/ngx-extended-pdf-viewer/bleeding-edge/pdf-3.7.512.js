@@ -11715,7 +11715,9 @@ class InkEditor extends _editor.AnnotationEditor {
     this.setInForeground();
     event.preventDefault();
     if (event.type !== "mouse") {
-      this.div.focus();
+      this.div.focus({
+        preventScroll: true
+      });
     }
     this.#startDrawing(event.offsetX, event.offsetY);
   }

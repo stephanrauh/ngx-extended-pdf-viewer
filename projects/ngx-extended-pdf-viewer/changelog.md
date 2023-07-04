@@ -470,3 +470,4 @@
 - 17.4.0-alpha.0 #1796 implemented `(annotationEditorModeChanged)` and added the CSS class `ngx-extended-pdf-viewer-prevent-touch-move` that's added to the body to prevent scrolling when the text or ink editor is used
 - 17.4.0 #1796 continued implementing `(annotationEditorModeChanged)`
 - 17.4.1 #1673 fix `[mobileFriendlyZoom]` on iPads (the find menu was displayed at the wrong position); #1478 allow using absolute URLs for `pdfDefaultOptions.assetsFolder`
+- 17.4.2 #1802 fix unintended scrolling when starting to draw on a mobile device using the ink editor tool; #1665 re-initialize book mode when `[src]` changes

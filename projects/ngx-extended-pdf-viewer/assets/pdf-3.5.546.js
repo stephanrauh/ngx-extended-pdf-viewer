@@ -1001,7 +1001,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.5.545',
+    apiVersion: '3.5.546',
     data,
     password,
     disableAutoFetch,
@@ -2757,9 +2757,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.5.545';
+const version = '3.5.546';
 exports.version = version;
-const build = 'cd804a461';
+const build = '895629a6e';
 exports.build = build;
 
 /***/ }),
@@ -11599,7 +11599,9 @@ class InkEditor extends _editor.AnnotationEditor {
     }
     this.setInForeground();
     if (event.type !== "mouse") {
-      this.div.focus();
+      this.div.focus({
+        preventScroll: true
+      });
     }
     event.stopPropagation();
     this.canvas.addEventListener("pointerleave", this.#boundCanvasPointerleave);
@@ -16187,8 +16189,8 @@ var _annotation_layer = __w_pdfjs_require__(32);
 var _worker_options = __w_pdfjs_require__(14);
 var _svg = __w_pdfjs_require__(35);
 var _xfa_layer = __w_pdfjs_require__(34);
-const pdfjsVersion = '3.5.545';
-const pdfjsBuild = 'cd804a461';
+const pdfjsVersion = '3.5.546';
+const pdfjsBuild = '895629a6e';
 })();
 
 /******/ 	return __webpack_exports__;

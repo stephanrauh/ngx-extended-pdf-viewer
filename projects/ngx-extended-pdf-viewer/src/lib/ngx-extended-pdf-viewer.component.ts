@@ -178,13 +178,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public set pageViewMode(viewMode: PageViewModeType) {
     const hasChanged = this._pageViewMode !== viewMode;
     if (hasChanged) {
-      const mustRedraw = this._pageViewMode === 'book' || viewMode === 'book';
+      const mustRedraw = !this.ngxExtendedPdfViewerIncompletelyInitialized && (this._pageViewMode === 'book' || viewMode === 'book');
       this._pageViewMode = viewMode;
       const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
-      PDFViewerApplicationOptions.set('pageViewMode', this.pageViewMode);
+      PDFViewerApplicationOptions?.set('pageViewMode', this.pageViewMode);
       const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-      PDFViewerApplication.pdfViewer.pageViewMode = this._pageViewMode;
-      PDFViewerApplication.findController.pageViewMode = this._pageViewMode;
+      if (PDFViewerApplication) {
+        PDFViewerApplication.pdfViewer.pageViewMode = this._pageViewMode;
+        PDFViewerApplication.findController.pageViewMode = this._pageViewMode;
+      }
       if (viewMode === 'infinite-scroll') {
         if (this.scrollMode === ScrollModeType.page || this.scrollMode === ScrollModeType.horizontal) {
           this.scrollMode = ScrollModeType.vertical;
@@ -1982,6 +1984,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         if (this.srcChangeTriggeredByUser) {
           this.srcChangeTriggeredByUser = false;
         } else {
+          if (this.pageViewMode === 'book') {
+            const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+            PDFViewerApplication?.pdfViewer?.destroyBookMode();
+            PDFViewerApplication?.pdfViewer?.stopRendering();
+            PDFViewerApplication?.pdfThumbnailViewer?.stopRendering();
+          }
           if (!!this._src) {
             if (this.ngxExtendedPdfViewerIncompletelyInitialized) {
               this.openPDF();
@@ -2026,7 +2034,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
 
       if ('zoom' in changes) {
-        (async () => this.setZoom())();
+        await this.setZoom();
       }
 
       if ('maxZoom' in changes) {
