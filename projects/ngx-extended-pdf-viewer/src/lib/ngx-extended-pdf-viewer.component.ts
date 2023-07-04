@@ -1695,6 +1695,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       PDFViewerApplication.eventBus.on('outlineloaded', (event) => this.outlineLoaded.emit(event));
       PDFViewerApplication.eventBus.on('attachmentsloaded', (event) => this.attachmentsloaded.emit(event));
       PDFViewerApplication.eventBus.on('layersloaded', (event) => this.layersloaded.emit(event));
+      PDFViewerApplication.eventBus.on('presentationmodechanged', (event) => {
+        const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+        PDFViewerApplication?.pdfViewer?.destroyBookMode();
+      });
 
       PDFViewerApplication.eventBus.on('updatefindcontrolstate', (x: FindResult) => {
         if (x.state === FindState.NOT_FOUND) {
