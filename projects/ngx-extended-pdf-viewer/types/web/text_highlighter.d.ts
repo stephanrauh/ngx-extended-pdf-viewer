@@ -52,8 +52,7 @@ export class TextHighlighter {
      */
     enable(): void;
     disable(): void;
-    _convertMatches(matches: any, matchesLength: any, matchesColor: any): {
-        color: any;
+    _convertMatches(matches: any, matchesLength: any): {
         begin: {
             divIdx: number;
             offset: number;

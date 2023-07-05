@@ -35,10 +35,10 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.GenericCom = void 0;
 var _app = __webpack_require__(2);
-var _preferences = __webpack_require__(46);
-var _download_manager = __webpack_require__(47);
-var _genericl10n = __webpack_require__(48);
-var _generic_scripting = __webpack_require__(50);
+var _preferences = __webpack_require__(44);
+var _download_manager = __webpack_require__(45);
+var _genericl10n = __webpack_require__(46);
+var _generic_scripting = __webpack_require__(48);
 ;
 const GenericCom = {};
 exports.GenericCom = GenericCom;
@@ -99,18 +99,18 @@ var _webPdf_cursor_tools = __webpack_require__(13);
 var _webPdf_document_properties = __webpack_require__(15);
 var _webPdf_find_bar = __webpack_require__(16);
 var _pdf_find_controller = __webpack_require__(17);
-var _pdf_history = __webpack_require__(21);
-var _webPdf_layer_viewer = __webpack_require__(22);
-var _webPdf_outline_viewer = __webpack_require__(23);
-var _webPdf_presentation_mode = __webpack_require__(24);
-var _pdf_rendering_queue = __webpack_require__(25);
-var _pdf_scripting_manager = __webpack_require__(26);
-var _webPdf_sidebar = __webpack_require__(27);
-var _webPdf_thumbnail_viewer = __webpack_require__(28);
-var _pdf_viewer = __webpack_require__(30);
-var _webSecondary_toolbar = __webpack_require__(43);
-var _webToolbar = __webpack_require__(44);
-var _view_history = __webpack_require__(45);
+var _pdf_history = __webpack_require__(19);
+var _webPdf_layer_viewer = __webpack_require__(20);
+var _webPdf_outline_viewer = __webpack_require__(21);
+var _webPdf_presentation_mode = __webpack_require__(22);
+var _pdf_rendering_queue = __webpack_require__(23);
+var _pdf_scripting_manager = __webpack_require__(24);
+var _webPdf_sidebar = __webpack_require__(25);
+var _webPdf_thumbnail_viewer = __webpack_require__(26);
+var _pdf_viewer = __webpack_require__(28);
+var _webSecondary_toolbar = __webpack_require__(41);
+var _webToolbar = __webpack_require__(42);
+var _view_history = __webpack_require__(43);
 const FORCE_PAGES_LOADED_TIMEOUT = 10;
 const WHEEL_ZOOM_DISABLED_TIMEOUT = 1000;
 const ViewOnLoad = {
@@ -2011,8 +2011,6 @@ function webViewerFindFromUrlHash(evt) {
     query: evt.query,
     caseSensitive: false,
     entireWord: false,
-    ignoreAccents: false,
-    fuzzySearch: false,
     highlightAll: true,
     findPrevious: false,
     matchDiacritics: true
@@ -4941,17 +4939,10 @@ class PDFFindBar {
     this.findResultsCount = options.findResultsCount;
     this.findPreviousButton = options.findPreviousButton;
     this.findNextButton = options.findNextButton;
-    this.findFieldMultiline = options.findFieldMultiline || null;
-    this.multipleSearchTexts = options.findMultipleSearchTextsCheckbox || null;
-    this.ignoreAccents = options.ignoreAccentsCheckbox || null;
-    this.fuzzySearch = options.fuzzyCheckbox || null;
     this.eventBus = eventBus;
     this.l10n = l10n;
     this.toggleButton.addEventListener("click", () => {
       this.toggle();
-    });
-    this.findFieldMultiline.addEventListener("input", () => {
-      this.dispatchEvent("");
     });
     this.findField.addEventListener("input", () => {
       this.dispatchEvent("");
@@ -4983,21 +4974,6 @@ class PDFFindBar {
     this.entireWord.addEventListener("click", () => {
       this.dispatchEvent("entirewordchange");
     });
-    this.multipleSearchTexts.addEventListener("click", () => {
-      this.dispatchEvent("multiplesearchtextschange");
-    });
-    this.ignoreAccents.addEventListener("click", () => {
-      this.dispatchEvent("ignoreAccentsChange");
-    });
-    this.fuzzySearch.addEventListener("click", () => {
-      this.dispatchEvent("fuzzySearchChange");
-    });
-    this.currentPage.addEventListener("click", () => {
-      this.dispatchEvent("currentPageChange");
-    });
-    this.pageRange.addEventListener("input", () => {
-      this.dispatchEvent("pageRangeChange");
-    });
     this.matchDiacritics?.addEventListener("click", () => {
       this.dispatchEvent("diacriticmatchingchange");
     });
@@ -5010,17 +4986,12 @@ class PDFFindBar {
     this.eventBus.dispatch("find", {
       source: this,
       type,
-      query: this.findFieldMultiline.classList.contains("hidden") ? this.findField.value : this.findFieldMultiline.value + "\n",
-      phraseSearch: !this.multipleSearchTexts.checked,
+      query: this.findField.value,
       caseSensitive: this.caseSensitive.checked,
       entireWord: this.entireWord.checked,
-      ignoreAccents: this.ignoreAccents.checked,
-      fuzzySearch: this.fuzzySearch.checked,
       highlightAll: this.highlightAll.checked,
-      currentPage: this.currentPage.checked,
-      pageRange: this.pageRange.value,
       findPrevious: findPrev,
-      matchDiacritics: this.matchDiacritics?.checked
+      matchDiacritics: this.matchDiacritics.checked
     });
   }
   updateUIState(state, previous, matchesCount) {
@@ -5041,8 +5012,6 @@ class PDFFindBar {
         break;
     }
     this.findField.setAttribute("data-status", status);
-    this.findFieldMultiline.classList.toggle("notFound", status === "notFound");
-    this.findFieldMultiline.setAttribute("data-status", status);
     this.findField.setAttribute("aria-invalid", state === _pdf_find_controller.FindState.NOT_FOUND);
     findMsg.then(msg => {
       this.findMsg.setAttribute("data-status", status);
@@ -5130,10 +5099,8 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.PDFFindController = exports.FindState = void 0;
-var _index = __webpack_require__(18);
-var _pdf_find_utils = __webpack_require__(19);
-var _levenshtein = __webpack_require__(20);
 var _ui_utils = __webpack_require__(3);
+var _pdf_find_utils = __webpack_require__(18);
 var _pdfjsLib = __webpack_require__(4);
 const FindState = {
   FOUND: 0,
@@ -5157,74 +5124,206 @@ const CHARACTERS_TO_NORMALIZE = {
   "\u201F": '"',
   "\u00BC": "1/4",
   "\u00BD": "1/2",
-  "\u00BE": "3/4",
-  "\n": " "
+  "\u00BE": "3/4"
 };
-let normalizationRegex = null;
+const DIACRITICS_EXCEPTION = new Set([0x3099, 0x309a, 0x094d, 0x09cd, 0x0a4d, 0x0acd, 0x0b4d, 0x0bcd, 0x0c4d, 0x0ccd, 0x0d3b, 0x0d3c, 0x0d4d, 0x0dca, 0x0e3a, 0x0eba, 0x0f84, 0x1039, 0x103a, 0x1714, 0x1734, 0x17d2, 0x1a60, 0x1b44, 0x1baa, 0x1bab, 0x1bf2, 0x1bf3, 0x2d7f, 0xa806, 0xa82c, 0xa8c4, 0xa953, 0xa9c0, 0xaaf6, 0xabed, 0x0c56, 0x0f71, 0x0f72, 0x0f7a, 0x0f7b, 0x0f7c, 0x0f7d, 0x0f80, 0x0f74]);
+let DIACRITICS_EXCEPTION_STR;
+const DIACRITICS_REG_EXP = /\p{M}+/gu;
+const SPECIAL_CHARS_REG_EXP = /([.*+?^${}()|[\]\\])|(\p{P})|(\s+)|(\p{M})|(\p{L})/gu;
+const NOT_DIACRITIC_FROM_END_REG_EXP = /([^\p{M}])\p{M}*$/u;
+const NOT_DIACRITIC_FROM_START_REG_EXP = /^\p{M}*([^\p{M}])/u;
+const SYLLABLES_REG_EXP = /[\uAC00-\uD7AF\uFA6C\uFACF-\uFAD1\uFAD5-\uFAD7]+/g;
+const SYLLABLES_LENGTHS = new Map();
+const FIRST_CHAR_SYLLABLES_REG_EXP = "[\\u1100-\\u1112\\ud7a4-\\ud7af\\ud84a\\ud84c\\ud850\\ud854\\ud857\\ud85f]";
+const NFKC_CHARS_TO_NORMALIZE = new Map();
+let noSyllablesRegExp = null;
+let withSyllablesRegExp = null;
 function normalize(text) {
-  if (!normalizationRegex) {
+  const syllablePositions = [];
+  let m;
+  while ((m = SYLLABLES_REG_EXP.exec(text)) !== null) {
+    let {
+      index
+    } = m;
+    for (const char of m[0]) {
+      let len = SYLLABLES_LENGTHS.get(char);
+      if (!len) {
+        len = char.normalize("NFD").length;
+        SYLLABLES_LENGTHS.set(char, len);
+      }
+      syllablePositions.push([len, index++]);
+    }
+  }
+  let normalizationRegex;
+  if (syllablePositions.length === 0 && noSyllablesRegExp) {
+    normalizationRegex = noSyllablesRegExp;
+  } else if (syllablePositions.length > 0 && withSyllablesRegExp) {
+    normalizationRegex = withSyllablesRegExp;
+  } else {
     const replace = Object.keys(CHARACTERS_TO_NORMALIZE).join("");
-    normalizationRegex = new RegExp(`[${replace}]`, "g");
-  }
-  let diffs = null;
-  const normalizedText = text.replace(normalizationRegex, function (ch, index) {
-    const normalizedCh = CHARACTERS_TO_NORMALIZE[ch];
-    const diff = normalizedCh.length - ch.length;
-    if (ch === "\n") {
-      (diffs ||= []).push([index - 1, 1]);
-    } else if (diff !== 0) {
-      (diffs ||= []).push([index, diff]);
+    const toNormalizeWithNFKC = (0, _pdf_find_utils.getNormalizeWithNFKC)();
+    const CJK = "(?:\\p{Ideographic}|[\u3040-\u30FF])";
+    const HKDiacritics = "(?:\u3099|\u309A)";
+    const regexp = `([${replace}])|([${toNormalizeWithNFKC}])|(${HKDiacritics}\\n)|(\\p{M}+(?:-\\n)?)|(\\S-\\n)|(${CJK}\\n)|(\\n)`;
+    if (syllablePositions.length === 0) {
+      normalizationRegex = noSyllablesRegExp = new RegExp(regexp + "|(\\u0000)", "gum");
+    } else {
+      normalizationRegex = withSyllablesRegExp = new RegExp(regexp + `|(${FIRST_CHAR_SYLLABLES_REG_EXP})`, "gum");
     }
-    return normalizedCh;
+  }
+  const rawDiacriticsPositions = [];
+  while ((m = DIACRITICS_REG_EXP.exec(text)) !== null) {
+    rawDiacriticsPositions.push([m[0].length, m.index]);
+  }
+  let normalized = text.normalize("NFD");
+  const positions = [[0, 0]];
+  let rawDiacriticsIndex = 0;
+  let syllableIndex = 0;
+  let shift = 0;
+  let shiftOrigin = 0;
+  let eol = 0;
+  let hasDiacritics = false;
+  normalized = normalized.replace(normalizationRegex, (match, p1, p2, p3, p4, p5, p6, p7, p8, i) => {
+    i -= shiftOrigin;
+    if (p1) {
+      const replacement = CHARACTERS_TO_NORMALIZE[p1];
+      const jj = replacement.length;
+      for (let j = 1; j < jj; j++) {
+        positions.push([i - shift + j, shift - j]);
+      }
+      shift -= jj - 1;
+      return replacement;
+    }
+    if (p2) {
+      let replacement = NFKC_CHARS_TO_NORMALIZE.get(p2);
+      if (!replacement) {
+        replacement = p2.normalize("NFKC");
+        NFKC_CHARS_TO_NORMALIZE.set(p2, replacement);
+      }
+      const jj = replacement.length;
+      for (let j = 1; j < jj; j++) {
+        positions.push([i - shift + j, shift - j]);
+      }
+      shift -= jj - 1;
+      return replacement;
+    }
+    if (p3) {
+      hasDiacritics = true;
+      if (i + eol === rawDiacriticsPositions[rawDiacriticsIndex]?.[1]) {
+        ++rawDiacriticsIndex;
+      } else {
+        positions.push([i - 1 - shift + 1, shift - 1]);
+        shift -= 1;
+        shiftOrigin += 1;
+      }
+      positions.push([i - shift + 1, shift]);
+      shiftOrigin += 1;
+      eol += 1;
+      return p3.charAt(0);
+    }
+    if (p4) {
+      const hasTrailingDashEOL = p4.endsWith("\n");
+      const len = hasTrailingDashEOL ? p4.length - 2 : p4.length;
+      hasDiacritics = true;
+      let jj = len;
+      if (i + eol === rawDiacriticsPositions[rawDiacriticsIndex]?.[1]) {
+        jj -= rawDiacriticsPositions[rawDiacriticsIndex][0];
+        ++rawDiacriticsIndex;
+      }
+      for (let j = 1; j <= jj; j++) {
+        positions.push([i - 1 - shift + j, shift - j]);
+      }
+      shift -= jj;
+      shiftOrigin += jj;
+      if (hasTrailingDashEOL) {
+        i += len - 1;
+        positions.push([i - shift + 1, 1 + shift]);
+        shift += 1;
+        shiftOrigin += 1;
+        eol += 1;
+        return p4.slice(0, len);
+      }
+      return p4;
+    }
+    if (p5) {
+      const len = p5.length - 2;
+      positions.push([i - shift + len, 1 + shift]);
+      shift += 1;
+      shiftOrigin += 1;
+      eol += 1;
+      return p5.slice(0, -2);
+    }
+    if (p6) {
+      const len = p6.length - 1;
+      positions.push([i - shift + len, shift]);
+      shiftOrigin += 1;
+      eol += 1;
+      return p6.slice(0, -1);
+    }
+    if (p7) {
+      positions.push([i - shift + 1, shift - 1]);
+      shift -= 1;
+      shiftOrigin += 1;
+      eol += 1;
+      return " ";
+    }
+    if (i + eol === syllablePositions[syllableIndex]?.[1]) {
+      const newCharLen = syllablePositions[syllableIndex][0] - 1;
+      ++syllableIndex;
+      for (let j = 1; j <= newCharLen; j++) {
+        positions.push([i - (shift - j), shift - j]);
+      }
+      shift -= newCharLen;
+      shiftOrigin += newCharLen;
+    }
+    return p8;
   });
-  return [normalizedText, diffs];
+  positions.push([normalized.length, shift]);
+  return [normalized, positions, hasDiacritics];
 }
-function getOriginalIndex(matchIndex, diffs = null) {
+function getOriginalIndex(diffs, pos, len) {
   if (!diffs) {
-    return matchIndex;
+    return [pos, len];
   }
-  let totalDiff = 0;
-  for (const [index, diff] of diffs) {
-    const currentIndex = index + totalDiff;
-    if (index >= matchIndex) {
-      break;
-    }
-    if (index + diff > matchIndex) {
-      totalDiff += matchIndex - currentIndex;
-      break;
-    }
-    totalDiff += diff;
+  const start = pos;
+  const end = pos + len - 1;
+  let i = (0, _ui_utils.binarySearchFirstItem)(diffs, x => x[0] >= start);
+  if (diffs[i][0] > start) {
+    --i;
   }
-  return matchIndex - totalDiff;
+  let j = (0, _ui_utils.binarySearchFirstItem)(diffs, x => x[0] >= end, i);
+  if (diffs[j][0] > end) {
+    --j;
+  }
+  const oldStart = start + diffs[i][1];
+  const oldEnd = end + diffs[j][1];
+  const oldLen = oldEnd + 1 - oldStart;
+  return [oldStart, oldLen];
 }
 class PDFFindController {
+  #state = null;
+  #updateMatchesCountOnProgress = true;
+  #visitedPagesCount = 0;
   constructor({
     linkService,
     eventBus,
+    updateMatchesCountOnProgress = true,
     pageViewMode
   }) {
     this._linkService = linkService;
     this._eventBus = eventBus;
+    this.#updateMatchesCountOnProgress = updateMatchesCountOnProgress;
     this._pageViewMode = pageViewMode;
-    this._reset();
-    eventBus._on("find", this._onFind.bind(this));
-    eventBus._on("findbarclose", this._onFindBarClose.bind(this));
-    this.executeCommand = (cmd, state) => {
-      globalThis.ngxConsole.error("Deprecated method `PDFFindController.executeCommand` called, " + 'please dispatch a "find"-event using the EventBus instead.');
-      const eventState = Object.assign(Object.create(null), state, {
-        type: cmd.substring("find".length)
-      });
-      this._onFind(eventState);
-    };
+    this.onIsPageVisible = null;
+    this.#reset();
+    eventBus._on("find", this.#onFind.bind(this));
+    eventBus._on("findbarclose", this.#onFindBarClose.bind(this));
   }
   get highlightMatches() {
     return this._highlightMatches;
   }
   get pageMatches() {
     return this._pageMatches;
-  }
-  get pageMatchesColor() {
-    return this._pageMatchesColor;
   }
   get pageMatchesLength() {
     return this._pageMatchesLength;
@@ -5233,11 +5332,11 @@ class PDFFindController {
     return this._selected;
   }
   get state() {
-    return this._state;
+    return this.#state;
   }
   setDocument(pdfDocument) {
     if (this._pdfDocument) {
-      this._reset();
+      this.#reset();
     }
     if (!pdfDocument) {
       return;
@@ -5245,26 +5344,32 @@ class PDFFindController {
     this._pdfDocument = pdfDocument;
     this._firstPageCapability.resolve();
   }
-  _onFind(state) {
+  #onFind(state) {
     if (!state) {
       return;
+    }
+    if (state.phraseSearch === false) {
+      console.error("The `phraseSearch`-parameter was removed, please provide " + "an Array of strings in the `query`-parameter instead.");
+      if (typeof state.query === "string") {
+        state.query = state.query.match(/\S+/g);
+      }
     }
     const pdfDocument = this._pdfDocument;
     const {
       type
     } = state;
-    if (this._state === null || this._shouldDirtyMatch(state)) {
+    if (this.#state === null || this.#shouldDirtyMatch(state)) {
       this._dirtyMatch = true;
     }
-    this._state = state;
+    this.#state = state;
     if (type !== "highlightallchange") {
-      this._updateUIState(FindState.PENDING);
+      this.#updateUIState(FindState.PENDING);
     }
     this._firstPageCapability.promise.then(() => {
       if (!this._pdfDocument || pdfDocument && this._pdfDocument !== pdfDocument) {
         return;
       }
-      this._extractText();
+      this.#extractText();
       const findbarClosed = !this._highlightMatches;
       const pendingTimeout = !!this._findTimeout;
       if (this._findTimeout) {
@@ -5273,25 +5378,25 @@ class PDFFindController {
       }
       if (!type) {
         this._findTimeout = setTimeout(() => {
-          this._nextMatch();
+          this.#nextMatch();
           this._findTimeout = null;
         }, FIND_TIMEOUT);
       } else if (this._dirtyMatch) {
-        this._nextMatch();
+        this.#nextMatch();
       } else if (type === "again") {
-        this._nextMatch();
-        if (findbarClosed && this._state.highlightAll) {
-          this._updateAllPages();
+        this.#nextMatch();
+        if (findbarClosed && this.#state.highlightAll) {
+          this.#updateAllPages();
         }
       } else if (type === "highlightallchange") {
         if (pendingTimeout) {
-          this._nextMatch();
+          this.#nextMatch();
         } else {
           this._highlightMatches = true;
         }
-        this._updateAllPages();
+        this.#updateAllPages();
       } else {
-        this._nextMatch();
+        this.#nextMatch();
       }
     });
   }
@@ -5315,14 +5420,14 @@ class PDFFindController {
     };
     (0, _ui_utils.scrollIntoView)(element, spot, true, this._pageViewMode === 'infinite-scroll');
   }
-  _reset() {
+  #reset() {
     this._highlightMatches = false;
     this._scrollMatches = false;
     this._pdfDocument = null;
     this._pageMatches = [];
     this._pageMatchesLength = [];
-    this._pageMatchesColor = [];
-    this._state = null;
+    this.#visitedPagesCount = 0;
+    this.#state = null;
     this._selected = {
       pageIdx: -1,
       matchIdx: -1
@@ -5335,6 +5440,7 @@ class PDFFindController {
     this._extractTextPromises = [];
     this._pageContents = [];
     this._pageDiffs = [];
+    this._hasDiacritics = [];
     this._matchesCountTotal = 0;
     this._pagesToSearch = null;
     this._pendingFindMatches = new Set();
@@ -5344,328 +5450,200 @@ class PDFFindController {
     this._findTimeout = null;
     this._firstPageCapability = new _pdfjsLib.PromiseCapability();
   }
-  get _query() {
-    if (this._state.query !== this._rawQuery) {
-      this._rawQuery = this._state.query;
-      const queries = this._state.query.split("\n");
-      const normalizedQueries = queries.map(q => normalize(q)[0]);
-      this._normalizedQuery = normalizedQueries.join("\n");
+  get #query() {
+    const {
+      query
+    } = this.#state;
+    if (typeof query === "string") {
+      if (query !== this._rawQuery) {
+        this._rawQuery = query;
+        [this._normalizedQuery] = normalize(query);
+      }
+      return this._normalizedQuery;
     }
-    return this._normalizedQuery;
+    return (query || []).filter(q => !!q).map(q => normalize(q)[0]);
   }
-  _shouldDirtyMatch(state) {
-    if (state.query !== this._state.query) {
+  #shouldDirtyMatch(state) {
+    const newQuery = state.query,
+      prevQuery = this.#state.query;
+    const newType = typeof newQuery,
+      prevType = typeof prevQuery;
+    if (newType !== prevType) {
       return true;
+    }
+    if (newType === "string") {
+      if (newQuery !== prevQuery) {
+        return true;
+      }
+    } else {
+      if (JSON.stringify(newQuery) !== JSON.stringify(prevQuery)) {
+        return true;
+      }
     }
     switch (state.type) {
       case "again":
         const pageNumber = this._selected.pageIdx + 1;
         const linkService = this._linkService;
-        if (pageNumber >= 1 && pageNumber <= linkService.pagesCount && pageNumber !== linkService.page && !linkService.isPageVisible(pageNumber)) {
-          return true;
-        }
-        return false;
+        return pageNumber >= 1 && pageNumber <= linkService.pagesCount && pageNumber !== linkService.page && !(this.onIsPageVisible?.(pageNumber) ?? true);
       case "highlightallchange":
         return false;
     }
     return true;
   }
-  _prepareMatches(matchesWithLength, matches, matchesLength, matchesColor) {
-    function isSubTerm(currentIndex) {
-      const currentElem = matchesWithLength[currentIndex];
-      const nextElem = matchesWithLength[currentIndex + 1];
-      if (currentIndex < matchesWithLength.length - 1 && currentElem.match === nextElem.match) {
-        currentElem.skipped = true;
-        return true;
-      }
-      for (let i = currentIndex - 1; i >= 0; i--) {
-        const prevElem = matchesWithLength[i];
-        if (prevElem.skipped) {
-          continue;
-        }
-        if (prevElem.match + prevElem.matchLength < currentElem.match) {
-          break;
-        }
-        if (prevElem.match + prevElem.matchLength >= currentElem.match + currentElem.matchLength) {
-          currentElem.skipped = true;
-          return true;
-        }
-      }
-      return false;
-    }
-    matchesWithLength.sort(function (a, b) {
-      return a.match === b.match ? a.matchLength - b.matchLength : a.match - b.match;
-    });
-    for (let i = 0, len = matchesWithLength.length; i < len; i++) {
-      if (isSubTerm(i)) {
-        continue;
-      }
-      matches.push(matchesWithLength[i].match);
-      matchesLength.push(matchesWithLength[i].matchLength);
-      matchesColor.push(matchesWithLength[i].color);
-    }
-  }
-  _isEntireWord(content, startIdx, length) {
-    if (startIdx > 0) {
+  #isEntireWord(content, startIdx, length) {
+    let match = content.slice(0, startIdx).match(NOT_DIACRITIC_FROM_END_REG_EXP);
+    if (match) {
       const first = content.charCodeAt(startIdx);
-      const limit = content.charCodeAt(startIdx - 1);
+      const limit = match[1].charCodeAt(0);
       if ((0, _pdf_find_utils.getCharacterType)(first) === (0, _pdf_find_utils.getCharacterType)(limit)) {
         return false;
       }
     }
-    const endIdx = startIdx + length - 1;
-    if (endIdx < content.length - 1) {
-      const last = content.charCodeAt(endIdx);
-      const limit = content.charCodeAt(endIdx + 1);
+    match = content.slice(startIdx + length).match(NOT_DIACRITIC_FROM_START_REG_EXP);
+    if (match) {
+      const last = content.charCodeAt(startIdx + length - 1);
+      const limit = match[1].charCodeAt(0);
       if ((0, _pdf_find_utils.getCharacterType)(last) === (0, _pdf_find_utils.getCharacterType)(limit)) {
         return false;
       }
     }
     return true;
   }
-  _calculateFuzzyMatch(query, pageIndex, pageContent, pageDiffs) {
-    const matches = [];
-    const matchesLength = [];
-    const queryLen = query.length;
-    const shortLen = queryLen < 5 ? queryLen : 5;
-    const maxDistance = Math.round(queryLen / 5);
-    const shortQuery = query.substring(0, shortLen);
-    const options = {
-      useCollator: true
-    };
-    for (let i = 0; i < pageContent.length - queryLen; i++) {
-      const shortCurrentContent = pageContent.substring(i, i + shortLen);
-      if (_levenshtein.Levenshtein.distance(shortQuery, shortCurrentContent, options) < 3) {
-        const currentContent = pageContent.substring(i, i + queryLen);
-        const distance = _levenshtein.Levenshtein.distance(query, currentContent, options);
-        if (distance <= maxDistance) {
-          if (i + 1 < pageContent.length - queryLen) {
-            const nextCurrentContent = pageContent.substring(i + 1, i + 1 + queryLen);
-            const nextDistance = _levenshtein.Levenshtein.distance(query, nextCurrentContent, options);
-            if (distance >= nextDistance) {
-              continue;
-            }
-          }
-          const originalMatchIdx = getOriginalIndex(i, pageDiffs),
-            matchEnd = i + queryLen - 1,
-            originalQueryLen = getOriginalIndex(matchEnd, pageDiffs) - originalMatchIdx + 1;
-          matches.push(originalMatchIdx);
-          matchesLength.push(originalQueryLen);
-          i += queryLen - 1;
-        }
-      }
-    }
-    this._pageMatches[pageIndex] = matches;
-    this._pageMatchesLength[pageIndex] = matchesLength;
-  }
-  _calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, entireWord, ignoreAccents) {
-    if (ignoreAccents) {
-      pageContent = (0, _index.deburr)(pageContent);
-      query = (0, _index.deburr)(query);
-    }
-    const matches = [],
-      matchesLength = [];
-    const queryLen = query.length;
-    let matchIdx = -queryLen;
-    while (true) {
-      matchIdx = pageContent.indexOf(query, matchIdx + queryLen);
-      if (matchIdx === -1) {
-        break;
-      }
-      if (entireWord && !this._isEntireWord(pageContent, matchIdx, queryLen)) {
-        continue;
-      }
-      const originalMatchIdx = getOriginalIndex(matchIdx, pageDiffs),
-        matchEnd = matchIdx + queryLen - 1,
-        originalQueryLen = getOriginalIndex(matchEnd, pageDiffs) - originalMatchIdx + 1;
-      matches.push(originalMatchIdx);
-      matchesLength.push(originalQueryLen);
-    }
-    this._pageMatches[pageIndex] = matches;
-    this._pageMatchesLength[pageIndex] = matchesLength;
-  }
-  _calculateWordMatch(query, pageIndex, pageContent, pageDiffs, entireWord, ignoreAccents) {
-    if (ignoreAccents) {
-      pageContent = (0, _index.deburr)(pageContent);
-      query = (0, _index.deburr)(query);
-    }
-    const matchesWithLength = [];
-    const queryArray = query.includes("\n") ? query.trim().split(/\n+/g) : query.trim().match(/\S+/g);
-    for (let i = 0, len = queryArray.length; i < len; i++) {
-      const subquery = queryArray[i];
-      const subqueryLen = subquery.length;
-      if (subqueryLen === 0) {
-        continue;
-      }
-      let matchIdx = -subqueryLen;
-      while (true) {
-        matchIdx = pageContent.indexOf(subquery, matchIdx + subqueryLen);
-        if (matchIdx === -1) {
-          break;
-        }
-        if (entireWord && !this._isEntireWord(pageContent, matchIdx, subqueryLen)) {
-          continue;
-        }
-        const originalMatchIdx = getOriginalIndex(matchIdx, pageDiffs),
-          matchEnd = matchIdx + subqueryLen - 1,
-          originalQueryLen = getOriginalIndex(matchEnd, pageDiffs) - originalMatchIdx + 1;
-        matchesWithLength.push({
-          match: originalMatchIdx,
-          matchLength: originalQueryLen,
-          skipped: false,
-          color: i
-        });
-      }
-    }
-    this._pageMatchesLength[pageIndex] = [];
-    this._pageMatchesColor[pageIndex] = [];
-    this._pageMatches[pageIndex] = [];
-    this._prepareMatches(matchesWithLength, this._pageMatches[pageIndex], this._pageMatchesLength[pageIndex], this._pageMatchesColor[pageIndex]);
-  }
-  _isInPageRanges(page = 1, commaSeparatedRanges) {
-    try {
-      if (!commaSeparatedRanges) {
-        return true;
-      }
-      const parts = commaSeparatedRanges.split(",");
-      return parts.some(range => this._isInPageRange(page, range));
-    } catch (e) {
-      return true;
-    }
-  }
-  _isInPageRange(page = 1, range = "6-7") {
-    try {
-      if (!range) {
-        return true;
-      }
-      if (range.includes("-")) {
-        const parts = range.split("-");
-        const from = parts[0].trim();
-        if (from.length > 0) {
-          if (page < Number(from)) {
-            return false;
-          }
-        }
-        const to = parts[1].trim();
-        if (to.length > 0) {
-          if (page > Number(to)) {
-            return false;
-          }
-        }
-      } else {
-        const from = range.trim();
-        if (from.length > 0) {
-          if (Number(from) === page) {
-            return true;
-          } else {
-            return false;
-          }
-        }
-      }
-      return true;
-    } catch (e) {
-      return true;
-    }
-  }
-  _calculateMatch(pageIndex) {
-    if (!this.state) {
+  #calculateRegExpMatch(query, entireWord, pageIndex, pageContent) {
+    const matches = this._pageMatches[pageIndex] = [];
+    const matchesLength = this._pageMatchesLength[pageIndex] = [];
+    if (!query) {
       return;
     }
-    let pageContent = this._pageContents[pageIndex];
-    const pageDiffs = this._pageDiffs[pageIndex];
-    let query = this._query;
-    const {
-      caseSensitive,
-      entireWord,
-      ignoreAccents,
-      fuzzySearch,
-      phraseSearch,
-      currentPage,
-      pageRange
-    } = this._state;
-    let ignoreCurrentPage = false;
-    if (currentPage) {
-      if (pageIndex !== this._linkService.page - 1) {
-        ignoreCurrentPage = true;
-        this._pageMatches[pageIndex] = [];
+    const diffs = this._pageDiffs[pageIndex];
+    let match;
+    while ((match = query.exec(pageContent)) !== null) {
+      if (entireWord && !this.#isEntireWord(pageContent, match.index, match[0].length)) {
+        continue;
+      }
+      const [matchPos, matchLen] = getOriginalIndex(diffs, match.index, match[0].length);
+      if (matchLen) {
+        matches.push(matchPos);
+        matchesLength.push(matchLen);
       }
     }
-    if (!this._isInPageRanges(pageIndex + 1, pageRange)) {
-      ignoreCurrentPage = true;
-      this._pageMatches[pageIndex] = [];
+  }
+  #convertToRegExpString(query, hasDiacritics) {
+    const {
+      matchDiacritics
+    } = this.#state;
+    let isUnicode = false;
+    query = query.replaceAll(SPECIAL_CHARS_REG_EXP, (match, p1, p2, p3, p4, p5) => {
+      if (p1) {
+        return `[ ]*\\${p1}[ ]*`;
+      }
+      if (p2) {
+        return `[ ]*${p2}[ ]*`;
+      }
+      if (p3) {
+        return "[ ]+";
+      }
+      if (matchDiacritics) {
+        return p4 || p5;
+      }
+      if (p4) {
+        return DIACRITICS_EXCEPTION.has(p4.charCodeAt(0)) ? p4 : "";
+      }
+      if (hasDiacritics) {
+        isUnicode = true;
+        return `${p5}\\p{M}*`;
+      }
+      return p5;
+    });
+    const trailingSpaces = "[ ]*";
+    if (query.endsWith(trailingSpaces)) {
+      query = query.slice(0, query.length - trailingSpaces.length);
     }
+    if (matchDiacritics) {
+      if (hasDiacritics) {
+        DIACRITICS_EXCEPTION_STR ||= String.fromCharCode(...DIACRITICS_EXCEPTION);
+        isUnicode = true;
+        query = `${query}(?=[${DIACRITICS_EXCEPTION_STR}]|[^\\p{M}]|$)`;
+      }
+    }
+    return [isUnicode, query];
+  }
+  #calculateMatch(pageIndex) {
+    let query = this.#query;
     if (query.length === 0) {
       return;
     }
-    if (!ignoreCurrentPage) {
-      if (!caseSensitive) {
-        pageContent = pageContent.toLowerCase();
-        query = query.toLowerCase();
-      }
-      if (fuzzySearch) {
-        if (query.length <= 2) {
-          this._calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, false);
-        } else {
-          this._calculateFuzzyMatch(query, pageIndex, pageContent, pageDiffs);
-        }
-      } else if (phraseSearch) {
-        this._calculatePhraseMatch(query, pageIndex, pageContent, pageDiffs, entireWord, ignoreAccents);
-      } else {
-        this._calculateWordMatch(query, pageIndex, pageContent, pageDiffs, entireWord, ignoreAccents);
-      }
+    const {
+      caseSensitive,
+      entireWord
+    } = this.#state;
+    const pageContent = this._pageContents[pageIndex];
+    const hasDiacritics = this._hasDiacritics[pageIndex];
+    let isUnicode = false;
+    if (typeof query === "string") {
+      [isUnicode, query] = this.#convertToRegExpString(query, hasDiacritics);
+    } else {
+      query = query.sort().reverse().map(q => {
+        const [isUnicodePart, queryPart] = this.#convertToRegExpString(q, hasDiacritics);
+        isUnicode ||= isUnicodePart;
+        return `(${queryPart})`;
+      }).join("|");
     }
-    if (this._state.highlightAll) {
-      this._updatePage(pageIndex);
+    const flags = `g${isUnicode ? "u" : ""}${caseSensitive ? "" : "i"}`;
+    query = query ? new RegExp(query, flags) : null;
+    this.#calculateRegExpMatch(query, entireWord, pageIndex, pageContent);
+    if (this.#state.highlightAll) {
+      this.#updatePage(pageIndex);
     }
     if (this._resumePageIdx === pageIndex) {
       this._resumePageIdx = null;
-      this._nextPageMatch();
+      this.#nextPageMatch();
     }
     const pageMatchesCount = this._pageMatches[pageIndex].length;
-    if (pageMatchesCount > 0) {
-      this._matchesCountTotal += pageMatchesCount;
-      this._updateUIResultsCount();
-    } else if (pageIndex + 1 === this._pageContents.length && this._matchesCountTotal === 0) {
-      this._updateUIResultsCount();
-    } else if (currentPage && !ignoreCurrentPage) {
-      this._updateMatch(false);
+    this._matchesCountTotal += pageMatchesCount;
+    if (this.#updateMatchesCountOnProgress) {
+      if (pageMatchesCount > 0) {
+        this.#updateUIResultsCount();
+      }
+    } else if (++this.#visitedPagesCount === this._linkService.pagesCount) {
+      this.#updateUIResultsCount();
     }
   }
-  _extractText() {
+  #extractText() {
     if (this._extractTextPromises.length > 0) {
       return;
     }
     let promise = Promise.resolve();
+    const textOptions = {
+      disableNormalization: true
+    };
     for (let i = 0, ii = this._linkService.pagesCount; i < ii; i++) {
       const extractTextCapability = new _pdfjsLib.PromiseCapability();
       this._extractTextPromises[i] = extractTextCapability.promise;
       promise = promise.then(() => {
-        if (this._pdfDocument && this._extractTextPromises.length > 0) {
-          return this._pdfDocument.getPage(i + 1).then(pdfPage => {
-            return pdfPage.getTextContent();
-          }).then(textContent => {
-            const textItems = textContent.items;
-            const strBuf = [];
-            for (let j = 0, jj = textItems.length; j < jj; j++) {
-              strBuf.push(textItems[j].str);
-              if (textItems[j].hasEOL) {
-                strBuf.push("\n");
-              }
+        return this._pdfDocument.getPage(i + 1).then(pdfPage => {
+          return pdfPage.getTextContent(textOptions);
+        }).then(textContent => {
+          const strBuf = [];
+          for (const textItem of textContent.items) {
+            strBuf.push(textItem.str);
+            if (textItem.hasEOL) {
+              strBuf.push("\n");
             }
-            [this._pageContents[i], this._pageDiffs[i]] = normalize(strBuf.join(""), false);
-            extractTextCapability.resolve(i);
-          }, reason => {
-            globalThis.ngxConsole.error(`Unable to get text content for page ${i + 1}`, reason);
-            this._pageContents[i] = "";
-            this._pageDiffs[i] = null;
-            extractTextCapability.resolve(i);
-          });
-        }
-        return Promise.resolve();
+          }
+          [this._pageContents[i], this._pageDiffs[i], this._hasDiacritics[i]] = normalize(strBuf.join(""));
+          extractTextCapability.resolve();
+        }, reason => {
+          console.error(`Unable to get text content for page ${i + 1}`, reason);
+          this._pageContents[i] = "";
+          this._pageDiffs[i] = null;
+          this._hasDiacritics[i] = false;
+          extractTextCapability.resolve();
+        });
       });
     }
   }
-  _updatePage(index) {
+  #updatePage(index) {
     if (this._scrollMatches && this._selected.pageIdx === index) {
       this._linkService.page = index + 1;
     }
@@ -5674,14 +5652,14 @@ class PDFFindController {
       pageIndex: index
     });
   }
-  _updateAllPages() {
+  #updateAllPages() {
     this._eventBus.dispatch("updatetextlayermatches", {
       source: this,
       pageIndex: -1
     });
   }
-  _nextMatch() {
-    const previous = this._state.findPrevious;
+  #nextMatch() {
+    const previous = this.#state.findPrevious;
     const currentPageIndex = this._linkService.page - 1;
     const numPages = this._linkService.pagesCount;
     this._highlightMatches = true;
@@ -5694,31 +5672,23 @@ class PDFFindController {
       this._resumePageIdx = null;
       this._pageMatches.length = 0;
       this._pageMatchesLength.length = 0;
-      this._pageMatchesColor.length = 0;
+      this.#visitedPagesCount = 0;
       this._matchesCountTotal = 0;
-      this._updateAllPages();
-      const {
-        currentPage
-      } = this.state;
-      let startPage = 0;
-      let finalPage = numPages - 1;
-      if (currentPage) {
-        startPage = this._linkService.page - 1;
-        finalPage = startPage;
-      }
-      for (let i = startPage; i <= finalPage; i++) {
+      this.#updateAllPages();
+      for (let i = 0; i < numPages; i++) {
         if (this._pendingFindMatches.has(i)) {
           continue;
         }
         this._pendingFindMatches.add(i);
-        this._extractTextPromises[i].then(pageIdx => {
-          this._pendingFindMatches.delete(pageIdx);
-          this._calculateMatch(pageIdx);
+        this._extractTextPromises[i].then(() => {
+          this._pendingFindMatches.delete(i);
+          this.#calculateMatch(i);
         });
       }
     }
-    if (this._query === "") {
-      this._updateUIState(FindState.FOUND);
+    const query = this.#query;
+    if (query.length === 0) {
+      this.#updateUIState(FindState.FOUND);
       return;
     }
     if (this._resumePageIdx) {
@@ -5730,46 +5700,35 @@ class PDFFindController {
       const numPageMatches = this._pageMatches[offset.pageIdx].length;
       if (!previous && offset.matchIdx + 1 < numPageMatches || previous && offset.matchIdx > 0) {
         offset.matchIdx = previous ? offset.matchIdx - 1 : offset.matchIdx + 1;
-        this._updateMatch(true);
+        this.#updateMatch(true);
         return;
       }
-      if (this.state.currentPage) {
-        if (previous) {
-          offset.matchIdx = numPageMatches - 1;
-        } else {
-          offset.matchIdx = 0;
-        }
-        this._updateMatch(true);
-        this._updateUIState(FindState.WRAPPED);
-        return;
-      } else {
-        this._advanceOffsetPage(previous);
-      }
+      this.#advanceOffsetPage(previous);
     }
-    this._nextPageMatch();
+    this.#nextPageMatch();
   }
-  _matchesReady(matches) {
+  #matchesReady(matches) {
     const offset = this._offset;
     const numMatches = matches.length;
-    const previous = this._state.findPrevious;
+    const previous = this.#state.findPrevious;
     if (numMatches) {
       offset.matchIdx = previous ? numMatches - 1 : 0;
-      this._updateMatch(true);
+      this.#updateMatch(true);
       return true;
     }
-    this._advanceOffsetPage(previous);
+    this.#advanceOffsetPage(previous);
     if (offset.wrapped) {
       offset.matchIdx = null;
       if (this._pagesToSearch < 0) {
-        this._updateMatch(false);
+        this.#updateMatch(false);
         return true;
       }
     }
     return false;
   }
-  _nextPageMatch() {
+  #nextPageMatch() {
     if (this._resumePageIdx !== null) {
-      globalThis.ngxConsole.error("There can only be one pending page.");
+      console.error("There can only be one pending page.");
     }
     let matches = null;
     do {
@@ -5779,9 +5738,9 @@ class PDFFindController {
         this._resumePageIdx = pageIdx;
         break;
       }
-    } while (!this._matchesReady(matches));
+    } while (!this.#matchesReady(matches));
   }
-  _advanceOffsetPage(previous) {
+  #advanceOffsetPage(previous) {
     const offset = this._offset;
     const numPages = this._linkService.pagesCount;
     offset.pageIdx = previous ? offset.pageIdx - 1 : offset.pageIdx + 1;
@@ -5792,7 +5751,7 @@ class PDFFindController {
       offset.wrapped = true;
     }
   }
-  _updateMatch(found = false) {
+  #updateMatch(found = false) {
     let state = FindState.NOT_FOUND;
     const wrapped = this._offset.wrapped;
     this._offset.wrapped = false;
@@ -5802,16 +5761,16 @@ class PDFFindController {
       this._selected.matchIdx = this._offset.matchIdx;
       state = wrapped ? FindState.WRAPPED : FindState.FOUND;
       if (previousPage !== -1 && previousPage !== this._selected.pageIdx) {
-        this._updatePage(previousPage);
+        this.#updatePage(previousPage);
       }
     }
-    this._updateUIState(state, this._state.findPrevious);
+    this.#updateUIState(state, this.#state.findPrevious);
     if (this._selected.pageIdx !== -1) {
       this._scrollMatches = true;
-      this._updatePage(this._selected.pageIdx);
+      this.#updatePage(this._selected.pageIdx);
     }
   }
-  _onFindBarClose(evt) {
+  #onFindBarClose(evt) {
     const pdfDocument = this._pdfDocument;
     this._firstPageCapability.promise.then(() => {
       if (!this._pdfDocument || pdfDocument && this._pdfDocument !== pdfDocument) {
@@ -5825,12 +5784,12 @@ class PDFFindController {
         this._resumePageIdx = null;
         this._dirtyMatch = true;
       }
-      this._updateUIState(FindState.FOUND);
+      this.#updateUIState(FindState.FOUND);
       this._highlightMatches = false;
-      this._updateAllPages();
+      this.#updateAllPages();
     });
   }
-  _requestMatchesCount() {
+  #requestMatchesCount() {
     const {
       pageIdx,
       matchIdx
@@ -5851,19 +5810,22 @@ class PDFFindController {
       total
     };
   }
-  _updateUIResultsCount() {
+  #updateUIResultsCount() {
     this._eventBus.dispatch("updatefindmatchescount", {
       source: this,
-      matchesCount: this._requestMatchesCount()
+      matchesCount: this.#requestMatchesCount()
     });
   }
-  _updateUIState(state, previous = false) {
+  #updateUIState(state, previous = false) {
+    if (!this.#updateMatchesCountOnProgress && (this.#visitedPagesCount !== this._linkService.pagesCount || state === FindState.PENDING)) {
+      return;
+    }
     this._eventBus.dispatch("updatefindcontrolstate", {
       source: this,
       state,
       previous,
-      matchesCount: this._requestMatchesCount(),
-      rawQuery: this._state?.query ?? null
+      matchesCount: this.#requestMatchesCount(),
+      rawQuery: this.#state?.query ?? null
     });
   }
 }
@@ -5871,253 +5833,6 @@ exports.PDFFindController = PDFFindController;
 
 /***/ }),
 /* 18 */
-/***/ ((__unused_webpack_module, exports) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.deburr = deburr;
-var INFINITY = 1 / 0;
-var symbolTag = '[object Symbol]';
-var reLatin = /[\xc0-\xd6\xd8-\xf6\xf8-\xff\u0100-\u017f]/g;
-var rsComboMarksRange = '\\u0300-\\u036f\\ufe20-\\ufe23',
-  rsComboSymbolsRange = '\\u20d0-\\u20f0';
-var rsCombo = '[' + rsComboMarksRange + rsComboSymbolsRange + ']';
-var reComboMark = RegExp(rsCombo, 'g');
-var deburredLetters = {
-  '\xc0': 'A',
-  '\xc1': 'A',
-  '\xc2': 'A',
-  '\xc3': 'A',
-  '\xc4': 'A',
-  '\xc5': 'A',
-  '\xe0': 'a',
-  '\xe1': 'a',
-  '\xe2': 'a',
-  '\xe3': 'a',
-  '\xe4': 'a',
-  '\xe5': 'a',
-  '\xc7': 'C',
-  '\xe7': 'c',
-  '\xd0': 'D',
-  '\xf0': 'd',
-  '\xc8': 'E',
-  '\xc9': 'E',
-  '\xca': 'E',
-  '\xcb': 'E',
-  '\xe8': 'e',
-  '\xe9': 'e',
-  '\xea': 'e',
-  '\xeb': 'e',
-  '\xcc': 'I',
-  '\xcd': 'I',
-  '\xce': 'I',
-  '\xcf': 'I',
-  '\xec': 'i',
-  '\xed': 'i',
-  '\xee': 'i',
-  '\xef': 'i',
-  '\xd1': 'N',
-  '\xf1': 'n',
-  '\xd2': 'O',
-  '\xd3': 'O',
-  '\xd4': 'O',
-  '\xd5': 'O',
-  '\xd6': 'O',
-  '\xd8': 'O',
-  '\xf2': 'o',
-  '\xf3': 'o',
-  '\xf4': 'o',
-  '\xf5': 'o',
-  '\xf6': 'o',
-  '\xf8': 'o',
-  '\xd9': 'U',
-  '\xda': 'U',
-  '\xdb': 'U',
-  '\xdc': 'U',
-  '\xf9': 'u',
-  '\xfa': 'u',
-  '\xfb': 'u',
-  '\xfc': 'u',
-  '\xdd': 'Y',
-  '\xfd': 'y',
-  '\xff': 'y',
-  '\xc6': 'Ae',
-  '\xe6': 'ae',
-  '\xde': 'Th',
-  '\xfe': 'th',
-  '\xdf': 'ss',
-  '\u0100': 'A',
-  '\u0102': 'A',
-  '\u0104': 'A',
-  '\u0101': 'a',
-  '\u0103': 'a',
-  '\u0105': 'a',
-  '\u0106': 'C',
-  '\u0108': 'C',
-  '\u010a': 'C',
-  '\u010c': 'C',
-  '\u0107': 'c',
-  '\u0109': 'c',
-  '\u010b': 'c',
-  '\u010d': 'c',
-  '\u010e': 'D',
-  '\u0110': 'D',
-  '\u010f': 'd',
-  '\u0111': 'd',
-  '\u0112': 'E',
-  '\u0114': 'E',
-  '\u0116': 'E',
-  '\u0118': 'E',
-  '\u011a': 'E',
-  '\u0113': 'e',
-  '\u0115': 'e',
-  '\u0117': 'e',
-  '\u0119': 'e',
-  '\u011b': 'e',
-  '\u011c': 'G',
-  '\u011e': 'G',
-  '\u0120': 'G',
-  '\u0122': 'G',
-  '\u011d': 'g',
-  '\u011f': 'g',
-  '\u0121': 'g',
-  '\u0123': 'g',
-  '\u0124': 'H',
-  '\u0126': 'H',
-  '\u0125': 'h',
-  '\u0127': 'h',
-  '\u0128': 'I',
-  '\u012a': 'I',
-  '\u012c': 'I',
-  '\u012e': 'I',
-  '\u0130': 'I',
-  '\u0129': 'i',
-  '\u012b': 'i',
-  '\u012d': 'i',
-  '\u012f': 'i',
-  '\u0131': 'i',
-  '\u0134': 'J',
-  '\u0135': 'j',
-  '\u0136': 'K',
-  '\u0137': 'k',
-  '\u0138': 'k',
-  '\u0139': 'L',
-  '\u013b': 'L',
-  '\u013d': 'L',
-  '\u013f': 'L',
-  '\u0141': 'L',
-  '\u013a': 'l',
-  '\u013c': 'l',
-  '\u013e': 'l',
-  '\u0140': 'l',
-  '\u0142': 'l',
-  '\u0143': 'N',
-  '\u0145': 'N',
-  '\u0147': 'N',
-  '\u014a': 'N',
-  '\u0144': 'n',
-  '\u0146': 'n',
-  '\u0148': 'n',
-  '\u014b': 'n',
-  '\u014c': 'O',
-  '\u014e': 'O',
-  '\u0150': 'O',
-  '\u014d': 'o',
-  '\u014f': 'o',
-  '\u0151': 'o',
-  '\u0154': 'R',
-  '\u0156': 'R',
-  '\u0158': 'R',
-  '\u0155': 'r',
-  '\u0157': 'r',
-  '\u0159': 'r',
-  '\u015a': 'S',
-  '\u015c': 'S',
-  '\u015e': 'S',
-  '\u0160': 'S',
-  '\u015b': 's',
-  '\u015d': 's',
-  '\u015f': 's',
-  '\u0161': 's',
-  '\u0162': 'T',
-  '\u0164': 'T',
-  '\u0166': 'T',
-  '\u0163': 't',
-  '\u0165': 't',
-  '\u0167': 't',
-  '\u0168': 'U',
-  '\u016a': 'U',
-  '\u016c': 'U',
-  '\u016e': 'U',
-  '\u0170': 'U',
-  '\u0172': 'U',
-  '\u0169': 'u',
-  '\u016b': 'u',
-  '\u016d': 'u',
-  '\u016f': 'u',
-  '\u0171': 'u',
-  '\u0173': 'u',
-  '\u0174': 'W',
-  '\u0175': 'w',
-  '\u0176': 'Y',
-  '\u0177': 'y',
-  '\u0178': 'Y',
-  '\u0179': 'Z',
-  '\u017b': 'Z',
-  '\u017d': 'Z',
-  '\u017a': 'z',
-  '\u017c': 'z',
-  '\u017e': 'z',
-  '\u0132': 'IJ',
-  '\u0133': 'ij',
-  '\u0152': 'Oe',
-  '\u0153': 'oe',
-  '\u0149': "'n",
-  '\u017f': 'ss'
-};
-var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
-var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-var root = freeGlobal || freeSelf || Function('return this')();
-function basePropertyOf(object) {
-  return function (key) {
-    return object == null ? undefined : object[key];
-  };
-}
-var deburrLetter = basePropertyOf(deburredLetters);
-var objectProto = Object.prototype;
-var objectToString = objectProto.toString;
-var Symbol = root.Symbol;
-var symbolProto = Symbol ? Symbol.prototype : undefined,
-  symbolToString = symbolProto ? symbolProto.toString : undefined;
-function baseToString(value) {
-  if (typeof value == 'string') {
-    return value;
-  }
-  if (isSymbol(value)) {
-    return symbolToString ? symbolToString.call(value) : '';
-  }
-  var result = value + '';
-  return result == '0' && 1 / value == -INFINITY ? '-0' : result;
-}
-function isObjectLike(value) {
-  return !!value && typeof value == 'object';
-}
-function isSymbol(value) {
-  return typeof value == 'symbol' || isObjectLike(value) && objectToString.call(value) == symbolTag;
-}
-function toString(value) {
-  return value == null ? '' : baseToString(value);
-}
-function deburr(string) {
-  string = toString(string);
-  return string && string.replace(reLatin, deburrLetter).replace(reComboMark, '');
-}
-
-/***/ }),
-/* 19 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -6203,95 +5918,7 @@ function getNormalizeWithNFKC() {
 }
 
 /***/ }),
-/* 20 */
-/***/ ((__unused_webpack_module, exports) => {
-
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.Levenshtein = void 0;
-let levenshtein_collator;
-try {
-  levenshtein_collator = Intl.Collator("und", {
-    sensitivity: "base"
-  });
-} catch (missingBrowserSupport) {
-  try {
-    levenshtein_collator = Intl.Collator("generic", {
-      sensitivity: "base"
-    });
-  } catch (noBrowserSupport) {
-    levenshtein_collator = undefined;
-  }
-}
-const levenshtein_prevRow = [];
-const levenshtein_str2Char = [];
-class Levenshtein {
-  static distance(str1, str2, options) {
-    const useCollator = options && levenshtein_collator && options.useCollator;
-    const str1Len = str1.length;
-    const str2Len = str2.length;
-    if (str1Len === 0) {
-      return str2Len;
-    }
-    if (str2Len === 0) {
-      return str1Len;
-    }
-    let curCol, nextCol, i, j, tmp;
-    for (i = 0; i < str2Len; ++i) {
-      levenshtein_prevRow[i] = i;
-      levenshtein_str2Char[i] = str2.charCodeAt(i);
-    }
-    levenshtein_prevRow[str2Len] = str2Len;
-    let strCmp;
-    if (useCollator) {
-      for (i = 0; i < str1Len; ++i) {
-        nextCol = i + 1;
-        for (j = 0; j < str2Len; ++j) {
-          curCol = nextCol;
-          strCmp = levenshtein_collator.compare(str1.charAt(i), String.fromCharCode(levenshtein_str2Char[j])) === 0;
-          nextCol = levenshtein_prevRow[j] + (strCmp ? 0 : 1);
-          tmp = curCol + 1;
-          if (nextCol > tmp) {
-            nextCol = tmp;
-          }
-          tmp = levenshtein_prevRow[j + 1] + 1;
-          if (nextCol > tmp) {
-            nextCol = tmp;
-          }
-          levenshtein_prevRow[j] = curCol;
-        }
-        levenshtein_prevRow[j] = nextCol;
-      }
-    } else {
-      for (i = 0; i < str1Len; ++i) {
-        nextCol = i + 1;
-        for (j = 0; j < str2Len; ++j) {
-          curCol = nextCol;
-          strCmp = str1.charCodeAt(i) === levenshtein_str2Char[j];
-          nextCol = levenshtein_prevRow[j] + (strCmp ? 0 : 1);
-          tmp = curCol + 1;
-          if (nextCol > tmp) {
-            nextCol = tmp;
-          }
-          tmp = levenshtein_prevRow[j + 1] + 1;
-          if (nextCol > tmp) {
-            nextCol = tmp;
-          }
-          levenshtein_prevRow[j] = curCol;
-        }
-        levenshtein_prevRow[j] = nextCol;
-      }
-    }
-    return nextCol;
-  }
-}
-exports.Levenshtein = Levenshtein;
-
-/***/ }),
-/* 21 */
+/* 19 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -6770,7 +6397,7 @@ function isDestArraysEqual(firstDest, secondDest) {
 }
 
 /***/ }),
-/* 22 */
+/* 20 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -6936,7 +6563,7 @@ class PDFLayerViewer extends _base_tree_viewer.BaseTreeViewer {
 exports.PDFLayerViewer = PDFLayerViewer;
 
 /***/ }),
-/* 23 */
+/* 21 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -7222,7 +6849,7 @@ class PDFOutlineViewer extends _base_tree_viewer.BaseTreeViewer {
 exports.PDFOutlineViewer = PDFOutlineViewer;
 
 /***/ }),
-/* 24 */
+/* 22 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -7556,7 +7183,7 @@ class PDFPresentationMode {
 exports.PDFPresentationMode = PDFPresentationMode;
 
 /***/ }),
-/* 25 */
+/* 23 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -7681,7 +7308,7 @@ class PDFRenderingQueue {
 exports.PDFRenderingQueue = PDFRenderingQueue;
 
 /***/ }),
-/* 26 */
+/* 24 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -8047,7 +7674,7 @@ class PDFScriptingManager {
 exports.PDFScriptingManager = PDFScriptingManager;
 
 /***/ }),
-/* 27 */
+/* 25 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -8375,7 +8002,7 @@ class PDFSidebar {
 exports.PDFSidebar = PDFSidebar;
 
 /***/ }),
-/* 28 */
+/* 26 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -8385,7 +8012,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.PDFThumbnailViewer = void 0;
 var _ui_utils = __webpack_require__(3);
-var _pdf_thumbnail_view = __webpack_require__(29);
+var _pdf_thumbnail_view = __webpack_require__(27);
 const THUMBNAIL_SCROLL_MARGIN = -19;
 const THUMBNAIL_SELECTED_CLASS = "selected";
 class PDFThumbnailViewer {
@@ -8609,7 +8236,7 @@ class PDFThumbnailViewer {
 exports.PDFThumbnailViewer = PDFThumbnailViewer;
 
 /***/ }),
-/* 29 */
+/* 27 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -8944,7 +8571,7 @@ class PDFThumbnailView {
 exports.PDFThumbnailView = PDFThumbnailView;
 
 /***/ }),
-/* 30 */
+/* 28 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -8955,10 +8582,10 @@ Object.defineProperty(exports, "__esModule", ({
 exports.PagesCountLimit = exports.PDFViewer = exports.PDFPageViewBuffer = void 0;
 var _pdfjsLib = __webpack_require__(4);
 var _ui_utils = __webpack_require__(3);
-var _l10n_utils = __webpack_require__(31);
-var _pageFlipModule = __webpack_require__(32);
-var _pdf_page_view = __webpack_require__(33);
-var _pdf_rendering_queue = __webpack_require__(25);
+var _l10n_utils = __webpack_require__(29);
+var _pageFlipModule = __webpack_require__(30);
+var _pdf_page_view = __webpack_require__(31);
+var _pdf_rendering_queue = __webpack_require__(23);
 var _pdf_link_service = __webpack_require__(7);
 const DEFAULT_CACHE_SIZE = 10;
 const PagesCountLimit = {
@@ -9037,7 +8664,7 @@ class PDFViewer {
   #scaleTimeoutId = null;
   #textLayerMode = _ui_utils.TextLayerMode.ENABLE;
   constructor(options) {
-    const viewerVersion = '3.7.513';
+    const viewerVersion = '3.7.515';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -10682,7 +10309,7 @@ class PDFViewer {
 exports.PDFViewer = PDFViewer;
 
 /***/ }),
-/* 31 */
+/* 29 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -10796,7 +10423,7 @@ const NullL10n = {
 exports.NullL10n = NullL10n;
 
 /***/ }),
-/* 32 */
+/* 30 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -12922,7 +12549,7 @@ class PageFlip extends EventObject {
 exports.PageFlip = PageFlip;
 
 /***/ }),
-/* 33 */
+/* 31 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -12933,18 +12560,18 @@ Object.defineProperty(exports, "__esModule", ({
 exports.PDFPageView = void 0;
 var _pdfjsLib = __webpack_require__(4);
 var _ui_utils = __webpack_require__(3);
-var _annotation_editor_layer_builder = __webpack_require__(34);
-var _annotation_layer_builder = __webpack_require__(35);
+var _annotation_editor_layer_builder = __webpack_require__(32);
+var _annotation_layer_builder = __webpack_require__(33);
 var _app_options = __webpack_require__(5);
-var _l10n_utils = __webpack_require__(31);
+var _l10n_utils = __webpack_require__(29);
 var _pdf_link_service = __webpack_require__(7);
-var _struct_tree_layer_builder = __webpack_require__(36);
-var _text_accessibility = __webpack_require__(37);
-var _canvasSize = _interopRequireDefault(__webpack_require__(38));
-var _util = __webpack_require__(39);
-var _text_highlighter = __webpack_require__(40);
-var _text_layer_builder = __webpack_require__(41);
-var _xfa_layer_builder = __webpack_require__(42);
+var _struct_tree_layer_builder = __webpack_require__(34);
+var _text_accessibility = __webpack_require__(35);
+var _canvasSize = _interopRequireDefault(__webpack_require__(36));
+var _util = __webpack_require__(37);
+var _text_highlighter = __webpack_require__(38);
+var _text_layer_builder = __webpack_require__(39);
+var _xfa_layer_builder = __webpack_require__(40);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 const MAX_CANVAS_PIXELS = _app_options.compatibilityParams.maxCanvasPixels || 16777216;
 const DEFAULT_LAYER_PROPERTIES = () => {
@@ -13708,7 +13335,7 @@ class PDFPageView {
 exports.PDFPageView = PDFPageView;
 
 /***/ }),
-/* 34 */
+/* 32 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -13718,7 +13345,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.AnnotationEditorLayerBuilder = void 0;
 var _pdfjsLib = __webpack_require__(4);
-var _l10n_utils = __webpack_require__(31);
+var _l10n_utils = __webpack_require__(29);
 class AnnotationEditorLayerBuilder {
   #uiManager;
   constructor(options) {
@@ -13795,7 +13422,7 @@ class AnnotationEditorLayerBuilder {
 exports.AnnotationEditorLayerBuilder = AnnotationEditorLayerBuilder;
 
 /***/ }),
-/* 35 */
+/* 33 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -13805,7 +13432,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.AnnotationLayerBuilder = void 0;
 var _pdfjsLib = __webpack_require__(4);
-var _l10n_utils = __webpack_require__(31);
+var _l10n_utils = __webpack_require__(29);
 var _ui_utils = __webpack_require__(3);
 class AnnotationLayerBuilder {
   #numAnnotations = 0;
@@ -13937,7 +13564,7 @@ class AnnotationLayerBuilder {
 exports.AnnotationLayerBuilder = AnnotationLayerBuilder;
 
 /***/ }),
-/* 36 */
+/* 34 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -14056,7 +13683,7 @@ class StructTreeLayerBuilder {
 exports.StructTreeLayerBuilder = StructTreeLayerBuilder;
 
 /***/ }),
-/* 37 */
+/* 35 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -14214,7 +13841,7 @@ class TextAccessibilityManager {
 exports.TextAccessibilityManager = TextAccessibilityManager;
 
 /***/ }),
-/* 38 */
+/* 36 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -14598,7 +14225,7 @@ var canvasSize = {
 exports["default"] = canvasSize;
 
 /***/ }),
-/* 39 */
+/* 37 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -15414,7 +15041,7 @@ function normalizeUnicode(str) {
 }
 
 /***/ }),
-/* 40 */
+/* 38 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -15471,7 +15098,7 @@ class TextHighlighter {
     }
     this._updateMatches(true);
   }
-  _convertMatches(matches, matchesLength, matchesColor) {
+  _convertMatches(matches, matchesLength) {
     if (!matches) {
       return [];
     }
@@ -15492,7 +15119,6 @@ class TextHighlighter {
         globalThis.ngxConsole.error("Could not find a matching mapping");
       }
       const match = {
-        color: matchesColor ? matchesColor[m] : 0,
         begin: {
           divIdx: i,
           offset: matchIdx - iIndex
@@ -15577,8 +15203,7 @@ class TextHighlighter {
       lastOffset = begin.offset;
       const end = match.end;
       const isSelected = isSelectedPage && i === selectedMatchIdx;
-      const colorNumber = match.color % 5;
-      const highlightSuffix = (isSelected ? " selected" : "") + " color" + colorNumber;
+      const highlightSuffix = isSelected ? " selected" : "";
       let selectedLeft = 0;
       if (!prevEnd || begin.divIdx !== prevEnd.divIdx) {
         if (prevEnd !== null) {
@@ -15639,15 +15264,14 @@ class TextHighlighter {
     }
     const pageMatches = findController.pageMatches[pageIdx] || null;
     const pageMatchesLength = findController.pageMatchesLength[pageIdx] || null;
-    const pageMatchesColor = findController.pageMatchesColor[pageIdx] || null;
-    this.matches = this._convertMatches(pageMatches, pageMatchesLength, pageMatchesColor);
+    this.matches = this._convertMatches(pageMatches, pageMatchesLength);
     this._renderMatches(this.matches);
   }
 }
 exports.TextHighlighter = TextHighlighter;
 
 /***/ }),
-/* 41 */
+/* 39 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -15805,7 +15429,7 @@ class TextLayerBuilder {
 exports.TextLayerBuilder = TextLayerBuilder;
 
 /***/ }),
-/* 42 */
+/* 40 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -15885,7 +15509,7 @@ class XfaLayerBuilder {
 exports.XfaLayerBuilder = XfaLayerBuilder;
 
 /***/ }),
-/* 43 */
+/* 41 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -15895,7 +15519,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.SecondaryToolbar = void 0;
 var _ui_utils = __webpack_require__(3);
-var _pdf_viewer = __webpack_require__(30);
+var _pdf_viewer = __webpack_require__(28);
 class SecondaryToolbar {
   constructor(options, eventBus, externalServices) {
     this.toolbar = options.toolbar;
@@ -16176,7 +15800,7 @@ class SecondaryToolbar {
 exports.SecondaryToolbar = SecondaryToolbar;
 
 /***/ }),
-/* 44 */
+/* 42 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -16478,7 +16102,7 @@ class Toolbar {
 exports.Toolbar = Toolbar;
 
 /***/ }),
-/* 45 */
+/* 43 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -16568,7 +16192,7 @@ class ViewHistory {
 exports.ViewHistory = ViewHistory;
 
 /***/ }),
-/* 46 */
+/* 44 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -16689,7 +16313,7 @@ class BasePreferences {
 exports.BasePreferences = BasePreferences;
 
 /***/ }),
-/* 47 */
+/* 45 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -16760,7 +16384,7 @@ class DownloadManager {
 exports.DownloadManager = DownloadManager;
 
 /***/ }),
-/* 48 */
+/* 46 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -16769,8 +16393,8 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.GenericL10n = void 0;
-__webpack_require__(49);
-var _l10n_utils = __webpack_require__(31);
+__webpack_require__(47);
+var _l10n_utils = __webpack_require__(29);
 const webL10n = document.webL10n;
 class GenericL10n {
   constructor(lang) {
@@ -16801,7 +16425,7 @@ class GenericL10n {
 exports.GenericL10n = GenericL10n;
 
 /***/ }),
-/* 49 */
+/* 47 */
 /***/ (() => {
 
 
@@ -17568,7 +17192,7 @@ document.webL10n = function (window, document, undefined) {
 }(window, document);
 
 /***/ }),
-/* 50 */
+/* 48 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -17627,7 +17251,7 @@ class GenericScripting {
 exports.GenericScripting = GenericScripting;
 
 /***/ }),
-/* 51 */
+/* 49 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -17638,9 +17262,9 @@ Object.defineProperty(exports, "__esModule", ({
 exports.PDFPrintService = void 0;
 var _pdfjsLib = __webpack_require__(4);
 var _app = __webpack_require__(2);
-var _canvasSize = _interopRequireDefault(__webpack_require__(38));
-var _print_utils = __webpack_require__(52);
-var _util = __webpack_require__(39);
+var _canvasSize = _interopRequireDefault(__webpack_require__(36));
+var _print_utils = __webpack_require__(50);
+var _util = __webpack_require__(37);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 let activeService = null;
 let dialog = null;
@@ -17944,7 +17568,7 @@ _app.PDFPrintServiceFactory.instance = {
 };
 
 /***/ }),
-/* 52 */
+/* 50 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -17955,7 +17579,7 @@ Object.defineProperty(exports, "__esModule", ({
 exports.getXfaHtmlForPrinting = getXfaHtmlForPrinting;
 var _pdfjsLib = __webpack_require__(4);
 var _pdf_link_service = __webpack_require__(7);
-var _xfa_layer_builder = __webpack_require__(42);
+var _xfa_layer_builder = __webpack_require__(40);
 function getXfaHtmlForPrinting(printContainer, pdfDocument) {
   const xfaHtml = pdfDocument.allXfaHtml;
   const linkService = new _pdf_link_service.SimpleLinkService();
@@ -18029,13 +17653,13 @@ Object.defineProperty(exports, "PDFViewerApplicationOptions", ({
   }
 }));
 __webpack_require__(1);
-__webpack_require__(51);
+__webpack_require__(49);
 var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(5);
 var _pdf_link_service = __webpack_require__(7);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.7.513';
-const pdfjsBuild = 'cced40d58';
+const pdfjsVersion = '3.7.515';
+const pdfjsBuild = '825803b8c';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
@@ -18132,16 +17756,10 @@ function getViewerConfiguration() {
       bar: document.getElementById("findbar"),
       toggleButton: document.getElementById("viewFind"),
       findField: document.getElementById("findInput"),
-      findFieldMultiline: document.getElementById("findInputMultiline"),
       highlightAllCheckbox: document.getElementById("findHighlightAll"),
-      findCurrentPageCheckbox: document.getElementById("findCurrentPage"),
-      findPageRangeField: document.getElementById("findRange"),
       caseSensitiveCheckbox: document.getElementById("findMatchCase"),
       matchDiacriticsCheckbox: document.getElementById("findMatchDiacritics"),
       entireWordCheckbox: document.getElementById("findEntireWord"),
-      findMultipleSearchTextsCheckbox: document.getElementById("findMultipleSearchTexts"),
-      ignoreAccentsCheckbox: document.getElementById("findIgnoreAccents"),
-      fuzzyCheckbox: document.getElementById("findFuzzy"),
       findMsg: document.getElementById("findMsg"),
       findResultsCount: document.getElementById("findResultsCount"),
       findPreviousButton: document.getElementById("findPrevious"),

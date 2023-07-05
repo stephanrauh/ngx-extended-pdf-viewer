@@ -20,19 +20,15 @@ import { PdfContextMenuComponent } from './toolbar/pdf-context-menu/pdf-context-
 import { PdfDownloadComponent } from './toolbar/pdf-download/pdf-download.component';
 import { PdfEditorComponent } from './toolbar/pdf-editor/pdf-editor.component';
 import { PdfFindButtonComponent } from './toolbar/pdf-find-button/pdf-find-button.component';
-import { PdfFindCurrentPageOnlyComponent } from './toolbar/pdf-findbar/pdf-find-current-page-only/pdf-find-current-page-only.component';
 import { PdfFindInputAreaComponent } from './toolbar/pdf-findbar/pdf-find-input-area/pdf-find-input-area.component';
 import { PdfFindNextComponent } from './toolbar/pdf-findbar/pdf-find-next/pdf-find-next.component';
 import { PdfFindPreviousComponent } from './toolbar/pdf-findbar/pdf-find-previous/pdf-find-previous.component';
-import { PdfFindRangeComponent } from './toolbar/pdf-findbar/pdf-find-range/pdf-find-range.component';
 import { PdfFindbarMessageContainerComponent } from './toolbar/pdf-findbar/pdf-findbar-message-container/pdf-findbar-message-container.component';
 import { PdfFindHighlightAllComponent } from './toolbar/pdf-findbar/pdf-findbar-options-one-container/pdf-find-highlight-all/pdf-find-highlight-all.component';
 import { PdfFindMatchCaseComponent } from './toolbar/pdf-findbar/pdf-findbar-options-one-container/pdf-find-match-case/pdf-find-match-case.component';
 import { PdfFindbarOptionsOneContainerComponent } from './toolbar/pdf-findbar/pdf-findbar-options-one-container/pdf-findbar-options-one-container.component';
-import { PdfFindIgnoreAccentsComponent } from './toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-find-ignore-accents/pdf-find-ignore-accents.component';
 import { PdfFindResultsCountComponent } from './toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-find-results-count/pdf-find-results-count.component';
 import { PdfFindbarOptionsThreeContainerComponent } from './toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-findbar-options-three-container.component';
-import { PdfFindMultipleSearchTextsComponent } from './toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-find-entire-phrase/pdf-find-entire-phrase.component';
 import { PdfFindEntireWordComponent } from './toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-find-entire-word/pdf-find-entire-word.component';
 import { PdfFindbarOptionsTwoContainerComponent } from './toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-findbar-options-two-container.component';
 import { PdfFindbarComponent } from './toolbar/pdf-findbar/pdf-findbar.component';
@@ -214,11 +210,7 @@ if (typeof window !== 'undefined') {
     PdfFindbarOptionsOneContainerComponent,
     PdfFindMatchCaseComponent,
     PdfFindHighlightAllComponent,
-    PdfFindRangeComponent,
-    PdfFindCurrentPageOnlyComponent,
     PdfFindEntireWordComponent,
-    PdfFindMultipleSearchTextsComponent,
-    PdfFindIgnoreAccentsComponent,
     PdfFindbarOptionsThreeContainerComponent,
     PdfFindResultsCountComponent,
     PdfFindbarMessageContainerComponent,

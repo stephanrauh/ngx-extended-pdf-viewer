@@ -10,6 +10,12 @@ export type PDFFindControllerOptions = {
      * - The application event bus.
      */
     eventBus: EventBus;
+    /**
+     * - True if the matches
+     * count must be updated on progress or only when the last page is reached.
+     * The default value is `true`.
+     */
+    updateMatchesCountOnProgress?: boolean | undefined;
 };
 export namespace FindState {
     const FOUND: number;
@@ -21,6 +27,9 @@ export namespace FindState {
  * @typedef {Object} PDFFindControllerOptions
  * @property {IPDFLinkService} linkService - The navigation/linking service.
  * @property {EventBus} eventBus - The application event bus.
+ * @property {boolean} [updateMatchesCountOnProgress] - True if the matches
+ *   count must be updated on progress or only when the last page is reached.
+ *   The default value is `true`.
  */
 /**
  * Provides search functionality to find a given string in a PDF document.
@@ -29,25 +38,23 @@ export class PDFFindController {
     /**
      * @param {PDFFindControllerOptions} options
      */
-    /** #492 modified by ngx-extended-pdf-viewer */
-    constructor({ linkService, eventBus, pageViewMode }: {
-        linkService: any;
-        eventBus: any;
-        pageViewMode: any;
-    });
-    _linkService: any;
-    _eventBus: any;
+    constructor({ linkService, eventBus, updateMatchesCountOnProgress, pageViewMode }: PDFFindControllerOptions);
+    _linkService: import("./interfaces").IPDFLinkService;
+    _eventBus: import("./event_utils").EventBus;
     _pageViewMode: any;
-    executeCommand: ((cmd: any, state: any) => void) | undefined;
+    /**
+     * Callback used to check if a `pageNumber` is currently visible.
+     * @type {function}
+     */
+    onIsPageVisible: Function;
     get highlightMatches(): boolean | undefined;
     get pageMatches(): any[] | undefined;
-    get pageMatchesColor(): any[] | undefined;
     get pageMatchesLength(): any[] | undefined;
     get selected(): {
         pageIdx: number;
         matchIdx: number;
     } | undefined;
-    get state(): any;
+    get state(): null;
     /**
      * Set a reference to the PDF document in order to search it.
      * Note that searching is not possible if this method is not called.
@@ -56,25 +63,29 @@ export class PDFFindController {
      */
     setDocument(pdfDocument: PDFDocumentProxy): void;
     _pdfDocument: import("../src/display/api").PDFDocumentProxy | null | undefined;
-    /**
-     * @private
-     */
-    private _onFind;
     _dirtyMatch: boolean | undefined;
-    _state: any;
     _findTimeout: any;
     _highlightMatches: boolean | undefined;
+    /**
+     * @typedef {Object} PDFFindControllerScrollMatchIntoViewParams
+     * @property {HTMLElement} element
+     * @property {number} selectedLeft
+     * @property {number} pageIndex
+     * @property {number} matchIndex
+     */
+    /**
+     * Scroll the current match into view.
+     * @param {PDFFindControllerScrollMatchIntoViewParams}
+     */
     scrollMatchIntoView({ element, selectedLeft, pageIndex, matchIndex, }: {
-        element?: null | undefined;
-        selectedLeft?: number | undefined;
-        pageIndex?: number | undefined;
-        matchIndex?: number | undefined;
+        element: HTMLElement;
+        selectedLeft: number;
+        pageIndex: number;
+        matchIndex: number;
     }): void;
     _scrollMatches: boolean | undefined;
-    _reset(): void;
     _pageMatches: any[] | undefined;
     _pageMatchesLength: any[] | undefined;
-    _pageMatchesColor: any[] | undefined;
     _selected: {
         pageIdx: number;
         matchIdx: number;
@@ -87,49 +98,12 @@ export class PDFFindController {
     _extractTextPromises: any[] | undefined;
     _pageContents: any[] | undefined;
     _pageDiffs: any[] | undefined;
+    _hasDiacritics: any[] | undefined;
     _matchesCountTotal: number | undefined;
-    _pagesToSearch: any;
+    _pagesToSearch: number | null | undefined;
     _pendingFindMatches: Set<any> | undefined;
     _resumePageIdx: any;
     _firstPageCapability: any;
-    /**
-     * @type {string} The (current) normalized search query.
-     */
-    get _query(): string;
     _rawQuery: any;
-    _normalizedQuery: any;
-    _shouldDirtyMatch(state: any): boolean;
-    /**
-     * Helper for multi-term search that fills the `matchesWithLength` array
-     * and handles cases where one search term includes another search term (for
-     * example, "tamed tame" or "this is"). It looks for intersecting terms in
-     * the `matches` and keeps elements with a longer match length.
-     */
-    _prepareMatches(matchesWithLength: any, matches: any, matchesLength: any, matchesColor: any): void;
-    /**
-     * Determine if the search query constitutes a "whole word", by comparing the
-     * first/last character type with the preceding/following character type.
-     */
-    _isEntireWord(content: any, startIdx: any, length: any): boolean;
-    _calculateFuzzyMatch(query: any, pageIndex: any, pageContent: any, pageDiffs: any): void;
-    _calculatePhraseMatch(query: any, pageIndex: any, pageContent: any, pageDiffs: any, entireWord: any, ignoreAccents: any): void;
-    _calculateWordMatch(query: any, pageIndex: any, pageContent: any, pageDiffs: any, entireWord: any, ignoreAccents: any): void;
-    _isInPageRanges(page: number | undefined, commaSeparatedRanges: any): any;
-    _isInPageRange(page?: number, range?: string): boolean;
-    _calculateMatch(pageIndex: any): void;
-    _extractText(): void;
-    _updatePage(index: any): void;
-    _updateAllPages(): void;
-    _nextMatch(): void;
-    _matchesReady(matches: any): boolean;
-    _nextPageMatch(): void;
-    _advanceOffsetPage(previous: any): void;
-    _updateMatch(found?: boolean): void;
-    _onFindBarClose(evt: any): void;
-    _requestMatchesCount(): {
-        current: number;
-        total: number | undefined;
-    };
-    _updateUIResultsCount(): void;
-    _updateUIState(state: any, previous?: boolean): void;
+    #private;
 }
