@@ -37,6 +37,7 @@ export class AnnotationEditor {
     static _colorManager: ColorManager;
     static _zIndex: number;
     static get _defaultLineColor(): any;
+    static deleteAnnotationElement(editor: any): void;
     /**
      * Deserialize the editor.
      * The result of the deserialization is a new editor.
@@ -59,6 +60,7 @@ export class AnnotationEditor {
     pageIndex: number;
     name: any;
     div: HTMLDivElement | null;
+    annotationElementId: any;
     rotation: any;
     pageRotation: number;
     pageDimensions: any[];
@@ -66,6 +68,7 @@ export class AnnotationEditor {
     x: number;
     y: number;
     isAttachedToDOM: boolean;
+    deleted: boolean;
     /**
      * Add some commands into the CommandManager (undo/redo stuff).
      * @param {Object} params
@@ -195,8 +198,9 @@ export class AnnotationEditor {
      * new annotation to add to the pdf document.
      *
      * To implement in subclasses.
+     * @param {boolean} isForCopying
      */
-    serialize(): void;
+    serialize(_isForCopying?: boolean): void;
     /**
      * Remove this editor.
      * It's used on ctrl+backspace action.

@@ -142,7 +142,7 @@ export type DocumentInitParameters = {
      * know when an image must be resized (uses `OffscreenCanvas` in the worker).
      * If it's -1 then a possibly slow algorithm is used to guess the max value.
      */
-    canvasMaxAreaInBytes?: boolean | undefined;
+    canvasMaxAreaInBytes?: number | undefined;
     /**
      * - By default fonts are converted to
      * OpenType fonts and loaded via the Font Loading API or `@font-face` rules.
@@ -518,10 +518,10 @@ export type PDFWorkerParameters = {
 };
 /** @type {string} */
 export const build: string;
-export let DefaultCanvasFactory: typeof DOMCanvasFactory;
-export let DefaultCMapReaderFactory: typeof DOMCMapReaderFactory;
-export let DefaultFilterFactory: typeof DOMFilterFactory;
-export let DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
+export const DefaultCanvasFactory: typeof DOMCanvasFactory | typeof import("./node_utils.js").NodeCanvasFactory;
+export const DefaultCMapReaderFactory: typeof DOMCMapReaderFactory;
+export const DefaultFilterFactory: typeof DOMFilterFactory | typeof import("./node_utils.js").NodeFilterFactory;
+export const DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
 /**
  * @typedef { Int8Array | Uint8Array | Uint8ClampedArray |
  *            Int16Array | Uint16Array |
@@ -604,7 +604,7 @@ export let DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
  *   `OffscreenCanvas` in the worker. Primarily used to improve performance of
  *   image conversion/rendering.
  *   The default value is `true` in web environments and `false` in Node.js.
- * @property {boolean} [canvasMaxAreaInBytes] - The integer value is used to
+ * @property {number} [canvasMaxAreaInBytes] - The integer value is used to
  *   know when an image must be resized (uses `OffscreenCanvas` in the worker).
  *   If it's -1 then a possibly slow algorithm is used to guess the max value.
  * @property {boolean} [disableFontFace] - By default fonts are converted to
@@ -736,7 +736,7 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#19@#docId": number;
+    static "__#29@#docId": number;
     _capability: PromiseCapability;
     _transport: any;
     _worker: any;
@@ -1243,6 +1243,10 @@ export class PDFPageProxy {
      */
     getJSActions(): Promise<Object>;
     /**
+     * @type {Object} The filter factory instance.
+     */
+    get filterFactory(): Object;
+    /**
      * @type {boolean} True if only XFA form.
      */
     get isPureXfa(): boolean;
@@ -1260,7 +1264,7 @@ export class PDFPageProxy {
      * @returns {RenderTask} An object that contains a promise that is
      *   resolved when the page finishes rendering.
      */
-    render({ canvasContext, viewport, intent, annotationMode, transform, background, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, }: RenderParameters, ...args: any[]): RenderTask;
+    render({ canvasContext, viewport, intent, annotationMode, transform, background, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, }: RenderParameters): RenderTask;
     /**
      * @param {GetOperatorListParameters} params - Page getOperatorList
      *   parameters.
@@ -1336,7 +1340,7 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#22@#workerPorts": WeakMap<object, any>;
+    static "__#32@#workerPorts": WeakMap<object, any>;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */

@@ -66,6 +66,7 @@ export class AnnotationLayerBuilder {
     } | null>;
     _annotationCanvasMap: Map<string, HTMLCanvasElement>;
     _accessibilityManager: any;
+    annotationLayer: any;
     div: HTMLDivElement | null;
     _cancelled: boolean;
     _eventBus: any;

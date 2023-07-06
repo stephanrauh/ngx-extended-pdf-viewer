@@ -92,6 +92,7 @@ export class DOMFilterFactory extends BaseFilterFactory {
     });
     addFilter(maps: any): any;
     addHCMFilter(fgColor: any, bgColor: any): any;
+    addHighlightHCMFilter(fgColor: any, bgColor: any, newFgColor: any, newBgColor: any): any;
     #private;
 }
 export class DOMStandardFontDataFactory extends BaseStandardFontDataFactory {
@@ -251,8 +252,7 @@ export class PixelsPerInch {
 declare const RenderingCancelledException_base: any;
 export class RenderingCancelledException extends RenderingCancelledException_base {
     [x: string]: any;
-    constructor(msg: any, type: any, extraDelay?: number);
-    type: any;
+    constructor(msg: any, extraDelay?: number);
     extraDelay: number;
 }
 /**

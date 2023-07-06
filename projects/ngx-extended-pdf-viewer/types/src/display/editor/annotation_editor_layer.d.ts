@@ -1,8 +1,8 @@
-export type AnnotationEditor = import("./editor.js").AnnotationEditor;
 export type AnnotationEditorUIManager = import("./tools.js").AnnotationEditorUIManager;
 export type PageViewport = import("../display_utils.js").PageViewport;
 export type TextAccessibilityManager = any;
 export type IL10n = any;
+export type AnnotationLayer = any;
 export type AnnotationEditorLayerOptions = {
     mode: Object;
     div: HTMLDivElement;
@@ -11,6 +11,7 @@ export type AnnotationEditorLayerOptions = {
     accessibilityManager?: any;
     pageIndex: number;
     l10n: any;
+    annotationLayer?: any;
 };
 export type RenderEditorLayerOptions = {
     viewport: PageViewport;
@@ -24,6 +25,7 @@ export type RenderEditorLayerOptions = {
  * @property {TextAccessibilityManager} [accessibilityManager]
  * @property {number} pageIndex
  * @property {IL10n} l10n
+ * @property {AnnotationLayer} [annotationLayer]
  */
 /**
  * @typedef {Object} RenderEditorLayerOptions
@@ -40,6 +42,7 @@ export class AnnotationEditorLayer {
     constructor(options: AnnotationEditorLayerOptions);
     pageIndex: number;
     div: HTMLDivElement;
+    viewport: any;
     get isEmpty(): boolean;
     /**
      * Update the toolbar if it's required to reflect the tool currently used.
@@ -71,6 +74,7 @@ export class AnnotationEditorLayer {
      * Disable editor creation.
      */
     disable(): void;
+    getEditableAnnotation(id: any): any;
     /**
      * Set the current editor.
      * @param {AnnotationEditor} editor
@@ -96,16 +100,6 @@ export class AnnotationEditorLayer {
      * @param {AnnotationEditor} editor
      */
     addOrRebuild(editor: AnnotationEditor): void;
-    /**
-     * Add a new editor and make this addition undoable.
-     * @param {AnnotationEditor} editor
-     */
-    addANewEditor(editor: AnnotationEditor): void;
-    /**
-     * Add a new editor and make this addition undoable.
-     * @param {AnnotationEditor} editor
-     */
-    addUndoableEditor(editor: AnnotationEditor): void;
     /**
      * Get an id for an editor.
      * @returns {string}
@@ -166,7 +160,6 @@ export class AnnotationEditorLayer {
      * @param {RenderEditorLayerOptions} parameters
      */
     render({ viewport }: RenderEditorLayerOptions): void;
-    viewport: import("../display_utils.js").PageViewport | undefined;
     /**
      * Update the main editor.
      * @param {RenderEditorLayerOptions} parameters
@@ -179,3 +172,4 @@ export class AnnotationEditorLayer {
     get pageDimensions(): Object;
     #private;
 }
+import { AnnotationEditor } from "./editor.js";

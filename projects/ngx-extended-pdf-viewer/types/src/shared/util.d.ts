@@ -42,6 +42,7 @@ export namespace AnnotationEditorType {
     const DISABLE: number;
     const NONE: number;
     const FREETEXT: number;
+    const STAMP: number;
     const INK: number;
 }
 export namespace AnnotationFieldFlag {
@@ -78,10 +79,6 @@ export namespace AnnotationFlag {
     export const TOGGLENOVIEW: number;
     export const LOCKEDCONTENTS: number;
 }
-export namespace AnnotationMarkedState {
-    const MARKED: string;
-    const UNMARKED: string;
-}
 export namespace AnnotationMode {
     const DISABLE_1: number;
     export { DISABLE_1 as DISABLE };
@@ -92,19 +89,6 @@ export namespace AnnotationMode {
 export namespace AnnotationReplyType {
     const GROUP: string;
     const REPLY: string;
-}
-export namespace AnnotationReviewState {
-    export const ACCEPTED: string;
-    export const REJECTED: string;
-    export const CANCELLED: string;
-    export const COMPLETED: string;
-    const NONE_1: string;
-    export { NONE_1 as NONE };
-}
-export namespace AnnotationStateModelType {
-    const MARKED_1: string;
-    export { MARKED_1 as MARKED };
-    export const REVIEW: string;
 }
 export namespace AnnotationType {
     export const TEXT: number;
@@ -121,7 +105,8 @@ export namespace AnnotationType {
     export { UNDERLINE_1 as UNDERLINE };
     export const SQUIGGLY: number;
     export const STRIKEOUT: number;
-    export const STAMP: number;
+    const STAMP_1: number;
+    export { STAMP_1 as STAMP };
     export const CARET: number;
     const INK_1: number;
     export { INK_1 as INK };
@@ -145,8 +130,8 @@ export const BaseException: any;
 export const BASELINE_FACTOR: number;
 export function bytesToString(bytes: any): string;
 export namespace CMapCompressionType {
-    const NONE_2: number;
-    export { NONE_2 as NONE };
+    const NONE_1: number;
+    export { NONE_1 as NONE };
     export const BINARY: number;
 }
 /**

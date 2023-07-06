@@ -27,10 +27,6 @@ export class PDFRenderingQueue {
      */
     isHighestPriority(view: IRenderableView): boolean;
     /**
-     * @returns {boolean}
-     */
-    hasViewer(): boolean;
-    /**
      * @param {Object} currentlyVisiblePages
      */
     renderHighestPriority(currentlyVisiblePages: Object): void;

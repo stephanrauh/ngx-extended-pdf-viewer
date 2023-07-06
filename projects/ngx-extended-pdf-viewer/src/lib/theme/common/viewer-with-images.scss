@@ -1139,7 +1139,7 @@ ngx-extended-pdf-viewer .html {
   }
 
 
-  .pdf-js-version-3-7 .thumbnail {
+  .thumbnail {
     /* Define these variables here, and not in :root, since the individual
      thumbnails may have different sizes. */
      /* --thumbnail-width: 0; */
@@ -1181,7 +1181,7 @@ ngx-extended-pdf-viewer {
     background-clip: content-box;
   }
 
-  .pdf-js-version-3-7 .thumbnailImage {
+  .thumbnailImage {
     width: var(--thumbnail-width);
     height: var(--thumbnail-height);
   }
@@ -1201,11 +1201,11 @@ ngx-extended-pdf-viewer {
     color: $page-background;
   }
 
-  .pdf-js-version-3-7 .thumbnail.selected {
+  .thumbnail.selected {
     border-color: $thumbnail-selection-ring !important;
   }
 
-  .pdf-js-version-3-7 .thumbnail:not([data-loaded]) > .thumbnailImage {
+  .thumbnail:not([data-loaded]) > .thumbnailImage {
     width: calc(var(--thumbnail-width) - 2px);
     height: calc(var(--thumbnail-height) - 2px);
     border: 1px dashed rgba(132, 132, 132, 1);

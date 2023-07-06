@@ -9,7 +9,7 @@ export type AnnotationEditorLayer = import("./annotation_editor_layer.js").Annot
  * some action like copy/paste, undo/redo, ...
  */
 export class AnnotationEditorUIManager {
-    static _keyboardManager: KeyboardManager;
+    static get _keyboardManager(): any;
     constructor(container: any, eventBus: any, annotationStorage: any);
     viewParameters: {
         realScale: number;
@@ -125,6 +125,22 @@ export class AnnotationEditorUIManager {
      * @param {AnnotationEditor} editor
      */
     removeEditor(editor: AnnotationEditor): void;
+    /**
+     * The annotation element with the given id has been deleted.
+     * @param {AnnotationEditor} editor
+     */
+    addDeletedAnnotationElement(editor: AnnotationEditor): void;
+    /**
+     * Check if the annotation element with the given id has been deleted.
+     * @param {string} annotationElementId
+     * @returns {boolean}
+     */
+    isDeletedAnnotationElement(annotationElementId: string): boolean;
+    /**
+     * The annotation element with the given id have been restored.
+     * @param {AnnotationEditor} editor
+     */
+    removeDeletedAnnotationElement(editor: AnnotationEditor): void;
     /**
      * Set the given editor as the active one.
      * @param {AnnotationEditor} editor

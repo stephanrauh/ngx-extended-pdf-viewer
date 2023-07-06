@@ -8,13 +8,13 @@ export class FreeTextEditor extends AnnotationEditor {
     static _internalPadding: number;
     static _defaultColor: null;
     static _defaultFontSize: number;
-    static _keyboardManager: KeyboardManager;
+    static get _keyboardManager(): any;
     static _type: string;
     static initialize(l10n: any): void;
     static updateDefaultParams(type: any, value: any): void;
     static get defaultPropertiesToUpdate(): any[][];
     /** @inheritdoc */
-    static deserialize(data: any, parent: any, uiManager: any): AnnotationEditor;
+    static deserialize(data: any, parent: any, uiManager: any): AnnotationEditor | null;
     constructor(params: any);
     /** @inheritdoc */
     updateParams(type: any, value: any): void;
@@ -44,7 +44,7 @@ export class FreeTextEditor extends AnnotationEditor {
     overlayDiv: HTMLDivElement | undefined;
     get contentDiv(): HTMLDivElement | undefined;
     /** @inheritdoc */
-    serialize(): {
+    serialize(isForCopying?: boolean): {
         annotationType: number;
         color: number[];
         fontSize: any;
@@ -52,8 +52,11 @@ export class FreeTextEditor extends AnnotationEditor {
         pageIndex: number;
         rect: any[];
         rotation: any;
+    } | {
+        pageIndex: number;
+        id: any;
+        deleted: boolean;
     } | null;
     #private;
 }
 import { AnnotationEditor } from "./editor.js";
-import { KeyboardManager } from "./tools.js";
