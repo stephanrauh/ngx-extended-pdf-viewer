@@ -10,10 +10,6 @@ export interface FindOptions {
   matchCase?: boolean;
   wholeWords?: boolean;
   ignoreAccents?: boolean;
-  findMultipleSearchTexts?: boolean;
-  fuzzySearch?: boolean;
-  currentPage?: boolean; // search only in the current page
-  pageRange?: string; // page range definition, e.g. "2", "2,3,4", "5-6" or "2,5-6,7"
 }
 
 interface DrawContext {
@@ -47,15 +43,6 @@ export interface Section {
 export class NgxExtendedPdfViewerService {
   public recalculateSize$ = new Subject<void>();
 
-  public findMultiple(text: Array<string>, options: FindOptions = {}): boolean {
-    options = {
-      ...options,
-      findMultipleSearchTexts: true,
-    };
-    const searchString = text.join('\n') + '\n';
-    return this.find(searchString, options);
-  }
-
   public find(text: string, options: FindOptions = {}): boolean {
     if (!NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
       // tslint:disable-next-line:quotemark
@@ -65,14 +52,6 @@ export class NgxExtendedPdfViewerService {
       const highlightAllCheckbox = document.getElementById('findHighlightAll') as HTMLInputElement;
       if (highlightAllCheckbox) {
         highlightAllCheckbox.checked = options.highlightAll || false;
-      }
-      const findPageRange = document.getElementById('findRange') as HTMLInputElement;
-      if (findPageRange) {
-        findPageRange.value = options.pageRange || '';
-      }
-      const findCurrentPageCheckbox = document.getElementById('findCurrentPage') as HTMLInputElement;
-      if (findCurrentPageCheckbox) {
-        findCurrentPageCheckbox.checked = options.currentPage || false;
       }
 
       const matchCaseCheckbox = document.getElementById('findMatchCase') as HTMLInputElement;
@@ -87,39 +66,12 @@ export class NgxExtendedPdfViewerService {
       if (findIgnoreAccentsCheckbox) {
         findIgnoreAccentsCheckbox.checked = options.ignoreAccents || false;
       }
-      const multipleSearchTerms = options.findMultipleSearchTexts || text.includes('\n') || false;
-      const findMultipleSearchTextsCheckbox = document.getElementById('findMultipleSearchTexts') as HTMLInputElement;
-      if (findMultipleSearchTextsCheckbox) {
-        findMultipleSearchTextsCheckbox.checked = multipleSearchTerms;
-      }
-      const individualWordsModeCheckbox = document.getElementById('individualWordsMode') as HTMLInputElement;
-      if (individualWordsModeCheckbox) {
-        individualWordsModeCheckbox.checked = false;
-      }
-      const fuzzySearchCheckbox = document.getElementById('findFuzzy') as HTMLInputElement;
-      if (fuzzySearchCheckbox) {
-        fuzzySearchCheckbox.checked = options.fuzzySearch || false;
-      }
-      const inputField = multipleSearchTerms ? document.getElementById('findInputMultiline') : document.getElementById('findInput');
+      const inputField = document.getElementById('findInput') as HTMLInputElement;
       if (inputField) {
-        if (inputField instanceof HTMLTextAreaElement) {
-          inputField.value = text;
-
-          // todo dirty hack!
-          inputField.classList.remove('hidden');
-          (document.getElementById('findInput') as HTMLInputElement)?.classList.add('hidden');
-          (document.getElementById('individualWordsModeLabel') as HTMLInputElement)?.classList.remove('hidden');
-          (document.getElementById('individualWordsMode') as HTMLInputElement)?.classList.remove('hidden');
-          // end of the dirty hack
-        } else if (inputField instanceof HTMLInputElement) {
-          inputField.value = text;
-          // todo dirty hack!
-          inputField.classList.remove('hidden');
-          (document.getElementById('findInputMultiline') as HTMLInputElement)?.classList.add('hidden');
-          (document.getElementById('individualWordsModeLabel') as HTMLInputElement)?.classList.add('hidden');
-          (document.getElementById('individualWordsMode') as HTMLInputElement)?.classList.add('hidden');
-          // end of the dirty hack
-        }
+        inputField.value = text;
+        // todo dirty hack!
+        inputField.classList.remove('hidden');
+        // end of the dirty hack
         inputField.dispatchEvent(new Event('input'));
         return true;
       } else {
