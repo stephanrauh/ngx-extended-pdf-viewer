@@ -1687,38 +1687,42 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       PDFViewerApplication.eventBus.on('layersloaded', hideSidebarToolbar);
 
       PDFViewerApplication.eventBus.on('annotationlayerrendered', (event: AnnotationLayerRenderedEvent) => {
-        this.annotationLayerRendered.emit(event);
-        this.enableOrDisableForms(event.source.div, true);
+        this.ngZone.run(() => {
+          this.annotationLayerRendered.emit(event);
+          this.enableOrDisableForms(event.source.div, true);
+        });
       });
-      PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', (event) => this.annotationEditorLayerRendered.emit(event));
-      PDFViewerApplication.eventBus.on('xfalayerrendered', (event) => this.xfaLayerRendered.emit(event));
-      PDFViewerApplication.eventBus.on('outlineloaded', (event) => this.outlineLoaded.emit(event));
-      PDFViewerApplication.eventBus.on('attachmentsloaded', (event) => this.attachmentsloaded.emit(event));
-      PDFViewerApplication.eventBus.on('layersloaded', (event) => this.layersloaded.emit(event));
+      PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', (event) => this.ngZone.run(() => this.annotationEditorLayerRendered.emit(event)));
+      PDFViewerApplication.eventBus.on('xfalayerrendered', (event) => this.ngZone.run(() => this.xfaLayerRendered.emit(event)));
+      PDFViewerApplication.eventBus.on('outlineloaded', (event) => this.ngZone.run(() => this.outlineLoaded.emit(event)));
+      PDFViewerApplication.eventBus.on('attachmentsloaded', (event) => this.ngZone.run(() => this.attachmentsloaded.emit(event)));
+      PDFViewerApplication.eventBus.on('layersloaded', (event) => this.ngZone.run(() => this.layersloaded.emit(event)));
       PDFViewerApplication.eventBus.on('presentationmodechanged', (event) => {
         const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
         PDFViewerApplication?.pdfViewer?.destroyBookMode();
       });
 
       PDFViewerApplication.eventBus.on('updatefindcontrolstate', (x: FindResult) => {
-        if (x.state === FindState.NOT_FOUND) {
-          this.updateFindMatchesCount.emit({ current: 0, total: 0 });
-        } else if (x.matchesCount.total) {
-          x.matchesCount.matches = PDFViewerApplication.findController._pageMatches;
-          x.matchesCount.matchesLength = PDFViewerApplication.findController._pageMatchesLength;
-          x.matchesCount.matchesColor = PDFViewerApplication.findController._pageMatchesColor;
-          this.updateFindMatchesCount.emit(x.matchesCount);
-        }
+        this.ngZone.run(() => {
+          if (x.state === FindState.NOT_FOUND) {
+            this.updateFindMatchesCount.emit({ current: 0, total: 0 });
+          } else if (x.matchesCount.total) {
+            x.matchesCount.matches = PDFViewerApplication.findController._pageMatches;
+            x.matchesCount.matchesLength = PDFViewerApplication.findController._pageMatchesLength;
+            x.matchesCount.matchesColor = PDFViewerApplication.findController._pageMatchesColor;
+            this.updateFindMatchesCount.emit(x.matchesCount);
+          }
 
-        if (this.updateFindState) {
-          this.updateFindState.emit(x.state);
-        }
+          if (this.updateFindState) {
+            this.updateFindState.emit(x.state);
+          }
+        });
       });
       PDFViewerApplication.eventBus.on('updatefindmatchescount', (x: FindResult) => {
         x.matchesCount.matches = PDFViewerApplication.findController._pageMatches;
         x.matchesCount.matchesLength = PDFViewerApplication.findController._pageMatchesLength;
         x.matchesCount.matchesColor = PDFViewerApplication.findController._pageMatchesColor;
-        this.updateFindMatchesCount.emit(x.matchesCount);
+        this.ngZone.run(() => this.updateFindMatchesCount.emit(x.matchesCount));
       });
 
       PDFViewerApplication.eventBus.on('pagechanging', (x: PageNumberChange) => {
