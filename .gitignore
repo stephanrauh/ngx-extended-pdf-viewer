@@ -45,7 +45,3 @@ Thumbs.db
 *.pdf
 **/VG-2021-07-19.pdf
 
-# generated files
-*.map
-*-es5.js
-*.min.js
