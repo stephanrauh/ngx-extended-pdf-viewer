@@ -27,6 +27,7 @@ export type TextContent = {
 };
 
 export interface FindController {
+  state: any;
   _pageMatches: Array<any>;
   _pageMatchesColor: Array<number>;
   _pageMatchesLength: Array<number>;

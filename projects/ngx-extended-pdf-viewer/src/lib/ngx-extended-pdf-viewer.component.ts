@@ -1704,14 +1704,26 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
       PDFViewerApplication.eventBus.on('updatefindcontrolstate', (x: FindResult) => {
         this.ngZone.run(() => {
-          if (x.state === FindState.NOT_FOUND) {
-            this.updateFindMatchesCount.emit({ current: 0, total: 0 });
-          } else if (x.matchesCount.total) {
-            x.matchesCount.matches = PDFViewerApplication.findController._pageMatches;
-            x.matchesCount.matchesLength = PDFViewerApplication.findController._pageMatchesLength;
-            x.matchesCount.matchesColor = PDFViewerApplication.findController._pageMatchesColor;
-            this.updateFindMatchesCount.emit(x.matchesCount);
+          let type = PDFViewerApplication.findController.state.type || 'find';
+          if (type === 'again') {
+            type = 'findagain';
           }
+          const result = {
+            caseSensitive: PDFViewerApplication.findController.state.caseSensitive,
+            entireWord: PDFViewerApplication.findController.state.entireWord,
+            findPrevious: PDFViewerApplication.findController.state.findPrevious,
+            highlightAll: PDFViewerApplication.findController.state.highlightAll,
+            matchDiacritics: PDFViewerApplication.findController.state.matchDiacritics,
+            query: PDFViewerApplication.findController.state.query,
+            type,
+          };
+          this.updateFindMatchesCount.emit({
+            ...result,
+            current: x.matchesCount.current,
+            total: x.matchesCount.total,
+            matches: PDFViewerApplication.findController._pageMatches,
+            matchesLength: PDFViewerApplication.findController._pageMatchesLength,
+          });
 
           if (this.updateFindState) {
             this.updateFindState.emit(x.state);
@@ -1721,8 +1733,21 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       PDFViewerApplication.eventBus.on('updatefindmatchescount', (x: FindResult) => {
         x.matchesCount.matches = PDFViewerApplication.findController._pageMatches;
         x.matchesCount.matchesLength = PDFViewerApplication.findController._pageMatchesLength;
-        x.matchesCount.matchesColor = PDFViewerApplication.findController._pageMatchesColor;
-        this.ngZone.run(() => this.updateFindMatchesCount.emit(x.matchesCount));
+        this.ngZone.run(() =>
+          this.updateFindMatchesCount.emit({
+            caseSensitive: PDFViewerApplication.findController.state.caseSensitive,
+            entireWord: PDFViewerApplication.findController.state.entireWord,
+            findPrevious: PDFViewerApplication.findController.state.findPrevious,
+            highlightAll: PDFViewerApplication.findController.state.highlightAll,
+            matchDiacritics: PDFViewerApplication.findController.state.matchDiacritics,
+            query: PDFViewerApplication.findController.state.query,
+            type: PDFViewerApplication.findController.state.type,
+            current: x.matchesCount.current,
+            total: x.matchesCount.total,
+            matches: x.matchesCount.matches,
+            matchesLength: x.matchesCount.matchesLength,
+          })
+        );
       });
 
       PDFViewerApplication.eventBus.on('pagechanging', (x: PageNumberChange) => {

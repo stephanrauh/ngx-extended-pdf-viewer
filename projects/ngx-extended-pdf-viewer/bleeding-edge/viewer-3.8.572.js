@@ -5336,6 +5336,11 @@ class PDFFindController {
     this.#state = state;
     if (type !== "highlightallchange") {
       this.#updateUIState(FindState.PENDING);
+    } else {
+      const hasMatches = this._pageMatches.some(matches => matches.length > 0);
+      const emptyQuery = !this.state?.query;
+      const reportAsFound = emptyQuery || hasMatches;
+      this.#updateUIState(reportAsFound ? FindState.FOUND : FindState.NOT_FOUND);
     }
     this._firstPageCapability.promise.then(() => {
       if (!this._pdfDocument || pdfDocument && this._pdfDocument !== pdfDocument) {

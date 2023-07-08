@@ -9,7 +9,7 @@ export interface FindOptions {
   highlightAll?: boolean;
   matchCase?: boolean;
   wholeWords?: boolean;
-  ignoreAccents?: boolean;
+  matchDiacritics?: boolean;
 }
 
 interface DrawContext {
@@ -62,9 +62,9 @@ export class NgxExtendedPdfViewerService {
       if (entireWordCheckbox) {
         entireWordCheckbox.checked = options.wholeWords || false;
       }
-      const findIgnoreAccentsCheckbox = document.getElementById('findIgnoreAccents') as HTMLInputElement;
-      if (findIgnoreAccentsCheckbox) {
-        findIgnoreAccentsCheckbox.checked = options.ignoreAccents || false;
+      const matchDiacriticsCheckbox = document.getElementById('findMatchDiacritics') as HTMLInputElement;
+      if (matchDiacriticsCheckbox) {
+        matchDiacriticsCheckbox.checked = options.matchDiacritics || false;
       }
       const inputField = document.getElementById('findInput') as HTMLInputElement;
       if (inputField) {
