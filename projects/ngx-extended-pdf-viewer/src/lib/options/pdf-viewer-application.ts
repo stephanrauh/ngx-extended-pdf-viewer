@@ -422,22 +422,22 @@ export type GetViewportParameters = {
    * - The desired rotation, in degrees, of
    * the viewport. If omitted it defaults to the page rotation.
    */
-  rotation: number | undefined;
+  rotation?: number;
   /**
    * - The horizontal, i.e. x-axis, offset.
    * The default value is `0`.
    */
-  offsetX: number | undefined;
+  offsetX?: number;
   /**
    * - The vertical, i.e. y-axis, offset.
    * The default value is `0`.
    */
-  offsetY: number | undefined;
+  offsetY?: number;
   /**
    * - If true, the y-axis will not be
    * flipped. The default value is `false`.
    */
-  dontFlip: boolean | undefined;
+  dontFlip?: boolean;
 };
 
 export interface PDFDateString {
