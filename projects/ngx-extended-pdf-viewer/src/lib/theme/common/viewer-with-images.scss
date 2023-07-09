@@ -1135,17 +1135,13 @@ ngx-extended-pdf-viewer .html {
   }
 
   .thumbnail {
-    margin: 0 10px 5px 10px;
-  }
-
-
-  .thumbnail {
     /* Define these variables here, and not in :root, since the individual
      thumbnails may have different sizes. */
      /* --thumbnail-width: 0; */
      /* --thumbnail-height: 0; */
      width: var(--thumbnail-width);
      height: var(--thumbnail-height);
+     margin: 0 10px 5px 10px;
      padding: 1px;
      border: 7px solid transparent;
      border-radius: 2px;
@@ -1175,15 +1171,12 @@ ngx-extended-pdf-viewer {
 
   .thumbnailImage {
     border: 1px solid $fullscreen-background;
+    width: var(--thumbnail-width);
+    height: var(--thumbnail-height);
     opacity: 0.8;
     z-index: 1;
     background-color: $page-background;
     background-clip: content-box;
-  }
-
-  .thumbnailImage {
-    width: var(--thumbnail-width);
-    height: var(--thumbnail-height);
   }
 
   .thumbnailSelectionRing {

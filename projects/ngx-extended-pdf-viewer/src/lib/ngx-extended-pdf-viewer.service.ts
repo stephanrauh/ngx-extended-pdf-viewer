@@ -23,12 +23,14 @@ export interface PDFExportScaleFactor {
   scale?: number;
 }
 
+type DirectionType = 'ltr' | 'rtl' | 'both' | undefined;
+
 export interface Line {
   x: number;
   y: number;
   width: number;
   height: number;
-  direction: 'ltr' | 'rtl' | 'both' | undefined;
+  direction: DirectionType;
   text: string;
 }
 export interface Section {
@@ -36,7 +38,7 @@ export interface Section {
   y: number;
   width: number;
   height: number;
-  direction: 'ltr' | 'rtl' | 'both' | undefined;
+  direction: DirectionType;
   lines: Array<Line>;
 }
 
@@ -215,7 +217,7 @@ export class NgxExtendedPdfViewerService {
 
       let addIt = i === snippets.length - 1 || currentSnippet.hasEOL;
       if (addIt) {
-        let direction: 'ltr' | 'rtl' | 'both' | undefined = undefined;
+        let direction: DirectionType = undefined;
         if (countLTR > 0 && countRTL > 0) {
           direction = 'both';
         } else if (countLTR > 0) {
