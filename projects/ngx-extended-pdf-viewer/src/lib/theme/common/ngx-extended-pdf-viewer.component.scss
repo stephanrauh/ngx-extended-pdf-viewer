@@ -10,43 +10,6 @@ ngx-extended-pdf-viewer {
   }
 }
 
-ngx-extended-pdf-viewer {
-  .textLayer .highlight.color0 {
-    background-color: $highlight-color0;
-  }
-  .textLayer .highlight.color0.selected {
-    background-color: $highlight-color0-selected;
-  }
-
-  .textLayer .highlight.color1 {
-    background-color: $highlight-color1;
-  }
-  .textLayer .highlight.color1.selected {
-    background-color: $highlight-color1-selected;
-  }
-
-  .textLayer .highlight.color2 {
-    background-color: $highlight-color2;
-  }
-  .textLayer .highlight.color2.selected {
-    background-color: $highlight-color2-selected;
-  }
-
-  .textLayer .highlight.color3 {
-    background-color: $highlight-color3;
-  }
-  .textLayer .highlight.color3.selected {
-    background-color: $highlight-color3-selected;
-  }
-
-  .textLayer .highlight.color4 {
-    background-color: $highlight-color4;
-  }
-  .textLayer .highlight.color4.selected {
-    background-color: $highlight-color4-selected;
-  }
-}
-
 html[dir='ltr'] ngx-extended-pdf-viewer .dialogButton,
 html[dir='ltr'] ngx-extended-pdf-viewer .toolbarButton {
   margin: 3px 0 4px 0;

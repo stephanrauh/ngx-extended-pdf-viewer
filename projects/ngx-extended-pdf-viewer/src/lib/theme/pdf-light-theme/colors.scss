@@ -1,19 +1,4 @@
-$highlight-color0: rgba(180, 0, 170, 0.4);
-$highlight-color0-selected: rgb(180, 0, 170);
-
-$highlight-color1: rgba(0, 100, 0, 0.4);
-$highlight-color1-selected: rgb(0, 100, 0);
-
-$highlight-color2: rgba(0, 0, 255, 0.4);
-$highlight-color2-selected: rgb(0, 0, 255);
-
-$highlight-color3: rgba(255, 0, 0, 0.4);
-$highlight-color3-selected: rgb(255, 0, 0);
-
-$highlight-color4: rgba(255, 94, 0, 0.4);
-$highlight-color4-selected: rgb(255, 94, 0);
-
-$highlight: var($highlight-color0-selected);
+$highlight: rgba(180, 0, 170, 0.4);
 
 $highlight-selected: rgba(0, 100, 0, 1);
 
@@ -75,9 +60,6 @@ $selection-background: rgba(0, 0, 255, 0.3);
 
 $outline-active-color: rgba(0, 0, 0, 0.08);
 $outline-active-bg-color: rgba(0, 0, 0, 1);
-
-$scrollbar-color: auto;
-$scrollbar-bg-color: auto;
 
 $sidebar-width: 200px;
 $sidebar-transition-duration: 200ms;
