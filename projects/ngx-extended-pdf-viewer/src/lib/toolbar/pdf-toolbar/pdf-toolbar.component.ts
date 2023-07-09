@@ -29,6 +29,9 @@ export class PdfToolbarComponent implements AfterViewInit {
   public showTextEditor: ResponsiveVisibility = false;
 
   @Input()
+  public showStampEditor: ResponsiveVisibility = false;
+
+  @Input()
   public showFindButton: ResponsiveVisibility | undefined = undefined;
 
   @Input()

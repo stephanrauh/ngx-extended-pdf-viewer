@@ -12,6 +12,7 @@ export type AnnotationEditorLayerOptions = {
     pageIndex: number;
     l10n: any;
     annotationLayer?: any;
+    viewport: PageViewport;
 };
 export type RenderEditorLayerOptions = {
     viewport: PageViewport;
@@ -26,6 +27,7 @@ export type RenderEditorLayerOptions = {
  * @property {number} pageIndex
  * @property {IL10n} l10n
  * @property {AnnotationLayer} [annotationLayer]
+ * @property {PageViewport} viewport
  */
 /**
  * @typedef {Object} RenderEditorLayerOptions
@@ -39,10 +41,10 @@ export class AnnotationEditorLayer {
     /**
      * @param {AnnotationEditorLayerOptions} options
      */
-    constructor(options: AnnotationEditorLayerOptions);
+    constructor({ uiManager, pageIndex, div, accessibilityManager, annotationLayer, viewport, l10n, }: AnnotationEditorLayerOptions);
     pageIndex: number;
     div: HTMLDivElement;
-    viewport: any;
+    viewport: import("../display_utils.js").PageViewport;
     get isEmpty(): boolean;
     /**
      * Update the toolbar if it's required to reflect the tool currently used.
@@ -100,6 +102,11 @@ export class AnnotationEditorLayer {
      * @param {AnnotationEditor} editor
      */
     addOrRebuild(editor: AnnotationEditor): void;
+    /**
+     * Add a new editor and make this addition undoable.
+     * @param {AnnotationEditor} editor
+     */
+    addUndoableEditor(editor: AnnotationEditor): void;
     /**
      * Get an id for an editor.
      * @returns {string}

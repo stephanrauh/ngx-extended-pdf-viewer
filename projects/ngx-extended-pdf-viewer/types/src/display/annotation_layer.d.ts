@@ -118,6 +118,10 @@ export class InkAnnotationElement extends AnnotationElement {
     getElementsToTriggerPopup(): any[];
     #private;
 }
+export class StampAnnotationElement extends AnnotationElement {
+    constructor(parameters: any);
+    render(): HTMLElement | undefined;
+}
 import { AnnotationStorage } from "./annotation_storage.js";
 declare class AnnotationElement {
     constructor(parameters: any, { isRenderable, ignoreBorder, createQuadrilaterals, }?: {
@@ -199,5 +203,6 @@ declare class AnnotationElement {
     hide(): void;
     getElementsToTriggerPopup(): HTMLElement | HTMLElement[] | undefined;
     addHighlightArea(): void;
+    _editOnDoubleClick(): void;
 }
 export {};

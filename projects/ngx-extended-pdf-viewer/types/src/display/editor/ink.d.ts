@@ -7,8 +7,11 @@ export class InkEditor extends AnnotationEditor {
     static _defaultThickness: number;
     static _l10nPromise: any;
     static _type: string;
+    /** @inheritdoc */
     static initialize(l10n: any): void;
+    /** @inheritdoc */
     static updateDefaultParams(type: any, value: any): void;
+    /** @inheritdoc */
     static get defaultPropertiesToUpdate(): any[][];
     /**
      * Convert into a Path2D.
@@ -85,7 +88,7 @@ export class InkEditor extends AnnotationEditor {
         }[];
         pageIndex: number;
         rect: any[];
-        rotation: any;
+        rotation: number;
     } | null;
     #private;
 }

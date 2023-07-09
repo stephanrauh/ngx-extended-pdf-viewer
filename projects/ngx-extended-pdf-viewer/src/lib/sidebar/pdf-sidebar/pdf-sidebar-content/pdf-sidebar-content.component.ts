@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { TrustedTypesWindow } from 'trusted-types/lib';
 import { PdfThumbnailDrawnEvent } from '../../../events/pdf-thumbnail-drawn-event';
 import { getVersionSuffix, pdfDefaultOptions } from '../../../options/pdf-default-options';
@@ -23,7 +23,7 @@ const THUMBNAIL_CANVAS_BORDER_WIDTH = 1; // one pixel
   templateUrl: './pdf-sidebar-content.component.html',
   styleUrls: ['./pdf-sidebar-content.component.css'],
 })
-export class PdfSidebarContentComponent implements OnDestroy {
+export class PdfSidebarContentComponent implements OnDestroy, OnInit {
   @Input()
   public customThumbnail: TemplateRef<any> | undefined;
 
@@ -45,6 +45,10 @@ export class PdfSidebarContentComponent implements OnDestroy {
 
   @Output()
   public thumbnailDrawn = new EventEmitter<PdfThumbnailDrawnEvent>();
+
+  public ngOnInit(): void {
+    this.pdfJsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
+  }
 
   public get thumbnailViewTemplate(): ElementRef {
     if (this.pdfJsVersion < '3.7') {

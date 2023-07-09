@@ -736,7 +736,7 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#29@#docId": number;
+    static "__#31@#docId": number;
     _capability: PromiseCapability;
     _transport: any;
     _worker: any;
@@ -1340,7 +1340,7 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#32@#workerPorts": WeakMap<object, any>;
+    static "__#34@#workerPorts": WeakMap<object, any>;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */

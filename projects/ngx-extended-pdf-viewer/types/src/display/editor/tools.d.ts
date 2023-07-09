@@ -10,12 +10,13 @@ export type AnnotationEditorLayer = import("./annotation_editor_layer.js").Annot
  */
 export class AnnotationEditorUIManager {
     static get _keyboardManager(): any;
-    constructor(container: any, eventBus: any, annotationStorage: any);
+    constructor(container: any, eventBus: any, pdfDocument: any, pageColors: any);
     viewParameters: {
         realScale: number;
         rotation: number;
     };
     destroy(): void;
+    get hcmFilter(): any;
     onPageChanging({ pageNumber }: {
         pageNumber: any;
     }): void;
@@ -89,8 +90,9 @@ export class AnnotationEditorUIManager {
     /**
      * Change the editor mode (None, FreeText, Ink, ...)
      * @param {number} mode
+     * @param {string|null} editId
      */
-    updateMode(mode: number): void;
+    updateMode(mode: number, editId?: string | null): void;
     /**
      * Update the toolbar if it's required to reflect the tool currently used.
      * @param {number} mode
@@ -209,6 +211,7 @@ export class AnnotationEditorUIManager {
      * @returns {number}
      */
     getMode(): number;
+    get imageManager(): any;
     removeEditors(filterFunction?: () => boolean): void;
     #private;
 }

@@ -308,6 +308,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public showTextEditor: ResponsiveVisibility = true;
 
   @Input()
+  public showStampEditor: ResponsiveVisibility = true;
+
+  @Input()
   public showDrawEditor: ResponsiveVisibility = true;
 
   /** store the timeout id so it can be canceled if user leaves the page before the PDF is shown */

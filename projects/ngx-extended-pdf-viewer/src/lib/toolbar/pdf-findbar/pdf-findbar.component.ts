@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { getVersionSuffix, pdfDefaultOptions } from '../../options/pdf-default-options';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
@@ -7,7 +7,7 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
   templateUrl: './pdf-findbar.component.html',
   styleUrls: ['./pdf-findbar.component.css'],
 })
-export class PdfFindbarComponent {
+export class PdfFindbarComponent implements OnInit {
   @Input()
   public showFindButton: ResponsiveVisibility = true;
 
@@ -61,4 +61,8 @@ export class PdfFindbarComponent {
   public showFindMessages = true;
 
   public pdfJsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
+
+  public ngOnInit(): void {
+    this.pdfJsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
+  }
 }

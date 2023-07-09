@@ -39,6 +39,22 @@ export class AnnotationEditor {
     static get _defaultLineColor(): any;
     static deleteAnnotationElement(editor: any): void;
     /**
+     * Initialize the l10n stuff for this type of editor.
+     * @param {Object} _l10n
+     */
+    static initialize(_l10n: Object): void;
+    /**
+     * Update the default parameters for this type of editor.
+     * @param {number} _type
+     * @param {*} _value
+     */
+    static updateDefaultParams(_type: number, _value: any): void;
+    /**
+     * Get the default properties to set in the UI for this type of editor.
+     * @returns {Array}
+     */
+    static get defaultPropertiesToUpdate(): any[];
+    /**
      * Deserialize the editor.
      * The result of the deserialization is a new editor.
      *
@@ -48,6 +64,7 @@ export class AnnotationEditor {
      * @returns {AnnotationEditor}
      */
     static deserialize(data: Object, parent: AnnotationEditorLayer, uiManager: AnnotationEditorUIManager): AnnotationEditor;
+    static get MIN_SIZE(): number;
     /**
      * @param {AnnotationEditorParameters} parameters
      */
@@ -61,7 +78,7 @@ export class AnnotationEditor {
     name: any;
     div: HTMLDivElement | null;
     annotationElementId: any;
-    rotation: any;
+    rotation: number;
     pageRotation: number;
     pageDimensions: any[];
     pageTranslation: any[];
@@ -69,6 +86,11 @@ export class AnnotationEditor {
     y: number;
     isAttachedToDOM: boolean;
     deleted: boolean;
+    /**
+     * Get the properties to update in the UI for this editor.
+     * @returns {Array}
+     */
+    get propertiesToUpdate(): any[];
     /**
      * Add some commands into the CommandManager (undo/redo stuff).
      * @param {Object} params
@@ -199,8 +221,9 @@ export class AnnotationEditor {
      *
      * To implement in subclasses.
      * @param {boolean} isForCopying
+     * @param {Object} [context]
      */
-    serialize(_isForCopying?: boolean): void;
+    serialize(_isForCopying?: boolean, _context?: null): void;
     /**
      * Remove this editor.
      * It's used on ctrl+backspace action.
@@ -231,10 +254,9 @@ export class AnnotationEditor {
      */
     enableEditing(): void;
     /**
-     * Get some properties to update in the UI.
-     * @returns {Object}
+     * The editor is about to be edited.
      */
-    get propertiesToUpdate(): Object;
+    enterInEditMode(): void;
     /**
      * Get the div which really contains the displayed content.
      */
@@ -249,6 +271,12 @@ export class AnnotationEditor {
      * @type {boolean}
      */
     get isEditing(): boolean;
+    /**
+     * Set the aspect ratio to use when resizing.
+     * @param {number} width
+     * @param {number} height
+     */
+    setAspectRatio(width: number, height: number): void;
     #private;
 }
 import { ColorManager } from "./tools.js";

@@ -19,6 +19,7 @@ const requiredIds = [
   'download',
   'editorFreeText',
   'editorInk',
+  'editorStamp',
   'editorModeButtons',
   'editorNone',
   'errorClose',

@@ -166,6 +166,7 @@ export class FormatError extends FormatError_base {
     constructor(msg: any);
 }
 export function getModificationDate(date?: Date): string;
+export function getUuid(): string;
 export function getVerbosityLevel(): number;
 export const IDENTITY_MATRIX: number[];
 export namespace ImageKind {
