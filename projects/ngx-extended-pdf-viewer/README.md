@@ -27,6 +27,16 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 <img src="https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/example.png?raw=true">
 
+## More breaking changes ahead! What's new in Version 18?
+
+Version 18 updates the find API, updates to pdf.js 3.8 in the stable branch and to pdf.js 3.9 in the bleeding-edge branch. The bleeding-edge branch, in turn, gives you a sneak preview to the new "stamp" editor which allows you to add images to PDF files.
+
+The updated find API also brings a couple of breaking changes. I removed the fuzzy search, the multiple words-seacrch, and the current page / page range search. "Ignore accent" now is "match diacritics". When you migrate your code, you'll have to invert your boolean logic, because "ignore accents" is the oppositve of "match diacritics". Along the way, I noticed that the find API didn't work as expected. I fixed several bugs and added more fields to the events. If you rely on the old events, brace yourself for (minor) breaking changes.
+
+The reason for the breaking changes is that maintaining the library became more time-consuming with each version of pdf.js. So I had to reduce the differences between the libraries. In other words, I pruned ngx-extended-pdf-viewer. I'm positive I've finished pruning, so in future, there will be less breaking changes. Please apologize for the inconvenience!
+
+If you need the old extended findbar, please stick to version 17. I've split off a separate branch, so I can maintain version 17 in parallel for a short while.
+
 ## Breaking changes ahead! What's new in Version 17?
 
 Version 17 ships with a revamped form support. Along the way, I've polished some rough edges, which is a breaking change if you rely on the old (and incorrect) behavior. In particular, checkboxes now send the value defined by the author of the PDF file. For instance, if the author defined the checkbox to have the values "Y" and "N", now `(formData)` emits these values. Until version 16, it emitted a boolean value. Another improvement (or breaking change, depending on your application) is that `[formData]` now is used to initialize the fields of the PDF file. Earlier versions forced you to use a delayed initialization with a timeout. Version 17 allows you to drop this cumbersome workaround.
@@ -43,7 +53,7 @@ Other features I've dropped are `[formTheme]` and `[wheelAction]`. Both of them 
 
 If you need one of these features - well, this is an open-source library. Contributors are welcome. It's just that I have to prune the library as long as I'm the only contributor.
 
-The base library is now pdf.js 3.5 in the stable branch and pdf.js 3.7 in the "bleeding edge" branch.
+The base library now is pdf.js 3.5 in the stable branch and pdf.js 3.7 in the "bleeding edge" branch.
 
 ## Full changelog
 
@@ -64,7 +74,9 @@ Would you like to participate in a popular open source project? It's easy: just 
 ## Features
 
 - programmatic API for many features, such as searching
+- Editor: add text, images, or free-style drawings to your PDF file. (The image feature requires pdf.js 3.9 or higher).
 - Printing
+- Drag and drop
 - Support for forms, including two-way binding
 - XFA forms are also supported (with a few limitations)
 - (Limited) support for signatures (lacking verification of the signature, so use on your own risk!)
@@ -84,9 +96,9 @@ Would you like to participate in a popular open source project? It's easy: just 
 - Direct access to the core API of pdf.js (including TypeScript definition files)
 - The ability to deactivate (i.e. hide) every button, menu item, and the context menu
 - Color theming
-- And customizing the toolbars, the side bar, and the menus according to your needs.
+- And you can customize the toolbars, the side bar, and the menus according to your needs.
 
-Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 3.5, released in April 2023. If you're the daring one, you can also use the developer version 3.7. It's bleeding edge, so use it at own risk. Basically, the bleeding edge version helps me because I can add Mozilla's latest improvements in frequent, small increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but most of the time, the quality is production-ready.
+Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 3.8, released in July 2023. If you're the daring one, you can also use the developer version 3.9. It's bleeding edge, so use it at own risk. Basically, the bleeding edge version helps me because I can add Mozilla's latest improvements in frequent, small increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but most of the time, the quality is production-ready.
 
 ## Alternatives
 
