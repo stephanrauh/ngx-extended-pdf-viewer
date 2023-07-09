@@ -100,8 +100,8 @@ export class FindComponent {
     ).length;
     this.totalNumberOfMatchingCharacters = this.matchesLength
       .filter((page) => page.length > 0)
-      .flatMap((page) => page as number[])
-      .reduce((a, b) => a + b, 0);
+      .reduce((a, b) => a.concat(b), []) // .flatMap((page) => page as number[])
+      .reduce((a: number, b: number) => a + b, 0);
   }
 
   public onCheckboxClicked() {
