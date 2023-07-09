@@ -32,6 +32,7 @@ export class FindComponent {
   public direction: 'forward' | 'backward' | undefined;
   public pagesWithMatch: number = 0;
   public totalNumberOfMatchingCharacters: number = 0;
+  public findbarVisible: boolean = false;
 
   public get findStateText(): string {
     switch (this.findState) {

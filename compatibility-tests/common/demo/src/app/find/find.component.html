@@ -1,6 +1,15 @@
 <section class="section">
   <input
-    matInput
+    id="findbarVisible"
+    type="checkbox"
+    [(ngModel)]="findbarVisible"
+    (change)="onCheckboxClicked()"
+  />
+  <label for="findbarVisible">Is the findbar visible?</label>
+</section>
+<section class="section">
+  <input
+    id="searchtext"
     class="margin"
     [(ngModel)]="searchtext"
     placeholder="search term"
@@ -14,6 +23,7 @@
 </section>
 <section class="section">
   <input
+    id="highlightAll"
     type="checkbox"
     [(ngModel)]="highlightAll"
     (change)="onCheckboxClicked()"
@@ -49,8 +59,8 @@
   <small style="margin-left: 24px">(try "licao" to find "lição")</small>
 </section>
 <section class="section" style="margin-top: 5px; margin-bottom: 10px">
-  <button (click)="findNext()">next</button>
-  <button (click)="findPrevious()" style="margin-left: 10px">previous</button>
+  <button id="gotoNextPage" (click)="findNext()">next</button>
+  <button id="gotoPreviousPage" (click)="findPrevious()" style="margin-left: 10px">previous</button>
 </section>
 
 <section>
@@ -81,5 +91,6 @@
   [showHandToolButton]="true"
   [page]="9"
   [minifiedJSLibraries]="false"
+  [(findbarVisible)]="findbarVisible"
 >
 </ngx-extended-pdf-viewer>
