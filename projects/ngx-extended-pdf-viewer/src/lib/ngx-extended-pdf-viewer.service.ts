@@ -51,20 +51,20 @@ export class NgxExtendedPdfViewerService {
     } else {
       const highlightAllCheckbox = document.getElementById('findHighlightAll') as HTMLInputElement;
       if (highlightAllCheckbox) {
-        highlightAllCheckbox.checked = options.highlightAll || false;
+        highlightAllCheckbox.checked = options.highlightAll ?? false;
       }
 
       const matchCaseCheckbox = document.getElementById('findMatchCase') as HTMLInputElement;
       if (matchCaseCheckbox) {
-        matchCaseCheckbox.checked = options.matchCase || false;
+        matchCaseCheckbox.checked = options.matchCase ?? false;
       }
       const entireWordCheckbox = document.getElementById('findEntireWord') as HTMLInputElement;
       if (entireWordCheckbox) {
-        entireWordCheckbox.checked = options.wholeWords || false;
+        entireWordCheckbox.checked = options.wholeWords ?? false;
       }
       const matchDiacriticsCheckbox = document.getElementById('findMatchDiacritics') as HTMLInputElement;
       if (matchDiacriticsCheckbox) {
-        matchDiacriticsCheckbox.checked = options.matchDiacritics || false;
+        matchDiacriticsCheckbox.checked = options.matchDiacritics ?? false;
       }
       const inputField = document.getElementById('findInput') as HTMLInputElement;
       if (inputField) {
@@ -136,7 +136,7 @@ export class NgxExtendedPdfViewerService {
 
   public setPrintRange(printRange: PDFPrintRange) {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    window['isInPDFPrintRange'] = (page: number) => this.isInPDFPrintRange(page, printRange as PDFPrintRange);
+    window['isInPDFPrintRange'] = (page: number) => this.isInPDFPrintRange(page, printRange);
     window['filteredPageCount'] = this.filteredPageCount(PDFViewerApplication.pagesCount, printRange);
   }
 
@@ -163,8 +163,7 @@ export class NgxExtendedPdfViewerService {
       }
     }
     if (printRange.excluded) {
-      const e = printRange.excluded as Array<number>;
-      if (e.some((p) => p === page)) {
+      if (printRange.excluded.some((p) => p === page)) {
         return false;
       }
     }
@@ -216,7 +215,14 @@ export class NgxExtendedPdfViewerService {
 
       let addIt = i === snippets.length - 1 || currentSnippet.hasEOL;
       if (addIt) {
-        const direction = countLTR > 0 ? (countRTL > 0 ? 'both' : 'ltr') : countRTL > 0 ? 'rtl' : undefined;
+        let direction: 'ltr' | 'rtl' | 'both' | undefined = undefined;
+        if (countLTR > 0 && countRTL > 0) {
+          direction = 'both';
+        } else if (countLTR > 0) {
+          direction = 'ltr';
+        } else if (countRTL > 0) {
+          direction = 'rtl';
+        }
         const line = {
           direction,
           x: minX,

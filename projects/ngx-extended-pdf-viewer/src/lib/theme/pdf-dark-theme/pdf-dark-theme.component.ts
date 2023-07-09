@@ -25,8 +25,6 @@ export class PdfDarkThemeComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy() {
     const styles = this.document.getElementById('pdf-theme-css') as HTMLElement;
-    if (styles && styles.parentElement) {
-      (styles.parentElement as any).removeChild(styles);
-    }
+    styles?.parentElement?.removeChild(styles);
   }
 }

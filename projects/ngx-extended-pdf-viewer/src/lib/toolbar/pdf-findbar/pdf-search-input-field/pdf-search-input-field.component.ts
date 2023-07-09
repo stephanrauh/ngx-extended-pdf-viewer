@@ -5,6 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './pdf-search-input-field.component.html',
   styleUrls: ['./pdf-search-input-field.component.css'],
 })
-export class PdfSearchInputFieldComponent {
-  constructor() {}
-}
+export class PdfSearchInputFieldComponent {}

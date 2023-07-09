@@ -221,7 +221,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnDestroy() {
     const styles = this.document.getElementById('pdf-dynamic-css') as HTMLElement;
-    if (styles && styles.parentElement) {
+    if (styles?.parentElement) {
       (styles.parentElement as any).removeChild(styles);
     }
   }

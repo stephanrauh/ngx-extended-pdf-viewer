@@ -5,7 +5,7 @@ const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSet
 export const pdfjsVersion = '3.8.573';
 export const pdfjsBleedingEdgeVersion = '3.9.452';
 export function getVersionSuffix(folder: string): string {
-  if (folder && folder.includes('bleeding-edge')) {
+  if (folder?.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
   }
   return pdfjsVersion;

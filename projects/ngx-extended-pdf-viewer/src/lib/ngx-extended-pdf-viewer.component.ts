@@ -91,6 +91,8 @@ function isIOS() {
   );
 }
 
+export type SpreadType = 'off' | 'even' | 'odd';
+
 @Component({
   selector: 'ngx-extended-pdf-viewer',
   templateUrl: './ngx-extended-pdf-viewer.component.html',
@@ -389,7 +391,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if (url.length > 980) {
         // minimal length of a base64 encoded PDF
         if (url.length % 4 === 0) {
-          if (/^[a-zA-Z\d\/+]+={0,2}$/.test(url)) {
+          if (/^[a-zA-Z\d/+]+={0,2}$/.test(url)) {
             console.error('The URL looks like a base64 encoded string. If so, please use the attribute [base64Src] instead of [src]');
           }
         }
@@ -703,7 +705,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public showBorders = true;
 
   @Input()
-  public spread: 'off' | 'even' | 'odd';
+  public spread: SpreadType;
 
   @Output()
   public spreadChange = new EventEmitter<'off' | 'even' | 'odd'>();
@@ -1092,7 +1094,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       document.body.appendChild(r);
       const elements = this.collectElementPositions(r, this.root.nativeElement, []);
       document.body.removeChild(r);
-      const sorted = elements.sort((a, b) => {
+      const topRightGreaterThanBottomLeftComparator = (a, b) => {
         if (a.y - b.y > 15) {
           return 1;
         }
@@ -1100,7 +1102,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           return -1;
         }
         return a.x - b.x;
-      });
+      };
+      const sorted = [...elements].sort(topRightGreaterThanBottomLeftComparator);
       for (let i = 0; i < sorted.length; i++) {
         sorted[i].element.tabIndex = this.startTabindex + i;
       }
@@ -1564,7 +1567,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.ngZone.run(() => this.propertiesDialogVisibleChange.emit(true));
       });
 
-      PDFViewerApplication.eventBus.on('pagesloaded', async (x: PagesLoadedEvent) => {
+      PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
         this.ngZone.run(() => this.pagesLoaded.emit(x));
         this.removeScrollbarInInfiniteScrollMode(false);
         if (this.rotation !== undefined && this.rotation !== null) {
@@ -1585,7 +1588,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             }
           }
         });
-        await this.setZoom();
+        this.setZoom();
       });
       PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
         this.ngZone.run(() => {
@@ -1805,7 +1808,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
           await PDFViewerApplication.open(options);
           this.pdfLoadingStarts.emit({});
-          // await this.setZoom();
           setTimeout(async () => this.setZoom());
         });
       }
@@ -1865,7 +1867,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       password: this.password,
       verbosity: this.logLevel,
     };
-    if (this._src && this._src['range']) {
+    if (this._src?.['range']) {
       options.range = this._src['range'];
     }
     if (this.httpHeaders) {
@@ -2209,7 +2211,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
 
     if ('showUnverifiedSignatures' in changes) {
-      if (PDFViewerApplication && PDFViewerApplication.pdfDocument) {
+      if (PDFViewerApplication?.pdfDocument) {
         PDFViewerApplication.pdfDocument._transport.messageHandler.send('showUnverifiedSignatures', this.showUnverifiedSignatures);
       }
     }
@@ -2317,7 +2319,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
 
       if (PDFViewerApplication.pdfViewer) {
-        PDFViewerApplication.pdfViewer.currentScaleValue = zoomAsNumber || 'auto';
+        PDFViewerApplication.pdfViewer.currentScaleValue = zoomAsNumber ?? 'auto';
       }
     }
   }

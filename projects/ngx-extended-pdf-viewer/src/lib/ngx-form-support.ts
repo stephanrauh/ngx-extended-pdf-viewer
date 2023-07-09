@@ -1,11 +1,13 @@
 import { EventEmitter, NgZone } from '@angular/core';
 import { FormDataType, IPDFViewerApplication } from '../public_api';
 
+export type HtmlFormElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+
 export class NgxFormSupport {
   /** Maps the internal ids of the annotations of pdf.js to their field name */
   private formIdToFullFieldName: { [key: string]: string } = {};
 
-  private formIdToField: { [key: string]: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement } = {};
+  private formIdToField: { [key: string]: HtmlFormElement } = {};
 
   private radioButtons: { [key: string]: Array<HTMLInputElement> } = {};
 
@@ -25,22 +27,13 @@ export class NgxFormSupport {
     (globalThis as any).getFormValueFromAngular = (key: string) => this.getFormValueFromAngular(key);
     (globalThis as any).updateAngularFormValue = (key: string | HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, value: { value: string }) =>
       this.updateAngularFormValueCalledByPdfjs(key, value);
-    (globalThis as any).registerAcroformField = (
-      id: string,
-      element: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
-      value: string | Array<string>,
-      radioButtonValueName?: string
-    ) => this.registerAcroformField(id, element, value, radioButtonValueName);
-    (globalThis as any).registerXFAField = (element: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, value: { value: string }) =>
-      this.registerXFAField(element, value);
+    (globalThis as any).registerAcroformField = (id: string, element: HtmlFormElement, value: string | Array<string>, radioButtonValueName?: string) =>
+      this.registerAcroformField(id, element, value, radioButtonValueName);
+
+    (globalThis as any).registerXFAField = (element: HtmlFormElement, value: { value: string }) => this.registerXFAField(element, value);
   }
 
-  private registerAcroformField(
-    id: string,
-    element: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
-    value: null | string | Array<string>,
-    radioButtonValueName?: string
-  ): void {
+  private registerAcroformField(id: string, element: HtmlFormElement, value: null | string | Array<string>, radioButtonValueName?: string): void {
     const fieldName = element.name;
     this.formIdToField[id] = element;
     this.formIdToFullFieldName[id] = fieldName;
@@ -65,7 +58,7 @@ export class NgxFormSupport {
   private registerXFAField(element: HTMLElement, value: { value: string }): void {
     const fullFieldName = this.findFullXFAName(element);
     if (element instanceof HTMLInputElement && element.type === 'radio') {
-      const id = element.getAttribute('fieldid') || '';
+      const id = element.getAttribute('fieldid') ?? '';
       // remove the xfa name of the radio button itself form the field name,
       // because the field name refers to the entire group of relatated radio buttons
       const groupName = fullFieldName.substring(0, fullFieldName.lastIndexOf('.'));
@@ -76,17 +69,17 @@ export class NgxFormSupport {
       }
       this.radioButtons[groupName].push(element);
     } else if (element instanceof HTMLInputElement) {
-      const id = element.getAttribute('fieldid') || '';
+      const id = element.getAttribute('fieldid') ?? '';
       this.formIdToField[id] = element;
       this.formIdToFullFieldName[id] = fullFieldName;
       this.formData[fullFieldName] = value.value;
     } else if (element instanceof HTMLSelectElement) {
-      const id = element.getAttribute('fieldid') || '';
+      const id = element.getAttribute('fieldid') ?? '';
       this.formIdToField[id] = element;
       this.formIdToFullFieldName[id] = fullFieldName;
       this.formData[fullFieldName] = value.value;
     } else if (element instanceof HTMLTextAreaElement) {
-      const id = element.getAttribute('fieldid') || '';
+      const id = element.getAttribute('fieldid') ?? '';
       this.formIdToField[id] = element;
       this.formIdToFullFieldName[id] = fullFieldName;
       this.formData[fullFieldName] = value.value;
@@ -194,7 +187,7 @@ export class NgxFormSupport {
     }
   }
 
-  private doUpdateAngularFormValue(field: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, value: { value: string }, fullKey: string) {
+  private doUpdateAngularFormValue(field: HtmlFormElement, value: { value: string }, fullKey: string) {
     let change = false;
     if (field instanceof HTMLInputElement && field.type === 'checkbox') {
       const exportValue = field.getAttribute('exportvalue');

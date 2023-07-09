@@ -18,17 +18,17 @@ export type PageViewportParameters = {
    * - The horizontal, i.e. x-axis, offset. The
    * default value is `0`.
    */
-  offsetX?: number | undefined;
+  offsetX: number | undefined;
   /**
    * - The vertical, i.e. y-axis, offset. The
    * default value is `0`.
    */
-  offsetY?: number | undefined;
+  offsetY: number | undefined;
   /**
    * - If true, the y-axis will not be flipped.
    * The default value is `false`.
    */
-  dontFlip?: boolean | undefined;
+  dontFlip: boolean | undefined;
 };
 
 export interface TextLayerRenderedEvent {
