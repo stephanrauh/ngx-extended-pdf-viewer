@@ -229,7 +229,7 @@ export class NgxFormSupport {
   public updateFormFieldsInPdfCalledByNgOnChanges(previousFormData: Object) {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
 
-    if (!PDFViewerApplication || !PDFViewerApplication.pdfDocument || !PDFViewerApplication.pdfDocument.annotationStorage) {
+    if (!PDFViewerApplication?.pdfDocument?.annotationStorage) {
       // ngOnChanges calls this method too early - so just ignore it
       return;
     }

@@ -54,7 +54,7 @@ export class PdfDocumentPropertiesExtractor {
     if (md['contentDispositionFilename']) {
       result.fileName = md['contentDispositionFilename'];
     }
-    result.maybeFileSize = await (await pdfDocument.getDownloadInfo()).length;
+    result.maybeFileSize = (await pdfDocument.getDownloadInfo()).length;
     return result;
   }
 

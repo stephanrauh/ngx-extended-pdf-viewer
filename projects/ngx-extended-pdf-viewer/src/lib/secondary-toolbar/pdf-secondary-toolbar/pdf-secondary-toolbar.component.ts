@@ -187,7 +187,7 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
     }
     let count = 0;
     const children = e.children;
-    if (children && children.length) {
+    if (children?.length) {
       for (let i = 0; i < children.length && count === 0; i++) {
         const child = children.item(i);
         if (child && child instanceof HTMLElement) {

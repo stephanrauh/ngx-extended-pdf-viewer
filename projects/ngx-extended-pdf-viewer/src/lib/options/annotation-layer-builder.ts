@@ -25,9 +25,6 @@ export interface AnnotationLayerBuilder {
   annotationStorage: AnnotationStorage;
   imageResourcesPath: string;
   renderForms: boolean;
-  // linkService: IPDFLinkService;
-  // downloadManager: IDownloadManager;
   enableScripting: boolean;
   annotationCanvasMap: Map<string, HTMLCanvasElement>;
-  // accessibilityManager: TextAccessibilityManager;
 }

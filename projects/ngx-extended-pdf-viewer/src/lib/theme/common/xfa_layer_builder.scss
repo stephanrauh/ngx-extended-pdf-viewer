@@ -27,10 +27,6 @@
   }
 }
 
-.xfaLayer {
-  background-color: transparent;
-}
-
 .xfaLayer .highlight {
   margin: -1px;
   padding: 1px;
@@ -72,6 +68,7 @@
 }
 
 .xfaLayer {
+  background-color: transparent;
   position: absolute;
   text-align: initial;
   top: 0;

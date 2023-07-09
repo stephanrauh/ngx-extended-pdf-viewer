@@ -30,8 +30,6 @@ export class PdfAcroformDefaultThemeComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy() {
     const styles = this.document.getElementById('pdf-acroform-css') as HTMLElement;
-    if (styles && styles.parentElement) {
-      (styles.parentElement as any).removeChild(styles);
-    }
+    styles?.parentElement?.removeChild(styles);
   }
 }
