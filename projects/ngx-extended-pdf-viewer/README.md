@@ -37,6 +37,14 @@ The reason for the breaking changes is that maintaining the library became more 
 
 If you need the old extended findbar, please stick to version 17. I've split off a separate branch, so I can maintain version 17 in parallel for a short while.
 
+A small breaking change affects single-page mode. I've removed a CSS rule that pushed the page to the left. If you don't like the page to be centered, you can add the CSS rules in your global `style.css`:
+
+```CSS
+.pdfViewer.singlePageView .page {
+  margin: 0;
+}
+```
+
 ## Breaking changes ahead! What's new in Version 17?
 
 Version 17 ships with a revamped form support. Along the way, I've polished some rough edges, which is a breaking change if you rely on the old (and incorrect) behavior. In particular, checkboxes now send the value defined by the author of the PDF file. For instance, if the author defined the checkbox to have the values "Y" and "N", now `(formData)` emits these values. Until version 16, it emitted a boolean value. Another improvement (or breaking change, depending on your application) is that `[formData]` now is used to initialize the fields of the PDF file. Earlier versions forced you to use a delayed initialization with a timeout. Version 17 allows you to drop this cumbersome workaround.
