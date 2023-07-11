@@ -9112,7 +9112,7 @@ class PDFViewer {
   #onVisibilityChange = null;
   #scaleTimeoutId = null;
   constructor(options) {
-    const viewerVersion = '3.5.548';
+    const viewerVersion = '3.5.549';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -10146,12 +10146,14 @@ class PDFViewer {
         break;
       }
     }
-    this._setCurrentPageNumber(stillFullyVisible ? currentId : visiblePages[0].id);
-    this._updateLocation(visible.first);
-    this.eventBus.dispatch("updateviewarea", {
-      source: this,
-      location: this._location
-    });
+    if (this.scrollMode !== _ui_utils.ScrollMode.PAGE) {
+      this._setCurrentPageNumber(stillFullyVisible ? currentId : visiblePages[0].id);
+      this._updateLocation(visible.first);
+      this.eventBus.dispatch("updateviewarea", {
+        source: this,
+        location: this._location
+      });
+    }
     this.hidePagesDependingOnpageViewMode();
   }
   containsElement(element) {
@@ -18147,8 +18149,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(5);
 var _pdf_link_service = __webpack_require__(7);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.5.548';
-const pdfjsBuild = 'f6afeff58';
+const pdfjsVersion = '3.5.549';
+const pdfjsBuild = '1a4ce7108';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,

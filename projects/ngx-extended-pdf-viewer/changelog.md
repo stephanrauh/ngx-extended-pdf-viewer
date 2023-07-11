@@ -472,4 +472,5 @@
 - 17.4.1 #1673 fix `[mobileFriendlyZoom]` on iPads (the find menu was displayed at the wrong position); #1478 allow using absolute URLs for `pdfDefaultOptions.assetsFolder`
 - 17.4.2 #1802 fix unintended scrolling when starting to draw on a mobile device using the ink editor tool; #1665 re-initialize book mode when `[src]` changes
 - 17.4.3 #1665 re-initialize book mode when the user opens a new PDF document via the "file open" menu or drag-and-drop; #1159 deactivate zooming and presentation mode in book mode
-- 17.4.4 #1805 emit every event within ngZone; #1807 reactivated the presentation mode menu item of the secondary menu (stable branch only)
+- 17.4.4 #1805 emit every event within ngZone; #1807 reactivated the presentation mode menu item of the secondary menu (stable branch pdf.js 3.5 only)
+- 17.4.5 #1808 cease setting the page acording to the visible page in single-page mode (because this is only useful to track the scroll position and because it caused an infinite loop in presentation mode) (stable branch pdf.js 3.5 only)
