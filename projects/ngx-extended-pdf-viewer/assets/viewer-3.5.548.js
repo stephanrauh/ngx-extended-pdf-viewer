@@ -483,7 +483,7 @@ const PDFViewerApplication = {
     if (appConfig.secondaryToolbar) {
       this.secondaryToolbar = new _webSecondary_toolbar.SecondaryToolbar(appConfig.secondaryToolbar, eventBus, this.externalServices);
     }
-    if (this.supportsFullscreen && appConfig.secondaryToolbar?.presentationModeButton) {
+    if (this.supportsFullscreen && (appConfig.toolbar?.presentationModeButton || appConfig.secondaryToolbar?.presentationModeButton)) {
       this.pdfPresentationMode = new _webPdf_presentation_mode.PDFPresentationMode({
         container,
         pdfViewer: this.pdfViewer,
@@ -9112,7 +9112,7 @@ class PDFViewer {
   #onVisibilityChange = null;
   #scaleTimeoutId = null;
   constructor(options) {
-    const viewerVersion = '3.5.547';
+    const viewerVersion = '3.5.548';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -16312,6 +16312,9 @@ class Toolbar {
       element: options.print,
       eventName: "print"
     }, {
+      element: options.presentationModeButton,
+      eventName: "presentationmode"
+    }, {
       element: options.download,
       eventName: "download"
     }, {
@@ -18144,8 +18147,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(5);
 var _pdf_link_service = __webpack_require__(7);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.5.547';
-const pdfjsBuild = '86ba271f3';
+const pdfjsVersion = '3.5.548';
+const pdfjsBuild = 'f6afeff58';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
@@ -18197,12 +18200,13 @@ function getViewerConfiguration() {
       editorFreeTextParamsToolbar: document.getElementById("editorFreeTextParamsToolbar"),
       editorInkButton: document.getElementById("editorInk"),
       editorInkParamsToolbar: document.getElementById("editorInkParamsToolbar"),
+      presentationModeButton: document.getElementById("presentationMode"),
       download: document.getElementById("download")
     },
     secondaryToolbar: {
       toolbar: document.getElementById("secondaryToolbar"),
       toggleButton: document.getElementById("secondaryToolbarToggle"),
-      presentationModeButton: document.getElementById("presentationMode"),
+      presentationModeButton: document.getElementById("secondaryPresentationMode"),
       openFileButton: document.getElementById("secondaryOpenFile"),
       printButton: document.getElementById("secondaryPrint"),
       downloadButton: document.getElementById("secondaryDownload"),
