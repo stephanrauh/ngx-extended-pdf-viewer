@@ -1,6 +1,6 @@
 <div id="sidebarContent" [style.top]="top">
   <div #thumbnailViewTemplate>
-    <ng-content *ngTemplateOutlet="defaultThumbnail"></ng-content>
+    <ng-content *ngTemplateOutlet="customThumbnail ? customThumbnail : defaultThumbnail"></ng-content>
   </div>
 
   <div id="thumbnailView" (keydown)="onKeyDown($event)"></div>

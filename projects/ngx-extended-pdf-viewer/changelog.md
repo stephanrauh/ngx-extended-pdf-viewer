@@ -475,3 +475,4 @@
 - 18.0.0-alpha.0 #1735, #1181 replace my fork of the find controller by Mozilla's find controller and implement Mozilla's "match diacritics" option; update to pdf.js 3.8; #1805 emit every event within ngZone; added the HTML code of the new "image stamp" feature of pdf.js 3.9
 - 18.0.0-alpha.1 #1807 reactivated the presentation mode menu item of the secondary menu
 - 18.0.0-alpha.2 removed the CSS rule `.pdfViewer.singlePageView .page { margin: 0; }`; #1808 cease setting the page acording to the visible page in single-page mode (because this is only useful to track the scroll position and because it caused an infinite loop in presentation mode)
+- 18.0.0-alpha.3 #1809 The thumbnail view was broken in version 18.0.0-alpha.1 and -alpha.2. Now it's back.

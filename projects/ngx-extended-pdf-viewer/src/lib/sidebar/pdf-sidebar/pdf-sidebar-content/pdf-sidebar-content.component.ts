@@ -34,10 +34,7 @@ export class PdfSidebarContentComponent implements OnDestroy, OnInit {
   public mobileFriendlyZoomScale = 1.0;
 
   @ViewChild('thumbnailViewTemplate')
-  public thumbnailViewTemplate35: ElementRef;
-
-  @ViewChild('thumbnailViewTemplate37')
-  public thumbnailViewTemplate37: ElementRef;
+  public thumbnailViewTemplate: ElementRef;
 
   public pdfJsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
 
@@ -48,13 +45,6 @@ export class PdfSidebarContentComponent implements OnDestroy, OnInit {
 
   public ngOnInit(): void {
     this.pdfJsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
-  }
-
-  public get thumbnailViewTemplate(): ElementRef {
-    if (this.pdfJsVersion < '3.7') {
-      return this.thumbnailViewTemplate35;
-    }
-    return this.thumbnailViewTemplate37;
   }
 
   public get top(): string {
