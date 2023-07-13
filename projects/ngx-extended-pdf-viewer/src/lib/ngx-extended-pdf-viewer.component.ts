@@ -1067,7 +1067,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           document.getElementsByTagName('head')[0].appendChild(script);
         });
       }
-      if (!(window as any).webViewerLoad) {
+      if (!(globalThis as any).webViewerLoad) {
         this.loadViewer();
       }
     });
@@ -1077,7 +1077,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (typeof window !== 'undefined') {
       if (!this.shuttingDown) {
         // hurried users sometimes reload the PDF before it has finished initializing
-        if ((window as any).webViewerLoad) {
+        if ((globalThis as any).webViewerLoad) {
           this.ngZone.runOutsideAngular(() => this.doInitPDFViewer());
         } else {
           setTimeout(() => this.ngAfterViewInit(), 50);
@@ -1169,6 +1169,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.initTimeout = setTimeout(() => {
         if (!this.shuttingDown) {
           // hurried users sometimes reload the PDF before it has finished initializing
+          const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+          PDFViewerApplication.updateAndActicateToolbarButtons();
           this.calcViewerPositionTop();
           this.afterLibraryInit();
           this.openPDF();
@@ -1209,7 +1211,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.onResize();
         this.hideToolbarIfItIsEmpty();
         this.dummyComponents.addMissingStandardWidgets();
-        this.ngZone.runOutsideAngular(() => (<any>window).webViewerLoad());
+        this.ngZone.runOutsideAngular(() => globalThis.webViewerLoad());
 
         const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
         PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix

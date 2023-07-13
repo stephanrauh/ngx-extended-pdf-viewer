@@ -12,4 +12,13 @@ export class PdfFindButtonComponent {
 
   @Input()
   public textLayer: boolean | undefined = undefined;
+
+  public onClick(): void {
+    const PDFViewerApplication = (window as any).PDFViewerApplication;
+    if (PDFViewerApplication.findBar.opened) {
+      PDFViewerApplication.findBar.close();
+    } else {
+      PDFViewerApplication.findBar.open();
+    }
+  }
 }

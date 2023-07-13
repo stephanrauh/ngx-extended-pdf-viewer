@@ -1,20 +1,17 @@
-import { PDFNotificationService } from './../../../pdf-notification-service';
-import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IPDFViewerApplication } from '../../../options/pdf-viewer-application';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { UpdateUIStateEvent } from '../../../events/update-ui-state-event';
+import { IPDFViewerApplication } from '../../../options/pdf-viewer-application';
+import { PDFNotificationService } from './../../../pdf-notification-service';
 
 @Component({
   selector: 'pdf-last-page',
   templateUrl: './pdf-last-page.component.html',
-  styleUrls: ['./pdf-last-page.component.css']
+  styleUrls: ['./pdf-last-page.component.css'],
 })
 export class PdfLastPageComponent {
   public disableLastPage = true;
 
-  @ViewChild('button')
-  private button: ElementRef<HTMLButtonElement>;
-
-  constructor(private notificationService: PDFNotificationService) {
+  constructor(private notificationService: PDFNotificationService, private changeDetectorRef: ChangeDetectorRef) {
     const subscription = this.notificationService.onPDFJSInit.subscribe(() => {
       this.onPdfJsInit();
       subscription.unsubscribe();
@@ -28,12 +25,12 @@ export class PdfLastPageComponent {
 
   public onPdfJsInit(): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.on('updateuistate', event => this.updateUIState(event));
+    PDFViewerApplication.eventBus.on('updateuistate', (event) => this.updateUIState(event));
   }
 
   public updateUIState(event: UpdateUIStateEvent): void {
     this.disableLastPage = event.pageNumber === event.pagesCount;
-    this.button.nativeElement.disabled = this.disableLastPage;
+    this.changeDetectorRef.markForCheck();
   }
 
   public lastPage(): void {

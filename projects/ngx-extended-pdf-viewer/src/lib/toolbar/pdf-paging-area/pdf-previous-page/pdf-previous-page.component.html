@@ -1,12 +1,12 @@
-
-<button type="button"
-  class="toolbarButton"
+<pdf-shy-button
   title="Previous Page"
   id="previous"
-  data-l10n-id="previous"
-  >
-  <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-    <path fill="currentColor" d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" />
-  </svg>
-  <span data-l10n-id="previous_label">Previous</span>
-</button>
+  secondaryToolbarId="previousPage"
+  l10nId="previous"
+  l10nLabel="previous_label"
+  [disabled]="disablePreviousPage"
+  [order]="600"
+  eventBusName="previouspage"
+  image="<svg style='width: 24px; height: 24px' viewBox='0 0 24 24'><path fill='currentColor' d='M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z' /></svg>"
+>
+</pdf-shy-button>

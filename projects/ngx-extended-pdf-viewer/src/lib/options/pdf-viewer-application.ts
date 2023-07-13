@@ -1050,6 +1050,7 @@ export interface PDFDocumentProxy {
 }
 
 export interface IPDFViewerApplication {
+  updateAndActicateToolbarButtons(): void;
   pdfThumbnailViewer: any;
   pdfDocumentProperties: any;
   appConfig: IPDFViewerAppConfig;

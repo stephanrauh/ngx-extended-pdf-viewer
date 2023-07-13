@@ -25,6 +25,15 @@
     </div>
     <pdf-zoom-toolbar [showZoomButtons]="showZoomButtons" [zoomLevels]="zoomLevels"></pdf-zoom-toolbar>
     <div id="toolbarViewerRight">
+      <pdf-document-properties></pdf-document-properties>
+      <pdf-no-spread></pdf-no-spread>
+      <pdf-odd-spread></pdf-odd-spread>
+      <pdf-even-spread></pdf-even-spread>
+      <pdf-single-page-mode></pdf-single-page-mode>
+      <pdf-vertical-scroll-mode></pdf-vertical-scroll-mode>
+      <pdf-horizontal-scroll></pdf-horizontal-scroll>
+      <pdf-wrapped-scroll-mode></pdf-wrapped-scroll-mode>
+      <pdf-infinite-scroll></pdf-infinite-scroll>
       <pdf-hand-tool [showHandToolButton]="showHandToolButton"></pdf-hand-tool>
       <pdf-select-tool [showSelectToolButton]="showHandToolButton"></pdf-select-tool>
       <pdf-rotate-page [showRotateButton]="showRotateButton" [clockwise]="true" [counterClockwise]="false"> </pdf-rotate-page>

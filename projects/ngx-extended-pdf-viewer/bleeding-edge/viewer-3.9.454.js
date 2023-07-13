@@ -1712,6 +1712,55 @@ const PDFViewerApplication = {
   },
   get scriptingReady() {
     return this.pdfScriptingManager.ready;
+  },
+  updateAndActicateToolbarButtons() {
+    const newConfig = globalThis.PDFJS_getViewerConfiguration();
+    newConfig.defaultUrl = this.appConfig.defaultUrl;
+    this.compareObjects(newConfig.toolbar, this.appConfig.toolbar);
+    this.compareObjects(newConfig.secondaryToolbar, this.appConfig.secondaryToolbar);
+  },
+  compareObjects(obj1, obj2, path = '') {
+    if (!obj1 || !obj2) {
+      console.log(`Missing object at path: ${path}`);
+      console.log(`Value 1:`, obj1);
+      console.log(`Value 2:`, obj2);
+      return;
+    }
+    if (obj1 instanceof HTMLElement || obj2 instanceof HTMLElement) {
+      if (obj1 !== obj2) {
+        console.log(`Value mismatch at path: ${path}`);
+        console.log(`Value 1:`, obj1);
+        console.log(`Value 2:`, obj2);
+      }
+      return;
+    }
+    if (typeof obj1 !== typeof obj2) {
+      console.log(`Type mismatch at path: ${path}`);
+      console.log(`Value 1:`, obj1);
+      console.log(`Value 2:`, obj2);
+      return;
+    }
+    if (Array.isArray(obj1) && Array.isArray(obj2)) {
+      if (obj1.length !== obj2.length) {
+        console.log(`Array length mismatch at path: ${path}`);
+        console.log(`Array 1:`, obj1);
+        console.log(`Array 2:`, obj2);
+        return;
+      }
+      for (let i = 0; i < obj1.length; i++) {
+        this.compareObjects(obj1[i], obj2[i], `${path}[${i}]`);
+      }
+      return;
+    }
+    if (typeof obj1 === 'object' && typeof obj2 === 'object') {
+      const keys1 = Object.keys(obj1);
+      const keys2 = Object.keys(obj2);
+      const allKeys = new Set([...keys1, ...keys2]);
+      for (const key of allKeys) {
+        this.compareObjects(obj1[key], obj2[key], `${path}.${key}`);
+      }
+      return;
+    }
   }
 };
 exports.PDFViewerApplication = PDFViewerApplication;
@@ -17826,7 +17875,8 @@ function webViewerLoad() {
   _app.PDFViewerApplication.run(config);
 }
 document.blockUnblockOnload?.(true);
-window.webViewerLoad = webViewerLoad;
+globalThis.webViewerLoad = webViewerLoad;
+globalThis.PDFJS_getViewerConfiguration = getViewerConfiguration;
 })();
 
 /******/ })()

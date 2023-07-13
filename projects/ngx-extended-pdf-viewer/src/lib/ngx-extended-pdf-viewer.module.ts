@@ -2,7 +2,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgxExtendedPdfViewerCommonModule } from './ngx-extended-pdf-viewer-common.module';
+import { DynamicCssComponent } from './dynamic-css/dynamic-css.component';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 import { NgxConsole } from './options/ngx-console';
@@ -11,14 +11,20 @@ import { PdfDocumentPropertiesDialogComponent } from './pdf-dialog/pdf-document-
 import { PdfErrorMessageComponent } from './pdf-dialog/pdf-error-message/pdf-error-message.component';
 import { PdfPasswordDialogComponent } from './pdf-dialog/pdf-password-dialog/pdf-password-dialog.component';
 import { PdfPreparePrintingDialogComponent } from './pdf-dialog/pdf-prepare-printing-dialog/pdf-prepare-printing-dialog.component';
+import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
+import { NegativeResponsiveCSSClassPipe, ResponsiveCSSClassPipe } from './responsive-visibility';
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
 import { PdfSidebarContentComponent } from './sidebar/pdf-sidebar/pdf-sidebar-content/pdf-sidebar-content.component';
 import { PdfSidebarToolbarComponent } from './sidebar/pdf-sidebar/pdf-sidebar-toolbar/pdf-sidebar-toolbar.component';
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 import { PdfAcroformDefaultThemeComponent } from './theme/acroform-default-theme/pdf-acroform-default-theme.component';
+import { PdfDarkThemeComponent } from './theme/pdf-dark-theme/pdf-dark-theme.component';
+import { PdfLightThemeComponent } from './theme/pdf-light-theme/pdf-light-theme.component';
 import { PdfContextMenuComponent } from './toolbar/pdf-context-menu/pdf-context-menu.component';
+import { PdfDocumentPropertiesComponent } from './toolbar/pdf-document-properties/pdf-document-properties.component';
 import { PdfDownloadComponent } from './toolbar/pdf-download/pdf-download.component';
 import { PdfEditorComponent } from './toolbar/pdf-editor/pdf-editor.component';
+import { PdfEvenSpreadComponent } from './toolbar/pdf-even-spread/pdf-even-spread.component';
 import { PdfFindButtonComponent } from './toolbar/pdf-find-button/pdf-find-button.component';
 import { PdfFindInputAreaComponent } from './toolbar/pdf-findbar/pdf-find-input-area/pdf-find-input-area.component';
 import { PdfFindNextComponent } from './toolbar/pdf-findbar/pdf-find-next/pdf-find-next.component';
@@ -31,9 +37,14 @@ import { PdfFindResultsCountComponent } from './toolbar/pdf-findbar/pdf-findbar-
 import { PdfFindbarOptionsThreeContainerComponent } from './toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-findbar-options-three-container.component';
 import { PdfFindEntireWordComponent } from './toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-find-entire-word/pdf-find-entire-word.component';
 import { PdfFindbarOptionsTwoContainerComponent } from './toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-findbar-options-two-container.component';
+import { PdfMatchDiacriticsComponent } from './toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-match-diacritics/pdf-match-diacritics.component';
 import { PdfFindbarComponent } from './toolbar/pdf-findbar/pdf-findbar.component';
 import { PdfSearchInputFieldComponent } from './toolbar/pdf-findbar/pdf-search-input-field/pdf-search-input-field.component';
 import { PdfHandToolComponent } from './toolbar/pdf-hand-tool/pdf-hand-tool.component';
+import { PdfHorizontalScrollComponent } from './toolbar/pdf-horizontal-scroll/pdf-horizontal-scroll.component';
+import { PdfInfiniteScrollComponent } from './toolbar/pdf-infinite-scroll/pdf-infinite-scroll.component';
+import { PdfNoSpreadComponent } from './toolbar/pdf-no-spread/pdf-no-spread.component';
+import { PdfOddSpreadComponent } from './toolbar/pdf-odd-spread/pdf-odd-spread.component';
 import { PdfOpenFileComponent } from './toolbar/pdf-open-file/pdf-open-file.component';
 import { PdfFirstPageComponent } from './toolbar/pdf-paging-area/pdf-first-page/pdf-first-page.component';
 import { PdfLastPageComponent } from './toolbar/pdf-paging-area/pdf-last-page/pdf-last-page.component';
@@ -45,13 +56,18 @@ import { PdfPresentationModeComponent } from './toolbar/pdf-presentation-mode/pd
 import { PdfPrintComponent } from './toolbar/pdf-print/pdf-print.component';
 import { PdfRotatePageComponent } from './toolbar/pdf-rotate-page/pdf-rotate-page.component';
 import { PdfSelectToolComponent } from './toolbar/pdf-select-tool/pdf-select-tool.component';
+import { PdfShyButtonComponent } from './toolbar/pdf-shy-button/pdf-shy-button.component';
+import { PdfSinglePageModeComponent } from './toolbar/pdf-single-page-mode/pdf-single-page-mode.component';
 import { PdfToggleSecondaryToolbarComponent } from './toolbar/pdf-toggle-secondary-toolbar/pdf-toggle-secondary-toolbar.component';
 import { PdfToggleSidebarComponent } from './toolbar/pdf-toggle-sidebar/pdf-toggle-sidebar.component';
 import { PdfToolbarComponent } from './toolbar/pdf-toolbar/pdf-toolbar.component';
+import { PdfVerticalScrollModeComponent } from './toolbar/pdf-vertical-scroll-button/pdf-vertical-scroll-mode.component';
+import { PdfWrappedScrollModeComponent } from './toolbar/pdf-wrapped-scroll-mode/pdf-wrapped-scroll-mode.component';
 import { PdfZoomDropdownComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-dropdown/pdf-zoom-dropdown.component';
 import { PdfZoomInComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-in/pdf-zoom-in.component';
 import { PdfZoomOutComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-out/pdf-zoom-out.component';
 import { PdfZoomToolbarComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-toolbar.component';
+import { TranslatePipe } from './translate.pipe';
 
 if (new Date().getTime() === 0) {
   new NgxConsole().log('');
@@ -184,56 +200,135 @@ if (typeof window !== 'undefined') {
 }
 
 @NgModule({
-  imports: [NgxExtendedPdfViewerCommonModule, CommonModule, FormsModule],
-  declarations: [NgxExtendedPdfViewerComponent],
-  providers: [NgxExtendedPdfViewerService],
-  exports: [
-    PdfZoomDropdownComponent,
+  imports: [CommonModule, FormsModule],
+  declarations: [
+    DynamicCssComponent,
+    NegativeResponsiveCSSClassPipe,
+    NgxExtendedPdfViewerComponent,
+    PdfAcroformDefaultThemeComponent,
     PdfContextMenuComponent,
-    PdfPresentationModeComponent,
-    PdfOpenFileComponent,
-    PdfPrintComponent,
+    PdfDarkThemeComponent,
+    PdfDocumentPropertiesComponent,
+    PdfDocumentPropertiesDialogComponent,
     PdfDownloadComponent,
+    PdfDummyComponentsComponent,
     PdfEditorComponent,
-    PdfZoomToolbarComponent,
-    PdfPagingAreaComponent,
+    PdfErrorMessageComponent,
+    PdfEvenSpreadComponent,
     PdfFindbarComponent,
+    PdfFindbarMessageContainerComponent,
+    PdfFindbarOptionsOneContainerComponent,
+    PdfFindbarOptionsThreeContainerComponent,
+    PdfFindbarOptionsTwoContainerComponent,
+    PdfFindButtonComponent,
+    PdfFindEntireWordComponent,
+    PdfFindHighlightAllComponent,
+    PdfFindInputAreaComponent,
+    PdfFindMatchCaseComponent,
+    PdfFindNextComponent,
+    PdfFindPreviousComponent,
+    PdfFindResultsCountComponent,
+    PdfFirstPageComponent,
+    PdfHandToolComponent,
+    PdfHorizontalScrollComponent,
+    PdfInfiniteScrollComponent,
+    PdfLastPageComponent,
+    PdfLightThemeComponent,
+    PdfMatchDiacriticsComponent,
+    PdfNextPageComponent,
+    PdfNoSpreadComponent,
+    PdfOddSpreadComponent,
+    PdfOpenFileComponent,
+    PdfPageNumberComponent,
+    PdfPagingAreaComponent,
+    PdfPasswordDialogComponent,
+    PdfPreparePrintingDialogComponent,
+    PdfPresentationModeComponent,
+    PdfPreviousPageComponent,
+    PdfPrintComponent,
+    PdfRotatePageComponent,
+    PdfSearchInputFieldComponent,
+    PdfSecondaryToolbarComponent,
+    PdfSelectToolComponent,
+    PdfShyButtonComponent,
     PdfSidebarComponent,
     PdfSidebarContentComponent,
     PdfSidebarToolbarComponent,
-    PdfSecondaryToolbarComponent,
-    PdfSearchInputFieldComponent,
-    PdfFindPreviousComponent,
-    PdfFindNextComponent,
-    PdfFindInputAreaComponent,
-    PdfFindbarOptionsTwoContainerComponent,
-    PdfFindbarOptionsOneContainerComponent,
-    PdfFindMatchCaseComponent,
-    PdfFindHighlightAllComponent,
-    PdfFindEntireWordComponent,
-    PdfFindbarOptionsThreeContainerComponent,
-    PdfFindResultsCountComponent,
-    PdfFindbarMessageContainerComponent,
-    PdfHandToolComponent,
-    PdfRotatePageComponent,
-    PdfSelectToolComponent,
-    PdfToolbarComponent,
-    PdfFindButtonComponent,
-    PdfToggleSidebarComponent,
+    PdfSinglePageModeComponent,
     PdfToggleSecondaryToolbarComponent,
-    PdfLastPageComponent,
-    PdfFirstPageComponent,
-    PdfNextPageComponent,
-    PdfPreviousPageComponent,
-    PdfPageNumberComponent,
+    PdfToggleSidebarComponent,
+    PdfToolbarComponent,
+    PdfVerticalScrollModeComponent,
+    PdfWrappedScrollModeComponent,
+    PdfZoomDropdownComponent,
     PdfZoomInComponent,
     PdfZoomOutComponent,
+    PdfZoomToolbarComponent,
+    ResponsiveCSSClassPipe,
+    TranslatePipe,
+  ],
+  providers: [NgxExtendedPdfViewerService],
+  exports: [
+    NegativeResponsiveCSSClassPipe,
     NgxExtendedPdfViewerComponent,
     PdfAcroformDefaultThemeComponent,
+    PdfContextMenuComponent,
+    PdfDarkThemeComponent,
     PdfDocumentPropertiesDialogComponent,
+    PdfDownloadComponent,
+    PdfEditorComponent,
+    PdfErrorMessageComponent,
+    PdfEvenSpreadComponent,
+    PdfFindbarComponent,
+    PdfFindbarMessageContainerComponent,
+    PdfFindbarOptionsOneContainerComponent,
+    PdfFindbarOptionsThreeContainerComponent,
+    PdfFindbarOptionsTwoContainerComponent,
+    PdfFindButtonComponent,
+    PdfFindEntireWordComponent,
+    PdfFindHighlightAllComponent,
+    PdfFindInputAreaComponent,
+    PdfFindMatchCaseComponent,
+    PdfFindNextComponent,
+    PdfFindPreviousComponent,
+    PdfFindResultsCountComponent,
+    PdfFirstPageComponent,
+    PdfHandToolComponent,
+    PdfHorizontalScrollComponent,
+    PdfInfiniteScrollComponent,
+    PdfLastPageComponent,
+    PdfLightThemeComponent,
+    PdfMatchDiacriticsComponent,
+    PdfNextPageComponent,
+    PdfNoSpreadComponent,
+    PdfOddSpreadComponent,
+    PdfOpenFileComponent,
+    PdfPageNumberComponent,
+    PdfPagingAreaComponent,
     PdfPasswordDialogComponent,
     PdfPreparePrintingDialogComponent,
-    PdfErrorMessageComponent,
+    PdfPresentationModeComponent,
+    PdfPreviousPageComponent,
+    PdfPrintComponent,
+    PdfRotatePageComponent,
+    PdfSearchInputFieldComponent,
+    PdfSecondaryToolbarComponent,
+    PdfSelectToolComponent,
+    PdfShyButtonComponent,
+    PdfSidebarComponent,
+    PdfSidebarContentComponent,
+    PdfSidebarToolbarComponent,
+    PdfSinglePageModeComponent,
+    PdfToggleSecondaryToolbarComponent,
+    PdfToggleSidebarComponent,
+    PdfToolbarComponent,
+    PdfVerticalScrollModeComponent,
+    PdfWrappedScrollModeComponent,
+    PdfZoomDropdownComponent,
+    PdfZoomInComponent,
+    PdfZoomOutComponent,
+    PdfZoomToolbarComponent,
+    ResponsiveCSSClassPipe,
   ],
 })
 export class NgxExtendedPdfViewerModule {}

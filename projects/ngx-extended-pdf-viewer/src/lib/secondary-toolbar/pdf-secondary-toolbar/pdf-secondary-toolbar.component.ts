@@ -14,9 +14,11 @@ import {
   SimpleChanges,
   TemplateRef,
 } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { take } from 'rxjs/operators';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { ResponsiveVisibility } from '../../responsive-visibility';
+import { PdfShyButtonService } from '../../toolbar/pdf-shy-button/pdf-shy-button-service';
 import { PDFNotificationService } from './../../pdf-notification-service';
 
 @Component({
@@ -74,9 +76,17 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
 
   public disableNextPage = true;
 
-  private mutationObserver: MutationObserver | undefined;
+  private classMutationObserver: MutationObserver | undefined;
 
-  constructor(private element: ElementRef, public notificationService: PDFNotificationService, @Inject(PLATFORM_ID) private platformId) {
+  private primaryToolbarMutationObserver: MutationObserver | undefined;
+
+  constructor(
+    private element: ElementRef,
+    public notificationService: PDFNotificationService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    public pdfShyButtonService: PdfShyButtonService,
+    private sanitizer: DomSanitizer
+  ) {
     this.notificationService.onPDFJSInit.pipe(take(1)).subscribe(() => {
       this.onPdfJsInit();
     });
@@ -90,6 +100,14 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
     PDFViewerApplication.eventBus.on('pagerendered', () => {
       this.updateUIState();
     });
+
+    const toolbarContainer = document.querySelector('ngx-extended-pdf-viewer #toolbarContainer') as HTMLElement;
+    this.primaryToolbarMutationObserver = new MutationObserver((mutationList) => {
+      var buttons = toolbarContainer.querySelectorAll('pdf-shy-button');
+      console.log('Number of shy buttons: ' + buttons.length);
+    });
+
+    this.primaryToolbarMutationObserver.observe(toolbarContainer, { childList: true, subtree: true });
   }
 
   public updateUIState(): void {
@@ -128,7 +146,7 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
 
       const config = { attributes: true, childList: true, subtree: true };
 
-      this.mutationObserver = new MutationObserver((mutationList: MutationRecord[], observer) => {
+      this.classMutationObserver = new MutationObserver((mutationList: MutationRecord[], observer) => {
         for (const mutation of mutationList) {
           if (mutation.type === 'attributes') {
             if (mutation.attributeName === 'class') {
@@ -138,14 +156,14 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
         }
       });
 
-      this.mutationObserver.observe(targetNode, config);
+      this.classMutationObserver.observe(targetNode, config);
     }
   }
 
   public ngOnDestroy(): void {
-    if (this.mutationObserver) {
-      this.mutationObserver.disconnect();
-      this.mutationObserver = undefined;
+    if (this.classMutationObserver) {
+      this.classMutationObserver.disconnect();
+      this.classMutationObserver = undefined;
     }
   }
 
@@ -206,5 +224,20 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
   public nextPage(): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     PDFViewerApplication.eventBus.dispatch('nextpage');
+  }
+
+  public sanitizeHtml(html: string) {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
+  }
+
+  public onClick(htmlevent: Event, action: undefined | (() => void), eventBusName?: string): void {
+    if (action) {
+      action();
+      htmlevent.preventDefault();
+    } else if (eventBusName) {
+      const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+      PDFViewerApplication.eventBus.dispatch(eventBusName);
+      htmlevent.preventDefault();
+    }
   }
 }

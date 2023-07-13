@@ -1,0 +1,15 @@
+<button
+  type="button"
+  [id]="id"
+  class="toolbarButton"
+  [class]="cssClass"
+  [title]="title"
+  [attr.data-l10n-id]="l10nId"
+  [class.toggled]="toggled"
+  [disabled]="disabled"
+  [innerHTML]="imageHtml"
+  (click)="onClick($event)"
+>
+  <ng-content *ngIf="!image"></ng-content>
+  <span [attr.data-l10n-id]="l10nLabel">{{ title }}</span>
+</button>

@@ -1,10 +1,12 @@
-<button type="button"
+<pdf-shy-button
   id="zoomOut"
-  class="toolbarButton zoomOut"
+  class="zoomOut"
   title="Zoom Out"
-  data-l10n-id="zoom_out">
-  <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-    <path fill="currentColor" d="M19,13H5V11H19V13Z" />
-  </svg>
-  <span data-l10n-id="zoom_out_label">Zoom Out</span>
-</button>
+  l10nid="zoom_out"
+  l10nLabel="zoom_out_label"
+  eventBusName="zoomout"
+  [cssClass]="showZoomButtons | responsiveCSSClass : ''"
+  [order]="1500"
+  image="<svg style='width: 24px; height: 24px' viewBox='0 0 24 24'><path fill='currentColor' d='M19,13H5V11H19V13Z' /></svg>"
+>
+</pdf-shy-button>

@@ -1,14 +1,13 @@
-<button type="button"
-  class="toolbarButton hiddenLargeView"
+<pdf-shy-button
+  cssClass="hiddenLargeView"
   title="First page"
   id="primaryFirstPage"
-  data-l10n-id="first_page"
+  l10nId="first_page"
   (click)="firstPage()"
   [disabled]="disableFirstPage"
-  #button
-  >
-  <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-    <path fill="currentColor" d="M18.41,16.59L13.82,12L18.41,7.41L17,6L11,12L17,18L18.41,16.59M6,6H8V18H6V6Z" />
-  </svg>
-  <span data-l10n-id="first_page_label">First page</span>
-</button>
+  l10nLabel="first_page_label"
+  [order]="500"
+  eventBusName="firstpage"
+  image="<svg style='width: 24px; height: 24px' viewBox='0 0 24 24'><path fill='currentColor' d='M18.41,16.59L13.82,12L18.41,7.41L17,6L11,12L17,18L18.41,16.59M6,6H8V18H6V6Z' /></svg>"
+>
+</pdf-shy-button>
