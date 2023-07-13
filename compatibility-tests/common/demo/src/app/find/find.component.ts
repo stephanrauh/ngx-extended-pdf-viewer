@@ -67,7 +67,6 @@ export class FindComponent {
       highlightAll: this.highlightAll,
       matchCase: this.matchCase,
       wholeWords: this.wholeWord,
-      matchDiacritics: this.matchDiacritics,
     });
   }
 
@@ -86,22 +85,8 @@ export class FindComponent {
   public updateFindMatchesCount(result: FindResultMatchesCount) {
     this.currentMatchNumber = result.current;
     this.totalMatches = result.total;
-    this._searchtext = result.query;
-    this.highlightAll = result.highlightAll;
-    this.matchCase = result.caseSensitive;
-    this.wholeWord = result.entireWord;
-    this.matchDiacritics = result.matchDiacritics;
     this.matches = result.matches;
     this.matchesLength = result.matchesLength;
-    this.type = result.type;
-    this.direction = result.findPrevious ? 'backward' : 'forward';
-    this.pagesWithMatch = this.matchesLength.filter(
-      (page) => page.length > 0
-    ).length;
-    this.totalNumberOfMatchingCharacters = this.matchesLength
-      .filter((page) => page.length > 0)
-      .reduce((a, b) => a.concat(b), []) // .flatMap((page) => page as number[])
-      .reduce((a: number, b: number) => a + b, 0);
   }
 
   public onCheckboxClicked() {
@@ -109,7 +94,6 @@ export class FindComponent {
       highlightAll: this.highlightAll,
       matchCase: this.matchCase,
       wholeWords: this.wholeWord,
-      matchDiacritics: this.matchDiacritics,
     });
   }
 

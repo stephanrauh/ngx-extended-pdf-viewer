@@ -13,6 +13,7 @@ import { IndexComponent } from './index/index.component';
 import { FindComponent } from './find/find.component';
 import { ZapfdingbatsComponent } from './zapfdingbats/zapfdingbats.component';
 import { FormsModule } from '@angular/forms';
+import { SmoketestWithThumbnailsComponent } from './smoketest-with-thumbnail/smoketest-with-thumbnail.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { FormsModule } from '@angular/forms';
     IndexComponent,
     NgOnDestroyComponent,
     SmoketestComponent,
+    SmoketestWithThumbnailsComponent,
     StandardFontsAndCmapsComponent,
     ZapfdingbatsComponent
   ],

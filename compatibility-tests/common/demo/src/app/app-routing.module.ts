@@ -7,11 +7,13 @@ import { StandardFontsAndCmapsComponent } from './standard-fonts-and-cmaps/stand
 import { IndexComponent } from './index/index.component';
 import { FindComponent } from './find/find.component';
 import { ZapfdingbatsComponent } from './zapfdingbats/zapfdingbats.component';
+import { SmoketestWithThumbnailsComponent } from './smoketest-with-thumbnail/smoketest-with-thumbnail.component';
 
 const routes: Routes = [
   { path: 'absolute-asset-path', component: AbsoluteAssetsPathComponent},
   { path: 'ng-on-destroy', component: NgOnDestroyComponent },
   { path: 'smoketest', component: SmoketestComponent },
+  { path: 'smoketest-with-thumbnails', component: SmoketestWithThumbnailsComponent },
   { path: 'standard-fonts-and-cmaps', component: StandardFontsAndCmapsComponent},
   { path: 'find', component: FindComponent},
   { path: 'zapfdingbats', component: ZapfdingbatsComponent},

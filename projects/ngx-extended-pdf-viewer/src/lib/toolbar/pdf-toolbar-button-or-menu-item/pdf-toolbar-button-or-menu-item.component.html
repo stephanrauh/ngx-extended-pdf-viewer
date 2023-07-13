@@ -1,0 +1,4 @@
+<button type="button" [id]="id" class="toolbarButton" [class]="cssClass" [title]="title" [attr.data-l10n-id]="l10nId">
+  <ng-content></ng-content>
+  <span [attr.data-l10n-id]="l10nLabel">{{ title }}</span>
+</button>
