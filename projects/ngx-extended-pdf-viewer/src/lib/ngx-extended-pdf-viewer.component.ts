@@ -61,6 +61,7 @@ import { OutlineLoadedEvent } from './events/outline-loaded-event';
 import { XfaLayerRenderedEvent } from './events/xfa-layer-rendered-event';
 import { NgxFormSupport } from './ngx-form-support';
 import { PdfSidebarView } from './options/pdf-sidebar-views';
+import { SpreadType } from './options/spread-type';
 import { ResponsiveVisibility } from './responsive-visibility';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
@@ -90,8 +91,6 @@ function isIOS() {
     (navigator.userAgent.includes('Mac') && 'ontouchend' in document)
   );
 }
-
-export type SpreadType = 'off' | 'even' | 'odd';
 
 @Component({
   selector: 'ngx-extended-pdf-viewer',
@@ -1169,8 +1168,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.initTimeout = setTimeout(() => {
         if (!this.shuttingDown) {
           // hurried users sometimes reload the PDF before it has finished initializing
-          const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-          PDFViewerApplication.updateAndActicateToolbarButtons();
           this.calcViewerPositionTop();
           this.afterLibraryInit();
           this.openPDF();

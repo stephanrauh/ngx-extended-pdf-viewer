@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
-import { ScrollMode } from '../../options/pdf-scroll-mode';
-import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { PageViewModeType } from '../../options/pdf-viewer';
 
 @Component({
   selector: 'pdf-infinite-scroll',
@@ -8,8 +7,13 @@ import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
   styleUrls: ['./pdf-infinite-scroll.component.css'],
 })
 export class PdfInfiniteScrollComponent {
+  @Input()
+  public pageViewMode: PageViewModeType;
+
+  @Output()
+  public pageViewModeChange = new EventEmitter<PageViewModeType>();
+
   public onClick(): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.INFINITE });
+    this.pageViewModeChange.emit('infinite-scroll');
   }
 }

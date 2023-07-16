@@ -231,6 +231,8 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
   }
 
   public onClick(htmlevent: Event, action: undefined | (() => void), eventBusName?: string): void {
+    const origin = htmlevent.target as HTMLElement;
+    origin?.classList.add('toggled');
     if (action) {
       action();
       htmlevent.preventDefault();

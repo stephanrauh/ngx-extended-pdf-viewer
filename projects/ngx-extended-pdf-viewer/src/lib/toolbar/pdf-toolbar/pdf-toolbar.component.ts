@@ -1,4 +1,6 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { PageViewModeType, ScrollModeType } from '../../options/pdf-viewer';
+import { SpreadType } from '../../options/spread-type';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
@@ -72,6 +74,15 @@ export class PdfToolbarComponent implements AfterViewInit {
 
   @Input()
   public zoomLevels = ['auto', 'page-actual', 'page-fit', 'page-width', 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
+
+  @Input()
+  public pageViewMode: PageViewModeType;
+
+  @Input()
+  public spread: SpreadType;
+
+  @Input()
+  public scrollMode: ScrollModeType;
 
   @Output()
   public onToolbarLoaded = new EventEmitter<HTMLElement>();

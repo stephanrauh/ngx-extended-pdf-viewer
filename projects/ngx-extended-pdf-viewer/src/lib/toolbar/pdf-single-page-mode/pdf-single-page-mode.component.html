@@ -2,10 +2,11 @@
   cssClass="hiddenLargeView"
   title="Use Page Scrolling"
   id="scrollPage"
+  [class.toggled]="pageViewMode === 'single'"
   l10nId="scroll_page"
   (click)="onClick()"
   l10nLabel="scroll_page_label"
   [order]="3000"
-  image="<svg style='width: 24px; height: 24px; margin-top: 3px' viewBox='0 0 24 24'><path fill='currentColor' d='M10,7V9H12V17H14V7H10Z' /></svg>"
+  image="<svg style='width: 24px; height: 24px' viewBox='0 0 24 24'><path fill='currentColor' d='M10,7V9H12V17H14V7H10Z' /></svg>"
 >
 </pdf-shy-button>

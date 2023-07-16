@@ -59,7 +59,8 @@ export class PdfShyButtonComponent implements OnInit, OnChanges {
     this.pdfShyButtonServiceService.add(this);
   }
 
-  public ngOnChanges(): void {
+  public ngOnChanges(changes: any): void {
+    console.log(this.id, changes);
     this.pdfShyButtonServiceService.update(this);
   }
 

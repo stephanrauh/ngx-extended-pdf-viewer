@@ -4,3 +4,22 @@ svg {
   top: 0px;
   left: 0px;
 }
+
+.secondaryToolbarButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  border: 0 none;
+  background: none;
+  width: 100%;
+  height: 25px;
+}
+
+.secondaryToolbarButton span {
+  display: inline-block;
+}
+
+.secondaryToolbarButton[disabled] {
+  opacity: 0.5;
+}
