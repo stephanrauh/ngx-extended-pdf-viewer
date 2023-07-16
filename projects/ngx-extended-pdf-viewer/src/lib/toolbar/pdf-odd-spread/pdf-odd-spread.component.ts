@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
-import { SpreadMode } from '../../options/pdf-spread-mode';
+import { Component, NgZone } from '@angular/core';
+import { take } from 'rxjs';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { SpreadType } from '../../options/spread-type';
+import { PDFNotificationService } from '../../pdf-notification-service';
 
 @Component({
   selector: 'pdf-odd-spread',
@@ -9,11 +10,26 @@ import { SpreadType } from '../../options/spread-type';
   styleUrls: ['./pdf-odd-spread.component.css'],
 })
 export class PdfOddSpreadComponent {
-  @Input()
   public spread: SpreadType = 'off';
+
+  constructor(private notificationService: PDFNotificationService, private ngZone: NgZone) {
+    this.notificationService.onPDFJSInit.pipe(take(1)).subscribe(() => {
+      this.onPdfJsInit();
+    });
+  }
+
+  public onPdfJsInit(): void {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    PDFViewerApplication.eventBus.on('spreadmodechanged', (event) => {
+      this.ngZone.run(() => {
+        const modes = ['off', 'odd', 'even'] as Array<SpreadType>;
+        this.spread = modes[event.mode];
+      });
+    });
+  }
 
   public onClick(): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.dispatch('switchspreadmode', { mode: SpreadMode.ODD });
+    PDFViewerApplication.pdfViewer.spreadMode = 1;
   }
 }

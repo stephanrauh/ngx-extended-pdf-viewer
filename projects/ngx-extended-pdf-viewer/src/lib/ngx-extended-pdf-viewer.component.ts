@@ -1677,6 +1677,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         });
       });
 
+      PDFViewerApplication.eventBus.on('spreadmodechanged', (event) => {
+        this.ngZone.run(() => {
+          const modes = ['off', 'odd', 'even'] as Array<SpreadType>;
+          this.spread = modes[event.mode];
+        });
+      });
+
       const hideSidebarToolbar = () => {
         this.ngZone.run(() => {
           if (this.sidebarComponent) {
