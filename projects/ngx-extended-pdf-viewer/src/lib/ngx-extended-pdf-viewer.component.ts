@@ -151,6 +151,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public enableDragAndDrop = true;
 
+  public localizationInitialized: boolean = false;
+
   @Input()
   public set formData(formData: FormDataType) {
     this.formSupport.formData = formData;
@@ -657,6 +659,27 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public showSecondaryToolbarButton = true;
+
+  @Input()
+  public showDocumentPropertiesButton: ResponsiveVisibility = true;
+
+  @Input()
+  public showSpreadButtons: ResponsiveVisibility = true;
+
+  @Input()
+  public showSinglePageModeButton: ResponsiveVisibility = true;
+
+  @Input()
+  public showVerticalScrollButton: ResponsiveVisibility = true;
+
+  @Input()
+  public showHorizontalScrollButton: ResponsiveVisibility = true;
+
+  @Input()
+  public showWrappedScrollButton: ResponsiveVisibility = true;
+
+  @Input()
+  public showInfiniteScrollButton: ResponsiveVisibility = true;
 
   /** Set by the event (secondaryMenuIsEmpty) */
   public hideKebabMenuForSecondaryToolbar = false;
@@ -1183,6 +1206,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
     const callback = () => {
       document.removeEventListener('localized', callback);
+      this.localizationInitialized = true;
       this.initTimeout = setTimeout(() => {
         if (!this.shuttingDown) {
           // hurried users sometimes reload the PDF before it has finished initializing

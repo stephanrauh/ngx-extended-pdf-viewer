@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
+import { ResponsiveCSSClass } from '../../responsive-visibility';
 import { PdfShyButtonService } from './pdf-shy-button-service';
 
 @Component({
@@ -16,7 +17,7 @@ export class PdfShyButtonComponent implements OnInit, OnChanges {
   public secondaryToolbarId: string;
 
   @Input()
-  public cssClass: string;
+  public cssClass: ResponsiveCSSClass;
 
   @Input()
   public eventBusName: string;

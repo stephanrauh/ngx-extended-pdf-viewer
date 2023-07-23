@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
+import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
+import { ResponsiveCSSClass } from '../../responsive-visibility';
 import { PdfShyButtonComponent } from './pdf-shy-button.component';
 
 export interface PdfShyButtonDescription {
   id: string;
-  cssClass: string;
+  cssClass: ResponsiveCSSClass;
   l10nId: string;
   l10nLabel: string;
   title: string;
@@ -28,7 +30,7 @@ export class PdfShyButtonService {
     const previousDefinition = this.buttons.findIndex((b) => b.id === id);
     const description: PdfShyButtonDescription = {
       id,
-      cssClass: button.cssClass?.replace('hidden', 'visible'),
+      cssClass: button.cssClass,
       l10nId: button.l10nId,
       l10nLabel: button.l10nLabel,
       title: button.title,
@@ -41,6 +43,16 @@ export class PdfShyButtonService {
     };
     if (previousDefinition >= 0) {
       this.buttons[previousDefinition] = description;
+      setTimeout(() => {
+        const PDFViewerApplication = (window as any).PDFViewerApplication as IPDFViewerApplication;
+        if (PDFViewerApplication?.l10n) {
+          const element = document.getElementById(id);
+          PDFViewerApplication.l10n.translate(element).then(() => {
+            // Dispatch the 'localized' event on the `eventBus` once the viewer
+            // has been fully initialized and translated.
+          });
+        }
+      }, 0);
     } else {
       this.buttons.push(description);
     }

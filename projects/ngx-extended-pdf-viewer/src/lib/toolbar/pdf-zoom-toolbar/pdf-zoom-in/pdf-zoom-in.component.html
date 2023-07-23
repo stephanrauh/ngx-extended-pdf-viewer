@@ -1,6 +1,7 @@
 <pdf-shy-button
   id="zoomIn"
-  cssClass="zoomIn"
+  [cssClass]="showZoomButtons | responsiveCSSClass : 'always-visible'"
+  class="zoomIn"
   title="Zoom In"
   l10nid="zoom_in"
   l10nLabel="zoom_in_label"

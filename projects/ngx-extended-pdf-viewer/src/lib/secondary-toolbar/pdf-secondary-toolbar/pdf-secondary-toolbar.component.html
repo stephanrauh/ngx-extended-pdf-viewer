@@ -13,7 +13,7 @@
         *ngFor="let button of pdfShyButtonService.buttons"
         type="button"
         [id]="button.id"
-        [ngClass]="button.cssClass"
+        [ngClass]="button.cssClass | invertForSecondaryToolbar"
         [class.toggled]="button.toggled"
         class="secondaryToolbarButton"
         [title]="button.title"

@@ -1,5 +1,5 @@
 <pdf-shy-button
-  cssClass="hiddenLargeView"
+  [cssClass]="show | responsiveCSSClass : 'always-in-secondary-menu'"
   [toggled]="spread === 'even'"
   title="Join page spreads starting with even-numbered pages"
   id="spreadEven"

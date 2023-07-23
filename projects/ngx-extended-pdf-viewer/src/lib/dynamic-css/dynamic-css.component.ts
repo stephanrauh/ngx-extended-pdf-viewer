@@ -31,6 +31,14 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
 
   public get style(): string {
     return `
+#toolbarContainer .always-in-secondary-menu {
+  display: none;
+}
+
+#secondaryToolbar .always-in-secondary-menu {
+  display: inline-flex;
+}
+
 @media all and (max-width: ${this.xl}px) {
   #toolbarViewerMiddle {
     display: table;

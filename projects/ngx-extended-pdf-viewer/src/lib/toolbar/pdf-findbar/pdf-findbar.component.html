@@ -3,7 +3,7 @@
 <ng-template #defaultFindbar>
   <div
     class="findbar hidden doorHanger"
-    [class]="showFindButton | responsiveCSSClass : ''"
+    [class]="showFindButton | responsiveCSSClass : 'always-visible'"
     id="findbar"
     [style.transform]="'scale(' + mobileFriendlyZoomScale + ')'"
     [style.transformOrigin]="'left top'"

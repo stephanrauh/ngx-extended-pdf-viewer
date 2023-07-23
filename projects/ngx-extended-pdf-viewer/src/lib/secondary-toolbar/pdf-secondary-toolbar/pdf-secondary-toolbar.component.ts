@@ -66,6 +66,9 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
   @Input()
   public showPropertiesButton: ResponsiveVisibility = true;
 
+  @Input()
+  public localizationInitialized: boolean;
+
   @Output()
   public spreadChange = new EventEmitter<'off' | 'even' | 'odd'>();
 

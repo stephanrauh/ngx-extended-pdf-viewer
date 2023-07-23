@@ -4,6 +4,7 @@ import { ScrollMode } from '../../options/pdf-scroll-mode';
 import { PageViewModeType, ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
+import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
   selector: 'pdf-vertical-scroll-mode',
@@ -11,6 +12,9 @@ import { PDFNotificationService } from '../../pdf-notification-service';
   styleUrls: ['./pdf-vertical-scroll-mode.component.css'],
 })
 export class PdfVerticalScrollModeComponent {
+  @Input()
+  public show: ResponsiveVisibility = true;
+
   @Input()
   public scrollMode: ScrollModeType;
 
@@ -29,8 +33,10 @@ export class PdfVerticalScrollModeComponent {
     const emitter = this.pageViewModeChange;
     this.onClick = () => {
       setTimeout(() => {
-        emitter.emit('multiple');
-        this.pageViewMode = 'multiple';
+        if (this.pageViewMode !== 'multiple' && this.pageViewMode !== 'infinite-scroll') {
+          emitter.emit('multiple');
+          this.pageViewMode = 'multiple';
+        }
         const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
         PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.VERTICAL });
       });

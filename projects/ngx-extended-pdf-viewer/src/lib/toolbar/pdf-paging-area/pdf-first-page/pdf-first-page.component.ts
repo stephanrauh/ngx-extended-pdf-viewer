@@ -1,6 +1,7 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { UpdateUIStateEvent } from '../../../events/update-ui-state-event';
 import { IPDFViewerApplication } from '../../../options/pdf-viewer-application';
+import { ResponsiveVisibility } from '../../../responsive-visibility';
 import { PDFNotificationService } from './../../../pdf-notification-service';
 
 @Component({
@@ -9,6 +10,9 @@ import { PDFNotificationService } from './../../../pdf-notification-service';
   styleUrls: ['./pdf-first-page.component.css'],
 })
 export class PdfFirstPageComponent {
+  @Input()
+  public show: ResponsiveVisibility = true;
+
   public disableFirstPage = true;
 
   constructor(private notificationService: PDFNotificationService, private changeDetectorRef: ChangeDetectorRef) {

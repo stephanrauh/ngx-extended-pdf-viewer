@@ -7,6 +7,7 @@ import { IPDFViewer, PageViewModeType } from './pdf-viewer';
 import { IPDFViewerAppConfig } from './pdf-viewer-app-config';
 
 export interface IWebL10n {
+  translate(element: HTMLElement | null): Promise<void>;
   get(key: string, args: any, fallbackString: string): string;
 }
 

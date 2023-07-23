@@ -1,5 +1,5 @@
 <pdf-shy-button
-  cssClass="hiddenLargeView"
+  [cssClass]="show | responsiveCSSClass : 'always-in-secondary-menu'"
   title="Wrapped Scrolling"
   id="scrollWrapped"
   [toggled]="scrollMode == 2"

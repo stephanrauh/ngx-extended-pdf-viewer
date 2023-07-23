@@ -87,6 +87,27 @@ export class PdfToolbarComponent implements AfterViewInit {
   @Input()
   public scrollMode: ScrollModeType;
 
+  @Input()
+  public showDocumentPropertiesButton: ResponsiveVisibility = true;
+
+  @Input()
+  public showSpreadButtons: ResponsiveVisibility = true;
+
+  @Input()
+  public showSinglePageModeButton: ResponsiveVisibility = true;
+
+  @Input()
+  public showVerticalScrollButton: ResponsiveVisibility = true;
+
+  @Input()
+  public showHorizontalScrollButton: ResponsiveVisibility = true;
+
+  @Input()
+  public showWrappedScrollButton: ResponsiveVisibility = true;
+
+  @Input()
+  public showInfiniteScrollButton: ResponsiveVisibility = true;
+
   @Output()
   public onToolbarLoaded = new EventEmitter<HTMLElement>();
 

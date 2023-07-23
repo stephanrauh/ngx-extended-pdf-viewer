@@ -4,6 +4,7 @@ import { ScrollMode } from '../../options/pdf-scroll-mode';
 import { PageViewModeType, ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
+import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
   selector: 'pdf-single-page-mode',
@@ -11,6 +12,9 @@ import { PDFNotificationService } from '../../pdf-notification-service';
   styleUrls: ['./pdf-single-page-mode.component.css'],
 })
 export class PdfSinglePageModeComponent {
+  @Input()
+  public show: ResponsiveVisibility = true;
+
   @Input()
   public scrollMode: ScrollModeType;
 

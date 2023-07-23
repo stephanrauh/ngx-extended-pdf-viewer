@@ -1,5 +1,5 @@
 <pdf-shy-button
-  cssClass="hiddenLargeView"
+  [cssClass]="show | responsiveCSSClass : 'always-in-secondary-menu'"
   title="Use Vertical Scrolling"
   id="scrollVertical"
   l10nId="scroll_vertical"

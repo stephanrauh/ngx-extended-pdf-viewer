@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ScrollMode } from '../../options/pdf-scroll-mode';
 import { PageViewModeType, ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
+import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
   selector: 'pdf-infinite-scroll',
@@ -9,6 +10,9 @@ import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
   styleUrls: ['./pdf-infinite-scroll.component.css'],
 })
 export class PdfInfiniteScrollComponent {
+  @Input()
+  public show: ResponsiveVisibility = true;
+
   @Input()
   public pageViewMode: PageViewModeType;
 

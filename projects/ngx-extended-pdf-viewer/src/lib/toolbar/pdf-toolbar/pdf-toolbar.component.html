@@ -25,23 +25,40 @@
     </div>
     <pdf-zoom-toolbar [showZoomButtons]="showZoomButtons" [zoomLevels]="zoomLevels"></pdf-zoom-toolbar>
     <div id="toolbarViewerRight">
-      <pdf-document-properties></pdf-document-properties>
-      <pdf-no-spread></pdf-no-spread>
-      <pdf-odd-spread></pdf-odd-spread>
-      <pdf-even-spread></pdf-even-spread>
-      <pdf-single-page-mode [pageViewMode]="pageViewMode" (pageViewModeChange)="updatePageViewMode($event)" [scrollMode]="scrollMode"></pdf-single-page-mode>
+      <pdf-document-properties [show]="showDocumentPropertiesButton"></pdf-document-properties>
+      <pdf-no-spread [show]="showSpreadButtons"></pdf-no-spread>
+      <pdf-odd-spread [show]="showSpreadButtons"></pdf-odd-spread>
+      <pdf-even-spread [show]="showSpreadButtons"></pdf-even-spread>
+      <pdf-single-page-mode
+        [show]="showSinglePageModeButton"
+        [pageViewMode]="pageViewMode"
+        (pageViewModeChange)="updatePageViewMode($event)"
+        [scrollMode]="scrollMode"
+      ></pdf-single-page-mode>
       <pdf-vertical-scroll-mode
+        [show]="showVerticalScrollButton"
         [pageViewMode]="pageViewMode"
         (pageViewModeChange)="updatePageViewMode($event)"
         [scrollMode]="scrollMode"
       ></pdf-vertical-scroll-mode>
-      <pdf-horizontal-scroll [pageViewMode]="pageViewMode" (pageViewModeChange)="updatePageViewMode($event)" [scrollMode]="scrollMode"></pdf-horizontal-scroll>
+      <pdf-horizontal-scroll
+        [show]="showHorizontalScrollButton"
+        [pageViewMode]="pageViewMode"
+        (pageViewModeChange)="updatePageViewMode($event)"
+        [scrollMode]="scrollMode"
+      ></pdf-horizontal-scroll>
       <pdf-wrapped-scroll-mode
+        [show]="showWrappedScrollButton"
         [pageViewMode]="pageViewMode"
         (pageViewModeChange)="updatePageViewMode($event)"
         [scrollMode]="scrollMode"
       ></pdf-wrapped-scroll-mode>
-      <pdf-infinite-scroll [pageViewMode]="pageViewMode" (pageViewModeChange)="updatePageViewMode($event)" [scrollMode]="scrollMode"></pdf-infinite-scroll>
+      <pdf-infinite-scroll
+        [show]="showInfiniteScrollButton"
+        [pageViewMode]="pageViewMode"
+        (pageViewModeChange)="updatePageViewMode($event)"
+        [scrollMode]="scrollMode"
+      ></pdf-infinite-scroll>
       <pdf-hand-tool [showHandToolButton]="showHandToolButton"></pdf-hand-tool>
       <pdf-select-tool [showSelectToolButton]="showHandToolButton"></pdf-select-tool>
       <pdf-rotate-page [showRotateButton]="showRotateButton" [clockwise]="true" [counterClockwise]="false"> </pdf-rotate-page>

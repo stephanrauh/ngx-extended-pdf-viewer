@@ -1,5 +1,5 @@
 <pdf-shy-button
-  cssClass="hiddenLargeView"
+  [cssClass]="show | responsiveCSSClass : 'always-in-secondary-menu'"
   title="Join page spreads starting with odd-numbered pages"
   id="spreadOdd"
   [toggled]="spread === 'odd'"

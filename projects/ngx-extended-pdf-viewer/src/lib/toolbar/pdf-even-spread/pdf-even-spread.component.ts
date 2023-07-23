@@ -1,8 +1,9 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, Input, NgZone } from '@angular/core';
 import { take } from 'rxjs';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { SpreadType } from '../../options/spread-type';
 import { PDFNotificationService } from '../../pdf-notification-service';
+import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
   selector: 'pdf-even-spread',
@@ -10,6 +11,9 @@ import { PDFNotificationService } from '../../pdf-notification-service';
   styleUrls: ['./pdf-even-spread.component.css'],
 })
 export class PdfEvenSpreadComponent {
+  @Input()
+  public show: ResponsiveVisibility = true;
+
   public spread: SpreadType = 'off';
 
   constructor(private notificationService: PDFNotificationService, private ngZone: NgZone) {

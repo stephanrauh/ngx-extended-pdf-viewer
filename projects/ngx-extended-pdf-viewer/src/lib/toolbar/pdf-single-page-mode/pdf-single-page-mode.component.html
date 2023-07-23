@@ -1,5 +1,5 @@
 <pdf-shy-button
-  cssClass="hiddenLargeView"
+  [cssClass]="show | responsiveCSSClass : 'always-in-secondary-menu'"
   title="Use Page Scrolling"
   id="scrollPage"
   [toggled]="scrollMode == 3"

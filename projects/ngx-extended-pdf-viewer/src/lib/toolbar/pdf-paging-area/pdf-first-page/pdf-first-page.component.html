@@ -1,5 +1,5 @@
 <pdf-shy-button
-  cssClass="hiddenLargeView"
+  [cssClass]="show | responsiveCSSClass : 'hiddenLargeView'"
   title="First page"
   id="primaryFirstPage"
   l10nId="first_page"
