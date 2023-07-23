@@ -78,6 +78,9 @@ export class PdfToolbarComponent implements AfterViewInit {
   @Input()
   public pageViewMode: PageViewModeType;
 
+  @Output()
+  public pageViewModeChange = new EventEmitter<PageViewModeType>();
+
   @Input()
   public spread: SpreadType;
 
@@ -91,5 +94,13 @@ export class PdfToolbarComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.onToolbarLoaded.emit(this.elementRef.nativeElement.getElementsByClassName('toolbar')[0] as HTMLElement);
+  }
+
+  public updatePageViewMode(pageViewMode: PageViewModeType): void {
+    if (pageViewMode) {
+      console.log(pageViewMode);
+      this.pageViewModeChange.emit(pageViewMode as PageViewModeType);
+      this.pageViewMode = pageViewMode;
+    }
   }
 }

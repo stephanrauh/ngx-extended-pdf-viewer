@@ -78,8 +78,6 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
 
   private classMutationObserver: MutationObserver | undefined;
 
-  private primaryToolbarMutationObserver: MutationObserver | undefined;
-
   constructor(
     private element: ElementRef,
     public notificationService: PDFNotificationService,
@@ -100,14 +98,6 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
     PDFViewerApplication.eventBus.on('pagerendered', () => {
       this.updateUIState();
     });
-
-    const toolbarContainer = document.querySelector('ngx-extended-pdf-viewer #toolbarContainer') as HTMLElement;
-    this.primaryToolbarMutationObserver = new MutationObserver((mutationList) => {
-      var buttons = toolbarContainer.querySelectorAll('pdf-shy-button');
-      console.log('Number of shy buttons: ' + buttons.length);
-    });
-
-    this.primaryToolbarMutationObserver.observe(toolbarContainer, { childList: true, subtree: true });
   }
 
   public updateUIState(): void {

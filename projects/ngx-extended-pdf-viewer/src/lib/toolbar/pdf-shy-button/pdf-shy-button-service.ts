@@ -28,7 +28,7 @@ export class PdfShyButtonService {
     const previousDefinition = this.buttons.findIndex((b) => b.id === id);
     const description: PdfShyButtonDescription = {
       id,
-      cssClass: button.cssClass?.replace('hidden', 'xvisible'),
+      cssClass: button.cssClass?.replace('hidden', 'visible'),
       l10nId: button.l10nId,
       l10nLabel: button.l10nLabel,
       title: button.title,
@@ -39,9 +39,6 @@ export class PdfShyButtonService {
       action: button.action,
       eventBusName: button.eventBusName,
     };
-    if (button.id === 'next') {
-      console.log('adding next button', description);
-    }
     if (previousDefinition >= 0) {
       this.buttons[previousDefinition] = description;
     } else {

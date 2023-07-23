@@ -52,6 +52,7 @@
               [textLayer]="textLayer"
               [toolbarMarginTop]="toolbarMarginTop"
               [toolbarWidth]="toolbarWidth"
+              (pageViewModeChange)="pageViewMode = $event"
               (onToolbarLoaded)="onToolbarLoaded($event)"
               [zoomLevels]="zoomLevels"
             ></pdf-toolbar>

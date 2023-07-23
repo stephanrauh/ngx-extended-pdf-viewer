@@ -175,6 +175,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     return this._pageViewMode;
   }
 
+  /*
+  public updatePageViewMode(newPageViewMode: PageViewModeType, restoreHeight: boolean) {
+    setTimeout(() => {
+      const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+      this._pageViewMode = newPageViewMode;
+      this.removeScrollbarInInfiniteScrollMode(restoreHeight);
+      PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(this.scrollMode ?? ScrollModeType.vertical) });
+    });
+  }
+  */
+
   @Input()
   public set pageViewMode(viewMode: PageViewModeType) {
     const hasChanged = this._pageViewMode !== viewMode;
@@ -191,13 +202,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if (viewMode === 'infinite-scroll') {
         if (this.scrollMode === ScrollModeType.page || this.scrollMode === ScrollModeType.horizontal) {
           this.scrollMode = ScrollModeType.vertical;
+          PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(this.scrollMode) });
         }
+        this.removeScrollbarInInfiniteScrollMode(false);
       } else if (viewMode !== 'multiple') {
         this.scrollMode = ScrollModeType.vertical;
       } else {
         if (this.scrollMode === ScrollModeType.page) {
           this.scrollMode = ScrollModeType.vertical;
         }
+        this.removeScrollbarInInfiniteScrollMode(true);
       }
       if (viewMode === 'single') {
         // since pdf.js, our custom single-page-mode has been replaced by the standard scrollMode="page"
@@ -247,15 +261,19 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Output()
   public srcChange = new EventEmitter<string>();
 
-  private _scrollMode: ScrollModeType | undefined = undefined;
+  private _scrollMode: ScrollModeType = ScrollModeType.vertical;
 
-  public get scrollMode(): ScrollModeType | undefined {
+  public get scrollMode(): ScrollModeType {
     return this._scrollMode;
   }
 
   @Input()
-  public set scrollMode(value: ScrollModeType | undefined) {
+  public set scrollMode(value: ScrollModeType) {
     if (this._scrollMode !== value) {
+      const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+      if (PDFViewerApplication.pdfViewer.scrollMode !== Number(this.scrollMode)) {
+        PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(this.scrollMode) });
+      }
       this._scrollMode = value;
       if (this._scrollMode === ScrollModeType.page) {
         if (this.pageViewMode !== 'single') {
@@ -1544,7 +1562,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       });
 
       PDFViewerApplication.eventBus.on('scrollmodechanged', (x: ScrollModeChangedEvent) => {
-        this.ngZone.run(() => this.scrollModeChange.emit(x.mode));
+        this.ngZone.run(() => {
+          console.log('ScrollModeChanged: ' + x.mode + ' previous: ' + this._scrollMode + ' previous page view mode: ' + this.pageViewMode);
+          this._scrollMode = x.mode;
+          this.scrollModeChange.emit(x.mode);
+        });
       });
       PDFViewerApplication.eventBus.on('progress', (x: ProgressBarEvent) => {
         this.ngZone.run(() => this.progress.emit(x));
@@ -2245,14 +2267,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
 
     if ('pageViewMode' in changes && !changes['pageViewMode'].isFirstChange()) {
+      this.pageViewMode = changes['pageViewMode'].currentValue;
+      /*
       const restoreHeight = changes['pageViewMode'].previousValue === 'infinite-scroll';
       // add a short delay wait until the setter has been called
       // and to avoid the ExpressionChangedAfterItHasBeenCheckedError
-      setTimeout(() => {
-        this._pageViewMode = changes['pageViewMode'].currentValue;
-        this.removeScrollbarInInfiniteScrollMode(restoreHeight);
-        PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(this.scrollMode) });
-      });
+      this.updatePageViewMode(changes['pageViewMode'].currentValue, restoreHeight);
+      */
     }
     if ('replaceBrowserPrint' in changes && typeof window !== 'undefined') {
       if (this.replaceBrowserPrint) {

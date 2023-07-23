@@ -29,11 +29,19 @@
       <pdf-no-spread></pdf-no-spread>
       <pdf-odd-spread></pdf-odd-spread>
       <pdf-even-spread></pdf-even-spread>
-      <pdf-single-page-mode [pageViewMode]="pageViewMode"></pdf-single-page-mode>
-      <pdf-vertical-scroll-mode [scrollMode]="scrollMode"></pdf-vertical-scroll-mode>
-      <pdf-horizontal-scroll [scrollMode]="scrollMode"></pdf-horizontal-scroll>
-      <pdf-wrapped-scroll-mode [scrollMode]="scrollMode"></pdf-wrapped-scroll-mode>
-      <pdf-infinite-scroll [(pageViewMode)]="pageViewMode"></pdf-infinite-scroll>
+      <pdf-single-page-mode [pageViewMode]="pageViewMode" (pageViewModeChange)="updatePageViewMode($event)" [scrollMode]="scrollMode"></pdf-single-page-mode>
+      <pdf-vertical-scroll-mode
+        [pageViewMode]="pageViewMode"
+        (pageViewModeChange)="updatePageViewMode($event)"
+        [scrollMode]="scrollMode"
+      ></pdf-vertical-scroll-mode>
+      <pdf-horizontal-scroll [pageViewMode]="pageViewMode" (pageViewModeChange)="updatePageViewMode($event)" [scrollMode]="scrollMode"></pdf-horizontal-scroll>
+      <pdf-wrapped-scroll-mode
+        [pageViewMode]="pageViewMode"
+        (pageViewModeChange)="updatePageViewMode($event)"
+        [scrollMode]="scrollMode"
+      ></pdf-wrapped-scroll-mode>
+      <pdf-infinite-scroll [pageViewMode]="pageViewMode" (pageViewModeChange)="updatePageViewMode($event)" [scrollMode]="scrollMode"></pdf-infinite-scroll>
       <pdf-hand-tool [showHandToolButton]="showHandToolButton"></pdf-hand-tool>
       <pdf-select-tool [showSelectToolButton]="showHandToolButton"></pdf-select-tool>
       <pdf-rotate-page [showRotateButton]="showRotateButton" [clockwise]="true" [counterClockwise]="false"> </pdf-rotate-page>
