@@ -46,7 +46,7 @@
     "copyfiles": "^2.4.1",
     "ng-packagr": "~13.3.1",
     "properties-reader": "^2.2.0",
-    "sass": "^1.63.6",
+    "sass": "^1.64.1",
     "ts-node": "^10.9.1",
     "tslib": "^2.6.0",
     "tslint": "^6.1.3",
