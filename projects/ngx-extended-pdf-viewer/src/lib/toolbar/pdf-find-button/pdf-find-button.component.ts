@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
@@ -13,12 +13,20 @@ export class PdfFindButtonComponent {
   @Input()
   public textLayer: boolean | undefined = undefined;
 
-  public onClick(): void {
-    const PDFViewerApplication = (window as any).PDFViewerApplication;
-    if (PDFViewerApplication.findBar.opened) {
-      PDFViewerApplication.findBar.close();
-    } else {
-      PDFViewerApplication.findBar.open();
-    }
+  @Input()
+  public findbarVisible = false;
+
+  @Output()
+  public findbarVisibleChange = new EventEmitter<boolean>();
+
+  public onClick: () => void;
+
+  constructor() {
+    const emitter = this.findbarVisibleChange;
+    this.onClick = () => {
+      setTimeout(() => {
+        emitter.emit(!this.findbarVisible);
+      });
+    };
   }
 }

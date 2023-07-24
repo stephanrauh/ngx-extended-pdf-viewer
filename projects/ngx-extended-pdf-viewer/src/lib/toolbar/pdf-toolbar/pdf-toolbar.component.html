@@ -20,7 +20,7 @@
   <div id="toolbarViewer">
     <div id="toolbarViewerLeft">
       <pdf-toggle-sidebar [showSidebarButton]="showSidebarButton"></pdf-toggle-sidebar>
-      <pdf-find-button [showFindButton]="showFindButton" [textLayer]="textLayer"></pdf-find-button>
+      <pdf-find-button [showFindButton]="showFindButton" [textLayer]="textLayer" [(findbarVisible)]="findbarVisible"></pdf-find-button>
       <pdf-paging-area [showPagingButtons]="showPagingButtons"></pdf-paging-area>
     </div>
     <pdf-zoom-toolbar [showZoomButtons]="showZoomButtons" [zoomLevels]="zoomLevels"></pdf-zoom-toolbar>

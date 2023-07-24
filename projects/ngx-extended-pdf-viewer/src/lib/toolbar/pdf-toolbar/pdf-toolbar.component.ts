@@ -111,6 +111,12 @@ export class PdfToolbarComponent implements AfterViewInit {
   @Output()
   public onToolbarLoaded = new EventEmitter<HTMLElement>();
 
+  @Input()
+  public findbarVisible = false;
+
+  @Output()
+  public findbarVisibleChange = new EventEmitter<boolean>();
+
   constructor(private elementRef: ElementRef) {}
 
   ngAfterViewInit(): void {

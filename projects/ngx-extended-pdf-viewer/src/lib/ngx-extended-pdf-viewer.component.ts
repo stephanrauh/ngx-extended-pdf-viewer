@@ -2108,7 +2108,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
 
       if ('findbarVisible' in changes) {
-        if (this.findbarVisible) {
+        if (changes['findbarVisible'].currentValue) {
           PDFViewerApplication.findBar.open();
         } else {
           PDFViewerApplication.findBar.close();

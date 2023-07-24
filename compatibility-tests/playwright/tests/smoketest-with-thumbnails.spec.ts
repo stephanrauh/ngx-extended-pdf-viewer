@@ -27,7 +27,7 @@ async function runBasicTests(page) {
   expect(await page.locator('ngx-extended-pdf-viewer').screenshot()).toMatchSnapshot({ maxDiffPixelRatio: 0.001 });
 
   await page.locator('#sidebar-button').click();
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(500);
   expect(await page.locator('ngx-extended-pdf-viewer').screenshot()).toMatchSnapshot({ maxDiffPixelRatio: 0.001 });
 
   await page.locator('#page-button').click();
