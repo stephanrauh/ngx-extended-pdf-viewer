@@ -4,14 +4,14 @@ test.beforeEach(async ({ page }) => {
   // await page.goto('http://localhost:4200/smoketest');
 });
 
-test.describe('Smoketest', () => {
+test.describe('Smoketest with thumbnails', () => {
   test('at least one page renders', async ({ page }) => {
-    await page.goto('http://localhost:4200/smoketest');
+    await page.goto('http://localhost:4200/smoketest-with-thumbnails');
     await runBasicTests(page);
   });
 
   test('at least one page renders - bleeding edge', async ({ page }) => {
-    await page.goto('http://localhost:4200/smoketest?bleeding-edge');
+    await page.goto('http://localhost:4200/smoketest-with-thumbnails?bleeding-edge');
     await runBasicTests(page);
   });
 });
@@ -26,14 +26,22 @@ async function runBasicTests(page) {
   expect(await page.locator('pdf-toolbar').screenshot()).toMatchSnapshot({ maxDiffPixelRatio: 0.001 });
   expect(await page.locator('ngx-extended-pdf-viewer').screenshot()).toMatchSnapshot({ maxDiffPixelRatio: 0.001 });
 
+  await page.locator('#sidebar-button').click();
+  await page.waitForTimeout(250);
+  expect(await page.locator('ngx-extended-pdf-viewer').screenshot()).toMatchSnapshot({ maxDiffPixelRatio: 0.001 });
+
   await page.locator('#page-button').click();
   expect(await page.locator('ngx-extended-pdf-viewer').screenshot()).toMatchSnapshot({ maxDiffPixelRatio: 0.001 });
   await page.locator('#next').click();
   expect(await page.locator('ngx-extended-pdf-viewer').screenshot()).toMatchSnapshot({ maxDiffPixelRatio: 0.001 });
 
   await page.locator('#rotate-button').click();
+  await page.waitForTimeout(500);
   expect(await page.locator('ngx-extended-pdf-viewer').screenshot()).toMatchSnapshot({ maxDiffPixelRatio: 0.001 });
+
+  // when rotating the page, the thumbnails are not updated fast enough, so let's skip this test
   await page.locator('#primaryPageRotateCw').click();
+  await page.waitForTimeout(500);
   expect(await page.locator('ngx-extended-pdf-viewer').screenshot()).toMatchSnapshot({ maxDiffPixelRatio: 0.001 });
 
   await page.locator('#zoom-button').click();
@@ -44,9 +52,11 @@ async function runBasicTests(page) {
   await page.locator('#zoom-auto-button').click();
   expect(await page.locator('ngx-extended-pdf-viewer').screenshot()).toMatchSnapshot({ maxDiffPixelRatio: 0.001 });
   await page.locator('#spread-button').click();
+  await page.waitForTimeout(250);
   expect(await page.locator('ngx-extended-pdf-viewer').screenshot()).toMatchSnapshot({ maxDiffPixelRatio: 0.001 });
   await page.locator('#secondaryToolbarToggle').click();
   expect(await page.locator('ngx-extended-pdf-viewer').screenshot()).toMatchSnapshot({ maxDiffPixelRatio: 0.001 });
-  await page.locator('#spreadEven').click();
+  await page.locator('#secondarySpreadEven').click();
+  await page.waitForTimeout(250);
   expect(await page.locator('ngx-extended-pdf-viewer').screenshot()).toMatchSnapshot({ maxDiffPixelRatio: 0.001 });
 }

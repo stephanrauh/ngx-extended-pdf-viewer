@@ -27,7 +27,7 @@ export class PdfShyButtonService {
   constructor() {}
 
   public add(button: PdfShyButtonComponent): void {
-    const id = button.secondaryToolbarId ?? this.addDefaultPrefix(button);
+    const id = button.secondaryMenuId ?? this.addDefaultPrefix(button);
     const previousDefinition = this.buttons.findIndex((b) => b.id === id);
     const description: PdfShyButtonDescription = {
       id,
@@ -62,11 +62,14 @@ export class PdfShyButtonService {
   }
 
   private addDefaultPrefix(button: PdfShyButtonComponent): string {
-    return 'secondary' + button.id.substring(0, 1).toUpperCase() + button.id.substring(1);
+    if (button.primaryToolbarId.startsWith('primary')) {
+      return button.primaryToolbarId.replace('primary', 'secondary');
+    }
+    return 'secondary' + button.primaryToolbarId.substring(0, 1).toUpperCase() + button.primaryToolbarId.substring(1);
   }
 
   public update(button: PdfShyButtonComponent): void {
-    const id = 'secondary' + button.id.substring(0, 1).toUpperCase() + button.id.substring(1);
+    const id = button.secondaryMenuId ?? this.addDefaultPrefix(button);
 
     if (this.buttons.some((b) => b.id === id)) {
       this.add(button);

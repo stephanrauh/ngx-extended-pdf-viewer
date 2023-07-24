@@ -1,7 +1,7 @@
 <pdf-shy-button
   *ngIf="clockwise"
   [action]="rotateCW"
-  id="primaryPageRotateCw"
+  primaryToolbarId="primaryPageRotateCw"
   class="rotateCw"
   [cssClass]="showRotateButton | responsiveCSSClass : 'hiddenXLView'"
   title="Rotate Clockwise"
@@ -16,7 +16,7 @@
 <pdf-shy-button
   *ngIf="counterClockwise"
   [action]="rotateCCW"
-  id="primaryPageRotateCcw"
+  primaryToolbarId="primaryPageRotateCcw"
   class="rotateCcw"
   [cssClass]="showRotateButton | responsiveCSSClass : 'hiddenXLView'"
   title="Rotate Counterclockwise"

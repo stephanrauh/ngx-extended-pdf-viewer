@@ -2173,6 +2173,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
       if ('sidebarVisible' in changes || 'activeSidebarView' in changes) {
         if (this.sidebarVisible) {
+          PDFViewerApplication.pdfSidebar.open();
           const view = Number(this.activeSidebarView);
           if (view === 1 || view === 2 || view === 3 || view === 4) {
             PDFViewerApplication.pdfSidebar.switchView(view, true);

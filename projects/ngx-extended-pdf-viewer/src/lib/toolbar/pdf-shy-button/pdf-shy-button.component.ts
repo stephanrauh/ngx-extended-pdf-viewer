@@ -11,10 +11,10 @@ import { PdfShyButtonService } from './pdf-shy-button-service';
 })
 export class PdfShyButtonComponent implements OnInit, OnChanges {
   @Input()
-  public id: string;
+  public primaryToolbarId: string;
 
   @Input()
-  public secondaryToolbarId: string;
+  public secondaryMenuId: string;
 
   @Input()
   public cssClass: ResponsiveCSSClass;
