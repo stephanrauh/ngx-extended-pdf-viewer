@@ -29,7 +29,13 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 ## More breaking changes ahead! What's new in Version 18?
 
-Version 18 updates the find API, updates to pdf.js 3.8 in the stable branch and to pdf.js 3.9 in the bleeding-edge branch. The bleeding-edge branch, in turn, gives you a sneak preview to the new "stamp" editor which allows you to add images to PDF files.
+Version 18 (currently in it's alpha stage) ships with quite a few improvements:
+
+- It updates the find API,
+- brings toolbar customization to another level,
+- adds more flexibility with respect to `[pageViewMode]`, `[scrollMode]`, and `[spreadMode]`,
+- and updates to pdf.js 3.8 in the stable branch and to pdf.js 3.9 in the bleeding-edge branch.
+- The bleeding-edge branch, in turn, gives you a sneak preview to the new "stamp" editor which allows you to add images to PDF files.
 
 The updated find API also brings a couple of breaking changes. I removed the fuzzy search, the multiple words-seacrch, and the current page / page range search. "Ignore accent" now is "match diacritics". When you migrate your code, you'll have to invert your boolean logic, because "ignore accents" is the oppositve of "match diacritics". Along the way, I noticed that the find API didn't work as expected. I fixed several bugs and added more fields to the events. If you rely on the old events, brace yourself for (minor) breaking changes.
 
