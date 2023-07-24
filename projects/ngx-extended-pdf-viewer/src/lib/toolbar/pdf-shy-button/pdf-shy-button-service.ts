@@ -16,6 +16,7 @@ export interface PdfShyButtonDescription {
   image: SafeHtml;
   action?: () => void;
   eventBusName?: string;
+  closeOnClick?: boolean;
 }
 
 @Injectable({
@@ -40,6 +41,7 @@ export class PdfShyButtonService {
       image: button.imageHtml,
       action: button.action,
       eventBusName: button.eventBusName,
+      closeOnClick: button.closeOnClick,
     };
     if (previousDefinition >= 0) {
       this.buttons[previousDefinition] = description;

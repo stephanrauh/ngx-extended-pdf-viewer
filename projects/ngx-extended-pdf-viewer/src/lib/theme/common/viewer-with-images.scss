@@ -650,21 +650,14 @@ html[dir='rtl'] ngx-extended-pdf-viewer #findInput[data-status='pending'] {
   background-color: rgba(255, 102, 102, 1);
 }
 
-html[dir='rtl'] ngx-extended-pdf-viewer ngx-extended-pdf-viewer {
-  .secondaryToolbar,
+ngx-extended-pdf-viewer ngx-extended-pdf-viewer {
   .editorParamsToolbar {
     padding: 6px;
     height: auto;
     z-index: 3000;
   }
 }
-html[dir='ltr'] ngx-extended-pdf-viewer .secondaryToolbar {
-  right: 4px;
-}
 
-html[dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbar {
-  left: 4px;
-}
 ngx-extended-pdf-viewer {
   .editorParamsToolbarContainer {
     width: 220px;
@@ -715,17 +708,7 @@ ngx-extended-pdf-viewer {
     background-color: white;
   }
 
-  #secondaryToolbarButtonContainer {
-    width: 250px;
-    max-height: 400px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
 
-  #secondaryToolbarButtonContainer.hiddenScrollModeButtons > .scrollModeButtons,
-  #secondaryToolbarButtonContainer.hiddenSpreadModeButtons > .spreadModeButtons {
-    display: none !important;
-  }
 
   #editorInkParamsToolbar {
     inset-inline-end: 40px;
@@ -865,7 +848,6 @@ html[dir="rtl"] #toolbarSidebarRight *{
 
 ngx-extended-pdf-viewer {
   .toolbarButton,
-  // .secondaryToolbarButton,
   .dialogButton {
     border: 0 none;
     background: none;
@@ -881,7 +863,6 @@ ngx-extended-pdf-viewer {
   }
 
   .toolbarButton[disabled],
-  // .secondaryToolbarButton[disabled],
   .dialogButton[disabled] {
     opacity: 0.5;
   }
@@ -986,26 +967,6 @@ html[dir='rtl'] ngx-extended-pdf-viewer #findNext {
 }
 
 ngx-extended-pdf-viewer {
-  .toolbarButton::before,
-  .secondaryToolbarButton::before {
-    /* All matching images have a size of 16x16
-   * All relevant containers have a size of 32x25 */
-    position: absolute;
-    display: inline-block;
-    top: 4px;
-    left: 7px;
-  }
-}
-
-html[dir='ltr'] ngx-extended-pdf-viewer .secondaryToolbarButton::before {
-  left: 4px;
-}
-
-html[dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbarButton::before {
-  right: 4px;
-}
-
-ngx-extended-pdf-viewer {
   .toolbarButton.pdfSidebarNotification::after {
     position: absolute;
     display: inline-block;
@@ -1026,34 +987,7 @@ html[dir='rtl'] ngx-extended-pdf-viewer .toolbarButton.pdfSidebarNotification::a
   right: 17px;
 }
 
-ngx-extended-pdf-viewer {
-  .secondaryToolbarButton {
-    position: relative;
-    margin: 0 0 4px 0;
-    padding: 3px 0 1px 0;
-    height: auto;
-    min-height: 25px;
-    width: 200px;
-    white-space: normal;
-  }
-}
-html[dir='ltr'] ngx-extended-pdf-viewer .secondaryToolbarButton {
-  padding-left: 24px;
-  text-align: left;
-}
 
-html[dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbarButton {
-  padding-right: 24px;
-  text-align: right;
-}
-
-html[dir='ltr'] ngx-extended-pdf-viewer .secondaryToolbarButton > span {
-  padding-right: 4px;
-}
-
-html[dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbarButton > span {
-  padding-left: 4px;
-}
 
 ngx-extended-pdf-viewer .html {
   .toolbarField {

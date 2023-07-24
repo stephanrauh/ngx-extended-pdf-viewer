@@ -20,7 +20,7 @@ export class PdfShyButtonComponent implements OnInit, OnChanges {
   public cssClass: ResponsiveCSSClass;
 
   @Input()
-  public eventBusName: string;
+  public eventBusName: string | undefined = undefined;
 
   @Input()
   public l10nId: string;
@@ -41,7 +41,10 @@ export class PdfShyButtonComponent implements OnInit, OnChanges {
   public order: number;
 
   @Input()
-  public action: (() => void) | undefined;
+  public action: (() => void) | undefined = undefined;
+
+  @Input()
+  public closeOnClick: boolean = true;
 
   private _imageHtml: SafeHtml;
 

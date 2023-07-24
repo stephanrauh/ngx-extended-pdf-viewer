@@ -18,10 +18,10 @@
         class="secondaryToolbarButton"
         [title]="button.title"
         [attr.data-l10n-id]="button.l10nId"
-        (click)="onClick($event, button.action, button.eventBusName)"
+        (click)="onClick($event, button.action, button.eventBusName, button.closeOnClick)"
       >
-        <span *ngIf="button.image" [innerHTML]="button.image"></span>
-        <span [attr.data-l10n-id]="button.l10nLabel">{{ button.title }}</span>
+        <span class="icon" *ngIf="button.image" [innerHTML]="button.image"></span>
+        <span class="toolbar-caption" [attr.data-l10n-id]="button.l10nLabel">{{ button.title }}</span>
       </button>
     </div>
   </div>

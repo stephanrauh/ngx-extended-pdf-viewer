@@ -223,16 +223,19 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
     return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
-  public onClick(htmlevent: Event, action: undefined | (() => void), eventBusName?: string): void {
+  public onClick(htmlevent: Event, action: undefined | (() => void), eventBusName?: string, closeOnClick?: boolean): void {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const origin = htmlevent.target as HTMLElement;
     origin?.classList.add('toggled');
     if (action) {
       action();
       htmlevent.preventDefault();
     } else if (eventBusName) {
-      const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
       PDFViewerApplication.eventBus.dispatch(eventBusName);
       htmlevent.preventDefault();
+    }
+    if (closeOnClick) {
+      PDFViewerApplication.secondaryToolbar.close();
     }
   }
 }

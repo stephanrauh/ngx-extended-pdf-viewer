@@ -1,5 +1,6 @@
 import { Component, Input, NgZone } from '@angular/core';
 import { take } from 'rxjs';
+import { ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { SpreadType } from '../../options/spread-type';
 import { PDFNotificationService } from '../../pdf-notification-service';
@@ -13,6 +14,9 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
 export class PdfOddSpreadComponent {
   @Input()
   public show: ResponsiveVisibility = true;
+
+  @Input()
+  public scrollMode: ScrollModeType;
 
   public spread: SpreadType = 'off';
 

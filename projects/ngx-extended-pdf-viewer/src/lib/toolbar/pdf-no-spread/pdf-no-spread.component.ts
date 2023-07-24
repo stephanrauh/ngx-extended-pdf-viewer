@@ -1,5 +1,6 @@
 import { Component, Input, NgZone, OnChanges } from '@angular/core';
 import { take } from 'rxjs';
+import { ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { SpreadType } from '../../options/spread-type';
 import { PDFNotificationService } from '../../pdf-notification-service';
@@ -15,6 +16,9 @@ export class PdfNoSpreadComponent implements OnChanges {
   public show: ResponsiveVisibility = true;
 
   public spread: SpreadType = 'off';
+
+  @Input()
+  public scrollMode: ScrollModeType;
 
   constructor(private notificationService: PDFNotificationService, private ngZone: NgZone) {
     this.notificationService.onPDFJSInit.pipe(take(1)).subscribe(() => {

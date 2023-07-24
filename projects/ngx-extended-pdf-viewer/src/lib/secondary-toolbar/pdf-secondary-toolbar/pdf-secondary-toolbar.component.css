@@ -12,7 +12,7 @@ svg {
 
   border: 0 none;
   background: none;
-  width: 100%;
+  width: calc(100% - 4px);
   height: 25px;
 }
 
@@ -22,4 +22,58 @@ svg {
 
 .secondaryToolbarButton[disabled] {
   opacity: 0.5;
+}
+
+.secondaryToolbarButton {
+  position: relative;
+  margin: 0 0 4px 0;
+  padding: 3px 0 1px 0;
+  height: auto;
+  min-height: 25px;
+  white-space: normal;
+}
+::ng-deep html[dir='ltr'] ngx-extended-pdf-viewer .secondaryToolbarButton {
+  padding-left: 4px;
+  text-align: left;
+}
+
+::ng-deep html[dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbarButton {
+  padding-right: 4px;
+  text-align: right;
+}
+
+::ng-deep html[dir='ltr'] ngx-extended-pdf-viewer .secondaryToolbarButton > span {
+  padding-right: 4px;
+}
+
+::ng-deep html[dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbarButton > span {
+  padding-left: 4px;
+}
+
+.secondaryToolbar {
+  height: auto;
+  z-index: 3000;
+}
+
+::ng-deep html[dir='ltr'] ngx-extended-pdf-viewer .secondaryToolbar {
+  right: 4px;
+}
+
+::ng-deep [dir='rtl'] ngx-extended-pdf-viewer .secondaryToolbar {
+  left: 4px;
+}
+
+#secondaryToolbarButtonContainer {
+  width: 250px;
+  max-height: 400px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.toolbar-caption {
+  position: relative;
+  top: -3px;
+}
+.icon {
+  width: 24px;
 }
