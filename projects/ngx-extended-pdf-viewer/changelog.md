@@ -474,3 +474,4 @@
 - 17.4.3 #1665 re-initialize book mode when the user opens a new PDF document via the "file open" menu or drag-and-drop; #1159 deactivate zooming and presentation mode in book mode
 - 17.4.4 #1805 emit every event within ngZone; #1807 reactivated the presentation mode menu item of the secondary menu (stable branch pdf.js 3.5 only)
 - 17.4.5 #1808 cease setting the page acording to the visible page in single-page mode (because this is only useful to track the scroll position and because it caused an infinite loop in presentation mode) (stable branch pdf.js 3.5 only)
+- 17.4.6 #1812 use generous compatibility settings for older browsers; included the bugfix #1807 now with the bleeding edge branch, too

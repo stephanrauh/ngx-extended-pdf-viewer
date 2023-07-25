@@ -5,7 +5,7 @@ rm -r build
 
 FOLDER="assets"
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
-if [ "$BRANCH" == "bleeding-edge" ]; then
+if [ "$BRANCH" == "3.7" ]; then
   FOLDER="bleeding-edge"
 fi
 
