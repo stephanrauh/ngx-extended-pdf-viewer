@@ -17,7 +17,6 @@ import {
 import { DomSanitizer } from '@angular/platform-browser';
 import { take } from 'rxjs/operators';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
-import { ResponsiveVisibility } from '../../responsive-visibility';
 import { PdfShyButtonService } from '../../toolbar/pdf-shy-button/pdf-shy-button-service';
 import { PDFNotificationService } from './../../pdf-notification-service';
 
@@ -35,36 +34,6 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
 
   @Input()
   public mobileFriendlyZoomScale: number;
-
-  @Input()
-  public showPresentationModeButton: ResponsiveVisibility = true;
-
-  @Input()
-  public showOpenFileButton: ResponsiveVisibility = true;
-
-  @Input()
-  public showPrintButton: ResponsiveVisibility = true;
-
-  @Input()
-  public showDownloadButton: ResponsiveVisibility = true;
-
-  @Input()
-  public showPagingButtons: ResponsiveVisibility = true;
-
-  @Input()
-  public showRotateButton: ResponsiveVisibility = true;
-
-  @Input()
-  public showHandToolButton: ResponsiveVisibility = true;
-
-  @Input()
-  public showScrollingButton: ResponsiveVisibility = true;
-
-  @Input()
-  public showSpreadButton: ResponsiveVisibility = true;
-
-  @Input()
-  public showPropertiesButton: ResponsiveVisibility = true;
 
   @Input()
   public localizationInitialized: boolean;
@@ -207,16 +176,6 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
       }
     }
     return count;
-  }
-
-  public previousPage(): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.dispatch('previouspage');
-  }
-
-  public nextPage(): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.dispatch('nextpage');
   }
 
   public sanitizeHtml(html: string) {

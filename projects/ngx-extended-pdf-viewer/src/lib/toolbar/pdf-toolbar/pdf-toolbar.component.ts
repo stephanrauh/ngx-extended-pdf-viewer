@@ -19,9 +19,6 @@ export class PdfToolbarComponent implements AfterViewInit {
   public primaryMenuVisible = true;
 
   @Input()
-  public showBookmarkButton: ResponsiveVisibility = true;
-
-  @Input()
   public showDownloadButton: ResponsiveVisibility = true;
 
   @Input()
@@ -88,10 +85,10 @@ export class PdfToolbarComponent implements AfterViewInit {
   public scrollMode: ScrollModeType;
 
   @Input()
-  public showDocumentPropertiesButton: ResponsiveVisibility = true;
+  public showPropertiesButton: ResponsiveVisibility = true;
 
   @Input()
-  public showSpreadButtons: ResponsiveVisibility = true;
+  public showSpreadButton: ResponsiveVisibility = true;
 
   @Input()
   public showSinglePageModeButton: ResponsiveVisibility = true;
@@ -107,6 +104,9 @@ export class PdfToolbarComponent implements AfterViewInit {
 
   @Input()
   public showInfiniteScrollButton: ResponsiveVisibility = true;
+
+  @Input()
+  public showBookModeButton: ResponsiveVisibility = true;
 
   @Output()
   public onToolbarLoaded = new EventEmitter<HTMLElement>();

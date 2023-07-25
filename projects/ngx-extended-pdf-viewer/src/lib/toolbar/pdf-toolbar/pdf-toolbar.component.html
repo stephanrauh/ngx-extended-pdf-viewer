@@ -25,10 +25,10 @@
     </div>
     <pdf-zoom-toolbar [showZoomButtons]="showZoomButtons" [zoomLevels]="zoomLevels"></pdf-zoom-toolbar>
     <div id="toolbarViewerRight">
-      <pdf-document-properties [show]="showDocumentPropertiesButton"></pdf-document-properties>
-      <pdf-no-spread [scrollMode]="scrollMode" [show]="showSpreadButtons"></pdf-no-spread>
-      <pdf-odd-spread [scrollMode]="scrollMode" [show]="showSpreadButtons"></pdf-odd-spread>
-      <pdf-even-spread [scrollMode]="scrollMode" [show]="showSpreadButtons"></pdf-even-spread>
+      <pdf-document-properties [show]="showPropertiesButton"></pdf-document-properties>
+      <pdf-no-spread [scrollMode]="scrollMode" [show]="showSpreadButton"></pdf-no-spread>
+      <pdf-odd-spread [scrollMode]="scrollMode" [show]="showSpreadButton"></pdf-odd-spread>
+      <pdf-even-spread [scrollMode]="scrollMode" [show]="showSpreadButton"></pdf-even-spread>
       <pdf-single-page-mode
         [show]="showSinglePageModeButton"
         [pageViewMode]="pageViewMode"
@@ -59,6 +59,12 @@
         (pageViewModeChange)="updatePageViewMode($event)"
         [scrollMode]="scrollMode"
       ></pdf-infinite-scroll>
+      <pdf-book-mode
+        [show]="showBookModeButton"
+        [pageViewMode]="pageViewMode"
+        (pageViewModeChange)="updatePageViewMode($event)"
+        [scrollMode]="scrollMode"
+      ></pdf-book-mode>
       <pdf-hand-tool [showHandToolButton]="showHandToolButton"></pdf-hand-tool>
       <pdf-select-tool [showSelectToolButton]="showHandToolButton"></pdf-select-tool>
       <pdf-rotate-page [showRotateButton]="showRotateButton" [clockwise]="true" [counterClockwise]="false"> </pdf-rotate-page>

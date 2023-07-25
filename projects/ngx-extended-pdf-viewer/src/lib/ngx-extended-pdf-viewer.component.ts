@@ -661,12 +661,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public showSecondaryToolbarButton = true;
 
   @Input()
-  public showDocumentPropertiesButton: ResponsiveVisibility = true;
-
-  @Input()
-  public showSpreadButtons: ResponsiveVisibility = true;
-
-  @Input()
   public showSinglePageModeButton: ResponsiveVisibility = true;
 
   @Input()
@@ -680,6 +674,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   @Input()
   public showInfiniteScrollButton: ResponsiveVisibility = true;
+
+  @Input()
+  public showBookModeButton: ResponsiveVisibility = true;
 
   /** Set by the event (secondaryMenuIsEmpty) */
   public hideKebabMenuForSecondaryToolbar = false;
