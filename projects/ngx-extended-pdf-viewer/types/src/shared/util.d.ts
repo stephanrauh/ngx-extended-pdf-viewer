@@ -36,6 +36,8 @@ export namespace AnnotationEditorParamsType {
     const INK_COLOR: number;
     const INK_THICKNESS: number;
     const INK_OPACITY: number;
+    const INK_DIMS: number;
+    const STAMP_DIMS: number;
 }
 export const AnnotationEditorPrefix: "pdfjs_internal_editor_";
 export namespace AnnotationEditorType {
@@ -182,6 +184,7 @@ export class InvalidPDFException extends InvalidPDFException_base {
 }
 export function isArrayBuffer(v: any): boolean;
 export function isArrayEqual(arr1: any, arr2: any): boolean;
+export const isNodeJS: any;
 export const LINE_DESCENT_FACTOR: 0.35;
 export const LINE_FACTOR: 1.35;
 export const MAX_IMAGE_SIZE_TO_CACHE: 10000000;

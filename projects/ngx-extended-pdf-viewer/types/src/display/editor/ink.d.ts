@@ -18,9 +18,9 @@ export class InkEditor extends AnnotationEditor {
      * @param {Arra<Array<number>} bezier
      * @returns {Path2D}
      */
-    static "__#14@#buildPath2D"(bezier: Arra<number[]>): Path2D;
-    static "__#14@#toPDFCoordinates"(points: any, rect: any, rotation: any): any;
-    static "__#14@#fromPDFCoordinates"(points: any, rect: any, rotation: any): any;
+    static "__#15@#buildPath2D"(bezier: Arra<number[]>): Path2D;
+    static "__#15@#toPDFCoordinates"(points: any, rect: any, rotation: any): any;
+    static "__#15@#fromPDFCoordinates"(points: any, rect: any, rotation: any): any;
     /** @inheritdoc */
     static deserialize(data: any, parent: any, uiManager: any): AnnotationEditor | null;
     constructor(params: any);

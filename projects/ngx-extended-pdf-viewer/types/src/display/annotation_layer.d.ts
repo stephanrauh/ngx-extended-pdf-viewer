@@ -106,6 +106,7 @@ export class AnnotationLayer {
 export class FreeTextAnnotationElement extends AnnotationElement {
     constructor(parameters: any);
     textContent: any;
+    textPosition: any;
     annotationEditorType: number;
     render(): HTMLElement | undefined;
 }
@@ -143,7 +144,6 @@ declare class AnnotationElement {
     _fieldObjects: any;
     parent: any;
     container: HTMLElement | undefined;
-    quadrilaterals: HTMLElement[] | undefined;
     /**
      * Create an empty container for the annotation's HTML element.
      *
@@ -161,12 +161,9 @@ declare class AnnotationElement {
      * Create quadrilaterals from the annotation's quadpoints.
      *
      * @private
-     * @param {boolean} ignoreBorder
      * @memberof AnnotationElement
-     * @returns {Array<HTMLElement>} An array of section elements.
      */
     private _createQuadrilaterals;
-    firstQuadRect: any;
     /**
      * Create a popup for the annotation's HTML element. This is used for
      * annotations that do not have a Popup entry in the dictionary, but
@@ -177,23 +174,12 @@ declare class AnnotationElement {
      */
     private _createPopup;
     /**
-     * Render the quadrilaterals of the annotation.
-     *
-     * @private
-     * @param {string} className
-     * @memberof AnnotationElement
-     * @returns {Array<HTMLElement>} An array of section elements.
-     */
-    private _renderQuadrilaterals;
-    /**
      * Render the annotation's HTML element(s).
      *
      * @public
      * @memberof AnnotationElement
-     * @returns {HTMLElement|Array<HTMLElement>|undefined} A section element or
-     *   an array of section elements.
      */
-    public render(): HTMLElement | Array<HTMLElement> | undefined;
+    public render(): void;
     /**
      * @private
      * @returns {Array}
@@ -201,8 +187,17 @@ declare class AnnotationElement {
     private _getElementsByName;
     show(): void;
     hide(): void;
-    getElementsToTriggerPopup(): HTMLElement | HTMLElement[] | undefined;
+    /**
+     * Get the HTML element(s) which can trigger a popup when clicked or hovered.
+     *
+     * @public
+     * @memberof AnnotationElement
+     * @returns {Array<HTMLElement>|HTMLElement} An array of elements or an
+     *          element.
+     */
+    public getElementsToTriggerPopup(): Array<HTMLElement> | HTMLElement;
     addHighlightArea(): void;
     _editOnDoubleClick(): void;
+    #private;
 }
 export {};

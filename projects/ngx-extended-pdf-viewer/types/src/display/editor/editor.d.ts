@@ -78,6 +78,7 @@ export class AnnotationEditor {
     name: any;
     div: HTMLDivElement | null;
     annotationElementId: any;
+    _willKeepAspectRatio: boolean;
     rotation: number;
     pageRotation: number;
     pageDimensions: any[];
@@ -142,12 +143,19 @@ export class AnnotationEditor {
      * @param {number} y - y-translation in screen coordinates.
      */
     translate(x: number, y: number): void;
+    fixAndSetPosition(): void;
     /**
      * Convert a screen translation into a page one.
      * @param {number} x
      * @param {number} y
      */
     screenToPageTranslation(x: number, y: number): number[];
+    /**
+     * Convert a page translation into a screen one.
+     * @param {number} x
+     * @param {number} y
+     */
+    pageTranslationToScreen(x: number, y: number): number[];
     get parentScale(): any;
     get parentRotation(): number;
     get parentDimensions(): number[];
@@ -173,6 +181,9 @@ export class AnnotationEditor {
      * @param {PointerEvent} event
      */
     pointerdown(event: PointerEvent): void;
+    /**
+     * Convert the current rect into a page one.
+     */
     getRect(tx: any, ty: any): any[];
     getRectInCurrentCoords(rect: any, pageHeight: any): any[];
     /**
@@ -229,6 +240,18 @@ export class AnnotationEditor {
      * It's used on ctrl+backspace action.
      */
     remove(): void;
+    /**
+     * @returns {number} the type to use in the undo/redo stack when resizing.
+     */
+    get resizeType(): number;
+    /**
+     * @returns {boolean} true if this editor can be resized.
+     */
+    get isResizable(): boolean;
+    /**
+     * Add the resizers to this editor.
+     */
+    makeResizable(): void;
     /**
      * Select this editor.
      */

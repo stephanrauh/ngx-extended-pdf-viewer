@@ -169,6 +169,7 @@ export class AnnotationEditorUIManager {
      */
     unselect(editor: AnnotationEditor): void;
     get hasSelection(): boolean;
+    stopUndoAccumulation(): void;
     /**
      * Undo the last command.
      */
@@ -266,6 +267,7 @@ export class CommandManager {
         overwriteIfSameType: boolean;
         keepUndo: boolean;
     }): void;
+    stopUndoAccumulation(): void;
     /**
      * Undo the last command.
      */

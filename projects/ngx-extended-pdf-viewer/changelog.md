@@ -477,3 +477,4 @@
 - 18.0.0-alpha.2 removed the CSS rule `.pdfViewer.singlePageView .page { margin: 0; }`; #1808 cease setting the page acording to the visible page in single-page mode (because this is only useful to track the scroll position and because it caused an infinite loop in presentation mode)
 - 18.0.0-alpha.3 #1809 The thumbnail view was broken in version 18.0.0-alpha.1 and -alpha.2. Now it's back.
 - 18.0.0-alpha.4 #1584 re-designed the toolbar and the secondary menu so that now every button can hide in the secondary menu and that every menu item has a corresponding button in the main toolbar; allow for combining infinite scrolling with the "wrapped" scroll mode; define the `<pdf-shy-button>` allowing users to define their own custom toolbar with buttons that hide in the secondary menu on small screens; fixed `[sidebarVisible]="true"`
+- 18.0.0-alpha.5 #1812 compile the ES5 build with generous compatibility settings; updated the bleeding edge branch

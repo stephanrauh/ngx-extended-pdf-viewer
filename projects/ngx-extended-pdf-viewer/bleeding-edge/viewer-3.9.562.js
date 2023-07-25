@@ -324,9 +324,7 @@ const PDFViewerApplication = {
       const enabled = params.get("pdfbug").split(",");
       try {
         await loadPDFBug(this);
-        this._PDFBug.init({
-          OPS: _pdfjsLib.OPS
-        }, mainContainer, enabled);
+        this._PDFBug.init(mainContainer, enabled);
       } catch (ex) {
         console.error(`_parseHashParams: "${ex.message}".`);
       }
@@ -407,6 +405,7 @@ const PDFViewerApplication = {
     const container = appConfig.mainContainer,
       viewer = appConfig.viewerContainer;
     const annotationEditorMode = _app_options.AppOptions.get("annotationEditorMode");
+    const isOffscreenCanvasSupported = _app_options.AppOptions.get("isOffscreenCanvasSupported") && _pdfjsLib.FeatureTest.isOffscreenCanvasSupported;
     const pageColors = _app_options.AppOptions.get("forcePageColors") || window.matchMedia("(forced-colors: active)").matches ? {
       background: _app_options.AppOptions.get("pageColorsBackground"),
       foreground: _app_options.AppOptions.get("pageColorsForeground")
@@ -428,7 +427,7 @@ const PDFViewerApplication = {
       removePageBorders: _app_options.AppOptions.get("removePageBorders"),
       enablePrintAutoRotate: _app_options.AppOptions.get("enablePrintAutoRotate"),
       useOnlyCssZoom: _app_options.AppOptions.get("useOnlyCssZoom"),
-      isOffscreenCanvasSupported: _app_options.AppOptions.get("isOffscreenCanvasSupported"),
+      isOffscreenCanvasSupported,
       maxCanvasPixels: _app_options.AppOptions.get("maxCanvasPixels"),
       pageViewMode: _app_options.AppOptions.get("pageViewMode"),
       enablePermissions: _app_options.AppOptions.get("enablePermissions"),
@@ -461,9 +460,8 @@ const PDFViewerApplication = {
     }
     if (appConfig.annotationEditorParams) {
       if (annotationEditorMode !== _pdfjsLib.AnnotationEditorType.DISABLE) {
-        const editorStampButton = appConfig.toolbar?.editorStampButton;
-        if (editorStampButton && _app_options.AppOptions.get("enableStampEditor") && _app_options.AppOptions.get("isOffscreenCanvasSupported") && _pdfjsLib.FeatureTest.isOffscreenCanvasSupported) {
-          editorStampButton.hidden = false;
+        if (_app_options.AppOptions.get("enableStampEditor") && isOffscreenCanvasSupported) {
+          appConfig.toolbar?.editorStampButton?.classList.remove("hidden");
         }
         this.annotationEditorParams = new _webAnnotation_editor_params.AnnotationEditorParams(appConfig.annotationEditorParams, eventBus);
       } else {
@@ -1712,55 +1710,6 @@ const PDFViewerApplication = {
   },
   get scriptingReady() {
     return this.pdfScriptingManager.ready;
-  },
-  updateAndActicateToolbarButtons() {
-    const newConfig = globalThis.PDFJS_getViewerConfiguration();
-    newConfig.defaultUrl = this.appConfig.defaultUrl;
-    this.compareObjects(newConfig.toolbar, this.appConfig.toolbar);
-    this.compareObjects(newConfig.secondaryToolbar, this.appConfig.secondaryToolbar);
-  },
-  compareObjects(obj1, obj2, path = '') {
-    if (!obj1 || !obj2) {
-      console.log(`Missing object at path: ${path}`);
-      console.log(`Value 1:`, obj1);
-      console.log(`Value 2:`, obj2);
-      return;
-    }
-    if (obj1 instanceof HTMLElement || obj2 instanceof HTMLElement) {
-      if (obj1 !== obj2) {
-        console.log(`Value mismatch at path: ${path}`);
-        console.log(`Value 1:`, obj1);
-        console.log(`Value 2:`, obj2);
-      }
-      return;
-    }
-    if (typeof obj1 !== typeof obj2) {
-      console.log(`Type mismatch at path: ${path}`);
-      console.log(`Value 1:`, obj1);
-      console.log(`Value 2:`, obj2);
-      return;
-    }
-    if (Array.isArray(obj1) && Array.isArray(obj2)) {
-      if (obj1.length !== obj2.length) {
-        console.log(`Array length mismatch at path: ${path}`);
-        console.log(`Array 1:`, obj1);
-        console.log(`Array 2:`, obj2);
-        return;
-      }
-      for (let i = 0; i < obj1.length; i++) {
-        this.compareObjects(obj1[i], obj2[i], `${path}[${i}]`);
-      }
-      return;
-    }
-    if (typeof obj1 === 'object' && typeof obj2 === 'object') {
-      const keys1 = Object.keys(obj1);
-      const keys2 = Object.keys(obj2);
-      const allKeys = new Set([...keys1, ...keys2]);
-      for (const key of allKeys) {
-        this.compareObjects(obj1[key], obj2[key], `${path}.${key}`);
-      }
-      return;
-    }
   }
 };
 exports.PDFViewerApplication = PDFViewerApplication;
@@ -3154,7 +3103,7 @@ function toggleExpandedBtn(button, toggle, view = null) {
 
 
 
-module.exports = window["pdfjs-dist/build/pdf"];
+module.exports = globalThis.pdfjsLib;
 
 /***/ }),
 /* 5 */
@@ -3298,7 +3247,7 @@ const defaultOptions = {
   },
   useOnlyCssZoom: {
     value: false,
-    kind: OptionKind.VIEWER + OptionKind.PREFERENCE
+    kind: OptionKind.VIEWER
   },
   viewerCssTheme: {
     value: 0,
@@ -3818,26 +3767,24 @@ class PDFLinkService {
           dest = [null, {
             name: "XYZ"
           }, zoomArgs.length > 1 ? zoomArgs[1] | 0 : null, zoomArgs.length > 2 ? zoomArgs[2] | 0 : null, zoomArgNumber ? zoomArgNumber / 100 : zoomArg];
-        } else {
-          if (zoomArg === "Fit" || zoomArg === "FitB") {
-            dest = [null, {
-              name: zoomArg
-            }];
-          } else if (zoomArg === "FitH" || zoomArg === "FitBH" || zoomArg === "FitV" || zoomArg === "FitBV") {
-            dest = [null, {
-              name: zoomArg
-            }, zoomArgs.length > 1 ? zoomArgs[1] | 0 : null];
-          } else if (zoomArg === "FitR") {
-            if (zoomArgs.length !== 5) {
-              globalThis.ngxConsole.error('PDFLinkService.setHash: Not enough parameters for "FitR".');
-            } else {
-              dest = [null, {
-                name: zoomArg
-              }, zoomArgs[1] | 0, zoomArgs[2] | 0, zoomArgs[3] | 0, zoomArgs[4] | 0];
-            }
+        } else if (zoomArg === "Fit" || zoomArg === "FitB") {
+          dest = [null, {
+            name: zoomArg
+          }];
+        } else if (zoomArg === "FitH" || zoomArg === "FitBH" || zoomArg === "FitV" || zoomArg === "FitBV") {
+          dest = [null, {
+            name: zoomArg
+          }, zoomArgs.length > 1 ? zoomArgs[1] | 0 : null];
+        } else if (zoomArg === "FitR") {
+          if (zoomArgs.length !== 5) {
+            globalThis.ngxConsole.error('PDFLinkService.setHash: Not enough parameters for "FitR".');
           } else {
-            globalThis.ngxConsole.error(`PDFLinkService.setHash: "${zoomArg}" is not a valid zoom value.`);
+            dest = [null, {
+              name: zoomArg
+            }, zoomArgs[1] | 0, zoomArgs[2] | 0, zoomArgs[3] | 0, zoomArgs[4] | 0];
           }
+        } else {
+          globalThis.ngxConsole.error(`PDFLinkService.setHash: "${zoomArg}" is not a valid zoom value.`);
         }
       }
       if (dest) {
@@ -5510,10 +5457,8 @@ class PDFFindController {
       if (newQuery !== prevQuery) {
         return true;
       }
-    } else {
-      if (JSON.stringify(newQuery) !== JSON.stringify(prevQuery)) {
-        return true;
-      }
+    } else if (JSON.stringify(newQuery) !== JSON.stringify(prevQuery)) {
+      return true;
     }
     switch (state.type) {
       case "again":
@@ -7021,7 +6966,9 @@ class PDFPresentationMode {
       this.pdfViewer.currentScaleValue = this.#args.scaleValue;
       this.pdfViewer.currentPageNumber = pageNumber;
       if (this.#args.annotationEditorMode !== null) {
-        this.pdfViewer.annotationEditorMode = this.#args.annotationEditorMode;
+        this.pdfViewer.annotationEditorMode = {
+          mode: this.#args.annotationEditorMode
+        };
       }
       this.#args = null;
     }, 0);
@@ -8682,7 +8629,7 @@ class PDFViewer {
   #scaleTimeoutId = null;
   #textLayerMode = _ui_utils.TextLayerMode.ENABLE;
   constructor(options) {
-    const viewerVersion = '3.9.454';
+    const viewerVersion = '3.9.562';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -14258,6 +14205,7 @@ exports.getVerbosityLevel = getVerbosityLevel;
 exports.info = info;
 exports.isArrayBuffer = isArrayBuffer;
 exports.isArrayEqual = isArrayEqual;
+exports.isNodeJS = void 0;
 exports.normalizeUnicode = normalizeUnicode;
 exports.objectFromMap = objectFromMap;
 exports.objectSize = objectSize;
@@ -14270,7 +14218,8 @@ exports.stringToUTF8String = stringToUTF8String;
 exports.unreachable = unreachable;
 exports.utf8StringToString = utf8StringToString;
 exports.warn = warn;
-;
+const isNodeJS = typeof process === "object" && process + "" === "[object process]" && !process.versions.nw && !(process.versions.electron && process.type && process.type !== "browser");
+exports.isNodeJS = isNodeJS;
 const IDENTITY_MATRIX = [1, 0, 0, 1, 0, 0];
 exports.IDENTITY_MATRIX = IDENTITY_MATRIX;
 const FONT_IDENTITY_MATRIX = [0.001, 0, 0, 0.001, 0, 0];
@@ -14317,7 +14266,9 @@ const AnnotationEditorParamsType = {
   FREETEXT_OPACITY: 3,
   INK_COLOR: 11,
   INK_THICKNESS: 12,
-  INK_OPACITY: 13
+  INK_OPACITY: 13,
+  INK_DIMS: 14,
+  STAMP_DIMS: 21
 };
 exports.AnnotationEditorParamsType = AnnotationEditorParamsType;
 const PermissionFlag = {
@@ -16256,7 +16207,6 @@ class BasePreferences {
     "scrollModeOnLoad": -1,
     "spreadModeOnLoad": -1,
     "textLayerMode": 1,
-    "useOnlyCssZoom": false,
     "viewerCssTheme": 0,
     "viewOnLoad": 0,
     "disableAutoFetch": false,
@@ -16312,10 +16262,8 @@ class BasePreferences {
       } else {
         throw new Error(`Set preference: "${value}" is a ${valueType}, expected a ${defaultType}.`);
       }
-    } else {
-      if (valueType === "number" && !Number.isInteger(value)) {
-        throw new Error(`Set preference: "${value}" must be an integer.`);
-      }
+    } else if (valueType === "number" && !Number.isInteger(value)) {
+      throw new Error(`Set preference: "${value}" must be an integer.`);
     }
     this.#prefs[name] = value;
     return this._writeToStorage(this.#prefs).catch(reason => {
@@ -17709,8 +17657,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(5);
 var _pdf_link_service = __webpack_require__(7);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.9.454';
-const pdfjsBuild = 'db03d36ec';
+const pdfjsVersion = '3.9.562';
+const pdfjsBuild = 'f7790a3d8';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
@@ -17875,8 +17823,7 @@ function webViewerLoad() {
   _app.PDFViewerApplication.run(config);
 }
 document.blockUnblockOnload?.(true);
-globalThis.webViewerLoad = webViewerLoad;
-globalThis.PDFJS_getViewerConfiguration = getViewerConfiguration;
+window.webViewerLoad = webViewerLoad;
 })();
 
 /******/ })()

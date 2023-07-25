@@ -518,10 +518,10 @@ export type PDFWorkerParameters = {
 };
 /** @type {string} */
 export const build: string;
-export const DefaultCanvasFactory: typeof DOMCanvasFactory | typeof import("./node_utils.js").NodeCanvasFactory;
-export const DefaultCMapReaderFactory: typeof DOMCMapReaderFactory;
-export const DefaultFilterFactory: typeof DOMFilterFactory | typeof import("./node_utils.js").NodeFilterFactory;
-export const DefaultStandardFontDataFactory: typeof DOMStandardFontDataFactory;
+export const DefaultCanvasFactory: any;
+export const DefaultCMapReaderFactory: any;
+export const DefaultFilterFactory: any;
+export const DefaultStandardFontDataFactory: any;
 /**
  * @typedef { Int8Array | Uint8Array | Uint8ClampedArray |
  *            Int16Array | Uint16Array |
@@ -736,7 +736,7 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#31@#docId": number;
+    static "__#32@#docId": number;
     _capability: PromiseCapability;
     _transport: any;
     _worker: any;
@@ -1340,7 +1340,7 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#34@#workerPorts": WeakMap<object, any>;
+    static "__#35@#workerPorts": WeakMap<object, any>;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */
@@ -1430,10 +1430,6 @@ export const version: string;
 import { PageViewport } from "./display_utils.js";
 import { OptionalContentConfig } from "./optional_content_config.js";
 import { PrintAnnotationStorage } from "./annotation_storage.js";
-import { DOMCanvasFactory } from "./display_utils.js";
-import { DOMCMapReaderFactory } from "./display_utils.js";
-import { DOMFilterFactory } from "./display_utils.js";
-import { DOMStandardFontDataFactory } from "./display_utils.js";
 import { PromiseCapability } from "../shared/util.js";
 import { AnnotationStorage } from "./annotation_storage.js";
 import { info } from "../shared/util.js";
@@ -1474,4 +1470,4 @@ declare class PDFObjects {
     #private;
 }
 import { MessageHandler } from "../shared/message_handler.js";
-export {};
+export { SVGGraphics };

@@ -1708,44 +1708,6 @@ const PDFViewerApplication = {
   },
   get scriptingReady() {
     return this.pdfScriptingManager.ready;
-  },
-  updateAndActicateToolbarButtons() {
-    const newConfig = globalThis.PDFJS_getViewerConfiguration();
-    this.compareObjects(newConfig, this.config);
-  },
-  compareObjects(obj1, obj2, path = '') {
-    if (typeof obj1 !== typeof obj2) {
-      console.log(`Type mismatch at path: ${path}`);
-      console.log(`Value 1:`, obj1);
-      console.log(`Value 2:`, obj2);
-      return;
-    }
-    if (Array.isArray(obj1) && Array.isArray(obj2)) {
-      if (obj1.length !== obj2.length) {
-        console.log(`Array length mismatch at path: ${path}`);
-        console.log(`Array 1:`, obj1);
-        console.log(`Array 2:`, obj2);
-        return;
-      }
-      for (let i = 0; i < obj1.length; i++) {
-        this.compareObjects(obj1[i], obj2[i], `${path}[${i}]`);
-      }
-      return;
-    }
-    if (typeof obj1 === 'object' && typeof obj2 === 'object') {
-      const keys1 = Object.keys(obj1);
-      const keys2 = Object.keys(obj2);
-      const allKeys = new Set([...keys1, ...keys2]);
-      for (const key of allKeys) {
-        this.compareObjects(obj1[key], obj2[key], `${path}.${key}`);
-      }
-      return;
-    }
-    if (obj1 !== obj2) {
-      console.log(`Value mismatch at path: ${path}`);
-      console.log(`Value 1:`, obj1);
-      console.log(`Value 2:`, obj2);
-    }
   }
 };
 exports.PDFViewerApplication = PDFViewerApplication;
@@ -8661,7 +8623,7 @@ class PDFViewer {
   #scaleTimeoutId = null;
   #textLayerMode = _ui_utils.TextLayerMode.ENABLE;
   constructor(options) {
-    const viewerVersion = '3.8.575';
+    const viewerVersion = '3.8.577';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -17655,8 +17617,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(5);
 var _pdf_link_service = __webpack_require__(7);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.8.575';
-const pdfjsBuild = '505dab675';
+const pdfjsVersion = '3.8.577';
+const pdfjsBuild = '166d35392';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
@@ -17820,8 +17782,7 @@ function webViewerLoad() {
   _app.PDFViewerApplication.run(config);
 }
 document.blockUnblockOnload?.(true);
-globalThis.webViewerLoad = webViewerLoad;
-globalThis.PDFJS_getViewerConfiguration = getViewerConfiguration;
+window.webViewerLoad = webViewerLoad;
 })();
 
 /******/ })()
