@@ -65,7 +65,7 @@ svg {
 
 #secondaryToolbarButtonContainer {
   width: 250px;
-  max-height: 650px;
+  max-height: 775px;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }

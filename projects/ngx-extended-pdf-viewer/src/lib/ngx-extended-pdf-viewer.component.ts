@@ -721,19 +721,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this._showScrollingButton = val;
   }
 
-  private _showSpreadButton: ResponsiveVisibility = true;
-
-  public get showSpreadButton() {
-    if (this.pageViewMode !== 'infinite-scroll') {
-      return this._showSpreadButton;
-    }
-    return false;
-  }
-
   @Input()
-  public set showSpreadButton(val: ResponsiveVisibility) {
-    this._showSpreadButton = val;
-  }
+  public showSpreadButton: ResponsiveVisibility = true;
 
   @Input()
   public showPropertiesButton: ResponsiveVisibility = true;

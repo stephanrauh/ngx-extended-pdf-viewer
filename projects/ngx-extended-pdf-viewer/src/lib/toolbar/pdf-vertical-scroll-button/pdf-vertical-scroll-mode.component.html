@@ -3,7 +3,7 @@
   title="Use Vertical Scrolling"
   primaryToolbarId="scrollVertical"
   l10nId="scroll_vertical"
-  [toggled]="scrollMode == 0"
+  [toggled]="scrollMode == 0 && pageViewMode !== 'book'"
   [action]="onClick"
   l10nLabel="scroll_vertical_label"
   [order]="3100"

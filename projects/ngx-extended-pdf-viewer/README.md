@@ -32,12 +32,15 @@ This library provides an embeddable PDF viewer component. It's different from ot
 Version 18 (currently in it's alpha stage) ships with quite a few improvements:
 
 - It updates the find API,
-- brings toolbar customization to another level,
+- brings toolbar customization and responsive design to another level,
+- give you the option to add many buttons to the toolbar that used to be hidden in the secondary menu,
 - adds more flexibility with respect to `[pageViewMode]`, `[scrollMode]`, and `[spreadMode]`,
 - and updates to pdf.js 3.8 in the stable branch and to pdf.js 3.9 in the bleeding-edge branch.
 - The bleeding-edge branch, in turn, gives you a sneak preview to the new "stamp" editor which allows you to add images to PDF files.
 
-The updated find API also brings a couple of breaking changes. I removed the fuzzy search, the multiple words-seacrch, and the current page / page range search. "Ignore accent" now is "match diacritics". When you migrate your code, you'll have to invert your boolean logic, because "ignore accents" is the oppositve of "match diacritics". Along the way, I noticed that the find API didn't work as expected. I fixed several bugs and added more fields to the events. If you rely on the old events, brace yourself for (minor) breaking changes.
+A side-effect of the improvements of the toolbar and the secondary menu is a slightly modified layout. Most people won't notice, but if you're using screenshot tests, expect them to break.
+
+The updated find API brings a couple of breaking changes. I removed the fuzzy search, the multiple words-seacrch, and the current page / page range search. "Ignore accent" now is "match diacritics". When you migrate your code, you'll have to invert your boolean logic, because "ignore accents" is the oppositve of "match diacritics". Along the way, I noticed that the find API didn't work as expected. I fixed several bugs and added more fields to the events. If you rely on the old events, brace yourself for (minor) breaking changes.
 
 The reason for the breaking changes is that maintaining the library became more time-consuming with each version of pdf.js. So I had to reduce the differences between the libraries. In other words, I pruned ngx-extended-pdf-viewer. I'm positive I've finished pruning, so in future, there will be less breaking changes. Please apologize for the inconvenience!
 
@@ -73,10 +76,6 @@ The base library now is pdf.js 3.5 in the stable branch and pdf.js 3.7 in the "b
 
 There's also a detailed <a href="https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/main/projects/ngx-extended-pdf-viewer/changelog.md">changelog</a>.
 
-## Announcement: version 18 is going to drop the extended find bar
-
-A feature I'm about to drop in version 18 is the extended find bar. The base library now ships most of the features I've added a couple of years ago, and their implementation is better. Just think of the wide range of languages and character sets pdf.js supports. To be honest, that's a merge conflict I didn't resolve since 14 month, so it's unlikely I'm ever going to solve it. So it's better to abandon my implementation in favor of their implementation. This means that fuzzy search, multiple search teams, and the distinction between phrase search and word search are gone.
-
 ## Showcase and manual
 
 There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook.
@@ -90,7 +89,7 @@ Would you like to participate in a popular open source project? It's easy: just 
 - programmatic API for many features, such as searching
 - Editor: add text, images, or free-style drawings to your PDF file. (The image feature requires pdf.js 3.9 or higher).
 - Printing
-- Drag and drop
+- Drag and drop of PDF files to the viewer
 - Support for forms, including two-way binding
 - XFA forms are also supported (with a few limitations)
 - (Limited) support for signatures (lacking verification of the signature, so use on your own risk!)
@@ -99,12 +98,12 @@ Would you like to participate in a popular open source project? It's easy: just 
 - Download (including form data) and upload
 - Zoom (with optional two-way binding to an attribute)
 - Full-screen mode
-- Various selection tools
-- Standard display or even / odd spreads (like a book)
 - Book mode with animated page turn animations
 - Single page mode (supporting giant PDF documents of 30000+ pages)
 - Infinite scrolling
 - Plus several other approaches to scrolling (vertical, horizontal, "wrapped" scrolling)
+- Various selection tools
+- Standard display or even / odd spreads (like a book)
 - A wide range of event listeners
 - Internationalization (providing translations to several dozen languages)
 - Direct access to the core API of pdf.js (including TypeScript definition files)
