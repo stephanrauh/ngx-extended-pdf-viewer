@@ -68,11 +68,8 @@ export * from './lib/toolbar/pdf-findbar/pdf-find-previous/pdf-find-previous.com
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-message-container/pdf-findbar-message-container.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-one-container/pdf-find-highlight-all/pdf-find-highlight-all.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-one-container/pdf-find-match-case/pdf-find-match-case.component';
-export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-one-container/pdf-findbar-options-one-container.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-find-results-count/pdf-find-results-count.component';
-export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-three-container/pdf-findbar-options-three-container.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-find-entire-word/pdf-find-entire-word.component';
-export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-findbar-options-two-container.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-match-diacritics/pdf-match-diacritics.component';
 export * from './lib/toolbar/pdf-findbar/pdf-findbar.component';
 export * from './lib/toolbar/pdf-findbar/pdf-search-input-field/pdf-search-input-field.component';

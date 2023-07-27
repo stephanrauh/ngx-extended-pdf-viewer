@@ -622,7 +622,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public showFindEntirePhrase = true;
 
   @Input()
-  public showFindIgnoreAccents = true;
+  public showFindMatchDiacritics = true;
 
   @Input()
   public showFindFuzzySearch = true;

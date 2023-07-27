@@ -40,9 +40,11 @@ Version 18 (currently in its alpha stage) ships with quite a few improvements:
 
 A slightly modified layout is a side-effect of the improvements of the toolbar and the secondary menu. Most people won't notice, but if you're using screenshot tests, expect them to break.
 
-The updated find API brings a couple of breaking changes. I removed the fuzzy search, the multiple words-search, and the current page / page range search. "Ignore accent" now is "match diacritics." When you migrate your code, you'll have to invert your boolean logic because "ignore accents" is the opposite of "match diacritics". Along the way, I noticed that the find API didn't work as expected. I fixed several bugs and added more fields to the events. If you rely on the old events, brace yourself for (minor) breaking changes.
+The updated find API brings a couple of breaking changes. I removed the fuzzy search, the multiple words-search, and the current page / page range search. "Ignore accent" now is "match diacritics." When you migrate your code, you'll have to invert your boolean logic because "ignore accents" is the opposite of "match diacritics". Along the way, I noticed that the find API didn't work as expected. I fixed several bugs and added more fields to the events. If you rely on the old events, brace yourself for (minor) breaking changes. Plus, I've renamed, moved, and even removed a couple of classes to make the
+new file structure match the simplified find bar.
 
-The breaking changes are because maintaining the library became more time-consuming with each version of pdf.js. So I had to reduce the differences between the libraries. In other words, I pruned ngx-extended-pdf-viewer. I'm positive I've finished pruning, so in the future, there will be fewer breaking changes. Please apologize for the inconvenience!
+The breaking changes became nessary because maintaining the library became more time-consuming with each version of pdf.js. Even worse,
+the pdf.js team worked heavily on the find algorithm, but I wasn't able to merge their improvements during the last one or two years. So I had to reduce the differences between the libraries. In other words, I pruned ngx-extended-pdf-viewer. I'm positive I've finished pruning, so in the future, there will be fewer breaking changes. Please apologize for the inconvenience!
 
 If you need the old extended find bar, please stick to version 17. I've split off a separate branch, so I can maintain version 17 in parallel for a while.
 

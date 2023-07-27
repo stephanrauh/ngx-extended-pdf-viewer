@@ -49,7 +49,7 @@ export class PdfFindbarComponent implements OnInit {
   public showFindEntirePhrase = true;
 
   @Input()
-  public showFindIgnoreAccents = true;
+  public showFindMatchDiacritics = true;
 
   @Input()
   public showFindFuzzySearch = true;
