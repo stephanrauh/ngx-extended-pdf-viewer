@@ -24,6 +24,7 @@ import { PdfBookModeComponent } from './toolbar/pdf-book-mode/pdf-book-mode.comp
 import { PdfContextMenuComponent } from './toolbar/pdf-context-menu/pdf-context-menu.component';
 import { PdfDocumentPropertiesComponent } from './toolbar/pdf-document-properties/pdf-document-properties.component';
 import { PdfDownloadComponent } from './toolbar/pdf-download/pdf-download.component';
+import { PdfDrawEditorComponent } from './toolbar/pdf-draw-editor/pdf-draw-editor.component';
 import { PdfEditorComponent } from './toolbar/pdf-editor/pdf-editor.component';
 import { PdfEvenSpreadComponent } from './toolbar/pdf-even-spread/pdf-even-spread.component';
 import { PdfFindButtonComponent } from './toolbar/pdf-find-button/pdf-find-button.component';
@@ -59,6 +60,8 @@ import { PdfRotatePageComponent } from './toolbar/pdf-rotate-page/pdf-rotate-pag
 import { PdfSelectToolComponent } from './toolbar/pdf-select-tool/pdf-select-tool.component';
 import { PdfShyButtonComponent } from './toolbar/pdf-shy-button/pdf-shy-button.component';
 import { PdfSinglePageModeComponent } from './toolbar/pdf-single-page-mode/pdf-single-page-mode.component';
+import { PdfStampEditorComponent } from './toolbar/pdf-stamp-editor/pdf-stamp-editor.component';
+import { PdfTextEditorComponent } from './toolbar/pdf-text-editor/pdf-text-editor.component';
 import { PdfToggleSecondaryToolbarComponent } from './toolbar/pdf-toggle-secondary-toolbar/pdf-toggle-secondary-toolbar.component';
 import { PdfToggleSidebarComponent } from './toolbar/pdf-toggle-sidebar/pdf-toggle-sidebar.component';
 import { PdfToolbarComponent } from './toolbar/pdf-toolbar/pdf-toolbar.component';
@@ -210,6 +213,7 @@ if (typeof window !== 'undefined') {
     PdfBookModeComponent,
     PdfContextMenuComponent,
     PdfDarkThemeComponent,
+    PdfDrawEditorComponent,
     PdfDocumentPropertiesComponent,
     PdfDocumentPropertiesDialogComponent,
     PdfDownloadComponent,
@@ -257,6 +261,8 @@ if (typeof window !== 'undefined') {
     PdfSidebarContentComponent,
     PdfSidebarToolbarComponent,
     PdfSinglePageModeComponent,
+    PdfStampEditorComponent,
+    PdfTextEditorComponent,
     PdfToggleSecondaryToolbarComponent,
     PdfToggleSidebarComponent,
     PdfToolbarComponent,
@@ -277,6 +283,7 @@ if (typeof window !== 'undefined') {
     PdfBookModeComponent,
     PdfContextMenuComponent,
     PdfDarkThemeComponent,
+    PdfDrawEditorComponent,
     PdfDocumentPropertiesDialogComponent,
     PdfDownloadComponent,
     PdfEditorComponent,
@@ -322,6 +329,8 @@ if (typeof window !== 'undefined') {
     PdfSidebarContentComponent,
     PdfSidebarToolbarComponent,
     PdfSinglePageModeComponent,
+    PdfStampEditorComponent,
+    PdfTextEditorComponent,
     PdfToggleSecondaryToolbarComponent,
     PdfToggleSidebarComponent,
     PdfToolbarComponent,

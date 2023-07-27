@@ -1,75 +1,12 @@
-<div id="editorModeButtons" class="splitToolbarButton toggled hiddenTinyView" role="radiogroup" *ngIf="!!showDrawEditor || !!showTextEditor">
-  <button
-    *ngIf="pdfJsVersion >= '3.9'"
-    id="editorStamp"
-    class="toolbarButton"
-    disabled="disabled"
-    title="Text"
-    role="radio"
-    type="button"
-    aria-checked="false"
-    tabindex="34"
-    data-l10n-id="editor_free_text2"
-    [class]="showStampEditor | responsiveCSSClass : 'hiddenTinyView'"
-  >
-    <span data-l10n-id="editor_free_text2_label">Text</span>
-    <svg style="width: 20px; height: 20px" viewBox="0 0 24 24">
-      <path
-        fill="currentColor"
-        d="M13 19C13 19.7 13.13 20.37 13.35 21H5C3.9 21 3 20.11 3 19V5C3 3.9 3.9 3 5 3H19C20.11 3 21 3.9 21 5V13.35C20.37 13.13 19.7 13 19 13V5H5V19H13M13.96 12.29L11.21 15.83L9.25 13.47L6.5 17H13.35C13.75 15.88 14.47 14.91 15.4 14.21L13.96 12.29M20 18V15H18V18H15V20H18V23H20V20H23V18H20Z"
-      />
-    </svg>
-  </button>
-  <button
-    id="editorFreeText"
-    class="toolbarButton"
-    disabled="disabled"
-    title="Text"
-    role="radio"
-    type="button"
-    aria-checked="false"
-    tabindex="34"
-    data-l10n-id="editor_free_text2"
-    [class]="showTextEditor | responsiveCSSClass : 'hiddenTinyView'"
-  >
-    <span data-l10n-id="editor_free_text2_label">Text</span>
-    <svg style="width: 20px; height: 20px" viewBox="0 0 24 24">
-      <path
-        fill="currentColor"
-        d="M18.5,4L19.66,8.35L18.7,8.61C18.25,7.74 17.79,6.87 17.26,6.43C16.73,6 16.11,6 15.5,6H13V16.5C13,17 13,17.5 13.33,17.75C13.67,18 14.33,18 15,18V19H9V18C9.67,18 10.33,18 10.67,17.75C11,17.5 11,17 11,16.5V6H8.5C7.89,6 7.27,6 6.74,6.43C6.21,6.87 5.75,7.74 5.3,8.61L4.34,8.35L5.5,4H18.5Z"
-      />
-    </svg>
-  </button>
-  <button
-    id="editorInk"
-    class="toolbarButton"
-    disabled="disabled"
-    title="Draw"
-    role="radio"
-    aria-checked="false"
-    type="button"
-    tabindex="35"
-    data-l10n-id="editor_ink2"
-    [class]="showDrawEditor | responsiveCSSClass : 'hiddenTinyView'"
-  >
-    <span data-l10n-id="editor_ink2_label">Draw</span>
-    <svg
-      style="width: 20px; height: 20px"
-      version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 16 16"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-      enable-background="new 0 0 16 16"
-    >
-      <g>
-        <g transform="scale(0.03125)">
-          <path
-            d="m455.1,137.9l-32.4,32.4-81-81.1 32.4-32.4c6.6-6.6 18.1-6.6 24.7,0l56.3,56.4c6.8,6.8 6.8,17.9 0,24.7zm-270.7,271l-81-81.1 209.4-209.7 81,81.1-209.4,209.7zm-99.7-42l60.6,60.7-84.4,23.8 23.8-84.5zm399.3-282.6l-56.3-56.4c-11-11-50.7-31.8-82.4,0l-285.3,285.5c-2.5,2.5-4.3,5.5-5.2,8.9l-43,153.1c-2,7.1 0.1,14.7 5.2,20 5.2,5.3 15.6,6.2 20,5.2l153-43.1c3.4-0.9 6.4-2.7 8.9-5.2l285.1-285.5c22.7-22.7 22.7-59.7 0-82.5z"
-          />
-        </g>
-      </g>
-    </svg>
-  </button>
+<div
+  id="editorModeButtons"
+  class="splitToolbarButton toggled hiddenTinyView"
+  role="radiogroup"
+  *ngIf="!!showStampEditor || !!showDrawEditor || !!showTextEditor"
+>
+  <pdf-stamp-editor [show]="showStampEditor"></pdf-stamp-editor>
+  <pdf-text-editor [show]="showTextEditor"></pdf-text-editor>
+  <pdf-draw-editor [show]="showDrawEditor"></pdf-draw-editor>
 </div>
 
-<div id="editorModeSeparator" class="verticalToolbarSeparator hiddenTinyView" *ngIf="!!showDrawEditor || !!showTextEditor"></div>
+<div id="editorModeSeparator" class="verticalToolbarSeparator hiddenTinyView" *ngIf="!!showStampEditor || !!showDrawEditor || !!showTextEditor"></div>
