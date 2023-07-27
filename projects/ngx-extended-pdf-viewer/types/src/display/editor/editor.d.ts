@@ -143,6 +143,13 @@ export class AnnotationEditor {
      * @param {number} y - y-translation in screen coordinates.
      */
     translate(x: number, y: number): void;
+    /**
+     * Translate the editor position within its page and adjust the scroll
+     * in order to have the editor in the view.
+     * @param {number} x - x-translation in page coordinates.
+     * @param {number} y - y-translation in page coordinates.
+     */
+    translateInPage(x: number, y: number): void;
     fixAndSetPosition(): void;
     /**
      * Convert a screen translation into a page one.
@@ -240,10 +247,6 @@ export class AnnotationEditor {
      * It's used on ctrl+backspace action.
      */
     remove(): void;
-    /**
-     * @returns {number} the type to use in the undo/redo stack when resizing.
-     */
-    get resizeType(): number;
     /**
      * @returns {boolean} true if this editor can be resized.
      */

@@ -30,14 +30,13 @@ export namespace AnnotationBorderStyleType {
     const UNDERLINE: number;
 }
 export namespace AnnotationEditorParamsType {
+    const RESIZE: number;
     const FREETEXT_SIZE: number;
     const FREETEXT_COLOR: number;
     const FREETEXT_OPACITY: number;
     const INK_COLOR: number;
     const INK_THICKNESS: number;
     const INK_OPACITY: number;
-    const INK_DIMS: number;
-    const STAMP_DIMS: number;
 }
 export const AnnotationEditorPrefix: "pdfjs_internal_editor_";
 export namespace AnnotationEditorType {

@@ -9,6 +9,8 @@ export type AnnotationEditorLayer = import("./annotation_editor_layer.js").Annot
  * some action like copy/paste, undo/redo, ...
  */
 export class AnnotationEditorUIManager {
+    static "__#22@#TRANSLATE_SMALL": number;
+    static "__#22@#TRANSLATE_BIG": number;
     static get _keyboardManager(): any;
     constructor(container: any, eventBus: any, pdfDocument: any, pageColors: any);
     viewParameters: {
@@ -188,6 +190,7 @@ export class AnnotationEditorUIManager {
      */
     delete(): void;
     commitOrRemove(): void;
+    hasSomethingToControl(): boolean;
     /**
      * Select all the editors.
      */
@@ -196,6 +199,7 @@ export class AnnotationEditorUIManager {
      * Unselect all the selected editors.
      */
     unselectAll(): void;
+    translateSelectedEditors(x: any, y: any): void;
     /**
      * Is the current editor the one passed as argument?
      * @param {AnnotationEditor} editor
