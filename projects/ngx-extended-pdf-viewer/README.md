@@ -29,22 +29,22 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 ## More breaking changes ahead! What's new in Version 18?
 
-Version 18 (currently in it's alpha stage) ships with quite a few improvements:
+Version 18 (currently in its alpha stage) ships with quite a few improvements:
 
 - It updates the find API,
 - brings toolbar customization and responsive design to another level,
-- give you the option to add many buttons to the toolbar that used to be hidden in the secondary menu,
-- adds more flexibility with respect to `[pageViewMode]`, `[scrollMode]`, and `[spreadMode]`,
+- gives you the option to add many buttons to the toolbar that used to hide in the secondary menu,
+- adds more flexibility with for `[pageViewMode]`, `[scrollMode]`, and `[spreadMode]`,
 - and updates to pdf.js 3.8 in the stable branch and to pdf.js 3.9 in the bleeding-edge branch.
-- The bleeding-edge branch, in turn, gives you a sneak preview to the new "stamp" editor which allows you to add images to PDF files.
+- The bleeding-edge branch, in turn, gives you a sneak preview of the new "stamp" editor, which allows you to add images to PDF files.
 
-A side-effect of the improvements of the toolbar and the secondary menu is a slightly modified layout. Most people won't notice, but if you're using screenshot tests, expect them to break.
+A slightly modified layout is a side-effect of the improvements of the toolbar and the secondary menu. Most people won't notice, but if you're using screenshot tests, expect them to break.
 
-The updated find API brings a couple of breaking changes. I removed the fuzzy search, the multiple words-seacrch, and the current page / page range search. "Ignore accent" now is "match diacritics". When you migrate your code, you'll have to invert your boolean logic, because "ignore accents" is the oppositve of "match diacritics". Along the way, I noticed that the find API didn't work as expected. I fixed several bugs and added more fields to the events. If you rely on the old events, brace yourself for (minor) breaking changes.
+The updated find API brings a couple of breaking changes. I removed the fuzzy search, the multiple words-search, and the current page / page range search. "Ignore accent" now is "match diacritics." When you migrate your code, you'll have to invert your boolean logic because "ignore accents" is the opposite of "match diacritics". Along the way, I noticed that the find API didn't work as expected. I fixed several bugs and added more fields to the events. If you rely on the old events, brace yourself for (minor) breaking changes.
 
-The reason for the breaking changes is that maintaining the library became more time-consuming with each version of pdf.js. So I had to reduce the differences between the libraries. In other words, I pruned ngx-extended-pdf-viewer. I'm positive I've finished pruning, so in future, there will be less breaking changes. Please apologize for the inconvenience!
+The breaking changes are because maintaining the library became more time-consuming with each version of pdf.js. So I had to reduce the differences between the libraries. In other words, I pruned ngx-extended-pdf-viewer. I'm positive I've finished pruning, so in the future, there will be fewer breaking changes. Please apologize for the inconvenience!
 
-If you need the old extended findbar, please stick to version 17. I've split off a separate branch, so I can maintain version 17 in parallel for a short while.
+If you need the old extended find bar, please stick to version 17. I've split off a separate branch, so I can maintain version 17 in parallel for a while.
 
 A small breaking change affects single-page mode. I've removed a CSS rule that pushed the page to the left. If you don't like the page to be centered, you can add the CSS rules in your global `style.css`:
 
@@ -82,36 +82,34 @@ There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>.
 
 ## Contributors welcome!
 
-Would you like to participate in a popular open source project? It's easy: just open a ticket so we can discuss the change, create a fork, and send me a pull request. Contributions to the showcase are as welcome as contributions to the core library itself.
+Would you like to participate in a popular open source-project? It's easy: just open a ticket so we can discuss the change, create a fork, and send me a pull request. Contributions to the showcase are as welcome as contributions to the core library.
 
 ## Features
 
 - programmatic API for many features, such as searching
 - Editor: add text, images, or free-style drawings to your PDF file. (The image feature requires pdf.js 3.9 or higher).
 - Printing
-- Drag and drop of PDF files to the viewer
+- Drag and drop PDF files to the viewer
 - Support for forms, including two-way binding
 - XFA forms are also supported (with a few limitations)
-- (Limited) support for signatures (lacking verification of the signature, so use on your own risk!)
-- Sidebar with thumbnails, outlines, and attachments (and each of them both optional and customizable)
+- (Limited) support for signatures (lacking verification of the signature, so use at your own risk!)
+- Sidebar with thumbnails, outlines, and attachments (each of them is both optional and customizable)
 - Rotating pages
 - Download (including form data) and upload
 - Zoom (with optional two-way binding to an attribute)
 - Full-screen mode
-- Book mode with animated page turn animations
+- Book mode with animated page-turn animations
 - Single page mode (supporting giant PDF documents of 30000+ pages)
 - Infinite scrolling
 - Plus several other approaches to scrolling (vertical, horizontal, "wrapped" scrolling)
-- Various selection tools
-- Standard display or even / odd spreads (like a book)
 - A wide range of event listeners
 - Internationalization (providing translations to several dozen languages)
 - Direct access to the core API of pdf.js (including TypeScript definition files)
-- The ability to deactivate (i.e. hide) every button, menu item, and the context menu
+- The ability to hide every button, menu item, and the context menu
+- Responsive design that even includes your custom toolbars
 - Color theming
-- And you can customize the toolbars, the side bar, and the menus according to your needs.
 
-Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 3.8, released in July 2023. If you're the daring one, you can also use the developer version 3.9. It's bleeding edge, so use it at own risk. Basically, the bleeding edge version helps me because I can add Mozilla's latest improvements in frequent, small increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but most of the time, the quality is production-ready.
+Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 3.8, released in July 2023. If you're the daring one, you can also use the developer version 3.9. It's bleeding edge, so use it at your own risk. Basically, the bleeding edge version helps me because I can add Mozilla's latest improvements in frequent, tiny increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but the quality is usually production-ready.
 
 ## Alternatives
 
@@ -129,12 +127,12 @@ You might also try to use the native PDF viewer of your browser. That's a valid 
 
 ## How to use the library
 
-As a rule of thumb, I recommend cloning the [showcase project from GitHub](https://github.com/stephanrauh/extended-pdf-viewer-showcase) before doing anything else. It's a standard Angular CLI application, so you'll get it up and running in less than ten minutes. It's a good starting point to do your own experiments. Maybe even more important: you'll learn whether the library works on your machine. (Of course, it does, but it's always good to double-check!)
+As a rule of thumb, I recommend cloning the [showcase project from GitHub](https://github.com/stephanrauh/extended-pdf-viewer-showcase) before doing anything else. It's a standard Angular CLI application, so you'll get it up and running in less than ten minutes. It's a good starting point to do your experiments. Maybe even more important: you'll learn whether the library works on your machine. (Of course, it does, but it's always good to double-check!)
 
-Currently, the minimum required version is Angular 12. The idea is to support the four most current versions of Angular, which gives you roughly two years to update. However, supporting so many version isn't always possible.
+Currently, the minimum required version is Angular 12. The idea is to support the four most current versions of Angular, which gives you roughly two years to update. However, supporting so many versions isn't always possible.
 
 1. run `npm add ngx-extended-pdf-viewer` and accept all the defaults
-2. Now there's an example component, but it isn't part of your application yet. You can either add the example component to your application or copy the relevant line to you HTML template:
+2. There's an example component, but it isn't yet part of your application. You can either add the example component to your application or copy the relevant line to your HTML template:
 
 ```html
 <ngx-extended-pdf-viewer [src]="'assets/example.pdf'" useBrowserLocale="true"></ngx-extended-pdf-viewer>
@@ -150,7 +148,7 @@ Missing a configuration option? File an issue on the [project bug tracker](https
 
 ## Searching programmatically
 
-The service `NgxExtendedPdfViewerService` offers you a programmatic API for searching, printing, dealing with layers, and scrolling within the page.
+The service `NgxExtendedPdfViewerService` offers a programmatic API for searching, printing, dealing with layers, and scrolling within the page.
 
 ## Internationalization
 
@@ -159,13 +157,13 @@ The service `NgxExtendedPdfViewerService` offers you a programmatic API for sear
 
 ### Slow default way
 
-If you add the translation files to your project as described above in step 3, the PDF viewer uses the browser language setting to determine which language to load. First, it loads the `locale.properties`, scans it for the desired language files, and loads the language file from the corresponding folder. That's two additional HTTP calls. That's slow, and it may even lead to errors if the network is already congested loading other resource files.
+If you add the translation files to your project as described above in step 3, the PDF viewer uses the browser language setting to determine which language to load. First, it loads the `locale.properties,` scans it for the desired language files, and loads the language file from the corresponding folder. That's two additional HTTP calls.
 
 Don't forget to set the attribute `useBrowserLocale="true"` if you follow this approach.
 
 ### Slow way with custom translation files
 
-If you want to use the slow way, but prefer to load the language files from a different URL, add a link to your application like so:
+If you want to use the slow way but prefer to load the language files from a different URL, add a link to your application like so:
 
 ```html
 <link rel="resource" type="application/l10n" href="https://www.example.com/locale/locale.properties" />
@@ -175,7 +173,7 @@ In this case, don't set `useBrowserLocale` (or set it explicitly to false).
 
 ### Inlining (aka embedding) the language files
 
-Alternatively, you can provide the translations as a Json file. This Json file has to be part of an HTML page. That's especially useful if you need only one or two languages, because the are loaded a lot faster. To get familiar with this approach, embed the Json file in the `index.html` like so:
+Alternatively, you can provide the translations as a Json file. This Json file has to be part of an HTML page. That's especially useful if you need only one or two languages. To get familiar with this approach, embed the Json file in the `index.html` like so:
 
 ```html
 <script type="application/l10n">
@@ -183,11 +181,11 @@ Alternatively, you can provide the translations as a Json file. This Json file h
 </script>
 ```
 
-The folder `node_modules/ngx-extended-pdf-viewer/assets/inline-locale-files` contains snippet files you can simply copy into your HTML page.
+The folder `node_modules/ngx-extended-pdf-viewer/assets/inline-locale-files` contains snippet files you can copy into your HTML page.
 
-_Hint_: You can also add the language definition in another HTML file. The bottom line is that the HTML snippet is already part of the DOM when the PDF viewer is initialized. Cluttering the root index file with the translations is an ugly and inflexible hack, but it works.
+_Hint_: You can add the language definition in an arbitrary HTML file. The bottom line is that the HTML snippet is already part of the DOM when the PDF viewer is initialized. Cluttering the root index file with the translations is an ugly and inflexible hack, but it works.
 
-If you're using the "inline" approach, don't set `useBrowserLocale` (or set it explicitly to `false`).
+If you use the "inline" approach, don't set `useBrowserLocale` (or set it explicitly to `false`).
 
 </details>
 
@@ -195,7 +193,7 @@ If you're using the "inline" approach, don't set `useBrowserLocale` (or set it e
 
 See https://github.com/stephanrauh/ngx-extended-pdf-viewer/tree/main/projects/ngx-extended-pdf-viewer/troubleshooting.md
 
-## Feedback, pull requests and bug reports
+## Feedback, pull requests, and bug reports
 
 Pull requests and bug reports are welcome. Please send them to the bug tracker of
 the project page: https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues
@@ -216,7 +214,7 @@ Thanks to the awesome pdf.js team and all the users who've reported bugs and eve
 
 ## Internet Explorer 11 is no longer supported
 
-Reluctantly, I have to drop support for Internet Explorer 11. The base library, Mozilla's pdf.js, now generates binaries that are no longer compatible to Internet Explorer 11, and it seems there's no easy fix. That's a pity because IE11 support was the original use-case of the library and because I frequently get messages from developers who need IE11 support. The last version known to be compatible is 5.3. Version 7.3.2 should be compatible, too, but a user reported crashes.
+Reluctantly, I have to drop support for Internet Explorer 11. The base library, Mozilla's pdf.js, now generates binaries no longer compatible with Internet Explorer 11, and it seems there's no easy fix. That's a pity because IE11 support was the original use-case of the library and because I frequently get messages from developers who need IE11 support. The last version known to be compatible is 5.3. Version 7.3.2 should be compatible, too, but a user reported crashes.
 
 ## Changelog
 
