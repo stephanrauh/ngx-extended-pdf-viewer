@@ -9,7 +9,7 @@
 <button id="zoom-button" (click)="zoom=100">zoom=100</button><span>{{zoom}}</span>
 <button id="zoom-auto-button" (click)="zoom='auto'">zoom='auto'</button>
 <button id="spread-button" (click)="spread='odd'">spread=odd</button><span>{{spread}}</span>
-<button id="sidebar-button" (click)="showSidebar=true">sidbar=true</button><span>{{spread}}</span>
+<button id="sidebar-button" (click)="showSidebar=!showSidebar">toggle sidebar</button><span>{{showSidebar}}</span>
 <ngx-extended-pdf-viewer
   [src]="'/assets/pdfs/Bootstrap-vs-Material-Design-vs-Prime-vs-Tailwind.pdf'"
   [(page)]="page"
@@ -17,4 +17,5 @@
   [(rotation)]="rotation"
   [(spread)]="spread"
   [minifiedJSLibraries]="false"
+  [(sidebarVisible)]="showSidebar"
   > </ngx-extended-pdf-viewer>
