@@ -35,7 +35,6 @@ export class PdfVerticalScrollModeComponent {
       setTimeout(() => {
         if (this.pageViewMode !== 'multiple' && this.pageViewMode !== 'infinite-scroll') {
           emitter.emit('multiple');
-          this.pageViewMode = 'multiple';
         }
         const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
         PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.VERTICAL });

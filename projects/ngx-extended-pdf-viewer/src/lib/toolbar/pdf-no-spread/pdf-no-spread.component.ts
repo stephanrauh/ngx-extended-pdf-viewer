@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnChanges } from '@angular/core';
+import { Component, Input, NgZone } from '@angular/core';
 import { take } from 'rxjs';
 import { ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
@@ -11,7 +11,7 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
   templateUrl: './pdf-no-spread.component.html',
   styleUrls: ['./pdf-no-spread.component.css'],
 })
-export class PdfNoSpreadComponent implements OnChanges {
+export class PdfNoSpreadComponent {
   @Input()
   public show: ResponsiveVisibility = true;
 
@@ -39,9 +39,5 @@ export class PdfNoSpreadComponent implements OnChanges {
   public onClick(): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     PDFViewerApplication.pdfViewer.spreadMode = 0;
-  }
-
-  public ngOnChanges(changes: any): void {
-    console.log('NoSpread', changes);
   }
 }

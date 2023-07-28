@@ -29,11 +29,10 @@
 
             <pdf-toolbar
               (onToolbarLoaded)="onToolbarLoaded($event)"
-              (pageViewModeChange)="pageViewMode = $event"
               [class.server-side-rendering]="serverSideRendering"
               [customToolbar]="customToolbar"
               [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
-              [pageViewMode]="pageViewMode"
+              [(pageViewMode)]="pageViewMode"
               [primaryMenuVisible]="primaryMenuVisible"
               [scrollMode]="scrollMode ?? 0"
               [showPropertiesButton]="showPropertiesButton"

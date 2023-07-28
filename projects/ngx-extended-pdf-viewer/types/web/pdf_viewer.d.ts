@@ -210,13 +210,7 @@ export class PDFViewer {
         down: boolean;
         lastX: any;
         lastY: any;
-        _eventHandler: (evt: any) => void; /**
-         * After calling resize, the size of the buffer will be `newSize`.
-         * The optional parameter `idsToKeep` is, if present, a Set of page-ids to
-         * push to the back of the buffer, delaying their destruction. The size of
-         * `idsToKeep` has no impact on the final size of the buffer; if `idsToKeep`
-         * is larger than `newSize`, some of those pages will be destroyed anyway.
-         */
+        _eventHandler: (evt: any) => void;
     };
     presentationModeState: number;
     _onBeforeDraw: ((evt: any) => void) | null;

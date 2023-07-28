@@ -194,6 +194,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (hasChanged) {
       const mustRedraw = !this.ngxExtendedPdfViewerIncompletelyInitialized && (this._pageViewMode === 'book' || viewMode === 'book');
       this._pageViewMode = viewMode;
+      this.pageViewModeChange.emit(this._pageViewMode);
       const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
       PDFViewerApplicationOptions?.set('pageViewMode', this.pageViewMode);
       const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
@@ -1573,9 +1574,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
       PDFViewerApplication.eventBus.on('scrollmodechanged', (x: ScrollModeChangedEvent) => {
         this.ngZone.run(() => {
-          console.log('ScrollModeChanged: ' + x.mode + ' previous: ' + this._scrollMode + ' previous page view mode: ' + this.pageViewMode);
           this._scrollMode = x.mode;
           this.scrollModeChange.emit(x.mode);
+          if (x.mode === ScrollModeType.page) {
+            if (this.pageViewMode !== 'single') {
+              this.pageViewModeChange.emit('single');
+              this._pageViewMode = 'single';
+            }
+          }
         });
       });
       PDFViewerApplication.eventBus.on('progress', (x: ProgressBarEvent) => {

@@ -29,7 +29,7 @@ export class PdfInfiniteScrollComponent {
     this.onClick = () => {
       setTimeout(() => {
         if (this.pageViewMode === 'infinite-scroll') {
-          this.pageViewMode = 'multiple';
+          // this.pageViewMode = 'multiple';
           emitter.emit('multiple');
         } else {
           const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
@@ -37,7 +37,7 @@ export class PdfInfiniteScrollComponent {
             PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.VERTICAL });
           }
           emitter.emit('infinite-scroll');
-          this.pageViewMode = 'infinite-scroll';
+          // this.pageViewMode = 'infinite-scroll';
         }
       });
     };
