@@ -2697,8 +2697,14 @@ function scrollIntoView(element, spot, scrollMatches = false, infiniteScroll = f
       offsetX += spot.left;
       parent.scrollLeft = offsetX;
     }
+  } else if (isDivInViewport(element)) {
+    return;
   }
   parent.scrollTop = offsetY;
+}
+function isDivInViewport(element) {
+  const rect = element.getBoundingClientRect();
+  return rect.top >= 0 && rect.left >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && rect.right <= (window.innerWidth || document.documentElement.clientWidth);
 }
 function watchScroll(viewAreaElement, callback) {
   const debounceScroll = function (evt) {
@@ -8623,7 +8629,7 @@ class PDFViewer {
   #scaleTimeoutId = null;
   #textLayerMode = _ui_utils.TextLayerMode.ENABLE;
   constructor(options) {
-    const viewerVersion = '3.8.577';
+    const viewerVersion = '3.8.578';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -17617,8 +17623,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(5);
 var _pdf_link_service = __webpack_require__(7);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.8.577';
-const pdfjsBuild = '166d35392';
+const pdfjsVersion = '3.8.578';
+const pdfjsBuild = 'e506c29ad';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
