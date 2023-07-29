@@ -39,6 +39,16 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   display: inline-flex;
 }
 
+#outerContainer #mainContainer .visibleXXSView,
+#outerContainer #mainContainer .visibleTinyView,
+#outerContainer #mainContainer .visibleSmallView,
+#outerContainer #mainContainer .visibleMediumView,
+#outerContainer #mainContainer .visibleLargeView,
+#outerContainer #mainContainer .visibleXLView,
+#outerContainer #mainContainer .visibleXXLView {
+  display: none;
+}
+
 @media all and (max-width: ${this.xl}px) {
   #toolbarViewerMiddle {
     display: table;
@@ -65,10 +75,6 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   #outerContainer .hiddenMediumView {
     display: inherit;
   }
-  #outerContainer .visibleLargeView,
-  #outerContainer .visibleMediumView {
-    display: none;
-  }
 }
 
 @media all and (max-width: ${this.lg}px) {
@@ -79,7 +85,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   #outerContainer .hiddenLargeView {
     display: none;
   }
-  #outerContainer .visibleLargeView {
+  #outerContainer  #mainContainer .visibleLargeView {
     display: inherit;
   }
 }
@@ -91,7 +97,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   #outerContainer .hiddenMediumView {
     display: none;
   }
-  #outerContainer .visibleMediumView {
+  #outerContainer  #mainContainer .visibleMediumView {
     display: inherit;
   }
 }
@@ -101,7 +107,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   #outerContainer .hiddenSmallView * {
     display: none;
   }
-  #outerContainer .visibleSmallView {
+  #outerContainer  #mainContainer .visibleSmallView {
     display: inherit;
   }
   .toolbarButtonSpacer {
@@ -154,7 +160,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   #outerContainer .hiddenXXLView {
     display: none;
   }
-  #outerContainer .visibleXXLView {
+  #outerContainer  #mainContainer .visibleXXLView {
     display: inherit;
   }
 }
@@ -171,7 +177,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   #outerContainer .hiddenTinyView * {
     display: none;
   }
-  #outerContainer .visibleTinyView {
+  #outerContainer  #mainContainer .visibleTinyView {
     display: inherit;
   }
 }
@@ -181,7 +187,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   #outerContainer .hiddenXXSView * {
     display: none;
   }
-  #outerContainer .visibleXXSView {
+  #outerContainer #mainContainer .visibleXXSView {
     display: inherit;
   }
 }

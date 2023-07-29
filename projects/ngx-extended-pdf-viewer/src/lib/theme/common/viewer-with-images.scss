@@ -1493,14 +1493,6 @@ ngx-extended-pdf-viewer {
 
 }
 
-ngx-extended-pdf-viewer {
-  .visibleLargeView,
-  .visibleMediumView,
-  .visibleSmallView {
-    display: none;
-  }
-}
-
 ngx-extended-pdf-viewer .html .unverified-signature-warning,
 ngx-extended-pdf-viewer .html .modified-background-warning {
   width: 100%;

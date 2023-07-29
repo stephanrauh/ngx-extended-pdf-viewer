@@ -2034,9 +2034,3 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
     display: block;
   }
 }
-
-.visibleLargeView,
-.visibleMediumView,
-.visibleSmallView {
-  display: none;
-}
