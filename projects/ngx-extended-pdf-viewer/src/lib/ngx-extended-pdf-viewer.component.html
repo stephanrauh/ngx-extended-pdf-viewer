@@ -29,6 +29,8 @@
 
             <pdf-toolbar
               (onToolbarLoaded)="onToolbarLoaded($event)"
+              [sidebarVisible]="sidebarVisible"
+              (sidebarVisibleChange)="sidebarVisible = $event"
               [class.server-side-rendering]="serverSideRendering"
               [customToolbar]="customToolbar"
               [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
@@ -62,7 +64,7 @@
               [toolbarMarginTop]="toolbarMarginTop"
               [toolbarWidth]="toolbarWidth"
               [zoomLevels]="zoomLevels"
-              [(findbarVisible)]="findbarVisible"
+              [findbarVisible]="findbarVisible"
             ></pdf-toolbar>
 
             <div class="editorParamsToolbar hidden doorHangerRight" id="editorFreeTextParamsToolbar" [class.server-side-rendering]="serverSideRendering">

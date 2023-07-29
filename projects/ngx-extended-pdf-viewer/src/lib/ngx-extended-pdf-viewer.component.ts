@@ -577,8 +577,29 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.findbarLeft = '0px';
   }
 
+  private _sidebarVisible: boolean | undefined = undefined;
+  public get sidebarVisible(): boolean | undefined {
+    return this._sidebarVisible;
+  }
   @Input()
-  public sidebarVisible: boolean | undefined = undefined;
+  public set sidebarVisible(value: boolean | undefined) {
+    if (value !== this._sidebarVisible) {
+      this.sidebarVisibleChange.emit(value);
+    }
+    this._sidebarVisible = value;
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    if (this.sidebarVisible) {
+      PDFViewerApplication.pdfSidebar.open();
+      const view = Number(this.activeSidebarView);
+      if (view === 1 || view === 2 || view === 3 || view === 4) {
+        PDFViewerApplication.pdfSidebar.switchView(view, true);
+      } else {
+        console.error('[activeSidebarView] must be an integer value between 1 and 4');
+      }
+    } else {
+      PDFViewerApplication.pdfSidebar.close();
+    }
+  }
 
   @Output()
   public sidebarVisibleChange = new EventEmitter<boolean>();
@@ -659,7 +680,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public showToolbar = true;
 
   @Input()
-  public showSecondaryToolbarButton = true;
+  public showSecondaryToolbarButton: ResponsiveVisibility = true;
 
   @Input()
   public showSinglePageModeButton: ResponsiveVisibility = true;
@@ -912,11 +933,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.secondaryToolbarTop = (33 + 38 * (factor - 1)).toString() + 'px';
     this.findbarTop = (33 + 38 * (factor - 1)).toString() + 'px';
 
-    const findButton = document.getElementById('viewFind');
+    const findButton = document.getElementById('primaryViewFind');
     if (findButton) {
       const containerPositionLeft = this.toolbar.getBoundingClientRect().left;
       const findButtonPosition = findButton.getBoundingClientRect();
-      const left = findButtonPosition.left - containerPositionLeft;
+      const left = Math.max(0, findButtonPosition.left - containerPositionLeft);
       this.findbarLeft = left + 'px';
     } else if (this.showSidebarButton) {
       this.findbarLeft = 34 + (32 * factor).toString() + 'px';
@@ -1588,12 +1609,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.ngZone.run(() => this.progress.emit(x));
       });
       PDFViewerApplication.eventBus.on('findbarclose', () => {
-        this.findbarVisible = false;
-        this.ngZone.run(() => this.findbarVisibleChange.emit(false));
+        this.ngZone.run(() => {
+          this.findbarVisible = false;
+          this.findbarVisibleChange.emit(false);
+          this.cdr.markForCheck();
+        });
       });
       PDFViewerApplication.eventBus.on('findbaropen', () => {
-        this.findbarVisible = true;
-        this.ngZone.run(() => this.findbarVisibleChange.emit(true));
+        this.ngZone.run(() => {
+          this.findbarVisible = true;
+          this.findbarVisibleChange.emit(true);
+          this.cdr.markForCheck();
+        });
       });
       PDFViewerApplication.eventBus.on('propertiesdialogclose', () => {
         this.propertiesDialogVisible = false;
@@ -2163,7 +2190,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           }
         }
       }
-      if ('sidebarVisible' in changes || 'activeSidebarView' in changes) {
+      if ('activeSidebarView' in changes) {
         if (this.sidebarVisible) {
           PDFViewerApplication.pdfSidebar.open();
           const view = Number(this.activeSidebarView);

@@ -57,6 +57,12 @@ export class PdfToolbarComponent implements AfterViewInit {
   @Input()
   public showSidebarButton: ResponsiveVisibility = true;
 
+  @Output()
+  public sidebarVisibleChange = new EventEmitter<boolean>();
+
+  @Input()
+  public sidebarVisible: boolean | undefined = false;
+
   @Input()
   public showZoomButtons: ResponsiveVisibility = true;
 
@@ -114,9 +120,6 @@ export class PdfToolbarComponent implements AfterViewInit {
   @Input()
   public findbarVisible = false;
 
-  @Output()
-  public findbarVisibleChange = new EventEmitter<boolean>();
-
   constructor(private elementRef: ElementRef) {}
 
   ngAfterViewInit(): void {
@@ -129,5 +132,9 @@ export class PdfToolbarComponent implements AfterViewInit {
       this.pageViewModeChange.emit(pageViewMode as PageViewModeType);
       this.pageViewMode = pageViewMode;
     }
+  }
+
+  public updateSidebarVisible(sidebarVisible: boolean): void {
+    this.sidebarVisibleChange.emit(sidebarVisible);
   }
 }

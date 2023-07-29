@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, NgZone, Output } from '@angular/core';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
@@ -8,5 +8,20 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
 })
 export class PdfToggleSidebarComponent {
   @Input()
-  public showSidebarButton: ResponsiveVisibility = true;
+  public show: ResponsiveVisibility = true;
+
+  @Input()
+  public sidebarVisible: boolean | undefined = false;
+
+  @Output()
+  public showChange = new EventEmitter<boolean>();
+
+  public onClick: () => void;
+
+  constructor(private ngZone: NgZone) {
+    const emitter = this.showChange;
+    this.onClick = () => {
+      emitter.emit(!this.sidebarVisible);
+    };
+  }
 }
