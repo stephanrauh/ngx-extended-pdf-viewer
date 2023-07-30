@@ -954,7 +954,7 @@ function getDocument(src) {
   const pdfBug = src.pdfBug === true;
   const length = rangeTransport ? rangeTransport.length : src.length ?? NaN;
   const useSystemFonts = typeof src.useSystemFonts === "boolean" ? src.useSystemFonts : !_util.isNodeJS && !disableFontFace;
-  const useWorkerFetch = typeof src.useWorkerFetch === "boolean" ? src.useWorkerFetch : CMapReaderFactory === _display_utils.DOMCMapReaderFactory && StandardFontDataFactory === _display_utils.DOMStandardFontDataFactory && (0, _display_utils.isValidFetchUrl)(cMapUrl, document.baseURI) && (0, _display_utils.isValidFetchUrl)(standardFontDataUrl, document.baseURI);
+  const useWorkerFetch = typeof src.useWorkerFetch === "boolean" ? src.useWorkerFetch : CMapReaderFactory === _display_utils.DOMCMapReaderFactory && StandardFontDataFactory === _display_utils.DOMStandardFontDataFactory && cMapUrl && standardFontDataUrl && (0, _display_utils.isValidFetchUrl)(cMapUrl, document.baseURI) && (0, _display_utils.isValidFetchUrl)(standardFontDataUrl, document.baseURI);
   const canvasFactory = src.canvasFactory || new DefaultCanvasFactory({
     ownerDocument
   });
@@ -987,7 +987,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.9.570',
+    apiVersion: '3.9.595',
     data,
     password,
     disableAutoFetch,
@@ -2756,9 +2756,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.9.570';
+const version = '3.9.595';
 exports.version = version;
-const build = '74ca425bd';
+const build = '26ec3ebc4';
 exports.build = build;
 
 /***/ }),
@@ -3534,6 +3534,9 @@ class AnnotationEditor {
   unselect() {
     this.#resizersDiv?.classList.add("hidden");
     this.div?.classList.remove("selectedEditor");
+    if (this.div?.contains(document.activeElement)) {
+      this._uiManager.currentLayer.div.focus();
+    }
   }
   updateParams(type, value) {}
   disableEditing() {}
@@ -3952,39 +3955,40 @@ class AnnotationEditorUIManager {
   #translation = [0, 0];
   #translationTimeoutId = null;
   #container = null;
-  static #TRANSLATE_SMALL = 1;
-  static #TRANSLATE_BIG = 10;
+  static TRANSLATE_SMALL = 1;
+  static TRANSLATE_BIG = 10;
   static get _keyboardManager() {
+    const proto = AnnotationEditorUIManager.prototype;
     const arrowChecker = self => {
       const {
         activeElement
       } = document;
       return activeElement && self.#container.contains(activeElement) && self.hasSomethingToControl();
     };
-    const small = this.#TRANSLATE_SMALL;
-    const big = this.#TRANSLATE_BIG;
-    return (0, _util.shadow)(this, "_keyboardManager", new KeyboardManager([[["ctrl+a", "mac+meta+a"], AnnotationEditorUIManager.prototype.selectAll], [["ctrl+z", "mac+meta+z"], AnnotationEditorUIManager.prototype.undo], [["ctrl+y", "ctrl+shift+z", "mac+meta+shift+z", "ctrl+shift+Z", "mac+meta+shift+Z"], AnnotationEditorUIManager.prototype.redo], [["Backspace", "alt+Backspace", "ctrl+Backspace", "shift+Backspace", "mac+Backspace", "mac+alt+Backspace", "mac+ctrl+Backspace", "Delete", "ctrl+Delete", "shift+Delete", "mac+Delete"], AnnotationEditorUIManager.prototype.delete], [["Escape", "mac+Escape"], AnnotationEditorUIManager.prototype.unselectAll], [["ArrowLeft", "mac+ArrowLeft"], AnnotationEditorUIManager.prototype.translateSelectedEditors, {
+    const small = this.TRANSLATE_SMALL;
+    const big = this.TRANSLATE_BIG;
+    return (0, _util.shadow)(this, "_keyboardManager", new KeyboardManager([[["ctrl+a", "mac+meta+a"], proto.selectAll], [["ctrl+z", "mac+meta+z"], proto.undo], [["ctrl+y", "ctrl+shift+z", "mac+meta+shift+z", "ctrl+shift+Z", "mac+meta+shift+Z"], proto.redo], [["Backspace", "alt+Backspace", "ctrl+Backspace", "shift+Backspace", "mac+Backspace", "mac+alt+Backspace", "mac+ctrl+Backspace", "Delete", "ctrl+Delete", "shift+Delete", "mac+Delete"], proto.delete], [["Escape", "mac+Escape"], proto.unselectAll], [["ArrowLeft", "mac+ArrowLeft"], proto.translateSelectedEditors, {
       args: [-small, 0],
       checker: arrowChecker
-    }], [["ctrl+ArrowLeft", "mac+shift+ArrowLeft"], AnnotationEditorUIManager.prototype.translateSelectedEditors, {
+    }], [["ctrl+ArrowLeft", "mac+shift+ArrowLeft"], proto.translateSelectedEditors, {
       args: [-big, 0],
       checker: arrowChecker
-    }], [["ArrowRight", "mac+ArrowRight"], AnnotationEditorUIManager.prototype.translateSelectedEditors, {
+    }], [["ArrowRight", "mac+ArrowRight"], proto.translateSelectedEditors, {
       args: [small, 0],
       checker: arrowChecker
-    }], [["ctrl+ArrowRight", "mac+shift+ArrowRight"], AnnotationEditorUIManager.prototype.translateSelectedEditors, {
+    }], [["ctrl+ArrowRight", "mac+shift+ArrowRight"], proto.translateSelectedEditors, {
       args: [big, 0],
       checker: arrowChecker
-    }], [["ArrowUp", "mac+ArrowUp"], AnnotationEditorUIManager.prototype.translateSelectedEditors, {
+    }], [["ArrowUp", "mac+ArrowUp"], proto.translateSelectedEditors, {
       args: [0, -small],
       checker: arrowChecker
-    }], [["ctrl+ArrowUp", "mac+shift+ArrowUp"], AnnotationEditorUIManager.prototype.translateSelectedEditors, {
+    }], [["ctrl+ArrowUp", "mac+shift+ArrowUp"], proto.translateSelectedEditors, {
       args: [0, -big],
       checker: arrowChecker
-    }], [["ArrowDown", "mac+ArrowDown"], AnnotationEditorUIManager.prototype.translateSelectedEditors, {
+    }], [["ArrowDown", "mac+ArrowDown"], proto.translateSelectedEditors, {
       args: [0, small],
       checker: arrowChecker
-    }], [["ctrl+ArrowDown", "mac+shift+ArrowDown"], AnnotationEditorUIManager.prototype.translateSelectedEditors, {
+    }], [["ctrl+ArrowDown", "mac+shift+ArrowDown"], proto.translateSelectedEditors, {
       args: [0, big],
       checker: arrowChecker
     }]]));
@@ -4126,7 +4130,7 @@ class AnnotationEditorUIManager {
       this.updateMode(_util.AnnotationEditorType.FREETEXT);
     }
     this.unselectAll();
-    const layer = this.#allLayers.get(this.#currentPageIndex);
+    const layer = this.currentLayer;
     try {
       const newEditors = [];
       for (const editor of data) {
@@ -4486,8 +4490,10 @@ class AnnotationEditorUIManager {
       hasSelectedEditor: false
     });
   }
-  translateSelectedEditors(x, y) {
-    this.commitOrRemove();
+  translateSelectedEditors(x, y, noCommit = false) {
+    if (!noCommit) {
+      this.commitOrRemove();
+    }
     if (!this.hasSelection) {
       return;
     }
@@ -6483,12 +6489,7 @@ function genericComposeSMask(maskCtx, layerCtx, width, height, subtype, backdrop
   const r0 = hasBackdrop ? backdrop[0] : 0;
   const g0 = hasBackdrop ? backdrop[1] : 0;
   const b0 = hasBackdrop ? backdrop[2] : 0;
-  let composeFn;
-  if (subtype === "Luminosity") {
-    composeFn = composeSMaskLuminosity;
-  } else {
-    composeFn = composeSMaskAlpha;
-  }
+  const composeFn = subtype === "Luminosity" ? composeSMaskLuminosity : composeSMaskAlpha;
   const PIXELS_TO_PROCESS = 1048576;
   const chunkSize = Math.min(height, Math.ceil(PIXELS_TO_PROCESS / width));
   for (let row = 0; row < height; row += chunkSize) {
@@ -7406,12 +7407,7 @@ class CanvasGraphics {
           }
         }
       }
-      let charWidth;
-      if (vertical) {
-        charWidth = width * widthAdvanceScale - spacing * fontDirection;
-      } else {
-        charWidth = width * widthAdvanceScale + spacing * fontDirection;
-      }
+      const charWidth = vertical ? width * widthAdvanceScale - spacing * fontDirection : width * widthAdvanceScale + spacing * fontDirection;
       x += charWidth;
       if (restoreNeeded) {
         ctx.restore();
@@ -8245,12 +8241,7 @@ function drawTriangle(data, context, p1, p2, p3, c1, c2, c3) {
   let xb, cbr, cbg, cbb;
   for (let y = minY; y <= maxY; y++) {
     if (y < y2) {
-      let k;
-      if (y < y1) {
-        k = 0;
-      } else {
-        k = (y1 - y) / (y1 - y2);
-      }
+      const k = y < y1 ? 0 : (y1 - y) / (y1 - y2);
       xa = x1 - (x1 - x2) * k;
       car = c1r - (c1r - c2r) * k;
       cag = c1g - (c1g - c2g) * k;
@@ -10866,11 +10857,7 @@ const convertImgDataToPng = function () {
   for (let i = 0; i < 256; i++) {
     let c = i;
     for (let h = 0; h < 8; h++) {
-      if (c & 1) {
-        c = 0xedb88320 ^ c >> 1 & 0x7fffffff;
-      } else {
-        c = c >> 1 & 0x7fffffff;
-      }
+      c = c & 1 ? 0xedb88320 ^ c >> 1 & 0x7fffffff : c >> 1 & 0x7fffffff;
     }
     crcTable[i] = c;
   }
@@ -10918,12 +10905,7 @@ const convertImgDataToPng = function () {
       return deflateSyncUncompressed(literals);
     }
     try {
-      let input;
-      if (parseInt(process.versions.node) >= 8) {
-        input = literals;
-      } else {
-        input = Buffer.from(literals);
-      }
+      const input = parseInt(process.versions.node) >= 8 ? literals : Buffer.from(literals);
       const output = require("zlib").deflateSync(input, {
         level: 9
       });
@@ -11473,12 +11455,7 @@ class SVGGraphics {
         }
         current.tspan.textContent += character;
       } else {}
-      let charWidth;
-      if (vertical) {
-        charWidth = width * widthAdvanceScale - spacing * fontDirection;
-      } else {
-        charWidth = width * widthAdvanceScale + spacing * fontDirection;
-      }
+      const charWidth = vertical ? width * widthAdvanceScale - spacing * fontDirection : width * widthAdvanceScale + spacing * fontDirection;
       x += charWidth;
     }
     current.tspan.setAttributeNS(null, "x", current.xcoords.map(pf).join(" "));
@@ -12967,9 +12944,37 @@ class FreeTextEditor extends _editor.AnnotationEditor {
   static _defaultColor = null;
   static _defaultFontSize = 10;
   static get _keyboardManager() {
-    return (0, _util.shadow)(this, "_keyboardManager", new _tools.KeyboardManager([[["ctrl+s", "mac+meta+s", "ctrl+p", "mac+meta+p"], FreeTextEditor.prototype.commitOrRemove, {
+    const proto = FreeTextEditor.prototype;
+    const arrowChecker = self => self.isEmpty();
+    const small = _tools.AnnotationEditorUIManager.TRANSLATE_SMALL;
+    const big = _tools.AnnotationEditorUIManager.TRANSLATE_BIG;
+    return (0, _util.shadow)(this, "_keyboardManager", new _tools.KeyboardManager([[["ctrl+s", "mac+meta+s", "ctrl+p", "mac+meta+p"], proto.commitOrRemove, {
       bubbles: true
-    }], [["ctrl+Enter", "mac+meta+Enter", "Escape", "mac+Escape"], FreeTextEditor.prototype.commitOrRemove]]));
+    }], [["ctrl+Enter", "mac+meta+Enter", "Escape", "mac+Escape"], proto.commitOrRemove], [["ArrowLeft", "mac+ArrowLeft"], proto._translateEmpty, {
+      args: [-small, 0],
+      checker: arrowChecker
+    }], [["ctrl+ArrowLeft", "mac+shift+ArrowLeft"], proto._translateEmpty, {
+      args: [-big, 0],
+      checker: arrowChecker
+    }], [["ArrowRight", "mac+ArrowRight"], proto._translateEmpty, {
+      args: [small, 0],
+      checker: arrowChecker
+    }], [["ctrl+ArrowRight", "mac+shift+ArrowRight"], proto._translateEmpty, {
+      args: [big, 0],
+      checker: arrowChecker
+    }], [["ArrowUp", "mac+ArrowUp"], proto._translateEmpty, {
+      args: [0, -small],
+      checker: arrowChecker
+    }], [["ctrl+ArrowUp", "mac+shift+ArrowUp"], proto._translateEmpty, {
+      args: [0, -big],
+      checker: arrowChecker
+    }], [["ArrowDown", "mac+ArrowDown"], proto._translateEmpty, {
+      args: [0, small],
+      checker: arrowChecker
+    }], [["ctrl+ArrowDown", "mac+shift+ArrowDown"], proto._translateEmpty, {
+      args: [0, big],
+      checker: arrowChecker
+    }]]));
   }
   static _type = "freetext";
   constructor(params) {
@@ -13046,6 +13051,9 @@ class FreeTextEditor extends _editor.AnnotationEditor {
       overwriteIfSameType: true,
       keepUndo: true
     });
+  }
+  _translateEmpty(x, y) {
+    this._uiManager.translateSelectedEditors(x, y, true);
   }
   getInitialTranslation() {
     const scale = this.parentScale;
@@ -16181,12 +16189,7 @@ class XfaLayer {
         html.append(node);
         continue;
       }
-      let childHtml;
-      if (child?.attributes?.xmlns) {
-        childHtml = document.createElementNS(child.attributes.xmlns, name);
-      } else {
-        childHtml = document.createElement(name);
-      }
+      const childHtml = child?.attributes?.xmlns ? document.createElementNS(child.attributes.xmlns, name) : document.createElement(name);
       html.append(childHtml);
       if (child.attributes) {
         this.setAttributes({
@@ -17636,8 +17639,8 @@ var _tools = __w_pdfjs_require__(5);
 var _annotation_layer = __w_pdfjs_require__(29);
 var _worker_options = __w_pdfjs_require__(14);
 var _xfa_layer = __w_pdfjs_require__(32);
-const pdfjsVersion = '3.9.570';
-const pdfjsBuild = '74ca425bd';
+const pdfjsVersion = '3.9.595';
+const pdfjsBuild = '26ec3ebc4';
 })();
 
 /******/ 	return __webpack_exports__;

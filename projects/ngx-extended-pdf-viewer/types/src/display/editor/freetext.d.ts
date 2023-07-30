@@ -24,6 +24,12 @@ export class FreeTextEditor extends AnnotationEditor {
     /** @inheritdoc */
     get propertiesToUpdate(): any[][];
     /**
+     * Helper to translate the editor with the keyboard when it's empty.
+     * @param {number} x in page units.
+     * @param {number} y in page units.
+     */
+    _translateEmpty(x: number, y: number): void;
+    /**
      * Commit the content we have in this editor.
      * @returns {undefined}
      */
