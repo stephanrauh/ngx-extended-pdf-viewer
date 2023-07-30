@@ -480,3 +480,5 @@
 - 18.0.0-alpha.5 #1812 compile the ES5 build with generous compatibility settings; updated the bleeding edge branch
 - 18.0.0-alpha.6 #1584 added the book-mode button
 - 18.0.0-alpha.7 #1823 reduce unnecessary scrolling when activating the single-page mode or the book mode; #1584 fine-tuning and allow the editor buttons to hide in the secondary menu
+- 18.0.0-alpha.8 #1584 finetuning and bugfixes; allow the "toggle sidebar" button to hide in the secondary menu; make the find button work reliably
+- 18.0.0-beta.0 update to pdf.js 3.9 (stable branch) and 3.10 (bleeding-edge branch); tidied up the translation files specific to ngx-extended-pdf-viewer

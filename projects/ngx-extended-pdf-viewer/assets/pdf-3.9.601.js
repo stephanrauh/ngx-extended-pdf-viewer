@@ -987,7 +987,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.9.595',
+    apiVersion: '3.9.601',
     data,
     password,
     disableAutoFetch,
@@ -1999,6 +1999,7 @@ class WorkerTransport {
   #methodPromises = new Map();
   #pageCache = new Map();
   #pagePromises = new Map();
+  #passwordCapability = null;
   constructor(messageHandler, loadingTask, networkStream, params, factory) {
     this.messageHandler = messageHandler;
     this.loadingTask = loadingTask;
@@ -2014,7 +2015,6 @@ class WorkerTransport {
     this.standardFontDataFactory = factory.standardFontDataFactory;
     this.destroyed = false;
     this.destroyCapability = null;
-    this._passwordCapability = null;
     this._networkStream = networkStream;
     this._fullReader = null;
     this._lastProgress = null;
@@ -2080,9 +2080,7 @@ class WorkerTransport {
     }
     this.destroyed = true;
     this.destroyCapability = new _util.PromiseCapability();
-    if (this._passwordCapability) {
-      this._passwordCapability.reject(new Error("Worker was destroyed during onPassword callback"));
-    }
+    this.#passwordCapability?.reject(new Error("Worker was destroyed during onPassword callback"));
     const waitOn = [];
     for (const page of this.#pageCache.values()) {
       waitOn.push(page._destroy());
@@ -2236,13 +2234,13 @@ class WorkerTransport {
       loadingTask._capability.reject(reason);
     });
     messageHandler.on("PasswordRequest", exception => {
-      this._passwordCapability = new _util.PromiseCapability();
+      this.#passwordCapability = new _util.PromiseCapability();
       if (loadingTask.onPassword) {
         const updatePassword = password => {
           if (password instanceof Error) {
-            this._passwordCapability.reject(password);
+            this.#passwordCapability.reject(password);
           } else {
-            this._passwordCapability.resolve({
+            this.#passwordCapability.resolve({
               password
             });
           }
@@ -2250,12 +2248,12 @@ class WorkerTransport {
         try {
           loadingTask.onPassword(updatePassword, exception.code);
         } catch (ex) {
-          this._passwordCapability.reject(ex);
+          this.#passwordCapability.reject(ex);
         }
       } else {
-        this._passwordCapability.reject(new _util.PasswordException(exception.message, exception.code));
+        this.#passwordCapability.reject(new _util.PasswordException(exception.message, exception.code));
       }
-      return this._passwordCapability.promise;
+      return this.#passwordCapability.promise;
     });
     messageHandler.on("DataLoaded", data => {
       loadingTask.onProgress?.({
@@ -2756,9 +2754,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.9.595';
+const version = '3.9.601';
 exports.version = version;
-const build = '26ec3ebc4';
+const build = 'ae9e54186';
 exports.build = build;
 
 /***/ }),
@@ -17639,8 +17637,8 @@ var _tools = __w_pdfjs_require__(5);
 var _annotation_layer = __w_pdfjs_require__(29);
 var _worker_options = __w_pdfjs_require__(14);
 var _xfa_layer = __w_pdfjs_require__(32);
-const pdfjsVersion = '3.9.595';
-const pdfjsBuild = '26ec3ebc4';
+const pdfjsVersion = '3.9.601';
+const pdfjsBuild = 'ae9e54186';
 })();
 
 /******/ 	return __webpack_exports__;

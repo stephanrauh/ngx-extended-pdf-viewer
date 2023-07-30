@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { getVersionSuffix, pdfDefaultOptions } from '../../options/pdf-default-options';
+import { Component, Input } from '@angular/core';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
@@ -7,7 +6,7 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
   templateUrl: './pdf-editor.component.html',
   styleUrls: ['./pdf-editor.component.css'],
 })
-export class PdfEditorComponent implements OnInit {
+export class PdfEditorComponent {
   @Input()
   public showDrawEditor: ResponsiveVisibility = true;
 
@@ -16,10 +15,4 @@ export class PdfEditorComponent implements OnInit {
 
   @Input()
   public showStampEditor: ResponsiveVisibility = true;
-
-  public pdfJsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
-
-  public ngOnInit(): void {
-    this.pdfJsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
-  }
 }

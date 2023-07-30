@@ -1,7 +1,6 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild } from '@angular/core';
 import { TrustedTypesWindow } from 'trusted-types/lib';
 import { PdfThumbnailDrawnEvent } from '../../../events/pdf-thumbnail-drawn-event';
-import { getVersionSuffix, pdfDefaultOptions } from '../../../options/pdf-default-options';
 declare class PDFThumbnailView {
   anchor: HTMLAnchorElement;
   div: HTMLElement;
@@ -23,7 +22,7 @@ const THUMBNAIL_CANVAS_BORDER_WIDTH = 1; // one pixel
   templateUrl: './pdf-sidebar-content.component.html',
   styleUrls: ['./pdf-sidebar-content.component.css'],
 })
-export class PdfSidebarContentComponent implements OnDestroy, OnInit {
+export class PdfSidebarContentComponent implements OnDestroy {
   @Input()
   public customThumbnail: TemplateRef<any> | undefined;
 
@@ -36,16 +35,10 @@ export class PdfSidebarContentComponent implements OnDestroy, OnInit {
   @ViewChild('thumbnailViewTemplate')
   public thumbnailViewTemplate: ElementRef;
 
-  public pdfJsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
-
   private linkService: PDFLinkService | undefined;
 
   @Output()
   public thumbnailDrawn = new EventEmitter<PdfThumbnailDrawnEvent>();
-
-  public ngOnInit(): void {
-    this.pdfJsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
-  }
 
   public get top(): string {
     let top = 0;
@@ -121,13 +114,7 @@ export class PdfSidebarContentComponent implements OnDestroy, OnInit {
     };
     pdfThumbnailView.anchor = anchor;
 
-    let img: HTMLImageElement | undefined;
-    if (this.pdfJsVersion < '3.7') {
-      const ring = newElement.getElementsByClassName('image-container')[0] as HTMLElement;
-      pdfThumbnailView.ring = ring;
-    } else {
-      img = newElement.getElementsByTagName('img')[0];
-    }
+    const img: HTMLImageElement | undefined = newElement.getElementsByTagName('img')[0];
     pdfThumbnailView.div = newElement.getElementsByClassName('thumbnail')[0] as HTMLElement;
 
     container.appendChild(newElement);

@@ -35,7 +35,7 @@ Version 18 (currently in its alpha stage) ships with quite a few improvements:
 - brings toolbar customization and responsive design to another level,
 - gives you the option to add many buttons to the toolbar that used to hide in the secondary menu,
 - adds more flexibility with for `[pageViewMode]`, `[scrollMode]`, and `[spreadMode]`,
-- and updates to pdf.js 3.8 in the stable branch and to pdf.js 3.9 in the bleeding-edge branch.
+- and updates to pdf.js 3.9 in the stable branch and to pdf.js 3.10 in the bleeding-edge branch.
 - The bleeding-edge branch, in turn, gives you a sneak preview of the new "stamp" editor, which allows you to add images to PDF files.
 
 A slightly modified layout is a side-effect of the improvements of the toolbar and the secondary menu. Most people won't notice, but if you're using screenshot tests, expect them to break.
@@ -111,7 +111,7 @@ Would you like to participate in a popular open source-project? It's easy: just 
 - Responsive design that even includes your custom toolbars
 - Color theming
 
-Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 3.8, released in July 2023. If you're the daring one, you can also use the developer version 3.9. It's bleeding edge, so use it at your own risk. Basically, the bleeding edge version helps me because I can add Mozilla's latest improvements in frequent, tiny increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but the quality is usually production-ready.
+Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 3.9, released in July 2023. If you're the daring one, you can also use the developer version 3.9. It's bleeding edge, so use it at your own risk. Basically, the bleeding edge version helps me because I can add Mozilla's latest improvements in frequent, tiny increments. But every once in a while, it contains a feature you may need, so feel free to use it. I don't encourage using the "bleeding edge" branch in production, but the quality is usually production-ready.
 
 ## Alternatives
 

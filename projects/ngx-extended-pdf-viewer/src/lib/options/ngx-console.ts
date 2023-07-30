@@ -4,17 +4,29 @@ globalThis['ngxConsoleFilter'] = (_level: string, _message: any): boolean => {
 export class NgxConsole {
   public log(message: any, reason?: any): void {
     if (globalThis['ngxConsoleFilter']('log', message)) {
-      console.log(message, reason);
+      if (reason !== undefined) {
+        console.log(message, reason);
+      } else {
+        console.log(message);
+      }
     }
   }
   public error(message: any, reason?: any): void {
     if (globalThis['ngxConsoleFilter']('error', message)) {
-      console.error(message, reason);
+      if (reason !== undefined) {
+        console.error(message, reason);
+      } else {
+        console.error(message);
+      }
     }
   }
   public warn(message: any, reason?: any): void {
     if (globalThis['ngxConsoleFilter']('warn', message)) {
-      console.warn(message, reason);
+      if (reason !== undefined) {
+        console.warn(message, reason);
+      } else {
+        console.warn(message);
+      }
     }
   }
 }
