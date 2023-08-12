@@ -20,11 +20,8 @@
         [attr.data-l10n-id]="button.l10nId"
         (click)="onClick($event, button.action, button.eventBusName, button.closeOnClick)"
       >
-        zzz
         <span class="icon" *ngIf="button.image" [innerHTML]="button.image"></span>
-        xxx
         <span class="toolbar-caption" [attr.data-l10n-id]="button.l10nLabel">{{ button.title }}</span>
-        yyy
       </button>
     </div>
   </div>

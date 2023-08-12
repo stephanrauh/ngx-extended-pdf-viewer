@@ -8661,7 +8661,7 @@ class PDFViewer {
   #scaleTimeoutId = null;
   #textLayerMode = _ui_utils.TextLayerMode.ENABLE;
   constructor(options) {
-    const viewerVersion = '3.10.425';
+    const viewerVersion = '3.10.503';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -17697,8 +17697,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(6);
 var _pdf_link_service = __webpack_require__(8);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.10.425';
-const pdfjsBuild = 'c0f664fca';
+const pdfjsVersion = '3.10.503';
+const pdfjsBuild = 'ee7f8b003';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
