@@ -3,6 +3,12 @@
  */
 export class StampEditor extends AnnotationEditor {
     static _type: string;
+    static get supportedTypes(): any;
+    static get supportedTypesStr(): any;
+    /** @inheritdoc */
+    static isHandlingMimeForPasting(mime: any): any;
+    /** @inheritdoc */
+    static paste(item: any, parent: any): void;
     /** @inheritdoc */
     static deserialize(data: any, parent: any, uiManager: any): AnnotationEditor | null;
     constructor(params: any);

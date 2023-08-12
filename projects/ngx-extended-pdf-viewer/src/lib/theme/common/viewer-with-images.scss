@@ -196,6 +196,15 @@ ngx-extended-pdf-viewer {
   .body {
     height: 100%;
     width: 100%;
+    scrollbar-color: var(--scrollbar-color) var(--scrollbar-bg-color);
+  }
+
+  .body,
+  .body :is(.toolbar, .editorParamsToolbar, .findbar, #sidebarContainer)
+  :is(input, button, select),
+  .body .secondaryToolbar :is(input, button, a, select) {
+    outline: none;
+    font: message-box;
   }
 
   .body,
@@ -216,9 +225,7 @@ ngx-extended-pdf-viewer {
     color: $select-text-color;
   }
 
-  .hidden {
-    display: none !important;
-  }
+  .hidden,
   [hidden] {
     display: none !important;
   }
@@ -709,15 +716,23 @@ ngx-extended-pdf-viewer {
   }
 
 
+  #editorStampParamsToolbar {
+    inset-inline-end: 40px;
+    background-color: $toolbar-background;
+  }
 
   #editorInkParamsToolbar {
-    inset-inline-end: 40px;
-    background-color: var($toolbar-background);
+    inset-inline-end: 68px;
+    background-color: $toolbar-background;
   }
 
   #editorFreeTextParamsToolbar {
-    inset-inline-end: 68px;
-    background-color: var($toolbar-background);
+    inset-inline-end: 96px;
+    background-color: $toolbar-background;
+  }
+
+  #editorStampAddImage::before {
+    mask-image: var(--editorParams-stampAddImage-icon);
   }
 
   .doorHanger,

@@ -30,11 +30,8 @@ export class PdfSinglePageModeComponent {
     this.notificationService.onPDFJSInit.pipe(take(1)).subscribe(() => {
       this.onPdfJsInit();
     });
-    const emitter = this.pageViewModeChange;
     this.onClick = () => {
       setTimeout(() => {
-        //        emitter.emit('single');
-        //        this.pageViewMode = 'single';
         const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
         PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.PAGE });
       });

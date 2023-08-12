@@ -7,7 +7,6 @@ import { PdfShyButtonService } from './pdf-shy-button-service';
 @Component({
   selector: 'pdf-shy-button',
   templateUrl: './pdf-shy-button.component.html',
-  styleUrls: ['./pdf-shy-button.component.css'],
 })
 export class PdfShyButtonComponent implements OnInit, OnChanges {
   @Input()
@@ -46,6 +45,9 @@ export class PdfShyButtonComponent implements OnInit, OnChanges {
   @Input()
   public closeOnClick: boolean = true;
 
+  @Input()
+  public onlySecondaryMenu: boolean = false;
+
   private _imageHtml: SafeHtml;
 
   public get imageHtml(): SafeHtml {
@@ -54,7 +56,85 @@ export class PdfShyButtonComponent implements OnInit, OnChanges {
 
   @Input()
   public set image(value: string) {
-    this._imageHtml = this.sanitizeHtml(value);
+    const svgTags = [
+      // 'a' is not allowed!
+      'animate',
+      'animateMotion',
+      'animateTransform',
+      'audio',
+      'canvas',
+      'circle',
+      'clipPath',
+      'defs',
+      'desc',
+      'discard',
+      'ellipse',
+      'feBlend',
+      'feColorMatrix',
+      'feComponentTransfer',
+      'feComposite',
+      'feConvolveMatrix',
+      'feDiffuseLighting',
+      'feDisplacementMap',
+      'feDistantLight',
+      'feDropShadow',
+      'feFlood',
+      'feFuncA',
+      'feFuncB',
+      'feFuncG',
+      'feFuncR',
+      'feGaussianBlur',
+      'feImage',
+      'feMerge',
+      'feMergeNode',
+      'feMorphology',
+      'feOffset',
+      'fePointLight',
+      'feSpecularLighting',
+      'feSpotLight',
+      'feTile',
+      'feTurbulence',
+      'filter',
+      'foreignObject',
+      'g',
+      'iframe',
+      'image',
+      'line',
+      'linearGradient',
+      'marker',
+      'mask',
+      'metadata',
+      'mpath',
+      'path',
+      'pattern',
+      'polygon',
+      'polyline',
+      'radialGradient',
+      'rect',
+      'script',
+      'set',
+      'stop',
+      'style',
+      'svg',
+      'switch',
+      'symbol',
+      'text',
+      'textPath',
+      'title',
+      'tspan',
+      'unknown',
+      'use',
+      'video',
+      'view',
+    ];
+
+    // only <svg> and SVG tags are allowed
+    const tags = value.split('<').filter((tag) => tag.length > 0);
+    const legal = tags.every((tag) => tag.startsWith('svg') || tag.startsWith('/') || svgTags.includes(tag.split(/\s|\>/)[0]));
+    if (!legal) {
+      throw new Error('Illegal image for PDFShyButton. Only SVG images are allowed. Please use only the tags <svg> and <path>. ' + value);
+    }
+    this._imageHtml = this.sanitizeHtml(value); // NOSONAR
   }
 
   constructor(private pdfShyButtonServiceService: PdfShyButtonService, private sanitizer: DomSanitizer) {}
@@ -67,7 +147,7 @@ export class PdfShyButtonComponent implements OnInit, OnChanges {
     this.pdfShyButtonServiceService.update(this);
   }
 
-  public sanitizeHtml(html: string): SafeHtml {
+  private sanitizeHtml(html: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 

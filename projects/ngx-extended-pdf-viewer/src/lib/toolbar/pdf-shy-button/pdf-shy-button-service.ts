@@ -24,7 +24,6 @@ export interface PdfShyButtonDescription {
 })
 export class PdfShyButtonService {
   public buttons: PdfShyButtonDescription[] = [];
-  constructor() {}
 
   public add(button: PdfShyButtonComponent): void {
     const id = button.secondaryMenuId ?? this.addDefaultPrefix(button);

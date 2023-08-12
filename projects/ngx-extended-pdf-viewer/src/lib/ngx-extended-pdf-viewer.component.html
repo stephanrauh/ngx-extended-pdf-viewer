@@ -11,135 +11,107 @@
       <div class="body pdf-js-version-{{ majorMinorPdfJsVersion }}" [style.backgroundColor]="backgroundColor">
         <div id="outerContainer" (window:resize)="onResize()">
           <div class="free-floating-bar" *ngIf="showFreeFloatingBar">
-            <ng-content *ngTemplateOutlet="customFreeFloatingBar ? customFreeFloatingBar : defaultFreeFloatingBar"> </ng-content>
+            <ng-content *ngTemplateOutlet="customFreeFloatingBar ? customFreeFloatingBar : defaultFreeFloatingBar">
+            </ng-content>
           </div>
-          <pdf-sidebar
-            #pdfsidebar
-            [sidebarVisible]="sidebarVisible || false"
-            [showSidebarButton]="showSidebarButton"
-            [customSidebar]="customSidebar"
-            [customThumbnail]="customThumbnail"
-            (thumbnailDrawn)="thumbnailDrawn.emit($event)"
-            [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
-            [sidebarPositionTop]="sidebarPositionTop"
-          >
+          <pdf-sidebar #pdfsidebar [sidebarVisible]="sidebarVisible || false" [showSidebarButton]="showSidebarButton"
+            [customSidebar]="customSidebar" [customThumbnail]="customThumbnail"
+            (thumbnailDrawn)="thumbnailDrawn.emit($event)" [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+            [sidebarPositionTop]="sidebarPositionTop">
           </pdf-sidebar>
           <div id="mainContainer" [class.toolbar-hidden]="!primaryMenuVisible">
             <pdf-dummy-components></pdf-dummy-components>
 
-            <pdf-toolbar
-              (onToolbarLoaded)="onToolbarLoaded($event)"
-              [sidebarVisible]="sidebarVisible"
-              (sidebarVisibleChange)="sidebarVisible = $event"
-              [class.server-side-rendering]="serverSideRendering"
-              [customToolbar]="customToolbar"
-              [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
-              [(pageViewMode)]="pageViewMode"
-              [primaryMenuVisible]="primaryMenuVisible"
-              [scrollMode]="scrollMode ?? 0"
-              [showPropertiesButton]="showPropertiesButton"
-              [showBookModeButton]="showBookModeButton"
-              [showDownloadButton]="showDownloadButton"
-              [showDrawEditor]="showDrawEditor"
-              [showFindButton]="showFindButton"
-              [showHandToolButton]="showHandToolButton"
+            <pdf-toolbar (onToolbarLoaded)="onToolbarLoaded($event)" [sidebarVisible]="sidebarVisible"
+              (sidebarVisibleChange)="sidebarVisible = $event" [class.server-side-rendering]="serverSideRendering"
+              [customToolbar]="customToolbar" [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+              [(pageViewMode)]="pageViewMode" [primaryMenuVisible]="primaryMenuVisible" [scrollMode]="scrollMode ?? 0"
+              [showPropertiesButton]="showPropertiesButton" [showBookModeButton]="showBookModeButton"
+              [showDownloadButton]="showDownloadButton" [showDrawEditor]="showDrawEditor"
+              [showFindButton]="showFindButton" [showHandToolButton]="showHandToolButton"
               [showHorizontalScrollButton]="showHorizontalScrollButton"
-              [showInfiniteScrollButton]="showInfiniteScrollButton"
-              [showOpenFileButton]="showOpenFileButton"
+              [showInfiniteScrollButton]="showInfiniteScrollButton" [showOpenFileButton]="showOpenFileButton"
               [showPagingButtons]="showPagingButtons"
               [showPresentationModeButton]="showPresentationModeButton && pageViewMode !== 'book'"
-              [showPrintButton]="showPrintButton && enablePrint"
-              [showRotateButton]="showRotateButton"
+              [showPrintButton]="showPrintButton && enablePrint" [showRotateButton]="showRotateButton"
               [showSecondaryToolbarButton]="showSecondaryToolbarButton && !hideKebabMenuForSecondaryToolbar"
-              [showSidebarButton]="showSidebarButton"
-              [showSinglePageModeButton]="showSinglePageModeButton"
-              [showSpreadButton]="showSpreadButton"
-              [showStampEditor]="showStampEditor"
-              [showTextEditor]="showTextEditor"
-              [showVerticalScrollButton]="showVerticalScrollButton"
+              [showSidebarButton]="showSidebarButton" [showSinglePageModeButton]="showSinglePageModeButton"
+              [showSpreadButton]="showSpreadButton" [showStampEditor]="showStampEditor"
+              [showTextEditor]="showTextEditor" [showVerticalScrollButton]="showVerticalScrollButton"
               [showWrappedScrollButton]="showWrappedScrollButton"
-              [showZoomButtons]="showZoomButtons && pageViewMode !== 'book'"
-              [spread]="spread"
-              [textLayer]="textLayer"
-              [toolbarMarginTop]="toolbarMarginTop"
-              [toolbarWidth]="toolbarWidth"
-              [zoomLevels]="zoomLevels"
-              [findbarVisible]="findbarVisible"
-            ></pdf-toolbar>
+              [showZoomButtons]="showZoomButtons && pageViewMode !== 'book'" [spread]="spread" [textLayer]="textLayer"
+              [toolbarMarginTop]="toolbarMarginTop" [toolbarWidth]="toolbarWidth" [zoomLevels]="zoomLevels"
+              [findbarVisible]="findbarVisible"></pdf-toolbar>
 
-            <div class="editorParamsToolbar hidden doorHangerRight" id="editorFreeTextParamsToolbar" [class.server-side-rendering]="serverSideRendering">
+            <div class="editorParamsToolbar hidden doorHangerRight" id="editorFreeTextParamsToolbar"
+              [class.server-side-rendering]="serverSideRendering">
               <div class="editorParamsToolbarContainer">
                 <div class="editorParamsSetter">
-                  <label for="editorFreeTextColor" class="editorParamsLabel" data-l10n-id="editor_free_text_color">Font Color</label>
+                  <label for="editorFreeTextColor" class="editorParamsLabel" data-l10n-id="editor_free_text_color">Font
+                    Color</label>
                   <input type="color" id="editorFreeTextColor" class="editorParamsColor" tabindex="100" />
                 </div>
                 <div class="editorParamsSetter">
-                  <label for="editorFreeTextFontSize" class="editorParamsLabel" data-l10n-id="editor_free_text_size">Font Size</label>
-                  <input type="range" id="editorFreeTextFontSize" class="editorParamsSlider" value="10" min="5" max="100" step="1" tabindex="101" />
+                  <label for="editorFreeTextFontSize" class="editorParamsLabel"
+                    data-l10n-id="editor_free_text_size">Font Size</label>
+                  <input type="range" id="editorFreeTextFontSize" class="editorParamsSlider" value="10" min="5"
+                    max="100" step="1" tabindex="101" />
                 </div>
               </div>
             </div>
 
-            <div class="editorParamsToolbar hidden doorHangerRight" id="editorInkParamsToolbar" [class.server-side-rendering]="serverSideRendering">
+            <div class="editorParamsToolbar hidden doorHangerRight" id="editorInkParamsToolbar"
+              [class.server-side-rendering]="serverSideRendering">
               <div class="editorParamsToolbarContainer">
                 <div class="editorParamsSetter">
                   <label for="editorInkColor" class="editorParamsLabel" data-l10n-id="editor_ink_color">Color</label>
                   <input type="color" id="editorInkColor" class="editorParamsColor" tabindex="102" />
                 </div>
                 <div class="editorParamsSetter">
-                  <label for="editorInkThickness" class="editorParamsLabel" data-l10n-id="editor_ink_thickness">Thickness</label>
-                  <input type="range" id="editorInkThickness" class="editorParamsSlider" value="1" min="1" max="20" step="1" tabindex="103" />
+                  <label for="editorInkThickness" class="editorParamsLabel"
+                    data-l10n-id="editor_ink_thickness">Thickness</label>
+                  <input type="range" id="editorInkThickness" class="editorParamsSlider" value="1" min="1" max="20"
+                    step="1" tabindex="103" />
                 </div>
                 <div class="editorParamsSetter">
-                  <label for="editorInkOpacity" class="editorParamsLabel" data-l10n-id="editor_ink_opacity">Opacity</label>
-                  <input type="range" id="editorInkOpacity" class="editorParamsSlider" value="100" min="1" max="100" step="1" tabindex="104" />
+                  <label for="editorInkOpacity" class="editorParamsLabel"
+                    data-l10n-id="editor_ink_opacity">Opacity</label>
+                  <input type="range" id="editorInkOpacity" class="editorParamsSlider" value="100" min="1" max="100"
+                    step="1" tabindex="104" />
                 </div>
               </div>
+
             </div>
 
-            <pdf-secondary-toolbar
-              #pdfSecondaryToolbarComponent
-              [class.server-side-rendering]="serverSideRendering"
-              [customSecondaryToolbar]="customSecondaryToolbar"
-              [secondaryToolbarTop]="secondaryToolbarTop"
-              [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
-              (spreadChange)="onSpreadChange($event)"
+            <pdf-secondary-toolbar #pdfSecondaryToolbarComponent [class.server-side-rendering]="serverSideRendering"
+              [customSecondaryToolbar]="customSecondaryToolbar" [secondaryToolbarTop]="secondaryToolbarTop"
+              [mobileFriendlyZoomScale]="mobileFriendlyZoomScale" (spreadChange)="onSpreadChange($event)"
               (secondaryMenuIsEmpty)="onSecondaryMenuIsEmpty($event)"
-              [localizationInitialized]="localizationInitialized"
-            >
+              [localizationInitialized]="localizationInitialized">
             </pdf-secondary-toolbar>
 
-            <pdf-findbar
-              [class.server-side-rendering]="serverSideRendering"
-              [findbarLeft]="findbarLeft"
-              [findbarTop]="findbarTop"
-              [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
-              [showFindButton]="showFindButton || false"
-              [customFindbarInputArea]="customFindbarInputArea"
-              [customFindbarButtons]="customFindbarButtons"
-              [showFindCurrentPageOnly]="showFindCurrentPageOnly"
-              [showFindEntirePhrase]="showFindEntirePhrase"
-              [showFindEntireWord]="showFindEntireWord"
-              [showFindFuzzySearch]="showFindFuzzySearch"
-              [showFindHighlightAll]="showFindHighlightAll"
-              [showFindMatchDiacritics]="showFindMatchDiacritics"
-              [showFindMatchCase]="showFindMatchCase"
-              [showFindMessages]="showFindMessages"
-              [showFindPageRange]="showFindPageRange"
-              [showFindResultsCount]="showFindResultsCount"
-            >
+            <pdf-findbar [class.server-side-rendering]="serverSideRendering" [findbarLeft]="findbarLeft"
+              [findbarTop]="findbarTop" [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
+              [showFindButton]="showFindButton || false" [customFindbarInputArea]="customFindbarInputArea"
+              [customFindbarButtons]="customFindbarButtons" [showFindCurrentPageOnly]="showFindCurrentPageOnly"
+              [showFindEntirePhrase]="showFindEntirePhrase" [showFindEntireWord]="showFindEntireWord"
+              [showFindFuzzySearch]="showFindFuzzySearch" [showFindHighlightAll]="showFindHighlightAll"
+              [showFindMatchDiacritics]="showFindMatchDiacritics" [showFindMatchCase]="showFindMatchCase"
+              [showFindMessages]="showFindMessages" [showFindPageRange]="showFindPageRange"
+              [showFindResultsCount]="showFindResultsCount">
             </pdf-findbar>
 
             <pdf-context-menu></pdf-context-menu>
 
-            <div id="viewerContainer" [style.top]="viewerPositionTop" [style.backgroundColor]="backgroundColor" tabindex="0">
+            <div id="viewerContainer" [style.top]="viewerPositionTop" [style.backgroundColor]="backgroundColor"
+              tabindex="0">
               <div class="unverified-signature-warning" *ngIf="hasSignature && showUnverifiedSignatures">
                 {{
-                  'unverified_signature_warning'
-                    | translate
-                      : "This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid.
+                'unverified_signature_warning'
+                | translate
+                : "This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid.
                 Please download the file and open it in Acrobat Reader to verify the signature is valid."
-                    | async
+                | async
                 }}
               </div>
               <div id="viewer" class="pdfViewer" (dblclick)="zoomToPageWidth($event)"></div>

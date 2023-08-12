@@ -875,15 +875,9 @@ export class PDFDocumentProxy {
      */
     getAttachments(): Promise<any>;
     /**
-     * @returns {Promise<Array<string> | null>} A promise that is resolved with
-     *   an {Array} of all the JavaScript strings in the name tree, or `null`
-     *   if no JavaScript exists.
-     */
-    getJavaScript(): Promise<Array<string> | null>;
-    /**
      * @returns {Promise<Object | null>} A promise that is resolved with
      *   an {Object} with the JavaScript actions:
-     *     - from the name tree (like getJavaScript);
+     *     - from the name tree.
      *     - from A or AA entries in the catalog dictionary.
      *   , or `null` if no JavaScript exists.
      */

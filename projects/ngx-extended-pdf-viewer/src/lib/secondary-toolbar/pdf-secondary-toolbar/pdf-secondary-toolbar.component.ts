@@ -14,7 +14,6 @@ import {
   SimpleChanges,
   TemplateRef,
 } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { take } from 'rxjs/operators';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PdfShyButtonService } from '../../toolbar/pdf-shy-button/pdf-shy-button-service';
@@ -54,8 +53,7 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
     private element: ElementRef,
     public notificationService: PDFNotificationService,
     @Inject(PLATFORM_ID) private platformId: Object,
-    public pdfShyButtonService: PdfShyButtonService,
-    private sanitizer: DomSanitizer
+    public pdfShyButtonService: PdfShyButtonService
   ) {
     this.notificationService.onPDFJSInit.pipe(take(1)).subscribe(() => {
       this.onPdfJsInit();
@@ -176,10 +174,6 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
       }
     }
     return count;
-  }
-
-  public sanitizeHtml(html: string) {
-    return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
   public onClick(htmlevent: Event, action: undefined | (() => void), eventBusName?: string, closeOnClick?: boolean): void {

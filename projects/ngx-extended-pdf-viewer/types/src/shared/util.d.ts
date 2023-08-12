@@ -31,6 +31,7 @@ export namespace AnnotationBorderStyleType {
 }
 export namespace AnnotationEditorParamsType {
     const RESIZE: number;
+    const CREATE: number;
     const FREETEXT_SIZE: number;
     const FREETEXT_COLOR: number;
     const FREETEXT_OPACITY: number;
@@ -156,6 +157,7 @@ export class FeatureTest {
     static get isEvalSupported(): any;
     static get isOffscreenCanvasSupported(): any;
     static get platform(): any;
+    static get isCSSRoundSupported(): any;
 }
 export const FONT_IDENTITY_MATRIX: number[];
 declare const FormatError_base: any;

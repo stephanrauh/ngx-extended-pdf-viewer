@@ -55,6 +55,22 @@ export class AnnotationEditor {
      */
     static get defaultPropertiesToUpdate(): any[];
     /**
+     * Check if this kind of editor is able to handle the given mime type for
+     * pasting.
+     * @param {string} mime
+     * @returns {boolean}
+     */
+    static isHandlingMimeForPasting(_mime: any): boolean;
+    /**
+     * Extract the data from the clipboard item and delegate the creation of the
+     * editor to the parent.
+     * @param {DataTransferItem} item
+     * @param {AnnotationEditorLayer} parent
+     */
+    static paste(item: DataTransferItem, parent: AnnotationEditorLayer): void;
+    static "__#23@#rotatePoint"(x: any, y: any, angle: any): any[];
+    static "__#23@#noContextMenu"(e: any): void;
+    /**
      * Deserialize the editor.
      * The result of the deserialization is a new editor.
      *
@@ -69,7 +85,9 @@ export class AnnotationEditor {
      * @param {AnnotationEditorParameters} parameters
      */
     constructor(parameters: AnnotationEditorParameters);
+    _initialOptions: any;
     _uiManager: null;
+    _focusEventsAllowed: boolean;
     parent: import("./annotation_editor_layer.js").AnnotationEditorLayer;
     id: string;
     width: any;
@@ -92,6 +110,9 @@ export class AnnotationEditor {
      * @returns {Array}
      */
     get propertiesToUpdate(): any[];
+    set _isDraggable(arg: boolean);
+    get _isDraggable(): boolean;
+    center(): void;
     /**
      * Add some commands into the CommandManager (undo/redo stuff).
      * @param {Object} params
@@ -123,13 +144,6 @@ export class AnnotationEditor {
     commit(): void;
     addToAnnotationStorage(): void;
     /**
-     * We use drag-and-drop in order to move an editor on a page.
-     * @param {DragEvent} event
-     */
-    dragstart(event: DragEvent): void;
-    startX: number | undefined;
-    startY: number | undefined;
-    /**
      * Set the editor position within its parent.
      * @param {number} x
      * @param {number} y
@@ -150,19 +164,20 @@ export class AnnotationEditor {
      * @param {number} y - y-translation in page coordinates.
      */
     translateInPage(x: number, y: number): void;
+    drag(tx: any, ty: any): void;
     fixAndSetPosition(): void;
     /**
      * Convert a screen translation into a page one.
      * @param {number} x
      * @param {number} y
      */
-    screenToPageTranslation(x: number, y: number): number[];
+    screenToPageTranslation(x: number, y: number): any[];
     /**
      * Convert a page translation into a screen one.
      * @param {number} x
      * @param {number} y
      */
-    pageTranslationToScreen(x: number, y: number): number[];
+    pageTranslationToScreen(x: number, y: number): any[];
     get parentScale(): any;
     get parentRotation(): number;
     get parentDimensions(): number[];
@@ -188,6 +203,8 @@ export class AnnotationEditor {
      * @param {PointerEvent} event
      */
     pointerdown(event: PointerEvent): void;
+    moveInDOM(): void;
+    _setParentAndPosition(parent: any, x: any, y: any): void;
     /**
      * Convert the current rect into a page one.
      */

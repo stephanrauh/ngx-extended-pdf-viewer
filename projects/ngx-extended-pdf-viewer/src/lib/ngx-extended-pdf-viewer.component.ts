@@ -2312,12 +2312,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
     if ('pageViewMode' in changes && !changes['pageViewMode'].isFirstChange()) {
       this.pageViewMode = changes['pageViewMode'].currentValue;
-      /*
-      const restoreHeight = changes['pageViewMode'].previousValue === 'infinite-scroll';
-      // add a short delay wait until the setter has been called
-      // and to avoid the ExpressionChangedAfterItHasBeenCheckedError
-      this.updatePageViewMode(changes['pageViewMode'].currentValue, restoreHeight);
-      */
     }
     if ('replaceBrowserPrint' in changes && typeof window !== 'undefined') {
       if (this.replaceBrowserPrint) {

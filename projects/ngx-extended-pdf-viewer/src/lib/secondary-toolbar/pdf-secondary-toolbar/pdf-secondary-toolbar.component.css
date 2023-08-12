@@ -14,6 +14,13 @@ svg {
   background: none;
   width: calc(100% - 4px);
   height: 25px;
+
+  position: relative;
+  margin: 0 0 4px 0;
+  padding: 3px 0 1px 0;
+  height: auto;
+  min-height: 25px;
+  white-space: normal;
 }
 
 .secondaryToolbarButton span {
@@ -24,14 +31,6 @@ svg {
   opacity: 0.5;
 }
 
-.secondaryToolbarButton {
-  position: relative;
-  margin: 0 0 4px 0;
-  padding: 3px 0 1px 0;
-  height: auto;
-  min-height: 25px;
-  white-space: normal;
-}
 ::ng-deep html[dir='ltr'] ngx-extended-pdf-viewer .secondaryToolbarButton {
   padding-left: 4px;
   text-align: left;

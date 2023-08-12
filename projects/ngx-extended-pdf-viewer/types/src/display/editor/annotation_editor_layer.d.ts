@@ -92,6 +92,12 @@ export class AnnotationEditorLayer {
      */
     remove(editor: AnnotationEditor): void;
     /**
+     * An editor can have a different parent, for example after having
+     * being dragged and droped from a page to another.
+     * @param {AnnotationEditor} editor
+     */
+    changeParent(editor: AnnotationEditor): void;
+    /**
      * Add a new editor in the current view.
      * @param {AnnotationEditor} editor
      */
@@ -113,11 +119,21 @@ export class AnnotationEditorLayer {
      */
     getNextId(): string;
     /**
+     * Paste some content into a new editor.
+     * @param {number} mode
+     * @param {Object} params
+     */
+    pasteEditor(mode: number, params: Object): void;
+    /**
      * Create a new editor
      * @param {Object} data
      * @returns {AnnotationEditor}
      */
     deserialize(data: Object): AnnotationEditor;
+    /**
+     * Create and add a new editor.
+     */
+    addNewEditor(): void;
     /**
      * Set the last selected editor.
      * @param {AnnotationEditor} editor
@@ -149,15 +165,13 @@ export class AnnotationEditorLayer {
      */
     pointerdown(event: PointerEvent): void;
     /**
-     * Drag callback.
-     * @param {DragEvent} event
+     *
+     * @param {AnnotationEditor} editor
+     * @param {number} x
+     * @param {number} y
+     * @returns
      */
-    drop(event: DragEvent): void;
-    /**
-     * Dragover callback.
-     * @param {DragEvent} event
-     */
-    dragover(event: DragEvent): void;
+    findNewParent(editor: AnnotationEditor, x: number, y: number): boolean;
     /**
      * Destroy the main editor.
      */

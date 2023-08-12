@@ -12,7 +12,7 @@ export class AnnotationEditorUIManager {
     static TRANSLATE_SMALL: number;
     static TRANSLATE_BIG: number;
     static get _keyboardManager(): any;
-    constructor(container: any, eventBus: any, pdfDocument: any, pageColors: any);
+    constructor(container: any, viewer: any, eventBus: any, pdfDocument: any, pageColors: any);
     viewParameters: {
         realScale: number;
         rotation: number;
@@ -23,6 +23,8 @@ export class AnnotationEditorUIManager {
         pageNumber: any;
     }): void;
     focusMainContainer(): void;
+    findParent(x: any, y: any): any;
+    disableUserSelect(value?: boolean): void;
     addShouldRescale(editor: any): void;
     removeShouldRescale(editor: any): void;
     onScaleChanging({ scale }: {
@@ -36,6 +38,8 @@ export class AnnotationEditorUIManager {
      * @param {AnnotationEditor} editor
      */
     addToAnnotationStorage(editor: AnnotationEditor): void;
+    blur(): void;
+    focus(): void;
     /**
      * Copy callback.
      * @param {ClipboardEvent} event
@@ -78,6 +82,7 @@ export class AnnotationEditorUIManager {
      */
     getId(): string;
     get currentLayer(): any;
+    getLayer(pageIndex: any): any;
     get currentPageIndex(): number;
     /**
      * Add a new layer for a page which will contains the editors.
@@ -107,8 +112,9 @@ export class AnnotationEditorUIManager {
      * @param {*} value
      */
     updateParams(type: number, value: any): void;
+    enableWaiting(mustWait?: boolean): void;
     /**
-     * Get all the editors belonging to a give page.
+     * Get all the editors belonging to a given page.
      * @param {number} pageIndex
      * @returns {Array<AnnotationEditor>}
      */
@@ -171,7 +177,6 @@ export class AnnotationEditorUIManager {
      */
     unselect(editor: AnnotationEditor): void;
     get hasSelection(): boolean;
-    stopUndoAccumulation(): void;
     /**
      * Undo the last command.
      */
@@ -200,6 +205,27 @@ export class AnnotationEditorUIManager {
      */
     unselectAll(): void;
     translateSelectedEditors(x: any, y: any, noCommit?: boolean): void;
+    /**
+     * Set up the drag session for moving the selected editors.
+     */
+    setUpDragSession(): void;
+    /**
+     * Ends the drag session.
+     * @returns {boolean} true if at least one editor has been moved.
+     */
+    endDragSession(): boolean;
+    /**
+     * Drag the set of selected editors.
+     * @param {number} tx
+     * @param {number} ty
+     */
+    dragSelectedEditors(tx: number, ty: number): void;
+    /**
+     * Rebuild the editor (usually on undo/redo actions) on a potentially
+     * non-rendered page.
+     * @param {AnnotationEditor} editor
+     */
+    rebuild(editor: AnnotationEditor): void;
     /**
      * Is the current editor the one passed as argument?
      * @param {AnnotationEditor} editor
@@ -271,7 +297,6 @@ export class CommandManager {
         overwriteIfSameType: boolean;
         keepUndo: boolean;
     }): void;
-    stopUndoAccumulation(): void;
     /**
      * Undo the last command.
      */
