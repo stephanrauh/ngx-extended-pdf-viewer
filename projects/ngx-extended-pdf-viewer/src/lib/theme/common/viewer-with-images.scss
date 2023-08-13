@@ -731,10 +731,6 @@ ngx-extended-pdf-viewer {
     background-color: $toolbar-background;
   }
 
-  #editorStampAddImage::before {
-    mask-image: var(--editorParams-stampAddImage-icon);
-  }
-
   .doorHanger,
   .doorHangerRight {
     border: 1px solid $border;

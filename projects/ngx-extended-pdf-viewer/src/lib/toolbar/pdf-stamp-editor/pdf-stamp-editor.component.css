@@ -1,3 +1,10 @@
 button {
   padding: 0;
+  height: 25px;
+  background-color: transparent;
+}
+
+button:focus {
+  outline: none;
+  border: none;
 }
