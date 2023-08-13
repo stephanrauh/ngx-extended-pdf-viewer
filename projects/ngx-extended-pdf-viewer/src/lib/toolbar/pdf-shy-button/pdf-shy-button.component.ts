@@ -130,7 +130,7 @@ export class PdfShyButtonComponent implements OnInit, OnChanges {
 
     // only <svg> and SVG tags are allowed
     const tags = value.split('<').filter((tag) => tag.length > 0);
-    const legal = tags.every((tag) => tag.startsWith('svg') || tag.startsWith('/') || svgTags.includes(tag.split(/\s|\>/)[0]));
+    const legal = tags.every((tag) => tag.startsWith('svg') || tag.startsWith('/') || svgTags.includes(tag.split(/\s|>/)[0]));
     if (!legal) {
       throw new Error('Illegal image for PDFShyButton. Only SVG images are allowed. Please use only the tags <svg> and <path>. ' + value);
     }
