@@ -134,7 +134,7 @@ export class PdfShyButtonComponent implements OnInit, OnChanges {
     if (!legal) {
       throw new Error('Illegal image for PDFShyButton. Only SVG images are allowed. Please use only the tags <svg> and <path>. ' + value);
     }
-    this._imageHtml = this.sanitizeHtml(value); // NOSONAR
+    this._imageHtml = this.sanitizeHtml(value);
   }
 
   constructor(private pdfShyButtonServiceService: PdfShyButtonService, private sanitizer: DomSanitizer) {}
@@ -148,7 +148,7 @@ export class PdfShyButtonComponent implements OnInit, OnChanges {
   }
 
   private sanitizeHtml(html: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(html);
+    return this.sanitizer.bypassSecurityTrustHtml(html); // NOSONAR
   }
 
   public onClick(event: Event): void {
