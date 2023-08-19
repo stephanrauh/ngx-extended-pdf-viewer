@@ -987,7 +987,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.9.602',
+    apiVersion: '3.9.603',
     data,
     password,
     disableAutoFetch,
@@ -2754,9 +2754,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.9.602';
+const version = '3.9.603';
 exports.version = version;
-const build = 'ef4488acf';
+const build = '9a92645aa';
 exports.build = build;
 
 /***/ }),
@@ -2946,6 +2946,7 @@ class AnnotationEditor {
   #isInEditMode = false;
   _uiManager = null;
   #zIndex = AnnotationEditor._zIndex++;
+  doNotMove = false;
   static _colorManager = new _tools.ColorManager();
   static _zIndex = 1;
   constructor(parameters) {
@@ -4108,7 +4109,7 @@ class AnnotationEditorUIManager {
     const data = event.clipboardData.getData("application/pdfjs");
     this.addSerializedEditor(data);
   }
-  addSerializedEditor(data, activateEditorIfNecessary = false) {
+  addSerializedEditor(data, activateEditorIfNecessary = false, doNotMove = false) {
     if (!data) {
       return;
     }
@@ -4136,6 +4137,7 @@ class AnnotationEditorUIManager {
         if (!deserializedEditor) {
           return;
         }
+        deserializedEditor.doNotMove = doNotMove;
         newEditors.push(deserializedEditor);
       }
       const cmd = () => {
@@ -4542,12 +4544,14 @@ class AnnotationEditorUIManager {
   }
   removeEditors(filterFunction = () => true) {
     let hasChanged = false;
+    this.#allLayers.forEach(layer => layer.setCleaningUp(true));
     this.#allEditors.forEach(editor => {
       if (filterFunction(editor.serialize())) {
         editor.remove();
         hasChanged = true;
       }
     });
+    this.#allLayers.forEach(layer => layer.setCleaningUp(false));
     if (hasChanged) {
       this.#dispatchUpdateStates({
         hasSomethingToUndo: false,
@@ -12909,6 +12913,9 @@ class AnnotationEditorLayer {
     } = this.viewport.rawDims;
     return [pageWidth, pageHeight];
   }
+  setCleaningUp(isCleaningUp) {
+    this.#isCleaningUp = isCleaningUp;
+  }
 }
 exports.AnnotationEditorLayer = AnnotationEditorLayer;
 
@@ -16730,7 +16737,11 @@ class InkEditor extends _editor.AnnotationEditor {
     if (this.width) {
       const [parentWidth, parentHeight] = this.parentDimensions;
       this.setAspectRatio(this.width * parentWidth, this.height * parentHeight);
-      this.setAt(baseX * parentWidth, baseY * parentHeight, this.width * parentWidth, this.height * parentHeight);
+      if (this.doNotMove) {
+        this.setAt(baseX * parentWidth, baseY * parentHeight, 0, 0);
+      } else {
+        this.setAt(baseX * parentWidth, baseY * parentHeight, this.width * parentWidth, this.height * parentHeight);
+      }
       this.#isCanvasInitialized = true;
       this.#setCanvasDims();
       this.setDims(this.width * parentWidth, this.height * parentHeight);
@@ -17637,8 +17648,8 @@ var _tools = __w_pdfjs_require__(5);
 var _annotation_layer = __w_pdfjs_require__(29);
 var _worker_options = __w_pdfjs_require__(14);
 var _xfa_layer = __w_pdfjs_require__(32);
-const pdfjsVersion = '3.9.602';
-const pdfjsBuild = 'ef4488acf';
+const pdfjsVersion = '3.9.603';
+const pdfjsBuild = '9a92645aa';
 })();
 
 /******/ 	return __webpack_exports__;

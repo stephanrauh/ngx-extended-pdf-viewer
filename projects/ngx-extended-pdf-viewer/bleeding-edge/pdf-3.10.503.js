@@ -2956,6 +2956,7 @@ class AnnotationEditor {
   _focusEventsAllowed = true;
   #isDraggable = false;
   #zIndex = AnnotationEditor._zIndex++;
+  doNotMove = false;
   static _colorManager = new _tools.ColorManager();
   static _zIndex = 1;
   constructor(parameters) {
@@ -4280,7 +4281,7 @@ class AnnotationEditorUIManager {
     const data = clipboardData.getData("application/pdfjs");
     this.addSerializedEditor(data);
   }
-  addSerializedEditor(data, activateEditorIfNecessary = false) {
+  addSerializedEditor(data, activateEditorIfNecessary = false, doNotMove = false) {
     if (!data) {
       return;
     }
@@ -4308,6 +4309,7 @@ class AnnotationEditorUIManager {
         if (!deserializedEditor) {
           return;
         }
+        deserializedEditor.doNotMove = doNotMove;
         newEditors.push(deserializedEditor);
       }
       const cmd = () => {
@@ -4835,12 +4837,14 @@ class AnnotationEditorUIManager {
   }
   removeEditors(filterFunction = () => true) {
     let hasChanged = false;
+    this.#allLayers.forEach(layer => layer.setCleaningUp(true));
     this.#allEditors.forEach(editor => {
       if (filterFunction(editor.serialize())) {
         editor.remove();
         hasChanged = true;
       }
     });
+    this.#allLayers.forEach(layer => layer.setCleaningUp(false));
     if (hasChanged) {
       this.#dispatchUpdateStates({
         hasSomethingToUndo: false,
@@ -13252,6 +13256,9 @@ class AnnotationEditorLayer {
     } = this.viewport.rawDims;
     return [pageWidth, pageHeight];
   }
+  setCleaningUp(isCleaningUp) {
+    this.#isCleaningUp = isCleaningUp;
+  }
 }
 exports.AnnotationEditorLayer = AnnotationEditorLayer;
 
@@ -17121,7 +17128,11 @@ class InkEditor extends _editor.AnnotationEditor {
     if (this.width) {
       const [parentWidth, parentHeight] = this.parentDimensions;
       this.setAspectRatio(this.width * parentWidth, this.height * parentHeight);
-      this.setAt(baseX * parentWidth, baseY * parentHeight, this.width * parentWidth, this.height * parentHeight);
+      if (this.doNotMove) {
+        this.setAt(baseX * parentWidth, baseY * parentHeight, 0, 0);
+      } else {
+        this.setAt(baseX * parentWidth, baseY * parentHeight, this.width * parentWidth, this.height * parentHeight);
+      }
       this.#isCanvasInitialized = true;
       this.#setCanvasDims();
       this.setDims(this.width * parentWidth, this.height * parentHeight);

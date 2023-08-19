@@ -3115,7 +3115,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.ngxExtendedPdfViewerVersion = void 0;
-const ngxExtendedPdfViewerVersion = '18.0.0-beta.1';
+const ngxExtendedPdfViewerVersion = '18.0.0-beta.2';
 exports.ngxExtendedPdfViewerVersion = ngxExtendedPdfViewerVersion;
 
 /***/ }),
@@ -10293,7 +10293,7 @@ class PDFViewer {
     if (!Array.isArray(data)) {
       data = [data];
     }
-    this.#annotationEditorUIManager.addSerializedEditor(data, true);
+    this.#annotationEditorUIManager.addSerializedEditor(data, true, true);
   }
   removeEditorAnnotations(filter = () => true) {
     this.#annotationEditorUIManager.removeEditors(filter);

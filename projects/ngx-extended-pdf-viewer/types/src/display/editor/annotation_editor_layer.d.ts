@@ -191,6 +191,7 @@ export class AnnotationEditorLayer {
      * @returns {Object} dimensions.
      */
     get pageDimensions(): Object;
+    setCleaningUp(isCleaningUp: any): void;
     #private;
 }
 import { AnnotationEditor } from "./editor.js";

@@ -55,7 +55,7 @@ export class AnnotationEditorUIManager {
      * @param {ClipboardEvent} event
      */
     paste(event: ClipboardEvent): void;
-    addSerializedEditor(data: any, activateEditorIfNecessary?: boolean): void;
+    addSerializedEditor(data: any, activateEditorIfNecessary?: boolean, doNotMove?: boolean): void;
     /**
      * Keydown callback.
      * @param {KeyboardEvent} event
