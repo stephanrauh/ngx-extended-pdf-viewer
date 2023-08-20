@@ -988,7 +988,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.10.503',
+    apiVersion: '3.10.504',
     data,
     password,
     disableAutoFetch,
@@ -2762,9 +2762,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.10.503';
+const version = '3.10.504';
 exports.version = version;
-const build = 'ee7f8b003';
+const build = 'f74a9b92e';
 exports.build = build;
 
 /***/ }),
@@ -3109,6 +3109,9 @@ class AnnotationEditor {
   setAt(x, y, tx, ty) {
     const [width, height] = this.parentDimensions;
     [tx, ty] = this.screenToPageTranslation(tx, ty);
+    if (this.doNotMove) {
+      [tx, ty] = [0, 0];
+    }
     this.x = (x + tx) / width;
     this.y = (y + ty) / height;
     this.fixAndSetPosition();
@@ -17128,11 +17131,7 @@ class InkEditor extends _editor.AnnotationEditor {
     if (this.width) {
       const [parentWidth, parentHeight] = this.parentDimensions;
       this.setAspectRatio(this.width * parentWidth, this.height * parentHeight);
-      if (this.doNotMove) {
-        this.setAt(baseX * parentWidth, baseY * parentHeight, 0, 0);
-      } else {
-        this.setAt(baseX * parentWidth, baseY * parentHeight, this.width * parentWidth, this.height * parentHeight);
-      }
+      this.setAt(baseX * parentWidth, baseY * parentHeight, this.width * parentWidth, this.height * parentHeight);
       this.#isCanvasInitialized = true;
       this.#setCanvasDims();
       this.setDims(this.width * parentWidth, this.height * parentHeight);
@@ -18102,8 +18101,8 @@ var _tools = __w_pdfjs_require__(5);
 var _annotation_layer = __w_pdfjs_require__(29);
 var _worker_options = __w_pdfjs_require__(14);
 var _xfa_layer = __w_pdfjs_require__(32);
-const pdfjsVersion = '3.10.503';
-const pdfjsBuild = 'ee7f8b003';
+const pdfjsVersion = '3.10.504';
+const pdfjsBuild = 'f74a9b92e';
 })();
 
 /******/ 	return __webpack_exports__;

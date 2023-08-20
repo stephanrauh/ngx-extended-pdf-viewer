@@ -3118,7 +3118,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.ngxExtendedPdfViewerVersion = void 0;
-const ngxExtendedPdfViewerVersion = '18.0.0-beta.2';
+const ngxExtendedPdfViewerVersion = '18.0.0-beta.3';
 exports.ngxExtendedPdfViewerVersion = ngxExtendedPdfViewerVersion;
 
 /***/ }),
@@ -8641,7 +8641,7 @@ class PDFViewer {
   #scaleTimeoutId = null;
   #textLayerMode = _ui_utils.TextLayerMode.ENABLE;
   constructor(options) {
-    const viewerVersion = '3.9.603';
+    const viewerVersion = '3.9.604';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -17672,8 +17672,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(6);
 var _pdf_link_service = __webpack_require__(8);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.9.603';
-const pdfjsBuild = '9a92645aa';
+const pdfjsVersion = '3.9.604';
+const pdfjsBuild = '4c5c5072c';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
