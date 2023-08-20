@@ -19,8 +19,9 @@
         [title]="button.title"
         [attr.data-l10n-id]="button.l10nId"
         (click)="onClick($event, button.action, button.eventBusName, button.closeOnClick)"
+        [attr.aria-label]="button.title"
       >
-        <span class="icon" *ngIf="button.image" [innerHTML]="button.image"></span>
+        <span class="icon" role="img" [attr.aria-label]="button.title" *ngIf="button.image" [innerHTML]="button.image"></span>
         <span class="toolbar-caption" [attr.data-l10n-id]="button.l10nLabel">{{ button.title }}</span>
       </button>
     </div>
