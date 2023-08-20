@@ -88,7 +88,7 @@ function isKeyIgnored(cmd: number, keycode: number | 'WHEEL'): boolean {
   const ignoreKeys: Array<string> = PDFViewerApplicationOptions.get('ignoreKeys');
   const acceptKeys: Array<string> = PDFViewerApplicationOptions.get('acceptKeys');
   if (keycode === 'WHEEL') {
-    if (isKeyInList(ignoreKeys, cmd, 'WHEEL')) {
+    if (!!ignoreKeys && isKeyInList(ignoreKeys, cmd, 'WHEEL')) {
       return true;
     }
     if (!!acceptKeys && acceptKeys.length > 0) {

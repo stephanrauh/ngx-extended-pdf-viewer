@@ -485,4 +485,4 @@
 - 18.0.0-beta.1 #1835 address the issues Sonarcloud reports; update the 3.10 branch
 - 18.0.0-beta.2 #1825 stop adding an offset to the coordinates when importing serialized editor annotations (ink editor only)
 - 18.0.0-beta.3 #1825 stop adding an offset to the coordinates when importing serialized editor annotations
-- 18.0.0-beta.4 #1838 add `role="img"` and ARIA labels
+- 18.0.0-beta.4 #1838 add `role="img"` and ARIA labels; #1830 wheel events are now caught only if the mouse is above the PDF, but not if it's outside the PDF; updated the annotation layer CSS
