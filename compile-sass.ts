@@ -11,7 +11,7 @@ fs.writeFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-light-the
 
 const annotationLayerBuilder = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/annotation-layer-builder.scss', options);
 const xfaLayerBuilder = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/xfa_layer_builder.scss', options);
-const annotationEditorLayerBuilder = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/annotation_editor_layer_builder.css', options);
+const annotationEditorLayerBuilder = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/annotation_editor_layer_builder.scss', options);
 
 const acroLightCSS = [annotationLayerBuilder.css, xfaLayerBuilder.css, annotationEditorLayerBuilder.css].join(' ');
 fs.writeFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/acroform-default-theme/pdf-acroform-default-colors-css.ts', cssToTs(acroLightCSS));
