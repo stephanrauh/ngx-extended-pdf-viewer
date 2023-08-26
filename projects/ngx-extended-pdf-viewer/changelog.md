@@ -482,8 +482,8 @@
 - 18.0.0-alpha.7 #1823 reduce unnecessary scrolling when activating the single-page mode or the book mode; #1584 fine-tuning and allow the editor buttons to hide in the secondary menu
 - 18.0.0-alpha.8 #1584 finetuning and bugfixes; allow the "toggle sidebar" button to hide in the secondary menu; make the find button work reliably
 - 18.0.0-beta.0 update to pdf.js 3.9 (stable branch) and 3.10 (bleeding-edge branch); tidied up the translation files specific to ngx-extended-pdf-viewer
-- 18.0.0-beta.1 #1835 address the issues Sonarcloud reports; update the 3.10 branch
+- 18.0.0-beta.1 #1835 address the issues Sonarcloud reports; update the bleeding edge branch
 - 18.0.0-beta.2 #1825 stop adding an offset to the coordinates when importing serialized editor annotations (ink editor only)
 - 18.0.0-beta.3 #1825 stop adding an offset to the coordinates when importing serialized editor annotations
 - 18.0.0-beta.4 #1838 add `role="img"` and ARIA labels; #1830 wheel events are now caught only if the mouse is above the PDF, but not if it's outside the PDF;
-- 18.0.0-beta.5 #1825 now `NgxExtendedPdfViewerService.addEditorAnnotation()` respects the `pageIndex`if it's defined in the annotation: otherwise, the annotation is added to the current page; #1824 #1848 added the CSS rules required to resize images and drawings which have been added using the new editor tools; #1838 add more missing role tags
+- 18.0.0-beta.5 #1825 now `NgxExtendedPdfViewerService.addEditorAnnotation()` respects the `pageIndex`if it's defined in the annotation: otherwise, the annotation is added to the current page; #1824 #1848 added the CSS rules required to resize images and drawings which have been added using the new editor tools; #1838 add more missing role tags; update the bleeding edge branch

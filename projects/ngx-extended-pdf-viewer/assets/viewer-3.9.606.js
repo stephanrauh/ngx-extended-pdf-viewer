@@ -3119,7 +3119,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.ngxExtendedPdfViewerVersion = void 0;
-const ngxExtendedPdfViewerVersion = '18.0.0-beta.4';
+const ngxExtendedPdfViewerVersion = '18.0.0-beta.5';
 exports.ngxExtendedPdfViewerVersion = ngxExtendedPdfViewerVersion;
 
 /***/ }),
@@ -8642,7 +8642,7 @@ class PDFViewer {
   #scaleTimeoutId = null;
   #textLayerMode = _ui_utils.TextLayerMode.ENABLE;
   constructor(options) {
-    const viewerVersion = '3.9.605';
+    const viewerVersion = '3.9.606';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -10274,7 +10274,7 @@ class PDFViewer {
     if (!Array.isArray(data)) {
       data = [data];
     }
-    this.#annotationEditorUIManager.addSerializedEditor(data, true, true);
+    this.#annotationEditorUIManager.addSerializedEditor(data, true, true, false);
   }
   removeEditorAnnotations(filter = () => true) {
     this.#annotationEditorUIManager.removeEditors(filter);
@@ -17673,8 +17673,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(6);
 var _pdf_link_service = __webpack_require__(8);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.9.605';
-const pdfjsBuild = '7e0b54c44';
+const pdfjsVersion = '3.9.606';
+const pdfjsBuild = '865dc5bad';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,

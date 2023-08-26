@@ -1334,7 +1334,7 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#35@#workerPorts": WeakMap<object, any>;
+    static "__#35@#workerPorts": any;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */
@@ -1346,7 +1346,7 @@ export class PDFWorker {
     static get workerSrc(): string;
     static get _mainThreadWorkerMessageHandler(): any;
     static get _setupFakeWorkerGlobal(): any;
-    constructor({ name, port, verbosity }?: {
+    constructor({ name, port, verbosity, }?: {
         name?: null | undefined;
         port?: null | undefined;
         verbosity?: number | undefined;

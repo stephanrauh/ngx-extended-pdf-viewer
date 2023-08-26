@@ -987,7 +987,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.9.605',
+    apiVersion: '3.9.606',
     data,
     password,
     disableAutoFetch,
@@ -2754,9 +2754,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.9.605';
+const version = '3.9.606';
 exports.version = version;
-const build = '7e0b54c44';
+const build = '865dc5bad';
 exports.build = build;
 
 /***/ }),
@@ -4112,7 +4112,7 @@ class AnnotationEditorUIManager {
     const data = event.clipboardData.getData("application/pdfjs");
     this.addSerializedEditor(data);
   }
-  addSerializedEditor(data, activateEditorIfNecessary = false, doNotMove = false) {
+  addSerializedEditor(data, activateEditorIfNecessary = false, doNotMove = false, ignorePageNumber = true) {
     if (!data) {
       return;
     }
@@ -4132,10 +4132,12 @@ class AnnotationEditorUIManager {
       this.updateMode(_util.AnnotationEditorType.FREETEXT);
     }
     this.unselectAll();
-    const layer = this.currentLayer;
     try {
       const newEditors = [];
       for (const editor of data) {
+        const pageNumberMissing = editor.pageIndex === undefined;
+        const useCurrentPage = ignorePageNumber || pageNumberMissing;
+        const layer = useCurrentPage ? this.currentLayer : this.getLayer(editor.pageIndex);
         const deserializedEditor = layer.deserialize(editor);
         if (!deserializedEditor) {
           return;
@@ -4224,6 +4226,9 @@ class AnnotationEditorUIManager {
   }
   get currentLayer() {
     return this.#allLayers.get(this.#currentPageIndex);
+  }
+  getLayer(pageIndex) {
+    return this.#allLayers.get(pageIndex);
   }
   get currentPageIndex() {
     return this.#currentPageIndex;
@@ -17647,8 +17652,8 @@ var _tools = __w_pdfjs_require__(5);
 var _annotation_layer = __w_pdfjs_require__(29);
 var _worker_options = __w_pdfjs_require__(14);
 var _xfa_layer = __w_pdfjs_require__(32);
-const pdfjsVersion = '3.9.605';
-const pdfjsBuild = '7e0b54c44';
+const pdfjsVersion = '3.9.606';
+const pdfjsBuild = '865dc5bad';
 })();
 
 /******/ 	return __webpack_exports__;
