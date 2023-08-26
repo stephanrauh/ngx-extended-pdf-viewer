@@ -11,6 +11,7 @@
   [innerHTML]="imageHtml"
   (click)="onClick($event)"
   [attr.aria-label]="title"
+  role="button"
 >
   <ng-content *ngIf="!image" role="img" aria-hidden="true"></ng-content>
   <span [attr.data-l10n-id]="l10nLabel">{{ title }}</span>
