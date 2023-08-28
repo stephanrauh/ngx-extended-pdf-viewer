@@ -988,7 +988,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.10.507',
+    apiVersion: '3.11.435',
     data,
     password,
     disableAutoFetch,
@@ -2570,11 +2570,7 @@ class WorkerTransport {
 class PDFObjects {
   #objs = Object.create(null);
   #ensureObj(objId) {
-    const obj = this.#objs[objId];
-    if (obj) {
-      return obj;
-    }
-    return this.#objs[objId] = {
+    return this.#objs[objId] ||= {
       capability: new _util.PromiseCapability(),
       data: null
     };
@@ -2776,9 +2772,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.10.507';
+const version = '3.11.435';
 exports.version = version;
-const build = 'cc045eab1';
+const build = '8954ff27f';
 exports.build = build;
 
 /***/ }),
@@ -18084,8 +18080,8 @@ var _tools = __w_pdfjs_require__(5);
 var _annotation_layer = __w_pdfjs_require__(29);
 var _worker_options = __w_pdfjs_require__(14);
 var _xfa_layer = __w_pdfjs_require__(32);
-const pdfjsVersion = '3.10.507';
-const pdfjsBuild = 'cc045eab1';
+const pdfjsVersion = '3.11.435';
+const pdfjsBuild = '8954ff27f';
 })();
 
 /******/ 	return __webpack_exports__;

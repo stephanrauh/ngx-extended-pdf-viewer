@@ -487,3 +487,4 @@
 - 18.0.0-beta.3 #1825 stop adding an offset to the coordinates when importing serialized editor annotations
 - 18.0.0-beta.4 #1838 add `role="img"` and ARIA labels; #1830 wheel events are now caught only if the mouse is above the PDF, but not if it's outside the PDF;
 - 18.0.0-beta.5 #1825 now `NgxExtendedPdfViewerService.addEditorAnnotation()` respects the `pageIndex`if it's defined in the annotation: otherwise, the annotation is added to the current page; #1824 #1848 added the CSS rules required to resize images and drawings which have been added using the new editor tools; #1838 add more missing role tags; update the bleeding edge branch
+- 18.0.0-beta.6 #1852 fixed a NPE of custom toolbars; #1854 update pdf.js to version 3.10 (stable branch) and 3.11 (bleeding-edge branch)

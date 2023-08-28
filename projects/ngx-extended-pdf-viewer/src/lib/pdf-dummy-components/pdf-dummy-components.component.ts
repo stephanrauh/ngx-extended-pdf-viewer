@@ -22,6 +22,7 @@ const requiredIds = [
   'editorStamp',
   'editorModeButtons',
   'editorNone',
+  'editorStampAddImage',
   'errorClose',
   'errorMessage',
   'errorMoreInfo',

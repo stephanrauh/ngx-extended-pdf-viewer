@@ -119,7 +119,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = '3.10.507';
+    const workerVersion = '3.11.435';
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
     }
@@ -57770,9 +57770,7 @@ class PDFWorkerStream {
     return reader;
   }
   cancelAllRequests(reason) {
-    if (this._fullRequestReader) {
-      this._fullRequestReader.cancel(reason);
-    }
+    this._fullRequestReader?.cancel(reason);
     for (const reader of this._rangeRequestReaders.slice(0)) {
       reader.cancel(reason);
     }
@@ -57904,8 +57902,8 @@ Object.defineProperty(exports, "WorkerMessageHandler", ({
   }
 }));
 var _worker = __w_pdfjs_require__(1);
-const pdfjsVersion = '3.10.507';
-const pdfjsBuild = 'cc045eab1';
+const pdfjsVersion = '3.11.435';
+const pdfjsBuild = '8954ff27f';
 })();
 
 /******/ 	return __webpack_exports__;

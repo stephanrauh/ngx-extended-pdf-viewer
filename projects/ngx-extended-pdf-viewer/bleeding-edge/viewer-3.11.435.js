@@ -751,7 +751,7 @@ const PDFViewerApplication = {
     this._contentLength = null;
     this._saveInProgress = false;
     this._hasAnnotationEditors = false;
-    promises.push(this.pdfScriptingManager.destroyPromise);
+    promises.push(this.pdfScriptingManager.destroyPromise, this.passwordPrompt.close());
     this.setTitle();
     this.pdfSidebar?.reset();
     this.pdfOutlineViewer?.reset();
@@ -1179,29 +1179,26 @@ const PDFViewerApplication = {
     };
   },
   async _initializeAutoPrint(pdfDocument, openActionPromise) {
-    const [openAction, javaScript] = await Promise.all([openActionPromise, !this.pdfViewer.enableScripting ? pdfDocument.getJavaScript() : null]);
+    const [openAction, jsActions] = await Promise.all([openActionPromise, this.pdfViewer.enableScripting ? null : pdfDocument.getJSActions()]);
     if (pdfDocument !== this.pdfDocument) {
       return;
     }
-    let triggerAutoPrint = false;
-    if (openAction?.action === "Print") {
-      triggerAutoPrint = true;
-    }
-    if (javaScript) {
-      javaScript.some(js => {
-        if (!js) {
-          return false;
+    let triggerAutoPrint = openAction?.action === "Print";
+    if (jsActions) {
+      globalThis.ngxConsole.warn("Warning: JavaScript support is not enabled");
+      for (const name in jsActions) {
+        if (triggerAutoPrint) {
+          break;
         }
-        globalThis.ngxConsole.warn("Warning: JavaScript support is not enabled");
-        return true;
-      });
-      if (!triggerAutoPrint) {
-        for (const js of javaScript) {
-          if (js && _ui_utils.AutoPrintRegExp.test(js)) {
-            triggerAutoPrint = true;
-            break;
-          }
+        switch (name) {
+          case "WillClose":
+          case "WillSave":
+          case "DidSave":
+          case "WillPrint":
+          case "DidPrint":
+            continue;
         }
+        triggerAutoPrint = jsActions[name].some(js => _ui_utils.AutoPrintRegExp.test(js));
       }
     }
     if (triggerAutoPrint) {
@@ -3119,7 +3116,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.ngxExtendedPdfViewerVersion = void 0;
-const ngxExtendedPdfViewerVersion = '18.0.0-beta.5';
+const ngxExtendedPdfViewerVersion = '18.0.0-beta.6';
 exports.ngxExtendedPdfViewerVersion = ngxExtendedPdfViewerVersion;
 
 /***/ }),
@@ -4020,7 +4017,8 @@ class AnnotationEditorParams {
     editorFreeTextColor,
     editorInkColor,
     editorInkThickness,
-    editorInkOpacity
+    editorInkOpacity,
+    editorStampAddImage
   }) {
     const dispatchEvent = (typeStr, value) => {
       this.eventBus.dispatch("switchannotationeditorparams", {
@@ -4043,6 +4041,9 @@ class AnnotationEditorParams {
     });
     editorInkOpacity.addEventListener("input", function () {
       dispatchEvent("INK_OPACITY", this.valueAsNumber);
+    });
+    editorStampAddImage.addEventListener("click", () => {
+      dispatchEvent("CREATE");
     });
     this.eventBus._on("annotationeditorparamschanged", evt => {
       for (const [type, value] of evt.details) {
@@ -7327,6 +7328,7 @@ class PDFScriptingManager {
   #ready = false;
   #sandboxBundleSrc = null;
   #scripting = null;
+  #willPrintCapability = null;
   constructor({
     eventBus,
     sandboxBundleSrc = null,
@@ -7453,10 +7455,22 @@ class PDFScriptingManager {
     });
   }
   async dispatchWillPrint() {
-    return this.#scripting?.dispatchEventInSandbox({
-      id: "doc",
-      name: "WillPrint"
-    });
+    if (!this.#scripting) {
+      return;
+    }
+    await this.#willPrintCapability?.promise;
+    this.#willPrintCapability = new _pdfjsLib.PromiseCapability();
+    try {
+      await this.#scripting.dispatchEventInSandbox({
+        id: "doc",
+        name: "WillPrint"
+      });
+    } catch (ex) {
+      this.#willPrintCapability.resolve();
+      this.#willPrintCapability = null;
+      throw ex;
+    }
+    await this.#willPrintCapability.promise;
   }
   async dispatchDidPrint() {
     return this.#scripting?.dispatchEventInSandbox({
@@ -7545,6 +7559,10 @@ class PDFScriptingManager {
           if (!isInPresentationMode) {
             pdfViewer.decreaseScale();
           }
+          break;
+        case "WillPrintFinished":
+          this.#willPrintCapability?.resolve();
+          this.#willPrintCapability = null;
           break;
       }
       return;
@@ -7644,6 +7662,8 @@ class PDFScriptingManager {
     try {
       await this.#scripting.destroySandbox();
     } catch {}
+    this.#willPrintCapability?.reject(new Error("Scripting destroyed."));
+    this.#willPrintCapability = null;
     for (const [name, listener] of this._internalEvents) {
       this.#eventBus._off(name, listener);
     }
@@ -8642,7 +8662,7 @@ class PDFViewer {
   #scaleTimeoutId = null;
   #textLayerMode = _ui_utils.TextLayerMode.ENABLE;
   constructor(options) {
-    const viewerVersion = '3.9.606';
+    const viewerVersion = '3.11.435';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -9160,7 +9180,7 @@ class PDFViewer {
         if (pdfDocument.isPureXfa) {
           console.warn("Warning: XFA-editing is not implemented.");
         } else if (isValidAnnotationEditorMode(mode)) {
-          this.#annotationEditorUIManager = new _pdfjsLib.AnnotationEditorUIManager(this.container, this.eventBus, pdfDocument, this.pageColors);
+          this.#annotationEditorUIManager = new _pdfjsLib.AnnotationEditorUIManager(this.container, this.viewer, this.eventBus, pdfDocument, this.pageColors);
           if (mode !== _pdfjsLib.AnnotationEditorType.NONE) {
             this.#annotationEditorUIManager.updateMode(mode);
           }
@@ -14280,6 +14300,7 @@ const AnnotationEditorType = {
 exports.AnnotationEditorType = AnnotationEditorType;
 const AnnotationEditorParamsType = {
   RESIZE: 1,
+  CREATE: 2,
   FREETEXT_SIZE: 11,
   FREETEXT_COLOR: 12,
   FREETEXT_OPACITY: 13,
@@ -14752,6 +14773,9 @@ class FeatureTest {
       isWin: navigator.platform.includes("Win"),
       isMac: navigator.platform.includes("Mac")
     });
+  }
+  static get isCSSRoundSupported() {
+    return shadow(this, "isCSSRoundSupported", globalThis.CSS?.supports?.("width: round(1.5px, 1px)"));
   }
 }
 exports.FeatureTest = FeatureTest;
@@ -15964,14 +15988,15 @@ class Toolbar {
     editorFreeTextParamsToolbar,
     editorInkButton,
     editorInkParamsToolbar,
-    editorStampButton
+    editorStampButton,
+    editorStampParamsToolbar
   }) {
     const editorModeChanged = ({
       mode
     }) => {
       (0, _ui_utils.toggleCheckedBtn)(editorFreeTextButton, mode === _pdfjsLib.AnnotationEditorType.FREETEXT, editorFreeTextParamsToolbar);
       (0, _ui_utils.toggleCheckedBtn)(editorInkButton, mode === _pdfjsLib.AnnotationEditorType.INK, editorInkParamsToolbar);
-      (0, _ui_utils.toggleCheckedBtn)(editorStampButton, mode === _pdfjsLib.AnnotationEditorType.STAMP);
+      (0, _ui_utils.toggleCheckedBtn)(editorStampButton, mode === _pdfjsLib.AnnotationEditorType.STAMP, editorStampParamsToolbar);
       const isDisable = mode === _pdfjsLib.AnnotationEditorType.DISABLE;
       editorFreeTextButton.disabled = isDisable;
       editorInkButton.disabled = isDisable;
@@ -17673,8 +17698,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(6);
 var _pdf_link_service = __webpack_require__(8);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.9.606';
-const pdfjsBuild = 'ab0ccf1ec';
+const pdfjsVersion = '3.11.435';
+const pdfjsBuild = '8954ff27f';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
@@ -17728,6 +17753,7 @@ function getViewerConfiguration() {
       editorInkParamsToolbar: document.getElementById("editorInkParamsToolbar"),
       editorStampButton: document.getElementById("editorStamp"),
       presentationModeButton: document.getElementById("presentationMode"),
+      editorStampParamsToolbar: document.getElementById("editorStampParamsToolbar"),
       download: document.getElementById("download")
     },
     secondaryToolbar: {
@@ -17814,7 +17840,8 @@ function getViewerConfiguration() {
       editorFreeTextColor: document.getElementById("editorFreeTextColor"),
       editorInkColor: document.getElementById("editorInkColor"),
       editorInkThickness: document.getElementById("editorInkThickness"),
-      editorInkOpacity: document.getElementById("editorInkOpacity")
+      editorInkOpacity: document.getElementById("editorInkOpacity"),
+      editorStampAddImage: document.getElementById("editorStampAddImage")
     },
     printContainer: document.getElementById("printContainer"),
     openFileInput: document.getElementById("fileInput"),
