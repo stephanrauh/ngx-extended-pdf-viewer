@@ -1743,15 +1743,7 @@ async function loadFakeWorker() {
   }
   await (0, _pdfjsLib.loadScript)(_pdfjsLib.PDFWorker.workerSrc);
 }
-async function loadPDFBug(self) {
-  const {
-    debuggerScriptPath
-  } = self.appConfig;
-  const {
-    PDFBug
-  } = await import(debuggerScriptPath);
-  self._PDFBug = PDFBug;
-}
+async function loadPDFBug(self) {}
 function reportPageStatsPDFBug({
   pageNumber
 }) {
@@ -1920,8 +1912,8 @@ function webViewerHashchange(evt) {
       url: URL.createObjectURL(file),
       originalUrl: file.name
     });
-    if (window["setNgxExtendedPdfViewerSource"]) {
-      window["setNgxExtendedPdfViewerSource"](file.name ? file.name : URL.createObjectURL(file));
+    if (globalThis.setNgxExtendedPdfViewerSource) {
+      globalThis.setNgxExtendedPdfViewerSource(file.name ?? URL.createObjectURL(file));
     }
   };
   var webViewerOpenFile = function (evt) {
@@ -3116,7 +3108,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.ngxExtendedPdfViewerVersion = void 0;
-const ngxExtendedPdfViewerVersion = '18.0.0-beta.6';
+const ngxExtendedPdfViewerVersion = '18.0.0-beta.8';
 exports.ngxExtendedPdfViewerVersion = ngxExtendedPdfViewerVersion;
 
 /***/ }),
@@ -8662,7 +8654,7 @@ class PDFViewer {
   #scaleTimeoutId = null;
   #textLayerMode = _ui_utils.TextLayerMode.ENABLE;
   constructor(options) {
-    const viewerVersion = '3.10.543';
+    const viewerVersion = '3.11.437';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -17417,7 +17409,6 @@ class PDFPrintService {
         overlayManager.close(dialog);
       }
     });
-    overlayPromise = undefined;
   }
   renderPages() {
     if (this.pdfDocument.isPureXfa) {
@@ -17698,8 +17689,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(6);
 var _pdf_link_service = __webpack_require__(8);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.10.543';
-const pdfjsBuild = '06eaf5d45';
+const pdfjsVersion = '3.11.437';
+const pdfjsBuild = '85c07f81b';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,

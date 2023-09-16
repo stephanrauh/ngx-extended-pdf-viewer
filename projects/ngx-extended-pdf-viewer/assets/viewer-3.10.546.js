@@ -1743,15 +1743,7 @@ async function loadFakeWorker() {
   }
   await (0, _pdfjsLib.loadScript)(_pdfjsLib.PDFWorker.workerSrc);
 }
-async function loadPDFBug(self) {
-  const {
-    debuggerScriptPath
-  } = self.appConfig;
-  const {
-    PDFBug
-  } = await import(debuggerScriptPath);
-  self._PDFBug = PDFBug;
-}
+async function loadPDFBug(self) {}
 function reportPageStatsPDFBug({
   pageNumber
 }) {
@@ -1920,8 +1912,8 @@ function webViewerHashchange(evt) {
       url: URL.createObjectURL(file),
       originalUrl: file.name
     });
-    if (window["setNgxExtendedPdfViewerSource"]) {
-      window["setNgxExtendedPdfViewerSource"](file.name ? file.name : URL.createObjectURL(file));
+    if (globalThis.setNgxExtendedPdfViewerSource) {
+      globalThis.setNgxExtendedPdfViewerSource(file.name ?? URL.createObjectURL(file));
     }
   };
   var webViewerOpenFile = function (evt) {
@@ -3116,7 +3108,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.ngxExtendedPdfViewerVersion = void 0;
-const ngxExtendedPdfViewerVersion = '18.0.0-beta.6';
+const ngxExtendedPdfViewerVersion = '18.0.0-beta.8';
 exports.ngxExtendedPdfViewerVersion = ngxExtendedPdfViewerVersion;
 
 /***/ }),
@@ -8662,7 +8654,7 @@ class PDFViewer {
   #scaleTimeoutId = null;
   #textLayerMode = _ui_utils.TextLayerMode.ENABLE;
   constructor(options) {
-    const viewerVersion = '3.11.435';
+    const viewerVersion = '3.10.546';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -17417,37 +17409,40 @@ class PDFPrintService {
         overlayManager.close(dialog);
       }
     });
-    overlayPromise = undefined;
   }
   renderPages() {
-    if (this.pdfDocument.isPureXfa) {
-      (0, _print_utils.getXfaHtmlForPrinting)(this.printContainer, this.pdfDocument);
-      return Promise.resolve();
-    }
-    const pageCount = this.pagesOverview.length;
-    const renderNextPage = (resolve, reject) => {
-      this.throwIfInactive();
-      while (true) {
-        ++this.currentPage;
+    try {
+      if (this.pdfDocument.isPureXfa) {
+        (0, _print_utils.getXfaHtmlForPrinting)(this.printContainer, this.pdfDocument);
+        return Promise.resolve();
+      }
+      const pageCount = this.pagesOverview.length;
+      const renderNextPage = (resolve, reject) => {
+        this.throwIfInactive();
+        while (true) {
+          ++this.currentPage;
+          if (this.currentPage >= pageCount) {
+            break;
+          }
+          if (!window.isInPDFPrintRange || window.isInPDFPrintRange(this.currentPage)) {
+            break;
+          }
+        }
         if (this.currentPage >= pageCount) {
-          break;
+          renderProgress(window.filteredPageCount | pageCount, window.filteredPageCount | pageCount, this.l10n, this.eventBus);
+          resolve();
+          return;
         }
-        if (!window.isInPDFPrintRange || window.isInPDFPrintRange(this.currentPage)) {
-          break;
-        }
-      }
-      if (this.currentPage >= pageCount) {
-        renderProgress(window.filteredPageCount | pageCount, window.filteredPageCount | pageCount, this.l10n, this.eventBus);
-        resolve();
-        return;
-      }
-      const index = this.currentPage;
-      renderProgress(index, window.filteredPageCount | pageCount, this.l10n, this.eventBus);
-      renderPage(this, this.pdfDocument, index + 1, this.pagesOverview[index], this._printResolution, this._optionalContentConfigPromise, this._printAnnotationStoragePromise).then(this.useRenderedPage.bind(this)).then(function () {
-        renderNextPage(resolve, reject);
-      }, reject);
-    };
-    return new Promise(renderNextPage);
+        const index = this.currentPage;
+        renderProgress(index, window.filteredPageCount | pageCount, this.l10n, this.eventBus);
+        renderPage(this, this.pdfDocument, index + 1, this.pagesOverview[index], this._printResolution, this._optionalContentConfigPromise, this._printAnnotationStoragePromise).then(this.useRenderedPage.bind(this)).then(function () {
+          renderNextPage(resolve, reject);
+        }, reject);
+      };
+      return new Promise(renderNextPage);
+    } catch (e) {
+      console.log("Hallo hallo" + e);
+    }
   }
   useRenderedPage() {
     this.throwIfInactive();
@@ -17520,17 +17515,21 @@ window.printPDF = function printPdf() {
       return;
     }
     const activeServiceOnEntry = activeService;
-    activeService.renderPages().then(function () {
-      const progressIndicator = document.getElementById("printServiceDialog");
-      if (progressIndicator) {
-        progressIndicator.classList.add("hidden");
-      }
-      return activeServiceOnEntry.performPrint();
-    }).catch(function () {}).then(function () {
-      if (activeServiceOnEntry.active) {
-        abort();
-      }
-    });
+    try {
+      activeService.renderPages().then(function () {
+        const progressIndicator = document.getElementById("printServiceDialog");
+        if (progressIndicator) {
+          progressIndicator.classList.add("hidden");
+        }
+        return activeServiceOnEntry.performPrint();
+      }).catch(function () {}).then(function () {
+        if (activeServiceOnEntry.active) {
+          abort();
+        }
+      });
+    } catch (e) {
+      console.log("Hallo" + e);
+    }
   }
 };
 function dispatchEvent(eventType) {
@@ -17698,8 +17697,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(6);
 var _pdf_link_service = __webpack_require__(8);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.11.435';
-const pdfjsBuild = '8954ff27f';
+const pdfjsVersion = '3.10.546';
+const pdfjsBuild = 'e603ed568';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
