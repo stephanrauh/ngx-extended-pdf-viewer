@@ -1047,9 +1047,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   private loadViewer(): void {
-    window['ngxZone'] = this.ngZone;
+    globalThis['ngxZone'] = this.ngZone;
     this.ngZone.runOutsideAngular(() => {
-      if (!window['pdfjs-dist/build/pdf']) {
+      if (!globalThis['pdfjs-dist/build/pdf']) {
         setTimeout(() => this.loadViewer(), 25);
       } else {
         this.needsES5().then((needsES5) => {
@@ -1094,7 +1094,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   private loadPdfJs() {
     globalThis['ngxZone'] = this.ngZone;
     this.ngZone.runOutsideAngular(() => {
-      if (!window['pdfjs-dist/build/pdf']) {
+      if (!globalThis['pdfjs-dist/build/pdf']) {
         this.needsES5().then((needsES5) => {
           if (needsES5) {
             if (!pdfDefaultOptions.needsES5) {
@@ -1105,7 +1105,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             pdfDefaultOptions.needsES5 = true;
             console.log('Using the ES5 version of the PDF viewer. Your PDF files show faster if you update your browser.');
           }
-          window['ngxZone'] = this.ngZone;
           if (this.minifiedJSLibraries) {
             if (!pdfDefaultOptions.workerSrc().endsWith('.min.js')) {
               const src = pdfDefaultOptions.workerSrc();
@@ -1114,10 +1113,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           }
           const pdfJsPath = this.getPdfJsPath('pdf', needsES5);
           const script = this.createScriptElement(pdfJsPath);
+          script.onload = () => {
+            if (!(globalThis as any).webViewerLoad) {
+              this.loadViewer();
+            }
+          };
           document.getElementsByTagName('head')[0].appendChild(script);
         });
-      }
-      if (!(globalThis as any).webViewerLoad) {
+      } else if (!(globalThis as any).webViewerLoad) {
         this.loadViewer();
       }
     });
