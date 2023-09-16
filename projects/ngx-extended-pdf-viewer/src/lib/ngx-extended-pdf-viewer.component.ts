@@ -201,7 +201,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if (viewMode === 'single') {
         // since pdf.js, our custom single-page-mode has been replaced by the standard scrollMode="page"
         this.scrollMode = ScrollModeType.page;
-        this._pageViewMode = 'multiple';
+        this._pageViewMode = viewMode;
       }
       if (viewMode === 'book') {
         this.showBorders = false;
