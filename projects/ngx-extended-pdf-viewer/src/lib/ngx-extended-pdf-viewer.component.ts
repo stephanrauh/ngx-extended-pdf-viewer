@@ -1049,15 +1049,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   private loadViewer(): void {
     globalThis['ngxZone'] = this.ngZone;
     this.ngZone.runOutsideAngular(() => {
-      if (!globalThis['pdfjs-dist/build/pdf']) {
-        setTimeout(() => this.loadViewer(), 25);
-      } else {
-        this.needsES5().then((needsES5) => {
-          const viewerPath = this.getPdfJsPath('viewer', needsES5);
-          const script = this.createScriptElement(viewerPath);
-          document.getElementsByTagName('head')[0].appendChild(script);
-        });
-      }
+      this.needsES5().then((needsES5) => {
+        const viewerPath = this.getPdfJsPath('viewer', needsES5);
+        const script = this.createScriptElement(viewerPath);
+        document.getElementsByTagName('head')[0].appendChild(script);
+      });
     });
   }
 
