@@ -63,7 +63,7 @@
 }
 
 .annotationLayer .textWidgetAnnotation textarea {
-  font: message-box;
+  font-family: message-box;
   font-size: 9px;
   resize: none;
 }
@@ -164,7 +164,7 @@
   padding: 6px;
   margin-left: 5px;
   cursor: pointer;
-  font: message-box;
+  font-family: message-box;
   font-size: 9px;
   word-wrap: break-word;
 }
@@ -366,7 +366,7 @@
 .pdf-viewer input,
 .pdf-viewer button,
 .pdf-viewer select {
-  font: message-box;
+  font-family: message-box;
   outline: none;
 }
 

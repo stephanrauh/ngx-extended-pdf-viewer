@@ -300,7 +300,7 @@
   outline: 1.5px solid rgb(255, 255, 74);
   padding: calc(6px * var(--scale-factor));
   cursor: pointer;
-  font: message-box;
+  font-family: message-box;
   white-space: normal;
   word-wrap: break-word;
   pointer-events: auto;
