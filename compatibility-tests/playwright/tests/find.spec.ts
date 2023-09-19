@@ -21,7 +21,7 @@ async function runTest(page, urlSuffix = '') {
   await expect(page.locator('.visiblePageIsLoading')).not.toBeVisible();
   await page.waitForTimeout(500);
   expect(await page.screenshot()).toMatchSnapshot({ maxDiffPixelRatio: 0.001 });
-  await page.locator('#viewFind').click();
+  await page.locator('#primaryViewFind').click();
   await page.waitForTimeout(500);
   expect(await page.screenshot()).toMatchSnapshot({ maxDiffPixelRatio: 0.001 });
   await page.locator('#highlightAll').click();

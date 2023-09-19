@@ -29,7 +29,7 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 ## More breaking changes ahead! What's new in Version 18?
 
-Version 18 (currently in its alpha stage) ships with quite a few improvements:
+Version 18 ships with quite a few improvements:
 
 - It updates the find API,
 - brings toolbar customization and responsive design to another level,
@@ -55,24 +55,6 @@ A small breaking change affects single-page mode. I've removed a CSS rule that p
   margin: 0;
 }
 ```
-
-## Breaking changes ahead! What's new in Version 17?
-
-Version 17 ships with a revamped form support. Along the way, I've polished some rough edges, which is a breaking change if you rely on the old (and incorrect) behavior. In particular, checkboxes now send the value defined by the author of the PDF file. For instance, if the author defined the checkbox to have the values "Y" and "N", now `(formData)` emits these values. Until version 16, it emitted a boolean value. Another improvement (or breaking change, depending on your application) is that `[formData]` now is used to initialize the fields of the PDF file. Earlier versions forced you to use a delayed initialization with a timeout. Version 17 allows you to drop this cumbersome workaround.
-
-Book mode is back again. It was broken in version 16.
-
-When you add a text or a drawing to the PDF file using the new editor functions, these additions now show in the download and in print.
-
-Plus, version 17 removes a couple of features. The growing popularity of the library and the rapid evolution of the base library pdf.js result in a flood of issues and hard-to-solve merge conflicts. To solve that problem, I'll remove some of the features that proved to cause too much works.
-
-In particular, I've removed the custom PDF backgrounds. The pdf.js team have worked a lot on the code I'd modified to implement the custom backgrounds. I didn't manage to resolve the merge conflict, nor do I have enough spare time to re-implement the feature, so I decided to drop it.
-
-Other features I've dropped are `[formTheme]` and `[wheelAction]`. Both of them ceased to work some time ago without anybody complaining.
-
-If you need one of these features - well, this is an open-source library. Contributors are welcome. It's just that I have to prune the library as long as I'm the only contributor.
-
-The base library now is pdf.js 3.5 in the stable branch and pdf.js 3.7 in the "bleeding edge" branch.
 
 ## Full changelog
 
