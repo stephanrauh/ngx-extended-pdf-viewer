@@ -84,7 +84,6 @@
 
 .annotationEditorLayer .selectedEditor {
   outline: var(--focus-outline);
-  resize: none;
 }
 
 /* added by ngx-extended-pdf-viewer */
@@ -155,7 +154,6 @@
 }
 
 .annotationEditorLayer .inkEditor.editing {
-  resize: none;
   cursor: inherit;
 }
 
@@ -178,7 +176,7 @@
 }
 
 .annotationEditorLayer {
-  :is(.xfreeTextEditor, .inkEditor, .stampEditor) {
+  :is(.freeTextEditor, .inkEditor, .stampEditor) {
     & > .resizers {
       width: 100%;
       height: 100%;

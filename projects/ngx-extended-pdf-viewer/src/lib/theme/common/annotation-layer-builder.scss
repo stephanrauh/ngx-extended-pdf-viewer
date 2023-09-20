@@ -284,8 +284,6 @@
 .annotationLayer .popupAnnotation {
   position: absolute;
   font-size: calc(9px * var(--scale-factor));
-  width: 100%;
-  min-width: calc(180px * var(--scale-factor));
   pointer-events: none;
   width: max-content;
   max-width: 45%;
