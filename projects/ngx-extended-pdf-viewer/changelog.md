@@ -492,3 +492,5 @@
 - 18.0.0-beta.8 #1857 show the print overlay even if printing twice
 - 18.0.0-beta.9 fixed a CSS layout problem that happens only on Chrome; fixed translation errors
 - 18.0.0-beta.10 slightly increased the font size of the text fields to match the previous font size more closely
+- 18.0.0 updated the test screenshots to accomodate the new stamp editor button
+- 18.0.1 #1835 addressed minor CSS issues; dependency updates

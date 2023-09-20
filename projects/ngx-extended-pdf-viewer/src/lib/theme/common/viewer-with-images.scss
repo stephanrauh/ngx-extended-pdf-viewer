@@ -204,7 +204,7 @@ ngx-extended-pdf-viewer {
   :is(input, button, select),
   .body .secondaryToolbar :is(input, button, a, select) {
     outline: none;
-    font-family: message-box;
+    font-family: message-box, sans-serif;
     font-size: 13px;
   }
 
@@ -212,7 +212,7 @@ ngx-extended-pdf-viewer {
   .pdf-viewer input,
   .pdf-viewer button,
   .pdf-viewer select {
-    font-family: message-box;
+    font-family: message-box, sans-serif;
     outline: none;
     scrollbar-color: var(--scrollbar-color) var(--scrollbar-bg-color);
   }
