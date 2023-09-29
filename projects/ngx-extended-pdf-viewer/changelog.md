@@ -494,3 +494,4 @@
 - 18.0.0-beta.10 slightly increased the font size of the text fields to match the previous font size more closely
 - 18.0.0 updated the test screenshots to accomodate the new stamp editor button
 - 18.0.1 #1835 addressed minor CSS issues; dependency updates
+- 18.0.2 #1882 `<pdf-toggle-sidebar>` now also works in custom toolbars

@@ -58,6 +58,7 @@ import { AnnotationLayerRenderedEvent } from './events/annotation-layer-rendered
 import { AttachmentLoadedEvent } from './events/attachment-loaded-event';
 import { LayersLoadedEvent } from './events/layers-loaded-event';
 import { OutlineLoadedEvent } from './events/outline-loaded-event';
+import { ToggleSidebarEvent } from './events/toggle-sidebar-event';
 import { XfaLayerRenderedEvent } from './events/xfa-layer-rendered-event';
 import { NgxFormSupport } from './ngx-form-support';
 import { PdfSidebarView } from './options/pdf-sidebar-views';
@@ -1578,6 +1579,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
       this.initTimeout = null;
       this.selectCursorTool();
+
+      PDFViewerApplication.eventBus.on('toggleSidebar', (x: ToggleSidebarEvent) => {
+        this.ngZone.run(() => {
+          this.sidebarVisible = x.visible;
+          this.sidebarVisibleChange.emit(x.visible);
+        });
+      });
 
       PDFViewerApplication.eventBus.on('textlayerrendered', (x: TextLayerRenderedEvent) => {
         this.ngZone.run(() => this.textLayerRendered.emit(x));

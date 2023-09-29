@@ -57,9 +57,6 @@ export class PdfToolbarComponent implements AfterViewInit {
   @Input()
   public showSidebarButton: ResponsiveVisibility = true;
 
-  @Output()
-  public sidebarVisibleChange = new EventEmitter<boolean>();
-
   @Input()
   public sidebarVisible: boolean | undefined = false;
 
@@ -132,9 +129,5 @@ export class PdfToolbarComponent implements AfterViewInit {
       this.pageViewModeChange.emit(pageViewMode);
       this.pageViewMode = pageViewMode;
     }
-  }
-
-  public updateSidebarVisible(sidebarVisible: boolean): void {
-    this.sidebarVisibleChange.emit(sidebarVisible);
   }
 }

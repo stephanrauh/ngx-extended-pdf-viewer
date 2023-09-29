@@ -19,7 +19,7 @@
 <ng-template #defaultToolbar>
   <div id="toolbarViewer">
     <div id="toolbarViewerLeft">
-      <pdf-toggle-sidebar [show]="showSidebarButton" [sidebarVisible]="sidebarVisible" (showChange)="updateSidebarVisible($event)"></pdf-toggle-sidebar>
+      <pdf-toggle-sidebar [show]="showSidebarButton" [sidebarVisible]="sidebarVisible"></pdf-toggle-sidebar>
       <pdf-find-button [showFindButton]="showFindButton" [textLayer]="textLayer" [findbarVisible]="findbarVisible"></pdf-find-button>
       <pdf-paging-area [showPagingButtons]="showPagingButtons"></pdf-paging-area>
     </div>
