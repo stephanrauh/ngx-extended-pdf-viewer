@@ -27,7 +27,7 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 <img src="https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/example.png?raw=true">
 
-## More breaking changes ahead! What's new in Version 18?
+## What's new in Version 18?
 
 Version 18 ships with quite a few improvements:
 
@@ -55,6 +55,18 @@ A small breaking change affects single-page mode. I've removed a CSS rule that p
   margin: 0;
 }
 ```
+
+### Note on version 18.1.0
+
+I've changed the ids of the "next" and "previous" buttons, both in the primary toolbar and the secondary menu. Plus, I've fixed a bug that prevented the pagination buttons to show in the secondary menu. Strictly speaking, this is a breaking change, but it's so small I decided to call it minor version update.
+
+### Known bugs
+
+To my surprise, form support is broken in version 18.0.0-18.0.3. That's a high-priority ticket, so it should be history soon. Nonethless, it shows that version 18 does add several new (and unexpected) bugs. Have a look at the bug tracker before updating.
+
+### Note on breaking changes
+
+The last two versions brought a lot of breaking changes, some of them very annoying to users relying on them. I'm sorry about that. I had to prune the library because progress of the base library has shyrocketed. It became next to impossible to keep up with the pace. The good news is now I'm confident I can keep up with the pace of the base library now. I don't expect new major breaking changes any time soon. Minor breaking changes - in particular, changes related to CSS - are always possible, but I'll try hard to avoid them.
 
 ## Full changelog
 
