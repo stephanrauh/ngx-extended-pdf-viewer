@@ -9112,7 +9112,7 @@ class PDFViewer {
   #onVisibilityChange = null;
   #scaleTimeoutId = null;
   constructor(options) {
-    const viewerVersion = '3.5.550';
+    const viewerVersion = '3.5.551';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -14019,7 +14019,9 @@ class AnnotationLayerBuilder {
     if (!this.div) {
       return;
     }
-    this.div.hidden = true;
+    if (!document.querySelector("[data-pdfjsprinting=true]")) {
+      this.div.hidden = true;
+    }
   }
   #updatePresentationModeState(state) {
     if (!this.div) {
@@ -18149,8 +18151,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(5);
 var _pdf_link_service = __webpack_require__(7);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.5.550';
-const pdfjsBuild = 'df5366593';
+const pdfjsVersion = '3.5.551';
+const pdfjsBuild = 'd04a97707';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,

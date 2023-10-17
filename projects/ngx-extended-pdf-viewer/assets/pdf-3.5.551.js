@@ -1001,7 +1001,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.5.550',
+    apiVersion: '3.5.551',
     data,
     password,
     disableAutoFetch,
@@ -2757,9 +2757,9 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.5.550';
+const version = '3.5.551';
 exports.version = version;
-const build = 'df5366593';
+const build = 'd04a97707';
 exports.build = build;
 
 /***/ }),
@@ -13001,10 +13001,16 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
     let element = null;
     if (this.renderForms) {
       const angularData = window.getFormValueFromAngular(this.data.fieldName);
-      const storedData = angularData.value ? angularData : storage.getValue(id, {
+      const formData = storage.getValue(id, {
         value: this.data.fieldValue
       });
-      let textContent = storedData.formattedValue || storedData.value || "";
+      const storedData = angularData.value ? angularData : formData;
+      if (angularData !== formData) {
+        storage.setValue(id, {
+          value: angularData.value
+        });
+      }
+      let textContent = storedData.value || "";
       const maxLen = storage.getValue(id, {
         charLimit: this.data.maxLen
       }).charLimit;
@@ -13300,21 +13306,21 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
     const data = this.data;
     const id = data.id;
     const angularData = window.getFormValueFromAngular(this.data.fieldName);
+    const formValue = storage.getValue(id, {
+      value: data.exportValue === data.fieldValue
+    }).value;
     let angularValue = undefined;
     if (angularData.value) {
       angularValue = angularData.value === true || angularData.value === data.exportValue;
     }
-    let value = angularValue !== undefined ? angularValue : storage.getValue(id, {
-      value: data.exportValue === data.fieldValue
-    }).value;
-    if (typeof value === "string") {
+    let value = angularValue !== undefined ? angularValue : formValue;
+    let updateAngularValueNecessary = false;
+    if (typeof value === "string" || angularData !== formValue) {
       value = value !== "Off";
       storage.setValue(id, {
         value
       });
-      window.updateAngularFormValue(id, {
-        value
-      });
+      updateAngularValueNecessary = true;
     }
     this.container.classList.add("buttonWidgetAnnotation", "checkBox");
     const element = document.createElement("input");
@@ -13361,6 +13367,11 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
     element.addEventListener("updateFromAngular", newvalue => storage.setValue(id, {
       value: newvalue.detail
     }));
+    if (updateAngularValueNecessary) {
+      window.updateAngularFormValue(id, {
+        value
+      });
+    }
     if (this.enableScripting && this.hasJSActions) {
       element.addEventListener("updatefromsandbox", jsEvent => {
         const actions = {
@@ -13396,10 +13407,11 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
     const data = this.data;
     const id = data.id;
     const angularData = window.getFormValueFromAngular(this.data.fieldName);
-    let value = angularData.value ?? storage.getValue(id, {
+    const formValue = storage.getValue(id, {
       value: data.fieldValue === data.buttonValue
     }).value;
-    if (typeof value === "string") {
+    let value = angularData.value ?? formValue;
+    if (typeof value === "string" || angularData !== formValue) {
       value = value === data.buttonValue;
       storage.setValue(id, {
         value
@@ -13511,9 +13523,15 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
     const storage = this.annotationStorage;
     const id = this.data.id;
     const angularData = window.getFormValueFromAngular(this.data.fieldName);
-    const storedData = angularData.value ? angularData : storage.getValue(id, {
+    const formData = storage.getValue(id, {
       value: this.data.fieldValue
     });
+    const storedData = angularData.value ? angularData : formData;
+    if (angularData !== formData) {
+      storage.setValue(id, {
+        value: angularData.value
+      });
+    }
     const selectElement = document.createElement("select");
     GetElementsByNameSet.add(selectElement);
     selectElement.setAttribute("data-element-id", id);
@@ -16189,8 +16207,8 @@ var _annotation_layer = __w_pdfjs_require__(32);
 var _worker_options = __w_pdfjs_require__(14);
 var _svg = __w_pdfjs_require__(35);
 var _xfa_layer = __w_pdfjs_require__(34);
-const pdfjsVersion = '3.5.550';
-const pdfjsBuild = 'df5366593';
+const pdfjsVersion = '3.5.551';
+const pdfjsBuild = 'd04a97707';
 })();
 
 /******/ 	return __webpack_exports__;
