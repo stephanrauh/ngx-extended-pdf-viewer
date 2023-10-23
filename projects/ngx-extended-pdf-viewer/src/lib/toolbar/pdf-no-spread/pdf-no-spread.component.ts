@@ -1,5 +1,5 @@
 import { Component, Input, NgZone } from '@angular/core';
-import { take } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { SpreadType } from '../../options/spread-type';

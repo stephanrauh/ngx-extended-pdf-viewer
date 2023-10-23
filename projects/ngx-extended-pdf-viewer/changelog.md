@@ -497,3 +497,5 @@
 - 18.0.2 #1882 `<pdf-toggle-sidebar>` now also works in custom toolbars
 - 18.1.0 #1896 fixed a bug that caused the pagination buttons to browse two pages at a time; show the "next page / previous page" in the secondary toolbar; updated the README; note that I've changed the id of the pagination buttons, which might break your CSS code
 - 18.1.1 #1887 include the form values passed by [formData] in printed and downloaded PDF files; stop hiding the annotation layer when the print window shows
+- 18.1.2 #1916 `[sidebarVisible]` now works again on initial load
+- 18.1.3 #1058 import rxjs operators correctly

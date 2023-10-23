@@ -591,16 +591,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     }
     this._sidebarVisible = value;
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    if (this.sidebarVisible) {
-      PDFViewerApplication.pdfSidebar.open();
-      const view = Number(this.activeSidebarView);
-      if (view === 1 || view === 2 || view === 3 || view === 4) {
-        PDFViewerApplication.pdfSidebar.switchView(view, true);
+    if (PDFViewerApplication?.pdfSidebar) {
+      if (this.sidebarVisible) {
+        PDFViewerApplication.pdfSidebar.open();
+        const view = Number(this.activeSidebarView);
+        if (view === 1 || view === 2 || view === 3 || view === 4) {
+          PDFViewerApplication.pdfSidebar.switchView(view, true);
+        } else {
+          console.error('[activeSidebarView] must be an integer value between 1 and 4');
+        }
       } else {
-        console.error('[activeSidebarView] must be an integer value between 1 and 4');
+        PDFViewerApplication.pdfSidebar.close();
       }
-    } else {
-      PDFViewerApplication.pdfSidebar.close();
     }
   }
 

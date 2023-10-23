@@ -3108,7 +3108,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.ngxExtendedPdfViewerVersion = void 0;
-const ngxExtendedPdfViewerVersion = '18.1.1';
+const ngxExtendedPdfViewerVersion = '18.1.2';
 exports.ngxExtendedPdfViewerVersion = ngxExtendedPdfViewerVersion;
 
 /***/ }),
@@ -17692,7 +17692,7 @@ var _app_options = __webpack_require__(6);
 var _pdf_link_service = __webpack_require__(8);
 var _app = __webpack_require__(2);
 const pdfjsVersion = '3.11.440';
-const pdfjsBuild = 'dcf4ff6c5';
+const pdfjsBuild = 'a6163a289';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
