@@ -50,7 +50,7 @@ Put all of them in the same parent folder. pdf.js needs to be built first, follo
 1. `npm install -g gulp-cli`
 1. `npm install`
 1. `gulp generic` (not necessary - but it gives you faster feedback if there's a compile error)
-1. `cd ngx-extended-pdf-viewer`
+1. `cd ../ngx-extended-pdf-viewer`
 1. `sh ./updateMozillasPdfViewer.sh`
 1. `npm run showcase`
 1. `cd ../extended-pdf-viewer-showcase`
