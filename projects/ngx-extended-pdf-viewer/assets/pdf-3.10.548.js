@@ -2774,7 +2774,7 @@ class InternalRenderTask {
 }
 const version = '3.10.548';
 exports.version = version;
-const build = 'd7d95bd79';
+const build = '562fe111b';
 exports.build = build;
 
 /***/ }),
@@ -18099,7 +18099,7 @@ var _annotation_layer = __w_pdfjs_require__(29);
 var _worker_options = __w_pdfjs_require__(14);
 var _xfa_layer = __w_pdfjs_require__(32);
 const pdfjsVersion = '3.10.548';
-const pdfjsBuild = 'd7d95bd79';
+const pdfjsBuild = '562fe111b';
 })();
 
 /******/ 	return __webpack_exports__;
