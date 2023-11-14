@@ -3108,7 +3108,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.ngxExtendedPdfViewerVersion = void 0;
-const ngxExtendedPdfViewerVersion = '18.1.4';
+const ngxExtendedPdfViewerVersion = '18.1.6';
 exports.ngxExtendedPdfViewerVersion = ngxExtendedPdfViewerVersion;
 
 /***/ }),

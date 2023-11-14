@@ -501,3 +501,4 @@
 - 18.1.3 #1058 import rxjs operators correctly
 - 18.1.4 #1919 added missing JavaScript libraries again
 - 18.1.5 #1943 removed the duplicate label "infinite scroll"
+- 18.1.6 #1932 fixed SSR

@@ -178,70 +178,61 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     return this._pageViewMode;
   }
 
-  /*
-  public updatePageViewMode(newPageViewMode: PageViewModeType, restoreHeight: boolean) {
-    setTimeout(() => {
-      const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-      this._pageViewMode = newPageViewMode;
-      this.removeScrollbarInInfiniteScrollMode(restoreHeight);
-      PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(this.scrollMode ?? ScrollModeType.vertical) });
-    });
-  }
-  */
-
   @Input()
   public set pageViewMode(viewMode: PageViewModeType) {
-    const hasChanged = this._pageViewMode !== viewMode;
-    if (hasChanged) {
-      const mustRedraw = !this.ngxExtendedPdfViewerIncompletelyInitialized && (this._pageViewMode === 'book' || viewMode === 'book');
-      this._pageViewMode = viewMode;
-      this.pageViewModeChange.emit(this._pageViewMode);
-      const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
-      PDFViewerApplicationOptions?.set('pageViewMode', this.pageViewMode);
-      const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-      if (PDFViewerApplication) {
-        PDFViewerApplication.pdfViewer.pageViewMode = this._pageViewMode;
-        PDFViewerApplication.findController.pageViewMode = this._pageViewMode;
-      }
-      if (viewMode === 'infinite-scroll') {
-        if (this.scrollMode === ScrollModeType.page || this.scrollMode === ScrollModeType.horizontal) {
-          this.scrollMode = ScrollModeType.vertical;
-          PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(this.scrollMode) });
-        }
-        this.removeScrollbarInInfiniteScrollMode(false);
-      } else if (viewMode !== 'multiple') {
-        this.scrollMode = ScrollModeType.vertical;
-      } else {
-        if (this.scrollMode === ScrollModeType.page) {
-          this.scrollMode = ScrollModeType.vertical;
-        }
-        this.removeScrollbarInInfiniteScrollMode(true);
-      }
-      if (viewMode === 'single') {
-        // since pdf.js, our custom single-page-mode has been replaced by the standard scrollMode="page"
-        this.scrollMode = ScrollModeType.page;
+    if (isPlatformBrowser(this.platformId)) {
+      const hasChanged = this._pageViewMode !== viewMode;
+      if (hasChanged) {
+        const mustRedraw = !this.ngxExtendedPdfViewerIncompletelyInitialized && (this._pageViewMode === 'book' || viewMode === 'book');
         this._pageViewMode = viewMode;
-      }
-      if (viewMode === 'book') {
-        this.showBorders = false;
-        if (this.scrollMode !== ScrollModeType.vertical) {
+        this.pageViewModeChange.emit(this._pageViewMode);
+        const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
+        PDFViewerApplicationOptions?.set('pageViewMode', this.pageViewMode);
+        const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+        if (PDFViewerApplication) {
+          PDFViewerApplication.pdfViewer.pageViewMode = this._pageViewMode;
+          PDFViewerApplication.findController.pageViewMode = this._pageViewMode;
+        }
+        if (viewMode === 'infinite-scroll') {
+          if (this.scrollMode === ScrollModeType.page || this.scrollMode === ScrollModeType.horizontal) {
+            this.scrollMode = ScrollModeType.vertical;
+            PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(this.scrollMode) });
+          }
+          this.removeScrollbarInInfiniteScrollMode(false);
+        } else if (viewMode !== 'multiple') {
           this.scrollMode = ScrollModeType.vertical;
+        } else {
+          if (this.scrollMode === ScrollModeType.page) {
+            this.scrollMode = ScrollModeType.vertical;
+          }
+          this.removeScrollbarInInfiniteScrollMode(true);
         }
-      }
-      if (mustRedraw) {
-        if (viewMode !== 'book') {
-          const ngx = this.elementRef.nativeElement as HTMLElement;
-          const viewerContainer = ngx.querySelector('#viewerContainer') as HTMLDivElement;
-          viewerContainer.style.width = '';
-          viewerContainer.style.overflow = '';
-          viewerContainer.style.marginRight = '';
-          viewerContainer.style.marginLeft = '';
-          const viewer = ngx.querySelector('#viewer') as HTMLDivElement;
-          viewer.style.maxWidth = '';
-          viewer.style.minWidth = '';
+        if (viewMode === 'single') {
+          // since pdf.js, our custom single-page-mode has been replaced by the standard scrollMode="page"
+          this.scrollMode = ScrollModeType.page;
+          this._pageViewMode = viewMode;
         }
+        if (viewMode === 'book') {
+          this.showBorders = false;
+          if (this.scrollMode !== ScrollModeType.vertical) {
+            this.scrollMode = ScrollModeType.vertical;
+          }
+        }
+        if (mustRedraw) {
+          if (viewMode !== 'book') {
+            const ngx = this.elementRef.nativeElement as HTMLElement;
+            const viewerContainer = ngx.querySelector('#viewerContainer') as HTMLDivElement;
+            viewerContainer.style.width = '';
+            viewerContainer.style.overflow = '';
+            viewerContainer.style.marginRight = '';
+            viewerContainer.style.marginLeft = '';
+            const viewer = ngx.querySelector('#viewer') as HTMLDivElement;
+            viewer.style.maxWidth = '';
+            viewer.style.minWidth = '';
+          }
 
-        this.openPDF2();
+          this.openPDF2();
+        }
       }
     }
   }
@@ -1515,6 +1506,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   private async overrideDefaultSettings() {
+    if (typeof window === 'undefined') {
+      return; // server side rendering
+    }
     const options = (window as any).PDFViewerApplicationOptions as IPDFViewerApplicationOptions;
     // tslint:disable-next-line:forin
     for (const key in pdfDefaultOptions) {
@@ -2343,6 +2337,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   private async setZoom() {
+    if (typeof window === 'undefined') {
+      return; // server side rendering
+    }
     // sometimes ngOnChanges calls this method before the page is initialized,
     // so let's check if this.root is already defined
     if (this.root) {
