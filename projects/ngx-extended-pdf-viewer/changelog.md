@@ -502,3 +502,4 @@
 - 18.1.4 #1919 added missing JavaScript libraries again
 - 18.1.5 #1943 removed the duplicate label "infinite scroll"
 - 18.1.6 #1932 fixed SSR
+- 18.1.7 #1957 allow Angular 17 users to use the library
