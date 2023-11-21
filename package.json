@@ -33,7 +33,7 @@
     "@angular/forms": "^13.4.0",
     "@angular/platform-browser": "^13.3.11",
     "@angular/platform-browser-dynamic": "^13.4.0",
-    "@schematics/angular": "^13.3.8",
+    "@schematics/angular": "^17.0.2",
     "@types/estree": "^1.0.5",
     "@types/trusted-types": "^2.0.6",
     "rxjs": "^7.8.1",
