@@ -15021,7 +15021,7 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
     }
     let value = angularValue !== undefined ? angularValue : formValue;
     let updateAngularValueNecessary = false;
-    if (typeof value === "string" || angularData !== formValue) {
+    if (typeof value === "string" || !!angularData?.value && angularData?.value !== formValue) {
       value = value !== "Off";
       storage.setValue(id, {
         value

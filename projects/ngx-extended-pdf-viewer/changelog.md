@@ -503,3 +503,4 @@
 - 18.1.5 #1943 removed the duplicate label "infinite scroll"
 - 18.1.6 #1932 fixed SSR
 - 18.1.7 #1957 allow Angular 17 users to use the library
+- 18.1.8 #1920 fixed the bug that every checkbox was initially checked in many PDF forms
