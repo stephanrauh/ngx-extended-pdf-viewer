@@ -478,3 +478,4 @@
 - 17.4.7 #1856 Single-page mode was broken on initial load
 - 17.4.8 #1887 include the form values passed by [formData] in printed and downloaded PDF files; stop hiding the annotation layer when the print window shows (stable branch pdf.js 3.5 only)
 - 17.4.9 #1969 now also radio-button checkboxes have the correct initial value
+- 17.4.10 #1864 remove `await import` because it confuses the Angular 17 compiler
