@@ -477,3 +477,4 @@
 - 17.4.6 #1812 use generous compatibility settings for older browsers; included the bugfix #1807 now with the bleeding edge branch, too
 - 17.4.7 #1856 Single-page mode was broken on initial load
 - 17.4.8 #1887 include the form values passed by [formData] in printed and downloaded PDF files; stop hiding the annotation layer when the print window shows (stable branch pdf.js 3.5 only)
+- 17.4.9 #1969 now also radio-button checkboxes have the correct initial value
