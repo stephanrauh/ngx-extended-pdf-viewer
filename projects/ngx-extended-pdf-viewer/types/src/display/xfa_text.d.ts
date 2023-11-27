@@ -1,3 +1,5 @@
+export type TextContent = import("./api").TextContent;
+/** @typedef {import("./api").TextContent} TextContent */
 export class XfaText {
     /**
      * Walk an XFA tree and create an array of text nodes that is compatible

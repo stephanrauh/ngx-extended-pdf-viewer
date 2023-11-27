@@ -505,3 +505,4 @@
 - 18.1.7 #1957 allow Angular 17 users to use the library
 - 18.1.8 #1920 fixed the bug that every checkbox was initially checked in many PDF forms
 - 18.1.9 #1972 fixed several missing translations (kudos to Daphné Bellemin for contributing the pull request); #1969 now also radio-button checkboxes have the correct initial value
+- 18.1.10 #1976 update the bleeding edge branch to pdf.js 4.0

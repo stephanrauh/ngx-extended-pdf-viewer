@@ -55,7 +55,6 @@ export type PageViewportCloneParameters = {
      */
     dontFlip?: boolean | undefined;
 };
-export const AnnotationPrefix: "pdfjs_internal_id_";
 export function deprecated(details: any): void;
 export class DOMCanvasFactory extends BaseCanvasFactory {
     constructor({ ownerDocument }?: {
@@ -72,7 +71,7 @@ export class DOMCMapReaderFactory extends BaseCMapReaderFactory {
      * @ignore
      */
     _fetchData(url: any, compressionType: any): Promise<{
-        cMapData: any;
+        cMapData: Uint8Array;
         compressionType: any;
     }>;
 }
@@ -99,7 +98,7 @@ export class DOMStandardFontDataFactory extends BaseStandardFontDataFactory {
     /**
      * @ignore
      */
-    _fetchData(url: any): Promise<any>;
+    _fetchData(url: any): Promise<Uint8Array>;
 }
 export class DOMSVGFactory extends BaseSVGFactory {
     /**
@@ -107,6 +106,7 @@ export class DOMSVGFactory extends BaseSVGFactory {
      */
     _createSVG(type: any): any;
 }
+export function fetchData(url: any, type?: string): Promise<any>;
 export function getColorValues(colors: any): void;
 export function getCurrentTransform(ctx: any): any[];
 export function getCurrentTransformInverse(ctx: any): any[];
@@ -137,11 +137,9 @@ export function isDataScheme(url: any): boolean;
 export function isPdfFile(filename: any): boolean;
 export function isValidFetchUrl(url: any, baseUrl: any): boolean;
 /**
- * @param {string} src
- * @param {boolean} [removeScriptElement]
- * @returns {Promise<void>}
+ * Event handler to suppress context menu.
  */
-export function loadScript(src: string, removeScriptElement?: boolean | undefined): Promise<void>;
+export function noContextMenu(e: any): void;
 /**
  * @typedef {Object} PageViewportParameters
  * @property {Array<number>} viewBox - The xMin, yMin, xMax and

@@ -1016,7 +1016,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   private createScriptElement(sourcePath: string): HTMLScriptElement {
     const script = document.createElement('script');
     script.async = true;
-    script.type = 'text/javascript';
+    script.type = sourcePath.endsWith('.mjs') ? 'module' : 'text/javascript';
     const ttWindow = window as unknown as TrustedTypesWindow;
     if (ttWindow.trustedTypes) {
       const sanitizer = ttWindow.trustedTypes.createPolicy('foo', {
@@ -1031,9 +1031,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   private getPdfJsPath(artifact: 'pdf' | 'viewer', needsES5: boolean) {
-    const suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
+    let suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
     const assets = pdfDefaultOptions.assetsFolder;
     const versionSuffix = getVersionSuffix(assets);
+    if (versionSuffix.startsWith('4')) {
+      suffix = suffix.replace('.js', '.mjs');
+    }
     const artifactPath = `/${artifact}-`;
     const es5 = needsES5 ? '-es5' : '';
 
@@ -1102,6 +1105,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             }
           }
           const pdfJsPath = this.getPdfJsPath('pdf', needsES5);
+          if (pdfJsPath.endsWith('.mjs')) {
+            const src = pdfDefaultOptions.workerSrc();
+            pdfDefaultOptions.workerSrc = () => src.replace('.js', '.mjs');
+          }
           const script = this.createScriptElement(pdfJsPath);
           script.onload = () => {
             if (!(globalThis as any).webViewerLoad) {
@@ -1207,8 +1214,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       // server-side rendering
       return;
     }
-    const callback = () => {
-      document.removeEventListener('localized', callback);
+    const initializeViewerAndOpenPdf = () => {
+      document.removeEventListener('localized', initializeViewerAndOpenPdf);
       this.localizationInitialized = true;
       this.initTimeout = setTimeout(() => {
         if (!this.shuttingDown) {
@@ -1232,7 +1239,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.beforePrint.emit();
     });
 
-    document.addEventListener('localized', callback);
+    document.addEventListener('localized', initializeViewerAndOpenPdf);
 
     if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
       // tslint:disable-next-line:quotemark
@@ -1241,6 +1248,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const onLoaded = () => {
       this.overrideDefaultSettings();
       document.removeEventListener('webviewerloaded', onLoaded);
+      if (this.pdfJsVersion >= '4') {
+        initializeViewerAndOpenPdf();
+      }
     };
     document.addEventListener('webviewerloaded', onLoaded);
 
@@ -1321,7 +1331,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       const link = this.renderer.createElement('link');
       link.rel = 'resource';
       link.type = 'application/l10n';
-      link.href = this.localeFolderPath + '/locale.properties';
+      if (this.majorMinorPdfJsVersion >= '4') {
+        link.href = this.localeFolderPath + '/locale.json';
+      } else {
+        link.href = this.localeFolderPath + '/locale.properties';
+      }
       link.setAttribute('origin', 'ngx-extended-pdf-viewer');
       this.renderer.appendChild(this.elementRef.nativeElement, link);
     } else if (this.useBrowserLocale && langCount > 0) {

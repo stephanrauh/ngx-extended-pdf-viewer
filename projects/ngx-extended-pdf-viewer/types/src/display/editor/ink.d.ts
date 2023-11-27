@@ -5,8 +5,8 @@ export class InkEditor extends AnnotationEditor {
     static _defaultColor: null;
     static _defaultOpacity: number;
     static _defaultThickness: number;
-    static _l10nPromise: any;
     static _type: string;
+    static _editorType: number;
     /** @inheritdoc */
     static initialize(l10n: any): void;
     /** @inheritdoc */
@@ -15,12 +15,12 @@ export class InkEditor extends AnnotationEditor {
     static get defaultPropertiesToUpdate(): any[][];
     /**
      * Convert into a Path2D.
-     * @param {Arra<Array<number>} bezier
+     * @param {Array<Array<number>>} bezier
      * @returns {Path2D}
      */
-    static "__#15@#buildPath2D"(bezier: Arra<number[]>): Path2D;
-    static "__#15@#toPDFCoordinates"(points: any, rect: any, rotation: any): any;
-    static "__#15@#fromPDFCoordinates"(points: any, rect: any, rotation: any): any;
+    static "__#16@#buildPath2D"(bezier: Array<Array<number>>): Path2D;
+    static "__#16@#toPDFCoordinates"(points: any, rect: any, rotation: any): any;
+    static "__#16@#fromPDFCoordinates"(points: any, rect: any, rotation: any): any;
     /** @inheritdoc */
     static deserialize(data: any, parent: any, uiManager: any): AnnotationEditor | null;
     constructor(params: any);
@@ -46,11 +46,6 @@ export class InkEditor extends AnnotationEditor {
      */
     canvasPointerdown(event: PointerEvent): void;
     /**
-     * oncontextmenu callback for the canvas we're drawing on.
-     * @param {PointerEvent} event
-     */
-    canvasContextMenu(event: PointerEvent): void;
-    /**
      * onpointermove callback for the canvas we're drawing on.
      * @param {PointerEvent} event
      */
@@ -66,8 +61,6 @@ export class InkEditor extends AnnotationEditor {
      */
     canvasPointerleave(event: PointerEvent): void;
     ctx: RenderingContext | null | undefined;
-    /** @inheritdoc */
-    render(): HTMLDivElement | null;
     /**
      * When the dimensions of the div change the inner canvas must
      * renew its dimensions, hence it must redraw its own contents.
@@ -89,6 +82,7 @@ export class InkEditor extends AnnotationEditor {
         pageIndex: number;
         rect: any[];
         rotation: number;
+        structTreeParentId: any;
     } | null;
     #private;
 }

@@ -736,7 +736,7 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#32@#docId": number;
+    static "__#34@#docId": number;
     _capability: PromiseCapability;
     _transport: any;
     _worker: any;
@@ -1334,7 +1334,7 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#35@#workerPorts": any;
+    static "__#37@#workerPorts": any;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */
@@ -1344,7 +1344,7 @@ export class PDFWorker {
      * @type {string}
      */
     static get workerSrc(): string;
-    static get _mainThreadWorkerMessageHandler(): any;
+    static get "__#37@#mainThreadWorkerMessageHandler"(): any;
     static get _setupFakeWorkerGlobal(): any;
     constructor({ name, port, verbosity, }?: {
         name?: null | undefined;
@@ -1384,7 +1384,6 @@ export class PDFWorker {
 }
 export namespace PDFWorkerUtil {
     const isWorkerDisabled: boolean;
-    const fallbackWorkerSrc: null;
     const fakeWorkerId: number;
 }
 /**
@@ -1464,4 +1463,4 @@ declare class PDFObjects {
     #private;
 }
 import { MessageHandler } from "../shared/message_handler.js";
-export { SVGGraphics };
+export {};

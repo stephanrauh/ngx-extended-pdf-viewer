@@ -44,6 +44,7 @@ export namespace AnnotationEditorType {
     const DISABLE: number;
     const NONE: number;
     const FREETEXT: number;
+    const HIGHLIGHT: number;
     const STAMP: number;
     const INK: number;
 }
@@ -88,6 +89,7 @@ export namespace AnnotationMode {
     export const ENABLE_FORMS: number;
     export const ENABLE_STORAGE: number;
 }
+export const AnnotationPrefix: "pdfjs_internal_id_";
 export namespace AnnotationReplyType {
     const GROUP: string;
     const REPLY: string;
@@ -102,7 +104,8 @@ export namespace AnnotationType {
     export const CIRCLE: number;
     export const POLYGON: number;
     export const POLYLINE: number;
-    export const HIGHLIGHT: number;
+    const HIGHLIGHT_1: number;
+    export { HIGHLIGHT_1 as HIGHLIGHT };
     const UNDERLINE_1: number;
     export { UNDERLINE_1 as UNDERLINE };
     export const SQUIGGLY: number;
@@ -347,7 +350,7 @@ export function setVerbosityLevel(level: any): void;
 export function shadow(obj: any, prop: any, value: any, nonSerializable?: boolean): any;
 export function string32(value: any): string;
 export function stringToBytes(str: any): Uint8Array;
-export function stringToPDFString(str: any): string;
+export function stringToPDFString(str: any): any;
 export function stringToUTF8String(str: any): string;
 export namespace TextRenderingMode {
     export const FILL: number;

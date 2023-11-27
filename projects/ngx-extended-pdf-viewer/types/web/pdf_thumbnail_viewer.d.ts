@@ -1,6 +1,6 @@
 export type PDFDocumentProxy = import("../src/display/api").PDFDocumentProxy;
+export type PDFPageProxy = import("../src/display/api").PDFPageProxy;
 export type EventBus = import("./event_utils").EventBus;
-export type IL10n = import("./interfaces").IL10n;
 export type IPDFLinkService = import("./interfaces").IPDFLinkService;
 export type PDFRenderingQueue = import("./pdf_rendering_queue").PDFRenderingQueue;
 export type PDFThumbnailViewerOptions = {
@@ -22,10 +22,6 @@ export type PDFThumbnailViewerOptions = {
      */
     renderingQueue: PDFRenderingQueue;
     /**
-     * - Localization service.
-     */
-    l10n: IL10n;
-    /**
      * - Overwrites background and foreground colors
      * with user defined ones in order to improve readability in high contrast
      * mode.
@@ -39,7 +35,6 @@ export type PDFThumbnailViewerOptions = {
  * @property {EventBus} eventBus - The application event bus.
  * @property {IPDFLinkService} linkService - The navigation/linking service.
  * @property {PDFRenderingQueue} renderingQueue - The rendering queue object.
- * @property {IL10n} l10n - Localization service.
  * @property {Object} [pageColors] - Overwrites background and foreground colors
  *   with user defined ones in order to improve readability in high contrast
  *   mode.
@@ -51,12 +46,11 @@ export class PDFThumbnailViewer {
     /**
      * @param {PDFThumbnailViewerOptions} options
      */
-    constructor({ container, eventBus, linkService, renderingQueue, l10n, pageColors, }: PDFThumbnailViewerOptions);
+    constructor({ container, eventBus, linkService, renderingQueue, pageColors, }: PDFThumbnailViewerOptions);
     container: HTMLDivElement;
     eventBus: import("./event_utils").EventBus;
     linkService: import("./interfaces").IPDFLinkService;
     renderingQueue: import("./pdf_rendering_queue").PDFRenderingQueue;
-    l10n: import("./interfaces").IL10n;
     pageColors: Object | null;
     scroll: {
         right: boolean;

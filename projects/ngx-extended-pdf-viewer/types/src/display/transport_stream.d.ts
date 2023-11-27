@@ -1,3 +1,6 @@
+export type IPDFStream = import("../interfaces").IPDFStream;
+export type IPDFStreamReader = import("../interfaces").IPDFStreamReader;
+export type IPDFStreamRangeReader = import("../interfaces").IPDFStreamRangeReader;
 /** @implements {IPDFStream} */
 export class PDFDataTransportStream implements IPDFStream {
     constructor({ length, initialData, progressiveDone, contentDispositionFilename, disableRange, disableStream, }: {

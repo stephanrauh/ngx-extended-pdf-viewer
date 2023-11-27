@@ -43,6 +43,11 @@ export class TextLayerBuilder {
     highlighter: any;
     accessibilityManager: any;
     isOffscreenCanvasSupported: boolean;
+    /**
+     * Callback used to attach the textLayer to the DOM.
+     * @type {function}
+     */
+    onAppend: Function;
     div: HTMLDivElement;
     get numTextDivs(): number;
     /**

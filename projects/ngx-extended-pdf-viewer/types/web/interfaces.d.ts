@@ -18,12 +18,12 @@ export class IDownloadManager {
      */
     downloadData(data: Uint8Array, filename: string, contentType?: string | undefined): void;
     /**
-     * @param {HTMLElement} element
      * @param {Uint8Array} data
      * @param {string} filename
+     * @param {string | null} [dest]
      * @returns {boolean} Indicating if the data was opened.
      */
-    openOrDownloadData(element: HTMLElement, data: Uint8Array, filename: string): boolean;
+    openOrDownloadData(data: Uint8Array, filename: string, dest?: string | null | undefined): boolean;
     /**
      * @param {Blob} blob
      * @param {string} url
@@ -37,29 +37,37 @@ export class IDownloadManager {
  */
 export class IL10n {
     /**
-     * @returns {Promise<string>} - Resolves to the current locale.
+     * @returns {string} - The current locale.
      */
-    getLanguage(): Promise<string>;
+    getLanguage(): string;
     /**
-     * @returns {Promise<string>} - Resolves to 'rtl' or 'ltr'.
+     * @returns {string} - 'rtl' or 'ltr'.
      */
-    getDirection(): Promise<string>;
+    getDirection(): string;
     /**
      * Translates text identified by the key and adds/formats data using the args
      * property bag. If the key was not found, translation falls back to the
      * fallback text.
-     * @param {string} key
+     * @param {Array | string} ids
      * @param {Object | null} [args]
      * @param {string} [fallback]
      * @returns {Promise<string>}
      */
-    get(key: string, args?: Object | null | undefined, fallback?: string | undefined): Promise<string>;
+    get(ids: any[] | string, args?: Object | null | undefined, fallback?: string | undefined): Promise<string>;
     /**
      * Translates HTML element.
      * @param {HTMLElement} element
      * @returns {Promise<void>}
      */
     translate(element: HTMLElement): Promise<void>;
+    /**
+     * Pause the localization.
+     */
+    pause(): void;
+    /**
+     * Resume the localization.
+     */
+    resume(): void;
 }
 /** @typedef {import("../src/display/api").PDFPageProxy} PDFPageProxy */
 /** @typedef {import("../src/display/display_utils").PageViewport} PageViewport */

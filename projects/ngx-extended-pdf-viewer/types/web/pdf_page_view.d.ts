@@ -76,10 +76,10 @@ export type PDFPageViewOptions = {
      */
     l10n?: import("./interfaces").IL10n | undefined;
     /**
-     * - The function that is used to lookup
+     * - The object that is used to lookup
      * the necessary layer-properties.
      */
-    layerProperties?: Function | undefined;
+    layerProperties?: Object | undefined;
 };
 /**
  * @implements {IRenderableView}
@@ -104,12 +104,7 @@ export class PDFPageView implements IRenderableView {
     pageColors: Object | null;
     eventBus: import("./event_utils").EventBus;
     renderingQueue: import("./pdf_rendering_queue").PDFRenderingQueue | undefined;
-    l10n: {
-        getLanguage(): Promise<string>;
-        getDirection(): Promise<string>;
-        get(key: any, args?: null, fallback?: any): Promise<any>;
-        translate(element: any): Promise<void>;
-    };
+    l10n: any;
     renderTask: any;
     resume: (() => void) | null;
     _isStandalone: boolean | undefined;
@@ -149,7 +144,7 @@ export class PDFPageView implements IRenderableView {
      */
     /**
      * Update e.g. the scale and/or rotation of the page.
-     * @param {PDFPageViewUpdateParameters}
+     * @param {PDFPageViewUpdateParameters} params
      */
     update({ scale, rotation, optionalContentConfigPromise, drawingDelay, }: {
         /**

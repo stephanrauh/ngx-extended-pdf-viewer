@@ -1,12 +1,13 @@
 export type PDFPageProxy = import("./api").PDFPageProxy;
 export type PageViewport = import("./display_utils").PageViewport;
-export type IDownloadManager = any;
+export type TextAccessibilityManager = import("../../web/text_accessibility.js").TextAccessibilityManager;
+export type IDownloadManager = import("../../web/interfaces").IDownloadManager;
 export type IPDFLinkService = import("../../web/interfaces").IPDFLinkService;
 export type AnnotationElementParameters = {
     data: Object;
     layer: HTMLDivElement;
     linkService: IPDFLinkService;
-    downloadManager: any;
+    downloadManager?: import("../../web/interfaces").IDownloadManager | undefined;
     annotationStorage?: AnnotationStorage | undefined;
     /**
      * - Path for image resources, mainly
@@ -25,7 +26,7 @@ export type AnnotationLayerParameters = {
     annotations: any[];
     page: PDFPageProxy;
     linkService: IPDFLinkService;
-    downloadManager: any;
+    downloadManager: IDownloadManager;
     annotationStorage?: AnnotationStorage | undefined;
     /**
      * - Path for image resources, mainly
@@ -46,7 +47,7 @@ export type AnnotationLayerParameters = {
         [x: string]: Object[];
     } | null | undefined;
     annotationCanvasMap?: Map<string, HTMLCanvasElement> | undefined;
-    accessibilityManager?: any;
+    accessibilityManager?: import("../../web/text_accessibility.js").TextAccessibilityManager | undefined;
 };
 /**
  * @typedef {Object} AnnotationLayerParameters
@@ -71,16 +72,14 @@ export type AnnotationLayerParameters = {
  * Manage the layer containing all the annotations.
  */
 export class AnnotationLayer {
-    constructor({ div, accessibilityManager, annotationCanvasMap, l10n, page, viewport, }: {
+    constructor({ div, accessibilityManager, annotationCanvasMap, page, viewport, }: {
         div: any;
         accessibilityManager: any;
         annotationCanvasMap: any;
-        l10n: any;
         page: any;
         viewport: any;
     });
     div: any;
-    l10n: any;
     page: any;
     viewport: any;
     zIndex: number;
@@ -109,6 +108,7 @@ export class FreeTextAnnotationElement extends AnnotationElement {
     textPosition: any;
     annotationEditorType: number;
     render(): HTMLElement | undefined;
+    get _isEditable(): any;
 }
 export class InkAnnotationElement extends AnnotationElement {
     constructor(parameters: any);
@@ -125,6 +125,11 @@ export class StampAnnotationElement extends AnnotationElement {
 }
 import { AnnotationStorage } from "./annotation_storage.js";
 declare class AnnotationElement {
+    static _hasPopupData({ titleObj, contentsObj, richText }: {
+        titleObj: any;
+        contentsObj: any;
+        richText: any;
+    }): boolean;
     constructor(parameters: any, { isRenderable, ignoreBorder, createQuadrilaterals, }?: {
         isRenderable?: boolean | undefined;
         ignoreBorder?: boolean | undefined;
@@ -144,6 +149,7 @@ declare class AnnotationElement {
     _fieldObjects: any;
     parent: any;
     container: HTMLElement | undefined;
+    get hasPopupData(): boolean;
     /**
      * Create an empty container for the annotation's HTML element.
      *
@@ -197,6 +203,7 @@ declare class AnnotationElement {
      */
     public getElementsToTriggerPopup(): Array<HTMLElement> | HTMLElement;
     addHighlightArea(): void;
+    get _isEditable(): boolean;
     _editOnDoubleClick(): void;
     #private;
 }

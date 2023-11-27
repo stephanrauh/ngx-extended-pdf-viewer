@@ -6,6 +6,8 @@ export type EventBus = import("./event_utils").EventBus;
 export type IDownloadManager = import("./interfaces").IDownloadManager;
 export type IL10n = import("./interfaces").IL10n;
 export type IPDFLinkService = import("./interfaces").IPDFLinkService;
+export type PDFFindController = import("./pdf_find_controller").PDFFindController;
+export type PDFScriptingManager = import("./pdf_scripting_manager").PDFScriptingManager;
 export type PDFViewerOptions = {
     /**
      * - The container for the viewer element.
@@ -32,12 +34,12 @@ export type PDFViewerOptions = {
      * - The find controller
      * component.
      */
-    findController?: any;
+    findController?: import("./pdf_find_controller").PDFFindController | undefined;
     /**
      * - The scripting manager
      * component.
      */
-    scriptingManager?: any;
+    scriptingManager?: import("./pdf_scripting_manager").PDFScriptingManager | undefined;
     /**
      * - The rendering queue object.
      */
@@ -181,19 +183,14 @@ export class PDFViewer {
     eventBus: import("./event_utils").EventBus;
     linkService: import("./interfaces").IPDFLinkService | SimpleLinkService;
     downloadManager: import("./interfaces").IDownloadManager | null;
-    findController: any;
-    _scriptingManager: any;
+    findController: import("./pdf_find_controller").PDFFindController | null;
+    _scriptingManager: import("./pdf_scripting_manager").PDFScriptingManager | null;
     imageResourcesPath: string;
     enablePrintAutoRotate: boolean;
     removePageBorders: boolean | undefined;
     isOffscreenCanvasSupported: boolean;
     maxCanvasPixels: number | undefined;
-    l10n: {
-        getLanguage(): Promise<string>;
-        getDirection(): Promise<string>;
-        get(key: any, args?: null, fallback?: any): Promise<any>;
-        translate(element: any): Promise<void>;
-    };
+    l10n: any;
     pageColors: Object | null;
     defaultRenderingQueue: boolean;
     renderingQueue: PDFRenderingQueue | undefined;
@@ -286,6 +283,7 @@ export class PDFViewer {
     get firstPagePromise(): any;
     get onePageRendered(): any;
     get pagesPromise(): any;
+    get _layerProperties(): any;
     getAllText(): Promise<string | null>;
     /**
      * @param {PDFDocumentProxy} pdfDocument
@@ -456,13 +454,45 @@ export class PDFViewer {
     } | undefined): void;
     get containerTopLeft(): number[];
     /**
-     * @param {number} mode - AnnotationEditor mode (None, FreeText, Ink, ...)
+     * @typedef {Object} AnnotationEditorModeOptions
+     * @property {number} mode - The editor mode (none, FreeText, ink, ...).
+     * @property {string|null} [editId] - ID of the existing annotation to edit.
+     * @property {boolean} [isFromKeyboard] - True if the mode change is due to a
+     *   keyboard action.
      */
-    set annotationEditorMode(arg: number);
     /**
-     * @type {number}
+     * @param {AnnotationEditorModeOptions} options
      */
-    get annotationEditorMode(): number;
+    set annotationEditorMode(arg: {
+        /**
+         * - The editor mode (none, FreeText, ink, ...).
+         */
+        mode: number;
+        /**
+         * - ID of the existing annotation to edit.
+         */
+        editId?: string | null | undefined;
+        /**
+         * - True if the mode change is due to a
+         * keyboard action.
+         */
+        isFromKeyboard?: boolean | undefined;
+    });
+    get annotationEditorMode(): {
+        /**
+         * - The editor mode (none, FreeText, ink, ...).
+         */
+        mode: number;
+        /**
+         * - ID of the existing annotation to edit.
+         */
+        editId?: string | null | undefined;
+        /**
+         * - True if the mode change is due to a
+         * keyboard action.
+         */
+        isFromKeyboard?: boolean | undefined;
+    };
     set annotationEditorParams(arg: any);
     refresh(noUpdate?: boolean, updateArgs?: any): void;
     getSerializedAnnotations(): any[] | null;

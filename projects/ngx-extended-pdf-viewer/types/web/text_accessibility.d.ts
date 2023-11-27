@@ -14,7 +14,7 @@ export class TextAccessibilityManager {
      * @param {HTMLElement} e2
      * @returns {number}
      */
-    static "__#40@#compareElementPositions"(e1: HTMLElement, e2: HTMLElement): number;
+    static "__#4@#compareElementPositions"(e1: HTMLElement, e2: HTMLElement): number;
     setTextMapping(textDivs: any): void;
     /**
      * Function called when the text layer has finished rendering.
@@ -31,12 +31,14 @@ export class TextAccessibilityManager {
      * in order to correctly position this editor in the text flow.
      * @param {HTMLElement} element
      * @param {boolean} isRemovable
+     * @returns {string|null} The id in the struct tree if any.
      */
-    addPointerInTextLayer(element: HTMLElement, isRemovable: boolean): void;
+    addPointerInTextLayer(element: HTMLElement, isRemovable: boolean): string | null;
     /**
      * Move a div in the DOM in order to respect the visual order.
      * @param {HTMLDivElement} element
+     * @returns {string|null} The id in the struct tree if any.
      */
-    moveElementInDOM(container: any, element: HTMLDivElement, contentElement: any, isRemovable: any): void;
+    moveElementInDOM(container: any, element: HTMLDivElement, contentElement: any, isRemovable: any): string | null;
     #private;
 }

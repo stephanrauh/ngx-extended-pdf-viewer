@@ -4,12 +4,12 @@ export type AnnotationEditorLayer = import("./annotation_editor_layer.js").Annot
  */
 export class FreeTextEditor extends AnnotationEditor {
     static _freeTextDefaultContent: string;
-    static _l10nPromise: any;
     static _internalPadding: number;
     static _defaultColor: null;
     static _defaultFontSize: number;
     static get _keyboardManager(): any;
     static _type: string;
+    static _editorType: number;
     /** @inheritdoc */
     static initialize(l10n: any): void;
     /** @inheritdoc */
@@ -39,20 +39,12 @@ export class FreeTextEditor extends AnnotationEditor {
      * @param {MouseEvent} event
      */
     dblclick(event: MouseEvent): void;
-    /**
-     * onkeydown callback.
-     * @param {KeyboardEvent} event
-     */
-    keydown(event: KeyboardEvent): void;
     editorDivKeydown(event: any): void;
     editorDivFocus(event: any): void;
     editorDivBlur(event: any): void;
     editorDivInput(event: any): void;
-    /** @inheritdoc */
-    render(): HTMLDivElement | null;
     editorDiv: HTMLDivElement | undefined;
     overlayDiv: HTMLDivElement | undefined;
-    get contentDiv(): HTMLDivElement | undefined;
     /** @inheritdoc */
     serialize(isForCopying?: boolean): {
         annotationType: number;
@@ -62,6 +54,7 @@ export class FreeTextEditor extends AnnotationEditor {
         pageIndex: number;
         rect: any[];
         rotation: number;
+        structTreeParentId: any;
     } | {
         pageIndex: number;
         id: any;

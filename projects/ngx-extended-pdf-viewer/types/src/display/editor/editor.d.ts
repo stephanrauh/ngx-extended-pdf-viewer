@@ -1,5 +1,4 @@
 export type AnnotationEditorLayer = import("./annotation_editor_layer.js").AnnotationEditorLayer;
-export type AnnotationEditorUIManager = import("./tools.js").AnnotationEditorUIManager;
 export type AnnotationEditorParameters = {
     /**
      * - the global manager
@@ -34,15 +33,18 @@ export type AnnotationEditorParameters = {
  * Base class for editors.
  */
 export class AnnotationEditor {
+    static _borderLineWidth: number;
     static _colorManager: ColorManager;
     static _zIndex: number;
+    static SMALL_EDITOR_SIZE: number;
+    static get _resizerKeyboardManager(): any;
     static get _defaultLineColor(): any;
     static deleteAnnotationElement(editor: any): void;
     /**
      * Initialize the l10n stuff for this type of editor.
-     * @param {Object} _l10n
+     * @param {Object} l10n
      */
-    static initialize(_l10n: Object): void;
+    static initialize(l10n: Object, options?: null): void;
     /**
      * Update the default parameters for this type of editor.
      * @param {number} _type
@@ -60,7 +62,7 @@ export class AnnotationEditor {
      * @param {string} mime
      * @returns {boolean}
      */
-    static isHandlingMimeForPasting(_mime: any): boolean;
+    static isHandlingMimeForPasting(mime: string): boolean;
     /**
      * Extract the data from the clipboard item and delegate the creation of the
      * editor to the parent.
@@ -68,8 +70,7 @@ export class AnnotationEditor {
      * @param {AnnotationEditorLayer} parent
      */
     static paste(item: DataTransferItem, parent: AnnotationEditorLayer): void;
-    static "__#23@#rotatePoint"(x: any, y: any, angle: any): any[];
-    static "__#23@#noContextMenu"(e: any): void;
+    static "__#25@#rotatePoint"(x: any, y: any, angle: any): any[];
     /**
      * Deserialize the editor.
      * The result of the deserialization is a new editor.
@@ -77,9 +78,9 @@ export class AnnotationEditor {
      * @param {Object} data
      * @param {AnnotationEditorLayer} parent
      * @param {AnnotationEditorUIManager} uiManager
-     * @returns {AnnotationEditor}
+     * @returns {AnnotationEditor | null}
      */
-    static deserialize(data: Object, parent: AnnotationEditorLayer, uiManager: AnnotationEditorUIManager): AnnotationEditor;
+    static deserialize(data: Object, parent: AnnotationEditorLayer, uiManager: AnnotationEditorUIManager): AnnotationEditor | null;
     static get MIN_SIZE(): number;
     /**
      * @param {AnnotationEditorParameters} parameters
@@ -88,6 +89,7 @@ export class AnnotationEditor {
     _initialOptions: any;
     _uiManager: null;
     _focusEventsAllowed: boolean;
+    _l10nPromise: null;
     doNotMove: boolean;
     parent: import("./annotation_editor_layer.js").AnnotationEditorLayer;
     id: string;
@@ -98,6 +100,7 @@ export class AnnotationEditor {
     div: HTMLDivElement | null;
     annotationElementId: any;
     _willKeepAspectRatio: boolean;
+    _structTreeParentId: any;
     rotation: number;
     pageRotation: number;
     pageDimensions: any[];
@@ -106,6 +109,7 @@ export class AnnotationEditor {
     y: number;
     isAttachedToDOM: boolean;
     deleted: boolean;
+    get editorType(): any;
     /**
      * Get the properties to update in the UI for this editor.
      * @returns {Array}
@@ -113,6 +117,10 @@ export class AnnotationEditor {
     get propertiesToUpdate(): any[];
     set _isDraggable(arg: boolean);
     get _isDraggable(): boolean;
+    /**
+     * @returns {boolean} true if the editor handles the Enter key itself.
+     */
+    get isEnterHandled(): boolean;
     center(): void;
     /**
      * Add some commands into the CommandManager (undo/redo stuff).
@@ -194,11 +202,27 @@ export class AnnotationEditor {
      * @returns {Array<number>}
      */
     getInitialTranslation(): Array<number>;
+    addAltTextButton(): Promise<void>;
+    altTextFinish(): void;
+    addEditToolbar(): void;
+    removeEditToolbar(): void;
+    getClientDimensions(): DOMRect;
+    /**
+     * Set the alt text data.
+     */
+    set altTextData(arg: {
+        altText: string;
+        decorative: boolean;
+    });
+    get altTextData(): {
+        altText: string;
+        decorative: boolean;
+    };
     /**
      * Render this editor in a div.
-     * @returns {HTMLDivElement}
+     * @returns {HTMLDivElement | null}
      */
-    render(): HTMLDivElement;
+    render(): HTMLDivElement | null;
     /**
      * Onpointerdown callback.
      * @param {PointerEvent} event
@@ -234,7 +258,7 @@ export class AnnotationEditor {
      */
     isInEditMode(): boolean;
     /**
-     * If it returns true, then this editor handle the keyboard
+     * If it returns true, then this editor handles the keyboard
      * events itself.
      * @returns {boolean}
      */
@@ -256,10 +280,11 @@ export class AnnotationEditor {
      * new annotation to add to the pdf document.
      *
      * To implement in subclasses.
-     * @param {boolean} isForCopying
-     * @param {Object} [context]
+     * @param {boolean} [isForCopying]
+     * @param {Object | null} [context]
+     * @returns {Object | null}
      */
-    serialize(_isForCopying?: boolean, _context?: null): void;
+    serialize(isForCopying?: boolean | undefined, context?: Object | null | undefined): Object | null;
     /**
      * Remove this editor.
      * It's used on ctrl+backspace action.
@@ -273,6 +298,13 @@ export class AnnotationEditor {
      * Add the resizers to this editor.
      */
     makeResizable(): void;
+    /**
+     * onkeydown callback.
+     * @param {KeyboardEvent} event
+     */
+    keydown(event: KeyboardEvent): void;
+    _resizeWithKeyboard(x: any, y: any): void;
+    _stopResizingWithKeyboard(): void;
     /**
      * Select this editor.
      */
@@ -302,9 +334,14 @@ export class AnnotationEditor {
      */
     enterInEditMode(): void;
     /**
-     * Get the div which really contains the displayed content.
+     * @returns {HTMLElement | null} the element requiring an alt text.
      */
-    get contentDiv(): HTMLDivElement | null;
+    getImageForAltText(): HTMLElement | null;
+    /**
+     * Get the div which really contains the displayed content.
+     * @returns {HTMLDivElement | undefined}
+     */
+    get contentDiv(): HTMLDivElement | undefined;
     /**
      * When set to true, it means that this editor is currently edited.
      * @param {boolean} value
@@ -323,4 +360,5 @@ export class AnnotationEditor {
     setAspectRatio(width: number, height: number): void;
     #private;
 }
+import { AnnotationEditorUIManager } from "./tools.js";
 import { ColorManager } from "./tools.js";

@@ -7,6 +7,7 @@ import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.compone
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 import { NgxConsole } from './options/ngx-console';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
+import { PdfAltTextDialogComponent } from './pdf-dialog/pdf-alt-text-dialog/pdf-alt-text-dialog.component';
 import { PdfDocumentPropertiesDialogComponent } from './pdf-dialog/pdf-document-properties-dialog/pdf-document-properties-dialog.component';
 import { PdfErrorMessageComponent } from './pdf-dialog/pdf-error-message/pdf-error-message.component';
 import { PdfPasswordDialogComponent } from './pdf-dialog/pdf-password-dialog/pdf-password-dialog.component';
@@ -211,6 +212,7 @@ if (typeof window !== 'undefined') {
     PdfContextMenuComponent,
     PdfDarkThemeComponent,
     PdfDrawEditorComponent,
+    PdfAltTextDialogComponent,
     PdfDocumentPropertiesComponent,
     PdfDocumentPropertiesDialogComponent,
     PdfDownloadComponent,
@@ -278,6 +280,7 @@ if (typeof window !== 'undefined') {
     PdfContextMenuComponent,
     PdfDarkThemeComponent,
     PdfDrawEditorComponent,
+    PdfAltTextDialogComponent,
     PdfDocumentPropertiesDialogComponent,
     PdfDownloadComponent,
     PdfEditorComponent,

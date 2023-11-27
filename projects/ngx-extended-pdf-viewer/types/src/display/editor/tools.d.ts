@@ -12,13 +12,16 @@ export class AnnotationEditorUIManager {
     static TRANSLATE_SMALL: number;
     static TRANSLATE_BIG: number;
     static get _keyboardManager(): any;
-    constructor(container: any, viewer: any, eventBus: any, pdfDocument: any, pageColors: any);
+    constructor(container: any, viewer: any, altTextManager: any, eventBus: any, pdfDocument: any, pageColors: any);
+    _eventBus: any;
     viewParameters: {
         realScale: number;
         rotation: number;
     };
     destroy(): void;
     get hcmFilter(): any;
+    get direction(): any;
+    editAltText(editor: any): void;
     onPageChanging({ pageNumber }: {
         pageNumber: any;
     }): void;
@@ -40,6 +43,8 @@ export class AnnotationEditorUIManager {
     addToAnnotationStorage(editor: AnnotationEditor): void;
     blur(): void;
     focus(): void;
+    addEditListeners(): void;
+    removeEditListeners(): void;
     /**
      * Copy callback.
      * @param {ClipboardEvent} event
@@ -98,8 +103,11 @@ export class AnnotationEditorUIManager {
      * Change the editor mode (None, FreeText, Ink, ...)
      * @param {number} mode
      * @param {string|null} editId
+     * @param {boolean} [isFromKeyboard] - true if the mode change is due to a
+     *   keyboard action.
      */
-    updateMode(mode: number, editId?: string | null): void;
+    updateMode(mode: number, editId?: string | null, isFromKeyboard?: boolean | undefined): void;
+    addNewEditorFromKeyboard(): void;
     /**
      * Update the toolbar if it's required to reflect the tool currently used.
      * @param {number} mode
@@ -171,12 +179,14 @@ export class AnnotationEditorUIManager {
      * @param {AnnotationEditor} editor
      */
     isSelected(editor: AnnotationEditor): boolean;
+    get firstSelectedEditor(): any;
     /**
      * Unselect an editor.
      * @param {AnnotationEditor} editor
      */
     unselect(editor: AnnotationEditor): void;
     get hasSelection(): boolean;
+    get isEnterHandled(): any;
     /**
      * Undo the last command.
      */
@@ -226,6 +236,7 @@ export class AnnotationEditorUIManager {
      * @param {AnnotationEditor} editor
      */
     rebuild(editor: AnnotationEditor): void;
+    get isEditorHandlingKeyboard(): any;
     /**
      * Is the current editor the one passed as argument?
      * @param {AnnotationEditor} editor
@@ -337,11 +348,11 @@ export class KeyboardManager {
     /**
      * Execute a callback, if any, for a given keyboard event.
      * The self is used as `this` in the callback.
-     * @param {Object} self.
+     * @param {Object} self
      * @param {KeyboardEvent} event
      * @returns
      */
-    exec(self: any, event: KeyboardEvent): void;
+    exec(self: Object, event: KeyboardEvent): void;
     #private;
 }
 /**

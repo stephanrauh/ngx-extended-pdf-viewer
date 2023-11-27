@@ -59,8 +59,8 @@ export class PdfSidebarContentComponent implements OnDestroy {
         linkService: any,
         id: number,
         container: HTMLDivElement,
-        thumbPageTitlePromise: Promise<string>
-      ) => this.createThumbnail(pdfThumbnailView, linkService, id, container, thumbPageTitlePromise);
+        thumbPageTitlePromiseOrPageL10nArgs: Promise<string> | string
+      ) => this.createThumbnail(pdfThumbnailView, linkService, id, container, thumbPageTitlePromiseOrPageL10nArgs);
     }
   }
 
@@ -81,7 +81,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
     linkService: PDFLinkService,
     id: number,
     container: HTMLDivElement,
-    thumbPageTitlePromise: Promise<string>
+    thumbPageTitlePromiseOrPageL10nArgs: Promise<string> | string
   ): HTMLImageElement | undefined {
     this.linkService = linkService;
     const template = this.thumbnailViewTemplate;
@@ -105,9 +105,15 @@ export class PdfSidebarContentComponent implements OnDestroy {
 
     const anchor = newElement as HTMLAnchorElement;
     anchor.href = linkService.getAnchorUrl(`#page=${id}`);
-    thumbPageTitlePromise.then((msg) => {
-      anchor.title = msg;
-    });
+    // TODO: remove the if branch after updating to pdf.js 4.0
+    if (thumbPageTitlePromiseOrPageL10nArgs instanceof Promise) {
+      thumbPageTitlePromiseOrPageL10nArgs.then((msg) => {
+        anchor.title = msg;
+      });
+    } else {
+      anchor.setAttribute('data-l10n-id', 'pdfjs-thumb-page-title');
+      anchor.setAttribute('data-l10n-args', thumbPageTitlePromiseOrPageL10nArgs);
+    }
     anchor.onclick = () => {
       linkService.page = id;
       return false;

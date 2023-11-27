@@ -28,7 +28,10 @@ export class FontLoader {
     removeNativeFontFace(nativeFontFace: any): void;
     insertRule(rule: any): void;
     clear(): void;
-    loadSystemFont(info: any): Promise<void>;
+    loadSystemFont({ systemFontInfo: info, _inspectFont }: {
+        systemFontInfo: any;
+        _inspectFont: any;
+    }): Promise<void>;
     bind(font: any): Promise<void>;
     get isFontLoadingAPISupported(): any;
     get isSyncFontLoadingSupported(): any;

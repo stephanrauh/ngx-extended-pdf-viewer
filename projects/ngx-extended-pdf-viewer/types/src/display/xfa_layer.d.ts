@@ -1,10 +1,11 @@
+export type AnnotationStorage = import("./annotation_storage").AnnotationStorage;
 export type PageViewport = import("./display_utils").PageViewport;
 export type IPDFLinkService = import("../../web/interfaces").IPDFLinkService;
 export type XfaLayerParameters = {
     viewport: PageViewport;
     div: HTMLDivElement;
     xfaHtml: Object;
-    annotationStorage?: any;
+    annotationStorage?: import("./annotation_storage").AnnotationStorage | undefined;
     linkService: IPDFLinkService;
     /**
      * - (default value is 'display').

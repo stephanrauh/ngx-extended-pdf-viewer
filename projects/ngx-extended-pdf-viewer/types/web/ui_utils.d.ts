@@ -47,10 +47,10 @@ export type GetVisibleElementsParameters = {
 export const animationStarted: Promise<any>;
 /**
  * Converts API PageLayout values to the format used by `BaseViewer`.
- * @param {string} mode - The API PageLayout value.
+ * @param {string} layout - The API PageLayout value.
  * @returns {Object}
  */
-export function apiPageLayoutToViewerModes(layout: any): Object;
+export function apiPageLayoutToViewerModes(layout: string): Object;
 /**
  * Converts API PageMode values to the format used by `PDFSidebar`.
  * NOTE: There's also a "FullScreen" parameter which is not possible to support,
@@ -157,7 +157,7 @@ export function getPageSizeInches({ view, userUnit, rotate }: GetPageSizeInchesP
  * rendering canvas. Earlier and later refer to index in `views`, not page
  * layout.)
  *
- * @param {GetVisibleElementsParameters}
+ * @param {GetVisibleElementsParameters} params
  * @returns {Object} `{ first, last, views: [{ id, x, y, view, percent }] }`
  */
 export function getVisibleElements({ scrollEl, views, sortByVisibility, horizontal, rtl, }: GetVisibleElementsParameters): Object;
@@ -168,10 +168,6 @@ export function isValidSpreadMode(mode: any): boolean;
 export const MAX_AUTO_SCALE: 1.25;
 export const MAX_SCALE: 10;
 export const MIN_SCALE: 0.1;
-/**
- * Event handler to suppress context menu.
- */
-export function noContextMenuHandler(evt: any): void;
 export function normalizeWheelEventDelta(evt: any): number;
 export function normalizeWheelEventDirection(evt: any): number;
 /**
@@ -193,10 +189,10 @@ export class OutputScale {
 }
 /**
  * Helper function to parse query string (e.g. ?param1=value&param2=...).
- * @param {string}
+ * @param {string} query
  * @returns {Map}
  */
-export function parseQueryString(query: any): Map<any, any>;
+export function parseQueryString(query: string): Map<any, any>;
 export namespace PresentationModeState {
     const UNKNOWN: number;
     const NORMAL: number;

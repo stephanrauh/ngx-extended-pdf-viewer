@@ -1,17 +1,17 @@
 export type AnnotationEditorUIManager = import("./tools.js").AnnotationEditorUIManager;
 export type PageViewport = import("../display_utils.js").PageViewport;
-export type TextAccessibilityManager = any;
-export type IL10n = any;
-export type AnnotationLayer = any;
+export type TextAccessibilityManager = import("../../../web/text_accessibility.js").TextAccessibilityManager;
+export type IL10n = import("../../../web/interfaces").IL10n;
+export type AnnotationLayer = import("../annotation_layer.js").AnnotationLayer;
 export type AnnotationEditorLayerOptions = {
     mode: Object;
     div: HTMLDivElement;
     uiManager: AnnotationEditorUIManager;
     enabled: boolean;
-    accessibilityManager?: any;
+    accessibilityManager?: import("../../../web/text_accessibility.js").TextAccessibilityManager | undefined;
     pageIndex: number;
-    l10n: any;
-    annotationLayer?: any;
+    l10n: IL10n;
+    annotationLayer?: import("../annotation_layer.js").AnnotationLayer | undefined;
     viewport: PageViewport;
 };
 export type RenderEditorLayerOptions = {
@@ -38,6 +38,7 @@ export type RenderEditorLayerOptions = {
  */
 export class AnnotationEditorLayer {
     static _initialized: boolean;
+    static "__#18@#editorTypes": Map<number, typeof FreeTextEditor | typeof InkEditor | typeof StampEditor>;
     /**
      * @param {AnnotationEditorLayerOptions} options
      */
@@ -67,6 +68,7 @@ export class AnnotationEditorLayer {
      * @param {Object} params
      */
     addCommands(params: Object): void;
+    togglePointerEvents(enabled?: boolean): void;
     /**
      * Enable pointer events on the main div in order to enable
      * editor creation.
@@ -127,9 +129,9 @@ export class AnnotationEditorLayer {
     /**
      * Create a new editor
      * @param {Object} data
-     * @returns {AnnotationEditor}
+     * @returns {AnnotationEditor | null}
      */
-    deserialize(data: Object): AnnotationEditor;
+    deserialize(data: Object): AnnotationEditor | null;
     /**
      * Create and add a new editor.
      */
@@ -195,3 +197,6 @@ export class AnnotationEditorLayer {
     #private;
 }
 import { AnnotationEditor } from "./editor.js";
+import { FreeTextEditor } from "./freetext.js";
+import { InkEditor } from "./ink.js";
+import { StampEditor } from "./stamp.js";
