@@ -40,7 +40,7 @@ export class PdfShyButtonComponent implements OnInit, OnChanges {
   public order: number;
 
   @Input()
-  public action: (() => void) | undefined = undefined;
+  public action: ((htmlEvent?: Event, isSecondaryMenue?: boolean) => void) | undefined = undefined;
 
   @Input()
   public closeOnClick: boolean = true;
@@ -151,14 +151,14 @@ export class PdfShyButtonComponent implements OnInit, OnChanges {
     return this.sanitizer.bypassSecurityTrustHtml(html); // NOSONAR
   }
 
-  public onClick(event: Event): void {
+  public onClick(htmlEvent: Event): void {
     if (this.action) {
-      this.action();
-      event.preventDefault();
+      this.action(htmlEvent, false);
+      htmlEvent.preventDefault();
     } else if (this.eventBusName) {
       const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
       PDFViewerApplication.eventBus.dispatch(this.eventBusName);
-      event.preventDefault();
+      htmlEvent.preventDefault();
     }
   }
 }

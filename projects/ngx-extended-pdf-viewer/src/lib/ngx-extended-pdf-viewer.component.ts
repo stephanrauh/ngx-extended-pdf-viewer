@@ -2049,28 +2049,26 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       if (PDFViewerApplication.printKeyDownListener) {
         removeEventListener('keydown', PDFViewerApplication.printKeyDownListener, true);
       }
-      setTimeout(() => {
-        if (PDFViewerApplication._boundEvents) {
-          PDFViewerApplication.unbindWindowEvents();
-        }
-        const bus = PDFViewerApplication.eventBus;
-        if (bus) {
-          PDFViewerApplication.unbindEvents();
-          for (const key in bus._listeners) {
-            if (bus._listeners[key]) {
-              const list = bus._listeners[key];
-              // not sure if the for loop is necessary - but
-              // it might improve garbage collection if the "listeners"
-              // array is stored somewhere else
-              for (let i = 0; i < list.length; i++) {
-                list[i] = undefined;
-              }
-              bus._listeners[key] = undefined;
+      if (PDFViewerApplication._boundEvents) {
+        PDFViewerApplication.unbindWindowEvents();
+      }
+      const bus = PDFViewerApplication.eventBus;
+      if (bus) {
+        PDFViewerApplication.unbindEvents();
+        for (const key in bus._listeners) {
+          if (bus._listeners[key]) {
+            const list = bus._listeners[key];
+            // not sure if the for loop is necessary - but
+            // it might improve garbage collection if the "listeners"
+            // array is stored somewhere else
+            for (let i = 0; i < list.length; i++) {
+              list[i] = undefined;
             }
+            bus._listeners[key] = undefined;
           }
         }
-        (PDFViewerApplication.eventBus as any) = null;
-      });
+      }
+      (PDFViewerApplication.eventBus as any) = null;
     }
   }
 

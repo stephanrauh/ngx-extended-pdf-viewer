@@ -176,12 +176,17 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
     return count;
   }
 
-  public onClick(htmlevent: Event, action: undefined | (() => void), eventBusName?: string, closeOnClick?: boolean): void {
+  public onClick(
+    htmlevent: Event,
+    action: undefined | ((htmlevent: Event, secondaryToolbar: boolean) => void),
+    eventBusName?: string,
+    closeOnClick?: boolean
+  ): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const origin = htmlevent.target as HTMLElement;
     origin?.classList.add('toggled');
     if (action) {
-      action();
+      action(htmlevent, true);
       htmlevent.preventDefault();
     } else if (eventBusName) {
       PDFViewerApplication.eventBus.dispatch(eventBusName);

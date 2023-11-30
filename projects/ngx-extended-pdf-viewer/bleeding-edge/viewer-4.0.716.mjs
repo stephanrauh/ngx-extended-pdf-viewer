@@ -3498,13 +3498,14 @@ const PDFViewerApplication = {
         eventBus
       });
     }
-    let prompt = _app_options_js__WEBPACK_IMPORTED_MODULE_2__.AppOptions.get("passwordPrompt");
+    const prompt = _app_options_js__WEBPACK_IMPORTED_MODULE_2__.AppOptions.get("passwordPrompt");
     if (!prompt) {
       if (appConfig.passwordOverlay) {
         this.passwordPrompt = new _password_prompt_js__WEBPACK_IMPORTED_MODULE_7__.PasswordPrompt(appConfig.passwordOverlay, this.overlayManager, this.isViewerEmbedded);
       }
+    } else {
+      this.passwordPrompt = prompt;
     }
-    this.passwordPrompt = prompt;
     if (appConfig.sidebar?.outlineView) {
       this.pdfOutlineViewer = new web_pdf_outline_viewer__WEBPACK_IMPORTED_MODULE_15__.PDFOutlineViewer({
         container: appConfig.sidebar.outlineView,
@@ -14756,7 +14757,7 @@ class PDFViewer {
   #scaleTimeoutId = null;
   #textLayerMode = _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.TextLayerMode.ENABLE;
   constructor(options) {
-    const viewerVersion = '4.0.715';
+    const viewerVersion = '4.0.716';
     if (pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version !== viewerVersion) {
       throw new Error(`The API version "${pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -18579,8 +18580,8 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([web_
 
 
 
-const pdfjsVersion = '4.0.715';
-const pdfjsBuild = 'ea991ddef';
+const pdfjsVersion = '4.0.716';
+const pdfjsBuild = '44fad326b';
 const AppConstants = {
   LinkTarget: _pdf_link_service_js__WEBPACK_IMPORTED_MODULE_4__.LinkTarget,
   RenderingStates: _ui_utils_js__WEBPACK_IMPORTED_MODULE_2__.RenderingStates,
