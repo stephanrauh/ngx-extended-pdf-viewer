@@ -1,24 +1,14 @@
 <span id="scaleSelectContainer">
-  <select
-    id="scaleSelect"
-    title="Zoom"
-    data-l10n-id="zoom"
-    #sizeSelector
-  >
-    <option *ngFor="let level of _zoomLevels"
+  <select id="scaleSelect" title="Zoom" data-l10n-id="pdfjs-zoom-select" #sizeSelector>
+    <option
+      *ngFor="let level of _zoomLevels"
       [id]="level.id"
       [attr.value]="level.value"
       [attr.data-l10n-id]="level.dataL10nId"
-      [attr.data-l10n-args]="level.dataL10nArgs">
-      {{level.displayValue}}
+      [attr.data-l10n-args]="level.dataL10nArgs"
+    >
+      {{ level.displayValue }}
     </option>
-    <option
-    id="customScaleOption"
-    title=""
-    value="custom"
-    disabled="disabled"
-    hidden="true"
-  ></option>
-
+    <option id="customScaleOption" title="" value="custom" disabled="disabled" hidden="true"></option>
   </select>
 </span>

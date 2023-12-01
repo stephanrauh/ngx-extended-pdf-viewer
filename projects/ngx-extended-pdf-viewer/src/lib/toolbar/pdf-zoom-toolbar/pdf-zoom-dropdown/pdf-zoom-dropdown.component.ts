@@ -35,7 +35,7 @@ export class PdfZoomDropdownComponent {
       return {
         id: this.snakeToCamel(value + 'Option'),
         value: v,
-        dataL10nId: 'page_scale_' + v.replace('page-', ''),
+        dataL10nId: 'pdfjs-page-scale-' + v.replace('page-', ''),
         dataL10nArgs: undefined,
         displayValue: v,
       };
@@ -44,7 +44,7 @@ export class PdfZoomDropdownComponent {
     return {
       id: `scale_${percentage}`,
       value: String(numericalValue),
-      dataL10nId: 'page_scale_percent',
+      dataL10nId: 'pdfjs-page-scale-percent',
       dataL10nArgs: `{ "scale": ${percentage} }`,
       displayValue: String(percentage) + '%',
     };

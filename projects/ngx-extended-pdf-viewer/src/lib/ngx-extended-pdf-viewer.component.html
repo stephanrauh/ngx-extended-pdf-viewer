@@ -69,11 +69,11 @@
             <div class="editorParamsToolbar hidden doorHangerRight" id="editorFreeTextParamsToolbar" [class.server-side-rendering]="serverSideRendering">
               <div class="editorParamsToolbarContainer">
                 <div class="editorParamsSetter">
-                  <label for="editorFreeTextColor" class="editorParamsLabel" data-l10n-id="editor_free_text_color">Font Color</label>
+                  <label for="editorFreeTextColor" class="editorParamsLabel" data-l10n-id="pdfjs-editor-free-text-color-input">Font Color</label>
                   <input type="color" id="editorFreeTextColor" class="editorParamsColor" tabindex="100" />
                 </div>
                 <div class="editorParamsSetter">
-                  <label for="editorFreeTextFontSize" class="editorParamsLabel" data-l10n-id="editor_free_text_size">Font Size</label>
+                  <label for="editorFreeTextFontSize" class="editorParamsLabel" data-l10n-id="pdfjs-editor-free-text-size-input">Font Size</label>
                   <input type="range" id="editorFreeTextFontSize" class="editorParamsSlider" value="10" min="5" max="100" step="1" tabindex="101" />
                 </div>
               </div>
@@ -82,15 +82,15 @@
             <div class="editorParamsToolbar hidden doorHangerRight" id="editorInkParamsToolbar" [class.server-side-rendering]="serverSideRendering">
               <div class="editorParamsToolbarContainer">
                 <div class="editorParamsSetter">
-                  <label for="editorInkColor" class="editorParamsLabel" data-l10n-id="editor_ink_color">Color</label>
+                  <label for="editorInkColor" class="editorParamsLabel" data-l10n-id="pdfjs-editor-ink-color-input">Color</label>
                   <input type="color" id="editorInkColor" class="editorParamsColor" tabindex="102" />
                 </div>
                 <div class="editorParamsSetter">
-                  <label for="editorInkThickness" class="editorParamsLabel" data-l10n-id="editor_ink_thickness">Thickness</label>
+                  <label for="editorInkThickness" class="editorParamsLabel" data-l10n-id="pdfjs-editor-ink-thickness-input">Thickness</label>
                   <input type="range" id="editorInkThickness" class="editorParamsSlider" value="1" min="1" max="20" step="1" tabindex="103" />
                 </div>
                 <div class="editorParamsSetter">
-                  <label for="editorInkOpacity" class="editorParamsLabel" data-l10n-id="editor_ink_opacity">Opacity</label>
+                  <label for="editorInkOpacity" class="editorParamsLabel" data-l10n-id="pdfjs-editor-ink-opacity-input">Opacity</label>
                   <input type="range" id="editorInkOpacity" class="editorParamsSlider" value="100" min="1" max="100" step="1" tabindex="104" />
                 </div>
               </div>
@@ -134,7 +134,7 @@
             <div id="viewerContainer" [style.top]="viewerPositionTop" [style.backgroundColor]="backgroundColor" tabindex="0" role="document">
               <div class="unverified-signature-warning" *ngIf="hasSignature && showUnverifiedSignatures">
                 {{
-                  'unverified_signature_warning'
+                  'pdfjs-editor-unverified-signature-warning'
                     | translate
                       : "This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid.
                 Please download the file and open it in Acrobat Reader to verify the signature is valid."
