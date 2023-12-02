@@ -1765,6 +1765,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.ngZone.run(() => {
           const modes = ['off', 'odd', 'even'] as Array<SpreadType>;
           this.spread = modes[event.mode];
+          this.spreadChange.emit(this.spread);
         });
       });
 
