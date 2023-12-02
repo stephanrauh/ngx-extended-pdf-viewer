@@ -48,7 +48,7 @@ for (let lang in languages) {
     }
   }
 
-  if (folder !== 'bleeding-edge') {
+  if (folder !== 'bleeding-edge' && folder !== '3.11') {
     const filename28 = '../projects/ngx-extended-pdf-viewer/bleeding-edge/locale/' + lang + '/viewer.properties';
     if (filename28 != originalFilename && fs.existsSync(filename28) && fs.existsSync(originalFilename)) {
       const originalLines = fs.readFileSync(originalFilename).toString().replace(' = ', '=');

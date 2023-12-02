@@ -8,25 +8,39 @@ BRANCH=$(git rev-parse --abbrev-ref HEAD)
 if [ "$BRANCH" == "bleeding-edge" ]; then
   FOLDER="bleeding-edge"
 fi
+if [ $BRANCH == "3.11" ]; then
+  FOLDER="bleeding-edge"
+fi
 
-gulp minified-legacy &
-gulp minified &
+gulp generic
+gulp generic-legacy
+gulp minified-legacy
+gulp minified
 wait
 
 mv build/minified/web/pdf.viewer.js build/minified/web/viewer.min.js
+mv build/generic/web/viewer.js build/minified/web/viewer.js
 
 mv build/minified-legacy/web/pdf.viewer.js build/minified-legacy/web/viewer-es5.min.js
-mv build/minified-legacy/web/viewer.js build/minified-legacy/web/viewer-es5.js
+mv build/generic-legacy/web/viewer.js build/minified-legacy/web/viewer-es5.js
 
-mv build/minified-legacy/build/pdf.js build/minified-legacy/build/pdf-es5.js
-mv build/minified-legacy/build/pdf.min.js build/minified-legacy/build/pdf-es5.min.js
+mv build/minified/build/pdf.js build/minified/build/pdf.min.js
+mv build/generic/build/pdf.js build/minified/build/pdf.js
 
-mv build/minified-legacy/build/pdf.sandbox.js build/minified-legacy/build/pdf.sandbox-es5.js
-mv build/minified-legacy/build/pdf.sandbox.min.js build/minified-legacy/build/pdf.sandbox-es5.min.js
+mv build/minified-legacy/build/pdf.js build/minified-legacy/build/pdf-es5.min.js
+mv build/generic-legacy/build/pdf.js build/minified-legacy/build/pdf-es5.js
 
-mv build/minified-legacy/build/pdf.worker.js build/minified-legacy/build/pdf.worker-es5.js
-mv build/minified-legacy/build/pdf.worker.min.js build/minified-legacy/build/pdf.worker-es5.min.js
+mv build/minified/build/pdf.sandbox.js build/minified/build/pdf.sandbox.min.js
+mv build/generic/build/pdf.sandbox.js build/minified/build/pdf.sandbox.js
 
+mv build/minified-legacy/build/pdf.sandbox.js build/minified-legacy/build/pdf.sandbox-es5.min.js
+mv build/generic-legacy/build/pdf.sandbox.js build/minified-legacy/build/pdf.sandbox-es5.js
+
+mv build/minified/build/pdf.worker.js build/minified/build/pdf.worker.min.js
+mv build/generic/build/pdf.worker.js build/minified/build/pdf.worker.js
+
+mv build/minified-legacy/build/pdf.worker.js build/minified-legacy/build/pdf.worker-es5.min.js
+mv build/generic-legacy/build/pdf.worker.js build/minified-legacy/build/pdf.worker-es5.js
 
 cd ../ngx-extended-pdf-viewer
 # cd inlineImageFiles
@@ -61,5 +75,6 @@ cd ..
 
 cd add-version-number-to-file-name
 node run-outside-ngzone.js
+echo "adding version numbers"
 node add-version-number.js
 cd ..

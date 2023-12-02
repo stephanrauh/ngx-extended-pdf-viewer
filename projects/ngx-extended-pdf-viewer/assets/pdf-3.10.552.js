@@ -66,21 +66,14 @@ exports.stringToUTF8String = stringToUTF8String;
 exports.unreachable = unreachable;
 exports.utf8StringToString = utf8StringToString;
 exports.warn = warn;
-const isNodeJS = typeof process === "object" && process + "" === "[object process]" && !process.versions.nw && !(process.versions.electron && process.type && process.type !== "browser");
-exports.isNodeJS = isNodeJS;
-const IDENTITY_MATRIX = [1, 0, 0, 1, 0, 0];
-exports.IDENTITY_MATRIX = IDENTITY_MATRIX;
-const FONT_IDENTITY_MATRIX = [0.001, 0, 0, 0.001, 0, 0];
-exports.FONT_IDENTITY_MATRIX = FONT_IDENTITY_MATRIX;
-const MAX_IMAGE_SIZE_TO_CACHE = 10e6;
-exports.MAX_IMAGE_SIZE_TO_CACHE = MAX_IMAGE_SIZE_TO_CACHE;
-const LINE_FACTOR = 1.35;
-exports.LINE_FACTOR = LINE_FACTOR;
-const LINE_DESCENT_FACTOR = 0.35;
-exports.LINE_DESCENT_FACTOR = LINE_DESCENT_FACTOR;
-const BASELINE_FACTOR = LINE_DESCENT_FACTOR / LINE_FACTOR;
-exports.BASELINE_FACTOR = BASELINE_FACTOR;
-const RenderingIntentFlag = {
+const isNodeJS = exports.isNodeJS = typeof process === "object" && process + "" === "[object process]" && !process.versions.nw && !(process.versions.electron && process.type && process.type !== "browser");
+const IDENTITY_MATRIX = exports.IDENTITY_MATRIX = [1, 0, 0, 1, 0, 0];
+const FONT_IDENTITY_MATRIX = exports.FONT_IDENTITY_MATRIX = [0.001, 0, 0, 0.001, 0, 0];
+const MAX_IMAGE_SIZE_TO_CACHE = exports.MAX_IMAGE_SIZE_TO_CACHE = 10e6;
+const LINE_FACTOR = exports.LINE_FACTOR = 1.35;
+const LINE_DESCENT_FACTOR = exports.LINE_DESCENT_FACTOR = 0.35;
+const BASELINE_FACTOR = exports.BASELINE_FACTOR = LINE_DESCENT_FACTOR / LINE_FACTOR;
+const RenderingIntentFlag = exports.RenderingIntentFlag = {
   ANY: 0x01,
   DISPLAY: 0x02,
   PRINT: 0x04,
@@ -90,25 +83,21 @@ const RenderingIntentFlag = {
   ANNOTATIONS_DISABLE: 0x40,
   OPLIST: 0x100
 };
-exports.RenderingIntentFlag = RenderingIntentFlag;
-const AnnotationMode = {
+const AnnotationMode = exports.AnnotationMode = {
   DISABLE: 0,
   ENABLE: 1,
   ENABLE_FORMS: 2,
   ENABLE_STORAGE: 3
 };
-exports.AnnotationMode = AnnotationMode;
-const AnnotationEditorPrefix = "pdfjs_internal_editor_";
-exports.AnnotationEditorPrefix = AnnotationEditorPrefix;
-const AnnotationEditorType = {
+const AnnotationEditorPrefix = exports.AnnotationEditorPrefix = "pdfjs_internal_editor_";
+const AnnotationEditorType = exports.AnnotationEditorType = {
   DISABLE: -1,
   NONE: 0,
   FREETEXT: 3,
   STAMP: 13,
   INK: 15
 };
-exports.AnnotationEditorType = AnnotationEditorType;
-const AnnotationEditorParamsType = {
+const AnnotationEditorParamsType = exports.AnnotationEditorParamsType = {
   RESIZE: 1,
   CREATE: 2,
   FREETEXT_SIZE: 11,
@@ -118,8 +107,7 @@ const AnnotationEditorParamsType = {
   INK_THICKNESS: 22,
   INK_OPACITY: 23
 };
-exports.AnnotationEditorParamsType = AnnotationEditorParamsType;
-const PermissionFlag = {
+const PermissionFlag = exports.PermissionFlag = {
   PRINT: 0x04,
   MODIFY_CONTENTS: 0x08,
   COPY: 0x10,
@@ -129,8 +117,7 @@ const PermissionFlag = {
   ASSEMBLE: 0x400,
   PRINT_HIGH_QUALITY: 0x800
 };
-exports.PermissionFlag = PermissionFlag;
-const TextRenderingMode = {
+const TextRenderingMode = exports.TextRenderingMode = {
   FILL: 0,
   STROKE: 1,
   FILL_STROKE: 2,
@@ -142,14 +129,12 @@ const TextRenderingMode = {
   FILL_STROKE_MASK: 3,
   ADD_TO_PATH_FLAG: 4
 };
-exports.TextRenderingMode = TextRenderingMode;
-const ImageKind = {
+const ImageKind = exports.ImageKind = {
   GRAYSCALE_1BPP: 1,
   RGB_24BPP: 2,
   RGBA_32BPP: 3
 };
-exports.ImageKind = ImageKind;
-const AnnotationType = {
+const AnnotationType = exports.AnnotationType = {
   TEXT: 1,
   LINK: 2,
   FREETEXT: 3,
@@ -177,13 +162,11 @@ const AnnotationType = {
   THREED: 25,
   REDACT: 26
 };
-exports.AnnotationType = AnnotationType;
-const AnnotationReplyType = {
+const AnnotationReplyType = exports.AnnotationReplyType = {
   GROUP: "Group",
   REPLY: "R"
 };
-exports.AnnotationReplyType = AnnotationReplyType;
-const AnnotationFlag = {
+const AnnotationFlag = exports.AnnotationFlag = {
   INVISIBLE: 0x01,
   HIDDEN: 0x02,
   PRINT: 0x04,
@@ -195,8 +178,7 @@ const AnnotationFlag = {
   TOGGLENOVIEW: 0x100,
   LOCKEDCONTENTS: 0x200
 };
-exports.AnnotationFlag = AnnotationFlag;
-const AnnotationFieldFlag = {
+const AnnotationFieldFlag = exports.AnnotationFieldFlag = {
   READONLY: 0x0000001,
   REQUIRED: 0x0000002,
   NOEXPORT: 0x0000004,
@@ -217,16 +199,14 @@ const AnnotationFieldFlag = {
   RADIOSINUNISON: 0x2000000,
   COMMITONSELCHANGE: 0x4000000
 };
-exports.AnnotationFieldFlag = AnnotationFieldFlag;
-const AnnotationBorderStyleType = {
+const AnnotationBorderStyleType = exports.AnnotationBorderStyleType = {
   SOLID: 1,
   DASHED: 2,
   BEVELED: 3,
   INSET: 4,
   UNDERLINE: 5
 };
-exports.AnnotationBorderStyleType = AnnotationBorderStyleType;
-const AnnotationActionEventType = {
+const AnnotationActionEventType = exports.AnnotationActionEventType = {
   E: "Mouse Enter",
   X: "Mouse Exit",
   D: "Mouse Down",
@@ -242,32 +222,27 @@ const AnnotationActionEventType = {
   V: "Validate",
   C: "Calculate"
 };
-exports.AnnotationActionEventType = AnnotationActionEventType;
-const DocumentActionEventType = {
+const DocumentActionEventType = exports.DocumentActionEventType = {
   WC: "WillClose",
   WS: "WillSave",
   DS: "DidSave",
   WP: "WillPrint",
   DP: "DidPrint"
 };
-exports.DocumentActionEventType = DocumentActionEventType;
-const PageActionEventType = {
+const PageActionEventType = exports.PageActionEventType = {
   O: "PageOpen",
   C: "PageClose"
 };
-exports.PageActionEventType = PageActionEventType;
-const VerbosityLevel = {
+const VerbosityLevel = exports.VerbosityLevel = {
   ERRORS: 0,
   WARNINGS: 1,
   INFOS: 5
 };
-exports.VerbosityLevel = VerbosityLevel;
-const CMapCompressionType = {
+const CMapCompressionType = exports.CMapCompressionType = {
   NONE: 0,
   BINARY: 1
 };
-exports.CMapCompressionType = CMapCompressionType;
-const OPS = {
+const OPS = exports.OPS = {
   dependency: 1,
   setLineWidth: 2,
   setLineCap: 3,
@@ -357,12 +332,10 @@ const OPS = {
   paintSolidColorImageMask: 90,
   constructPath: 91
 };
-exports.OPS = OPS;
-const PasswordResponses = {
+const PasswordResponses = exports.PasswordResponses = {
   NEED_PASSWORD: 1,
   INCORRECT_PASSWORD: 2
 };
-exports.PasswordResponses = PasswordResponses;
 let verbosity = VerbosityLevel.WARNINGS;
 function setVerbosityLevel(level) {
   if (Number.isInteger(level)) {
@@ -449,7 +422,7 @@ function shadow(obj, prop, value, nonSerializable = false) {
   });
   return value;
 }
-const BaseException = function BaseExceptionClosure() {
+const BaseException = exports.BaseException = function BaseExceptionClosure() {
   function BaseException(message, name) {
     if (this.constructor === BaseException) {
       unreachable("Cannot initialize BaseException.");
@@ -461,7 +434,6 @@ const BaseException = function BaseExceptionClosure() {
   BaseException.constructor = BaseException;
   return BaseException;
 }();
-exports.BaseException = BaseException;
 class PasswordException extends BaseException {
   constructor(msg, code) {
     super(msg, "PasswordException");
@@ -897,14 +869,10 @@ const ServiceWorkerOptions = {
   showUnverifiedSignatures: false
 };
 window.ServiceWorkerOptions = ServiceWorkerOptions;
-const DefaultCanvasFactory = _util.isNodeJS ? _displayNode_utils.NodeCanvasFactory : _display_utils.DOMCanvasFactory;
-exports.DefaultCanvasFactory = DefaultCanvasFactory;
-const DefaultCMapReaderFactory = _util.isNodeJS ? _displayNode_utils.NodeCMapReaderFactory : _display_utils.DOMCMapReaderFactory;
-exports.DefaultCMapReaderFactory = DefaultCMapReaderFactory;
-const DefaultFilterFactory = _util.isNodeJS ? _displayNode_utils.NodeFilterFactory : _display_utils.DOMFilterFactory;
-exports.DefaultFilterFactory = DefaultFilterFactory;
-const DefaultStandardFontDataFactory = _util.isNodeJS ? _displayNode_utils.NodeStandardFontDataFactory : _display_utils.DOMStandardFontDataFactory;
-exports.DefaultStandardFontDataFactory = DefaultStandardFontDataFactory;
+const DefaultCanvasFactory = exports.DefaultCanvasFactory = _util.isNodeJS ? _displayNode_utils.NodeCanvasFactory : _display_utils.DOMCanvasFactory;
+const DefaultCMapReaderFactory = exports.DefaultCMapReaderFactory = _util.isNodeJS ? _displayNode_utils.NodeCMapReaderFactory : _display_utils.DOMCMapReaderFactory;
+const DefaultFilterFactory = exports.DefaultFilterFactory = _util.isNodeJS ? _displayNode_utils.NodeFilterFactory : _display_utils.DOMFilterFactory;
+const DefaultStandardFontDataFactory = exports.DefaultStandardFontDataFactory = _util.isNodeJS ? _displayNode_utils.NodeStandardFontDataFactory : _display_utils.DOMStandardFontDataFactory;
 function getDocument(src) {
   if (typeof src === "string" || src instanceof URL) {
     src = {
@@ -988,7 +956,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.11.442',
+    apiVersion: '3.10.552',
     data,
     password,
     disableAutoFetch,
@@ -1776,12 +1744,11 @@ class LoopbackPort {
   }
 }
 exports.LoopbackPort = LoopbackPort;
-const PDFWorkerUtil = {
+const PDFWorkerUtil = exports.PDFWorkerUtil = {
   isWorkerDisabled: false,
   fallbackWorkerSrc: null,
   fakeWorkerId: 0
 };
-exports.PDFWorkerUtil = PDFWorkerUtil;
 {
   if (_util.isNodeJS && typeof require === "function") {
     PDFWorkerUtil.isWorkerDisabled = true;
@@ -2772,10 +2739,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.11.442';
-exports.version = version;
-const build = '2efb2c1a3';
-exports.build = build;
+const version = exports.version = '3.10.552';
+const build = exports.build = '505fb2db1';
 
 /***/ }),
 /* 3 */
@@ -2790,12 +2755,11 @@ exports.SerializableEmpty = exports.PrintAnnotationStorage = exports.AnnotationS
 var _util = __w_pdfjs_require__(1);
 var _editor = __w_pdfjs_require__(4);
 var _murmurhash = __w_pdfjs_require__(8);
-const SerializableEmpty = Object.freeze({
+const SerializableEmpty = exports.SerializableEmpty = Object.freeze({
   map: null,
   hash: "",
   transfers: undefined
 });
-exports.SerializableEmpty = SerializableEmpty;
 class AnnotationStorage {
   #modified = false;
   #storage = new Map();
@@ -4898,8 +4862,7 @@ exports.setLayerDimensions = setLayerDimensions;
 var _base_factory = __w_pdfjs_require__(7);
 var _util = __w_pdfjs_require__(1);
 const SVG_NS = "http://www.w3.org/2000/svg";
-const AnnotationPrefix = "pdfjs_internal_id_";
-exports.AnnotationPrefix = AnnotationPrefix;
+const AnnotationPrefix = exports.AnnotationPrefix = "pdfjs_internal_id_";
 class PixelsPerInch {
   static CSS = 96.0;
   static PDF = 72.0;
@@ -8420,12 +8383,11 @@ exports.TilingPattern = exports.PathType = void 0;
 exports.getShadingPattern = getShadingPattern;
 var _util = __w_pdfjs_require__(1);
 var _display_utils = __w_pdfjs_require__(6);
-const PathType = {
+const PathType = exports.PathType = {
   FILL: "Fill",
   STROKE: "Stroke",
   SHADING: "Shading"
 };
-exports.PathType = PathType;
 function applyBoundingBox(ctx, bbox) {
   if (!bbox) {
     return;
@@ -8987,8 +8949,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.GlobalWorkerOptions = void 0;
-const GlobalWorkerOptions = Object.create(null);
-exports.GlobalWorkerOptions = GlobalWorkerOptions;
+const GlobalWorkerOptions = exports.GlobalWorkerOptions = Object.create(null);
 GlobalWorkerOptions.workerPort = null;
 GlobalWorkerOptions.workerSrc = "";
 
@@ -16407,7 +16368,7 @@ function formatL10nValue(text, args) {
     return name in args ? args[name] : "{{" + name + "}}";
   });
 }
-const NullL10n = {
+const NullL10n = exports.NullL10n = {
   async getLanguage() {
     return "en-us";
   },
@@ -16419,7 +16380,6 @@ const NullL10n = {
   },
   async translate(element) {}
 };
-exports.NullL10n = NullL10n;
 
 /***/ }),
 /* 32 */
@@ -18103,8 +18063,8 @@ var _tools = __w_pdfjs_require__(5);
 var _annotation_layer = __w_pdfjs_require__(29);
 var _worker_options = __w_pdfjs_require__(14);
 var _xfa_layer = __w_pdfjs_require__(32);
-const pdfjsVersion = '3.11.442';
-const pdfjsBuild = '2efb2c1a3';
+const pdfjsVersion = '3.10.552';
+const pdfjsBuild = '505fb2db1';
 })();
 
 /******/ 	return __webpack_exports__;

@@ -66,21 +66,14 @@ exports.stringToUTF8String = stringToUTF8String;
 exports.unreachable = unreachable;
 exports.utf8StringToString = utf8StringToString;
 exports.warn = warn;
-const isNodeJS = typeof process === "object" && process + "" === "[object process]" && !process.versions.nw && !(process.versions.electron && process.type && process.type !== "browser");
-exports.isNodeJS = isNodeJS;
-const IDENTITY_MATRIX = [1, 0, 0, 1, 0, 0];
-exports.IDENTITY_MATRIX = IDENTITY_MATRIX;
-const FONT_IDENTITY_MATRIX = [0.001, 0, 0, 0.001, 0, 0];
-exports.FONT_IDENTITY_MATRIX = FONT_IDENTITY_MATRIX;
-const MAX_IMAGE_SIZE_TO_CACHE = 10e6;
-exports.MAX_IMAGE_SIZE_TO_CACHE = MAX_IMAGE_SIZE_TO_CACHE;
-const LINE_FACTOR = 1.35;
-exports.LINE_FACTOR = LINE_FACTOR;
-const LINE_DESCENT_FACTOR = 0.35;
-exports.LINE_DESCENT_FACTOR = LINE_DESCENT_FACTOR;
-const BASELINE_FACTOR = LINE_DESCENT_FACTOR / LINE_FACTOR;
-exports.BASELINE_FACTOR = BASELINE_FACTOR;
-const RenderingIntentFlag = {
+const isNodeJS = exports.isNodeJS = typeof process === "object" && process + "" === "[object process]" && !process.versions.nw && !(process.versions.electron && process.type && process.type !== "browser");
+const IDENTITY_MATRIX = exports.IDENTITY_MATRIX = [1, 0, 0, 1, 0, 0];
+const FONT_IDENTITY_MATRIX = exports.FONT_IDENTITY_MATRIX = [0.001, 0, 0, 0.001, 0, 0];
+const MAX_IMAGE_SIZE_TO_CACHE = exports.MAX_IMAGE_SIZE_TO_CACHE = 10e6;
+const LINE_FACTOR = exports.LINE_FACTOR = 1.35;
+const LINE_DESCENT_FACTOR = exports.LINE_DESCENT_FACTOR = 0.35;
+const BASELINE_FACTOR = exports.BASELINE_FACTOR = LINE_DESCENT_FACTOR / LINE_FACTOR;
+const RenderingIntentFlag = exports.RenderingIntentFlag = {
   ANY: 0x01,
   DISPLAY: 0x02,
   PRINT: 0x04,
@@ -90,25 +83,21 @@ const RenderingIntentFlag = {
   ANNOTATIONS_DISABLE: 0x40,
   OPLIST: 0x100
 };
-exports.RenderingIntentFlag = RenderingIntentFlag;
-const AnnotationMode = {
+const AnnotationMode = exports.AnnotationMode = {
   DISABLE: 0,
   ENABLE: 1,
   ENABLE_FORMS: 2,
   ENABLE_STORAGE: 3
 };
-exports.AnnotationMode = AnnotationMode;
-const AnnotationEditorPrefix = "pdfjs_internal_editor_";
-exports.AnnotationEditorPrefix = AnnotationEditorPrefix;
-const AnnotationEditorType = {
+const AnnotationEditorPrefix = exports.AnnotationEditorPrefix = "pdfjs_internal_editor_";
+const AnnotationEditorType = exports.AnnotationEditorType = {
   DISABLE: -1,
   NONE: 0,
   FREETEXT: 3,
   STAMP: 13,
   INK: 15
 };
-exports.AnnotationEditorType = AnnotationEditorType;
-const AnnotationEditorParamsType = {
+const AnnotationEditorParamsType = exports.AnnotationEditorParamsType = {
   RESIZE: 1,
   CREATE: 2,
   FREETEXT_SIZE: 11,
@@ -118,8 +107,7 @@ const AnnotationEditorParamsType = {
   INK_THICKNESS: 22,
   INK_OPACITY: 23
 };
-exports.AnnotationEditorParamsType = AnnotationEditorParamsType;
-const PermissionFlag = {
+const PermissionFlag = exports.PermissionFlag = {
   PRINT: 0x04,
   MODIFY_CONTENTS: 0x08,
   COPY: 0x10,
@@ -129,8 +117,7 @@ const PermissionFlag = {
   ASSEMBLE: 0x400,
   PRINT_HIGH_QUALITY: 0x800
 };
-exports.PermissionFlag = PermissionFlag;
-const TextRenderingMode = {
+const TextRenderingMode = exports.TextRenderingMode = {
   FILL: 0,
   STROKE: 1,
   FILL_STROKE: 2,
@@ -142,14 +129,12 @@ const TextRenderingMode = {
   FILL_STROKE_MASK: 3,
   ADD_TO_PATH_FLAG: 4
 };
-exports.TextRenderingMode = TextRenderingMode;
-const ImageKind = {
+const ImageKind = exports.ImageKind = {
   GRAYSCALE_1BPP: 1,
   RGB_24BPP: 2,
   RGBA_32BPP: 3
 };
-exports.ImageKind = ImageKind;
-const AnnotationType = {
+const AnnotationType = exports.AnnotationType = {
   TEXT: 1,
   LINK: 2,
   FREETEXT: 3,
@@ -177,13 +162,11 @@ const AnnotationType = {
   THREED: 25,
   REDACT: 26
 };
-exports.AnnotationType = AnnotationType;
-const AnnotationReplyType = {
+const AnnotationReplyType = exports.AnnotationReplyType = {
   GROUP: "Group",
   REPLY: "R"
 };
-exports.AnnotationReplyType = AnnotationReplyType;
-const AnnotationFlag = {
+const AnnotationFlag = exports.AnnotationFlag = {
   INVISIBLE: 0x01,
   HIDDEN: 0x02,
   PRINT: 0x04,
@@ -195,8 +178,7 @@ const AnnotationFlag = {
   TOGGLENOVIEW: 0x100,
   LOCKEDCONTENTS: 0x200
 };
-exports.AnnotationFlag = AnnotationFlag;
-const AnnotationFieldFlag = {
+const AnnotationFieldFlag = exports.AnnotationFieldFlag = {
   READONLY: 0x0000001,
   REQUIRED: 0x0000002,
   NOEXPORT: 0x0000004,
@@ -217,16 +199,14 @@ const AnnotationFieldFlag = {
   RADIOSINUNISON: 0x2000000,
   COMMITONSELCHANGE: 0x4000000
 };
-exports.AnnotationFieldFlag = AnnotationFieldFlag;
-const AnnotationBorderStyleType = {
+const AnnotationBorderStyleType = exports.AnnotationBorderStyleType = {
   SOLID: 1,
   DASHED: 2,
   BEVELED: 3,
   INSET: 4,
   UNDERLINE: 5
 };
-exports.AnnotationBorderStyleType = AnnotationBorderStyleType;
-const AnnotationActionEventType = {
+const AnnotationActionEventType = exports.AnnotationActionEventType = {
   E: "Mouse Enter",
   X: "Mouse Exit",
   D: "Mouse Down",
@@ -242,32 +222,27 @@ const AnnotationActionEventType = {
   V: "Validate",
   C: "Calculate"
 };
-exports.AnnotationActionEventType = AnnotationActionEventType;
-const DocumentActionEventType = {
+const DocumentActionEventType = exports.DocumentActionEventType = {
   WC: "WillClose",
   WS: "WillSave",
   DS: "DidSave",
   WP: "WillPrint",
   DP: "DidPrint"
 };
-exports.DocumentActionEventType = DocumentActionEventType;
-const PageActionEventType = {
+const PageActionEventType = exports.PageActionEventType = {
   O: "PageOpen",
   C: "PageClose"
 };
-exports.PageActionEventType = PageActionEventType;
-const VerbosityLevel = {
+const VerbosityLevel = exports.VerbosityLevel = {
   ERRORS: 0,
   WARNINGS: 1,
   INFOS: 5
 };
-exports.VerbosityLevel = VerbosityLevel;
-const CMapCompressionType = {
+const CMapCompressionType = exports.CMapCompressionType = {
   NONE: 0,
   BINARY: 1
 };
-exports.CMapCompressionType = CMapCompressionType;
-const OPS = {
+const OPS = exports.OPS = {
   dependency: 1,
   setLineWidth: 2,
   setLineCap: 3,
@@ -357,12 +332,10 @@ const OPS = {
   paintSolidColorImageMask: 90,
   constructPath: 91
 };
-exports.OPS = OPS;
-const PasswordResponses = {
+const PasswordResponses = exports.PasswordResponses = {
   NEED_PASSWORD: 1,
   INCORRECT_PASSWORD: 2
 };
-exports.PasswordResponses = PasswordResponses;
 let verbosity = VerbosityLevel.WARNINGS;
 function setVerbosityLevel(level) {
   if (Number.isInteger(level)) {
@@ -374,24 +347,12 @@ function getVerbosityLevel() {
 }
 function info(msg) {
   if (verbosity >= VerbosityLevel.INFOS) {
-    if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
-      console.log(`Info: ${msg}`);
-    } else if (Window && globalThis.ngxConsole) {
-      globalThis.ngxConsole.log(`Info: ${msg}`);
-    } else {
-      console.log(`Info: ${msg}`);
-    }
+    console.log(`Info: ${msg}`);
   }
 }
 function warn(msg) {
   if (verbosity >= VerbosityLevel.WARNINGS) {
-    if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
-      console.log(`Warning: ${msg}`);
-    } else if (Window && globalThis.ngxConsole) {
-      globalThis.ngxConsole.log(`Warning: ${msg}`);
-    } else {
-      console.log(`Warning: ${msg}`);
-    }
+    console.log(`Warning: ${msg}`);
   }
 }
 function unreachable(msg) {
@@ -409,7 +370,6 @@ function _isValidProtocol(url) {
     case "ftp:":
     case "mailto:":
     case "tel:":
-    case "capacitor":
       return true;
     default:
       return false;
@@ -449,7 +409,7 @@ function shadow(obj, prop, value, nonSerializable = false) {
   });
   return value;
 }
-const BaseException = function BaseExceptionClosure() {
+const BaseException = exports.BaseException = function BaseExceptionClosure() {
   function BaseException(message, name) {
     if (this.constructor === BaseException) {
       unreachable("Cannot initialize BaseException.");
@@ -461,7 +421,6 @@ const BaseException = function BaseExceptionClosure() {
   BaseException.constructor = BaseException;
   return BaseException;
 }();
-exports.BaseException = BaseException;
 class PasswordException extends BaseException {
   constructor(msg, code) {
     super(msg, "PasswordException");
@@ -893,18 +852,10 @@ var _xfa_text = __w_pdfjs_require__(25);
 const DEFAULT_RANGE_CHUNK_SIZE = 65536;
 const RENDERING_CANCELLED_TIMEOUT = 100;
 const DELAYED_CLEANUP_TIMEOUT = 5000;
-const ServiceWorkerOptions = {
-  showUnverifiedSignatures: false
-};
-window.ServiceWorkerOptions = ServiceWorkerOptions;
-const DefaultCanvasFactory = _util.isNodeJS ? _displayNode_utils.NodeCanvasFactory : _display_utils.DOMCanvasFactory;
-exports.DefaultCanvasFactory = DefaultCanvasFactory;
-const DefaultCMapReaderFactory = _util.isNodeJS ? _displayNode_utils.NodeCMapReaderFactory : _display_utils.DOMCMapReaderFactory;
-exports.DefaultCMapReaderFactory = DefaultCMapReaderFactory;
-const DefaultFilterFactory = _util.isNodeJS ? _displayNode_utils.NodeFilterFactory : _display_utils.DOMFilterFactory;
-exports.DefaultFilterFactory = DefaultFilterFactory;
-const DefaultStandardFontDataFactory = _util.isNodeJS ? _displayNode_utils.NodeStandardFontDataFactory : _display_utils.DOMStandardFontDataFactory;
-exports.DefaultStandardFontDataFactory = DefaultStandardFontDataFactory;
+const DefaultCanvasFactory = exports.DefaultCanvasFactory = _util.isNodeJS ? _displayNode_utils.NodeCanvasFactory : _display_utils.DOMCanvasFactory;
+const DefaultCMapReaderFactory = exports.DefaultCMapReaderFactory = _util.isNodeJS ? _displayNode_utils.NodeCMapReaderFactory : _display_utils.DOMCMapReaderFactory;
+const DefaultFilterFactory = exports.DefaultFilterFactory = _util.isNodeJS ? _displayNode_utils.NodeFilterFactory : _display_utils.DOMFilterFactory;
+const DefaultStandardFontDataFactory = exports.DefaultStandardFontDataFactory = _util.isNodeJS ? _displayNode_utils.NodeStandardFontDataFactory : _display_utils.DOMStandardFontDataFactory;
 function getDocument(src) {
   if (typeof src === "string" || src instanceof URL) {
     src = {
@@ -925,7 +876,7 @@ function getDocument(src) {
   const {
     docId
   } = task;
-  const url = src.url ? getUrlProp(src.url, src.baseHref) : null;
+  const url = src.url ? getUrlProp(src.url) : null;
   const data = src.data ? getDataProp(src.data) : null;
   const httpHeaders = src.httpHeaders || null;
   const withCredentials = src.withCredentials === true;
@@ -935,10 +886,10 @@ function getDocument(src) {
   let worker = src.worker instanceof PDFWorker ? src.worker : null;
   const verbosity = src.verbosity;
   const docBaseUrl = typeof src.docBaseUrl === "string" && !(0, _display_utils.isDataScheme)(src.docBaseUrl) ? src.docBaseUrl : null;
-  const cMapUrl = typeof src.cMapUrl === "function" ? src.cMapUrl() : typeof src.cMapUrl === "string" ? src.cMapUrl : null;
+  const cMapUrl = typeof src.cMapUrl === "string" ? src.cMapUrl : null;
   const cMapPacked = src.cMapPacked !== false;
   const CMapReaderFactory = src.CMapReaderFactory || DefaultCMapReaderFactory;
-  const standardFontDataUrl = typeof src.standardFontDataUrl === "function" ? src.standardFontDataUrl() : typeof src.standardFontDataUrl === "string" ? src.standardFontDataUrl : null;
+  const standardFontDataUrl = typeof src.standardFontDataUrl === "string" ? src.standardFontDataUrl : null;
   const StandardFontDataFactory = src.StandardFontDataFactory || DefaultStandardFontDataFactory;
   const ignoreErrors = src.stopAtErrors !== true;
   const maxImageSize = Number.isInteger(src.maxImageSize) && src.maxImageSize > -1 ? src.maxImageSize : -1;
@@ -988,7 +939,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.10.550',
+    apiVersion: '3.11.4',
     data,
     password,
     disableAutoFetch,
@@ -1062,7 +1013,6 @@ function getDocument(src) {
       const messageHandler = new _message_handler.MessageHandler(docId, workerId, worker.port);
       const transport = new WorkerTransport(messageHandler, task, networkStream, transportParams, transportFactory);
       task._transport = transport;
-      messageHandler.send("showUnverifiedSignatures", window.ServiceWorkerOptions.showUnverifiedSignatures);
       messageHandler.send("Ready", null);
     });
   }).catch(task._capability.reject);
@@ -1078,17 +1028,13 @@ async function _fetchDocument(worker, source) {
   }
   return workerId;
 }
-function getUrlProp(val, baseHref) {
+function getUrlProp(val) {
   if (val instanceof URL) {
     return val.href;
   }
   try {
-    if (baseHref) {
-      return new URL(val, window.location.origin + baseHref).href;
-    } else {
-      return new URL(val, window.location).href;
-    }
-  } catch (ex) {
+    return new URL(val, window.location).href;
+  } catch {
     if (_util.isNodeJS && typeof val === "string") {
       return val;
     }
@@ -1776,12 +1722,11 @@ class LoopbackPort {
   }
 }
 exports.LoopbackPort = LoopbackPort;
-const PDFWorkerUtil = {
+const PDFWorkerUtil = exports.PDFWorkerUtil = {
   isWorkerDisabled: false,
   fallbackWorkerSrc: null,
   fakeWorkerId: 0
 };
-exports.PDFWorkerUtil = PDFWorkerUtil;
 {
   if (_util.isNodeJS && typeof require === "function") {
     PDFWorkerUtil.isWorkerDisabled = true;
@@ -1852,15 +1797,6 @@ class PDFWorker {
       verbosity: this.verbosity
     });
   }
-  #generateTrustedURL(sourcePath) {
-    if (window.trustedTypes) {
-      const sanitizer = window.trustedTypes.createPolicy("foo", {
-        createScriptURL: url => url
-      });
-      return sanitizer.createScriptURL(sourcePath);
-    }
-    return sourcePath;
-  }
   _initialize() {
     if (!PDFWorkerUtil.isWorkerDisabled && !PDFWorker._mainThreadWorkerMessageHandler) {
       let {
@@ -1870,7 +1806,7 @@ class PDFWorker {
         if (!PDFWorkerUtil.isSameOrigin(window.location.href, workerSrc)) {
           workerSrc = PDFWorkerUtil.createCDNWrapper(new URL(workerSrc, window.location).href);
         }
-        const worker = new Worker(this.#generateTrustedURL(workerSrc));
+        const worker = new Worker(workerSrc);
         const messageHandler = new _message_handler.MessageHandler("main", "worker", worker);
         const terminateEarly = () => {
           worker.removeEventListener("error", onWorkerError);
@@ -1985,9 +1921,6 @@ class PDFWorker {
   }
   static get workerSrc() {
     if (_worker_options.GlobalWorkerOptions.workerSrc) {
-      if (_worker_options.GlobalWorkerOptions.workerSrc.constructor.name === "Function") {
-        return _worker_options.GlobalWorkerOptions.workerSrc();
-      }
       return _worker_options.GlobalWorkerOptions.workerSrc;
     }
     if (PDFWorkerUtil.fallbackWorkerSrc !== null) {
@@ -2745,15 +2678,13 @@ class InternalRenderTask {
     }
   }
   _scheduleNext() {
-    window.ngxZone.runOutsideAngular(() => {
-      if (this._useRequestAnimationFrame) {
-        window.requestAnimationFrame(() => {
-          this._nextBound().catch(this._cancelBound);
-        });
-      } else {
-        Promise.resolve().then(this._nextBound).catch(this._cancelBound);
-      }
-    });
+    if (this._useRequestAnimationFrame) {
+      window.requestAnimationFrame(() => {
+        this._nextBound().catch(this._cancelBound);
+      });
+    } else {
+      Promise.resolve().then(this._nextBound).catch(this._cancelBound);
+    }
   }
   async _next() {
     if (this.cancelled) {
@@ -2772,10 +2703,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = '3.10.550';
-exports.version = version;
-const build = '6285f3bf2';
-exports.build = build;
+const version = exports.version = '3.11.4';
+const build = exports.build = 'd0a76536e';
 
 /***/ }),
 /* 3 */
@@ -2790,12 +2719,11 @@ exports.SerializableEmpty = exports.PrintAnnotationStorage = exports.AnnotationS
 var _util = __w_pdfjs_require__(1);
 var _editor = __w_pdfjs_require__(4);
 var _murmurhash = __w_pdfjs_require__(8);
-const SerializableEmpty = Object.freeze({
+const SerializableEmpty = exports.SerializableEmpty = Object.freeze({
   map: null,
   hash: "",
   transfers: undefined
 });
-exports.SerializableEmpty = SerializableEmpty;
 class AnnotationStorage {
   #modified = false;
   #storage = new Map();
@@ -2966,7 +2894,6 @@ class AnnotationEditor {
   _focusEventsAllowed = true;
   #isDraggable = false;
   #zIndex = AnnotationEditor._zIndex++;
-  doNotMove = false;
   static _colorManager = new _tools.ColorManager();
   static _zIndex = 1;
   constructor(parameters) {
@@ -3119,9 +3046,6 @@ class AnnotationEditor {
   setAt(x, y, tx, ty) {
     const [width, height] = this.parentDimensions;
     [tx, ty] = this.screenToPageTranslation(tx, ty);
-    if (this.doNotMove) {
-      [tx, ty] = [0, 0];
-    }
     this.x = (x + tx) / width;
     this.y = (y + ty) / height;
     this.fixAndSetPosition();
@@ -3927,11 +3851,6 @@ class CommandManager {
   destroy() {
     this.#commands = null;
   }
-  reset() {
-    this.#commands = [];
-    this.#position = -1;
-    this.#locked = false;
-  }
 }
 exports.CommandManager = CommandManager;
 class KeyboardManager {
@@ -4291,17 +4210,12 @@ class AnnotationEditorUIManager {
         }
       }
     }
-    const data = clipboardData.getData("application/pdfjs");
-    this.addSerializedEditor(data);
-  }
-  addSerializedEditor(data, activateEditorIfNecessary = false, doNotMove = false, ignorePageNumber = true) {
+    let data = clipboardData.getData("application/pdfjs");
     if (!data) {
       return;
     }
     try {
-      if (typeof data === "string") {
-        data = JSON.parse(data);
-      }
+      data = JSON.parse(data);
     } catch (ex) {
       (0, _util.warn)(`paste: "${ex.message}".`);
       return;
@@ -4309,22 +4223,15 @@ class AnnotationEditorUIManager {
     if (!Array.isArray(data)) {
       return;
     }
-    const previousMode = this.#mode;
-    if (activateEditorIfNecessary && previousMode === _util.AnnotationEditorType.NONE) {
-      this.updateMode(_util.AnnotationEditorType.FREETEXT);
-    }
     this.unselectAll();
+    const layer = this.currentLayer;
     try {
       const newEditors = [];
       for (const editor of data) {
-        const pageNumberMissing = editor.pageIndex === undefined;
-        const useCurrentPage = ignorePageNumber || pageNumberMissing;
-        const layer = useCurrentPage ? this.currentLayer : this.getLayer(editor.pageIndex);
         const deserializedEditor = layer.deserialize(editor);
         if (!deserializedEditor) {
           return;
         }
-        deserializedEditor.doNotMove = doNotMove;
         newEditors.push(deserializedEditor);
       }
       const cmd = () => {
@@ -4345,9 +4252,6 @@ class AnnotationEditorUIManager {
       });
     } catch (ex) {
       (0, _util.warn)(`paste: "${ex.message}".`);
-    }
-    if (activateEditorIfNecessary && previousMode !== this.#mode) {
-      this.updateMode(previousMode);
     }
   }
   keydown(event) {
@@ -4850,25 +4754,6 @@ class AnnotationEditorUIManager {
   get imageManager() {
     return (0, _util.shadow)(this, "imageManager", new ImageManager());
   }
-  removeEditors(filterFunction = () => true) {
-    let hasChanged = false;
-    this.#allLayers.forEach(layer => layer.setCleaningUp(true));
-    this.#allEditors.forEach(editor => {
-      if (filterFunction(editor.serialize())) {
-        editor.remove();
-        hasChanged = true;
-      }
-    });
-    this.#allLayers.forEach(layer => layer.setCleaningUp(false));
-    if (hasChanged) {
-      this.#dispatchUpdateStates({
-        hasSomethingToUndo: false,
-        hasSomethingToRedo: false,
-        isEmpty: this.#isEmpty()
-      });
-      this.#commandManager.reset();
-    }
-  }
 }
 exports.AnnotationEditorUIManager = AnnotationEditorUIManager;
 
@@ -4898,8 +4783,7 @@ exports.setLayerDimensions = setLayerDimensions;
 var _base_factory = __w_pdfjs_require__(7);
 var _util = __w_pdfjs_require__(1);
 const SVG_NS = "http://www.w3.org/2000/svg";
-const AnnotationPrefix = "pdfjs_internal_id_";
-exports.AnnotationPrefix = AnnotationPrefix;
+const AnnotationPrefix = exports.AnnotationPrefix = "pdfjs_internal_id_";
 class PixelsPerInch {
   static CSS = 96.0;
   static PDF = 72.0;
@@ -5336,9 +5220,6 @@ function getFilenameFromUrl(url, onlyStripPath = false) {
   return url.substring(url.lastIndexOf("/") + 1);
 }
 function getPdfFilenameFromUrl(url, defaultFilename = "document.pdf") {
-  if (window.PDFViewerApplication.appConfig.filenameForDownload) {
-    return window.PDFViewerApplication.appConfig.filenameForDownload;
-  }
   if (typeof url !== "string") {
     return defaultFilename;
   }
@@ -5404,44 +5285,29 @@ function isValidFetchUrl(url, baseUrl) {
     const {
       protocol
     } = baseUrl ? new URL(url, baseUrl) : new URL(url);
-    return protocol === "http:" || protocol === "https:" || protocol === "capacitor:";
+    return protocol === "http:" || protocol === "https:";
   } catch {
     return false;
   }
 }
-function generateTrustedURL(sourcePath) {
-  if (window.trustedTypes) {
-    const sanitizer = window.trustedTypes.createPolicy("foo", {
-      createScriptURL: url => url
-    });
-    return sanitizer.createScriptURL(sourcePath);
-  }
-  return sourcePath;
-}
 function loadScript(src, removeScriptElement = false) {
   return new Promise((resolve, reject) => {
     const script = document.createElement("script");
-    let source = src;
-    if (src.constructor.name === "Function") {
-      source = src();
-    }
-    const secureSource = generateTrustedURL(source);
-    script.src = secureSource;
+    script.src = src;
     script.onload = function (evt) {
       if (removeScriptElement) {
         script.remove();
       }
       resolve(evt);
     };
-    script.onerror = function (error) {
-      globalThis.ngxConsole.log(error);
+    script.onerror = function () {
       reject(new Error(`Cannot load script at: ${script.src}`));
     };
     (document.head || document.documentElement).append(script);
   });
 }
 function deprecated(details) {
-  globalThis.ngxConsole.log("Deprecated API usage: " + details);
+  console.log("Deprecated API usage: " + details);
 }
 let pdfDateStringRegex;
 class PDFDateString {
@@ -5610,13 +5476,9 @@ class BaseCanvasFactory {
       throw new Error("Invalid canvas size");
     }
     const canvas = this._createCanvas(width, height);
-    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
-      willReadFrequently: true
-    } : undefined;
-    const context = canvas.getContext("2d", options);
     return {
       canvas,
-      context
+      context: canvas.getContext("2d")
     };
   }
   reset(canvasAndContext, width, height) {
@@ -5997,10 +5859,7 @@ class FontLoader {
     const canvas = this._document.createElement("canvas");
     canvas.width = 1;
     canvas.height = 1;
-    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
-      willReadFrequently: true
-    } : undefined;
-    const ctx = canvas.getContext("2d", options);
+    const ctx = canvas.getContext("2d");
     let called = 0;
     function isFontReady(name, callback) {
       if (++called > 30) {
@@ -8420,12 +8279,11 @@ exports.TilingPattern = exports.PathType = void 0;
 exports.getShadingPattern = getShadingPattern;
 var _util = __w_pdfjs_require__(1);
 var _display_utils = __w_pdfjs_require__(6);
-const PathType = {
+const PathType = exports.PathType = {
   FILL: "Fill",
   STROKE: "Stroke",
   SHADING: "Shading"
 };
-exports.PathType = PathType;
 function applyBoundingBox(ctx, bbox) {
   if (!bbox) {
     return;
@@ -8987,8 +8845,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.GlobalWorkerOptions = void 0;
-const GlobalWorkerOptions = Object.create(null);
-exports.GlobalWorkerOptions = GlobalWorkerOptions;
+const GlobalWorkerOptions = exports.GlobalWorkerOptions = Object.create(null);
 GlobalWorkerOptions.workerPort = null;
 GlobalWorkerOptions.workerSrc = "";
 
@@ -10800,7 +10657,7 @@ class PDFNodeStream {
   constructor(source) {
     this.source = source;
     this.url = parseUrl(source.url);
-    this.isHttp = this.url.protocol === "http:" || this.url.protocol === "https:" || this.url.protocol === "capacitor:";
+    this.isHttp = this.url.protocol === "http:" || this.url.protocol === "https:";
     this.isFsUrl = this.url.protocol === "file:";
     this.httpHeaders = this.isHttp && source.httpHeaders || {};
     this._fullRequestReader = null;
@@ -12440,18 +12297,16 @@ const DEFAULT_FONT_ASCENT = 0.8;
 const ascentCache = new Map();
 function getCtx(size, isOffscreenCanvasSupported) {
   let ctx;
-  const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
-    willReadFrequently: true,
-    alpha: false
-  } : {
-    alpha: false
-  };
   if (isOffscreenCanvasSupported && _util.FeatureTest.isOffscreenCanvasSupported) {
-    ctx = new OffscreenCanvas(size, size).getContext("2d", options);
+    ctx = new OffscreenCanvas(size, size).getContext("2d", {
+      alpha: false
+    });
   } else {
     const canvas = document.createElement("canvas");
     canvas.width = canvas.height = size;
-    ctx = canvas.getContext("2d", options);
+    ctx = canvas.getContext("2d", {
+      alpha: false
+    });
   }
   return ctx;
 }
@@ -12463,8 +12318,8 @@ function getAscent(fontFamily, isOffscreenCanvasSupported) {
   const ctx = getCtx(DEFAULT_FONT_SIZE, isOffscreenCanvasSupported);
   ctx.font = `${DEFAULT_FONT_SIZE}px ${fontFamily}`;
   const metrics = ctx.measureText("");
-  let ascent = metrics?.fontBoundingBoxAscent;
-  let descent = Math.abs(metrics?.fontBoundingBoxDescent);
+  let ascent = metrics.fontBoundingBoxAscent;
+  let descent = Math.abs(metrics.fontBoundingBoxDescent);
   if (ascent) {
     const ratio = ascent / (ascent + descent);
     ascentCache.set(fontFamily, ratio);
@@ -12592,14 +12447,12 @@ function layout(params) {
       params.prevFontSize = fontSize;
       params.prevFontFamily = fontFamily;
     }
-    try {
-      const {
-        width
-      } = ctx.measureText(div.textContent);
-      if (width > 0) {
-        transform = `scaleX(${canvasWidth * scale / width})`;
-      }
-    } catch (fingerprintIsBlockedException) {}
+    const {
+      width
+    } = ctx.measureText(div.textContent);
+    if (width > 0) {
+      transform = `scaleX(${canvasWidth * scale / width})`;
+    }
   }
   if (properties.angle !== 0) {
     transform = `rotate(${properties.angle}deg) ${transform}`;
@@ -13270,9 +13123,6 @@ class AnnotationEditorLayer {
       pageHeight
     } = this.viewport.rawDims;
     return [pageWidth, pageHeight];
-  }
-  setCleaningUp(isCleaningUp) {
-    this.#isCleaningUp = isCleaningUp;
   }
 }
 exports.AnnotationEditorLayer = AnnotationEditorLayer;
@@ -14494,9 +14344,6 @@ class LinkAnnotationElement extends AnnotationElement {
               storage.setValue(id, {
                 value
               });
-              window.updateAngularFormValue(id, {
-                value
-              });
               break;
             }
           case "checkbox":
@@ -14506,9 +14353,6 @@ class LinkAnnotationElement extends AnnotationElement {
               storage.setValue(id, {
                 value
               });
-              window.updateAngularFormValue(id, {
-                value
-              });
               break;
             }
           case "combobox":
@@ -14516,9 +14360,6 @@ class LinkAnnotationElement extends AnnotationElement {
             {
               const value = field.defaultValue || "";
               storage.setValue(id, {
-                value
-              });
-              window.updateAngularFormValue(id, {
                 value
               });
               break;
@@ -14690,16 +14531,9 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
     this.container.classList.add("textWidgetAnnotation");
     let element = null;
     if (this.renderForms) {
-      const angularData = window.getFormValueFromAngular(this.data.fieldName);
-      const formData = storage.getValue(id, {
+      const storedData = storage.getValue(id, {
         value: this.data.fieldValue
       });
-      const storedData = angularData.value ? angularData : formData;
-      if (angularData !== formData) {
-        storage.setValue(id, {
-          value: angularData.value
-        });
-      }
       let textContent = storedData.value || "";
       const maxLen = storage.getValue(id, {
         charLimit: this.data.maxLen
@@ -14747,9 +14581,6 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
         storage.setValue(id, {
           value: event.target.value
         });
-        window.updateAngularFormValue(id, {
-          value: event.target.value
-        });
         this.setPropertyOnSiblings(element, "value", event.target.value, "value");
         elementData.formattedValue = null;
       });
@@ -14767,10 +14598,6 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
         }
         event.target.scrollLeft = 0;
       };
-      window.registerAcroformField(id, element, storedData.value);
-      element.addEventListener("updateFromAngular", newvalue => storage.setValue(id, {
-        value: newvalue.detail
-      }));
       if (this.enableScripting && this.hasJSActions) {
         element.addEventListener("focus", event => {
           const {
@@ -14790,9 +14617,6 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
               storage.setValue(id, {
                 value: elementData.userValue.toString()
               });
-              window.updateAngularFormValue(id, {
-                value: elementData.userValue.toString()
-              });
               event.target.value = elementData.userValue;
             },
             formattedValue(event) {
@@ -14804,9 +14628,6 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
                 event.target.value = formattedValue;
               }
               storage.setValue(id, {
-                formattedValue
-              });
-              window.updateAngularFormValue(id, {
                 formattedValue
               });
             },
@@ -14832,9 +14653,6 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
               value = value.slice(0, charLimit);
               target.value = elementData.userValue = value;
               storage.setValue(id, {
-                value
-              });
-              window.updateAngularFormValue(id, {
                 value
               });
               this.linkService.eventBus?.dispatch("dispatcheventinsandbox", {
@@ -15011,24 +14829,11 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
     const storage = this.annotationStorage;
     const data = this.data;
     const id = data.id;
-    const angularData = window.getFormValueFromAngular(this.data.fieldName);
-    const formValue = storage.getValue(id, {
+    let value = storage.getValue(id, {
       value: data.exportValue === data.fieldValue
     }).value;
-    let angularValue = undefined;
-    if (angularData.value) {
-      angularValue = angularData.value === true || angularData.value === data.exportValue;
-    }
-    let value = angularValue !== undefined ? angularValue : formValue;
-    let updateAngularValueNecessary = false;
     if (typeof value === "string") {
-      value = value === data.exportValue;
-      storage.setValue(id, {
-        value
-      });
-      updateAngularValueNecessary = true;
-    } else if (angularData?.value !== undefined && angularData.value !== formValue) {
-      value = angularData.value === data.exportValue;
+      value = value !== "Off";
       storage.setValue(id, {
         value
       });
@@ -15059,14 +14864,8 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
         storage.setValue(checkbox.id, {
           value: curChecked
         });
-        window.updateAngularFormValue(id, {
-          value: curChecked
-        });
       }
       storage.setValue(id, {
-        value: checked
-      });
-      window.updateAngularFormValue(id, {
         value: checked
       });
     });
@@ -15074,15 +14873,6 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
       const defaultValue = data.defaultFieldValue || "Off";
       event.target.checked = defaultValue === data.exportValue;
     });
-    window.registerAcroformField(id, element, value ? data.exportValue : false);
-    element.addEventListener("updateFromAngular", newvalue => storage.setValue(id, {
-      value: newvalue.detail
-    }));
-    if (updateAngularValueNecessary) {
-      window.updateAngularFormValue(id, {
-        value
-      });
-    }
     if (this.enableScripting && this.hasJSActions) {
       element.addEventListener("updatefromsandbox", jsEvent => {
         const actions = {
@@ -15090,9 +14880,6 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
             event.target.checked = event.detail.value !== "Off";
             storage.setValue(id, {
               value: event.target.checked
-            });
-            window.updateAngularFormValue(id, {
-              value: event.target.value
             });
           }
         };
@@ -15117,19 +14904,13 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
     const storage = this.annotationStorage;
     const data = this.data;
     const id = data.id;
-    const angularData = window.getFormValueFromAngular(this.data.fieldName);
-    const formValue = storage.getValue(id, {
+    let value = storage.getValue(id, {
       value: data.fieldValue === data.buttonValue
     }).value;
-    let value = angularData.value ?? formValue;
-    if (typeof value === "string" || angularData !== formValue) {
-      value = value === data.buttonValue;
+    if (typeof value === "string") {
+      value = value !== data.buttonValue;
       storage.setValue(id, {
         value
-      });
-    } else if (value) {
-      window.updateAngularFormValue(id, {
-        value: data.buttonValue
       });
     }
     const element = document.createElement("input");
@@ -15152,14 +14933,8 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
         storage.setValue(radio.id, {
           value: false
         });
-        window.updateAngularFormValue(radio.id, {
-          value: false
-        });
       }
       storage.setValue(id, {
-        value: checked
-      });
-      window.updateAngularFormValue(id, {
         value: checked
       });
     });
@@ -15167,10 +14942,6 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
       const defaultValue = data.defaultFieldValue;
       event.target.checked = defaultValue !== null && defaultValue !== undefined && defaultValue === data.buttonValue;
     });
-    window.registerAcroformField(id, element, value ? data.buttonValue : undefined, data.buttonValue);
-    element.addEventListener("updateFromAngular", newvalue => storage.setValue(id, {
-      value: newvalue.detail
-    }));
     if (this.enableScripting && this.hasJSActions) {
       const pdfButtonValue = data.buttonValue;
       element.addEventListener("updatefromsandbox", jsEvent => {
@@ -15183,9 +14954,6 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
                 radio.domElement.checked = curChecked;
               }
               storage.setValue(radio.id, {
-                value: curChecked
-              });
-              window.updateAngularFormValue(id, {
                 value: curChecked
               });
             }
@@ -15233,16 +15001,9 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
     this.container.classList.add("choiceWidgetAnnotation");
     const storage = this.annotationStorage;
     const id = this.data.id;
-    const angularData = window.getFormValueFromAngular(this.data.fieldName);
-    const formData = storage.getValue(id, {
+    const storedData = storage.getValue(id, {
       value: this.data.fieldValue
     });
-    const storedData = angularData.value ? angularData : formData;
-    if (angularData !== formData) {
-      storage.setValue(id, {
-        value: angularData.value
-      });
-    }
     const selectElement = document.createElement("select");
     GetElementsByNameSet.add(selectElement);
     selectElement.setAttribute("data-element-id", id);
@@ -15308,10 +15069,6 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
         };
       });
     };
-    window.registerAcroformField(id, selectElement, selectedValues);
-    selectElement.addEventListener("updateFromAngular", newvalue => storage.setValue(id, {
-      value: newvalue.detail
-    }));
     if (this.enableScripting && this.hasJSActions) {
       selectElement.addEventListener("updatefromsandbox", jsEvent => {
         const actions = {
@@ -15326,9 +15083,6 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
               value: getValue(true)
             });
             selectedValues = getValue(false);
-            window.updateAngularFormValue(id, {
-              value: selectedValues
-            });
           },
           multipleSelection(event) {
             selectElement.multiple = true;
@@ -15359,9 +15113,6 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
               items: []
             });
             selectedValues = getValue(false);
-            window.updateAngularFormValue(id, {
-              value: selectedValues
-            });
           },
           insert(event) {
             const {
@@ -15383,9 +15134,6 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
               items: getItems(event)
             });
             selectedValues = getValue(false);
-            window.updateAngularFormValue(id, {
-              value: selectedValues
-            });
           },
           items(event) {
             const {
@@ -15412,9 +15160,6 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
               items: getItems(event)
             });
             selectedValues = getValue(false);
-            window.updateAngularFormValue(id, {
-              value: selectedValues
-            });
           },
           indices(event) {
             const indices = new Set(event.detail.indices);
@@ -15425,9 +15170,6 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
               value: getValue(true)
             });
             selectedValues = getValue(false);
-            window.updateAngularFormValue(id, {
-              value: selectedValues
-            });
           },
           editable(event) {
             event.target.disabled = !event.detail.editable;
@@ -15438,9 +15180,6 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
       selectElement.addEventListener("input", event => {
         const exportValue = getValue(true);
         storage.setValue(id, {
-          value: exportValue
-        });
-        window.updateAngularFormValue(id, {
           value: exportValue
         });
         event.preventDefault();
@@ -15461,9 +15200,6 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
     } else {
       selectElement.addEventListener("input", function (event) {
         storage.setValue(id, {
-          value: getValue(true)
-        });
-        window.updateAngularFormValue(id, {
           value: getValue(true)
         });
       });
@@ -16407,7 +16143,7 @@ function formatL10nValue(text, args) {
     return name in args ? args[name] : "{{" + name + "}}";
   });
 }
-const NullL10n = {
+const NullL10n = exports.NullL10n = {
   async getLanguage() {
     return "en-us";
   },
@@ -16419,7 +16155,6 @@ const NullL10n = {
   },
   async translate(element) {}
 };
-exports.NullL10n = NullL10n;
 
 /***/ }),
 /* 32 */
@@ -16434,17 +16169,9 @@ exports.XfaLayer = void 0;
 var _xfa_text = __w_pdfjs_require__(25);
 class XfaLayer {
   static setupStorage(html, id, element, storage, intent) {
-    const angularData = window.getFormValueFromAngular(html);
-    if (angularData.value) {
-      storage.setValue(id, angularData);
-    }
-    const storedData = angularData.value ? angularData : storage.getValue(id, {
+    const storedData = storage.getValue(id, {
       value: null
     });
-    window.registerXFAField(html, storedData);
-    html.addEventListener("updateFromAngular", value => storage.setValue(id, {
-      value: value.detail
-    }));
     switch (element.name) {
       case "textarea":
         if (storedData.value !== null) {
@@ -16454,9 +16181,6 @@ class XfaLayer {
           break;
         }
         html.addEventListener("input", event => {
-          window.updateAngularFormValue(html, {
-            value: event.target.value
-          });
           storage.setValue(id, {
             value: event.target.value
           });
@@ -16466,16 +16190,13 @@ class XfaLayer {
         if (element.attributes.type === "radio" || element.attributes.type === "checkbox") {
           if (storedData.value === element.attributes.xfaOn) {
             html.setAttribute("checked", true);
-          } else {
+          } else if (storedData.value === element.attributes.xfaOff) {
             html.removeAttribute("checked");
           }
           if (intent === "print") {
             break;
           }
           html.addEventListener("change", event => {
-            window.updateAngularFormValue(html, {
-              value: event.target.checked ? event.target.getAttribute("xfaOn") : event.target.getAttribute("xfaOff")
-            });
             storage.setValue(id, {
               value: event.target.checked ? event.target.getAttribute("xfaOn") : event.target.getAttribute("xfaOff")
             });
@@ -16488,9 +16209,6 @@ class XfaLayer {
             break;
           }
           html.addEventListener("input", event => {
-            window.updateAngularFormValue(html, {
-              value: event.target.value
-            });
             storage.setValue(id, {
               value: event.target.value
             });
@@ -16511,9 +16229,6 @@ class XfaLayer {
         html.addEventListener("input", event => {
           const options = event.target.options;
           const value = options.selectedIndex === -1 ? "" : options[options.selectedIndex].value;
-          window.updateAngularFormValue(html, {
-            value
-          });
           storage.setValue(id, {
             value
           });
@@ -17089,9 +16804,7 @@ class InkEditor extends _editor.AnnotationEditor {
     this.setInForeground();
     event.preventDefault();
     if (event.type !== "mouse") {
-      this.div.focus({
-        preventScroll: true
-      });
+      this.div.focus();
     }
     this.#startDrawing(event.offsetX, event.offsetY);
   }
@@ -17127,10 +16840,7 @@ class InkEditor extends _editor.AnnotationEditor {
     this.canvas.className = "inkEditorCanvas";
     InkEditor._l10nPromise.get("editor_ink_canvas_aria_label").then(msg => this.canvas?.setAttribute("aria-label", msg));
     this.div.append(this.canvas);
-    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
-      willReadFrequently: true
-    } : undefined;
-    this.ctx = this.canvas.getContext("2d", options);
+    this.ctx = this.canvas.getContext("2d");
   }
   #createObserver() {
     this.#observer = new ResizeObserver(entries => {
@@ -18103,12 +17813,13 @@ var _tools = __w_pdfjs_require__(5);
 var _annotation_layer = __w_pdfjs_require__(29);
 var _worker_options = __w_pdfjs_require__(14);
 var _xfa_layer = __w_pdfjs_require__(32);
-const pdfjsVersion = '3.10.550';
-const pdfjsBuild = '6285f3bf2';
+const pdfjsVersion = '3.11.4';
+const pdfjsBuild = 'd0a76536e';
 })();
 
 /******/ 	return __webpack_exports__;
 /******/ })()
 ;
 });
+
 });

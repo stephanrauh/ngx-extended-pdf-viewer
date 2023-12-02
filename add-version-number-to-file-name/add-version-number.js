@@ -4,10 +4,10 @@ let options = originalOptions;
 
 function fixVersionNumber(folder = 'assets') {
   const f = '../projects/ngx-extended-pdf-viewer/' + folder + '/';
+  console.log(f + 'pdf.js');
   if (fs.existsSync(f + 'pdf.js')) {
     const pdfjs = fs.readFileSync(f + 'pdf.js').toString();
-
-    console.log(pdfjs.match(/pdfjsVersion\s?=\s?\'.+\'/g)[0]);
+    console.log(pdfjs.match(/pdfjsVersion\s?=\s?'.+'/g)[0]);
     let pdfjsVersion = pdfjs.match(/pdfjsVersion\s?=\s?\'.+\'/g)[0].match(/\'.+?\'/g)[0];
     pdfjsVersion = pdfjsVersion.substring(1, pdfjsVersion.length - 1);
     const pdfjsWorker = fs.readFileSync(f + 'pdf.worker.js').toString();
