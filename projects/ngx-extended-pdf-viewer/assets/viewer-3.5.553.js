@@ -1649,15 +1649,7 @@ async function loadFakeWorker() {
   }
   await (0, _pdfjsLib.loadScript)(_pdfjsLib.PDFWorker.workerSrc);
 }
-async function loadPDFBug(self) {
-  const {
-    debuggerScriptPath
-  } = self.appConfig;
-  const {
-    PDFBug
-  } = await import(debuggerScriptPath);
-  self._PDFBug = PDFBug;
-}
+async function loadPDFBug(self) {}
 function reportPageStatsPDFBug({
   pageNumber
 }) {
@@ -9112,7 +9104,7 @@ class PDFViewer {
   #onVisibilityChange = null;
   #scaleTimeoutId = null;
   constructor(options) {
-    const viewerVersion = '3.5.552';
+    const viewerVersion = '3.5.553';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -18151,8 +18143,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(5);
 var _pdf_link_service = __webpack_require__(7);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.5.552';
-const pdfjsBuild = 'daaeb5a57';
+const pdfjsVersion = '3.5.553';
+const pdfjsBuild = '31d818330';
 const AppConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
