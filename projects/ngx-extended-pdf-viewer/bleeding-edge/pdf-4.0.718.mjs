@@ -2919,7 +2919,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '4.0.716',
+    apiVersion: '4.0.718',
     data,
     password,
     disableAutoFetch,
@@ -4667,8 +4667,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = '4.0.716';
-const build = '44fad326b';
+const version = '4.0.718';
+const build = '698acb08e';
 
 __webpack_async_result__();
 } catch(e) { __webpack_async_result__(e); } });
@@ -9274,6 +9274,7 @@ class InkEditor extends editor_editor.AnnotationEditor {
       this.#currentPath2D = path2D = new Path2D();
       path2D.moveTo(...currentPath[0]);
     }
+    console.log("Bezier" + currentPath.length);
     this.#makeBezierCurve(path2D, ...currentPath.at(-3), ...currentPath.at(-2), x, y);
   }
   #endPath() {
@@ -16125,8 +16126,8 @@ _display_api_js__WEBPACK_IMPORTED_MODULE_1__ = (__webpack_async_dependencies__.t
 
 
 
-const pdfjsVersion = '4.0.716';
-const pdfjsBuild = '44fad326b';
+const pdfjsVersion = '4.0.718';
+const pdfjsBuild = '698acb08e';
 
 __webpack_async_result__();
 } catch(e) { __webpack_async_result__(e); } });
