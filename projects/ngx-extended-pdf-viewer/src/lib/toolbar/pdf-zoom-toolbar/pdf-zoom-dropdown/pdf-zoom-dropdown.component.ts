@@ -46,7 +46,7 @@ export class PdfZoomDropdownComponent {
       value: String(numericalValue),
       dataL10nId: 'page_scale_percent',
       dataL10nArgs: `{ "scale": ${percentage} }`,
-      displayValue: String(percentage) + '%',
+      displayValue: isNaN(percentage) ? '' : String(percentage) + '%',
     };
   }
 
