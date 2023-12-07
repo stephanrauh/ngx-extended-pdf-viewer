@@ -1383,8 +1383,8 @@ export class PDFWorker {
     #private;
 }
 export namespace PDFWorkerUtil {
-    const isWorkerDisabled: boolean;
-    const fakeWorkerId: number;
+    let isWorkerDisabled: boolean;
+    let fakeWorkerId: number;
 }
 /**
  * Allows controlling of the rendering tasks.

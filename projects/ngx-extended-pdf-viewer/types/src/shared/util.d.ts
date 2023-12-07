@@ -7,125 +7,125 @@ export class AbortException extends AbortException_base {
     constructor(msg: any);
 }
 export namespace AnnotationActionEventType {
-    const E: string;
-    const X: string;
-    const D: string;
-    const U: string;
-    const Fo: string;
-    const Bl: string;
-    const PO: string;
-    const PC: string;
-    const PV: string;
-    const PI: string;
-    const K: string;
-    const F: string;
-    const V: string;
-    const C: string;
+    let E: string;
+    let X: string;
+    let D: string;
+    let U: string;
+    let Fo: string;
+    let Bl: string;
+    let PO: string;
+    let PC: string;
+    let PV: string;
+    let PI: string;
+    let K: string;
+    let F: string;
+    let V: string;
+    let C: string;
 }
 export namespace AnnotationBorderStyleType {
-    const SOLID: number;
-    const DASHED: number;
-    const BEVELED: number;
-    const INSET: number;
-    const UNDERLINE: number;
+    let SOLID: number;
+    let DASHED: number;
+    let BEVELED: number;
+    let INSET: number;
+    let UNDERLINE: number;
 }
 export namespace AnnotationEditorParamsType {
-    const RESIZE: number;
-    const CREATE: number;
-    const FREETEXT_SIZE: number;
-    const FREETEXT_COLOR: number;
-    const FREETEXT_OPACITY: number;
-    const INK_COLOR: number;
-    const INK_THICKNESS: number;
-    const INK_OPACITY: number;
+    let RESIZE: number;
+    let CREATE: number;
+    let FREETEXT_SIZE: number;
+    let FREETEXT_COLOR: number;
+    let FREETEXT_OPACITY: number;
+    let INK_COLOR: number;
+    let INK_THICKNESS: number;
+    let INK_OPACITY: number;
 }
 export const AnnotationEditorPrefix: "pdfjs_internal_editor_";
 export namespace AnnotationEditorType {
-    const DISABLE: number;
-    const NONE: number;
-    const FREETEXT: number;
-    const HIGHLIGHT: number;
-    const STAMP: number;
-    const INK: number;
+    let DISABLE: number;
+    let NONE: number;
+    let FREETEXT: number;
+    let HIGHLIGHT: number;
+    let STAMP: number;
+    let INK: number;
 }
 export namespace AnnotationFieldFlag {
-    const READONLY: number;
-    const REQUIRED: number;
-    const NOEXPORT: number;
-    const MULTILINE: number;
-    const PASSWORD: number;
-    const NOTOGGLETOOFF: number;
-    const RADIO: number;
-    const PUSHBUTTON: number;
-    const COMBO: number;
-    const EDIT: number;
-    const SORT: number;
-    const FILESELECT: number;
-    const MULTISELECT: number;
-    const DONOTSPELLCHECK: number;
-    const DONOTSCROLL: number;
-    const COMB: number;
-    const RICHTEXT: number;
-    const RADIOSINUNISON: number;
-    const COMMITONSELCHANGE: number;
+    let READONLY: number;
+    let REQUIRED: number;
+    let NOEXPORT: number;
+    let MULTILINE: number;
+    let PASSWORD: number;
+    let NOTOGGLETOOFF: number;
+    let RADIO: number;
+    let PUSHBUTTON: number;
+    let COMBO: number;
+    let EDIT: number;
+    let SORT: number;
+    let FILESELECT: number;
+    let MULTISELECT: number;
+    let DONOTSPELLCHECK: number;
+    let DONOTSCROLL: number;
+    let COMB: number;
+    let RICHTEXT: number;
+    let RADIOSINUNISON: number;
+    let COMMITONSELCHANGE: number;
 }
 export namespace AnnotationFlag {
-    export const INVISIBLE: number;
-    export const HIDDEN: number;
-    export const PRINT: number;
-    export const NOZOOM: number;
-    export const NOROTATE: number;
-    export const NOVIEW: number;
-    const READONLY_1: number;
+    export let INVISIBLE: number;
+    export let HIDDEN: number;
+    export let PRINT: number;
+    export let NOZOOM: number;
+    export let NOROTATE: number;
+    export let NOVIEW: number;
+    let READONLY_1: number;
     export { READONLY_1 as READONLY };
-    export const LOCKED: number;
-    export const TOGGLENOVIEW: number;
-    export const LOCKEDCONTENTS: number;
+    export let LOCKED: number;
+    export let TOGGLENOVIEW: number;
+    export let LOCKEDCONTENTS: number;
 }
 export namespace AnnotationMode {
-    const DISABLE_1: number;
+    let DISABLE_1: number;
     export { DISABLE_1 as DISABLE };
-    export const ENABLE: number;
-    export const ENABLE_FORMS: number;
-    export const ENABLE_STORAGE: number;
+    export let ENABLE: number;
+    export let ENABLE_FORMS: number;
+    export let ENABLE_STORAGE: number;
 }
 export const AnnotationPrefix: "pdfjs_internal_id_";
 export namespace AnnotationReplyType {
-    const GROUP: string;
-    const REPLY: string;
+    let GROUP: string;
+    let REPLY: string;
 }
 export namespace AnnotationType {
-    export const TEXT: number;
-    export const LINK: number;
-    const FREETEXT_1: number;
+    export let TEXT: number;
+    export let LINK: number;
+    let FREETEXT_1: number;
     export { FREETEXT_1 as FREETEXT };
-    export const LINE: number;
-    export const SQUARE: number;
-    export const CIRCLE: number;
-    export const POLYGON: number;
-    export const POLYLINE: number;
-    const HIGHLIGHT_1: number;
+    export let LINE: number;
+    export let SQUARE: number;
+    export let CIRCLE: number;
+    export let POLYGON: number;
+    export let POLYLINE: number;
+    let HIGHLIGHT_1: number;
     export { HIGHLIGHT_1 as HIGHLIGHT };
-    const UNDERLINE_1: number;
+    let UNDERLINE_1: number;
     export { UNDERLINE_1 as UNDERLINE };
-    export const SQUIGGLY: number;
-    export const STRIKEOUT: number;
-    const STAMP_1: number;
+    export let SQUIGGLY: number;
+    export let STRIKEOUT: number;
+    let STAMP_1: number;
     export { STAMP_1 as STAMP };
-    export const CARET: number;
-    const INK_1: number;
+    export let CARET: number;
+    let INK_1: number;
     export { INK_1 as INK };
-    export const POPUP: number;
-    export const FILEATTACHMENT: number;
-    export const SOUND: number;
-    export const MOVIE: number;
-    export const WIDGET: number;
-    export const SCREEN: number;
-    export const PRINTERMARK: number;
-    export const TRAPNET: number;
-    export const WATERMARK: number;
-    export const THREED: number;
-    export const REDACT: number;
+    export let POPUP: number;
+    export let FILEATTACHMENT: number;
+    export let SOUND: number;
+    export let MOVIE: number;
+    export let WIDGET: number;
+    export let SCREEN: number;
+    export let PRINTERMARK: number;
+    export let TRAPNET: number;
+    export let WATERMARK: number;
+    export let THREED: number;
+    export let REDACT: number;
 }
 export function assert(cond: any, msg: any): void;
 /**
@@ -135,9 +135,9 @@ export const BaseException: any;
 export const BASELINE_FACTOR: number;
 export function bytesToString(bytes: any): string;
 export namespace CMapCompressionType {
-    const NONE_1: number;
+    let NONE_1: number;
     export { NONE_1 as NONE };
-    export const BINARY: number;
+    export let BINARY: number;
 }
 /**
  * Attempts to create a valid absolute URL.
@@ -149,11 +149,11 @@ export namespace CMapCompressionType {
  */
 export function createValidAbsoluteUrl(url: URL | string, baseUrl?: string | URL | undefined, options?: Object | undefined): URL | null;
 export namespace DocumentActionEventType {
-    const WC: string;
-    const WS: string;
-    const DS: string;
-    const WP: string;
-    const DP: string;
+    let WC: string;
+    let WS: string;
+    let DS: string;
+    let WP: string;
+    let DP: string;
 }
 export class FeatureTest {
     static get isLittleEndian(): any;
@@ -176,9 +176,9 @@ export function getUuid(): string;
 export function getVerbosityLevel(): number;
 export const IDENTITY_MATRIX: number[];
 export namespace ImageKind {
-    const GRAYSCALE_1BPP: number;
-    const RGB_24BPP: number;
-    const RGBA_32BPP: number;
+    let GRAYSCALE_1BPP: number;
+    let RGB_24BPP: number;
+    let RGBA_32BPP: number;
 }
 export function info(msg: any): void;
 declare const InvalidPDFException_base: any;
@@ -201,98 +201,98 @@ export function normalizeUnicode(str: any): any;
 export function objectFromMap(map: any): any;
 export function objectSize(obj: any): number;
 export namespace OPS {
-    const dependency: number;
-    const setLineWidth: number;
-    const setLineCap: number;
-    const setLineJoin: number;
-    const setMiterLimit: number;
-    const setDash: number;
-    const setRenderingIntent: number;
-    const setFlatness: number;
-    const setGState: number;
-    const save: number;
-    const restore: number;
-    const transform: number;
-    const moveTo: number;
-    const lineTo: number;
-    const curveTo: number;
-    const curveTo2: number;
-    const curveTo3: number;
-    const closePath: number;
-    const rectangle: number;
-    const stroke: number;
-    const closeStroke: number;
-    const fill: number;
-    const eoFill: number;
-    const fillStroke: number;
-    const eoFillStroke: number;
-    const closeFillStroke: number;
-    const closeEOFillStroke: number;
-    const endPath: number;
-    const clip: number;
-    const eoClip: number;
-    const beginText: number;
-    const endText: number;
-    const setCharSpacing: number;
-    const setWordSpacing: number;
-    const setHScale: number;
-    const setLeading: number;
-    const setFont: number;
-    const setTextRenderingMode: number;
-    const setTextRise: number;
-    const moveText: number;
-    const setLeadingMoveText: number;
-    const setTextMatrix: number;
-    const nextLine: number;
-    const showText: number;
-    const showSpacedText: number;
-    const nextLineShowText: number;
-    const nextLineSetSpacingShowText: number;
-    const setCharWidth: number;
-    const setCharWidthAndBounds: number;
-    const setStrokeColorSpace: number;
-    const setFillColorSpace: number;
-    const setStrokeColor: number;
-    const setStrokeColorN: number;
-    const setFillColor: number;
-    const setFillColorN: number;
-    const setStrokeGray: number;
-    const setFillGray: number;
-    const setStrokeRGBColor: number;
-    const setFillRGBColor: number;
-    const setStrokeCMYKColor: number;
-    const setFillCMYKColor: number;
-    const shadingFill: number;
-    const beginInlineImage: number;
-    const beginImageData: number;
-    const endInlineImage: number;
-    const paintXObject: number;
-    const markPoint: number;
-    const markPointProps: number;
-    const beginMarkedContent: number;
-    const beginMarkedContentProps: number;
-    const endMarkedContent: number;
-    const beginCompat: number;
-    const endCompat: number;
-    const paintFormXObjectBegin: number;
-    const paintFormXObjectEnd: number;
-    const beginGroup: number;
-    const endGroup: number;
-    const beginAnnotation: number;
-    const endAnnotation: number;
-    const paintImageMaskXObject: number;
-    const paintImageMaskXObjectGroup: number;
-    const paintImageXObject: number;
-    const paintInlineImageXObject: number;
-    const paintInlineImageXObjectGroup: number;
-    const paintImageXObjectRepeat: number;
-    const paintImageMaskXObjectRepeat: number;
-    const paintSolidColorImageMask: number;
-    const constructPath: number;
+    let dependency: number;
+    let setLineWidth: number;
+    let setLineCap: number;
+    let setLineJoin: number;
+    let setMiterLimit: number;
+    let setDash: number;
+    let setRenderingIntent: number;
+    let setFlatness: number;
+    let setGState: number;
+    let save: number;
+    let restore: number;
+    let transform: number;
+    let moveTo: number;
+    let lineTo: number;
+    let curveTo: number;
+    let curveTo2: number;
+    let curveTo3: number;
+    let closePath: number;
+    let rectangle: number;
+    let stroke: number;
+    let closeStroke: number;
+    let fill: number;
+    let eoFill: number;
+    let fillStroke: number;
+    let eoFillStroke: number;
+    let closeFillStroke: number;
+    let closeEOFillStroke: number;
+    let endPath: number;
+    let clip: number;
+    let eoClip: number;
+    let beginText: number;
+    let endText: number;
+    let setCharSpacing: number;
+    let setWordSpacing: number;
+    let setHScale: number;
+    let setLeading: number;
+    let setFont: number;
+    let setTextRenderingMode: number;
+    let setTextRise: number;
+    let moveText: number;
+    let setLeadingMoveText: number;
+    let setTextMatrix: number;
+    let nextLine: number;
+    let showText: number;
+    let showSpacedText: number;
+    let nextLineShowText: number;
+    let nextLineSetSpacingShowText: number;
+    let setCharWidth: number;
+    let setCharWidthAndBounds: number;
+    let setStrokeColorSpace: number;
+    let setFillColorSpace: number;
+    let setStrokeColor: number;
+    let setStrokeColorN: number;
+    let setFillColor: number;
+    let setFillColorN: number;
+    let setStrokeGray: number;
+    let setFillGray: number;
+    let setStrokeRGBColor: number;
+    let setFillRGBColor: number;
+    let setStrokeCMYKColor: number;
+    let setFillCMYKColor: number;
+    let shadingFill: number;
+    let beginInlineImage: number;
+    let beginImageData: number;
+    let endInlineImage: number;
+    let paintXObject: number;
+    let markPoint: number;
+    let markPointProps: number;
+    let beginMarkedContent: number;
+    let beginMarkedContentProps: number;
+    let endMarkedContent: number;
+    let beginCompat: number;
+    let endCompat: number;
+    let paintFormXObjectBegin: number;
+    let paintFormXObjectEnd: number;
+    let beginGroup: number;
+    let endGroup: number;
+    let beginAnnotation: number;
+    let endAnnotation: number;
+    let paintImageMaskXObject: number;
+    let paintImageMaskXObjectGroup: number;
+    let paintImageXObject: number;
+    let paintInlineImageXObject: number;
+    let paintInlineImageXObjectGroup: number;
+    let paintImageXObjectRepeat: number;
+    let paintImageMaskXObjectRepeat: number;
+    let paintSolidColorImageMask: number;
+    let constructPath: number;
 }
 export namespace PageActionEventType {
-    export const O: string;
-    const C_1: string;
+    export let O: string;
+    let C_1: string;
     export { C_1 as C };
 }
 declare const PasswordException_base: any;
@@ -302,19 +302,19 @@ export class PasswordException extends PasswordException_base {
     code: any;
 }
 export namespace PasswordResponses {
-    const NEED_PASSWORD: number;
-    const INCORRECT_PASSWORD: number;
+    let NEED_PASSWORD: number;
+    let INCORRECT_PASSWORD: number;
 }
 export namespace PermissionFlag {
-    const PRINT_1: number;
+    let PRINT_1: number;
     export { PRINT_1 as PRINT };
-    export const MODIFY_CONTENTS: number;
-    export const COPY: number;
-    export const MODIFY_ANNOTATIONS: number;
-    export const FILL_INTERACTIVE_FORMS: number;
-    export const COPY_FOR_ACCESSIBILITY: number;
-    export const ASSEMBLE: number;
-    export const PRINT_HIGH_QUALITY: number;
+    export let MODIFY_CONTENTS: number;
+    export let COPY: number;
+    export let MODIFY_ANNOTATIONS: number;
+    export let FILL_INTERACTIVE_FORMS: number;
+    export let COPY_FOR_ACCESSIBILITY: number;
+    export let ASSEMBLE: number;
+    export let PRINT_HIGH_QUALITY: number;
 }
 export class PromiseCapability {
     /**
@@ -336,15 +336,15 @@ export class PromiseCapability {
     #private;
 }
 export namespace RenderingIntentFlag {
-    export const ANY: number;
-    export const DISPLAY: number;
-    const PRINT_2: number;
+    export let ANY: number;
+    export let DISPLAY: number;
+    let PRINT_2: number;
     export { PRINT_2 as PRINT };
-    export const SAVE: number;
-    export const ANNOTATIONS_FORMS: number;
-    export const ANNOTATIONS_STORAGE: number;
-    export const ANNOTATIONS_DISABLE: number;
-    export const OPLIST: number;
+    export let SAVE: number;
+    export let ANNOTATIONS_FORMS: number;
+    export let ANNOTATIONS_STORAGE: number;
+    export let ANNOTATIONS_DISABLE: number;
+    export let OPLIST: number;
 }
 export function setVerbosityLevel(level: any): void;
 export function shadow(obj: any, prop: any, value: any, nonSerializable?: boolean): any;
@@ -353,17 +353,17 @@ export function stringToBytes(str: any): Uint8Array;
 export function stringToPDFString(str: any): any;
 export function stringToUTF8String(str: any): string;
 export namespace TextRenderingMode {
-    export const FILL: number;
-    export const STROKE: number;
-    export const FILL_STROKE: number;
-    const INVISIBLE_1: number;
+    export let FILL: number;
+    export let STROKE: number;
+    export let FILL_STROKE: number;
+    let INVISIBLE_1: number;
     export { INVISIBLE_1 as INVISIBLE };
-    export const FILL_ADD_TO_PATH: number;
-    export const STROKE_ADD_TO_PATH: number;
-    export const FILL_STROKE_ADD_TO_PATH: number;
-    export const ADD_TO_PATH: number;
-    export const FILL_STROKE_MASK: number;
-    export const ADD_TO_PATH_FLAG: number;
+    export let FILL_ADD_TO_PATH: number;
+    export let STROKE_ADD_TO_PATH: number;
+    export let FILL_STROKE_ADD_TO_PATH: number;
+    export let ADD_TO_PATH: number;
+    export let FILL_STROKE_MASK: number;
+    export let ADD_TO_PATH_FLAG: number;
 }
 declare const UnexpectedResponseException_base: any;
 export class UnexpectedResponseException extends UnexpectedResponseException_base {
@@ -393,9 +393,9 @@ export class Util {
     static bezierBoundingBox(x0: any, y0: any, x1: any, y1: any, x2: any, y2: any, x3: any, y3: any): number[];
 }
 export namespace VerbosityLevel {
-    const ERRORS: number;
-    const WARNINGS: number;
-    const INFOS: number;
+    let ERRORS: number;
+    let WARNINGS: number;
+    let INFOS: number;
 }
 export function warn(msg: any): void;
 export {};

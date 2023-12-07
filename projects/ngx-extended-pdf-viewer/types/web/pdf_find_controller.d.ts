@@ -18,10 +18,10 @@ export type PDFFindControllerOptions = {
     updateMatchesCountOnProgress?: boolean | undefined;
 };
 export namespace FindState {
-    const FOUND: number;
-    const NOT_FOUND: number;
-    const WRAPPED: number;
-    const PENDING: number;
+    let FOUND: number;
+    let NOT_FOUND: number;
+    let WRAPPED: number;
+    let PENDING: number;
 }
 /**
  * @typedef {Object} PDFFindControllerOptions

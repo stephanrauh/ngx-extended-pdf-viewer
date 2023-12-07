@@ -55,7 +55,7 @@ export class AnnotationStorage {
      */
     get serializable(): Readonly<{
         map: null;
-        hash: string;
+        hash: "";
         transfer: undefined;
     }> | {
         map: Map<any, any>;
@@ -84,6 +84,6 @@ export class PrintAnnotationStorage extends AnnotationStorage {
 }
 export const SerializableEmpty: Readonly<{
     map: null;
-    hash: string;
+    hash: "";
     transfer: undefined;
 }>;

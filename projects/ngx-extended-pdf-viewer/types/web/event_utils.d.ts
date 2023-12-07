@@ -70,6 +70,6 @@ export class EventBus {
  */
 export function waitOnEventOrTimeout({ target, name, delay }: WaitOnEventOrTimeoutParameters): Promise<any>;
 export namespace WaitOnType {
-    const EVENT: string;
-    const TIMEOUT: string;
+    let EVENT: string;
+    let TIMEOUT: string;
 }

@@ -92,9 +92,9 @@ export function backtrackBeforeAllVisibleElements(index: number, views: any[], t
  */
 export function binarySearchFirstItem(items: any, condition: any, start?: number): number;
 export namespace CursorTool {
-    const SELECT: number;
-    const HAND: number;
-    const ZOOM: number;
+    let SELECT: number;
+    let HAND: number;
+    let ZOOM: number;
 }
 export const DEFAULT_SCALE: 1;
 export const DEFAULT_SCALE_DELTA: 1.1;
@@ -194,10 +194,10 @@ export class OutputScale {
  */
 export function parseQueryString(query: string): Map<any, any>;
 export namespace PresentationModeState {
-    const UNKNOWN: number;
-    const NORMAL: number;
-    const CHANGING: number;
-    const FULLSCREEN: number;
+    let UNKNOWN: number;
+    let NORMAL: number;
+    let CHANGING: number;
+    let FULLSCREEN: number;
 }
 export class ProgressBar {
     constructor(bar: any);
@@ -215,10 +215,10 @@ export class ProgressBar {
  */
 export function removeNullCharacters(str: string, replaceInvisible?: boolean | undefined): any;
 export namespace RenderingStates {
-    const INITIAL: number;
-    const RUNNING: number;
-    const PAUSED: number;
-    const FINISHED: number;
+    let INITIAL: number;
+    let RUNNING: number;
+    let PAUSED: number;
+    let FINISHED: number;
 }
 export function roundToDivide(x: any, div: any): any;
 export const SCROLLBAR_PADDING: 40;
@@ -238,34 +238,34 @@ export function scrollIntoView(element: HTMLElement, spot?: {
     top?: number | undefined;
 } | undefined, scrollMatches?: boolean | undefined, infiniteScroll?: boolean): void;
 export namespace ScrollMode {
-    const UNKNOWN_1: number;
+    let UNKNOWN_1: number;
     export { UNKNOWN_1 as UNKNOWN };
-    export const VERTICAL: number;
-    export const HORIZONTAL: number;
-    export const WRAPPED: number;
-    export const PAGE: number;
+    export let VERTICAL: number;
+    export let HORIZONTAL: number;
+    export let WRAPPED: number;
+    export let PAGE: number;
 }
 export namespace SidebarView {
-    const UNKNOWN_2: number;
+    let UNKNOWN_2: number;
     export { UNKNOWN_2 as UNKNOWN };
-    export const NONE: number;
-    export const THUMBS: number;
-    export const OUTLINE: number;
-    export const ATTACHMENTS: number;
-    export const LAYERS: number;
+    export let NONE: number;
+    export let THUMBS: number;
+    export let OUTLINE: number;
+    export let ATTACHMENTS: number;
+    export let LAYERS: number;
 }
 export namespace SpreadMode {
-    const UNKNOWN_3: number;
+    let UNKNOWN_3: number;
     export { UNKNOWN_3 as UNKNOWN };
-    const NONE_1: number;
+    let NONE_1: number;
     export { NONE_1 as NONE };
-    export const ODD: number;
-    export const EVEN: number;
+    export let ODD: number;
+    export let EVEN: number;
 }
 export namespace TextLayerMode {
-    const DISABLE: number;
-    const ENABLE: number;
-    const ENABLE_PERMISSIONS: number;
+    let DISABLE: number;
+    let ENABLE: number;
+    let ENABLE_PERMISSIONS: number;
 }
 export function toggleCheckedBtn(button: any, toggle: any, view?: null): void;
 export function toggleExpandedBtn(button: any, toggle: any, view?: null): void;

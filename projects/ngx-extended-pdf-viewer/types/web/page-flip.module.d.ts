@@ -207,7 +207,7 @@ declare class EventObject {
      * @param {string} eventName
      * @param {EventCallback} callback
      */
-    on(eventName: string, callback: EventCallback): EventObject;
+    on(eventName: string, callback: EventCallback): this;
     /**
      * Removing all handlers from an event
      *
@@ -413,7 +413,7 @@ declare class Flip {
      */
     getState(): string;
     setState(newState: any): void;
-    getDirectionByPoint(touchPos: any): 1 | 0;
+    getDirectionByPoint(touchPos: any): 0 | 1;
     getAnimationDuration(size: any): any;
     checkDirection(direction: any): boolean;
     reset(): void;

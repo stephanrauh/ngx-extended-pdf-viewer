@@ -116,7 +116,7 @@ export class TextLayerRenderTask {
         div: null;
         scale: number;
         properties: null;
-        ctx: any;
+        ctx: RenderingContext | OffscreenCanvasRenderingContext2D | null;
     };
     _transform: any[];
     _pageWidth: any;

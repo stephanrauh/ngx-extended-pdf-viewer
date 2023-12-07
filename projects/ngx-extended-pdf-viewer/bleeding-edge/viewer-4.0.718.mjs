@@ -6194,6 +6194,9 @@ async function docProperties(pdfDocument) {
 }
 class GenericScripting {
   constructor(sandboxBundleSrc) {
+    if (sandboxBundleSrc?.constructor?.name === "Function") {
+      sandboxBundleSrc = sandboxBundleSrc();
+    }
     this._ready = new Promise((resolve, reject) => {
       const sandbox = import(/* webpackIgnore: true */ sandboxBundleSrc);
       sandbox.then(pdfjsSandbox => {
@@ -6634,7 +6637,7 @@ __webpack_async_result__();
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ngxExtendedPdfViewerVersion: () => (/* binding */ ngxExtendedPdfViewerVersion)
 /* harmony export */ });
-const ngxExtendedPdfViewerVersion = '18.2.0-alpha.2';
+const ngxExtendedPdfViewerVersion = '19.0.0-alpha.0';
 
 /***/ }),
 

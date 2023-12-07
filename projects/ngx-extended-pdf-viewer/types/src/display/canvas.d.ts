@@ -6,7 +6,7 @@ export class CanvasGraphics {
     ctx: any;
     current: CanvasExtraState;
     stateStack: any[];
-    pendingClip: {} | null;
+    pendingClip: {} | {} | null;
     pendingEOFill: boolean;
     res: any;
     xobjs: any;

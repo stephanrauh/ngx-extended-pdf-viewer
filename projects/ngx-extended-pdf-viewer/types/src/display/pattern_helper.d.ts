@@ -1,8 +1,8 @@
 export function getShadingPattern(IR: any): RadialAxialShadingPattern | MeshShadingPattern | DummyShadingPattern;
 export namespace PathType {
-    const FILL: string;
-    const STROKE: string;
-    const SHADING: string;
+    let FILL: string;
+    let STROKE: string;
+    let SHADING: string;
 }
 export class TilingPattern {
     static MAX_PATTERN_SIZE: number;

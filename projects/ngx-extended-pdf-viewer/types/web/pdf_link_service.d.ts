@@ -51,11 +51,11 @@ export type PDFLinkServiceOptions = {
     ignoreDestinationZoom?: boolean | undefined;
 };
 export namespace LinkTarget {
-    const NONE: number;
-    const SELF: number;
-    const BLANK: number;
-    const PARENT: number;
-    const TOP: number;
+    let NONE: number;
+    let SELF: number;
+    let BLANK: number;
+    let PARENT: number;
+    let TOP: number;
 }
 /**
  * @typedef {Object} PDFLinkServiceOptions

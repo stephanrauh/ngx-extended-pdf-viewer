@@ -107,9 +107,9 @@ export type PDFViewerOptions = {
     pageColors?: Object | undefined;
 };
 export namespace PagesCountLimit {
-    const FORCE_SCROLL_MODE_PAGE: number;
-    const FORCE_LAZY_PAGE_INIT: number;
-    const PAUSE_EAGER_PAGE_INIT: number;
+    let FORCE_SCROLL_MODE_PAGE: number;
+    let FORCE_LAZY_PAGE_INIT: number;
+    let PAUSE_EAGER_PAGE_INIT: number;
 }
 /**
  * @typedef {Object} PDFViewerOptions

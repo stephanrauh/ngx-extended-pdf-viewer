@@ -7,9 +7,9 @@ export class AppOptions {
 }
 export const compatibilityParams: any;
 export namespace OptionKind {
-    const BROWSER: number;
-    const VIEWER: number;
-    const API: number;
-    const WORKER: number;
-    const PREFERENCE: number;
+    let BROWSER: number;
+    let VIEWER: number;
+    let API: number;
+    let WORKER: number;
+    let PREFERENCE: number;
 }

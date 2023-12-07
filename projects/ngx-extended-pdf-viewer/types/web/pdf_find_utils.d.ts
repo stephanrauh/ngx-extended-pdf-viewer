@@ -1,12 +1,12 @@
 export namespace CharacterType {
-    const SPACE: number;
-    const ALPHA_LETTER: number;
-    const PUNCT: number;
-    const HAN_LETTER: number;
-    const KATAKANA_LETTER: number;
-    const HIRAGANA_LETTER: number;
-    const HALFWIDTH_KATAKANA_LETTER: number;
-    const THAI_LETTER: number;
+    let SPACE: number;
+    let ALPHA_LETTER: number;
+    let PUNCT: number;
+    let HAN_LETTER: number;
+    let KATAKANA_LETTER: number;
+    let HIRAGANA_LETTER: number;
+    let HALFWIDTH_KATAKANA_LETTER: number;
+    let THAI_LETTER: number;
 }
 /**
  * This function is based on the word-break detection implemented in:

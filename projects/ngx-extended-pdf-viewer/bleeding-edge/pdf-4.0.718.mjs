@@ -9274,7 +9274,6 @@ class InkEditor extends editor_editor.AnnotationEditor {
       this.#currentPath2D = path2D = new Path2D();
       path2D.moveTo(...currentPath[0]);
     }
-    console.log("Bezier" + currentPath.length);
     this.#makeBezierCurve(path2D, ...currentPath.at(-3), ...currentPath.at(-2), x, y);
   }
   #endPath() {
