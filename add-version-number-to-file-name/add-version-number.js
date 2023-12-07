@@ -59,7 +59,7 @@ function fixVersionNumber(folder = 'assets', suffix = '.mjs') {
   }
 }
 
-fixVersionNumber('assets', '.js');
+fixVersionNumber('assets', '.mjs');
 fixVersionNumber('bleeding-edge', '.mjs');
 if (options != originalOptions) {
   fs.writeFileSync('../projects/ngx-extended-pdf-viewer/src/lib/options/pdf-default-options.ts', options);
