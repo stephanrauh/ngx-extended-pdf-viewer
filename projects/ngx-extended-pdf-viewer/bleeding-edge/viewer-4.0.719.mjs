@@ -4732,7 +4732,6 @@ async function loadFakeWorker() {
   if (pdfjs_lib__WEBPACK_IMPORTED_MODULE_1__.GlobalWorkerOptions.workerSrc.constructor.name === "Function") {
     pdfjs_lib__WEBPACK_IMPORTED_MODULE_1__.GlobalWorkerOptions.workerSrc = pdfjs_lib__WEBPACK_IMPORTED_MODULE_1__.GlobalWorkerOptions.workerSrc();
   }
-  await import(/* webpackIgnore: true */ pdfjs_lib__WEBPACK_IMPORTED_MODULE_1__.PDFWorker.workerSrc);
 }
 async function loadPDFBug(self) {}
 function reportPageStatsPDFBug({
@@ -6637,7 +6636,7 @@ __webpack_async_result__();
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ngxExtendedPdfViewerVersion: () => (/* binding */ ngxExtendedPdfViewerVersion)
 /* harmony export */ });
-const ngxExtendedPdfViewerVersion = '19.0.0-alpha.0';
+const ngxExtendedPdfViewerVersion = '19.0.0-alpha.1';
 
 /***/ }),
 
@@ -16431,7 +16430,6 @@ __webpack_require__.a(__webpack_module__, async (__webpack_handle_async_dependen
 /* harmony export */   InvalidPDFException: () => (/* binding */ InvalidPDFException),
 /* harmony export */   MissingPDFException: () => (/* binding */ MissingPDFException),
 /* harmony export */   PDFDateString: () => (/* binding */ PDFDateString),
-/* harmony export */   PDFWorker: () => (/* binding */ PDFWorker),
 /* harmony export */   PasswordResponses: () => (/* binding */ PasswordResponses),
 /* harmony export */   PermissionFlag: () => (/* binding */ PermissionFlag),
 /* harmony export */   PixelsPerInch: () => (/* binding */ PixelsPerInch),
@@ -16455,7 +16453,7 @@ __webpack_require__.a(__webpack_module__, async (__webpack_handle_async_dependen
 /* harmony export */   updateTextLayer: () => (/* binding */ updateTextLayer),
 /* harmony export */   version: () => (/* binding */ version)
 /* harmony export */ });
-/* unused harmony exports CMapCompressionType, DrawLayer, ImageKind, isDataScheme, OPS, Outliner, PDFDataRangeTransport, Util, VerbosityLevel */
+/* unused harmony exports CMapCompressionType, DrawLayer, ImageKind, isDataScheme, OPS, Outliner, PDFDataRangeTransport, PDFWorker, Util, VerbosityLevel */
 if (!globalThis.pdfjsLib) {
   await globalThis.pdfjsLibPromise;
 }
