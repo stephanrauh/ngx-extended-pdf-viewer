@@ -28,12 +28,12 @@
     "PDF viewer",
     "Angular",
     "ng2",
-    "Angular 12 - 17",
+    "Angular 16 - 17",
     "customizable PDF viewer"
   ],
   "peerDependencies": {
-    "@angular/common": ">=12.0.0 <18.0.0",
-    "@angular/core": ">=12.0.0 <18.0.0"
+    "@angular/common": ">=16.0.0 <18.0.0",
+    "@angular/core": ">=16.0.0 <18.0.0"
   },
   "dependencies": {
     "lodash.deburr": "^4.1.0"

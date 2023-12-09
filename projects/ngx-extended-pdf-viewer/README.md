@@ -34,8 +34,9 @@ Version 19 - currently published as an alpha version - updates to pdf.js 4.0, an
 My promise of backward compatibility to roughly 3-4 version still holds, so I'm going to maintain version 18 for a while. I also hope that version 19 is compatible to Angular 14, 15, and 16, but at the moment, it's too early to promise anything.
 
 In a nutshell:
-- You're using Angular 16 or below? Stick to ngx-extended-pdf-viewer@18 until I encourage you to update. Check this page every once in a while - there might be updates.
-- You've invested in the old i18n API, or you can't update because of a breaking change? Please tell me about your issue (for example, at https://github.com/stephanrauh/ngx-extended-pdf-viewer/discussions/1976). But brace yourself for an update. Supporting two version simultaneously is painful to me, so I won't do this forever.
+- You're using Angular 16? Give ngx-extended-pdf-viewer 19 a try. My preliminary compatibility test indicates it's compatible. If it isn't, please tell me about it.
+- You're using Angular 15 or below? Stick to ngx-extended-pdf-viewer@18. But brace yourself for an update. Supporting two version simultaneously is painful to me, so I won't do this forever.
+- You've invested in the old i18n API, or you can't update because of a breaking change? Please tell me about your issue (for example, at https://github.com/stephanrauh/ngx-extended-pdf-viewer/discussions/1976). 
 - You're using Angular 17 and can afford to start fresh? Go for version 19, including the alpha versions!
 
 ## What's new in Version 18?

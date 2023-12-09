@@ -510,3 +510,4 @@
 - 19.0.0-alpha.0 #1983 fixed `(spreadChange)`; #1979 fixed the declaration of `UpdateUIStateEvent`; #1990 fixed loading the sandbox; #1976 fixed several other bugs caused by updating to pdf.js 4.0; now the stable branch also uses my fork of pdf.js 4.0.269
 - 19.0.0-alpha.1 #1976 added missing translations (bleeding edge only)
 - 19.0.0-alpha.2 #1976 added missing translations; stop adding pdf.mjs to the minified build of viewer.min.mjs
+- 19.0.0-alpha.3 #1976 updated the compatibility promise: ngx-extended-pdf-viewer 19+ is incompatible to Angular 15 and below
