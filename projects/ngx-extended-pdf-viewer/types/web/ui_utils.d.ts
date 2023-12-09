@@ -201,7 +201,7 @@ export namespace PresentationModeState {
 }
 export class ProgressBar {
     constructor(bar: any);
-    set percent(arg: number);
+    set percent(val: number);
     get percent(): number;
     setWidth(viewer: any): void;
     setDisableAutoFetch(delay?: number): void;
@@ -213,7 +213,7 @@ export class ProgressBar {
  * @param {string} str
  * @param {boolean} [replaceInvisible]
  */
-export function removeNullCharacters(str: string, replaceInvisible?: boolean | undefined): any;
+export function removeNullCharacters(str: string, replaceInvisible?: boolean | undefined): string;
 export namespace RenderingStates {
     let INITIAL: number;
     let RUNNING: number;

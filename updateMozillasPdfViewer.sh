@@ -1,7 +1,7 @@
 #!/bin/sh
 cd ../mypdf.js
 
-rm -r build
+rm -rf build
 
 FOLDER="assets"
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
@@ -13,7 +13,6 @@ gulp generic
 gulp generic-legacy
 gulp minified-legacy
 gulp minified
-wait
 
 mv build/minified/web/pdf.viewer.mjs build/minified/web/viewer.min.mjs
 mv build/generic/web/viewer.mjs build/minified/web/viewer.mjs
@@ -56,10 +55,13 @@ cp -R ../mypdf.js/build/minified/web/viewer.min* ./projects/ngx-extended-pdf-vie
 cp -R ../mypdf.js/build/minified-legacy/build/pdf* ./projects/ngx-extended-pdf-viewer/$FOLDER/
 cp -R ../mypdf.js/build/minified-legacy/web/viewer-* ./projects/ngx-extended-pdf-viewer/$FOLDER/
 
-if [ $BRANCH == "bleeding-edge" ]
+if [ $BRANCH != "bleeding-edge" ]
 then
   echo "Generating types"
-  "./node_modules/.bin/tsc" --target ES2020 --allowJS --declaration --outDir projects/ngx-extended-pdf-viewer/types/ --strict --esModuleInterop --forceConsistentCasingInFileNames --emitDeclarationOnly --moduleResolution node ../mypdf.js/src/pdf.js ../mypdf.js/web/pdf_viewer.js
+  cd ../mypdf.js
+  gulp types
+  cd ../ngx-extended-pdf-viewer
+  cp -r ../mypdf.js/build/types/ ./projects/ngx-extended-pdf-viewer/types
 fi
 
 # cd addBaseLanguages

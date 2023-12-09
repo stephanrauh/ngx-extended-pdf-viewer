@@ -49,3 +49,5 @@ Thumbs.db
 *.map
 *-es5.js
 *.min.js
+*-es5.mjs
+*.min.mjs

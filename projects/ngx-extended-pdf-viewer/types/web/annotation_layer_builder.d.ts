@@ -60,7 +60,7 @@ export class AnnotationLayerBuilder {
     } | null>;
     _annotationCanvasMap: Map<string, HTMLCanvasElement>;
     _accessibilityManager: import("./text_accessibility.js").TextAccessibilityManager;
-    annotationLayer: any;
+    annotationLayer: AnnotationLayer | null;
     div: HTMLDivElement | null;
     _cancelled: boolean;
     _eventBus: any;
@@ -75,3 +75,4 @@ export class AnnotationLayerBuilder {
     hide(): void;
     #private;
 }
+import { AnnotationLayer } from "../src/pdf";

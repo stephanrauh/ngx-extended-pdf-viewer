@@ -9,7 +9,6 @@ fi
 
 gulp minified
 
-
 cd ../ngx-extended-pdf-viewer
 # cd inlineImageFiles
 # node index.js $FOLDER

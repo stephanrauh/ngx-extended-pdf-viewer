@@ -18582,7 +18582,7 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([web_
 
 
 const pdfjsVersion = '4.0.720';
-const pdfjsBuild = 'e3ade7783';
+const pdfjsBuild = 'd948ba674';
 const AppConstants = {
   LinkTarget: _pdf_link_service_js__WEBPACK_IMPORTED_MODULE_4__.LinkTarget,
   RenderingStates: _ui_utils_js__WEBPACK_IMPORTED_MODULE_2__.RenderingStates,

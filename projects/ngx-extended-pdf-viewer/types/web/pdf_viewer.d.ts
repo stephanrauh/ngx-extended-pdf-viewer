@@ -190,7 +190,14 @@ export class PDFViewer {
     removePageBorders: boolean | undefined;
     isOffscreenCanvasSupported: boolean;
     maxCanvasPixels: number | undefined;
-    l10n: any;
+    l10n: {
+        getLanguage(): any;
+        getDirection(): any;
+        get(ids: any, args: null | undefined, fallback: any): Promise<any>;
+        translate(element: any): Promise<any>;
+        pause(): any;
+        resume(): any;
+    };
     pageColors: Object | null;
     defaultRenderingQueue: boolean;
     renderingQueue: PDFRenderingQueue | undefined;
@@ -222,7 +229,7 @@ export class PDFViewer {
     /**
      * @param {number} val - The page number.
      */
-    set currentPageNumber(arg: number);
+    set currentPageNumber(val: number);
     /**
      * @type {number}
      */
@@ -249,7 +256,7 @@ export class PDFViewer {
     /**
      * @param {string} val - The page label.
      */
-    set currentPageLabel(arg: string | null);
+    set currentPageLabel(val: string | null);
     /**
      * @type {string|null} Returns the current page label, or `null` if no page
      *   labels exist.
@@ -258,7 +265,7 @@ export class PDFViewer {
     /**
      * @param {number} val - Scale of the pages in percents.
      */
-    set currentScale(arg: number);
+    set currentScale(val: number);
     /**
      * @type {number}
      */
@@ -266,7 +273,7 @@ export class PDFViewer {
     /**
      * @param val - The scale of the pages (in percent or predefined value).
      */
-    set currentScaleValue(arg: string);
+    set currentScaleValue(val: string);
     /**
      * @type {string}
      */
@@ -274,15 +281,15 @@ export class PDFViewer {
     /**
      * @param {number} rotation - The rotation of the pages (0, 90, 180, 270).
      */
-    set pagesRotation(arg: number);
+    set pagesRotation(rotation: number);
     /**
      * @type {number}
      */
     get pagesRotation(): number;
     _pagesRotation: any;
-    get firstPagePromise(): any;
-    get onePageRendered(): any;
-    get pagesPromise(): any;
+    get firstPagePromise(): Promise<any> | null;
+    get onePageRendered(): Promise<any> | null;
+    get pagesPromise(): Promise<any> | null;
     get _layerProperties(): any;
     getAllText(): Promise<string | null>;
     /**
@@ -309,9 +316,9 @@ export class PDFViewer {
         rotation: any;
         pdfOpenParams: string;
     } | null | undefined;
-    _firstPageCapability: any;
-    _onePageRenderedCapability: any;
-    _pagesCapability: any;
+    _firstPageCapability: PromiseCapability | undefined;
+    _onePageRenderedCapability: PromiseCapability | undefined;
+    _pagesCapability: PromiseCapability | undefined;
     _previousScrollMode: any;
     _spreadMode: any;
     _scrollUpdate(): void;
@@ -387,7 +394,7 @@ export class PDFViewer {
      * @param {Promise<OptionalContentConfig>} promise - A promise that is
      *   resolved with an {@link OptionalContentConfig} instance.
      */
-    set optionalContentConfigPromise(arg: Promise<import("../src/display/optional_content_config").OptionalContentConfig | null>);
+    set optionalContentConfigPromise(promise: Promise<import("../src/display/optional_content_config").OptionalContentConfig | null>);
     /**
      * @type {Promise<OptionalContentConfig | null>}
      */
@@ -397,7 +404,7 @@ export class PDFViewer {
      *   laid out within the scrolling container.
      *   The constants from {ScrollMode} should be used.
      */
-    set scrollMode(arg: number);
+    set scrollMode(mode: number);
     /**
      * @type {number} One of the values in {ScrollMode}.
      */
@@ -408,7 +415,7 @@ export class PDFViewer {
      *   even-number pages (unless `SpreadMode.NONE` is used).
      *   The constants from {SpreadMode} should be used.
      */
-    set spreadMode(arg: number);
+    set spreadMode(mode: number);
     /**
      * @type {number} One of the values in {SpreadMode}.
      */
@@ -463,7 +470,7 @@ export class PDFViewer {
     /**
      * @param {AnnotationEditorModeOptions} options
      */
-    set annotationEditorMode(arg: {
+    set annotationEditorMode({ mode, editId, isFromKeyboard }: {
         /**
          * - The editor mode (none, FreeText, ink, ...).
          */
@@ -493,7 +500,7 @@ export class PDFViewer {
          */
         isFromKeyboard?: boolean | undefined;
     };
-    set annotationEditorParams(arg: any);
+    set annotationEditorParams({ type, value }: any);
     refresh(noUpdate?: boolean, updateArgs?: any): void;
     getSerializedAnnotations(): any[] | null;
     addEditorAnnotation(data: any): void;
@@ -505,3 +512,4 @@ export class PDFViewer {
 import { PDFRenderingQueue } from "./pdf_rendering_queue.js";
 import { SimpleLinkService } from "./pdf_link_service.js";
 import { PageFlip } from "./page-flip.module.js";
+import { PromiseCapability } from "../src/pdf";

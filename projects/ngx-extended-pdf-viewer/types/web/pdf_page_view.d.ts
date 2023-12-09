@@ -104,7 +104,14 @@ export class PDFPageView implements IRenderableView {
     pageColors: Object | null;
     eventBus: import("./event_utils").EventBus;
     renderingQueue: import("./pdf_rendering_queue").PDFRenderingQueue | undefined;
-    l10n: any;
+    l10n: {
+        getLanguage(): any;
+        getDirection(): any;
+        get(ids: any, args: null | undefined, fallback: any): Promise<any>;
+        translate(element: any): Promise<any>;
+        pause(): any;
+        resume(): any;
+    };
     renderTask: any;
     resume: (() => void) | null;
     _isStandalone: boolean | undefined;
@@ -117,7 +124,7 @@ export class PDFPageView implements IRenderableView {
     xfaLayer: XfaLayerBuilder | null;
     structTreeLayer: any;
     div: HTMLDivElement;
-    set renderingState(arg: number);
+    set renderingState(state: number);
     get renderingState(): number;
     setPdfPage(pdfPage: any): void;
     destroy(): void;

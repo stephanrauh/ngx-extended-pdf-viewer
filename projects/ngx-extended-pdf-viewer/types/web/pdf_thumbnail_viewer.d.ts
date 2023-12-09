@@ -70,7 +70,7 @@ export class PDFThumbnailViewer {
     private _getVisibleThumbs;
     scrollThumbnailIntoView(pageNumber: any): void;
     _currentPageNumber: any;
-    set pagesRotation(arg: any);
+    set pagesRotation(rotation: any);
     get pagesRotation(): any;
     _pagesRotation: any;
     cleanup(): void;

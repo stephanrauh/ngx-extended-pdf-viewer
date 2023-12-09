@@ -83,7 +83,7 @@ export class IPDFLinkService {
     /**
      * @param {number} value
      */
-    set page(arg: number);
+    set page(value: number);
     /**
      * @type {number}
      */
@@ -91,7 +91,7 @@ export class IPDFLinkService {
     /**
      * @param {number} value
      */
-    set rotation(arg: number);
+    set rotation(value: number);
     /**
      * @type {number}
      */
@@ -103,7 +103,7 @@ export class IPDFLinkService {
     /**
      * @param {boolean} value
      */
-    set externalLinkEnabled(arg: boolean);
+    set externalLinkEnabled(value: boolean);
     /**
      * @type {boolean}
      */

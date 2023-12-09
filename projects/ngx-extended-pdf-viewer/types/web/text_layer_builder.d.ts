@@ -38,8 +38,8 @@ export class TextLayerBuilder {
     textContentItemsStr: any[];
     renderingDone: boolean;
     textDivs: any[];
-    textDivProperties: WeakMap<object, any>;
-    textLayerRenderTask: any;
+    textDivProperties: WeakMap<WeakKey, any>;
+    textLayerRenderTask: import("../src/display/text_layer.js").TextLayerRenderTask | null;
     highlighter: any;
     accessibilityManager: any;
     isOffscreenCanvasSupported: boolean;

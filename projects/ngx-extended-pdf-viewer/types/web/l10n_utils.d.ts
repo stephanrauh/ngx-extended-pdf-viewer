@@ -1,11 +1,9 @@
-export function getL10nFallback(key: any, args: any): any;
+export type IL10n = import("./interfaces").IL10n;
 export namespace NullL10n {
-    function getLanguage(): Promise<string>;
-    function getLanguage(): Promise<string>;
-    function getDirection(): Promise<string>;
-    function getDirection(): Promise<string>;
-    function get(key: any, args?: null, fallback?: any): Promise<any>;
-    function get(key: any, args?: null, fallback?: any): Promise<any>;
-    function translate(element: any): Promise<void>;
-    function translate(element: any): Promise<void>;
+    function getLanguage(): any;
+    function getDirection(): any;
+    function get(ids: any, args: null | undefined, fallback: any): Promise<any>;
+    function translate(element: any): Promise<any>;
+    function pause(): any;
+    function resume(): any;
 }

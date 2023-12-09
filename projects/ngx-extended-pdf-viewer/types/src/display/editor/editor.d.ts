@@ -115,7 +115,7 @@ export class AnnotationEditor {
      * @returns {Array}
      */
     get propertiesToUpdate(): any[];
-    set _isDraggable(arg: boolean);
+    set _isDraggable(value: boolean);
     get _isDraggable(): boolean;
     /**
      * @returns {boolean} true if the editor handles the Enter key itself.
@@ -210,7 +210,7 @@ export class AnnotationEditor {
     /**
      * Set the alt text data.
      */
-    set altTextData(arg: {
+    set altTextData({ altText, decorative }: {
         altText: string;
         decorative: boolean;
     });
@@ -346,7 +346,7 @@ export class AnnotationEditor {
      * When set to true, it means that this editor is currently edited.
      * @param {boolean} value
      */
-    set isEditing(arg: boolean);
+    set isEditing(value: boolean);
     /**
      * If true then the editor is currently edited.
      * @type {boolean}

@@ -75,7 +75,7 @@ export namespace LinkTarget {
  * @implements {IPDFLinkService}
  */
 export class PDFLinkService implements IPDFLinkService {
-    static "__#47@#isValidExplicitDestination"(dest: any): boolean;
+    static "__#46@#isValidExplicitDestination"(dest: any): boolean;
     /**
      * @param {PDFLinkServiceOptions} options
      */
@@ -99,7 +99,7 @@ export class PDFLinkService implements IPDFLinkService {
     /**
      * @param {number} value
      */
-    set page(arg: number);
+    set page(value: number);
     /**
      * @type {number}
      */
@@ -107,7 +107,7 @@ export class PDFLinkService implements IPDFLinkService {
     /**
      * @param {number} value
      */
-    set rotation(arg: number);
+    set rotation(value: number);
     /**
      * @type {number}
      */
@@ -182,7 +182,7 @@ export class SimpleLinkService implements IPDFLinkService {
     /**
      * @param {number} value
      */
-    set page(arg: number);
+    set page(value: number);
     /**
      * @type {number}
      */
@@ -190,7 +190,7 @@ export class SimpleLinkService implements IPDFLinkService {
     /**
      * @param {number} value
      */
-    set rotation(arg: number);
+    set rotation(value: number);
     /**
      * @type {number}
      */

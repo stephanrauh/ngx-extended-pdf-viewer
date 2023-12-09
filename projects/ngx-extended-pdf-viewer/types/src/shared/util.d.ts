@@ -350,7 +350,7 @@ export function setVerbosityLevel(level: any): void;
 export function shadow(obj: any, prop: any, value: any, nonSerializable?: boolean): any;
 export function string32(value: any): string;
 export function stringToBytes(str: any): Uint8Array;
-export function stringToPDFString(str: any): any;
+export function stringToPDFString(str: any): string;
 export function stringToUTF8String(str: any): string;
 export namespace TextRenderingMode {
     export let FILL: number;

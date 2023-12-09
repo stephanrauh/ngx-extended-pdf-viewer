@@ -14049,7 +14049,7 @@ __webpack_async_result__();
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ngxExtendedPdfViewerVersion: () => (/* binding */ ngxExtendedPdfViewerVersion)
 /* harmony export */ });
-var ngxExtendedPdfViewerVersion='19.0.0-alpha.1';
+var ngxExtendedPdfViewerVersion='19.0.0-alpha.2';
 
 /***/ }),
 
