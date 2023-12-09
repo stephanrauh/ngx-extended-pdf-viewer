@@ -508,3 +508,5 @@
 - 18.2.0-alpha.0 #1976 update the bleeding edge branch to pdf.js 4.0; added optional parameters to the `[action]` attribute of the `PdfShyButton` allowing you to access the event and to distinguish buttons in the primary toolbar from menu entries in the secondary menu; fixed `PDFNotificationService.pdfjsVersion` which previous showed the wrong version number.
 - 18.2.0-alpha.1 #1976 updated the i18n labels to pdf.js 4.0
 - 19.0.0-alpha.0 #1983 fixed `(spreadChange)`; #1979 fixed the declaration of `UpdateUIStateEvent`; #1990 fixed loading the sandbox; #1976 fixed several other bugs caused by updating to pdf.js 4.0; now the stable branch also uses my fork of pdf.js 4.0.269
+- 19.0.0-alpha.1 #1976 added missing translations (bleeding edge only)
+- 19.0.0-alpha.2 #1976 added missing translations; stop adding pdf.mjs to the minified build of viewer.min.mjs
