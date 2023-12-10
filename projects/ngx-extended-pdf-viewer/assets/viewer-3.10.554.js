@@ -3086,7 +3086,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.ngxExtendedPdfViewerVersion = void 0;
-const ngxExtendedPdfViewerVersion = exports.ngxExtendedPdfViewerVersion = '18.1.11';
+const ngxExtendedPdfViewerVersion = exports.ngxExtendedPdfViewerVersion = '18.1.12';
 
 /***/ }),
 /* 6 */
@@ -8623,8 +8623,10 @@ class PDFViewer {
   #onVisibilityChange = null;
   #scaleTimeoutId = null;
   #textLayerMode = _ui_utils.TextLayerMode.ENABLE;
+  #outerScrollContainer = undefined;
+  #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = '3.10.553';
+    const viewerVersion = '3.10.554';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -8685,6 +8687,29 @@ class PDFViewer {
         pdfPage?.cleanup();
       }
     });
+  }
+  get pageViewMode() {
+    return this.#pageViewMode;
+  }
+  set pageViewMode(viewMode) {
+    if (this.#pageViewMode !== viewMode) {
+      this.#pageViewMode = viewMode;
+      if (!this.#outerScrollContainer && viewMode === "infinite-scroll") {
+        this.#outerScrollContainer = this.#findParentWithScrollbar(this.container.offsetParent);
+        if (this.#outerScrollContainer) {
+          (0, _ui_utils.watchScroll)(this.#outerScrollContainer, this._scrollUpdate.bind(this));
+        }
+      }
+    }
+  }
+  #findParentWithScrollbar(element) {
+    while (element) {
+      if (element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth) {
+        return element;
+      }
+      element = element.parentElement;
+    }
+    return null;
   }
   get pagesCount() {
     return this._pages.length;
@@ -17631,8 +17656,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(6);
 var _pdf_link_service = __webpack_require__(8);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.10.553';
-const pdfjsBuild = '68fa490e1';
+const pdfjsVersion = '3.10.554';
+const pdfjsBuild = '99ea2a16b';
 const AppConstants = exports.PDFViewerApplicationConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
