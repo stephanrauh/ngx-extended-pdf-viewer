@@ -25,11 +25,6 @@
                 "glob": "**/*",
                 "input": "node_modules/ngx-extended-pdf-viewer/assets/",
                 "output": "/assets/"
-              },
-              {
-                "glob": "**/*",
-                "input": "node_modules/ngx-extended-pdf-viewer/bleeding-edge/",
-                "output": "/bleeding-edge/"
               }
             ],
             "styles": ["src/styles.css"],

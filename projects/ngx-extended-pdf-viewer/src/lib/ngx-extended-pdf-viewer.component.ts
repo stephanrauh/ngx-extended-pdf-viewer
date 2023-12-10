@@ -998,6 +998,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   private addScriptOpChainingSupport(): Promise<boolean> {
     return new Promise((resolve) => {
+      if (pdfDefaultOptions.assetsFolder === 'bleeding-edge') {
+        pdfDefaultOptions.assetsFolder="assets";
+      }
       const script = this.createScriptElement(pdfDefaultOptions.assetsFolder + '/op-chaining-support.js');
       script.onload = () => {
         script.remove();

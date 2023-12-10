@@ -35,8 +35,8 @@ Version 18 ships with quite a few improvements:
 - brings toolbar customization and responsive design to another level,
 - gives you the option to add many buttons to the toolbar that used to hide in the secondary menu,
 - adds more flexibility with for `[pageViewMode]`, `[scrollMode]`, and `[spreadMode]`,
-- and updates to pdf.js 3.10 in the stable branch and to pdf.js 3.11 in the bleeding-edge branch.
-- The bleeding-edge branch, in turn, gives you a sneak preview of the new "stamp" editor, which allows you to add images to PDF files.
+- and updates to pdf.js 3.10.
+- The bleeding-edge branch has been deleted in version 18.1.11. It will be back in version 19, but it doesn't make sense to maintain this branch in version 18 after starting the alpha phase of version 19.
 
 A slightly modified layout is a side-effect of the improvements of the toolbar and the secondary menu. Most people won't notice, but if you're using screenshot tests, expect them to break.
 
