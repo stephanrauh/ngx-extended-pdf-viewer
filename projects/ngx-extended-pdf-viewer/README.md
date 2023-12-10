@@ -39,6 +39,10 @@ In a nutshell:
 - You've invested in the old i18n API, or you can't update because of a breaking change? Please tell me about your issue (for example, at https://github.com/stephanrauh/ngx-extended-pdf-viewer/discussions/1976). 
 - You're using Angular 17 and can afford to start fresh? Go for version 19, including the alpha versions!
 
+Breaking changes of version 19:
+- The attribute `useBrowserLocale` and the inlined translations are gone.
+- Many translation keys have changed. If you're using custom translations, you'll need to update them and to migrate to the FTL format.
+
 ## What's new in Version 18?
 
 Version 18 ships with quite a few improvements:
