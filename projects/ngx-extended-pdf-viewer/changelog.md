@@ -506,4 +506,4 @@
 - 18.1.8 #1920 fixed the bug that every checkbox was initially checked in many PDF forms
 - 18.1.9 #1972 fixed several missing translations (kudos to Daphné Bellemin for contributing the pull request); #1969 now also radio-button checkboxes have the correct initial value
 - 18.1.10 #1979 fixed the declaration of `UpdateUIStateEvent`
-- 18.1.11 #1992 fixed NaN% issue loading the zoom dropdown component
+- 18.1.11 #1992 fixed the NaN% issue loading the zoom dropdown component
