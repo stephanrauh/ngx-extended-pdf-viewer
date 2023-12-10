@@ -13,13 +13,20 @@ cd ../ngx-extended-pdf-viewer
 # cd inlineImageFiles
 # node index.js $FOLDER
 # cd ..
-rm -R ./projects/ngx-extended-pdf-viewer/$FOLDER/pdf*.js
-rm -R ./projects/ngx-extended-pdf-viewer/$FOLDER/viewer*.js
+rm -R ./projects/ngx-extended-pdf-viewer/$FOLDER/pdf*.
+rm -R ./projects/ngx-extended-pdf-viewer/$FOLDER/viewer*.
+mv ../mypdf.js/build/minified/web/pdf.viewer.mjs ../mypdf.js/build/minified/web/viewer.min.mjs
 cp -R ../mypdf.js/build/minified/web/locale/* ./projects/ngx-extended-pdf-viewer/$FOLDER/locale/
 cp -R ../mypdf.js/build/minified/web/cmaps/* ./projects/ngx-extended-pdf-viewer/$FOLDER/cmaps/
 cp -R ../mypdf.js/build/minified/build/pdf.* ./projects/ngx-extended-pdf-viewer/$FOLDER/
-cp -R ../mypdf.js/build/minified/web/viewer.js* ./projects/ngx-extended-pdf-viewer/$FOLDER/
+cp -R ../mypdf.js/build/minified/web/viewer.mjs* ./projects/ngx-extended-pdf-viewer/$FOLDER/
 cp -R ../mypdf.js/build/minified/web/viewer.min* ./projects/ngx-extended-pdf-viewer/$FOLDER/
+rm -R ./projects/ngx-extended-pdf-viewer/$FOLDER/*.d.mts
+
+cd addBaseLanguages
+# node index.js $FOLDER
+node add-additional-translations.js $FOLDER
+cd ..
 
 cd add-version-number-to-file-name
 node run-outside-ngzone.js

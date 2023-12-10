@@ -511,3 +511,4 @@
 - 19.0.0-alpha.1 #1976 added missing translations (bleeding edge only)
 - 19.0.0-alpha.2 #1976 added missing translations; stop adding pdf.mjs to the minified build of viewer.min.mjs
 - 19.0.0-alpha.3 #1976 updated the compatibility promise: ngx-extended-pdf-viewer 19+ is incompatible to Angular 15 and below
+- 19.0.0-alpha.4 #1976 added the additional locales again and removed the attribute `useBrowserLocale`

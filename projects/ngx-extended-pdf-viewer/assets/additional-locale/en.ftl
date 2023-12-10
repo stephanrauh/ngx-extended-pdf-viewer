@@ -13,4 +13,7 @@
 # limitations under the License.
 
 # Additional translations
-unverified_signature_warning=Diese PDF-Datei enthält eine digitale Signatur. Der PDF-Viewer kann nicht überprüfen, ob die Signatur gültig ist. Laden Sie die Datei herunter und öffnen Sie sie in Acrobat Reader, um zu überprüfen, ob die Signatur gültig ist.
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+infinite-scroll-label = Infinite scroll
+infinite-scroll = Infinite scroll
+

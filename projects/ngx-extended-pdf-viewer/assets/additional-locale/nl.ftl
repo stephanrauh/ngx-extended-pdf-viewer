@@ -13,4 +13,7 @@
 # limitations under the License.
 
 # Additional translations
-unverified_signature_warning=Questo file PDF contiene una firma digitale. Questo visualizzatore PDF non può verificare se la firma è valida. Scarica il file e aprilo in Acrobat Reader per verificare che la firma sia valida.
+unverified-signature-warning = Deze PDF bevat een digitale handtekening. De PDF viewer kan de geldigheid niet controleren. Gelieve het bestand te downloaden en te openen in Acrobat Reader om de handtekening te controleren.
+
+
+

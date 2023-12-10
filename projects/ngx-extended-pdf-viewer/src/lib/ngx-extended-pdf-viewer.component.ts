@@ -468,22 +468,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     return this._height;
   }
 
-  private _useBrowserLocale: boolean | undefined = undefined;
-
-  public get useBrowserLocale() {
-    return !!this._useBrowserLocale;
-  }
-
-  /**
-   * If this flag is true, this components adds a link to the locale assets. The pdf viewer
-   * sees this link and uses it to load the locale files automatically.
-   * @param useBrowserLocale boolean
-   */
-  @Input()
-  public set useBrowserLocale(value: boolean) {
-    this._useBrowserLocale = value;
-  }
-
   @Input()
   public forceUsingLegacyES5 = false;
 
@@ -1314,36 +1298,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   private addTranslationsUnlessProvidedByTheUser() {
-    const langLinks = document.querySelectorAll('link[type="application/l10n"]');
-    const langCount = langLinks.length;
-    const dict = document.querySelector('script[type="application/l10n"]');
-    const userProvidesTranslations = langCount > 0 || !!dict;
-    if (this._useBrowserLocale === undefined) {
-      this.useBrowserLocale = !userProvidesTranslations;
-    }
+    const link = this.renderer.createElement('link');
+    link.rel = 'resource';
+    link.type = 'application/l10n';
+    link.href = this.localeFolderPath + '/locale.json';
 
-    if (!userProvidesTranslations) {
-      if (!this.useBrowserLocale) {
-        console.error("If you set the attribute 'useBrowserLocale' to false, you must provide the translations yourself in a script or link tag.");
-        console.error('The easiest way to do this is to add them to the index.html.');
-        console.error('The PDF viewer ignores your setting and loads the default translations.');
-      }
-      const link = this.renderer.createElement('link');
-      link.rel = 'resource';
-      link.type = 'application/l10n';
-      if (this.majorMinorPdfJsVersion >= '4') {
-        link.href = this.localeFolderPath + '/locale.json';
-      } else {
-        link.href = this.localeFolderPath + '/locale.properties';
-      }
-      link.setAttribute('origin', 'ngx-extended-pdf-viewer');
-      this.renderer.appendChild(this.elementRef.nativeElement, link);
-    } else if (this.useBrowserLocale && langCount > 0) {
-      const o = langLinks[0].attributes['origin'];
-      if (o && o.value !== 'ngx-extended-pdf-viewer') {
-        console.error("Please set the attribute 'useBrowserLocale' to false if you provide the translations yourself in a script or link tag.");
-      }
-    }
+    link.setAttribute('origin', 'ngx-extended-pdf-viewer');
+    this.renderer.appendChild(this.elementRef.nativeElement, link);
   }
 
   private hideToolbarIfItIsEmpty() {

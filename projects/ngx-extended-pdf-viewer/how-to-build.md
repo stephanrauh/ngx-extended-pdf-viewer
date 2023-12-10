@@ -16,11 +16,13 @@ In a nutshell: you need two projects, ngx-extended-pdf-viewer and extended-pdf-v
 6. `cd ..`
 7. `git clone https://github.com/stephanrauh/extended-pdf-viewer-showcase`
 8. `cd extended-pdf-viewer-showcase`
-9. Make sure npm can install packages from GitHub. I hope I can get rid of this requirement soon! In the meantime, follow the instructions at https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages. Stop at the "publishing a package" section. All you need is a GitHub token allowing you to read an npm package from GitHub and to log in to npm using this GitHub token.
-10. `npm install`
-11. `cd ../ngx-extended-pdf-viewer && npm run showcase && cd ../extended-pdf-viewer-showcase && ng serve -o`
+9. `npm install`
+10. `npm run ts`
+11. Navigate to `http://localhost:4200`
 
-If you modify the the library, you need to stop the Angular server and run step 11. That's a bit annoying: until Angular 10 (or so) Angular used to recompile and redeploy after running `npm run showcase` in a secondary terminal window. For some reason unknown, this useful feature is broken with contemporary versions of Angular.
+If you modify the the library, you need to stop the Angular server and run step 10.
+
+The GitHub repository only contains the non-minified JavaScript files of the stable branch of my fork of pdf.js. If you need the minified files, or if you want to use the bleeding-edge branch, you'll have to compile pdf.js yourself.
 
 ## Build ngx-extended-pdf-viewer with a custom version of pdf.js
 
@@ -48,13 +50,13 @@ Put all of them in the same parent folder. pdf.js needs to be built first, follo
 1. `mv pdf.js mypdf.js` (or `rename pdf.js mypdf.js` if you're using Windows)
 1. `cd mypdf.js`
 1. `npm install -g gulp-cli`
-1. `npm install`
+1. `npm install` (some versions of pdf.js require the `--force` flag)
 1. `gulp generic` (not necessary - but it gives you faster feedback if there's a compile error)
 1. `cd ../ngx-extended-pdf-viewer`
-1. `sh ./updateMozillasPdfViewer.sh`
-1. `npm run showcase`
-1. `cd ../extended-pdf-viewer-showcase`
-1. `ng s -o`
+1. `npm run full`
+1. Navigate to `http://localhost:4200`
+
+If you don't need the minified files, you can use `npm run quick` instead of `npm run full`.
 
 ## Living on the bleeding edge
 
@@ -67,10 +69,14 @@ Compiling the "bleeding edge" branch of pdf.js is easy:
 1. `cd mypdf.js`
 1. `git checkout bleeding-edge`
 1. `cd ../ngx-extended-pdf-viewer``
-1. `./updateMozillasPdfViewer.sh && npm run showcase`
+1. `npm run full`
+
+If you don't need the minified files, you can use `npm run quick` instead of `npm run full`.
 
 ## Dockerized smoke tests
 
 The folder `compatibility-tests` contains tiny test suites. They are meant to be run after publishing a new version. They build an new greenfield projects in Docker and check if the PDF file renders correctly.
 
 Currently, these test must be run manually. CD to one of the `AngularXX` folders and run the script `test.sh`.
+
+I've noticed that the test often fail due to minor shifts of the UI. These shifts are usually so small you wouldn't even notice without the Playwright tests.

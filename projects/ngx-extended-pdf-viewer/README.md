@@ -143,7 +143,7 @@ Currently, the minimum required version is Angular 12. The idea is to support th
 2. There's an example component, but it isn't yet part of your application. You can either add the example component to your application or copy the relevant line to your HTML template:
 
 ```html
-<ngx-extended-pdf-viewer [src]="'assets/example.pdf'" useBrowserLocale="true"></ngx-extended-pdf-viewer>
+<ngx-extended-pdf-viewer [src]="'assets/example.pdf'"></ngx-extended-pdf-viewer>
 ```
 
 If you're running a non-standard configuration, have a look at <a href="https://pdfviewer.net/extended-pdf-viewer/getting-started">the getting-started page"</a> of the showcase.
@@ -157,45 +157,6 @@ Missing a configuration option? File an issue on the [project bug tracker](https
 ## Searching programmatically
 
 The service `NgxExtendedPdfViewerService` offers a programmatic API for searching, printing, dealing with layers, and scrolling within the page.
-
-## Internationalization
-
-<details>
-  <summary><b>Expand to learn how to translate ngx-extended-pdf-viewer to 120+ languages</b></summary>
-
-### Slow default way
-
-If you add the translation files to your project as described above in step 3, the PDF viewer uses the browser language setting to determine which language to load. First, it loads the `locale.properties,` scans it for the desired language files, and loads the language file from the corresponding folder. That's two additional HTTP calls.
-
-Don't forget to set the attribute `useBrowserLocale="true"` if you follow this approach.
-
-### Slow way with custom translation files
-
-If you want to use the slow way but prefer to load the language files from a different URL, add a link to your application like so:
-
-```html
-<link rel="resource" type="application/l10n" href="https://www.example.com/locale/locale.properties" />
-```
-
-In this case, don't set `useBrowserLocale` (or set it explicitly to false).
-
-### Inlining (aka embedding) the language files
-
-Alternatively, you can provide the translations as a Json file. This Json file has to be part of an HTML page. That's especially useful if you need only one or two languages. To get familiar with this approach, embed the Json file in the `index.html` like so:
-
-```html
-<script type="application/l10n">
-  {"default_locale":"de","locales":{"de": ... }}
-</script>
-```
-
-The folder `node_modules/ngx-extended-pdf-viewer/assets/inline-locale-files` contains snippet files you can copy into your HTML page.
-
-_Hint_: You can add the language definition in an arbitrary HTML file. The bottom line is that the HTML snippet is already part of the DOM when the PDF viewer is initialized. Cluttering the root index file with the translations is an ugly and inflexible hack, but it works.
-
-If you use the "inline" approach, don't set `useBrowserLocale` (or set it explicitly to `false`).
-
-</details>
 
 ## Troubleshooting
 

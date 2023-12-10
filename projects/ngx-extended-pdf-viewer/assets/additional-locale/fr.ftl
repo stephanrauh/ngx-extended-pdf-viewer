@@ -13,4 +13,8 @@
 # limitations under the License.
 
 # Additional translations
-unverified_signature_warning=Dokument vsebuje digitalni podpis. PDF viewer ne more preveriti veljavnost podpisa. Prosimo prenesite dokument in veljavnost podpisa preverite v programu Acrobat Reader.
+unverified-signature-warning = Ce fichier PDF contient une signature numérique. Le visualiseur PDF ne peut pas vérifier si la signature est valide. Veuillez télécharger le fichier et l'ouvrir dans Acrobat Reader pour vérifier que la signature est valide.
+
+
+
+
