@@ -6,6 +6,7 @@
     "prebuild": "ts-node compile-sass.ts && node extract-versions.js",
     "build": "npm run showcase",
     "unix-package": "npm run prebuild && ng b ngx-extended-pdf-viewer && rm -r dist && ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json && cd projects/ngx-extended-pdf-viewer && npm run build && cd ../..",
+    "postunix-package": "rm -rf dist/ngx-extended-pdf-viewer/assets/additional-locale && rm -r dist/ngx-extended-pdf-viewer/assets/images",
     "showcase": "npm run prebuild && npm run unix-package && rm -r -f ../extended-pdf-viewer-showcase/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../extended-pdf-viewer-showcase/node_modules/ngx-extended-pdf-viewer",
     "issue": "npm run unix-package && rm -r ../../ngx-beyondjava/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../../ngx-beyondjava/node_modules/ngx-extended-pdf-viewer",
     "win-package": "npm run prebuild && ng b ngx-extended-pdf-viewer && rmdir dist /S && ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json",
