@@ -151,7 +151,7 @@ function addDeclarationToNgModule(options: ModuleOptions): Rule {
   };
 }
 
-export function findModule(host: Tree, generateDir: string, moduleExt = MODULE_EXT, routingModuleExt = ROUTING_MODULE_EXT): Path {
+export function findModule(host: Tree, generateDir: string, moduleExt = MODULE_EXT, routingModuleExt = ROUTING_MODULE_EXT): Path | undefined {
   let dir: DirEntry | null = host.getDir(`/${generateDir}`);
   let foundRoutingModule = false;
 
@@ -172,11 +172,6 @@ export function findModule(host: Tree, generateDir: string, moduleExt = MODULE_E
     dir = dir.parent;
   }
 
-  const errorMsg = foundRoutingModule
-    ? 'Could not find a non Routing NgModule.' +
-      `\nModules with suffix '${routingModuleExt}' are strictly reserved for routing.` +
-      '\nUse the skip-import option to skip importing in NgModule.'
-    : 'Could not find an NgModule. Use the skip-import option to skip importing in NgModule.';
-
-  throw new Error(errorMsg);
+  console.log("Couldn't find a module. Assuming this is a stand-alone project.");
+  return undefined;
 }

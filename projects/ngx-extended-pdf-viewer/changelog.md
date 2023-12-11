@@ -508,3 +508,4 @@
 - 18.1.10 #1979 fixed the declaration of `UpdateUIStateEvent`
 - 18.1.11 #1992 fixed the NaN% issue loading the zoom dropdown component
 - 18.1.12 #1989 make sure that pages below the fold are rendered when `pageViewMode="infinite-scroll"`
+- 18.1.13 reduced the size of the viewer.js file; removed the folder `images`` and the `additional-locale` from the distribution package; #1961 now the schematics cops with stand-alone projects
