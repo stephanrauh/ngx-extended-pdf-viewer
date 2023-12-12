@@ -368,7 +368,7 @@ pdfjs-editor-resizer-label-middle-left = Middle left — resize
 # limitations under the License.
 
 # Additional translations
-unverified_signature_warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-infinite_scroll_label = Infinite scroll
-infinite_scroll = Infinite scroll
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+infinite-scroll-label = Infinite scroll
+infinite-scroll = Infinite scroll
 
