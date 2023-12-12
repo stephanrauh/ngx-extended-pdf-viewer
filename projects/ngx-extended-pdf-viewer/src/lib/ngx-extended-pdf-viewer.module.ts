@@ -70,6 +70,7 @@ import { PdfZoomInComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-in/pdf-z
 import { PdfZoomOutComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-out/pdf-zoom-out.component';
 import { PdfZoomToolbarComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-toolbar.component';
 import { TranslatePipe } from './translate.pipe';
+import { PdfHighlightEditorComponent } from './toolbar/pdf-highlight-editor/pdf-highlight-editor.component';
 
 if (new Date().getTime() === 0) {
   new NgxConsole().log('');
@@ -232,6 +233,7 @@ if (typeof window !== 'undefined') {
     PdfFindResultsCountComponent,
     PdfFirstPageComponent,
     PdfHandToolComponent,
+    PdfHighlightEditorComponent,
     PdfHorizontalScrollComponent,
     PdfInfiniteScrollComponent,
     PdfLastPageComponent,
@@ -298,6 +300,7 @@ if (typeof window !== 'undefined') {
     PdfFindResultsCountComponent,
     PdfFirstPageComponent,
     PdfHandToolComponent,
+    PdfHighlightEditorComponent,
     PdfHorizontalScrollComponent,
     PdfInfiniteScrollComponent,
     PdfLastPageComponent,

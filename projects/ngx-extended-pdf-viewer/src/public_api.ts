@@ -75,6 +75,7 @@ export * from './lib/toolbar/pdf-findbar/pdf-findbar-options-two-container/pdf-m
 export * from './lib/toolbar/pdf-findbar/pdf-findbar.component';
 export * from './lib/toolbar/pdf-findbar/pdf-search-input-field/pdf-search-input-field.component';
 export * from './lib/toolbar/pdf-hand-tool/pdf-hand-tool.component';
+export * from './lib/toolbar/pdf-highlight-editor/pdf-highlight-editor.component';
 export * from './lib/toolbar/pdf-horizontal-scroll/pdf-horizontal-scroll.component';
 export * from './lib/toolbar/pdf-infinite-scroll/pdf-infinite-scroll.component';
 export * from './lib/toolbar/pdf-no-spread/pdf-no-spread.component';

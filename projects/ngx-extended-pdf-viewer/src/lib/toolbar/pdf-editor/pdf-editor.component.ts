@@ -11,6 +11,9 @@ export class PdfEditorComponent {
   public showDrawEditor: ResponsiveVisibility = true;
 
   @Input()
+  public showHighlightEditor: ResponsiveVisibility = true;
+
+  @Input()
   public showTextEditor: ResponsiveVisibility = true;
 
   @Input()

@@ -40,6 +40,7 @@
               [showBookModeButton]="showBookModeButton"
               [showDownloadButton]="showDownloadButton"
               [showDrawEditor]="showDrawEditor"
+              [showHighlightEditor]="showHighlightEditor"
               [showFindButton]="showFindButton"
               [showHandToolButton]="showHandToolButton"
               [showHorizontalScrollButton]="showHorizontalScrollButton"
@@ -65,6 +66,14 @@
               [zoomLevels]="zoomLevels"
               [findbarVisible]="findbarVisible"
             ></pdf-toolbar>
+
+            <div class="editorParamsToolbar hidden doorHangerRight" id="editorHighlightParamsToolbar">
+              <div id="highlightParamsToolbarContainer" class="editorParamsToolbarContainer">
+                <div id="editorHighlightColorPicker" class="colorPicker">
+                  <span id="highlightColorPickerLabel" class="editorParamsLabel" data-l10n-id="pdfjs-editor-highlight-colorpicker-label">Highlight color</span>
+                </div>
+              </div>
+            </div>
 
             <div class="editorParamsToolbar hidden doorHangerRight" id="editorFreeTextParamsToolbar" [class.server-side-rendering]="serverSideRendering">
               <div class="editorParamsToolbarContainer">

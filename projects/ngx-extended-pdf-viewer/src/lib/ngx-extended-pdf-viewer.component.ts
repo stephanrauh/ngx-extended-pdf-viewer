@@ -329,6 +329,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public showDrawEditor: ResponsiveVisibility = true;
 
+  @Input()
+  public showHighlightEditor: ResponsiveVisibility = true;
+
   /** store the timeout id so it can be canceled if user leaves the page before the PDF is shown */
   private initTimeout: any;
 
@@ -2040,6 +2043,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       const visible =
         this.showDownloadButton ||
         this.showDrawEditor ||
+        this.showHighlightEditor ||
         this.showTextEditor ||
         this.showFindButton ||
         this.showOpenFileButton ||
