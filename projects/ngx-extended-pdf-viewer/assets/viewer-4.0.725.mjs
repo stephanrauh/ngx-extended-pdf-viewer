@@ -6636,7 +6636,7 @@ __webpack_async_result__();
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ngxExtendedPdfViewerVersion: () => (/* binding */ ngxExtendedPdfViewerVersion)
 /* harmony export */ });
-const ngxExtendedPdfViewerVersion = '19.0.0-alpha.4';
+const ngxExtendedPdfViewerVersion = '19.0.0-alpha.5';
 
 /***/ }),
 
@@ -14758,8 +14758,10 @@ class PDFViewer {
   #onVisibilityChange = null;
   #scaleTimeoutId = null;
   #textLayerMode = _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.TextLayerMode.ENABLE;
+  #outerScrollContainer = undefined;
+  #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = '4.0.721';
+    const viewerVersion = '4.0.725';
     if (pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version !== viewerVersion) {
       throw new Error(`The API version "${pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -14820,6 +14822,29 @@ class PDFViewer {
     if (this.l10n === web_l10n_utils__WEBPACK_IMPORTED_MODULE_2__.NullL10n) {
       this.l10n.translate(this.container);
     }
+  }
+  get pageViewMode() {
+    return this.#pageViewMode;
+  }
+  set pageViewMode(viewMode) {
+    if (this.#pageViewMode !== viewMode) {
+      this.#pageViewMode = viewMode;
+      if (!this.#outerScrollContainer && viewMode === "infinite-scroll") {
+        this.#outerScrollContainer = this.#findParentWithScrollbar(this.container.offsetParent);
+        if (this.#outerScrollContainer) {
+          (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.watchScroll)(this.#outerScrollContainer, this._scrollUpdate.bind(this));
+        }
+      }
+    }
+  }
+  #findParentWithScrollbar(element) {
+    while (element) {
+      if (element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth) {
+        return element;
+      }
+      element = element.parentElement;
+    }
+    return null;
   }
   get pagesCount() {
     return this._pages.length;
@@ -18581,8 +18606,8 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([web_
 
 
 
-const pdfjsVersion = '4.0.721';
-const pdfjsBuild = '96abb558b';
+const pdfjsVersion = '4.0.725';
+const pdfjsBuild = 'f51bcae8b';
 const AppConstants = {
   LinkTarget: _pdf_link_service_js__WEBPACK_IMPORTED_MODULE_4__.LinkTarget,
   RenderingStates: _ui_utils_js__WEBPACK_IMPORTED_MODULE_2__.RenderingStates,

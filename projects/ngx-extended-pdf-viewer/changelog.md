@@ -512,4 +512,4 @@
 - 19.0.0-alpha.2 #1976 added missing translations; stop adding pdf.mjs to the minified build of viewer.min.mjs
 - 19.0.0-alpha.3 #1976 updated the compatibility promise: ngx-extended-pdf-viewer 19+ is incompatible to Angular 15 and below
 - 19.0.0-alpha.4 #1976 added the additional locales again and removed the attribute `useBrowserLocale`
-- 19.0.0-alpha.5 #1989 make sure that pages below the fold are rendered when `pageViewMode="infinite-scroll"`
+- 19.0.0-alpha.5 #1989 make sure that pages below the fold are rendered when `pageViewMode="infinite-scroll"`; #2011 added the HTML required by the new (still invisible) highlight editor of pdf.js

@@ -178,8 +178,8 @@ export class PDFViewer {
     constructor(options: PDFViewerOptions);
     container: HTMLDivElement;
     viewer: Element | null;
-    /** #495 modified by ngx-extended-pdf-viewer */
-    pageViewMode: any;
+    set pageViewMode(viewMode: string);
+    get pageViewMode(): string;
     eventBus: import("./event_utils").EventBus;
     linkService: import("./interfaces").IPDFLinkService | SimpleLinkService;
     downloadManager: import("./interfaces").IDownloadManager | null;
