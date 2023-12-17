@@ -30,8 +30,9 @@ export class PdfSinglePageModeComponent {
     this.notificationService.onPDFJSInit.pipe(take(1)).subscribe(() => {
       this.onPdfJsInit();
     });
+
     this.onClick = () => {
-      setTimeout(() => {
+      ngZone.run(() => {
         const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
         PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.PAGE });
       });

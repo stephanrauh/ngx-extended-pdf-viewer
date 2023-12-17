@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ResponsiveVisibility } from '../../responsive-visibility';
+import { NgxExtendedPdfViewerService } from '../../ngx-extended-pdf-viewer.service';
 
 @Component({
   selector: 'pdf-toggle-secondary-toolbar',
@@ -9,6 +10,8 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
 export class PdfToggleSecondaryToolbarComponent {
   @Input()
   public showSecondaryToolbarButton: ResponsiveVisibility = true;
+
+  constructor(public service: NgxExtendedPdfViewerService) {}
 
   public onClick(event: Event): boolean {
     event.preventDefault();

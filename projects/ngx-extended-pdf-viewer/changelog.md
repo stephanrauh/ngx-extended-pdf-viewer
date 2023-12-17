@@ -515,3 +515,4 @@
 - 19.0.0-alpha.5 #1989 make sure that pages below the fold are rendered when `pageViewMode="infinite-scroll"`; #2011 added the HTML required by the new (still invisible) highlight editor of pdf.js
 - 19.0.0-alpha.6 #1961 now the schematics cops with stand-alone projects
 - 19.0.0-alpha.7 #1997 added missing translations
+- 19.0.0 #1987 make the radio buttons of the secondary menu more reliable, and hide the secondary menu more reliably when it's empty; don't close the secondary menu when the "single page mode" menu is clicked

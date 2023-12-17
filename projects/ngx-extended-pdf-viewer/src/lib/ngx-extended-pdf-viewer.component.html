@@ -50,7 +50,7 @@
               [showPresentationModeButton]="showPresentationModeButton && pageViewMode !== 'book'"
               [showPrintButton]="showPrintButton && enablePrint"
               [showRotateButton]="showRotateButton"
-              [showSecondaryToolbarButton]="showSecondaryToolbarButton && !hideKebabMenuForSecondaryToolbar"
+              [showSecondaryToolbarButton]="showSecondaryToolbarButton && !service.secondaryMenuIsEmpty"
               [showSidebarButton]="showSidebarButton"
               [showSinglePageModeButton]="showSinglePageModeButton"
               [showSpreadButton]="showSpreadButton"
@@ -112,7 +112,6 @@
               [secondaryToolbarTop]="secondaryToolbarTop"
               [mobileFriendlyZoomScale]="mobileFriendlyZoomScale"
               (spreadChange)="onSpreadChange($event)"
-              (secondaryMenuIsEmpty)="onSecondaryMenuIsEmpty($event)"
               [localizationInitialized]="localizationInitialized"
             >
             </pdf-secondary-toolbar>
