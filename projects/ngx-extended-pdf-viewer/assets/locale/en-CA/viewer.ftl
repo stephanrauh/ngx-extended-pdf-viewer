@@ -310,25 +310,64 @@ pdfjs-ink-canvas =
 ## This is used in an aria label to help to understand the role of the resizer.
 
 
-
-# Translations for ngx-extended-pdf-viewer additions
-
-# Copyright 2019-2093 by Stephan Rauh
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# Additional translations
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-infinite-scroll-label = Infinite scroll
-infinite-scroll = Infinite scroll
-
+pdfjs-infinite-scroll-button-label = Infinite scroll
+pdfjs-find-match-count =
+    { $total ->
+        [one] { $current } of { $total } match
+       *[other] { $current } of { $total } matches
+    }
+pdfjs-find-match-count-limit =
+    { $limit ->
+        [one] More than { $limit } match
+       *[other] More than { $limit } matches
+    }
+pdfjs-editor-highlight-button =
+    .title = Highlight
+pdfjs-editor-highlight-button-label = Highlight
+pdfjs-editor-remove-ink-button =
+    .title = Remove drawing
+pdfjs-editor-remove-freetext-button =
+    .title = Remove text
+pdfjs-editor-remove-stamp-button =
+    .title = Remove image
+pdfjs-editor-remove-highlight-button =
+    .title = Remove highlight
+pdfjs-editor-alt-text-button-label = Alt text
+pdfjs-editor-alt-text-edit-button-label = Edit alt text
+pdfjs-editor-alt-text-dialog-label = Choose an option
+pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
+pdfjs-editor-alt-text-add-description-label = Add a description
+pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
+pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
+pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
+pdfjs-editor-alt-text-cancel-button = Cancel
+pdfjs-editor-alt-text-save-button = Save
+pdfjs-editor-alt-text-decorative-tooltip = Marked as decorative
+pdfjs-editor-alt-text-textarea =
+    .placeholder = For example, “A young man sits down at a table to eat a meal”
+pdfjs-editor-resizer-label-top-left = Top left corner — resize
+pdfjs-editor-resizer-label-top-middle = Top middle — resize
+pdfjs-editor-resizer-label-top-right = Top right corner — resize
+pdfjs-editor-resizer-label-middle-right = Middle right — resize
+pdfjs-editor-resizer-label-bottom-right = Bottom right corner — resize
+pdfjs-editor-resizer-label-bottom-middle = Bottom middle — resize
+pdfjs-editor-resizer-label-bottom-left = Bottom left corner — resize
+pdfjs-editor-resizer-label-middle-left = Middle left — resize
+pdfjs-editor-highlight-colorpicker-label = Highlight color
+pdfjs-editor-colorpicker-button =
+    .title = Change color
+pdfjs-editor-colorpicker-dropdown =
+    .aria-label = Color choices
+pdfjs-editor-colorpicker-yellow =
+    .title = Yellow
+pdfjs-editor-colorpicker-green =
+    .title = Green
+pdfjs-editor-colorpicker-blue =
+    .title = Blue
+pdfjs-editor-colorpicker-pink =
+    .title = Pink
+pdfjs-editor-colorpicker-red =
+    .title = Red
+pdfjs-editor-remove-button =
+    .title = Remove

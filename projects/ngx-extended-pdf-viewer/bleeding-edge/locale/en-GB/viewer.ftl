@@ -350,25 +350,29 @@ pdfjs-editor-resizer-label-bottom-middle = Bottom middle — resize
 pdfjs-editor-resizer-label-bottom-left = Bottom left corner — resize
 pdfjs-editor-resizer-label-middle-left = Middle left — resize
 
-
-# Translations for ngx-extended-pdf-viewer additions
-
-# Copyright 2019-2093 by Stephan Rauh
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# Additional translations
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
-infinite-scroll-label = Infinite scroll
-infinite-scroll = Infinite scroll
-
+pdfjs-editor-highlight-button =
+    .title = Highlight
+pdfjs-editor-highlight-button-label = Highlight
+pdfjs-editor-remove-ink-button =
+    .title = Remove drawing
+pdfjs-editor-remove-freetext-button =
+    .title = Remove text
+pdfjs-editor-remove-stamp-button =
+    .title = Remove image
+pdfjs-editor-remove-highlight-button =
+    .title = Remove highlight
+pdfjs-editor-highlight-colorpicker-label = Highlight color
+pdfjs-editor-colorpicker-button =
+    .title = Change color
+pdfjs-editor-colorpicker-dropdown =
+    .aria-label = Color choices
+pdfjs-editor-colorpicker-yellow =
+    .title = Yellow
+pdfjs-editor-colorpicker-green =
+    .title = Green
+pdfjs-editor-colorpicker-blue =
+    .title = Blue
+pdfjs-editor-colorpicker-pink =
+    .title = Pink
+pdfjs-editor-colorpicker-red =
+    .title = Red

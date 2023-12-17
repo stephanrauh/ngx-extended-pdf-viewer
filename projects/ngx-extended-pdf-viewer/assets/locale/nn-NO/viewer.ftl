@@ -339,3 +339,42 @@ pdfjs-editor-alt-text-textarea =
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
 
+
+pdfjs-editor-highlight-button =
+    .title = Highlight
+pdfjs-editor-highlight-button-label = Highlight
+pdfjs-editor-remove-ink-button =
+    .title = Remove drawing
+pdfjs-editor-remove-freetext-button =
+    .title = Remove text
+pdfjs-editor-remove-stamp-button =
+    .title = Remove image
+pdfjs-editor-remove-highlight-button =
+    .title = Remove highlight
+pdfjs-editor-resizer-label-top-left = Top left corner — resize
+pdfjs-editor-resizer-label-top-middle = Top middle — resize
+pdfjs-editor-resizer-label-top-right = Top right corner — resize
+pdfjs-editor-resizer-label-middle-right = Middle right — resize
+pdfjs-editor-resizer-label-bottom-right = Bottom right corner — resize
+pdfjs-editor-resizer-label-bottom-middle = Bottom middle — resize
+pdfjs-editor-resizer-label-bottom-left = Bottom left corner — resize
+pdfjs-editor-resizer-label-middle-left = Middle left — resize
+pdfjs-editor-highlight-colorpicker-label = Highlight color
+pdfjs-editor-colorpicker-button =
+    .title = Change color
+pdfjs-editor-colorpicker-dropdown =
+    .aria-label = Color choices
+pdfjs-editor-colorpicker-yellow =
+    .title = Yellow
+pdfjs-editor-colorpicker-green =
+    .title = Green
+pdfjs-editor-colorpicker-blue =
+    .title = Blue
+pdfjs-editor-colorpicker-pink =
+    .title = Pink
+pdfjs-editor-colorpicker-red =
+    .title = Red
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll
+pdfjs-editor-remove-button =
+    .title = Remove

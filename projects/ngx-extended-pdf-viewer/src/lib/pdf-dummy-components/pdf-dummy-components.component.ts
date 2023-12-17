@@ -18,6 +18,7 @@ const requiredIds = [
   'documentPropertiesClose',
   'download',
   'editorFreeText',
+  'editorHighlight',
   'editorInk',
   'editorStamp',
   'editorModeButtons',

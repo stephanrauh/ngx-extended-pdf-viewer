@@ -244,3 +244,110 @@ pdfjs-editor-ink-color-input = رنگ
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
 
+
+pdfjs-download-button =
+    .title = Download
+pdfjs-download-button-label = Download
+pdfjs-bookmark-button =
+    .title = Current Page (View URL from Current Page)
+pdfjs-bookmark-button-label = Current Page
+pdfjs-open-in-app-button =
+    .title = Open in app
+pdfjs-open-in-app-button-label = Open in app
+pdfjs-scroll-page-button =
+    .title = Use Page Scrolling
+pdfjs-scroll-page-button-label = Page Scrolling
+pdfjs-scroll-wrapped-button =
+    .title = Use Wrapped Scrolling
+pdfjs-scroll-wrapped-button-label = Wrapped Scrolling
+pdfjs-spread-none-button =
+    .title = Do not join page spreads
+pdfjs-spread-none-button-label = No Spreads
+pdfjs-spread-odd-button =
+    .title = Join page spreads starting with odd-numbered pages
+pdfjs-spread-odd-button-label = Odd Spreads
+pdfjs-spread-even-button =
+    .title = Join page spreads starting with even-numbered pages
+pdfjs-spread-even-button-label = Even Spreads
+pdfjs-document-properties-page-size-orientation-portrait = portrait
+pdfjs-document-properties-page-size-orientation-landscape = landscape
+pdfjs-toggle-sidebar-notification-button =
+    .title = Toggle Sidebar (document contains outline/attachments/layers)
+pdfjs-current-outline-item-button =
+    .title = Find Current Outline Item
+pdfjs-current-outline-item-button-label = Current Outline Item
+pdfjs-additional-layers = Additional Layers
+pdfjs-find-match-diacritics-checkbox-label = Match Diacritics
+pdfjs-find-match-count =
+    { $total ->
+        [one] { $current } of { $total } match
+       *[other] { $current } of { $total } matches
+    }
+pdfjs-find-match-count-limit =
+    { $limit ->
+        [one] More than { $limit } match
+       *[other] More than { $limit } matches
+    }
+pdfjs-annotation-date-string = { $date }, { $time }
+pdfjs-editor-stamp-button =
+    .title = Add or edit images
+pdfjs-editor-stamp-button-label = Add or edit images
+pdfjs-editor-highlight-button =
+    .title = Highlight
+pdfjs-editor-highlight-button-label = Highlight
+pdfjs-editor-remove-ink-button =
+    .title = Remove drawing
+pdfjs-editor-remove-freetext-button =
+    .title = Remove text
+pdfjs-editor-remove-stamp-button =
+    .title = Remove image
+pdfjs-editor-remove-highlight-button =
+    .title = Remove highlight
+pdfjs-editor-ink-thickness-input = Thickness
+pdfjs-editor-ink-opacity-input = Opacity
+pdfjs-editor-stamp-add-image-button =
+    .title = Add image
+pdfjs-editor-stamp-add-image-button-label = Add image
+pdfjs-free-text =
+    .aria-label = Text Editor
+pdfjs-free-text-default-content = Start typing…
+pdfjs-ink =
+    .aria-label = Draw Editor
+pdfjs-ink-canvas =
+    .aria-label = User-created image
+pdfjs-editor-alt-text-button-label = Alt text
+pdfjs-editor-alt-text-edit-button-label = Edit alt text
+pdfjs-editor-alt-text-dialog-label = Choose an option
+pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
+pdfjs-editor-alt-text-add-description-label = Add a description
+pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
+pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
+pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
+pdfjs-editor-alt-text-cancel-button = Cancel
+pdfjs-editor-alt-text-save-button = Save
+pdfjs-editor-alt-text-decorative-tooltip = Marked as decorative
+pdfjs-editor-alt-text-textarea =
+    .placeholder = For example, “A young man sits down at a table to eat a meal”
+pdfjs-editor-resizer-label-top-left = Top left corner — resize
+pdfjs-editor-resizer-label-top-middle = Top middle — resize
+pdfjs-editor-resizer-label-top-right = Top right corner — resize
+pdfjs-editor-resizer-label-middle-right = Middle right — resize
+pdfjs-editor-resizer-label-bottom-right = Bottom right corner — resize
+pdfjs-editor-resizer-label-bottom-middle = Bottom middle — resize
+pdfjs-editor-resizer-label-bottom-left = Bottom left corner — resize
+pdfjs-editor-resizer-label-middle-left = Middle left — resize
+pdfjs-editor-highlight-colorpicker-label = Highlight color
+pdfjs-editor-colorpicker-button =
+    .title = Change color
+pdfjs-editor-colorpicker-dropdown =
+    .aria-label = Color choices
+pdfjs-editor-colorpicker-yellow =
+    .title = Yellow
+pdfjs-editor-colorpicker-green =
+    .title = Green
+pdfjs-editor-colorpicker-blue =
+    .title = Blue
+pdfjs-editor-colorpicker-pink =
+    .title = Pink
+pdfjs-editor-colorpicker-red =
+    .title = Red
