@@ -30,7 +30,6 @@ export class PdfEvenSpreadComponent {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     PDFViewerApplication.eventBus.on('spreadmodechanged', (event) => {
       this.ngZone.run(() => {
-        console.log('Caught event: spreadmodechanged', event);
         const modes = ['off', 'odd', 'even'] as Array<SpreadType>;
         this.spread = modes[event.mode];
       });

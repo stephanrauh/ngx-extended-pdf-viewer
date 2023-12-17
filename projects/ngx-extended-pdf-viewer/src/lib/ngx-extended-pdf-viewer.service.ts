@@ -1,9 +1,8 @@
 import { Subject } from 'rxjs';
-import { EditorAnnotation } from '../public_api';
-import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { PdfLayer } from './options/optional_content_config';
 import { PDFPrintRange } from './options/pdf-print-range';
 import { IPDFViewerApplication, PDFDocumentProxy, TextItem, TextMarkedContent } from './options/pdf-viewer-application';
+import { EditorAnnotation } from './options/pdf-viewer';
 
 export interface FindOptions {
   highlightAll?: boolean;
@@ -43,10 +42,15 @@ export interface Section {
 }
 
 export class NgxExtendedPdfViewerService {
+
+  public ngxExtendedPdfViewerInitialized = false;
+
   public recalculateSize$ = new Subject<void>();
 
+  public secondaryMenuIsEmpty = false;
+
   public find(text: string, options: FindOptions = {}): boolean {
-    if (!NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
+    if (!this.ngxExtendedPdfViewerInitialized) {
       // tslint:disable-next-line:quotemark
       console.error("The PDF viewer hasn't finished initializing. Please call find() later.");
       return false;
@@ -85,7 +89,7 @@ export class NgxExtendedPdfViewerService {
   }
 
   public findNext(): boolean {
-    if (!NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
+    if (!this.ngxExtendedPdfViewerInitialized) {
       // tslint:disable-next-line:quotemark
       console.error("The PDF viewer hasn't finished initializing. Please call findNext() later.");
       return false;
@@ -100,7 +104,7 @@ export class NgxExtendedPdfViewerService {
   }
 
   public findPrevious(): boolean {
-    if (!NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
+    if (!this.ngxExtendedPdfViewerInitialized) {
       // tslint:disable-next-line:quotemark
       console.error("The PDF viewer hasn't finished initializing. Please call findPrevious() later.");
       return false;

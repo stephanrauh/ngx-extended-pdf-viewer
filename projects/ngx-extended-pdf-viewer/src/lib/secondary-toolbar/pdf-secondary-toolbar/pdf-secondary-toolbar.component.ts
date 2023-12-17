@@ -18,6 +18,7 @@ import { take } from 'rxjs/operators';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PdfShyButtonService } from '../../toolbar/pdf-shy-button/pdf-shy-button-service';
 import { PDFNotificationService } from './../../pdf-notification-service';
+import { NgxExtendedPdfViewerService } from '../../ngx-extended-pdf-viewer.service';
 
 @Component({
   selector: 'pdf-secondary-toolbar',
@@ -40,9 +41,6 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
   @Output()
   public spreadChange = new EventEmitter<'off' | 'even' | 'odd'>();
 
-  @Output()
-  public secondaryMenuIsEmpty = new EventEmitter<boolean>();
-
   public disablePreviousPage = true;
 
   public disableNextPage = true;
@@ -53,7 +51,8 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
     private element: ElementRef,
     public notificationService: PDFNotificationService,
     @Inject(PLATFORM_ID) private platformId: Object,
-    public pdfShyButtonService: PdfShyButtonService
+    public pdfShyButtonService: PdfShyButtonService,
+    private ngxExtendedPdfViewerService: NgxExtendedPdfViewerService
   ) {
     this.notificationService.onPDFJSInit.pipe(take(1)).subscribe(() => {
       this.onPdfJsInit();
@@ -111,7 +110,11 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
           if (mutation.type === 'attributes') {
             if (mutation.attributeName === 'class') {
               this.checkVisibility();
+              break;
             }
+          } else if (mutation.type === 'childList') {
+            this.checkVisibility();
+            break;
           }
         }
       });
@@ -137,7 +140,7 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
         visibleButtons = this.checkVisibilityRecursively(g);
       }
     }
-    this.secondaryMenuIsEmpty.emit(visibleButtons === 0);
+    this.ngxExtendedPdfViewerService.secondaryMenuIsEmpty = visibleButtons === 0;
   }
 
   private checkVisibilityRecursively(e: HTMLElement): number {

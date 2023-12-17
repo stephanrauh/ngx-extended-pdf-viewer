@@ -102,7 +102,6 @@ function isIOS() {
 export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   private static originalPrint = typeof window !== 'undefined' ? window.print : undefined;
 
-  public static ngxExtendedPdfViewerInitialized = false;
   public ngxExtendedPdfViewerIncompletelyInitialized = true;
 
   private formSupport = new NgxFormSupport();
@@ -389,7 +388,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       reader.onloadend = () => {
         setTimeout(() => {
           this.src = new Uint8Array(reader.result as ArrayBuffer);
-          if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
+          if (this.service.ngxExtendedPdfViewerInitialized) {
             if (this.ngxExtendedPdfViewerIncompletelyInitialized) {
               this.openPDF();
             } else {
@@ -696,9 +695,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public showBookModeButton: ResponsiveVisibility = true;
 
-  /** Set by the event (secondaryMenuIsEmpty) */
-  public hideKebabMenuForSecondaryToolbar = false;
-
   @Input()
   public showRotateButton: ResponsiveVisibility = true;
 
@@ -950,7 +946,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     private elementRef: ElementRef,
     private platformLocation: PlatformLocation,
     private cdr: ChangeDetectorRef,
-    private service: NgxExtendedPdfViewerService,
+    public service: NgxExtendedPdfViewerService,
     private renderer: Renderer2
   ) {
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
@@ -1237,7 +1233,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
     document.addEventListener('localized', callback);
 
-    if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
+    if (this.service.ngxExtendedPdfViewerInitialized) {
       // tslint:disable-next-line:quotemark
       console.error("You're trying to open two instances of the PDF viewer. Most likely, this will result in errors.");
     }
@@ -1337,7 +1333,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   private hideToolbarIfItIsEmpty() {
     this.primaryMenuVisible = this.showToolbar;
-    if (!this.showSecondaryToolbarButton || this.hideKebabMenuForSecondaryToolbar) {
+    if (!this.showSecondaryToolbarButton || this.service.secondaryMenuIsEmpty) {
       if (!this.isPrimaryMenuVisible()) {
         this.primaryMenuVisible = false;
       }
@@ -1570,7 +1566,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     ServiceWorkerOptions.showUnverifiedSignatures = this.showUnverifiedSignatures;
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     PDFViewerApplication.enablePrint = this.enablePrint;
-    NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized = true;
+    this.service.ngxExtendedPdfViewerInitialized = true;
     if (this._src) {
       this.ngxExtendedPdfViewerIncompletelyInitialized = false;
       if (!this.listenToURL) {
@@ -2016,7 +2012,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     (window as any).registerAcroformAnnotations = undefined;
     this.shuttingDown = true;
 
-    NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized = false;
+    this.service.ngxExtendedPdfViewerInitialized = false;
     if (this.initTimeout) {
       clearTimeout(this.initTimeout);
       this.initTimeout = undefined;
@@ -2096,7 +2092,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = (window as any).PDFViewerApplicationOptions;
 
-    if (NgxExtendedPdfViewerComponent.ngxExtendedPdfViewerInitialized) {
+    if (this.service.ngxExtendedPdfViewerInitialized) {
       if ('src' in changes || 'base64Src' in changes) {
         if (this.srcChangeTriggeredByUser) {
           this.srcChangeTriggeredByUser = false;
@@ -2427,15 +2423,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @HostListener('contextmenu')
   public onContextMenu(): boolean {
     return this.contextMenuAllowed;
-  }
-
-  public onSecondaryMenuIsEmpty(hideKebabButton: boolean) {
-    this.hideKebabMenuForSecondaryToolbar = hideKebabButton;
-    if (hideKebabButton) {
-      if (!this.isPrimaryMenuVisible()) {
-        this.primaryMenuVisible = false;
-      }
-    }
   }
 
   public async scrollSignatureWarningIntoView(pdf: PDFDocumentProxy): Promise<void> {

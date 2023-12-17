@@ -125,7 +125,6 @@ export class PdfToolbarComponent implements AfterViewInit {
 
   public updatePageViewMode(pageViewMode: PageViewModeType): void {
     if (pageViewMode) {
-      console.log(pageViewMode);
       this.pageViewModeChange.emit(pageViewMode);
       this.pageViewMode = pageViewMode;
     }
