@@ -47,42 +47,6 @@ for (let lang in languages) {
       }
     }
   }
-
-  if (folder !== 'bleeding-edge' && folder !== '3.11') {
-    const filename28 = '../projects/ngx-extended-pdf-viewer/bleeding-edge/locale/' + lang + '/viewer.properties';
-    if (filename28 != originalFilename && fs.existsSync(filename28) && fs.existsSync(originalFilename)) {
-      const originalLines = fs.readFileSync(originalFilename).toString().replace(' = ', '=');
-      const additionalLines = fs.readFileSync(filename28).toString().replace(' = ', '=').toString().split('\n');
-      let additions = extractMissingTranslations(additionalLines, originalLines);
-
-      if (additions.length > 0) {
-        const complete = originalLines + '\n\n# Translations added from pdf.js@next\n\n' + additions;
-        fs.writeFileSync(originalFilename, complete);
-      }
-    }
-  }
-
-  const filename28English = '../projects/ngx-extended-pdf-viewer/bleeding-edge/locale/en-US/viewer.properties';
-  if (fs.existsSync(originalFilename)) {
-    const originalLines = fs.readFileSync(originalFilename).toString().replace(' = ', '=');
-    const additionalLines = fs.readFileSync(filename28English).toString().replace(' = ', '=').toString().split('\n');
-    let additions = '';
-
-    for (const line of additionalLines) {
-      if (line.trim().length > 0 && !line.startsWith('#')) {
-        const pos = line.indexOf('=');
-        const key = line.substring(0, pos).trim();
-        if (!originalLines.includes(key + '=') && !originalLines.includes(key + ' =')) {
-          additions += line + '\n';
-        }
-      }
-    }
-
-    if (additions.length > 0) {
-      const complete = originalLines + '\n\n# Translations added from the English translations of pdf.js@next\n\n' + additions;
-      fs.writeFileSync(originalFilename, complete);
-    }
-  }
 }
 function extractMissingTranslations(additionalLines, originalLines) {
   let additions = '';
