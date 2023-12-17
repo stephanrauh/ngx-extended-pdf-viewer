@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, NgZone, Output } from '@angular/core';
 import { ScrollMode } from '../../options/pdf-scroll-mode';
 import { PageViewModeType, ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
@@ -24,10 +24,10 @@ export class PdfInfiniteScrollComponent {
 
   public onClick: () => void;
 
-  constructor() {
+  constructor(private ngZone: NgZone) {
     const emitter = this.pageViewModeChange;
     this.onClick = () => {
-      setTimeout(() => {
+      this.ngZone.run(() => {
         if (this.pageViewMode === 'infinite-scroll') {
           emitter.emit('multiple');
         } else {

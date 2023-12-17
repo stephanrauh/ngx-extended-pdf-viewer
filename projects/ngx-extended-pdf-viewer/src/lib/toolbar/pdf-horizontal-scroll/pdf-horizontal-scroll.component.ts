@@ -32,7 +32,7 @@ export class PdfHorizontalScrollComponent {
     });
     const emitter = this.pageViewModeChange;
     this.onClick = () => {
-      setTimeout(() => {
+      this.ngZone.run(() => {
         if (this.pageViewMode !== 'multiple' && this.pageViewMode !== 'infinite-scroll') {
           emitter.emit('multiple');
         }
