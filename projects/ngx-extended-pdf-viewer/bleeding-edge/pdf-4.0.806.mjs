@@ -9679,7 +9679,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '4.0.796',
+    apiVersion: '4.0.806',
     data,
     password,
     disableAutoFetch,
@@ -11427,8 +11427,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = '4.0.796';
-const build = 'e651d241e';
+const version = '4.0.806';
+const build = '17e393490';
 
 ;// CONCATENATED MODULE: ./src/display/text_layer.js
 
@@ -17751,8 +17751,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = '4.0.796';
-const pdfjsBuild = 'e651d241e';
+const pdfjsVersion = '4.0.806';
+const pdfjsBuild = '17e393490';
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
