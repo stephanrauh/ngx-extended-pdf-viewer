@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ResponsiveCSSClassPipe } from '../../responsive-visibility';
+import { PdfShyButtonComponent } from '../pdf-shy-button/pdf-shy-button.component';
 import { PdfFindButtonComponent } from './pdf-find-button.component';
 
 // Mock the PDFViewerApplication object
@@ -16,7 +18,7 @@ describe('PdfFindButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PdfFindButtonComponent],
+      declarations: [PdfFindButtonComponent, PdfShyButtonComponent, ResponsiveCSSClassPipe],
     }).compileComponents();
   });
 
