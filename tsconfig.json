@@ -1,6 +1,9 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "target": "es5",
+    "module": "ESNext",
+    "esModuleInterop": true,
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
@@ -9,12 +12,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "strictNullChecks": true,
-    "target": "es2022",
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2022", "dom"],
-    "paths": {
-      "ngx-extended-pdf-viewer": ["dist/ngx-extended-pdf-viewer"]
-    },
     "types": ["jest", "node"],
   },
   "angularCompilerOptions": {
