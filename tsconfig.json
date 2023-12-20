@@ -2,7 +2,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "target": "es5",
-    "module": "ESNext",
     "esModuleInterop": true,
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
