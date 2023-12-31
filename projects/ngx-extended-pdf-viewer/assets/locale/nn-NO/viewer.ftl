@@ -340,6 +340,8 @@ pdfjs-editor-alt-text-textarea =
 ## This is used in an aria label to help to understand the role of the resizer.
 
 
+pdfjs-editor-remove-button =
+    .title = Fjern
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
@@ -376,5 +378,3 @@ pdfjs-editor-colorpicker-red =
     .title = Red
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-editor-remove-button =
-    .title = Remove

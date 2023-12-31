@@ -326,9 +326,13 @@ pdfjs-editor-alt-text-save-button = Sekles
 
 pdfjs-find-match-count-limit =
     { $limit ->
-        [one] More than { $limit } match
-       *[other] More than { $limit } matches
+        [one] Ugar n { $limit } umṣada
+       *[other] Ugar n { $limit } yimṣadayen
     }
+pdfjs-editor-alt-text-button-label = Aḍris amaskal
+pdfjs-editor-alt-text-edit-button-label = Ẓreg aḍris amaskal
+pdfjs-editor-alt-text-mark-decorative-label = Creḍ d adlag
+pdfjs-editor-alt-text-decorative-tooltip = Yettwacreḍ d adlag
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
@@ -340,13 +344,9 @@ pdfjs-editor-remove-stamp-button =
     .title = Remove image
 pdfjs-editor-remove-highlight-button =
     .title = Remove highlight
-pdfjs-editor-alt-text-button-label = Alt text
-pdfjs-editor-alt-text-edit-button-label = Edit alt text
 pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
 pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
-pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
 pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
-pdfjs-editor-alt-text-decorative-tooltip = Marked as decorative
 pdfjs-editor-alt-text-textarea =
     .placeholder = For example, “A young man sits down at a table to eat a meal”
 pdfjs-editor-resizer-label-top-left = Top left corner — resize

@@ -301,6 +301,20 @@ pdfjs-editor-ink-button-label = Tegn
 pdfjs-editor-stamp-button =
     .title = Tilføj eller rediger billeder
 pdfjs-editor-stamp-button-label = Tilføj eller rediger billeder
+pdfjs-editor-remove-button =
+    .title = Fjern
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Fjern tegning
+pdfjs-editor-remove-freetext-button =
+    .title = Fjern tekst
+pdfjs-editor-remove-stamp-button =
+    .title = Fjern billede
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Farve
 pdfjs-editor-free-text-size-input = Størrelse
@@ -351,12 +365,6 @@ pdfjs-editor-resizer-label-middle-left = Midten til venstre — tilpas størrels
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
-pdfjs-editor-remove-ink-button =
-    .title = Remove drawing
-pdfjs-editor-remove-freetext-button =
-    .title = Remove text
-pdfjs-editor-remove-stamp-button =
-    .title = Remove image
 pdfjs-editor-remove-highlight-button =
     .title = Remove highlight
 pdfjs-editor-highlight-colorpicker-label = Highlight color
@@ -374,3 +382,5 @@ pdfjs-editor-colorpicker-pink =
     .title = Pink
 pdfjs-editor-colorpicker-red =
     .title = Red
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll

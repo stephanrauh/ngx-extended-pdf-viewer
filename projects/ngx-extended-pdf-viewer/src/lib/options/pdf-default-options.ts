@@ -2,8 +2,8 @@ const _isIE11 = typeof window === 'undefined' ? false : !!(<any>window).MSInputM
 const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
-export const pdfjsVersion = '4.0.725';
-export const pdfjsBleedingEdgeVersion = '4.0.806';
+export const pdfjsVersion = '4.0.727';
+export const pdfjsBleedingEdgeVersion = '4.0.841';
 export function getVersionSuffix(folder: string): string {
   if (folder?.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -82,7 +82,7 @@ export let pdfDefaultOptions = {
   disableAutoFetch: false,
   disableFontFace: false,
   disableRange: false,
-  disableStream: false,
+  disableStream: true,
   isEvalSupported: true,
   isOffscreenCanvasSupported: true,
   maxImageSize: -1,

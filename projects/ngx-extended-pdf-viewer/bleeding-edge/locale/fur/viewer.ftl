@@ -301,6 +301,20 @@ pdfjs-editor-ink-button-label = Dissen
 pdfjs-editor-stamp-button =
     .title = Zonte o modifiche imagjins
 pdfjs-editor-stamp-button-label = Zonte o modifiche imagjins
+pdfjs-editor-remove-button =
+    .title = Gjave
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Gjave dissen
+pdfjs-editor-remove-freetext-button =
+    .title = Gjave test
+pdfjs-editor-remove-stamp-button =
+    .title = Gjave imagjin
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Colôr
 pdfjs-editor-free-text-size-input = Dimension
@@ -351,12 +365,6 @@ pdfjs-editor-resizer-label-middle-left = Bande di çampe tal mieç — ridimensi
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
-pdfjs-editor-remove-ink-button =
-    .title = Remove drawing
-pdfjs-editor-remove-freetext-button =
-    .title = Remove text
-pdfjs-editor-remove-stamp-button =
-    .title = Remove image
 pdfjs-editor-remove-highlight-button =
     .title = Remove highlight
 pdfjs-editor-highlight-colorpicker-label = Highlight color
@@ -374,3 +382,5 @@ pdfjs-editor-colorpicker-pink =
     .title = Pink
 pdfjs-editor-colorpicker-red =
     .title = Red
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll

@@ -54,7 +54,6 @@ __webpack_require__.d(__webpack_exports__, {
   AnnotationLayer: () => (/* reexport */ AnnotationLayer),
   AnnotationMode: () => (/* reexport */ AnnotationMode),
   CMapCompressionType: () => (/* reexport */ CMapCompressionType),
-  ColorPicker: () => (/* reexport */ ColorPicker),
   DOMSVGFactory: () => (/* reexport */ DOMSVGFactory),
   DrawLayer: () => (/* reexport */ DrawLayer),
   FeatureTest: () => (/* reexport */ util_FeatureTest),
@@ -135,9 +134,7 @@ const AnnotationEditorParamsType = {
   FREETEXT_OPACITY: 13,
   INK_COLOR: 21,
   INK_THICKNESS: 22,
-  INK_OPACITY: 23,
-  HIGHLIGHT_COLOR: 31,
-  HIGHLIGHT_DEFAULT_COLOR: 32
+  INK_OPACITY: 23
 };
 const PermissionFlag = {
   PRINT: 0x04,
@@ -1959,7 +1956,7 @@ class KeyboardManager {
     if (checker && !checker(self, event)) {
       return;
     }
-    callback.bind(self, ...args, event)();
+    callback.bind(self, ...args)();
     if (!bubbles) {
       event.stopPropagation();
       event.preventDefault();
@@ -2007,12 +2004,10 @@ class AnnotationEditorUIManager {
   #editorsToRescale = new Set();
   #filterFactory = null;
   #focusMainContainerTimeoutId = null;
-  #highlightColors = null;
   #idManager = new IdManager();
   #isEnabled = false;
   #isWaiting = false;
   #lastActiveElement = null;
-  #mainHighlightColorPicker = null;
   #mode = AnnotationEditorType.NONE;
   #selectedEditors = new Set();
   #pageColors = null;
@@ -2042,7 +2037,7 @@ class AnnotationEditorUIManager {
   static get _keyboardManager() {
     const proto = AnnotationEditorUIManager.prototype;
     const arrowChecker = self => {
-      return self.#container.contains(document.activeElement) && document.activeElement.tagName !== "BUTTON" && self.hasSomethingToControl();
+      return self.#container.contains(document.activeElement) && self.hasSomethingToControl();
     };
     const textInputChecker = (_self, {
       target: el
@@ -2097,7 +2092,7 @@ class AnnotationEditorUIManager {
       checker: arrowChecker
     }]]));
   }
-  constructor(container, viewer, altTextManager, eventBus, pdfDocument, pageColors, highlightColors) {
+  constructor(container, viewer, altTextManager, eventBus, pdfDocument, pageColors) {
     this.#container = container;
     this.#viewer = viewer;
     this.#altTextManager = altTextManager;
@@ -2109,7 +2104,6 @@ class AnnotationEditorUIManager {
     this.#annotationStorage = pdfDocument.annotationStorage;
     this.#filterFactory = pdfDocument.filterFactory;
     this.#pageColors = pageColors;
-    this.#highlightColors = highlightColors || null;
     this.viewParameters = {
       realScale: PixelsPerInch.PDF_TO_CSS_UNITS,
       rotation: 0
@@ -2146,12 +2140,6 @@ class AnnotationEditorUIManager {
   }
   get direction() {
     return shadow(this, "direction", getComputedStyle(this.#container).direction);
-  }
-  get highlightColors() {
-    return shadow(this, "highlightColors", this.#highlightColors ? new Map(this.#highlightColors.split(",").map(pair => pair.split("=").map(x => x.trim()))) : null);
-  }
-  setMainHighlightColorPicker(colorPicker) {
-    this.#mainHighlightColorPicker = colorPicker;
   }
   editAltText(editor) {
     this.#altTextManager?.editAltText(this, editor);
@@ -2472,9 +2460,7 @@ class AnnotationEditorUIManager {
     }
   }
   addNewEditorFromKeyboard() {
-    if (this.currentLayer.canCreateNewEmptyEditor()) {
-      this.currentLayer.addNewEditor();
-    }
+    this.currentLayer.addNewEditor();
   }
   updateToolbar(mode) {
     if (mode === this.#mode) {
@@ -2489,13 +2475,9 @@ class AnnotationEditorUIManager {
     if (!this.#editorTypes) {
       return;
     }
-    switch (type) {
-      case AnnotationEditorParamsType.CREATE:
-        this.currentLayer.addNewEditor();
-        return;
-      case AnnotationEditorParamsType.HIGHLIGHT_DEFAULT_COLOR:
-        this.#mainHighlightColorPicker?.updateColor(value);
-        break;
+    if (type === AnnotationEditorParamsType.CREATE) {
+      this.currentLayer.addNewEditor();
+      return;
     }
     for (const editor of this.#selectedEditors) {
       editor.updateParams(type, value);
@@ -2728,9 +2710,7 @@ class AnnotationEditorUIManager {
   unselectAll() {
     if (this.#activeEditor) {
       this.#activeEditor.commitOrRemove();
-      if (this.#mode !== AnnotationEditorType.NONE) {
-        return;
-      }
+      return;
     }
     if (!this.hasSelection) {
       return;
@@ -2915,149 +2895,10 @@ class AnnotationEditorUIManager {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/editor/alt_text.js
-
-class AltText {
-  #altText = "";
-  #altTextDecorative = false;
-  #altTextButton = null;
-  #altTextTooltip = null;
-  #altTextTooltipTimeout = null;
-  #altTextWasFromKeyBoard = false;
-  #editor = null;
-  static _l10nPromise = null;
-  constructor(editor) {
-    this.#editor = editor;
-  }
-  static initialize(l10nPromise) {
-    AltText._l10nPromise ||= l10nPromise;
-  }
-  async render() {
-    const altText = this.#altTextButton = document.createElement("button");
-    altText.className = "altText";
-    const msg = await AltText._l10nPromise.get("pdfjs-editor-alt-text-button-label");
-    altText.textContent = msg;
-    altText.setAttribute("aria-label", msg);
-    altText.tabIndex = "0";
-    altText.addEventListener("contextmenu", noContextMenu);
-    altText.addEventListener("pointerdown", event => event.stopPropagation());
-    const onClick = event => {
-      event.preventDefault();
-      this.#editor._uiManager.editAltText(this.#editor);
-    };
-    altText.addEventListener("click", onClick, {
-      capture: true
-    });
-    altText.addEventListener("keydown", event => {
-      if (event.target === altText && event.key === "Enter") {
-        this.#altTextWasFromKeyBoard = true;
-        onClick(event);
-      }
-    });
-    await this.#setState();
-    return altText;
-  }
-  finish() {
-    if (!this.#altTextButton) {
-      return;
-    }
-    this.#altTextButton.focus({
-      focusVisible: this.#altTextWasFromKeyBoard
-    });
-    this.#altTextWasFromKeyBoard = false;
-  }
-  get data() {
-    return {
-      altText: this.#altText,
-      decorative: this.#altTextDecorative
-    };
-  }
-  set data({
-    altText,
-    decorative
-  }) {
-    if (this.#altText === altText && this.#altTextDecorative === decorative) {
-      return;
-    }
-    this.#altText = altText;
-    this.#altTextDecorative = decorative;
-    this.#setState();
-  }
-  toggle(enabled = false) {
-    if (!this.#altTextButton) {
-      return;
-    }
-    if (!enabled && this.#altTextTooltipTimeout) {
-      clearTimeout(this.#altTextTooltipTimeout);
-      this.#altTextTooltipTimeout = null;
-    }
-    this.#altTextButton.disabled = !enabled;
-  }
-  destroy() {
-    this.#altTextButton?.remove();
-    this.#altTextButton = null;
-    this.#altTextTooltip = null;
-  }
-  async #setState() {
-    const button = this.#altTextButton;
-    if (!button) {
-      return;
-    }
-    if (!this.#altText && !this.#altTextDecorative) {
-      button.classList.remove("done");
-      this.#altTextTooltip?.remove();
-      return;
-    }
-    button.classList.add("done");
-    AltText._l10nPromise.get("pdfjs-editor-alt-text-edit-button-label").then(msg => {
-      button.setAttribute("aria-label", msg);
-    });
-    let tooltip = this.#altTextTooltip;
-    if (!tooltip) {
-      this.#altTextTooltip = tooltip = document.createElement("span");
-      tooltip.className = "tooltip";
-      tooltip.setAttribute("role", "tooltip");
-      const id = tooltip.id = `alt-text-tooltip-${this.#editor.id}`;
-      button.setAttribute("aria-describedby", id);
-      const DELAY_TO_SHOW_TOOLTIP = 100;
-      button.addEventListener("mouseenter", () => {
-        this.#altTextTooltipTimeout = setTimeout(() => {
-          this.#altTextTooltipTimeout = null;
-          this.#altTextTooltip.classList.add("show");
-          this.#editor._uiManager._eventBus.dispatch("reporttelemetry", {
-            source: this,
-            details: {
-              type: "editing",
-              subtype: this.#editor.editorType,
-              data: {
-                action: "alt_text_tooltip"
-              }
-            }
-          });
-        }, DELAY_TO_SHOW_TOOLTIP);
-      });
-      button.addEventListener("mouseleave", () => {
-        if (this.#altTextTooltipTimeout) {
-          clearTimeout(this.#altTextTooltipTimeout);
-          this.#altTextTooltipTimeout = null;
-        }
-        this.#altTextTooltip?.classList.remove("show");
-      });
-    }
-    tooltip.innerText = this.#altTextDecorative ? await AltText._l10nPromise.get("pdfjs-editor-alt-text-decorative-tooltip") : this.#altText;
-    if (!tooltip.parentNode) {
-      button.append(tooltip);
-    }
-    const element = this.#editor.getImageForAltText();
-    element?.setAttribute("aria-describedby", tooltip.id);
-  }
-}
-
 ;// CONCATENATED MODULE: ./src/display/editor/toolbar.js
 
 class EditorToolbar {
   #toolbar = null;
-  #colorPicker = null;
   #editor;
   #buttons = null;
   constructor(editor) {
@@ -3071,15 +2912,6 @@ class EditorToolbar {
     const buttons = this.#buttons = document.createElement("div");
     buttons.className = "buttons";
     editToolbar.append(buttons);
-    const position = this.#editor.toolbarPosition;
-    if (position) {
-      const {
-        style
-      } = editToolbar;
-      const x = this.#editor._uiManager.direction === "ltr" ? 1 - position[0] : position[0];
-      style.insetInlineEnd = `${100 * x}%`;
-      style.top = `calc(${100 * position[1]}% + var(--editor-toolbar-vert-offset))`;
-    }
     this.#addDeleteButton();
     return editToolbar;
   }
@@ -3107,7 +2939,6 @@ class EditorToolbar {
   }
   hide() {
     this.#toolbar.classList.add("hidden");
-    this.#colorPicker?.hideDropdown();
   }
   show() {
     this.#toolbar.classList.remove("hidden");
@@ -3116,32 +2947,15 @@ class EditorToolbar {
     const button = document.createElement("button");
     button.className = "delete";
     button.tabIndex = 0;
-    button.setAttribute("data-l10n-id", `pdfjs-editor-remove-${this.#editor.editorType}-button`);
+    button.setAttribute("data-l10n-id", "pdfjs-editor-remove-button");
     this.#addListenersToElement(button);
     button.addEventListener("click", e => {
       this.#editor._uiManager.delete();
     });
     this.#buttons.append(button);
   }
-  get #divider() {
-    const divider = document.createElement("div");
-    divider.className = "divider";
-    return divider;
-  }
-  addAltTextButton(button) {
-    this.#addListenersToElement(button);
-    this.#buttons.prepend(button, this.#divider);
-  }
-  addColorPicker(colorPicker) {
-    this.#colorPicker = colorPicker;
-    const button = colorPicker.renderButton();
-    this.#addListenersToElement(button);
-    this.#buttons.prepend(button, this.#divider);
-  }
   remove() {
     this.#toolbar.remove();
-    this.#colorPicker?.destroy();
-    this.#colorPicker = null;
   }
 }
 
@@ -3150,10 +2964,14 @@ class EditorToolbar {
 
 
 
-
 class AnnotationEditor {
   #allResizerDivs = null;
-  #altText = null;
+  #altText = "";
+  #altTextDecorative = false;
+  #altTextButton = null;
+  #altTextTooltip = null;
+  #altTextTooltipTimeout = null;
+  #altTextWasFromKeyBoard = false;
   #keepAspectRatio = false;
   #resizersDiv = null;
   #savedDimensions = null;
@@ -3176,6 +2994,7 @@ class AnnotationEditor {
   static _borderLineWidth = -1;
   static _colorManager = new ColorManager();
   static _zIndex = 1;
+  static SMALL_EDITOR_SIZE = 0;
   static get _resizerKeyboardManager() {
     const resize = AnnotationEditor.prototype._resizeWithKeyboard;
     const small = AnnotationEditorUIManager.TRANSLATE_SMALL;
@@ -3436,7 +3255,7 @@ class AnnotationEditor {
         return [-x, -y];
     }
   }
-  fixAndSetPosition(rotation = this.rotation) {
+  fixAndSetPosition() {
     const [pageWidth, pageHeight] = this.pageDimensions;
     let {
       x,
@@ -3448,7 +3267,7 @@ class AnnotationEditor {
     height *= pageHeight;
     x *= pageWidth;
     y *= pageHeight;
-    switch (rotation) {
+    switch (this.rotation) {
       case 0:
         x = Math.max(0, Math.min(pageWidth - width, x));
         y = Math.max(0, Math.min(pageHeight - height, y));
@@ -3535,6 +3354,7 @@ class AnnotationEditor {
     if (!this.#keepAspectRatio) {
       this.div.style.height = `${(100 * height / parentHeight).toFixed(2)}%`;
     }
+    this.#altTextButton?.classList.toggle("small", width < AnnotationEditor.SMALL_EDITOR_SIZE || height < AnnotationEditor.SMALL_EDITOR_SIZE);
   }
   fixDims() {
     const {
@@ -3586,7 +3406,7 @@ class AnnotationEditor {
     if (event.button !== 0 || event.ctrlKey && isMac) {
       return;
     }
-    this.#altText?.toggle(false);
+    this.#toggleAltTextButton(false);
     const boundResizerPointermove = this.#resizerPointermove.bind(this, name);
     const savedDraggable = this._isDraggable;
     this._isDraggable = false;
@@ -3605,7 +3425,7 @@ class AnnotationEditor {
     this.div.style.cursor = this.parent.div.style.cursor = window.getComputedStyle(event.target).cursor;
     const pointerUpCallback = () => {
       this.parent.togglePointerEvents(true);
-      this.#altText?.toggle(true);
+      this.#toggleAltTextButton(true);
       this._isDraggable = savedDraggable;
       window.removeEventListener("pointerup", pointerUpCallback);
       window.removeEventListener("blur", pointerUpCallback);
@@ -3733,19 +3553,118 @@ class AnnotationEditor {
     this.setDims(parentWidth * newWidth, parentHeight * newHeight);
     this.fixAndSetPosition();
   }
-  altTextFinish() {
-    this.#altText?.finish();
+  async addAltTextButton() {
+    if (this.#altTextButton) {
+      return;
+    }
+    const altText = this.#altTextButton = document.createElement("button");
+    altText.className = "altText";
+    const msg = await AnnotationEditor._l10nPromise.get("pdfjs-editor-alt-text-button-label");
+    altText.textContent = msg;
+    altText.setAttribute("aria-label", msg);
+    altText.tabIndex = "0";
+    altText.addEventListener("contextmenu", noContextMenu);
+    altText.addEventListener("pointerdown", event => event.stopPropagation());
+    const onClick = event => {
+      this.#altTextButton.hidden = true;
+      event.preventDefault();
+      this._uiManager.editAltText(this);
+    };
+    altText.addEventListener("click", onClick, {
+      capture: true
+    });
+    altText.addEventListener("keydown", event => {
+      if (event.target === altText && event.key === "Enter") {
+        this.#altTextWasFromKeyBoard = true;
+        onClick(event);
+      }
+    });
+    this.#setAltTextButtonState();
+    this.div.append(altText);
+    if (!AnnotationEditor.SMALL_EDITOR_SIZE) {
+      const PERCENT = 40;
+      AnnotationEditor.SMALL_EDITOR_SIZE = Math.min(128, Math.round(altText.getBoundingClientRect().width * (1 + PERCENT / 100)));
+    }
   }
-  async addEditToolbar() {
+  async #setAltTextButtonState() {
+    const button = this.#altTextButton;
+    if (!button) {
+      return;
+    }
+    if (!this.#altText && !this.#altTextDecorative) {
+      button.classList.remove("done");
+      this.#altTextTooltip?.remove();
+      return;
+    }
+    button.classList.add("done");
+    AnnotationEditor._l10nPromise.get("pdfjs-editor-alt-text-edit-button-label").then(msg => {
+      button.setAttribute("aria-label", msg);
+    });
+    let tooltip = this.#altTextTooltip;
+    if (!tooltip) {
+      this.#altTextTooltip = tooltip = document.createElement("span");
+      tooltip.className = "tooltip";
+      tooltip.setAttribute("role", "tooltip");
+      const id = tooltip.id = `alt-text-tooltip-${this.id}`;
+      button.setAttribute("aria-describedby", id);
+      const DELAY_TO_SHOW_TOOLTIP = 100;
+      button.addEventListener("mouseenter", () => {
+        this.#altTextTooltipTimeout = setTimeout(() => {
+          this.#altTextTooltipTimeout = null;
+          this.#altTextTooltip.classList.add("show");
+          this._uiManager._eventBus.dispatch("reporttelemetry", {
+            source: this,
+            details: {
+              type: "editing",
+              subtype: this.editorType,
+              data: {
+                action: "alt_text_tooltip"
+              }
+            }
+          });
+        }, DELAY_TO_SHOW_TOOLTIP);
+      });
+      button.addEventListener("mouseleave", () => {
+        if (this.#altTextTooltipTimeout) {
+          clearTimeout(this.#altTextTooltipTimeout);
+          this.#altTextTooltipTimeout = null;
+        }
+        this.#altTextTooltip?.classList.remove("show");
+      });
+    }
+    tooltip.innerText = this.#altTextDecorative ? await AnnotationEditor._l10nPromise.get("pdfjs-editor-alt-text-decorative-tooltip") : this.#altText;
+    if (!tooltip.parentNode) {
+      button.append(tooltip);
+    }
+    const element = this.getImageForAltText();
+    element?.setAttribute("aria-describedby", tooltip.id);
+  }
+  #toggleAltTextButton(enabled = false) {
+    if (!this.#altTextButton) {
+      return;
+    }
+    if (!enabled && this.#altTextTooltipTimeout) {
+      clearTimeout(this.#altTextTooltipTimeout);
+      this.#altTextTooltipTimeout = null;
+    }
+    this.#altTextButton.disabled = !enabled;
+  }
+  altTextFinish() {
+    if (!this.#altTextButton) {
+      return;
+    }
+    this.#altTextButton.hidden = false;
+    this.#altTextButton.focus({
+      focusVisible: this.#altTextWasFromKeyBoard
+    });
+    this.#altTextWasFromKeyBoard = false;
+  }
+  addEditToolbar() {
     if (this.#editToolbar || this.#isInEditMode) {
-      return this.#editToolbar;
+      return;
     }
     this.#editToolbar = new EditorToolbar(this);
     this.div.append(this.#editToolbar.render());
-    if (this.#altText) {
-      this.#editToolbar.addAltTextButton(await this.#altText.render());
-    }
-    return this.#editToolbar;
   }
   removeEditToolbar() {
     if (!this.#editToolbar) {
@@ -3753,27 +3672,26 @@ class AnnotationEditor {
     }
     this.#editToolbar.remove();
     this.#editToolbar = null;
-    this.#altText?.destroy();
   }
   getClientDimensions() {
     return this.div.getBoundingClientRect();
   }
-  async addAltTextButton() {
-    if (this.#altText) {
-      return;
-    }
-    AltText.initialize(AnnotationEditor._l10nPromise);
-    this.#altText = new AltText(this);
-    await this.addEditToolbar();
-  }
   get altTextData() {
-    return this.#altText?.data;
+    return {
+      altText: this.#altText,
+      decorative: this.#altTextDecorative
+    };
   }
-  set altTextData(data) {
-    if (!this.#altText) {
+  set altTextData({
+    altText,
+    decorative
+  }) {
+    if (this.#altText === altText && this.#altTextDecorative === decorative) {
       return;
     }
-    this.#altText.data = data;
+    this.#altText = altText;
+    this.#altTextDecorative = decorative;
+    this.#setAltTextButtonState();
   }
   render() {
     this.div = document.createElement("div");
@@ -3803,23 +3721,12 @@ class AnnotationEditor {
       return;
     }
     this.#hasBeenClicked = true;
-    if (this._isDraggable) {
-      this.#setUpDragSession(event);
-      return;
-    }
-    this.#selectOnPointerEvent(event);
-  }
-  #selectOnPointerEvent(event) {
-    const {
-      isMac
-    } = util_FeatureTest.platform;
-    if (event.ctrlKey && !isMac || event.shiftKey || event.metaKey && isMac) {
-      this.parent.toggleSelected(this);
-    } else {
-      this.parent.setSelected(this);
-    }
+    this.#setUpDragSession(event);
   }
   #setUpDragSession(event) {
+    if (!this._isDraggable) {
+      return;
+    }
     const isSelected = this._uiManager.isSelected(this);
     this._uiManager.setUpDragSession();
     let pointerMoveOptions, pointerMoveCallback;
@@ -3842,7 +3749,14 @@ class AnnotationEditor {
       }
       this.#hasBeenClicked = false;
       if (!this._uiManager.endDragSession()) {
-        this.#selectOnPointerEvent(event);
+        const {
+          isMac
+        } = util_FeatureTest.platform;
+        if (event.ctrlKey && !isMac || event.shiftKey || event.metaKey && isMac) {
+          this.parent.toggleSelected(this);
+        } else {
+          this.parent.setSelected(this);
+        }
       }
     };
     window.addEventListener("pointerup", pointerUpCallback);
@@ -3863,7 +3777,7 @@ class AnnotationEditor {
     this.y = y;
     this.fixAndSetPosition();
   }
-  getRect(tx, ty, rotation = this.rotation) {
+  getRect(tx, ty) {
     const scale = this.parentScale;
     const [pageWidth, pageHeight] = this.pageDimensions;
     const [pageX, pageY] = this.pageTranslation;
@@ -3873,7 +3787,7 @@ class AnnotationEditor {
     const y = this.y * pageHeight;
     const width = this.width * pageWidth;
     const height = this.height * pageHeight;
-    switch (rotation) {
+    switch (this.rotation) {
       case 0:
         return [x + shiftX + pageX, pageHeight - y - shiftY - height + pageY, x + shiftX + width + pageX, pageHeight - y - shiftY + pageY];
       case 90:
@@ -3926,7 +3840,6 @@ class AnnotationEditor {
     this.div?.addEventListener("focusin", this.#boundFocusin);
     this.div?.addEventListener("focusout", this.#boundFocusout);
   }
-  rotate(_angle) {}
   serialize(isForCopying = false, context = null) {
     unreachable("An editor must be serializable");
   }
@@ -3956,6 +3869,9 @@ class AnnotationEditor {
     } else {
       this._uiManager.removeEditor(this);
     }
+    this.#altTextButton?.remove();
+    this.#altTextButton = null;
+    this.#altTextTooltip = null;
     if (this.#moveInDOMTimeout) {
       clearTimeout(this.#moveInDOMTimeout);
       this.#moveInDOMTimeout = null;
@@ -3972,9 +3888,6 @@ class AnnotationEditor {
       this.#resizersDiv.classList.remove("hidden");
       bindEvents(this, this.div, ["keydown"]);
     }
-  }
-  get toolbarPosition() {
-    return null;
   }
   keydown(event) {
     if (!this.isResizable || event.target !== this.div || event.key !== "Enter") {
@@ -4084,14 +3997,7 @@ class AnnotationEditor {
   select() {
     this.makeResizable();
     this.div?.classList.add("selectedEditor");
-    if (!this.#editToolbar) {
-      this.addEditToolbar().then(() => {
-        if (this.div?.classList.contains("selectedEditor")) {
-          this.#editToolbar?.show();
-        }
-      });
-      return;
-    }
+    this.addEditToolbar();
     this.#editToolbar?.show();
   }
   unselect() {
@@ -4103,8 +4009,16 @@ class AnnotationEditor {
     this.#editToolbar?.hide();
   }
   updateParams(type, value) {}
-  disableEditing() {}
-  enableEditing() {}
+  disableEditing() {
+    if (this.#altTextButton) {
+      this.#altTextButton.hidden = true;
+    }
+  }
+  enableEditing() {
+    if (this.#altTextButton) {
+      this.#altTextButton.hidden = false;
+    }
+  }
   enterInEditMode() {}
   getImageForAltText() {
     return null;
@@ -4138,9 +4052,6 @@ class AnnotationEditor {
   }
   static get MIN_SIZE() {
     return 16;
-  }
-  static canCreateNewEmptyEditor() {
-    return true;
   }
 }
 class FakeEditor extends AnnotationEditor {
@@ -9679,7 +9590,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '4.0.806',
+    apiVersion: '4.0.727',
     data,
     password,
     disableAutoFetch,
@@ -11427,8 +11338,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = '4.0.806';
-const build = '17e393490';
+const version = '4.0.727';
+const build = 'ecea815a0';
 
 ;// CONCATENATED MODULE: ./src/display/text_layer.js
 
@@ -15100,693 +15011,6 @@ class FreeTextEditor extends AnnotationEditor {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/editor/color_picker.js
-
-
-
-class ColorPicker {
-  #boundKeyDown = this.#keyDown.bind(this);
-  #button = null;
-  #buttonSwatch = null;
-  #defaultColor;
-  #dropdown = null;
-  #dropdownWasFromKeyboard = false;
-  #isMainColorPicker = false;
-  #eventBus;
-  #uiManager = null;
-  static get _keyboardManager() {
-    return shadow(this, "_keyboardManager", new KeyboardManager([[["Escape", "mac+Escape"], ColorPicker.prototype._hideDropdownFromKeyboard], [[" ", "mac+ "], ColorPicker.prototype._colorSelectFromKeyboard], [["ArrowDown", "ArrowRight", "mac+ArrowDown", "mac+ArrowRight"], ColorPicker.prototype._moveToNext], [["ArrowUp", "ArrowLeft", "mac+ArrowUp", "mac+ArrowLeft"], ColorPicker.prototype._moveToPrevious], [["Home", "mac+Home"], ColorPicker.prototype._moveToBeginning], [["End", "mac+End"], ColorPicker.prototype._moveToEnd]]));
-  }
-  constructor({
-    editor = null,
-    uiManager = null
-  }) {
-    this.#isMainColorPicker = !editor;
-    this.#uiManager = editor?._uiManager || uiManager;
-    this.#eventBus = this.#uiManager._eventBus;
-    this.#defaultColor = editor?.color || this.#uiManager?.highlightColors.values().next().value || "#FFFF98";
-  }
-  renderButton() {
-    const button = this.#button = document.createElement("button");
-    button.className = "colorPicker";
-    button.tabIndex = "0";
-    button.setAttribute("data-l10n-id", "pdfjs-editor-colorpicker-button");
-    button.setAttribute("aria-haspopup", true);
-    button.addEventListener("click", this.#openDropdown.bind(this));
-    const swatch = this.#buttonSwatch = document.createElement("span");
-    swatch.className = "swatch";
-    swatch.style.backgroundColor = this.#defaultColor;
-    button.append(swatch);
-    return button;
-  }
-  renderMainDropdown() {
-    const dropdown = this.#dropdown = this.#getDropdownRoot(AnnotationEditorParamsType.HIGHLIGHT_DEFAULT_COLOR);
-    dropdown.setAttribute("aria-orientation", "horizontal");
-    dropdown.setAttribute("aria-labelledby", "highlightColorPickerLabel");
-    return dropdown;
-  }
-  #getDropdownRoot(paramType) {
-    const div = document.createElement("div");
-    div.addEventListener("contextmenu", noContextMenu);
-    div.className = "dropdown";
-    div.role = "listbox";
-    div.setAttribute("aria-multiselectable", false);
-    div.setAttribute("aria-orientation", "vertical");
-    div.setAttribute("data-l10n-id", "pdfjs-editor-colorpicker-dropdown");
-    for (const [name, color] of this.#uiManager.highlightColors) {
-      const button = document.createElement("button");
-      button.tabIndex = "0";
-      button.role = "option";
-      button.setAttribute("data-color", color);
-      button.title = name;
-      button.setAttribute("data-l10n-id", `pdfjs-editor-colorpicker-${name}`);
-      const swatch = document.createElement("span");
-      button.append(swatch);
-      swatch.className = "swatch";
-      swatch.style.backgroundColor = color;
-      button.setAttribute("aria-selected", color === this.#defaultColor);
-      button.addEventListener("click", this.#colorSelect.bind(this, paramType, color));
-      div.append(button);
-    }
-    div.addEventListener("keydown", this.#boundKeyDown);
-    return div;
-  }
-  #colorSelect(type, color, event) {
-    event.stopPropagation();
-    this.#eventBus.dispatch("switchannotationeditorparams", {
-      source: this,
-      type,
-      value: color
-    });
-  }
-  _colorSelectFromKeyboard(event) {
-    const color = event.target.getAttribute("data-color");
-    if (!color) {
-      return;
-    }
-    this.#colorSelect(color, event);
-  }
-  _moveToNext(event) {
-    if (event.target === this.#button) {
-      this.#dropdown.firstChild?.focus();
-      return;
-    }
-    event.target.nextSibling?.focus();
-  }
-  _moveToPrevious(event) {
-    event.target.previousSibling?.focus();
-  }
-  _moveToBeginning() {
-    this.#dropdown.firstChild?.focus();
-  }
-  _moveToEnd() {
-    this.#dropdown.lastChild?.focus();
-  }
-  #keyDown(event) {
-    ColorPicker._keyboardManager.exec(this, event);
-  }
-  #openDropdown(event) {
-    if (this.#dropdown && !this.#dropdown.classList.contains("hidden")) {
-      this.hideDropdown();
-      return;
-    }
-    this.#button.addEventListener("keydown", this.#boundKeyDown);
-    this.#dropdownWasFromKeyboard = event.detail === 0;
-    if (this.#dropdown) {
-      this.#dropdown.classList.remove("hidden");
-      return;
-    }
-    const root = this.#dropdown = this.#getDropdownRoot(AnnotationEditorParamsType.HIGHLIGHT_COLOR);
-    this.#button.append(root);
-  }
-  hideDropdown() {
-    this.#dropdown?.classList.add("hidden");
-  }
-  _hideDropdownFromKeyboard() {
-    if (this.#isMainColorPicker || !this.#dropdown || this.#dropdown.classList.contains("hidden")) {
-      return;
-    }
-    this.hideDropdown();
-    this.#button.removeEventListener("keydown", this.#boundKeyDown);
-    this.#button.focus({
-      preventScroll: true,
-      focusVisible: this.#dropdownWasFromKeyboard
-    });
-  }
-  updateColor(color) {
-    if (this.#buttonSwatch) {
-      this.#buttonSwatch.style.backgroundColor = color;
-    }
-    if (!this.#dropdown) {
-      return;
-    }
-    const i = this.#uiManager.highlightColors.values();
-    for (const child of this.#dropdown.children) {
-      child.setAttribute("aria-selected", i.next().value === color);
-    }
-  }
-  destroy() {
-    this.#button?.remove();
-    this.#button = null;
-    this.#buttonSwatch = null;
-    this.#dropdown?.remove();
-    this.#dropdown = null;
-  }
-}
-
-;// CONCATENATED MODULE: ./src/display/editor/outliner.js
-class Outliner {
-  #box;
-  #verticalEdges = [];
-  #intervals = [];
-  constructor(boxes, borderWidth = 0, innerMargin = 0, isLTR = true) {
-    let minX = Infinity;
-    let maxX = -Infinity;
-    let minY = Infinity;
-    let maxY = -Infinity;
-    const NUMBER_OF_DIGITS = 4;
-    const EPSILON = 10 ** -NUMBER_OF_DIGITS;
-    for (const {
-      x,
-      y,
-      width,
-      height
-    } of boxes) {
-      const x1 = Math.floor((x - borderWidth) / EPSILON) * EPSILON;
-      const x2 = Math.ceil((x + width + borderWidth) / EPSILON) * EPSILON;
-      const y1 = Math.floor((y - borderWidth) / EPSILON) * EPSILON;
-      const y2 = Math.ceil((y + height + borderWidth) / EPSILON) * EPSILON;
-      const left = [x1, y1, y2, true];
-      const right = [x2, y1, y2, false];
-      this.#verticalEdges.push(left, right);
-      minX = Math.min(minX, x1);
-      maxX = Math.max(maxX, x2);
-      minY = Math.min(minY, y1);
-      maxY = Math.max(maxY, y2);
-    }
-    const bboxWidth = maxX - minX + 2 * innerMargin;
-    const bboxHeight = maxY - minY + 2 * innerMargin;
-    const shiftedMinX = minX - innerMargin;
-    const shiftedMinY = minY - innerMargin;
-    const lastEdge = this.#verticalEdges.at(isLTR ? -1 : -2);
-    const lastPoint = [lastEdge[0], lastEdge[2]];
-    for (const edge of this.#verticalEdges) {
-      const [x, y1, y2] = edge;
-      edge[0] = (x - shiftedMinX) / bboxWidth;
-      edge[1] = (y1 - shiftedMinY) / bboxHeight;
-      edge[2] = (y2 - shiftedMinY) / bboxHeight;
-    }
-    this.#box = {
-      x: shiftedMinX,
-      y: shiftedMinY,
-      width: bboxWidth,
-      height: bboxHeight,
-      lastPoint
-    };
-  }
-  getOutlines() {
-    this.#verticalEdges.sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2]);
-    const outlineVerticalEdges = [];
-    for (const edge of this.#verticalEdges) {
-      if (edge[3]) {
-        outlineVerticalEdges.push(...this.#breakEdge(edge));
-        this.#insert(edge);
-      } else {
-        this.#remove(edge);
-        outlineVerticalEdges.push(...this.#breakEdge(edge));
-      }
-    }
-    return this.#getOutlines(outlineVerticalEdges);
-  }
-  #getOutlines(outlineVerticalEdges) {
-    const edges = [];
-    const allEdges = new Set();
-    for (const edge of outlineVerticalEdges) {
-      const [x, y1, y2] = edge;
-      edges.push([x, y1, edge], [x, y2, edge]);
-    }
-    edges.sort((a, b) => a[1] - b[1] || a[0] - b[0]);
-    for (let i = 0, ii = edges.length; i < ii; i += 2) {
-      const edge1 = edges[i][2];
-      const edge2 = edges[i + 1][2];
-      edge1.push(edge2);
-      edge2.push(edge1);
-      allEdges.add(edge1);
-      allEdges.add(edge2);
-    }
-    const outlines = [];
-    let outline;
-    while (allEdges.size > 0) {
-      const edge = allEdges.values().next().value;
-      let [x, y1, y2, edge1, edge2] = edge;
-      allEdges.delete(edge);
-      let lastPointX = x;
-      let lastPointY = y1;
-      outline = [x, y2];
-      outlines.push(outline);
-      while (true) {
-        let e;
-        if (allEdges.has(edge1)) {
-          e = edge1;
-        } else if (allEdges.has(edge2)) {
-          e = edge2;
-        } else {
-          break;
-        }
-        allEdges.delete(e);
-        [x, y1, y2, edge1, edge2] = e;
-        if (lastPointX !== x) {
-          outline.push(lastPointX, lastPointY, x, lastPointY === y1 ? y1 : y2);
-          lastPointX = x;
-        }
-        lastPointY = lastPointY === y1 ? y2 : y1;
-      }
-      outline.push(lastPointX, lastPointY);
-    }
-    return {
-      outlines,
-      box: this.#box
-    };
-  }
-  #binarySearch(y) {
-    const array = this.#intervals;
-    let start = 0;
-    let end = array.length - 1;
-    while (start <= end) {
-      const middle = start + end >> 1;
-      const y1 = array[middle][0];
-      if (y1 === y) {
-        return middle;
-      }
-      if (y1 < y) {
-        start = middle + 1;
-      } else {
-        end = middle - 1;
-      }
-    }
-    return end + 1;
-  }
-  #insert([, y1, y2]) {
-    const index = this.#binarySearch(y1);
-    this.#intervals.splice(index, 0, [y1, y2]);
-  }
-  #remove([, y1, y2]) {
-    const index = this.#binarySearch(y1);
-    for (let i = index; i < this.#intervals.length; i++) {
-      const [start, end] = this.#intervals[i];
-      if (start !== y1) {
-        break;
-      }
-      if (start === y1 && end === y2) {
-        this.#intervals.splice(i, 1);
-        return;
-      }
-    }
-    for (let i = index - 1; i >= 0; i--) {
-      const [start, end] = this.#intervals[i];
-      if (start !== y1) {
-        break;
-      }
-      if (start === y1 && end === y2) {
-        this.#intervals.splice(i, 1);
-        return;
-      }
-    }
-  }
-  #breakEdge(edge) {
-    const [x, y1, y2] = edge;
-    const results = [[x, y1, y2]];
-    const index = this.#binarySearch(y2);
-    for (let i = 0; i < index; i++) {
-      const [start, end] = this.#intervals[i];
-      for (let j = 0, jj = results.length; j < jj; j++) {
-        const [, y3, y4] = results[j];
-        if (end <= y3 || y4 <= start) {
-          continue;
-        }
-        if (y3 >= start) {
-          if (y4 > end) {
-            results[j][1] = end;
-          } else {
-            if (jj === 1) {
-              return [];
-            }
-            results.splice(j, 1);
-            j--;
-            jj--;
-          }
-          continue;
-        }
-        results[j][2] = start;
-        if (y4 > end) {
-          results.push([x, end, y4]);
-        }
-      }
-    }
-    return results;
-  }
-}
-
-;// CONCATENATED MODULE: ./src/display/editor/highlight.js
-
-
-
-
-
-class HighlightEditor extends AnnotationEditor {
-  #boxes;
-  #clipPathId = null;
-  #colorPicker = null;
-  #focusOutlines = null;
-  #highlightDiv = null;
-  #highlightOutlines = null;
-  #id = null;
-  #lastPoint = null;
-  #opacity;
-  #outlineId = null;
-  static _defaultColor = null;
-  static _defaultOpacity = 1;
-  static _l10nPromise;
-  static _type = "highlight";
-  static _editorType = AnnotationEditorType.HIGHLIGHT;
-  constructor(params) {
-    super({
-      ...params,
-      name: "highlightEditor"
-    });
-    HighlightEditor._defaultColor ||= this._uiManager.highlightColors?.values().next().value || "#fff066";
-    this.color = params.color || HighlightEditor._defaultColor;
-    this.#opacity = params.opacity || HighlightEditor._defaultOpacity;
-    this.#boxes = params.boxes || null;
-    this._isDraggable = false;
-    this.#createOutlines();
-    this.#addToDrawLayer();
-    this.rotate(this.rotation);
-  }
-  #createOutlines() {
-    const outliner = new Outliner(this.#boxes, 0.001);
-    this.#highlightOutlines = outliner.getOutlines();
-    ({
-      x: this.x,
-      y: this.y,
-      width: this.width,
-      height: this.height
-    } = this.#highlightOutlines.box);
-    const outlinerForOutline = new Outliner(this.#boxes, 0.0025, 0.001, this._uiManager.direction === "ltr");
-    this.#focusOutlines = outlinerForOutline.getOutlines();
-    const {
-      lastPoint
-    } = this.#focusOutlines.box;
-    this.#lastPoint = [(lastPoint[0] - this.x) / this.width, (lastPoint[1] - this.y) / this.height];
-  }
-  static initialize(l10n) {
-    AnnotationEditor.initialize(l10n);
-  }
-  static updateDefaultParams(type, value) {
-    switch (type) {
-      case AnnotationEditorParamsType.HIGHLIGHT_DEFAULT_COLOR:
-        HighlightEditor._defaultColor = value;
-        break;
-    }
-  }
-  get toolbarPosition() {
-    return this.#lastPoint;
-  }
-  updateParams(type, value) {
-    switch (type) {
-      case AnnotationEditorParamsType.HIGHLIGHT_COLOR:
-        this.#updateColor(value);
-        break;
-    }
-  }
-  static get defaultPropertiesToUpdate() {
-    return [[AnnotationEditorParamsType.HIGHLIGHT_DEFAULT_COLOR, HighlightEditor._defaultColor]];
-  }
-  get propertiesToUpdate() {
-    return [[AnnotationEditorParamsType.HIGHLIGHT_COLOR, this.color || HighlightEditor._defaultColor]];
-  }
-  #updateColor(color) {
-    const savedColor = this.color;
-    this.addCommands({
-      cmd: () => {
-        this.color = color;
-        this.parent.drawLayer.changeColor(this.#id, color);
-        this.#colorPicker?.updateColor(color);
-      },
-      undo: () => {
-        this.color = savedColor;
-        this.parent.drawLayer.changeColor(this.#id, savedColor);
-        this.#colorPicker?.updateColor(savedColor);
-      },
-      mustExec: true,
-      type: AnnotationEditorParamsType.HIGHLIGHT_COLOR,
-      overwriteIfSameType: true,
-      keepUndo: true
-    });
-  }
-  async addEditToolbar() {
-    const toolbar = await super.addEditToolbar();
-    if (!toolbar) {
-      return null;
-    }
-    if (this._uiManager.highlightColors) {
-      this.#colorPicker = new ColorPicker({
-        editor: this
-      });
-      toolbar.addColorPicker(this.#colorPicker);
-    }
-    return toolbar;
-  }
-  disableEditing() {
-    super.disableEditing();
-    this.div.classList.toggle("disabled", true);
-  }
-  enableEditing() {
-    super.enableEditing();
-    this.div.classList.toggle("disabled", false);
-  }
-  fixAndSetPosition() {
-    return super.fixAndSetPosition(0);
-  }
-  getRect(tx, ty) {
-    return super.getRect(tx, ty, 0);
-  }
-  onceAdded() {
-    this.parent.addUndoableEditor(this);
-    this.div.focus();
-  }
-  remove() {
-    super.remove();
-    this.#cleanDrawLayer();
-  }
-  rebuild() {
-    if (!this.parent) {
-      return;
-    }
-    super.rebuild();
-    if (this.div === null) {
-      return;
-    }
-    this.#addToDrawLayer();
-    if (!this.isAttachedToDOM) {
-      this.parent.add(this);
-    }
-  }
-  setParent(parent) {
-    let mustBeSelected = false;
-    if (this.parent && !parent) {
-      this.#cleanDrawLayer();
-    } else if (parent) {
-      this.#addToDrawLayer(parent);
-      mustBeSelected = !this.parent && this.div?.classList.contains("selectedEditor");
-    }
-    super.setParent(parent);
-    if (mustBeSelected) {
-      this.select();
-    }
-  }
-  #cleanDrawLayer() {
-    if (this.#id === null || !this.parent) {
-      return;
-    }
-    this.parent.drawLayer.remove(this.#id);
-    this.#id = null;
-    this.parent.drawLayer.remove(this.#outlineId);
-    this.#outlineId = null;
-  }
-  #addToDrawLayer(parent = this.parent) {
-    if (this.#id !== null) {
-      return;
-    }
-    ({
-      id: this.#id,
-      clipPathId: this.#clipPathId
-    } = parent.drawLayer.highlight(this.#highlightOutlines, this.color, this.#opacity));
-    if (this.#highlightDiv) {
-      this.#highlightDiv.style.clipPath = this.#clipPathId;
-    }
-    this.#outlineId = parent.drawLayer.highlightOutline(this.#focusOutlines);
-  }
-  static #rotateBbox({
-    x,
-    y,
-    width,
-    height
-  }, angle) {
-    switch (angle) {
-      case 90:
-        return {
-          x: 1 - y - height,
-          y: x,
-          width: height,
-          height: width
-        };
-      case 180:
-        return {
-          x: 1 - x - width,
-          y: 1 - y - height,
-          width,
-          height
-        };
-      case 270:
-        return {
-          x: y,
-          y: 1 - x - width,
-          width: height,
-          height: width
-        };
-    }
-    return {
-      x,
-      y,
-      width,
-      height
-    };
-  }
-  rotate(angle) {
-    const {
-      drawLayer
-    } = this.parent;
-    drawLayer.rotate(this.#id, angle);
-    drawLayer.rotate(this.#outlineId, angle);
-    drawLayer.updateBox(this.#id, HighlightEditor.#rotateBbox(this, angle));
-    drawLayer.updateBox(this.#outlineId, HighlightEditor.#rotateBbox(this.#focusOutlines.box, angle));
-  }
-  render() {
-    if (this.div) {
-      return this.div;
-    }
-    const div = super.render();
-    const highlightDiv = this.#highlightDiv = document.createElement("div");
-    div.append(highlightDiv);
-    highlightDiv.className = "internal";
-    highlightDiv.style.clipPath = this.#clipPathId;
-    const [parentWidth, parentHeight] = this.parentDimensions;
-    this.setDims(this.width * parentWidth, this.height * parentHeight);
-    bindEvents(this, this.#highlightDiv, ["pointerover", "pointerleave"]);
-    this.enableEditing();
-    return div;
-  }
-  pointerover() {
-    this.parent.drawLayer.addClass(this.#outlineId, "hovered");
-  }
-  pointerleave() {
-    this.parent.drawLayer.removeClass(this.#outlineId, "hovered");
-  }
-  select() {
-    super.select();
-    this.parent?.drawLayer.removeClass(this.#outlineId, "hovered");
-    this.parent?.drawLayer.addClass(this.#outlineId, "selected");
-  }
-  unselect() {
-    super.unselect();
-    this.parent?.drawLayer.removeClass(this.#outlineId, "selected");
-  }
-  #serializeBoxes() {
-    const [pageWidth, pageHeight] = this.pageDimensions;
-    const boxes = this.#boxes;
-    const quadPoints = new Array(boxes.length * 8);
-    let i = 0;
-    for (const {
-      x,
-      y,
-      width,
-      height
-    } of boxes) {
-      const sx = x * pageWidth;
-      const sy = (1 - y - height) * pageHeight;
-      quadPoints[i] = quadPoints[i + 4] = sx;
-      quadPoints[i + 1] = quadPoints[i + 3] = sy;
-      quadPoints[i + 2] = quadPoints[i + 6] = sx + width * pageWidth;
-      quadPoints[i + 5] = quadPoints[i + 7] = sy + height * pageHeight;
-      i += 8;
-    }
-    return quadPoints;
-  }
-  #serializeOutlines() {
-    const [pageWidth, pageHeight] = this.pageDimensions;
-    const width = this.width * pageWidth;
-    const height = this.height * pageHeight;
-    const tx = this.x * pageWidth;
-    const ty = (1 - this.y - this.height) * pageHeight;
-    const outlines = [];
-    for (const outline of this.#highlightOutlines.outlines) {
-      const points = new Array(outline.length);
-      for (let i = 0; i < outline.length; i += 2) {
-        points[i] = tx + outline[i] * width;
-        points[i + 1] = ty + (1 - outline[i + 1]) * height;
-      }
-      outlines.push(points);
-    }
-    return outlines;
-  }
-  static deserialize(data, parent, uiManager) {
-    const editor = super.deserialize(data, parent, uiManager);
-    const {
-      rect,
-      color,
-      quadPoints
-    } = data;
-    editor.color = Util.makeHexColor(...color);
-    editor.#opacity = data.opacity;
-    const [pageWidth, pageHeight] = editor.pageDimensions;
-    editor.width = (rect[2] - rect[0]) / pageWidth;
-    editor.height = (rect[3] - rect[1]) / pageHeight;
-    const boxes = editor.#boxes = [];
-    for (let i = 0; i < quadPoints.length; i += 8) {
-      boxes.push({
-        x: quadPoints[4] / pageWidth,
-        y: 1 - quadPoints[i + 5] / pageHeight,
-        width: (quadPoints[i + 2] - quadPoints[i]) / pageWidth,
-        height: (quadPoints[i + 5] - quadPoints[i + 1]) / pageHeight
-      });
-    }
-    editor.#createOutlines();
-    return editor;
-  }
-  serialize(isForCopying = false) {
-    if (this.isEmpty() || isForCopying) {
-      return null;
-    }
-    const rect = this.getRect(0, 0);
-    const color = AnnotationEditor._colorManager.convert(this.color);
-    return {
-      annotationType: AnnotationEditorType.HIGHLIGHT,
-      color,
-      opacity: this.#opacity,
-      quadPoints: this.#serializeBoxes(),
-      outlines: this.#serializeOutlines(),
-      pageIndex: this.pageIndex,
-      rect,
-      rotation: 0,
-      structTreeParentId: this._structTreeParentId
-    };
-  }
-  static canCreateNewEmptyEditor() {
-    return false;
-  }
-}
-
 ;// CONCATENATED MODULE: ./src/display/editor/ink.js
 
 
@@ -16222,7 +15446,7 @@ class InkEditor extends AnnotationEditor {
     }
     this.setInForeground();
     event.preventDefault();
-    if (!this.div.contains(document.activeElement)) {
+    if (event.pointerType !== "mouse" && !this.div.contains(document.activeElement)) {
       this.div.focus({
         preventScroll: true
       });
@@ -16982,32 +16206,26 @@ class StampEditor extends AnnotationEditor {
 
 
 
-
 class AnnotationEditorLayer {
   #accessibilityManager;
   #allowClick = false;
   #annotationLayer = null;
   #boundPointerup = this.pointerup.bind(this);
-  #boundPointerUpAfterSelection = this.pointerUpAfterSelection.bind(this);
   #boundPointerdown = this.pointerdown.bind(this);
   #editorFocusTimeoutId = null;
-  #boundSelectionStart = this.selectionStart.bind(this);
   #editors = new Map();
   #hadPointerDown = false;
   #isCleaningUp = false;
   #isDisabling = false;
-  #textLayer = null;
   #uiManager;
   static _initialized = false;
-  static #editorTypes = new Map([FreeTextEditor, InkEditor, StampEditor, HighlightEditor].map(type => [type._editorType, type]));
+  static #editorTypes = new Map([FreeTextEditor, InkEditor, StampEditor].map(type => [type._editorType, type]));
   constructor({
     uiManager,
     pageIndex,
     div,
     accessibilityManager,
     annotationLayer,
-    drawLayer,
-    textLayer,
     viewport,
     l10n
   }) {
@@ -17025,8 +16243,6 @@ class AnnotationEditorLayer {
     this.#accessibilityManager = accessibilityManager;
     this.#annotationLayer = annotationLayer;
     this.viewport = viewport;
-    this.#textLayer = textLayer;
-    this.drawLayer = drawLayer;
     this.#uiManager.addLayer(this);
   }
   get isEmpty() {
@@ -17037,27 +16253,11 @@ class AnnotationEditorLayer {
   }
   updateMode(mode = this.#uiManager.getMode()) {
     this.#cleanup();
-    switch (mode) {
-      case AnnotationEditorType.NONE:
-        this.disableTextSelection();
-        this.togglePointerEvents(false);
-        this.disableClick();
-        break;
-      case AnnotationEditorType.INK:
-        this.addInkEditorIfNeeded(false);
-        this.disableTextSelection();
-        this.togglePointerEvents(true);
-        this.disableClick();
-        break;
-      case AnnotationEditorType.HIGHLIGHT:
-        this.enableTextSelection();
-        this.togglePointerEvents(false);
-        this.disableClick();
-        break;
-      default:
-        this.disableTextSelection();
-        this.togglePointerEvents(true);
-        this.enableClick();
+    if (mode === AnnotationEditorType.INK) {
+      this.addInkEditorIfNeeded(false);
+      this.disableClick();
+    } else {
+      this.enableClick();
     }
     if (mode !== AnnotationEditorType.NONE) {
       const {
@@ -17070,7 +16270,7 @@ class AnnotationEditorLayer {
     }
   }
   addInkEditorIfNeeded(isCommitting) {
-    if (this.#uiManager.getMode() !== AnnotationEditorType.INK) {
+    if (!isCommitting && this.#uiManager.getMode() !== AnnotationEditorType.INK) {
       return;
     }
     if (!isCommitting) {
@@ -17160,7 +16360,6 @@ class AnnotationEditorLayer {
     for (const editorType of AnnotationEditorLayer.#editorTypes.values()) {
       classList.remove(`${editorType._type}Editing`);
     }
-    this.disableTextSelection();
     this.#isDisabling = false;
   }
   getEditableAnnotation(id) {
@@ -17172,16 +16371,6 @@ class AnnotationEditorLayer {
       return;
     }
     this.#uiManager.setActiveEditor(editor);
-  }
-  enableTextSelection() {
-    if (this.#textLayer?.div) {
-      document.addEventListener("selectstart", this.#boundSelectionStart);
-    }
-  }
-  disableTextSelection() {
-    if (this.#textLayer?.div) {
-      document.removeEventListener("selectstart", this.#boundSelectionStart);
-    }
   }
   enableClick() {
     this.div.addEventListener("pointerdown", this.#boundPointerdown);
@@ -17293,15 +16482,9 @@ class AnnotationEditorLayer {
   getNextId() {
     return this.#uiManager.getId();
   }
-  get #currentEditorType() {
-    return AnnotationEditorLayer.#editorTypes.get(this.#uiManager.getMode());
-  }
   #createNewEditor(params) {
-    const editorType = this.#currentEditorType;
+    const editorType = AnnotationEditorLayer.#editorTypes.get(this.#uiManager.getMode());
     return editorType ? new editorType.prototype.constructor(params) : null;
-  }
-  canCreateNewEmptyEditor() {
-    return this.#currentEditorType?.canCreateNewEmptyEditor();
   }
   pasteEditor(mode, params) {
     this.#uiManager.updateToolbar(mode);
@@ -17327,7 +16510,7 @@ class AnnotationEditorLayer {
   deserialize(data) {
     return AnnotationEditorLayer.#editorTypes.get(data.annotationType ?? data.annotationEditorType)?.deserialize(data, this, this.#uiManager) || null;
   }
-  #createAndAddNewEditor(event, isCentered, data = {}) {
+  #createAndAddNewEditor(event, isCentered) {
     const id = this.getNextId();
     const editor = this.#createNewEditor({
       parent: this,
@@ -17335,8 +16518,7 @@ class AnnotationEditorLayer {
       x: event.offsetX,
       y: event.offsetY,
       uiManager: this.#uiManager,
-      isCentered,
-      ...data
+      isCentered
     });
     if (editor) {
       this.add(editor);
@@ -17377,84 +16559,6 @@ class AnnotationEditorLayer {
   unselect(editor) {
     this.#uiManager.unselect(editor);
   }
-  selectionStart(_event) {
-    this.#textLayer?.div.addEventListener("pointerup", this.#boundPointerUpAfterSelection, {
-      once: true
-    });
-  }
-  pointerUpAfterSelection(event) {
-    const selection = document.getSelection();
-    if (selection.rangeCount === 0) {
-      return;
-    }
-    const range = selection.getRangeAt(0);
-    if (range.collapsed) {
-      return;
-    }
-    if (!this.#textLayer?.div.contains(range.commonAncestorContainer)) {
-      return;
-    }
-    const {
-      x: layerX,
-      y: layerY,
-      width: parentWidth,
-      height: parentHeight
-    } = this.#textLayer.div.getBoundingClientRect();
-    const bboxes = range.getClientRects();
-    let rotator;
-    switch (this.viewport.rotation) {
-      case 90:
-        rotator = (x, y, w, h) => ({
-          x: (y - layerY) / parentHeight,
-          y: 1 - (x + w - layerX) / parentWidth,
-          width: h / parentHeight,
-          height: w / parentWidth
-        });
-        break;
-      case 180:
-        rotator = (x, y, w, h) => ({
-          x: 1 - (x + w - layerX) / parentWidth,
-          y: 1 - (y + h - layerY) / parentHeight,
-          width: w / parentWidth,
-          height: h / parentHeight
-        });
-        break;
-      case 270:
-        rotator = (x, y, w, h) => ({
-          x: 1 - (y + h - layerY) / parentHeight,
-          y: (x - layerX) / parentWidth,
-          width: h / parentHeight,
-          height: w / parentWidth
-        });
-        break;
-      default:
-        rotator = (x, y, w, h) => ({
-          x: (x - layerX) / parentWidth,
-          y: (y - layerY) / parentHeight,
-          width: w / parentWidth,
-          height: h / parentHeight
-        });
-        break;
-    }
-    const boxes = [];
-    for (const {
-      x,
-      y,
-      width,
-      height
-    } of bboxes) {
-      if (width === 0 || height === 0) {
-        continue;
-      }
-      boxes.push(rotator(x, y, width, height));
-    }
-    if (boxes.length !== 0) {
-      this.#createAndAddNewEditor(event, false, {
-        boxes
-      });
-    }
-    selection.empty();
-  }
   pointerup(event) {
     const {
       isMac
@@ -17480,9 +16584,6 @@ class AnnotationEditorLayer {
     this.#createAndAddNewEditor(event, false);
   }
   pointerdown(event) {
-    if (this.#uiManager.getMode() === AnnotationEditorType.HIGHLIGHT) {
-      this.enableTextSelection();
-    }
     if (this.#hadPointerDown) {
       this.#hadPointerDown = false;
       return;
@@ -17550,17 +16651,10 @@ class AnnotationEditorLayer {
     viewport
   }) {
     this.#uiManager.commitOrRemove();
-    const oldRotation = this.viewport.rotation;
-    const rotation = viewport.rotation;
     this.viewport = viewport;
     setLayerDimensions(this.div, {
-      rotation
+      rotation: viewport.rotation
     });
-    if (oldRotation !== rotation) {
-      for (const editor of this.#editors.values()) {
-        editor.rotate(rotation);
-      }
-    }
     this.updateMode();
   }
   get pageDimensions() {
@@ -17723,9 +16817,6 @@ class DrawLayer {
     this.#mapping.get(id).classList.remove(className);
   }
   remove(id) {
-    if (this.#parent === null) {
-      return;
-    }
     this.#mapping.get(id).remove();
     this.#mapping.delete(id);
   }
@@ -17735,6 +16826,199 @@ class DrawLayer {
       root.remove();
     }
     this.#mapping.clear();
+  }
+}
+
+;// CONCATENATED MODULE: ./src/display/editor/outliner.js
+class Outliner {
+  #box;
+  #verticalEdges = [];
+  #intervals = [];
+  constructor(boxes, borderWidth = 0, innerMargin = 0, isLTR = true) {
+    let minX = Infinity;
+    let maxX = -Infinity;
+    let minY = Infinity;
+    let maxY = -Infinity;
+    const NUMBER_OF_DIGITS = 4;
+    const EPSILON = 10 ** -NUMBER_OF_DIGITS;
+    for (const {
+      x,
+      y,
+      width,
+      height
+    } of boxes) {
+      const x1 = Math.floor((x - borderWidth) / EPSILON) * EPSILON;
+      const x2 = Math.ceil((x + width + borderWidth) / EPSILON) * EPSILON;
+      const y1 = Math.floor((y - borderWidth) / EPSILON) * EPSILON;
+      const y2 = Math.ceil((y + height + borderWidth) / EPSILON) * EPSILON;
+      const left = [x1, y1, y2, true];
+      const right = [x2, y1, y2, false];
+      this.#verticalEdges.push(left, right);
+      minX = Math.min(minX, x1);
+      maxX = Math.max(maxX, x2);
+      minY = Math.min(minY, y1);
+      maxY = Math.max(maxY, y2);
+    }
+    const bboxWidth = maxX - minX + 2 * innerMargin;
+    const bboxHeight = maxY - minY + 2 * innerMargin;
+    const shiftedMinX = minX - innerMargin;
+    const shiftedMinY = minY - innerMargin;
+    const lastEdge = this.#verticalEdges.at(isLTR ? -1 : -2);
+    const lastPoint = [lastEdge[0], lastEdge[2]];
+    for (const edge of this.#verticalEdges) {
+      const [x, y1, y2] = edge;
+      edge[0] = (x - shiftedMinX) / bboxWidth;
+      edge[1] = (y1 - shiftedMinY) / bboxHeight;
+      edge[2] = (y2 - shiftedMinY) / bboxHeight;
+    }
+    this.#box = {
+      x: shiftedMinX,
+      y: shiftedMinY,
+      width: bboxWidth,
+      height: bboxHeight,
+      lastPoint
+    };
+  }
+  getOutlines() {
+    this.#verticalEdges.sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2]);
+    const outlineVerticalEdges = [];
+    for (const edge of this.#verticalEdges) {
+      if (edge[3]) {
+        outlineVerticalEdges.push(...this.#breakEdge(edge));
+        this.#insert(edge);
+      } else {
+        this.#remove(edge);
+        outlineVerticalEdges.push(...this.#breakEdge(edge));
+      }
+    }
+    return this.#getOutlines(outlineVerticalEdges);
+  }
+  #getOutlines(outlineVerticalEdges) {
+    const edges = [];
+    const allEdges = new Set();
+    for (const edge of outlineVerticalEdges) {
+      const [x, y1, y2] = edge;
+      edges.push([x, y1, edge], [x, y2, edge]);
+    }
+    edges.sort((a, b) => a[1] - b[1] || a[0] - b[0]);
+    for (let i = 0, ii = edges.length; i < ii; i += 2) {
+      const edge1 = edges[i][2];
+      const edge2 = edges[i + 1][2];
+      edge1.push(edge2);
+      edge2.push(edge1);
+      allEdges.add(edge1);
+      allEdges.add(edge2);
+    }
+    const outlines = [];
+    let outline;
+    while (allEdges.size > 0) {
+      const edge = allEdges.values().next().value;
+      let [x, y1, y2, edge1, edge2] = edge;
+      allEdges.delete(edge);
+      let lastPointX = x;
+      let lastPointY = y1;
+      outline = [x, y2];
+      outlines.push(outline);
+      while (true) {
+        let e;
+        if (allEdges.has(edge1)) {
+          e = edge1;
+        } else if (allEdges.has(edge2)) {
+          e = edge2;
+        } else {
+          break;
+        }
+        allEdges.delete(e);
+        [x, y1, y2, edge1, edge2] = e;
+        if (lastPointX !== x) {
+          outline.push(lastPointX, lastPointY, x, lastPointY === y1 ? y1 : y2);
+          lastPointX = x;
+        }
+        lastPointY = lastPointY === y1 ? y2 : y1;
+      }
+      outline.push(lastPointX, lastPointY);
+    }
+    return {
+      outlines,
+      box: this.#box
+    };
+  }
+  #binarySearch(y) {
+    const array = this.#intervals;
+    let start = 0;
+    let end = array.length - 1;
+    while (start <= end) {
+      const middle = start + end >> 1;
+      const y1 = array[middle][0];
+      if (y1 === y) {
+        return middle;
+      }
+      if (y1 < y) {
+        start = middle + 1;
+      } else {
+        end = middle - 1;
+      }
+    }
+    return end + 1;
+  }
+  #insert([, y1, y2]) {
+    const index = this.#binarySearch(y1);
+    this.#intervals.splice(index, 0, [y1, y2]);
+  }
+  #remove([, y1, y2]) {
+    const index = this.#binarySearch(y1);
+    for (let i = index; i < this.#intervals.length; i++) {
+      const [start, end] = this.#intervals[i];
+      if (start !== y1) {
+        break;
+      }
+      if (start === y1 && end === y2) {
+        this.#intervals.splice(i, 1);
+        return;
+      }
+    }
+    for (let i = index - 1; i >= 0; i--) {
+      const [start, end] = this.#intervals[i];
+      if (start !== y1) {
+        break;
+      }
+      if (start === y1 && end === y2) {
+        this.#intervals.splice(i, 1);
+        return;
+      }
+    }
+  }
+  #breakEdge(edge) {
+    const [x, y1, y2] = edge;
+    const results = [[x, y1, y2]];
+    const index = this.#binarySearch(y2);
+    for (let i = 0; i < index; i++) {
+      const [start, end] = this.#intervals[i];
+      for (let j = 0, jj = results.length; j < jj; j++) {
+        const [, y3, y4] = results[j];
+        if (end <= y3 || y4 <= start) {
+          continue;
+        }
+        if (y3 >= start) {
+          if (y4 > end) {
+            results[j][1] = end;
+          } else {
+            if (jj === 1) {
+              return [];
+            }
+            results.splice(j, 1);
+            j--;
+            jj--;
+          }
+          continue;
+        }
+        results[j][2] = start;
+        if (y4 > end) {
+          results.push([x, end, y4]);
+        }
+      }
+    }
+    return results;
   }
 }
 
@@ -17750,9 +17034,8 @@ class DrawLayer {
 
 
 
-
-const pdfjsVersion = '4.0.806';
-const pdfjsBuild = '17e393490';
+const pdfjsVersion = '4.0.727';
+const pdfjsBuild = 'ecea815a0';
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -17762,7 +17045,6 @@ var __webpack_exports__AnnotationEditorUIManager = __webpack_exports__.Annotatio
 var __webpack_exports__AnnotationLayer = __webpack_exports__.AnnotationLayer;
 var __webpack_exports__AnnotationMode = __webpack_exports__.AnnotationMode;
 var __webpack_exports__CMapCompressionType = __webpack_exports__.CMapCompressionType;
-var __webpack_exports__ColorPicker = __webpack_exports__.ColorPicker;
 var __webpack_exports__DOMSVGFactory = __webpack_exports__.DOMSVGFactory;
 var __webpack_exports__DrawLayer = __webpack_exports__.DrawLayer;
 var __webpack_exports__FeatureTest = __webpack_exports__.FeatureTest;
@@ -17800,4 +17082,4 @@ var __webpack_exports__setLayerDimensions = __webpack_exports__.setLayerDimensio
 var __webpack_exports__shadow = __webpack_exports__.shadow;
 var __webpack_exports__updateTextLayer = __webpack_exports__.updateTextLayer;
 var __webpack_exports__version = __webpack_exports__.version;
-export { __webpack_exports__AbortException as AbortException, __webpack_exports__AnnotationEditorLayer as AnnotationEditorLayer, __webpack_exports__AnnotationEditorParamsType as AnnotationEditorParamsType, __webpack_exports__AnnotationEditorType as AnnotationEditorType, __webpack_exports__AnnotationEditorUIManager as AnnotationEditorUIManager, __webpack_exports__AnnotationLayer as AnnotationLayer, __webpack_exports__AnnotationMode as AnnotationMode, __webpack_exports__CMapCompressionType as CMapCompressionType, __webpack_exports__ColorPicker as ColorPicker, __webpack_exports__DOMSVGFactory as DOMSVGFactory, __webpack_exports__DrawLayer as DrawLayer, __webpack_exports__FeatureTest as FeatureTest, __webpack_exports__GlobalWorkerOptions as GlobalWorkerOptions, __webpack_exports__ImageKind as ImageKind, __webpack_exports__InvalidPDFException as InvalidPDFException, __webpack_exports__MissingPDFException as MissingPDFException, __webpack_exports__OPS as OPS, __webpack_exports__Outliner as Outliner, __webpack_exports__PDFDataRangeTransport as PDFDataRangeTransport, __webpack_exports__PDFDateString as PDFDateString, __webpack_exports__PDFWorker as PDFWorker, __webpack_exports__PasswordResponses as PasswordResponses, __webpack_exports__PermissionFlag as PermissionFlag, __webpack_exports__PixelsPerInch as PixelsPerInch, __webpack_exports__PromiseCapability as PromiseCapability, __webpack_exports__RenderingCancelledException as RenderingCancelledException, __webpack_exports__UnexpectedResponseException as UnexpectedResponseException, __webpack_exports__Util as Util, __webpack_exports__VerbosityLevel as VerbosityLevel, __webpack_exports__XfaLayer as XfaLayer, __webpack_exports__build as build, __webpack_exports__createValidAbsoluteUrl as createValidAbsoluteUrl, __webpack_exports__fetchData as fetchData, __webpack_exports__getDocument as getDocument, __webpack_exports__getFilenameFromUrl as getFilenameFromUrl, __webpack_exports__getPdfFilenameFromUrl as getPdfFilenameFromUrl, __webpack_exports__getXfaPageViewport as getXfaPageViewport, __webpack_exports__isDataScheme as isDataScheme, __webpack_exports__isPdfFile as isPdfFile, __webpack_exports__noContextMenu as noContextMenu, __webpack_exports__normalizeUnicode as normalizeUnicode, __webpack_exports__renderTextLayer as renderTextLayer, __webpack_exports__setLayerDimensions as setLayerDimensions, __webpack_exports__shadow as shadow, __webpack_exports__updateTextLayer as updateTextLayer, __webpack_exports__version as version };
+export { __webpack_exports__AbortException as AbortException, __webpack_exports__AnnotationEditorLayer as AnnotationEditorLayer, __webpack_exports__AnnotationEditorParamsType as AnnotationEditorParamsType, __webpack_exports__AnnotationEditorType as AnnotationEditorType, __webpack_exports__AnnotationEditorUIManager as AnnotationEditorUIManager, __webpack_exports__AnnotationLayer as AnnotationLayer, __webpack_exports__AnnotationMode as AnnotationMode, __webpack_exports__CMapCompressionType as CMapCompressionType, __webpack_exports__DOMSVGFactory as DOMSVGFactory, __webpack_exports__DrawLayer as DrawLayer, __webpack_exports__FeatureTest as FeatureTest, __webpack_exports__GlobalWorkerOptions as GlobalWorkerOptions, __webpack_exports__ImageKind as ImageKind, __webpack_exports__InvalidPDFException as InvalidPDFException, __webpack_exports__MissingPDFException as MissingPDFException, __webpack_exports__OPS as OPS, __webpack_exports__Outliner as Outliner, __webpack_exports__PDFDataRangeTransport as PDFDataRangeTransport, __webpack_exports__PDFDateString as PDFDateString, __webpack_exports__PDFWorker as PDFWorker, __webpack_exports__PasswordResponses as PasswordResponses, __webpack_exports__PermissionFlag as PermissionFlag, __webpack_exports__PixelsPerInch as PixelsPerInch, __webpack_exports__PromiseCapability as PromiseCapability, __webpack_exports__RenderingCancelledException as RenderingCancelledException, __webpack_exports__UnexpectedResponseException as UnexpectedResponseException, __webpack_exports__Util as Util, __webpack_exports__VerbosityLevel as VerbosityLevel, __webpack_exports__XfaLayer as XfaLayer, __webpack_exports__build as build, __webpack_exports__createValidAbsoluteUrl as createValidAbsoluteUrl, __webpack_exports__fetchData as fetchData, __webpack_exports__getDocument as getDocument, __webpack_exports__getFilenameFromUrl as getFilenameFromUrl, __webpack_exports__getPdfFilenameFromUrl as getPdfFilenameFromUrl, __webpack_exports__getXfaPageViewport as getXfaPageViewport, __webpack_exports__isDataScheme as isDataScheme, __webpack_exports__isPdfFile as isPdfFile, __webpack_exports__noContextMenu as noContextMenu, __webpack_exports__normalizeUnicode as normalizeUnicode, __webpack_exports__renderTextLayer as renderTextLayer, __webpack_exports__setLayerDimensions as setLayerDimensions, __webpack_exports__shadow as shadow, __webpack_exports__updateTextLayer as updateTextLayer, __webpack_exports__version as version };

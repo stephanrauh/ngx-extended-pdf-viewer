@@ -234,6 +234,13 @@ pdfjs-find-match-count =
         [one] Timeḍriwt { $current } ɣef { $total }
        *[other] Timeḍriwin { $current } ɣef { $total }
     }
+# Variables:
+#   $limit (Number) - the maximum number of matches
+pdfjs-find-match-count-limit =
+    { $limit ->
+        [one] Ugar n { $limit } umṣada
+       *[other] Ugar n { $limit } yimṣadayen
+    }
 pdfjs-find-not-found = Ulac tawinest
 
 ## Predefined zoom values
@@ -315,20 +322,20 @@ pdfjs-ink-canvas =
 
 ## Alt-text dialog
 
+# Alternative text (alt text) helps when people can't see the image.
+pdfjs-editor-alt-text-button-label = Aḍris amaskal
+pdfjs-editor-alt-text-edit-button-label = Ẓreg aḍris amaskal
 pdfjs-editor-alt-text-dialog-label = Fren taxtirt
 pdfjs-editor-alt-text-add-description-label = Rnu aglam
+pdfjs-editor-alt-text-mark-decorative-label = Creḍ d adlag
 pdfjs-editor-alt-text-cancel-button = Sefsex
 pdfjs-editor-alt-text-save-button = Sekles
+pdfjs-editor-alt-text-decorative-tooltip = Yettwacreḍ d adlag
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
 
 
-pdfjs-find-match-count-limit =
-    { $limit ->
-        [one] More than { $limit } match
-       *[other] More than { $limit } matches
-    }
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
@@ -340,13 +347,9 @@ pdfjs-editor-remove-stamp-button =
     .title = Remove image
 pdfjs-editor-remove-highlight-button =
     .title = Remove highlight
-pdfjs-editor-alt-text-button-label = Alt text
-pdfjs-editor-alt-text-edit-button-label = Edit alt text
 pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
 pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
-pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
 pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
-pdfjs-editor-alt-text-decorative-tooltip = Marked as decorative
 pdfjs-editor-alt-text-textarea =
     .placeholder = For example, “A young man sits down at a table to eat a meal”
 pdfjs-editor-resizer-label-top-left = Top left corner — resize
@@ -372,3 +375,5 @@ pdfjs-editor-colorpicker-pink =
     .title = Pink
 pdfjs-editor-colorpicker-red =
     .title = Red
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll

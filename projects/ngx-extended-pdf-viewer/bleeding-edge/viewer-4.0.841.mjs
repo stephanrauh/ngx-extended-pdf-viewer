@@ -11258,7 +11258,7 @@ class PDFLinkService {
     }
     if (this.pdfViewer.pageViewMode === "book") {
       if (this.pdfViewer.pageFlip) {
-        this.pdfViewer.ensureAdjecentPagesAreLoaded();
+        this.pdfViewer.ensureAdjacentPagesAreLoaded();
         const evenPage = this.pdfViewer.currentPageNumber - this.pdfViewer.currentPageNumber % 2;
         const evenTargetPage = pageNumber - pageNumber % 2;
         if (evenPage === evenTargetPage - 2) {
@@ -13886,7 +13886,6 @@ class PDFSidebar {
     this.outlineView = elements.outlineView;
     this.attachmentsView = elements.attachmentsView;
     this.layersView = elements.layersView;
-    this._outlineOptionsContainer = elements.outlineOptionsContainer;
     this._currentOutlineItemButton = elements.currentOutlineItemButton;
     this.eventBus = eventBus;
     this.#isRTL = l10n.getDirection() === "rtl";
@@ -13960,7 +13959,6 @@ class PDFSidebar {
     (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(this.outlineButton, view === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.SidebarView.OUTLINE, this.outlineView);
     (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(this.attachmentsButton, view === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.SidebarView.ATTACHMENTS, this.attachmentsView);
     (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(this.layersButton, view === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.SidebarView.LAYERS, this.layersView);
-    this._outlineOptionsContainer.classList.toggle("hidden", view !== _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.SidebarView.OUTLINE);
     if (forceOpen && !this.isOpen) {
       this.open();
       return;
@@ -14834,7 +14832,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = '4.0.806';
+    const viewerVersion = '4.0.841';
     if (pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version !== viewerVersion) {
       throw new Error(`The API version "${pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -14958,6 +14956,7 @@ class PDFViewer {
       } else {
         this.pageFlip.turnToPage(val - 1);
       }
+      this.ensureAdjacentPagesAreLoaded();
     }
   }
   hidePagesDependingOnpageViewMode() {
@@ -14979,7 +14978,6 @@ class PDFViewer {
               size: "fixed"
             });
             this.pageFlip.loadFromHTML(document.querySelectorAll(".page"));
-            this.ensureAdjecentPagesAreLoaded();
             this.pageFlip.on("flip", e => {
               if (this._currentPageNumber !== e.data + 1) {
                 this._setCurrentPageNumber(e.data + 1, false);
@@ -14990,7 +14988,7 @@ class PDFViewer {
       }
     }
   }
-  _setCurrentPageNumber(val, resetCurrentPageView = false) {
+  async _setCurrentPageNumber(val, resetCurrentPageView = false) {
     if (this._currentPageNumber === val) {
       if (resetCurrentPageView) {
         this.#resetCurrentPageView();
@@ -15006,20 +15004,18 @@ class PDFViewer {
     if (this.pageViewMode === "book" || this.pageViewMode === "infinite-scroll") {
       const pageView = this._pages[this.currentPageNumber - 1];
       if (pageView.div.parentElement.classList.contains("spread")) {
-        pageView.div.parentElement.childNodes.forEach(div => {
+        pageView.div.parentElement.childNodes.forEach(async div => {
           const pageNumber = Number(div.getAttribute("data-page-number"));
           const pv = this._pages[pageNumber - 1];
-          this.#ensurePdfPageLoaded(pv).then(() => {
-            this.renderingQueue.renderView(pv);
-          });
+          await this.#ensurePdfPageLoaded(pv);
+          this.renderingQueue.renderView(pv);
           div.style.display = "inline-block";
         });
       } else {
-        this.#ensurePdfPageLoaded(pageView).then(() => {
-          this.renderingQueue.renderView(pageView);
-        });
-        if (this.pageViewMode === "book") {
-          this.ensureAdjecentPagesAreLoaded();
+        await this.#ensurePdfPageLoaded(pageView);
+        this.renderingQueue.renderView(pageView);
+        if (this.#pageViewMode === "book") {
+          this.ensureAdjacentPagesAreLoaded();
         }
       }
     }
@@ -15047,43 +15043,57 @@ class PDFViewer {
     }
     return false;
   }
-  async ensureAdjecentPagesAreLoaded() {
-    const advances = [0, 1, -1, 2, -2];
+  async ensureAdjacentPagesAreLoaded() {
+    const advances = [0, 1, -1, 2, -2, -3];
+    let offset = 0;
+    if (this.currentPageNumber % 2 === 1) {
+      offset = -1;
+    }
+    let renderAsynchronously = false;
     for (const advance of advances) {
-      const pageIndex = this.currentPageNumber + advance;
+      const pageIndex = this.currentPageNumber + advance + offset;
       if (pageIndex >= 0 && pageIndex < this._pages.length) {
-        const pageView = this._pages[pageIndex];
-        await this.#ensurePdfPageLoaded(pageView);
-      }
-    }
-    const loader = () => this.adjacentPagesLoader(loader);
-    this.eventBus._on("pagerendered", loader);
-    this.eventBus._on("thumbnailRendered", loader);
-  }
-  adjacentPagesLoader(self) {
-    const advances = [0, 1, -1, 2, -2];
-    const isAlreadyRendering = this._pages.some(pageView => pageView.renderingState === _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.RenderingStates.RUNNING);
-    if (isAlreadyRendering) {
-      return;
-    }
-    const pausedRendering = this._pages.find(pageView => pageView.renderingState === _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.RenderingStates.PAUSED);
-    if (pausedRendering) {
-      this.renderingQueue.renderView(pausedRendering);
-      return;
-    }
-    for (const advance of advances) {
-      const pageIndex = this.currentPageNumber + advance;
-      if (pageIndex >= 0 && pageIndex < this._pages.length) {
-        const pageView = this._pages[pageIndex];
-        const needsToBeRendered = pageView.renderingState === _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.RenderingStates.INITIAL;
-        if (needsToBeRendered) {
-          this.renderingQueue.renderView(pageView);
-          return;
+        try {
+          const pageView = this._pages[pageIndex];
+          await this.#ensurePdfPageLoaded(pageView);
+          const isAlreadyRendering = this._pages.some(pv => pv.renderingState === _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.RenderingStates.RUNNING || pv.renderingState === _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.RenderingStates.PAUSED);
+          if (isAlreadyRendering || renderAsynchronously) {
+            const loader = () => this.adjacentPagesRenderer(loader, pageIndex);
+            this.eventBus._on("pagerendered", loader);
+            this.eventBus._on("thumbnailRendered", loader);
+          } else {
+            renderAsynchronously = this.adjacentPagesRenderer(null, pageIndex);
+          }
+        } catch (exception) {
+          console.log("Exception during pre-rendering page " + pageIndex, exception);
         }
       }
     }
-    this.eventBus._off("pagerendered", self);
-    this.eventBus._off("thumbnailRendered", self);
+  }
+  adjacentPagesRenderer(self, pageIndex) {
+    const isAlreadyRendering = this._pages.find(pageView => pageView.renderingState === _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.RenderingStates.RUNNING);
+    if (isAlreadyRendering) {
+      return true;
+    }
+    const pausedRendering = this._pages.find(pageView => pageView.renderingState === _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.RenderingStates.PAUSED);
+    if (pausedRendering) {
+      console.log("Delaying because " + pausedRendering.id + " is already in pause mode, so let's trigger this one first");
+      this.renderingQueue.renderView(pausedRendering);
+      return true;
+    }
+    if (self) {
+      this.eventBus._off("pagerendered", self);
+      this.eventBus._off("thumbnailRendered", self);
+    }
+    if (pageIndex >= 0 && pageIndex < this._pages.length) {
+      const pageView = this._pages[pageIndex];
+      const needsToBeRendered = pageView.renderingState === _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.RenderingStates.INITIAL;
+      if (needsToBeRendered) {
+        this.renderingQueue.renderView(pageView);
+        return true;
+      }
+    }
+    return false;
   }
   get currentPageLabel() {
     return this._pageLabels?.[this._currentPageNumber - 1] ?? null;
@@ -15451,7 +15461,13 @@ class PDFViewer {
           this._pagesCapability.resolve();
           return;
         }
+        if (this.#pageViewMode === "book") {
+          await this.ensureAdjacentPagesAreLoaded();
+        }
         for (let pageNum = 2; pageNum <= pagesCount; ++pageNum) {
+          if (this._pages[pageNum - 1]) {
+            continue;
+          }
           const promise = pdfDocument.getPage(pageNum).then(pdfPage => {
             const pageView = this._pages[pageNum - 1];
             if (!pageView.pdfPage) {
@@ -16801,10 +16817,10 @@ _pdf_viewer_js__WEBPACK_IMPORTED_MODULE_1__ = (__webpack_async_dependencies__.th
 
 
 class SecondaryToolbar {
+  #opts;
   constructor(options, eventBus) {
-    this.toolbar = options.toolbar;
-    this.toggleButton = options.toggleButton;
-    this.buttons = [{
+    this.#opts = options;
+    const buttons = [{
       element: options.presentationModeButton,
       eventName: "presentationmode",
       close: true
@@ -16904,23 +16920,14 @@ class SecondaryToolbar {
       eventName: "documentproperties",
       close: true
     }];
-    this.buttons.push({
+    buttons.push({
       element: options.openFileButton,
       eventName: "openfile",
       close: true
     });
-    this.items = {
-      firstPage: options.firstPageButton,
-      lastPage: options.lastPageButton,
-      pageRotateCw: options.pageRotateCwButton,
-      pageRotateCcw: options.pageRotateCcwButton
-    };
     this.eventBus = eventBus;
     this.opened = false;
-    this.#bindClickListeners();
-    this.#bindCursorToolsListener(options);
-    this.#bindScrollModeListener(options);
-    this.#bindSpreadModeListener(options);
+    this.#bindListeners(buttons);
     this.reset();
   }
   get isOpen() {
@@ -16938,39 +16945,42 @@ class SecondaryToolbar {
     this.pageNumber = 0;
     this.pagesCount = 0;
     this.#updateUIState();
-    this.eventBus.dispatch("secondarytoolbarreset", {
-      source: this
+    this.#scrollModeChanged({
+      mode: _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.ScrollMode.VERTICAL
+    });
+    this.#spreadModeChanged({
+      mode: _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.SpreadMode.NONE
     });
   }
   #updateUIState() {
-    this.items.firstPage.disabled = this.pageNumber <= 1;
-    if (document.getElementById("previousPage")) {
-      document.getElementById("previousPage").disabled = this.pageNumber <= 1;
-    }
-    this.items.lastPage.disabled = this.pageNumber >= this.pagesCount;
-    if (document.getElementById("nextPage")) {
-      document.getElementById("nextPage").disabled = this.pageNumber >= this.pagesCount;
-    }
-    this.items.pageRotateCw.disabled = this.pagesCount === 0;
-    this.items.pageRotateCcw.disabled = this.pagesCount === 0;
-    this.eventBus.dispatch("updateuistate", {
-      source: this,
-      widget: "SecondaryToolbar",
-      pageNumber: this.pageNumber,
-      pagesCount: this.pagesCount
-    });
+    const {
+      firstPageButton,
+      lastPageButton,
+      pageRotateCwButton,
+      pageRotateCcwButton
+    } = this.#opts;
+    firstPageButton.disabled = this.pageNumber <= 1;
+    lastPageButton.disabled = this.pageNumber >= this.pagesCount;
+    pageRotateCwButton.disabled = this.pagesCount === 0;
+    pageRotateCcwButton.disabled = this.pagesCount === 0;
   }
-  #bindClickListeners() {
-    this.toggleButton.addEventListener("click", this.toggle.bind(this));
+  #bindListeners(buttons) {
+    const {
+      eventBus
+    } = this;
+    const {
+      toggleButton
+    } = this.#opts;
+    toggleButton.addEventListener("click", this.toggle.bind(this));
     for (const {
       element,
       eventName,
       close,
       eventDetails
-    } of this.buttons) {
-      element?.addEventListener("click", evt => {
+    } of buttons) {
+      element.addEventListener("click", evt => {
         if (eventName !== null) {
-          this.eventBus.dispatch(eventName, {
+          eventBus.dispatch(eventName, {
             source: this,
             ...eventDetails
           });
@@ -16978,7 +16988,7 @@ class SecondaryToolbar {
         if (close) {
           this.close();
         }
-        this.eventBus.dispatch("reporttelemetry", {
+        eventBus.dispatch("reporttelemetry", {
           source: this,
           details: {
             type: "buttons",
@@ -16989,87 +16999,79 @@ class SecondaryToolbar {
         });
       });
     }
+    eventBus._on("cursortoolchanged", this.#cursorToolChanged.bind(this));
+    eventBus._on("scrollmodechanged", this.#scrollModeChanged.bind(this));
+    eventBus._on("spreadmodechanged", this.#spreadModeChanged.bind(this));
   }
-  #bindCursorToolsListener({
-    cursorSelectToolButton,
-    cursorHandToolButton
+  #cursorToolChanged({
+    tool
   }) {
-    this.eventBus._on("cursortoolchanged", ({
-      tool
-    }) => {
-      (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(cursorSelectToolButton, tool === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.CursorTool.SELECT);
-      (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(cursorHandToolButton, tool === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.CursorTool.HAND);
-    });
+    const {
+      cursorSelectToolButton,
+      cursorHandToolButton
+    } = this.#opts;
+    (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(cursorSelectToolButton, tool === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.CursorTool.SELECT);
+    (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(cursorHandToolButton, tool === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.CursorTool.HAND);
   }
-  #bindScrollModeListener({
-    scrollPageButton,
-    scrollVerticalButton,
-    scrollHorizontalButton,
-    scrollWrappedButton,
-    spreadNoneButton,
-    spreadOddButton,
-    spreadEvenButton
+  #scrollModeChanged({
+    mode
   }) {
-    const scrollModeChanged = ({
-      mode
-    }) => {
-      (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(scrollPageButton, mode === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.ScrollMode.PAGE);
-      (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(scrollVerticalButton, mode === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.ScrollMode.VERTICAL);
-      (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(scrollHorizontalButton, mode === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.ScrollMode.HORIZONTAL);
-      (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(scrollWrappedButton, mode === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.ScrollMode.WRAPPED);
-      const forceScrollModePage = this.pagesCount > _pdf_viewer_js__WEBPACK_IMPORTED_MODULE_1__.PagesCountLimit.FORCE_SCROLL_MODE_PAGE;
-      scrollPageButton.disabled = forceScrollModePage;
-      scrollVerticalButton.disabled = forceScrollModePage;
-      scrollHorizontalButton.disabled = forceScrollModePage;
-      scrollWrappedButton.disabled = forceScrollModePage;
-      const isHorizontal = mode === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.ScrollMode.HORIZONTAL;
-      spreadNoneButton.disabled = isHorizontal;
-      spreadOddButton.disabled = isHorizontal;
-      spreadEvenButton.disabled = isHorizontal;
-    };
-    this.eventBus._on("scrollmodechanged", scrollModeChanged);
-    this.eventBus._on("secondarytoolbarreset", evt => {
-      if (evt.source === this) {
-        scrollModeChanged({
-          mode: _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.ScrollMode.VERTICAL
-        });
-      }
-    });
+    const {
+      scrollPageButton,
+      scrollVerticalButton,
+      scrollHorizontalButton,
+      scrollWrappedButton,
+      spreadNoneButton,
+      spreadOddButton,
+      spreadEvenButton
+    } = this.#opts;
+    (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(scrollPageButton, mode === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.ScrollMode.PAGE);
+    (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(scrollVerticalButton, mode === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.ScrollMode.VERTICAL);
+    (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(scrollHorizontalButton, mode === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.ScrollMode.HORIZONTAL);
+    (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(scrollWrappedButton, mode === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.ScrollMode.WRAPPED);
+    const forceScrollModePage = this.pagesCount > _pdf_viewer_js__WEBPACK_IMPORTED_MODULE_1__.PagesCountLimit.FORCE_SCROLL_MODE_PAGE;
+    scrollPageButton.disabled = forceScrollModePage;
+    scrollVerticalButton.disabled = forceScrollModePage;
+    scrollHorizontalButton.disabled = forceScrollModePage;
+    scrollWrappedButton.disabled = forceScrollModePage;
+    const isHorizontal = mode === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.ScrollMode.HORIZONTAL;
+    spreadNoneButton.disabled = isHorizontal;
+    spreadOddButton.disabled = isHorizontal;
+    spreadEvenButton.disabled = isHorizontal;
   }
-  #bindSpreadModeListener({
-    spreadNoneButton,
-    spreadOddButton,
-    spreadEvenButton
+  #spreadModeChanged({
+    mode
   }) {
-    const spreadModeChanged = ({
-      mode
-    }) => {
-      (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(spreadNoneButton, mode === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.SpreadMode.NONE);
-      (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(spreadOddButton, mode === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.SpreadMode.ODD);
-      (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(spreadEvenButton, mode === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.SpreadMode.EVEN);
-    };
-    this.eventBus._on("spreadmodechanged", spreadModeChanged);
-    this.eventBus._on("secondarytoolbarreset", evt => {
-      if (evt.source === this) {
-        spreadModeChanged({
-          mode: _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.SpreadMode.NONE
-        });
-      }
-    });
+    const {
+      spreadNoneButton,
+      spreadOddButton,
+      spreadEvenButton
+    } = this.#opts;
+    (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(spreadNoneButton, mode === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.SpreadMode.NONE);
+    (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(spreadOddButton, mode === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.SpreadMode.ODD);
+    (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleCheckedBtn)(spreadEvenButton, mode === _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.SpreadMode.EVEN);
   }
   open() {
     if (this.opened) {
       return;
     }
     this.opened = true;
-    (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleExpandedBtn)(this.toggleButton, true, this.toolbar);
+    const {
+      toggleButton,
+      toolbar
+    } = this.#opts;
+    (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleExpandedBtn)(toggleButton, true, toolbar);
   }
   close() {
     if (!this.opened) {
       return;
     }
     this.opened = false;
-    (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleExpandedBtn)(this.toggleButton, false, this.toolbar);
+    const {
+      toggleButton,
+      toolbar
+    } = this.#opts;
+    (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.toggleExpandedBtn)(toggleButton, false, toolbar);
   }
   toggle() {
     if (this.opened) {
@@ -17776,10 +17778,11 @@ pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? 
 
 
 class Toolbar {
+  #opts;
   constructor(options, eventBus) {
-    this.toolbar = options.container;
+    this.#opts = options;
     this.eventBus = eventBus;
-    this.buttons = [{
+    const buttons = [{
       element: options.previous,
       eventName: "previouspage"
     }, {
@@ -17845,19 +17848,9 @@ class Toolbar {
         }
       }
     }];
-    this.items = {
-      numPages: options.numPages,
-      pageNumber: options.pageNumber,
-      scaleSelect: options.scaleSelect,
-      customScaleOption: options.customScaleOption,
-      previous: options.previous,
-      next: options.next,
-      zoomIn: options.zoomIn,
-      zoomOut: options.zoomOut
-    };
-    this.#bindListeners(options);
+    this.#bindListeners(buttons);
     if (options.editorHighlightColorPicker) {
-      this.eventBus._on("annotationeditoruimanager", ({
+      eventBus._on("annotationeditoruimanager", ({
         uiManager
       }) => {
         this.#setAnnotationEditorUIManager(uiManager, options.editorHighlightColorPicker);
@@ -17906,24 +17899,27 @@ class Toolbar {
     }
     this.#updateUIState(true);
     this.updateLoadingIndicatorState();
-    this.eventBus.dispatch("toolbarreset", {
-      source: this
+    this.#editorModeChanged({
+      mode: pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.AnnotationEditorType.DISABLE
     });
   }
-  #bindListeners(options) {
+  #bindListeners(buttons) {
+    const {
+      eventBus
+    } = this;
     const {
       pageNumber,
       scaleSelect
-    } = this.items;
+    } = this.#opts;
     const self = this;
     for (const {
       element,
       eventName,
       eventDetails
-    } of this.buttons) {
-      element?.addEventListener("click", evt => {
+    } of buttons) {
+      element.addEventListener("click", evt => {
         if (eventName !== null) {
-          this.eventBus.dispatch(eventName, {
+          eventBus.dispatch(eventName, {
             source: this,
             ...eventDetails,
             isFromKeyboard: evt.detail === 0
@@ -17935,7 +17931,7 @@ class Toolbar {
       this.select();
     });
     pageNumber.addEventListener("change", function () {
-      self.eventBus.dispatch("pagenumberchanged", {
+      eventBus.dispatch("pagenumberchanged", {
         source: self,
         value: this.value
       });
@@ -17944,89 +17940,81 @@ class Toolbar {
       if (this.value === "custom") {
         return;
       }
-      self.eventBus.dispatch("scalechanged", {
+      eventBus.dispatch("scalechanged", {
         source: self,
         value: this.value
       });
     });
-    scaleSelect.addEventListener("click", function (evt) {
-      const target = evt.target;
+    scaleSelect.addEventListener("click", function ({
+      target
+    }) {
       if (this.value === self.pageScaleValue && target.tagName.toUpperCase() === "OPTION") {
         this.blur();
       }
     });
     scaleSelect.oncontextmenu = pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.noContextMenu;
-    this.#bindEditorToolsListener(options);
+    eventBus._on("annotationeditormodechanged", this.#editorModeChanged.bind(this));
   }
-  #bindEditorToolsListener({
-    editorFreeTextButton,
-    editorFreeTextParamsToolbar,
-    editorHighlightButton,
-    editorHighlightParamsToolbar,
-    editorInkButton,
-    editorInkParamsToolbar,
-    editorStampButton,
-    editorStampParamsToolbar
+  #editorModeChanged({
+    mode
   }) {
-    const editorModeChanged = ({
-      mode
-    }) => {
-      (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.toggleCheckedBtn)(editorFreeTextButton, mode === pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.AnnotationEditorType.FREETEXT, editorFreeTextParamsToolbar);
-      (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.toggleCheckedBtn)(editorHighlightButton, mode === pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.AnnotationEditorType.HIGHLIGHT, editorHighlightParamsToolbar);
-      (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.toggleCheckedBtn)(editorInkButton, mode === pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.AnnotationEditorType.INK, editorInkParamsToolbar);
-      (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.toggleCheckedBtn)(editorStampButton, mode === pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.AnnotationEditorType.STAMP, editorStampParamsToolbar);
-      const isDisable = mode === pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.AnnotationEditorType.DISABLE;
-      editorFreeTextButton.disabled = isDisable;
-      editorHighlightButton.disabled = isDisable;
-      editorInkButton.disabled = isDisable;
-      editorStampButton.disabled = isDisable;
-    };
-    this.eventBus._on("annotationeditormodechanged", editorModeChanged);
-    this.eventBus._on("toolbarreset", evt => {
-      if (evt.source === this) {
-        editorModeChanged({
-          mode: pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.AnnotationEditorType.DISABLE
-        });
-      }
-    });
+    const {
+      editorFreeTextButton,
+      editorFreeTextParamsToolbar,
+      editorHighlightButton,
+      editorHighlightParamsToolbar,
+      editorInkButton,
+      editorInkParamsToolbar,
+      editorStampButton,
+      editorStampParamsToolbar
+    } = this.#opts;
+    (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.toggleCheckedBtn)(editorFreeTextButton, mode === pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.AnnotationEditorType.FREETEXT, editorFreeTextParamsToolbar);
+    (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.toggleCheckedBtn)(editorHighlightButton, mode === pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.AnnotationEditorType.HIGHLIGHT, editorHighlightParamsToolbar);
+    (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.toggleCheckedBtn)(editorInkButton, mode === pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.AnnotationEditorType.INK, editorInkParamsToolbar);
+    (0,_ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.toggleCheckedBtn)(editorStampButton, mode === pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.AnnotationEditorType.STAMP, editorStampParamsToolbar);
+    const isDisable = mode === pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.AnnotationEditorType.DISABLE;
+    editorFreeTextButton.disabled = isDisable;
+    editorHighlightButton.disabled = isDisable;
+    editorInkButton.disabled = isDisable;
+    editorStampButton.disabled = isDisable;
   }
   #updateUIState(resetNumPages = false) {
     const {
       pageNumber,
       pagesCount,
       pageScaleValue,
-      pageScale,
-      items
+      pageScale
     } = this;
+    const opts = this.#opts;
     if (resetNumPages) {
       if (this.hasPageLabels) {
-        items.pageNumber.type = "text";
-        items.numPages.setAttribute("data-l10n-id", "pdfjs-page-of-pages");
+        opts.pageNumber.type = "text";
+        opts.numPages.setAttribute("data-l10n-id", "pdfjs-page-of-pages");
       } else {
-        items.pageNumber.type = "number";
-        items.numPages.setAttribute("data-l10n-id", "pdfjs-of-pages");
-        items.numPages.setAttribute("data-l10n-args", JSON.stringify({
+        opts.pageNumber.type = "number";
+        opts.numPages.setAttribute("data-l10n-id", "pdfjs-of-pages");
+        opts.numPages.setAttribute("data-l10n-args", JSON.stringify({
           pagesCount
         }));
       }
-      items.pageNumber.max = pagesCount;
+      opts.pageNumber.max = pagesCount;
     }
     if (this.hasPageLabels) {
-      items.pageNumber.value = this.pageLabel;
-      items.numPages.setAttribute("data-l10n-args", JSON.stringify({
+      opts.pageNumber.value = this.pageLabel;
+      opts.numPages.setAttribute("data-l10n-args", JSON.stringify({
         pageNumber,
         pagesCount
       }));
     } else {
-      items.pageNumber.value = pageNumber;
+      opts.pageNumber.value = pageNumber;
     }
-    items.previous.disabled = pageNumber <= 1;
-    items.next.disabled = pageNumber >= pagesCount;
-    items.zoomOut.disabled = pageScale <= _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.MIN_SCALE;
-    items.zoomIn.disabled = pageScale >= _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.MAX_SCALE;
+    opts.previous.disabled = pageNumber <= 1;
+    opts.next.disabled = pageNumber >= pagesCount;
+    opts.zoomOut.disabled = pageScale <= _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.MIN_SCALE;
+    opts.zoomIn.disabled = pageScale >= _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.MAX_SCALE;
     let predefinedValueFound = false;
-    if (items.scaleSelect.options) {
-      for (const option of items.scaleSelect.options) {
+    if (opts.scaleSelect.options) {
+      for (const option of opts.scaleSelect.options) {
         if (option.value !== pageScaleValue) {
           option.selected = false;
           continue;
@@ -18036,8 +18024,8 @@ class Toolbar {
       }
     }
     if (!predefinedValueFound) {
-      items.customScaleOption.selected = true;
-      items.customScaleOption.setAttribute("data-l10n-args", JSON.stringify({
+      opts.customScaleOption.selected = true;
+      opts.customScaleOption.setAttribute("data-l10n-args", JSON.stringify({
         scale: Math.round(pageScale * 10000) / 100
       }));
     }
@@ -18053,7 +18041,7 @@ class Toolbar {
   updateLoadingIndicatorState(loading = false) {
     const {
       pageNumber
-    } = this.items;
+    } = this.#opts;
     pageNumber.classList.toggle("loading", loading);
   }
 }
@@ -18720,8 +18708,8 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([web_
 
 
 
-const pdfjsVersion = '4.0.806';
-const pdfjsBuild = '17e393490';
+const pdfjsVersion = '4.0.841';
+const pdfjsBuild = '1c0d4745e';
 const AppConstants = {
   LinkTarget: _pdf_link_service_js__WEBPACK_IMPORTED_MODULE_4__.LinkTarget,
   RenderingStates: _ui_utils_js__WEBPACK_IMPORTED_MODULE_2__.RenderingStates,
@@ -18815,7 +18803,6 @@ function getViewerConfiguration() {
       outlineView: document.getElementById("outlineView"),
       attachmentsView: document.getElementById("attachmentsView"),
       layersView: document.getElementById("layersView"),
-      outlineOptionsContainer: document.getElementById("outlineOptionsContainer"),
       currentOutlineItemButton: document.getElementById("currentOutlineItem")
     },
     findBar: {

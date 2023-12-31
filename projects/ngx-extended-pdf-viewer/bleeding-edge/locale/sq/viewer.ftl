@@ -292,6 +292,22 @@ pdfjs-editor-ink-button-label = Vizatoni
 pdfjs-editor-stamp-button =
     .title = Shtoni ose përpunoni figura
 pdfjs-editor-stamp-button-label = Shtoni ose përpunoni figura
+pdfjs-editor-remove-button =
+    .title = Hiqe
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Hiq vizatim
+pdfjs-editor-remove-freetext-button =
+    .title = Hiq tekst
+pdfjs-editor-remove-stamp-button =
+    .title = Hiq figurë
+pdfjs-editor-remove-highlight-button =
+    .title = Hiqe theksimin
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Ngjyrë
 pdfjs-editor-free-text-size-input = Madhësi
@@ -339,6 +355,25 @@ pdfjs-editor-resizer-label-bottom-middle = Mesi i pjesës poshtë — ripërmaso
 pdfjs-editor-resizer-label-bottom-left = Cepi i poshtëm — ripërmasojeni
 pdfjs-editor-resizer-label-middle-left = Majtas në mes — ripërmasojeni
 
+## Color picker
+
+# This means "Color used to highlight text"
+pdfjs-editor-highlight-colorpicker-label = Ngjyrë theksimi
+pdfjs-editor-colorpicker-button =
+    .title = Ndryshoni ngjyrë
+pdfjs-editor-colorpicker-dropdown =
+    .aria-label = Zgjedhje ngjyre
+pdfjs-editor-colorpicker-yellow =
+    .title = E verdhë
+pdfjs-editor-colorpicker-green =
+    .title = E gjelbër
+pdfjs-editor-colorpicker-blue =
+    .title = Blu
+pdfjs-editor-colorpicker-pink =
+    .title = Rozë
+pdfjs-editor-colorpicker-red =
+    .title = E kuqe
+
 pdfjs-spread-none-button =
     .title = Do not join page spreads
 pdfjs-spread-none-button-label = No Spreads
@@ -351,26 +386,5 @@ pdfjs-spread-even-button-label = Even Spreads
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
-pdfjs-editor-remove-ink-button =
-    .title = Remove drawing
-pdfjs-editor-remove-freetext-button =
-    .title = Remove text
-pdfjs-editor-remove-stamp-button =
-    .title = Remove image
-pdfjs-editor-remove-highlight-button =
-    .title = Remove highlight
-pdfjs-editor-highlight-colorpicker-label = Highlight color
-pdfjs-editor-colorpicker-button =
-    .title = Change color
-pdfjs-editor-colorpicker-dropdown =
-    .aria-label = Color choices
-pdfjs-editor-colorpicker-yellow =
-    .title = Yellow
-pdfjs-editor-colorpicker-green =
-    .title = Green
-pdfjs-editor-colorpicker-blue =
-    .title = Blue
-pdfjs-editor-colorpicker-pink =
-    .title = Pink
-pdfjs-editor-colorpicker-red =
-    .title = Red
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll

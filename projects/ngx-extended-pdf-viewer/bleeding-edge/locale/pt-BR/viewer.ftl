@@ -303,6 +303,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = Adicionar ou editar imagens
 pdfjs-editor-remove-button =
     .title = Remover
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Remover desenho
+pdfjs-editor-remove-freetext-button =
+    .title = Remover texto
+pdfjs-editor-remove-stamp-button =
+    .title = Remover imagem
+pdfjs-editor-remove-highlight-button =
+    .title = Remover destaque
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Cor
 pdfjs-editor-free-text-size-input = Tamanho
@@ -350,29 +364,30 @@ pdfjs-editor-resizer-label-bottom-middle = No centro da base — redimensionar
 pdfjs-editor-resizer-label-bottom-left = Canto inferior esquerdo — redimensionar
 pdfjs-editor-resizer-label-middle-left = No meio à esquerda — redimensionar
 
+## Color picker
+
+# This means "Color used to highlight text"
+pdfjs-editor-highlight-colorpicker-label = Cor de destaque
+pdfjs-editor-colorpicker-button =
+    .title = Mudar cor
+pdfjs-editor-colorpicker-dropdown =
+    .aria-label = Opções de cores
+pdfjs-editor-colorpicker-yellow =
+    .title = Amarelo
+pdfjs-editor-colorpicker-green =
+    .title = Verde
+pdfjs-editor-colorpicker-blue =
+    .title = Azul
+pdfjs-editor-colorpicker-pink =
+    .title = Rosa
+pdfjs-editor-colorpicker-red =
+    .title = Vermelho
+
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
-pdfjs-editor-remove-ink-button =
-    .title = Remove drawing
-pdfjs-editor-remove-freetext-button =
-    .title = Remove text
-pdfjs-editor-remove-stamp-button =
-    .title = Remove image
-pdfjs-editor-remove-highlight-button =
-    .title = Remove highlight
-pdfjs-editor-highlight-colorpicker-label = Highlight color
-pdfjs-editor-colorpicker-button =
-    .title = Change color
-pdfjs-editor-colorpicker-dropdown =
-    .aria-label = Color choices
-pdfjs-editor-colorpicker-yellow =
-    .title = Yellow
-pdfjs-editor-colorpicker-green =
-    .title = Green
-pdfjs-editor-colorpicker-blue =
-    .title = Blue
-pdfjs-editor-colorpicker-pink =
-    .title = Pink
-pdfjs-editor-colorpicker-red =
-    .title = Red
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll
+
+# Translations for ngx-extended-pdf-viewer additions
+

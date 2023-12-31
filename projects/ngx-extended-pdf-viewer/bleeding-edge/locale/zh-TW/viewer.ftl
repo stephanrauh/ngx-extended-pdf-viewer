@@ -295,6 +295,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = 新增或編輯圖片
 pdfjs-editor-remove-button =
     .title = 移除
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = 移除繪圖
+pdfjs-editor-remove-freetext-button =
+    .title = 移除文字
+pdfjs-editor-remove-stamp-button =
+    .title = 移除圖片
+pdfjs-editor-remove-highlight-button =
+    .title = 移除強調範圍
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = 色彩
 pdfjs-editor-free-text-size-input = 大小
@@ -342,29 +356,27 @@ pdfjs-editor-resizer-label-bottom-middle = 底部中間 — 調整大小
 pdfjs-editor-resizer-label-bottom-left = 左下角 — 調整大小
 pdfjs-editor-resizer-label-middle-left = 中間左方 — 調整大小
 
+## Color picker
+
+# This means "Color used to highlight text"
+pdfjs-editor-highlight-colorpicker-label = 強調色彩
+pdfjs-editor-colorpicker-button =
+    .title = 更改色彩
+pdfjs-editor-colorpicker-dropdown =
+    .aria-label = 色彩選項
+pdfjs-editor-colorpicker-yellow =
+    .title = 黃色
+pdfjs-editor-colorpicker-green =
+    .title = 綠色
+pdfjs-editor-colorpicker-blue =
+    .title = 藍色
+pdfjs-editor-colorpicker-pink =
+    .title = 粉紅色
+pdfjs-editor-colorpicker-red =
+    .title = 紅色
+
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
-pdfjs-editor-remove-ink-button =
-    .title = Remove drawing
-pdfjs-editor-remove-freetext-button =
-    .title = Remove text
-pdfjs-editor-remove-stamp-button =
-    .title = Remove image
-pdfjs-editor-remove-highlight-button =
-    .title = Remove highlight
-pdfjs-editor-highlight-colorpicker-label = Highlight color
-pdfjs-editor-colorpicker-button =
-    .title = Change color
-pdfjs-editor-colorpicker-dropdown =
-    .aria-label = Color choices
-pdfjs-editor-colorpicker-yellow =
-    .title = Yellow
-pdfjs-editor-colorpicker-green =
-    .title = Green
-pdfjs-editor-colorpicker-blue =
-    .title = Blue
-pdfjs-editor-colorpicker-pink =
-    .title = Pink
-pdfjs-editor-colorpicker-red =
-    .title = Red
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll

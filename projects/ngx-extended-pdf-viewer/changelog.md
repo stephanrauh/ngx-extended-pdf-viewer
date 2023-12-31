@@ -516,3 +516,4 @@
 - 19.0.0-alpha.6 #1961 now the schematics cops with stand-alone projects
 - 19.0.0-alpha.7 #1997 added missing translations
 - 19.0.0 #1987 make the radio buttons of the secondary menu more reliable, and hide the secondary menu more reliably when it's empty; don't close the secondary menu when the "single page mode" menu is clicked
+- 19.0.1 #766 make book mode preloading more reliable

@@ -62,7 +62,7 @@
   "optionalDependencies": {
     "fsevents": "^2.3.3"
   },
-  "deactivated-jest": {
+  "jest": {
     "preset": "jest-preset-angular",
     "setupFilesAfterEnv": [
       "<rootDir>/setupJest.ts"

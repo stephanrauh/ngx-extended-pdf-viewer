@@ -11211,7 +11211,7 @@ class PDFLinkService {
     }
     if (this.pdfViewer.pageViewMode === "book") {
       if (this.pdfViewer.pageFlip) {
-        this.pdfViewer.ensureAdjecentPagesAreLoaded();
+        this.pdfViewer.ensureAdjacentPagesAreLoaded();
         const evenPage = this.pdfViewer.currentPageNumber - this.pdfViewer.currentPageNumber % 2;
         const evenTargetPage = pageNumber - pageNumber % 2;
         if (evenPage === evenTargetPage - 2) {
@@ -14761,7 +14761,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = '4.0.725';
+    const viewerVersion = '4.0.727';
     if (pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version !== viewerVersion) {
       throw new Error(`The API version "${pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -14884,6 +14884,7 @@ class PDFViewer {
       } else {
         this.pageFlip.turnToPage(val - 1);
       }
+      this.ensureAdjacentPagesAreLoaded();
     }
   }
   hidePagesDependingOnpageViewMode() {
@@ -14905,7 +14906,6 @@ class PDFViewer {
               size: "fixed"
             });
             this.pageFlip.loadFromHTML(document.querySelectorAll(".page"));
-            this.ensureAdjecentPagesAreLoaded();
             this.pageFlip.on("flip", e => {
               if (this._currentPageNumber !== e.data + 1) {
                 this._setCurrentPageNumber(e.data + 1, false);
@@ -14916,7 +14916,7 @@ class PDFViewer {
       }
     }
   }
-  _setCurrentPageNumber(val, resetCurrentPageView = false) {
+  async _setCurrentPageNumber(val, resetCurrentPageView = false) {
     if (this._currentPageNumber === val) {
       if (resetCurrentPageView) {
         this.#resetCurrentPageView();
@@ -14932,20 +14932,18 @@ class PDFViewer {
     if (this.pageViewMode === "book" || this.pageViewMode === "infinite-scroll") {
       const pageView = this._pages[this.currentPageNumber - 1];
       if (pageView.div.parentElement.classList.contains("spread")) {
-        pageView.div.parentElement.childNodes.forEach(div => {
+        pageView.div.parentElement.childNodes.forEach(async div => {
           const pageNumber = Number(div.getAttribute("data-page-number"));
           const pv = this._pages[pageNumber - 1];
-          this.#ensurePdfPageLoaded(pv).then(() => {
-            this.renderingQueue.renderView(pv);
-          });
+          await this.#ensurePdfPageLoaded(pv);
+          this.renderingQueue.renderView(pv);
           div.style.display = "inline-block";
         });
       } else {
-        this.#ensurePdfPageLoaded(pageView).then(() => {
-          this.renderingQueue.renderView(pageView);
-        });
-        if (this.pageViewMode === "book") {
-          this.ensureAdjecentPagesAreLoaded();
+        await this.#ensurePdfPageLoaded(pageView);
+        this.renderingQueue.renderView(pageView);
+        if (this.#pageViewMode === "book") {
+          this.ensureAdjacentPagesAreLoaded();
         }
       }
     }
@@ -14973,43 +14971,57 @@ class PDFViewer {
     }
     return false;
   }
-  async ensureAdjecentPagesAreLoaded() {
-    const advances = [0, 1, -1, 2, -2];
+  async ensureAdjacentPagesAreLoaded() {
+    const advances = [0, 1, -1, 2, -2, -3];
+    let offset = 0;
+    if (this.currentPageNumber % 2 === 1) {
+      offset = -1;
+    }
+    let renderAsynchronously = false;
     for (const advance of advances) {
-      const pageIndex = this.currentPageNumber + advance;
+      const pageIndex = this.currentPageNumber + advance + offset;
       if (pageIndex >= 0 && pageIndex < this._pages.length) {
-        const pageView = this._pages[pageIndex];
-        await this.#ensurePdfPageLoaded(pageView);
-      }
-    }
-    const loader = () => this.adjacentPagesLoader(loader);
-    this.eventBus._on("pagerendered", loader);
-    this.eventBus._on("thumbnailRendered", loader);
-  }
-  adjacentPagesLoader(self) {
-    const advances = [0, 1, -1, 2, -2];
-    const isAlreadyRendering = this._pages.some(pageView => pageView.renderingState === _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.RenderingStates.RUNNING);
-    if (isAlreadyRendering) {
-      return;
-    }
-    const pausedRendering = this._pages.find(pageView => pageView.renderingState === _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.RenderingStates.PAUSED);
-    if (pausedRendering) {
-      this.renderingQueue.renderView(pausedRendering);
-      return;
-    }
-    for (const advance of advances) {
-      const pageIndex = this.currentPageNumber + advance;
-      if (pageIndex >= 0 && pageIndex < this._pages.length) {
-        const pageView = this._pages[pageIndex];
-        const needsToBeRendered = pageView.renderingState === _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.RenderingStates.INITIAL;
-        if (needsToBeRendered) {
-          this.renderingQueue.renderView(pageView);
-          return;
+        try {
+          const pageView = this._pages[pageIndex];
+          await this.#ensurePdfPageLoaded(pageView);
+          const isAlreadyRendering = this._pages.some(pv => pv.renderingState === _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.RenderingStates.RUNNING || pv.renderingState === _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.RenderingStates.PAUSED);
+          if (isAlreadyRendering || renderAsynchronously) {
+            const loader = () => this.adjacentPagesRenderer(loader, pageIndex);
+            this.eventBus._on("pagerendered", loader);
+            this.eventBus._on("thumbnailRendered", loader);
+          } else {
+            renderAsynchronously = this.adjacentPagesRenderer(null, pageIndex);
+          }
+        } catch (exception) {
+          console.log("Exception during pre-rendering page " + pageIndex, exception);
         }
       }
     }
-    this.eventBus._off("pagerendered", self);
-    this.eventBus._off("thumbnailRendered", self);
+  }
+  adjacentPagesRenderer(self, pageIndex) {
+    const isAlreadyRendering = this._pages.find(pageView => pageView.renderingState === _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.RenderingStates.RUNNING);
+    if (isAlreadyRendering) {
+      return true;
+    }
+    const pausedRendering = this._pages.find(pageView => pageView.renderingState === _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.RenderingStates.PAUSED);
+    if (pausedRendering) {
+      console.log("Delaying because " + pausedRendering.id + " is already in pause mode, so let's trigger this one first");
+      this.renderingQueue.renderView(pausedRendering);
+      return true;
+    }
+    if (self) {
+      this.eventBus._off("pagerendered", self);
+      this.eventBus._off("thumbnailRendered", self);
+    }
+    if (pageIndex >= 0 && pageIndex < this._pages.length) {
+      const pageView = this._pages[pageIndex];
+      const needsToBeRendered = pageView.renderingState === _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.RenderingStates.INITIAL;
+      if (needsToBeRendered) {
+        this.renderingQueue.renderView(pageView);
+        return true;
+      }
+    }
+    return false;
   }
   get currentPageLabel() {
     return this._pageLabels?.[this._currentPageNumber - 1] ?? null;
@@ -15373,7 +15385,13 @@ class PDFViewer {
           this._pagesCapability.resolve();
           return;
         }
+        if (this.#pageViewMode === "book") {
+          await this.ensureAdjacentPagesAreLoaded();
+        }
         for (let pageNum = 2; pageNum <= pagesCount; ++pageNum) {
+          if (this._pages[pageNum - 1]) {
+            continue;
+          }
           const promise = pdfDocument.getPage(pageNum).then(pdfPage => {
             const pageView = this._pages[pageNum - 1];
             if (!pageView.pdfPage) {
@@ -18606,8 +18624,8 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([web_
 
 
 
-const pdfjsVersion = '4.0.725';
-const pdfjsBuild = 'f51bcae8b';
+const pdfjsVersion = '4.0.727';
+const pdfjsBuild = 'ecea815a0';
 const AppConstants = {
   LinkTarget: _pdf_link_service_js__WEBPACK_IMPORTED_MODULE_4__.LinkTarget,
   RenderingStates: _ui_utils_js__WEBPACK_IMPORTED_MODULE_2__.RenderingStates,

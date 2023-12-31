@@ -39,6 +39,15 @@ pdfjs-open-file-button-label = Digeriñ ur restr
 pdfjs-print-button =
     .title = Moullañ
 pdfjs-print-button-label = Moullañ
+pdfjs-save-button =
+    .title = Enrollañ
+pdfjs-save-button-label = Enrollañ
+# Used in Firefox for Android as a tooltip for the download button (“download” is a verb).
+pdfjs-download-button =
+    .title = Pellgargañ
+# Used in Firefox for Android as a label for the download button (“download” is a verb).
+# Length of the translation matters since we are in a mobile context, with limited screen estate.
+pdfjs-download-button-label = Pellgargañ
 
 ##  Secondary toolbar and context menu
 
@@ -252,20 +261,35 @@ pdfjs-web-fonts-disabled = Diweredekaet eo an nodrezhoù web: n'haller ket arver
 
 ## Editing
 
+pdfjs-editor-free-text-button =
+    .title = Testenn
+pdfjs-editor-free-text-button-label = Testenn
+pdfjs-editor-ink-button =
+    .title = Tresañ
+pdfjs-editor-ink-button-label = Tresañ
+
+## Remove button for the various kind of editor.
+
+
+##
+
+# Editor Parameters
+pdfjs-editor-free-text-color-input = Liv
+pdfjs-editor-free-text-size-input = Ment
+pdfjs-editor-ink-color-input = Liv
 
 ## Alt-text dialog
 
+pdfjs-editor-alt-text-cancel-button = Nullañ
+pdfjs-editor-alt-text-save-button = Enrollañ
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
 
 
-pdfjs-save-button =
-    .title = Save
-pdfjs-save-button-label = Save
-pdfjs-download-button =
-    .title = Download
-pdfjs-download-button-label = Download
+## Color picker
+
+
 pdfjs-bookmark-button =
     .title = Current Page (View URL from Current Page)
 pdfjs-bookmark-button-label = Current Page
@@ -289,12 +313,6 @@ pdfjs-find-match-count-limit =
         [one] More than { $limit } match
        *[other] More than { $limit } matches
     }
-pdfjs-editor-free-text-button =
-    .title = Text
-pdfjs-editor-free-text-button-label = Text
-pdfjs-editor-ink-button =
-    .title = Draw
-pdfjs-editor-ink-button-label = Draw
 pdfjs-editor-stamp-button =
     .title = Add or edit images
 pdfjs-editor-stamp-button-label = Add or edit images
@@ -309,9 +327,6 @@ pdfjs-editor-remove-stamp-button =
     .title = Remove image
 pdfjs-editor-remove-highlight-button =
     .title = Remove highlight
-pdfjs-editor-free-text-color-input = Color
-pdfjs-editor-free-text-size-input = Size
-pdfjs-editor-ink-color-input = Color
 pdfjs-editor-ink-thickness-input = Thickness
 pdfjs-editor-ink-opacity-input = Opacity
 pdfjs-editor-stamp-add-image-button =
@@ -332,8 +347,6 @@ pdfjs-editor-alt-text-add-description-label = Add a description
 pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
 pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
 pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
-pdfjs-editor-alt-text-cancel-button = Cancel
-pdfjs-editor-alt-text-save-button = Save
 pdfjs-editor-alt-text-decorative-tooltip = Marked as decorative
 pdfjs-editor-alt-text-textarea =
     .placeholder = For example, “A young man sits down at a table to eat a meal”
@@ -360,3 +373,5 @@ pdfjs-editor-colorpicker-pink =
     .title = Pink
 pdfjs-editor-colorpicker-red =
     .title = Red
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll

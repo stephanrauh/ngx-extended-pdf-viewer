@@ -11,7 +11,9 @@
   CDN: <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">unpkg.com</a>
  </p>
 
-# Welcome to ngx-extended-pdf-viewer!
+# BeyondJava.net and PDFViewer.net wish you a happy new year 2024!
+
+## Welcome to ngx-extended-pdf-viewer!
 
 [![Join the chat at https://gitter.im/ngx-extended-pdf-viewer/community](https://badges.gitter.im/ngx-extended-pdf-viewer/community.svg)](https://gitter.im/ngx-extended-pdf-viewer/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -24,4 +26,5 @@ Bringing Mozilla's pdf.js to the Angular world. That's not only the core PDF vie
 There's a showcase at <a href="https://pdfviewer.net">https://pdfviewer.net</a>. Check this page for live demos, source code examples, and a handbook.
 
 ## Build or update the library from scratch
+
 See the [how-to-build walkthrough](projects/ngx-extended-pdf-viewer/how-to-build.md).

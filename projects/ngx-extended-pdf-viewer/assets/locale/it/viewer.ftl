@@ -355,31 +355,34 @@ pdfjs-editor-resizer-label-middle-left = Lato sinistro nel mezzo — ridimension
 
 
 
-unverified-signature-warning = Questo file PDF contiene una firma digitale. Questo visualizzatore PDF non può verificare se la firma è valida. Scarica il file e aprilo in Acrobat Reader per verificare che la firma sia valida.
+pdfjs-editor-remove-ink-button =
+    .title = Rimuovi disegno
+pdfjs-editor-remove-freetext-button =
+    .title = Rimuovi testo
+pdfjs-editor-remove-stamp-button =
+    .title = Rimuovi immagine
+pdfjs-editor-remove-highlight-button =
+    .title = Rimuovi evidenziazione
+pdfjs-editor-highlight-colorpicker-label = Colore evidenziatore
+pdfjs-editor-colorpicker-button =
+    .title = Cambia colore
+pdfjs-editor-colorpicker-dropdown =
+    .aria-label = Colori disponibili
+pdfjs-editor-colorpicker-yellow =
+    .title = Giallo
+pdfjs-editor-colorpicker-green =
+    .title = Verde
+pdfjs-editor-colorpicker-blue =
+    .title = Blu
+pdfjs-editor-colorpicker-pink =
+    .title = Rosa
+pdfjs-editor-colorpicker-red =
+    .title = Rosso
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
-pdfjs-editor-remove-ink-button =
-    .title = Remove drawing
-pdfjs-editor-remove-freetext-button =
-    .title = Remove text
-pdfjs-editor-remove-stamp-button =
-    .title = Remove image
-pdfjs-editor-remove-highlight-button =
-    .title = Remove highlight
-pdfjs-editor-highlight-colorpicker-label = Highlight color
-pdfjs-editor-colorpicker-button =
-    .title = Change color
-pdfjs-editor-colorpicker-dropdown =
-    .aria-label = Color choices
-pdfjs-editor-colorpicker-yellow =
-    .title = Yellow
-pdfjs-editor-colorpicker-green =
-    .title = Green
-pdfjs-editor-colorpicker-blue =
-    .title = Blue
-pdfjs-editor-colorpicker-pink =
-    .title = Pink
-pdfjs-editor-colorpicker-red =
-    .title = Red
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
+
+# Translations for ngx-extended-pdf-viewer additions
+

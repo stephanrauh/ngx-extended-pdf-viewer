@@ -307,6 +307,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = Wobraze pśidaś abo wobźěłaś
 pdfjs-editor-remove-button =
     .title = Wótwónoźeś
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Kreslanku wótwónoźeś
+pdfjs-editor-remove-freetext-button =
+    .title = Tekst wótwónoźeś
+pdfjs-editor-remove-stamp-button =
+    .title = Wobraz wótwónoźeś
+pdfjs-editor-remove-highlight-button =
+    .title = Wuzwignjenje wótpóraś
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Barwa
 pdfjs-editor-free-text-size-input = Wjelikosć
@@ -354,29 +368,27 @@ pdfjs-editor-resizer-label-bottom-middle = Dołojce wesrjejź – wjelikosć zm�
 pdfjs-editor-resizer-label-bottom-left = Dołojce nalěwo – wjelikosć změniś
 pdfjs-editor-resizer-label-middle-left = Wesrjejź nalěwo – wjelikosć změniś
 
-pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
-pdfjs-editor-remove-ink-button =
-    .title = Remove drawing
-pdfjs-editor-remove-freetext-button =
-    .title = Remove text
-pdfjs-editor-remove-stamp-button =
-    .title = Remove image
-pdfjs-editor-remove-highlight-button =
-    .title = Remove highlight
-pdfjs-editor-highlight-colorpicker-label = Highlight color
+## Color picker
+
+# This means "Color used to highlight text"
+pdfjs-editor-highlight-colorpicker-label = Barwa wuzwignjenja
 pdfjs-editor-colorpicker-button =
-    .title = Change color
+    .title = Barwu změniś
 pdfjs-editor-colorpicker-dropdown =
-    .aria-label = Color choices
+    .aria-label = Wuběrk barwow
 pdfjs-editor-colorpicker-yellow =
-    .title = Yellow
+    .title = Žołty
 pdfjs-editor-colorpicker-green =
-    .title = Green
+    .title = Zeleny
 pdfjs-editor-colorpicker-blue =
-    .title = Blue
+    .title = Módry
 pdfjs-editor-colorpicker-pink =
     .title = Pink
 pdfjs-editor-colorpicker-red =
-    .title = Red
+    .title = Cerwjeny
+
+pdfjs-editor-highlight-button =
+    .title = Highlight
+pdfjs-editor-highlight-button-label = Highlight
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+pdfjs-infinite-scroll-button-label = Infinite scroll

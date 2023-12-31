@@ -348,7 +348,6 @@ pdfjs-editor-resizer-label-bottom-middle = Inferior ao centro — redimensionar
 pdfjs-editor-resizer-label-bottom-left = Canto inferior esquerdo — redimensionar
 pdfjs-editor-resizer-label-middle-left = Centro à esquerda — redimensionar
 
-unverified-signature-warning = Este arquivo PDF contém uma assinatura digital. O visualizador de PDF não pode verificar se a assinatura é válida. Faça download do arquivo e abra-o no Acrobat Reader para verificar se a assinatura é válida.
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
@@ -375,6 +374,10 @@ pdfjs-editor-colorpicker-pink =
     .title = Pink
 pdfjs-editor-colorpicker-red =
     .title = Red
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-editor-remove-button =
     .title = Remove
+
+# Translations for ngx-extended-pdf-viewer additions
+

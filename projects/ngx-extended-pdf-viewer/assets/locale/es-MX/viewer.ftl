@@ -298,7 +298,6 @@ pdfjs-ink-canvas =
 ## This is used in an aria label to help to understand the role of the resizer.
 
 
-unverified-signature-warning = Este archivo PDF contiene una firma digital. El visor de PDF no puede verificar si la firma es válida. Descargue el archivo y ábralo en Acrobat Reader para verificar que la firma sea válida.
 pdfjs-download-button =
     .title = Download
 pdfjs-download-button-label = Download
@@ -365,6 +364,10 @@ pdfjs-editor-colorpicker-pink =
     .title = Pink
 pdfjs-editor-colorpicker-red =
     .title = Red
+unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-editor-remove-button =
     .title = Remove
+
+# Translations for ngx-extended-pdf-viewer additions
+
