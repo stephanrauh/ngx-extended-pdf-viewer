@@ -2435,6 +2435,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         return;
       }
     }
+    if (this.pageViewMode === 'book') {
+      // scaling doesn't work in book mode
+      return;
+    }
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const desiredCenterY = event.clientY;
     const previousScale = (PDFViewerApplication.pdfViewer as any).currentScale;

@@ -90,9 +90,7 @@ const AnnotationEditorParamsType = {
   FREETEXT_OPACITY: 13,
   INK_COLOR: 21,
   INK_THICKNESS: 22,
-  INK_OPACITY: 23,
-  HIGHLIGHT_COLOR: 31,
-  HIGHLIGHT_DEFAULT_COLOR: 32
+  INK_OPACITY: 23
 };
 const PermissionFlag = {
   PRINT: 0x04,
@@ -4011,10 +4009,6 @@ class FlateStream extends DecodeStream {
     }
     return [codes, maxLen];
   }
-  #endsStreamOnError(err) {
-    info(err);
-    this.eof = true;
-  }
   readBlock() {
     let buffer, len;
     const str = this.str;
@@ -4026,23 +4020,19 @@ class FlateStream extends DecodeStream {
     if (hdr === 0) {
       let b;
       if ((b = str.getByte()) === -1) {
-        this.#endsStreamOnError("Bad block header in flate stream");
-        return;
+        throw new FormatError("Bad block header in flate stream");
       }
       let blockLen = b;
       if ((b = str.getByte()) === -1) {
-        this.#endsStreamOnError("Bad block header in flate stream");
-        return;
+        throw new FormatError("Bad block header in flate stream");
       }
       blockLen |= b << 8;
       if ((b = str.getByte()) === -1) {
-        this.#endsStreamOnError("Bad block header in flate stream");
-        return;
+        throw new FormatError("Bad block header in flate stream");
       }
       let check = b;
       if ((b = str.getByte()) === -1) {
-        this.#endsStreamOnError("Bad block header in flate stream");
-        return;
+        throw new FormatError("Bad block header in flate stream");
       }
       check |= b << 8;
       if (check !== (~blockLen & 0xffff) && (blockLen !== 0 || check !== 0)) {
@@ -29304,9 +29294,6 @@ function generateFont({
   return result;
 }
 function getFontSubstitution(systemFontCache, idFactory, localFontPath, baseFontName, standardFontName) {
-  if (baseFontName.startsWith("InvalidPDFjsFont_")) {
-    return null;
-  }
   baseFontName = normalizeFontName(baseFontName);
   const key = baseFontName;
   let substitutionInfo = systemFontCache.get(key);
@@ -31452,7 +31439,6 @@ class PartialEvaluator {
       }
       const objId = `mask_${this.idFactory.createObjId()}`;
       operatorList.addDependency(objId);
-      imgData.dataLen = imgData.bitmap ? imgData.width * imgData.height * 4 : imgData.data.length;
       this._sendImgData(objId, imgData);
       args = [{
         data: objId,
@@ -31494,32 +31480,14 @@ class PartialEvaluator {
       cacheGlobally = false;
     if (this.parsingType3Font) {
       objId = `${this.idFactory.getDocId()}_type3_${objId}`;
-    } else if (cacheKey && imageRef) {
+    } else if (imageRef) {
       cacheGlobally = this.globalImageCache.shouldCache(imageRef, this.pageIndex);
       if (cacheGlobally) {
-        assert(!isInline, "Cannot cache an inline image globally.");
         objId = `${this.idFactory.getDocId()}_${objId}`;
       }
     }
     operatorList.addDependency(objId);
     args = [objId, w, h];
-    operatorList.addImageOps(OPS.paintImageXObject, args, optionalContent);
-    if (cacheGlobally && w * h > 250000) {
-      const localLength = await this.handler.sendWithPromise("commonobj", [objId, "CopyLocalImage", {
-        imageRef
-      }]);
-      if (localLength) {
-        this.globalImageCache.setData(imageRef, {
-          objId,
-          fn: OPS.paintImageXObject,
-          args,
-          optionalContent,
-          byteSize: 0
-        });
-        this.globalImageCache.addByteSize(imageRef, localLength);
-        return;
-      }
-    }
     PDFImage.buildImage({
       xref: this.xref,
       res: resources,
@@ -31529,16 +31497,16 @@ class PartialEvaluator {
       localColorSpaceCache
     }).then(async imageObj => {
       imgData = await imageObj.createImageData(false, this.options.isOffscreenCanvasSupported);
-      imgData.dataLen = imgData.bitmap ? imgData.width * imgData.height * 4 : imgData.data.length;
-      imgData.ref = imageRef;
-      if (cacheGlobally) {
-        this.globalImageCache.addByteSize(imageRef, imgData.dataLen);
+      if (cacheKey && imageRef && cacheGlobally) {
+        const length = imgData.bitmap ? imgData.width * imgData.height * 4 : imgData.data.length;
+        this.globalImageCache.addByteSize(imageRef, length);
       }
       return this._sendImgData(objId, imgData, cacheGlobally);
     }).catch(reason => {
       warn(`Unable to decode image "${objId}": "${reason}".`);
       return this._sendImgData(objId, null, cacheGlobally);
     });
+    operatorList.addImageOps(OPS.paintImageXObject, args, optionalContent);
     if (cacheKey) {
       const cacheData = {
         fn: OPS.paintImageXObject,
@@ -31549,6 +31517,7 @@ class PartialEvaluator {
       if (imageRef) {
         this._regionalImageCache.set(null, imageRef, cacheData);
         if (cacheGlobally) {
+          assert(!isInline, "Cannot cache an inline image globally.");
           this.globalImageCache.setData(imageRef, {
             objId,
             fn: OPS.paintImageXObject,
@@ -51046,13 +51015,11 @@ class Annotation {
     }
     if (borderStyle.has("BS")) {
       const dict = borderStyle.get("BS");
-      if (dict instanceof Dict) {
-        const dictType = dict.get("Type");
-        if (!dictType || isName(dictType, "Border")) {
-          this.borderStyle.setWidth(dict.get("W"), this.rectangle);
-          this.borderStyle.setStyle(dict.get("S"));
-          this.borderStyle.setDashArray(dict.getArray("D"));
-        }
+      const dictType = dict.get("Type");
+      if (!dictType || isName(dictType, "Border")) {
+        this.borderStyle.setWidth(dict.get("W"), this.rectangle);
+        this.borderStyle.setStyle(dict.get("S"));
+        this.borderStyle.setDashArray(dict.getArray("D"));
       }
     } else if (borderStyle.has("Border")) {
       const array = borderStyle.getArray("Border");
@@ -53829,7 +53796,6 @@ class XRef {
     this._pendingRefs = new RefSet();
     this._newPersistentRefNum = null;
     this._newTemporaryRefNum = null;
-    this._persistentRefsCache = null;
   }
   getNewPersistentRef(obj) {
     if (this._newPersistentRefNum === null) {
@@ -53842,24 +53808,11 @@ class XRef {
   getNewTemporaryRef() {
     if (this._newTemporaryRefNum === null) {
       this._newTemporaryRefNum = this.entries.length || 1;
-      if (this._newPersistentRefNum) {
-        this._persistentRefsCache = new Map();
-        for (let i = this._newTemporaryRefNum; i < this._newPersistentRefNum; i++) {
-          this._persistentRefsCache.set(i, this._cacheMap.get(i));
-          this._cacheMap.delete(i);
-        }
-      }
     }
     return Ref.get(this._newTemporaryRefNum++, 0);
   }
   resetNewTemporaryRef() {
     this._newTemporaryRefNum = null;
-    if (this._persistentRefsCache) {
-      for (const [num, obj] of this._persistentRefsCache) {
-        this._cacheMap.set(num, obj);
-      }
-    }
-    this._persistentRefsCache = null;
   }
   setStartXRef(startXRef) {
     this.startXRefQueue = [startXRef];
@@ -56638,7 +56591,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = '4.0.841';
+    const workerVersion = '4.0.728';
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
     }
@@ -57212,8 +57165,8 @@ if (typeof window === "undefined" && typeof self !== "undefined" && isMessagePor
 
 ;// CONCATENATED MODULE: ./src/pdf.worker.js
 
-const pdfjsVersion = '4.0.841';
-const pdfjsBuild = '1c0d4745e';
+const pdfjsVersion = '4.0.728';
+const pdfjsBuild = 'd5cf764cb';
 
 var __webpack_exports__WorkerMessageHandler = __webpack_exports__.WorkerMessageHandler;
 export { __webpack_exports__WorkerMessageHandler as WorkerMessageHandler };

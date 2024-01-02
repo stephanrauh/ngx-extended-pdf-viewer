@@ -61,7 +61,6 @@ function addMissingTranslations(targetLang, additionalLang) {
       add = !targetLang.includes(key);
     }
     if (add) {
-      console.log('Adding ' + line);
       targetLang = targetLang + '\n' + line;
     }
   }
