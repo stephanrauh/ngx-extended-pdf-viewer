@@ -518,3 +518,4 @@
 - 19.0.0 #1987 make the radio buttons of the secondary menu more reliable, and hide the secondary menu more reliably when it's empty; don't close the secondary menu when the "single page mode" menu is clicked
 - 19.0.1 #766 make book mode preloading more reliable
 - 19.0.2 #766 suppress the double-click zoom in book mode; #2007 stop shipping the outdated version of pdf.js 3.9
+- 19.0.3 #2007 now the minified worker file is loaded again if the PDF viewer uses the minified files (`[minifiedJSLibraries]="true"`); this was broken since version 18.2.0-alpha.0

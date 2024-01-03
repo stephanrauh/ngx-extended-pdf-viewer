@@ -1082,9 +1082,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             console.log('Using the ES5 version of the PDF viewer. Your PDF files show faster if you update your browser.');
           }
           if (this.minifiedJSLibraries) {
-            if (!pdfDefaultOptions.workerSrc().endsWith('.min.js')) {
+            if (!pdfDefaultOptions.workerSrc().endsWith('.min.mjs')) {
               const src = pdfDefaultOptions.workerSrc();
-              pdfDefaultOptions.workerSrc = () => src.replace('.js', '.min.js');
+              pdfDefaultOptions.workerSrc = () => src.replace('.mjs', '.min.mjs');
             }
           }
           const pdfJsPath = this.getPdfJsPath('pdf', needsES5);
