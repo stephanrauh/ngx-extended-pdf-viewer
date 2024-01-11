@@ -32,7 +32,7 @@
     "@angular/compiler": "^17.0.8",
     "@angular/core": "^17.0.8",
     "@angular/forms": "^17.0.8",
-    "@angular/platform-browser": "^17.0.8",
+    "@angular/platform-browser": "^17.0.9",
     "@angular/platform-browser-dynamic": "^17.0.8",
     "@schematics/angular": "^17.0.8",
     "@types/estree": "^1.0.5",
