@@ -25,6 +25,8 @@ export class PdfZoomDropdownComponent {
   constructor(private element: ElementRef) {}
 
   private valueToZoomLevel(value: string | number): ZoomLevel {
+    // const new TranslatePipe().transform('pdfjs-page-scale-percent', '{ $scale } %');
+
     if (value.toString().endsWith('%')) {
       value = value.toString().replace('%', '');
       value = Number(value) / 100;
@@ -41,12 +43,13 @@ export class PdfZoomDropdownComponent {
       };
     }
     const percentage = Math.round(numericalValue * 100);
+    const percentageAsString = isNaN(percentage) ? '' : String(percentage);
     return {
       id: `scale_${percentage}`,
       value: String(numericalValue),
       dataL10nId: 'pdfjs-page-scale-percent',
-      dataL10nArgs: `{ "scale": ${percentage} }`,
-      displayValue: isNaN(percentage) ? '' : String(percentage) + '%',
+      dataL10nArgs: `{ "scale": ${percentageAsString} }`,
+      displayValue: '',
     };
   }
 
