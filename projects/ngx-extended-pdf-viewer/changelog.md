@@ -521,3 +521,4 @@
 - 19.0.3 #2007 now the minified worker file is loaded again if the PDF viewer uses the minified files (`[minifiedJSLibraries]="true"`); this was broken since version 18.2.0-alpha.0
 - 19.0.4 #2045 render the zoom level even if it's not one of the predefined zoom levels
 - 19.0.5 #2051 fixed the `[page]` when the PDF is loaded; #2045 render the zoom level even if it's not one of the predefined zoom levels
+- 19.0.6 #2077 document that the library requires RxJS 7 or higher
