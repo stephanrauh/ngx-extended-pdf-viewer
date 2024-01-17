@@ -1211,7 +1211,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       return;
     }
     const initializeViewerAndOpenPdf = () => {
-      document.removeEventListener('localized', initializeViewerAndOpenPdf);
       this.localizationInitialized = true;
       this.initTimeout = setTimeout(() => {
         if (!this.shuttingDown) {
@@ -1235,8 +1234,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       this.beforePrint.emit();
     });
 
-    document.addEventListener('localized', initializeViewerAndOpenPdf);
-
     if (this.service.ngxExtendedPdfViewerInitialized) {
       // tslint:disable-next-line:quotemark
       console.error("You're trying to open two instances of the PDF viewer. Most likely, this will result in errors.");
@@ -1244,9 +1241,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const onLoaded = () => {
       this.overrideDefaultSettings();
       document.removeEventListener('webviewerloaded', onLoaded);
-      if (this.pdfJsVersion >= '4') {
-        initializeViewerAndOpenPdf();
-      }
+      initializeViewerAndOpenPdf();
     };
     document.addEventListener('webviewerloaded', onLoaded);
 

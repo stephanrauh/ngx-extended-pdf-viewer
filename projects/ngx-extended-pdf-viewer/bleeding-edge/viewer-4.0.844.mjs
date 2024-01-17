@@ -6683,7 +6683,7 @@ __webpack_async_result__();
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ngxExtendedPdfViewerVersion: () => (/* binding */ ngxExtendedPdfViewerVersion)
 /* harmony export */ });
-const ngxExtendedPdfViewerVersion = '19.0.5';
+const ngxExtendedPdfViewerVersion = '19.0.6';
 
 /***/ }),
 
@@ -18875,10 +18875,10 @@ function webViewerLoad() {
     }
   });
   try {
-    parent.document.dispatchEvent(event);
+    document.dispatchEvent(event);
   } catch (ex) {
     console.error(`webviewerloaded: ${ex}`);
-    document.dispatchEvent(event);
+    parent.document.dispatchEvent(event);
   }
   _app_js__WEBPACK_IMPORTED_MODULE_5__.PDFViewerApplication.run(config);
 }
