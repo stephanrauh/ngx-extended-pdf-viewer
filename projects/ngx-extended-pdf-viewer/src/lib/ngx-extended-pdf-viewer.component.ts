@@ -1618,7 +1618,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.ngZone.run(() => this.propertiesDialogVisibleChange.emit(true));
       });
 
-      PDFViewerApplication.eventBus.on('pdfLoaded', (x: PagesLoadedEvent) => {
+      PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
         this.ngZone.run(() => this.pagesLoaded.emit(x));
         this.removeScrollbarInInfiniteScrollMode(false);
         if (this.rotation !== undefined && this.rotation !== null) {
@@ -1633,7 +1633,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             if (this.nameddest) {
               PDFViewerApplication.pdfLinkService.goToDestination(this.nameddest);
             } else if (this.page) {
-              debugger;
               PDFViewerApplication.page = Number(this.page);
             } else if (this.pageLabel) {
               PDFViewerApplication.pdfViewer.currentPageLabel = this.pageLabel;
