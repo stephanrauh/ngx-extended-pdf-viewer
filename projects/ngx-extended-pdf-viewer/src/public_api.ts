@@ -11,6 +11,7 @@ export * from './lib/events/invalid-pdf-exception';
 export * from './lib/events/layers-loaded-event';
 export * from './lib/events/outline-loaded-event';
 export * from './lib/events/page-number-change';
+export * from './lib/events/page-render-event';
 export * from './lib/events/page-rendered-event';
 export * from './lib/events/pages-loaded-event';
 export * from './lib/events/pages-rotation-event';
