@@ -523,3 +523,4 @@
 - 19.0.5 #2051 fixed the `[page]` when the PDF is loaded; #2045 render the zoom level even if it's not one of the predefined zoom levels
 - 19.0.6 #2077 document that the library requires RxJS 7 or higher
 - 19.0.7 #2096 fixed a bug that broke - among other things - printing of multi-page documents; #2091 added a forgotten event to the public API; #2081 fixed `(pagesLoaded)`
+- 19.1.0 updated to pdf.js 4.0.375; #2016 updated the CSS rules --> annotations can now be deleted
