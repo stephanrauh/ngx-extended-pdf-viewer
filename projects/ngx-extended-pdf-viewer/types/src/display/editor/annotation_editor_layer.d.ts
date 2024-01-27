@@ -3,6 +3,7 @@ export type PageViewport = import("../display_utils.js").PageViewport;
 export type TextAccessibilityManager = import("../../../web/text_accessibility.js").TextAccessibilityManager;
 export type IL10n = import("../../../web/interfaces").IL10n;
 export type AnnotationLayer = import("../annotation_layer.js").AnnotationLayer;
+export type DrawLayer = import("../draw_layer.js").DrawLayer;
 export type AnnotationEditorLayerOptions = {
     mode: Object;
     div: HTMLDivElement;
@@ -12,6 +13,8 @@ export type AnnotationEditorLayerOptions = {
     pageIndex: number;
     l10n: IL10n;
     annotationLayer?: import("../annotation_layer.js").AnnotationLayer | undefined;
+    textLayer?: HTMLDivElement | undefined;
+    drawLayer: DrawLayer;
     viewport: PageViewport;
 };
 export type RenderEditorLayerOptions = {
@@ -27,6 +30,8 @@ export type RenderEditorLayerOptions = {
  * @property {number} pageIndex
  * @property {IL10n} l10n
  * @property {AnnotationLayer} [annotationLayer]
+ * @property {HTMLDivElement} [textLayer]
+ * @property {DrawLayer} drawLayer
  * @property {PageViewport} viewport
  */
 /**
@@ -38,14 +43,15 @@ export type RenderEditorLayerOptions = {
  */
 export class AnnotationEditorLayer {
     static _initialized: boolean;
-    static "__#18@#editorTypes": Map<number, typeof FreeTextEditor | typeof InkEditor | typeof StampEditor>;
+    static "__#22@#editorTypes": Map<number, typeof FreeTextEditor | typeof HighlightEditor | typeof InkEditor | typeof StampEditor>;
     /**
      * @param {AnnotationEditorLayerOptions} options
      */
-    constructor({ uiManager, pageIndex, div, accessibilityManager, annotationLayer, viewport, l10n, }: AnnotationEditorLayerOptions);
+    constructor({ uiManager, pageIndex, div, accessibilityManager, annotationLayer, drawLayer, textLayer, viewport, l10n, }: AnnotationEditorLayerOptions);
     pageIndex: number;
     div: HTMLDivElement;
     viewport: import("../display_utils.js").PageViewport;
+    drawLayer: import("../draw_layer.js").DrawLayer;
     get isEmpty(): boolean;
     /**
      * Update the toolbar if it's required to reflect the tool currently used.
@@ -84,6 +90,8 @@ export class AnnotationEditorLayer {
      * @param {AnnotationEditor} editor
      */
     setActiveEditor(editor: AnnotationEditor): void;
+    enableTextSelection(): void;
+    disableTextSelection(): void;
     enableClick(): void;
     disableClick(): void;
     attach(editor: any): void;
@@ -120,6 +128,7 @@ export class AnnotationEditorLayer {
      * @returns {string}
      */
     getNextId(): string;
+    canCreateNewEmptyEditor(): boolean | undefined;
     /**
      * Paste some content into a new editor.
      * @param {number} mode
@@ -156,6 +165,17 @@ export class AnnotationEditorLayer {
      * @param {AnnotationEditor} editor
      */
     unselect(editor: AnnotationEditor): void;
+    /**
+     * SelectionChange callback.
+     * @param {Event} _event
+     */
+    selectionStart(_event: Event): void;
+    /**
+     * Called when the user releases the mouse button after having selected
+     * some text.
+     * @param {PointerEvent} event
+     */
+    pointerUpAfterSelection(event: PointerEvent): void;
     /**
      * Pointerup callback.
      * @param {PointerEvent} event
@@ -198,5 +218,6 @@ export class AnnotationEditorLayer {
 }
 import { AnnotationEditor } from "./editor.js";
 import { FreeTextEditor } from "./freetext.js";
+import { HighlightEditor } from "./highlight.js";
 import { InkEditor } from "./ink.js";
 import { StampEditor } from "./stamp.js";

@@ -9,9 +9,9 @@ export class GenericL10n extends L10n implements IL10n {
      *   translations.
      * @param {String} baseLang - The base language to use for translations.
      */
-    static "__#50@#generateBundles"(defaultLang: string, baseLang: string): AsyncGenerator<any, void, unknown>;
-    static "__#50@#createBundle"(lang: any, baseURL: any, paths: any): Promise<any>;
-    static "__#50@#getPaths"(): Promise<{
+    static "__#53@#generateBundles"(defaultLang: string, baseLang: string): AsyncGenerator<any, void, unknown>;
+    static "__#53@#createBundle"(lang: any, baseURL: any, paths: any): Promise<any>;
+    static "__#53@#getPaths"(): Promise<{
         baseURL: any;
         paths: any;
     }>;

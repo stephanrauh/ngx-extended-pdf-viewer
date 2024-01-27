@@ -303,6 +303,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = Lisää tai muokkaa kuvia
 pdfjs-editor-remove-button =
     .title = Poista
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Poista piirros
+pdfjs-editor-remove-freetext-button =
+    .title = Poista teksti
+pdfjs-editor-remove-stamp-button =
+    .title = Poista kuva
+pdfjs-editor-remove-highlight-button =
+    .title = Poista korostus
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Väri
 pdfjs-editor-free-text-size-input = Koko
@@ -350,14 +364,9 @@ pdfjs-editor-resizer-label-bottom-middle = Alhaalla keskellä - muuta kokoa
 pdfjs-editor-resizer-label-bottom-left = Vasen alakulma - muuta kokoa
 pdfjs-editor-resizer-label-middle-left = Keskellä vasemmalla - muuta kokoa
 
-pdfjs-editor-remove-ink-button =
-    .title = Poista piirros
-pdfjs-editor-remove-freetext-button =
-    .title = Poista teksti
-pdfjs-editor-remove-stamp-button =
-    .title = Poista kuva
-pdfjs-editor-remove-highlight-button =
-    .title = Poista korostus
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = Korostusväri
 pdfjs-editor-colorpicker-button =
     .title = Vaihda väri
@@ -373,8 +382,12 @@ pdfjs-editor-colorpicker-pink =
     .title = Pinkki
 pdfjs-editor-colorpicker-red =
     .title = Punainen
+
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = Korostus
+pdfjs-editor-highlight-button-label = Korostus
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

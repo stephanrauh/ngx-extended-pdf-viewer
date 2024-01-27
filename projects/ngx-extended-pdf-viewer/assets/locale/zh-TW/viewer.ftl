@@ -295,6 +295,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = 新增或編輯圖片
 pdfjs-editor-remove-button =
     .title = 移除
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = 移除繪圖
+pdfjs-editor-remove-freetext-button =
+    .title = 移除文字
+pdfjs-editor-remove-stamp-button =
+    .title = 移除圖片
+pdfjs-editor-remove-highlight-button =
+    .title = 移除強調範圍
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = 色彩
 pdfjs-editor-free-text-size-input = 大小
@@ -342,14 +356,9 @@ pdfjs-editor-resizer-label-bottom-middle = 底部中間 — 調整大小
 pdfjs-editor-resizer-label-bottom-left = 左下角 — 調整大小
 pdfjs-editor-resizer-label-middle-left = 中間左方 — 調整大小
 
-pdfjs-editor-remove-ink-button =
-    .title = 移除繪圖
-pdfjs-editor-remove-freetext-button =
-    .title = 移除文字
-pdfjs-editor-remove-stamp-button =
-    .title = 移除圖片
-pdfjs-editor-remove-highlight-button =
-    .title = 移除強調範圍
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = 強調色彩
 pdfjs-editor-colorpicker-button =
     .title = 更改色彩
@@ -365,8 +374,12 @@ pdfjs-editor-colorpicker-pink =
     .title = 粉紅色
 pdfjs-editor-colorpicker-red =
     .title = 紅色
+
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = 強調
+pdfjs-editor-highlight-button-label = 強調
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

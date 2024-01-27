@@ -303,6 +303,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = Adicionar ou editar imagens
 pdfjs-editor-remove-button =
     .title = Remover
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Remover desenho
+pdfjs-editor-remove-freetext-button =
+    .title = Remover texto
+pdfjs-editor-remove-stamp-button =
+    .title = Remover imagem
+pdfjs-editor-remove-highlight-button =
+    .title = Remover destaque
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Cor
 pdfjs-editor-free-text-size-input = Tamanho
@@ -350,14 +364,9 @@ pdfjs-editor-resizer-label-bottom-middle = No centro da base — redimensionar
 pdfjs-editor-resizer-label-bottom-left = Canto inferior esquerdo — redimensionar
 pdfjs-editor-resizer-label-middle-left = No meio à esquerda — redimensionar
 
-pdfjs-editor-remove-ink-button =
-    .title = Remover desenho
-pdfjs-editor-remove-freetext-button =
-    .title = Remover texto
-pdfjs-editor-remove-stamp-button =
-    .title = Remover imagem
-pdfjs-editor-remove-highlight-button =
-    .title = Remover destaque
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = Cor de destaque
 pdfjs-editor-colorpicker-button =
     .title = Mudar cor
@@ -373,9 +382,13 @@ pdfjs-editor-colorpicker-pink =
     .title = Rosa
 pdfjs-editor-colorpicker-red =
     .title = Vermelho
+
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = Destaque
+pdfjs-editor-highlight-button-label = Destaque
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 

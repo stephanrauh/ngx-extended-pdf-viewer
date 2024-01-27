@@ -70,6 +70,11 @@ export type PDFViewerOptions = {
      */
     annotationEditorMode?: number | undefined;
     /**
+     * - A comma separated list
+     * of colors to propose to highlight some text in the pdf.
+     */
+    annotationEditorHighlightColors?: string | undefined;
+    /**
      * - Path for image resources, mainly
      * mainly for annotation icons. Include trailing slash.
      */
@@ -137,6 +142,8 @@ export namespace PagesCountLimit {
  * @property {number} [annotationEditorMode] - Enables the creation and editing
  *   of new Annotations. The constants from {@link AnnotationEditorType} should
  *   be used. The default value is `AnnotationEditorType.NONE`.
+ * @property {string} [annotationEditorHighlightColors] - A comma separated list
+ *   of colors to propose to highlight some text in the pdf.
  * @property {string} [imageResourcesPath] - Path for image resources, mainly
  *   mainly for annotation icons. Include trailing slash.
  * @property {boolean} [enablePrintAutoRotate] - Enables automatic rotation of

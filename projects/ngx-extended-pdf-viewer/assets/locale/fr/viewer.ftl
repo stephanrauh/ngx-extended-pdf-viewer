@@ -299,6 +299,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = Ajouter ou modifier des images
 pdfjs-editor-remove-button =
     .title = Supprimer
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Supprimer le dessin
+pdfjs-editor-remove-freetext-button =
+    .title = Supprimer le texte
+pdfjs-editor-remove-stamp-button =
+    .title = Supprimer l’image
+pdfjs-editor-remove-highlight-button =
+    .title = Supprimer le surlignage
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Couleur
 pdfjs-editor-free-text-size-input = Taille
@@ -346,14 +360,9 @@ pdfjs-editor-resizer-label-bottom-middle = Centre bas — redimensionner
 pdfjs-editor-resizer-label-bottom-left = Coin inférieur gauche — redimensionner
 pdfjs-editor-resizer-label-middle-left = Milieu gauche — redimensionner
 
-pdfjs-editor-remove-ink-button =
-    .title = Supprimer le dessin
-pdfjs-editor-remove-freetext-button =
-    .title = Supprimer le texte
-pdfjs-editor-remove-stamp-button =
-    .title = Supprimer l’image
-pdfjs-editor-remove-highlight-button =
-    .title = Supprimer le surlignage
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = Couleur de surlignage
 pdfjs-editor-colorpicker-button =
     .title = Changer de couleur
@@ -369,9 +378,13 @@ pdfjs-editor-colorpicker-pink =
     .title = Rose
 pdfjs-editor-colorpicker-red =
     .title = Rouge
+
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = Surligner
+pdfjs-editor-highlight-button-label = Surligner
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 

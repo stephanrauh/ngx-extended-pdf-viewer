@@ -12,7 +12,7 @@ export class AnnotationEditorUIManager {
     static TRANSLATE_SMALL: number;
     static TRANSLATE_BIG: number;
     static get _keyboardManager(): any;
-    constructor(container: any, viewer: any, altTextManager: any, eventBus: any, pdfDocument: any, pageColors: any);
+    constructor(container: any, viewer: any, altTextManager: any, eventBus: any, pdfDocument: any, pageColors: any, highlightColors: any);
     _eventBus: any;
     viewParameters: {
         realScale: number;
@@ -21,6 +21,8 @@ export class AnnotationEditorUIManager {
     destroy(): void;
     get hcmFilter(): any;
     get direction(): any;
+    get highlightColors(): any;
+    setMainHighlightColorPicker(colorPicker: any): void;
     editAltText(editor: any): void;
     onPageChanging({ pageNumber }: {
         pageNumber: any;

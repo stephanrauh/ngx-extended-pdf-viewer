@@ -301,6 +301,22 @@ pdfjs-editor-ink-button-label = Dibujar
 pdfjs-editor-stamp-button =
     .title = Añadir o editar imágenes
 pdfjs-editor-stamp-button-label = Añadir o editar imágenes
+pdfjs-editor-remove-button =
+    .title = Eliminar
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Eliminar dibujo
+pdfjs-editor-remove-freetext-button =
+    .title = Eliminar texto
+pdfjs-editor-remove-stamp-button =
+    .title = Eliminar imagen
+pdfjs-editor-remove-highlight-button =
+    .title = Quitar resaltado
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Color
 pdfjs-editor-free-text-size-input = Tamaño
@@ -348,16 +364,9 @@ pdfjs-editor-resizer-label-bottom-middle = Borde inferior en el medio — redime
 pdfjs-editor-resizer-label-bottom-left = Esquina inferior izquierda — redimensionar
 pdfjs-editor-resizer-label-middle-left = Borde izquierdo en el medio — redimensionar
 
-pdfjs-editor-remove-button =
-    .title = Eliminar
-pdfjs-editor-remove-ink-button =
-    .title = Eliminar dibujo
-pdfjs-editor-remove-freetext-button =
-    .title = Eliminar texto
-pdfjs-editor-remove-stamp-button =
-    .title = Eliminar imagen
-pdfjs-editor-remove-highlight-button =
-    .title = Quitar resaltado
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = Color de resaltado
 pdfjs-editor-colorpicker-button =
     .title = Cambiar color
@@ -373,9 +382,13 @@ pdfjs-editor-colorpicker-pink =
     .title = Rosa
 pdfjs-editor-colorpicker-red =
     .title = Rojo
+
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = Resaltar
+pdfjs-editor-highlight-button-label = Resaltar
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 

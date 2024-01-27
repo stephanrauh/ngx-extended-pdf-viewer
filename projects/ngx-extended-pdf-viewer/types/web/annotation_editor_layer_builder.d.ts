@@ -11,6 +11,8 @@ export type AnnotationEditorLayerBuilderOptions = {
     l10n?: import("./interfaces").IL10n | undefined;
     accessibilityManager?: import("./text_accessibility.js").TextAccessibilityManager | undefined;
     annotationLayer?: import("../src/display/annotation_layer.js").AnnotationLayer | undefined;
+    textLayer?: any;
+    drawLayer?: any;
 };
 /**
  * @typedef {Object} AnnotationEditorLayerBuilderOptions
@@ -20,6 +22,8 @@ export type AnnotationEditorLayerBuilderOptions = {
  * @property {IL10n} [l10n]
  * @property {TextAccessibilityManager} [accessibilityManager]
  * @property {AnnotationLayer} [annotationLayer]
+ * @property {TextLayer} [textLayer]
+ * @property {DrawLayer} [drawLayer]
  */
 export class AnnotationEditorLayerBuilder {
     /**

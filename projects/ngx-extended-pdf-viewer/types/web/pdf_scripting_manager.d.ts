@@ -5,10 +5,10 @@ export type PDFScriptingManagerOptions = {
      */
     eventBus: EventBus;
     /**
-     * - The path and filename of the scripting
-     * bundle.
+     * - The path and filename of the
+     * scripting bundle.
      */
-    sandboxBundleSrc: string;
+    sandboxBundleSrc?: string | undefined;
     /**
      * - The factory that is used when
      * initializing scripting; must contain a `createScripting` method.
@@ -24,8 +24,8 @@ export type PDFScriptingManagerOptions = {
 /**
  * @typedef {Object} PDFScriptingManagerOptions
  * @property {EventBus} eventBus - The application event bus.
- * @property {string} sandboxBundleSrc - The path and filename of the scripting
- *   bundle.
+ * @property {string} [sandboxBundleSrc] - The path and filename of the
+ *   scripting bundle.
  * @property {Object} [externalServices] - The factory that is used when
  *   initializing scripting; must contain a `createScripting` method.
  *   PLEASE NOTE: Primarily intended for the default viewer use-case.
@@ -36,7 +36,7 @@ export class PDFScriptingManager {
     /**
      * @param {PDFScriptingManagerOptions} options
      */
-    constructor({ eventBus, sandboxBundleSrc, externalServices, docProperties, }: PDFScriptingManagerOptions);
+    constructor({ eventBus, externalServices, docProperties }: PDFScriptingManagerOptions);
     setViewer(pdfViewer: any): void;
     setDocument(pdfDocument: any): Promise<void>;
     dispatchWillSave(): Promise<any>;

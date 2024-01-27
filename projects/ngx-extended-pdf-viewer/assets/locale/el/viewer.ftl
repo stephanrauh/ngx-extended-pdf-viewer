@@ -303,6 +303,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = Προσθήκη ή επεξεργασία εικόνων
 pdfjs-editor-remove-button =
     .title = Αφαίρεση
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Αφαίρεση σχεδίου
+pdfjs-editor-remove-freetext-button =
+    .title = Αφαίρεση κειμένου
+pdfjs-editor-remove-stamp-button =
+    .title = Αφαίρεση εικόνας
+pdfjs-editor-remove-highlight-button =
+    .title = Αφαίρεση επισήμανσης
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Χρώμα
 pdfjs-editor-free-text-size-input = Μέγεθος
@@ -350,14 +364,9 @@ pdfjs-editor-resizer-label-bottom-middle = Μέσο κάτω πλευράς — 
 pdfjs-editor-resizer-label-bottom-left = Κάτω αριστερή γωνία — αλλαγή μεγέθους
 pdfjs-editor-resizer-label-middle-left = Μέσο αριστερής πλευράς — αλλαγή μεγέθους
 
-pdfjs-editor-remove-ink-button =
-    .title = Αφαίρεση σχεδίου
-pdfjs-editor-remove-freetext-button =
-    .title = Αφαίρεση κειμένου
-pdfjs-editor-remove-stamp-button =
-    .title = Αφαίρεση εικόνας
-pdfjs-editor-remove-highlight-button =
-    .title = Αφαίρεση επισήμανσης
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = Χρώμα επισήμανσης
 pdfjs-editor-colorpicker-button =
     .title = Αλλαγή χρώματος
@@ -373,8 +382,12 @@ pdfjs-editor-colorpicker-pink =
     .title = Ροζ
 pdfjs-editor-colorpicker-red =
     .title = Κόκκινο
+
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = Επισήμανση
+pdfjs-editor-highlight-button-label = Επισήμανση
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

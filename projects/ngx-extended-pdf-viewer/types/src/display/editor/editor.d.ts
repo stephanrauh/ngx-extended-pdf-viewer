@@ -36,7 +36,6 @@ export class AnnotationEditor {
     static _borderLineWidth: number;
     static _colorManager: ColorManager;
     static _zIndex: number;
-    static SMALL_EDITOR_SIZE: number;
     static get _resizerKeyboardManager(): any;
     static get _defaultLineColor(): any;
     static deleteAnnotationElement(editor: any): void;
@@ -70,7 +69,7 @@ export class AnnotationEditor {
      * @param {AnnotationEditorLayer} parent
      */
     static paste(item: DataTransferItem, parent: AnnotationEditorLayer): void;
-    static "__#25@#rotatePoint"(x: any, y: any, angle: any): any[];
+    static "__#30@#rotatePoint"(x: any, y: any, angle: any): any[];
     /**
      * Deserialize the editor.
      * The result of the deserialization is a new editor.
@@ -82,6 +81,7 @@ export class AnnotationEditor {
      */
     static deserialize(data: Object, parent: AnnotationEditorLayer, uiManager: AnnotationEditorUIManager): AnnotationEditor | null;
     static get MIN_SIZE(): number;
+    static canCreateNewEmptyEditor(): boolean;
     /**
      * @param {AnnotationEditorParameters} parameters
      */
@@ -174,7 +174,11 @@ export class AnnotationEditor {
      */
     translateInPage(x: number, y: number): void;
     drag(tx: any, ty: any): void;
-    fixAndSetPosition(): void;
+    /**
+     * Fix the position of the editor in order to keep it inside its parent page.
+     * @param {number} [rotation] - the rotation of the page.
+     */
+    fixAndSetPosition(rotation?: number | undefined): void;
     /**
      * Convert a screen translation into a page one.
      * @param {number} x
@@ -202,22 +206,20 @@ export class AnnotationEditor {
      * @returns {Array<number>}
      */
     getInitialTranslation(): Array<number>;
-    addAltTextButton(): Promise<void>;
     altTextFinish(): void;
-    addEditToolbar(): void;
+    /**
+     * Add a toolbar for this editor.
+     * @returns {Promise<EditorToolbar|null>}
+     */
+    addEditToolbar(): Promise<EditorToolbar | null>;
     removeEditToolbar(): void;
     getClientDimensions(): DOMRect;
+    addAltTextButton(): Promise<void>;
     /**
      * Set the alt text data.
      */
-    set altTextData({ altText, decorative }: {
-        altText: string;
-        decorative: boolean;
-    });
-    get altTextData(): {
-        altText: string;
-        decorative: boolean;
-    };
+    set altTextData(data: any);
+    get altTextData(): any;
     /**
      * Render this editor in a div.
      * @returns {HTMLDivElement | null}
@@ -232,8 +234,11 @@ export class AnnotationEditor {
     _setParentAndPosition(parent: any, x: any, y: any): void;
     /**
      * Convert the current rect into a page one.
+     * @param {number} tx - x-translation in screen coordinates.
+     * @param {number} ty - y-translation in screen coordinates.
+     * @param {number} [rotation] - the rotation of the page.
      */
-    getRect(tx: any, ty: any): any[];
+    getRect(tx: number, ty: number, rotation?: number | undefined): any[];
     getRectInCurrentCoords(rect: any, pageHeight: any): any[];
     /**
      * Executed once this editor has been rendered.
@@ -275,6 +280,11 @@ export class AnnotationEditor {
      */
     rebuild(): void;
     /**
+     * Rotate the editor.
+     * @param {number} angle
+     */
+    rotate(_angle: any): void;
+    /**
      * Serialize the editor.
      * The result of the serialization will be used to construct a
      * new annotation to add to the pdf document.
@@ -298,6 +308,7 @@ export class AnnotationEditor {
      * Add the resizers to this editor.
      */
     makeResizable(): void;
+    get toolbarPosition(): null;
     /**
      * onkeydown callback.
      * @param {KeyboardEvent} event
@@ -361,4 +372,5 @@ export class AnnotationEditor {
     #private;
 }
 import { AnnotationEditorUIManager } from "./tools.js";
+import { EditorToolbar } from "./toolbar.js";
 import { ColorManager } from "./tools.js";

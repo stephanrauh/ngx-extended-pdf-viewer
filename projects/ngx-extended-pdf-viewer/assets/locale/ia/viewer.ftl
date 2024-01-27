@@ -303,6 +303,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = Adder o rediger imagines
 pdfjs-editor-remove-button =
     .title = Remover
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Remover le designo
+pdfjs-editor-remove-freetext-button =
+    .title = Remover texto
+pdfjs-editor-remove-stamp-button =
+    .title = Remover imagine
+pdfjs-editor-remove-highlight-button =
+    .title = Remover evidentia
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Color
 pdfjs-editor-free-text-size-input = Dimension
@@ -350,14 +364,9 @@ pdfjs-editor-resizer-label-bottom-middle = Medio inferior — redimensionar
 pdfjs-editor-resizer-label-bottom-left = Angulo inferior sinistre — redimensionar
 pdfjs-editor-resizer-label-middle-left = Medio sinistre — redimensionar
 
-pdfjs-editor-remove-ink-button =
-    .title = Remover le designo
-pdfjs-editor-remove-freetext-button =
-    .title = Remover texto
-pdfjs-editor-remove-stamp-button =
-    .title = Remover imagine
-pdfjs-editor-remove-highlight-button =
-    .title = Remover evidentia
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = Color pro evidentiar
 pdfjs-editor-colorpicker-button =
     .title = Cambiar color
@@ -373,8 +382,12 @@ pdfjs-editor-colorpicker-pink =
     .title = Rosate
 pdfjs-editor-colorpicker-red =
     .title = Rubie
+
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = Evidentia
+pdfjs-editor-highlight-button-label = Evidentia
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

@@ -303,6 +303,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = הוספה או עריכת תמונות
 pdfjs-editor-remove-button =
     .title = הסרה
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = הסרת ציור
+pdfjs-editor-remove-freetext-button =
+    .title = הסרת טקסט
+pdfjs-editor-remove-stamp-button =
+    .title = הסרת תמונה
+pdfjs-editor-remove-highlight-button =
+    .title = הסרת הדגשה
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = צבע
 pdfjs-editor-free-text-size-input = גודל
@@ -350,14 +364,9 @@ pdfjs-editor-resizer-label-bottom-middle = למטה באמצע - שינוי גו
 pdfjs-editor-resizer-label-bottom-left = פינה שמאלית תחתונה - שינוי גודל
 pdfjs-editor-resizer-label-middle-left = שמאלה באמצע - שינוי גודל
 
-pdfjs-editor-remove-ink-button =
-    .title = הסרת ציור
-pdfjs-editor-remove-freetext-button =
-    .title = הסרת טקסט
-pdfjs-editor-remove-stamp-button =
-    .title = הסרת תמונה
-pdfjs-editor-remove-highlight-button =
-    .title = הסרת הדגשה
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = צבע הדגשה
 pdfjs-editor-colorpicker-button =
     .title = שינוי צבע
@@ -373,8 +382,12 @@ pdfjs-editor-colorpicker-pink =
     .title = ורוד
 pdfjs-editor-colorpicker-red =
     .title = אדום
+
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = סימון
+pdfjs-editor-highlight-button-label = סימון
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

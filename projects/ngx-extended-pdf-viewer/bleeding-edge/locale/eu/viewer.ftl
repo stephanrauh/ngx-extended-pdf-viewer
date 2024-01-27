@@ -301,6 +301,25 @@ pdfjs-editor-ink-button-label = Marrazkia
 pdfjs-editor-stamp-button =
     .title = Gehitu edo editatu irudiak
 pdfjs-editor-stamp-button-label = Gehitu edo editatu irudiak
+pdfjs-editor-remove-button =
+    .title = Kendu
+pdfjs-editor-highlight-button =
+    .title = Nabarmendu
+pdfjs-editor-highlight-button-label = Nabarmendu
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Kendu marrazkia
+pdfjs-editor-remove-freetext-button =
+    .title = Kendu testua
+pdfjs-editor-remove-stamp-button =
+    .title = Kendu irudia
+pdfjs-editor-remove-highlight-button =
+    .title = Kendu nabarmentzea
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Kolorea
 pdfjs-editor-free-text-size-input = Tamaina
@@ -348,31 +367,27 @@ pdfjs-editor-resizer-label-bottom-middle = Behean erdian — aldatu tamaina
 pdfjs-editor-resizer-label-bottom-left = Beheko ezkerreko izkina — aldatu tamaina
 pdfjs-editor-resizer-label-middle-left = Erdian ezkerrean —  aldatu tamaina
 
-pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
-pdfjs-editor-remove-ink-button =
-    .title = Remove drawing
-pdfjs-editor-remove-freetext-button =
-    .title = Remove text
-pdfjs-editor-remove-stamp-button =
-    .title = Remove image
-pdfjs-editor-remove-highlight-button =
-    .title = Remove highlight
-pdfjs-editor-highlight-colorpicker-label = Highlight color
+## Color picker
+
+# This means "Color used to highlight text"
+pdfjs-editor-highlight-colorpicker-label = Nabarmentze kolorea
 pdfjs-editor-colorpicker-button =
-    .title = Change color
+    .title = Aldatu kolorea
 pdfjs-editor-colorpicker-dropdown =
-    .aria-label = Color choices
+    .aria-label = Kolore-aukerak
 pdfjs-editor-colorpicker-yellow =
-    .title = Yellow
+    .title = Horia
 pdfjs-editor-colorpicker-green =
-    .title = Green
+    .title = Berdea
 pdfjs-editor-colorpicker-blue =
-    .title = Blue
+    .title = Urdina
 pdfjs-editor-colorpicker-pink =
-    .title = Pink
+    .title = Arrosa
 pdfjs-editor-colorpicker-red =
-    .title = Red
+    .title = Gorria
+
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

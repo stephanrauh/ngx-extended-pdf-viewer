@@ -305,6 +305,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = Добавить или изменить изображения
 pdfjs-editor-remove-button =
     .title = Удалить
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Удалить рисунок
+pdfjs-editor-remove-freetext-button =
+    .title = Удалить текст
+pdfjs-editor-remove-stamp-button =
+    .title = Удалить изображение
+pdfjs-editor-remove-highlight-button =
+    .title = Удалить выделение
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Цвет
 pdfjs-editor-free-text-size-input = Размер
@@ -352,14 +366,9 @@ pdfjs-editor-resizer-label-bottom-middle = Внизу посередине — �
 pdfjs-editor-resizer-label-bottom-left = Нижний левый угол — изменить размер
 pdfjs-editor-resizer-label-middle-left = В центре слева — изменить размер
 
-pdfjs-editor-remove-ink-button =
-    .title = Удалить рисунок
-pdfjs-editor-remove-freetext-button =
-    .title = Удалить текст
-pdfjs-editor-remove-stamp-button =
-    .title = Удалить изображение
-pdfjs-editor-remove-highlight-button =
-    .title = Удалить выделение
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = Цвет выделения
 pdfjs-editor-colorpicker-button =
     .title = Изменить цвет
@@ -375,8 +384,12 @@ pdfjs-editor-colorpicker-pink =
     .title = Розовый
 pdfjs-editor-colorpicker-red =
     .title = Красный
+
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = Выделение
+pdfjs-editor-highlight-button-label = Выделение
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

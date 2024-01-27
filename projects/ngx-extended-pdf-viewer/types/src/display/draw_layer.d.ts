@@ -5,13 +5,13 @@
  */
 export class DrawLayer {
     static get _svgFactory(): any;
-    static "__#42@#setBox"(element: any, { x, y, width, height }: {
+    static "__#21@#setBox"(element: any, { x, y, width, height }: {
         x: any;
         y: any;
         width: any;
         height: any;
     }): void;
-    static "__#42@#extractPathFromHighlightOutlines"(polygons: any): string;
+    static "__#21@#extractPathFromHighlightOutlines"(polygons: any): string;
     constructor({ pageIndex }: {
         pageIndex: any;
     });

@@ -301,6 +301,25 @@ pdfjs-editor-ink-button-label = Desegni
 pdfjs-editor-stamp-button =
     .title = Aldoni aŭ modifi bildojn
 pdfjs-editor-stamp-button-label = Aldoni aŭ modifi bildojn
+pdfjs-editor-remove-button =
+    .title = Forigi
+pdfjs-editor-highlight-button =
+    .title = Elstarigi
+pdfjs-editor-highlight-button-label = Elstarigi
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Forigi desegnon
+pdfjs-editor-remove-freetext-button =
+    .title = Forigi tekston
+pdfjs-editor-remove-stamp-button =
+    .title = Forigi bildon
+pdfjs-editor-remove-highlight-button =
+    .title = Forigi elstaraĵon
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Koloro
 pdfjs-editor-free-text-size-input = Grando
@@ -348,31 +367,27 @@ pdfjs-editor-resizer-label-bottom-middle = Malsupra mezo — ŝanĝi grandon
 pdfjs-editor-resizer-label-bottom-left = Malsupra maldekstra angulo — ŝanĝi grandon
 pdfjs-editor-resizer-label-middle-left = Maldekstra mezo — ŝanĝi grandon
 
-pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
-pdfjs-editor-remove-ink-button =
-    .title = Remove drawing
-pdfjs-editor-remove-freetext-button =
-    .title = Remove text
-pdfjs-editor-remove-stamp-button =
-    .title = Remove image
-pdfjs-editor-remove-highlight-button =
-    .title = Remove highlight
-pdfjs-editor-highlight-colorpicker-label = Highlight color
+## Color picker
+
+# This means "Color used to highlight text"
+pdfjs-editor-highlight-colorpicker-label = Elstarigi koloron
 pdfjs-editor-colorpicker-button =
-    .title = Change color
+    .title = Ŝanĝi koloron
 pdfjs-editor-colorpicker-dropdown =
-    .aria-label = Color choices
+    .aria-label = Elekto de koloroj
 pdfjs-editor-colorpicker-yellow =
-    .title = Yellow
+    .title = Flava
 pdfjs-editor-colorpicker-green =
-    .title = Green
+    .title = Verda
 pdfjs-editor-colorpicker-blue =
-    .title = Blue
+    .title = Blua
 pdfjs-editor-colorpicker-pink =
-    .title = Pink
+    .title = Roza
 pdfjs-editor-colorpicker-red =
-    .title = Red
+    .title = Ruĝa
+
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

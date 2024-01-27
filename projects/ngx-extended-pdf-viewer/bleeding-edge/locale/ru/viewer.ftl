@@ -305,6 +305,9 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = Добавить или изменить изображения
 pdfjs-editor-remove-button =
     .title = Удалить
+pdfjs-editor-highlight-button =
+    .title = Выделение
+pdfjs-editor-highlight-button-label = Выделение
 
 ## Remove button for the various kind of editor.
 
@@ -385,8 +388,8 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Красный
 
-pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

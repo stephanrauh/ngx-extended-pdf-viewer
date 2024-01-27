@@ -311,6 +311,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = Ychwanegu neu olygu delweddau
 pdfjs-editor-remove-button =
     .title = Tynnu
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Dileu lluniad
+pdfjs-editor-remove-freetext-button =
+    .title = Dileu testun
+pdfjs-editor-remove-stamp-button =
+    .title = Dileu delwedd
+pdfjs-editor-remove-highlight-button =
+    .title = Tynnu amlygiad
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Lliw
 pdfjs-editor-free-text-size-input = Maint
@@ -358,14 +372,9 @@ pdfjs-editor-resizer-label-bottom-middle = Canol gwaelod — newid maint
 pdfjs-editor-resizer-label-bottom-left = Y gornel chwith isaf — newid maint
 pdfjs-editor-resizer-label-middle-left = Chwith canol — newid maint
 
-pdfjs-editor-remove-ink-button =
-    .title = Dileu lluniad
-pdfjs-editor-remove-freetext-button =
-    .title = Dileu testun
-pdfjs-editor-remove-stamp-button =
-    .title = Dileu delwedd
-pdfjs-editor-remove-highlight-button =
-    .title = Tynnu amlygiad
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = Lliw amlygu
 pdfjs-editor-colorpicker-button =
     .title = Newid lliw
@@ -381,8 +390,12 @@ pdfjs-editor-colorpicker-pink =
     .title = Pinc
 pdfjs-editor-colorpicker-red =
     .title = Coch
+
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = Amlygu
+pdfjs-editor-highlight-button-label = Amlygu
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

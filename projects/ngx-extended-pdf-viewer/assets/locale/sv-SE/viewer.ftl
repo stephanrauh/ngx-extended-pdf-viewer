@@ -303,6 +303,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = Lägg till eller redigera bilder
 pdfjs-editor-remove-button =
     .title = Ta bort
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Ta bort ritning
+pdfjs-editor-remove-freetext-button =
+    .title = Ta bort text
+pdfjs-editor-remove-stamp-button =
+    .title = Ta bort bild
+pdfjs-editor-remove-highlight-button =
+    .title = Ta bort markering
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Färg
 pdfjs-editor-free-text-size-input = Storlek
@@ -350,14 +364,9 @@ pdfjs-editor-resizer-label-bottom-middle = Nedre mitten — ändra storlek
 pdfjs-editor-resizer-label-bottom-left = Nedre vänstra hörnet — ändra storlek
 pdfjs-editor-resizer-label-middle-left = Mitten till vänster — ändra storlek
 
-pdfjs-editor-remove-ink-button =
-    .title = Ta bort ritning
-pdfjs-editor-remove-freetext-button =
-    .title = Ta bort text
-pdfjs-editor-remove-stamp-button =
-    .title = Ta bort bild
-pdfjs-editor-remove-highlight-button =
-    .title = Ta bort markering
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = Markeringsfärg
 pdfjs-editor-colorpicker-button =
     .title = Ändra färg
@@ -373,8 +382,12 @@ pdfjs-editor-colorpicker-pink =
     .title = Rosa
 pdfjs-editor-colorpicker-red =
     .title = Röd
+
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = Markera
+pdfjs-editor-highlight-button-label = Markera
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

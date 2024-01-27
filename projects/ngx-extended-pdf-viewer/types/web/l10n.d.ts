@@ -6,8 +6,8 @@ export type IL10n = import("./interfaces").IL10n;
  * @implements {IL10n}
  */
 export class L10n implements IL10n {
-    static "__#49@#fixupLangCode"(langCode: any): any;
-    static "__#49@#isRTL"(lang: any): boolean;
+    static "__#52@#fixupLangCode"(langCode: any): any;
+    static "__#52@#isRTL"(lang: any): boolean;
     constructor({ lang, isRTL }: {
         lang: any;
         isRTL: any;

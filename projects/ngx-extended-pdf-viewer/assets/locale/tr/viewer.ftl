@@ -303,6 +303,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = Resim ekle veya düzenle
 pdfjs-editor-remove-button =
     .title = Kaldır
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Çizimi kaldır
+pdfjs-editor-remove-freetext-button =
+    .title = Metni kaldır
+pdfjs-editor-remove-stamp-button =
+    .title = Resmi kaldır
+pdfjs-editor-remove-highlight-button =
+    .title = Vurgulamayı kaldır
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Renk
 pdfjs-editor-free-text-size-input = Boyut
@@ -350,14 +364,9 @@ pdfjs-editor-resizer-label-bottom-middle = Alt orta — yeniden boyutlandır
 pdfjs-editor-resizer-label-bottom-left = Sol alt köşe — yeniden boyutlandır
 pdfjs-editor-resizer-label-middle-left = Orta sol — yeniden boyutlandır
 
-pdfjs-editor-remove-ink-button =
-    .title = Çizimi kaldır
-pdfjs-editor-remove-freetext-button =
-    .title = Metni kaldır
-pdfjs-editor-remove-stamp-button =
-    .title = Resmi kaldır
-pdfjs-editor-remove-highlight-button =
-    .title = Vurgulamayı kaldır
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = Vurgu rengi
 pdfjs-editor-colorpicker-button =
     .title = Rengi değiştir
@@ -373,8 +382,12 @@ pdfjs-editor-colorpicker-pink =
     .title = Pembe
 pdfjs-editor-colorpicker-red =
     .title = Kırmızı
+
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = Vurgula
+pdfjs-editor-highlight-button-label = Vurgula
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

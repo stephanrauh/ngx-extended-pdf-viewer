@@ -301,6 +301,8 @@ pdfjs-editor-ink-button-label = Teikne
 pdfjs-editor-stamp-button =
     .title = Legg til eller rediger bilde
 pdfjs-editor-stamp-button-label = Legg til eller rediger bilde
+pdfjs-editor-remove-button =
+    .title = Fjern
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Farge
 pdfjs-editor-free-text-size-input = Storleik
@@ -340,8 +342,6 @@ pdfjs-editor-alt-text-textarea =
 ## This is used in an aria label to help to understand the role of the resizer.
 
 
-pdfjs-editor-remove-button =
-    .title = Fjern
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
@@ -353,6 +353,9 @@ pdfjs-editor-remove-stamp-button =
     .title = Remove image
 pdfjs-editor-remove-highlight-button =
     .title = Remove highlight
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 pdfjs-editor-resizer-label-top-left = Top left corner — resize
 pdfjs-editor-resizer-label-top-middle = Top middle — resize
 pdfjs-editor-resizer-label-top-right = Top right corner — resize

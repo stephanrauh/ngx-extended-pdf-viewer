@@ -301,6 +301,22 @@ pdfjs-editor-ink-button-label = Tekenje
 pdfjs-editor-stamp-button =
     .title = Ofbyldingen tafoegje of bewurkje
 pdfjs-editor-stamp-button-label = Ofbyldingen tafoegje of bewurkje
+pdfjs-editor-remove-button =
+    .title = Fuortsmite
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Tekening fuortsmite
+pdfjs-editor-remove-freetext-button =
+    .title = Tekst fuortsmite
+pdfjs-editor-remove-stamp-button =
+    .title = Ofbylding fuortsmite
+pdfjs-editor-remove-highlight-button =
+    .title = Markearring fuortsmite
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Kleur
 pdfjs-editor-free-text-size-input = Grutte
@@ -348,16 +364,9 @@ pdfjs-editor-resizer-label-bottom-middle = Midden ûnder – formaat wizigje
 pdfjs-editor-resizer-label-bottom-left = Linkerûnderhoek – formaat wizigje
 pdfjs-editor-resizer-label-middle-left = Links midden – formaat wizigje
 
-pdfjs-editor-remove-button =
-    .title = Fuortsmite
-pdfjs-editor-remove-ink-button =
-    .title = Tekening fuortsmite
-pdfjs-editor-remove-freetext-button =
-    .title = Tekst fuortsmite
-pdfjs-editor-remove-stamp-button =
-    .title = Ofbylding fuortsmite
-pdfjs-editor-remove-highlight-button =
-    .title = Markearring fuortsmite
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = Markearringskleur
 pdfjs-editor-colorpicker-button =
     .title = Kleur wizigje
@@ -373,8 +382,12 @@ pdfjs-editor-colorpicker-pink =
     .title = Roze
 pdfjs-editor-colorpicker-red =
     .title = Read
+
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = Markearje
+pdfjs-editor-highlight-button-label = Markearje
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

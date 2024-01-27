@@ -303,6 +303,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = Суреттерді қосу немесе түзету
 pdfjs-editor-remove-button =
     .title = Өшіру
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Сызбаны өшіру
+pdfjs-editor-remove-freetext-button =
+    .title = Мәтінді өшіру
+pdfjs-editor-remove-stamp-button =
+    .title = Суретті өшіру
+pdfjs-editor-remove-highlight-button =
+    .title = Түспен ерекшелеуді өшіру
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Түс
 pdfjs-editor-free-text-size-input = Өлшемі
@@ -350,14 +364,9 @@ pdfjs-editor-resizer-label-bottom-middle = Төменгі ортасы — өл�
 pdfjs-editor-resizer-label-bottom-left = Төменгі сол жақ бұрыш — өлшемін өзгерту
 pdfjs-editor-resizer-label-middle-left = Ортаңғы сол жақ — өлшемін өзгерту
 
-pdfjs-editor-remove-ink-button =
-    .title = Сызбаны өшіру
-pdfjs-editor-remove-freetext-button =
-    .title = Мәтінді өшіру
-pdfjs-editor-remove-stamp-button =
-    .title = Суретті өшіру
-pdfjs-editor-remove-highlight-button =
-    .title = Түспен ерекшелеуді өшіру
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = Ерекшелеу түсі
 pdfjs-editor-colorpicker-button =
     .title = Түсті өзгерту
@@ -373,8 +382,12 @@ pdfjs-editor-colorpicker-pink =
     .title = Қызғылт
 pdfjs-editor-colorpicker-red =
     .title = Қызыл
+
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = Ерекшелеу
+pdfjs-editor-highlight-button-label = Ерекшелеу
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

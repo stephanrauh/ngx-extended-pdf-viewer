@@ -123,6 +123,7 @@ export class PDFPageView implements IRenderableView {
     zoomLayer: ParentNode | null;
     xfaLayer: XfaLayerBuilder | null;
     structTreeLayer: any;
+    drawLayer: any;
     div: HTMLDivElement;
     set renderingState(state: number);
     get renderingState(): number;

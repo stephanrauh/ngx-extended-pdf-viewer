@@ -303,6 +303,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = Bæta við eða breyta myndum
 pdfjs-editor-remove-button =
     .title = Fjarlægja
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Fjarlægja teikningu
+pdfjs-editor-remove-freetext-button =
+    .title = Fjarlægja texta
+pdfjs-editor-remove-stamp-button =
+    .title = Fjarlægja mynd
+pdfjs-editor-remove-highlight-button =
+    .title = Fjarlægja áherslulit
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Litur
 pdfjs-editor-free-text-size-input = Stærð
@@ -350,14 +364,9 @@ pdfjs-editor-resizer-label-bottom-middle = Neðst á miðju - breyta stærð
 pdfjs-editor-resizer-label-bottom-left = Neðst í vinstra horni - breyta stærð
 pdfjs-editor-resizer-label-middle-left = Miðja til vinstri - breyta stærð
 
-pdfjs-editor-remove-ink-button =
-    .title = Fjarlægja teikningu
-pdfjs-editor-remove-freetext-button =
-    .title = Fjarlægja texta
-pdfjs-editor-remove-stamp-button =
-    .title = Fjarlægja mynd
-pdfjs-editor-remove-highlight-button =
-    .title = Fjarlægja áherslulit
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = Áherslulitur
 pdfjs-editor-colorpicker-button =
     .title = Skipta um lit
@@ -373,8 +382,12 @@ pdfjs-editor-colorpicker-pink =
     .title = Bleikt
 pdfjs-editor-colorpicker-red =
     .title = Rautt
+
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = Áherslulita
+pdfjs-editor-highlight-button-label = Áherslulita
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

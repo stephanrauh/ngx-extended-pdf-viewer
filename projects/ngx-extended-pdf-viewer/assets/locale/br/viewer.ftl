@@ -39,6 +39,15 @@ pdfjs-open-file-button-label = Digeriñ ur restr
 pdfjs-print-button =
     .title = Moullañ
 pdfjs-print-button-label = Moullañ
+pdfjs-save-button =
+    .title = Enrollañ
+pdfjs-save-button-label = Enrollañ
+# Used in Firefox for Android as a tooltip for the download button (“download” is a verb).
+pdfjs-download-button =
+    .title = Pellgargañ
+# Used in Firefox for Android as a label for the download button (“download” is a verb).
+# Length of the translation matters since we are in a mobile context, with limited screen estate.
+pdfjs-download-button-label = Pellgargañ
 
 ##  Secondary toolbar and context menu
 
@@ -252,37 +261,44 @@ pdfjs-web-fonts-disabled = Diweredekaet eo an nodrezhoù web: n'haller ket arver
 
 ## Editing
 
-
-## Alt-text dialog
-
-
-## Editor resizers
-## This is used in an aria label to help to understand the role of the resizer.
-
-
-pdfjs-save-button =
-    .title = Enrollañ
-pdfjs-save-button-label = Enrollañ
-pdfjs-download-button =
-    .title = Pellgargañ
-pdfjs-download-button-label = Pellgargañ
 pdfjs-editor-free-text-button =
     .title = Testenn
 pdfjs-editor-free-text-button-label = Testenn
 pdfjs-editor-ink-button =
     .title = Tresañ
 pdfjs-editor-ink-button-label = Tresañ
+
+## Remove button for the various kind of editor.
+
+
+##
+
+# Editor Parameters
 pdfjs-editor-free-text-color-input = Liv
 pdfjs-editor-free-text-size-input = Ment
 pdfjs-editor-ink-color-input = Liv
+
+## Alt-text dialog
+
 pdfjs-editor-alt-text-cancel-button = Nullañ
 pdfjs-editor-alt-text-save-button = Enrollañ
-pdfjs-bookmark-button =
-    .title = Current Page (View URL from Current Page)
-pdfjs-bookmark-button-label = Current Page
+
+## Editor resizers
+## This is used in an aria label to help to understand the role of the resizer.
+
+
+## Color picker
+
+
+pdfjs-bookmark-button-label = Pajenn a-vremañ
 pdfjs-open-in-app-button =
-    .title = Open in app
-pdfjs-open-in-app-button-label = Open in app
+    .title = Digeriñ en arload
+pdfjs-open-in-app-button-label = Digeriñ en arload
+pdfjs-editor-ink-thickness-input = Tevder
+pdfjs-editor-ink-opacity-input = Boullder
+pdfjs-editor-stamp-add-image-button =
+    .title = Ouzhpennañ ur skeudenn
+pdfjs-editor-stamp-add-image-button-label = Ouzhpennañ ur skeudenn
 pdfjs-scroll-page-button =
     .title = Use Page Scrolling
 pdfjs-scroll-page-button-label = Page Scrolling
@@ -314,11 +330,9 @@ pdfjs-editor-remove-stamp-button =
     .title = Remove image
 pdfjs-editor-remove-highlight-button =
     .title = Remove highlight
-pdfjs-editor-ink-thickness-input = Thickness
-pdfjs-editor-ink-opacity-input = Opacity
-pdfjs-editor-stamp-add-image-button =
-    .title = Add image
-pdfjs-editor-stamp-add-image-button-label = Add image
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 pdfjs-free-text =
     .aria-label = Text Editor
 pdfjs-free-text-default-content = Start typing…
@@ -362,5 +376,3 @@ pdfjs-editor-colorpicker-red =
     .title = Red
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-editor-remove-button =
-    .title = Remove

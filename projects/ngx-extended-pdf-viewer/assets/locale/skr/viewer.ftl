@@ -304,6 +304,19 @@ pdfjs-ink-canvas =
 ## This is used in an aria label to help to understand the role of the resizer.
 
 
+pdfjs-editor-stamp-add-image-button =
+    .title = تصویر شامل کرو
+pdfjs-editor-stamp-add-image-button-label = تصویر شامل کرو
+pdfjs-editor-colorpicker-yellow =
+    .title = پیلا
+pdfjs-editor-colorpicker-green =
+    .title = ساوا
+pdfjs-editor-colorpicker-blue =
+    .title = نیلا
+pdfjs-editor-colorpicker-pink =
+    .title = گلابی
+pdfjs-editor-colorpicker-red =
+    .title = لال
 pdfjs-find-match-count =
     { $total ->
         [one] { $current } of { $total } match
@@ -328,9 +341,9 @@ pdfjs-editor-remove-stamp-button =
     .title = Remove image
 pdfjs-editor-remove-highlight-button =
     .title = Remove highlight
-pdfjs-editor-stamp-add-image-button =
-    .title = Add image
-pdfjs-editor-stamp-add-image-button-label = Add image
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 pdfjs-editor-alt-text-button-label = Alt text
 pdfjs-editor-alt-text-edit-button-label = Edit alt text
 pdfjs-editor-alt-text-dialog-label = Choose an option
@@ -357,17 +370,5 @@ pdfjs-editor-colorpicker-button =
     .title = Change color
 pdfjs-editor-colorpicker-dropdown =
     .aria-label = Color choices
-pdfjs-editor-colorpicker-yellow =
-    .title = Yellow
-pdfjs-editor-colorpicker-green =
-    .title = Green
-pdfjs-editor-colorpicker-blue =
-    .title = Blue
-pdfjs-editor-colorpicker-pink =
-    .title = Pink
-pdfjs-editor-colorpicker-red =
-    .title = Red
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-editor-remove-button =
-    .title = Remove

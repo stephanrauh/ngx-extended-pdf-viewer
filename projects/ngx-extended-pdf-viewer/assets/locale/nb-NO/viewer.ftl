@@ -303,6 +303,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = Legg til eller rediger bilder
 pdfjs-editor-remove-button =
     .title = Fjern
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Fjern tegningen
+pdfjs-editor-remove-freetext-button =
+    .title = Fjern tekst
+pdfjs-editor-remove-stamp-button =
+    .title = Fjern bildet
+pdfjs-editor-remove-highlight-button =
+    .title = Fjern utheving
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Farge
 pdfjs-editor-free-text-size-input = Størrelse
@@ -350,14 +364,9 @@ pdfjs-editor-resizer-label-bottom-middle = Nederst i midten — endre størrelse
 pdfjs-editor-resizer-label-bottom-left = Nederste venstre hjørne – endre størrelse
 pdfjs-editor-resizer-label-middle-left = Midt til venstre — endre størrelse
 
-pdfjs-editor-remove-ink-button =
-    .title = Fjern tegningen
-pdfjs-editor-remove-freetext-button =
-    .title = Fjern tekst
-pdfjs-editor-remove-stamp-button =
-    .title = Fjern bildet
-pdfjs-editor-remove-highlight-button =
-    .title = Fjern utheving
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = Uthevingsfarge
 pdfjs-editor-colorpicker-button =
     .title = Endre farge
@@ -373,8 +382,12 @@ pdfjs-editor-colorpicker-pink =
     .title = Rosa
 pdfjs-editor-colorpicker-red =
     .title = Rød
+
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

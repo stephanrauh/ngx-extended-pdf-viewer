@@ -303,6 +303,20 @@ pdfjs-editor-stamp-button =
 pdfjs-editor-stamp-button-label = Embojuaju térã embosako’i ta’ãnga
 pdfjs-editor-remove-button =
     .title = Mboguete
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Emboguete ta’ãnga
+pdfjs-editor-remove-freetext-button =
+    .title = Emboguete moñe’ẽrã
+pdfjs-editor-remove-stamp-button =
+    .title = Emboguete ta’ãnga
+pdfjs-editor-remove-highlight-button =
+    .title = Eipe’a jehechaveha
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Sa’y
 pdfjs-editor-free-text-size-input = Tuichakue
@@ -350,14 +364,9 @@ pdfjs-editor-resizer-label-bottom-middle = Yvy gotyo mbytépe — emoambue tuich
 pdfjs-editor-resizer-label-bottom-left = Iguýpe asu gotyo — emoambue tuichakue
 pdfjs-editor-resizer-label-middle-left = Mbyte asu gotyo — emoambue tuichakue
 
-pdfjs-editor-remove-ink-button =
-    .title = Emboguete ta’ãnga
-pdfjs-editor-remove-freetext-button =
-    .title = Emboguete moñe’ẽrã
-pdfjs-editor-remove-stamp-button =
-    .title = Emboguete ta’ãnga
-pdfjs-editor-remove-highlight-button =
-    .title = Eipe’a jehechaveha
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = Jehechaveha sa’y
 pdfjs-editor-colorpicker-button =
     .title = Emoambue sa’y
@@ -373,8 +382,12 @@ pdfjs-editor-colorpicker-pink =
     .title = Pytãngy
 pdfjs-editor-colorpicker-red =
     .title = Pyha
+
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = Mbosa’y
+pdfjs-editor-highlight-button-label = Mbosa’y
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

@@ -359,6 +359,9 @@ pdfjs-editor-remove-stamp-button =
     .title = Remove image
 pdfjs-editor-remove-highlight-button =
     .title = Remove highlight
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 pdfjs-editor-highlight-colorpicker-label = Highlight color
 pdfjs-editor-colorpicker-button =
     .title = Change color
@@ -376,8 +379,6 @@ pdfjs-editor-colorpicker-red =
     .title = Red
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-editor-remove-button =
-    .title = Remove
 
 # Translations for ngx-extended-pdf-viewer additions
 

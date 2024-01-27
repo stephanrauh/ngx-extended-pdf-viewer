@@ -7,11 +7,16 @@ function fixVersionNumber(folder = 'assets', suffix = '.mjs') {
   if (fs.existsSync(f + 'pdf' + suffix)) {
     const pdfjs = fs.readFileSync(f + 'pdf' + suffix).toString();
 
-    console.log(pdfjs.match(/pdfjsVersion\s?=\s?\'.+\'/g)[0]);
-    let pdfjsVersion = pdfjs.match(/pdfjsVersion\s?=\s?\'.+\'/g)[0].match(/\'.+?\'/g)[0];
+    let pattern = /pdfjsVersion\s?=\s?\'.+\'/g;
+    if (!pdfjs.match(pattern)) {
+      pattern = /pdfjsVersion\s?=\s?\".+\"/g;
+    }
+
+    console.log(pdfjs.match(pattern)[0]);
+    let pdfjsVersion = pdfjs.match(pattern)[0].match(/[\'|\"].+?[\'|\"]/g)[0];
     pdfjsVersion = pdfjsVersion.substring(1, pdfjsVersion.length - 1);
     const pdfjsWorker = fs.readFileSync(f + 'pdf.worker' + suffix).toString();
-    let workerVersion = pdfjsWorker.match(/pdfjsVersion\s?=\s?\'.+\'/g)[0].match(/\'.+?\'/g)[0];
+    let workerVersion = pdfjsWorker.match(/pdfjsVersion\s?=\s?[\'|\"].+[\'|\"]/g)[0].match(/[\'|\"].+?[\'|\"]/g)[0];
     workerVersion = workerVersion.substring(1, workerVersion.length - 1);
     if (workerVersion !== pdfjsVersion) {
       console.error("Version numbers don't match");

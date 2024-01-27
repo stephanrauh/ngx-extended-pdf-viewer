@@ -312,6 +312,8 @@ pdfjs-editor-remove-freetext-button =
     .title = Fjern tekst
 pdfjs-editor-remove-stamp-button =
     .title = Fjern billede
+pdfjs-editor-remove-highlight-button =
+    .title = Fjern fremhævning
 
 ##
 
@@ -362,25 +364,30 @@ pdfjs-editor-resizer-label-bottom-middle = Nederst i midten - tilpas størrelse
 pdfjs-editor-resizer-label-bottom-left = Nederste venstre hjørne - tilpas størrelse
 pdfjs-editor-resizer-label-middle-left = Midten til venstre — tilpas størrelse
 
+## Color picker
+
+# This means "Color used to highlight text"
+pdfjs-editor-highlight-colorpicker-label = Fremhævningsfarve
+pdfjs-editor-colorpicker-button =
+    .title = Skift farve
+pdfjs-editor-colorpicker-dropdown =
+    .aria-label = Farvevalg
+pdfjs-editor-colorpicker-yellow =
+    .title = Gul
+pdfjs-editor-colorpicker-green =
+    .title = Grøn
+pdfjs-editor-colorpicker-blue =
+    .title = Blå
+pdfjs-editor-colorpicker-pink =
+    .title = Lyserød
+pdfjs-editor-colorpicker-red =
+    .title = Rød
+
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
-pdfjs-editor-remove-highlight-button =
-    .title = Remove highlight
-pdfjs-editor-highlight-colorpicker-label = Highlight color
-pdfjs-editor-colorpicker-button =
-    .title = Change color
-pdfjs-editor-colorpicker-dropdown =
-    .aria-label = Color choices
-pdfjs-editor-colorpicker-yellow =
-    .title = Yellow
-pdfjs-editor-colorpicker-green =
-    .title = Green
-pdfjs-editor-colorpicker-blue =
-    .title = Blue
-pdfjs-editor-colorpicker-pink =
-    .title = Pink
-pdfjs-editor-colorpicker-red =
-    .title = Red
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

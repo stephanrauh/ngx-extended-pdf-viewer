@@ -301,6 +301,20 @@ pdfjs-editor-ink-button-label = ਵਾਹੋ
 pdfjs-editor-stamp-button =
     .title = ਚਿੱਤਰ ਜੋੜੋ ਜਾਂ ਸੋਧੋ
 pdfjs-editor-stamp-button-label = ਚਿੱਤਰ ਜੋੜੋ ਜਾਂ ਸੋਧੋ
+pdfjs-editor-remove-button =
+    .title = ਹਟਾਓ
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = ਡਰਾਇੰਗ ਨੂੰ ਹਟਾਓ
+pdfjs-editor-remove-freetext-button =
+    .title = ਲਿਖਤ ਨੂੰ ਹਟਾਓ
+pdfjs-editor-remove-stamp-button =
+    .title = ਚਿੱਤਰ ਨੂੰ ਹਟਾਓ
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = ਰੰਗ
 pdfjs-editor-free-text-size-input = ਆਕਾਰ
@@ -348,33 +362,28 @@ pdfjs-editor-resizer-label-bottom-middle = ਹੇਠਾਂ ਮੱਧ — ਮੁ�
 pdfjs-editor-resizer-label-bottom-left = ਹੇਠਾਂ ਖੱਬਾ ਕੋਨਾ — ਮੁੜ-ਆਕਾਰ ਕਰੋ
 pdfjs-editor-resizer-label-middle-left = ਮੱਧ ਖੱਬਾ — ਮੁੜ-ਆਕਾਰ ਕਰੋ
 
-pdfjs-editor-remove-button =
-    .title = ਹਟਾਓ
-pdfjs-editor-remove-ink-button =
-    .title = ਡਰਾਇੰਗ ਨੂੰ ਹਟਾਓ
-pdfjs-editor-remove-freetext-button =
-    .title = ਲਿਖਤ ਨੂੰ ਹਟਾਓ
-pdfjs-editor-remove-stamp-button =
-    .title = ਚਿੱਤਰ ਨੂੰ ਹਟਾਓ
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = ਹਾਈਲਾਈਟ
+pdfjs-editor-highlight-button-label = ਹਾਈਲਾਈਟ
 pdfjs-editor-remove-highlight-button =
-    .title = Remove highlight
-pdfjs-editor-highlight-colorpicker-label = Highlight color
+    .title = ਹਾਈਲਾਈਟ ਨੂੰ ਹਟਾਓ
+pdfjs-editor-highlight-colorpicker-label = ਹਾਈਟਲਾਈਟ ਦਾ ਰੰਗ
 pdfjs-editor-colorpicker-button =
-    .title = Change color
+    .title = ਰੰਗ ਨੂੰ ਬਦਲੋ
 pdfjs-editor-colorpicker-dropdown =
-    .aria-label = Color choices
+    .aria-label = ਰੰਗ ਚੋਣਾਂ
 pdfjs-editor-colorpicker-yellow =
-    .title = Yellow
+    .title = ਪੀਲਾ
 pdfjs-editor-colorpicker-green =
-    .title = Green
+    .title = ਹਰਾ
 pdfjs-editor-colorpicker-blue =
-    .title = Blue
+    .title = ਨੀਲਾ
 pdfjs-editor-colorpicker-pink =
-    .title = Pink
+    .title = ਗੁਲਾਬੀ
 pdfjs-editor-colorpicker-red =
-    .title = Red
+    .title = ਲਾਲ
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

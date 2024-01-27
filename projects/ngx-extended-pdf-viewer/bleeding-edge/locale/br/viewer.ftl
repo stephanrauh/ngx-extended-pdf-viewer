@@ -48,6 +48,13 @@ pdfjs-download-button =
 # Used in Firefox for Android as a label for the download button (“download” is a verb).
 # Length of the translation matters since we are in a mobile context, with limited screen estate.
 pdfjs-download-button-label = Pellgargañ
+pdfjs-bookmark-button-label = Pajenn a-vremañ
+# Used in Firefox for Android.
+pdfjs-open-in-app-button =
+    .title = Digeriñ en arload
+# Used in Firefox for Android.
+# Length of the translation matters since we are in a mobile context, with limited screen estate.
+pdfjs-open-in-app-button-label = Digeriñ en arload
 
 ##  Secondary toolbar and context menu
 
@@ -277,6 +284,11 @@ pdfjs-editor-ink-button-label = Tresañ
 pdfjs-editor-free-text-color-input = Liv
 pdfjs-editor-free-text-size-input = Ment
 pdfjs-editor-ink-color-input = Liv
+pdfjs-editor-ink-thickness-input = Tevder
+pdfjs-editor-ink-opacity-input = Boullder
+pdfjs-editor-stamp-add-image-button =
+    .title = Ouzhpennañ ur skeudenn
+pdfjs-editor-stamp-add-image-button-label = Ouzhpennañ ur skeudenn
 
 ## Alt-text dialog
 
@@ -290,12 +302,6 @@ pdfjs-editor-alt-text-save-button = Enrollañ
 ## Color picker
 
 
-pdfjs-bookmark-button =
-    .title = Current Page (View URL from Current Page)
-pdfjs-bookmark-button-label = Current Page
-pdfjs-open-in-app-button =
-    .title = Open in app
-pdfjs-open-in-app-button-label = Open in app
 pdfjs-scroll-page-button =
     .title = Use Page Scrolling
 pdfjs-scroll-page-button-label = Page Scrolling
@@ -327,11 +333,9 @@ pdfjs-editor-remove-stamp-button =
     .title = Remove image
 pdfjs-editor-remove-highlight-button =
     .title = Remove highlight
-pdfjs-editor-ink-thickness-input = Thickness
-pdfjs-editor-ink-opacity-input = Opacity
-pdfjs-editor-stamp-add-image-button =
-    .title = Add image
-pdfjs-editor-stamp-add-image-button-label = Add image
+pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Change thickness when highlighting items other than text
 pdfjs-free-text =
     .aria-label = Text Editor
 pdfjs-free-text-default-content = Start typing…

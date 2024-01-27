@@ -38,6 +38,8 @@ export namespace AnnotationEditorParamsType {
     let INK_COLOR: number;
     let INK_THICKNESS: number;
     let INK_OPACITY: number;
+    let HIGHLIGHT_COLOR: number;
+    let HIGHLIGHT_DEFAULT_COLOR: number;
 }
 export const AnnotationEditorPrefix: "pdfjs_internal_editor_";
 export namespace AnnotationEditorType {
