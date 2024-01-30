@@ -1550,288 +1550,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     PDFViewerApplication.enablePrint = this.enablePrint;
     this.service.ngxExtendedPdfViewerInitialized = true;
+    this.registerEventListeners(PDFViewerApplication);
+    this.selectCursorTool();
+    if (!this.listenToURL) {
+      PDFViewerApplication.pdfLinkService.setHash = function () {};
+    }
+
     if (this._src) {
       this.ngxExtendedPdfViewerIncompletelyInitialized = false;
-      if (!this.listenToURL) {
-        PDFViewerApplication.pdfLinkService.setHash = function () {};
-      }
       this.initTimeout = null;
-      this.selectCursorTool();
-
-      PDFViewerApplication.eventBus.on('toggleSidebar', (x: ToggleSidebarEvent) => {
-        this.ngZone.run(() => {
-          this.sidebarVisible = x.visible;
-          this.sidebarVisibleChange.emit(x.visible);
-        });
-      });
-
-      PDFViewerApplication.eventBus.on('textlayerrendered', (x: TextLayerRenderedEvent) => {
-        this.ngZone.run(() => this.textLayerRendered.emit(x));
-      });
-
-      PDFViewerApplication.eventBus.on('annotationeditormodechanged', (x: AnnotationEditorEditorModeChangedEvent) => {
-        // we're using a timeout here to make sure the editor is already visible
-        // when the event is caught. Pdf.js fires it a bit early.
-        setTimeout(() => this.annotationEditorModeChanged.emit(x));
-        if (x.mode === 0) {
-          document.body.classList.remove('ngx-extended-pdf-viewer-prevent-touch-move');
-        } else {
-          document.body.classList.add('ngx-extended-pdf-viewer-prevent-touch-move');
-        }
-      });
-
-      PDFViewerApplication.eventBus.on('scrollmodechanged', (x: ScrollModeChangedEvent) => {
-        this.ngZone.run(() => {
-          this._scrollMode = x.mode;
-          this.scrollModeChange.emit(x.mode);
-          if (x.mode === ScrollModeType.page) {
-            if (this.pageViewMode !== 'single') {
-              this.pageViewModeChange.emit('single');
-              this._pageViewMode = 'single';
-            }
-          }
-        });
-      });
-      PDFViewerApplication.eventBus.on('progress', (x: ProgressBarEvent) => {
-        this.ngZone.run(() => this.progress.emit(x));
-      });
-      PDFViewerApplication.eventBus.on('findbarclose', () => {
-        this.ngZone.run(() => {
-          this.findbarVisible = false;
-          this.findbarVisibleChange.emit(false);
-          this.cdr.markForCheck();
-        });
-      });
-      PDFViewerApplication.eventBus.on('findbaropen', () => {
-        this.ngZone.run(() => {
-          this.findbarVisible = true;
-          this.findbarVisibleChange.emit(true);
-          this.cdr.markForCheck();
-        });
-      });
-      PDFViewerApplication.eventBus.on('propertiesdialogclose', () => {
-        this.propertiesDialogVisible = false;
-        this.ngZone.run(() => this.propertiesDialogVisibleChange.emit(false));
-      });
-      PDFViewerApplication.eventBus.on('propertiesdialogopen', () => {
-        this.propertiesDialogVisible = true;
-        this.ngZone.run(() => this.propertiesDialogVisibleChange.emit(true));
-      });
-
-      PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
-        this.ngZone.run(() => this.pagesLoaded.emit(x));
-        this.removeScrollbarInInfiniteScrollMode(false);
-        if (this.rotation !== undefined && this.rotation !== null) {
-          const r = Number(this.rotation);
-          if (r === 0 || r === 90 || r === 180 || r === 270) {
-            PDFViewerApplication.pdfViewer.pagesRotation = r;
-          }
-        }
-        setTimeout(() => {
-          if (!this.shuttingDown) {
-            // hurried users sometimes reload the PDF before it has finished initializing
-            if (this.nameddest) {
-              PDFViewerApplication.pdfLinkService.goToDestination(this.nameddest);
-            } else if (this.page) {
-              PDFViewerApplication.page = Number(this.page);
-            } else if (this.pageLabel) {
-              PDFViewerApplication.pdfViewer.currentPageLabel = this.pageLabel;
-            }
-          }
-        });
-        this.setZoom();
-      });
-      PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
-        this.ngZone.run(() => {
-          this.pageRendered.emit(x);
-          this.removeScrollbarInInfiniteScrollMode(false);
-        });
-      });
-      PDFViewerApplication.eventBus.on('pagerender', (x: PageRenderEvent) => {
-        this.ngZone.run(() => {
-          this.pageRender.emit(x);
-        });
-      });
-
-      PDFViewerApplication.eventBus.on('download', (x: PdfDownloadedEvent) => {
-        this.ngZone.run(() => {
-          this.pdfDownloaded.emit(x);
-        });
-      });
-      PDFViewerApplication.eventBus.on('scalechanging', (x: ScaleChangingEvent) => {
-        setTimeout(() => {
-          this.currentZoomFactor.emit(x.scale);
-          this.cdr.markForCheck();
-        });
-
-        if (x.presetValue !== 'auto' && x.presetValue !== 'page-fit' && x.presetValue !== 'page-actual' && x.presetValue !== 'page-width') {
-          // ignore rounding differences
-          if (Math.abs(x.previousScale - x.scale) > 0.000001) {
-            this.zoom = x.scale * 100;
-            this.zoomChange.emit(x.scale * 100);
-          }
-        } else if (x.previousPresetValue !== x.presetValue) {
-          // called when the user selects one of the text values of the zoom select dropdown
-          this.zoomChange.emit(x.presetValue);
-        }
-      });
-
-      PDFViewerApplication.eventBus.on('rotationchanging', (x: PagesRotationEvent) => {
-        this.ngZone.run(() => {
-          this.rotationChange.emit(x.pagesRotation);
-        });
-      });
-      PDFViewerApplication.eventBus.on('fileinputchange', (x: FileInputChanged) => {
-        this.ngZone.run(() => {
-          if (x.fileInput.files && x.fileInput.files.length >= 1) {
-            // drag and drop
-            this.srcChange.emit(x.fileInput.files[0].name);
-          } else {
-            // regular file open dialog
-            const path = x.fileInput?.value?.replace('C:\\fakepath\\', '');
-            this.srcChange.emit(path);
-          }
-        });
-      });
-      PDFViewerApplication.eventBus.on('cursortoolchanged', (x: HandtoolChanged) => {
-        this.ngZone.run(() => {
-          this.handTool = x.tool === PdfCursorTools.HAND;
-          this.handToolChange.emit(x.tool === PdfCursorTools.HAND);
-        });
-      });
-
-      PDFViewerApplication.eventBus.on('sidebarviewchanged', (x: SidebarviewChange) => {
-        this.ngZone.run(() => {
-          this.sidebarVisibleChange.emit(x.view > 0);
-          if (x.view > 0) {
-            this.activeSidebarViewChange.emit(x.view);
-          }
-          if (this.sidebarComponent) {
-            this.sidebarComponent.showToolbarWhenNecessary();
-          }
-        });
-      });
-
-      PDFViewerApplication.eventBus.on('documentloaded', (pdfLoadedEvent: PdfDocumentLoadedEvent) => {
-        this.ngZone.run(() => {
-          const pages = pdfLoadedEvent.source.pagesCount;
-          this.pageLabel = undefined;
-          if (this.page && this.page >= pages) {
-            this.page = pages;
-          }
-          this.scrollSignatureWarningIntoView(pdfLoadedEvent.source.pdfDocument);
-          if (this.findbarVisible) {
-            PDFViewerApplication.findBar.open();
-          }
-          if (this.propertiesDialogVisible) {
-            PDFViewerApplication.pdfDocumentProperties.open();
-          }
-        });
-      });
-
-      PDFViewerApplication.eventBus.on('spreadmodechanged', (event) => {
-        this.ngZone.run(() => {
-          const modes = ['off', 'odd', 'even'] as Array<SpreadType>;
-          this.spread = modes[event.mode];
-          this.spreadChange.emit(this.spread);
-        });
-      });
-
-      const hideSidebarToolbar = () => {
-        this.ngZone.run(() => {
-          if (this.sidebarComponent) {
-            this.sidebarComponent.showToolbarWhenNecessary();
-          }
-        });
-      };
-
-      PDFViewerApplication.eventBus.on('outlineloaded', hideSidebarToolbar);
-
-      PDFViewerApplication.eventBus.on('attachmentsloaded', hideSidebarToolbar);
-
-      PDFViewerApplication.eventBus.on('layersloaded', hideSidebarToolbar);
-
-      PDFViewerApplication.eventBus.on('annotationlayerrendered', (event: AnnotationLayerRenderedEvent) => {
-        const div = event.source.div;
-        this.ngZone.run(() => {
-          this.annotationLayerRendered.emit(event);
-          this.enableOrDisableForms(div, true);
-        });
-      });
-      PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', (event) => this.ngZone.run(() => this.annotationEditorLayerRendered.emit(event)));
-      PDFViewerApplication.eventBus.on('xfalayerrendered', (event) => this.ngZone.run(() => this.xfaLayerRendered.emit(event)));
-      PDFViewerApplication.eventBus.on('outlineloaded', (event) => this.ngZone.run(() => this.outlineLoaded.emit(event)));
-      PDFViewerApplication.eventBus.on('attachmentsloaded', (event) => this.ngZone.run(() => this.attachmentsloaded.emit(event)));
-      PDFViewerApplication.eventBus.on('layersloaded', (event) => this.ngZone.run(() => this.layersloaded.emit(event)));
-      PDFViewerApplication.eventBus.on('presentationmodechanged', (event) => {
-        const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-        PDFViewerApplication?.pdfViewer?.destroyBookMode();
-      });
-
-      PDFViewerApplication.eventBus.on('updatefindcontrolstate', (x: FindResult) => {
-        this.ngZone.run(() => {
-          let type = PDFViewerApplication.findController.state.type || 'find';
-          if (type === 'again') {
-            type = 'findagain';
-          }
-          const result = {
-            caseSensitive: PDFViewerApplication.findController.state.caseSensitive,
-            entireWord: PDFViewerApplication.findController.state.entireWord,
-            findPrevious: PDFViewerApplication.findController.state.findPrevious,
-            highlightAll: PDFViewerApplication.findController.state.highlightAll,
-            matchDiacritics: PDFViewerApplication.findController.state.matchDiacritics,
-            query: PDFViewerApplication.findController.state.query,
-            type,
-          };
-          this.updateFindMatchesCount.emit({
-            ...result,
-            current: x.matchesCount.current,
-            total: x.matchesCount.total,
-            matches: PDFViewerApplication.findController._pageMatches,
-            matchesLength: PDFViewerApplication.findController._pageMatchesLength,
-          });
-
-          if (this.updateFindState) {
-            this.updateFindState.emit(x.state);
-          }
-        });
-      });
-      PDFViewerApplication.eventBus.on('updatefindmatchescount', (x: FindResult) => {
-        x.matchesCount.matches = PDFViewerApplication.findController._pageMatches;
-        x.matchesCount.matchesLength = PDFViewerApplication.findController._pageMatchesLength;
-        this.ngZone.run(() =>
-          this.updateFindMatchesCount.emit({
-            caseSensitive: PDFViewerApplication.findController.state.caseSensitive,
-            entireWord: PDFViewerApplication.findController.state.entireWord,
-            findPrevious: PDFViewerApplication.findController.state.findPrevious,
-            highlightAll: PDFViewerApplication.findController.state.highlightAll,
-            matchDiacritics: PDFViewerApplication.findController.state.matchDiacritics,
-            query: PDFViewerApplication.findController.state.query,
-            type: PDFViewerApplication.findController.state.type,
-            current: x.matchesCount.current,
-            total: x.matchesCount.total,
-            matches: x.matchesCount.matches,
-            matchesLength: x.matchesCount.matchesLength,
-          })
-        );
-      });
-
-      PDFViewerApplication.eventBus.on('pagechanging', (x: PageNumberChange) => {
-        if (!this.shuttingDown) {
-          // hurried users sometimes reload the PDF before it has finished initializing
-          this.ngZone.run(() => {
-            const currentPage = PDFViewerApplication.pdfViewer.currentPageNumber;
-            const currentPageLabel = PDFViewerApplication.pdfViewer.currentPageLabel;
-
-            if (currentPage !== this.page) {
-              this.pageChange.emit(currentPage);
-            }
-            if (currentPageLabel !== this.pageLabel) {
-              this.pageLabelChange.emit(currentPageLabel);
-            }
-          });
-        }
-      });
 
       setTimeout(async () => this.checkHeight(), 100);
       // open a file in the viewer
@@ -1880,6 +1607,283 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         }
       }, 100);
     }
+  }
+
+  private registerEventListeners(PDFViewerApplication: IPDFViewerApplication) {
+    PDFViewerApplication.eventBus.on('toggleSidebar', (x: ToggleSidebarEvent) => {
+      this.ngZone.run(() => {
+        this.sidebarVisible = x.visible;
+        this.sidebarVisibleChange.emit(x.visible);
+      });
+    });
+
+    PDFViewerApplication.eventBus.on('textlayerrendered', (x: TextLayerRenderedEvent) => {
+      this.ngZone.run(() => this.textLayerRendered.emit(x));
+    });
+
+    PDFViewerApplication.eventBus.on('annotationeditormodechanged', (x: AnnotationEditorEditorModeChangedEvent) => {
+      // we're using a timeout here to make sure the editor is already visible
+      // when the event is caught. Pdf.js fires it a bit early.
+      setTimeout(() => this.annotationEditorModeChanged.emit(x));
+      if (x.mode === 0) {
+        document.body.classList.remove('ngx-extended-pdf-viewer-prevent-touch-move');
+      } else {
+        document.body.classList.add('ngx-extended-pdf-viewer-prevent-touch-move');
+      }
+    });
+
+    PDFViewerApplication.eventBus.on('scrollmodechanged', (x: ScrollModeChangedEvent) => {
+      this.ngZone.run(() => {
+        this._scrollMode = x.mode;
+        this.scrollModeChange.emit(x.mode);
+        if (x.mode === ScrollModeType.page) {
+          if (this.pageViewMode !== 'single') {
+            this.pageViewModeChange.emit('single');
+            this._pageViewMode = 'single';
+          }
+        }
+      });
+    });
+    PDFViewerApplication.eventBus.on('progress', (x: ProgressBarEvent) => {
+      this.ngZone.run(() => this.progress.emit(x));
+    });
+    PDFViewerApplication.eventBus.on('findbarclose', () => {
+      this.ngZone.run(() => {
+        this.findbarVisible = false;
+        this.findbarVisibleChange.emit(false);
+        this.cdr.markForCheck();
+      });
+    });
+    PDFViewerApplication.eventBus.on('findbaropen', () => {
+      this.ngZone.run(() => {
+        this.findbarVisible = true;
+        this.findbarVisibleChange.emit(true);
+        this.cdr.markForCheck();
+      });
+    });
+    PDFViewerApplication.eventBus.on('propertiesdialogclose', () => {
+      this.propertiesDialogVisible = false;
+      this.ngZone.run(() => this.propertiesDialogVisibleChange.emit(false));
+    });
+    PDFViewerApplication.eventBus.on('propertiesdialogopen', () => {
+      this.propertiesDialogVisible = true;
+      this.ngZone.run(() => this.propertiesDialogVisibleChange.emit(true));
+    });
+
+    PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
+      this.ngZone.run(() => this.pagesLoaded.emit(x));
+      this.removeScrollbarInInfiniteScrollMode(false);
+      if (this.rotation !== undefined && this.rotation !== null) {
+        const r = Number(this.rotation);
+        if (r === 0 || r === 90 || r === 180 || r === 270) {
+          PDFViewerApplication.pdfViewer.pagesRotation = r;
+        }
+      }
+      setTimeout(() => {
+        if (!this.shuttingDown) {
+          // hurried users sometimes reload the PDF before it has finished initializing
+          if (this.nameddest) {
+            PDFViewerApplication.pdfLinkService.goToDestination(this.nameddest);
+          } else if (this.page) {
+            PDFViewerApplication.page = Number(this.page);
+          } else if (this.pageLabel) {
+            PDFViewerApplication.pdfViewer.currentPageLabel = this.pageLabel;
+          }
+        }
+      });
+      this.setZoom();
+    });
+    PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
+      this.ngZone.run(() => {
+        this.pageRendered.emit(x);
+        this.removeScrollbarInInfiniteScrollMode(false);
+      });
+    });
+    PDFViewerApplication.eventBus.on('pagerender', (x: PageRenderEvent) => {
+      this.ngZone.run(() => {
+        this.pageRender.emit(x);
+      });
+    });
+
+    PDFViewerApplication.eventBus.on('download', (x: PdfDownloadedEvent) => {
+      this.ngZone.run(() => {
+        this.pdfDownloaded.emit(x);
+      });
+    });
+    PDFViewerApplication.eventBus.on('scalechanging', (x: ScaleChangingEvent) => {
+      setTimeout(() => {
+        this.currentZoomFactor.emit(x.scale);
+        this.cdr.markForCheck();
+      });
+
+      if (x.presetValue !== 'auto' && x.presetValue !== 'page-fit' && x.presetValue !== 'page-actual' && x.presetValue !== 'page-width') {
+        // ignore rounding differences
+        if (Math.abs(x.previousScale - x.scale) > 0.000001) {
+          this.zoom = x.scale * 100;
+          this.zoomChange.emit(x.scale * 100);
+        }
+      } else if (x.previousPresetValue !== x.presetValue) {
+        // called when the user selects one of the text values of the zoom select dropdown
+        this.zoomChange.emit(x.presetValue);
+      }
+    });
+
+    PDFViewerApplication.eventBus.on('rotationchanging', (x: PagesRotationEvent) => {
+      this.ngZone.run(() => {
+        this.rotationChange.emit(x.pagesRotation);
+      });
+    });
+    PDFViewerApplication.eventBus.on('fileinputchange', (x: FileInputChanged) => {
+      this.ngZone.run(() => {
+        if (x.fileInput.files && x.fileInput.files.length >= 1) {
+          // drag and drop
+          this.srcChange.emit(x.fileInput.files[0].name);
+        } else {
+          // regular file open dialog
+          const path = x.fileInput?.value?.replace('C:\\fakepath\\', '');
+          this.srcChange.emit(path);
+        }
+      });
+    });
+    PDFViewerApplication.eventBus.on('cursortoolchanged', (x: HandtoolChanged) => {
+      this.ngZone.run(() => {
+        this.handTool = x.tool === PdfCursorTools.HAND;
+        this.handToolChange.emit(x.tool === PdfCursorTools.HAND);
+      });
+    });
+
+    PDFViewerApplication.eventBus.on('sidebarviewchanged', (x: SidebarviewChange) => {
+      this.ngZone.run(() => {
+        this.sidebarVisibleChange.emit(x.view > 0);
+        if (x.view > 0) {
+          this.activeSidebarViewChange.emit(x.view);
+        }
+        if (this.sidebarComponent) {
+          this.sidebarComponent.showToolbarWhenNecessary();
+        }
+      });
+    });
+
+    PDFViewerApplication.eventBus.on('documentloaded', (pdfLoadedEvent: PdfDocumentLoadedEvent) => {
+      this.ngZone.run(() => {
+        const pages = pdfLoadedEvent.source.pagesCount;
+        this.pageLabel = undefined;
+        if (this.page && this.page >= pages) {
+          this.page = pages;
+        }
+        this.scrollSignatureWarningIntoView(pdfLoadedEvent.source.pdfDocument);
+        if (this.findbarVisible) {
+          PDFViewerApplication.findBar.open();
+        }
+        if (this.propertiesDialogVisible) {
+          PDFViewerApplication.pdfDocumentProperties.open();
+        }
+      });
+    });
+
+    PDFViewerApplication.eventBus.on('spreadmodechanged', (event) => {
+      this.ngZone.run(() => {
+        const modes = ['off', 'odd', 'even'] as Array<SpreadType>;
+        this.spread = modes[event.mode];
+        this.spreadChange.emit(this.spread);
+      });
+    });
+
+    const hideSidebarToolbar = () => {
+      this.ngZone.run(() => {
+        if (this.sidebarComponent) {
+          this.sidebarComponent.showToolbarWhenNecessary();
+        }
+      });
+    };
+
+    PDFViewerApplication.eventBus.on('outlineloaded', hideSidebarToolbar);
+
+    PDFViewerApplication.eventBus.on('attachmentsloaded', hideSidebarToolbar);
+
+    PDFViewerApplication.eventBus.on('layersloaded', hideSidebarToolbar);
+
+    PDFViewerApplication.eventBus.on('annotationlayerrendered', (event: AnnotationLayerRenderedEvent) => {
+      const div = event.source.div;
+      this.ngZone.run(() => {
+        this.annotationLayerRendered.emit(event);
+        this.enableOrDisableForms(div, true);
+      });
+    });
+    PDFViewerApplication.eventBus.on('annotationeditorlayerrendered', (event) => this.ngZone.run(() => this.annotationEditorLayerRendered.emit(event)));
+    PDFViewerApplication.eventBus.on('xfalayerrendered', (event) => this.ngZone.run(() => this.xfaLayerRendered.emit(event)));
+    PDFViewerApplication.eventBus.on('outlineloaded', (event) => this.ngZone.run(() => this.outlineLoaded.emit(event)));
+    PDFViewerApplication.eventBus.on('attachmentsloaded', (event) => this.ngZone.run(() => this.attachmentsloaded.emit(event)));
+    PDFViewerApplication.eventBus.on('layersloaded', (event) => this.ngZone.run(() => this.layersloaded.emit(event)));
+    PDFViewerApplication.eventBus.on('presentationmodechanged', (event) => {
+      const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+      PDFViewerApplication?.pdfViewer?.destroyBookMode();
+    });
+
+    PDFViewerApplication.eventBus.on('updatefindcontrolstate', (x: FindResult) => {
+      this.ngZone.run(() => {
+        let type = PDFViewerApplication.findController.state.type || 'find';
+        if (type === 'again') {
+          type = 'findagain';
+        }
+        const result = {
+          caseSensitive: PDFViewerApplication.findController.state.caseSensitive,
+          entireWord: PDFViewerApplication.findController.state.entireWord,
+          findPrevious: PDFViewerApplication.findController.state.findPrevious,
+          highlightAll: PDFViewerApplication.findController.state.highlightAll,
+          matchDiacritics: PDFViewerApplication.findController.state.matchDiacritics,
+          query: PDFViewerApplication.findController.state.query,
+          type,
+        };
+        this.updateFindMatchesCount.emit({
+          ...result,
+          current: x.matchesCount.current,
+          total: x.matchesCount.total,
+          matches: PDFViewerApplication.findController._pageMatches,
+          matchesLength: PDFViewerApplication.findController._pageMatchesLength,
+        });
+
+        if (this.updateFindState) {
+          this.updateFindState.emit(x.state);
+        }
+      });
+    });
+    PDFViewerApplication.eventBus.on('updatefindmatchescount', (x: FindResult) => {
+      x.matchesCount.matches = PDFViewerApplication.findController._pageMatches;
+      x.matchesCount.matchesLength = PDFViewerApplication.findController._pageMatchesLength;
+      this.ngZone.run(() =>
+        this.updateFindMatchesCount.emit({
+          caseSensitive: PDFViewerApplication.findController.state.caseSensitive,
+          entireWord: PDFViewerApplication.findController.state.entireWord,
+          findPrevious: PDFViewerApplication.findController.state.findPrevious,
+          highlightAll: PDFViewerApplication.findController.state.highlightAll,
+          matchDiacritics: PDFViewerApplication.findController.state.matchDiacritics,
+          query: PDFViewerApplication.findController.state.query,
+          type: PDFViewerApplication.findController.state.type,
+          current: x.matchesCount.current,
+          total: x.matchesCount.total,
+          matches: x.matchesCount.matches,
+          matchesLength: x.matchesCount.matchesLength,
+        })
+      );
+    });
+
+    PDFViewerApplication.eventBus.on('pagechanging', (x: PageNumberChange) => {
+      if (!this.shuttingDown) {
+        // hurried users sometimes reload the PDF before it has finished initializing
+        this.ngZone.run(() => {
+          const currentPage = PDFViewerApplication.pdfViewer.currentPageNumber;
+          const currentPageLabel = PDFViewerApplication.pdfViewer.currentPageLabel;
+
+          if (currentPage !== this.page) {
+            this.pageChange.emit(currentPage);
+          }
+          if (currentPageLabel !== this.pageLabel) {
+            this.pageLabelChange.emit(currentPageLabel);
+          }
+        });
+      }
+    });
   }
 
   private removeScrollbarInInfiniteScrollMode(restoreHeight: boolean): void {
