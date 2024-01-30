@@ -524,4 +524,5 @@
 - 19.0.6 #2077 document that the library requires RxJS 7 or higher
 - 19.0.7 #2096 fixed a bug that broke - among other things - printing of multi-page documents; #2091 added a forgotten event to the public API; #2081 fixed `(pagesLoaded)`
 - 19.1.0 #2099 updated to pdf.js 4.0.375; #2016 updated the CSS rules --> annotations can now be deleted
-- 19.2.0 #2116 inlined draw_layer_builder.scss because it wasn't loaded at all (might be a breaking change); #2071 initialize the event listeners even if `[src]="undefined` (might be a breaking change); dependency updates
+- 19.2.0 #2116 inlined draw_layer_builder.scss because it wasn't loaded at all (might be a breaking change); #2071 initialize the event listeners even if `[src]="undefined` (might be a breaking change)
+- 19.2.1 dependency updates
