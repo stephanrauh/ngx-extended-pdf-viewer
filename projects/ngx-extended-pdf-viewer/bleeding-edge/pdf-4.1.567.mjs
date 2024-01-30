@@ -137,7 +137,8 @@ const AnnotationEditorParamsType = {
   INK_THICKNESS: 22,
   INK_OPACITY: 23,
   HIGHLIGHT_COLOR: 31,
-  HIGHLIGHT_DEFAULT_COLOR: 32
+  HIGHLIGHT_DEFAULT_COLOR: 32,
+  HIGHLIGHT_THICKNESS: 33
 };
 const PermissionFlag = {
   PRINT: 0x04,
@@ -593,43 +594,43 @@ class Util {
     if (transform[0]) {
       if (transform[0] < 0) {
         temp = minMax[0];
-        minMax[0] = minMax[1];
-        minMax[1] = temp;
+        minMax[0] = minMax[2];
+        minMax[2] = temp;
       }
       minMax[0] *= transform[0];
-      minMax[1] *= transform[0];
+      minMax[2] *= transform[0];
       if (transform[3] < 0) {
-        temp = minMax[2];
-        minMax[2] = minMax[3];
+        temp = minMax[1];
+        minMax[1] = minMax[3];
         minMax[3] = temp;
       }
-      minMax[2] *= transform[3];
+      minMax[1] *= transform[3];
       minMax[3] *= transform[3];
     } else {
       temp = minMax[0];
-      minMax[0] = minMax[2];
-      minMax[2] = temp;
-      temp = minMax[1];
-      minMax[1] = minMax[3];
+      minMax[0] = minMax[1];
+      minMax[1] = temp;
+      temp = minMax[2];
+      minMax[2] = minMax[3];
       minMax[3] = temp;
       if (transform[1] < 0) {
-        temp = minMax[2];
-        minMax[2] = minMax[3];
+        temp = minMax[1];
+        minMax[1] = minMax[3];
         minMax[3] = temp;
       }
-      minMax[2] *= transform[1];
+      minMax[1] *= transform[1];
       minMax[3] *= transform[1];
       if (transform[2] < 0) {
         temp = minMax[0];
-        minMax[0] = minMax[1];
-        minMax[1] = temp;
+        minMax[0] = minMax[2];
+        minMax[2] = temp;
       }
       minMax[0] *= transform[2];
-      minMax[1] *= transform[2];
+      minMax[2] *= transform[2];
     }
     minMax[0] += transform[4];
-    minMax[1] += transform[4];
-    minMax[2] += transform[5];
+    minMax[1] += transform[5];
+    minMax[2] += transform[4];
     minMax[3] += transform[5];
   }
   static transform(m1, m2) {
@@ -694,59 +695,48 @@ class Util {
     }
     return [xLow, yLow, xHigh, yHigh];
   }
-  static bezierBoundingBox(x0, y0, x1, y1, x2, y2, x3, y3) {
-    const tvalues = [],
-      bounds = [[], []];
-    let a, b, c, t, t1, t2, b2ac, sqrtb2ac;
-    for (let i = 0; i < 2; ++i) {
-      if (i === 0) {
-        b = 6 * x0 - 12 * x1 + 6 * x2;
-        a = -3 * x0 + 9 * x1 - 9 * x2 + 3 * x3;
-        c = 3 * x1 - 3 * x0;
-      } else {
-        b = 6 * y0 - 12 * y1 + 6 * y2;
-        a = -3 * y0 + 9 * y1 - 9 * y2 + 3 * y3;
-        c = 3 * y1 - 3 * y0;
-      }
-      if (Math.abs(a) < 1e-12) {
-        if (Math.abs(b) < 1e-12) {
-          continue;
-        }
-        t = -c / b;
-        if (0 < t && t < 1) {
-          tvalues.push(t);
-        }
-        continue;
-      }
-      b2ac = b * b - 4 * c * a;
-      sqrtb2ac = Math.sqrt(b2ac);
-      if (b2ac < 0) {
-        continue;
-      }
-      t1 = (-b + sqrtb2ac) / (2 * a);
-      if (0 < t1 && t1 < 1) {
-        tvalues.push(t1);
-      }
-      t2 = (-b - sqrtb2ac) / (2 * a);
-      if (0 < t2 && t2 < 1) {
-        tvalues.push(t2);
-      }
+  static #getExtremumOnCurve(x0, x1, x2, x3, y0, y1, y2, y3, t, minMax) {
+    if (t <= 0 || t >= 1) {
+      return;
     }
-    let j = tvalues.length,
-      mt;
-    const jlen = j;
-    while (j--) {
-      t = tvalues[j];
-      mt = 1 - t;
-      bounds[0][j] = mt * mt * mt * x0 + 3 * mt * mt * t * x1 + 3 * mt * t * t * x2 + t * t * t * x3;
-      bounds[1][j] = mt * mt * mt * y0 + 3 * mt * mt * t * y1 + 3 * mt * t * t * y2 + t * t * t * y3;
+    const mt = 1 - t;
+    const tt = t * t;
+    const ttt = tt * t;
+    const x = mt * (mt * (mt * x0 + 3 * t * x1) + 3 * tt * x2) + ttt * x3;
+    const y = mt * (mt * (mt * y0 + 3 * t * y1) + 3 * tt * y2) + ttt * y3;
+    minMax[0] = Math.min(minMax[0], x);
+    minMax[1] = Math.min(minMax[1], y);
+    minMax[2] = Math.max(minMax[2], x);
+    minMax[3] = Math.max(minMax[3], y);
+  }
+  static #getExtremum(x0, x1, x2, x3, y0, y1, y2, y3, a, b, c, minMax) {
+    if (Math.abs(a) < 1e-12) {
+      if (Math.abs(b) >= 1e-12) {
+        this.#getExtremumOnCurve(x0, x1, x2, x3, y0, y1, y2, y3, -c / b, minMax);
+      }
+      return;
     }
-    bounds[0][jlen] = x0;
-    bounds[1][jlen] = y0;
-    bounds[0][jlen + 1] = x3;
-    bounds[1][jlen + 1] = y3;
-    bounds[0].length = bounds[1].length = jlen + 2;
-    return [Math.min(...bounds[0]), Math.min(...bounds[1]), Math.max(...bounds[0]), Math.max(...bounds[1])];
+    const delta = b ** 2 - 4 * c * a;
+    if (delta < 0) {
+      return;
+    }
+    const sqrtDelta = Math.sqrt(delta);
+    const a2 = 2 * a;
+    this.#getExtremumOnCurve(x0, x1, x2, x3, y0, y1, y2, y3, (-b + sqrtDelta) / a2, minMax);
+    this.#getExtremumOnCurve(x0, x1, x2, x3, y0, y1, y2, y3, (-b - sqrtDelta) / a2, minMax);
+  }
+  static bezierBoundingBox(x0, y0, x1, y1, x2, y2, x3, y3, minMax) {
+    if (minMax) {
+      minMax[0] = Math.min(minMax[0], x0, x3);
+      minMax[1] = Math.min(minMax[1], y0, y3);
+      minMax[2] = Math.max(minMax[2], x0, x3);
+      minMax[3] = Math.max(minMax[3], y0, y3);
+    } else {
+      minMax = [Math.min(x0, x3), Math.min(y0, y3), Math.max(x0, x3), Math.max(y0, y3)];
+    }
+    this.#getExtremum(x0, x1, x2, x3, y0, y1, y2, y3, 3 * (-x0 + 3 * (x1 - x2) + x3), 6 * (x0 - 2 * x1 + x2), 3 * (x1 - x0), minMax);
+    this.#getExtremum(x0, x1, x2, x3, y0, y1, y2, y3, 3 * (-y0 + 3 * (y1 - y2) + y3), 6 * (y0 - 2 * y1 + y2), 3 * (y1 - y0), minMax);
+    return minMax;
   }
 }
 const PDFStringTranslateTable = (/* unused pure expression or super */ null && ([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x2d8, 0x2c7, 0x2c6, 0x2d9, 0x2dd, 0x2db, 0x2da, 0x2dc, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x2022, 0x2020, 0x2021, 0x2026, 0x2014, 0x2013, 0x192, 0x2044, 0x2039, 0x203a, 0x2212, 0x2030, 0x201e, 0x201c, 0x201d, 0x2018, 0x2019, 0x201a, 0x2122, 0xfb01, 0xfb02, 0x141, 0x152, 0x160, 0x178, 0x17d, 0x131, 0x142, 0x153, 0x161, 0x17e, 0, 0x20ac]));
@@ -800,9 +790,6 @@ function stringToUTF8String(str) {
 function utf8StringToString(str) {
   return unescape(encodeURIComponent(str));
 }
-function isArrayBuffer(v) {
-  return typeof v === "object" && v?.byteLength !== undefined;
-}
 function isArrayEqual(arr1, arr2) {
   if (arr1.length !== arr2.length) {
     return false;
@@ -843,9 +830,7 @@ function normalizeUnicode(str) {
     NormalizeRegex = /([\u00a0\u00b5\u037e\u0eb3\u2000-\u200a\u202f\u2126\ufb00-\ufb04\ufb06\ufb20-\ufb36\ufb38-\ufb3c\ufb3e\ufb40-\ufb41\ufb43-\ufb44\ufb46-\ufba1\ufba4-\ufba9\ufbae-\ufbb1\ufbd3-\ufbdc\ufbde-\ufbe7\ufbea-\ufbf8\ufbfc-\ufbfd\ufc00-\ufc5d\ufc64-\ufcf1\ufcf5-\ufd3d\ufd88\ufdf4\ufdfa-\ufdfb\ufe71\ufe77\ufe79\ufe7b\ufe7d]+)|(\ufb05+)/gu;
     NormalizationMap = new Map([["ﬅ", "ſt"]]);
   }
-  return str.replaceAll(NormalizeRegex, (_, p1, p2) => {
-    return p1 ? p1.normalize("NFKC") : NormalizationMap.get(p2);
-  });
+  return str.replaceAll(NormalizeRegex, (_, p1, p2) => p1 ? p1.normalize("NFKC") : NormalizationMap.get(p2));
 }
 function getUuid() {
   if (typeof crypto !== "undefined" && typeof crypto?.randomUUID === "function") {
@@ -877,7 +862,7 @@ class BaseFilterFactory {
   addHCMFilter(fgColor, bgColor) {
     return "none";
   }
-  addHighlightHCMFilter(fgColor, bgColor, newFgColor, newBgColor) {
+  addHighlightHCMFilter(filterName, fgColor, bgColor, newFgColor, newBgColor) {
     return "none";
   }
   destroy(keepHCM = false) {}
@@ -1027,12 +1012,7 @@ class DOMFilterFactory extends BaseFilterFactory {
   #_defs;
   #docId;
   #document;
-  #hcmFilter;
-  #hcmKey;
-  #hcmUrl;
-  #hcmHighlightFilter;
-  #hcmHighlightKey;
-  #hcmHighlightUrl;
+  #_hcmCache;
   #id = 0;
   constructor({
     docId,
@@ -1044,6 +1024,9 @@ class DOMFilterFactory extends BaseFilterFactory {
   }
   get #cache() {
     return this.#_cache ||= new Map();
+  }
+  get #hcmCache() {
+    return this.#_hcmCache ||= new Map();
   }
   get #defs() {
     if (!this.#_defs) {
@@ -1113,14 +1096,26 @@ class DOMFilterFactory extends BaseFilterFactory {
   }
   addHCMFilter(fgColor, bgColor) {
     const key = `${fgColor}-${bgColor}`;
-    if (this.#hcmKey === key) {
-      return this.#hcmUrl;
+    const filterName = "base";
+    let info = this.#hcmCache.get(filterName);
+    if (info?.key === key) {
+      return info.url;
     }
-    this.#hcmKey = key;
-    this.#hcmUrl = "none";
-    this.#hcmFilter?.remove();
+    if (info) {
+      info.filter?.remove();
+      info.key = key;
+      info.url = "none";
+      info.filter = null;
+    } else {
+      info = {
+        key,
+        url: "none",
+        filter: null
+      };
+      this.#hcmCache.set(filterName, info);
+    }
     if (!fgColor || !bgColor) {
-      return this.#hcmUrl;
+      return info.url;
     }
     const fgRGB = this.#getRGB(fgColor);
     fgColor = Util.makeHexColor(...fgRGB);
@@ -1128,7 +1123,7 @@ class DOMFilterFactory extends BaseFilterFactory {
     bgColor = Util.makeHexColor(...bgRGB);
     this.#defs.style.color = "";
     if (fgColor === "#000000" && bgColor === "#ffffff" || fgColor === bgColor) {
-      return this.#hcmUrl;
+      return info.url;
     }
     const map = new Array(256);
     for (let i = 0; i <= 255; i++) {
@@ -1137,7 +1132,7 @@ class DOMFilterFactory extends BaseFilterFactory {
     }
     const table = map.join(",");
     const id = `g_${this.#docId}_hcm_filter`;
-    const filter = this.#hcmHighlightFilter = this.#createFilter(id);
+    const filter = info.filter = this.#createFilter(id);
     this.#addTransferMapConversion(table, table, table, filter);
     this.#addGrayConversion(filter);
     const getSteps = (c, n) => {
@@ -1150,19 +1145,30 @@ class DOMFilterFactory extends BaseFilterFactory {
       return arr.join(",");
     };
     this.#addTransferMapConversion(getSteps(0, 5), getSteps(1, 5), getSteps(2, 5), filter);
-    this.#hcmUrl = `url(#${id})`;
-    return this.#hcmUrl;
+    info.url = `url(#${id})`;
+    return info.url;
   }
-  addHighlightHCMFilter(fgColor, bgColor, newFgColor, newBgColor) {
+  addHighlightHCMFilter(filterName, fgColor, bgColor, newFgColor, newBgColor) {
     const key = `${fgColor}-${bgColor}-${newFgColor}-${newBgColor}`;
-    if (this.#hcmHighlightKey === key) {
-      return this.#hcmHighlightUrl;
+    let info = this.#hcmCache.get(filterName);
+    if (info?.key === key) {
+      return info.url;
     }
-    this.#hcmHighlightKey = key;
-    this.#hcmHighlightUrl = "none";
-    this.#hcmHighlightFilter?.remove();
+    if (info) {
+      info.filter?.remove();
+      info.key = key;
+      info.url = "none";
+      info.filter = null;
+    } else {
+      info = {
+        key,
+        url: "none",
+        filter: null
+      };
+      this.#hcmCache.set(filterName, info);
+    }
     if (!fgColor || !bgColor) {
-      return this.#hcmHighlightUrl;
+      return info.url;
     }
     const [fgRGB, bgRGB] = [fgColor, bgColor].map(this.#getRGB.bind(this));
     let fgGray = Math.round(0.2126 * fgRGB[0] + 0.7152 * fgRGB[1] + 0.0722 * fgRGB[2]);
@@ -1191,15 +1197,15 @@ class DOMFilterFactory extends BaseFilterFactory {
       }
       return arr.join(",");
     };
-    const id = `g_${this.#docId}_hcm_highlight_filter`;
-    const filter = this.#hcmHighlightFilter = this.#createFilter(id);
+    const id = `g_${this.#docId}_hcm_${filterName}_filter`;
+    const filter = info.filter = this.#createFilter(id);
     this.#addGrayConversion(filter);
     this.#addTransferMapConversion(getSteps(newFgRGB[0], newBgRGB[0], 5), getSteps(newFgRGB[1], newBgRGB[1], 5), getSteps(newFgRGB[2], newBgRGB[2], 5), filter);
-    this.#hcmHighlightUrl = `url(#${id})`;
-    return this.#hcmHighlightUrl;
+    info.url = `url(#${id})`;
+    return info.url;
   }
   destroy(keepHCM = false) {
-    if (keepHCM && (this.#hcmUrl || this.#hcmHighlightUrl)) {
+    if (keepHCM && this.#hcmCache.size !== 0) {
       return;
     }
     if (this.#_defs) {
@@ -1305,19 +1311,15 @@ async function fetchData(url, type = "text") {
 }
 class DOMCMapReaderFactory extends BaseCMapReaderFactory {
   _fetchData(url, compressionType) {
-    return fetchData(url, this.isCompressed ? "arraybuffer" : "text").then(data => {
-      return {
-        cMapData: data instanceof ArrayBuffer ? new Uint8Array(data) : stringToBytes(data),
-        compressionType
-      };
-    });
+    return fetchData(url, this.isCompressed ? "arraybuffer" : "text").then(data => ({
+      cMapData: data instanceof ArrayBuffer ? new Uint8Array(data) : stringToBytes(data),
+      compressionType
+    }));
   }
 }
 class DOMStandardFontDataFactory extends BaseStandardFontDataFactory {
   _fetchData(url) {
-    return fetchData(url, "arraybuffer").then(data => {
-      return new Uint8Array(data);
-    });
+    return fetchData(url, "arraybuffer").then(data => new Uint8Array(data));
   }
 }
 class DOMSVGFactory extends BaseSVGFactory {
@@ -1821,6 +1823,7 @@ class CommandManager {
   add({
     cmd,
     undo,
+    post,
     mustExec,
     type = NaN,
     overwriteIfSameType = false,
@@ -1835,6 +1838,7 @@ class CommandManager {
     const save = {
       cmd,
       undo,
+      post,
       type
     };
     if (this.#position === -1) {
@@ -1868,7 +1872,12 @@ class CommandManager {
       return;
     }
     this.#locked = true;
-    this.#commands[this.#position].undo();
+    const {
+      undo,
+      post
+    } = this.#commands[this.#position];
+    undo();
+    post?.();
     this.#locked = false;
     this.#position -= 1;
   }
@@ -1876,7 +1885,12 @@ class CommandManager {
     if (this.#position < this.#commands.length - 1) {
       this.#position += 1;
       this.#locked = true;
-      this.#commands[this.#position].cmd();
+      const {
+        cmd,
+        post
+      } = this.#commands[this.#position];
+      cmd();
+      post?.();
       this.#locked = false;
     }
   }
@@ -2041,9 +2055,7 @@ class AnnotationEditorUIManager {
   static TRANSLATE_BIG = 10;
   static get _keyboardManager() {
     const proto = AnnotationEditorUIManager.prototype;
-    const arrowChecker = self => {
-      return self.#container.contains(document.activeElement) && document.activeElement.tagName !== "BUTTON" && self.hasSomethingToControl();
-    };
+    const arrowChecker = self => self.#container.contains(document.activeElement) && document.activeElement.tagName !== "BUTTON" && self.hasSomethingToControl();
     const textInputChecker = (_self, {
       target: el
     }) => {
@@ -2594,6 +2606,16 @@ class AnnotationEditorUIManager {
       this.#dispatchUpdateUI(editor.propertiesToUpdate);
     }
   }
+  get #lastSelectedEditor() {
+    let ed = null;
+    for (ed of this.#selectedEditors) {}
+    return ed;
+  }
+  updateUI(editor) {
+    if (this.#lastSelectedEditor === editor) {
+      this.#dispatchUpdateUI(editor.propertiesToUpdate);
+    }
+  }
   toggleSelected(editor) {
     if (this.#selectedEditors.has(editor)) {
       this.#selectedEditors.delete(editor);
@@ -2707,6 +2729,9 @@ class AnnotationEditorUIManager {
     return this.#activeEditor || this.hasSelection;
   }
   #selectEditors(editors) {
+    for (const editor of this.#selectedEditors) {
+      editor.unselect();
+    }
     this.#selectedEditors.clear();
     for (const editor of editors) {
       if (editor.isEmpty()) {
@@ -2716,7 +2741,7 @@ class AnnotationEditorUIManager {
       editor.select();
     }
     this.#dispatchUpdateStates({
-      hasSelectedEditor: true
+      hasSelectedEditor: this.hasSelection
     });
   }
   selectAll() {
@@ -3166,6 +3191,8 @@ class AnnotationEditor {
   #isInEditMode = false;
   #isResizerEnabledForKeyboard = false;
   #moveInDOMTimeout = null;
+  #prevDragX = 0;
+  #prevDragY = 0;
   _initialOptions = Object.create(null);
   _uiManager = null;
   _focusEventsAllowed = true;
@@ -3248,7 +3275,7 @@ class AnnotationEditor {
     fakeEditor.deleted = true;
     fakeEditor._uiManager.addToAnnotationStorage(fakeEditor);
   }
-  static initialize(l10n, options = null) {
+  static initialize(l10n, _uiManager, options) {
     AnnotationEditor._l10nPromise ||= new Map(["pdfjs-editor-alt-text-button-label", "pdfjs-editor-alt-text-edit-button-label", "pdfjs-editor-alt-text-decorative-tooltip", "pdfjs-editor-resizer-label-topLeft", "pdfjs-editor-resizer-label-topMiddle", "pdfjs-editor-resizer-label-topRight", "pdfjs-editor-resizer-label-middleRight", "pdfjs-editor-resizer-label-bottomRight", "pdfjs-editor-resizer-label-bottomMiddle", "pdfjs-editor-resizer-label-bottomLeft", "pdfjs-editor-resizer-label-middleLeft"].map(str => [str, l10n.get(str.replaceAll(/([A-Z])/g, c => `-${c.toLowerCase()}`))]));
     if (options?.strings) {
       for (const str of options.strings) {
@@ -3409,7 +3436,7 @@ class AnnotationEditor {
       x,
       y
     } = this;
-    const [bx, by] = this.#getBaseTranslation();
+    const [bx, by] = this.getBaseTranslation();
     x += bx;
     y += by;
     this.div.style.left = `${(100 * x).toFixed(2)}%`;
@@ -3418,7 +3445,7 @@ class AnnotationEditor {
       block: "nearest"
     });
   }
-  #getBaseTranslation() {
+  getBaseTranslation() {
     const [parentWidth, parentHeight] = this.parentDimensions;
     const {
       _borderLineWidth
@@ -3468,7 +3495,7 @@ class AnnotationEditor {
     }
     this.x = x /= pageWidth;
     this.y = y /= pageHeight;
-    const [bx, by] = this.#getBaseTranslation();
+    const [bx, by] = this.getBaseTranslation();
     x += bx;
     y += by;
     const {
@@ -3824,12 +3851,21 @@ class AnnotationEditor {
     this._uiManager.setUpDragSession();
     let pointerMoveOptions, pointerMoveCallback;
     if (isSelected) {
+      this.div.classList.add("moving");
       pointerMoveOptions = {
         passive: true,
         capture: true
       };
+      this.#prevDragX = event.clientX;
+      this.#prevDragY = event.clientY;
       pointerMoveCallback = e => {
-        const [tx, ty] = this.screenToPageTranslation(e.movementX, e.movementY);
+        const {
+          clientX: x,
+          clientY: y
+        } = e;
+        const [tx, ty] = this.screenToPageTranslation(x - this.#prevDragX, y - this.#prevDragY);
+        this.#prevDragX = x;
+        this.#prevDragY = y;
         this._uiManager.dragSelectedEditors(tx, ty);
       };
       window.addEventListener("pointermove", pointerMoveCallback, pointerMoveOptions);
@@ -3838,6 +3874,7 @@ class AnnotationEditor {
       window.removeEventListener("pointerup", pointerUpCallback);
       window.removeEventListener("blur", pointerUpCallback);
       if (isSelected) {
+        this.div.classList.remove("moving");
         window.removeEventListener("pointermove", pointerMoveCallback, pointerMoveOptions);
       }
       this.#hasBeenClicked = false;
@@ -4159,7 +4196,6 @@ class FakeEditor extends AnnotationEditor {
 }
 
 ;// CONCATENATED MODULE: ./src/shared/murmurhash3.js
-
 const SEED = 0xc3d2e1f0;
 const MASK_HIGH = 0xffff0000;
 const MASK_LOW = 0xffff;
@@ -4182,11 +4218,11 @@ class MurmurHash3_64 {
           data[length++] = code & 0xff;
         }
       }
-    } else if (isArrayBuffer(input)) {
+    } else if (ArrayBuffer.isView(input)) {
       data = input.slice();
       length = data.byteLength;
     } else {
-      throw new Error("Wrong data format in MurmurHash3_64_update. " + "Input must be a string or array.");
+      throw new Error("Invalid data format, must be a string or TypedArray.");
     }
     const blockCounts = length >> 2;
     const tailLength = length - blockCounts * 4;
@@ -4725,12 +4761,10 @@ class NodeCanvasFactory extends BaseCanvasFactory {
 }
 class NodeCMapReaderFactory extends BaseCMapReaderFactory {
   _fetchData(url, compressionType) {
-    return node_utils_fetchData(url).then(data => {
-      return {
-        cMapData: data,
-        compressionType
-      };
-    });
+    return node_utils_fetchData(url).then(data => ({
+      cMapData: data,
+      compressionType
+    }));
   }
 }
 class NodeStandardFontDataFactory extends BaseStandardFontDataFactory {
@@ -5645,17 +5679,13 @@ class CanvasExtraState {
   updateScalingPathMinMax(transform, minMax) {
     Util.scaleMinMax(transform, minMax);
     this.minX = Math.min(this.minX, minMax[0]);
-    this.maxX = Math.max(this.maxX, minMax[1]);
-    this.minY = Math.min(this.minY, minMax[2]);
+    this.minY = Math.min(this.minY, minMax[1]);
+    this.maxX = Math.max(this.maxX, minMax[2]);
     this.maxY = Math.max(this.maxY, minMax[3]);
   }
   updateCurvePathMinMax(transform, x0, y0, x1, y1, x2, y2, x3, y3, minMax) {
-    const box = Util.bezierBoundingBox(x0, y0, x1, y1, x2, y2, x3, y3);
+    const box = Util.bezierBoundingBox(x0, y0, x1, y1, x2, y2, x3, y3, minMax);
     if (minMax) {
-      minMax[0] = Math.min(minMax[0], box[0], box[2]);
-      minMax[1] = Math.max(minMax[1], box[0], box[2]);
-      minMax[2] = Math.min(minMax[2], box[1], box[3]);
-      minMax[3] = Math.max(minMax[3], box[1], box[3]);
       return;
     }
     this.updateRectMinMax(transform, box);
@@ -6883,12 +6913,10 @@ class CanvasGraphics {
       const color = IR[1];
       const baseTransform = this.baseTransform || getCurrentTransform(this.ctx);
       const canvasGraphicsFactory = {
-        createCanvasGraphics: ctx => {
-          return new CanvasGraphics(ctx, this.commonObjs, this.objs, this.canvasFactory, this.filterFactory, {
-            optionalContentConfig: this.optionalContentConfig,
-            markedContentStack: this.markedContentStack
-          });
-        }
+        createCanvasGraphics: ctx => new CanvasGraphics(ctx, this.commonObjs, this.objs, this.canvasFactory, this.filterFactory, {
+          optionalContentConfig: this.optionalContentConfig,
+          markedContentStack: this.markedContentStack
+        })
       };
       pattern = new TilingPattern(IR, color, this.ctx, canvasGraphicsFactory, baseTransform);
     } else {
@@ -7489,10 +7517,390 @@ for (const op in OPS) {
   }
 }
 
+;// CONCATENATED MODULE: ./src/display/text_layer.js
+
+
+const MAX_TEXT_DIVS_TO_RENDER = 100000;
+const DEFAULT_FONT_SIZE = 30;
+const DEFAULT_FONT_ASCENT = 0.8;
+const ascentCache = new Map();
+let _canvasContext = null;
+function getCtx() {
+  if (!_canvasContext) {
+    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+      willReadFrequently: true,
+      alpha: false
+    } : {
+      alpha: false
+    };
+    const canvas = document.createElement("canvas");
+    canvas.className = "hiddenCanvasElement";
+    document.body.append(canvas);
+    _canvasContext = canvas.getContext("2d", options);
+  }
+  return _canvasContext;
+}
+function cleanupTextLayer() {
+  _canvasContext?.canvas.remove();
+  _canvasContext = null;
+}
+function getAscent(fontFamily) {
+  const cachedAscent = ascentCache.get(fontFamily);
+  if (cachedAscent) {
+    return cachedAscent;
+  }
+  const ctx = getCtx();
+  const savedFont = ctx.font;
+  ctx.canvas.width = ctx.canvas.height = DEFAULT_FONT_SIZE;
+  ctx.font = `${DEFAULT_FONT_SIZE}px ${fontFamily}`;
+  const metrics = ctx.measureText("");
+  let ascent = metrics?.fontBoundingBoxAscent;
+  let descent = Math.abs(metrics?.fontBoundingBoxDescent);
+  if (ascent) {
+    const ratio = ascent / (ascent + descent);
+    ascentCache.set(fontFamily, ratio);
+    ctx.canvas.width = ctx.canvas.height = 0;
+    ctx.font = savedFont;
+    return ratio;
+  }
+  ctx.strokeStyle = "red";
+  ctx.clearRect(0, 0, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE);
+  ctx.strokeText("g", 0, 0);
+  let pixels = ctx.getImageData(0, 0, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE).data;
+  descent = 0;
+  for (let i = pixels.length - 1 - 3; i >= 0; i -= 4) {
+    if (pixels[i] > 0) {
+      descent = Math.ceil(i / 4 / DEFAULT_FONT_SIZE);
+      break;
+    }
+  }
+  ctx.clearRect(0, 0, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE);
+  ctx.strokeText("A", 0, DEFAULT_FONT_SIZE);
+  pixels = ctx.getImageData(0, 0, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE).data;
+  ascent = 0;
+  for (let i = 0, ii = pixels.length; i < ii; i += 4) {
+    if (pixels[i] > 0) {
+      ascent = DEFAULT_FONT_SIZE - Math.floor(i / 4 / DEFAULT_FONT_SIZE);
+      break;
+    }
+  }
+  ctx.canvas.width = ctx.canvas.height = 0;
+  ctx.font = savedFont;
+  if (ascent) {
+    const ratio = ascent / (ascent + descent);
+    ascentCache.set(fontFamily, ratio);
+    return ratio;
+  }
+  ascentCache.set(fontFamily, DEFAULT_FONT_ASCENT);
+  return DEFAULT_FONT_ASCENT;
+}
+function appendText(task, geom, styles) {
+  const textDiv = document.createElement("span");
+  const textDivProperties = {
+    angle: 0,
+    canvasWidth: 0,
+    hasText: geom.str !== "",
+    hasEOL: geom.hasEOL,
+    fontSize: 0
+  };
+  task._textDivs.push(textDiv);
+  const tx = Util.transform(task._transform, geom.transform);
+  let angle = Math.atan2(tx[1], tx[0]);
+  const style = styles[geom.fontName];
+  if (style.vertical) {
+    angle += Math.PI / 2;
+  }
+  const fontFamily = task._fontInspectorEnabled && style.fontSubstitution || style.fontFamily;
+  const fontHeight = Math.hypot(tx[2], tx[3]);
+  const fontAscent = fontHeight * getAscent(fontFamily);
+  let left, top;
+  if (angle === 0) {
+    left = tx[4];
+    top = tx[5] - fontAscent;
+  } else {
+    left = tx[4] + fontAscent * Math.sin(angle);
+    top = tx[5] - fontAscent * Math.cos(angle);
+  }
+  const scaleFactorStr = "calc(var(--scale-factor)*";
+  const divStyle = textDiv.style;
+  if (task._container === task._rootContainer) {
+    divStyle.left = `${(100 * left / task._pageWidth).toFixed(2)}%`;
+    divStyle.top = `${(100 * top / task._pageHeight).toFixed(2)}%`;
+  } else {
+    divStyle.left = `${scaleFactorStr}${left.toFixed(2)}px)`;
+    divStyle.top = `${scaleFactorStr}${top.toFixed(2)}px)`;
+  }
+  divStyle.fontSize = `${scaleFactorStr}${fontHeight.toFixed(2)}px)`;
+  divStyle.fontFamily = fontFamily;
+  textDivProperties.fontSize = fontHeight;
+  textDiv.setAttribute("role", "presentation");
+  textDiv.textContent = geom.str;
+  textDiv.dir = geom.dir;
+  if (task._fontInspectorEnabled) {
+    textDiv.dataset.fontName = style.fontSubstitutionLoadedName || geom.fontName;
+  }
+  if (angle !== 0) {
+    textDivProperties.angle = angle * (180 / Math.PI);
+  }
+  let shouldScaleText = false;
+  if (geom.str.length > 1) {
+    shouldScaleText = true;
+  } else if (geom.str !== " " && geom.transform[0] !== geom.transform[3]) {
+    const absScaleX = Math.abs(geom.transform[0]),
+      absScaleY = Math.abs(geom.transform[3]);
+    if (absScaleX !== absScaleY && Math.max(absScaleX, absScaleY) / Math.min(absScaleX, absScaleY) > 1.5) {
+      shouldScaleText = true;
+    }
+  }
+  if (shouldScaleText) {
+    textDivProperties.canvasWidth = style.vertical ? geom.height : geom.width;
+  }
+  task._textDivProperties.set(textDiv, textDivProperties);
+  if (task._isReadableStream) {
+    task._layoutText(textDiv);
+  }
+}
+function layout(params) {
+  const {
+    div,
+    scale,
+    properties,
+    ctx,
+    prevFontSize,
+    prevFontFamily
+  } = params;
+  const {
+    style
+  } = div;
+  let transform = "";
+  if (properties.canvasWidth !== 0 && properties.hasText) {
+    const {
+      fontFamily
+    } = style;
+    const {
+      canvasWidth,
+      fontSize
+    } = properties;
+    if (prevFontSize !== fontSize || prevFontFamily !== fontFamily) {
+      ctx.font = `${fontSize * scale}px ${fontFamily}`;
+      params.prevFontSize = fontSize;
+      params.prevFontFamily = fontFamily;
+    }
+    try {
+      const {
+        width
+      } = ctx.measureText(div.textContent);
+      if (width > 0) {
+        transform = `scaleX(${canvasWidth * scale / width})`;
+      }
+    } catch (fingerprintIsBlockedException) {}
+  }
+  if (properties.angle !== 0) {
+    transform = `rotate(${properties.angle}deg) ${transform}`;
+  }
+  if (transform.length > 0) {
+    style.transform = transform;
+  }
+}
+function render(task) {
+  if (task._canceled) {
+    return;
+  }
+  const textDivs = task._textDivs;
+  const capability = task._capability;
+  const textDivsLength = textDivs.length;
+  if (textDivsLength > MAX_TEXT_DIVS_TO_RENDER) {
+    capability.resolve();
+    return;
+  }
+  if (!task._isReadableStream) {
+    for (const textDiv of textDivs) {
+      task._layoutText(textDiv);
+    }
+  }
+  capability.resolve();
+}
+class TextLayerRenderTask {
+  constructor({
+    textContentSource,
+    container,
+    viewport,
+    textDivs,
+    textDivProperties,
+    textContentItemsStr
+  }) {
+    this._textContentSource = textContentSource;
+    this._isReadableStream = textContentSource instanceof ReadableStream;
+    this._container = this._rootContainer = container;
+    this._textDivs = textDivs || [];
+    this._textContentItemsStr = textContentItemsStr || [];
+    this._fontInspectorEnabled = !!globalThis.FontInspector?.enabled;
+    this._reader = null;
+    this._textDivProperties = textDivProperties || new WeakMap();
+    this._canceled = false;
+    this._capability = new PromiseCapability();
+    this._layoutTextParams = {
+      prevFontSize: null,
+      prevFontFamily: null,
+      div: null,
+      scale: viewport.scale * (globalThis.devicePixelRatio || 1),
+      properties: null,
+      ctx: getCtx()
+    };
+    const {
+      pageWidth,
+      pageHeight,
+      pageX,
+      pageY
+    } = viewport.rawDims;
+    this._transform = [1, 0, 0, -1, -pageX, pageY + pageHeight];
+    this._pageWidth = pageWidth;
+    this._pageHeight = pageHeight;
+    setLayerDimensions(container, viewport);
+    this._capability.promise.finally(() => {
+      this._layoutTextParams = null;
+    }).catch(() => {});
+  }
+  get promise() {
+    return this._capability.promise;
+  }
+  cancel() {
+    this._canceled = true;
+    if (this._reader) {
+      this._reader.cancel(new AbortException("TextLayer task cancelled.")).catch(() => {});
+      this._reader = null;
+    }
+    this._capability.reject(new AbortException("TextLayer task cancelled."));
+  }
+  _processItems(items, styleCache) {
+    for (const item of items) {
+      if (item.str === undefined) {
+        if (item.type === "beginMarkedContentProps" || item.type === "beginMarkedContent") {
+          const parent = this._container;
+          this._container = document.createElement("span");
+          this._container.classList.add("markedContent");
+          if (item.id !== null) {
+            this._container.setAttribute("id", `${item.id}`);
+          }
+          parent.append(this._container);
+        } else if (item.type === "endMarkedContent") {
+          this._container = this._container.parentNode;
+        }
+        continue;
+      }
+      this._textContentItemsStr.push(item.str);
+      appendText(this, item, styleCache);
+    }
+  }
+  _layoutText(textDiv) {
+    const textDivProperties = this._layoutTextParams.properties = this._textDivProperties.get(textDiv);
+    this._layoutTextParams.div = textDiv;
+    layout(this._layoutTextParams);
+    if (textDivProperties.hasText) {
+      this._container.append(textDiv);
+    }
+    if (textDivProperties.hasEOL) {
+      const br = document.createElement("br");
+      br.setAttribute("role", "presentation");
+      this._container.append(br);
+    }
+  }
+  _render() {
+    const capability = new PromiseCapability();
+    let styleCache = Object.create(null);
+    if (this._isReadableStream) {
+      const pump = () => {
+        this._reader.read().then(({
+          value,
+          done
+        }) => {
+          if (done) {
+            capability.resolve();
+            return;
+          }
+          Object.assign(styleCache, value.styles);
+          this._processItems(value.items, styleCache);
+          pump();
+        }, capability.reject);
+      };
+      this._reader = this._textContentSource.getReader();
+      pump();
+    } else if (this._textContentSource) {
+      const {
+        items,
+        styles
+      } = this._textContentSource;
+      this._processItems(items, styles);
+      capability.resolve();
+    } else {
+      throw new Error('No "textContentSource" parameter specified.');
+    }
+    capability.promise.then(() => {
+      styleCache = null;
+      render(this);
+    }, this._capability.reject);
+  }
+}
+function renderTextLayer(params) {
+  const task = new TextLayerRenderTask(params);
+  task._render();
+  return task;
+}
+function updateTextLayer({
+  container,
+  viewport,
+  textDivs,
+  textDivProperties,
+  mustRotate = true,
+  mustRescale = true
+}) {
+  if (mustRotate) {
+    setLayerDimensions(container, {
+      rotation: viewport.rotation
+    });
+  }
+  if (mustRescale) {
+    const ctx = getCtx();
+    const scale = viewport.scale * (globalThis.devicePixelRatio || 1);
+    const params = {
+      prevFontSize: null,
+      prevFontFamily: null,
+      div: null,
+      scale,
+      properties: null,
+      ctx
+    };
+    for (const div of textDivs) {
+      params.properties = textDivProperties.get(div);
+      params.div = div;
+      layout(params);
+    }
+  }
+}
+
 ;// CONCATENATED MODULE: ./src/display/worker_options.js
-const GlobalWorkerOptions = Object.create(null);
-GlobalWorkerOptions.workerPort = null;
-GlobalWorkerOptions.workerSrc = "";
+class GlobalWorkerOptions {
+  static #port = null;
+  static #src = "";
+  static get workerPort() {
+    return this.#port;
+  }
+  static set workerPort(val) {
+    if (!(typeof Worker !== "undefined" && val instanceof Worker) && val !== null) {
+      throw new Error("Invalid `workerPort` type.");
+    }
+    this.#port = val;
+  }
+  static get workerSrc() {
+    return this.#src;
+  }
+  static set workerSrc(val) {
+    if (typeof val !== "string") {
+      throw new Error("Invalid `workerSrc` type.");
+    }
+    this.#src = val;
+  }
+}
 
 ;// CONCATENATED MODULE: ./src/shared/message_handler.js
 
@@ -8665,9 +9073,7 @@ class PDFFetchStreamReader {
       }
       this._reader = response.body.getReader();
       this._headersCapability.resolve();
-      const getResponseHeader = name => {
-        return response.headers.get(name);
-      };
+      const getResponseHeader = name => response.headers.get(name);
       const {
         allowRangeRequests,
         suggestedLength
@@ -8979,9 +9385,7 @@ class PDFNetworkStreamFullRequestReader {
   _onHeadersReceived() {
     const fullRequestXhrId = this._fullRequestId;
     const fullRequestXhr = this._manager.getRequestXhr(fullRequestXhrId);
-    const getResponseHeader = name => {
-      return fullRequestXhr.getResponseHeader(name);
-    };
+    const getResponseHeader = name => fullRequestXhr.getResponseHeader(name);
     const {
       allowRangeRequests,
       suggestedLength
@@ -9429,9 +9833,7 @@ class PDFNodeStreamFullReader extends BaseFullReader {
       }
       this._headersCapability.resolve();
       this._setReadableStream(response);
-      const getResponseHeader = name => {
-        return this._readableStream.headers[name.toLowerCase()];
-      };
+      const getResponseHeader = name => this._readableStream.headers[name.toLowerCase()];
       const {
         allowRangeRequests,
         suggestedLength
@@ -9585,6 +9987,7 @@ class XfaText {
 
 
 
+
 const DEFAULT_RANGE_CHUNK_SIZE = 65536;
 const RENDERING_CANCELLED_TIMEOUT = 100;
 const DELAYED_CLEANUP_TIMEOUT = 5000;
@@ -9601,7 +10004,7 @@ function getDocument(src) {
     src = {
       url: src
     };
-  } else if (isArrayBuffer(src)) {
+  } else if (src instanceof ArrayBuffer || ArrayBuffer.isView(src)) {
     src = {
       data: src
     };
@@ -9679,7 +10082,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '4.0.848',
+    apiVersion: "4.1.567",
     data,
     password,
     disableAutoFetch,
@@ -9796,7 +10199,7 @@ function getDataProp(val) {
   if (typeof val === "string") {
     return stringToBytes(val);
   }
-  if (typeof val === "object" && !isNaN(val?.length) || isArrayBuffer(val)) {
+  if (val instanceof ArrayBuffer || ArrayBuffer.isView(val) || typeof val === "object" && !isNaN(val?.length)) {
     return new Uint8Array(val);
   }
   throw new Error("Invalid PDF binary data: either TypedArray, " + "string, or array-like object is expected in the data property.");
@@ -10204,9 +10607,7 @@ class PDFPageProxy {
   }
   getTextContent(params = {}) {
     if (this._transport._htmlForXfa) {
-      return this.getXfa().then(xfa => {
-        return XfaText.textContent(xfa);
-      });
+      return this.getXfa().then(xfa => XfaText.textContent(xfa));
     }
     const readableStream = this.streamTextContent(params);
     return new Promise(function (resolve, reject) {
@@ -10780,6 +11181,7 @@ class WorkerTransport {
       this.fontLoader.clear();
       this.#methodPromises.clear();
       this.filterFactory.destroy();
+      cleanupTextLayer();
       this._networkStream?.cancelAllRequests(new AbortException("Worker was terminated."));
       if (this.messageHandler) {
         this.messageHandler.destroy();
@@ -10973,11 +11375,9 @@ class WorkerTransport {
             ignoreErrors: params.ignoreErrors,
             inspectFont
           });
-          this.fontLoader.bind(font).catch(reason => {
-            return messageHandler.sendWithPromise("FontFallback", {
-              id
-            });
-          }).finally(() => {
+          this.fontLoader.bind(font).catch(() => messageHandler.sendWithPromise("FontFallback", {
+            id
+          })).finally(() => {
             if (!params.fontExtraProperties && font.data) {
               font.data = null;
             }
@@ -11178,9 +11578,7 @@ class WorkerTransport {
     return this.messageHandler.sendWithPromise("GetOutline", null);
   }
   getOptionalContentConfig() {
-    return this.messageHandler.sendWithPromise("GetOptionalContentConfig", null).then(results => {
-      return new OptionalContentConfig(results);
-    });
+    return this.messageHandler.sendWithPromise("GetOptionalContentConfig", null).then(results => new OptionalContentConfig(results));
   }
   getPermissions() {
     return this.messageHandler.sendWithPromise("GetPermissions", null);
@@ -11191,14 +11589,12 @@ class WorkerTransport {
     if (cachedPromise) {
       return cachedPromise;
     }
-    const promise = this.messageHandler.sendWithPromise(name, null).then(results => {
-      return {
-        info: results[0],
-        metadata: results[1] ? new Metadata(results[1]) : null,
-        contentDispositionFilename: this._fullReader?.filename ?? null,
-        contentLength: this._fullReader?.contentLength ?? null
-      };
-    });
+    const promise = this.messageHandler.sendWithPromise(name, null).then(results => ({
+      info: results[0],
+      metadata: results[1] ? new Metadata(results[1]) : null,
+      contentDispositionFilename: this._fullReader?.filename ?? null,
+      contentLength: this._fullReader?.contentLength ?? null
+    }));
     this.#methodPromises.set(name, promise);
     return promise;
   }
@@ -11222,6 +11618,7 @@ class WorkerTransport {
     }
     this.#methodPromises.clear();
     this.filterFactory.destroy(true);
+    cleanupTextLayer();
   }
   get loadingParams() {
     const {
@@ -11446,365 +11843,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = '4.0.848';
-const build = 'dad0cfc22';
-
-;// CONCATENATED MODULE: ./src/display/text_layer.js
-
-
-const MAX_TEXT_DIVS_TO_RENDER = 100000;
-const DEFAULT_FONT_SIZE = 30;
-const DEFAULT_FONT_ASCENT = 0.8;
-const ascentCache = new Map();
-function getCtx(size, isOffscreenCanvasSupported) {
-  let ctx;
-  const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
-    willReadFrequently: true,
-    alpha: false
-  } : {
-    alpha: false
-  };
-  if (isOffscreenCanvasSupported && util_FeatureTest.isOffscreenCanvasSupported) {
-    ctx = new OffscreenCanvas(size, size).getContext("2d", options);
-  } else {
-    const canvas = document.createElement("canvas");
-    canvas.width = canvas.height = size;
-    ctx = canvas.getContext("2d", options);
-  }
-  return ctx;
-}
-function getAscent(fontFamily, isOffscreenCanvasSupported) {
-  const cachedAscent = ascentCache.get(fontFamily);
-  if (cachedAscent) {
-    return cachedAscent;
-  }
-  const ctx = getCtx(DEFAULT_FONT_SIZE, isOffscreenCanvasSupported);
-  ctx.font = `${DEFAULT_FONT_SIZE}px ${fontFamily}`;
-  const metrics = ctx.measureText("");
-  let ascent = metrics?.fontBoundingBoxAscent;
-  let descent = Math.abs(metrics?.fontBoundingBoxDescent);
-  if (ascent) {
-    const ratio = ascent / (ascent + descent);
-    ascentCache.set(fontFamily, ratio);
-    ctx.canvas.width = ctx.canvas.height = 0;
-    return ratio;
-  }
-  ctx.strokeStyle = "red";
-  ctx.clearRect(0, 0, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE);
-  ctx.strokeText("g", 0, 0);
-  let pixels = ctx.getImageData(0, 0, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE).data;
-  descent = 0;
-  for (let i = pixels.length - 1 - 3; i >= 0; i -= 4) {
-    if (pixels[i] > 0) {
-      descent = Math.ceil(i / 4 / DEFAULT_FONT_SIZE);
-      break;
-    }
-  }
-  ctx.clearRect(0, 0, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE);
-  ctx.strokeText("A", 0, DEFAULT_FONT_SIZE);
-  pixels = ctx.getImageData(0, 0, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE).data;
-  ascent = 0;
-  for (let i = 0, ii = pixels.length; i < ii; i += 4) {
-    if (pixels[i] > 0) {
-      ascent = DEFAULT_FONT_SIZE - Math.floor(i / 4 / DEFAULT_FONT_SIZE);
-      break;
-    }
-  }
-  ctx.canvas.width = ctx.canvas.height = 0;
-  if (ascent) {
-    const ratio = ascent / (ascent + descent);
-    ascentCache.set(fontFamily, ratio);
-    return ratio;
-  }
-  ascentCache.set(fontFamily, DEFAULT_FONT_ASCENT);
-  return DEFAULT_FONT_ASCENT;
-}
-function appendText(task, geom, styles) {
-  const textDiv = document.createElement("span");
-  const textDivProperties = {
-    angle: 0,
-    canvasWidth: 0,
-    hasText: geom.str !== "",
-    hasEOL: geom.hasEOL,
-    fontSize: 0
-  };
-  task._textDivs.push(textDiv);
-  const tx = Util.transform(task._transform, geom.transform);
-  let angle = Math.atan2(tx[1], tx[0]);
-  const style = styles[geom.fontName];
-  if (style.vertical) {
-    angle += Math.PI / 2;
-  }
-  const fontFamily = task._fontInspectorEnabled && style.fontSubstitution || style.fontFamily;
-  const fontHeight = Math.hypot(tx[2], tx[3]);
-  const fontAscent = fontHeight * getAscent(fontFamily, task._isOffscreenCanvasSupported);
-  let left, top;
-  if (angle === 0) {
-    left = tx[4];
-    top = tx[5] - fontAscent;
-  } else {
-    left = tx[4] + fontAscent * Math.sin(angle);
-    top = tx[5] - fontAscent * Math.cos(angle);
-  }
-  const scaleFactorStr = "calc(var(--scale-factor)*";
-  const divStyle = textDiv.style;
-  if (task._container === task._rootContainer) {
-    divStyle.left = `${(100 * left / task._pageWidth).toFixed(2)}%`;
-    divStyle.top = `${(100 * top / task._pageHeight).toFixed(2)}%`;
-  } else {
-    divStyle.left = `${scaleFactorStr}${left.toFixed(2)}px)`;
-    divStyle.top = `${scaleFactorStr}${top.toFixed(2)}px)`;
-  }
-  divStyle.fontSize = `${scaleFactorStr}${fontHeight.toFixed(2)}px)`;
-  divStyle.fontFamily = fontFamily;
-  textDivProperties.fontSize = fontHeight;
-  textDiv.setAttribute("role", "presentation");
-  textDiv.textContent = geom.str;
-  textDiv.dir = geom.dir;
-  if (task._fontInspectorEnabled) {
-    textDiv.dataset.fontName = style.fontSubstitutionLoadedName || geom.fontName;
-  }
-  if (angle !== 0) {
-    textDivProperties.angle = angle * (180 / Math.PI);
-  }
-  let shouldScaleText = false;
-  if (geom.str.length > 1) {
-    shouldScaleText = true;
-  } else if (geom.str !== " " && geom.transform[0] !== geom.transform[3]) {
-    const absScaleX = Math.abs(geom.transform[0]),
-      absScaleY = Math.abs(geom.transform[3]);
-    if (absScaleX !== absScaleY && Math.max(absScaleX, absScaleY) / Math.min(absScaleX, absScaleY) > 1.5) {
-      shouldScaleText = true;
-    }
-  }
-  if (shouldScaleText) {
-    textDivProperties.canvasWidth = style.vertical ? geom.height : geom.width;
-  }
-  task._textDivProperties.set(textDiv, textDivProperties);
-  if (task._isReadableStream) {
-    task._layoutText(textDiv);
-  }
-}
-function layout(params) {
-  const {
-    div,
-    scale,
-    properties,
-    ctx,
-    prevFontSize,
-    prevFontFamily
-  } = params;
-  const {
-    style
-  } = div;
-  let transform = "";
-  if (properties.canvasWidth !== 0 && properties.hasText) {
-    const {
-      fontFamily
-    } = style;
-    const {
-      canvasWidth,
-      fontSize
-    } = properties;
-    if (prevFontSize !== fontSize || prevFontFamily !== fontFamily) {
-      ctx.font = `${fontSize * scale}px ${fontFamily}`;
-      params.prevFontSize = fontSize;
-      params.prevFontFamily = fontFamily;
-    }
-    try {
-      const {
-        width
-      } = ctx.measureText(div.textContent);
-      if (width > 0) {
-        transform = `scaleX(${canvasWidth * scale / width})`;
-      }
-    } catch (fingerprintIsBlockedException) {}
-  }
-  if (properties.angle !== 0) {
-    transform = `rotate(${properties.angle}deg) ${transform}`;
-  }
-  if (transform.length > 0) {
-    style.transform = transform;
-  }
-}
-function render(task) {
-  if (task._canceled) {
-    return;
-  }
-  const textDivs = task._textDivs;
-  const capability = task._capability;
-  const textDivsLength = textDivs.length;
-  if (textDivsLength > MAX_TEXT_DIVS_TO_RENDER) {
-    capability.resolve();
-    return;
-  }
-  if (!task._isReadableStream) {
-    for (const textDiv of textDivs) {
-      task._layoutText(textDiv);
-    }
-  }
-  capability.resolve();
-}
-class TextLayerRenderTask {
-  constructor({
-    textContentSource,
-    container,
-    viewport,
-    textDivs,
-    textDivProperties,
-    textContentItemsStr,
-    isOffscreenCanvasSupported
-  }) {
-    this._textContentSource = textContentSource;
-    this._isReadableStream = textContentSource instanceof ReadableStream;
-    this._container = this._rootContainer = container;
-    this._textDivs = textDivs || [];
-    this._textContentItemsStr = textContentItemsStr || [];
-    this._isOffscreenCanvasSupported = isOffscreenCanvasSupported;
-    this._fontInspectorEnabled = !!globalThis.FontInspector?.enabled;
-    this._reader = null;
-    this._textDivProperties = textDivProperties || new WeakMap();
-    this._canceled = false;
-    this._capability = new PromiseCapability();
-    this._layoutTextParams = {
-      prevFontSize: null,
-      prevFontFamily: null,
-      div: null,
-      scale: viewport.scale * (globalThis.devicePixelRatio || 1),
-      properties: null,
-      ctx: getCtx(0, isOffscreenCanvasSupported)
-    };
-    const {
-      pageWidth,
-      pageHeight,
-      pageX,
-      pageY
-    } = viewport.rawDims;
-    this._transform = [1, 0, 0, -1, -pageX, pageY + pageHeight];
-    this._pageWidth = pageWidth;
-    this._pageHeight = pageHeight;
-    setLayerDimensions(container, viewport);
-    this._capability.promise.finally(() => {
-      this._layoutTextParams = null;
-    }).catch(() => {});
-  }
-  get promise() {
-    return this._capability.promise;
-  }
-  cancel() {
-    this._canceled = true;
-    if (this._reader) {
-      this._reader.cancel(new AbortException("TextLayer task cancelled.")).catch(() => {});
-      this._reader = null;
-    }
-    this._capability.reject(new AbortException("TextLayer task cancelled."));
-  }
-  _processItems(items, styleCache) {
-    for (const item of items) {
-      if (item.str === undefined) {
-        if (item.type === "beginMarkedContentProps" || item.type === "beginMarkedContent") {
-          const parent = this._container;
-          this._container = document.createElement("span");
-          this._container.classList.add("markedContent");
-          if (item.id !== null) {
-            this._container.setAttribute("id", `${item.id}`);
-          }
-          parent.append(this._container);
-        } else if (item.type === "endMarkedContent") {
-          this._container = this._container.parentNode;
-        }
-        continue;
-      }
-      this._textContentItemsStr.push(item.str);
-      appendText(this, item, styleCache);
-    }
-  }
-  _layoutText(textDiv) {
-    const textDivProperties = this._layoutTextParams.properties = this._textDivProperties.get(textDiv);
-    this._layoutTextParams.div = textDiv;
-    layout(this._layoutTextParams);
-    if (textDivProperties.hasText) {
-      this._container.append(textDiv);
-    }
-    if (textDivProperties.hasEOL) {
-      const br = document.createElement("br");
-      br.setAttribute("role", "presentation");
-      this._container.append(br);
-    }
-  }
-  _render() {
-    const capability = new PromiseCapability();
-    let styleCache = Object.create(null);
-    if (this._isReadableStream) {
-      const pump = () => {
-        this._reader.read().then(({
-          value,
-          done
-        }) => {
-          if (done) {
-            capability.resolve();
-            return;
-          }
-          Object.assign(styleCache, value.styles);
-          this._processItems(value.items, styleCache);
-          pump();
-        }, capability.reject);
-      };
-      this._reader = this._textContentSource.getReader();
-      pump();
-    } else if (this._textContentSource) {
-      const {
-        items,
-        styles
-      } = this._textContentSource;
-      this._processItems(items, styles);
-      capability.resolve();
-    } else {
-      throw new Error('No "textContentSource" parameter specified.');
-    }
-    capability.promise.then(() => {
-      styleCache = null;
-      render(this);
-    }, this._capability.reject);
-  }
-}
-function renderTextLayer(params) {
-  const task = new TextLayerRenderTask(params);
-  task._render();
-  return task;
-}
-function updateTextLayer({
-  container,
-  viewport,
-  textDivs,
-  textDivProperties,
-  isOffscreenCanvasSupported,
-  mustRotate = true,
-  mustRescale = true
-}) {
-  if (mustRotate) {
-    setLayerDimensions(container, {
-      rotation: viewport.rotation
-    });
-  }
-  if (mustRescale) {
-    const ctx = getCtx(0, isOffscreenCanvasSupported);
-    const scale = viewport.scale * (globalThis.devicePixelRatio || 1);
-    const params = {
-      prevFontSize: null,
-      prevFontFamily: null,
-      div: null,
-      scale,
-      properties: null,
-      ctx
-    };
-    for (const div of textDivs) {
-      params.properties = textDivProperties.get(div);
-      params.div = div;
-      layout(params);
-    }
-  }
-}
+const version = "4.1.567";
+const build = "1bf5a36be";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -13649,12 +13689,10 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
     let selectedValues = getValue(false);
     const getItems = event => {
       const options = event.target.options;
-      return Array.prototype.map.call(options, option => {
-        return {
-          displayValue: option.textContent,
-          exportValue: option.value
-        };
-      });
+      return Array.prototype.map.call(options, option => ({
+        displayValue: option.textContent,
+        exportValue: option.value
+      }));
     };
     window.registerAcroformField(id, selectElement, selectedValues);
     selectElement.addEventListener("updateFromAngular", newvalue => storage.setValue(id, {
@@ -14670,8 +14708,8 @@ class FreeTextEditor extends AnnotationEditor {
     this.#color = params.color || FreeTextEditor._defaultColor || AnnotationEditor._defaultLineColor;
     this.#fontSize = params.fontSize || FreeTextEditor._defaultFontSize;
   }
-  static initialize(l10n) {
-    AnnotationEditor.initialize(l10n, {
+  static initialize(l10n, uiManager) {
+    AnnotationEditor.initialize(l10n, uiManager, {
       strings: ["pdfjs-free-text-default-content"]
     });
     const style = getComputedStyle(document.documentElement);
@@ -14712,12 +14750,9 @@ class FreeTextEditor extends AnnotationEditor {
     };
     const savedFontsize = this.#fontSize;
     this.addCommands({
-      cmd: () => {
-        setFontsize(fontSize);
-      },
-      undo: () => {
-        setFontsize(savedFontsize);
-      },
+      cmd: setFontsize.bind(this, fontSize),
+      undo: setFontsize.bind(this, savedFontsize),
+      post: this._uiManager.updateUI.bind(this._uiManager, this),
       mustExec: true,
       type: AnnotationEditorParamsType.FREETEXT_SIZE,
       overwriteIfSameType: true,
@@ -14725,14 +14760,14 @@ class FreeTextEditor extends AnnotationEditor {
     });
   }
   #updateColor(color) {
+    const setColor = col => {
+      this.#color = this.editorDiv.style.color = col;
+    };
     const savedColor = this.#color;
     this.addCommands({
-      cmd: () => {
-        this.#color = this.editorDiv.style.color = color;
-      },
-      undo: () => {
-        this.#color = this.editorDiv.style.color = savedColor;
-      },
+      cmd: setColor.bind(this, color),
+      undo: setColor.bind(this, savedColor),
+      post: this._uiManager.updateUI.bind(this._uiManager, this),
       mustExec: true,
       type: AnnotationEditorParamsType.FREETEXT_COLOR,
       overwriteIfSameType: true,
@@ -14827,13 +14862,12 @@ class FreeTextEditor extends AnnotationEditor {
     super.remove();
   }
   #extractText() {
-    const divs = this.editorDiv.getElementsByTagName("div");
-    if (divs.length === 0) {
-      return this.editorDiv.innerText;
-    }
     const buffer = [];
-    for (const div of divs) {
-      buffer.push(div.innerText.replace(/\r\n?|\n/, ""));
+    this.editorDiv.normalize();
+    const EOL_PATTERN = /\r\n?|\n/g;
+    for (const child of this.editorDiv.childNodes) {
+      const content = child.nodeType === Node.TEXT_NODE ? child.nodeValue : child.innerText;
+      buffer.push(content.replaceAll(EOL_PATTERN, ""));
     }
     return buffer.join("\n");
   }
@@ -15014,6 +15048,12 @@ class FreeTextEditor extends AnnotationEditor {
       this.editorDiv.append(div);
     }
   }
+  #serializeContent() {
+    return this.#content.replaceAll("\xa0", " ");
+  }
+  static #deserializeContent(content) {
+    return content.replaceAll(" ", "\xa0");
+  }
   get contentDiv() {
     return this.editorDiv;
   }
@@ -15057,7 +15097,7 @@ class FreeTextEditor extends AnnotationEditor {
     const editor = super.deserialize(data, parent, uiManager);
     editor.#fontSize = data.fontSize;
     editor.#color = Util.makeHexColor(...data.color);
-    editor.#content = data.value;
+    editor.#content = FreeTextEditor.#deserializeContent(data.value);
     editor.annotationElementId = data.id || null;
     editor.#initialData = initialData;
     return editor;
@@ -15080,7 +15120,7 @@ class FreeTextEditor extends AnnotationEditor {
       annotationType: AnnotationEditorType.FREETEXT,
       color,
       fontSize: this.#fontSize,
-      value: this.#content,
+      value: this.#serializeContent(),
       pageIndex: this.pageIndex,
       rect,
       rotation: this.rotation,
@@ -15119,161 +15159,8 @@ class FreeTextEditor extends AnnotationEditor {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/editor/color_picker.js
-
-
-
-class ColorPicker {
-  #boundKeyDown = this.#keyDown.bind(this);
-  #button = null;
-  #buttonSwatch = null;
-  #defaultColor;
-  #dropdown = null;
-  #dropdownWasFromKeyboard = false;
-  #isMainColorPicker = false;
-  #eventBus;
-  #uiManager = null;
-  static get _keyboardManager() {
-    return shadow(this, "_keyboardManager", new KeyboardManager([[["Escape", "mac+Escape"], ColorPicker.prototype._hideDropdownFromKeyboard], [[" ", "mac+ "], ColorPicker.prototype._colorSelectFromKeyboard], [["ArrowDown", "ArrowRight", "mac+ArrowDown", "mac+ArrowRight"], ColorPicker.prototype._moveToNext], [["ArrowUp", "ArrowLeft", "mac+ArrowUp", "mac+ArrowLeft"], ColorPicker.prototype._moveToPrevious], [["Home", "mac+Home"], ColorPicker.prototype._moveToBeginning], [["End", "mac+End"], ColorPicker.prototype._moveToEnd]]));
-  }
-  constructor({
-    editor = null,
-    uiManager = null
-  }) {
-    this.#isMainColorPicker = !editor;
-    this.#uiManager = editor?._uiManager || uiManager;
-    this.#eventBus = this.#uiManager._eventBus;
-    this.#defaultColor = editor?.color || this.#uiManager?.highlightColors.values().next().value || "#FFFF98";
-  }
-  renderButton() {
-    const button = this.#button = document.createElement("button");
-    button.className = "colorPicker";
-    button.tabIndex = "0";
-    button.setAttribute("data-l10n-id", "pdfjs-editor-colorpicker-button");
-    button.setAttribute("aria-haspopup", true);
-    button.addEventListener("click", this.#openDropdown.bind(this));
-    const swatch = this.#buttonSwatch = document.createElement("span");
-    swatch.className = "swatch";
-    swatch.style.backgroundColor = this.#defaultColor;
-    button.append(swatch);
-    return button;
-  }
-  renderMainDropdown() {
-    const dropdown = this.#dropdown = this.#getDropdownRoot(AnnotationEditorParamsType.HIGHLIGHT_DEFAULT_COLOR);
-    dropdown.setAttribute("aria-orientation", "horizontal");
-    dropdown.setAttribute("aria-labelledby", "highlightColorPickerLabel");
-    return dropdown;
-  }
-  #getDropdownRoot(paramType) {
-    const div = document.createElement("div");
-    div.addEventListener("contextmenu", noContextMenu);
-    div.className = "dropdown";
-    div.role = "listbox";
-    div.setAttribute("aria-multiselectable", false);
-    div.setAttribute("aria-orientation", "vertical");
-    div.setAttribute("data-l10n-id", "pdfjs-editor-colorpicker-dropdown");
-    for (const [name, color] of this.#uiManager.highlightColors) {
-      const button = document.createElement("button");
-      button.tabIndex = "0";
-      button.role = "option";
-      button.setAttribute("data-color", color);
-      button.title = name;
-      button.setAttribute("data-l10n-id", `pdfjs-editor-colorpicker-${name}`);
-      const swatch = document.createElement("span");
-      button.append(swatch);
-      swatch.className = "swatch";
-      swatch.style.backgroundColor = color;
-      button.setAttribute("aria-selected", color === this.#defaultColor);
-      button.addEventListener("click", this.#colorSelect.bind(this, paramType, color));
-      div.append(button);
-    }
-    div.addEventListener("keydown", this.#boundKeyDown);
-    return div;
-  }
-  #colorSelect(type, color, event) {
-    event.stopPropagation();
-    this.#eventBus.dispatch("switchannotationeditorparams", {
-      source: this,
-      type,
-      value: color
-    });
-  }
-  _colorSelectFromKeyboard(event) {
-    const color = event.target.getAttribute("data-color");
-    if (!color) {
-      return;
-    }
-    this.#colorSelect(color, event);
-  }
-  _moveToNext(event) {
-    if (event.target === this.#button) {
-      this.#dropdown.firstChild?.focus();
-      return;
-    }
-    event.target.nextSibling?.focus();
-  }
-  _moveToPrevious(event) {
-    event.target.previousSibling?.focus();
-  }
-  _moveToBeginning() {
-    this.#dropdown.firstChild?.focus();
-  }
-  _moveToEnd() {
-    this.#dropdown.lastChild?.focus();
-  }
-  #keyDown(event) {
-    ColorPicker._keyboardManager.exec(this, event);
-  }
-  #openDropdown(event) {
-    if (this.#dropdown && !this.#dropdown.classList.contains("hidden")) {
-      this.hideDropdown();
-      return;
-    }
-    this.#button.addEventListener("keydown", this.#boundKeyDown);
-    this.#dropdownWasFromKeyboard = event.detail === 0;
-    if (this.#dropdown) {
-      this.#dropdown.classList.remove("hidden");
-      return;
-    }
-    const root = this.#dropdown = this.#getDropdownRoot(AnnotationEditorParamsType.HIGHLIGHT_COLOR);
-    this.#button.append(root);
-  }
-  hideDropdown() {
-    this.#dropdown?.classList.add("hidden");
-  }
-  _hideDropdownFromKeyboard() {
-    if (this.#isMainColorPicker || !this.#dropdown || this.#dropdown.classList.contains("hidden")) {
-      return;
-    }
-    this.hideDropdown();
-    this.#button.removeEventListener("keydown", this.#boundKeyDown);
-    this.#button.focus({
-      preventScroll: true,
-      focusVisible: this.#dropdownWasFromKeyboard
-    });
-  }
-  updateColor(color) {
-    if (this.#buttonSwatch) {
-      this.#buttonSwatch.style.backgroundColor = color;
-    }
-    if (!this.#dropdown) {
-      return;
-    }
-    const i = this.#uiManager.highlightColors.values();
-    for (const child of this.#dropdown.children) {
-      child.setAttribute("aria-selected", i.next().value === color);
-    }
-  }
-  destroy() {
-    this.#button?.remove();
-    this.#button = null;
-    this.#buttonSwatch = null;
-    this.#dropdown?.remove();
-    this.#dropdown = null;
-  }
-}
-
 ;// CONCATENATED MODULE: ./src/display/editor/outliner.js
+
 class Outliner {
   #box;
   #verticalEdges = [];
@@ -15382,10 +15269,7 @@ class Outliner {
       }
       outline.push(lastPointX, lastPointY);
     }
-    return {
-      outlines,
-      box: this.#box
-    };
+    return new HighlightOutline(outlines, this.#box);
   }
   #binarySearch(y) {
     const array = this.#intervals;
@@ -15465,8 +15349,603 @@ class Outliner {
     return results;
   }
 }
+class Outline {
+  toSVGPath() {
+    throw new Error("Abstract method `toSVGPath` must be implemented.");
+  }
+  get box() {
+    throw new Error("Abstract getter `box` must be implemented.");
+  }
+  serialize(_bbox, _rotation) {
+    throw new Error("Abstract method `serialize` must be implemented.");
+  }
+  get free() {
+    return this instanceof FreeHighlightOutline;
+  }
+}
+class HighlightOutline extends Outline {
+  #box;
+  #outlines;
+  constructor(outlines, box) {
+    super();
+    this.#outlines = outlines;
+    this.#box = box;
+  }
+  toSVGPath() {
+    const buffer = [];
+    for (const polygon of this.#outlines) {
+      let [prevX, prevY] = polygon;
+      buffer.push(`M${prevX} ${prevY}`);
+      for (let i = 2; i < polygon.length; i += 2) {
+        const x = polygon[i];
+        const y = polygon[i + 1];
+        if (x === prevX) {
+          buffer.push(`V${y}`);
+          prevY = y;
+        } else if (y === prevY) {
+          buffer.push(`H${x}`);
+          prevX = x;
+        }
+      }
+      buffer.push("Z");
+    }
+    return buffer.join(" ");
+  }
+  serialize([blX, blY, trX, trY], _rotation) {
+    const outlines = [];
+    const width = trX - blX;
+    const height = trY - blY;
+    for (const outline of this.#outlines) {
+      const points = new Array(outline.length);
+      for (let i = 0; i < outline.length; i += 2) {
+        points[i] = blX + outline[i] * width;
+        points[i + 1] = trY - outline[i + 1] * height;
+      }
+      outlines.push(points);
+    }
+    return outlines;
+  }
+  get box() {
+    return this.#box;
+  }
+}
+class FreeOutliner {
+  #box;
+  #bottom = [];
+  #innerMargin;
+  #isLTR;
+  #top = [];
+  #last = new Float64Array(18);
+  #min;
+  #min_dist;
+  #scaleFactor;
+  #thickness;
+  #points = [];
+  static #MIN_DIST = 8;
+  static #MIN_DIFF = 2;
+  static #MIN = FreeOutliner.#MIN_DIST + FreeOutliner.#MIN_DIFF;
+  constructor({
+    x,
+    y
+  }, box, scaleFactor, thickness, isLTR, innerMargin = 0) {
+    this.#box = box;
+    this.#thickness = thickness * scaleFactor;
+    this.#isLTR = isLTR;
+    this.#last.set([NaN, NaN, NaN, NaN, x, y], 6);
+    this.#innerMargin = innerMargin;
+    this.#min_dist = FreeOutliner.#MIN_DIST * scaleFactor;
+    this.#min = FreeOutliner.#MIN * scaleFactor;
+    this.#scaleFactor = scaleFactor;
+    this.#points.push(x, y);
+  }
+  get free() {
+    return true;
+  }
+  isEmpty() {
+    return isNaN(this.#last[8]);
+  }
+  add({
+    x,
+    y
+  }) {
+    const [layerX, layerY, layerWidth, layerHeight] = this.#box;
+    let [x1, y1, x2, y2] = this.#last.subarray(8, 12);
+    const diffX = x - x2;
+    const diffY = y - y2;
+    const d = Math.hypot(diffX, diffY);
+    if (d < this.#min) {
+      return false;
+    }
+    const diffD = d - this.#min_dist;
+    const K = diffD / d;
+    const shiftX = K * diffX;
+    const shiftY = K * diffY;
+    let x0 = x1;
+    let y0 = y1;
+    x1 = x2;
+    y1 = y2;
+    x2 += shiftX;
+    y2 += shiftY;
+    this.#points?.push(x, y);
+    const nX = -shiftY / diffD;
+    const nY = shiftX / diffD;
+    const thX = nX * this.#thickness;
+    const thY = nY * this.#thickness;
+    this.#last.set(this.#last.subarray(2, 8), 0);
+    this.#last.set([x2 + thX, y2 + thY], 4);
+    this.#last.set(this.#last.subarray(14, 18), 12);
+    this.#last.set([x2 - thX, y2 - thY], 16);
+    if (isNaN(this.#last[6])) {
+      if (this.#top.length === 0) {
+        this.#last.set([x1 + thX, y1 + thY], 2);
+        this.#top.push(NaN, NaN, NaN, NaN, (x1 + thX - layerX) / layerWidth, (y1 + thY - layerY) / layerHeight);
+        this.#last.set([x1 - thX, y1 - thY], 14);
+        this.#bottom.push(NaN, NaN, NaN, NaN, (x1 - thX - layerX) / layerWidth, (y1 - thY - layerY) / layerHeight);
+      }
+      this.#last.set([x0, y0, x1, y1, x2, y2], 6);
+      return !this.isEmpty();
+    }
+    this.#last.set([x0, y0, x1, y1, x2, y2], 6);
+    const angle = Math.abs(Math.atan2(y0 - y1, x0 - x1) - Math.atan2(shiftY, shiftX));
+    if (angle < Math.PI / 2) {
+      [x1, y1, x2, y2] = this.#last.subarray(2, 6);
+      this.#top.push(NaN, NaN, NaN, NaN, ((x1 + x2) / 2 - layerX) / layerWidth, ((y1 + y2) / 2 - layerY) / layerHeight);
+      [x1, y1, x0, y0] = this.#last.subarray(14, 18);
+      this.#bottom.push(NaN, NaN, NaN, NaN, ((x0 + x1) / 2 - layerX) / layerWidth, ((y0 + y1) / 2 - layerY) / layerHeight);
+      return true;
+    }
+    [x0, y0, x1, y1, x2, y2] = this.#last.subarray(0, 6);
+    this.#top.push(((x0 + 5 * x1) / 6 - layerX) / layerWidth, ((y0 + 5 * y1) / 6 - layerY) / layerHeight, ((5 * x1 + x2) / 6 - layerX) / layerWidth, ((5 * y1 + y2) / 6 - layerY) / layerHeight, ((x1 + x2) / 2 - layerX) / layerWidth, ((y1 + y2) / 2 - layerY) / layerHeight);
+    [x2, y2, x1, y1, x0, y0] = this.#last.subarray(12, 18);
+    this.#bottom.push(((x0 + 5 * x1) / 6 - layerX) / layerWidth, ((y0 + 5 * y1) / 6 - layerY) / layerHeight, ((5 * x1 + x2) / 6 - layerX) / layerWidth, ((5 * y1 + y2) / 6 - layerY) / layerHeight, ((x1 + x2) / 2 - layerX) / layerWidth, ((y1 + y2) / 2 - layerY) / layerHeight);
+    return true;
+  }
+  toSVGPath() {
+    if (this.isEmpty()) {
+      return "";
+    }
+    const top = this.#top;
+    const bottom = this.#bottom;
+    const lastTop = this.#last.subarray(4, 6);
+    const lastBottom = this.#last.subarray(16, 18);
+    const [x, y, width, height] = this.#box;
+    if (isNaN(this.#last[6]) && !this.isEmpty()) {
+      return `M${(this.#last[2] - x) / width} ${(this.#last[3] - y) / height} L${(this.#last[4] - x) / width} ${(this.#last[5] - y) / height} L${(this.#last[16] - x) / width} ${(this.#last[17] - y) / height} L${(this.#last[14] - x) / width} ${(this.#last[15] - y) / height} Z`;
+    }
+    const buffer = [];
+    buffer.push(`M${top[4]} ${top[5]}`);
+    for (let i = 6; i < top.length; i += 6) {
+      if (isNaN(top[i])) {
+        buffer.push(`L${top[i + 4]} ${top[i + 5]}`);
+      } else {
+        buffer.push(`C${top[i]} ${top[i + 1]} ${top[i + 2]} ${top[i + 3]} ${top[i + 4]} ${top[i + 5]}`);
+      }
+    }
+    buffer.push(`L${(lastTop[0] - x) / width} ${(lastTop[1] - y) / height} L${(lastBottom[0] - x) / width} ${(lastBottom[1] - y) / height}`);
+    for (let i = bottom.length - 6; i >= 6; i -= 6) {
+      if (isNaN(bottom[i])) {
+        buffer.push(`L${bottom[i + 4]} ${bottom[i + 5]}`);
+      } else {
+        buffer.push(`C${bottom[i]} ${bottom[i + 1]} ${bottom[i + 2]} ${bottom[i + 3]} ${bottom[i + 4]} ${bottom[i + 5]}`);
+      }
+    }
+    buffer.push(`L${bottom[4]} ${bottom[5]} Z`);
+    return buffer.join(" ");
+  }
+  getOutlines() {
+    const top = this.#top;
+    const bottom = this.#bottom;
+    const last = this.#last;
+    const lastTop = last.subarray(4, 6);
+    const lastBottom = last.subarray(16, 18);
+    const [layerX, layerY, layerWidth, layerHeight] = this.#box;
+    const points = new Float64Array(this.#points?.length ?? 0);
+    for (let i = 0, ii = points.length; i < ii; i += 2) {
+      points[i] = (this.#points[i] - layerX) / layerWidth;
+      points[i + 1] = (this.#points[i + 1] - layerY) / layerHeight;
+    }
+    if (isNaN(last[6]) && !this.isEmpty()) {
+      const outline = new Float64Array(24);
+      outline.set([NaN, NaN, NaN, NaN, (last[2] - layerX) / layerWidth, (last[3] - layerY) / layerHeight, NaN, NaN, NaN, NaN, (last[4] - layerX) / layerWidth, (last[5] - layerY) / layerHeight, NaN, NaN, NaN, NaN, (last[16] - layerX) / layerWidth, (last[17] - layerY) / layerHeight, NaN, NaN, NaN, NaN, (last[14] - layerX) / layerWidth, (last[15] - layerY) / layerHeight], 0);
+      return new FreeHighlightOutline(outline, points, this.#box, this.#scaleFactor, this.#innerMargin, this.#isLTR);
+    }
+    const outline = new Float64Array(this.#top.length + 12 + this.#bottom.length);
+    let N = top.length;
+    for (let i = 0; i < N; i += 2) {
+      if (isNaN(top[i])) {
+        outline[i] = outline[i + 1] = NaN;
+        continue;
+      }
+      outline[i] = top[i];
+      outline[i + 1] = top[i + 1];
+    }
+    outline.set([NaN, NaN, NaN, NaN, (lastTop[0] - layerX) / layerWidth, (lastTop[1] - layerY) / layerHeight, NaN, NaN, NaN, NaN, (lastBottom[0] - layerX) / layerWidth, (lastBottom[1] - layerY) / layerHeight], N);
+    N += 12;
+    for (let i = bottom.length - 6; i >= 6; i -= 6) {
+      for (let j = 0; j < 6; j += 2) {
+        if (isNaN(bottom[i + j])) {
+          outline[N] = outline[N + 1] = NaN;
+          N += 2;
+          continue;
+        }
+        outline[N] = bottom[i + j];
+        outline[N + 1] = bottom[i + j + 1];
+        N += 2;
+      }
+    }
+    outline.set([NaN, NaN, NaN, NaN, bottom[4], bottom[5]], N);
+    return new FreeHighlightOutline(outline, points, this.#box, this.#scaleFactor, this.#innerMargin, this.#isLTR);
+  }
+}
+class FreeHighlightOutline extends Outline {
+  #box;
+  #bbox = null;
+  #innerMargin;
+  #isLTR;
+  #points;
+  #scaleFactor;
+  #outline;
+  constructor(outline, points, box, scaleFactor, innerMargin, isLTR) {
+    super();
+    this.#outline = outline;
+    this.#points = points;
+    this.#box = box;
+    this.#scaleFactor = scaleFactor;
+    this.#innerMargin = innerMargin;
+    this.#isLTR = isLTR;
+    this.#computeMinMax(isLTR);
+    const {
+      x,
+      y,
+      width,
+      height
+    } = this.#bbox;
+    for (let i = 0, ii = outline.length; i < ii; i += 2) {
+      outline[i] = (outline[i] - x) / width;
+      outline[i + 1] = (outline[i + 1] - y) / height;
+    }
+    for (let i = 0, ii = points.length; i < ii; i += 2) {
+      points[i] = (points[i] - x) / width;
+      points[i + 1] = (points[i + 1] - y) / height;
+    }
+  }
+  toSVGPath() {
+    const buffer = [`M${this.#outline[4]} ${this.#outline[5]}`];
+    for (let i = 6, ii = this.#outline.length; i < ii; i += 6) {
+      if (isNaN(this.#outline[i])) {
+        buffer.push(`L${this.#outline[i + 4]} ${this.#outline[i + 5]}`);
+        continue;
+      }
+      buffer.push(`C${this.#outline[i]} ${this.#outline[i + 1]} ${this.#outline[i + 2]} ${this.#outline[i + 3]} ${this.#outline[i + 4]} ${this.#outline[i + 5]}`);
+    }
+    buffer.push("Z");
+    return buffer.join(" ");
+  }
+  serialize([blX, blY, trX, trY], rotation) {
+    const width = trX - blX;
+    const height = trY - blY;
+    let outline;
+    let points;
+    switch (rotation) {
+      case 0:
+        outline = this.#rescale(this.#outline, blX, trY, width, -height);
+        points = this.#rescale(this.#points, blX, trY, width, -height);
+        break;
+      case 90:
+        outline = this.#rescaleAndSwap(this.#outline, blX, blY, width, height);
+        points = this.#rescaleAndSwap(this.#points, blX, blY, width, height);
+        break;
+      case 180:
+        outline = this.#rescale(this.#outline, trX, blY, -width, height);
+        points = this.#rescale(this.#points, trX, blY, -width, height);
+        break;
+      case 270:
+        outline = this.#rescaleAndSwap(this.#outline, trX, trY, -width, -height);
+        points = this.#rescaleAndSwap(this.#points, trX, trY, -width, -height);
+        break;
+    }
+    return {
+      outline: Array.from(outline),
+      points: [Array.from(points)]
+    };
+  }
+  #rescale(src, tx, ty, sx, sy) {
+    const dest = new Float64Array(src.length);
+    for (let i = 0, ii = src.length; i < ii; i += 2) {
+      dest[i] = tx + src[i] * sx;
+      dest[i + 1] = ty + src[i + 1] * sy;
+    }
+    return dest;
+  }
+  #rescaleAndSwap(src, tx, ty, sx, sy) {
+    const dest = new Float64Array(src.length);
+    for (let i = 0, ii = src.length; i < ii; i += 2) {
+      dest[i] = tx + src[i + 1] * sx;
+      dest[i + 1] = ty + src[i] * sy;
+    }
+    return dest;
+  }
+  #computeMinMax(isLTR) {
+    const outline = this.#outline;
+    let lastX = outline[4];
+    let lastY = outline[5];
+    let minX = lastX;
+    let minY = lastY;
+    let maxX = lastX;
+    let maxY = lastY;
+    let lastPointX = lastX;
+    let lastPointY = lastY;
+    const ltrCallback = isLTR ? Math.max : Math.min;
+    for (let i = 6, ii = outline.length; i < ii; i += 6) {
+      if (isNaN(outline[i])) {
+        minX = Math.min(minX, outline[i + 4]);
+        minY = Math.min(minY, outline[i + 5]);
+        maxX = Math.max(maxX, outline[i + 4]);
+        maxY = Math.max(maxY, outline[i + 5]);
+        if (lastPointY < outline[i + 5]) {
+          lastPointX = outline[i + 4];
+          lastPointY = outline[i + 5];
+        } else if (lastPointY === outline[i + 5]) {
+          lastPointX = ltrCallback(lastPointX, outline[i + 4]);
+        }
+      } else {
+        const bbox = Util.bezierBoundingBox(lastX, lastY, ...outline.slice(i, i + 6));
+        minX = Math.min(minX, bbox[0]);
+        minY = Math.min(minY, bbox[1]);
+        maxX = Math.max(maxX, bbox[2]);
+        maxY = Math.max(maxY, bbox[3]);
+        if (lastPointY < bbox[3]) {
+          lastPointX = bbox[2];
+          lastPointY = bbox[3];
+        } else if (lastPointY === bbox[3]) {
+          lastPointX = ltrCallback(lastPointX, bbox[2]);
+        }
+      }
+      lastX = outline[i + 4];
+      lastY = outline[i + 5];
+    }
+    const x = minX - this.#innerMargin,
+      y = minY - this.#innerMargin,
+      width = maxX - minX + 2 * this.#innerMargin,
+      height = maxY - minY + 2 * this.#innerMargin;
+    lastPointX = (lastPointX - x) / width;
+    lastPointY = (lastPointY - y) / height;
+    this.#bbox = {
+      x,
+      y,
+      width,
+      height,
+      lastPoint: [lastPointX, lastPointY]
+    };
+  }
+  get box() {
+    return this.#bbox;
+  }
+  getNewOutline(thickness, innerMargin) {
+    const {
+      x,
+      y,
+      width,
+      height
+    } = this.#bbox;
+    const [layerX, layerY, layerWidth, layerHeight] = this.#box;
+    const sx = width * layerWidth;
+    const sy = height * layerHeight;
+    const tx = x * layerWidth + layerX;
+    const ty = y * layerHeight + layerY;
+    const outliner = new FreeOutliner({
+      x: this.#points[0] * sx + tx,
+      y: this.#points[1] * sy + ty
+    }, this.#box, this.#scaleFactor, thickness, this.#isLTR, innerMargin ?? this.#innerMargin);
+    for (let i = 2; i < this.#points.length; i += 2) {
+      outliner.add({
+        x: this.#points[i] * sx + tx,
+        y: this.#points[i + 1] * sy + ty
+      });
+    }
+    return outliner.getOutlines();
+  }
+}
+
+;// CONCATENATED MODULE: ./src/display/editor/color_picker.js
+
+
+
+class ColorPicker {
+  #boundKeyDown = this.#keyDown.bind(this);
+  #boundPointerDown = this.#pointerDown.bind(this);
+  #button = null;
+  #buttonSwatch = null;
+  #defaultColor;
+  #dropdown = null;
+  #dropdownWasFromKeyboard = false;
+  #isMainColorPicker = false;
+  #eventBus;
+  #uiManager = null;
+  #type;
+  static get _keyboardManager() {
+    return shadow(this, "_keyboardManager", new KeyboardManager([[["Escape", "mac+Escape"], ColorPicker.prototype._hideDropdownFromKeyboard], [[" ", "mac+ "], ColorPicker.prototype._colorSelectFromKeyboard], [["ArrowDown", "ArrowRight", "mac+ArrowDown", "mac+ArrowRight"], ColorPicker.prototype._moveToNext], [["ArrowUp", "ArrowLeft", "mac+ArrowUp", "mac+ArrowLeft"], ColorPicker.prototype._moveToPrevious], [["Home", "mac+Home"], ColorPicker.prototype._moveToBeginning], [["End", "mac+End"], ColorPicker.prototype._moveToEnd]]));
+  }
+  constructor({
+    editor = null,
+    uiManager = null
+  }) {
+    if (editor) {
+      this.#isMainColorPicker = false;
+      this.#type = AnnotationEditorParamsType.HIGHLIGHT_COLOR;
+    } else {
+      this.#isMainColorPicker = true;
+      this.#type = AnnotationEditorParamsType.HIGHLIGHT_DEFAULT_COLOR;
+    }
+    this.#uiManager = editor?._uiManager || uiManager;
+    this.#eventBus = this.#uiManager._eventBus;
+    this.#defaultColor = editor?.color || this.#uiManager?.highlightColors.values().next().value || "#FFFF98";
+  }
+  renderButton() {
+    const button = this.#button = document.createElement("button");
+    button.className = "colorPicker";
+    button.tabIndex = "0";
+    button.setAttribute("data-l10n-id", "pdfjs-editor-colorpicker-button");
+    button.setAttribute("aria-haspopup", true);
+    button.addEventListener("click", this.#openDropdown.bind(this));
+    button.addEventListener("keydown", this.#boundKeyDown);
+    const swatch = this.#buttonSwatch = document.createElement("span");
+    swatch.className = "swatch";
+    swatch.style.backgroundColor = this.#defaultColor;
+    button.append(swatch);
+    return button;
+  }
+  renderMainDropdown() {
+    const dropdown = this.#dropdown = this.#getDropdownRoot();
+    dropdown.setAttribute("aria-orientation", "horizontal");
+    dropdown.setAttribute("aria-labelledby", "highlightColorPickerLabel");
+    return dropdown;
+  }
+  #getDropdownRoot() {
+    const div = document.createElement("div");
+    div.addEventListener("contextmenu", noContextMenu);
+    div.className = "dropdown";
+    div.role = "listbox";
+    div.setAttribute("aria-multiselectable", false);
+    div.setAttribute("aria-orientation", "vertical");
+    div.setAttribute("data-l10n-id", "pdfjs-editor-colorpicker-dropdown");
+    for (const [name, color] of this.#uiManager.highlightColors) {
+      const button = document.createElement("button");
+      button.tabIndex = "0";
+      button.role = "option";
+      button.setAttribute("data-color", color);
+      button.title = name;
+      button.setAttribute("data-l10n-id", `pdfjs-editor-colorpicker-${name}`);
+      const swatch = document.createElement("span");
+      button.append(swatch);
+      swatch.className = "swatch";
+      swatch.style.backgroundColor = color;
+      button.setAttribute("aria-selected", color === this.#defaultColor);
+      button.addEventListener("click", this.#colorSelect.bind(this, color));
+      div.append(button);
+    }
+    div.addEventListener("keydown", this.#boundKeyDown);
+    return div;
+  }
+  #colorSelect(color, event) {
+    event.stopPropagation();
+    this.#eventBus.dispatch("switchannotationeditorparams", {
+      source: this,
+      type: this.#type,
+      value: color
+    });
+  }
+  _colorSelectFromKeyboard(event) {
+    if (event.target === this.#button) {
+      this.#openDropdown(event);
+      return;
+    }
+    const color = event.target.getAttribute("data-color");
+    if (!color) {
+      return;
+    }
+    this.#colorSelect(color, event);
+  }
+  _moveToNext(event) {
+    if (!this.#isDropdownVisible) {
+      this.#openDropdown(event);
+      return;
+    }
+    if (event.target === this.#button) {
+      this.#dropdown.firstChild?.focus();
+      return;
+    }
+    event.target.nextSibling?.focus();
+  }
+  _moveToPrevious(event) {
+    if (event.target === this.#dropdown?.firstChild || event.target === this.#button) {
+      if (this.#isDropdownVisible) {
+        this._hideDropdownFromKeyboard();
+      }
+      return;
+    }
+    if (!this.#isDropdownVisible) {
+      this.#openDropdown(event);
+    }
+    event.target.previousSibling?.focus();
+  }
+  _moveToBeginning(event) {
+    if (!this.#isDropdownVisible) {
+      this.#openDropdown(event);
+      return;
+    }
+    this.#dropdown.firstChild?.focus();
+  }
+  _moveToEnd(event) {
+    if (!this.#isDropdownVisible) {
+      this.#openDropdown(event);
+      return;
+    }
+    this.#dropdown.lastChild?.focus();
+  }
+  #keyDown(event) {
+    ColorPicker._keyboardManager.exec(this, event);
+  }
+  #openDropdown(event) {
+    if (this.#isDropdownVisible) {
+      this.hideDropdown();
+      return;
+    }
+    this.#dropdownWasFromKeyboard = event.detail === 0;
+    window.addEventListener("pointerdown", this.#boundPointerDown);
+    if (this.#dropdown) {
+      this.#dropdown.classList.remove("hidden");
+      return;
+    }
+    const root = this.#dropdown = this.#getDropdownRoot();
+    this.#button.append(root);
+  }
+  #pointerDown(event) {
+    if (this.#dropdown?.contains(event.target)) {
+      return;
+    }
+    this.hideDropdown();
+  }
+  hideDropdown() {
+    this.#dropdown?.classList.add("hidden");
+    window.removeEventListener("pointerdown", this.#boundPointerDown);
+  }
+  get #isDropdownVisible() {
+    return this.#dropdown && !this.#dropdown.classList.contains("hidden");
+  }
+  _hideDropdownFromKeyboard() {
+    if (this.#isMainColorPicker || !this.#isDropdownVisible) {
+      return;
+    }
+    this.hideDropdown();
+    this.#button.focus({
+      preventScroll: true,
+      focusVisible: this.#dropdownWasFromKeyboard
+    });
+  }
+  updateColor(color) {
+    if (this.#buttonSwatch) {
+      this.#buttonSwatch.style.backgroundColor = color;
+    }
+    if (!this.#dropdown) {
+      return;
+    }
+    const i = this.#uiManager.highlightColors.values();
+    for (const child of this.#dropdown.children) {
+      child.setAttribute("aria-selected", i.next().value === color);
+    }
+  }
+  destroy() {
+    this.#button?.remove();
+    this.#button = null;
+    this.#buttonSwatch = null;
+    this.#dropdown?.remove();
+    this.#dropdown = null;
+  }
+}
 
 ;// CONCATENATED MODULE: ./src/display/editor/highlight.js
+
 
 
 
@@ -15480,27 +15959,39 @@ class HighlightEditor extends AnnotationEditor {
   #highlightDiv = null;
   #highlightOutlines = null;
   #id = null;
+  #isFreeHighlight = false;
   #lastPoint = null;
   #opacity;
   #outlineId = null;
+  #thickness;
   static _defaultColor = null;
   static _defaultOpacity = 1;
+  static _defaultThickness = 12;
   static _l10nPromise;
   static _type = "highlight";
   static _editorType = AnnotationEditorType.HIGHLIGHT;
+  static _freeHighlightId = -1;
+  static _freeHighlight = null;
+  static _freeHighlightClipId = "";
   constructor(params) {
     super({
       ...params,
       name: "highlightEditor"
     });
-    HighlightEditor._defaultColor ||= this._uiManager.highlightColors?.values().next().value || "#fff066";
     this.color = params.color || HighlightEditor._defaultColor;
+    this.#thickness = params.thickness || HighlightEditor._defaultThickness;
     this.#opacity = params.opacity || HighlightEditor._defaultOpacity;
     this.#boxes = params.boxes || null;
     this._isDraggable = false;
-    this.#createOutlines();
-    this.#addToDrawLayer();
-    this.rotate(this.rotation);
+    if (params.highlightId > -1) {
+      this.#isFreeHighlight = true;
+      this.#createFreeOutlines(params);
+      this.#addToDrawLayer();
+    } else {
+      this.#createOutlines();
+      this.#addToDrawLayer();
+      this.rotate(this.rotation);
+    }
   }
   #createOutlines() {
     const outliner = new Outliner(this.#boxes, 0.001);
@@ -15518,16 +16009,79 @@ class HighlightEditor extends AnnotationEditor {
     } = this.#focusOutlines.box;
     this.#lastPoint = [(lastPoint[0] - this.x) / this.width, (lastPoint[1] - this.y) / this.height];
   }
-  static initialize(l10n) {
-    AnnotationEditor.initialize(l10n);
+  #createFreeOutlines({
+    highlightOutlines,
+    highlightId,
+    clipPathId
+  }) {
+    this.#highlightOutlines = highlightOutlines;
+    const extraThickness = 1.5;
+    this.#focusOutlines = highlightOutlines.getNewOutline(this.#thickness / 2 + extraThickness, 0.0025);
+    if (highlightId >= 0) {
+      this.#id = highlightId;
+      this.#clipPathId = clipPathId;
+      this.parent.drawLayer.finalizeLine(highlightId, highlightOutlines);
+      this.#outlineId = this.parent.drawLayer.highlightOutline(this.#focusOutlines);
+    } else if (this.parent) {
+      this.parent.drawLayer.updateLine(this.#id, highlightOutlines);
+      this.parent.drawLayer.updateLine(this.#outlineId, this.#focusOutlines);
+    }
+    const {
+      x,
+      y,
+      width,
+      height,
+      lastPoint
+    } = highlightOutlines.box;
+    this.#lastPoint = lastPoint;
+    switch (this.rotation) {
+      case 0:
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        break;
+      case 90:
+        {
+          const [pageWidth, pageHeight] = this.parentDimensions;
+          this.x = y;
+          this.y = 1 - x;
+          this.width = width * pageHeight / pageWidth;
+          this.height = height * pageWidth / pageHeight;
+          break;
+        }
+      case 180:
+        this.x = 1 - x;
+        this.y = 1 - y;
+        this.width = width;
+        this.height = height;
+        break;
+      case 270:
+        {
+          const [pageWidth, pageHeight] = this.parentDimensions;
+          this.x = 1 - y;
+          this.y = x;
+          this.width = width * pageHeight / pageWidth;
+          this.height = height * pageWidth / pageHeight;
+          break;
+        }
+    }
+  }
+  static initialize(l10n, uiManager) {
+    AnnotationEditor.initialize(l10n, uiManager);
+    HighlightEditor._defaultColor ||= uiManager.highlightColors?.values().next().value || "#fff066";
   }
   static updateDefaultParams(type, value) {
     switch (type) {
       case AnnotationEditorParamsType.HIGHLIGHT_DEFAULT_COLOR:
         HighlightEditor._defaultColor = value;
         break;
+      case AnnotationEditorParamsType.HIGHLIGHT_THICKNESS:
+        HighlightEditor._defaultThickness = value;
+        break;
     }
   }
+  translateInPage(x, y) {}
   get toolbarPosition() {
     return this.#lastPoint;
   }
@@ -15536,29 +16090,46 @@ class HighlightEditor extends AnnotationEditor {
       case AnnotationEditorParamsType.HIGHLIGHT_COLOR:
         this.#updateColor(value);
         break;
+      case AnnotationEditorParamsType.HIGHLIGHT_THICKNESS:
+        this.#updateThickness(value);
+        break;
     }
   }
   static get defaultPropertiesToUpdate() {
-    return [[AnnotationEditorParamsType.HIGHLIGHT_DEFAULT_COLOR, HighlightEditor._defaultColor]];
+    return [[AnnotationEditorParamsType.HIGHLIGHT_DEFAULT_COLOR, HighlightEditor._defaultColor], [AnnotationEditorParamsType.HIGHLIGHT_THICKNESS, HighlightEditor._defaultThickness]];
   }
   get propertiesToUpdate() {
-    return [[AnnotationEditorParamsType.HIGHLIGHT_COLOR, this.color || HighlightEditor._defaultColor]];
+    return [[AnnotationEditorParamsType.HIGHLIGHT_COLOR, this.color || HighlightEditor._defaultColor], [AnnotationEditorParamsType.HIGHLIGHT_THICKNESS, this.#thickness || HighlightEditor._defaultThickness]];
   }
   #updateColor(color) {
+    const setColor = col => {
+      this.color = col;
+      this.parent?.drawLayer.changeColor(this.#id, col);
+      this.#colorPicker?.updateColor(col);
+    };
     const savedColor = this.color;
     this.addCommands({
-      cmd: () => {
-        this.color = color;
-        this.parent.drawLayer.changeColor(this.#id, color);
-        this.#colorPicker?.updateColor(color);
-      },
-      undo: () => {
-        this.color = savedColor;
-        this.parent.drawLayer.changeColor(this.#id, savedColor);
-        this.#colorPicker?.updateColor(savedColor);
-      },
+      cmd: setColor.bind(this, color),
+      undo: setColor.bind(this, savedColor),
+      post: this._uiManager.updateUI.bind(this._uiManager, this),
       mustExec: true,
       type: AnnotationEditorParamsType.HIGHLIGHT_COLOR,
+      overwriteIfSameType: true,
+      keepUndo: true
+    });
+  }
+  #updateThickness(thickness) {
+    const savedThickness = this.#thickness;
+    const setThickness = th => {
+      this.#thickness = th;
+      this.#changeThickness(th);
+    };
+    this.addCommands({
+      cmd: setThickness.bind(this, thickness),
+      undo: setThickness.bind(this, savedThickness),
+      post: this._uiManager.updateUI.bind(this._uiManager, this),
+      mustExec: true,
+      type: AnnotationEditorParamsType.INK_THICKNESS,
       overwriteIfSameType: true,
       keepUndo: true
     });
@@ -15585,10 +16156,13 @@ class HighlightEditor extends AnnotationEditor {
     this.div.classList.toggle("disabled", false);
   }
   fixAndSetPosition() {
-    return super.fixAndSetPosition(0);
+    return super.fixAndSetPosition(this.#getRotation());
+  }
+  getBaseTranslation() {
+    return [0, 0];
   }
   getRect(tx, ty) {
-    return super.getRect(tx, ty, 0);
+    return super.getRect(tx, ty, this.#getRotation());
   }
   onceAdded() {
     this.parent.addUndoableEditor(this);
@@ -15624,6 +16198,17 @@ class HighlightEditor extends AnnotationEditor {
       this.select();
     }
   }
+  #changeThickness(thickness) {
+    if (!this.#isFreeHighlight) {
+      return;
+    }
+    this.#createFreeOutlines({
+      highlightOutlines: this.#highlightOutlines.getNewOutline(thickness / 2)
+    });
+    this.fixAndSetPosition();
+    const [parentWidth, parentHeight] = this.parentDimensions;
+    this.setDims(this.width * parentWidth, this.height * parentHeight);
+  }
   #cleanDrawLayer() {
     if (this.#id === null || !this.parent) {
       return;
@@ -15641,10 +16226,10 @@ class HighlightEditor extends AnnotationEditor {
       id: this.#id,
       clipPathId: this.#clipPathId
     } = parent.drawLayer.highlight(this.#highlightOutlines, this.color, this.#opacity));
+    this.#outlineId = parent.drawLayer.highlightOutline(this.#focusOutlines);
     if (this.#highlightDiv) {
       this.#highlightDiv.style.clipPath = this.#clipPathId;
     }
-    this.#outlineId = parent.drawLayer.highlightOutline(this.#focusOutlines);
   }
   static #rotateBbox({
     x,
@@ -15686,9 +16271,16 @@ class HighlightEditor extends AnnotationEditor {
     const {
       drawLayer
     } = this.parent;
+    let box;
+    if (this.#isFreeHighlight) {
+      angle = (angle - this.rotation + 360) % 360;
+      box = HighlightEditor.#rotateBbox(this.#highlightOutlines.box, angle);
+    } else {
+      box = HighlightEditor.#rotateBbox(this, angle);
+    }
     drawLayer.rotate(this.#id, angle);
     drawLayer.rotate(this.#outlineId, angle);
-    drawLayer.updateBox(this.#id, HighlightEditor.#rotateBbox(this, angle));
+    drawLayer.updateBox(this.#id, box);
     drawLayer.updateBox(this.#outlineId, HighlightEditor.#rotateBbox(this.#focusOutlines.box, angle));
   }
   render() {
@@ -15696,6 +16288,9 @@ class HighlightEditor extends AnnotationEditor {
       return this.div;
     }
     const div = super.render();
+    if (this.#isFreeHighlight) {
+      div.classList.add("free");
+    }
     const highlightDiv = this.#highlightDiv = document.createElement("div");
     div.append(highlightDiv);
     highlightDiv.className = "internal";
@@ -15721,10 +16316,17 @@ class HighlightEditor extends AnnotationEditor {
     super.unselect();
     this.parent?.drawLayer.removeClass(this.#outlineId, "selected");
   }
-  #serializeBoxes() {
+  #getRotation() {
+    return this.#isFreeHighlight ? this.rotation : 0;
+  }
+  #serializeBoxes(rect) {
+    if (this.#isFreeHighlight) {
+      return null;
+    }
     const [pageWidth, pageHeight] = this.pageDimensions;
     const boxes = this.#boxes;
     const quadPoints = new Array(boxes.length * 8);
+    const [tx, ty] = rect;
     let i = 0;
     for (const {
       x,
@@ -15732,8 +16334,8 @@ class HighlightEditor extends AnnotationEditor {
       width,
       height
     } of boxes) {
-      const sx = x * pageWidth;
-      const sy = (1 - y - height) * pageHeight;
+      const sx = tx + x * pageWidth;
+      const sy = ty + (1 - y - height) * pageHeight;
       quadPoints[i] = quadPoints[i + 4] = sx;
       quadPoints[i + 1] = quadPoints[i + 3] = sy;
       quadPoints[i + 2] = quadPoints[i + 6] = sx + width * pageWidth;
@@ -15742,40 +16344,89 @@ class HighlightEditor extends AnnotationEditor {
     }
     return quadPoints;
   }
-  #serializeOutlines() {
-    const [pageWidth, pageHeight] = this.pageDimensions;
-    const width = this.width * pageWidth;
-    const height = this.height * pageHeight;
-    const tx = this.x * pageWidth;
-    const ty = (1 - this.y - this.height) * pageHeight;
-    const outlines = [];
-    for (const outline of this.#highlightOutlines.outlines) {
-      const points = new Array(outline.length);
-      for (let i = 0; i < outline.length; i += 2) {
-        points[i] = tx + outline[i] * width;
-        points[i + 1] = ty + (1 - outline[i + 1]) * height;
-      }
-      outlines.push(points);
+  #serializeOutlines(rect) {
+    return this.#highlightOutlines.serialize(rect, this.#getRotation());
+  }
+  static startHighlighting(parent, isLTR, {
+    target: textLayer,
+    x,
+    y
+  }) {
+    const {
+      x: layerX,
+      y: layerY,
+      width: parentWidth,
+      height: parentHeight
+    } = textLayer.getBoundingClientRect();
+    const pointerMove = e => {
+      this.#highlightMove(parent, e);
+    };
+    const pointerDownOptions = {
+      capture: true,
+      passive: false
+    };
+    const pointerDown = e => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+    const pointerUpCallback = e => {
+      textLayer.removeEventListener("pointermove", pointerMove);
+      window.removeEventListener("blur", pointerUpCallback);
+      window.removeEventListener("pointerup", pointerUpCallback);
+      window.removeEventListener("pointerdown", pointerDown, pointerDownOptions);
+      window.removeEventListener("contextmenu", noContextMenu);
+      this.#endHighlight(parent, e);
+    };
+    window.addEventListener("blur", pointerUpCallback);
+    window.addEventListener("pointerup", pointerUpCallback);
+    window.addEventListener("pointerdown", pointerDown, pointerDownOptions);
+    window.addEventListener("contextmenu", noContextMenu);
+    textLayer.addEventListener("pointermove", pointerMove);
+    this._freeHighlight = new FreeOutliner({
+      x,
+      y
+    }, [layerX, layerY, parentWidth, parentHeight], parent.scale, this._defaultThickness / 2, isLTR, 0.001);
+    ({
+      id: this._freeHighlightId,
+      clipPathId: this._freeHighlightClipId
+    } = parent.drawLayer.highlight(this._freeHighlight, this._defaultColor, this._defaultOpacity, true));
+  }
+  static #highlightMove(parent, event) {
+    if (this._freeHighlight.add(event)) {
+      parent.drawLayer.updatePath(this._freeHighlightId, this._freeHighlight);
     }
-    return outlines;
+  }
+  static #endHighlight(parent, event) {
+    if (!this._freeHighlight.isEmpty()) {
+      parent.createAndAddNewEditor(event, false, {
+        highlightId: this._freeHighlightId,
+        highlightOutlines: this._freeHighlight.getOutlines(),
+        clipPathId: this._freeHighlightClipId
+      });
+    } else {
+      parent.drawLayer.removeFreeHighlight(this._freeHighlightId);
+    }
+    this._freeHighlightId = -1;
+    this._freeHighlight = null;
+    this._freeHighlightClipId = "";
   }
   static deserialize(data, parent, uiManager) {
     const editor = super.deserialize(data, parent, uiManager);
     const {
-      rect,
+      rect: [blX, blY, trX, trY],
       color,
       quadPoints
     } = data;
     editor.color = Util.makeHexColor(...color);
     editor.#opacity = data.opacity;
     const [pageWidth, pageHeight] = editor.pageDimensions;
-    editor.width = (rect[2] - rect[0]) / pageWidth;
-    editor.height = (rect[3] - rect[1]) / pageHeight;
+    editor.width = (trX - blX) / pageWidth;
+    editor.height = (trY - blY) / pageHeight;
     const boxes = editor.#boxes = [];
     for (let i = 0; i < quadPoints.length; i += 8) {
       boxes.push({
-        x: quadPoints[4] / pageWidth,
-        y: 1 - quadPoints[i + 5] / pageHeight,
+        x: (quadPoints[4] - trX) / pageWidth,
+        y: (trY - (1 - quadPoints[i + 5])) / pageHeight,
         width: (quadPoints[i + 2] - quadPoints[i]) / pageWidth,
         height: (quadPoints[i + 5] - quadPoints[i + 1]) / pageHeight
       });
@@ -15793,11 +16444,12 @@ class HighlightEditor extends AnnotationEditor {
       annotationType: AnnotationEditorType.HIGHLIGHT,
       color,
       opacity: this.#opacity,
-      quadPoints: this.#serializeBoxes(),
-      outlines: this.#serializeOutlines(),
+      thickness: this.#thickness,
+      quadPoints: this.#serializeBoxes(rect),
+      outlines: this.#serializeOutlines(rect),
       pageIndex: this.pageIndex,
       rect,
-      rotation: 0,
+      rotation: this.#getRotation(),
       structTreeParentId: this._structTreeParentId
     };
   }
@@ -15851,8 +16503,8 @@ class InkEditor extends AnnotationEditor {
     this.y = 0;
     this._willKeepAspectRatio = true;
   }
-  static initialize(l10n) {
-    AnnotationEditor.initialize(l10n);
+  static initialize(l10n, uiManager) {
+    AnnotationEditor.initialize(l10n, uiManager);
   }
   static updateDefaultParams(type, value) {
     switch (type) {
@@ -15887,16 +16539,15 @@ class InkEditor extends AnnotationEditor {
     return [[AnnotationEditorParamsType.INK_THICKNESS, this.thickness || InkEditor._defaultThickness], [AnnotationEditorParamsType.INK_COLOR, this.color || InkEditor._defaultColor || AnnotationEditor._defaultLineColor], [AnnotationEditorParamsType.INK_OPACITY, Math.round(100 * (this.opacity ?? InkEditor._defaultOpacity))]];
   }
   #updateThickness(thickness) {
+    const setThickness = th => {
+      this.thickness = th;
+      this.#fitToContent();
+    };
     const savedThickness = this.thickness;
     this.addCommands({
-      cmd: () => {
-        this.thickness = thickness;
-        this.#fitToContent();
-      },
-      undo: () => {
-        this.thickness = savedThickness;
-        this.#fitToContent();
-      },
+      cmd: setThickness.bind(this, thickness),
+      undo: setThickness.bind(this, savedThickness),
+      post: this._uiManager.updateUI.bind(this._uiManager, this),
       mustExec: true,
       type: AnnotationEditorParamsType.INK_THICKNESS,
       overwriteIfSameType: true,
@@ -15904,16 +16555,15 @@ class InkEditor extends AnnotationEditor {
     });
   }
   #updateColor(color) {
+    const setColor = col => {
+      this.color = col;
+      this.#redraw();
+    };
     const savedColor = this.color;
     this.addCommands({
-      cmd: () => {
-        this.color = color;
-        this.#redraw();
-      },
-      undo: () => {
-        this.color = savedColor;
-        this.#redraw();
-      },
+      cmd: setColor.bind(this, color),
+      undo: setColor.bind(this, savedColor),
+      post: this._uiManager.updateUI.bind(this._uiManager, this),
       mustExec: true,
       type: AnnotationEditorParamsType.INK_COLOR,
       overwriteIfSameType: true,
@@ -15921,17 +16571,16 @@ class InkEditor extends AnnotationEditor {
     });
   }
   #updateOpacity(opacity) {
+    const setOpacity = op => {
+      this.opacity = op;
+      this.#redraw();
+    };
     opacity /= 100;
     const savedOpacity = this.opacity;
     this.addCommands({
-      cmd: () => {
-        this.opacity = opacity;
-        this.#redraw();
-      },
-      undo: () => {
-        this.opacity = savedOpacity;
-        this.#redraw();
-      },
+      cmd: setOpacity.bind(this, opacity),
+      undo: setOpacity.bind(this, savedOpacity),
+      post: this._uiManager.updateUI.bind(this._uiManager, this),
       mustExec: true,
       type: AnnotationEditorParamsType.INK_OPACITY,
       overwriteIfSameType: true,
@@ -16458,6 +17107,13 @@ class InkEditor extends AnnotationEditor {
       const points = [];
       for (let j = 0, jj = bezier.length; j < jj; j++) {
         const [first, control1, control2, second] = bezier[j];
+        if (first[0] === second[0] && first[1] === second[1] && jj === 1) {
+          const p0 = s * first[0] + shiftX;
+          const p1 = s * first[1] + shiftY;
+          buffer.push(p0, p1);
+          points.push(p0, p1);
+          break;
+        }
         const p10 = s * first[0] + shiftX;
         const p11 = s * first[1] + shiftY;
         const p20 = s * control1[0] + shiftX;
@@ -16628,8 +17284,8 @@ class StampEditor extends AnnotationEditor {
     this.#bitmapUrl = params.bitmapUrl;
     this.#bitmapFile = params.bitmapFile;
   }
-  static initialize(l10n) {
-    AnnotationEditor.initialize(l10n);
+  static initialize(l10n, uiManager) {
+    AnnotationEditor.initialize(l10n, uiManager);
   }
   static get supportedTypes() {
     const types = ["apng", "avif", "bmp", "gif", "jpeg", "png", "svg+xml", "webp", "x-icon"];
@@ -17009,6 +17665,7 @@ class AnnotationEditorLayer {
   #boundPointerup = this.pointerup.bind(this);
   #boundPointerUpAfterSelection = this.pointerUpAfterSelection.bind(this);
   #boundPointerdown = this.pointerdown.bind(this);
+  #boundTextLayerPointerDown = this.#textLayerPointerDown.bind(this);
   #editorFocusTimeoutId = null;
   #boundSelectionStart = this.selectionStart.bind(this);
   #editors = new Map();
@@ -17034,7 +17691,7 @@ class AnnotationEditorLayer {
     if (!AnnotationEditorLayer._initialized) {
       AnnotationEditorLayer._initialized = true;
       for (const editorType of editorTypes) {
-        editorType.initialize(l10n);
+        editorType.initialize(l10n, uiManager);
       }
     }
     uiManager.registerEditorTypes(editorTypes);
@@ -17100,7 +17757,7 @@ class AnnotationEditorLayer {
         }
       }
     }
-    const editor = this.#createAndAddNewEditor({
+    const editor = this.createAndAddNewEditor({
       offsetX: 0,
       offsetY: 0
     }, false);
@@ -17195,11 +17852,34 @@ class AnnotationEditorLayer {
   enableTextSelection() {
     if (this.#textLayer?.div) {
       document.addEventListener("selectstart", this.#boundSelectionStart);
+      this.#textLayer.div.addEventListener("pointerdown", this.#boundTextLayerPointerDown);
+      this.#textLayer.div.classList.add("highlighting");
     }
   }
   disableTextSelection() {
     if (this.#textLayer?.div) {
       document.removeEventListener("selectstart", this.#boundSelectionStart);
+      this.#textLayer.div.removeEventListener("pointerdown", this.#boundTextLayerPointerDown);
+      this.#textLayer.div.classList.remove("highlighting");
+    }
+  }
+  #textLayerPointerDown(event) {
+    this.#uiManager.unselectAll();
+    if (event.target === this.#textLayer.div) {
+      const {
+        isMac
+      } = util_FeatureTest.platform;
+      if (event.button !== 0 || event.ctrlKey && isMac) {
+        return;
+      }
+      this.#textLayer.div.classList.add("free");
+      HighlightEditor.startHighlighting(this, this.#uiManager.direction === "ltr", event);
+      this.#textLayer.div.addEventListener("pointerup", () => {
+        this.#textLayer.div.classList.remove("free");
+      }, {
+        once: true
+      });
+      event.preventDefault();
     }
   }
   enableClick() {
@@ -17346,7 +18026,7 @@ class AnnotationEditorLayer {
   deserialize(data) {
     return AnnotationEditorLayer.#editorTypes.get(data.annotationType ?? data.annotationEditorType)?.deserialize(data, this, this.#uiManager) || null;
   }
-  #createAndAddNewEditor(event, isCentered, data = {}) {
+  createAndAddNewEditor(event, isCentered, data = {}) {
     const id = this.getNextId();
     const editor = this.#createNewEditor({
       parent: this,
@@ -17382,7 +18062,7 @@ class AnnotationEditorLayer {
     };
   }
   addNewEditor() {
-    this.#createAndAddNewEditor(this.#getCenterPoint(), true);
+    this.createAndAddNewEditor(this.#getCenterPoint(), true);
   }
   setSelected(editor) {
     this.#uiManager.setSelected(editor);
@@ -17468,7 +18148,7 @@ class AnnotationEditorLayer {
       boxes.push(rotator(x, y, width, height));
     }
     if (boxes.length !== 0) {
-      this.#createAndAddNewEditor(event, false, {
+      this.createAndAddNewEditor(event, false, {
         boxes
       });
     }
@@ -17496,7 +18176,7 @@ class AnnotationEditorLayer {
       this.#uiManager.unselectAll();
       return;
     }
-    this.#createAndAddNewEditor(event, false);
+    this.createAndAddNewEditor(event, false);
   }
   pointerdown(event) {
     if (this.#uiManager.getMode() === AnnotationEditorType.HIGHLIGHT) {
@@ -17589,6 +18269,9 @@ class AnnotationEditorLayer {
     } = this.viewport.rawDims;
     return [pageWidth, pageHeight];
   }
+  get scale() {
+    return this.#uiManager.viewParameters.realScale;
+  }
   setCleaningUp(isCleaningUp) {
     this.#isCleaningUp = isCleaningUp;
   }
@@ -17601,6 +18284,7 @@ class DrawLayer {
   #parent = null;
   #id = 0;
   #mapping = new Map();
+  #toUpdate = new Map();
   constructor({
     pageIndex
   }) {
@@ -17625,11 +18309,11 @@ class DrawLayer {
     return shadow(this, "_svgFactory", new DOMSVGFactory());
   }
   static #setBox(element, {
-    x,
-    y,
-    width,
-    height
-  }) {
+    x = 0,
+    y = 0,
+    width = 1,
+    height = 1
+  } = {}) {
     const {
       style
     } = element;
@@ -17644,20 +18328,7 @@ class DrawLayer {
     DrawLayer.#setBox(svg, box);
     return svg;
   }
-  highlight({
-    outlines,
-    box
-  }, color, opacity) {
-    const id = this.#id++;
-    const root = this.#createSVG(box);
-    root.classList.add("highlight");
-    const defs = DrawLayer._svgFactory.createElement("defs");
-    root.append(defs);
-    const path = DrawLayer._svgFactory.createElement("path");
-    defs.append(path);
-    const pathId = `path_p${this.pageIndex}_${id}`;
-    path.setAttribute("id", pathId);
-    path.setAttribute("d", DrawLayer.#extractPathFromHighlightOutlines(outlines));
+  #createClipPath(defs, pathId) {
     const clipPath = DrawLayer._svgFactory.createElement("clipPath");
     defs.append(clipPath);
     const clipPathId = `clip_${pathId}`;
@@ -17667,6 +18338,26 @@ class DrawLayer {
     clipPath.append(clipPathUse);
     clipPathUse.setAttribute("href", `#${pathId}`);
     clipPathUse.classList.add("clip");
+    return clipPathId;
+  }
+  highlight(outlines, color, opacity, isPathUpdatable = false) {
+    const id = this.#id++;
+    const root = this.#createSVG(outlines.box);
+    root.classList.add("highlight");
+    if (outlines.free) {
+      root.classList.add("free");
+    }
+    const defs = DrawLayer._svgFactory.createElement("defs");
+    root.append(defs);
+    const path = DrawLayer._svgFactory.createElement("path");
+    defs.append(path);
+    const pathId = `path_p${this.pageIndex}_${id}`;
+    path.setAttribute("id", pathId);
+    path.setAttribute("d", outlines.toSVGPath());
+    if (isPathUpdatable) {
+      this.#toUpdate.set(id, path);
+    }
+    const clipPathId = this.#createClipPath(defs, pathId);
     const use = DrawLayer._svgFactory.createElement("use");
     root.append(use);
     root.setAttribute("fill", color);
@@ -17678,12 +18369,9 @@ class DrawLayer {
       clipPathId: `url(#${clipPathId})`
     };
   }
-  highlightOutline({
-    outlines,
-    box
-  }) {
+  highlightOutline(outlines) {
     const id = this.#id++;
-    const root = this.#createSVG(box);
+    const root = this.#createSVG(outlines.box);
     root.classList.add("highlightOutline");
     const defs = DrawLayer._svgFactory.createElement("defs");
     root.append(defs);
@@ -17691,7 +18379,7 @@ class DrawLayer {
     defs.append(path);
     const pathId = `path_p${this.pageIndex}_${id}`;
     path.setAttribute("id", pathId);
-    path.setAttribute("d", DrawLayer.#extractPathFromHighlightOutlines(outlines));
+    path.setAttribute("d", outlines.toSVGPath());
     path.setAttribute("vector-effect", "non-scaling-stroke");
     const use1 = DrawLayer._svgFactory.createElement("use");
     root.append(use1);
@@ -17703,25 +18391,25 @@ class DrawLayer {
     this.#mapping.set(id, root);
     return id;
   }
-  static #extractPathFromHighlightOutlines(polygons) {
-    const buffer = [];
-    for (const polygon of polygons) {
-      let [prevX, prevY] = polygon;
-      buffer.push(`M${prevX} ${prevY}`);
-      for (let i = 2; i < polygon.length; i += 2) {
-        const x = polygon[i];
-        const y = polygon[i + 1];
-        if (x === prevX) {
-          buffer.push(`V${y}`);
-          prevY = y;
-        } else if (y === prevY) {
-          buffer.push(`H${x}`);
-          prevX = x;
-        }
-      }
-      buffer.push("Z");
-    }
-    return buffer.join(" ");
+  finalizeLine(id, line) {
+    const path = this.#toUpdate.get(id);
+    this.#toUpdate.delete(id);
+    this.updateBox(id, line.box);
+    path.setAttribute("d", line.toSVGPath());
+  }
+  updateLine(id, line) {
+    const root = this.#mapping.get(id);
+    const defs = root.firstChild;
+    const path = defs.firstChild;
+    this.updateBox(id, line.box);
+    path.setAttribute("d", line.toSVGPath());
+  }
+  removeFreeHighlight(id) {
+    this.remove(id);
+    this.#toUpdate.delete(id);
+  }
+  updatePath(id, line) {
+    this.#toUpdate.get(id).setAttribute("d", line.toSVGPath());
   }
   updateBox(id, box) {
     DrawLayer.#setBox(this.#mapping.get(id), box);
@@ -17770,8 +18458,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = '4.0.848';
-const pdfjsBuild = 'dad0cfc22';
+const pdfjsVersion = "4.1.567";
+const pdfjsBuild = "1bf5a36be";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;

@@ -2132,40 +2132,40 @@ const BaseException = function BaseExceptionClosure() {
   BaseException.constructor = BaseException;
   return BaseException;
 }();
-class PasswordException extends (/* unused pure expression or super */ null && (BaseException)) {
+class PasswordException extends BaseException {
   constructor(msg, code) {
     super(msg, "PasswordException");
     this.code = code;
   }
 }
-class UnknownErrorException extends (/* unused pure expression or super */ null && (BaseException)) {
+class UnknownErrorException extends BaseException {
   constructor(msg, details) {
     super(msg, "UnknownErrorException");
     this.details = details;
   }
 }
-class InvalidPDFException extends (/* unused pure expression or super */ null && (BaseException)) {
+class InvalidPDFException extends BaseException {
   constructor(msg) {
     super(msg, "InvalidPDFException");
   }
 }
-class MissingPDFException extends (/* unused pure expression or super */ null && (BaseException)) {
+class MissingPDFException extends BaseException {
   constructor(msg) {
     super(msg, "MissingPDFException");
   }
 }
-class UnexpectedResponseException extends (/* unused pure expression or super */ null && (BaseException)) {
+class UnexpectedResponseException extends BaseException {
   constructor(msg, status) {
     super(msg, "UnexpectedResponseException");
     this.status = status;
   }
 }
-class FormatError extends (/* unused pure expression or super */ null && (BaseException)) {
+class FormatError extends BaseException {
   constructor(msg) {
     super(msg, "FormatError");
   }
 }
-class AbortException extends (/* unused pure expression or super */ null && (BaseException)) {
+class AbortException extends BaseException {
   constructor(msg) {
     super(msg, "AbortException");
   }
@@ -6683,7 +6683,7 @@ __webpack_async_result__();
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ngxExtendedPdfViewerVersion: () => (/* binding */ ngxExtendedPdfViewerVersion)
 /* harmony export */ });
-const ngxExtendedPdfViewerVersion = '19.1.0';
+const ngxExtendedPdfViewerVersion = '19.2.0';
 
 /***/ }),
 
@@ -14832,7 +14832,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = '4.0.848';
+    const viewerVersion = '4.0.849';
     if (pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version !== viewerVersion) {
       throw new Error(`The API version "${pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -18704,8 +18704,8 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([web_
 
 
 
-const pdfjsVersion = '4.0.848';
-const pdfjsBuild = 'dad0cfc22';
+const pdfjsVersion = '4.0.849';
+const pdfjsBuild = 'b90c92ba7';
 const AppConstants = {
   LinkTarget: _pdf_link_service_js__WEBPACK_IMPORTED_MODULE_4__.LinkTarget,
   RenderingStates: _ui_utils_js__WEBPACK_IMPORTED_MODULE_2__.RenderingStates,
