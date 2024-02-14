@@ -293,8 +293,6 @@ pdfjs-editor-ink-button-label = 绘图
 pdfjs-editor-stamp-button =
     .title = 添加或编辑图像
 pdfjs-editor-stamp-button-label = 添加或编辑图像
-pdfjs-editor-remove-button =
-    .title = 移除
 pdfjs-editor-highlight-button =
     .title = 高亮
 pdfjs-editor-highlight-button-label = 高亮
@@ -321,6 +319,8 @@ pdfjs-editor-ink-opacity-input = 不透明度
 pdfjs-editor-stamp-add-image-button =
     .title = 添加图像
 pdfjs-editor-stamp-add-image-button-label = 添加图像
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = 粗细
 pdfjs-free-text =
     .aria-label = 文本编辑器
 pdfjs-free-text-default-content = 开始输入…
@@ -378,7 +378,6 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = 红色
 
-pdfjs-editor-free-highlight-thickness-input = Thickness
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.

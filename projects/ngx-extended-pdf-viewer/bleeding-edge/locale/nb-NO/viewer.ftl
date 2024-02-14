@@ -301,8 +301,6 @@ pdfjs-editor-ink-button-label = Tegn
 pdfjs-editor-stamp-button =
     .title = Legg til eller rediger bilder
 pdfjs-editor-stamp-button-label = Legg til eller rediger bilder
-pdfjs-editor-remove-button =
-    .title = Fjern
 
 ## Remove button for the various kind of editor.
 
@@ -326,6 +324,8 @@ pdfjs-editor-ink-opacity-input = Ugjennomsiktighet
 pdfjs-editor-stamp-add-image-button =
     .title = Legg til bilde
 pdfjs-editor-stamp-add-image-button-label = Legg til bilde
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = Tykkelse
 pdfjs-free-text =
     .aria-label = Tekstredigering
 pdfjs-free-text-default-content = Begynn å skrive…
@@ -386,7 +386,6 @@ pdfjs-editor-colorpicker-red =
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
-pdfjs-editor-free-highlight-thickness-input = Thickness
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.

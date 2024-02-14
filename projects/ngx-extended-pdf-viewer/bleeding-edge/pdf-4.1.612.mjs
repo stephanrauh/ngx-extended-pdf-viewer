@@ -138,7 +138,8 @@ const AnnotationEditorParamsType = {
   INK_OPACITY: 23,
   HIGHLIGHT_COLOR: 31,
   HIGHLIGHT_DEFAULT_COLOR: 32,
-  HIGHLIGHT_THICKNESS: 33
+  HIGHLIGHT_THICKNESS: 33,
+  HIGHLIGHT_FREE: 34
 };
 const PermissionFlag = {
   PRINT: 0x04,
@@ -2036,6 +2037,7 @@ class AnnotationEditorUIManager {
   #boundCut = this.cut.bind(this);
   #boundPaste = this.paste.bind(this);
   #boundKeydown = this.keydown.bind(this);
+  #boundKeyup = this.keyup.bind(this);
   #boundOnEditingAction = this.onEditingAction.bind(this);
   #boundOnPageChanging = this.onPageChanging.bind(this);
   #boundOnScaleChanging = this.onScaleChanging.bind(this);
@@ -2126,6 +2128,7 @@ class AnnotationEditorUIManager {
       realScale: PixelsPerInch.PDF_TO_CSS_UNITS,
       rotation: 0
     };
+    this.isShiftKeyDown = false;
   }
   destroy() {
     this.#removeKeyboardManager();
@@ -2228,6 +2231,7 @@ class AnnotationEditorUIManager {
     window.removeEventListener("blur", this.#boundBlur);
   }
   blur() {
+    this.isShiftKeyDown = false;
     if (!this.hasSelection) {
       return;
     }
@@ -2257,9 +2261,11 @@ class AnnotationEditorUIManager {
   }
   #addKeyboardManager() {
     window.addEventListener("keydown", this.#boundKeydown);
+    window.addEventListener("keyup", this.#boundKeyup);
   }
   #removeKeyboardManager() {
     window.removeEventListener("keydown", this.#boundKeydown);
+    window.removeEventListener("keyup", this.#boundKeyup);
   }
   #addCopyPasteListeners() {
     document.addEventListener("copy", this.#boundCopy);
@@ -2374,8 +2380,16 @@ class AnnotationEditorUIManager {
     }
   }
   keydown(event) {
+    if (!this.isShiftKeyDown && event.key === "Shift") {
+      this.isShiftKeyDown = true;
+    }
     if (!this.isEditorHandlingKeyboard) {
       AnnotationEditorUIManager._keyboardManager.exec(this, event);
+    }
+  }
+  keyup(event) {
+    if (this.isShiftKeyDown && event.key === "Shift") {
+      this.isShiftKeyDown = false;
     }
   }
   onEditingAction(details) {
@@ -4739,9 +4753,7 @@ class FontFaceObject {
 ;// CONCATENATED MODULE: ./src/display/node_utils.js
 
 
-;
 let fs, canvas, path2d_polyfill;
-;
 const node_utils_fetchData = function (url) {
   return new Promise((resolve, reject) => {
     fs.readFile(url, (error, data) => {
@@ -8528,15 +8540,17 @@ class OptionalContentConfig {
 
 
 class PDFDataTransportStream {
-  constructor({
-    length,
-    initialData,
-    progressiveDone = false,
-    contentDispositionFilename = null,
+  constructor(pdfDataRangeTransport, {
     disableRange = false,
     disableStream = false
-  }, pdfDataRangeTransport) {
+  }) {
     assert(pdfDataRangeTransport, 'PDFDataTransportStream - missing required "pdfDataRangeTransport" argument.');
+    const {
+      length,
+      initialData,
+      progressiveDone,
+      contentDispositionFilename
+    } = pdfDataRangeTransport;
     this._queuedChunks = [];
     this._progressiveDone = progressiveDone;
     this._contentDispositionFilename = contentDispositionFilename;
@@ -8550,27 +8564,27 @@ class PDFDataTransportStream {
     this._contentLength = length;
     this._fullRequestReader = null;
     this._rangeReaders = [];
-    this._pdfDataRangeTransport.addRangeListener((begin, chunk) => {
+    pdfDataRangeTransport.addRangeListener((begin, chunk) => {
       this._onReceiveData({
         begin,
         chunk
       });
     });
-    this._pdfDataRangeTransport.addProgressListener((loaded, total) => {
+    pdfDataRangeTransport.addProgressListener((loaded, total) => {
       this._onProgress({
         loaded,
         total
       });
     });
-    this._pdfDataRangeTransport.addProgressiveReadListener(chunk => {
+    pdfDataRangeTransport.addProgressiveReadListener(chunk => {
       this._onReceiveData({
         chunk
       });
     });
-    this._pdfDataRangeTransport.addProgressiveDoneListener(() => {
+    pdfDataRangeTransport.addProgressiveDoneListener(() => {
       this._onProgressiveDone();
     });
-    this._pdfDataRangeTransport.transportReady();
+    pdfDataRangeTransport.transportReady();
   }
   _onReceiveData({
     begin,
@@ -8984,7 +8998,6 @@ function validateResponseStatus(status) {
 ;// CONCATENATED MODULE: ./src/display/fetch_stream.js
 
 
-;
 function createFetchOptions(headers, withCredentials, abortController) {
   return {
     method: "GET",
@@ -9189,7 +9202,6 @@ class PDFFetchStreamRangeReader {
 ;// CONCATENATED MODULE: ./src/display/network.js
 
 
-;
 const OK_RESPONSE = 200;
 const PARTIAL_CONTENT_RESPONSE = 206;
 function network_getArrayBuffer(xhr) {
@@ -9596,7 +9608,6 @@ class PDFNetworkStreamRangeRequestReader {
 ;// CONCATENATED MODULE: ./src/display/node_stream.js
 
 
-;
 let node_stream_fs, http, https, url;
 const fileUriRegex = /^file:\/\/\/[a-zA-Z]:\//;
 function parseUrl(sourceUrl) {
@@ -10082,7 +10093,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: "4.1.567",
+    apiVersion: "4.1.612",
     data,
     password,
     disableAutoFetch,
@@ -10122,14 +10133,10 @@ function getDocument(src) {
     const networkStreamPromise = new Promise(function (resolve) {
       let networkStream;
       if (rangeTransport) {
-        networkStream = new PDFDataTransportStream({
-          length,
-          initialData: rangeTransport.initialData,
-          progressiveDone: rangeTransport.progressiveDone,
-          contentDispositionFilename: rangeTransport.contentDispositionFilename,
+        networkStream = new PDFDataTransportStream(rangeTransport, {
           disableRange,
           disableStream
-        }, rangeTransport);
+        });
       } else if (!data) {
         const createPDFNetworkStream = params => {
           if (isNodeJS) {
@@ -11843,8 +11850,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.1.567";
-const build = "1bf5a36be";
+const version = "4.1.612";
+const build = "7cae81d9f";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -15416,6 +15423,8 @@ class FreeOutliner {
   #isLTR;
   #top = [];
   #last = new Float64Array(18);
+  #lastX;
+  #lastY;
   #min;
   #min_dist;
   #scaleFactor;
@@ -15444,10 +15453,18 @@ class FreeOutliner {
   isEmpty() {
     return isNaN(this.#last[8]);
   }
+  #getLastCoords() {
+    const lastTop = this.#last.subarray(4, 6);
+    const lastBottom = this.#last.subarray(16, 18);
+    const [x, y, width, height] = this.#box;
+    return [(this.#lastX + (lastTop[0] - lastBottom[0]) / 2 - x) / width, (this.#lastY + (lastTop[1] - lastBottom[1]) / 2 - y) / height, (this.#lastX + (lastBottom[0] - lastTop[0]) / 2 - x) / width, (this.#lastY + (lastBottom[1] - lastTop[1]) / 2 - y) / height];
+  }
   add({
     x,
     y
   }) {
+    this.#lastX = x;
+    this.#lastY = y;
     const [layerX, layerY, layerWidth, layerHeight] = this.#box;
     let [x1, y1, x2, y2] = this.#last.subarray(8, 12);
     const diffX = x - x2;
@@ -15509,8 +15526,9 @@ class FreeOutliner {
     const lastTop = this.#last.subarray(4, 6);
     const lastBottom = this.#last.subarray(16, 18);
     const [x, y, width, height] = this.#box;
+    const [lastTopX, lastTopY, lastBottomX, lastBottomY] = this.#getLastCoords();
     if (isNaN(this.#last[6]) && !this.isEmpty()) {
-      return `M${(this.#last[2] - x) / width} ${(this.#last[3] - y) / height} L${(this.#last[4] - x) / width} ${(this.#last[5] - y) / height} L${(this.#last[16] - x) / width} ${(this.#last[17] - y) / height} L${(this.#last[14] - x) / width} ${(this.#last[15] - y) / height} Z`;
+      return `M${(this.#last[2] - x) / width} ${(this.#last[3] - y) / height} L${(this.#last[4] - x) / width} ${(this.#last[5] - y) / height} L${lastTopX} ${lastTopY} L${lastBottomX} ${lastBottomY} L${(this.#last[16] - x) / width} ${(this.#last[17] - y) / height} L${(this.#last[14] - x) / width} ${(this.#last[15] - y) / height} Z`;
     }
     const buffer = [];
     buffer.push(`M${top[4]} ${top[5]}`);
@@ -15521,7 +15539,7 @@ class FreeOutliner {
         buffer.push(`C${top[i]} ${top[i + 1]} ${top[i + 2]} ${top[i + 3]} ${top[i + 4]} ${top[i + 5]}`);
       }
     }
-    buffer.push(`L${(lastTop[0] - x) / width} ${(lastTop[1] - y) / height} L${(lastBottom[0] - x) / width} ${(lastBottom[1] - y) / height}`);
+    buffer.push(`L${(lastTop[0] - x) / width} ${(lastTop[1] - y) / height} L${lastTopX} ${lastTopY} L${lastBottomX} ${lastBottomY} L${(lastBottom[0] - x) / width} ${(lastBottom[1] - y) / height}`);
     for (let i = bottom.length - 6; i >= 6; i -= 6) {
       if (isNaN(bottom[i])) {
         buffer.push(`L${bottom[i + 4]} ${bottom[i + 5]}`);
@@ -15539,17 +15557,20 @@ class FreeOutliner {
     const lastTop = last.subarray(4, 6);
     const lastBottom = last.subarray(16, 18);
     const [layerX, layerY, layerWidth, layerHeight] = this.#box;
-    const points = new Float64Array(this.#points?.length ?? 0);
-    for (let i = 0, ii = points.length; i < ii; i += 2) {
+    const points = new Float64Array((this.#points?.length ?? 0) + 2);
+    for (let i = 0, ii = points.length - 2; i < ii; i += 2) {
       points[i] = (this.#points[i] - layerX) / layerWidth;
       points[i + 1] = (this.#points[i + 1] - layerY) / layerHeight;
     }
+    points[points.length - 2] = (this.#lastX - layerX) / layerWidth;
+    points[points.length - 1] = (this.#lastY - layerY) / layerHeight;
+    const [lastTopX, lastTopY, lastBottomX, lastBottomY] = this.#getLastCoords();
     if (isNaN(last[6]) && !this.isEmpty()) {
-      const outline = new Float64Array(24);
-      outline.set([NaN, NaN, NaN, NaN, (last[2] - layerX) / layerWidth, (last[3] - layerY) / layerHeight, NaN, NaN, NaN, NaN, (last[4] - layerX) / layerWidth, (last[5] - layerY) / layerHeight, NaN, NaN, NaN, NaN, (last[16] - layerX) / layerWidth, (last[17] - layerY) / layerHeight, NaN, NaN, NaN, NaN, (last[14] - layerX) / layerWidth, (last[15] - layerY) / layerHeight], 0);
+      const outline = new Float64Array(36);
+      outline.set([NaN, NaN, NaN, NaN, (last[2] - layerX) / layerWidth, (last[3] - layerY) / layerHeight, NaN, NaN, NaN, NaN, (last[4] - layerX) / layerWidth, (last[5] - layerY) / layerHeight, NaN, NaN, NaN, NaN, lastTopX, lastTopY, NaN, NaN, NaN, NaN, lastBottomX, lastBottomY, NaN, NaN, NaN, NaN, (last[16] - layerX) / layerWidth, (last[17] - layerY) / layerHeight, NaN, NaN, NaN, NaN, (last[14] - layerX) / layerWidth, (last[15] - layerY) / layerHeight], 0);
       return new FreeHighlightOutline(outline, points, this.#box, this.#scaleFactor, this.#innerMargin, this.#isLTR);
     }
-    const outline = new Float64Array(this.#top.length + 12 + this.#bottom.length);
+    const outline = new Float64Array(this.#top.length + 24 + this.#bottom.length);
     let N = top.length;
     for (let i = 0; i < N; i += 2) {
       if (isNaN(top[i])) {
@@ -15559,8 +15580,8 @@ class FreeOutliner {
       outline[i] = top[i];
       outline[i + 1] = top[i + 1];
     }
-    outline.set([NaN, NaN, NaN, NaN, (lastTop[0] - layerX) / layerWidth, (lastTop[1] - layerY) / layerHeight, NaN, NaN, NaN, NaN, (lastBottom[0] - layerX) / layerWidth, (lastBottom[1] - layerY) / layerHeight], N);
-    N += 12;
+    outline.set([NaN, NaN, NaN, NaN, (lastTop[0] - layerX) / layerWidth, (lastTop[1] - layerY) / layerHeight, NaN, NaN, NaN, NaN, lastTopX, lastTopY, NaN, NaN, NaN, NaN, lastBottomX, lastBottomY, NaN, NaN, NaN, NaN, (lastBottom[0] - layerX) / layerWidth, (lastBottom[1] - layerY) / layerHeight], N);
+    N += 24;
     for (let i = bottom.length - 6; i >= 6; i -= 6) {
       for (let j = 0; j < 6; j += 2) {
         if (isNaN(bottom[i + j])) {
@@ -15708,8 +15729,6 @@ class FreeHighlightOutline extends Outline {
       y = minY - this.#innerMargin,
       width = maxX - minX + 2 * this.#innerMargin,
       height = maxY - minY + 2 * this.#innerMargin;
-    lastPointX = (lastPointX - x) / width;
-    lastPointY = (lastPointY - y) / height;
     this.#bbox = {
       x,
       y,
@@ -16023,17 +16042,18 @@ class HighlightEditor extends AnnotationEditor {
       this.parent.drawLayer.finalizeLine(highlightId, highlightOutlines);
       this.#outlineId = this.parent.drawLayer.highlightOutline(this.#focusOutlines);
     } else if (this.parent) {
+      const angle = this.parent.viewport.rotation;
       this.parent.drawLayer.updateLine(this.#id, highlightOutlines);
+      this.parent.drawLayer.updateBox(this.#id, HighlightEditor.#rotateBbox(this.#highlightOutlines.box, (angle - this.rotation + 360) % 360));
       this.parent.drawLayer.updateLine(this.#outlineId, this.#focusOutlines);
+      this.parent.drawLayer.updateBox(this.#outlineId, HighlightEditor.#rotateBbox(this.#focusOutlines.box, angle));
     }
     const {
       x,
       y,
       width,
-      height,
-      lastPoint
+      height
     } = highlightOutlines.box;
-    this.#lastPoint = lastPoint;
     switch (this.rotation) {
       case 0:
         this.x = x;
@@ -16066,6 +16086,10 @@ class HighlightEditor extends AnnotationEditor {
           break;
         }
     }
+    const {
+      lastPoint
+    } = this.#focusOutlines.box;
+    this.#lastPoint = [(lastPoint[0] - x) / width, (lastPoint[1] - y) / height];
   }
   static initialize(l10n, uiManager) {
     AnnotationEditor.initialize(l10n, uiManager);
@@ -16099,7 +16123,7 @@ class HighlightEditor extends AnnotationEditor {
     return [[AnnotationEditorParamsType.HIGHLIGHT_DEFAULT_COLOR, HighlightEditor._defaultColor], [AnnotationEditorParamsType.HIGHLIGHT_THICKNESS, HighlightEditor._defaultThickness]];
   }
   get propertiesToUpdate() {
-    return [[AnnotationEditorParamsType.HIGHLIGHT_COLOR, this.color || HighlightEditor._defaultColor], [AnnotationEditorParamsType.HIGHLIGHT_THICKNESS, this.#thickness || HighlightEditor._defaultThickness]];
+    return [[AnnotationEditorParamsType.HIGHLIGHT_COLOR, this.color || HighlightEditor._defaultColor], [AnnotationEditorParamsType.HIGHLIGHT_THICKNESS, this.#thickness || HighlightEditor._defaultThickness], [AnnotationEditorParamsType.HIGHLIGHT_FREE, this.#isFreeHighlight]];
   }
   #updateColor(color) {
     const setColor = col => {
@@ -18076,10 +18100,26 @@ class AnnotationEditorLayer {
   unselect(editor) {
     this.#uiManager.unselect(editor);
   }
-  selectionStart(_event) {
-    this.#textLayer?.div.addEventListener("pointerup", this.#boundPointerUpAfterSelection, {
-      once: true
-    });
+  selectionStart(event) {
+    if (!this.#textLayer || event.target.parentElement.closest(".textLayer") !== this.#textLayer.div) {
+      return;
+    }
+    if (this.#uiManager.isShiftKeyDown) {
+      const keyup = () => {
+        if (this.#uiManager.isShiftKeyDown) {
+          return;
+        }
+        window.removeEventListener("keyup", keyup);
+        window.removeEventListener("blur", keyup);
+        this.pointerUpAfterSelection({});
+      };
+      window.addEventListener("keyup", keyup);
+      window.addEventListener("blur", keyup);
+    } else {
+      this.#textLayer.div.addEventListener("pointerup", this.#boundPointerUpAfterSelection, {
+        once: true
+      });
+    }
   }
   pointerUpAfterSelection(event) {
     const selection = document.getSelection();
@@ -18381,9 +18421,33 @@ class DrawLayer {
     path.setAttribute("id", pathId);
     path.setAttribute("d", outlines.toSVGPath());
     path.setAttribute("vector-effect", "non-scaling-stroke");
+    let maskId;
+    if (outlines.free) {
+      root.classList.add("free");
+      const mask = DrawLayer._svgFactory.createElement("mask");
+      defs.append(mask);
+      maskId = `mask_p${this.pageIndex}_${id}`;
+      mask.setAttribute("id", maskId);
+      mask.setAttribute("maskUnits", "objectBoundingBox");
+      const rect = DrawLayer._svgFactory.createElement("rect");
+      mask.append(rect);
+      rect.setAttribute("width", "1");
+      rect.setAttribute("height", "1");
+      rect.setAttribute("fill", "white");
+      const use = DrawLayer._svgFactory.createElement("use");
+      mask.append(use);
+      use.setAttribute("href", `#${pathId}`);
+      use.setAttribute("stroke", "none");
+      use.setAttribute("fill", "black");
+      use.setAttribute("fill-rule", "nonzero");
+      use.classList.add("mask");
+    }
     const use1 = DrawLayer._svgFactory.createElement("use");
     root.append(use1);
     use1.setAttribute("href", `#${pathId}`);
+    if (maskId) {
+      use1.setAttribute("mask", `url(#${maskId})`);
+    }
     const use2 = use1.cloneNode();
     root.append(use2);
     use1.classList.add("mainOutline");
@@ -18401,7 +18465,6 @@ class DrawLayer {
     const root = this.#mapping.get(id);
     const defs = root.firstChild;
     const path = defs.firstChild;
-    this.updateBox(id, line.box);
     path.setAttribute("d", line.toSVGPath());
   }
   removeFreeHighlight(id) {
@@ -18458,8 +18521,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.1.567";
-const pdfjsBuild = "1bf5a36be";
+const pdfjsVersion = "4.1.612";
+const pdfjsBuild = "7cae81d9f";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;

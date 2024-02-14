@@ -301,8 +301,9 @@ pdfjs-editor-ink-button-label = Dissen
 pdfjs-editor-stamp-button =
     .title = Zonte o modifiche imagjins
 pdfjs-editor-stamp-button-label = Zonte o modifiche imagjins
-pdfjs-editor-remove-button =
-    .title = Gjave
+pdfjs-editor-highlight-button =
+    .title = Evidenzie
+pdfjs-editor-highlight-button-label = Evidenzie
 
 ## Remove button for the various kind of editor.
 
@@ -326,6 +327,8 @@ pdfjs-editor-ink-opacity-input = Opacitât
 pdfjs-editor-stamp-add-image-button =
     .title = Zonte imagjin
 pdfjs-editor-stamp-add-image-button-label = Zonte imagjin
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = Spessôr
 pdfjs-free-text =
     .aria-label = Editôr di test
 pdfjs-free-text-default-content = Scomence a scrivi…
@@ -383,10 +386,6 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Ros
 
-pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
-pdfjs-editor-free-highlight-thickness-input = Thickness
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.

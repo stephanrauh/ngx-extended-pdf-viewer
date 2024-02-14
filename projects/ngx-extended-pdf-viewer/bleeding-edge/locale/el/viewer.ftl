@@ -301,8 +301,6 @@ pdfjs-editor-ink-button-label = Σχέδιο
 pdfjs-editor-stamp-button =
     .title = Προσθήκη ή επεξεργασία εικόνων
 pdfjs-editor-stamp-button-label = Προσθήκη ή επεξεργασία εικόνων
-pdfjs-editor-remove-button =
-    .title = Αφαίρεση
 pdfjs-editor-highlight-button =
     .title = Επισήμανση
 pdfjs-editor-highlight-button-label = Επισήμανση
@@ -329,6 +327,8 @@ pdfjs-editor-ink-opacity-input = Αδιαφάνεια
 pdfjs-editor-stamp-add-image-button =
     .title = Προσθήκη εικόνας
 pdfjs-editor-stamp-add-image-button-label = Προσθήκη εικόνας
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = Πάχος
 pdfjs-free-text =
     .aria-label = Επεξεργασία κειμένου
 pdfjs-free-text-default-content = Ξεκινήστε να πληκτρολογείτε…
@@ -386,7 +386,6 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Κόκκινο
 
-pdfjs-editor-free-highlight-thickness-input = Thickness
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.

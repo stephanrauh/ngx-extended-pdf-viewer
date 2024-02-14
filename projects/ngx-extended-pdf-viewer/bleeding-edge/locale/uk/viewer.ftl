@@ -303,8 +303,6 @@ pdfjs-editor-ink-button-label = Малювати
 pdfjs-editor-stamp-button =
     .title = Додати чи редагувати зображення
 pdfjs-editor-stamp-button-label = Додати чи редагувати зображення
-pdfjs-editor-remove-button =
-    .title = Вилучити
 pdfjs-editor-highlight-button =
     .title = Підсвітити
 pdfjs-editor-highlight-button-label = Підсвітити
@@ -331,6 +329,10 @@ pdfjs-editor-ink-opacity-input = Прозорість
 pdfjs-editor-stamp-add-image-button =
     .title = Додати зображення
 pdfjs-editor-stamp-add-image-button-label = Додати зображення
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = Товщина
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Змінюйте товщину під час підсвічування елементів, крім тексту
 pdfjs-free-text =
     .aria-label = Текстовий редактор
 pdfjs-free-text-default-content = Почніть вводити…
@@ -360,14 +362,14 @@ pdfjs-editor-alt-text-textarea =
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
 
-pdfjs-editor-resizer-label-top-left = Верхній лівий кут — зміна розміру
-pdfjs-editor-resizer-label-top-middle = Вгорі посередині — зміна розміру
-pdfjs-editor-resizer-label-top-right = Верхній правий кут — зміна розміру
-pdfjs-editor-resizer-label-middle-right = Праворуч посередині — зміна розміру
-pdfjs-editor-resizer-label-bottom-right = Нижній правий кут — зміна розміру
-pdfjs-editor-resizer-label-bottom-middle = Внизу посередині — зміна розміру
-pdfjs-editor-resizer-label-bottom-left = Нижній лівий кут — зміна розміру
-pdfjs-editor-resizer-label-middle-left = Ліворуч посередині — зміна розміру
+pdfjs-editor-resizer-label-top-left = Верхній лівий кут – зміна розміру
+pdfjs-editor-resizer-label-top-middle = Вгорі посередині – зміна розміру
+pdfjs-editor-resizer-label-top-right = Верхній правий кут – зміна розміру
+pdfjs-editor-resizer-label-middle-right = Праворуч посередині – зміна розміру
+pdfjs-editor-resizer-label-bottom-right = Нижній правий кут – зміна розміру
+pdfjs-editor-resizer-label-bottom-middle = Внизу посередині – зміна розміру
+pdfjs-editor-resizer-label-bottom-left = Нижній лівий кут – зміна розміру
+pdfjs-editor-resizer-label-middle-left = Ліворуч посередині – зміна розміру
 
 ## Color picker
 
@@ -388,8 +390,5 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Червоний
 
-pdfjs-editor-free-highlight-thickness-input = Thickness
-pdfjs-editor-free-highlight-thickness-title =
-    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

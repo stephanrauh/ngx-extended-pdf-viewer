@@ -332,6 +332,11 @@ pdfjs-editor-ink-opacity-input = Opacità
 pdfjs-editor-stamp-add-image-button =
     .title = Aggiungi immagine
 pdfjs-editor-stamp-add-image-button-label = Aggiungi immagine
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = Spessore
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Modifica lo spessore della selezione per elementi non testuali
+
 pdfjs-free-text =
     .aria-label = Editor di testo
 pdfjs-free-text-default-content = Inizia a digitare…
@@ -390,9 +395,6 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Rosso
 
-pdfjs-editor-free-highlight-thickness-input = Thickness
-pdfjs-editor-free-highlight-thickness-title =
-    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 

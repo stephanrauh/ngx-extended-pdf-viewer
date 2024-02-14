@@ -293,8 +293,9 @@ pdfjs-editor-ink-button-label = รูปวาด
 pdfjs-editor-stamp-button =
     .title = เพิ่มหรือแก้ไขภาพ
 pdfjs-editor-stamp-button-label = เพิ่มหรือแก้ไขภาพ
-pdfjs-editor-remove-button =
-    .title = เอาออก
+pdfjs-editor-highlight-button =
+    .title = เน้น
+pdfjs-editor-highlight-button-label = เน้น
 
 ## Remove button for the various kind of editor.
 
@@ -375,9 +376,6 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = แดง
 
-pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
 pdfjs-editor-free-highlight-thickness-input = Thickness
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text

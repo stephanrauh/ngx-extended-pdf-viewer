@@ -301,8 +301,6 @@ pdfjs-editor-ink-button-label = ਵਾਹੋ
 pdfjs-editor-stamp-button =
     .title = ਚਿੱਤਰ ਜੋੜੋ ਜਾਂ ਸੋਧੋ
 pdfjs-editor-stamp-button-label = ਚਿੱਤਰ ਜੋੜੋ ਜਾਂ ਸੋਧੋ
-pdfjs-editor-remove-button =
-    .title = ਹਟਾਓ
 pdfjs-editor-highlight-button =
     .title = ਹਾਈਲਾਈਟ
 pdfjs-editor-highlight-button-label = ਹਾਈਲਾਈਟ
@@ -329,6 +327,8 @@ pdfjs-editor-ink-opacity-input = ਧੁੰਦਲਾਪਨ
 pdfjs-editor-stamp-add-image-button =
     .title = ਚਿੱਤਰ ਜੋੜੋ
 pdfjs-editor-stamp-add-image-button-label = ਚਿੱਤਰ ਜੋੜੋ
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = ਮੋਟਾਈ
 pdfjs-free-text =
     .aria-label = ਲਿਖਤ ਐਡੀਟਰ
 pdfjs-free-text-default-content = …ਲਿਖਣਾ ਸ਼ੁਰੂ ਕਰੋ
@@ -386,7 +386,6 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = ਲਾਲ
 
-pdfjs-editor-free-highlight-thickness-input = Thickness
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
