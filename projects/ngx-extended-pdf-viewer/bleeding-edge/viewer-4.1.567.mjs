@@ -2133,40 +2133,40 @@ const BaseException = function BaseExceptionClosure() {
   BaseException.constructor = BaseException;
   return BaseException;
 }();
-class PasswordException extends (/* unused pure expression or super */ null && (BaseException)) {
+class PasswordException extends BaseException {
   constructor(msg, code) {
     super(msg, "PasswordException");
     this.code = code;
   }
 }
-class UnknownErrorException extends (/* unused pure expression or super */ null && (BaseException)) {
+class UnknownErrorException extends BaseException {
   constructor(msg, details) {
     super(msg, "UnknownErrorException");
     this.details = details;
   }
 }
-class InvalidPDFException extends (/* unused pure expression or super */ null && (BaseException)) {
+class InvalidPDFException extends BaseException {
   constructor(msg) {
     super(msg, "InvalidPDFException");
   }
 }
-class MissingPDFException extends (/* unused pure expression or super */ null && (BaseException)) {
+class MissingPDFException extends BaseException {
   constructor(msg) {
     super(msg, "MissingPDFException");
   }
 }
-class UnexpectedResponseException extends (/* unused pure expression or super */ null && (BaseException)) {
+class UnexpectedResponseException extends BaseException {
   constructor(msg, status) {
     super(msg, "UnexpectedResponseException");
     this.status = status;
   }
 }
-class FormatError extends (/* unused pure expression or super */ null && (BaseException)) {
+class FormatError extends BaseException {
   constructor(msg) {
     super(msg, "FormatError");
   }
 }
-class AbortException extends (/* unused pure expression or super */ null && (BaseException)) {
+class AbortException extends BaseException {
   constructor(msg) {
     super(msg, "AbortException");
   }
@@ -6677,7 +6677,7 @@ __webpack_async_result__();
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ngxExtendedPdfViewerVersion: () => (/* binding */ ngxExtendedPdfViewerVersion)
 /* harmony export */ });
-const ngxExtendedPdfViewerVersion = '19.2.0';
+const ngxExtendedPdfViewerVersion = '19.2.1';
 
 /***/ }),
 

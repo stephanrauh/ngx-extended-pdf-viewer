@@ -15,7 +15,7 @@ export class PdfOpenFileComponent {
   public showOpenFileButton: ResponsiveVisibility = true;
 
   public onClick = (htmlEvent: Event, secondaryToolbar: boolean) => {
-    if (!secondaryToolbar && this.pdfNotificationService.pdfjsVersion >= '4') {
+    if (!secondaryToolbar) {
       const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
       PDFViewerApplication?.eventBus?.dispatch('openfile', { source: window });
     }

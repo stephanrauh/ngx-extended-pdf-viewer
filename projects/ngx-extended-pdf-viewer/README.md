@@ -34,18 +34,18 @@ Version 19 updates to pdf.js 4.0, and that means breaking changes. I hope most o
 My promise of backward compatibility to roughly 3-4 version still holds, so I'm going to maintain version 18 for a while. I also hope that version 19 is compatible to Angular 14, 15, and 16, but at the moment, it's too early to promise anything.
 
 In a nutshell:
+
 - You're using Angular 16? Give ngx-extended-pdf-viewer 19 a try. My preliminary compatibility test indicates it's compatible. If it isn't, please tell me about it.
 - You're using Angular 15 or below? Stick to ngx-extended-pdf-viewer@18. But brace yourself for an update. Supporting two version simultaneously is painful to me, so I won't do this forever.
-- You've invested in the old i18n API, or you can't update because of a breaking change? Please tell me about your issue (for example, at https://github.com/stephanrauh/ngx-extended-pdf-viewer/discussions/1976). 
+- You've invested in the old i18n API, or you can't update because of a breaking change? Please tell me about your issue (for example, at https://github.com/stephanrauh/ngx-extended-pdf-viewer/discussions/1976).
 - You're using Angular 17 and can afford to start fresh? Go for version 19, including the alpha versions!
 
 Breaking changes of version 19:
+
 - The attribute `useBrowserLocale` and the inlined translations are gone.
 - Many translation keys have changed. If you're using custom translations, you'll need to update them and to migrate to the FTL format.
 
 ### What's the difference between the stable and the bleeding-edge version of pdf.js?
-
-In November 2023, the pdf.js team have published version 4.0.269, but the developer version still has the version number 4.0.x. So I suspect verson 4.0.269 is an intermediate release.
 
 The bleeding edge branch is the latest developer version of pdf.js (usually one to three weeks behind). In theory, this means it might be buggy, but the pdf.js teams manage to deliver a remarkable high quality. Most of the bugs of the bleeding-edge version are my bugs, usually caused by merging, and that's also the reason why I maintain this branch. It helps me to spot bugs early. I'm always happy when people use the bleeding-edge branch and report errors, as long as you keep in mind it's not intended to be used in production.
 
@@ -129,7 +129,7 @@ Would you like to participate in a popular open source-project? It's easy: just 
 - Responsive design that even includes your custom toolbars
 - Color theming
 
-Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 4.0.269, released in late November 2023. 
+Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 4.0.269, released in late November 2023.
 
 ## Alternatives
 

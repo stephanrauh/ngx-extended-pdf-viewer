@@ -513,7 +513,7 @@
 - 19.0.0-alpha.3 #1976 updated the compatibility promise: ngx-extended-pdf-viewer 19+ is incompatible to Angular 15 and below
 - 19.0.0-alpha.4 #1976 added the additional locales again and removed the attribute `useBrowserLocale`
 - 19.0.0-alpha.5 #1989 make sure that pages below the fold are rendered when `pageViewMode="infinite-scroll"`; #2011 added the HTML required by the new (still invisible) highlight editor of pdf.js
-- 19.0.0-alpha.6 #1961 now the schematics cops with stand-alone projects
+- 19.0.0-alpha.6 #1961 now the schematics copes with stand-alone projects
 - 19.0.0-alpha.7 #1997 added missing translations
 - 19.0.0 #1987 make the radio buttons of the secondary menu more reliable, and hide the secondary menu more reliably when it's empty; don't close the secondary menu when the "single page mode" menu is clicked
 - 19.0.1 #766 make book mode preloading more reliable
@@ -525,5 +525,4 @@
 - 19.0.7 #2096 fixed a bug that broke - among other things - printing of multi-page documents; #2091 added a forgotten event to the public API; #2081 fixed `(pagesLoaded)`
 - 19.1.0 #2099 updated to pdf.js 4.0.375; #2016 updated the CSS rules --> annotations can now be deleted
 - 19.2.0 #2116 inlined draw_layer_builder.scss because it wasn't loaded at all (might be a breaking change); #2071 initialize the event listeners even if `[src]="undefined` (might be a breaking change)
-- 19.2.1 dependency updates
-- 19.2.2 #2078 scrollIntoView() now works again even on high zoom levels
+- 19.2.1 dependency updates; #2078 scrollIntoView() now works again even on high zoom levels
