@@ -508,5 +508,6 @@
 - 18.1.10 #1979 fixed the declaration of `UpdateUIStateEvent`
 - 18.1.11 #1992 fixed the NaN% issue loading the zoom dropdown component
 - 18.1.12 #1989 make sure that pages below the fold are rendered when `pageViewMode="infinite-scroll"`
-- 18.1.13 reduced the size of the viewer.js file; removed the folder `images`` and the `additional-locale` from the distribution package; #1961 now the schematics cops with stand-alone projects
+- 18.1.13 reduced the size of the viewer.js file; removed the folder ` images`` and the  `additional-locale` from the distribution package; #1961 now the schematics cops with stand-alone projects
 - 18.1.14 #1961 now the schematics copes with stand-alone projects; #1987 make the radio buttons of the secondary menu more reliable, and hide the secondary menu more reliably when it's empty; don't close the secondary menu when the "single page mode" menu is clicked
+- 18.1.15 #2078 scrollIntoView() now works again even on high zoom levels
