@@ -33,6 +33,15 @@ export class PdfStampEditorComponent {
   }
 
   public onClick(): void {
-    document.getElementById('editorStamp')?.click();
+    const element = document.getElementById('editorStamp');
+
+    var clickEvent = new MouseEvent('click', {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+      detail: 1,
+    });
+
+    element?.dispatchEvent(clickEvent);
   }
 }

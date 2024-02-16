@@ -6486,7 +6486,7 @@ class GenericScripting {
       sandboxBundleSrc = sandboxBundleSrc();
     }
     this._ready = new Promise((resolve, reject) => {
-      const sandbox = import(/* webpackIgnore: true */ sandboxBundleSrc);
+      const sandbox = import( /*webpackIgnore: true*/sandboxBundleSrc);
       sandbox.then(pdfjsSandbox => {
         resolve(pdfjsSandbox.QuickJSSandbox());
       }).catch(reject);
@@ -6875,7 +6875,7 @@ const GenericL10n = null;
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ngxExtendedPdfViewerVersion: () => (/* binding */ ngxExtendedPdfViewerVersion)
 /* harmony export */ });
-const ngxExtendedPdfViewerVersion = '19.2.1';
+const ngxExtendedPdfViewerVersion = '19.2.2';
 
 /***/ }),
 
@@ -15028,7 +15028,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = "4.1.612";
+    const viewerVersion = "4.1.656";
     if (pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version !== viewerVersion) {
       throw new Error(`The API version "${pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -18886,8 +18886,8 @@ _app_js__WEBPACK_IMPORTED_MODULE_3__ = (__webpack_async_dependencies__.then ? (a
 
 
 
-const pdfjsVersion = "4.1.612";
-const pdfjsBuild = "7cae81d9f";
+const pdfjsVersion = "4.1.656";
+const pdfjsBuild = "e7bfd901e";
 const AppConstants = {
   LinkTarget: _pdf_link_service_js__WEBPACK_IMPORTED_MODULE_2__.LinkTarget,
   RenderingStates: _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.RenderingStates,

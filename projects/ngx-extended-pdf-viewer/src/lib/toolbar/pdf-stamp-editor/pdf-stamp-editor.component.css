@@ -2,9 +2,16 @@ button {
   padding: 0;
   height: 25px;
   background-color: transparent;
+  width: 100%;
 }
 
 button:focus {
   outline: none;
   border: none;
+}
+
+.align-image-to-text {
+  top: 3px;
+  position: relative;
+  padding-right: 4px;
 }

@@ -10093,7 +10093,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: "4.1.612",
+    apiVersion: "4.1.656",
     data,
     password,
     disableAutoFetch,
@@ -11080,7 +11080,7 @@ class PDFWorker {
       if (this.#mainThreadWorkerMessageHandler) {
         return this.#mainThreadWorkerMessageHandler;
       }
-      const worker = await import(/* webpackIgnore: true */ this.workerSrc);
+      const worker = await import( /*webpackIgnore: true*/this.workerSrc);
       return worker.WorkerMessageHandler;
     };
     return shadow(this, "_setupFakeWorkerGlobal", loader());
@@ -11850,8 +11850,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.1.612";
-const build = "7cae81d9f";
+const version = "4.1.656";
+const build = "e7bfd901e";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -18521,8 +18521,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.1.612";
-const pdfjsBuild = "7cae81d9f";
+const pdfjsVersion = "4.1.656";
+const pdfjsBuild = "e7bfd901e";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
