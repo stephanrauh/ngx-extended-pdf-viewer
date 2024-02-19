@@ -329,6 +329,8 @@ pdfjs-editor-stamp-add-image-button =
 pdfjs-editor-stamp-add-image-button-label = Προσθήκη εικόνας
 # This refers to the thickness of the line used for free highlighting (not bound to text)
 pdfjs-editor-free-highlight-thickness-input = Πάχος
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Αλλαγή πάχους κατά την επισήμανση στοιχείων εκτός κειμένου
 pdfjs-free-text =
     .aria-label = Επεξεργασία κειμένου
 pdfjs-free-text-default-content = Ξεκινήστε να πληκτρολογείτε…
@@ -386,7 +388,5 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Κόκκινο
 
-pdfjs-editor-free-highlight-thickness-title =
-    .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

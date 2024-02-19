@@ -39,11 +39,13 @@ else
   cp -R "../mypdf.js/build/minified/web/standard_fonts" ./projects/ngx-extended-pdf-viewer/$FOLDER
 
   cp -R ../mypdf.js/build/minified/build/pdf.* ./projects/ngx-extended-pdf-viewer/$FOLDER/
-  cp -R ../mypdf.js/build/minified/web/viewer.* ./projects/ngx-extended-pdf-viewer/$FOLDER/
-  cp -R ../mypdf.js/build/minified/web/viewer.min* ./projects/ngx-extended-pdf-viewer/$FOLDER/
+  cp -R ../mypdf.js/build/minified/web/viewer.*.mjs ./projects/ngx-extended-pdf-viewer/$FOLDER/
+  cp -R ../mypdf.js/build/minified/web/viewer.min*.mjs ./projects/ngx-extended-pdf-viewer/$FOLDER/
   cp -R ../mypdf.js/build/minified-legacy/build/pdf* ./projects/ngx-extended-pdf-viewer/$FOLDER/
-  cp -R ../mypdf.js/build/minified-legacy/web/viewer-* ./projects/ngx-extended-pdf-viewer/$FOLDER/
+  cp -R ../mypdf.js/build/minified-legacy/web/viewer-*.mjs ./projects/ngx-extended-pdf-viewer/$FOLDER/
   rm -R ./projects/ngx-extended-pdf-viewer/$FOLDER/*.d.mts
+  rm -R ./projects/ngx-extended-pdf-viewer/$FOLDER/*.html
+  rm -R ./projects/ngx-extended-pdf-viewer/$FOLDER/*.css
 
   cd addBaseLanguages
   # node index.js $FOLDER

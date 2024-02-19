@@ -8434,7 +8434,7 @@ class OptionalContentConfig {
       return true;
     }
     if (!group) {
-      warn("Optional content group not defined.");
+      info("Optional content group not defined.");
       return true;
     }
     if (group.type === "OCG") {
@@ -10093,7 +10093,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: "4.1.656",
+    apiVersion: "4.1.679",
     data,
     password,
     disableAutoFetch,
@@ -11850,8 +11850,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.1.656";
-const build = "e7bfd901e";
+const version = "4.1.679";
+const build = "62f576f7a";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -18521,8 +18521,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.1.656";
-const pdfjsBuild = "e7bfd901e";
+const pdfjsVersion = "4.1.679";
+const pdfjsBuild = "62f576f7a";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
