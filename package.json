@@ -10,7 +10,7 @@
     "issue": "npm run unix-package && rm -r ../../ngx-beyondjava/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../../ngx-beyondjava/node_modules/ngx-extended-pdf-viewer",
     "win-package": "npm run prebuild && ng b ngx-extended-pdf-viewer && rmdir dist /S && ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json",
     "release": "npm run unix-package && cd dist/ngx-extended-pdf-viewer && npm publish && cd .. && cd .. && ./createTag.sh && node ./increase-version-number.js",
-    "quick": "cd ../ngx-extended-pdf-viewer && ./quickUpdate.sh && npm run showcase && cd ../extended-pdf-viewer-showcase && npm run prebuild && ng s --host 0.0.0.0",
+    "quick": "cd ../ngx-extended-pdf-viewer && ./updateMozillasPdfViewer.sh quick && npm run showcase && cd ../extended-pdf-viewer-showcase && npm run prebuild && ng s --host 0.0.0.0",
     "full": "npm run prebuild && cd ../ngx-extended-pdf-viewer && ./updateMozillasPdfViewer.sh && npm run showcase && cd ../extended-pdf-viewer-showcase && npm run prebuild && ng s --host 0.0.0.0",
     "demo": "cd ../ngx-extended-pdf-viewer && ./updateMozillasPdfViewer.sh && npm run showcase && rm -f -r ../demo/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../demo/node_modules/ngx-extended-pdf-viewer && cd ../demo && ng s -o",
     "ts": "cd ../ngx-extended-pdf-viewer && npm run showcase && cd ../extended-pdf-viewer-showcase && ng s --host 0.0.0.0",

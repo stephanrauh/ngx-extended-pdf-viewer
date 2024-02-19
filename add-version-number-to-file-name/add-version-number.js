@@ -12,7 +12,6 @@ function fixVersionNumber(folder = 'assets', suffix = '.mjs') {
       pattern = /pdfjsVersion\s?=\s?\".+\"/g;
     }
 
-    console.log(pdfjs.match(pattern)[0]);
     let pdfjsVersion = pdfjs.match(pattern)[0].match(/[\'|\"].+?[\'|\"]/g)[0];
     pdfjsVersion = pdfjsVersion.substring(1, pdfjsVersion.length - 1);
     const pdfjsWorker = fs.readFileSync(f + 'pdf.worker' + suffix).toString();
@@ -23,24 +22,24 @@ function fixVersionNumber(folder = 'assets', suffix = '.mjs') {
       process.exit(-10);
     }
     fs.renameSync(f + 'pdf' + suffix, f + `pdf-${pdfjsVersion}${suffix}`);
-    fs.renameSync(f + 'pdf.min' + suffix, f + `pdf-${pdfjsVersion}.min${suffix}`);
     try {
+      fs.renameSync(f + 'pdf.min' + suffix, f + `pdf-${pdfjsVersion}.min${suffix}`);
       fs.renameSync(f + 'pdf-es5' + suffix, f + `pdf-${pdfjsVersion}-es5${suffix}`);
       fs.renameSync(f + 'pdf-es5.min' + suffix, f + `pdf-${pdfjsVersion}-es5.min${suffix}`);
     } catch (e) {
       console.log('ES5 files are missing');
     }
 
+    fs.renameSync(f + 'pdf.sandbox' + suffix, f + `pdf.sandbox-${pdfjsVersion}${suffix}`);
     try {
-      fs.renameSync(f + 'pdf.sandbox' + suffix, f + `pdf.sandbox-${pdfjsVersion}${suffix}`);
       fs.renameSync(f + 'pdf.sandbox.min' + suffix, f + `pdf.sandbox-${pdfjsVersion}.min${suffix}`);
       fs.renameSync(f + 'pdf.sandbox-es5' + suffix, f + `pdf.sandbox-${pdfjsVersion}-es5${suffix}`);
       fs.renameSync(f + 'pdf.sandbox-es5.min' + suffix, f + `pdf.sandbox-${pdfjsVersion}-es5.min${suffix}`);
     } catch (e) {}
 
     fs.renameSync(f + 'pdf.worker' + suffix, f + `pdf.worker-${pdfjsVersion}${suffix}`);
-    fs.renameSync(f + 'pdf.worker.min' + suffix, f + `pdf.worker-${pdfjsVersion}.min${suffix}`);
     try {
+      fs.renameSync(f + 'pdf.worker.min' + suffix, f + `pdf.worker-${pdfjsVersion}.min${suffix}`);
       fs.renameSync(f + 'pdf.worker-es5' + suffix, f + `pdf.worker-${pdfjsVersion}-es5${suffix}`);
       fs.renameSync(f + 'pdf.worker-es5.min' + suffix, f + `pdf.worker-${pdfjsVersion}-es5.min${suffix}`);
     } catch (e) {
@@ -48,8 +47,8 @@ function fixVersionNumber(folder = 'assets', suffix = '.mjs') {
     }
 
     fs.renameSync(f + 'viewer' + suffix, f + `viewer-${pdfjsVersion}${suffix}`);
-    fs.renameSync(f + 'viewer.min' + suffix, f + `viewer-${pdfjsVersion}.min${suffix}`);
     try {
+      fs.renameSync(f + 'viewer.min' + suffix, f + `viewer-${pdfjsVersion}.min${suffix}`);
       fs.renameSync(f + 'viewer-es5' + suffix, f + `viewer-${pdfjsVersion}-es5${suffix}`);
       fs.renameSync(f + 'viewer-es5.min' + suffix, f + `viewer-${pdfjsVersion}-es5.min${suffix}`);
     } catch (e) {

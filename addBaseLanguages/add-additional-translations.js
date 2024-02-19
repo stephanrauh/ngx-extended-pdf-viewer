@@ -21,7 +21,6 @@ function processOneLanguage(lang, shortcode) {
   }
 
   const englishFilename = '../projects/ngx-extended-pdf-viewer/' + folder + '/locale/en-US/viewer.ftl';
-  console.log(englishFilename);
   targetLang = addTranslationsFromAFile(englishFilename, targetLang);
 
   if (folder === 'assets') {
@@ -39,7 +38,6 @@ function processOneLanguage(lang, shortcode) {
   targetLang = addTranslationsFromAFile(additionalEnglishFilename, targetLang);
 
   if (originalLines !== targetLang) {
-    console.log('Writing ' + originalFilename);
     fs.writeFileSync(originalFilename, targetLang);
   }
 }
