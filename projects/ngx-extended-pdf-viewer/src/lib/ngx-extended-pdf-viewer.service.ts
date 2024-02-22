@@ -399,7 +399,7 @@ export class NgxExtendedPdfViewerService {
     if (pages.length > pageIndex && pageIndex >= 0) {
       const pageView = pages[pageIndex];
       const hasBeenRendered  = pageView.renderingState === 3;
-      return hasBeenRendered ;
+      return hasBeenRendered;
     }
     return false;
   }
