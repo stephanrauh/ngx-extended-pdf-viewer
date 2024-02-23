@@ -386,9 +386,9 @@ pdfjs-editor-colorpicker-red =
 pdfjs-editor-highlight-button =
     .title = Markeren
 pdfjs-editor-highlight-button-label = Markeren
-pdfjs-editor-free-highlight-thickness-input = Thickness
+pdfjs-editor-free-highlight-thickness-input = Dikte
 pdfjs-editor-free-highlight-thickness-title =
-    .title = Change thickness when highlighting items other than text
+    .title = Dikte wijzigen bij accentuering van andere items dan tekst
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 

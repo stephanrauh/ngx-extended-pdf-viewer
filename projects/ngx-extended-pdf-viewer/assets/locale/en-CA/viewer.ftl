@@ -310,6 +310,21 @@ pdfjs-ink-canvas =
 ## This is used in an aria label to help to understand the role of the resizer.
 
 
+pdfjs-editor-highlight-colorpicker-label = Highlight colour
+pdfjs-editor-colorpicker-button =
+    .title = Change colour
+pdfjs-editor-colorpicker-dropdown =
+    .aria-label = Colour choices
+pdfjs-editor-colorpicker-yellow =
+    .title = Yellow
+pdfjs-editor-colorpicker-green =
+    .title = Green
+pdfjs-editor-colorpicker-blue =
+    .title = Blue
+pdfjs-editor-colorpicker-pink =
+    .title = Pink
+pdfjs-editor-colorpicker-red =
+    .title = Red
 pdfjs-find-match-count =
     { $total ->
         [one] { $current } of { $total } match
@@ -355,21 +370,6 @@ pdfjs-editor-resizer-label-bottom-right = Bottom right corner — resize
 pdfjs-editor-resizer-label-bottom-middle = Bottom middle — resize
 pdfjs-editor-resizer-label-bottom-left = Bottom left corner — resize
 pdfjs-editor-resizer-label-middle-left = Middle left — resize
-pdfjs-editor-highlight-colorpicker-label = Highlight color
-pdfjs-editor-colorpicker-button =
-    .title = Change color
-pdfjs-editor-colorpicker-dropdown =
-    .aria-label = Color choices
-pdfjs-editor-colorpicker-yellow =
-    .title = Yellow
-pdfjs-editor-colorpicker-green =
-    .title = Green
-pdfjs-editor-colorpicker-blue =
-    .title = Blue
-pdfjs-editor-colorpicker-pink =
-    .title = Pink
-pdfjs-editor-colorpicker-red =
-    .title = Red
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 

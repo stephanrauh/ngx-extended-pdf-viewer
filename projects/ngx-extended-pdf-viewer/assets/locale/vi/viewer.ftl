@@ -376,10 +376,10 @@ pdfjs-editor-colorpicker-red =
     .title = Đỏ
 
 pdfjs-editor-highlight-button =
-    .title = Tô sáng
-pdfjs-editor-highlight-button-label = Tô sáng
-pdfjs-editor-free-highlight-thickness-input = Thickness
+    .title = Đánh dấu
+pdfjs-editor-highlight-button-label = Đánh dấu
+pdfjs-editor-free-highlight-thickness-input = Độ dày
 pdfjs-editor-free-highlight-thickness-title =
-    .title = Change thickness when highlighting items other than text
+    .title = Thay đổi độ dày khi đánh dấu các mục không phải là văn bản
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

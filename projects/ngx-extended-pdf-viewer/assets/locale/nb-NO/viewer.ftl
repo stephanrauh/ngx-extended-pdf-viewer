@@ -383,10 +383,10 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Rød
 
+pdfjs-editor-free-highlight-thickness-input = Tykkelse
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
-pdfjs-editor-free-highlight-thickness-input = Thickness
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.

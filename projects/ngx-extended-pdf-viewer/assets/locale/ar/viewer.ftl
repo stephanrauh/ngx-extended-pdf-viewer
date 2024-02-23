@@ -264,21 +264,21 @@ pdfjs-web-fonts-disabled = خطوط الوب مُعطّلة: تعذّر استخ
 
 
 pdfjs-save-button =
-    .title = Save
-pdfjs-save-button-label = Save
+    .title = احفظ
+pdfjs-save-button-label = احفظ
 pdfjs-download-button =
-    .title = Download
-pdfjs-download-button-label = Download
+    .title = نزّل
+pdfjs-download-button-label = نزّل
 pdfjs-open-in-app-button =
-    .title = Open in app
-pdfjs-open-in-app-button-label = Open in app
+    .title = افتح في تطبيق
+pdfjs-open-in-app-button-label = افتح في تطبيق
+pdfjs-find-match-diacritics-checkbox-label = طابِق الحركات
 pdfjs-scroll-page-button =
     .title = Use Page Scrolling
 pdfjs-scroll-page-button-label = Page Scrolling
 pdfjs-current-outline-item-button =
     .title = Find Current Outline Item
 pdfjs-current-outline-item-button-label = Current Outline Item
-pdfjs-find-match-diacritics-checkbox-label = Match Diacritics
 pdfjs-find-match-count =
     { $total ->
         [one] { $current } of { $total } match

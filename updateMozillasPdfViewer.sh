@@ -3,9 +3,11 @@ cd ../mypdf.js
 FOLDER="assets"
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 if [ "$BRANCH" == "bleeding-edge" ]; then
+echo "new"
   cd ../ngx-extended-pdf-viewer
   sh ./update-4.1-and-higher.sh
 else
+echo "old"
   rm -rf build
 
   gulp minified-legacy
@@ -39,7 +41,7 @@ else
   cp -R "../mypdf.js/build/minified/web/standard_fonts" ./projects/ngx-extended-pdf-viewer/$FOLDER
 
   cp -R ../mypdf.js/build/minified/build/pdf.* ./projects/ngx-extended-pdf-viewer/$FOLDER/
-  cp -R ../mypdf.js/build/minified/web/viewer.*.mjs ./projects/ngx-extended-pdf-viewer/$FOLDER/
+  cp -R ../mypdf.js/build/minified/web/viewer*.mjs ./projects/ngx-extended-pdf-viewer/$FOLDER/
   cp -R ../mypdf.js/build/minified/web/viewer.min*.mjs ./projects/ngx-extended-pdf-viewer/$FOLDER/
   cp -R ../mypdf.js/build/minified-legacy/build/pdf* ./projects/ngx-extended-pdf-viewer/$FOLDER/
   cp -R ../mypdf.js/build/minified-legacy/web/viewer-*.mjs ./projects/ngx-extended-pdf-viewer/$FOLDER/

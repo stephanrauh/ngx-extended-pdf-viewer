@@ -384,10 +384,10 @@ pdfjs-editor-colorpicker-red =
     .title = Cotschen
 
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
-pdfjs-editor-free-highlight-thickness-input = Thickness
+    .title = Marcar
+pdfjs-editor-highlight-button-label = Marcar
+pdfjs-editor-free-highlight-thickness-input = Grossezza
 pdfjs-editor-free-highlight-thickness-title =
-    .title = Change thickness when highlighting items other than text
+    .title = Midar la grossezza cun relevar elements betg textuals
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
