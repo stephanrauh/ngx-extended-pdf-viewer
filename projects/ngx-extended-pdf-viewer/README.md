@@ -40,6 +40,9 @@ In a nutshell:
 - You've invested in the old i18n API, or you can't update because of a breaking change? Please tell me about your issue (for example, at https://github.com/stephanrauh/ngx-extended-pdf-viewer/discussions/1976).
 - You're using Angular 17 and can afford to start fresh? Go for version 19, including the alpha versions!
 
+Breaking change of version 19.3.0:
+Danny Tram kindly added a bugfix to the method `NgxExtendedPdfViewerService.hasPageBeenRendered()`. Strictly speaking it's a breaking change because previously the method did the exact opposite of what the name indicates. However, it's still a bug fix, so I've decided to increase the minor version number only.
+
 Breaking changes of version 19:
 
 - The attribute `useBrowserLocale` and the inlined translations are gone.
