@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { AnnotationEditorEditorModeChangedEvent } from '../../events/annotation-editor-mode-changed-event';
 import { getVersionSuffix, pdfDefaultOptions } from '../../options/pdf-default-options';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
@@ -20,7 +20,7 @@ export class PdfStampEditorComponent {
     return getVersionSuffix(pdfDefaultOptions.assetsFolder);
   }
 
-  constructor(private notificationService: PDFNotificationService) {
+  constructor(private notificationService: PDFNotificationService, private cdr: ChangeDetectorRef) {
     const subscription = this.notificationService.onPDFJSInit.subscribe(() => {
       this.onPdfJsInit();
       subscription.unsubscribe();
@@ -29,7 +29,12 @@ export class PdfStampEditorComponent {
 
   private onPdfJsInit() {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.on('annotationeditormodechanged', ({ mode }: AnnotationEditorEditorModeChangedEvent) => (this.isSelected = mode === 13));
+    PDFViewerApplication.eventBus.on('annotationeditormodechanged', ({ mode }: AnnotationEditorEditorModeChangedEvent) => {
+      setTimeout(() => {
+        this.isSelected = mode === 13;
+        this.cdr.detectChanges();
+      });
+    });
   }
 
   public onClick(): void {
