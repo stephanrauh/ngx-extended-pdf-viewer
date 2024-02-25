@@ -1687,7 +1687,8 @@ function opacityToHex(opacity) {
 }
 class IdManager {
   #id = 0;
-  getId() {
+  constructor() {}
+  get id() {
     return `${AnnotationEditorPrefix}${this.#id++}`;
   }
 }
@@ -2022,8 +2023,8 @@ class AnnotationEditorUIManager {
   #editorsToRescale = new Set();
   #filterFactory = null;
   #focusMainContainerTimeoutId = null;
-  #hasSelection = false;
   #highlightColors = null;
+  #highlightWhenShiftUp = false;
   #idManager = new IdManager();
   #isEnabled = false;
   #isWaiting = false;
@@ -2269,8 +2270,7 @@ class AnnotationEditorUIManager {
   #selectionChange() {
     const selection = document.getSelection();
     if (!selection || selection.isCollapsed) {
-      if (this.#hasSelection) {
-        this.#hasSelection = false;
+      if (this.#selectedTextNode) {
         this.#selectedTextNode = null;
         this.#dispatchUpdateStates({
           hasSelectedText: false
@@ -2286,8 +2286,7 @@ class AnnotationEditorUIManager {
     }
     const anchorElement = anchorNode.nodeType === Node.TEXT_NODE ? anchorNode.parentElement : anchorNode;
     if (!anchorElement.closest(".textLayer")) {
-      if (this.#hasSelection) {
-        this.#hasSelection = false;
+      if (this.#selectedTextNode) {
         this.#selectedTextNode = null;
         this.#dispatchUpdateStates({
           hasSelectedText: false
@@ -2295,11 +2294,28 @@ class AnnotationEditorUIManager {
       }
       return;
     }
-    this.#hasSelection = true;
     this.#selectedTextNode = anchorNode;
     this.#dispatchUpdateStates({
       hasSelectedText: true
     });
+    if (this.#mode !== AnnotationEditorType.HIGHLIGHT) {
+      return;
+    }
+    this.#highlightWhenShiftUp = this.isShiftKeyDown;
+    if (!this.isShiftKeyDown) {
+      const pointerup = e => {
+        if (e.type === "pointerup" && e.button !== 0) {
+          return;
+        }
+        window.removeEventListener("pointerup", pointerup);
+        window.removeEventListener("blur", pointerup);
+        if (e.type === "pointerup") {
+          this.highlightSelection();
+        }
+      };
+      window.addEventListener("pointerup", pointerup);
+      window.addEventListener("blur", pointerup);
+    }
   }
   #addSelectionListener() {
     document.addEventListener("selectionchange", this.#boundSelectionChange);
@@ -2317,6 +2333,10 @@ class AnnotationEditorUIManager {
   }
   blur() {
     this.isShiftKeyDown = false;
+    if (this.#highlightWhenShiftUp) {
+      this.#highlightWhenShiftUp = false;
+      this.highlightSelection();
+    }
     if (!this.hasSelection) {
       return;
     }
@@ -2475,6 +2495,10 @@ class AnnotationEditorUIManager {
   keyup(event) {
     if (this.isShiftKeyDown && event.key === "Shift") {
       this.isShiftKeyDown = false;
+      if (this.#highlightWhenShiftUp) {
+        this.#highlightWhenShiftUp = false;
+        this.highlightSelection();
+      }
     }
   }
   onEditingAction(details) {
@@ -2529,7 +2553,7 @@ class AnnotationEditorUIManager {
     }
   }
   getId() {
-    return this.#idManager.getId();
+    return this.#idManager.id;
   }
   get currentLayer() {
     return this.#allLayers.get(this.#currentPageIndex);
@@ -10257,7 +10281,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: "4.1.682",
+    apiVersion: "4.1.700",
     data,
     password,
     disableAutoFetch,
@@ -12014,8 +12038,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.1.682";
-const build = "bfb3d3b23";
+const version = "4.1.700";
+const build = "482c452ab";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -17877,11 +17901,9 @@ class AnnotationEditorLayer {
   #allowClick = false;
   #annotationLayer = null;
   #boundPointerup = this.pointerup.bind(this);
-  #boundPointerUpAfterSelection = this.pointerUpAfterSelection.bind(this);
   #boundPointerdown = this.pointerdown.bind(this);
   #boundTextLayerPointerDown = this.#textLayerPointerDown.bind(this);
   #editorFocusTimeoutId = null;
-  #boundSelectionStart = this.selectionStart.bind(this);
   #editors = new Map();
   #hadPointerDown = false;
   #isCleaningUp = false;
@@ -18072,14 +18094,12 @@ class AnnotationEditorLayer {
   }
   enableTextSelection() {
     if (this.#textLayer?.div) {
-      document.addEventListener("selectstart", this.#boundSelectionStart);
       this.#textLayer.div.addEventListener("pointerdown", this.#boundTextLayerPointerDown);
       this.#textLayer.div.classList.add("highlighting");
     }
   }
   disableTextSelection() {
     if (this.#textLayer?.div) {
-      document.removeEventListener("selectstart", this.#boundSelectionStart);
       this.#textLayer.div.removeEventListener("pointerdown", this.#boundTextLayerPointerDown);
       this.#textLayer.div.classList.remove("highlighting");
     }
@@ -18296,36 +18316,6 @@ class AnnotationEditorLayer {
   }
   unselect(editor) {
     this.#uiManager.unselect(editor);
-  }
-  selectionStart(event) {
-    if (!this.#textLayer || event.target.parentElement.closest(".textLayer") !== this.#textLayer.div) {
-      return;
-    }
-    if (this.#uiManager.isShiftKeyDown) {
-      const keyup = () => {
-        if (this.#uiManager.isShiftKeyDown) {
-          return;
-        }
-        window.removeEventListener("keyup", keyup);
-        window.removeEventListener("blur", keyup);
-        this.pointerUpAfterSelection({});
-      };
-      window.addEventListener("keyup", keyup);
-      window.addEventListener("blur", keyup);
-    } else {
-      this.#textLayer.div.addEventListener("pointerup", this.#boundPointerUpAfterSelection, {
-        once: true
-      });
-    }
-  }
-  pointerUpAfterSelection(event) {
-    const boxes = this.#uiManager.getSelectionBoxes(this.#textLayer?.div);
-    if (boxes) {
-      this.createAndAddNewEditor(event, false, {
-        boxes
-      });
-      document.getSelection().empty();
-    }
   }
   pointerup(event) {
     const {
@@ -18654,8 +18644,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.1.682";
-const pdfjsBuild = "bfb3d3b23";
+const pdfjsVersion = "4.1.700";
+const pdfjsBuild = "482c452ab";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
