@@ -1,8 +1,8 @@
 import { Subject } from 'rxjs';
+import { EditorAnnotation, StampEditorAnnotation } from './options/editor-annotations';
 import { PdfLayer } from './options/optional_content_config';
 import { PDFPrintRange } from './options/pdf-print-range';
 import { IPDFViewerApplication, PDFDocumentProxy, TextItem, TextMarkedContent } from './options/pdf-viewer-application';
-import { EditorAnnotation } from './options/pdf-viewer';
 
 export interface FindOptions {
   highlightAll?: boolean;
@@ -42,7 +42,6 @@ export interface Section {
 }
 
 export class NgxExtendedPdfViewerService {
-
   public ngxExtendedPdfViewerInitialized = false;
 
   public recalculateSize$ = new Subject<void>();
@@ -398,10 +397,23 @@ export class NgxExtendedPdfViewerService {
     const pages = PDFViewerApplication.pdfViewer._pages;
     if (pages.length > pageIndex && pageIndex >= 0) {
       const pageView = pages[pageIndex];
-      const hasBeenRendered  = pageView.renderingState === 3;
+      const hasBeenRendered = pageView.renderingState === 3;
       return hasBeenRendered;
     }
     return false;
+  }
+
+  private sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  public async renderPage(pageIndex: number): Promise<void> {
+    if (!this.hasPageBeenRendered(pageIndex)) {
+      await this.addPageToRenderQueue(pageIndex);
+      while (!this.hasPageBeenRendered(pageIndex)) {
+        await this.sleep(7);
+      }
+    }
   }
 
   public currentlyRenderedPages(): Array<number> {
@@ -482,5 +494,57 @@ export class NgxExtendedPdfViewerService {
   public removeEditorAnnotations(filter?: (serialized: object) => boolean): void {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     PDFViewerApplication.pdfViewer.removeEditorAnnotations(filter);
+  }
+
+  private async loadImageAsDataURL(imageUrl: string): Promise<Blob | string> {
+    if (imageUrl.startsWith('data:')) {
+      return imageUrl;
+    }
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch the image from ${imageUrl}: ${response.statusText}`);
+    }
+
+    const imageBlob = await response.blob();
+    return imageBlob;
+  }
+
+  public async addImageToAnnotationLayer(
+    urlOrDataUrl: string,
+    page: number,
+    leftAsPercentage: number,
+    bottomAsPercentage: number,
+    rightAsPercentage: number,
+    topAsPercentage: number,
+    rotation: 0 | 90 | 180 | 270
+  ): Promise<void> {
+    await this.renderPage(page);
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const previousAnnotationEditorMode = PDFViewerApplication.pdfViewer.annotationEditorMode;
+    this.switchAnnotationEdtorMode(13);
+    const dataUrl = await this.loadImageAsDataURL(urlOrDataUrl);
+    const pageSize = PDFViewerApplication.pdfViewer._pages[page].pdfPage.view;
+    const left = pageSize[0];
+    const bottom = pageSize[1];
+    const right = pageSize[2];
+    const top = pageSize[3];
+    const width = right - left;
+    const height = top - bottom;
+
+    const stampAnnotation: StampEditorAnnotation = {
+      annotationType: 13,
+      pageIndex: page,
+      bitmapUrl: dataUrl,
+      rect: [(leftAsPercentage * width) / 100, (bottomAsPercentage * height) / 100, (rightAsPercentage * width) / 100, (topAsPercentage * height) / 100],
+      rotation,
+    };
+    this.addEditorAnnotation(stampAnnotation);
+    await this.sleep(10);
+    this.switchAnnotationEdtorMode(previousAnnotationEditorMode);
+  }
+
+  public switchAnnotationEdtorMode(mode: number): void {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    PDFViewerApplication.eventBus.dispatch('switchannotationeditormode', { mode });
   }
 }

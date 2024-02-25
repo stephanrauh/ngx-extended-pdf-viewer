@@ -29,6 +29,7 @@ export * from './lib/ngx-extended-pdf-viewer.component';
 export * from './lib/ngx-extended-pdf-viewer.module';
 export * from './lib/ngx-extended-pdf-viewer.service';
 export * from './lib/options/annotation-layer-builder';
+export * from './lib/options/editor-annotations';
 export * from './lib/options/link-target';
 export * from './lib/options/optional_content_config';
 export * from './lib/options/password-prompt';

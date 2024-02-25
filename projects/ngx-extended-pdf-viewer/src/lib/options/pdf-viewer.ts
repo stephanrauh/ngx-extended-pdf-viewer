@@ -1,3 +1,4 @@
+import { EditorAnnotation } from './editor-annotations';
 import { OptionalContentConfig } from './optional_content_config';
 import { PDFPageView } from './pdf_page_view';
 
@@ -24,35 +25,8 @@ export interface IPDFRenderingQueue {
   getHighestPriority(visiblePage: Array<any>, pages: Array<any>, scrolledDown: boolean, preRenderExtra: boolean);
 }
 
-export type FreeTextEditorAnnotation = {
-  annotationType: 3;
-  color: Array<number>; // an array of three integer numbers
-  fontSize: number;
-  value: string;
-  pageIndex: number;
-  rect: Array<number>; // rect[1] is the y position; rect[2] is the x position
-  rotation: 0 | 90 | 180 | 270; // in degrees
-};
-
-export type BezierPath = {
-  bezier: Array<number>;
-  points: Array<number>;
-};
-
-export type InkEditorAnnotation = {
-  annotationType: 15;
-  color: Array<number>; // an array of three integer numbers
-  thickness: number;
-  opacity: number;
-  paths: Array<BezierPath>;
-  pageIndex: number;
-  rect: Array<number>; // [left, bottom, right, top]
-  rotation: 0 | 90 | 180 | 270; // in degrees
-};
-
-export type EditorAnnotation = InkEditorAnnotation | FreeTextEditorAnnotation;
-
 export interface IPDFViewer {
+  annotationEditorMode: any;
   currentPageLabel: string | undefined;
   currentPageNumber: number;
   currentScaleValue: string | number;

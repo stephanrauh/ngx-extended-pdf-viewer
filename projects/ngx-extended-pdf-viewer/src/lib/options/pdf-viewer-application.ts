@@ -644,7 +644,7 @@ export interface PDFPageProxy {
    * @returns {PageViewport} Contains 'width' and 'height' properties
    *   along with transforms required for rendering.
    */
-  getViewport({ scale, rotation, offsetX, offsetY, dontFlip }?: GetViewportParameters): PageViewport;
+  getViewport({ scale, rotation, offsetX, offsetY, dontFlip }: GetViewportParameters): PageViewport;
   /**
    * @param {GetAnnotationsParameters} params - Annotation parameters.
    * @returns {Promise<Array<any>>} A promise that is resolved with an
