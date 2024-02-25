@@ -512,10 +512,10 @@ export class NgxExtendedPdfViewerService {
   public async addImageToAnnotationLayer(
     urlOrDataUrl: string,
     page: number,
-    leftAsPercentage: number,
-    bottomAsPercentage: number,
-    rightAsPercentage: number,
-    topAsPercentage: number,
+    left: number | string,
+    bottom: number | string,
+    right: number | string,
+    top: number | string,
     rotation: 0 | 90 | 180 | 270
   ): Promise<void> {
     await this.renderPage(page);
@@ -524,23 +524,41 @@ export class NgxExtendedPdfViewerService {
     this.switchAnnotationEdtorMode(13);
     const dataUrl = await this.loadImageAsDataURL(urlOrDataUrl);
     const pageSize = PDFViewerApplication.pdfViewer._pages[page].pdfPage.view;
-    const left = pageSize[0];
-    const bottom = pageSize[1];
-    const right = pageSize[2];
-    const top = pageSize[3];
-    const width = right - left;
-    const height = top - bottom;
+    const leftDim = pageSize[0];
+    const bottomDim = pageSize[1];
+    const rightDim = pageSize[2];
+    const topDim = pageSize[3];
+    const width = rightDim - leftDim;
+    const height = topDim - bottomDim;
+
+    const leftPdf = this.convertToPDFCoordinates(left, width);
+    const bottomPdf = this.convertToPDFCoordinates(bottom, height);
+    const rightPdf = this.convertToPDFCoordinates(right, width);
+    const topPdf = this.convertToPDFCoordinates(top, height);
 
     const stampAnnotation: StampEditorAnnotation = {
       annotationType: 13,
       pageIndex: page,
       bitmapUrl: dataUrl,
-      rect: [(leftAsPercentage * width) / 100, (bottomAsPercentage * height) / 100, (rightAsPercentage * width) / 100, (topAsPercentage * height) / 100],
+      rect: [leftPdf, bottomPdf, rightPdf, topPdf],
       rotation,
     };
+    console.log(stampAnnotation);
     this.addEditorAnnotation(stampAnnotation);
     await this.sleep(10);
     this.switchAnnotationEdtorMode(previousAnnotationEditorMode);
+  }
+
+  private convertToPDFCoordinates(top: string | number, height: number): number {
+    if (typeof top === 'string') {
+      if (top.endsWith('%')) {
+        return (parseInt(top, 10) / 100) * height;
+      } else {
+        return parseInt(top, 10);
+      }
+    } else {
+      return top;
+    }
   }
 
   public switchAnnotationEdtorMode(mode: number): void {
