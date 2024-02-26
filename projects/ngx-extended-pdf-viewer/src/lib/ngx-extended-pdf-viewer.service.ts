@@ -24,6 +24,16 @@ export interface PDFExportScaleFactor {
 
 type DirectionType = 'ltr' | 'rtl' | 'both' | undefined;
 
+export interface PdfImageParameters {
+  urlOrDataUrl: string;
+  page?: number;
+  left?: number | string;
+  bottom?: number | string;
+  right?: number | string;
+  top?: number | string;
+  rotation?: 0 | 90 | 180 | 270;
+}
+
 export interface Line {
   x: number;
   y: number;
@@ -509,17 +519,16 @@ export class NgxExtendedPdfViewerService {
     return imageBlob;
   }
 
-  public async addImageToAnnotationLayer(
-    urlOrDataUrl: string,
-    page: number,
-    left: number | string,
-    bottom: number | string,
-    right: number | string,
-    top: number | string,
-    rotation: 0 | 90 | 180 | 270
-  ): Promise<void> {
-    await this.renderPage(page);
+  public async addImageToAnnotationLayer({ urlOrDataUrl, page, left, bottom, right, top, rotation }: PdfImageParameters): Promise<void> {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+
+    if (page) {
+      if (page !== this.currentPageIndex()) {
+        await this.renderPage(page);
+      }
+    } else {
+      page = this.currentPageIndex();
+    }
     const previousAnnotationEditorMode = PDFViewerApplication.pdfViewer.annotationEditorMode;
     this.switchAnnotationEdtorMode(13);
     const dataUrl = await this.loadImageAsDataURL(urlOrDataUrl);
@@ -531,17 +540,17 @@ export class NgxExtendedPdfViewerService {
     const width = rightDim - leftDim;
     const height = topDim - bottomDim;
 
-    const leftPdf = this.convertToPDFCoordinates(left, width);
-    const bottomPdf = this.convertToPDFCoordinates(bottom, height);
-    const rightPdf = this.convertToPDFCoordinates(right, width);
-    const topPdf = this.convertToPDFCoordinates(top, height);
+    const leftPdf = this.convertToPDFCoordinates(left, width, 0);
+    const bottomPdf = this.convertToPDFCoordinates(bottom, height, 0);
+    const rightPdf = this.convertToPDFCoordinates(right, width, width);
+    const topPdf = this.convertToPDFCoordinates(top, height, height);
 
     const stampAnnotation: StampEditorAnnotation = {
       annotationType: 13,
       pageIndex: page,
       bitmapUrl: dataUrl,
       rect: [leftPdf, bottomPdf, rightPdf, topPdf],
-      rotation,
+      rotation: rotation ?? 0,
     };
     console.log(stampAnnotation);
     this.addEditorAnnotation(stampAnnotation);
@@ -549,15 +558,23 @@ export class NgxExtendedPdfViewerService {
     this.switchAnnotationEdtorMode(previousAnnotationEditorMode);
   }
 
-  private convertToPDFCoordinates(top: string | number, height: number): number {
-    if (typeof top === 'string') {
-      if (top.endsWith('%')) {
-        return (parseInt(top, 10) / 100) * height;
+  public currentPageIndex(): number {
+    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    return PDFViewerApplication.pdfViewer.currentPageNumber;
+  }
+
+  private convertToPDFCoordinates(value: string | number | undefined, maxValue: number, defaultValue: number): number {
+    if (!value) {
+      return defaultValue;
+    }
+    if (typeof value === 'string') {
+      if (value.endsWith('%')) {
+        return (parseInt(value, 10) / 100) * maxValue;
       } else {
-        return parseInt(top, 10);
+        return parseInt(value, 10);
       }
     } else {
-      return top;
+      return value;
     }
   }
 
