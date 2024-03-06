@@ -51,7 +51,6 @@ import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 import { UnitToPx } from './unit-to-px';
 
-import { TrustedTypesWindow } from 'trusted-types/lib';
 import { AnnotationEditorLayerRenderedEvent } from './events/annotation-editor-layer-rendered-event';
 import { AnnotationEditorEditorModeChangedEvent } from './events/annotation-editor-mode-changed-event';
 import { AnnotationLayerRenderedEvent } from './events/annotation-layer-rendered-event';
@@ -63,6 +62,7 @@ import { XfaLayerRenderedEvent } from './events/xfa-layer-rendered-event';
 import { NgxFormSupport } from './ngx-form-support';
 import { PdfSidebarView } from './options/pdf-sidebar-views';
 import { SpreadType } from './options/spread-type';
+import { PdfCspPolicyService } from './pdf-csp-policy.service';
 import { ResponsiveVisibility } from './responsive-visibility';
 
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
@@ -947,7 +947,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     private platformLocation: PlatformLocation,
     private cdr: ChangeDetectorRef,
     public service: NgxExtendedPdfViewerService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private pdfCspPolicyService: PdfCspPolicyService
   ) {
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
     this.service.recalculateSize$.subscribe(() => this.onResize());
@@ -1013,16 +1014,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const script = document.createElement('script');
     script.async = true;
     script.type = sourcePath.endsWith('.mjs') ? 'module' : 'text/javascript';
-    const ttWindow = window as unknown as TrustedTypesWindow;
-    if (ttWindow.trustedTypes) {
-      const sanitizer = ttWindow.trustedTypes.createPolicy('foo', {
-        createScriptURL: (input) => input,
-      });
-      script.src = sanitizer.createScriptURL(this.location.normalize(sourcePath)) as any;
-    } else {
-      script.src = this.location.normalize(sourcePath);
-    }
-
+    this.pdfCspPolicyService.addTrustedJavaScript(script, sourcePath);
     return script;
   }
 

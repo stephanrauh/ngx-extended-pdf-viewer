@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { addTrustedHTML as addSanitizedHTML } from '../sanitized-css-injector';
+import { PdfCspPolicyService } from '../../pdf-csp-policy.service';
 import { css } from './colors-css';
 
 @Component({
@@ -10,7 +10,7 @@ import { css } from './colors-css';
   // encapsulation: ViewEncapsulation.None,
 })
 export class PdfLightThemeComponent implements OnInit, OnDestroy {
-  constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: any) {}
+  constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: any, private pdfCspPolicyService: PdfCspPolicyService) {}
 
   public ngOnInit() {
     this.injectStyle();
@@ -19,7 +19,7 @@ export class PdfLightThemeComponent implements OnInit, OnDestroy {
   private injectStyle() {
     const styles = this.document.createElement('STYLE') as HTMLStyleElement;
     styles.id = 'pdf-theme-css';
-    addSanitizedHTML(styles, css);
+    this.pdfCspPolicyService.addTrustedHTML(styles, css);
     this.renderer.appendChild(this.document.head, styles);
   }
 

@@ -276,9 +276,6 @@ pdfjs-download-button-label = Download
 pdfjs-bookmark-button =
     .title = Current Page (View URL from Current Page)
 pdfjs-bookmark-button-label = Current Page
-pdfjs-open-in-app-button =
-    .title = Open in app
-pdfjs-open-in-app-button-label = Open in app
 pdfjs-find-match-count =
     { $total ->
         [one] { $current } of { $total } match

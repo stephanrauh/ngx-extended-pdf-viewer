@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { addTrustedHTML } from '../sanitized-css-injector';
+import { PdfCspPolicyService } from '../../pdf-csp-policy.service';
 import { css } from './pdf-acroform-default-colors-css';
 
 @Component({
@@ -15,7 +15,7 @@ import { css } from './pdf-acroform-default-colors-css';
   //  encapsulation: ViewEncapsulation.None,
 })
 export class PdfAcroformDefaultThemeComponent implements OnInit, OnDestroy {
-  constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: any) {}
+  constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: any, private pdfCspPolicyService: PdfCspPolicyService) {}
 
   public ngOnInit() {
     this.injectStyle();
@@ -24,7 +24,7 @@ export class PdfAcroformDefaultThemeComponent implements OnInit, OnDestroy {
   private injectStyle() {
     const styles = this.document.createElement('STYLE') as HTMLStyleElement;
     styles.id = 'pdf-acroform-css';
-    addTrustedHTML(styles, css);
+    this.pdfCspPolicyService.addTrustedHTML(styles, css);
     this.renderer.appendChild(this.document.head, styles);
   }
 

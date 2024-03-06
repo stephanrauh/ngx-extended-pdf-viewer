@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild } from '@angular/core';
-import { TrustedTypesWindow } from 'trusted-types/lib';
 import { PdfThumbnailDrawnEvent } from '../../../events/pdf-thumbnail-drawn-event';
+import { PdfCspPolicyService } from '../../../pdf-csp-policy.service';
 declare class PDFThumbnailView {
   anchor: HTMLAnchorElement;
   div: HTMLElement;
@@ -51,7 +51,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
     return `${top}px`;
   }
 
-  constructor() {
+  constructor(private pdfCspPolicyService: PdfCspPolicyService) {
     if (typeof window !== 'undefined') {
       (window as any).pdfThumbnailGeneratorReady = () => this.pdfThumbnailGeneratorReady();
       (window as any).pdfThumbnailGenerator = (
@@ -134,31 +134,9 @@ export class PdfSidebarContentComponent implements OnDestroy {
     return img;
   }
 
-  private getTrustedHtml(html: string) {
-    if (typeof window === 'undefined') {
-      // server-side rendering
-      return html;
-    }
-    const ttWindow = window as unknown as TrustedTypesWindow;
-    if (ttWindow.trustedTypes) {
-      // Create a policy that can create TrustedHTML values
-      // after sanitizing the input strings with DOMPurify library.
-      const sanitizer = ttWindow.trustedTypes.createPolicy('foo', {
-        createHTML: (input) => input,
-      });
-
-      return sanitizer.createHTML(html) as unknown as any; // Puts the sanitized value into the DOM.
-    } else {
-      return html;
-    }
-  }
-
   private createElementFromHTML(htmlString): HTMLElement {
     const div = document.createElement('div');
-    const trustedHtml = this.getTrustedHtml(htmlString.trim());
-    div.innerHTML = trustedHtml;
-
-    // Change this to div.childNodes to support multiple top-level nodes
+    this.pdfCspPolicyService.addTrustedHTML(div, htmlString);
     return div.firstChild as HTMLElement;
   }
 

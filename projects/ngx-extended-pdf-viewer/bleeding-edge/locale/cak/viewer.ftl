@@ -293,9 +293,6 @@ pdfjs-ink-canvas =
 pdfjs-download-button =
     .title = Download
 pdfjs-download-button-label = Download
-pdfjs-open-in-app-button =
-    .title = Open in app
-pdfjs-open-in-app-button-label = Open in app
 pdfjs-find-match-count =
     { $total ->
         [one] { $current } of { $total } match

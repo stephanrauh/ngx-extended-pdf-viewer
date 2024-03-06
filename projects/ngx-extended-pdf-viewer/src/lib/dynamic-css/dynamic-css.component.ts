@@ -1,7 +1,7 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { PdfCspPolicyService } from '../pdf-csp-policy.service';
 import { PdfBreakpoints } from '../responsive-visibility';
-import { addTrustedHTML } from '../theme/sanitized-css-injector';
 
 @Component({
   selector: 'pdf-dynamic-css',
@@ -194,7 +194,12 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   `;
   }
 
-  constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: Document, @Inject(PLATFORM_ID) private platformId) {
+  constructor(
+    private renderer: Renderer2,
+    @Inject(DOCUMENT) private document: Document,
+    @Inject(PLATFORM_ID) private platformId,
+    private pdfCspPolicyService: PdfCspPolicyService
+  ) {
     if (isPlatformBrowser(this.platformId)) {
       this.width = document.body.clientWidth;
     }
@@ -220,11 +225,12 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
     if (!styles) {
       styles = this.document.createElement('STYLE') as HTMLStyleElement;
       styles.id = 'pdf-dynamic-css';
-      addTrustedHTML(styles, this.style);
+      this.pdfCspPolicyService.addTrustedHTML(styles, this.style);
 
       this.renderer.appendChild(this.document.head, styles);
+    } else {
+      this.pdfCspPolicyService.addTrustedHTML(styles, this.style);
     }
-    addTrustedHTML(styles, this.style);
   }
 
   private injectStyle() {
