@@ -305,8 +305,6 @@ pdfjs-editor-ink-button-label = Riši
 pdfjs-editor-stamp-button =
     .title = Dodajanje ali urejanje slik
 pdfjs-editor-stamp-button-label = Dodajanje ali urejanje slik
-pdfjs-editor-remove-button =
-    .title = Odstrani
 pdfjs-editor-highlight-button =
     .title = Poudarek
 pdfjs-editor-highlight-button-label = Poudarek
@@ -333,6 +331,10 @@ pdfjs-editor-ink-opacity-input = Neprosojnost
 pdfjs-editor-stamp-add-image-button =
     .title = Dodaj sliko
 pdfjs-editor-stamp-add-image-button-label = Dodaj sliko
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = Debelina
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Spremeni debelino pri označevanju nebesedilnih elementov
 pdfjs-free-text =
     .aria-label = Urejevalnik besedila
 pdfjs-free-text-default-content = Začnite tipkati …
@@ -390,9 +392,7 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Rdeča
 
-pdfjs-editor-free-highlight-thickness-input = Thickness
-pdfjs-editor-free-highlight-thickness-title =
-    .title = Change thickness when highlighting items other than text
+pdfjs-editor-highlight-show-all-button-label = Show all
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 

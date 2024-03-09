@@ -319,6 +319,10 @@ pdfjs-editor-ink-opacity-input = ความทึบ
 pdfjs-editor-stamp-add-image-button =
     .title = เพิ่มภาพ
 pdfjs-editor-stamp-add-image-button-label = เพิ่มภาพ
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = ความหนา
+pdfjs-editor-free-highlight-thickness-title =
+    .title = เปลี่ยนความหนาเมื่อเน้นรายการอื่นๆ ที่ไม่ใช่ข้อความ
 pdfjs-free-text =
     .aria-label = ตัวแก้ไขข้อความ
 pdfjs-free-text-default-content = เริ่มพิมพ์…
@@ -376,8 +380,6 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = แดง
 
-pdfjs-editor-free-highlight-thickness-input = Thickness
-pdfjs-editor-free-highlight-thickness-title =
-    .title = Change thickness when highlighting items other than text
+pdfjs-editor-highlight-show-all-button-label = Show all
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

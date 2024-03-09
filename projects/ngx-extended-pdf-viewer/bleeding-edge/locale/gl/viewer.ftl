@@ -301,6 +301,18 @@ pdfjs-editor-ink-button-label = Debuxo
 pdfjs-editor-stamp-button =
     .title = Engadir ou editar imaxes
 pdfjs-editor-stamp-button-label = Engadir ou editar imaxes
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-freetext-button =
+    .title = Eliminar o texto
+pdfjs-editor-remove-stamp-button =
+    .title = Eliminar a imaxe
+pdfjs-editor-remove-highlight-button =
+    .title = Eliminar o resaltado
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Cor
 pdfjs-editor-free-text-size-input = Tamaño
@@ -310,6 +322,8 @@ pdfjs-editor-ink-opacity-input = Opacidade
 pdfjs-editor-stamp-add-image-button =
     .title = Engadir imaxe
 pdfjs-editor-stamp-add-image-button-label = Engadir imaxe
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = Grosor
 pdfjs-free-text =
     .aria-label = Editor de texto
 pdfjs-free-text-default-content = Comezar a teclear…
@@ -346,18 +360,14 @@ pdfjs-editor-resizer-label-bottom-middle = Abaixo medio: cambia o tamaño
 pdfjs-editor-resizer-label-bottom-left = Esquina inferior esquerda: cambia o tamaño
 pdfjs-editor-resizer-label-middle-left = Medio esquerdo: cambia o tamaño
 
+## Color picker
+
+
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
 pdfjs-editor-remove-ink-button =
     .title = Remove drawing
-pdfjs-editor-remove-freetext-button =
-    .title = Remove text
-pdfjs-editor-remove-stamp-button =
-    .title = Remove image
-pdfjs-editor-remove-highlight-button =
-    .title = Remove highlight
-pdfjs-editor-free-highlight-thickness-input = Thickness
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
 pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
@@ -377,5 +387,6 @@ pdfjs-editor-colorpicker-pink =
     .title = Pink
 pdfjs-editor-colorpicker-red =
     .title = Red
+pdfjs-editor-highlight-show-all-button-label = Show all
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
