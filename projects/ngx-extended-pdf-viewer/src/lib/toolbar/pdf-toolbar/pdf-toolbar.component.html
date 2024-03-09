@@ -67,14 +67,19 @@
       ></pdf-book-mode>
       <pdf-hand-tool [showHandToolButton]="showHandToolButton"></pdf-hand-tool>
       <pdf-select-tool [showSelectToolButton]="showHandToolButton"></pdf-select-tool>
-      <pdf-rotate-page [showRotateButton]="showRotateButton" [clockwise]="true" [counterClockwise]="false"> </pdf-rotate-page>
-      <pdf-rotate-page [showRotateButton]="showRotateButton" [clockwise]="false" [counterClockwise]="true"> </pdf-rotate-page>
+      <pdf-rotate-page-cw [showRotateCwButton]="showRotateCwButton"> </pdf-rotate-page-cw>
+      <pdf-rotate-page-ccw [showRotateCcwButton]="showRotateCcwButton"> </pdf-rotate-page-ccw>
       <pdf-presentation-mode [showPresentationModeButton]="showPresentationModeButton"></pdf-presentation-mode>
       <pdf-open-file [showOpenFileButton]="showOpenFileButton"></pdf-open-file>
       <pdf-print [showPrintButton]="showPrintButton"></pdf-print>
       <pdf-download [showDownloadButton]="showDownloadButton"></pdf-download>
 
-      <pdf-editor [showDrawEditor]="showDrawEditor" [showHighlightEditor]="showHighlightEditor" [showTextEditor]="showTextEditor" [showStampEditor]="showStampEditor"></pdf-editor>
+      <pdf-editor
+        [showDrawEditor]="showDrawEditor"
+        [showHighlightEditor]="showHighlightEditor"
+        [showTextEditor]="showTextEditor"
+        [showStampEditor]="showStampEditor"
+      ></pdf-editor>
       <pdf-toggle-secondary-toolbar [showSecondaryToolbarButton]="showSecondaryToolbarButton"> </pdf-toggle-secondary-toolbar>
     </div>
   </div>

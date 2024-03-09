@@ -696,7 +696,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   public showBookModeButton: ResponsiveVisibility = true;
 
   @Input()
-  public showRotateButton: ResponsiveVisibility = true;
+  public set showRotateButton(visibility: ResponsiveVisibility) {
+    this.showRotateCwButton = visibility;
+    this.showRotateCcwButton = visibility;
+  }
+
+  @Input()
+  public showRotateCwButton: ResponsiveVisibility = true;
+
+  @Input()
+  public showRotateCcwButton: ResponsiveVisibility = true;
 
   private _handTool = !isIOS();
 
@@ -2051,7 +2060,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         this.showPresentationModeButton ||
         this.showPrintButton ||
         this.showPropertiesButton ||
-        this.showRotateButton ||
+        this.showRotateCwButton ||
+        this.showRotateCcwButton ||
         this.showHandToolButton ||
         this.showScrollingButton ||
         this.showSpreadButton ||

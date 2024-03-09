@@ -3,11 +3,9 @@ cd ../mypdf.js
 FOLDER="assets"
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 if [ "$BRANCH" == "bleeding-edge" ]; then
-echo "new"
   cd ../ngx-extended-pdf-viewer
   sh ./update-4.1-and-higher.sh
 else
-echo "old"
   rm -rf build
 
   gulp minified-legacy

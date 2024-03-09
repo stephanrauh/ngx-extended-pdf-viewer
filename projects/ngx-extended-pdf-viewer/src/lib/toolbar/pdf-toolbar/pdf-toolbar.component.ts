@@ -52,7 +52,10 @@ export class PdfToolbarComponent implements AfterViewInit {
   public showPresentationModeButton: ResponsiveVisibility = false;
 
   @Input()
-  public showRotateButton: ResponsiveVisibility = true;
+  public showRotateCwButton: ResponsiveVisibility = true;
+
+  @Input()
+  public showRotateCcwButton: ResponsiveVisibility = true;
 
   @Input()
   public showSecondaryToolbarButton: ResponsiveVisibility = true;

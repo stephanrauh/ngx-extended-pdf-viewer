@@ -531,4 +531,4 @@
 - 19.4.0-alpha.0 #2148 update the buttons the annotation editor mode changes programmatically; add typing the the editor modes; added `NgxExtendedePdfViewerService.addImageToAnnotationLayer()` and several helper methods. Caveat: the API is going to change slightly
 - 19.4.0-alpha.1 #2148 update the buttons then the annotation editor mode changes programmatically; add typing the the editor modes
 - 19.4.0-alpha.2 #2148 allow to pass both native pdf.js coordinate and percentages to `NgxExtendedePdfViewerService.addImageToAnnotationLayer()`
-- 19.4.0-alpha.3 #2180 improve CSP (content security policy) support; allow to pass pixels to `NgxExtendedePdfViewerService.addImageToAnnotationLayer()`; #2179 restrict the file open dialog to PDF files
+- 19.4.0 #2180 improve CSP (content security policy) support; allow to pass pixels to `NgxExtendedePdfViewerService.addImageToAnnotationLayer()`; #2179 restrict the file open dialog to PDF files; #2168 split the `<pdf-rotate-page>` into `<pdf-rotate-page-cw>` and `<pdf-rotate-page-ccw>`

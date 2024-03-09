@@ -41,6 +41,7 @@ import { PdfMatchDiacriticsComponent } from './toolbar/pdf-findbar/pdf-findbar-o
 import { PdfFindbarComponent } from './toolbar/pdf-findbar/pdf-findbar.component';
 import { PdfSearchInputFieldComponent } from './toolbar/pdf-findbar/pdf-search-input-field/pdf-search-input-field.component';
 import { PdfHandToolComponent } from './toolbar/pdf-hand-tool/pdf-hand-tool.component';
+import { PdfHighlightEditorComponent } from './toolbar/pdf-highlight-editor/pdf-highlight-editor.component';
 import { PdfHorizontalScrollComponent } from './toolbar/pdf-horizontal-scroll/pdf-horizontal-scroll.component';
 import { PdfInfiniteScrollComponent } from './toolbar/pdf-infinite-scroll/pdf-infinite-scroll.component';
 import { PdfNoSpreadComponent } from './toolbar/pdf-no-spread/pdf-no-spread.component';
@@ -54,6 +55,8 @@ import { PdfPagingAreaComponent } from './toolbar/pdf-paging-area/pdf-paging-are
 import { PdfPreviousPageComponent } from './toolbar/pdf-paging-area/pdf-previous-page/pdf-previous-page.component';
 import { PdfPresentationModeComponent } from './toolbar/pdf-presentation-mode/pdf-presentation-mode.component';
 import { PdfPrintComponent } from './toolbar/pdf-print/pdf-print.component';
+import { PdfRotatePageCcwComponent } from './toolbar/pdf-rotate-page-ccw/pdf-rotate-page-ccw.component';
+import { PdfRotatePageCwComponent } from './toolbar/pdf-rotate-page-cw/pdf-rotate-page-cw.component';
 import { PdfRotatePageComponent } from './toolbar/pdf-rotate-page/pdf-rotate-page.component';
 import { PdfSelectToolComponent } from './toolbar/pdf-select-tool/pdf-select-tool.component';
 import { PdfShyButtonComponent } from './toolbar/pdf-shy-button/pdf-shy-button.component';
@@ -70,7 +73,6 @@ import { PdfZoomInComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-in/pdf-z
 import { PdfZoomOutComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-out/pdf-zoom-out.component';
 import { PdfZoomToolbarComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-toolbar.component';
 import { TranslatePipe } from './translate.pipe';
-import { PdfHighlightEditorComponent } from './toolbar/pdf-highlight-editor/pdf-highlight-editor.component';
 
 if (new Date().getTime() === 0) {
   new NgxConsole().log('');
@@ -251,6 +253,8 @@ if (typeof window !== 'undefined') {
     PdfPreviousPageComponent,
     PdfPrintComponent,
     PdfRotatePageComponent,
+    PdfRotatePageCwComponent,
+    PdfRotatePageCcwComponent,
     PdfSearchInputFieldComponent,
     PdfSecondaryToolbarComponent,
     PdfSelectToolComponent,
