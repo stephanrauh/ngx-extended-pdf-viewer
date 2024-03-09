@@ -528,7 +528,7 @@
 - 19.2.1 dependency updates; #2078 scrollIntoView() now works again even on high zoom levels
 - 19.2.2 #2138 stop opening the file dialog when opening the "stamp editor" menu - kudos to GitHub user BulletQQ for teaching me how to solve the issue! Also fixed the layout of the stamp editor popup menu
 - 19.3.0 #2165 fixed the method `NgxExtendedPdfViewerService.hasPageBeenRendered()`. Strictly speaking it's a breaking change because previously the method did the exact opposite of what the name indicates.
-- 19.4.0-alpha.0 #2148 update the buttons then the annotation editor mode changes programmatically; add typing the the editor modes; added `NgxExtendedePdfViewerService.addImageToAnnotationLayer()` and several helper methods. Caveat: the API is going to change slightly
-- 19.4.0-alpha.1 (todo)
-- 19.4.0-alpha.2 (todo)
-- 19.4.0-alpha.3 #2180 improve CSP (content security policy) support
+- 19.4.0-alpha.0 #2148 update the buttons the annotation editor mode changes programmatically; add typing the the editor modes; added `NgxExtendedePdfViewerService.addImageToAnnotationLayer()` and several helper methods. Caveat: the API is going to change slightly
+- 19.4.0-alpha.1 #2148 update the buttons then the annotation editor mode changes programmatically; add typing the the editor modes
+- 19.4.0-alpha.2 #2148 allow to pass both native pdf.js coordinate and percentages to `NgxExtendedePdfViewerService.addImageToAnnotationLayer()`
+- 19.4.0-alpha.3 #2180 improve CSP (content security policy) support; allow to pass pixels to `NgxExtendedePdfViewerService.addImageToAnnotationLayer()`; #2179 restrict the file open dialog to PDF files

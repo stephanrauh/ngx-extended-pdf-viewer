@@ -539,11 +539,13 @@ export class NgxExtendedPdfViewerService {
     const topDim = pageSize[3];
     const width = rightDim - leftDim;
     const height = topDim - bottomDim;
+    const imageWidth = PDFViewerApplication.pdfViewer._pages[page].div.clientWidth;
+    const imageHeight = PDFViewerApplication.pdfViewer._pages[page].div.clientHeight;
 
-    const leftPdf = this.convertToPDFCoordinates(left, width, 0);
-    const bottomPdf = this.convertToPDFCoordinates(bottom, height, 0);
-    const rightPdf = this.convertToPDFCoordinates(right, width, width);
-    const topPdf = this.convertToPDFCoordinates(top, height, height);
+    const leftPdf = this.convertToPDFCoordinates(left, width, 0, imageWidth);
+    const bottomPdf = this.convertToPDFCoordinates(bottom, height, 0, imageHeight);
+    const rightPdf = this.convertToPDFCoordinates(right, width, width, imageWidth);
+    const topPdf = this.convertToPDFCoordinates(top, height, height, imageHeight);
 
     const stampAnnotation: StampEditorAnnotation = {
       annotationType: 13,
@@ -552,7 +554,6 @@ export class NgxExtendedPdfViewerService {
       rect: [leftPdf, bottomPdf, rightPdf, topPdf],
       rotation: rotation ?? 0,
     };
-    console.log(stampAnnotation);
     this.addEditorAnnotation(stampAnnotation);
     await this.sleep(10);
     this.switchAnnotationEdtorMode(previousAnnotationEditorMode);
@@ -563,13 +564,15 @@ export class NgxExtendedPdfViewerService {
     return PDFViewerApplication.pdfViewer.currentPageNumber;
   }
 
-  private convertToPDFCoordinates(value: string | number | undefined, maxValue: number, defaultValue: number): number {
+  private convertToPDFCoordinates(value: string | number | undefined, maxValue: number, defaultValue: number, imageMaxValue: number): number {
     if (!value) {
       return defaultValue;
     }
     if (typeof value === 'string') {
       if (value.endsWith('%')) {
         return (parseInt(value, 10) / 100) * maxValue;
+      } else if (value.endsWith('px')) {
+        return parseInt(value, 10) * (maxValue / imageMaxValue);
       } else {
         return parseInt(value, 10);
       }
