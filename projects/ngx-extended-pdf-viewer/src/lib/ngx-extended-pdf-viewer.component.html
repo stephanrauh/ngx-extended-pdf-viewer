@@ -182,7 +182,14 @@
           <!-- dialogContainer -->
         </div>
         <!-- outerContainer -->
-        <input type="file" id="fileInput" class="hidden" [class.server-side-rendering]="serverSideRendering" />
+        <input
+          type="file"
+          id="fileInput"
+          accept=".pdf,application/pdf"
+          class="hidden"
+          [class.server-side-rendering]="serverSideRendering"
+          *ngIf="pdfJsVersion < '4.1'"
+        />
         <div id="printContainer"></div>
       </div>
     </div>
