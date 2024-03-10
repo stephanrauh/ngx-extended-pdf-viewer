@@ -1773,6 +1773,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           this.page = pages;
         }
         this.scrollSignatureWarningIntoView(pdfLoadedEvent.source.pdfDocument);
+        this.pdfLoaded.emit({ pagesCount: pdfLoadedEvent.source.pdfDocument?.numPages } as PdfLoadedEvent);
         if (this.findbarVisible) {
           PDFViewerApplication.findBar.open();
         }
@@ -1968,7 +1969,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       }
       options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
       await PDFViewerApplication.open(options);
-      this.pdfLoaded.emit({ pagesCount: PDFViewerApplication.pagesCount });
     } catch (error) {
       this.pdfLoadingFailed.emit(error);
     }
@@ -2424,19 +2424,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       const page = await pdf.getPage(i);
       const annotations = await page.getAnnotations();
 
-      annotations.forEach((a) => {
-        if (a.fieldType === 'Sig') {
-          this.ngZone.run(() => {
-            this.hasSignature = true;
-            setTimeout(() => {
-              const viewerContainer = document.querySelector('#viewerContainer') as HTMLElement;
-              viewerContainer.scrollBy(0, -32);
-            });
+      // Check if there is at least one 'Sig' fieldType in annotations
+      this.hasSignature = annotations.some((a) => a.fieldType === 'Sig');
+
+      if (this.hasSignature) {
+        this.ngZone.run(() => {
+          // Defer scrolling to ensure it happens after any other UI updates
+          setTimeout(() => {
+            const viewerContainer = document.querySelector('#viewerContainer');
+            viewerContainer?.scrollBy(0, -32); // Adjust the scroll position
           });
-        }
-      });
+        });
+        break; // stop looping through the pages as soon as we find a signature
+      }
     }
-    this.pdfLoaded.emit({ pagesCount: pdf?.numPages } as PdfLoadedEvent);
   }
 
   public async zoomToPageWidth(event: MouseEvent): Promise<void> {
