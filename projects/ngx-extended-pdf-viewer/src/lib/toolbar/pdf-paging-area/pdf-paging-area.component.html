@@ -1,9 +1,9 @@
 <div [class]="showPagingButtons | responsiveCSSClass : 'hiddenTinyView'" class="paging-left">
-  <pdf-first-page style="margin-right: -3px"></pdf-first-page>
-  <pdf-previous-page style="margin-left: -3px"></pdf-previous-page>
+  <pdf-first-page class="margin-right-correct"></pdf-first-page>
+  <pdf-previous-page class="margin-left-correct"></pdf-previous-page>
 </div>
 <pdf-page-number [class]="showPagingButtons | responsiveCSSClass : 'hiddenXXSView'"></pdf-page-number>
 <div [class]="showPagingButtons | responsiveCSSClass : 'hiddenTinyView'" class="paging-right">
-  <pdf-next-page style="margin-right: -3px; margin-left: -3px"></pdf-next-page>
-  <pdf-last-page style="margin-left: -3px"></pdf-last-page>
+  <pdf-next-page class="margin-right-correct margin-left-correct"></pdf-next-page>
+  <pdf-last-page class="margin-left-correct"></pdf-last-page>
 </div>

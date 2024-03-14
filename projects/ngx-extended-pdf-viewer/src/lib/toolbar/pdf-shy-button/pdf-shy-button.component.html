@@ -8,10 +8,10 @@
   [attr.data-l10n-id]="l10nId"
   [class.toggled]="toggled"
   [disabled]="disabled"
-  [innerHTML]="imageHtml"
   (click)="onClick($event)"
   [attr.aria-label]="title"
-  role="button"
+  role="buttonRef"
+  #botton
 >
   <ng-content *ngIf="!image" role="img" aria-hidden="true"></ng-content>
   <span [attr.data-l10n-id]="l10nLabel">{{ title }}</span>

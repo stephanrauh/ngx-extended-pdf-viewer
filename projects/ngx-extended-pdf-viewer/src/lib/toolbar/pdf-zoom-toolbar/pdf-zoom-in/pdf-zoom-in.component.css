@@ -3,3 +3,8 @@ button {
   margin-right: -2px !important;
   padding: 0;
 }
+
+.box24 {
+  width: 24px;
+  height: 24px;
+}

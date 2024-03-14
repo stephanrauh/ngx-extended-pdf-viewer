@@ -7,3 +7,7 @@ button.toolbarButton {
 div#toolbarSidebar > button:first-child {
   margin-left: 4px !important;
 }
+
+.margin-left-1px {
+  margin-left: 1px;
+}

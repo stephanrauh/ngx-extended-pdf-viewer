@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, CSP_NONCE, Inject, OnDestroy, OnInit, Optional, Renderer2 } from '@angular/core';
 import { PdfCspPolicyService } from '../../pdf-csp-policy.service';
 import { css } from './colors-css';
 
@@ -10,7 +10,12 @@ import { css } from './colors-css';
   // encapsulation: ViewEncapsulation.None,
 })
 export class PdfDarkThemeComponent implements OnInit, OnDestroy {
-  constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: any, private pdfCspPolicyService: PdfCspPolicyService) {}
+  constructor(
+    private renderer: Renderer2,
+    @Inject(DOCUMENT) private document: any,
+    private pdfCspPolicyService: PdfCspPolicyService,
+    @Inject(CSP_NONCE) @Optional() private nonce?: string | null
+  ) {}
 
   public ngOnInit() {
     this.injectStyle();
@@ -19,6 +24,11 @@ export class PdfDarkThemeComponent implements OnInit, OnDestroy {
   private injectStyle() {
     const styles = this.document.createElement('STYLE') as HTMLStyleElement;
     styles.id = 'pdf-theme-css';
+
+    if (this.nonce) {
+      styles.nonce = this.nonce;
+    }
+
     this.pdfCspPolicyService.addTrustedHTML(styles, css);
     this.renderer.appendChild(this.document.head, styles);
   }
