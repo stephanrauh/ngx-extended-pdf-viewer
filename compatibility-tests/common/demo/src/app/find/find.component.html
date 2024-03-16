@@ -15,8 +15,8 @@
     placeholder="search term"
   />
   <small *ngIf="findState !== undefined"
-    ><span style="margin-left: 24px">{{ findStateText }}</span>
-    <span style="margin-left: 24px" *ngIf="totalMatches && totalMatches > 0"
+    ><span class="margin-left-24px">{{ findStateText }}</span>
+    <span class="margin-left-24px" *ngIf="totalMatches && totalMatches > 0"
       >Result {{ currentMatchNumber }} of {{ totalMatches }}
     </span></small
   >
@@ -56,9 +56,9 @@
     id="matchDiacritics"
   />
   <label for="matchDiacritics"> match diacritics</label>
-  <small style="margin-left: 24px">(try "licao" to find "lição")</small>
+  <small class="margin-left-24px">(try "licao" to find "lição")</small>
 </section>
-<section class="section" style="margin-top: 5px; margin-bottom: 10px">
+<section class="section button-box">
   <button id="gotoNextPage" (click)="findNext()">next</button>
   <button id="gotoPreviousPage" (click)="findPrevious()" style="margin-left: 10px">previous</button>
 </section>

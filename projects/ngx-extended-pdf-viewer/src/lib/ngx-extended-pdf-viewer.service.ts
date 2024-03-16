@@ -1,4 +1,5 @@
 import { Subject } from 'rxjs';
+import { Injectable, Renderer2 } from '@angular/core';
 import { EditorAnnotation, StampEditorAnnotation } from './options/editor-annotations';
 import { PdfLayer } from './options/optional_content_config';
 import { PDFPrintRange } from './options/pdf-print-range';
@@ -51,12 +52,19 @@ export interface Section {
   lines: Array<Line>;
 }
 
+@Injectable({
+  providedIn: 'root',
+})
 export class NgxExtendedPdfViewerService {
   public ngxExtendedPdfViewerInitialized = false;
 
   public recalculateSize$ = new Subject<void>();
 
   public secondaryMenuIsEmpty = false;
+
+  constructor(
+    private renderer: Renderer2
+  ) {}
 
   public find(text: string, options: FindOptions = {}): boolean {
     if (!this.ngxExtendedPdfViewerInitialized) {
@@ -325,8 +333,8 @@ export class NgxExtendedPdfViewerService {
 
     canvas.width = width;
     canvas.height = height;
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
+    this.renderer.setStyle(canvas, 'width', `${width}px`);
+    this.renderer.setStyle(canvas, 'height', `${height}px`);
 
     return { ctx, canvas };
   }

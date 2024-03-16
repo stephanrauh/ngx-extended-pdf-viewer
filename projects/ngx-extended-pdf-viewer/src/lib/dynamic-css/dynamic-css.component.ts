@@ -1,5 +1,5 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { Component, CSP_NONCE, Inject, Input, OnChanges, OnDestroy, OnInit, Optional, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { PdfCspPolicyService } from '../pdf-csp-policy.service';
 import { PdfBreakpoints } from '../responsive-visibility';
 
@@ -47,6 +47,14 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
 #outerContainer #mainContainer .visibleXLView,
 #outerContainer #mainContainer .visibleXXLView {
   display: none;
+}
+
+.pdf-margin-top-3px {
+  margin-top: 3px;
+}
+
+.pdf-margin-top--2px {
+  margin-top: -2px;
 }
 
 @media all and (max-width: ${this.xl}px) {
@@ -198,7 +206,8 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
     private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document,
     @Inject(PLATFORM_ID) private platformId,
-    private pdfCspPolicyService: PdfCspPolicyService
+    private pdfCspPolicyService: PdfCspPolicyService,
+    @Inject(CSP_NONCE) @Optional() private nonce?: string | null
   ) {
     if (isPlatformBrowser(this.platformId)) {
       this.width = document.body.clientWidth;
@@ -226,6 +235,10 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
       styles = this.document.createElement('STYLE') as HTMLStyleElement;
       styles.id = 'pdf-dynamic-css';
       this.pdfCspPolicyService.addTrustedHTML(styles, this.style);
+
+      if (this.nonce) {
+        styles.nonce = this.nonce;
+      }
 
       this.renderer.appendChild(this.document.head, styles);
     } else {

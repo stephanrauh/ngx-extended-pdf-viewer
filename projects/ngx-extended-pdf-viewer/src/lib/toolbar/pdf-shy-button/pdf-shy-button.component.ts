@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { ResponsiveCSSClass } from '../../responsive-visibility';
@@ -47,6 +47,8 @@ export class PdfShyButtonComponent implements OnInit, OnChanges {
 
   @Input()
   public onlySecondaryMenu: boolean = false;
+
+  @ViewChild('buttonRef', { static: false }) buttonRef: ElementRef;
 
   private _imageHtml: SafeHtml;
 
@@ -135,12 +137,18 @@ export class PdfShyButtonComponent implements OnInit, OnChanges {
       throw new Error('Illegal image for PDFShyButton. Only SVG images are allowed. Please use only the tags <svg> and <path>. ' + value);
     }
     this._imageHtml = this.sanitizeHtml(value);
+    this.updateButtonImage();
   }
 
-  constructor(private pdfShyButtonServiceService: PdfShyButtonService, private sanitizer: DomSanitizer) {}
+  constructor(
+    private pdfShyButtonServiceService: PdfShyButtonService,
+    private sanitizer: DomSanitizer,
+    private renderer: Renderer2
+  ) {}
 
   public ngOnInit(): void {
     this.pdfShyButtonServiceService.add(this);
+    this.updateButtonImage();
   }
 
   public ngOnChanges(changes: any): void {
@@ -159,6 +167,20 @@ export class PdfShyButtonComponent implements OnInit, OnChanges {
       const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
       PDFViewerApplication.eventBus.dispatch(this.eventBusName);
       htmlEvent.preventDefault();
+    }
+  }
+
+  public updateButtonImage() {
+    if (this.buttonRef) {
+      const el = this.buttonRef.nativeElement;
+      if (this._imageHtml) {
+        this.renderer.appendChild(el, this._imageHtml);
+      } else {
+        const childNodes = el.childNodes;
+        for (let child of childNodes) {
+          this.renderer.removeChild(el, child);
+        }
+      }
     }
   }
 }

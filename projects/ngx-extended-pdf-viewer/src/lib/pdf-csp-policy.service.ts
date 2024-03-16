@@ -24,9 +24,9 @@ export class PdfCspPolicyService {
       return;
     }
     if (this.sanitizer) {
-      styles.innerHTML = this.sanitizer.createHTML(css) as unknown as any;
+      styles.textContent = this.sanitizer.createHTML(css) as unknown as any;
     } else {
-      styles.innerHTML = css;
+      styles.textContent = css;
     }
   }
 
