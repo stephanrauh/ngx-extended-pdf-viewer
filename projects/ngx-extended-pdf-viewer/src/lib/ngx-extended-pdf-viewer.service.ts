@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { Renderer2 } from '@angular/core';
+import { Injectable, Renderer2 } from '@angular/core';
 import { EditorAnnotation, StampEditorAnnotation } from './options/editor-annotations';
 import { PdfLayer } from './options/optional_content_config';
 import { PDFPrintRange } from './options/pdf-print-range';
@@ -52,6 +52,9 @@ export interface Section {
   lines: Array<Line>;
 }
 
+@Injectable({
+  providedIn: 'root',
+})
 export class NgxExtendedPdfViewerService {
   public ngxExtendedPdfViewerInitialized = false;
 
