@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild } from '@angular/core';
 import { PdfThumbnailDrawnEvent } from '../../../events/pdf-thumbnail-drawn-event';
 import { PdfCspPolicyService } from '../../../pdf-csp-policy.service';
 declare class PDFThumbnailView {
@@ -51,7 +51,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
     return `${top}px`;
   }
 
-  constructor(private pdfCspPolicyService: PdfCspPolicyService, private renderer: Renderer2) {
+  constructor(private pdfCspPolicyService: PdfCspPolicyService) {
     if (typeof window !== 'undefined') {
       (window as any).pdfThumbnailGeneratorReady = () => this.pdfThumbnailGeneratorReady();
       (window as any).pdfThumbnailGenerator = (
