@@ -1,5 +1,5 @@
+import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Injectable, Renderer2 } from '@angular/core';
 import { EditorAnnotation, StampEditorAnnotation } from './options/editor-annotations';
 import { PdfLayer } from './options/optional_content_config';
 import { PDFPrintRange } from './options/pdf-print-range';
@@ -62,9 +62,11 @@ export class NgxExtendedPdfViewerService {
 
   public secondaryMenuIsEmpty = false;
 
-  constructor(
-    private renderer: Renderer2
-  ) {}
+  private renderer: Renderer2;
+
+  constructor(private rendererFactory: RendererFactory2) {
+    this.renderer = this.rendererFactory.createRenderer(null, null);
+  }
 
   public find(text: string, options: FindOptions = {}): boolean {
     if (!this.ngxExtendedPdfViewerInitialized) {
