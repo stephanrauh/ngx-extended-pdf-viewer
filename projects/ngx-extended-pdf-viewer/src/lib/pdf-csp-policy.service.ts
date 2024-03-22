@@ -5,7 +5,7 @@ import { TrustedTypesWindow } from 'trusted-types/lib';
   providedIn: 'root',
 })
 export class PdfCspPolicyService {
-  private sanitizer: any = undefined;
+  private sanitizer: any = undefined; // TrustedTypePolicy;
 
   constructor() {
     const ttWindow = window as unknown as TrustedTypesWindow;
@@ -18,7 +18,7 @@ export class PdfCspPolicyService {
     (window as any).pdfViewerSanitizer = this.sanitizer;
   }
 
-  public addTrustedHTML(styles: HTMLElement, css: string) {
+  public addTrustedCSS(styles: HTMLElement, css: string) {
     if (typeof window === 'undefined') {
       // server-side rendering
       return;

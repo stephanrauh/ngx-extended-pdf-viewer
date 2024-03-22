@@ -31,6 +31,12 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 Version 19 updates to pdf.js 4.0, and that means breaking changes. I hope most of you won't even notice it, but under the hood, there's a lot of change. So I decided to do a bold step and update ngx-extended-pdf-viewer to Angular 17.
 
+Version 19.5 also brings improved support for CSP (content security policy). Now the PDF viewer works with this CSP configuration:
+
+```
+Content-Security-Policy: base-uri 'self'; default-src mydomain.com 'nonce-{{nonce}}'
+```
+
 My promise of backward compatibility to roughly 3-4 version still holds, so I'm going to maintain version 18 for a while. I also hope that version 19 is compatible to Angular 14, 15, and 16, but at the moment, it's too early to promise anything.
 
 In a nutshell:

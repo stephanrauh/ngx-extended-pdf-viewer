@@ -29,7 +29,7 @@ export class PdfDarkThemeComponent implements OnInit, OnDestroy {
       styles.nonce = this.nonce;
     }
 
-    this.pdfCspPolicyService.addTrustedHTML(styles, css);
+    this.pdfCspPolicyService.addTrustedCSS(styles, css);
     this.renderer.appendChild(this.document.head, styles);
   }
 

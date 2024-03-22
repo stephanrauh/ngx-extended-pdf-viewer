@@ -1111,6 +1111,14 @@ ngx-extended-pdf-viewer .html {
     outline: 0;
   }
 
+  #thumbnailView img.thumbnailImage {
+    display: none;
+  }
+
+  #thumbnailView div[data-loaded="true"] img.thumbnailImage {
+    display: unset;
+  }
+
   .thumbnail {
     /* Define these variables here, and not in :root, since the individual
      thumbnails may have different sizes. */
@@ -1143,7 +1151,6 @@ ngx-extended-pdf-viewer {
   }
 
   .thumbnail:not([data-loaded]) {
-    border: 1px dashed $thumbnail-not-loaded-ring;
     margin: -1px 9px 4px 9px;
   }
 

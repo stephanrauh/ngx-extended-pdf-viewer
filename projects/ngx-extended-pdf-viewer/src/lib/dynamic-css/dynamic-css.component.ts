@@ -1,5 +1,5 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Component, CSP_NONCE, Inject, Input, OnChanges, OnDestroy, OnInit, Optional, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { CSP_NONCE, Component, Inject, Input, OnChanges, OnDestroy, OnInit, Optional, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { PdfCspPolicyService } from '../pdf-csp-policy.service';
 import { PdfBreakpoints } from '../responsive-visibility';
 
@@ -234,7 +234,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
     if (!styles) {
       styles = this.document.createElement('STYLE') as HTMLStyleElement;
       styles.id = 'pdf-dynamic-css';
-      this.pdfCspPolicyService.addTrustedHTML(styles, this.style);
+      this.pdfCspPolicyService.addTrustedCSS(styles, this.style);
 
       if (this.nonce) {
         styles.nonce = this.nonce;
@@ -242,7 +242,7 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
 
       this.renderer.appendChild(this.document.head, styles);
     } else {
-      this.pdfCspPolicyService.addTrustedHTML(styles, this.style);
+      this.pdfCspPolicyService.addTrustedCSS(styles, this.style);
     }
   }
 

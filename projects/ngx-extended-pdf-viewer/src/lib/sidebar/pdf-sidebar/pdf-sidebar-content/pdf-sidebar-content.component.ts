@@ -1,6 +1,5 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output, TemplateRef, ViewChild } from '@angular/core';
 import { PdfThumbnailDrawnEvent } from '../../../events/pdf-thumbnail-drawn-event';
-import { PdfCspPolicyService } from '../../../pdf-csp-policy.service';
 declare class PDFThumbnailView {
   anchor: HTMLAnchorElement;
   div: HTMLElement;
@@ -32,8 +31,8 @@ export class PdfSidebarContentComponent implements OnDestroy {
   @Input()
   public mobileFriendlyZoomScale = 1.0;
 
-  @ViewChild('thumbnailViewTemplate')
-  public thumbnailViewTemplate: ElementRef;
+  @ViewChild('defaultThumbnail', { read: TemplateRef })
+  public defaultThumbnail!: TemplateRef<any>;
 
   private linkService: PDFLinkService | undefined;
 
@@ -51,7 +50,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
     return `${top}px`;
   }
 
-  constructor(private pdfCspPolicyService: PdfCspPolicyService) {
+  constructor() {
     if (typeof window !== 'undefined') {
       (window as any).pdfThumbnailGeneratorReady = () => this.pdfThumbnailGeneratorReady();
       (window as any).pdfThumbnailGenerator = (
@@ -59,7 +58,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
         linkService: any,
         id: number,
         container: HTMLDivElement,
-        thumbPageTitlePromiseOrPageL10nArgs: Promise<string> | string
+        thumbPageTitlePromiseOrPageL10nArgs: string
       ) => this.createThumbnail(pdfThumbnailView, linkService, id, container, thumbPageTitlePromiseOrPageL10nArgs);
     }
   }
@@ -69,10 +68,10 @@ export class PdfSidebarContentComponent implements OnDestroy {
   }
 
   public pdfThumbnailGeneratorReady(): boolean {
-    if (!this.thumbnailViewTemplate) {
+    if (!this.defaultThumbnail) {
       return false;
     }
-    const t = this.thumbnailViewTemplate.nativeElement as HTMLElement;
+    const t = this.defaultThumbnail.elementRef.nativeElement as HTMLElement;
     return !!t && !!t.innerHTML && t.innerHTML.length > 0;
   }
 
@@ -81,39 +80,24 @@ export class PdfSidebarContentComponent implements OnDestroy {
     linkService: PDFLinkService,
     id: number,
     container: HTMLDivElement,
-    thumbPageTitlePromiseOrPageL10nArgs: Promise<string> | string
+    thumbPageTitlePromiseOrPageL10nArgs: string
   ): HTMLImageElement | undefined {
     this.linkService = linkService;
-    const template = this.thumbnailViewTemplate;
-    // get the inner HTML without the attributes and classes added by Angular
-    const inner = template.nativeElement.innerHTML
-      .split(/_ng\w+-\w+-\w+=""/g)
-      .join('')
-      .split(/ng-\w+-\w+/g)
-      .join('')
-      .split(/<!--[\s\S]*?-->/g)
-      .join('');
-
-    const borderAdjustment = 2 * THUMBNAIL_CANVAS_BORDER_WIDTH;
-
-    const widthOfRing = `${pdfThumbnailView.canvasWidth + borderAdjustment}px`;
-    const heightOfRing = `${pdfThumbnailView.canvasHeight + borderAdjustment}px`;
-
-    const newHtml = inner.split('WIDTH_OF_RING').join(widthOfRing).split('HEIGHT_OF_RING').join(heightOfRing).split('PAGE_NUMBER').join(id);
-    const newElement = this.createElementFromHTML(newHtml);
+    const template = this.customThumbnail ?? this.defaultThumbnail;
+    const view = template.createEmbeddedView(null);
+    const newElement = view.rootNodes[0] as HTMLElement;
     newElement.classList.remove('pdf-viewer-template');
 
     const anchor = newElement as HTMLAnchorElement;
     anchor.href = linkService.getAnchorUrl(`#page=${id}`);
-    // TODO: remove the if branch after updating to pdf.js 4.0
-    if (thumbPageTitlePromiseOrPageL10nArgs instanceof Promise) {
-      thumbPageTitlePromiseOrPageL10nArgs.then((msg) => {
-        anchor.title = msg;
-      });
-    } else {
-      anchor.setAttribute('data-l10n-id', 'pdfjs-thumb-page-title');
-      anchor.setAttribute('data-l10n-args', thumbPageTitlePromiseOrPageL10nArgs);
-    }
+
+    anchor.setAttribute('data-l10n-id', 'pdfjs-thumb-page-title');
+    anchor.setAttribute('data-l10n-args', thumbPageTitlePromiseOrPageL10nArgs);
+
+    newElement.querySelectorAll('[data-page-number]').forEach((element) => {
+      element.setAttribute('data-page-number', id.toString());
+    });
+
     anchor.onclick = () => {
       linkService.page = id;
       return false;
@@ -132,12 +116,6 @@ export class PdfSidebarContentComponent implements OnDestroy {
     };
     this.thumbnailDrawn.emit(thumbnailDrawnEvent);
     return img;
-  }
-
-  private createElementFromHTML(htmlString): HTMLElement {
-    const div = document.createElement('div');
-    this.pdfCspPolicyService.addTrustedHTML(div, htmlString);
-    return div.firstChild as HTMLElement;
   }
 
   public onKeyDown(event: KeyboardEvent): void {
