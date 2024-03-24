@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { ResponsiveCSSClass } from '../../responsive-visibility';
@@ -8,7 +8,7 @@ import { PdfShyButtonService } from './pdf-shy-button-service';
   selector: 'pdf-shy-button',
   templateUrl: './pdf-shy-button.component.html',
 })
-export class PdfShyButtonComponent implements OnInit, OnChanges {
+export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit {
   @Input()
   public primaryToolbarId: string;
 
@@ -137,18 +137,16 @@ export class PdfShyButtonComponent implements OnInit, OnChanges {
       throw new Error('Illegal image for PDFShyButton. Only SVG images are allowed. Please use only the tags <svg> and <path>. ' + value);
     }
     this._imageHtml = this.sanitizeHtml(value);
+  }
+
+  constructor(private pdfShyButtonServiceService: PdfShyButtonService, private sanitizer: DomSanitizer, private renderer: Renderer2) {}
+
+  public ngAfterViewInit(): void {
     this.updateButtonImage();
   }
 
-  constructor(
-    private pdfShyButtonServiceService: PdfShyButtonService,
-    private sanitizer: DomSanitizer,
-    private renderer: Renderer2
-  ) {}
-
   public ngOnInit(): void {
     this.pdfShyButtonServiceService.add(this);
-    this.updateButtonImage();
   }
 
   public ngOnChanges(changes: any): void {
@@ -174,7 +172,10 @@ export class PdfShyButtonComponent implements OnInit, OnChanges {
     if (this.buttonRef) {
       const el = this.buttonRef.nativeElement;
       if (this._imageHtml) {
-        this.renderer.appendChild(el, this._imageHtml);
+        const temp = this.renderer.createElement('div');
+        temp.innerHTML = this._imageHtml;
+        const image = temp.children[0];
+        this.renderer.appendChild(el, image);
       } else {
         const childNodes = el.childNodes;
         for (let child of childNodes) {
