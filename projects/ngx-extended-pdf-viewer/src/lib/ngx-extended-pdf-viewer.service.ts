@@ -532,7 +532,7 @@ export class NgxExtendedPdfViewerService {
   public async addImageToAnnotationLayer({ urlOrDataUrl, page, left, bottom, right, top, rotation }: PdfImageParameters): Promise<void> {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
 
-    if (page) {
+    if (page !== undefined) {
       if (page !== this.currentPageIndex()) {
         await this.renderPage(page);
       }
@@ -571,7 +571,7 @@ export class NgxExtendedPdfViewerService {
 
   public currentPageIndex(): number {
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    return PDFViewerApplication.pdfViewer.currentPageNumber;
+    return PDFViewerApplication.pdfViewer.currentPageNumber - 1;
   }
 
   private convertToPDFCoordinates(value: string | number | undefined, maxValue: number, defaultValue: number, imageMaxValue: number): number {
