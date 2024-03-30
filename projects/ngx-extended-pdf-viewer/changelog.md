@@ -535,4 +535,4 @@
 - 19.4.1 #2120 stop firing `(pdfLoaded)` twice when `[src]` fires; refactored `scrollSignatureWarningIntoView()`
 - 19.5.0 #2221 improve support for CSP (content security policy); tidy up the code generating thumbnails; stop showing thumbnail images while loading
 - 19.5.1 #2221 display the toolbar correctly (probably this breaks CSP support again); #2239 `currentPageIndex()` and `addImageToAnnotationLayer()` now return / expect the page index (starting with 0) instead of the page number (starting with 1)
-- 19.6.0-alpha.0 #2256 emit events when a user adds, removes, or edits an annotation; #2228 fixed highlight editor; updated the browser compatibility list
+- 19.6.0 #2256 emit events when a user adds, removes, or edits an annotation; #2228 fixed highlight editor; updated the browser compatibility list

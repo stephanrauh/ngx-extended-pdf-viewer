@@ -73,7 +73,7 @@
                 <div id="editorHighlightColorPicker" class="colorPicker">
                   <span id="highlightColorPickerLabel" class="editorParamsLabel" data-l10n-id="pdfjs-editor-highlight-colorpicker-label">Highlight color</span>
                 </div>
-                <div id="editorHighlightThickness">
+                <div id="editorHighlightThickness" *ngIf="pdfJsVersion >= '4.1'">
                   <label for="editorFreeHighlightThickness" class="editorParamsLabel" data-l10n-id="pdfjs-editor-free-highlight-thickness-input"
                     >Thickness</label
                   >

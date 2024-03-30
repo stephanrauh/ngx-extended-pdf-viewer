@@ -44,6 +44,7 @@ export class AnnotationEditorLayerBuilder {
     annotationEditorLayer: AnnotationEditorLayer | null;
     div: HTMLDivElement | null;
     _cancelled: boolean;
+    eventBus: any;
     /**
      * @param {PageViewport} viewport
      * @param {string} intent (default value is 'display')

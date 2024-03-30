@@ -386,9 +386,16 @@ pdfjs-editor-colorpicker-red =
 pdfjs-editor-highlight-button =
     .title = Destaque
 pdfjs-editor-highlight-button-label = Destaque
+pdfjs-highlight-floating-button =
+    .title = Destaque
 pdfjs-editor-free-highlight-thickness-input = Espessura
 pdfjs-editor-free-highlight-thickness-title =
     .title = Mudar espessura ao destacar itens que não são texto
+pdfjs-editor-highlight-show-all-button-label = Mostrar tudo
+pdfjs-highlight-floating-button1 =
+    .title = Highlight
+    .aria-label = Highlight
+pdfjs-highlight-floating-button-label = Highlight
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 

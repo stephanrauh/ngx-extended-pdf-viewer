@@ -382,9 +382,16 @@ pdfjs-editor-colorpicker-red =
 pdfjs-editor-highlight-button =
     .title = Surligner
 pdfjs-editor-highlight-button-label = Surligner
+pdfjs-highlight-floating-button =
+    .title = Surligner
 pdfjs-editor-free-highlight-thickness-input = Épaisseur
 pdfjs-editor-free-highlight-thickness-title =
-    .title = Change thickness when highlighting items other than text
+    .title = Modifier l’épaisseur pour le surlignage d’éléments non textuels
+pdfjs-editor-highlight-show-all-button-label = Tout afficher
+pdfjs-highlight-floating-button1 =
+    .title = Highlight
+    .aria-label = Highlight
+pdfjs-highlight-floating-button-label = Highlight
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 

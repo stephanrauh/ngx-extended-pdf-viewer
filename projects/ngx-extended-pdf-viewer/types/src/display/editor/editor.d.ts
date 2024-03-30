@@ -109,6 +109,7 @@ export class AnnotationEditor {
     y: number;
     isAttachedToDOM: boolean;
     deleted: boolean;
+    eventBus: any;
     get editorType(): any;
     /**
      * Get the properties to update in the UI for this editor.

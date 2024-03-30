@@ -2830,6 +2830,7 @@ class AnnotationEditorLayerBuilder {
     this.#annotationLayer = options.annotationLayer || null;
     this.#textLayer = options.textLayer || null;
     this.#drawLayer = options.drawLayer || null;
+    this.eventBus = options.eventBus;
   }
   async render(viewport, intent = "display") {
     if (intent !== "display") {
@@ -2863,7 +2864,8 @@ class AnnotationEditorLayerBuilder {
       viewport: clonedViewport,
       annotationLayer: this.#annotationLayer,
       textLayer: this.#textLayer,
-      drawLayer: this.#drawLayer
+      drawLayer: this.#drawLayer,
+      eventBus: this.eventBus
     });
     const parameters = {
       viewport: clonedViewport,
@@ -6683,7 +6685,7 @@ __webpack_async_result__();
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ngxExtendedPdfViewerVersion: () => (/* binding */ ngxExtendedPdfViewerVersion)
 /* harmony export */ });
-const ngxExtendedPdfViewerVersion = '19.4.0-alpha.3';
+const ngxExtendedPdfViewerVersion = '19.6.0';
 
 /***/ }),
 
@@ -12610,7 +12612,8 @@ class PDFPageView {
           accessibilityManager: this._accessibilityManager,
           annotationLayer: this.annotationLayer?.annotationLayer,
           textLayer: this.textLayer,
-          drawLayer: this.drawLayer.getDrawLayer()
+          drawLayer: this.drawLayer.getDrawLayer(),
+          eventBus: this.eventBus
         });
       }
       this.#renderAnnotationEditorLayer();
@@ -14832,7 +14835,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = '4.0.851';
+    const viewerVersion = '4.0.854';
     if (pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version !== viewerVersion) {
       throw new Error(`The API version "${pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -18704,8 +18707,8 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([web_
 
 
 
-const pdfjsVersion = '4.0.851';
-const pdfjsBuild = 'd0ce62ef1';
+const pdfjsVersion = '4.0.854';
+const pdfjsBuild = 'bdf06a57e';
 const AppConstants = {
   LinkTarget: _pdf_link_service_js__WEBPACK_IMPORTED_MODULE_4__.LinkTarget,
   RenderingStates: _ui_utils_js__WEBPACK_IMPORTED_MODULE_2__.RenderingStates,
