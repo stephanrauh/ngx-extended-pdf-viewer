@@ -94,9 +94,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
     anchor.setAttribute('data-l10n-id', 'pdfjs-thumb-page-title');
     anchor.setAttribute('data-l10n-args', thumbPageTitlePromiseOrPageL10nArgs);
 
-    newElement.querySelectorAll('[data-page-number]').forEach((element) => {
-      element.setAttribute('data-page-number', id.toString());
-    });
+    this.replacePageNuberEverywhere(newElement, id.toString());
 
     anchor.onclick = () => {
       linkService.page = id;
@@ -138,5 +136,25 @@ export class PdfSidebarContentComponent implements OnDestroy {
         event.preventDefault();
       }
     }
+  }
+
+  private replacePageNuberEverywhere(element: Element, pageNumber: string): void {
+    if (element.attributes) {
+      Array.from(element.attributes).forEach((attr) => {
+        if (attr.value.includes('PAGE_NUMBER')) {
+          attr.value = attr.value.replace('PAGE_NUMBER', pageNumber);
+        }
+      });
+    }
+
+    element.childNodes.forEach((child) => {
+      if (child.nodeType === Node.ELEMENT_NODE) {
+        this.replacePageNuberEverywhere(child as Element, pageNumber);
+      } else if (child.nodeType === Node.TEXT_NODE) {
+        if (child.nodeValue && child.nodeValue.includes('PAGE_NUMBER')) {
+          child.nodeValue = child.nodeValue.replace('PAGE_NUMBER', pageNumber);
+        }
+      }
+    });
   }
 }
