@@ -292,8 +292,9 @@ pdfjs-editor-ink-button-label = Vizatoni
 pdfjs-editor-stamp-button =
     .title = Shtoni ose përpunoni figura
 pdfjs-editor-stamp-button-label = Shtoni ose përpunoni figura
-pdfjs-editor-remove-button =
-    .title = Hiqe
+pdfjs-editor-highlight-button =
+    .title = Theksim
+pdfjs-editor-highlight-button-label = Theksoje
 
 ## Remove button for the various kind of editor.
 
@@ -317,6 +318,10 @@ pdfjs-editor-ink-opacity-input = Patejdukshmëri
 pdfjs-editor-stamp-add-image-button =
     .title = Shtoni figurë
 pdfjs-editor-stamp-add-image-button-label = Shtoni figurë
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = Trashësi
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Ndryshoni trashësinë kur theksoni objekte tjetër nga tekst
 pdfjs-free-text =
     .aria-label = Përpunues Tekstesh
 pdfjs-free-text-default-content = Filloni të shtypni…
@@ -383,12 +388,10 @@ pdfjs-spread-odd-button-label = Odd Spreads
 pdfjs-spread-even-button =
     .title = Join page spreads starting with even-numbered pages
 pdfjs-spread-even-button-label = Even Spreads
-pdfjs-editor-highlight-button =
+pdfjs-highlight-floating-button1 =
     .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
-pdfjs-editor-free-highlight-thickness-input = Thickness
-pdfjs-editor-free-highlight-thickness-title =
-    .title = Change thickness when highlighting items other than text
+    .aria-label = Highlight
+pdfjs-highlight-floating-button-label = Highlight
 pdfjs-editor-highlight-show-all-button-label = Show all
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

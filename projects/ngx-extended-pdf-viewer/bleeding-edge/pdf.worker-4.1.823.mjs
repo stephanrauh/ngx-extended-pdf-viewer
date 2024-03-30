@@ -31476,17 +31476,25 @@ class PartialEvaluator {
     }
     const SMALL_IMAGE_DIMENSIONS = 200;
     if (isInline && !dict.has("SMask") && !dict.has("Mask") && w + h < SMALL_IMAGE_DIMENSIONS) {
-      const imageObj = new PDFImage({
-        xref: this.xref,
-        res: resources,
-        image,
-        isInline,
-        pdfFunctionFactory: this._pdfFunctionFactory,
-        localColorSpaceCache
-      });
-      imgData = await imageObj.createImageData(true, false);
-      operatorList.isOffscreenCanvasSupported = this.options.isOffscreenCanvasSupported;
-      operatorList.addImageOps(OPS.paintInlineImageXObject, [imgData], optionalContent);
+      try {
+        const imageObj = new PDFImage({
+          xref: this.xref,
+          res: resources,
+          image,
+          isInline,
+          pdfFunctionFactory: this._pdfFunctionFactory,
+          localColorSpaceCache
+        });
+        imgData = await imageObj.createImageData(true, false);
+        operatorList.isOffscreenCanvasSupported = this.options.isOffscreenCanvasSupported;
+        operatorList.addImageOps(OPS.paintInlineImageXObject, [imgData], optionalContent);
+      } catch (reason) {
+        const msg = `Unable to decode inline image: "${reason}".`;
+        if (!this.options.ignoreErrors) {
+          throw new Error(msg);
+        }
+        warn(msg);
+      }
       return;
     }
     let objId = `img_${this.idFactory.createObjId()}`,
@@ -35352,7 +35360,8 @@ function pickPlatformItem(dict) {
   return null;
 }
 class FileSpec {
-  constructor(root, xref) {
+  #contentAvailable = false;
+  constructor(root, xref, skipContent = false) {
     if (!(root instanceof Dict)) {
       return;
     }
@@ -35365,10 +35374,12 @@ class FileSpec {
     if (root.has("RF")) {
       warn("Related file specifications are not supported");
     }
-    this.contentAvailable = true;
-    if (!root.has("EF")) {
-      this.contentAvailable = false;
-      warn("Non-embedded file specifications are not supported");
+    if (!skipContent) {
+      if (root.has("EF")) {
+        this.#contentAvailable = true;
+      } else {
+        warn("Non-embedded file specifications are not supported");
+      }
     }
   }
   get filename() {
@@ -35379,7 +35390,7 @@ class FileSpec {
     return this._filename;
   }
   get content() {
-    if (!this.contentAvailable) {
+    if (!this.#contentAvailable) {
       return null;
     }
     if (!this.contentRef && this.root) {
@@ -38588,7 +38599,7 @@ class Catalog {
         continue;
       }
       if (!outlineDict.has("Title")) {
-        throw new FormatError("Invalid outline item encountered.");
+        warn("Invalid outline item encountered.");
       }
       const data = {
         url: null,
@@ -38617,7 +38628,7 @@ class Catalog {
         unsafeUrl: data.unsafeUrl,
         newWindow: data.newWindow,
         setOCGState: data.setOCGState,
-        title: stringToPDFString(title),
+        title: typeof title === "string" ? stringToPDFString(title) : "",
         color: rgbColor,
         count: Number.isInteger(count) ? count : undefined,
         bold: !!(flags & 2),
@@ -38697,14 +38708,9 @@ class Catalog {
           continue;
         }
         groupRefs.put(groupRef);
-        const group = this.xref.fetch(groupRef);
-        groups.push({
-          id: groupRef.toString(),
-          name: typeof group.get("Name") === "string" ? stringToPDFString(group.get("Name")) : null,
-          intent: typeof group.get("Intent") === "string" ? stringToPDFString(group.get("Intent")) : null
-        });
+        groups.push(this.#readOptionalContentGroup(groupRef));
       }
-      config = this._readOptionalContentConfig(defaultConfig, groupRefs);
+      config = this.#readOptionalContentConfig(defaultConfig, groupRefs);
       config.groups = groups;
     } catch (ex) {
       if (ex instanceof MissingDataException) {
@@ -38714,7 +38720,62 @@ class Catalog {
     }
     return shadow(this, "optionalContentConfig", config);
   }
-  _readOptionalContentConfig(config, contentGroupRefs) {
+  #readOptionalContentGroup(groupRef) {
+    const group = this.xref.fetch(groupRef);
+    const obj = {
+      id: groupRef.toString(),
+      name: null,
+      intent: null,
+      usage: {
+        print: null,
+        view: null
+      }
+    };
+    const name = group.get("Name");
+    if (typeof name === "string") {
+      obj.name = stringToPDFString(name);
+    }
+    let intent = group.getArray("Intent");
+    if (!Array.isArray(intent)) {
+      intent = [intent];
+    }
+    if (intent.every(i => i instanceof Name)) {
+      obj.intent = intent.map(i => i.name);
+    }
+    const usage = group.get("Usage");
+    if (!(usage instanceof Dict)) {
+      return obj;
+    }
+    const usageObj = obj.usage;
+    const print = usage.get("Print");
+    if (print instanceof Dict) {
+      const printState = print.get("PrintState");
+      if (printState instanceof Name) {
+        switch (printState.name) {
+          case "ON":
+          case "OFF":
+            usageObj.print = {
+              printState: printState.name
+            };
+        }
+      }
+    }
+    const view = usage.get("View");
+    if (view instanceof Dict) {
+      const viewState = view.get("ViewState");
+      if (viewState instanceof Name) {
+        switch (viewState.name) {
+          case "ON":
+          case "OFF":
+            usageObj.view = {
+              viewState: viewState.name
+            };
+        }
+      }
+    }
+    return obj;
+  }
+  #readOptionalContentConfig(config, contentGroupRefs) {
     function parseOnOff(refs) {
       const onParsed = [];
       if (Array.isArray(refs)) {
@@ -39573,7 +39634,11 @@ class Catalog {
         case "GoToR":
           const urlDict = action.get("F");
           if (urlDict instanceof Dict) {
-            url = urlDict.get("F") || null;
+            const fs = new FileSpec(urlDict, null, true);
+            const {
+              filename
+            } = fs.serializable;
+            url = filename;
           } else if (typeof urlDict === "string") {
             url = urlDict;
           }
@@ -50538,7 +50603,8 @@ class AnnotationFactory {
       needAppearances: !collectFields && acroForm.get("NeedAppearances") === true,
       pageIndex,
       evaluatorOptions: pdfManager.evaluatorOptions,
-      pageRef
+      pageRef,
+      eventBus: pdfManager.eventBus
     };
     switch (subtype) {
       case "Link":
@@ -56756,7 +56822,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = "4.1.753";
+    const workerVersion = "4.1.823";
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
     }
@@ -57331,8 +57397,8 @@ if (typeof window === "undefined" && typeof self !== "undefined" && isMessagePor
 
 ;// CONCATENATED MODULE: ./src/pdf.worker.js
 
-const pdfjsVersion = "4.1.753";
-const pdfjsBuild = "ce8de5f97";
+const pdfjsVersion = "4.1.823";
+const pdfjsBuild = "4d5f93ddf";
 
 var __webpack_exports__WorkerMessageHandler = __webpack_exports__.WorkerMessageHandler;
 export { __webpack_exports__WorkerMessageHandler as WorkerMessageHandler };

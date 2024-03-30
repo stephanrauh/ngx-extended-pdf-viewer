@@ -296,6 +296,8 @@ pdfjs-editor-stamp-button-label = 添加或编辑图像
 pdfjs-editor-highlight-button =
     .title = 高亮
 pdfjs-editor-highlight-button-label = 高亮
+pdfjs-highlight-floating-button =
+    .title = 高亮
 
 ## Remove button for the various kind of editor.
 
@@ -380,6 +382,16 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = 红色
 
-pdfjs-editor-highlight-show-all-button-label = Show all
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
+pdfjs-editor-highlight-show-all-button-label = 显示全部
+pdfjs-editor-highlight-show-all-button =
+    .title = 显示全部
+
+pdfjs-highlight-floating-button1 =
+    .title = Highlight
+    .aria-label = Highlight
+pdfjs-highlight-floating-button-label = Highlight
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

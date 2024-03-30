@@ -26,8 +26,8 @@ pdfjs-zoom-out-button =
     .title = Uzaklaştır
 pdfjs-zoom-out-button-label = Uzaklaştır
 pdfjs-zoom-in-button =
-    .title = Yaklaştır
-pdfjs-zoom-in-button-label = Yaklaştır
+    .title = Yakınlaştır
+pdfjs-zoom-in-button-label = Yakınlaştır
 pdfjs-zoom-select =
     .title = Yakınlaştırma
 pdfjs-presentation-mode-button =
@@ -85,10 +85,10 @@ pdfjs-scroll-page-button =
     .title = Sayfa kaydırmayı kullan
 pdfjs-scroll-page-button-label = Sayfa kaydırma
 pdfjs-scroll-vertical-button =
-    .title = Dikey kaydırma kullan
+    .title = Dikey kaydırmayı kullan
 pdfjs-scroll-vertical-button-label = Dikey kaydırma
 pdfjs-scroll-horizontal-button =
-    .title = Yatay kaydırma kullan
+    .title = Yatay kaydırmayı kullan
 pdfjs-scroll-horizontal-button-label = Yatay kaydırma
 pdfjs-scroll-wrapped-button =
     .title = Yan yana kaydırmayı kullan
@@ -122,7 +122,7 @@ pdfjs-document-properties-title = Başlık:
 pdfjs-document-properties-author = Yazar:
 pdfjs-document-properties-subject = Konu:
 pdfjs-document-properties-keywords = Anahtar kelimeler:
-pdfjs-document-properties-creation-date = Oluturma tarihi:
+pdfjs-document-properties-creation-date = Oluşturma tarihi:
 pdfjs-document-properties-modification-date = Değiştirme tarihi:
 # Variables:
 #   $date (Date) - the creation/modification date of the PDF file
@@ -304,6 +304,8 @@ pdfjs-editor-stamp-button-label = Resim ekle veya düzenle
 pdfjs-editor-highlight-button =
     .title = Vurgula
 pdfjs-editor-highlight-button-label = Vurgula
+pdfjs-highlight-floating-button =
+    .title = Vurgula
 
 ## Remove button for the various kind of editor.
 
@@ -388,6 +390,16 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Kırmızı
 
-pdfjs-editor-highlight-show-all-button-label = Show all
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
+pdfjs-editor-highlight-show-all-button-label = Tümünü göster
+pdfjs-editor-highlight-show-all-button =
+    .title = Tümünü göster
+
+pdfjs-highlight-floating-button1 =
+    .title = Highlight
+    .aria-label = Highlight
+pdfjs-highlight-floating-button-label = Highlight
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
