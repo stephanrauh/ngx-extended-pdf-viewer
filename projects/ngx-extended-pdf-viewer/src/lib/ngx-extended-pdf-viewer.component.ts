@@ -51,6 +51,7 @@ import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 import { UnitToPx } from './unit-to-px';
 
+import { AnnotationEditorEvent } from './events/annotation-editor-layer-event';
 import { AnnotationEditorLayerRenderedEvent } from './events/annotation-editor-layer-rendered-event';
 import { AnnotationEditorEditorModeChangedEvent } from './events/annotation-editor-mode-changed-event';
 import { AnnotationLayerRenderedEvent } from './events/annotation-layer-rendered-event';
@@ -117,6 +118,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @ViewChild('root')
   public root: ElementRef;
 
+  @Output()
+  public annotationEditorEvent = new EventEmitter<AnnotationEditorEvent>();
   /* UI templates */
   @Input()
   public customFindbarInputArea: TemplateRef<any> | undefined;
@@ -1611,6 +1614,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   private registerEventListeners(PDFViewerApplication: IPDFViewerApplication) {
+    PDFViewerApplication.eventBus.on('annotation-editor-event', (x: AnnotationEditorEvent) => {
+      this.ngZone.run(() => {
+        this.annotationEditorEvent.emit(x);
+      });
+    });
+
     PDFViewerApplication.eventBus.on('toggleSidebar', (x: ToggleSidebarEvent) => {
       this.ngZone.run(() => {
         this.sidebarVisible = x.visible;

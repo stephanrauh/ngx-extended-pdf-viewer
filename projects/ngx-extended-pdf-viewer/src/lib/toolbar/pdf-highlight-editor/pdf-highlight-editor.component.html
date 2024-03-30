@@ -1,18 +1,13 @@
-<!--
 <pdf-shy-button
-  title="Draw"
+  title="Highlight"
   primaryToolbarId="editorHighlight"
   [cssClass]="show | responsiveCSSClass : 'hiddenTinyView'"
-  l10nId="pdfjs-editor-free-text-button"
-  l10nLabel="pdfjs-editor-free-text-button-label"
-  [order]="4100"
+  l10nId="pdfjs-editor-highlight-button"
+  l10nLabel="pdfjs-editor-highlight-button-label"
+  [order]="4000"
   [action]="onClick"
   [toggled]="isSelected"
   [closeOnClick]="true"
-  image="<svg width='20px' height='20px' viewBox='0 0 24 24'> <path fill='currentColor' d='M18.5,4L19.66,8.35L18.7,8.61C18.25,7.74 17.79,6.87 17.26,6.43C16.73,6 16.11,6 15.5,6H13V16.5C13,17 13,17.5 13.33,17.75C13.67,18 14.33,18 15,18V19H9V18C9.67,18 10.33,18 10.67,17.75C11,17.5 11,17 11,16.5V6H8.5C7.89,6 7.27,6 6.74,6.43C6.21,6.87 5.75,7.74 5.3,8.61L4.34,8.35L5.5,4H18.5Z' /> </svg>"
+  image="<svg width='20px' height='20px' viewBox='0 0 24 24'> <path fill='currentColor' d='M18.5,1.15C17.97,1.15 17.46,1.34 17.07,1.73L11.26,7.55L16.91,13.2L22.73,7.39C23.5,6.61 23.5,5.35 22.73,4.56L19.89,1.73C19.5,1.34 19,1.15 18.5,1.15M10.3,8.5L4.34,14.46C3.56,15.24 3.56,16.5 4.36,17.31C3.14,18.54 1.9,19.77 0.67,21H6.33L7.19,20.14C7.97,20.9 9.22,20.89 10,20.12L15.95,14.16' /></svg>"
 >
 </pdf-shy-button>
--->
-<button id="editorHighlight" class="toolbarButton" hidden="true" disabled="disabled" title="Highlight" role="radio" aria-checked="false" aria-controls="editorHighlightParamsToolbar" tabindex="31" data-l10n-id="pdfjs-editor-highlight-button">
-  <span data-l10n-id="pdfjs-editor-highlight-button-label">Highlight</span>
-</button>

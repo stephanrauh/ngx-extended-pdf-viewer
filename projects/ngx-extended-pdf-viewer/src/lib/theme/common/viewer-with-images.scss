@@ -692,6 +692,8 @@ ngx-extended-pdf-viewer {
   .editorParamsToolbarContainer {
     width: 220px;
     margin-bottom: -4px;
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
 
   .editorParamsToolbarContainer>.editorParamsSetter {
@@ -738,6 +740,11 @@ ngx-extended-pdf-viewer {
     background-color: white;
   }
 
+
+  #editorHighlightParamsToolbar {
+    inset-inline-end: 128px;
+    background-color: $toolbar-background;
+  }
 
   #editorStampParamsToolbar {
     inset-inline-end: 40px;
