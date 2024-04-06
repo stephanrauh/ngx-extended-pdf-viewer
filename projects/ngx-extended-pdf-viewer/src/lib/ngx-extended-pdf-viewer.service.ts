@@ -138,31 +138,33 @@ export class NgxExtendedPdfViewerService {
   }
 
   public print(printRange?: PDFPrintRange) {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    const alreadyThere = !!window['isInPDFPrintRange'] && !printRange;
-    if (!alreadyThere) {
-      if (!printRange) {
-        printRange = {} as PDFPrintRange;
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    if (PDFViewerApplication) {
+      const alreadyThere = !!globalThis['isInPDFPrintRange'] && !printRange;
+      if (!alreadyThere) {
+        if (!printRange) {
+          printRange = {} as PDFPrintRange;
+        }
+        this.setPrintRange(printRange);
       }
-      this.setPrintRange(printRange);
-    }
-    (window as any).printPDF();
-    if (!alreadyThere) {
-      PDFViewerApplication.eventBus.on('afterprint', () => {
-        this.removePrintRange();
-      });
+      (globalThis as any).printPDF();
+      if (!alreadyThere) {
+        PDFViewerApplication.eventBus.on('afterprint', () => {
+          this.removePrintRange();
+        });
+      }
     }
   }
 
   public removePrintRange() {
-    window['isInPDFPrintRange'] = undefined;
-    window['filteredPageCount'] = undefined;
+    globalThis['isInPDFPrintRange'] = undefined;
+    globalThis['filteredPageCount'] = undefined;
   }
 
   public setPrintRange(printRange: PDFPrintRange) {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    window['isInPDFPrintRange'] = (page: number) => this.isInPDFPrintRange(page, printRange);
-    window['filteredPageCount'] = this.filteredPageCount(PDFViewerApplication.pagesCount, printRange);
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    globalThis['isInPDFPrintRange'] = (page: number) => this.isInPDFPrintRange(page, printRange);
+    globalThis['filteredPageCount'] = this.filteredPageCount(PDFViewerApplication?.pagesCount, printRange);
   }
 
   public filteredPageCount(pageCount: number, range: PDFPrintRange): number {
@@ -201,76 +203,82 @@ export class NgxExtendedPdfViewerService {
   }
 
   public async getPageAsLines(pageNumber: number): Promise<Array<Line>> {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    const pdfDocument = PDFViewerApplication.pdfDocument;
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    if (PDFViewerApplication) {
+      const pdfDocument = PDFViewerApplication.pdfDocument;
 
-    const page = await pdfDocument.getPage(pageNumber);
-    const textSnippets = (await page.getTextContent()).items //
-      .filter((info) => !info['type']); // ignore the TextMarkedContent items
+      const page = await pdfDocument.getPage(pageNumber);
+      const textSnippets = (await page.getTextContent()).items //
+        .filter((info) => !info['type']); // ignore the TextMarkedContent items
 
-    const snippets = textSnippets as Array<TextItem>;
+      const snippets = textSnippets as Array<TextItem>;
 
-    let minX = Number.MAX_SAFE_INTEGER;
-    let minY = Number.MAX_SAFE_INTEGER;
-    let maxX = Number.MIN_SAFE_INTEGER;
-    let maxY = Number.MIN_SAFE_INTEGER;
-    let countLTR = 0;
-    let countRTL = 0;
-    let text = '';
-    let lines = new Array<Line>();
-    for (let i = 0; i < snippets.length; i++) {
-      const currentSnippet = snippets[i];
-      if (!currentSnippet.hasEOL) {
-        const x = currentSnippet.transform[4];
-        const y = -currentSnippet.transform[5];
-        const width = currentSnippet.width;
-        const height = currentSnippet.height;
-        minX = Math.min(minX, x);
-        minY = Math.min(minY, y);
-        maxX = Math.max(maxX, x + width);
-        maxY = Math.max(maxY, y + height);
-        text += currentSnippet.str;
-        if (currentSnippet.dir === 'rtl') {
-          countRTL++;
+      let minX = Number.MAX_SAFE_INTEGER;
+      let minY = Number.MAX_SAFE_INTEGER;
+      let maxX = Number.MIN_SAFE_INTEGER;
+      let maxY = Number.MIN_SAFE_INTEGER;
+      let countLTR = 0;
+      let countRTL = 0;
+      let text = '';
+      let lines = new Array<Line>();
+      for (let i = 0; i < snippets.length; i++) {
+        const currentSnippet = snippets[i];
+        if (!currentSnippet.hasEOL) {
+          const x = currentSnippet.transform[4];
+          const y = -currentSnippet.transform[5];
+          const width = currentSnippet.width;
+          const height = currentSnippet.height;
+          minX = Math.min(minX, x);
+          minY = Math.min(minY, y);
+          maxX = Math.max(maxX, x + width);
+          maxY = Math.max(maxY, y + height);
+          text += currentSnippet.str;
+          if (currentSnippet.dir === 'rtl') {
+            countRTL++;
+          }
+          if (currentSnippet.dir === 'ltr') {
+            countLTR++;
+          }
         }
-        if (currentSnippet.dir === 'ltr') {
-          countLTR++;
+
+        let addIt = i === snippets.length - 1 || currentSnippet.hasEOL;
+        if (addIt) {
+          let direction: DirectionType = undefined;
+          if (countLTR > 0 && countRTL > 0) {
+            direction = 'both';
+          } else if (countLTR > 0) {
+            direction = 'ltr';
+          } else if (countRTL > 0) {
+            direction = 'rtl';
+          }
+          const line = {
+            direction,
+            x: minX,
+            y: minY,
+            width: maxX - minX,
+            height: maxY - minY,
+            text: text.trim(),
+          } as Line;
+          lines.push(line);
+          minX = Number.MAX_SAFE_INTEGER;
+          minY = Number.MAX_SAFE_INTEGER;
+          maxX = Number.MIN_SAFE_INTEGER;
+          maxY = Number.MIN_SAFE_INTEGER;
+          countLTR = 0;
+          countRTL = 0;
+          text = '';
         }
       }
-
-      let addIt = i === snippets.length - 1 || currentSnippet.hasEOL;
-      if (addIt) {
-        let direction: DirectionType = undefined;
-        if (countLTR > 0 && countRTL > 0) {
-          direction = 'both';
-        } else if (countLTR > 0) {
-          direction = 'ltr';
-        } else if (countRTL > 0) {
-          direction = 'rtl';
-        }
-        const line = {
-          direction,
-          x: minX,
-          y: minY,
-          width: maxX - minX,
-          height: maxY - minY,
-          text: text.trim(),
-        } as Line;
-        lines.push(line);
-        minX = Number.MAX_SAFE_INTEGER;
-        minY = Number.MAX_SAFE_INTEGER;
-        maxX = Number.MIN_SAFE_INTEGER;
-        maxY = Number.MIN_SAFE_INTEGER;
-        countLTR = 0;
-        countRTL = 0;
-        text = '';
-      }
+      return lines;
     }
-    return lines;
+    return [];
   }
 
   public async getPageAsText(pageNumber: number): Promise<string> {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    if (!PDFViewerApplication) {
+      return '';
+    }
     const pdfDocument = PDFViewerApplication.pdfDocument;
 
     const page = await pdfDocument.getPage(pageNumber);
@@ -289,7 +297,10 @@ export class NgxExtendedPdfViewerService {
   }
 
   public getPageAsImage(pageNumber: number, scale: PDFExportScaleFactor, background?: string, backgroundColorToReplace: string = '#FFFFFF'): Promise<any> {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    if (!PDFViewerApplication) {
+      return Promise.resolve(undefined);
+    }
     const pdfDocument = PDFViewerApplication.pdfDocument;
     const pagePromise: Promise<any> = pdfDocument.getPage(pageNumber);
     const imagePromise = (pdfPage) => Promise.resolve(this.draw(pdfPage, scale, background, backgroundColorToReplace));
@@ -342,12 +353,15 @@ export class NgxExtendedPdfViewerService {
   }
 
   public async getCurrentDocumentAsBlob(): Promise<Blob> {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    return await PDFViewerApplication.export();
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    return await PDFViewerApplication?.export();
   }
 
   public async getFormData(currentFormValues = true): Promise<Array<Object>> {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    if (!PDFViewerApplication) {
+      return [];
+    }
     const pdf: PDFDocumentProxy | undefined = PDFViewerApplication.pdfDocument;
     // screen DPI / PDF DPI
     const dpiRatio = 96 / 72;
@@ -395,15 +409,15 @@ export class NgxExtendedPdfViewerService {
    * or if it's out of range
    */
   public addPageToRenderQueue(pageIndex: number): boolean {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    return PDFViewerApplication.pdfViewer.addPageToRenderQueue(pageIndex);
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    return PDFViewerApplication?.pdfViewer.addPageToRenderQueue(pageIndex);
   }
 
   public isRenderQueueEmpty(): boolean {
     const scrolledDown = true;
     const renderExtra = false;
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    const nextPage = PDFViewerApplication.pdfViewer.renderingQueue.getHighestPriority(
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    const nextPage = PDFViewerApplication?.pdfViewer.renderingQueue.getHighestPriority(
       PDFViewerApplication.pdfViewer._getVisiblePages(),
       PDFViewerApplication.pdfViewer._pages,
       scrolledDown,
@@ -413,7 +427,10 @@ export class NgxExtendedPdfViewerService {
   }
 
   public hasPageBeenRendered(pageIndex: number): boolean {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    if (!PDFViewerApplication) {
+      return false;
+    }
     const pages = PDFViewerApplication.pdfViewer._pages;
     if (pages.length > pageIndex && pageIndex >= 0) {
       const pageView = pages[pageIndex];
@@ -437,19 +454,28 @@ export class NgxExtendedPdfViewerService {
   }
 
   public currentlyRenderedPages(): Array<number> {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    if (!PDFViewerApplication) {
+      return [];
+    }
     const pages = PDFViewerApplication.pdfViewer._pages;
     return pages.filter((page) => page.renderingState === 3).map((page) => page.id);
   }
 
   public numberOfPages(): number {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    if (!PDFViewerApplication) {
+      return 0;
+    }
     const pages = PDFViewerApplication.pdfViewer._pages;
     return pages.length;
   }
 
   public getCurrentlyVisiblePageNumbers(): Array<number> {
-    const app = (window as any).PDFViewerApplication as IPDFViewerApplication;
+    const app = (globalThis as any).PDFViewerApplication as IPDFViewerApplication;
+    if (!app) {
+      return [];
+    }
     const pages = (app.pdfViewer._getVisiblePages() as any).views as Array<any>;
     return pages?.map((page) => page.id);
   }
@@ -459,7 +485,10 @@ export class NgxExtendedPdfViewerService {
   }
 
   public async listLayers(): Promise<Array<PdfLayer> | undefined> {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    if (!PDFViewerApplication) {
+      return [];
+    }
 
     const optionalContentConfig = await PDFViewerApplication.pdfViewer.optionalContentConfigPromise;
     if (optionalContentConfig) {
@@ -478,7 +507,10 @@ export class NgxExtendedPdfViewerService {
   }
 
   public async toggleLayer(layerId: string): Promise<void> {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    if (!PDFViewerApplication) {
+      return;
+    }
     const optionalContentConfig = await PDFViewerApplication.pdfViewer.optionalContentConfigPromise;
     if (optionalContentConfig) {
       let isVisible = optionalContentConfig.getGroup(layerId).visible;
@@ -496,24 +528,24 @@ export class NgxExtendedPdfViewerService {
   }
 
   public scrollPageIntoView(pageNumber: number, pageSpot?: { top?: number | string; left?: number | string }): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    const viewer = PDFViewerApplication.pdfViewer as any;
-    viewer.scrollPagePosIntoView(pageNumber, pageSpot);
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    const viewer = PDFViewerApplication?.pdfViewer as any;
+    viewer?.scrollPagePosIntoView(pageNumber, pageSpot);
   }
 
   public getSerializedAnnotations(): EditorAnnotation[] | null {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    return PDFViewerApplication.pdfViewer.getSerializedAnnotations();
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    return PDFViewerApplication?.pdfViewer.getSerializedAnnotations();
   }
 
   public addEditorAnnotation(serializedAnnotation: string | EditorAnnotation): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.pdfViewer.addEditorAnnotation(serializedAnnotation);
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    PDFViewerApplication?.pdfViewer.addEditorAnnotation(serializedAnnotation);
   }
 
   public removeEditorAnnotations(filter?: (serialized: object) => boolean): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.pdfViewer.removeEditorAnnotations(filter);
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    PDFViewerApplication?.pdfViewer.removeEditorAnnotations(filter);
   }
 
   private async loadImageAsDataURL(imageUrl: string): Promise<Blob | string> {
@@ -530,48 +562,49 @@ export class NgxExtendedPdfViewerService {
   }
 
   public async addImageToAnnotationLayer({ urlOrDataUrl, page, left, bottom, right, top, rotation }: PdfImageParameters): Promise<void> {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-
-    if (page !== undefined) {
-      if (page !== this.currentPageIndex()) {
-        await this.renderPage(page);
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    if (PDFViewerApplication) {
+      if (page !== undefined) {
+        if (page !== this.currentPageIndex()) {
+          await this.renderPage(page);
+        }
+      } else {
+        page = this.currentPageIndex();
       }
-    } else {
-      page = this.currentPageIndex();
+      const previousAnnotationEditorMode = PDFViewerApplication.pdfViewer.annotationEditorMode;
+      this.switchAnnotationEdtorMode(13);
+      const dataUrl = await this.loadImageAsDataURL(urlOrDataUrl);
+      const pageSize = PDFViewerApplication.pdfViewer._pages[page].pdfPage.view;
+      const leftDim = pageSize[0];
+      const bottomDim = pageSize[1];
+      const rightDim = pageSize[2];
+      const topDim = pageSize[3];
+      const width = rightDim - leftDim;
+      const height = topDim - bottomDim;
+      const imageWidth = PDFViewerApplication.pdfViewer._pages[page].div.clientWidth;
+      const imageHeight = PDFViewerApplication.pdfViewer._pages[page].div.clientHeight;
+
+      const leftPdf = this.convertToPDFCoordinates(left, width, 0, imageWidth);
+      const bottomPdf = this.convertToPDFCoordinates(bottom, height, 0, imageHeight);
+      const rightPdf = this.convertToPDFCoordinates(right, width, width, imageWidth);
+      const topPdf = this.convertToPDFCoordinates(top, height, height, imageHeight);
+
+      const stampAnnotation: StampEditorAnnotation = {
+        annotationType: 13,
+        pageIndex: page,
+        bitmapUrl: dataUrl,
+        rect: [leftPdf, bottomPdf, rightPdf, topPdf],
+        rotation: rotation ?? 0,
+      };
+      this.addEditorAnnotation(stampAnnotation);
+      await this.sleep(10);
+      this.switchAnnotationEdtorMode(previousAnnotationEditorMode);
     }
-    const previousAnnotationEditorMode = PDFViewerApplication.pdfViewer.annotationEditorMode;
-    this.switchAnnotationEdtorMode(13);
-    const dataUrl = await this.loadImageAsDataURL(urlOrDataUrl);
-    const pageSize = PDFViewerApplication.pdfViewer._pages[page].pdfPage.view;
-    const leftDim = pageSize[0];
-    const bottomDim = pageSize[1];
-    const rightDim = pageSize[2];
-    const topDim = pageSize[3];
-    const width = rightDim - leftDim;
-    const height = topDim - bottomDim;
-    const imageWidth = PDFViewerApplication.pdfViewer._pages[page].div.clientWidth;
-    const imageHeight = PDFViewerApplication.pdfViewer._pages[page].div.clientHeight;
-
-    const leftPdf = this.convertToPDFCoordinates(left, width, 0, imageWidth);
-    const bottomPdf = this.convertToPDFCoordinates(bottom, height, 0, imageHeight);
-    const rightPdf = this.convertToPDFCoordinates(right, width, width, imageWidth);
-    const topPdf = this.convertToPDFCoordinates(top, height, height, imageHeight);
-
-    const stampAnnotation: StampEditorAnnotation = {
-      annotationType: 13,
-      pageIndex: page,
-      bitmapUrl: dataUrl,
-      rect: [leftPdf, bottomPdf, rightPdf, topPdf],
-      rotation: rotation ?? 0,
-    };
-    this.addEditorAnnotation(stampAnnotation);
-    await this.sleep(10);
-    this.switchAnnotationEdtorMode(previousAnnotationEditorMode);
   }
 
   public currentPageIndex(): number {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    return PDFViewerApplication.pdfViewer.currentPageNumber - 1;
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    return PDFViewerApplication?.pdfViewer.currentPageNumber - 1;
   }
 
   private convertToPDFCoordinates(value: string | number | undefined, maxValue: number, defaultValue: number, imageMaxValue: number): number {
@@ -592,7 +625,7 @@ export class NgxExtendedPdfViewerService {
   }
 
   public switchAnnotationEdtorMode(mode: number): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.dispatch('switchannotationeditormode', { mode });
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    PDFViewerApplication?.eventBus.dispatch('switchannotationeditormode', { mode });
   }
 }
