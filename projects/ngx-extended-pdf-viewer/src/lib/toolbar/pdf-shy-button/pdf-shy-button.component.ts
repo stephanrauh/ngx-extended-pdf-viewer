@@ -175,7 +175,10 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit {
         const temp = this.renderer.createElement('div');
         temp.innerHTML = this._imageHtml;
         const image = temp.children[0];
-        this.renderer.appendChild(el, image);
+        if (!el.innerHTML.includes(image.innerHTML)) {
+          // if using SSR, the HTML code may already be there
+          this.renderer.appendChild(el, image);
+        }
       } else {
         const childNodes = el.childNodes;
         for (let child of childNodes) {
