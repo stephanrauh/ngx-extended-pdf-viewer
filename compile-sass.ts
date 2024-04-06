@@ -5,9 +5,10 @@ const options = { style: 'compressed' } as sass.Options<'sync'>;
 const dark = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-dark-theme/colors.scss', options);
 const light = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-light-theme/colors.scss', options);
 const print = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/print.scss', options);
+const toggleButton = fs.readFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/toggle_button.css');
 
-fs.writeFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-dark-theme/colors-css.ts', cssToTs(dark.css + ' ' + print.css));
-fs.writeFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-light-theme/colors-css.ts', cssToTs(light.css + ' ' + print.css));
+fs.writeFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-dark-theme/colors-css.ts', cssToTs(dark.css + ' ' + print.css + ' ' + toggleButton));
+fs.writeFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-light-theme/colors-css.ts', cssToTs(light.css + ' ' + print.css + ' ' + toggleButton));
 
 const annotationLayerBuilder = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/annotation-layer-builder.scss', options);
 const xfaLayerBuilder = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/xfa_layer_builder.scss', options);
