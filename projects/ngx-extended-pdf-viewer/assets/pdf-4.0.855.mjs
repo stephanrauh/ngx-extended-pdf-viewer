@@ -2354,7 +2354,6 @@ class AnnotationEditorUIManager {
         undo,
         mustExec: true
       });
-      console.log('paste: added new editors');
     } catch (ex) {
       warn(`paste: "${ex.message}".`);
     }
@@ -2767,7 +2766,6 @@ class AnnotationEditorUIManager {
           for (const editor of editors) {
             if (this.#allEditors.has(editor.id)) {
               editor.translateInPage(totalX, totalY);
-              console.log('translateSelectedEditors: translated editor', editor.id, totalX, totalY);
             }
           }
         },
@@ -9734,7 +9732,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '4.0.854',
+    apiVersion: '4.0.855',
     data,
     password,
     disableAutoFetch,
@@ -11498,8 +11496,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = '4.0.854';
-const build = 'bdf06a57e';
+const version = '4.0.855';
+const build = '2492a3c25';
 
 ;// CONCATENATED MODULE: ./src/display/text_layer.js
 
@@ -17888,8 +17886,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = '4.0.854';
-const pdfjsBuild = 'bdf06a57e';
+const pdfjsVersion = '4.0.855';
+const pdfjsBuild = '2492a3c25';
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;

@@ -6934,7 +6934,7 @@ const GenericL10n = null;
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ngxExtendedPdfViewerVersion: () => (/* binding */ ngxExtendedPdfViewerVersion)
 /* harmony export */ });
-const ngxExtendedPdfViewerVersion = '19.6.0';
+const ngxExtendedPdfViewerVersion = '19.6.2';
 
 /***/ }),
 
@@ -16778,7 +16778,7 @@ class PDFViewer {
     const rawAnnotations = this.pdfDocument.annotationStorage.getAll();
     if (rawAnnotations) {
       const annotations = Object.values(rawAnnotations);
-      return annotations.map(a => a.serialize());
+      return annotations.filter(a => a.serialize).map(a => a.serialize()).filter(a => a?.annotationType !== undefined);
     }
     return null;
   }

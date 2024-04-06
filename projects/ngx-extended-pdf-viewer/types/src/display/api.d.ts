@@ -1431,7 +1431,6 @@ import { NodeFilterFactory } from "./node_utils";
 import { NodeStandardFontDataFactory } from "./node_utils";
 import { PromiseCapability } from "../shared/util.js";
 import { AnnotationStorage } from "./annotation_storage.js";
-import { info } from "../shared/util.js";
 import { Metadata } from "./metadata.js";
 import { StatTimer } from "./display_utils.js";
 /**

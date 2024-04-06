@@ -537,3 +537,4 @@
 - 19.5.1 #2221 display the toolbar correctly (probably this breaks CSP support again); #2239 `currentPageIndex()` and `addImageToAnnotationLayer()` now return / expect the page index (starting with 0) instead of the page number (starting with 1)
 - 19.6.0 #2256 emit events when a user adds, removes, or edits an annotation; #2228 fixed highlight editor; updated the browser compatibility list
 - 19.6.1 #2240 allow developers to use the variable PAGE_NUMBER in thumbnails again (was broken in version 19.5.0).
+- 19.6.2 #2245 fixed an SSR issue; #2255 make sure that `getSerializedAnnotation()` does not export form fields

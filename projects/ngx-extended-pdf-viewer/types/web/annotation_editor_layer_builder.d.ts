@@ -5,12 +5,12 @@ export type TextAccessibilityManager = import("./text_accessibility.js").TextAcc
 export type IL10n = import("./interfaces").IL10n;
 export type AnnotationLayer = import("../src/display/annotation_layer.js").AnnotationLayer;
 export type AnnotationEditorLayerBuilderOptions = {
-    uiManager?: import("../src/display/editor/tools.js").AnnotationEditorUIManager | undefined;
+    uiManager?: import("../src/pdf").AnnotationEditorUIManager | undefined;
     pageDiv: HTMLDivElement;
     pdfPage: PDFPageProxy;
     l10n?: import("./interfaces").IL10n | undefined;
     accessibilityManager?: import("./text_accessibility.js").TextAccessibilityManager | undefined;
-    annotationLayer?: import("../src/display/annotation_layer.js").AnnotationLayer | undefined;
+    annotationLayer?: import("../src/pdf").AnnotationLayer | undefined;
     textLayer?: any;
     drawLayer?: any;
 };
