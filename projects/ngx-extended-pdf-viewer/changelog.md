@@ -539,4 +539,5 @@
 - 19.6.1 #2240 allow developers to use the variable PAGE_NUMBER in thumbnails again (was broken in version 19.5.0).
 - 19.6.2 #2245 fixed an SSR issue; #2255 make sure that `getSerializedAnnotation()` does not export form fields
 - 19.6.3 #2273 fixed: server side rendering adds two toolbars
-- 19.6.4 #2273 made the `NgxExtendedPdfViewerService` ready for SSR; #1301 fix `NgxExtendedPdfViewer.scrollPageIntoView()` (was broken when omitting the optional parameter); #2228 fixed a few layout glitches (defunct highlight toggle button and oversized zoom in button)
+- 19.6.4 #2273 made the `NgxExtendedPdfViewerService` ready for SSR; #1301 fix `NgxExtendedPdfViewer.scrollPageIntoView()` (was broken when omitting the optional parameter) (bleeding edge branch only); #2228 fixed a few layout glitches (defunct highlight toggle button and oversized zoom in button)
+- 19.6.5 #1301 fix `NgxExtendedPdfViewer.scrollPageIntoView()` (was broken when omitting the optional parameter) (stable branch)
