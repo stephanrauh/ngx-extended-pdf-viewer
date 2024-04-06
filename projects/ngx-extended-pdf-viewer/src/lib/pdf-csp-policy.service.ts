@@ -8,14 +8,18 @@ export class PdfCspPolicyService {
   private sanitizer: any = undefined; // TrustedTypePolicy;
 
   constructor() {
-    const ttWindow = window as unknown as TrustedTypesWindow;
+    if (typeof window === 'undefined') {
+      // server-side rendering
+      return;
+    }
+    const ttWindow = globalThis as unknown as TrustedTypesWindow;
     if (ttWindow.trustedTypes) {
       this.sanitizer = ttWindow.trustedTypes.createPolicy('pdf-viewer', {
         createHTML: (input) => input,
         createScriptURL: (input) => input,
       });
     }
-    (window as any).pdfViewerSanitizer = this.sanitizer;
+    (globalThis as any).pdfViewerSanitizer = this.sanitizer;
   }
 
   public addTrustedCSS(styles: HTMLElement, css: string) {
