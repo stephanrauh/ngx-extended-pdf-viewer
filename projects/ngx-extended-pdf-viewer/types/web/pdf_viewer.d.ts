@@ -372,7 +372,7 @@ export class PDFViewer {
         ignoreDestinationZoom?: boolean | undefined;
     }): void;
     _updateLocation(firstPage: any): void;
-    update(): void;
+    update(noScroll?: boolean): void;
     containsElement(element: any): boolean;
     focus(): void;
     get _isContainerRtl(): boolean;

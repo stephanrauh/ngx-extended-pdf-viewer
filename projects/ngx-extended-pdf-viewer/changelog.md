@@ -307,7 +307,7 @@
 - 11.0.0-alpha.0 #995 performance improvements; #991/#1000 better detection of browsers lacking support for optional chaining; updated to pdf.js 2.11 (default) and pdf.js 2.12 (bleeding-edge branch); added the new "page scroll" mode of pdf.js 2.12 (which is essentially identical to `[pageViewMode]="'single'", but implemented independently by the pdf.js team) (only supported by the "bleeding edge" branch)
 - 11.0.0-alpha.1 now the default version of pdf.js is really 2.11.531 (the alpha.0 version accidentally delivered version 2.12.350)
 - 11.0.0-alpha.2 #998 add an additional log message to hunt down the Cypress bug
-- 11.0.0-alpha.3 #1013 lower the reqirements to RxJS 6; #1015 #995 removed the custom single-page-mode in favor of the new `[pageScrollMode]="3"` of pdf.js 2.12
+- 11.0.0-alpha.3 #1013 lower the reqirements to RxJS 6; #1015 #995 removed the custom single-page-mode in favor of the new `[scrollMode]="3"` of pdf.js 2.12
 - 11.0.0-alpha.4 #804 allow users to filter log messages
 - 11.0.0-alpha.5 #1030 ignore tiny rounding difference when emitting `(zoomChange)`; #1035 fix the "Window is not defined" error message
 - 11.0.0-alpha.6 #1040 fixed the single-page mode of the bleeding-edge branch; #804 detect the worker thread more reliably
@@ -542,3 +542,4 @@
 - 19.6.5 #2273 made the `NgxExtendedPdfViewerService` ready for SSR; #1301 fix `NgxExtendedPdfViewer.scrollPageIntoView()` (was broken when omitting the optional parameter) (bleeding edge branch only); #2228 fixed a few layout glitches (defunct highlight toggle button and oversized zoom in button)
 - 19.6.6 #1301 fix `NgxExtendedPdfViewer.scrollPageIntoView()` (was broken when omitting the optional parameter) (stable branch)
 - 19.7.0 #2242 stop removing form fields when removing editors with `NgxExtendedPdfViewerService.removeEditorAnnotations()`; #2208 modify annotation editor attributes programmatically
+- 19.7.1 #2275 prevent accidental firing of `(pageChange)` and `(pageLabelChange)` when changing the `pageViewMode

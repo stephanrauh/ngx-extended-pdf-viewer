@@ -5018,7 +5018,7 @@ function webViewerUpdateFindControlState({
 }
 function webViewerScaleChanging(evt) {
   PDFViewerApplication.toolbar?.setPageScale(evt.presetValue, evt.scale);
-  PDFViewerApplication.pdfViewer.update();
+  PDFViewerApplication.pdfViewer.update(evt.noScroll);
 }
 function webViewerRotationChanging(evt) {
   if (PDFViewerApplication.pdfThumbnailViewer) {
@@ -6685,7 +6685,7 @@ __webpack_async_result__();
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ngxExtendedPdfViewerVersion: () => (/* binding */ ngxExtendedPdfViewerVersion)
 /* harmony export */ });
-const ngxExtendedPdfViewerVersion = '19.6.7';
+const ngxExtendedPdfViewerVersion = '19.7.1';
 
 /***/ }),
 
@@ -14835,7 +14835,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = '4.0.858';
+    const viewerVersion = '4.0.859';
     if (pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version !== viewerVersion) {
       throw new Error(`The API version "${pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -15707,7 +15707,8 @@ class PDFViewer {
           scale: newScale,
           presetValue: newValue,
           previousScale,
-          previousPresetValue: previousScaleValue
+          previousPresetValue: previousScaleValue,
+          noScroll
         });
       }
       return;
@@ -15745,7 +15746,8 @@ class PDFViewer {
       scale: newScale,
       presetValue: preset ? newValue : undefined,
       previousScale,
-      previousPresetValue: previousScaleValue
+      previousPresetValue: previousScaleValue,
+      noScroll
     });
     if (this.defaultRenderingQueue) {
       this.update();
@@ -15961,7 +15963,7 @@ class PDFViewer {
       pdfOpenParams
     };
   }
-  update() {
+  update(noScroll = false) {
     if (this.scrollMode === _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.ScrollMode.PAGE) {
       this.viewer.classList.add("singlePageView");
     } else {
@@ -15989,7 +15991,7 @@ class PDFViewer {
         break;
       }
     }
-    if (this.scrollMode !== _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.ScrollMode.PAGE) {
+    if (this.scrollMode !== _ui_utils_js__WEBPACK_IMPORTED_MODULE_1__.ScrollMode.PAGE && !noScroll) {
       this._setCurrentPageNumber(stillFullyVisible ? currentId : visiblePages[0].id);
       this._updateLocation(visible.first);
       this.eventBus.dispatch("updateviewarea", {
@@ -18707,8 +18709,8 @@ var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([web_
 
 
 
-const pdfjsVersion = '4.0.858';
-const pdfjsBuild = '76cd9fec2';
+const pdfjsVersion = '4.0.859';
+const pdfjsBuild = 'b8df540e0';
 const AppConstants = {
   LinkTarget: _pdf_link_service_js__WEBPACK_IMPORTED_MODULE_4__.LinkTarget,
   RenderingStates: _ui_utils_js__WEBPACK_IMPORTED_MODULE_2__.RenderingStates,
