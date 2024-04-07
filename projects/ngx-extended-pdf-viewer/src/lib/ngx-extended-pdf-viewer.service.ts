@@ -1,6 +1,6 @@
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { EditorAnnotation, StampEditorAnnotation } from './options/editor-annotations';
+import { AnnotationEditorParamsType, EditorAnnotation, StampEditorAnnotation } from './options/editor-annotations';
 import { PdfLayer } from './options/optional_content_config';
 import { PDFPrintRange } from './options/pdf-print-range';
 import { IPDFViewerApplication, PDFDocumentProxy, TextItem, TextMarkedContent } from './options/pdf-viewer-application';
@@ -627,5 +627,47 @@ export class NgxExtendedPdfViewerService {
   public switchAnnotationEdtorMode(mode: number): void {
     const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
     PDFViewerApplication?.eventBus.dispatch('switchannotationeditormode', { mode });
+  }
+
+  public set editorFontSize(size: number) {
+    this.setEditorProperty(AnnotationEditorParamsType.FREETEXT_SIZE, size);
+  }
+
+  public set editorFontColor(color: string) {
+    this.setEditorProperty(AnnotationEditorParamsType.FREETEXT_COLOR, color);
+  }
+
+  public set editorInkColor(color: string) {
+    this.setEditorProperty(AnnotationEditorParamsType.INK_COLOR, color);
+  }
+
+  public set editorInkOpacity(opacity: number) {
+    this.setEditorProperty(AnnotationEditorParamsType.INK_OPACITY, opacity);
+  }
+
+  public set editorInkThickness(thickness: number) {
+    this.setEditorProperty(AnnotationEditorParamsType.INK_THICKNESS, thickness);
+  }
+
+  public set editorHighlightColor(color: string) {
+    this.setEditorProperty(AnnotationEditorParamsType.HIGHLIGHT_COLOR, color);
+  }
+
+  public set editorHighlightDefaultColor(color: string) {
+    this.setEditorProperty(AnnotationEditorParamsType.HIGHLIGHT_DEFAULT_COLOR, color);
+  }
+
+  public set editorHighlightShowAll(showAll: boolean) {
+    this.setEditorProperty(AnnotationEditorParamsType.HIGHLIGHT_SHOW_ALL, showAll);
+  }
+
+  public set editorHighlightThickness(thickness: number) {
+    this.setEditorProperty(AnnotationEditorParamsType.HIGHLIGHT_THICKNESS, thickness);
+  }
+
+  public setEditorProperty(editorPropertyType: number, value: any): void {
+    const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
+    PDFViewerApplication?.eventBus.dispatch('switchannotationeditorparams', { type: editorPropertyType, value });
+    PDFViewerApplication?.eventBus.dispatch('annotationeditorparamschanged', { details: [[editorPropertyType, value]] });
   }
 }

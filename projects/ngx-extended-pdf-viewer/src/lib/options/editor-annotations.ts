@@ -7,6 +7,22 @@ export enum AnnotationEditorType {
   INK = 15,
 }
 
+export const AnnotationEditorParamsType = {
+  RESIZE: 1,
+  CREATE: 2,
+  FREETEXT_SIZE: 11,
+  FREETEXT_COLOR: 12,
+  FREETEXT_OPACITY: 13,
+  INK_COLOR: 21,
+  INK_THICKNESS: 22,
+  INK_OPACITY: 23,
+  HIGHLIGHT_COLOR: 31,
+  HIGHLIGHT_DEFAULT_COLOR: 32,
+  HIGHLIGHT_THICKNESS: 33,
+  HIGHLIGHT_FREE: 34,
+  HIGHLIGHT_SHOW_ALL: 35,
+};
+
 export type AnnotationEditorTypeValue = -1 | 0 | 3 | 9 | 13 | 15;
 
 export type BezierPath = {
