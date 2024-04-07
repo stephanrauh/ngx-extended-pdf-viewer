@@ -3326,9 +3326,11 @@ class AnnotationEditorUIManager {
     let hasChanged = false;
     this.#allLayers.forEach(layer => layer.setCleaningUp(true));
     this.#allEditors.forEach(editor => {
-      if (filterFunction(editor.serialize())) {
-        editor.remove();
-        hasChanged = true;
+      if (editor?.serialize()) {
+        if (filterFunction(editor.serialize())) {
+          editor.remove();
+          hasChanged = true;
+        }
       }
     });
     this.#allLayers.forEach(layer => layer.setCleaningUp(false));
@@ -10654,7 +10656,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: "4.1.836",
+    apiVersion: "4.1.837",
     data,
     password,
     disableAutoFetch,
@@ -12423,8 +12425,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.1.836";
-const build = "42e2a15eb";
+const version = "4.1.837";
+const build = "b0706fb61";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -19321,8 +19323,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.1.836";
-const pdfjsBuild = "42e2a15eb";
+const pdfjsVersion = "4.1.837";
+const pdfjsBuild = "b0706fb61";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
