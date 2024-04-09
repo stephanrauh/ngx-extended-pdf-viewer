@@ -151,7 +151,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
       if (child.nodeType === Node.ELEMENT_NODE) {
         this.replacePageNuberEverywhere(child as Element, pageNumber);
       } else if (child.nodeType === Node.TEXT_NODE) {
-        if (child.nodeValue && child.nodeValue.includes('PAGE_NUMBER')) {
+        if (child.nodeValue?.includes('PAGE_NUMBER')) {
           child.nodeValue = child.nodeValue.replace('PAGE_NUMBER', pageNumber);
         }
       }
