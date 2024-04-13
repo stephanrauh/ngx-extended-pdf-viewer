@@ -543,4 +543,4 @@
 - 19.6.6 #1301 fix `NgxExtendedPdfViewer.scrollPageIntoView()` (was broken when omitting the optional parameter) (stable branch)
 - 19.7.0 #2242 stop removing form fields when removing editors with `NgxExtendedPdfViewerService.removeEditorAnnotations()`; #2208 modify annotation editor attributes programmatically
 - 19.7.1 #2275 prevent accidental firing of `(pageChange)` and `(pageLabelChange)` when changing the `pageViewMode
-- 20.0.0-alpha.0 make Sonarcloud happy by shortening an if statement; #2279 fix the highlight editor toolbar in rtl languages; #2282 improved compatibility to ng-zorro; #2293 improve the CSS encapsulation; #2294 make sure that the highlight editor can be closed again
+- 20.0.0-alpha.0 make Sonarcloud happy by shortening an if statement; #2279 fix the highlight editor toolbar in rtl languages; #2282 improved compatibility to ng-zorro; #2293 improve the CSS encapsulation; #2294 make sure that the highlight editor can be closed again; #2295 Checkboxes with non-boolean export values can now be set by default from Angular

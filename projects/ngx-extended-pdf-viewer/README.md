@@ -27,6 +27,16 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 <img src="https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/example.png?raw=true">
 
+## What's new in Version 20?
+
+Version 20 contains a couple of minor bugfixes that might break your application. It's not likely, but I decided to play it safe and to increase the major version number. The new version
+
+- updates to pdf.js 4.1. Both the bleeding-edge and the stable branch now run a version called "4.1", but as always, the bleeding-edge contains the latests (and possibly buggy) addition from pdf.js.
+- I've improved CSS encapsulation. Recently, I'd added a couple of CSS files and forgot to wrap these file into the `ngx-extended-pdf-viewer`. If you've modified some of my CSS rules, you may want to add the `.ngx-extended-pdf-viewer` class to the CSS selector. If you haven't done so yet, your CSS rule is probably broken.
+- I've fixed bugs with checkboxes and radiobuttons in forms. This might break your application if it relies on the bugs.
+- I've removed the minified ES5 build. I suspect nowadays very few people are using the ES5 build, so let's reduce the size of this package.
+- I might rename the `*.mjs` files again to `*.js` because a surprising number of webservers doesn't support `*.mjs` files. At the time of writing, the decision is still open.
+
 ## What's new in Version 19?
 
 Version 19 updates to pdf.js 4.0, and that means breaking changes. I hope most of you won't even notice it, but under the hood, there's a lot of change. So I decided to do a bold step and update ngx-extended-pdf-viewer to Angular 17.
