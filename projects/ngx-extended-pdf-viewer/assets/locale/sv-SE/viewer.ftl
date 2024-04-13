@@ -301,8 +301,15 @@ pdfjs-editor-ink-button-label = Rita
 pdfjs-editor-stamp-button =
     .title = Lägg till eller redigera bilder
 pdfjs-editor-stamp-button-label = Lägg till eller redigera bilder
-pdfjs-editor-remove-button =
-    .title = Ta bort
+pdfjs-editor-highlight-button =
+    .title = Markera
+pdfjs-editor-highlight-button-label = Markera
+pdfjs-highlight-floating-button =
+    .title = Markera
+pdfjs-highlight-floating-button1 =
+    .title = Markera
+    .aria-label = Markera
+pdfjs-highlight-floating-button-label = Markera
 
 ## Remove button for the various kind of editor.
 
@@ -326,6 +333,10 @@ pdfjs-editor-ink-opacity-input = Opacitet
 pdfjs-editor-stamp-add-image-button =
     .title = Lägg till bild
 pdfjs-editor-stamp-add-image-button-label = Lägg till bild
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = Tjocklek
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Ändra tjocklek när du markerar andra objekt än text
 pdfjs-free-text =
     .aria-label = Textredigerare
 pdfjs-free-text-default-content = Börja skriva…
@@ -383,18 +394,12 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Röd
 
-pdfjs-editor-highlight-button =
-    .title = Markera
-pdfjs-editor-highlight-button-label = Markera
-pdfjs-highlight-floating-button =
-    .title = Markera
-pdfjs-editor-free-highlight-thickness-input = Tjocklek
-pdfjs-editor-free-highlight-thickness-title =
-    .title = Ändra tjocklek när du markerar andra objekt än text
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
 pdfjs-editor-highlight-show-all-button-label = Visa alla
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
+pdfjs-editor-highlight-show-all-button =
+    .title = Visa alla
+
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

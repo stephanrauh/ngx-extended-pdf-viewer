@@ -304,6 +304,12 @@ pdfjs-editor-stamp-button-label = 画像を追加または編集
 pdfjs-editor-highlight-button =
     .title = 強調します
 pdfjs-editor-highlight-button-label = 強調
+pdfjs-highlight-floating-button =
+    .title = 強調
+pdfjs-highlight-floating-button1 =
+    .title = 強調
+    .aria-label = 強調します
+pdfjs-highlight-floating-button-label = 強調
 
 ## Remove button for the various kind of editor.
 
@@ -388,10 +394,12 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = 赤色
 
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
-pdfjs-editor-highlight-show-all-button-label = Show all
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
+pdfjs-editor-highlight-show-all-button-label = すべて表示
+pdfjs-editor-highlight-show-all-button =
+    .title = 強調の表示を切り替えます
+
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

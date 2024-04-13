@@ -283,6 +283,15 @@ pdfjs-editor-free-text-button-label = متن
 pdfjs-editor-ink-button =
     .title = چھکو
 pdfjs-editor-ink-button-label = چھکو
+pdfjs-editor-highlight-button =
+    .title = نمایاں کرو
+pdfjs-editor-highlight-button-label = نمایاں کرو
+pdfjs-highlight-floating-button =
+    .title = نمایاں کرو
+pdfjs-highlight-floating-button1 =
+    .title = نمایاں کرو
+    .aria-label = نمایاں کرو
+pdfjs-highlight-floating-button-label = نمایاں کرو
 
 ## Remove button for the various kind of editor.
 
@@ -308,6 +317,8 @@ pdfjs-ink-canvas =
 
 ## Alt-text dialog
 
+pdfjs-editor-alt-text-cancel-button = منسوخ
+pdfjs-editor-alt-text-save-button = محفوظ
 
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
@@ -326,6 +337,13 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = لال
 
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
+pdfjs-editor-highlight-show-all-button-label = سارے ݙکھاؤ
+pdfjs-editor-highlight-show-all-button =
+    .title = سارے ݙکھاؤ
+
 pdfjs-find-match-count =
     { $total ->
         [one] { $current } of { $total } match
@@ -339,13 +357,6 @@ pdfjs-find-match-count-limit =
 pdfjs-editor-stamp-button =
     .title = Add or edit images
 pdfjs-editor-stamp-button-label = Add or edit images
-pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
 pdfjs-editor-remove-ink-button =
     .title = Remove drawing
 pdfjs-editor-remove-freetext-button =
@@ -365,8 +376,6 @@ pdfjs-editor-alt-text-add-description-label = Add a description
 pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
 pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
 pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
-pdfjs-editor-alt-text-cancel-button = Cancel
-pdfjs-editor-alt-text-save-button = Save
 pdfjs-editor-alt-text-decorative-tooltip = Marked as decorative
 pdfjs-editor-alt-text-textarea =
     .placeholder = For example, “A young man sits down at a table to eat a meal”
@@ -383,6 +392,5 @@ pdfjs-editor-colorpicker-button =
     .title = Change color
 pdfjs-editor-colorpicker-dropdown =
     .aria-label = Color choices
-pdfjs-editor-highlight-show-all-button-label = Show all
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

@@ -62,6 +62,7 @@ export class AnnotationStorage {
         hash: string;
         transfer: any[];
     };
+    get editorStats(): any;
     #private;
 }
 /**

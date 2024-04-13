@@ -5,30 +5,28 @@
  */
 export class DrawLayer {
     static get _svgFactory(): any;
-    static "__#21@#setBox"(element: any, { x, y, width, height }: {
-        x: any;
-        y: any;
-        width: any;
-        height: any;
+    static "__#26@#setBox"(element: any, { x, y, width, height }?: {
+        x?: number | undefined;
+        y?: number | undefined;
+        width?: number | undefined;
+        height?: number | undefined;
     }): void;
-    static "__#21@#extractPathFromHighlightOutlines"(polygons: any): string;
     constructor({ pageIndex }: {
         pageIndex: any;
     });
     pageIndex: any;
     setParent(parent: any): void;
-    highlight({ outlines, box }: {
-        outlines: any;
-        box: any;
-    }, color: any, opacity: any): {
+    highlight(outlines: any, color: any, opacity: any, isPathUpdatable?: boolean): {
         id: number;
         clipPathId: string;
     };
-    highlightOutline({ outlines, box }: {
-        outlines: any;
-        box: any;
-    }): number;
+    highlightOutline(outlines: any): number;
+    finalizeLine(id: any, line: any): void;
+    updateLine(id: any, line: any): void;
+    removeFreeHighlight(id: any): void;
+    updatePath(id: any, line: any): void;
     updateBox(id: any, box: any): void;
+    show(id: any, visible: any): void;
     rotate(id: any, angle: any): void;
     changeColor(id: any, color: any): void;
     changeOpacity(id: any, opacity: any): void;

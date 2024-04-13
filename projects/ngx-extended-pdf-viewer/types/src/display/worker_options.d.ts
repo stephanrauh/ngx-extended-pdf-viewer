@@ -1,27 +1,25 @@
-export type GlobalWorkerOptionsType = {
+export class GlobalWorkerOptions {
+    static "__#39@#port": null;
+    static "__#39@#src": string;
     /**
-     * - Defines global port for worker
-     * process. Overrides the `workerSrc` option.
+     * @param {Worker | null} workerPort - Defines global port for worker process.
+     *   Overrides the `workerSrc` option.
      */
-    workerPort: Worker | null;
+    static set workerPort(val: Worker | null);
     /**
-     * - A string containing the path and filename
-     * of the worker file.
+     * @type {Worker | null}
+     */
+    static get workerPort(): Worker | null;
+    /**
+     * @param {string} workerSrc - A string containing the path and filename of
+     *   the worker file.
      *
-     * NOTE: The `workerSrc` option should always be set, in order to prevent any
-     * issues when using the PDF.js library.
+     *   NOTE: The `workerSrc` option should always be set, in order to prevent
+     *         any issues when using the PDF.js library.
      */
-    workerSrc: string;
-};
-/**
- * @typedef {Object} GlobalWorkerOptionsType
- * @property {Worker | null} workerPort - Defines global port for worker
- *   process. Overrides the `workerSrc` option.
- * @property {string} workerSrc - A string containing the path and filename
- *   of the worker file.
- *
- *   NOTE: The `workerSrc` option should always be set, in order to prevent any
- *         issues when using the PDF.js library.
- */
-/** @type {GlobalWorkerOptionsType} */
-export const GlobalWorkerOptions: GlobalWorkerOptionsType;
+    static set workerSrc(val: string);
+    /**
+     * @type {string}
+     */
+    static get workerSrc(): string;
+}

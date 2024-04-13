@@ -298,6 +298,10 @@ pdfjs-editor-highlight-button =
 pdfjs-editor-highlight-button-label = 강조 표시
 pdfjs-highlight-floating-button =
     .title = 강조 표시
+pdfjs-highlight-floating-button1 =
+    .title = 강조 표시
+    .aria-label = 강조 표시
+pdfjs-highlight-floating-button-label = 강조 표시
 
 ## Remove button for the various kind of editor.
 
@@ -389,9 +393,5 @@ pdfjs-editor-highlight-show-all-button-label = 모두 보기
 pdfjs-editor-highlight-show-all-button =
     .title = 모두 보기
 
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

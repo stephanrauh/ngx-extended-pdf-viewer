@@ -301,6 +301,25 @@ pdfjs-editor-ink-button-label = Desenhar
 pdfjs-editor-stamp-button =
     .title = Adicionar ou editar imagens
 pdfjs-editor-stamp-button-label = Adicionar ou editar imagens
+pdfjs-editor-highlight-button =
+    .title = Destaque
+pdfjs-editor-highlight-button-label = Destaque
+pdfjs-highlight-floating-button =
+    .title = Destaque
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Remover desenho
+pdfjs-editor-remove-freetext-button =
+    .title = Remover texto
+pdfjs-editor-remove-stamp-button =
+    .title = Remover imagem
+pdfjs-editor-remove-highlight-button =
+    .title = Remover destaque
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Cor
 pdfjs-editor-free-text-size-input = Tamanho
@@ -310,6 +329,10 @@ pdfjs-editor-ink-opacity-input = Opacidade
 pdfjs-editor-stamp-add-image-button =
     .title = Adicionar imagem
 pdfjs-editor-stamp-add-image-button-label = Adicionar imagem
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = Espessura
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Alterar espessura quando destacar itens que não sejam texto
 pdfjs-free-text =
     .aria-label = Editor de texto
 pdfjs-free-text-default-content = Começar a digitar…
@@ -348,22 +371,9 @@ pdfjs-editor-resizer-label-bottom-middle = Inferior ao centro — redimensionar
 pdfjs-editor-resizer-label-bottom-left = Canto inferior esquerdo — redimensionar
 pdfjs-editor-resizer-label-middle-left = Centro à esquerda — redimensionar
 
-pdfjs-editor-highlight-button =
-    .title = Destaque
-pdfjs-editor-highlight-button-label = Destaque
-pdfjs-highlight-floating-button =
-    .title = Destaque
-pdfjs-editor-remove-ink-button =
-    .title = Remover desenho
-pdfjs-editor-remove-freetext-button =
-    .title = Remover texto
-pdfjs-editor-remove-stamp-button =
-    .title = Remover imagem
-pdfjs-editor-remove-highlight-button =
-    .title = Remover destaque
-pdfjs-editor-free-highlight-thickness-input = Espessura
-pdfjs-editor-free-highlight-thickness-title =
-    .title = Alterar espessura quando destacar itens que não sejam texto
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = Cor de destaque
 pdfjs-editor-colorpicker-button =
     .title = Alterar cor
@@ -379,11 +389,18 @@ pdfjs-editor-colorpicker-pink =
     .title = Rosa
 pdfjs-editor-colorpicker-red =
     .title = Vermelho
+
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
 pdfjs-editor-highlight-show-all-button-label = Mostrar tudo
+pdfjs-editor-highlight-show-all-button =
+    .title = Mostrar tudo
+
 pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
+    .title = Realçar
+    .aria-label = Realçar
+pdfjs-highlight-floating-button-label = Realçar
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 

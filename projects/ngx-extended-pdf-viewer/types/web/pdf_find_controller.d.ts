@@ -103,8 +103,7 @@ export class PDFFindController {
     _pagesToSearch: number | null | undefined;
     _pendingFindMatches: Set<any> | undefined;
     _resumePageIdx: any;
-    _firstPageCapability: PromiseCapability | undefined;
+    _firstPageCapability: PromiseWithResolvers<any> | undefined;
     _rawQuery: any;
     #private;
 }
-import { PromiseCapability } from "../src/pdf";

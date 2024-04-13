@@ -8,7 +8,7 @@ export class InkEditor extends AnnotationEditor {
     static _type: string;
     static _editorType: number;
     /** @inheritdoc */
-    static initialize(l10n: any): void;
+    static initialize(l10n: any, uiManager: any): void;
     /** @inheritdoc */
     static updateDefaultParams(type: any, value: any): void;
     /** @inheritdoc */
@@ -18,9 +18,9 @@ export class InkEditor extends AnnotationEditor {
      * @param {Array<Array<number>>} bezier
      * @returns {Path2D}
      */
-    static "__#19@#buildPath2D"(bezier: Array<Array<number>>): Path2D;
-    static "__#19@#toPDFCoordinates"(points: any, rect: any, rotation: any): any;
-    static "__#19@#fromPDFCoordinates"(points: any, rect: any, rotation: any): any;
+    static "__#24@#buildPath2D"(bezier: Array<Array<number>>): Path2D;
+    static "__#24@#toPDFCoordinates"(points: any, rect: any, rotation: any): any;
+    static "__#24@#fromPDFCoordinates"(points: any, rect: any, rotation: any): any;
     /** @inheritdoc */
     static deserialize(data: any, parent: any, uiManager: any): AnnotationEditor | null;
     constructor(params: any);

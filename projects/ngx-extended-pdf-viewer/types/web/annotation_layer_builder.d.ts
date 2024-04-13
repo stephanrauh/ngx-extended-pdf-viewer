@@ -5,7 +5,6 @@ export type IDownloadManager = import("./interfaces").IDownloadManager;
 export type IPDFLinkService = import("./interfaces").IPDFLinkService;
 export type TextAccessibilityManager = import("./text_accessibility.js").TextAccessibilityManager;
 export type AnnotationLayerBuilderOptions = {
-    pageDiv: HTMLDivElement;
     pdfPage: PDFPageProxy;
     annotationStorage?: import("../src/display/annotation_storage").AnnotationStorage | undefined;
     /**
@@ -23,10 +22,10 @@ export type AnnotationLayerBuilderOptions = {
     } | null> | undefined;
     annotationCanvasMap?: Map<string, HTMLCanvasElement> | undefined;
     accessibilityManager?: import("./text_accessibility.js").TextAccessibilityManager | undefined;
+    onAppend?: Function | undefined;
 };
 /**
  * @typedef {Object} AnnotationLayerBuilderOptions
- * @property {HTMLDivElement} pageDiv
  * @property {PDFPageProxy} pdfPage
  * @property {AnnotationStorage} [annotationStorage]
  * @property {string} [imageResourcesPath] - Path for image resources, mainly
@@ -40,13 +39,13 @@ export type AnnotationLayerBuilderOptions = {
  *   [fieldObjectsPromise]
  * @property {Map<string, HTMLCanvasElement>} [annotationCanvasMap]
  * @property {TextAccessibilityManager} [accessibilityManager]
+ * @property {function} [onAppend]
  */
 export class AnnotationLayerBuilder {
     /**
      * @param {AnnotationLayerBuilderOptions} options
      */
-    constructor({ pageDiv, pdfPage, linkService, downloadManager, annotationStorage, imageResourcesPath, renderForms, enableScripting, hasJSActionsPromise, fieldObjectsPromise, annotationCanvasMap, accessibilityManager, }: AnnotationLayerBuilderOptions);
-    pageDiv: HTMLDivElement;
+    constructor({ pdfPage, linkService, downloadManager, annotationStorage, imageResourcesPath, renderForms, enableScripting, hasJSActionsPromise, fieldObjectsPromise, annotationCanvasMap, accessibilityManager, onAppend, }: AnnotationLayerBuilderOptions);
     pdfPage: import("../src/display/api").PDFPageProxy;
     linkService: import("./interfaces").IPDFLinkService;
     downloadManager: import("./interfaces").IDownloadManager | undefined;

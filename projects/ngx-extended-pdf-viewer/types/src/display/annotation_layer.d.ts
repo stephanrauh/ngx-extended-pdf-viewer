@@ -26,7 +26,7 @@ export type AnnotationLayerParameters = {
     annotations: any[];
     page: PDFPageProxy;
     linkService: IPDFLinkService;
-    downloadManager: IDownloadManager;
+    downloadManager?: import("../../web/interfaces").IDownloadManager | undefined;
     annotationStorage?: AnnotationStorage | undefined;
     /**
      * - Path for image resources, mainly
@@ -56,7 +56,7 @@ export type AnnotationLayerParameters = {
  * @property {Array} annotations
  * @property {PDFPageProxy} page
  * @property {IPDFLinkService} linkService
- * @property {IDownloadManager} downloadManager
+ * @property {IDownloadManager} [downloadManager]
  * @property {AnnotationStorage} [annotationStorage]
  * @property {string} [imageResourcesPath] - Path for image resources, mainly
  *   for annotation icons. Include trailing slash.

@@ -301,8 +301,9 @@ pdfjs-editor-ink-button-label = Designar
 pdfjs-editor-stamp-button =
     .title = Adder o rediger imagines
 pdfjs-editor-stamp-button-label = Adder o rediger imagines
-pdfjs-editor-remove-button =
-    .title = Remover
+pdfjs-editor-highlight-button =
+    .title = Evidentia
+pdfjs-editor-highlight-button-label = Evidentia
 
 ## Remove button for the various kind of editor.
 
@@ -326,6 +327,10 @@ pdfjs-editor-ink-opacity-input = Opacitate
 pdfjs-editor-stamp-add-image-button =
     .title = Adder imagine
 pdfjs-editor-stamp-add-image-button-label = Adder imagine
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = Spissor
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Cambiar spissor evidentiante elementos differente de texto
 pdfjs-free-text =
     .aria-label = Editor de texto
 pdfjs-free-text-default-content = Comenciar a scriber…
@@ -383,16 +388,12 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Rubie
 
-pdfjs-editor-highlight-button =
-    .title = Evidentia
-pdfjs-editor-highlight-button-label = Evidentia
-pdfjs-editor-free-highlight-thickness-input = Spissor
-pdfjs-editor-free-highlight-thickness-title =
-    .title = Cambiar spissor evidentiante elementos differente de texto
+pdfjs-highlight-floating-button =
+    .title = Evidentiar
 pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
-pdfjs-editor-highlight-show-all-button-label = Show all
+    .title = Evidentiar
+    .aria-label = Evidentiar
+pdfjs-highlight-floating-button-label = Evidentiar
+pdfjs-editor-highlight-show-all-button-label = Monstrar toto
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

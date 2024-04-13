@@ -85,14 +85,9 @@ export type PDFViewerOptions = {
      */
     enablePrintAutoRotate?: boolean | undefined;
     /**
-     * - Allows to use an
-     * OffscreenCanvas if needed.
-     */
-    isOffscreenCanvasSupported?: boolean | undefined;
-    /**
      * - The maximum supported canvas size in
      * total pixels, i.e. width * height. Use `-1` for no limit, or `0` for
-     * CSS-only zooming. The default value is 4096 * 4096 (16 mega-pixels).
+     * CSS-only zooming. The default value is 4096 * 8192 (32 mega-pixels).
      */
     maxCanvasPixels?: number | undefined;
     /**
@@ -148,11 +143,9 @@ export namespace PagesCountLimit {
  *   mainly for annotation icons. Include trailing slash.
  * @property {boolean} [enablePrintAutoRotate] - Enables automatic rotation of
  *   landscape pages upon printing. The default is `false`.
- * @property {boolean} [isOffscreenCanvasSupported] - Allows to use an
- *   OffscreenCanvas if needed.
  * @property {number} [maxCanvasPixels] - The maximum supported canvas size in
  *   total pixels, i.e. width * height. Use `-1` for no limit, or `0` for
- *   CSS-only zooming. The default value is 4096 * 4096 (16 mega-pixels).
+ *   CSS-only zooming. The default value is 4096 * 8192 (32 mega-pixels).
  * @property {IL10n} [l10n] - Localization service.
  * @property {boolean} [enablePermissions] - Enables PDF document permissions,
  *   when they exist. The default value is `false`.
@@ -195,16 +188,8 @@ export class PDFViewer {
     imageResourcesPath: string;
     enablePrintAutoRotate: boolean;
     removePageBorders: boolean | undefined;
-    isOffscreenCanvasSupported: boolean;
     maxCanvasPixels: number | undefined;
-    l10n: {
-        getLanguage(): any;
-        getDirection(): any;
-        get(ids: any, args: null | undefined, fallback: any): Promise<any>;
-        translate(element: any): Promise<any>;
-        pause(): any;
-        resume(): any;
-    };
+    l10n: any;
     pageColors: Object | null;
     defaultRenderingQueue: boolean;
     renderingQueue: PDFRenderingQueue | undefined;
@@ -323,9 +308,9 @@ export class PDFViewer {
         rotation: any;
         pdfOpenParams: string;
     } | null | undefined;
-    _firstPageCapability: PromiseCapability | undefined;
-    _onePageRenderedCapability: PromiseCapability | undefined;
-    _pagesCapability: PromiseCapability | undefined;
+    _firstPageCapability: PromiseWithResolvers<any> | undefined;
+    _onePageRenderedCapability: PromiseWithResolvers<any> | undefined;
+    _pagesCapability: PromiseWithResolvers<any> | undefined;
     _previousScrollMode: any;
     _spreadMode: any;
     _scrollUpdate(): void;
@@ -519,4 +504,3 @@ export class PDFViewer {
 import { PDFRenderingQueue } from "./pdf_rendering_queue.js";
 import { SimpleLinkService } from "./pdf_link_service.js";
 import { PageFlip } from "./page-flip.module.js";
-import { PromiseCapability } from "../src/pdf";

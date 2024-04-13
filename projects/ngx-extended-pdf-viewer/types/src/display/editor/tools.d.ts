@@ -12,16 +12,20 @@ export class AnnotationEditorUIManager {
     static TRANSLATE_SMALL: number;
     static TRANSLATE_BIG: number;
     static get _keyboardManager(): any;
-    constructor(container: any, viewer: any, altTextManager: any, eventBus: any, pdfDocument: any, pageColors: any, highlightColors: any);
+    constructor(container: any, viewer: any, altTextManager: any, eventBus: any, pdfDocument: any, pageColors: any, highlightColors: any, enableHighlightFloatingButton: any, mlManager: any);
     _eventBus: any;
     viewParameters: {
         realScale: number;
         rotation: number;
     };
+    isShiftKeyDown: boolean;
     destroy(): void;
+    mlGuess(data: any): Promise<any>;
+    get hasMLManager(): boolean;
     get hcmFilter(): any;
     get direction(): any;
     get highlightColors(): any;
+    get highlightColorNames(): any;
     setMainHighlightColorPicker(colorPicker: any): void;
     editAltText(editor: any): void;
     onPageChanging({ pageNumber }: {
@@ -38,6 +42,7 @@ export class AnnotationEditorUIManager {
     onRotationChanging({ pagesRotation }: {
         pagesRotation: any;
     }): void;
+    highlightSelection(methodOfCreation?: string): void;
     /**
      * Add an editor in the annotation storage.
      * @param {AnnotationEditor} editor
@@ -69,12 +74,18 @@ export class AnnotationEditorUIManager {
      */
     keydown(event: KeyboardEvent): void;
     /**
+     * Keyup callback.
+     * @param {KeyboardEvent} event
+     */
+    keyup(event: KeyboardEvent): void;
+    /**
      * Execute an action for a given name.
      * For example, the user can click on the "Undo" entry in the context menu
      * and it'll trigger the undo action.
-     * @param {Object} details
      */
-    onEditingAction(details: Object): void;
+    onEditingAction({ name }: {
+        name: any;
+    }): void;
     /**
      * Set the editing state.
      * It can be useful to temporarily disable it when the user is editing a
@@ -122,6 +133,7 @@ export class AnnotationEditorUIManager {
      * @param {*} value
      */
     updateParams(type: number, value: any): void;
+    showAllEditors(type: any, visible: any, updateButton?: boolean): void;
     enableWaiting(mustWait?: boolean): void;
     /**
      * Get all the editors belonging to a given page.
@@ -166,6 +178,11 @@ export class AnnotationEditorUIManager {
      * @param {AnnotationEditor} editor
      */
     setActiveEditor(editor: AnnotationEditor): void;
+    /**
+     * Update the UI of the active editor.
+     * @param {AnnotationEditor} editor
+     */
+    updateUI(editor: AnnotationEditor): void;
     /**
      * Add or remove an editor the current selection.
      * @param {AnnotationEditor} editor
@@ -257,6 +274,12 @@ export class AnnotationEditorUIManager {
     getMode(): number;
     get imageManager(): any;
     removeEditors(filterFunction?: () => boolean): void;
+    getSelectionBoxes(textLayer: any): {
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+    }[] | null;
     #private;
 }
 export function bindEvents(obj: any, element: any, names: any): void;
@@ -293,6 +316,7 @@ export class CommandManager {
      * @typedef {Object} addOptions
      * @property {function} cmd
      * @property {function} undo
+     * @property {function} [post]
      * @property {boolean} mustExec
      * @property {number} type
      * @property {boolean} overwriteIfSameType
@@ -302,9 +326,10 @@ export class CommandManager {
      * Add a new couple of commands to be used in case of redo/undo.
      * @param {addOptions} options
      */
-    add({ cmd, undo, mustExec, type, overwriteIfSameType, keepUndo, }: {
+    add({ cmd, undo, post, mustExec, type, overwriteIfSameType, keepUndo, }: {
         cmd: Function;
         undo: Function;
+        post?: Function | undefined;
         mustExec: boolean;
         type: number;
         overwriteIfSameType: boolean;

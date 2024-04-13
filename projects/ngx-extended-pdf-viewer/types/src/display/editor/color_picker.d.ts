@@ -9,8 +9,8 @@ export class ColorPicker {
     _colorSelectFromKeyboard(event: any): void;
     _moveToNext(event: any): void;
     _moveToPrevious(event: any): void;
-    _moveToBeginning(): void;
-    _moveToEnd(): void;
+    _moveToBeginning(event: any): void;
+    _moveToEnd(event: any): void;
     hideDropdown(): void;
     _hideDropdownFromKeyboard(): void;
     updateColor(color: any): void;

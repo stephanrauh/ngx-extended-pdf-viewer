@@ -301,8 +301,6 @@ pdfjs-editor-ink-button-label = Расмкашӣ
 pdfjs-editor-stamp-button =
     .title = Илова ё таҳрир кардани тасвирҳо
 pdfjs-editor-stamp-button-label = Илова ё таҳрир кардани тасвирҳо
-pdfjs-editor-remove-button =
-    .title = Тоза кардан
 
 ## Remove button for the various kind of editor.
 
@@ -383,7 +381,13 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Сурх
 
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
 pdfjs-editor-highlight-show-all-button-label = Ҳамаро намоиш додан
+pdfjs-editor-highlight-show-all-button =
+    .title = Ҳамаро намоиш додан
+
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight

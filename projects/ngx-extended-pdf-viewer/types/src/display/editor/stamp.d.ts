@@ -5,7 +5,7 @@ export class StampEditor extends AnnotationEditor {
     static _type: string;
     static _editorType: number;
     /** @inheritdoc */
-    static initialize(l10n: any): void;
+    static initialize(l10n: any, uiManager: any): void;
     static get supportedTypes(): any;
     static get supportedTypesStr(): any;
     /** @inheritdoc */

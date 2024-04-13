@@ -153,6 +153,14 @@ export class IPDFLinkService {
 /**
  * @interface
  */
+export class IPDFPrintServiceFactory {
+    static initGlobals(): void;
+    static get supportsPrinting(): boolean;
+    static createPrintService(): void;
+}
+/**
+ * @interface
+ */
 export class IRenderableView {
     /** @type {function | null} */
     resume: Function | null;

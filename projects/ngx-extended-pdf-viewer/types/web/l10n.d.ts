@@ -1,4 +1,5 @@
 export type IL10n = import("./interfaces").IL10n;
+export const GenericL10n: null;
 /** @typedef {import("./interfaces").IL10n} IL10n */
 /**
  * NOTE: The L10n-implementations should use lowercase language-codes
@@ -6,8 +7,8 @@ export type IL10n = import("./interfaces").IL10n;
  * @implements {IL10n}
  */
 export class L10n implements IL10n {
-    static "__#52@#fixupLangCode"(langCode: any): any;
-    static "__#52@#isRTL"(lang: any): boolean;
+    static "__#57@#fixupLangCode"(langCode: any): any;
+    static "__#57@#isRTL"(lang: any): boolean;
     constructor({ lang, isRTL }: {
         lang: any;
         isRTL: any;

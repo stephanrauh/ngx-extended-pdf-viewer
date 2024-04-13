@@ -1,5 +1,5 @@
 export class EditorToolbar {
-    static "__#29@#pointerDown"(e: any): void;
+    static "__#3@#pointerDown"(e: any): void;
     constructor(editor: any);
     render(): HTMLDivElement;
     hide(): void;
@@ -7,5 +7,11 @@ export class EditorToolbar {
     addAltTextButton(button: any): void;
     addColorPicker(colorPicker: any): void;
     remove(): void;
+    #private;
+}
+export class HighlightToolbar {
+    constructor(uiManager: any);
+    show(parent: any, boxes: any, isLTR: any): void;
+    hide(): void;
     #private;
 }

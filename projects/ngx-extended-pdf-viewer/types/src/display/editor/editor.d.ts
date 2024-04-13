@@ -36,6 +36,7 @@ export class AnnotationEditor {
     static _borderLineWidth: number;
     static _colorManager: ColorManager;
     static _zIndex: number;
+    static _telemetryTimeout: number;
     static get _resizerKeyboardManager(): any;
     static get _defaultLineColor(): any;
     static deleteAnnotationElement(editor: any): void;
@@ -43,7 +44,7 @@ export class AnnotationEditor {
      * Initialize the l10n stuff for this type of editor.
      * @param {Object} l10n
      */
-    static initialize(l10n: Object, options?: null): void;
+    static initialize(l10n: Object, _uiManager: any, options: any): void;
     /**
      * Update the default parameters for this type of editor.
      * @param {number} _type
@@ -69,7 +70,7 @@ export class AnnotationEditor {
      * @param {AnnotationEditorLayer} parent
      */
     static paste(item: DataTransferItem, parent: AnnotationEditorLayer): void;
-    static "__#30@#rotatePoint"(x: any, y: any, angle: any): any[];
+    static "__#34@#rotatePoint"(x: any, y: any, angle: any): any[];
     /**
      * Deserialize the editor.
      * The result of the deserialization is a new editor.
@@ -87,6 +88,7 @@ export class AnnotationEditor {
      */
     constructor(parameters: AnnotationEditorParameters);
     _initialOptions: any;
+    _isVisible: boolean;
     _uiManager: null;
     _focusEventsAllowed: boolean;
     _l10nPromise: null;
@@ -175,6 +177,20 @@ export class AnnotationEditor {
      */
     translateInPage(x: number, y: number): void;
     drag(tx: any, ty: any): void;
+    get _hasBeenMoved(): boolean;
+    /**
+     * Get the translation to take into account the editor border.
+     * The CSS engine positions the element by taking the border into account so
+     * we must apply the opposite translation to have the editor in the right
+     * position.
+     * @returns {Array<number>}
+     */
+    getBaseTranslation(): Array<number>;
+    /**
+     * @returns {boolean} true if position must be fixed (i.e. make the x and y
+     * living in the page).
+     */
+    get _mustFixPosition(): boolean;
     /**
      * Fix the position of the editor in order to keep it inside its parent page.
      * @param {number} [rotation] - the rotation of the page.
@@ -221,6 +237,7 @@ export class AnnotationEditor {
      */
     set altTextData(data: any);
     get altTextData(): any;
+    hasAltText(): boolean;
     /**
      * Render this editor in a div.
      * @returns {HTMLDivElement | null}
@@ -370,6 +387,24 @@ export class AnnotationEditor {
      * @param {number} height
      */
     setAspectRatio(width: number, height: number): void;
+    /**
+     * Get the data to report to the telemetry when the editor is added.
+     * @returns {Object}
+     */
+    get telemetryInitialData(): Object;
+    /**
+     * The telemetry data to use when saving/printing.
+     * @returns {Object|null}
+     */
+    get telemetryFinalData(): Object | null;
+    _reportTelemetry(data: any, mustWait?: boolean): void;
+    /**
+     * Show or hide this editor.
+     * @param {boolean|undefined} visible
+     */
+    show(visible?: boolean | undefined): void;
+    enable(): void;
+    disable(): void;
     #private;
 }
 import { AnnotationEditorUIManager } from "./tools.js";

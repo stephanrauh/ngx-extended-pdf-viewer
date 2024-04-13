@@ -1,5 +1,4 @@
 export type TypedArray = Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array;
-export type BinaryData = TypedArray | ArrayBuffer | Array<number> | string;
 export type RefProxy = {
     num: number;
     gen: number;
@@ -13,7 +12,8 @@ export type DocumentInitParameters = {
      */
     url?: string | URL | undefined;
     /**
-     * - Binary PDF data.
+     * -
+     * Binary PDF data.
      * Use TypedArrays (Uint8Array) to improve the memory usage. If PDF data is
      * BASE64-encoded, use `atob()` to convert it to a binary string first.
      *
@@ -21,7 +21,7 @@ export type DocumentInitParameters = {
      * worker-thread. This will help reduce main-thread memory usage, however
      * it will take ownership of the TypedArrays.
      */
-    data?: BinaryData | undefined;
+    data?: string | number[] | ArrayBuffer | TypedArray | undefined;
     /**
      * - Basic authentication headers.
      */
@@ -530,9 +530,6 @@ export const DefaultStandardFontDataFactory: typeof NodeStandardFontDataFactory;
  * } TypedArray
  */
 /**
- * @typedef { TypedArray | ArrayBuffer | Array<number> | string } BinaryData
- */
-/**
  * @typedef {Object} RefProxy
  * @property {number} num
  * @property {number} gen
@@ -542,7 +539,8 @@ export const DefaultStandardFontDataFactory: typeof NodeStandardFontDataFactory;
  *
  * @typedef {Object} DocumentInitParameters
  * @property {string | URL} [url] - The URL of the PDF.
- * @property {BinaryData} [data] - Binary PDF data.
+ * @property {TypedArray | ArrayBuffer | Array<number> | string} [data] -
+ *   Binary PDF data.
  *   Use TypedArrays (Uint8Array) to improve the memory usage. If PDF data is
  *   BASE64-encoded, use `atob()` to convert it to a binary string first.
  *
@@ -685,7 +683,7 @@ export class PDFDataRangeTransport {
     _progressListeners: any[];
     _progressiveReadListeners: any[];
     _progressiveDoneListeners: any[];
-    _readyCapability: PromiseCapability;
+    _readyCapability: PromiseWithResolvers<any>;
     /**
      * @param {function} listener
      */
@@ -736,8 +734,8 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#39@#docId": number;
-    _capability: PromiseCapability;
+    static "__#44@#docId": number;
+    _capability: PromiseWithResolvers<any>;
     _transport: any;
     _worker: any;
     /**
@@ -917,11 +915,32 @@ export class PDFDocumentProxy {
         items: any[];
     }[]>;
     /**
+     * @typedef {Object} GetOptionalContentConfigParameters
+     * @property {string} [intent] - Determines the optional content groups that
+     *   are visible by default; valid values are:
+     *    - 'display' (viewable groups).
+     *    - 'print' (printable groups).
+     *    - 'any' (all groups).
+     *   The default value is 'display'.
+     */
+    /**
+     * @param {GetOptionalContentConfigParameters} [params] - Optional content
+     *   config parameters.
      * @returns {Promise<OptionalContentConfig>} A promise that is resolved with
      *   an {@link OptionalContentConfig} that contains all the optional content
      *   groups (assuming that the document has any).
      */
-    getOptionalContentConfig(): Promise<OptionalContentConfig>;
+    getOptionalContentConfig({ intent }?: {
+        /**
+         * - Determines the optional content groups that
+         * are visible by default; valid values are:
+         * - 'display' (viewable groups).
+         * - 'print' (printable groups).
+         * - 'any' (all groups).
+         * The default value is 'display'.
+         */
+        intent?: string | undefined;
+    } | undefined): Promise<OptionalContentConfig>;
     /**
      * @returns {Promise<Array<number> | null>} A promise that is resolved with
      *   an {Array} that contains the permission flags for the PDF document, or
@@ -1226,11 +1245,11 @@ export class PDFPageProxy {
      */
     getViewport({ scale, rotation, offsetX, offsetY, dontFlip, }?: GetViewportParameters): PageViewport;
     /**
-     * @param {GetAnnotationsParameters} params - Annotation parameters.
+     * @param {GetAnnotationsParameters} [params] - Annotation parameters.
      * @returns {Promise<Array<any>>} A promise that is resolved with an
      *   {Array} of the annotation objects.
      */
-    getAnnotations({ intent }?: GetAnnotationsParameters): Promise<Array<any>>;
+    getAnnotations({ intent }?: GetAnnotationsParameters | undefined): Promise<Array<any>>;
     /**
      * @returns {Promise<Object>} A promise that is resolved with an
      *   {Object} with JS actions.
@@ -1334,7 +1353,7 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#42@#workerPorts": any;
+    static "__#47@#workerPorts": any;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */
@@ -1344,7 +1363,7 @@ export class PDFWorker {
      * @type {string}
      */
     static get workerSrc(): string;
-    static get "__#42@#mainThreadWorkerMessageHandler"(): any;
+    static get "__#47@#mainThreadWorkerMessageHandler"(): any;
     static get _setupFakeWorkerGlobal(): any;
     constructor({ name, port, verbosity, }?: {
         name?: null | undefined;
@@ -1354,7 +1373,7 @@ export class PDFWorker {
     name: any;
     destroyed: boolean;
     verbosity: number;
-    _readyCapability: PromiseCapability;
+    _readyCapability: PromiseWithResolvers<any>;
     _port: any;
     _webWorker: Worker | null;
     _messageHandler: MessageHandler | null;
@@ -1429,7 +1448,6 @@ import { NodeCMapReaderFactory } from "./node_utils";
 import { DOMFilterFactory } from "./display_utils.js";
 import { NodeFilterFactory } from "./node_utils";
 import { NodeStandardFontDataFactory } from "./node_utils";
-import { PromiseCapability } from "../shared/util.js";
 import { AnnotationStorage } from "./annotation_storage.js";
 import { Metadata } from "./metadata.js";
 import { StatTimer } from "./display_utils.js";

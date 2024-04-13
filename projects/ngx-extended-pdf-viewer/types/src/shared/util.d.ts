@@ -40,6 +40,9 @@ export namespace AnnotationEditorParamsType {
     let INK_OPACITY: number;
     let HIGHLIGHT_COLOR: number;
     let HIGHLIGHT_DEFAULT_COLOR: number;
+    let HIGHLIGHT_THICKNESS: number;
+    let HIGHLIGHT_FREE: number;
+    let HIGHLIGHT_SHOW_ALL: number;
 }
 export const AnnotationEditorPrefix: "pdfjs_internal_editor_";
 export namespace AnnotationEditorType {
@@ -188,7 +191,6 @@ export class InvalidPDFException extends InvalidPDFException_base {
     [x: string]: any;
     constructor(msg: any);
 }
-export function isArrayBuffer(v: any): boolean;
 export function isArrayEqual(arr1: any, arr2: any): boolean;
 export const isNodeJS: any;
 export const LINE_DESCENT_FACTOR: 0.35;
@@ -318,25 +320,6 @@ export namespace PermissionFlag {
     export let ASSEMBLE: number;
     export let PRINT_HIGH_QUALITY: number;
 }
-export class PromiseCapability {
-    /**
-     * @type {Promise<any>} The Promise object.
-     */
-    promise: Promise<any>;
-    /**
-     * @type {function} Fulfills the Promise.
-     */
-    resolve: Function;
-    /**
-     * @type {function} Rejects the Promise.
-     */
-    reject: Function;
-    /**
-     * @type {boolean} If the Promise has been fulfilled/rejected.
-     */
-    get settled(): boolean;
-    #private;
-}
 export namespace RenderingIntentFlag {
     export let ANY: number;
     export let DISPLAY: number;
@@ -392,7 +375,9 @@ export class Util {
     static singularValueDecompose2dScale(m: any): number[];
     static normalizeRect(rect: any): any;
     static intersect(rect1: any, rect2: any): number[] | null;
-    static bezierBoundingBox(x0: any, y0: any, x1: any, y1: any, x2: any, y2: any, x3: any, y3: any): number[];
+    static "__#1@#getExtremumOnCurve"(x0: any, x1: any, x2: any, x3: any, y0: any, y1: any, y2: any, y3: any, t: any, minMax: any): void;
+    static "__#1@#getExtremum"(x0: any, x1: any, x2: any, x3: any, y0: any, y1: any, y2: any, y3: any, a: any, b: any, c: any, minMax: any): void;
+    static bezierBoundingBox(x0: any, y0: any, x1: any, y1: any, x2: any, y2: any, x3: any, y3: any, minMax: any): any;
 }
 export namespace VerbosityLevel {
     let ERRORS: number;

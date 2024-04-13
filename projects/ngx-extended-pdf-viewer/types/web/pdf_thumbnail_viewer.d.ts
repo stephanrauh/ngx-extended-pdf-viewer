@@ -59,25 +59,13 @@ export class PDFThumbnailViewer {
         lastY: any;
         _eventHandler: (evt: any) => void;
     };
-    /**
-     * @private
-     */
-    private _scrollUpdated;
     getThumbnail(index: any): any;
-    /**
-     * @private
-     */
-    private _getVisibleThumbs;
     scrollThumbnailIntoView(pageNumber: any): void;
     _currentPageNumber: any;
     set pagesRotation(rotation: any);
     get pagesRotation(): any;
     _pagesRotation: any;
     cleanup(): void;
-    /**
-     * @private
-     */
-    private _resetView;
     _thumbnails: any[] | undefined;
     _pageLabels: any[] | null | undefined;
     /**
@@ -86,10 +74,6 @@ export class PDFThumbnailViewer {
     setDocument(pdfDocument: PDFDocumentProxy): void;
     initialized: boolean | undefined;
     pdfDocument: import("../src/display/api").PDFDocumentProxy | undefined;
-    /**
-     * @private
-     */
-    private _cancelRendering;
     /**
      * @param {Array|null} labels
      */

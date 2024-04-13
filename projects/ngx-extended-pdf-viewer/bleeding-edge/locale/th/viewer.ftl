@@ -296,6 +296,12 @@ pdfjs-editor-stamp-button-label = เพิ่มหรือแก้ไขภ�
 pdfjs-editor-highlight-button =
     .title = เน้น
 pdfjs-editor-highlight-button-label = เน้น
+pdfjs-highlight-floating-button =
+    .title = เน้นสี
+pdfjs-highlight-floating-button1 =
+    .title = เน้นสี
+    .aria-label = เน้นสี
+pdfjs-highlight-floating-button-label = เน้นสี
 
 ## Remove button for the various kind of editor.
 
@@ -380,10 +386,12 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = แดง
 
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
-pdfjs-editor-highlight-show-all-button-label = Show all
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
+pdfjs-editor-highlight-show-all-button-label = แสดงทั้งหมด
+pdfjs-editor-highlight-show-all-button =
+    .title = แสดงทั้งหมด
+
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

@@ -283,12 +283,21 @@ pdfjs-editor-free-text-button-label = متن
 pdfjs-editor-ink-button =
     .title = چھکو
 pdfjs-editor-ink-button-label = چھکو
+
+## Remove button for the various kind of editor.
+
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = رنگ
 pdfjs-editor-free-text-size-input = سائز
 pdfjs-editor-ink-color-input = رنگ
 pdfjs-editor-ink-thickness-input = ٹھولھ
 pdfjs-editor-ink-opacity-input = دھندلاپن
+pdfjs-editor-stamp-add-image-button =
+    .title = تصویر شامل کرو
+pdfjs-editor-stamp-add-image-button-label = تصویر شامل کرو
 pdfjs-free-text =
     .aria-label = ٹیکسٹ ایڈیٹر
 pdfjs-free-text-default-content = ٹائپنگ شروع کرو …
@@ -304,9 +313,8 @@ pdfjs-ink-canvas =
 ## This is used in an aria label to help to understand the role of the resizer.
 
 
-pdfjs-editor-stamp-add-image-button =
-    .title = تصویر شامل کرو
-pdfjs-editor-stamp-add-image-button-label = تصویر شامل کرو
+## Color picker
+
 pdfjs-editor-colorpicker-yellow =
     .title = پیلا
 pdfjs-editor-colorpicker-green =
@@ -317,6 +325,19 @@ pdfjs-editor-colorpicker-pink =
     .title = گلابی
 pdfjs-editor-colorpicker-red =
     .title = لال
+
+pdfjs-editor-highlight-button =
+    .title = نمایاں کرو
+pdfjs-editor-highlight-button-label = نمایاں کرو
+pdfjs-highlight-floating-button =
+    .title = نمایاں کرو
+pdfjs-highlight-floating-button1 =
+    .title = نمایاں کرو
+    .aria-label = نمایاں کرو
+pdfjs-highlight-floating-button-label = نمایاں کرو
+pdfjs-editor-alt-text-cancel-button = منسوخ
+pdfjs-editor-alt-text-save-button = محفوظ
+pdfjs-editor-highlight-show-all-button-label = سارے ݙکھاؤ
 pdfjs-find-match-count =
     { $total ->
         [one] { $current } of { $total } match
@@ -330,13 +351,6 @@ pdfjs-find-match-count-limit =
 pdfjs-editor-stamp-button =
     .title = Add or edit images
 pdfjs-editor-stamp-button-label = Add or edit images
-pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
 pdfjs-editor-remove-ink-button =
     .title = Remove drawing
 pdfjs-editor-remove-freetext-button =
@@ -356,8 +370,6 @@ pdfjs-editor-alt-text-add-description-label = Add a description
 pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
 pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
 pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
-pdfjs-editor-alt-text-cancel-button = Cancel
-pdfjs-editor-alt-text-save-button = Save
 pdfjs-editor-alt-text-decorative-tooltip = Marked as decorative
 pdfjs-editor-alt-text-textarea =
     .placeholder = For example, “A young man sits down at a table to eat a meal”
@@ -374,6 +386,5 @@ pdfjs-editor-colorpicker-button =
     .title = Change color
 pdfjs-editor-colorpicker-dropdown =
     .aria-label = Color choices
-pdfjs-editor-highlight-show-all-button-label = Show all
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

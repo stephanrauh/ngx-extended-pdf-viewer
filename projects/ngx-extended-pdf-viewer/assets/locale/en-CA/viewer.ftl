@@ -286,6 +286,12 @@ pdfjs-editor-ink-button-label = Draw
 pdfjs-editor-stamp-button =
     .title = Add or edit images
 pdfjs-editor-stamp-button-label = Add or edit images
+
+## Remove button for the various kind of editor.
+
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Colour
 pdfjs-editor-free-text-size-input = Size
@@ -310,6 +316,9 @@ pdfjs-ink-canvas =
 ## This is used in an aria label to help to understand the role of the resizer.
 
 
+## Color picker
+
+# This means "Color used to highlight text"
 pdfjs-editor-highlight-colorpicker-label = Highlight colour
 pdfjs-editor-colorpicker-button =
     .title = Change colour
@@ -325,6 +334,7 @@ pdfjs-editor-colorpicker-pink =
     .title = Pink
 pdfjs-editor-colorpicker-red =
     .title = Red
+
 pdfjs-find-match-count =
     { $total ->
         [one] { $current } of { $total } match
@@ -338,6 +348,8 @@ pdfjs-find-match-count-limit =
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight
+pdfjs-highlight-floating-button =
+    .title = Highlight
 pdfjs-highlight-floating-button1 =
     .title = Highlight
     .aria-label = Highlight

@@ -306,6 +306,10 @@ pdfjs-editor-highlight-button =
 pdfjs-editor-highlight-button-label = Vurgula
 pdfjs-highlight-floating-button =
     .title = Vurgula
+pdfjs-highlight-floating-button1 =
+    .title = Vurgula
+    .aria-label = Vurgula
+pdfjs-highlight-floating-button-label = Vurgula
 
 ## Remove button for the various kind of editor.
 
@@ -397,9 +401,5 @@ pdfjs-editor-highlight-show-all-button-label = Tümünü göster
 pdfjs-editor-highlight-show-all-button =
     .title = Tümünü göster
 
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

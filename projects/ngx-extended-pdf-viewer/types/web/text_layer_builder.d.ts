@@ -9,19 +9,14 @@ export type TextLayerBuilderOptions = {
      */
     highlighter: TextHighlighter;
     accessibilityManager?: import("./text_accessibility.js").TextAccessibilityManager | undefined;
-    /**
-     * - Allows to use an
-     * OffscreenCanvas if needed.
-     */
-    isOffscreenCanvasSupported?: boolean | undefined;
+    onAppend?: Function | undefined;
 };
 /**
  * @typedef {Object} TextLayerBuilderOptions
  * @property {TextHighlighter} highlighter - Optional object that will handle
  *   highlighting text from the find controller.
  * @property {TextAccessibilityManager} [accessibilityManager]
- * @property {boolean} [isOffscreenCanvasSupported] - Allows to use an
- *   OffscreenCanvas if needed.
+ * @property {function} [onAppend]
  */
 /**
  * The text layer builder provides text selection functionality for the PDF.
@@ -29,11 +24,11 @@ export type TextLayerBuilderOptions = {
  * contain text that matches the PDF text they are overlaying.
  */
 export class TextLayerBuilder {
-    constructor({ highlighter, accessibilityManager, isOffscreenCanvasSupported, enablePermissions, }: {
+    constructor({ highlighter, accessibilityManager, enablePermissions, onAppend, }: {
         highlighter?: null | undefined;
         accessibilityManager?: null | undefined;
-        isOffscreenCanvasSupported?: boolean | undefined;
         enablePermissions?: boolean | undefined;
+        onAppend?: null | undefined;
     });
     textContentItemsStr: any[];
     renderingDone: boolean;
@@ -42,12 +37,6 @@ export class TextLayerBuilder {
     textLayerRenderTask: import("../src/display/text_layer.js").TextLayerRenderTask | null;
     highlighter: any;
     accessibilityManager: any;
-    isOffscreenCanvasSupported: boolean;
-    /**
-     * Callback used to attach the textLayer to the DOM.
-     * @type {function}
-     */
-    onAppend: Function;
     div: HTMLDivElement;
     get numTextDivs(): number;
     /**

@@ -301,8 +301,12 @@ pdfjs-editor-ink-button-label = Teikne
 pdfjs-editor-stamp-button =
     .title = Legg til eller rediger bilde
 pdfjs-editor-stamp-button-label = Legg til eller rediger bilde
-pdfjs-editor-remove-button =
-    .title = Fjern
+
+## Remove button for the various kind of editor.
+
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Farge
 pdfjs-editor-free-text-size-input = Storleik
@@ -342,6 +346,8 @@ pdfjs-editor-alt-text-textarea =
 ## This is used in an aria label to help to understand the role of the resizer.
 
 
+## Color picker
+
 pdfjs-editor-colorpicker-yellow =
     .title = Gul
 pdfjs-editor-colorpicker-green =
@@ -352,6 +358,7 @@ pdfjs-editor-colorpicker-pink =
     .title = Rosa
 pdfjs-editor-colorpicker-red =
     .title = Raud
+
 pdfjs-editor-highlight-button =
     .title = Highlight
 pdfjs-editor-highlight-button-label = Highlight

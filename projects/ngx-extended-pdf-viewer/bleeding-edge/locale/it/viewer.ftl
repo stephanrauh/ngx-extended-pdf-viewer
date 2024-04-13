@@ -51,12 +51,6 @@ pdfjs-download-button-label = Scarica
 pdfjs-bookmark-button =
     .title = Pagina corrente (mostra URL della pagina corrente)
 pdfjs-bookmark-button-label = Pagina corrente
-# Used in Firefox for Android.
-pdfjs-open-in-app-button =
-    .title = Apri in app
-# Used in Firefox for Android.
-# Length of the translation matters since we are in a mobile context, with limited screen estate.
-pdfjs-open-in-app-button-label = Apri in app
 
 ##  Secondary toolbar and context menu
 
@@ -309,6 +303,10 @@ pdfjs-editor-highlight-button =
 pdfjs-editor-highlight-button-label = Evidenzia
 pdfjs-highlight-floating-button =
     .title = Evidenzia
+pdfjs-highlight-floating-button1 =
+    .title = Evidenzia
+    .aria-label = Evidenzia
+pdfjs-highlight-floating-button-label = Evidenzia
 
 ## Remove button for the various kind of editor.
 
@@ -402,11 +400,6 @@ pdfjs-editor-highlight-show-all-button-label = Mostra tutto
 pdfjs-editor-highlight-show-all-button =
     .title = Mostra tutto
 
-
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 

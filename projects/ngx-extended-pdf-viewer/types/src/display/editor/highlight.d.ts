@@ -4,13 +4,23 @@
 export class HighlightEditor extends AnnotationEditor {
     static _defaultColor: null;
     static _defaultOpacity: number;
+    static _defaultThickness: number;
     static _l10nPromise: any;
     static _type: string;
     static _editorType: number;
-    static initialize(l10n: any): void;
+    static _freeHighlightId: number;
+    static _freeHighlight: null;
+    static _freeHighlightClipId: string;
+    static get _keyboardManager(): any;
+    static computeTelemetryFinalData(data: any): {
+        numberOfColors: any;
+    };
+    /** @inheritdoc */
+    static initialize(l10n: any, uiManager: any): void;
+    /** @inheritdoc */
     static updateDefaultParams(type: any, value: any): void;
     static get defaultPropertiesToUpdate(): (number | null)[][];
-    static "__#18@#rotateBbox"({ x, y, width, height }: {
+    static "__#23@#rotateBbox"({ x, y, width, height }: {
         x: any;
         y: any;
         width: any;
@@ -21,10 +31,32 @@ export class HighlightEditor extends AnnotationEditor {
         width: any;
         height: any;
     };
+    static startHighlighting(parent: any, isLTR: any, { target: textLayer, x, y }: {
+        target: any;
+        x: any;
+        y: any;
+    }): void;
+    static "__#23@#highlightMove"(parent: any, event: any): void;
+    static "__#23@#endHighlight"(parent: any, event: any): void;
     /** @inheritdoc */
     static deserialize(data: any, parent: any, uiManager: any): AnnotationEditor | null;
     constructor(params: any);
     color: any;
+    /** @inheritdoc */
+    get telemetryInitialData(): {
+        action: string;
+        type: string;
+        color: any;
+        thickness: any;
+        methodOfCreation: string;
+    };
+    /** @inheritdoc */
+    get telemetryFinalData(): {
+        type: string;
+        color: any;
+    };
+    /** @inheritdoc */
+    translateInPage(x: any, y: any): void;
     /** @inheritdoc */
     updateParams(type: any, value: any): void;
     /** @inheritdoc */
@@ -37,13 +69,15 @@ export class HighlightEditor extends AnnotationEditor {
     rotate(angle: any): void;
     pointerover(): void;
     pointerleave(): void;
+    _moveCaret(direction: any): void;
     /** @inheritdoc */
     serialize(isForCopying?: boolean): {
         annotationType: number;
         color: number[];
         opacity: any;
-        quadPoints: any[];
-        outlines: any[][];
+        thickness: any;
+        quadPoints: any[] | null;
+        outlines: any;
         pageIndex: number;
         rect: any[];
         rotation: number;

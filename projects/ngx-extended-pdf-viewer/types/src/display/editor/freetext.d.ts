@@ -11,11 +11,13 @@ export class FreeTextEditor extends AnnotationEditor {
     static _type: string;
     static _editorType: number;
     /** @inheritdoc */
-    static initialize(l10n: any): void;
+    static initialize(l10n: any, uiManager: any): void;
     /** @inheritdoc */
     static updateDefaultParams(type: any, value: any): void;
     /** @inheritdoc */
     static get defaultPropertiesToUpdate(): any[][];
+    static "__#17@#getNodeContent"(node: any): any;
+    static "__#17@#deserializeContent"(content: any): any;
     /** @inheritdoc */
     static deserialize(data: any, parent: any, uiManager: any): AnnotationEditor | null;
     constructor(params: any);
@@ -45,6 +47,7 @@ export class FreeTextEditor extends AnnotationEditor {
     editorDivInput(event: any): void;
     editorDiv: HTMLDivElement | undefined;
     overlayDiv: HTMLDivElement | undefined;
+    editorDivPaste(event: any): void;
     /** @inheritdoc */
     serialize(isForCopying?: boolean): {
         annotationType: number;

@@ -304,6 +304,12 @@ pdfjs-editor-stamp-button-label = Lisää tai muokkaa kuvia
 pdfjs-editor-highlight-button =
     .title = Korostus
 pdfjs-editor-highlight-button-label = Korostus
+pdfjs-highlight-floating-button =
+    .title = Korostus
+pdfjs-highlight-floating-button1 =
+    .title = Korostus
+    .aria-label = Korostus
+pdfjs-highlight-floating-button-label = Korostus
 
 ## Remove button for the various kind of editor.
 
@@ -395,9 +401,5 @@ pdfjs-editor-highlight-show-all-button-label = Näytä kaikki
 pdfjs-editor-highlight-show-all-button =
     .title = Näytä kaikki
 
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

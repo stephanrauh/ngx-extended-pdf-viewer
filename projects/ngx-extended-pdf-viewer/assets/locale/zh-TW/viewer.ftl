@@ -293,8 +293,15 @@ pdfjs-editor-ink-button-label = 繪圖
 pdfjs-editor-stamp-button =
     .title = 新增或編輯圖片
 pdfjs-editor-stamp-button-label = 新增或編輯圖片
-pdfjs-editor-remove-button =
-    .title = 移除
+pdfjs-editor-highlight-button =
+    .title = 強調
+pdfjs-editor-highlight-button-label = 強調
+pdfjs-highlight-floating-button =
+    .title = 強調
+pdfjs-highlight-floating-button1 =
+    .title = 強調
+    .aria-label = 強調
+pdfjs-highlight-floating-button-label = 強調
 
 ## Remove button for the various kind of editor.
 
@@ -318,6 +325,10 @@ pdfjs-editor-ink-opacity-input = 透​明度
 pdfjs-editor-stamp-add-image-button =
     .title = 新增圖片
 pdfjs-editor-stamp-add-image-button-label = 新增圖片
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = 線條粗細
+pdfjs-editor-free-highlight-thickness-title =
+    .title = 更改強調文字以外的項目時的線條粗細
 pdfjs-free-text =
     .aria-label = 文本編輯器
 pdfjs-free-text-default-content = 開始打字…
@@ -375,18 +386,12 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = 紅色
 
-pdfjs-editor-highlight-button =
-    .title = 強調
-pdfjs-editor-highlight-button-label = 強調
-pdfjs-highlight-floating-button =
-    .title = 強調
-pdfjs-editor-free-highlight-thickness-input = 線條粗細
-pdfjs-editor-free-highlight-thickness-title =
-    .title = 更改強調文字以外的項目時的線條粗細
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
 pdfjs-editor-highlight-show-all-button-label = 顯示全部
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
+pdfjs-editor-highlight-show-all-button =
+    .title = 顯示全部
+
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

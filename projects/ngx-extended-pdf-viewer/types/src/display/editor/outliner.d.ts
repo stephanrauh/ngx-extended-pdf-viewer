@@ -1,3 +1,21 @@
+export class FreeOutliner {
+    static "__#20@#MIN_DIST": number;
+    static "__#20@#MIN_DIFF": number;
+    static "__#20@#MIN": number;
+    constructor({ x, y }: {
+        x: any;
+        y: any;
+    }, box: any, scaleFactor: any, thickness: any, isLTR: any, innerMargin?: number);
+    get free(): boolean;
+    isEmpty(): boolean;
+    add({ x, y }: {
+        x: any;
+        y: any;
+    }): boolean;
+    toSVGPath(): string;
+    getOutlines(): FreeHighlightOutline;
+    #private;
+}
 export class Outliner {
     /**
      * Construct an outliner.
@@ -12,15 +30,41 @@ export class Outliner {
      *   the last point of the boxes.
      */
     constructor(boxes: Array<Object>, borderWidth?: number, innerMargin?: number, isLTR?: boolean);
-    getOutlines(): {
-        outlines: any[][];
-        box: {
-            x: number;
-            y: number;
-            width: number;
-            height: number;
-            lastPoint: any[];
-        };
-    };
+    getOutlines(): HighlightOutline;
     #private;
 }
+declare class FreeHighlightOutline extends Outline {
+    constructor(outline: any, points: any, box: any, scaleFactor: any, innerMargin: any, isLTR: any);
+    serialize([blX, blY, trX, trY]: [any, any, any, any], rotation: any): {
+        outline: number[];
+        points: number[][];
+    };
+    get box(): null;
+    getNewOutline(thickness: any, innerMargin: any): FreeHighlightOutline;
+    #private;
+}
+declare class HighlightOutline extends Outline {
+    constructor(outlines: any, box: any);
+    /**
+     * Serialize the outlines into the PDF page coordinate system.
+     * @param {Array<number>} _bbox - the bounding box of the annotation.
+     * @param {number} _rotation - the rotation of the annotation.
+     * @returns {Array<Array<number>>}
+     */
+    serialize([blX, blY, trX, trY]: Array<number>, _rotation: number): Array<Array<number>>;
+    get box(): any;
+    #private;
+}
+declare class Outline {
+    /**
+     * @returns {string} The SVG path of the outline.
+     */
+    toSVGPath(): string;
+    /**
+     * @type {Object|null} The bounding box of the outline.
+     */
+    get box(): Object | null;
+    serialize(_bbox: any, _rotation: any): void;
+    get free(): any;
+}
+export {};

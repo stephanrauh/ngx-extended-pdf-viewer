@@ -306,6 +306,10 @@ pdfjs-editor-highlight-button =
 pdfjs-editor-highlight-button-label = Markera
 pdfjs-highlight-floating-button =
     .title = Markera
+pdfjs-highlight-floating-button1 =
+    .title = Markera
+    .aria-label = Markera
+pdfjs-highlight-floating-button-label = Markera
 
 ## Remove button for the various kind of editor.
 
@@ -397,9 +401,5 @@ pdfjs-editor-highlight-show-all-button-label = Visa alla
 pdfjs-editor-highlight-show-all-button =
     .title = Visa alla
 
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

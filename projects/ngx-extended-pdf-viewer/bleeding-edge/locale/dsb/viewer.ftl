@@ -308,6 +308,12 @@ pdfjs-editor-stamp-button-label = Wobraze pśidaś abo wobźěłaś
 pdfjs-editor-highlight-button =
     .title = Wuzwignuś
 pdfjs-editor-highlight-button-label = Wuzwignuś
+pdfjs-highlight-floating-button =
+    .title = Wuzwignjenje
+pdfjs-highlight-floating-button1 =
+    .title = Wuzwignuś
+    .aria-label = Wuzwignuś
+pdfjs-highlight-floating-button-label = Wuzwignuś
 
 ## Remove button for the various kind of editor.
 
@@ -392,10 +398,12 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Cerwjeny
 
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
-pdfjs-editor-highlight-show-all-button-label = Show all
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
+pdfjs-editor-highlight-show-all-button-label = Wšykne pokazaś
+pdfjs-editor-highlight-show-all-button =
+    .title = Wšykne pokazaś
+
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

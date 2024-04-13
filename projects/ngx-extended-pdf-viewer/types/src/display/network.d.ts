@@ -34,7 +34,7 @@ declare class PDFNetworkStreamFullRequestReader implements IPDFStreamReader {
     _manager: any;
     _url: any;
     _fullRequestId: any;
-    _headersReceivedCapability: PromiseCapability;
+    _headersReceivedCapability: PromiseWithResolvers<any>;
     _disableRange: any;
     _contentLength: any;
     _rangeChunkSize: any;
@@ -79,5 +79,4 @@ declare class PDFNetworkStreamRangeRequestReader implements IPDFStreamRangeReade
     read(): Promise<any>;
     cancel(reason: any): void;
 }
-import { PromiseCapability } from "../shared/util.js";
 export {};

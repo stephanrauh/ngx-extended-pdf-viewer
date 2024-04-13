@@ -306,6 +306,10 @@ pdfjs-editor-highlight-button =
 pdfjs-editor-highlight-button-label = Áherslulita
 pdfjs-highlight-floating-button =
     .title = Áherslulita
+pdfjs-highlight-floating-button1 =
+    .title = Áherslulita
+    .aria-label = Áherslulita
+pdfjs-highlight-floating-button-label = Áherslulita
 
 ## Remove button for the various kind of editor.
 
@@ -397,9 +401,5 @@ pdfjs-editor-highlight-show-all-button-label = Birta allt
 pdfjs-editor-highlight-show-all-button =
     .title = Birta allt
 
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

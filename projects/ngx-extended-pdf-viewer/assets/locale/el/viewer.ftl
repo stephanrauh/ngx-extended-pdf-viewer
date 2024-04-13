@@ -301,8 +301,15 @@ pdfjs-editor-ink-button-label = Σχέδιο
 pdfjs-editor-stamp-button =
     .title = Προσθήκη ή επεξεργασία εικόνων
 pdfjs-editor-stamp-button-label = Προσθήκη ή επεξεργασία εικόνων
-pdfjs-editor-remove-button =
-    .title = Αφαίρεση
+pdfjs-editor-highlight-button =
+    .title = Επισήμανση
+pdfjs-editor-highlight-button-label = Επισήμανση
+pdfjs-highlight-floating-button =
+    .title = Επισήμανση
+pdfjs-highlight-floating-button1 =
+    .title = Επισήμανση
+    .aria-label = Επισήμανση
+pdfjs-highlight-floating-button-label = Επισήμανση
 
 ## Remove button for the various kind of editor.
 
@@ -326,6 +333,10 @@ pdfjs-editor-ink-opacity-input = Αδιαφάνεια
 pdfjs-editor-stamp-add-image-button =
     .title = Προσθήκη εικόνας
 pdfjs-editor-stamp-add-image-button-label = Προσθήκη εικόνας
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = Πάχος
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Αλλαγή πάχους κατά την επισήμανση στοιχείων εκτός κειμένου
 pdfjs-free-text =
     .aria-label = Επεξεργασία κειμένου
 pdfjs-free-text-default-content = Ξεκινήστε να πληκτρολογείτε…
@@ -383,16 +394,12 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Κόκκινο
 
-pdfjs-editor-highlight-button =
-    .title = Επισήμανση
-pdfjs-editor-highlight-button-label = Επισήμανση
-pdfjs-editor-free-highlight-thickness-input = Πάχος
-pdfjs-editor-free-highlight-thickness-title =
-    .title = Αλλαγή πάχους κατά την επισήμανση στοιχείων εκτός κειμένου
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
-pdfjs-editor-highlight-show-all-button-label = Show all
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
+pdfjs-editor-highlight-show-all-button-label = Εμφάνιση όλων
+pdfjs-editor-highlight-show-all-button =
+    .title = Εμφάνιση όλων
+
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

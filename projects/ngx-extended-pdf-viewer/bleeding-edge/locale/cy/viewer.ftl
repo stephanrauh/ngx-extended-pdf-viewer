@@ -312,6 +312,12 @@ pdfjs-editor-stamp-button-label = Ychwanegu neu olygu delweddau
 pdfjs-editor-highlight-button =
     .title = Amlygu
 pdfjs-editor-highlight-button-label = Amlygu
+pdfjs-highlight-floating-button =
+    .title = Amlygu
+pdfjs-highlight-floating-button1 =
+    .title = Amlygu
+    .aria-label = Amlygu
+pdfjs-highlight-floating-button-label = Amlygu
 
 ## Remove button for the various kind of editor.
 
@@ -396,10 +402,12 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Coch
 
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
-pdfjs-editor-highlight-show-all-button-label = Show all
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
+pdfjs-editor-highlight-show-all-button-label = Dangos y cyfan
+pdfjs-editor-highlight-show-all-button =
+    .title = Dangos y cyfan
+
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

@@ -3,16 +3,12 @@ export type IPDFStreamReader = import("../interfaces").IPDFStreamReader;
 export type IPDFStreamRangeReader = import("../interfaces").IPDFStreamRangeReader;
 /** @implements {IPDFStream} */
 export class PDFDataTransportStream implements IPDFStream {
-    constructor({ length, initialData, progressiveDone, contentDispositionFilename, disableRange, disableStream, }: {
-        length: any;
-        initialData: any;
-        progressiveDone?: boolean | undefined;
-        contentDispositionFilename?: null | undefined;
+    constructor(pdfDataRangeTransport: any, { disableRange, disableStream }: {
         disableRange?: boolean | undefined;
         disableStream?: boolean | undefined;
-    }, pdfDataRangeTransport: any);
+    });
     _queuedChunks: ArrayBuffer[];
-    _progressiveDone: boolean;
+    _progressiveDone: any;
     _contentDispositionFilename: any;
     _pdfDataRangeTransport: any;
     _isStreamingSupported: boolean;

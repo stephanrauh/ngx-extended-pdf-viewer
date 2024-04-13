@@ -37,11 +37,6 @@ export type TextLayerRenderParameters = {
      * This is output and shall initially be set to an empty array.
      */
     textContentItemsStr?: string[] | undefined;
-    /**
-     * true if we can use
-     * OffscreenCanvas to measure string widths.
-     */
-    isOffscreenCanvasSupported?: boolean | undefined;
 };
 /**
  * Text layer update parameters.
@@ -69,11 +64,6 @@ export type TextLayerUpdateParameters = {
      */
     textDivProperties?: WeakMap<HTMLElement, Object> | undefined;
     /**
-     * true if we can use
-     * OffscreenCanvas to measure string widths.
-     */
-    isOffscreenCanvasSupported?: boolean | undefined;
-    /**
      * true if the text layer must be rotated.
      */
     mustRotate?: boolean | undefined;
@@ -83,20 +73,20 @@ export type TextLayerUpdateParameters = {
      */
     mustRescale?: boolean | undefined;
 };
+export function cleanupTextLayer(): void;
 /**
  * @param {TextLayerRenderParameters} params
  * @returns {TextLayerRenderTask}
  */
 export function renderTextLayer(params: TextLayerRenderParameters): TextLayerRenderTask;
 export class TextLayerRenderTask {
-    constructor({ textContentSource, container, viewport, textDivs, textDivProperties, textContentItemsStr, isOffscreenCanvasSupported, }: {
+    constructor({ textContentSource, container, viewport, textDivs, textDivProperties, textContentItemsStr, }: {
         textContentSource: any;
         container: any;
         viewport: any;
         textDivs: any;
         textDivProperties: any;
         textContentItemsStr: any;
-        isOffscreenCanvasSupported: any;
     });
     _textContentSource: any;
     _isReadableStream: boolean;
@@ -104,19 +94,18 @@ export class TextLayerRenderTask {
     _rootContainer: any;
     _textDivs: any;
     _textContentItemsStr: any;
-    _isOffscreenCanvasSupported: any;
     _fontInspectorEnabled: boolean;
     _reader: any;
     _textDivProperties: any;
     _canceled: boolean;
-    _capability: PromiseCapability;
+    _capability: PromiseWithResolvers<any>;
     _layoutTextParams: {
         prevFontSize: null;
         prevFontFamily: null;
         div: null;
         scale: number;
         properties: null;
-        ctx: RenderingContext | OffscreenCanvasRenderingContext2D | null;
+        ctx: any;
     };
     _transform: any[];
     _pageWidth: any;
@@ -147,5 +136,4 @@ export class TextLayerRenderTask {
  * @param {TextLayerUpdateParameters} params
  * @returns {undefined}
  */
-export function updateTextLayer({ container, viewport, textDivs, textDivProperties, isOffscreenCanvasSupported, mustRotate, mustRescale, }: TextLayerUpdateParameters): undefined;
-import { PromiseCapability } from "../shared/util.js";
+export function updateTextLayer({ container, viewport, textDivs, textDivProperties, mustRotate, mustRescale, }: TextLayerUpdateParameters): undefined;

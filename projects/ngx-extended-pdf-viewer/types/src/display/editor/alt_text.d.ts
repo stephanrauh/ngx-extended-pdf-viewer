@@ -4,6 +4,7 @@ export class AltText {
     constructor(editor: any);
     render(): Promise<HTMLButtonElement>;
     finish(): void;
+    isEmpty(): boolean;
     /**
      * Set the alt text data.
      */
