@@ -1031,7 +1031,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   private getPdfJsPath(artifact: 'pdf' | 'viewer', needsES5: boolean) {
-    let suffix = this.minifiedJSLibraries ? '.min.js' : '.js';
+    let suffix = this.minifiedJSLibraries && !needsES5 ? '.min.js' : '.js';
     const assets = pdfDefaultOptions.assetsFolder;
     const versionSuffix = getVersionSuffix(assets);
     if (versionSuffix.startsWith('4')) {
@@ -1098,7 +1098,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             pdfDefaultOptions.needsES5 = true;
             console.log('Using the ES5 version of the PDF viewer. Your PDF files show faster if you update your browser.');
           }
-          if (this.minifiedJSLibraries) {
+          if (this.minifiedJSLibraries && !needsES5) {
             if (!pdfDefaultOptions.workerSrc().endsWith('.min.mjs')) {
               const src = pdfDefaultOptions.workerSrc();
               pdfDefaultOptions.workerSrc = () => src.replace('.mjs', '.min.mjs');
