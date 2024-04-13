@@ -262,7 +262,7 @@
 - 8.1.2 #650 + #657 restored compatibility to MacOS Mojave and iOS 13; #649 fixed the Italian translations (and probably many other translations, too)
 - 8.2.0 #650 compatibility to Safari 12.1 and 11.1; fixed the automatic height calculation if the height attribute is omitted or given as a percentage and the CSS framework translates that to "0px"
 - 8.3.0-alpha.0 #652 support the double-tap gesture to enlarge the PDF; #675 use the correct color to display errors; #690 fix an error that sometimes happens when the preview window is closed
-- 8.3.0 #704 now you can pass URL objects to the `[url]`; #694 by default, `pdfDefaultOptions.textLayerMode` is now the enhanced text layer; plus, the PDF uses `pdfDefaultOptions.textLayerMode` the chose the text layer mode
+- 8.3.0 #704 now you can pass URL objects to the `[url]`; #694 by default, `pdfDefaultOptions.textLayerMode` is now the enhanced text layer; plus, the PDF uses `pdfDefaultOptions.textLayerMode` the chosen the text layer mode
 - 8.4.0 #686 optionally prevent dragging and dropping files to the PDF viewer
 - 9.0.0-alpha.0 #700 re-worked the print CSS
 - 9.0.0-alpha.1 #90 #543 if `[zoom]` is undefined or omitted, the zoom, page number, and rotation are taken from `localStore`. In other words: if you've viewed the document before, your settings are restored. #255 stop reporting the "worker is terminated" message. #707 fixed the exception occurring in Brave on iOS with active fingerprinting protection; #645 added the `(pageRender)` event which is sent when a page is about to be rendered (as opposed to `(pageRendered)`, which is sent when the page has finished rendering); #629 download Blobs and base64 files on Chrome on iOS; #90 respect the rotation the user choose previously when re-opening a PDF document; #652 added `pdfDefaultOptions.doubleTapZoomFactor` to enable custom scalings on double-tap
@@ -543,3 +543,4 @@
 - 19.6.6 #1301 fix `NgxExtendedPdfViewer.scrollPageIntoView()` (was broken when omitting the optional parameter) (stable branch)
 - 19.7.0 #2242 stop removing form fields when removing editors with `NgxExtendedPdfViewerService.removeEditorAnnotations()`; #2208 modify annotation editor attributes programmatically
 - 19.7.1 #2275 prevent accidental firing of `(pageChange)` and `(pageLabelChange)` when changing the `pageViewMode
+- 20.0.0-alpha.0 make Sonarcloud happy by shortening an if statement; #2279 fix the highlight editor toolbar in rtl languages; #2282 improved compatibility to ng-zorro; #2293 improve the CSS encapsulation; #2294 make sure that the highlight editor can be closed again

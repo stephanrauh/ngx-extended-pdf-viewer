@@ -13,104 +13,106 @@
  * limitations under the License.
  */
 
-.textLayer {
-  position: absolute;
-  text-align: initial;
-  inset: 0;
-  overflow: hidden;
-  opacity: 1;
-  line-height: 1;
-  text-size-adjust: none;
-  forced-color-adjust: none;
-  transform-origin: 0 0;
-  z-index: 2;
-  caret-color: CanvasText;
-
-  &.highlighting {
-    touch-action: none;
-  }
-
-  :is(span, br) {
-    color: transparent;
+ngx-extended-pdf-viewer {
+  .textLayer {
     position: absolute;
-    white-space: pre;
-    cursor: text;
-    transform-origin: 0% 0%;
-  }
+    text-align: initial;
+    inset: 0;
+    overflow: hidden;
+    opacity: 1;
+    line-height: 1;
+    text-size-adjust: none;
+    forced-color-adjust: none;
+    transform-origin: 0 0;
+    z-index: 2;
+    caret-color: CanvasText;
 
-  /* Only necessary in Google Chrome, see issue 14205, and most unfortunately
- * the problem doesn't show up in "text" reference tests. */
-  /*#if !MOZCENTRAL*/
-  span.markedContent {
-    top: 0;
-    height: 0;
-  }
-
-  /*#endif*/
-
-  .highlight {
-    --highlight-bg-color: rgb(180 0 170 / 0.25);
-    --highlight-selected-bg-color: rgb(0 100 0 / 0.25);
-    --highlight-backdrop-filter: none;
-    --highlight-selected-backdrop-filter: none;
-
-    @media screen and (forced-colors: active) {
-      --highlight-bg-color: transparent;
-      --highlight-selected-bg-color: transparent;
-      --highlight-backdrop-filter: var(--hcm-highlight-filter);
-      --highlight-selected-backdrop-filter: var(--hcm-highlight-selected-filter);
+    &.highlighting {
+      touch-action: none;
     }
 
-    margin: -1px;
-    padding: 1px;
-    background-color: $highlight;
-    backdrop-filter: var(--highlight-backdrop-filter);
-    border-radius: 4px;
-  }
+    :is(span, br) {
+      color: transparent;
+      position: absolute;
+      white-space: pre;
+      cursor: text;
+      transform-origin: 0% 0%;
+    }
 
-  &.appended {
-    position: initial;
-  }
-
-  &.begin {
-    border-radius: 4px 0 0 4px;
-  }
-
-  &.end {
-    border-radius: 0 4px 4px 0;
-  }
-
-  &.middle {
-    border-radius: 0;
-  }
-
-  .textLayer .highlight.selected {
-    background-color: $highlight-selected;
-    backdrop-filter: var(--highlight-selected-backdrop-filter);
-  }
-
-  .textLayer ::selection {
-    background: $selected;
-  }
-
-  /* Avoids https://github.com/mozilla/pdf.js/issues/13840 in Chrome */
-  /*#if !MOZCENTRAL*/
-  br::selection {
-    background: transparent;
-  }
-
-  /*#endif*/
-
-  .endOfContent {
-    display: block;
-    position: absolute;
-    inset: 100% 0 0;
-    z-index: -1;
-    cursor: default;
-    user-select: none;
-
-    &.active {
+    /* Only necessary in Google Chrome, see issue 14205, and most unfortunately
+ * the problem doesn't show up in "text" reference tests. */
+    /*#if !MOZCENTRAL*/
+    span.markedContent {
       top: 0;
+      height: 0;
+    }
+
+    /*#endif*/
+
+    .highlight {
+      --highlight-bg-color: rgb(180 0 170 / 0.25);
+      --highlight-selected-bg-color: rgb(0 100 0 / 0.25);
+      --highlight-backdrop-filter: none;
+      --highlight-selected-backdrop-filter: none;
+
+      @media screen and (forced-colors: active) {
+        --highlight-bg-color: transparent;
+        --highlight-selected-bg-color: transparent;
+        --highlight-backdrop-filter: var(--hcm-highlight-filter);
+        --highlight-selected-backdrop-filter: var(--hcm-highlight-selected-filter);
+      }
+
+      margin: -1px;
+      padding: 1px;
+      background-color: $highlight;
+      backdrop-filter: var(--highlight-backdrop-filter);
+      border-radius: 4px;
+    }
+
+    &.appended {
+      position: initial;
+    }
+
+    &.begin {
+      border-radius: 4px 0 0 4px;
+    }
+
+    &.end {
+      border-radius: 0 4px 4px 0;
+    }
+
+    &.middle {
+      border-radius: 0;
+    }
+
+    .textLayer .highlight.selected {
+      background-color: $highlight-selected;
+      backdrop-filter: var(--highlight-selected-backdrop-filter);
+    }
+
+    .textLayer ::selection {
+      background: $selected;
+    }
+
+    /* Avoids https://github.com/mozilla/pdf.js/issues/13840 in Chrome */
+    /*#if !MOZCENTRAL*/
+    br::selection {
+      background: transparent;
+    }
+
+    /*#endif*/
+
+    .endOfContent {
+      display: block;
+      position: absolute;
+      inset: 100% 0 0;
+      z-index: -1;
+      cursor: default;
+      user-select: none;
+
+      &.active {
+        top: 0;
+      }
     }
   }
 }

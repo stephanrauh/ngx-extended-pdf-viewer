@@ -13,65 +13,65 @@
  * limitations under the License.
  */
 
-.canvasWrapper {
-  svg {
-    transform: none;
+ngx-extended-pdf-viewer {
+  .canvasWrapper {
+    svg {
+      transform: none;
 
-    &[data-main-rotation="90"] {
-      use:not(.clip) {
-        transform: matrix(0, 1, -1, 0, 1, 0);
-      }
-    }
-
-    &[data-main-rotation="180"] {
-      use:not(.clip) {
-        transform: matrix(-1, 0, 0, -1, 1, 1);
-      }
-    }
-
-    &[data-main-rotation="270"] {
-      use:not(.clip) {
-        transform: matrix(0, -1, 1, 0, 0, 1);
-      }
-    }
-
-    &.highlight {
-      --blend-mode: multiply;
-
-      @media screen and (forced-colors: active) {
-        --blend-mode: difference;
+      &[data-main-rotation="90"] {
+        use:not(.clip) {
+          transform: matrix(0, 1, -1, 0, 1, 0);
+        }
       }
 
-      position: absolute;
-      mix-blend-mode: var(--blend-mode);
-
-      &:not(.free) {
-        fill-rule: evenodd;
-      }
-    }
-
-    &.highlightOutline {
-      position: absolute;
-      mix-blend-mode: normal;
-      fill-rule: evenodd;
-      fill: none;
-
-      &.hovered {
-        stroke: var(--hover-outline-color);
-        stroke-width: var(--outline-width);
+      &[data-main-rotation="180"] {
+        use:not(.clip) {
+          transform: matrix(-1, 0, 0, -1, 1, 1);
+        }
       }
 
-      &.selected {
-        .mainOutline {
-          stroke: var(--outline-around-color);
-          stroke-width: calc(
-            var(--outline-width) + 2 * var(--outline-around-width)
-          );
+      &[data-main-rotation="270"] {
+        use:not(.clip) {
+          transform: matrix(0, -1, 1, 0, 0, 1);
+        }
+      }
+
+      &.highlight {
+        --blend-mode: multiply;
+
+        @media screen and (forced-colors: active) {
+          --blend-mode: difference;
         }
 
-        .secondaryOutline {
-          stroke: var(--outline-color);
+        position: absolute;
+        mix-blend-mode: var(--blend-mode);
+
+        &:not(.free) {
+          fill-rule: evenodd;
+        }
+      }
+
+      &.highlightOutline {
+        position: absolute;
+        mix-blend-mode: normal;
+        fill-rule: evenodd;
+        fill: none;
+
+        &.hovered {
+          stroke: var(--hover-outline-color);
           stroke-width: var(--outline-width);
+        }
+
+        &.selected {
+          .mainOutline {
+            stroke: var(--outline-around-color);
+            stroke-width: calc(var(--outline-width) + 2 * var(--outline-around-width));
+          }
+
+          .secondaryOutline {
+            stroke: var(--outline-color);
+            stroke-width: var(--outline-width);
+          }
         }
       }
     }

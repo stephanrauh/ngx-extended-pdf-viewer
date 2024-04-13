@@ -33,6 +33,6 @@ export class PdfHighlightEditorComponent {
   }
 
   public onClick(): void {
-    document.getElementById('editorFreeText')?.click();
+    document.getElementById('editorHighlight')?.click();
   }
 }
