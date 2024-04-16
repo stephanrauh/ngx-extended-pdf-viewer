@@ -25,12 +25,14 @@ html[dir='ltr'] ngx-extended-pdf-viewer #secondaryToolbarToggle {
   margin-right: 4px;
   margin-left: 0;
 }
+
 html[dir='rtl'] ngx-extended-pdf-viewer #secondaryToolbarToggle {
   margin-right: 0;
   margin-left: 4px;
 }
 
 ngx-extended-pdf-viewer {
+
   .toolbarButton,
   // .secondaryToolbarButton,
   .dialogButton {
@@ -65,6 +67,7 @@ ngx-extended-pdf-viewer {
 }
 
 ngx-extended-pdf-viewer {
+
   button:focus,
   a:focus,
   input:focus,
@@ -76,4 +79,10 @@ ngx-extended-pdf-viewer {
   input[type="checkbox"]:focus {
     outline: 1px solid blue;
   }
+}
+
+// #2282 enforce the content-box model for the PDF viewer, so it works with ng-zorro-antd
+ngx-extended-pdf-viewer div.zoom,
+ngx-extended-pdf-viewer div.zoom * {
+  box-sizing: content-box !important;
 }
