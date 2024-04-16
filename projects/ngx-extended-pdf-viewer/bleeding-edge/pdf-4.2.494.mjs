@@ -10647,7 +10647,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: "4.1.888",
+    apiVersion: "4.2.494",
     data,
     password,
     disableAutoFetch,
@@ -12416,7 +12416,7 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.1.888";
+const version = "4.2.494";
 const build = "adc43639e";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
@@ -19303,7 +19303,7 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.1.888";
+const pdfjsVersion = "4.2.494";
 const pdfjsBuild = "adc43639e";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;

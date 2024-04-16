@@ -6933,7 +6933,7 @@ const GenericL10n = null;
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ngxExtendedPdfViewerVersion: () => (/* binding */ ngxExtendedPdfViewerVersion)
 /* harmony export */ });
-const ngxExtendedPdfViewerVersion = '20.0.0-alpha.0';
+const ngxExtendedPdfViewerVersion = '20.0.0-alpha.1';
 
 /***/ }),
 

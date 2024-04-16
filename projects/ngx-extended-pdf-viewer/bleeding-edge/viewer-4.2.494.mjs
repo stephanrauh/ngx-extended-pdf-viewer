@@ -3386,7 +3386,6 @@ const PDFViewerApplication = {
     const container = appConfig.mainContainer,
       viewer = appConfig.viewerContainer;
     const annotationEditorMode = _app_options_js__WEBPACK_IMPORTED_MODULE_2__.AppOptions.get("annotationEditorMode");
-    const isOffscreenCanvasSupported = _app_options_js__WEBPACK_IMPORTED_MODULE_2__.AppOptions.get("isOffscreenCanvasSupported") && pdfjs_lib__WEBPACK_IMPORTED_MODULE_1__.FeatureTest.isOffscreenCanvasSupported;
     const pageColors = _app_options_js__WEBPACK_IMPORTED_MODULE_2__.AppOptions.get("forcePageColors") || window.matchMedia("(forced-colors: active)").matches ? {
       background: _app_options_js__WEBPACK_IMPORTED_MODULE_2__.AppOptions.get("pageColorsBackground"),
       foreground: _app_options_js__WEBPACK_IMPORTED_MODULE_2__.AppOptions.get("pageColorsForeground")
@@ -3443,7 +3442,7 @@ const PDFViewerApplication = {
     }
     if (appConfig.annotationEditorParams) {
       if (annotationEditorMode !== pdfjs_lib__WEBPACK_IMPORTED_MODULE_1__.AnnotationEditorType.DISABLE) {
-        if (_app_options_js__WEBPACK_IMPORTED_MODULE_2__.AppOptions.get("enableStampEditor") && isOffscreenCanvasSupported) {
+        if (_app_options_js__WEBPACK_IMPORTED_MODULE_2__.AppOptions.get("enableStampEditor")) {
           appConfig.toolbar?.editorStampButton?.classList.remove("hidden");
         }
         const editorHighlightButton = appConfig.toolbar?.editorHighlightButton;
@@ -6933,7 +6932,7 @@ const GenericL10n = null;
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ngxExtendedPdfViewerVersion: () => (/* binding */ ngxExtendedPdfViewerVersion)
 /* harmony export */ });
-const ngxExtendedPdfViewerVersion = '20.0.0-alpha.0';
+const ngxExtendedPdfViewerVersion = '20.0.0-alpha.1';
 
 /***/ }),
 
@@ -15082,7 +15081,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = "4.1.888";
+    const viewerVersion = "4.2.494";
     if (pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version !== viewerVersion) {
       throw new Error(`The API version "${pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -16794,7 +16793,6 @@ __webpack_require__.a(__webpack_module__, async (__webpack_handle_async_dependen
 /* harmony export */   ColorPicker: () => (/* binding */ ColorPicker),
 /* harmony export */   DOMSVGFactory: () => (/* binding */ DOMSVGFactory),
 /* harmony export */   DrawLayer: () => (/* binding */ DrawLayer),
-/* harmony export */   FeatureTest: () => (/* binding */ FeatureTest),
 /* harmony export */   GlobalWorkerOptions: () => (/* binding */ GlobalWorkerOptions),
 /* harmony export */   InvalidPDFException: () => (/* binding */ InvalidPDFException),
 /* harmony export */   MissingPDFException: () => (/* binding */ MissingPDFException),
@@ -16821,7 +16819,7 @@ __webpack_require__.a(__webpack_module__, async (__webpack_handle_async_dependen
 /* harmony export */   updateTextLayer: () => (/* binding */ updateTextLayer),
 /* harmony export */   version: () => (/* binding */ version)
 /* harmony export */ });
-/* unused harmony exports CMapCompressionType, ImageKind, isDataScheme, OPS, Outliner, PDFDataRangeTransport, PDFWorker, Util, VerbosityLevel */
+/* unused harmony exports CMapCompressionType, FeatureTest, ImageKind, isDataScheme, OPS, Outliner, PDFDataRangeTransport, PDFWorker, Util, VerbosityLevel */
 if (!globalThis.pdfjsLib) {
   await globalThis.pdfjsLibPromise;
 }
@@ -18974,7 +18972,7 @@ _app_js__WEBPACK_IMPORTED_MODULE_3__ = (__webpack_async_dependencies__.then ? (a
 
 
 
-const pdfjsVersion = "4.1.888";
+const pdfjsVersion = "4.2.494";
 const pdfjsBuild = "adc43639e";
 const AppConstants = {
   LinkTarget: _pdf_link_service_js__WEBPACK_IMPORTED_MODULE_2__.LinkTarget,
