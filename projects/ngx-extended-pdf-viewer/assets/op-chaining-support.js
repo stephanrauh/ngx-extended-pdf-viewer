@@ -24,5 +24,8 @@ new (function () {
       return optionalChaining?.support;
     }
   }
-  window.supportsOptionalChaining = new BrowserCompatibilityTester().supportsOptionalChaining();
+
+  const supportsOptionalChaining = new BrowserCompatibilityTester().supportsOptionalChaining();
+  const supportModernPromises = !!Promise.withResolvers;
+  window.ngxExtendedPdfViewerCanRunModernJSCode = supportsOptionalChaining && supportModernPromises;
 })();
