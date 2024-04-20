@@ -1107,7 +1107,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           const pdfJsPath = this.getPdfJsPath('pdf', needsES5);
           if (pdfJsPath.endsWith('.mjs')) {
             const src = pdfDefaultOptions.workerSrc();
-            pdfDefaultOptions.workerSrc = () => src.replace('.js', '.mjs');
+            if (src.endsWith('.js')) {
+              pdfDefaultOptions.workerSrc = () => src.substring(0, src.length - 3) + '.mjs';
+            }
           }
           const script = this.createScriptElement(pdfJsPath);
           script.onload = () => {
