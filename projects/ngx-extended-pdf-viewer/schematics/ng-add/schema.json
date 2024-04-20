@@ -21,6 +21,11 @@
       "description": "Do you want to use the stable version? (Chose 'no' to use the 'bleeding-edge' version)",
       "x-prompt": "Do you want to use the stable version? (Chose 'no' to use the 'bleeding-edge' version)"
     },
+    "standalone": {
+      "type": "boolean",
+      "description": "Are you using standalone components? (Default: yes)",
+      "x-prompt": "Are you using standalone components? (Default: yes)"
+    },
     "exampleComponent": {
       "type": "boolean",
       "description": "Do you want to generate an example component using ngx-extended-pdf-viewer? (Default: yes)",

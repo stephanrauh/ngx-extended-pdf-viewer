@@ -5,4 +5,5 @@ export interface Schema extends ModuleOptions {
   defaultProject: string;
   stable: boolean;
   exampleComponent: boolean;
+  standalone: boolean;
 }

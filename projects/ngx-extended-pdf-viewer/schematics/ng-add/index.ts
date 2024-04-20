@@ -2,7 +2,7 @@ import { join, normalize, Path, strings } from '@angular-devkit/core';
 import { apply, applyTemplates, chain, DirEntry, mergeWith, move, Rule, SchematicContext, SchematicsException, Tree, url } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { InsertChange } from '@schematics/angular/utility/change';
-import { buildRelativePath, ModuleOptions, MODULE_EXT, ROUTING_MODULE_EXT } from '@schematics/angular/utility/find-module';
+import { buildRelativePath, MODULE_EXT, ModuleOptions, ROUTING_MODULE_EXT } from '@schematics/angular/utility/find-module';
 import * as ts from 'typescript';
 import { addDeclarationToModule, addImportToModule } from './ast-utils';
 import { Schema } from './schema';
@@ -54,10 +54,8 @@ export function ngAdd(options: Schema): Rule {
     context.addTask(new NodePackageInstallTask());
     if (exampleComponent) {
       const folder = projectName === options.defaultProject ? '/src' : `/projects/${projectName}/src`;
-      const exampleComponentRule = generateExampleComponent(folder, stable);
-      return chain([exampleComponentRule, updateAngularJsonRule(projectName, stable), addDeclarationToNgModule(options)]);
+      return chain([addDeclarationToNgModule(options), generateExampleComponent(folder, stable, options), updateAngularJsonRule(projectName, stable)]);
     }
-    // return updateAngularJson(tree, projectName, stable);
     return tree;
   };
 }
@@ -96,12 +94,13 @@ function updateAngularJson(tree: Tree, projectName: string, stable: boolean): Tr
   return tree;
 }
 
-function generateExampleComponent(folder: string, stable: boolean): Rule {
+function generateExampleComponent(folder: string, stable: boolean, options: Schema): Rule {
   const templateSource = apply(url('./files'), [
     applyTemplates({
       classify: strings.classify,
       dasherize: strings.dasherize,
       stable: stable,
+      standalone: options.standalone,
     }),
     move(normalize(folder)),
   ]);
@@ -111,9 +110,13 @@ function generateExampleComponent(folder: string, stable: boolean): Rule {
 
 function addDeclarationToNgModule(options: ModuleOptions): Rule {
   return (host: Tree) => {
+    if (options.standalone) {
+      return host;
+    }
     if (options.skipImport || !options.module) {
       options.module = findModule(host, 'src/app/pdf-viewer');
       if (!options.module) {
+        options.standalone = true;
         return host;
       }
     }
@@ -172,6 +175,15 @@ export function findModule(host: Tree, generateDir: string, moduleExt = MODULE_E
     dir = dir.parent;
   }
 
-  console.log("Couldn't find a module. Assuming this is a stand-alone project.");
+  console.error('');
+  console.error(
+    "Error: Couldn't find a module. Assuming this is a stand-alone project. You need to add these lines to the decorator of the ExamplePdfViewerComponent:"
+  );
+  console.error('');
+  console.error('standalone: true,');
+  console.error('providers: [NgxExtendedPdfViewerService],');
+  console.error('imports: [NgxExtendedPdfViewerModule],');
+  console.error('');
+
   return undefined;
 }
