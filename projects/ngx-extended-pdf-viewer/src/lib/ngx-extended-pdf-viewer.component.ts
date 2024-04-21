@@ -995,12 +995,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (needsES5 || isIE || isEdge || isIOs13OrBelow || this.forceUsingLegacyES5) {
       return true;
     }
-    return !(await this.supportsOptionalChaining());
+    return !(await this.ngxExtendedPdfViewerCanRunModernJSCode());
   }
 
-  private supportsOptionalChaining(): Promise<boolean> {
+  private ngxExtendedPdfViewerCanRunModernJSCode(): Promise<boolean> {
     return new Promise((resolve) => {
-      const support = (<any>window).supportsOptionalChaining;
+      const support = (<any>window).ngxExtendedPdfViewerCanRunModernJSCode;
       support !== undefined ? resolve(support) : resolve(this.addScriptOpChainingSupport());
     });
   }
@@ -1010,11 +1010,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       const script = this.createScriptElement(pdfDefaultOptions.assetsFolder + '/op-chaining-support.js');
       script.onload = () => {
         script.remove();
-        resolve((<any>window).supportsOptionalChaining as boolean);
+        resolve((<any>window).ngxExtendedPdfViewerCanRunModernJSCode as boolean);
       };
       script.onerror = () => {
         script.remove();
-        (<any>window).supportsOptionalChaining = false;
+        (<any>window).ngxExtendedPdfViewerCanRunModernJSCode = false;
         resolve(false);
       };
 
@@ -1819,6 +1819,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     PDFViewerApplication.eventBus.on('annotationlayerrendered', (event: AnnotationLayerRenderedEvent) => {
       const div = event.source.div;
       this.ngZone.run(() => {
+        event.initialFormDataStoredInThePDF = this.formSupport.initialFormDataStoredInThePDF;
         this.annotationLayerRendered.emit(event);
         this.enableOrDisableForms(div, true);
       });

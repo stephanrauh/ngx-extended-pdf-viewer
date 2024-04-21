@@ -10700,7 +10700,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: "4.2.507",
+    apiVersion: "4.2.517",
     data,
     password,
     disableAutoFetch,
@@ -12469,8 +12469,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.2.507";
-const build = "6b97e87e0";
+const version = "4.2.517";
+const build = "9c42e7e08";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -12539,10 +12539,11 @@ class XfaLayer {
     if (angularData.value) {
       storage.setValue(id, angularData);
     }
-    const storedData = angularData.value ? angularData : storage.getValue(id, {
+    const initialValue = storage.getValue(id, {
       value: null
     });
-    window.registerXFAField(html, storedData);
+    const storedData = angularData.value ? angularData : initialValue;
+    window.registerXFAField(html, storedData, initialValue);
     html.addEventListener("updateFromAngular", value => storage.setValue(id, {
       value: value.detail
     }));
@@ -13821,7 +13822,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
         }
         event.target.scrollLeft = 0;
       };
-      window.registerAcroformField(id, element, storedData.value);
+      window.registerAcroformField(id, element, storedData.value, undefined, this.data.fieldValue);
       element.addEventListener("updateFromAngular", newvalue => storage.setValue(id, {
         value: newvalue.detail
       }));
@@ -14141,7 +14142,7 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
       const defaultValue = data.defaultFieldValue || "Off";
       event.target.checked = defaultValue === data.exportValue;
     });
-    window.registerAcroformField(id, element, value ? data.exportValue : false);
+    window.registerAcroformField(id, element, value ? data.exportValue : false, undefined, this.data.fieldValue);
     element.addEventListener("updateFromAngular", newvalue => storage.setValue(id, {
       value: newvalue.detail
     }));
@@ -14242,7 +14243,7 @@ class RadioButtonWidgetAnnotationElement extends WidgetAnnotationElement {
       const defaultValue = data.defaultFieldValue;
       event.target.checked = defaultValue !== null && defaultValue !== undefined && defaultValue === data.buttonValue;
     });
-    window.registerAcroformField(id, element, value ? data.buttonValue : undefined, data.buttonValue);
+    window.registerAcroformField(id, element, value ? data.buttonValue : undefined, data.buttonValue, this.data.fieldValue);
     element.addEventListener("updateFromAngular", newvalue => storage.setValue(id, {
       value: newvalue.detail
     }));
@@ -14378,7 +14379,7 @@ class ChoiceWidgetAnnotationElement extends WidgetAnnotationElement {
         exportValue: option.value
       }));
     };
-    window.registerAcroformField(id, selectElement, selectedValues);
+    window.registerAcroformField(id, selectElement, selectedValues, undefined, this.data.fieldValue);
     selectElement.addEventListener("updateFromAngular", newvalue => storage.setValue(id, {
       value: newvalue.detail
     }));
@@ -19471,8 +19472,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.2.507";
-const pdfjsBuild = "6b97e87e0";
+const pdfjsVersion = "4.2.517";
+const pdfjsBuild = "9c42e7e08";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;

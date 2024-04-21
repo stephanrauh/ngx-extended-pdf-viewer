@@ -13,6 +13,8 @@ export class NgxFormSupport {
 
   public formData: FormDataType = {};
 
+  public initialFormDataStoredInThePDF: FormDataType = {};
+
   public formDataChange = new EventEmitter<FormDataType>();
 
   private ngZone: NgZone;
@@ -27,13 +29,25 @@ export class NgxFormSupport {
     (globalThis as any).getFormValueFromAngular = (key: string) => this.getFormValueFromAngular(key);
     (globalThis as any).updateAngularFormValue = (key: string | HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, value: { value: string }) =>
       this.updateAngularFormValueCalledByPdfjs(key, value);
-    (globalThis as any).registerAcroformField = (id: string, element: HtmlFormElement, value: string | Array<string>, radioButtonValueName?: string) =>
-      this.registerAcroformField(id, element, value, radioButtonValueName);
+    (globalThis as any).registerAcroformField = (
+      id: string,
+      element: HtmlFormElement,
+      value: string | Array<string>,
+      radioButtonValueName: string,
+      initialValueFromPDF: string
+    ) => this.registerAcroformField(id, element, value, radioButtonValueName, initialValueFromPDF);
 
-    (globalThis as any).registerXFAField = (element: HtmlFormElement, value: { value: string }) => this.registerXFAField(element, value);
+    (globalThis as any).registerXFAField = (element: HtmlFormElement, value: { value: string }, initialValueFromPDF: string) =>
+      this.registerXFAField(element, value, initialValueFromPDF);
   }
 
-  private registerAcroformField(id: string, element: HtmlFormElement, value: null | string | Array<string>, radioButtonValueName?: string): void {
+  private registerAcroformField(
+    id: string,
+    element: HtmlFormElement,
+    value: null | string | Array<string>,
+    radioButtonValueName: string,
+    initialFormValueFromPDF: string
+  ): void {
     const fieldName = element.name;
     this.formIdToField[id] = element;
     this.formIdToFullFieldName[id] = fieldName;
@@ -42,6 +56,7 @@ export class NgxFormSupport {
       this.formIdToFullFieldName[id] = groupName;
       if (value) {
         this.formData[groupName] = radioButtonValueName as string;
+        this.initialFormDataStoredInThePDF[groupName] = initialFormValueFromPDF;
       }
       element.setAttribute('exportValue', radioButtonValueName as string);
       if (!this.radioButtons[groupName]) {
@@ -50,12 +65,14 @@ export class NgxFormSupport {
       this.radioButtons[groupName].push(element);
     } else if (element instanceof HTMLSelectElement) {
       this.formData[fieldName] = this.getValueOfASelectField(element);
+      this.initialFormDataStoredInThePDF[fieldName] = initialFormValueFromPDF;
     } else {
       this.formData[fieldName] = value;
+      this.initialFormDataStoredInThePDF[fieldName] = initialFormValueFromPDF;
     }
   }
 
-  private registerXFAField(element: HTMLElement, value: { value: string }): void {
+  private registerXFAField(element: HTMLElement, value: { value: string }, initialFormValueFromPDF: string): void {
     const fullFieldName = this.findFullXFAName(element);
     if (element instanceof HTMLInputElement && element.type === 'radio') {
       const id = element.getAttribute('fieldid') ?? '';
@@ -63,7 +80,9 @@ export class NgxFormSupport {
       // because the field name refers to the entire group of relatated radio buttons
       const groupName = fullFieldName.substring(0, fullFieldName.lastIndexOf('.'));
       this.formIdToFullFieldName[id] = groupName;
-      this.formData[groupName] = value.value;
+      this.formData[groupName] = value?.value;
+      this.initialFormDataStoredInThePDF[groupName] = initialFormValueFromPDF;
+
       if (!this.radioButtons[groupName]) {
         this.radioButtons[groupName] = [];
       }
@@ -72,17 +91,20 @@ export class NgxFormSupport {
       const id = element.getAttribute('fieldid') ?? '';
       this.formIdToField[id] = element;
       this.formIdToFullFieldName[id] = fullFieldName;
-      this.formData[fullFieldName] = value.value;
+      this.formData[fullFieldName] = value?.value;
+      this.initialFormDataStoredInThePDF[fullFieldName] = initialFormValueFromPDF;
     } else if (element instanceof HTMLSelectElement) {
       const id = element.getAttribute('fieldid') ?? '';
       this.formIdToField[id] = element;
       this.formIdToFullFieldName[id] = fullFieldName;
-      this.formData[fullFieldName] = value.value;
+      this.formData[fullFieldName] = value?.value;
+      this.initialFormDataStoredInThePDF[fullFieldName] = initialFormValueFromPDF;
     } else if (element instanceof HTMLTextAreaElement) {
       const id = element.getAttribute('fieldid') ?? '';
       this.formIdToField[id] = element;
       this.formIdToFullFieldName[id] = fullFieldName;
-      this.formData[fullFieldName] = value.value;
+      this.formData[fullFieldName] = value?.value;
+      this.initialFormDataStoredInThePDF[fullFieldName] = initialFormValueFromPDF;
     } else {
       console.error("Couldn't register an XFA form field", element);
     }

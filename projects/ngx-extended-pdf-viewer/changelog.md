@@ -546,4 +546,4 @@
 - 20.0.0-alpha.0 make Sonarcloud happy by shortening an if statement; #2279 fix the highlight editor toolbar in rtl languages; #2282 improved compatibility to ng-zorro; #2293 improve the CSS encapsulation; #2294 make sure that the highlight editor can be closed again; #2295 Checkboxes with non-boolean export values can now be set by default from Angular
 - 20.0.0-alpha.1 #2282 improved compatibility to ng-zorro; #2293 improve the CSS encapsulation (the text layer was broken in version 20.0.0-alpha.0)
 - 20.0.0-alpha.2 #2274 now ngx add ngx-extended-pdf-viewer also supports stand-alone components
-- 20.0.0-alpha.3 #2196 make sure that only the file ending of old configurations is converted from _.js to _.mjs; before the bugfix, it might also rename the domain "jsdelivr" to "mjsdelivr"
+- 20.0.0-alpha.3 #2196 make sure that only the file ending of old configurations is converted from _.js to _.mjs; before the bugfix, it might also rename the domain "jsdelivr" to "mjsdelivr"; #2301 support browser that don't implement `Promise.withResolvers()`; #1917 add the inital value of the form values stored in the PDF to the `(annotationLayerRendered)` event
