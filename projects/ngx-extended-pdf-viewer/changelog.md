@@ -547,3 +547,5 @@
 - 20.0.0-alpha.1 #2282 improved compatibility to ng-zorro; #2293 improve the CSS encapsulation (the text layer was broken in version 20.0.0-alpha.0)
 - 20.0.0-alpha.2 #2274 now ngx add ngx-extended-pdf-viewer also supports stand-alone components
 - 20.0.0-alpha.3 #2196 make sure that only the file ending of old configurations is converted from _.js to _.mjs; before the bugfix, it might also rename the domain "jsdelivr" to "mjsdelivr"; #2301 support browser that don't implement `Promise.withResolvers()`; #1917 add the inital value of the form values stored in the PDF to the `(annotationLayerRendered)` event
+- 20.0.0-alpha.4 #2291 improved compatibility to Tailwind (removing a span tag that's always invisible)
+- 20.0.0 no changes (apart from updating the bleeding edge branch)
