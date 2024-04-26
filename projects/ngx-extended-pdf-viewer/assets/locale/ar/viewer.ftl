@@ -289,99 +289,109 @@ pdfjs-web-fonts-disabled = خطوط الوب مُعطّلة: تعذّر استخ
 
 
 pdfjs-scroll-page-button =
-    .title = Use Page Scrolling
-pdfjs-scroll-page-button-label = Page Scrolling
+    .title = استخدم تمرير الصفحة
+pdfjs-scroll-page-button-label = تمرير الصفحة
 pdfjs-current-outline-item-button =
-    .title = Find Current Outline Item
-pdfjs-current-outline-item-button-label = Current Outline Item
+    .title = ابحث عن عنصر المخطّط التفصيلي الحالي
+pdfjs-current-outline-item-button-label = عنصر المخطّط التفصيلي الحالي
 pdfjs-find-match-count =
     { $total ->
-        [one] { $current } of { $total } match
-       *[other] { $current } of { $total } matches
+        [zero] لا  مطابقة
+        [one] { $current } من أصل { $total } مطابقة
+        [two] { $current } من أصل { $total } مطابقة
+        [few] { $current } من أصل { $total } مطابقة
+        [many] { $current } من أصل { $total } مطابقة
+       *[other] { $current } من أصل { $total } مطابقة
     }
 pdfjs-find-match-count-limit =
     { $limit ->
-        [one] More than { $limit } match
-       *[other] More than { $limit } matches
+        [zero] { $limit } مطابقة
+        [one] أكثر من { $limit } مطابقة
+        [two] أكثر من { $limit } مطابقة
+        [few] أكثر من { $limit } مطابقة
+        [many] أكثر من { $limit } مطابقة
+       *[other] أكثر من { $limit } مطابقات
     }
 pdfjs-editor-free-text-button =
-    .title = Text
-pdfjs-editor-free-text-button-label = Text
+    .title = نص
+pdfjs-editor-free-text-button-label = نص
 pdfjs-editor-ink-button =
-    .title = Draw
-pdfjs-editor-ink-button-label = Draw
+    .title = ارسم
+pdfjs-editor-ink-button-label = ارسم
 pdfjs-editor-stamp-button =
-    .title = Add or edit images
-pdfjs-editor-stamp-button-label = Add or edit images
+    .title = أضِف أو حرّر الصور
+pdfjs-editor-stamp-button-label = أضِف أو حرّر الصور
 pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
+    .title = أبرِز
+pdfjs-editor-highlight-button-label = أبرِز
+pdfjs-highlight-floating-button =
+    .title = أبرِز
 pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
+    .title = أبرِز
+    .aria-label = أبرِز
+pdfjs-highlight-floating-button-label = أبرِز
 pdfjs-editor-remove-ink-button =
-    .title = Remove drawing
+    .title = أزِل الرسم
 pdfjs-editor-remove-freetext-button =
-    .title = Remove text
+    .title = أزِل النص
 pdfjs-editor-remove-stamp-button =
-    .title = Remove image
+    .title = أزِل الصورة
 pdfjs-editor-remove-highlight-button =
-    .title = Remove highlight
-pdfjs-editor-free-text-color-input = Color
-pdfjs-editor-free-text-size-input = Size
-pdfjs-editor-ink-color-input = Color
-pdfjs-editor-ink-thickness-input = Thickness
-pdfjs-editor-ink-opacity-input = Opacity
+    .title = أزِل الإبراز
+pdfjs-editor-free-text-color-input = اللون
+pdfjs-editor-free-text-size-input = الحجم
+pdfjs-editor-ink-color-input = اللون
+pdfjs-editor-ink-thickness-input = السماكة
+pdfjs-editor-ink-opacity-input = العتامة
 pdfjs-editor-stamp-add-image-button =
-    .title = Add image
-pdfjs-editor-stamp-add-image-button-label = Add image
-pdfjs-editor-free-highlight-thickness-input = Thickness
+    .title = أضِف صورة
+pdfjs-editor-stamp-add-image-button-label = أضِف صورة
+pdfjs-editor-free-highlight-thickness-input = السماكة
 pdfjs-editor-free-highlight-thickness-title =
-    .title = Change thickness when highlighting items other than text
+    .title = غيّر السُمك عند إبراز عناصر أُخرى غير النص
 pdfjs-free-text =
-    .aria-label = Text Editor
-pdfjs-free-text-default-content = Start typing…
+    .aria-label = محرِّر النص
+pdfjs-free-text-default-content = ابدأ الكتابة…
 pdfjs-ink =
-    .aria-label = Draw Editor
+    .aria-label = محرِّر الرسم
 pdfjs-ink-canvas =
-    .aria-label = User-created image
-pdfjs-editor-alt-text-button-label = Alt text
-pdfjs-editor-alt-text-edit-button-label = Edit alt text
-pdfjs-editor-alt-text-dialog-label = Choose an option
-pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
-pdfjs-editor-alt-text-add-description-label = Add a description
-pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
-pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
-pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
-pdfjs-editor-alt-text-cancel-button = Cancel
-pdfjs-editor-alt-text-save-button = Save
-pdfjs-editor-alt-text-decorative-tooltip = Marked as decorative
+    .aria-label = صورة أنشأها المستخدم
+pdfjs-editor-alt-text-button-label = نص بديل
+pdfjs-editor-alt-text-edit-button-label = تحرير النص البديل
+pdfjs-editor-alt-text-dialog-label = اختر خيار
+pdfjs-editor-alt-text-dialog-description = يساعد النص البديل عندما لا يتمكن الأشخاص من رؤية الصورة أو عندما لا يتم تحميلها.
+pdfjs-editor-alt-text-add-description-label = أضِف وصف
+pdfjs-editor-alt-text-add-description-description = استهدف جملتين تصفان الموضوع أو الإعداد أو الإجراءات.
+pdfjs-editor-alt-text-mark-decorative-label = علّمها على أنها زخرفية
+pdfjs-editor-alt-text-mark-decorative-description = يُستخدم هذا في الصور المزخرفة، مثل الحدود أو العلامات المائية.
+pdfjs-editor-alt-text-cancel-button = ألغِ
+pdfjs-editor-alt-text-save-button = احفظ
+pdfjs-editor-alt-text-decorative-tooltip = عُلّمت على أنها زخرفية
 pdfjs-editor-alt-text-textarea =
-    .placeholder = For example, “A young man sits down at a table to eat a meal”
-pdfjs-editor-resizer-label-top-left = Top left corner — resize
-pdfjs-editor-resizer-label-top-middle = Top middle — resize
-pdfjs-editor-resizer-label-top-right = Top right corner — resize
-pdfjs-editor-resizer-label-middle-right = Middle right — resize
-pdfjs-editor-resizer-label-bottom-right = Bottom right corner — resize
-pdfjs-editor-resizer-label-bottom-middle = Bottom middle — resize
-pdfjs-editor-resizer-label-bottom-left = Bottom left corner — resize
-pdfjs-editor-resizer-label-middle-left = Middle left — resize
-pdfjs-editor-highlight-colorpicker-label = Highlight color
+    .placeholder = على سبيل المثال، "يجلس شاب على الطاولة لتناول وجبة"
+pdfjs-editor-resizer-label-top-left = الزاوية اليُسرى العُليا — غيّر الحجم
+pdfjs-editor-resizer-label-top-middle = أعلى الوسط - غيّر الحجم
+pdfjs-editor-resizer-label-top-right = الزاوية اليُمنى العُليا - غيّر الحجم
+pdfjs-editor-resizer-label-middle-right = اليمين الأوسط - غيّر الحجم
+pdfjs-editor-resizer-label-bottom-right = الزاوية اليُمنى السُفلى - غيّر الحجم
+pdfjs-editor-resizer-label-bottom-middle = أسفل الوسط - غيّر الحجم
+pdfjs-editor-resizer-label-bottom-left = الزاوية اليُسرى السُفلية - غيّر الحجم
+pdfjs-editor-resizer-label-middle-left = مُنتصف اليسار - غيّر الحجم
+pdfjs-editor-highlight-colorpicker-label = أبرِز اللون
 pdfjs-editor-colorpicker-button =
-    .title = Change color
+    .title = غيّر اللون
 pdfjs-editor-colorpicker-dropdown =
-    .aria-label = Color choices
+    .aria-label = اختيارات الألوان
 pdfjs-editor-colorpicker-yellow =
-    .title = Yellow
+    .title = أصفر
 pdfjs-editor-colorpicker-green =
-    .title = Green
+    .title = أخضر
 pdfjs-editor-colorpicker-blue =
-    .title = Blue
+    .title = أزرق
 pdfjs-editor-colorpicker-pink =
-    .title = Pink
+    .title = وردي
 pdfjs-editor-colorpicker-red =
-    .title = Red
-pdfjs-editor-highlight-show-all-button-label = Show all
+    .title = أحمر
+pdfjs-editor-highlight-show-all-button-label = أظهِر الكل
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

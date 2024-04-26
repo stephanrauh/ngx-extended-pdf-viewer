@@ -326,6 +326,19 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = لال
 
+pdfjs-find-match-count =
+    { $total ->
+        [one] { $total } وِچوں { $current } مشابہ
+       *[other] { $total } وِچوں { $current } مشابے
+    }
+pdfjs-find-match-count-limit =
+    { $limit ->
+        [one] { $limit } توں ودھ مماثلت۔
+       *[other] { $limit } توں ودھ مماثلتاں۔
+    }
+pdfjs-editor-stamp-button =
+    .title = تصویراں کوں شامل کرو یا ترمیم کرو
+pdfjs-editor-stamp-button-label = تصویراں کوں شامل کرو یا ترمیم کرو
 pdfjs-editor-highlight-button =
     .title = نمایاں کرو
 pdfjs-editor-highlight-button-label = نمایاں کرو
@@ -335,56 +348,43 @@ pdfjs-highlight-floating-button1 =
     .title = نمایاں کرو
     .aria-label = نمایاں کرو
 pdfjs-highlight-floating-button-label = نمایاں کرو
+pdfjs-editor-remove-ink-button =
+    .title = ڈرائینگ ہٹاؤ
+pdfjs-editor-remove-freetext-button =
+    .title = متن ہٹاؤ
+pdfjs-editor-remove-stamp-button =
+    .title = تصویر ہٹاؤ
+pdfjs-editor-remove-highlight-button =
+    .title = نمایاں ہٹاؤ
+pdfjs-editor-free-highlight-thickness-input = مُٹاݨ
+pdfjs-editor-free-highlight-thickness-title =
+    .title = متن توں ان٘ج ٻئے شئیں کوں نمایاں کرݨ ویلے مُٹاݨ کوں بدلو
+pdfjs-editor-alt-text-button-label = Alt متن
+pdfjs-editor-alt-text-edit-button-label = alt متن وِچ ترمیم کرو
+pdfjs-editor-alt-text-dialog-label = ہِک اختیار چُݨو
+pdfjs-editor-alt-text-dialog-description = Alt متن (متبادل متن) اِیں ویلے مَدَت کرین٘دا ہِے جہڑیلے لوک تصویر کوں نِھیں ݙیکھ سڳدے یا جہڑیلے اِیہ لوڈ کائنی تِھین٘دا۔
+pdfjs-editor-alt-text-add-description-label = تفصیل شامل کرو
+pdfjs-editor-alt-text-add-description-description = 1-2 جملیاں دا مقصد جہڑے موضوع، ترتیب، یا اعمال کوں بیان کرین٘دے ہِن۔
+pdfjs-editor-alt-text-mark-decorative-label = آرائشی طور تے نشان زد کرو
+pdfjs-editor-alt-text-mark-decorative-description = اِیہ آرائشی تصویراں کِیتے استعمال تِھین٘دا ہِے، جیویں بارڈر یا واٹر مارکس۔
 pdfjs-editor-alt-text-cancel-button = منسوخ
 pdfjs-editor-alt-text-save-button = محفوظ
-pdfjs-editor-highlight-show-all-button-label = سارے ݙکھاؤ
-pdfjs-find-match-count =
-    { $total ->
-        [one] { $current } of { $total } match
-       *[other] { $current } of { $total } matches
-    }
-pdfjs-find-match-count-limit =
-    { $limit ->
-        [one] More than { $limit } match
-       *[other] More than { $limit } matches
-    }
-pdfjs-editor-stamp-button =
-    .title = Add or edit images
-pdfjs-editor-stamp-button-label = Add or edit images
-pdfjs-editor-remove-ink-button =
-    .title = Remove drawing
-pdfjs-editor-remove-freetext-button =
-    .title = Remove text
-pdfjs-editor-remove-stamp-button =
-    .title = Remove image
-pdfjs-editor-remove-highlight-button =
-    .title = Remove highlight
-pdfjs-editor-free-highlight-thickness-input = Thickness
-pdfjs-editor-free-highlight-thickness-title =
-    .title = Change thickness when highlighting items other than text
-pdfjs-editor-alt-text-button-label = Alt text
-pdfjs-editor-alt-text-edit-button-label = Edit alt text
-pdfjs-editor-alt-text-dialog-label = Choose an option
-pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
-pdfjs-editor-alt-text-add-description-label = Add a description
-pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
-pdfjs-editor-alt-text-mark-decorative-label = Mark as decorative
-pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
-pdfjs-editor-alt-text-decorative-tooltip = Marked as decorative
+pdfjs-editor-alt-text-decorative-tooltip = آرائشی دے طور تے نشان زد تِھی ڳِیا
 pdfjs-editor-alt-text-textarea =
-    .placeholder = For example, “A young man sits down at a table to eat a meal”
-pdfjs-editor-resizer-label-top-left = Top left corner — resize
-pdfjs-editor-resizer-label-top-middle = Top middle — resize
-pdfjs-editor-resizer-label-top-right = Top right corner — resize
-pdfjs-editor-resizer-label-middle-right = Middle right — resize
-pdfjs-editor-resizer-label-bottom-right = Bottom right corner — resize
-pdfjs-editor-resizer-label-bottom-middle = Bottom middle — resize
-pdfjs-editor-resizer-label-bottom-left = Bottom left corner — resize
-pdfjs-editor-resizer-label-middle-left = Middle left — resize
-pdfjs-editor-highlight-colorpicker-label = Highlight color
+    .placeholder = مثال دے طور تے، "ہِک جؤان کھاݨاں کھاوݨ کِیتے میز اُتّے ٻیٹھا ہِے"
+pdfjs-editor-resizer-label-top-left = اُتلی کَھٻّی نُکّڑ — سائز بدلو
+pdfjs-editor-resizer-label-top-middle = اُتلا وِچلا — سائز بدلو
+pdfjs-editor-resizer-label-top-right = اُتلی سَڄّی نُکَّڑ — سائز بدلو
+pdfjs-editor-resizer-label-middle-right = وِچلا سڄّا — سائز بدلو
+pdfjs-editor-resizer-label-bottom-right = تلوِیں سَڄّی نُکَّڑ — سائز بدلو
+pdfjs-editor-resizer-label-bottom-middle = تلواں وِچلا — سائز بدلو
+pdfjs-editor-resizer-label-bottom-left = تلوِیں کَھٻّی نُکّڑ — سائز بدلو
+pdfjs-editor-resizer-label-middle-left = وِچلا کَھٻّا — سائز بدلو
+pdfjs-editor-highlight-colorpicker-label = نشابر رنگ
 pdfjs-editor-colorpicker-button =
-    .title = Change color
+    .title = رنگ بدلو
 pdfjs-editor-colorpicker-dropdown =
-    .aria-label = Color choices
+    .aria-label = رنگ اختیارات
+pdfjs-editor-highlight-show-all-button-label = سارے ݙکھاؤ
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
