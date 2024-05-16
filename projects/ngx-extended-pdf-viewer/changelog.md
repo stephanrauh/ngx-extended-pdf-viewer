@@ -550,3 +550,4 @@
 - 20.0.0-alpha.4 #2291 improved compatibility to Tailwind (removing a span tag that's always invisible)
 - 20.0.0 no changes (apart from updating the bleeding edge branch)
 - 20.0.1 #2322 stop throwing an exception when destroying the PDF viewer
+- 20.0.2 fixed CVE-2024-4367

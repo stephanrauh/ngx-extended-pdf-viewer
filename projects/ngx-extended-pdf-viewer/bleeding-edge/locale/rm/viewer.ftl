@@ -51,12 +51,6 @@ pdfjs-download-button-label = Telechargiar
 pdfjs-bookmark-button =
     .title = Pagina actuala (mussar l'URL da la pagina actuala)
 pdfjs-bookmark-button-label = Pagina actuala
-# Used in Firefox for Android.
-pdfjs-open-in-app-button =
-    .title = Avrir en ina app
-# Used in Firefox for Android.
-# Length of the translation matters since we are in a mobile context, with limited screen estate.
-pdfjs-open-in-app-button-label = Avrir en ina app
 
 ##  Secondary toolbar and context menu
 
@@ -306,6 +300,10 @@ pdfjs-editor-highlight-button =
 pdfjs-editor-highlight-button-label = Marcar
 pdfjs-highlight-floating-button =
     .title = Relevar
+pdfjs-highlight-floating-button1 =
+    .title = Marcar
+    .aria-label = Marcar
+pdfjs-highlight-floating-button-label = Marcar
 
 ## Remove button for the various kind of editor.
 
@@ -397,9 +395,5 @@ pdfjs-editor-highlight-show-all-button-label = Mussar tut
 pdfjs-editor-highlight-show-all-button =
     .title = Mussar tut
 
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

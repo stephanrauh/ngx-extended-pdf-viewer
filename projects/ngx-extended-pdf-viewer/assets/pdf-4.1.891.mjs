@@ -830,6 +830,17 @@ function getUuid() {
   return bytesToString(buf);
 }
 const AnnotationPrefix = "pdfjs_internal_id_";
+const FontRenderOps = {
+  BEZIER_CURVE_TO: 0,
+  MOVE_TO: 1,
+  LINE_TO: 2,
+  QUADRATIC_CURVE_TO: 3,
+  RESTORE: 4,
+  SAVE: 5,
+  SCALE: 6,
+  TRANSFORM: 7,
+  TRANSLATE: 8
+};
 
 ;// CONCATENATED MODULE: ./src/display/base_factory.js
 
@@ -5166,7 +5177,6 @@ class FontLoader {
 }
 class FontFaceObject {
   constructor(translatedData, {
-    isEvalSupported = true,
     disableFontFace = false,
     ignoreErrors = false,
     inspectFont = null
@@ -5175,7 +5185,6 @@ class FontFaceObject {
     for (const i in translatedData) {
       this[i] = translatedData[i];
     }
-    this.isEvalSupported = isEvalSupported !== false;
     this.disableFontFace = disableFontFace === true;
     this.ignoreErrors = ignoreErrors === true;
     this._inspectFont = inspectFont;
@@ -5230,22 +5239,72 @@ class FontFaceObject {
         throw ex;
       }
       warn(`getPathGenerator - ignoring character: "${ex}".`);
+    }
+    if (!Array.isArray(cmds) || cmds.length === 0) {
       return this.compiledGlyphs[character] = function (c, size) {};
     }
-    if (this.isEvalSupported && util_FeatureTest.isEvalSupported) {
-      const jsBuf = [];
-      for (const current of cmds) {
-        const args = current.args !== undefined ? current.args.join(",") : "";
-        jsBuf.push("c.", current.cmd, "(", args, ");\n");
+    const commands = [];
+    for (let i = 0, ii = cmds.length; i < ii;) {
+      switch (cmds[i++]) {
+        case FontRenderOps.BEZIER_CURVE_TO:
+          {
+            const [a, b, c, d, e, f] = cmds.slice(i, i + 6);
+            commands.push(ctx => ctx.bezierCurveTo(a, b, c, d, e, f));
+            i += 6;
+          }
+          break;
+        case FontRenderOps.MOVE_TO:
+          {
+            const [a, b] = cmds.slice(i, i + 2);
+            commands.push(ctx => ctx.moveTo(a, b));
+            i += 2;
+          }
+          break;
+        case FontRenderOps.LINE_TO:
+          {
+            const [a, b] = cmds.slice(i, i + 2);
+            commands.push(ctx => ctx.lineTo(a, b));
+            i += 2;
+          }
+          break;
+        case FontRenderOps.QUADRATIC_CURVE_TO:
+          {
+            const [a, b, c, d] = cmds.slice(i, i + 4);
+            commands.push(ctx => ctx.quadraticCurveTo(a, b, c, d));
+            i += 4;
+          }
+          break;
+        case FontRenderOps.RESTORE:
+          commands.push(ctx => ctx.restore());
+          break;
+        case FontRenderOps.SAVE:
+          commands.push(ctx => ctx.save());
+          break;
+        case FontRenderOps.SCALE:
+          assert(commands.length === 2, "Scale command is only valid at the third position.");
+          break;
+        case FontRenderOps.TRANSFORM:
+          {
+            const [a, b, c, d, e, f] = cmds.slice(i, i + 6);
+            commands.push(ctx => ctx.transform(a, b, c, d, e, f));
+            i += 6;
+          }
+          break;
+        case FontRenderOps.TRANSLATE:
+          {
+            const [a, b] = cmds.slice(i, i + 2);
+            commands.push(ctx => ctx.translate(a, b));
+            i += 2;
+          }
+          break;
       }
-      return this.compiledGlyphs[character] = new Function("c", "size", jsBuf.join(""));
     }
-    return this.compiledGlyphs[character] = function (c, size) {
-      for (const current of cmds) {
-        if (current.cmd === "scale") {
-          current.args = [size, -size];
-        }
-        c[current.cmd].apply(c, current.args);
+    return this.compiledGlyphs[character] = function glyphDrawer(ctx, size) {
+      commands[0](ctx);
+      commands[1](ctx);
+      ctx.scale(size, -size);
+      for (let i = 2, ii = commands.length; i < ii; i++) {
+        commands[i](ctx);
       }
     };
   }
@@ -10647,7 +10706,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: "4.1.889",
+    apiVersion: "4.1.891",
     data,
     password,
     disableAutoFetch,
@@ -10670,7 +10729,6 @@ function getDocument(src) {
   };
   const transportParams = {
     ignoreErrors,
-    isEvalSupported,
     disableFontFace,
     fontExtraProperties,
     enableXfa,
@@ -11943,7 +12001,6 @@ class WorkerTransport {
           }
           const inspectFont = params.pdfBug && globalThis.FontInspector?.enabled ? (font, url) => globalThis.FontInspector.fontAdded(font, url) : null;
           const font = new FontFaceObject(exportedData, {
-            isEvalSupported: params.isEvalSupported,
             disableFontFace: params.disableFontFace,
             ignoreErrors: params.ignoreErrors,
             inspectFont
@@ -12416,8 +12473,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.1.889";
-const build = "7b57d8c1a";
+const version = "4.1.891";
+const build = "867382d12";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -19304,8 +19361,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.1.889";
-const pdfjsBuild = "7b57d8c1a";
+const pdfjsVersion = "4.1.891";
+const pdfjsBuild = "867382d12";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;

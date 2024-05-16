@@ -29,7 +29,7 @@ pdfjs-zoom-in-button =
     .title = Խոշորացնել
 pdfjs-zoom-in-button-label = Խոշորացնել
 pdfjs-zoom-select =
-    .title = Մասշտաբ
+    .title = Դիտափոխում
 pdfjs-presentation-mode-button =
     .title = Անցնել Ներկայացման եղանակին
 pdfjs-presentation-mode-button-label = Ներկայացման եղանակ
@@ -39,6 +39,10 @@ pdfjs-open-file-button-label = Բացել
 pdfjs-print-button =
     .title = Տպել
 pdfjs-print-button-label = Տպել
+# Used in Firefox for Android as a label for the download button (“download” is a verb).
+# Length of the translation matters since we are in a mobile context, with limited screen estate.
+pdfjs-download-button-label = Ներբեռնել
+pdfjs-bookmark-button-label = Ընթացիկ էջ
 
 ##  Secondary toolbar and context menu
 
@@ -243,6 +247,13 @@ pdfjs-web-fonts-disabled = Վեբ-տառատեսակները անջատված ե
 ## Editing
 
 
+## Remove button for the various kind of editor.
+
+
+##
+
+pdfjs-free-text-default-content = Սկսել մուտքագրումը…
+
 ## Alt-text dialog
 
 
@@ -250,15 +261,19 @@ pdfjs-web-fonts-disabled = Վեբ-տառատեսակները անջատված ե
 ## This is used in an aria label to help to understand the role of the resizer.
 
 
+## Color picker
+
+
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
+pdfjs-editor-highlight-show-all-button-label = Ցուցադրել բոլորը
+pdfjs-editor-highlight-show-all-button =
+    .title = Ցուցադրել բոլորը
+
 pdfjs-save-button =
     .title = Save
 pdfjs-save-button-label = Save
-pdfjs-download-button =
-    .title = Download
-pdfjs-download-button-label = Download
-pdfjs-bookmark-button =
-    .title = Current Page (View URL from Current Page)
-pdfjs-bookmark-button-label = Current Page
 pdfjs-scroll-page-button =
     .title = Use Page Scrolling
 pdfjs-scroll-page-button-label = Page Scrolling
@@ -319,9 +334,6 @@ pdfjs-editor-stamp-add-image-button-label = Add image
 pdfjs-editor-free-highlight-thickness-input = Thickness
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
-pdfjs-free-text =
-    .aria-label = Text Editor
-pdfjs-free-text-default-content = Start typing…
 pdfjs-ink =
     .aria-label = Draw Editor
 pdfjs-ink-canvas =
@@ -362,6 +374,5 @@ pdfjs-editor-colorpicker-pink =
     .title = Pink
 pdfjs-editor-colorpicker-red =
     .title = Red
-pdfjs-editor-highlight-show-all-button-label = Show all
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

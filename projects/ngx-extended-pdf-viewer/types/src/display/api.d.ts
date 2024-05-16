@@ -126,8 +126,8 @@ export type DocumentInitParameters = {
     maxImageSize?: number | undefined;
     /**
      * - Determines if we can evaluate strings
-     * as JavaScript. Primarily used to improve performance of font rendering, and
-     * when parsing PDF functions. The default value is `true`.
+     * as JavaScript. Primarily used to improve performance of PDF functions.
+     * The default value is `true`.
      */
     isEvalSupported?: boolean | undefined;
     /**
@@ -596,8 +596,8 @@ export const DefaultStandardFontDataFactory: typeof NodeStandardFontDataFactory;
  *   pixels, i.e. width * height. Images above this value will not be rendered.
  *   Use -1 for no limit, which is also the default value.
  * @property {boolean} [isEvalSupported] - Determines if we can evaluate strings
- *   as JavaScript. Primarily used to improve performance of font rendering, and
- *   when parsing PDF functions. The default value is `true`.
+ *   as JavaScript. Primarily used to improve performance of PDF functions.
+ *   The default value is `true`.
  * @property {boolean} [isOffscreenCanvasSupported] - Determines if we can use
  *   `OffscreenCanvas` in the worker. Primarily used to improve performance of
  *   image conversion/rendering.

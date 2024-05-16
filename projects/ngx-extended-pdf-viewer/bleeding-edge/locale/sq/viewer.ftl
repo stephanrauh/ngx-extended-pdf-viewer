@@ -51,12 +51,6 @@ pdfjs-download-button-label = Shkarkoje
 pdfjs-bookmark-button =
     .title = Faqja e Tanishme (Shihni URL nga Faqja e Tanishme)
 pdfjs-bookmark-button-label = Faqja e Tanishme
-# Used in Firefox for Android.
-pdfjs-open-in-app-button =
-    .title = Hape në aplikacion
-# Used in Firefox for Android.
-# Length of the translation matters since we are in a mobile context, with limited screen estate.
-pdfjs-open-in-app-button-label = Hape në aplikacion
 
 ##  Secondary toolbar and context menu
 
@@ -295,6 +289,12 @@ pdfjs-editor-stamp-button-label = Shtoni ose përpunoni figura
 pdfjs-editor-highlight-button =
     .title = Theksim
 pdfjs-editor-highlight-button-label = Theksoje
+pdfjs-highlight-floating-button =
+    .title = Theksim
+pdfjs-highlight-floating-button1 =
+    .title = Theksim
+    .aria-label = Theksim
+pdfjs-highlight-floating-button-label = Theksim
 
 ## Remove button for the various kind of editor.
 
@@ -379,6 +379,13 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = E kuqe
 
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
+pdfjs-editor-highlight-show-all-button-label = Shfaqi krejt
+pdfjs-editor-highlight-show-all-button =
+    .title = Shfaqi krejt
+
 pdfjs-spread-none-button =
     .title = Do not join page spreads
 pdfjs-spread-none-button-label = No Spreads
@@ -388,10 +395,5 @@ pdfjs-spread-odd-button-label = Odd Spreads
 pdfjs-spread-even-button =
     .title = Join page spreads starting with even-numbered pages
 pdfjs-spread-even-button-label = Even Spreads
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
-pdfjs-editor-highlight-show-all-button-label = Show all
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
