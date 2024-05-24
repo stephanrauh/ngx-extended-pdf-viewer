@@ -6944,7 +6944,7 @@ const GenericL10n = null;
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ngxExtendedPdfViewerVersion: () => (/* binding */ ngxExtendedPdfViewerVersion)
 /* harmony export */ });
-const ngxExtendedPdfViewerVersion = '20.0.2';
+const ngxExtendedPdfViewerVersion = '20.1.0';
 
 /***/ }),
 
@@ -10359,7 +10359,7 @@ class PDFFindController {
     }
     return true;
   }
-  #calculateRegExpMatch(query, entireWord, pageIndex, pageContent) {
+  _calculateRegExpMatch(query, entireWord, pageIndex, pageContent) {
     const matches = this._pageMatches[pageIndex] = [];
     const matchesLength = this._pageMatchesLength[pageIndex] = [];
     if (!query) {
@@ -10378,7 +10378,7 @@ class PDFFindController {
       }
     }
   }
-  #convertToRegExpString(query, hasDiacritics) {
+  _convertToRegExpString(query, hasDiacritics) {
     const {
       matchDiacritics
     } = this.#state;
@@ -10418,7 +10418,7 @@ class PDFFindController {
     }
     return [isUnicode, query];
   }
-  #calculateMatch(pageIndex) {
+  _calculateMatch(pageIndex) {
     let query = this.#query;
     if (query.length === 0) {
       return;
@@ -10431,17 +10431,17 @@ class PDFFindController {
     const hasDiacritics = this._hasDiacritics[pageIndex];
     let isUnicode = false;
     if (typeof query === "string") {
-      [isUnicode, query] = this.#convertToRegExpString(query, hasDiacritics);
+      [isUnicode, query] = this._convertToRegExpString(query, hasDiacritics);
     } else {
       query = query.sort().reverse().map(q => {
-        const [isUnicodePart, queryPart] = this.#convertToRegExpString(q, hasDiacritics);
+        const [isUnicodePart, queryPart] = this._convertToRegExpString(q, hasDiacritics);
         isUnicode ||= isUnicodePart;
         return `(${queryPart})`;
       }).join("|");
     }
     const flags = `g${isUnicode ? "u" : ""}${caseSensitive ? "" : "i"}`;
     query = query ? new RegExp(query, flags) : null;
-    this.#calculateRegExpMatch(query, entireWord, pageIndex, pageContent);
+    this._calculateRegExpMatch(query, entireWord, pageIndex, pageContent);
     if (this.#state.highlightAll) {
       this.#updatePage(pageIndex);
     }
@@ -10533,7 +10533,7 @@ class PDFFindController {
         this._pendingFindMatches.add(i);
         this._extractTextPromises[i].then(() => {
           this._pendingFindMatches.delete(i);
-          this.#calculateMatch(i);
+          this._calculateMatch(i);
         });
       }
     }
@@ -15094,7 +15094,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = "4.1.891";
+    const viewerVersion = "4.1.894";
     if (pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version !== viewerVersion) {
       throw new Error(`The API version "${pdfjs_lib__WEBPACK_IMPORTED_MODULE_0__.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -18982,8 +18982,8 @@ _app_js__WEBPACK_IMPORTED_MODULE_3__ = (__webpack_async_dependencies__.then ? (a
 
 
 
-const pdfjsVersion = "4.1.891";
-const pdfjsBuild = "867382d12";
+const pdfjsVersion = "4.1.894";
+const pdfjsBuild = "9c15ea3ee";
 const AppConstants = {
   LinkTarget: _pdf_link_service_js__WEBPACK_IMPORTED_MODULE_2__.LinkTarget,
   RenderingStates: _ui_utils_js__WEBPACK_IMPORTED_MODULE_0__.RenderingStates,

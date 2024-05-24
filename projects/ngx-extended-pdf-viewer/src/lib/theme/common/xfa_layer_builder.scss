@@ -91,7 +91,7 @@ ngx-extended-pdf-viewer {
     letter-spacing: -0.01px;
     text-align: inherit;
     text-decoration: inherit;
-    box-sizing: border-box;
+    box-sizing: border-box !important;
     background-color: transparent;
     padding: 0;
     margin: 0;

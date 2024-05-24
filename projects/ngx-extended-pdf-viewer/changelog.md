@@ -551,3 +551,4 @@
 - 20.0.0 no changes (apart from updating the bleeding edge branch)
 - 20.0.1 #2322 stop throwing an exception when destroying the PDF viewer
 - 20.0.2 fixed CVE-2024-4367
+- 20.1.0 #2339 made several methods in the PDFFindController public to allow users to add custom implementations; #2343 fixed the box-sizing model of the annotation layer (was broken by #2282)

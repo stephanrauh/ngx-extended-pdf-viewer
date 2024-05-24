@@ -388,8 +388,6 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Rubie
 
-pdfjs-highlight-floating-button =
-    .title = Evidentiar
 pdfjs-highlight-floating-button1 =
     .title = Evidentiar
     .aria-label = Evidentiar

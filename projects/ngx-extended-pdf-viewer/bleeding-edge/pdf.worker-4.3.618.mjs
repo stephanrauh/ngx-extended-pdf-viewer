@@ -8873,13 +8873,17 @@ class Parser {
     this.shift();
     return imageStream;
   }
-  _findStreamLength(startPos, signature) {
+  #findStreamLength(startPos) {
     const {
       stream
     } = this.lexer;
     stream.pos = startPos;
     const SCAN_BLOCK_LENGTH = 2048;
-    const signatureLength = signature.length;
+    const signatureLength = "endstream".length;
+    const END_SIGNATURE = new Uint8Array([0x65, 0x6e, 0x64]);
+    const endLength = END_SIGNATURE.length;
+    const PARTIAL_SIGNATURE = [new Uint8Array([0x73, 0x74, 0x72, 0x65, 0x61, 0x6d]), new Uint8Array([0x73, 0x74, 0x65, 0x61, 0x6d]), new Uint8Array([0x73, 0x74, 0x72, 0x65, 0x61])];
+    const normalLength = signatureLength - endLength;
     while (stream.pos < stream.end) {
       const scanBytes = stream.peekBytes(SCAN_BLOCK_LENGTH);
       const scanLength = scanBytes.length - signatureLength;
@@ -8889,12 +8893,34 @@ class Parser {
       let pos = 0;
       while (pos < scanLength) {
         let j = 0;
-        while (j < signatureLength && scanBytes[pos + j] === signature[j]) {
+        while (j < endLength && scanBytes[pos + j] === END_SIGNATURE[j]) {
           j++;
         }
-        if (j >= signatureLength) {
-          stream.pos += pos;
-          return stream.pos - startPos;
+        if (j >= endLength) {
+          let found = false;
+          for (const part of PARTIAL_SIGNATURE) {
+            const partLen = part.length;
+            let k = 0;
+            while (k < partLen && scanBytes[pos + j + k] === part[k]) {
+              k++;
+            }
+            if (k >= normalLength) {
+              found = true;
+              break;
+            }
+            if (k >= partLen) {
+              const lastByte = scanBytes[pos + j + k];
+              if (isWhiteSpace(lastByte)) {
+                info(`Found "${bytesToString([...END_SIGNATURE, ...part])}" when ` + "searching for endstream command.");
+                found = true;
+              }
+              break;
+            }
+          }
+          if (found) {
+            stream.pos += pos;
+            return stream.pos - startPos;
+          }
         }
         pos++;
       }
@@ -8917,27 +8943,9 @@ class Parser {
     if (this.tryShift() && isCmd(this.buf2, "endstream")) {
       this.shift();
     } else {
-      const ENDSTREAM_SIGNATURE = new Uint8Array([0x65, 0x6e, 0x64, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d]);
-      let actualLength = this._findStreamLength(startPos, ENDSTREAM_SIGNATURE);
+      const actualLength = this.#findStreamLength(startPos);
       if (actualLength < 0) {
-        const MAX_TRUNCATION = 1;
-        for (let i = 1; i <= MAX_TRUNCATION; i++) {
-          const end = ENDSTREAM_SIGNATURE.length - i;
-          const TRUNCATED_SIGNATURE = ENDSTREAM_SIGNATURE.slice(0, end);
-          const maybeLength = this._findStreamLength(startPos, TRUNCATED_SIGNATURE);
-          if (maybeLength >= 0) {
-            const lastByte = stream.peekBytes(end + 1)[end];
-            if (!isWhiteSpace(lastByte)) {
-              break;
-            }
-            info(`Found "${bytesToString(TRUNCATED_SIGNATURE)}" when ` + "searching for endstream command.");
-            actualLength = maybeLength;
-            break;
-          }
-        }
-        if (actualLength < 0) {
-          throw new FormatError("Missing endstream command.");
-        }
+        throw new FormatError("Missing endstream command.");
       }
       length = actualLength;
       lexer.nextChar();
@@ -22768,8 +22776,7 @@ function adjustMapping(charCodeToGlyphId, hasGlyph, newGlyphZeroId, toUnicode) {
   let nextAvailableFontCharCode = privateUseOffetStart;
   let privateUseOffetEnd = PRIVATE_USE_AREAS[privateUseAreaIndex][1];
   const isInPrivateArea = code => PRIVATE_USE_AREAS[0][0] <= code && code <= PRIVATE_USE_AREAS[0][1] || PRIVATE_USE_AREAS[1][0] <= code && code <= PRIVATE_USE_AREAS[1][1];
-  for (let originalCharCode in charCodeToGlyphId) {
-    originalCharCode |= 0;
+  for (const originalCharCode in charCodeToGlyphId) {
     let glyphId = charCodeToGlyphId[originalCharCode];
     if (!hasGlyph(glyphId)) {
       continue;
@@ -24464,7 +24471,7 @@ class Font {
       tag: "post",
       data: createPostTable(properties)
     };
-    const charCodeToGlyphId = [];
+    const charCodeToGlyphId = Object.create(null);
     function hasGlyph(glyphId) {
       return !missingGlyphs[glyphId];
     }
@@ -54570,7 +54577,7 @@ class PDFDocument {
         if (type instanceof Ref) {
           type = await xref.fetchAsync(type);
         }
-        if (isName(type, "Page") || !obj.has("Type") && !obj.has("Kids")) {
+        if (isName(type, "Page") || !obj.has("Type") && !obj.has("Kids") && obj.has("Contents")) {
           if (!catalog.pageKidsCountCache.has(ref)) {
             catalog.pageKidsCountCache.put(ref, 1);
           }
@@ -54855,7 +54862,7 @@ class BasePdfManager {
     this._password = args.password;
     this.enableXfa = args.enableXfa;
     args.evaluatorOptions.isOffscreenCanvasSupported &&= FeatureTest.isOffscreenCanvasSupported;
-    this.evaluatorOptions = args.evaluatorOptions;
+    this.evaluatorOptions = Object.freeze(args.evaluatorOptions);
   }
   get docId() {
     return this._docId;
@@ -55566,7 +55573,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = "4.3.500";
+    const workerVersion = "4.3.618";
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
     }
@@ -56142,8 +56149,8 @@ if (typeof window === "undefined" && typeof self !== "undefined" && isMessagePor
 
 ;// CONCATENATED MODULE: ./src/pdf.worker.js
 
-const pdfjsVersion = "4.3.500";
-const pdfjsBuild = "aaeb3587b";
+const pdfjsVersion = "4.3.618";
+const pdfjsBuild = "45bc028b9";
 
 var __webpack_exports__WorkerMessageHandler = __webpack_exports__.WorkerMessageHandler;
 export { __webpack_exports__WorkerMessageHandler as WorkerMessageHandler };

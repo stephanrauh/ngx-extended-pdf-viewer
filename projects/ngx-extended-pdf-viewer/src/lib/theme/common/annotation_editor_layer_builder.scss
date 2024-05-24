@@ -788,7 +788,7 @@ ngx-extended-pdf-viewer {
 
           & input {
             appearance: none;
-            box-sizing: border-box;
+            box-sizing: border-box !important;
             width: 16px;
             height: 16px;
             border-radius: 50%;
@@ -856,7 +856,7 @@ ngx-extended-pdf-viewer {
             padding: 8px;
             resize: none;
             margin: 0;
-            box-sizing: border-box;
+            box-sizing: border-box !important;
             border-radius: 4px;
             border: 1px solid var(--textarea-border-color);
             background: var(--textarea-bg-color);
@@ -948,7 +948,7 @@ ngx-extended-pdf-viewer {
       border: 1px solid var(--swatch-border-color);
       border-radius: 100%;
       outline-offset: 2px;
-      box-sizing: border-box;
+      box-sizing: border-box !important;
       forced-color-adjust: none;
     }
 
@@ -1114,7 +1114,7 @@ ngx-extended-pdf-viewer {
     gap: 16px;
     display: flex;
     flex-direction: column;
-    box-sizing: border-box;
+    box-sizing: border-box !important;
 
     .editorParamsLabel {
       width: fit-content;

@@ -99,7 +99,7 @@ ngx-extended-pdf-viewer {
     width: var(--toggle-width);
     border-radius: var(--toggle-border-radius);
     background: var(--toggle-background-color);
-    box-sizing: border-box;
+    box-sizing: border-box !important;
     flex-shrink: 0;
 
     &:focus-visible {

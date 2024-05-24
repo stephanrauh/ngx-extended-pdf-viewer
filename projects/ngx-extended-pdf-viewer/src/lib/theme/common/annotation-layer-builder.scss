@@ -102,7 +102,7 @@ ngx-extended-pdf-viewer {
       position: absolute;
       text-align: initial;
       pointer-events: auto;
-      box-sizing: border-box;
+      box-sizing: border-box !important;
       transform-origin: 0 0;
     }
 
@@ -143,7 +143,7 @@ ngx-extended-pdf-viewer {
     .buttonWidgetAnnotation:is(.checkBox, .radioButton) input {
       background-image: var(--annotation-unfocused-field-background);
       border: 2px solid var(--input-unfocused-border-color);
-      box-sizing: border-box;
+      box-sizing: border-box !important;
       font: calc(9px * var(--scale-factor)) sans-serif;
       height: 100%;
       margin: 0;
