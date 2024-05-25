@@ -10706,7 +10706,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: "4.1.894",
+    apiVersion: "4.1.896",
     data,
     password,
     disableAutoFetch,
@@ -12473,8 +12473,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.1.894";
-const build = "9c15ea3ee";
+const version = "4.1.896";
+const build = "99a19892a";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -13698,6 +13698,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
         storage.setValue(id, {
           value: angularData.value
         });
+        storedData.formattedValue = angularData.value;
       }
       let textContent = storedData.value || "";
       const maxLen = storage.getValue(id, {
@@ -14087,7 +14088,7 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
       const defaultValue = data.defaultFieldValue || "Off";
       event.target.checked = defaultValue === data.exportValue;
     });
-    window.registerAcroformField(id, element, value ? data.exportValue : false, undefined, this.data.fieldValue);
+    window.registerAcroformField(id, element, value ? data.exportValue : undefined, undefined, this.data.fieldValue);
     element.addEventListener("updateFromAngular", newvalue => storage.setValue(id, {
       value: newvalue.detail
     }));
@@ -19361,8 +19362,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.1.894";
-const pdfjsBuild = "9c15ea3ee";
+const pdfjsVersion = "4.1.896";
+const pdfjsBuild = "99a19892a";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;

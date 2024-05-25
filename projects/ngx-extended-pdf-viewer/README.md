@@ -27,11 +27,17 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 <img src="https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/example.png?raw=true">
 
+## Security
+
+Version 20.0.2 is a security fix. It solves CVE-2024-4367. I strongly recommend updating to the latest version of ngx-extended-pdf-viewer as soon as possible, or to version 20.0.2 as a minimum. Older versions contain a bug allowing malicious PDF files to run arbitrary code. Kudos go to GitHub users ScratchPDX and Deepak Shakya to tell me about it, so I could provide a hotfix during my vacations.
+
 ## What's new in Version 20?
+
+Version 20.2.0 fixes a few bugs in PDF files with forms. Now checkboxes always show the value stored in the PDF files (unless overwritten by `(formDataChange)´), and text fields always show the value sent by `[formData]` even if there's a pre-formatted value in the PDF file. The bug fix might break your application if you rely on the error. I don't consider this a breaking change, but even so, I've increase the minor version number to make you aware of potential problems.
 
 Version 20 contains a couple of minor bugfixes that might break your application. It's not likely, but I decided to play it safe and to increase the major version number. The new version
 
-- updates to pdf.js 4.1. The bleeding-edge is a sneak preview of version 4.2, containing the latests (and possibly buggy) addition from pdf.js.
+- updates to pdf.js 4.1. The bleeding-edge is a sneak preview of version 4.3, containing the latests (and possibly buggy) additions from pdf.js.
 - I've improved CSS encapsulation. Recently, I'd added a couple of CSS files and forgot to wrap these file into the `ngx-extended-pdf-viewer`. If you've modified some of my CSS rules, you may want to add the `.ngx-extended-pdf-viewer` class to the CSS selector. If you haven't done so yet, your CSS rule is probably broken.
 - I've fixed bugs with checkboxes and radiobuttons in forms. This might break your application if it relies on the bugs.
 - I've removed the minified ES5 build. I suspect nowadays very few people are using the ES5 build, so let's reduce the size of this package.
