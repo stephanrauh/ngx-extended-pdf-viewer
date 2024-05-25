@@ -313,15 +313,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   @Input()
   public enablePrint = true;
 
-  /**
-   * Number of milliseconds to wait between initializing the PDF viewer and loading the PDF file.
-   * Most users can let this parameter safely at it's default value of zero.
-   * Set this to 1000 or higher if you run into timing problems (typically caused by loading the locale files
-   * after the PDF files, so they are not available when the PDF viewer is initialized).
-   */
-  @Input()
-  public delayFirstView = 0;
-
   @Input()
   public showTextEditor: ResponsiveVisibility = true;
 
@@ -1211,12 +1202,30 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     return elements;
   }
 
+  private afterPrintListener = () => {
+    this.afterPrint.emit();
+  };
+
+  private beforePrintListener = () => {
+    this.beforePrint.emit();
+  };
+
   private doInitPDFViewer() {
     if (typeof window === 'undefined') {
       // server-side rendering
       return;
     }
-    const initializeViewerAndOpenPdf = () => {
+
+    window.addEventListener('afterprint', this.afterPrintListener);
+    window.addEventListener('beforeprint', this.beforePrintListener);
+
+    if (this.service.ngxExtendedPdfViewerInitialized) {
+      // tslint:disable-next-line:quotemark
+      console.error("You're trying to open two instances of the PDF viewer. Most likely, this will result in errors.");
+    }
+    const onLoaded = () => {
+      document.removeEventListener('webviewerloaded', onLoaded);
+      this.overrideDefaultSettings();
       this.localizationInitialized = true;
       this.initTimeout = setTimeout(() => {
         if (!this.shuttingDown) {
@@ -1229,25 +1238,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
             window.print = (window as any).printPDF;
           }
         }
-      }, this.delayFirstView);
-    };
-
-    window.addEventListener('afterprint', () => {
-      this.afterPrint.emit();
-    });
-
-    window.addEventListener('beforeprint', () => {
-      this.beforePrint.emit();
-    });
-
-    if (this.service.ngxExtendedPdfViewerInitialized) {
-      // tslint:disable-next-line:quotemark
-      console.error("You're trying to open two instances of the PDF viewer. Most likely, this will result in errors.");
-    }
-    const onLoaded = () => {
-      this.overrideDefaultSettings();
-      document.removeEventListener('webviewerloaded', onLoaded);
-      initializeViewerAndOpenPdf();
+      });
     };
     document.addEventListener('webviewerloaded', onLoaded);
 
@@ -1564,7 +1555,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
     if (this._src) {
       this.ngxExtendedPdfViewerIncompletelyInitialized = false;
-      this.initTimeout = null;
+      this.initTimeout = undefined;
 
       setTimeout(async () => this.checkHeight(), 100);
       // open a file in the viewer
@@ -1995,11 +1986,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (typeof window === 'undefined') {
       return; // fast escape for server side rendering
     }
+    globalThis['setNgxExtendedPdfViewerSource'] = undefined;
+
+    window.removeEventListener('afterprint', this.afterPrintListener);
+    window.removeEventListener('beforeprint', this.beforePrintListener);
+    globalThis['ngxZone'] = undefined;
+    globalThis['ngxConsole'] = undefined;
 
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     PDFViewerApplication?.pdfViewer?.destroyBookMode();
     PDFViewerApplication?.pdfViewer?.stopRendering();
     PDFViewerApplication?.pdfThumbnailViewer?.stopRendering();
+    if (PDFViewerApplication) {
+      (PDFViewerApplication.onError as any) = undefined;
+    }
 
     const originalPrint = NgxExtendedPdfViewerComponent.originalPrint;
     if (window && originalPrint && !originalPrint.toString().includes('printPdf')) {
@@ -2012,6 +2012,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
     (window as any).getFormValueFromAngular = undefined;
     (window as any).registerAcroformAnnotations = undefined;
+    (window as any).getFormValue = undefined;
+    (window as any).setFormValue = undefined;
+    (window as any).assignFormIdAndFieldName = undefined;
+    (window as any).registerAcroformField = undefined;
+    (window as any).registerXFAField = undefined;
+    (window as any).assignFormIdAndFieldName = undefined;
+    (window as any).updateAngularFormValue = undefined;
+    (window as any).updateThumbnailSelection = undefined;
     this.shuttingDown = true;
 
     this.service.ngxExtendedPdfViewerInitialized = false;
@@ -2023,6 +2031,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       // #802 clear the form data; otherwise the "download" dialogs opens
       PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
       this.formSupport.reset();
+      (this.formSupport as any) = undefined;
 
       PDFViewerApplication._cleanup();
 
