@@ -67,7 +67,9 @@ export class NgxFormSupport {
       this.formData[fieldName] = this.getValueOfASelectField(element);
       this.initialFormDataStoredInThePDF[fieldName] = initialFormValueFromPDF;
     } else {
-      this.formData[fieldName] = value;
+      if (value !== undefined) {
+        this.formData[fieldName] = value;
+      }
       this.initialFormDataStoredInThePDF[fieldName] = initialFormValueFromPDF;
     }
   }
