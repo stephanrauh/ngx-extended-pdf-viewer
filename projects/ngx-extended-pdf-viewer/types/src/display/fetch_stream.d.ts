@@ -20,7 +20,7 @@ declare class PDFFetchStreamReader implements IPDFStreamReader {
     _filename: string | null;
     _withCredentials: any;
     _contentLength: any;
-    _headersCapability: PromiseWithResolvers<any>;
+    _headersCapability: any;
     _disableRange: any;
     _rangeChunkSize: any;
     _abortController: AbortController;
@@ -28,7 +28,7 @@ declare class PDFFetchStreamReader implements IPDFStreamReader {
     _isRangeSupported: boolean;
     _headers: Headers;
     onProgress: any;
-    get headersReady(): Promise<any>;
+    get headersReady(): any;
     get filename(): string | null;
     get contentLength(): any;
     get isRangeSupported(): boolean;
@@ -49,7 +49,7 @@ declare class PDFFetchStreamRangeReader implements IPDFStreamRangeReader {
     _reader: ReadableStreamDefaultReader<Uint8Array> | null;
     _loaded: number;
     _withCredentials: any;
-    _readCapability: PromiseWithResolvers<any>;
+    _readCapability: any;
     _isStreamingSupported: boolean;
     _abortController: AbortController;
     _headers: Headers;

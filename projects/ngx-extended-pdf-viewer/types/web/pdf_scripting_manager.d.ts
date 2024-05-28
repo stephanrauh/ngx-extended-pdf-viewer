@@ -48,10 +48,6 @@ export class PDFScriptingManager {
     /**
      * @private
      */
-    private get _internalEvents();
-    /**
-     * @private
-     */
     private get _pageOpenPending();
     /**
      * @private

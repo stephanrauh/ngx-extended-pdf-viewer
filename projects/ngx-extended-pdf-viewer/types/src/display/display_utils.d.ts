@@ -91,6 +91,8 @@ export class DOMFilterFactory extends BaseFilterFactory {
     });
     addFilter(maps: any): any;
     addHCMFilter(fgColor: any, bgColor: any): any;
+    addAlphaFilter(map: any): any;
+    addLuminosityFilter(map: any): any;
     addHighlightHCMFilter(filterName: any, fgColor: any, bgColor: any, newFgColor: any, newBgColor: any): any;
     #private;
 }
@@ -113,10 +115,9 @@ export function getCurrentTransformInverse(ctx: any): any[];
 /**
  * Gets the filename from a given URL.
  * @param {string} url
- * @param {boolean} [onlyStripPath]
  * @returns {string}
  */
-export function getFilenameFromUrl(url: string, onlyStripPath?: boolean | undefined): string;
+export function getFilenameFromUrl(url: string): string;
 /**
  * Returns the filename or guessed filename from the url (see issue 3455).
  * @param {string} url - The original PDF location.

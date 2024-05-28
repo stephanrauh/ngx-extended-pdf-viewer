@@ -103,7 +103,7 @@ export class PDFFindController {
     _pagesToSearch: number | null | undefined;
     _pendingFindMatches: Set<any> | undefined;
     _resumePageIdx: any;
-    _firstPageCapability: PromiseWithResolvers<any> | undefined;
+    _firstPageCapability: any;
     _rawQuery: any;
     _calculateRegExpMatch(query: any, entireWord: any, pageIndex: any, pageContent: any): void;
     _convertToRegExpString(query: any, hasDiacritics: any): any[];

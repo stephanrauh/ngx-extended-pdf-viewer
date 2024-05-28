@@ -50,6 +50,7 @@ export class EventBus {
      * @ignore
      */
     _off(eventName: any, listener: any, options?: null): void;
+    destroy(): void;
     #private;
 }
 /**

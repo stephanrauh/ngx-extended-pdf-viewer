@@ -7,8 +7,8 @@ export const GenericL10n: null;
  * @implements {IL10n}
  */
 export class L10n implements IL10n {
-    static "__#57@#fixupLangCode"(langCode: any): any;
-    static "__#57@#isRTL"(lang: any): boolean;
+    static "__#58@#fixupLangCode"(langCode: any): any;
+    static "__#58@#isRTL"(lang: any): boolean;
     constructor({ lang, isRTL }: {
         lang: any;
         isRTL: any;

@@ -298,6 +298,10 @@ pdfjs-editor-highlight-button =
 pdfjs-editor-highlight-button-label = เน้น
 pdfjs-highlight-floating-button =
     .title = เน้นสี
+pdfjs-highlight-floating-button1 =
+    .title = เน้นสี
+    .aria-label = เน้นสี
+pdfjs-highlight-floating-button-label = เน้นสี
 
 ## Remove button for the various kind of editor.
 
@@ -389,9 +393,5 @@ pdfjs-editor-highlight-show-all-button-label = แสดงทั้งหมด
 pdfjs-editor-highlight-show-all-button =
     .title = แสดงทั้งหมด
 
-pdfjs-highlight-floating-button1 =
-    .title = เน้นสี
-    .aria-label = เน้นสี
-pdfjs-highlight-floating-button-label = เน้นสี
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

@@ -32,7 +32,7 @@ export class AnnotationEditorLayerBuilder {
     constructor(options: AnnotationEditorLayerBuilderOptions);
     pdfPage: import("../src/display/api").PDFPageProxy;
     accessibilityManager: import("./text_accessibility.js").TextAccessibilityManager | undefined;
-    l10n: any;
+    l10n: import("./interfaces").IL10n | GenericL10n | undefined;
     annotationEditorLayer: AnnotationEditorLayer | null;
     div: HTMLDivElement | null;
     _cancelled: boolean;
@@ -47,4 +47,5 @@ export class AnnotationEditorLayerBuilder {
     show(): void;
     #private;
 }
+import { GenericL10n } from "./genericl10n";
 import { AnnotationEditorLayer } from "../src/pdf";

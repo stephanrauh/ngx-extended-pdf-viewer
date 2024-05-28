@@ -63,6 +63,8 @@ export class FreeTextEditor extends AnnotationEditor {
         id: any;
         deleted: boolean;
     } | null;
+    /** @inheritdoc */
+    renderAnnotationElement(annotation: any): HTMLElement;
     #private;
 }
 import { AnnotationEditor } from "./editor.js";

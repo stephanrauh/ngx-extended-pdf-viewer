@@ -32,7 +32,6 @@ export class TextHighlighter {
     matches: any[];
     eventBus: import("./event_utils").EventBus;
     pageIdx: number;
-    _onUpdateTextLayerMatches: ((evt: any) => void) | null;
     textDivs: Node[] | null;
     textContentItemsStr: string[] | null;
     enabled: boolean;
@@ -60,4 +59,5 @@ export class TextHighlighter {
     }[];
     _renderMatches(matches: any): void;
     _updateMatches(reset?: boolean): void;
+    #private;
 }

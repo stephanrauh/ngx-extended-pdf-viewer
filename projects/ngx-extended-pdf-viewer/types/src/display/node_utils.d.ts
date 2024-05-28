@@ -12,6 +12,10 @@ export class NodeCMapReaderFactory extends BaseCMapReaderFactory {
 }
 export class NodeFilterFactory extends BaseFilterFactory {
 }
+export class NodePackages {
+    static get promise(): undefined;
+    static get(name: any): undefined;
+}
 export class NodeStandardFontDataFactory extends BaseStandardFontDataFactory {
     /**
      * @ignore

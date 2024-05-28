@@ -1,30 +1,3 @@
-export type ExternalLinkParameters = {
-    /**
-     * - An absolute URL.
-     */
-    url: string;
-    /**
-     * - The link target. The default value is
-     * `LinkTarget.NONE`.
-     */
-    target?: {
-        NONE: number;
-        SELF: number;
-        BLANK: number;
-        PARENT: number;
-        TOP: number;
-    } | undefined;
-    /**
-     * - The link relationship. The default value is
-     * `DEFAULT_LINK_REL`.
-     */
-    rel?: string | undefined;
-    /**
-     * - Whether the link should be enabled. The
-     * default value is true.
-     */
-    enabled?: boolean | undefined;
-};
 export type EventBus = import("./event_utils").EventBus;
 export type IPDFLinkService = import("./interfaces").IPDFLinkService;
 export type PDFLinkServiceOptions = {
@@ -75,15 +48,15 @@ export namespace LinkTarget {
  * @implements {IPDFLinkService}
  */
 export class PDFLinkService implements IPDFLinkService {
-    static "__#54@#isValidExplicitDestination"(dest: any): boolean;
+    static "__#55@#isValidExplicitDest"(dest: any): boolean;
     /**
      * @param {PDFLinkServiceOptions} options
      */
     constructor({ eventBus, externalLinkTarget, externalLinkRel, ignoreDestinationZoom, }?: PDFLinkServiceOptions);
+    externalLinkEnabled: boolean;
     eventBus: import("./event_utils").EventBus;
     externalLinkTarget: number;
     externalLinkRel: string;
-    externalLinkEnabled: boolean;
     _ignoreDestinationZoom: boolean;
     baseUrl: any;
     pdfDocument: any;
@@ -129,7 +102,7 @@ export class PDFLinkService implements IPDFLinkService {
      */
     goToPage(val: number | string): void;
     /**
-     * Wrapper around the `addLinkAttributes` helper function.
+     * Adds various attributes (href, title, target, rel) to hyperlinks.
      * @param {HTMLAnchorElement} link
      * @param {string} url
      * @param {boolean} [newWindow]
@@ -159,85 +132,9 @@ export class PDFLinkService implements IPDFLinkService {
      * @param {Object} action
      */
     executeSetOCGState(action: Object): Promise<void>;
-    /**
-     * @param {number} pageNum - page number.
-     * @param {Object} pageRef - reference to the page.
-     */
-    cachePageRef(pageNum: number, pageRef: Object): void;
-    /**
-     * @ignore
-     */
-    _cachedPageNumber(pageRef: any): any;
-    #private;
 }
 /**
  * @implements {IPDFLinkService}
  */
-export class SimpleLinkService implements IPDFLinkService {
-    externalLinkEnabled: boolean;
-    /**
-     * @type {number}
-     */
-    get pagesCount(): number;
-    /**
-     * @param {number} value
-     */
-    set page(value: number);
-    /**
-     * @type {number}
-     */
-    get page(): number;
-    /**
-     * @param {number} value
-     */
-    set rotation(value: number);
-    /**
-     * @type {number}
-     */
-    get rotation(): number;
-    /**
-     * @type {boolean}
-     */
-    get isInPresentationMode(): boolean;
-    /**
-     * @param {string|Array} dest - The named, or explicit, PDF destination.
-     */
-    goToDestination(dest: string | any[]): Promise<void>;
-    /**
-     * @param {number|string} val - The page number, or page label.
-     */
-    goToPage(val: number | string): void;
-    /**
-     * @param {HTMLAnchorElement} link
-     * @param {string} url
-     * @param {boolean} [newWindow]
-     */
-    addLinkAttributes(link: HTMLAnchorElement, url: string, newWindow?: boolean | undefined): void;
-    /**
-     * @param dest - The PDF destination object.
-     * @returns {string} The hyperlink to the PDF object.
-     */
-    getDestinationHash(dest: any): string;
-    /**
-     * @param hash - The PDF parameters/hash.
-     * @returns {string} The hyperlink to the PDF object.
-     */
-    getAnchorUrl(hash: any): string;
-    /**
-     * @param {string} hash
-     */
-    setHash(hash: string): void;
-    /**
-     * @param {string} action
-     */
-    executeNamedAction(action: string): void;
-    /**
-     * @param {Object} action
-     */
-    executeSetOCGState(action: Object): void;
-    /**
-     * @param {number} pageNum - page number.
-     * @param {Object} pageRef - reference to the page.
-     */
-    cachePageRef(pageNum: number, pageRef: Object): void;
+export class SimpleLinkService extends PDFLinkService implements IPDFLinkService {
 }

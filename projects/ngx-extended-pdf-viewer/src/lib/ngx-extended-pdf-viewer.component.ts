@@ -61,6 +61,7 @@ import { OutlineLoadedEvent } from './events/outline-loaded-event';
 import { ToggleSidebarEvent } from './events/toggle-sidebar-event';
 import { XfaLayerRenderedEvent } from './events/xfa-layer-rendered-event';
 import { NgxFormSupport } from './ngx-form-support';
+import { NgxConsole } from './options/ngx-console';
 import { PdfSidebarView } from './options/pdf-sidebar-views';
 import { SpreadType } from './options/spread-type';
 import { PdfCspPolicyService } from './pdf-csp-policy.service';
@@ -1001,12 +1002,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       const script = this.createScriptElement(pdfDefaultOptions.assetsFolder + '/op-chaining-support.js');
       script.onload = () => {
         script.remove();
+        script.onload = null;
         resolve((<any>window).ngxExtendedPdfViewerCanRunModernJSCode as boolean);
       };
       script.onerror = () => {
         script.remove();
         (<any>window).ngxExtendedPdfViewerCanRunModernJSCode = false;
         resolve(false);
+        script.onerror = null;
       };
 
       document.body.appendChild(script);
@@ -1017,6 +1020,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     const script = document.createElement('script');
     script.async = true;
     script.type = sourcePath.endsWith('.mjs') ? 'module' : 'text/javascript';
+    script.className = 'ngx-extended-pdf-viewer-script';
     this.pdfCspPolicyService.addTrustedJavaScript(script, sourcePath);
     return script;
   }
@@ -1061,6 +1065,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   ngOnInit() {
+    NgxConsole.init();
     if (isPlatformBrowser(this.platformId)) {
       globalThis['setNgxExtendedPdfViewerSource'] = (url: string) => {
         this._src = url;
@@ -1550,7 +1555,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.registerEventListeners(PDFViewerApplication);
     this.selectCursorTool();
     if (!this.listenToURL) {
-      PDFViewerApplication.pdfLinkService.setHash = function () {};
+      PDFViewerApplication.pdfLinkService.setHash = undefined;
     }
 
     if (this._src) {
@@ -2020,6 +2025,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     (window as any).assignFormIdAndFieldName = undefined;
     (window as any).updateAngularFormValue = undefined;
     (window as any).updateThumbnailSelection = undefined;
+    (window as any).ngxConsoleFilter = undefined;
+    // (window as any).pdfDefaultOptions = undefined;
+    // (window as any).pdfViewerSanitizer = undefined;
+    (window as any).printPDF = undefined;
+    // (window as any).webViewerLoad = undefined;
     this.shuttingDown = true;
 
     this.service.ngxExtendedPdfViewerInitialized = false;
@@ -2051,20 +2061,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       const bus = PDFViewerApplication.eventBus;
       if (bus) {
         PDFViewerApplication.unbindEvents();
-        for (const key in bus._listeners) {
-          if (bus._listeners[key]) {
-            const list = bus._listeners[key];
-            // not sure if the for loop is necessary - but
-            // it might improve garbage collection if the "listeners"
-            // array is stored somewhere else
-            for (let i = 0; i < list.length; i++) {
-              list[i] = undefined;
-            }
-            bus._listeners[key] = undefined;
-          }
-        }
+        bus.destroy();
       }
       (PDFViewerApplication.eventBus as any) = null;
+      document.querySelectorAll('.ngx-extended-pdf-viewer-script').forEach((e: HTMLScriptElement) => {
+        e.onload = null;
+        e.remove();
+      });
     }
   }
 

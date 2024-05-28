@@ -31,6 +31,12 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 Version 20.0.2 is a security fix. It solves CVE-2024-4367. I strongly recommend updating to the latest version of ngx-extended-pdf-viewer as soon as possible, or to version 20.0.2 as a minimum. Older versions contain a bug allowing malicious PDF files to run arbitrary code. Kudos go to GitHub users ScratchPDX and Deepak Shakya to tell me about it, so I could provide a hotfix during my vacations.
 
+## What's new in Version 20.5.0?
+
+Basically, version 20.5.0 updates to pdf.js 4.3 and solves some memory leak issues. At the moment these versions are alpha versions because I believe it's time for thorough testing. Solving memory leaks is always a challenge, so I don't want to do it in a rush.
+
+Please don't update your production code to the alpha versions - they are meant for testing. If you want to help me to keep the quality of the library high, go for the alpha versions and report bugs if you find them. Otherwise, please stick to version 20.2.x for a short while.
+
 ## What's new in Version 20?
 
 Version 20.2.0 fixes a few bugs in PDF files with forms. Now checkboxes always show the value stored in the PDF files (unless overwritten by `(formDataChange)´), and text fields always show the value sent by `[formData]` even if there's a pre-formatted value in the PDF file. The bug fix might break your application if you rely on the error. I don't consider this a breaking change, but even so, I've increase the minor version number to make you aware of potential problems.

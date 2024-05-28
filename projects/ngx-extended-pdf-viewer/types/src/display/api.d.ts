@@ -279,6 +279,10 @@ export type TextContent = {
     styles: {
         [x: string]: TextStyle;
     };
+    /**
+     * - The document /Lang attribute.
+     */
+    lang: string | null;
 };
 /**
  * Page text content part.
@@ -683,7 +687,7 @@ export class PDFDataRangeTransport {
     _progressListeners: any[];
     _progressiveReadListeners: any[];
     _progressiveDoneListeners: any[];
-    _readyCapability: PromiseWithResolvers<any>;
+    _readyCapability: any;
     /**
      * @param {function} listener
      */
@@ -734,8 +738,8 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#44@#docId": number;
-    _capability: PromiseWithResolvers<any>;
+    static "__#45@#docId": number;
+    _capability: any;
     _transport: any;
     _worker: any;
     /**
@@ -1011,6 +1015,11 @@ export class PDFDocumentProxy {
      */
     destroy(): Promise<void>;
     /**
+     * @param {RefProxy} ref - The page reference.
+     * @returns {number | null} The page number, if it's cached.
+     */
+    cachedPageNumber(ref: RefProxy): number | null;
+    /**
      * @type {DocumentInitParameters} A subset of the current
      *   {DocumentInitParameters}, which are needed in the viewer.
      */
@@ -1071,6 +1080,7 @@ export class PDFDocumentProxy {
  *   items are included when includeMarkedContent is true.
  * @property {Object<string, TextStyle>} styles - {@link TextStyle} objects,
  *   indexed by font name.
+ * @property {string | null} lang - The document /Lang attribute.
  */
 /**
  * Page text content part.
@@ -1353,7 +1363,7 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#47@#workerPorts": any;
+    static "__#48@#workerPorts": any;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */
@@ -1363,7 +1373,7 @@ export class PDFWorker {
      * @type {string}
      */
     static get workerSrc(): string;
-    static get "__#47@#mainThreadWorkerMessageHandler"(): any;
+    static get "__#48@#mainThreadWorkerMessageHandler"(): any;
     static get _setupFakeWorkerGlobal(): any;
     constructor({ name, port, verbosity, }?: {
         name?: null | undefined;
@@ -1373,7 +1383,7 @@ export class PDFWorker {
     name: any;
     destroyed: boolean;
     verbosity: number;
-    _readyCapability: PromiseWithResolvers<any>;
+    _readyCapability: any;
     _port: any;
     _webWorker: Worker | null;
     _messageHandler: MessageHandler | null;

@@ -314,6 +314,12 @@ export class AnnotationEditor {
      */
     serialize(isForCopying?: boolean | undefined, context?: Object | null | undefined): Object | null;
     /**
+     * Check if an existing annotation associated with this editor has been
+     * modified.
+     * @returns {boolean}
+     */
+    get hasBeenModified(): boolean;
+    /**
      * Remove this editor.
      * It's used on ctrl+backspace action.
      */
@@ -405,6 +411,13 @@ export class AnnotationEditor {
     show(visible?: boolean | undefined): void;
     enable(): void;
     disable(): void;
+    /**
+     * Render an annotation in the annotation layer.
+     * @param {Object} annotation
+     * @returns {HTMLElement}
+     */
+    renderAnnotationElement(annotation: Object): HTMLElement;
+    resetAnnotationElement(annotation: any): void;
     #private;
 }
 import { AnnotationEditorUIManager } from "./tools.js";

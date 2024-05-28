@@ -98,7 +98,7 @@ export class PDFPageView implements IRenderableView {
     pageColors: Object | null;
     eventBus: import("./event_utils").EventBus;
     renderingQueue: import("./pdf_rendering_queue").PDFRenderingQueue | undefined;
-    l10n: any;
+    l10n: import("./interfaces").IL10n | GenericL10n | undefined;
     renderTask: any;
     resume: (() => void) | null;
     _isStandalone: boolean | undefined;
@@ -194,6 +194,7 @@ export class PDFPageView implements IRenderableView {
     get thumbnailCanvas(): HTMLCanvasElement | null | undefined;
     #private;
 }
+import { GenericL10n } from "./genericl10n";
 import { AnnotationLayerBuilder } from "./annotation_layer_builder.js";
 import { AnnotationEditorLayerBuilder } from "./annotation_editor_layer_builder.js";
 import { TextLayerBuilder } from "./text_layer_builder.js";

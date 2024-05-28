@@ -10359,7 +10359,6 @@ class TextLayer {
     this.#pageWidth = pageWidth;
     this.#pageHeight = pageHeight;
     setLayerDimensions(container, viewport);
-    TextLayer.#pendingTextLayers.add(this);
     this.#capability.promise.catch(() => {}).then(() => {
       TextLayer.#pendingTextLayers.delete(this);
       this.#layoutTextParams = null;
@@ -10383,6 +10382,7 @@ class TextLayer {
       }, this.#capability.reject);
     };
     this.#reader = this.#textContentSource.getReader();
+    TextLayer.#pendingTextLayers.add(this);
     pump();
     return this.#capability.promise;
   }
@@ -10837,7 +10837,7 @@ function getDocument(src) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.3.620",
+    apiVersion: "4.3.650",
     data,
     password,
     disableAutoFetch,
@@ -10861,11 +10861,13 @@ function getDocument(src) {
   const transportParams = {
     disableFontFace,
     fontExtraProperties,
-    enableXfa,
     ownerDocument,
-    disableAutoFetch,
     pdfBug,
-    styleElement
+    styleElement,
+    loadingParams: {
+      disableAutoFetch,
+      enableXfa
+    }
   };
   worker.promise.then(function () {
     if (task.destroyed) {
@@ -11862,6 +11864,7 @@ class WorkerTransport {
       ownerDocument: params.ownerDocument,
       styleElement: params.styleElement
     });
+    this.loadingParams = params.loadingParams;
     this._params = params;
     this.canvasFactory = factory.canvasFactory;
     this.filterFactory = factory.filterFactory;
@@ -12403,16 +12406,6 @@ class WorkerTransport {
     const refStr = ref.gen === 0 ? `${ref.num}R` : `${ref.num}R${ref.gen}`;
     return this.#pageRefCache.get(refStr) ?? null;
   }
-  get loadingParams() {
-    const {
-      disableAutoFetch,
-      enableXfa
-    } = this._params;
-    return shadow(this, "loadingParams", {
-      disableAutoFetch,
-      enableXfa
-    });
-  }
 }
 const INITIAL_DATA = Symbol("INITIAL_DATA");
 class PDFObjects {
@@ -12626,8 +12619,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.3.620";
-const build = "d1714e406";
+const version = "4.3.650";
+const build = "2263182a1";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -19720,8 +19713,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.3.620";
-const pdfjsBuild = "d1714e406";
+const pdfjsVersion = "4.3.650";
+const pdfjsBuild = "2263182a1";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;

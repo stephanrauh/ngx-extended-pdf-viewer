@@ -280,6 +280,14 @@ export class AnnotationEditorUIManager {
         width: number;
         height: number;
     }[] | null;
+    addChangedExistingAnnotation({ annotationElementId, id }: {
+        annotationElementId: any;
+        id: any;
+    }): void;
+    removeChangedExistingAnnotation({ annotationElementId }: {
+        annotationElementId: any;
+    }): void;
+    renderAnnotationElement(annotation: any): void;
     #private;
 }
 export function bindEvents(obj: any, element: any, names: any): void;

@@ -1,7 +1,15 @@
-globalThis['ngxConsoleFilter'] = (_level: string, _message: any): boolean => {
-  return true;
-};
 export class NgxConsole {
+  public static init() {
+    if (!globalThis['ngxConsoleFilter']) {
+      globalThis['ngxConsoleFilter'] = (_level: string, _message: any): boolean => {
+        return true;
+      };
+    }
+    if (!globalThis['ngxConsole']) {
+      globalThis['ngxConsole'] = new NgxConsole();
+    }
+  }
+
   public log(message: any, reason?: any): void {
     if (globalThis['ngxConsoleFilter']('log', message)) {
       if (reason !== undefined) {
@@ -30,5 +38,3 @@ export class NgxConsole {
     }
   }
 }
-
-globalThis['ngxConsole'] = new NgxConsole();

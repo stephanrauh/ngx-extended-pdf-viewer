@@ -189,7 +189,7 @@ export class PDFViewer {
     enablePrintAutoRotate: boolean;
     removePageBorders: boolean | undefined;
     maxCanvasPixels: number | undefined;
-    l10n: any;
+    l10n: import("./interfaces").IL10n | GenericL10n | undefined;
     pageColors: Object | null;
     defaultRenderingQueue: boolean;
     renderingQueue: PDFRenderingQueue | undefined;
@@ -201,8 +201,6 @@ export class PDFViewer {
         _eventHandler: (evt: any) => void;
     };
     presentationModeState: number;
-    _onBeforeDraw: ((evt: any) => void) | null;
-    _onAfterDraw: any;
     get pagesCount(): number;
     getPageView(index: any): any;
     getCachedPageViews(): Set<any>;
@@ -279,9 +277,9 @@ export class PDFViewer {
      */
     get pagesRotation(): number;
     _pagesRotation: any;
-    get firstPagePromise(): Promise<any> | null;
-    get onePageRendered(): Promise<any> | null;
-    get pagesPromise(): Promise<any> | null;
+    get firstPagePromise(): any;
+    get onePageRendered(): any;
+    get pagesPromise(): any;
     get _layerProperties(): any;
     getAllText(): Promise<string | null>;
     /**
@@ -308,9 +306,9 @@ export class PDFViewer {
         rotation: any;
         pdfOpenParams: string;
     } | null | undefined;
-    _firstPageCapability: PromiseWithResolvers<any> | undefined;
-    _onePageRenderedCapability: PromiseWithResolvers<any> | undefined;
-    _pagesCapability: PromiseWithResolvers<any> | undefined;
+    _firstPageCapability: any;
+    _onePageRenderedCapability: any;
+    _pagesCapability: any;
     _previousScrollMode: any;
     _spreadMode: any;
     _scrollUpdate(): void;
@@ -432,24 +430,50 @@ export class PDFViewer {
      * @property {number} [drawingDelay]
      * @property {number} [scaleFactor]
      * @property {number} [steps]
+     * @property {Array} [origin] x and y coordinates of the scale
+     *                            transformation origin.
      */
+    /**
+     * Changes the current zoom level by the specified amount.
+     * @param {ChangeScaleOptions} [options]
+     */
+    updateScale({ drawingDelay, scaleFactor, steps, origin }?: {
+        drawingDelay?: number | undefined;
+        scaleFactor?: number | undefined;
+        steps?: number | undefined;
+        /**
+         * x and y coordinates of the scale
+         *  transformation origin.
+         */
+        origin?: any[] | undefined;
+    } | undefined): void;
     /**
      * Increase the current zoom level one, or more, times.
      * @param {ChangeScaleOptions} [options]
      */
-    increaseScale({ drawingDelay, scaleFactor, steps }?: {
+    increaseScale(options?: {
         drawingDelay?: number | undefined;
         scaleFactor?: number | undefined;
         steps?: number | undefined;
+        /**
+         * x and y coordinates of the scale
+         *  transformation origin.
+         */
+        origin?: any[] | undefined;
     } | undefined): void;
     /**
      * Decrease the current zoom level one, or more, times.
      * @param {ChangeScaleOptions} [options]
      */
-    decreaseScale({ drawingDelay, scaleFactor, steps }?: {
+    decreaseScale(options?: {
         drawingDelay?: number | undefined;
         scaleFactor?: number | undefined;
         steps?: number | undefined;
+        /**
+         * x and y coordinates of the scale
+         *  transformation origin.
+         */
+        origin?: any[] | undefined;
     } | undefined): void;
     get containerTopLeft(): number[];
     /**
@@ -503,4 +527,5 @@ export class PDFViewer {
 }
 import { PDFRenderingQueue } from "./pdf_rendering_queue.js";
 import { SimpleLinkService } from "./pdf_link_service.js";
+import { GenericL10n } from "./genericl10n";
 import { PageFlip } from "./page-flip.module.js";

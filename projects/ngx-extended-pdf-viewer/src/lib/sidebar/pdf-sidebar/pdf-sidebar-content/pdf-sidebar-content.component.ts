@@ -65,6 +65,8 @@ export class PdfSidebarContentComponent implements OnDestroy {
 
   public ngOnDestroy(): void {
     this.linkService = undefined;
+    (window as any).pdfThumbnailGeneratorReady = undefined;
+    (window as any).pdfThumbnailGenerator = undefined;
   }
 
   public pdfThumbnailGeneratorReady(): boolean {
