@@ -65,8 +65,8 @@
         (pageViewModeChange)="updatePageViewMode($event)"
         [scrollMode]="scrollMode"
       ></pdf-book-mode>
-      <pdf-hand-tool [showHandToolButton]="showHandToolButton"></pdf-hand-tool>
-      <pdf-select-tool [showSelectToolButton]="showHandToolButton"></pdf-select-tool>
+      <pdf-hand-tool [showHandToolButton]="showHandToolButton" [handTool]="handTool"></pdf-hand-tool>
+      <pdf-select-tool [showSelectToolButton]="showHandToolButton" [handTool]="handTool"></pdf-select-tool>
       <pdf-rotate-page-cw [showRotateCwButton]="showRotateCwButton"> </pdf-rotate-page-cw>
       <pdf-rotate-page-ccw [showRotateCcwButton]="showRotateCcwButton"> </pdf-rotate-page-ccw>
       <pdf-presentation-mode [showPresentationModeButton]="showPresentationModeButton"></pdf-presentation-mode>

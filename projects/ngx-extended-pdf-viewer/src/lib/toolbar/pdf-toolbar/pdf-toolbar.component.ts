@@ -40,6 +40,9 @@ export class PdfToolbarComponent implements AfterViewInit {
   public showHandToolButton: ResponsiveVisibility = true;
 
   @Input()
+  public handTool = false;
+
+  @Input()
   public showOpenFileButton: ResponsiveVisibility = true;
 
   @Input()

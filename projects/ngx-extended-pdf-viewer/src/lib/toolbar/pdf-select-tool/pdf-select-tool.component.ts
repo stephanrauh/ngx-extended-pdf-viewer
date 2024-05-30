@@ -16,6 +16,11 @@ export class PdfSelectToolComponent {
 
   public isSelected = true;
 
+  @Input()
+  public set handTool(value: boolean) {
+    this.isSelected = !value;
+  }
+
   constructor(private notificationService: PDFNotificationService) {
     effect(() => {
       if (notificationService.onPDFJSInitSignal()) {

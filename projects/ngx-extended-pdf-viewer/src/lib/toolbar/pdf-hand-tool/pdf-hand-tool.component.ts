@@ -14,6 +14,11 @@ export class PdfHandToolComponent {
   @Input()
   public showHandToolButton: ResponsiveVisibility = true;
 
+  @Input()
+  public set handTool(value: boolean) {
+    this.isSelected = value;
+  }
+
   public isSelected = false;
 
   constructor(private notificationService: PDFNotificationService) {
