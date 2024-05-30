@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, NgZone, Output } from '@angular/core';
-import { take } from 'rxjs/operators';
+import { Component, EventEmitter, Input, NgZone, Output, effect } from '@angular/core';
 import { ScrollMode } from '../../options/pdf-scroll-mode';
 import { PageViewModeType, ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
@@ -27,8 +26,10 @@ export class PdfHorizontalScrollComponent {
   public onClick: () => void;
 
   constructor(private notificationService: PDFNotificationService, private ngZone: NgZone) {
-    this.notificationService.onPDFJSInit.pipe(take(1)).subscribe(() => {
-      this.onPdfJsInit();
+    effect(() => {
+      if (notificationService.onPDFJSInitSignal()) {
+        this.onPdfJsInit();
+      }
     });
     const emitter = this.pageViewModeChange;
     this.onClick = () => {

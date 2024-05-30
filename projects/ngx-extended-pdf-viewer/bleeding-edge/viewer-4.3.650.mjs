@@ -1293,7 +1293,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '20.5.0-alpha.0';
+const ngxExtendedPdfViewerVersion = '20.5.0-alpha.1';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -12525,6 +12525,9 @@ class TextLayerBuilder {
       const selection = document.getSelection();
       if (selection.rangeCount === 0) {
         this.#textLayers.forEach(reset);
+        return;
+      }
+      if (this.#textLayers.size === 0) {
         return;
       }
       const activeTextLayers = new Set();

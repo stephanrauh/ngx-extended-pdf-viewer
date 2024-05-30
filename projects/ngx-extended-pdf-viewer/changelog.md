@@ -553,3 +553,5 @@
 - 20.0.2 fixed CVE-2024-4367
 - 20.1.0 #2339 made several methods in the PDFFindController public to allow users to add custom implementations; #2343 fixed the box-sizing model of the annotation layer (was broken by #2282)
 - 20.2.0 #2243 render all icons in high-contrast mode; #2331 render the initial state of checkboxes correctly even if they are radiobuttons in disguise and the first checkbox is not checked; fixed a corner case that rendered the default value of a form field even though it was overwritten by Angular's `(formDataChange)` event
+- 20.5.0-alpha.0 #2329 reduce the memory leaks (work in progress - the leak is still there)
+- 20.5.0-alpha.1 #2349 prevent exceptions on right-click if there's no text layer; #2348 unlock Angular 18; #2329 embrace signals to reduce the memory leak (work in progress - the leak is still there)

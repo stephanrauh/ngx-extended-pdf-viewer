@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Subject, firstValueFrom } from 'rxjs';
+import { Injectable, effect, signal } from '@angular/core';
+import { Subject } from 'rxjs';
 import { getVersionSuffix, pdfDefaultOptions } from './options/pdf-default-options';
 
 @Injectable({
@@ -7,14 +7,18 @@ import { getVersionSuffix, pdfDefaultOptions } from './options/pdf-default-optio
 })
 export class PDFNotificationService {
   // this event is fired when the pdf.js library has been loaded and objects like PDFApplication are available
+  public onPDFJSInitSignal = signal(false);
+
   public onPDFJSInit = new Subject<void>();
 
   public pdfjsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
 
   public constructor() {
-    (async () => {
-      await firstValueFrom(this.onPDFJSInit);
-      this.pdfjsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
-    })();
+    effect(() => {
+      if (this.onPDFJSInitSignal()) {
+        this.pdfjsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
+        this.onPDFJSInit.next();
+      }
+    });
   }
 }

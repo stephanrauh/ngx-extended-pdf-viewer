@@ -7,9 +7,15 @@ import { TrustedTypesWindow } from 'trusted-types/lib';
 export class PdfCspPolicyService {
   private sanitizer: any = undefined; // TrustedTypePolicy;
 
-  constructor() {
+  constructor() {}
+
+  public init() {
     if (typeof window === 'undefined') {
       // server-side rendering
+      return;
+    }
+    if ((globalThis as any).pdfViewerSanitizer) {
+      // already initialized
       return;
     }
     const ttWindow = globalThis as unknown as TrustedTypesWindow;
@@ -27,6 +33,7 @@ export class PdfCspPolicyService {
       // server-side rendering
       return;
     }
+    this.init();
     if (this.sanitizer) {
       styles.textContent = this.sanitizer.createHTML(css) as unknown as any;
     } else {
@@ -39,6 +46,7 @@ export class PdfCspPolicyService {
       // server-side rendering
       return;
     }
+    this.init();
     if (this.sanitizer) {
       scripts.src = this.sanitizer.createScriptURL(css) as unknown as any;
     } else {

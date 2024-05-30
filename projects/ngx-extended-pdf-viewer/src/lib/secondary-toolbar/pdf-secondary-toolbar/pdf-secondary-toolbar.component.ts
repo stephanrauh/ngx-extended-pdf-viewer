@@ -13,12 +13,12 @@ import {
   PLATFORM_ID,
   SimpleChanges,
   TemplateRef,
+  effect,
 } from '@angular/core';
-import { take } from 'rxjs/operators';
+import { NgxExtendedPdfViewerService } from '../../ngx-extended-pdf-viewer.service';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PdfShyButtonService } from '../../toolbar/pdf-shy-button/pdf-shy-button-service';
 import { PDFNotificationService } from './../../pdf-notification-service';
-import { NgxExtendedPdfViewerService } from '../../ngx-extended-pdf-viewer.service';
 
 @Component({
   selector: 'pdf-secondary-toolbar',
@@ -54,8 +54,10 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
     public pdfShyButtonService: PdfShyButtonService,
     private ngxExtendedPdfViewerService: NgxExtendedPdfViewerService
   ) {
-    this.notificationService.onPDFJSInit.pipe(take(1)).subscribe(() => {
-      this.onPdfJsInit();
+    effect(() => {
+      if (notificationService.onPDFJSInitSignal()) {
+        this.onPdfJsInit();
+      }
     });
   }
 

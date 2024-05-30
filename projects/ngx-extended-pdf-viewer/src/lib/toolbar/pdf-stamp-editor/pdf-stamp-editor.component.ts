@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, effect } from '@angular/core';
 import { AnnotationEditorEditorModeChangedEvent } from '../../events/annotation-editor-mode-changed-event';
 import { getVersionSuffix, pdfDefaultOptions } from '../../options/pdf-default-options';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
@@ -21,9 +21,10 @@ export class PdfStampEditorComponent {
   }
 
   constructor(private notificationService: PDFNotificationService, private cdr: ChangeDetectorRef) {
-    const subscription = this.notificationService.onPDFJSInit.subscribe(() => {
-      this.onPdfJsInit();
-      subscription.unsubscribe();
+    effect(() => {
+      if (notificationService.onPDFJSInitSignal()) {
+        this.onPdfJsInit();
+      }
     });
   }
 

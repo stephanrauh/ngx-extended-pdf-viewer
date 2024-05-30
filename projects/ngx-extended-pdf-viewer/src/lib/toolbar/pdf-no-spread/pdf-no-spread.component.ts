@@ -1,5 +1,4 @@
-import { Component, Input, NgZone } from '@angular/core';
-import { take } from 'rxjs/operators';
+import { Component, Input, NgZone, effect } from '@angular/core';
 import { ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { SpreadType } from '../../options/spread-type';
@@ -21,8 +20,10 @@ export class PdfNoSpreadComponent {
   public scrollMode: ScrollModeType;
 
   constructor(private notificationService: PDFNotificationService, private ngZone: NgZone) {
-    this.notificationService.onPDFJSInit.pipe(take(1)).subscribe(() => {
-      this.onPdfJsInit();
+    effect(() => {
+      if (notificationService.onPDFJSInitSignal()) {
+        this.onPdfJsInit();
+      }
     });
   }
 

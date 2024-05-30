@@ -157,6 +157,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   public localizationInitialized: boolean = false;
 
+  private windowSizeRecalculatorSubscription: any;
+
   @Input()
   public set formData(formData: FormDataType) {
     this.formSupport.formData = formData;
@@ -955,7 +957,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     private pdfCspPolicyService: PdfCspPolicyService
   ) {
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
-    this.service.recalculateSize$.subscribe(() => this.onResize());
+    this.windowSizeRecalculatorSubscription = this.service.recalculateSize$.subscribe(() => this.onResize());
     if (isPlatformBrowser(this.platformId)) {
       this.serverSideRendering = false;
       this.toolbarWidth = String(document.body.clientWidth);
@@ -1327,7 +1329,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   /** Notifies every widget that implements onLibraryInit() that the PDF viewer objects are available */
   private afterLibraryInit() {
-    this.notificationService.onPDFJSInit.next();
+    this.notificationService.onPDFJSInitSignal.set(true);
   }
 
   public checkHeight(): void {
@@ -1991,12 +1993,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (typeof window === 'undefined') {
       return; // fast escape for server side rendering
     }
-    globalThis['setNgxExtendedPdfViewerSource'] = undefined;
+    delete globalThis['setNgxExtendedPdfViewerSource'];
 
     window.removeEventListener('afterprint', this.afterPrintListener);
     window.removeEventListener('beforeprint', this.beforePrintListener);
-    globalThis['ngxZone'] = undefined;
-    globalThis['ngxConsole'] = undefined;
+    delete globalThis['ngxZone'];
+    delete globalThis['ngxConsole'];
 
     const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     PDFViewerApplication?.pdfViewer?.destroyBookMode();
@@ -2015,20 +2017,22 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       printContainer.parentElement?.removeChild(printContainer);
     }
 
-    (window as any).getFormValueFromAngular = undefined;
-    (window as any).registerAcroformAnnotations = undefined;
-    (window as any).getFormValue = undefined;
-    (window as any).setFormValue = undefined;
-    (window as any).assignFormIdAndFieldName = undefined;
-    (window as any).registerAcroformField = undefined;
-    (window as any).registerXFAField = undefined;
-    (window as any).assignFormIdAndFieldName = undefined;
-    (window as any).updateAngularFormValue = undefined;
-    (window as any).updateThumbnailSelection = undefined;
-    (window as any).ngxConsoleFilter = undefined;
+    const w = window as any;
+    delete w.getFormValueFromAngular;
+    delete w.registerAcroformAnnotations;
+    delete w.getFormValue;
+    delete w.setFormValue;
+    delete w.assignFormIdAndFieldName;
+    delete w.registerAcroformField;
+    delete w.registerXFAField;
+    delete w.assignFormIdAndFieldName;
+    delete w.updateAngularFormValue;
+    delete w.updateThumbnailSelection;
+    delete w.ngxConsoleFilter;
     // (window as any).pdfDefaultOptions = undefined;
-    // (window as any).pdfViewerSanitizer = undefined;
-    (window as any).printPDF = undefined;
+    delete w.pdfViewerSanitizer;
+    delete w.printPDF;
+
     // (window as any).webViewerLoad = undefined;
     this.shuttingDown = true;
 
@@ -2069,6 +2073,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
         e.remove();
       });
     }
+    this.windowSizeRecalculatorSubscription?.unsubscribe();
+    this.notificationService.onPDFJSInitSignal.set(false);
   }
 
   private isPrimaryMenuVisible(): boolean {

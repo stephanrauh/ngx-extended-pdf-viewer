@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, effect } from '@angular/core';
 import { AnnotationEditorEditorModeChangedEvent } from '../../events/annotation-editor-mode-changed-event';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
@@ -16,9 +16,10 @@ export class PdfTextEditorComponent {
   public isSelected = false;
 
   constructor(private notificationService: PDFNotificationService, private cdr: ChangeDetectorRef) {
-    const subscription = this.notificationService.onPDFJSInit.subscribe(() => {
-      this.onPdfJsInit();
-      subscription.unsubscribe();
+    effect(() => {
+      if (notificationService.onPDFJSInitSignal()) {
+        this.onPdfJsInit();
+      }
     });
   }
 

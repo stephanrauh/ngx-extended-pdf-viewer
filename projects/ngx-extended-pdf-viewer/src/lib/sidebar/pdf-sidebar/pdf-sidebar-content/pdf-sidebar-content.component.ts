@@ -14,8 +14,6 @@ declare class PDFLinkService {
   public getAnchorUrl(targetUrl: string): string;
 }
 
-const THUMBNAIL_CANVAS_BORDER_WIDTH = 1; // one pixel
-
 @Component({
   selector: 'pdf-sidebar-content',
   templateUrl: './pdf-sidebar-content.component.html',
@@ -65,8 +63,9 @@ export class PdfSidebarContentComponent implements OnDestroy {
 
   public ngOnDestroy(): void {
     this.linkService = undefined;
-    (window as any).pdfThumbnailGeneratorReady = undefined;
-    (window as any).pdfThumbnailGenerator = undefined;
+    const w = window as any;
+    delete w.pdfThumbnailGeneratorReady;
+    delete w.pdfThumbnailGenerator;
   }
 
   public pdfThumbnailGeneratorReady(): boolean {

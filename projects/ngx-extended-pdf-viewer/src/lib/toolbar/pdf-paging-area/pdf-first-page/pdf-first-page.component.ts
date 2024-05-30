@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, effect } from '@angular/core';
 import { UpdateUIStateEvent } from '../../../events/update-ui-state-event';
 import { IPDFViewerApplication } from '../../../options/pdf-viewer-application';
 import { ResponsiveVisibility } from '../../../responsive-visibility';
@@ -16,9 +16,10 @@ export class PdfFirstPageComponent {
   public disableFirstPage = true;
 
   constructor(private notificationService: PDFNotificationService, private changeDetectorRef: ChangeDetectorRef) {
-    const subscription = this.notificationService.onPDFJSInit.subscribe(() => {
-      this.onPdfJsInit();
-      subscription.unsubscribe();
+    effect(() => {
+      if (notificationService.onPDFJSInitSignal()) {
+        this.onPdfJsInit();
+      }
     });
   }
 

@@ -1,7 +1,7 @@
 export class NgxConsole {
   public static init() {
     if (!globalThis['ngxConsoleFilter']) {
-      globalThis['ngxConsoleFilter'] = (_level: string, _message: any): boolean => {
+      globalThis['ngxConsoleFilter'] = function (_level: string, _message: any): boolean {
         return true;
       };
     }

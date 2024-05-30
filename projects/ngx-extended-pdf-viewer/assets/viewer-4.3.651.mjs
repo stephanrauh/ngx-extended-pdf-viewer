@@ -1293,7 +1293,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '20.5.0-alpha.0';
+const ngxExtendedPdfViewerVersion = '20.5.0-alpha.1';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -12527,6 +12527,9 @@ class TextLayerBuilder {
         this.#textLayers.forEach(reset);
         return;
       }
+      if (this.#textLayers.size === 0) {
+        return;
+      }
       const activeTextLayers = new Set();
       for (let i = 0; i < selection.rangeCount; i++) {
         const range = selection.getRangeAt(i);
@@ -13481,7 +13484,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = "4.3.649";
+    const viewerVersion = "4.3.651";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -18207,8 +18210,8 @@ function webViewerReportTelemetry({
 
 
 
-const pdfjsVersion = "4.3.649";
-const pdfjsBuild = "1cbcdafc7";
+const pdfjsVersion = "4.3.651";
+const pdfjsBuild = "f0600cce3";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
