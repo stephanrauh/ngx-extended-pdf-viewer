@@ -157,7 +157,7 @@ function isDivInViewport(element) {
   const rect = element.getBoundingClientRect();
   return rect.top >= 0 && rect.left >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && rect.right <= (window.innerWidth || document.documentElement.clientWidth);
 }
-function watchScroll(viewAreaElement, callback) {
+function watchScroll(viewAreaElement, callback, abortSignal = undefined) {
   const debounceScroll = function (evt) {
     if (rAF) {
       return;
@@ -187,7 +187,10 @@ function watchScroll(viewAreaElement, callback) {
     _eventHandler: debounceScroll
   };
   let rAF = null;
-  viewAreaElement.addEventListener("scroll", debounceScroll, true);
+  viewAreaElement.addEventListener("scroll", debounceScroll, {
+    useCapture: true,
+    signal: abortSignal
+  });
   return state;
 }
 function parseQueryString(query) {
@@ -1293,7 +1296,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '20.5.0-alpha.1';
+const ngxExtendedPdfViewerVersion = '20.5.0-alpha.2';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -9333,14 +9336,15 @@ class PDFThumbnailViewer {
     eventBus,
     linkService,
     renderingQueue,
-    pageColors
+    pageColors,
+    abortSignal
   }) {
     this.container = container;
     this.eventBus = eventBus;
     this.linkService = linkService;
     this.renderingQueue = renderingQueue;
     this.pageColors = pageColors || null;
-    this.scroll = watchScroll(this.container, this.#scrollUpdated.bind(this));
+    this.scroll = watchScroll(this.container, this.#scrollUpdated.bind(this), abortSignal);
     this.#resetView();
   }
   #scrollUpdated() {
@@ -13406,8 +13410,8 @@ class PDFPageView {
 
 const DEFAULT_CACHE_SIZE = 10;
 const PagesCountLimit = {
-  FORCE_SCROLL_MODE_PAGE: 15000,
-  FORCE_LAZY_PAGE_INIT: 7500,
+  FORCE_SCROLL_MODE_PAGE: 10000,
+  FORCE_LAZY_PAGE_INIT: 5000,
   PAUSE_EAGER_PAGE_INIT: 250
 };
 function isValidAnnotationEditorMode(mode) {
@@ -13484,7 +13488,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = "4.3.650";
+    const viewerVersion = "4.4.513";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -13528,7 +13532,16 @@ class PDFViewer {
     } else {
       this.renderingQueue = options.renderingQueue;
     }
-    this.scroll = watchScroll(this.container, this._scrollUpdate.bind(this));
+    const {
+      abortSignal
+    } = options;
+    abortSignal?.addEventListener("abort", () => {
+      this.#resizeObserver.disconnect();
+      this.#resizeObserver = null;
+    }, {
+      once: true
+    });
+    this.scroll = watchScroll(this.container, this._scrollUpdate.bind(this), abortSignal);
     this.presentationModeState = PresentationModeState.UNKNOWN;
     this._resetView();
     if (this.removePageBorders) {
@@ -15888,6 +15901,7 @@ const app_PDFViewerApplication = {
   _downloadUrl: "",
   _eventBusAbortController: null,
   _windowAbortController: null,
+  _globalAbortController: new AbortController(),
   documentInfo: null,
   metadata: null,
   _contentDispositionFilename: null,
@@ -16087,7 +16101,8 @@ const app_PDFViewerApplication = {
       pageViewMode: AppOptions.get("pageViewMode"),
       enablePermissions: AppOptions.get("enablePermissions"),
       pageColors,
-      mlManager: this.mlManager
+      mlManager: this.mlManager,
+      abortSignal: this._globalAbortController.signal
     });
     this.pdfViewer = pdfViewer;
     pdfRenderingQueue.setViewer(pdfViewer);
@@ -16099,7 +16114,8 @@ const app_PDFViewerApplication = {
         eventBus,
         renderingQueue: pdfRenderingQueue,
         linkService: pdfLinkService,
-        pageColors
+        pageColors,
+        abortSignal: this._globalAbortController.signal
       });
       pdfRenderingQueue.setThumbnailViewer(this.pdfThumbnailViewer);
     }
@@ -17371,6 +17387,10 @@ const app_PDFViewerApplication = {
   unbindWindowEvents() {
     this._windowAbortController?.abort();
     this._windowAbortController = null;
+    if (AppOptions.get("isInAutomation")) {
+      this._globalAbortController?.abort();
+      this._globalAbortController = null;
+    }
   },
   _accumulateTicks(ticks, prop) {
     if (this[prop] > 0 && ticks < 0 || this[prop] < 0 && ticks > 0) {
@@ -18210,8 +18230,8 @@ function webViewerReportTelemetry({
 
 
 
-const pdfjsVersion = "4.3.650";
-const pdfjsBuild = "2263182a1";
+const pdfjsVersion = "4.4.513";
+const pdfjsBuild = "cf2ef26b4";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,

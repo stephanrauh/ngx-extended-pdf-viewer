@@ -10837,7 +10837,7 @@ function getDocument(src) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.3.650",
+    apiVersion: "4.4.513",
     data,
     password,
     disableAutoFetch,
@@ -12619,8 +12619,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.3.650";
-const build = "2263182a1";
+const version = "4.4.513";
+const build = "cf2ef26b4";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -13324,15 +13324,9 @@ class AnnotationElement {
     if (!quadPoints) {
       return;
     }
-    const [rectBlX, rectBlY, rectTrX, rectTrY] = this.data.rect;
-    if (quadPoints.length === 1) {
-      const [, {
-        x: trX,
-        y: trY
-      }, {
-        x: blX,
-        y: blY
-      }] = quadPoints[0];
+    const [rectBlX, rectBlY, rectTrX, rectTrY] = this.data.rect.map(x => Math.fround(x));
+    if (quadPoints.length === 8) {
+      const [trX, trY, blX, blY] = quadPoints.subarray(2, 6);
       if (rectTrX === trX && rectTrY === trY && rectBlX === blX && rectBlY === blY) {
         return;
       }
@@ -13366,13 +13360,11 @@ class AnnotationElement {
     clipPath.setAttribute("id", id);
     clipPath.setAttribute("clipPathUnits", "objectBoundingBox");
     defs.append(clipPath);
-    for (const [, {
-      x: trX,
-      y: trY
-    }, {
-      x: blX,
-      y: blY
-    }] of quadPoints) {
+    for (let i = 2, ii = quadPoints.length; i < ii; i += 8) {
+      const trX = quadPoints[i];
+      const trY = quadPoints[i + 1];
+      const blX = quadPoints[i + 2];
+      const blY = quadPoints[i + 3];
       const rect = svgFactory.createElement("rect");
       const x = (blX - rectBlX) / width;
       const y = (rectTrY - trY) / height;
@@ -15202,27 +15194,37 @@ class PolylineAnnotationElement extends AnnotationElement {
   }
   render() {
     this.container.classList.add(this.containerClassName);
-    const data = this.data;
+    const {
+      data: {
+        rect,
+        vertices,
+        borderStyle,
+        popupRef
+      }
+    } = this;
+    if (!vertices) {
+      return this.container;
+    }
     const {
       width,
       height
-    } = getRectDims(data.rect);
+    } = getRectDims(rect);
     const svg = this.svgFactory.create(width, height, true);
     let points = [];
-    for (const coordinate of data.vertices) {
-      const x = coordinate.x - data.rect[0];
-      const y = data.rect[3] - coordinate.y;
-      points.push(x + "," + y);
+    for (let i = 0, ii = vertices.length; i < ii; i += 2) {
+      const x = vertices[i] - rect[0];
+      const y = rect[3] - vertices[i + 1];
+      points.push(`${x},${y}`);
     }
     points = points.join(" ");
     const polyline = this.#polyline = this.svgFactory.createElement(this.svgElementName);
     polyline.setAttribute("points", points);
-    polyline.setAttribute("stroke-width", data.borderStyle.width || 1);
+    polyline.setAttribute("stroke-width", borderStyle.width || 1);
     polyline.setAttribute("stroke", "transparent");
     polyline.setAttribute("fill", "transparent");
     svg.append(polyline);
     this.container.append(svg);
-    if (!data.popupRef && this.hasPopupData) {
+    if (!popupRef && this.hasPopupData) {
       this._createPopup();
     }
     return this.container;
@@ -15269,27 +15271,34 @@ class InkAnnotationElement extends AnnotationElement {
   }
   render() {
     this.container.classList.add(this.containerClassName);
-    const data = this.data;
+    const {
+      data: {
+        rect,
+        inkLists,
+        borderStyle,
+        popupRef
+      }
+    } = this;
     const {
       width,
       height
-    } = getRectDims(data.rect);
+    } = getRectDims(rect);
     const svg = this.svgFactory.create(width, height, true);
-    for (const inkList of data.inkLists) {
+    for (const inkList of inkLists) {
       let points = [];
-      for (const coordinate of inkList) {
-        const x = coordinate.x - data.rect[0];
-        const y = data.rect[3] - coordinate.y;
+      for (let i = 0, ii = inkList.length; i < ii; i += 2) {
+        const x = inkList[i] - rect[0];
+        const y = rect[3] - inkList[i + 1];
         points.push(`${x},${y}`);
       }
       points = points.join(" ");
       const polyline = this.svgFactory.createElement(this.svgElementName);
       this.#polylines.push(polyline);
       polyline.setAttribute("points", points);
-      polyline.setAttribute("stroke-width", data.borderStyle.width || 1);
+      polyline.setAttribute("stroke-width", borderStyle.width || 1);
       polyline.setAttribute("stroke", "transparent");
       polyline.setAttribute("fill", "transparent");
-      if (!data.popupRef && this.hasPopupData) {
+      if (!popupRef && this.hasPopupData) {
         this._createPopup();
       }
       svg.append(polyline);
@@ -17530,7 +17539,7 @@ class HighlightEditor extends AnnotationEditor {
     }
     const [pageWidth, pageHeight] = this.pageDimensions;
     const boxes = this.#boxes;
-    const quadPoints = new Array(boxes.length * 8);
+    const quadPoints = new Float32Array(boxes.length * 8);
     let i = 0;
     for (const {
       x,
@@ -19713,8 +19722,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.3.650";
-const pdfjsBuild = "2263182a1";
+const pdfjsVersion = "4.4.513";
+const pdfjsBuild = "cf2ef26b4";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;

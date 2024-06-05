@@ -394,9 +394,9 @@ pdfjs-editor-highlight-show-all-button =
     .title = Prikaži vse
 
 pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
+    .title = Označi
+    .aria-label = Označi
+pdfjs-highlight-floating-button-label = Označi
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 
