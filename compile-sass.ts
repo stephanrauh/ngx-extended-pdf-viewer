@@ -1,11 +1,12 @@
 import * as fs from 'fs';
 import * as sass from 'sass';
 
+// when debugging use { style: 'expanded' }
 const options = { style: 'compressed' } as sass.Options<'sync'>;
 const dark = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-dark-theme/colors.scss', options);
 const light = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-light-theme/colors.scss', options);
 const print = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/print.scss', options);
-const toggleButton = fs.readFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/toggle_button.css');
+const toggleButton = sass.compile('./projects/ngx-extended-pdf-viewer/src/lib/theme/common/toggle_button.css', options);
 
 fs.writeFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-dark-theme/colors-css.ts', cssToTs(dark.css + ' ' + print.css + ' ' + toggleButton));
 fs.writeFileSync('./projects/ngx-extended-pdf-viewer/src/lib/theme/pdf-light-theme/colors-css.ts', cssToTs(light.css + ' ' + print.css + ' ' + toggleButton));

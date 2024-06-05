@@ -32,7 +32,7 @@ $select-text-color: $text-color;
 
 $select-background-color: $toolbar-background;
 
-$tree-text-color:rgba(66, 66, 66, 1);
+$tree-text-color: rgba(66, 66, 66, 1);
 
 $loading-bar-background: rgba(221, 221, 221, 1);
 
@@ -66,6 +66,7 @@ $sidebar-width: 200px;
 $sidebar-transition-duration: 200ms;
 $sidebar-transition-timing-function: ease;
 
+@import "../common/text-layer-builder.scss";
 @import "../common/viewer-with-images.scss";
 @import '../common/ngx-extended-pdf-viewer.component.scss';
 

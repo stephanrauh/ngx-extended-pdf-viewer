@@ -555,3 +555,4 @@
 - 20.2.0 #2243 render all icons in high-contrast mode; #2331 render the initial state of checkboxes correctly even if they are radiobuttons in disguise and the first checkbox is not checked; fixed a corner case that rendered the default value of a form field even though it was overwritten by Angular's `(formDataChange)` event
 - 20.5.0-alpha.0 #2329 reduce the memory leaks (work in progress - the leak is still there)
 - 20.5.0-alpha.1 #2349 prevent exceptions on right-click if there's no text layer; #2348 unlock Angular 18; #2329 embrace signals to reduce the memory leak (work in progress - the leak is still there); #2350 now `[handTool]="true"` activates the corresponding buttons in the toolbar correctly
+- 20.5.0-alpha.2 #2356 fix the CSS code of "find - highlight all"

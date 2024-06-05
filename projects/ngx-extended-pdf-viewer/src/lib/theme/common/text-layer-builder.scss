@@ -67,27 +67,28 @@ ngx-extended-pdf-viewer {
       background-color: $highlight;
       backdrop-filter: var(--highlight-backdrop-filter);
       border-radius: 4px;
-    }
 
-    &.appended {
-      position: initial;
-    }
 
-    &.begin {
-      border-radius: 4px 0 0 4px;
-    }
+      &.appended {
+        position: initial;
+      }
 
-    &.end {
-      border-radius: 0 4px 4px 0;
-    }
+      &.begin {
+        border-radius: 4px 0 0 4px;
+      }
 
-    &.middle {
-      border-radius: 0;
-    }
+      &.end {
+        border-radius: 0 4px 4px 0;
+      }
 
-    .textLayer .highlight.selected {
-      background-color: $highlight-selected;
-      backdrop-filter: var(--highlight-selected-backdrop-filter);
+      &.middle {
+        border-radius: 0;
+      }
+
+      .textLayer .highlight.selected {
+        background-color: $highlight-selected;
+        backdrop-filter: var(--highlight-selected-backdrop-filter);
+      }
     }
 
     .textLayer ::selection {

@@ -65,6 +65,7 @@ $sidebar-width: 200px;
 $sidebar-transition-duration: 200ms;
 $sidebar-transition-timing-function: ease;
 
+@import "../common/text-layer-builder.scss";
 @import "../common/viewer-with-images.scss";
 @import '../common/ngx-extended-pdf-viewer.component.scss';
 
@@ -76,5 +77,3 @@ $sidebar-transition-timing-function: ease;
   --scrollbar-color: auto;
   --scrollbar-bg-color: auto;
 }
-
-
