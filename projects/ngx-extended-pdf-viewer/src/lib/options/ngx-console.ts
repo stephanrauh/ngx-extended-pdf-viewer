@@ -13,7 +13,7 @@ export class NgxConsole {
   public log(message: any, reason?: any): void {
     if (globalThis['ngxConsoleFilter']('log', message)) {
       if (reason !== undefined) {
-        console.log(message, reason);
+        console.log('%s', message, reason);
       } else {
         console.log(message);
       }
@@ -22,7 +22,7 @@ export class NgxConsole {
   public error(message: any, reason?: any): void {
     if (globalThis['ngxConsoleFilter']('error', message)) {
       if (reason !== undefined) {
-        console.error(message, reason);
+        console.error('%s', message, reason);
       } else {
         console.error(message);
       }
@@ -31,7 +31,7 @@ export class NgxConsole {
   public warn(message: any, reason?: any): void {
     if (globalThis['ngxConsoleFilter']('warn', message)) {
       if (reason !== undefined) {
-        console.warn(message, reason);
+        console.warn('%s', message, reason);
       } else {
         console.warn(message);
       }
