@@ -2257,6 +2257,8 @@ class AnnotationEditorUIManager {
   #boundFocus = this.focus.bind(this);
   #boundCopy = this.copy.bind(this);
   #boundCut = this.cut.bind(this);
+  #boundDragOver = this.dragOver.bind(this);
+  #boundDrop = this.drop.bind(this);
   #boundPaste = this.paste.bind(this);
   #boundKeydown = this.keydown.bind(this);
   #boundKeyup = this.keyup.bind(this);
@@ -2347,6 +2349,7 @@ class AnnotationEditorUIManager {
     this._eventBus._on("scalechanging", this.#boundOnScaleChanging);
     this._eventBus._on("rotationchanging", this.#boundOnRotationChanging);
     this.#addSelectionListener();
+    this.#addDragAndDropListeners();
     this.#addKeyboardManager();
     this.#annotationStorage = pdfDocument.annotationStorage;
     this.#filterFactory = pdfDocument.filterFactory;
@@ -2361,6 +2364,7 @@ class AnnotationEditorUIManager {
     this.isShiftKeyDown = false;
   }
   destroy() {
+    this.#removeDragAndDropListeners();
     this.#removeKeyboardManager();
     this.#removeFocusManager();
     this._eventBus._off("editingaction", this.#boundOnEditingAction);
@@ -2656,6 +2660,14 @@ class AnnotationEditorUIManager {
     document.removeEventListener("cut", this.#boundCut);
     document.removeEventListener("paste", this.#boundPaste);
   }
+  #addDragAndDropListeners() {
+    document.addEventListener("dragover", this.#boundDragOver);
+    document.addEventListener("drop", this.#boundDrop);
+  }
+  #removeDragAndDropListeners() {
+    document.removeEventListener("dragover", this.#boundDragOver);
+    document.removeEventListener("drop", this.#boundDrop);
+  }
   addEditListeners() {
     this.#addKeyboardManager();
     this.#addCopyPasteListeners();
@@ -2663,6 +2675,30 @@ class AnnotationEditorUIManager {
   removeEditListeners() {
     this.#removeKeyboardManager();
     this.#removeCopyPasteListeners();
+  }
+  dragOver(event) {
+    for (const {
+      type
+    } of event.dataTransfer.items) {
+      for (const editorType of this.#editorTypes) {
+        if (editorType.isHandlingMimeForPasting(type)) {
+          event.dataTransfer.dropEffect = "copy";
+          event.preventDefault();
+          return;
+        }
+      }
+    }
+  }
+  drop(event) {
+    for (const item of event.dataTransfer.items) {
+      for (const editorType of this.#editorTypes) {
+        if (editorType.isHandlingMimeForPasting(item.type)) {
+          editorType.paste(item, this.currentLayer);
+          event.preventDefault();
+          return;
+        }
+      }
+    }
   }
   copy(event) {
     event.preventDefault();
@@ -10837,7 +10873,7 @@ function getDocument(src) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.4.513",
+    apiVersion: "4.4.528",
     data,
     password,
     disableAutoFetch,
@@ -12619,8 +12655,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.4.513";
-const build = "cf2ef26b4";
+const version = "4.4.528";
+const build = "888794574";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -19722,8 +19758,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.4.513";
-const pdfjsBuild = "cf2ef26b4";
+const pdfjsVersion = "4.4.528";
+const pdfjsBuild = "888794574";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
