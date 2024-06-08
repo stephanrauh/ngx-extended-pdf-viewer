@@ -13487,7 +13487,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = "4.4.528";
+    const viewerVersion = "4.4.535";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -13730,7 +13730,7 @@ class PDFViewer {
             renderAsynchronously = this.adjacentPagesRenderer(null, pageIndex);
           }
         } catch (exception) {
-          console.log("Exception during pre-rendering page " + pageIndex, exception);
+          console.log("Exception during pre-rendering page %s", pageIndex, exception);
         }
       }
     }
@@ -18229,8 +18229,8 @@ function webViewerReportTelemetry({
 
 
 
-const pdfjsVersion = "4.4.528";
-const pdfjsBuild = "888794574";
+const pdfjsVersion = "4.4.535";
+const pdfjsBuild = "5ae9d11f0";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "start": "npm run showcase && cd ../extended-pdf-viewer && ng s -o",
-    "prebuild": "ts-node compile-sass.ts && node extract-versions.js",
+    "prebuild": "ts-node compile-sass.ts && node extract-versions.js && npm run generate-sbom",
     "build": "npm run showcase",
     "unix-package": "npm run prebuild && ng b ngx-extended-pdf-viewer && rm -r dist && ng-packagr -p projects/ngx-extended-pdf-viewer/ng-package.json && cd projects/ngx-extended-pdf-viewer && npm run build && cd ../..",
     "showcase": "npm run prebuild && npm run unix-package && rm -r -f ../extended-pdf-viewer-showcase/node_modules/ngx-extended-pdf-viewer && cp -R dist/ngx-extended-pdf-viewer ../extended-pdf-viewer-showcase/node_modules/ngx-extended-pdf-viewer",
@@ -23,7 +23,8 @@
     "test:ng16": "cd compatibility-tests/Angular16 && ./test.sh",
     "test:ng16-esbuild": "cd compatibility-tests/Angular16-esbuild && ./test.sh",
     "test:ng17": "cd compatibility-tests/Angular17 && ./test.sh",
-    "jest": "ng test"
+    "jest": "ng test",
+    "generate-sbom": "cyclonedx-npm --output-file sbom.json --mc-type library"
   },
   "private": true,
   "dependencies": {
@@ -44,6 +45,7 @@
     "@angular-devkit/build-angular": "^17.3.8",
     "@angular/cli": "^17.3.8",
     "@angular/compiler-cli": "^17.3.11",
+    "@cyclonedx/cyclonedx-npm": "^1.19.0",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.14.2",
     "copyfiles": "^2.4.1",
