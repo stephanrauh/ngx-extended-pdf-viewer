@@ -25,8 +25,8 @@ function getDefaultLanguage(): string {
   }
   return 'en-US';
 }
-
-export const pdfDefaultOptions = {
+// sonar ignore next line
+export let pdfDefaultOptions = {
   needsES5: _isIE11 || isEdge || needsES5,
   annotationEditorMode: 0,
   annotationMode: 2,
