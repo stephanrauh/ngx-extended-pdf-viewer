@@ -2031,7 +2031,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     delete w.ngxConsoleFilter;
     // (window as any).pdfDefaultOptions = undefined;
     delete w.pdfViewerSanitizer;
-    delete w.printPDF;
+    // delete w.printPDF;
 
     // (window as any).webViewerLoad = undefined;
     this.shuttingDown = true;

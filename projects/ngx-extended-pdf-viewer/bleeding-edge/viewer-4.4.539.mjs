@@ -13487,7 +13487,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = "4.4.535";
+    const viewerVersion = "4.4.539";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -18229,8 +18229,8 @@ function webViewerReportTelemetry({
 
 
 
-const pdfjsVersion = "4.4.535";
-const pdfjsBuild = "5ae9d11f0";
+const pdfjsVersion = "4.4.539";
+const pdfjsBuild = "bf699dff2";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
