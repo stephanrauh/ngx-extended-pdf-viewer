@@ -869,23 +869,25 @@ class BaseFilterFactory {
   destroy(keepHCM = false) {}
 }
 class BaseCanvasFactory {
-  constructor() {
+  #enableHWA = false;
+  constructor({
+    enableHWA = false
+  } = {}) {
     if (this.constructor === BaseCanvasFactory) {
       unreachable("Cannot initialize BaseCanvasFactory.");
     }
+    this.#enableHWA = enableHWA;
   }
   create(width, height) {
     if (width <= 0 || height <= 0) {
       throw new Error("Invalid canvas size");
     }
     const canvas = this._createCanvas(width, height);
-    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
-      willReadFrequently: true
-    } : undefined;
-    const context = canvas.getContext("2d", options);
     return {
       canvas,
-      context
+      context: canvas.getContext("2d", {
+        willReadFrequently: !this.#enableHWA
+      })
     };
   }
   reset(canvasAndContext, width, height) {
@@ -1311,9 +1313,12 @@ class DOMFilterFactory extends BaseFilterFactory {
 }
 class DOMCanvasFactory extends BaseCanvasFactory {
   constructor({
-    ownerDocument = globalThis.document
+    ownerDocument = globalThis.document,
+    enableHWA = false
   } = {}) {
-    super();
+    super({
+      enableHWA
+    });
     this._document = ownerDocument;
   }
   _createCanvas(width, height) {
@@ -1913,7 +1918,9 @@ class ImageManager {
   static get _isSVGFittingCanvas() {
     const svg = `data:image/svg+xml;charset=UTF-8,<svg viewBox="0 0 1 1" width="1" height="1" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" style="fill:red;"/></svg>`;
     const canvas = new OffscreenCanvas(1, 3);
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", {
+      willReadFrequently: true
+    });
     const image = new Image();
     image.src = svg;
     const promise = image.decode().then(() => {
@@ -10629,13 +10636,10 @@ class TextLayer {
       canvas.className = "hiddenCanvasElement";
       canvas.lang = lang;
       document.body.append(canvas);
-      const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
-        willReadFrequently: true,
-        alpha: false
-      } : {
-        alpha: false
-      };
-      canvasContext = canvas.getContext("2d", options);
+      canvasContext = canvas.getContext("2d", {
+        alpha: false,
+        willReadFrequently: true
+      });
       this.#canvasContexts.set(lang, canvasContext);
     }
     return canvasContext;
@@ -10838,11 +10842,13 @@ function getDocument(src) {
   const disableStream = src.disableStream === true;
   const disableAutoFetch = src.disableAutoFetch === true;
   const pdfBug = src.pdfBug === true;
+  const enableHWA = src.enableHWA === true;
   const length = rangeTransport ? rangeTransport.length : src.length ?? NaN;
   const useSystemFonts = typeof src.useSystemFonts === "boolean" ? src.useSystemFonts : !isNodeJS && !disableFontFace;
   const useWorkerFetch = typeof src.useWorkerFetch === "boolean" ? src.useWorkerFetch : CMapReaderFactory === DOMCMapReaderFactory && StandardFontDataFactory === DOMStandardFontDataFactory && cMapUrl && standardFontDataUrl && isValidFetchUrl(cMapUrl, document.baseURI) && isValidFetchUrl(standardFontDataUrl, document.baseURI);
   const canvasFactory = src.canvasFactory || new DefaultCanvasFactory({
-    ownerDocument
+    ownerDocument,
+    enableHWA
   });
   const filterFactory = src.filterFactory || new DefaultFilterFactory({
     docId,
@@ -10873,7 +10879,7 @@ function getDocument(src) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.4.539",
+    apiVersion: "4.4.562",
     data,
     password,
     disableAutoFetch,
@@ -12655,8 +12661,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.4.539";
-const build = "bf699dff2";
+const version = "4.4.562";
+const build = "f7c402a40";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -19758,8 +19764,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.4.539";
-const pdfjsBuild = "bf699dff2";
+const pdfjsVersion = "4.4.562";
+const pdfjsBuild = "f7c402a40";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;

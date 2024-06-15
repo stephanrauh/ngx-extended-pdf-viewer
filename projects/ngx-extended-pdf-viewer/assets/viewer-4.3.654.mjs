@@ -13484,7 +13484,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = "4.3.653";
+    const viewerVersion = "4.3.654";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -16466,6 +16466,9 @@ const app_PDFViewerApplication = {
         });
       };
       return loadingTask.promise.then(pdfDocument => {
+        if (globalThis.ServiceWorkerOptions) {
+          pdfDocument._transport.messageHandler.send('showUnverifiedSignatures', globalThis.ServiceWorkerOptions.showUnverifiedSignatures);
+        }
         this.load(pdfDocument);
       }, reason => {
         if (loadingTask !== this.pdfLoadingTask) {
@@ -18210,8 +18213,8 @@ function webViewerReportTelemetry({
 
 
 
-const pdfjsVersion = "4.3.653";
-const pdfjsBuild = "30725560d";
+const pdfjsVersion = "4.3.654";
+const pdfjsBuild = "5f03202ad";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,

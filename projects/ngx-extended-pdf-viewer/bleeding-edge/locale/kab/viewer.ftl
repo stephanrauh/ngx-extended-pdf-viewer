@@ -51,12 +51,6 @@ pdfjs-download-button-label = Sader
 pdfjs-bookmark-button =
     .title = Asebter amiran (Sken-d tansa URL seg usebter amiran)
 pdfjs-bookmark-button-label = Asebter amiran
-# Used in Firefox for Android.
-pdfjs-open-in-app-button =
-    .title = Ldi deg usnas
-# Used in Firefox for Android.
-# Length of the translation matters since we are in a mobile context, with limited screen estate.
-pdfjs-open-in-app-button-label = Ldi deg usnas
 
 ##  Secondary toolbar and context menu
 
@@ -301,8 +295,27 @@ pdfjs-editor-ink-button-label = Suneɣ
 pdfjs-editor-stamp-button =
     .title = Rnu neɣ ẓreg tugniwin
 pdfjs-editor-stamp-button-label = Rnu neɣ ẓreg tugniwin
-pdfjs-editor-remove-button =
-    .title = Kkes
+pdfjs-editor-highlight-button =
+    .title = Derrer
+pdfjs-editor-highlight-button-label = Derrer
+pdfjs-highlight-floating-button1 =
+    .title = Derrer
+    .aria-label = Derrer
+pdfjs-highlight-floating-button-label = Derrer
+
+## Remove button for the various kind of editor.
+
+pdfjs-editor-remove-ink-button =
+    .title = Kkes asuneɣ
+pdfjs-editor-remove-freetext-button =
+    .title = Kkes aḍris
+pdfjs-editor-remove-stamp-button =
+    .title = Kkes tugna
+pdfjs-editor-remove-highlight-button =
+    .title = Kkes aderrer
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = Initen
 pdfjs-editor-free-text-size-input = Teɣzi
@@ -312,6 +325,8 @@ pdfjs-editor-ink-opacity-input = Tebrek
 pdfjs-editor-stamp-add-image-button =
     .title = Rnu tawlaft
 pdfjs-editor-stamp-add-image-button-label = Rnu tawlaft
+# This refers to the thickness of the line used for free highlighting (not bound to text)
+pdfjs-editor-free-highlight-thickness-input = Tuzert
 pdfjs-free-text =
     .aria-label = Amaẓrag n uḍris
 pdfjs-free-text-default-content = Bdu tira...
@@ -335,23 +350,41 @@ pdfjs-editor-alt-text-decorative-tooltip = Yettwacreḍ d adlag
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
 
+pdfjs-editor-resizer-label-top-left = Tiɣmert n ufella n zelmeḍ — semsawi teɣzi
+pdfjs-editor-resizer-label-top-middle = Talemmat n ufella — semsawi teɣzi
+pdfjs-editor-resizer-label-top-right = Tiɣmert n ufella n yeffus — semsawi teɣzi
+pdfjs-editor-resizer-label-middle-right = Talemmast tayeffust — semsawi teɣzi
+pdfjs-editor-resizer-label-bottom-right = Tiɣmert n wadda n yeffus — semsawi teɣzi
+pdfjs-editor-resizer-label-bottom-middle = Talemmat n wadda — semsawi teɣzi
+pdfjs-editor-resizer-label-bottom-left = Tiɣmert n wadda n zelmeḍ — semsawi teɣzi
+pdfjs-editor-resizer-label-middle-left = Talemmast tazelmdaḍt — semsawi teɣzi
 
-pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
-pdfjs-editor-remove-ink-button =
-    .title = Remove drawing
-pdfjs-editor-remove-freetext-button =
-    .title = Remove text
-pdfjs-editor-remove-stamp-button =
-    .title = Remove image
-pdfjs-editor-remove-highlight-button =
-    .title = Remove highlight
-pdfjs-editor-free-highlight-thickness-input = Thickness
+## Color picker
+
+# This means "Color used to highlight text"
+pdfjs-editor-highlight-colorpicker-label = Ini n uderrer
+pdfjs-editor-colorpicker-button =
+    .title = Senfel ini
+pdfjs-editor-colorpicker-dropdown =
+    .aria-label = Afran n yiniten
+pdfjs-editor-colorpicker-yellow =
+    .title = Awraɣ
+pdfjs-editor-colorpicker-green =
+    .title = Azegzaw
+pdfjs-editor-colorpicker-blue =
+    .title = Amidadi
+pdfjs-editor-colorpicker-pink =
+    .title = Axuxi
+pdfjs-editor-colorpicker-red =
+    .title = Azggaɣ
+
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
+pdfjs-editor-highlight-show-all-button-label = Sken akk
+pdfjs-editor-highlight-show-all-button =
+    .title = Sken akk
+
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
 pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
@@ -359,29 +392,5 @@ pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that d
 pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
 pdfjs-editor-alt-text-textarea =
     .placeholder = For example, “A young man sits down at a table to eat a meal”
-pdfjs-editor-resizer-label-top-left = Top left corner — resize
-pdfjs-editor-resizer-label-top-middle = Top middle — resize
-pdfjs-editor-resizer-label-top-right = Top right corner — resize
-pdfjs-editor-resizer-label-middle-right = Middle right — resize
-pdfjs-editor-resizer-label-bottom-right = Bottom right corner — resize
-pdfjs-editor-resizer-label-bottom-middle = Bottom middle — resize
-pdfjs-editor-resizer-label-bottom-left = Bottom left corner — resize
-pdfjs-editor-resizer-label-middle-left = Middle left — resize
-pdfjs-editor-highlight-colorpicker-label = Highlight color
-pdfjs-editor-colorpicker-button =
-    .title = Change color
-pdfjs-editor-colorpicker-dropdown =
-    .aria-label = Color choices
-pdfjs-editor-colorpicker-yellow =
-    .title = Yellow
-pdfjs-editor-colorpicker-green =
-    .title = Green
-pdfjs-editor-colorpicker-blue =
-    .title = Blue
-pdfjs-editor-colorpicker-pink =
-    .title = Pink
-pdfjs-editor-colorpicker-red =
-    .title = Red
-pdfjs-editor-highlight-show-all-button-label = Show all
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll

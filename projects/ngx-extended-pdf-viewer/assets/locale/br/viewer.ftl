@@ -312,13 +312,13 @@ pdfjs-editor-alt-text-save-button = Enrollañ
 ## Color picker
 
 
+pdfjs-find-match-diacritics-checkbox-label = Doujañ d’an tiredoù
 pdfjs-scroll-page-button =
     .title = Use Page Scrolling
 pdfjs-scroll-page-button-label = Page Scrolling
 pdfjs-current-outline-item-button =
     .title = Find Current Outline Item
 pdfjs-current-outline-item-button-label = Current Outline Item
-pdfjs-find-match-diacritics-checkbox-label = Match Diacritics
 pdfjs-find-match-count =
     { $total ->
         [one] { $current } of { $total } match
