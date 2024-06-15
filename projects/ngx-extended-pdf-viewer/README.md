@@ -37,6 +37,10 @@ Basically, version 20.5.0 updates to pdf.js 4.3 and solves some memory leak issu
 
 Please don't update your production code to the alpha versions - they are meant for testing. If you want to help me to keep the quality of the library high, go for the alpha versions and report bugs if you find them. Otherwise, please stick to version 20.2.x for a short while.
 
+Breaking changes:
+
+- The +/- zoom buttons now have a different id. I've renamed them after observing these buttons always triggered two events, on triggered by pdf.js, the other by ngx-extended-pdf-viewer. If you rely on the id for some reason, that might be a breaking change.
+
 ## What's new in Version 20?
 
 Version 20.2.0 fixes a few bugs in PDF files with forms. Now checkboxes always show the value stored in the PDF files (unless overwritten by `(formDataChange)´), and text fields always show the value sent by `[formData]` even if there's a pre-formatted value in the PDF file. The bug fix might break your application if you rely on the error. I don't consider this a breaking change, but even so, I've increase the minor version number to make you aware of potential problems.
