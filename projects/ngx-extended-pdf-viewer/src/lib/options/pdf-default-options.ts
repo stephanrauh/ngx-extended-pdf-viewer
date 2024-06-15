@@ -1,9 +1,9 @@
-const _isIE11 = typeof window === 'undefined' ? false : !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
+const _isIE11 = typeof window === 'undefined' ? false : !!(<any>globalThis).MSInputMethodContext && !!(<any>document).documentMode;
 const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
-export const pdfjsVersion = '4.3.653';
-export const pdfjsBleedingEdgeVersion = '4.4.539';
+export const pdfjsVersion = '4.3.654';
+export const pdfjsBleedingEdgeVersion = '4.4.562';
 export function getVersionSuffix(folder: string): string {
   if (folder?.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -26,7 +26,7 @@ function getDefaultLanguage(): string {
   return 'en-US';
 }
 // sonar ignore next line
-export let pdfDefaultOptions = {
+export const pdfDefaultOptions = {
   needsES5: _isIE11 || isEdge || needsES5,
   annotationEditorMode: 0,
   annotationMode: 2,
@@ -97,13 +97,6 @@ export let pdfDefaultOptions = {
   defaultCacheSize: 50,
   passwordPrompt: undefined,
   locale: getDefaultLanguage(),
-  activateWillReadFrequentlyFlag: false,
+  activateWillReadFrequentlyFlag: false, // set this to true sometimes solves rendering issues with Chrome. Deprecated since pdf.js 4.4
+  enableHWA: true, // enable hardware acceleration. Active since pdf.js 4.4. This is the opposite of activateWillReadFrequentlyFlag
 };
-
-if (typeof window !== 'undefined') {
-  if ((<any>window).pdfDefaultOptions) {
-    pdfDefaultOptions = (<any>window).pdfDefaultOptions;
-  } else {
-    (<any>window).pdfDefaultOptions = pdfDefaultOptions;
-  }
-}

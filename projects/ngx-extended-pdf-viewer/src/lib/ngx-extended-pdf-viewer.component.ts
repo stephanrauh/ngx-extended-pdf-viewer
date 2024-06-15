@@ -1,4 +1,4 @@
-import { isPlatformBrowser, Location, PlatformLocation } from '@angular/common';
+import { isPlatformBrowser, PlatformLocation } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -948,7 +948,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     private ngZone: NgZone,
     @Inject(PLATFORM_ID) private platformId,
     private notificationService: PDFNotificationService,
-    private location: Location,
     private elementRef: ElementRef,
     private platformLocation: PlatformLocation,
     private cdr: ChangeDetectorRef,
@@ -956,11 +955,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     private renderer: Renderer2,
     private pdfCspPolicyService: PdfCspPolicyService
   ) {
+    console.log("constructor of 'ngx-extended-pdf-viewer'");
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
     this.windowSizeRecalculatorSubscription = this.service.recalculateSize$.subscribe(() => this.onResize());
     if (isPlatformBrowser(this.platformId)) {
+      NgxConsole.init();
       this.serverSideRendering = false;
       this.toolbarWidth = String(document.body.clientWidth);
+      if ((<any>globalThis).pdfDefaultOptions) {
+        for (const key in (<any>globalThis).pdfDefaultOptions) {
+          pdfDefaultOptions[key] = (<any>globalThis).pdfDefaultOptions[key];
+        }
+      } else {
+        (<any>globalThis).pdfDefaultOptions = pdfDefaultOptions;
+      }
     }
   }
 
@@ -982,7 +990,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       // server-side rendering
       return false;
     }
-    const isIE = !!(<any>window).MSInputMethodContext && !!(<any>document).documentMode;
+    const isIE = !!(<any>globalThis).MSInputMethodContext && !!(<any>document).documentMode;
     const isEdge = /Edge\/\d./i.test(navigator.userAgent);
     const isIOs13OrBelow = this.iOSVersionRequiresES5();
     let needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
@@ -994,7 +1002,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
 
   private ngxExtendedPdfViewerCanRunModernJSCode(): Promise<boolean> {
     return new Promise((resolve) => {
-      const support = (<any>window).ngxExtendedPdfViewerCanRunModernJSCode;
+      const support = (<any>globalThis).ngxExtendedPdfViewerCanRunModernJSCode;
       support !== undefined ? resolve(support) : resolve(this.addScriptOpChainingSupport());
     });
   }
@@ -1005,11 +1013,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       script.onload = () => {
         script.remove();
         script.onload = null;
-        resolve((<any>window).ngxExtendedPdfViewerCanRunModernJSCode as boolean);
+        resolve((<any>globalThis).ngxExtendedPdfViewerCanRunModernJSCode as boolean);
       };
       script.onerror = () => {
         script.remove();
-        (<any>window).ngxExtendedPdfViewerCanRunModernJSCode = false;
+        (<any>globalThis).ngxExtendedPdfViewerCanRunModernJSCode = false;
         resolve(false);
         script.onerror = null;
       };
@@ -1990,6 +1998,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
   }
 
   public async ngOnDestroy(): Promise<void> {
+    this.shuttingDown = true;
+    this.service.ngxExtendedPdfViewerInitialized = false;
     if (typeof window === 'undefined') {
       return; // fast escape for server side rendering
     }
@@ -2017,6 +2027,41 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
       printContainer.parentElement?.removeChild(printContainer);
     }
 
+    if (this.initTimeout) {
+      clearTimeout(this.initTimeout);
+      this.initTimeout = undefined;
+    }
+    if (PDFViewerApplication) {
+      // #802 clear the form data; otherwise the "download" dialogs opens
+      PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
+      this.formSupport.reset();
+      (this.formSupport as any) = undefined;
+      PDFViewerApplication.unbindWindowEvents();
+
+      PDFViewerApplication._cleanup();
+
+      try {
+        await PDFViewerApplication.close();
+      } catch (error) {
+        // just ignore it
+        // for example, the secondary toolbar may have not been initialized yet, so
+        // trying to destroy it result in errors
+      }
+      if (PDFViewerApplication.printKeyDownListener) {
+        removeEventListener('keydown', PDFViewerApplication.printKeyDownListener, true);
+      }
+
+      const bus = PDFViewerApplication.eventBus;
+      if (bus) {
+        PDFViewerApplication.unbindEvents();
+        bus.destroy();
+      }
+      (PDFViewerApplication.eventBus as any) = null;
+      document.querySelectorAll('.ngx-extended-pdf-viewer-script').forEach((e: HTMLScriptElement) => {
+        e.onload = null;
+        e.remove();
+      });
+    }
     const w = window as any;
     delete w.getFormValueFromAngular;
     delete w.registerAcroformAnnotations;
@@ -2031,48 +2076,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     delete w.ngxConsoleFilter;
     // (window as any).pdfDefaultOptions = undefined;
     delete w.pdfViewerSanitizer;
-    // delete w.printPDF;
-
-    // (window as any).webViewerLoad = undefined;
-    this.shuttingDown = true;
-
-    this.service.ngxExtendedPdfViewerInitialized = false;
-    if (this.initTimeout) {
-      clearTimeout(this.initTimeout);
-      this.initTimeout = undefined;
-    }
-    if (PDFViewerApplication) {
-      // #802 clear the form data; otherwise the "download" dialogs opens
-      PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
-      this.formSupport.reset();
-      (this.formSupport as any) = undefined;
-
-      PDFViewerApplication._cleanup();
-
-      try {
-        await PDFViewerApplication.close();
-      } catch (error) {
-        // just ignore it
-        // for example, the secondary toolbar may have not been initialized yet, so
-        // trying to destroy it result in errors
-      }
-      if (PDFViewerApplication.printKeyDownListener) {
-        removeEventListener('keydown', PDFViewerApplication.printKeyDownListener, true);
-      }
-      if (PDFViewerApplication._boundEvents) {
-        PDFViewerApplication.unbindWindowEvents();
-      }
-      const bus = PDFViewerApplication.eventBus;
-      if (bus) {
-        PDFViewerApplication.unbindEvents();
-        bus.destroy();
-      }
-      (PDFViewerApplication.eventBus as any) = null;
-      document.querySelectorAll('.ngx-extended-pdf-viewer-script').forEach((e: HTMLScriptElement) => {
-        e.onload = null;
-        e.remove();
-      });
-    }
     this.windowSizeRecalculatorSubscription?.unsubscribe();
     this.notificationService.onPDFJSInitSignal.set(false);
   }
