@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
   "version": 1,
-  "serialNumber": "urn:uuid:986634c4-8b52-4ef8-a409-2dc2566d5713",
+  "serialNumber": "urn:uuid:5cb34cbe-5ef9-41cd-9e5a-fee594099047",
   "metadata": {
-    "timestamp": "2024-06-15T17:56:33.138Z",
+    "timestamp": "2024-06-19T20:46:33.910Z",
     "tools": [
       {
         "name": "npm",
@@ -10724,8 +10724,8 @@
     {
       "type": "library",
       "name": "caniuse-lite",
-      "version": "1.0.30001634",
-      "bom-ref": "caniuse-lite@1.0.30001634",
+      "version": "1.0.30001636",
+      "bom-ref": "caniuse-lite@1.0.30001636",
       "author": "Ben Briggs",
       "description": "A smaller version of caniuse-db, with only the essentials!",
       "licenses": [
@@ -10735,7 +10735,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/caniuse-lite@1.0.30001634",
+      "purl": "pkg:npm/caniuse-lite@1.0.30001636",
       "externalReferences": [
         {
           "url": "git+https://github.com/browserslist/caniuse-lite.git",
@@ -10753,12 +10753,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001634.tgz",
+          "url": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001636.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "7db0585d0f6adfeca9d6ad60064f3ab4e16ce29ca7ff2c459b964d3f5f0e5c90df037b71226398f4f85fc55820678bd11c3aa853c36b294f3578dd0eb733a044"
+              "content": "6cc836be6afc5c1b1b2fa2ebd141d7cbfdb59bce054f10cb5a7d854aa31de4fae56ccc702654270b6616631560a7ae8f644f8104d1768d841404a0a8d450de66"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -12833,8 +12833,8 @@
     {
       "type": "library",
       "name": "electron-to-chromium",
-      "version": "1.4.803",
-      "bom-ref": "electron-to-chromium@1.4.803",
+      "version": "1.4.806",
+      "bom-ref": "electron-to-chromium@1.4.806",
       "author": "Kilian Valkhof",
       "description": "Provides a list of electron-to-chromium version mappings",
       "licenses": [
@@ -12844,7 +12844,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/electron-to-chromium@1.4.803",
+      "purl": "pkg:npm/electron-to-chromium@1.4.806",
       "externalReferences": [
         {
           "url": "git+https://github.com/kilian/electron-to-chromium.git",
@@ -12862,12 +12862,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.803.tgz",
+          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.806.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "eb51fd98bcc63822cb56c9cb891cc26dceb7ba574fd009e24583d5de16c656d38d035a48eea48620b75ba1f47b03c4cc6ceca90e87040231ff7bef64d5021ede"
+              "content": "9e4a045f640807c93008eb6fb60c215d6cb620755c38b419bbd428dfab9a181f37e66757fe1f2e2d1968b0be902212d552702289c5d15b4d0fc1a3d90bbe0dae"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -16397,8 +16397,8 @@
       "type": "library",
       "name": "node",
       "group": "@types",
-      "version": "20.14.2",
-      "bom-ref": "@types/node@20.14.2",
+      "version": "20.14.6",
+      "bom-ref": "@types/node@20.14.6",
       "description": "TypeScript definitions for node",
       "licenses": [
         {
@@ -16407,7 +16407,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40types/node@20.14.2#types/node",
+      "purl": "pkg:npm/%40types/node@20.14.6#types/node",
       "externalReferences": [
         {
           "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/node",
@@ -16425,12 +16425,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@types/node/-/node-20.14.2.tgz",
+          "url": "https://registry.npmjs.org/@types/node/-/node-20.14.6.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "c72bba580315c2fe802852c1f9effbc92655affd332c2cce6bbad2a6aea3370a6a3ab51b700083582fb9ddde27d901ce9c3a2ed1f6c8b20f3066efecc6b9c8e1"
+              "content": "25b0345c824f2f522236753b3c5c435f27c0c1cc1556b3a8ab2cf3c904f231e56107390954c4a40b52e556c450da5a6a898e27e816fda024ba9730ca550c5b67"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -16451,8 +16451,8 @@
       "type": "library",
       "name": "express-serve-static-core",
       "group": "@types",
-      "version": "4.19.3",
-      "bom-ref": "@types/express-serve-static-core@4.19.3",
+      "version": "4.19.5",
+      "bom-ref": "@types/express-serve-static-core@4.19.5",
       "description": "TypeScript definitions for express-serve-static-core",
       "licenses": [
         {
@@ -16461,7 +16461,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40types/express-serve-static-core@4.19.3#types/express-serve-static-core",
+      "purl": "pkg:npm/%40types/express-serve-static-core@4.19.5#types/express-serve-static-core",
       "externalReferences": [
         {
           "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/express-serve-static-core",
@@ -16479,12 +16479,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@types/express-serve-static-core/-/express-serve-static-core-4.19.3.tgz",
+          "url": "https://registry.npmjs.org/@types/express-serve-static-core/-/express-serve-static-core-4.19.5.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "28ecccecc85c0459669e5aff7f3212145e6f196552bcde9f4dde13f84c4eb74f1b03f740e64a52cd8e769ccb08d4a0c5994444a497a53d8caeb252d14a38e00a"
+              "content": "cba5b4dedbeb0023bbd9a8a3279b85d36151ab97200d1f6553175d43cbf217e1af9a3250a9bcc37099e012351173e66c1b7d5523784e0cd649d94463f3aa739a"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -25022,8 +25022,8 @@
     {
       "type": "library",
       "name": "sass",
-      "version": "1.77.5",
-      "bom-ref": "sass@1.77.5",
+      "version": "1.77.6",
+      "bom-ref": "sass@1.77.6",
       "author": "Natalie Weizenbaum",
       "description": "A pure JavaScript implementation of Sass.",
       "licenses": [
@@ -25033,7 +25033,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/sass@1.77.5",
+      "purl": "pkg:npm/sass@1.77.6",
       "externalReferences": [
         {
           "url": "git+https://github.com/sass/dart-sass.git",
@@ -25051,12 +25051,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/sass/-/sass-1.77.5.tgz",
+          "url": "https://registry.npmjs.org/sass/-/sass-1.77.6.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "a037d7d66ba4225c5a70f750a8d6fa995dad542ae713e3f79d5622a32ef6579b65939e823cd70ee130ae15c68244a29f275337947f790a57914be75528bdaa32"
+              "content": "0725c4d682c3efd195abd1edd4f7875823cc3c1f171e906ecf5afce680722878d963aa95eab5a7428bd0cd7257b90fd7c84d4e8f788f937968dbcbb3691036fd"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -30955,8 +30955,8 @@
     {
       "type": "library",
       "name": "launch-editor",
-      "version": "2.6.1",
-      "bom-ref": "launch-editor@2.6.1",
+      "version": "2.8.0",
+      "bom-ref": "launch-editor@2.8.0",
       "author": "Evan You",
       "description": "launch editor from node.js",
       "licenses": [
@@ -30966,7 +30966,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/launch-editor@2.6.1",
+      "purl": "pkg:npm/launch-editor@2.8.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/yyx990803/launch-editor.git",
@@ -30984,12 +30984,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/launch-editor/-/launch-editor-2.6.1.tgz",
+          "url": "https://registry.npmjs.org/launch-editor/-/launch-editor-2.8.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "781fee5e6155a58e337b3986a795ed536d64c28ec605b281f8443e519796b466fdc80339c6dfc4be4fa5607dde44d02d21df9e8f8bbb4d83c5674ef0e2ceeb47"
+              "content": "bc9ada9ce009ac8fe5972586450aa20ccf9a76bc3e93cddfbe69b1dfe9d5e3b837fb7eb1335e6313ecf267a15f7a5d36fb14afb8cd1bd860d1a2c5d991b6fac0"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -33218,8 +33218,8 @@
     {
       "type": "library",
       "name": "ws",
-      "version": "8.17.0",
-      "bom-ref": "ws@8.17.0",
+      "version": "8.17.1",
+      "bom-ref": "ws@8.17.1",
       "author": "Einar Otto Stangvik",
       "description": "Simple to use, blazing fast and thoroughly tested websocket client and server for Node.js",
       "licenses": [
@@ -33229,7 +33229,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/ws@8.17.0",
+      "purl": "pkg:npm/ws@8.17.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/websockets/ws.git",
@@ -33247,12 +33247,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/ws/-/ws-8.17.0.tgz",
+          "url": "https://registry.npmjs.org/ws/-/ws-8.17.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "b89abad74f04819300976d0a6a01a4cc229f3048f198abd91c6ed396ad19ea73a4cbb605edaab898ec7ac4af1327f8b52de2b842eb3b20d92d69c72d0e063c3b"
+              "content": "e97405bd74e46df50e64e28a20b146d4f0cad8d0d0b386b3290976e93d184b90b1a962e05da8db3d9fa1e2065e909c91a8553ca6f9db01b6ecff74e044fcbe19"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -37749,8 +37749,8 @@
         {
           "type": "library",
           "name": "glob",
-          "version": "10.4.1",
-          "bom-ref": "@npmcli/package-json@5.2.0|glob@10.4.1",
+          "version": "10.4.2",
+          "bom-ref": "@npmcli/package-json@5.2.0|glob@10.4.2",
           "author": "Isaac Z. Schlueter",
           "description": "the most correct and second fastest glob implementation in JavaScript",
           "licenses": [
@@ -37760,7 +37760,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/glob@10.4.1",
+          "purl": "pkg:npm/glob@10.4.2",
           "externalReferences": [
             {
               "url": "git://github.com/isaacs/node-glob.git",
@@ -37778,12 +37778,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/glob/-/glob-10.4.1.tgz",
+              "url": "https://registry.npmjs.org/glob/-/glob-10.4.2.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "da37a5865ab7138868ef867254b374de829d0195546ba50367314b547d47edd9e86b1fb2f6ac9aabccc191f0c88208e7894d7dcf4c14d7ccb5ea3301d9ec9523"
+                  "content": "1b0325505e8f90fa371a4db5531902a213afd0f2dc21756d2b22e5a44236f11fdc3bfe1e34e7662e4dc2316d7044e57f591fc4b1939601f05b04ea98becf3cff"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -38238,6 +38238,60 @@
     },
     {
       "type": "library",
+      "name": "package-json-from-dist",
+      "version": "1.0.0",
+      "bom-ref": "package-json-from-dist@1.0.0",
+      "author": "Isaac Z. Schlueter",
+      "description": "Load the local package.json from either src or dist folder",
+      "licenses": [
+        {
+          "license": {
+            "id": "BlueOak-1.0.0"
+          }
+        }
+      ],
+      "purl": "pkg:npm/package-json-from-dist@1.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/isaacs/package-json-from-dist.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/isaacs/package-json-from-dist#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/isaacs/package-json-from-dist/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/package-json-from-dist/-/package-json-from-dist-1.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "7404ef09e64dffcc10b06cb07b3d66cc7b5394fdb61fc3847cfad530b36be3f7866be8a3b4b9ffe8ce5fd1d63c50a36b0b63bd50253a492a06dea44a9eded24f"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/package-json-from-dist"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
       "name": "path-scurry",
       "version": "1.11.1",
       "bom-ref": "path-scurry@1.11.1",
@@ -38511,8 +38565,8 @@
         {
           "type": "library",
           "name": "glob",
-          "version": "10.4.1",
-          "bom-ref": "node-gyp@10.1.0|glob@10.4.1",
+          "version": "10.4.2",
+          "bom-ref": "node-gyp@10.1.0|glob@10.4.2",
           "author": "Isaac Z. Schlueter",
           "description": "the most correct and second fastest glob implementation in JavaScript",
           "licenses": [
@@ -38522,7 +38576,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/glob@10.4.1",
+          "purl": "pkg:npm/glob@10.4.2",
           "externalReferences": [
             {
               "url": "git://github.com/isaacs/node-glob.git",
@@ -38540,12 +38594,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/glob/-/glob-10.4.1.tgz",
+              "url": "https://registry.npmjs.org/glob/-/glob-10.4.2.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "da37a5865ab7138868ef867254b374de829d0195546ba50367314b547d47edd9e86b1fb2f6ac9aabccc191f0c88208e7894d7dcf4c14d7ccb5ea3301d9ec9523"
+                  "content": "1b0325505e8f90fa371a4db5531902a213afd0f2dc21756d2b22e5a44236f11fdc3bfe1e34e7662e4dc2316d7044e57f591fc4b1939601f05b04ea98becf3cff"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -39383,8 +39437,8 @@
         {
           "type": "library",
           "name": "glob",
-          "version": "10.4.1",
-          "bom-ref": "cacache@18.0.3|glob@10.4.1",
+          "version": "10.4.2",
+          "bom-ref": "cacache@18.0.3|glob@10.4.2",
           "author": "Isaac Z. Schlueter",
           "description": "the most correct and second fastest glob implementation in JavaScript",
           "licenses": [
@@ -39394,7 +39448,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/glob@10.4.1",
+          "purl": "pkg:npm/glob@10.4.2",
           "externalReferences": [
             {
               "url": "git://github.com/isaacs/node-glob.git",
@@ -39412,12 +39466,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/glob/-/glob-10.4.1.tgz",
+              "url": "https://registry.npmjs.org/glob/-/glob-10.4.2.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "da37a5865ab7138868ef867254b374de829d0195546ba50367314b547d47edd9e86b1fb2f6ac9aabccc191f0c88208e7894d7dcf4c14d7ccb5ea3301d9ec9523"
+                  "content": "1b0325505e8f90fa371a4db5531902a213afd0f2dc21756d2b22e5a44236f11fdc3bfe1e34e7662e4dc2316d7044e57f591fc4b1939601f05b04ea98becf3cff"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -41932,8 +41986,8 @@
         {
           "type": "library",
           "name": "glob",
-          "version": "10.4.1",
-          "bom-ref": "read-package-json@7.0.1|glob@10.4.1",
+          "version": "10.4.2",
+          "bom-ref": "read-package-json@7.0.1|glob@10.4.2",
           "author": "Isaac Z. Schlueter",
           "description": "the most correct and second fastest glob implementation in JavaScript",
           "licenses": [
@@ -41943,7 +41997,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/glob@10.4.1",
+          "purl": "pkg:npm/glob@10.4.2",
           "externalReferences": [
             {
               "url": "git://github.com/isaacs/node-glob.git",
@@ -41961,12 +42015,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/glob/-/glob-10.4.1.tgz",
+              "url": "https://registry.npmjs.org/glob/-/glob-10.4.2.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "da37a5865ab7138868ef867254b374de829d0195546ba50367314b547d47edd9e86b1fb2f6ac9aabccc191f0c88208e7894d7dcf4c14d7ccb5ea3301d9ec9523"
+                  "content": "1b0325505e8f90fa371a4db5531902a213afd0f2dc21756d2b22e5a44236f11fdc3bfe1e34e7662e4dc2316d7044e57f591fc4b1939601f05b04ea98becf3cff"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -55007,8 +55061,8 @@
     {
       "type": "library",
       "name": "ts-jest",
-      "version": "29.1.4",
-      "bom-ref": "ts-jest@29.1.4",
+      "version": "29.1.5",
+      "bom-ref": "ts-jest@29.1.5",
       "author": "Kulshekhar Kabra",
       "description": "A Jest transformer with source map support that lets you use Jest to test projects written in TypeScript",
       "licenses": [
@@ -55018,7 +55072,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/ts-jest@29.1.4",
+      "purl": "pkg:npm/ts-jest@29.1.5",
       "externalReferences": [
         {
           "url": "git+https://github.com/kulshekhar/ts-jest.git",
@@ -55036,12 +55090,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/ts-jest/-/ts-jest-29.1.4.tgz",
+          "url": "https://registry.npmjs.org/ts-jest/-/ts-jest-29.1.5.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "6221f00e14af0a222da0082c2ada0b142b9a903cc3b09d432c39d2a2e4da4e674e70ec08912cdb2d776e690e8ce4345586e642fcd61a699fe6b476d632ffd2e9"
+              "content": "52e0a5498c4cedbcafbd87f259d148fbfd94c4c9b037225bd0d3e464f404da17b0dd1bab57b97bcd446038701dff523565d3e97b7194b1735701c37c4c529222"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -66443,7 +66497,7 @@
       "type": "library",
       "name": "string-width",
       "version": "4.2.3",
-      "bom-ref": "BomRef.d7c4hkadffg.6aeo865cgf8",
+      "bom-ref": "BomRef.ht53q5g88m.2dcj8658iqo",
       "author": "Sindre Sorhus",
       "description": "Get the visual width of a string - the number of columns required to display it",
       "licenses": [
@@ -66551,7 +66605,7 @@
       "type": "library",
       "name": "strip-ansi",
       "version": "6.0.1",
-      "bom-ref": "BomRef.aad784tv5bg.t0ppq438n88",
+      "bom-ref": "BomRef.t8tghr2gjv8.v9ejk1juujo",
       "author": "Sindre Sorhus",
       "description": "Strip ANSI escape codes from a string",
       "licenses": [
@@ -69756,7 +69810,7 @@
         "@schematics/angular@17.3.8",
         "@types/estree@1.0.5",
         "@types/jest@29.5.12",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "@types/trusted-types@2.0.7",
         "copyfiles@2.4.1",
         "fsevents@2.3.3",
@@ -69765,9 +69819,8 @@
         "jest@29.7.0",
         "ng-packagr@17.3.0",
         "properties-reader@2.3.0",
-        "rxjs@7.8.1",
-        "sass@1.77.5",
-        "ts-jest@29.1.4",
+        "sass@1.77.6",
+        "ts-jest@29.1.5",
         "ts-node@10.9.2",
         "tslib@2.6.3",
         "tslint@6.1.3",
@@ -69947,7 +70000,7 @@
         "html-entities@2.5.2",
         "http-proxy-middleware@2.0.6",
         "ipaddr.js@2.2.0",
-        "launch-editor@2.6.1",
+        "launch-editor@2.8.0",
         "open@8.4.2",
         "p-retry@4.6.2",
         "rimraf@3.0.2",
@@ -69958,7 +70011,7 @@
         "spdy@4.0.2",
         "webpack-dev-server@4.15.1|webpack-dev-middleware@5.3.4",
         "webpack@5.90.3",
-        "ws@8.17.0"
+        "ws@8.17.1"
       ]
     },
     {
@@ -70172,8 +70225,8 @@
     {
       "ref": "browserslist@4.23.1",
       "dependsOn": [
-        "caniuse-lite@1.0.30001634",
-        "electron-to-chromium@1.4.803",
+        "caniuse-lite@1.0.30001636",
+        "electron-to-chromium@1.4.806",
         "node-releases@2.0.14",
         "update-browserslist-db@1.0.16"
       ]
@@ -71287,13 +71340,13 @@
     {
       "ref": "vite@5.1.7",
       "dependsOn": [
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "vite@5.1.7|esbuild@0.19.12",
         "fsevents@2.3.3",
         "less@4.2.0",
         "postcss@8.4.35",
         "rollup@4.18.0",
-        "sass@1.77.5",
+        "sass@1.77.6",
         "terser@5.29.1"
       ]
     },
@@ -71313,7 +71366,7 @@
       "ref": "autoprefixer@10.4.18",
       "dependsOn": [
         "browserslist@4.23.1",
-        "caniuse-lite@1.0.30001634",
+        "caniuse-lite@1.0.30001636",
         "fraction.js@4.3.7",
         "normalize-range@0.1.2",
         "picocolors@1.0.1",
@@ -71322,7 +71375,7 @@
       ]
     },
     {
-      "ref": "caniuse-lite@1.0.30001634"
+      "ref": "caniuse-lite@1.0.30001636"
     },
     {
       "ref": "fraction.js@4.3.7"
@@ -71534,7 +71587,7 @@
       ]
     },
     {
-      "ref": "electron-to-chromium@1.4.803"
+      "ref": "electron-to-chromium@1.4.806"
     },
     {
       "ref": "node-releases@2.0.14"
@@ -71896,7 +71949,7 @@
       "ref": "@types/express@4.17.21",
       "dependsOn": [
         "@types/body-parser@1.19.5",
-        "@types/express-serve-static-core@4.19.3",
+        "@types/express-serve-static-core@4.19.5",
         "@types/qs@6.9.15",
         "@types/serve-static@1.15.7"
       ]
@@ -71905,25 +71958,25 @@
       "ref": "@types/body-parser@1.19.5",
       "dependsOn": [
         "@types/connect@3.4.38",
-        "@types/node@20.14.2"
+        "@types/node@20.14.6"
       ]
     },
     {
       "ref": "@types/connect@3.4.38",
       "dependsOn": [
-        "@types/node@20.14.2"
+        "@types/node@20.14.6"
       ]
     },
     {
-      "ref": "@types/node@20.14.2",
+      "ref": "@types/node@20.14.6",
       "dependsOn": [
         "undici-types@5.26.5"
       ]
     },
     {
-      "ref": "@types/express-serve-static-core@4.19.3",
+      "ref": "@types/express-serve-static-core@4.19.5",
       "dependsOn": [
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "@types/qs@6.9.15",
         "@types/range-parser@1.2.7",
         "@types/send@0.17.4"
@@ -71939,21 +71992,21 @@
       "ref": "@types/send@0.17.4",
       "dependsOn": [
         "@types/mime@1.3.5",
-        "@types/node@20.14.2"
+        "@types/node@20.14.6"
       ]
     },
     {
       "ref": "@types/serve-static@1.15.7",
       "dependsOn": [
         "@types/http-errors@2.0.4",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "@types/send@0.17.4"
       ]
     },
     {
       "ref": "@types/http-proxy@1.17.14",
       "dependsOn": [
-        "@types/node@20.14.2"
+        "@types/node@20.14.6"
       ]
     },
     {
@@ -72278,7 +72331,7 @@
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
         "@types/jsdom@20.0.1",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "jest-mock@29.7.0",
         "jest-util@29.7.0",
         "jsdom@20.0.3"
@@ -72459,7 +72512,7 @@
         "postcss@8.4.35",
         "rollup@4.18.0",
         "rxjs@7.8.1",
-        "sass@1.77.5",
+        "sass@1.77.6",
         "tslib@2.6.3",
         "typescript@5.2.2"
       ]
@@ -72788,7 +72841,7 @@
       "ref": "sass-loader@14.1.1",
       "dependsOn": [
         "neo-async@2.6.2",
-        "sass@1.77.5",
+        "sass@1.77.6",
         "webpack@5.90.3"
       ]
     },
@@ -72796,7 +72849,7 @@
       "ref": "neo-async@2.6.2"
     },
     {
-      "ref": "sass@1.77.5",
+      "ref": "sass@1.77.6",
       "dependsOn": [
         "chokidar@3.6.0",
         "immutable@4.3.6",
@@ -72910,14 +72963,14 @@
     {
       "ref": "@types/bonjour@3.5.13",
       "dependsOn": [
-        "@types/node@20.14.2"
+        "@types/node@20.14.6"
       ]
     },
     {
       "ref": "@types/connect-history-api-fallback@1.5.4",
       "dependsOn": [
-        "@types/express-serve-static-core@4.19.3",
-        "@types/node@20.14.2"
+        "@types/express-serve-static-core@4.19.5",
+        "@types/node@20.14.6"
       ]
     },
     {
@@ -72935,13 +72988,13 @@
     {
       "ref": "@types/sockjs@0.3.36",
       "dependsOn": [
-        "@types/node@20.14.2"
+        "@types/node@20.14.6"
       ]
     },
     {
       "ref": "@types/ws@8.5.10",
       "dependsOn": [
-        "@types/node@20.14.2"
+        "@types/node@20.14.6"
       ]
     },
     {
@@ -73371,7 +73424,7 @@
       "ref": "ipaddr.js@2.2.0"
     },
     {
-      "ref": "launch-editor@2.6.1",
+      "ref": "launch-editor@2.8.0",
       "dependsOn": [
         "picocolors@1.0.1",
         "shell-quote@1.8.1"
@@ -73409,7 +73462,7 @@
     {
       "ref": "@types/node-forge@1.3.11",
       "dependsOn": [
-        "@types/node@20.14.2"
+        "@types/node@20.14.6"
       ]
     },
     {
@@ -73590,7 +73643,7 @@
       "ref": "minimalistic-assert@1.0.1"
     },
     {
-      "ref": "ws@8.17.0"
+      "ref": "ws@8.17.1"
     },
     {
       "ref": "webpack-merge@5.10.0",
@@ -73833,7 +73886,7 @@
     {
       "ref": "terser-webpack-plugin@5.3.10|jest-worker@27.5.1",
       "dependsOn": [
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "merge-stream@2.0.0",
         "terser-webpack-plugin@5.3.10|supports-color@8.1.1"
       ]
@@ -74092,7 +74145,7 @@
       "ref": "@npmcli/package-json@5.2.0",
       "dependsOn": [
         "@npmcli/git@5.0.7",
-        "@npmcli/package-json@5.2.0|glob@10.4.1",
+        "@npmcli/package-json@5.2.0|glob@10.4.2",
         "hosted-git-info@7.0.2",
         "json-parse-even-better-errors@3.0.2",
         "normalize-package-data@6.0.1",
@@ -74101,12 +74154,13 @@
       ]
     },
     {
-      "ref": "@npmcli/package-json@5.2.0|glob@10.4.1",
+      "ref": "@npmcli/package-json@5.2.0|glob@10.4.2",
       "dependsOn": [
         "foreground-child@3.2.1",
         "jackspeak@3.4.0",
         "@npmcli/package-json@5.2.0|minimatch@9.0.4",
         "minipass@7.1.2",
+        "package-json-from-dist@1.0.0",
         "path-scurry@1.11.1"
       ]
     },
@@ -74149,6 +74203,9 @@
       "ref": "minipass@7.1.2"
     },
     {
+      "ref": "package-json-from-dist@1.0.0"
+    },
+    {
       "ref": "path-scurry@1.11.1",
       "dependsOn": [
         "path-scurry@1.11.1|lru-cache@10.2.2",
@@ -74175,7 +74232,7 @@
       "dependsOn": [
         "env-paths@2.2.1",
         "exponential-backoff@3.1.1",
-        "node-gyp@10.1.0|glob@10.4.1",
+        "node-gyp@10.1.0|glob@10.4.2",
         "graceful-fs@4.2.11",
         "make-fetch-happen@13.0.1",
         "node-gyp@10.1.0|nopt@7.2.1",
@@ -74186,12 +74243,13 @@
       ]
     },
     {
-      "ref": "node-gyp@10.1.0|glob@10.4.1",
+      "ref": "node-gyp@10.1.0|glob@10.4.2",
       "dependsOn": [
         "foreground-child@3.2.1",
         "jackspeak@3.4.0",
         "node-gyp@10.1.0|minimatch@9.0.4",
         "minipass@7.1.2",
+        "package-json-from-dist@1.0.0",
         "path-scurry@1.11.1"
       ]
     },
@@ -74282,7 +74340,7 @@
       "dependsOn": [
         "@npmcli/fs@3.1.1",
         "fs-minipass@3.0.3",
-        "cacache@18.0.3|glob@10.4.1",
+        "cacache@18.0.3|glob@10.4.2",
         "cacache@18.0.3|lru-cache@10.2.2",
         "minipass-collect@2.0.1",
         "minipass-flush@1.0.5",
@@ -74295,12 +74353,13 @@
       ]
     },
     {
-      "ref": "cacache@18.0.3|glob@10.4.1",
+      "ref": "cacache@18.0.3|glob@10.4.2",
       "dependsOn": [
         "foreground-child@3.2.1",
         "jackspeak@3.4.0",
         "cacache@18.0.3|minimatch@9.0.4",
         "minipass@7.1.2",
+        "package-json-from-dist@1.0.0",
         "path-scurry@1.11.1"
       ]
     },
@@ -74548,19 +74607,20 @@
     {
       "ref": "read-package-json@7.0.1",
       "dependsOn": [
-        "read-package-json@7.0.1|glob@10.4.1",
+        "read-package-json@7.0.1|glob@10.4.2",
         "json-parse-even-better-errors@3.0.2",
         "normalize-package-data@6.0.1",
         "npm-normalize-package-bin@3.0.1"
       ]
     },
     {
-      "ref": "read-package-json@7.0.1|glob@10.4.1",
+      "ref": "read-package-json@7.0.1|glob@10.4.2",
       "dependsOn": [
         "foreground-child@3.2.1",
         "jackspeak@3.4.0",
         "read-package-json@7.0.1|minimatch@9.0.4",
         "minipass@7.1.2",
+        "package-json-from-dist@1.0.0",
         "path-scurry@1.11.1"
       ]
     },
@@ -75328,7 +75388,7 @@
         "@jest/schemas@29.6.3",
         "@types/istanbul-lib-coverage@2.0.6",
         "@types/istanbul-reports@3.0.4",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "@types/yargs@17.0.32",
         "@jest/types@29.6.3|chalk@4.1.2"
       ]
@@ -75380,7 +75440,7 @@
       "ref": "jest-util@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "jest-util@29.7.0|chalk@4.1.2",
         "ci-info@3.9.0",
         "graceful-fs@4.2.11",
@@ -75593,7 +75653,7 @@
       "dependsOn": [
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "jest-mock@29.7.0"
       ]
     },
@@ -75602,7 +75662,7 @@
       "dependsOn": [
         "@jest/types@29.6.3",
         "@sinonjs/fake-timers@10.3.0",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "jest-message-util@29.7.0",
         "jest-mock@29.7.0",
         "jest-util@29.7.0"
@@ -75612,7 +75672,7 @@
       "ref": "jest-mock@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "jest-util@29.7.0"
       ]
     },
@@ -75658,7 +75718,7 @@
     {
       "ref": "@types/jsdom@20.0.1",
       "dependsOn": [
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "@types/tough-cookie@4.0.5",
         "parse5@7.1.2"
       ]
@@ -75696,7 +75756,7 @@
         "whatwg-encoding@2.0.0",
         "whatwg-mimetype@3.0.0",
         "whatwg-url@11.0.0",
-        "ws@8.17.0",
+        "ws@8.17.1",
         "xml-name-validator@4.0.0"
       ]
     },
@@ -75913,7 +75973,7 @@
         "jest-util@29.7.0",
         "jest@29.7.0",
         "pretty-format@29.7.0",
-        "ts-jest@29.1.4",
+        "ts-jest@29.1.5",
         "typescript@5.2.2"
       ]
     },
@@ -75924,7 +75984,7 @@
       ]
     },
     {
-      "ref": "ts-jest@29.1.4",
+      "ref": "ts-jest@29.1.5",
       "dependsOn": [
         "@babel/core@7.24.0",
         "@jest/transform@29.7.0",
@@ -75950,7 +76010,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "ansi-escapes@4.3.2",
         "@jest/core@29.7.0|chalk@4.1.2",
         "ci-info@3.9.0",
@@ -76013,7 +76073,7 @@
       "ref": "@jest/console@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "@jest/console@29.7.0|chalk@4.1.2",
         "jest-message-util@29.7.0",
         "jest-util@29.7.0",
@@ -76063,7 +76123,7 @@
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
         "@jridgewell/trace-mapping@0.3.25",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "@jest/reporters@29.7.0|chalk@4.1.2",
         "collect-v8-coverage@1.0.2",
         "exit@0.1.2",
@@ -76249,7 +76309,7 @@
     {
       "ref": "jest-worker@29.7.0",
       "dependsOn": [
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "jest-util@29.7.0",
         "merge-stream@2.0.0",
         "jest-worker@29.7.0|supports-color@8.1.1"
@@ -76308,7 +76368,7 @@
         "@babel/core@7.24.0",
         "@jest/test-sequencer@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "babel-jest@29.7.0",
         "jest-config@29.7.0|chalk@4.1.2",
         "ci-info@3.9.0",
@@ -76382,7 +76442,7 @@
       "dependsOn": [
         "@jest/types@29.6.3",
         "@types/graceful-fs@4.1.9",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "anymatch@3.1.3",
         "fb-watchman@2.0.2",
         "fsevents@2.3.3",
@@ -76451,7 +76511,7 @@
         "@jest/expect@29.7.0",
         "@jest/test-result@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "jest-circus@29.7.0|chalk@4.1.2",
         "co@4.6.0",
         "dedent@1.5.3",
@@ -76626,7 +76686,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "jest-runtime@29.7.0|chalk@4.1.2",
         "cjs-module-lexer@1.3.1",
         "collect-v8-coverage@1.0.2",
@@ -76686,7 +76746,7 @@
         "@jest/environment@29.7.0",
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "jest-mock@29.7.0",
         "jest-util@29.7.0"
       ]
@@ -76750,7 +76810,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "jest-runner@29.7.0|chalk@4.1.2",
         "emittery@0.13.1",
         "graceful-fs@4.2.11",
@@ -76865,7 +76925,7 @@
         "@tsconfig/node12@1.0.11",
         "@tsconfig/node14@1.0.3",
         "@tsconfig/node16@1.0.4",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "acorn-walk@8.3.3",
         "acorn@8.12.0",
         "arg@4.1.3",
@@ -76880,7 +76940,7 @@
     {
       "ref": "@types/graceful-fs@4.1.9",
       "dependsOn": [
-        "@types/node@20.14.2"
+        "@types/node@20.14.6"
       ]
     },
     {
@@ -76953,7 +77013,7 @@
       "dependsOn": [
         "@jest/test-result@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.2",
+        "@types/node@20.14.6",
         "ansi-escapes@4.3.2",
         "jest-watcher@29.7.0|chalk@4.1.2",
         "emittery@0.13.1",
@@ -77253,9 +77313,9 @@
     {
       "ref": "@isaacs/cliui@8.0.2",
       "dependsOn": [
-        "BomRef.d7c4hkadffg.6aeo865cgf8",
+        "BomRef.ht53q5g88m.2dcj8658iqo",
         "@isaacs/cliui@8.0.2|string-width@5.1.2",
-        "BomRef.aad784tv5bg.t0ppq438n88",
+        "BomRef.t8tghr2gjv8.v9ejk1juujo",
         "@isaacs/cliui@8.0.2|strip-ansi@7.1.0",
         "wrap-ansi@7.0.0",
         "@isaacs/cliui@8.0.2|wrap-ansi@8.1.0"
@@ -77293,7 +77353,7 @@
       "ref": "@isaacs/cliui@8.0.2|ansi-styles@6.2.1"
     },
     {
-      "ref": "BomRef.d7c4hkadffg.6aeo865cgf8",
+      "ref": "BomRef.ht53q5g88m.2dcj8658iqo",
       "dependsOn": [
         "emoji-regex@8.0.0",
         "is-fullwidth-code-point@3.0.0",
@@ -77304,7 +77364,7 @@
       "ref": "eastasianwidth@0.2.0"
     },
     {
-      "ref": "BomRef.aad784tv5bg.t0ppq438n88",
+      "ref": "BomRef.t8tghr2gjv8.v9ejk1juujo",
       "dependsOn": [
         "ansi-regex@5.0.1"
       ]
