@@ -905,6 +905,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     setTimeout(() => this.calcViewerPositionTop());
   }
 
+  private static numberOfActiveViewers = 0;
+
   private shuttingDown = false;
 
   public serverSideRendering = true;
@@ -1074,19 +1076,24 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     });
   }
 
-  ngOnInit() {
-    NgxConsole.init();
-    if (isPlatformBrowser(this.platformId)) {
-      globalThis['setNgxExtendedPdfViewerSource'] = (url: string) => {
-        this._src = url;
-        this.srcChangeTriggeredByUser = true;
-        this.srcChange.emit(url);
-      };
+  public ngOnInit() {
+    if (NgxExtendedPdfViewerComponent.numberOfActiveViewers > 0) {
+      setTimeout(() => this.ngOnInit(), 1);
+    } else {
+      NgxExtendedPdfViewerComponent.numberOfActiveViewers++;
+      NgxConsole.init();
+      if (isPlatformBrowser(this.platformId)) {
+        globalThis['setNgxExtendedPdfViewerSource'] = (url: string) => {
+          this._src = url;
+          this.srcChangeTriggeredByUser = true;
+          this.srcChange.emit(url);
+        };
 
-      this.addTranslationsUnlessProvidedByTheUser();
-      this.formSupport.registerFormSupportWithPdfjs(this.ngZone);
-      this.loadPdfJs();
-      this.hideToolbarIfItIsEmpty();
+        this.addTranslationsUnlessProvidedByTheUser();
+        this.formSupport.registerFormSupportWithPdfjs(this.ngZone);
+        this.loadPdfJs();
+        this.hideToolbarIfItIsEmpty();
+      }
     }
   }
 
@@ -1131,7 +1138,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     });
   }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit() {
     if (typeof window !== 'undefined') {
       if (!this.shuttingDown) {
         // hurried users sometimes reload the PDF before it has finished initializing
@@ -2078,6 +2085,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     delete w.pdfViewerSanitizer;
     this.windowSizeRecalculatorSubscription?.unsubscribe();
     this.notificationService.onPDFJSInitSignal.set(false);
+    NgxExtendedPdfViewerComponent.numberOfActiveViewers--;
   }
 
   private isPrimaryMenuVisible(): boolean {

@@ -557,4 +557,4 @@
 - 20.5.0-alpha.1 #2349 prevent exceptions on right-click if there's no text layer; #2348 unlock Angular 18; #2329 embrace signals to reduce the memory leak (work in progress - the leak is still there); #2350 now `[handTool]="true"` activates the corresponding buttons in the toolbar correctly
 - 20.5.0-alpha.2 #2356 fix the CSS code of "find - highlight all"
 - 20.5.0-alpha.3 #2364 show the "highlight all" toggle button again; fix a bug that prevented printing after closing a PDF viewer and opening a new one; #2374 in the bleeding-edge version, there's a new flag `pdfDefaultOptions.enableHWA` replacing `pdfDefaultOptions.activateWillReadFrequentlyFlag`; #2364 draw unverified signatures again
-- 20.5.0-alpha.4 #2364 now zooming via the +/- only triggers a single event
+- 20.5.0-alpha.4 #2364 now zooming via the +/- only triggers a single event; #2077 reduce the required version of RxJS to 6.0; #2364/#2329 solve weird bugs caused by running `ngOnDestroy()` and `ngOnInit()` simultaneously
