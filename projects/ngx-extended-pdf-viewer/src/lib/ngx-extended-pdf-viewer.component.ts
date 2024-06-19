@@ -1945,7 +1945,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
 
     await PDFViewerApplication.close();
-    this.formSupport.reset();
+    this.formSupport?.reset();
 
     const options: any = {
       password: this.password,
@@ -2034,7 +2034,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     if (PDFViewerApplication) {
       // #802 clear the form data; otherwise the "download" dialogs opens
       PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
-      this.formSupport.reset();
+      this.formSupport?.reset();
       (this.formSupport as any) = undefined;
       PDFViewerApplication.unbindWindowEvents();
 
@@ -2135,7 +2135,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
           } else {
             // #802 clear the form data; otherwise the "download" dialogs opens
             PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
-            this.formSupport.reset();
+            this.formSupport?.reset();
 
             let inputField = PDFViewerApplication.appConfig?.openFileInput;
             if (!inputField) {
