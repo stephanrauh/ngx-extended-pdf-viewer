@@ -961,7 +961,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
     this.windowSizeRecalculatorSubscription = this.service.recalculateSize$.subscribe(() => this.onResize());
     if (isPlatformBrowser(this.platformId)) {
-      NgxConsole.init();
       this.serverSideRendering = false;
       this.toolbarWidth = String(document.body.clientWidth);
       if ((<any>globalThis).pdfDefaultOptions) {
@@ -2079,9 +2078,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, AfterViewInit, OnC
     delete w.registerXFAField;
     delete w.assignFormIdAndFieldName;
     delete w.updateAngularFormValue;
-    delete w.updateThumbnailSelection;
     delete w.ngxConsoleFilter;
-    // (window as any).pdfDefaultOptions = undefined;
     delete w.pdfViewerSanitizer;
     this.windowSizeRecalculatorSubscription?.unsubscribe();
     this.notificationService.onPDFJSInitSignal.set(false);

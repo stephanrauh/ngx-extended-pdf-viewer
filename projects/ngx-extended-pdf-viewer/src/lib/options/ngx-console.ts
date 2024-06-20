@@ -1,12 +1,10 @@
 export class NgxConsole {
   public static init() {
-    setTimeout(() => {
-      if (!globalThis['ngxConsoleFilter']) {
-        globalThis['ngxConsoleFilter'] = function (_level: string, _message: any): boolean {
-          return true;
-        };
-      }
-    }, 0);
+    if (!globalThis['ngxConsoleFilter']) {
+      globalThis['ngxConsoleFilter'] = function (_level: string, _message: any): boolean {
+        return true;
+      };
+    }
     if (!globalThis['ngxConsole']) {
       globalThis['ngxConsole'] = new NgxConsole();
     }
