@@ -47,6 +47,8 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
 
   private classMutationObserver: MutationObserver | undefined;
 
+  private PDFViewerApplication: IPDFViewerApplication | undefined;
+
   constructor(
     private element: ElementRef,
     public notificationService: PDFNotificationService,
@@ -55,26 +57,25 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
     private ngxExtendedPdfViewerService: NgxExtendedPdfViewerService
   ) {
     effect(() => {
-      if (notificationService.onPDFJSInitSignal()) {
+      this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
+      if (this.PDFViewerApplication) {
         this.onPdfJsInit();
       }
     });
   }
 
   public onPdfJsInit(): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.on('pagechanging', () => {
+    this.PDFViewerApplication?.eventBus.on('pagechanging', () => {
       this.updateUIState();
     });
-    PDFViewerApplication.eventBus.on('pagerendered', () => {
+    this.PDFViewerApplication?.eventBus.on('pagerendered', () => {
       this.updateUIState();
     });
   }
 
   public updateUIState(): void {
     setTimeout(() => {
-      const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-      const currentPage = PDFViewerApplication.pdfViewer.currentPageNumber;
+      const currentPage = this.PDFViewerApplication?.pdfViewer.currentPageNumber;
       const previousButton = document.getElementById('previousPage') as HTMLButtonElement;
       if (previousButton) {
         this.disablePreviousPage = Number(currentPage) <= 1;
@@ -82,7 +83,7 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
       }
       const nextButton = document.getElementById('nextPage') as HTMLButtonElement;
       if (nextButton) {
-        this.disableNextPage = currentPage === PDFViewerApplication.pagesCount;
+        this.disableNextPage = currentPage === this.PDFViewerApplication?.pagesCount;
         nextButton.disabled = this.disableNextPage;
       }
     });

@@ -15,17 +15,19 @@ export class PdfHighlightEditorComponent {
 
   public isSelected = false;
 
+  private PDFViewerApplication: IPDFViewerApplication | undefined;
+
   constructor(private notificationService: PDFNotificationService, private cdr: ChangeDetectorRef) {
     effect(() => {
-      if (notificationService.onPDFJSInitSignal()) {
+      this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
+      if (this.PDFViewerApplication) {
         this.onPdfJsInit();
       }
     });
   }
 
   private onPdfJsInit() {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.on('annotationeditormodechanged', ({ mode }: AnnotationEditorEditorModeChangedEvent) => {
+    this.PDFViewerApplication?.eventBus.on('annotationeditormodechanged', ({ mode }: AnnotationEditorEditorModeChangedEvent) => {
       setTimeout(() => {
         this.isSelected = mode === 9;
         this.cdr.detectChanges();

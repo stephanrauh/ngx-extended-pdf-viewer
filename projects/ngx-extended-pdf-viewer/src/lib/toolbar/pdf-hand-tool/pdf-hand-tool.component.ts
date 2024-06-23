@@ -19,23 +19,24 @@ export class PdfHandToolComponent {
     this.isSelected = value;
   }
 
+  private PDFViewerApplication: IPDFViewerApplication | undefined;
+
   public isSelected = false;
 
   constructor(private notificationService: PDFNotificationService) {
     effect(() => {
-      if (notificationService.onPDFJSInitSignal()) {
+      this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
+      if (this.PDFViewerApplication) {
         this.onPdfJsInit();
       }
     });
   }
 
   private onPdfJsInit() {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.on('cursortoolchanged', ({ tool }: HandtoolChanged) => (this.isSelected = tool === PdfCursorTools.HAND));
+    this.PDFViewerApplication?.eventBus.on('cursortoolchanged', ({ tool }: HandtoolChanged) => (this.isSelected = tool === PdfCursorTools.HAND));
   }
 
   public onClick(): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.dispatch('switchcursortool', { tool: PdfCursorTools.HAND });
+    this.PDFViewerApplication?.eventBus.dispatch('switchcursortool', { tool: PdfCursorTools.HAND });
   }
 }

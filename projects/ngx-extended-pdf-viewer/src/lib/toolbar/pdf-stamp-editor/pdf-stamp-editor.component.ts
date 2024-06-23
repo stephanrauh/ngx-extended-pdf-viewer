@@ -16,21 +16,23 @@ export class PdfStampEditorComponent {
 
   public isSelected = false;
 
+  private PDFViewerApplication: IPDFViewerApplication | undefined;
+
   public get pdfJsVersion(): string {
     return getVersionSuffix(pdfDefaultOptions.assetsFolder);
   }
 
   constructor(private notificationService: PDFNotificationService, private cdr: ChangeDetectorRef) {
     effect(() => {
-      if (notificationService.onPDFJSInitSignal()) {
+      this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
+      if (this.PDFViewerApplication) {
         this.onPdfJsInit();
       }
     });
   }
 
   private onPdfJsInit() {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.on('annotationeditormodechanged', ({ mode }: AnnotationEditorEditorModeChangedEvent) => {
+    this.PDFViewerApplication?.eventBus.on('annotationeditormodechanged', ({ mode }: AnnotationEditorEditorModeChangedEvent) => {
       setTimeout(() => {
         this.isSelected = mode === 13;
         this.cdr.detectChanges();

@@ -11,7 +11,8 @@ export class NgxConsole {
   }
 
   public log(message: any, reason?: any): void {
-    if (globalThis['ngxConsoleFilter']('log', message)) {
+    const filter = globalThis['ngxConsoleFilter'] ?? (() => true);
+    if (filter('log', message)) {
       if (reason !== undefined) {
         console.log('%s', message, reason);
       } else {
@@ -19,8 +20,10 @@ export class NgxConsole {
       }
     }
   }
+
   public error(message: any, reason?: any): void {
-    if (globalThis['ngxConsoleFilter']('error', message)) {
+    const filter = globalThis['ngxConsoleFilter'] ?? (() => true);
+    if (filter('error', message)) {
       if (reason !== undefined) {
         console.error('%s', message, reason);
       } else {
@@ -29,7 +32,8 @@ export class NgxConsole {
     }
   }
   public warn(message: any, reason?: any): void {
-    if (globalThis['ngxConsoleFilter']('warn', message)) {
+    const filter = globalThis['ngxConsoleFilter'] ?? (() => true);
+    if (filter('warn', message)) {
       if (reason !== undefined) {
         console.warn('%s', message, reason);
       } else {

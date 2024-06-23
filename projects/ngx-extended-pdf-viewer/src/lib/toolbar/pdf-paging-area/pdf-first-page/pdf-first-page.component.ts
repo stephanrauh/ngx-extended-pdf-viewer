@@ -15,22 +15,23 @@ export class PdfFirstPageComponent {
 
   public disableFirstPage = true;
 
+  private PDFViewerApplication: IPDFViewerApplication | undefined;
+
   constructor(private notificationService: PDFNotificationService, private changeDetectorRef: ChangeDetectorRef) {
     effect(() => {
-      if (notificationService.onPDFJSInitSignal()) {
+      this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
+      if (this.PDFViewerApplication) {
         this.onPdfJsInit();
       }
     });
   }
 
   public firstPage(): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.dispatch('firstpage');
+    this.PDFViewerApplication?.eventBus.dispatch('firstpage');
   }
 
   public onPdfJsInit(): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.on('updateuistate', (event) => this.updateUIState(event));
+    this.PDFViewerApplication?.eventBus.on('updateuistate', (event) => this.updateUIState(event));
   }
 
   public updateUIState(event: UpdateUIStateEvent): void {

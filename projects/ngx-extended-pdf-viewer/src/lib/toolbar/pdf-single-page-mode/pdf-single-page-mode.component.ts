@@ -25,24 +25,25 @@ export class PdfSinglePageModeComponent {
 
   public onClick: () => void;
 
+  private PDFViewerApplication: IPDFViewerApplication | undefined;
+
   constructor(private notificationService: PDFNotificationService, private ngZone: NgZone) {
     effect(() => {
-      if (notificationService.onPDFJSInitSignal()) {
+      this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
+      if (this.PDFViewerApplication) {
         this.onPdfJsInit();
       }
     });
 
     this.onClick = () => {
       ngZone.run(() => {
-        const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-        PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.PAGE });
+        this.PDFViewerApplication?.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.PAGE });
       });
     };
   }
 
   public onPdfJsInit(): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.on('switchscrollmode', (event) => {
+    this.PDFViewerApplication?.eventBus.on('switchscrollmode', (event) => {
       this.ngZone.run(() => {
         this.scrollMode = event.mode;
       });

@@ -19,17 +19,19 @@ export class PdfOddSpreadComponent {
 
   public spread: SpreadType = 'off';
 
+  private PDFViewerApplication: IPDFViewerApplication | undefined;
+
   constructor(private notificationService: PDFNotificationService, private ngZone: NgZone) {
     effect(() => {
-      if (notificationService.onPDFJSInitSignal()) {
+      this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
+      if (this.PDFViewerApplication) {
         this.onPdfJsInit();
       }
     });
   }
 
   public onPdfJsInit(): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.on('spreadmodechanged', (event) => {
+    this.PDFViewerApplication?.eventBus.on('spreadmodechanged', (event) => {
       this.ngZone.run(() => {
         const modes = ['off', 'odd', 'even'] as Array<SpreadType>;
         this.spread = modes[event.mode];
@@ -38,7 +40,8 @@ export class PdfOddSpreadComponent {
   }
 
   public onClick(): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.pdfViewer.spreadMode = 1;
+    if (this.PDFViewerApplication) {
+      this.PDFViewerApplication.pdfViewer.spreadMode = 1;
+    }
   }
 }

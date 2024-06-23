@@ -25,9 +25,12 @@ export class PdfWrappedScrollModeComponent {
 
   public onClick: () => void;
 
+  private PDFViewerApplication: IPDFViewerApplication | undefined;
+
   constructor(private notificationService: PDFNotificationService, private ngZone: NgZone) {
     effect(() => {
-      if (notificationService.onPDFJSInitSignal()) {
+      this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
+      if (this.PDFViewerApplication) {
         this.onPdfJsInit();
       }
     });
@@ -37,15 +40,13 @@ export class PdfWrappedScrollModeComponent {
         if (this.pageViewMode !== 'multiple' && this.pageViewMode !== 'infinite-scroll') {
           emitter.emit('multiple');
         }
-        const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-        PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.WRAPPED });
+        this.PDFViewerApplication?.eventBus.dispatch('switchscrollmode', { mode: ScrollMode.WRAPPED });
       });
     };
   }
 
   public onPdfJsInit(): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.on('switchscrollmode', (event) => {
+    this.PDFViewerApplication?.eventBus.on('switchscrollmode', (event) => {
       this.ngZone.run(() => {
         this.scrollMode = event.mode;
       });

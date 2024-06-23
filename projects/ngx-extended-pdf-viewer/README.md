@@ -31,18 +31,25 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 Version 20.0.2 is a security fix. It solves CVE-2024-4367. I strongly recommend updating to the latest version of ngx-extended-pdf-viewer as soon as possible, or to version 20.0.2 as a minimum. Older versions contain a bug allowing malicious PDF files to run arbitrary code. Kudos go to GitHub users ScratchPDX and Deepak Shakya to tell me about it, so I could provide a hotfix during my vacations.
 
-## What's new in Version 20.5.0?
+## Sneak preview to version 21.0.0
 
-Basically, version 20.5.0 updates to pdf.js 4.3 and solves some memory leak issues. At the moment these versions are alpha versions because I believe it's time for thorough testing. Solving memory leaks is always a challenge, so I don't want to do it in a rush.
+If everything goes according to the plan - which is not 100% guaranteed - version 21 is going to
 
-Please don't update your production code to the alpha versions - they are meant for testing. If you want to help me to keep the quality of the library high, go for the alpha versions and report bugs if you find them. Otherwise, please stick to version 20.2.x for a short while.
+- get rid of RxJS
+- to stop polluting the global namespace
+- and it's going to move the code loading the huge JavaScript files to a service. So the viewer doesn't have to reload the JavaScript files every time you destroy the viewer and open a new one. It seems many people do that, so this is going to improve performance considerably.
+
+## What's new in version 20.5.0?
+
+Basically, version 20.5.0 updates to pdf.js 4.3 and solves some memory leak issues. However, that turned out to be a major task, involving a major rewrite of the initialization of the library.
 
 Breaking changes:
 
+- I've modified the way the application initializes. It's unlikely you notice this, but if you rely on `window.PDFViewerApplication` to be available early, you might see errors. Starting with version 20.5.0, the recommended approach is to listen to the signal `PDFNotificationService.onPDFJSInitSignal()`. When the viewer is initialized, the signal fires and sends the references to `PDFViewerApplication` and a few other resources. After receiving this signal, you can safely use the `PDFViewerApplication` sent by the signal. When the viewer is destroy, the signal fires again, this time sending `undefined` to indicate you must stop using `PDFViewerApplication`. The next time the viewer initializes, the signal fires again, this time passing the reference to the new instance of `PDFViewerApplication`.
 - The +/- zoom buttons now have a different id. I've renamed them after observing these buttons always triggered two events, on triggered by pdf.js, the other by ngx-extended-pdf-viewer. If you rely on the id for some reason, that might be a breaking change.
 - If you want to use `ngxConsoleFilter`, now you have to register it later. You can safely register the method when `PDFNotificationService.onPDFJSInit` is fired. However, this event is subject to change, too - if everything goes according to plan, version 21 is going to replace this `Observable` by a `Signal`.
 
-## What's new in Version 20?
+## What's new in version 20?
 
 Version 20.2.0 fixes a few bugs in PDF files with forms. Now checkboxes always show the value stored in the PDF files (unless overwritten by `(formDataChange)´), and text fields always show the value sent by `[formData]` even if there's a pre-formatted value in the PDF file. The bug fix might break your application if you rely on the error. I don't consider this a breaking change, but even so, I've increase the minor version number to make you aware of potential problems.
 

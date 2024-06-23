@@ -21,6 +21,7 @@ export class PageFlip extends EventObject {
      * Destructor. Remove a root HTML element and all event handlers
      */
     destroy(): void;
+    render: CanvasRender | HTMLRender | undefined;
     /**
      * Update the render area. Re-show current page.
      */
@@ -32,7 +33,6 @@ export class PageFlip extends EventObject {
      */
     loadFromImages(imagesHref: string[]): void;
     ui: HTMLUI | CanvasUI | undefined;
-    render: CanvasRender | HTMLRender | undefined;
     flipController: Flip | undefined;
     /**
      * Load pages from HTML elements on the HTML mode
@@ -234,36 +234,6 @@ declare class HTMLPageCollection extends PageCollection {
     load(): void;
 }
 /**
- * UI for HTML mode
- */
-declare class HTMLUI extends UI {
-    constructor(inBlock: any, app: any, setting: any, items: any);
-    distElement: any;
-    items: any;
-    clear(): void;
-    /**
-     * Update page list from HTMLElements
-     *
-     * @param {(NodeListOf<HTMLElement>|HTMLElement[])} items - List of pages as HTML Element
-     */
-    updateItems(items: (NodeListOf<HTMLElement> | HTMLElement[])): void;
-    update(): void;
-}
-/**
- * UI for canvas mode
- */
-declare class CanvasUI extends UI {
-    constructor(inBlock: any, app: any, setting: any);
-    canvas: any;
-    distElement: any;
-    resizeCanvas(): void;
-    /**
-     * Get canvas element
-     */
-    getCanvas(): any;
-    update(): void;
-}
-/**
  * Class responsible for rendering the Canvas book
  */
 declare class CanvasRender extends Render {
@@ -327,6 +297,36 @@ declare class HTMLRender extends Render {
     drawFrame(): void;
     lastAngle: any;
     clear(): void;
+}
+/**
+ * UI for HTML mode
+ */
+declare class HTMLUI extends UI {
+    constructor(inBlock: any, app: any, setting: any, items: any);
+    distElement: any;
+    items: any;
+    clear(): void;
+    /**
+     * Update page list from HTMLElements
+     *
+     * @param {(NodeListOf<HTMLElement>|HTMLElement[])} items - List of pages as HTML Element
+     */
+    updateItems(items: (NodeListOf<HTMLElement> | HTMLElement[])): void;
+    update(): void;
+}
+/**
+ * UI for canvas mode
+ */
+declare class CanvasUI extends UI {
+    constructor(inBlock: any, app: any, setting: any);
+    canvas: any;
+    distElement: any;
+    resizeCanvas(): void;
+    /**
+     * Get canvas element
+     */
+    getCanvas(): any;
+    update(): void;
 }
 /**
  * Class representing the flipping process
@@ -555,6 +555,7 @@ declare class Render {
     safari: boolean;
     setting: any;
     app: any;
+    ngxZone: any;
     /**
      * Executed when requestAnimationFrame is called. Performs the current animation process and call drawFrame()
      *

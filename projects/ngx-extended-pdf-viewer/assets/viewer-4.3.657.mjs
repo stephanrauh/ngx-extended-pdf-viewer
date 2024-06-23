@@ -48,7 +48,8 @@ var __webpack_exports__ = {};
 __webpack_require__.d(__webpack_exports__, {
   PDFViewerApplication: () => (/* reexport */ app_PDFViewerApplication),
   PDFViewerApplicationConstants: () => (/* binding */ AppConstants),
-  PDFViewerApplicationOptions: () => (/* reexport */ AppOptions)
+  PDFViewerApplicationOptions: () => (/* reexport */ AppOptions),
+  webViewerLoad: () => (/* binding */ webViewerLoad)
 });
 
 ;// CONCATENATED MODULE: ./web/ui_utils.js
@@ -1293,7 +1294,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '20.5.0-alpha.4';
+const ngxExtendedPdfViewerVersion = '20.5.0';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -10619,6 +10620,7 @@ class Render {
     this.app = app;
     const regex = new RegExp('Version\\/[\\d\\.]+.*Safari/');
     this.safari = regex.exec(window.navigator.userAgent) !== null;
+    this.ngxZone = setting.ngxZone;
   }
   render(timer) {
     if (this.animation !== null) {
@@ -10636,12 +10638,12 @@ class Render {
   start() {
     this.update();
     const loop = timer => {
-      window.ngxZone.runOutsideAngular(() => {
+      this.ngxZone?.runOutsideAngular(() => {
         this.render(timer);
         requestAnimationFrame(loop);
       });
     };
-    window.ngxZone.runOutsideAngular(() => {
+    this.ngxZone?.runOutsideAngular(() => {
       requestAnimationFrame(loop);
     });
   }
@@ -11501,7 +11503,9 @@ class PageFlip extends EventObject {
     this.block = inBlock;
   }
   destroy() {
+    this.render.ngxZone = undefined;
     this.ui.destroy();
+    this.render = undefined;
   }
   update() {
     this.render.update();
@@ -13484,7 +13488,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = "4.3.654";
+    const viewerVersion = "4.3.657";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -13628,7 +13632,8 @@ class PDFViewer {
               width: page1.clientWidth,
               height: page1.clientHeight,
               showCover: true,
-              size: "fixed"
+              size: "fixed",
+              ngxZone: globalThis.ngxZone
             });
             this.pageFlip.loadFromHTML(document.querySelectorAll(".page"));
             this.pageFlip.on("flip", e => {
@@ -16276,6 +16281,19 @@ const app_PDFViewerApplication = {
     } else {
       this._hideViewBookmark();
     }
+    const event = new CustomEvent("webviewerinitialized", {
+      bubbles: true,
+      cancelable: true,
+      detail: {
+        source: window
+      }
+    });
+    try {
+      document.dispatchEvent(event);
+    } catch (ex) {
+      console.error(`webviewerinitialized: ${ex}`);
+      parent.document.dispatchEvent(event);
+    }
   },
   get externalServices() {
     return shadow(this, "externalServices", new ExternalServices());
@@ -18213,8 +18231,8 @@ function webViewerReportTelemetry({
 
 
 
-const pdfjsVersion = "4.3.654";
-const pdfjsBuild = "5f03202ad";
+const pdfjsVersion = "4.3.657";
+const pdfjsBuild = "71276e511";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
@@ -18389,9 +18407,9 @@ function webViewerLoad() {
   app_PDFViewerApplication.run(config);
 }
 document.blockUnblockOnload?.(true);
-window.webViewerLoad = webViewerLoad;
 
 var __webpack_exports__PDFViewerApplication = __webpack_exports__.PDFViewerApplication;
 var __webpack_exports__PDFViewerApplicationConstants = __webpack_exports__.PDFViewerApplicationConstants;
 var __webpack_exports__PDFViewerApplicationOptions = __webpack_exports__.PDFViewerApplicationOptions;
-export { __webpack_exports__PDFViewerApplication as PDFViewerApplication, __webpack_exports__PDFViewerApplicationConstants as PDFViewerApplicationConstants, __webpack_exports__PDFViewerApplicationOptions as PDFViewerApplicationOptions };
+var __webpack_exports__webViewerLoad = __webpack_exports__.webViewerLoad;
+export { __webpack_exports__PDFViewerApplication as PDFViewerApplication, __webpack_exports__PDFViewerApplicationConstants as PDFViewerApplicationConstants, __webpack_exports__PDFViewerApplicationOptions as PDFViewerApplicationOptions, __webpack_exports__webViewerLoad as webViewerLoad };

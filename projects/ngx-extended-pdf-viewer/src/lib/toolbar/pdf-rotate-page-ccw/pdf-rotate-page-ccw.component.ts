@@ -18,22 +18,23 @@ export class PdfRotatePageCcwComponent {
   @Input()
   public counterClockwise = true;
 
+  private PDFViewerApplication: IPDFViewerApplication | undefined;
+
   constructor(private notificationService: PDFNotificationService, private changeDetectorRef: ChangeDetectorRef) {
     effect(() => {
-      if (notificationService.onPDFJSInitSignal()) {
+      this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
+      if (this.PDFViewerApplication) {
         this.onPdfJsInit();
       }
     });
   }
 
   public rotateCCW(): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.dispatch('rotateccw');
+    this.PDFViewerApplication?.eventBus.dispatch('rotateccw');
   }
 
   public onPdfJsInit(): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-    PDFViewerApplication.eventBus.on('updateuistate', (event) => this.updateUIState(event));
+    this.PDFViewerApplication?.eventBus.on('updateuistate', (event) => this.updateUIState(event));
   }
 
   public updateUIState(event: UpdateUIStateEvent): void {
