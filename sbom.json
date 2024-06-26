@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
   "version": 1,
-  "serialNumber": "urn:uuid:9a72e19a-6b1c-44cd-84b5-18f981121915",
+  "serialNumber": "urn:uuid:5b09f282-ca66-4136-8d53-308905c2b0d3",
   "metadata": {
-    "timestamp": "2024-06-24T20:01:06.557Z",
+    "timestamp": "2024-06-26T19:45:13.890Z",
     "tools": [
       {
         "name": "npm",
@@ -10724,8 +10724,8 @@
     {
       "type": "library",
       "name": "caniuse-lite",
-      "version": "1.0.30001636",
-      "bom-ref": "caniuse-lite@1.0.30001636",
+      "version": "1.0.30001637",
+      "bom-ref": "caniuse-lite@1.0.30001637",
       "author": "Ben Briggs",
       "description": "A smaller version of caniuse-db, with only the essentials!",
       "licenses": [
@@ -10735,7 +10735,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/caniuse-lite@1.0.30001636",
+      "purl": "pkg:npm/caniuse-lite@1.0.30001637",
       "externalReferences": [
         {
           "url": "git+https://github.com/browserslist/caniuse-lite.git",
@@ -10753,12 +10753,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001636.tgz",
+          "url": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001637.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "6cc836be6afc5c1b1b2fa2ebd141d7cbfdb59bce054f10cb5a7d854aa31de4fae56ccc702654270b6616631560a7ae8f644f8104d1768d841404a0a8d450de66"
+              "content": "d71d2a448d660f5a3d7beee6048ed7b731403f85eccdb1da556b0c8866d23cb61e90a4c917b2be14d93a02c5c7e2c52973eaabb08de95607f525d97fb8692e49"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -12833,8 +12833,8 @@
     {
       "type": "library",
       "name": "electron-to-chromium",
-      "version": "1.4.806",
-      "bom-ref": "electron-to-chromium@1.4.806",
+      "version": "1.4.812",
+      "bom-ref": "electron-to-chromium@1.4.812",
       "author": "Kilian Valkhof",
       "description": "Provides a list of electron-to-chromium version mappings",
       "licenses": [
@@ -12844,7 +12844,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/electron-to-chromium@1.4.806",
+      "purl": "pkg:npm/electron-to-chromium@1.4.812",
       "externalReferences": [
         {
           "url": "git+https://github.com/kilian/electron-to-chromium.git",
@@ -12862,12 +12862,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.806.tgz",
+          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.812.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "9e4a045f640807c93008eb6fb60c215d6cb620755c38b419bbd428dfab9a181f37e66757fe1f2e2d1968b0be902212d552702289c5d15b4d0fc1a3d90bbe0dae"
+              "content": "ecbf1f0b6132fdbe9278f0c5291db31c0cb899b769d7fdfc624e53b0044eeba5b7842e4a11a78a30c1e8c70b6e1fe8dcbb60182d29fd417d388bde6de859751e"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -16397,8 +16397,8 @@
       "type": "library",
       "name": "node",
       "group": "@types",
-      "version": "20.14.6",
-      "bom-ref": "@types/node@20.14.6",
+      "version": "20.14.9",
+      "bom-ref": "@types/node@20.14.9",
       "description": "TypeScript definitions for node",
       "licenses": [
         {
@@ -16407,7 +16407,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40types/node@20.14.6#types/node",
+      "purl": "pkg:npm/%40types/node@20.14.9#types/node",
       "externalReferences": [
         {
           "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/node",
@@ -16425,12 +16425,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@types/node/-/node-20.14.6.tgz",
+          "url": "https://registry.npmjs.org/@types/node/-/node-20.14.9.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "25b0345c824f2f522236753b3c5c435f27c0c1cc1556b3a8ab2cf3c904f231e56107390954c4a40b52e556c450da5a6a898e27e816fda024ba9730ca550c5b67"
+              "content": "d3a382b674d7b5639904995102995e5a7747e09b1156cd690c273c74b490a7eecfa54a57dde3dd1f278d4854de49eec5b4ac9092b94fbc7c09396dd22ddf0eca"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -30407,8 +30407,8 @@
     {
       "type": "library",
       "name": "object-inspect",
-      "version": "1.13.1",
-      "bom-ref": "object-inspect@1.13.1",
+      "version": "1.13.2",
+      "bom-ref": "object-inspect@1.13.2",
       "author": "James Halliday",
       "description": "string representations of objects in node and the browser",
       "licenses": [
@@ -30418,7 +30418,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/object-inspect@1.13.1",
+      "purl": "pkg:npm/object-inspect@1.13.2",
       "externalReferences": [
         {
           "url": "git://github.com/inspect-js/object-inspect.git",
@@ -30436,12 +30436,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/object-inspect/-/object-inspect-1.13.1.tgz",
+          "url": "https://registry.npmjs.org/object-inspect/-/object-inspect-1.13.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "e6aa23d5152228e32c08234b57508188f604d74b33893b2798dc64008feb661883eb7085ec8a9d1460bf5f38d68e94a02dfd0bc575f76c3148874135f1fe9485"
+              "content": "21165246ecc98b29de9805cf62d3dee41a08fd111235847b4d89b9d0c0b932a6dddc99b0e72efdd2c12b630dd5e92af21490fae1bef8a9042cf709f9060fe4de"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -35062,8 +35062,8 @@
     {
       "type": "library",
       "name": "es-module-lexer",
-      "version": "1.5.3",
-      "bom-ref": "es-module-lexer@1.5.3",
+      "version": "1.5.4",
+      "bom-ref": "es-module-lexer@1.5.4",
       "author": "Guy Bedford",
       "description": "Lexes ES modules returning their import/export metadata",
       "licenses": [
@@ -35073,7 +35073,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/es-module-lexer@1.5.3",
+      "purl": "pkg:npm/es-module-lexer@1.5.4",
       "externalReferences": [
         {
           "url": "git+https://github.com/guybedford/es-module-lexer.git",
@@ -35091,12 +35091,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/es-module-lexer/-/es-module-lexer-1.5.3.tgz",
+          "url": "https://registry.npmjs.org/es-module-lexer/-/es-module-lexer-1.5.4.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "8b580282647d74297a56297a50a3c8fedac0ebdb34f20fecca18832bd4c6d0d7f54498e3148f80ce8596eec3ee7f39206009fceb5b24b82c096b4a48207631be"
+              "content": "31534ae7a36232b3b08ad141edca83c2ad0242eb5bc3ed01bcbb21252b1ed0c50d53ecb5142ddb512fc0420ee852783eff02abae48bb25f9b0b551e455f3cb97"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -37803,8 +37803,8 @@
         {
           "type": "library",
           "name": "minimatch",
-          "version": "9.0.4",
-          "bom-ref": "@npmcli/package-json@5.2.0|minimatch@9.0.4",
+          "version": "9.0.5",
+          "bom-ref": "@npmcli/package-json@5.2.0|minimatch@9.0.5",
           "author": "Isaac Z. Schlueter",
           "description": "a glob matcher in javascript",
           "licenses": [
@@ -37814,7 +37814,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/minimatch@9.0.4",
+          "purl": "pkg:npm/minimatch@9.0.5",
           "externalReferences": [
             {
               "url": "git://github.com/isaacs/minimatch.git",
@@ -37832,12 +37832,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.4.tgz",
+              "url": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.5.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "2aa5a1f957217f170c3510098e3dad9ec48974d6c7b1582790185336b5bb023568e8ebcbb71c3ccdf4fda0bc35252a21945cc9f230a84e06a85ef27e907b7a7f"
+                  "content": "1ba4f4657e3cc60a33c7be7cee4a1e5fd62cd8d632e869affff3fcf6c12d7bd57dc2121aa4c345e2274ac675b642d09c2e24d695bff07c269b02d0055a1841a3"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -38457,8 +38457,8 @@
     {
       "type": "library",
       "name": "normalize-package-data",
-      "version": "6.0.1",
-      "bom-ref": "normalize-package-data@6.0.1",
+      "version": "6.0.2",
+      "bom-ref": "normalize-package-data@6.0.2",
       "author": "GitHub Inc.",
       "description": "Normalizes data that can be found in package.json files.",
       "licenses": [
@@ -38468,7 +38468,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/normalize-package-data@6.0.1",
+      "purl": "pkg:npm/normalize-package-data@6.0.2",
       "externalReferences": [
         {
           "url": "git+https://github.com/npm/normalize-package-data.git",
@@ -38486,12 +38486,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/normalize-package-data/-/normalize-package-data-6.0.1.tgz",
+          "url": "https://registry.npmjs.org/normalize-package-data/-/normalize-package-data-6.0.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "eabbc27de456f8e1196a0001e2530b48db933586562d5b4a71c2bbf554937ffff24d8e5538281ca47f343be6d92bc35ea6cee95277791be425320d7257fda265"
+              "content": "57a83282861bff9126348f8c106ad6902f9eebe46bee64e67c7af10db2f3c50a20064833a3beab928934026ead860485eccbf69cb39a8c0263e6f0c9644167ee"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -38619,8 +38619,8 @@
         {
           "type": "library",
           "name": "minimatch",
-          "version": "9.0.4",
-          "bom-ref": "node-gyp@10.1.0|minimatch@9.0.4",
+          "version": "9.0.5",
+          "bom-ref": "node-gyp@10.1.0|minimatch@9.0.5",
           "author": "Isaac Z. Schlueter",
           "description": "a glob matcher in javascript",
           "licenses": [
@@ -38630,7 +38630,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/minimatch@9.0.4",
+          "purl": "pkg:npm/minimatch@9.0.5",
           "externalReferences": [
             {
               "url": "git://github.com/isaacs/minimatch.git",
@@ -38648,12 +38648,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.4.tgz",
+              "url": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.5.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "2aa5a1f957217f170c3510098e3dad9ec48974d6c7b1582790185336b5bb023568e8ebcbb71c3ccdf4fda0bc35252a21945cc9f230a84e06a85ef27e907b7a7f"
+                  "content": "1ba4f4657e3cc60a33c7be7cee4a1e5fd62cd8d632e869affff3fcf6c12d7bd57dc2121aa4c345e2274ac675b642d09c2e24d695bff07c269b02d0055a1841a3"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -39491,8 +39491,8 @@
         {
           "type": "library",
           "name": "minimatch",
-          "version": "9.0.4",
-          "bom-ref": "cacache@18.0.3|minimatch@9.0.4",
+          "version": "9.0.5",
+          "bom-ref": "cacache@18.0.3|minimatch@9.0.5",
           "author": "Isaac Z. Schlueter",
           "description": "a glob matcher in javascript",
           "licenses": [
@@ -39502,7 +39502,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/minimatch@9.0.4",
+          "purl": "pkg:npm/minimatch@9.0.5",
           "externalReferences": [
             {
               "url": "git://github.com/isaacs/minimatch.git",
@@ -39520,12 +39520,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.4.tgz",
+              "url": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.5.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "2aa5a1f957217f170c3510098e3dad9ec48974d6c7b1582790185336b5bb023568e8ebcbb71c3ccdf4fda0bc35252a21945cc9f230a84e06a85ef27e907b7a7f"
+                  "content": "1ba4f4657e3cc60a33c7be7cee4a1e5fd62cd8d632e869affff3fcf6c12d7bd57dc2121aa4c345e2274ac675b642d09c2e24d695bff07c269b02d0055a1841a3"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -39817,8 +39817,8 @@
         {
           "type": "library",
           "name": "minimatch",
-          "version": "9.0.4",
-          "bom-ref": "ignore-walk@6.0.5|minimatch@9.0.4",
+          "version": "9.0.5",
+          "bom-ref": "ignore-walk@6.0.5|minimatch@9.0.5",
           "author": "Isaac Z. Schlueter",
           "description": "a glob matcher in javascript",
           "licenses": [
@@ -39828,7 +39828,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/minimatch@9.0.4",
+          "purl": "pkg:npm/minimatch@9.0.5",
           "externalReferences": [
             {
               "url": "git://github.com/isaacs/minimatch.git",
@@ -39846,12 +39846,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.4.tgz",
+              "url": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.5.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "2aa5a1f957217f170c3510098e3dad9ec48974d6c7b1582790185336b5bb023568e8ebcbb71c3ccdf4fda0bc35252a21945cc9f230a84e06a85ef27e907b7a7f"
+                  "content": "1ba4f4657e3cc60a33c7be7cee4a1e5fd62cd8d632e869affff3fcf6c12d7bd57dc2121aa4c345e2274ac675b642d09c2e24d695bff07c269b02d0055a1841a3"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -42040,8 +42040,8 @@
         {
           "type": "library",
           "name": "minimatch",
-          "version": "9.0.4",
-          "bom-ref": "read-package-json@7.0.1|minimatch@9.0.4",
+          "version": "9.0.5",
+          "bom-ref": "read-package-json@7.0.1|minimatch@9.0.5",
           "author": "Isaac Z. Schlueter",
           "description": "a glob matcher in javascript",
           "licenses": [
@@ -42051,7 +42051,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/minimatch@9.0.4",
+          "purl": "pkg:npm/minimatch@9.0.5",
           "externalReferences": [
             {
               "url": "git://github.com/isaacs/minimatch.git",
@@ -42069,12 +42069,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.4.tgz",
+              "url": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.5.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "2aa5a1f957217f170c3510098e3dad9ec48974d6c7b1582790185336b5bb023568e8ebcbb71c3ccdf4fda0bc35252a21945cc9f230a84e06a85ef27e907b7a7f"
+                  "content": "1ba4f4657e3cc60a33c7be7cee4a1e5fd62cd8d632e869affff3fcf6c12d7bd57dc2121aa4c345e2274ac675b642d09c2e24d695bff07c269b02d0055a1841a3"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -42644,8 +42644,8 @@
         {
           "type": "library",
           "name": "minimatch",
-          "version": "9.0.4",
-          "bom-ref": "@tufjs/models@2.0.1|minimatch@9.0.4",
+          "version": "9.0.5",
+          "bom-ref": "@tufjs/models@2.0.1|minimatch@9.0.5",
           "author": "Isaac Z. Schlueter",
           "description": "a glob matcher in javascript",
           "licenses": [
@@ -42655,7 +42655,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/minimatch@9.0.4",
+          "purl": "pkg:npm/minimatch@9.0.5",
           "externalReferences": [
             {
               "url": "git://github.com/isaacs/minimatch.git",
@@ -42673,12 +42673,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.4.tgz",
+              "url": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.5.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "2aa5a1f957217f170c3510098e3dad9ec48974d6c7b1582790185336b5bb023568e8ebcbb71c3ccdf4fda0bc35252a21945cc9f230a84e06a85ef27e907b7a7f"
+                  "content": "1ba4f4657e3cc60a33c7be7cee4a1e5fd62cd8d632e869affff3fcf6c12d7bd57dc2121aa4c345e2274ac675b642d09c2e24d695bff07c269b02d0055a1841a3"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -42971,8 +42971,8 @@
     {
       "type": "library",
       "name": "is-core-module",
-      "version": "2.13.1",
-      "bom-ref": "is-core-module@2.13.1",
+      "version": "2.14.0",
+      "bom-ref": "is-core-module@2.14.0",
       "author": "Jordan Harband",
       "description": "Is this specifier a node.js core module?",
       "licenses": [
@@ -42982,7 +42982,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/is-core-module@2.13.1",
+      "purl": "pkg:npm/is-core-module@2.14.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/inspect-js/is-core-module.git",
@@ -43000,12 +43000,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/is-core-module/-/is-core-module-2.13.1.tgz",
+          "url": "https://registry.npmjs.org/is-core-module/-/is-core-module-2.14.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "847ac88ef66c7ed3acbca4a7d9345897adf3bf1b201342bed2660ca07ea00f8a264792160762b29e2bc141cce8dfec05d5c0a48f3be9b6723d434b0f53aea297"
+              "content": "6b974526287964b62546d0dcd1d6563fb4622abeb120ace69ffa006020ef74b4e169d560c89c256a840f991b4c4a9cfeae4d0e180808bbe4dc33d1d41747e4d4"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -44967,8 +44967,8 @@
     {
       "type": "library",
       "name": "smtp-address-parser",
-      "version": "1.0.10",
-      "bom-ref": "smtp-address-parser@1.0.10",
+      "version": "1.1.0",
+      "bom-ref": "smtp-address-parser@1.1.0",
       "author": "Gene Hightower",
       "description": "Parse an SMTP (RFC-5321) address",
       "scope": "optional",
@@ -44979,7 +44979,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/smtp-address-parser@1.0.10",
+      "purl": "pkg:npm/smtp-address-parser@1.1.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/gene-hightower/smtp-address-parser.git",
@@ -44997,12 +44997,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/smtp-address-parser/-/smtp-address-parser-1.0.10.tgz",
+          "url": "https://registry.npmjs.org/smtp-address-parser/-/smtp-address-parser-1.1.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "3ac83d2e6bc67801bf8726a8e2695d6df94b3a492bddafa1e26d65c0a08ae54f0ce9902beed757133ffefefafbe764d2184e0c35495497d7082b6701f1c8335e"
+              "content": "1b3d758db354d2996b45e53d4a3edf9ac852071c49f5285d0f6ab892d1c81e8feba531fa945c90a181d828834f26d3def1a1c59ec6ed5b8e8bb34b42081b0866"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -54953,8 +54953,8 @@
     {
       "type": "library",
       "name": "jest-preset-angular",
-      "version": "14.1.0",
-      "bom-ref": "jest-preset-angular@14.1.0",
+      "version": "14.1.1",
+      "bom-ref": "jest-preset-angular@14.1.1",
       "author": "Michał Pierzchała",
       "description": "Jest preset configuration for Angular projects",
       "licenses": [
@@ -54964,7 +54964,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/jest-preset-angular@14.1.0",
+      "purl": "pkg:npm/jest-preset-angular@14.1.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/thymikee/jest-preset-angular.git",
@@ -54982,12 +54982,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/jest-preset-angular/-/jest-preset-angular-14.1.0.tgz",
+          "url": "https://registry.npmjs.org/jest-preset-angular/-/jest-preset-angular-14.1.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "509c0fb69b00325df452d0631d6d008b4861a0ab0d5110b57571f9b52623ba652c591ee20e47bea01132933eee5efe2b37e3d681e348aa4c68e0a1d08ce21397"
+              "content": "9965b65a59dd1deb53a783d0a2fd39bfb244e87650079b93cc677ea16d913c7d4e39308b50a23c992214e035c2049e0b0e0e6020c31fa87b314ff426a6ed9d41"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -57874,8 +57874,8 @@
     {
       "type": "library",
       "name": "v8-to-istanbul",
-      "version": "9.2.0",
-      "bom-ref": "v8-to-istanbul@9.2.0",
+      "version": "9.3.0",
+      "bom-ref": "v8-to-istanbul@9.3.0",
       "author": "Ben Coe",
       "description": "convert from v8 coverage format to istanbul's format",
       "licenses": [
@@ -57885,7 +57885,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/v8-to-istanbul@9.2.0",
+      "purl": "pkg:npm/v8-to-istanbul@9.3.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/istanbuljs/v8-to-istanbul.git",
@@ -57903,12 +57903,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/v8-to-istanbul/-/v8-to-istanbul-9.2.0.tgz",
+          "url": "https://registry.npmjs.org/v8-to-istanbul/-/v8-to-istanbul-9.3.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "fc41ffb03831536786c5a8ca7702c20e6438156abe9298b7b829811a9c35c49b67031123943f23f0f122196a4220c22cddc88d0201f47774d3262524633c998c"
+              "content": "9221946a558dfab80127fd4e1d9b01b54e2b5d939f8ffeeb290c542ca948cf0cd04af3095143603f0244121ee053ac445710b46a1a0e06f376608f061fa14d80"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -57929,7 +57929,7 @@
           "type": "library",
           "name": "convert-source-map",
           "version": "2.0.0",
-          "bom-ref": "v8-to-istanbul@9.2.0|convert-source-map@2.0.0",
+          "bom-ref": "v8-to-istanbul@9.3.0|convert-source-map@2.0.0",
           "author": "Thorsten Lorenz",
           "description": "Converts a source-map from/to  different formats and allows adding/changing properties.",
           "licenses": [
@@ -66497,7 +66497,7 @@
       "type": "library",
       "name": "string-width",
       "version": "4.2.3",
-      "bom-ref": "BomRef.g7ucgcvkfh.at0ff7qh4no",
+      "bom-ref": "BomRef.cvapj9c86g8.j8hrp6ibdd8",
       "author": "Sindre Sorhus",
       "description": "Get the visual width of a string - the number of columns required to display it",
       "licenses": [
@@ -66605,7 +66605,7 @@
       "type": "library",
       "name": "strip-ansi",
       "version": "6.0.1",
-      "bom-ref": "BomRef.bclpu6pfivo.pi5ar0e3gp",
+      "bom-ref": "BomRef.be7bmj7ho58.kc6e1ha31ug",
       "author": "Sindre Sorhus",
       "description": "Strip ANSI escape codes from a string",
       "licenses": [
@@ -69810,12 +69810,12 @@
         "@schematics/angular@17.3.8",
         "@types/estree@1.0.5",
         "@types/jest@29.5.12",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "@types/trusted-types@2.0.7",
         "copyfiles@2.4.1",
         "fsevents@2.3.3",
         "jest-environment-jsdom@29.7.0",
-        "jest-preset-angular@14.1.0",
+        "jest-preset-angular@14.1.1",
         "jest@29.7.0",
         "ng-packagr@17.3.0",
         "properties-reader@2.3.0",
@@ -70038,7 +70038,7 @@
         "browserslist@4.23.1",
         "chrome-trace-event@1.0.4",
         "enhanced-resolve@5.17.0",
-        "es-module-lexer@1.5.3",
+        "es-module-lexer@1.5.4",
         "eslint-scope@5.1.1",
         "events@3.3.0",
         "glob-to-regexp@0.4.1",
@@ -70225,8 +70225,8 @@
     {
       "ref": "browserslist@4.23.1",
       "dependsOn": [
-        "caniuse-lite@1.0.30001636",
-        "electron-to-chromium@1.4.806",
+        "caniuse-lite@1.0.30001637",
+        "electron-to-chromium@1.4.812",
         "node-releases@2.0.14",
         "update-browserslist-db@1.0.16"
       ]
@@ -70485,7 +70485,7 @@
     {
       "ref": "resolve@1.22.8",
       "dependsOn": [
-        "is-core-module@2.13.1",
+        "is-core-module@2.14.0",
         "path-parse@1.0.7",
         "supports-preserve-symlinks-flag@1.0.0"
       ]
@@ -71340,7 +71340,7 @@
     {
       "ref": "vite@5.1.7",
       "dependsOn": [
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "vite@5.1.7|esbuild@0.19.12",
         "fsevents@2.3.3",
         "less@4.2.0",
@@ -71366,7 +71366,7 @@
       "ref": "autoprefixer@10.4.18",
       "dependsOn": [
         "browserslist@4.23.1",
-        "caniuse-lite@1.0.30001636",
+        "caniuse-lite@1.0.30001637",
         "fraction.js@4.3.7",
         "normalize-range@0.1.2",
         "picocolors@1.0.1",
@@ -71375,7 +71375,7 @@
       ]
     },
     {
-      "ref": "caniuse-lite@1.0.30001636"
+      "ref": "caniuse-lite@1.0.30001637"
     },
     {
       "ref": "fraction.js@4.3.7"
@@ -71587,7 +71587,7 @@
       ]
     },
     {
-      "ref": "electron-to-chromium@1.4.806"
+      "ref": "electron-to-chromium@1.4.812"
     },
     {
       "ref": "node-releases@2.0.14"
@@ -71958,17 +71958,17 @@
       "ref": "@types/body-parser@1.19.5",
       "dependsOn": [
         "@types/connect@3.4.38",
-        "@types/node@20.14.6"
+        "@types/node@20.14.9"
       ]
     },
     {
       "ref": "@types/connect@3.4.38",
       "dependsOn": [
-        "@types/node@20.14.6"
+        "@types/node@20.14.9"
       ]
     },
     {
-      "ref": "@types/node@20.14.6",
+      "ref": "@types/node@20.14.9",
       "dependsOn": [
         "undici-types@5.26.5"
       ]
@@ -71976,7 +71976,7 @@
     {
       "ref": "@types/express-serve-static-core@4.19.5",
       "dependsOn": [
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "@types/qs@6.9.15",
         "@types/range-parser@1.2.7",
         "@types/send@0.17.4"
@@ -71992,21 +71992,21 @@
       "ref": "@types/send@0.17.4",
       "dependsOn": [
         "@types/mime@1.3.5",
-        "@types/node@20.14.6"
+        "@types/node@20.14.9"
       ]
     },
     {
       "ref": "@types/serve-static@1.15.7",
       "dependsOn": [
         "@types/http-errors@2.0.4",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "@types/send@0.17.4"
       ]
     },
     {
       "ref": "@types/http-proxy@1.17.14",
       "dependsOn": [
-        "@types/node@20.14.6"
+        "@types/node@20.14.9"
       ]
     },
     {
@@ -72331,7 +72331,7 @@
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
         "@types/jsdom@20.0.1",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "jest-mock@29.7.0",
         "jest-util@29.7.0",
         "jsdom@20.0.3"
@@ -72963,14 +72963,14 @@
     {
       "ref": "@types/bonjour@3.5.13",
       "dependsOn": [
-        "@types/node@20.14.6"
+        "@types/node@20.14.9"
       ]
     },
     {
       "ref": "@types/connect-history-api-fallback@1.5.4",
       "dependsOn": [
         "@types/express-serve-static-core@4.19.5",
-        "@types/node@20.14.6"
+        "@types/node@20.14.9"
       ]
     },
     {
@@ -72988,13 +72988,13 @@
     {
       "ref": "@types/sockjs@0.3.36",
       "dependsOn": [
-        "@types/node@20.14.6"
+        "@types/node@20.14.9"
       ]
     },
     {
       "ref": "@types/ws@8.5.10",
       "dependsOn": [
-        "@types/node@20.14.6"
+        "@types/node@20.14.9"
       ]
     },
     {
@@ -73366,11 +73366,11 @@
         "call-bind@1.0.7",
         "es-errors@1.3.0",
         "get-intrinsic@1.2.4",
-        "object-inspect@1.13.1"
+        "object-inspect@1.13.2"
       ]
     },
     {
-      "ref": "object-inspect@1.13.1"
+      "ref": "object-inspect@1.13.2"
     },
     {
       "ref": "send@0.18.0",
@@ -73462,7 +73462,7 @@
     {
       "ref": "@types/node-forge@1.3.11",
       "dependsOn": [
-        "@types/node@20.14.6"
+        "@types/node@20.14.9"
       ]
     },
     {
@@ -73836,7 +73836,7 @@
       ]
     },
     {
-      "ref": "es-module-lexer@1.5.3"
+      "ref": "es-module-lexer@1.5.4"
     },
     {
       "ref": "eslint-scope@5.1.1",
@@ -73886,7 +73886,7 @@
     {
       "ref": "terser-webpack-plugin@5.3.10|jest-worker@27.5.1",
       "dependsOn": [
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "merge-stream@2.0.0",
         "terser-webpack-plugin@5.3.10|supports-color@8.1.1"
       ]
@@ -74148,7 +74148,7 @@
         "@npmcli/package-json@5.2.0|glob@10.4.2",
         "hosted-git-info@7.0.2",
         "json-parse-even-better-errors@3.0.2",
-        "normalize-package-data@6.0.1",
+        "normalize-package-data@6.0.2",
         "@npmcli/package-json@5.2.0|proc-log@4.2.0",
         "semver@7.6.0"
       ]
@@ -74158,14 +74158,14 @@
       "dependsOn": [
         "foreground-child@3.2.1",
         "jackspeak@3.4.0",
-        "@npmcli/package-json@5.2.0|minimatch@9.0.4",
+        "@npmcli/package-json@5.2.0|minimatch@9.0.5",
         "minipass@7.1.2",
         "package-json-from-dist@1.0.0",
         "path-scurry@1.11.1"
       ]
     },
     {
-      "ref": "@npmcli/package-json@5.2.0|minimatch@9.0.4",
+      "ref": "@npmcli/package-json@5.2.0|minimatch@9.0.5",
       "dependsOn": [
         "@npmcli/package-json@5.2.0|brace-expansion@2.0.1"
       ]
@@ -74219,10 +74219,9 @@
       "ref": "json-parse-even-better-errors@3.0.2"
     },
     {
-      "ref": "normalize-package-data@6.0.1",
+      "ref": "normalize-package-data@6.0.2",
       "dependsOn": [
         "hosted-git-info@7.0.2",
-        "is-core-module@2.13.1",
         "semver@7.6.0",
         "validate-npm-package-license@3.0.4"
       ]
@@ -74247,14 +74246,14 @@
       "dependsOn": [
         "foreground-child@3.2.1",
         "jackspeak@3.4.0",
-        "node-gyp@10.1.0|minimatch@9.0.4",
+        "node-gyp@10.1.0|minimatch@9.0.5",
         "minipass@7.1.2",
         "package-json-from-dist@1.0.0",
         "path-scurry@1.11.1"
       ]
     },
     {
-      "ref": "node-gyp@10.1.0|minimatch@9.0.4",
+      "ref": "node-gyp@10.1.0|minimatch@9.0.5",
       "dependsOn": [
         "node-gyp@10.1.0|brace-expansion@2.0.1"
       ]
@@ -74357,14 +74356,14 @@
       "dependsOn": [
         "foreground-child@3.2.1",
         "jackspeak@3.4.0",
-        "cacache@18.0.3|minimatch@9.0.4",
+        "cacache@18.0.3|minimatch@9.0.5",
         "minipass@7.1.2",
         "package-json-from-dist@1.0.0",
         "path-scurry@1.11.1"
       ]
     },
     {
-      "ref": "cacache@18.0.3|minimatch@9.0.4",
+      "ref": "cacache@18.0.3|minimatch@9.0.5",
       "dependsOn": [
         "cacache@18.0.3|brace-expansion@2.0.1"
       ]
@@ -74393,11 +74392,11 @@
     {
       "ref": "ignore-walk@6.0.5",
       "dependsOn": [
-        "ignore-walk@6.0.5|minimatch@9.0.4"
+        "ignore-walk@6.0.5|minimatch@9.0.5"
       ]
     },
     {
-      "ref": "ignore-walk@6.0.5|minimatch@9.0.4",
+      "ref": "ignore-walk@6.0.5|minimatch@9.0.5",
       "dependsOn": [
         "ignore-walk@6.0.5|brace-expansion@2.0.1"
       ]
@@ -74609,7 +74608,7 @@
       "dependsOn": [
         "read-package-json@7.0.1|glob@10.4.2",
         "json-parse-even-better-errors@3.0.2",
-        "normalize-package-data@6.0.1",
+        "normalize-package-data@6.0.2",
         "npm-normalize-package-bin@3.0.1"
       ]
     },
@@ -74618,14 +74617,14 @@
       "dependsOn": [
         "foreground-child@3.2.1",
         "jackspeak@3.4.0",
-        "read-package-json@7.0.1|minimatch@9.0.4",
+        "read-package-json@7.0.1|minimatch@9.0.5",
         "minipass@7.1.2",
         "package-json-from-dist@1.0.0",
         "path-scurry@1.11.1"
       ]
     },
     {
-      "ref": "read-package-json@7.0.1|minimatch@9.0.4",
+      "ref": "read-package-json@7.0.1|minimatch@9.0.5",
       "dependsOn": [
         "read-package-json@7.0.1|brace-expansion@2.0.1"
       ]
@@ -74692,11 +74691,11 @@
       "ref": "@tufjs/models@2.0.1",
       "dependsOn": [
         "@tufjs/canonical-json@2.0.0",
-        "@tufjs/models@2.0.1|minimatch@9.0.4"
+        "@tufjs/models@2.0.1|minimatch@9.0.5"
       ]
     },
     {
-      "ref": "@tufjs/models@2.0.1|minimatch@9.0.4",
+      "ref": "@tufjs/models@2.0.1|minimatch@9.0.5",
       "dependsOn": [
         "@tufjs/models@2.0.1|brace-expansion@2.0.1"
       ]
@@ -74725,7 +74724,7 @@
       "ref": "mkdirp@1.0.4"
     },
     {
-      "ref": "is-core-module@2.13.1",
+      "ref": "is-core-module@2.14.0",
       "dependsOn": [
         "hasown@2.0.2"
       ]
@@ -74893,7 +74892,7 @@
         "@cyclonedx/cyclonedx-library@6.10.0",
         "commander@10.0.1",
         "hosted-git-info@7.0.2",
-        "normalize-package-data@6.0.1",
+        "normalize-package-data@6.0.2",
         "packageurl-js@1.2.1",
         "xmlbuilder2@3.1.1"
       ]
@@ -74922,7 +74921,7 @@
         "ajv@8.12.0",
         "punycode@2.3.1",
         "schemes@1.4.0",
-        "smtp-address-parser@1.0.10",
+        "smtp-address-parser@1.1.0",
         "uri-js@4.4.1"
       ]
     },
@@ -74939,7 +74938,7 @@
       "ref": "extend@3.0.2"
     },
     {
-      "ref": "smtp-address-parser@1.0.10",
+      "ref": "smtp-address-parser@1.1.0",
       "dependsOn": [
         "nearley@2.20.1"
       ]
@@ -75388,7 +75387,7 @@
         "@jest/schemas@29.6.3",
         "@types/istanbul-lib-coverage@2.0.6",
         "@types/istanbul-reports@3.0.4",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "@types/yargs@17.0.32",
         "@jest/types@29.6.3|chalk@4.1.2"
       ]
@@ -75440,7 +75439,7 @@
       "ref": "jest-util@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "jest-util@29.7.0|chalk@4.1.2",
         "ci-info@3.9.0",
         "graceful-fs@4.2.11",
@@ -75653,7 +75652,7 @@
       "dependsOn": [
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "jest-mock@29.7.0"
       ]
     },
@@ -75662,7 +75661,7 @@
       "dependsOn": [
         "@jest/types@29.6.3",
         "@sinonjs/fake-timers@10.3.0",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "jest-message-util@29.7.0",
         "jest-mock@29.7.0",
         "jest-util@29.7.0"
@@ -75672,7 +75671,7 @@
       "ref": "jest-mock@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "jest-util@29.7.0"
       ]
     },
@@ -75718,7 +75717,7 @@
     {
       "ref": "@types/jsdom@20.0.1",
       "dependsOn": [
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "@types/tough-cookie@4.0.5",
         "parse5@7.1.2"
       ]
@@ -75960,7 +75959,7 @@
       ]
     },
     {
-      "ref": "jest-preset-angular@14.1.0",
+      "ref": "jest-preset-angular@14.1.1",
       "dependsOn": [
         "@angular-devkit/build-angular@17.3.8",
         "@angular/compiler-cli@17.3.11",
@@ -76010,7 +76009,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "ansi-escapes@4.3.2",
         "@jest/core@29.7.0|chalk@4.1.2",
         "ci-info@3.9.0",
@@ -76073,7 +76072,7 @@
       "ref": "@jest/console@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "@jest/console@29.7.0|chalk@4.1.2",
         "jest-message-util@29.7.0",
         "jest-util@29.7.0",
@@ -76123,7 +76122,7 @@
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
         "@jridgewell/trace-mapping@0.3.25",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "@jest/reporters@29.7.0|chalk@4.1.2",
         "collect-v8-coverage@1.0.2",
         "exit@0.1.2",
@@ -76140,7 +76139,7 @@
         "@jest/reporters@29.7.0|slash@3.0.0",
         "string-length@4.0.2",
         "strip-ansi@6.0.1",
-        "v8-to-istanbul@9.2.0"
+        "v8-to-istanbul@9.3.0"
       ]
     },
     {
@@ -76309,7 +76308,7 @@
     {
       "ref": "jest-worker@29.7.0",
       "dependsOn": [
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "jest-util@29.7.0",
         "merge-stream@2.0.0",
         "jest-worker@29.7.0|supports-color@8.1.1"
@@ -76335,15 +76334,15 @@
       "ref": "char-regex@1.0.2"
     },
     {
-      "ref": "v8-to-istanbul@9.2.0",
+      "ref": "v8-to-istanbul@9.3.0",
       "dependsOn": [
         "@jridgewell/trace-mapping@0.3.25",
         "@types/istanbul-lib-coverage@2.0.6",
-        "v8-to-istanbul@9.2.0|convert-source-map@2.0.0"
+        "v8-to-istanbul@9.3.0|convert-source-map@2.0.0"
       ]
     },
     {
-      "ref": "v8-to-istanbul@9.2.0|convert-source-map@2.0.0"
+      "ref": "v8-to-istanbul@9.3.0|convert-source-map@2.0.0"
     },
     {
       "ref": "jest-changed-files@29.7.0",
@@ -76368,7 +76367,7 @@
         "@babel/core@7.24.0",
         "@jest/test-sequencer@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "babel-jest@29.7.0",
         "jest-config@29.7.0|chalk@4.1.2",
         "ci-info@3.9.0",
@@ -76442,7 +76441,7 @@
       "dependsOn": [
         "@jest/types@29.6.3",
         "@types/graceful-fs@4.1.9",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "anymatch@3.1.3",
         "fb-watchman@2.0.2",
         "fsevents@2.3.3",
@@ -76511,7 +76510,7 @@
         "@jest/expect@29.7.0",
         "@jest/test-result@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "jest-circus@29.7.0|chalk@4.1.2",
         "co@4.6.0",
         "dedent@1.5.3",
@@ -76686,7 +76685,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "jest-runtime@29.7.0|chalk@4.1.2",
         "cjs-module-lexer@1.3.1",
         "collect-v8-coverage@1.0.2",
@@ -76746,7 +76745,7 @@
         "@jest/environment@29.7.0",
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "jest-mock@29.7.0",
         "jest-util@29.7.0"
       ]
@@ -76810,7 +76809,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "jest-runner@29.7.0|chalk@4.1.2",
         "emittery@0.13.1",
         "graceful-fs@4.2.11",
@@ -76925,7 +76924,7 @@
         "@tsconfig/node12@1.0.11",
         "@tsconfig/node14@1.0.3",
         "@tsconfig/node16@1.0.4",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "acorn-walk@8.3.3",
         "acorn@8.12.0",
         "arg@4.1.3",
@@ -76940,7 +76939,7 @@
     {
       "ref": "@types/graceful-fs@4.1.9",
       "dependsOn": [
-        "@types/node@20.14.6"
+        "@types/node@20.14.9"
       ]
     },
     {
@@ -77013,7 +77012,7 @@
       "dependsOn": [
         "@jest/test-result@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.6",
+        "@types/node@20.14.9",
         "ansi-escapes@4.3.2",
         "jest-watcher@29.7.0|chalk@4.1.2",
         "emittery@0.13.1",
@@ -77313,9 +77312,9 @@
     {
       "ref": "@isaacs/cliui@8.0.2",
       "dependsOn": [
-        "BomRef.g7ucgcvkfh.at0ff7qh4no",
+        "BomRef.cvapj9c86g8.j8hrp6ibdd8",
         "@isaacs/cliui@8.0.2|string-width@5.1.2",
-        "BomRef.bclpu6pfivo.pi5ar0e3gp",
+        "BomRef.be7bmj7ho58.kc6e1ha31ug",
         "@isaacs/cliui@8.0.2|strip-ansi@7.1.0",
         "wrap-ansi@7.0.0",
         "@isaacs/cliui@8.0.2|wrap-ansi@8.1.0"
@@ -77353,7 +77352,7 @@
       "ref": "@isaacs/cliui@8.0.2|ansi-styles@6.2.1"
     },
     {
-      "ref": "BomRef.g7ucgcvkfh.at0ff7qh4no",
+      "ref": "BomRef.cvapj9c86g8.j8hrp6ibdd8",
       "dependsOn": [
         "emoji-regex@8.0.0",
         "is-fullwidth-code-point@3.0.0",
@@ -77364,7 +77363,7 @@
       "ref": "eastasianwidth@0.2.0"
     },
     {
-      "ref": "BomRef.bclpu6pfivo.pi5ar0e3gp",
+      "ref": "BomRef.be7bmj7ho58.kc6e1ha31ug",
       "dependsOn": [
         "ansi-regex@5.0.1"
       ]

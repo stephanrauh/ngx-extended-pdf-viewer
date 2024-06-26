@@ -158,7 +158,7 @@ function isDivInViewport(element) {
   const rect = element.getBoundingClientRect();
   return rect.top >= 0 && rect.left >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && rect.right <= (window.innerWidth || document.documentElement.clientWidth);
 }
-function watchScroll(viewAreaElement, callback, abortSignal = undefined) {
+function watchScroll(viewAreaElement, callback) {
   const debounceScroll = function (evt) {
     if (rAF) {
       return;
@@ -188,10 +188,7 @@ function watchScroll(viewAreaElement, callback, abortSignal = undefined) {
     _eventHandler: debounceScroll
   };
   let rAF = null;
-  viewAreaElement.addEventListener("scroll", debounceScroll, {
-    useCapture: true,
-    signal: abortSignal
-  });
+  viewAreaElement.addEventListener("scroll", debounceScroll, true);
   return state;
 }
 function parseQueryString(query) {
@@ -763,10 +760,6 @@ const defaultOptions = {
     value: "",
     kind: OptionKind.API
   },
-  enableHWA: {
-    value: false,
-    kind: OptionKind.API + OptionKind.VIEWER + OptionKind.PREFERENCE
-  },
   enableXfa: {
     value: true,
     kind: OptionKind.API + OptionKind.PREFERENCE
@@ -1301,7 +1294,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '20.5.0';
+const ngxExtendedPdfViewerVersion = '20.5.1';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -1488,7 +1481,6 @@ class BasePreferences {
     disableFontFace: false,
     disableRange: false,
     disableStream: false,
-    enableHWA: false,
     enableXfa: true,
     viewerCssTheme: 0
   });
@@ -3693,6 +3685,13 @@ function download(blobUrl, filename) {
 }
 class DownloadManager {
   #openBlobUrls = new WeakMap();
+  downloadUrl(url, filename, _options) {
+    if (!createValidAbsoluteUrl(url, "http://example.com")) {
+      globalThis.ngxConsole.error(`downloadUrl - not a valid URL: ${url}`);
+      return;
+    }
+    download(url + "#pdfjs.action=download", filename);
+  }
   downloadData(data, filename, contentType) {
     const blobUrl = URL.createObjectURL(new Blob([data], {
       type: contentType
@@ -3722,19 +3721,8 @@ class DownloadManager {
     this.downloadData(data, filename, contentType);
     return false;
   }
-  download(data, url, filename, _options) {
-    let blobUrl;
-    if (data) {
-      blobUrl = URL.createObjectURL(new Blob([data], {
-        type: "application/pdf"
-      }));
-    } else {
-      if (!createValidAbsoluteUrl(url, "http://example.com")) {
-        console.error(`download - not a valid URL: ${url}`);
-        return;
-      }
-      blobUrl = url + "#pdfjs.action=download";
-    }
+  download(blob, url, filename, _options) {
+    const blobUrl = URL.createObjectURL(blob);
     download(blobUrl, filename);
   }
 }
@@ -9036,14 +9024,21 @@ class TempImageFactory {
     const tempCanvas = this.#tempCanvas ||= document.createElement("canvas");
     tempCanvas.width = width;
     tempCanvas.height = height;
-    const ctx = tempCanvas.getContext("2d", {
+    const options1 = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+      willReadFrequently: true,
       alpha: false
-    });
+    } : {
+      alpha: false
+    };
+    const options2 = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+      willReadFrequently: true
+    } : undefined;
+    const ctx = tempCanvas.getContext("2d", options1);
     ctx.save();
     ctx.fillStyle = "rgb(255, 255, 255)";
     ctx.fillRect(0, 0, width, height);
     ctx.restore();
-    return [tempCanvas, tempCanvas.getContext("2d")];
+    return [tempCanvas, tempCanvas.getContext("2d", options2)];
   }
   static destroyCanvas() {
     const tempCanvas = this.#tempCanvas;
@@ -9063,8 +9058,7 @@ class PDFThumbnailView {
     optionalContentConfigPromise,
     linkService,
     renderingQueue,
-    pageColors,
-    enableHWA
+    pageColors
   }) {
     this.id = id;
     this.renderingId = "thumbnail" + id;
@@ -9075,7 +9069,6 @@ class PDFThumbnailView {
     this.pdfPageRotate = defaultViewport.rotation;
     this._optionalContentConfigPromise = optionalContentConfigPromise || null;
     this.pageColors = pageColors || null;
-    this.enableHWA = enableHWA || false;
     this.eventBus = eventBus;
     this.linkService = linkService;
     this.renderingQueue = renderingQueue;
@@ -9167,12 +9160,15 @@ class PDFThumbnailView {
     }
     this.resume = null;
   }
-  #getPageDrawContext(upscaleFactor = 1, enableHWA = this.enableHWA) {
+  #getPageDrawContext(upscaleFactor = 1) {
     const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d", {
-      alpha: false,
-      willReadFrequently: !enableHWA
-    });
+    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+      willReadFrequently: true,
+      alpha: false
+    } : {
+      alpha: false
+    };
+    const ctx = canvas.getContext("2d", options);
     const outputScale = new OutputScale();
     canvas.width = upscaleFactor * this.canvasWidth * outputScale.sx | 0;
     canvas.height = upscaleFactor * this.canvasHeight * outputScale.sy | 0;
@@ -9291,7 +9287,7 @@ class PDFThumbnailView {
     const {
       ctx,
       canvas
-    } = this.#getPageDrawContext(1, true);
+    } = this.#getPageDrawContext();
     if (img.width <= 2 * canvas.width) {
       ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
       return canvas;
@@ -9338,17 +9334,14 @@ class PDFThumbnailViewer {
     eventBus,
     linkService,
     renderingQueue,
-    pageColors,
-    abortSignal,
-    enableHWA
+    pageColors
   }) {
     this.container = container;
     this.eventBus = eventBus;
     this.linkService = linkService;
     this.renderingQueue = renderingQueue;
     this.pageColors = pageColors || null;
-    this.enableHWA = enableHWA || false;
-    this.scroll = watchScroll(this.container, this.#scrollUpdated.bind(this), abortSignal);
+    this.scroll = watchScroll(this.container, this.#scrollUpdated.bind(this));
     this.#resetView();
   }
   #scrollUpdated() {
@@ -9475,8 +9468,7 @@ class PDFThumbnailViewer {
           linkService: this.linkService,
           renderingQueue: this.renderingQueue,
           pageColors: this.pageColors,
-          eventBus: this.eventBus,
-          enableHWA: this.enableHWA
+          eventBus: this.eventBus
         });
         this._thumbnails.push(thumbnail);
       }
@@ -12432,6 +12424,13 @@ class TextLayerBuilder {
     this.div.tabIndex = 0;
     this.div.className = "textLayer";
   }
+  #finishRendering() {
+    this.#renderingDone = true;
+    const endOfContent = document.createElement("div");
+    endOfContent.className = "endOfContent";
+    this.div.append(endOfContent);
+    this.#bindMouse(endOfContent);
+  }
   async render(viewport, textContentParams = null) {
     if (this.#renderingDone && this.#textLayer) {
       this.#textLayer.update({
@@ -12457,11 +12456,7 @@ class TextLayerBuilder {
     this.highlighter?.setTextMapping(textDivs, textContentItemsStr);
     this.accessibilityManager?.setTextMapping(textDivs);
     await this.#textLayer.render();
-    this.#renderingDone = true;
-    const endOfContent = document.createElement("div");
-    endOfContent.className = "endOfContent";
-    this.div.append(endOfContent);
-    this.#bindMouse(endOfContent);
+    this.#finishRendering();
     this.#onAppend?.(this.div);
     this.highlighter?.enable();
     this.accessibilityManager?.enable();
@@ -12599,7 +12594,6 @@ const DEFAULT_LAYER_PROPERTIES = null;
 const LAYERS_ORDER = new Map([["canvasWrapper", 0], ["textLayer", 1], ["annotationLayer", 2], ["annotationEditorLayer", 3], ["xfaLayer", 3]]);
 class PDFPageView {
   #annotationMode = AnnotationMode.ENABLE_FORMS;
-  #enableHWA = false;
   #hasRestrictedScaling = false;
   #layerProperties = null;
   #loadingId = null;
@@ -12632,7 +12626,6 @@ class PDFPageView {
     this.imageResourcesPath = options.imageResourcesPath || "";
     this.maxCanvasPixels = options.maxCanvasPixels ?? AppOptions.get("maxCanvasPixels");
     this.pageColors = options.pageColors || null;
-    this.#enableHWA = options.enableHWA || false;
     this.eventBus = options.eventBus;
     this.renderingQueue = options.renderingQueue;
     this.l10n = options.l10n;
@@ -13242,10 +13235,13 @@ class PDFPageView {
     };
     canvasWrapper.append(canvas);
     this.canvas = canvas;
-    const ctx = canvas.getContext("2d", {
-      alpha: false,
-      willReadFrequently: !this.#enableHWA
-    });
+    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
+      willReadFrequently: true,
+      alpha: false
+    } : {
+      alpha: false
+    };
+    const ctx = canvas.getContext("2d", options);
     const outputScale = this.outputScale = new OutputScale();
     if (this.maxCanvasPixels === 0) {
       const invScale = 1 / this.scale;
@@ -13414,8 +13410,8 @@ class PDFPageView {
 
 const DEFAULT_CACHE_SIZE = 10;
 const PagesCountLimit = {
-  FORCE_SCROLL_MODE_PAGE: 10000,
-  FORCE_LAZY_PAGE_INIT: 5000,
+  FORCE_SCROLL_MODE_PAGE: 15000,
+  FORCE_LAZY_PAGE_INIT: 7500,
   PAUSE_EAGER_PAGE_INIT: 250
 };
 function isValidAnnotationEditorMode(mode) {
@@ -13477,7 +13473,6 @@ class PDFViewer {
   #annotationEditorUIManager = null;
   #annotationMode = AnnotationMode.ENABLE_FORMS;
   #containerTopLeft = null;
-  #enableHWA = false;
   #enableHighlightFloatingButton = false;
   #enablePermissions = false;
   #eventAbortController = null;
@@ -13493,7 +13488,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = "4.4.566";
+    const viewerVersion = "4.3.659";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -13530,7 +13525,6 @@ class PDFViewer {
     this.#enablePermissions = options.enablePermissions || false;
     this.pageColors = options.pageColors || null;
     this.#mlManager = options.mlManager || null;
-    this.#enableHWA = options.enableHWA || false;
     this.defaultRenderingQueue = !options.renderingQueue;
     if (this.defaultRenderingQueue) {
       this.renderingQueue = new PDFRenderingQueue();
@@ -13538,16 +13532,7 @@ class PDFViewer {
     } else {
       this.renderingQueue = options.renderingQueue;
     }
-    const {
-      abortSignal
-    } = options;
-    abortSignal?.addEventListener("abort", () => {
-      this.#resizeObserver.disconnect();
-      this.#resizeObserver = null;
-    }, {
-      once: true
-    });
-    this.scroll = watchScroll(this.container, this._scrollUpdate.bind(this), abortSignal);
+    this.scroll = watchScroll(this.container, this._scrollUpdate.bind(this));
     this.presentationModeState = PresentationModeState.UNKNOWN;
     this._resetView();
     if (this.removePageBorders) {
@@ -13957,14 +13942,10 @@ class PDFViewer {
         return;
       }
       this.#getAllTextInProgress = true;
-      const {
-        classList
-      } = this.viewer;
-      classList.add("copyAll");
-      const ac = new AbortController();
-      window.addEventListener("keydown", ev => this.#interruptCopyCondition = ev.key === "Escape", {
-        signal: ac.signal
-      });
+      const savedCursor = this.container.style.cursor;
+      this.container.style.cursor = "wait";
+      const interruptCopy = ev => this.#interruptCopyCondition = ev.key === "Escape";
+      window.addEventListener("keydown", interruptCopy);
       this.getAllText().then(async text => {
         if (text !== null) {
           await navigator.clipboard.writeText(text);
@@ -13974,8 +13955,8 @@ class PDFViewer {
       }).finally(() => {
         this.#getAllTextInProgress = false;
         this.#interruptCopyCondition = false;
-        ac.abort();
-        classList.remove("copyAll");
+        window.removeEventListener("keydown", interruptCopy);
+        this.container.style.cursor = savedCursor;
       });
       event.preventDefault();
       event.stopPropagation();
@@ -14108,8 +14089,7 @@ class PDFViewer {
           maxCanvasPixels: this.maxCanvasPixels,
           pageColors,
           l10n: this.l10n,
-          layerProperties: this._layerProperties,
-          enableHWA: this.#enableHWA
+          layerProperties: this._layerProperties
         });
         this._pages.push(pageView);
       }
@@ -15913,7 +15893,6 @@ const app_PDFViewerApplication = {
   _downloadUrl: "",
   _eventBusAbortController: null,
   _windowAbortController: null,
-  _globalAbortController: new AbortController(),
   documentInfo: null,
   metadata: null,
   _contentDispositionFilename: null,
@@ -16090,7 +16069,6 @@ const app_PDFViewerApplication = {
       foreground: AppOptions.get("pageColorsForeground")
     } : null;
     const altTextManager = appConfig.altTextDialog ? new AltTextManager(appConfig.altTextDialog, container, this.overlayManager, eventBus) : null;
-    const enableHWA = AppOptions.get("enableHWA");
     const pdfViewer = new PDFViewer({
       container,
       viewer,
@@ -16114,9 +16092,7 @@ const app_PDFViewerApplication = {
       pageViewMode: AppOptions.get("pageViewMode"),
       enablePermissions: AppOptions.get("enablePermissions"),
       pageColors,
-      mlManager: this.mlManager,
-      abortSignal: this._globalAbortController.signal,
-      enableHWA
+      mlManager: this.mlManager
     });
     this.pdfViewer = pdfViewer;
     pdfRenderingQueue.setViewer(pdfViewer);
@@ -16128,9 +16104,7 @@ const app_PDFViewerApplication = {
         eventBus,
         renderingQueue: pdfRenderingQueue,
         linkService: pdfLinkService,
-        pageColors,
-        abortSignal: this._globalAbortController.signal,
-        enableHWA
+        pageColors
       });
       pdfRenderingQueue.setThumbnailViewer(this.pdfThumbnailViewer);
     }
@@ -16246,6 +16220,7 @@ const app_PDFViewerApplication = {
     validateFileURL(file);
     const fileInput = this._openFileInput = document.createElement("input");
     fileInput.id = "fileInput";
+    fileInput.className = "ngx-extended-pdf-viewer-file-input";
     fileInput.hidden = true;
     fileInput.type = "file";
     fileInput.value = null;
@@ -16268,21 +16243,15 @@ const app_PDFViewerApplication = {
         evt.preventDefault();
         evt.dataTransfer.dropEffect = evt.dataTransfer.effectAllowed === "copy" ? "copy" : "move";
       }
-      for (const item of evt.dataTransfer.items) {
-        if (item.type === "application/pdf") {
-          evt.dataTransfer.dropEffect = evt.dataTransfer.effectAllowed === "copy" ? "copy" : "move";
-          evt.preventDefault();
-          evt.stopPropagation();
-          return;
-        }
-      }
     });
     appConfig.mainContainer.addEventListener("drop", function (evt) {
-      if (evt.dataTransfer.files?.[0].type !== "application/pdf") {
+      evt.preventDefault();
+      const {
+        files
+      } = evt.dataTransfer;
+      if (!files || files.length === 0) {
         return;
       }
-      evt.preventDefault();
-      evt.stopPropagation();
       eventBus.dispatch("fileinputchange", {
         source: this,
         fileInput: evt.dataTransfer,
@@ -16550,12 +16519,18 @@ const app_PDFViewerApplication = {
     throw new Error("PDF document not downloaded.");
   },
   async download(options = {}) {
-    let data;
+    const url = this._downloadUrl,
+      filename = this._docFilename;
     try {
       this._ensureDownloadComplete();
-      data = await this.pdfDocument.getData();
-    } catch {}
-    this.downloadManager.download(data, this._downloadUrl, this._docFilename, options);
+      const data = await this.pdfDocument.getData();
+      const blob = new Blob([data], {
+        type: "application/pdf"
+      });
+      await this.downloadManager.download(blob, url, filename, options);
+    } catch {
+      await this.downloadManager.downloadUrl(url, filename, options);
+    }
   },
   async save(options = {}) {
     if (this._saveInProgress) {
@@ -16563,10 +16538,15 @@ const app_PDFViewerApplication = {
     }
     this._saveInProgress = true;
     await this.pdfScriptingManager.dispatchWillSave();
+    const url = this._downloadUrl,
+      filename = this._docFilename;
     try {
       this._ensureDownloadComplete();
       const data = await this.pdfDocument.saveDocument();
-      this.downloadManager.download(data, this._downloadUrl, this._docFilename, options);
+      const blob = new Blob([data], {
+        type: "application/pdf"
+      });
+      await this.downloadManager.download(blob, url, filename, options);
     } catch (reason) {
       globalThis.ngxConsole.error(`Error when saving the document: ${reason.message}`);
       await this.download(options);
@@ -16584,13 +16564,12 @@ const app_PDFViewerApplication = {
       });
     }
   },
-  async downloadOrSave(options = {}) {
-    const {
-      classList
-    } = this.appConfig.appContainer;
-    classList.add("wait");
-    await (this.pdfDocument?.annotationStorage.size > 0 ? this.save(options) : this.download(options));
-    classList.remove("wait");
+  downloadOrSave(options = {}) {
+    if (this.pdfDocument?.annotationStorage.size > 0) {
+      this.save(options);
+    } else {
+      this.download(options);
+    }
   },
   async _exportWithAnnotations() {
     if (this._saveInProgress) {
@@ -17414,10 +17393,6 @@ const app_PDFViewerApplication = {
   unbindWindowEvents() {
     this._windowAbortController?.abort();
     this._windowAbortController = null;
-    if (AppOptions.get("isInAutomation")) {
-      this._globalAbortController?.abort();
-      this._globalAbortController = null;
-    }
   },
   _accumulateTicks(ticks, prop) {
     if (this[prop] > 0 && ticks < 0 || this[prop] < 0 && ticks > 0) {
@@ -18257,8 +18232,8 @@ function webViewerReportTelemetry({
 
 
 
-const pdfjsVersion = "4.4.566";
-const pdfjsBuild = "13ee2dbb7";
+const pdfjsVersion = "4.3.659";
+const pdfjsBuild = "ba0b24810";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
