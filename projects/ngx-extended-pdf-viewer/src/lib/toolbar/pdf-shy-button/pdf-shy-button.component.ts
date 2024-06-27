@@ -1,6 +1,7 @@
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, Renderer2, ViewChild, effect } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
+import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveCSSClass } from '../../responsive-visibility';
 import { PdfShyButtonService } from './pdf-shy-button-service';
 
@@ -47,6 +48,8 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input()
   public onlySecondaryMenu: boolean = false;
+
+  private PDFViewerApplication: IPDFViewerApplication | undefined;
 
   @ViewChild('buttonRef', { static: false }) buttonRef: ElementRef;
 
@@ -139,7 +142,22 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit {
     this._imageHtml = this.sanitizeHtml(value);
   }
 
-  constructor(private pdfShyButtonServiceService: PdfShyButtonService, private sanitizer: DomSanitizer, private renderer: Renderer2) {}
+  constructor(
+    private pdfShyButtonServiceService: PdfShyButtonService,
+    private sanitizer: DomSanitizer,
+    private renderer: Renderer2,
+    private notificationService: PDFNotificationService
+  ) {
+    console.log('PdfRotatePageComponent.constructor');
+    effect(() => {
+      this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
+      console.log('Setting PDFViewerApplication to ', this.PDFViewerApplication);
+      if (this.PDFViewerApplication) {
+      } else {
+        console.log('PdfRotatePageComponent.PDFViewerApplication is undefined');
+      }
+    });
+  }
 
   public ngAfterViewInit(): void {
     this.updateButtonImage();

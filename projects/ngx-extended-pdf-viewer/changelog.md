@@ -560,3 +560,4 @@
 - 20.5.0-alpha.4 #2364 now zooming via the +/- only triggers a single event; #2077 reduce the required version of RxJS to 6.0; #2364/#2329 solve weird bugs caused by running `ngOnDestroy()` and `ngOnInit()` simultaneously
 - 20.5.0 #2364 ensure that `ngxConsole` and `ngxConsoleFilter` can be used after destroying and re-creating `<ngx-extended-pdf-viewer>`; #2374 remove `webViewerLoad` from the global namespace and modify the process of loading and initializing so that switching between the demos also works on Safari (plus reduce the memory leak reported in #2329): #2387 stop the animation loop when destroying the `PageFlip` object
 - 20.5.1 #2389 remove the file input tag when destroying the component
+- 20.5.2 #2392 fix the rotate button and the hand tool / select mode button
