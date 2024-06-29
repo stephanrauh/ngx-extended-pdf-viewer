@@ -10992,7 +10992,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.4.675",
+    apiVersion: "4.4.676",
     data,
     password,
     disableAutoFetch,
@@ -12751,16 +12751,14 @@ class InternalRenderTask {
     }
   }
   _scheduleNext() {
-    window.ngxZone.runOutsideAngular(() => {
-      if (this._useRequestAnimationFrame) {
-        this.#rAF = window.requestAnimationFrame(() => {
-          this.#rAF = null;
-          this._nextBound().catch(this._cancelBound);
-        });
-      } else {
-        Promise.resolve().then(this._nextBound).catch(this._cancelBound);
-      }
-    });
+    if (this._useRequestAnimationFrame) {
+      this.#rAF = window.requestAnimationFrame(() => {
+        this.#rAF = null;
+        this._nextBound().catch(this._cancelBound);
+      });
+    } else {
+      Promise.resolve().then(this._nextBound).catch(this._cancelBound);
+    }
   }
   async _next() {
     if (this.cancelled) {
@@ -12777,8 +12775,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.4.675";
-const build = "b2e980c75";
+const version = "4.4.676";
+const build = "c5b4c6416";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -17266,7 +17264,7 @@ class HighlightEditor extends AnnotationEditor {
     this.color = params.color || HighlightEditor._defaultColor;
     this.#thickness = params.thickness || HighlightEditor._defaultThickness;
     this.#opacity = params.opacity || HighlightEditor._defaultOpacity;
-    this.#boxes = params.boxes || [];
+    this.#boxes = params.boxes || null;
     this.#methodOfCreation = params.methodOfCreation || "";
     this.#text = params.text || "";
     this._isDraggable = false;
@@ -19962,8 +19960,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.4.675";
-const pdfjsBuild = "b2e980c75";
+const pdfjsVersion = "4.4.676";
+const pdfjsBuild = "c5b4c6416";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;

@@ -10837,7 +10837,7 @@ function getDocument(src) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.3.659",
+    apiVersion: "4.3.660",
     data,
     password,
     disableAutoFetch,
@@ -12594,15 +12594,13 @@ class InternalRenderTask {
     }
   }
   _scheduleNext() {
-    window.ngxZone.runOutsideAngular(() => {
-      if (this._useRequestAnimationFrame) {
-        window.requestAnimationFrame(() => {
-          this._nextBound().catch(this._cancelBound);
-        });
-      } else {
-        Promise.resolve().then(this._nextBound).catch(this._cancelBound);
-      }
-    });
+    if (this._useRequestAnimationFrame) {
+      window.requestAnimationFrame(() => {
+        this._nextBound().catch(this._cancelBound);
+      });
+    } else {
+      Promise.resolve().then(this._nextBound).catch(this._cancelBound);
+    }
   }
   async _next() {
     if (this.cancelled) {
@@ -12619,8 +12617,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.3.659";
-const build = "ba0b24810";
+const version = "4.3.660";
+const build = "9be2e97ea";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -19713,8 +19711,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.3.659";
-const pdfjsBuild = "ba0b24810";
+const pdfjsVersion = "4.3.660";
+const pdfjsBuild = "9be2e97ea";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;

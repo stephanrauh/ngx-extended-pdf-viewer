@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
   "version": 1,
-  "serialNumber": "urn:uuid:d974c8f7-4e20-4654-8774-bd393148c0db",
+  "serialNumber": "urn:uuid:a09889da-5491-4cbf-8b91-85e7b1789f7a",
   "metadata": {
-    "timestamp": "2024-06-28T20:23:30.704Z",
+    "timestamp": "2024-06-29T21:11:27.990Z",
     "tools": [
       {
         "name": "npm",
@@ -10724,8 +10724,8 @@
     {
       "type": "library",
       "name": "caniuse-lite",
-      "version": "1.0.30001637",
-      "bom-ref": "caniuse-lite@1.0.30001637",
+      "version": "1.0.30001638",
+      "bom-ref": "caniuse-lite@1.0.30001638",
       "author": "Ben Briggs",
       "description": "A smaller version of caniuse-db, with only the essentials!",
       "licenses": [
@@ -10735,7 +10735,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/caniuse-lite@1.0.30001637",
+      "purl": "pkg:npm/caniuse-lite@1.0.30001638",
       "externalReferences": [
         {
           "url": "git+https://github.com/browserslist/caniuse-lite.git",
@@ -10753,12 +10753,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001637.tgz",
+          "url": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001638.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "d71d2a448d660f5a3d7beee6048ed7b731403f85eccdb1da556b0c8866d23cb61e90a4c917b2be14d93a02c5c7e2c52973eaabb08de95607f525d97fb8692e49"
+              "content": "e52b89509edc66784fa5e2c7687d1cfc73c09c01d9bd2e84956c872bd19221b54e40004bce8c22236a639a9bd9d5611b932cf8ea215de145e53874794aa81f31"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -11480,8 +11480,8 @@
         {
           "type": "library",
           "name": "yocto-queue",
-          "version": "1.0.0",
-          "bom-ref": "pkg-dir@7.0.0|yocto-queue@1.0.0",
+          "version": "1.1.0",
+          "bom-ref": "pkg-dir@7.0.0|yocto-queue@1.1.0",
           "author": "Sindre Sorhus",
           "description": "Tiny queue data structure",
           "licenses": [
@@ -11491,7 +11491,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/yocto-queue@1.0.0",
+          "purl": "pkg:npm/yocto-queue@1.1.0",
           "externalReferences": [
             {
               "url": "git+https://github.com/sindresorhus/yocto-queue.git",
@@ -11509,12 +11509,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/yocto-queue/-/yocto-queue-1.0.0.tgz",
+              "url": "https://registry.npmjs.org/yocto-queue/-/yocto-queue-1.1.0.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "f5b9d273f1c45b6b91cbaef073e4fc5306ae2ee3c9567dbc8dbf86b49635ea288a5b2be6609457553e146a6b0010641f3e8860af6ab84ead2c41b425c537e2d6"
+                  "content": "70ca239a59f09008085ea81afb6b17b21960aeb708d1010f2799f9f2912fb6e168e0f69e91fa26942b9d02b0c3ee18fc1e4b308e5d3fc787aee2af976b458581"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -12833,8 +12833,8 @@
     {
       "type": "library",
       "name": "electron-to-chromium",
-      "version": "1.4.812",
-      "bom-ref": "electron-to-chromium@1.4.812",
+      "version": "1.4.815",
+      "bom-ref": "electron-to-chromium@1.4.815",
       "author": "Kilian Valkhof",
       "description": "Provides a list of electron-to-chromium version mappings",
       "licenses": [
@@ -12844,7 +12844,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/electron-to-chromium@1.4.812",
+      "purl": "pkg:npm/electron-to-chromium@1.4.815",
       "externalReferences": [
         {
           "url": "git+https://github.com/kilian/electron-to-chromium.git",
@@ -12862,12 +12862,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.812.tgz",
+          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.815.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "ecbf1f0b6132fdbe9278f0c5291db31c0cb899b769d7fdfc624e53b0044eeba5b7842e4a11a78a30c1e8c70b6e1fe8dcbb60182d29fd417d388bde6de859751e"
+              "content": "3afa534f622da4e5c92fb2067186a44631c2b7c2f91abacdff01c242c441e0f41ad57f5f7be5fda1e9f6e3998821deecd78c6f02b08649322aeb8e323d428a2e"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -36439,8 +36439,8 @@
         {
           "type": "library",
           "name": "lru-cache",
-          "version": "10.2.2",
-          "bom-ref": "hosted-git-info@7.0.2|lru-cache@10.2.2",
+          "version": "10.3.0",
+          "bom-ref": "hosted-git-info@7.0.2|lru-cache@10.3.0",
           "author": "Isaac Z. Schlueter",
           "description": "A cache object that deletes the least-recently-used items.",
           "licenses": [
@@ -36450,7 +36450,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/lru-cache@10.2.2",
+          "purl": "pkg:npm/lru-cache@10.3.0",
           "externalReferences": [
             {
               "url": "git://github.com/isaacs/node-lru-cache.git",
@@ -36468,12 +36468,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/lru-cache/-/lru-cache-10.2.2.tgz",
+              "url": "https://registry.npmjs.org/lru-cache/-/lru-cache-10.3.0.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "f61a77569dbf845414888c0aa3c5c2785567ae0f0f9374d834f211eed2400ca8b961f705eef11a2bb6af1474e54b2de438a61a25069a95f128e98b9775c78139"
+                  "content": "090975f49fe0f876e36efe18de614d3571442ffe6dfca0a0f0f382b94a9de2b30a8c61be8f5c9b111f37871579f332fe7452353d392ddc634548746df9df2a11"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -36874,8 +36874,8 @@
         {
           "type": "library",
           "name": "lru-cache",
-          "version": "10.2.2",
-          "bom-ref": "@npmcli/git@5.0.7|lru-cache@10.2.2",
+          "version": "10.3.0",
+          "bom-ref": "@npmcli/git@5.0.7|lru-cache@10.3.0",
           "author": "Isaac Z. Schlueter",
           "description": "A cache object that deletes the least-recently-used items.",
           "licenses": [
@@ -36885,7 +36885,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/lru-cache@10.2.2",
+          "purl": "pkg:npm/lru-cache@10.3.0",
           "externalReferences": [
             {
               "url": "git://github.com/isaacs/node-lru-cache.git",
@@ -36903,12 +36903,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/lru-cache/-/lru-cache-10.2.2.tgz",
+              "url": "https://registry.npmjs.org/lru-cache/-/lru-cache-10.3.0.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "f61a77569dbf845414888c0aa3c5c2785567ae0f0f9374d834f211eed2400ca8b961f705eef11a2bb6af1474e54b2de438a61a25069a95f128e98b9775c78139"
+                  "content": "090975f49fe0f876e36efe18de614d3571442ffe6dfca0a0f0f382b94a9de2b30a8c61be8f5c9b111f37871579f332fe7452353d392ddc634548746df9df2a11"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -38347,8 +38347,8 @@
         {
           "type": "library",
           "name": "lru-cache",
-          "version": "10.2.2",
-          "bom-ref": "path-scurry@1.11.1|lru-cache@10.2.2",
+          "version": "10.3.0",
+          "bom-ref": "path-scurry@1.11.1|lru-cache@10.3.0",
           "author": "Isaac Z. Schlueter",
           "description": "A cache object that deletes the least-recently-used items.",
           "licenses": [
@@ -38358,7 +38358,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/lru-cache@10.2.2",
+          "purl": "pkg:npm/lru-cache@10.3.0",
           "externalReferences": [
             {
               "url": "git://github.com/isaacs/node-lru-cache.git",
@@ -38376,12 +38376,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/lru-cache/-/lru-cache-10.2.2.tgz",
+              "url": "https://registry.npmjs.org/lru-cache/-/lru-cache-10.3.0.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "f61a77569dbf845414888c0aa3c5c2785567ae0f0f9374d834f211eed2400ca8b961f705eef11a2bb6af1474e54b2de438a61a25069a95f128e98b9775c78139"
+                  "content": "090975f49fe0f876e36efe18de614d3571442ffe6dfca0a0f0f382b94a9de2b30a8c61be8f5c9b111f37871579f332fe7452353d392ddc634548746df9df2a11"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -39599,8 +39599,8 @@
         {
           "type": "library",
           "name": "lru-cache",
-          "version": "10.2.2",
-          "bom-ref": "cacache@18.0.3|lru-cache@10.2.2",
+          "version": "10.3.0",
+          "bom-ref": "cacache@18.0.3|lru-cache@10.3.0",
           "author": "Isaac Z. Schlueter",
           "description": "A cache object that deletes the least-recently-used items.",
           "licenses": [
@@ -39610,7 +39610,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/lru-cache@10.2.2",
+          "purl": "pkg:npm/lru-cache@10.3.0",
           "externalReferences": [
             {
               "url": "git://github.com/isaacs/node-lru-cache.git",
@@ -39628,12 +39628,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/lru-cache/-/lru-cache-10.2.2.tgz",
+              "url": "https://registry.npmjs.org/lru-cache/-/lru-cache-10.3.0.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "f61a77569dbf845414888c0aa3c5c2785567ae0f0f9374d834f211eed2400ca8b961f705eef11a2bb6af1474e54b2de438a61a25069a95f128e98b9775c78139"
+                  "content": "090975f49fe0f876e36efe18de614d3571442ffe6dfca0a0f0f382b94a9de2b30a8c61be8f5c9b111f37871579f332fe7452353d392ddc634548746df9df2a11"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -40201,8 +40201,8 @@
         {
           "type": "library",
           "name": "lru-cache",
-          "version": "10.2.2",
-          "bom-ref": "@npmcli/agent@2.2.2|lru-cache@10.2.2",
+          "version": "10.3.0",
+          "bom-ref": "@npmcli/agent@2.2.2|lru-cache@10.3.0",
           "author": "Isaac Z. Schlueter",
           "description": "A cache object that deletes the least-recently-used items.",
           "licenses": [
@@ -40212,7 +40212,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/lru-cache@10.2.2",
+          "purl": "pkg:npm/lru-cache@10.3.0",
           "externalReferences": [
             {
               "url": "git://github.com/isaacs/node-lru-cache.git",
@@ -40230,12 +40230,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/lru-cache/-/lru-cache-10.2.2.tgz",
+              "url": "https://registry.npmjs.org/lru-cache/-/lru-cache-10.3.0.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "f61a77569dbf845414888c0aa3c5c2785567ae0f0f9374d834f211eed2400ca8b961f705eef11a2bb6af1474e54b2de438a61a25069a95f128e98b9775c78139"
+                  "content": "090975f49fe0f876e36efe18de614d3571442ffe6dfca0a0f0f382b94a9de2b30a8c61be8f5c9b111f37871579f332fe7452353d392ddc634548746df9df2a11"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -40257,8 +40257,8 @@
     {
       "type": "library",
       "name": "socks-proxy-agent",
-      "version": "8.0.3",
-      "bom-ref": "socks-proxy-agent@8.0.3",
+      "version": "8.0.4",
+      "bom-ref": "socks-proxy-agent@8.0.4",
       "author": "Nathan Rajlich",
       "description": "A SOCKS proxy `http.Agent` implementation for HTTP and HTTPS",
       "licenses": [
@@ -40268,7 +40268,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/socks-proxy-agent@8.0.3#packages/socks-proxy-agent",
+      "purl": "pkg:npm/socks-proxy-agent@8.0.4#packages/socks-proxy-agent",
       "externalReferences": [
         {
           "url": "git+https://github.com/TooTallNate/proxy-agents.git#packages/socks-proxy-agent",
@@ -40286,12 +40286,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/socks-proxy-agent/-/socks-proxy-agent-8.0.3.tgz",
+          "url": "https://registry.npmjs.org/socks-proxy-agent/-/socks-proxy-agent-8.0.4.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "54d7a04d92a1b86ab9bd20fa5cd2a56ea5a1cadff8d02828130f17c43e9d8679bc26af4811ade721ae07c2733c5cea94d02741d01c16557bacaa21577c7077f8"
+              "content": "18d02afde83c51dab6c7478d88592bf60460e5b03b3d71166a041d7915f870f486f97ffc577f2feb7ee08a6f5b8c5a6d324d505ac093af4b6dac91225db36747"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -66497,7 +66497,7 @@
       "type": "library",
       "name": "string-width",
       "version": "4.2.3",
-      "bom-ref": "BomRef.5plsvfvgbno.u0k7of9gc28",
+      "bom-ref": "BomRef.6e6ugeoucjo.16ndmiljsig",
       "author": "Sindre Sorhus",
       "description": "Get the visual width of a string - the number of columns required to display it",
       "licenses": [
@@ -66605,7 +66605,7 @@
       "type": "library",
       "name": "strip-ansi",
       "version": "6.0.1",
-      "bom-ref": "BomRef.tibmkpd9dno.feqvpjglp7g",
+      "bom-ref": "BomRef.sbg6rcc6gug.rrdacqp8p88",
       "author": "Sindre Sorhus",
       "description": "Strip ANSI escape codes from a string",
       "licenses": [
@@ -70225,8 +70225,8 @@
     {
       "ref": "browserslist@4.23.1",
       "dependsOn": [
-        "caniuse-lite@1.0.30001637",
-        "electron-to-chromium@1.4.812",
+        "caniuse-lite@1.0.30001638",
+        "electron-to-chromium@1.4.815",
         "node-releases@2.0.14",
         "update-browserslist-db@1.0.16"
       ]
@@ -71366,7 +71366,7 @@
       "ref": "autoprefixer@10.4.18",
       "dependsOn": [
         "browserslist@4.23.1",
-        "caniuse-lite@1.0.30001637",
+        "caniuse-lite@1.0.30001638",
         "fraction.js@4.3.7",
         "normalize-range@0.1.2",
         "picocolors@1.0.1",
@@ -71375,7 +71375,7 @@
       ]
     },
     {
-      "ref": "caniuse-lite@1.0.30001637"
+      "ref": "caniuse-lite@1.0.30001638"
     },
     {
       "ref": "fraction.js@4.3.7"
@@ -71444,11 +71444,11 @@
     {
       "ref": "pkg-dir@7.0.0|p-limit@4.0.0",
       "dependsOn": [
-        "pkg-dir@7.0.0|yocto-queue@1.0.0"
+        "pkg-dir@7.0.0|yocto-queue@1.1.0"
       ]
     },
     {
-      "ref": "pkg-dir@7.0.0|yocto-queue@1.0.0"
+      "ref": "pkg-dir@7.0.0|yocto-queue@1.1.0"
     },
     {
       "ref": "pkg-dir@7.0.0|path-exists@5.0.0"
@@ -71587,7 +71587,7 @@
       ]
     },
     {
-      "ref": "electron-to-chromium@1.4.812"
+      "ref": "electron-to-chromium@1.4.815"
     },
     {
       "ref": "node-releases@2.0.14"
@@ -74000,11 +74000,11 @@
     {
       "ref": "hosted-git-info@7.0.2",
       "dependsOn": [
-        "hosted-git-info@7.0.2|lru-cache@10.2.2"
+        "hosted-git-info@7.0.2|lru-cache@10.3.0"
       ]
     },
     {
-      "ref": "hosted-git-info@7.0.2|lru-cache@10.2.2"
+      "ref": "hosted-git-info@7.0.2|lru-cache@10.3.0"
     },
     {
       "ref": "proc-log@3.0.0"
@@ -74057,7 +74057,7 @@
       "ref": "@npmcli/git@5.0.7",
       "dependsOn": [
         "@npmcli/promise-spawn@7.0.2",
-        "@npmcli/git@5.0.7|lru-cache@10.2.2",
+        "@npmcli/git@5.0.7|lru-cache@10.3.0",
         "npm-pick-manifest@9.0.0",
         "@npmcli/git@5.0.7|proc-log@4.2.0",
         "promise-inflight@1.0.1",
@@ -74067,7 +74067,7 @@
       ]
     },
     {
-      "ref": "@npmcli/git@5.0.7|lru-cache@10.2.2"
+      "ref": "@npmcli/git@5.0.7|lru-cache@10.3.0"
     },
     {
       "ref": "@npmcli/git@5.0.7|proc-log@4.2.0"
@@ -74208,12 +74208,12 @@
     {
       "ref": "path-scurry@1.11.1",
       "dependsOn": [
-        "path-scurry@1.11.1|lru-cache@10.2.2",
+        "path-scurry@1.11.1|lru-cache@10.3.0",
         "minipass@7.1.2"
       ]
     },
     {
-      "ref": "path-scurry@1.11.1|lru-cache@10.2.2"
+      "ref": "path-scurry@1.11.1|lru-cache@10.3.0"
     },
     {
       "ref": "json-parse-even-better-errors@3.0.2"
@@ -74340,7 +74340,7 @@
         "@npmcli/fs@3.1.1",
         "fs-minipass@3.0.3",
         "cacache@18.0.3|glob@10.4.2",
-        "cacache@18.0.3|lru-cache@10.2.2",
+        "cacache@18.0.3|lru-cache@10.3.0",
         "minipass-collect@2.0.1",
         "minipass-flush@1.0.5",
         "minipass-pipeline@1.2.4",
@@ -74375,7 +74375,7 @@
       ]
     },
     {
-      "ref": "cacache@18.0.3|lru-cache@10.2.2"
+      "ref": "cacache@18.0.3|lru-cache@10.3.0"
     },
     {
       "ref": "fs-minipass@3.0.3",
@@ -74432,8 +74432,8 @@
         "agent-base@7.1.1",
         "@npmcli/agent@2.2.2|http-proxy-agent@7.0.2",
         "https-proxy-agent@7.0.4",
-        "@npmcli/agent@2.2.2|lru-cache@10.2.2",
-        "socks-proxy-agent@8.0.3"
+        "@npmcli/agent@2.2.2|lru-cache@10.3.0",
+        "socks-proxy-agent@8.0.4"
       ]
     },
     {
@@ -74444,10 +74444,10 @@
       ]
     },
     {
-      "ref": "@npmcli/agent@2.2.2|lru-cache@10.2.2"
+      "ref": "@npmcli/agent@2.2.2|lru-cache@10.3.0"
     },
     {
-      "ref": "socks-proxy-agent@8.0.3",
+      "ref": "socks-proxy-agent@8.0.4",
       "dependsOn": [
         "agent-base@7.1.1",
         "debug@4.3.5",
@@ -77312,9 +77312,9 @@
     {
       "ref": "@isaacs/cliui@8.0.2",
       "dependsOn": [
-        "BomRef.5plsvfvgbno.u0k7of9gc28",
+        "BomRef.6e6ugeoucjo.16ndmiljsig",
         "@isaacs/cliui@8.0.2|string-width@5.1.2",
-        "BomRef.tibmkpd9dno.feqvpjglp7g",
+        "BomRef.sbg6rcc6gug.rrdacqp8p88",
         "@isaacs/cliui@8.0.2|strip-ansi@7.1.0",
         "wrap-ansi@7.0.0",
         "@isaacs/cliui@8.0.2|wrap-ansi@8.1.0"
@@ -77352,7 +77352,7 @@
       "ref": "@isaacs/cliui@8.0.2|ansi-styles@6.2.1"
     },
     {
-      "ref": "BomRef.5plsvfvgbno.u0k7of9gc28",
+      "ref": "BomRef.6e6ugeoucjo.16ndmiljsig",
       "dependsOn": [
         "emoji-regex@8.0.0",
         "is-fullwidth-code-point@3.0.0",
@@ -77363,7 +77363,7 @@
       "ref": "eastasianwidth@0.2.0"
     },
     {
-      "ref": "BomRef.tibmkpd9dno.feqvpjglp7g",
+      "ref": "BomRef.sbg6rcc6gug.rrdacqp8p88",
       "dependsOn": [
         "ansi-regex@5.0.1"
       ]
