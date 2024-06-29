@@ -192,6 +192,9 @@ function watchScroll(viewAreaElement, callback, abortSignal = undefined) {
     useCapture: true,
     signal: abortSignal
   });
+  abortSignal?.addEventListener("abort", () => window.cancelAnimationFrame(rAF), {
+    once: true
+  });
   return state;
 }
 function parseQueryString(query) {
@@ -269,9 +272,8 @@ function approximateFraction(x) {
   }
   return result;
 }
-function roundToDivide(x, div) {
-  const r = x % div;
-  return r === 0 ? x : Math.round(x - r + div);
+function floorToDivide(x, div) {
+  return x - x % div;
 }
 function getPageSizeInches({
   view,
@@ -764,7 +766,7 @@ const defaultOptions = {
     kind: OptionKind.API
   },
   enableHWA: {
-    value: false,
+    value: true,
     kind: OptionKind.API + OptionKind.VIEWER + OptionKind.PREFERENCE
   },
   enableXfa: {
@@ -1301,7 +1303,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '20.5.1';
+const ngxExtendedPdfViewerVersion = '20.5.3';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -1414,9 +1416,18 @@ class EventBus {
     }
   }
 }
-class AutomationEventBus extends EventBus {
+class FirefoxEventBus extends EventBus {
+  #externalServices;
+  #globalEventNames;
+  #isInAutomation;
+  constructor(globalEventNames, externalServices, isInAutomation) {
+    super();
+    this.#globalEventNames = globalEventNames;
+    this.#externalServices = externalServices;
+    this.#isInAutomation = isInAutomation;
+  }
   dispatch(eventName, data) {
-    throw new Error("Not implemented: AutomationEventBus.dispatch");
+    throw new Error("Not implemented: FirefoxEventBus.dispatch");
   }
 }
 
@@ -1441,6 +1452,10 @@ class BaseExternalServices {
     throw new Error("Not implemented: updateEditorStates");
   }
   async getNimbusExperimentData() {}
+  async getGlobalEventNames() {
+    return null;
+  }
+  dispatchGlobalEvent(_event) {}
 }
 
 ;// CONCATENATED MODULE: ./web/preferences.js
@@ -1488,7 +1503,7 @@ class BasePreferences {
     disableFontFace: false,
     disableRange: false,
     disableStream: false,
-    enableHWA: false,
+    enableHWA: true,
     enableXfa: true,
     viewerCssTheme: 0
   });
@@ -2902,6 +2917,7 @@ class DOMLocalization extends Localization {
 ;// CONCATENATED MODULE: ./web/l10n.js
 class L10n {
   #dir;
+  #elements = new Set();
   #lang;
   #l10n;
   constructor({
@@ -2936,10 +2952,18 @@ class L10n {
     return messages?.[0].value || fallback;
   }
   async translate(element) {
+    this.#elements.add(element);
     try {
       this.#l10n.connectRoot(element);
       await this.#l10n.translateRoots();
     } catch {}
+  }
+  async destroy() {
+    for (const element of this.#elements) {
+      this.#l10n.disconnectRoot(element);
+    }
+    this.#elements.clear();
+    this.#l10n.pauseObserving();
   }
   pause() {
     this.#l10n.pauseObserving();
@@ -3013,8 +3037,7 @@ class genericl10n_GenericL10n extends L10n {
       const bundle = await this.#createBundle(lang, baseURL, paths);
       if (bundle) {
         yield bundle;
-      }
-      if (lang === "en-us") {
+      } else if (lang === "en-us") {
         yield this.#createBundleFallback(lang);
       }
     }
@@ -5288,6 +5311,7 @@ class PDFFindController {
       source: this,
       state,
       previous,
+      entireWord: this.#state?.entireWord ?? null,
       matchesCount: this.#requestMatchesCount(),
       rawQuery: this.#state?.query ?? null
     });
@@ -13265,8 +13289,8 @@ class PDFPageView {
     }
     const sfx = approximateFraction(outputScale.sx);
     const sfy = approximateFraction(outputScale.sy);
-    width = roundToDivide(width * outputScale.sx, sfx[0]);
-    height = roundToDivide(height * outputScale.sy, sfy[0]);
+    width = floorToDivide(width * outputScale.sx, sfx[0]);
+    height = floorToDivide(height * outputScale.sy, sfy[0]);
     let divisor = 1;
     if (width >= 4096 || height >= 4096) {
       if (!!this.maxWidth || !canvasSize.test({
@@ -13286,13 +13310,13 @@ class PDFPageView {
         }
       }
     }
-    canvas.width = roundToDivide(viewport.width * outputScale.sx, sfx[0]);
-    canvas.height = roundToDivide(viewport.height * outputScale.sy, sfy[0]);
+    canvas.width = floorToDivide(viewport.width * outputScale.sx, sfx[0]);
+    canvas.height = floorToDivide(viewport.height * outputScale.sy, sfy[0]);
     const {
       style
     } = canvas;
-    style.width = roundToDivide(viewport.width, sfx[1]) + "px";
-    style.height = roundToDivide(viewport.height, sfy[1]) + "px";
+    style.width = floorToDivide(viewport.width, sfx[1]) + "px";
+    style.height = floorToDivide(viewport.height, sfy[1]) + "px";
     this.#viewportMap.set(canvas, viewport);
     const transform = outputScale.scaled ? [outputScale.sx, 0, 0, outputScale.sy, 0, 0] : null;
     const renderContext = {
@@ -13493,7 +13517,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = "4.4.567";
+    const viewerVersion = "4.4.675";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -15910,6 +15934,7 @@ const app_PDFViewerApplication = {
   isViewerEmbedded: window.parent !== window,
   url: "",
   baseUrl: "",
+  _allowedGlobalEventsPromise: null,
   _downloadUrl: "",
   _eventBusAbortController: null,
   _windowAbortController: null,
@@ -16055,7 +16080,8 @@ const app_PDFViewerApplication = {
       externalServices,
       l10n
     } = this;
-    const eventBus = AppOptions.get("isInAutomation") ? new AutomationEventBus() : new EventBus();
+    let eventBus;
+    eventBus = new EventBus();
     this.eventBus = eventBus;
     this.overlayManager = new OverlayManager();
     const pdfRenderingQueue = new PDFRenderingQueue();
@@ -16544,17 +16570,12 @@ const app_PDFViewerApplication = {
       });
     });
   },
-  _ensureDownloadComplete() {
-    if (this.pdfDocument && this.downloadComplete) {
-      return;
-    }
-    throw new Error("PDF document not downloaded.");
-  },
   async download(options = {}) {
     let data;
     try {
-      this._ensureDownloadComplete();
-      data = await this.pdfDocument.getData();
+      if (this.downloadComplete) {
+        data = await this.pdfDocument.getData();
+      }
     } catch {}
     this.downloadManager.download(data, this._downloadUrl, this._docFilename, options);
   },
@@ -16565,7 +16586,6 @@ const app_PDFViewerApplication = {
     this._saveInProgress = true;
     await this.pdfScriptingManager.dispatchWillSave();
     try {
-      this._ensureDownloadComplete();
       const data = await this.pdfDocument.saveDocument();
       this.downloadManager.download(data, this._downloadUrl, this._docFilename, options);
     } catch (reason) {
@@ -17415,10 +17435,14 @@ const app_PDFViewerApplication = {
   unbindWindowEvents() {
     this._windowAbortController?.abort();
     this._windowAbortController = null;
-    if (AppOptions.get("isInAutomation")) {
-      this._globalAbortController?.abort();
-      this._globalAbortController = null;
-    }
+  },
+  async testingClose() {
+    this.unbindEvents();
+    this.unbindWindowEvents();
+    this._globalAbortController?.abort();
+    this._globalAbortController = null;
+    this.findBar?.close();
+    await Promise.all([this.l10n?.destroy(), this.close()]);
   },
   _accumulateTicks(ticks, prop) {
     if (this[prop] > 0 && ticks < 0 || this[prop] < 0 && ticks > 0) {
@@ -17735,6 +17759,7 @@ function webViewerUpdateFindMatchesCount({
 function webViewerUpdateFindControlState({
   state,
   previous,
+  entireWord,
   matchesCount,
   rawQuery
 }) {
@@ -17742,6 +17767,7 @@ function webViewerUpdateFindControlState({
     app_PDFViewerApplication.externalServices.updateFindControlState({
       result: state,
       findPrevious: previous,
+      entireWord,
       matchesCount,
       rawQuery
     });
@@ -18258,8 +18284,8 @@ function webViewerReportTelemetry({
 
 
 
-const pdfjsVersion = "4.4.567";
-const pdfjsBuild = "2943abeef";
+const pdfjsVersion = "4.4.675";
+const pdfjsBuild = "b2e980c75";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
