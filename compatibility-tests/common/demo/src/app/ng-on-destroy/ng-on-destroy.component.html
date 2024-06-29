@@ -1,15 +1,12 @@
 <small>
-  Copyright hint: the PDF file has been published by <a href="https://de.linkedin.com/in/stephan-rauh-a6a398aa">Stephan
-    Rauh</a> on
+  Copyright hint: the PDF file has been published by <a href="https://de.linkedin.com/in/stephan-rauh-a6a398aa">Stephan Rauh</a> on
   <a href="https://www.beyondjava.net/page/beyondjava-conference">BeyondJava.net</a> under a
-  <a target="#" rel="license" href="https://creativecommons.org/licenses/by-nc-nd/3.0/de/">Creative Commons
-    Attribution-NonCommercial-NoDerivs 3.0 Germany License.<br /></a> </small>
+  <a target="#" rel="license" href="https://creativecommons.org/licenses/by-nc-nd/3.0/de/"
+    >Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Germany License.<br
+  /></a>
+</small>
 <button id="hide" (click)="hide()">hide</button>
 <button id="show" (click)="show()">show</button>
 <button id="toggle" (click)="toggle()">toggle quickly</button>
-<ngx-extended-pdf-viewer
-    *ngIf="visible"
-  [src]="'/assets/pdfs/Bootstrap-vs-Material-Design-vs-Prime-vs-Tailwind.pdf'"
-  [height]="'50vh'"
-  [minifiedJSLibraries]="false"
-  > </ngx-extended-pdf-viewer>
+<ngx-extended-pdf-viewer *ngIf="visible" [src]="'/assets/pdfs/Bootstrap-vs-Material-Design-vs-Prime-vs-Tailwind.pdf'" [height]="'50vh'">
+</ngx-extended-pdf-viewer>

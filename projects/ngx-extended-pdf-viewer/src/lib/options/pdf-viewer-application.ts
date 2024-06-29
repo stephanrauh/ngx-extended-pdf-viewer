@@ -1083,4 +1083,5 @@ export interface IPDFViewerApplication {
   unbindEvents(): void;
   unbindWindowEvents(): void;
   export(): Promise<Blob>;
+  printPdf(): void;
 }

@@ -1,60 +1,28 @@
 <section class="section">
-  <input
-    id="findbarVisible"
-    type="checkbox"
-    [(ngModel)]="findbarVisible"
-    (change)="onCheckboxClicked()"
-  />
+  <input id="findbarVisible" type="checkbox" [(ngModel)]="findbarVisible" (change)="onCheckboxClicked()" />
   <label for="findbarVisible">Is the findbar visible?</label>
 </section>
 <section class="section">
-  <input
-    id="searchtext"
-    class="margin"
-    [(ngModel)]="searchtext"
-    placeholder="search term"
-  />
+  <input id="searchtext" class="margin" [(ngModel)]="searchtext" placeholder="search term" />
   <small *ngIf="findState !== undefined"
     ><span class="margin-left-24px">{{ findStateText }}</span>
-    <span class="margin-left-24px" *ngIf="totalMatches && totalMatches > 0"
-      >Result {{ currentMatchNumber }} of {{ totalMatches }}
-    </span></small
+    <span class="margin-left-24px" *ngIf="totalMatches && totalMatches > 0">Result {{ currentMatchNumber }} of {{ totalMatches }} </span></small
   >
 </section>
 <section class="section">
-  <input
-    id="highlightAll"
-    type="checkbox"
-    [(ngModel)]="highlightAll"
-    (change)="onCheckboxClicked()"
-  />
+  <input id="highlightAll" type="checkbox" [(ngModel)]="highlightAll" (change)="onCheckboxClicked()" />
   <label for="highlight">Highlight all</label>
 </section>
 <section class="section">
-  <input
-    type="checkbox"
-    [(ngModel)]="matchCase"
-    (change)="onCheckboxClicked()"
-    id="matchCase"
-  />
+  <input type="checkbox" [(ngModel)]="matchCase" (change)="onCheckboxClicked()" id="matchCase" />
   <label for="matchCase"> match case</label>
 </section>
 <section class="section">
-  <input
-    type="checkbox"
-    [(ngModel)]="wholeWord"
-    (change)="onCheckboxClicked()"
-    id="wholeWord"
-  />
+  <input type="checkbox" [(ngModel)]="wholeWord" (change)="onCheckboxClicked()" id="wholeWord" />
   <label for="wholeWord"> whole word</label>
 </section>
 <section class="section">
-  <input
-    type="checkbox"
-    [(ngModel)]="matchDiacritics"
-    (change)="onCheckboxClicked()"
-    id="matchDiacritics"
-  />
+  <input type="checkbox" [(ngModel)]="matchDiacritics" (change)="onCheckboxClicked()" id="matchDiacritics" />
   <label for="matchDiacritics"> match diacritics</label>
   <small class="margin-left-24px">(try "licao" to find "lição")</small>
 </section>
@@ -65,21 +33,15 @@
 
 <section>
   <b>Info:</b>
-  Search type: {{ type }}
-  Direction: {{ direction }}
-  Total number of matching characters (nonsensical metric to test the matchesLength property): {{totalNumberOfMatchingCharacters}}
-
+  Search type: {{ type }} Direction: {{ direction }} Total number of matching characters (nonsensical metric to test the matchesLength property):
+  {{ totalNumberOfMatchingCharacters }}
 </section>
 
 <small
   >The example PDF has been published under a
-  <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/"
-    >Creative Commons (CC BY-NC-SA 3.0) license</a
-  >
+  <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons (CC BY-NC-SA 3.0) license</a>
   at
-  <a href="https://wisc.pb.unizin.org/portuguese/"
-    >https://wisc.pb.unizin.org/portuguese/</a
-  >.</small
+  <a href="https://wisc.pb.unizin.org/portuguese/">https://wisc.pb.unizin.org/portuguese/</a>.</small
 >
 <ngx-extended-pdf-viewer
   [src]="'/assets/pdfs/Portugues-para-principiantes-1538054164.pdf'"
@@ -90,7 +52,6 @@
   [handTool]="false"
   [showHandToolButton]="true"
   [page]="9"
-  [minifiedJSLibraries]="false"
   [(findbarVisible)]="findbarVisible"
 >
 </ngx-extended-pdf-viewer>

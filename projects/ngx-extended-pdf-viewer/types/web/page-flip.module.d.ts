@@ -555,7 +555,6 @@ declare class Render {
     safari: boolean;
     setting: any;
     app: any;
-    ngxZone: any;
     /**
      * Executed when requestAnimationFrame is called. Performs the current animation process and call drawFrame()
      *

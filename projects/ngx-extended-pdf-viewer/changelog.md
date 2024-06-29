@@ -561,3 +561,4 @@
 - 20.5.0 #2364 ensure that `ngxConsole` and `ngxConsoleFilter` can be used after destroying and re-creating `<ngx-extended-pdf-viewer>`; #2374 remove `webViewerLoad` from the global namespace and modify the process of loading and initializing so that switching between the demos also works on Safari (plus reduce the memory leak reported in #2329): #2387 stop the animation loop when destroying the `PageFlip` object
 - 20.5.1 #2389 remove the file input tag when destroying the component
 - 20.5.2 #2392 fix the rotate button and the hand tool / select mode button
+- 21.0.0 #2337 move the code needed for loading the JavaScript files to a service so multiple instances can use the JavaScript files without reloading them; move objects from `globalThis` to `PdfViewerApplication`; stop using `ngZone.runOutsideAngular()` to make it easier to use the viewer without zone.js

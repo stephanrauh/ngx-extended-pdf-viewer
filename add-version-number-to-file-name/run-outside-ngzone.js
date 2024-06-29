@@ -17,8 +17,6 @@ function addRunOutsideZone(folder = 'assets', file) {
       .replace(`define("pdfjs-dist/build/pdf",[],e)`, `(globalThis["pdfjs-dist/build/pdf"]=globalThis.pdfjsLib=e()||define("pdfjs-dist/build/pdf",[],e))`);
     // end of #1427
 
-    const start = 'window.ngxZone.runOutsideAngular(() => {\n';
-    const end = '\n});\n';
     fs.writeFileSync(f, start + code + end);
   }
 }
