@@ -150,7 +150,6 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit {
   ) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
-      console.log('Setting PDFViewerApplication to ', this.PDFViewerApplication);
       if (this.PDFViewerApplication) {
       } else {
         console.log('PdfRotatePageComponent.PDFViewerApplication is undefined');

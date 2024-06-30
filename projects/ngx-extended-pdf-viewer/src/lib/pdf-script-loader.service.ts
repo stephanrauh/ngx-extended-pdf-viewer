@@ -1,4 +1,4 @@
-import { Injectable, effect, signal } from '@angular/core';
+import { Injectable, OnDestroy, effect, signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import { getVersionSuffix, pdfDefaultOptions } from './options/pdf-default-options';
 import { IPDFViewerApplication } from './options/pdf-viewer-application';
@@ -8,7 +8,7 @@ import { PdfCspPolicyService } from './pdf-csp-policy.service';
 @Injectable({
   providedIn: 'root',
 })
-export class PDFScriptLoaderService {
+export class PDFScriptLoaderService implements OnDestroy {
   public forceUsingLegacyES5 = false;
 
   /** Use the minified (minifiedJSLibraries="true", which is the default) or the user-readable pdf.js library (minifiedJSLibraries="false") */
@@ -183,7 +183,7 @@ export class PDFScriptLoaderService {
     });
   }
 
-  public destroy() {
+  public ngOnDestroy() {
     this.shuttingDown = true;
     if (typeof window === 'undefined') {
       return; // fast escape for server side rendering

@@ -947,7 +947,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   public async ngOnInit() {
-    debugger;
     NgxConsole.init();
     if (isPlatformBrowser(this.platformId)) {
       this.addTranslationsUnlessProvidedByTheUser();
@@ -1817,7 +1816,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   public async ngOnDestroy(): Promise<void> {
-    debugger;
     this.notificationService.onPDFJSInitSignal.set(undefined);
     this.service.ngxExtendedPdfViewerInitialized = false;
     delete globalThis.ngxConsole;
