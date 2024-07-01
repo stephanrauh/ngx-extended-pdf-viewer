@@ -13,6 +13,7 @@ export class AnnotationEditorUIManager {
     static TRANSLATE_BIG: number;
     static get _keyboardManager(): any;
     constructor(container: any, viewer: any, altTextManager: any, eventBus: any, pdfDocument: any, pageColors: any, highlightColors: any, enableHighlightFloatingButton: any, mlManager: any);
+    _signal: AbortSignal;
     _eventBus: any;
     viewParameters: {
         realScale: number;
@@ -52,6 +53,12 @@ export class AnnotationEditorUIManager {
     focus(): void;
     addEditListeners(): void;
     removeEditListeners(): void;
+    dragOver(event: any): void;
+    /**
+     * Drop callback.
+     * @param {DragEvent} event
+     */
+    drop(event: DragEvent): void;
     /**
      * Copy callback.
      * @param {ClipboardEvent} event

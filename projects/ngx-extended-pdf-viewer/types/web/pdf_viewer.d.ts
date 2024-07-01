@@ -105,6 +105,11 @@ export type PDFViewerOptions = {
      * mode.
      */
     pageColors?: Object | undefined;
+    /**
+     * - Enables hardware acceleration for
+     * rendering. The default value is `false`.
+     */
+    enableHWA?: boolean | undefined;
 };
 export namespace PagesCountLimit {
     let FORCE_SCROLL_MODE_PAGE: number;
@@ -152,6 +157,8 @@ export namespace PagesCountLimit {
  * @property {Object} [pageColors] - Overwrites background and foreground colors
  *   with user defined ones in order to improve readability in high contrast
  *   mode.
+ * @property {boolean} [enableHWA] - Enables hardware acceleration for
+ *   rendering. The default value is `false`.
  */
 export class PDFPageViewBuffer {
     constructor(size: any);
@@ -201,6 +208,7 @@ export class PDFViewer {
         _eventHandler: (evt: any) => void;
     };
     presentationModeState: number;
+    setTextLayerMode(mode: any): void;
     get pagesCount(): number;
     getPageView(index: any): any;
     getCachedPageViews(): Set<any>;

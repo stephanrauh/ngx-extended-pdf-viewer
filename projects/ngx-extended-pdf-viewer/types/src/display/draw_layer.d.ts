@@ -5,7 +5,7 @@
  */
 export class DrawLayer {
     static get _svgFactory(): any;
-    static "__#26@#setBox"(element: any, { x, y, width, height }?: {
+    static "__#27@#setBox"(element: any, { x, y, width, height }?: {
         x?: number | undefined;
         y?: number | undefined;
         width?: number | undefined;

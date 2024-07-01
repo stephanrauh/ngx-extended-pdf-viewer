@@ -43,7 +43,7 @@ export type RenderEditorLayerOptions = {
  */
 export class AnnotationEditorLayer {
     static _initialized: boolean;
-    static "__#27@#editorTypes": Map<number, typeof FreeTextEditor | typeof HighlightEditor | typeof InkEditor | typeof StampEditor>;
+    static "__#28@#editorTypes": Map<number, typeof FreeTextEditor | typeof HighlightEditor | typeof InkEditor | typeof StampEditor>;
     /**
      * @param {AnnotationEditorLayerOptions} options
      */
@@ -132,6 +132,7 @@ export class AnnotationEditorLayer {
      * @returns {string}
      */
     getNextId(): string;
+    get _signal(): AbortSignal;
     canCreateNewEmptyEditor(): boolean | undefined;
     /**
      * Paste some content into a new editor.

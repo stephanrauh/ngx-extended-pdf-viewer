@@ -26,6 +26,7 @@ export interface IPDFRenderingQueue {
 }
 
 export interface IPDFViewer {
+  setTextLayerMode(textLayerMode: number): unknown;
   annotationEditorMode: any;
   currentPageLabel: string | undefined;
   currentPageNumber: number;

@@ -66,6 +66,7 @@ export function apiPageModeToSidebarView(mode: string): number;
  *  @param {number} x - Positive float number.
  *  @returns {Array} Estimated fraction: the first array item is a numerator,
  *                   the second one is a denominator.
+ *                   They are both natural numbers.
  */
 export function approximateFraction(x: number): any[];
 export const AutoPrintRegExp: RegExp;
@@ -100,6 +101,11 @@ export const DEFAULT_SCALE: 1;
 export const DEFAULT_SCALE_DELTA: 1.1;
 export const DEFAULT_SCALE_VALUE: "auto";
 export const docStyle: CSSStyleDeclaration | null;
+/**
+ * @param {number} x - A positive number to round to a multiple of `div`.
+ * @param {number} div - A natural number.
+ */
+export function floorToDivide(x: number, div: number): number;
 /**
  * Get the active or focused element in current DOM.
  *
@@ -220,7 +226,6 @@ export namespace RenderingStates {
     let PAUSED: number;
     let FINISHED: number;
 }
-export function roundToDivide(x: any, div: any): any;
 export const SCROLLBAR_PADDING: 40;
 /**
  * Scrolls specified element into view of its parent.
@@ -275,7 +280,7 @@ export const VERTICAL_PADDING: 5;
  * Helper function to start monitoring the scroll event and converting them into
  * PDF.js friendly one: with scroll debounce and scroll direction.
  */
-export function watchScroll(viewAreaElement: any, callback: any): {
+export function watchScroll(viewAreaElement: any, callback: any, abortSignal?: undefined): {
     right: boolean;
     down: boolean;
     lastX: any;

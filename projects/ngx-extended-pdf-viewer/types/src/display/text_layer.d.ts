@@ -36,16 +36,21 @@ export function renderTextLayer(...args: any[]): {
     textContentItemsStr: string[];
 } | undefined;
 export class TextLayer {
-    static "__#44@#ascentCache": Map<any, any>;
-    static "__#44@#canvasContexts": Map<any, any>;
-    static "__#44@#pendingTextLayers": Set<any>;
+    static "__#45@#ascentCache": Map<any, any>;
+    static "__#45@#canvasContexts": Map<any, any>;
+    static "__#45@#minFontSize": null;
+    static "__#45@#pendingTextLayers": Set<any>;
     /**
      * Clean-up global textLayer data.
      * @returns {undefined}
      */
     static cleanup(): undefined;
-    static "__#44@#getCtx"(lang?: null): any;
-    static "__#44@#getAscent"(fontFamily: any, lang: any): any;
+    static "__#45@#getCtx"(lang?: null): any;
+    /**
+     * Compute the minimum font size enforced by the browser.
+     */
+    static "__#45@#ensureMinFontSizeComputed"(): void;
+    static "__#45@#getAscent"(fontFamily: any, lang: any): any;
     /**
      * @param {TextLayerParameters} options
      */

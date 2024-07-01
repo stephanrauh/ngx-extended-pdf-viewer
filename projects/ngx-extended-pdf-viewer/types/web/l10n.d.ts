@@ -7,8 +7,8 @@ export const GenericL10n: null;
  * @implements {IL10n}
  */
 export class L10n implements IL10n {
-    static "__#58@#fixupLangCode"(langCode: any): any;
-    static "__#58@#isRTL"(lang: any): boolean;
+    static "__#60@#fixupLangCode"(langCode: any): any;
+    static "__#60@#isRTL"(lang: any): boolean;
     constructor({ lang, isRTL }: {
         lang: any;
         isRTL: any;
@@ -22,6 +22,8 @@ export class L10n implements IL10n {
     get(ids: any, args: null | undefined, fallback: any): Promise<any>;
     /** @inheritdoc */
     translate(element: any): Promise<void>;
+    /** @inheritdoc */
+    destroy(): Promise<void>;
     /** @inheritdoc */
     pause(): void;
     /** @inheritdoc */

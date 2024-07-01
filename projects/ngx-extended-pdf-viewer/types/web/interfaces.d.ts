@@ -6,12 +6,6 @@ export type RenderingStates = any;
  */
 export class IDownloadManager {
     /**
-     * @param {string} url
-     * @param {string} filename
-     * @param {Object} [options]
-     */
-    downloadUrl(url: string, filename: string, options?: Object | undefined): void;
-    /**
      * @param {Uint8Array} data
      * @param {string} filename
      * @param {string} [contentType]
@@ -25,12 +19,12 @@ export class IDownloadManager {
      */
     openOrDownloadData(data: Uint8Array, filename: string, dest?: string | null | undefined): boolean;
     /**
-     * @param {Blob} blob
+     * @param {Uint8Array} data
      * @param {string} url
      * @param {string} filename
      * @param {Object} [options]
      */
-    download(blob: Blob, url: string, filename: string, options?: Object | undefined): void;
+    download(data: Uint8Array, url: string, filename: string, options?: Object | undefined): void;
 }
 /**
  * @interface

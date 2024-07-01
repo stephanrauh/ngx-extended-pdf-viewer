@@ -15,12 +15,6 @@ export type WaitOnEventOrTimeoutParameters = {
     delay: number;
 };
 /**
- * NOTE: Only used to support various PDF viewer tests in `mozilla-central`.
- */
-export class AutomationEventBus extends EventBus {
-    dispatch(eventName: any, data: any): void;
-}
-/**
  * Simple event bus for an application. Listeners are attached using the `on`
  * and `off` methods. To raise an event, the `dispatch` method shall be used.
  */
@@ -51,6 +45,14 @@ export class EventBus {
      */
     _off(eventName: any, listener: any, options?: null): void;
     destroy(): void;
+    #private;
+}
+/**
+ * NOTE: Only used in the Firefox build-in pdf viewer.
+ */
+export class FirefoxEventBus extends EventBus {
+    constructor(globalEventNames: any, externalServices: any, isInAutomation: any);
+    dispatch(eventName: any, data: any): void;
     #private;
 }
 /**

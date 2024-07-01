@@ -20,7 +20,7 @@ export class HighlightEditor extends AnnotationEditor {
     /** @inheritdoc */
     static updateDefaultParams(type: any, value: any): void;
     static get defaultPropertiesToUpdate(): (number | null)[][];
-    static "__#23@#rotateBbox"({ x, y, width, height }: {
+    static "__#24@#rotateBbox"({ x, y, width, height }: {
         x: any;
         y: any;
         width: any;
@@ -36,8 +36,8 @@ export class HighlightEditor extends AnnotationEditor {
         x: any;
         y: any;
     }): void;
-    static "__#23@#highlightMove"(parent: any, event: any): void;
-    static "__#23@#endHighlight"(parent: any, event: any): void;
+    static "__#24@#highlightMove"(parent: any, event: any): void;
+    static "__#24@#endHighlight"(parent: any, event: any): void;
     /** @inheritdoc */
     static deserialize(data: any, parent: any, uiManager: any): AnnotationEditor | null;
     constructor(params: any);
@@ -76,7 +76,7 @@ export class HighlightEditor extends AnnotationEditor {
         color: number[];
         opacity: any;
         thickness: any;
-        quadPoints: any[] | null;
+        quadPoints: Float32Array | null;
         outlines: any;
         pageIndex: number;
         rect: any[];

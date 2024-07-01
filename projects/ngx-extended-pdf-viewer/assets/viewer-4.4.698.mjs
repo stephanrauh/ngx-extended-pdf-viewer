@@ -1301,7 +1301,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '21.0.0-alpha.0';
+const ngxExtendedPdfViewerVersion = '21.0.0-alpha.2';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -13509,7 +13509,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = "4.4.676";
+    const viewerVersion = "4.4.698";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -13582,6 +13582,9 @@ class PDFViewer {
     if (!options.l10n) {
       this.l10n.translate(this.container);
     }
+  }
+  setTextLayerMode(mode) {
+    this.#textLayerMode = mode;
   }
   get pageViewMode() {
     return this.#pageViewMode;
@@ -18274,8 +18277,8 @@ app_PDFViewerApplication.printPdf = printPdf;
 
 
 
-const pdfjsVersion = "4.4.676";
-const pdfjsBuild = "c5b4c6416";
+const pdfjsVersion = "4.4.698";
+const pdfjsBuild = "cb5241d6a";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,

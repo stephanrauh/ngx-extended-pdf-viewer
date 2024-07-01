@@ -1226,9 +1226,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   private activateTextlayerIfNecessary(options: any): void {
     if (this.textLayer === undefined) {
       if (!this.handTool) {
-        if (options) {
-          options.set('textLayerMode', pdfDefaultOptions.textLayerMode);
-        }
+        options?.set('textLayerMode', pdfDefaultOptions.textLayerMode);
+        this.pdfScriptLoaderService.PDFViewerApplication.pdfViewer?.setTextLayerMode(pdfDefaultOptions.textLayerMode);
         this.textLayer = true;
         if (this.showFindButton === undefined) {
           this.showFindButton = true;
@@ -1245,9 +1244,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           });
         }
       } else {
-        if (options) {
-          options.set('textLayerMode', this.showHandToolButton ? pdfDefaultOptions.textLayerMode : 0);
-        }
+        options?.set('textLayerMode', this.showHandToolButton ? pdfDefaultOptions.textLayerMode : 0);
+        this.pdfScriptLoaderService.PDFViewerApplication.pdfViewer?.setTextLayerMode(pdfDefaultOptions.textLayerMode);
+
         if (!this.showHandToolButton) {
           if (this.showFindButton || this.showFindButton === undefined) {
             this.ngZone.run(() => {
@@ -1272,50 +1271,22 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         }
       }
     } else {
-      if (this.textLayer) {
-        // todo: is this a redundant check?
-        if (options) {
-          options.set('textLayerMode', pdfDefaultOptions.textLayerMode);
-        }
-        this.textLayer = true;
-        if (this.showFindButton === undefined) {
-          this.showFindButton = true;
-          setTimeout(() => {
-            // todo remove this hack:
-            const viewFind = document.getElementById('viewFind') as HTMLElement;
-            if (viewFind) {
-              viewFind.classList.remove('invisible');
-            }
-            const findbar = document.getElementById('findbar') as HTMLElement;
-            if (findbar) {
-              findbar.classList.remove('invisible');
-            }
-          });
-        }
-      } else {
-        // todo: is the else branch dead code?
-        if (options) {
-          options.set('textLayerMode', 0);
-        }
-        this.textLayer = false;
-        if (this.showFindButton) {
-          if (this.logLevel >= VerbosityLevel.WARNINGS) {
-            // tslint:disable-next-line:max-line-length
-            console.warn('Hiding the "find" button because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the find button.');
-            this.ngZone.run(() => {
-              this.showFindButton = false;
-            });
+      options?.set('textLayerMode', pdfDefaultOptions.textLayerMode);
+      this.pdfScriptLoaderService.PDFViewerApplication.pdfViewer?.setTextLayerMode(pdfDefaultOptions.textLayerMode);
+      this.textLayer = true;
+      if (this.showFindButton === undefined) {
+        this.showFindButton = true;
+        setTimeout(() => {
+          // todo remove this hack:
+          const viewFind = document.getElementById('viewFind') as HTMLElement;
+          if (viewFind) {
+            viewFind.classList.remove('invisible');
           }
-        }
-        if (this.showHandToolButton) {
-          if (this.logLevel >= VerbosityLevel.WARNINGS) {
-            console.warn(
-              // tslint:disable-next-line:max-line-length
-              'Hiding the "hand tool / selection mode" menu because the text layer of the PDF file is not rendered. Use [textLayer]="true" to enable the the menu items.'
-            );
-            this.showHandToolButton = false;
+          const findbar = document.getElementById('findbar') as HTMLElement;
+          if (findbar) {
+            findbar.classList.remove('invisible');
           }
-        }
+        });
       }
     }
   }

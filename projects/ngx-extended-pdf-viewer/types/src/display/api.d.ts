@@ -207,6 +207,11 @@ export type DocumentInitParameters = {
      * to create SVG filters when rendering some images on the main canvas.
      */
     filterFactory?: Object | undefined;
+    /**
+     * - Enables hardware acceleration for
+     * rendering. The default value is `false`.
+     */
+    enableHWA?: boolean | undefined;
 };
 export type OnProgressParameters = {
     /**
@@ -522,7 +527,7 @@ export type PDFWorkerParameters = {
 };
 /** @type {string} */
 export const build: string;
-export const DefaultCanvasFactory: typeof DOMCanvasFactory | typeof NodeCanvasFactory;
+export const DefaultCanvasFactory: typeof NodeCanvasFactory;
 export const DefaultCMapReaderFactory: typeof NodeCMapReaderFactory;
 export const DefaultFilterFactory: typeof DOMFilterFactory | typeof NodeFilterFactory;
 export const DefaultStandardFontDataFactory: typeof NodeStandardFontDataFactory;
@@ -643,6 +648,8 @@ export const DefaultStandardFontDataFactory: typeof NodeStandardFontDataFactory;
  *   when creating canvases. The default value is {new DOMCanvasFactory()}.
  * @property {Object} [filterFactory] - A factory instance that will be used
  *   to create SVG filters when rendering some images on the main canvas.
+ * @property {boolean} [enableHWA] - Enables hardware acceleration for
+ *   rendering. The default value is `false`.
  */
 /**
  * This is the main entry point for loading a PDF and interacting with it.
@@ -656,7 +663,7 @@ export const DefaultStandardFontDataFactory: typeof NodeStandardFontDataFactory;
  *         already populated with data, or a parameter object.
  * @returns {PDFDocumentLoadingTask}
  */
-export function getDocument(src: string | URL | TypedArray | ArrayBuffer | DocumentInitParameters): PDFDocumentLoadingTask;
+export function getDocument(src?: string | URL | TypedArray | ArrayBuffer | DocumentInitParameters): PDFDocumentLoadingTask;
 export class LoopbackPort {
     postMessage(obj: any, transfer: any): void;
     addEventListener(name: any, listener: any): void;
@@ -738,7 +745,7 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#45@#docId": number;
+    static "__#46@#docId": number;
     _capability: any;
     _transport: any;
     _worker: any;
@@ -1363,7 +1370,7 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#48@#workerPorts": any;
+    static "__#49@#workerPorts": any;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */
@@ -1373,7 +1380,7 @@ export class PDFWorker {
      * @type {string}
      */
     static get workerSrc(): string;
-    static get "__#48@#mainThreadWorkerMessageHandler"(): any;
+    static get "__#49@#mainThreadWorkerMessageHandler"(): any;
     static get _setupFakeWorkerGlobal(): any;
     constructor({ name, port, verbosity, }?: {
         name?: null | undefined;
@@ -1452,7 +1459,6 @@ export const version: string;
 import { PageViewport } from "./display_utils.js";
 import { OptionalContentConfig } from "./optional_content_config.js";
 import { PrintAnnotationStorage } from "./annotation_storage.js";
-import { DOMCanvasFactory } from "./display_utils.js";
 import { NodeCanvasFactory } from "./node_utils";
 import { NodeCMapReaderFactory } from "./node_utils";
 import { DOMFilterFactory } from "./display_utils.js";

@@ -75,6 +75,11 @@ export type PDFPageViewOptions = {
      * the necessary layer-properties.
      */
     layerProperties?: Object | undefined;
+    /**
+     * - Enables hardware acceleration for
+     * rendering. The default value is `false`.
+     */
+    enableHWA?: boolean | undefined;
 };
 /**
  * @implements {IRenderableView}

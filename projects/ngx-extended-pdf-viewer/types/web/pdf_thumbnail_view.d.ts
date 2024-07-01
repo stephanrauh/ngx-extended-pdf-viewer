@@ -41,6 +41,11 @@ export type PDFThumbnailViewOptions = {
      * mode.
      */
     pageColors?: Object | undefined;
+    /**
+     * - Enables hardware acceleration for
+     * rendering. The default value is `false`.
+     */
+    enableHWA?: boolean | undefined;
 };
 /**
  * @implements {IRenderableView}
@@ -49,7 +54,7 @@ export class PDFThumbnailView implements IRenderableView {
     /**
      * @param {PDFThumbnailViewOptions} options
      */
-    constructor({ container, eventBus, id, defaultViewport, optionalContentConfigPromise, linkService, renderingQueue, pageColors, }: PDFThumbnailViewOptions);
+    constructor({ container, eventBus, id, defaultViewport, optionalContentConfigPromise, linkService, renderingQueue, pageColors, enableHWA, }: PDFThumbnailViewOptions);
     id: number;
     renderingId: string;
     pageLabel: string | null;
@@ -59,6 +64,7 @@ export class PDFThumbnailView implements IRenderableView {
     pdfPageRotate: number;
     _optionalContentConfigPromise: Promise<import("../src/display/optional_content_config").OptionalContentConfig> | null;
     pageColors: Object | null;
+    enableHWA: boolean;
     eventBus: import("./event_utils").EventBus;
     linkService: import("./interfaces").IPDFLinkService;
     renderingQueue: import("./pdf_rendering_queue").PDFRenderingQueue;
@@ -105,9 +111,11 @@ export class PDFThumbnailView implements IRenderableView {
  * @property {Object} [pageColors] - Overwrites background and foreground colors
  *   with user defined ones in order to improve readability in high contrast
  *   mode.
+ * @property {boolean} [enableHWA] - Enables hardware acceleration for
+ *   rendering. The default value is `false`.
  */
 export class TempImageFactory {
-    static "__#69@#tempCanvas": null;
-    static getCanvas(width: any, height: any): (HTMLCanvasElement | RenderingContext | null)[];
+    static "__#71@#tempCanvas": null;
+    static getCanvas(width: any, height: any): (HTMLCanvasElement | CanvasRenderingContext2D | null)[];
     static destroyCanvas(): void;
 }

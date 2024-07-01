@@ -57,8 +57,9 @@ export type PageViewportCloneParameters = {
 };
 export function deprecated(details: any): void;
 export class DOMCanvasFactory extends BaseCanvasFactory {
-    constructor({ ownerDocument }?: {
+    constructor({ ownerDocument, enableHWA }?: {
         ownerDocument?: Document | undefined;
+        enableHWA?: boolean | undefined;
     });
     _document: Document;
     /**

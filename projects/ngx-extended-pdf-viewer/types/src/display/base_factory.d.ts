@@ -1,4 +1,7 @@
 export class BaseCanvasFactory {
+    constructor({ enableHWA }?: {
+        enableHWA?: boolean | undefined;
+    });
     create(width: any, height: any): {
         canvas: void;
         context: any;
@@ -9,6 +12,7 @@ export class BaseCanvasFactory {
      * @ignore
      */
     _createCanvas(width: any, height: any): void;
+    #private;
 }
 export class BaseCMapReaderFactory {
     constructor({ baseUrl, isCompressed }: {

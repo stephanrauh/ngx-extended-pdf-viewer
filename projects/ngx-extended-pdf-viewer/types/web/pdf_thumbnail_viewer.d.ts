@@ -27,6 +27,16 @@ export type PDFThumbnailViewerOptions = {
      * mode.
      */
     pageColors?: Object | undefined;
+    /**
+     * - The AbortSignal for the window
+     * events.
+     */
+    abortSignal?: AbortSignal | undefined;
+    /**
+     * - Enables hardware acceleration for
+     * rendering. The default value is `false`.
+     */
+    enableHWA?: boolean | undefined;
 };
 /**
  * @typedef {Object} PDFThumbnailViewerOptions
@@ -38,6 +48,10 @@ export type PDFThumbnailViewerOptions = {
  * @property {Object} [pageColors] - Overwrites background and foreground colors
  *   with user defined ones in order to improve readability in high contrast
  *   mode.
+ * @property {AbortSignal} [abortSignal] - The AbortSignal for the window
+ *   events.
+ * @property {boolean} [enableHWA] - Enables hardware acceleration for
+ *   rendering. The default value is `false`.
  */
 /**
  * Viewer control to display thumbnails for pages in a PDF document.
@@ -46,12 +60,13 @@ export class PDFThumbnailViewer {
     /**
      * @param {PDFThumbnailViewerOptions} options
      */
-    constructor({ container, eventBus, linkService, renderingQueue, pageColors, }: PDFThumbnailViewerOptions);
+    constructor({ container, eventBus, linkService, renderingQueue, pageColors, abortSignal, enableHWA, }: PDFThumbnailViewerOptions);
     container: HTMLDivElement;
     eventBus: import("./event_utils").EventBus;
     linkService: import("./interfaces").IPDFLinkService;
     renderingQueue: import("./pdf_rendering_queue").PDFRenderingQueue;
     pageColors: Object | null;
+    enableHWA: boolean;
     scroll: {
         right: boolean;
         down: boolean;

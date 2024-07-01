@@ -563,4 +563,4 @@
 - 20.5.2 #2392 fix the rotate button and the hand tool / select mode button
 - 21.0.0-alpha.0 #2337 move the code needed for loading the JavaScript files to a service so multiple instances can use the JavaScript files without reloading them; move objects from `globalThis` to `PdfViewerApplication`; stop using `ngZone.runOutsideAngular()` to make it easier to use the viewer without zone.js
 - 21.0.0-alpha.1 #2409 fixed several broken items of the secondary menu
-- 21.0.0-alpha.2 #2411 fixed absolute asset paths
+- 21.0.0-alpha.2 #2411 fixed absolute asset paths; #2337 allow the textlayer to be activated or deactivated in an existing viewer when showing another document
