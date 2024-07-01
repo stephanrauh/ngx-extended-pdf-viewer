@@ -106,8 +106,12 @@ export class PDFScriptLoaderService implements OnDestroy {
     script.type = 'module';
     script.className = `ngx-extended-pdf-viewer-script`;
     // this.pdfCspPolicyService.addTrustedJavaScript(script, sourcePath);
+    if (viewerPath.startsWith('/') || viewerPath.startsWith('http')) {
+    } else {
+      viewerPath = './' + viewerPath;
+    }
     const body = `
-      import { webViewerLoad, PDFViewerApplication, PDFViewerApplicationConstants, PDFViewerApplicationOptions } from './${viewerPath}';
+      import { webViewerLoad, PDFViewerApplication, PDFViewerApplicationConstants, PDFViewerApplicationOptions } from '${viewerPath}';
       const event = new CustomEvent("ngxViewerFileHasBeenLoaded", {
         detail: {
           PDFViewerApplication,
