@@ -564,3 +564,4 @@
 - 21.0.0-alpha.0 #2337 move the code needed for loading the JavaScript files to a service so multiple instances can use the JavaScript files without reloading them; move objects from `globalThis` to `PdfViewerApplication`; stop using `ngZone.runOutsideAngular()` to make it easier to use the viewer without zone.js
 - 21.0.0-alpha.1 #2409 fixed several broken items of the secondary menu
 - 21.0.0-alpha.2 #2411 fixed absolute asset paths; #2337 allow the textlayer to be activated or deactivated in an existing viewer when showing another document
+- 21.0.0-alpha.3 #2337 fix form support (was broken after closing and re-opening the viewer) (work in progress); #2301 added detection for Safari 16 which requires the ES5 build; #2337 activate the hide-toolbar-settings before loading the JavaScript files
