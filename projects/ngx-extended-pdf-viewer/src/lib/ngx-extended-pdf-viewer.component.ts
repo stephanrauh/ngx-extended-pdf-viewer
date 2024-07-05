@@ -948,15 +948,26 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   public async ngOnInit() {
     NgxConsole.init();
+    this.hideToolbarIfItIsEmpty();
     if (isPlatformBrowser(this.platformId)) {
       this.addTranslationsUnlessProvidedByTheUser();
-      await this.pdfScriptLoaderService.ensurePdfJsHasBeenLoaded();
+      await this.waitUntilOldComponentIsGone();
       this.formSupport.registerFormSupportWithPdfjs(this.ngZone);
+      await this.pdfScriptLoaderService.ensurePdfJsHasBeenLoaded();
 
       this.doInitPDFViewer();
-
-      this.hideToolbarIfItIsEmpty();
     }
+  }
+
+  private async waitUntilOldComponentIsGone(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const interval = setInterval(() => {
+        if (!this.service.ngxExtendedPdfViewerInitialized) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 10);
+    });
   }
 
   private assignTabindexes() {
@@ -1788,7 +1799,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   public async ngOnDestroy(): Promise<void> {
     this.notificationService.onPDFJSInitSignal.set(undefined);
-    this.service.ngxExtendedPdfViewerInitialized = false;
     delete globalThis.ngxConsole;
     delete globalThis.ngxConsoleFilter;
 
@@ -1833,6 +1843,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         bus.destroy();
       }
       (PDFViewerApplication.eventBus as any) = undefined;
+      this.service.ngxExtendedPdfViewerInitialized = false;
     }
   }
 

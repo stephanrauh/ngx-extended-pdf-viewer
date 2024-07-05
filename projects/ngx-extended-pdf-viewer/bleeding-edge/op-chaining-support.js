@@ -25,7 +25,16 @@ new (function () {
     }
   }
 
+  function supportsPromiseWithResolvers() {
+    const iframe = document.createElement('iframe');
+    document.firstElementChild.append(iframe);
+    const useLegacyPdfViewer = 'withResolvers' in iframe.contentWindow['Promise'];
+    iframe.parentElement.removeChild(iframe);
+
+    return useLegacyPdfViewer;
+  }
+
   const supportsOptionalChaining = new BrowserCompatibilityTester().supportsOptionalChaining();
-  const supportModernPromises = !!Promise.withResolvers;
+  const supportModernPromises = supportsPromiseWithResolvers();
   window.ngxExtendedPdfViewerCanRunModernJSCode = supportsOptionalChaining && supportModernPromises;
 })();
