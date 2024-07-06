@@ -27,7 +27,7 @@ export type PDFPageViewOptions = {
     defaultViewport: PageViewport;
     /**
      * -
-     * A promise that is resolved with an {@link OptionalContentConfig } instance.
+     * A promise that is resolved with an {@link OptionalContentConfig} instance.
      * The default value is `null`.
      */
     optionalContentConfigPromise?: Promise<import("../src/display/optional_content_config").OptionalContentConfig> | undefined;
@@ -44,8 +44,8 @@ export type PDFPageViewOptions = {
     /**
      * - Controls if the annotation layer is
      * created, and if interactive form elements or `AnnotationStorage`-data are
-     * being rendered. The constants from {@link AnnotationMode } should be used;
-     * see also {@link RenderParameters } and {@link GetOperatorListParameters }.
+     * being rendered. The constants from {@link AnnotationMode} should be used;
+     * see also {@link RenderParameters} and {@link GetOperatorListParameters}.
      * The default value is `AnnotationMode.ENABLE_FORMS`.
      */
     annotationMode?: number | undefined;
@@ -156,7 +156,7 @@ export class PDFPageView implements IRenderableView {
          */
         rotation?: number | undefined;
         /**
-         * A promise that is resolved with an {@link OptionalContentConfig }instance. The default value is `null`.
+         * A promise that is resolved with an {@link OptionalContentConfig}instance. The default value is `null`.
          */
         optionalContentConfigPromise?: Promise<import("../src/display/optional_content_config").OptionalContentConfig> | undefined;
         drawingDelay?: number | undefined;

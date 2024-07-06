@@ -49,7 +49,7 @@ export type AnnotationLayerParameters = {
     } | null | undefined;
     annotationCanvasMap?: Map<string, HTMLCanvasElement> | undefined;
     accessibilityManager?: import("../../web/text_accessibility.js").TextAccessibilityManager | undefined;
-    annotationEditorUIManager?: any;
+    annotationEditorUIManager?: AnnotationEditorUIManager;
 };
 /**
  * @typedef {Object} AnnotationLayerParameters

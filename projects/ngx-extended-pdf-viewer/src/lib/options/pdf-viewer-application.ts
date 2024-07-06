@@ -1084,4 +1084,5 @@ export interface IPDFViewerApplication {
   unbindWindowEvents(): void;
   export(): Promise<Blob>;
   printPdf(): void;
+  ngxKeyboardManager: any;
 }

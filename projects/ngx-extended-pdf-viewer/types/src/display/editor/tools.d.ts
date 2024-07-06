@@ -268,7 +268,7 @@ export class AnnotationEditorUIManager {
      * @param {AnnotationEditor} editor
      * @returns
      */
-    isActive(editor: AnnotationEditor): boolean;
+    isActive(editor: AnnotationEditor): editor is never;
     /**
      * Get the current active editor.
      * @returns {AnnotationEditor|null}

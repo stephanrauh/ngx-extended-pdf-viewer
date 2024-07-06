@@ -1288,10 +1288,12 @@ const {
   PermissionFlag,
   PixelsPerInch,
   RenderingCancelledException,
+  renderTextLayer,
   setLayerDimensions,
   shadow,
   TextLayer,
   UnexpectedResponseException,
+  updateTextLayer,
   Util,
   VerbosityLevel,
   version,
@@ -1299,7 +1301,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '21.0.0-alpha.3';
+const ngxExtendedPdfViewerVersion = '21.0.0-alpha.4';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -3780,6 +3782,12 @@ class OverlayManager {
     dialog.addEventListener("cancel", evt => {
       this.#active = null;
     });
+  }
+  unregister(dialog) {
+    if (!this.#overlays.has(dialog)) {
+      throw new Error("The overlay does not exist.");
+    }
+    this.#overlays.delete(dialog);
   }
   async open(dialog) {
     if (!this.#overlays.has(dialog)) {
@@ -8055,11 +8063,11 @@ class PDFPrintService {
     this.scratchCanvas.width = this.scratchCanvas.height = 0;
     this.scratchCanvas = null;
     activeService = null;
-    ensureOverlay().then(function () {
-      if (overlayManager.active === dialog) {
-        overlayManager.close(dialog);
-      }
-    });
+    if (overlayManager.active === dialog) {
+      overlayManager.close(dialog);
+      overlayManager.unregister(dialog);
+      overlayPromise = undefined;
+    }
   }
   renderPages() {
     if (this.pdfDocument.isPureXfa) {
@@ -8140,7 +8148,7 @@ function printPdf() {
     return;
   }
   if (activeService) {
-    globalThis.ngxConsole.warn("Ignored window.printPDF() because of a pending print job.");
+    globalThis.ngxConsole.warn("Ignored this.printPDF() because of a pending print job.");
     return;
   }
   ensureOverlay().then(function () {
@@ -11882,9 +11890,6 @@ class AnnotationLayerBuilder {
       this.div.hidden = true;
     }
   }
-  hasEditableAnnotations() {
-    return !!this.annotationLayer?.hasEditableAnnotations();
-  }
   #updatePresentationModeState(state) {
     if (!this.div) {
       return;
@@ -12621,7 +12626,6 @@ class PDFPageView {
   #annotationMode = AnnotationMode.ENABLE_FORMS;
   #enableHWA = false;
   #hasRestrictedScaling = false;
-  #isEditing = false;
   #layerProperties = null;
   #loadingId = null;
   #previousRotation = null;
@@ -12775,9 +12779,6 @@ class PDFPageView {
   destroy() {
     this.reset();
     this.pdfPage?.cleanup();
-  }
-  hasEditableAnnotations() {
-    return !!this.annotationLayer?.hasEditableAnnotations();
   }
   get _textHighlighter() {
     return shadow(this, "_textHighlighter", new TextHighlighter({
@@ -12954,19 +12955,6 @@ class PDFPageView {
       }
       this._resetZoomLayer();
     }
-  }
-  toggleEditingMode(isEditing) {
-    if (!this.hasEditableAnnotations()) {
-      return;
-    }
-    this.#isEditing = isEditing;
-    this.reset({
-      keepZoomLayer: true,
-      keepAnnotationLayer: true,
-      keepAnnotationEditorLayer: true,
-      keepXfaLayer: true,
-      keepTextLayer: true
-    });
   }
   update({
     scale = 0,
@@ -13339,8 +13327,7 @@ class PDFPageView {
       annotationMode: this.#annotationMode,
       optionalContentConfigPromise: this._optionalContentConfigPromise,
       annotationCanvasMap: this._annotationCanvasMap,
-      pageColors,
-      isEditing: this.#isEditing
+      pageColors
     };
     const renderTask = this.renderTask = pdfPage.render(renderContext);
     renderTask.onContinue = renderContinueCallback;
@@ -13520,8 +13507,6 @@ class PDFViewer {
   #enablePermissions = false;
   #eventAbortController = null;
   #mlManager = null;
-  #onPageRenderedCallback = null;
-  #switchAnnotationEditorModeTimeoutId = null;
   #getAllTextInProgress = false;
   #hiddenCopyElement = null;
   #interruptCopyCondition = false;
@@ -13533,7 +13518,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = "4.5.537";
+    const viewerVersion = "4.4.700";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -14277,7 +14262,6 @@ class PDFViewer {
     this.viewer.removeAttribute("lang");
     this.#hiddenCopyElement?.remove();
     this.#hiddenCopyElement = null;
-    this.#cleanupSwitchAnnotationEditorMode();
   }
   #ensurePageViewVisible() {
     if (this._scrollMode !== ScrollMode.PAGE) {
@@ -14717,34 +14701,6 @@ class PDFViewer {
       });
     }
     this.hidePagesDependingOnpageViewMode();
-  }
-  #switchToEditAnnotationMode() {
-    const visible = this._getVisiblePages();
-    const pagesToRefresh = [];
-    const {
-      ids,
-      views
-    } = visible;
-    for (const page of views) {
-      const {
-        view
-      } = page;
-      if (!view.hasEditableAnnotations()) {
-        ids.delete(view.id);
-        continue;
-      }
-      pagesToRefresh.push(page);
-    }
-    if (pagesToRefresh.length === 0) {
-      return null;
-    }
-    this.renderingQueue.renderHighestPriority({
-      first: pagesToRefresh[0],
-      last: pagesToRefresh.at(-1),
-      views: pagesToRefresh,
-      ids
-    });
-    return ids;
   }
   containsElement(element) {
     return this.container.contains(element);
@@ -15191,16 +15147,6 @@ class PDFViewer {
   get containerTopLeft() {
     return this.#containerTopLeft ||= [this.container.offsetTop, this.container.offsetLeft];
   }
-  #cleanupSwitchAnnotationEditorMode() {
-    if (this.#onPageRenderedCallback) {
-      this.eventBus._off("pagerendered", this.#onPageRenderedCallback);
-      this.#onPageRenderedCallback = null;
-    }
-    if (this.#switchAnnotationEditorModeTimeoutId !== null) {
-      clearTimeout(this.#switchAnnotationEditorModeTimeoutId);
-      this.#switchAnnotationEditorModeTimeoutId = null;
-    }
-  }
   get annotationEditorMode() {
     return this.#annotationEditorUIManager ? this.#annotationEditorMode : AnnotationEditorType.DISABLE;
   }
@@ -15221,47 +15167,12 @@ class PDFViewer {
     if (!this.pdfDocument) {
       return;
     }
-    const {
-      eventBus
-    } = this;
-    const updater = () => {
-      this.#cleanupSwitchAnnotationEditorMode();
-      this.#annotationEditorMode = mode;
-      eventBus.dispatch("annotationeditormodechanged", {
-        source: this,
-        mode
-      });
-      this.#annotationEditorUIManager.updateMode(mode, editId, isFromKeyboard);
-    };
-    if (mode === AnnotationEditorType.NONE || this.#annotationEditorMode === AnnotationEditorType.NONE) {
-      const isEditing = mode !== AnnotationEditorType.NONE;
-      if (!isEditing) {
-        this.pdfDocument.annotationStorage.resetModifiedIds();
-      }
-      for (const pageView of this._pages) {
-        pageView.toggleEditingMode(isEditing);
-      }
-      const idsToRefresh = this.#switchToEditAnnotationMode();
-      if (isEditing && editId && idsToRefresh) {
-        this.#cleanupSwitchAnnotationEditorMode();
-        this.#onPageRenderedCallback = ({
-          pageNumber
-        }) => {
-          idsToRefresh.delete(pageNumber);
-          if (idsToRefresh.size === 0) {
-            this.#switchAnnotationEditorModeTimeoutId = setTimeout(updater, 0);
-          }
-        };
-        const {
-          signal
-        } = this.#eventAbortController;
-        eventBus._on("pagerendered", this.#onPageRenderedCallback, {
-          signal
-        });
-        return;
-      }
-    }
-    updater();
+    this.#annotationEditorMode = mode;
+    this.eventBus.dispatch("annotationeditormodechanged", {
+      source: this,
+      mode
+    });
+    this.#annotationEditorUIManager.updateMode(mode, editId, isFromKeyboard);
   }
   set annotationEditorParams({
     type,
@@ -17246,7 +17157,7 @@ const app_PDFViewerApplication = {
     if (!this.supportsPrinting) {
       return;
     }
-    window.printPDF();
+    this.printPdf();
   },
   bindEvents() {
     if (this._eventBusAbortController) {
@@ -17926,7 +17837,7 @@ function webViewerWheel(evt) {
     return;
   }
   const cmd = (evt.ctrlKey ? 1 : 0) | (evt.altKey ? 2 : 0) | (evt.shiftKey ? 4 : 0) | (evt.metaKey ? 8 : 0);
-  if (window.isKeyIgnored && window.isKeyIgnored(cmd, "WHEEL")) {
+  if (app_PDFViewerApplication?.isKeyIgnored && app_PDFViewerApplication.isKeyIgnored(cmd, "WHEEL")) {
     return;
   }
   const deltaMode = evt.deltaMode;
@@ -18096,8 +18007,10 @@ function webViewerKeyDown(evt) {
   let handled = false,
     ensureViewerFocused = false;
   const cmd = (evt.ctrlKey ? 1 : 0) | (evt.altKey ? 2 : 0) | (evt.shiftKey ? 4 : 0) | (evt.metaKey ? 8 : 0);
-  if (window.isKeyIgnored && window.isKeyIgnored(cmd, evt.keyCode)) {
-    return;
+  if (app_PDFViewerApplication.ngxKeyboardManager) {
+    if (app_PDFViewerApplication.ngxKeyboardManager.isKeyIgnored.bind(app_PDFViewerApplication.ngxKeyboardManager)(cmd, evt.keyCode)) {
+      return;
+    }
   }
   if (cmd === 1 || cmd === 8 || cmd === 5 || cmd === 12) {
     switch (evt.keyCode) {
@@ -18375,8 +18288,8 @@ app_PDFViewerApplication.printPdf = printPdf;
 
 
 
-const pdfjsVersion = "4.5.537";
-const pdfjsBuild = "30a47b645";
+const pdfjsVersion = "4.4.700";
+const pdfjsBuild = "bf64306e4";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,

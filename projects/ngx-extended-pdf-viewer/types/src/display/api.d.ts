@@ -48,7 +48,7 @@ export type DocumentInitParameters = {
     range?: PDFDataRangeTransport | undefined;
     /**
      * - Specify maximum number of bytes fetched
-     * per range request. The default value is {@link DEFAULT_RANGE_CHUNK_SIZE }.
+     * per range request. The default value is {@link DEFAULT_RANGE_CHUNK_SIZE}.
      */
     rangeChunkSize?: number | undefined;
     /**
@@ -58,7 +58,7 @@ export type DocumentInitParameters = {
     worker?: PDFWorker | undefined;
     /**
      * - Controls the logging level; the constants
-     * from {@link VerbosityLevel } should be used.
+     * from {@link VerbosityLevel} should be used.
      */
     verbosity?: number | undefined;
     /**
@@ -273,12 +273,12 @@ export type getTextContentParameters = {
 export type TextContent = {
     /**
      * - Array of
-     * {@link TextItem } and {@link TextMarkedContent } objects. TextMarkedContent
+     * {@link TextItem} and {@link TextMarkedContent} objects. TextMarkedContent
      * items are included when includeMarkedContent is true.
      */
     items: Array<TextItem | TextMarkedContent>;
     /**
-     * - {@link TextStyle } objects,
+     * - {@link TextStyle} objects,
      * indexed by font name.
      */
     styles: {
@@ -392,7 +392,7 @@ export type RenderParameters = {
     /**
      * Controls which annotations are rendered
      * onto the canvas, for annotations with appearance-data; the values from
-     * {@link AnnotationMode } should be used. The following values are supported:
+     * {@link AnnotationMode} should be used. The following values are supported:
      * - `AnnotationMode.DISABLE`, which disables all annotations.
      * - `AnnotationMode.ENABLE`, which includes all possible annotations (thus
      * it also depends on the `intent`-option, see above).
@@ -400,7 +400,7 @@ export type RenderParameters = {
      * interactive form elements (those will be rendered in the display layer).
      * - `AnnotationMode.ENABLE_STORAGE`, which includes all possible annotations
      * (as above) but where interactive form elements are updated with data
-     * from the {@link AnnotationStorage }-instance; useful e.g. for printing.
+     * from the {@link AnnotationStorage}-instance; useful e.g. for printing.
      * The default value is `AnnotationMode.ENABLE`.
      */
     annotationMode?: number | undefined;
@@ -429,7 +429,7 @@ export type RenderParameters = {
     pageColors?: Object | undefined;
     /**
      * -
-     * A promise that should resolve with an {@link OptionalContentConfig }created from `PDFDocumentProxy.getOptionalContentConfig`. If `null`,
+     * A promise that should resolve with an {@link OptionalContentConfig}created from `PDFDocumentProxy.getOptionalContentConfig`. If `null`,
      * the configuration will be fetched automatically with the default visibility
      * states set.
      */
@@ -453,7 +453,7 @@ export type GetOperatorListParameters = {
     /**
      * Controls which annotations are included
      * in the operatorList, for annotations with appearance-data; the values from
-     * {@link AnnotationMode } should be used. The following values are supported:
+     * {@link AnnotationMode} should be used. The following values are supported:
      * - `AnnotationMode.DISABLE`, which disables all annotations.
      * - `AnnotationMode.ENABLE`, which includes all possible annotations (thus
      * it also depends on the `intent`-option, see above).
@@ -461,7 +461,7 @@ export type GetOperatorListParameters = {
      * interactive form elements (those will be rendered in the display layer).
      * - `AnnotationMode.ENABLE_STORAGE`, which includes all possible annotations
      * (as above) but where interactive form elements are updated with data
-     * from the {@link AnnotationStorage }-instance; useful e.g. for printing.
+     * from the {@link AnnotationStorage}-instance; useful e.g. for printing.
      * The default value is `AnnotationMode.ENABLE`.
      */
     annotationMode?: number | undefined;
@@ -473,7 +473,7 @@ export type GetOperatorListParameters = {
 export type StructTreeNode = {
     /**
      * - Array of
-     * {@link StructTreeNode } and {@link StructTreeContent } objects.
+     * {@link StructTreeNode} and {@link StructTreeContent} objects.
      */
     children: Array<StructTreeNode | StructTreeContent>;
     /**
@@ -521,7 +521,7 @@ export type PDFWorkerParameters = {
     port?: Worker | undefined;
     /**
      * - Controls the logging level;
-     * the constants from {@link VerbosityLevel } should be used.
+     * the constants from {@link VerbosityLevel} should be used.
      */
     verbosity?: number | undefined;
 };
@@ -909,7 +909,7 @@ export class PDFDocumentProxy {
      * @returns {Promise<Array<OutlineNode>>} A promise that is resolved with an
      *   {Array} that is a tree outline (if it has one) of the PDF file.
      */
-    getOutline(): Promise<{
+    getOutline(): Promise<Array<{
         title: string;
         bold: boolean;
         italic: boolean;
@@ -923,8 +923,8 @@ export class PDFDocumentProxy {
         unsafeUrl: string | undefined;
         newWindow: boolean | undefined;
         count: number | undefined;
-        items: any[];
-    }[]>;
+        items: Array<any>;
+    }>>;
     /**
      * @typedef {Object} GetOptionalContentConfigParameters
      * @property {string} [intent] - Determines the optional content groups that

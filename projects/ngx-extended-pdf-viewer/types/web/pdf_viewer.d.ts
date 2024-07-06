@@ -58,14 +58,14 @@ export type PDFViewerOptions = {
     /**
      * - Controls if the annotation layer is
      * created, and if interactive form elements or `AnnotationStorage`-data are
-     * being rendered. The constants from {@link AnnotationMode } should be used;
-     * see also {@link RenderParameters } and {@link GetOperatorListParameters }.
+     * being rendered. The constants from {@link AnnotationMode} should be used;
+     * see also {@link RenderParameters} and {@link GetOperatorListParameters}.
      * The default value is `AnnotationMode.ENABLE_FORMS`.
      */
     annotationMode?: number | undefined;
     /**
      * - Enables the creation and editing
-     * of new Annotations. The constants from {@link AnnotationEditorType } should
+     * of new Annotations. The constants from {@link AnnotationEditorType} should
      * be used. The default value is `AnnotationEditorType.NONE`.
      */
     annotationEditorMode?: number | undefined;
@@ -254,7 +254,7 @@ export class PDFViewer {
     /**
      * @param {string} val - The page label.
      */
-    set currentPageLabel(val: string | null);
+    set currentPageLabel(val: string);
     /**
      * @type {string|null} Returns the current page label, or `null` if no page
      *   labels exist.
@@ -392,7 +392,7 @@ export class PDFViewer {
      * @param {Promise<OptionalContentConfig>} promise - A promise that is
      *   resolved with an {@link OptionalContentConfig} instance.
      */
-    set optionalContentConfigPromise(promise: Promise<import("../src/display/optional_content_config").OptionalContentConfig | null>);
+    set optionalContentConfigPromise(promise: Promise<import("../src/display/optional_content_config").OptionalContentConfig>);
     /**
      * @type {Promise<OptionalContentConfig | null>}
      */
@@ -513,11 +513,21 @@ export class PDFViewer {
         /**
          * - The editor mode (none, FreeText, ink, ...).
          */
+        /**
+         * - The editor mode (none, FreeText, ink, ...).
+         */
         mode: number;
         /**
          * - ID of the existing annotation to edit.
          */
+        /**
+         * - ID of the existing annotation to edit.
+         */
         editId?: string | null | undefined;
+        /**
+         * - True if the mode change is due to a
+         * keyboard action.
+         */
         /**
          * - True if the mode change is due to a
          * keyboard action.

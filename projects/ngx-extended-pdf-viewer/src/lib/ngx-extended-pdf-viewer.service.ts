@@ -146,12 +146,12 @@ export class NgxExtendedPdfViewerService {
           printRange = {} as PDFPrintRange;
         }
         this.setPrintRange(printRange);
-      }
-      (globalThis as any).printPDF();
-      if (!alreadyThere) {
-        PDFViewerApplication.eventBus.on('afterprint', () => {
-          this.removePrintRange();
-        });
+        PDFViewerApplication.printPdf();
+        if (!alreadyThere) {
+          PDFViewerApplication.eventBus.on('afterprint', () => {
+            this.removePrintRange();
+          });
+        }
       }
     }
   }

@@ -60,6 +60,7 @@ import { OutlineLoadedEvent } from './events/outline-loaded-event';
 import { ToggleSidebarEvent } from './events/toggle-sidebar-event';
 import { XfaLayerRenderedEvent } from './events/xfa-layer-rendered-event';
 import { NgxFormSupport } from './ngx-form-support';
+import { NgxKeyboardManagerService } from './ngx-keyboard-manager.service';
 import { NgxConsole } from './options/ngx-console';
 import { PdfSidebarView } from './options/pdf-sidebar-views';
 import { SpreadType } from './options/spread-type';
@@ -911,7 +912,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     private cdr: ChangeDetectorRef,
     public service: NgxExtendedPdfViewerService,
     private renderer: Renderer2,
-    private pdfScriptLoaderService: PDFScriptLoaderService
+    private pdfScriptLoaderService: PDFScriptLoaderService,
+    private keyboardManager: NgxKeyboardManagerService
   ) {
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
     this.windowSizeRecalculatorSubscription = this.service.recalculateSize$.subscribe(() => this.onResize());
@@ -954,7 +956,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       await this.waitUntilOldComponentIsGone();
       this.formSupport.registerFormSupportWithPdfjs(this.ngZone);
       await this.pdfScriptLoaderService.ensurePdfJsHasBeenLoaded();
-
+      this.keyboardManager.registerKeyboardListener(this.pdfScriptLoaderService.PDFViewerApplication, this.pdfScriptLoaderService.PDFViewerApplicationOptions);
       this.doInitPDFViewer();
     }
   }
@@ -1801,6 +1803,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     this.notificationService.onPDFJSInitSignal.set(undefined);
     delete globalThis.ngxConsole;
     delete globalThis.ngxConsoleFilter;
+    this.keyboardManager.unregisterKeyboardListener();
 
     const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
 
@@ -1842,6 +1845,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         PDFViewerApplication.unbindEvents();
         bus.destroy();
       }
+      PDFViewerApplication.unbindWindowEvents();
       (PDFViewerApplication.eventBus as any) = undefined;
       this.service.ngxExtendedPdfViewerInitialized = false;
     }

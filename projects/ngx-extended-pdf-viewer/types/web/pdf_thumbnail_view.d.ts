@@ -23,7 +23,7 @@ export type PDFThumbnailViewOptions = {
     defaultViewport: PageViewport;
     /**
      * -
-     * A promise that is resolved with an {@link OptionalContentConfig } instance.
+     * A promise that is resolved with an {@link OptionalContentConfig} instance.
      * The default value is `null`.
      */
     optionalContentConfigPromise?: Promise<import("../src/display/optional_content_config").OptionalContentConfig> | undefined;
