@@ -1062,6 +1062,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       // tslint:disable-next-line:quotemark
       console.error("You're trying to open two instances of the PDF viewer. Most likely, this will result in errors.");
     }
+    this.overrideDefaultSettings();
     const onLoaded = () => {
       document.removeEventListener('webviewerinitialized', onLoaded);
       if (!this.pdfScriptLoaderService.PDFViewerApplication.eventBus) {
@@ -1071,7 +1072,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         }, 10);
       } else {
         (globalThis as any).PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
-        this.overrideDefaultSettings();
         this.pdfScriptLoaderService.PDFViewerApplication.eventBus.on('sourcechanged', this.reportSourceChanges);
         this.pdfScriptLoaderService.PDFViewerApplication.eventBus.on('afterprint', this.afterPrintListener);
         this.pdfScriptLoaderService.PDFViewerApplication.eventBus.on('beforeprint', this.beforePrintListener);
