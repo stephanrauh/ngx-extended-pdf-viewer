@@ -49913,8 +49913,7 @@ class Annotation {
       subtype: params.subtype,
       hasOwnCanvas: false,
       noRotate: !!(this.flags & AnnotationFlag.NOROTATE),
-      noHTML: isLocked && isContentLocked,
-      isEditable: false
+      noHTML: isLocked && isContentLocked
     };
     if (params.collectFields) {
       const kids = dict.get("Kids");
@@ -49959,9 +49958,6 @@ class Annotation {
       return !noPrint;
     }
     return this.printable;
-  }
-  mustBeViewedWhenEditing() {
-    return !this.data.isEditable;
   }
   get viewable() {
     if (this.data.quadPoints === null) {
@@ -51926,8 +51922,7 @@ class PopupAnnotation extends Annotation {
 class FreeTextAnnotation extends MarkupAnnotation {
   constructor(params) {
     super(params);
-    this.data.hasOwnCanvas = this.data.noRotate;
-    this.data.isEditable = !this.data.noHTML;
+    this.data.hasOwnCanvas = !this.data.noHTML;
     this.data.noHTML = false;
     const {
       evaluatorOptions,
@@ -53919,9 +53914,7 @@ class Page {
     task,
     intent,
     cacheKey,
-    annotationStorage = null,
-    isEditing = false,
-    modifiedIds = null
+    annotationStorage = null
   }) {
     const contentStreamPromise = this.getContentStream();
     const resourcesPromise = this.loadResources(["ColorSpace", "ExtGState", "Font", "Pattern", "Properties", "Shading", "XObject"]);
@@ -54023,7 +54016,7 @@ class Page {
         intentPrint = !!(intent & RenderingIntentFlag.PRINT);
       const opListPromises = [];
       for (const annotation of annotations) {
-        if (intentAny || intentDisplay && annotation.mustBeViewed(annotationStorage, renderForms) && (isEditing && annotation.mustBeViewedWhenEditing() || !isEditing && !modifiedIds?.has(annotation.data.id)) || intentPrint && annotation.mustBePrinted(annotationStorage)) {
+        if (intentAny || intentDisplay && annotation.mustBeViewed(annotationStorage, renderForms) || intentPrint && annotation.mustBePrinted(annotationStorage)) {
           opListPromises.push(annotation.getOperatorList(partialEvaluator, task, intent, renderForms, annotationStorage).catch(function (reason) {
             warn("getOperatorList - ignoring annotation data during " + `"${task.name}" task: "${reason}".`);
             return {
@@ -55762,7 +55755,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = "4.5.539";
+    const workerVersion = "4.4.703";
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
     }
@@ -56230,9 +56223,7 @@ class WorkerMessageHandler {
           task,
           intent: data.intent,
           cacheKey: data.cacheKey,
-          annotationStorage: data.annotationStorage,
-          isEditing: data.isEditing,
-          modifiedIds: data.modifiedIds
+          annotationStorage: data.annotationStorage
         }).then(function (operatorListInfo) {
           finishWorkerTask(task);
           if (start) {
@@ -56340,8 +56331,8 @@ if (typeof window === "undefined" && typeof self !== "undefined" && isMessagePor
 
 ;// CONCATENATED MODULE: ./src/pdf.worker.js
 
-const pdfjsVersion = "4.5.539";
-const pdfjsBuild = "011d4cdde";
+const pdfjsVersion = "4.4.703";
+const pdfjsBuild = "3f54b8eb8";
 
 var __webpack_exports__WorkerMessageHandler = __webpack_exports__.WorkerMessageHandler;
 export { __webpack_exports__WorkerMessageHandler as WorkerMessageHandler };
