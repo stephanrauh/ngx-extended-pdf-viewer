@@ -916,7 +916,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     private keyboardManager: NgxKeyboardManagerService
   ) {
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
-    this.windowSizeRecalculatorSubscription = this.service.recalculateSize$.subscribe(() => this.onResize());
     if (isPlatformBrowser(this.platformId)) {
       this.serverSideRendering = false;
       this.toolbarWidth = String(document.body.clientWidth);

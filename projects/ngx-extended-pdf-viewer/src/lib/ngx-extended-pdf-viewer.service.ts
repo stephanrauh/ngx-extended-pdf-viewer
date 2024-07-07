@@ -1,5 +1,4 @@
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
-import { Subject } from 'rxjs';
 import { AnnotationEditorParamsType, EditorAnnotation, StampEditorAnnotation } from './options/editor-annotations';
 import { PdfLayer } from './options/optional_content_config';
 import { PDFPrintRange } from './options/pdf-print-range';
@@ -57,8 +56,6 @@ export interface Section {
 })
 export class NgxExtendedPdfViewerService {
   public ngxExtendedPdfViewerInitialized = false;
-
-  public recalculateSize$ = new Subject<void>();
 
   public secondaryMenuIsEmpty = false;
 
@@ -478,10 +475,6 @@ export class NgxExtendedPdfViewerService {
     }
     const pages = (app.pdfViewer._getVisiblePages() as any).views as Array<any>;
     return pages?.map((page) => page.id);
-  }
-
-  public recalculateSize(): void {
-    this.recalculateSize$.next();
   }
 
   public async listLayers(): Promise<Array<PdfLayer> | undefined> {

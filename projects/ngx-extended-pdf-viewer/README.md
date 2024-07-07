@@ -45,6 +45,7 @@ The goal of version 21 is to
 
 Version 21 contains several breaking changes. The good news is that I assume the vast majority of developers won't even notice. These breaking changes are:
 
+- The RxJS subjects `recalculateSize$` and `onPDFJSInit` are gone. You can use ``onPDFJSInitSignal` to replace `onPDFJSInit`. I suspect nobody uses `recalculateSize$`, so I didn't implement a replacement yet.
 - The attributes `[minifiedJSLibraries]` and `[forceUsingLegacyES5]` have moved from the component to the new `PDFScriptLoaderService`. That, in turn, makes it difficult to set them. I haven't decided yet how to proceed. Chances are I'm going to move them to the `pdfDefaultOptions`.
 - Compatibility with CSP (Content Security Policy) has - temporarily - become worse. After finishing my refactoring, I intend to fix this.
 - Earlier versions of the viewer stored many attributes, objects, and functions in the global namespace (i.e. `globalThis` or `window`). Many of these attributes have already migrated to `PDFScriptLoaderService.PDFViewerApplication`.
