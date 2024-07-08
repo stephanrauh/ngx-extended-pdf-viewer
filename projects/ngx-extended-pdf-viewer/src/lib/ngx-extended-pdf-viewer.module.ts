@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { DynamicCssComponent } from './dynamic-css/dynamic-css.component';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
-import { NgxKeyboardManagerService } from './ngx-keyboard-manager.service';
 import { NgxConsole } from './options/ngx-console';
 import { PdfAltTextDialogComponent } from './pdf-dialog/pdf-alt-text-dialog/pdf-alt-text-dialog.component';
 import { PdfDocumentPropertiesDialogComponent } from './pdf-dialog/pdf-document-properties-dialog/pdf-document-properties-dialog.component';
@@ -159,7 +158,7 @@ if (!Promise['allSettled']) {
     ResponsiveCSSClassPipe,
     TranslatePipe,
   ],
-  providers: [NgxExtendedPdfViewerService, NgxKeyboardManagerService],
+  providers: [NgxExtendedPdfViewerService],
   exports: [
     NegativeResponsiveCSSClassPipe,
     NgxExtendedPdfViewerComponent,

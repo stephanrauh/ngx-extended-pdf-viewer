@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { IPDFViewerApplication } from '../public_api';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class NgxKeyboardManagerService {
   private PDFViewerApplication?: IPDFViewerApplication;
 

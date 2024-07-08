@@ -567,3 +567,4 @@
 - 21.0.0-alpha.3 #2337 fix form support (was broken after closing and re-opening the viewer) (work in progress); #2301 added detection for Safari 16 which requires the ES5 build; #2337 activate the hide-toolbar-settings before loading the JavaScript files
 - 21.0.0-alpha.4 #2337 fix wheel support; fix the `[ignoreKeys]` and `[acceptKeys]`; fix printing; all of the were broken after closing and re-opening the viewer
 - 21.0.0-alpha.5 #2077 removed the dependency on RxJS; this also removes `recalculateSize$` and `onPDFJSInit`
+- 21.0.0-alpha.6 #2337 added the new keyboard service to the public API and make it a root service
