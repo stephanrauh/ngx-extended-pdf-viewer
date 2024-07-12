@@ -1072,7 +1072,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         }, 10);
       } else {
         (globalThis as any).PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
-        this.pdfScriptLoaderService.PDFViewerApplication.eventBus.on('sourcechanged', this.reportSourceChanges);
+        this.pdfScriptLoaderService.PDFViewerApplication.eventBus.on('sourcechanged', this.reportSourceChanges.bind(this));
         this.pdfScriptLoaderService.PDFViewerApplication.eventBus.on('afterprint', this.afterPrintListener);
         this.pdfScriptLoaderService.PDFViewerApplication.eventBus.on('beforeprint', this.beforePrintListener);
         this.localizationInitialized = true;
@@ -1809,7 +1809,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (PDFViewerApplication) {
       this.pdfScriptLoaderService.PDFViewerApplication.eventBus?.off('afterprint', this.afterPrintListener);
       this.pdfScriptLoaderService.PDFViewerApplication.eventBus?.off('beforeprint', this.beforePrintListener);
-      this.pdfScriptLoaderService.PDFViewerApplication.eventBus?.off('sourcechanged', this.reportSourceChanges);
+      this.pdfScriptLoaderService.PDFViewerApplication.eventBus?.off('sourcechanged', this.reportSourceChanges.bind(this));
 
       // #802 clear the form data; otherwise the "download" dialogs opens
       PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();

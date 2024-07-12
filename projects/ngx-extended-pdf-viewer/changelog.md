@@ -568,3 +568,4 @@
 - 21.0.0-alpha.4 #2337 fix wheel support; fix the `[ignoreKeys]` and `[acceptKeys]`; fix printing; all of the were broken after closing and re-opening the viewer
 - 21.0.0-alpha.5 #2077 removed the dependency on RxJS; this also removes `recalculateSize$` and `onPDFJSInit`
 - 21.0.0-alpha.6 #2337 added the new keyboard service to the public API and make it a root service
+- 21.0.0-alpha.7 #2430 restore a method that has been removed by pdf.js but is still used by ngx-extended-pdf-viewer; #2433 fixed an NPE when `(srcChange()` is fired (missing `this` pointer)
