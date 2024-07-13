@@ -61,7 +61,6 @@ import { ToggleSidebarEvent } from './events/toggle-sidebar-event';
 import { XfaLayerRenderedEvent } from './events/xfa-layer-rendered-event';
 import { NgxFormSupport } from './ngx-form-support';
 import { NgxKeyboardManagerService } from './ngx-keyboard-manager.service';
-import { NgxConsole } from './options/ngx-console';
 import { PdfSidebarView } from './options/pdf-sidebar-views';
 import { SpreadType } from './options/spread-type';
 import { PDFScriptLoaderService } from './pdf-script-loader.service';
@@ -948,7 +947,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   public async ngOnInit() {
-    NgxConsole.init();
     this.hideToolbarIfItIsEmpty();
     if (isPlatformBrowser(this.platformId)) {
       this.addTranslationsUnlessProvidedByTheUser();
@@ -1799,13 +1797,15 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   public async ngOnDestroy(): Promise<void> {
     this.notificationService.onPDFJSInitSignal.set(undefined);
-    delete globalThis.ngxConsole;
-    delete globalThis.ngxConsoleFilter;
     this.keyboardManager.unregisterKeyboardListener();
 
     const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
 
     if (PDFViewerApplication) {
+      if (PDFViewerApplication.ngxConsole) {
+        PDFViewerApplication.ngxConsole.reset();
+        delete PDFViewerApplication.ngxConsole;
+      }
       this.pdfScriptLoaderService.PDFViewerApplication.eventBus?.off('afterprint', this.afterPrintListener);
       this.pdfScriptLoaderService.PDFViewerApplication.eventBus?.off('beforeprint', this.beforePrintListener);
       this.pdfScriptLoaderService.PDFViewerApplication.eventBus?.off('sourcechanged', this.reportSourceChanges.bind(this));

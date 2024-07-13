@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { DynamicCssComponent } from './dynamic-css/dynamic-css.component';
 import { NgxExtendedPdfViewerComponent } from './ngx-extended-pdf-viewer.component';
 import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
-import { NgxConsole } from './options/ngx-console';
 import { PdfAltTextDialogComponent } from './pdf-dialog/pdf-alt-text-dialog/pdf-alt-text-dialog.component';
 import { PdfDocumentPropertiesDialogComponent } from './pdf-dialog/pdf-document-properties-dialog/pdf-document-properties-dialog.component';
 import { PdfErrorMessageComponent } from './pdf-dialog/pdf-error-message/pdf-error-message.component';
@@ -72,10 +71,6 @@ import { PdfZoomInComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-in/pdf-z
 import { PdfZoomOutComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-out/pdf-zoom-out.component';
 import { PdfZoomToolbarComponent } from './toolbar/pdf-zoom-toolbar/pdf-zoom-toolbar.component';
 import { TranslatePipe } from './translate.pipe';
-
-if (new Date().getTime() === 0) {
-  new NgxConsole().log('');
-}
 
 if (!Promise['allSettled']) {
   if (!!window['Zone'] && !window['__zone_symbol__Promise.allSettled']) {

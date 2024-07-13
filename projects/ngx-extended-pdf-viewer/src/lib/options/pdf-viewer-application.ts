@@ -1,3 +1,4 @@
+import { INgxConsole } from './ngx-console';
 import { OptionalContentConfig } from './optional_content_config';
 import { PasswordPrompt } from './password-prompt';
 import { AnnotationStorage, PrintAnnotationStorage } from './pdf-annotation-storage';
@@ -1052,6 +1053,7 @@ export interface PDFDocumentProxy {
 }
 
 export interface IPDFViewerApplication {
+  ngxConsole?: INgxConsole;
   pdfThumbnailViewer: any;
   pdfDocumentProperties: any;
   appConfig: IPDFViewerAppConfig;
