@@ -1,8 +1,8 @@
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
-import { AnnotationEditorParamsType, EditorAnnotation, StampEditorAnnotation } from './options/editor-annotations';
+import { AnnotationEditorParamsType, AnnotationMode, EditorAnnotation, StampEditorAnnotation } from './options/editor-annotations';
 import { PdfLayer } from './options/optional_content_config';
 import { PDFPrintRange } from './options/pdf-print-range';
-import { IPDFViewerApplication, PDFDocumentProxy, TextItem, TextMarkedContent } from './options/pdf-viewer-application';
+import { IPDFViewerApplication, PDFDocumentProxy, PDFPageProxy, TextItem, TextMarkedContent } from './options/pdf-viewer-application';
 
 export interface FindOptions {
   highlightAll?: boolean;
@@ -293,19 +293,22 @@ export class NgxExtendedPdfViewerService {
       .join('');
   }
 
-  public getPageAsImage(pageNumber: number, scale: PDFExportScaleFactor, background?: string, backgroundColorToReplace: string = '#FFFFFF'): Promise<any> {
+  public async getPageAsCanvas(pageNumber: number, scale: PDFExportScaleFactor, background?: string, backgroundColorToReplace: string = '#FFFFFF', annotationMode: AnnotationMode = AnnotationMode.ENABLE): Promise<HTMLCanvasElement | undefined> {
     const PDFViewerApplication: IPDFViewerApplication = (globalThis as any).PDFViewerApplication;
     if (!PDFViewerApplication) {
       return Promise.resolve(undefined);
     }
     const pdfDocument = PDFViewerApplication.pdfDocument;
-    const pagePromise: Promise<any> = pdfDocument.getPage(pageNumber);
-    const imagePromise = (pdfPage) => Promise.resolve(this.draw(pdfPage, scale, background, backgroundColorToReplace));
-
-    return pagePromise.then(imagePromise);
+    const pdfPage = await pdfDocument.getPage(pageNumber);
+    return this.draw(pdfPage, scale, background, backgroundColorToReplace, annotationMode);
   }
 
-  private draw(pdfPage: any, scale: PDFExportScaleFactor, background?: string, backgroundColorToReplace: string = '#FFFFFF'): Promise<HTMLCanvasElement> {
+  public async getPageAsImage(pageNumber: number, scale: PDFExportScaleFactor, background?: string, backgroundColorToReplace: string = '#FFFFFF', annotationMode: AnnotationMode = AnnotationMode.ENABLE): Promise<string | undefined> {
+    const canvas = await this.getPageAsCanvas(pageNumber, scale, background, backgroundColorToReplace, annotationMode);
+    return canvas?.toDataURL();
+  }
+
+  private async draw(pdfPage: PDFPageProxy, scale: PDFExportScaleFactor, background?: string, backgroundColorToReplace: string = '#FFFFFF', annotationMode: AnnotationMode = AnnotationMode.ENABLE): Promise<HTMLCanvasElement> {
     let zoomFactor = 1;
     if (scale.scale) {
       zoomFactor = scale.scale;
@@ -325,10 +328,11 @@ export class NgxExtendedPdfViewerService {
       viewport: drawViewport,
       background,
       backgroundColorToReplace,
+      annotationMode,
     };
     const renderTask = pdfPage.render(renderContext);
 
-    const dataUrlPromise = () => Promise.resolve(canvas.toDataURL());
+    const dataUrlPromise = () => Promise.resolve(canvas);
 
     return renderTask.promise.then(dataUrlPromise);
   }

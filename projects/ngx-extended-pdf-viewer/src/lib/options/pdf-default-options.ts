@@ -1,3 +1,5 @@
+import { AnnotationMode } from "./editor-annotations";
+
 const _isIE11 = typeof window === 'undefined' ? false : !!(<any>globalThis).MSInputMethodContext && !!(<any>document).documentMode;
 const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
@@ -29,7 +31,7 @@ function getDefaultLanguage(): string {
 export const pdfDefaultOptions = {
   needsES5: _isIE11 || isEdge || needsES5,
   annotationEditorMode: 0,
-  annotationMode: 2,
+  annotationMode: AnnotationMode.ENABLE_FORMS,
   defaultZoomDelay: 400, // milliseconds
   cursorToolOnLoad: 0,
   defaultUrl: '',
