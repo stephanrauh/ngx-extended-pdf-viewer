@@ -1836,6 +1836,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       delete w.registerXFAField;
       delete w.assignFormIdAndFieldName;
       delete w.updateAngularFormValue;
+      delete w.PDFViewerApplication;
+      // delete w.PDFViewerApplicationOptions; deleting this causes an error when initializing another viewer
+      delete w.PDFViewerApplicationConstants;
+      delete w.ngxExtendedPdfViewerCanRunModernJSCode;
       this.windowSizeRecalculatorSubscription?.unsubscribe();
 
       const bus = PDFViewerApplication.eventBus;
