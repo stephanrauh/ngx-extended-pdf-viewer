@@ -146,14 +146,10 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit {
     private pdfShyButtonServiceService: PdfShyButtonService,
     private sanitizer: DomSanitizer,
     private renderer: Renderer2,
-    private notificationService: PDFNotificationService
+    notificationService: PDFNotificationService
   ) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
-      if (this.PDFViewerApplication) {
-      } else {
-        console.log('PdfRotatePageComponent.PDFViewerApplication is undefined');
-      }
     });
   }
 
@@ -178,8 +174,7 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit {
       this.action(htmlEvent, false);
       htmlEvent.preventDefault();
     } else if (this.eventBusName) {
-      const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-      PDFViewerApplication.eventBus.dispatch(this.eventBusName);
+      this.PDFViewerApplication?.eventBus.dispatch(this.eventBusName);
       htmlEvent.preventDefault();
     }
   }

@@ -3,6 +3,7 @@ import { PasswordPrompt } from './password-prompt';
 import { AnnotationStorage, PrintAnnotationStorage } from './pdf-annotation-storage';
 import { IEventBus } from './pdf-event-bus';
 import { PageViewport } from './pdf-page-view-port';
+import { PDFPrintService } from './pdf-print-service';
 import { IPDFViewer, PageViewModeType } from './pdf-viewer';
 import { IPDFViewerAppConfig } from './pdf-viewer-app-config';
 
@@ -1067,6 +1068,8 @@ export interface IPDFViewerApplication {
   passwordPrompt: PasswordPrompt;
   pdfDocument: PDFDocumentProxy;
   pdfLinkService: any /* PDFLinkService;*/;
+  printService: PDFPrintService;
+  PDFPrintServiceFactory: any;
   pdfSidebar: any;
   pdfViewer: IPDFViewer;
   printKeyDownListener: undefined | ((this: Window, ev: KeyboardEvent) => any);

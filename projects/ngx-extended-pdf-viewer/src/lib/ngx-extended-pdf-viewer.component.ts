@@ -1071,7 +1071,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           onLoaded();
         }, 10);
       } else {
-        (globalThis as any).PDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
         this.pdfScriptLoaderService.PDFViewerApplication.eventBus.on('sourcechanged', this.reportSourceChanges.bind(this));
         this.pdfScriptLoaderService.PDFViewerApplication.eventBus.on('afterprint', this.afterPrintListener);
         this.pdfScriptLoaderService.PDFViewerApplication.eventBus.on('beforeprint', this.beforePrintListener);
@@ -1827,7 +1826,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       if (PDFViewerApplication.printKeyDownListener) {
         removeEventListener('keydown', PDFViewerApplication.printKeyDownListener, true);
       }
-      const w = window as any;
+      const w = globalThis as any;
       delete w.getFormValueFromAngular;
       delete w.registerAcroformAnnotations;
       delete w.getFormValue;
