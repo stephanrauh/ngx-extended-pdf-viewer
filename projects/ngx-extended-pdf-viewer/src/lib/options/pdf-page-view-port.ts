@@ -45,4 +45,11 @@ export interface PageViewport {
    * @see {@link convertToViewportPoint}
    */
   convertToPdfPoint(x: number, y: number): Object;
+
+  /**
+   * Clones viewport.
+   * @returns {PageViewport} PageViewport cloned by this viewport.
+   * @see {@link clone}
+   */
+  clone(): PageViewport;
 }

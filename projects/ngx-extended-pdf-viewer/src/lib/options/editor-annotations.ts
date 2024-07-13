@@ -1,3 +1,10 @@
+export enum AnnotationMode {
+  DISABLE = 0,
+  ENABLE = 1,
+  ENABLE_FORMS = 2,
+  ENABLE_STORAGE = 3
+};
+
 export enum AnnotationEditorType {
   DISABLE = -1,
   NONE = 0,
