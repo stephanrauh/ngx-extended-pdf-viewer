@@ -69,6 +69,7 @@ import { ResponsiveVisibility } from './responsive-visibility';
 declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 declare class ResizeObserver {
   constructor(param: () => void);
+  public disconnect();
   public observe(div: HTMLElement);
 }
 
@@ -141,6 +142,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public localizationInitialized: boolean = false;
 
   private windowSizeRecalculatorSubscription: any;
+  private resizeObserver: ResizeObserver | undefined;
 
   @Input()
   public set formData(formData: FormDataType) {
@@ -1096,6 +1098,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         this.onResize();
         this.hideToolbarIfItIsEmpty();
         this.dummyComponents.addMissingStandardWidgets();
+        if (this.pdfScriptLoaderService.PDFViewerApplicationOptions) {
+          const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
+          (globalThis as any).PDFViewerApplicationOptions = PDFViewerApplicationOptions;
+        }
+
         this.pdfScriptLoaderService.webViewerLoad();
 
         const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
@@ -1798,6 +1805,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public async ngOnDestroy(): Promise<void> {
     this.notificationService.onPDFJSInitSignal.set(undefined);
     this.keyboardManager.unregisterKeyboardListener();
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
 
     const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
 
@@ -1837,7 +1847,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       delete w.assignFormIdAndFieldName;
       delete w.updateAngularFormValue;
       delete w.PDFViewerApplication;
-      // delete w.PDFViewerApplicationOptions; deleting this causes an error when initializing another viewer
+      delete w.PDFViewerApplicationOptions;
       delete w.PDFViewerApplicationConstants;
       delete w.ngxExtendedPdfViewerCanRunModernJSCode;
       this.windowSizeRecalculatorSubscription?.unsubscribe();
@@ -2207,10 +2217,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       this.checkHeight();
     }
     try {
-      const observer = new ResizeObserver(() => this.removeScrollbarInInfiniteScrollMode(false));
       const viewer = document.getElementById('viewer');
       if (viewer) {
-        observer.observe(viewer);
+        this.resizeObserver = new ResizeObserver(() => this.removeScrollbarInInfiniteScrollMode(false));
+        this.resizeObserver.observe(viewer);
       }
     } catch (exception) {
       console.log('ResizeObserver is not supported by your browser');

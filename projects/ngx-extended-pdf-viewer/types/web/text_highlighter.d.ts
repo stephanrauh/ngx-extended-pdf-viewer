@@ -11,8 +11,6 @@ export type TextHighlighterOptions = {
      */
     pageIndex: number;
 };
-/** @typedef {import("./event_utils").EventBus} EventBus */
-/** @typedef {import("./pdf_find_controller").PDFFindController} PDFFindController */
 /**
  * @typedef {Object} TextHighlighterOptions
  * @property {PDFFindController} findController

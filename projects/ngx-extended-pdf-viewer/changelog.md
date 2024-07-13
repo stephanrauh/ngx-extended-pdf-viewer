@@ -569,4 +569,4 @@
 - 21.0.0-alpha.5 #2077 removed the dependency on RxJS; this also removes `recalculateSize$` and `onPDFJSInit`
 - 21.0.0-alpha.6 #2337 added the new keyboard service to the public API and make it a root service
 - 21.0.0-alpha.7 #2430 restore a method that has been removed by pdf.js but is still used by ngx-extended-pdf-viewer; #2433 fixed an NPE when `(srcChange()` is fired (missing `this` pointer)
-- 21.0.0-alpha.8 #2436 enable getPageAsImage to render storage annotations; #2337 remove the references to `globalThis` from the `NgxExtendedPdfViewerService`
+- 21.0.0-alpha.8 #2436 enable getPageAsImage to render storage annotations; #2337 remove the references to `globalThis` from the `NgxExtendedPdfViewerService`; #2337 moved the console log filter from `globalThis` to `PdfViewerApplication`
