@@ -142,8 +142,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   private windowSizeRecalculatorSubscription: any;
   private resizeObserver: ResizeObserver | undefined;
 
+  private initialAngularFormData?: FormDataType = undefined;
+
   @Input()
   public set formData(formData: FormDataType) {
+    if (this.initialAngularFormData === undefined) {
+      this.initialAngularFormData = formData;
+    }
     this.formSupport.formData = formData;
   }
 
@@ -1769,6 +1774,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
     await PDFViewerApplication.close();
     this.formSupport?.reset();
+    if (this.initialAngularFormData) {
+      this.formSupport.formData = this.initialAngularFormData;
+    }
     if (this.filenameForDownload) {
       PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
     } else {
