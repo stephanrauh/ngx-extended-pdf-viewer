@@ -14,7 +14,7 @@ export class PdfCspPolicyService {
       // server-side rendering
       return;
     }
-    if ((globalThis as any).pdfViewerSanitizer) {
+    if (this.sanitizer) {
       // already initialized
       return;
     }
@@ -25,7 +25,6 @@ export class PdfCspPolicyService {
         createScriptURL: (input) => input,
       });
     }
-    (globalThis as any).pdfViewerSanitizer = this.sanitizer;
   }
 
   public addTrustedCSS(styles: HTMLElement, css: string) {

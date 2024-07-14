@@ -209,7 +209,6 @@ export class PDFScriptLoaderService implements OnDestroy {
     PDFViewerApplication._cleanup();
 
     const w = window as any;
-    delete w.pdfViewerSanitizer;
     delete w.pdfjsLib;
     this.onPDFJSInitSignal.set(undefined);
     document.querySelectorAll('.ngx-extended-pdf-viewer-script').forEach((e: HTMLScriptElement) => {

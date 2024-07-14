@@ -96,6 +96,7 @@ export class PdfSidebarContentComponent implements OnDestroy {
 
     const anchor = newElement as HTMLAnchorElement;
     anchor.href = linkService.getAnchorUrl(`#page=${id}`);
+    anchor.className = `thumbnail${id}`;
 
     anchor.setAttribute('data-l10n-id', 'pdfjs-thumb-page-title');
     anchor.setAttribute('data-l10n-args', thumbPageTitlePromiseOrPageL10nArgs);
