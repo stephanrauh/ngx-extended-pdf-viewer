@@ -42,7 +42,6 @@ import { assetsUrl, getVersionSuffix, pdfDefaultOptions } from './options/pdf-de
 import { PageViewModeType, ScrollModeChangedEvent, ScrollModeType } from './options/pdf-viewer';
 import { IPDFViewerApplication, PDFDocumentProxy } from './options/pdf-viewer-application';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
-import { ServiceWorkerOptionsType } from './options/service-worker-options';
 import { VerbosityLevel } from './options/verbosity-level';
 import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
 import { PDFNotificationService } from './pdf-notification-service';
@@ -66,7 +65,6 @@ import { SpreadType } from './options/spread-type';
 import { PDFScriptLoaderService } from './pdf-script-loader.service';
 import { ResponsiveVisibility } from './responsive-visibility';
 
-declare const ServiceWorkerOptions: ServiceWorkerOptionsType; // defined in viewer.js
 declare class ResizeObserver {
   constructor(param: () => void);
   public disconnect();
@@ -946,6 +944,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     this._src = change.sourcefile;
     this.srcChangeTriggeredByUser = true;
     this.srcChange.emit(change.sourcefile);
+    const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
+    if (this.filenameForDownload) {
+      PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
+    } else {
+      PDFViewerApplication.appConfig.filenameForDownload = this.guessFilenameFromUrl(this._src);
+    }
   }
 
   public async ngOnInit() {
@@ -953,8 +957,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (isPlatformBrowser(this.platformId)) {
       this.addTranslationsUnlessProvidedByTheUser();
       await this.waitUntilOldComponentIsGone();
-      this.formSupport.registerFormSupportWithPdfjs(this.ngZone);
       await this.pdfScriptLoaderService.ensurePdfJsHasBeenLoaded();
+      this.formSupport.registerFormSupportWithPdfjs(this.ngZone, this.pdfScriptLoaderService.PDFViewerApplication);
       this.keyboardManager.registerKeyboardListener(this.pdfScriptLoaderService.PDFViewerApplication, this.pdfScriptLoaderService.PDFViewerApplicationOptions);
       this.doInitPDFViewer();
     }
@@ -1052,6 +1056,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     this.beforePrint.emit();
   };
 
+  private guessFilenameFromUrl(src: unknown): string | undefined {
+    if (src && typeof src === 'string') {
+      const slash = src.lastIndexOf('/');
+      if (slash > 0) {
+        return src.substring(slash + 1);
+      } else {
+        return src;
+      }
+    }
+    return undefined;
+  }
+
   private doInitPDFViewer() {
     if (typeof window === 'undefined') {
       // server-side rendering
@@ -1107,9 +1123,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
         const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
         PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
-        if (this.filenameForDownload) {
-          PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
-        }
         const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
 
         PDFViewerApplicationOptions.set('enableDragAndDrop', this.enableDragAndDrop);
@@ -1366,9 +1379,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   private async openPDF(): Promise<void> {
-    ServiceWorkerOptions.showUnverifiedSignatures = this.showUnverifiedSignatures;
     const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
+    PDFViewerApplication.serviceWorkerOptions.showUnverifiedSignatures = this.showUnverifiedSignatures;
     PDFViewerApplication.enablePrint = this.enablePrint;
+    if (this.filenameForDownload) {
+      PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
+    } else {
+      PDFViewerApplication.appConfig.filenameForDownload = this.guessFilenameFromUrl(this._src);
+    }
     this.service.ngxExtendedPdfViewerInitialized = true;
     this.registerEventListeners(PDFViewerApplication);
     this.selectCursorTool();
@@ -1751,6 +1769,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
     await PDFViewerApplication.close();
     this.formSupport?.reset();
+    if (this.filenameForDownload) {
+      PDFViewerApplication.appConfig.filenameForDownload = this.filenameForDownload;
+    } else {
+      PDFViewerApplication.appConfig.filenameForDownload = this.guessFilenameFromUrl(this._src);
+    }
 
     const options: any = {
       password: this.password,

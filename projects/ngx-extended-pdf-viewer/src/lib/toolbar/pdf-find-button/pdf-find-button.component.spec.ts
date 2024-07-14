@@ -28,7 +28,7 @@ describe('PdfFindButtonComponent', () => {
     component = fixture.componentInstance;
 
     // Assign the mock object to the window.PDFViewerApplication
-    (window as any).PDFViewerApplication = mockPDFViewerApplication;
+    component.PDFViewerApplication = mockPDFViewerApplication;
 
     // Detect changes to initialize the component
     fixture.detectChanges();

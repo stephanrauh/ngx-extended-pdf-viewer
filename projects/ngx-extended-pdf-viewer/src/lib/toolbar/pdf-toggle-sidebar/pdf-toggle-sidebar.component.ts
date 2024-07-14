@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, NgZone, Output } from '@angular/core';
+import { Component, effect, EventEmitter, Input, Output } from '@angular/core';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
+import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveVisibility } from '../../responsive-visibility';
 
 @Component({
@@ -19,13 +20,17 @@ export class PdfToggleSidebarComponent {
 
   public onClick: () => void;
 
-  constructor(private ngZone: NgZone) {
+  private PDFViewerApplication: IPDFViewerApplication | undefined;
+
+  constructor(public notificationService: PDFNotificationService) {
     const emitter = this.showChange;
+    effect(() => {
+      this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
+    });
     this.onClick = () => {
-      const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-      const newVisibility = !PDFViewerApplication.pdfSidebar.isOpen;
+      const newVisibility = !this.PDFViewerApplication?.pdfSidebar.isOpen;
       emitter.emit(newVisibility);
-      PDFViewerApplication.eventBus.dispatch('toggleSidebar', { visible: newVisibility });
+      this.PDFViewerApplication?.eventBus.dispatch('toggleSidebar', { visible: newVisibility });
     };
   }
 }

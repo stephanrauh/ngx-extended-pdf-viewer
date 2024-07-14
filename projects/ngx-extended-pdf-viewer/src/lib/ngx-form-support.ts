@@ -19,13 +19,16 @@ export class NgxFormSupport {
 
   private ngZone: NgZone;
 
+  private PDFViewerApplication: IPDFViewerApplication | undefined;
+
   public reset() {
     this.formData = {};
     this.formIdToFullFieldName = {};
   }
 
-  public registerFormSupportWithPdfjs(ngZone: NgZone): void {
+  public registerFormSupportWithPdfjs(ngZone: NgZone, PDFViewerApplication: IPDFViewerApplication): void {
     this.ngZone = ngZone;
+    this.PDFViewerApplication = PDFViewerApplication;
     (globalThis as any).getFormValueFromAngular = (key: string) => this.getFormValueFromAngular(key);
     (globalThis as any).updateAngularFormValue = (key: string | HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, value: { value: string }) =>
       this.updateAngularFormValueCalledByPdfjs(key, value);
@@ -251,9 +254,7 @@ export class NgxFormSupport {
   }
 
   public updateFormFieldsInPdfCalledByNgOnChanges(previousFormData: Object) {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
-
-    if (!PDFViewerApplication?.pdfDocument?.annotationStorage) {
+    if (!this.PDFViewerApplication?.pdfDocument?.annotationStorage) {
       // ngOnChanges calls this method too early - so just ignore it
       return;
     }

@@ -188,18 +188,17 @@ export class PdfSecondaryToolbarComponent implements OnChanges, AfterViewInit, O
     eventBusName?: string,
     closeOnClick?: boolean
   ): void {
-    const PDFViewerApplication: IPDFViewerApplication = (window as any).PDFViewerApplication;
     const origin = htmlevent.target as HTMLElement;
     origin?.classList.add('toggled');
     if (action) {
       action.call(this, htmlevent, true);
       htmlevent.preventDefault();
     } else if (eventBusName) {
-      PDFViewerApplication.eventBus.dispatch(eventBusName);
+      this.PDFViewerApplication?.eventBus.dispatch(eventBusName);
       htmlevent.preventDefault();
     }
     if (closeOnClick) {
-      PDFViewerApplication.secondaryToolbar.close();
+      this.PDFViewerApplication?.secondaryToolbar.close();
     }
   }
 }

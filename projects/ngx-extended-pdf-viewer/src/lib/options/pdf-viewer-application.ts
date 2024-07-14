@@ -7,6 +7,7 @@ import { PageViewport } from './pdf-page-view-port';
 import { PDFPrintService } from './pdf-print-service';
 import { IPDFViewer, PageViewModeType } from './pdf-viewer';
 import { IPDFViewerAppConfig } from './pdf-viewer-app-config';
+import { ServiceWorkerOptionsType } from './service-worker-options';
 
 export interface IWebL10n {
   translate(element: HTMLElement | null): Promise<void>;
@@ -1078,6 +1079,8 @@ export interface IPDFViewerApplication {
   sidebarViewOnLoad: 0 | 1;
   spreadModeOnLoad: 0 | 1 | 2;
   secondaryToolbar: any;
+
+  serviceWorkerOptions: ServiceWorkerOptionsType;
   store: ViewHistory;
   toolbar: any;
   viewer: HTMLDivElement;

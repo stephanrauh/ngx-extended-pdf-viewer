@@ -1,11 +1,11 @@
-import { AnnotationMode } from "./editor-annotations";
+import { AnnotationMode } from './editor-annotations';
 
 const _isIE11 = typeof window === 'undefined' ? false : !!(<any>globalThis).MSInputMethodContext && !!(<any>document).documentMode;
 const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.userAgent);
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
-export const pdfjsVersion = '4.4.705';
-export const pdfjsBleedingEdgeVersion = '4.5.545';
+export const pdfjsVersion = '4.4.709';
+export const pdfjsBleedingEdgeVersion = '4.5.610';
 export function getVersionSuffix(folder: string): string {
   if (folder?.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -66,7 +66,9 @@ export const pdfDefaultOptions = {
   // viewerCssTheme: 0, // not supported by ngx-extended-pdf-viewer
   viewOnLoad: 0,
   cMapPacked: true,
-  cMapUrl: () => `${assetsUrl(pdfDefaultOptions.assetsFolder, '/..')}/cmaps/`,
+  cMapUrl: function () {
+    return `${assetsUrl(pdfDefaultOptions.assetsFolder, '/..')}/cmaps/`;
+  },
   disableAutoFetch: false,
   disableFontFace: false,
   disableRange: false,
@@ -80,14 +82,16 @@ export const pdfDefaultOptions = {
   workerPort: null,
   assetsFolder: 'assets',
   _internalFilenameSuffix: '.min', // don't modify this - it's an internal field
-  sandboxBundleSrc: () =>
-    pdfDefaultOptions.needsES5
+  sandboxBundleSrc: function () {
+    return pdfDefaultOptions.needsES5
       ? `./pdf.sandbox-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}-es5${pdfDefaultOptions._internalFilenameSuffix}.mjs`
-      : `./pdf.sandbox-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}${pdfDefaultOptions._internalFilenameSuffix}.mjs`,
-  workerSrc: () =>
-    pdfDefaultOptions.needsES5
+      : `./pdf.sandbox-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}${pdfDefaultOptions._internalFilenameSuffix}.mjs`;
+  },
+  workerSrc: function () {
+    return pdfDefaultOptions.needsES5
       ? `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.worker-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}-es5.mjs`
-      : `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.worker-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}.mjs`,
+      : `${assetsUrl(pdfDefaultOptions.assetsFolder)}/pdf.worker-${getVersionSuffix(assetsUrl(pdfDefaultOptions.assetsFolder))}.mjs`;
+  },
   standardFontDataUrl: () => `${assetsUrl(pdfDefaultOptions.assetsFolder, '/..')}/standard_fonts/`,
 
   // options specific to ngx-extended-pdf-viewer (as opposed to being used by pdf.js)
