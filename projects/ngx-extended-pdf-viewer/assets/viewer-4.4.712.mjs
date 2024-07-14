@@ -52,7 +52,57 @@ __webpack_require__.d(__webpack_exports__, {
   webViewerLoad: () => (/* binding */ webViewerLoad)
 });
 
+;// CONCATENATED MODULE: ./external/ngx-logger/ngx-console.js
+class ngx_console_NgxConsole {
+  static ngxConsoleFilter = (_level, _message) => true;
+  static log(message, reason) {
+    if (ngx_console_NgxConsole.ngxConsoleFilter("log", message)) {
+      if (reason !== undefined) {
+        console.log("%s", message, reason);
+      } else {
+        console.log(message);
+      }
+    }
+  }
+  static error(message, reason) {
+    if (ngx_console_NgxConsole.ngxConsoleFilter("error", message)) {
+      if (reason !== undefined) {
+        console.error("%s", message, reason);
+      } else {
+        console.error(message);
+      }
+    }
+  }
+  static warn(message, reason) {
+    if (ngx_console_NgxConsole.ngxConsoleFilter("warn", message)) {
+      if (reason !== undefined) {
+        console.warn("%s", message, reason);
+      } else {
+        console.warn(message);
+      }
+    }
+  }
+  static debug(message, reason) {
+    if (ngx_console_NgxConsole.ngxConsoleFilter("debug", message)) {
+      if (reason !== undefined) {
+        console.warn("%s", message, reason);
+      } else {
+        console.warn(message);
+      }
+    }
+  }
+  get ngxConsoleFilter() {
+    return ngx_console_NgxConsole.ngxConsoleFilter;
+  }
+  set ngxConsoleFilter(filter) {
+    ngx_console_NgxConsole.ngxConsoleFilter = filter;
+  }
+  reset() {
+    ngx_console_NgxConsole.ngxConsoleFilter = (_level, _message) => true;
+  }
+}
 ;// CONCATENATED MODULE: ./web/ui_utils.js
+
 const DEFAULT_SCALE_VALUE = "auto";
 const DEFAULT_SCALE = 1.0;
 const DEFAULT_SCALE_DELTA = 1.1;
@@ -122,7 +172,7 @@ function scrollIntoView(element, spot, scrollMatches = false, infiniteScroll = f
   }
   let parent = element.offsetParent;
   if (!parent) {
-    globalThis.ngxConsole.error("offsetParent is not set -- cannot scroll");
+    ngx_console_NgxConsole.error("offsetParent is not set -- cannot scroll");
     return;
   }
   let offsetY = element.offsetTop + element.clientTop;
@@ -892,6 +942,7 @@ class AppOptions {
 
 ;// CONCATENATED MODULE: ./web/pdf_link_service.js
 
+
 const DEFAULT_LINK_REL = "noopener noreferrer nofollow";
 const LinkTarget = {
   NONE: 0,
@@ -972,7 +1023,7 @@ class PDFLinkService {
         try {
           pageNumber = (await this.pdfDocument.getPageIndex(destRef)) + 1;
         } catch {
-          globalThis.ngxConsole.error(`goToDestination: "${destRef}" is not a valid page reference, for dest="${dest}".`);
+          ngx_console_NgxConsole.error(`goToDestination: "${destRef}" is not a valid page reference, for dest="${dest}".`);
           return;
         }
       }
@@ -980,7 +1031,7 @@ class PDFLinkService {
       pageNumber = destRef + 1;
     }
     if (!pageNumber || pageNumber < 1 || pageNumber > this.pagesCount) {
-      globalThis.ngxConsole.error(`goToDestination: "${pageNumber}" is not a valid page number, for dest="${dest}".`);
+      ngx_console_NgxConsole.error(`goToDestination: "${pageNumber}" is not a valid page number, for dest="${dest}".`);
       return;
     }
     if (this.pdfHistory) {
@@ -1003,7 +1054,7 @@ class PDFLinkService {
     }
     const pageNumber = typeof val === "string" && this.pdfViewer.pageLabelToPageNumber(val) || val | 0;
     if (!(Number.isInteger(pageNumber) && pageNumber > 0 && pageNumber <= this.pagesCount)) {
-      globalThis.ngxConsole.error(`PDFLinkService.goToPage: "${val}" is not a valid page.`);
+      ngx_console_NgxConsole.error(`PDFLinkService.goToPage: "${val}" is not a valid page.`);
       return;
     }
     if (this.pdfHistory) {
@@ -1114,14 +1165,14 @@ class PDFLinkService {
           }, zoomArgs.length > 1 ? zoomArgs[1] | 0 : null];
         } else if (zoomArg === "FitR") {
           if (zoomArgs.length !== 5) {
-            globalThis.ngxConsole.error('PDFLinkService.setHash: Not enough parameters for "FitR".');
+            ngx_console_NgxConsole.error('PDFLinkService.setHash: Not enough parameters for "FitR".');
           } else {
             dest = [null, {
               name: zoomArg
             }, zoomArgs[1] | 0, zoomArgs[2] | 0, zoomArgs[3] | 0, zoomArgs[4] | 0];
           }
         } else {
-          globalThis.ngxConsole.error(`PDFLinkService.setHash: "${zoomArg}" is not a valid zoom value.`);
+          ngx_console_NgxConsole.error(`PDFLinkService.setHash: "${zoomArg}" is not a valid zoom value.`);
         }
       }
       if (dest) {
@@ -1301,7 +1352,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '21.0.0-alpha.7';
+const ngxExtendedPdfViewerVersion = '21.0.0-alpha.8';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -3701,6 +3752,7 @@ class CaretBrowsingMode {
 
 ;// CONCATENATED MODULE: ./web/download_manager.js
 
+
 function download(blobUrl, filename) {
   const a = document.createElement("a");
   if (!a.click) {
@@ -3738,7 +3790,7 @@ class DownloadManager {
         window.open(blobUrl);
         return true;
       } catch (ex) {
-        globalThis.ngxConsole.error(`openOrDownloadData: ${ex}`);
+        ngx_console_NgxConsole.error(`openOrDownloadData: ${ex}`);
         URL.revokeObjectURL(blobUrl);
         this.#openBlobUrls.delete(data);
       }
@@ -3805,12 +3857,21 @@ class OverlayManager {
     dialog.showModal();
     dialog.classList.remove("hidden");
   }
-  async close(dialog = this.#active) {
+  async close(dialog = this.#active, silent = false) {
     if (!this.#overlays.has(dialog)) {
+      if (silent) {
+        return;
+      }
       throw new Error("The overlay does not exist.");
     } else if (!this.#active) {
+      if (silent) {
+        return;
+      }
       throw new Error("The overlay is currently not active.");
     } else if (this.#active !== dialog) {
+      if (silent) {
+        return;
+      }
       throw new Error("Another overlay is currently active.");
     }
     dialog.close();
@@ -4212,6 +4273,7 @@ function isOverPerfectScrollbar(x, y, divName) {
 
 
 
+
 class PDFCursorTools {
   #active = CursorTool.SELECT;
   #prevActive = null;
@@ -4257,7 +4319,7 @@ class PDFCursorTools {
         break;
       case CursorTool.ZOOM:
       default:
-        globalThis.ngxConsole.error(`switchTool: "${tool}" is an unsupported value.`);
+        ngx_console_NgxConsole.error(`switchTool: "${tool}" is an unsupported value.`);
         return;
     }
     this.#active = tool;
@@ -4407,7 +4469,7 @@ class PDFDocumentProperties {
     this.#updateUI();
   }
   async close() {
-    this.overlayManager.close(this.dialog);
+    this.overlayManager.close(this.dialog, true);
     this.eventBus.dispatch("propertiesdialogclose", this);
   }
   setDocument(pdfDocument) {
@@ -5499,6 +5561,7 @@ class PDFFindBar {
 ;// CONCATENATED MODULE: ./web/pdf_history.js
 
 
+
 const HASH_CHANGE_TIMEOUT = 1000;
 const POSITION_UPDATED_THRESHOLD = 50;
 const UPDATE_VIEWAREA_TIMEOUT = 1000;
@@ -5531,7 +5594,7 @@ class PDFHistory {
     updateUrl = false
   }) {
     if (!fingerprint || typeof fingerprint !== "string") {
-      globalThis.ngxConsole.error('PDFHistory.initialize: The "fingerprint" must be a non-empty string.');
+      ngx_console_NgxConsole.error('PDFHistory.initialize: The "fingerprint" must be a non-empty string.');
       return;
     }
     if (this._initialized) {
@@ -5603,14 +5666,14 @@ class PDFHistory {
       return;
     }
     if (namedDest && typeof namedDest !== "string") {
-      globalThis.ngxConsole.error("PDFHistory.push: " + `"${namedDest}" is not a valid namedDest parameter.`);
+      ngx_console_NgxConsole.error("PDFHistory.push: " + `"${namedDest}" is not a valid namedDest parameter.`);
       return;
     } else if (!Array.isArray(explicitDest)) {
-      globalThis.ngxConsole.error("PDFHistory.push: " + `"${explicitDest}" is not a valid explicitDest parameter.`);
+      ngx_console_NgxConsole.error("PDFHistory.push: " + `"${explicitDest}" is not a valid explicitDest parameter.`);
       return;
     } else if (!this.#isValidPage(pageNumber)) {
       if (pageNumber !== null || this._destination) {
-        globalThis.ngxConsole.error("PDFHistory.push: " + `"${pageNumber}" is not a valid pageNumber parameter.`);
+        ngx_console_NgxConsole.error("PDFHistory.push: " + `"${pageNumber}" is not a valid pageNumber parameter.`);
         return;
       }
     }
@@ -5646,7 +5709,7 @@ class PDFHistory {
       return;
     }
     if (!this.#isValidPage(pageNumber)) {
-      globalThis.ngxConsole.error(`PDFHistory.pushPage: "${pageNumber}" is not a valid page number.`);
+      ngx_console_NgxConsole.error(`PDFHistory.pushPage: "${pageNumber}" is not a valid page number.`);
       return;
     }
     if (this._destination?.page === pageNumber) {
@@ -7188,6 +7251,7 @@ function getXfaHtmlForPrinting(printContainer, pdfDocument) {
 }
 
 ;// CONCATENATED MODULE: ./src/shared/util.js
+
 const isNodeJS = typeof process === "object" && process + "" === "[object process]" && !process.versions.nw && !(process.versions.electron && process.type && process.type !== "browser");
 const IDENTITY_MATRIX = (/* unused pure expression or super */ null && ([1, 0, 0, 1, 0, 0]));
 const FONT_IDENTITY_MATRIX = (/* unused pure expression or super */ null && ([0.001, 0, 0, 0.001, 0, 0]));
@@ -7477,8 +7541,8 @@ function info(msg) {
   if (verbosity >= util_VerbosityLevel.INFOS) {
     if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
       console.log(`Info: ${msg}`);
-    } else if (Window && globalThis.ngxConsole) {
-      globalThis.ngxConsole.log(`Info: ${msg}`);
+    } else if (Window && NgxConsole) {
+      NgxConsole.log(`Info: ${msg}`);
     } else {
       console.log(`Info: ${msg}`);
     }
@@ -7488,8 +7552,8 @@ function warn(msg) {
   if (verbosity >= util_VerbosityLevel.WARNINGS) {
     if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
       console.log(`Warning: ${msg}`);
-    } else if (Window && globalThis.ngxConsole) {
-      globalThis.ngxConsole.log(`Warning: ${msg}`);
+    } else if (Window && ngx_console_NgxConsole) {
+      ngx_console_NgxConsole.log(`Warning: ${msg}`);
     } else {
       console.log(`Warning: ${msg}`);
     }
@@ -7941,6 +8005,7 @@ const FontRenderOps = {
 
 
 
+
 let activeService = null;
 let dialog = null;
 let overlayManager = null;
@@ -8016,7 +8081,7 @@ class PDFPrintService {
     printResolution,
     printAnnotationStoragePromise = null,
     eventBus
-  }) {
+  }, isInPDFPrintRange, filteredPageCount) {
     this.pdfDocument = pdfDocument;
     this.pagesOverview = pagesOverview;
     this.printContainer = printContainer;
@@ -8028,6 +8093,8 @@ class PDFPrintService {
     this.currentPage = -1;
     this.scratchCanvas = document.createElement("canvas");
     this.eventBus = eventBus;
+    this.filteredPageCount = filteredPageCount;
+    this.isInPDFPrintRange = isInPDFPrintRange;
   }
   layout() {
     this.throwIfInactive();
@@ -8041,7 +8108,7 @@ class PDFPrintService {
     } = this.pagesOverview[0];
     const hasEqualPageSizes = this.pagesOverview.every(size => size.width === width && size.height === height);
     if (!hasEqualPageSizes) {
-      globalThis.ngxConsole.warn("Not all pages have the same size. The printed result may be incorrect!");
+      ngx_console_NgxConsole.warn("Not all pages have the same size. The printed result may be incorrect!");
     }
     this.pageStyleSheet = document.createElement("style");
     this.pageStyleSheet.textContent = `@page { size: ${width}pt ${height}pt;}`;
@@ -8082,17 +8149,17 @@ class PDFPrintService {
         if (this.currentPage >= pageCount) {
           break;
         }
-        if (!window.isInPDFPrintRange || window.isInPDFPrintRange(this.currentPage)) {
+        if (!this.isInPDFPrintRange || this.isInPDFPrintRange(this.currentPage)) {
           break;
         }
       }
       if (this.currentPage >= pageCount) {
-        renderProgress(window.filteredPageCount | pageCount, window.filteredPageCount | pageCount, this.eventBus);
+        renderProgress(this.filteredPageCount ?? pageCount, this.filteredPageCount ?? pageCount, this.eventBus);
         resolve();
         return;
       }
       const index = this.currentPage;
-      renderProgress(index, window.filteredPageCount | pageCount, this.eventBus);
+      renderProgress(index, this.filteredPageCount ?? pageCount, this.eventBus);
       renderPage(this, this.pdfDocument, index + 1, this.pagesOverview[index], this._printResolution, this._optionalContentConfigPromise, this._printAnnotationStoragePromise).then(this.useRenderedPage.bind(this)).then(function () {
         renderNextPage(resolve, reject);
       }, reject);
@@ -8148,7 +8215,7 @@ function printPdf() {
     return;
   }
   if (activeService) {
-    globalThis.ngxConsole.warn("Ignored this.printPDF() because of a pending print job.");
+    ngx_console_NgxConsole.warn("Ignored this.printPDF() because of a pending print job.");
     return;
   }
   ensureOverlay().then(function () {
@@ -8160,7 +8227,7 @@ function printPdf() {
     dispatchEvent("beforeprint");
   } finally {
     if (!activeService) {
-      globalThis.ngxConsole.error("Expected print service to be initialized.");
+      ngx_console_NgxConsole.error("Expected print service to be initialized.");
       ensureOverlay().then(function () {
         if (overlayManager.active === dialog) {
           overlayManager.close(dialog);
@@ -8244,6 +8311,7 @@ function ensureOverlay() {
   return overlayPromise;
 }
 class PDFPrintServiceFactory {
+  static enablePrint = true;
   static initGlobals(app) {
     viewerApp = app;
   }
@@ -8254,11 +8322,15 @@ class PDFPrintServiceFactory {
     if (activeService) {
       throw new Error("The print service is created and active.");
     }
-    return activeService = new PDFPrintService(params);
+    if (!PDFPrintServiceFactory.enablePrint) {
+      console.debug("The print service is disabled.");
+    }
+    return activeService = new PDFPrintService(params, PDFPrintServiceFactory.isInPDFPrintRange, PDFPrintServiceFactory.filteredPageCount);
   }
 }
 
 ;// CONCATENATED MODULE: ./web/pdf_rendering_queue.js
+
 
 
 const CLEANUP_TIMEOUT = 30000;
@@ -8365,7 +8437,7 @@ class PDFRenderingQueue {
           if (reason instanceof RenderingCancelledException) {
             return;
           }
-          globalThis.ngxConsole.error(`renderView: "${reason}"`);
+          ngx_console_NgxConsole.error(`renderView: "${reason}"`);
         });
         break;
     }
@@ -8374,6 +8446,7 @@ class PDFRenderingQueue {
 }
 
 ;// CONCATENATED MODULE: ./web/pdf_scripting_manager.js
+
 
 
 class PDFScriptingManager {
@@ -8419,7 +8492,7 @@ class PDFScriptingManager {
     try {
       this.#scripting = this.#initScripting();
     } catch (error) {
-      globalThis.ngxConsole.error(`setDocument: "${error.message}".`);
+      ngx_console_NgxConsole.error(`setDocument: "${error.message}".`);
       await this.#destroyScripting();
       return;
     }
@@ -8496,7 +8569,7 @@ class PDFScriptingManager {
         source: this
       });
     } catch (error) {
-      globalThis.ngxConsole.error(`setDocument: "${error.message}".`);
+      ngx_console_NgxConsole.error(`setDocument: "${error.message}".`);
       await this.#destroyScripting();
       return;
     }
@@ -8571,10 +8644,10 @@ class PDFScriptingManager {
     if (!id) {
       switch (command) {
         case "clear":
-          globalThis.ngxConsole.clear();
+          ngx_console_NgxConsole.clear();
           break;
         case "error":
-          globalThis.ngxConsole.error(value);
+          ngx_console_NgxConsole.error(value);
           break;
         case "layout":
           if (!isInPresentationMode) {
@@ -8592,7 +8665,7 @@ class PDFScriptingManager {
           });
           break;
         case "println":
-          globalThis.ngxConsole.log(value);
+          ngx_console_NgxConsole.log(value);
           break;
         case "zoom":
           if (!isInPresentationMode) {
@@ -8740,6 +8813,7 @@ class PDFScriptingManager {
 
 ;// CONCATENATED MODULE: ./web/pdf_sidebar.js
 
+
 const SIDEBAR_WIDTH_VAR = "--sidebar-width";
 const SIDEBAR_MIN_WIDTH = 200;
 const SIDEBAR_RESIZING_CLASS = "sidebarResizing";
@@ -8838,7 +8912,7 @@ class PDFSidebar {
         }
         break;
       default:
-        globalThis.ngxConsole.error(`PDFSidebar.switchView: "${view}" is not a valid view.`);
+        ngx_console_NgxConsole.error(`PDFSidebar.switchView: "${view}" is not a valid view.`);
         return;
     }
     this.active = view;
@@ -9058,6 +9132,7 @@ class PDFSidebar {
 ;// CONCATENATED MODULE: ./web/pdf_thumbnail_view.js
 
 
+
 const DRAW_UPSCALE_FACTOR = 2;
 const MAX_NUM_SCALING_STEPS = 3;
 const THUMBNAIL_WIDTH = 98;
@@ -9114,8 +9189,15 @@ class PDFThumbnailView {
     this.renderTask = null;
     this.renderingState = RenderingStates.INITIAL;
     this.resume = null;
-    if (window.pdfThumbnailGenerator) {
-      this._placeholderImg = window.pdfThumbnailGenerator(this, linkService, id, container, this.#pageL10nArgs);
+    eventBus.dispatch("rendercustomthumbnail", {
+      pdfThumbnailView: this,
+      linkService,
+      id,
+      container,
+      thumbPageTitlePromiseOrPageL10nArgs: this.#pageL10nArgs
+    });
+    if (container.querySelector(`.${this.renderingId}`)) {
+      this._placeholderImg = container.querySelector(`.${this.renderingId} .thumbnailImage`);
     } else {
       this.createThumbnail(this, linkService, id, container, this.#pageL10nArgs);
     }
@@ -9125,6 +9207,7 @@ class PDFThumbnailView {
     anchor.href = linkService.getAnchorUrl("#page=" + id);
     anchor.setAttribute("data-l10n-id", "pdfjs-thumb-page-title");
     anchor.setAttribute("data-l10n-args", this.#pageL10nArgs);
+    anchor.className = this.renderingId;
     anchor.onclick = function () {
       linkService.goToPage(id);
       return false;
@@ -9246,7 +9329,7 @@ class PDFThumbnailView {
   }
   async draw() {
     if (this.renderingState !== RenderingStates.INITIAL) {
-      globalThis.ngxConsole.error("Must be in new state before drawing");
+      ngx_console_NgxConsole.error("Must be in new state before drawing");
       return undefined;
     }
     const {
@@ -9361,6 +9444,7 @@ class PDFThumbnailView {
 ;// CONCATENATED MODULE: ./web/pdf_thumbnail_viewer.js
 
 
+
 const THUMBNAIL_SCROLL_MARGIN = -19;
 const THUMBNAIL_SELECTED_CLASS = "selected";
 class PDFThumbnailViewer {
@@ -9400,7 +9484,7 @@ class PDFThumbnailViewer {
     }
     const thumbnailView = this._thumbnails[pageNumber - 1];
     if (!thumbnailView) {
-      globalThis.ngxConsole.error('scrollThumbnailIntoView: Invalid "pageNumber" parameter.');
+      ngx_console_NgxConsole.error('scrollThumbnailIntoView: Invalid "pageNumber" parameter.');
       return;
     }
     if (pageNumber !== this._currentPageNumber) {
@@ -9515,7 +9599,7 @@ class PDFThumbnailViewer {
       const thumbnailView = this._thumbnails[this._currentPageNumber - 1];
       thumbnailView.div.classList.add(THUMBNAIL_SELECTED_CLASS);
     }).catch(reason => {
-      globalThis.ngxConsole.error("Unable to initialize thumbnail viewer", reason);
+      ngx_console_NgxConsole.error("Unable to initialize thumbnail viewer", reason);
     });
   }
   #cancelRendering() {
@@ -9531,7 +9615,7 @@ class PDFThumbnailViewer {
       this._pageLabels = null;
     } else if (!(Array.isArray(labels) && this.pdfDocument.numPages === labels.length)) {
       this._pageLabels = null;
-      globalThis.ngxConsole.error("PDFThumbnailViewer_setPageLabels: Invalid page labels.");
+      ngx_console_NgxConsole.error("PDFThumbnailViewer_setPageLabels: Invalid page labels.");
     } else {
       this._pageLabels = labels;
     }
@@ -9550,7 +9634,7 @@ class PDFThumbnailViewer {
       }
       return pdfPage;
     } catch (reason) {
-      globalThis.ngxConsole.error("Unable to get page for thumb view", reason);
+      ngx_console_NgxConsole.error("Unable to get page for thumb view", reason);
       return null;
     }
   }
@@ -12212,6 +12296,7 @@ class TextAccessibilityManager {
 }
 
 ;// CONCATENATED MODULE: ./web/text_highlighter.js
+
 class TextHighlighter {
   #eventAbortController = null;
   constructor({
@@ -12278,7 +12363,7 @@ class TextHighlighter {
         i++;
       }
       if (i === textContentItemsStr.length) {
-        globalThis.ngxConsole.error("Could not find a matching mapping");
+        ngx_console_NgxConsole.error("Could not find a matching mapping");
       }
       const match = {
         begin: {
@@ -12605,6 +12690,7 @@ class TextLayerBuilder {
 }
 
 ;// CONCATENATED MODULE: ./web/pdf_page_view.js
+
 
 
 
@@ -13178,7 +13264,7 @@ class PDFPageView {
   }
   async draw() {
     if (this.renderingState !== RenderingStates.INITIAL) {
-      globalThis.ngxConsole.error("Must be in new state before drawing");
+      ngx_console_NgxConsole.error("Must be in new state before drawing");
       this.reset();
     }
     const {
@@ -13437,6 +13523,7 @@ class PDFPageView {
 
 
 
+
 const DEFAULT_CACHE_SIZE = 10;
 const PagesCountLimit = {
   FORCE_SCROLL_MODE_PAGE: 10000,
@@ -13518,7 +13605,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = "4.4.705";
+    const viewerVersion = "4.4.712";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -13648,7 +13735,7 @@ class PDFViewer {
     }
     const flip = Math.abs(this._currentPageNumber - val) <= 2;
     if (!this._setCurrentPageNumber(val, true)) {
-      globalThis.ngxConsole.error(`currentPageNumber: "${val}" is not a valid page.`);
+      ngx_console_NgxConsole.error(`currentPageNumber: "${val}" is not a valid page.`);
     }
     if (this.pageFlip) {
       if (flip) {
@@ -13809,7 +13896,7 @@ class PDFViewer {
       }
     }
     if (!this._setCurrentPageNumber(page, true)) {
-      globalThis.ngxConsole.error(`currentPageLabel: "${val}" is not a valid page.`);
+      ngx_console_NgxConsole.error(`currentPageLabel: "${val}" is not a valid page.`);
     }
   }
   get currentScale() {
@@ -14213,7 +14300,7 @@ class PDFViewer {
         this.update();
       }
     }).catch(reason => {
-      globalThis.ngxConsole.error("Unable to initialize viewer", reason);
+      ngx_console_NgxConsole.error("Unable to initialize viewer", reason);
       this._pagesCapability.reject(reason);
     });
   }
@@ -14225,7 +14312,7 @@ class PDFViewer {
       this._pageLabels = null;
     } else if (!(Array.isArray(labels) && this.pdfDocument.numPages === labels.length)) {
       this._pageLabels = null;
-      globalThis.ngxConsole.error(`setPageLabels: Invalid page labels.`);
+      ngx_console_NgxConsole.error(`setPageLabels: Invalid page labels.`);
     } else {
       this._pageLabels = labels;
     }
@@ -14508,7 +14595,7 @@ class PDFViewer {
           scale = Math.min(MAX_AUTO_SCALE, horizontalScale);
           break;
         default:
-          globalThis.ngxConsole.error(`#setScale: "${value}" is an unknown zoom value.`);
+          ngx_console_NgxConsole.error(`#setScale: "${value}" is an unknown zoom value.`);
           return;
       }
       options.preset = true;
@@ -15899,6 +15986,7 @@ class ViewHistory {
 
 
 
+
 const FORCE_PAGES_LOADED_TIMEOUT = 10;
 const WHEEL_ZOOM_DISABLED_TIMEOUT = 1000;
 const ViewOnLoad = {
@@ -16448,7 +16536,7 @@ const app_PDFViewerApplication = {
     document.title = `${editorIndicator ? "* " : ""}${title}`;
   },
   get _docFilename() {
-    return this._contentDispositionFilename || pdfjs_getPdfFilenameFromUrl(this.url);
+    return this._contentDispositionFilename || pdfjs_getPdfFilenameFromUrl(this.url, app_PDFViewerApplication.appConfig.filenameForDownload);
   },
   _hideViewBookmark() {
     if (!this.appConfig) {
@@ -16549,10 +16637,9 @@ const app_PDFViewerApplication = {
         percent: 100 * loaded / total
       });
     };
+    const showUnverifiedSignatures = this.serviceWorkerOptions.showUnverifiedSignatures;
     return loadingTask.promise.then(pdfDocument => {
-      if (globalThis.ServiceWorkerOptions) {
-        pdfDocument._transport.messageHandler.send('showUnverifiedSignatures', globalThis.ServiceWorkerOptions.showUnverifiedSignatures);
-      }
+      pdfDocument._transport.messageHandler.send('showUnverifiedSignatures', showUnverifiedSignatures);
       this.load(pdfDocument);
     }, reason => {
       if (loadingTask !== this.pdfLoadingTask) {
@@ -16595,7 +16682,7 @@ const app_PDFViewerApplication = {
       const data = await this.pdfDocument.saveDocument();
       this.downloadManager.download(data, this._downloadUrl, this._docFilename, options);
     } catch (reason) {
-      globalThis.ngxConsole.error(`Error when saving the document: ${reason.message}`);
+      ngx_console_NgxConsole.error(`Error when saving the document: ${reason.message}`);
       await this.download(options);
     } finally {
       await this.pdfScriptingManager.dispatchDidSave();
@@ -16906,7 +16993,7 @@ const app_PDFViewerApplication = {
     }
     let triggerAutoPrint = openAction?.action === "Print";
     if (jsActions) {
-      globalThis.ngxConsole.warn("Warning: JavaScript support is not enabled");
+      ngx_console_NgxConsole.warn("Warning: JavaScript support is not enabled");
       for (const name in jsActions) {
         if (triggerAutoPrint) {
           break;
@@ -16942,7 +17029,7 @@ const app_PDFViewerApplication = {
     this._contentLength ??= contentLength;
     const options = window.PDFViewerApplicationOptions;
     if (!options || options.get("verbosity") > 0) {
-      globalThis.ngxConsole.log(`PDF ${pdfDocument.fingerprints[0]} [${info.PDFFormatVersion} ` + `${(info.Producer || "-").trim()} / ${(info.Creator || "-").trim()}] ` + `(PDF.js: ${version || "?"} [${build || "?"}])  modified by ngx-extended-pdf-viewer ${ngxExtendedPdfViewerVersion}`);
+      ngx_console_NgxConsole.log(`PDF ${pdfDocument.fingerprints[0]} [${info.PDFFormatVersion} ` + `${(info.Producer || "-").trim()} / ${(info.Creator || "-").trim()}] ` + `(PDF.js: ${version || "?"} [${build || "?"}])  modified by ngx-extended-pdf-viewer ${ngxExtendedPdfViewerVersion}`);
     }
     let pdfTitle = info.Title;
     const metadataTitle = metadata?.get("dc:title");
@@ -16958,9 +17045,9 @@ const app_PDFViewerApplication = {
     }
     if (info.IsXFAPresent && !info.IsAcroFormPresent && !pdfDocument.isPureXfa) {
       if (pdfDocument.loadingParams.enableXfa) {
-        globalThis.ngxConsole.warn("Warning: XFA Foreground documents are not supported");
+        ngx_console_NgxConsole.warn("Warning: XFA Foreground documents are not supported");
       } else {
-        globalThis.ngxConsole.warn("Warning: XFA support is not enabled");
+        ngx_console_NgxConsole.warn("Warning: XFA support is not enabled");
       }
     } else if ((info.IsAcroFormPresent || info.IsXFAPresent) && !this.pdfViewer.renderForms) {
       console.warn("Warning: Interactive form support is not enabled");
@@ -17561,7 +17648,7 @@ function webViewerPageMode({
       view = SidebarView.NONE;
       break;
     default:
-      globalThis.ngxConsole.error('Invalid "pagemode" hash parameter: ' + mode);
+      ngx_console_NgxConsole.error('Invalid "pagemode" hash parameter: ' + mode);
       return;
   }
   app_PDFViewerApplication.pdfSidebar?.switchView(view, true);
@@ -18294,23 +18381,26 @@ function webViewerReportTelemetry({
   app_PDFViewerApplication.externalServices.reportTelemetry(details);
 }
 app_PDFViewerApplication.printPdf = printPdf;
+app_PDFViewerApplication.PDFPrintServiceFactory = PDFPrintServiceFactory;
+app_PDFViewerApplication.ngxConsole = new ngx_console_NgxConsole();
+const ServiceWorkerOptions = {
+  showUnverifiedSignatures: false
+};
+app_PDFViewerApplication.serviceWorkerOptions = ServiceWorkerOptions;
 
 ;// CONCATENATED MODULE: ./web/viewer.js
 
 
 
 
-const pdfjsVersion = "4.4.705";
-const pdfjsBuild = "4a8373b40";
+const pdfjsVersion = "4.4.712";
+const pdfjsBuild = "4298934ca";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
   ScrollMode: ScrollMode,
   SpreadMode: SpreadMode
 };
-window.PDFViewerApplication = app_PDFViewerApplication;
-window.PDFViewerApplicationConstants = AppConstants;
-window.PDFViewerApplicationOptions = AppOptions;
 if (!HTMLCollection.prototype[Symbol.iterator]) {
   HTMLCollection.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
 }

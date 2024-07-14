@@ -87,12 +87,64 @@ __webpack_require__.d(__webpack_exports__, {
   isPdfFile: () => (/* reexport */ isPdfFile),
   noContextMenu: () => (/* reexport */ noContextMenu),
   normalizeUnicode: () => (/* reexport */ normalizeUnicode),
+  renderTextLayer: () => (/* reexport */ renderTextLayer),
   setLayerDimensions: () => (/* reexport */ setLayerDimensions),
   shadow: () => (/* reexport */ shadow),
+  updateTextLayer: () => (/* reexport */ updateTextLayer),
   version: () => (/* reexport */ version)
 });
 
+;// CONCATENATED MODULE: ./external/ngx-logger/ngx-console.js
+class NgxConsole {
+  static ngxConsoleFilter = (_level, _message) => true;
+  static log(message, reason) {
+    if (NgxConsole.ngxConsoleFilter("log", message)) {
+      if (reason !== undefined) {
+        console.log("%s", message, reason);
+      } else {
+        console.log(message);
+      }
+    }
+  }
+  static error(message, reason) {
+    if (NgxConsole.ngxConsoleFilter("error", message)) {
+      if (reason !== undefined) {
+        console.error("%s", message, reason);
+      } else {
+        console.error(message);
+      }
+    }
+  }
+  static warn(message, reason) {
+    if (NgxConsole.ngxConsoleFilter("warn", message)) {
+      if (reason !== undefined) {
+        console.warn("%s", message, reason);
+      } else {
+        console.warn(message);
+      }
+    }
+  }
+  static debug(message, reason) {
+    if (NgxConsole.ngxConsoleFilter("debug", message)) {
+      if (reason !== undefined) {
+        console.warn("%s", message, reason);
+      } else {
+        console.warn(message);
+      }
+    }
+  }
+  get ngxConsoleFilter() {
+    return NgxConsole.ngxConsoleFilter;
+  }
+  set ngxConsoleFilter(filter) {
+    NgxConsole.ngxConsoleFilter = filter;
+  }
+  reset() {
+    NgxConsole.ngxConsoleFilter = (_level, _message) => true;
+  }
+}
 ;// CONCATENATED MODULE: ./src/shared/util.js
+
 const isNodeJS = typeof process === "object" && process + "" === "[object process]" && !process.versions.nw && !(process.versions.electron && process.type && process.type !== "browser");
 const IDENTITY_MATRIX = [1, 0, 0, 1, 0, 0];
 const FONT_IDENTITY_MATRIX = [0.001, 0, 0, 0.001, 0, 0];
@@ -382,8 +434,8 @@ function info(msg) {
   if (verbosity >= VerbosityLevel.INFOS) {
     if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
       console.log(`Info: ${msg}`);
-    } else if (Window && globalThis.ngxConsole) {
-      globalThis.ngxConsole.log(`Info: ${msg}`);
+    } else if (Window && NgxConsole) {
+      NgxConsole.log(`Info: ${msg}`);
     } else {
       console.log(`Info: ${msg}`);
     }
@@ -393,8 +445,8 @@ function warn(msg) {
   if (verbosity >= VerbosityLevel.WARNINGS) {
     if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
       console.log(`Warning: ${msg}`);
-    } else if (Window && globalThis.ngxConsole) {
-      globalThis.ngxConsole.log(`Warning: ${msg}`);
+    } else if (Window && NgxConsole) {
+      NgxConsole.log(`Warning: ${msg}`);
     } else {
       console.log(`Warning: ${msg}`);
     }
@@ -1002,6 +1054,7 @@ class BaseSVGFactory {
 ;// CONCATENATED MODULE: ./src/display/display_utils.js
 
 
+
 const SVG_NS = "http://www.w3.org/2000/svg";
 class PixelsPerInch {
   static CSS = 96.0;
@@ -1009,6 +1062,7 @@ class PixelsPerInch {
   static PDF_TO_CSS_UNITS = this.CSS / this.PDF;
 }
 class DOMFilterFactory extends BaseFilterFactory {
+  #baseUrl;
   #_cache;
   #_defs;
   #docId;
@@ -1072,6 +1126,20 @@ class DOMFilterFactory extends BaseFilterFactory {
     }
     return [bufferR.join(","), bufferG.join(","), bufferB.join(",")];
   }
+  #createUrl(id) {
+    if (this.#baseUrl === undefined) {
+      const url = this.#document.URL;
+      if (url === this.#document.baseURI) {
+        this.#baseUrl = "";
+      } else if (isDataScheme(url)) {
+        warn('#createUrl: ignore "data:"-URL for performance reasons.');
+        this.#baseUrl = "";
+      } else {
+        this.#baseUrl = url.split("#", 1)[0];
+      }
+    }
+    return `url(${this.#baseUrl}#${id})`;
+  }
   addFilter(maps) {
     if (!maps) {
       return "none";
@@ -1088,7 +1156,7 @@ class DOMFilterFactory extends BaseFilterFactory {
       return value;
     }
     const id = `g_${this.#docId}_transfer_map_${this.#id++}`;
-    const url = `url(#${id})`;
+    const url = this.#createUrl(id);
     this.#cache.set(maps, url);
     this.#cache.set(key, url);
     const filter = this.#createFilter(id);
@@ -1146,7 +1214,7 @@ class DOMFilterFactory extends BaseFilterFactory {
       return arr.join(",");
     };
     this.#addTransferMapConversion(getSteps(0, 5), getSteps(1, 5), getSteps(2, 5), filter);
-    info.url = `url(#${id})`;
+    info.url = this.#createUrl(id);
     return info.url;
   }
   addAlphaFilter(map) {
@@ -1162,7 +1230,7 @@ class DOMFilterFactory extends BaseFilterFactory {
       return value;
     }
     const id = `g_${this.#docId}_alpha_map_${this.#id++}`;
-    const url = `url(#${id})`;
+    const url = this.#createUrl(id);
     this.#cache.set(map, url);
     this.#cache.set(key, url);
     const filter = this.#createFilter(id);
@@ -1187,7 +1255,7 @@ class DOMFilterFactory extends BaseFilterFactory {
       return value;
     }
     const id = `g_${this.#docId}_luminosity_map_${this.#id++}`;
-    const url = `url(#${id})`;
+    const url = this.#createUrl(id);
     this.#cache.set(map, url);
     this.#cache.set(key, url);
     const filter = this.#createFilter(id);
@@ -1250,7 +1318,7 @@ class DOMFilterFactory extends BaseFilterFactory {
     const filter = info.filter = this.#createFilter(id);
     this.#addGrayConversion(filter);
     this.#addTransferMapConversion(getSteps(newFgRGB[0], newBgRGB[0], 5), getSteps(newFgRGB[1], newBgRGB[1], 5), getSteps(newFgRGB[2], newBgRGB[2], 5), filter);
-    info.url = `url(#${id})`;
+    info.url = this.#createUrl(id);
     return info.url;
   }
   destroy(keepHCM = false) {
@@ -1515,8 +1583,8 @@ function getFilenameFromUrl(url) {
   return url.substring(url.lastIndexOf("/") + 1);
 }
 function getPdfFilenameFromUrl(url, defaultFilename = "document.pdf") {
-  if (window.PDFViewerApplication.appConfig.filenameForDownload) {
-    return window.PDFViewerApplication.appConfig.filenameForDownload;
+  if (defaultFilename && defaultFilename !== "document.pdf") {
+    return defaultFilename;
   }
   if (typeof url !== "string") {
     return defaultFilename;
@@ -1600,7 +1668,7 @@ function noContextMenu(e) {
   e.preventDefault();
 }
 function deprecated(details) {
-  globalThis.ngxConsole.log("Deprecated API usage: " + details);
+  NgxConsole.log("Deprecated API usage: " + details);
 }
 let pdfDateStringRegex;
 class PDFDateString {
@@ -5048,7 +5116,6 @@ const SerializableEmpty = Object.freeze({
 });
 class AnnotationStorage {
   #modified = false;
-  #modifiedIds = null;
   #storage = new Map();
   constructor() {
     this.onSetModified = null;
@@ -5200,25 +5267,6 @@ class AnnotationStorage {
     }
     return stats;
   }
-  resetModifiedIds() {
-    this.#modifiedIds = null;
-  }
-  get modifiedIds() {
-    if (this.#modifiedIds) {
-      return this.#modifiedIds;
-    }
-    const ids = [];
-    for (const value of this.#storage.values()) {
-      if (!(value instanceof AnnotationEditor) || !value.annotationElementId || !value.serialize()) {
-        continue;
-      }
-      ids.push(value.annotationElementId);
-    }
-    return this.#modifiedIds = {
-      ids: new Set(ids),
-      hash: ids.join(",")
-    };
-  }
 }
 class PrintAnnotationStorage extends AnnotationStorage {
   #serializable;
@@ -5243,12 +5291,6 @@ class PrintAnnotationStorage extends AnnotationStorage {
   }
   get serializable() {
     return this.#serializable;
-  }
-  get modifiedIds() {
-    return shadow(this, "modifiedIds", {
-      ids: new Set(),
-      hash: ""
-    });
   }
 }
 
@@ -10834,6 +10876,37 @@ class TextLayer {
     return ratio;
   }
 }
+function renderTextLayer() {
+  deprecated("`renderTextLayer`, please use `TextLayer` instead.");
+  const {
+    textContentSource,
+    container,
+    viewport,
+    ...rest
+  } = arguments[0];
+  const restKeys = Object.keys(rest);
+  if (restKeys.length > 0) {
+    warn("Ignoring `renderTextLayer` parameters: " + restKeys.join(", "));
+  }
+  const textLayer = new TextLayer({
+    textContentSource,
+    container,
+    viewport
+  });
+  const {
+    textDivs,
+    textContentItemsStr
+  } = textLayer;
+  const promise = textLayer.render();
+  return {
+    promise,
+    textDivs,
+    textContentItemsStr
+  };
+}
+function updateTextLayer() {
+  deprecated("`updateTextLayer`, please use `TextLayer` instead.");
+}
 
 ;// CONCATENATED MODULE: ./src/display/xfa_text.js
 class XfaText {
@@ -10898,10 +10971,6 @@ class XfaText {
 const DEFAULT_RANGE_CHUNK_SIZE = 65536;
 const RENDERING_CANCELLED_TIMEOUT = 100;
 const DELAYED_CLEANUP_TIMEOUT = 5000;
-const ServiceWorkerOptions = {
-  showUnverifiedSignatures: false
-};
-window.ServiceWorkerOptions = ServiceWorkerOptions;
 const DefaultCanvasFactory = isNodeJS ? NodeCanvasFactory : DOMCanvasFactory;
 const DefaultCMapReaderFactory = isNodeJS ? NodeCMapReaderFactory : DOMCMapReaderFactory;
 const DefaultFilterFactory = isNodeJS ? NodeFilterFactory : DOMFilterFactory;
@@ -10985,7 +11054,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.5.545",
+    apiVersion: "4.4.712",
     data,
     password,
     disableAutoFetch,
@@ -11382,11 +11451,10 @@ class PDFPageProxy {
     optionalContentConfigPromise = null,
     annotationCanvasMap = null,
     pageColors = null,
-    printAnnotationStorage = null,
-    isEditing = false
+    printAnnotationStorage = null
   }) {
     this._stats?.time("Overall");
-    const intentArgs = this._transport.getRenderingIntent(intent, annotationMode, printAnnotationStorage, isEditing);
+    const intentArgs = this._transport.getRenderingIntent(intent, annotationMode, printAnnotationStorage);
     const {
       renderingIntent,
       cacheKey
@@ -11479,8 +11547,7 @@ class PDFPageProxy {
   getOperatorList({
     intent = "display",
     annotationMode = AnnotationMode.ENABLE,
-    printAnnotationStorage = null,
-    isEditing = false
+    printAnnotationStorage = null
   } = {}) {
     function operatorListChanged() {
       if (intentState.operatorList.lastChunk) {
@@ -11488,7 +11555,7 @@ class PDFPageProxy {
         intentState.renderTasks.delete(opListTask);
       }
     }
-    const intentArgs = this._transport.getRenderingIntent(intent, annotationMode, printAnnotationStorage, isEditing, true);
+    const intentArgs = this._transport.getRenderingIntent(intent, annotationMode, printAnnotationStorage, true);
     let intentState = this._intentStates.get(intentArgs.cacheKey);
     if (!intentState) {
       intentState = Object.create(null);
@@ -11646,9 +11713,7 @@ class PDFPageProxy {
   _pumpOperatorList({
     renderingIntent,
     cacheKey,
-    annotationStorageSerializable,
-    isEditing,
-    modifiedIds
+    annotationStorageSerializable
   }) {
     const {
       map,
@@ -11658,9 +11723,7 @@ class PDFPageProxy {
       pageIndex: this._pageIndex,
       intent: renderingIntent,
       cacheKey,
-      annotationStorage: map,
-      isEditing,
-      modifiedIds
+      annotationStorage: map
     }, transfer);
     const reader = readableStream.getReader();
     const intentState = this._intentStates.get(cacheKey);
@@ -11855,7 +11918,11 @@ class PDFWorker {
   }
   #generateTrustedURL(sourcePath) {
     if (window.trustedTypes) {
-      return window.pdfViewerSanitizer.createScriptURL(sourcePath);
+      const sanitizer = window.trustedTypes.createPolicy("pdf-viewer", {
+        createHTML: input => input,
+        createScriptURL: input => input
+      });
+      return sanitizer.createScriptURL(sourcePath);
     }
     return sourcePath;
   }
@@ -12041,7 +12108,7 @@ class WorkerTransport {
   get annotationStorage() {
     return shadow(this, "annotationStorage", new AnnotationStorage());
   }
-  getRenderingIntent(intent, annotationMode = AnnotationMode.ENABLE, printAnnotationStorage = null, isEditing = false, isOpList = false) {
+  getRenderingIntent(intent, annotationMode = AnnotationMode.ENABLE, printAnnotationStorage = null, isOpList = false) {
     let renderingIntent = RenderingIntentFlag.DISPLAY;
     let annotationStorageSerializable = SerializableEmpty;
     switch (intent) {
@@ -12056,7 +12123,6 @@ class WorkerTransport {
       default:
         warn(`getRenderingIntent - invalid intent: ${intent}`);
     }
-    const annotationStorage = renderingIntent & RenderingIntentFlag.PRINT && printAnnotationStorage instanceof PrintAnnotationStorage ? printAnnotationStorage : this.annotationStorage;
     switch (annotationMode) {
       case AnnotationMode.DISABLE:
         renderingIntent += RenderingIntentFlag.ANNOTATIONS_DISABLE;
@@ -12068,6 +12134,7 @@ class WorkerTransport {
         break;
       case AnnotationMode.ENABLE_STORAGE:
         renderingIntent += RenderingIntentFlag.ANNOTATIONS_STORAGE;
+        const annotationStorage = renderingIntent & RenderingIntentFlag.PRINT && printAnnotationStorage instanceof PrintAnnotationStorage ? printAnnotationStorage : this.annotationStorage;
         annotationStorageSerializable = annotationStorage.serializable;
         break;
       default:
@@ -12076,17 +12143,10 @@ class WorkerTransport {
     if (isOpList) {
       renderingIntent += RenderingIntentFlag.OPLIST;
     }
-    const {
-      ids: modifiedIds,
-      hash: modifiedIdsHash
-    } = annotationStorage.modifiedIds;
-    const cacheKeyBuf = [renderingIntent, annotationStorageSerializable.hash, isEditing ? 1 : 0, modifiedIdsHash];
     return {
       renderingIntent,
-      cacheKey: cacheKeyBuf.join("_"),
-      annotationStorageSerializable,
-      isEditing,
-      modifiedIds
+      cacheKey: `${renderingIntent}_${annotationStorageSerializable.hash}`,
+      annotationStorageSerializable
     };
   }
   destroy() {
@@ -12781,8 +12841,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.5.545";
-const build = "04265078a";
+const version = "4.4.712";
+const build = "4298934ca";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -13186,9 +13246,6 @@ class AnnotationElement {
     richText
   }) {
     return !!(titleObj?.str || contentsObj?.str || richText?.str);
-  }
-  get _isEditable() {
-    return this.data.isEditable;
   }
   get hasPopupData() {
     return AnnotationElement._hasPopupData(this.data);
@@ -13649,6 +13706,9 @@ class AnnotationElement {
     } else {
       triggers.classList.add("highlightArea");
     }
+  }
+  get _isEditable() {
+    return false;
   }
   _editOnDoubleClick() {
     if (!this._isEditable) {
@@ -15162,6 +15222,10 @@ class PopupElement {
       this.#setPosition();
       this.#container.hidden = false;
       this.#container.style.zIndex = parseInt(this.#container.style.zIndex) + 1000;
+      const page = this.#container.closest(".page");
+      if (page) {
+        page.style.overflow = "visible";
+      }
     } else if (this.#pinned) {
       this.#container.classList.add("focused");
     }
@@ -15173,6 +15237,10 @@ class PopupElement {
     }
     this.#container.hidden = true;
     this.#container.style.zIndex = parseInt(this.#container.style.zIndex) - 1000;
+    const page = this.#container.closest(".page");
+    if (page) {
+      page.style.overflow = "";
+    }
   }
   forceHide() {
     this.#wasVisible = this.isVisible;
@@ -15223,6 +15291,9 @@ class FreeTextAnnotationElement extends AnnotationElement {
     }
     this._editOnDoubleClick();
     return this.container;
+  }
+  get _isEditable() {
+    return this.data.hasOwnCanvas;
   }
 }
 class LineAnnotationElement extends AnnotationElement {
@@ -15631,9 +15702,6 @@ class AnnotationLayer {
     this.zIndex = 0;
     this._annotationEditorUIManager = annotationEditorUIManager;
   }
-  hasEditableAnnotations() {
-    return this.#editableAnnotations.size > 0;
-  }
   #appendElement(element, id) {
     const contentElement = element.firstChild || element;
     contentElement.id = `${AnnotationPrefix}${id}`;
@@ -15700,7 +15768,7 @@ class AnnotationLayer {
         rendered.style.visibility = "hidden";
       }
       this.#appendElement(rendered, data.id);
-      if (element._isEditable) {
+      if (element.annotationEditorType > 0) {
         this.#editableAnnotations.set(element.data.id, element);
         this._annotationEditorUIManager?.renderAnnotationElement(element);
       }
@@ -17727,7 +17795,6 @@ class HighlightEditor extends AnnotationEditor {
       return null;
     }
     const [pageWidth, pageHeight] = this.pageDimensions;
-    const [pageX, pageY] = this.pageTranslation;
     const boxes = this.#boxes;
     const quadPoints = new Float32Array(boxes.length * 8);
     let i = 0;
@@ -17737,8 +17804,8 @@ class HighlightEditor extends AnnotationEditor {
       width,
       height
     } of boxes) {
-      const sx = x * pageWidth + pageX;
-      const sy = (1 - y - height) * pageHeight + pageY;
+      const sx = x * pageWidth;
+      const sy = (1 - y - height) * pageHeight;
       quadPoints[i] = quadPoints[i + 4] = sx;
       quadPoints[i + 1] = quadPoints[i + 3] = sy;
       quadPoints[i + 2] = quadPoints[i + 6] = sx + width * pageWidth;
@@ -19967,8 +20034,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.5.545";
-const pdfjsBuild = "04265078a";
+const pdfjsVersion = "4.4.712";
+const pdfjsBuild = "4298934ca";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -20011,7 +20078,9 @@ var __webpack_exports__isDataScheme = __webpack_exports__.isDataScheme;
 var __webpack_exports__isPdfFile = __webpack_exports__.isPdfFile;
 var __webpack_exports__noContextMenu = __webpack_exports__.noContextMenu;
 var __webpack_exports__normalizeUnicode = __webpack_exports__.normalizeUnicode;
+var __webpack_exports__renderTextLayer = __webpack_exports__.renderTextLayer;
 var __webpack_exports__setLayerDimensions = __webpack_exports__.setLayerDimensions;
 var __webpack_exports__shadow = __webpack_exports__.shadow;
+var __webpack_exports__updateTextLayer = __webpack_exports__.updateTextLayer;
 var __webpack_exports__version = __webpack_exports__.version;
-export { __webpack_exports__AbortException as AbortException, __webpack_exports__AnnotationEditorLayer as AnnotationEditorLayer, __webpack_exports__AnnotationEditorParamsType as AnnotationEditorParamsType, __webpack_exports__AnnotationEditorType as AnnotationEditorType, __webpack_exports__AnnotationEditorUIManager as AnnotationEditorUIManager, __webpack_exports__AnnotationLayer as AnnotationLayer, __webpack_exports__AnnotationMode as AnnotationMode, __webpack_exports__CMapCompressionType as CMapCompressionType, __webpack_exports__ColorPicker as ColorPicker, __webpack_exports__DOMSVGFactory as DOMSVGFactory, __webpack_exports__DrawLayer as DrawLayer, __webpack_exports__FeatureTest as FeatureTest, __webpack_exports__GlobalWorkerOptions as GlobalWorkerOptions, __webpack_exports__ImageKind as ImageKind, __webpack_exports__InvalidPDFException as InvalidPDFException, __webpack_exports__MissingPDFException as MissingPDFException, __webpack_exports__OPS as OPS, __webpack_exports__Outliner as Outliner, __webpack_exports__PDFDataRangeTransport as PDFDataRangeTransport, __webpack_exports__PDFDateString as PDFDateString, __webpack_exports__PDFWorker as PDFWorker, __webpack_exports__PasswordResponses as PasswordResponses, __webpack_exports__PermissionFlag as PermissionFlag, __webpack_exports__PixelsPerInch as PixelsPerInch, __webpack_exports__RenderingCancelledException as RenderingCancelledException, __webpack_exports__TextLayer as TextLayer, __webpack_exports__UnexpectedResponseException as UnexpectedResponseException, __webpack_exports__Util as Util, __webpack_exports__VerbosityLevel as VerbosityLevel, __webpack_exports__XfaLayer as XfaLayer, __webpack_exports__build as build, __webpack_exports__createValidAbsoluteUrl as createValidAbsoluteUrl, __webpack_exports__fetchData as fetchData, __webpack_exports__getDocument as getDocument, __webpack_exports__getFilenameFromUrl as getFilenameFromUrl, __webpack_exports__getPdfFilenameFromUrl as getPdfFilenameFromUrl, __webpack_exports__getXfaPageViewport as getXfaPageViewport, __webpack_exports__isDataScheme as isDataScheme, __webpack_exports__isPdfFile as isPdfFile, __webpack_exports__noContextMenu as noContextMenu, __webpack_exports__normalizeUnicode as normalizeUnicode, __webpack_exports__setLayerDimensions as setLayerDimensions, __webpack_exports__shadow as shadow, __webpack_exports__version as version };
+export { __webpack_exports__AbortException as AbortException, __webpack_exports__AnnotationEditorLayer as AnnotationEditorLayer, __webpack_exports__AnnotationEditorParamsType as AnnotationEditorParamsType, __webpack_exports__AnnotationEditorType as AnnotationEditorType, __webpack_exports__AnnotationEditorUIManager as AnnotationEditorUIManager, __webpack_exports__AnnotationLayer as AnnotationLayer, __webpack_exports__AnnotationMode as AnnotationMode, __webpack_exports__CMapCompressionType as CMapCompressionType, __webpack_exports__ColorPicker as ColorPicker, __webpack_exports__DOMSVGFactory as DOMSVGFactory, __webpack_exports__DrawLayer as DrawLayer, __webpack_exports__FeatureTest as FeatureTest, __webpack_exports__GlobalWorkerOptions as GlobalWorkerOptions, __webpack_exports__ImageKind as ImageKind, __webpack_exports__InvalidPDFException as InvalidPDFException, __webpack_exports__MissingPDFException as MissingPDFException, __webpack_exports__OPS as OPS, __webpack_exports__Outliner as Outliner, __webpack_exports__PDFDataRangeTransport as PDFDataRangeTransport, __webpack_exports__PDFDateString as PDFDateString, __webpack_exports__PDFWorker as PDFWorker, __webpack_exports__PasswordResponses as PasswordResponses, __webpack_exports__PermissionFlag as PermissionFlag, __webpack_exports__PixelsPerInch as PixelsPerInch, __webpack_exports__RenderingCancelledException as RenderingCancelledException, __webpack_exports__TextLayer as TextLayer, __webpack_exports__UnexpectedResponseException as UnexpectedResponseException, __webpack_exports__Util as Util, __webpack_exports__VerbosityLevel as VerbosityLevel, __webpack_exports__XfaLayer as XfaLayer, __webpack_exports__build as build, __webpack_exports__createValidAbsoluteUrl as createValidAbsoluteUrl, __webpack_exports__fetchData as fetchData, __webpack_exports__getDocument as getDocument, __webpack_exports__getFilenameFromUrl as getFilenameFromUrl, __webpack_exports__getPdfFilenameFromUrl as getPdfFilenameFromUrl, __webpack_exports__getXfaPageViewport as getXfaPageViewport, __webpack_exports__isDataScheme as isDataScheme, __webpack_exports__isPdfFile as isPdfFile, __webpack_exports__noContextMenu as noContextMenu, __webpack_exports__normalizeUnicode as normalizeUnicode, __webpack_exports__renderTextLayer as renderTextLayer, __webpack_exports__setLayerDimensions as setLayerDimensions, __webpack_exports__shadow as shadow, __webpack_exports__updateTextLayer as updateTextLayer, __webpack_exports__version as version };

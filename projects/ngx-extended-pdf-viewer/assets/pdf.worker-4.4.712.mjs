@@ -49,7 +49,57 @@ __webpack_require__.d(__webpack_exports__, {
   WorkerMessageHandler: () => (/* reexport */ WorkerMessageHandler)
 });
 
+;// CONCATENATED MODULE: ./external/ngx-logger/ngx-console.js
+class NgxConsole {
+  static ngxConsoleFilter = (_level, _message) => true;
+  static log(message, reason) {
+    if (NgxConsole.ngxConsoleFilter("log", message)) {
+      if (reason !== undefined) {
+        console.log("%s", message, reason);
+      } else {
+        console.log(message);
+      }
+    }
+  }
+  static error(message, reason) {
+    if (NgxConsole.ngxConsoleFilter("error", message)) {
+      if (reason !== undefined) {
+        console.error("%s", message, reason);
+      } else {
+        console.error(message);
+      }
+    }
+  }
+  static warn(message, reason) {
+    if (NgxConsole.ngxConsoleFilter("warn", message)) {
+      if (reason !== undefined) {
+        console.warn("%s", message, reason);
+      } else {
+        console.warn(message);
+      }
+    }
+  }
+  static debug(message, reason) {
+    if (NgxConsole.ngxConsoleFilter("debug", message)) {
+      if (reason !== undefined) {
+        console.warn("%s", message, reason);
+      } else {
+        console.warn(message);
+      }
+    }
+  }
+  get ngxConsoleFilter() {
+    return NgxConsole.ngxConsoleFilter;
+  }
+  set ngxConsoleFilter(filter) {
+    NgxConsole.ngxConsoleFilter = filter;
+  }
+  reset() {
+    NgxConsole.ngxConsoleFilter = (_level, _message) => true;
+  }
+}
 ;// CONCATENATED MODULE: ./src/shared/util.js
+
 const isNodeJS = typeof process === "object" && process + "" === "[object process]" && !process.versions.nw && !(process.versions.electron && process.type && process.type !== "browser");
 const IDENTITY_MATRIX = [1, 0, 0, 1, 0, 0];
 const FONT_IDENTITY_MATRIX = [0.001, 0, 0, 0.001, 0, 0];
@@ -339,8 +389,8 @@ function info(msg) {
   if (verbosity >= VerbosityLevel.INFOS) {
     if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
       console.log(`Info: ${msg}`);
-    } else if (Window && globalThis.ngxConsole) {
-      globalThis.ngxConsole.log(`Info: ${msg}`);
+    } else if (Window && NgxConsole) {
+      NgxConsole.log(`Info: ${msg}`);
     } else {
       console.log(`Info: ${msg}`);
     }
@@ -350,8 +400,8 @@ function warn(msg) {
   if (verbosity >= VerbosityLevel.WARNINGS) {
     if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
       console.log(`Warning: ${msg}`);
-    } else if (Window && globalThis.ngxConsole) {
-      globalThis.ngxConsole.log(`Warning: ${msg}`);
+    } else if (Window && NgxConsole) {
+      NgxConsole.log(`Warning: ${msg}`);
     } else {
       console.log(`Warning: ${msg}`);
     }
@@ -55755,7 +55805,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = "4.4.705";
+    const workerVersion = "4.4.712";
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
     }
@@ -56331,8 +56381,8 @@ if (typeof window === "undefined" && typeof self !== "undefined" && isMessagePor
 
 ;// CONCATENATED MODULE: ./src/pdf.worker.js
 
-const pdfjsVersion = "4.4.705";
-const pdfjsBuild = "4a8373b40";
+const pdfjsVersion = "4.4.712";
+const pdfjsBuild = "4298934ca";
 
 var __webpack_exports__WorkerMessageHandler = __webpack_exports__.WorkerMessageHandler;
 export { __webpack_exports__WorkerMessageHandler as WorkerMessageHandler };
