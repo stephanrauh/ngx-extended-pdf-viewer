@@ -71,7 +71,7 @@ export class PDFThumbnailView implements IRenderableView {
     renderTask: any;
     renderingState: number;
     resume: (() => void) | null;
-    _placeholderImg: any;
+    _placeholderImg: Element | null | undefined;
     createThumbnail(pdfThumbnailView: any, linkService: any, id: any, container: any, pageL10nArgs: any): void;
     anchor: HTMLAnchorElement | undefined;
     div: HTMLDivElement | undefined;
