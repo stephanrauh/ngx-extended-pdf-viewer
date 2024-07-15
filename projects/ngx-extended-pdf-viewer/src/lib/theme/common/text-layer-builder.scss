@@ -67,6 +67,7 @@ ngx-extended-pdf-viewer {
       background-color: $highlight;
       backdrop-filter: var(--highlight-backdrop-filter);
       border-radius: 4px;
+      opacity: 0.5;
 
 
       &.appended {
@@ -85,7 +86,7 @@ ngx-extended-pdf-viewer {
         border-radius: 0;
       }
 
-      .textLayer .highlight.selected {
+      &.selected {
         background-color: $highlight-selected;
         backdrop-filter: var(--highlight-selected-backdrop-filter);
       }
