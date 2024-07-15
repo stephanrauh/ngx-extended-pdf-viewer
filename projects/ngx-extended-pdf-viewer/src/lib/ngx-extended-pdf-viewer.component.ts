@@ -324,6 +324,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public relativeCoordsOptions: Object = {};
 
+  /** Use the minified (minifiedJSLibraries="true", which is the default) or the user-readable pdf.js library (minifiedJSLibraries="false") */
+  public get minifiedJSLibraries() {
+    return pdfDefaultOptions._internalFilenameSuffix === '.min';
+  }
+
+  @Input()
+  public set minifiedJSLibraries(value) {
+    if (value) {
+      pdfDefaultOptions._internalFilenameSuffix = '.min';
+    } else {
+      pdfDefaultOptions._internalFilenameSuffix = '';
+    }
+  }
+
   public primaryMenuVisible = true;
 
   /** option to increase (or reduce) print resolution. Default is 150 (dpi). Sensible values

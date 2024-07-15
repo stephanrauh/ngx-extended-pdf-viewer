@@ -10,22 +10,6 @@ import { PdfCspPolicyService } from './pdf-csp-policy.service';
 export class PDFScriptLoaderService implements OnDestroy {
   public forceUsingLegacyES5 = false;
 
-  /** Use the minified (minifiedJSLibraries="true", which is the default) or the user-readable pdf.js library (minifiedJSLibraries="false") */
-  private _minifiedJSLibraries = false;
-
-  public get minifiedJSLibraries() {
-    return this._minifiedJSLibraries;
-  }
-
-  public set minifiedJSLibraries(value) {
-    this._minifiedJSLibraries = value;
-    if (value) {
-      pdfDefaultOptions._internalFilenameSuffix = '.min';
-    } else {
-      pdfDefaultOptions._internalFilenameSuffix = '';
-    }
-  }
-
   // this event is fired when the pdf.js library has been loaded and objects like PDFApplication are available
   public onPDFJSInitSignal = signal<IPDFViewerApplication | undefined>(undefined);
 
@@ -123,12 +107,13 @@ export class PDFScriptLoaderService implements OnDestroy {
   }
 
   private getPdfJsPath(artifact: 'pdf' | 'viewer') {
-    let suffix = this.minifiedJSLibraries && !this._needsES5 ? '.min.js' : '.js';
+    let suffix = pdfDefaultOptions._internalFilenameSuffix;
+    if (this._needsES5) {
+      suffix = ''; // we don't publish minified ES5 files
+    }
+    suffix += '.mjs';
     const assets = pdfDefaultOptions.assetsFolder;
     const versionSuffix = getVersionSuffix(assets);
-    if (versionSuffix.startsWith('4')) {
-      suffix = suffix.replace('.js', '.mjs');
-    }
     const artifactPath = `/${artifact}-`;
     const es5 = this._needsES5 ? '-es5' : '';
 
