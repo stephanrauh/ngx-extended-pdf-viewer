@@ -1891,9 +1891,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       delete w.registerXFAField;
       delete w.assignFormIdAndFieldName;
       delete w.updateAngularFormValue;
-      delete w.PDFViewerApplication;
-      delete w.PDFViewerApplicationOptions;
-      delete w.PDFViewerApplicationConstants;
+
       delete w.ngxExtendedPdfViewerCanRunModernJSCode;
       this.windowSizeRecalculatorSubscription?.unsubscribe();
 
@@ -1904,6 +1902,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       }
       PDFViewerApplication.unbindWindowEvents();
       (PDFViewerApplication.eventBus as any) = undefined;
+      delete w.PDFViewerApplication;
+      delete w.PDFViewerApplicationOptions;
+      delete w.PDFViewerApplicationConstants;
       this.service.ngxExtendedPdfViewerInitialized = false;
     }
   }
