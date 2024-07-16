@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, NgZone, Output, effect } from '@angular/core';
+import { Component, EventEmitter, Input, NgZone, OnDestroy, Output, effect } from '@angular/core';
 import { ScrollMode } from '../../options/pdf-scroll-mode';
 import { PageViewModeType, ScrollModeType } from '../../options/pdf-viewer';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
@@ -10,7 +10,7 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
   templateUrl: './pdf-horizontal-scroll.component.html',
   styleUrls: ['./pdf-horizontal-scroll.component.css'],
 })
-export class PdfHorizontalScrollComponent {
+export class PdfHorizontalScrollComponent implements OnDestroy {
   @Input()
   public show: ResponsiveVisibility = true;
 
@@ -23,7 +23,7 @@ export class PdfHorizontalScrollComponent {
   @Output()
   public pageViewModeChange = new EventEmitter<PageViewModeType>();
 
-  public onClick: () => void;
+  public onClick?: () => void;
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
@@ -51,5 +51,9 @@ export class PdfHorizontalScrollComponent {
         this.scrollMode = event.mode;
       });
     });
+  }
+
+  public ngOnDestroy(): void {
+    this.onClick = undefined;
   }
 }

@@ -23,7 +23,7 @@ export class PdfRotatePageComponent {
 
   private PDFViewerApplication: IPDFViewerApplication | undefined;
 
-  constructor(private notificationService: PDFNotificationService, private changeDetectorRef: ChangeDetectorRef) {
+  constructor(notificationService: PDFNotificationService, private changeDetectorRef: ChangeDetectorRef) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
       if (this.PDFViewerApplication) {

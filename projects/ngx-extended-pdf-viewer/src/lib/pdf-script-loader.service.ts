@@ -189,9 +189,9 @@ export class PDFScriptLoaderService implements OnDestroy {
       printContainer.parentElement?.removeChild(printContainer);
     }
 
-    PDFViewerApplication.unbindWindowEvents();
+    PDFViewerApplication?.unbindWindowEvents();
 
-    PDFViewerApplication._cleanup();
+    PDFViewerApplication?._cleanup();
 
     const w = window as any;
     delete w.pdfjsLib;

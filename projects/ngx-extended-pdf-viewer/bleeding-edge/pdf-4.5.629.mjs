@@ -2,7 +2,7 @@
  * @licstart The following is the entire license notice for the
  * JavaScript code in this page
  *
- * Copyright 2023 Mozilla Foundation
+ * Copyright 2024 Mozilla Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,18 +87,16 @@ __webpack_require__.d(__webpack_exports__, {
   isPdfFile: () => (/* reexport */ isPdfFile),
   noContextMenu: () => (/* reexport */ noContextMenu),
   normalizeUnicode: () => (/* reexport */ normalizeUnicode),
-  renderTextLayer: () => (/* reexport */ renderTextLayer),
   setLayerDimensions: () => (/* reexport */ setLayerDimensions),
   shadow: () => (/* reexport */ shadow),
-  updateTextLayer: () => (/* reexport */ updateTextLayer),
   version: () => (/* reexport */ version)
 });
 
 ;// CONCATENATED MODULE: ./external/ngx-logger/ngx-console.js
-class NgxConsole {
+class ngx_console_NgxConsole {
   static ngxConsoleFilter = (_level, _message) => true;
   static log(message, reason) {
-    if (NgxConsole.ngxConsoleFilter("log", message)) {
+    if (ngx_console_NgxConsole.ngxConsoleFilter("log", message)) {
       if (reason !== undefined) {
         console.log("%s", message, reason);
       } else {
@@ -107,7 +105,7 @@ class NgxConsole {
     }
   }
   static error(message, reason) {
-    if (NgxConsole.ngxConsoleFilter("error", message)) {
+    if (ngx_console_NgxConsole.ngxConsoleFilter("error", message)) {
       if (reason !== undefined) {
         console.error("%s", message, reason);
       } else {
@@ -116,7 +114,7 @@ class NgxConsole {
     }
   }
   static warn(message, reason) {
-    if (NgxConsole.ngxConsoleFilter("warn", message)) {
+    if (ngx_console_NgxConsole.ngxConsoleFilter("warn", message)) {
       if (reason !== undefined) {
         console.warn("%s", message, reason);
       } else {
@@ -125,7 +123,7 @@ class NgxConsole {
     }
   }
   static debug(message, reason) {
-    if (NgxConsole.ngxConsoleFilter("debug", message)) {
+    if (ngx_console_NgxConsole.ngxConsoleFilter("debug", message)) {
       if (reason !== undefined) {
         console.warn("%s", message, reason);
       } else {
@@ -134,13 +132,13 @@ class NgxConsole {
     }
   }
   get ngxConsoleFilter() {
-    return NgxConsole.ngxConsoleFilter;
+    return ngx_console_NgxConsole.ngxConsoleFilter;
   }
   set ngxConsoleFilter(filter) {
-    NgxConsole.ngxConsoleFilter = filter;
+    ngx_console_NgxConsole.ngxConsoleFilter = filter;
   }
   reset() {
-    NgxConsole.ngxConsoleFilter = (_level, _message) => true;
+    ngx_console_NgxConsole.ngxConsoleFilter = (_level, _message) => true;
   }
 }
 ;// CONCATENATED MODULE: ./src/shared/util.js
@@ -160,6 +158,7 @@ const RenderingIntentFlag = {
   ANNOTATIONS_FORMS: 0x10,
   ANNOTATIONS_STORAGE: 0x20,
   ANNOTATIONS_DISABLE: 0x40,
+  IS_EDITING: 0x80,
   OPLIST: 0x100
 };
 const AnnotationMode = {
@@ -434,8 +433,8 @@ function info(msg) {
   if (verbosity >= VerbosityLevel.INFOS) {
     if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
       console.log(`Info: ${msg}`);
-    } else if (Window && NgxConsole) {
-      NgxConsole.log(`Info: ${msg}`);
+    } else if (Window && ngx_console_NgxConsole) {
+      ngx_console_NgxConsole.log(`Info: ${msg}`);
     } else {
       console.log(`Info: ${msg}`);
     }
@@ -445,8 +444,8 @@ function warn(msg) {
   if (verbosity >= VerbosityLevel.WARNINGS) {
     if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
       console.log(`Warning: ${msg}`);
-    } else if (Window && NgxConsole) {
-      NgxConsole.log(`Warning: ${msg}`);
+    } else if (Window && ngx_console_NgxConsole) {
+      ngx_console_NgxConsole.log(`Warning: ${msg}`);
     } else {
       console.log(`Warning: ${msg}`);
     }
@@ -1128,14 +1127,14 @@ class DOMFilterFactory extends BaseFilterFactory {
   }
   #createUrl(id) {
     if (this.#baseUrl === undefined) {
+      this.#baseUrl = "";
       const url = this.#document.URL;
-      if (url === this.#document.baseURI) {
-        this.#baseUrl = "";
-      } else if (isDataScheme(url)) {
-        warn('#createUrl: ignore "data:"-URL for performance reasons.');
-        this.#baseUrl = "";
-      } else {
-        this.#baseUrl = url.split("#", 1)[0];
+      if (url !== this.#document.baseURI) {
+        if (isDataScheme(url)) {
+          warn('#createUrl: ignore "data:"-URL for performance reasons.');
+        } else {
+          this.#baseUrl = url.split("#", 1)[0];
+        }
       }
     }
     return `url(${this.#baseUrl}#${id})`;
@@ -2330,6 +2329,7 @@ class AnnotationEditorUIManager {
   #editorTypes = null;
   #editorsToRescale = new Set();
   #enableHighlightFloatingButton = false;
+  #enableUpdatedAddImage = false;
   #filterFactory = null;
   #focusMainContainerTimeoutId = null;
   #highlightColors = null;
@@ -2429,7 +2429,7 @@ class AnnotationEditorUIManager {
       checker: arrowChecker
     }]]));
   }
-  constructor(container, viewer, altTextManager, eventBus, pdfDocument, pageColors, highlightColors, enableHighlightFloatingButton, mlManager) {
+  constructor(container, viewer, altTextManager, eventBus, pdfDocument, pageColors, highlightColors, enableHighlightFloatingButton, enableUpdatedAddImage, mlManager) {
     this._signal = this.#abortController.signal;
     this.#container = container;
     this.#viewer = viewer;
@@ -2447,6 +2447,7 @@ class AnnotationEditorUIManager {
     this.#pageColors = pageColors;
     this.#highlightColors = highlightColors || null;
     this.#enableHighlightFloatingButton = enableHighlightFloatingButton;
+    this.#enableUpdatedAddImage = enableUpdatedAddImage;
     this.#mlManager = mlManager || null;
     this.viewParameters = {
       realScale: PixelsPerInch.PDF_TO_CSS_UNITS,
@@ -2486,8 +2487,11 @@ class AnnotationEditorUIManager {
   async mlGuess(data) {
     return this.#mlManager?.guess(data) || null;
   }
-  get hasMLManager() {
-    return !!this.#mlManager;
+  isMLEnabledFor(name) {
+    return !!this.#mlManager?.isEnabledFor(name);
+  }
+  get useNewAltTextFlow() {
+    return this.#enableUpdatedAddImage;
   }
   get hcmFilter() {
     return shadow(this, "hcmFilter", this.#pageColors ? this.#filterFactory.addHCMFilter(this.#pageColors.foreground, this.#pageColors.background) : "none");
@@ -2558,6 +2562,20 @@ class AnnotationEditorUIManager {
   }) {
     return anchorNode.nodeType === Node.TEXT_NODE ? anchorNode.parentElement : anchorNode;
   }
+  #getLayerForTextLayer(textLayer) {
+    const {
+      currentLayer
+    } = this;
+    if (currentLayer.hasTextLayer(textLayer)) {
+      return currentLayer;
+    }
+    for (const layer of this.#allLayers.values()) {
+      if (layer.hasTextLayer(textLayer)) {
+        return layer;
+      }
+    }
+    return null;
+  }
   highlightSelection(methodOfCreation = "") {
     const selection = document.getSelection();
     if (!selection || selection.isCollapsed) {
@@ -2584,22 +2602,20 @@ class AnnotationEditorUIManager {
       });
       this.showAllEditors("highlight", true, true);
     }
-    for (const layer of this.#allLayers.values()) {
-      if (layer.hasTextLayer(textLayer)) {
-        layer.createAndAddNewEditor({
-          x: 0,
-          y: 0
-        }, false, {
-          methodOfCreation,
-          boxes,
-          anchorNode,
-          anchorOffset,
-          focusNode,
-          focusOffset,
-          text
-        });
-        break;
-      }
+    const layer = this.#getLayerForTextLayer(textLayer);
+    if (layer) {
+      layer.createAndAddNewEditor({
+        x: 0,
+        y: 0
+      }, false, {
+        methodOfCreation,
+        boxes,
+        anchorNode,
+        anchorOffset,
+        focusNode,
+        focusOffset,
+        text
+      });
     }
   }
   #displayHighlightToolbar() {
@@ -2664,11 +2680,14 @@ class AnnotationEditorUIManager {
     }
     this.#highlightWhenShiftUp = this.isShiftKeyDown;
     if (!this.isShiftKeyDown) {
+      const activeLayer = this.#mode === AnnotationEditorType.HIGHLIGHT ? this.#getLayerForTextLayer(textLayer) : null;
+      activeLayer?.toggleDrawing();
       const signal = this._signal;
       const pointerup = e => {
         if (e.type === "pointerup" && e.button !== 0) {
           return;
         }
+        activeLayer?.toggleDrawing(true);
         window.removeEventListener("pointerup", pointerup);
         window.removeEventListener("blur", pointerup);
         if (e.type === "pointerup") {
@@ -5116,6 +5135,7 @@ const SerializableEmpty = Object.freeze({
 });
 class AnnotationStorage {
   #modified = false;
+  #modifiedIds = null;
   #storage = new Map();
   constructor() {
     this.onSetModified = null;
@@ -5267,6 +5287,25 @@ class AnnotationStorage {
     }
     return stats;
   }
+  resetModifiedIds() {
+    this.#modifiedIds = null;
+  }
+  get modifiedIds() {
+    if (this.#modifiedIds) {
+      return this.#modifiedIds;
+    }
+    const ids = [];
+    for (const value of this.#storage.values()) {
+      if (!(value instanceof AnnotationEditor) || !value.annotationElementId || !value.serialize()) {
+        continue;
+      }
+      ids.push(value.annotationElementId);
+    }
+    return this.#modifiedIds = {
+      ids: new Set(ids),
+      hash: ids.join(",")
+    };
+  }
 }
 class PrintAnnotationStorage extends AnnotationStorage {
   #serializable;
@@ -5291,6 +5330,12 @@ class PrintAnnotationStorage extends AnnotationStorage {
   }
   get serializable() {
     return this.#serializable;
+  }
+  get modifiedIds() {
+    return shadow(this, "modifiedIds", {
+      ids: new Set(),
+      hash: ""
+    });
   }
 }
 
@@ -10824,6 +10869,7 @@ class TextLayer {
     div.style.opacity = 0;
     div.style.lineHeight = 1;
     div.style.fontSize = "1px";
+    div.style.position = "absolute";
     div.textContent = "X";
     document.body.append(div);
     this.#minFontSize = div.getBoundingClientRect().height;
@@ -10875,37 +10921,6 @@ class TextLayer {
     this.#ascentCache.set(fontFamily, ratio);
     return ratio;
   }
-}
-function renderTextLayer() {
-  deprecated("`renderTextLayer`, please use `TextLayer` instead.");
-  const {
-    textContentSource,
-    container,
-    viewport,
-    ...rest
-  } = arguments[0];
-  const restKeys = Object.keys(rest);
-  if (restKeys.length > 0) {
-    warn("Ignoring `renderTextLayer` parameters: " + restKeys.join(", "));
-  }
-  const textLayer = new TextLayer({
-    textContentSource,
-    container,
-    viewport
-  });
-  const {
-    textDivs,
-    textContentItemsStr
-  } = textLayer;
-  const promise = textLayer.render();
-  return {
-    promise,
-    textDivs,
-    textContentItemsStr
-  };
-}
-function updateTextLayer() {
-  deprecated("`updateTextLayer`, please use `TextLayer` instead.");
 }
 
 ;// CONCATENATED MODULE: ./src/display/xfa_text.js
@@ -11054,7 +11069,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.4.712",
+    apiVersion: "4.5.629",
     data,
     password,
     disableAutoFetch,
@@ -11451,10 +11466,11 @@ class PDFPageProxy {
     optionalContentConfigPromise = null,
     annotationCanvasMap = null,
     pageColors = null,
-    printAnnotationStorage = null
+    printAnnotationStorage = null,
+    isEditing = false
   }) {
     this._stats?.time("Overall");
-    const intentArgs = this._transport.getRenderingIntent(intent, annotationMode, printAnnotationStorage);
+    const intentArgs = this._transport.getRenderingIntent(intent, annotationMode, printAnnotationStorage, isEditing);
     const {
       renderingIntent,
       cacheKey
@@ -11547,7 +11563,8 @@ class PDFPageProxy {
   getOperatorList({
     intent = "display",
     annotationMode = AnnotationMode.ENABLE,
-    printAnnotationStorage = null
+    printAnnotationStorage = null,
+    isEditing = false
   } = {}) {
     function operatorListChanged() {
       if (intentState.operatorList.lastChunk) {
@@ -11555,7 +11572,7 @@ class PDFPageProxy {
         intentState.renderTasks.delete(opListTask);
       }
     }
-    const intentArgs = this._transport.getRenderingIntent(intent, annotationMode, printAnnotationStorage, true);
+    const intentArgs = this._transport.getRenderingIntent(intent, annotationMode, printAnnotationStorage, isEditing, true);
     let intentState = this._intentStates.get(intentArgs.cacheKey);
     if (!intentState) {
       intentState = Object.create(null);
@@ -11713,7 +11730,8 @@ class PDFPageProxy {
   _pumpOperatorList({
     renderingIntent,
     cacheKey,
-    annotationStorageSerializable
+    annotationStorageSerializable,
+    modifiedIds
   }) {
     const {
       map,
@@ -11723,7 +11741,8 @@ class PDFPageProxy {
       pageIndex: this._pageIndex,
       intent: renderingIntent,
       cacheKey,
-      annotationStorage: map
+      annotationStorage: map,
+      modifiedIds
     }, transfer);
     const reader = readableStream.getReader();
     const intentState = this._intentStates.get(cacheKey);
@@ -12108,7 +12127,7 @@ class WorkerTransport {
   get annotationStorage() {
     return shadow(this, "annotationStorage", new AnnotationStorage());
   }
-  getRenderingIntent(intent, annotationMode = AnnotationMode.ENABLE, printAnnotationStorage = null, isOpList = false) {
+  getRenderingIntent(intent, annotationMode = AnnotationMode.ENABLE, printAnnotationStorage = null, isEditing = false, isOpList = false) {
     let renderingIntent = RenderingIntentFlag.DISPLAY;
     let annotationStorageSerializable = SerializableEmpty;
     switch (intent) {
@@ -12123,6 +12142,7 @@ class WorkerTransport {
       default:
         warn(`getRenderingIntent - invalid intent: ${intent}`);
     }
+    const annotationStorage = renderingIntent & RenderingIntentFlag.PRINT && printAnnotationStorage instanceof PrintAnnotationStorage ? printAnnotationStorage : this.annotationStorage;
     switch (annotationMode) {
       case AnnotationMode.DISABLE:
         renderingIntent += RenderingIntentFlag.ANNOTATIONS_DISABLE;
@@ -12134,19 +12154,27 @@ class WorkerTransport {
         break;
       case AnnotationMode.ENABLE_STORAGE:
         renderingIntent += RenderingIntentFlag.ANNOTATIONS_STORAGE;
-        const annotationStorage = renderingIntent & RenderingIntentFlag.PRINT && printAnnotationStorage instanceof PrintAnnotationStorage ? printAnnotationStorage : this.annotationStorage;
         annotationStorageSerializable = annotationStorage.serializable;
         break;
       default:
         warn(`getRenderingIntent - invalid annotationMode: ${annotationMode}`);
     }
+    if (isEditing) {
+      renderingIntent += RenderingIntentFlag.IS_EDITING;
+    }
     if (isOpList) {
       renderingIntent += RenderingIntentFlag.OPLIST;
     }
+    const {
+      ids: modifiedIds,
+      hash: modifiedIdsHash
+    } = annotationStorage.modifiedIds;
+    const cacheKeyBuf = [renderingIntent, annotationStorageSerializable.hash, modifiedIdsHash];
     return {
       renderingIntent,
-      cacheKey: `${renderingIntent}_${annotationStorageSerializable.hash}`,
-      annotationStorageSerializable
+      cacheKey: cacheKeyBuf.join("_"),
+      annotationStorageSerializable,
+      modifiedIds
     };
   }
   destroy() {
@@ -12841,8 +12869,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.4.712";
-const build = "4298934ca";
+const version = "4.5.629";
+const build = "fa9dd6863";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -13246,6 +13274,9 @@ class AnnotationElement {
     richText
   }) {
     return !!(titleObj?.str || contentsObj?.str || richText?.str);
+  }
+  get _isEditable() {
+    return this.data.isEditable;
   }
   get hasPopupData() {
     return AnnotationElement._hasPopupData(this.data);
@@ -13706,9 +13737,6 @@ class AnnotationElement {
     } else {
       triggers.classList.add("highlightArea");
     }
-  }
-  get _isEditable() {
-    return false;
   }
   _editOnDoubleClick() {
     if (!this._isEditable) {
@@ -15292,9 +15320,6 @@ class FreeTextAnnotationElement extends AnnotationElement {
     this._editOnDoubleClick();
     return this.container;
   }
-  get _isEditable() {
-    return this.data.hasOwnCanvas;
-  }
 }
 class LineAnnotationElement extends AnnotationElement {
   #line = null;
@@ -15702,6 +15727,9 @@ class AnnotationLayer {
     this.zIndex = 0;
     this._annotationEditorUIManager = annotationEditorUIManager;
   }
+  hasEditableAnnotations() {
+    return this.#editableAnnotations.size > 0;
+  }
   #appendElement(element, id) {
     const contentElement = element.firstChild || element;
     contentElement.id = `${AnnotationPrefix}${id}`;
@@ -15768,7 +15796,7 @@ class AnnotationLayer {
         rendered.style.visibility = "hidden";
       }
       this.#appendElement(rendered, data.id);
-      if (element.annotationEditorType > 0) {
+      if (element._isEditable) {
         this.#editableAnnotations.set(element.data.id, element);
         this._annotationEditorUIManager?.renderAnnotationElement(element);
       }
@@ -17795,6 +17823,7 @@ class HighlightEditor extends AnnotationEditor {
       return null;
     }
     const [pageWidth, pageHeight] = this.pageDimensions;
+    const [pageX, pageY] = this.pageTranslation;
     const boxes = this.#boxes;
     const quadPoints = new Float32Array(boxes.length * 8);
     let i = 0;
@@ -17804,8 +17833,8 @@ class HighlightEditor extends AnnotationEditor {
       width,
       height
     } of boxes) {
-      const sx = x * pageWidth;
-      const sy = (1 - y - height) * pageHeight;
+      const sx = x * pageWidth + pageX;
+      const sy = (1 - y - height) * pageHeight + pageY;
       quadPoints[i] = quadPoints[i + 4] = sx;
       quadPoints[i + 1] = quadPoints[i + 3] = sy;
       quadPoints[i + 2] = quadPoints[i + 6] = sx + width * pageWidth;
@@ -18802,6 +18831,7 @@ class StampEditor extends AnnotationEditor {
   #bitmapFile = null;
   #bitmapFileName = "";
   #canvas = null;
+  #hasMLBeenQueried = false;
   #observer = null;
   #resizeTimeoutId = null;
   #isSvg = false;
@@ -19049,6 +19079,36 @@ class StampEditor extends AnnotationEditor {
     }
     return bitmap;
   }
+  async #mlGuessAltText(bitmap, width, height) {
+    if (this.#hasMLBeenQueried) {
+      return;
+    }
+    this.#hasMLBeenQueried = true;
+    if (!this._uiManager.isMLEnabledFor("altText") || this.hasAltText()) {
+      return;
+    }
+    const offscreen = new OffscreenCanvas(width, height);
+    const ctx = offscreen.getContext("2d", {
+      willReadFrequently: true
+    });
+    ctx.drawImage(bitmap, 0, 0, bitmap.width, bitmap.height, 0, 0, width, height);
+    const response = await this._uiManager.mlGuess({
+      service: "image-to-text",
+      request: {
+        data: ctx.getImageData(0, 0, width, height).data,
+        width,
+        height,
+        channels: 4
+      }
+    });
+    const altText = response?.output || "";
+    if (this.parent && altText && !this.hasAltText()) {
+      this.altTextData = {
+        altText,
+        decorative: false
+      };
+    }
+  }
   #drawBitmap(width, height) {
     width = Math.ceil(width);
     height = Math.ceil(height);
@@ -19059,28 +19119,7 @@ class StampEditor extends AnnotationEditor {
     canvas.width = width;
     canvas.height = height;
     const bitmap = this.#isSvg ? this.#bitmap : this.#scaleBitmap(width, height);
-    if (this._uiManager.hasMLManager && !this.hasAltText()) {
-      const offscreen = new OffscreenCanvas(width, height);
-      const ctx = offscreen.getContext("2d");
-      ctx.drawImage(bitmap, 0, 0, bitmap.width, bitmap.height, 0, 0, width, height);
-      this._uiManager.mlGuess({
-        service: "image-to-text",
-        request: {
-          data: ctx.getImageData(0, 0, width, height).data,
-          width,
-          height,
-          channels: 4
-        }
-      }).then(response => {
-        const altText = response?.output || "";
-        if (this.parent && altText && !this.hasAltText()) {
-          this.altTextData = {
-            altText,
-            decorative: false
-          };
-        }
-      });
-    }
+    this.#mlGuessAltText(bitmap, width, height);
     const ctx = canvas.getContext("2d");
     ctx.filter = this._uiManager.hcmFilter;
     ctx.drawImage(bitmap, 0, 0, bitmap.width, bitmap.height, 0, 0, width, height);
@@ -19336,6 +19375,9 @@ class AnnotationEditorLayer {
   addCommands(params) {
     this.#uiManager.addCommands(params);
   }
+  toggleDrawing(enabled = false) {
+    this.div.classList.toggle("drawing", !enabled);
+  }
   togglePointerEvents(enabled = false) {
     this.div.classList.toggle("disabled", !enabled);
   }
@@ -19463,7 +19505,10 @@ class AnnotationEditorLayer {
   }
   #textLayerPointerDown(event) {
     this.#uiManager.unselectAll();
-    if (event.target === this.#textLayer.div) {
+    const {
+      target
+    } = event;
+    if (target === this.#textLayer.div || target.classList.contains("endOfContent") && this.#textLayer.div.contains(target)) {
       const {
         isMac
       } = util_FeatureTest.platform;
@@ -19472,9 +19517,11 @@ class AnnotationEditorLayer {
       }
       this.#uiManager.showAllEditors("highlight", true, true);
       this.#textLayer.div.classList.add("free");
+      this.toggleDrawing();
       HighlightEditor.startHighlighting(this, this.#uiManager.direction === "ltr", event);
       this.#textLayer.div.addEventListener("pointerup", () => {
         this.#textLayer.div.classList.remove("free");
+        this.toggleDrawing(true);
       }, {
         once: true,
         signal: this.#uiManager._signal
@@ -20034,8 +20081,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.4.712";
-const pdfjsBuild = "4298934ca";
+const pdfjsVersion = "4.5.629";
+const pdfjsBuild = "fa9dd6863";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -20078,9 +20125,7 @@ var __webpack_exports__isDataScheme = __webpack_exports__.isDataScheme;
 var __webpack_exports__isPdfFile = __webpack_exports__.isPdfFile;
 var __webpack_exports__noContextMenu = __webpack_exports__.noContextMenu;
 var __webpack_exports__normalizeUnicode = __webpack_exports__.normalizeUnicode;
-var __webpack_exports__renderTextLayer = __webpack_exports__.renderTextLayer;
 var __webpack_exports__setLayerDimensions = __webpack_exports__.setLayerDimensions;
 var __webpack_exports__shadow = __webpack_exports__.shadow;
-var __webpack_exports__updateTextLayer = __webpack_exports__.updateTextLayer;
 var __webpack_exports__version = __webpack_exports__.version;
-export { __webpack_exports__AbortException as AbortException, __webpack_exports__AnnotationEditorLayer as AnnotationEditorLayer, __webpack_exports__AnnotationEditorParamsType as AnnotationEditorParamsType, __webpack_exports__AnnotationEditorType as AnnotationEditorType, __webpack_exports__AnnotationEditorUIManager as AnnotationEditorUIManager, __webpack_exports__AnnotationLayer as AnnotationLayer, __webpack_exports__AnnotationMode as AnnotationMode, __webpack_exports__CMapCompressionType as CMapCompressionType, __webpack_exports__ColorPicker as ColorPicker, __webpack_exports__DOMSVGFactory as DOMSVGFactory, __webpack_exports__DrawLayer as DrawLayer, __webpack_exports__FeatureTest as FeatureTest, __webpack_exports__GlobalWorkerOptions as GlobalWorkerOptions, __webpack_exports__ImageKind as ImageKind, __webpack_exports__InvalidPDFException as InvalidPDFException, __webpack_exports__MissingPDFException as MissingPDFException, __webpack_exports__OPS as OPS, __webpack_exports__Outliner as Outliner, __webpack_exports__PDFDataRangeTransport as PDFDataRangeTransport, __webpack_exports__PDFDateString as PDFDateString, __webpack_exports__PDFWorker as PDFWorker, __webpack_exports__PasswordResponses as PasswordResponses, __webpack_exports__PermissionFlag as PermissionFlag, __webpack_exports__PixelsPerInch as PixelsPerInch, __webpack_exports__RenderingCancelledException as RenderingCancelledException, __webpack_exports__TextLayer as TextLayer, __webpack_exports__UnexpectedResponseException as UnexpectedResponseException, __webpack_exports__Util as Util, __webpack_exports__VerbosityLevel as VerbosityLevel, __webpack_exports__XfaLayer as XfaLayer, __webpack_exports__build as build, __webpack_exports__createValidAbsoluteUrl as createValidAbsoluteUrl, __webpack_exports__fetchData as fetchData, __webpack_exports__getDocument as getDocument, __webpack_exports__getFilenameFromUrl as getFilenameFromUrl, __webpack_exports__getPdfFilenameFromUrl as getPdfFilenameFromUrl, __webpack_exports__getXfaPageViewport as getXfaPageViewport, __webpack_exports__isDataScheme as isDataScheme, __webpack_exports__isPdfFile as isPdfFile, __webpack_exports__noContextMenu as noContextMenu, __webpack_exports__normalizeUnicode as normalizeUnicode, __webpack_exports__renderTextLayer as renderTextLayer, __webpack_exports__setLayerDimensions as setLayerDimensions, __webpack_exports__shadow as shadow, __webpack_exports__updateTextLayer as updateTextLayer, __webpack_exports__version as version };
+export { __webpack_exports__AbortException as AbortException, __webpack_exports__AnnotationEditorLayer as AnnotationEditorLayer, __webpack_exports__AnnotationEditorParamsType as AnnotationEditorParamsType, __webpack_exports__AnnotationEditorType as AnnotationEditorType, __webpack_exports__AnnotationEditorUIManager as AnnotationEditorUIManager, __webpack_exports__AnnotationLayer as AnnotationLayer, __webpack_exports__AnnotationMode as AnnotationMode, __webpack_exports__CMapCompressionType as CMapCompressionType, __webpack_exports__ColorPicker as ColorPicker, __webpack_exports__DOMSVGFactory as DOMSVGFactory, __webpack_exports__DrawLayer as DrawLayer, __webpack_exports__FeatureTest as FeatureTest, __webpack_exports__GlobalWorkerOptions as GlobalWorkerOptions, __webpack_exports__ImageKind as ImageKind, __webpack_exports__InvalidPDFException as InvalidPDFException, __webpack_exports__MissingPDFException as MissingPDFException, __webpack_exports__OPS as OPS, __webpack_exports__Outliner as Outliner, __webpack_exports__PDFDataRangeTransport as PDFDataRangeTransport, __webpack_exports__PDFDateString as PDFDateString, __webpack_exports__PDFWorker as PDFWorker, __webpack_exports__PasswordResponses as PasswordResponses, __webpack_exports__PermissionFlag as PermissionFlag, __webpack_exports__PixelsPerInch as PixelsPerInch, __webpack_exports__RenderingCancelledException as RenderingCancelledException, __webpack_exports__TextLayer as TextLayer, __webpack_exports__UnexpectedResponseException as UnexpectedResponseException, __webpack_exports__Util as Util, __webpack_exports__VerbosityLevel as VerbosityLevel, __webpack_exports__XfaLayer as XfaLayer, __webpack_exports__build as build, __webpack_exports__createValidAbsoluteUrl as createValidAbsoluteUrl, __webpack_exports__fetchData as fetchData, __webpack_exports__getDocument as getDocument, __webpack_exports__getFilenameFromUrl as getFilenameFromUrl, __webpack_exports__getPdfFilenameFromUrl as getPdfFilenameFromUrl, __webpack_exports__getXfaPageViewport as getXfaPageViewport, __webpack_exports__isDataScheme as isDataScheme, __webpack_exports__isPdfFile as isPdfFile, __webpack_exports__noContextMenu as noContextMenu, __webpack_exports__normalizeUnicode as normalizeUnicode, __webpack_exports__setLayerDimensions as setLayerDimensions, __webpack_exports__shadow as shadow, __webpack_exports__version as version };
