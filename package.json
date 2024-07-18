@@ -31,7 +31,7 @@
   "dependencies": {
     "@angular/animations": "^17.1.1",
     "@angular/common": "^17.1.1",
-    "@angular/compiler": "^17.1.1",
+    "@angular/compiler": "^18.1.1",
     "@angular/core": "^17.1.1",
     "@angular/forms": "^17.3.11",
     "@angular/platform-browser": "^17.1.1",
