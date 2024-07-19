@@ -55,20 +55,10 @@ export class PDFScriptLoaderService implements OnDestroy {
     });
   }
 
-  private loadCoreLibrary(): Promise<boolean> {
-    return new Promise((resolve) => {
-      const coreLibraryPath = this.getPdfJsPath('pdf');
-      const script = this.createScriptElement(coreLibraryPath);
-      script.onload = () => {
-        resolve(true);
-      };
-      script.onerror = () => {
-        resolve(false);
-        script.onerror = null;
-      };
-
-      document.body.appendChild(script);
-    });
+  private async loadCoreLibrary(): Promise<void> {
+    debugger;
+    const coreLibraryPath = this.getPdfJsPath('pdf');
+    const module = await import('/' + coreLibraryPath);
   }
 
   private createScriptElement(sourcePath: string): HTMLScriptElement {
