@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
   "version": 1,
-  "serialNumber": "urn:uuid:31d7163d-de44-4d32-960f-2ff706213ad3",
+  "serialNumber": "urn:uuid:9265746d-1826-40cb-ab5c-053ba57b9ebd",
   "metadata": {
-    "timestamp": "2024-07-16T20:14:39.710Z",
+    "timestamp": "2024-07-21T20:47:14.994Z",
     "tools": [
       {
         "name": "npm",
@@ -1522,8 +1522,8 @@
       "type": "library",
       "name": "compiler-cli",
       "group": "@angular",
-      "version": "17.3.11",
-      "bom-ref": "@angular/compiler-cli@17.3.11",
+      "version": "17.3.12",
+      "bom-ref": "@angular/compiler-cli@17.3.12",
       "description": "Angular - the compiler CLI for Node.js",
       "licenses": [
         {
@@ -1532,7 +1532,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40angular/compiler-cli@17.3.11#packages/compiler-cli",
+      "purl": "pkg:npm/%40angular/compiler-cli@17.3.12#packages/compiler-cli",
       "externalReferences": [
         {
           "url": "git+https://github.com/angular/angular.git#packages/compiler-cli",
@@ -1550,12 +1550,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@angular/compiler-cli/-/compiler-cli-17.3.11.tgz",
+          "url": "https://registry.npmjs.org/@angular/compiler-cli/-/compiler-cli-17.3.12.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "3b8e07fc1286c344d8ab468d4ce29865f4224eb7e36e671397ccb8517e82f577b2f215ef8a3cd9380b230344c6bef0c9c5e2d1facc5a445e22f488686ad9ddf2"
+              "content": "d45f0cee759f0a1ceeadbee86dbbee13b9895e51ed635506e7ca5cc1ca2656da4f6fe90f6af8003bc384bc91d804c57e6f34b1917b79508c0bf65b7d8c753164"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -1577,7 +1577,7 @@
           "name": "core",
           "group": "@babel",
           "version": "7.23.9",
-          "bom-ref": "@angular/compiler-cli@17.3.11|@babel/core@7.23.9",
+          "bom-ref": "@angular/compiler-cli@17.3.12|@babel/core@7.23.9",
           "author": "The Babel Team",
           "description": "Babel compiler core.",
           "licenses": [
@@ -1631,7 +1631,7 @@
               "type": "library",
               "name": "convert-source-map",
               "version": "2.0.0",
-              "bom-ref": "@angular/compiler-cli@17.3.11|@babel/core@7.23.9|convert-source-map@2.0.0",
+              "bom-ref": "@angular/compiler-cli@17.3.12|@babel/core@7.23.9|convert-source-map@2.0.0",
               "author": "Thorsten Lorenz",
               "description": "Converts a source-map from/to  different formats and allows adding/changing properties.",
               "licenses": [
@@ -1685,7 +1685,7 @@
               "type": "library",
               "name": "semver",
               "version": "6.3.1",
-              "bom-ref": "@angular/compiler-cli@17.3.11|@babel/core@7.23.9|semver@6.3.1",
+              "bom-ref": "@angular/compiler-cli@17.3.12|@babel/core@7.23.9|semver@6.3.1",
               "author": "GitHub Inc.",
               "description": "The semantic version parser used by npm.",
               "licenses": [
@@ -2731,8 +2731,8 @@
           "type": "library",
           "name": "generator",
           "group": "@babel",
-          "version": "7.24.9",
-          "bom-ref": "@babel/traverse@7.24.8|@babel/generator@7.24.9",
+          "version": "7.24.10",
+          "bom-ref": "@babel/traverse@7.24.8|@babel/generator@7.24.10",
           "author": "The Babel Team",
           "description": "Turns an AST into code.",
           "licenses": [
@@ -2742,7 +2742,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/%40babel/generator@7.24.9#packages/babel-generator",
+          "purl": "pkg:npm/%40babel/generator@7.24.10#packages/babel-generator",
           "externalReferences": [
             {
               "url": "git+https://github.com/babel/babel.git#packages/babel-generator",
@@ -2760,12 +2760,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/@babel/generator/-/generator-7.24.9.tgz",
+              "url": "https://registry.npmjs.org/@babel/generator/-/generator-7.24.10.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "1bcbf78d183ecfc2306358c7171bc236138f60fb5eac4e179633607464d87d24edcf3c2322cc08cc86923d22ecdd1ef216eaa7a8d79acb9ae32027ea56bfbfe8"
+                  "content": "a3d1c164bd46db5dbd96e114946d6107837f9e560d5879e9c25343f5e38c72546aaaed580f2dac49854215467097c2351b187e41246b3f6bc3ec4a54985557c6"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -12833,8 +12833,8 @@
     {
       "type": "library",
       "name": "electron-to-chromium",
-      "version": "1.4.827",
-      "bom-ref": "electron-to-chromium@1.4.827",
+      "version": "1.4.832",
+      "bom-ref": "electron-to-chromium@1.4.832",
       "author": "Kilian Valkhof",
       "description": "Provides a list of electron-to-chromium version mappings",
       "licenses": [
@@ -12844,7 +12844,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/electron-to-chromium@1.4.827",
+      "purl": "pkg:npm/electron-to-chromium@1.4.832",
       "externalReferences": [
         {
           "url": "git+https://github.com/kilian/electron-to-chromium.git",
@@ -12862,12 +12862,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.827.tgz",
+          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.832.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "558f89d1ee1215c35f432d7d304a0c75a21c64b9830a9aeabc1b648a2d564c24d01e946f7f937cfb791360280bfcf727b6fc10be6309593b833ecabe22585629"
+              "content": "7137a7dd20741f648653bc78ebb3517b579571081cb92ea372429f5891e26b67a8d1c1c818ea87a00c5ebc86190f87911dc5a392f173a3dddb8b7bc9f56fb594"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -12887,8 +12887,8 @@
     {
       "type": "library",
       "name": "node-releases",
-      "version": "2.0.14",
-      "bom-ref": "node-releases@2.0.14",
+      "version": "2.0.17",
+      "bom-ref": "node-releases@2.0.17",
       "author": "Sergey Rubanov",
       "description": "Node.js releases data",
       "licenses": [
@@ -12898,7 +12898,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/node-releases@2.0.14",
+      "purl": "pkg:npm/node-releases@2.0.17",
       "externalReferences": [
         {
           "url": "git+https://github.com/chicoxyzzy/node-releases.git",
@@ -12916,12 +12916,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/node-releases/-/node-releases-2.0.14.tgz",
+          "url": "https://registry.npmjs.org/node-releases/-/node-releases-2.0.17.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "cb5d30396b7cc99a6a5e63a0468efb59a1c49a1610606340eb2e36d4f2ac2985842bc696f9ca80a616e8ad90e1a9fc8aadb64437dd823755f629b69f636b3b63"
+              "content": "5b0e9994e88441f3df5cce39bf5ee869b93bed9ee68396ceb7b0230f2cf2ed18caf4eacbacb0bc772650a003c43ad157f5268d7f54ddbebe6044959d4c98fb18"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -16397,8 +16397,8 @@
       "type": "library",
       "name": "node",
       "group": "@types",
-      "version": "20.14.10",
-      "bom-ref": "@types/node@20.14.10",
+      "version": "20.14.11",
+      "bom-ref": "@types/node@20.14.11",
       "description": "TypeScript definitions for node",
       "licenses": [
         {
@@ -16407,7 +16407,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40types/node@20.14.10#types/node",
+      "purl": "pkg:npm/%40types/node@20.14.11#types/node",
       "externalReferences": [
         {
           "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/node",
@@ -16425,12 +16425,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@types/node/-/node-20.14.10.tgz",
+          "url": "https://registry.npmjs.org/@types/node/-/node-20.14.11.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "31d8977fe9c3b8cbd8d2024ac727d9effe9416c1133bb986285e783150ff7a4252e87745b69645060ae1e8fb1ebbae174dbd8c2f214f95b5ba863f0761140d39"
+              "content": "929ad0a4bf0c31eb336f3ea88c1e7fb54f0f2cde247ac9cdf068f3c37e3dac394d82c4b383dd250158f79652bdf4387b24e37eb7d02eb1c3cf156ea63db4e748"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -25667,8 +25667,8 @@
     {
       "type": "library",
       "name": "rollup",
-      "version": "4.18.1",
-      "bom-ref": "rollup@4.18.1",
+      "version": "4.19.0",
+      "bom-ref": "rollup@4.19.0",
       "author": "Rich Harris",
       "description": "Next-generation ES module bundler",
       "licenses": [
@@ -25678,7 +25678,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/rollup@4.18.1",
+      "purl": "pkg:npm/rollup@4.19.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/rollup/rollup.git",
@@ -25696,12 +25696,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/rollup/-/rollup-4.18.1.tgz",
+          "url": "https://registry.npmjs.org/rollup/-/rollup-4.19.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "125c76513f25cf1c4e5cca72e47590199aa4ad03adad50c36bf6e6f65d74f94e2b4275736cbfcb819e0d38cd4c3c80f21e4ebd5b8227b980c5e5dcd18782b0d4"
+              "content": "e6bec4612408a301ec2b879367463cd6aa59b89cfe314b987aa9a662644c9759f085d99b898aade63c337fabbbc323b326062ab4244cb5544a3ad1c0341cfbac"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -35975,8 +35975,8 @@
       "type": "library",
       "name": "animations",
       "group": "@angular",
-      "version": "17.3.11",
-      "bom-ref": "@angular/animations@17.3.11",
+      "version": "17.3.12",
+      "bom-ref": "@angular/animations@17.3.12",
       "author": "angular",
       "description": "Angular - animations integration with web-animations",
       "licenses": [
@@ -35986,7 +35986,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40angular/animations@17.3.11#packages/animations",
+      "purl": "pkg:npm/%40angular/animations@17.3.12#packages/animations",
       "externalReferences": [
         {
           "url": "git+https://github.com/angular/angular.git#packages/animations",
@@ -36004,12 +36004,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@angular/animations/-/animations-17.3.11.tgz",
+          "url": "https://registry.npmjs.org/@angular/animations/-/animations-17.3.12.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "d72d4481a8398db7544945952be280dfd37d5450ebceaf4e6e36c086b5c595729ad27a41470e5ba6b10478b1503044cc3fd3298db9a3d8fa0049f978bea8ff23"
+              "content": "f61b1d585e2045171526d3dc09c60b697d4223233dc14bbaafec5197acd4e61abcaa1977e618a0ea8ba7cfb097140ccb7f458305d335e9b3c7a2e546686efa96"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -36026,8 +36026,8 @@
       "type": "library",
       "name": "core",
       "group": "@angular",
-      "version": "17.3.11",
-      "bom-ref": "@angular/core@17.3.11",
+      "version": "17.3.12",
+      "bom-ref": "@angular/core@17.3.12",
       "author": "angular",
       "description": "Angular - the core framework",
       "licenses": [
@@ -36037,7 +36037,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40angular/core@17.3.11#packages/core",
+      "purl": "pkg:npm/%40angular/core@17.3.12#packages/core",
       "externalReferences": [
         {
           "url": "git+https://github.com/angular/angular.git#packages/core",
@@ -36055,12 +36055,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@angular/core/-/core-17.3.11.tgz",
+          "url": "https://registry.npmjs.org/@angular/core/-/core-17.3.12.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "db03d9c1715e8b7915c4adb29481fa09d19e6eb0b892fa28171eeaa17fb6e743884c010530e0c919d87f7b7c740e91548e546f42d20543e6294257c2e499cbe2"
+              "content": "32e16de722a2d7ad4999ab94b5ae038749bca1fc28aba227a3e2a83ad9183011ac4b1f80edd4a6f83531c4dc1d8fbf833728372e3546085801167ab883ccf4e8"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -43079,8 +43079,8 @@
     {
       "type": "library",
       "name": "is-core-module",
-      "version": "2.14.0",
-      "bom-ref": "is-core-module@2.14.0",
+      "version": "2.15.0",
+      "bom-ref": "is-core-module@2.15.0",
       "author": "Jordan Harband",
       "description": "Is this specifier a node.js core module?",
       "licenses": [
@@ -43090,7 +43090,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/is-core-module@2.14.0",
+      "purl": "pkg:npm/is-core-module@2.15.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/inspect-js/is-core-module.git",
@@ -43108,12 +43108,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/is-core-module/-/is-core-module-2.14.0.tgz",
+          "url": "https://registry.npmjs.org/is-core-module/-/is-core-module-2.15.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "6b974526287964b62546d0dcd1d6563fb4622abeb120ace69ffa006020ef74b4e169d560c89c256a840f991b4c4a9cfeae4d0e180808bbe4dc33d1d41747e4d4"
+              "content": "0ddf8b6f6ff3be4f522b2d53182b75c05245a3f31604f317e71eca72f2da8d64c6ba899ccdd417eb53ef639c8ae925400b0a687b15a8f3521f172a0a6364274c"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -43836,8 +43836,8 @@
       "type": "library",
       "name": "common",
       "group": "@angular",
-      "version": "17.3.11",
-      "bom-ref": "@angular/common@17.3.11",
+      "version": "17.3.12",
+      "bom-ref": "@angular/common@17.3.12",
       "author": "angular",
       "description": "Angular - commonly needed directives and services",
       "licenses": [
@@ -43847,7 +43847,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40angular/common@17.3.11#packages/common",
+      "purl": "pkg:npm/%40angular/common@17.3.12#packages/common",
       "externalReferences": [
         {
           "url": "git+https://github.com/angular/angular.git#packages/common",
@@ -43865,12 +43865,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@angular/common/-/common-17.3.11.tgz",
+          "url": "https://registry.npmjs.org/@angular/common/-/common-17.3.12.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "586f8742351a4338982c675b72fd9a5be1bbdeeae8379545f72938a9661ca255be541f1257f0ce02897cb85560085db57083a5e7ec1f259bc0e2be681b77586b"
+              "content": "bda6c9cefaf1efa5d716b9b544967aa3f0b21b7da989307fd6c7c57ca1dd947d50ae602b6fc22de20ca4f68123675224003d07bc15a57d69a7f93e95c77a5d53"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -43887,8 +43887,8 @@
       "type": "library",
       "name": "compiler",
       "group": "@angular",
-      "version": "17.3.11",
-      "bom-ref": "@angular/compiler@17.3.11",
+      "version": "17.3.12",
+      "bom-ref": "@angular/compiler@17.3.12",
       "author": "angular",
       "description": "Angular - the compiler library",
       "licenses": [
@@ -43898,7 +43898,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40angular/compiler@17.3.11#packages/compiler",
+      "purl": "pkg:npm/%40angular/compiler@17.3.12#packages/compiler",
       "externalReferences": [
         {
           "url": "git+https://github.com/angular/angular.git#packages/compiler",
@@ -43916,12 +43916,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@angular/compiler/-/compiler-17.3.11.tgz",
+          "url": "https://registry.npmjs.org/@angular/compiler/-/compiler-17.3.12.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "8a7811a111033e47991926b5dc3973b528d980602b35c9ac0168e3f9ffaf42041e9138e47d00ff37e062c7f2d2b7965d6d28c732dae40ccc913f06cdca4e4a7a"
+              "content": "bf023ca0e2ff80cfb03e7a6d3957816cc7d9630cd1c50b28be88d97fe66897db33974937499dc5c9c5a5c715d9185bb754811facfea95e99539b23834bf2edd7"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -44490,8 +44490,8 @@
     {
       "type": "library",
       "name": "zone.js",
-      "version": "0.14.7",
-      "bom-ref": "zone.js@0.14.7",
+      "version": "0.14.8",
+      "bom-ref": "zone.js@0.14.8",
       "author": "Brian Ford",
       "description": "Zones for JavaScript",
       "licenses": [
@@ -44501,7 +44501,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/zone.js@0.14.7#packages/zone.js",
+      "purl": "pkg:npm/zone.js@0.14.8#packages/zone.js",
       "externalReferences": [
         {
           "url": "git://github.com/angular/angular.git#packages/zone.js",
@@ -44519,12 +44519,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/zone.js/-/zone.js-0.14.7.tgz",
+          "url": "https://registry.npmjs.org/zone.js/-/zone.js-0.14.8.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "d30e831a45f604fba22bf34b7fee00f052c4e3743005fbaacf6755822ff8d118f55a6a94b240aa8f7dbd3bfa70aea1492c6e57f3091e1b6461200ae8e38d71b6"
+              "content": "e3cba1ecc9d5a78fce403b821de15d5f0e5df31c0fa854ef94780f2752c115be466aeb2d2d2655f98507d2da39ca03721a9a93b23a5ba6dd78d54fe3de909fa9"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -44541,8 +44541,8 @@
       "type": "library",
       "name": "forms",
       "group": "@angular",
-      "version": "17.3.11",
-      "bom-ref": "@angular/forms@17.3.11",
+      "version": "17.3.12",
+      "bom-ref": "@angular/forms@17.3.12",
       "author": "angular",
       "description": "Angular - directives and services for creating forms",
       "licenses": [
@@ -44552,7 +44552,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40angular/forms@17.3.11#packages/forms",
+      "purl": "pkg:npm/%40angular/forms@17.3.12#packages/forms",
       "externalReferences": [
         {
           "url": "git+https://github.com/angular/angular.git#packages/forms",
@@ -44570,12 +44570,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@angular/forms/-/forms-17.3.11.tgz",
+          "url": "https://registry.npmjs.org/@angular/forms/-/forms-17.3.12.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "ef5f5f968ff52fae18380c4bde9ceccd32beedb7335553900d74f59219e36f8f06559741501c16d83f9c15ba925b554cb965abd809b0cb594be183394bba8f25"
+              "content": "b55eabd76437c845255f0a55928e04f97b1cba74c8a4f90b6da8839ff3132f75718b62d99ec2e01f277f8b7f0768737e7bf1f70746b54e848e855e707f76b2e1"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -44592,8 +44592,8 @@
       "type": "library",
       "name": "platform-browser",
       "group": "@angular",
-      "version": "17.3.11",
-      "bom-ref": "@angular/platform-browser@17.3.11",
+      "version": "17.3.12",
+      "bom-ref": "@angular/platform-browser@17.3.12",
       "author": "angular",
       "description": "Angular - library for using Angular in a web browser",
       "licenses": [
@@ -44603,7 +44603,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40angular/platform-browser@17.3.11#packages/platform-browser",
+      "purl": "pkg:npm/%40angular/platform-browser@17.3.12#packages/platform-browser",
       "externalReferences": [
         {
           "url": "git+https://github.com/angular/angular.git#packages/platform-browser",
@@ -44621,12 +44621,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@angular/platform-browser/-/platform-browser-17.3.11.tgz",
+          "url": "https://registry.npmjs.org/@angular/platform-browser/-/platform-browser-17.3.12.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "b168cccbca8a1fa00eb79615e0e3283e113109b19d4483e3352c14af10a6f1af19cf90da9a85f74a26fdc919357ad8c1b918fea09c924b12122629b63985c941"
+              "content": "0d8634e29b5687fba5307cddfb2e7658213c42711819e2225b78442058c237ccf491b21d15d52d101d082b9be334bdde8f28549a985ca5e4f93d87f7617b6a59"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -44643,8 +44643,8 @@
       "type": "library",
       "name": "platform-browser-dynamic",
       "group": "@angular",
-      "version": "17.3.11",
-      "bom-ref": "@angular/platform-browser-dynamic@17.3.11",
+      "version": "17.3.12",
+      "bom-ref": "@angular/platform-browser-dynamic@17.3.12",
       "author": "angular",
       "description": "Angular - library for using Angular in a web browser with JIT compilation",
       "licenses": [
@@ -44654,7 +44654,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40angular/platform-browser-dynamic@17.3.11#packages/platform-browser-dynamic",
+      "purl": "pkg:npm/%40angular/platform-browser-dynamic@17.3.12#packages/platform-browser-dynamic",
       "externalReferences": [
         {
           "url": "git+https://github.com/angular/angular.git#packages/platform-browser-dynamic",
@@ -44672,12 +44672,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@angular/platform-browser-dynamic/-/platform-browser-dynamic-17.3.11.tgz",
+          "url": "https://registry.npmjs.org/@angular/platform-browser-dynamic/-/platform-browser-dynamic-17.3.12.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "24f0347a7272250e47df8d16436c1f5db0821f38c188096310332bfd28b0fc2cd27b45c8f1a4180ea28c2d432d47209d6213421188e7056817062f596bd6e566"
+              "content": "0d0c15ec1db1fc344b4434a2b2781945d2ea1dd61b6eba99bf61e6bb865b9cd61a58f0bcaafce013fd02bd8f949036adde709cb1fc2c327943781e932fbfc868"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -55169,8 +55169,8 @@
     {
       "type": "library",
       "name": "ts-jest",
-      "version": "29.2.2",
-      "bom-ref": "ts-jest@29.2.2",
+      "version": "29.2.3",
+      "bom-ref": "ts-jest@29.2.3",
       "author": "Kulshekhar Kabra",
       "description": "A Jest transformer with source map support that lets you use Jest to test projects written in TypeScript",
       "licenses": [
@@ -55180,7 +55180,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/ts-jest@29.2.2",
+      "purl": "pkg:npm/ts-jest@29.2.3",
       "externalReferences": [
         {
           "url": "git+https://github.com/kulshekhar/ts-jest.git",
@@ -55198,12 +55198,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/ts-jest/-/ts-jest-29.2.2.tgz",
+          "url": "https://registry.npmjs.org/ts-jest/-/ts-jest-29.2.3.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "b125bb3a8a1a293df80009e03fa935552ebaf5ad0774bc644199e50bb4fbeac724182a245c59ef277c919506464530285792b5f477d2802892c1639221f71896"
+              "content": "c8271f55d881167815cfdfe47878a7f449ecad0b50b44bb79d1ca4372f51569f8588f1456cf2774a0e90838f939261f4bcc3f9aac4ca8174ac93cd07470bdd81"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -66014,8 +66014,8 @@
       "type": "library",
       "name": "wasm-node",
       "group": "@rollup",
-      "version": "4.18.1",
-      "bom-ref": "@rollup/wasm-node@4.18.1",
+      "version": "4.19.0",
+      "bom-ref": "@rollup/wasm-node@4.19.0",
       "author": "Rich Harris",
       "description": "Next-generation ES module bundler with Node wasm",
       "licenses": [
@@ -66025,7 +66025,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40rollup/wasm-node@4.18.1",
+      "purl": "pkg:npm/%40rollup/wasm-node@4.19.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/rollup/rollup.git",
@@ -66043,12 +66043,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@rollup/wasm-node/-/wasm-node-4.18.1.tgz",
+          "url": "https://registry.npmjs.org/@rollup/wasm-node/-/wasm-node-4.19.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "ff924d228eda7f70643ddb26d289994f08bf29c122927477fdbb361c4766b9d81ecbec43c97d2ab5c33b43c3056e9a9d77347af8595e523c8656fd7290bdefd5"
+              "content": "56b59e106b2e53311f34f58ab528a73d4e7d976b5f7103e6f5e5799e09ccdfa5f697d24d097b6eb73104cbcc6d8cc59739755ef488c4f34dfb02604922e400fb"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -66605,7 +66605,7 @@
       "type": "library",
       "name": "string-width",
       "version": "4.2.3",
-      "bom-ref": "BomRef.hqodup45meg.m0hsg243aqo",
+      "bom-ref": "BomRef.rcsa7gftfj.em12ko0e5p8",
       "author": "Sindre Sorhus",
       "description": "Get the visual width of a string - the number of columns required to display it",
       "licenses": [
@@ -66713,7 +66713,7 @@
       "type": "library",
       "name": "strip-ansi",
       "version": "6.0.1",
-      "bom-ref": "BomRef.pih03p322f8.26hj5mi5ha",
+      "bom-ref": "BomRef.saekl62f53o.rukd54bfueo",
       "author": "Sindre Sorhus",
       "description": "Strip ANSI escape codes from a string",
       "licenses": [
@@ -67634,8 +67634,8 @@
       "type": "library",
       "name": "rollup-darwin-arm64",
       "group": "@rollup",
-      "version": "4.18.1",
-      "bom-ref": "@rollup/rollup-darwin-arm64@4.18.1",
+      "version": "4.19.0",
+      "bom-ref": "@rollup/rollup-darwin-arm64@4.19.0",
       "author": "Lukas Taegert-Atkinson",
       "description": "Native bindings for Rollup",
       "scope": "optional",
@@ -67646,7 +67646,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40rollup/rollup-darwin-arm64@4.18.1",
+      "purl": "pkg:npm/%40rollup/rollup-darwin-arm64@4.19.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/rollup/rollup.git",
@@ -67664,12 +67664,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@rollup/rollup-darwin-arm64/-/rollup-darwin-arm64-4.18.1.tgz",
+          "url": "https://registry.npmjs.org/@rollup/rollup-darwin-arm64/-/rollup-darwin-arm64-4.19.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "be4fa66bc882d5e6e37bf6a1a71a67adf5502626d33321dd5a938667726943b3209ffdd034798fabb6308d96c813b926ef7747e4cd5ee8c451b271015bbbf909"
+              "content": "7a6bca1cbe01d79c7a9e535304cb48682f6d2cf469780e6332f44b5d56e5fd6f487bb1e192b13b2908ef812f6ec606ad2f51e61d60d79394d34b821a349c5b00"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -68225,8 +68225,8 @@
     {
       "type": "library",
       "name": "jake",
-      "version": "10.9.1",
-      "bom-ref": "jake@10.9.1",
+      "version": "10.9.2",
+      "bom-ref": "jake@10.9.2",
       "author": "Matthew Eernisse",
       "description": "JavaScript build tool, similar to Make or Rake",
       "licenses": [
@@ -68236,7 +68236,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/jake@10.9.1",
+      "purl": "pkg:npm/jake@10.9.2",
       "externalReferences": [
         {
           "url": "git://github.com/jakejs/jake.git",
@@ -68254,12 +68254,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/jake/-/jake-10.9.1.tgz",
+          "url": "https://registry.npmjs.org/jake/-/jake-10.9.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "eb56ed70e1cd9cb9ec39db4b800e5e7ea4168e74a2fefa30e476c8ec731d28a5aabeb291d5b2cadc13e5267f6071268fd9ec2e6a6512301e57132efa294212db"
+              "content": "d8fe124341eb2d0f9fc3a965a4b9ce68602f37666eebbefc48932b094c27b387cea06f5acab4e2664dd557cb023e455917c69bd3392c5694bc143639a5108d04"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -68280,7 +68280,7 @@
           "type": "library",
           "name": "chalk",
           "version": "4.1.2",
-          "bom-ref": "jake@10.9.1|chalk@4.1.2",
+          "bom-ref": "jake@10.9.2|chalk@4.1.2",
           "description": "Terminal string styling done right",
           "licenses": [
             {
@@ -68333,7 +68333,7 @@
           "type": "library",
           "name": "ansi-styles",
           "version": "4.3.0",
-          "bom-ref": "jake@10.9.1|ansi-styles@4.3.0",
+          "bom-ref": "jake@10.9.2|ansi-styles@4.3.0",
           "author": "Sindre Sorhus",
           "description": "ANSI escape codes for styling strings in the terminal",
           "licenses": [
@@ -68387,7 +68387,7 @@
           "type": "library",
           "name": "color-convert",
           "version": "2.0.1",
-          "bom-ref": "jake@10.9.1|color-convert@2.0.1",
+          "bom-ref": "jake@10.9.2|color-convert@2.0.1",
           "author": "Heather Arthur",
           "description": "Plain color conversion functions",
           "licenses": [
@@ -68441,7 +68441,7 @@
           "type": "library",
           "name": "color-name",
           "version": "1.1.4",
-          "bom-ref": "jake@10.9.1|color-name@1.1.4",
+          "bom-ref": "jake@10.9.2|color-name@1.1.4",
           "author": "DY",
           "description": "A list of color names and its values",
           "licenses": [
@@ -68495,7 +68495,7 @@
           "type": "library",
           "name": "supports-color",
           "version": "7.2.0",
-          "bom-ref": "jake@10.9.1|supports-color@7.2.0",
+          "bom-ref": "jake@10.9.2|supports-color@7.2.0",
           "author": "Sindre Sorhus",
           "description": "Detect whether a terminal supports color",
           "licenses": [
@@ -68549,7 +68549,7 @@
           "type": "library",
           "name": "has-flag",
           "version": "4.0.0",
-          "bom-ref": "jake@10.9.1|has-flag@4.0.0",
+          "bom-ref": "jake@10.9.2|has-flag@4.0.0",
           "author": "Sindre Sorhus",
           "description": "Check if argv has a specific flag",
           "licenses": [
@@ -70556,20 +70556,20 @@
       "ref": "ngx-pdf-viewer-demo@0.0.0",
       "dependsOn": [
         "@angular-devkit/build-angular@17.3.8",
-        "@angular/animations@17.3.11",
+        "@angular/animations@17.3.12",
         "@angular/cli@17.3.8",
-        "@angular/common@17.3.11",
-        "@angular/compiler-cli@17.3.11",
-        "@angular/compiler@17.3.11",
-        "@angular/core@17.3.11",
-        "@angular/forms@17.3.11",
-        "@angular/platform-browser-dynamic@17.3.11",
-        "@angular/platform-browser@17.3.11",
+        "@angular/common@17.3.12",
+        "@angular/compiler-cli@17.3.12",
+        "@angular/compiler@17.3.12",
+        "@angular/core@17.3.12",
+        "@angular/forms@17.3.12",
+        "@angular/platform-browser-dynamic@17.3.12",
+        "@angular/platform-browser@17.3.12",
         "@cyclonedx/cyclonedx-npm@1.19.3",
         "@schematics/angular@17.3.8",
         "@types/estree@1.0.5",
         "@types/jest@29.5.12",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "@types/trusted-types@2.0.7",
         "copyfiles@2.4.1",
         "fsevents@2.3.3",
@@ -70579,12 +70579,12 @@
         "ng-packagr@17.3.0",
         "properties-reader@2.3.0",
         "sass@1.77.8",
-        "ts-jest@29.2.2",
+        "ts-jest@29.2.3",
         "ts-node@10.9.2",
         "tslib@2.6.3",
         "tslint@6.1.3",
         "typescript@5.2.2",
-        "zone.js@0.14.7"
+        "zone.js@0.14.8"
       ]
     },
     {
@@ -70594,7 +70594,7 @@
         "@angular-devkit/architect@0.1703.8",
         "@angular-devkit/build-webpack@0.1703.8",
         "@angular-devkit/core@17.3.8",
-        "@angular/compiler-cli@17.3.11",
+        "@angular/compiler-cli@17.3.12",
         "@babel/core@7.24.0",
         "@babel/generator@7.23.6",
         "@babel/helper-annotate-as-pure@7.22.5",
@@ -70880,10 +70880,10 @@
       "ref": "source-map@0.7.4"
     },
     {
-      "ref": "@angular/compiler-cli@17.3.11",
+      "ref": "@angular/compiler-cli@17.3.12",
       "dependsOn": [
-        "@angular/compiler@17.3.11",
-        "@angular/compiler-cli@17.3.11|@babel/core@7.23.9",
+        "@angular/compiler@17.3.12",
+        "@angular/compiler-cli@17.3.12|@babel/core@7.23.9",
         "@jridgewell/sourcemap-codec@1.5.0",
         "chokidar@3.6.0",
         "convert-source-map@1.9.0",
@@ -70895,7 +70895,7 @@
       ]
     },
     {
-      "ref": "@angular/compiler-cli@17.3.11|@babel/core@7.23.9",
+      "ref": "@angular/compiler-cli@17.3.12|@babel/core@7.23.9",
       "dependsOn": [
         "@ampproject/remapping@2.3.0",
         "@babel/code-frame@7.24.7",
@@ -70907,18 +70907,18 @@
         "@babel/template@7.24.7",
         "@babel/traverse@7.24.8",
         "@babel/types@7.24.9",
-        "@angular/compiler-cli@17.3.11|@babel/core@7.23.9|convert-source-map@2.0.0",
+        "@angular/compiler-cli@17.3.12|@babel/core@7.23.9|convert-source-map@2.0.0",
         "debug@4.3.5",
         "gensync@1.0.0-beta.2",
         "json5@2.2.3",
-        "@angular/compiler-cli@17.3.11|@babel/core@7.23.9|semver@6.3.1"
+        "@angular/compiler-cli@17.3.12|@babel/core@7.23.9|semver@6.3.1"
       ]
     },
     {
-      "ref": "@angular/compiler-cli@17.3.11|@babel/core@7.23.9|convert-source-map@2.0.0"
+      "ref": "@angular/compiler-cli@17.3.12|@babel/core@7.23.9|convert-source-map@2.0.0"
     },
     {
-      "ref": "@angular/compiler-cli@17.3.11|@babel/core@7.23.9|semver@6.3.1"
+      "ref": "@angular/compiler-cli@17.3.12|@babel/core@7.23.9|semver@6.3.1"
     },
     {
       "ref": "@babel/core@7.24.0",
@@ -70985,8 +70985,8 @@
       "ref": "browserslist@4.23.2",
       "dependsOn": [
         "caniuse-lite@1.0.30001642",
-        "electron-to-chromium@1.4.827",
-        "node-releases@2.0.14",
+        "electron-to-chromium@1.4.832",
+        "node-releases@2.0.17",
         "update-browserslist-db@1.1.0"
       ]
     },
@@ -71040,7 +71040,7 @@
       "ref": "@babel/traverse@7.24.8",
       "dependsOn": [
         "@babel/code-frame@7.24.7",
-        "@babel/traverse@7.24.8|@babel/generator@7.24.9",
+        "@babel/traverse@7.24.8|@babel/generator@7.24.10",
         "@babel/helper-environment-visitor@7.24.7",
         "@babel/helper-function-name@7.24.7",
         "@babel/helper-hoist-variables@7.24.7",
@@ -71052,7 +71052,7 @@
       ]
     },
     {
-      "ref": "@babel/traverse@7.24.8|@babel/generator@7.24.9",
+      "ref": "@babel/traverse@7.24.8|@babel/generator@7.24.10",
       "dependsOn": [
         "@babel/types@7.24.9",
         "@jridgewell/gen-mapping@0.3.5",
@@ -71244,7 +71244,7 @@
     {
       "ref": "resolve@1.22.8",
       "dependsOn": [
-        "is-core-module@2.14.0",
+        "is-core-module@2.15.0",
         "path-parse@1.0.7",
         "supports-preserve-symlinks-flag@1.0.0"
       ]
@@ -72082,7 +72082,7 @@
     {
       "ref": "@ngtools/webpack@17.3.8",
       "dependsOn": [
-        "@angular/compiler-cli@17.3.11",
+        "@angular/compiler-cli@17.3.12",
         "typescript@5.2.2",
         "webpack@5.90.3"
       ]
@@ -72099,12 +72099,12 @@
     {
       "ref": "vite@5.1.7",
       "dependsOn": [
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "vite@5.1.7|esbuild@0.19.12",
         "fsevents@2.3.3",
         "less@4.2.0",
         "postcss@8.4.35",
-        "rollup@4.18.1",
+        "rollup@4.19.0",
         "sass@1.77.8",
         "terser@5.29.1"
       ]
@@ -72346,10 +72346,10 @@
       ]
     },
     {
-      "ref": "electron-to-chromium@1.4.827"
+      "ref": "electron-to-chromium@1.4.832"
     },
     {
-      "ref": "node-releases@2.0.14"
+      "ref": "node-releases@2.0.17"
     },
     {
       "ref": "update-browserslist-db@1.1.0",
@@ -72717,17 +72717,17 @@
       "ref": "@types/body-parser@1.19.5",
       "dependsOn": [
         "@types/connect@3.4.38",
-        "@types/node@20.14.10"
+        "@types/node@20.14.11"
       ]
     },
     {
       "ref": "@types/connect@3.4.38",
       "dependsOn": [
-        "@types/node@20.14.10"
+        "@types/node@20.14.11"
       ]
     },
     {
-      "ref": "@types/node@20.14.10",
+      "ref": "@types/node@20.14.11",
       "dependsOn": [
         "undici-types@5.26.5"
       ]
@@ -72735,7 +72735,7 @@
     {
       "ref": "@types/express-serve-static-core@4.19.5",
       "dependsOn": [
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "@types/qs@6.9.15",
         "@types/range-parser@1.2.7",
         "@types/send@0.17.4"
@@ -72751,21 +72751,21 @@
       "ref": "@types/send@0.17.4",
       "dependsOn": [
         "@types/mime@1.3.5",
-        "@types/node@20.14.10"
+        "@types/node@20.14.11"
       ]
     },
     {
       "ref": "@types/serve-static@1.15.7",
       "dependsOn": [
         "@types/http-errors@2.0.4",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "@types/send@0.17.4"
       ]
     },
     {
       "ref": "@types/http-proxy@1.17.14",
       "dependsOn": [
-        "@types/node@20.14.10"
+        "@types/node@20.14.11"
       ]
     },
     {
@@ -73090,7 +73090,7 @@
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
         "@types/jsdom@20.0.1",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "jest-mock@29.7.0",
         "jest-util@29.7.0",
         "jsdom@20.0.3"
@@ -73247,10 +73247,10 @@
     {
       "ref": "ng-packagr@17.3.0",
       "dependsOn": [
-        "@angular/compiler-cli@17.3.11",
+        "@angular/compiler-cli@17.3.12",
         "@rollup/plugin-json@6.1.0",
         "@rollup/plugin-node-resolve@15.2.3",
-        "@rollup/wasm-node@4.18.1",
+        "@rollup/wasm-node@4.19.0",
         "ajv@8.12.0",
         "ansi-colors@4.1.3",
         "browserslist@4.23.2",
@@ -73269,7 +73269,7 @@
         "ora@5.4.1",
         "piscina@4.4.0",
         "postcss@8.4.35",
-        "rollup@4.18.1",
+        "rollup@4.19.0",
         "rxjs@7.8.1",
         "sass@1.77.8",
         "tslib@2.6.3",
@@ -73667,9 +73667,9 @@
       "ref": "fsevents@2.3.3"
     },
     {
-      "ref": "rollup@4.18.1",
+      "ref": "rollup@4.19.0",
       "dependsOn": [
-        "@rollup/rollup-darwin-arm64@4.18.1",
+        "@rollup/rollup-darwin-arm64@4.19.0",
         "@types/estree@1.0.5",
         "fsevents@2.3.3"
       ]
@@ -73722,14 +73722,14 @@
     {
       "ref": "@types/bonjour@3.5.13",
       "dependsOn": [
-        "@types/node@20.14.10"
+        "@types/node@20.14.11"
       ]
     },
     {
       "ref": "@types/connect-history-api-fallback@1.5.4",
       "dependsOn": [
         "@types/express-serve-static-core@4.19.5",
-        "@types/node@20.14.10"
+        "@types/node@20.14.11"
       ]
     },
     {
@@ -73747,13 +73747,13 @@
     {
       "ref": "@types/sockjs@0.3.36",
       "dependsOn": [
-        "@types/node@20.14.10"
+        "@types/node@20.14.11"
       ]
     },
     {
       "ref": "@types/ws@8.5.11",
       "dependsOn": [
-        "@types/node@20.14.10"
+        "@types/node@20.14.11"
       ]
     },
     {
@@ -74221,7 +74221,7 @@
     {
       "ref": "@types/node-forge@1.3.11",
       "dependsOn": [
-        "@types/node@20.14.10"
+        "@types/node@20.14.11"
       ]
     },
     {
@@ -74645,7 +74645,7 @@
     {
       "ref": "terser-webpack-plugin@5.3.10|jest-worker@27.5.1",
       "dependsOn": [
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "merge-stream@2.0.0",
         "terser-webpack-plugin@5.3.10|supports-color@8.1.1"
       ]
@@ -74686,18 +74686,18 @@
       "ref": "terser-webpack-plugin@5.3.10|json-schema-traverse@0.4.1"
     },
     {
-      "ref": "@angular/animations@17.3.11",
+      "ref": "@angular/animations@17.3.12",
       "dependsOn": [
-        "@angular/core@17.3.11",
+        "@angular/core@17.3.12",
         "tslib@2.6.3"
       ]
     },
     {
-      "ref": "@angular/core@17.3.11",
+      "ref": "@angular/core@17.3.12",
       "dependsOn": [
         "rxjs@7.8.1",
         "tslib@2.6.3",
-        "zone.js@0.14.7"
+        "zone.js@0.14.8"
       ]
     },
     {
@@ -75490,7 +75490,7 @@
       "ref": "mkdirp@1.0.4"
     },
     {
-      "ref": "is-core-module@2.14.0",
+      "ref": "is-core-module@2.15.0",
       "dependsOn": [
         "hasown@2.0.2"
       ]
@@ -75560,17 +75560,17 @@
       "ref": "yargs-parser@21.1.1"
     },
     {
-      "ref": "@angular/common@17.3.11",
+      "ref": "@angular/common@17.3.12",
       "dependsOn": [
-        "@angular/core@17.3.11",
+        "@angular/core@17.3.12",
         "rxjs@7.8.1",
         "tslib@2.6.3"
       ]
     },
     {
-      "ref": "@angular/compiler@17.3.11",
+      "ref": "@angular/compiler@17.3.12",
       "dependsOn": [
-        "@angular/core@17.3.11",
+        "@angular/core@17.3.12",
         "tslib@2.6.3"
       ]
     },
@@ -75621,34 +75621,34 @@
       "ref": "reflect-metadata@0.2.2"
     },
     {
-      "ref": "zone.js@0.14.7"
+      "ref": "zone.js@0.14.8"
     },
     {
-      "ref": "@angular/forms@17.3.11",
+      "ref": "@angular/forms@17.3.12",
       "dependsOn": [
-        "@angular/common@17.3.11",
-        "@angular/core@17.3.11",
-        "@angular/platform-browser@17.3.11",
+        "@angular/common@17.3.12",
+        "@angular/core@17.3.12",
+        "@angular/platform-browser@17.3.12",
         "rxjs@7.8.1",
         "tslib@2.6.3"
       ]
     },
     {
-      "ref": "@angular/platform-browser@17.3.11",
+      "ref": "@angular/platform-browser@17.3.12",
       "dependsOn": [
-        "@angular/animations@17.3.11",
-        "@angular/common@17.3.11",
-        "@angular/core@17.3.11",
+        "@angular/animations@17.3.12",
+        "@angular/common@17.3.12",
+        "@angular/core@17.3.12",
         "tslib@2.6.3"
       ]
     },
     {
-      "ref": "@angular/platform-browser-dynamic@17.3.11",
+      "ref": "@angular/platform-browser-dynamic@17.3.12",
       "dependsOn": [
-        "@angular/common@17.3.11",
-        "@angular/compiler@17.3.11",
-        "@angular/core@17.3.11",
-        "@angular/platform-browser@17.3.11",
+        "@angular/common@17.3.12",
+        "@angular/compiler@17.3.12",
+        "@angular/core@17.3.12",
+        "@angular/platform-browser@17.3.12",
         "tslib@2.6.3"
       ]
     },
@@ -76152,7 +76152,7 @@
         "@jest/schemas@29.6.3",
         "@types/istanbul-lib-coverage@2.0.6",
         "@types/istanbul-reports@3.0.4",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "@types/yargs@17.0.32",
         "@jest/types@29.6.3|chalk@4.1.2"
       ]
@@ -76204,7 +76204,7 @@
       "ref": "jest-util@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "jest-util@29.7.0|chalk@4.1.2",
         "ci-info@3.9.0",
         "graceful-fs@4.2.11",
@@ -76417,7 +76417,7 @@
       "dependsOn": [
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "jest-mock@29.7.0"
       ]
     },
@@ -76426,7 +76426,7 @@
       "dependsOn": [
         "@jest/types@29.6.3",
         "@sinonjs/fake-timers@10.3.0",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "jest-message-util@29.7.0",
         "jest-mock@29.7.0",
         "jest-util@29.7.0"
@@ -76436,7 +76436,7 @@
       "ref": "jest-mock@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "jest-util@29.7.0"
       ]
     },
@@ -76482,7 +76482,7 @@
     {
       "ref": "@types/jsdom@20.0.1",
       "dependsOn": [
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "@types/tough-cookie@4.0.5",
         "parse5@7.1.2"
       ]
@@ -76727,9 +76727,9 @@
       "ref": "jest-preset-angular@14.1.1",
       "dependsOn": [
         "@angular-devkit/build-angular@17.3.8",
-        "@angular/compiler-cli@17.3.11",
-        "@angular/core@17.3.11",
-        "@angular/platform-browser-dynamic@17.3.11",
+        "@angular/compiler-cli@17.3.12",
+        "@angular/core@17.3.12",
+        "@angular/platform-browser-dynamic@17.3.12",
         "bs-logger@0.2.6",
         "esbuild-wasm@0.20.1",
         "esbuild@0.20.1",
@@ -76737,7 +76737,7 @@
         "jest-util@29.7.0",
         "jest@29.7.0",
         "pretty-format@29.7.0",
-        "ts-jest@29.2.2",
+        "ts-jest@29.2.3",
         "typescript@5.2.2"
       ]
     },
@@ -76748,7 +76748,7 @@
       ]
     },
     {
-      "ref": "ts-jest@29.2.2",
+      "ref": "ts-jest@29.2.3",
       "dependsOn": [
         "@babel/core@7.24.0",
         "@jest/transform@29.7.0",
@@ -76775,7 +76775,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "ansi-escapes@4.3.2",
         "@jest/core@29.7.0|chalk@4.1.2",
         "ci-info@3.9.0",
@@ -76838,7 +76838,7 @@
       "ref": "@jest/console@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "@jest/console@29.7.0|chalk@4.1.2",
         "jest-message-util@29.7.0",
         "jest-util@29.7.0",
@@ -76888,7 +76888,7 @@
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
         "@jridgewell/trace-mapping@0.3.25",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "@jest/reporters@29.7.0|chalk@4.1.2",
         "collect-v8-coverage@1.0.2",
         "exit@0.1.2",
@@ -77074,7 +77074,7 @@
     {
       "ref": "jest-worker@29.7.0",
       "dependsOn": [
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "jest-util@29.7.0",
         "merge-stream@2.0.0",
         "jest-worker@29.7.0|supports-color@8.1.1"
@@ -77133,7 +77133,7 @@
         "@babel/core@7.24.0",
         "@jest/test-sequencer@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "babel-jest@29.7.0",
         "jest-config@29.7.0|chalk@4.1.2",
         "ci-info@3.9.0",
@@ -77207,7 +77207,7 @@
       "dependsOn": [
         "@jest/types@29.6.3",
         "@types/graceful-fs@4.1.9",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "anymatch@3.1.3",
         "fb-watchman@2.0.2",
         "fsevents@2.3.3",
@@ -77276,7 +77276,7 @@
         "@jest/expect@29.7.0",
         "@jest/test-result@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "jest-circus@29.7.0|chalk@4.1.2",
         "co@4.6.0",
         "dedent@1.5.3",
@@ -77451,7 +77451,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "jest-runtime@29.7.0|chalk@4.1.2",
         "cjs-module-lexer@1.3.1",
         "collect-v8-coverage@1.0.2",
@@ -77511,7 +77511,7 @@
         "@jest/environment@29.7.0",
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "jest-mock@29.7.0",
         "jest-util@29.7.0"
       ]
@@ -77575,7 +77575,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "jest-runner@29.7.0|chalk@4.1.2",
         "emittery@0.13.1",
         "graceful-fs@4.2.11",
@@ -77690,7 +77690,7 @@
         "@tsconfig/node12@1.0.11",
         "@tsconfig/node14@1.0.3",
         "@tsconfig/node16@1.0.4",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "acorn-walk@8.3.3",
         "acorn@8.12.1",
         "arg@4.1.3",
@@ -77705,7 +77705,7 @@
     {
       "ref": "@types/graceful-fs@4.1.9",
       "dependsOn": [
-        "@types/node@20.14.10"
+        "@types/node@20.14.11"
       ]
     },
     {
@@ -77778,7 +77778,7 @@
       "dependsOn": [
         "@jest/test-result@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.10",
+        "@types/node@20.14.11",
         "ansi-escapes@4.3.2",
         "jest-watcher@29.7.0|chalk@4.1.2",
         "emittery@0.13.1",
@@ -78011,7 +78011,7 @@
       "ref": "@rollup/plugin-json@6.1.0",
       "dependsOn": [
         "@rollup/pluginutils@5.1.0",
-        "rollup@4.18.1"
+        "rollup@4.19.0"
       ]
     },
     {
@@ -78020,7 +78020,7 @@
         "@types/estree@1.0.5",
         "estree-walker@2.0.2",
         "@rollup/pluginutils@5.1.0|picomatch@2.3.1",
-        "rollup@4.18.1"
+        "rollup@4.19.0"
       ]
     },
     {
@@ -78038,7 +78038,7 @@
         "is-builtin-module@3.2.1",
         "is-module@1.0.0",
         "resolve@1.22.8",
-        "rollup@4.18.1"
+        "rollup@4.19.0"
       ]
     },
     {
@@ -78057,7 +78057,7 @@
       "ref": "is-module@1.0.0"
     },
     {
-      "ref": "@rollup/wasm-node@4.18.1",
+      "ref": "@rollup/wasm-node@4.19.0",
       "dependsOn": [
         "@types/estree@1.0.5",
         "fsevents@2.3.3"
@@ -78078,9 +78078,9 @@
     {
       "ref": "@isaacs/cliui@8.0.2",
       "dependsOn": [
-        "BomRef.hqodup45meg.m0hsg243aqo",
+        "BomRef.rcsa7gftfj.em12ko0e5p8",
         "@isaacs/cliui@8.0.2|string-width@5.1.2",
-        "BomRef.pih03p322f8.26hj5mi5ha",
+        "BomRef.saekl62f53o.rukd54bfueo",
         "@isaacs/cliui@8.0.2|strip-ansi@7.1.0",
         "wrap-ansi@7.0.0",
         "@isaacs/cliui@8.0.2|wrap-ansi@8.1.0"
@@ -78118,7 +78118,7 @@
       "ref": "@isaacs/cliui@8.0.2|ansi-styles@6.2.1"
     },
     {
-      "ref": "BomRef.hqodup45meg.m0hsg243aqo",
+      "ref": "BomRef.rcsa7gftfj.em12ko0e5p8",
       "dependsOn": [
         "emoji-regex@8.0.0",
         "is-fullwidth-code-point@3.0.0",
@@ -78129,7 +78129,7 @@
       "ref": "eastasianwidth@0.2.0"
     },
     {
-      "ref": "BomRef.pih03p322f8.26hj5mi5ha",
+      "ref": "BomRef.saekl62f53o.rukd54bfueo",
       "dependsOn": [
         "ansi-regex@5.0.1"
       ]
@@ -78213,7 +78213,7 @@
       ]
     },
     {
-      "ref": "@rollup/rollup-darwin-arm64@4.18.1"
+      "ref": "@rollup/rollup-darwin-arm64@4.19.0"
     },
     {
       "ref": "properties-reader@2.3.0",
@@ -78280,48 +78280,48 @@
     {
       "ref": "ejs@3.1.10",
       "dependsOn": [
-        "jake@10.9.1"
+        "jake@10.9.2"
       ]
     },
     {
-      "ref": "jake@10.9.1",
+      "ref": "jake@10.9.2",
       "dependsOn": [
         "async@3.2.5",
-        "jake@10.9.1|chalk@4.1.2",
+        "jake@10.9.2|chalk@4.1.2",
         "filelist@1.0.4",
         "minimatch@3.1.2"
       ]
     },
     {
-      "ref": "jake@10.9.1|chalk@4.1.2",
+      "ref": "jake@10.9.2|chalk@4.1.2",
       "dependsOn": [
-        "jake@10.9.1|ansi-styles@4.3.0",
-        "jake@10.9.1|supports-color@7.2.0"
+        "jake@10.9.2|ansi-styles@4.3.0",
+        "jake@10.9.2|supports-color@7.2.0"
       ]
     },
     {
-      "ref": "jake@10.9.1|ansi-styles@4.3.0",
+      "ref": "jake@10.9.2|ansi-styles@4.3.0",
       "dependsOn": [
-        "jake@10.9.1|color-convert@2.0.1"
+        "jake@10.9.2|color-convert@2.0.1"
       ]
     },
     {
-      "ref": "jake@10.9.1|color-convert@2.0.1",
+      "ref": "jake@10.9.2|color-convert@2.0.1",
       "dependsOn": [
-        "jake@10.9.1|color-name@1.1.4"
+        "jake@10.9.2|color-name@1.1.4"
       ]
     },
     {
-      "ref": "jake@10.9.1|color-name@1.1.4"
+      "ref": "jake@10.9.2|color-name@1.1.4"
     },
     {
-      "ref": "jake@10.9.1|supports-color@7.2.0",
+      "ref": "jake@10.9.2|supports-color@7.2.0",
       "dependsOn": [
-        "jake@10.9.1|has-flag@4.0.0"
+        "jake@10.9.2|has-flag@4.0.0"
       ]
     },
     {
-      "ref": "jake@10.9.1|has-flag@4.0.0"
+      "ref": "jake@10.9.2|has-flag@4.0.0"
     },
     {
       "ref": "async@3.2.5"
