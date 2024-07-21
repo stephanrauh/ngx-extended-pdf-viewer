@@ -37,38 +37,114 @@ export class PDFScriptLoaderService implements OnDestroy {
   }
 
   private addScriptOpChainingSupport(): Promise<boolean> {
-    return new Promise((resolve) => {
-      const script = this.createScriptElement(pdfDefaultOptions.assetsFolder + '/op-chaining-support.js');
-      script.onload = () => {
-        script.remove();
-        script.onload = null;
-        resolve((<any>globalThis).ngxExtendedPdfViewerCanRunModernJSCode as boolean);
-      };
-      script.onerror = () => {
-        script.remove();
-        (<any>globalThis).ngxExtendedPdfViewerCanRunModernJSCode = false;
-        resolve(false);
-        script.onerror = null;
-      };
+    if (this.isCSPApplied()) {
+      return new Promise((resolve) => {
+        const script = this.createScriptElement(pdfDefaultOptions.assetsFolder + '/op-chaining-support.js');
+        script.onload = () => {
+          script.remove();
+          script.onload = null;
+          resolve((<any>globalThis).ngxExtendedPdfViewerCanRunModernJSCode as boolean);
+        };
+        script.onerror = () => {
+          script.remove();
+          (<any>globalThis).ngxExtendedPdfViewerCanRunModernJSCode = false;
+          resolve(false);
+          script.onerror = null;
+        };
 
-      document.body.appendChild(script);
-    });
+        document.body.appendChild(script);
+      });
+    } else {
+      const code = `
+new (function () {
+  class BrowserCompatibilityTester {
+    // Does your browser doesn't support private fields?
+    #privateField;
+
+    constructor() {
+      // Does your browser support the logical assignment operators?
+      let x = false;
+      x ||= true;
+
+      this.#privateMethod();
+    }
+
+    // Does your browser doesn't support private methods?
+    #privateMethod() {
+      // check the the browser supports string.at()
+      return 'hello'.at(4);
+    }
+
+    supportsOptionalChaining() {
+      const optionalChaining = {
+        support: true,
+      };
+      return optionalChaining?.support;
+    }
   }
 
-  private loadCoreLibrary(): Promise<boolean> {
-    return new Promise((resolve) => {
-      const coreLibraryPath = this.getPdfJsPath('pdf');
-      const script = this.createScriptElement(coreLibraryPath);
-      script.onload = () => {
-        resolve(true);
-      };
-      script.onerror = () => {
-        resolve(false);
-        script.onerror = null;
-      };
+  function supportsPromiseWithResolvers() {
+    const iframe = document.createElement('iframe');
+    document.firstElementChild.append(iframe);
+    const useLegacyPdfViewer = 'withResolvers' in iframe.contentWindow['Promise'];
+    iframe.parentElement.removeChild(iframe);
 
-      document.body.appendChild(script);
-    });
+    return useLegacyPdfViewer;
+  }
+
+  const supportsOptionalChaining = new BrowserCompatibilityTester().supportsOptionalChaining();
+  const supportModernPromises = supportsPromiseWithResolvers();
+  window.ngxExtendedPdfViewerCanRunModernJSCode = supportsOptionalChaining && supportModernPromises;
+})();
+`;
+      const script = this.createInlineScript(code);
+      document.getElementsByTagName('head')[0].appendChild(script);
+      return new Promise((resolve) => {
+        const interval = setInterval(() => {
+          if ((globalThis as any).ngxExtendedPdfViewerCanRunModernJSCode !== undefined) {
+            clearInterval(interval);
+            resolve((globalThis as any).ngxExtendedPdfViewerCanRunModernJSCode);
+          }
+        }, 1);
+      });
+    }
+  }
+
+  private createInlineScript(code: string): HTMLScriptElement {
+    const script = document.createElement('script');
+    script.async = true;
+    script.type = 'module';
+    script.className = `ngx-extended-pdf-viewer-script`;
+    script.text = code;
+    return script;
+  }
+
+  private isCSPAppliedViaMetaTag(): boolean {
+    const metaTags = document.getElementsByTagName('meta');
+    for (let i = 0; i < metaTags.length; i++) {
+      if (metaTags[i].getAttribute('http-equiv') === 'Content-Security-Policy') {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private isCSPApplied() {
+    if (this.isCSPAppliedViaMetaTag()) {
+      return true;
+    }
+    try {
+      eval('1');
+      return false;
+    } catch (e) {
+      if (e instanceof EvalError) {
+        console.log('CSP is applied');
+        return true;
+      } else {
+        console.log('An unexpected error occurred', e);
+        return false;
+      }
+    }
   }
 
   private createScriptElement(sourcePath: string): HTMLScriptElement {
@@ -77,32 +153,6 @@ export class PDFScriptLoaderService implements OnDestroy {
     script.type = sourcePath.endsWith('.mjs') ? 'module' : 'text/javascript';
     script.className = `ngx-extended-pdf-viewer-script`;
     this.pdfCspPolicyService.addTrustedJavaScript(script, sourcePath);
-    return script;
-  }
-
-  private createScriptImportElement(viewerPath: string): HTMLScriptElement {
-    const script = document.createElement('script');
-    script.async = true;
-    script.type = 'module';
-    script.className = `ngx-extended-pdf-viewer-script`;
-    // this.pdfCspPolicyService.addTrustedJavaScript(script, sourcePath);
-    if (viewerPath.startsWith('/') || viewerPath.startsWith('http')) {
-    } else {
-      viewerPath = './' + viewerPath;
-    }
-    const body = `
-      import { webViewerLoad, PDFViewerApplication, PDFViewerApplicationConstants, PDFViewerApplicationOptions } from '${viewerPath}';
-      const event = new CustomEvent("ngxViewerFileHasBeenLoaded", {
-        detail: {
-          PDFViewerApplication,
-          PDFViewerApplicationConstants,
-          PDFViewerApplicationOptions,
-          webViewerLoad
-        }
-      });
-      document.dispatchEvent(event);
-      `;
-    script.text = body;
     return script;
   }
 
@@ -133,7 +183,7 @@ export class PDFScriptLoaderService implements OnDestroy {
         document.removeEventListener('ngxViewerFileHasBeenLoaded', listener);
       };
       document.addEventListener('ngxViewerFileHasBeenLoaded', listener, { once: true });
-      const script = this.createScriptImportElement(viewerPath);
+      const script = this.createScriptElement(viewerPath);
       document.getElementsByTagName('head')[0].appendChild(script);
     });
   }
@@ -160,7 +210,6 @@ export class PDFScriptLoaderService implements OnDestroy {
     return new Promise(async (resolve) => {
       (async () => {
         this._needsES5 = await this.needsES5();
-        await this.loadCoreLibrary();
         await this.loadViewer();
         //this.ngxExtendedPdfViewerIncompletelyInitialized = false;
         resolve(this.PDFViewerApplication !== undefined);

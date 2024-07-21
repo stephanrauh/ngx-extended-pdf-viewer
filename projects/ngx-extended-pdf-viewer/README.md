@@ -50,6 +50,7 @@ The goal of version 21 is to
 - get rid of RxJS
 - to stop polluting the global namespace (that's partially finished)
 - to get rid of the memory leaks
+- to reduce the number of requests loading JavaScript files
 - and it's going to move the code loading the huge JavaScript files to a service. So the viewer doesn't have to reload the JavaScript files every time you destroy the viewer and open a new one. It seems many people do that, so this is going to improve performance considerably. This goal is already fulfilled, although I doubt it's free of errors yet.
 
 Version 21 contains several breaking changes. The good news is that I assume the vast majority of developers won't even notice. These breaking changes are:

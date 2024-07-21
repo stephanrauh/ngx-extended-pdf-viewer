@@ -1419,9 +1419,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       setTimeout(async () => this.checkHeight(), 100);
       // open a file in the viewer
       if (!!this._src) {
+        let workerSrc: string | (() => string) = pdfDefaultOptions.workerSrc;
+        if (typeof workerSrc === 'function') {
+          workerSrc = workerSrc();
+        }
         const options: any = {
           password: this.password,
           verbosity: this.logLevel,
+          workerSrc,
         };
         if (this._src['range']) {
           options.range = this._src['range'];
@@ -1448,6 +1453,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           options.data = this._src;
         }
         options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
+
         await PDFViewerApplication.open(options);
         this.pdfLoadingStarts.emit({});
         setTimeout(async () => this.setZoom());
@@ -1797,9 +1803,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       PDFViewerApplication.appConfig.filenameForDownload = this.guessFilenameFromUrl(this._src);
     }
 
+    let workerSrc: string | (() => string) = pdfDefaultOptions.workerSrc;
+    if (typeof workerSrc === 'function') {
+      workerSrc = workerSrc();
+    }
     const options: any = {
       password: this.password,
       verbosity: this.logLevel,
+      workerSrc,
     };
     if (this._src?.['range']) {
       options.range = this._src['range'];
