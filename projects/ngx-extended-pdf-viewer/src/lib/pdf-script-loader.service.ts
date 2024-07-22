@@ -207,14 +207,9 @@ new (function () {
     if (this.PDFViewerApplication) {
       return true;
     }
-    return new Promise(async (resolve) => {
-      (async () => {
-        this._needsES5 = await this.needsES5();
-        await this.loadViewer();
-        //this.ngxExtendedPdfViewerIncompletelyInitialized = false;
-        resolve(this.PDFViewerApplication !== undefined);
-      })();
-    });
+    this._needsES5 = await this.needsES5();
+    await this.loadViewer();
+    return this.PDFViewerApplication !== undefined;
   }
 
   public ngOnDestroy() {
@@ -257,7 +252,7 @@ new (function () {
   public replaceBrowserPrint(useCustomPrintOfPdfJS: boolean): void {
     if (useCustomPrintOfPdfJS) {
       if (this.PDFViewerApplication?.printPdf) {
-        window.print = this.PDFViewerApplication.printPdf;
+        window.print = this.PDFViewerApplication.printPdf.bind(this.PDFViewerApplication);
       }
     } else {
       if (this.originalPrint && !this.originalPrint.toString().includes('printPdf')) {

@@ -141,8 +141,9 @@ export class NgxExtendedPdfViewerService {
 
   public print(printRange?: PDFPrintRange) {
     if (this.PDFViewerApplication) {
-      const alreadyThere = !!this.PDFViewerApplication.PDFPrintServiceFactory && !printRange;
+      const alreadyThere = this.PDFViewerApplication?.PDFPrintServiceFactory?.isInPDFPrintRange !== undefined;
       if (!alreadyThere) {
+        // slow down hurried users clicking the print button multiple times
         if (!printRange) {
           printRange = {} as PDFPrintRange;
         }
@@ -597,7 +598,6 @@ export class NgxExtendedPdfViewerService {
     const height = topDim - bottomDim;
     const imageWidth = this.PDFViewerApplication?.pdfViewer._pages[pageToModify].div.clientWidth;
     const imageHeight = this.PDFViewerApplication?.pdfViewer._pages[pageToModify].div.clientHeight;
-    pageToModify;
     const leftPdf = this.convertToPDFCoordinates(left, width, 0, imageWidth);
     const bottomPdf = this.convertToPDFCoordinates(bottom, height, 0, imageHeight);
     const rightPdf = this.convertToPDFCoordinates(right, width, width, imageWidth);
