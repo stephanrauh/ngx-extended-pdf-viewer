@@ -574,4 +574,4 @@
 - 21.0.0-alpha.9 #2337 restored the `[minifiedJSLibraries]` attribute (was accidentally deleted); fixed a layout glitch that made the selected find result indistinguishable from the other find results when `highlight all` is selected
 - 21.0.0-alpha.10 #2439 fixed an NPE that was raised when destroying the services; try to eliminate more memory leaks
 - 21.0.0-alpha.11 #2440 stopped loading the JS file in an inline script, thus restoring compatiblity to CSP; merged the pdf.mjs and the viewer.mjs files so there's one request less; #376 simplified the way the `workerSrc()` parameter is passed to pdf.js; delete `globalThis.pdfJsLib` after using it to pass the objects of pdf.js to the viewer; detect CSP and load the `op-chaining-support.js` as an inline script if possible to avoid an additional request
-- 21.0.0-alpha.12 #2452 fixed printing (it still depended on `window.PDFViewerApplication`); fixed two Sonarqube findings
+- 21.0.0-alpha.12 #2452 fixed printing (it still depended on `window.PDFViewerApplication`); fixed two Sonarqube findings; #8 / #2445 get rid of wrong HTML issue reports in Chrome
