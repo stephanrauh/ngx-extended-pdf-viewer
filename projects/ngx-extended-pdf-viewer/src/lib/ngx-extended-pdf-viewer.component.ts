@@ -806,8 +806,19 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Output()
   public zoomChange = new EventEmitter<string | number | undefined>();
 
+  private _zoomLevels = ['auto', 'page-actual', 'page-fit', 'page-width', 0.5, 1, 1.25, 1.5, 2, 3, 4];
+
+  public get zoomLevels() {
+    if (this.maxZoom && this.maxZoom === this.minZoom) {
+      return [this.maxZoom];
+    }
+    return this._zoomLevels;
+  }
+
   @Input()
-  public zoomLevels = ['auto', 'page-actual', 'page-fit', 'page-width', 0.5, 1, 1.25, 1.5, 2, 3, 4];
+  public set zoomLevels(value) {
+    this._zoomLevels = value;
+  }
 
   @Input()
   public maxZoom = 10;
