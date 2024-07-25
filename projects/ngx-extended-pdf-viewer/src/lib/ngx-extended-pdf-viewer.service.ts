@@ -141,17 +141,15 @@ export class NgxExtendedPdfViewerService {
 
   public print(printRange?: PDFPrintRange) {
     if (this.PDFViewerApplication) {
-      const alreadyThere = this.PDFViewerApplication?.PDFPrintServiceFactory?.isInPDFPrintRange !== undefined;
-      if (!alreadyThere) {
+      const alreadyPrinting = this.PDFViewerApplication?.PDFPrintServiceFactory?.isInPDFPrintRange !== undefined;
+      if (!alreadyPrinting) {
         // slow down hurried users clicking the print button multiple times
         if (!printRange) {
           printRange = {} as PDFPrintRange;
         }
         this.setPrintRange(printRange);
         this.PDFViewerApplication?.printPdf();
-        if (!alreadyThere) {
-          this.PDFViewerApplication?.eventBus.on('afterprint', this.removePrintRange.bind(this), { once: true });
-        }
+        this.PDFViewerApplication?.eventBus.on('afterprint', this.removePrintRange.bind(this), { once: true });
       }
     }
   }
@@ -584,7 +582,7 @@ export class NgxExtendedPdfViewerService {
       }
       pageToModify = page;
     } else {
-      pageToModify = this.currentPageIndex() || 0;
+      pageToModify = this.currentPageIndex() ?? 0;
     }
     const previousAnnotationEditorMode = this.PDFViewerApplication.pdfViewer.annotationEditorMode;
     this.switchAnnotationEdtorMode(13);

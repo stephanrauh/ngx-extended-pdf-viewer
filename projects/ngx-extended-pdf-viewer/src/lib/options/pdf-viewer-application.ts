@@ -528,7 +528,7 @@ export type RenderParameters = {
    * - Rendering intent, can be 'display', 'print',
    * or 'any'. The default value is 'display'.
    */
-  intent?: string | undefined;
+  intent?: string;
   /**
    * Controls which annotations are rendered
    * onto the canvas, for annotations with appearance-data; the values from
@@ -543,17 +543,17 @@ export type RenderParameters = {
    * from the {@link AnnotationStorage }-instance; useful e.g. for printing.
    * The default value is `AnnotationMode.ENABLE`.
    */
-  annotationMode?: number | undefined;
+  annotationMode?: number;
   /**
    * - Additional transform, applied just
    * before viewport transform.
    */
-  transform?: any[] | undefined;
+  transform?: any[];
   /**
    * - The factory instance that will be used
    * when creating canvases. The default value is {new DOMCanvasFactory()}.
    */
-  canvasFactory?: Object | undefined;
+  canvasFactory?: Object;
   /**
    * - Background to use for the canvas.
    * Any valid `canvas.fillStyle` can be used: a `DOMString` parsed as CSS
@@ -564,22 +564,22 @@ export type RenderParameters = {
    * NOTE: This option may be partially, or completely, ignored when the
    * `pageColors`-option is used.
    */
-  background?: string | Object | undefined;
+  background?: string | Object;
   /**
    * - Overwrites background and foreground colors
    * with user defined ones in order to improve readability in high contrast
    * mode.
    */
-  pageColors?: Object | undefined;
+  pageColors?: Object;
   /**
    * - Map some
    * annotation ids with canvases used to render them.
    */
-  annotationCanvasMap?: Map<string, HTMLCanvasElement> | undefined;
-  printAnnotationStorage?: PrintAnnotationStorage | undefined;
+  annotationCanvasMap?: Map<string, HTMLCanvasElement>;
+  printAnnotationStorage?: PrintAnnotationStorage;
 
-  backgroundColorToReplace?: string | undefined; // added by ngx-extended-pdf-viewer
-  optionalContentConfigPromise?: Promise<unknown> | undefined; // added by ngx-extended-pdf-viewer?
+  backgroundColorToReplace?: string; // added by ngx-extended-pdf-viewer
+  optionalContentConfigPromise?: Promise<unknown>; // added by ngx-extended-pdf-viewer?
 };
 
 /**

@@ -170,7 +170,7 @@
 
             <pdf-context-menu></pdf-context-menu>
 
-            <div id="viewerContainer" [style.top]="viewerPositionTop" [style.backgroundColor]="backgroundColor" role="document">
+            <div id="viewerContainer" [style.top]="viewerPositionTop" [style.backgroundColor]="backgroundColor">
               <div class="unverified-signature-warning" *ngIf="hasSignature && showUnverifiedSignatures">
                 {{
                   'unverified-signature-warning'

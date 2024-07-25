@@ -58,10 +58,10 @@ export class NgxFormSupport {
       const groupName = fieldName;
       this.formIdToFullFieldName[id] = groupName;
       if (value) {
-        this.formData[groupName] = radioButtonValueName as string;
+        this.formData[groupName] = radioButtonValueName;
         this.initialFormDataStoredInThePDF[groupName] = initialFormValueFromPDF;
       }
-      element.setAttribute('exportValue', radioButtonValueName as string);
+      element.setAttribute('exportValue', radioButtonValueName);
       if (!this.radioButtons[groupName]) {
         this.radioButtons[groupName] = [];
       }

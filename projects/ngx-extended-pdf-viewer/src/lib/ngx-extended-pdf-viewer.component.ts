@@ -1354,7 +1354,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (typeof window === 'undefined') {
       return; // server side rendering
     }
-    const options = this.pdfScriptLoaderService.PDFViewerApplicationOptions as IPDFViewerApplicationOptions;
+    const options = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
     // tslint:disable-next-line:forin
     for (const key in pdfDefaultOptions) {
       options.set(key, pdfDefaultOptions[key]);
@@ -2330,10 +2330,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       if (!pdfDefaultOptions.doubleTapZoomsInHandMode) {
         return;
       }
-    } else {
-      if (!pdfDefaultOptions.doubleTapZoomsInTextSelectionMode) {
-        return;
-      }
+    } else if (!pdfDefaultOptions.doubleTapZoomsInTextSelectionMode) {
+      return;
     }
     if (this.pageViewMode === 'book') {
       // scaling doesn't work in book mode

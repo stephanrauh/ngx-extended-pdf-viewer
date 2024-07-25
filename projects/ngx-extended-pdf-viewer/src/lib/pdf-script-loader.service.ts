@@ -254,10 +254,8 @@ new (function () {
       if (this.PDFViewerApplication?.printPdf) {
         window.print = this.PDFViewerApplication.printPdf.bind(this.PDFViewerApplication);
       }
-    } else {
-      if (this.originalPrint && !this.originalPrint.toString().includes('printPdf')) {
-        window.print = this.originalPrint;
-      }
+    } else if (this.originalPrint && !this.originalPrint.toString().includes('printPdf')) {
+      window.print = this.originalPrint;
     }
   }
 
