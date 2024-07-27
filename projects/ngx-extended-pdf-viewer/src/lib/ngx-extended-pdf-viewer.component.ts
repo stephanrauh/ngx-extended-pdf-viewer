@@ -1112,7 +1112,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
     this.overrideDefaultSettings();
     const onLoaded = () => {
-      document.removeEventListener('webviewerinitialized', onLoaded);
       if (!this.pdfScriptLoaderService.PDFViewerApplication.eventBus) {
         console.error("Eventbus is null? Let's try again.");
         setTimeout(() => {
@@ -1135,7 +1134,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         }
       }
     };
-    document.addEventListener('webviewerinitialized', onLoaded);
+    document.addEventListener('webviewerinitialized', onLoaded, { once: true });
 
     this.activateTextlayerIfNecessary(null);
 
@@ -1994,7 +1993,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
             if (this.pdfScriptLoaderService.ngxExtendedPdfViewerIncompletelyInitialized) {
               this.openPDF();
             } else {
-              await this.openPDF2();
+              const initialized = this.notificationService.onPDFJSInitSignal();
+              if (initialized) {
+                await this.openPDF2();
+              } else {
+                // the library loads the PDF file later during the initialization
+              }
             }
           } else {
             // #802 clear the form data; otherwise the "download" dialogs opens
