@@ -2,7 +2,7 @@
  * @licstart The following is the entire license notice for the
  * JavaScript code in this page
  *
- * Copyright 2023 Mozilla Foundation
+ * Copyright 2024 Mozilla Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,6 +115,7 @@ const RenderingIntentFlag = {
   ANNOTATIONS_FORMS: 0x10,
   ANNOTATIONS_STORAGE: 0x20,
   ANNOTATIONS_DISABLE: 0x40,
+  IS_EDITING: 0x80,
   OPLIST: 0x100
 };
 const AnnotationMode = {
@@ -370,7 +371,9 @@ const OPS = {
   paintImageXObjectRepeat: 88,
   paintImageMaskXObjectRepeat: 89,
   paintSolidColorImageMask: 90,
-  constructPath: 91
+  constructPath: 91,
+  setStrokeTransparent: 92,
+  setFillTransparent: 93
 };
 const PasswordResponses = {
   NEED_PASSWORD: 1,
@@ -1016,6 +1019,9 @@ class Dict {
     }
     return dict;
   }
+  delete(key) {
+    delete this._map[key];
+  }
 }
 class Ref {
   constructor(num, gen) {
@@ -1586,6 +1592,9 @@ function getNewAnnotationsMap(annotationStorage) {
     annotations.push(value);
   }
   return newAnnotationsByPage.size > 0 ? newAnnotationsByPage : null;
+}
+function stringToAsciiOrUTF16BE(str) {
+  return isAscii(str) ? str : stringToUTF16String(str, true);
 }
 function isAscii(str) {
   return /^[\x00-\x7F]*$/.test(str);
@@ -2334,7 +2343,8 @@ class ColorSpace {
               }
             }
           }
-          throw new FormatError(`Unrecognized ColorSpace: ${cs.name}`);
+          warn(`Unrecognized ColorSpace: ${cs.name}`);
+          return this.singletons.gray;
       }
     }
     if (Array.isArray(cs)) {
@@ -2409,10 +2419,12 @@ class ColorSpace {
           const range = params.getArray("Range");
           return new LabCS(whitePoint, blackPoint, range);
         default:
-          throw new FormatError(`Unimplemented ColorSpace object: ${mode}`);
+          warn(`Unimplemented ColorSpace object: ${mode}`);
+          return this.singletons.gray;
       }
     }
-    throw new FormatError(`Unrecognized ColorSpace object: ${cs}`);
+    warn(`Unrecognized ColorSpace object: ${cs}`);
+    return this.singletons.gray;
   }
   static isDefaultDecode(decode, numComps) {
     if (!Array.isArray(decode)) {
@@ -16330,6 +16342,7 @@ function clearUnicodeCaches() {
 
 
 
+
 const SEAC_ANALYSIS_ENABLED = true;
 const FontFlags = {
   FixedPitch: 1,
@@ -16408,6 +16421,41 @@ function type1FontGlyphMapping(properties, builtInEncoding, glyphNames) {
 function normalizeFontName(name) {
   return name.replaceAll(/[,_]/g, "-").replaceAll(/\s/g, "");
 }
+const getVerticalPresentationForm = getLookupTableFactory(t => {
+  t[0x2013] = 0xfe32;
+  t[0x2014] = 0xfe31;
+  t[0x2025] = 0xfe30;
+  t[0x2026] = 0xfe19;
+  t[0x3001] = 0xfe11;
+  t[0x3002] = 0xfe12;
+  t[0x3008] = 0xfe3f;
+  t[0x3009] = 0xfe40;
+  t[0x300a] = 0xfe3d;
+  t[0x300b] = 0xfe3e;
+  t[0x300c] = 0xfe41;
+  t[0x300d] = 0xfe42;
+  t[0x300e] = 0xfe43;
+  t[0x300f] = 0xfe44;
+  t[0x3010] = 0xfe3b;
+  t[0x3011] = 0xfe3c;
+  t[0x3014] = 0xfe39;
+  t[0x3015] = 0xfe3a;
+  t[0x3016] = 0xfe17;
+  t[0x3017] = 0xfe18;
+  t[0xfe4f] = 0xfe34;
+  t[0xff01] = 0xfe15;
+  t[0xff08] = 0xfe35;
+  t[0xff09] = 0xfe36;
+  t[0xff0c] = 0xfe10;
+  t[0xff1a] = 0xfe13;
+  t[0xff1b] = 0xfe14;
+  t[0xff1f] = 0xfe16;
+  t[0xff3b] = 0xfe47;
+  t[0xff3d] = 0xfe48;
+  t[0xff3f] = 0xfe33;
+  t[0xff5b] = 0xfe37;
+  t[0xff5d] = 0xfe38;
+});
 
 ;// CONCATENATED MODULE: ./src/core/standard_fonts.js
 
@@ -24965,6 +25013,36 @@ class Font {
     builder.addTable("post", createPostTable(properties));
     return builder.toArray();
   }
+  get _spaceWidth() {
+    const possibleSpaceReplacements = ["space", "minus", "one", "i", "I"];
+    let width;
+    for (const glyphName of possibleSpaceReplacements) {
+      if (glyphName in this.widths) {
+        width = this.widths[glyphName];
+        break;
+      }
+      const glyphsUnicodeMap = getGlyphsUnicode();
+      const glyphUnicode = glyphsUnicodeMap[glyphName];
+      let charcode = 0;
+      if (this.composite && this.cMap.contains(glyphUnicode)) {
+        charcode = this.cMap.lookup(glyphUnicode);
+        if (typeof charcode === "string") {
+          charcode = convertCidString(glyphUnicode, charcode);
+        }
+      }
+      if (!charcode && this.toUnicode) {
+        charcode = this.toUnicode.charCodeOf(glyphUnicode);
+      }
+      if (charcode <= 0) {
+        charcode = glyphUnicode;
+      }
+      width = this.widths[charcode];
+      if (width) {
+        break;
+      }
+    }
+    return shadow(this, "_spaceWidth", width || this.defaultWidth);
+  }
   _charToGlyph(charcode, isSpace = false) {
     let glyph = this._glyphCache[charcode];
     if (glyph?.isSpace === isSpace) {
@@ -24993,6 +25071,10 @@ class Font {
       const glyphName = this.differences[charcode] || this.defaultEncoding[charcode];
       if ((glyphName === ".notdef" || glyphName === "") && this.type === "Type1") {
         fontCharCode = 0x20;
+        if (glyphName === "") {
+          width ||= this._spaceWidth;
+          unicode = String.fromCharCode(fontCharCode);
+        }
       }
       fontCharCode = mapSpecialUnicodeValues(fontCharCode);
     }
@@ -25015,6 +25097,12 @@ class Font {
         fontChar = String.fromCodePoint(fontCharCode);
       } else {
         warn(`charToGlyph - invalid fontCharCode: ${fontCharCode}`);
+      }
+    }
+    if (this.missingFile && this.vertical && fontChar.length === 1) {
+      const vertical = getVerticalPresentationForm()[fontChar.charCodeAt(0)];
+      if (vertical) {
+        fontChar = unicode = String.fromCharCode(vertical);
       }
     }
     glyph = new fonts_Glyph(charcode, fontChar, unicode, accent, width, vmetric, operatorListId, isSpace, isInFont);
@@ -31220,9 +31308,7 @@ class PartialEvaluator {
                 resources,
                 localColorSpaceCache
               }).then(function (colorSpace) {
-                if (colorSpace) {
-                  stateManager.state.fillColorSpace = colorSpace;
-                }
+                stateManager.state.fillColorSpace = colorSpace || ColorSpace.singletons.gray;
               }));
               return;
             }
@@ -31238,9 +31324,7 @@ class PartialEvaluator {
                 resources,
                 localColorSpaceCache
               }).then(function (colorSpace) {
-                if (colorSpace) {
-                  stateManager.state.strokeColorSpace = colorSpace;
-                }
+                stateManager.state.strokeColorSpace = colorSpace || ColorSpace.singletons.gray;
               }));
               return;
             }
@@ -31283,7 +31367,12 @@ class PartialEvaluator {
             args = ColorSpace.singletons.rgb.getRgb(args, 0);
             break;
           case OPS.setFillColorN:
-            cs = stateManager.state.fillColorSpace;
+            cs = stateManager.state.patternFillColorSpace;
+            if (!cs) {
+              args = [];
+              fn = OPS.setFillTransparent;
+              break;
+            }
             if (cs.name === "Pattern") {
               next(self.handleColorN(operatorList, OPS.setFillColorN, args, cs, patterns, resources, task, localColorSpaceCache, localTilingPatternCache, localShadingPatternCache));
               return;
@@ -31292,7 +31381,12 @@ class PartialEvaluator {
             fn = OPS.setFillRGBColor;
             break;
           case OPS.setStrokeColorN:
-            cs = stateManager.state.strokeColorSpace;
+            cs = stateManager.state.patternStrokeColorSpace;
+            if (!cs) {
+              args = [];
+              fn = OPS.setStrokeTransparent;
+              break;
+            }
             if (cs.name === "Pattern") {
               next(self.handleColorN(operatorList, OPS.setStrokeColorN, args, cs, patterns, resources, task, localColorSpaceCache, localTilingPatternCache, localShadingPatternCache));
               return;
@@ -32507,6 +32601,9 @@ class PartialEvaluator {
             map[charCode] = String.fromCodePoint(token);
             return;
           }
+          if (token.length % 2 !== 0) {
+            token = "\u0000" + token;
+          }
           const str = [];
           for (let k = 0; k < token.length; k += 2) {
             const w1 = token.charCodeAt(k) << 8 | token.charCodeAt(k + 1);
@@ -33305,8 +33402,22 @@ class EvalState {
     this.ctm = new Float32Array(IDENTITY_MATRIX);
     this.font = null;
     this.textRenderingMode = TextRenderingMode.FILL;
-    this.fillColorSpace = ColorSpace.singletons.gray;
-    this.strokeColorSpace = ColorSpace.singletons.gray;
+    this._fillColorSpace = ColorSpace.singletons.gray;
+    this._strokeColorSpace = ColorSpace.singletons.gray;
+    this.patternFillColorSpace = null;
+    this.patternStrokeColorSpace = null;
+  }
+  get fillColorSpace() {
+    return this._fillColorSpace;
+  }
+  set fillColorSpace(colorSpace) {
+    this._fillColorSpace = this.patternFillColorSpace = colorSpace;
+  }
+  get strokeColorSpace() {
+    return this._strokeColorSpace;
+  }
+  set strokeColorSpace(colorSpace) {
+    this._strokeColorSpace = this.patternStrokeColorSpace = colorSpace;
   }
   clone() {
     return Object.create(this);
@@ -36617,6 +36728,7 @@ async function incrementalUpdate({
 
 
 
+
 const MAX_DEPTH = 40;
 const StructElementType = {
   PAGE_CONTENT: 1,
@@ -36901,19 +37013,19 @@ class StructTreeRoot {
         const tagDict = new Dict(xref);
         tagDict.set("S", Name.get(type));
         if (title) {
-          tagDict.set("T", title);
+          tagDict.set("T", stringToAsciiOrUTF16BE(title));
         }
         if (lang) {
           tagDict.set("Lang", lang);
         }
         if (alt) {
-          tagDict.set("Alt", alt);
+          tagDict.set("Alt", stringToAsciiOrUTF16BE(alt));
         }
         if (expanded) {
-          tagDict.set("E", expanded);
+          tagDict.set("E", stringToAsciiOrUTF16BE(expanded));
         }
         if (actualText) {
-          tagDict.set("ActualText", actualText);
+          tagDict.set("ActualText", stringToAsciiOrUTF16BE(actualText));
         }
         await this.#updateParentTag({
           structTreeParent,
@@ -37341,26 +37453,27 @@ function isValidExplicitDest(dest) {
   if (!(zoom instanceof Name)) {
     return false;
   }
+  const argsLen = args.length;
   let allowNull = true;
   switch (zoom.name) {
     case "XYZ":
-      if (args.length !== 3) {
+      if (argsLen < 2 || argsLen > 3) {
         return false;
       }
       break;
     case "Fit":
     case "FitB":
-      return args.length === 0;
+      return argsLen === 0;
     case "FitH":
     case "FitBH":
     case "FitV":
     case "FitBV":
-      if (args.length !== 1) {
+      if (argsLen > 1) {
         return false;
       }
       break;
     case "FitR":
-      if (args.length !== 4) {
+      if (argsLen !== 4) {
         return false;
       }
       allowNull = false;
@@ -49963,7 +50076,8 @@ class Annotation {
       subtype: params.subtype,
       hasOwnCanvas: false,
       noRotate: !!(this.flags & AnnotationFlag.NOROTATE),
-      noHTML: isLocked && isContentLocked
+      noHTML: isLocked && isContentLocked,
+      isEditable: false
     };
     if (params.collectFields) {
       const kids = dict.get("Kids");
@@ -50008,6 +50122,9 @@ class Annotation {
       return !noPrint;
     }
     return this.printable;
+  }
+  mustBeViewedWhenEditing(isEditing, modifiedIds = null) {
+    return isEditing ? !this.data.isEditable : !modifiedIds?.has(this.data.id);
   }
   get viewable() {
     if (this.data.quadPoints === null) {
@@ -50190,7 +50307,7 @@ class Annotation {
       });
     });
   }
-  async getOperatorList(evaluator, task, intent, renderForms, annotationStorage) {
+  async getOperatorList(evaluator, task, intent, annotationStorage) {
     const {
       hasOwnCanvas,
       id,
@@ -50572,14 +50689,21 @@ class MarkupAnnotation extends Annotation {
     this._streams.push(this.appearance, appearanceStream);
   }
   static async createNewAnnotation(xref, annotation, dependencies, params) {
-    const annotationRef = annotation.ref ||= xref.getNewTemporaryRef();
+    let oldAnnotation;
+    if (annotation.ref) {
+      oldAnnotation = (await xref.fetchIfRefAsync(annotation.ref)).clone();
+    } else {
+      annotation.ref = xref.getNewTemporaryRef();
+    }
+    const annotationRef = annotation.ref;
     const ap = await this.createNewAppearanceStream(annotation, xref, params);
     const buffer = [];
     let annotationDict;
     if (ap) {
       const apRef = xref.getNewTemporaryRef();
       annotationDict = this.createNewDict(annotation, xref, {
-        apRef
+        apRef,
+        oldAnnotation
       });
       await writeObject(apRef, ap, buffer, xref);
       dependencies.push({
@@ -50587,7 +50711,9 @@ class MarkupAnnotation extends Annotation {
         data: buffer.join("")
       });
     } else {
-      annotationDict = this.createNewDict(annotation, xref, {});
+      annotationDict = this.createNewDict(annotation, xref, {
+        oldAnnotation
+      });
     }
     if (Number.isInteger(annotation.parentTreeId)) {
       annotationDict.set("StructParent", annotation.parentTreeId);
@@ -50751,8 +50877,8 @@ class WidgetAnnotation extends Annotation {
     }
     return str;
   }
-  async getOperatorList(evaluator, task, intent, renderForms, annotationStorage) {
-    if (renderForms && !(this instanceof SignatureWidgetAnnotation) && !this.data.noHTML && !this.data.hasOwnCanvas) {
+  async getOperatorList(evaluator, task, intent, annotationStorage) {
+    if (intent & RenderingIntentFlag.ANNOTATIONS_FORMS && !(this instanceof SignatureWidgetAnnotation) && !this.data.noHTML && !this.data.hasOwnCanvas) {
       return {
         opList: new OperatorList(),
         separateForm: true,
@@ -50760,11 +50886,11 @@ class WidgetAnnotation extends Annotation {
       };
     }
     if (!this._hasText) {
-      return super.getOperatorList(evaluator, task, intent, renderForms, annotationStorage);
+      return super.getOperatorList(evaluator, task, intent, annotationStorage);
     }
     const content = await this._getAppearance(evaluator, task, intent, annotationStorage);
     if (this.appearance && content === null) {
-      return super.getOperatorList(evaluator, task, intent, renderForms, annotationStorage);
+      return super.getOperatorList(evaluator, task, intent, annotationStorage);
     }
     const opList = new OperatorList();
     if (!this._defaultAppearance || content === null) {
@@ -50862,8 +50988,7 @@ class WidgetAnnotation extends Annotation {
       path: this.data.fieldName,
       value
     };
-    const encoder = val => isAscii(val) ? val : stringToUTF16String(val, true);
-    dict.set("V", Array.isArray(value) ? value.map(encoder) : encoder(value));
+    dict.set("V", Array.isArray(value) ? value.map(stringToAsciiOrUTF16BE) : stringToAsciiOrUTF16BE(value));
     this.amendSavedDict(annotationStorage, dict);
     const maybeMK = this._getMKDict(rotation);
     if (maybeMK) {
@@ -51330,7 +51455,7 @@ class ButtonWidgetAnnotation extends WidgetAnnotation {
       warn("Invalid field flags for button widget annotation");
     }
   }
-  async getOperatorList(evaluator, task, intent, renderForms, annotationStorage) {
+  async getOperatorList(evaluator, task, intent, annotationStorage) {
     if (this.data.pushButton) {
       return super.getOperatorList(evaluator, task, intent, false, annotationStorage);
     }
@@ -51342,7 +51467,7 @@ class ButtonWidgetAnnotation extends WidgetAnnotation {
       rotation = storageEntry ? storageEntry.rotation : null;
     }
     if (value === null && this.appearance) {
-      return super.getOperatorList(evaluator, task, intent, renderForms, annotationStorage);
+      return super.getOperatorList(evaluator, task, intent, annotationStorage);
     }
     if (value === null || value === undefined) {
       value = this.data.checkBox ? this.data.fieldValue === this.data.exportValue : this.data.fieldValue === this.data.buttonValue;
@@ -51355,7 +51480,7 @@ class ButtonWidgetAnnotation extends WidgetAnnotation {
         appearance.dict.set("Matrix", this.getRotationMatrix(annotationStorage));
       }
       this.appearance = appearance;
-      const operatorList = super.getOperatorList(evaluator, task, intent, renderForms, annotationStorage);
+      const operatorList = super.getOperatorList(evaluator, task, intent, annotationStorage);
       this.appearance = savedAppearance;
       appearance.dict.set("Matrix", savedMatrix);
       return operatorList;
@@ -51972,7 +52097,8 @@ class PopupAnnotation extends Annotation {
 class FreeTextAnnotation extends MarkupAnnotation {
   constructor(params) {
     super(params);
-    this.data.hasOwnCanvas = !this.data.noHTML;
+    this.data.hasOwnCanvas = this.data.noRotate;
+    this.data.isEditable = !this.data.noHTML;
     this.data.noHTML = false;
     const {
       evaluatorOptions,
@@ -52018,7 +52144,8 @@ class FreeTextAnnotation extends MarkupAnnotation {
   }
   static createNewDict(annotation, xref, {
     apRef,
-    ap
+    ap,
+    oldAnnotation
   }) {
     const {
       color,
@@ -52028,19 +52155,24 @@ class FreeTextAnnotation extends MarkupAnnotation {
       user,
       value
     } = annotation;
-    const freetext = new Dict(xref);
+    const freetext = oldAnnotation || new Dict(xref);
     freetext.set("Type", Name.get("Annot"));
     freetext.set("Subtype", Name.get("FreeText"));
-    freetext.set("CreationDate", `D:${getModificationDate()}`);
+    if (oldAnnotation) {
+      freetext.set("M", `D:${getModificationDate()}`);
+      freetext.delete("RC");
+    } else {
+      freetext.set("CreationDate", `D:${getModificationDate()}`);
+    }
     freetext.set("Rect", rect);
     const da = `/Helv ${fontSize} Tf ${getPdfColor(color, true)}`;
     freetext.set("DA", da);
-    freetext.set("Contents", isAscii(value) ? value : stringToUTF16String(value, true));
+    freetext.set("Contents", stringToAsciiOrUTF16BE(value));
     freetext.set("F", 4);
     freetext.set("Border", [0, 0, 0]);
     freetext.set("Rotate", rotation);
     if (user) {
-      freetext.set("T", isAscii(user) ? user : stringToUTF16String(user, true));
+      freetext.set("T", stringToAsciiOrUTF16BE(user));
     }
     if (apRef || ap) {
       const n = new Dict(xref);
@@ -52611,7 +52743,7 @@ class HighlightAnnotation extends MarkupAnnotation {
     highlight.set("C", Array.from(color, c => c / 255));
     highlight.set("CA", opacity);
     if (user) {
-      highlight.set("T", isAscii(user) ? user : stringToUTF16String(user, true));
+      highlight.set("T", stringToAsciiOrUTF16BE(user));
     }
     if (apRef || ap) {
       const n = new Dict(xref);
@@ -52847,7 +52979,7 @@ class StampAnnotation extends MarkupAnnotation {
     stamp.set("Border", [0, 0, 0]);
     stamp.set("Rotate", rotation);
     if (user) {
-      stamp.set("T", isAscii(user) ? user : stringToUTF16String(user, true));
+      stamp.set("T", stringToAsciiOrUTF16BE(user));
     }
     if (apRef || ap) {
       const n = new Dict(xref);
@@ -53964,7 +54096,8 @@ class Page {
     task,
     intent,
     cacheKey,
-    annotationStorage = null
+    annotationStorage = null,
+    modifiedIds = null
   }) {
     const contentStreamPromise = this.getContentStream();
     const resourcesPromise = this.loadResources(["ColorSpace", "ExtGState", "Font", "Pattern", "Properties", "Shading", "XObject"]);
@@ -54061,13 +54194,14 @@ class Page {
         };
       }
       const renderForms = !!(intent & RenderingIntentFlag.ANNOTATIONS_FORMS),
+        isEditing = !!(intent & RenderingIntentFlag.IS_EDITING),
         intentAny = !!(intent & RenderingIntentFlag.ANY),
         intentDisplay = !!(intent & RenderingIntentFlag.DISPLAY),
         intentPrint = !!(intent & RenderingIntentFlag.PRINT);
       const opListPromises = [];
       for (const annotation of annotations) {
-        if (intentAny || intentDisplay && annotation.mustBeViewed(annotationStorage, renderForms) || intentPrint && annotation.mustBePrinted(annotationStorage)) {
-          opListPromises.push(annotation.getOperatorList(partialEvaluator, task, intent, renderForms, annotationStorage).catch(function (reason) {
+        if (intentAny || intentDisplay && annotation.mustBeViewed(annotationStorage, renderForms) && annotation.mustBeViewedWhenEditing(isEditing, modifiedIds) || intentPrint && annotation.mustBePrinted(annotationStorage)) {
+          opListPromises.push(annotation.getOperatorList(partialEvaluator, task, intent, annotationStorage).catch(function (reason) {
             warn("getOperatorList - ignoring annotation data during " + `"${task.name}" task: "${reason}".`);
             return {
               opList: null,
@@ -55805,7 +55939,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = "4.4.717";
+    const workerVersion = "4.5.701";
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
     }
@@ -56273,7 +56407,8 @@ class WorkerMessageHandler {
           task,
           intent: data.intent,
           cacheKey: data.cacheKey,
-          annotationStorage: data.annotationStorage
+          annotationStorage: data.annotationStorage,
+          modifiedIds: data.modifiedIds
         }).then(function (operatorListInfo) {
           finishWorkerTask(task);
           if (start) {
@@ -56381,8 +56516,8 @@ if (typeof window === "undefined" && typeof self !== "undefined" && isMessagePor
 
 ;// CONCATENATED MODULE: ./src/pdf.worker.js
 
-const pdfjsVersion = "4.4.717";
-const pdfjsBuild = "18a270fc9";
+const pdfjsVersion = "4.5.701";
+const pdfjsBuild = "f2baf92a1";
 
 var __webpack_exports__WorkerMessageHandler = __webpack_exports__.WorkerMessageHandler;
 export { __webpack_exports__WorkerMessageHandler as WorkerMessageHandler };

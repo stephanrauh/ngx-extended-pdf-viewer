@@ -1593,6 +1593,9 @@ function getNewAnnotationsMap(annotationStorage) {
   }
   return newAnnotationsByPage.size > 0 ? newAnnotationsByPage : null;
 }
+function stringToAsciiOrUTF16BE(str) {
+  return isAscii(str) ? str : stringToUTF16String(str, true);
+}
 function isAscii(str) {
   return /^[\x00-\x7F]*$/.test(str);
 }
@@ -36725,6 +36728,7 @@ async function incrementalUpdate({
 
 
 
+
 const MAX_DEPTH = 40;
 const StructElementType = {
   PAGE_CONTENT: 1,
@@ -37009,19 +37013,19 @@ class StructTreeRoot {
         const tagDict = new Dict(xref);
         tagDict.set("S", Name.get(type));
         if (title) {
-          tagDict.set("T", title);
+          tagDict.set("T", stringToAsciiOrUTF16BE(title));
         }
         if (lang) {
           tagDict.set("Lang", lang);
         }
         if (alt) {
-          tagDict.set("Alt", alt);
+          tagDict.set("Alt", stringToAsciiOrUTF16BE(alt));
         }
         if (expanded) {
-          tagDict.set("E", expanded);
+          tagDict.set("E", stringToAsciiOrUTF16BE(expanded));
         }
         if (actualText) {
-          tagDict.set("ActualText", actualText);
+          tagDict.set("ActualText", stringToAsciiOrUTF16BE(actualText));
         }
         await this.#updateParentTag({
           structTreeParent,
@@ -50984,8 +50988,7 @@ class WidgetAnnotation extends Annotation {
       path: this.data.fieldName,
       value
     };
-    const encoder = val => isAscii(val) ? val : stringToUTF16String(val, true);
-    dict.set("V", Array.isArray(value) ? value.map(encoder) : encoder(value));
+    dict.set("V", Array.isArray(value) ? value.map(stringToAsciiOrUTF16BE) : stringToAsciiOrUTF16BE(value));
     this.amendSavedDict(annotationStorage, dict);
     const maybeMK = this._getMKDict(rotation);
     if (maybeMK) {
@@ -52164,12 +52167,12 @@ class FreeTextAnnotation extends MarkupAnnotation {
     freetext.set("Rect", rect);
     const da = `/Helv ${fontSize} Tf ${getPdfColor(color, true)}`;
     freetext.set("DA", da);
-    freetext.set("Contents", isAscii(value) ? value : stringToUTF16String(value, true));
+    freetext.set("Contents", stringToAsciiOrUTF16BE(value));
     freetext.set("F", 4);
     freetext.set("Border", [0, 0, 0]);
     freetext.set("Rotate", rotation);
     if (user) {
-      freetext.set("T", isAscii(user) ? user : stringToUTF16String(user, true));
+      freetext.set("T", stringToAsciiOrUTF16BE(user));
     }
     if (apRef || ap) {
       const n = new Dict(xref);
@@ -52740,7 +52743,7 @@ class HighlightAnnotation extends MarkupAnnotation {
     highlight.set("C", Array.from(color, c => c / 255));
     highlight.set("CA", opacity);
     if (user) {
-      highlight.set("T", isAscii(user) ? user : stringToUTF16String(user, true));
+      highlight.set("T", stringToAsciiOrUTF16BE(user));
     }
     if (apRef || ap) {
       const n = new Dict(xref);
@@ -52976,7 +52979,7 @@ class StampAnnotation extends MarkupAnnotation {
     stamp.set("Border", [0, 0, 0]);
     stamp.set("Rotate", rotation);
     if (user) {
-      stamp.set("T", isAscii(user) ? user : stringToUTF16String(user, true));
+      stamp.set("T", stringToAsciiOrUTF16BE(user));
     }
     if (apRef || ap) {
       const n = new Dict(xref);
@@ -55936,7 +55939,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = "4.5.689";
+    const workerVersion = "4.5.701";
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
     }
@@ -56513,8 +56516,8 @@ if (typeof window === "undefined" && typeof self !== "undefined" && isMessagePor
 
 ;// CONCATENATED MODULE: ./src/pdf.worker.js
 
-const pdfjsVersion = "4.5.689";
-const pdfjsBuild = "1777148eb";
+const pdfjsVersion = "4.5.701";
+const pdfjsBuild = "f2baf92a1";
 
 var __webpack_exports__WorkerMessageHandler = __webpack_exports__.WorkerMessageHandler;
 export { __webpack_exports__WorkerMessageHandler as WorkerMessageHandler };

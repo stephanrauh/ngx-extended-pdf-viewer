@@ -5515,10 +5515,7 @@ class FontLoader {
     const canvas = this._document.createElement("canvas");
     canvas.width = 1;
     canvas.height = 1;
-    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
-      willReadFrequently: true
-    } : undefined;
-    const ctx = canvas.getContext("2d", options);
+    const ctx = canvas.getContext("2d");
     let called = 0;
     function isFontReady(name, callback) {
       if (++called > 30) {
@@ -11095,7 +11092,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.5.689",
+    apiVersion: "4.5.701",
     data,
     password,
     disableAutoFetch,
@@ -12892,8 +12889,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.5.689";
-const build = "1777148eb";
+const version = "4.5.701";
+const build = "f2baf92a1";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -18508,10 +18505,7 @@ class InkEditor extends AnnotationEditor {
     this.canvas.className = "inkEditorCanvas";
     this.canvas.setAttribute("data-l10n-id", "pdfjs-ink-canvas");
     this.div.append(this.canvas);
-    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
-      willReadFrequently: true
-    } : undefined;
-    this.ctx = this.canvas.getContext("2d", options);
+    this.ctx = this.canvas.getContext("2d");
   }
   #createObserver() {
     this.#observer = new ResizeObserver(entries => {
@@ -20105,8 +20099,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.5.689";
-const pdfjsBuild = "1777148eb";
+const pdfjsVersion = "4.5.701";
+const pdfjsBuild = "f2baf92a1";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -20790,6 +20784,22 @@ const Type = {
   UNDEFINED: 0x10
 };
 const defaultOptions = {
+  defaultCacheSize: {
+    value: 50,
+    kind: OptionKind.VIEWER
+  },
+  passwordPrompt: {
+    value: null,
+    kind: OptionKind.VIEWER
+  },
+  enableDragAndDrop: {
+    value: true,
+    kind: OptionKind.VIEWER
+  },
+  pageViewMode: {
+    value: "multiple",
+    kind: OptionKind.VIEWER
+  },
   allowedGlobalEvents: {
     value: null,
     kind: OptionKind.BROWSER
@@ -20865,7 +20875,7 @@ const defaultOptions = {
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
   },
   defaultZoomValue: {
-    value: "",
+    value: "auto",
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
   },
   disableHistory: {
@@ -21117,18 +21127,9 @@ class AppOptions {
     return options;
   }
   static set(name, value) {
-    const defaultOpt = defaultOptions[name];
-    if (!defaultOpt) {
-      console.error("Invalid AppOptions value: " + name + " = " + value);
-      return;
-    }
-    if (!(typeof value === typeof defaultOpt.value || Type[(typeof value).toUpperCase()] & defaultOpt.type)) {
-      if (name !== "maxZoom" && name !== "minZoom") {
-        console.error("Invalid AppOptions value: " + name + " = " + value);
-        return;
-      }
-    }
-    userOptions.set(name, value);
+    this.setAll({
+      [name]: value
+    });
   }
   static setAll(options, prefs = false) {
     let events;
@@ -21136,18 +21137,23 @@ class AppOptions {
       const defaultOpt = defaultOptions[name],
         userOpt = options[name];
       if (!defaultOpt || !(typeof userOpt === typeof defaultOpt.value || Type[(typeof userOpt).toUpperCase()] & defaultOpt.type)) {
+        if (!(typeof value === typeof defaultOpt.value || Type[(typeof value).toUpperCase()] & defaultOpt.type)) {
+          if (name !== "maxZoom" && name !== "minZoom" && name !== "passwordPrompt" && name !== "defaultZoomValue") {
+            console.error("Invalid AppOptions value: " + name + " = " + value);
+            return;
+          }
+        }
         continue;
       }
-      if (prefs) {
-        const {
-          kind
-        } = defaultOpt;
-        if (!(kind & OptionKind.BROWSER || kind & OptionKind.PREFERENCE)) {
-          continue;
-        }
-        if (this.eventBus && kind & OptionKind.EVENT_DISPATCH) {
-          (events ||= new Map()).set(name, userOpt);
-        }
+      const {
+        kind
+      } = defaultOpt;
+      if (prefs && !(kind & OptionKind.BROWSER || kind & OptionKind.PREFERENCE)) {
+        console.error("Invalid AppOptions parameter: " + name + " = " + value);
+        continue;
+      }
+      if (this.eventBus && kind & OptionKind.EVENT_DISPATCH) {
+        (events ||= new Map()).set(name, userOpt);
       }
       userOptions.set(name, userOpt);
     }
@@ -21587,7 +21593,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '21.0.0-alpha.13';
+const ngxExtendedPdfViewerVersion = '21.0.0-alpha.14';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -21747,7 +21753,7 @@ class BasePreferences {
     annotationMode: 2,
     cursorToolOnLoad: 0,
     defaultZoomDelay: 400,
-    defaultZoomValue: "",
+    defaultZoomValue: "auto",
     disablePageLabels: false,
     enableAltText: false,
     enableGuessAltText: true,
@@ -28222,10 +28228,7 @@ function renderPage(activeServiceOnEntry, pdfDocument, pageNumber, size, printRe
   PRINT_UNITS *= scale;
   scratchCanvas.width = Math.floor(size.width * PRINT_UNITS);
   scratchCanvas.height = Math.floor(size.height * PRINT_UNITS);
-  const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
-    willReadFrequently: true
-  } : undefined;
-  const ctx = scratchCanvas.getContext("2d", options);
+  const ctx = scratchCanvas.getContext("2d");
   ctx.save();
   ctx.fillStyle = "rgb(255, 255, 255)";
   ctx.fillRect(0, 0, scratchCanvas.width, scratchCanvas.height);
@@ -29907,98 +29910,6 @@ class Page {
     return this.state.hardAngle;
   }
 }
-class ImagePage extends Page {
-  constructor(render, href, density) {
-    super(render, density);
-    this.image = null;
-    this.isLoad = false;
-    this.loadingAngle = 0;
-    this.image = new Image();
-    this.image.src = href;
-  }
-  draw(tempDensity) {
-    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
-      willReadFrequently: true
-    } : undefined;
-    const ctx = canvas.getContext("2d", options);
-    const pagePos = this.render.convertToGlobal(this.state.position);
-    const pageWidth = this.render.getRect().pageWidth;
-    const pageHeight = this.render.getRect().height;
-    ctx.save();
-    ctx.translate(pagePos.x, pagePos.y);
-    ctx.beginPath();
-    for (let p of this.state.area) {
-      if (p !== null) {
-        p = this.render.convertToGlobal(p);
-        ctx.lineTo(p.x - pagePos.x, p.y - pagePos.y);
-      }
-    }
-    ctx.rotate(this.state.angle);
-    ctx.clip();
-    if (!this.isLoad) {
-      this.drawLoader(ctx, {
-        x: 0,
-        y: 0
-      }, pageWidth, pageHeight);
-    } else {
-      ctx.drawImage(this.image, 0, 0, pageWidth, pageHeight);
-    }
-    ctx.restore();
-  }
-  simpleDraw(orient) {
-    const rect = this.render.getRect();
-    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
-      willReadFrequently: true
-    } : undefined;
-    const ctx = canvas.getContext("2d", options);
-    const pageWidth = rect.pageWidth;
-    const pageHeight = rect.height;
-    const x = orient === 1 ? rect.left + rect.pageWidth : rect.left;
-    const y = rect.top;
-    if (!this.isLoad) {
-      this.drawLoader(ctx, {
-        x,
-        y
-      }, pageWidth, pageHeight);
-    } else {
-      ctx.drawImage(this.image, x, y, pageWidth, pageHeight);
-    }
-  }
-  drawLoader(ctx, shiftPos, pageWidth, pageHeight) {
-    ctx.beginPath();
-    ctx.strokeStyle = 'rgb(200, 200, 200)';
-    ctx.fillStyle = 'rgb(255, 255, 255)';
-    ctx.lineWidth = 1;
-    ctx.rect(shiftPos.x + 1, shiftPos.y + 1, pageWidth - 1, pageHeight - 1);
-    ctx.stroke();
-    ctx.fill();
-    const middlePoint = {
-      x: shiftPos.x + pageWidth / 2,
-      y: shiftPos.y + pageHeight / 2
-    };
-    ctx.beginPath();
-    ctx.lineWidth = 10;
-    ctx.arc(middlePoint.x, middlePoint.y, 20, this.loadingAngle, 3 * Math.PI / 2 + this.loadingAngle);
-    ctx.stroke();
-    ctx.closePath();
-    this.loadingAngle += 0.07;
-    if (this.loadingAngle >= 2 * Math.PI) {
-      this.loadingAngle = 0;
-    }
-  }
-  load() {
-    if (!this.isLoad) this.image.onload = () => {
-      this.isLoad = true;
-    };
-  }
-  newTemporaryCopy() {
-    return this;
-  }
-  getTemporaryCopy() {
-    return this;
-  }
-  hideTemporaryCopy() {}
-}
 class PageCollection {
   constructor(app, render) {
     this.pages = [];
@@ -30138,20 +30049,6 @@ class PageCollection {
     }
     this.currentPageIndex = spread[0];
     this.app.updatePageIndex(this.currentPageIndex);
-  }
-}
-class ImagePageCollection extends PageCollection {
-  constructor(app, render, imagesHref) {
-    super(app, render);
-    this.imagesHref = imagesHref;
-  }
-  load() {
-    for (const href of this.imagesHref) {
-      const page = new ImagePage(this.render, href, "soft");
-      page.load();
-      this.pages.push(page);
-    }
-    this.createSpread();
   }
 }
 class Helper {
@@ -31120,10 +31017,7 @@ class CanvasRender extends Render {
   constructor(app, setting, inCanvas) {
     super(app, setting);
     this.canvas = inCanvas;
-    const options = window.pdfDefaultOptions.activateWillReadFrequentlyFlag ? {
-      willReadFrequently: true
-    } : undefined;
-    const ctx = canvas.getContext("2d", options);
+    const ctx = canvas.getContext("2d");
   }
   getContext() {
     return this.ctx;
@@ -31819,23 +31713,6 @@ class PageFlip extends EventObject {
     this.render.update();
     this.pages.show();
   }
-  loadFromImages(imagesHref) {
-    this.ui = new CanvasUI(this.block, this, this.setting);
-    const canvas = this.ui.getCanvas();
-    this.render = new CanvasRender(this, this.setting, canvas);
-    this.flipController = new Flip(this.render, this);
-    this.pages = new ImagePageCollection(this, this.render, imagesHref);
-    this.pages.load();
-    this.render.start();
-    this.pages.show(this.setting.startPage);
-    setTimeout(() => {
-      this.ui.update();
-      this.trigger('init', this, {
-        page: this.setting.startPage,
-        mode: this.render.getOrientation()
-      });
-    }, 1);
-  }
   loadFromHTML(items) {
     this.ui = new HTMLUI(this.block, this, this.setting, items);
     this.render = new HTMLRender(this, this.setting, this.ui.getDistElement());
@@ -31851,17 +31728,6 @@ class PageFlip extends EventObject {
         mode: this.render.getOrientation()
       });
     }, 1);
-  }
-  updateFromImages(imagesHref) {
-    const current = this.pages.getCurrentPageIndex();
-    this.pages.destroy();
-    this.pages = new ImagePageCollection(this, this.render, imagesHref);
-    this.pages.load();
-    this.pages.show(current);
-    this.trigger('update', this, {
-      page: current,
-      mode: this.render.getOrientation()
-    });
   }
   updateFromHtml(items) {
     const current = this.pages.getCurrentPageIndex();
@@ -33819,14 +33685,19 @@ class PDFViewer {
   #textLayerMode = TextLayerMode.ENABLE;
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
+  #maxZoom = MAX_SCALE;
+  #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.5.689";
+    const viewerVersion = "4.5.701";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
     this.container = options.container;
     this.viewer = options.viewer || options.container.firstElementChild;
     this.pageViewMode = options.pageViewMode || "multiple";
+    this.defaultCacheSize = options.defaultCacheSize;
+    this.#maxZoom = options.maxZoom;
+    this.#minZoom = options.minZoom;
     if (this.container?.tagName !== "DIV" || this.viewer?.tagName !== "DIV") {
       throw new Error("Invalid `container` and/or `viewer` option.");
     }
@@ -33894,6 +33765,18 @@ class PDFViewer {
     if (!options.l10n) {
       this.l10n.translate(this.container);
     }
+  }
+  get maxZoom() {
+    return this.#maxZoom;
+  }
+  set maxZoom(value) {
+    this.#maxZoom = value;
+  }
+  get minZoom() {
+    return this.#minZoom;
+  }
+  set minZoom(value) {
+    this.#minZoom = value;
   }
   setTextLayerMode(mode) {
     this.#textLayerMode = mode;
@@ -34542,7 +34425,7 @@ class PDFViewer {
     this._currentScale = UNKNOWN_SCALE;
     this._currentScaleValue = null;
     this._pageLabels = null;
-    const bufferSize = Number(PDFViewerApplicationOptions.get("defaultCacheSize")) || DEFAULT_CACHE_SIZE;
+    const bufferSize = this.defaultCacheSize || DEFAULT_CACHE_SIZE;
     this.#buffer = new PDFPageViewBuffer(bufferSize);
     this._location = null;
     this._pagesRotation = 0;
@@ -34768,8 +34651,8 @@ class PDFViewer {
     if (!value) {
       value = "auto";
     }
-    if (PDFViewerApplicationOptions.get("maxZoom") && PDFViewerApplicationOptions.get("maxZoom") === PDFViewerApplicationOptions.get("minZoom")) {
-      value = PDFViewerApplicationOptions.get("maxZoom");
+    if (this.maxZoom && this.maxZoom === this.minZoom) {
+      value = this.maxZoom;
     }
     let scale = parseFloat(value);
     if (this._currentScale === scale) {
@@ -34983,7 +34866,7 @@ class PDFViewer {
     if (numVisiblePages === 0) {
       return;
     }
-    const bufferSize = Number(PDFViewerApplicationOptions.get("defaultCacheSize")) || DEFAULT_CACHE_SIZE;
+    const bufferSize = this.defaultCacheSize || DEFAULT_CACHE_SIZE;
     const newCacheSize = Math.max(bufferSize, 2 * numVisiblePages + 1);
     this.#buffer.resize(newCacheSize, visible.ids);
     this.renderingQueue.renderHighestPriority(visible);
@@ -35436,15 +35319,9 @@ class PDFViewer {
         newScale = round((newScale * delta).toFixed(2) * 10) / 10;
       } while (--steps > 0);
     }
-    let minScale = Number(PDFViewerApplicationOptions.get("minZoom"));
-    if (!minScale) {
-      minScale = MIN_SCALE;
-    }
+    const minScale = Number(this.minZoom) ?? MIN_SCALE;
     newScale = Math.max(minScale, newScale);
-    let maxScale = Number(PDFViewerApplicationOptions.get("maxZoom"));
-    if (!maxScale) {
-      maxScale = MAX_SCALE;
-    }
+    const maxScale = Number(this.maxZoom) ?? MAX_SCALE;
     newScale = Math.min(maxScale, newScale);
     this.#setScale(newScale, {
       noScroll: false,
@@ -35887,8 +35764,14 @@ class SecondaryToolbar {
 
 class Toolbar {
   #opts;
-  constructor(options, eventBus, toolbarDensity = 0) {
+  #defaultZoomValue = DEFAULT_SCALE_VALUE;
+  #maxZoom = MAX_SCALE;
+  #minZoom = MIN_SCALE;
+  constructor(options, eventBus, defaultZoomValue, minZoom, maxZoom, toolbarDensity = 0) {
     this.#opts = options;
+    this.#defaultZoomValue = defaultZoomValue;
+    this.#maxZoom = maxZoom;
+    this.#minZoom = minZoom;
     this.eventBus = eventBus;
     const buttons = [{
       element: options.previous,
@@ -35981,6 +35864,18 @@ class Toolbar {
     });
     this.reset();
   }
+  get maxZoom() {
+    return this.#maxZoom;
+  }
+  set maxZoom(value) {
+    this.#maxZoom = value;
+  }
+  get minZoom() {
+    return this.#minZoom;
+  }
+  set minZoom(value) {
+    this.#minZoom = value;
+  }
   #updateToolbarDensity() {}
   #setAnnotationEditorUIManager(uiManager, parentContainer) {
     const colorPicker = new ColorPicker({
@@ -36009,15 +35904,10 @@ class Toolbar {
     this.pageLabel = null;
     this.hasPageLabels = false;
     this.pagesCount = 0;
-    const defaultZoomOption = PDFViewerApplicationOptions.get('defaultZoomValue');
-    if (defaultZoomOption) {
-      this.pageScaleValue = defaultZoomOption;
-      if (!!Number(defaultZoomOption)) {
-        this.pageScale = Number(defaultZoomOption);
-      }
-    } else {
-      this.pageScaleValue = DEFAULT_SCALE_VALUE;
-      this.pageScale = DEFAULT_SCALE;
+    const defaultZoomOption = this.#defaultZoomValue || DEFAULT_SCALE_VALUE;
+    this.pageScaleValue = defaultZoomOption;
+    if (Number(defaultZoomOption)) {
+      this.pageScale = Number(defaultZoomOption);
     }
     this.#updateUIState(true);
     this.updateLoadingIndicatorState();
@@ -36135,8 +36025,10 @@ class Toolbar {
     }
     opts.previous.disabled = pageNumber <= 1;
     opts.next.disabled = pageNumber >= pagesCount;
-    opts.zoomOut.disabled = pageScale <= MIN_SCALE;
-    opts.zoomIn.disabled = pageScale >= MAX_SCALE;
+    const minScale = Number(this.minZoom) ?? MIN_SCALE;
+    const maxScale = Number(this.maxZoom) ?? MAX_SCALE;
+    opts.zoomOut.disabled = pageScale <= minScale;
+    opts.zoomIn.disabled = pageScale >= maxScale;
     let predefinedValueFound = false;
     if (opts.scaleSelect.options) {
       for (const option of opts.scaleSelect.options) {
@@ -36536,7 +36428,10 @@ const PDFViewerApplication = {
       pageColors,
       mlManager: this.mlManager,
       abortSignal: this._globalAbortController.signal,
-      enableHWA
+      enableHWA,
+      defaultCacheSize: AppOptions.get("defaultCacheSize"),
+      minZoom: AppOptions.get("minZoom"),
+      maxZoom: AppOptions.get("maxZoom")
     });
     this.pdfViewer = pdfViewer;
     pdfRenderingQueue.setViewer(pdfViewer);
@@ -36588,7 +36483,7 @@ const PDFViewerApplication = {
       });
     }
     if (appConfig.toolbar) {
-      this.toolbar = new Toolbar(appConfig.toolbar, eventBus, AppOptions.get("toolbarDensity"));
+      this.toolbar = new Toolbar(appConfig.toolbar, eventBus, AppOptions.get("defaultZoomValue"), AppOptions.get("minZoom"), AppOptions.get("maxZoom"), AppOptions.get("toolbarDensity"));
     }
     if (appConfig.secondaryToolbar) {
       this.secondaryToolbar = new SecondaryToolbar(appConfig.secondaryToolbar, eventBus);
@@ -37310,8 +37205,7 @@ const PDFViewerApplication = {
     this.metadata = metadata;
     this._contentDispositionFilename ??= contentDispositionFilename;
     this._contentLength ??= contentLength;
-    const options = window.PDFViewerApplicationOptions;
-    if (!options || options.get("verbosity") > 0) {
+    if (AppOptions?.get("verbosity") > 0) {
       ngx_console_NgxConsole.log(`PDF ${pdfDocument.fingerprints[0]} [${info.PDFFormatVersion} ` + `${(info.Producer || "-").trim()} / ${(info.Creator || "-").trim()}] ` + `(PDF.js: ${version || "?"} [${build || "?"}])  modified by ngx-extended-pdf-viewer ${ngxExtendedPdfViewerVersion}`);
     }
     let pdfTitle = info.Title;
@@ -38665,8 +38559,8 @@ function webViewerSetPreference({
 
 
 
-const pdfjsVersion = "4.5.689";
-const pdfjsBuild = "1777148eb";
+const pdfjsVersion = "4.5.701";
+const pdfjsBuild = "f2baf92a1";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
