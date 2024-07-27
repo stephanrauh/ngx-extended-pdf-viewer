@@ -12,7 +12,7 @@ export class AnnotationEditorUIManager {
     static TRANSLATE_SMALL: number;
     static TRANSLATE_BIG: number;
     static get _keyboardManager(): any;
-    constructor(container: any, viewer: any, altTextManager: any, eventBus: any, pdfDocument: any, pageColors: any, highlightColors: any, enableHighlightFloatingButton: any, mlManager: any);
+    constructor(container: any, viewer: any, altTextManager: any, eventBus: any, pdfDocument: any, pageColors: any, highlightColors: any, enableHighlightFloatingButton: any, enableUpdatedAddImage: any, mlManager: any);
     _signal: AbortSignal;
     _eventBus: any;
     viewParameters: {
@@ -22,13 +22,16 @@ export class AnnotationEditorUIManager {
     isShiftKeyDown: boolean;
     destroy(): void;
     mlGuess(data: any): Promise<any>;
-    get hasMLManager(): boolean;
+    isMLEnabledFor(name: any): Promise<boolean>;
+    get useNewAltTextFlow(): boolean;
     get hcmFilter(): any;
     get direction(): any;
     get highlightColors(): any;
     get highlightColorNames(): any;
     setMainHighlightColorPicker(colorPicker: any): void;
     editAltText(editor: any): void;
+    switchToMode(mode: any, callback: any): void;
+    setPreference(name: any, value: any): void;
     onPageChanging({ pageNumber }: {
         pageNumber: any;
     }): void;

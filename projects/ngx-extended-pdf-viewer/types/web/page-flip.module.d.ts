@@ -15,37 +15,25 @@ export class PageFlip extends EventObject {
     isUserTouch: boolean;
     isUserMove: boolean;
     setting: FlipSetting;
-    pages: ImagePageCollection | HTMLPageCollection | null;
+    pages: HTMLPageCollection | null;
     block: HTMLElement;
     /**
      * Destructor. Remove a root HTML element and all event handlers
      */
     destroy(): void;
-    render: CanvasRender | HTMLRender | undefined;
+    render: HTMLRender | undefined;
     /**
      * Update the render area. Re-show current page.
      */
     update(): void;
-    /**
-     * Load pages from images on the Canvas mode
-     *
-     * @param {string[]} imagesHref - List of paths to images
-     */
-    loadFromImages(imagesHref: string[]): void;
-    ui: HTMLUI | CanvasUI | undefined;
-    flipController: Flip | undefined;
     /**
      * Load pages from HTML elements on the HTML mode
      *
      * @param {(NodeListOf<HTMLElement>|HTMLElement[])} items - List of pages as HTML Element
      */
     loadFromHTML(items: (NodeListOf<HTMLElement> | HTMLElement[])): void;
-    /**
-     * Update current pages from images
-     *
-     * @param {string[]} imagesHref - List of paths to images
-     */
-    updateFromImages(imagesHref: string[]): void;
+    ui: HTMLUI | undefined;
+    flipController: Flip | undefined;
     /**
      * Update current pages from HTML
      *
@@ -217,14 +205,6 @@ declare class EventObject {
     trigger(eventName: any, app: any, data?: null): void;
 }
 /**
- * Сlass representing a collection of pages as images on the canvas
- */
-declare class ImagePageCollection extends PageCollection {
-    constructor(app: any, render: any, imagesHref: any);
-    imagesHref: any;
-    load(): void;
-}
-/**
  * Сlass representing a collection of pages as HTML Element
  */
 declare class HTMLPageCollection extends PageCollection {
@@ -232,20 +212,6 @@ declare class HTMLPageCollection extends PageCollection {
     element: any;
     pagesElement: any;
     load(): void;
-}
-/**
- * Class responsible for rendering the Canvas book
- */
-declare class CanvasRender extends Render {
-    constructor(app: any, setting: any, inCanvas: any);
-    canvas: any;
-    getContext(): any;
-    reload(): void;
-    drawFrame(): void;
-    drawBookShadow(): void;
-    drawOuterShadow(): void;
-    drawInnerShadow(): void;
-    clear(): void;
 }
 /**
  * Class responsible for rendering the HTML book
@@ -312,20 +278,6 @@ declare class HTMLUI extends UI {
      * @param {(NodeListOf<HTMLElement>|HTMLElement[])} items - List of pages as HTML Element
      */
     updateItems(items: (NodeListOf<HTMLElement> | HTMLElement[])): void;
-    update(): void;
-}
-/**
- * UI for canvas mode
- */
-declare class CanvasUI extends UI {
-    constructor(inBlock: any, app: any, setting: any);
-    canvas: any;
-    distElement: any;
-    resizeCanvas(): void;
-    /**
-     * Get canvas element
-     */
-    getCanvas(): any;
     update(): void;
 }
 /**

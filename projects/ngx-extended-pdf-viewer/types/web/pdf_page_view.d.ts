@@ -121,6 +121,7 @@ export class PDFPageView implements IRenderableView {
     get renderingState(): number;
     setPdfPage(pdfPage: any): void;
     destroy(): void;
+    hasEditableAnnotations(): boolean;
     get _textHighlighter(): any;
     /**
      * @private
@@ -133,6 +134,7 @@ export class PDFPageView implements IRenderableView {
         keepXfaLayer?: boolean | undefined;
         keepTextLayer?: boolean | undefined;
     }): void;
+    toggleEditingMode(isEditing: any): void;
     /**
      * @typedef {Object} PDFPageViewUpdateParameters
      * @property {number} [scale] The new scale, if specified.

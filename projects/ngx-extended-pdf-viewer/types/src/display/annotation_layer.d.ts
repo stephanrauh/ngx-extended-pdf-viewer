@@ -89,6 +89,7 @@ export class AnnotationLayer {
     zIndex: number;
     _annotationEditorUIManager: any;
     popupShow: any[] | undefined;
+    hasEditableAnnotations(): boolean;
     /**
      * Render a new annotation layer with all annotation elements.
      *
@@ -113,7 +114,6 @@ export class FreeTextAnnotationElement extends AnnotationElement {
     textPosition: any;
     annotationEditorType: number;
     render(): HTMLElement | undefined;
-    get _isEditable(): any;
 }
 export class InkAnnotationElement extends AnnotationElement {
     constructor(parameters: any);
@@ -154,6 +154,7 @@ declare class AnnotationElement {
     _fieldObjects: any;
     parent: any;
     container: HTMLElement | undefined;
+    get _isEditable(): any;
     get hasPopupData(): boolean;
     updateEdited(params: any): void;
     resetEdited(): void;
@@ -210,7 +211,6 @@ declare class AnnotationElement {
      */
     public getElementsToTriggerPopup(): Array<HTMLElement> | HTMLElement;
     addHighlightArea(): void;
-    get _isEditable(): boolean;
     _editOnDoubleClick(): void;
     #private;
 }

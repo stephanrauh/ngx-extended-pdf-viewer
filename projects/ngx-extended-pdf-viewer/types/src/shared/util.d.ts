@@ -304,6 +304,8 @@ export namespace OPS {
     let paintImageMaskXObjectRepeat: number;
     let paintSolidColorImageMask: number;
     let constructPath: number;
+    let setStrokeTransparent: number;
+    let setFillTransparent: number;
 }
 export namespace PageActionEventType {
     export let O: string;
@@ -341,6 +343,7 @@ export namespace RenderingIntentFlag {
     export let ANNOTATIONS_FORMS: number;
     export let ANNOTATIONS_STORAGE: number;
     export let ANNOTATIONS_DISABLE: number;
+    export let IS_EDITING: number;
     export let OPLIST: number;
 }
 export function setVerbosityLevel(level: any): void;

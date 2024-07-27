@@ -440,6 +440,10 @@ export type RenderParameters = {
      */
     annotationCanvasMap?: Map<string, HTMLCanvasElement> | undefined;
     printAnnotationStorage?: PrintAnnotationStorage | undefined;
+    /**
+     * - Render the page in editing mode.
+     */
+    isEditing?: boolean | undefined;
 };
 /**
  * Page getOperatorList parameters.
@@ -466,6 +470,10 @@ export type GetOperatorListParameters = {
      */
     annotationMode?: number | undefined;
     printAnnotationStorage?: PrintAnnotationStorage | undefined;
+    /**
+     * - Render the page in editing mode.
+     */
+    isEditing?: boolean | undefined;
 };
 /**
  * Structure tree node. The root node will have a role "Root".
@@ -1172,6 +1180,7 @@ export class PDFDocumentProxy {
  * @property {Map<string, HTMLCanvasElement>} [annotationCanvasMap] - Map some
  *   annotation ids with canvases used to render them.
  * @property {PrintAnnotationStorage} [printAnnotationStorage]
+ * @property {boolean} [isEditing] - Render the page in editing mode.
  */
 /**
  * Page getOperatorList parameters.
@@ -1192,6 +1201,7 @@ export class PDFDocumentProxy {
  *      from the {@link AnnotationStorage}-instance; useful e.g. for printing.
  *   The default value is `AnnotationMode.ENABLE`.
  * @property {PrintAnnotationStorage} [printAnnotationStorage]
+ * @property {boolean} [isEditing] - Render the page in editing mode.
  */
 /**
  * Structure tree node. The root node will have a role "Root".
@@ -1294,14 +1304,14 @@ export class PDFPageProxy {
      * @returns {RenderTask} An object that contains a promise that is
      *   resolved when the page finishes rendering.
      */
-    render({ canvasContext, viewport, intent, annotationMode, transform, background, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, }: RenderParameters): RenderTask;
+    render({ canvasContext, viewport, intent, annotationMode, transform, background, optionalContentConfigPromise, annotationCanvasMap, pageColors, printAnnotationStorage, isEditing, }: RenderParameters): RenderTask;
     /**
      * @param {GetOperatorListParameters} params - Page getOperatorList
      *   parameters.
      * @returns {Promise<PDFOperatorList>} A promise resolved with an
      *   {@link PDFOperatorList} object that represents the page's operator list.
      */
-    getOperatorList({ intent, annotationMode, printAnnotationStorage, }?: GetOperatorListParameters): Promise<PDFOperatorList>;
+    getOperatorList({ intent, annotationMode, printAnnotationStorage, isEditing, }?: GetOperatorListParameters): Promise<PDFOperatorList>;
     /**
      * NOTE: All occurrences of whitespace will be replaced by
      * standard spaces (0x20).

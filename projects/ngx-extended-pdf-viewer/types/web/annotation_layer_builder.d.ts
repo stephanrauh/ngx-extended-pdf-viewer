@@ -76,6 +76,7 @@ export class AnnotationLayerBuilder {
     render(viewport: PageViewport, intent?: string): Promise<void>;
     cancel(): void;
     hide(): void;
+    hasEditableAnnotations(): boolean;
     #private;
 }
 import { AnnotationLayer } from "../src/pdf";

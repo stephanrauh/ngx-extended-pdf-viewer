@@ -30,11 +30,6 @@ export type TextLayerUpdateParameters = {
      */
     onBefore?: Function | undefined;
 };
-export function renderTextLayer(...args: any[]): {
-    promise: Promise<any>;
-    textDivs: HTMLElement[];
-    textContentItemsStr: string[];
-} | undefined;
 export class TextLayer {
     static "__#45@#ascentCache": Map<any, any>;
     static "__#45@#canvasContexts": Map<any, any>;
@@ -85,4 +80,3 @@ export class TextLayer {
     get textContentItemsStr(): string[];
     #private;
 }
-export function updateTextLayer(): void;

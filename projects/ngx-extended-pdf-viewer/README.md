@@ -40,18 +40,16 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 Version 20.0.2 is a security fix. It solves CVE-2024-4367. I strongly recommend updating to the latest version of ngx-extended-pdf-viewer as soon as possible, or to version 20.0.2 as a minimum. Older versions contain a bug allowing malicious PDF files to run arbitrary code. Kudos go to GitHub users ScratchPDX and Deepak Shakya to tell me about it, so I could provide a hotfix during my vacations.
 
-## Version 21 alpha versions: Sneak preview to an optimized viewer
+## Version 21 beta versions: Sneak preview to an optimized viewer
 
-If everything goes according to the plan - which is not 100% guaranteed - version 21 is going to be a major refactoring. To my surprise, the first step went remarkably
-smooth, so I've decided to publish the current state of the art as an alpha version. It's a very early look into the workshop, so don't use it in production. As always, the goal of the alpha version is to give you the opportunity to run some test and to give me feedback whether you like the changes.
+Version 21 is a major refactoring. It reduces the memory footprint and start-up times. The new version
 
-The goal of version 21 is to
-
-- get rid of RxJS
-- to stop polluting the global namespace (that's partially finished)
-- to get rid of the memory leaks
-- to reduce the number of requests loading JavaScript files
-- and it's going to move the code loading the huge JavaScript files to a service. So the viewer doesn't have to reload the JavaScript files every time you destroy the viewer and open a new one. It seems many people do that, so this is going to improve performance considerably. This goal is already fulfilled, although I doubt it's free of errors yet.
+- updates to pdf.js 4.5
+- gets rid of RxJS
+- stops polluting the global namespace
+- reduces the memory leaks (that's partially finished, but you should notice an improvement)
+- reduces the number of requests loading JavaScript files
+- and it moves the code loading the huge JavaScript files to a service. So the viewer doesn't have to reload the JavaScript files every time you destroy the viewer and open a new one.
 
 Version 21 contains several breaking changes. The good news is that I assume the vast majority of developers won't even notice. These breaking changes are:
 
@@ -59,7 +57,6 @@ Version 21 contains several breaking changes. The good news is that I assume the
 - The API for custom thumbnails has slightly changed. Now it doesn't require you to add functions to the `window` object.
 - The RxJS subjects `recalculateSize$` and `onPDFJSInit` are gone. You can use ``onPDFJSInitSignal` to replace `onPDFJSInit`. I suspect nobody uses `recalculateSize$`, so I didn't implement a replacement yet.
 - The attributes `[minifiedJSLibraries]` and `[forceUsingLegacyES5]` have moved from the component to the new `PDFScriptLoaderService`. That, in turn, makes it difficult to set them. I haven't decided yet how to proceed. Chances are I'm going to move them to the `pdfDefaultOptions`.
-- Compatibility with CSP (Content Security Policy) has - temporarily - become worse. After finishing my refactoring, I intend to fix this.
 
 ## What's new in version 20.5.0?
 

@@ -77,6 +77,7 @@ export class AnnotationEditorLayer {
      * @param {Object} params
      */
     addCommands(params: Object): void;
+    toggleDrawing(enabled?: boolean): void;
     togglePointerEvents(enabled?: boolean): void;
     toggleAnnotationLayerPointerEvents(enabled?: boolean): void;
     /**

@@ -60,7 +60,7 @@ export class InkEditor extends AnnotationEditor {
      * @param {PointerEvent} event
      */
     canvasPointerleave(event: PointerEvent): void;
-    ctx: RenderingContext | null | undefined;
+    ctx: CanvasRenderingContext2D | null | undefined;
     /**
      * When the dimensions of the div change the inner canvas must
      * renew its dimensions, hence it must redraw its own contents.

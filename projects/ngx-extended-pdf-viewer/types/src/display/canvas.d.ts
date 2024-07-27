@@ -120,7 +120,9 @@ export class CanvasGraphics {
     setStrokeColorN(...args: any[]): void;
     setFillColorN(...args: any[]): void;
     setStrokeRGBColor(r: any, g: any, b: any): void;
+    setStrokeTransparent(): void;
     setFillRGBColor(r: any, g: any, b: any): void;
+    setFillTransparent(): void;
     _getPattern(objId: any, matrix?: null): any;
     shadingFill(objId: any): void;
     beginInlineImage(): void;

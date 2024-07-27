@@ -187,6 +187,8 @@ export class PDFViewer {
     viewer: Element | null;
     set pageViewMode(viewMode: string);
     get pageViewMode(): string;
+    /** end of modification */
+    defaultCacheSize: any;
     eventBus: import("./event_utils").EventBus;
     linkService: import("./interfaces").IPDFLinkService | SimpleLinkService;
     downloadManager: import("./interfaces").IDownloadManager | null;
@@ -208,6 +210,10 @@ export class PDFViewer {
         _eventHandler: (evt: any) => void;
     };
     presentationModeState: number;
+    set maxZoom(value: number);
+    get maxZoom(): number;
+    set minZoom(value: number);
+    get minZoom(): number;
     setTextLayerMode(mode: any): void;
     get pagesCount(): number;
     getPageView(index: any): any;
