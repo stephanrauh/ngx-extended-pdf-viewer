@@ -36,8 +36,8 @@ export class PDFScriptLoaderService implements OnDestroy {
     });
   }
 
-  private addScriptOpChainingSupport(): Promise<boolean> {
-    if (this.isCSPApplied()) {
+  private addScriptOpChainingSupport(useInlineScripts: boolean): Promise<boolean> {
+    if (!useInlineScripts || this.isCSPApplied()) {
       return new Promise((resolve) => {
         const script = this.createScriptElement(pdfDefaultOptions.assetsFolder + '/op-chaining-support.js');
         script.onload = () => {
@@ -133,18 +133,7 @@ new (function () {
     if (this.isCSPAppliedViaMetaTag()) {
       return true;
     }
-    try {
-      eval('1');
-      return false;
-    } catch (e) {
-      if (e instanceof EvalError) {
-        console.log('CSP is applied');
-        return true;
-      } else {
-        console.log('An unexpected error occurred', e);
-        return false;
-      }
-    }
+    return false;
   }
 
   private createScriptElement(sourcePath: string): HTMLScriptElement {
@@ -170,7 +159,7 @@ new (function () {
     return assets + artifactPath + versionSuffix + es5 + suffix;
   }
 
-  private async loadViewer(): Promise<void> {
+  private async loadViewer(useInlineScripts: boolean): Promise<void> {
     return new Promise((resolve) => {
       const viewerPath = this.getPdfJsPath('viewer');
       const listener = (event: CustomEvent) => {
@@ -203,12 +192,12 @@ new (function () {
     });
   }
 
-  public async ensurePdfJsHasBeenLoaded(): Promise<boolean> {
+  public async ensurePdfJsHasBeenLoaded(useInlineScripts: boolean): Promise<boolean> {
     if (this.PDFViewerApplication) {
       return true;
     }
-    this._needsES5 = await this.needsES5();
-    await this.loadViewer();
+    this._needsES5 = await this.needsES5(useInlineScripts);
+    await this.loadViewer(useInlineScripts);
     return this.PDFViewerApplication !== undefined;
   }
 
@@ -272,7 +261,7 @@ new (function () {
     return false;
   }
 
-  private async needsES5(): Promise<boolean> {
+  private async needsES5(useInlineScripts: boolean): Promise<boolean> {
     if (typeof window === 'undefined') {
       // server-side rendering
       return false;
@@ -286,15 +275,15 @@ new (function () {
         this._needsES5 = true;
         return true;
       }
-      this._needsES5 = !(await this.ngxExtendedPdfViewerCanRunModernJSCode());
+      this._needsES5 = !(await this.ngxExtendedPdfViewerCanRunModernJSCode(useInlineScripts));
     }
     return this._needsES5;
   }
 
-  private ngxExtendedPdfViewerCanRunModernJSCode(): Promise<boolean> {
+  private ngxExtendedPdfViewerCanRunModernJSCode(useInlineScripts: boolean): Promise<boolean> {
     return new Promise((resolve) => {
       const support = (<any>globalThis).ngxExtendedPdfViewerCanRunModernJSCode;
-      support !== undefined ? resolve(support) : resolve(this.addScriptOpChainingSupport());
+      support !== undefined ? resolve(support) : resolve(this.addScriptOpChainingSupport(useInlineScripts));
     });
   }
 }

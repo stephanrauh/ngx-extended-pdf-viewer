@@ -510,6 +510,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   public _showSidebarButton: ResponsiveVisibility = true;
 
+  @Input()
+  public useInlineScripts = true;
+
   public viewerPositionTop = '32px';
 
   /** pdf.js can show signatures, but fails to verify them. So they are switched off by default.
@@ -986,7 +989,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (isPlatformBrowser(this.platformId)) {
       this.addTranslationsUnlessProvidedByTheUser();
       await this.waitUntilOldComponentIsGone();
-      await this.pdfScriptLoaderService.ensurePdfJsHasBeenLoaded();
+      await this.pdfScriptLoaderService.ensurePdfJsHasBeenLoaded(this.useInlineScripts);
       this.formSupport.registerFormSupportWithPdfjs(this.ngZone, this.pdfScriptLoaderService.PDFViewerApplication);
       this.keyboardManager.registerKeyboardListener(this.pdfScriptLoaderService.PDFViewerApplication);
       this.doInitPDFViewer();
