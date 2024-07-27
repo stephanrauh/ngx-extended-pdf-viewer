@@ -1,25 +1,28 @@
 import { Injectable } from '@angular/core';
 import { IPDFViewerApplication } from '../public_api';
-import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NgxKeyboardManagerService {
-  private PDFViewerApplication?: IPDFViewerApplication;
+  /** Allows the user to disable the keyboard bindings completely */
+  public ignoreKeyboard = false;
 
-  private PDFViewerApplicationOptions?: IPDFViewerApplicationOptions;
+  /** Allows the user to disable a list of key bindings. */
+  public ignoreKeys: Array<string> = [];
+
+  /** Allows the user to enable a list of key bindings explicitly. If this property is set, every other key binding is ignored. */
+  public acceptKeys: Array<string> = [];
+
   constructor() {}
 
   public isKeyIgnored(cmd: number, keycode: number | 'WHEEL'): boolean {
-    const ignoreKeys: Array<string> = this.PDFViewerApplicationOptions?.get('ignoreKeys');
-    const acceptKeys: Array<string> = this.PDFViewerApplicationOptions?.get('acceptKeys');
     if (keycode === 'WHEEL') {
-      if (!!ignoreKeys && this.isKeyInList(ignoreKeys, cmd, 'WHEEL')) {
+      if (!!this.ignoreKeys && this.isKeyInList(this.ignoreKeys, cmd, 'WHEEL')) {
         return true;
       }
-      if (!!acceptKeys && acceptKeys.length > 0) {
-        return !this.isKeyInList(acceptKeys, cmd, 'WHEEL');
+      if (!!this.acceptKeys && this.acceptKeys.length > 0) {
+        return !this.isKeyInList(this.acceptKeys, cmd, 'WHEEL');
       }
 
       return false;
@@ -34,19 +37,18 @@ export class NgxKeyboardManagerService {
     // 2 == ALT
     // 4 == SHIFT
     // 8 == META
-    const ignoreKeyboard = this.PDFViewerApplicationOptions?.get('ignoreKeyboard');
-    if (!!ignoreKeyboard) {
+    if (!!this.ignoreKeyboard) {
       return true;
     }
 
-    if (!!ignoreKeys && ignoreKeys.length > 0) {
-      if (this.isKeyInList(ignoreKeys, cmd, keycode)) {
+    if (!!this.ignoreKeys && this.ignoreKeys.length > 0) {
+      if (this.isKeyInList(this.ignoreKeys, cmd, keycode)) {
         return true;
       }
     }
 
-    if (!!acceptKeys && acceptKeys.length > 0) {
-      return !this.isKeyInList(acceptKeys, cmd, keycode);
+    if (!!this.acceptKeys && this.acceptKeys.length > 0) {
+      return !this.isKeyInList(this.acceptKeys, cmd, keycode);
     }
     return false;
   }
@@ -123,17 +125,7 @@ export class NgxKeyboardManagerService {
     return key === keycode && cmd === cmdDef;
   }
 
-  public registerKeyboardListener(PDFViewerApplication: IPDFViewerApplication, PDFViewerApplicationOptions: IPDFViewerApplicationOptions) {
-    this.PDFViewerApplication = PDFViewerApplication;
-    this.PDFViewerApplicationOptions = PDFViewerApplicationOptions;
+  public registerKeyboardListener(PDFViewerApplication: IPDFViewerApplication) {
     PDFViewerApplication.ngxKeyboardManager = this;
-  }
-
-  public unregisterKeyboardListener() {
-    if (this.PDFViewerApplication) {
-      delete this.PDFViewerApplication.ngxKeyboardManager;
-    }
-    this.PDFViewerApplication = undefined;
-    this.PDFViewerApplicationOptions = undefined;
   }
 }

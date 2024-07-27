@@ -139,7 +139,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   public localizationInitialized: boolean = false;
 
-  private windowSizeRecalculatorSubscription: any;
   private resizeObserver: ResizeObserver | undefined;
 
   private initialAngularFormData?: FormDataType = undefined;
@@ -492,7 +491,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   /** Override the default locale. This must be the complete locale name, such as "es-ES". The string is allowed to be all lowercase.
    */
   @Input()
-  public language: string | undefined = undefined;
+  public language: string | undefined = typeof window === 'undefined' ? 'en' : navigator.language;
 
   /** By default, listening to the URL is deactivated because often the anchor tag is used for the Angular router */
   @Input()
@@ -989,7 +988,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       await this.waitUntilOldComponentIsGone();
       await this.pdfScriptLoaderService.ensurePdfJsHasBeenLoaded();
       this.formSupport.registerFormSupportWithPdfjs(this.ngZone, this.pdfScriptLoaderService.PDFViewerApplication);
-      this.keyboardManager.registerKeyboardListener(this.pdfScriptLoaderService.PDFViewerApplication, this.pdfScriptLoaderService.PDFViewerApplicationOptions);
+      this.keyboardManager.registerKeyboardListener(this.pdfScriptLoaderService.PDFViewerApplication);
       this.doInitPDFViewer();
     }
   }
@@ -1156,22 +1155,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
 
         PDFViewerApplicationOptions.set('enableDragAndDrop', this.enableDragAndDrop);
-        let language = this.language === '' ? undefined : this.language;
-        if (!language) {
-          if (typeof window === 'undefined') {
-            // server-side rendering
-            language = 'en';
-          } else {
-            language = navigator.language;
-          }
-        }
-        PDFViewerApplicationOptions.set('locale', language);
+        PDFViewerApplicationOptions.set('localeProperties', { lang: this.language });
         PDFViewerApplicationOptions.set('imageResourcesPath', this.imageResourcesPath);
         PDFViewerApplicationOptions.set('minZoom', this.minZoom);
         PDFViewerApplicationOptions.set('maxZoom', this.maxZoom);
         PDFViewerApplicationOptions.set('pageViewMode', this.pageViewMode);
         PDFViewerApplicationOptions.set('verbosity', this.logLevel);
-        PDFViewerApplicationOptions.set('initialZoom', this.zoom);
+        if (this.theme === 'dark') {
+          PDFViewerApplicationOptions.set('viewerCssTheme', 2);
+        } else if (this.theme === 'light') {
+          PDFViewerApplicationOptions.set('viewerCssTheme', 1);
+        }
 
         PDFViewerApplication.isViewerEmbedded = true;
         if (PDFViewerApplication.printKeyDownListener) {
@@ -1356,15 +1350,32 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
     const options = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
     // tslint:disable-next-line:forin
+    const optionsToIgnore = [
+      'needsES5',
+      'rangeChunkSize',
+      '_internalFilenameSuffix',
+      'assetsFolder',
+      'doubleTapZoomFactor',
+      'doubleTapZoomsInHandMode',
+      'doubleTapZoomsInTextSelectionMode',
+      'doubleTapResetsZoomOnSecondDoubleTap',
+    ];
     for (const key in pdfDefaultOptions) {
-      options.set(key, pdfDefaultOptions[key]);
+      if (!optionsToIgnore.includes(key)) {
+        const option = pdfDefaultOptions[key];
+        if (typeof option === 'function') {
+          options.set(key, option());
+        } else {
+          options.set(key, pdfDefaultOptions[key]);
+        }
+      }
     }
     options.set('disablePreferences', true);
     await this.setZoom();
 
-    options.set('ignoreKeyboard', this.ignoreKeyboard);
-    options.set('ignoreKeys', this.ignoreKeys);
-    options.set('acceptKeys', this.acceptKeys);
+    this.keyboardManager.ignoreKeyboard = this.ignoreKeyboard;
+    this.keyboardManager.ignoreKeys = this.ignoreKeys;
+    this.keyboardManager.acceptKeys = this.acceptKeys;
     this.activateTextlayerIfNecessary(options);
 
     if (this.scrollMode || this.scrollMode === ScrollModeType.vertical) {
@@ -1406,6 +1417,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (this.showBorders === false) {
       options.set('removePageBorders', !this.showBorders);
     }
+    const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
+    PDFViewerApplicationOptions.set('localeProperties', { lang: this.language });
   }
 
   private async openPDF(): Promise<void> {
@@ -1871,7 +1884,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   public async ngOnDestroy(): Promise<void> {
     this.notificationService.onPDFJSInitSignal.set(undefined);
-    this.keyboardManager.unregisterKeyboardListener();
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
@@ -1883,9 +1895,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         PDFViewerApplication.ngxConsole.reset();
         delete PDFViewerApplication.ngxConsole;
       }
-      this.pdfScriptLoaderService.PDFViewerApplication.eventBus?.off('afterprint', this.afterPrintListener);
-      this.pdfScriptLoaderService.PDFViewerApplication.eventBus?.off('beforeprint', this.beforePrintListener);
-      this.pdfScriptLoaderService.PDFViewerApplication.eventBus?.off('sourcechanged', this.reportSourceChanges.bind(this));
+      delete PDFViewerApplication.ngxKeyboardManager;
+      PDFViewerApplication.eventBus?.off('afterprint', this.afterPrintListener);
+      PDFViewerApplication.eventBus?.off('beforeprint', this.beforePrintListener);
+      PDFViewerApplication.eventBus?.off('sourcechanged', this.reportSourceChanges.bind(this));
 
       // #802 clear the form data; otherwise the "download" dialogs opens
       PDFViewerApplication.pdfDocument?.annotationStorage?.resetModified();
@@ -1913,9 +1926,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       delete w.registerXFAField;
       delete w.assignFormIdAndFieldName;
       delete w.updateAngularFormValue;
-
-      delete w.ngxExtendedPdfViewerCanRunModernJSCode;
-      this.windowSizeRecalculatorSubscription?.unsubscribe();
 
       const bus = PDFViewerApplication.eventBus;
       if (bus) {
@@ -2014,11 +2024,21 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       }
 
       if ('maxZoom' in changes) {
-        PDFViewerApplicationOptions.set('maxZoom', this.maxZoom);
+        if (PDFViewerApplication.pdfViewer) {
+          PDFViewerApplication.pdfViewer.maxZoom = this.maxZoom;
+        }
+        if (PDFViewerApplication.toolbar) {
+          PDFViewerApplication.toolbar.maxZoom = this.maxZoom;
+        }
       }
 
       if ('minZoom' in changes) {
-        PDFViewerApplicationOptions.set('minZoom', this.minZoom);
+        if (PDFViewerApplication.pdfViewer) {
+          PDFViewerApplication.pdfViewer.minZoom = this.minZoom;
+        }
+        if (PDFViewerApplication.toolbar) {
+          PDFViewerApplication.toolbar.minZoom = this.minZoom;
+        }
       }
 
       if ('handTool' in changes) {

@@ -26,6 +26,8 @@ export interface IPDFRenderingQueue {
 }
 
 export interface IPDFViewer {
+  maxZoom: number;
+  minZoom: number;
   setTextLayerMode(textLayerMode: number): unknown;
   annotationEditorMode: any;
   currentPageLabel: string | undefined;

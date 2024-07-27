@@ -5,7 +5,7 @@ const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.u
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
 export const pdfjsVersion = '4.4.717';
-export const pdfjsBleedingEdgeVersion = '4.5.689';
+export const pdfjsBleedingEdgeVersion = '4.5.701';
 export function getVersionSuffix(folder: string): string {
   if (folder?.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -35,7 +35,7 @@ export const pdfDefaultOptions = {
   defaultZoomDelay: 400, // milliseconds
   cursorToolOnLoad: 0,
   defaultUrl: '',
-  defaultZoomValue: undefined,
+  defaultZoomValue: '',
   disableHistory: false,
   disablePageLabels: false,
   enablePermissions: false,
@@ -46,7 +46,7 @@ export const pdfDefaultOptions = {
   historyUpdateUrl: false,
   ignoreDestinationZoom: false,
   imageResourcesPath: './images/',
-  maxCanvasPixels: 16777216,
+  maxCanvasPixels: 2 ** 25, // 33.554.432 pixels
   forcePageColors: false,
   pageColorsBackground: 'Canvas',
   pageColorsForeground: 'CanvasText',
@@ -54,16 +54,13 @@ export const pdfDefaultOptions = {
   printResolution: 150,
   rangeChunkSize: 65536,
   removePageBorders: false,
-  renderer: 'canvas',
-  renderForms: true,
   enableXfa: true,
   fontExtraProperties: false,
   sidebarViewOnLoad: -1,
   scrollModeOnLoad: -1,
   spreadModeOnLoad: -1,
   textLayerMode: 1,
-  useOnlyCssZoom: false,
-  // viewerCssTheme: 0, // not supported by ngx-extended-pdf-viewer
+  // viewerCssTheme: 0, // not supported by ngx-extended-pdf-viewer, use [theme] instead
   viewOnLoad: 0,
   cMapPacked: true,
   cMapUrl: function () {
@@ -77,7 +74,6 @@ export const pdfDefaultOptions = {
   isOffscreenCanvasSupported: true,
   maxImageSize: -1,
   pdfBug: false,
-  postMessageTransfers: true,
   verbosity: 1,
   workerPort: null,
   assetsFolder: 'assets',
@@ -104,7 +100,5 @@ export const pdfDefaultOptions = {
   enableScripting: true,
   defaultCacheSize: 50,
   passwordPrompt: undefined,
-  locale: getDefaultLanguage(),
-  activateWillReadFrequentlyFlag: false, // set this to true sometimes solves rendering issues with Chrome. Deprecated since pdf.js 4.4
-  enableHWA: true, // enable hardware acceleration. Active since pdf.js 4.4. This is the opposite of activateWillReadFrequentlyFlag
+  enableHWA: true, // enable hardware acceleration. Active since pdf.js 4.4.
 };
