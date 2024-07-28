@@ -961,13 +961,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (isPlatformBrowser(this.platformId)) {
       this.serverSideRendering = false;
       this.toolbarWidth = String(document.body.clientWidth);
-      if ((<any>globalThis).pdfDefaultOptions) {
-        for (const key in (<any>globalThis).pdfDefaultOptions) {
-          pdfDefaultOptions[key] = (<any>globalThis).pdfDefaultOptions[key];
-        }
-      } else {
-        (<any>globalThis).pdfDefaultOptions = pdfDefaultOptions;
-      }
     }
   }
 
