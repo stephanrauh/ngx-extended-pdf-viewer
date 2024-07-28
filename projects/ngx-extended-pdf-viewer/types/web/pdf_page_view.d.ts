@@ -192,8 +192,6 @@ export class PDFPageView implements IRenderableView {
      * @param {string|null} label
      */
     setPageLabel(label: string | null): void;
-    determineMaxDimensions(): number;
-    maxWidth: number | undefined;
     /**
      * For use by the `PDFThumbnailView.setImage`-method.
      * @ignore

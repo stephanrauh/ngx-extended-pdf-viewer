@@ -303,6 +303,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public enablePrint = true;
 
+  public get enablePrintAutoRotate() {
+    return pdfDefaultOptions.enablePrintAutoRotate;
+  }
+  @Input()
+  public set enablePrintAutoRotate(value) {
+    pdfDefaultOptions.enablePrintAutoRotate = value;
+    if (this.pdfScriptLoaderService.PDFViewerApplication?.pdfViewer) {
+      this.pdfScriptLoaderService.PDFViewerApplication.pdfViewer.enablePrintAutoRotate = value;
+    }
+  }
+
   @Input()
   public showTextEditor: ResponsiveVisibility = true;
 
@@ -1895,7 +1906,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (PDFViewerApplication) {
       if (PDFViewerApplication.ngxConsole) {
         PDFViewerApplication.ngxConsole.reset();
-        delete PDFViewerApplication.ngxConsole;
       }
       delete PDFViewerApplication.ngxKeyboardManager;
       PDFViewerApplication.eventBus?.off('afterprint', this.afterPrintListener);
