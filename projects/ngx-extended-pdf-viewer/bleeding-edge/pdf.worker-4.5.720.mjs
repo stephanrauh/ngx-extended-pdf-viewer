@@ -402,11 +402,11 @@ function info(msg) {
 function warn(msg) {
   if (verbosity >= VerbosityLevel.WARNINGS) {
     if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
-      console.log(`Warning: ${msg}`);
+      NgxConsole.log(`Warning: ${msg}`);
     } else if (Window && NgxConsole) {
       NgxConsole.log(`Warning: ${msg}`);
     } else {
-      console.log(`Warning: ${msg}`);
+      NgxConsole.log(`Warning: ${msg}`);
     }
   }
 }
@@ -37323,6 +37323,9 @@ class StructTreePage {
       warn("StructTree MAX_DEPTH reached.");
       return null;
     }
+    if (!(dict instanceof Dict)) {
+      return null;
+    }
     if (map.has(dict)) {
       return map.get(dict);
     }
@@ -55939,7 +55942,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = "4.5.701";
+    const workerVersion = "4.5.720";
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
     }
@@ -56516,8 +56519,8 @@ if (typeof window === "undefined" && typeof self !== "undefined" && isMessagePor
 
 ;// CONCATENATED MODULE: ./src/pdf.worker.js
 
-const pdfjsVersion = "4.5.701";
-const pdfjsBuild = "f2baf92a1";
+const pdfjsVersion = "4.5.720";
+const pdfjsBuild = "a29486507";
 
 var __webpack_exports__WorkerMessageHandler = __webpack_exports__.WorkerMessageHandler;
 export { __webpack_exports__WorkerMessageHandler as WorkerMessageHandler };

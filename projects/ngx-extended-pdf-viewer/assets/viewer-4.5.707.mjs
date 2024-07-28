@@ -446,11 +446,11 @@ function info(msg) {
 function warn(msg) {
   if (verbosity >= VerbosityLevel.WARNINGS) {
     if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
-      console.log(`Warning: ${msg}`);
+      ngx_console_NgxConsole.log(`Warning: ${msg}`);
     } else if (Window && ngx_console_NgxConsole) {
       ngx_console_NgxConsole.log(`Warning: ${msg}`);
     } else {
-      console.log(`Warning: ${msg}`);
+      ngx_console_NgxConsole.log(`Warning: ${msg}`);
     }
   }
 }
@@ -11092,7 +11092,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.5.701",
+    apiVersion: "4.5.707",
     data,
     password,
     disableAutoFetch,
@@ -12889,8 +12889,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.5.701";
-const build = "f2baf92a1";
+const version = "4.5.707";
+const build = "2760c88b3";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -20099,8 +20099,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.5.701";
-const pdfjsBuild = "f2baf92a1";
+const pdfjsVersion = "4.5.707";
+const pdfjsBuild = "2760c88b3";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -21134,22 +21134,26 @@ class AppOptions {
   static setAll(options, prefs = false) {
     let events;
     for (const name in options) {
-      const defaultOpt = defaultOptions[name],
-        userOpt = options[name];
+      const defaultOpt = defaultOptions[name];
+      let userOpt = options[name];
       if (!defaultOpt || !(typeof userOpt === typeof defaultOpt.value || Type[(typeof userOpt).toUpperCase()] & defaultOpt.type)) {
-        if (!(typeof value === typeof defaultOpt.value || Type[(typeof value).toUpperCase()] & defaultOpt.type)) {
-          if (name !== "maxZoom" && name !== "minZoom" && name !== "passwordPrompt" && name !== "defaultZoomValue") {
-            console.error("Invalid AppOptions value: " + name + " = " + value);
-            return;
+        if (typeof defaultOpt.value === "number" && typeof userOpt === "string") {
+          if (!Number.isNaN(Number(userOpt))) {
+            userOpt = Number(userOpt);
           }
         }
-        continue;
+        if (!(typeof userOpt === typeof defaultOpt.value || Type[(typeof userOpt).toUpperCase()] & defaultOpt.type)) {
+          if (name !== "maxZoom" && name !== "minZoom" && name !== "passwordPrompt" && name !== "defaultZoomValue") {
+            console.error("Invalid AppOptions value: " + name + " = " + userOpt);
+            continue;
+          }
+        }
       }
       const {
         kind
       } = defaultOpt;
       if (prefs && !(kind & OptionKind.BROWSER || kind & OptionKind.PREFERENCE)) {
-        console.error("Invalid AppOptions parameter: " + name + " = " + value);
+        console.error("Invalid AppOptions parameter: " + name + " = " + userOpt);
         continue;
       }
       if (this.eventBus && kind & OptionKind.EVENT_DISPATCH) {
@@ -21593,7 +21597,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '21.0.0-alpha.14';
+const ngxExtendedPdfViewerVersion = '21.0.0-beta.1';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -26979,151 +26983,14 @@ class PDFPresentationMode {
 }
 
 ;// CONCATENATED MODULE: ./node_modules/canvas-size/dist/canvas-size.esm.js
-function _iterableToArrayLimit(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s,
-      _e,
-      _x,
-      _r,
-      _arr = [],
-      _n = !0,
-      _d = !1;
-    try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i) return;
-        _n = !1;
-      } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);
-    } catch (err) {
-      _d = !0, _e = err;
-    } finally {
-      try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return;
-      } finally {
-        if (_d) throw _e;
-      }
-    }
-    return _arr;
-  }
-}
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    enumerableOnly && (symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    })), keys.push.apply(keys, symbols);
-  }
-  return keys;
-}
-function _objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = null != arguments[i] ? arguments[i] : {};
-    i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
-      _defineProperty(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
-      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-    });
-  }
-  return target;
-}
-function _defineProperty(obj, key, value) {
-  key = _toPropertyKey(key);
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-  return target;
-}
-function _objectWithoutProperties(source, excluded) {
-  if (source == null) return {};
-  var target = _objectWithoutPropertiesLoose(source, excluded);
-  var key, i;
-  if (Object.getOwnPropertySymbols) {
-    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-    for (i = 0; i < sourceSymbolKeys.length; i++) {
-      key = sourceSymbolKeys[i];
-      if (excluded.indexOf(key) >= 0) continue;
-      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
-      target[key] = source[key];
-    }
-  }
-  return target;
-}
-function _slicedToArray(arr, i) {
-  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
-}
-function _toConsumableArray(arr) {
-  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
-}
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
-}
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
-}
-function _iterableToArray(iter) {
-  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
-}
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-}
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-  return arr2;
-}
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-function _toPrimitive(input, hint) {
-  if (typeof input !== "object" || input === null) return input;
-  var prim = input[Symbol.toPrimitive];
-  if (prim !== undefined) {
-    var res = prim.call(input, hint || "default");
-    if (typeof res !== "object") return res;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return (hint === "string" ? String : Number)(input);
-}
-function _toPropertyKey(arg) {
-  var key = _toPrimitive(arg, "string");
-  return typeof key === "symbol" ? key : String(key);
-}
 function canvasTest(settings) {
-  var size = settings.sizes.shift();
-  var width = Math.max(Math.ceil(size[0]), 1);
-  var height = Math.max(Math.ceil(size[1]), 1);
-  var fill = [width - 1, height - 1, 1, 1];
-  var job = Date.now();
-  var isWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
-  var cropCvs, testCvs;
+  const size = settings.sizes.shift();
+  const width = Math.max(Math.ceil(size[0]), 1);
+  const height = Math.max(Math.ceil(size[1]), 1);
+  const fill = [width - 1, height - 1, 1, 1];
+  const testTimeStart = performance.now();
+  const isWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+  let cropCvs, testCvs;
   if (isWorker) {
     cropCvs = new OffscreenCanvas(1, 1);
     testCvs = new OffscreenCanvas(width, height);
@@ -27135,15 +27002,15 @@ function canvasTest(settings) {
     testCvs.width = width;
     testCvs.height = height;
   }
-  var cropCtx = cropCvs.getContext("2d");
-  var testCtx = testCvs.getContext("2d");
+  const cropCtx = cropCvs.getContext("2d");
+  const testCtx = testCvs.getContext("2d");
   if (testCtx) {
     testCtx.fillRect.apply(testCtx, fill);
     cropCtx.drawImage(testCvs, width - 1, height - 1, 1, 1, 0, 0, 1, 1);
   }
-  var isTestPass = cropCtx && cropCtx.getImageData(0, 0, 1, 1).data[3] !== 0;
-  var benchmark = Date.now() - job;
-  [cropCvs, testCvs].forEach(function (cvs) {
+  const isTestPass = cropCtx && cropCtx.getImageData(0, 0, 1, 1).data[3] !== 0;
+  const testTime = parseInt(performance.now() - testTimeStart);
+  [cropCvs, testCvs].forEach(cvs => {
     cvs.height = 0;
     cvs.width = 0;
   });
@@ -27151,57 +27018,67 @@ function canvasTest(settings) {
     postMessage({
       width: width,
       height: height,
-      benchmark: benchmark,
+      testTime: testTime,
       isTestPass: isTestPass
     });
     if (!isTestPass && settings.sizes.length) {
-      canvasTest(settings);
+      setTimeout(() => {
+        canvasTest(settings);
+      }, 0);
     }
   } else if (isTestPass) {
-    settings.onSuccess(width, height, benchmark);
+    settings.onSuccess({
+      width: width,
+      height: height,
+      testTime: testTime
+    });
   } else {
-    settings.onError(width, height, benchmark);
+    settings.onError({
+      width: width,
+      height: height,
+      testTime: testTime
+    });
     if (settings.sizes.length) {
-      canvasTest(settings);
+      setTimeout(() => {
+        canvasTest(settings);
+      }, 0);
     }
   }
   return isTestPass;
 }
-var testSizes = {
+const testSizes = {
   area: [16384, 14188, 11402, 11180, 10836, 8192, 4096, 1],
   height: [8388607, 65535, 32767, 16384, 8192, 4096, 1],
   width: [4194303, 65535, 32767, 16384, 8192, 4096, 1]
 };
-var _excluded = ["onError", "onSuccess"];
-var defaults = {
+const defaults = {
   max: null,
   min: 1,
   sizes: [],
   step: 1024,
-  usePromise: false,
   useWorker: false,
   onError: Function.prototype,
   onSuccess: Function.prototype
 };
-var workerJobs = {};
+const workerJobs = {};
 function createSizesArray(settings) {
-  var isArea = settings.width === settings.height;
-  var isWidth = settings.height === 1;
-  var isHeight = settings.width === 1;
-  var sizes = [];
+  const isArea = settings.width === settings.height;
+  const isWidth = settings.height === 1;
+  const isHeight = settings.width === 1;
+  const sizes = [];
   if (!settings.width || !settings.height) {
-    settings.sizes.forEach(function (testSize) {
-      var width = isArea || isWidth ? testSize : 1;
-      var height = isArea || isHeight ? testSize : 1;
+    settings.sizes.forEach(testSize => {
+      const width = isArea || isWidth ? testSize : 1;
+      const height = isArea || isHeight ? testSize : 1;
       sizes.push([width, height]);
     });
   } else {
-    var testMin = settings.min || defaults.min;
-    var testStep = settings.step || defaults.step;
-    var testSize = Math.max(settings.width, settings.height);
+    const testMin = settings.min || defaults.min;
+    const testStep = settings.step || defaults.step;
+    let testSize = Math.max(settings.width, settings.height);
     while (testSize >= testMin) {
-      var width = isArea || isWidth ? testSize : 1;
-      var height = isArea || isHeight ? testSize : 1;
+      const width = isArea || isWidth ? testSize : 1;
+      const height = isArea || isHeight ? testSize : 1;
       sizes.push([width, height]);
       testSize -= testStep;
     }
@@ -27209,74 +27086,106 @@ function createSizesArray(settings) {
   return sizes;
 }
 function handleMethod(settings) {
-  var hasCanvasSupport = window && "HTMLCanvasElement" in window;
-  var hasOffscreenCanvasSupport = window && "OffscreenCanvas" in window;
-  var jobID = Date.now();
-  var _onError = settings.onError,
-    _onSuccess = settings.onSuccess,
-    settingsWithoutCallbacks = _objectWithoutProperties(settings, _excluded);
-  var worker = null;
+  const isBrowser = typeof window !== "undefined";
+  const hasPromiseSupport = isBrowser && "Promise" in window;
+  const hasCanvasSupport = isBrowser && "HTMLCanvasElement" in window;
+  const hasOffscreenCanvasSupport = isBrowser && "OffscreenCanvas" in window;
+  const jobID = URL.createObjectURL(new Blob([])).slice(-36);
+  const totalTimeStart = performance.now();
+  const {
+    onError: onError,
+    onSuccess: onSuccess,
+    ...settingsWithoutCallbacks
+  } = settings;
+  const getTotalTime = () => parseInt(performance.now() - totalTimeStart);
+  let worker = null;
   if (!hasCanvasSupport) {
     return false;
   }
   if (settings.useWorker && hasOffscreenCanvasSupport) {
-    var js = "\n            var canvasTest = ".concat(canvasTest.toString(), ";\n            onmessage = function(e) {\n                canvasTest(e.data);\n            };\n        ");
-    var blob = new Blob([js], {
+    const js = `\n            var canvasTest = ${canvasTest.toString()};\n            onmessage = function(e) {\n                canvasTest(e.data);\n            };\n        `;
+    const blob = new Blob([js], {
       type: "application/javascript"
     });
-    var blobURL = URL.createObjectURL(blob);
+    const blobURL = URL.createObjectURL(blob);
     worker = new Worker(blobURL);
     URL.revokeObjectURL(blobURL);
     worker.onmessage = function (e) {
-      var _e$data = e.data,
-        width = _e$data.width,
-        height = _e$data.height,
-        benchmark = _e$data.benchmark,
-        isTestPass = _e$data.isTestPass;
+      const {
+        width: width,
+        height: height,
+        testTime: testTime,
+        isTestPass: isTestPass
+      } = e.data;
+      const results = {
+        width: width,
+        height: height,
+        testTime: testTime,
+        totalTime: getTotalTime()
+      };
       if (isTestPass) {
-        workerJobs[jobID].onSuccess(width, height, benchmark);
+        workerJobs[jobID].onSuccess(results);
         delete workerJobs[jobID];
       } else {
-        workerJobs[jobID].onError(width, height, benchmark);
+        workerJobs[jobID].onError(results);
       }
     };
   }
-  if (settings.usePromise) {
-    return new Promise(function (resolve, reject) {
-      var promiseSettings = _objectSpread2(_objectSpread2({}, settings), {}, {
-        onError: function onError(width, height, benchmark) {
-          var isLastTest;
+  if (hasPromiseSupport) {
+    return new Promise(resolve => {
+      const promiseSettings = {
+        ...settings,
+        onError(_ref) {
+          let {
+            width: width,
+            height: height,
+            testTime: testTime
+          } = _ref;
+          const results = {
+            width: width,
+            height: height,
+            testTime: testTime,
+            totalTime: getTotalTime()
+          };
+          let isLastTest;
           if (settings.sizes.length === 0) {
             isLastTest = true;
           } else {
-            var _settings$sizes$slice = settings.sizes.slice(-1),
-              _settings$sizes$slice2 = _slicedToArray(_settings$sizes$slice, 1),
-              _settings$sizes$slice3 = _slicedToArray(_settings$sizes$slice2[0], 2),
-              lastWidth = _settings$sizes$slice3[0],
-              lastHeight = _settings$sizes$slice3[1];
+            const [[lastWidth, lastHeight]] = settings.sizes.slice(-1);
             isLastTest = width === lastWidth && height === lastHeight;
           }
-          _onError(width, height, benchmark);
+          onError(results);
           if (isLastTest) {
-            reject({
-              width: width,
-              height: height,
-              benchmark: benchmark
+            resolve({
+              ...results,
+              success: false
             });
           }
         },
-        onSuccess: function onSuccess(width, height, benchmark) {
-          _onSuccess(width, height, benchmark);
-          resolve({
+        onSuccess(_ref2) {
+          let {
             width: width,
             height: height,
-            benchmark: benchmark
+            testTime: testTime
+          } = _ref2;
+          const results = {
+            width: width,
+            height: height,
+            testTime: testTime,
+            totalTime: getTotalTime()
+          };
+          onSuccess(results);
+          resolve({
+            ...results,
+            success: true
           });
         }
-      });
+      };
       if (worker) {
-        var onError = promiseSettings.onError,
-          onSuccess = promiseSettings.onSuccess;
+        const {
+          onError: onError,
+          onSuccess: onSuccess
+        } = promiseSettings;
         workerJobs[jobID] = {
           onError: onError,
           onSuccess: onSuccess
@@ -27289,8 +27198,8 @@ function handleMethod(settings) {
   } else {
     if (worker) {
       workerJobs[jobID] = {
-        onError: _onError,
-        onSuccess: _onSuccess
+        onError: onError,
+        onSuccess: onSuccess
       };
       worker.postMessage(settingsWithoutCallbacks);
     } else {
@@ -27298,53 +27207,62 @@ function handleMethod(settings) {
     }
   }
 }
-var canvasSize = {
-  maxArea: function maxArea() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var sizes = createSizesArray({
+const canvas_size_esm_canvasSize = {
+  maxArea() {
+    let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    const sizes = createSizesArray({
       width: options.max,
       height: options.max,
       min: options.min,
       step: options.step,
-      sizes: _toConsumableArray(testSizes.area)
+      sizes: [...testSizes.area]
     });
-    var settings = _objectSpread2(_objectSpread2(_objectSpread2({}, defaults), options), {}, {
+    const settings = {
+      ...defaults,
+      ...options,
       sizes: sizes
-    });
+    };
     return handleMethod(settings);
   },
-  maxHeight: function maxHeight() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var sizes = createSizesArray({
+  maxHeight() {
+    let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    const sizes = createSizesArray({
       width: 1,
       height: options.max,
       min: options.min,
       step: options.step,
-      sizes: _toConsumableArray(testSizes.height)
+      sizes: [...testSizes.height]
     });
-    var settings = _objectSpread2(_objectSpread2(_objectSpread2({}, defaults), options), {}, {
+    const settings = {
+      ...defaults,
+      ...options,
       sizes: sizes
-    });
+    };
     return handleMethod(settings);
   },
-  maxWidth: function maxWidth() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var sizes = createSizesArray({
+  maxWidth() {
+    let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    const sizes = createSizesArray({
       width: options.max,
       height: 1,
       min: options.min,
       step: options.step,
-      sizes: _toConsumableArray(testSizes.width)
+      sizes: [...testSizes.width]
     });
-    var settings = _objectSpread2(_objectSpread2(_objectSpread2({}, defaults), options), {}, {
+    const settings = {
+      ...defaults,
+      ...options,
       sizes: sizes
-    });
+    };
     return handleMethod(settings);
   },
-  test: function test() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var settings = _objectSpread2(_objectSpread2({}, defaults), options);
-    settings.sizes = _toConsumableArray(settings.sizes);
+  test() {
+    let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    const settings = {
+      ...defaults,
+      ...options
+    };
+    settings.sizes = [...settings.sizes];
     if (settings.width && settings.height) {
       settings.sizes = [[settings.width, settings.height]];
     }
@@ -27444,6 +27362,67 @@ function getXfaHtmlForPrinting(printContainer, pdfDocument) {
   }
 }
 
+;// CONCATENATED MODULE: ./web/max_canvas_size.js
+
+class MaxCanvasSize {
+  static maxWidth = null;
+  static maxHeight = null;
+  static maxArea = null;
+  static async determineMaxArea() {
+    const {
+      success,
+      width,
+      height
+    } = await canvas_size_esm_canvasSize.maxArea({
+      useWorker: true
+    });
+    if (!success) {
+      MaxCanvasSize.maxWidth = 4096;
+      MaxCanvasSize.maxArea = 16777216;
+      return 4096;
+    }
+    MaxCanvasSize.maxArea = width * height;
+    return MaxCanvasSize.maxArea;
+  }
+  static async determineMaxWidth() {
+    const {
+      width
+    } = await canvas_size_esm_canvasSize.maxWidth({
+      useWorker: true
+    });
+    MaxCanvasSize.maxWidth = width;
+    return MaxCanvasSize.maxWidth;
+  }
+  static async determineMaxHeight() {
+    const {
+      height
+    } = await canvas_size_esm_canvasSize.maxHeight({
+      useWorker: true
+    });
+    MaxCanvasSize.maxHeight = height;
+    return MaxCanvasSize.maxHeight;
+  }
+  static async determineMaxDimensions() {
+    if (MaxCanvasSize.maxWidth) {
+      return MaxCanvasSize.maxWidth;
+    }
+    await this.determineMaxArea();
+    await this.determineMaxHeight();
+    await this.determineMaxWidth();
+    return MaxCanvasSize.maxWidth;
+  }
+  static async reduceToMaxCanvasSize(width, height) {
+    let divisor = 1;
+    if (width >= 4096 || height >= 4096) {
+      await this.determineMaxDimensions();
+      divisor = Math.max(width / MaxCanvasSize.maxWidth, height / MaxCanvasSize.maxHeight, Math.sqrt(width * height / MaxCanvasSize.maxArea));
+      if (divisor > 1) {
+        divisor = Math.ceil(1 + 100 * divisor) / 100;
+      }
+    }
+    return divisor;
+  }
+}
 ;// CONCATENATED MODULE: ./src/shared/util.js
 
 const isNodeJS = typeof process === "object" && process + "" === "[object process]" && !process.versions.nw && !(process.versions.electron && process.type && process.type !== "browser");
@@ -27748,11 +27727,11 @@ function info(msg) {
 function warn(msg) {
   if (verbosity >= util_VerbosityLevel.WARNINGS) {
     if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
-      console.log(`Warning: ${msg}`);
+      ngx_console_NgxConsole.log(`Warning: ${msg}`);
     } else if (Window && ngx_console_NgxConsole) {
       ngx_console_NgxConsole.log(`Warning: ${msg}`);
     } else {
-      console.log(`Warning: ${msg}`);
+      ngx_console_NgxConsole.log(`Warning: ${msg}`);
     }
   }
 }
@@ -28203,29 +28182,25 @@ const FontRenderOps = {
 
 
 
+
 let activeService = null;
 let dialog = null;
 let overlayManager = null;
 let viewerApp = {
   initialized: false
 };
-function renderPage(activeServiceOnEntry, pdfDocument, pageNumber, size, printResolution, optionalContentConfigPromise, printAnnotationStoragePromise) {
+async function renderPage(activeServiceOnEntry, pdfDocument, pageNumber, size, printResolution, optionalContentConfigPromise, printAnnotationStoragePromise) {
   const scratchCanvas = activeService.scratchCanvas;
   let PRINT_UNITS = printResolution / PixelsPerInch.PDF;
-  let scale = 1;
   const canvasWidth = Math.floor(size.width * PRINT_UNITS);
   const canvasHeight = Math.floor(size.height * PRINT_UNITS);
-  if (canvasWidth >= 4096 || canvasHeight >= 4096) {
-    if (!canvasSize.test({
-      width: canvasWidth,
-      height: canvasHeight
-    })) {
-      const max = determineMaxDimensions();
-      scale = Math.min(max / canvasWidth, max / canvasHeight) * 0.95;
-    }
-    warn("Page " + pageNumber + ": Reduced the [printResolution] to " + Math.floor(printResolution * scale) + " because the browser can't render larger canvases. If you see blank page in the print preview, reduce [printResolution] manually to a lower value.");
+  const divisor = await MaxCanvasSize.reduceToMaxCanvasSize(canvasWidth, canvasHeight);
+  if (divisor > 1) {
+    const reduction = Math.round((divisor - 1) * 100);
+    PRINT_UNITS = Math.ceil(0.95 * PRINT_UNITS / divisor);
+    const dpi = PRINT_UNITS * PixelsPerInch.PDF;
+    warn(`Page ${pageNumber}: Reduced the maximum resolution by ${reduction}% because the browser can't render larger canvases. The resolution is now ${dpi} DPI.`);
   }
-  PRINT_UNITS *= scale;
   scratchCanvas.width = Math.floor(size.width * PRINT_UNITS);
   scratchCanvas.height = Math.floor(size.height * PRINT_UNITS);
   const ctx = scratchCanvas.getContext("2d");
@@ -28255,17 +28230,25 @@ function renderPage(activeServiceOnEntry, pdfDocument, pageNumber, size, printRe
     });
   });
 }
-function determineMaxDimensions() {
-  const checklist = [4096, 8192, 10836, 11180, 11402, 14188, 16384];
-  for (let width of checklist) {
-    if (!canvasSize.test({
-      width: width + 1,
-      height: width + 1
-    })) {
-      return width;
+async function determineMaxDimensions() {
+  debugger;
+  if (PDFPrintService.maxWidth) {
+    return PDFPrintService.maxWidth;
+  }
+  const checklist = [4096, 8192, 10836, 11180, 11402, 14188, 14188, 16384, 23168];
+  for (const width of checklist) {
+    const {
+      success
+    } = await canvasSize.test({
+      width,
+      height: width
+    });
+    if (!success) {
+      PDFPrintService.maxWidth = width;
+      return PDFPrintService.maxWidth;
     }
   }
-  return 16384;
+  return 23168;
 }
 class PDFPrintService {
   constructor({
@@ -32766,6 +32749,7 @@ class TextLayerBuilder {
 
 
 
+
 const DEFAULT_LAYER_PROPERTIES = null;
 const LAYERS_ORDER = new Map([["canvasWrapper", 0], ["textLayer", 1], ["annotationLayer", 2], ["annotationEditorLayer", 3], ["xfaLayer", 3]]);
 class PDFPageView {
@@ -33455,24 +33439,14 @@ class PDFPageView {
     const sfy = approximateFraction(outputScale.sy);
     width = floorToDivide(width * outputScale.sx, sfx[0]);
     height = floorToDivide(height * outputScale.sy, sfy[0]);
-    let divisor = 1;
-    if (width >= 4096 || height >= 4096) {
-      if (!!this.maxWidth || !canvasSize.test({
-        width,
-        height
-      })) {
-        const max = this.determineMaxDimensions();
-        divisor = Math.max(width / max, height / max);
-        if (divisor > 1) {
-          const newScale = Math.floor(100 * this.scale / divisor) / 100;
-          divisor = this.scale / newScale;
-          viewport.width /= divisor;
-          viewport.height /= divisor;
-          warn(`Page ${this.id}: Reduced the maximum zoom to ${newScale} because the browser can't render larger canvases.`);
-        } else {
-          divisor = 1;
-        }
-      }
+    const divisor = await MaxCanvasSize.reduceToMaxCanvasSize(width, height);
+    if (divisor > 1) {
+      viewport.width /= divisor;
+      viewport.width *= 0.95;
+      viewport.height /= divisor;
+      viewport.width *= 0.95;
+      const reduction = Math.round((divisor / 0.95 - 1) * 100);
+      warn(`Page ${this.id}: Reduced the maximum resolution by ${reduction}% because the browser can't render larger canvases.`);
     }
     canvas.width = floorToDivide(viewport.width * outputScale.sx, sfx[0]);
     canvas.height = floorToDivide(viewport.height * outputScale.sy, sfy[0]);
@@ -33566,22 +33540,6 @@ class PDFPageView {
     } else {
       this.div.removeAttribute("data-page-label");
     }
-  }
-  determineMaxDimensions() {
-    if (this.maxWidth) {
-      return this.maxWidth;
-    }
-    const checklist = [4096, 8192, 10836, 11180, 11402, 14188, 16384];
-    for (const width of checklist) {
-      if (!canvasSize.test({
-        width: width + 1,
-        height: width + 1
-      })) {
-        this.maxWidth = width;
-        return this.maxWidth;
-      }
-    }
-    return 16384;
   }
   get thumbnailCanvas() {
     const {
@@ -33688,7 +33646,7 @@ class PDFViewer {
   #maxZoom = MAX_SCALE;
   #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.5.701";
+    const viewerVersion = "4.5.707";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -36579,27 +36537,29 @@ const PDFViewerApplication = {
       if (AppOptions.get("enableDragAndDrop")) {
         evt.preventDefault();
         evt.dataTransfer.dropEffect = evt.dataTransfer.effectAllowed === "copy" ? "copy" : "move";
-      }
-      for (const item of evt.dataTransfer.items) {
-        if (item.type === "application/pdf") {
-          evt.dataTransfer.dropEffect = evt.dataTransfer.effectAllowed === "copy" ? "copy" : "move";
-          evt.preventDefault();
-          evt.stopPropagation();
-          return;
+        for (const item of evt.dataTransfer.items) {
+          if (item.type === "application/pdf") {
+            evt.dataTransfer.dropEffect = evt.dataTransfer.effectAllowed === "copy" ? "copy" : "move";
+            evt.preventDefault();
+            evt.stopPropagation();
+            return;
+          }
         }
       }
     });
     appConfig.mainContainer.addEventListener("drop", function (evt) {
-      if (evt.dataTransfer.files?.[0].type !== "application/pdf") {
-        return;
+      if (AppOptions.get("enableDragAndDrop")) {
+        if (evt.dataTransfer.files?.[0].type !== "application/pdf") {
+          return;
+        }
+        evt.preventDefault();
+        evt.stopPropagation();
+        eventBus.dispatch("fileinputchange", {
+          source: this,
+          fileInput: evt.dataTransfer,
+          dropEvent: evt
+        });
       }
-      evt.preventDefault();
-      evt.stopPropagation();
-      eventBus.dispatch("fileinputchange", {
-        source: this,
-        fileInput: evt.dataTransfer,
-        dropEvent: evt
-      });
     });
     if (!AppOptions.get("supportsDocumentFonts")) {
       AppOptions.set("disableFontFace", true);
@@ -36909,7 +36869,7 @@ const PDFViewerApplication = {
     }
   },
   _ensureDownloadComplete() {
-    if (this.pdfDocument && this.downloadComplete) {
+    if (this.pdfDocument) {
       return;
     }
     throw new Error("PDF document not downloaded.");
@@ -38559,8 +38519,8 @@ function webViewerSetPreference({
 
 
 
-const pdfjsVersion = "4.5.701";
-const pdfjsBuild = "f2baf92a1";
+const pdfjsVersion = "4.5.707";
+const pdfjsBuild = "2760c88b3";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,

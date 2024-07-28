@@ -42,14 +42,17 @@ Version 20.0.2 is a security fix. It solves CVE-2024-4367. I strongly recommend 
 
 ## Version 21 beta versions: Sneak preview to an optimized viewer
 
-Version 21 is a major refactoring. It reduces the memory footprint and start-up times. The new version
+Version 21 is a major refactoring. At the moment, I'm calling it a beta version, but it should be ready for production. I plan to publish the final version in the next few days.
+
+The new version reduces the memory footprint and start-up times. It
 
 - updates to pdf.js 4.5
 - gets rid of RxJS
 - stops polluting the global namespace
 - reduces the memory leaks (that's partially finished, but you should notice an improvement)
 - reduces the number of requests loading JavaScript files
-- and it moves the code loading the huge JavaScript files to a service. So the viewer doesn't have to reload the JavaScript files every time you destroy the viewer and open a new one.
+- moves the code loading the huge JavaScript files to a service (so the viewer can reuse the JavaScript files instead of reloading them)
+- and it fixes quite a few bugs.
 
 Version 21 contains several breaking changes. The good news is that I assume the vast majority of developers won't even notice. These breaking changes are:
 
