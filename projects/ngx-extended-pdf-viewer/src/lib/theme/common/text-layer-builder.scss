@@ -115,6 +115,10 @@ ngx-extended-pdf-viewer {
       &.active {
         top: 0;
       }
+
+      &.selecting .endOfContent {
+        top: 0;
+      }
     }
   }
 }
