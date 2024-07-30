@@ -15,3 +15,8 @@ button {
   margin-top: 0;
   margin-bottom: 0;
 }
+
+.width-height-23px {
+  width: 23px; 
+  height: 23px;
+}
