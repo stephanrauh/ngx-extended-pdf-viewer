@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
   "version": 1,
-  "serialNumber": "urn:uuid:7b912cff-f8ac-4e95-b345-20e418393207",
+  "serialNumber": "urn:uuid:131554bc-51c4-4493-b858-fe98bf6588f0",
   "metadata": {
-    "timestamp": "2024-07-28T20:09:20.186Z",
+    "timestamp": "2024-07-30T20:27:55.218Z",
     "tools": [
       {
         "name": "npm",
@@ -2565,8 +2565,8 @@
       "type": "library",
       "name": "traverse",
       "group": "@babel",
-      "version": "7.25.0",
-      "bom-ref": "@babel/traverse@7.25.0",
+      "version": "7.25.1",
+      "bom-ref": "@babel/traverse@7.25.1",
       "author": "The Babel Team",
       "description": "The Babel Traverse module maintains the overall tree state, and is responsible for replacing, removing, and adding nodes",
       "licenses": [
@@ -2576,7 +2576,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40babel/traverse@7.25.0#packages/babel-traverse",
+      "purl": "pkg:npm/%40babel/traverse@7.25.1#packages/babel-traverse",
       "externalReferences": [
         {
           "url": "git+https://github.com/babel/babel.git#packages/babel-traverse",
@@ -2594,12 +2594,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@babel/traverse/-/traverse-7.25.0.tgz",
+          "url": "https://registry.npmjs.org/@babel/traverse/-/traverse-7.25.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "b9b00b4e11d0cb81827fa99b6fee5944d98b2c223b6c9ddff10e8b1c14919522925a3e5aedd494cc904bbf756e22116b14f8231782333c5e7aed81bf1d209d64"
+              "content": "2eb1c7a16ab4f19a66985a8103337e854756c32e73b7b1466bf855c0c70ea96e8e56dc2a6a80f9bad7ee19853cec963175980b52f92d02c9f7ee3fec611f6c88"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -2621,7 +2621,7 @@
           "name": "generator",
           "group": "@babel",
           "version": "7.25.0",
-          "bom-ref": "@babel/traverse@7.25.0|@babel/generator@7.25.0",
+          "bom-ref": "@babel/traverse@7.25.1|@babel/generator@7.25.0",
           "author": "The Babel Team",
           "description": "Turns an AST into code.",
           "licenses": [
@@ -7875,8 +7875,8 @@
       "type": "library",
       "name": "plugin-transform-function-name",
       "group": "@babel",
-      "version": "7.25.0",
-      "bom-ref": "@babel/plugin-transform-function-name@7.25.0",
+      "version": "7.25.1",
+      "bom-ref": "@babel/plugin-transform-function-name@7.25.1",
       "author": "The Babel Team",
       "description": "Apply ES2015 function.name semantics to all functions",
       "licenses": [
@@ -7886,7 +7886,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40babel/plugin-transform-function-name@7.25.0#packages/babel-plugin-transform-function-name",
+      "purl": "pkg:npm/%40babel/plugin-transform-function-name@7.25.1#packages/babel-plugin-transform-function-name",
       "externalReferences": [
         {
           "url": "git+https://github.com/babel/babel.git#packages/babel-plugin-transform-function-name",
@@ -7904,12 +7904,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@babel/plugin-transform-function-name/-/plugin-transform-function-name-7.25.0.tgz",
+          "url": "https://registry.npmjs.org/@babel/plugin-transform-function-name/-/plugin-transform-function-name-7.25.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "09099f4a72b5e1e62ef367eee86942c117221c1ee6a7ba0b37e0dec860c3c14afd70cc2e495be224a3d7c3f61c45865d0754dd94b2561c7c17c27c03d569c299"
+              "content": "4d554955d5bd44a30d8092652ed1ec2834f27636406f022c9fac9204f41a100514e7e815be526dffd9d19aa55bb15fc805a9d18f35a868040a2e86a6595394b8"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -26199,8 +26199,8 @@
       "type": "library",
       "name": "ws",
       "group": "@types",
-      "version": "8.5.11",
-      "bom-ref": "@types/ws@8.5.11",
+      "version": "8.5.12",
+      "bom-ref": "@types/ws@8.5.12",
       "description": "TypeScript definitions for ws",
       "licenses": [
         {
@@ -26209,7 +26209,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40types/ws@8.5.11#types/ws",
+      "purl": "pkg:npm/%40types/ws@8.5.12#types/ws",
       "externalReferences": [
         {
           "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/ws",
@@ -26227,12 +26227,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@types/ws/-/ws-8.5.11.tgz",
+          "url": "https://registry.npmjs.org/@types/ws/-/ws-8.5.12.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "e3eabb3f98774a92716817edd03ce96ebea598c6aa87426bdad6e1259fe5b80c2f0fba214829e2624c33fe92f1b93da1d0439ae900038098f52a8f93cd17d9fb"
+              "content": "ded3d192fd44b640e9ce58322b223ca46b0664018f11a5debb40ce8f90c8db925af756dd01875d6076c00d1615ad93116df5bed65e58c175432a884324d43191"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -41332,8 +41332,8 @@
     {
       "type": "library",
       "name": "minipass-json-stream",
-      "version": "1.0.1",
-      "bom-ref": "minipass-json-stream@1.0.1",
+      "version": "1.0.2",
+      "bom-ref": "minipass-json-stream@1.0.2",
       "author": "Isaac Z. Schlueter",
       "description": "Like JSONStream, but using Minipass streams",
       "licenses": [
@@ -41343,30 +41343,30 @@
           }
         }
       ],
-      "purl": "pkg:npm/minipass-json-stream@1.0.1",
+      "purl": "pkg:npm/minipass-json-stream@1.0.2",
       "externalReferences": [
         {
-          "url": "git+https://github.com/npm/minipass-json-stream.git",
+          "url": "git+https://github.com/isaacs/minipass-json-stream.git",
           "type": "vcs",
           "comment": "as detected from PackageJson property \"repository.url\""
         },
         {
-          "url": "https://github.com/npm/minipass-json-stream#readme",
+          "url": "https://github.com/isaacs/minipass-json-stream#readme",
           "type": "website",
           "comment": "as detected from PackageJson property \"homepage\""
         },
         {
-          "url": "https://github.com/npm/minipass-json-stream/issues",
+          "url": "https://github.com/isaacs/minipass-json-stream/issues",
           "type": "issue-tracker",
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/minipass-json-stream/-/minipass-json-stream-1.0.1.tgz",
+          "url": "https://registry.npmjs.org/minipass-json-stream/-/minipass-json-stream-1.0.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "383a98d7c519b7f23c93e6fbae5d8010d81b584f080d86a6fae9dd20938dbe2800cfc291e4659b96c15311f42cd16383b236d25d6966f891c4bfc1abe937dd6e"
+              "content": "9b2c5e7939b9ee562cf291f69f13f3984120f03188816fbd9afe83e09643da96bcd48fce063794ecfb4809757a73d79119303924c0ecb883d46510b204c60d86"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -41387,7 +41387,7 @@
           "type": "library",
           "name": "minipass",
           "version": "3.3.6",
-          "bom-ref": "minipass-json-stream@1.0.1|minipass@3.3.6",
+          "bom-ref": "minipass-json-stream@1.0.2|minipass@3.3.6",
           "author": "Isaac Z. Schlueter",
           "description": "minimal implementation of a PassThrough stream",
           "licenses": [
@@ -41441,7 +41441,7 @@
           "type": "library",
           "name": "yallist",
           "version": "4.0.0",
-          "bom-ref": "minipass-json-stream@1.0.1|yallist@4.0.0",
+          "bom-ref": "minipass-json-stream@1.0.2|yallist@4.0.0",
           "author": "Isaac Z. Schlueter",
           "description": "Yet Another Linked List",
           "licenses": [
@@ -66277,7 +66277,7 @@
       "type": "library",
       "name": "string-width",
       "version": "4.2.3",
-      "bom-ref": "BomRef.qvirnutntog.r6f2gu7puqg",
+      "bom-ref": "BomRef.580m0epek8.fh4n3fbgpr",
       "author": "Sindre Sorhus",
       "description": "Get the visual width of a string - the number of columns required to display it",
       "licenses": [
@@ -66385,7 +66385,7 @@
       "type": "library",
       "name": "strip-ansi",
       "version": "6.0.1",
-      "bom-ref": "BomRef.ufejvuqdarg.a8g95s67438",
+      "bom-ref": "BomRef.han4reecto.0144nrau35o",
       "author": "Sindre Sorhus",
       "description": "Strip ANSI escape codes from a string",
       "licenses": [
@@ -70418,7 +70418,7 @@
         "@types/serve-index@1.9.4",
         "@types/serve-static@1.15.7",
         "@types/sockjs@0.3.36",
-        "@types/ws@8.5.11",
+        "@types/ws@8.5.12",
         "ansi-html-community@0.0.8",
         "bonjour-service@1.2.1",
         "chokidar@3.6.0",
@@ -70577,7 +70577,7 @@
         "@babel/helpers@7.25.0",
         "@babel/parser@7.25.0",
         "@babel/template@7.25.0",
-        "@babel/traverse@7.25.0",
+        "@babel/traverse@7.25.1",
         "@babel/types@7.25.0",
         "@angular/compiler-cli@17.3.12|@babel/core@7.23.9|convert-source-map@2.0.0",
         "debug@4.3.6",
@@ -70603,7 +70603,7 @@
         "@babel/helpers@7.25.0",
         "@babel/parser@7.25.0",
         "@babel/template@7.25.0",
-        "@babel/traverse@7.25.0",
+        "@babel/traverse@7.25.1",
         "@babel/types@7.25.0",
         "@babel/core@7.24.0|convert-source-map@2.0.0",
         "debug@4.3.6",
@@ -70678,28 +70678,28 @@
         "@babel/helper-module-imports@7.24.7",
         "@babel/helper-simple-access@7.24.7",
         "@babel/helper-validator-identifier@7.24.7",
-        "@babel/traverse@7.25.0"
+        "@babel/traverse@7.25.1"
       ]
     },
     {
       "ref": "@babel/helper-module-imports@7.24.7",
       "dependsOn": [
-        "@babel/traverse@7.25.0",
+        "@babel/traverse@7.25.1",
         "@babel/types@7.25.0"
       ]
     },
     {
       "ref": "@babel/helper-simple-access@7.24.7",
       "dependsOn": [
-        "@babel/traverse@7.25.0",
+        "@babel/traverse@7.25.1",
         "@babel/types@7.25.0"
       ]
     },
     {
-      "ref": "@babel/traverse@7.25.0",
+      "ref": "@babel/traverse@7.25.1",
       "dependsOn": [
         "@babel/code-frame@7.24.7",
-        "@babel/traverse@7.25.0|@babel/generator@7.25.0",
+        "@babel/traverse@7.25.1|@babel/generator@7.25.0",
         "@babel/parser@7.25.0",
         "@babel/template@7.25.0",
         "@babel/types@7.25.0",
@@ -70708,7 +70708,7 @@
       ]
     },
     {
-      "ref": "@babel/traverse@7.25.0|@babel/generator@7.25.0",
+      "ref": "@babel/traverse@7.25.1|@babel/generator@7.25.0",
       "dependsOn": [
         "@babel/types@7.25.0",
         "@jridgewell/gen-mapping@0.3.5",
@@ -70809,7 +70809,7 @@
         "@babel/core@7.24.0",
         "@babel/helper-remap-async-to-generator@7.25.0|@babel/helper-annotate-as-pure@7.24.7",
         "@babel/helper-wrap-function@7.25.0",
-        "@babel/traverse@7.25.0"
+        "@babel/traverse@7.25.1"
       ]
     },
     {
@@ -70822,7 +70822,7 @@
       "ref": "@babel/helper-wrap-function@7.25.0",
       "dependsOn": [
         "@babel/template@7.25.0",
-        "@babel/traverse@7.25.0",
+        "@babel/traverse@7.25.1",
         "@babel/types@7.25.0"
       ]
     },
@@ -70980,7 +70980,7 @@
         "@babel/plugin-transform-exponentiation-operator@7.24.7",
         "@babel/plugin-transform-export-namespace-from@7.24.7",
         "@babel/plugin-transform-for-of@7.24.7",
-        "@babel/plugin-transform-function-name@7.25.0",
+        "@babel/plugin-transform-function-name@7.25.1",
         "@babel/plugin-transform-json-strings@7.24.7",
         "@babel/plugin-transform-literals@7.24.7",
         "@babel/plugin-transform-logical-assignment-operators@7.24.7",
@@ -71042,7 +71042,7 @@
     {
       "ref": "@babel/helper-skip-transparent-expression-wrappers@7.24.7",
       "dependsOn": [
-        "@babel/traverse@7.25.0",
+        "@babel/traverse@7.25.1",
         "@babel/types@7.25.0"
       ]
     },
@@ -71060,7 +71060,7 @@
       "dependsOn": [
         "@babel/core@7.24.0",
         "@babel/helper-plugin-utils@7.24.8",
-        "@babel/traverse@7.25.0"
+        "@babel/traverse@7.25.1"
       ]
     },
     {
@@ -71293,7 +71293,7 @@
         "@babel/helper-optimise-call-expression@7.24.7",
         "@babel/helper-replace-supers@7.25.0",
         "@babel/helper-skip-transparent-expression-wrappers@7.24.7",
-        "@babel/traverse@7.25.0",
+        "@babel/traverse@7.25.1",
         "@babel/helper-create-class-features-plugin@7.25.0|semver@6.3.1"
       ]
     },
@@ -71309,7 +71309,7 @@
     {
       "ref": "@babel/helper-member-expression-to-functions@7.24.8",
       "dependsOn": [
-        "@babel/traverse@7.25.0",
+        "@babel/traverse@7.25.1",
         "@babel/types@7.25.0"
       ]
     },
@@ -71325,7 +71325,7 @@
         "@babel/core@7.24.0",
         "@babel/helper-member-expression-to-functions@7.24.8",
         "@babel/helper-optimise-call-expression@7.24.7",
-        "@babel/traverse@7.25.0"
+        "@babel/traverse@7.25.1"
       ]
     },
     {
@@ -71345,7 +71345,7 @@
         "@babel/helper-compilation-targets@7.24.8",
         "@babel/helper-plugin-utils@7.24.8",
         "@babel/helper-replace-supers@7.25.0",
-        "@babel/traverse@7.25.0",
+        "@babel/traverse@7.25.1",
         "globals@11.12.0"
       ]
     },
@@ -71404,7 +71404,7 @@
     {
       "ref": "@babel/helper-builder-binary-assignment-operator-visitor@7.24.7",
       "dependsOn": [
-        "@babel/traverse@7.25.0",
+        "@babel/traverse@7.25.1",
         "@babel/types@7.25.0"
       ]
     },
@@ -71425,12 +71425,12 @@
       ]
     },
     {
-      "ref": "@babel/plugin-transform-function-name@7.25.0",
+      "ref": "@babel/plugin-transform-function-name@7.25.1",
       "dependsOn": [
         "@babel/core@7.24.0",
         "@babel/helper-compilation-targets@7.24.8",
         "@babel/helper-plugin-utils@7.24.8",
-        "@babel/traverse@7.25.0"
+        "@babel/traverse@7.25.1"
       ]
     },
     {
@@ -71487,7 +71487,7 @@
         "@babel/helper-module-transforms@7.25.0",
         "@babel/helper-plugin-utils@7.24.8",
         "@babel/helper-validator-identifier@7.24.7",
-        "@babel/traverse@7.25.0"
+        "@babel/traverse@7.25.1"
       ]
     },
     {
@@ -73377,7 +73377,7 @@
       ]
     },
     {
-      "ref": "@types/ws@8.5.11",
+      "ref": "@types/ws@8.5.12",
       "dependsOn": [
         "@types/node@20.14.13"
       ]
@@ -74805,7 +74805,7 @@
         "@npmcli/redact@1.1.0",
         "make-fetch-happen@13.0.1",
         "minipass-fetch@3.0.5",
-        "minipass-json-stream@1.0.1",
+        "minipass-json-stream@1.0.2",
         "minipass@7.1.2",
         "minizlib@2.1.2",
         "npm-package-arg@11.0.1",
@@ -74964,20 +74964,20 @@
       "ref": "minizlib@2.1.2|yallist@4.0.0"
     },
     {
-      "ref": "minipass-json-stream@1.0.1",
+      "ref": "minipass-json-stream@1.0.2",
       "dependsOn": [
         "jsonparse@1.3.1",
-        "minipass-json-stream@1.0.1|minipass@3.3.6"
+        "minipass-json-stream@1.0.2|minipass@3.3.6"
       ]
     },
     {
-      "ref": "minipass-json-stream@1.0.1|minipass@3.3.6",
+      "ref": "minipass-json-stream@1.0.2|minipass@3.3.6",
       "dependsOn": [
-        "minipass-json-stream@1.0.1|yallist@4.0.0"
+        "minipass-json-stream@1.0.2|yallist@4.0.0"
       ]
     },
     {
-      "ref": "minipass-json-stream@1.0.1|yallist@4.0.0"
+      "ref": "minipass-json-stream@1.0.2|yallist@4.0.0"
     },
     {
       "ref": "jsonparse@1.3.1"
@@ -77704,9 +77704,9 @@
     {
       "ref": "@isaacs/cliui@8.0.2",
       "dependsOn": [
-        "BomRef.qvirnutntog.r6f2gu7puqg",
+        "BomRef.580m0epek8.fh4n3fbgpr",
         "@isaacs/cliui@8.0.2|string-width@5.1.2",
-        "BomRef.ufejvuqdarg.a8g95s67438",
+        "BomRef.han4reecto.0144nrau35o",
         "@isaacs/cliui@8.0.2|strip-ansi@7.1.0",
         "wrap-ansi@7.0.0",
         "@isaacs/cliui@8.0.2|wrap-ansi@8.1.0"
@@ -77744,7 +77744,7 @@
       "ref": "@isaacs/cliui@8.0.2|ansi-styles@6.2.1"
     },
     {
-      "ref": "BomRef.qvirnutntog.r6f2gu7puqg",
+      "ref": "BomRef.580m0epek8.fh4n3fbgpr",
       "dependsOn": [
         "emoji-regex@8.0.0",
         "is-fullwidth-code-point@3.0.0",
@@ -77755,7 +77755,7 @@
       "ref": "eastasianwidth@0.2.0"
     },
     {
-      "ref": "BomRef.ufejvuqdarg.a8g95s67438",
+      "ref": "BomRef.han4reecto.0144nrau35o",
       "dependsOn": [
         "ansi-regex@5.0.1"
       ]
