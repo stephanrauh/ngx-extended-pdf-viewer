@@ -40,11 +40,13 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 Version 20.0.2 is a security fix. It solves CVE-2024-4367. I strongly recommend updating to the latest version of ngx-extended-pdf-viewer as soon as possible, or to version 20.0.2 as a minimum. Older versions contain a bug allowing malicious PDF files to run arbitrary code. Kudos go to GitHub users ScratchPDX and Deepak Shakya to tell me about it, so I could provide a hotfix during my vacations.
 
-## Version 21 beta versions: Sneak preview to an optimized viewer
+## Version 21: an optimized viewer
 
-Version 21 is a major refactoring. At the moment, I'm calling it a beta version, but it should be ready for production. I plan to publish the final version in the next few days.
+Version 21 is a major refactoring. The new version reduces the memory footprint and start-up times. I consider it a major progress: now the architecture is significantly cleaner. It's still work in progress, but you should notice the difference.
 
-The new version reduces the memory footprint and start-up times. It
+If you're using Content Security Policy (CSP), you might want to follow [issue 2362](https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/2362). Earlier versions of the viewer offered a makeshift support of CSP. I hope to come up with a much cleaner solution soon.
+
+Let's have a look at the changes in more detail. Version 21
 
 - updates to pdf.js 4.5
 - gets rid of RxJS
@@ -59,9 +61,8 @@ Version 21 contains several breaking changes. The good news is that I assume the
 - `window.PDFViewerApplication` is now undefined. Earlier versions of the viewer stored many attributes, objects, and functions in the global namespace (i.e. `globalThis` or `window`). Many of these attributes have already migrated to `PDFScriptLoaderService.PDFViewerApplication`. If you need the `PDFViewerApplication`, you can get it from the `PdfNoticationService`.
 - The API for custom thumbnails has slightly changed. Now it doesn't require you to add functions to the `window` object.
 - The RxJS subjects `recalculateSize$` and `onPDFJSInit` are gone. You can use ``onPDFJSInitSignal` to replace `onPDFJSInit`. I suspect nobody uses `recalculateSize$`, so I didn't implement a replacement yet.
-- The attributes `[minifiedJSLibraries]` and `[forceUsingLegacyES5]` have moved from the component to the new `PDFScriptLoaderService`. That, in turn, makes it difficult to set them. I haven't decided yet how to proceed. Chances are I'm going to move them to the `pdfDefaultOptions`.
 
-## What's new in version 20.5.0?
+## What's new in version 20.5.x?
 
 Basically, version 20.5.0 updates to pdf.js 4.3 and solves some memory leak issues. However, that turned out to be a major task, involving a major rewrite of the initialization of the library.
 
@@ -72,17 +73,6 @@ Breaking changes:
 - I've modified the way the application initializes. It's unlikely you notice this, but if you rely on `window.PDFViewerApplication` to be available early, you might see errors. Starting with version 20.5.0, the recommended approach is to listen to the signal `PDFNotificationService.onPDFJSInitSignal()`. When the viewer is initialized, the signal fires and sends the references to `PDFViewerApplication` and a few other resources. After receiving this signal, you can safely use the `PDFViewerApplication` sent by the signal. When the viewer is destroy, the signal fires again, this time sending `undefined` to indicate you must stop using `PDFViewerApplication`. The next time the viewer initializes, the signal fires again, this time passing the reference to the new instance of `PDFViewerApplication`.
 - The +/- zoom buttons now have a different id. I've renamed them after observing these buttons always triggered two events, on triggered by pdf.js, the other by ngx-extended-pdf-viewer. If you rely on the id for some reason, that might be a breaking change.
 - If you want to use `ngxConsoleFilter`, now you have to register it later. You can safely register the method when `PDFNotificationService.onPDFJSInit` is fired. However, this event is subject to change, too - if everything goes according to plan, version 21 is going to replace this `Observable` by a `Signal`.
-
-## What's new in version 20?
-
-Version 20.2.0 fixes a few bugs in PDF files with forms. Now checkboxes always show the value stored in the PDF files (unless overwritten by `(formDataChange)´), and text fields always show the value sent by `[formData]` even if there's a pre-formatted value in the PDF file. The bug fix might break your application if you rely on the error. I don't consider this a breaking change, but even so, I've increase the minor version number to make you aware of potential problems.
-
-Version 20 contains a couple of minor bugfixes that might break your application. It's not likely, but I decided to play it safe and to increase the major version number. The new version
-
-- updates to pdf.js 4.1. The bleeding-edge is a sneak preview of version 4.3, containing the latests (and possibly buggy) additions from pdf.js.
-- I've improved CSS encapsulation. Recently, I'd added a couple of CSS files and forgot to wrap these file into the `ngx-extended-pdf-viewer`. If you've modified some of my CSS rules, you may want to add the `.ngx-extended-pdf-viewer` class to the CSS selector. If you haven't done so yet, your CSS rule is probably broken.
-- I've fixed bugs with checkboxes and radiobuttons in forms. This might break your application if it relies on the bugs.
-- I've removed the minified ES5 build. I suspect nowadays very few people are using the ES5 build, so let's reduce the size of this package.
 
 ## Full changelog
 
@@ -99,9 +89,10 @@ Would you like to participate in a popular open source-project? It's easy: just 
 ## Features
 
 - programmatic API for many features, such as searching
-- Editor: add text, images, or free-style drawings to your PDF file.
+- resizable toolbars to support small mobile devices or working places where users wear gloves
+- Editor: add text, images, highlights, or free-style drawings to your PDF file.
 - Printing
-- Drag and drop PDF files to the viewer
+- Dragging and dropping PDF files to the viewer
 - Support for forms, including two-way binding
 - XFA forms are also supported (with a few limitations)
 - (Limited) support for signatures (lacking verification of the signature, so use at your own risk!)
@@ -121,7 +112,7 @@ Would you like to participate in a popular open source-project? It's easy: just 
 - Responsive design that even includes your custom toolbars
 - Color theming
 
-Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 4.0.269, released in late November 2023.
+Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 4.5, released in late July 2024.
 
 ## Alternatives
 
@@ -131,7 +122,7 @@ Even I have to admit my pet project doesn't match every requirement. There are s
   <summary><b>Expand to learn more about the other options to display PDF files in Angular</b></summary>
   If you only need the base functionality, I'll happily pass you to <a href="https://github.com/vadimdez/ng2-pdf-viewer/" target="#">the project of Vadym Yatsyuk</a>. Vadym does a great job delivering a no-nonsense PDF viewer. However, if you need something that can easily pass as the native viewer on a gloomy day, ngx-extended-pdf-viewer is your friend.
 
-There's also a direct counterpart to my library: <a href="https://www.npmjs.com/package/ng2-pdfjs-viewer" target="#">ng2-pdfjs-viewer</a>. As far as I can see, it's also a good library. As of May 2021, it's running on PDF.js 2.2.171. It wraps the PDF viewer in an iFrame. That's a more reliable approach, but it also offers fewer options. The list of attributes is shorter, and the PDF viewer can't emit events to your application. If you're not happy with my library, check out ng2-pdfjs-viewer. It's a good library, too. Its unique selling point is displaying multiple PDF files simultaneously on the same page.
+There's also a direct counterpart to my library: <a href="https://www.npmjs.com/package/ng2-pdfjs-viewer" target="#">ng2-pdfjs-viewer</a>. As far as I can see, it's also a good library. As of Augst 2024, it's running on PDF.js 2.2.171. It wraps the PDF viewer in an iFrame. That's a more reliable approach, but it also offers fewer options. The list of attributes is shorter, and the PDF viewer can't emit events to your application. If you're not happy with my library, check out ng2-pdfjs-viewer. It's a good library, too. Its unique selling point is displaying multiple PDF files simultaneously on the same page.
 
 You might also try to use the native PDF viewer of your browser. That's a valid approach. It's even the preferred approach. However, `ngx-extended-pdf-viewer` gives you a wide range of options that aren't available using the native API.
 
@@ -139,7 +130,7 @@ You might also try to use the native PDF viewer of your browser. That's a valid 
 
 ## Running the showcase locally
 
-As a rule of thumb, I recommend cloning the [showcase project from GitHub](https://github.com/stephanrauh/extended-pdf-viewer-showcase). It's a standard Angular CLI application, so you'll get it up and running in less than ten minutes. It's a good starting point to do your experiments. Maybe even more important: you'll learn whether the library works on your machine. (Of course, it does, but it's always good to double-check!)
+As a rule of thumb, I recommend cloning the [showcase project from GitHub](https://github.com/stephanrauh/extended-pdf-viewer-showcase) to get familiar with the library. It's a standard Angular CLI application, so you'll get it up and running in less than ten minutes. It's a good starting point to do your experiments. Maybe even more important: you'll learn whether the library works on your machine. (Of course, it does, but it's always good to double-check!)
 
 Currently, the minimum required version is Angular 16. The idea is to support the four most current versions of Angular, which gives you roughly two years to update. However, supporting so many versions isn't always possible.
 
