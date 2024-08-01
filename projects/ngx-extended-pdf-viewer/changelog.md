@@ -580,3 +580,5 @@
 - 21.0.0-beta.1 #2337 stop loading the worker file twice when re-using an existing instance of `PDFViewerApplication`; removed `pdfDefaultOptions` from `globalThis`; #2467 update to canvas-size 2.0, activate the automatic detection of the maximum canvas size by default, and improve the algorithm determining the maximum canvas size; #2459 allow numeric default options to be passed as string (because that frequently happens when there's no explicit type conversion of values passed from the browser); #2455 implemented `[enablePrintAutoRotate]` as an attribute because `pdfDefaultOptions.enablePrintAutoRotate` is only read during the initialization of the viewer; `[enablePrintAutoRotate]` can be changed at any point in time; #2468 fixed `[enableDragAndDrop]`
 - 21.0.0-beta.2 #2362 / #2440 improved CSP support by eliminating inline styles
 - 21.0.0-beta.3 #2362 improved CSP support by reverting the changes introduced with #1447
+- 21.0.0 updated the README
+- 21.0.1 updated the README

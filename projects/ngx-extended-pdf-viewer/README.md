@@ -11,7 +11,6 @@
     <img src="https://badge.fury.io/js/ngx-extended-pdf-viewer.svg" alt="npm version">
   </a>
   <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg"></a>
-  <a href="https://openbase.io/js/ngx-extended-pdf-viewer?utm_source=embedded&utm_medium=badge&utm_campaign=rate-badge"><img src="https://badges.openbase.io/js/rating/ngx-extended-pdf-viewer.svg"></a>
   <a href="https://sonarcloud.io/summary/new_code?id=stephanrauh_ngx-extended-pdf-viewer"><img src="https://sonarcloud.io/api/project_badges/measure?project=stephanrauh_ngx-extended-pdf-viewer&metric=alert_status"></a>
   <a href="https://unpkg.com/browse/ngx-extended-pdf-viewer/">
     <img src="https://img.shields.io/badge/cdn-unpkg.com-orange">
