@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, effect } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, ViewEncapsulation, effect } from '@angular/core';
 import { UpdateUIStateEvent } from '../../events/update-ui-state-event';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
@@ -8,6 +8,7 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
   selector: 'pdf-rotate-page-cw',
   templateUrl: './pdf-rotate-page-cw.component.html',
   styleUrls: ['./pdf-rotate-page-cw.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class PdfRotatePageCwComponent {
   @Input()
