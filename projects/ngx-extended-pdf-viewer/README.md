@@ -53,6 +53,7 @@ Let's have a look at the changes in more detail. Version 21
 - reduces the memory leaks (that's partially finished, but you should notice an improvement)
 - reduces the number of requests loading JavaScript files
 - moves the code loading the huge JavaScript files to a service (so the viewer can reuse the JavaScript files instead of reloading them)
+- improves (and fixes) the responsive design of the toolbar (since version 21.1.0)
 - and it fixes quite a few bugs.
 
 Version 21 contains several breaking changes. The good news is that I assume the vast majority of developers won't even notice. These breaking changes are:
@@ -60,6 +61,7 @@ Version 21 contains several breaking changes. The good news is that I assume the
 - `window.PDFViewerApplication` is now undefined. Earlier versions of the viewer stored many attributes, objects, and functions in the global namespace (i.e. `globalThis` or `window`). Many of these attributes have already migrated to `PDFScriptLoaderService.PDFViewerApplication`. If you need the `PDFViewerApplication`, you can get it from the `PdfNoticationService`.
 - The API for custom thumbnails has slightly changed. Now it doesn't require you to add functions to the `window` object.
 - The RxJS subjects `recalculateSize$` and `onPDFJSInit` are gone. You can use ``onPDFJSInitSignal` to replace `onPDFJSInit`. I suspect nobody uses `recalculateSize$`, so I didn't implement a replacement yet.
+- Version 21.1.0 improves the responsive design of the toolbar and updated the breakpoint, which had sort of broken after introducing the four editor buttons. This means you might see more buttons, and it moves the zoom dropdown to the left. If you don't want to see the extra buttons, you can hide them via the `[showXXX]` attributes.
 
 ## What's new in version 20.5.x?
 

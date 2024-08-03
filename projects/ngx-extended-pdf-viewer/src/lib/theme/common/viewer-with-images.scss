@@ -526,6 +526,10 @@ ngx-extended-pdf-viewer {
 ngx-extended-pdf-viewer {
   #toolbarViewer {
     min-height: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
   }
 
   #loadingBar {
@@ -832,33 +836,27 @@ ngx-extended-pdf-viewer {
     display: none;
   }
 
-  #toolbarViewerMiddle {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+  #toolbarViewerMiddleContainer {
+    /* Prevents the text from wrapping and ensures it stays in one line: */
+    white-space: nowrap;
+  }
+
+  #toolbarViewerLeft,
+  #toolbarViewerRight,
+  #toolbarViewerMiddleContainer {
+    /* Allows the column to shrink and grow as needed: */
+    flex: 0 1 auto;
   }
 }
 
 html[dir='ltr'] ngx-extended-pdf-viewer #toolbarViewerLeft,
 html[dir='rtl'] ngx-extended-pdf-viewer #toolbarViewerRight {
-  float: left;
   margin-left: 4px;
-}
-
-html[dir="ltr"] #toolbarSidebarLeft,
-html[dir="rtl"] #toolbarSidebarRight {
-  float: left;
 }
 
 html[dir='ltr'] ngx-extended-pdf-viewer #toolbarViewerRight,
 html[dir='rtl'] ngx-extended-pdf-viewer #toolbarViewerLeft {
-  float: right;
   margin-right: 4px;
-}
-
-html[dir="ltr"] #toolbarSidebarRight,
-html[dir="rtl"] #toolbarSidebarLeft {
-  float: right;
 }
 
 html[dir='ltr'] ngx-extended-pdf-viewer #toolbarViewerLeft>*,

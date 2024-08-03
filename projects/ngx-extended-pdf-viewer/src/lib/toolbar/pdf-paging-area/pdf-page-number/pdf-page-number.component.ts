@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ResponsiveVisibility } from '../../../responsive-visibility';
 
 @Component({
   selector: 'pdf-page-number',
@@ -7,5 +8,7 @@ import { Component, Input } from '@angular/core';
 })
 export class PdfPageNumberComponent {
   @Input()
-  public showPagingButtons = true;
+  public showPageNumber: ResponsiveVisibility = true;
+  @Input()
+  public showPageLabel: ResponsiveVisibility = true;
 }

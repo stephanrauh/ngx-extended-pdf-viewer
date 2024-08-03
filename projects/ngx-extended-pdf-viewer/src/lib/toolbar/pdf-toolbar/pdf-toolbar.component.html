@@ -21,9 +21,20 @@
     <div id="toolbarViewerLeft">
       <pdf-toggle-sidebar [show]="showSidebarButton" [sidebarVisible]="sidebarVisible"></pdf-toggle-sidebar>
       <pdf-find-button [showFindButton]="showFindButton" [textLayer]="textLayer" [findbarVisible]="findbarVisible"></pdf-find-button>
-      <pdf-paging-area [showPagingButtons]="showPagingButtons"></pdf-paging-area>
+      <pdf-paging-area
+        [showPagingButtons]="showPagingButtons"
+        [showFirstAndLastPageButtons]="showFirstAndLastPageButtons"
+        [showPreviousAndNextPageButtons]="showPreviousAndNextPageButtons"
+        [showPageNumber]="showPageNumber"
+        [showPageLabel]="showPageLabel"
+      ></pdf-paging-area>
     </div>
-    <pdf-zoom-toolbar [showZoomButtons]="showZoomButtons" [zoomLevels]="zoomLevels"></pdf-zoom-toolbar>
+    <pdf-zoom-toolbar
+      id="toolbarViewerMiddleContainer"
+      [showZoomButtons]="showZoomButtons"
+      [showZoomDropdown]="showZoomDropdown"
+      [zoomLevels]="zoomLevels"
+    ></pdf-zoom-toolbar>
     <div id="toolbarViewerRight">
       <pdf-document-properties [show]="showPropertiesButton"></pdf-document-properties>
       <pdf-no-spread [scrollMode]="scrollMode" [show]="showSpreadButton"></pdf-no-spread>

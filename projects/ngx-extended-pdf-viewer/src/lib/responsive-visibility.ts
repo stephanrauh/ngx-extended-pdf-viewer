@@ -11,9 +11,9 @@ export class PdfBreakpoints {
 
   static lg = 660;
 
-  static xl = 780;
+  static xl = 790;
 
-  static xxl = 900;
+  static xxl = 910;
 }
 
 export type ResponsiveCSSClass =

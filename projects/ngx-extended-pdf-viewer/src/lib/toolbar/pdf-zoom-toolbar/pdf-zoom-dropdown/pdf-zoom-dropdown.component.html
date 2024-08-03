@@ -1,4 +1,4 @@
-<span id="scaleSelectContainer">
+<span id="scaleSelectContainer" [class]="showZoomDropdown | responsiveCSSClass : 'hiddenTinyView'">
   <select id="scaleSelect" title="Zoom" data-l10n-id="pdfjs-zoom-select" #sizeSelector>
     <option
       *ngFor="let level of _zoomLevels"

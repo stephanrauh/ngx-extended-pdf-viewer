@@ -1,5 +1,5 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { CSP_NONCE, Component, Inject, Input, OnChanges, OnDestroy, OnInit, Optional, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { CSP_NONCE, Component, Inject, Input, OnDestroy, Optional, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { PdfCspPolicyService } from '../pdf-csp-policy.service';
 import { PdfBreakpoints } from '../responsive-visibility';
 
@@ -8,7 +8,7 @@ import { PdfBreakpoints } from '../responsive-visibility';
   templateUrl: './dynamic-css.component.html',
   styleUrls: ['./dynamic-css.component.css'],
 })
-export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
+export class DynamicCssComponent implements OnDestroy {
   @Input()
   public zoom = 1.0;
 
@@ -55,16 +55,6 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
 
 .pdf-margin-top--2px {
   margin-top: -2px;
-}
-
-@media all and (max-width: ${this.xl}px) {
-  #toolbarViewerMiddle {
-    display: table;
-    margin: auto;
-    left: auto;
-    position: inherit;
-    transform: none;
-  }
 }
 
 @media all and (max-width: ${this.xxl}) {
@@ -129,12 +119,6 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   }
 }
 
-@media all and (max-width: ${this.sm}px) {
-  #scaleSelectContainer {
-    display: none;
-  }
-}
-
 #outerContainer .visibleXLView,
 #outerContainer .visibleXXLView,
 #outerContainer .visibleTinyView {
@@ -153,15 +137,6 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   #outerContainer .visibleXLView {
     display: inherit;
   }
-
-  #toolbarViewerMiddle {
-    -webkit-transform: translateX(-36%);
-    transform: translateX(-36%);
-    display: unset;
-    margin: unset;
-    left: 50%;
-    position: absolute;
-  }
 }
 
 @media all and (max-width: ${this.xxl}px) {
@@ -170,13 +145,6 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
   }
   #outerContainer  #mainContainer .visibleXXLView {
     display: inherit;
-  }
-}
-
-@media all and (max-width: ${this.md}px) {
-  #toolbarViewerMiddle {
-    -webkit-transform: translateX(-26%);
-    transform: translateX(-26%);
   }
 }
 
@@ -214,13 +182,15 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public ngOnInit() {
-    this.injectStyle();
-  }
+  public updateToolbarWidth() {
+    const container = document.getElementById('toolbarViewer') ?? document.getElementById('outerContainer');
+    if (!container) {
+      return;
+    }
+    const toolbarWidthInPixels = container.clientWidth;
 
-  public ngOnChanges() {
     const fullWith = this.document.body.clientWidth;
-    const partialViewScale = fullWith / this.width;
+    const partialViewScale = fullWith / toolbarWidthInPixels;
     const scaleFactor = partialViewScale * (this.zoom ? this.zoom : 1);
 
     this.xs = scaleFactor * PdfBreakpoints.xs;
@@ -243,12 +213,6 @@ export class DynamicCssComponent implements OnInit, OnChanges, OnDestroy {
       this.renderer.appendChild(this.document.head, styles);
     } else {
       this.pdfCspPolicyService.addTrustedCSS(styles, this.style);
-    }
-  }
-
-  private injectStyle() {
-    if (this.width === 3.14159265359) {
-      setTimeout(() => this.ngOnChanges(), 1);
     }
   }
 

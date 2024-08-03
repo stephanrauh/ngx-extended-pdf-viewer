@@ -581,4 +581,4 @@
 - 21.0.0-beta.2 #2362 / #2440 improved CSP support by eliminating inline styles
 - 21.0.0-beta.3 #2362 improved CSP support by reverting the changes introduced with #1447
 - 21.0.0 updated the README
-- 21.0.1 updated the README
+- 21.1.0 updated the README; #2466 fixed responsive design and fine-tuned the default values of the breakpoints; implemented `[showPreviousAndNextPageButtons]`, `[showFirstAndLastPageButtons]`,`[showPageNumber]`,`| [showPageLabel]`, and`[showZoomDropdown]`.

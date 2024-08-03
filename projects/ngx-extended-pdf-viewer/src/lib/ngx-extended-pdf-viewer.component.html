@@ -2,14 +2,14 @@
 <pdf-light-theme *ngIf="theme === 'light'"></pdf-light-theme>
 <pdf-acroform-default-theme></pdf-acroform-default-theme>
 
-<pdf-dynamic-css [zoom]="mobileFriendlyZoomScale" [width]="toolbarWidthInPixels"></pdf-dynamic-css>
+<pdf-dynamic-css #DynamicCssComponent [zoom]="mobileFriendlyZoomScale"></pdf-dynamic-css>
 <ng-content *ngTemplateOutlet="customPdfViewer ? customPdfViewer : defaultPdfViewer"></ng-content>
 
 <ng-template #defaultPdfViewer>
   <div class="zoom" [style.height]="minHeight ? minHeight : height" #root>
     <div class="html">
       <div class="body pdf-js-version-{{ majorMinorPdfJsVersion }}" [style.backgroundColor]="backgroundColor">
-        <div id="outerContainer" (window:resize)="onResize()">
+        <div id="outerContainer">
           <div class="free-floating-bar" *ngIf="showFreeFloatingBar">
             <ng-content *ngTemplateOutlet="customFreeFloatingBar ? customFreeFloatingBar : defaultFreeFloatingBar"> </ng-content>
           </div>
@@ -48,6 +48,10 @@
               [showInfiniteScrollButton]="showInfiniteScrollButton"
               [showOpenFileButton]="showOpenFileButton"
               [showPagingButtons]="showPagingButtons"
+              [showFirstAndLastPageButtons]="showFirstAndLastPageButtons"
+              [showPreviousAndNextPageButtons]="showPreviousAndNextPageButtons"
+              [showPageNumber]="showPageNumber"
+              [showPageLabel]="showPageLabel"
               [showPresentationModeButton]="showPresentationModeButton && pageViewMode !== 'book'"
               [showPrintButton]="showPrintButton && enablePrint"
               [showRotateCwButton]="showRotateCwButton"
@@ -61,6 +65,7 @@
               [showVerticalScrollButton]="showVerticalScrollButton"
               [showWrappedScrollButton]="showWrappedScrollButton"
               [showZoomButtons]="showZoomButtons && pageViewMode !== 'book'"
+              [showZoomDropdown]="showZoomDropdown"
               [spread]="spread"
               [textLayer]="textLayer"
               [toolbarMarginTop]="toolbarMarginTop"

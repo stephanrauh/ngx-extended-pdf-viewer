@@ -77,7 +77,6 @@ const requiredIds = [
   'producerField',
   'scaleSelect',
   'scaleSelectContainer',
-  'scaleSelectContainer',
   'scrollHorizontal',
   'scrollPage',
   'scrollVertical',

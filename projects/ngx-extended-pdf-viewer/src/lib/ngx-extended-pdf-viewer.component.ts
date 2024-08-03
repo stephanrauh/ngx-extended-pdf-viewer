@@ -49,6 +49,7 @@ import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
 import { UnitToPx } from './unit-to-px';
 
+import { DynamicCssComponent } from './dynamic-css/dynamic-css.component';
 import { AnnotationEditorEvent } from './events/annotation-editor-layer-event';
 import { AnnotationEditorLayerRenderedEvent } from './events/annotation-editor-layer-rendered-event';
 import { AnnotationEditorEditorModeChangedEvent } from './events/annotation-editor-mode-changed-event';
@@ -238,6 +239,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @ViewChild('pdfSecondaryToolbarComponent')
   private secondaryToolbarComponent: PdfSecondaryToolbarComponent;
 
+  @ViewChild('DynamicCssComponent')
+  private dynamicCSSComponent: DynamicCssComponent;
+
   @ViewChild('pdfsidebar')
   private sidebarComponent: PdfSidebarComponent;
 
@@ -315,16 +319,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   @Input()
-  public showTextEditor: ResponsiveVisibility = true;
+  public showTextEditor: ResponsiveVisibility = 'xxl';
 
   @Input()
-  public showStampEditor: ResponsiveVisibility = true;
+  public showStampEditor: ResponsiveVisibility = 'xxl';
 
   @Input()
-  public showDrawEditor: ResponsiveVisibility = true;
+  public showDrawEditor: ResponsiveVisibility = 'xxl';
 
   @Input()
-  public showHighlightEditor: ResponsiveVisibility = true;
+  public showHighlightEditor: ResponsiveVisibility = 'xxl';
 
   /** How many log messages should be printed?
    * Legal values: VerbosityLevel.INFOS (= 5), VerbosityLevel.WARNINGS (= 1), VerbosityLevel.ERRORS (= 0) */
@@ -643,7 +647,22 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public showPagingButtons: ResponsiveVisibility = true;
 
   @Input()
+  public showFirstAndLastPageButtons: ResponsiveVisibility = true;
+
+  @Input()
+  public showPreviousAndNextPageButtons: ResponsiveVisibility = true;
+
+  @Input()
+  public showPageNumber: ResponsiveVisibility = true;
+
+  @Input()
+  public showPageLabel: ResponsiveVisibility = true;
+
+  @Input()
   public showZoomButtons: ResponsiveVisibility = true;
+
+  @Input()
+  public showZoomDropdown: ResponsiveVisibility = true;
 
   @Input()
   public showPresentationModeButton: ResponsiveVisibility = false;
@@ -855,8 +874,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public onToolbarLoaded(toolbarElement: HTMLElement): void {
     this.toolbar = toolbarElement;
   }
-
-  public toolbarWidthInPixels = 3.14159265359; // magic number indicating the toolbar size hasn't been determined yet
 
   public secondaryToolbarTop: string | undefined = undefined;
 
@@ -1146,6 +1163,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       if (!this.pdfScriptLoaderService.shuttingDown) {
         // hurried users sometimes reload the PDF before it has finished initializing
         // This initializes the webviewer, the file may be passed in to it to initialize the viewer with a pdf directly
+        this.initResizeObserver();
         this.onResize();
         this.hideToolbarIfItIsEmpty();
         this.dummyComponents.addMissingStandardWidgets();
@@ -2301,27 +2319,61 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     }
   }
 
+  public initResizeObserver(): void {
+    try {
+      const viewer = document.getElementById('viewer');
+      if (viewer) {
+        this.resizeObserver = new ResizeObserver(() => {
+          this.onResize();
+        });
+        this.resizeObserver.observe(viewer);
+      }
+    } catch (exception) {
+      console.log('ResizeObserver is not supported by your browser');
+    }
+  }
   public onResize(): void {
     const pdfViewer = document.getElementsByClassName('html');
     if (pdfViewer && pdfViewer.length > 0) {
       const container = document.getElementById('outerContainer');
       if (container) {
-        const width = container.clientWidth;
-        this.toolbarWidthInPixels = width;
         if (this.secondaryToolbarComponent) {
           this.secondaryToolbarComponent.checkVisibility();
+        }
+        if (this.dynamicCSSComponent) {
+          this.dynamicCSSComponent.updateToolbarWidth();
         }
       }
       this.checkHeight();
     }
-    try {
-      const viewer = document.getElementById('viewer');
-      if (viewer) {
-        this.resizeObserver = new ResizeObserver(() => this.removeScrollbarInInfiniteScrollMode(false));
-        this.resizeObserver.observe(viewer);
-      }
-    } catch (exception) {
-      console.log('ResizeObserver is not supported by your browser');
+    this.removeScrollbarInInfiniteScrollMode(false);
+    // this.adjustCenterColumnInToolbar();
+  }
+
+  private adjustCenterColumnInToolbar() {
+    const container = document.querySelector('#toolbarViewer') as HTMLElement;
+    const leftColumn = document.querySelector('#toolbarViewer #toolbarViewerLeft') as HTMLElement;
+    const rightColumn = document.querySelector('#toolbarViewer #toolbarViewerRight') as HTMLElement;
+    const centerColumn = document.querySelector('#toolbarViewer #toolbarViewerMiddleContainer') as HTMLElement;
+    if (!container || !leftColumn || !rightColumn || !centerColumn) {
+      return;
+    }
+
+    const containerWidth = container.offsetWidth;
+    const leftWidth = leftColumn.offsetWidth;
+    const rightWidth = rightColumn.offsetWidth;
+    const centerWidth = centerColumn.offsetWidth;
+    const availableWidth = (containerWidth - centerWidth) / 2 - 15;
+
+    if (rightWidth > availableWidth || leftWidth > availableWidth) {
+      centerColumn.style.position = 'static';
+      centerColumn.style.transform = 'none';
+      centerColumn.style.border = '1px solid red';
+    } else {
+      centerColumn.style.position = 'absolute';
+      centerColumn.style.left = '50%';
+      centerColumn.style.transform = 'translateX(-50%)';
+      centerColumn.style.border = '1px solid blue';
     }
   }
 
