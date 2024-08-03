@@ -11223,7 +11223,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.5.744",
+    apiVersion: "4.5.759",
     data,
     password,
     disableAutoFetch,
@@ -13020,8 +13020,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.5.744";
-const build = "9097618ea";
+const version = "4.5.759";
+const build = "b4cebfea1";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -20273,8 +20273,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.5.744";
-const pdfjsBuild = "9097618ea";
+const pdfjsVersion = "4.5.759";
+const pdfjsBuild = "b4cebfea1";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -34374,7 +34374,7 @@ class PDFViewer {
   #maxZoom = MAX_SCALE;
   #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.5.744";
+    const viewerVersion = "4.5.759";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -39202,8 +39202,8 @@ PDFViewerApplication.serviceWorkerOptions = ServiceWorkerOptions;
 
 
 
-const pdfjsVersion = "4.5.744";
-const pdfjsBuild = "9097618ea";
+const pdfjsVersion = "4.5.759";
+const pdfjsBuild = "b4cebfea1";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
