@@ -3,13 +3,13 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
   "version": 1,
-  "serialNumber": "urn:uuid:b2f3248b-6ff2-48a0-85ed-422d1058f87e",
+  "serialNumber": "urn:uuid:af98d880-7c23-40df-8bde-4eee5e8db977",
   "metadata": {
-    "timestamp": "2024-08-01T20:34:22.537Z",
+    "timestamp": "2024-08-03T19:49:05.125Z",
     "tools": [
       {
         "name": "npm",
-        "version": "10.8.1"
+        "version": "10.8.2"
       },
       {
         "vendor": "@cyclonedx",
@@ -2237,8 +2237,8 @@
     {
       "type": "library",
       "name": "browserslist",
-      "version": "4.23.2",
-      "bom-ref": "browserslist@4.23.2",
+      "version": "4.23.3",
+      "bom-ref": "browserslist@4.23.3",
       "author": "Andrey Sitnik",
       "description": "Share target browsers between different front-end tools, like Autoprefixer, Stylelint and babel-env-preset",
       "licenses": [
@@ -2248,7 +2248,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/browserslist@4.23.2",
+      "purl": "pkg:npm/browserslist@4.23.3",
       "externalReferences": [
         {
           "url": "git+https://github.com/browserslist/browserslist.git",
@@ -2266,12 +2266,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/browserslist/-/browserslist-4.23.2.tgz",
+          "url": "https://registry.npmjs.org/browserslist/-/browserslist-4.23.3.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "aa4a92ca2b2d31877101cc3e0b36d9c25072f001a64bf7845acfac115e539cb4460ce2fe0b93361271fab656728346280311890052a1eb5127f4147de351a71c"
+              "content": "6edc021495632386160cd7dabbc46167e07543f54ba14213ae6dd194feb2d6d60658839af889ee6224465d4057a3c9c0d6a2a61ccc8b07f895420e534f8785a0"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -16069,8 +16069,8 @@
       "type": "library",
       "name": "node",
       "group": "@types",
-      "version": "20.14.13",
-      "bom-ref": "@types/node@20.14.13",
+      "version": "20.14.14",
+      "bom-ref": "@types/node@20.14.14",
       "description": "TypeScript definitions for node",
       "licenses": [
         {
@@ -16079,7 +16079,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40types/node@20.14.13#types/node",
+      "purl": "pkg:npm/%40types/node@20.14.14#types/node",
       "externalReferences": [
         {
           "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/node",
@@ -16097,12 +16097,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@types/node/-/node-20.14.13.tgz",
+          "url": "https://registry.npmjs.org/@types/node/-/node-20.14.14.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "f9b1e81a265bf14890d3e584b66a61d885900a322a83c30364c015fa9a514615199eab85e664243fff6fa52c090a512248cfc2edf6591313f37d4d2f253ca9f3"
+              "content": "77ae1fd34f7cd9f4bd6283a026400ca252bb30df08ab74c37558dc85b6077449a3b61fc31e8c31f361a7a00fad55400dfbbbf17d85200338be2576ca35dd920d"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -66277,7 +66277,7 @@
       "type": "library",
       "name": "string-width",
       "version": "4.2.3",
-      "bom-ref": "BomRef.2m883urc708.qli0ss8k5h8",
+      "bom-ref": "BomRef.c7u2i30dqfg.57cerol6kf",
       "author": "Sindre Sorhus",
       "description": "Get the visual width of a string - the number of columns required to display it",
       "licenses": [
@@ -66385,7 +66385,7 @@
       "type": "library",
       "name": "strip-ansi",
       "version": "6.0.1",
-      "bom-ref": "BomRef.fl3haur7ulo.khvg065ojoo",
+      "bom-ref": "BomRef.67srhstqm.b8s6911ifc8",
       "author": "Sindre Sorhus",
       "description": "Strip ANSI escape codes from a string",
       "licenses": [
@@ -70241,7 +70241,7 @@
         "@schematics/angular@17.3.8",
         "@types/estree@1.0.5",
         "@types/jest@29.5.12",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "@types/trusted-types@2.0.7",
         "copyfiles@2.4.1",
         "fsevents@2.3.3",
@@ -70283,7 +70283,7 @@
         "autoprefixer@10.4.18",
         "babel-loader@9.1.3",
         "babel-plugin-istanbul@6.1.1",
-        "browserslist@4.23.2",
+        "browserslist@4.23.3",
         "copy-webpack-plugin@11.0.0",
         "critters@0.0.22",
         "css-loader@6.10.0",
@@ -70466,7 +70466,7 @@
         "@webassemblyjs/wasm-parser@1.12.1",
         "acorn-import-assertions@1.9.0",
         "acorn@8.12.1",
-        "browserslist@4.23.2",
+        "browserslist@4.23.3",
         "chrome-trace-event@1.0.4",
         "enhanced-resolve@5.17.1",
         "es-module-lexer@1.5.4",
@@ -70639,7 +70639,7 @@
       "dependsOn": [
         "@babel/compat-data@7.25.2",
         "@babel/helper-validator-option@7.24.8",
-        "browserslist@4.23.2",
+        "browserslist@4.23.3",
         "lru-cache@5.1.1",
         "@babel/helper-compilation-targets@7.25.2|semver@6.3.1"
       ]
@@ -70654,7 +70654,7 @@
       "ref": "@babel/helper-validator-option@7.24.8"
     },
     {
-      "ref": "browserslist@4.23.2",
+      "ref": "browserslist@4.23.3",
       "dependsOn": [
         "caniuse-lite@1.0.30001646",
         "electron-to-chromium@1.5.4",
@@ -70916,7 +70916,7 @@
     {
       "ref": "core-js-compat@3.37.1",
       "dependsOn": [
-        "browserslist@4.23.2"
+        "browserslist@4.23.3"
       ]
     },
     {
@@ -71728,7 +71728,7 @@
     {
       "ref": "vite@5.1.7",
       "dependsOn": [
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "vite@5.1.7|esbuild@0.19.12",
         "fsevents@2.3.3",
         "less@4.2.0",
@@ -71753,7 +71753,7 @@
     {
       "ref": "autoprefixer@10.4.18",
       "dependsOn": [
-        "browserslist@4.23.2",
+        "browserslist@4.23.3",
         "caniuse-lite@1.0.30001646",
         "fraction.js@4.3.7",
         "normalize-range@0.1.2",
@@ -71983,7 +71983,7 @@
     {
       "ref": "update-browserslist-db@1.1.0",
       "dependsOn": [
-        "browserslist@4.23.2",
+        "browserslist@4.23.3",
         "escalade@3.1.2",
         "picocolors@1.0.1"
       ]
@@ -72346,17 +72346,17 @@
       "ref": "@types/body-parser@1.19.5",
       "dependsOn": [
         "@types/connect@3.4.38",
-        "@types/node@20.14.13"
+        "@types/node@20.14.14"
       ]
     },
     {
       "ref": "@types/connect@3.4.38",
       "dependsOn": [
-        "@types/node@20.14.13"
+        "@types/node@20.14.14"
       ]
     },
     {
-      "ref": "@types/node@20.14.13",
+      "ref": "@types/node@20.14.14",
       "dependsOn": [
         "undici-types@5.26.5"
       ]
@@ -72364,7 +72364,7 @@
     {
       "ref": "@types/express-serve-static-core@4.19.5",
       "dependsOn": [
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "@types/qs@6.9.15",
         "@types/range-parser@1.2.7",
         "@types/send@0.17.4"
@@ -72380,21 +72380,21 @@
       "ref": "@types/send@0.17.4",
       "dependsOn": [
         "@types/mime@1.3.5",
-        "@types/node@20.14.13"
+        "@types/node@20.14.14"
       ]
     },
     {
       "ref": "@types/serve-static@1.15.7",
       "dependsOn": [
         "@types/http-errors@2.0.4",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "@types/send@0.17.4"
       ]
     },
     {
       "ref": "@types/http-proxy@1.17.14",
       "dependsOn": [
-        "@types/node@20.14.13"
+        "@types/node@20.14.14"
       ]
     },
     {
@@ -72719,7 +72719,7 @@
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
         "@types/jsdom@20.0.1",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "jest-mock@29.7.0",
         "jest-util@29.7.0",
         "jsdom@20.0.3"
@@ -72882,7 +72882,7 @@
         "@rollup/wasm-node@4.19.2",
         "ajv@8.12.0",
         "ansi-colors@4.1.3",
-        "browserslist@4.23.2",
+        "browserslist@4.23.3",
         "cacache@18.0.4",
         "chokidar@3.6.0",
         "ng-packagr@17.3.0|commander@12.1.0",
@@ -73351,14 +73351,14 @@
     {
       "ref": "@types/bonjour@3.5.13",
       "dependsOn": [
-        "@types/node@20.14.13"
+        "@types/node@20.14.14"
       ]
     },
     {
       "ref": "@types/connect-history-api-fallback@1.5.4",
       "dependsOn": [
         "@types/express-serve-static-core@4.19.5",
-        "@types/node@20.14.13"
+        "@types/node@20.14.14"
       ]
     },
     {
@@ -73376,13 +73376,13 @@
     {
       "ref": "@types/sockjs@0.3.36",
       "dependsOn": [
-        "@types/node@20.14.13"
+        "@types/node@20.14.14"
       ]
     },
     {
       "ref": "@types/ws@8.5.12",
       "dependsOn": [
-        "@types/node@20.14.13"
+        "@types/node@20.14.14"
       ]
     },
     {
@@ -73850,7 +73850,7 @@
     {
       "ref": "@types/node-forge@1.3.11",
       "dependsOn": [
-        "@types/node@20.14.13"
+        "@types/node@20.14.14"
       ]
     },
     {
@@ -74274,7 +74274,7 @@
     {
       "ref": "terser-webpack-plugin@5.3.10|jest-worker@27.5.1",
       "dependsOn": [
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "merge-stream@2.0.0",
         "terser-webpack-plugin@5.3.10|supports-color@8.1.1"
       ]
@@ -75781,7 +75781,7 @@
         "@jest/schemas@29.6.3",
         "@types/istanbul-lib-coverage@2.0.6",
         "@types/istanbul-reports@3.0.4",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "@types/yargs@17.0.32",
         "@jest/types@29.6.3|chalk@4.1.2"
       ]
@@ -75833,7 +75833,7 @@
       "ref": "jest-util@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "jest-util@29.7.0|chalk@4.1.2",
         "ci-info@3.9.0",
         "graceful-fs@4.2.11",
@@ -76046,7 +76046,7 @@
       "dependsOn": [
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "jest-mock@29.7.0"
       ]
     },
@@ -76055,7 +76055,7 @@
       "dependsOn": [
         "@jest/types@29.6.3",
         "@sinonjs/fake-timers@10.3.0",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "jest-message-util@29.7.0",
         "jest-mock@29.7.0",
         "jest-util@29.7.0"
@@ -76065,7 +76065,7 @@
       "ref": "jest-mock@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "jest-util@29.7.0"
       ]
     },
@@ -76111,7 +76111,7 @@
     {
       "ref": "@types/jsdom@20.0.1",
       "dependsOn": [
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "@types/tough-cookie@4.0.5",
         "parse5@7.1.2"
       ]
@@ -76404,7 +76404,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "ansi-escapes@4.3.2",
         "@jest/core@29.7.0|chalk@4.1.2",
         "ci-info@3.9.0",
@@ -76467,7 +76467,7 @@
       "ref": "@jest/console@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "@jest/console@29.7.0|chalk@4.1.2",
         "jest-message-util@29.7.0",
         "jest-util@29.7.0",
@@ -76517,7 +76517,7 @@
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
         "@jridgewell/trace-mapping@0.3.25",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "@jest/reporters@29.7.0|chalk@4.1.2",
         "collect-v8-coverage@1.0.2",
         "exit@0.1.2",
@@ -76703,7 +76703,7 @@
     {
       "ref": "jest-worker@29.7.0",
       "dependsOn": [
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "jest-util@29.7.0",
         "merge-stream@2.0.0",
         "jest-worker@29.7.0|supports-color@8.1.1"
@@ -76762,7 +76762,7 @@
         "@babel/core@7.24.0",
         "@jest/test-sequencer@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "babel-jest@29.7.0",
         "jest-config@29.7.0|chalk@4.1.2",
         "ci-info@3.9.0",
@@ -76836,7 +76836,7 @@
       "dependsOn": [
         "@jest/types@29.6.3",
         "@types/graceful-fs@4.1.9",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "anymatch@3.1.3",
         "fb-watchman@2.0.2",
         "fsevents@2.3.3",
@@ -76905,7 +76905,7 @@
         "@jest/expect@29.7.0",
         "@jest/test-result@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "jest-circus@29.7.0|chalk@4.1.2",
         "co@4.6.0",
         "dedent@1.5.3",
@@ -77080,7 +77080,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "jest-runtime@29.7.0|chalk@4.1.2",
         "cjs-module-lexer@1.3.1",
         "collect-v8-coverage@1.0.2",
@@ -77140,7 +77140,7 @@
         "@jest/environment@29.7.0",
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "jest-mock@29.7.0",
         "jest-util@29.7.0"
       ]
@@ -77204,7 +77204,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "jest-runner@29.7.0|chalk@4.1.2",
         "emittery@0.13.1",
         "graceful-fs@4.2.11",
@@ -77319,7 +77319,7 @@
         "@tsconfig/node12@1.0.11",
         "@tsconfig/node14@1.0.3",
         "@tsconfig/node16@1.0.4",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "acorn-walk@8.3.3",
         "acorn@8.12.1",
         "arg@4.1.3",
@@ -77334,7 +77334,7 @@
     {
       "ref": "@types/graceful-fs@4.1.9",
       "dependsOn": [
-        "@types/node@20.14.13"
+        "@types/node@20.14.14"
       ]
     },
     {
@@ -77407,7 +77407,7 @@
       "dependsOn": [
         "@jest/test-result@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.13",
+        "@types/node@20.14.14",
         "ansi-escapes@4.3.2",
         "jest-watcher@29.7.0|chalk@4.1.2",
         "emittery@0.13.1",
@@ -77707,9 +77707,9 @@
     {
       "ref": "@isaacs/cliui@8.0.2",
       "dependsOn": [
-        "BomRef.2m883urc708.qli0ss8k5h8",
+        "BomRef.c7u2i30dqfg.57cerol6kf",
         "@isaacs/cliui@8.0.2|string-width@5.1.2",
-        "BomRef.fl3haur7ulo.khvg065ojoo",
+        "BomRef.67srhstqm.b8s6911ifc8",
         "@isaacs/cliui@8.0.2|strip-ansi@7.1.0",
         "wrap-ansi@7.0.0",
         "@isaacs/cliui@8.0.2|wrap-ansi@8.1.0"
@@ -77747,7 +77747,7 @@
       "ref": "@isaacs/cliui@8.0.2|ansi-styles@6.2.1"
     },
     {
-      "ref": "BomRef.2m883urc708.qli0ss8k5h8",
+      "ref": "BomRef.c7u2i30dqfg.57cerol6kf",
       "dependsOn": [
         "emoji-regex@8.0.0",
         "is-fullwidth-code-point@3.0.0",
@@ -77758,7 +77758,7 @@
       "ref": "eastasianwidth@0.2.0"
     },
     {
-      "ref": "BomRef.fl3haur7ulo.khvg065ojoo",
+      "ref": "BomRef.67srhstqm.b8s6911ifc8",
       "dependsOn": [
         "ansi-regex@5.0.1"
       ]
