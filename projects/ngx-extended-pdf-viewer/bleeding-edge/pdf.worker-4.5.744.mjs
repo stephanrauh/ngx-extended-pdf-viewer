@@ -1322,7 +1322,10 @@ function isBooleanArray(arr, len) {
   return Array.isArray(arr) && (len === null || arr.length === len) && arr.every(x => typeof x === "boolean");
 }
 function isNumberArray(arr, len) {
-  return Array.isArray(arr) && (len === null || arr.length === len) && arr.every(x => typeof x === "number");
+  if (Array.isArray(arr)) {
+    return (len === null || arr.length === len) && arr.every(x => typeof x === "number");
+  }
+  return ArrayBuffer.isView(arr) && (arr.length === 0 || typeof arr[0] === "number") && (len === null || arr.length === len);
 }
 function lookupMatrix(arr, fallback) {
   return isNumberArray(arr, 6) ? arr : fallback;
@@ -55942,7 +55945,7 @@ class WorkerMessageHandler {
       docId,
       apiVersion
     } = docParams;
-    const workerVersion = "4.5.721";
+    const workerVersion = "4.5.744";
     if (apiVersion !== workerVersion) {
       throw new Error(`The API version "${apiVersion}" does not match ` + `the Worker version "${workerVersion}".`);
     }
@@ -56519,8 +56522,8 @@ if (typeof window === "undefined" && typeof self !== "undefined" && isMessagePor
 
 ;// CONCATENATED MODULE: ./src/pdf.worker.js
 
-const pdfjsVersion = "4.5.721";
-const pdfjsBuild = "f0344ddb4";
+const pdfjsVersion = "4.5.744";
+const pdfjsBuild = "9097618ea";
 
 var __webpack_exports__WorkerMessageHandler = __webpack_exports__.WorkerMessageHandler;
 export { __webpack_exports__WorkerMessageHandler as WorkerMessageHandler };
