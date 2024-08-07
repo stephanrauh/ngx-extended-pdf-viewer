@@ -47,7 +47,6 @@ import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-co
 import { PDFNotificationService } from './pdf-notification-service';
 import { PdfSecondaryToolbarComponent } from './secondary-toolbar/pdf-secondary-toolbar/pdf-secondary-toolbar.component';
 import { PdfSidebarComponent } from './sidebar/pdf-sidebar/pdf-sidebar.component';
-import { UnitToPx } from './unit-to-px';
 
 import { DynamicCssComponent } from './dynamic-css/dynamic-css.component';
 import { AnnotationEditorEvent } from './events/annotation-editor-layer-event';
@@ -60,6 +59,7 @@ import { OutlineLoadedEvent } from './events/outline-loaded-event';
 import { ToggleSidebarEvent } from './events/toggle-sidebar-event';
 import { XfaLayerRenderedEvent } from './events/xfa-layer-rendered-event';
 import { NgxFormSupport } from './ngx-form-support';
+import { NgxHasHeight } from './ngx-has-height';
 import { NgxKeyboardManagerService } from './ngx-keyboard-manager.service';
 import { PdfSidebarView } from './options/pdf-sidebar-views';
 import { SpreadType } from './options/spread-type';
@@ -88,7 +88,7 @@ export interface FormDataType {
   styleUrls: ['./ngx-extended-pdf-viewer.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestroy {
+export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestroy, NgxHasHeight {
   private formSupport = new NgxFormSupport();
 
   /**
@@ -191,14 +191,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
             this.scrollMode = ScrollModeType.vertical;
             PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(this.scrollMode) });
           }
-          this.removeScrollbarInInfiniteScrollMode(false);
+          this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(false, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
         } else if (viewMode !== 'multiple') {
           this.scrollMode = ScrollModeType.vertical;
         } else {
           if (this.scrollMode === ScrollModeType.page) {
             this.scrollMode = ScrollModeType.vertical;
           }
-          this.removeScrollbarInInfiniteScrollMode(true);
+          this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(true, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
         }
         if (viewMode === 'single') {
           // since pdf.js, our custom single-page-mode has been replaced by the standard scrollMode="page"
@@ -228,6 +228,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         }
       }
     }
+  }
+
+  public markForCheck(): void {
+    this.cdr.markForCheck();
   }
 
   @Output()
@@ -446,7 +450,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
    * The combination of height, minHeight, and autoHeight ensures the PDF height of the PDF viewer is calculated correctly when the height is a percentage.
    * By default, many CSS frameworks make a div with 100% have a height or zero pixels. checkHeigth() fixes this.
    */
-  private autoHeight = false;
+  public autoHeight = false;
 
   @Input()
   public minHeight: string | undefined = undefined;
@@ -454,7 +458,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   private _height: string | undefined = '100%';
 
   @Input()
-  public set height(h) {
+  public set height(h: string | undefined) {
     this.minHeight = undefined;
     this.autoHeight = false;
     if (h) {
@@ -468,7 +472,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       this.height = '100%';
     }
     setTimeout(() => {
-      this.checkHeight();
+      this.dynamicCSSComponent.checkHeight(this, this.logLevel);
     });
   }
 
@@ -968,7 +972,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     private notificationService: PDFNotificationService,
     private elementRef: ElementRef,
     private platformLocation: PlatformLocation,
-    private cdr: ChangeDetectorRef,
+    public cdr: ChangeDetectorRef,
     public service: NgxExtendedPdfViewerService,
     private renderer: Renderer2,
     private pdfScriptLoaderService: PDFScriptLoaderService,
@@ -1238,64 +1242,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     this.notificationService.onPDFJSInitSignal.set(this.pdfScriptLoaderService.PDFViewerApplication);
   }
 
-  public checkHeight(): void {
-    if (this._height) {
-      if (isNaN(Number(this._height.replace('%', '')))) {
-        // The height is defined with one of the units vh, vw, em, rem, etc.
-        // So the height check isn't necessary.
-        return;
-      }
-    }
-    if (document.querySelector('[data-pdfjsprinting]')) {
-      // #1702 workaround to a Firefox bug: when printing, container.clientHeight is temporarily 0,
-      // causing ngx-extended-pdf-viewer to default to 100 pixels height. So it's better
-      // to do nothing.
-      return;
-    }
-    if (typeof document !== 'undefined') {
-      const container = document.getElementsByClassName('zoom')[0] as HTMLElement;
-      if (container) {
-        if (container.clientHeight === 0) {
-          if (this.logLevel >= VerbosityLevel.WARNINGS && !this.autoHeight) {
-            console.warn(
-              "The height of the PDF viewer widget is zero pixels. Please check the height attribute. Is there a syntax error? Or are you using a percentage with a CSS framework that doesn't support this? The height is adjusted automatedly."
-            );
-          }
-          this.autoHeight = true;
-        }
-        if (this.autoHeight) {
-          const available = window.innerHeight;
-          const rect = container.getBoundingClientRect();
-          const top = rect.top;
-          let maximumHeight = available - top;
-          // take the margins and paddings of the parent containers into account
-          const padding = this.calculateBorderMargin(container);
-          maximumHeight -= padding;
-          if (maximumHeight > 100) {
-            this.minHeight = `${maximumHeight}px`;
-          } else {
-            this.minHeight = '100px';
-          }
-          this.cdr.markForCheck();
-        }
-      }
-    }
-  }
-
-  private calculateBorderMargin(container: HTMLElement | null): number {
-    if (container) {
-      const computedStyle = window.getComputedStyle(container);
-
-      const padding = UnitToPx.toPx(computedStyle.paddingBottom);
-      const margin = UnitToPx.toPx(computedStyle.marginBottom);
-      if (container.style.zIndex) {
-        return padding + margin;
-      }
-      return padding + margin + this.calculateBorderMargin(container.parentElement);
-    }
-    return 0;
-  }
-
   public onSpreadChange(newSpread: 'off' | 'even' | 'odd'): void {
     this.spreadChange.emit(newSpread);
   }
@@ -1464,7 +1410,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (this._src) {
       this.pdfScriptLoaderService.ngxExtendedPdfViewerIncompletelyInitialized = false;
 
-      setTimeout(async () => this.checkHeight(), 100);
+      setTimeout(async () => this.dynamicCSSComponent.checkHeight(this, this.logLevel), 100);
       // open a file in the viewer
       if (!!this._src) {
         let workerSrc: string | (() => string) = pdfDefaultOptions.workerSrc;
@@ -1586,7 +1532,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
     PDFViewerApplication.eventBus.on('pagesloaded', (x: PagesLoadedEvent) => {
       this.ngZone.run(() => this.pagesLoaded.emit(x));
-      this.removeScrollbarInInfiniteScrollMode(false);
+      this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(false, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
       if (this.rotation !== undefined && this.rotation !== null) {
         const r = Number(this.rotation);
         if (r === 0 || r === 90 || r === 180 || r === 270) {
@@ -1610,7 +1556,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     PDFViewerApplication.eventBus.on('pagerendered', (x: PageRenderedEvent) => {
       this.ngZone.run(() => {
         this.pageRendered.emit(x);
-        this.removeScrollbarInInfiniteScrollMode(false);
+        this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(false, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
       });
     });
     PDFViewerApplication.eventBus.on('pagerender', (x: PageRenderEvent) => {
@@ -1800,34 +1746,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         });
       }
     });
-  }
-
-  private removeScrollbarInInfiniteScrollMode(restoreHeight: boolean): void {
-    if (this.pageViewMode === 'infinite-scroll' || restoreHeight) {
-      const viewer = document.getElementById('viewer');
-      const zoom = document.getElementsByClassName('zoom')[0];
-      if (viewer) {
-        setTimeout(() => {
-          if (this.pageViewMode === 'infinite-scroll') {
-            const height = viewer.clientHeight + 17;
-            if (this.primaryMenuVisible) {
-              this.height = height + 35 + 'px';
-            } else if (height > 17) {
-              this.height = height + 'px';
-            } else if (this.height === undefined) {
-              this.height = '100%';
-            }
-            if (zoom) {
-              (<HTMLElement>zoom).style.height = this.height;
-            }
-          } else if (restoreHeight) {
-            this.autoHeight = true;
-            this._height = undefined;
-            this.checkHeight();
-          }
-        });
-      }
-    }
   }
 
   public async openPDF2(): Promise<void> {
@@ -2344,37 +2262,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           this.dynamicCSSComponent.updateToolbarWidth();
         }
       }
-      this.checkHeight();
+      this.dynamicCSSComponent.checkHeight(this, this.logLevel);
     }
-    this.removeScrollbarInInfiniteScrollMode(false);
-    // this.adjustCenterColumnInToolbar();
-  }
-
-  private adjustCenterColumnInToolbar() {
-    const container = document.querySelector('#toolbarViewer') as HTMLElement;
-    const leftColumn = document.querySelector('#toolbarViewer #toolbarViewerLeft') as HTMLElement;
-    const rightColumn = document.querySelector('#toolbarViewer #toolbarViewerRight') as HTMLElement;
-    const centerColumn = document.querySelector('#toolbarViewer #toolbarViewerMiddleContainer') as HTMLElement;
-    if (!container || !leftColumn || !rightColumn || !centerColumn) {
-      return;
-    }
-
-    const containerWidth = container.offsetWidth;
-    const leftWidth = leftColumn.offsetWidth;
-    const rightWidth = rightColumn.offsetWidth;
-    const centerWidth = centerColumn.offsetWidth;
-    const availableWidth = (containerWidth - centerWidth) / 2 - 15;
-
-    if (rightWidth > availableWidth || leftWidth > availableWidth) {
-      centerColumn.style.position = 'static';
-      centerColumn.style.transform = 'none';
-      centerColumn.style.border = '1px solid red';
-    } else {
-      centerColumn.style.position = 'absolute';
-      centerColumn.style.left = '50%';
-      centerColumn.style.transform = 'translateX(-50%)';
-      centerColumn.style.border = '1px solid blue';
-    }
+    this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(false, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
   }
 
   @HostListener('contextmenu')
