@@ -2,21 +2,21 @@
   outline: none;
 }
 
-button:focus {
+ngx-extended-pdf-viewer pdf-rotate-page-ccw button:focus {
   outline: none;
 }
 
-svg:focus {
+ngx-extended-pdf-viewer pdf-rotate-page-ccw svg:focus {
   outline: none;
 }
 
-button {
+ngx-extended-pdf-viewer pdf-rotate-page-ccw button {
   padding: 0;
   margin-top: 0;
   margin-bottom: 0;
 }
 
-.width-height-23px {
-  width: 23px; 
+ngx-extended-pdf-viewer pdf-rotate-page-ccw .width-height-23px {
+  width: 23px;
   height: 23px;
 }
