@@ -583,3 +583,4 @@
 - 21.0.0 updated the README
 - 21.1.0 updated the README; #2466 fixed responsive design and fine-tuned the default values of the breakpoints; implemented `[showPreviousAndNextPageButtons]`, `[showFirstAndLastPageButtons]`,`[showPageNumber]`,`| [showPageLabel]`, and`[showZoomDropdown]`.
 - 21.1.1 #2485 prevent the CSS rules for the rotate buttons from bleeding into the global CSS rules; move layout-related code to `DynamicCssComponent
+- 21.1.2 #2486 added two missing icons

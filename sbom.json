@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
   "version": 1,
-  "serialNumber": "urn:uuid:ef56f54d-e064-49e8-bc08-5607c9928da5",
+  "serialNumber": "urn:uuid:e1001e8e-6be9-4319-9e65-f60aaa3e6fcc",
   "metadata": {
-    "timestamp": "2024-08-03T19:56:42.195Z",
+    "timestamp": "2024-08-07T19:53:24.334Z",
     "tools": [
       {
         "name": "npm",
@@ -4424,8 +4424,8 @@
     {
       "type": "library",
       "name": "core-js-compat",
-      "version": "3.37.1",
-      "bom-ref": "core-js-compat@3.37.1",
+      "version": "3.38.0",
+      "bom-ref": "core-js-compat@3.38.0",
       "author": "Denis Pushkarev",
       "description": "core-js compat",
       "licenses": [
@@ -4435,7 +4435,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/core-js-compat@3.37.1#packages/core-js-compat",
+      "purl": "pkg:npm/core-js-compat@3.38.0#packages/core-js-compat",
       "externalReferences": [
         {
           "url": "git+https://github.com/zloirock/core-js.git#packages/core-js-compat",
@@ -4453,12 +4453,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/core-js-compat/-/core-js-compat-3.37.1.tgz",
+          "url": "https://registry.npmjs.org/core-js-compat/-/core-js-compat-3.38.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "f5336222684abd0a925243af93f98c459cce00d4e21150bb59a04d84770a33bc7eff913597936fb32b11d7dcee0d049c13c93e91f41759137702d4bf78e487a6"
+              "content": "ef92c089c74b6b838957017115b411dcd7676633605fa20ba55715cdc0b84f6b267ab0799442ccac9410428595e938ae0bfbe5685aa0536b4a431f70e6cd1ed0"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -10396,8 +10396,8 @@
     {
       "type": "library",
       "name": "caniuse-lite",
-      "version": "1.0.30001646",
-      "bom-ref": "caniuse-lite@1.0.30001646",
+      "version": "1.0.30001650",
+      "bom-ref": "caniuse-lite@1.0.30001650",
       "author": "Ben Briggs",
       "description": "A smaller version of caniuse-db, with only the essentials!",
       "licenses": [
@@ -10407,7 +10407,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/caniuse-lite@1.0.30001646",
+      "purl": "pkg:npm/caniuse-lite@1.0.30001650",
       "externalReferences": [
         {
           "url": "git+https://github.com/browserslist/caniuse-lite.git",
@@ -10425,12 +10425,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001646.tgz",
+          "url": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001650.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "751834d20b9d8810c34e65210a549dbf786a45fa5b3a7536f08a48d53e8f0532d66be90e8f4ebcd42f2e30bdcf89f61f444b81ad58c31a12f769d629053eaca7"
+              "content": "7e011cee13ff2c1ee289c7571d423d56c06c3199949a55497903f6aaa416fb7964a9585b9a3114f33a7e879b2d59e8a55fe1bbb97b885082255a50f0f6376df2"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -12505,8 +12505,8 @@
     {
       "type": "library",
       "name": "electron-to-chromium",
-      "version": "1.5.4",
-      "bom-ref": "electron-to-chromium@1.5.4",
+      "version": "1.5.5",
+      "bom-ref": "electron-to-chromium@1.5.5",
       "author": "Kilian Valkhof",
       "description": "Provides a list of electron-to-chromium version mappings",
       "licenses": [
@@ -12516,7 +12516,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/electron-to-chromium@1.5.4",
+      "purl": "pkg:npm/electron-to-chromium@1.5.5",
       "externalReferences": [
         {
           "url": "git+https://github.com/kilian/electron-to-chromium.git",
@@ -12534,12 +12534,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.4.tgz",
+          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.5.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "a2bcc0f3556a2f220650403bed89150350fe37e9cd7e5da2b095638e63b2ae5c6ea28675f729dbf9d3a56834ea77f89d2914bd943092066b7333e9320ac32790"
+              "content": "411eff03b664312f2d66ea1fb42fe37ea36464b40eefbf52496dd8b991cfe1e5e98f711f7c62c5701fd7bbd000650ccb71c4e2095f84994a3785ae2643dc2794"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -16393,8 +16393,8 @@
       "type": "library",
       "name": "http-proxy",
       "group": "@types",
-      "version": "1.17.14",
-      "bom-ref": "@types/http-proxy@1.17.14",
+      "version": "1.17.15",
+      "bom-ref": "@types/http-proxy@1.17.15",
       "description": "TypeScript definitions for http-proxy",
       "licenses": [
         {
@@ -16403,7 +16403,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40types/http-proxy@1.17.14#types/http-proxy",
+      "purl": "pkg:npm/%40types/http-proxy@1.17.15#types/http-proxy",
       "externalReferences": [
         {
           "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/http-proxy",
@@ -16421,12 +16421,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@types/http-proxy/-/http-proxy-1.17.14.tgz",
+          "url": "https://registry.npmjs.org/@types/http-proxy/-/http-proxy-1.17.15.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "492ac3d1cd4e4339455fba46bb5797c521237a67a3eb869a34f4618556141aa5e1d01b65740031dfb306f1bb5cba6be980ac99a751791a7dc9924b5dc6216feb"
+              "content": "db98396ad82254d4c8bf42c10d38351fbe07bdacb1d1a8ed24f2cb718137c2116fef9274a5636d381cda5c94200d39ab5f56f1e54f580b6c3f9fae413751f045"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -25339,8 +25339,8 @@
     {
       "type": "library",
       "name": "rollup",
-      "version": "4.19.2",
-      "bom-ref": "rollup@4.19.2",
+      "version": "4.20.0",
+      "bom-ref": "rollup@4.20.0",
       "author": "Rich Harris",
       "description": "Next-generation ES module bundler",
       "licenses": [
@@ -25350,7 +25350,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/rollup@4.19.2",
+      "purl": "pkg:npm/rollup@4.20.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/rollup/rollup.git",
@@ -25368,12 +25368,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/rollup/-/rollup-4.19.2.tgz",
+          "url": "https://registry.npmjs.org/rollup/-/rollup-4.20.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "ebf8e09cdd6cbc5f4f8cd609e326b797e72abad838f6f399e2b560b032b1765fb982918f9c1c855d61b27c7f581b1f62de77c1c12bb5232bbabc6c05140d0175"
+              "content": "eab6d604285c9d21b32255de21d348653a2929869df191bc6a3865efc94644bb08dab5fc2246a8b508556acd8c6be18fc496afd7dc2b4b3bd1bee8afd182b35b"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -30627,8 +30627,8 @@
     {
       "type": "library",
       "name": "launch-editor",
-      "version": "2.8.0",
-      "bom-ref": "launch-editor@2.8.0",
+      "version": "2.8.1",
+      "bom-ref": "launch-editor@2.8.1",
       "author": "Evan You",
       "description": "launch editor from node.js",
       "licenses": [
@@ -30638,7 +30638,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/launch-editor@2.8.0",
+      "purl": "pkg:npm/launch-editor@2.8.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/yyx990803/launch-editor.git",
@@ -30656,12 +30656,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/launch-editor/-/launch-editor-2.8.0.tgz",
+          "url": "https://registry.npmjs.org/launch-editor/-/launch-editor-2.8.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "bc9ada9ce009ac8fe5972586450aa20ccf9a76bc3e93cddfbe69b1dfe9d5e3b837fb7eb1335e6313ecf267a15f7a5d36fb14afb8cd1bd860d1a2c5d991b6fac0"
+              "content": "7a5071da5feda7dcfdf57e47fea7aff2ec83cb0561d155c0c046e393c90986773982b38590687b696eaae7999ef719d86ecb36eb55ed9d4af2b19f97bc66e140"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -37693,8 +37693,8 @@
     {
       "type": "library",
       "name": "foreground-child",
-      "version": "3.2.1",
-      "bom-ref": "foreground-child@3.2.1",
+      "version": "3.3.0",
+      "bom-ref": "foreground-child@3.3.0",
       "author": "Isaac Z. Schlueter",
       "description": "Run a child as if it's the foreground process. Give it stdio. Exit when it exits.",
       "licenses": [
@@ -37704,7 +37704,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/foreground-child@3.2.1",
+      "purl": "pkg:npm/foreground-child@3.3.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/tapjs/foreground-child.git",
@@ -37722,12 +37722,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/foreground-child/-/foreground-child-3.2.1.tgz",
+          "url": "https://registry.npmjs.org/foreground-child/-/foreground-child-3.3.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "3d7514c8baab4765c258809fbfaba4a693fdeac745c166cd1277c432dee336c2128ccb2f68b3629c01cd0d8caf93253e4991b605349b4f93631bebd9b257c64c"
+              "content": "2ddda0f2bac0c8c6055c1844a8ccfc6401c18b8278b92d62fc2c463039e3c8559d74c5cb55c0e9d39d4365fbbeb7bf9a6fb5afe9232aa569b21488f951b7c5be"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -37748,7 +37748,7 @@
           "type": "library",
           "name": "signal-exit",
           "version": "4.1.0",
-          "bom-ref": "foreground-child@3.2.1|signal-exit@4.1.0",
+          "bom-ref": "foreground-child@3.3.0|signal-exit@4.1.0",
           "author": "Ben Coe",
           "description": "when you want to fire an event no matter how a process exits.",
           "licenses": [
@@ -44162,8 +44162,8 @@
     {
       "type": "library",
       "name": "zone.js",
-      "version": "0.14.8",
-      "bom-ref": "zone.js@0.14.8",
+      "version": "0.14.10",
+      "bom-ref": "zone.js@0.14.10",
       "author": "Brian Ford",
       "description": "Zones for JavaScript",
       "licenses": [
@@ -44173,7 +44173,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/zone.js@0.14.8#packages/zone.js",
+      "purl": "pkg:npm/zone.js@0.14.10#packages/zone.js",
       "externalReferences": [
         {
           "url": "git://github.com/angular/angular.git#packages/zone.js",
@@ -44191,12 +44191,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/zone.js/-/zone.js-0.14.8.tgz",
+          "url": "https://registry.npmjs.org/zone.js/-/zone.js-0.14.10.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "e3cba1ecc9d5a78fce403b821de15d5f0e5df31c0fa854ef94780f2752c115be466aeb2d2d2655f98507d2da39ca03721a9a93b23a5ba6dd78d54fe3de909fa9"
+              "content": "60602168eec9e72c0e5d6e889d73652e67d4d7de05f25560bbb6d19ed505dd3886f18de704ad31d54249b8750ffdef08ca28648c262a84249ca52c2795a49191"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -52237,8 +52237,8 @@
       "type": "library",
       "name": "yargs",
       "group": "@types",
-      "version": "17.0.32",
-      "bom-ref": "@types/yargs@17.0.32",
+      "version": "17.0.33",
+      "bom-ref": "@types/yargs@17.0.33",
       "description": "TypeScript definitions for yargs",
       "licenses": [
         {
@@ -52247,7 +52247,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40types/yargs@17.0.32#types/yargs",
+      "purl": "pkg:npm/%40types/yargs@17.0.33#types/yargs",
       "externalReferences": [
         {
           "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/yargs",
@@ -52265,12 +52265,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@types/yargs/-/yargs-17.0.32.tgz",
+          "url": "https://registry.npmjs.org/@types/yargs/-/yargs-17.0.33.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "c50ebb61cfe568e1b9b8c7d7ff4f77311946182201cd931aad56be81f34a271580220ca462954690175ba84cc60c37c2ad5523e8789f7f8993679040e93980a2"
+              "content": "5a9c4108a58f2ebe314ac1e0cf9d75ac524033ec12dbcc36cc43b5403358e7333f4bca24ef434d7f3b47d31c21a8ac9a2b438709b37df0b0c066ecb572dc4390"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -65686,8 +65686,8 @@
       "type": "library",
       "name": "wasm-node",
       "group": "@rollup",
-      "version": "4.19.2",
-      "bom-ref": "@rollup/wasm-node@4.19.2",
+      "version": "4.20.0",
+      "bom-ref": "@rollup/wasm-node@4.20.0",
       "author": "Rich Harris",
       "description": "Next-generation ES module bundler with Node wasm",
       "licenses": [
@@ -65697,7 +65697,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40rollup/wasm-node@4.19.2",
+      "purl": "pkg:npm/%40rollup/wasm-node@4.20.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/rollup/rollup.git",
@@ -65715,12 +65715,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@rollup/wasm-node/-/wasm-node-4.19.2.tgz",
+          "url": "https://registry.npmjs.org/@rollup/wasm-node/-/wasm-node-4.20.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "6c931d9f721291c95f1fbb9e0ce0c70f0b396a07992ee2bf0823ef72a8257609352faf9f590587eced93cd4787abd31fcbda4e9221c79f79889345b39543cb9d"
+              "content": "3712112438eef59cd7c29099f9331811f953fca24f81c6a656b9089cfc01fe34b31081217241c681b0bd0bc164cedefb9c4659a5f17f1f605e77029f8f13bda9"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -66277,7 +66277,7 @@
       "type": "library",
       "name": "string-width",
       "version": "4.2.3",
-      "bom-ref": "BomRef.dsl94lhppkg.dehke4ipq1o",
+      "bom-ref": "BomRef.cv622h3v0c8.mkii2uibii",
       "author": "Sindre Sorhus",
       "description": "Get the visual width of a string - the number of columns required to display it",
       "licenses": [
@@ -66385,7 +66385,7 @@
       "type": "library",
       "name": "strip-ansi",
       "version": "6.0.1",
-      "bom-ref": "BomRef.s14rfic0o6g.r7t4t911utg",
+      "bom-ref": "BomRef.db9dus3ndgg.jqs8p0ku7b8",
       "author": "Sindre Sorhus",
       "description": "Strip ANSI escape codes from a string",
       "licenses": [
@@ -67306,8 +67306,8 @@
       "type": "library",
       "name": "rollup-darwin-arm64",
       "group": "@rollup",
-      "version": "4.19.2",
-      "bom-ref": "@rollup/rollup-darwin-arm64@4.19.2",
+      "version": "4.20.0",
+      "bom-ref": "@rollup/rollup-darwin-arm64@4.20.0",
       "author": "Lukas Taegert-Atkinson",
       "description": "Native bindings for Rollup",
       "scope": "optional",
@@ -67318,7 +67318,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40rollup/rollup-darwin-arm64@4.19.2",
+      "purl": "pkg:npm/%40rollup/rollup-darwin-arm64@4.20.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/rollup/rollup.git",
@@ -67336,12 +67336,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@rollup/rollup-darwin-arm64/-/rollup-darwin-arm64-4.19.2.tgz",
+          "url": "https://registry.npmjs.org/@rollup/rollup-darwin-arm64/-/rollup-darwin-arm64-4.20.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "2080114605823563137901fe92bfe01531c971c2b3c04688d184afb6a90404f8fb02c844945abcf53cab78a3450068797eb2df0c26e8767abe61eddda8628f07"
+              "content": "b8555fbf3bec746b6548bb8bd1996f3c9be5e999ab1f8081c0b18414f7bb85499fee1b4600df9a5e8e3747f57a2c04f2c652950bf9ba52c2dbee36c6f8b1b7f5"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -70256,7 +70256,7 @@
         "tslib@2.6.3",
         "tslint@6.1.3",
         "typescript@5.2.2",
-        "zone.js@0.14.8"
+        "zone.js@0.14.10"
       ]
     },
     {
@@ -70431,7 +70431,7 @@
         "html-entities@2.5.2",
         "http-proxy-middleware@2.0.6",
         "ipaddr.js@2.2.0",
-        "launch-editor@2.8.0",
+        "launch-editor@2.8.1",
         "open@8.4.2",
         "p-retry@4.6.2",
         "rimraf@3.0.2",
@@ -70656,8 +70656,8 @@
     {
       "ref": "browserslist@4.23.3",
       "dependsOn": [
-        "caniuse-lite@1.0.30001646",
-        "electron-to-chromium@1.5.4",
+        "caniuse-lite@1.0.30001650",
+        "electron-to-chromium@1.5.5",
         "node-releases@2.0.18",
         "update-browserslist-db@1.1.0"
       ]
@@ -70899,7 +70899,7 @@
       "dependsOn": [
         "@babel/core@7.24.0",
         "babel-plugin-polyfill-corejs3@0.9.0|@babel/helper-define-polyfill-provider@0.5.0",
-        "core-js-compat@3.37.1"
+        "core-js-compat@3.38.0"
       ]
     },
     {
@@ -70914,7 +70914,7 @@
       ]
     },
     {
-      "ref": "core-js-compat@3.37.1",
+      "ref": "core-js-compat@3.38.0",
       "dependsOn": [
         "browserslist@4.23.3"
       ]
@@ -71019,7 +71019,7 @@
         "babel-plugin-polyfill-corejs2@0.4.11",
         "babel-plugin-polyfill-corejs3@0.9.0",
         "babel-plugin-polyfill-regenerator@0.5.5",
-        "core-js-compat@3.37.1",
+        "core-js-compat@3.38.0",
         "@babel/preset-env@7.24.0|semver@6.3.1"
       ]
     },
@@ -71733,7 +71733,7 @@
         "fsevents@2.3.3",
         "less@4.2.0",
         "postcss@8.4.35",
-        "rollup@4.19.2",
+        "rollup@4.20.0",
         "sass@1.77.8",
         "terser@5.29.1"
       ]
@@ -71754,7 +71754,7 @@
       "ref": "autoprefixer@10.4.18",
       "dependsOn": [
         "browserslist@4.23.3",
-        "caniuse-lite@1.0.30001646",
+        "caniuse-lite@1.0.30001650",
         "fraction.js@4.3.7",
         "normalize-range@0.1.2",
         "picocolors@1.0.1",
@@ -71763,7 +71763,7 @@
       ]
     },
     {
-      "ref": "caniuse-lite@1.0.30001646"
+      "ref": "caniuse-lite@1.0.30001650"
     },
     {
       "ref": "fraction.js@4.3.7"
@@ -71975,7 +71975,7 @@
       ]
     },
     {
-      "ref": "electron-to-chromium@1.5.4"
+      "ref": "electron-to-chromium@1.5.5"
     },
     {
       "ref": "node-releases@2.0.18"
@@ -72326,7 +72326,7 @@
       "ref": "http-proxy-middleware@2.0.6",
       "dependsOn": [
         "@types/express@4.17.21",
-        "@types/http-proxy@1.17.14",
+        "@types/http-proxy@1.17.15",
         "http-proxy@1.18.1",
         "is-glob@4.0.3",
         "is-plain-obj@3.0.0",
@@ -72392,7 +72392,7 @@
       ]
     },
     {
-      "ref": "@types/http-proxy@1.17.14",
+      "ref": "@types/http-proxy@1.17.15",
       "dependsOn": [
         "@types/node@20.14.14"
       ]
@@ -72879,7 +72879,7 @@
         "@angular/compiler-cli@17.3.12",
         "@rollup/plugin-json@6.1.0",
         "@rollup/plugin-node-resolve@15.2.3",
-        "@rollup/wasm-node@4.19.2",
+        "@rollup/wasm-node@4.20.0",
         "ajv@8.12.0",
         "ansi-colors@4.1.3",
         "browserslist@4.23.3",
@@ -72898,7 +72898,7 @@
         "ora@5.4.1",
         "piscina@4.4.0",
         "postcss@8.4.35",
-        "rollup@4.19.2",
+        "rollup@4.20.0",
         "rxjs@7.8.1",
         "sass@1.77.8",
         "tslib@2.6.3",
@@ -73296,9 +73296,9 @@
       "ref": "fsevents@2.3.3"
     },
     {
-      "ref": "rollup@4.19.2",
+      "ref": "rollup@4.20.0",
       "dependsOn": [
-        "@rollup/rollup-darwin-arm64@4.19.2",
+        "@rollup/rollup-darwin-arm64@4.20.0",
         "@types/estree@1.0.5",
         "fsevents@2.3.3"
       ]
@@ -73812,7 +73812,7 @@
       "ref": "ipaddr.js@2.2.0"
     },
     {
-      "ref": "launch-editor@2.8.0",
+      "ref": "launch-editor@2.8.1",
       "dependsOn": [
         "picocolors@1.0.1",
         "shell-quote@1.8.1"
@@ -74326,7 +74326,7 @@
       "dependsOn": [
         "rxjs@7.8.1",
         "tslib@2.6.3",
-        "zone.js@0.14.8"
+        "zone.js@0.14.10"
       ]
     },
     {
@@ -74548,7 +74548,7 @@
     {
       "ref": "@npmcli/package-json@5.2.0|glob@10.4.5",
       "dependsOn": [
-        "foreground-child@3.2.1",
+        "foreground-child@3.3.0",
         "jackspeak@3.4.3",
         "@npmcli/package-json@5.2.0|minimatch@9.0.5",
         "minipass@7.1.2",
@@ -74572,14 +74572,14 @@
       "ref": "@npmcli/package-json@5.2.0|proc-log@4.2.0"
     },
     {
-      "ref": "foreground-child@3.2.1",
+      "ref": "foreground-child@3.3.0",
       "dependsOn": [
         "cross-spawn@7.0.3",
-        "foreground-child@3.2.1|signal-exit@4.1.0"
+        "foreground-child@3.3.0|signal-exit@4.1.0"
       ]
     },
     {
-      "ref": "foreground-child@3.2.1|signal-exit@4.1.0"
+      "ref": "foreground-child@3.3.0|signal-exit@4.1.0"
     },
     {
       "ref": "jackspeak@3.4.3",
@@ -74636,7 +74636,7 @@
     {
       "ref": "node-gyp@10.2.0|glob@10.4.5",
       "dependsOn": [
-        "foreground-child@3.2.1",
+        "foreground-child@3.3.0",
         "jackspeak@3.4.3",
         "node-gyp@10.2.0|minimatch@9.0.5",
         "minipass@7.1.2",
@@ -74749,7 +74749,7 @@
     {
       "ref": "cacache@18.0.4|glob@10.4.5",
       "dependsOn": [
-        "foreground-child@3.2.1",
+        "foreground-child@3.3.0",
         "jackspeak@3.4.3",
         "cacache@18.0.4|minimatch@9.0.5",
         "minipass@7.1.2",
@@ -75010,7 +75010,7 @@
     {
       "ref": "read-package-json@7.0.1|glob@10.4.5",
       "dependsOn": [
-        "foreground-child@3.2.1",
+        "foreground-child@3.3.0",
         "jackspeak@3.4.3",
         "read-package-json@7.0.1|minimatch@9.0.5",
         "minipass@7.1.2",
@@ -75250,7 +75250,7 @@
       "ref": "reflect-metadata@0.2.2"
     },
     {
-      "ref": "zone.js@0.14.8"
+      "ref": "zone.js@0.14.10"
     },
     {
       "ref": "@angular/forms@17.3.12",
@@ -75782,7 +75782,7 @@
         "@types/istanbul-lib-coverage@2.0.6",
         "@types/istanbul-reports@3.0.4",
         "@types/node@20.14.14",
-        "@types/yargs@17.0.32",
+        "@types/yargs@17.0.33",
         "@jest/types@29.6.3|chalk@4.1.2"
       ]
     },
@@ -76100,7 +76100,7 @@
       ]
     },
     {
-      "ref": "@types/yargs@17.0.32",
+      "ref": "@types/yargs@17.0.33",
       "dependsOn": [
         "@types/yargs-parser@21.0.3"
       ]
@@ -77640,7 +77640,7 @@
       "ref": "@rollup/plugin-json@6.1.0",
       "dependsOn": [
         "@rollup/pluginutils@5.1.0",
-        "rollup@4.19.2"
+        "rollup@4.20.0"
       ]
     },
     {
@@ -77649,7 +77649,7 @@
         "@types/estree@1.0.5",
         "estree-walker@2.0.2",
         "@rollup/pluginutils@5.1.0|picomatch@2.3.1",
-        "rollup@4.19.2"
+        "rollup@4.20.0"
       ]
     },
     {
@@ -77667,7 +77667,7 @@
         "is-builtin-module@3.2.1",
         "is-module@1.0.0",
         "resolve@1.22.8",
-        "rollup@4.19.2"
+        "rollup@4.20.0"
       ]
     },
     {
@@ -77686,7 +77686,7 @@
       "ref": "is-module@1.0.0"
     },
     {
-      "ref": "@rollup/wasm-node@4.19.2",
+      "ref": "@rollup/wasm-node@4.20.0",
       "dependsOn": [
         "@types/estree@1.0.5",
         "fsevents@2.3.3"
@@ -77707,9 +77707,9 @@
     {
       "ref": "@isaacs/cliui@8.0.2",
       "dependsOn": [
-        "BomRef.dsl94lhppkg.dehke4ipq1o",
+        "BomRef.cv622h3v0c8.mkii2uibii",
         "@isaacs/cliui@8.0.2|string-width@5.1.2",
-        "BomRef.s14rfic0o6g.r7t4t911utg",
+        "BomRef.db9dus3ndgg.jqs8p0ku7b8",
         "@isaacs/cliui@8.0.2|strip-ansi@7.1.0",
         "wrap-ansi@7.0.0",
         "@isaacs/cliui@8.0.2|wrap-ansi@8.1.0"
@@ -77747,7 +77747,7 @@
       "ref": "@isaacs/cliui@8.0.2|ansi-styles@6.2.1"
     },
     {
-      "ref": "BomRef.dsl94lhppkg.dehke4ipq1o",
+      "ref": "BomRef.cv622h3v0c8.mkii2uibii",
       "dependsOn": [
         "emoji-regex@8.0.0",
         "is-fullwidth-code-point@3.0.0",
@@ -77758,7 +77758,7 @@
       "ref": "eastasianwidth@0.2.0"
     },
     {
-      "ref": "BomRef.s14rfic0o6g.r7t4t911utg",
+      "ref": "BomRef.db9dus3ndgg.jqs8p0ku7b8",
       "dependsOn": [
         "ansi-regex@5.0.1"
       ]
@@ -77842,7 +77842,7 @@
       ]
     },
     {
-      "ref": "@rollup/rollup-darwin-arm64@4.19.2"
+      "ref": "@rollup/rollup-darwin-arm64@4.20.0"
     },
     {
       "ref": "properties-reader@2.3.0",
