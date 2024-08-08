@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
   "version": 1,
-  "serialNumber": "urn:uuid:e1001e8e-6be9-4319-9e65-f60aaa3e6fcc",
+  "serialNumber": "urn:uuid:446d4d6b-5420-41a6-b76c-e199df9da3fb",
   "metadata": {
-    "timestamp": "2024-08-07T19:53:24.334Z",
+    "timestamp": "2024-08-08T19:31:09.448Z",
     "tools": [
       {
         "name": "npm",
@@ -10396,8 +10396,8 @@
     {
       "type": "library",
       "name": "caniuse-lite",
-      "version": "1.0.30001650",
-      "bom-ref": "caniuse-lite@1.0.30001650",
+      "version": "1.0.30001651",
+      "bom-ref": "caniuse-lite@1.0.30001651",
       "author": "Ben Briggs",
       "description": "A smaller version of caniuse-db, with only the essentials!",
       "licenses": [
@@ -10407,7 +10407,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/caniuse-lite@1.0.30001650",
+      "purl": "pkg:npm/caniuse-lite@1.0.30001651",
       "externalReferences": [
         {
           "url": "git+https://github.com/browserslist/caniuse-lite.git",
@@ -10425,12 +10425,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001650.tgz",
+          "url": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001651.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "7e011cee13ff2c1ee289c7571d423d56c06c3199949a55497903f6aaa416fb7964a9585b9a3114f33a7e879b2d59e8a55fe1bbb97b885082255a50f0f6376df2"
+              "content": "f427fe5efd6324d7b5c4f64b1ae5172cd904d41a0392a46a632149f530d84aa85dbaa03886ee2847d1e5b86a166100bf6a3f161e3b06555f9bc24874fad7a046"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -66277,7 +66277,7 @@
       "type": "library",
       "name": "string-width",
       "version": "4.2.3",
-      "bom-ref": "BomRef.cv622h3v0c8.mkii2uibii",
+      "bom-ref": "BomRef.2dv65nhgqho.tsoj1fr9j8o",
       "author": "Sindre Sorhus",
       "description": "Get the visual width of a string - the number of columns required to display it",
       "licenses": [
@@ -66385,7 +66385,7 @@
       "type": "library",
       "name": "strip-ansi",
       "version": "6.0.1",
-      "bom-ref": "BomRef.db9dus3ndgg.jqs8p0ku7b8",
+      "bom-ref": "BomRef.vepn43vonjg.1veccdlt3no",
       "author": "Sindre Sorhus",
       "description": "Strip ANSI escape codes from a string",
       "licenses": [
@@ -70656,7 +70656,7 @@
     {
       "ref": "browserslist@4.23.3",
       "dependsOn": [
-        "caniuse-lite@1.0.30001650",
+        "caniuse-lite@1.0.30001651",
         "electron-to-chromium@1.5.5",
         "node-releases@2.0.18",
         "update-browserslist-db@1.1.0"
@@ -71754,7 +71754,7 @@
       "ref": "autoprefixer@10.4.18",
       "dependsOn": [
         "browserslist@4.23.3",
-        "caniuse-lite@1.0.30001650",
+        "caniuse-lite@1.0.30001651",
         "fraction.js@4.3.7",
         "normalize-range@0.1.2",
         "picocolors@1.0.1",
@@ -71763,7 +71763,7 @@
       ]
     },
     {
-      "ref": "caniuse-lite@1.0.30001650"
+      "ref": "caniuse-lite@1.0.30001651"
     },
     {
       "ref": "fraction.js@4.3.7"
@@ -77707,9 +77707,9 @@
     {
       "ref": "@isaacs/cliui@8.0.2",
       "dependsOn": [
-        "BomRef.cv622h3v0c8.mkii2uibii",
+        "BomRef.2dv65nhgqho.tsoj1fr9j8o",
         "@isaacs/cliui@8.0.2|string-width@5.1.2",
-        "BomRef.db9dus3ndgg.jqs8p0ku7b8",
+        "BomRef.vepn43vonjg.1veccdlt3no",
         "@isaacs/cliui@8.0.2|strip-ansi@7.1.0",
         "wrap-ansi@7.0.0",
         "@isaacs/cliui@8.0.2|wrap-ansi@8.1.0"
@@ -77747,7 +77747,7 @@
       "ref": "@isaacs/cliui@8.0.2|ansi-styles@6.2.1"
     },
     {
-      "ref": "BomRef.cv622h3v0c8.mkii2uibii",
+      "ref": "BomRef.2dv65nhgqho.tsoj1fr9j8o",
       "dependsOn": [
         "emoji-regex@8.0.0",
         "is-fullwidth-code-point@3.0.0",
@@ -77758,7 +77758,7 @@
       "ref": "eastasianwidth@0.2.0"
     },
     {
-      "ref": "BomRef.db9dus3ndgg.jqs8p0ku7b8",
+      "ref": "BomRef.vepn43vonjg.1veccdlt3no",
       "dependsOn": [
         "ansi-regex@5.0.1"
       ]
