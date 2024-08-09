@@ -184,7 +184,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
         if (PDFViewerApplication) {
           PDFViewerApplication.pdfViewer.pageViewMode = this._pageViewMode;
-          PDFViewerApplication.findController.pageViewMode = this._pageViewMode;
+          PDFViewerApplication.findController._pageViewMode = this._pageViewMode;
         }
         if (viewMode === 'infinite-scroll') {
           if (this.scrollMode === ScrollModeType.page || this.scrollMode === ScrollModeType.horizontal) {
@@ -1684,26 +1684,26 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
     PDFViewerApplication.eventBus.on('updatefindcontrolstate', (x: FindResult) => {
       this.ngZone.run(() => {
-        let type = PDFViewerApplication.findController.state.type || 'find';
+        let type = PDFViewerApplication.findController.state?.type ?? 'find';
         if (type === 'again') {
           type = 'findagain';
         }
         const result = {
-          caseSensitive: PDFViewerApplication.findController.state.caseSensitive,
-          entireWord: PDFViewerApplication.findController.state.entireWord,
-          findPrevious: PDFViewerApplication.findController.state.findPrevious,
-          highlightAll: PDFViewerApplication.findController.state.highlightAll,
-          matchDiacritics: PDFViewerApplication.findController.state.matchDiacritics,
-          query: PDFViewerApplication.findController.state.query,
+          caseSensitive: PDFViewerApplication.findController.state?.caseSensitive,
+          entireWord: PDFViewerApplication.findController.state?.entireWord,
+          findPrevious: PDFViewerApplication.findController.state?.findPrevious,
+          highlightAll: PDFViewerApplication.findController.state?.highlightAll,
+          matchDiacritics: PDFViewerApplication.findController.state?.matchDiacritics,
+          query: PDFViewerApplication.findController.state?.query,
           type,
         };
         this.updateFindMatchesCount.emit({
           ...result,
           current: x.matchesCount.current,
           total: x.matchesCount.total,
-          matches: PDFViewerApplication.findController._pageMatches,
-          matchesLength: PDFViewerApplication.findController._pageMatchesLength,
-        });
+          matches: PDFViewerApplication.findController._pageMatches ?? [],
+          matchesLength: PDFViewerApplication.findController._pageMatchesLength ?? [],
+        } as FindResultMatchesCount); // TODO: remove the cast because it's just duct tape
 
         if (this.updateFindState) {
           this.updateFindState.emit(x.state);
@@ -1711,17 +1711,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       });
     });
     PDFViewerApplication.eventBus.on('updatefindmatchescount', (x: FindResult) => {
-      x.matchesCount.matches = PDFViewerApplication.findController._pageMatches;
-      x.matchesCount.matchesLength = PDFViewerApplication.findController._pageMatchesLength;
+      x.matchesCount.matches = PDFViewerApplication.findController._pageMatches ?? [];
+      x.matchesCount.matchesLength = PDFViewerApplication.findController._pageMatchesLength ?? [];
       this.ngZone.run(() =>
         this.updateFindMatchesCount.emit({
-          caseSensitive: PDFViewerApplication.findController.state.caseSensitive,
-          entireWord: PDFViewerApplication.findController.state.entireWord,
-          findPrevious: PDFViewerApplication.findController.state.findPrevious,
-          highlightAll: PDFViewerApplication.findController.state.highlightAll,
-          matchDiacritics: PDFViewerApplication.findController.state.matchDiacritics,
-          query: PDFViewerApplication.findController.state.query,
-          type: PDFViewerApplication.findController.state.type,
+          caseSensitive: PDFViewerApplication.findController.state?.caseSensitive ?? false,
+          entireWord: PDFViewerApplication.findController.state?.entireWord ?? false,
+          findPrevious: PDFViewerApplication.findController.state?.findPrevious ?? false,
+          highlightAll: PDFViewerApplication.findController.state?.highlightAll ?? false,
+          matchDiacritics: PDFViewerApplication.findController.state?.matchDiacritics ?? false,
+          query: PDFViewerApplication.findController.state?.query ?? '',
+          type: PDFViewerApplication.findController.state?.type as any,
           current: x.matchesCount.current,
           total: x.matchesCount.total,
           matches: x.matchesCount.matches,

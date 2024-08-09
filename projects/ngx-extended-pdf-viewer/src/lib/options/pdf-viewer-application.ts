@@ -5,7 +5,7 @@ import { AnnotationStorage, PrintAnnotationStorage } from './pdf-annotation-stor
 import { IEventBus } from './pdf-event-bus';
 import { PageViewport } from './pdf-page-view-port';
 import { PDFPrintService } from './pdf-print-service';
-import { IPDFViewer, PageViewModeType } from './pdf-viewer';
+import { IPDFViewer } from './pdf-viewer';
 import { IPDFViewerAppConfig } from './pdf-viewer-app-config';
 import { ServiceWorkerOptionsType } from './service-worker-options';
 
@@ -30,12 +30,107 @@ export type TextContent = {
   items: Array<TextItem | TextMarkedContent>;
 };
 
-export interface FindController {
-  state: any;
-  _pageMatches: Array<any>;
-  _pageMatchesColor: Array<number>;
-  _pageMatchesLength: Array<number>;
-  pageViewMode: PageViewModeType;
+export interface PDFFindParameters {
+  caseSensitive?: boolean;
+  entireWord?: boolean;
+  findPrevious: boolean;
+  highlightAll?: boolean;
+  matchDiacritics?: boolean;
+  query: string;
+  source: any;
+  type: 'highlightallchange' | 'find' | 'again' | 'findagain'; //  | 'findbarhighlight' | 'scroll',
+  dontScrollIntoView?: boolean;
+}
+
+export interface PDFFindController {
+  /**
+   * @param {PDFFindControllerOptions} options
+   */
+  _linkService: any; // import("./interfaces").IPDFLinkService;
+  _eventBus: any; // import("./event_utils").EventBus;
+  _pageViewMode: any;
+  /**
+   * Callback used to check if a `pageNumber` is currently visible.
+   * @type {function}
+   */
+  onIsPageVisible: Function;
+  get highlightMatches(): boolean | undefined;
+  get pageMatches(): any[] | undefined;
+  get pageMatchesLength(): any[] | undefined;
+  get selected():
+    | {
+        pageIdx: number;
+        matchIdx: number;
+      }
+    | undefined;
+  get state(): PDFFindParameters | undefined;
+  /**
+   * Set a reference to the PDF document in order to search it.
+   * Note that searching is not possible if this method is not called.
+   *
+   * @param {PDFDocumentProxy} pdfDocument - The PDF document to search.
+   */
+  setDocument(pdfDocument: PDFDocumentProxy): void;
+  _pdfDocument: PDFDocumentProxy | null | undefined;
+  _dirtyMatch: boolean | undefined;
+  _findTimeout: any;
+  _highlightMatches: boolean | undefined;
+  /**
+   * @typedef {Object} PDFFindControllerScrollMatchIntoViewParams
+   * @property {HTMLElement} element
+   * @property {number} selectedLeft
+   * @property {number} pageIndex
+   * @property {number} matchIndex
+   */
+  /**
+   * Scroll the current match into view.
+   * @param {PDFFindControllerScrollMatchIntoViewParams}
+   */
+  scrollMatchIntoView({
+    element,
+    selectedLeft,
+    pageIndex,
+    matchIndex,
+  }: {
+    element: HTMLElement;
+    selectedLeft: number;
+    pageIndex: number;
+    matchIndex: number;
+  }): void;
+  _scrollMatches: boolean | undefined;
+  _pageMatches: any[] | undefined;
+  _pageMatchesLength: any[] | undefined;
+  _selected:
+    | {
+        pageIdx: number;
+        matchIdx: number;
+      }
+    | undefined;
+  _offset:
+    | {
+        pageIdx: null;
+        matchIdx: null;
+        wrapped: boolean;
+      }
+    | undefined;
+  _extractTextPromises: any[] | undefined;
+  _pageContents: any[] | undefined;
+  _pageDiffs: any[] | undefined;
+  _hasDiacritics: any[] | undefined;
+  _matchesCountTotal: number | undefined;
+  _pagesToSearch: number | null | undefined;
+  _pendingFindMatches: Set<any> | undefined;
+  _resumePageIdx: any;
+  _firstPageCapability: any;
+  _rawQuery: any;
+  _calculateRegExpMatch(query: any, entireWord: any, pageIndex: any, pageContent: any): void;
+  _convertToRegExpString(query: any, hasDiacritics: any): any[];
+  _calculateMatch(pageIndex: any): void;
+
+  ngxFind(PDFFindParameters: PDFFindParameters): void;
+
+  ngxFindNext(): void;
+  ngxFindPrevious(): void;
 }
 
 export interface Metadata {
@@ -1062,7 +1157,7 @@ export interface IPDFViewerApplication {
   enablePrint: boolean;
   eventBus: IEventBus;
   findBar: any;
-  findController: FindController;
+  findController: PDFFindController;
   isViewerEmbedded: boolean;
   l10n: IWebL10n;
   onError: (error: Error) => void;

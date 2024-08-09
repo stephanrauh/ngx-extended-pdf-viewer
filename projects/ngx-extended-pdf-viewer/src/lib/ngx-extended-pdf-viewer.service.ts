@@ -2,7 +2,7 @@ import { effect, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { AnnotationEditorParamsType, AnnotationMode, EditorAnnotation, StampEditorAnnotation } from './options/editor-annotations';
 import { PdfLayer } from './options/optional_content_config';
 import { PDFPrintRange } from './options/pdf-print-range';
-import { IPDFViewerApplication, PDFDocumentProxy, PDFPageProxy, TextItem, TextMarkedContent } from './options/pdf-viewer-application';
+import { IPDFViewerApplication, PDFDocumentProxy, PDFFindParameters, PDFPageProxy, TextItem, TextMarkedContent } from './options/pdf-viewer-application';
 import { PDFNotificationService } from './pdf-notification-service';
 
 export interface FindOptions {
@@ -10,6 +10,7 @@ export interface FindOptions {
   matchCase?: boolean;
   wholeWords?: boolean;
   matchDiacritics?: boolean;
+  dontScrollIntoView?: boolean;
 }
 
 interface DrawContext {
@@ -100,6 +101,20 @@ export class NgxExtendedPdfViewerService {
         inputField.classList.remove('hidden');
         // end of the dirty hack
         inputField.dispatchEvent(new Event('input'));
+        const findParameters: PDFFindParameters = {
+          caseSensitive: options.matchCase ?? false,
+          entireWord: options.wholeWords ?? false,
+          highlightAll: options.highlightAll ?? false,
+          matchDiacritics: options.matchDiacritics ?? false,
+          findPrevious: false,
+          query: text,
+          source: null,
+          type: 'find',
+          dontScrollIntoView: options.dontScrollIntoView ?? false,
+        };
+        const findController = this.PDFViewerApplication?.findController;
+        findController?.ngxFind(findParameters);
+
         return true;
       } else {
         // tslint:disable-next-line:quotemark
@@ -115,12 +130,9 @@ export class NgxExtendedPdfViewerService {
       console.error("The PDF viewer hasn't finished initializing. Please call findNext() later.");
       return false;
     } else {
-      const button = document.getElementById('findNext');
-      if (button) {
-        button.click();
-        return true;
-      }
-      return false;
+      const findController = this.PDFViewerApplication?.findController;
+      findController?.ngxFindNext();
+      return true;
     }
   }
 
@@ -130,12 +142,9 @@ export class NgxExtendedPdfViewerService {
       console.error("The PDF viewer hasn't finished initializing. Please call findPrevious() later.");
       return false;
     } else {
-      const button = document.getElementById('findPrevious');
-      if (button) {
-        button.click();
-        return true;
-      }
-      return false;
+      const findController = this.PDFViewerApplication?.findController;
+      findController?.ngxFindPrevious();
+      return true;
     }
   }
 
