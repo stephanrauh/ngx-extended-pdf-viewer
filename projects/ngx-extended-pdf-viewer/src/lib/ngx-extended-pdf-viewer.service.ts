@@ -71,11 +71,11 @@ export class NgxExtendedPdfViewerService {
     });
   }
 
-  public find(text: string, options: FindOptions = {}): boolean {
+  public find(text: string, options: FindOptions = {}): Array<Promise<number>> | undefined {
     if (!this.ngxExtendedPdfViewerInitialized) {
       // tslint:disable-next-line:quotemark
       console.error("The PDF viewer hasn't finished initializing. Please call find() later.");
-      return false;
+      return undefined;
     } else {
       const highlightAllCheckbox = document.getElementById('findHighlightAll') as HTMLInputElement;
       if (highlightAllCheckbox) {
@@ -101,26 +101,20 @@ export class NgxExtendedPdfViewerService {
         inputField.classList.remove('hidden');
         // end of the dirty hack
         inputField.dispatchEvent(new Event('input'));
-        const findParameters: PDFFindParameters = {
-          caseSensitive: options.matchCase ?? false,
-          entireWord: options.wholeWords ?? false,
-          highlightAll: options.highlightAll ?? false,
-          matchDiacritics: options.matchDiacritics ?? false,
-          findPrevious: false,
-          query: text,
-          source: null,
-          type: 'find',
-          dontScrollIntoView: options.dontScrollIntoView ?? false,
-        };
-        const findController = this.PDFViewerApplication?.findController;
-        findController?.ngxFind(findParameters);
-
-        return true;
-      } else {
-        // tslint:disable-next-line:quotemark
-        console.error("Unexpected error: the input field used to search isn't part of the DOM.");
-        return false;
       }
+      const findParameters: PDFFindParameters = {
+        caseSensitive: options.matchCase ?? false,
+        entireWord: options.wholeWords ?? false,
+        highlightAll: options.highlightAll ?? false,
+        matchDiacritics: options.matchDiacritics ?? false,
+        findPrevious: false,
+        query: text,
+        source: null,
+        type: 'find',
+        dontScrollIntoView: options.dontScrollIntoView ?? false,
+      };
+      const findController = this.PDFViewerApplication?.findController;
+      return findController?.ngxFind(findParameters);
     }
   }
 

@@ -127,7 +127,7 @@ export interface PDFFindController {
   _convertToRegExpString(query: any, hasDiacritics: any): any[];
   _calculateMatch(pageIndex: any): void;
 
-  ngxFind(PDFFindParameters: PDFFindParameters): void;
+  ngxFind(PDFFindParameters: PDFFindParameters): Array<Promise<any>>;
 
   ngxFindNext(): void;
   ngxFindPrevious(): void;
