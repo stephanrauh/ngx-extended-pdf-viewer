@@ -173,60 +173,66 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   @Input()
   public set pageViewMode(viewMode: PageViewModeType) {
-    if (isPlatformBrowser(this.platformId)) {
-      const hasChanged = this._pageViewMode !== viewMode;
-      if (hasChanged) {
-        const mustRedraw = !this.pdfScriptLoaderService.ngxExtendedPdfViewerIncompletelyInitialized && (this._pageViewMode === 'book' || viewMode === 'book');
-        this._pageViewMode = viewMode;
-        this.pageViewModeChange.emit(this._pageViewMode);
-        const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
-        PDFViewerApplicationOptions?.set('pageViewMode', this.pageViewMode);
-        const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
-        if (PDFViewerApplication) {
-          PDFViewerApplication.pdfViewer.pageViewMode = this._pageViewMode;
-          PDFViewerApplication.findController._pageViewMode = this._pageViewMode;
-        }
-        if (viewMode === 'infinite-scroll') {
-          if (this.scrollMode === ScrollModeType.page || this.scrollMode === ScrollModeType.horizontal) {
-            this.scrollMode = ScrollModeType.vertical;
-            PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(this.scrollMode) });
-          }
-          this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(false, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
-        } else if (viewMode !== 'multiple') {
-          this.scrollMode = ScrollModeType.vertical;
-        } else {
-          if (this.scrollMode === ScrollModeType.page) {
-            this.scrollMode = ScrollModeType.vertical;
-          }
-          this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(true, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
-        }
-        if (viewMode === 'single') {
-          // since pdf.js, our custom single-page-mode has been replaced by the standard scrollMode="page"
-          this.scrollMode = ScrollModeType.page;
-          this._pageViewMode = viewMode;
-        }
-        if (viewMode === 'book') {
-          this.showBorders = false;
-          if (this.scrollMode !== ScrollModeType.vertical) {
-            this.scrollMode = ScrollModeType.vertical;
-          }
-        }
-        if (mustRedraw) {
-          if (viewMode !== 'book') {
-            const ngx = this.elementRef.nativeElement as HTMLElement;
-            const viewerContainer = ngx.querySelector('#viewerContainer') as HTMLDivElement;
-            viewerContainer.style.width = '';
-            viewerContainer.style.overflow = '';
-            viewerContainer.style.marginRight = '';
-            viewerContainer.style.marginLeft = '';
-            const viewer = ngx.querySelector('#viewer') as HTMLDivElement;
-            viewer.style.maxWidth = '';
-            viewer.style.minWidth = '';
-          }
+    if (!isPlatformBrowser(this.platformId)) return;
 
-          this.openPDF2();
+    const hasChanged = this._pageViewMode !== viewMode;
+    if (!hasChanged) return;
+
+    const mustRedraw = !this.pdfScriptLoaderService.ngxExtendedPdfViewerIncompletelyInitialized && (this._pageViewMode === 'book' || viewMode === 'book');
+    this._pageViewMode = viewMode;
+    this.pageViewModeChange.emit(this._pageViewMode);
+
+    const PDFViewerApplicationOptions: IPDFViewerApplicationOptions = this.pdfScriptLoaderService.PDFViewerApplicationOptions;
+    PDFViewerApplicationOptions?.set('pageViewMode', this.pageViewMode);
+
+    const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
+    if (PDFViewerApplication) {
+      PDFViewerApplication.pdfViewer.pageViewMode = this._pageViewMode;
+      PDFViewerApplication.findController._pageViewMode = this._pageViewMode;
+    }
+
+    switch (viewMode) {
+      case 'infinite-scroll':
+        if (this.scrollMode === ScrollModeType.page || this.scrollMode === ScrollModeType.horizontal) {
+          this.scrollMode = ScrollModeType.vertical;
+          PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(this.scrollMode) });
         }
+        this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(false, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
+        break;
+      case 'single':
+        // since pdf.js, our custom single-page-mode has been replaced by the standard scrollMode="page"
+        this.scrollMode = ScrollModeType.page;
+        this._pageViewMode = viewMode;
+        break;
+      case 'book':
+        this.showBorders = false;
+        if (this.scrollMode !== ScrollModeType.vertical) {
+          this.scrollMode = ScrollModeType.vertical;
+        }
+        break;
+      case 'multiple':
+        if (this.scrollMode === ScrollModeType.page) {
+          this.scrollMode = ScrollModeType.vertical;
+        }
+        this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(true, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
+        break;
+      default:
+        this.scrollMode = ScrollModeType.vertical;
+    }
+
+    if (mustRedraw) {
+      if (viewMode !== 'book') {
+        const ngx = this.elementRef.nativeElement as HTMLElement;
+        const viewerContainer = ngx.querySelector('#viewerContainer') as HTMLDivElement;
+        viewerContainer.style.width = '';
+        viewerContainer.style.overflow = '';
+        viewerContainer.style.marginRight = '';
+        viewerContainer.style.marginLeft = '';
+        const viewer = ngx.querySelector('#viewer') as HTMLDivElement;
+        viewer.style.maxWidth = '';
+        viewer.style.minWidth = '';
       }
+      this.openPDF2();
     }
   }
 
@@ -1057,20 +1063,24 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   private showElementsRecursively(root: Element): void {
-    root.classList.remove('hidden');
-    root.classList.remove('invisible');
-    root.classList.remove('hiddenXXLView');
-    root.classList.remove('hiddenXLView');
-    root.classList.remove('hiddenLargeView');
-    root.classList.remove('hiddenMediumView');
-    root.classList.remove('hiddenSmallView');
-    root.classList.remove('hiddenTinyView');
-    root.classList.remove('visibleXXLView');
-    root.classList.remove('visibleXLView');
-    root.classList.remove('visibleLargeView');
-    root.classList.remove('visibleMediumView');
-    root.classList.remove('visibleSmallView');
-    root.classList.remove('visibleTinyView');
+    const classesToRemove = [
+      'hidden',
+      'invisible',
+      'hiddenXXLView',
+      'hiddenXLView',
+      'hiddenLargeView',
+      'hiddenMediumView',
+      'hiddenSmallView',
+      'hiddenTinyView',
+      'visibleXXLView',
+      'visibleXLView',
+      'visibleLargeView',
+      'visibleMediumView',
+      'visibleSmallView',
+      'visibleTinyView',
+    ];
+
+    root.classList.remove(...classesToRemove);
 
     if (root instanceof HTMLButtonElement || root instanceof HTMLAnchorElement || root instanceof HTMLInputElement || root instanceof HTMLSelectElement) {
       return;
@@ -1246,29 +1256,30 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     this.spreadChange.emit(newSpread);
   }
 
+  private toggleVisibility = (elementId: string, cssClass = 'invisible') => {
+    const element = document.getElementById(elementId) as HTMLElement;
+    element?.classList.remove(cssClass);
+  };
+
   private activateTextlayerIfNecessary(options: any): void {
+    const setTextLayerMode = (mode: number) => {
+      options?.set('textLayerMode', mode);
+      this.pdfScriptLoaderService.PDFViewerApplication.pdfViewer?.setTextLayerMode(mode);
+    };
+
     if (this.textLayer === undefined) {
       if (!this.handTool) {
-        options?.set('textLayerMode', pdfDefaultOptions.textLayerMode);
-        this.pdfScriptLoaderService.PDFViewerApplication.pdfViewer?.setTextLayerMode(pdfDefaultOptions.textLayerMode);
+        setTextLayerMode(pdfDefaultOptions.textLayerMode);
         this.textLayer = true;
         if (this.showFindButton === undefined) {
           this.showFindButton = true;
           setTimeout(() => {
-            // todo remove this hack:
-            const viewFind = document.getElementById('viewFind') as HTMLElement;
-            if (viewFind) {
-              viewFind.classList.remove('invisible');
-            }
-            const findbar = document.getElementById('findbar') as HTMLElement;
-            if (findbar) {
-              findbar.classList.remove('invisible');
-            }
+            this.toggleVisibility('viewFind');
+            this.toggleVisibility('findbar');
           });
         }
       } else {
-        options?.set('textLayerMode', this.showHandToolButton ? pdfDefaultOptions.textLayerMode : 0);
-        this.pdfScriptLoaderService.PDFViewerApplication.pdfViewer?.setTextLayerMode(pdfDefaultOptions.textLayerMode);
+        setTextLayerMode(this.showHandToolButton ? pdfDefaultOptions.textLayerMode : 0);
 
         if (!this.showHandToolButton) {
           if (this.showFindButton || this.showFindButton === undefined) {
@@ -1294,21 +1305,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         }
       }
     } else {
-      options?.set('textLayerMode', pdfDefaultOptions.textLayerMode);
-      this.pdfScriptLoaderService.PDFViewerApplication.pdfViewer?.setTextLayerMode(pdfDefaultOptions.textLayerMode);
+      setTextLayerMode(pdfDefaultOptions.textLayerMode);
       this.textLayer = true;
       if (this.showFindButton === undefined) {
         this.showFindButton = true;
         setTimeout(() => {
-          // todo remove this hack:
-          const viewFind = document.getElementById('viewFind') as HTMLElement;
-          if (viewFind) {
-            viewFind.classList.remove('invisible');
-          }
-          const findbar = document.getElementById('findbar') as HTMLElement;
-          if (findbar) {
-            findbar.classList.remove('invisible');
-          }
+          this.toggleVisibility('viewFind');
+          this.toggleVisibility('findbar');
         });
       }
     }

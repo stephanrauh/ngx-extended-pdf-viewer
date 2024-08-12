@@ -254,47 +254,64 @@ export class DynamicCssComponent implements OnDestroy {
   }
 
   public checkHeight(ngxExtendedPdfViewer: NgxHasHeight, logLevel: VerbosityLevel): void {
-    if (ngxExtendedPdfViewer.height) {
-      if (isNaN(Number(ngxExtendedPdfViewer.height.replace('%', '')))) {
-        // The height is defined with one of the units vh, vw, em, rem, etc.
-        // So the height check isn't necessary.
-        return;
+    if (this.isHeightDefinedWithUnits(ngxExtendedPdfViewer.height)) return;
+    if (this.isPrinting()) return;
+
+    const container = this.getContainer();
+    if (!container) return;
+
+    if (this.isContainerHeightZero(container, ngxExtendedPdfViewer, logLevel)) {
+      ngxExtendedPdfViewer.autoHeight = true;
+    }
+
+    if (ngxExtendedPdfViewer.autoHeight) {
+      this.adjustHeight(container, ngxExtendedPdfViewer);
+    }
+  }
+
+  /**
+   * The height is defined with one of the units vh, vw, em, rem, etc.
+   * So the height check isn't necessary.
+   * @param height the height of the container
+   */
+  private isHeightDefinedWithUnits(height: string | undefined): boolean {
+    return height ? isNaN(Number(height.replace('%', ''))) : false;
+  }
+
+  /**
+   * #1702 workaround to a Firefox bug: when printing, container.clientHeight is temporarily 0,
+   * causing ngx-extended-pdf-viewer to default to 100 pixels height. So it's better to do nothing.
+   * @returns true if data-pdfjsprinting is set
+   */
+  private isPrinting(): boolean {
+    return !!document.querySelector('[data-pdfjsprinting]');
+  }
+
+  private getContainer(): HTMLElement | null {
+    return typeof document !== 'undefined' ? (document.getElementsByClassName('zoom')[0] as HTMLElement) : null;
+  }
+
+  private isContainerHeightZero(container: HTMLElement, ngxExtendedPdfViewer: NgxHasHeight, logLevel: VerbosityLevel): boolean {
+    if (container.clientHeight === 0) {
+      if (logLevel >= VerbosityLevel.WARNINGS && !ngxExtendedPdfViewer.autoHeight) {
+        console.warn(
+          "The height of the PDF viewer widget is zero pixels. Please check the height attribute. Is there a syntax error? Or are you using a percentage with a CSS framework that doesn't support this? The height is adjusted automatedly."
+        );
       }
+      return true;
     }
-    if (document.querySelector('[data-pdfjsprinting]')) {
-      // #1702 workaround to a Firefox bug: when printing, container.clientHeight is temporarily 0,
-      // causing ngx-extended-pdf-viewer to default to 100 pixels height. So it's better
-      // to do nothing.
-      return;
-    }
-    if (typeof document !== 'undefined') {
-      const container = document.getElementsByClassName('zoom')[0] as HTMLElement;
-      if (container) {
-        if (container.clientHeight === 0) {
-          if (logLevel >= VerbosityLevel.WARNINGS && !ngxExtendedPdfViewer.autoHeight) {
-            console.warn(
-              "The height of the PDF viewer widget is zero pixels. Please check the height attribute. Is there a syntax error? Or are you using a percentage with a CSS framework that doesn't support this? The height is adjusted automatedly."
-            );
-          }
-          ngxExtendedPdfViewer.autoHeight = true;
-        }
-        if (ngxExtendedPdfViewer.autoHeight) {
-          const available = window.innerHeight;
-          const rect = container.getBoundingClientRect();
-          const top = rect.top;
-          let maximumHeight = available - top;
-          // take the margins and paddings of the parent containers into account
-          const padding = this.calculateBorderMargin(container);
-          maximumHeight -= padding;
-          if (maximumHeight > 100) {
-            ngxExtendedPdfViewer.minHeight = `${maximumHeight}px`;
-          } else {
-            ngxExtendedPdfViewer.minHeight = '100px';
-          }
-          ngxExtendedPdfViewer.markForCheck();
-        }
-      }
-    }
+    return false;
+  }
+
+  private adjustHeight(container: HTMLElement, ngxExtendedPdfViewer: NgxHasHeight): void {
+    const available = window.innerHeight;
+    const rect = container.getBoundingClientRect();
+    const top = rect.top;
+    let maximumHeight = available - top;
+    const padding = this.calculateBorderMargin(container);
+    maximumHeight -= padding;
+    ngxExtendedPdfViewer.minHeight = maximumHeight > 100 ? `${maximumHeight}px` : '100px';
+    ngxExtendedPdfViewer.markForCheck();
   }
 
   private calculateBorderMargin(container: HTMLElement | null): number {
