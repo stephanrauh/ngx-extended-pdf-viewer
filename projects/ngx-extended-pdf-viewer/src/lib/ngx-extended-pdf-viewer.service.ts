@@ -11,6 +11,8 @@ export interface FindOptions {
   wholeWords?: boolean;
   matchDiacritics?: boolean;
   dontScrollIntoView?: boolean;
+
+  useSecondaryFindcontroller?: boolean;
 }
 
 interface DrawContext {
@@ -77,31 +79,33 @@ export class NgxExtendedPdfViewerService {
       console.error("The PDF viewer hasn't finished initializing. Please call find() later.");
       return undefined;
     } else {
-      const highlightAllCheckbox = document.getElementById('findHighlightAll') as HTMLInputElement;
-      if (highlightAllCheckbox) {
-        highlightAllCheckbox.checked = options.highlightAll ?? false;
+      if (!options.useSecondaryFindcontroller) {
+        const highlightAllCheckbox = document.getElementById('findHighlightAll') as HTMLInputElement;
+        if (highlightAllCheckbox) {
+          highlightAllCheckbox.checked = options.highlightAll ?? false;
+        }
+
+        const matchCaseCheckbox = document.getElementById('findMatchCase') as HTMLInputElement;
+        if (matchCaseCheckbox) {
+          matchCaseCheckbox.checked = options.matchCase ?? false;
+        }
+        const entireWordCheckbox = document.getElementById('findEntireWord') as HTMLInputElement;
+        if (entireWordCheckbox) {
+          entireWordCheckbox.checked = options.wholeWords ?? false;
+        }
+        const matchDiacriticsCheckbox = document.getElementById('findMatchDiacritics') as HTMLInputElement;
+        if (matchDiacriticsCheckbox) {
+          matchDiacriticsCheckbox.checked = options.matchDiacritics ?? false;
+        }
+        const inputField = document.getElementById('findInput') as HTMLInputElement;
+        if (inputField) {
+          inputField.value = text;
+          // todo dirty hack!
+          inputField.classList.remove('hidden');
+          // end of the dirty hack
+        }
       }
 
-      const matchCaseCheckbox = document.getElementById('findMatchCase') as HTMLInputElement;
-      if (matchCaseCheckbox) {
-        matchCaseCheckbox.checked = options.matchCase ?? false;
-      }
-      const entireWordCheckbox = document.getElementById('findEntireWord') as HTMLInputElement;
-      if (entireWordCheckbox) {
-        entireWordCheckbox.checked = options.wholeWords ?? false;
-      }
-      const matchDiacriticsCheckbox = document.getElementById('findMatchDiacritics') as HTMLInputElement;
-      if (matchDiacriticsCheckbox) {
-        matchDiacriticsCheckbox.checked = options.matchDiacritics ?? false;
-      }
-      const inputField = document.getElementById('findInput') as HTMLInputElement;
-      if (inputField) {
-        inputField.value = text;
-        // todo dirty hack!
-        inputField.classList.remove('hidden');
-        // end of the dirty hack
-        inputField.dispatchEvent(new Event('input'));
-      }
       const findParameters: PDFFindParameters = {
         caseSensitive: options.matchCase ?? false,
         entireWord: options.wholeWords ?? false,
@@ -113,30 +117,32 @@ export class NgxExtendedPdfViewerService {
         type: 'find',
         dontScrollIntoView: options.dontScrollIntoView ?? false,
       };
-      const findController = this.PDFViewerApplication?.findController;
-      return findController?.ngxFind(findParameters);
+      const findController = options.useSecondaryFindcontroller ? this.PDFViewerApplication?.customFindController : this.PDFViewerApplication?.findController;
+      const result = findController?.ngxFind(findParameters);
+      console.log('ngxFind: ', this.PDFViewerApplication?.customFindController?.state?.query, this.PDFViewerApplication?.findController?.state?.query);
+      return result;
     }
   }
 
-  public findNext(): boolean {
+  public findNext(useSecondaryFindcontroller: boolean = false): boolean {
     if (!this.ngxExtendedPdfViewerInitialized) {
       // tslint:disable-next-line:quotemark
       console.error("The PDF viewer hasn't finished initializing. Please call findNext() later.");
       return false;
     } else {
-      const findController = this.PDFViewerApplication?.findController;
+      const findController = useSecondaryFindcontroller ? this.PDFViewerApplication?.customFindController : this.PDFViewerApplication?.findController;
       findController?.ngxFindNext();
       return true;
     }
   }
 
-  public findPrevious(): boolean {
+  public findPrevious(useSecondaryFindcontroller: boolean = false): boolean {
     if (!this.ngxExtendedPdfViewerInitialized) {
       // tslint:disable-next-line:quotemark
       console.error("The PDF viewer hasn't finished initializing. Please call findPrevious() later.");
       return false;
     } else {
-      const findController = this.PDFViewerApplication?.findController;
+      const findController = useSecondaryFindcontroller ? this.PDFViewerApplication?.customFindController : this.PDFViewerApplication?.findController;
       findController?.ngxFindPrevious();
       return true;
     }

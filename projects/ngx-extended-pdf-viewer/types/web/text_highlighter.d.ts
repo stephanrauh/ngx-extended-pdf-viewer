@@ -25,8 +25,9 @@ export class TextHighlighter {
     /**
      * @param {TextHighlighterOptions} options
      */
-    constructor({ findController, eventBus, pageIndex }: TextHighlighterOptions);
+    constructor({ findController, customFindController, eventBus, pageIndex }: TextHighlighterOptions);
     findController: import("./pdf_find_controller").PDFFindController;
+    customFindController: any;
     matches: any[];
     eventBus: import("./event_utils").EventBus;
     pageIdx: number;
@@ -49,13 +50,14 @@ export class TextHighlighter {
      */
     enable(): void;
     disable(): void;
-    _convertMatches(matches: any, matchesLength: any): {
+    _convertMatches(matches: any, matchesLength: any, cssClass?: string): {
         begin: {
             divIdx: number;
             offset: number;
         };
+        cssClass: string;
     }[];
-    _renderMatches(matches: any): void;
+    _renderMatches(matches: any, findController: any): void;
     _updateMatches(reset?: boolean): void;
     #private;
 }

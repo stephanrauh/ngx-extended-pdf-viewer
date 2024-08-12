@@ -49,7 +49,8 @@ ngx-extended-pdf-viewer {
 
     /*#endif*/
 
-    .highlight {
+    .highlight,
+    .customHighlight {
       --highlight-bg-color: rgb(180 0 170 / 0.25);
       --highlight-selected-bg-color: rgb(0 100 0 / 0.25);
       --highlight-backdrop-filter: none;
@@ -90,6 +91,11 @@ ngx-extended-pdf-viewer {
         background-color: $highlight-selected;
         backdrop-filter: var(--highlight-selected-backdrop-filter);
       }
+    }
+
+    .customHighlight {
+      --highlight-bg-color: rgba(0, 0, 180, 0.4);
+      --highlight-selected-bg-color: rgba(0, 0, 180, 0.6);
     }
 
     .textLayer ::selection {

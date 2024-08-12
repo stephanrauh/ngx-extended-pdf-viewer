@@ -1158,6 +1158,9 @@ export interface IPDFViewerApplication {
   eventBus: IEventBus;
   findBar: any;
   findController: PDFFindController;
+
+  customFindController: PDFFindController;
+
   isViewerEmbedded: boolean;
   l10n: IWebL10n;
   onError: (error: Error) => void;

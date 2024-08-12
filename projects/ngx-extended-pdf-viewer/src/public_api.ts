@@ -42,6 +42,7 @@ export * from './lib/options/pdf-viewer';
 export * from './lib/options/pdf-viewer-app-config';
 export * from './lib/options/pdf-viewer-application';
 export * from './lib/options/pdf_page_view';
+export * from './lib/options/rendered-textlayer-highlights';
 export * from './lib/options/text-layer-builder';
 export * from './lib/options/verbosity-level';
 export * from './lib/pdf-dialog/pdf-alt-text-dialog/pdf-alt-text-dialog.component';

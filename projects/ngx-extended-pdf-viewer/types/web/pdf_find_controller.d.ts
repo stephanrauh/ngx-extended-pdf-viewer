@@ -63,6 +63,10 @@ export class PDFFindController {
      */
     setDocument(pdfDocument: PDFDocumentProxy): void;
     _pdfDocument: import("../src/display/api").PDFDocumentProxy | null | undefined;
+    ngxFind(pdfFindParameters: any): any[];
+    _findResultResolvers: any[] | undefined;
+    ngxFindNext(): void;
+    ngxFindPrevious(): void;
     _dirtyMatch: boolean | undefined;
     _findTimeout: any;
     _highlightMatches: boolean | undefined;

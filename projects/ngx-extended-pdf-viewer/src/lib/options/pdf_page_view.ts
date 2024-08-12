@@ -55,7 +55,6 @@ export interface PDFPageView {
   getPagePoint(x: any, y: any): Object;
   draw(): any;
   reset(): void;
-  textHighlighter: any;
 
   canvas: HTMLCanvasElement | undefined;
 

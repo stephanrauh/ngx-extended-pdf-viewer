@@ -193,6 +193,7 @@ export class PDFViewer {
     linkService: import("./interfaces").IPDFLinkService | SimpleLinkService;
     downloadManager: import("./interfaces").IDownloadManager | null;
     findController: import("./pdf_find_controller").PDFFindController | null;
+    customFindController: any;
     _scriptingManager: import("./pdf_scripting_manager").PDFScriptingManager | null;
     imageResourcesPath: string;
     enablePrintAutoRotate: boolean;
