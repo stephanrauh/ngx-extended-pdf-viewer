@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
   "version": 1,
-  "serialNumber": "urn:uuid:446d4d6b-5420-41a6-b76c-e199df9da3fb",
+  "serialNumber": "urn:uuid:64103e90-366f-4dc3-a8cc-561f96a0361e",
   "metadata": {
-    "timestamp": "2024-08-08T19:31:09.448Z",
+    "timestamp": "2024-08-13T20:26:47.433Z",
     "tools": [
       {
         "name": "npm",
@@ -12505,8 +12505,8 @@
     {
       "type": "library",
       "name": "electron-to-chromium",
-      "version": "1.5.5",
-      "bom-ref": "electron-to-chromium@1.5.5",
+      "version": "1.5.6",
+      "bom-ref": "electron-to-chromium@1.5.6",
       "author": "Kilian Valkhof",
       "description": "Provides a list of electron-to-chromium version mappings",
       "licenses": [
@@ -12516,7 +12516,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/electron-to-chromium@1.5.5",
+      "purl": "pkg:npm/electron-to-chromium@1.5.6",
       "externalReferences": [
         {
           "url": "git+https://github.com/kilian/electron-to-chromium.git",
@@ -12534,12 +12534,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.5.tgz",
+          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.6.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "411eff03b664312f2d66ea1fb42fe37ea36464b40eefbf52496dd8b991cfe1e5e98f711f7c62c5701fd7bbd000650ccb71c4e2095f84994a3785ae2643dc2794"
+              "content": "8f05d6b0ce513dfea3f5d3d8cdaa2b70149483a022aa870f13232991c864be7b5a1fd1c67ce38c670c4c2630d8fd712cdd3e5d33bbb21f556144c92a514f6a57"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -13102,8 +13102,8 @@
     {
       "type": "library",
       "name": "ignore",
-      "version": "5.3.1",
-      "bom-ref": "ignore@5.3.1",
+      "version": "5.3.2",
+      "bom-ref": "ignore@5.3.2",
       "author": "kael",
       "description": "Ignore is a manager and filter for .gitignore rules, the one used by eslint, gitbook and many others.",
       "licenses": [
@@ -13113,7 +13113,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/ignore@5.3.1",
+      "purl": "pkg:npm/ignore@5.3.2",
       "externalReferences": [
         {
           "url": "git+ssh://git@github.com/kaelzhang/node-ignore.git",
@@ -13131,12 +13131,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/ignore/-/ignore-5.3.1.tgz",
+          "url": "https://registry.npmjs.org/ignore/-/ignore-5.3.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "e45cadcff22b68c8eaa707dddf891edbc3d354c8d98c91b630f9f9b7b384e1e50250d7fc0406bb6f95944bdfd0bebea6c0e412ecc93abddb0c9e8e617be4fc5f"
+              "content": "86c053354a904c3c245ad71d608da2d3a63f9d4044b0d10324a8d676280bbde832f240ee2404bcb91969924710a721172f467fa630f2e4706632344227682afa"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -14664,8 +14664,8 @@
     {
       "type": "library",
       "name": "postcss-selector-parser",
-      "version": "6.1.1",
-      "bom-ref": "postcss-selector-parser@6.1.1",
+      "version": "6.1.2",
+      "bom-ref": "postcss-selector-parser@6.1.2",
       "licenses": [
         {
           "license": {
@@ -14673,7 +14673,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/postcss-selector-parser@6.1.1",
+      "purl": "pkg:npm/postcss-selector-parser@6.1.2",
       "externalReferences": [
         {
           "url": "git+https://github.com/postcss/postcss-selector-parser.git",
@@ -14691,12 +14691,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/postcss-selector-parser/-/postcss-selector-parser-6.1.1.tgz",
+          "url": "https://registry.npmjs.org/postcss-selector-parser/-/postcss-selector-parser-6.1.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "6f8765c3ff55f00ef5acb203b12c1599a93dcf60ee05407b080d7fc1275e94d133aac8e848f7800d358d3b4f65a47e3d0e2cb7fc9219d9b48f075748dcb2421e"
+              "content": "43ca907cf899f931ceff766b3ab3b470924a7e96026a0b4c5245db9c47e68148f05e0eb3fd605e3b24bd00f0413c24d288357eb384b0406bbcc85b2231122e76"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -16069,8 +16069,8 @@
       "type": "library",
       "name": "node",
       "group": "@types",
-      "version": "20.14.14",
-      "bom-ref": "@types/node@20.14.14",
+      "version": "20.14.15",
+      "bom-ref": "@types/node@20.14.15",
       "description": "TypeScript definitions for node",
       "licenses": [
         {
@@ -16079,7 +16079,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40types/node@20.14.14#types/node",
+      "purl": "pkg:npm/%40types/node@20.14.15#types/node",
       "externalReferences": [
         {
           "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/node",
@@ -16097,12 +16097,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@types/node/-/node-20.14.14.tgz",
+          "url": "https://registry.npmjs.org/@types/node/-/node-20.14.15.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "77ae1fd34f7cd9f4bd6283a026400ca252bb30df08ab74c37558dc85b6077449a3b61fc31e8c31f361a7a00fad55400dfbbbf17d85200338be2576ca35dd920d"
+              "content": "173d710cc085fc1d34fed61254c9662bb85578b87b8c4e5fdc1ed7d7f866574309070136eca952ec4bc3fd8a7ecf5966f26561c15e70fa7f233991bc01f4e52b"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -63896,8 +63896,8 @@
     {
       "type": "library",
       "name": "babel-preset-current-node-syntax",
-      "version": "1.0.1",
-      "bom-ref": "babel-preset-current-node-syntax@1.0.1",
+      "version": "1.1.0",
+      "bom-ref": "babel-preset-current-node-syntax@1.1.0",
       "author": "Nicolò Ribaudo",
       "description": "A Babel preset that enables parsing of proposals supported by the current Node.js version.",
       "licenses": [
@@ -63907,7 +63907,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/babel-preset-current-node-syntax@1.0.1",
+      "purl": "pkg:npm/babel-preset-current-node-syntax@1.1.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/nicolo-ribaudo/babel-preset-current-node-syntax.git",
@@ -63925,12 +63925,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/babel-preset-current-node-syntax/-/babel-preset-current-node-syntax-1.0.1.tgz",
+          "url": "https://registry.npmjs.org/babel-preset-current-node-syntax/-/babel-preset-current-node-syntax-1.1.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "33b2d0d1bc5aae4c50a0dfafcf96893ec2c19fbee7f10813166a3c58ad3fe386ae2b6c65097ad8714c47171814eea5b9633c3f0a398b44adae27368277b2efa9"
+              "content": "95d62cb3c49b0655af6b56ecdbcabbf09bb966ad45fbc06ba81659d151612c1be187a942a42da8de00c98bfe4344bb3d1606190a798f6085455389515c293253"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -66277,7 +66277,7 @@
       "type": "library",
       "name": "string-width",
       "version": "4.2.3",
-      "bom-ref": "BomRef.2dv65nhgqho.tsoj1fr9j8o",
+      "bom-ref": "BomRef.iahcgp1oi8o.k3ol024rfvo",
       "author": "Sindre Sorhus",
       "description": "Get the visual width of a string - the number of columns required to display it",
       "licenses": [
@@ -66385,7 +66385,7 @@
       "type": "library",
       "name": "strip-ansi",
       "version": "6.0.1",
-      "bom-ref": "BomRef.vepn43vonjg.1veccdlt3no",
+      "bom-ref": "BomRef.bhc0dn0n1tg.3o9vbhblnag",
       "author": "Sindre Sorhus",
       "description": "Strip ANSI escape codes from a string",
       "licenses": [
@@ -70241,7 +70241,7 @@
         "@schematics/angular@17.3.8",
         "@types/estree@1.0.5",
         "@types/jest@29.5.12",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "@types/trusted-types@2.0.7",
         "copyfiles@2.4.1",
         "fsevents@2.3.3",
@@ -70657,7 +70657,7 @@
       "ref": "browserslist@4.23.3",
       "dependsOn": [
         "caniuse-lite@1.0.30001651",
-        "electron-to-chromium@1.5.5",
+        "electron-to-chromium@1.5.6",
         "node-releases@2.0.18",
         "update-browserslist-db@1.1.0"
       ]
@@ -71728,7 +71728,7 @@
     {
       "ref": "vite@5.1.7",
       "dependsOn": [
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "vite@5.1.7|esbuild@0.19.12",
         "fsevents@2.3.3",
         "less@4.2.0",
@@ -71975,7 +71975,7 @@
       ]
     },
     {
-      "ref": "electron-to-chromium@1.5.5"
+      "ref": "electron-to-chromium@1.5.6"
     },
     {
       "ref": "node-releases@2.0.18"
@@ -72030,7 +72030,7 @@
       "dependsOn": [
         "dir-glob@3.0.1",
         "fast-glob@3.3.2",
-        "ignore@5.3.1",
+        "ignore@5.3.2",
         "merge2@1.4.1",
         "slash@4.0.0"
       ]
@@ -72045,7 +72045,7 @@
       "ref": "path-type@4.0.0"
     },
     {
-      "ref": "ignore@5.3.1"
+      "ref": "ignore@5.3.2"
     },
     {
       "ref": "merge2@1.4.1"
@@ -72206,13 +72206,13 @@
       "ref": "postcss-modules-local-by-default@4.0.5",
       "dependsOn": [
         "icss-utils@5.1.0",
-        "postcss-selector-parser@6.1.1",
+        "postcss-selector-parser@6.1.2",
         "postcss-value-parser@4.2.0",
         "postcss@8.4.35"
       ]
     },
     {
-      "ref": "postcss-selector-parser@6.1.1",
+      "ref": "postcss-selector-parser@6.1.2",
       "dependsOn": [
         "cssesc@3.0.0",
         "util-deprecate@1.0.2"
@@ -72227,7 +72227,7 @@
     {
       "ref": "postcss-modules-scope@3.2.0",
       "dependsOn": [
-        "postcss-selector-parser@6.1.1",
+        "postcss-selector-parser@6.1.2",
         "postcss@8.4.35"
       ]
     },
@@ -72346,17 +72346,17 @@
       "ref": "@types/body-parser@1.19.5",
       "dependsOn": [
         "@types/connect@3.4.38",
-        "@types/node@20.14.14"
+        "@types/node@20.14.15"
       ]
     },
     {
       "ref": "@types/connect@3.4.38",
       "dependsOn": [
-        "@types/node@20.14.14"
+        "@types/node@20.14.15"
       ]
     },
     {
-      "ref": "@types/node@20.14.14",
+      "ref": "@types/node@20.14.15",
       "dependsOn": [
         "undici-types@5.26.5"
       ]
@@ -72364,7 +72364,7 @@
     {
       "ref": "@types/express-serve-static-core@4.19.5",
       "dependsOn": [
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "@types/qs@6.9.15",
         "@types/range-parser@1.2.7",
         "@types/send@0.17.4"
@@ -72380,21 +72380,21 @@
       "ref": "@types/send@0.17.4",
       "dependsOn": [
         "@types/mime@1.3.5",
-        "@types/node@20.14.14"
+        "@types/node@20.14.15"
       ]
     },
     {
       "ref": "@types/serve-static@1.15.7",
       "dependsOn": [
         "@types/http-errors@2.0.4",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "@types/send@0.17.4"
       ]
     },
     {
       "ref": "@types/http-proxy@1.17.15",
       "dependsOn": [
-        "@types/node@20.14.14"
+        "@types/node@20.14.15"
       ]
     },
     {
@@ -72719,7 +72719,7 @@
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
         "@types/jsdom@20.0.1",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "jest-mock@29.7.0",
         "jest-util@29.7.0",
         "jsdom@20.0.3"
@@ -73351,14 +73351,14 @@
     {
       "ref": "@types/bonjour@3.5.13",
       "dependsOn": [
-        "@types/node@20.14.14"
+        "@types/node@20.14.15"
       ]
     },
     {
       "ref": "@types/connect-history-api-fallback@1.5.4",
       "dependsOn": [
         "@types/express-serve-static-core@4.19.5",
-        "@types/node@20.14.14"
+        "@types/node@20.14.15"
       ]
     },
     {
@@ -73376,13 +73376,13 @@
     {
       "ref": "@types/sockjs@0.3.36",
       "dependsOn": [
-        "@types/node@20.14.14"
+        "@types/node@20.14.15"
       ]
     },
     {
       "ref": "@types/ws@8.5.12",
       "dependsOn": [
-        "@types/node@20.14.14"
+        "@types/node@20.14.15"
       ]
     },
     {
@@ -73850,7 +73850,7 @@
     {
       "ref": "@types/node-forge@1.3.11",
       "dependsOn": [
-        "@types/node@20.14.14"
+        "@types/node@20.14.15"
       ]
     },
     {
@@ -74274,7 +74274,7 @@
     {
       "ref": "terser-webpack-plugin@5.3.10|jest-worker@27.5.1",
       "dependsOn": [
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "merge-stream@2.0.0",
         "terser-webpack-plugin@5.3.10|supports-color@8.1.1"
       ]
@@ -75781,7 +75781,7 @@
         "@jest/schemas@29.6.3",
         "@types/istanbul-lib-coverage@2.0.6",
         "@types/istanbul-reports@3.0.4",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "@types/yargs@17.0.33",
         "@jest/types@29.6.3|chalk@4.1.2"
       ]
@@ -75833,7 +75833,7 @@
       "ref": "jest-util@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "jest-util@29.7.0|chalk@4.1.2",
         "ci-info@3.9.0",
         "graceful-fs@4.2.11",
@@ -76046,7 +76046,7 @@
       "dependsOn": [
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "jest-mock@29.7.0"
       ]
     },
@@ -76055,7 +76055,7 @@
       "dependsOn": [
         "@jest/types@29.6.3",
         "@sinonjs/fake-timers@10.3.0",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "jest-message-util@29.7.0",
         "jest-mock@29.7.0",
         "jest-util@29.7.0"
@@ -76065,7 +76065,7 @@
       "ref": "jest-mock@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "jest-util@29.7.0"
       ]
     },
@@ -76111,7 +76111,7 @@
     {
       "ref": "@types/jsdom@20.0.1",
       "dependsOn": [
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "@types/tough-cookie@4.0.5",
         "parse5@7.1.2"
       ]
@@ -76404,7 +76404,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "ansi-escapes@4.3.2",
         "@jest/core@29.7.0|chalk@4.1.2",
         "ci-info@3.9.0",
@@ -76467,7 +76467,7 @@
       "ref": "@jest/console@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "@jest/console@29.7.0|chalk@4.1.2",
         "jest-message-util@29.7.0",
         "jest-util@29.7.0",
@@ -76517,7 +76517,7 @@
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
         "@jridgewell/trace-mapping@0.3.25",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "@jest/reporters@29.7.0|chalk@4.1.2",
         "collect-v8-coverage@1.0.2",
         "exit@0.1.2",
@@ -76703,7 +76703,7 @@
     {
       "ref": "jest-worker@29.7.0",
       "dependsOn": [
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "jest-util@29.7.0",
         "merge-stream@2.0.0",
         "jest-worker@29.7.0|supports-color@8.1.1"
@@ -76762,7 +76762,7 @@
         "@babel/core@7.24.0",
         "@jest/test-sequencer@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "babel-jest@29.7.0",
         "jest-config@29.7.0|chalk@4.1.2",
         "ci-info@3.9.0",
@@ -76836,7 +76836,7 @@
       "dependsOn": [
         "@jest/types@29.6.3",
         "@types/graceful-fs@4.1.9",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "anymatch@3.1.3",
         "fb-watchman@2.0.2",
         "fsevents@2.3.3",
@@ -76905,7 +76905,7 @@
         "@jest/expect@29.7.0",
         "@jest/test-result@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "jest-circus@29.7.0|chalk@4.1.2",
         "co@4.6.0",
         "dedent@1.5.3",
@@ -76975,7 +76975,7 @@
         "@jest/expect-utils@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "babel-preset-current-node-syntax@1.0.1",
+        "babel-preset-current-node-syntax@1.1.0",
         "jest-snapshot@29.7.0|chalk@4.1.2",
         "expect@29.7.0",
         "graceful-fs@4.2.11",
@@ -77080,7 +77080,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "jest-runtime@29.7.0|chalk@4.1.2",
         "cjs-module-lexer@1.3.1",
         "collect-v8-coverage@1.0.2",
@@ -77140,7 +77140,7 @@
         "@jest/environment@29.7.0",
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "jest-mock@29.7.0",
         "jest-util@29.7.0"
       ]
@@ -77204,7 +77204,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "jest-runner@29.7.0|chalk@4.1.2",
         "emittery@0.13.1",
         "graceful-fs@4.2.11",
@@ -77319,7 +77319,7 @@
         "@tsconfig/node12@1.0.11",
         "@tsconfig/node14@1.0.3",
         "@tsconfig/node16@1.0.4",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "acorn-walk@8.3.3",
         "acorn@8.12.1",
         "arg@4.1.3",
@@ -77334,7 +77334,7 @@
     {
       "ref": "@types/graceful-fs@4.1.9",
       "dependsOn": [
-        "@types/node@20.14.14"
+        "@types/node@20.14.15"
       ]
     },
     {
@@ -77407,7 +77407,7 @@
       "dependsOn": [
         "@jest/test-result@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@20.14.14",
+        "@types/node@20.14.15",
         "ansi-escapes@4.3.2",
         "jest-watcher@29.7.0|chalk@4.1.2",
         "emittery@0.13.1",
@@ -77484,12 +77484,14 @@
       ]
     },
     {
-      "ref": "babel-preset-current-node-syntax@1.0.1",
+      "ref": "babel-preset-current-node-syntax@1.1.0",
       "dependsOn": [
         "@babel/core@7.24.0",
         "@babel/plugin-syntax-async-generators@7.8.4",
         "@babel/plugin-syntax-bigint@7.8.3",
         "@babel/plugin-syntax-class-properties@7.12.13",
+        "@babel/plugin-syntax-class-static-block@7.14.5",
+        "@babel/plugin-syntax-import-attributes@7.24.7",
         "@babel/plugin-syntax-import-meta@7.10.4",
         "@babel/plugin-syntax-json-strings@7.8.3",
         "@babel/plugin-syntax-logical-assignment-operators@7.10.4",
@@ -77498,6 +77500,7 @@
         "@babel/plugin-syntax-object-rest-spread@7.8.3",
         "@babel/plugin-syntax-optional-catch-binding@7.8.3",
         "@babel/plugin-syntax-optional-chaining@7.8.3",
+        "@babel/plugin-syntax-private-property-in-object@7.14.5",
         "@babel/plugin-syntax-top-level-await@7.14.5"
       ]
     },
@@ -77707,9 +77710,9 @@
     {
       "ref": "@isaacs/cliui@8.0.2",
       "dependsOn": [
-        "BomRef.2dv65nhgqho.tsoj1fr9j8o",
+        "BomRef.iahcgp1oi8o.k3ol024rfvo",
         "@isaacs/cliui@8.0.2|string-width@5.1.2",
-        "BomRef.vepn43vonjg.1veccdlt3no",
+        "BomRef.bhc0dn0n1tg.3o9vbhblnag",
         "@isaacs/cliui@8.0.2|strip-ansi@7.1.0",
         "wrap-ansi@7.0.0",
         "@isaacs/cliui@8.0.2|wrap-ansi@8.1.0"
@@ -77747,7 +77750,7 @@
       "ref": "@isaacs/cliui@8.0.2|ansi-styles@6.2.1"
     },
     {
-      "ref": "BomRef.2dv65nhgqho.tsoj1fr9j8o",
+      "ref": "BomRef.iahcgp1oi8o.k3ol024rfvo",
       "dependsOn": [
         "emoji-regex@8.0.0",
         "is-fullwidth-code-point@3.0.0",
@@ -77758,7 +77761,7 @@
       "ref": "eastasianwidth@0.2.0"
     },
     {
-      "ref": "BomRef.vepn43vonjg.1veccdlt3no",
+      "ref": "BomRef.bhc0dn0n1tg.3o9vbhblnag",
       "dependsOn": [
         "ansi-regex@5.0.1"
       ]
@@ -77894,7 +77897,7 @@
       "dependsOn": [
         "@babel/core@7.24.0",
         "babel-plugin-jest-hoist@29.6.3",
-        "babel-preset-current-node-syntax@1.0.1"
+        "babel-preset-current-node-syntax@1.1.0"
       ]
     },
     {
