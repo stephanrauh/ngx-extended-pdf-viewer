@@ -1336,7 +1336,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     for (const key in pdfDefaultOptions) {
       if (!optionsToIgnore.includes(key)) {
         const option = pdfDefaultOptions[key];
-        if (typeof option === 'function') {
+        if (key !== 'findController' && typeof option === 'function') {
           options.set(key, option());
         } else {
           options.set(key, pdfDefaultOptions[key]);

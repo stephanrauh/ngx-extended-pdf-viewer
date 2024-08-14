@@ -43,6 +43,7 @@ export const pdfDefaultOptions = {
   enablePrintAutoRotate: true,
   externalLinkRel: 'noopener noreferrer nofollow',
   externalLinkTarget: 0,
+  findController: undefined, // must extend PDFFindController
   historyUpdateUrl: false,
   ignoreDestinationZoom: false,
   imageResourcesPath: './images/',
