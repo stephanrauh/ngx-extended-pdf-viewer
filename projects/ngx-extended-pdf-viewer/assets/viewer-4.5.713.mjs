@@ -24,7 +24,7 @@
 
 /******/ // The require scope
 /******/ var __webpack_require__ = {};
-/******/ 
+/******/
 /************************************************************************/
 /******/ /* webpack/runtime/define property getters */
 /******/ (() => {
@@ -37,12 +37,12 @@
 /******/ 		}
 /******/ 	};
 /******/ })();
-/******/ 
+/******/
 /******/ /* webpack/runtime/hasOwnProperty shorthand */
 /******/ (() => {
 /******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ })();
-/******/ 
+/******/
 /************************************************************************/
 var __webpack_exports__ = globalThis.pdfjsLib = {};
 
@@ -20172,7 +20172,7 @@ var __webpack_exports__version = __webpack_exports__.version;
 
 /******/ // The require scope
 /******/ var __webpack_require__ = {};
-/******/ 
+/******/
 /************************************************************************/
 /******/ /* webpack/runtime/define property getters */
 /******/ (() => {
@@ -20185,12 +20185,12 @@ var __webpack_exports__version = __webpack_exports__.version;
 /******/ 		}
 /******/ 	};
 /******/ })();
-/******/ 
+/******/
 /******/ /* webpack/runtime/hasOwnProperty shorthand */
 /******/ (() => {
 /******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ })();
-/******/ 
+/******/
 /************************************************************************/
 var __webpack_exports__ = {};
 
@@ -36246,6 +36246,7 @@ const PDFViewerApplication = {
   pdfLayerViewer: null,
   pdfCursorTools: null,
   pdfScriptingManager: null,
+  pdfWorker: null,
   store: null,
   downloadManager: null,
   overlayManager: null,
@@ -36836,17 +36837,22 @@ const PDFViewerApplication = {
       await this.close();
     }
     const workerParams = AppOptions.getAll(OptionKind.WORKER);
-    if (args.workerSrc) {
+    if (args.workerSrc !== workerParams.workerSrc) {
       workerParams.workerSrc = args.workerSrc;
+      this.pdfWorker = null;
     }
     Object.assign(GlobalWorkerOptions, workerParams);
+    if (this.pdfWorker === null) {
+      this.pdfWorker = workerParams.port ? PDFWorker.fromPort(workerParams) : new PDFWorker(workerParams);
+    }
     if (args.url) {
       this.setTitleUsingUrl(args.originalUrl || args.url, args.url);
     }
     const apiParams = AppOptions.getAll(OptionKind.API);
     const loadingTask = getDocument({
       ...apiParams,
-      ...args
+      ...args,
+      worker: this.pdfWorker,
     });
     this.pdfLoadingTask = loadingTask;
     loadingTask.onPassword = (updateCallback, reason) => {
