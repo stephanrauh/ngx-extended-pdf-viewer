@@ -36,7 +36,9 @@ export interface PDFFindParameters {
   findPrevious: boolean;
   highlightAll?: boolean;
   matchDiacritics?: boolean;
-  query: string;
+  findMultiple?: boolean;
+  matchRegExp?: boolean;
+  query: string | string[] | RegExp;
   source: any;
   type: 'highlightallchange' | 'find' | 'again' | 'findagain'; //  | 'findbarhighlight' | 'scroll',
   dontScrollIntoView?: boolean;

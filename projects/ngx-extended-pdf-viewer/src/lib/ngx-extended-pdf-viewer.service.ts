@@ -11,7 +11,8 @@ export interface FindOptions {
   wholeWords?: boolean;
   matchDiacritics?: boolean;
   dontScrollIntoView?: boolean;
-
+  findMultiple?: boolean;
+  regexp?: boolean;
   useSecondaryFindcontroller?: boolean;
 }
 
@@ -73,7 +74,7 @@ export class NgxExtendedPdfViewerService {
     });
   }
 
-  public find(text: string, options: FindOptions = {}): Array<Promise<number>> | undefined {
+  public find(text: string | string[] | RegExp, options: FindOptions = {}): Array<Promise<number>> | undefined {
     if (!this.ngxExtendedPdfViewerInitialized) {
       // tslint:disable-next-line:quotemark
       console.error("The PDF viewer hasn't finished initializing. Please call find() later.");
@@ -89,20 +90,52 @@ export class NgxExtendedPdfViewerService {
         if (matchCaseCheckbox) {
           matchCaseCheckbox.checked = options.matchCase ?? false;
         }
+
+        const findMultipleCheckbox = document.getElementById('findMultiple') as HTMLInputElement;
+        if (findMultipleCheckbox) {
+          findMultipleCheckbox.checked = options.findMultiple ?? false;
+        }
+
         const entireWordCheckbox = document.getElementById('findEntireWord') as HTMLInputElement;
         if (entireWordCheckbox) {
           entireWordCheckbox.checked = options.wholeWords ?? false;
         }
+
         const matchDiacriticsCheckbox = document.getElementById('findMatchDiacritics') as HTMLInputElement;
         if (matchDiacriticsCheckbox) {
           matchDiacriticsCheckbox.checked = options.matchDiacritics ?? false;
         }
+
+        const matchRegExpCheckbox = document.getElementById('matchRegExp') as HTMLInputElement;
+        if (matchRegExpCheckbox) {
+          matchRegExpCheckbox.checked = options.regexp ?? false;
+          if (matchRegExpCheckbox.checked) {
+            if (findMultipleCheckbox) {
+              findMultipleCheckbox.checked = false;
+            }
+            if (entireWordCheckbox) {
+              entireWordCheckbox.checked = false;
+            }
+
+            if (matchDiacriticsCheckbox) {
+              matchDiacriticsCheckbox.checked = false;
+            }
+          }
+          if (findMultipleCheckbox) {
+            findMultipleCheckbox.disabled = matchRegExpCheckbox.checked;
+          }
+          if (entireWordCheckbox) {
+            entireWordCheckbox.disabled = matchRegExpCheckbox.checked;
+          }
+
+          if (matchDiacriticsCheckbox) {
+            matchDiacriticsCheckbox.disabled = matchRegExpCheckbox.checked;
+          }
+        }
+
         const inputField = document.getElementById('findInput') as HTMLInputElement;
-        if (inputField) {
+        if (inputField && typeof text === 'string') {
           inputField.value = text;
-          // todo dirty hack!
-          inputField.classList.remove('hidden');
-          // end of the dirty hack
         }
       }
 
@@ -111,6 +144,8 @@ export class NgxExtendedPdfViewerService {
         entireWord: options.wholeWords ?? false,
         highlightAll: options.highlightAll ?? false,
         matchDiacritics: options.matchDiacritics ?? false,
+        findMultiple: options.findMultiple,
+        matchRegExp: options.regexp ?? false,
         findPrevious: false,
         query: text,
         source: null,

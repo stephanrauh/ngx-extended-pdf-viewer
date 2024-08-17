@@ -58,4 +58,10 @@ export class PdfFindbarComponent {
 
   @Input()
   public showFindMessages = true;
+
+  @Input()
+  public showFindMultiple: boolean = true;
+
+  @Input()
+  public showFindRegexp: boolean = true;
 }

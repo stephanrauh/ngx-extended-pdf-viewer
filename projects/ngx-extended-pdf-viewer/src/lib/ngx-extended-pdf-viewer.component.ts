@@ -630,6 +630,12 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public showFindMatchCase = true;
 
   @Input()
+  public showFindMultiple: boolean = true;
+
+  @Input()
+  public showFindRegexp: boolean = false;
+
+  @Input()
   public showFindCurrentPageOnly = true;
 
   @Input()
