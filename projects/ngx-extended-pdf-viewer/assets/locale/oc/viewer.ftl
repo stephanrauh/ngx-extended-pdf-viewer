@@ -353,6 +353,19 @@ pdfjs-editor-highlight-show-all-button-label = O afichar tot
 pdfjs-editor-highlight-show-all-button =
     .title = O afichar tot
 
+pdfjs-editor-highlight-button =
+    .title = Subrelinhar
+pdfjs-editor-highlight-button-label = Subrelinhar
+pdfjs-highlight-floating-button1 =
+    .title = Subrelinhar
+    .aria-label = Subrelinhar
+pdfjs-highlight-floating-button-label = Subrelinhar
+pdfjs-editor-remove-ink-button =
+    .title = Levar lo dessenh
+pdfjs-editor-remove-highlight-button =
+    .title = Levar lo suslinhatge
+pdfjs-editor-colorpicker-dropdown =
+    .aria-label = Causida de colors
 pdfjs-find-match-count =
     { $total ->
         [one] { $current } of { $total } match
@@ -363,17 +376,6 @@ pdfjs-find-match-count-limit =
         [one] More than { $limit } match
        *[other] More than { $limit } matches
     }
-pdfjs-editor-highlight-button =
-    .title = Highlight
-pdfjs-editor-highlight-button-label = Highlight
-pdfjs-highlight-floating-button1 =
-    .title = Highlight
-    .aria-label = Highlight
-pdfjs-highlight-floating-button-label = Highlight
-pdfjs-editor-remove-ink-button =
-    .title = Remove drawing
-pdfjs-editor-remove-highlight-button =
-    .title = Remove highlight
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
 pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
@@ -391,14 +393,12 @@ pdfjs-editor-resizer-label-bottom-right = Bottom right corner — resize
 pdfjs-editor-resizer-label-bottom-middle = Bottom middle — resize
 pdfjs-editor-resizer-label-bottom-left = Bottom left corner — resize
 pdfjs-editor-resizer-label-middle-left = Middle left — resize
-pdfjs-editor-colorpicker-dropdown =
-    .aria-label = Color choices
 pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
 pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
 pdfjs-editor-new-alt-text-textarea =
     .placeholder = Write your description here…
 pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
-pdfjs-editor-new-alt-text-disclaimer = This alt text was created automatically.
+pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
 pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Learn more
 pdfjs-editor-new-alt-text-create-automatically-button-label = Create alt text automatically
 pdfjs-editor-new-alt-text-not-now-button = Not now

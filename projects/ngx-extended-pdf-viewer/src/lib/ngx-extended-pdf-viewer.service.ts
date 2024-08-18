@@ -154,7 +154,6 @@ export class NgxExtendedPdfViewerService {
       };
       const findController = options.useSecondaryFindcontroller ? this.PDFViewerApplication?.customFindController : this.PDFViewerApplication?.findController;
       const result = findController?.ngxFind(findParameters);
-      console.log('ngxFind: ', this.PDFViewerApplication?.customFindController?.state?.query, this.PDFViewerApplication?.findController?.state?.query);
       return result;
     }
   }

@@ -51,12 +51,6 @@ pdfjs-download-button-label = Herunterladen
 pdfjs-bookmark-button =
     .title = Aktuelle Seite (URL von aktueller Seite anzeigen)
 pdfjs-bookmark-button-label = Aktuelle Seite
-# Used in Firefox for Android.
-pdfjs-open-in-app-button =
-    .title = Mit App öffnen
-# Used in Firefox for Android.
-# Length of the translation matters since we are in a mobile context, with limited screen estate.
-pdfjs-open-in-app-button-label = Mit App öffnen
 
 ##  Secondary toolbar and context menu
 
@@ -304,8 +298,6 @@ pdfjs-editor-stamp-button-label = Grafiken hinzufügen oder bearbeiten
 pdfjs-editor-highlight-button =
     .title = Hervorheben
 pdfjs-editor-highlight-button-label = Hervorheben
-pdfjs-highlight-floating-button =
-    .title = Hervorheben
 pdfjs-highlight-floating-button1 =
     .title = Hervorheben
     .aria-label = Hervorheben
@@ -401,12 +393,23 @@ pdfjs-editor-highlight-show-all-button-label = Alle anzeigen
 pdfjs-editor-highlight-show-all-button =
     .title = Alle anzeigen
 
+## New alt-text dialog
+## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
+
+
+## Image alt-text settings
+
+pdfjs-editor-alt-text-settings-delete-model-button = Löschen
+pdfjs-editor-alt-text-settings-download-model-button = Herunterladen
+pdfjs-editor-alt-text-settings-downloading-model-button = Wird heruntergeladen…
+pdfjs-editor-alt-text-settings-close-button = Schließen
+
 pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
 pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
 pdfjs-editor-new-alt-text-textarea =
     .placeholder = Write your description here…
 pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
-pdfjs-editor-new-alt-text-disclaimer = This alt text was created automatically.
+pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
 pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Learn more
 pdfjs-editor-new-alt-text-create-automatically-button-label = Create alt text automatically
 pdfjs-editor-new-alt-text-not-now-button = Not now
@@ -428,13 +431,9 @@ pdfjs-editor-alt-text-settings-create-model-button-label = Create alt text autom
 pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-alt-text-settings-download-model-label = Alt text AI model ({ $totalSize } MB)
 pdfjs-editor-alt-text-settings-ai-model-description = Runs locally on your device so your data stays private. Required for automatic alt text.
-pdfjs-editor-alt-text-settings-delete-model-button = Delete
-pdfjs-editor-alt-text-settings-download-model-button = Download
-pdfjs-editor-alt-text-settings-downloading-model-button = Downloading…
 pdfjs-editor-alt-text-settings-editor-title = Alt text editor
 pdfjs-editor-alt-text-settings-show-dialog-button-label = Show alt text editor right away when adding an image
 pdfjs-editor-alt-text-settings-show-dialog-description = Helps you make sure all your images have alt text.
-pdfjs-editor-alt-text-settings-close-button = Close
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 
