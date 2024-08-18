@@ -21826,7 +21826,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '21.3.1';
+const ngxExtendedPdfViewerVersion = '21.3.2';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -39391,10 +39391,15 @@ function onKeyDown(evt) {
         break;
     }
     if (turnPage !== 0 && (!turnOnlyIfPageFit || pdfViewer.currentScaleValue === "page-fit")) {
-      if (turnPage > 0) {
-        pdfViewer.nextPage();
-      } else {
-        pdfViewer.previousPage();
+      const {
+        mainContainer
+      } = this.appConfig;
+      if (viewerIsAllowedToCaptureKeyEvent(mainContainer)) {
+        if (turnPage > 0) {
+          pdfViewer.nextPage();
+        } else {
+          pdfViewer.previousPage();
+        }
       }
       handled = true;
     }
@@ -39428,6 +39433,20 @@ function onKeyDown(evt) {
   if (handled) {
     evt.preventDefault();
   }
+}
+function viewerIsAllowedToCaptureKeyEvent(mainContainer) {
+  let elementInFocus = document.activeElement;
+  const ngxExtendedPdfViewer = mainContainer.closest('ngx-extended-pdf-viewer');
+  while (elementInFocus && elementInFocus !== document.body) {
+    if (elementInFocus === ngxExtendedPdfViewer) {
+      return true;
+    }
+    if (elementInFocus.tabIndex !== -1) {
+      return false;
+    }
+    elementInFocus = elementInFocus.parentElement;
+  }
+  return true;
 }
 function beforeUnload(evt) {
   evt.preventDefault();
