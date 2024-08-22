@@ -402,6 +402,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     } else if (url instanceof URL) {
       this._src = url.toString();
     } else if (typeof Blob !== 'undefined' && url instanceof Blob) {
+      if (!this.isBrowser()) {
+        return;
+      }
       // additional check introduced to support server side rendering
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -931,12 +934,22 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   public serverSideRendering = true;
 
+  /**
+   * Checks if the code is running in a browser environment.
+   */
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && typeof document !== 'undefined';
+  }
+
   public calcViewerPositionTop(): void {
+    if (!this.isBrowser()) {
+      return;
+    }
     if (this.toolbar === undefined) {
       this.sidebarPositionTop = '0';
       return;
     }
-    let top = this.toolbar.getBoundingClientRect().height;
+    const top = this.toolbar.getBoundingClientRect().height;
     if (top < 33) {
       this.viewerPositionTop = '33px';
     } else {
