@@ -457,6 +457,8 @@ pdfjs-infinite-scroll-button-label = Infinite scroll
 # Translations for ngx-extended-pdf-viewer additions
 
 
+pdfjs-find-multiple-checkbox-label = multiple queries separated by space"
+pdfjs-find-regexp-checkbox-label = regular expression
 
 # Translations for ngx-extended-pdf-viewer additions
 
