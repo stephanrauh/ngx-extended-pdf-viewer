@@ -13,6 +13,9 @@
  * limitations under the License.
  */
 
+// @import url(draw_layer_builder.css); imported via compile-sass.ts
+// @import url(toggle_button.css); imported via compile-sass.ts
+
 :root {
   --outline-width: 2px;
   --outline-color: #0060df;
@@ -36,8 +39,9 @@
     text;
   --editorFreeHighlight-editing-cursor: url('data:image/svg+xml;charset=UTF-8,<svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path fill-rule="evenodd" clip-rule="evenodd" d="M7.10918 11.66C7.24918 11.8 7.43918 11.88 7.63918 11.88C7.83918 11.88 8.02918 11.8 8.16918 11.66L14.9192 4.91C15.2692 4.57 15.4592 4.11 15.4592 3.62C15.4592 3.13 15.2692 2.67 14.9192 2.33L13.1292 0.54C12.7892 0.19 12.3292 0 11.8392 0C11.3492 0 10.8892 0.2 10.5492 0.54L3.79918 7.29C3.50918 7.58 3.50918 8.06 3.79918 8.35L4.38988 8.9407L1.40918 11.93H5.64918L6.51419 11.065L7.10918 11.66ZM7.63918 10.07L5.38918 7.82V7.81L7.8648 5.33438L10.1198 7.58938L7.63918 10.07ZM11.1805 6.52872L13.8592 3.85C13.9892 3.72 13.9892 3.52 13.8592 3.39L12.0692 1.6C11.9892 1.52 11.8892 1.5 11.8392 1.5C11.8392 1.5 11.6892 1.51 11.6092 1.59L8.92546 4.27372L11.1805 6.52872Z" fill="#000"/><path d="M0.40918 14H15.4092V16H0.40918V14Z" fill="#000"/></g></svg>') 0 16,
     pointer;
-  --editorFreeText-editing-cursor: url("data:image/svg+xml;charset=UTF-8,<svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 2.75H12.5V2.25V1V0.5H12H10.358C9.91165 0.5 9.47731 0.625661 9.09989 0.860442L9.09886 0.861087L8 1.54837L6.89997 0.860979L6.89911 0.860443C6.5218 0.625734 6.08748 0.5 5.642 0.5H4H3.5V1V2.25V2.75H4H5.642C5.66478 2.75 5.6885 2.75641 5.71008 2.76968C5.71023 2.76977 5.71038 2.76986 5.71053 2.76995L6.817 3.461C6.81704 3.46103 6.81709 3.46105 6.81713 3.46108C6.81713 3.46108 6.81713 3.46108 6.81714 3.46109C6.8552 3.48494 6.876 3.52285 6.876 3.567V8V12.433C6.876 12.4771 6.85523 12.515 6.81722 12.5389C6.81715 12.5389 6.81707 12.539 6.817 12.539L5.70953 13.23C5.70941 13.2301 5.70929 13.2302 5.70917 13.2303C5.68723 13.2438 5.6644 13.25 5.641 13.25H4H3.5V13.75V15V15.5H4H5.642C6.08835 15.5 6.52269 15.3743 6.90011 15.1396L6.90086 15.1391L8 14.4526L9.10003 15.14L9.10089 15.1406C9.47831 15.3753 9.91265 15.501 10.359 15.501H12H12.5V15.001V13.751V13.251H12H10.358C10.3352 13.251 10.3115 13.2446 10.2899 13.2313C10.2897 13.2312 10.2896 13.2311 10.2895 13.231L9.183 12.54C9.18298 12.54 9.18295 12.54 9.18293 12.54C9.18291 12.5399 9.18288 12.5399 9.18286 12.5399C9.14615 12.5169 9.125 12.4797 9.125 12.434V8V3.567C9.125 3.52266 9.14603 3.48441 9.18364 3.4606C9.18377 3.46052 9.1839 3.46043 9.18404 3.46035L10.2895 2.76995C10.2896 2.76985 10.2898 2.76975 10.2899 2.76966C10.3119 2.75619 10.3346 2.75 10.358 2.75H12Z' fill='black' stroke='white'/></svg>") 0 16,
-    pointer;
+
+  --new-alt-text-warning-image: url('data:image/svg+xml;charset=UTF-8,<svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.78182 2.63903C8.58882 2.28803 8.25782 2.25003 8.12482 2.25003C7.99019 2.24847 7.85771 2.28393 7.74185 2.35253C7.62599 2.42113 7.5312 2.52023 7.46782 2.63903L1.97082 12.639C1.90673 12.7528 1.87406 12.8816 1.87617 13.0122C1.87828 13.1427 1.91509 13.2704 1.98282 13.382C2.04798 13.4951 2.14207 13.5888 2.25543 13.6535C2.36879 13.7182 2.49732 13.7515 2.62782 13.75H13.6218C13.7523 13.7515 13.8809 13.7182 13.9942 13.6535C14.1076 13.5888 14.2017 13.4951 14.2668 13.382C14.3346 13.2704 14.3714 13.1427 14.3735 13.0122C14.3756 12.8816 14.3429 12.7528 14.2788 12.639L8.78182 2.63903ZM6.37282 2.03703C6.75182 1.34603 7.43882 1.00003 8.12482 1.00003C8.48341 0.997985 8.83583 1.09326 9.14454 1.2757C9.45325 1.45814 9.70668 1.72092 9.87782 2.03603L15.3748 12.036C16.1078 13.369 15.1438 15 13.6228 15H2.62782C1.10682 15 0.141823 13.37 0.875823 12.037L6.37282 2.03703ZM8.74982 9.06203C8.74982 9.22779 8.68397 9.38676 8.56676 9.50397C8.44955 9.62118 8.29058 9.68703 8.12482 9.68703C7.95906 9.68703 7.80009 9.62118 7.68288 9.50397C7.56566 9.38676 7.49982 9.22779 7.49982 9.06203V5.62503C7.49982 5.45927 7.56566 5.3003 7.68288 5.18309C7.80009 5.06588 7.95906 5.00003 8.12482 5.00003C8.29058 5.00003 8.44955 5.06588 8.56676 5.18309C8.68397 5.3003 8.74982 5.45927 8.74982 5.62503V9.06203ZM7.74982 12L7.49982 11.75V11L7.74982 10.75H8.49982L8.74982 11V11.75L8.49982 12H7.74982Z" fill="black"/></svg>');
+
 }
 
 ngx-extended-pdf-viewer {
@@ -67,6 +71,12 @@ ngx-extended-pdf-viewer {
 
     &.free span {
       cursor: var(--editorFreeHighlight-editing-cursor);
+    }
+  }
+
+  #viewerContainer.pdfPresentationMode:fullscreen {
+    .noAltTextBadge {
+      display: none !important;
     }
   }
 
@@ -107,6 +117,14 @@ ngx-extended-pdf-viewer {
     transform-origin: 0 0;
     cursor: auto;
     z-index: 4; // needed to edit annotations on top of the viewer
+
+    .selectedEditor {
+      z-index: 100000 !important;
+    }
+
+    &.drawing * {
+      pointer-events: none !important;
+    }
   }
 
   .annotationEditorLayer.waiting {
@@ -198,10 +216,12 @@ ngx-extended-pdf-viewer {
     }
   }
 
-  .annotationEditorLayer :is(.freeTextEditor, .inkEditor, .stampEditor, .highlightEditor) {
+  .annotationEditorLayer :is(.freeTextEditor, .inkEditor, .stampEditor, .highlightEditor),
+  .textLayer {
     .editToolbar {
       --editor-toolbar-delete-image: url("data:image/svg+xml; utf8, <svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M11 3H13.6C14 3 14.3 3.3 14.3 3.6C14.3 3.9 14 4.2 13.7 4.2H13.3V14C13.3 15.1 12.4 16 11.3 16H4.80005C3.70005 16 2.80005 15.1 2.80005 14V4.2H2.40005C2.00005 4.2 1.80005 4 1.80005 3.6C1.80005 3.2 2.00005 3 2.40005 3H5.00005V2C5.00005 0.9 5.90005 0 7.00005 0H9.00005C10.1 0 11 0.9 11 2V3ZM6.90005 1.2L6.30005 1.8V3H9.80005V1.8L9.20005 1.2H6.90005ZM11.4 14.7L12 14.1V4.2H4.00005V14.1L4.60005 14.7H11.4ZM7.00005 12.4C7.00005 12.7 6.70005 13 6.40005 13C6.10005 13 5.80005 12.7 5.80005 12.4V7.6C5.70005 7.3 6.00005 7 6.40005 7C6.80005 7 7.00005 7.3 7.00005 7.6V12.4ZM10.2001 12.4C10.2001 12.7 9.90006 13 9.60006 13C9.30006 13 9.00006 12.7 9.00006 12.4V7.6C9.00006 7.3 9.30006 7 9.60006 7C9.90006 7 10.2001 7.3 10.2001 7.6V12.4Z' fill='black' /></svg>");
       --editor-toolbar-bg-color: #f0f0f4;
+      --editor-toolbar-highlight-image: url('data:image/svg+xml; utf8, <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path fill-rule="evenodd" clip-rule="evenodd" d="M7.10918 11.66C7.24918 11.8 7.43918 11.88 7.63918 11.88C7.83918 11.88 8.02918 11.8 8.16918 11.66L14.9192 4.91C15.2692 4.57 15.4592 4.11 15.4592 3.62C15.4592 3.13 15.2692 2.67 14.9192 2.33L13.1292 0.54C12.7892 0.19 12.3292 0 11.8392 0C11.3492 0 10.8892 0.2 10.5492 0.54L3.79918 7.29C3.50918 7.58 3.50918 8.06 3.79918 8.35L4.38988 8.9407L1.40918 11.93H5.64918L6.51419 11.065L7.10918 11.66ZM7.63918 10.07L5.38918 7.82V7.81L7.8648 5.33438L10.1198 7.58938L7.63918 10.07ZM11.1805 6.52872L13.8592 3.85C13.9892 3.72 13.9892 3.52 13.8592 3.39L12.0692 1.6C11.9892 1.52 11.8892 1.5 11.8392 1.5C11.8392 1.5 11.6892 1.51 11.6092 1.59L8.92546 4.27372L11.1805 6.52872Z" fill="#000"/><path d="M0.40918 14H15.4092V16H0.40918V14Z" fill="#000"/></g></svg>');
       --editor-toolbar-fg-color: #2e2e56;
       --editor-toolbar-border-color: #8f8f9d;
       --editor-toolbar-hover-border-color: var(--editor-toolbar-border-color);
@@ -213,12 +233,18 @@ ngx-extended-pdf-viewer {
       --editor-toolbar-vert-offset: 6px;
       --editor-toolbar-height: 28px;
       --editor-toolbar-padding: 2px;
+      --alt-text-done-color: #2ac3a2;
+      --alt-text-warning-color: #0090ed;
+      --alt-text-hover-done-color: var(--alt-text-done-color);
+      --alt-text-hover-warning-color: var(--alt-text-warning-color);
 
       @media (prefers-color-scheme: dark) {
         --editor-toolbar-bg-color: #2b2a33;
         --editor-toolbar-fg-color: #fbfbfe;
         --editor-toolbar-hover-bg-color: #52525e;
         --editor-toolbar-focus-outline-color: #0df;
+        --alt-text-done-color: #54ffbd;
+        --alt-text-warning-color: #80ebff;
       }
 
       @media screen and (forced-colors: active) {
@@ -231,6 +257,10 @@ ngx-extended-pdf-viewer {
         --editor-toolbar-hover-outline: 2px solid var(--editor-toolbar-hover-border-color);
         --editor-toolbar-focus-outline-color: ButtonBorder;
         --editor-toolbar-shadow: none;
+        --alt-text-done-color: var(--editor-toolbar-fg-color);
+        --alt-text-warning-color: var(--editor-toolbar-fg-color);
+        --alt-text-hover-done-color: var(--editor-toolbar-hover-fg-color);
+        --alt-text-hover-warning-color: var(--editor-toolbar-hover-fg-color);
       }
 
       display: flex;
@@ -282,6 +312,25 @@ ngx-extended-pdf-viewer {
           background-color: var(--editor-toolbar-border-color);
           display: inline-block;
           margin-inline: 2px;
+        }
+
+        .highlightButton {
+          width: var(--editor-toolbar-height);
+
+          &::before {
+            content: "";
+            mask-image: var(--editor-toolbar-highlight-image);
+            mask-repeat: no-repeat;
+            mask-position: center;
+            display: inline-block;
+            background-color: var(--editor-toolbar-fg-color);
+            width: 100%;
+            height: 100%;
+          }
+
+          &:hover::before {
+            background-color: var(--editor-toolbar-hover-fg-color);
+          }
         }
 
         .delete {
@@ -369,6 +418,31 @@ ngx-extended-pdf-viewer {
             mask-image: var(--alt-text-done-image);
           }
 
+          &.new {
+            &::before {
+              width: 16px;
+              height: 16px;
+              mask-image: var(--new-alt-text-warning-image);
+              background-color: var(--alt-text-warning-color);
+              mask-size: cover;
+            }
+
+            &:hover::before {
+              background-color: var(--alt-text-hover-warning-color);
+            }
+
+            &.done {
+              &::before {
+                mask-image: var(--alt-text-done-image);
+                background-color: var(--alt-text-done-color);
+              }
+
+              &:hover::before {
+                background-color: var(--alt-text-hover-done-color);
+              }
+            }
+          }
+
           .tooltip {
             display: none;
 
@@ -445,6 +519,7 @@ ngx-extended-pdf-viewer {
     height: 100%;
   }
 
+  // todo: in pdf.js, the selector is "freeTextEditor" without a dot
   .annotationEditorLayer .freeTextEditor .overlay.enabled {
     display: block;
   }
@@ -457,10 +532,6 @@ ngx-extended-pdf-viewer {
   .annotationEditorLayer .freeTextEditor .internal:focus {
     outline: none;
     user-select: auto;
-  }
-
-  .annotationEditorLayer :is(.freeTextEditor, .inkEditor, .stampEditor):hover:not(.selectedEditor) {
-    outline: var(--hover-outline);
   }
 
   .annotationEditorLayer .inkEditor {
@@ -483,18 +554,66 @@ ngx-extended-pdf-viewer {
   .annotationEditorLayer .stampEditor {
     width: auto;
     height: auto;
-  }
 
-  .annotationEditorLayer .stampEditor canvas {
-    width: 100%;
-    height: 100%;
+    canvas {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      top: 0;
+      left: 0;
+    }
+
+    .noAltTextBadge {
+      --no-alt-text-badge-border-color: #f0f0f4;
+      --no-alt-text-badge-bg-color: #cfcfd8;
+      --no-alt-text-badge-fg-color: #5b5b66;
+
+      @media (prefers-color-scheme: dark) {
+        --no-alt-text-badge-border-color: #52525e;
+        --no-alt-text-badge-bg-color: #fbfbfe;
+        --no-alt-text-badge-fg-color: #15141a;
+      }
+
+      @media screen and (forced-colors: active) {
+        --no-alt-text-badge-border-color: ButtonText;
+        --no-alt-text-badge-bg-color: ButtonFace;
+        --no-alt-text-badge-fg-color: ButtonText;
+      }
+
+      position: absolute;
+      inset-inline-end: 5px;
+      inset-block-end: 5px;
+      display: inline-flex;
+      width: 32px;
+      height: 32px;
+      padding: 3px;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+      z-index: 1;
+
+      border-radius: 2px;
+      border: 1px solid var(--no-alt-text-badge-border-color);
+      background: var(--no-alt-text-badge-bg-color);
+
+      &::before {
+        content: "";
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        mask-image: var(--new-alt-text-warning-image);
+        mask-size: cover;
+        background-color: var(--no-alt-text-badge-fg-color);
+      }
+    }
   }
 
   .annotationEditorLayer {
     :is(.freeTextEditor, .inkEditor, .stampEditor) {
       &>.resizers {
-        width: 100%;
-        height: 100%;
+        width: 100%; // #2282 compatibility to ngZorro?
+        height: 100%; // #2282 compatibility to ngZorro?
         position: absolute;
         inset: 0;
 
@@ -659,104 +778,13 @@ ngx-extended-pdf-viewer {
     }
   }
 
-  #altTextDialog {
-    --dialog-bg-color: white;
-    --dialog-border-color: white;
-    --dialog-shadow: 0 2px 14px 0 rgb(58 57 68 / 0.2);
-    --text-primary-color: #15141a;
-    --text-secondary-color: #5b5b66;
-    --hover-filter: brightness(0.9);
-    --focus-ring-color: #0060df;
-    --focus-ring-outline: 2px solid var(--focus-ring-color);
-
-    --textarea-border-color: #8f8f9d;
-    --textarea-bg-color: white;
-    --textarea-fg-color: var(--text-secondary-color);
-
-    --radio-bg-color: #f0f0f4;
-    --radio-checked-bg-color: #fbfbfe;
-    --radio-border-color: #8f8f9d;
-    --radio-checked-border-color: #0060df;
-
-    --button-cancel-bg-color: #f0f0f4;
-    --button-cancel-fg-color: var(--text-primary-color);
-    --button-cancel-border-color: var(--button-cancel-bg-color);
-    --button-cancel-hover-bg-color: var(--button-cancel-bg-color);
-    --button-cancel-hover-fg-color: var(--button-cancel-fg-color);
-    --button-cancel-hover-border-color: var(--button-cancel-hover-bg-color);
-
-    --button-save-bg-color: #0060df;
-    --button-save-fg-color: #fbfbfe;
-    --button-save-hover-bg-color: var(--button-save-bg-color);
-    --button-save-hover-fg-color: var(--button-save-fg-color);
-    --button-save-hover-border-color: var(--button-save-hover-bg-color);
-
-    @media (prefers-color-scheme: dark) {
-      --dialog-bg-color: #1c1b22;
-      --dialog-border-color: #1c1b22;
-      --dialog-shadow: 0 2px 14px 0 #15141a;
-      --text-primary-color: #fbfbfe;
-      --text-secondary-color: #cfcfd8;
-      --focus-ring-color: #0df;
-      --hover-filter: brightness(1.4);
-
-      --textarea-bg-color: #42414d;
-
-      --radio-bg-color: #2b2a33;
-      --radio-checked-bg-color: #15141a;
-      --radio-checked-border-color: #0df;
-
-      --button-cancel-bg-color: #2b2a33;
-      --button-save-bg-color: #0df;
-      --button-save-fg-color: #15141a;
-    }
-
-    @media screen and (forced-colors: active) {
-      --dialog-bg-color: Canvas;
-      --dialog-border-color: CanvasText;
-      --dialog-shadow: none;
-      --text-primary-color: CanvasText;
-      --text-secondary-color: CanvasText;
-      --hover-filter: none;
-      --focus-ring-color: ButtonBorder;
-
-      --textarea-border-color: ButtonBorder;
-      --textarea-bg-color: Field;
-      --textarea-fg-color: ButtonText;
-
-      --radio-bg-color: ButtonFace;
-      --radio-checked-bg-color: ButtonFace;
-      --radio-border-color: ButtonText;
-      --radio-checked-border-color: ButtonText;
-
-      --button-cancel-bg-color: ButtonFace;
-      --button-cancel-fg-color: ButtonText;
-      --button-cancel-border-color: ButtonText;
-      --button-cancel-hover-bg-color: AccentColor;
-      --button-cancel-hover-fg-color: AccentColorText;
-
-      --button-save-bg-color: ButtonText;
-      --button-save-fg-color: ButtonFace;
-      --button-save-hover-bg-color: AccentColor;
-      --button-save-hover-fg-color: AccentColorText;
-    }
-
-    font: message-box;
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 150%;
-    border-radius: 4px;
-    padding: 12px 16px;
-    border: 1px solid var(--dialog-border-color);
-    background: var(--dialog-bg-color);
-    color: var(--text-primary-color);
-    box-shadow: var(--dialog-shadow);
-
+  .dialog.altText {
     &::backdrop {
       /* This is needed to avoid to darken the image the user want to describe. */
       mask: url(#alttext-manager-mask);
     }
 
+    /* See alt_text_manager.js */
     &.positioned {
       margin: 0;
     }
@@ -768,58 +796,6 @@ ngx-extended-pdf-viewer {
       flex-direction: column;
       align-items: flex-start;
       gap: 16px;
-
-      & *:focus-visible {
-        outline: var(--focus-ring-outline);
-        outline-offset: 2px;
-      }
-
-      & .radio {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-
-        & .radioButton {
-          display: flex;
-          gap: 8px;
-          align-self: stretch;
-          align-items: center;
-
-          & input {
-            appearance: none;
-            box-sizing: border-box !important;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background-color: var(--radio-bg-color);
-            border: 1px solid var(--radio-border-color);
-
-            &:hover {
-              filter: var(--hover-filter);
-            }
-
-            &:checked {
-              background-color: var(--radio-checked-bg-color);
-              border: 4px solid var(--radio-checked-border-color);
-            }
-          }
-        }
-
-        & .radioLabel {
-          display: flex;
-          padding-inline-start: 24px;
-          align-items: flex-start;
-          gap: 10px;
-          align-self: stretch;
-
-          & span {
-            flex: 1 0 0;
-            font-size: 11px;
-            color: var(--text-secondary-color);
-          }
-        }
-      }
 
       & #overallDescription {
         display: flex;
@@ -850,27 +826,8 @@ ngx-extended-pdf-viewer {
           padding-inline: 24px 10px;
 
           textarea {
-            font: inherit;
             width: 100%;
             min-height: 75px;
-            padding: 8px;
-            resize: none;
-            margin: 0;
-            box-sizing: border-box !important;
-            border-radius: 4px;
-            border: 1px solid var(--textarea-border-color);
-            background: var(--textarea-bg-color);
-            color: var(--textarea-fg-color);
-
-            &:focus {
-              outline-offset: 0;
-              border-color: transparent;
-            }
-
-            &:disabled {
-              pointer-events: none;
-              opacity: 0.4;
-            }
           }
         }
       }
@@ -881,44 +838,193 @@ ngx-extended-pdf-viewer {
         align-items: flex-start;
         gap: 8px;
         align-self: stretch;
+      }
+    }
+  }
 
-        button {
-          border-radius: 4px;
-          border: 1px solid;
-          font: menu;
-          font-weight: 600;
-          padding: 4px 16px;
-          width: auto;
-          height: 32px;
+  .dialog.newAltText {
+    --new-alt-text-ai-disclaimer-icon: url('data:image/svg+xml;charset=UTF-8,<svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.49073 1.3015L3.30873 2.1505C3.29349 2.22246 3.25769 2.28844 3.20568 2.34045C3.15368 2.39246 3.08769 2.42826 3.01573 2.4435L2.16673 2.6255C1.76473 2.7125 1.76473 3.2865 2.16673 3.3725L3.01573 3.5555C3.08769 3.57074 3.15368 3.60654 3.20568 3.65855C3.25769 3.71056 3.29349 3.77654 3.30873 3.8485L3.49073 4.6975C3.57773 5.0995 4.15173 5.0995 4.23773 4.6975L4.42073 3.8485C4.43598 3.77654 4.47177 3.71056 4.52378 3.65855C4.57579 3.60654 4.64178 3.57074 4.71373 3.5555L5.56173 3.3725C5.96373 3.2855 5.96373 2.7115 5.56173 2.6255L4.71273 2.4435C4.64083 2.42814 4.57491 2.3923 4.52292 2.34031C4.47093 2.28832 4.43509 2.2224 4.41973 2.1505L4.23773 1.3015C4.15073 0.8995 3.57673 0.8995 3.49073 1.3015ZM10.8647 13.9995C10.4853 14.0056 10.1158 13.8782 9.82067 13.6397C9.52553 13.4013 9.32347 13.0667 9.24973 12.6945L8.89273 11.0275C8.83676 10.7687 8.70738 10.5316 8.52009 10.3445C8.3328 10.1574 8.09554 10.0282 7.83673 9.9725L6.16973 9.6155C5.38873 9.4465 4.86473 8.7975 4.86473 7.9995C4.86473 7.2015 5.38873 6.5525 6.16973 6.3845L7.83673 6.0275C8.09551 5.97135 8.33267 5.84193 8.51992 5.65468C8.70716 5.46744 8.83658 5.23028 8.89273 4.9715L9.25073 3.3045C9.41773 2.5235 10.0667 1.9995 10.8647 1.9995C11.6627 1.9995 12.3117 2.5235 12.4797 3.3045L12.8367 4.9715C12.9507 5.4995 13.3647 5.9135 13.8927 6.0265L15.5597 6.3835C16.3407 6.5525 16.8647 7.2015 16.8647 7.9995C16.8647 8.7975 16.3407 9.4465 15.5597 9.6145L13.8927 9.9715C13.6337 10.0275 13.3963 10.157 13.209 10.3445C13.0217 10.5319 12.8925 10.7694 12.8367 11.0285L12.4787 12.6945C12.4054 13.0667 12.2036 13.4014 11.9086 13.6399C11.6135 13.8784 11.2441 14.0057 10.8647 13.9995ZM10.8647 3.2495C10.7667 3.2495 10.5337 3.2795 10.4727 3.5655L10.1147 5.2335C10.0081 5.72777 9.76116 6.18082 9.40361 6.53837C9.04606 6.89593 8.59301 7.14283 8.09873 7.2495L6.43173 7.6065C6.14573 7.6685 6.11473 7.9015 6.11473 7.9995C6.11473 8.0975 6.14573 8.3305 6.43173 8.3925L8.09873 8.7495C8.59301 8.85617 9.04606 9.10307 9.40361 9.46062C9.76116 9.81817 10.0081 10.2712 10.1147 10.7655L10.4727 12.4335C10.5337 12.7195 10.7667 12.7495 10.8647 12.7495C10.9627 12.7495 11.1957 12.7195 11.2567 12.4335L11.6147 10.7665C11.7212 10.272 11.9681 9.81878 12.3256 9.46103C12.6832 9.10329 13.1363 8.85624 13.6307 8.7495L15.2977 8.3925C15.5837 8.3305 15.6147 8.0975 15.6147 7.9995C15.6147 7.9015 15.5837 7.6685 15.2977 7.6065L13.6307 7.2495C13.1365 7.14283 12.6834 6.89593 12.3259 6.53837C11.9683 6.18082 11.7214 5.72777 11.6147 5.2335L11.2567 3.5655C11.1957 3.2795 10.9627 3.2495 10.8647 3.2495ZM3.30873 12.1505L3.49073 11.3015C3.57673 10.8995 4.15073 10.8995 4.23773 11.3015L4.41973 12.1505C4.43509 12.2224 4.47093 12.2883 4.52292 12.3403C4.57491 12.3923 4.64083 12.4281 4.71273 12.4435L5.56173 12.6255C5.96373 12.7115 5.96373 13.2855 5.56173 13.3725L4.71273 13.5545C4.64083 13.5699 4.57491 13.6057 4.52292 13.6577C4.47093 13.7097 4.43509 13.7756 4.41973 13.8475L4.23773 14.6965C4.15173 15.0985 3.57773 15.0985 3.49073 14.6965L3.30873 13.8475C3.29337 13.7756 3.25754 13.7097 3.20555 13.6577C3.15356 13.6057 3.08764 13.5699 3.01573 13.5545L2.16673 13.3725C1.76473 13.2865 1.76473 12.7125 2.16673 12.6255L3.01573 12.4435C3.08769 12.4283 3.15368 12.3925 3.20568 12.3405C3.25769 12.2884 3.29349 12.2225 3.30873 12.1505Z" fill="black"/></svg>');
+    // copied the spinner from https://icon-sets.iconify.design/svg-spinners/270-ring-with-bg/
+    // where it's licensed under MIT by Utkarsh Verma
+    --new-alt-text-spinner-icon: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity="0.25"/><path fill="currentColor" d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z"><animateTransform attributeName="transform" dur="1.125s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></svg>');
+    --preview-image-bg-color: #f0f0f4;
+    --preview-image-border: none;
 
-          &:hover {
-            cursor: pointer;
-            filter: var(--hover-filter);
-          }
+    @media (prefers-color-scheme: dark) {
+      --preview-image-bg-color: #2b2a33;
+    }
 
-          &#altTextCancel {
-            color: var(--button-cancel-fg-color);
-            background-color: var(--button-cancel-bg-color);
-            border-color: var(--button-cancel-border-color);
+    @media screen and (forced-colors: active) {
+      --preview-image-bg-color: ButtonFace;
+      --preview-image-border: 1px solid ButtonText;
+    }
 
-            &:hover {
-              color: var(--button-cancel-hover-fg-color);
-              background-color: var(--button-cancel-hover-bg-color);
-              border-color: var(--button-cancel-hover-border-color);
+    width: 80%;
+    max-width: 570px;
+    min-width: 300px;
+    padding: 0;
+
+    &.noAi {
+
+      #newAltTextDisclaimer,
+      #newAltTextCreateAutomatically {
+        display: none !important;
+      }
+    }
+
+    &.aiInstalling {
+      #newAltTextCreateAutomatically {
+        display: none !important;
+      }
+
+      #newAltTextDownloadModel {
+        display: flex !important;
+      }
+    }
+
+    &.error {
+      #newAltTextNotNow {
+        display: none !important;
+      }
+
+      #newAltTextCancel {
+        display: inline-block !important;
+      }
+    }
+
+    &:not(.error) #newAltTextError {
+      display: none !important;
+    }
+
+    #newAltTextContainer {
+      display: flex;
+      width: auto;
+      padding: 16px;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      gap: 12px;
+      flex: 0 1 auto;
+      line-height: normal;
+
+      #mainContent {
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-start;
+        gap: 12px;
+        align-self: stretch;
+        flex: 1 1 auto;
+
+        #descriptionAndSettings {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+          flex: 1 0 0;
+          align-self: stretch;
+        }
+
+        #descriptionInstruction {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+          align-self: stretch;
+          flex: 1 1 auto;
+
+          #newAltTextDescriptionContainer {
+            width: 100%;
+            height: 70px;
+            position: relative;
+
+            textarea {
+              width: 100%;
+              height: 100%;
+              padding: 8px;
+
+              &::placeholder {
+                color: var(--text-secondary-color);
+              }
+            }
+
+            .altTextSpinner {
+              display: none;
+              position: absolute;
+              width: 16px;
+              height: 16px;
+              inset-inline-start: 8px;
+              inset-block-start: 8px;
+              mask-size: cover;
+              background-color: var(--text-secondary-color);
+              pointer-events: none;
+            }
+
+            &.loading {
+              textarea::placeholder {
+                color: transparent;
+              }
+
+              .altTextSpinner {
+                display: inline-block;
+                mask-image: var(--new-alt-text-spinner-icon);
+              }
             }
           }
 
-          &#altTextSave {
-            color: var(--button-save-hover-fg-color);
-            background-color: var(--button-save-hover-bg-color);
-            border-color: var(--button-save-hover-border-color);
-            opacity: 1;
+          #newAltTextDescription {
+            font-size: 11px;
+          }
 
-            &:hover {
-              color: var(--button-save-hover-fg-color);
-              background-color: var(--button-save-hover-bg-color);
-              border-color: var(--button-save-hover-border-color);
+          #newAltTextDisclaimer {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 4px;
+            font-size: 11px;
+
+            &::before {
+              content: "";
+              display: inline-block;
+              width: 17px;
+              height: 16px;
+              mask-image: var(--new-alt-text-ai-disclaimer-icon);
+              mask-size: cover;
+              background-color: var(--text-secondary-color);
+              flex: 1 0 auto;
             }
+          }
+        }
+
+        #newAltTextDownloadModel {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          align-self: stretch;
+
+          &::before {
+            content: "";
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            mask-image: var(--new-alt-text-spinner-icon);
+            mask-size: cover;
+            background-color: var(--text-secondary-color);
+          }
+        }
+
+        #newAltTextImagePreview {
+          width: 180px;
+          aspect-ratio: 1;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex: 0 0 auto;
+          background-color: var(--preview-image-bg-color);
+          border: var(--preview-image-border);
+
+          >canvas {
+            max-width: 100%;
+            max-height: 100%;
           }
         }
       }
@@ -948,7 +1054,7 @@ ngx-extended-pdf-viewer {
       border: 1px solid var(--swatch-border-color);
       border-radius: 100%;
       outline-offset: 2px;
-      box-sizing: border-box !important;
+      box-sizing: border-box !important; // #2343
       forced-color-adjust: none;
     }
 
@@ -1114,7 +1220,7 @@ ngx-extended-pdf-viewer {
     gap: 16px;
     display: flex;
     flex-direction: column;
-    box-sizing: border-box !important;
+    box-sizing: border-box !important; // #2343
 
     .editorParamsLabel {
       width: fit-content;
@@ -1190,10 +1296,15 @@ ngx-extended-pdf-viewer {
         }
 
         @media screen and (forced-colors: active) {
-          --example-color: HighlightText;
+          --example-color: CanvasText;
         }
 
-        &::before {
+        :is(& > .editorParamsSlider[disabled]) {
+          opacity: 0.4;
+        }
+
+        &::before,
+        &::after {
           content: "";
           width: 8px;
           aspect-ratio: 1;
@@ -1202,19 +1313,106 @@ ngx-extended-pdf-viewer {
           background-color: var(--example-color);
         }
 
+        &::after {
+          width: 24px;
+        }
+
         .editorParamsSlider {
           width: unset;
           height: 14px;
         }
+      }
+    }
 
-        &::after {
-          content: "";
-          width: 24px;
-          aspect-ratio: 1;
-          display: block;
-          border-radius: 100%;
-          background-color: var(--example-color);
+    #editorHighlightVisibility {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      align-self: stretch;
+
+      .divider {
+        --divider-color: #d7d7db;
+
+        @media (prefers-color-scheme: dark) {
+          --divider-color: #8f8f9d;
         }
+
+        @media screen and (forced-colors: active) {
+          --divider-color: CanvasText;
+        }
+
+        margin-block: 4px;
+        width: 100%;
+        height: 1px;
+        background-color: var(--divider-color);
+      }
+
+      .toggler {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        align-self: stretch;
+      }
+    }
+  }
+
+  #altTextSettingsDialog {
+    padding: 16px;
+
+    #altTextSettingsContainer {
+      display: flex;
+      width: 573px;
+      flex-direction: column;
+      gap: 16px;
+
+      .mainContainer {
+        gap: 16px;
+      }
+
+      .description {
+        color: var(--text-secondary-color);
+      }
+
+      #aiModelSettings {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        button {
+          width: fit-content;
+        }
+
+        &.download {
+          #deleteModelButton {
+            display: none;
+          }
+        }
+
+        &:not(.download) {
+          #downloadModelButton {
+            display: none;
+          }
+        }
+      }
+
+      #automaticAltText,
+      #altTextEditor {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      #createModelDescription,
+      #aiModelSettings,
+      #showAltTextDialogDescription {
+        padding-inline-start: 40px;
+      }
+
+      #automaticSettings {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
       }
     }
   }
