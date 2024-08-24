@@ -38,7 +38,7 @@ export class PDFFindController {
     /**
      * @param {PDFFindControllerOptions} options
      */
-    constructor({ linkService, eventBus, updateMatchesCountOnProgress, pageViewMode }: PDFFindControllerOptions);
+    constructor({ linkService, eventBus, updateMatchesCountOnProgress, pageViewMode, listenToEventBus, }: PDFFindControllerOptions);
     _linkService: import("./interfaces").IPDFLinkService;
     _eventBus: import("./event_utils").EventBus;
     _pageViewMode: any;

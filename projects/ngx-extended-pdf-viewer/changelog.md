@@ -589,3 +589,4 @@
 - 21.3.1 #1735 removed the @Input() attributes of features that have been removed in version 18; #2494 removed the non-existing atribute `numTextDivs` from `TextLayerRenderedEvent` and added the `layer` attribute to all four `LayerRenderedEvents`; #2598 fixed a bug that always assumed the "highlight all" is set; updated the bleeding edge branch
 - 21.3.2 #2463 now the PDF viewer only reacts on the arrow keys if they aren't used for accessability
 - 21.3.3 #2522 update the showcase to Angular 18, Angular Material 18, add static-site generation to the showcase, and fix SSR/SSG errors; #2500 add a Polyfill to `Promise.withResolvers` that jumps in if an old version of zone.js accidentally deletes your browser's implementation
+- 21.3.4 #2339 / #2524 the PDF viewer didn't scroll find matches reliably into view
