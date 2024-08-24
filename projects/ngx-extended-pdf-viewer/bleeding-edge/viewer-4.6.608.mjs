@@ -4237,6 +4237,7 @@ class AnnotationEditor {
     y += by;
     this.div.style.left = `${(100 * x).toFixed(2)}%`;
     this.div.style.top = `${(100 * y).toFixed(2)}%`;
+    console.log('drag', x, y);
     this.div.scrollIntoView({
       block: "nearest"
     });
@@ -11203,7 +11204,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.6.607",
+    apiVersion: "4.6.608",
     data,
     password,
     disableAutoFetch,
@@ -12998,8 +12999,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.6.607";
-const build = "cf9e2691b";
+const version = "4.6.608";
+const build = "52ffb669a";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -20321,8 +20322,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.6.607";
-const pdfjsBuild = "cf9e2691b";
+const pdfjsVersion = "4.6.608";
+const pdfjsBuild = "52ffb669a";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -21826,7 +21827,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '21.3.2';
+const ngxExtendedPdfViewerVersion = '21.3.3';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -34613,7 +34614,7 @@ class PDFViewer {
   #maxZoom = MAX_SCALE;
   #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.6.607";
+    const viewerVersion = "4.6.608";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -39466,8 +39467,8 @@ PDFViewerApplication.serviceWorkerOptions = ServiceWorkerOptions;
 
 
 
-const pdfjsVersion = "4.6.607";
-const pdfjsBuild = "cf9e2691b";
+const pdfjsVersion = "4.6.608";
+const pdfjsBuild = "52ffb669a";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
