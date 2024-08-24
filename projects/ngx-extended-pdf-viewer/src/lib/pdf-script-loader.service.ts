@@ -287,7 +287,6 @@ new (function () {
    * This method adds a polyfill for Promise.withResolvers if it is not available.
    */
   private polyfillPromiseWithResolversIfZoneJSOverwritesIt() {
-    debugger;
     const TypelessPromise = Promise as any;
     if (!TypelessPromise.withResolvers) {
       TypelessPromise.withResolvers = function withResolvers() {
