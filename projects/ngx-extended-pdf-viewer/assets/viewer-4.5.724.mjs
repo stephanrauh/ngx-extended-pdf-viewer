@@ -11092,7 +11092,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.5.722",
+    apiVersion: "4.5.724",
     data,
     password,
     disableAutoFetch,
@@ -12889,8 +12889,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.5.722";
-const build = "59dc09a6e";
+const version = "4.5.724";
+const build = "730abdc2e";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -20099,8 +20099,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.5.722";
-const pdfjsBuild = "59dc09a6e";
+const pdfjsVersion = "4.5.724";
+const pdfjsBuild = "730abdc2e";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -21605,7 +21605,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '21.3.3';
+const ngxExtendedPdfViewerVersion = '21.3.4';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -25073,7 +25073,8 @@ class PDFFindController {
     linkService,
     eventBus,
     updateMatchesCountOnProgress = true,
-    pageViewMode
+    pageViewMode,
+    listenToEventBus
   }) {
     this._linkService = linkService;
     this._eventBus = eventBus;
@@ -25081,8 +25082,10 @@ class PDFFindController {
     this._pageViewMode = pageViewMode;
     this.onIsPageVisible = null;
     this.#reset();
-    eventBus._on("find", this.#onFind.bind(this));
-    eventBus._on("findbarclose", this.#onFindBarClose.bind(this));
+    if (listenToEventBus) {
+      eventBus._on("find", this.#onFind.bind(this));
+      eventBus._on("findbarclose", this.#onFindBarClose.bind(this));
+    }
   }
   get highlightMatches() {
     return this._highlightMatches;
@@ -25204,10 +25207,6 @@ class PDFFindController {
       return;
     }
     if (!this._scrollMatches || !element) {
-      return;
-    } else if (matchIndex === -1 || matchIndex !== this._selected.matchIdx) {
-      return;
-    } else if (pageIndex === -1 || pageIndex !== this._selected.pageIdx) {
       return;
     }
     this._scrollMatches = false;
@@ -25696,10 +25695,10 @@ class PDFFindBar {
     this.caseSensitive.addEventListener("click", () => {
       this.dispatchEvent("casesensitivitychange");
     });
-    this.findMultipleCheckbox.addEventListener("click", () => {
+    this.findMultipleCheckbox?.addEventListener("click", () => {
       this.dispatchEvent("findmultiplechange");
     });
-    this.matchRegExpCheckbox.addEventListener("click", () => {
+    this.matchRegExpCheckbox?.addEventListener("click", () => {
       if (this.matchRegExpCheckbox.checked) {
         this.findMultipleCheckbox.checked = false;
         this.findMultipleCheckbox.disabled = true;
@@ -25730,8 +25729,8 @@ class PDFFindBar {
       type,
       query: this.findField.value,
       caseSensitive: this.caseSensitive.checked,
-      findMultiple: this.findMultipleCheckbox.checked,
-      matchRegExp: this.matchRegExpCheckbox.checked,
+      findMultiple: this.findMultipleCheckbox?.checked,
+      matchRegExp: this.matchRegExpCheckbox?.checked,
       entireWord: this.entireWord.checked,
       highlightAll: this.highlightAll.checked,
       findPrevious: findPrev,
@@ -27286,7 +27285,7 @@ function handleMethod(settings) {
     }
   }
 }
-const canvas_size_esm_canvasSize = {
+const canvasSize = {
   maxArea() {
     let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     const sizes = createSizesArray({
@@ -27452,7 +27451,7 @@ class MaxCanvasSize {
       success,
       width,
       height
-    } = await canvas_size_esm_canvasSize.maxArea({
+    } = await canvasSize.maxArea({
       useWorker: true
     });
     if (!success) {
@@ -27466,7 +27465,7 @@ class MaxCanvasSize {
   static async determineMaxWidth() {
     const {
       width
-    } = await canvas_size_esm_canvasSize.maxWidth({
+    } = await canvasSize.maxWidth({
       useWorker: true
     });
     MaxCanvasSize.maxWidth = width;
@@ -27475,7 +27474,7 @@ class MaxCanvasSize {
   static async determineMaxHeight() {
     const {
       height
-    } = await canvas_size_esm_canvasSize.maxHeight({
+    } = await canvasSize.maxHeight({
       useWorker: true
     });
     MaxCanvasSize.maxHeight = height;
@@ -28308,26 +28307,6 @@ async function renderPage(activeServiceOnEntry, pdfDocument, pageNumber, size, p
       throw reason;
     });
   });
-}
-async function determineMaxDimensions() {
-  debugger;
-  if (PDFPrintService.maxWidth) {
-    return PDFPrintService.maxWidth;
-  }
-  const checklist = [4096, 8192, 10836, 11180, 11402, 14188, 14188, 16384, 23168];
-  for (const width of checklist) {
-    const {
-      success
-    } = await canvasSize.test({
-      width,
-      height: width
-    });
-    if (!success) {
-      PDFPrintService.maxWidth = width;
-      return PDFPrintService.maxWidth;
-    }
-  }
-  return 23168;
 }
 class PDFPrintService {
   constructor({
@@ -33745,7 +33724,7 @@ class PDFViewer {
   #maxZoom = MAX_SCALE;
   #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.5.722";
+    const viewerVersion = "4.5.724";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -36452,14 +36431,16 @@ const PDFViewerApplication = {
       linkService: pdfLinkService,
       eventBus,
       pageViewMode: AppOptions.get("pageViewMode"),
-      updateMatchesCountOnProgress: true
+      updateMatchesCountOnProgress: true,
+      listenToEventBus: false
     });
     this.customFindController = customFindController;
     const findController = new FindControllerConstructor({
       linkService: pdfLinkService,
       eventBus,
       pageViewMode: AppOptions.get("pageViewMode"),
-      updateMatchesCountOnProgress: true
+      updateMatchesCountOnProgress: true,
+      listenToEventBus: true
     });
     this.findController = findController;
     const pdfScriptingManager = new PDFScriptingManager({
@@ -38661,8 +38642,8 @@ function webViewerSetPreference({
 
 
 
-const pdfjsVersion = "4.5.722";
-const pdfjsBuild = "59dc09a6e";
+const pdfjsVersion = "4.5.724";
+const pdfjsBuild = "730abdc2e";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
