@@ -417,6 +417,10 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Prikaži uređivač za
 pdfjs-editor-alt-text-settings-show-dialog-description = Pomaže osigurati da sve tvoje slike imaju zamjenski tekst.
 pdfjs-editor-alt-text-settings-close-button = Zatvori
 
+pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
+pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
 pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
 pdfjs-editor-new-alt-text-textarea =

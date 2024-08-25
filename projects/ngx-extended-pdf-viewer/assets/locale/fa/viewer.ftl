@@ -266,6 +266,9 @@ pdfjs-spread-odd-button-label = Odd Spreads
 pdfjs-spread-even-button =
     .title = Join page spreads starting with even-numbered pages
 pdfjs-spread-even-button-label = Even Spreads
+pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
+pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-document-properties-page-size-orientation-portrait = portrait
 pdfjs-document-properties-page-size-orientation-landscape = landscape
 pdfjs-toggle-sidebar-notification-button =
@@ -285,7 +288,7 @@ pdfjs-find-match-count-limit =
         [one] More than { $limit } match
        *[other] More than { $limit } matches
     }
-pdfjs-annotation-date-string = { $date }, { $time }
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-editor-stamp-button =
     .title = Add or edit images
 pdfjs-editor-stamp-button-label = Add or edit images
@@ -394,3 +397,4 @@ unverified-signature-warning = This PDF file contains a digital signature. The P
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = multiple queries separated by space"
 pdfjs-find-regexp-checkbox-label = regular expression
+pdfjs-annotation-date-string = { $date }, { $time }

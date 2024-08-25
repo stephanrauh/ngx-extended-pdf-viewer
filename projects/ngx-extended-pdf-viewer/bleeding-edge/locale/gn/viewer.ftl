@@ -446,6 +446,10 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Ehechauka moñe’ẽr
 pdfjs-editor-alt-text-settings-show-dialog-description = Nepytyvõta ta’ãngakuéra orekotaha moñe’ẽrã mokõiha.
 pdfjs-editor-alt-text-settings-close-button = Mboty
 
+pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
+pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
 pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.

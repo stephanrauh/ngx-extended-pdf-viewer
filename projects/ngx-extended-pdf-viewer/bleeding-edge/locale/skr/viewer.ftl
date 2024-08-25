@@ -402,11 +402,20 @@ pdfjs-editor-new-alt-text-error-close-button = بند کرو
 
 ## Image alt-text settings
 
+pdfjs-image-alt-text-settings-button =
+    .title = تصویر آلٹ عبارت ترتیباں
+pdfjs-image-alt-text-settings-button-label = تصویر آلٹ عبارت ترتیباں
+pdfjs-editor-alt-text-settings-dialog-label = تصویر آلٹ عبارت ترتیباں
+pdfjs-editor-alt-text-settings-automatic-title = خودکار آلٹ عبارت
 pdfjs-editor-alt-text-settings-delete-model-button = مٹاؤ
 pdfjs-editor-alt-text-settings-download-model-button = ڈاؤن لوڈ
 pdfjs-editor-alt-text-settings-downloading-model-button = ڈاؤن لوڈ تھیندا پئے …
 pdfjs-editor-alt-text-settings-close-button = بند کرو
 
+pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
+pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
 pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
 pdfjs-editor-new-alt-text-textarea =
@@ -422,11 +431,6 @@ pdfjs-editor-new-alt-text-added-button-label = Alt text added
 pdfjs-editor-new-alt-text-missing-button-label = Missing alt text
 pdfjs-editor-new-alt-text-to-review-button-label = Review alt text
 pdfjs-editor-new-alt-text-generated-alt-text-with-disclaimer = Created automatically: { $generatedAltText }
-pdfjs-image-alt-text-settings-button =
-    .title = Image alt text settings
-pdfjs-image-alt-text-settings-button-label = Image alt text settings
-pdfjs-editor-alt-text-settings-dialog-label = Image alt text settings
-pdfjs-editor-alt-text-settings-automatic-title = Automatic alt text
 pdfjs-editor-alt-text-settings-create-model-button-label = Create alt text automatically
 pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-alt-text-settings-download-model-label = Alt text AI model ({ $totalSize } MB)

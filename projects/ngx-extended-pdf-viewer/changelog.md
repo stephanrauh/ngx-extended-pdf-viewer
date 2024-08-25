@@ -590,3 +590,4 @@
 - 21.3.2 #2463 now the PDF viewer only reacts on the arrow keys if they aren't used for accessability
 - 21.3.3 #2522 update the showcase to Angular 18, Angular Material 18, add static-site generation to the showcase, and fix SSR/SSG errors; #2500 add a Polyfill to `Promise.withResolvers` that jumps in if an old version of zone.js accidentally deletes your browser's implementation
 - 21.3.4 #2339 / #2524 the PDF viewer didn't scroll find matches reliably into view
+- 21.3.5 #2515 now annotations added programmatically or by pasting send events if moved or resized; updated the bleeding edge branch

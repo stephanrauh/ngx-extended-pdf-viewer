@@ -386,6 +386,10 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = წითელი
 
+pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
+pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-highlight-floating-button1 =
     .title = Highlight
     .aria-label = Highlight

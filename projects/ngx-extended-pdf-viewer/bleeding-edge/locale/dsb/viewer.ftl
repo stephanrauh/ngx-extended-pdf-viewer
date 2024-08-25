@@ -409,7 +409,7 @@ pdfjs-editor-new-alt-text-textarea =
 # This text refers to the alt text box above this description. It offers a definition of alt text.
 pdfjs-editor-new-alt-text-description = Krotke wopisanje za luźe, kótarež njamóžośo wobraz wiźeś abo gaž se wobraz njezacytajo.
 # This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
-pdfjs-editor-new-alt-text-disclaimer = Toś ten alternatiwny tekst jo se awtomatiski napórał.
+pdfjs-editor-new-alt-text-disclaimer1 = Toś ten alternatiwny tekst jo se awtomatiski napórał a jo snaź njedokradny.
 pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Dalšne informacije
 pdfjs-editor-new-alt-text-create-automatically-button-label = Alternatiwny tekst awtomatiski napóraś
 pdfjs-editor-new-alt-text-not-now-button = Nic něnto
@@ -446,7 +446,10 @@ pdfjs-editor-alt-text-settings-editor-title = Editor za alternatiwny tekst
 pdfjs-editor-alt-text-settings-show-dialog-button-label = Editor alternatiwnego teksta ned pokazaś, gaž se wobraz pśidawa
 pdfjs-editor-alt-text-settings-close-button = Zacyniś
 
-pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
+pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
+pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
     .aria-valuetext = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
 pdfjs-editor-alt-text-settings-ai-model-description = Runs locally on your device so your data stays private. Required for automatic alt text.

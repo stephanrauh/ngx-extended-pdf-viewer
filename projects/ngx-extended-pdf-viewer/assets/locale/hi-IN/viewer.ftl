@@ -268,6 +268,9 @@ pdfjs-scroll-wrapped-button-label = Wrapped Scrolling
 pdfjs-spread-even-button =
     .title = Join page spreads starting with even-numbered pages
 pdfjs-spread-even-button-label = Even Spreads
+pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
+pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-toggle-sidebar-notification-button =
     .title = Toggle Sidebar (document contains outline/attachments/layers)
 pdfjs-layers-button =
@@ -290,6 +293,7 @@ pdfjs-find-match-count-limit =
     }
 pdfjs-page-landmark =
     .aria-label = Page { $page }
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-editor-free-text-button =
     .title = Text
 pdfjs-editor-free-text-button-label = Text
