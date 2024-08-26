@@ -11204,7 +11204,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.6.640",
+    apiVersion: "4.6.646",
     data,
     password,
     disableAutoFetch,
@@ -12999,8 +12999,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.6.640";
-const build = "9ada02c94";
+const version = "4.6.646";
+const build = "7afe7b814";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -18092,6 +18092,7 @@ class HighlightEditor extends AnnotationEditor {
 class InkEditor extends AnnotationEditor {
   #baseHeight = 0;
   #baseWidth = 0;
+  #boundCanvasTouchMove = null;
   #canvasContextMenuTimeoutId = null;
   #currentPath2D = new Path2D();
   #disableEditing = false;
@@ -18108,6 +18109,7 @@ class InkEditor extends AnnotationEditor {
   static _defaultThickness = 1;
   static _type = "ink";
   static _editorType = AnnotationEditorType.INK;
+  static _currentPointerType = null;
   constructor(params) {
     super({
       ...params,
@@ -18125,6 +18127,28 @@ class InkEditor extends AnnotationEditor {
     this.x = 0;
     this.y = 0;
     this._willKeepAspectRatio = true;
+    this.editorPointerType = null;
+    if (InkEditor._currentPointerType === null) {
+      InkEditor._currentPointerType = '';
+      window.addEventListener('pointerdown', this.windowPointerDown);
+    }
+  }
+  destroy() {
+    super.destroy();
+    if (InkEditor._currentPointerType !== null) {
+      window.removeEventListener('pointerdown', this.windowPointerDown);
+      InkEditor._currentPointerType = null;
+    }
+  }
+  windowPointerDown(event) {
+    InkEditor._currentPointerType = event.pointerType;
+    return true;
+  }
+  initializePointerType() {
+    this.editorPointerType = InkEditor._currentPointerType;
+  }
+  resetPointerType(pointerType) {
+    this.editorPointerType = null;
   }
   static initialize(l10n, uiManager) {
     AnnotationEditor.initialize(l10n, uiManager);
@@ -18289,6 +18313,7 @@ class InkEditor extends AnnotationEditor {
       return;
     }
     super.enableEditMode();
+    this.initializePointerType();
     this._isDraggable = false;
     this.#addPointerdownListener();
   }
@@ -18297,6 +18322,7 @@ class InkEditor extends AnnotationEditor {
       return;
     }
     super.disableEditMode();
+    this.resetPointerType();
     this._isDraggable = !this.isEmpty();
     this.div.classList.remove("editing");
     this.#removePointerdownListener();
@@ -18353,6 +18379,10 @@ class InkEditor extends AnnotationEditor {
     });
     this.canvas.addEventListener("pointerup", this.canvasPointerup.bind(this), {
       signal
+    });
+    this.canvas.addEventListener("touchmove", this.#boundCanvasTouchMove, {
+      signal: this._uiManager._signal,
+      passive: false
     });
     this.isEditing = true;
     if (!this.#isCanvasInitialized) {
@@ -18564,7 +18594,7 @@ class InkEditor extends AnnotationEditor {
     this.pointerdownAC = null;
   }
   canvasPointerdown(event) {
-    if (event.button !== 0 || !this.isInEditMode() || this.#disableEditing) {
+    if (event.button !== 0 || !this.isInEditMode() || this.#disableEditing || this.editorPointerType !== event.pointerType) {
       return;
     }
     this.setInForeground();
@@ -18587,9 +18617,16 @@ class InkEditor extends AnnotationEditor {
   canvasPointerleave(event) {
     this.#endDrawing(event);
   }
+  canvasTouchMove(event) {
+    if (!this.isInEditMode() || this.#disableEditing || this.editorPointerType !== InkEditor._currentPointerType) {
+      return;
+    }
+    event.preventDefault();
+  }
   #endDrawing(event) {
     this.#drawingAC?.abort();
     this.#drawingAC = null;
+    this.canvas.removeEventListener("touchmove", this.#boundCanvasTouchMove);
     this.#addPointerdownListener();
     if (this.#canvasContextMenuTimeoutId) {
       clearTimeout(this.#canvasContextMenuTimeoutId);
@@ -19032,7 +19069,8 @@ class StampEditor extends AnnotationEditor {
       this._reportTelemetry({
         action: "pdfjs.image.image_added",
         data: {
-          alt_text_modal: false
+          alt_text_modal: false,
+          alt_text_type: "empty"
         }
       });
       try {
@@ -20321,8 +20359,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.6.640";
-const pdfjsBuild = "9ada02c94";
+const pdfjsVersion = "4.6.646";
+const pdfjsBuild = "7afe7b814";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -21826,7 +21864,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '21.3.5';
+const ngxExtendedPdfViewerVersion = '21.3.6';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -24041,7 +24079,8 @@ class NewAltTextManager {
     this.#currentEditor._reportTelemetry({
       action: "pdfjs.image.image_added",
       data: {
-        alt_text_modal: false
+        alt_text_modal: true,
+        alt_text_type: "skipped"
       }
     });
     this.#finish();
@@ -24085,7 +24124,8 @@ class NewAltTextManager {
     this.#currentEditor._reportTelemetry({
       action: "pdfjs.image.image_added",
       data: {
-        alt_text_modal: true
+        alt_text_modal: true,
+        alt_text_type: altText ? "present" : "empty"
       }
     });
     this.#currentEditor._reportTelemetry({
@@ -26221,7 +26261,7 @@ class PDFFindController {
       matchRegExp
     } = this.#state;
     if (findMultiple && typeof query === "string") {
-      query = query.split(/\s+/);
+      query = query.trim().split(/\s+/);
     }
     if (matchRegExp && typeof query === "string") {
       query = new RegExp(query, caseSensitive ? "g" : "gi");
@@ -34598,7 +34638,7 @@ class PDFViewer {
   #maxZoom = MAX_SCALE;
   #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.6.640";
+    const viewerVersion = "4.6.646";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -39453,8 +39493,8 @@ PDFViewerApplication.serviceWorkerOptions = ServiceWorkerOptions;
 
 
 
-const pdfjsVersion = "4.6.640";
-const pdfjsBuild = "9ada02c94";
+const pdfjsVersion = "4.6.646";
+const pdfjsBuild = "7afe7b814";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,

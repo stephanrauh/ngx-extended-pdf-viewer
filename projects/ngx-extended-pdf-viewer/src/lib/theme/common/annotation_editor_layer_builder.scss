@@ -148,8 +148,6 @@ ngx-extended-pdf-viewer {
     cursor: var(--editorInk-editing-cursor);
   }
 
-  /* end of addition by ngx-extended-pdf-viewer */
-
   .annotationEditorLayer :is(.freeTextEditor, .inkEditor, .stampEditor) {
     position: absolute;
     background: transparent;

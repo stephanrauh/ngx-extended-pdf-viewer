@@ -24,7 +24,7 @@
 
 /******/ // The require scope
 /******/ var __webpack_require__ = {};
-/******/
+/******/ 
 /************************************************************************/
 /******/ /* webpack/runtime/define property getters */
 /******/ (() => {
@@ -37,12 +37,12 @@
 /******/ 		}
 /******/ 	};
 /******/ })();
-/******/
+/******/ 
 /******/ /* webpack/runtime/hasOwnProperty shorthand */
 /******/ (() => {
 /******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ })();
-/******/
+/******/ 
 /************************************************************************/
 var __webpack_exports__ = globalThis.pdfjsLib = {};
 
@@ -11093,7 +11093,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.5.726",
+    apiVersion: "4.5.729",
     data,
     password,
     disableAutoFetch,
@@ -12890,8 +12890,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.5.726";
-const build = "b4db8a74b";
+const version = "4.5.729";
+const build = "6ffa35862";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -18037,20 +18037,20 @@ class InkEditor extends AnnotationEditor {
     this._willKeepAspectRatio = true;
     this.editorPointerType = null;
     if (InkEditor._currentPointerType === null) {
-      InkEditor._currentPointerType = '';  // add listener only once
-      window.addEventListener('pointerdown', this.windowPointerDown);
+      InkEditor._currentPointerType = "";
+      window.addEventListener("pointerdown", this.windowPointerDown);
     }
   }
   destroy() {
     super.destroy();
     if (InkEditor._currentPointerType !== null) {
-      window.removeEventListener('pointerdown', this.windowPointerDown);
-      InkEditor._currentPointerType = null;  // remove listener only once
+      window.removeEventListener("pointerdown", this.windowPointerDown);
+      InkEditor._currentPointerType = null;
     }
   }
   windowPointerDown(event) {
     InkEditor._currentPointerType = event.pointerType;
-    return true;  // do not prevent default
+    return true;
   }
   initializePointerType() {
     this.editorPointerType = InkEditor._currentPointerType;
@@ -18516,7 +18516,6 @@ class InkEditor extends AnnotationEditor {
     if (!this.isInEditMode() || this.#disableEditing || this.editorPointerType !== InkEditor._currentPointerType) {
       return;
     }
-    // disable default scroll behaviour on touch move
     event.preventDefault();
   }
   #endDrawing(event) {
@@ -20138,8 +20137,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.5.726";
-const pdfjsBuild = "b4db8a74b";
+const pdfjsVersion = "4.5.729";
+const pdfjsBuild = "6ffa35862";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -20211,7 +20210,7 @@ var __webpack_exports__version = __webpack_exports__.version;
 
 /******/ // The require scope
 /******/ var __webpack_require__ = {};
-/******/
+/******/ 
 /************************************************************************/
 /******/ /* webpack/runtime/define property getters */
 /******/ (() => {
@@ -20224,12 +20223,12 @@ var __webpack_exports__version = __webpack_exports__.version;
 /******/ 		}
 /******/ 	};
 /******/ })();
-/******/
+/******/ 
 /******/ /* webpack/runtime/hasOwnProperty shorthand */
 /******/ (() => {
 /******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ })();
-/******/
+/******/ 
 /************************************************************************/
 var __webpack_exports__ = {};
 
@@ -21644,7 +21643,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '21.3.5';
+const ngxExtendedPdfViewerVersion = '21.3.6';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -25417,7 +25416,7 @@ class PDFFindController {
     const hasDiacritics = this._hasDiacritics[pageIndex];
     let isUnicode = false;
     if (findMultiple && typeof query === "string") {
-      query = query.split(/\s+/);
+      query = query.trim().split(/\s+/);
     }
     if (matchRegExp && typeof query === "string") {
       query = new RegExp(query, caseSensitive ? "g" : "gi");
@@ -33763,7 +33762,7 @@ class PDFViewer {
   #maxZoom = MAX_SCALE;
   #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.5.726";
+    const viewerVersion = "4.5.729";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -38681,8 +38680,8 @@ function webViewerSetPreference({
 
 
 
-const pdfjsVersion = "4.5.726";
-const pdfjsBuild = "b4db8a74b";
+const pdfjsVersion = "4.5.729";
+const pdfjsBuild = "6ffa35862";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
