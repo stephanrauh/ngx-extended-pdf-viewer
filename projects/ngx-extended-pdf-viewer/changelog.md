@@ -581,9 +581,13 @@
 - 21.0.0-beta.2 #2362 / #2440 improved CSP support by eliminating inline styles
 - 21.0.0-beta.3 #2362 improved CSP support by reverting the changes introduced with #1447
 - 21.0.0 updated the README
-- 21.1.0 updated the README; #2466 fixed responsive design and fine-tuned the default values of the breakpoints; implemented `[showPreviousAndNextPageButtons]`, `[showFirstAndLastPageButtons]`,`[showPageNumber]`,`| [showPageLabel]`, and`[showZoomDropdown]`.
+- 21.1.0 updated the README; #2466 fixed responsive design and fine-tuned the default values of the breakpoints; implemented `[showPreviousAndNextPageButtons]`, `[showFirstAndLastPageButtons]`,`[showPageNumber]`,`[showPageLabel]`, and`[showZoomDropdown]`.
 - 21.1.1 #2485 prevent the CSS rules for the rotate buttons from bleeding into the global CSS rules; move layout-related code to `DynamicCssComponent
 - 21.1.2 #2486 added two missing icons
 - 21.2.0 #2482 add an API option to turn off the auto jump-to-page when a phrase is found; #2488 added a secondary findController that's available only through the API and that allows both programmer and user to search independently without interfering with each other's search result
 - 21.3.0 #2480 / #2506 cache the PDF worker so it can be re-used when opening a new PDF document. Kudos go to Antoine Legrain for analyzing the topic and sending a pull request! #2509 allow users and developers to find multiple words and regular expressions #2339 allow for custom find controllers. Now developers can extend or even replace the original find controller by their own implementation.
 - 21.3.1 #1735 removed the @Input() attributes of features that have been removed in version 18; #2494 removed the non-existing atribute `numTextDivs` from `TextLayerRenderedEvent` and added the `layer` attribute to all four `LayerRenderedEvents`; #2598 fixed a bug that always assumed the "highlight all" is set; updated the bleeding edge branch
+- 21.3.2 #2463 now the PDF viewer only reacts on the arrow keys if they aren't used for accessability
+- 21.3.3 #2522 update the showcase to Angular 18, Angular Material 18, add static-site generation to the showcase, and fix SSR/SSG errors; #2500 add a Polyfill to `Promise.withResolvers` that jumps in if an old version of zone.js accidentally deletes your browser's implementation
+- 21.3.4 #2339 / #2524 the PDF viewer didn't scroll find matches reliably into view
+- 21.3.5 #2515 now annotations added programmatically or by pasting send events if moved or resized; updated the bleeding edge branch

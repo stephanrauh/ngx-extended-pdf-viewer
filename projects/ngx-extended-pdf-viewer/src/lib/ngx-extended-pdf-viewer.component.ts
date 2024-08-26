@@ -402,22 +402,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     } else if (url instanceof URL) {
       this._src = url.toString();
     } else if (typeof Blob !== 'undefined' && url instanceof Blob) {
-      // additional check introduced to support server side rendering
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setTimeout(() => {
-          this.src = new Uint8Array(reader.result as ArrayBuffer);
-          if (this.service.ngxExtendedPdfViewerInitialized) {
-            if (this.pdfScriptLoaderService.ngxExtendedPdfViewerIncompletelyInitialized) {
-              this.openPDF();
-            } else {
-              (async () => this.openPDF2())();
-            }
-            // else openPDF is called later, so we do nothing to prevent loading the PDF file twice
+      (async () => {
+        this.src = await this.convertBlobToUint8Array(url);
+        if (this.service.ngxExtendedPdfViewerInitialized) {
+          if (this.pdfScriptLoaderService.ngxExtendedPdfViewerIncompletelyInitialized) {
+            this.openPDF();
+          } else {
+            (async () => this.openPDF2())();
           }
-        });
-      };
-      reader.readAsArrayBuffer(url);
+          // else openPDF is called later, so we do nothing to prevent loading the PDF file twice
+        }
+      })();
     } else if (typeof url === 'string') {
       this._src = url;
       if (url.length > 980) {
@@ -431,6 +426,30 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     } else {
       (this._src as any) = url;
     }
+  }
+
+  private async convertBlobToUint8Array(blob): Promise<Uint8Array> {
+    // first try the algorithm for modern browsers and node.js
+    if (blob.arrayBuffer) {
+      const arrayBuffer = await blob.arrayBuffer();
+      return new Uint8Array(arrayBuffer);
+    }
+
+    // then try the old-fashioned way
+    return new Promise<Uint8Array>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (reader.result) {
+          resolve(new Uint8Array(reader.result as ArrayBuffer));
+        } else {
+          reject(new Error('Error converting Blob to Uint8Array'));
+        }
+      };
+      reader.onerror = () => {
+        reject(new Error('FileReader error'));
+      };
+      reader.readAsArrayBuffer(blob);
+    });
   }
 
   @Input()
@@ -931,12 +950,22 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   public serverSideRendering = true;
 
+  /**
+   * Checks if the code is running in a browser environment.
+   */
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && typeof document !== 'undefined';
+  }
+
   public calcViewerPositionTop(): void {
+    if (!this.isBrowser()) {
+      return;
+    }
     if (this.toolbar === undefined) {
       this.sidebarPositionTop = '0';
       return;
     }
-    let top = this.toolbar.getBoundingClientRect().height;
+    const top = this.toolbar.getBoundingClientRect().height;
     if (top < 33) {
       this.viewerPositionTop = '33px';
     } else {

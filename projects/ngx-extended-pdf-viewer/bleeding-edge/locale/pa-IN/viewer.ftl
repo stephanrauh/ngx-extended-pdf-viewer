@@ -298,8 +298,6 @@ pdfjs-editor-stamp-button-label = ਚਿੱਤਰ ਜੋੜੋ ਜਾਂ ਸੋ�
 pdfjs-editor-highlight-button =
     .title = ਹਾਈਲਾਈਟ
 pdfjs-editor-highlight-button-label = ਹਾਈਲਾਈਟ
-pdfjs-highlight-floating-button =
-    .title = ਹਾਈਲਾਈਟ
 pdfjs-highlight-floating-button1 =
     .title = ਹਾਈਲਾਈਟ
     .aria-label = ਹਾਈਲਾਈਟ
@@ -395,39 +393,70 @@ pdfjs-editor-highlight-show-all-button-label = ਸਭ ਵੇਖੋ
 pdfjs-editor-highlight-show-all-button =
     .title = ਸਭ ਵੇਖੋ
 
-pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
-pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
+## New alt-text dialog
+## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
+
+# Modal header positioned above a text box where users can edit the alt text.
+pdfjs-editor-new-alt-text-dialog-edit-label = ਬਦਲਵੀਂ ਲਿਖਤ (ਚਿੱਤਰ ਦਾ ਵਰਣਨ) ਨੂੰ ਸੋਧੋ
+# Modal header positioned above a text box where users can add the alt text.
+pdfjs-editor-new-alt-text-dialog-add-label = ਬਦਲਵੀਂ ਲਿਖਤ (ਚਿੱਤਰ ਦਾ ਵਰਣਨ) ਨੂੰ ਜੋੜੋ
 pdfjs-editor-new-alt-text-textarea =
-    .placeholder = Write your description here…
-pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
-pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
-pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Learn more
-pdfjs-editor-new-alt-text-create-automatically-button-label = Create alt text automatically
-pdfjs-editor-new-alt-text-not-now-button = Not now
-pdfjs-editor-new-alt-text-error-title = Couldn’t create alt text automatically
-pdfjs-editor-new-alt-text-error-description = Please write your own alt text or try again later.
-pdfjs-editor-new-alt-text-error-close-button = Close
-pdfjs-editor-new-alt-text-ai-model-downloading-progress = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
-    .aria-valuetext = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
-pdfjs-editor-new-alt-text-added-button-label = Alt text added
-pdfjs-editor-new-alt-text-missing-button-label = Missing alt text
-pdfjs-editor-new-alt-text-to-review-button-label = Review alt text
-pdfjs-editor-new-alt-text-generated-alt-text-with-disclaimer = Created automatically: { $generatedAltText }
+    .placeholder = …ਆਪਣਾ ਵਰਣਨਾ ਇੱਥੇ ਲਿਖੋ
+# This text refers to the alt text box above this description. It offers a definition of alt text.
+pdfjs-editor-new-alt-text-description = ਲੋਕ, ਜੋ ਕਿ ਚਿੱਤਰ ਨਹੀਂ ਵੇਖ ਸਕਦੇ ਜਾਂ ਜਦ ਵੀ ਚਿੱਤਰਾਂ ਨੂੰ ਲੋਡ ਨਹੀਂ ਜਾ ਸਕਦਾ, ਉਸ ਲਈ ਛੋਟਾ ਵੇਰਵਾ ਦਿਓ।
+# This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
+pdfjs-editor-new-alt-text-disclaimer1 = ਇਹ ਬਦਲਵੀਂ ਲਿਖਤ ਆਪਣੇ-ਆਪ ਤਿਆਰ ਕੀਤੀ ਗਈ ਸੀ ਅਤੇ ਗਲਤ ਵੀ ਹੋ ਸਕਦੀ ਹੈ।
+# This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
+pdfjs-editor-new-alt-text-disclaimer = ਇਹ ਬਦਲਵੀ ਲਿਖਤ ਆਪਣੇ-ਆਪ ਤਿਆਰ ਕੀਤੀ ਗਈ ਸੀ।
+pdfjs-editor-new-alt-text-disclaimer-learn-more-url = ਹੋਰ ਜਾਣੋ
+pdfjs-editor-new-alt-text-create-automatically-button-label = ਬਲਦਵੀਂ ਲਿਖਤ ਆਪਣੇ-ਆਪ ਬਣਾਓ
+pdfjs-editor-new-alt-text-not-now-button = ਹੁਣੇ ਨਹੀਂ
+pdfjs-editor-new-alt-text-error-title = ਬਦਲਵੀਂ ਲਿਖਤ ਆਪਣੇ-ਆਪ ਬਣਾਈ ਨਹੀਂ ਜਾ ਸਕੀ
+pdfjs-editor-new-alt-text-error-description = ਆਪਣਾ ਖੁਦ ਦੀ ਬਦਲਵੀਂ ਲਿਖਤ ਲਿਖੋ ਜਾਂ ਫੇਰ ਕੋਸ਼ਿਸ਼ ਕਰੋ।
+pdfjs-editor-new-alt-text-error-close-button = ਬੰਦ ਕਰੋ
+# Variables:
+#   $totalSize (Number) - the total size (in MB) of the AI model.
+#   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
+#   $percent (Number) - the percentage of the downloaded size.
+pdfjs-editor-new-alt-text-ai-model-downloading-progress = ਬਦਲਵਾਂ ਲਿਖਤ AI ਮਾਡਲ ਡਾਊਨਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ ({ $totalSize } MB ਵਿੱਚੋਂ { $downloadedSize })
+    .aria-valuetext = ਬਦਲਵਾਂ ਲਿਖਤ AI ਮਾਡਲ ਡਾਊਨਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ ({ $totalSize } MB ਵਿੱਚੋਂ { $downloadedSize })
+# This is a button that users can click to edit the alt text they have already added.
+pdfjs-editor-new-alt-text-added-button-label = ਬਦਲਵੀਂ ਲਿਖਤ ਜੋੜੀ
+# This is a button that users can click to open the alt text editor and add alt text when it is not present.
+pdfjs-editor-new-alt-text-missing-button-label = ਬਦਲਵਾਂ ਲਿਖਤ ਗੁੰਮ ਹੈ
+# This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
+pdfjs-editor-new-alt-text-to-review-button-label = ਬਦਲਵੀਂ ਲਿਖਤ ਦਾ ਰੀਵਿਊ ਕਰੋ
+# "Created automatically" is a prefix that will be added to the beginning of any alt text that has been automatically generated. After the colon, the user will see/hear the actual alt text description. If the alt text has been edited by a human, this prefix will not appear.
+# Variables:
+#   $generatedAltText (String) - the generated alt-text.
+pdfjs-editor-new-alt-text-generated-alt-text-with-disclaimer = ਆਪਣੇ-ਆਪ ਬਣਾਇਆ: { $generatedAltText }
+
+## Image alt-text settings
+
 pdfjs-image-alt-text-settings-button =
-    .title = Image alt text settings
-pdfjs-image-alt-text-settings-button-label = Image alt text settings
-pdfjs-editor-alt-text-settings-dialog-label = Image alt text settings
-pdfjs-editor-alt-text-settings-automatic-title = Automatic alt text
-pdfjs-editor-alt-text-settings-create-model-button-label = Create alt text automatically
-pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.
-pdfjs-editor-alt-text-settings-download-model-label = Alt text AI model ({ $totalSize } MB)
-pdfjs-editor-alt-text-settings-ai-model-description = Runs locally on your device so your data stays private. Required for automatic alt text.
-pdfjs-editor-alt-text-settings-delete-model-button = Delete
-pdfjs-editor-alt-text-settings-download-model-button = Download
-pdfjs-editor-alt-text-settings-downloading-model-button = Downloading…
-pdfjs-editor-alt-text-settings-editor-title = Alt text editor
-pdfjs-editor-alt-text-settings-show-dialog-button-label = Show alt text editor right away when adding an image
-pdfjs-editor-alt-text-settings-show-dialog-description = Helps you make sure all your images have alt text.
-pdfjs-editor-alt-text-settings-close-button = Close
+    .title = ਚਿੱਤਰ ਬਦਲਵੀਂ ਲਿਖਤ ਦੀਆਂ ਸੈਟਿੰਗਾਂ
+pdfjs-image-alt-text-settings-button-label = ਚਿੱਤਰ ਬਦਲਵੀਂ ਲਿਖਤ ਦੀਆਂ ਸੈਟਿੰਗਾਂ
+pdfjs-editor-alt-text-settings-dialog-label = ਚਿੱਤਰ ਬਦਲਵੀਂ ਲਿਖਤ ਦੀਆਂ ਸੈਟਿੰਗਾਂ
+pdfjs-editor-alt-text-settings-automatic-title = ਆਟੋਮਮੈਟਿਕ ਬਦਲਵੀਂ ਲਿਖਤ
+pdfjs-editor-alt-text-settings-create-model-button-label = ਬਲਦਵੀਂ ਲਿਖਤ ਆਪਣੇ-ਆਪ ਬਣਾਓ
+pdfjs-editor-alt-text-settings-create-model-description = ਚਿੱਤਰ ਨਾ ਵੇਖ ਸਕਣ ਵਾਲੇ ਲੋਕਾਂ ਦੀ ਮਦਦ ਜਾਂ ਜਦ ਵੀ ਚਿੱਤਰਾਂ ਨੂੰ ਲੋਡ ਨਹੀਂ ਜਾ ਸਕਦਾ, ਉਸ ਲਈ ਛੋਟਾ ਵੇਰਵਾ ਦਿਓ।
+# Variables:
+#   $totalSize (Number) - the total size (in MB) of the AI model.
+pdfjs-editor-alt-text-settings-download-model-label = ਬਦਲਵੀ ਲਿਖਤ ਲਈ AI ਮਾਡਲ ({ $totalSize } MB)
+pdfjs-editor-alt-text-settings-ai-model-description = ਤੁਹਾਡੇ ਡਿਵਾਈਸ ਉੱਤੇ ਲੋਕਲ ਹੀ ਚੱਲਦਾ ਹੋਣ ਕਰਕੇ ਤੁਹਾਡਾ ਡਾਟਾ ਪ੍ਰਾਈਵੇਟ ਹੀ ਰਹਿੰਦਾ ਹੈ। ਆਟੋਮੈਟਿਕ ਬਦਲਵੀਂ ਲਿਖਤ ਲਈ ਚਾਹੀਦਾ ਹੈ।
+pdfjs-editor-alt-text-settings-delete-model-button = ਹਟਾਓ
+pdfjs-editor-alt-text-settings-download-model-button = ਡਾਊਨਲੋਡ
+pdfjs-editor-alt-text-settings-downloading-model-button = …ਨੂੰ ਡਾਊਨਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ
+pdfjs-editor-alt-text-settings-editor-title = ਬਦਲਵੀਂ ਲਿਖਤ ਐਡੀਟਰ
+pdfjs-editor-alt-text-settings-show-dialog-button-label = ਜਦੋਂ ਵਿੱਚ ਚਿੱਤਰ ਜੋੜਿਆ ਜਾਵੇ ਤਾਂ ਫ਼ੌਰਨ ਬਦਲਵੀ ਲਿਖਤ ਸੰਪਾਦਕ ਵੇਖਾਓ
+pdfjs-editor-alt-text-settings-show-dialog-description = ਤੁਹਾਡੀ ਮਦਦ ਕਰਦਾ ਹੈ ਕਿ ਤੁਹਾਡੇ ਸਾਰੇ ਚਿੱਤਰਾਂ ਲਈ ਬਦਲਵੀਂ ਲਿਖਤ ਮੌਜੂਦ ਹੋਵੇ।
+pdfjs-editor-alt-text-settings-close-button = ਬੰਦ ਕਰੋ
+
+pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
+pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
+pdfjs-find-multiple-checkbox-label = multiple queries separated by space"
+pdfjs-find-regexp-checkbox-label = regular expression

@@ -21,7 +21,7 @@ export class PDFScriptLoaderService implements OnDestroy {
 
   public PDFViewerApplication!: IPDFViewerApplication;
   public PDFViewerApplicationOptions!: IPDFViewerApplicationOptions;
-  private PDFViewerApplicationConstants: any;
+  // private PDFViewerApplicationConstants: any;
   public webViewerLoad: () => void;
 
   private originalPrint = typeof window !== 'undefined' ? window.print : undefined;
@@ -166,7 +166,7 @@ new (function () {
         const { PDFViewerApplication, PDFViewerApplicationOptions, PDFViewerApplicationConstants, webViewerLoad } = event.detail;
         this.PDFViewerApplication = PDFViewerApplication;
         this.PDFViewerApplicationOptions = PDFViewerApplicationOptions;
-        this.PDFViewerApplicationConstants = PDFViewerApplicationConstants;
+        //        this.PDFViewerApplicationConstants = PDFViewerApplicationConstants;
         this.webViewerLoad = webViewerLoad;
         resolve();
         document.removeEventListener('ngxViewerFileHasBeenLoaded', listener);
@@ -276,8 +276,29 @@ new (function () {
         return true;
       }
       this._needsES5 = !(await this.ngxExtendedPdfViewerCanRunModernJSCode(useInlineScripts));
+      this.polyfillPromiseWithResolversIfZoneJSOverwritesIt();
     }
     return this._needsES5;
+  }
+
+  /**
+   * Angular 16 uses zone.js 0.13.3, and this version has a problem with Promise.withResolvers.
+   * If your browser supports Promise.withResolvers, zone.js accidentally overwrites it with "undefined".
+   * This method adds a polyfill for Promise.withResolvers if it is not available.
+   */
+  private polyfillPromiseWithResolversIfZoneJSOverwritesIt() {
+    const TypelessPromise = Promise as any;
+    if (!TypelessPromise.withResolvers) {
+      TypelessPromise.withResolvers = function withResolvers() {
+        var a,
+          b,
+          c = new this(function (resolve, reject) {
+            a = resolve;
+            b = reject;
+          });
+        return { resolve: a, reject: b, promise: c };
+      };
+    }
   }
 
   private ngxExtendedPdfViewerCanRunModernJSCode(useInlineScripts: boolean): Promise<boolean> {

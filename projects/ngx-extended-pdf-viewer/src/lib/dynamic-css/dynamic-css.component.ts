@@ -284,7 +284,17 @@ export class DynamicCssComponent implements OnDestroy {
    * @returns true if data-pdfjsprinting is set
    */
   private isPrinting(): boolean {
+    if (!this.isBrowser()) {
+      return false;
+    }
     return !!document.querySelector('[data-pdfjsprinting]');
+  }
+
+  /**
+   * Checks if the code is running in a browser environment.
+   */
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && typeof document !== 'undefined';
   }
 
   private getContainer(): HTMLElement | null {
