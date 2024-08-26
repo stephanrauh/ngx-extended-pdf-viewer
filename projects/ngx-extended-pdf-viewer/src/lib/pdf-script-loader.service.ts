@@ -163,10 +163,9 @@ new (function () {
     return new Promise((resolve) => {
       const viewerPath = this.getPdfJsPath('viewer');
       const listener = (event: CustomEvent) => {
-        const { PDFViewerApplication, PDFViewerApplicationOptions, PDFViewerApplicationConstants, webViewerLoad } = event.detail;
+        const { PDFViewerApplication, PDFViewerApplicationOptions, webViewerLoad } = event.detail;
         this.PDFViewerApplication = PDFViewerApplication;
         this.PDFViewerApplicationOptions = PDFViewerApplicationOptions;
-        //        this.PDFViewerApplicationConstants = PDFViewerApplicationConstants;
         this.webViewerLoad = webViewerLoad;
         resolve();
         document.removeEventListener('ngxViewerFileHasBeenLoaded', listener);
@@ -290,12 +289,12 @@ new (function () {
     const TypelessPromise = Promise as any;
     if (!TypelessPromise.withResolvers) {
       TypelessPromise.withResolvers = function withResolvers() {
-        var a,
-          b,
-          c = new this(function (resolve, reject) {
-            a = resolve;
-            b = reject;
-          });
+        let a: unknown;
+        let b: unknown;
+        const c = new this(function (resolve: unknown, reject: unknown) {
+          a = resolve;
+          b = reject;
+        });
         return { resolve: a, reject: b, promise: c };
       };
     }

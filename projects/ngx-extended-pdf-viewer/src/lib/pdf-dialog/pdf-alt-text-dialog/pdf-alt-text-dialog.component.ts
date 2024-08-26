@@ -1,12 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'pdf-alt-text-dialog',
   templateUrl: './pdf-alt-text-dialog.component.html',
-  styleUrls: ['./pdf-alt-text-dialog.component.css'],
 })
-export class PdfAltTextDialogComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit() {}
-}
+export class PdfAltTextDialogComponent {}
