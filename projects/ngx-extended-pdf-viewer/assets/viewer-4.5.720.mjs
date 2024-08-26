@@ -24,7 +24,7 @@
 
 /******/ // The require scope
 /******/ var __webpack_require__ = {};
-/******/ 
+/******/
 /************************************************************************/
 /******/ /* webpack/runtime/define property getters */
 /******/ (() => {
@@ -37,12 +37,12 @@
 /******/ 		}
 /******/ 	};
 /******/ })();
-/******/ 
+/******/
 /******/ /* webpack/runtime/hasOwnProperty shorthand */
 /******/ (() => {
 /******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ })();
-/******/ 
+/******/
 /************************************************************************/
 var __webpack_exports__ = globalThis.pdfjsLib = {};
 
@@ -18015,6 +18015,7 @@ class InkEditor extends AnnotationEditor {
   static _defaultThickness = 1;
   static _type = "ink";
   static _editorType = AnnotationEditorType.INK;
+  static _currentPointerType = null;
   constructor(params) {
     super({
       ...params,
@@ -18032,6 +18033,28 @@ class InkEditor extends AnnotationEditor {
     this.x = 0;
     this.y = 0;
     this._willKeepAspectRatio = true;
+    this.editorPointerType = null;
+    if (InkEditor._currentPointerType === null) {
+      InkEditor._currentPointerType = '';  // add listener only once
+      window.addEventListener('pointerdown', this.windowPointerDown, true);  // executed in the capturing phase. Ensure to be first
+    }
+  }
+  destroy() {
+    super.destroy();
+    if (InkEditor._currentPointerType !== null) {
+      window.removeEventListener('pointerdown', this.windowPointerDown);
+      InkEditor._currentPointerType = null;  // remove listener only once
+    }
+  }
+  windowPointerDown(event) {
+    InkEditor._currentPointerType = event.pointerType;
+    return true;  // do not prevent default
+  }
+  initializePointerType() {
+    this.editorPointerType = null; // InkEditor._currentPointerType;
+  }
+  resetPointerType(pointerType) {
+    this.editorPointerType = null;
   }
   static initialize(l10n, uiManager) {
     AnnotationEditor.initialize(l10n, uiManager);
@@ -18196,6 +18219,7 @@ class InkEditor extends AnnotationEditor {
       return;
     }
     super.enableEditMode();
+    this.initializePointerType();
     this._isDraggable = false;
     this.canvas.addEventListener("pointerdown", this.#boundCanvasPointerdown, {
       signal: this._uiManager._signal
@@ -18206,6 +18230,7 @@ class InkEditor extends AnnotationEditor {
       return;
     }
     super.disableEditMode();
+    this.resetPointerType();
     this._isDraggable = !this.isEmpty();
     this.div.classList.remove("editing");
     this.canvas.removeEventListener("pointerdown", this.#boundCanvasPointerdown);
@@ -18461,6 +18486,10 @@ class InkEditor extends AnnotationEditor {
     if (event.button !== 0 || !this.isInEditMode() || this.#disableEditing) {
       return;
     }
+    if (this.editorPointerType !== event.pointerType) {
+
+      return;
+    }
     this.setInForeground();
     event.preventDefault();
     if (!this.div.contains(document.activeElement)) {
@@ -18471,15 +18500,21 @@ class InkEditor extends AnnotationEditor {
     this.#startDrawing(event.offsetX, event.offsetY);
   }
   canvasPointermove(event) {
-    event.preventDefault();
-    this.#draw(event.offsetX, event.offsetY);
+    if (this.editorPointerType === event.pointerType) {
+      event.preventDefault();
+      this.#draw(event.offsetX, event.offsetY);
+    }
   }
   canvasPointerup(event) {
-    event.preventDefault();
-    this.#endDrawing(event);
+    if (this.editorPointerType === event.pointerType) {
+      event.preventDefault();
+      this.#endDrawing(event);
+    }
   }
   canvasPointerleave(event) {
-    this.#endDrawing(event);
+    if (this.editorPointerType === event.pointerType) {
+      this.#endDrawing(event);
+    }
   }
   #endDrawing(event) {
     this.canvas.removeEventListener("pointerleave", this.#boundCanvasPointerleave);
@@ -20172,7 +20207,7 @@ var __webpack_exports__version = __webpack_exports__.version;
 
 /******/ // The require scope
 /******/ var __webpack_require__ = {};
-/******/ 
+/******/
 /************************************************************************/
 /******/ /* webpack/runtime/define property getters */
 /******/ (() => {
@@ -20185,12 +20220,12 @@ var __webpack_exports__version = __webpack_exports__.version;
 /******/ 		}
 /******/ 	};
 /******/ })();
-/******/ 
+/******/
 /******/ /* webpack/runtime/hasOwnProperty shorthand */
 /******/ (() => {
 /******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ })();
-/******/ 
+/******/
 /************************************************************************/
 var __webpack_exports__ = {};
 
