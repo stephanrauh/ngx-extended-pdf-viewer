@@ -148,11 +148,6 @@ ngx-extended-pdf-viewer {
     cursor: var(--editorInk-editing-cursor);
   }
 
-  /* added by ngx-extended-pdf-viewer */
-  .ngx-extended-pdf-viewer-prevent-touch-move #viewerContainer {
-    touch-action: none;
-  }
-
   /* end of addition by ngx-extended-pdf-viewer */
 
   .annotationEditorLayer :is(.freeTextEditor, .inkEditor, .stampEditor) {
@@ -548,7 +543,6 @@ ngx-extended-pdf-viewer {
     inset: 0;
     width: 100%;
     height: 100%;
-    touch-action: none;
   }
 
   .annotationEditorLayer .stampEditor {

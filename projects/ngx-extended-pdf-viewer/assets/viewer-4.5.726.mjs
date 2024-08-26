@@ -24,7 +24,7 @@
 
 /******/ // The require scope
 /******/ var __webpack_require__ = {};
-/******/ 
+/******/
 /************************************************************************/
 /******/ /* webpack/runtime/define property getters */
 /******/ (() => {
@@ -37,12 +37,12 @@
 /******/ 		}
 /******/ 	};
 /******/ })();
-/******/ 
+/******/
 /******/ /* webpack/runtime/hasOwnProperty shorthand */
 /******/ (() => {
 /******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ })();
-/******/ 
+/******/
 /************************************************************************/
 var __webpack_exports__ = globalThis.pdfjsLib = {};
 
@@ -18002,6 +18002,7 @@ class InkEditor extends AnnotationEditor {
   #boundCanvasPointerleave = this.canvasPointerleave.bind(this);
   #boundCanvasPointerup = this.canvasPointerup.bind(this);
   #boundCanvasPointerdown = this.canvasPointerdown.bind(this);
+  #boundCanvasTouchMove = this.canvasTouchMove.bind(this);
   #canvasContextMenuTimeoutId = null;
   #currentPath2D = new Path2D();
   #disableEditing = false;
@@ -18016,6 +18017,7 @@ class InkEditor extends AnnotationEditor {
   static _defaultThickness = 1;
   static _type = "ink";
   static _editorType = AnnotationEditorType.INK;
+  static _currentPointerType = null;
   constructor(params) {
     super({
       ...params,
@@ -18033,6 +18035,28 @@ class InkEditor extends AnnotationEditor {
     this.x = 0;
     this.y = 0;
     this._willKeepAspectRatio = true;
+    this.editorPointerType = null;
+    if (InkEditor._currentPointerType === null) {
+      InkEditor._currentPointerType = '';  // add listener only once
+      window.addEventListener('pointerdown', this.windowPointerDown);
+    }
+  }
+  destroy() {
+    super.destroy();
+    if (InkEditor._currentPointerType !== null) {
+      window.removeEventListener('pointerdown', this.windowPointerDown);
+      InkEditor._currentPointerType = null;  // remove listener only once
+    }
+  }
+  windowPointerDown(event) {
+    InkEditor._currentPointerType = event.pointerType;
+    return true;  // do not prevent default
+  }
+  initializePointerType() {
+    this.editorPointerType = InkEditor._currentPointerType;
+  }
+  resetPointerType(pointerType) {
+    this.editorPointerType = null;
   }
   static initialize(l10n, uiManager) {
     AnnotationEditor.initialize(l10n, uiManager);
@@ -18197,6 +18221,7 @@ class InkEditor extends AnnotationEditor {
       return;
     }
     super.enableEditMode();
+    this.initializePointerType();
     this._isDraggable = false;
     this.canvas.addEventListener("pointerdown", this.#boundCanvasPointerdown, {
       signal: this._uiManager._signal
@@ -18207,6 +18232,7 @@ class InkEditor extends AnnotationEditor {
       return;
     }
     super.disableEditMode();
+    this.resetPointerType();
     this._isDraggable = !this.isEmpty();
     this.div.classList.remove("editing");
     this.canvas.removeEventListener("pointerdown", this.#boundCanvasPointerdown);
@@ -18261,6 +18287,10 @@ class InkEditor extends AnnotationEditor {
     });
     this.canvas.addEventListener("pointerup", this.#boundCanvasPointerup, {
       signal
+    });
+    this.canvas.addEventListener("touchmove", this.#boundCanvasTouchMove, {
+      signal: this._uiManager._signal,
+      passive: false
     });
     this.canvas.removeEventListener("pointerdown", this.#boundCanvasPointerdown);
     this.isEditing = true;
@@ -18459,7 +18489,7 @@ class InkEditor extends AnnotationEditor {
     this.enableEditMode();
   }
   canvasPointerdown(event) {
-    if (event.button !== 0 || !this.isInEditMode() || this.#disableEditing) {
+    if (event.button !== 0 || !this.isInEditMode() || this.#disableEditing || this.editorPointerType !== event.pointerType) {
       return;
     }
     this.setInForeground();
@@ -18482,10 +18512,18 @@ class InkEditor extends AnnotationEditor {
   canvasPointerleave(event) {
     this.#endDrawing(event);
   }
+  canvasTouchMove(event) {
+    if (!this.isInEditMode() || this.#disableEditing || this.editorPointerType !== InkEditor._currentPointerType) {
+      return;
+    }
+    // disable default scroll behaviour on touch move
+    event.preventDefault();
+  }
   #endDrawing(event) {
     this.canvas.removeEventListener("pointerleave", this.#boundCanvasPointerleave);
     this.canvas.removeEventListener("pointermove", this.#boundCanvasPointermove);
     this.canvas.removeEventListener("pointerup", this.#boundCanvasPointerup);
+    this.canvas.removeEventListener("touchmove", this.#boundCanvasTouchMove);
     this.canvas.addEventListener("pointerdown", this.#boundCanvasPointerdown, {
       signal: this._uiManager._signal
     });
@@ -20173,7 +20211,7 @@ var __webpack_exports__version = __webpack_exports__.version;
 
 /******/ // The require scope
 /******/ var __webpack_require__ = {};
-/******/ 
+/******/
 /************************************************************************/
 /******/ /* webpack/runtime/define property getters */
 /******/ (() => {
@@ -20186,12 +20224,12 @@ var __webpack_exports__version = __webpack_exports__.version;
 /******/ 		}
 /******/ 	};
 /******/ })();
-/******/ 
+/******/
 /******/ /* webpack/runtime/hasOwnProperty shorthand */
 /******/ (() => {
 /******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ })();
-/******/ 
+/******/
 /************************************************************************/
 var __webpack_exports__ = {};
 

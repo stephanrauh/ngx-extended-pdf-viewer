@@ -1511,11 +1511,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       // we're using a timeout here to make sure the editor is already visible
       // when the event is caught. Pdf.js fires it a bit early.
       setTimeout(() => this.annotationEditorModeChanged.emit(x));
-      if (x.mode === 0) {
-        document.body.classList.remove('ngx-extended-pdf-viewer-prevent-touch-move');
-      } else {
-        document.body.classList.add('ngx-extended-pdf-viewer-prevent-touch-move');
-      }
     });
 
     PDFViewerApplication.eventBus.on('scrollmodechanged', (x: ScrollModeChangedEvent) => {
