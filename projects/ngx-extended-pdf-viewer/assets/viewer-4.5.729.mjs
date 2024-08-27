@@ -24,7 +24,7 @@
 
 /******/ // The require scope
 /******/ var __webpack_require__ = {};
-/******/ 
+/******/
 /************************************************************************/
 /******/ /* webpack/runtime/define property getters */
 /******/ (() => {
@@ -37,12 +37,12 @@
 /******/ 		}
 /******/ 	};
 /******/ })();
-/******/ 
+/******/
 /******/ /* webpack/runtime/hasOwnProperty shorthand */
 /******/ (() => {
 /******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ })();
-/******/ 
+/******/
 /************************************************************************/
 var __webpack_exports__ = globalThis.pdfjsLib = {};
 
@@ -17992,7 +17992,26 @@ class HighlightEditor extends AnnotationEditor {
 ;// CONCATENATED MODULE: ./src/display/editor/ink.js
 
 
-
+class PointerType {
+  static current = null;
+  constructor(editor) {
+    if (PointerType.current === null) {
+      PointerType.current = "";
+      window.addEventListener("pointerdown", this.windowPointerDown, true);
+    }
+  }
+  destroy() {
+    if (PointerType.current !== null) {
+      window.removeEventListener("pointerdown", this.windowPointerDown, true);
+      PointerType.current = null;
+    }
+  }
+  windowPointerDown(event) {
+    PointerType.current = event.pointerType;
+    return true;
+  }
+}
+const pointerType = new PointerType();
 
 
 class InkEditor extends AnnotationEditor {
@@ -18017,7 +18036,6 @@ class InkEditor extends AnnotationEditor {
   static _defaultThickness = 1;
   static _type = "ink";
   static _editorType = AnnotationEditorType.INK;
-  static _currentPointerType = null;
   constructor(params) {
     super({
       ...params,
@@ -18036,26 +18054,11 @@ class InkEditor extends AnnotationEditor {
     this.y = 0;
     this._willKeepAspectRatio = true;
     this.editorPointerType = null;
-    if (InkEditor._currentPointerType === null) {
-      InkEditor._currentPointerType = "";
-      window.addEventListener("pointerdown", this.windowPointerDown);
-    }
-  }
-  destroy() {
-    super.destroy();
-    if (InkEditor._currentPointerType !== null) {
-      window.removeEventListener("pointerdown", this.windowPointerDown);
-      InkEditor._currentPointerType = null;
-    }
-  }
-  windowPointerDown(event) {
-    InkEditor._currentPointerType = event.pointerType;
-    return true;
   }
   initializePointerType() {
-    this.editorPointerType = InkEditor._currentPointerType;
+    this.editorPointerType = PointerType.current;
   }
-  resetPointerType(pointerType) {
+  resetPointerType() {
     this.editorPointerType = null;
   }
   static initialize(l10n, uiManager) {
@@ -18221,7 +18224,7 @@ class InkEditor extends AnnotationEditor {
       return;
     }
     super.enableEditMode();
-    this.initializePointerType();
+    setTimeout(() => this.initializePointerType());
     this._isDraggable = false;
     this.canvas.addEventListener("pointerdown", this.#boundCanvasPointerdown, {
       signal: this._uiManager._signal
@@ -18513,7 +18516,7 @@ class InkEditor extends AnnotationEditor {
     this.#endDrawing(event);
   }
   canvasTouchMove(event) {
-    if (!this.isInEditMode() || this.#disableEditing || this.editorPointerType !== InkEditor._currentPointerType) {
+    if (!this.isInEditMode() || this.#disableEditing || this.editorPointerType !== PointerType.current) {
       return;
     }
     event.preventDefault();
@@ -20210,7 +20213,7 @@ var __webpack_exports__version = __webpack_exports__.version;
 
 /******/ // The require scope
 /******/ var __webpack_require__ = {};
-/******/ 
+/******/
 /************************************************************************/
 /******/ /* webpack/runtime/define property getters */
 /******/ (() => {
@@ -20223,12 +20226,12 @@ var __webpack_exports__version = __webpack_exports__.version;
 /******/ 		}
 /******/ 	};
 /******/ })();
-/******/ 
+/******/
 /******/ /* webpack/runtime/hasOwnProperty shorthand */
 /******/ (() => {
 /******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ })();
-/******/ 
+/******/
 /************************************************************************/
 var __webpack_exports__ = {};
 
