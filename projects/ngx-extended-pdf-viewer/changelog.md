@@ -591,4 +591,4 @@
 - 21.3.3 #2522 update the showcase to Angular 18, Angular Material 18, add static-site generation to the showcase, and fix SSR/SSG errors; #2500 add a Polyfill to `Promise.withResolvers` that jumps in if an old version of zone.js accidentally deletes your browser's implementation
 - 21.3.4 #2339 / #2524 the PDF viewer didn't scroll find matches reliably into view
 - 21.3.5 #2515 now annotations added programmatically or by pasting send events if moved or resized; updated the bleeding edge branch
-- 21.3.6 #2527 / #2512 allow users to write with a pen on mobile devices in the ink editor, and still allow them to scroll using the finger gestures; #2529 fixed a bug that caused high CPU load when searching for multiple terms and the input ends with a space
+- 21.3.6 #2527 / #2512 allow users to write with a pen on mobile devices in the ink editor, and still allow them to scroll using the finger gestures; #2529 fixed a bug that caused high CPU load when searching for multiple terms and the input ends with a space; #2532 remove the file input widget when destroying the PDF viewer

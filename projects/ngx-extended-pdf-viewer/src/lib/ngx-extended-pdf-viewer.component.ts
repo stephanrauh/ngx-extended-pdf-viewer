@@ -1900,6 +1900,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       delete w.PDFViewerApplicationOptions;
       delete w.PDFViewerApplicationConstants;
       this.service.ngxExtendedPdfViewerInitialized = false;
+      document.querySelectorAll('.ngx-extended-pdf-viewer-file-input').forEach((e: HTMLInputElement) => {
+        e.remove();
+      });
     }
   }
 

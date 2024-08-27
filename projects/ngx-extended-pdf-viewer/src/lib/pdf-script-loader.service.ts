@@ -232,9 +232,6 @@ new (function () {
       e.onload = null;
       e.remove();
     });
-    document.querySelectorAll('.ngx-extended-pdf-viewer-file-input').forEach((e: HTMLInputElement) => {
-      e.remove();
-    });
   }
 
   public replaceBrowserPrint(useCustomPrintOfPdfJS: boolean): void {
