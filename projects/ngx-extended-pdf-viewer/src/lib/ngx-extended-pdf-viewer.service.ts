@@ -216,7 +216,7 @@ export class NgxExtendedPdfViewerService {
 
   public filteredPageCount(pageCount: number, range: PDFPrintRange): number {
     let result = 0;
-    for (let page = 1; page <= pageCount; page++) {
+    for (let page = 0; page < pageCount; page++) {
       if (this.isInPDFPrintRange(page, range)) {
         result++;
       }
