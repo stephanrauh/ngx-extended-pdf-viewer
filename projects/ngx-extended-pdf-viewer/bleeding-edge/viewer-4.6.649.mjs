@@ -10987,6 +10987,7 @@ class TextLayer {
       const canvas = document.createElement("canvas");
       canvas.className = "hiddenCanvasElement";
       canvas.lang = lang;
+      canvas.width = canvas.height = 0;
       document.body.append(canvas);
       canvasContext = canvas.getContext("2d", {
         alpha: false,
@@ -11204,7 +11205,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.6.646",
+    apiVersion: "4.6.649",
     data,
     password,
     disableAutoFetch,
@@ -12999,8 +13000,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.6.646";
-const build = "7afe7b814";
+const version = "4.6.649";
+const build = "b766d5633";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -18089,6 +18090,26 @@ class HighlightEditor extends AnnotationEditor {
 
 
 
+class PointerType {
+  static current = null;
+  constructor(editor) {
+    if (PointerType.current === null) {
+      PointerType.current = "";
+      window.addEventListener("pointerdown", this.windowPointerDown, true);
+    }
+  }
+  destroy() {
+    if (PointerType.current !== null) {
+      window.removeEventListener("pointerdown", this.windowPointerDown, true);
+      PointerType.current = null;
+    }
+  }
+  windowPointerDown(event) {
+    PointerType.current = event.pointerType;
+    return true;
+  }
+}
+const pointerType = new PointerType();
 class InkEditor extends AnnotationEditor {
   #baseHeight = 0;
   #baseWidth = 0;
@@ -18109,7 +18130,6 @@ class InkEditor extends AnnotationEditor {
   static _defaultThickness = 1;
   static _type = "ink";
   static _editorType = AnnotationEditorType.INK;
-  static _currentPointerType = null;
   constructor(params) {
     super({
       ...params,
@@ -18128,26 +18148,11 @@ class InkEditor extends AnnotationEditor {
     this.y = 0;
     this._willKeepAspectRatio = true;
     this.editorPointerType = null;
-    if (InkEditor._currentPointerType === null) {
-      InkEditor._currentPointerType = '';
-      window.addEventListener('pointerdown', this.windowPointerDown);
-    }
-  }
-  destroy() {
-    super.destroy();
-    if (InkEditor._currentPointerType !== null) {
-      window.removeEventListener('pointerdown', this.windowPointerDown);
-      InkEditor._currentPointerType = null;
-    }
-  }
-  windowPointerDown(event) {
-    InkEditor._currentPointerType = event.pointerType;
-    return true;
   }
   initializePointerType() {
-    this.editorPointerType = InkEditor._currentPointerType;
+    this.editorPointerType = PointerType.current;
   }
-  resetPointerType(pointerType) {
+  resetPointerType() {
     this.editorPointerType = null;
   }
   static initialize(l10n, uiManager) {
@@ -18313,7 +18318,7 @@ class InkEditor extends AnnotationEditor {
       return;
     }
     super.enableEditMode();
-    this.initializePointerType();
+    setTimeout(() => this.initializePointerType());
     this._isDraggable = false;
     this.#addPointerdownListener();
   }
@@ -18618,7 +18623,7 @@ class InkEditor extends AnnotationEditor {
     this.#endDrawing(event);
   }
   canvasTouchMove(event) {
-    if (!this.isInEditMode() || this.#disableEditing || this.editorPointerType !== InkEditor._currentPointerType) {
+    if (!this.isInEditMode() || this.#disableEditing || this.editorPointerType !== PointerType.current) {
       return;
     }
     event.preventDefault();
@@ -18683,7 +18688,11 @@ class InkEditor extends AnnotationEditor {
     if (this.width) {
       const [parentWidth, parentHeight] = this.parentDimensions;
       this.setAspectRatio(this.width * parentWidth, this.height * parentHeight);
-      this.setAt(baseX * parentWidth, baseY * parentHeight, this.width * parentWidth, this.height * parentHeight);
+      if (this.doNotMove) {
+        this.setAt(baseX * parentWidth, baseY * parentHeight, 0, 0);
+      } else {
+        this.setAt(baseX * parentWidth, baseY * parentHeight, this.width * parentWidth, this.height * parentHeight);
+      }
       this.#isCanvasInitialized = true;
       this.#setCanvasDims();
       this.setDims(this.width * parentWidth, this.height * parentHeight);
@@ -20359,8 +20368,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.6.646";
-const pdfjsBuild = "7afe7b814";
+const pdfjsVersion = "4.6.649";
+const pdfjsBuild = "b766d5633";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -34638,7 +34647,7 @@ class PDFViewer {
   #maxZoom = MAX_SCALE;
   #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.6.646";
+    const viewerVersion = "4.6.649";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -39493,8 +39502,8 @@ PDFViewerApplication.serviceWorkerOptions = ServiceWorkerOptions;
 
 
 
-const pdfjsVersion = "4.6.646";
-const pdfjsBuild = "7afe7b814";
+const pdfjsVersion = "4.6.649";
+const pdfjsBuild = "b766d5633";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,

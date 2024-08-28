@@ -7,7 +7,6 @@ export class InkEditor extends AnnotationEditor {
     static _defaultThickness: number;
     static _type: string;
     static _editorType: number;
-    static _currentPointerType: null;
     /** @inheritdoc */
     static initialize(l10n: any, uiManager: any): void;
     /** @inheritdoc */
@@ -37,9 +36,8 @@ export class InkEditor extends AnnotationEditor {
     translationY: number;
     editorPointerType: any;
     destroy(): void;
-    windowPointerDown(event: any): boolean;
     initializePointerType(): void;
-    resetPointerType(pointerType: any): void;
+    resetPointerType(): void;
     /** @inheritdoc */
     updateParams(type: any, value: any): void;
     /** @inheritdoc */

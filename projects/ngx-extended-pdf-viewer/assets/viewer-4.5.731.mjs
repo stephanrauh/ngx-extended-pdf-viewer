@@ -24,7 +24,7 @@
 
 /******/ // The require scope
 /******/ var __webpack_require__ = {};
-/******/
+/******/ 
 /************************************************************************/
 /******/ /* webpack/runtime/define property getters */
 /******/ (() => {
@@ -37,12 +37,12 @@
 /******/ 		}
 /******/ 	};
 /******/ })();
-/******/
+/******/ 
 /******/ /* webpack/runtime/hasOwnProperty shorthand */
 /******/ (() => {
 /******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ })();
-/******/
+/******/ 
 /************************************************************************/
 var __webpack_exports__ = globalThis.pdfjsLib = {};
 
@@ -10876,6 +10876,7 @@ class TextLayer {
       const canvas = document.createElement("canvas");
       canvas.className = "hiddenCanvasElement";
       canvas.lang = lang;
+      canvas.width = canvas.height = 0;
       document.body.append(canvas);
       canvasContext = canvas.getContext("2d", {
         alpha: false,
@@ -11093,7 +11094,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.5.729",
+    apiVersion: "4.5.731",
     data,
     password,
     disableAutoFetch,
@@ -12890,8 +12891,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.5.729";
-const build = "6ffa35862";
+const version = "4.5.731";
+const build = "726fe0f47";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -17992,6 +17993,9 @@ class HighlightEditor extends AnnotationEditor {
 ;// CONCATENATED MODULE: ./src/display/editor/ink.js
 
 
+
+
+
 class PointerType {
   static current = null;
   constructor(editor) {
@@ -18012,8 +18016,6 @@ class PointerType {
   }
 }
 const pointerType = new PointerType();
-
-
 class InkEditor extends AnnotationEditor {
   #baseHeight = 0;
   #baseWidth = 0;
@@ -18054,6 +18056,13 @@ class InkEditor extends AnnotationEditor {
     this.y = 0;
     this._willKeepAspectRatio = true;
     this.editorPointerType = null;
+  }
+  destroy() {
+    super.destroy();
+    if (InkEditor._currentPointerType !== null) {
+      window.removeEventListener("pointerdown", this.windowPointerDown);
+      InkEditor._currentPointerType = null;
+    }
   }
   initializePointerType() {
     this.editorPointerType = PointerType.current;
@@ -20140,8 +20149,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.5.729";
-const pdfjsBuild = "6ffa35862";
+const pdfjsVersion = "4.5.731";
+const pdfjsBuild = "726fe0f47";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -20213,7 +20222,7 @@ var __webpack_exports__version = __webpack_exports__.version;
 
 /******/ // The require scope
 /******/ var __webpack_require__ = {};
-/******/
+/******/ 
 /************************************************************************/
 /******/ /* webpack/runtime/define property getters */
 /******/ (() => {
@@ -20226,12 +20235,12 @@ var __webpack_exports__version = __webpack_exports__.version;
 /******/ 		}
 /******/ 	};
 /******/ })();
-/******/
+/******/ 
 /******/ /* webpack/runtime/hasOwnProperty shorthand */
 /******/ (() => {
 /******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ })();
-/******/
+/******/ 
 /************************************************************************/
 var __webpack_exports__ = {};
 
@@ -33765,7 +33774,7 @@ class PDFViewer {
   #maxZoom = MAX_SCALE;
   #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.5.729";
+    const viewerVersion = "4.5.731";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -38683,8 +38692,8 @@ function webViewerSetPreference({
 
 
 
-const pdfjsVersion = "4.5.729";
-const pdfjsBuild = "6ffa35862";
+const pdfjsVersion = "4.5.731";
+const pdfjsBuild = "726fe0f47";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
