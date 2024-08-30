@@ -197,7 +197,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           this.scrollMode = ScrollModeType.vertical;
           PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(this.scrollMode) });
         }
-        this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(false, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
+        setTimeout(() => {
+          // this timeout is necessary because @Input() is called before the child components are initialized
+          // (and the DynamicCssComponent is a child component)
+          this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(false, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
+        });
         break;
       case 'single':
         // since pdf.js, our custom single-page-mode has been replaced by the standard scrollMode="page"
@@ -214,7 +218,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         if (this.scrollMode === ScrollModeType.page) {
           this.scrollMode = ScrollModeType.vertical;
         }
-        this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(true, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
+        setTimeout(() => {
+          // this timeout is necessary because @Input() is called before the child components are initialized
+          // (and the DynamicCssComponent is a child component)
+          this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(true, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
+        });
         break;
       default:
         this.scrollMode = ScrollModeType.vertical;
@@ -497,6 +505,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       this.height = '100%';
     }
     setTimeout(() => {
+      // this timeout is necessary because @Input() is called before the child components are initialized
+      // (and the DynamicCssComponent is a child component)
       this.dynamicCSSComponent.checkHeight(this, this.logLevel);
     });
   }
