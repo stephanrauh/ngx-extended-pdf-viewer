@@ -21871,7 +21871,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '21.3.7';
+const ngxExtendedPdfViewerVersion = '21.3.8';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",

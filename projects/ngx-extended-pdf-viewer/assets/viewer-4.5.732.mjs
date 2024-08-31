@@ -11094,7 +11094,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.5.731",
+    apiVersion: "4.5.732",
     data,
     password,
     disableAutoFetch,
@@ -12891,8 +12891,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.5.731";
-const build = "726fe0f47";
+const version = "4.5.732";
+const build = "b409d2f8b";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -20149,8 +20149,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.5.731";
-const pdfjsBuild = "726fe0f47";
+const pdfjsVersion = "4.5.732";
+const pdfjsBuild = "b409d2f8b";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -21655,7 +21655,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '21.3.7';
+const ngxExtendedPdfViewerVersion = '21.3.8';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -32675,7 +32675,7 @@ class TextHighlighter {
       }
     }
     const pageMatchesLength = findController.pageMatchesLength[pageIdx] || null;
-    const convertedMatches = this._convertMatches(pageMatches, pageMatchesLength, "highlight", findController.state?.highlightMatches, pageIdx === findController.selected.pageIdx, findController.selected.matchIdx);
+    const convertedMatches = this._convertMatches(pageMatches, pageMatchesLength, "highlight", findController.state?.highlightAll, pageIdx === findController.selected.pageIdx, findController.selected.matchIdx);
     this.matches.push(...convertedMatches);
     this.matches.sort((a, b) => {
       const cmp = a.begin.divIdx - b.begin.divIdx;
@@ -33774,7 +33774,7 @@ class PDFViewer {
   #maxZoom = MAX_SCALE;
   #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.5.731";
+    const viewerVersion = "4.5.732";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -38692,8 +38692,8 @@ function webViewerSetPreference({
 
 
 
-const pdfjsVersion = "4.5.731";
-const pdfjsBuild = "726fe0f47";
+const pdfjsVersion = "4.5.732";
+const pdfjsBuild = "b409d2f8b";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
