@@ -213,6 +213,9 @@ ngx-extended-pdf-viewer {
   .textLayer {
     .editToolbar {
       --editor-toolbar-delete-image: url("data:image/svg+xml; utf8, <svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M11 3H13.6C14 3 14.3 3.3 14.3 3.6C14.3 3.9 14 4.2 13.7 4.2H13.3V14C13.3 15.1 12.4 16 11.3 16H4.80005C3.70005 16 2.80005 15.1 2.80005 14V4.2H2.40005C2.00005 4.2 1.80005 4 1.80005 3.6C1.80005 3.2 2.00005 3 2.40005 3H5.00005V2C5.00005 0.9 5.90005 0 7.00005 0H9.00005C10.1 0 11 0.9 11 2V3ZM6.90005 1.2L6.30005 1.8V3H9.80005V1.8L9.20005 1.2H6.90005ZM11.4 14.7L12 14.1V4.2H4.00005V14.1L4.60005 14.7H11.4ZM7.00005 12.4C7.00005 12.7 6.70005 13 6.40005 13C6.10005 13 5.80005 12.7 5.80005 12.4V7.6C5.70005 7.3 6.00005 7 6.40005 7C6.80005 7 7.00005 7.3 7.00005 7.6V12.4ZM10.2001 12.4C10.2001 12.7 9.90006 13 9.60006 13C9.30006 13 9.00006 12.7 9.00006 12.4V7.6C9.00006 7.3 9.30006 7 9.60006 7C9.90006 7 10.2001 7.3 10.2001 7.6V12.4Z' fill='black' /></svg>");
+     //[FS] - 28-08-2024
+     --editor-toolbar-comment-image: url("data:image/svg+xml; utf8, <svg width='16' height='16' id='Layer_1' data-name='Layer 1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 121.58 122.88'><title>message</title><path d='M25.8,111.27,44.08,94.69a3.46,3.46,0,0,1,2.41-1h66.18a2,2,0,0,0,2-1.95V8.9a2,2,0,0,0-2-1.95H8.9A1.95,1.95,0,0,0,7,8.9V91.76a1.95,1.95,0,0,0,2,1.95H22.33a3.48,3.48,0,0,1,3.47,3.48v14.08Zm1.17-45a3.48,3.48,0,0,0,0,7H68a3.48,3.48,0,0,0,0-7Zm0-39.86a3.48,3.48,0,0,0,0,7H94.69a3.48,3.48,0,1,0,0-6.95Zm0,19.93a3.48,3.48,0,0,0,0,6.95H87.66a3.48,3.48,0,0,0,0-6.95Zm20.9,54.32-23,21.07a3.48,3.48,0,0,1-6.06-2.32V100.66H8.9A8.91,8.91,0,0,1,0,91.76V8.9A8.91,8.91,0,0,1,8.9,0H112.67a8.93,8.93,0,0,1,8.91,8.9V91.76a8.93,8.93,0,0,1-8.91,8.9Z'/></svg>");
+     --editor-toolbar-tag-image: url("data:image/svg+xml;utf8,<svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M2 0H8C8.55228 0 9 0.447715 9 1V1.58579L15.7071 8.29289C16.0976 8.68342 16.0976 9.31658 15.7071 9.70711L9.70711 15.7071C9.31658 16.0976 8.68342 16.0976 8.29289 15.7071L1.58579 9H1C0.447715 9 0 8.55228 0 8V2C0 0.895431 0.895431 0 2 0ZM2 1C1.44772 1 1 1.44772 1 2V7.58579L8 14.5858L14.5858 8L7.58579 1H2ZM4 4C4.55228 4 5 3.55228 5 3C5 2.44772 4.55228 2 4 2C3.44772 2 3 2.44772 3 3C3 3.55228 3.44772 4 4 4Z' fill='black'/></svg>");
       --editor-toolbar-bg-color: #f0f0f4;
       --editor-toolbar-highlight-image: url('data:image/svg+xml; utf8, <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path fill-rule="evenodd" clip-rule="evenodd" d="M7.10918 11.66C7.24918 11.8 7.43918 11.88 7.63918 11.88C7.83918 11.88 8.02918 11.8 8.16918 11.66L14.9192 4.91C15.2692 4.57 15.4592 4.11 15.4592 3.62C15.4592 3.13 15.2692 2.67 14.9192 2.33L13.1292 0.54C12.7892 0.19 12.3292 0 11.8392 0C11.3492 0 10.8892 0.2 10.5492 0.54L3.79918 7.29C3.50918 7.58 3.50918 8.06 3.79918 8.35L4.38988 8.9407L1.40918 11.93H5.64918L6.51419 11.065L7.10918 11.66ZM7.63918 10.07L5.38918 7.82V7.81L7.8648 5.33438L10.1198 7.58938L7.63918 10.07ZM11.1805 6.52872L13.8592 3.85C13.9892 3.72 13.9892 3.52 13.8592 3.39L12.0692 1.6C11.9892 1.52 11.8892 1.5 11.8392 1.5C11.8392 1.5 11.6892 1.51 11.6092 1.59L8.92546 4.27372L11.1805 6.52872Z" fill="#000"/><path d="M0.40918 14H15.4092V16H0.40918V14Z" fill="#000"/></g></svg>');
       --editor-toolbar-fg-color: #2e2e56;
@@ -344,6 +347,63 @@ ngx-extended-pdf-viewer {
             background-color: var(--editor-toolbar-hover-fg-color);
           }
         }
+        //[FS] - 28-08-2024
+        .comment {
+          width: var(--editor-toolbar-height);
+
+          &::before {
+            content: "";
+            mask-image: var(--editor-toolbar-comment-image);
+            mask-repeat: no-repeat;
+            mask-position: center;
+            display: inline-block;
+            background-color: var(--editor-toolbar-fg-color);
+            width: 100%;
+            height: 100%;
+          }
+
+          &:hover::before {
+            background-color: var(--editor-toolbar-hover-fg-color);
+          }
+        }
+        .tag {
+          width: var(--editor-toolbar-height);
+          position: relative; 
+        
+          &::before {
+            content: "";
+            mask-image: var(--editor-toolbar-tag-image);
+            mask-repeat: no-repeat;
+            mask-position: center;
+            display: inline-block;
+            background-color: var(--editor-toolbar-fg-color);
+            width: 100%;
+            height: 100%;
+          }
+        
+          &:hover::before {
+            background-color: var(--editor-toolbar-hover-fg-color);
+          }
+        }
+        
+        .editPencil::after {
+          content: "";
+          mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' x='0px' y='0px' width='16' height='16' viewBox='0 0 50 50'><path d='M 43.125 2 C 41.878906 2 40.636719 2.488281 39.6875 3.4375 L 38.875 4.25 L 45.75 11.125 C 45.746094 11.128906 46.5625 10.3125 46.5625 10.3125 C 48.464844 8.410156 48.460938 5.335938 46.5625 3.4375 C 45.609375 2.488281 44.371094 2 43.125 2 Z M 37.34375 6.03125 C 37.117188 6.0625 36.90625 6.175781 36.75 6.34375 L 4.3125 38.8125 C 4.183594 38.929688 4.085938 39.082031 4.03125 39.25 L 2.03125 46.75 C 1.941406 47.09375 2.042969 47.457031 2.292969 47.707031 C 2.542969 47.957031 2.90625 48.058594 3.25 47.96875 L 10.75 45.96875 C 10.917969 45.914063 11.070313 45.816406 11.1875 45.6875 L 43.65625 13.25 C 44.054688 12.863281 44.058594 12.226563 43.671875 11.828125 C 43.285156 11.429688 42.648438 11.425781 42.25 11.8125 L 9.96875 44.09375 L 5.90625 40.03125 L 38.1875 7.75 C 38.488281 7.460938 38.578125 7.011719 38.410156 6.628906 C 38.242188 6.246094 37.855469 6.007813 37.4375 6.03125 C 37.40625 6.03125 37.375 6.03125 37.34375 6.03125 Z'></path></svg>");
+          mask-repeat: no-repeat;
+          display: inline-block;
+          background-color: var(--editor-toolbar-fg-color);
+          width: 50%; 
+          height: 50%; 
+          position: absolute;
+          top: 0; 
+          right: 0; 
+        }
+        
+        .editPencil:hover::after {
+          background-color: var(--editor-toolbar-hover-fg-color);
+        }
+        
+
 
         >* {
           height: var(--editor-toolbar-height);
@@ -1203,6 +1263,8 @@ ngx-extended-pdf-viewer {
 
   .editorParamsToolbar:has(#highlightParamsToolbarContainer) {
     padding: unset;
+    //[FS] - 28-08-2024
+    visibility: hidden;
   }
 
   #highlightParamsToolbarContainer {

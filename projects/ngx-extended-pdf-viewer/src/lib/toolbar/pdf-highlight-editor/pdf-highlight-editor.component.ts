@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, effect } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, Input, effect } from '@angular/core';
 import { AnnotationEditorEditorModeChangedEvent } from '../../events/annotation-editor-mode-changed-event';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
@@ -37,5 +37,13 @@ export class PdfHighlightEditorComponent {
 
   public onClick(): void {
     document.getElementById('editorHighlight')?.click();
+  }
+  //[FS] - 28-08-2024
+  @HostListener('document:keydown', ['$event'])
+  public handleOnClick(event: KeyboardEvent): void {
+    if (event.key === 'E' || event.key === 'e') {
+      event.preventDefault();
+      document.getElementById('editorHighlight')?.click();
+    }
   }
 }

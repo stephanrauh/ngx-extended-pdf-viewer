@@ -1799,20 +1799,21 @@ function setLayerDimensions(div, viewport, mustFlip = false, mustRotate = true) 
 }
 
 ;// CONCATENATED MODULE: ./src/display/editor/toolbar.js
-
-class EditorToolbar {
+//[FS] - 28-08-2024
+  class EditorToolbar {
   #toolbar = null;
   #colorPicker = null;
-  #editor;
+  editor;
   #buttons = null;
   constructor(editor) {
-    this.#editor = editor;
+    this.editor = editor;
+    this.keyboardAnnotations();
   }
   render() {
     const editToolbar = this.#toolbar = document.createElement("div");
     editToolbar.className = "editToolbar";
     editToolbar.setAttribute("role", "toolbar");
-    const signal = this.#editor._uiManager._signal;
+    const signal = this.editor._uiManager._signal;
     editToolbar.addEventListener("contextmenu", noContextMenu, {
       signal
     });
@@ -1822,33 +1823,59 @@ class EditorToolbar {
     const buttons = this.#buttons = document.createElement("div");
     buttons.className = "buttons";
     editToolbar.append(buttons);
-    const position = this.#editor.toolbarPosition;
+    const position = this.editor.toolbarPosition;
     if (position) {
       const {
         style
       } = editToolbar;
-      const x = this.#editor._uiManager.direction === "ltr" ? 1 - position[0] : position[0];
+      const x = this.editor._uiManager.direction === "ltr" ? 1 - position[0] : position[0];
       style.insetInlineEnd = `${100 * x}%`;
       style.top = `calc(${100 * position[1]}% + var(--editor-toolbar-vert-offset))`;
     }
+   //[FS] - 28-08-2024
+    const tagButtonClassName = this.editor.annotationConfig.type === 'Tag' ? 'tag editPencil' : 'tag';
+    const noteButtonClassName = this.editor.annotationConfig.type === 'Comment' ? 'comment editPencil' : 'comment';
+  
+    this.addTagButton(tagButtonClassName);
+    this.addCommentButton(noteButtonClassName); 
     this.#addDeleteButton();
     return editToolbar;
   }
+  //[FS] - 28-08-2024
+  keyboardAnnotations() {
+    document.addEventListener("keydown", (event) => {
+      const editToolbar = this.#toolbar;
+        if (editToolbar && editToolbar.className === "editToolbar") {
+        
+          if (event.key === "h") {
+            this.editor.unselect();
+          } else if (event.key === "t") {
+            this.editor.eventBus.dispatch('showCommentTagPopover', { id: this.editor.id, type: "Tag" });
+          }else if (event.key === "n") {
+            event.stopPropagation();
+            this.editor.eventBus.dispatch('showCommentTagPopover', { id: this.editor.id, type: "Comment" });
+          }
+          
+        
+      }
+    });
+  }
+  
   static #pointerDown(e) {
     e.stopPropagation();
   }
   #focusIn(e) {
-    this.#editor._focusEventsAllowed = false;
+    this.editor._focusEventsAllowed = false;
     e.preventDefault();
     e.stopPropagation();
   }
   #focusOut(e) {
-    this.#editor._focusEventsAllowed = true;
+    this.editor._focusEventsAllowed = true;
     e.preventDefault();
     e.stopPropagation();
   }
   #addListenersToElement(element) {
-    const signal = this.#editor._uiManager._signal;
+    const signal = this.editor._uiManager._signal;
     element.addEventListener("focusin", this.#focusIn.bind(this), {
       capture: true,
       signal
@@ -1868,16 +1895,68 @@ class EditorToolbar {
   show() {
     this.#toolbar.classList.remove("hidden");
   }
+  //[FS] - 28-08-2024
+  addTagButton(tagClassName = "tag") {
+    let button = this.#buttons.querySelector('.tag');
+  
+    if (!button) {
+      button = document.createElement("button");
+      button.tabIndex = 0;
+      button.textContent = ""; 
+      button.title = "Add Tag";
+      
+      this.#addListenersToElement(button);
+      button.addEventListener("mouseleave", () => {
+        button.textContent = "";
+      });
+  
+      button.addEventListener("click", () => {
+        this.editor.eventBus.dispatch('showCommentTagPopover', { id: this.editor.id, type: "Tag"});
+      });
+      
+      this.#buttons.append(button);
+    }
+    button.className = tagClassName;
+    button.title = tagClassName === 'tag editPencil' ? 'Edit Tag' : 'Add Tag';    
+
+  }
+  //[FS] - 28-08-2024
+  addCommentButton(noteClassName = "comment") {
+    let button = this.#buttons.querySelector('.comment');
+  
+    if (!button) {
+      button = document.createElement("button");
+      button.tabIndex = 0;
+      button.textContent = ""; 
+      button.title = "Add Note";
+      
+      this.#addListenersToElement(button);
+      button.addEventListener("mouseleave", () => {
+        button.textContent = "";
+      });
+  
+      button.addEventListener("click", () => {
+        this.editor.eventBus.dispatch('showCommentTagPopover', { id: this.editor.id, type: "Comment"});
+      });
+
+      this.#buttons.append(button);
+    }
+    button.className = noteClassName;
+    button.title = noteClassName === 'comment editPencil' ? 'Edit Note' : 'Add Note';    
+    
+  }
+
   #addDeleteButton() {
     const button = document.createElement("button");
     button.className = "delete";
     button.tabIndex = 0;
-    button.setAttribute("data-l10n-id", `pdfjs-editor-remove-${this.#editor.editorType}-button`);
+    //[FS] - 28-08-2024
+    button.title = "Remove";
     this.#addListenersToElement(button);
     button.addEventListener("click", e => {
-      this.#editor._uiManager.delete();
+      this.editor._uiManager.delete();
     }, {
-      signal: this.#editor._uiManager._signal
+      signal: this.editor._uiManager._signal
     });
     this.#buttons.append(button);
   }
@@ -1890,12 +1969,13 @@ class EditorToolbar {
     this.#addListenersToElement(button);
     this.#buttons.prepend(button, this.#divider);
   }
-  addColorPicker(colorPicker) {
-    this.#colorPicker = colorPicker;
-    const button = colorPicker.renderButton();
-    this.#addListenersToElement(button);
-    this.#buttons.prepend(button, this.#divider);
-  }
+  //[FS] - 28-08-2024
+  // addColorPicker(colorPicker) {
+  //   this.#colorPicker = colorPicker;
+  //   const button = colorPicker.renderButton();
+  //   this.#addListenersToElement(button);
+  //   this.#buttons.prepend(button, this.#divider);
+  // }
   remove() {
     this.#toolbar.remove();
     this.#colorPicker?.destroy();
@@ -2320,7 +2400,7 @@ class ColorManager {
 class AnnotationEditorUIManager {
   #abortController = new AbortController();
   #activeEditor = null;
-  #allEditors = new Map();
+  allEditors = new Map();
   #allLayers = new Map();
   #altTextManager = null;
   #annotationStorage = null;
@@ -2346,6 +2426,7 @@ class AnnotationEditorUIManager {
   #mlManager = null;
   #mode = AnnotationEditorType.NONE;
   #selectedEditors = new Set();
+  #editToolbar = null;
   #selectedTextNode = null;
   #pageColors = null;
   #showAllStates = null;
@@ -2380,6 +2461,12 @@ class AnnotationEditorUIManager {
     const textInputChecker = (_self, {
       target: el
     }) => {
+      //[FS] - 28-08-2024
+      // allowing only if from pdf viewer
+      if(!el.parentElement.classList.contains('annotationEditorLayer')){
+        return false;
+      }
+
       if (el instanceof HTMLInputElement) {
         const {
           type
@@ -2437,11 +2524,27 @@ class AnnotationEditorUIManager {
     this.#container = container;
     this.#viewer = viewer;
     this.#altTextManager = altTextManager;
+    //[FS] - 28-08-2024
+    this.annottationConfigs = [];
+    this.renderedConfigs = [];
     this._eventBus = eventBus;
     this._eventBus._on("editingaction", this.#boundOnEditingAction);
     this._eventBus._on("pagechanging", this.#boundOnPageChanging);
     this._eventBus._on("scalechanging", this.#boundOnScaleChanging);
     this._eventBus._on("rotationchanging", this.#boundOnRotationChanging);
+    //[FS] - 28-08-2024
+ // custom event to load annotation
+ this._eventBus._on("loadAnnotation", function(e) {
+  this.annottationConfigs = e.anottationConfigs.filter(d => !this.renderedConfigs.some(({anchorSpanIndex, pageNumber, text}) => anchorSpanIndex === d.anchorSpanIndex && pageNumber === d.pageNumber && text === d.text));
+  this.setAnnotationSelection(this.annottationConfigs[0]);
+}.bind(this));
+
+document.addEventListener("selectionchange", () => {
+if(document.getSelection().toString() === '' && this.annottationConfigs.length > 0)
+{
+  this.setAnnotationSelection(this.annottationConfigs[0]);
+}
+});
     this.#addSelectionListener();
     this.#addDragAndDropListeners();
     this.#addKeyboardManager();
@@ -2470,7 +2573,7 @@ class AnnotationEditorUIManager {
       layer.destroy();
     }
     this.#allLayers.clear();
-    this.#allEditors.clear();
+    this.allEditors.clear();
     this.#editorsToRescale.clear();
     this.#activeEditor = null;
     this.#selectedEditors.clear();
@@ -2508,6 +2611,43 @@ class AnnotationEditorUIManager {
   get highlightColorNames() {
     return shadow(this, "highlightColorNames", this.highlightColors ? new Map(Array.from(this.highlightColors, e => e.reverse())) : null);
   }
+  //[FS] - 28-08-2024
+  setAnnotationSelection(anottationConfig)
+  {
+    if(anottationConfig){
+      const allSpans = this.removeDuplicateElement(Array.from(this.#container.querySelectorAll(`.page[data-page-number="${anottationConfig.pageNumber}"] .textLayer span`)));
+
+    const elements = {
+      anchorElement: allSpans[anottationConfig.anchorSpanIndex],
+      focusElement: allSpans[anottationConfig.focusSpanIndex],
+    };
+
+    if(elements.anchorElement && elements.anchorElement.firstChild &&
+      elements.focusElement && elements.focusElement.firstChild &&
+      !(this.renderedConfigs.some(({anchorSpanIndex, pageNumber, text}) => (anchorSpanIndex === anottationConfig.anchorSpanIndex && pageNumber === anottationConfig.pageNumber && text === anottationConfig.text)))
+    )
+      {
+        try {
+        const selection = document.getSelection();
+        selection.removeAllRanges();
+        let range = new Range();
+        range.setStart(elements.anchorElement.firstChild, anottationConfig.anchorOffset);
+        range.setEnd(elements.focusElement.firstChild, anottationConfig.focusOffset);
+        selection?.addRange(range);
+  
+          this.highlightSelection("main_toolbar", anottationConfig, elements);
+
+         this.renderedConfigs.push(anottationConfig);
+         this.annottationConfigs = this.annottationConfigs.filter(d => !this.renderedConfigs.some(({anchorSpanIndex, pageNumber, text}) => anchorSpanIndex === d.anchorSpanIndex && pageNumber === d.pageNumber && text === d.text));
+        
+      }
+      catch (error) {
+        console.log("Range Error: Page Number :", anottationConfig.pageNumber);
+      }
+    }
+    }
+  }
+
   setMainHighlightColorPicker(colorPicker) {
     this.#mainHighlightColorPicker = colorPicker;
   }
@@ -2582,6 +2722,13 @@ class AnnotationEditorUIManager {
   }) {
     return anchorNode.nodeType === Node.TEXT_NODE ? anchorNode.parentElement : anchorNode;
   }
+    //[FS] - 28-08-2024
+  #getFocusElementForSelection({
+    focusNode
+  }) {
+    return focusNode.nodeType === Node.TEXT_NODE ? focusNode.parentElement : focusNode;
+  }
+
   #getLayerForTextLayer(textLayer) {
     const {
       currentLayer
@@ -2596,7 +2743,8 @@ class AnnotationEditorUIManager {
     }
     return null;
   }
-  highlightSelection(methodOfCreation = "") {
+  highlightSelection(methodOfCreation = "", annotationConfig, elements) {
+
     const selection = document.getSelection();
     if (!selection || selection.isCollapsed) {
       return;
@@ -2609,12 +2757,38 @@ class AnnotationEditorUIManager {
     } = selection;
     const text = selection.toString();
     const anchorElement = this.#getAnchorElementForSelection(selection);
+    //[FS] - 28-08-2024
+    const focusElement = this.#getFocusElementForSelection(selection);
     const textLayer = anchorElement.closest(".textLayer");
     const boxes = this.getSelectionBoxes(textLayer);
+    //[FS] - 28-08-2024
+    const pageNumber = this.#currentPageIndex + 1;
+
+   const allSpans = this.removeDuplicateElement(Array.from(this.#container.querySelectorAll(`.page[data-page-number="${pageNumber}"] .textLayer span`)));
+
+    const spanIndex = {
+      anchor: allSpans.findIndex(d => d.isEqualNode(this.removeStyleTransform(anchorElement))),
+      focus: allSpans.findIndex(d => d.isEqualNode(this.removeStyleTransform(focusElement)))
+    };
+
+    const annotationLocation = annotationConfig ? annotationConfig : {
+      anchorSpanIndex: spanIndex.anchor,
+      focusSpanIndex: spanIndex.focus,
+      pageNumber,
+      anchorOffset,
+      focusOffset,
+      color: "#FFFF98",
+      type: "Highlight",
+      comment: "",
+      Tags:[],
+      text 
+    };
+
     if (!boxes) {
       return;
     }
-    selection.empty();
+    //[FS] - 28-08-2024
+    //selection.empty();
     const layer = this.#getLayerForTextLayer(textLayer);
     const isNoneMode = this.#mode === AnnotationEditorType.NONE;
     const callback = () => {
@@ -2628,7 +2802,9 @@ class AnnotationEditorUIManager {
         anchorOffset,
         focusNode,
         focusOffset,
-        text
+          text,
+          annotationLocation,
+          color: annotationLocation.color
       });
       if (isNoneMode) {
         this.showAllEditors("highlight", true, true);
@@ -2639,6 +2815,28 @@ class AnnotationEditorUIManager {
       return;
     }
     callback();
+  }
+  //[FS] - 28-08-2024
+removeStyleTransform(element){
+  element.style.removeProperty('transform');
+  return element;
+}
+
+  removeDuplicateElement(data){
+    let newArray = [];
+
+    data.forEach((item) => {
+      let newItem = this.removeStyleTransform(item);
+      if(newArray.filter(i => i.isEqualNode(newItem)).length === 0)
+        {
+          newArray.push(newItem);
+        }else{
+          newItem.remove();
+        }
+    });
+
+    return newArray;
+
   }
   #displayHighlightToolbar() {
     const selection = document.getSelection();
@@ -3073,7 +3271,7 @@ class AnnotationEditorUIManager {
     if (!editId) {
       return;
     }
-    for (const editor of this.#allEditors.values()) {
+    for (const editor of this.allEditors.values()) {
       if (editor.annotationElementId === editId) {
         this.setSelected(editor);
         editor.enterInEditMode();
@@ -3129,7 +3327,7 @@ class AnnotationEditorUIManager {
     }
   }
   showAllEditors(type, visible, updateButton = false) {
-    for (const editor of this.#allEditors.values()) {
+    for (const editor of this.allEditors.values()) {
       if (editor.editorType === type) {
         editor.show(visible);
       }
@@ -3159,7 +3357,7 @@ class AnnotationEditorUIManager {
       for (const layer of this.#allLayers.values()) {
         layer.enable();
       }
-      for (const editor of this.#allEditors.values()) {
+      for (const editor of this.allEditors.values()) {
         editor.enable();
       }
     }
@@ -3171,14 +3369,14 @@ class AnnotationEditorUIManager {
       for (const layer of this.#allLayers.values()) {
         layer.disable();
       }
-      for (const editor of this.#allEditors.values()) {
+      for (const editor of this.allEditors.values()) {
         editor.disable();
       }
     }
   }
   getEditors(pageIndex) {
     const editors = [];
-    for (const editor of this.#allEditors.values()) {
+    for (const editor of this.allEditors.values()) {
       if (editor.pageIndex === pageIndex) {
         editors.push(editor);
       }
@@ -3186,10 +3384,10 @@ class AnnotationEditorUIManager {
     return editors;
   }
   getEditor(id) {
-    return this.#allEditors.get(id);
+    return this.allEditors.get(id);
   }
   addEditor(editor) {
-    this.#allEditors.set(editor.id, editor);
+    this.allEditors.set(editor.id, editor);
   }
   removeEditor(editor) {
     if (editor.div.contains(document.activeElement)) {
@@ -3201,7 +3399,7 @@ class AnnotationEditorUIManager {
         this.#focusMainContainerTimeoutId = null;
       }, 0);
     }
-    this.#allEditors.delete(editor.id);
+    this.allEditors.delete(editor.id);
     this.unselect(editor);
     if (!editor.annotationElementId || !this.#deletedAnnotationsElementIds.has(editor.annotationElementId)) {
       this.#annotationStorage?.remove(editor.id);
@@ -3322,11 +3520,11 @@ class AnnotationEditorUIManager {
     });
   }
   #isEmpty() {
-    if (this.#allEditors.size === 0) {
+    if (this.allEditors.size === 0) {
       return true;
     }
-    if (this.#allEditors.size === 1) {
-      for (const editor of this.#allEditors.values()) {
+    if (this.allEditors.size === 1) {
+      for (const editor of this.allEditors.values()) {
         return editor.isEmpty();
       }
     }
@@ -3380,7 +3578,7 @@ class AnnotationEditorUIManager {
     for (const editor of this.#selectedEditors) {
       editor.commit();
     }
-    this.#selectEditors(this.#allEditors.values());
+    this.#selectEditors(this.allEditors.values());
   }
   unselectAll() {
     if (this.#activeEditor) {
@@ -3421,14 +3619,14 @@ class AnnotationEditorUIManager {
       this.addCommands({
         cmd: () => {
           for (const editor of editors) {
-            if (this.#allEditors.has(editor.id)) {
+            if (this.allEditors.has(editor.id)) {
               editor.translateInPage(totalX, totalY);
             }
           }
         },
         undo: () => {
           for (const editor of editors) {
-            if (this.#allEditors.has(editor.id)) {
+            if (this.allEditors.has(editor.id)) {
               editor.translateInPage(-totalX, -totalY);
             }
           }
@@ -3479,7 +3677,7 @@ class AnnotationEditorUIManager {
       return false;
     }
     const move = (editor, x, y, pageIndex) => {
-      if (this.#allEditors.has(editor.id)) {
+      if (this.allEditors.has(editor.id)) {
         const parent = this.#allLayers.get(pageIndex);
         if (parent) {
           editor._setParentAndPosition(parent, x, y);
@@ -3573,7 +3771,7 @@ class AnnotationEditorUIManager {
   removeEditors(filterFunction = () => true) {
     let hasChanged = false;
     this.#allLayers.forEach(layer => layer.setCleaningUp(true));
-    this.#allEditors.forEach(editor => {
+    this.allEditors.forEach(editor => {
       if (editor?.serialize()) {
         if (filterFunction(editor.serialize())) {
           editor.remove();
@@ -3913,6 +4111,8 @@ class AnnotationEditor {
     this.pageIndex = parameters.parent.pageIndex;
     this.name = parameters.name;
     this.div = null;
+    //[FS] - 28-08-2024
+    this.annotationConfig = parameters.annotationLocation;
     this._uiManager = parameters.uiManager;
     this.annotationElementId = null;
     this._willKeepAspectRatio = false;
@@ -4589,6 +4789,11 @@ class AnnotationEditor {
       this.parent.toggleSelected(this);
     } else {
       this.parent.setSelected(this);
+       //[FS] - 28-08-2024
+      const tagClassName = this.#editToolbar.editor.annotationConfig.type === 'Tag' ? 'tag editPencil' : 'tag';
+      this.#editToolbar.addTagButton(tagClassName); 
+       const noteClassName = this.#editToolbar.editor.annotationConfig.type === 'Comment' ? 'comment editPencil' : 'comment';
+       this.#editToolbar.addCommentButton(noteClassName); 
     }
   }
   #setUpDragSession(event) {
@@ -17356,7 +17561,8 @@ class HighlightEditor extends AnnotationEditor {
   #lastPoint = null;
   #opacity;
   #outlineId = null;
-  #text = "";
+  text = "";
+  type = "";
   #thickness;
   #methodOfCreation = "";
   static _defaultColor = null;
@@ -17390,7 +17596,8 @@ class HighlightEditor extends AnnotationEditor {
     this.#opacity = params.opacity || HighlightEditor._defaultOpacity;
     this.#boxes = params.boxes || null;
     this.#methodOfCreation = params.methodOfCreation || "";
-    this.#text = params.text || "";
+    this.text = params.text || "";
+    this.type = "Highlight"
     this._isDraggable = false;
     if (params.highlightId > -1) {
       this.#isFreeHighlight = true;
@@ -17605,7 +17812,7 @@ class HighlightEditor extends AnnotationEditor {
       this.#colorPicker = new ColorPicker({
         editor: this
       });
-      toolbar.addColorPicker(this.#colorPicker);
+     // toolbar.addColorPicker(this.#colorPicker);
     }
     return toolbar;
   }
@@ -17754,8 +17961,8 @@ class HighlightEditor extends AnnotationEditor {
       return this.div;
     }
     const div = super.render();
-    if (this.#text) {
-      div.setAttribute("aria-label", this.#text);
+    if (this.text) {
+      div.setAttribute("aria-label", this.text);
       div.setAttribute("role", "mark");
     }
     if (this.#isFreeHighlight) {
@@ -19334,7 +19541,7 @@ class AnnotationEditorLayer {
   #boundPointerdown = null;
   #boundTextLayerPointerDown = null;
   #editorFocusTimeoutId = null;
-  #editors = new Map();
+  editors = new Map();
   #hadPointerDown = false;
   #isCleaningUp = false;
   #isDisabling = false;
@@ -19374,7 +19581,7 @@ class AnnotationEditorLayer {
     this.eventBus = eventBus;
   }
   get isEmpty() {
-    return this.#editors.size === 0;
+    return this.editors.size === 0;
   }
   get isInvisible() {
     return this.isEmpty && this.#uiManager.getMode() === AnnotationEditorType.NONE;
@@ -19424,7 +19631,7 @@ class AnnotationEditorLayer {
       return;
     }
     if (!isCommitting) {
-      for (const editor of this.#editors.values()) {
+      for (const editor of this.editors.values()) {
         if (editor.isEmpty()) {
           editor.setInBackground();
           return;
@@ -19456,7 +19663,7 @@ class AnnotationEditorLayer {
     this.div.tabIndex = 0;
     this.togglePointerEvents(true);
     const annotationElementIds = new Set();
-    for (const editor of this.#editors.values()) {
+    for (const editor of this.editors.values()) {
       editor.enableEditing();
       editor.show(true);
       if (editor.annotationElementId) {
@@ -19490,7 +19697,7 @@ class AnnotationEditorLayer {
     this.togglePointerEvents(false);
     const changedAnnotations = new Map();
     const resetAnnotations = new Map();
-    for (const editor of this.#editors.values()) {
+    for (const editor of this.editors.values()) {
       editor.disableEditing();
       if (!editor.annotationElementId) {
         continue;
@@ -19573,6 +19780,9 @@ class AnnotationEditorLayer {
   }
   #textLayerPointerDown(event) {
     this.#uiManager.unselectAll();
+    //[FS] - 28-08-2024
+    if (event.target === this.#textLayer.div && false) // Disabled the free select 
+    {
     const {
       target
     } = event;
@@ -19596,6 +19806,7 @@ class AnnotationEditorLayer {
       });
       event.preventDefault();
     }
+  }
   }
   enableClick() {
     if (this.#boundPointerdown) {
@@ -19621,7 +19832,7 @@ class AnnotationEditorLayer {
     this.#boundPointerup = null;
   }
   attach(editor) {
-    this.#editors.set(editor.id, editor);
+    this.editors.set(editor.id, editor);
     const {
       annotationElementId
     } = editor;
@@ -19630,7 +19841,7 @@ class AnnotationEditorLayer {
     }
   }
   detach(editor) {
-    this.#editors.delete(editor.id);
+    this.editors.delete(editor.id);
     this.#accessibilityManager?.removePointerInTextLayer(editor.contentDiv);
     if (!this.#isDisabling && editor.annotationElementId) {
       this.#uiManager.addDeletedAnnotationElement(editor);
@@ -19644,6 +19855,8 @@ class AnnotationEditorLayer {
     if (!this.#isCleaningUp) {
       this.addInkEditorIfNeeded(false);
     }
+    //[FS] - 28-08-2024
+    this.eventBus.dispatch("annotation-removed", {id: editor.id});
   }
   changeParent(editor) {
     if (editor.parent === this) {
@@ -19780,6 +19993,10 @@ class AnnotationEditorLayer {
     if (editor) {
       this.add(editor);
     }
+    //[FS] - 28-08-2024
+    this.eventBus.dispatch("showhighlightedArray", editor);
+    // clear the selection
+    document.getSelection()?.empty();
     return editor;
   }
   #getCenterPoint() {
@@ -19878,19 +20095,19 @@ class AnnotationEditorLayer {
       clearTimeout(this.#editorFocusTimeoutId);
       this.#editorFocusTimeoutId = null;
     }
-    for (const editor of this.#editors.values()) {
+    for (const editor of this.editors.values()) {
       this.#accessibilityManager?.removePointerInTextLayer(editor.contentDiv);
       editor.setParent(null);
       editor.isAttachedToDOM = false;
       editor.div.remove();
     }
     this.div = null;
-    this.#editors.clear();
+    this.editors.clear();
     this.#uiManager.removeLayer(this);
   }
   #cleanup() {
     this.#isCleaningUp = true;
-    for (const editor of this.#editors.values()) {
+    for (const editor of this.editors.values()) {
       if (editor.isEmpty()) {
         editor.remove();
       }
@@ -19920,7 +20137,7 @@ class AnnotationEditorLayer {
       rotation
     });
     if (oldRotation !== rotation) {
-      for (const editor of this.#editors.values()) {
+      for (const editor of this.editors.values()) {
         editor.rotate(rotation);
       }
     }

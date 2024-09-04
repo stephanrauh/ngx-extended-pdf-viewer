@@ -61,6 +61,8 @@ import { XfaLayerRenderedEvent } from './events/xfa-layer-rendered-event';
 import { NgxFormSupport } from './ngx-form-support';
 import { NgxHasHeight } from './ngx-has-height';
 import { NgxKeyboardManagerService } from './ngx-keyboard-manager.service';
+//[FS] - 28-08-2024
+import { AnnotationDeleteEvent, ShowCommentTagPopoverDetails } from './options/editor-annotations';
 import { PdfSidebarView } from './options/pdf-sidebar-views';
 import { SpreadType } from './options/spread-type';
 import { PDFScriptLoaderService } from './pdf-script-loader.service';
@@ -104,6 +106,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   @Output()
   public annotationEditorEvent = new EventEmitter<AnnotationEditorEvent>();
+  //[FS] - 28-08-2024
+  @Output()
+  public commentTagEvent = new EventEmitter<ShowCommentTagPopoverDetails>();
+  //[FS] - 28-08-2024
+  @Output()
+  public highlightArrayEvent = new EventEmitter<any>();
+  //[FS] - 28-08-2024
+  @Output()
+  public annotationRemovedEvent = new EventEmitter<AnnotationDeleteEvent>();
+
   /* UI templates */
   @Input()
   public customFindbarInputArea: TemplateRef<any> | undefined;
@@ -1503,6 +1515,24 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     PDFViewerApplication.eventBus.on('annotation-editor-event', (x: AnnotationEditorEvent) => {
       this.ngZone.run(() => {
         this.annotationEditorEvent.emit(x);
+      });
+    });
+    //[FS] - 28-08-2024
+    PDFViewerApplication.eventBus.on('showCommentTagPopover', (event: ShowCommentTagPopoverDetails) => {
+      this.ngZone.run(() => {
+        this.commentTagEvent.emit(event);
+      });
+    });
+
+    PDFViewerApplication.eventBus.on('annotation-removed', (event: AnnotationDeleteEvent) => {
+      this.ngZone.run(() => {
+        this.annotationRemovedEvent.emit(event);
+      });
+    });
+
+    PDFViewerApplication.eventBus.on('showhighlightedArray', (editor: any) => {
+      this.ngZone.run(() => {
+        this.highlightArrayEvent.emit(editor);
       });
     });
 

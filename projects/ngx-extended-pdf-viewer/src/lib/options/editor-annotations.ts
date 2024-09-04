@@ -73,5 +73,33 @@ export type HighlightEditorAnnotation = {
   pageIndex: number;
   rotation: 0 | 90 | 180 | 270; // in degrees
 };
+//[FS] - 28-08-2024
+export interface AnnotationItem {
+  pageNumber: number;
+  anchorSpanIndex: number;
+  focusSpanIndex: number;
+  anchorOffset: number;
+  focusOffset: number;
+  color: string;
+  type: AnnotationActionType;
+  text: string;
+  comment?: string;
+  Tags: [];
+}
+
+export interface ShowCommentTagPopoverDetails {
+  id: string;
+  type: AnnotationActionType;
+}
+
+export enum AnnotationActionType {
+  highlight = 'Highlight',
+  tag = 'Tag',
+  comment = 'Comment',
+}
+
+export interface AnnotationDeleteEvent {
+  id: string;
+}
 
 export type EditorAnnotation = InkEditorAnnotation | FreeTextEditorAnnotation | StampEditorAnnotation | HighlightEditorAnnotation;
