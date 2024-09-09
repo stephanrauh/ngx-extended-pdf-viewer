@@ -51,12 +51,6 @@ pdfjs-download-button-label = Telecargar
 pdfjs-bookmark-button =
     .title = Pagina actuala (mostrar l’adreça de la pagina actuala)
 pdfjs-bookmark-button-label = Pagina actuala
-# Used in Firefox for Android.
-pdfjs-open-in-app-button =
-    .title = Dobrir amb l’aplicacion
-# Used in Firefox for Android.
-# Length of the translation matters since we are in a mobile context, with limited screen estate.
-pdfjs-open-in-app-button-label = Dobrir amb l’aplicacion
 
 ##  Secondary toolbar and context menu
 
@@ -286,13 +280,24 @@ pdfjs-editor-ink-button-label = Dessenhar
 pdfjs-editor-stamp-button =
     .title = Apondre o modificar d’imatges
 pdfjs-editor-stamp-button-label = Apondre o modificar d’imatges
+pdfjs-editor-highlight-button =
+    .title = Subrelinhar
+pdfjs-editor-highlight-button-label = Subrelinhar
+pdfjs-highlight-floating-button1 =
+    .title = Subrelinhar
+    .aria-label = Subrelinhar
+pdfjs-highlight-floating-button-label = Subrelinhar
 
 ## Remove button for the various kind of editor.
 
+pdfjs-editor-remove-ink-button =
+    .title = Levar lo dessenh
 pdfjs-editor-remove-freetext-button =
     .title = Suprimir lo tèxte
 pdfjs-editor-remove-stamp-button =
     .title = Suprimir l’imatge
+pdfjs-editor-remove-highlight-button =
+    .title = Levar lo suslinhatge
 
 ##
 
@@ -335,6 +340,8 @@ pdfjs-editor-alt-text-save-button = Enregistrar
 pdfjs-editor-highlight-colorpicker-label = Color de suslinhatge
 pdfjs-editor-colorpicker-button =
     .title = Cambiar de color
+pdfjs-editor-colorpicker-dropdown =
+    .aria-label = Causida de colors
 pdfjs-editor-colorpicker-yellow =
     .title = Jaune
 pdfjs-editor-colorpicker-green =
@@ -353,19 +360,6 @@ pdfjs-editor-highlight-show-all-button-label = O afichar tot
 pdfjs-editor-highlight-show-all-button =
     .title = O afichar tot
 
-pdfjs-editor-highlight-button =
-    .title = Subrelinhar
-pdfjs-editor-highlight-button-label = Subrelinhar
-pdfjs-highlight-floating-button1 =
-    .title = Subrelinhar
-    .aria-label = Subrelinhar
-pdfjs-highlight-floating-button-label = Subrelinhar
-pdfjs-editor-remove-ink-button =
-    .title = Levar lo dessenh
-pdfjs-editor-remove-highlight-button =
-    .title = Levar lo suslinhatge
-pdfjs-editor-colorpicker-dropdown =
-    .aria-label = Causida de colors
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
@@ -441,13 +435,5 @@ pdfjs-editor-alt-text-settings-show-dialog-description = Helps you make sure all
 pdfjs-editor-alt-text-settings-close-button = Close
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = multiple queries separated by space"
+pdfjs-find-multiple-checkbox-label = match each word
 pdfjs-find-regexp-checkbox-label = regular expression
-pdfjs-editor-resizer-label-top-left = Top left corner — resize
-pdfjs-editor-resizer-label-top-middle = Top middle — resize
-pdfjs-editor-resizer-label-top-right = Top right corner — resize
-pdfjs-editor-resizer-label-middle-right = Middle right — resize
-pdfjs-editor-resizer-label-bottom-right = Bottom right corner — resize
-pdfjs-editor-resizer-label-bottom-middle = Bottom middle — resize
-pdfjs-editor-resizer-label-bottom-left = Bottom left corner — resize
-pdfjs-editor-resizer-label-middle-left = Middle left — resize

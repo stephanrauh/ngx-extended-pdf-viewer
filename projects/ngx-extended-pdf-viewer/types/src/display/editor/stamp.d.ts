@@ -12,9 +12,30 @@ export class StampEditor extends AnnotationEditor {
     static isHandlingMimeForPasting(mime: any): any;
     /** @inheritdoc */
     static paste(item: any, parent: any): void;
+    static computeTelemetryFinalData(data: any): {
+        hasAltText: any;
+        hasNoAltText: any;
+    };
     /** @inheritdoc */
     static deserialize(data: any, parent: any, uiManager: any): AnnotationEditor | null;
     constructor(params: any);
+    /** @inheritdoc */
+    get telemetryFinalData(): {
+        type: string;
+        hasAltText: boolean;
+    };
+    mlGuessAltText(imageData?: null, updateAltTextData?: boolean): Promise<any>;
+    copyCanvas(maxDimension: any, createImageData?: boolean): {
+        canvas: HTMLCanvasElement;
+        imageData: {
+            width: any;
+            height: any;
+            data: Uint8ClampedArray;
+        };
+    } | {
+        canvas: HTMLCanvasElement;
+        imageData: null;
+    };
     /** @inheritdoc */
     getImageForAltText(): null;
     /** @inheritdoc */

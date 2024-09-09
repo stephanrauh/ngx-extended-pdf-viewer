@@ -298,8 +298,6 @@ pdfjs-editor-stamp-button-label = Илова ё таҳрир кардани та
 pdfjs-editor-highlight-button =
     .title = Ҷудокунӣ
 pdfjs-editor-highlight-button-label = Ҷудокунӣ
-pdfjs-highlight-floating-button =
-    .title = Ҷудокунӣ
 pdfjs-highlight-floating-button1 =
     .title = Ҷудокунӣ
     .aria-label = Ҷудокунӣ
@@ -395,6 +393,14 @@ pdfjs-editor-highlight-show-all-button-label = Ҳамаро намоиш дод�
 pdfjs-editor-highlight-show-all-button =
     .title = Ҳамаро намоиш додан
 
+## New alt-text dialog
+## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
+
+pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Маълумоти бештар
+
+## Image alt-text settings
+
+
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
@@ -421,7 +427,6 @@ pdfjs-editor-new-alt-text-textarea =
     .placeholder = Write your description here…
 pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
-pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Learn more
 pdfjs-editor-new-alt-text-create-automatically-button-label = Create alt text automatically
 pdfjs-editor-new-alt-text-not-now-button = Not now
 pdfjs-editor-new-alt-text-error-title = Couldn’t create alt text automatically
@@ -451,5 +456,5 @@ pdfjs-editor-alt-text-settings-show-dialog-description = Helps you make sure all
 pdfjs-editor-alt-text-settings-close-button = Close
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = multiple queries separated by space"
+pdfjs-find-multiple-checkbox-label = match each word
 pdfjs-find-regexp-checkbox-label = regular expression

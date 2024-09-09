@@ -119,6 +119,9 @@ pdfjs-document-properties-keywords = Ключавыя словы:
 pdfjs-document-properties-creation-date = Дата стварэння:
 pdfjs-document-properties-modification-date = Дата змянення:
 # Variables:
+#   $dateObj (Date) - the creation/modification date and time of the PDF file
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+# Variables:
 #   $date (Date) - the creation/modification date of the PDF file
 #   $time (Time) - the creation/modification time of the PDF file
 pdfjs-document-properties-date-string = { $date }, { $time }
@@ -277,6 +280,9 @@ pdfjs-annotation-date-string = { $date }, { $time }
 # Some common types are e.g.: "Check", "Text", "Comment", "Note"
 pdfjs-text-annotation-type =
     .alt = [{ $type } Annotation]
+# Variables:
+#   $dateObj (Date) - the modification date and time of the annotation
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 
 ## Password
 
@@ -408,8 +414,6 @@ pdfjs-editor-new-alt-text-textarea =
 pdfjs-editor-new-alt-text-description = Кароткае апісанне для людзей, якія не бачаць выяву, ці калі выява не загружаецца.
 # This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
 pdfjs-editor-new-alt-text-disclaimer1 = Гэты тэкст для атрыбута alt быў створаны аўтаматычна і можа быць недакладным
-# This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
-pdfjs-editor-new-alt-text-disclaimer = Гэты тэкст для атрыбута alt быў створаны аўтаматычна.
 pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Даведацца больш
 pdfjs-editor-new-alt-text-create-automatically-button-label = Ствараць тэкст для атрыбута alt аўтаматычна
 pdfjs-editor-new-alt-text-not-now-button = Не зараз
@@ -456,8 +460,6 @@ pdfjs-editor-alt-text-settings-close-button = Закрыць
 
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
-pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-editor-resizer-top-left =
     .aria-label = Top left corner — resize
 pdfjs-editor-resizer-top-middle =
@@ -476,5 +478,5 @@ pdfjs-editor-resizer-middle-left =
     .aria-label = Middle left — resize
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = multiple queries separated by space"
+pdfjs-find-multiple-checkbox-label = match each word
 pdfjs-find-regexp-checkbox-label = regular expression

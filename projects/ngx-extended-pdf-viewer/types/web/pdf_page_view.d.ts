@@ -110,7 +110,7 @@ export class PDFPageView implements IRenderableView {
     _container: HTMLDivElement | undefined;
     _annotationCanvasMap: any;
     annotationLayer: AnnotationLayerBuilder | null;
-    annotationEditorLayer: AnnotationEditorLayerBuilder | null;
+    annotationEditorLayer: any;
     textLayer: TextLayerBuilder | null;
     zoomLayer: ParentNode | null;
     xfaLayer: XfaLayerBuilder | null;
@@ -201,7 +201,6 @@ export class PDFPageView implements IRenderableView {
 }
 import { GenericL10n } from "./genericl10n";
 import { AnnotationLayerBuilder } from "./annotation_layer_builder.js";
-import { AnnotationEditorLayerBuilder } from "./annotation_editor_layer_builder.js";
 import { TextLayerBuilder } from "./text_layer_builder.js";
 import { XfaLayerBuilder } from "./xfa_layer_builder.js";
 import { OutputScale } from "./ui_utils.js";

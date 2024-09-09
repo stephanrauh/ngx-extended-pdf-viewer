@@ -22,9 +22,8 @@ export class IDownloadManager {
      * @param {Uint8Array} data
      * @param {string} url
      * @param {string} filename
-     * @param {Object} [options]
      */
-    download(data: Uint8Array, url: string, filename: string, options?: Object | undefined): void;
+    download(data: Uint8Array, url: string, filename: string): void;
 }
 /**
  * @interface

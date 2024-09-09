@@ -541,7 +541,6 @@ export class PDFViewer {
          */
         isFromKeyboard?: boolean | undefined;
     };
-    set annotationEditorParams({ type, value }: any);
     refresh(noUpdate?: boolean, updateArgs?: any): void;
     getSerializedAnnotations(): any[] | null;
     addEditorAnnotation(data: any): void;

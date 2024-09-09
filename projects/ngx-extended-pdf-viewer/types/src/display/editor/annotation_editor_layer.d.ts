@@ -133,7 +133,7 @@ export class AnnotationEditorLayer {
      * @returns {string}
      */
     getNextId(): string;
-    get _signal(): AbortSignal;
+    combinedSignal(ac: any): AbortSignal;
     canCreateNewEmptyEditor(): boolean | undefined;
     /**
      * Paste some content into a new editor.

@@ -8,6 +8,6 @@ export class DownloadManager implements IDownloadManager {
      * @returns {boolean} Indicating if the data was opened.
      */
     openOrDownloadData(data: any, filename: any, dest?: null): boolean;
-    download(data: any, url: any, filename: any, _options: any): void;
+    download(data: any, url: any, filename: any): void;
     #private;
 }

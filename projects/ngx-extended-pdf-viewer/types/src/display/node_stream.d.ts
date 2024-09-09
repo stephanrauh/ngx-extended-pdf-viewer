@@ -1,7 +1,7 @@
 export class PDFNodeStream {
     constructor(source: any);
     source: any;
-    url: any;
+    url: URL;
     isHttp: boolean;
     isFsUrl: boolean;
     httpHeaders: any;

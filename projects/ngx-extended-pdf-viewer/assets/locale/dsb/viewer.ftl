@@ -51,12 +51,6 @@ pdfjs-download-button-label = Ześěgnuś
 pdfjs-bookmark-button =
     .title = Aktualny bok (URL z aktualnego boka pokazaś)
 pdfjs-bookmark-button-label = Aktualny bok
-# Used in Firefox for Android.
-pdfjs-open-in-app-button =
-    .title = W nałoženju wócyniś
-# Used in Firefox for Android.
-# Length of the translation matters since we are in a mobile context, with limited screen estate.
-pdfjs-open-in-app-button-label = W nałoženju wócyniś
 
 ##  Secondary toolbar and context menu
 
@@ -308,8 +302,6 @@ pdfjs-editor-stamp-button-label = Wobraze pśidaś abo wobźěłaś
 pdfjs-editor-highlight-button =
     .title = Wuzwignuś
 pdfjs-editor-highlight-button-label = Wuzwignuś
-pdfjs-highlight-floating-button =
-    .title = Wuzwignjenje
 pdfjs-highlight-floating-button1 =
     .title = Wuzwignuś
     .aria-label = Wuzwignuś
@@ -405,11 +397,18 @@ pdfjs-editor-highlight-show-all-button-label = Wšykne pokazaś
 pdfjs-editor-highlight-show-all-button =
     .title = Wšykne pokazaś
 
+## New alt-text dialog
+## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
+
+# Modal header positioned above a text box where users can edit the alt text.
 pdfjs-editor-new-alt-text-dialog-edit-label = Alternatiwny tekst wobźěłaś (wobrazowe wopisanje)
+# Modal header positioned above a text box where users can add the alt text.
 pdfjs-editor-new-alt-text-dialog-add-label = Alternatiwny tekst pśidaś (wobrazowe wopisanje)
 pdfjs-editor-new-alt-text-textarea =
     .placeholder = Pišćo how swójo wopisanje…
+# This text refers to the alt text box above this description. It offers a definition of alt text.
 pdfjs-editor-new-alt-text-description = Krotke wopisanje za luźe, kótarež njamóžośo wobraz wiźeś abo gaž se wobraz njezacytajo.
+# This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
 pdfjs-editor-new-alt-text-disclaimer1 = Toś ten alternatiwny tekst jo se awtomatiski napórał a jo snaź njedokradny.
 pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Dalšne informacije
 pdfjs-editor-new-alt-text-create-automatically-button-label = Alternatiwny tekst awtomatiski napóraś
@@ -417,10 +416,25 @@ pdfjs-editor-new-alt-text-not-now-button = Nic něnto
 pdfjs-editor-new-alt-text-error-title = Alternatiwny tekst njedajo se awtomatiski napóraś
 pdfjs-editor-new-alt-text-error-description = Pšosym pišćo swój alternatiwny tekst abo wopytajśo pózdźej hyšći raz.
 pdfjs-editor-new-alt-text-error-close-button = Zacyniś
+# Variables:
+#   $totalSize (Number) - the total size (in MB) of the AI model.
+#   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
+#   $percent (Number) - the percentage of the downloaded size.
+pdfjs-editor-new-alt-text-ai-model-downloading-progress = Model KI za alternatiwny tekst se ześěgujo ({ $downloadedSize } z { $totalSize } MB)
+    .aria-valuetext = Model KI za alternatiwny tekst se ześěgujo ({ $downloadedSize } z { $totalSize } MB)
+# This is a button that users can click to edit the alt text they have already added.
 pdfjs-editor-new-alt-text-added-button-label = Alternatiwny tekst jo se pśidał
+# This is a button that users can click to open the alt text editor and add alt text when it is not present.
 pdfjs-editor-new-alt-text-missing-button-label = Alternatiwny tekst felujo
+# This is a button that opens up the alt text modal where users should review the alt text that was automatically generated.
 pdfjs-editor-new-alt-text-to-review-button-label = Alternatiwny tekst pśeglědowaś
+# "Created automatically" is a prefix that will be added to the beginning of any alt text that has been automatically generated. After the colon, the user will see/hear the actual alt text description. If the alt text has been edited by a human, this prefix will not appear.
+# Variables:
+#   $generatedAltText (String) - the generated alt-text.
 pdfjs-editor-new-alt-text-generated-alt-text-with-disclaimer = Awtomatiski napórany: { $generatedAltText }
+
+## Image alt-text settings
+
 pdfjs-image-alt-text-settings-button =
     .title = Nastajenja alternatiwnego wobrazowego teksta
 pdfjs-image-alt-text-settings-button-label = Nastajenja alternatiwnego wobrazowego teksta
@@ -428,13 +442,18 @@ pdfjs-editor-alt-text-settings-dialog-label = Nastajenja alternatiwnego wobrazow
 pdfjs-editor-alt-text-settings-automatic-title = Awtomatiski alternatiwny tekst
 pdfjs-editor-alt-text-settings-create-model-button-label = Alternatiwny tekst awtomatiski napóraś
 pdfjs-editor-alt-text-settings-create-model-description = Naraźujo wopisanja, aby pomagał ludam, kótarež njamóžośo wobraz wiźeś abo gaž se wobraz njezacytajo.
+# Variables:
+#   $totalSize (Number) - the total size (in MB) of the AI model.
 pdfjs-editor-alt-text-settings-download-model-label = Model KI alternatiwnego teksta ({ $totalSize } MB)
+pdfjs-editor-alt-text-settings-ai-model-description = Běžy lokalnje na wašom rěźe, aby waše daty priwatne wóstali. Za awtomatiski alternatiwny tekst trjebny.
 pdfjs-editor-alt-text-settings-delete-model-button = Lašowaś
 pdfjs-editor-alt-text-settings-download-model-button = Ześěgnuś
 pdfjs-editor-alt-text-settings-downloading-model-button = Ześěgujo se…
 pdfjs-editor-alt-text-settings-editor-title = Editor za alternatiwny tekst
 pdfjs-editor-alt-text-settings-show-dialog-button-label = Editor alternatiwnego teksta ned pokazaś, gaž se wobraz pśidawa
+pdfjs-editor-alt-text-settings-show-dialog-description = Pomaga, wam wšym swójim wobrazam alternatiwny tekst pśidaś.
 pdfjs-editor-alt-text-settings-close-button = Zacyniś
+
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
@@ -455,11 +474,7 @@ pdfjs-editor-resizer-bottom-left =
     .aria-label = Bottom left corner — resize
 pdfjs-editor-resizer-middle-left =
     .aria-label = Middle left — resize
-pdfjs-editor-new-alt-text-ai-model-downloading-progress = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
-    .aria-valuetext = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
-pdfjs-editor-alt-text-settings-ai-model-description = Runs locally on your device so your data stays private. Required for automatic alt text.
-pdfjs-editor-alt-text-settings-show-dialog-description = Helps you make sure all your images have alt text.
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = multiple queries separated by space"
+pdfjs-find-multiple-checkbox-label = match each word
 pdfjs-find-regexp-checkbox-label = regular expression

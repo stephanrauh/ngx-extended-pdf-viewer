@@ -35,7 +35,6 @@ export class InkEditor extends AnnotationEditor {
     translationX: number;
     translationY: number;
     editorPointerType: any;
-    destroy(): void;
     initializePointerType(): void;
     resetPointerType(): void;
     /** @inheritdoc */
@@ -44,6 +43,7 @@ export class InkEditor extends AnnotationEditor {
     get propertiesToUpdate(): any[][];
     canvas: HTMLCanvasElement | null | undefined;
     onScaleChanging(): void;
+    pointerdownAC: any;
     /**
      * onpointerdown callback for the canvas we're drawing on.
      * @param {PointerEvent} event

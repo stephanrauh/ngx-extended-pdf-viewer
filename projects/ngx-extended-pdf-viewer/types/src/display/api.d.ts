@@ -1372,6 +1372,13 @@ export class PDFPageProxy {
     #private;
 }
 /**
+ * @typedef {Object} PDFWorkerParameters
+ * @property {string} [name] - The name of the worker.
+ * @property {Worker} [port] - The `workerPort` object.
+ * @property {number} [verbosity] - Controls the logging level;
+ *   the constants from {@link VerbosityLevel} should be used.
+ */
+/**
  * PDF.js web worker abstraction that controls the instantiation of PDF
  * documents. Message handlers are used to pass information from the main
  * thread to the worker thread and vice versa. If the creation of a web
@@ -1380,6 +1387,8 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
+    static "__#49@#fakeWorkerId": number;
+    static "__#49@#isWorkerDisabled": boolean;
     static "__#49@#workerPorts": any;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
@@ -1427,10 +1436,6 @@ export class PDFWorker {
      */
     destroy(): void;
     #private;
-}
-export namespace PDFWorkerUtil {
-    let isWorkerDisabled: boolean;
-    let fakeWorkerId: number;
 }
 /**
  * Allows controlling of the rendering tasks.

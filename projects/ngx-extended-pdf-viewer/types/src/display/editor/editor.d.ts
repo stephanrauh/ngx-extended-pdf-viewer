@@ -33,6 +33,8 @@ export type AnnotationEditorParameters = {
  * Base class for editors.
  */
 export class AnnotationEditor {
+    static _l10nPromise: null;
+    static _l10nResizer: null;
     static _borderLineWidth: number;
     static _colorManager: ColorManager;
     static _zIndex: number;
@@ -87,11 +89,11 @@ export class AnnotationEditor {
      * @param {AnnotationEditorParameters} parameters
      */
     constructor(parameters: AnnotationEditorParameters);
+    _editToolbar: null;
     _initialOptions: any;
     _isVisible: boolean;
     _uiManager: null;
     _focusEventsAllowed: boolean;
-    _l10nPromise: null;
     doNotMove: boolean;
     parent: import("./annotation_editor_layer.js").AnnotationEditorLayer;
     id: string;
@@ -223,6 +225,9 @@ export class AnnotationEditor {
      * @returns {Array<number>}
      */
     getInitialTranslation(): Array<number>;
+    /**
+     * Called when the alt text dialog is closed.
+     */
     altTextFinish(): void;
     /**
      * Add a toolbar for this editor.
@@ -237,7 +242,11 @@ export class AnnotationEditor {
      */
     set altTextData(data: any);
     get altTextData(): any;
+    get guessedAltText(): any;
+    setGuessedAltText(text: any): Promise<void>;
+    serializeAltText(isForCopying: any): any;
     hasAltText(): boolean;
+    hasAltTextData(): any;
     /**
      * Render this editor in a div.
      * @returns {HTMLDivElement | null}

@@ -23,6 +23,8 @@ export class L10n implements IL10n {
     /** @inheritdoc */
     translate(element: any): Promise<void>;
     /** @inheritdoc */
+    translateOnce(element: any): Promise<void>;
+    /** @inheritdoc */
     destroy(): Promise<void>;
     /** @inheritdoc */
     pause(): void;

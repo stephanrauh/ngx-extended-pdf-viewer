@@ -109,8 +109,31 @@ export class PDFFindController {
     _resumePageIdx: any;
     _firstPageCapability: any;
     _rawQuery: any;
-    _calculateRegExpMatch(query: any, entireWord: any, pageIndex: any, pageContent: any): void;
     _convertToRegExpString(query: any, hasDiacritics: any): any[];
     _calculateMatch(pageIndex: any): void;
+    /**
+     * @typedef {Object} FindMatch
+     * @property {number} index - The start of the matched text in the page's
+     *   string contents.
+     * @property {number} length - The length of the matched text.
+     */
+    /**
+     * @param {string | string[]} query - The search query.
+     * @param {string} pageContent - The text content of the page to search in.
+     * @param {number} pageIndex - The index of the page that is being processed.
+     * @returns {FindMatch[] | undefined} An array of matches in the provided
+     *   page.
+     */
+    match(query: string | string[], pageContent: string, pageIndex: number): {
+        /**
+         * - The start of the matched text in the page's
+         * string contents.
+         */
+        index: number;
+        /**
+         * - The length of the matched text.
+         */
+        length: number;
+    }[] | undefined;
     #private;
 }

@@ -406,14 +406,18 @@ pdfjs-editor-new-alt-text-textarea =
 pdfjs-editor-new-alt-text-description = Kort skildring for personar som ikkje kan sjå bildet, eller når bildet ikkje lastar inn.
 # This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
 pdfjs-editor-new-alt-text-disclaimer1 = Denne alternative teksten vart oppretta automatisk, og kan vere unøyaktig.
-# This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
-pdfjs-editor-new-alt-text-disclaimer = Denne alternative teksten vart oppretta automatisk.
 pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Les meir
 pdfjs-editor-new-alt-text-create-automatically-button-label = Opprett alternativ tekt automatisk
 pdfjs-editor-new-alt-text-not-now-button = Ikkje no
 pdfjs-editor-new-alt-text-error-title = Klarte ikkje å opprette alternativ tekst automatisk
 pdfjs-editor-new-alt-text-error-description = Skriv din eigen alternative tekst eller prøv igjen seinare.
 pdfjs-editor-new-alt-text-error-close-button = Lat att
+# Variables:
+#   $totalSize (Number) - the total size (in MB) of the AI model.
+#   $downloadedSize (Number) - the downloaded size (in MB) of the AI model.
+#   $percent (Number) - the percentage of the downloaded size.
+pdfjs-editor-new-alt-text-ai-model-downloading-progress = Lastar ned AI-modell med alternativ tekst ({ $downloadedSize } av { $totalSize } MB)
+    .aria-valuetext = Lastar ned AI-modell med alternativ tekst ({ $downloadedSize } av { $totalSize } MB)
 # This is a button that users can click to edit the alt text they have already added.
 pdfjs-editor-new-alt-text-added-button-label = Alternativ tekst lagt til
 # This is a button that users can click to open the alt text editor and add alt text when it is not present.
@@ -464,11 +468,9 @@ pdfjs-editor-resizer-bottom-left =
     .aria-label = Bottom left corner — resize
 pdfjs-editor-resizer-middle-left =
     .aria-label = Middle left — resize
-pdfjs-editor-new-alt-text-ai-model-downloading-progress = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
-    .aria-valuetext = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
 pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-alt-text-settings-show-dialog-description = Helps you make sure all your images have alt text.
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
-pdfjs-find-multiple-checkbox-label = multiple queries separated by space"
+pdfjs-find-multiple-checkbox-label = match each word
 pdfjs-find-regexp-checkbox-label = regular expression
