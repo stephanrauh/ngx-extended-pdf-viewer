@@ -47,7 +47,7 @@ If you're using Content Security Policy (CSP), you might want to follow [issue 2
 
 Let's have a look at the changes in more detail. Version 21
 
-- updates to pdf.js 4.5
+- updates to pdf.js 4.5 (and starting with version 21.4.0, pdf.js 4.6)
 - gets rid of RxJS
 - stops polluting the global namespace
 - reduces the memory leaks (that's partially finished, but you should notice an improvement)
@@ -113,7 +113,7 @@ Would you like to participate in a popular open source-project? It's easy: just 
 - Responsive design that even includes your custom toolbars
 - Color theming
 
-Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 4.5, released in late July 2024.
+Not to mention the ability to display PDF files, running on a customized version of Mozilla's pdf.js 4.6, released in September 2024.
 
 ## Alternatives
 

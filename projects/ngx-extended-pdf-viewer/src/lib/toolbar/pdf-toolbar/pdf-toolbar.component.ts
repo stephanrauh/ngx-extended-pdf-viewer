@@ -12,6 +12,10 @@ export class PdfToolbarComponent implements AfterViewInit {
   @Input()
   public customToolbar: TemplateRef<any> | undefined;
 
+  // This is set internally by the viewer after loading a document. If the document has a text layer, the viewer will set this to true.
+  @Input()
+  public hasTextLayer = false;
+
   @Input()
   public mobileFriendlyZoomScale = 1;
 

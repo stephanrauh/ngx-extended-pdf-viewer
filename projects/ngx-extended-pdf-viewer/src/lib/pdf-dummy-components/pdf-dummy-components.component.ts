@@ -104,7 +104,6 @@ const requiredIds = [
   'viewBookmark',
   'viewerContainer',
   'viewFind',
-  'viewFind',
   'viewLayers',
   'viewOutline',
   'viewOutline',

@@ -65,6 +65,7 @@ import { PdfSidebarView } from './options/pdf-sidebar-views';
 import { SpreadType } from './options/spread-type';
 import { PDFScriptLoaderService } from './pdf-script-loader.service';
 import { ResponsiveVisibility } from './responsive-visibility';
+import { detectTextLayer } from './toolbar/text-layer-detector';
 
 declare class ResizeObserver {
   constructor(param: () => void);
@@ -534,6 +535,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public acceptKeys: Array<string> = [];
 
+  public hasTextLayer = true;
+
   /** Allows the user to put the viewer's svg images into an arbitrary folder */
   @Input()
   public imageResourcesPath = assetsUrl(pdfDefaultOptions.assetsFolder) + '/images/';
@@ -999,7 +1002,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       const left = Math.max(0, findButtonPosition.left - containerPositionLeft);
       this.findbarLeft = left + 'px';
     } else if (this.showSidebarButton) {
-      this.findbarLeft = 34 + (32 * factor).toString() + 'px';
+      this.findbarLeft = (34 + 32 * factor).toString() + 'px';
     } else {
       this.findbarLeft = '0';
     }
@@ -1656,7 +1659,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     });
 
     PDFViewerApplication.eventBus.on('documentloaded', (pdfLoadedEvent: PdfDocumentLoadedEvent) => {
-      this.ngZone.run(() => {
+      this.ngZone.run(async () => {
         const pages = pdfLoadedEvent.source.pagesCount;
         this.pageLabel = undefined;
         if (this.page && this.page >= pages) {
@@ -1670,6 +1673,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         if (this.propertiesDialogVisible) {
           PDFViewerApplication.pdfDocumentProperties.open();
         }
+        this.hasTextLayer = this.textLayer === true && (await detectTextLayer(PDFViewerApplication.pdfDocument));
       });
     });
 

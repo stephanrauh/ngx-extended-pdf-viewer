@@ -23,7 +23,7 @@ export class PdfHandToolComponent {
 
   public isSelected = false;
 
-  constructor(private notificationService: PDFNotificationService) {
+  constructor(notificationService: PDFNotificationService) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
       if (this.PDFViewerApplication) {
