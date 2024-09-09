@@ -13,8 +13,10 @@
 # limitations under the License.
 
 # Additional translations
-unverified-signature-warning = Ce fichier PDF contient une signature numérique. Le visualiseur PDF ne peut pas vérifier si la signature est valide. Veuillez télécharger le fichier et l'ouvrir dans Acrobat Reader pour vérifier que la signature est valide.
-
+unverified-signature-warning = Ce fichier PDF contient une signature numérique. Le lecteur PDF ne peut pas vérifier si la signature est valide. Veuillez télécharger le fichier et l’ouvrir dans Acrobat Reader pour vérifier si la signature est valide.
+pdfjs-infinite-scroll-button-label = Défilement infini
+pdfjs-find-multiple-checkbox-label = Correspondre à chaque mot
+pdfjs-find-regexp-checkbox-label = Expression régulière
 
 
 

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Additional translations
-unverified-signature-warning = Diese PDF-Datei enthält eine digitale Signatur. Der PDF-Viewer kann nicht überprüfen, ob die Signatur gültig ist. Laden Sie die Datei herunter und öffnen Sie sie in Acrobat Reader, um zu überprüfen, ob die Signatur gültig ist.
+unverified-signature-warning = Diese PDF-Datei enthält eine digitale Signatur. Der PDF-Viewer kann nicht überprüfen, ob die Signatur gültig ist. Bitte laden Sie die Datei herunter und öffnen Sie sie in Acrobat Reader, um die Gültigkeit der Signatur zu überprüfen.
 pdfjs-infinite-scroll-button-label = Infinite Scroll
-pdfjs-find-multiple-checkbox-label = Mehrere Worte (durch Leerzeichen getrennt)
+pdfjs-find-multiple-checkbox-label = Jedes Wort finden
 pdfjs-find-regexp-checkbox-label = Regulärer Ausdruck
