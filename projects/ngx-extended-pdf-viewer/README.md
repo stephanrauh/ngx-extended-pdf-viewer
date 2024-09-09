@@ -39,6 +39,10 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 Version 20.0.2 is a security fix. It solves CVE-2024-4367. I strongly recommend updating to the latest version of ngx-extended-pdf-viewer as soon as possible, or to version 20.0.2 as a minimum. Older versions contain a bug allowing malicious PDF files to run arbitrary code. Kudos go to GitHub users ScratchPDX and Deepak Shakya to tell me about it, so I could provide a hotfix during my vacations.
 
+## Version 21.4: improved search UI and update to pdf.js 4.6
+
+Version 21.4 updates to pdf.js 4.6. It also improved the search functionality: the find button is hidden if there's no text layer in the PDF document (or at least in the first 20 pages of the PDF document - this seems to be a decent compromise between accuracy and performance). If there's no find button or no text layer, CTRL+F doesn't open the find bar.
+
 ## Version 21: an optimized viewer
 
 Version 21 is a major refactoring. The new version reduces the memory footprint and start-up times. I consider it a major progress: now the architecture is significantly cleaner. It's still work in progress, but you should notice the difference.
