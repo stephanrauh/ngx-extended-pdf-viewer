@@ -5,5 +5,5 @@
   "assets": ["changelog.md", "assets", "bleeding-edge"],
   "lib": {
     "entryFile": "src/public_api.ts"
-  },
+  }
 }
