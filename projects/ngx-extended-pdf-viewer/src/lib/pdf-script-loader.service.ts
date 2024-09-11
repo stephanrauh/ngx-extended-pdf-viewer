@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, effect, signal } from '@angular/core';
+import { Injectable, OnDestroy, effect, signal, Inject, CSP_NONCE } from '@angular/core';
 import { getVersionSuffix, pdfDefaultOptions } from './options/pdf-default-options';
 import { IPDFViewerApplication } from './options/pdf-viewer-application';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
@@ -28,7 +28,7 @@ export class PDFScriptLoaderService implements OnDestroy {
 
   public ngxExtendedPdfViewerIncompletelyInitialized = true;
 
-  public constructor(private pdfCspPolicyService: PdfCspPolicyService) {
+  public constructor(private pdfCspPolicyService: PdfCspPolicyService, @Inject(CSP_NONCE) private csp_nonce: string) {
     effect(() => {
       if (this.onPDFJSInitSignal()) {
         this.pdfjsVersion = getVersionSuffix(pdfDefaultOptions.assetsFolder);
@@ -116,6 +116,7 @@ new (function () {
     script.type = 'module';
     script.className = `ngx-extended-pdf-viewer-script`;
     script.text = code;
+    script.nonce = this.csp_nonce;
     return script;
   }
 
