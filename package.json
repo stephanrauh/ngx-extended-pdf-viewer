@@ -43,7 +43,7 @@
     "@angular/cli": "^17.3.9",
     "@angular/compiler-cli": "^17.3.12",
     "@cyclonedx/cyclonedx-npm": "^1.19.3",
-    "@types/jest": "^29.5.12",
+    "@types/jest": "^29.5.13",
     "@types/node": "^22.5.4",
     "@schematics/angular": "^17.3.9",
     "@types/estree": "^1.0.5",
