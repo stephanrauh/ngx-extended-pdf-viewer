@@ -9,7 +9,9 @@ export interface AnnotationEditorEvent {
     | 'colorChanged'
     | 'thicknessChanged'
     | 'opacityChanged'
-    | 'bezierPathChanged';
+    | 'bezierPathChanged'
+    | 'moved'
+    | 'altTextChanged';
   editorType: string;
   value: any;
   previousValue?: any;
