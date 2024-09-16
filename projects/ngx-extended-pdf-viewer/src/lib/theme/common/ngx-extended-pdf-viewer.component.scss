@@ -87,3 +87,7 @@ ngx-extended-pdf-viewer div.zoom,
 ngx-extended-pdf-viewer div.zoom * {
   box-sizing: content-box !important;
 }
+
+.hiddenCanvasElement {
+  display: none;
+}

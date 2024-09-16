@@ -595,4 +595,4 @@
 - 21.3.7 #2534 If you set the print range to 1 to 1, now the first page is printed. Previous versions didn't print the page; #2539 prevent a NPE that was raised when setting `[pageViewMode]="'infinite-scroll'"` or `[pageViewMode]="'multiple'"`
 - 21.3.8 #2526 fix "highlight all" in the find bar - before the bug fix, "highlight all" only worked in the bleeding edge branch
 - 21.4.0 #2548 CTRL+F now only activates the find bar if there's both a text layer and a find button in the toolbar; the find button is only shown if the PDF file has a text layer. More precisely, if one of the first 20 pages has a text layer.
-- 21.4.1 #2556 fire an `annotationEditorEvent` when a highlight is added; #2560 Fix Content Security Policy (CSP) issue, aded nonce attribute in inline script injector
+- 21.4.1 #2556 fire an `annotationEditorEvent` when a highlight is added; #2560 Fix Content Security Policy (CSP) issue, aded nonce attribute in inline script injector; #2490 make sure the hidden canvas that's used to determine the font size stay hidden all the time
