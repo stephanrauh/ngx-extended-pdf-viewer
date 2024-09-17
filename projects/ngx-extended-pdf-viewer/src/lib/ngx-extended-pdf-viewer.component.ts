@@ -1057,9 +1057,14 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       this.addTranslationsUnlessProvidedByTheUser();
       await this.waitUntilOldComponentIsGone();
       await this.pdfScriptLoaderService.ensurePdfJsHasBeenLoaded(this.useInlineScripts);
-      this.formSupport.registerFormSupportWithPdfjs(this.ngZone, this.pdfScriptLoaderService.PDFViewerApplication);
-      this.keyboardManager.registerKeyboardListener(this.pdfScriptLoaderService.PDFViewerApplication);
-      this.doInitPDFViewer();
+      // check if the PDF viewer has already been destroyed again
+      // (see https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/2571:
+      // destroying the viewer immediately after creating used to cause error messages)
+      if (this.formSupport) {
+        this.formSupport.registerFormSupportWithPdfjs(this.ngZone, this.pdfScriptLoaderService.PDFViewerApplication);
+        this.keyboardManager.registerKeyboardListener(this.pdfScriptLoaderService.PDFViewerApplication);
+        this.doInitPDFViewer();
+      }
     }
   }
 
