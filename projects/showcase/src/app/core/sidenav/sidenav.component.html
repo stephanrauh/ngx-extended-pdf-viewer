@@ -1,0 +1,11 @@
+<nav role="navigation" class="relative h-full bg-white w-2/3 p-4 pt-8 border-r z-30">
+  <button [attr.aria-expanded]="sidenavIsOpen()" aria-controls="sidenav" (click)="onClose()" class="float-end">
+    <span class="material-symbols-outlined"> close </span>
+  </button>
+  <ul id="sidenav">
+    <li>
+      <a>About</a>
+    </li>
+  </ul>
+</nav>
+<div class="absolute top-0 w-full h-full bg-black bg-opacity-35 z-20" (click)="onClose()"></div>

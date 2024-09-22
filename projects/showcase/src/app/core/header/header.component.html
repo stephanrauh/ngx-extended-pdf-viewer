@@ -1,11 +1,14 @@
-<header class="grid grid-cols-[minmax(0,_auto)_1fr] gap-6 items-center p-4 border-b border-b-gray-700 border-opacity-20">
-  <div>
-    <button [attr.aria-expanded]="menuIsOpen()" aria-controls="sidenav">
-      <span class="material-symbols-outlined"> menu </span>
-    </button>
+<header>
+  <div class="grid grid-cols-[minmax(0,_auto)_1fr] gap-6 items-center p-4 border-b border-b-gray-700 border-opacity-20">
+    <div>
+      <button [attr.aria-expanded]="sidenavIsOpen()" aria-controls="sidenav" (click)="onOpenSidenav()">
+        <span class="material-symbols-outlined"> menu </span>
+      </button>
+    </div>
+    <div class="grid grid-rows-[1fr_minmax(0,_auto)] text-2xl">
+      <h1>Angular PDF Viewer</h1>
+      <span class="text-[0.6em]">Version {{ extendedPdfViewerVersion }} with Angular {{ angularVersion }}</span>
+    </div>
   </div>
-  <div class="grid grid-rows-[1fr_minmax(0,_auto)] text-2xl">
-    <h1>Angular PDF Viewer</h1>
-    <span class="text-[0.6em]">{{ extendedPdfViewerVersion }} with Angular {{ angularVersion }}</span>
-  </div>
+  <pvs-sidenav class="absolute top-0 z-10 h-full w-full" [hidden]="!sidenavIsOpen()" />
 </header>

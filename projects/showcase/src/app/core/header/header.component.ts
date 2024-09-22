@@ -1,15 +1,22 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { versions } from '../../shared/constants/versions';
+import { SidenavComponent } from '../sidenav/sidenav.component';
+import { SidenavService } from '../../shared/services/sidenav.service';
 
 @Component({
   selector: 'pvs-header',
   standalone: true,
-  imports: [],
+  imports: [SidenavComponent],
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {
-  extendedPdfViewerVersion = versions.extendedPdfViewer;
-  angularVersion = versions.angular;
+  private sidenavService = inject(SidenavService);
 
-  menuIsOpen = signal(false);
+  public extendedPdfViewerVersion = versions.extendedPdfViewer;
+  public angularVersion = versions.angular;
+  public sidenavIsOpen = this.sidenavService.isOpen;
+
+  public onOpenSidenav() {
+    this.sidenavService.open();
+  }
 }
