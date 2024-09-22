@@ -3,5 +3,13 @@
 @tailwind utilities;
 
 * {
-  font-family: "Roboto", Calibri, sans-serif;
+  font-family: 'Roboto', Calibri, sans-serif;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 0,
+    'GRAD' 0,
+    'opsz' 24;
 }
