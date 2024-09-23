@@ -54,7 +54,7 @@
     "jest-preset-angular": "^14.2.2",
     "ng-packagr": "^17.3.0",
     "properties-reader": "^2.3.0",
-    "sass": "^1.78.0",
+    "sass": "^1.79.3",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "tslib": "^2.7.0",
