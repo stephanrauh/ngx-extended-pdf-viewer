@@ -956,7 +956,7 @@ function getDocument(src) {
   }
   const fetchDocParams = {
     docId,
-    apiVersion: '3.10.557',
+    apiVersion: '3.10.559',
     data,
     password,
     disableAutoFetch,
@@ -2739,8 +2739,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = exports.version = '3.10.557';
-const build = exports.build = 'cb0a59411';
+const version = exports.version = '3.10.559';
+const build = exports.build = '4924400cb';
 
 /***/ }),
 /* 3 */
@@ -14660,6 +14660,7 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
         storage.setValue(id, {
           value: angularData.value
         });
+        storedData.formattedValue = angularData.value;
       }
       let textContent = storedData.value || "";
       const maxLen = storage.getValue(id, {
@@ -15035,7 +15036,7 @@ class CheckboxWidgetAnnotationElement extends WidgetAnnotationElement {
       const defaultValue = data.defaultFieldValue || "Off";
       event.target.checked = defaultValue === data.exportValue;
     });
-    window.registerAcroformField(id, element, value ? data.exportValue : false);
+    window.registerAcroformField(id, element, value ? data.exportValue : undefined, undefined, data.fieldValue);
     element.addEventListener("updateFromAngular", newvalue => storage.setValue(id, {
       value: newvalue.detail
     }));
@@ -18063,8 +18064,8 @@ var _tools = __w_pdfjs_require__(5);
 var _annotation_layer = __w_pdfjs_require__(29);
 var _worker_options = __w_pdfjs_require__(14);
 var _xfa_layer = __w_pdfjs_require__(32);
-const pdfjsVersion = '3.10.557';
-const pdfjsBuild = 'cb0a59411';
+const pdfjsVersion = '3.10.559';
+const pdfjsBuild = '4924400cb';
 })();
 
 /******/ 	return __webpack_exports__;
