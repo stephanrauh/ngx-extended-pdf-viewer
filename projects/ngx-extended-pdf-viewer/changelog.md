@@ -511,3 +511,4 @@
 - 18.1.13 reduced the size of the viewer.js file; removed the folder ` images`` and the  `additional-locale` from the distribution package; #1961 now the schematics cops with stand-alone projects
 - 18.1.14 #1961 now the schematics copes with stand-alone projects; #1987 make the radio buttons of the secondary menu more reliable, and hide the secondary menu more reliably when it's empty; don't close the secondary menu when the "single page mode" menu is clicked
 - 18.1.15 #2078 scrollIntoView() now works again even on high zoom levels
+- 18.1.16 #2337 #2585 render the initial state of checkboxes correctly even if they are radiobuttons in disguise and the first checkbox is not checked. Kudos go to GitHub user @RyanHow for providing the backport to version 18!

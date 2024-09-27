@@ -8626,7 +8626,7 @@ class PDFViewer {
   #outerScrollContainer = undefined;
   #pageViewMode = "multiple";
   constructor(options) {
-    const viewerVersion = '3.10.559';
+    const viewerVersion = '3.10.560';
     if (_pdfjsLib.version !== viewerVersion) {
       throw new Error(`The API version "${_pdfjsLib.version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -17656,8 +17656,8 @@ var _ui_utils = __webpack_require__(3);
 var _app_options = __webpack_require__(6);
 var _pdf_link_service = __webpack_require__(8);
 var _app = __webpack_require__(2);
-const pdfjsVersion = '3.10.559';
-const pdfjsBuild = '4924400cb';
+const pdfjsVersion = '3.10.560';
+const pdfjsBuild = 'cc30dd43d';
 const AppConstants = exports.PDFViewerApplicationConstants = {
   LinkTarget: _pdf_link_service.LinkTarget,
   RenderingStates: _ui_utils.RenderingStates,
