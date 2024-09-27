@@ -372,6 +372,22 @@ pdfjs-editor-resizer-label-bottom-right = Dưới cùng bên phải — thay đ�
 pdfjs-editor-resizer-label-bottom-middle = Ở giữa dưới cùng — thay đổi kích thước
 pdfjs-editor-resizer-label-bottom-left = Góc dưới bên trái — thay đổi kích thước
 pdfjs-editor-resizer-label-middle-left = Ở giữa bên trái — thay đổi kích thước
+pdfjs-editor-resizer-top-left =
+    .aria-label = Trên cùng bên trái — thay đổi kích thước
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Trên cùng ở giữa — thay đổi kích thước
+pdfjs-editor-resizer-top-right =
+    .aria-label = Trên cùng bên phải — thay đổi kích thước
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Ở giữa bên phải — thay đổi kích thước
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Dưới cùng bên phải — thay đổi kích thước
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Ở giữa dưới cùng — thay đổi kích thước
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Góc dưới bên trái — thay đổi kích thước
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Ở giữa bên trái — thay đổi kích thước
 
 ## Color picker
 
@@ -456,22 +472,6 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Hiển thị ngay trì
 pdfjs-editor-alt-text-settings-show-dialog-description = Giúp bạn đảm bảo tất cả hình ảnh của bạn đều có văn bản thay thế.
 pdfjs-editor-alt-text-settings-close-button = Đóng
 
-pdfjs-editor-resizer-top-left =
-    .aria-label = Top left corner — resize
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Top middle — resize
-pdfjs-editor-resizer-top-right =
-    .aria-label = Top right corner — resize
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Middle right — resize
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Bottom right corner — resize
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Bottom middle — resize
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Bottom left corner — resize
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Middle left — resize
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

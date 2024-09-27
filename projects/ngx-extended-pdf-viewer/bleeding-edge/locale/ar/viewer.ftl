@@ -306,8 +306,6 @@ pdfjs-editor-stamp-button-label = أضِف أو حرّر الصور
 pdfjs-editor-highlight-button =
     .title = أبرِز
 pdfjs-editor-highlight-button-label = أبرِز
-pdfjs-highlight-floating-button =
-    .title = أبرِز
 pdfjs-highlight-floating-button1 =
     .title = أبرِز
     .aria-label = أبرِز
@@ -376,6 +374,22 @@ pdfjs-editor-resizer-label-bottom-right = الزاوية اليُمنى السُ
 pdfjs-editor-resizer-label-bottom-middle = أسفل الوسط - غيّر الحجم
 pdfjs-editor-resizer-label-bottom-left = الزاوية اليُسرى السُفلية - غيّر الحجم
 pdfjs-editor-resizer-label-middle-left = مُنتصف اليسار - غيّر الحجم
+pdfjs-editor-resizer-top-left =
+    .aria-label = الزاوية اليُسرى العُليا — غيّر الحجم
+pdfjs-editor-resizer-top-middle =
+    .aria-label = أعلى الوسط - غيّر الحجم
+pdfjs-editor-resizer-top-right =
+    .aria-label = الزاوية اليُمنى العُليا - غيّر الحجم
+pdfjs-editor-resizer-middle-right =
+    .aria-label = اليمين الأوسط - غيّر الحجم
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = الزاوية اليُمنى السُفلى - غيّر الحجم
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = أسفل الوسط - غيّر الحجم
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = الزاوية اليُسرى السُفلية - غيّر الحجم
+pdfjs-editor-resizer-middle-left =
+    .aria-label = مُنتصف اليسار - غيّر الحجم
 
 ## Color picker
 
@@ -403,26 +417,17 @@ pdfjs-editor-highlight-show-all-button-label = أظهِر الكل
 pdfjs-editor-highlight-show-all-button =
     .title = أظهِر الكل
 
+## New alt-text dialog
+## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
+
+
+## Image alt-text settings
+
+
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-editor-resizer-top-left =
-    .aria-label = Top left corner — resize
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Top middle — resize
-pdfjs-editor-resizer-top-right =
-    .aria-label = Top right corner — resize
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Middle right — resize
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Bottom right corner — resize
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Bottom middle — resize
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Bottom left corner — resize
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Middle left — resize
 pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
 pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
 pdfjs-editor-new-alt-text-textarea =

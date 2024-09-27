@@ -37359,9 +37359,25 @@ class StructTreePage {
       obj.role = node.role;
       obj.children = [];
       parent.children.push(obj);
-      const alt = node.dict.get("Alt");
+      let alt = node.dict.get("Alt");
+      if (typeof alt !== "string") {
+        alt = node.dict.get("ActualText");
+      }
       if (typeof alt === "string") {
         obj.alt = stringToPDFString(alt);
+      }
+      const a = node.dict.get("A");
+      if (a instanceof Dict) {
+        const bbox = lookupNormalRect(a.getArray("BBox"), null);
+        if (bbox) {
+          obj.bbox = bbox;
+        } else {
+          const width = a.get("Width");
+          const height = a.get("Height");
+          if (typeof width === "number" && width > 0 && typeof height === "number" && height > 0) {
+            obj.bbox = [0, 0, width, height];
+          }
+        }
       }
       const lang = node.dict.get("Lang");
       if (typeof lang === "string") {
@@ -50076,6 +50092,10 @@ class Annotation {
       this.data.fieldName = this._constructFieldName(dict);
       this.data.pageIndex = params.pageIndex;
     }
+    const it = dict.get("IT");
+    if (it instanceof Name) {
+      this.data.it = it.name;
+    }
     this._isOffscreenCanvasSupported = params.evaluatorOptions.isOffscreenCanvasSupported;
     this._fallbackFontDict = null;
     this._needAppearances = false;
@@ -50466,6 +50486,7 @@ class Annotation {
 class AnnotationBorderStyle {
   constructor() {
     this.width = 1;
+    this.rawWidth = 1;
     this.style = AnnotationBorderStyleType.SOLID;
     this.dashArray = [3];
     this.horizontalCornerRadius = 0;
@@ -50478,6 +50499,7 @@ class AnnotationBorderStyle {
     }
     if (typeof width === "number") {
       if (width > 0) {
+        this.rawWidth = width;
         const maxWidth = (rect[2] - rect[0]) / 2;
         const maxHeight = (rect[3] - rect[1]) / 2;
         if (maxWidth > 0 && maxHeight > 0 && (width > maxWidth || width > maxHeight)) {
@@ -52480,6 +52502,9 @@ class InkAnnotation extends MarkupAnnotation {
     } = params;
     this.data.annotationType = AnnotationType.INK;
     this.data.inkLists = [];
+    this.data.isEditable = !this.data.noHTML && this.data.it === "InkHighlight";
+    this.data.noHTML = false;
+    this.data.opacity = dict.get("CA") || 1;
     const rawInkLists = dict.getArray("InkList");
     if (!Array.isArray(rawInkLists)) {
       return;
@@ -52675,6 +52700,9 @@ class HighlightAnnotation extends MarkupAnnotation {
       xref
     } = params;
     this.data.annotationType = AnnotationType.HIGHLIGHT;
+    this.data.isEditable = !this.data.noHTML;
+    this.data.noHTML = false;
+    this.data.opacity = dict.get("CA") || 1;
     const quadPoints = this.data.quadPoints = getQuadPoints(dict, null);
     if (quadPoints) {
       const resources = this.appearance?.dict.get("Resources");
@@ -52701,7 +52729,8 @@ class HighlightAnnotation extends MarkupAnnotation {
   }
   static createNewDict(annotation, xref, {
     apRef,
-    ap
+    ap,
+    oldAnnotation
   }) {
     const {
       color,
@@ -52711,9 +52740,10 @@ class HighlightAnnotation extends MarkupAnnotation {
       user,
       quadPoints
     } = annotation;
-    const highlight = new Dict(xref);
+    const highlight = oldAnnotation || new Dict(xref);
     highlight.set("Type", Name.get("Annot"));
     highlight.set("Subtype", Name.get("Highlight"));
+    highlight.set(oldAnnotation ? "M" : "CreationDate", `D:${getModificationDate()}`);
     highlight.set("CreationDate", `D:${getModificationDate()}`);
     highlight.set("Rect", rect);
     highlight.set("F", 4);

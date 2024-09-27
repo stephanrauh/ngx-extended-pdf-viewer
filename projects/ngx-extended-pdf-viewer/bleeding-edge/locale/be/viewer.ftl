@@ -374,6 +374,22 @@ pdfjs-editor-resizer-label-bottom-right = Правы ніжні кут — зм�
 pdfjs-editor-resizer-label-bottom-middle = Пасярэдзіне ўнізе — змяніць памер
 pdfjs-editor-resizer-label-bottom-left = Левы ніжні кут — змяніць памер
 pdfjs-editor-resizer-label-middle-left = Пасярэдзіне злева — змяніць памер
+pdfjs-editor-resizer-top-left =
+    .aria-label = Верхні левы кут — змяніць памер
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Уверсе пасярэдзіне — змяніць памер
+pdfjs-editor-resizer-top-right =
+    .aria-label = Верхні правы кут — змяніць памер
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Пасярэдзіне справа — змяніць памер
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Правы ніжні кут — змяніць памер
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Пасярэдзіне ўнізе — змяніць памер
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Левы ніжні кут — змяніць памер
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Пасярэдзіне злева — змяніць памер
 
 ## Color picker
 
@@ -460,22 +476,6 @@ pdfjs-editor-alt-text-settings-close-button = Закрыць
 
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
-pdfjs-editor-resizer-top-left =
-    .aria-label = Top left corner — resize
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Top middle — resize
-pdfjs-editor-resizer-top-right =
-    .aria-label = Top right corner — resize
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Middle right — resize
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Bottom right corner — resize
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Bottom middle — resize
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Bottom left corner — resize
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Middle left — resize
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

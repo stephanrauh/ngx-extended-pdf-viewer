@@ -358,6 +358,22 @@ pdfjs-editor-resizer-label-bottom-right = Tiɣmert n wadda n yeffus — semsawi 
 pdfjs-editor-resizer-label-bottom-middle = Talemmat n wadda — semsawi teɣzi
 pdfjs-editor-resizer-label-bottom-left = Tiɣmert n wadda n zelmeḍ — semsawi teɣzi
 pdfjs-editor-resizer-label-middle-left = Talemmast tazelmdaḍt — semsawi teɣzi
+pdfjs-editor-resizer-top-left =
+    .aria-label = Tiɣmert n ufella n zelmeḍ — semsawi teɣzi
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Talemmat n ufella — semsawi teɣzi
+pdfjs-editor-resizer-top-right =
+    .aria-label = Tiɣmert n ufella n yeffus — semsawi teɣzi
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Talemmast tayeffust — semsawi teɣzi
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Tiɣmert n wadda n yeffus — semsawi teɣzi
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Talemmat n wadda — semsawi teɣzi
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Tiɣmert n wadda n zelmeḍ — semsawi teɣzi
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Talemmast tazelmdaḍt — semsawi teɣzi
 
 ## Color picker
 
@@ -385,6 +401,13 @@ pdfjs-editor-highlight-show-all-button-label = Sken akk
 pdfjs-editor-highlight-show-all-button =
     .title = Sken akk
 
+## New alt-text dialog
+## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
+
+
+## Image alt-text settings
+
+
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
@@ -396,22 +419,6 @@ pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that d
 pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.
 pdfjs-editor-alt-text-textarea =
     .placeholder = For example, “A young man sits down at a table to eat a meal”
-pdfjs-editor-resizer-top-left =
-    .aria-label = Top left corner — resize
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Top middle — resize
-pdfjs-editor-resizer-top-right =
-    .aria-label = Top right corner — resize
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Middle right — resize
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Bottom right corner — resize
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Bottom middle — resize
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Bottom left corner — resize
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Middle left — resize
 pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
 pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
 pdfjs-editor-new-alt-text-textarea =

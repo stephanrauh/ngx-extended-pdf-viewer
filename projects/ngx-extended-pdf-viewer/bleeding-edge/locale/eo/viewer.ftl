@@ -105,6 +105,10 @@ pdfjs-document-properties-button-label = Atributoj de dokumento…
 pdfjs-document-properties-file-name = Nomo de dosiero:
 pdfjs-document-properties-file-size = Grando de dosiero:
 # Variables:
+#   $mb (Number) - the PDF file size in megabytes
+#   $b (Number) - the PDF file size in bytes
+pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } Mo ({ $b } oktetoj)
+# Variables:
 #   $size_kb (Number) - the PDF file size in kilobytes
 #   $size_b (Number) - the PDF file size in bytes
 pdfjs-document-properties-kb = { $size_kb } KO ({ $size_b } oktetoj)
@@ -118,6 +122,9 @@ pdfjs-document-properties-subject = Temo:
 pdfjs-document-properties-keywords = Ŝlosilvorto:
 pdfjs-document-properties-creation-date = Dato de kreado:
 pdfjs-document-properties-modification-date = Dato de modifo:
+# Variables:
+#   $dateObj (Date) - the creation/modification date and time of the PDF file
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 # Variables:
 #   $date (Date) - the creation/modification date of the PDF file
 #   $time (Time) - the creation/modification time of the PDF file
@@ -275,6 +282,9 @@ pdfjs-annotation-date-string = { $date }, { $time }
 # Some common types are e.g.: "Check", "Text", "Comment", "Note"
 pdfjs-text-annotation-type =
     .alt = [Prinoto: { $type }]
+# Variables:
+#   $dateObj (Date) - the modification date and time of the annotation
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 
 ## Password
 
@@ -366,6 +376,22 @@ pdfjs-editor-resizer-label-bottom-right = Malsupra deksta angulo — ŝanĝi gra
 pdfjs-editor-resizer-label-bottom-middle = Malsupra mezo — ŝanĝi grandon
 pdfjs-editor-resizer-label-bottom-left = Malsupra maldekstra angulo — ŝanĝi grandon
 pdfjs-editor-resizer-label-middle-left = Maldekstra mezo — ŝanĝi grandon
+pdfjs-editor-resizer-top-left =
+    .aria-label = Supra maldekstra angulo — ŝangi grandon
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Supra mezo — ŝanĝi grandon
+pdfjs-editor-resizer-top-right =
+    .aria-label = Supran dekstran angulon — ŝanĝi grandon
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Dekstra mezo — ŝanĝi grandon
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Malsupra deksta angulo — ŝanĝi grandon
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Malsupra mezo — ŝanĝi grandon
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Malsupra maldekstra angulo — ŝanĝi grandon
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Maldekstra mezo — ŝanĝi grandon
 
 ## Color picker
 
@@ -451,25 +477,6 @@ pdfjs-editor-alt-text-settings-show-dialog-description = Tio ĉi helpas vin kont
 pdfjs-editor-alt-text-settings-close-button = Fermi
 
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
-pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
-pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-editor-resizer-top-left =
-    .aria-label = Top left corner — resize
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Top middle — resize
-pdfjs-editor-resizer-top-right =
-    .aria-label = Top right corner — resize
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Middle right — resize
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Bottom right corner — resize
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Bottom middle — resize
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Bottom left corner — resize
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Middle left — resize
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

@@ -384,6 +384,22 @@ pdfjs-editor-resizer-label-bottom-right = Deleka naprawo – wulkosć změnić
 pdfjs-editor-resizer-label-bottom-middle = Deleka wosrjedź – wulkosć změnić
 pdfjs-editor-resizer-label-bottom-left = Deleka nalěwo – wulkosć změnić
 pdfjs-editor-resizer-label-middle-left = Wosrjedź nalěwo – wulkosć změnić
+pdfjs-editor-resizer-top-left =
+    .aria-label = Horjeka nalěwo – wulkosć změnić
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Horjeka wosrjedź – wulkosć změnić
+pdfjs-editor-resizer-top-right =
+    .aria-label = Horjeka naprawo – wulkosć změnić
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Wosrjedź naprawo – wulkosć změnić
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Deleka naprawo – wulkosć změnić
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Deleka wosrjedź – wulkosć změnić
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Deleka nalěwo – wulkosć změnić
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Wosrjedź nalěwo – wulkosć změnić
 
 ## Color picker
 
@@ -468,22 +484,6 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Editor alternatiwneho 
 pdfjs-editor-alt-text-settings-show-dialog-description = Pomha, wam wšěm swojim wobrazam alternatiwny tekst přidać.
 pdfjs-editor-alt-text-settings-close-button = Začinić
 
-pdfjs-editor-resizer-top-left =
-    .aria-label = Top left corner — resize
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Top middle — resize
-pdfjs-editor-resizer-top-right =
-    .aria-label = Top right corner — resize
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Middle right — resize
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Bottom right corner — resize
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Bottom middle — resize
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Bottom left corner — resize
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Middle left — resize
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

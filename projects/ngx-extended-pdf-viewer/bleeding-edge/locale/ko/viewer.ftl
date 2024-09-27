@@ -372,6 +372,22 @@ pdfjs-editor-resizer-label-bottom-right = 오른쪽 아래 - 크기 조정
 pdfjs-editor-resizer-label-bottom-middle = 가운데 아래 — 크기 조정
 pdfjs-editor-resizer-label-bottom-left = 왼쪽 아래 - 크기 조정
 pdfjs-editor-resizer-label-middle-left = 왼쪽 가운데 — 크기 조정
+pdfjs-editor-resizer-top-left =
+    .aria-label = 왼쪽 위 — 크기 조정
+pdfjs-editor-resizer-top-middle =
+    .aria-label = 가운데 위 - 크기 조정
+pdfjs-editor-resizer-top-right =
+    .aria-label = 오른쪽 위 — 크기 조정
+pdfjs-editor-resizer-middle-right =
+    .aria-label = 오른쪽 가운데 — 크기 조정
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = 오른쪽 아래 - 크기 조정
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = 가운데 아래 — 크기 조정
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = 왼쪽 아래 - 크기 조정
+pdfjs-editor-resizer-middle-left =
+    .aria-label = 왼쪽 가운데 — 크기 조정
 
 ## Color picker
 
@@ -456,22 +472,6 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = 이미지 추가 시 �
 pdfjs-editor-alt-text-settings-show-dialog-description = 모든 이미지에 대체 텍스트가 있는지 확인하는 데 도움이 됩니다.
 pdfjs-editor-alt-text-settings-close-button = 닫기
 
-pdfjs-editor-resizer-top-left =
-    .aria-label = Top left corner — resize
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Top middle — resize
-pdfjs-editor-resizer-top-right =
-    .aria-label = Top right corner — resize
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Middle right — resize
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Bottom right corner — resize
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Bottom middle — resize
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Bottom left corner — resize
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Middle left — resize
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

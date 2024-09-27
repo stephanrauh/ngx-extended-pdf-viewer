@@ -51,12 +51,6 @@ pdfjs-download-button-label = Descargar
 pdfjs-bookmark-button =
     .title = Página actual (Ver URL de la página actual)
 pdfjs-bookmark-button-label = Página actual
-# Used in Firefox for Android.
-pdfjs-open-in-app-button =
-    .title = Abrir en aplicación
-# Used in Firefox for Android.
-# Length of the translation matters since we are in a mobile context, with limited screen estate.
-pdfjs-open-in-app-button-label = Abrir en aplicación
 
 ##  Secondary toolbar and context menu
 
@@ -304,8 +298,6 @@ pdfjs-editor-stamp-button-label = Añadir o editar imágenes
 pdfjs-editor-highlight-button =
     .title = Resaltar
 pdfjs-editor-highlight-button-label = Resaltar
-pdfjs-highlight-floating-button =
-    .title = Resaltar
 pdfjs-highlight-floating-button1 =
     .title = Resaltar
     .aria-label = Resaltar
@@ -374,6 +366,22 @@ pdfjs-editor-resizer-label-bottom-right = Esquina inferior derecha — redimensi
 pdfjs-editor-resizer-label-bottom-middle = Borde inferior en el medio — redimensionar
 pdfjs-editor-resizer-label-bottom-left = Esquina inferior izquierda — redimensionar
 pdfjs-editor-resizer-label-middle-left = Borde izquierdo en el medio — redimensionar
+pdfjs-editor-resizer-top-left =
+    .aria-label = Esquina superior izquierda — redimensionar
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Borde superior en el medio — redimensionar
+pdfjs-editor-resizer-top-right =
+    .aria-label = Esquina superior derecha — redimensionar
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Borde derecho en el medio — redimensionar
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Esquina inferior derecha — redimensionar
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Borde inferior en el medio — redimensionar
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Esquina inferior izquierda — redimensionar
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Borde izquierdo en el medio — redimensionar
 
 ## Color picker
 
@@ -401,26 +409,17 @@ pdfjs-editor-highlight-show-all-button-label = Mostrar todo
 pdfjs-editor-highlight-show-all-button =
     .title = Mostrar todo
 
+## New alt-text dialog
+## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
+
+
+## Image alt-text settings
+
+
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-editor-resizer-top-left =
-    .aria-label = Top left corner — resize
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Top middle — resize
-pdfjs-editor-resizer-top-right =
-    .aria-label = Top right corner — resize
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Middle right — resize
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Bottom right corner — resize
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Bottom middle — resize
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Bottom left corner — resize
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Middle left — resize
 pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
 pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
 pdfjs-editor-new-alt-text-textarea =

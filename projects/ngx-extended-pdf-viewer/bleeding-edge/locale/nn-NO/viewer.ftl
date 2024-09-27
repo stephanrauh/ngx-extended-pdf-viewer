@@ -119,6 +119,9 @@ pdfjs-document-properties-keywords = Stikkord:
 pdfjs-document-properties-creation-date = Dato oppretta:
 pdfjs-document-properties-modification-date = Dato endra:
 # Variables:
+#   $dateObj (Date) - the creation/modification date and time of the PDF file
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
+# Variables:
 #   $date (Date) - the creation/modification date of the PDF file
 #   $time (Time) - the creation/modification time of the PDF file
 pdfjs-document-properties-date-string = { $date }, { $time }
@@ -275,6 +278,9 @@ pdfjs-annotation-date-string = { $date } { $time }
 # Some common types are e.g.: "Check", "Text", "Comment", "Note"
 pdfjs-text-annotation-type =
     .alt = [{ $type } annotasjon]
+# Variables:
+#   $dateObj (Date) - the modification date and time of the annotation
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 
 ## Password
 
@@ -366,6 +372,22 @@ pdfjs-editor-resizer-label-bottom-right = Nedste høgre hjørne – endre størr
 pdfjs-editor-resizer-label-bottom-middle = Nedst i midten — endre størrelse
 pdfjs-editor-resizer-label-bottom-left = Nedste venstre hjørne – endre størrelse
 pdfjs-editor-resizer-label-middle-left = Midt til venstre — endre størrelse
+pdfjs-editor-resizer-top-left =
+    .aria-label = Øvste venstre hjørne – endre størrelse
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Øvst i midten — endre størrelse
+pdfjs-editor-resizer-top-right =
+    .aria-label = Øvste høgre hjørne – endre størrelse
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Midt til høgre – endre størrelse
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Nedste høgre hjørne – endre størrelse
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Nedst i midten — endre størrelse
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Nedste venstre hjørne – endre størrelse
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Midt til venstre — endre størrelse
 
 ## Color picker
 
@@ -437,6 +459,7 @@ pdfjs-image-alt-text-settings-button-label = Alternative tekst-innstillingar for
 pdfjs-editor-alt-text-settings-dialog-label = Alternative tekst-innstillingar for bilde
 pdfjs-editor-alt-text-settings-automatic-title = Automatisk alternativ tekst
 pdfjs-editor-alt-text-settings-create-model-button-label = Opprett alternativ tekt automatisk
+pdfjs-editor-alt-text-settings-create-model-description = Foreslår skildringar for å hjelpe folk som ikkje kan sjå bildet eller når bildet ikkje blir lasta inn.
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 pdfjs-editor-alt-text-settings-download-model-label = AI-modell for alternativ tekst ({ $totalSize } MB)
@@ -446,30 +469,11 @@ pdfjs-editor-alt-text-settings-download-model-button = Last ned
 pdfjs-editor-alt-text-settings-downloading-model-button = Lastar ned…
 pdfjs-editor-alt-text-settings-editor-title = Alternativ tekst-redigerar
 pdfjs-editor-alt-text-settings-show-dialog-button-label = Vis alternativ tekst-redigerar direkte når du legg til eit bilde
+pdfjs-editor-alt-text-settings-show-dialog-description = Hjelper deg med å sørgje for at alle bilda dine har alternativ tekst.
 pdfjs-editor-alt-text-settings-close-button = Lat att
 
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
-pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-editor-resizer-top-left =
-    .aria-label = Top left corner — resize
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Top middle — resize
-pdfjs-editor-resizer-top-right =
-    .aria-label = Top right corner — resize
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Middle right — resize
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Bottom right corner — resize
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Bottom middle — resize
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Bottom left corner — resize
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Middle left — resize
-pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.
-pdfjs-editor-alt-text-settings-show-dialog-description = Helps you make sure all your images have alt text.
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

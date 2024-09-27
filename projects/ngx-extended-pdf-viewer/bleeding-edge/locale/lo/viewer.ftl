@@ -45,12 +45,6 @@ pdfjs-save-button-label = ບັນທຶກ
 pdfjs-bookmark-button =
     .title = ໜ້າປັດຈຸບັນ (ເບິ່ງ URL ຈາກໜ້າປັດຈຸບັນ)
 pdfjs-bookmark-button-label = ຫນ້າ​ປັດ​ຈຸ​ບັນ
-# Used in Firefox for Android.
-pdfjs-open-in-app-button =
-    .title = ເປີດໃນ App
-# Used in Firefox for Android.
-# Length of the translation matters since we are in a mobile context, with limited screen estate.
-pdfjs-open-in-app-button-label = ເປີດໃນ App
 
 ##  Secondary toolbar and context menu
 
@@ -277,6 +271,12 @@ pdfjs-editor-free-text-button-label = ຂໍ້ຄວາມ
 pdfjs-editor-ink-button =
     .title = ແຕ້ມ
 pdfjs-editor-ink-button-label = ແຕ້ມ
+
+## Remove button for the various kind of editor.
+
+
+##
+
 # Editor Parameters
 pdfjs-editor-free-text-color-input = ສີ
 pdfjs-editor-free-text-size-input = ຂະຫນາດ
@@ -298,6 +298,20 @@ pdfjs-ink-canvas =
 ## This is used in an aria label to help to understand the role of the resizer.
 
 
+## Color picker
+
+
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
+
+## New alt-text dialog
+## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
+
+
+## Image alt-text settings
+
+
 pdfjs-download-button =
     .title = Download
 pdfjs-download-button-label = Download
@@ -305,12 +319,12 @@ pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) }
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-find-match-count =
-    { $total ->
+    { NUMBER($total) ->
         [one] { $current } of { $total } match
        *[other] { $current } of { $total } matches
     }
 pdfjs-find-match-count-limit =
-    { $limit ->
+    { NUMBER($limit) ->
         [one] More than { $limit } match
        *[other] More than { $limit } matches
     }

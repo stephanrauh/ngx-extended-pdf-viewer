@@ -107,7 +107,7 @@ pdfjs-document-properties-file-size = Розмір файлу:
 # Variables:
 #   $size_kb (Number) - the PDF file size in kilobytes
 #   $size_b (Number) - the PDF file size in bytes
-pdfjs-document-properties-kb = { $size_kb } КБ ({ $size_b } байтів)
+pdfjs-document-properties-kb = { $size_kb } кБ ({ $size_b } байтів)
 # Variables:
 #   $size_mb (Number) - the PDF file size in megabytes
 #   $size_b (Number) - the PDF file size in bytes
@@ -368,6 +368,22 @@ pdfjs-editor-resizer-label-bottom-right = Нижній правий кут – �
 pdfjs-editor-resizer-label-bottom-middle = Внизу посередині – зміна розміру
 pdfjs-editor-resizer-label-bottom-left = Нижній лівий кут – зміна розміру
 pdfjs-editor-resizer-label-middle-left = Ліворуч посередині – зміна розміру
+pdfjs-editor-resizer-top-left =
+    .aria-label = Верхній лівий кут – зміна розміру
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Вгорі посередині – зміна розміру
+pdfjs-editor-resizer-top-right =
+    .aria-label = Верхній правий кут – зміна розміру
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Праворуч посередині – зміна розміру
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Нижній правий кут – зміна розміру
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Внизу посередині – зміна розміру
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Нижній лівий кут – зміна розміру
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Ліворуч посередині – зміна розміру
 
 ## Color picker
 
@@ -427,27 +443,16 @@ pdfjs-image-alt-text-settings-button-label = Налаштування альте
 pdfjs-editor-alt-text-settings-dialog-label = Налаштування альтернативного тексту зображення
 pdfjs-editor-alt-text-settings-automatic-title = Автоматичний альтернативний текст
 pdfjs-editor-alt-text-settings-create-model-button-label = Автоматично створювати альтернативний текст
+pdfjs-editor-alt-text-settings-delete-model-button = Видалити
+pdfjs-editor-alt-text-settings-download-model-button = Завантажити
+pdfjs-editor-alt-text-settings-downloading-model-button = Завантаження…
+pdfjs-editor-alt-text-settings-editor-title = Редактор альтернативного тексту
+pdfjs-editor-alt-text-settings-close-button = Закрити
 
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-editor-resizer-top-left =
-    .aria-label = Top left corner — resize
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Top middle — resize
-pdfjs-editor-resizer-top-right =
-    .aria-label = Top right corner — resize
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Middle right — resize
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Bottom right corner — resize
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Bottom middle — resize
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Bottom left corner — resize
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Middle left — resize
 pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
 pdfjs-editor-new-alt-text-error-title = Couldn’t create alt text automatically
@@ -457,13 +462,8 @@ pdfjs-editor-new-alt-text-ai-model-downloading-progress = Downloading alt text A
 pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-alt-text-settings-download-model-label = Alt text AI model ({ $totalSize } MB)
 pdfjs-editor-alt-text-settings-ai-model-description = Runs locally on your device so your data stays private. Required for automatic alt text.
-pdfjs-editor-alt-text-settings-delete-model-button = Delete
-pdfjs-editor-alt-text-settings-download-model-button = Download
-pdfjs-editor-alt-text-settings-downloading-model-button = Downloading…
-pdfjs-editor-alt-text-settings-editor-title = Alt text editor
 pdfjs-editor-alt-text-settings-show-dialog-button-label = Show alt text editor right away when adding an image
 pdfjs-editor-alt-text-settings-show-dialog-description = Helps you make sure all your images have alt text.
-pdfjs-editor-alt-text-settings-close-button = Close
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

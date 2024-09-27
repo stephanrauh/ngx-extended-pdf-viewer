@@ -380,6 +380,22 @@ pdfjs-editor-resizer-label-bottom-right = Sağ alt köşe — yeniden boyutland�
 pdfjs-editor-resizer-label-bottom-middle = Alt orta — yeniden boyutlandır
 pdfjs-editor-resizer-label-bottom-left = Sol alt köşe — yeniden boyutlandır
 pdfjs-editor-resizer-label-middle-left = Orta sol — yeniden boyutlandır
+pdfjs-editor-resizer-top-left =
+    .aria-label = Sol üst köşe — yeniden boyutlandır
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Üst orta — yeniden boyutlandır
+pdfjs-editor-resizer-top-right =
+    .aria-label = Sağ üst köşe — yeniden boyutlandır
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Orta sağ — yeniden boyutlandır
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Sağ alt köşe — yeniden boyutlandır
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Alt orta — yeniden boyutlandır
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Sol alt köşe — yeniden boyutlandır
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Orta sol — yeniden boyutlandır
 
 ## Color picker
 
@@ -464,22 +480,6 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Resim eklerken alt met
 pdfjs-editor-alt-text-settings-show-dialog-description = Tüm resimlerinizin alt metne sahip olduğundan emin olmanızı sağlar.
 pdfjs-editor-alt-text-settings-close-button = Kapat
 
-pdfjs-editor-resizer-top-left =
-    .aria-label = Top left corner — resize
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Top middle — resize
-pdfjs-editor-resizer-top-right =
-    .aria-label = Top right corner — resize
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Middle right — resize
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Bottom right corner — resize
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Bottom middle — resize
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Bottom left corner — resize
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Middle left — resize
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

@@ -51,12 +51,6 @@ pdfjs-download-button-label = ჩამოტვირთვა
 pdfjs-bookmark-button =
     .title = მიმდინარე გვერდი (ბმული ამ გვერდისთვის)
 pdfjs-bookmark-button-label = მიმდინარე გვერდი
-# Used in Firefox for Android.
-pdfjs-open-in-app-button =
-    .title = გახსნა პროგრამით
-# Used in Firefox for Android.
-# Length of the translation matters since we are in a mobile context, with limited screen estate.
-pdfjs-open-in-app-button-label = გახსნა პროგრამით
 
 ##  Secondary toolbar and context menu
 
@@ -301,8 +295,6 @@ pdfjs-editor-ink-button-label = ხაზვა
 pdfjs-editor-stamp-button =
     .title = სურათების დართვა ან ჩასწორება
 pdfjs-editor-stamp-button-label = სურათების დართვა ან ჩასწორება
-pdfjs-editor-remove-button =
-    .title = მოცილება
 pdfjs-editor-highlight-button =
     .title = მონიშვნა
 pdfjs-editor-highlight-button-label = მონიშვნა
@@ -366,6 +358,22 @@ pdfjs-editor-resizer-label-bottom-right = ქვევით მარჯვნ�
 pdfjs-editor-resizer-label-bottom-middle = ქვევით შუაში — ზომაცვლა
 pdfjs-editor-resizer-label-bottom-left = ზვევით მარცხნივ — ზომაცვლა
 pdfjs-editor-resizer-label-middle-left = შუაში მარცხნივ — ზომაცვლა
+pdfjs-editor-resizer-top-left =
+    .aria-label = ზევით მარცხნივ — ზომაცვლა
+pdfjs-editor-resizer-top-middle =
+    .aria-label = ზევით შუაში — ზომაცვლა
+pdfjs-editor-resizer-top-right =
+    .aria-label = ზევით მარჯვნივ — ზომაცვლა
+pdfjs-editor-resizer-middle-right =
+    .aria-label = შუაში მარჯვნივ — ზომაცვლა
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = ქვევით მარჯვნივ — ზომაცვლა
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = ქვევით შუაში — ზომაცვლა
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = ზვევით მარცხნივ — ზომაცვლა
+pdfjs-editor-resizer-middle-left =
+    .aria-label = შუაში მარცხნივ — ზომაცვლა
 
 ## Color picker
 
@@ -386,6 +394,17 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = წითელი
 
+## Show all highlights
+## This is a toggle button to show/hide all the highlights.
+
+
+## New alt-text dialog
+## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
+
+
+## Image alt-text settings
+
+
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
@@ -397,22 +416,6 @@ pdfjs-highlight-floating-button-label = Highlight
 pdfjs-editor-free-highlight-thickness-input = Thickness
 pdfjs-editor-free-highlight-thickness-title =
     .title = Change thickness when highlighting items other than text
-pdfjs-editor-resizer-top-left =
-    .aria-label = Top left corner — resize
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Top middle — resize
-pdfjs-editor-resizer-top-right =
-    .aria-label = Top right corner — resize
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Middle right — resize
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Bottom right corner — resize
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Bottom middle — resize
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Bottom left corner — resize
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Middle left — resize
 pdfjs-editor-highlight-show-all-button-label = Show all
 pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
 pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
