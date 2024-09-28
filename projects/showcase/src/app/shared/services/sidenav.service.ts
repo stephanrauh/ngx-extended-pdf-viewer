@@ -1,11 +1,11 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SidenavService {
   private _isOpen = signal(false);
-  public isOpen = computed(() => this._isOpen());
+  public isOpen = this._isOpen.asReadonly();
 
   public open() {
     this._isOpen.set(true);
