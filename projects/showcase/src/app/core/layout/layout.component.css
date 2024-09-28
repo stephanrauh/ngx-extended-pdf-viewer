@@ -1,0 +1,26 @@
+:host {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "sidebar header"
+    "sidebar main";
+}
+
+header {
+  grid-area: header;
+  position: sticky;
+  top:0;
+}
+
+aside {
+  grid-area: sidebar;
+  position: fixed;
+  min-width: 30ch;
+}
+
+
+main {
+  grid-area: main;
+}

@@ -1,0 +1,12 @@
+<div class="grid grid-cols-[minmax(0,_auto)_1fr] gap-6 items-center bg-white p-4 border-b border-b-gray-700 border-opacity-20">
+  <div>
+    <button [attr.aria-expanded]="sidenavIsOpen()" aria-controls="sidenav" (click)="onOpenSidenav()">
+      <span role="img" class="material-symbols-outlined">menu</span>
+      <span class="sr-only">Menu</span>
+    </button>
+  </div>
+  <div class="grid grid-rows-[1fr_minmax(0,_auto)] text-2xl">
+    <h1>Angular PDF Viewer</h1>
+    <span class="text-[0.6em]">Version {{ extendedPdfViewerVersion }} with Angular {{ angularVersion }}</span>
+  </div>
+</div>

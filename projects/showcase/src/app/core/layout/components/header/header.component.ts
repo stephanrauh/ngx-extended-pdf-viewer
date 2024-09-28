@@ -1,7 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
-import { versions } from '../../shared/constants/versions';
+
 import { SidenavComponent } from '../sidenav/sidenav.component';
-import { SidenavService } from '../../shared/services/sidenav.service';
+import { SidenavService } from '../../../../shared/services/sidenav.service';
+import { versions } from '../../../../shared/constants/versions';
 
 @Component({
   selector: 'pvs-header',
