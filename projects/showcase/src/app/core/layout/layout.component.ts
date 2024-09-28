@@ -5,11 +5,12 @@ import { NgClass } from '@angular/common';
 import { SidenavService } from '../../shared/services/sidenav.service';
 import { CloseSidenavDirective } from '../directives/close-sidenav.directive';
 import { VisibleOnOpenSidenavDirective } from '../directives/visible-on-open-sidenav.directive';
+import { BlockOnOpenSidenavDirective } from '../directives/block-on-open-sidenav.directive';
 
 @Component({
   selector: 'pvs-layout',
   standalone: true,
-  imports: [HeaderComponent, SidenavComponent, NgClass, CloseSidenavDirective, VisibleOnOpenSidenavDirective],
+  imports: [HeaderComponent, SidenavComponent, NgClass, CloseSidenavDirective, VisibleOnOpenSidenavDirective, BlockOnOpenSidenavDirective],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css',
 })
