@@ -1,4 +1,4 @@
-import { computed, Directive, effect, HostBinding, inject } from '@angular/core';
+import { Directive, HostBinding, inject } from '@angular/core';
 import { SidenavService } from '../../shared/services/sidenav.service';
 
 @Directive({
@@ -7,12 +7,8 @@ import { SidenavService } from '../../shared/services/sidenav.service';
 })
 export class VisibleOnOpenSidenavDirective {
   private sidenavService = inject(SidenavService);
-  @HostBinding('class.hidden') isHidden = true;
 
-  constructor() {
-    effect(() => {
-      const isOpen = this.sidenavService.isOpen();
-      this.isHidden = !isOpen;
-    });
+  @HostBinding('class.hidden') get isHidden() {
+    return !this.sidenavService.isOpen();
   }
 }
