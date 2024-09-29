@@ -1,14 +1,14 @@
 import { Directive, HostBinding, inject } from '@angular/core';
-import { SidenavService } from '../../shared/services/sidenav.service';
+import { SidebarService } from '../../shared/services/sidebar.service';
 
 @Directive({
-  selector: '[pvsVisibleOnOpenSidenav]',
+  selector: '[pvsVisibleOnOpenSidebar]',
   standalone: true,
 })
 export class VisibleOnOpenSidenavDirective {
-  private sidenavService = inject(SidenavService);
+  private sidebarService = inject(SidebarService);
 
-  @HostBinding('class.hidden') get isHidden() {
-    return !this.sidenavService.isOpen();
+  @HostBinding('class.sidebar-open') get isHidden() {
+    return this.sidebarService.isOpen();
   }
 }

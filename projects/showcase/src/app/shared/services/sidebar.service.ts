@@ -3,12 +3,12 @@ import { Injectable, signal } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class SidenavService {
+export class SidebarService {
   private _isOpen = signal(false);
   public isOpen = this._isOpen.asReadonly();
 
-  public open() {
-    this._isOpen.set(true);
+  public toggle() {
+    this._isOpen.update((isOpen) => !isOpen);
   }
 
   public close() {

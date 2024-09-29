@@ -6,11 +6,14 @@
   font-family: 'Roboto', Calibri, sans-serif;
 }
 
-.blocked-scroll {
-  --scrollbar-width: 0;
-  overflow: hidden;
-  padding-right: var(--scrollbar-width);
+@media (max-width: 1024px) {
+  .blocked-scroll {
+    --scrollbar-width: 0;
+    overflow: hidden;
+    padding-right: var(--scrollbar-width);
+  }
 }
+
 
 .material-symbols-outlined {
   font-variation-settings:

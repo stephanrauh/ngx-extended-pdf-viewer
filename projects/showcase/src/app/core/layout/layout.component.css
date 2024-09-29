@@ -1,26 +1,43 @@
-:host {
-  min-height: 100dvh;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  grid-template-rows: auto 1fr;
-  grid-template-areas:
-    "sidebar header"
-    "sidebar main";
-}
-
 header {
-  grid-area: header;
   position: sticky;
   top:0;
+  height: 6rem;
 }
 
-aside {
-  grid-area: sidebar;
+.sidebar {
+  display: none;
   position: fixed;
+  top: 0;
   min-width: 30ch;
+  overflow: auto;
+  height: 100%;
 }
 
+.sidebar.sidebar-open {
+  display: block;
+}
 
-main {
-  grid-area: main;
+.layout {
+  display: none;
+}
+
+.layout.sidebar-open {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+
+  .sidebar.sidebar-open {
+    display: block;
+    position: sticky;
+    top: 6rem;
+  }
+
+  .content {
+    display: flex;
+  }
+
+  .layout.sidebar-open {
+    display: none;
+  }
 }

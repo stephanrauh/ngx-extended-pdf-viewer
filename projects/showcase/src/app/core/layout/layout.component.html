@@ -1,10 +1,14 @@
-<header pvsBlockOnOpenSidenav>
+<header pvsBlockOnOpenSidebar>
   <pvs-header />
 </header>
-<div class="fixed top-0 w-full h-full bg-black bg-opacity-35" pvsVisibleOnOpenSidenav pvsCloseSidenav></div>
-<aside>
-  <pvs-sidenav />
-</aside>
-<main pvsBlockOnOpenSidenav>
-  <ng-content />
-</main>
+
+<div class="layout fixed top-0 w-full h-full bg-black bg-opacity-35" pvsVisibleOnOpenSidebar pvsCloseSidebar></div>
+<div class="content">
+  <aside class="sidebar" pvsVisibleOnOpenSidebar>
+    <pvs-sidenav />
+  </aside>
+
+  <main class="main" pvsBlockOnOpenSidebar>
+    <ng-content />
+  </main>
+</div>

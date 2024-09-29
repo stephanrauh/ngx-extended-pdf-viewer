@@ -1,17 +1,17 @@
 import { Component, inject } from '@angular/core';
-import { SidenavService } from '../../../../shared/services/sidenav.service';
+import { SidebarService } from '../../../../shared/services/sidebar.service';
 import { NgClass } from '@angular/common';
-import { CloseSidenavDirective } from '../../../directives/close-sidenav.directive';
+import { CloseSidebarDirective } from '../../../directives/close-sidebar.directive';
 import { VisibleOnOpenSidenavDirective } from '../../../directives/visible-on-open-sidenav.directive';
 
 @Component({
   selector: 'pvs-sidenav',
   standalone: true,
-  imports: [NgClass, CloseSidenavDirective, VisibleOnOpenSidenavDirective],
+  imports: [NgClass, CloseSidebarDirective, VisibleOnOpenSidenavDirective],
   templateUrl: './sidenav.component.html',
 })
 export class SidenavComponent {
-  private sidenavService = inject(SidenavService);
+  private sidebarService = inject(SidebarService);
 
-  public sidenavIsOpen = this.sidenavService.isOpen;
+  public sidenavIsOpen = this.sidebarService.isOpen;
 }

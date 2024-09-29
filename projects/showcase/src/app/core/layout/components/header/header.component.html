@@ -1,6 +1,6 @@
-<div class="grid grid-cols-[minmax(0,_auto)_1fr] gap-6 items-center bg-white p-4 border-b border-b-gray-700 border-opacity-20">
+<div class="grid grid-cols-[minmax(0,_auto)_1fr] gap-6 items-center bg-white p-4 border-b border-b-gray-700 border-opacity-20 h-full">
   <div>
-    <button [attr.aria-expanded]="sidenavIsOpen()" aria-controls="sidenav" (click)="onOpenSidenav()">
+    <button [attr.aria-expanded]="sidenavIsOpen()" aria-controls="sidenav" (click)="toggleSidebar()">
       <span role="img" class="material-symbols-outlined">menu</span>
       <span class="sr-only">Menu</span>
     </button>

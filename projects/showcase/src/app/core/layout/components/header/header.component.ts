@@ -1,7 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { SidenavComponent } from '../sidenav/sidenav.component';
-import { SidenavService } from '../../../../shared/services/sidenav.service';
+import { SidebarService } from '../../../../shared/services/sidebar.service';
 import { versions } from '../../../../shared/constants/versions';
 
 @Component({
@@ -11,13 +11,13 @@ import { versions } from '../../../../shared/constants/versions';
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {
-  private sidenavService = inject(SidenavService);
+  private sidebarService = inject(SidebarService);
 
   public extendedPdfViewerVersion = versions.extendedPdfViewer;
   public angularVersion = versions.angular;
-  public sidenavIsOpen = this.sidenavService.isOpen;
+  public sidenavIsOpen = this.sidebarService.isOpen;
 
-  public onOpenSidenav() {
-    this.sidenavService.open();
+  public toggleSidebar() {
+    this.sidebarService.toggle();
   }
 }
