@@ -5,7 +5,7 @@ import { SidebarService } from '../../shared/services/sidebar.service';
   selector: '[pvsVisibleOnOpenSidebar]',
   standalone: true,
 })
-export class VisibleOnOpenSidenavDirective {
+export class VisibleOnOpenSidebarDirective {
   private sidebarService = inject(SidebarService);
 
   @HostBinding('class.sidebar-open') get isHidden() {
