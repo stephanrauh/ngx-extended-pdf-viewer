@@ -31,8 +31,8 @@ pdfjs-zoom-in-button-label = Uvećaj
 pdfjs-zoom-select =
     .title = Zumiranje
 pdfjs-presentation-mode-button =
-    .title = Prebaci u prezentacijski način rada
-pdfjs-presentation-mode-button-label = Prezentacijski način rada
+    .title = Prebaci u modus prezentacija
+pdfjs-presentation-mode-button-label = Modus prezentacija
 pdfjs-open-file-button =
     .title = Otvori datoteku
 pdfjs-open-file-button-label = Otvori
@@ -70,10 +70,10 @@ pdfjs-page-rotate-ccw-button =
     .title = Rotiraj obrnutno od smjera kazaljke na satu
 pdfjs-page-rotate-ccw-button-label = Rotiraj obrnutno od smjera kazaljke na satu
 pdfjs-cursor-text-select-tool-button =
-    .title = Omogući alat za označavanje teksta
+    .title = Aktiviraj alat za biranje teksta
 pdfjs-cursor-text-select-tool-button-label = Alat za označavanje teksta
 pdfjs-cursor-hand-tool-button =
-    .title = Omogući ručni alat
+    .title = Aktiviraj ručni alat
 pdfjs-cursor-hand-tool-button-label = Ručni alat
 pdfjs-scroll-page-button =
     .title = Koristi klizanje stranice
@@ -179,7 +179,7 @@ pdfjs-attachments-button =
     .title = Prikaži privitke
 pdfjs-attachments-button-label = Privitci
 pdfjs-layers-button =
-    .title = Prikaži slojeve (dvoklik za vraćanje svih slojeva u zadano stanje)
+    .title = Prikaži slojeve (dvoklik za vraćanje svih slojeva u standardno stanje)
 pdfjs-layers-button-label = Slojevi
 pdfjs-thumbs-button =
     .title = Prikaži minijature
@@ -360,30 +360,30 @@ pdfjs-editor-alt-text-textarea =
 ## Editor resizers
 ## This is used in an aria label to help to understand the role of the resizer.
 
-pdfjs-editor-resizer-label-top-left = Gornji lijevi kut — promijenite veličinu
-pdfjs-editor-resizer-label-top-middle = Gore sredina — promijenite veličinu
-pdfjs-editor-resizer-label-top-right = Gornji desni kut — promijenite veličinu
-pdfjs-editor-resizer-label-middle-right = Sredina desno — promijenite veličinu
-pdfjs-editor-resizer-label-bottom-right = Donji desni kut — promijenite veličinu
-pdfjs-editor-resizer-label-bottom-middle = Dolje sredina — promjenite veličinu
-pdfjs-editor-resizer-label-bottom-left = Donji lijevi kut — promijenite veličinu
-pdfjs-editor-resizer-label-middle-left = Sredina lijevo — promijenite veličinu
+pdfjs-editor-resizer-label-top-left = Gornji lijevi kut – promijeni veličinu
+pdfjs-editor-resizer-label-top-middle = Sredina gore – promijeni veličinu
+pdfjs-editor-resizer-label-top-right = Gornji desni kut – promijeni veličinu
+pdfjs-editor-resizer-label-middle-right = Sredina desno – promijeni veličinu
+pdfjs-editor-resizer-label-bottom-right = Donji desni kut – promijeni veličinu
+pdfjs-editor-resizer-label-bottom-middle = Sredina dolje – promjeni veličinu
+pdfjs-editor-resizer-label-bottom-left = Donji lijevi kut – promijeni veličinu
+pdfjs-editor-resizer-label-middle-left = Sredina lijevo – promijeni veličinu
 pdfjs-editor-resizer-top-left =
-    .aria-label = Gornji lijevi kut — promijenite veličinu
+    .aria-label = Gornji lijevi kut – promijeni veličinu
 pdfjs-editor-resizer-top-middle =
-    .aria-label = Gore sredina — promijenite veličinu
+    .aria-label = Sredina gore – promijeni veličinu
 pdfjs-editor-resizer-top-right =
-    .aria-label = Gornji desni kut — promijenite veličinu
+    .aria-label = Gornji desni kut – promijeni veličinu
 pdfjs-editor-resizer-middle-right =
-    .aria-label = Sredina desno — promijenite veličinu
+    .aria-label = Sredina desno – promijeni veličinu
 pdfjs-editor-resizer-bottom-right =
-    .aria-label = Donji desni kut — promijenite veličinu
+    .aria-label = Donji desni kut – promijeni veličinu
 pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Dolje sredina — promjenite veličinu
+    .aria-label = Sredina dolje – promjeni veličinu
 pdfjs-editor-resizer-bottom-left =
-    .aria-label = Donji lijevi kut — promijenite veličinu
+    .aria-label = Donji lijevi kut – promijeni veličinu
 pdfjs-editor-resizer-middle-left =
-    .aria-label = Sredina lijevo — promijenite veličinu
+    .aria-label = Sredina lijevo – promijeni veličinu
 
 ## Color picker
 
@@ -414,23 +414,31 @@ pdfjs-editor-highlight-show-all-button =
 ## New alt-text dialog
 ## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
 
+# This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
+pdfjs-editor-new-alt-text-disclaimer1 = Ovaj je alternativni tekst stvoren automatski i može biti netočan.
 pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Saznaj više
-pdfjs-editor-new-alt-text-create-automatically-button-label = Automatski stvori zamjenski tekst
+pdfjs-editor-new-alt-text-create-automatically-button-label = Automatski stvori alternativni tekst
+pdfjs-editor-new-alt-text-error-title = Nije bilo moguće automatski izraditi alternativni tekst
+# "Created automatically" is a prefix that will be added to the beginning of any alt text that has been automatically generated. After the colon, the user will see/hear the actual alt text description. If the alt text has been edited by a human, this prefix will not appear.
+# Variables:
+#   $generatedAltText (String) - the generated alt-text.
+pdfjs-editor-new-alt-text-generated-alt-text-with-disclaimer = Stvoreno automatski: { $generatedAltText }
 
 ## Image alt-text settings
 
 pdfjs-image-alt-text-settings-button =
-    .title = Postavke zamjenskog teksta slike
-pdfjs-image-alt-text-settings-button-label = Postavke zamjenskog teksta slike
-pdfjs-editor-alt-text-settings-dialog-label = Postavke zamjenskog teksta slike
-pdfjs-editor-alt-text-settings-automatic-title = Automatski zamjenski tekst
-pdfjs-editor-alt-text-settings-create-model-button-label = Automatski stvori zamjenski tekst
+    .title = Postavke alternativnog teksta slike
+pdfjs-image-alt-text-settings-button-label = Postavke alternativnog teksta slike
+pdfjs-editor-alt-text-settings-dialog-label = Postavke alternativnog teksta slike
+pdfjs-editor-alt-text-settings-automatic-title = Automatski alternativni tekst
+pdfjs-editor-alt-text-settings-create-model-button-label = Stvori alternativni tekst automatski
+pdfjs-editor-alt-text-settings-ai-model-description = Radi lokalno na tvom uređaju kako bi tvoji podaci ostali privatni. Potrebno za automatski alternativni tekst.
 pdfjs-editor-alt-text-settings-delete-model-button = Izbriši
 pdfjs-editor-alt-text-settings-download-model-button = Preuzmi
 pdfjs-editor-alt-text-settings-downloading-model-button = Preuzimanje …
-pdfjs-editor-alt-text-settings-editor-title = Uređivač zamjenskog teksta
-pdfjs-editor-alt-text-settings-show-dialog-button-label = Prikaži uređivač zamjenskog teksta odmah pri dodavanju slike
-pdfjs-editor-alt-text-settings-show-dialog-description = Pomaže osigurati da sve tvoje slike imaju zamjenski tekst.
+pdfjs-editor-alt-text-settings-editor-title = Uređivač alternativnog teksta
+pdfjs-editor-alt-text-settings-show-dialog-button-label = Prikaži uređivač alternativnog teksta odmah pri dodavanju slike
+pdfjs-editor-alt-text-settings-show-dialog-description = Pomaže osigurati da sve tvoje slike imaju alternativni tekst.
 pdfjs-editor-alt-text-settings-close-button = Zatvori
 
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
@@ -442,9 +450,7 @@ pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
 pdfjs-editor-new-alt-text-textarea =
     .placeholder = Write your description here…
 pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
-pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
 pdfjs-editor-new-alt-text-not-now-button = Not now
-pdfjs-editor-new-alt-text-error-title = Couldn’t create alt text automatically
 pdfjs-editor-new-alt-text-error-description = Please write your own alt text or try again later.
 pdfjs-editor-new-alt-text-error-close-button = Close
 pdfjs-editor-new-alt-text-ai-model-downloading-progress = Downloading alt text AI model ({ $downloadedSize } of { $totalSize } MB)
@@ -452,10 +458,8 @@ pdfjs-editor-new-alt-text-ai-model-downloading-progress = Downloading alt text A
 pdfjs-editor-new-alt-text-added-button-label = Alt text added
 pdfjs-editor-new-alt-text-missing-button-label = Missing alt text
 pdfjs-editor-new-alt-text-to-review-button-label = Review alt text
-pdfjs-editor-new-alt-text-generated-alt-text-with-disclaimer = Created automatically: { $generatedAltText }
 pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-alt-text-settings-download-model-label = Alt text AI model ({ $totalSize } MB)
-pdfjs-editor-alt-text-settings-ai-model-description = Runs locally on your device so your data stays private. Required for automatic alt text.
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word
