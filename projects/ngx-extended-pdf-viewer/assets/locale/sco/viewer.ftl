@@ -280,12 +280,12 @@ pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) }
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-find-match-diacritics-checkbox-label = Match Diacritics
 pdfjs-find-match-count =
-    { $total ->
+    { NUMBER($total) ->
         [one] { $current } of { $total } match
        *[other] { $current } of { $total } matches
     }
 pdfjs-find-match-count-limit =
-    { $limit ->
+    { NUMBER($limit) ->
         [one] More than { $limit } match
        *[other] More than { $limit } matches
     }

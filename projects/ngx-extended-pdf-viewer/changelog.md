@@ -597,4 +597,5 @@
 - 21.4.0 #2548 CTRL+F now only activates the find bar if there's both a text layer and a find button in the toolbar; the find button is only shown if the PDF file has a text layer. More precisely, if one of the first 20 pages has a text layer.
 - 21.4.1 #2556 fire an `annotationEditorEvent` when a highlight is added; #2560 Fix Content Security Policy (CSP) issue, aded nonce attribute in inline script injector; #2490 make sure the hidden canvas that's used to determine the font size stay hidden all the time
 - 21.4.2 #2571 if the PDF viewer is destroyed while it's still initializing, it inevitably runs into errors; I've added an additional check, so there's one error message less; updated the bleeding edge branch (it might still be broken due to many changes of pdf.js)
-- 21.4.3 dependency updates; updated the bleeding edge branch
+- 21.4.3 caveat: this version accidentally broke the stable branch! Please update to version 21.4.4 instead. Intended changes: dependency updates; updated the bleeding edge branch
+- 21.4.4 repaired the stable branch

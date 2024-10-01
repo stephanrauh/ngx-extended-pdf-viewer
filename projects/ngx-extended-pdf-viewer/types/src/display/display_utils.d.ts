@@ -87,7 +87,6 @@ export class DOMCMapReaderFactory extends BaseCMapReaderFactory {
  */
 export class DOMFilterFactory extends BaseFilterFactory {
     constructor({ docId, ownerDocument }?: {
-        docId: any;
         ownerDocument?: Document | undefined;
     });
     addFilter(maps: any): any;

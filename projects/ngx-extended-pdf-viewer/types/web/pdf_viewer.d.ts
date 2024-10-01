@@ -172,7 +172,7 @@ export class PDFPageViewBuffer {
      */
     resize(newSize: any, idsToKeep?: null): void;
     has(view: any): boolean;
-    [Symbol.iterator](): IterableIterator<any>;
+    [Symbol.iterator](): SetIterator<any>;
     #private;
 }
 /**
@@ -520,21 +520,11 @@ export class PDFViewer {
         /**
          * - The editor mode (none, FreeText, ink, ...).
          */
-        /**
-         * - The editor mode (none, FreeText, ink, ...).
-         */
         mode: number;
         /**
          * - ID of the existing annotation to edit.
          */
-        /**
-         * - ID of the existing annotation to edit.
-         */
         editId?: string | null | undefined;
-        /**
-         * - True if the mode change is due to a
-         * keyboard action.
-         */
         /**
          * - True if the mode change is due to a
          * keyboard action.

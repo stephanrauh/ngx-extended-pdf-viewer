@@ -268,12 +268,12 @@ pdfjs-additional-layers = Additional Layers
 pdfjs-find-match-diacritics-checkbox-label = Match Diacritics
 pdfjs-find-entire-word-checkbox-label = Whole Words
 pdfjs-find-match-count =
-    { $total ->
+    { NUMBER($total) ->
         [one] { $current } of { $total } match
        *[other] { $current } of { $total } matches
     }
 pdfjs-find-match-count-limit =
-    { $limit ->
+    { NUMBER($limit) ->
         [one] More than { $limit } match
        *[other] More than { $limit } matches
     }
