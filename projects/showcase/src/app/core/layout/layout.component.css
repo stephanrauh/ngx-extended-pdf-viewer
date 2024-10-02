@@ -27,7 +27,7 @@ header {
 
 @media (min-width: 1024px) {
 
-  .sidebar.sidebar-open {
+  .sidebar {
     display: block;
     position: sticky;
     top: 6rem;
