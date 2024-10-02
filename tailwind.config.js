@@ -2,7 +2,11 @@
 module.exports = {
   content: ['./projects/showcase/src/**/*.{html,ts}'],
   theme: {
-    extend: {},
+    extend: {
+      spacing: {
+        'header-height': '6rem',
+      },
+    },
   },
   plugins: [],
 };
