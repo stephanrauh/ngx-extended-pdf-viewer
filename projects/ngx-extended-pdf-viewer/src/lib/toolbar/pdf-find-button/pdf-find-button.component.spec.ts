@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ResponsiveCSSClassPipe } from '../../responsive-visibility';
 import { PdfShyButtonComponent } from '../pdf-shy-button/pdf-shy-button.component';
 import { PdfFindButtonComponent } from './pdf-find-button.component';
+import { PDFNotificationService } from '../../pdf-notification-service';
+import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 
 // Mock the PDFViewerApplication object
 const mockPDFViewerApplication = {
@@ -10,15 +12,17 @@ const mockPDFViewerApplication = {
     open: jest.fn(),
     close: jest.fn(),
   },
-};
+} as IPDFViewerApplication;
 
 describe('PdfFindButtonComponent', () => {
   let component: PdfFindButtonComponent;
   let fixture: ComponentFixture<PdfFindButtonComponent>;
+  let pdfNotificationService: PDFNotificationService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PdfFindButtonComponent, PdfShyButtonComponent, ResponsiveCSSClassPipe],
+      providers: [PDFNotificationService],
     }).compileComponents();
   });
 
@@ -28,7 +32,8 @@ describe('PdfFindButtonComponent', () => {
     component = fixture.componentInstance;
 
     // Assign the mock object to the window.PDFViewerApplication
-    component.PDFViewerApplication = mockPDFViewerApplication;
+    pdfNotificationService = TestBed.inject(PDFNotificationService);
+    pdfNotificationService.onPDFJSInitSignal.set(mockPDFViewerApplication);
 
     // Detect changes to initialize the component
     fixture.detectChanges();
