@@ -4,6 +4,7 @@
 
 * {
   font-family: 'Roboto', Calibri, sans-serif;
+  --header-height: 6rem;
 }
 
 @layer utilities {
@@ -13,6 +14,8 @@
     padding-right: var(--scrollbar-width);
   }
 }
+
+@layer utilities_align {}
 
 
 .material-symbols-outlined {

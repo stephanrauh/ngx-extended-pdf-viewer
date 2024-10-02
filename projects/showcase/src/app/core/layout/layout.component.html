@@ -4,13 +4,13 @@
 
 <div class="flex">
   <aside
-    class="hidden max-lg:z-10 fixed top-0 min-w-[30ch] overflow-auto h-full lg:block lg:sticky lg:top-header-height [&.sidebar-open]:block"
+    class="hidden max-lg:z-10 fixed max-lg:top-0 min-w-[30ch] overflow-auto max-lg:h-full lg:h-vh-wo-header lg:block lg:sticky lg:self-start lg:top-header-height [&.sidebar-open]:block"
     pvsVisibleOnOpenSidebar
   >
     <pvs-sidenav />
   </aside>
 
-  <main class="main" pvsBlockOnOpenSidebar>
+  <main class="p-2" pvsBlockOnOpenSidebar>
     <ng-content />
   </main>
 </div>
