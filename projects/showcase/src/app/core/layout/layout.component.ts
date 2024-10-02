@@ -11,6 +11,5 @@ import { BlockOnOpenSidebarDirective } from '../directives/block-on-open-sidebar
   standalone: true,
   imports: [HeaderComponent, SidenavComponent, NgClass, CloseSidebarDirective, VisibleOnOpenSidebarDirective, BlockOnOpenSidebarDirective],
   templateUrl: './layout.component.html',
-  styleUrl: './layout.component.css',
 })
 export class LayoutComponent {}

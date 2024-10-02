@@ -21,13 +21,11 @@ export class AppComponent {
   constructor() {
     effect(() => {
       const isOpen = this.sidebarService.isOpen();
-      if (isOpen) {
-        const scrollbarWidth = this.calculateBodyScrollbarWidth();
-        this.document.body.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
-        this.document.body.classList.add('blocked-scroll');
+      if (!isOpen) {
         return;
       }
-      this.document.body.classList.remove('blocked-scroll');
+      const scrollbarWidth = this.calculateBodyScrollbarWidth();
+      this.document.body.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
     });
   }
 

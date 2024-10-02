@@ -6,7 +6,7 @@
   font-family: 'Roboto', Calibri, sans-serif;
 }
 
-@media (max-width: 1024px) {
+@layer utilities {
   .blocked-scroll {
     --scrollbar-width: 0;
     overflow: hidden;
