@@ -2,9 +2,11 @@
   <pvs-header />
 </header>
 
-<div class="hidden fixed top-0 w-full h-full bg-black bg-opacity-35 max-lg:[&.sidebar-open]:block" pvsVisibleOnOpenSidebar pvsCloseSidebar></div>
 <div class="flex">
-  <aside class="hidden fixed top-0 min-w-[30ch] overflow-auto h-full lg:block lg:sticky lg:top-header-height [&.sidebar-open]:block" pvsVisibleOnOpenSidebar>
+  <aside
+    class="hidden max-lg:z-10 fixed top-0 min-w-[30ch] overflow-auto h-full lg:block lg:sticky lg:top-header-height [&.sidebar-open]:block"
+    pvsVisibleOnOpenSidebar
+  >
     <pvs-sidenav />
   </aside>
 
@@ -12,3 +14,4 @@
     <ng-content />
   </main>
 </div>
+<div class="hidden fixed top-0 w-full h-full bg-black bg-opacity-35 max-lg:[&.sidebar-open]:block" pvsVisibleOnOpenSidebar pvsCloseSidebar></div>
