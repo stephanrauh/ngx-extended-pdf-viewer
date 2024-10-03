@@ -1,10 +1,14 @@
-<nav role="navigation" class="bg-white p-4 grid grid-rows-[minmax(0,_auto)_1fr] h-full">
+<nav role="navigation" class="bg-white pt-4 grid grid-rows-[minmax(0,_auto)_1fr] h-full">
   <button [attr.aria-expanded]="sidenavIsOpen()" aria-controls="sidenav" pvsCloseSidebar class="place-self-end lg:hidden">
     <span class="material-symbols-outlined"> close </span>
   </button>
-  <ul id="sidenav">
-    <li>
-      <a>About</a>
-    </li>
-  </ul>
+  @for (entry of navigationEntries; track entry) {
+    <ol id="sidenav">
+      @if (isNavigationGroup(entry)) {
+        <pvs-navigation-group [group]="entry" />
+      } @else if (isNavigationTarget(entry)) {
+        <pvs-navigation-target [target]="entry" />
+      }
+    </ol>
+  }
 </nav>

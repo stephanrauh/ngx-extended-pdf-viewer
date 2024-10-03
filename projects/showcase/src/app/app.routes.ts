@@ -5,6 +5,18 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: ExampleComponent
-  }
+    redirectTo: 'about',
+  },
+  {
+    path: 'about',
+    component: ExampleComponent,
+  },
+  {
+    path: 'alternatives',
+    component: ExampleComponent,
+  },
+  {
+    path: 'browser-support',
+    component: ExampleComponent,
+  },
 ];
