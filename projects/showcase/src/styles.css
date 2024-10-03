@@ -5,6 +5,7 @@
 * {
   font-family: 'Roboto', Calibri, sans-serif;
   --header-height: 6rem;
+  --content-padding-top: 1rem;
 }
 
 @layer utilities {
