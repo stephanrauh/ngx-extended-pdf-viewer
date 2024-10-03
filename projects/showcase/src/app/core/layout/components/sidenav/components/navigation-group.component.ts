@@ -7,10 +7,14 @@ import { NavigationTargetComponent } from './navigation-target.component';
   standalone: true,
   imports: [NavigationTargetComponent],
   template: `
-    <li>
-      <button type="button">{{ group().displayName }}</button>
+    <li class="group">
+      <input type="checkbox" [id]="group().key" class="hidden" />
+      <div class="grid grid-cols-[1fr_minmax(0,auto)] font-semibold">
+        <label [for]="group().key" class="cursor-pointer">{{ group().displayName }}</label>
+        <span role="presentation" class="after:content-['+'] group-has-[:checked]:after:content-['-']"></span>
+      </div>
       @for (child of group().children; track child) {
-        <ol id="sidenav" class="ps-4">
+        <ol id="sidenav" class="ps-4 hidden group-has-[:checked]:block ">
           @if (isNavigationGroup(child)) {
             <pvs-navigation-group [group]="child" />
           } @else if (isNavigationTarget(child)) {

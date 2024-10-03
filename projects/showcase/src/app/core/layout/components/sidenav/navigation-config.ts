@@ -4,6 +4,7 @@ export const navigationConfig: NavigationEntry[] = [
   {
     type: 'group',
     displayName: 'About',
+    key: 'about',
     children: [
       {
         type: 'target',

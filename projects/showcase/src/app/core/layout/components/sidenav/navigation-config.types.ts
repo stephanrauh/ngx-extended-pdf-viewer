@@ -3,6 +3,7 @@ export type NavigationEntry = NavigationGroup | NavigationTarget;
 export type NavigationGroup = {
   type: 'group';
   displayName: string;
+  key: string;
   children: NavigationEntry[];
 };
 
