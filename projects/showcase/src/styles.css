@@ -13,10 +13,16 @@
     overflow: hidden;
     padding-right: var(--scrollbar-width);
   }
+
+  .frosted {
+    background-color: rgba(255,255,255,.7);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
 }
 
-@layer utilities_align {}
-
+@layer utilities_align {
+}
 
 .material-symbols-outlined {
   font-variation-settings:
