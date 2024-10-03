@@ -14,7 +14,7 @@ import { NavigationTargetComponent } from './navigation-target.component';
         <span role="presentation" class="after:content-['+'] group-has-[:checked]:after:content-['-']"></span>
       </div>
       @for (child of group().children; track child) {
-        <ol id="sidenav" class="ps-4 hidden group-has-[:checked]:block ">
+        <ol id="sidenav" class="ps-2 hidden group-has-[:checked]:block ">
           @if (isNavigationGroup(child)) {
             <pvs-navigation-group [group]="child" />
           } @else if (isNavigationTarget(child)) {

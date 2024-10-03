@@ -8,10 +8,11 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   imports: [RouterLink, RouterLinkActive],
   template: `
     <li>
-      <a [routerLink]="target().link" routerLinkActive="text-secondary-variant-light">{{ target().displayName }}</a>
+      <a class="ps-2" [routerLink]="target().link" [routerLinkActive]="['text-secondary-variant-light', 'border-s', 'border-secondary-variant-light']">{{
+        target().displayName
+      }}</a>
     </li>
   `,
-  styles: ``,
 })
 export class NavigationTargetComponent {
   target = input.required<NavigationTarget>();
