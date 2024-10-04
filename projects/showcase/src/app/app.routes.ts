@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { ExampleComponent } from './features/example/example.component';
+import { ContentPageComponent } from './core/content-page/content-page.component';
 
 export const routes: Routes = [
   {
@@ -9,21 +9,26 @@ export const routes: Routes = [
   },
   {
     path: 'about',
-    component: ExampleComponent,
-    data: { pageTitle: 'About' },
+    component: ContentPageComponent,
+    data: {
+      pageTitle: 'About',
+      contentSrc: '/assets/pages/about/intro.md',
+    },
   },
   {
     path: 'alternatives',
-    component: ExampleComponent,
+    component: ContentPageComponent,
     data: {
       pageTitle: 'Alternatives',
+      contentSrc: '',
     },
   },
   {
     path: 'browser-support',
-    component: ExampleComponent,
+    component: ContentPageComponent,
     data: {
       pageTitle: 'Browser Support',
+      contentSrc: '',
     },
   },
 ];

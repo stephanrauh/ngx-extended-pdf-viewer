@@ -73,8 +73,8 @@
               },
               {
                 "glob": "**/*.md",
-                "input": "src/app/",
-                "output": "/assets"
+                "input": "projects/showcase/src/app/pages/",
+                "output": "/assets/pages/"
               },
               {
                 "glob": "changelog.md",
