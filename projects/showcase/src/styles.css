@@ -8,6 +8,38 @@
   --content-padding-top: 1rem;
 }
 
+@layer base {
+  h1 {
+    @apply text-3xl;
+    @apply mt-4;
+    @apply mb-4;
+  }
+
+  h2 {
+    @apply text-2xl;
+    @apply mt-2;
+    @apply mb-2;
+  }
+
+  h3 {
+    @apply font-medium;
+    @apply text-lg;
+    @apply mt-2;
+    @apply mb-2;
+  }
+
+  markdown > p {
+    &:not(:last-child):not(:has(+ h2)) {
+      @apply mb-4;
+    }
+
+    &:has(+ h2) {
+      @apply mb-12;
+    }
+  }
+
+}
+
 @layer utilities {
   .blocked-scroll {
     --scrollbar-width: 0;
