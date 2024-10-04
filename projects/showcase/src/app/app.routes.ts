@@ -10,13 +10,20 @@ export const routes: Routes = [
   {
     path: 'about',
     component: ExampleComponent,
+    data: { pageTitle: 'About' },
   },
   {
     path: 'alternatives',
     component: ExampleComponent,
+    data: {
+      pageTitle: 'Alternatives',
+    },
   },
   {
     path: 'browser-support',
     component: ExampleComponent,
+    data: {
+      pageTitle: 'Browser Support',
+    },
   },
 ];
