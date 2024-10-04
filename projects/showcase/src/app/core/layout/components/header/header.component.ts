@@ -1,13 +1,12 @@
 import { Component, inject } from '@angular/core';
 
-import { SidenavComponent } from '../sidenav/sidenav.component';
 import { SidebarService } from '../../../../shared/services/sidebar.service';
 import { versions } from '../../../../shared/constants/versions';
 
 @Component({
   selector: 'pvs-header',
   standalone: true,
-  imports: [SidenavComponent],
+  imports: [],
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {
