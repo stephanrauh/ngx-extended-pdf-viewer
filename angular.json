@@ -75,17 +75,24 @@
                 "glob": "**/*.md",
                 "input": "projects/showcase/src/app/pages/",
                 "output": "/assets/pages/"
-              },
-              {
-                "glob": "changelog.md",
-                "input": "dist/ngx-extended-pdf-viewer/",
-                "output": "/assets/extended-pdf-viewer/changelog/"
               }
             ],
             "styles": [
-              "projects/showcase/src/styles.css"
+              "projects/showcase/src/styles.css",
+              "node_modules/prismjs/themes/prism-okaidia.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/marked/marked.min.js",
+              "node_modules/prismjs/prism.js",
+              "node_modules/prismjs/components/prism-batch.min.js",
+              "node_modules/prismjs/components/prism-css.min.js",
+              "node_modules/prismjs/components/prism-yaml.min.js",
+              "node_modules/prismjs/components/prism-nginx.min.js",
+              "node_modules/prismjs/components/prism-xml-doc.min.js",
+              "node_modules/prismjs/components/prism-json.min.js",
+              "node_modules/prismjs/components/prism-typescript.min.js",
+              "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.js"
+            ],
             "server": "projects/showcase/src/main.server.ts",
             "prerender": true,
             "ssr": {

@@ -1,4 +1,6 @@
-<h1 class="text-3xl">{{ pageTitle() }} Content</h1>
+<h1 class="text-3xl">{{ pageTitle() }}</h1>
 <div>
-  <pre>{{ content | async }}</pre>
+  @if (contentSrc(); as contentSrc) {
+    <pvs-markdown [src]="contentSrc" />
+  }
 </div>

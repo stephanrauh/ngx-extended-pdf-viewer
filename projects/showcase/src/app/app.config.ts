@@ -4,7 +4,8 @@ import { provideRouter, TitleStrategy, withComponentInputBinding } from '@angula
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { ContentPageTitleStrategyService } from './core/content-page/services/content-page-title-strategy.service';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideMarkdown } from 'ngx-markdown';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,6 +15,7 @@ export const appConfig: ApplicationConfig = {
       provide: TitleStrategy,
       useClass: ContentPageTitleStrategyService,
     },
-    provideHttpClient(),
+    provideHttpClient(withFetch()),
+    provideMarkdown(),
   ],
 };

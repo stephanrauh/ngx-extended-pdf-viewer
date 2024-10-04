@@ -1,4 +1,4 @@
-# What is &lt;ngx-extended-pdf-viewer&gt;?
+## What is &lt;ngx-extended-pdf-viewer&gt;?
 
 We all know the Adobe's PDF viewer. Almost certainly you've also seen PDF documents in a browser. Every modern browser supports PDF files natively.
 
