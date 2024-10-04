@@ -5,6 +5,7 @@ import { Title } from '@angular/platform-browser';
 @Injectable({ providedIn: 'root' })
 export class ContentPageTitleStrategyService extends TitleStrategy {
   private defaultTitle = 'Angular PDF Viewer Showcase';
+  private documentTitleSuffix = ' - Angular Extended PDF Viewer';
 
   constructor(private readonly title: Title) {
     super();
@@ -17,6 +18,6 @@ export class ContentPageTitleStrategyService extends TitleStrategy {
   }
 
   private setTitle(title?: string | null) {
-    this.title.setTitle(title ?? this.defaultTitle);
+    this.title.setTitle(`${title ?? this.defaultTitle} ${this.documentTitleSuffix}`);
   }
 }
