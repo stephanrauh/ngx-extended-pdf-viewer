@@ -3,14 +3,14 @@ export type NavigationEntry = NavigationGroup | NavigationTarget;
 export type NavigationGroup = {
   type: 'group';
   displayName: string;
-  key: string;
+  key?: string;
   children: NavigationEntry[];
 };
 
 export type NavigationTarget = {
   type: 'target';
   displayName: string;
-  link?: string;
+  link?: string[];
 };
 
 export function isNavigationGroup(entry: NavigationEntry): entry is NavigationGroup {
