@@ -1,11 +1,11 @@
-<div class="grid grid-cols-2 gap-8 h-full">
+<div class="grid grid-cols-2 gap-8 h-full pb-8">
   <div class="p2">
     <h1>{{ pageTitle() }}</h1>
     <div>
       <ng-content />
     </div>
   </div>
-  <div class="sticky top-content-begin self-start pt-4 pb-8">
+  <div class="sticky top-content-begin self-start pt-4">
     <ng-content select='[slot="viewer"]' />
   </div>
 </div>
