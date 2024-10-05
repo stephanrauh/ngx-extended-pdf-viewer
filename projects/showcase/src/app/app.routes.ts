@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { ContentPageComponent } from './core/content-page/content-page.component';
+import { Content } from './shared/types/content.types';
 
 export const routes: Routes = [
   {
@@ -12,7 +13,12 @@ export const routes: Routes = [
     component: ContentPageComponent,
     data: {
       pageTitle: 'About',
-      contentSrc: '/assets/pages/about/intro.md',
+      content: <Content[]>[
+        {
+          type: 'markdown',
+          src: '/assets/pages/about/intro/text.md',
+        },
+      ],
     },
   },
   {
@@ -20,7 +26,12 @@ export const routes: Routes = [
     component: ContentPageComponent,
     data: {
       pageTitle: 'Alternatives',
-      contentSrc: '',
+      content: <Content[]>[
+        {
+          type: 'markdown',
+          src: '/assets/pages/about/alternatives/text.md',
+        },
+      ],
     },
   },
   {
@@ -28,7 +39,12 @@ export const routes: Routes = [
     component: ContentPageComponent,
     data: {
       pageTitle: 'Browser Support',
-      contentSrc: '',
+      content: <Content[]>[
+        {
+          type: 'markdown',
+          src: '/assets/pages/about/browser-support/text.md',
+        },
+      ],
     },
   },
 ];

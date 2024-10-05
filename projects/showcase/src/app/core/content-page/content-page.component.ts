@@ -2,6 +2,7 @@ import { Component, input } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { MarkdownContentComponent } from '../../shared/components/markdown-content.component';
+import { Content } from '../../shared/types/content.types';
 
 @Component({
   selector: 'pvs-content-page',
@@ -12,5 +13,5 @@ import { MarkdownContentComponent } from '../../shared/components/markdown-conte
 })
 export class ContentPageComponent {
   public pageTitle = input.required<string>();
-  public contentSrc = input<string | null>(null);
+  public content = input<Content[]>([]);
 }

@@ -1,6 +1,10 @@
 <h1>{{ pageTitle() }}</h1>
 <div>
-  @if (contentSrc(); as contentSrc) {
-    <pvs-markdown [src]="contentSrc" />
+  @for (content of content(); track content) {
+    @switch (content.type) {
+      @case ('markdown') {
+        <pvs-markdown [src]="content.src" />
+      }
+    }
   }
 </div>
