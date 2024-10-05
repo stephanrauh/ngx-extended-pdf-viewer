@@ -15,7 +15,12 @@ export const basicsRoutes: Route[] = [
         component: ContentPageComponent,
         data: <RouteData>{
           pageTitle: 'Simple Demo',
-          content: [],
+          content: [
+            {
+              type: 'markdown',
+              src: '/assets/pages/basics/simple/text.md',
+            },
+          ],
         },
       },
     ],
