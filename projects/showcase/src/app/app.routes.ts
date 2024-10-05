@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { aboutRoutes } from './pages/about/about.routes';
+import { basicsRoutes } from './pages/basics/basics.routes';
 
 export const routes: Routes = [
   {
@@ -8,4 +9,5 @@ export const routes: Routes = [
     redirectTo: 'about',
   },
   ...aboutRoutes,
+  ...basicsRoutes,
 ];

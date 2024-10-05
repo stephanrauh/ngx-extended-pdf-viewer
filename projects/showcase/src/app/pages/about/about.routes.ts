@@ -1,14 +1,14 @@
 import { Route } from '@angular/router';
 import { ContentPageComponent } from '../../core/content-page/content-page.component';
-import { Content } from '../../shared/types/content.types';
+import { RouteData } from '../../shared/types/route-data.types';
 
 export const aboutRoutes: Route[] = [
   {
     path: 'about',
     component: ContentPageComponent,
-    data: {
+    data: <RouteData>{
       pageTitle: 'About',
-      content: <Content[]>[
+      content: [
         {
           type: 'markdown',
           src: '/assets/pages/about/intro/text.md',
@@ -21,7 +21,7 @@ export const aboutRoutes: Route[] = [
     component: ContentPageComponent,
     data: {
       pageTitle: 'Alternatives',
-      content: <Content[]>[
+      content: [
         {
           type: 'markdown',
           src: '/assets/pages/about/alternatives/text.md',
@@ -34,7 +34,7 @@ export const aboutRoutes: Route[] = [
     component: ContentPageComponent,
     data: {
       pageTitle: 'Browser Support',
-      content: <Content[]>[
+      content: [
         {
           type: 'markdown',
           src: '/assets/pages/about/browser-support/text.md',

@@ -23,4 +23,16 @@ export const navigationConfig: NavigationEntry[] = [
       },
     ],
   },
+  {
+    type: 'group',
+    displayName: 'Basics',
+    key: 'basics',
+    children: [
+      {
+        type: 'target',
+        displayName: 'Simple Demo',
+        link: 'basics/simple',
+      },
+    ],
+  },
 ];
