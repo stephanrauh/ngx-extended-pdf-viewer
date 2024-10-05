@@ -3,11 +3,12 @@ import { RouterOutlet } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { MarkdownContentComponent } from '../../shared/components/markdown-content.component';
 import { Content } from '../../shared/types/content.types';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 @Component({
   selector: 'pvs-content-page',
   standalone: true,
-  imports: [RouterOutlet, AsyncPipe, MarkdownContentComponent, MarkdownContentComponent],
+  imports: [RouterOutlet, AsyncPipe, MarkdownContentComponent, MarkdownContentComponent, NgxExtendedPdfViewerModule],
   templateUrl: './content-page.component.html',
   preserveWhitespaces: true,
 })
