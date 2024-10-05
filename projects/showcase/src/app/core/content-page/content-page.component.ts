@@ -19,7 +19,6 @@ export class ContentPageComponent {
 
   public pageTitle = computed(() => {
     const data = this.data();
-    console.log(data);
     if (!data) {
       return '';
     }
