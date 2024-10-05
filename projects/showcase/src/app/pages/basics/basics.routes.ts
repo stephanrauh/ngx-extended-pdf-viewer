@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
 import { RouteData, RouteGroupData } from '../../shared/types/route-data.types';
-import { ContentPageComponent } from '../../core/content-page/content-page.component';
+import { BasicPageComponent } from './simple/basic.page.component';
 
 export const basicsRoutes: Route[] = [
   {
@@ -12,15 +12,9 @@ export const basicsRoutes: Route[] = [
     children: [
       {
         path: 'simple',
-        component: ContentPageComponent,
+        component: BasicPageComponent,
         data: <RouteData>{
           pageTitle: 'Simple Demo',
-          content: [
-            {
-              type: 'markdown',
-              src: '/assets/pages/basics/simple/text.md',
-            },
-          ],
         },
       },
     ],

@@ -1,6 +1,8 @@
 import { Route } from '@angular/router';
-import { ContentPageComponent } from '../../core/content-page/content-page.component';
 import { RouteData, RouteGroupData } from '../../shared/types/route-data.types';
+import { IntroductionPageComponent } from './intro/introduction-page.component';
+import { AlternativesPageComponent } from './alternatives/alternatives.page.component';
+import { BrowserSupportPageComponent } from './browser-support/browser-support-page.component';
 
 export const aboutRoutes: Route[] = [
   {
@@ -12,41 +14,23 @@ export const aboutRoutes: Route[] = [
     children: [
       {
         path: 'about',
-        component: ContentPageComponent,
+        component: IntroductionPageComponent,
         data: <RouteData>{
-          pageTitle: 'About',
-          content: [
-            {
-              type: 'markdown',
-              src: '/assets/pages/about/intro/text.md',
-            },
-          ],
+          pageTitle: 'Introduction',
         },
       },
       {
         path: 'alternatives',
-        component: ContentPageComponent,
+        component: AlternativesPageComponent,
         data: {
           pageTitle: 'Alternatives',
-          content: [
-            {
-              type: 'markdown',
-              src: '/assets/pages/about/alternatives/text.md',
-            },
-          ],
         },
       },
       {
         path: 'browser-support',
-        component: ContentPageComponent,
+        component: BrowserSupportPageComponent,
         data: {
           pageTitle: 'Browser Support',
-          content: [
-            {
-              type: 'markdown',
-              src: '/assets/pages/about/browser-support/text.md',
-            },
-          ],
         },
       },
     ],

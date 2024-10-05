@@ -2,27 +2,10 @@
   <div class="p2">
     <h1>{{ pageTitle() }}</h1>
     <div>
-      <div>
-        @for (content of content(); track content) {
-          @switch (content.type) {
-            @case ('markdown') {
-              <pvs-markdown [src]="content.src" />
-            }
-          }
-        }
-      </div>
+      <ng-content />
     </div>
   </div>
   <div class="sticky top-content-begin self-start pt-4 pb-8">
-    <ngx-extended-pdf-viewer
-      [src]="'./assets/pdfs/The Public Domain - Enclosing the Commons of the Mind.pdf'"
-      [zoom]="'auto'"
-      [height]="'100%'"
-      [minifiedJSLibraries]="false"
-      [textLayer]="true"
-      [showPresentationModeButton]="true"
-      [page]="1"
-      [filenameForDownload]="'The Public Domain - Enclosing the Commons of the Mind.pdf'"
-    />
+    <ng-content select='[slot="viewer"]' />
   </div>
 </div>

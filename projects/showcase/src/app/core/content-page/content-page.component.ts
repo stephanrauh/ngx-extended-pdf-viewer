@@ -1,9 +1,9 @@
-import { Component, input } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, computed, inject } from '@angular/core';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { MarkdownContentComponent } from '../../shared/components/markdown-content.component';
-import { Content } from '../../shared/types/content.types';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'pvs-content-page',
@@ -13,6 +13,16 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
   preserveWhitespaces: true,
 })
 export class ContentPageComponent {
-  public pageTitle = input.required<string>();
-  public content = input<Content[]>([]);
+  private activatedRoute = inject(ActivatedRoute);
+
+  private data = toSignal(this.activatedRoute.data);
+
+  public pageTitle = computed(() => {
+    const data = this.data();
+    console.log(data);
+    if (!data) {
+      return '';
+    }
+    return data['pageTitle'];
+  });
 }
