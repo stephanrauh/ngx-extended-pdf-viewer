@@ -599,4 +599,4 @@
 - 21.4.2 #2571 if the PDF viewer is destroyed while it's still initializing, it inevitably runs into errors; I've added an additional check, so there's one error message less; updated the bleeding edge branch (it might still be broken due to many changes of pdf.js)
 - 21.4.3 caveat: this version accidentally broke the stable branch! Please update to version 21.4.4 instead. Intended changes: dependency updates; updated the bleeding edge branch
 - 21.4.4 repaired the stable branch
-- 22.0.0-alpha.0 updated the bleeding edge branch to pdf.js 4.7.76; this is a breaking change because `NgxExtendedPdfViewerService.addEditorAnnotation` is now asynchronous
+- 21.4.5 updated the bleeding edge branch to pdf.js 4.7.76; this is a breaking change because `NgxExtendedPdfViewerService.addEditorAnnotation` is now asynchronous
