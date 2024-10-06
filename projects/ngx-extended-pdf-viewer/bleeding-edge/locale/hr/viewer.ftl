@@ -414,6 +414,8 @@ pdfjs-editor-highlight-show-all-button =
 ## New alt-text dialog
 ## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
 
+pdfjs-editor-new-alt-text-textarea =
+    .placeholder = Ovdje upiši tvoj opis …
 # This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
 pdfjs-editor-new-alt-text-disclaimer1 = Ovaj je alternativni tekst stvoren automatski i može biti netočan.
 pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Saznaj više
@@ -447,8 +449,6 @@ pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "sh
 pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
 pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
-pdfjs-editor-new-alt-text-textarea =
-    .placeholder = Write your description here…
 pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-new-alt-text-not-now-button = Not now
 pdfjs-editor-new-alt-text-error-description = Please write your own alt text or try again later.

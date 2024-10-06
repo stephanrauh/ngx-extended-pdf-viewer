@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
   "version": 1,
-  "serialNumber": "urn:uuid:faff4e99-74c8-4f2e-bf2c-5624b80beb14",
+  "serialNumber": "urn:uuid:b7f91c93-d866-4ce6-b467-cd9d49d220b1",
   "metadata": {
-    "timestamp": "2024-10-01T20:11:01.831Z",
+    "timestamp": "2024-10-06T20:16:38.046Z",
     "tools": [
       {
         "name": "npm",
@@ -64933,7 +64933,7 @@
       "type": "library",
       "name": "string-width",
       "version": "4.2.3",
-      "bom-ref": "BomRef.4opf5qiparg.v09u8qj8ugg",
+      "bom-ref": "BomRef.j9v4npho1lo.aau8jk74mho",
       "author": "Sindre Sorhus",
       "description": "Get the visual width of a string - the number of columns required to display it",
       "licenses": [
@@ -65041,7 +65041,7 @@
       "type": "library",
       "name": "strip-ansi",
       "version": "6.0.1",
-      "bom-ref": "BomRef.5q7jvoashi8.n7ulhnm3q0g",
+      "bom-ref": "BomRef.a6krmcmm7bg.67hdopffroo",
       "author": "Sindre Sorhus",
       "description": "Strip ANSI escape codes from a string",
       "licenses": [
@@ -76209,9 +76209,9 @@
     {
       "ref": "@isaacs/cliui@8.0.2",
       "dependsOn": [
-        "BomRef.4opf5qiparg.v09u8qj8ugg",
+        "BomRef.j9v4npho1lo.aau8jk74mho",
         "@isaacs/cliui@8.0.2|string-width@5.1.2",
-        "BomRef.5q7jvoashi8.n7ulhnm3q0g",
+        "BomRef.a6krmcmm7bg.67hdopffroo",
         "@isaacs/cliui@8.0.2|strip-ansi@7.1.0",
         "wrap-ansi@7.0.0",
         "@isaacs/cliui@8.0.2|wrap-ansi@8.1.0"
@@ -76249,7 +76249,7 @@
       "ref": "@isaacs/cliui@8.0.2|ansi-styles@6.2.1"
     },
     {
-      "ref": "BomRef.4opf5qiparg.v09u8qj8ugg",
+      "ref": "BomRef.j9v4npho1lo.aau8jk74mho",
       "dependsOn": [
         "emoji-regex@8.0.0",
         "is-fullwidth-code-point@3.0.0",
@@ -76260,7 +76260,7 @@
       "ref": "eastasianwidth@0.2.0"
     },
     {
-      "ref": "BomRef.5q7jvoashi8.n7ulhnm3q0g",
+      "ref": "BomRef.a6krmcmm7bg.67hdopffroo",
       "dependsOn": [
         "ansi-regex@5.0.1"
       ]

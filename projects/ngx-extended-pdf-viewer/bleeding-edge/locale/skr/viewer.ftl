@@ -471,6 +471,7 @@ pdfjs-editor-alt-text-settings-create-model-description = اُنہاں لوکا�
 # Variables:
 #   $totalSize (Number) - the total size (in MB) of the AI model.
 pdfjs-editor-alt-text-settings-download-model-label = آلٹ عبارت اے آئی ماڈل ({ $totalSize } ایم بی)
+pdfjs-editor-alt-text-settings-ai-model-description = تہاݙی ڈیوائس تے مقامی طور تے چلدا ہے تاں جو تہاݙا ڈیٹا نجی رہوے۔ خودکار آلٹ عبارت کیتے ضروری ہے۔
 pdfjs-editor-alt-text-settings-delete-model-button = مٹاؤ
 pdfjs-editor-alt-text-settings-download-model-button = ڈاؤن لوڈ
 pdfjs-editor-alt-text-settings-downloading-model-button = ڈاؤن لوڈ تھیندا پئے …
@@ -479,7 +480,6 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = تصویر شامل ک
 pdfjs-editor-alt-text-settings-show-dialog-description = ایہ تہاکوں یقینی بݨاوݨ وچ مدد کریندے جو تہاݙیاں ساریاں تصویراں وچ آلٹ عبارت ہے۔
 pdfjs-editor-alt-text-settings-close-button = بند کرو
 
-pdfjs-editor-alt-text-settings-ai-model-description = Runs locally on your device so your data stays private. Required for automatic alt text.
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

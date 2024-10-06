@@ -244,12 +244,12 @@ pdfjs-find-entire-word-checkbox-label = Whole Words
 pdfjs-find-reached-top = Reached top of document, continued from bottom
 pdfjs-find-reached-bottom = Reached end of document, continued from top
 pdfjs-find-match-count =
-    { NUMBER($total) ->
+    { $total ->
         [one] { $current } of { $total } match
        *[other] { $current } of { $total } matches
     }
 pdfjs-find-match-count-limit =
-    { NUMBER($limit) ->
+    { $limit ->
         [one] More than { $limit } match
        *[other] More than { $limit } matches
     }

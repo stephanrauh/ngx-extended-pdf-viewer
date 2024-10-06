@@ -592,8 +592,8 @@ export class NgxExtendedPdfViewerService {
     return this.PDFViewerApplication?.pdfViewer.getSerializedAnnotations();
   }
 
-  public addEditorAnnotation(serializedAnnotation: string | EditorAnnotation): void {
-    this.PDFViewerApplication?.pdfViewer.addEditorAnnotation(serializedAnnotation);
+  public async addEditorAnnotation(serializedAnnotation: string | EditorAnnotation): Promise<void> {
+    await this.PDFViewerApplication?.pdfViewer.addEditorAnnotation(serializedAnnotation);
   }
 
   public removeEditorAnnotations(filter?: (serialized: object) => boolean): void {
