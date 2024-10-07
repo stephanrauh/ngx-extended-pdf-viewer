@@ -7,10 +7,7 @@
 
     @if (demoTemplate()) {
       <pvs-tab-panel header="Demo" key="demo">
-        <div class="sticky top-content-begin self-start pt-4">
-          <ng-content select='[slot="viewer"]' />
-          <ng-container *ngTemplateOutlet="demoTemplate()" />
-        </div>
+        <ng-container *ngTemplateOutlet="demoTemplate()" />
       </pvs-tab-panel>
     }
   </pvs-tabs>
