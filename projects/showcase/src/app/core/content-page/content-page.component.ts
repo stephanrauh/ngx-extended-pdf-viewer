@@ -1,14 +1,27 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, input, TemplateRef } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { MarkdownContentComponent } from '../../shared/components/markdown-content.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { TabsComponent } from '../../shared/components/tabs/tabs.component';
+import { TabPanelComponent } from '../../shared/components/tabs/tab-panel.component';
 
 @Component({
   selector: 'pvs-content-page',
   standalone: true,
-  imports: [RouterOutlet, AsyncPipe, MarkdownContentComponent, MarkdownContentComponent, NgxExtendedPdfViewerModule],
+  imports: [
+    RouterOutlet,
+    AsyncPipe,
+    MarkdownContentComponent,
+    MarkdownContentComponent,
+    NgxExtendedPdfViewerModule,
+    TabsComponent,
+    TabPanelComponent,
+    TabsComponent,
+    TabPanelComponent,
+    NgTemplateOutlet,
+  ],
   templateUrl: './content-page.component.html',
   preserveWhitespaces: true,
 })
@@ -16,6 +29,8 @@ export class ContentPageComponent {
   private activatedRoute = inject(ActivatedRoute);
 
   private data = toSignal(this.activatedRoute.data);
+
+  public demoTemplate = input<TemplateRef<any> | null>(null);
 
   public pageTitle = computed(() => {
     const data = this.data();

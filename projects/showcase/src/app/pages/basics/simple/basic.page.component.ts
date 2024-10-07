@@ -8,9 +8,11 @@ import { MarkdownContentComponent } from '../../../shared/components/markdown-co
   standalone: true,
   imports: [ContentPageComponent, NgxExtendedPdfViewerModule, MarkdownContentComponent],
   template: `
-    <pvs-content-page>
+    <pvs-content-page [demoTemplate]="demo">
       <pvs-markdown src="/assets/pages/basics/simple/text.md" />
+    </pvs-content-page>
 
+    <ng-template #demo>
       <ngx-extended-pdf-viewer
         slot="viewer"
         [src]="'./assets/pdfs/The Public Domain - Enclosing the Commons of the Mind.pdf'"
@@ -22,7 +24,7 @@ import { MarkdownContentComponent } from '../../../shared/components/markdown-co
         [page]="1"
         [filenameForDownload]="'The Public Domain - Enclosing the Commons of the Mind.pdf'"
       />
-    </pvs-content-page>
+    </ng-template>
   `,
 })
 export class BasicPageComponent {}

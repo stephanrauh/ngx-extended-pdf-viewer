@@ -1,11 +1,17 @@
-<div class="grid grid-cols-2 gap-8 h-full pb-8">
-  <div class="p2">
-    <h1>{{ pageTitle() }}</h1>
-    <div>
+<div class="pb-4">
+  <h1>{{ pageTitle() }}</h1>
+  <pvs-tabs>
+    <pvs-tab-panel header="Documentation" key="docs">
       <ng-content />
-    </div>
-  </div>
-  <div class="sticky top-content-begin self-start pt-4">
-    <ng-content select='[slot="viewer"]' />
-  </div>
+    </pvs-tab-panel>
+
+    @if (demoTemplate()) {
+      <pvs-tab-panel header="Demo" key="demo">
+        <div class="sticky top-content-begin self-start pt-4">
+          <ng-content select='[slot="viewer"]' />
+          <ng-container *ngTemplateOutlet="demoTemplate()" />
+        </div>
+      </pvs-tab-panel>
+    }
+  </pvs-tabs>
 </div>
