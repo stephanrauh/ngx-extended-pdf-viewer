@@ -31,10 +31,10 @@ module.exports = {
         },
         on: {
           primary: {
-            light: 'hsl(0,0%,12%)',
+            light: 'hsl(0,0%,99%)',
           },
           secondary: {
-            light: 'hsl(0,0%,99%)',
+            light: 'hsl(0,0%,12%)',
           },
           background: 'hsl(0,0%,99%)',
           surface: 'hsl(0,0%,99%)',
