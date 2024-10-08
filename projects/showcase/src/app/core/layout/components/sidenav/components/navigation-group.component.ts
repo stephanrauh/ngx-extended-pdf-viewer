@@ -7,7 +7,7 @@ import { NavigationTargetComponent } from './navigation-target.component';
   standalone: true,
   imports: [NavigationTargetComponent],
   template: `
-    <input type="checkbox" [id]="group().key ?? group()" class="hidden" />
+    <input type="checkbox" [id]="group().key ?? group()" checked class="hidden" />
     <div class="grid grid-cols-[1fr_minmax(0,auto)] font-semibold">
       <label [for]="group().key" class="cursor-pointer">{{ group().displayName }}</label>
       <span role="presentation" class="after:content-['+'] group-has-[:checked]:after:content-['-']"></span>
