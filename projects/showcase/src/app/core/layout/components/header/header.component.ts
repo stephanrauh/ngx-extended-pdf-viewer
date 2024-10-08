@@ -12,11 +12,11 @@ import { versions } from '../../../../shared/constants/versions';
 export class HeaderComponent {
   private sidebarService = inject(SidebarService);
 
-  public extendedPdfViewerVersion = versions.extendedPdfViewer;
-  public angularVersion = versions.angular;
-  public sidenavIsOpen = this.sidebarService.isOpen;
+  extendedPdfViewerVersion = versions.extendedPdfViewer;
+  angularVersion = versions.angular;
+  sidenavIsOpen = this.sidebarService.isOpen;
 
-  public toggleSidebar() {
+  toggleSidebar() {
     this.sidebarService.toggle();
   }
 }

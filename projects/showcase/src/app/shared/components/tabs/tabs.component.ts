@@ -30,8 +30,8 @@ import { FocusKeyManager } from '@angular/cdk/a11y';
 export class TabsComponent implements AfterViewInit {
   @ViewChildren(TabComponent) tabs: QueryList<TabComponent>;
 
-  public keyManager: FocusKeyManager<TabComponent>;
-  public tabPanels = contentChildren<TabPanelComponent>(TabPanelComponent);
+  keyManager: FocusKeyManager<TabComponent>;
+  tabPanels = contentChildren<TabPanelComponent>(TabPanelComponent);
 
   onKeydown(event: KeyboardEvent) {
     const { key } = event;

@@ -6,7 +6,7 @@ import { EnvironmentKey, EnvironmentValueType } from '../../../environments/envi
   providedIn: 'root',
 })
 export class EnvironmentService {
-  public get<K extends EnvironmentKey>(key: K): EnvironmentValueType<K> {
+  get<K extends EnvironmentKey>(key: K): EnvironmentValueType<K> {
     return environment[key];
   }
 }

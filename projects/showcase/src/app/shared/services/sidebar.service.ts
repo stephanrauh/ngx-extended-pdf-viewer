@@ -5,13 +5,13 @@ import { Injectable, signal } from '@angular/core';
 })
 export class SidebarService {
   private _isOpen = signal(false);
-  public isOpen = this._isOpen.asReadonly();
+  isOpen = this._isOpen.asReadonly();
 
-  public toggle() {
+  toggle() {
     this._isOpen.update((isOpen) => !isOpen);
   }
 
-  public close() {
+  close() {
     this._isOpen.set(false);
   }
 }

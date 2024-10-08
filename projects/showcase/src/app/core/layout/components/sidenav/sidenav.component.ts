@@ -18,8 +18,8 @@ import { CdkTrapFocus } from '@angular/cdk/a11y';
 export class SidenavComponent {
   private sidebarService = inject(SidebarService);
 
-  public sidenavIsOpen = this.sidebarService.isOpen;
-  public navigationEntries = navigationConfig;
+  sidenavIsOpen = this.sidebarService.isOpen;
+  navigationEntries = navigationConfig;
   protected readonly isNavigationGroup = isNavigationGroup;
   protected readonly isNavigationTarget = isNavigationTarget;
 }

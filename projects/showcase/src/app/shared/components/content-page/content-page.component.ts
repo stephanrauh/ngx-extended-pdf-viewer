@@ -30,9 +30,9 @@ export class ContentPageComponent {
 
   private data = toSignal(this.activatedRoute.data);
 
-  public demoTemplate = input<TemplateRef<any> | null>(null);
+  demoTemplate = input<TemplateRef<any> | null>(null);
 
-  public pageTitle = computed(() => {
+  pageTitle = computed(() => {
     const data = this.data();
     if (!data) {
       return '';

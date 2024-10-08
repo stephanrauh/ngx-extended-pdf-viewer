@@ -17,7 +17,7 @@ import { NgClass } from '@angular/common';
 export class TabPanelComponent {
   private tabService = inject(TabService);
 
-  public header = input.required<string>();
-  public key = input.required<string>();
-  public isActive = computed(() => this.tabService.activeTabKey() === this.key());
+  header = input.required<string>();
+  key = input.required<string>();
+  isActive = computed(() => this.tabService.activeTabKey() === this.key());
 }

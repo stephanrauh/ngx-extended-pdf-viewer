@@ -27,10 +27,10 @@ export class TabComponent implements FocusableOption {
   private tabService = inject(TabService);
   private element = viewChild<ElementRef>('tab');
 
-  public tab = input.required<TabPanelComponent>();
-  public tabKey = computed(() => this.tab().key());
-  public isActive = computed(() => this.tab().isActive());
-  public header = computed(() => this.tab().header());
+  tab = input.required<TabPanelComponent>();
+  tabKey = computed(() => this.tab().key());
+  isActive = computed(() => this.tab().isActive());
+  header = computed(() => this.tab().header());
 
   focus(): void {
     this.tabService.onChangeTab(this.tab().key());
