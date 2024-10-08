@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, PRIMARY_OUTLET, RouterStateSnapshot, TitleStrat
 import { Title } from '@angular/platform-browser';
 
 @Injectable({ providedIn: 'root' })
-export class ContentPageTitleStrategyService extends TitleStrategy {
+export class ShowcaseTitleStrategyService extends TitleStrategy {
   private defaultTitle = 'Angular PDF Viewer Showcase';
   private documentTitleSuffix = ' - Angular Extended PDF Viewer';
 

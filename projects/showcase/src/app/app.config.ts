@@ -3,7 +3,7 @@ import { provideRouter, TitleStrategy, withComponentInputBinding } from '@angula
 
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
-import { ContentPageTitleStrategyService } from './shared/components/content-page/services/content-page-title-strategy.service';
+import { ShowcaseTitleStrategyService } from './core/services/showcase-title-strategy.service';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideMarkdown } from 'ngx-markdown';
 
@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     {
       provide: TitleStrategy,
-      useClass: ContentPageTitleStrategyService,
+      useClass: ShowcaseTitleStrategyService,
     },
     provideHttpClient(withFetch()),
     provideMarkdown(),
