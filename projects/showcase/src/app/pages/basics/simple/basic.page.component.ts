@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ContentPageComponent } from '../../../core/content-page/content-page.component';
+import { ContentPageComponent } from '../../../shared/components/content-page/content-page.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
 import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';

@@ -1,11 +1,11 @@
 import { Component, computed, inject, input, TemplateRef } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
-import { MarkdownContentComponent } from '../../shared/components/markdown-content.component';
+import { MarkdownContentComponent } from '../markdown-content.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { TabsComponent } from '../../shared/components/tabs/tabs.component';
-import { TabPanelComponent } from '../../shared/components/tabs/tab-panel.component';
+import { TabsComponent } from '../tabs/tabs.component';
+import { TabPanelComponent } from '../tabs/tab-panel.component';
 
 @Component({
   selector: 'pvs-content-page',
