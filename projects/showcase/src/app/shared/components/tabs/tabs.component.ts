@@ -1,29 +1,20 @@
-import { AfterViewInit, Component, contentChildren, inject } from '@angular/core';
+import { AfterViewInit, Component, contentChildren, QueryList, ViewChildren } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { TabPanelComponent } from './tab-panel.component';
 import { TabButtonIdPipe } from './pipes/tab-button-id.pipe';
 import { TabIndexPipe } from './pipes/tab-index.pipe';
 import { TabService } from './services/tab.service';
+import { TabComponent } from './tab.component';
+import { FocusKeyManager } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'pvs-tabs',
   standalone: true,
-  imports: [NgClass, TabButtonIdPipe, TabButtonIdPipe, TabIndexPipe],
+  imports: [NgClass, TabButtonIdPipe, TabButtonIdPipe, TabIndexPipe, TabComponent],
   template: `
-    <div role="tablist" class="min-w-full inline-flex gap-6 flex-wrap border-b mb-4">
-      @for (tab of tabs(); track tab; let i = $index) {
-        <button
-          [id]="tab.key() | tabButtonId"
-          type="button"
-          role="tab"
-          [attr.aria-controls]="tab.key()"
-          [attr.tabindex]="tab.isActive() | tabIndex"
-          [attr.aria-selected]="tab.isActive()"
-          (click)="onChangeTab(tab)"
-          class="aria-selected:text-secondary-variant-light font-semibold p aria-selected:border-b aria-selected:border-b-secondary-variant-light pb-2 pt-2 ps-4 pe-4"
-        >
-          <span>{{ tab.header() }}</span>
-        </button>
+    <div role="tablist" class="min-w-full inline-flex gap-6 flex-wrap border-b mb-4" (keydown)="onKeydown($event)">
+      @for (tab of tabPanels(); track tab; let i = $index) {
+        <pvs-tab [tab]="tab" />
       }
     </div>
 
@@ -37,19 +28,26 @@ import { TabService } from './services/tab.service';
   providers: [TabService],
 })
 export class TabsComponent implements AfterViewInit {
-  private tabService = inject(TabService);
+  @ViewChildren(TabComponent) tabs: QueryList<TabComponent>;
 
-  public tabs = contentChildren<TabPanelComponent>(TabPanelComponent);
+  public keyManager: FocusKeyManager<TabComponent>;
+  public tabPanels = contentChildren<TabPanelComponent>(TabPanelComponent);
 
-  onChangeTab(tab: TabPanelComponent) {
-    this.tabService.onChangeTab(tab.key());
+  onKeydown(event: KeyboardEvent) {
+    const { key } = event;
+    if (key === 'ArrowUp' || key === 'ArrowDown') {
+      return;
+    }
+
+    // Prevent PDF Viewer from taking the focus
+    if (key === 'Home' || key === 'End') {
+      event.stopPropagation();
+    }
+    this.keyManager.onKeydown(event);
   }
 
   ngAfterViewInit() {
-    const firstTab = this.tabs().at(0);
-    if (!firstTab) {
-      return;
-    }
-    this.onChangeTab(firstTab);
+    this.keyManager = new FocusKeyManager<TabComponent>(this.tabs).withWrap().withHomeAndEnd().withHorizontalOrientation('ltr');
+    this.keyManager.setFirstItemActive();
   }
 }
