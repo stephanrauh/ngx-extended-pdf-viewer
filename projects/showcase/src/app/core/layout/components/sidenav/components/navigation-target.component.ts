@@ -10,7 +10,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
   template: `
-    <a class="ps-2" [routerLink]="target().link" [routerLinkActive]="['text-secondary-variant-light', 'border-s', 'border-secondary-variant-light']">{{
+    <a class="ps-2" [routerLink]="target().link" [routerLinkActive]="['text-primary-variant-light', 'border-s', 'border-primary-variant-light']">{{
       target().displayName
     }}</a>
   `,

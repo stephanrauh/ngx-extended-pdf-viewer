@@ -23,7 +23,7 @@ import { FocusKeyManager } from '@angular/cdk/a11y';
     </div>
   `,
   host: {
-    class: 'min-w-full block border ps-6 pe-6 pt-2 pb-4',
+    class: 'min-w-full block ps-6 pe-6 pt-2 pb-4',
   },
   providers: [TabService],
 })
