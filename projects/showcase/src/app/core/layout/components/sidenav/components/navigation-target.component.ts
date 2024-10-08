@@ -3,16 +3,17 @@ import { NavigationTarget } from '../navigation-config.types';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
-  selector: 'pvs-navigation-target',
+  selector: 'li[pvs-navigation-target]',
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
   template: `
-    <li>
-      <a class="ps-2" [routerLink]="target().link" [routerLinkActive]="['text-secondary-variant-light', 'border-s', 'border-secondary-variant-light']">{{
-        target().displayName
-      }}</a>
-    </li>
+    <a class="ps-2" [routerLink]="target().link" [routerLinkActive]="['text-secondary-variant-light', 'border-s', 'border-secondary-variant-light']">{{
+      target().displayName
+    }}</a>
   `,
+  host: {
+    class: '[&:not(:last-child)]:pb-2 ',
+  },
 })
 export class NavigationTargetComponent {
   target = input.required<NavigationTarget>();

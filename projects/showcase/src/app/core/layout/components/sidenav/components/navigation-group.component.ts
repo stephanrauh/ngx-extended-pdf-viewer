@@ -3,27 +3,28 @@ import { isNavigationGroup, isNavigationTarget, NavigationGroup } from '../navig
 import { NavigationTargetComponent } from './navigation-target.component';
 
 @Component({
-  selector: 'pvs-navigation-group',
+  selector: 'li[pvs-navigation-group]',
   standalone: true,
   imports: [NavigationTargetComponent],
   template: `
-    <li class="group">
-      <input type="checkbox" [id]="group().key ?? group()" class="hidden" />
-      <div class="grid grid-cols-[1fr_minmax(0,auto)] font-semibold">
-        <label [for]="group().key" class="cursor-pointer">{{ group().displayName }}</label>
-        <span role="presentation" class="after:content-['+'] group-has-[:checked]:after:content-['-']"></span>
-      </div>
+    <input type="checkbox" [id]="group().key ?? group()" class="hidden" />
+    <div class="grid grid-cols-[1fr_minmax(0,auto)] font-semibold">
+      <label [for]="group().key" class="cursor-pointer">{{ group().displayName }}</label>
+      <span role="presentation" class="after:content-['+'] group-has-[:checked]:after:content-['-']"></span>
+    </div>
+    <ol class="ps-2 hidden group-has-[:checked]:block ">
       @for (child of group().children; track child) {
-        <ol id="sidenav" class="ps-2 hidden group-has-[:checked]:block ">
-          @if (isNavigationGroup(child)) {
-            <pvs-navigation-group [group]="child" />
-          } @else if (isNavigationTarget(child)) {
-            <pvs-navigation-target [target]="child" />
-          }
-        </ol>
+        @if (isNavigationGroup(child)) {
+          <li pvs-navigation-group [group]="child"></li>
+        } @else if (isNavigationTarget(child)) {
+          <li pvs-navigation-target [target]="child"></li>
+        }
       }
-    </li>
+    </ol>
   `,
+  host: {
+    class: 'group [&:not(:last-child)]:pb-4',
+  },
 })
 export class NavigationGroupComponent {
   group = input.required<NavigationGroup>();

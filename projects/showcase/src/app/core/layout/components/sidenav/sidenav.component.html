@@ -2,13 +2,13 @@
   <button [attr.aria-expanded]="sidenavIsOpen()" aria-controls="sidenav" pvsCloseSidebar class="place-self-end lg:hidden">
     <span class="material-symbols-outlined"> close </span>
   </button>
-  @for (entry of navigationEntries; track entry) {
-    <ol class="[&:not(:last-child)]:pb-4">
+  <ol>
+    @for (entry of navigationEntries; track entry) {
       @if (isNavigationGroup(entry)) {
-        <pvs-navigation-group [group]="entry" />
+        <li pvs-navigation-group [group]="entry"></li>
       } @else if (isNavigationTarget(entry)) {
-        <pvs-navigation-target [target]="entry" />
+        <li pvs-navigation-target [target]="entry"></li>
       }
-    </ol>
-  }
+    }
+  </ol>
 </nav>
