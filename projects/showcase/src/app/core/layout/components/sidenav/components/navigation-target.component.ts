@@ -12,7 +12,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     }}</a>
   `,
   host: {
-    class: '[&:not(:last-child)]:pb-2 ',
+    class: 'pt-1 ',
   },
 })
 export class NavigationTargetComponent {
