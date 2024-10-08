@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { ContentPageComponent } from '../../../core/content-page/content-page.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
+import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
 
 @Component({
   selector: 'pvs-basic-page',
   standalone: true,
-  imports: [ContentPageComponent, NgxExtendedPdfViewerModule, MarkdownContentComponent],
+  imports: [ContentPageComponent, NgxExtendedPdfViewerModule, MarkdownContentComponent, SetMinifiedLibraryUsageDirective],
   template: `
     <pvs-content-page [demoTemplate]="demo">
       <pvs-markdown src="/assets/pages/basics/simple/text.md" />
@@ -18,11 +19,11 @@ import { MarkdownContentComponent } from '../../../shared/components/markdown-co
         [src]="'./assets/pdfs/The Public Domain - Enclosing the Commons of the Mind.pdf'"
         [zoom]="'auto'"
         [height]="'100%'"
-        [minifiedJSLibraries]="false"
         [textLayer]="true"
         [showPresentationModeButton]="true"
         [page]="1"
         [filenameForDownload]="'The Public Domain - Enclosing the Commons of the Mind.pdf'"
+        pvsSetMinifiedLibraryUsage
       />
     </ng-template>
   `,
