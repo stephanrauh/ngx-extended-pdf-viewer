@@ -37,7 +37,6 @@
       @apply mb-12;
     }
   }
-
 }
 
 @layer utilities {
@@ -48,9 +47,44 @@
   }
 
   .frosted {
-    background-color: rgba(255,255,255,.7);
+    background-color: rgba(255, 255, 255, 0.7);
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
+  }
+}
+
+@layer components {
+  .fieldset-group {
+    @apply grid;
+    @apply gap-4;
+  }
+
+  .fieldset {
+    @apply grid;
+    @apply gap-2;
+    @apply p-2;
+  }
+
+  .fieldset legend {
+    @apply text-xl;
+  }
+
+  .input-group {
+    @apply grid;
+    @apply gap-2;
+    @apply grid-cols-[minmax(0,auto)_1fr] gap-2;
+    @apply items-center;
+  }
+
+  .input-group input {
+    @apply p-2;
+    @apply bg-gray-100;
+  }
+
+  .radio-group {
+    @apply grid;
+    @apply gap-2;
+    @apply grid-cols-[minmax(0,auto)_1fr] gap-2;
   }
 }
 

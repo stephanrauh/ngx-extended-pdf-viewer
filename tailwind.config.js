@@ -36,8 +36,8 @@ module.exports = {
           secondary: {
             light: 'hsl(0,0%,12%)',
           },
-          background: 'hsl(0,0%,99%)',
-          surface: 'hsl(0,0%,99%)',
+          background: 'hsl(0,0%,0%)',
+          surface: 'hsl(0,0%,0%)',
           error: 'hsl(0,0%,99%)',
         },
       },
