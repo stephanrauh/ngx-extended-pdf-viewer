@@ -2,9 +2,10 @@ import { Injectable, signal } from '@angular/core';
 
 @Injectable()
 export class TabService {
-  activeTabKey = signal('');
+  private readonly _activeTabKey = signal('');
+  readonly activeTabKey = this._activeTabKey.asReadonly();
 
   onChangeTab(tab: string) {
-    this.activeTabKey.set(tab);
+    this._activeTabKey.set(tab);
   }
 }
