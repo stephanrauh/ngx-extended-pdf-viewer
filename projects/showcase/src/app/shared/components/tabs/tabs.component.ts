@@ -10,7 +10,7 @@ import { FocusKeyManager } from '@angular/cdk/a11y';
 @Component({
   selector: 'pvs-tabs',
   standalone: true,
-  imports: [NgClass, TabButtonIdPipe, TabButtonIdPipe, TabIndexPipe, TabComponent],
+  imports: [NgClass, TabButtonIdPipe, TabIndexPipe, TabComponent],
   template: `
     <div role="tablist" class="min-w-full inline-flex gap-6 flex-wrap border-b mb-4" (keydown)="onKeydown($event)">
       @for (tab of tabPanels(); track tab; let i = $index) {
