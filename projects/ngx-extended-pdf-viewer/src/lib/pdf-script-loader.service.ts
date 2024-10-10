@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, effect, signal, Inject, CSP_NONCE } from '@angular/core';
+import { CSP_NONCE, Inject, Injectable, OnDestroy, effect, signal } from '@angular/core';
 import { getVersionSuffix, pdfDefaultOptions } from './options/pdf-default-options';
 import { IPDFViewerApplication } from './options/pdf-viewer-application';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
@@ -8,7 +8,14 @@ import { PdfCspPolicyService } from './pdf-csp-policy.service';
   providedIn: 'root',
 })
 export class PDFScriptLoaderService implements OnDestroy {
-  public forceUsingLegacyES5 = false;
+  private _forceUsingLegacyES5 = false;
+  public get forceUsingLegacyES5() {
+    return this._forceUsingLegacyES5;
+  }
+  public set forceUsingLegacyES5(value) {
+    console.log('Please use the attribute `[forceUsingLegacyES5]` instead of setting the property in the service.');
+    this._forceUsingLegacyES5 = value;
+  }
 
   // this event is fired when the pdf.js library has been loaded and objects like PDFApplication are available
   public onPDFJSInitSignal = signal<IPDFViewerApplication | undefined>(undefined);
@@ -192,11 +199,14 @@ new (function () {
     });
   }
 
-  public async ensurePdfJsHasBeenLoaded(useInlineScripts: boolean): Promise<boolean> {
+  public async ensurePdfJsHasBeenLoaded(useInlineScripts: boolean, forceUsingLegacyES5: boolean): Promise<boolean> {
     if (this.PDFViewerApplication) {
       return true;
     }
-    this._needsES5 = await this.needsES5(useInlineScripts);
+    this._needsES5 = forceUsingLegacyES5 || (await this.needsES5(useInlineScripts));
+    if (forceUsingLegacyES5) {
+      pdfDefaultOptions.needsES5 = true;
+    }
     await this.loadViewer(useInlineScripts);
     return this.PDFViewerApplication !== undefined;
   }

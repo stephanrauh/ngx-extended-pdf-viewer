@@ -600,3 +600,4 @@
 - 21.4.3 caveat: this version accidentally broke the stable branch! Please update to version 21.4.4 instead. Intended changes: dependency updates; updated the bleeding edge branch
 - 21.4.4 repaired the stable branch
 - 21.4.5 updated the bleeding edge branch to pdf.js 4.7.76; this is a breaking change because `NgxExtendedPdfViewerService.addEditorAnnotation` is now asynchronous
+- 21.4.6 #2536 re-introduced `[forceUsingLegacyES5]`
