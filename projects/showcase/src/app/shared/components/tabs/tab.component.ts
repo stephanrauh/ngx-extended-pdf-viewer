@@ -33,7 +33,7 @@ export class TabComponent implements FocusableOption {
   header = computed(() => this.tab().header());
 
   focus(): void {
-    this.tabService.onChangeTab(this.tab().key());
+    this.onChangeTab();
     this.element()?.nativeElement?.focus();
   }
 
