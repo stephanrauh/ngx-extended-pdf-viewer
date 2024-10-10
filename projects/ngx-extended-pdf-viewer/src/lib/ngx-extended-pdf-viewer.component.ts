@@ -139,6 +139,9 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public enableDragAndDrop = true;
 
+  @Input()
+  public forceUsingLegacyES5 = false;
+
   public localizationInitialized: boolean = false;
 
   private resizeObserver: ResizeObserver | undefined;
@@ -1056,7 +1059,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (isPlatformBrowser(this.platformId)) {
       this.addTranslationsUnlessProvidedByTheUser();
       await this.waitUntilOldComponentIsGone();
-      await this.pdfScriptLoaderService.ensurePdfJsHasBeenLoaded(this.useInlineScripts);
+      await this.pdfScriptLoaderService.ensurePdfJsHasBeenLoaded(this.useInlineScripts, this.forceUsingLegacyES5);
       // check if the PDF viewer has already been destroyed again
       // (see https://github.com/stephanrauh/ngx-extended-pdf-viewer/issues/2571:
       // destroying the viewer immediately after creating used to cause error messages)
@@ -1869,6 +1872,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
+    // do not run this code on the server
+    if (typeof window !== 'undefined') {
+      const pc = document.getElementById('printContainer');
+      if (pc) {
+        pc.remove();
+      }
+    }
 
     const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
 
@@ -1919,9 +1929,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       delete w.PDFViewerApplicationOptions;
       delete w.PDFViewerApplicationConstants;
       this.service.ngxExtendedPdfViewerInitialized = false;
-      document.querySelectorAll('.ngx-extended-pdf-viewer-file-input').forEach((e: HTMLInputElement) => {
-        e.remove();
-      });
+
+      // do not run this code on the server
+      if (typeof window !== 'undefined') {
+        document.querySelectorAll('.ngx-extended-pdf-viewer-file-input').forEach((e: HTMLInputElement) => {
+          e.remove();
+        });
+      }
     }
   }
 
