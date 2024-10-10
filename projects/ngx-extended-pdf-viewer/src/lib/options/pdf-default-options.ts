@@ -5,7 +5,7 @@ const isEdge = typeof navigator === 'undefined' || /Edge\/\d./i.test(navigator.u
 const needsES5 = typeof ReadableStream === 'undefined' || typeof Promise['allSettled'] === 'undefined';
 
 export const pdfjsVersion = '4.6.688';
-export const pdfjsBleedingEdgeVersion = '4.7.643';
+export const pdfjsBleedingEdgeVersion = '4.7.686';
 export function getVersionSuffix(folder: string): string {
   if (folder?.includes('bleeding-edge')) {
     return pdfjsBleedingEdgeVersion;
@@ -21,12 +21,6 @@ export function assetsUrl(url: string, postfixIfPathIsRelativ = ''): string {
   return `./${url + postfixIfPathIsRelativ}`;
 }
 
-function getDefaultLanguage(): string {
-  if (typeof navigator !== 'undefined') {
-    return navigator?.language || 'en-US';
-  }
-  return 'en-US';
-}
 // sonar ignore next line
 export const pdfDefaultOptions = {
   needsES5: _isIE11 || isEdge || needsES5,
