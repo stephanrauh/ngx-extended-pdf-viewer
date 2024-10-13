@@ -11204,7 +11204,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.6.688",
+    apiVersion: "4.6.690",
     data,
     password,
     disableAutoFetch,
@@ -12999,8 +12999,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.6.688";
-const build = "9fa5ff466";
+const version = "4.6.690";
+const build = "9502e551e";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -20379,8 +20379,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.6.688";
-const pdfjsBuild = "9fa5ff466";
+const pdfjsVersion = "4.6.690";
+const pdfjsBuild = "9502e551e";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -21884,7 +21884,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '21.4.6';
+const ngxExtendedPdfViewerVersion = '22.0.0-alpha.0';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -27962,6 +27962,98 @@ class PDFPresentationMode {
   }
 }
 
+;// CONCATENATED MODULE: ./web/xfa_layer_builder.js
+
+class XfaLayerBuilder {
+  constructor({
+    pdfPage,
+    annotationStorage = null,
+    linkService,
+    xfaHtml = null
+  }) {
+    this.pdfPage = pdfPage;
+    this.annotationStorage = annotationStorage;
+    this.linkService = linkService;
+    this.xfaHtml = xfaHtml;
+    this.div = null;
+    this._cancelled = false;
+  }
+  async render(viewport, intent = "display") {
+    if (intent === "print") {
+      const parameters = {
+        viewport: viewport.clone({
+          dontFlip: true
+        }),
+        div: this.div,
+        xfaHtml: this.xfaHtml,
+        annotationStorage: this.annotationStorage,
+        linkService: this.linkService,
+        intent
+      };
+      this.div = document.createElement("div");
+      parameters.div = this.div;
+      return XfaLayer.render(parameters);
+    }
+    const xfaHtml = await this.pdfPage.getXfa();
+    if (this._cancelled || !xfaHtml) {
+      return {
+        textDivs: []
+      };
+    }
+    const parameters = {
+      viewport: viewport.clone({
+        dontFlip: true
+      }),
+      div: this.div,
+      xfaHtml,
+      annotationStorage: this.annotationStorage,
+      linkService: this.linkService,
+      intent
+    };
+    if (this.div) {
+      return XfaLayer.update(parameters);
+    }
+    this.div = document.createElement("div");
+    parameters.div = this.div;
+    return XfaLayer.render(parameters);
+  }
+  cancel() {
+    this._cancelled = true;
+  }
+  hide() {
+    if (!this.div) {
+      return;
+    }
+    this.div.hidden = true;
+  }
+}
+
+;// CONCATENATED MODULE: ./web/print_utils.js
+
+
+
+function getXfaHtmlForPrinting(printContainer, pdfDocument) {
+  const xfaHtml = pdfDocument.allXfaHtml;
+  const linkService = new SimpleLinkService();
+  const scale = Math.round(PixelsPerInch.PDF_TO_CSS_UNITS * 100) / 100;
+  for (const xfaPage of xfaHtml.children) {
+    const page = document.createElement("div");
+    page.className = "xfaPrintedPage";
+    printContainer.append(page);
+    const builder = new XfaLayerBuilder({
+      pdfPage: null,
+      annotationStorage: pdfDocument.annotationStorage,
+      linkService,
+      xfaHtml: xfaPage
+    });
+    const viewport = getXfaPageViewport(xfaPage, {
+      scale
+    });
+    builder.render(viewport, "print");
+    page.append(builder.div);
+  }
+}
+
 ;// CONCATENATED MODULE: ./node_modules/canvas-size/dist/canvas-size.esm.js
 function canvasTest(settings) {
   const size = settings.sizes.shift();
@@ -28249,98 +28341,6 @@ const canvasSize = {
     return handleMethod(settings);
   }
 };
-
-;// CONCATENATED MODULE: ./web/xfa_layer_builder.js
-
-class XfaLayerBuilder {
-  constructor({
-    pdfPage,
-    annotationStorage = null,
-    linkService,
-    xfaHtml = null
-  }) {
-    this.pdfPage = pdfPage;
-    this.annotationStorage = annotationStorage;
-    this.linkService = linkService;
-    this.xfaHtml = xfaHtml;
-    this.div = null;
-    this._cancelled = false;
-  }
-  async render(viewport, intent = "display") {
-    if (intent === "print") {
-      const parameters = {
-        viewport: viewport.clone({
-          dontFlip: true
-        }),
-        div: this.div,
-        xfaHtml: this.xfaHtml,
-        annotationStorage: this.annotationStorage,
-        linkService: this.linkService,
-        intent
-      };
-      this.div = document.createElement("div");
-      parameters.div = this.div;
-      return XfaLayer.render(parameters);
-    }
-    const xfaHtml = await this.pdfPage.getXfa();
-    if (this._cancelled || !xfaHtml) {
-      return {
-        textDivs: []
-      };
-    }
-    const parameters = {
-      viewport: viewport.clone({
-        dontFlip: true
-      }),
-      div: this.div,
-      xfaHtml,
-      annotationStorage: this.annotationStorage,
-      linkService: this.linkService,
-      intent
-    };
-    if (this.div) {
-      return XfaLayer.update(parameters);
-    }
-    this.div = document.createElement("div");
-    parameters.div = this.div;
-    return XfaLayer.render(parameters);
-  }
-  cancel() {
-    this._cancelled = true;
-  }
-  hide() {
-    if (!this.div) {
-      return;
-    }
-    this.div.hidden = true;
-  }
-}
-
-;// CONCATENATED MODULE: ./web/print_utils.js
-
-
-
-function getXfaHtmlForPrinting(printContainer, pdfDocument) {
-  const xfaHtml = pdfDocument.allXfaHtml;
-  const linkService = new SimpleLinkService();
-  const scale = Math.round(PixelsPerInch.PDF_TO_CSS_UNITS * 100) / 100;
-  for (const xfaPage of xfaHtml.children) {
-    const page = document.createElement("div");
-    page.className = "xfaPrintedPage";
-    printContainer.append(page);
-    const builder = new XfaLayerBuilder({
-      pdfPage: null,
-      annotationStorage: pdfDocument.annotationStorage,
-      linkService,
-      xfaHtml: xfaPage
-    });
-    const viewport = getXfaPageViewport(xfaPage, {
-      scale
-    });
-    builder.render(viewport, "print");
-    page.append(builder.div);
-  }
-}
 
 ;// CONCATENATED MODULE: ./web/max_canvas_size.js
 
@@ -29159,7 +29159,6 @@ const FontRenderOps = {
 
 
 
-
 let activeService = null;
 let dialog = null;
 let overlayManager = null;
@@ -29211,14 +29210,12 @@ class PDFPrintService {
   constructor({
     pdfDocument,
     pagesOverview,
-    printContainer,
     printResolution,
     printAnnotationStoragePromise = null,
     eventBus
   }, isInPDFPrintRange, filteredPageCount) {
     this.pdfDocument = pdfDocument;
     this.pagesOverview = pagesOverview;
-    this.printContainer = printContainer;
     this._printResolution = printResolution || 150;
     this._optionalContentConfigPromise = pdfDocument.getOptionalContentConfig({
       intent: "print"
@@ -29252,7 +29249,8 @@ class PDFPrintService {
     if (activeService !== this) {
       return;
     }
-    this.printContainer.textContent = "";
+    this.printContainer.remove();
+    this.printContainer = null;
     const body = document.querySelector("body");
     body.removeAttribute("data-pdfjsprinting");
     const html = document.querySelector("html");
@@ -29372,6 +29370,10 @@ function printPdf() {
       return;
     }
     const activeServiceOnEntry = activeService;
+    const printContainer = document.createElement("div");
+    printContainer.id = "printContainer";
+    document.body.append(printContainer);
+    activeServiceOnEntry.printContainer = printContainer;
     activeService.renderPages().then(function () {
       const progressIndicator = document.getElementById("printServiceDialog");
       if (progressIndicator) {
@@ -34652,7 +34654,7 @@ class PDFViewer {
   #maxZoom = MAX_SCALE;
   #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.6.688";
+    const viewerVersion = "4.6.690";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -38406,7 +38408,6 @@ const PDFViewerApplication = {
     this.printService = PDFPrintServiceFactory.createPrintService({
       pdfDocument: this.pdfDocument,
       pagesOverview: this.pdfViewer.getPagesOverview(),
-      printContainer: this.appConfig.printContainer,
       printResolution: AppOptions.get("printResolution"),
       printAnnotationStoragePromise: this._printAnnotationStoragePromise,
       eventBus: this.pdfViewer.eventBus
@@ -39523,8 +39524,8 @@ PDFViewerApplication.serviceWorkerOptions = ServiceWorkerOptions;
 
 
 
-const pdfjsVersion = "4.6.688";
-const pdfjsBuild = "9fa5ff466";
+const pdfjsVersion = "4.6.690";
+const pdfjsBuild = "9502e551e";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
@@ -39565,7 +39566,7 @@ function getViewerConfiguration() {
       next: document.getElementById("next"),
       zoomIn: document.getElementById("zoomIn"),
       zoomOut: document.getElementById("zoomOut"),
-      print: document.getElementById("print"),
+      print: document.getElementById("printButton"),
       editorFreeTextButton: document.getElementById("editorFreeText"),
       editorFreeTextParamsToolbar: document.getElementById("editorFreeTextParamsToolbar"),
       editorHighlightButton: document.getElementById("editorHighlight"),
@@ -39583,7 +39584,7 @@ function getViewerConfiguration() {
       toggleButton: document.getElementById("secondaryToolbarToggle"),
       presentationModeButton: document.getElementById("secondaryPresentationMode"),
       openFileButton: document.getElementById("secondaryOpenFile"),
-      printButton: document.getElementById("secondaryPrint"),
+      printButton: document.getElementById("secondaryPrintButton"),
       downloadButton: document.getElementById("secondaryDownload"),
       viewBookmarkButton: document.getElementById("viewBookmark"),
       firstPageButton: document.getElementById("firstPage"),
@@ -39706,8 +39707,7 @@ function getViewerConfiguration() {
       editorStampAddImage: document.getElementById("editorStampAddImage"),
       editorFreeHighlightThickness: document.getElementById("editorFreeHighlightThickness"),
       editorHighlightShowAll: document.getElementById("editorHighlightShowAll")
-    },
-    printContainer: document.getElementById("printContainer")
+    }
   };
 }
 function webViewerLoad() {

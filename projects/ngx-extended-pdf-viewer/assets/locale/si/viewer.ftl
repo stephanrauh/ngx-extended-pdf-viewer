@@ -287,12 +287,12 @@ pdfjs-current-outline-item-button-label = Current Outline Item
 pdfjs-find-match-case-checkbox-label = Match Case
 pdfjs-find-match-diacritics-checkbox-label = Match Diacritics
 pdfjs-find-match-count =
-    { NUMBER($total) ->
+    { $total ->
         [one] { $current } of { $total } match
        *[other] { $current } of { $total } matches
     }
 pdfjs-find-match-count-limit =
-    { NUMBER($limit) ->
+    { $limit ->
         [one] More than { $limit } match
        *[other] More than { $limit } matches
     }

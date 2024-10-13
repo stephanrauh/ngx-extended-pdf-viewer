@@ -601,3 +601,4 @@
 - 21.4.4 repaired the stable branch
 - 21.4.5 updated the bleeding edge branch to pdf.js 4.7.76; this is a breaking change because `NgxExtendedPdfViewerService.addEditorAnnotation` is now asynchronous
 - 21.4.6 #2536 re-introduced `[forceUsingLegacyES5]`
+- 22.0.0-alpha.0 #2603 create a new printContainer before each print and destroy it afterwards; modified the ids of the print buttons because pdf.js modified them
