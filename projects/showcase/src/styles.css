@@ -67,7 +67,8 @@
   .fieldset {
     @apply grid;
     @apply gap-2;
-    @apply p-2;
+    @apply pt-2;
+    @apply pb-2;
   }
 
   .fieldset legend {
