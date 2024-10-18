@@ -133,6 +133,5 @@ import { MarkdownContentComponent } from '../../../shared/components/markdown-co
       </tbody>
     </table>
   `,
-  styles: ``,
 })
 export class TroubleshootingPageComponent {}

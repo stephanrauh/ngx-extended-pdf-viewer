@@ -4,6 +4,7 @@ import { IntroductionPageComponent } from './intro/introduction-page.component';
 import { AlternativesPageComponent } from './alternatives/alternatives.page.component';
 import { BrowserSupportPageComponent } from './browser-support/browser-support-page.component';
 import { TroubleshootingPageComponent } from './troubleshooting/troubleshooting-page.component';
+import { ChangelogPageComponent } from './changelog/changelog-page.component';
 
 export const aboutRoutes: Route[] = [
   {
@@ -39,6 +40,13 @@ export const aboutRoutes: Route[] = [
         component: TroubleshootingPageComponent,
         data: {
           pageTitle: 'Troubleshooting',
+        },
+      },
+      {
+        path: 'changelog',
+        component: ChangelogPageComponent,
+        data: {
+          pageTitle: 'Changelog',
         },
       },
     ],
