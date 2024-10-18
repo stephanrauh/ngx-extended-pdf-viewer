@@ -28,13 +28,18 @@
     @apply mb-2;
   }
 
-  markdown > p {
-    &:not(:last-child):not(:has(+ h2)) {
+  markdown > p,
+  markdown > pre[class*="language-"] {
+    &:not(:last-child):not(:has(+ h2)){
       @apply mb-4;
     }
 
     &:has(+ h2) {
       @apply mb-12;
+    }
+
+    &:not(:last-child):has(+ h3) {
+      @apply mb-6;
     }
   }
 }
