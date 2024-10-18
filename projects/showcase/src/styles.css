@@ -42,6 +42,33 @@
       @apply mb-6;
     }
   }
+
+  table, th, td {
+    @apply border-collapse;
+  }
+
+  table {
+    @apply w-full;
+  }
+
+  th {
+    @apply bg-primary-variant-light;
+    @apply text-on-primary-light;
+    @apply p-1;
+  }
+
+  td {
+    @apply p-2;
+  }
+
+  tr:nth-child(even){
+    background-color: #f2f2f2;
+  }
+
+  tr:hover {
+    background-color: #ddd;
+  }
+
 }
 
 @layer utilities {
