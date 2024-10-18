@@ -3,7 +3,7 @@ import { ContentPageComponent } from '../../../shared/components/content-page/co
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
 
 @Component({
-  selector: 'pvs-getting-started',
+  selector: 'pvs-getting-started-page',
   standalone: true,
   imports: [ContentPageComponent, MarkdownContentComponent],
   template: `<pvs-content-page>

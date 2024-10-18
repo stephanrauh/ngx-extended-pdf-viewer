@@ -3,7 +3,7 @@ import { ContentPageComponent } from '../../../shared/components/content-page/co
 import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
 
 @Component({
-  selector: 'pvs-changelog',
+  selector: 'pvs-changelog-page',
   standalone: true,
   imports: [ContentPageComponent, MarkdownContentComponent],
   template: `<h1>Changelog</h1>`,
