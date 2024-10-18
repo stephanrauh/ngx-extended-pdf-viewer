@@ -3,6 +3,7 @@ import { RouteData, RouteGroupData } from '../../shared/types/route-data.types';
 import { IntroductionPageComponent } from './intro/introduction-page.component';
 import { AlternativesPageComponent } from './alternatives/alternatives.page.component';
 import { BrowserSupportPageComponent } from './browser-support/browser-support-page.component';
+import { TroubleshootingPageComponent } from './troubleshooting/troubleshooting-page.component';
 
 export const aboutRoutes: Route[] = [
   {
@@ -31,6 +32,13 @@ export const aboutRoutes: Route[] = [
         component: BrowserSupportPageComponent,
         data: {
           pageTitle: 'Browser Support',
+        },
+      },
+      {
+        path: 'troubleshooting',
+        component: TroubleshootingPageComponent,
+        data: {
+          pageTitle: 'Troubleshooting',
         },
       },
     ],
