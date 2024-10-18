@@ -6,11 +6,20 @@ import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set
 import { SplitViewComponent } from '../../../shared/components/split-view.component';
 import { BROWSER_STORAGE } from '../../../shared/helper/browser-storage.token';
 import { FormsModule } from '@angular/forms';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'pvs-basic-page',
   standalone: true,
-  imports: [ContentPageComponent, NgxExtendedPdfViewerModule, MarkdownContentComponent, SetMinifiedLibraryUsageDirective, SplitViewComponent, FormsModule],
+  imports: [
+    ContentPageComponent,
+    NgxExtendedPdfViewerModule,
+    MarkdownContentComponent,
+    SetMinifiedLibraryUsageDirective,
+    SplitViewComponent,
+    FormsModule,
+    DecimalPipe,
+  ],
   template: `
     <pvs-content-page [demoTemplate]="demo">
       <pvs-markdown src="/assets/pages/basics/simple/text.md" />
@@ -18,6 +27,20 @@ import { FormsModule } from '@angular/forms';
 
     <ng-template #demo>
       <pvs-split-view [stickyEnd]="true">
+        <div class="mb-12">
+          <h3>Note</h3>
+          <p>
+            There's a bug in the PDF file. See the annotation layer demo to see the bugfix.Copyright hint: the e-book has been published by James Boyle under a
+            CC BY-NC-SA 3.0 on www.thepublicdomain.org
+          </p>
+          @if (renderTime) {
+            <h3>Render Times</h3>
+            <ul>
+              <li>Time till page 5 showed: {{ renderTime | number: '1.0-2' }} ms</li>
+              <li>Last rendering time: {{ currentTime | number: '1.0-2' }} ms</li>
+            </ul>
+          }
+        </div>
         <div class="fieldset-group">
           <fieldset class="fieldset">
             <legend>Page and Label</legend>
@@ -92,13 +115,15 @@ export class BasicPageComponent {
   private localStorage = inject(BROWSER_STORAGE);
 
   private startTime: number | undefined;
-  private renderTime: number | undefined;
   /** This attribute is only used on browser without localStorage (e.g. Brave on iOS) */
   private themeIfLocalStorageIsUnavailable = 'light';
 
-  public height = 'auto';
-  public page = 5;
-  public pageLabel = '';
+  renderTime: number | undefined;
+  currentTime: number | undefined;
+
+  height = 'auto';
+  page = 5;
+  pageLabel = '';
 
   get theme(): string {
     try {
@@ -135,9 +160,13 @@ export class BasicPageComponent {
   }
 
   onPageRendered(event: PageRenderEvent): void {
-    if (event.pageNumber === 5 && this.startTime) {
-      const endTime = performance.now();
-      this.renderTime = endTime - this.startTime;
+    const endTime = performance.now();
+    if (this.startTime) {
+      if (event.pageNumber === 5) {
+        this.renderTime = endTime - this.startTime;
+      }
+
+      this.currentTime = endTime - this.startTime;
     }
     console.log('PageRendered', event);
   }
