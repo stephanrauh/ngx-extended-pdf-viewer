@@ -31,8 +31,6 @@ export class PDFScriptLoaderService implements OnDestroy {
   // private PDFViewerApplicationConstants: any;
   public webViewerLoad: () => void;
 
-  private originalPrint = typeof window !== 'undefined' ? window.print : undefined;
-
   public ngxExtendedPdfViewerIncompletelyInitialized = true;
 
   public constructor(private pdfCspPolicyService: PdfCspPolicyService, @Inject(CSP_NONCE) private csp_nonce: string) {
@@ -218,41 +216,12 @@ new (function () {
     }
     delete globalThis['setNgxExtendedPdfViewerSource'];
 
-    const PDFViewerApplication: IPDFViewerApplication = this.PDFViewerApplication;
-    PDFViewerApplication?.pdfViewer?.destroyBookMode();
-    PDFViewerApplication?.pdfViewer?.stopRendering();
-    PDFViewerApplication?.pdfThumbnailViewer?.stopRendering();
-
-    const originalPrint = this.originalPrint;
-    if (window && originalPrint && !originalPrint.toString().includes('printPdf')) {
-      window.print = originalPrint;
-    }
-    const printContainer = document.querySelector('#printContainer');
-    if (printContainer) {
-      printContainer.parentElement?.removeChild(printContainer);
-    }
-
-    PDFViewerApplication?.unbindWindowEvents();
-
-    PDFViewerApplication?._cleanup();
-
     const w = window as any;
     delete w.pdfjsLib;
-    this.onPDFJSInitSignal.set(undefined);
     document.querySelectorAll('.ngx-extended-pdf-viewer-script').forEach((e: HTMLScriptElement) => {
       e.onload = null;
       e.remove();
     });
-  }
-
-  public replaceBrowserPrint(useCustomPrintOfPdfJS: boolean): void {
-    if (useCustomPrintOfPdfJS) {
-      if (this.PDFViewerApplication?.printPdf) {
-        window.print = this.PDFViewerApplication.printPdf.bind(this.PDFViewerApplication);
-      }
-    } else if (this.originalPrint && !this.originalPrint.toString().includes('printPdf')) {
-      window.print = this.originalPrint;
-    }
   }
 
   private iOSVersionRequiresES5(): boolean {

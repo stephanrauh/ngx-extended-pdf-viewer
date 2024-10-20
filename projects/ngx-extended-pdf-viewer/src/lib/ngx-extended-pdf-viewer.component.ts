@@ -568,6 +568,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public replaceBrowserPrint = true;
 
+  private originalPrint = typeof window !== 'undefined' ? window.print : undefined;
+
   public _showSidebarButton: ResponsiveVisibility = true;
 
   @Input()
@@ -1208,7 +1210,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           this.openPDF();
           this.assignTabindexes();
           if (this.replaceBrowserPrint) {
-            this.pdfScriptLoaderService.replaceBrowserPrint(this.replaceBrowserPrint);
+            this.doReplaceBrowserPrint(this.replaceBrowserPrint);
           }
         }
       }
@@ -1867,6 +1869,17 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     PDFViewerApplication.eventBus.dispatch('switchcursortool', { tool: this.handTool ? 1 : 0 });
   }
 
+  public doReplaceBrowserPrint(useCustomPrintOfPdfJS: boolean): void {
+    if (useCustomPrintOfPdfJS) {
+      const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
+      if (PDFViewerApplication?.printPdf) {
+        window.print = PDFViewerApplication.printPdf.bind(PDFViewerApplication);
+      }
+    } else if (this.originalPrint && !this.originalPrint.toString().includes('printPdf')) {
+      window.print = this.originalPrint;
+    }
+  }
+
   public async ngOnDestroy(): Promise<void> {
     this.notificationService.onPDFJSInitSignal.set(undefined);
     if (this.resizeObserver) {
@@ -1880,12 +1893,23 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       }
     }
 
+    // do not run this code on the server
+    if (typeof window !== 'undefined') {
+      const originalPrint = this.originalPrint;
+      if (window && originalPrint && !originalPrint.toString().includes('printPdf')) {
+        window.print = originalPrint;
+      }
+    }
+
     const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
 
     if (PDFViewerApplication) {
       if (PDFViewerApplication.ngxConsole) {
         PDFViewerApplication.ngxConsole.reset();
       }
+      PDFViewerApplication.pdfViewer?.destroyBookMode();
+      PDFViewerApplication.pdfViewer?.stopRendering();
+      PDFViewerApplication.pdfThumbnailViewer?.stopRendering();
       delete PDFViewerApplication.ngxKeyboardManager;
       PDFViewerApplication.eventBus?.off('afterprint', this.afterPrintListener);
       PDFViewerApplication.eventBus?.off('beforeprint', this.beforePrintListener);
@@ -1924,6 +1948,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         bus.destroy();
       }
       PDFViewerApplication.unbindWindowEvents();
+      PDFViewerApplication?._cleanup();
       (PDFViewerApplication.eventBus as any) = undefined;
       delete w.PDFViewerApplication;
       delete w.PDFViewerApplicationOptions;
@@ -2204,7 +2229,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       this.pageViewMode = changes['pageViewMode'].currentValue;
     }
     if ('replaceBrowserPrint' in changes && typeof window !== 'undefined') {
-      this.pdfScriptLoaderService.replaceBrowserPrint(this.replaceBrowserPrint);
+      this.doReplaceBrowserPrint(this.replaceBrowserPrint);
     }
     if ('disableForms' in changes) {
       this.enableOrDisableForms(this.elementRef.nativeElement, false);
