@@ -5,7 +5,6 @@ export class HighlightEditor extends AnnotationEditor {
     static _defaultColor: null;
     static _defaultOpacity: number;
     static _defaultThickness: number;
-    static _l10nPromise: any;
     static _type: string;
     static _editorType: number;
     static _freeHighlightId: number;
@@ -20,7 +19,7 @@ export class HighlightEditor extends AnnotationEditor {
     /** @inheritdoc */
     static updateDefaultParams(type: any, value: any): void;
     static get defaultPropertiesToUpdate(): (number | null)[][];
-    static "__#24@#rotateBbox"({ x, y, width, height }: {
+    static "__#25@#rotateBbox"({ x, y, width, height }: {
         x: any;
         y: any;
         width: any;
@@ -36,10 +35,10 @@ export class HighlightEditor extends AnnotationEditor {
         x: any;
         y: any;
     }): void;
-    static "__#24@#highlightMove"(parent: any, event: any): void;
-    static "__#24@#endHighlight"(parent: any, event: any): void;
+    static "__#25@#highlightMove"(parent: any, event: any): void;
+    static "__#25@#endHighlight"(parent: any, event: any): void;
     /** @inheritdoc */
-    static deserialize(data: any, parent: any, uiManager: any): AnnotationEditor | null;
+    static deserialize(data: any, parent: any, uiManager: any): Promise<AnnotationEditor | null>;
     constructor(params: any);
     color: any;
     /** @inheritdoc */
@@ -71,18 +70,9 @@ export class HighlightEditor extends AnnotationEditor {
     pointerleave(): void;
     _moveCaret(direction: any): void;
     /** @inheritdoc */
-    serialize(isForCopying?: boolean): {
-        annotationType: number;
-        color: number[];
-        opacity: any;
-        thickness: any;
-        quadPoints: Float32Array | null;
-        outlines: any;
-        pageIndex: number;
-        rect: any[];
-        rotation: number;
-        structTreeParentId: any;
-    } | null;
+    serialize(isForCopying?: boolean): Object | null;
+    /** @inheritdoc */
+    renderAnnotationElement(annotation: any): null;
     #private;
 }
 import { AnnotationEditor } from "./editor.js";

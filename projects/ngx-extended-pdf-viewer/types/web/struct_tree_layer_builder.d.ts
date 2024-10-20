@@ -1,7 +1,9 @@
 export class StructTreeLayerBuilder {
-    get renderingDone(): boolean;
-    render(structTree: any): HTMLSpanElement | null;
+    constructor(pdfPage: any, rawDims: any);
+    render(): Promise<any>;
+    getAriaAttributes(annotationId: any): Promise<any>;
     hide(): void;
     show(): void;
+    addElementsToTextLayer(): void;
     #private;
 }

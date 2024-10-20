@@ -105,6 +105,14 @@ pdfjs-document-properties-button-label = Taɣaṛa n isemli…
 pdfjs-document-properties-file-name = Isem n ufaylu:
 pdfjs-document-properties-file-size = Teɣzi n ufaylu:
 # Variables:
+#   $kb (Number) - the PDF file size in kilobytes
+#   $b (Number) - the PDF file size in bytes
+pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } yibiten)
+# Variables:
+#   $mb (Number) - the PDF file size in megabytes
+#   $b (Number) - the PDF file size in bytes
+pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } yibiten)
+# Variables:
 #   $size_kb (Number) - the PDF file size in kilobytes
 #   $size_b (Number) - the PDF file size in bytes
 pdfjs-document-properties-kb = { $size_kb } KAṬ ({ $size_b } ibiten)
@@ -118,6 +126,9 @@ pdfjs-document-properties-subject = Amgay:
 pdfjs-document-properties-keywords = Awalen n tsaruţ
 pdfjs-document-properties-creation-date = Azemz n tmerna:
 pdfjs-document-properties-modification-date = Azemz n usnifel:
+# Variables:
+#   $dateObj (Date) - the creation/modification date and time of the PDF file
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 # Variables:
 #   $date (Date) - the creation/modification date of the PDF file
 #   $time (Time) - the creation/modification time of the PDF file
@@ -275,6 +286,9 @@ pdfjs-annotation-date-string = { $date }, { $time }
 # Some common types are e.g.: "Check", "Text", "Comment", "Note"
 pdfjs-text-annotation-type =
     .alt = [Tabzimt { $type }]
+# Variables:
+#   $dateObj (Date) - the modification date and time of the annotation
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 
 ## Password
 
@@ -327,6 +341,8 @@ pdfjs-editor-stamp-add-image-button =
 pdfjs-editor-stamp-add-image-button-label = Rnu tawlaft
 # This refers to the thickness of the line used for free highlighting (not bound to text)
 pdfjs-editor-free-highlight-thickness-input = Tuzert
+pdfjs-editor-free-highlight-thickness-title =
+    .title = Beddel tuzert mi ara d-tesbeggneḍ iferdisen niḍen ur nelli d aḍris
 pdfjs-free-text =
     .aria-label = Amaẓrag n uḍris
 pdfjs-free-text-default-content = Bdu tira...
@@ -358,6 +374,22 @@ pdfjs-editor-resizer-label-bottom-right = Tiɣmert n wadda n yeffus — semsawi 
 pdfjs-editor-resizer-label-bottom-middle = Talemmat n wadda — semsawi teɣzi
 pdfjs-editor-resizer-label-bottom-left = Tiɣmert n wadda n zelmeḍ — semsawi teɣzi
 pdfjs-editor-resizer-label-middle-left = Talemmast tazelmdaḍt — semsawi teɣzi
+pdfjs-editor-resizer-top-left =
+    .aria-label = Tiɣmert n ufella n zelmeḍ — semsawi teɣzi
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Talemmat n ufella — semsawi teɣzi
+pdfjs-editor-resizer-top-right =
+    .aria-label = Tiɣmert n ufella n yeffus — semsawi teɣzi
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Talemmast tayeffust — semsawi teɣzi
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Tiɣmert n wadda n yeffus — semsawi teɣzi
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Talemmat n wadda — semsawi teɣzi
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Tiɣmert n wadda n zelmeḍ — semsawi teɣzi
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Talemmast tazelmdaḍt — semsawi teɣzi
 
 ## Color picker
 
@@ -385,28 +417,10 @@ pdfjs-editor-highlight-show-all-button-label = Sken akk
 pdfjs-editor-highlight-show-all-button =
     .title = Sken akk
 
-pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } yibiten)
-pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } yibiten)
-pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-editor-free-highlight-thickness-title =
-    .title = Beddel tuzert mi ara d-tesbeggneḍ iferdisen niḍen ur nelli d aḍris
-pdfjs-editor-resizer-top-left =
-    .aria-label = Tiɣmert n ufella n zelmeḍ — semsawi teɣzi
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Talemmat n ufella — semsawi teɣzi
-pdfjs-editor-resizer-top-right =
-    .aria-label = Tiɣmert n ufella n yeffus — semsawi teɣzi
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Talemmast tayeffust — semsawi teɣzi
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Tiɣmert n wadda n yeffus — semsawi teɣzi
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Talemmat n wadda — semsawi teɣzi
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Tiɣmert n wadda n zelmeḍ — semsawi teɣzi
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Talemmast tazelmdaḍt — semsawi teɣzi
+## New alt-text dialog
+## Group note for entire feature: Alternative text (alt text) helps when people can't see the image. This feature includes a tool to create alt text automatically using an AI model that works locally on the user's device to preserve privacy.
+
+# Modal header positioned above a text box where users can add the alt text.
 pdfjs-editor-new-alt-text-dialog-add-label = Rnu aḍris niḍen (aglam n tugna)
 pdfjs-editor-new-alt-text-textarea =
     .placeholder = Aru aglam-ik dagi…
@@ -415,10 +429,14 @@ pdfjs-editor-new-alt-text-create-automatically-button-label = Rnu aḍris niḍe
 pdfjs-editor-new-alt-text-not-now-button = Mačči tura
 pdfjs-editor-new-alt-text-error-title = D awezɣi timerna n uḍris niḍen s wudem awurman
 pdfjs-editor-new-alt-text-error-close-button = Mdel
+
+## Image alt-text settings
+
 pdfjs-editor-alt-text-settings-delete-model-button = Kkes
 pdfjs-editor-alt-text-settings-download-model-button = Sader
 pdfjs-editor-alt-text-settings-downloading-model-button = Asader…
 pdfjs-editor-alt-text-settings-close-button = Mdel
+
 pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
 pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
 pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.

@@ -105,6 +105,14 @@ pdfjs-document-properties-button-label = Dokumentowe kakosći…
 pdfjs-document-properties-file-name = Mě dataje:
 pdfjs-document-properties-file-size = Wjelikosć dataje:
 # Variables:
+#   $kb (Number) - the PDF file size in kilobytes
+#   $b (Number) - the PDF file size in bytes
+pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bajtow)
+# Variables:
+#   $mb (Number) - the PDF file size in megabytes
+#   $b (Number) - the PDF file size in bytes
+pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bajtow)
+# Variables:
 #   $size_kb (Number) - the PDF file size in kilobytes
 #   $size_b (Number) - the PDF file size in bytes
 pdfjs-document-properties-kb = { $size_kb } KB ({ $size_b } bajtow)
@@ -118,6 +126,9 @@ pdfjs-document-properties-subject = Tema:
 pdfjs-document-properties-keywords = Klucowe słowa:
 pdfjs-document-properties-creation-date = Datum napóranja:
 pdfjs-document-properties-modification-date = Datum změny:
+# Variables:
+#   $dateObj (Date) - the creation/modification date and time of the PDF file
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 # Variables:
 #   $date (Date) - the creation/modification date of the PDF file
 #   $time (Time) - the creation/modification time of the PDF file
@@ -279,6 +290,9 @@ pdfjs-annotation-date-string = { $date }, { $time }
 # Some common types are e.g.: "Check", "Text", "Comment", "Note"
 pdfjs-text-annotation-type =
     .alt = [Typ pśipiskow: { $type }]
+# Variables:
+#   $dateObj (Date) - the modification date and time of the annotation
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 
 ## Password
 
@@ -370,6 +384,22 @@ pdfjs-editor-resizer-label-bottom-right = Dołojce napšawo – wjelikosć změn
 pdfjs-editor-resizer-label-bottom-middle = Dołojce wesrjejź – wjelikosć změniś
 pdfjs-editor-resizer-label-bottom-left = Dołojce nalěwo – wjelikosć změniś
 pdfjs-editor-resizer-label-middle-left = Wesrjejź nalěwo – wjelikosć změniś
+pdfjs-editor-resizer-top-left =
+    .aria-label = Górjejce nalěwo – wjelikosć změniś
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Górjejce wesrjejź – wjelikosć změniś
+pdfjs-editor-resizer-top-right =
+    .aria-label = Górjejce napšawo – wjelikosć změniś
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Wesrjejź napšawo – wjelikosć změniś
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Dołojce napšawo – wjelikosć změniś
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Dołojce wesrjejź – wjelikosć změniś
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Dołojce nalěwo – wjelikosć změniś
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Wesrjejź nalěwo – wjelikosć změniś
 
 ## Color picker
 
@@ -454,26 +484,6 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Editor alternatiwnego 
 pdfjs-editor-alt-text-settings-show-dialog-description = Pomaga, wam wšym swójim wobrazam alternatiwny tekst pśidaś.
 pdfjs-editor-alt-text-settings-close-button = Zacyniś
 
-pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bajtow)
-pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bajtow)
-pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-editor-resizer-top-left =
-    .aria-label = Górjejce nalěwo – wjelikosć změniś
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Górjejce wesrjejź – wjelikosć změniś
-pdfjs-editor-resizer-top-right =
-    .aria-label = Górjejce napšawo – wjelikosć změniś
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Wesrjejź napšawo – wjelikosć změniś
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Dołojce napšawo – wjelikosć změniś
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Dołojce wesrjejź – wjelikosć změniś
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Dołojce nalěwo – wjelikosć změniś
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Wesrjejź nalěwo – wjelikosć změniś
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

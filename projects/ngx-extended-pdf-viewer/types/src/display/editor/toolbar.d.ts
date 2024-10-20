@@ -3,6 +3,7 @@ export class EditorToolbar {
     static "__#4@#pointerDown"(e: any): void;
     constructor(editor: any);
     render(): HTMLDivElement;
+    get div(): null;
     hide(): void;
     show(): void;
     addAltText(altText: any): Promise<void>;

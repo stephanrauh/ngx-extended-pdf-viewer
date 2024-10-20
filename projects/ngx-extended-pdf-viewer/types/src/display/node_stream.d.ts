@@ -4,7 +4,7 @@ export class PDFNodeStream {
     url: URL;
     isHttp: boolean;
     isFsUrl: boolean;
-    httpHeaders: any;
+    headers: Headers;
     _fullRequestReader: PDFNodeStreamFsFullReader | PDFNodeStreamFullReader | null;
     _rangeRequestReaders: any[];
     get _progressiveDataLength(): number;
@@ -22,7 +22,6 @@ declare class PDFNodeStreamFsRangeReader extends BaseRangeReader {
 }
 declare class PDFNodeStreamRangeReader extends BaseRangeReader {
     constructor(stream: any, start: any, end: any);
-    _httpHeaders: {};
     _request: any;
 }
 declare class BaseFullReader {

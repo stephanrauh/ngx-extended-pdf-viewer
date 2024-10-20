@@ -4,9 +4,11 @@ export type TextAccessibilityManager = import("../../../web/text_accessibility.j
 export type IL10n = import("../../../web/interfaces").IL10n;
 export type AnnotationLayer = import("../annotation_layer.js").AnnotationLayer;
 export type DrawLayer = import("../draw_layer.js").DrawLayer;
+export type StructTreeLayerBuilder = any;
 export type AnnotationEditorLayerOptions = {
     mode: Object;
     div: HTMLDivElement;
+    structTreeLayer: StructTreeLayerBuilder;
     uiManager: AnnotationEditorUIManager;
     enabled: boolean;
     accessibilityManager?: import("../../../web/text_accessibility.js").TextAccessibilityManager | undefined;
@@ -24,6 +26,7 @@ export type RenderEditorLayerOptions = {
  * @typedef {Object} AnnotationEditorLayerOptions
  * @property {Object} mode
  * @property {HTMLDivElement} div
+ * @property {StructTreeLayerBuilder} structTreeLayer
  * @property {AnnotationEditorUIManager} uiManager
  * @property {boolean} enabled
  * @property {TextAccessibilityManager} [accessibilityManager]
@@ -43,15 +46,16 @@ export type RenderEditorLayerOptions = {
  */
 export class AnnotationEditorLayer {
     static _initialized: boolean;
-    static "__#28@#editorTypes": Map<number, typeof FreeTextEditor | typeof HighlightEditor | typeof InkEditor | typeof StampEditor>;
+    static "__#29@#editorTypes": Map<number, typeof FreeTextEditor | typeof HighlightEditor | typeof InkEditor | typeof StampEditor>;
     /**
      * @param {AnnotationEditorLayerOptions} options
      */
-    constructor({ uiManager, pageIndex, div, accessibilityManager, annotationLayer, drawLayer, textLayer, viewport, l10n, eventBus, }: AnnotationEditorLayerOptions);
+    constructor({ uiManager, pageIndex, div, structTreeLayer, accessibilityManager, annotationLayer, drawLayer, textLayer, viewport, l10n, eventBus, }: AnnotationEditorLayerOptions);
     pageIndex: number;
     div: HTMLDivElement;
     viewport: import("../display_utils.js").PageViewport;
     drawLayer: import("../draw_layer.js").DrawLayer;
+    _structTree: any;
     eventBus: any;
     get isEmpty(): boolean;
     get isInvisible(): boolean;
@@ -84,7 +88,7 @@ export class AnnotationEditorLayer {
      * Enable pointer events on the main div in order to enable
      * editor creation.
      */
-    enable(): void;
+    enable(): Promise<void>;
     /**
      * Disable editor creation.
      */

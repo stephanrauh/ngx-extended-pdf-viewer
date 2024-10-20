@@ -1,7 +1,7 @@
 export class FreeOutliner {
-    static "__#21@#MIN_DIST": number;
-    static "__#21@#MIN_DIFF": number;
-    static "__#21@#MIN": number;
+    static "__#22@#MIN_DIST": number;
+    static "__#22@#MIN_DIFF": number;
+    static "__#22@#MIN": number;
     constructor({ x, y }: {
         x: any;
         y: any;

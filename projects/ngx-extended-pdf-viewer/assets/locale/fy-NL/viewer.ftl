@@ -380,6 +380,22 @@ pdfjs-editor-resizer-label-bottom-right = Rjochterûnderhoek – formaat wizigje
 pdfjs-editor-resizer-label-bottom-middle = Midden ûnder – formaat wizigje
 pdfjs-editor-resizer-label-bottom-left = Linkerûnderhoek – formaat wizigje
 pdfjs-editor-resizer-label-middle-left = Links midden – formaat wizigje
+pdfjs-editor-resizer-top-left =
+    .aria-label = Linkerboppehoek – formaat wizigje
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Midden boppe – formaat wizigje
+pdfjs-editor-resizer-top-right =
+    .aria-label = Rjochterboppehoek – formaat wizigje
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Midden rjochts – formaat wizigje
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Rjochterûnderhoek – formaat wizigje
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Midden ûnder – formaat wizigje
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Linkerûnderhoek – formaat wizigje
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Links midden – formaat wizigje
 
 ## Color picker
 
@@ -464,22 +480,6 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Alternative-tekstbewur
 pdfjs-editor-alt-text-settings-show-dialog-description = Helpt jo derfoar te soargjen dat al jo ôfbyldingen alternative tekst hawwe.
 pdfjs-editor-alt-text-settings-close-button = Slute
 
-pdfjs-editor-resizer-top-left =
-    .aria-label = Linkerboppehoek – formaat wizigje
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Midden boppe – formaat wizigje
-pdfjs-editor-resizer-top-right =
-    .aria-label = Rjochterboppehoek – formaat wizigje
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Midden rjochts – formaat wizigje
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Rjochterûnderhoek – formaat wizigje
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Midden ûnder – formaat wizigje
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Linkerûnderhoek – formaat wizigje
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Links midden – formaat wizigje
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

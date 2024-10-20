@@ -105,6 +105,14 @@ pdfjs-document-properties-button-label = 文書のプロパティ...
 pdfjs-document-properties-file-name = ファイル名:
 pdfjs-document-properties-file-size = ファイルサイズ:
 # Variables:
+#   $kb (Number) - the PDF file size in kilobytes
+#   $b (Number) - the PDF file size in bytes
+pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } バイト)
+# Variables:
+#   $mb (Number) - the PDF file size in megabytes
+#   $b (Number) - the PDF file size in bytes
+pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } バイト)
+# Variables:
 #   $size_kb (Number) - the PDF file size in kilobytes
 #   $size_b (Number) - the PDF file size in bytes
 pdfjs-document-properties-kb = { $size_kb } KB ({ $size_b } バイト)
@@ -118,6 +126,9 @@ pdfjs-document-properties-subject = 件名:
 pdfjs-document-properties-keywords = キーワード:
 pdfjs-document-properties-creation-date = 作成日:
 pdfjs-document-properties-modification-date = 更新日:
+# Variables:
+#   $dateObj (Date) - the creation/modification date and time of the PDF file
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 # Variables:
 #   $date (Date) - the creation/modification date of the PDF file
 #   $time (Time) - the creation/modification time of the PDF file
@@ -267,6 +278,9 @@ pdfjs-annotation-date-string = { $date }, { $time }
 # Some common types are e.g.: "Check", "Text", "Comment", "Note"
 pdfjs-text-annotation-type =
     .alt = [{ $type } 注釈]
+# Variables:
+#   $dateObj (Date) - the modification date and time of the annotation
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 
 ## Password
 
@@ -358,6 +372,22 @@ pdfjs-editor-resizer-label-bottom-right = 右下隅 — サイズ変更
 pdfjs-editor-resizer-label-bottom-middle = 下中央 — サイズ変更
 pdfjs-editor-resizer-label-bottom-left = 左下隅 — サイズ変更
 pdfjs-editor-resizer-label-middle-left = 左中央 — サイズ変更
+pdfjs-editor-resizer-top-left =
+    .aria-label = 左上隅 — サイズ変更
+pdfjs-editor-resizer-top-middle =
+    .aria-label = 上中央 — サイズ変更
+pdfjs-editor-resizer-top-right =
+    .aria-label = 右上隅 — サイズ変更
+pdfjs-editor-resizer-middle-right =
+    .aria-label = 右中央 — サイズ変更
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = 右下隅 — サイズ変更
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = 下中央 — サイズ変更
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = 左下隅 — サイズ変更
+pdfjs-editor-resizer-middle-left =
+    .aria-label = 左中央 — サイズ変更
 
 ## Color picker
 
@@ -397,8 +427,7 @@ pdfjs-editor-new-alt-text-textarea =
     .placeholder = ここに説明を記入してください...
 # This text refers to the alt text box above this description. It offers a definition of alt text.
 pdfjs-editor-new-alt-text-description = 画像が読み込まれない場合や見えない人のための短い説明です。
-# This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
-pdfjs-editor-new-alt-text-disclaimer = この代替テキストは自動的に生成されました。
+pdfjs-editor-new-alt-text-disclaimer1 = この代替テキストは自動的に生成されたため正確でない可能性があります。
 pdfjs-editor-new-alt-text-disclaimer-learn-more-url = 詳細情報
 pdfjs-editor-new-alt-text-create-automatically-button-label = 代替テキストを自動生成
 pdfjs-editor-new-alt-text-not-now-button = 後で
@@ -443,27 +472,6 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = 画像の追加時に�
 pdfjs-editor-alt-text-settings-show-dialog-description = すべての画像に代替テキストを追加する助けになります。
 pdfjs-editor-alt-text-settings-close-button = 閉じる
 
-pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } バイト)
-pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } バイト)
-pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-editor-resizer-top-left =
-    .aria-label = 左上隅 — サイズ変更
-pdfjs-editor-resizer-top-middle =
-    .aria-label = 上中央 — サイズ変更
-pdfjs-editor-resizer-top-right =
-    .aria-label = 右上隅 — サイズ変更
-pdfjs-editor-resizer-middle-right =
-    .aria-label = 右中央 — サイズ変更
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = 右下隅 — サイズ変更
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = 下中央 — サイズ変更
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = 左下隅 — サイズ変更
-pdfjs-editor-resizer-middle-left =
-    .aria-label = 左中央 — サイズ変更
-pdfjs-editor-new-alt-text-disclaimer1 = この代替テキストは自動的に生成されたため正確でない可能性があります。
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

@@ -72,7 +72,7 @@ export class AnnotationEditor {
      * @param {AnnotationEditorLayer} parent
      */
     static paste(item: DataTransferItem, parent: AnnotationEditorLayer): void;
-    static "__#35@#rotatePoint"(x: any, y: any, angle: any): any[];
+    static "__#36@#rotatePoint"(x: any, y: any, angle: any): any[];
     /**
      * Deserialize the editor.
      * The result of the deserialization is a new editor.
@@ -80,9 +80,9 @@ export class AnnotationEditor {
      * @param {Object} data
      * @param {AnnotationEditorLayer} parent
      * @param {AnnotationEditorUIManager} uiManager
-     * @returns {AnnotationEditor | null}
+     * @returns {Promise<AnnotationEditor | null>}
      */
-    static deserialize(data: Object, parent: AnnotationEditorLayer, uiManager: AnnotationEditorUIManager): AnnotationEditor | null;
+    static deserialize(data: Object, parent: AnnotationEditorLayer, uiManager: AnnotationEditorUIManager): Promise<AnnotationEditor | null>;
     static get MIN_SIZE(): number;
     static canCreateNewEmptyEditor(): boolean;
     /**
@@ -91,6 +91,7 @@ export class AnnotationEditor {
     constructor(parameters: AnnotationEditorParameters);
     _editToolbar: null;
     _initialOptions: any;
+    _initialData: null;
     _isVisible: boolean;
     _uiManager: null;
     _focusEventsAllowed: boolean;
@@ -235,6 +236,7 @@ export class AnnotationEditor {
      */
     addEditToolbar(): Promise<EditorToolbar | null>;
     removeEditToolbar(): void;
+    addContainer(container: any): void;
     getClientDimensions(): DOMRect;
     addAltTextButton(): Promise<void>;
     /**
@@ -311,6 +313,11 @@ export class AnnotationEditor {
      * @param {number} angle
      */
     rotate(_angle: any): void;
+    /**
+     * Serialize the editor when it has been deleted.
+     * @returns {Object}
+     */
+    serializeDeleted(): Object;
     /**
      * Serialize the editor.
      * The result of the serialization will be used to construct a
@@ -423,9 +430,9 @@ export class AnnotationEditor {
     /**
      * Render an annotation in the annotation layer.
      * @param {Object} annotation
-     * @returns {HTMLElement}
+     * @returns {HTMLElement|null}
      */
-    renderAnnotationElement(annotation: Object): HTMLElement;
+    renderAnnotationElement(annotation: Object): HTMLElement | null;
     resetAnnotationElement(annotation: any): void;
     #private;
 }

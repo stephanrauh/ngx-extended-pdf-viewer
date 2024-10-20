@@ -372,6 +372,22 @@ pdfjs-editor-resizer-label-bottom-right = 右下角 — 調整大小
 pdfjs-editor-resizer-label-bottom-middle = 底部中間 — 調整大小
 pdfjs-editor-resizer-label-bottom-left = 左下角 — 調整大小
 pdfjs-editor-resizer-label-middle-left = 中間左方 — 調整大小
+pdfjs-editor-resizer-top-left =
+    .aria-label = 左上角 — 調整大小
+pdfjs-editor-resizer-top-middle =
+    .aria-label = 頂部中間 — 調整大小
+pdfjs-editor-resizer-top-right =
+    .aria-label = 右上角 — 調整大小
+pdfjs-editor-resizer-middle-right =
+    .aria-label = 中間右方 — 調整大小
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = 右下角 — 調整大小
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = 底部中間 — 調整大小
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = 左下角 — 調整大小
+pdfjs-editor-resizer-middle-left =
+    .aria-label = 中間左方 — 調整大小
 
 ## Color picker
 
@@ -456,22 +472,6 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = 新增圖片後立即�
 pdfjs-editor-alt-text-settings-show-dialog-description = 幫助您確保所有圖片都有替代文字。
 pdfjs-editor-alt-text-settings-close-button = 關閉
 
-pdfjs-editor-resizer-top-left =
-    .aria-label = 左上角 — 調整大小
-pdfjs-editor-resizer-top-middle =
-    .aria-label = 頂部中間 — 調整大小
-pdfjs-editor-resizer-top-right =
-    .aria-label = 右上角 — 調整大小
-pdfjs-editor-resizer-middle-right =
-    .aria-label = 中間右方 — 調整大小
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = 右下角 — 調整大小
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = 底部中間 — 調整大小
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = 左下角 — 調整大小
-pdfjs-editor-resizer-middle-left =
-    .aria-label = 中間左方 — 調整大小
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

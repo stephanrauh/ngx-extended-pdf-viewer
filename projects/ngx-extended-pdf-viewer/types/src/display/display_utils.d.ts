@@ -57,7 +57,7 @@ export type PageViewportCloneParameters = {
 };
 export function deprecated(details: any): void;
 export class DOMCanvasFactory extends BaseCanvasFactory {
-    constructor({ ownerDocument, enableHWA }?: {
+    constructor({ ownerDocument, enableHWA }: {
         ownerDocument?: Document | undefined;
         enableHWA?: boolean | undefined;
     });
@@ -86,7 +86,8 @@ export class DOMCMapReaderFactory extends BaseCMapReaderFactory {
  * does the magic for us.
  */
 export class DOMFilterFactory extends BaseFilterFactory {
-    constructor({ docId, ownerDocument }?: {
+    constructor({ docId, ownerDocument }: {
+        docId: any;
         ownerDocument?: Document | undefined;
     });
     addFilter(maps: any): any;
@@ -141,6 +142,24 @@ export function isValidFetchUrl(url: any, baseUrl: any): boolean;
  * Event handler to suppress context menu.
  */
 export function noContextMenu(e: any): void;
+/**
+ * Scale factors for the canvas, necessary with HiDPI displays.
+ */
+export class OutputScale {
+    /**
+     * @type {number} Horizontal scale.
+     */
+    sx: number;
+    /**
+     * @type {number} Vertical scale.
+     */
+    sy: number;
+    /**
+     * @type {boolean} Returns `true` when scaling is required, `false` otherwise.
+     */
+    get scaled(): boolean;
+    get symmetric(): boolean;
+}
 /**
  * @typedef {Object} PageViewportParameters
  * @property {Array<number>} viewBox - The xMin, yMin, xMax and

@@ -81,8 +81,8 @@ export class AnnotationEditorUIManager {
      * Paste callback.
      * @param {ClipboardEvent} event
      */
-    paste(event: ClipboardEvent): void;
-    addSerializedEditor(data: any, activateEditorIfNecessary?: boolean, doNotMove?: boolean, ignorePageNumber?: boolean): void;
+    paste(event: ClipboardEvent): Promise<void>;
+    addSerializedEditor(data: any, activateEditorIfNecessary?: boolean, doNotMove?: boolean, ignorePageNumber?: boolean): Promise<void>;
     /**
      * Keydown callback.
      * @param {KeyboardEvent} event
@@ -134,7 +134,7 @@ export class AnnotationEditorUIManager {
      * @param {boolean} [isFromKeyboard] - true if the mode change is due to a
      *   keyboard action.
      */
-    updateMode(mode: number, editId?: string | null, isFromKeyboard?: boolean | undefined): void;
+    updateMode(mode: number, editId?: string | null, isFromKeyboard?: boolean | undefined): Promise<void>;
     addNewEditorFromKeyboard(): void;
     /**
      * Update the toolbar if it's required to reflect the tool currently used.

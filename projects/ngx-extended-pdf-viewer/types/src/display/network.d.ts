@@ -12,10 +12,14 @@ export class PDFNetworkStream implements IPDFStream {
     cancelAllRequests(reason: any): void;
 }
 declare class NetworkManager {
-    constructor(url: any, args?: {});
+    constructor({ url, httpHeaders, withCredentials }: {
+        url: any;
+        httpHeaders: any;
+        withCredentials: any;
+    });
     url: any;
     isHttp: boolean;
-    httpHeaders: any;
+    headers: Headers;
     withCredentials: any;
     currXhrId: number;
     pendingRequests: any;
@@ -34,7 +38,7 @@ declare class PDFNetworkStreamFullRequestReader implements IPDFStreamReader {
     _manager: any;
     _url: any;
     _fullRequestId: any;
-    _headersReceivedCapability: any;
+    _headersCapability: any;
     _disableRange: any;
     _contentLength: any;
     _rangeChunkSize: any;

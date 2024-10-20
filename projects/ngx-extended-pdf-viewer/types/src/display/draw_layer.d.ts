@@ -5,7 +5,7 @@
  */
 export class DrawLayer {
     static get _svgFactory(): any;
-    static "__#27@#setBox"(element: any, { x, y, width, height }?: {
+    static "__#28@#setBox"(element: any, { x, y, width, height }?: {
         x?: number | undefined;
         y?: number | undefined;
         width?: number | undefined;
@@ -32,6 +32,7 @@ export class DrawLayer {
     changeOpacity(id: any, opacity: any): void;
     addClass(id: any, className: any): void;
     removeClass(id: any, className: any): void;
+    getSVGRoot(id: any): any;
     remove(id: any): void;
     destroy(): void;
     #private;

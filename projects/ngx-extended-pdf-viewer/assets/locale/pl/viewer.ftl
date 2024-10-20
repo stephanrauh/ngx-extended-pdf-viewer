@@ -105,6 +105,14 @@ pdfjs-document-properties-button-label = Właściwości dokumentu…
 pdfjs-document-properties-file-name = Nazwa pliku:
 pdfjs-document-properties-file-size = Rozmiar pliku:
 # Variables:
+#   $kb (Number) - the PDF file size in kilobytes
+#   $b (Number) - the PDF file size in bytes
+pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } B)
+# Variables:
+#   $mb (Number) - the PDF file size in megabytes
+#   $b (Number) - the PDF file size in bytes
+pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } B)
+# Variables:
 #   $size_kb (Number) - the PDF file size in kilobytes
 #   $size_b (Number) - the PDF file size in bytes
 pdfjs-document-properties-kb = { $size_kb } KB ({ $size_b } B)
@@ -118,6 +126,9 @@ pdfjs-document-properties-subject = Temat:
 pdfjs-document-properties-keywords = Słowa kluczowe:
 pdfjs-document-properties-creation-date = Data utworzenia:
 pdfjs-document-properties-modification-date = Data modyfikacji:
+# Variables:
+#   $dateObj (Date) - the creation/modification date and time of the PDF file
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 # Variables:
 #   $date (Date) - the creation/modification date of the PDF file
 #   $time (Time) - the creation/modification time of the PDF file
@@ -277,6 +288,9 @@ pdfjs-annotation-date-string = { $date }, { $time }
 # Some common types are e.g.: "Check", "Text", "Comment", "Note"
 pdfjs-text-annotation-type =
     .alt = [Przypis: { $type }]
+# Variables:
+#   $dateObj (Date) - the modification date and time of the annotation
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 
 ## Password
 
@@ -368,6 +382,22 @@ pdfjs-editor-resizer-label-bottom-right = Prawy dolny róg — zmień rozmiar
 pdfjs-editor-resizer-label-bottom-middle = Dolny środkowy — zmień rozmiar
 pdfjs-editor-resizer-label-bottom-left = Lewy dolny róg — zmień rozmiar
 pdfjs-editor-resizer-label-middle-left = Lewy środkowy — zmień rozmiar
+pdfjs-editor-resizer-top-left =
+    .aria-label = Lewy górny róg — zmień rozmiar
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Górny środkowy — zmień rozmiar
+pdfjs-editor-resizer-top-right =
+    .aria-label = Prawy górny róg — zmień rozmiar
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Prawy środkowy — zmień rozmiar
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Prawy dolny róg — zmień rozmiar
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Dolny środkowy — zmień rozmiar
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Lewy dolny róg — zmień rozmiar
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Lewy środkowy — zmień rozmiar
 
 ## Color picker
 
@@ -452,26 +482,6 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Wyświetlanie edytora 
 pdfjs-editor-alt-text-settings-show-dialog-description = Pomaga upewnić się, że wszystkie obrazy mają tekst alternatywny.
 pdfjs-editor-alt-text-settings-close-button = Zamknij
 
-pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } B)
-pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } B)
-pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-editor-resizer-top-left =
-    .aria-label = Lewy górny róg — zmień rozmiar
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Górny środkowy — zmień rozmiar
-pdfjs-editor-resizer-top-right =
-    .aria-label = Prawy górny róg — zmień rozmiar
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Prawy środkowy — zmień rozmiar
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Prawy dolny róg — zmień rozmiar
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Dolny środkowy — zmień rozmiar
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Lewy dolny róg — zmień rozmiar
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Lewy środkowy — zmień rozmiar
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

@@ -533,7 +533,7 @@ export class PDFViewer {
     };
     refresh(noUpdate?: boolean, updateArgs?: any): void;
     getSerializedAnnotations(): any[] | null;
-    addEditorAnnotation(data: any): void;
+    addEditorAnnotation(data: any): Promise<void>;
     removeEditorAnnotations(filter?: () => boolean): void;
     destroyBookMode(): void;
     stopRendering(): void;

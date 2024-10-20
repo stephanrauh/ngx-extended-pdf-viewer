@@ -105,6 +105,14 @@ pdfjs-document-properties-button-label = Propriedades do documento…
 pdfjs-document-properties-file-name = Nome do ficheiro:
 pdfjs-document-properties-file-size = Tamanho do ficheiro:
 # Variables:
+#   $kb (Number) - the PDF file size in kilobytes
+#   $b (Number) - the PDF file size in bytes
+pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
+# Variables:
+#   $mb (Number) - the PDF file size in megabytes
+#   $b (Number) - the PDF file size in bytes
+pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
+# Variables:
 #   $size_kb (Number) - the PDF file size in kilobytes
 #   $size_b (Number) - the PDF file size in bytes
 pdfjs-document-properties-kb = { $size_kb } KB ({ $size_b } bytes)
@@ -118,6 +126,9 @@ pdfjs-document-properties-subject = Assunto:
 pdfjs-document-properties-keywords = Palavras-chave:
 pdfjs-document-properties-creation-date = Data de criação:
 pdfjs-document-properties-modification-date = Data de modificação:
+# Variables:
+#   $dateObj (Date) - the creation/modification date and time of the PDF file
+pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 # Variables:
 #   $date (Date) - the creation/modification date of the PDF file
 #   $time (Time) - the creation/modification time of the PDF file
@@ -275,6 +286,9 @@ pdfjs-annotation-date-string = { $date }, { $time }
 # Some common types are e.g.: "Check", "Text", "Comment", "Note"
 pdfjs-text-annotation-type =
     .alt = [Anotação { $type }]
+# Variables:
+#   $dateObj (Date) - the modification date and time of the annotation
+pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
 
 ## Password
 
@@ -366,6 +380,22 @@ pdfjs-editor-resizer-label-bottom-right = Canto inferior direito — redimension
 pdfjs-editor-resizer-label-bottom-middle = Inferior ao centro — redimensionar
 pdfjs-editor-resizer-label-bottom-left = Canto inferior esquerdo — redimensionar
 pdfjs-editor-resizer-label-middle-left = Centro à esquerda — redimensionar
+pdfjs-editor-resizer-top-left =
+    .aria-label = Canto superior esquerdo — redimensionar
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Superior ao centro — redimensionar
+pdfjs-editor-resizer-top-right =
+    .aria-label = Canto superior direito — redimensionar
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Centro à direita — redimensionar
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Canto inferior direito — redimensionar
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Inferior ao centro — redimensionar
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Canto inferior esquerdo — redimensionar
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Centro à esquerda — redimensionar
 
 ## Color picker
 
@@ -406,8 +436,6 @@ pdfjs-editor-new-alt-text-textarea =
 pdfjs-editor-new-alt-text-description = Descrição curta para as pessoas que não podem visualizar a imagem ou quando a imagem não carrega.
 # This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
 pdfjs-editor-new-alt-text-disclaimer1 = Este texto alternativo foi criado automaticamente e pode ser impreciso.
-# This is a required legal disclaimer that refers to the automatically created text inside the alt text box above this text. It disappears if the text is edited by a human.
-pdfjs-editor-new-alt-text-disclaimer = Este texto alternativo foi criado automaticamente.
 pdfjs-editor-new-alt-text-disclaimer-learn-more-url = Saber mais
 pdfjs-editor-new-alt-text-create-automatically-button-label = Criar texto alternativo automaticamente
 pdfjs-editor-new-alt-text-not-now-button = Agora não
@@ -452,26 +480,6 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Mostrar editor de text
 pdfjs-editor-alt-text-settings-show-dialog-description = Ajuda a garantir que todas as suas imagens tenham um texto alternativo.
 pdfjs-editor-alt-text-settings-close-button = Fechar
 
-pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
-pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
-pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-annotation-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }
-pdfjs-editor-resizer-top-left =
-    .aria-label = Canto superior esquerdo — redimensionar
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Superior ao centro — redimensionar
-pdfjs-editor-resizer-top-right =
-    .aria-label = Canto superior direito — redimensionar
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Centro à direita — redimensionar
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Canto inferior direito — redimensionar
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Inferior ao centro — redimensionar
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Canto inferior esquerdo — redimensionar
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Centro à esquerda — redimensionar
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

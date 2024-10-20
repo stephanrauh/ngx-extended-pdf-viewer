@@ -17,7 +17,7 @@ export class StampEditor extends AnnotationEditor {
         hasNoAltText: any;
     };
     /** @inheritdoc */
-    static deserialize(data: any, parent: any, uiManager: any): AnnotationEditor | null;
+    static deserialize(data: any, parent: any, uiManager: any): Promise<AnnotationEditor | null>;
     constructor(params: any);
     /** @inheritdoc */
     get telemetryFinalData(): {
@@ -25,29 +25,22 @@ export class StampEditor extends AnnotationEditor {
         hasAltText: boolean;
     };
     mlGuessAltText(imageData?: null, updateAltTextData?: boolean): Promise<any>;
-    copyCanvas(maxDimension: any, createImageData?: boolean): {
-        canvas: HTMLCanvasElement;
+    copyCanvas(maxDataDimension: any, maxPreviewDimension: any, createImageData?: boolean): {
+        canvas: HTMLCanvasElement | null;
+        width: any;
+        height: any;
         imageData: {
             width: any;
             height: any;
             data: Uint8ClampedArray;
-        };
-    } | {
-        canvas: HTMLCanvasElement;
-        imageData: null;
+        } | null;
     };
     /** @inheritdoc */
     getImageForAltText(): null;
     /** @inheritdoc */
-    serialize(isForCopying?: boolean, context?: null): {
-        annotationType: number;
-        bitmapId: null;
-        pageIndex: number;
-        rect: any[];
-        rotation: number;
-        isSvg: boolean;
-        structTreeParentId: any;
-    } | null;
+    serialize(isForCopying?: boolean, context?: null): Object | null;
+    /** @inheritdoc */
+    renderAnnotationElement(annotation: any): null;
     #private;
 }
 import { AnnotationEditor } from "./editor.js";

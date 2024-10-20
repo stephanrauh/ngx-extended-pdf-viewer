@@ -380,6 +380,22 @@ pdfjs-editor-resizer-label-bottom-right = Esquina inferior derecha — cambiar e
 pdfjs-editor-resizer-label-bottom-middle = Borde inferior en el medio — cambiar el tamaño
 pdfjs-editor-resizer-label-bottom-left = Esquina inferior izquierda — cambiar el tamaño
 pdfjs-editor-resizer-label-middle-left = Borde izquierdo en el medio — cambiar el tamaño
+pdfjs-editor-resizer-top-left =
+    .aria-label = Esquina superior izquierda — cambiar el tamaño
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Borde superior en el medio — cambiar el tamaño
+pdfjs-editor-resizer-top-right =
+    .aria-label = Esquina superior derecha — cambiar el tamaño
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Borde derecho en el medio — cambiar el tamaño
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Esquina inferior derecha — cambiar el tamaño
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Borde inferior en el medio — cambiar el tamaño
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Esquina inferior izquierda — cambiar el tamaño
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Borde izquierdo en el medio — cambiar el tamaño
 
 ## Color picker
 
@@ -464,22 +480,6 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Mostrar el editor de t
 pdfjs-editor-alt-text-settings-show-dialog-description = Te ayuda a asegurarte de que todas tus imágenes tengan texto alternativo.
 pdfjs-editor-alt-text-settings-close-button = Cerrar
 
-pdfjs-editor-resizer-top-left =
-    .aria-label = Esquina superior izquierda — cambiar el tamaño
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Borde superior en el medio — cambiar el tamaño
-pdfjs-editor-resizer-top-right =
-    .aria-label = Esquina superior derecha — cambiar el tamaño
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Borde derecho en el medio — cambiar el tamaño
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Esquina inferior derecha — cambiar el tamaño
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Borde inferior en el medio — cambiar el tamaño
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Esquina inferior izquierda — cambiar el tamaño
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Borde izquierdo en el medio — cambiar el tamaño
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

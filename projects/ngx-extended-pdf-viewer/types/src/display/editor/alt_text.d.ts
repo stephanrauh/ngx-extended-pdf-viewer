@@ -1,4 +1,5 @@
 export class AltText {
+    static "__#35@#l10nNewButton": null;
     static _l10nPromise: null;
     static initialize(l10nPromise: any): void;
     constructor(editor: any);

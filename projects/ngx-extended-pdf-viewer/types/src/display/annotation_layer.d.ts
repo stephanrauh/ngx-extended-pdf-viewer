@@ -4,6 +4,7 @@ export type TextAccessibilityManager = import("../../web/text_accessibility.js")
 export type IDownloadManager = import("../../web/interfaces").IDownloadManager;
 export type IPDFLinkService = import("../../web/interfaces").IPDFLinkService;
 export type AnnotationEditorUIManager = any;
+export type StructTreeLayerBuilder = import("../../web/struct_tree_layer_builder.js").StructTreeLayerBuilder;
 export type AnnotationElementParameters = {
     data: Object;
     layer: HTMLDivElement;
@@ -50,6 +51,7 @@ export type AnnotationLayerParameters = {
     annotationCanvasMap?: Map<string, HTMLCanvasElement> | undefined;
     accessibilityManager?: import("../../web/text_accessibility.js").TextAccessibilityManager | undefined;
     annotationEditorUIManager?: AnnotationEditorUIManager;
+    structTreeLayer?: import("../../web/struct_tree_layer_builder.js").StructTreeLayerBuilder | undefined;
 };
 /**
  * @typedef {Object} AnnotationLayerParameters
@@ -70,18 +72,20 @@ export type AnnotationLayerParameters = {
  * @property {Map<string, HTMLCanvasElement>} [annotationCanvasMap]
  * @property {TextAccessibilityManager} [accessibilityManager]
  * @property {AnnotationEditorUIManager} [annotationEditorUIManager]
+ * @property {StructTreeLayerBuilder} [structTreeLayer]
  */
 /**
  * Manage the layer containing all the annotations.
  */
 export class AnnotationLayer {
-    constructor({ div, accessibilityManager, annotationCanvasMap, annotationEditorUIManager, page, viewport, }: {
+    constructor({ div, accessibilityManager, annotationCanvasMap, annotationEditorUIManager, page, viewport, structTreeLayer, }: {
         div: any;
         accessibilityManager: any;
         annotationCanvasMap: any;
         annotationEditorUIManager: any;
         page: any;
         viewport: any;
+        structTreeLayer: any;
     });
     div: any;
     page: any;
@@ -115,6 +119,11 @@ export class FreeTextAnnotationElement extends AnnotationElement {
     annotationEditorType: number;
     render(): HTMLElement | undefined;
 }
+export class HighlightAnnotationElement extends AnnotationElement {
+    constructor(parameters: any);
+    annotationEditorType: number;
+    render(): HTMLElement | undefined;
+}
 export class InkAnnotationElement extends AnnotationElement {
     constructor(parameters: any);
     containerClassName: string;
@@ -126,6 +135,7 @@ export class InkAnnotationElement extends AnnotationElement {
 }
 export class StampAnnotationElement extends AnnotationElement {
     constructor(parameters: any);
+    annotationEditorType: number;
     render(): HTMLElement | undefined;
 }
 import { AnnotationStorage } from "./annotation_storage.js";

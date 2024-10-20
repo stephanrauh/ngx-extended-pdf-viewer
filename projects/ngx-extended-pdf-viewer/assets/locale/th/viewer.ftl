@@ -358,6 +358,22 @@ pdfjs-editor-resizer-label-bottom-right = มุมขวาล่าง — ป
 pdfjs-editor-resizer-label-bottom-middle = ตรงกลางด้านล่าง — ปรับขนาด
 pdfjs-editor-resizer-label-bottom-left = มุมซ้ายล่าง — ปรับขนาด
 pdfjs-editor-resizer-label-middle-left = ตรงกลางด้านซ้าย — ปรับขนาด
+pdfjs-editor-resizer-top-left =
+    .aria-label = มุมซ้ายบน — ปรับขนาด
+pdfjs-editor-resizer-top-middle =
+    .aria-label = ตรงกลางด้านบน — ปรับขนาด
+pdfjs-editor-resizer-top-right =
+    .aria-label = มุมขวาบน — ปรับขนาด
+pdfjs-editor-resizer-middle-right =
+    .aria-label = ตรงกลางด้านขวา — ปรับขนาด
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = มุมขวาล่าง — ปรับขนาด
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = ตรงกลางด้านล่าง — ปรับขนาด
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = มุมซ้ายล่าง — ปรับขนาด
+pdfjs-editor-resizer-middle-left =
+    .aria-label = ตรงกลางด้านซ้าย — ปรับขนาด
 
 ## Color picker
 
@@ -442,22 +458,6 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = แสดงตัว�
 pdfjs-editor-alt-text-settings-show-dialog-description = ช่วยให้คุณแน่ใจว่าภาพทั้งหมดของคุณมีข้อความทดแทน
 pdfjs-editor-alt-text-settings-close-button = ปิด
 
-pdfjs-editor-resizer-top-left =
-    .aria-label = มุมซ้ายบน — ปรับขนาด
-pdfjs-editor-resizer-top-middle =
-    .aria-label = ตรงกลางด้านบน — ปรับขนาด
-pdfjs-editor-resizer-top-right =
-    .aria-label = มุมขวาบน — ปรับขนาด
-pdfjs-editor-resizer-middle-right =
-    .aria-label = ตรงกลางด้านขวา — ปรับขนาด
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = มุมขวาล่าง — ปรับขนาด
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = ตรงกลางด้านล่าง — ปรับขนาด
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = มุมซ้ายล่าง — ปรับขนาด
-pdfjs-editor-resizer-middle-left =
-    .aria-label = ตรงกลางด้านซ้าย — ปรับขนาด
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }

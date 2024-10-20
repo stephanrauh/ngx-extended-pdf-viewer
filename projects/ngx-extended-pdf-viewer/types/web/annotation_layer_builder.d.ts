@@ -69,11 +69,12 @@ export class AnnotationLayerBuilder {
     _eventBus: any;
     /**
      * @param {PageViewport} viewport
+     * @param {Object} options
      * @param {string} intent (default value is 'display')
      * @returns {Promise<void>} A promise that is resolved when rendering of the
      *   annotations is complete.
      */
-    render(viewport: PageViewport, intent?: string): Promise<void>;
+    render(viewport: PageViewport, options: Object, intent?: string): Promise<void>;
     cancel(): void;
     hide(): void;
     hasEditableAnnotations(): boolean;

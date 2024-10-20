@@ -380,6 +380,22 @@ pdfjs-editor-resizer-label-bottom-right = Nederste højre hjørne - tilpas stør
 pdfjs-editor-resizer-label-bottom-middle = Nederst i midten - tilpas størrelse
 pdfjs-editor-resizer-label-bottom-left = Nederste venstre hjørne - tilpas størrelse
 pdfjs-editor-resizer-label-middle-left = Midten til venstre — tilpas størrelse
+pdfjs-editor-resizer-top-left =
+    .aria-label = Øverste venstre hjørne — tilpas størrelse
+pdfjs-editor-resizer-top-middle =
+    .aria-label = Øverste i midten — tilpas størrelse
+pdfjs-editor-resizer-top-right =
+    .aria-label = Øverste højre hjørne — tilpas størrelse
+pdfjs-editor-resizer-middle-right =
+    .aria-label = Midten til højre — tilpas størrelse
+pdfjs-editor-resizer-bottom-right =
+    .aria-label = Nederste højre hjørne - tilpas størrelse
+pdfjs-editor-resizer-bottom-middle =
+    .aria-label = Nederst i midten - tilpas størrelse
+pdfjs-editor-resizer-bottom-left =
+    .aria-label = Nederste venstre hjørne - tilpas størrelse
+pdfjs-editor-resizer-middle-left =
+    .aria-label = Midten til venstre — tilpas størrelse
 
 ## Color picker
 
@@ -464,22 +480,6 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Vis redigering af alte
 pdfjs-editor-alt-text-settings-show-dialog-description = Hjælper dig med at sikre, at alle dine billeder har alternativ tekst.
 pdfjs-editor-alt-text-settings-close-button = Luk
 
-pdfjs-editor-resizer-top-left =
-    .aria-label = Øverste venstre hjørne — tilpas størrelse
-pdfjs-editor-resizer-top-middle =
-    .aria-label = Øverste i midten — tilpas størrelse
-pdfjs-editor-resizer-top-right =
-    .aria-label = Øverste højre hjørne — tilpas størrelse
-pdfjs-editor-resizer-middle-right =
-    .aria-label = Midten til højre — tilpas størrelse
-pdfjs-editor-resizer-bottom-right =
-    .aria-label = Nederste højre hjørne - tilpas størrelse
-pdfjs-editor-resizer-bottom-middle =
-    .aria-label = Nederst i midten - tilpas størrelse
-pdfjs-editor-resizer-bottom-left =
-    .aria-label = Nederste venstre hjørne - tilpas størrelse
-pdfjs-editor-resizer-middle-left =
-    .aria-label = Midten til venstre — tilpas størrelse
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

@@ -18,11 +18,11 @@ export class InkEditor extends AnnotationEditor {
      * @param {Array<Array<number>>} bezier
      * @returns {Path2D}
      */
-    static "__#25@#buildPath2D"(bezier: Array<Array<number>>): Path2D;
-    static "__#25@#toPDFCoordinates"(points: any, rect: any, rotation: any): any;
-    static "__#25@#fromPDFCoordinates"(points: any, rect: any, rotation: any): any;
+    static "__#26@#buildPath2D"(bezier: Array<Array<number>>): Path2D;
+    static "__#26@#toPDFCoordinates"(points: any, rect: any, rotation: any): any;
+    static "__#26@#fromPDFCoordinates"(points: any, rect: any, rotation: any): any;
     /** @inheritdoc */
-    static deserialize(data: any, parent: any, uiManager: any): AnnotationEditor | null;
+    static deserialize(data: any, parent: any, uiManager: any): Promise<AnnotationEditor | null>;
     constructor(params: any);
     color: any;
     thickness: any;

@@ -198,15 +198,16 @@ export type DocumentInitParameters = {
      */
     pdfBug?: boolean | undefined;
     /**
-     * - The factory instance that will be used
-     * when creating canvases. The default value is {new DOMCanvasFactory()}.
+     * - The factory that will be used when
+     * creating canvases. The default value is {DOMCanvasFactory}.
      */
-    canvasFactory?: Object | undefined;
+    CanvasFactory?: Object | undefined;
     /**
-     * - A factory instance that will be used
-     * to create SVG filters when rendering some images on the main canvas.
+     * - The factory that will be used to
+     * create SVG filters when rendering some images on the main canvas.
+     * The default value is {DOMFilterFactory}.
      */
-    filterFactory?: Object | undefined;
+    FilterFactory?: Object | undefined;
     /**
      * - Enables hardware acceleration for
      * rendering. The default value is `false`.
@@ -652,10 +653,11 @@ export const DefaultStandardFontDataFactory: typeof NodeStandardFontDataFactory;
  *   disabling of pre-fetching to work correctly.
  * @property {boolean} [pdfBug] - Enables special hooks for debugging PDF.js
  *   (see `web/debugger.js`). The default value is `false`.
- * @property {Object} [canvasFactory] - The factory instance that will be used
- *   when creating canvases. The default value is {new DOMCanvasFactory()}.
- * @property {Object} [filterFactory] - A factory instance that will be used
- *   to create SVG filters when rendering some images on the main canvas.
+ * @property {Object} [CanvasFactory] - The factory that will be used when
+ *    creating canvases. The default value is {DOMCanvasFactory}.
+ * @property {Object} [FilterFactory] - The factory that will be used to
+ *    create SVG filters when rendering some images on the main canvas.
+ *    The default value is {DOMFilterFactory}.
  * @property {boolean} [enableHWA] - Enables hardware acceleration for
  *   rendering. The default value is `false`.
  */
@@ -753,7 +755,7 @@ export class PDFDataRangeTransport {
  * after which individual pages can be rendered.
  */
 export class PDFDocumentLoadingTask {
-    static "__#46@#docId": number;
+    static "__#47@#docId": number;
     _capability: any;
     _transport: any;
     _worker: any;
@@ -804,6 +806,10 @@ export class PDFDocumentProxy {
      * @type {AnnotationStorage} Storage for annotation data in forms.
      */
     get annotationStorage(): AnnotationStorage;
+    /**
+     * @type {Object} The canvas factory instance.
+     */
+    get canvasFactory(): Object;
     /**
      * @type {Object} The filter factory instance.
      */
@@ -1387,9 +1393,9 @@ export class PDFPageProxy {
  * @param {PDFWorkerParameters} params - The worker initialization parameters.
  */
 export class PDFWorker {
-    static "__#49@#fakeWorkerId": number;
-    static "__#49@#isWorkerDisabled": boolean;
-    static "__#49@#workerPorts": any;
+    static "__#50@#fakeWorkerId": number;
+    static "__#50@#isWorkerDisabled": boolean;
+    static "__#50@#workerPorts": any;
     /**
      * @param {PDFWorkerParameters} params - The worker initialization parameters.
      */
@@ -1399,7 +1405,7 @@ export class PDFWorker {
      * @type {string}
      */
     static get workerSrc(): string;
-    static get "__#49@#mainThreadWorkerMessageHandler"(): any;
+    static get "__#50@#mainThreadWorkerMessageHandler"(): any;
     static get _setupFakeWorkerGlobal(): any;
     constructor({ name, port, verbosity, }?: {
         name?: null | undefined;

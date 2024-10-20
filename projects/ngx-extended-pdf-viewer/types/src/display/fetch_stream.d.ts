@@ -3,7 +3,7 @@ export class PDFFetchStream implements IPDFStream {
     constructor(source: any);
     source: any;
     isHttp: boolean;
-    httpHeaders: any;
+    headers: Headers;
     _fullRequestReader: PDFFetchStreamReader | null;
     _rangeRequestReaders: any[];
     get _progressiveDataLength(): number;
@@ -26,7 +26,6 @@ declare class PDFFetchStreamReader implements IPDFStreamReader {
     _abortController: AbortController;
     _isStreamingSupported: boolean;
     _isRangeSupported: boolean;
-    _headers: Headers;
     onProgress: any;
     get headersReady(): any;
     get filename(): string | null;
@@ -52,7 +51,6 @@ declare class PDFFetchStreamRangeReader implements IPDFStreamRangeReader {
     _readCapability: any;
     _isStreamingSupported: boolean;
     _abortController: AbortController;
-    _headers: Headers;
     onProgress: any;
     get isStreamingSupported(): boolean;
     read(): Promise<{

@@ -1,5 +1,5 @@
 export class BaseCanvasFactory {
-    constructor({ enableHWA }?: {
+    constructor({ enableHWA }: {
         enableHWA?: boolean | undefined;
     });
     create(width: any, height: any): {

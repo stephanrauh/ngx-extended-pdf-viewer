@@ -92,6 +92,7 @@ export function backtrackBeforeAllVisibleElements(index: number, views: any[], t
  *                   or |items.length| if no such element exists.
  */
 export function binarySearchFirstItem(items: any, condition: any, start?: number): number;
+export const calcRound: ((x: number) => number) | ((x: any) => any);
 export namespace CursorTool {
     let SELECT: number;
     let HAND: number;
@@ -176,23 +177,6 @@ export const MAX_SCALE: 10;
 export const MIN_SCALE: 0.1;
 export function normalizeWheelEventDelta(evt: any): number;
 export function normalizeWheelEventDirection(evt: any): number;
-/**
- * Scale factors for the canvas, necessary with HiDPI displays.
- */
-export class OutputScale {
-    /**
-     * @type {number} Horizontal scale.
-     */
-    sx: number;
-    /**
-     * @type {number} Vertical scale.
-     */
-    sy: number;
-    /**
-     * @type {boolean} Returns `true` when scaling is required, `false` otherwise.
-     */
-    get scaled(): boolean;
-}
 /**
  * Helper function to parse query string (e.g. ?param1=value&param2=...).
  * @param {string} query
