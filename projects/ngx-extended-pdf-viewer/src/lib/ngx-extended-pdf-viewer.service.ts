@@ -705,6 +705,10 @@ export class NgxExtendedPdfViewerService {
     this.setEditorProperty(AnnotationEditorParamsType.INK_THICKNESS, thickness);
   }
 
+  public set editorInkSmoothkness(thickness: number) {
+    this.setEditorProperty(AnnotationEditorParamsType.INK_SMOOTHNESS, thickness);
+  }
+
   public set editorHighlightColor(color: string) {
     this.setEditorProperty(AnnotationEditorParamsType.HIGHLIGHT_COLOR, color);
   }

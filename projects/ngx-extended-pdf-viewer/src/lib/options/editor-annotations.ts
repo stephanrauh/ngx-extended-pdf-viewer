@@ -2,8 +2,8 @@ export enum AnnotationMode {
   DISABLE = 0,
   ENABLE = 1,
   ENABLE_FORMS = 2,
-  ENABLE_STORAGE = 3
-};
+  ENABLE_STORAGE = 3,
+}
 
 export enum AnnotationEditorType {
   DISABLE = -1,
@@ -22,6 +22,7 @@ export const AnnotationEditorParamsType = {
   FREETEXT_OPACITY: 13,
   INK_COLOR: 21,
   INK_THICKNESS: 22,
+  INK_SMOOTHNESS: 2250,
   INK_OPACITY: 23,
   HIGHLIGHT_COLOR: 31,
   HIGHLIGHT_DEFAULT_COLOR: 32,
