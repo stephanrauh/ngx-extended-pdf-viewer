@@ -303,7 +303,7 @@ export class DynamicCssComponent implements OnDestroy {
 
   private isContainerHeightZero(container: HTMLElement, ngxExtendedPdfViewer: NgxHasHeight, logLevel: VerbosityLevel): boolean {
     if (container.clientHeight === 0) {
-      if (logLevel >= VerbosityLevel.WARNINGS && !ngxExtendedPdfViewer.autoHeight) {
+      if (logLevel >= VerbosityLevel.WARNINGS && !ngxExtendedPdfViewer.autoHeight && ngxExtendedPdfViewer.height !== '100%') {
         console.warn(
           "The height of the PDF viewer widget is zero pixels. Please check the height attribute. Is there a syntax error? Or are you using a percentage with a CSS framework that doesn't support this? The height is adjusted automatedly."
         );
