@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "documentationPage",
+  "title": "Documentation Page Schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "The name of the page",
+      "x-prompt": "What is the name of the documentation page?",
+      "type": "string",
+      "minLength": 1,
+      "default": "test"
+    },
+    "path": {
+      "description": "Page location relative to the pages folder",
+      "type": "string",
+      "format": "path",
+      "x-prompt": "Where should the service be created, relative to the pages folder?",
+      "default": "basics"
+    }
+  },
+  "required": [
+    "name",
+    "path"
+  ]
+}

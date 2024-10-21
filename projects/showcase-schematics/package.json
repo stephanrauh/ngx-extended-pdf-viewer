@@ -1,0 +1,25 @@
+{
+  "name": "showcase-schematics",
+  "version": "0.0.0",
+  "description": "A blank schematics",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && jasmine src/**/*_spec.js"
+  },
+  "keywords": [
+    "schematics"
+  ],
+  "author": "",
+  "license": "MIT",
+  "schematics": "./src/collection.json",
+  "dependencies": {
+    "@angular-devkit/core": "^18.2.9",
+    "@angular-devkit/schematics": "^18.2.9",
+    "typescript": "~5.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.18.0",
+    "@types/jasmine": "~5.1.0",
+    "jasmine": "^5.0.0"
+  }
+}
