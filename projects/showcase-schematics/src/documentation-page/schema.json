@@ -4,12 +4,12 @@
   "title": "Documentation Page Schema",
   "type": "object",
   "properties": {
-    "name": {
-      "description": "The name of the page",
-      "x-prompt": "What is the name of the documentation page?",
+    "pageTitle": {
+      "description": "The title of the page",
+      "x-prompt": "What is the title of the documentation page? It will be used as a component name and for the tab title too.",
       "type": "string",
       "minLength": 1,
-      "default": "test"
+      "default": "New Page"
     },
     "path": {
       "description": "Page location relative to the pages folder",
@@ -20,7 +20,7 @@
     }
   },
   "required": [
-    "name",
+    "pageTitle",
     "path"
   ]
 }

@@ -1,31 +1,43 @@
 import { apply, applyTemplates, chain, mergeWith, move, Rule, SchematicsException, Tree, url } from '@angular-devkit/schematics';
 import { normalize, strings } from '@angular-devkit/core';
 import { DocumentationPageSchema } from './documentation-page';
-import { dasherize } from '@angular-devkit/core/src/utils/strings';
 import * as ts from 'typescript';
+import * as path from 'path';
 
 export function documentationPage(_options: DocumentationPageSchema): Rule {
   return (tree: Tree) => {
+    const basePath = 'projects/showcase/src/app/pages';
+    const classifiedName = strings.classify(_options.pageTitle);
+    const dasherizedName = strings.dasherize(_options.pageTitle);
+    const componentName = `${classifiedName}PageComponent`;
+    const targetDir = `${basePath}/${_options.path}/${dasherizedName}`;
+
     const templateSource = apply(url('./files'), [
       applyTemplates({
-        dasherize: strings.dasherize,
-        classify: strings.classify,
-        name: _options.name,
+        classifiedName,
+        dasherizedName,
+        componentName,
         path: _options.path,
+        contentPageComponentPath: getRelativePath(targetDir, 'projects/showcase/src/app/shared/components/content-page/content-page.component'),
+        markdownContentComponentPath: getRelativePath(targetDir, 'projects/showcase/src/app/shared/components/markdown-content.component'),
       }),
-      move(normalize(`projects/showcase/src/app/pages/${_options.path}/${dasherize(_options.name)}`)),
+      move(normalize(targetDir)),
     ]);
 
-    addRouteToRoutesFile(tree, _options);
+    addRouteToRoutesFile(tree, targetDir, _options.pageTitle, dasherizedName, componentName);
 
     return chain([mergeWith(templateSource)]);
   };
 }
 
-function addRouteToRoutesFile(tree: Tree, options: DocumentationPageSchema): void {
-  const routesFilePath = `projects/showcase/src/app/pages/${options.path}/${dasherize(options.name)}.routes.ts`;
-  if (!tree.exists(routesFilePath)) {
-    throw new SchematicsException(`Routes file ${routesFilePath} does not exist.`);
+function getRelativePath(from: string, to: string): string {
+  return path.relative(from, to).replace(/\\/g, '/');
+}
+
+function addRouteToRoutesFile(tree: Tree, targetDir: string, pageTitle: string, dasherizedName: string, componentName: string): void {
+  const routesFilePath = findClosestRoutesFile(tree, targetDir);
+  if (!routesFilePath) {
+    throw new SchematicsException(`No routes.ts file found in the ancestor chain of ${targetDir}.`);
   }
 
   const routesFileContent = tree.read(routesFilePath);
@@ -37,10 +49,10 @@ function addRouteToRoutesFile(tree: Tree, options: DocumentationPageSchema): voi
 
   const newRoute = `
     {
-      path: '${dasherize(options.name)}',
-      component: ${strings.classify(options.name)}PageComponent,
+      path: '${dasherizedName}',
+      component: ${componentName},
       data: {
-        pageTitle: '${strings.classify(options.name)}'
+        pageTitle: '${pageTitle}'
       }
     }
   `;
@@ -53,8 +65,31 @@ function addRouteToRoutesFile(tree: Tree, options: DocumentationPageSchema): voi
   }
 
   const routesArrayText = routesArray.getText();
-  const updatedRoutesArrayText = routesArrayText.replace(/children: \[(.*?)\]/s, `children: [$1,${newRoute}]`);
+  const updatedRoutesArrayText = routesArrayText.replace(/children: \[(.*?)]/s, (_, p1) => {
+    const trimmed = p1.trim();
+    const lastChar = trimmed.charAt(trimmed.length - 1);
+    const separator = lastChar === ',' || lastChar === ';' ? '' : ',';
+    return `children: [${trimmed}${separator}${newRoute}]`;
+  });
 
   const updatedSourceFileText = sourceFile.getText().replace(routesArrayText, updatedRoutesArrayText);
-  tree.overwrite(routesFilePath, updatedSourceFileText);
+
+  const relativeImportPath = path.relative(path.dirname(routesFilePath), `${targetDir}/${dasherizedName}-page.component`).replace(/\\/g, '/');
+  const importStatement = `import { ${componentName} } from './${relativeImportPath}';\n`;
+  const updatedFileTextWithImport = importStatement + updatedSourceFileText;
+
+  tree.overwrite(routesFilePath, updatedFileTextWithImport);
+}
+
+function findClosestRoutesFile(tree: Tree, dir: string): string | null {
+  let currentDir = dir;
+  while (currentDir !== '/') {
+    const files = tree.getDir(currentDir).subfiles;
+    const routesFile = files.find((file) => file.endsWith('.routes.ts'));
+    if (routesFile) {
+      return path.join(currentDir, routesFile);
+    }
+    currentDir = path.dirname(currentDir);
+  }
+  return null;
 }

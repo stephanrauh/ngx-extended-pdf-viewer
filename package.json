@@ -30,7 +30,8 @@
     "generate-sbom": "cyclonedx-npm --output-file sbom.json --mc-type library",
     "serve:ssr:showcase": "node dist/showcase/server/server.mjs",
     "serve:showcase": "ng serve showcase",
-    "add-documentation-page": "schematics ./projects/showcase-schematics:documentationPage"
+    "build-schematics": "npm run build --prefix projects/showcase-schematics",
+    "add-documentation-page": "schematics ./projects/showcase-schematics:documentationPage --dry-run=false"
   },
   "private": true,
   "dependencies": {

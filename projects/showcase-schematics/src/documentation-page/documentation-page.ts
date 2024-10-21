@@ -1,4 +1,4 @@
 export interface DocumentationPageSchema {
-  name: string;
+  pageTitle: string;
   path: string;
 }
