@@ -18,8 +18,11 @@ export function documentationPage(_options: DocumentationPageSchema): Rule {
         dasherizedName,
         componentName,
         path: _options.path,
+        includeDemo: _options.includeDemo,
         contentPageComponentPath: getRelativePath(targetDir, 'projects/showcase/src/app/shared/components/content-page/content-page.component'),
         markdownContentComponentPath: getRelativePath(targetDir, 'projects/showcase/src/app/shared/components/markdown-content.component'),
+        splitViewComponentPath: getRelativePath(targetDir, 'projects/showcase/src/app/shared/components/split-view.component'),
+        minifiedDirectivePath: getRelativePath(targetDir, 'projects/showcase/src/app/shared/directives/set-minified-library-usage.directive'),
       }),
       move(normalize(targetDir)),
     ]);

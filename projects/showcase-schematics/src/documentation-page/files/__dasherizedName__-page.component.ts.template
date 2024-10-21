@@ -1,13 +1,30 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core';<% if (includeDemo) { %>
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { SplitViewComponent } from '<%= splitViewComponentPath %>';
+import { SetMinifiedLibraryUsageDirective } from '<%= minifiedDirectivePath %>';<% } %>
 import { ContentPageComponent } from '<%= contentPageComponentPath %>';
 import { MarkdownContentComponent } from '<%= markdownContentComponentPath %>';
 
 @Component({
   selector: 'pvs-<%= dasherizedName %>-page',
   standalone: true,
-  imports: [ContentPageComponent, MarkdownContentComponent],
+  imports: [ContentPageComponent, MarkdownContentComponent, <% if (includeDemo) { %>NgxExtendedPdfViewerModule, SplitViewComponent, SetMinifiedLibraryUsageDirective, <% } %>],
   template: `<pvs-content-page>
-    <pvs-markdown src="/assets/pages/<%= path %>/<%= dasherizedName %>/text.md" />
+    <pvs-markdown src="/assets/pages/<%= path %>/<%= dasherizedName %>/text.md" /><% if (includeDemo) { %>
+    <ng-template #demo>
+      <pvs-split-view [stickyEnd]="true">
+        <span>Add Demo Controls here</span>
+
+        <ngx-extended-pdf-viewer
+          slot="end"
+          src=""
+          zoom="auto"
+          [textLayer]="true"
+          [showPresentationModeButton]="true"
+          pvsSetMinifiedLibraryUsage
+        />
+      </pvs-split-view>
+    </ng-template><% } %>
   </pvs-content-page>`,
 })
 export class <%= componentName %> {}

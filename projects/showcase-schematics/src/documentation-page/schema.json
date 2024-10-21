@@ -17,6 +17,12 @@
       "format": "path",
       "x-prompt": "Where should the service be created, relative to the pages folder?",
       "default": "basics"
+    },
+    "includeDemo": {
+      "description": "Include a demo tab",
+      "type": "boolean",
+      "x-prompt": "Do you want to include a demo?",
+      "default": "yes"
     }
   },
   "required": [
