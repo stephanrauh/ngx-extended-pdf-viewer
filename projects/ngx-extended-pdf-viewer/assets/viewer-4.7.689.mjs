@@ -11351,7 +11351,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.7.688",
+    apiVersion: "4.7.689",
     data,
     password,
     disableAutoFetch,
@@ -13147,8 +13147,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.7.688";
-const build = "36ff816b5";
+const version = "4.7.689";
+const build = "b1e2dc567";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -20784,8 +20784,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.7.688";
-const pdfjsBuild = "36ff816b5";
+const pdfjsVersion = "4.7.689";
+const pdfjsBuild = "b1e2dc567";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -22286,7 +22286,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '22.0.0-alpha.1';
+const ngxExtendedPdfViewerVersion = '22.0.0-alpha.2';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -35220,7 +35220,7 @@ class PDFViewer {
   #maxZoom = MAX_SCALE;
   #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.7.688";
+    const viewerVersion = "4.7.689";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -39222,11 +39222,28 @@ const PDFViewerApplication = {
     window.addEventListener("keyup", onKeyUp.bind(this), {
       signal
     });
-    window.addEventListener("resize", () => eventBus.dispatch("resize", {
-      source: window
-    }), {
-      signal
-    });
+    if (viewerContainer) {
+      let resizeTimeout;
+      const resizeObserver = new ResizeObserver(entries => {
+        for (const entry of entries) {
+          if (entry.target === mainContainer) {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+              eventBus.dispatch("resize", {
+                source: mainContainer
+              });
+            }, 50);
+          }
+        }
+      });
+      resizeObserver.observe(mainContainer);
+    } else {
+      window.addEventListener("resize", () => eventBus.dispatch("resize", {
+        source: window
+      }), {
+        signal
+      });
+    }
     window.addEventListener("hashchange", () => {
       eventBus.dispatch("hashchange", {
         source: window,
@@ -40104,8 +40121,8 @@ PDFViewerApplication.serviceWorkerOptions = ServiceWorkerOptions;
 
 
 
-const pdfjsVersion = "4.7.688";
-const pdfjsBuild = "36ff816b5";
+const pdfjsVersion = "4.7.689";
+const pdfjsBuild = "b1e2dc567";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
