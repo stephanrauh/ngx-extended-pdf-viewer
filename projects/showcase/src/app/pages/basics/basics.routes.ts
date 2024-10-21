@@ -1,3 +1,4 @@
+import { LoadingPageComponent } from './loading/loading-page.component';
 import { Route } from '@angular/router';
 import { RouteData, RouteGroupData } from '../../shared/types/route-data.types';
 import { BasicPageComponent } from './simple/basic.page.component';
@@ -23,6 +24,13 @@ export const basicsRoutes: Route[] = [
         component: BasicPageComponent,
         data: <RouteData>{
           pageTitle: 'Simple Demo',
+        },
+      },
+      {
+        path: 'loading',
+        component: LoadingPageComponent,
+        data: {
+          pageTitle: 'Loading and unloading a file',
         },
       },
     ],
