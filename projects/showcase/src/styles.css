@@ -28,6 +28,10 @@
     @apply mb-2;
   }
 
+  markdown {
+    @apply inline-grid;
+  }
+
   markdown > p,
   markdown > pre[class*="language-"] {
     &:not(:last-child):not(:has(+ h2)){
