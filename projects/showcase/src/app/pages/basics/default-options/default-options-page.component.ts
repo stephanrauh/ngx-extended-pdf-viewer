@@ -9,7 +9,7 @@ import { availableOptions, optionsSettings } from './options-table.data';
   standalone: true,
   imports: [ContentPageComponent, MarkdownContentComponent, Angular2SmartTableModule],
   template: `<pvs-content-page [otherTabs]="[{ title: 'Available Options', template: availableOptions }]">
-    <pvs-markdown src="/assets/pages/configuration/default-options/text.md" />
+    <pvs-markdown src="/assets/pages/basics/default-options/text.md" />
     <ng-template #availableOptions>
       <h2>Available Options</h2>
       <p>Below you find an interactive list of all available options.</p>

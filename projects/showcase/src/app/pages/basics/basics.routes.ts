@@ -3,6 +3,7 @@ import { Route } from '@angular/router';
 import { RouteData, RouteGroupData } from '../../shared/types/route-data.types';
 import { BasicPageComponent } from './simple/basic.page.component';
 import { GettingStartedPageComponent } from './getting-started/getting-started-page.component';
+import { DefaultOptionsPageComponent } from './default-options/default-options-page.component';
 
 export const basicsRoutes: Route[] = [
   {
@@ -31,6 +32,13 @@ export const basicsRoutes: Route[] = [
         component: FileSourcesPageComponent,
         data: {
           pageTitle: 'File Sources',
+        },
+      },
+      {
+        path: 'default-options',
+        component: DefaultOptionsPageComponent,
+        data: {
+          pageTitle: 'Default Options',
         },
       },
     ],
