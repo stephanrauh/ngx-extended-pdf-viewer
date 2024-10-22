@@ -9,7 +9,7 @@ import { MarkdownContentComponent } from '<%= markdownContentComponentPath %>';
   selector: 'pvs-<%= dasherizedName %>-page',
   standalone: true,
   imports: [ContentPageComponent, MarkdownContentComponent, <% if (includeDemo) { %>NgxExtendedPdfViewerModule, SplitViewComponent, SetMinifiedLibraryUsageDirective, <% } %>],
-  template: `<pvs-content-page>
+  template: `<pvs-content-page<% if (includeDemo) { %> [demoTemplate]="demo"<% } %>>
     <pvs-markdown src="/assets/pages/<%= path %>/<%= dasherizedName %>/text.md" /><% if (includeDemo) { %>
     <ng-template #demo>
       <pvs-split-view [stickyEnd]="true">
