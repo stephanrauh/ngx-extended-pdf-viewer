@@ -5,7 +5,7 @@ import { NgClass } from '@angular/common';
   selector: 'pvs-split-view',
   standalone: true,
   imports: [NgClass],
-  template: ` <div class="grid grid-cols-2 gap-8 h-full">
+  template: ` <div class="grid grid-cols-[1fr_2fr] gap-8 h-full">
     <div [ngClass]="{ 'sticky top-content-begin self-start': stickyStart() }">
       <ng-content />
     </div>

@@ -106,7 +106,7 @@
   .input-group {
     @apply grid;
     @apply gap-2;
-    @apply grid-cols-[1fr_2fr] gap-2;
+    @apply grid-cols-[1fr_2fr];
     @apply items-center;
   }
 
@@ -125,7 +125,7 @@
     @apply min-w-0;
     @apply p-2;
   }
-  
+
 }
 
 @layer utilities_align {
