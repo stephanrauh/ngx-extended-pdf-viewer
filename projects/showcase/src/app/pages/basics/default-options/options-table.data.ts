@@ -1,3 +1,4 @@
+/* tslint:disable:max-line-length */
 import { Settings } from 'angular2-smart-table';
 
 export const optionsSettings: Settings = {
