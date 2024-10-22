@@ -1,11 +1,12 @@
 import { Component, computed, inject, input, TemplateRef } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
-import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, LowerCasePipe, NgTemplateOutlet } from '@angular/common';
 import { MarkdownContentComponent } from '../markdown-content.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TabsComponent } from '../tabs/tabs.component';
 import { TabPanelComponent } from '../tabs/tab-panel.component';
+import { Tab } from '../../types/tab.type';
 
 @Component({
   selector: 'pvs-content-page',
@@ -21,6 +22,7 @@ import { TabPanelComponent } from '../tabs/tab-panel.component';
     TabsComponent,
     TabPanelComponent,
     NgTemplateOutlet,
+    LowerCasePipe,
   ],
   templateUrl: './content-page.component.html',
   preserveWhitespaces: true,
@@ -31,6 +33,7 @@ export class ContentPageComponent {
   private data = toSignal(this.activatedRoute.data);
 
   demoTemplate = input<TemplateRef<any> | null>(null);
+  otherTabs = input<Tab[]>([]);
 
   pageTitle = computed(() => {
     const data = this.data();

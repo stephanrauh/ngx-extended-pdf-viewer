@@ -5,6 +5,12 @@
       <ng-content />
     </pvs-tab-panel>
 
+    @for (tab of otherTabs(); track tab.title) {
+      <pvs-tab-panel [header]="tab.title" [key]="tab.title | lowercase">
+        <ng-container *ngTemplateOutlet="tab.template" />
+      </pvs-tab-panel>
+    }
+
     @if (demoTemplate()) {
       <pvs-tab-panel header="Demo" key="demo">
         <ng-container *ngTemplateOutlet="demoTemplate()" />
