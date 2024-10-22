@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { aboutRoutes } from './pages/about/about.routes';
 import { basicsRoutes } from './pages/basics/basics.routes';
+import { configurationRoutes } from './pages/configuration/configuration.routes';
 
 export const routes: Routes = [
   {
@@ -10,4 +11,5 @@ export const routes: Routes = [
   },
   ...aboutRoutes,
   ...basicsRoutes,
+  ...configurationRoutes,
 ];
