@@ -1,4 +1,9 @@
-<nav id="sidenav" role="navigation" class="max-lg:p-4 lg:pt-4 h-full max-lg:grid max-lg:grid-rows-[minmax(0,_auto)_1fr]" [cdkTrapFocus]="sidenavIsOpen()">
+<nav
+  id="sidenav"
+  role="navigation"
+  class="max-lg:p-4 lg:pt-4 h-full max-lg:grid max-lg:grid-rows-[minmax(0,_auto)_1fr] max-lg:bg-surface"
+  [cdkTrapFocus]="sidenavIsOpen()"
+>
   <button [attr.aria-expanded]="sidenavIsOpen()" aria-controls="sidenav" pvsCloseSidebar class="place-self-end lg:hidden">
     <span class="material-symbols-outlined"> close </span>
   </button>
