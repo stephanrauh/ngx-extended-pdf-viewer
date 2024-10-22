@@ -52,7 +52,7 @@
   }
 
   th {
-    @apply bg-primary-variant-light;
+    @apply bg-primary-light;
     @apply text-on-primary-light;
     @apply p-1;
   }
@@ -69,8 +69,8 @@
     background-color: #ddd;
   }
 
-  a:not(.github-corner) {
-    @apply text-primary-variant-light;
+  :not(li) > a:not(.github-corner) {
+    @apply text-primary-light;
     @apply underline;
 
     &:hover,
@@ -81,7 +81,7 @@
     }
 
     &:visited {
-      @apply text-secondary-variant-light;
+      @apply text-secondary-light;
     }
   }
 }
@@ -111,7 +111,7 @@
     @apply gap-2;
     @apply pt-2;
     @apply pb-2;
-    @apply accent-primary-variant-light;
+    @apply accent-secondary-light;
   }
 
   .fieldset legend {

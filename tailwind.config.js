@@ -13,15 +13,15 @@ module.exports = {
       },
       colors: {
         primary: {
-          light: 'hsl(193,100%,32%)',
+          light: 'hsl(193,100%,25%)',
           variant: {
-            light: 'hsl(183,100%,23%)',
+            light: 'hsl(183,100%,18%)',
           },
         },
         secondary: {
-          light: 'hsl(0,96%,89%)',
+          light: 'hsl(163,100%,25%)',
           variant: {
-            light: 'hsl(329,46%,78%)',
+            light: 'hsl(153,100%,18%)',
           },
         },
         background: 'hsl(183,40%,98%)',

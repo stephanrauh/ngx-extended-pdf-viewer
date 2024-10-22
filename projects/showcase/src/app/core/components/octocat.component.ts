@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
   template: `<!-- GitHub ribbon found at https://tholman.com/github-corners/ -->
     <a
       href="https://github.com/stephanrauh/ngx-extended-pdf-viewer"
-      class="github-corner absolute top-0 right-0 border-0 fill-primary-variant-light text-on-primary-light"
+      class="github-corner absolute top-0 right-0 border-0 fill-primary-light text-on-primary-light"
       aria-label="View source or report bugs on GitHub"
       title="Source Code and Bug Tracker on GitHub"
       ><svg height="80" width="80" viewBox="0 0 250 250" aria-hidden="true">
