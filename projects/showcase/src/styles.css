@@ -69,6 +69,21 @@
     background-color: #ddd;
   }
 
+  a:not(.github-corner) {
+    @apply text-primary-variant-light;
+    @apply underline;
+
+    &:hover,
+    &:focus,
+    &:focus-visible,
+    &:active {
+      @apply text-primary-light;
+    }
+
+    &:visited {
+      @apply text-secondary-variant-light;
+    }
+  }
 }
 
 @layer utilities {
