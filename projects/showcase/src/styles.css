@@ -96,6 +96,7 @@
     @apply gap-2;
     @apply pt-2;
     @apply pb-2;
+    @apply accent-primary-variant-light;
   }
 
   .fieldset legend {
@@ -105,7 +106,7 @@
   .input-group {
     @apply grid;
     @apply gap-2;
-    @apply grid-cols-[minmax(0,auto)_1fr] gap-2;
+    @apply grid-cols-[1fr_2fr] gap-2;
     @apply items-center;
   }
 
@@ -119,6 +120,12 @@
     @apply gap-2;
     @apply grid-cols-[minmax(0,auto)_1fr] gap-2;
   }
+
+  .input-group select {
+    @apply min-w-0;
+    @apply p-2;
+  }
+  
 }
 
 @layer utilities_align {
