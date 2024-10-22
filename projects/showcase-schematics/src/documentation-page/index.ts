@@ -61,7 +61,7 @@ function addRouteToRoutesFile(tree: Tree, targetDir: string, pageTitle: string, 
   `;
 
   const routesArray = sourceFile.statements.find(
-    (node) => ts.isVariableStatement(node) && node.declarationList.declarations[0].name.getText() === 'basicsRoutes',
+    (node) => ts.isVariableStatement(node) && node.declarationList.declarations[0].name.getText().endsWith('Routes'),
   );
   if (!routesArray) {
     throw new SchematicsException(`Could not find routes array in ${routesFilePath}.`);
