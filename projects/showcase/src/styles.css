@@ -56,8 +56,10 @@
   }
 
   th {
-    @apply bg-primary-light;
-    @apply text-on-primary-light;
+    &:not(.angular2-smart-th){
+      @apply bg-primary-light;
+      @apply text-on-primary-light;
+    }
     @apply p-1;
   }
 
@@ -144,10 +146,6 @@
     @apply min-w-0;
     @apply p-2;
   }
-
-}
-
-@layer utilities_align {
 }
 
 .material-symbols-outlined {
