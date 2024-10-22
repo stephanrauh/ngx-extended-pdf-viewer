@@ -67,10 +67,8 @@ import { isBrowser } from '../../../shared/helper/utilities';
   </pvs-content-page>`,
 })
 export class FileSourcesPageComponent {
-  private document = inject(DOCUMENT);
-  baseURI = this.document.baseURI;
   source = '';
   dragAndDrop = true;
   bookMode = false;
-  url = new URL(`${isBrowser() ? this.document.URL : 'http://localhost:4200'}/assets/pdfs/GraalVM.pdf`);
+  url = new URL(`${isBrowser() ? inject(DOCUMENT).baseURI : 'http://localhost:4200'}/assets/pdfs/GraalVM.pdf`);
 }
