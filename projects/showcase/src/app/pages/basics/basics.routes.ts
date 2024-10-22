@@ -1,4 +1,4 @@
-import { LoadingPageComponent } from './loading/loading-page.component';
+import { FileSourcesPageComponent } from './file-sources/file-sources-page.component';
 import { Route } from '@angular/router';
 import { RouteData, RouteGroupData } from '../../shared/types/route-data.types';
 import { BasicPageComponent } from './simple/basic.page.component';
@@ -27,10 +27,10 @@ export const basicsRoutes: Route[] = [
         },
       },
       {
-        path: 'loading',
-        component: LoadingPageComponent,
+        path: 'file-sources',
+        component: FileSourcesPageComponent,
         data: {
-          pageTitle: 'Loading and unloading a file',
+          pageTitle: 'File Sources',
         },
       },
     ],

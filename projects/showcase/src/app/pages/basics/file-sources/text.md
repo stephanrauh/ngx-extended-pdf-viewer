@@ -1,7 +1,8 @@
-The attribute `src` allows you to switch between different documents. There's also the attribute `[base64Src]` for base64 encoded documents.
+### src Attribute
 
+The `src` attribute allows you to switch between different documents. There's also the attribute `[base64Src]` for base64 encoded documents.
 
-## Html
+### Html
 
 ```html
 <ngx-extended-pdf-viewer 
@@ -10,7 +11,7 @@ The attribute `src` allows you to switch between different documents. There's al
 </ngx-extended-pdf-viewer>
 ```
 
-## Typescript
+### Typescript
 ```ts
 @Component({ ... })
 export class MultipleDocumentsComponent {

@@ -9,7 +9,7 @@ import { SplitViewComponent } from '../../../shared/components/split-view.compon
 import { isBrowser } from '../../../shared/helper/utilities';
 
 @Component({
-  selector: 'pvs-loading-page',
+  selector: 'pvs-file-sources-page',
   standalone: true,
   imports: [
     ContentPageComponent,
@@ -22,7 +22,7 @@ import { isBrowser } from '../../../shared/helper/utilities';
     FormsModule,
   ],
   template: `<pvs-content-page [demoTemplate]="demo">
-    <pvs-markdown src="/assets/pages/basics/loading/text.md" />
+    <pvs-markdown src="/assets/pages/basics/file-sources/text.md" />
 
     <ng-template #demo>
       <pvs-split-view [stickyEnd]="true">
@@ -66,7 +66,7 @@ import { isBrowser } from '../../../shared/helper/utilities';
     </ng-template>
   </pvs-content-page>`,
 })
-export class LoadingPageComponent {
+export class FileSourcesPageComponent {
   private document = inject(DOCUMENT);
   baseURI = this.document.baseURI;
   source = '';
