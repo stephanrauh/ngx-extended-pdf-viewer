@@ -1,4 +1,5 @@
 import { AttributesPageComponent } from './attributes/attributes-page.component';
+import { EventsPageComponent } from './events/events-page.component';
 import { FileSourcesPageComponent } from './file-sources/file-sources-page.component';
 import { Route } from '@angular/router';
 import { RouteData, RouteGroupData } from '../../shared/types/route-data.types';
@@ -13,7 +14,8 @@ export const basicsRoutes: Route[] = [
       key: 'basics',
       name: 'Basics',
     },
-    children: [{
+    children: [
+      {
         path: 'getting-started',
         component: GettingStartedPageComponent,
         data: <RouteData>{
@@ -41,13 +43,20 @@ export const basicsRoutes: Route[] = [
           pageTitle: 'Default Options',
         },
       },
-    {
-      path: 'attributes',
-      component: AttributesPageComponent,
-      data: {
-        pageTitle: 'Attributes'
-      }
-    }
-  ],
+      {
+        path: 'attributes',
+        component: AttributesPageComponent,
+        data: {
+          pageTitle: 'Attributes',
+        },
+      },
+      {
+        path: 'events',
+        component: EventsPageComponent,
+        data: {
+          pageTitle: 'Events',
+        },
+      },
+    ],
   },
 ];
