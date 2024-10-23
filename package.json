@@ -45,7 +45,7 @@
     "@cyclonedx/cyclonedx-npm": "^1.19.3",
     "@schematics/angular": "^17.3.9",
     "@types/estree": "^1.0.5",
-    "@types/jest": "^29.5.13",
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.7.7",
     "@types/trusted-types": "^2.0.7",
     "copyfiles": "^2.4.1",
