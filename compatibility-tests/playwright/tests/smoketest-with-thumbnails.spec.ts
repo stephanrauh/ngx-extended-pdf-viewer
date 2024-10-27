@@ -46,7 +46,7 @@ async function runBasicTests(page) {
 
   await page.locator('#zoom-button').click();
   expect(await page.locator('ngx-extended-pdf-viewer').screenshot()).toMatchSnapshot({ maxDiffPixelRatio: 0.001 });
-  await page.locator('#zoomOut').click();
+  await page.locator('#primaryZoomOut').click();
   expect(await page.locator('ngx-extended-pdf-viewer').screenshot()).toMatchSnapshot({ maxDiffPixelRatio: 0.001 });
 
   await page.locator('#zoom-auto-button').click();

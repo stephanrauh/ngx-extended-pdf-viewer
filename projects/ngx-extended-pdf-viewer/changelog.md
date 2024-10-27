@@ -604,3 +604,5 @@
 - 22.0.0-alpha.0 #2603 create a new printContainer before each print and destroy it afterwards; modified the ids of the print buttons because pdf.js modified them
 - 22.0.0-alpha.1 #2611 restore `window.print()` when destroying the PDF viewer (was broken in version 21.x.x, but used to work before); update the stable branch to pdf.js 4.7.
 - 22.0.0-alpha.2 #2438 don't log a warning if the window height is zero but automatic height calculation is intended; #2595 adjust the automatic zoom if the width of the PDF viewer changes (before the change, there was a zoom observer that only reacted to size changes of the entire window)
+- 22.0.0-alpha.3 #2538 fixed a bug that reset an form input field modified by two-way binding to an old value when the blur event fires
+- 22.0.0-alpha.4 #2593 fixed a bug that closed the findbar immediately after opening it; removed the code that hides the find button if there's no text layer because several users reported the feature to be unreliable

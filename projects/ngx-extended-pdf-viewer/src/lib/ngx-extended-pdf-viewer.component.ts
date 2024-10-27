@@ -65,7 +65,6 @@ import { PdfSidebarView } from './options/pdf-sidebar-views';
 import { SpreadType } from './options/spread-type';
 import { PDFScriptLoaderService } from './pdf-script-loader.service';
 import { ResponsiveVisibility } from './responsive-visibility';
-import { detectTextLayer } from './toolbar/text-layer-detector';
 
 declare class ResizeObserver {
   constructor(param: () => void);
@@ -1683,7 +1682,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         if (this.propertiesDialogVisible) {
           PDFViewerApplication.pdfDocumentProperties.open();
         }
-        this.hasTextLayer = this.textLayer === true && (await detectTextLayer(PDFViewerApplication.pdfDocument));
+        this.hasTextLayer = this.textLayer === true;
       });
     });
 

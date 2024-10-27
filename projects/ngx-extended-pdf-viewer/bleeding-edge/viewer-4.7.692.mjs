@@ -11351,7 +11351,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.7.688",
+    apiVersion: "4.7.692",
     data,
     password,
     disableAutoFetch,
@@ -13147,8 +13147,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.7.688";
-const build = "36ff816b5";
+const version = "4.7.692";
+const build = "fc9e05380";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -14500,9 +14500,12 @@ class TextWidgetAnnotationElement extends WidgetAnnotationElement {
         event.target.scrollLeft = 0;
       };
       window.registerAcroformField(id, element, storedData.value, undefined, this.data.fieldValue);
-      element.addEventListener("updateFromAngular", newvalue => storage.setValue(id, {
-        value: newvalue.detail
-      }));
+      element.addEventListener("updateFromAngular", newvalue => {
+        elementData.formattedValue = null;
+        storage.setValue(id, {
+          value: newvalue.detail
+        });
+      });
       if (this.enableScripting && this.hasJSActions) {
         element.addEventListener("focus", event => {
           if (elementData.focused) {
@@ -20784,8 +20787,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.7.688";
-const pdfjsBuild = "36ff816b5";
+const pdfjsVersion = "4.7.692";
+const pdfjsBuild = "fc9e05380";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -22286,7 +22289,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '22.0.0-alpha.2';
+const ngxExtendedPdfViewerVersion = '22.0.0-alpha.3';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -27009,9 +27012,6 @@ class PDFFindBar {
     this.findNextButton = options.findNextButton;
     this.eventBus = eventBus;
     this.#mainContainer = mainContainer;
-    this.toggleButton.addEventListener("click", () => {
-      this.toggle();
-    });
     this.findField.addEventListener("input", () => {
       this.dispatchEvent("");
     });
@@ -30598,9 +30598,6 @@ class PDFSidebar {
           source: this
         });
       }
-    });
-    this.toggleButton.addEventListener("click", evt => {
-      this.toggle(evt);
     });
     this.thumbnailButton.addEventListener("click", () => {
       this.switchView(SidebarView.THUMBS);
@@ -35220,7 +35217,7 @@ class PDFViewer {
   #maxZoom = MAX_SCALE;
   #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.7.688";
+    const viewerVersion = "4.7.692";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -37595,8 +37592,12 @@ class Toolbar {
     opts.next.disabled = pageNumber >= pagesCount;
     const minScale = Number(this.minZoom) ?? MIN_SCALE;
     const maxScale = Number(this.maxZoom) ?? MAX_SCALE;
-    opts.zoomOut.disabled = pageScale <= minScale;
-    opts.zoomIn.disabled = pageScale >= maxScale;
+    if (opts.zoomOut) {
+      opts.zoomOut.disabled = pageScale <= minScale;
+    }
+    if (opts.zoomIn) {
+      opts.zoomIn.disabled = pageScale >= maxScale;
+    }
     let predefinedValueFound = false;
     if (opts.scaleSelect.options) {
       for (const option of opts.scaleSelect.options) {
@@ -40121,8 +40122,8 @@ PDFViewerApplication.serviceWorkerOptions = ServiceWorkerOptions;
 
 
 
-const pdfjsVersion = "4.7.688";
-const pdfjsBuild = "36ff816b5";
+const pdfjsVersion = "4.7.692";
+const pdfjsBuild = "fc9e05380";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
