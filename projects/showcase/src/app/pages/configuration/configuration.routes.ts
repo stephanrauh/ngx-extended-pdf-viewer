@@ -1,3 +1,4 @@
+import { JavaScriptPageComponent } from './javascript/javascript-page.component';
 import { InternationalizationPageComponent } from './internationalization/internationalization-page.component';
 import { LinksPageComponent } from './links/links-page.component';
 import { AuthenticationAndAuthorizationPageComponent } from './authentication-and-authorization/authentication-and-authorization-page.component';
@@ -12,34 +13,42 @@ export const configurationRoutes: Route[] = [
       name: 'Configuration',
       key: 'configuration',
     },
-    children: [{
+    children: [
+      {
         path: 'range-requests',
         component: RangeRequestsPageComponent,
         data: {
           pageTitle: 'Range Requests',
         },
       },
-    {
-      path: 'authentication-and-authorization',
-      component: AuthenticationAndAuthorizationPageComponent,
-      data: {
-        pageTitle: 'Authentication and Authorization'
-      }
-    },
-    {
-      path: 'links',
-      component: LinksPageComponent,
-      data: {
-        pageTitle: 'Links'
-      }
-    },
-    {
-      path: 'internationalization',
-      component: InternationalizationPageComponent,
-      data: {
-        pageTitle: 'Internationalization'
-      }
-    }
-  ],
+      {
+        path: 'authentication-and-authorization',
+        component: AuthenticationAndAuthorizationPageComponent,
+        data: {
+          pageTitle: 'Authentication and Authorization',
+        },
+      },
+      {
+        path: 'links',
+        component: LinksPageComponent,
+        data: {
+          pageTitle: 'Links',
+        },
+      },
+      {
+        path: 'internationalization',
+        component: InternationalizationPageComponent,
+        data: {
+          pageTitle: 'Internationalization',
+        },
+      },
+      {
+        path: 'java-script',
+        component: JavaScriptPageComponent,
+        data: {
+          pageTitle: 'JavaScript',
+        },
+      },
+    ],
   },
 ];

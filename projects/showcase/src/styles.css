@@ -142,7 +142,8 @@
     @apply bg-gray-100;
   }
 
-  .radio-group {
+  .radio-group,
+  .checkbox-group {
     @apply grid;
     @apply gap-2;
     @apply grid-cols-[minmax(0,auto)_1fr] gap-2;
