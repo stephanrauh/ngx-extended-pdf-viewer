@@ -33,6 +33,7 @@
   }
 
   markdown > p,
+  markdown > ul,
   markdown > pre[class*="language-"] {
     &:not(:last-child):not(:has(+ h2)){
       @apply mb-4;

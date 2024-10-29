@@ -1,3 +1,4 @@
+import { RangeRequestsPageComponent } from './range-requests/range-requests-page.component';
 import { Route } from '@angular/router';
 import { RouteGroupData } from '../../shared/types/route-data.types';
 
@@ -8,6 +9,14 @@ export const configurationRoutes: Route[] = [
       name: 'Configuration',
       key: 'configuration',
     },
-    children: [],
+    children: [
+      {
+        path: 'range-requests',
+        component: RangeRequestsPageComponent,
+        data: {
+          pageTitle: 'Range Requests',
+        },
+      },
+    ],
   },
 ];
