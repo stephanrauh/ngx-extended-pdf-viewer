@@ -1,3 +1,4 @@
+import { LinksPageComponent } from './links/links-page.component';
 import { AuthenticationAndAuthorizationPageComponent } from './authentication-and-authorization/authentication-and-authorization-page.component';
 import { RangeRequestsPageComponent } from './range-requests/range-requests-page.component';
 import { Route } from '@angular/router';
@@ -22,6 +23,13 @@ export const configurationRoutes: Route[] = [
       component: AuthenticationAndAuthorizationPageComponent,
       data: {
         pageTitle: 'Authentication and Authorization'
+      }
+    },
+    {
+      path: 'links',
+      component: LinksPageComponent,
+      data: {
+        pageTitle: 'Links'
       }
     }
   ],

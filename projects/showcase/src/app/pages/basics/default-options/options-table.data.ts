@@ -88,7 +88,7 @@ export const availableOptions = [
   },
   {
     attribute: 'externalLinkTarget',
-    description: 'Documented <a href="/link">here</a>',
+    description: 'Documented <a href="/configuration/links">here</a>',
     coveredBy: '',
   },
   {
