@@ -366,6 +366,7 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Mustra deretu s’edit
 pdfjs-editor-alt-text-settings-show-dialog-description = T’agiudat a assegurare chi totu is immàgines tuas tèngiant unu testu alternativu.
 pdfjs-editor-alt-text-settings-close-button = Serra
 
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-spread-none-button =
     .title = Do not join page spreads
 pdfjs-spread-none-button-label = No Spreads
@@ -422,6 +423,8 @@ pdfjs-editor-highlight-colorpicker-label = Highlight color
 pdfjs-editor-colorpicker-red =
     .title = Red
 pdfjs-editor-highlight-show-all-button-label = Show all
+pdfjs-editor-highlight-show-all-button =
+    .title = Show all
 pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
 pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
 pdfjs-editor-new-alt-text-textarea =

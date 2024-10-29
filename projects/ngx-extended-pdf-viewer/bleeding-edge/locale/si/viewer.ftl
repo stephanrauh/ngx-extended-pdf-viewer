@@ -266,6 +266,7 @@ pdfjs-free-text-default-content = ලිවීීම අරඹන්න…
 ## Image alt-text settings
 
 
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-of-pages = of { $pagesCount }
 pdfjs-page-rotate-cw-button =
     .title = Rotate Clockwise
@@ -389,6 +390,8 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Red
 pdfjs-editor-highlight-show-all-button-label = Show all
+pdfjs-editor-highlight-show-all-button =
+    .title = Show all
 pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
 pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
 pdfjs-editor-new-alt-text-textarea =

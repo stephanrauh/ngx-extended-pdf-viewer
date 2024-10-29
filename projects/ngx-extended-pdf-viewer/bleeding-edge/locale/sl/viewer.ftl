@@ -484,10 +484,9 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Ob dodajanju slike tak
 pdfjs-editor-alt-text-settings-show-dialog-description = Pomaga vam zagotoviti, da imajo vse vaše slike nadomestno besedilo.
 pdfjs-editor-alt-text-settings-close-button = Zapri
 
-unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
+# Additional translations for ngx-extended-pdf-viewer (sl)
+unverified-signature-warning = Dokument vsebuje digitalni podpis. PDF viewer ne more preveriti veljavnost podpisa. Prosimo prenesite dokument in veljavnost podpisa preverite v programu Acrobat Reader.
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word
 pdfjs-find-regexp-checkbox-label = regular expression
-
-# Translations for ngx-extended-pdf-viewer additions
-

@@ -472,6 +472,7 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = 이미지 추가 시 �
 pdfjs-editor-alt-text-settings-show-dialog-description = 모든 이미지에 대체 텍스트가 있는지 확인하는 데 도움이 됩니다.
 pdfjs-editor-alt-text-settings-close-button = 닫기
 
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

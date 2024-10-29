@@ -460,6 +460,7 @@ pdfjs-editor-alt-text-settings-downloading-model-button = Дар ҳоли бор
 pdfjs-editor-alt-text-settings-editor-title = Муҳаррири матни иловагӣ
 pdfjs-editor-alt-text-settings-close-button = Пӯшидан
 
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
 pdfjs-editor-new-alt-text-create-automatically-button-label = Create alt text automatically

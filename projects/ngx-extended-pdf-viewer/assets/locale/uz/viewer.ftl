@@ -186,6 +186,7 @@ pdfjs-web-fonts-disabled = Veb shriftlar oʻchirilgan: ichki PDF shriftlardan fo
 ## This is used in an aria label to help to understand the role of the resizer.
 
 
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-page-input =
     .title = Page
 pdfjs-page-of-pages = ({ $pageNumber } of { $pagesCount })
@@ -361,6 +362,8 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Red
 pdfjs-editor-highlight-show-all-button-label = Show all
+pdfjs-editor-highlight-show-all-button =
+    .title = Show all
 pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
 pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
 pdfjs-editor-new-alt-text-textarea =

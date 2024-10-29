@@ -458,6 +458,7 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = แสดงตัว�
 pdfjs-editor-alt-text-settings-show-dialog-description = ช่วยให้คุณแน่ใจว่าภาพทั้งหมดของคุณมีข้อความทดแทน
 pdfjs-editor-alt-text-settings-close-button = ปิด
 
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-document-properties-size-kb = { NUMBER($kb, maximumSignificantDigits: 3) } KB ({ $b } bytes)
 pdfjs-document-properties-size-mb = { NUMBER($mb, maximumSignificantDigits: 3) } MB ({ $b } bytes)
 pdfjs-document-properties-date-time-string = { DATETIME($dateObj, dateStyle: "short", timeStyle: "medium") }

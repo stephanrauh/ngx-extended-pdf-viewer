@@ -11351,7 +11351,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.7.691",
+    apiVersion: "4.7.693",
     data,
     password,
     disableAutoFetch,
@@ -13147,8 +13147,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.7.691";
-const build = "4359f3c77";
+const version = "4.7.693";
+const build = "34e214e98";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -20787,8 +20787,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.7.691";
-const pdfjsBuild = "4359f3c77";
+const pdfjsVersion = "4.7.693";
+const pdfjsBuild = "34e214e98";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -22289,7 +22289,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '22.0.0-alpha.3';
+const ngxExtendedPdfViewerVersion = '22.0.0-alpha.4';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -35217,7 +35217,7 @@ class PDFViewer {
   #maxZoom = MAX_SCALE;
   #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.7.691";
+    const viewerVersion = "4.7.693";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -40122,8 +40122,8 @@ PDFViewerApplication.serviceWorkerOptions = ServiceWorkerOptions;
 
 
 
-const pdfjsVersion = "4.7.691";
-const pdfjsBuild = "4359f3c77";
+const pdfjsVersion = "4.7.693";
+const pdfjsBuild = "34e214e98";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,

@@ -437,6 +437,7 @@ pdfjs-editor-alt-text-settings-download-model-button = Sader
 pdfjs-editor-alt-text-settings-downloading-model-button = Asader…
 pdfjs-editor-alt-text-settings-close-button = Mdel
 
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-alt-text-dialog-description = Alt text (alternative text) helps when people can’t see the image or when it doesn’t load.
 pdfjs-editor-alt-text-add-description-description = Aim for 1-2 sentences that describe the subject, setting, or actions.
 pdfjs-editor-alt-text-mark-decorative-description = This is used for ornamental images, like borders or watermarks.

@@ -86,6 +86,7 @@ pdfjs-password-cancel-button = Nkuvi-ka
 ## This is used in an aria label to help to understand the role of the resizer.
 
 
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-previous-button-label = Previous
 pdfjs-next-button =
     .title = Next Page
@@ -343,6 +344,8 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Red
 pdfjs-editor-highlight-show-all-button-label = Show all
+pdfjs-editor-highlight-show-all-button =
+    .title = Show all
 pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
 pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
 pdfjs-editor-new-alt-text-textarea =

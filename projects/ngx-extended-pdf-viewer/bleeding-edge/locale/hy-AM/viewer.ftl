@@ -271,6 +271,7 @@ pdfjs-editor-highlight-show-all-button-label = Ցուցադրել բոլորը
 pdfjs-editor-highlight-show-all-button =
     .title = Ցուցադրել բոլորը
 
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-save-button =
     .title = Save
 pdfjs-save-button-label = Save

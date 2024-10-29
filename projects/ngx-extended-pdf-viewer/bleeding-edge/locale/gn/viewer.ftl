@@ -474,6 +474,7 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Ehechauka moñe’ẽr
 pdfjs-editor-alt-text-settings-show-dialog-description = Nepytyvõta ta’ãngakuéra orekotaha moñe’ẽrã mokõiha.
 pdfjs-editor-alt-text-settings-close-button = Mboty
 
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-editor-new-alt-text-description = Short description for people who can’t see the image or when the image doesn’t load.
 pdfjs-editor-new-alt-text-disclaimer1 = This alt text was created automatically and may be inaccurate.
 pdfjs-editor-alt-text-settings-create-model-description = Suggests descriptions to help people who can’t see the image or when the image doesn’t load.

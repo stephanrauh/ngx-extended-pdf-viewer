@@ -480,6 +480,7 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = הצגת עורך טק
 pdfjs-editor-alt-text-settings-show-dialog-description = מסייע לך לוודא שלכל התמונות שלך יש טקסט חלופי.
 pdfjs-editor-alt-text-settings-close-button = סגירה
 
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 unverified-signature-warning = This PDF file contains a digital signature. The PDF viewer can't verify if the signature is valid. Please download the file and open it in Acrobat Reader to verify the signature is valid.
 pdfjs-infinite-scroll-button-label = Infinite scroll
 pdfjs-find-multiple-checkbox-label = match each word

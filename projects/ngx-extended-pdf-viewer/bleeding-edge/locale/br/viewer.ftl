@@ -311,6 +311,7 @@ pdfjs-editor-alt-text-save-button = Enrollañ
 ## This is a toggle button to show/hide all the highlights.
 
 
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-scroll-page-button =
     .title = Use Page Scrolling
 pdfjs-scroll-page-button-label = Page Scrolling
@@ -392,6 +393,8 @@ pdfjs-editor-colorpicker-pink =
 pdfjs-editor-colorpicker-red =
     .title = Red
 pdfjs-editor-highlight-show-all-button-label = Show all
+pdfjs-editor-highlight-show-all-button =
+    .title = Show all
 pdfjs-editor-new-alt-text-dialog-edit-label = Edit alt text (image description)
 pdfjs-editor-new-alt-text-dialog-add-label = Add alt text (image description)
 pdfjs-editor-new-alt-text-textarea =

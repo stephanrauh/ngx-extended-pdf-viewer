@@ -465,6 +465,7 @@ pdfjs-editor-alt-text-settings-show-dialog-button-label = Shfaq menjëherë për
 pdfjs-editor-alt-text-settings-show-dialog-description = Ju ndihmon të siguroheni se krejt figurat tuaja kanë tekst alternativ.
 pdfjs-editor-alt-text-settings-close-button = Mbylle
 
+# Translations for ngx-extended-pdf-viewer additions only available in en-US
 pdfjs-spread-none-button =
     .title = Do not join page spreads
 pdfjs-spread-none-button-label = No Spreads
