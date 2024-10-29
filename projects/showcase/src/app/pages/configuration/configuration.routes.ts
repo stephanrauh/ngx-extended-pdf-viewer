@@ -1,3 +1,4 @@
+import { InternationalizationPageComponent } from './internationalization/internationalization-page.component';
 import { LinksPageComponent } from './links/links-page.component';
 import { AuthenticationAndAuthorizationPageComponent } from './authentication-and-authorization/authentication-and-authorization-page.component';
 import { RangeRequestsPageComponent } from './range-requests/range-requests-page.component';
@@ -30,6 +31,13 @@ export const configurationRoutes: Route[] = [
       component: LinksPageComponent,
       data: {
         pageTitle: 'Links'
+      }
+    },
+    {
+      path: 'internationalization',
+      component: InternationalizationPageComponent,
+      data: {
+        pageTitle: 'Internationalization'
       }
     }
   ],
