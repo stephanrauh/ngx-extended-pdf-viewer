@@ -153,6 +153,21 @@
     @apply min-w-0;
     @apply p-2;
   }
+
+  .box {
+    border: 2px solid red;
+    border-radius: 8px;
+  }
+
+  .show-text-layer,
+  .show-text-layer > * {
+    color: hsla(240, 100%, 38%, 0.5) !important;
+  }
+
+  .long-word {
+    background-color: hsla(240, 100%, 50%, 0.55);
+    display: inline;
+  }
 }
 
 .material-symbols-outlined {

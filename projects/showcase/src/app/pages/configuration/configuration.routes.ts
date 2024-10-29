@@ -1,3 +1,4 @@
+import { LayersPageComponent } from './layers/layers-page.component';
 import { JavaScriptPageComponent } from './javascript/javascript-page.component';
 import { InternationalizationPageComponent } from './internationalization/internationalization-page.component';
 import { LinksPageComponent } from './links/links-page.component';
@@ -13,8 +14,7 @@ export const configurationRoutes: Route[] = [
       name: 'Configuration',
       key: 'configuration',
     },
-    children: [
-      {
+    children: [{
         path: 'range-requests',
         component: RangeRequestsPageComponent,
         data: {
@@ -49,6 +49,13 @@ export const configurationRoutes: Route[] = [
           pageTitle: 'JavaScript',
         },
       },
-    ],
+    {
+      path: 'layers',
+      component: LayersPageComponent,
+      data: {
+        pageTitle: 'Layers'
+      }
+    }
+  ],
   },
 ];
