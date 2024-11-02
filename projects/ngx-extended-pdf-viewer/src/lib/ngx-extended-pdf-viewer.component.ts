@@ -2366,13 +2366,19 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       this.hasSignature = annotations.some((a) => a.fieldType === 'Sig');
 
       if (this.hasSignature) {
-        this.ngZone.run(() => {
-          // Defer scrolling to ensure it happens after any other UI updates
-          setTimeout(() => {
-            const viewerContainer = document.querySelector('#viewerContainer');
-            viewerContainer?.scrollBy(0, -32); // Adjust the scroll position
+        // find signature
+        const signature = annotations.find((a) => a.fieldType === 'Sig');
+        const rect = signature?.rect;
+        // check that the rect has a size of at least 1x1 pixels and that it is visible
+        if (rect && rect.length === 4 && rect[2] - rect[0] > 0 && rect[3] - rect[1] > 0 && !signature.hidden) {
+          this.ngZone.run(() => {
+            // Defer scrolling to ensure it happens after any other UI updates
+            setTimeout(() => {
+              const viewerContainer = document.querySelector('#viewerContainer');
+              viewerContainer?.scrollBy(0, -32); // Adjust the scroll position
+            });
           });
-        });
+        }
         break; // stop looping through the pages as soon as we find a signature
       }
     }
