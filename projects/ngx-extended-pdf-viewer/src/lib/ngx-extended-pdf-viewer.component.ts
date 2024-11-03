@@ -40,7 +40,7 @@ import { NgxExtendedPdfViewerService } from './ngx-extended-pdf-viewer.service';
 import { PdfCursorTools } from './options/pdf-cursor-tools';
 import { assetsUrl, getVersionSuffix, pdfDefaultOptions } from './options/pdf-default-options';
 import { PageViewModeType, ScrollModeChangedEvent, ScrollModeType } from './options/pdf-viewer';
-import { IPDFViewerApplication, PDFDocumentProxy } from './options/pdf-viewer-application';
+import { IPDFViewerApplication, PDFDocumentProxy, PDFPageProxy } from './options/pdf-viewer-application';
 import { IPDFViewerApplicationOptions } from './options/pdf-viewer-application-options';
 import { VerbosityLevel } from './options/verbosity-level';
 import { PdfDummyComponentsComponent } from './pdf-dummy-components/pdf-dummy-components.component';
@@ -2353,6 +2353,18 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     return this.contextMenuAllowed;
   }
 
+  private async pageHasVisibleSignature(page: PDFPageProxy): Promise<boolean> {
+    const annotations = await page.getAnnotations();
+    const signature = annotations.find((a) => a.fieldType === 'Sig');
+    if (signature) {
+      const rect = signature?.rect;
+      if (rect && rect.length === 4 && rect[2] - rect[0] > 0 && rect[3] - rect[1] > 0 && !signature.hidden) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public async scrollSignatureWarningIntoView(pdf: PDFDocumentProxy): Promise<void> {
     /** This method has been inspired by https://medium.com/factory-mind/angular-pdf-forms-fa72b15c3fbd. Thanks, Jonny Fox! */
     this.hasSignature = false;
@@ -2360,27 +2372,20 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     for (let i = 1; i <= pdf?.numPages; i++) {
       // track the current page
       const page = await pdf.getPage(i);
-      const annotations = await page.getAnnotations();
 
-      // Check if there is at least one 'Sig' fieldType in annotations
-      this.hasSignature = annotations.some((a) => a.fieldType === 'Sig');
-
-      if (this.hasSignature) {
-        // find signature
-        const signature = annotations.find((a) => a.fieldType === 'Sig');
-        const rect = signature?.rect;
-        // check that the rect has a size of at least 1x1 pixels and that it is visible
-        if (rect && rect.length === 4 && rect[2] - rect[0] > 0 && rect[3] - rect[1] > 0 && !signature.hidden) {
-          this.ngZone.run(() => {
-            // Defer scrolling to ensure it happens after any other UI updates
-            setTimeout(() => {
-              const viewerContainer = document.querySelector('#viewerContainer');
-              viewerContainer?.scrollBy(0, -32); // Adjust the scroll position
-            });
-          });
-        }
+      if (await this.pageHasVisibleSignature(page)) {
+        this.hasSignature = true;
         break; // stop looping through the pages as soon as we find a signature
       }
+    }
+    if (this.hasSignature) {
+      this.ngZone.run(() => {
+        // Defer scrolling to ensure it happens after any other UI updates
+        setTimeout(() => {
+          const viewerContainer = document.querySelector('#viewerContainer');
+          viewerContainer?.scrollBy(0, -32); // Adjust the scroll position
+        });
+      });
     }
   }
 
