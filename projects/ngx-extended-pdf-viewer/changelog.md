@@ -606,4 +606,4 @@
 - 22.0.0-alpha.2 #2438 don't log a warning if the window height is zero but automatic height calculation is intended; #2595 adjust the automatic zoom if the width of the PDF viewer changes (before the change, there was a zoom observer that only reacted to size changes of the entire window)
 - 22.0.0-alpha.3 #2538 fixed a bug that reset an form input field modified by two-way binding to an old value when the blur event fires; #2593 fixed a bug that closed the findbar immediately after opening it; removed the code that hides the find button if there's no text layer because several users reported the feature to be unreliable
 - 22.0.0-alpha.4 #2594 fixed the custom translations added by ngx-extended-pdf-viewer
-- 22.0.0-alpha.5 #2635 stop showing warning if there's an invisible signature (but if the signature is visible, the warning is still shown)
+- 22.0.0-alpha.5 #2635 stop showing warning if there's an invisible signature (but if the signature is visible, the warning is still shown); #2545 trigger the blur event and JavaScript actions of a form field if the user clicks on a non-focusable element (e.g. the canvas of the PDF)
