@@ -11351,7 +11351,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.7.694",
+    apiVersion: "4.7.695",
     data,
     password,
     disableAutoFetch,
@@ -13147,8 +13147,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.7.694";
-const build = "c33bc25fa";
+const version = "4.7.695";
+const build = "7f1d6554c";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -18421,7 +18421,7 @@ const pointerType = new PointerType();
 class InkEditor extends AnnotationEditor {
   #baseHeight = 0;
   #baseWidth = 0;
-  #boundCanvasTouchMove = null;
+  #boundCanvasTouchMove = this.canvasTouchMove.bind(this);
   #canvasContextMenuTimeoutId = null;
   #currentPath2D = new Path2D();
   #disableEditing = false;
@@ -18465,6 +18465,7 @@ class InkEditor extends AnnotationEditor {
   }
   static initialize(l10n, uiManager) {
     AnnotationEditor.initialize(l10n, uiManager);
+    setTimeout(() => this.initializePointerType());
   }
   static updateDefaultParams(type, value) {
     switch (type) {
@@ -20787,8 +20788,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.7.694";
-const pdfjsBuild = "c33bc25fa";
+const pdfjsVersion = "4.7.695";
+const pdfjsBuild = "7f1d6554c";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -22289,7 +22290,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '22.0.0-alpha.5';
+const ngxExtendedPdfViewerVersion = '22.0.0-alpha.6';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -35217,7 +35218,7 @@ class PDFViewer {
   #maxZoom = MAX_SCALE;
   #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.7.694";
+    const viewerVersion = "4.7.695";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -40122,8 +40123,8 @@ PDFViewerApplication.serviceWorkerOptions = ServiceWorkerOptions;
 
 
 
-const pdfjsVersion = "4.7.694";
-const pdfjsBuild = "c33bc25fa";
+const pdfjsVersion = "4.7.695";
+const pdfjsBuild = "7f1d6554c";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
