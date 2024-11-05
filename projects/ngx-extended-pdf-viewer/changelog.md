@@ -608,3 +608,4 @@
 - 22.0.0-alpha.4 #2594 fixed the custom translations added by ngx-extended-pdf-viewer
 - 22.0.0-alpha.5 #2635 stop showing warning if there's an invisible signature (but if the signature is visible, the warning is still shown); #2545 trigger the blur event and JavaScript actions of a form field if the user clicks on a non-focusable element (e.g. the canvas of the PDF)
 - 22.0.0-alpha.6 #2597 stop the viewer from scrolling when using the ink tool with touch devices
+- 22.0.0-alpha.6 #2540 fixed `pdfDefaultOptions.workerPort`

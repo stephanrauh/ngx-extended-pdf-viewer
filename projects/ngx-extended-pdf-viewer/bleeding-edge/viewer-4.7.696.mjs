@@ -11351,7 +11351,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.7.695",
+    apiVersion: "4.7.696",
     data,
     password,
     disableAutoFetch,
@@ -13147,8 +13147,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.7.695";
-const build = "469b073ac";
+const version = "4.7.696";
+const build = "67783e048";
 
 ;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -18465,7 +18465,6 @@ class InkEditor extends AnnotationEditor {
   }
   static initialize(l10n, uiManager) {
     AnnotationEditor.initialize(l10n, uiManager);
-    setTimeout(() => this.initializePointerType());
   }
   static updateDefaultParams(type, value) {
     switch (type) {
@@ -20788,8 +20787,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.7.695";
-const pdfjsBuild = "469b073ac";
+const pdfjsVersion = "4.7.696";
+const pdfjsBuild = "67783e048";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -22290,7 +22289,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '22.0.0-alpha.6';
+const ngxExtendedPdfViewerVersion = '22.0.0-alpha.8';
 ;// CONCATENATED MODULE: ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -35218,7 +35217,7 @@ class PDFViewer {
   #maxZoom = MAX_SCALE;
   #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.7.695";
+    const viewerVersion = "4.7.696";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -38387,6 +38386,7 @@ const PDFViewerApplication = {
       this.pdfWorker = null;
     }
     Object.assign(GlobalWorkerOptions, workerParams);
+    workerParams.port = workerParams.port ?? GlobalWorkerOptions.workerPort;
     if (this.pdfWorker === null) {
       this.pdfWorker = workerParams.port ? PDFWorker.fromPort(workerParams) : new PDFWorker(workerParams);
     }
@@ -40123,8 +40123,8 @@ PDFViewerApplication.serviceWorkerOptions = ServiceWorkerOptions;
 
 
 
-const pdfjsVersion = "4.7.695";
-const pdfjsBuild = "469b073ac";
+const pdfjsVersion = "4.7.696";
+const pdfjsBuild = "67783e048";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
