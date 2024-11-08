@@ -24,7 +24,8 @@
     "test:ng16": "cd compatibility-tests/Angular16 && ./test.sh",
     "test:ng16-esbuild": "cd compatibility-tests/Angular16-esbuild && ./test.sh",
     "test:ng17": "cd compatibility-tests/Angular17 && ./test.sh",
-    "jest": "ng test",
+    "test": "jest",
+    "test:ci": "jest --coverage",
     "generate-sbom": "cyclonedx-npm --output-file sbom.json --mc-type library"
   },
   "private": true,
@@ -63,11 +64,5 @@
   },
   "optionalDependencies": {
     "fsevents": "^2.3.3"
-  },
-  "jest": {
-    "preset": "jest-preset-angular",
-    "setupFilesAfterEnv": [
-      "<rootDir>/setupJest.ts"
-    ]
   }
 }
