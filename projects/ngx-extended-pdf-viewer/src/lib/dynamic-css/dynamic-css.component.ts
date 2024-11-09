@@ -174,11 +174,11 @@ export class DynamicCssComponent implements OnDestroy {
   }
 
   constructor(
-    private renderer: Renderer2,
-    @Inject(DOCUMENT) private document: Document,
-    @Inject(PLATFORM_ID) private platformId,
-    private pdfCspPolicyService: PdfCspPolicyService,
-    @Inject(CSP_NONCE) @Optional() private nonce?: string | null
+    private readonly renderer: Renderer2,
+    @Inject(DOCUMENT) private readonly document: Document,
+    @Inject(PLATFORM_ID) private readonly platformId,
+    private readonly pdfCspPolicyService: PdfCspPolicyService,
+    @Inject(CSP_NONCE) @Optional() private readonly nonce?: string | null
   ) {
     if (isPlatformBrowser(this.platformId)) {
       this.width = document.body.clientWidth;
