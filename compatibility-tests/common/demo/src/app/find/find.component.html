@@ -4,54 +4,58 @@
 </section>
 <section class="section">
   <input id="searchtext" class="margin" [(ngModel)]="searchtext" placeholder="search term" />
-  <small *ngIf="findState !== undefined"
-    ><span class="margin-left-24px">{{ findStateText }}</span>
-    <span class="margin-left-24px" *ngIf="totalMatches && totalMatches > 0">Result {{ currentMatchNumber }} of {{ totalMatches }} </span></small
-  >
-</section>
-<section class="section">
-  <input id="highlightAll" type="checkbox" [(ngModel)]="highlightAll" (change)="onCheckboxClicked()" />
-  <label for="highlight">Highlight all</label>
-</section>
-<section class="section">
-  <input type="checkbox" [(ngModel)]="matchCase" (change)="onCheckboxClicked()" id="matchCase" />
-  <label for="matchCase"> match case</label>
-</section>
-<section class="section">
-  <input type="checkbox" [(ngModel)]="wholeWord" (change)="onCheckboxClicked()" id="wholeWord" />
-  <label for="wholeWord"> whole word</label>
-</section>
-<section class="section">
-  <input type="checkbox" [(ngModel)]="matchDiacritics" (change)="onCheckboxClicked()" id="matchDiacritics" />
-  <label for="matchDiacritics"> match diacritics</label>
-  <small class="margin-left-24px">(try "licao" to find "lição")</small>
-</section>
-<section class="section button-box">
-  <button id="gotoNextPage" (click)="findNext()">next</button>
-  <button id="gotoPreviousPage" (click)="findPrevious()" class="margin-left-10px">previous</button>
-</section>
+    @if (findState !== undefined) {
+      <small>
+        <span class="margin-left-24px">{{ findStateText }}</span>
+        @if (totalMatches && totalMatches > 0) {
+          <span class="margin-left-24px">Result {{ currentMatchNumber }} of {{ totalMatches }}</span>
+        }
+      </small>
+    }
+    </section>
+    <section class="section">
+      <input id="highlightAll" type="checkbox" [(ngModel)]="highlightAll" (change)="onCheckboxClicked()" />
+      <label for="highlight">Highlight all</label>
+    </section>
+    <section class="section">
+      <input type="checkbox" [(ngModel)]="matchCase" (change)="onCheckboxClicked()" id="matchCase" />
+      <label for="matchCase"> match case</label>
+    </section>
+    <section class="section">
+      <input type="checkbox" [(ngModel)]="wholeWord" (change)="onCheckboxClicked()" id="wholeWord" />
+      <label for="wholeWord"> whole word</label>
+    </section>
+    <section class="section">
+      <input type="checkbox" [(ngModel)]="matchDiacritics" (change)="onCheckboxClicked()" id="matchDiacritics" />
+      <label for="matchDiacritics"> match diacritics</label>
+      <small class="margin-left-24px">(try "licao" to find "lição")</small>
+    </section>
+    <section class="section button-box">
+      <button id="gotoNextPage" (click)="findNext()">next</button>
+      <button id="gotoPreviousPage" (click)="findPrevious()" class="margin-left-10px">previous</button>
+    </section>
 
-<section>
-  <b>Info:</b>
-  Search type: {{ type }} Direction: {{ direction }} Total number of matching characters (nonsensical metric to test the matchesLength property):
-  {{ totalNumberOfMatchingCharacters }}
-</section>
+    <section>
+      <b>Info:</b>
+      Search type: {{ type }} Direction: {{ direction }} Total number of matching characters (nonsensical metric to test the matchesLength property):
+      {{ totalNumberOfMatchingCharacters }}
+    </section>
 
-<small
-  >The example PDF has been published under a
-  <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons (CC BY-NC-SA 3.0) license</a>
-  at
-  <a href="https://wisc.pb.unizin.org/portuguese/">https://wisc.pb.unizin.org/portuguese/</a>.</small
->
-<ngx-extended-pdf-viewer
-  [src]="'/assets/pdfs/Portugues-para-principiantes-1538054164.pdf'"
-  (updateFindMatchesCount)="updateFindMatchesCount($event)"
-  (updateFindState)="updateFindState($event)"
-  backgroundColor="#ffffff"
-  [height]="'90vh'"
-  [handTool]="false"
-  [showHandToolButton]="true"
-  [page]="9"
-  [(findbarVisible)]="findbarVisible"
->
-</ngx-extended-pdf-viewer>
+    <small
+      >The example PDF has been published under a
+      <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons (CC BY-NC-SA 3.0) license</a>
+      at
+      <a href="https://wisc.pb.unizin.org/portuguese/">https://wisc.pb.unizin.org/portuguese/</a>.</small
+      >
+      <ngx-extended-pdf-viewer
+        [src]="'/assets/pdfs/Portugues-para-principiantes-1538054164.pdf'"
+        (updateFindMatchesCount)="updateFindMatchesCount($event)"
+        (updateFindState)="updateFindState($event)"
+        backgroundColor="#ffffff"
+        [height]="'90vh'"
+        [handTool]="false"
+        [showHandToolButton]="true"
+        [page]="9"
+        [(findbarVisible)]="findbarVisible"
+        >
+      </ngx-extended-pdf-viewer>

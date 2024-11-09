@@ -1,15 +1,19 @@
 <button id="switch-button" (click)="switchSrc()">Load {{caption}}</button>
 <br />
-<small *ngIf="counter%2===0">
-  Copyright hint: the PDF file has been published by <a href="https://github.com/pdfcpu/pdfcpu">the pdfcpu project</a> on
-  <a href="https://github.com/pdfcpu/pdfcpu/blob/master/pkg/samples/fonts/core/ZapfDingbats.pdf">https://github.com/pdfcpu/pdfcpu</a> under an
-  <a target="#" rel="license" href="https://github.com/pdfcpu/pdfcpu/blob/master/LICENSE.txt">Apache 2.0 license.<br /></a>
-</small>
-<small *ngIf="counter%2==1">
-  The example PDF has been published under a
-  <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons (CC BY-NC-SA 3.0) license</a>
-  at <a href="https://wisc.pb.unizin.org/portuguese/">https://wisc.pb.unizin.org/portuguese/</a>.
-</small>
+@if (counter%2===0) {
+  <small>
+    Copyright hint: the PDF file has been published by <a href="https://github.com/pdfcpu/pdfcpu">the pdfcpu project</a> on
+    <a href="https://github.com/pdfcpu/pdfcpu/blob/master/pkg/samples/fonts/core/ZapfDingbats.pdf">https://github.com/pdfcpu/pdfcpu</a> under an
+    <a target="#" rel="license" href="https://github.com/pdfcpu/pdfcpu/blob/master/LICENSE.txt">Apache 2.0 license.<br /></a>
+  </small>
+}
+@if (counter%2==1) {
+  <small>
+    The example PDF has been published under a
+    <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons (CC BY-NC-SA 3.0) license</a>
+    at <a href="https://wisc.pb.unizin.org/portuguese/">https://wisc.pb.unizin.org/portuguese/</a>.
+  </small>
+}
 <ngx-extended-pdf-viewer
   [src]="src">
 </ngx-extended-pdf-viewer>
