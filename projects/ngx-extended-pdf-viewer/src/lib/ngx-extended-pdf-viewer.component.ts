@@ -798,20 +798,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public showHandToolButton: ResponsiveVisibility = false;
 
-  private _showScrollingButton: ResponsiveVisibility = true;
-
-  public get showScrollingButton() {
-    if (this.pageViewMode === 'multiple') {
-      return this._showScrollingButton;
-    }
-    return false;
-  }
-
-  @Input()
-  public set showScrollingButton(val: ResponsiveVisibility) {
-    this._showScrollingButton = val;
-  }
-
   @Input()
   public showSpreadButton: ResponsiveVisibility = true;
 
@@ -823,6 +809,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   @Input()
   public spread: SpreadType;
+
+  @Input()
+  public set showScrollingButtons(show: ResponsiveVisibility) {
+    this.showVerticalScrollButton = show;
+    this.showHorizontalScrollButton = show;
+    this.showWrappedScrollButton = show;
+    this.showInfiniteScrollButton = show;
+    this.showBookModeButton = show;
+    this.showSinglePageModeButton = show;
+  }
 
   @Output()
   public spreadChange = new EventEmitter<'off' | 'even' | 'odd'>();
@@ -837,10 +833,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   @Input()
-  public set page(p: number | undefined) {
-    if (p) {
+  public set page(newPageNumber: number | string | undefined) {
+    if (newPageNumber) {
       // silently cope with strings
-      this._page = Number(p);
+      this._page = Number(newPageNumber);
     } else {
       this._page = undefined;
     }
@@ -1999,7 +1995,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         this.showRotateCwButton ||
         this.showRotateCcwButton ||
         this.showHandToolButton ||
-        this.showScrollingButton ||
+        this.showBookModeButton ||
+        this.showSinglePageModeButton ||
+        this.showVerticalScrollButton ||
+        this.showHorizontalScrollButton ||
+        this.showInfiniteScrollButton ||
         this.showSpreadButton ||
         this.showSidebarButton ||
         this.showZoomButtons;
