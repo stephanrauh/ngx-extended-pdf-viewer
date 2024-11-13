@@ -89,7 +89,7 @@ export interface FormDataType {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestroy, NgxHasHeight {
-  private formSupport = new NgxFormSupport();
+  private readonly formSupport = new NgxFormSupport();
 
   /**
    * The dummy components are inserted automatically when the user customizes the toolbar
@@ -194,57 +194,81 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       PDFViewerApplication.findController._pageViewMode = this._pageViewMode;
     }
 
+    this.handleViewMode(viewMode);
+
+    if (mustRedraw) {
+      this.redrawViewer(viewMode);
+    }
+  }
+
+  private handleViewMode(viewMode: PageViewModeType): void {
     switch (viewMode) {
       case 'infinite-scroll':
-        if (this.scrollMode === ScrollModeType.page || this.scrollMode === ScrollModeType.horizontal) {
-          this.scrollMode = ScrollModeType.vertical;
-          PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(this.scrollMode) });
-        }
-        setTimeout(() => {
-          // this timeout is necessary because @Input() is called before the child components are initialized
-          // (and the DynamicCssComponent is a child component)
-          this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(false, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
-        });
+        this.handleInfiniteScrollMode();
         break;
       case 'single':
-        // since pdf.js, our custom single-page-mode has been replaced by the standard scrollMode="page"
-        this.scrollMode = ScrollModeType.page;
-        this._pageViewMode = viewMode;
+        this.handleSinglePageMode();
         break;
       case 'book':
-        this.showBorders = false;
-        if (this.scrollMode !== ScrollModeType.vertical) {
-          this.scrollMode = ScrollModeType.vertical;
-        }
+        this.handleBookMode();
         break;
       case 'multiple':
-        if (this.scrollMode === ScrollModeType.page) {
-          this.scrollMode = ScrollModeType.vertical;
-        }
-        setTimeout(() => {
-          // this timeout is necessary because @Input() is called before the child components are initialized
-          // (and the DynamicCssComponent is a child component)
-          this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(true, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
-        });
+        this.handleMultiplePageMode();
         break;
       default:
         this.scrollMode = ScrollModeType.vertical;
     }
+  }
 
-    if (mustRedraw) {
-      if (viewMode !== 'book') {
-        const ngx = this.elementRef.nativeElement as HTMLElement;
-        const viewerContainer = ngx.querySelector('#viewerContainer') as HTMLDivElement;
-        viewerContainer.style.width = '';
-        viewerContainer.style.overflow = '';
-        viewerContainer.style.marginRight = '';
-        viewerContainer.style.marginLeft = '';
-        const viewer = ngx.querySelector('#viewer') as HTMLDivElement;
-        viewer.style.maxWidth = '';
-        viewer.style.minWidth = '';
-      }
-      this.openPDF2();
+  private handleInfiniteScrollMode(): void {
+    if (this.scrollMode === ScrollModeType.page || this.scrollMode === ScrollModeType.horizontal) {
+      this.scrollMode = ScrollModeType.vertical;
+      this.pdfScriptLoaderService.PDFViewerApplication.eventBus.dispatch('switchscrollmode', { mode: Number(this.scrollMode) });
     }
+    setTimeout(() => {
+      // this timeout is necessary because @Input() is called before the child components are initialized
+      // (and the DynamicCssComponent is a child component)
+      this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(false, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
+    });
+  }
+
+  // since pdf.js, our custom single-page-mode has been replaced by the standard scrollMode="page"
+  private handleSinglePageMode(): void {
+    this.scrollMode = ScrollModeType.page;
+    this._pageViewMode = 'single';
+  }
+
+  private handleBookMode(): void {
+    this.showBorders = false;
+    if (this.scrollMode !== ScrollModeType.vertical) {
+      this.scrollMode = ScrollModeType.vertical;
+    }
+  }
+
+  private handleMultiplePageMode(): void {
+    if (this.scrollMode === ScrollModeType.page) {
+      this.scrollMode = ScrollModeType.vertical;
+    }
+    setTimeout(() => {
+      // this timeout is necessary because @Input() is called before the child components are initialized
+      // (and the DynamicCssComponent is a child component)
+      this.dynamicCSSComponent.removeScrollbarInInfiniteScrollMode(true, this.pageViewMode, this.primaryMenuVisible, this, this.logLevel);
+    });
+  }
+
+  private redrawViewer(viewMode: PageViewModeType): void {
+    if (viewMode !== 'book') {
+      const ngx = this.elementRef.nativeElement as HTMLElement;
+      const viewerContainer = ngx.querySelector('#viewerContainer') as HTMLDivElement;
+      viewerContainer.style.width = '';
+      viewerContainer.style.overflow = '';
+      viewerContainer.style.marginRight = '';
+      viewerContainer.style.marginLeft = '';
+      const viewer = ngx.querySelector('#viewer') as HTMLDivElement;
+      viewer.style.maxWidth = '';
+      viewer.style.minWidth = '';
+    }
+    this.openPDF2();
   }
 
   public markForCheck(): void {
@@ -258,13 +282,13 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   public progress = new EventEmitter<ProgressBarEvent>();
 
   @ViewChild('pdfSecondaryToolbarComponent')
-  private secondaryToolbarComponent: PdfSecondaryToolbarComponent;
+  private readonly secondaryToolbarComponent: PdfSecondaryToolbarComponent;
 
   @ViewChild('DynamicCssComponent')
-  private dynamicCSSComponent: DynamicCssComponent;
+  private readonly dynamicCSSComponent: DynamicCssComponent;
 
   @ViewChild('pdfsidebar')
-  private sidebarComponent: PdfSidebarComponent;
+  private readonly sidebarComponent: PdfSidebarComponent;
 
   /* regular attributes */
 
@@ -366,11 +390,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   @Input()
   public set minifiedJSLibraries(value) {
-    if (value) {
-      pdfDefaultOptions._internalFilenameSuffix = '.min';
-    } else {
-      pdfDefaultOptions._internalFilenameSuffix = '';
-    }
+    pdfDefaultOptions._internalFilenameSuffix = value ? '.min' : '';
   }
 
   public primaryMenuVisible = true;
@@ -567,7 +587,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public replaceBrowserPrint = true;
 
-  private originalPrint = typeof window !== 'undefined' ? window.print : undefined;
+  private readonly originalPrint = typeof window !== 'undefined' ? window.print : undefined;
 
   public _showSidebarButton: ResponsiveVisibility = true;
 
@@ -778,20 +798,6 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   @Input()
   public showHandToolButton: ResponsiveVisibility = false;
 
-  private _showScrollingButton: ResponsiveVisibility = true;
-
-  public get showScrollingButton() {
-    if (this.pageViewMode === 'multiple') {
-      return this._showScrollingButton;
-    }
-    return false;
-  }
-
-  @Input()
-  public set showScrollingButton(val: ResponsiveVisibility) {
-    this._showScrollingButton = val;
-  }
-
   @Input()
   public showSpreadButton: ResponsiveVisibility = true;
 
@@ -803,6 +809,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
 
   @Input()
   public spread: SpreadType;
+
+  @Input()
+  public set showScrollingButtons(show: ResponsiveVisibility) {
+    this.showVerticalScrollButton = show;
+    this.showHorizontalScrollButton = show;
+    this.showWrappedScrollButton = show;
+    this.showInfiniteScrollButton = show;
+    this.showBookModeButton = show;
+    this.showSinglePageModeButton = show;
+  }
 
   @Output()
   public spreadChange = new EventEmitter<'off' | 'even' | 'odd'>();
@@ -817,10 +833,10 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   @Input()
-  public set page(p: number | undefined) {
-    if (p) {
+  public set page(newPageNumber: number | string | undefined) {
+    if (newPageNumber) {
       // silently cope with strings
-      this._page = Number(p);
+      this._page = Number(newPageNumber);
     } else {
       this._page = undefined;
     }
@@ -1013,16 +1029,16 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
   }
 
   constructor(
-    private ngZone: NgZone,
-    @Inject(PLATFORM_ID) private platformId,
-    private notificationService: PDFNotificationService,
-    private elementRef: ElementRef,
-    private platformLocation: PlatformLocation,
+    private readonly ngZone: NgZone,
+    @Inject(PLATFORM_ID) private readonly platformId,
+    private readonly notificationService: PDFNotificationService,
+    private readonly elementRef: ElementRef,
+    private readonly platformLocation: PlatformLocation,
     public cdr: ChangeDetectorRef,
     public service: NgxExtendedPdfViewerService,
-    private renderer: Renderer2,
-    private pdfScriptLoaderService: PDFScriptLoaderService,
-    private keyboardManager: NgxKeyboardManagerService
+    private readonly renderer: Renderer2,
+    private readonly pdfScriptLoaderService: PDFScriptLoaderService,
+    private readonly keyboardManager: NgxKeyboardManagerService
   ) {
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
     if (isPlatformBrowser(this.platformId)) {
@@ -1160,11 +1176,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     return elements;
   }
 
-  private afterPrintListener = () => {
+  private readonly afterPrintListener = () => {
     this.afterPrint.emit();
   };
 
-  private beforePrintListener = () => {
+  private readonly beforePrintListener = () => {
     this.beforePrint.emit();
   };
 
@@ -1301,7 +1317,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     this.spreadChange.emit(newSpread);
   }
 
-  private toggleVisibility = (elementId: string, cssClass = 'invisible') => {
+  private readonly toggleVisibility = (elementId: string, cssClass = 'invisible') => {
     const element = document.getElementById(elementId) as HTMLElement;
     element?.classList.remove(cssClass);
   };
@@ -1979,7 +1995,11 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
         this.showRotateCwButton ||
         this.showRotateCcwButton ||
         this.showHandToolButton ||
-        this.showScrollingButton ||
+        this.showBookModeButton ||
+        this.showSinglePageModeButton ||
+        this.showVerticalScrollButton ||
+        this.showHorizontalScrollButton ||
+        this.showInfiniteScrollButton ||
         this.showSpreadButton ||
         this.showSidebarButton ||
         this.showZoomButtons;

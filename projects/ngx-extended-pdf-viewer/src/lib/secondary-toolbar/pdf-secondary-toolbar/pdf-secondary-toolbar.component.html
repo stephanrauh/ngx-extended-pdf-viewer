@@ -20,6 +20,8 @@
           [attr.data-l10n-id]="button.l10nId"
           (click)="onClick($event, button.action, button.eventBusName, button.closeOnClick)"
           [attr.aria-label]="button.title"
+          [disabled]="button.disabled"
+
           >
           @if (button.image) {
             <span class="icon" role="img" aria-hidden="true" [attr.aria-label]="button.title" [innerHTML]="button.image"></span>
