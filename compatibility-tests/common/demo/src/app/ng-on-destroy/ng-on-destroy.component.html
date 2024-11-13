@@ -8,5 +8,7 @@
 <button id="hide" (click)="hide()">hide</button>
 <button id="show" (click)="show()">show</button>
 <button id="toggle" (click)="toggle()">toggle quickly</button>
-<ngx-extended-pdf-viewer *ngIf="visible" [src]="'/assets/pdfs/Bootstrap-vs-Material-Design-vs-Prime-vs-Tailwind.pdf'" [height]="'50vh'">
-</ngx-extended-pdf-viewer>
+@if (visible) {
+  <ngx-extended-pdf-viewer [src]="'/assets/pdfs/Bootstrap-vs-Material-Design-vs-Prime-vs-Tailwind.pdf'" [height]="'50vh'">
+  </ngx-extended-pdf-viewer>
+}
