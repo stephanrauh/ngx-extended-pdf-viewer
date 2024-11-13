@@ -94,7 +94,7 @@ __webpack_require__.d(__webpack_exports__, {
   version: () => (/* reexport */ version)
 });
 
-;// CONCATENATED MODULE: ./external/ngx-logger/ngx-console.js
+;// ./external/ngx-logger/ngx-console.js
 class NgxConsole {
   static ngxConsoleFilter = (_level, _message) => true;
   static log(message, reason) {
@@ -143,7 +143,7 @@ class NgxConsole {
     NgxConsole.ngxConsoleFilter = (_level, _message) => true;
   }
 }
-;// CONCATENATED MODULE: ./src/shared/util.js
+;// ./src/shared/util.js
 
 const isNodeJS = typeof process === "object" && process + "" === "[object process]" && !process.versions.nw && !(process.versions.electron && process.type && process.type !== "browser");
 const IDENTITY_MATRIX = [1, 0, 0, 1, 0, 0];
@@ -897,7 +897,7 @@ const FontRenderOps = {
   TRANSLATE: 8
 };
 
-;// CONCATENATED MODULE: ./src/display/base_factory.js
+;// ./src/display/base_factory.js
 
 class BaseFilterFactory {
   addFilter(maps) {
@@ -1036,7 +1036,7 @@ class BaseSVGFactory {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/display_utils.js
+;// ./src/display/display_utils.js
 
 
 
@@ -1794,7 +1794,7 @@ class OutputScale {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/editor/toolbar.js
+;// ./src/display/editor/toolbar.js
 
 class EditorToolbar {
   #toolbar = null;
@@ -1994,7 +1994,7 @@ class HighlightToolbar {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/editor/tools.js
+;// ./src/display/editor/tools.js
 
 
 
@@ -3789,7 +3789,7 @@ class AnnotationEditorUIManager {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/editor/alt_text.js
+;// ./src/display/editor/alt_text.js
 
 class AltText {
   #altText = null;
@@ -4052,7 +4052,7 @@ class AltText {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/editor/editor.js
+;// ./src/display/editor/editor.js
 
 
 
@@ -5290,7 +5290,7 @@ class FakeEditor extends AnnotationEditor {
   }
 }
 
-;// CONCATENATED MODULE: ./src/shared/murmurhash3.js
+;// ./src/shared/murmurhash3.js
 const SEED = 0xc3d2e1f0;
 const MASK_HIGH = 0xffff0000;
 const MASK_LOW = 0xffff;
@@ -5383,7 +5383,7 @@ class MurmurHash3_64 {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/annotation_storage.js
+;// ./src/display/annotation_storage.js
 
 
 
@@ -5598,7 +5598,7 @@ class PrintAnnotationStorage extends AnnotationStorage {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/font_loader.js
+;// ./src/display/font_loader.js
 
 class FontLoader {
   #systemFonts = new Set();
@@ -5934,7 +5934,7 @@ class FontFaceObject {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/node_utils.js
+;// ./src/display/node_utils.js
 
 
 class NodePackages {
@@ -5970,7 +5970,7 @@ class NodeStandardFontDataFactory extends BaseStandardFontDataFactory {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/pattern_helper.js
+;// ./src/display/pattern_helper.js
 
 
 const PathType = {
@@ -6449,7 +6449,7 @@ class TilingPattern {
   }
 }
 
-;// CONCATENATED MODULE: ./src/shared/image_utils.js
+;// ./src/shared/image_utils.js
 
 function convertToRGBA(params) {
   switch (params.kind) {
@@ -6556,7 +6556,7 @@ function grayToRGBA(src, dest) {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/canvas.js
+;// ./src/display/canvas.js
 
 
 
@@ -8736,7 +8736,7 @@ for (const op in OPS) {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/worker_options.js
+;// ./src/display/worker_options.js
 class GlobalWorkerOptions {
   static #port = null;
   static #src = "";
@@ -8760,7 +8760,7 @@ class GlobalWorkerOptions {
   }
 }
 
-;// CONCATENATED MODULE: ./src/shared/message_handler.js
+;// ./src/shared/message_handler.js
 
 const CallbackKind = {
   UNKNOWN: 0,
@@ -9163,7 +9163,7 @@ class MessageHandler {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/metadata.js
+;// ./src/display/metadata.js
 
 class Metadata {
   #metadataMap;
@@ -9189,7 +9189,7 @@ class Metadata {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/optional_content_config.js
+;// ./src/display/optional_content_config.js
 
 
 const INTERNAL = Symbol("INTERNAL");
@@ -9441,7 +9441,7 @@ class OptionalContentConfig {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/transport_stream.js
+;// ./src/display/transport_stream.js
 
 
 class PDFDataTransportStream {
@@ -9709,7 +9709,7 @@ class PDFDataTransportStreamRangeReader {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/content_disposition.js
+;// ./src/display/content_disposition.js
 
 function getFilenameFromContentDispositionHeader(contentDisposition) {
   let needsEncodingFixup = true;
@@ -9840,7 +9840,7 @@ function getFilenameFromContentDispositionHeader(contentDisposition) {
   return "";
 }
 
-;// CONCATENATED MODULE: ./src/display/network_utils.js
+;// ./src/display/network_utils.js
 
 
 
@@ -9913,7 +9913,7 @@ function validateResponseStatus(status) {
   return status === 200 || status === 206;
 }
 
-;// CONCATENATED MODULE: ./src/display/fetch_stream.js
+;// ./src/display/fetch_stream.js
 
 
 function createFetchOptions(headers, withCredentials, abortController) {
@@ -10106,7 +10106,7 @@ class PDFFetchStreamRangeReader {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/network.js
+;// ./src/display/network.js
 
 
 const OK_RESPONSE = 200;
@@ -10512,7 +10512,7 @@ class PDFNetworkStreamRangeRequestReader {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/node_stream.js
+;// ./src/display/node_stream.js
 
 
 
@@ -10817,7 +10817,7 @@ class PDFNodeStreamFsRangeReader extends BaseRangeReader {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/text_layer.js
+;// ./src/display/text_layer.js
 
 
 const MAX_TEXT_DIVS_TO_RENDER = 100000;
@@ -11201,7 +11201,7 @@ class TextLayer {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/xfa_text.js
+;// ./src/display/xfa_text.js
 class XfaText {
   static textContent(xfa) {
     const items = [];
@@ -11244,7 +11244,7 @@ class XfaText {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/api.js
+;// ./src/display/api.js
 
 
 
@@ -12359,7 +12359,7 @@ class PDFWorker {
       if (this.#mainThreadWorkerMessageHandler) {
         return this.#mainThreadWorkerMessageHandler;
       }
-      const worker = await import( /*webpackIgnore: true*/this.workerSrc);
+      const worker = await import(/*webpackIgnore: true*/this.workerSrc);
       return worker.WorkerMessageHandler;
     };
     return shadow(this, "_setupFakeWorkerGlobal", loader());
@@ -13150,7 +13150,7 @@ class InternalRenderTask {
 const version = "4.7.697";
 const build = "59c438ae0";
 
-;// CONCATENATED MODULE: ./src/shared/scripting_utils.js
+;// ./src/shared/scripting_utils.js
 function makeColorComp(n) {
   return Math.floor(Math.max(0, Math.min(1, n)) * 255).toString(16).padStart(2, "0");
 }
@@ -13209,7 +13209,7 @@ class ColorConverters {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/xfa_layer.js
+;// ./src/display/xfa_layer.js
 
 class XfaLayer {
   static setupStorage(html, id, element, storage, intent) {
@@ -13441,7 +13441,7 @@ class XfaLayer {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/annotation_layer.js
+;// ./src/display/annotation_layer.js
 
 
 
@@ -16143,7 +16143,7 @@ class AnnotationLayer {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/editor/freetext.js
+;// ./src/display/editor/freetext.js
 
 
 
@@ -16783,7 +16783,7 @@ class FreeTextEditor extends AnnotationEditor {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/editor/outliner.js
+;// ./src/display/editor/outliner.js
 
 class Outliner {
   #box;
@@ -17383,7 +17383,7 @@ class FreeHighlightOutline extends Outline {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/editor/color_picker.js
+;// ./src/display/editor/color_picker.js
 
 
 
@@ -17609,7 +17609,7 @@ class ColorPicker {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/editor/highlight.js
+;// ./src/display/editor/highlight.js
 
 
 
@@ -18392,7 +18392,7 @@ class HighlightEditor extends AnnotationEditor {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/editor/ink.js
+;// ./src/display/editor/ink.js
 
 
 
@@ -18625,6 +18625,7 @@ class InkEditor extends AnnotationEditor {
     if (this.#disableEditing || this.canvas === null) {
       return;
     }
+    console.log("enableInitMode");
     super.enableEditMode();
     setTimeout(() => this.initializePointerType());
     this._isDraggable = false;
@@ -18678,6 +18679,7 @@ class InkEditor extends AnnotationEditor {
     ctx.strokeStyle = `${color}${opacityToHex(opacity)}`;
   }
   #startDrawing(x, y) {
+    console.log("Start Drawing");
     this.canvas.addEventListener("contextmenu", noContextMenu, {
       signal: this._uiManager._signal
     });
@@ -18688,6 +18690,9 @@ class InkEditor extends AnnotationEditor {
       signal
     });
     this.canvas.addEventListener("pointermove", this.canvasPointermove.bind(this), {
+      signal
+    });
+    this.canvas.addEventListener("pointerup", this.canvasPointerup.bind(this), {
       signal
     });
     this.canvas.addEventListener("pointerup", this.canvasPointerup.bind(this), {
@@ -18872,6 +18877,7 @@ class InkEditor extends AnnotationEditor {
       return;
     }
     super.commit();
+    console.log("Commit");
     this.isEditing = false;
     this.disableEditMode();
     this.setInForeground();
@@ -18924,6 +18930,7 @@ class InkEditor extends AnnotationEditor {
     this.#draw(event.offsetX, event.offsetY);
   }
   canvasPointerup(event) {
+    console.log("Pointer Up");
     event.preventDefault();
     this.#endDrawing(event);
   }
@@ -18931,6 +18938,7 @@ class InkEditor extends AnnotationEditor {
     this.#endDrawing(event);
   }
   canvasTouchMove(event) {
+    console.log("Touch Move " + (!this.isInEditMode() || this.#disableEditing || this.editorPointerType !== PointerType.current));
     if (!this.isInEditMode() || this.#disableEditing || this.editorPointerType !== PointerType.current) {
       return;
     }
@@ -18939,6 +18947,7 @@ class InkEditor extends AnnotationEditor {
   #endDrawing(event) {
     this.#drawingAC?.abort();
     this.#drawingAC = null;
+    console.log("End Drawing");
     this.canvas.removeEventListener("touchmove", this.#boundCanvasTouchMove);
     this.#addPointerdownListener();
     if (this.#canvasContextMenuTimeoutId) {
@@ -19292,7 +19301,7 @@ class InkEditor extends AnnotationEditor {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/editor/stamp.js
+;// ./src/display/editor/stamp.js
 
 
 
@@ -19952,7 +19961,7 @@ class StampEditor extends AnnotationEditor {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/editor/annotation_editor_layer.js
+;// ./src/display/editor/annotation_editor_layer.js
 
 
 
@@ -20576,7 +20585,7 @@ class AnnotationEditorLayer {
   }
 }
 
-;// CONCATENATED MODULE: ./src/display/draw_layer.js
+;// ./src/display/draw_layer.js
 
 
 class DrawLayer {
@@ -20774,7 +20783,7 @@ class DrawLayer {
   }
 }
 
-;// CONCATENATED MODULE: ./src/pdf.js
+;// ./src/pdf.js
 
 
 
@@ -20891,7 +20900,7 @@ __webpack_require__.d(__webpack_exports__, {
   webViewerLoad: () => (/* binding */ webViewerLoad)
 });
 
-;// CONCATENATED MODULE: ./external/ngx-logger/ngx-console.js
+;// ./external/ngx-logger/ngx-console.js
 class ngx_console_NgxConsole {
   static ngxConsoleFilter = (_level, _message) => true;
   static log(message, reason) {
@@ -20940,7 +20949,7 @@ class ngx_console_NgxConsole {
     ngx_console_NgxConsole.ngxConsoleFilter = (_level, _message) => true;
   }
 }
-;// CONCATENATED MODULE: ./web/ui_utils.js
+;// ./web/ui_utils.js
 
 const DEFAULT_SCALE_VALUE = "auto";
 const DEFAULT_SCALE = 1.0;
@@ -21433,7 +21442,7 @@ const calcRound = function () {
   return e.style.width === "calc(1320px)" ? Math.fround : x => x;
 }();
 
-;// CONCATENATED MODULE: ./web/app_options.js
+;// ./web/app_options.js
 {
   var compatParams = new Map();
   const userAgent = navigator.userAgent || "";
@@ -21878,7 +21887,7 @@ class AppOptions {
   }
 }
 
-;// CONCATENATED MODULE: ./web/pdf_link_service.js
+;// ./web/pdf_link_service.js
 
 
 const DEFAULT_LINK_REL = "noopener noreferrer nofollow";
@@ -22240,7 +22249,7 @@ class SimpleLinkService extends PDFLinkService {
   setDocument(pdfDocument, baseUrl = null) {}
 }
 
-;// CONCATENATED MODULE: ./web/pdfjs.js
+;// ./web/pdfjs.js
 const {
   AbortException,
   AnnotationEditorLayer,
@@ -22288,9 +22297,9 @@ const {
   XfaLayer
 } = globalThis.pdfjsLib;
 
-;// CONCATENATED MODULE: ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '22.0.0-alpha.8';
-;// CONCATENATED MODULE: ./web/event_utils.js
+;// ./web/ngx-extended-pdf-viewer-version.js
+const ngxExtendedPdfViewerVersion = '22.0.0-alpha.9';
+;// ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
   TIMEOUT: "timeout"
@@ -22417,7 +22426,7 @@ class FirefoxEventBus extends EventBus {
   }
 }
 
-;// CONCATENATED MODULE: ./web/external_services.js
+;// ./web/external_services.js
 class BaseExternalServices {
   updateFindControlState(data) {}
   updateFindMatchesCount(data) {}
@@ -22435,7 +22444,7 @@ class BaseExternalServices {
   dispatchGlobalEvent(_event) {}
 }
 
-;// CONCATENATED MODULE: ./web/preferences.js
+;// ./web/preferences.js
 
 class BasePreferences {
   #defaults = Object.freeze({
@@ -22519,7 +22528,7 @@ class BasePreferences {
   }
 }
 
-;// CONCATENATED MODULE: ./node_modules/@fluent/bundle/esm/types.js
+;// ./node_modules/@fluent/bundle/esm/types.js
 class FluentType {
   constructor(value) {
     this.value = value;
@@ -22566,7 +22575,7 @@ class FluentDateTime extends FluentType {
     }
   }
 }
-;// CONCATENATED MODULE: ./node_modules/@fluent/bundle/esm/resolver.js
+;// ./node_modules/@fluent/bundle/esm/resolver.js
 
 const MAX_PLACEABLES = 100;
 const FSI = "\u2068";
@@ -22786,7 +22795,7 @@ function resolvePattern(scope, value) {
   }
   return resolveComplexPattern(scope, value);
 }
-;// CONCATENATED MODULE: ./node_modules/@fluent/bundle/esm/scope.js
+;// ./node_modules/@fluent/bundle/esm/scope.js
 class Scope {
   constructor(bundle, errors, args) {
     this.dirty = new WeakSet();
@@ -22815,7 +22824,7 @@ class Scope {
     return cache[id];
   }
 }
-;// CONCATENATED MODULE: ./node_modules/@fluent/bundle/esm/builtins.js
+;// ./node_modules/@fluent/bundle/esm/builtins.js
 
 function values(opts, allowed) {
   const unwrapped = Object.create(null);
@@ -22864,7 +22873,7 @@ function DATETIME(args, opts) {
   }
   throw new TypeError("Invalid argument to DATETIME");
 }
-;// CONCATENATED MODULE: ./node_modules/@fluent/bundle/esm/memoizer.js
+;// ./node_modules/@fluent/bundle/esm/memoizer.js
 const cache = new Map();
 function getMemoizerForLocale(locales) {
   const stringLocale = Array.isArray(locales) ? locales.join(" ") : locales;
@@ -22875,7 +22884,7 @@ function getMemoizerForLocale(locales) {
   }
   return memoizer;
 }
-;// CONCATENATED MODULE: ./node_modules/@fluent/bundle/esm/bundle.js
+;// ./node_modules/@fluent/bundle/esm/bundle.js
 
 
 
@@ -22944,7 +22953,7 @@ class FluentBundle {
     }
   }
 }
-;// CONCATENATED MODULE: ./node_modules/@fluent/bundle/esm/resource.js
+;// ./node_modules/@fluent/bundle/esm/resource.js
 const RE_MESSAGE_START = /^(-?[a-zA-Z][\w-]*) *= */gm;
 const RE_ATTRIBUTE_START = /\.([a-zA-Z][\w-]*) *= */y;
 const RE_VARIANT_START = /\*?\[/y;
@@ -23323,11 +23332,11 @@ class Indent {
     this.length = length;
   }
 }
-;// CONCATENATED MODULE: ./node_modules/@fluent/bundle/esm/index.js
+;// ./node_modules/@fluent/bundle/esm/index.js
 
 
 
-;// CONCATENATED MODULE: ./node_modules/@fluent/dom/esm/overlay.js
+;// ./node_modules/@fluent/dom/esm/overlay.js
 const reOverlay = /<|&#?\w+;/;
 const TEXT_LEVEL_ELEMENTS = {
   "http://www.w3.org/1999/xhtml": ["em", "strong", "small", "s", "cite", "q", "dfn", "abbr", "data", "time", "code", "var", "samp", "kbd", "sub", "sup", "i", "b", "u", "mark", "bdi", "bdo", "span", "br", "wbr"]
@@ -23478,7 +23487,7 @@ function shallowPopulateUsing(fromElement, toElement) {
   overlayAttributes(fromElement, toElement);
   return toElement;
 }
-;// CONCATENATED MODULE: ./node_modules/cached-iterable/src/cached_iterable.mjs
+;// ./node_modules/cached-iterable/src/cached_iterable.mjs
 class CachedIterable extends Array {
   static from(iterable) {
     if (iterable instanceof this) {
@@ -23487,7 +23496,7 @@ class CachedIterable extends Array {
     return new this(iterable);
   }
 }
-;// CONCATENATED MODULE: ./node_modules/cached-iterable/src/cached_sync_iterable.mjs
+;// ./node_modules/cached-iterable/src/cached_sync_iterable.mjs
 
 class CachedSyncIterable extends CachedIterable {
   constructor(iterable) {
@@ -23522,7 +23531,7 @@ class CachedSyncIterable extends CachedIterable {
     return this[this.length - 1];
   }
 }
-;// CONCATENATED MODULE: ./node_modules/cached-iterable/src/cached_async_iterable.mjs
+;// ./node_modules/cached-iterable/src/cached_async_iterable.mjs
 
 class CachedAsyncIterable extends CachedIterable {
   constructor(iterable) {
@@ -23559,10 +23568,10 @@ class CachedAsyncIterable extends CachedIterable {
     return this[this.length - 1];
   }
 }
-;// CONCATENATED MODULE: ./node_modules/cached-iterable/src/index.mjs
+;// ./node_modules/cached-iterable/src/index.mjs
 
 
-;// CONCATENATED MODULE: ./node_modules/@fluent/dom/esm/localization.js
+;// ./node_modules/@fluent/dom/esm/localization.js
 
 class Localization {
   constructor(resourceIds = [], generateBundles) {
@@ -23677,7 +23686,7 @@ function keysFromBundle(method, bundle, keys, translations) {
   });
   return missingIds;
 }
-;// CONCATENATED MODULE: ./node_modules/@fluent/dom/esm/dom_localization.js
+;// ./node_modules/@fluent/dom/esm/dom_localization.js
 
 
 const L10NID_ATTR_NAME = "data-l10n-id";
@@ -23840,10 +23849,10 @@ class DOMLocalization extends Localization {
     };
   }
 }
-;// CONCATENATED MODULE: ./node_modules/@fluent/dom/esm/index.js
+;// ./node_modules/@fluent/dom/esm/index.js
 
 
-;// CONCATENATED MODULE: ./web/l10n.js
+;// ./web/l10n.js
 class L10n {
   #dir;
   #elements = new Set();
@@ -23934,7 +23943,7 @@ class L10n {
 }
 const GenericL10n = null;
 
-;// CONCATENATED MODULE: ./web/genericl10n.js
+;// ./web/genericl10n.js
 
 
 
@@ -24012,7 +24021,7 @@ class genericl10n_GenericL10n extends L10n {
   }
 }
 
-;// CONCATENATED MODULE: ./web/generic_scripting.js
+;// ./web/generic_scripting.js
 
 async function docProperties(pdfDocument) {
   const url = "",
@@ -24046,7 +24055,7 @@ class GenericScripting {
       sandboxBundleSrc = sandboxBundleSrc();
     }
     this._ready = new Promise((resolve, reject) => {
-      const sandbox = import( /*webpackIgnore: true*/sandboxBundleSrc);
+      const sandbox = import(/*webpackIgnore: true*/sandboxBundleSrc);
       sandbox.then(pdfjsSandbox => {
         resolve(pdfjsSandbox.QuickJSSandbox());
       }).catch(reject);
@@ -24066,7 +24075,7 @@ class GenericScripting {
   }
 }
 
-;// CONCATENATED MODULE: ./web/genericcom.js
+;// ./web/genericcom.js
 
 
 
@@ -24187,7 +24196,7 @@ class FakeMLManager {
   }
 }
 
-;// CONCATENATED MODULE: ./web/new_alt_text_manager.js
+;// ./web/new_alt_text_manager.js
 
 class NewAltTextManager {
   #boundCancel = this.#cancel.bind(this);
@@ -24732,7 +24741,7 @@ class ImageAltTextSettings {
   }
 }
 
-;// CONCATENATED MODULE: ./web/alt_text_manager.js
+;// ./web/alt_text_manager.js
 
 class AltTextManager {
   #boundUpdateUIState = this.#updateUIState.bind(this);
@@ -24979,7 +24988,7 @@ class AltTextManager {
   }
 }
 
-;// CONCATENATED MODULE: ./web/annotation_editor_params.js
+;// ./web/annotation_editor_params.js
 
 class AnnotationEditorParams {
   constructor(options, eventBus) {
@@ -25071,7 +25080,7 @@ class AnnotationEditorParams {
   }
 }
 
-;// CONCATENATED MODULE: ./web/caret_browsing.js
+;// ./web/caret_browsing.js
 const PRECISION = 1e-1;
 class CaretBrowsingMode {
   #mainContainer;
@@ -25287,7 +25296,7 @@ class CaretBrowsingMode {
   }
 }
 
-;// CONCATENATED MODULE: ./web/download_manager.js
+;// ./web/download_manager.js
 
 
 function download(blobUrl, filename) {
@@ -25352,7 +25361,7 @@ class DownloadManager {
   }
 }
 
-;// CONCATENATED MODULE: ./web/overlay_manager.js
+;// ./web/overlay_manager.js
 class OverlayManager {
   #overlays = new WeakMap();
   #active = null;
@@ -25416,7 +25425,7 @@ class OverlayManager {
   }
 }
 
-;// CONCATENATED MODULE: ./web/password_prompt.js
+;// ./web/password_prompt.js
 
 class PasswordPrompt {
   #activeCapability = null;
@@ -25492,7 +25501,7 @@ class PasswordPrompt {
   }
 }
 
-;// CONCATENATED MODULE: ./web/base_tree_viewer.js
+;// ./web/base_tree_viewer.js
 
 const TREEITEM_OFFSET_TOP = -100;
 const TREEITEM_SELECTED_CLASS = "selected";
@@ -25588,7 +25597,7 @@ class BaseTreeViewer {
   }
 }
 
-;// CONCATENATED MODULE: ./web/pdf_attachment_viewer.js
+;// ./web/pdf_attachment_viewer.js
 
 
 class PDFAttachmentViewer extends BaseTreeViewer {
@@ -25685,7 +25694,7 @@ class PDFAttachmentViewer extends BaseTreeViewer {
   }
 }
 
-;// CONCATENATED MODULE: ./web/grab_to_pan.js
+;// ./web/grab_to_pan.js
 const CSS_CLASS_GRAB = "grab-to-pan-grab";
 class GrabToPan {
   constructor({
@@ -25803,7 +25812,7 @@ function isOverPerfectScrollbar(x, y, divName) {
   return false;
 }
 
-;// CONCATENATED MODULE: ./web/pdf_cursor_tools.js
+;// ./web/pdf_cursor_tools.js
 
 
 
@@ -25923,7 +25932,7 @@ class PDFCursorTools {
   }
 }
 
-;// CONCATENATED MODULE: ./web/pdf_document_properties.js
+;// ./web/pdf_document_properties.js
 
 
 const NON_METRIC_LOCALES = ["en-us", "en-lr", "my"];
@@ -26113,7 +26122,7 @@ class PDFDocumentProperties {
   }
 }
 
-;// CONCATENATED MODULE: ./web/pdf_find_utils.js
+;// ./web/pdf_find_utils.js
 const CharacterType = {
   SPACE: 0,
   ALPHA_LETTER: 1,
@@ -26187,7 +26196,7 @@ function getNormalizeWithNFKC() {
   return NormalizeWithNFKC;
 }
 
-;// CONCATENATED MODULE: ./web/pdf_find_controller.js
+;// ./web/pdf_find_controller.js
 
 
 
@@ -26986,7 +26995,7 @@ class PDFFindController {
   }
 }
 
-;// CONCATENATED MODULE: ./web/pdf_find_bar.js
+;// ./web/pdf_find_bar.js
 
 
 const MATCHES_COUNT_LIMIT = 1000;
@@ -27178,7 +27187,7 @@ class PDFFindBar {
   }
 }
 
-;// CONCATENATED MODULE: ./web/pdf_history.js
+;// ./web/pdf_history.js
 
 
 
@@ -27648,7 +27657,7 @@ function isDestArraysEqual(firstDest, secondDest) {
   return true;
 }
 
-;// CONCATENATED MODULE: ./web/pdf_layer_viewer.js
+;// ./web/pdf_layer_viewer.js
 
 class PDFLayerViewer extends BaseTreeViewer {
   constructor(options) {
@@ -27818,7 +27827,7 @@ class PDFLayerViewer extends BaseTreeViewer {
   }
 }
 
-;// CONCATENATED MODULE: ./web/pdf_outline_viewer.js
+;// ./web/pdf_outline_viewer.js
 
 
 class PDFOutlineViewer extends BaseTreeViewer {
@@ -28080,7 +28089,7 @@ class PDFOutlineViewer extends BaseTreeViewer {
   }
 }
 
-;// CONCATENATED MODULE: ./web/pdf_presentation_mode.js
+;// ./web/pdf_presentation_mode.js
 
 
 const DELAY_BEFORE_HIDING_CONTROLS = 3000;
@@ -28417,7 +28426,7 @@ class PDFPresentationMode {
   }
 }
 
-;// CONCATENATED MODULE: ./web/xfa_layer_builder.js
+;// ./web/xfa_layer_builder.js
 
 class XfaLayerBuilder {
   constructor({
@@ -28483,7 +28492,7 @@ class XfaLayerBuilder {
   }
 }
 
-;// CONCATENATED MODULE: ./web/print_utils.js
+;// ./web/print_utils.js
 
 
 
@@ -28509,7 +28518,7 @@ function getXfaHtmlForPrinting(printContainer, pdfDocument) {
   }
 }
 
-;// CONCATENATED MODULE: ./node_modules/canvas-size/dist/canvas-size.esm.js
+;// ./node_modules/canvas-size/dist/canvas-size.esm.js
 function canvasTest(settings) {
   const size = settings.sizes.shift();
   const width = Math.max(Math.ceil(size[0]), 1);
@@ -28797,7 +28806,7 @@ const canvasSize = {
   }
 };
 
-;// CONCATENATED MODULE: ./web/max_canvas_size.js
+;// ./web/max_canvas_size.js
 
 class MaxCanvasSize {
   static maxWidth = null;
@@ -28858,7 +28867,7 @@ class MaxCanvasSize {
     return divisor;
   }
 }
-;// CONCATENATED MODULE: ./src/shared/util.js
+;// ./src/shared/util.js
 
 const isNodeJS = typeof process === "object" && process + "" === "[object process]" && !process.versions.nw && !(process.versions.electron && process.type && process.type !== "browser");
 const IDENTITY_MATRIX = (/* unused pure expression or super */ null && ([1, 0, 0, 1, 0, 0]));
@@ -29612,7 +29621,7 @@ const FontRenderOps = {
   TRANSLATE: 8
 };
 
-;// CONCATENATED MODULE: ./web/pdf_print_service.js
+;// ./web/pdf_print_service.js
 
 
 
@@ -29926,7 +29935,7 @@ class PDFPrintServiceFactory {
   }
 }
 
-;// CONCATENATED MODULE: ./web/pdf_rendering_queue.js
+;// ./web/pdf_rendering_queue.js
 
 
 
@@ -30042,7 +30051,7 @@ class PDFRenderingQueue {
   }
 }
 
-;// CONCATENATED MODULE: ./web/pdf_scripting_manager.js
+;// ./web/pdf_scripting_manager.js
 
 
 
@@ -30408,7 +30417,7 @@ class PDFScriptingManager {
   }
 }
 
-;// CONCATENATED MODULE: ./web/pdf_sidebar.js
+;// ./web/pdf_sidebar.js
 
 
 const SIDEBAR_WIDTH_VAR = "--sidebar-width";
@@ -30731,7 +30740,7 @@ class PDFSidebar {
   }
 }
 
-;// CONCATENATED MODULE: ./web/pdf_thumbnail_view.js
+;// ./web/pdf_thumbnail_view.js
 
 
 
@@ -31043,7 +31052,7 @@ class PDFThumbnailView {
   }
 }
 
-;// CONCATENATED MODULE: ./web/pdf_thumbnail_viewer.js
+;// ./web/pdf_thumbnail_viewer.js
 
 
 
@@ -31265,7 +31274,7 @@ class PDFThumbnailViewer {
   }
 }
 
-;// CONCATENATED MODULE: ./web/page-flip.module.js
+;// ./web/page-flip.module.js
 class Page {
   constructor(render, density) {
     this.state = {
@@ -33241,7 +33250,7 @@ class PageFlip extends EventObject {
   }
 }
 
-;// CONCATENATED MODULE: ./web/annotation_editor_layer_builder.js
+;// ./web/annotation_editor_layer_builder.js
 
 
 class AnnotationEditorLayerBuilder {
@@ -33332,7 +33341,7 @@ class AnnotationEditorLayerBuilder {
   }
 }
 
-;// CONCATENATED MODULE: ./web/annotation_layer_builder.js
+;// ./web/annotation_layer_builder.js
 
 
 class AnnotationLayerBuilder {
@@ -33469,7 +33478,7 @@ class AnnotationLayerBuilder {
   }
 }
 
-;// CONCATENATED MODULE: ./web/draw_layer_builder.js
+;// ./web/draw_layer_builder.js
 
 class DrawLayerBuilder {
   #drawLayer = null;
@@ -33500,7 +33509,7 @@ class DrawLayerBuilder {
   }
 }
 
-;// CONCATENATED MODULE: ./web/struct_tree_layer_builder.js
+;// ./web/struct_tree_layer_builder.js
 
 const PDF_ROLE_TO_HTML_ROLE = {
   Document: null,
@@ -33701,7 +33710,7 @@ class StructTreeLayerBuilder {
   }
 }
 
-;// CONCATENATED MODULE: ./web/text_accessibility.js
+;// ./web/text_accessibility.js
 
 class TextAccessibilityManager {
   #enabled = false;
@@ -33853,7 +33862,7 @@ class TextAccessibilityManager {
   }
 }
 
-;// CONCATENATED MODULE: ./web/text_highlighter.js
+;// ./web/text_highlighter.js
 
 class TextHighlighter {
   #eventAbortController = null;
@@ -34092,7 +34101,7 @@ class TextHighlighter {
   }
 }
 
-;// CONCATENATED MODULE: ./web/text_layer_builder.js
+;// ./web/text_layer_builder.js
 
 
 class TextLayerBuilder {
@@ -34285,7 +34294,7 @@ class TextLayerBuilder {
   }
 }
 
-;// CONCATENATED MODULE: ./web/pdf_page_view.js
+;// ./web/pdf_page_view.js
 
 
 
@@ -35121,7 +35130,7 @@ class PDFPageView {
   }
 }
 
-;// CONCATENATED MODULE: ./web/pdf_viewer.js
+;// ./web/pdf_viewer.js
 
 
 
@@ -37013,7 +37022,7 @@ class PDFViewer {
   }
 }
 
-;// CONCATENATED MODULE: ./web/secondary_toolbar.js
+;// ./web/secondary_toolbar.js
 
 
 class SecondaryToolbar {
@@ -37296,7 +37305,7 @@ class SecondaryToolbar {
   }
 }
 
-;// CONCATENATED MODULE: ./web/toolbar.js
+;// ./web/toolbar.js
 
 
 class Toolbar {
@@ -37632,7 +37641,7 @@ class Toolbar {
   }
 }
 
-;// CONCATENATED MODULE: ./web/view_history.js
+;// ./web/view_history.js
 
 const DEFAULT_VIEW_HISTORY_CACHE_SIZE = 20;
 class ViewHistory {
@@ -37712,7 +37721,7 @@ class ViewHistory {
   }
 }
 
-;// CONCATENATED MODULE: ./web/app.js
+;// ./web/app.js
 
 
 
@@ -37865,13 +37874,13 @@ const PDFViewerApplication = {
       }
       const {
         PDFBug
-      } = await import( /*webpackIgnore: true*/AppOptions.get("debuggerSrc"));
+      } = await import(/*webpackIgnore: true*/AppOptions.get("debuggerSrc"));
       this._PDFBug = PDFBug;
     };
     if (params.get("disableworker") === "true") {
       try {
         GlobalWorkerOptions.workerSrc ||= AppOptions.get("workerSrc");
-        await import( /*webpackIgnore: true*/PDFWorker.workerSrc);
+        await import(/*webpackIgnore: true*/PDFWorker.workerSrc);
       } catch (ex) {
         console.error(`_parseHashParams: "${ex.message}".`);
       }
@@ -40118,7 +40127,7 @@ const ServiceWorkerOptions = {
 };
 PDFViewerApplication.serviceWorkerOptions = ServiceWorkerOptions;
 
-;// CONCATENATED MODULE: ./web/viewer.js
+;// ./web/viewer.js
 
 
 
