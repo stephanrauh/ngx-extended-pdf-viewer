@@ -22298,7 +22298,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '22.0.0-alpha.9';
+const ngxExtendedPdfViewerVersion = '22.0.0-alpha.10';
 ;// ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",

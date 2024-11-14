@@ -1,16 +1,8 @@
 @if (!!showHighlightEditor || !!showStampEditor || !!showDrawEditor || !!showTextEditor) {
-  <div
-    id="editorModeButtons"
-    class="splitToolbarButton toggled hiddenTinyView"
-    role="radiogroup"
-    >
-    <pdf-highlight-editor [show]="showHighlightEditor"></pdf-highlight-editor>
-    <pdf-text-editor [show]="showTextEditor"></pdf-text-editor>
-    <pdf-stamp-editor [show]="showStampEditor"></pdf-stamp-editor>
-    <pdf-draw-editor [show]="showDrawEditor"></pdf-draw-editor>
-  </div>
-}
-
-@if (!!showStampEditor || !!showDrawEditor || !!showTextEditor) {
-  <div id="editorModeSeparator" class="verticalToolbarSeparator hiddenTinyView"></div>
+<div id="editorModeButtons" class="splitToolbarButton toggled" role="radiogroup">
+  <pdf-highlight-editor [show]="showHighlightEditor"></pdf-highlight-editor>
+  <pdf-text-editor [show]="showTextEditor"></pdf-text-editor>
+  <pdf-stamp-editor [show]="showStampEditor"></pdf-stamp-editor>
+  <pdf-draw-editor [show]="showDrawEditor"></pdf-draw-editor>
+</div>
 }
