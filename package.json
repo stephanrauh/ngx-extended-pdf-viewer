@@ -44,7 +44,7 @@
     "@angular/cli": "^17.3.11",
     "@angular/compiler-cli": "^17.3.12",
     "@cyclonedx/cyclonedx-npm": "^1.19.3",
-    "@schematics/angular": "^17.3.9",
+    "@schematics/angular": "^19.0.0",
     "@types/estree": "^1.0.5",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.8.4",
