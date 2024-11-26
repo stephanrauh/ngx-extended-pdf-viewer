@@ -34,9 +34,6 @@ export class InkEditor extends AnnotationEditor {
     scaleFactor: number;
     translationX: number;
     translationY: number;
-    editorPointerType: any;
-    initializePointerType(): void;
-    resetPointerType(): void;
     /** @inheritdoc */
     updateParams(type: any, value: any): void;
     /** @inheritdoc */
@@ -64,7 +61,6 @@ export class InkEditor extends AnnotationEditor {
      * @param {PointerEvent} event
      */
     canvasPointerleave(event: PointerEvent): void;
-    canvasTouchMove(event: any): void;
     ctx: CanvasRenderingContext2D | null | undefined;
     /**
      * When the dimensions of the div change the inner canvas must

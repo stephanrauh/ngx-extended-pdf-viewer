@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
   "version": 1,
-  "serialNumber": "urn:uuid:45663e6f-3176-47a4-a4ea-4ea32c428630",
+  "serialNumber": "urn:uuid:aa34c603-19f9-4f75-ba5f-3572b49512ad",
   "metadata": {
-    "timestamp": "2024-11-13T19:33:29.124Z",
+    "timestamp": "2024-11-26T21:10:53.816Z",
     "tools": [
       {
         "name": "npm",
@@ -36,7 +36,7 @@
       {
         "vendor": "@cyclonedx",
         "name": "cyclonedx-library",
-        "version": "6.11.1",
+        "version": "6.13.0",
         "externalReferences": [
           {
             "url": "git+https://github.com/CycloneDX/cyclonedx-javascript-library.git",
@@ -1988,8 +1988,8 @@
       "type": "library",
       "name": "code-frame",
       "group": "@babel",
-      "version": "7.26.0",
-      "bom-ref": "@babel/code-frame@7.26.0",
+      "version": "7.26.2",
+      "bom-ref": "@babel/code-frame@7.26.2",
       "author": "The Babel Team",
       "description": "Generate errors that contain a code frame that point to source locations.",
       "licenses": [
@@ -1999,7 +1999,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40babel/code-frame@7.26.0#packages/babel-code-frame",
+      "purl": "pkg:npm/%40babel/code-frame@7.26.2#packages/babel-code-frame",
       "externalReferences": [
         {
           "url": "git+https://github.com/babel/babel.git#packages/babel-code-frame",
@@ -2017,12 +2017,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.26.0.tgz",
+          "url": "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.26.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "20d08ac53b5b5ed70d6d4677617badc0ca4495eaadb5cb3084075e7bb761ba856b0f6727b9cdcfaad11106dc645f99f3897f6f9c12fc5979921b0bfc0ae3d5ea"
+              "content": "4499481d1b9e420c168ad5a017c39d1581995f7dbc031e4109e98d1a5a877e9967453f444a2f0990596f69561b4be52e6d563a769bfcec5b36bb9336f6234555"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -2209,8 +2209,8 @@
       "type": "library",
       "name": "compat-data",
       "group": "@babel",
-      "version": "7.26.0",
-      "bom-ref": "@babel/compat-data@7.26.0",
+      "version": "7.26.2",
+      "bom-ref": "@babel/compat-data@7.26.2",
       "author": "The Babel Team",
       "licenses": [
         {
@@ -2219,7 +2219,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40babel/compat-data@7.26.0#packages/babel-compat-data",
+      "purl": "pkg:npm/%40babel/compat-data@7.26.2#packages/babel-compat-data",
       "externalReferences": [
         {
           "url": "git+https://github.com/babel/babel.git#packages/babel-compat-data",
@@ -2237,12 +2237,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.26.0.tgz",
+          "url": "https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.26.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "a844c809b6522deeee5eff5513c4ff45639d204e6aab24ee70eb78ccb60c69f8f63113b6ef554680b77844008931e04edfb50f5a15e228c064ed8949d1f3b340"
+              "content": "6745a0cd211af9a51c76226e088aa0ba30ac869316814a603b15e8b6b60f480e77840deaa2935aa9c269cabd2155bd45796767a85037e7f7d4b578012bcb2b42"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -2700,8 +2700,8 @@
           "type": "library",
           "name": "generator",
           "group": "@babel",
-          "version": "7.26.0",
-          "bom-ref": "@babel/traverse@7.25.9|@babel/generator@7.26.0",
+          "version": "7.26.2",
+          "bom-ref": "@babel/traverse@7.25.9|@babel/generator@7.26.2",
           "author": "The Babel Team",
           "description": "Turns an AST into code.",
           "licenses": [
@@ -2711,7 +2711,7 @@
               }
             }
           ],
-          "purl": "pkg:npm/%40babel/generator@7.26.0#packages/babel-generator",
+          "purl": "pkg:npm/%40babel/generator@7.26.2#packages/babel-generator",
           "externalReferences": [
             {
               "url": "git+https://github.com/babel/babel.git#packages/babel-generator",
@@ -2729,12 +2729,12 @@
               "comment": "as detected from PackageJson property \"bugs.url\""
             },
             {
-              "url": "https://registry.npmjs.org/@babel/generator/-/generator-7.26.0.tgz",
+              "url": "https://registry.npmjs.org/@babel/generator/-/generator-7.26.2.tgz",
               "type": "distribution",
               "hashes": [
                 {
                   "alg": "SHA-512",
-                  "content": "fc02240262279d6c2010024642bf6f63473ae8c8fa923904d993c1d4fbab4d1691021dd4f89e39b0040c8d00c9761e166d1de5d31e7192299704ac815d702edb"
+                  "content": "cdebd06e16dabbde67928c52ab77ff0c2fd20be10439465ddc362a7d290c858dbfc1f49e687575130e2f93c7bec7c9636b7d486f2b946b6b90dc938da8a6f2b3"
                 }
               ],
               "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -2976,8 +2976,8 @@
       "type": "library",
       "name": "parser",
       "group": "@babel",
-      "version": "7.26.1",
-      "bom-ref": "@babel/parser@7.26.1",
+      "version": "7.26.2",
+      "bom-ref": "@babel/parser@7.26.2",
       "author": "The Babel Team",
       "description": "A JavaScript parser",
       "licenses": [
@@ -2987,7 +2987,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40babel/parser@7.26.1#packages/babel-parser",
+      "purl": "pkg:npm/%40babel/parser@7.26.2#packages/babel-parser",
       "externalReferences": [
         {
           "url": "git+https://github.com/babel/babel.git#packages/babel-parser",
@@ -3005,12 +3005,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@babel/parser/-/parser-7.26.1.tgz",
+          "url": "https://registry.npmjs.org/@babel/parser/-/parser-7.26.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "adea1060d88026b79936c273cab0cdcc543e210e49162233007260f5b9fde12de5fb8fbe27b46c22134ca01fa580fffdb699a2010aaca6ffb17ddc534b34443b"
+              "content": "0d6302647f5603831a8adcf6ab6d5244a1e8f505d9c640ec6cd668543eb682eb0db4d041a8383d8bbb8e84049f4df2063735be3beafbfa302533c770a6170929"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -4069,8 +4069,8 @@
     {
       "type": "library",
       "name": "babel-plugin-polyfill-corejs2",
-      "version": "0.4.11",
-      "bom-ref": "babel-plugin-polyfill-corejs2@0.4.11",
+      "version": "0.4.12",
+      "bom-ref": "babel-plugin-polyfill-corejs2@0.4.12",
       "description": "A Babel plugin to inject imports to core-js@2 polyfills",
       "licenses": [
         {
@@ -4079,7 +4079,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/babel-plugin-polyfill-corejs2@0.4.11#packages/babel-plugin-polyfill-corejs2",
+      "purl": "pkg:npm/babel-plugin-polyfill-corejs2@0.4.12#packages/babel-plugin-polyfill-corejs2",
       "externalReferences": [
         {
           "url": "git+https://github.com/babel/babel-polyfills.git#packages/babel-plugin-polyfill-corejs2",
@@ -4097,12 +4097,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/babel-plugin-polyfill-corejs2/-/babel-plugin-polyfill-corejs2-0.4.11.tgz",
+          "url": "https://registry.npmjs.org/babel-plugin-polyfill-corejs2/-/babel-plugin-polyfill-corejs2-0.4.12.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "b0c109dbb2f48111d284e8791b9e2e0003da8823b2818ff9adab57ba2c9bd86e3a166952a5cf5e142cd85720e23f17cd6f0cc0ee661a8668d0739abe099434f5"
+              "content": "08f593e81c2f86b4ced9df10568ae14c2430f58e37ccebbb1bd1e281c7f1bdea4e53a6fca37b5c59a77aa1581922c6424ede36145bfdeda03b649b1b338fbca2"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -4123,7 +4123,7 @@
           "type": "library",
           "name": "semver",
           "version": "6.3.1",
-          "bom-ref": "babel-plugin-polyfill-corejs2@0.4.11|semver@6.3.1",
+          "bom-ref": "babel-plugin-polyfill-corejs2@0.4.12|semver@6.3.1",
           "author": "GitHub Inc.",
           "description": "The semantic version parser used by npm.",
           "licenses": [
@@ -4179,8 +4179,8 @@
       "type": "library",
       "name": "helper-define-polyfill-provider",
       "group": "@babel",
-      "version": "0.6.2",
-      "bom-ref": "@babel/helper-define-polyfill-provider@0.6.2",
+      "version": "0.6.3",
+      "bom-ref": "@babel/helper-define-polyfill-provider@0.6.3",
       "description": "Babel helper to create your own polyfill provider",
       "licenses": [
         {
@@ -4189,7 +4189,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40babel/helper-define-polyfill-provider@0.6.2#packages/babel-helper-define-polyfill-provider",
+      "purl": "pkg:npm/%40babel/helper-define-polyfill-provider@0.6.3#packages/babel-helper-define-polyfill-provider",
       "externalReferences": [
         {
           "url": "git+https://github.com/babel/babel-polyfills.git#packages/babel-helper-define-polyfill-provider",
@@ -4207,12 +4207,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@babel/helper-define-polyfill-provider/-/helper-define-polyfill-provider-0.6.2.tgz",
+          "url": "https://registry.npmjs.org/@babel/helper-define-polyfill-provider/-/helper-define-polyfill-provider-0.6.3.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "2d5efa83e0b9d366e250ae80c99dcb2b5d2f0e90f20b3667859157907d4bef9cc73e3ebcfaa73c65fa71dad87e833c00d8ccf22bed60ff710f97adb216756db5"
+              "content": "1caec18be1e3e87f954c703766f062b3b57fea1bbd42e4eb9cc5cdc9b7d47f68a2b94fcdf7b23c56307e29b84517c46577f2f1e4cce80b03c2a4f8df2be9fc0a"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -4449,8 +4449,8 @@
     {
       "type": "library",
       "name": "core-js-compat",
-      "version": "3.38.1",
-      "bom-ref": "core-js-compat@3.38.1",
+      "version": "3.39.0",
+      "bom-ref": "core-js-compat@3.39.0",
       "author": "Denis Pushkarev",
       "description": "core-js compat",
       "licenses": [
@@ -4460,7 +4460,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/core-js-compat@3.38.1#packages/core-js-compat",
+      "purl": "pkg:npm/core-js-compat@3.39.0#packages/core-js-compat",
       "externalReferences": [
         {
           "url": "git+https://github.com/zloirock/core-js.git#packages/core-js-compat",
@@ -4478,12 +4478,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/core-js-compat/-/core-js-compat-3.38.1.tgz",
+          "url": "https://registry.npmjs.org/core-js-compat/-/core-js-compat-3.39.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "2511fa81f5f11a6af3177b59e7b945c7ded8011c425cf68cccfa3a8c42d986ff3ca411f9557a50fb2d339ca1a5167cee6a286a84b6de7f1489c5624c3ed7c3cf"
+              "content": "560114c77570944c6be67a34b57941b7eb22941be14ebc8fc025d123621dd4f37c5932aeeccade7ad86f75da8eb9bad8c6415dbff46762baa5bf5b0534051e97"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -6143,8 +6143,8 @@
     {
       "type": "library",
       "name": "regexpu-core",
-      "version": "6.1.1",
-      "bom-ref": "regexpu-core@6.1.1",
+      "version": "6.2.0",
+      "bom-ref": "regexpu-core@6.2.0",
       "author": "Mathias Bynens",
       "description": "regexpu’s core functionality (i.e. `rewritePattern(pattern, flag)`), capable of translating ES6 Unicode regular expressions to ES5.",
       "licenses": [
@@ -6154,7 +6154,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/regexpu-core@6.1.1",
+      "purl": "pkg:npm/regexpu-core@6.2.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/mathiasbynens/regexpu-core.git",
@@ -6172,12 +6172,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/regexpu-core/-/regexpu-core-6.1.1.tgz",
+          "url": "https://registry.npmjs.org/regexpu-core/-/regexpu-core-6.2.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "93aecd6fd8efc09709995a70d233edb51d7fcd57e729ff0a9b420f6adad4ff32795de1b7f92971d312d7b3d1c1c894b35f3ae5cf9103bcdeb22cd303736a9d9f"
+              "content": "1fae813d032bbfe575eadf31b66abe502d02069893040eb457c89b4b541545e229f13d73f21c05c6a706ce6f4aea582c37bb01e5e7551fc6becdee85aa6e3078"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -6359,8 +6359,8 @@
     {
       "type": "library",
       "name": "regjsparser",
-      "version": "0.11.2",
-      "bom-ref": "regjsparser@0.11.2",
+      "version": "0.12.0",
+      "bom-ref": "regjsparser@0.12.0",
       "author": "'Julian Viereck'",
       "licenses": [
         {
@@ -6369,7 +6369,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/regjsparser@0.11.2",
+      "purl": "pkg:npm/regjsparser@0.12.0",
       "externalReferences": [
         {
           "url": "git+ssh://git@github.com/jviereck/regjsparser.git",
@@ -6387,12 +6387,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/regjsparser/-/regjsparser-0.11.2.tgz",
+          "url": "https://registry.npmjs.org/regjsparser/-/regjsparser-0.12.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "dce1996781e82c9924019c7fe3c9935c93659aa4c63b3734a3d39640fb96a643a55d73dbc8de8e69f09ca1752706a1360f77ff4f92fea5673591d1269df9d1b0"
+              "content": "72713ecbc6f3e0d84c8c848a6e079526da8d6ed7f94298d93fe06c968f94aa422df503e75fdab4f797a2451012246d7fb73e9d94dafa67936c062598a24a7a11"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -6413,7 +6413,7 @@
           "type": "library",
           "name": "jsesc",
           "version": "3.0.2",
-          "bom-ref": "regjsparser@0.11.2|jsesc@3.0.2",
+          "bom-ref": "regjsparser@0.12.0|jsesc@3.0.2",
           "author": "Mathias Bynens",
           "description": "Given some data, jsesc returns the shortest possible stringified & ASCII-safe representation of that data.",
           "licenses": [
@@ -10474,8 +10474,8 @@
     {
       "type": "library",
       "name": "caniuse-lite",
-      "version": "1.0.30001674",
-      "bom-ref": "caniuse-lite@1.0.30001674",
+      "version": "1.0.30001684",
+      "bom-ref": "caniuse-lite@1.0.30001684",
       "author": "Ben Briggs",
       "description": "A smaller version of caniuse-db, with only the essentials!",
       "licenses": [
@@ -10485,7 +10485,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/caniuse-lite@1.0.30001674",
+      "purl": "pkg:npm/caniuse-lite@1.0.30001684",
       "externalReferences": [
         {
           "url": "git+https://github.com/browserslist/caniuse-lite.git",
@@ -10503,12 +10503,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001674.tgz",
+          "url": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001684.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "8ceb0a9595519f37e12e88dbf9891bfa0c944a9f576f9ed2a3e7c088594bcf34caa6a83cc7149abf47b8d1cf3fe05feff4df104afad145a2de57341b2eaa2663"
+              "content": "1b52d1c0b2108c1428caad19246a86209517cc9f22ae96e31cba554570ef04449c149f5bd7bb202babe5c74180245136d68903ef35e5d3cad14547eae8776811"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -12587,8 +12587,8 @@
     {
       "type": "library",
       "name": "electron-to-chromium",
-      "version": "1.5.49",
-      "bom-ref": "electron-to-chromium@1.5.49",
+      "version": "1.5.65",
+      "bom-ref": "electron-to-chromium@1.5.65",
       "author": "Kilian Valkhof",
       "description": "Provides a list of electron-to-chromium version mappings",
       "licenses": [
@@ -12598,7 +12598,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/electron-to-chromium@1.5.49",
+      "purl": "pkg:npm/electron-to-chromium@1.5.65",
       "externalReferences": [
         {
           "url": "git+https://github.com/kilian/electron-to-chromium.git",
@@ -12616,12 +12616,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.49.tgz",
+          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.65.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "6577ecd4e7fc7c36facfb5846198d7a6021117a304bbc25d786034038d1a66ae8e41b4be789a679d5e3d7a96519dad8353f62c123490b86b503cfb6fb7a27ae4"
+              "content": "3d6573063821c7bff0a29ea7db6bd2d8c2d4f2d28677843dd5a0841a11bf4d8996e8f3f939c49771d9f14ded4d36dd13eba37c0fa8f1878902f14b1dcce19a23"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -14692,8 +14692,8 @@
     {
       "type": "library",
       "name": "postcss-modules-local-by-default",
-      "version": "4.0.5",
-      "bom-ref": "postcss-modules-local-by-default@4.0.5",
+      "version": "4.1.0",
+      "bom-ref": "postcss-modules-local-by-default@4.1.0",
       "author": "Mark Dalgleish",
       "description": "A CSS Modules transform to make local scope the default",
       "licenses": [
@@ -14703,7 +14703,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/postcss-modules-local-by-default@4.0.5",
+      "purl": "pkg:npm/postcss-modules-local-by-default@4.1.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/css-modules/postcss-modules-local-by-default.git",
@@ -14721,12 +14721,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/postcss-modules-local-by-default/-/postcss-modules-local-by-default-4.0.5.tgz",
+          "url": "https://registry.npmjs.org/postcss-modules-local-by-default/-/postcss-modules-local-by-default-4.1.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "e8c89e63bb087d32b48587da7f0d4e3041bed9b83c435a1c1c2a6858ba8e2a3dc95e52aee06edbb6498cfc1ee516e6d89185a64523cb662e5c86277add969963"
+              "content": "ae6d1b752bf88c2dc10e66b7b3d1f5f5975d5b46875fa128ab00d853621f66144dfb9dd0aee7d3468d8876401b46a2f1e11d8861b6676e328ac60e15379a14f5"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -14746,8 +14746,8 @@
     {
       "type": "library",
       "name": "postcss-selector-parser",
-      "version": "6.1.2",
-      "bom-ref": "postcss-selector-parser@6.1.2",
+      "version": "7.0.0",
+      "bom-ref": "postcss-selector-parser@7.0.0",
       "licenses": [
         {
           "license": {
@@ -14755,7 +14755,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/postcss-selector-parser@6.1.2",
+      "purl": "pkg:npm/postcss-selector-parser@7.0.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/postcss/postcss-selector-parser.git",
@@ -14773,12 +14773,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/postcss-selector-parser/-/postcss-selector-parser-6.1.2.tgz",
+          "url": "https://registry.npmjs.org/postcss-selector-parser/-/postcss-selector-parser-7.0.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "43ca907cf899f931ceff766b3ab3b470924a7e96026a0b4c5245db9c47e68148f05e0eb3fd605e3b24bd00f0413c24d288357eb384b0406bbcc85b2231122e76"
+              "content": "f516c4af563b1457e9b5dff5784767b728ccc0b7a0856d5b1d7f465a35e8d7dbf1e32b4f42100d96dbd5c43820cc997b9a758cf9d5f6f246fa7324bfe2242395"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -14906,8 +14906,8 @@
     {
       "type": "library",
       "name": "postcss-modules-scope",
-      "version": "3.2.0",
-      "bom-ref": "postcss-modules-scope@3.2.0",
+      "version": "3.2.1",
+      "bom-ref": "postcss-modules-scope@3.2.1",
       "author": "Glen Maddern",
       "description": "A CSS Modules transform to extract export statements from local-scope classes",
       "licenses": [
@@ -14917,7 +14917,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/postcss-modules-scope@3.2.0",
+      "purl": "pkg:npm/postcss-modules-scope@3.2.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/css-modules/postcss-modules-scope.git",
@@ -14935,12 +14935,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/postcss-modules-scope/-/postcss-modules-scope-3.2.0.tgz",
+          "url": "https://registry.npmjs.org/postcss-modules-scope/-/postcss-modules-scope-3.2.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "a2afa0d6cb2bb193acc7d33de9ce70f256919af12ef42dda7434a323ca1371b7e4ad313c871ff37f2a1b528588c5a28f3bc6ede92eb6931a70e46ab2a44c3541"
+              "content": "9bd8d9b2d0956aa1a34c0ba7cbc31d804f3cb1c2670a2412952ace59c4d080cdaddf65017be31498548ee6ded53127c07ff149288980c416aff28a021c95c224"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -16209,8 +16209,8 @@
       "type": "library",
       "name": "node",
       "group": "@types",
-      "version": "22.8.4",
-      "bom-ref": "@types/node@22.8.4",
+      "version": "22.10.0",
+      "bom-ref": "@types/node@22.10.0",
       "description": "TypeScript definitions for node",
       "licenses": [
         {
@@ -16219,7 +16219,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40types/node@22.8.4#types/node",
+      "purl": "pkg:npm/%40types/node@22.10.0#types/node",
       "externalReferences": [
         {
           "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/node",
@@ -16237,12 +16237,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@types/node/-/node-22.8.4.tgz",
+          "url": "https://registry.npmjs.org/@types/node/-/node-22.10.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "4a934dc647ed4c938f934a0dfb2d9b22abab1171d303600e6771090c329e27957392fbce452be64171906ab70ecd657569cec309a3c111d303c41b0cf9df235b"
+              "content": "5c2ef47116551251477c8501e3416064e05b80960528a31ae676fd97173062cb451bf322fbf6346c64beaece839a19a4a6ae299cd88b8ae6406dcd366023a798"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -16263,8 +16263,8 @@
       "type": "library",
       "name": "qs",
       "group": "@types",
-      "version": "6.9.16",
-      "bom-ref": "@types/qs@6.9.16",
+      "version": "6.9.17",
+      "bom-ref": "@types/qs@6.9.17",
       "description": "TypeScript definitions for qs",
       "licenses": [
         {
@@ -16273,7 +16273,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40types/qs@6.9.16#types/qs",
+      "purl": "pkg:npm/%40types/qs@6.9.17#types/qs",
       "externalReferences": [
         {
           "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/qs",
@@ -16291,12 +16291,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@types/qs/-/qs-6.9.16.tgz",
+          "url": "https://registry.npmjs.org/@types/qs/-/qs-6.9.17.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "ee2fb3c5774f0f44f870a0eec42517278c0772c24bc0435ae99ddd0aef1c7c22bbe37386cb936ed519801aa0cfb284c320d54471d5ca46f47fceb7be3f62aed4"
+              "content": "ad7e3f6cf71f9afc470efd178df2442d34ebfa207eb67d37da73c82ea1e6e706ed854514b95b4d186ab38726bd5d4c634cff05a6bd2a62049964ac4663efacbd"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -20430,8 +20430,8 @@
     {
       "type": "library",
       "name": "tslib",
-      "version": "2.8.0",
-      "bom-ref": "tslib@2.8.0",
+      "version": "2.8.1",
+      "bom-ref": "tslib@2.8.1",
       "author": "Microsoft Corp.",
       "description": "Runtime library for TypeScript helper functions",
       "licenses": [
@@ -20441,7 +20441,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/tslib@2.8.0",
+      "purl": "pkg:npm/tslib@2.8.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/Microsoft/tslib.git",
@@ -20459,12 +20459,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/tslib/-/tslib-2.8.0.tgz",
+          "url": "https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "8d657304ba659c29a8693af5dd5f5d61b890f7dc2f651774bcd59a0d183e6956117230c5de70e4b3114313ff9f9179ca8699d45249b1e692bfbfc982b4b56a64"
+              "content": "a0916ef781d06fe29576e49440bef09e99aa9df98bb0e03f9c087a6fa107d30084a0ad3f98f79753a737c0a0d5f373243ae1cf447b525ca294f7d2016b34bfdb"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -22532,8 +22532,8 @@
     {
       "type": "library",
       "name": "node-gyp-build",
-      "version": "4.8.2",
-      "bom-ref": "node-gyp-build@4.8.2",
+      "version": "4.8.4",
+      "bom-ref": "node-gyp-build@4.8.4",
       "author": "Mathias Buus",
       "description": "Build tool and bindings loader for node-gyp that supports prebuilds",
       "scope": "optional",
@@ -22544,7 +22544,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/node-gyp-build@4.8.2",
+      "purl": "pkg:npm/node-gyp-build@4.8.4",
       "externalReferences": [
         {
           "url": "git+https://github.com/prebuild/node-gyp-build.git",
@@ -22562,12 +22562,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/node-gyp-build/-/node-gyp-build-4.8.2.tgz",
+          "url": "https://registry.npmjs.org/node-gyp-build/-/node-gyp-build-4.8.4.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "211531138055b07597915fd214ebade2a4e56a0c3668cf13e7fbe74ec9ab1c9bd5a0ab9e24745cfc9685343ed00c373ad642d8509eaa959337b2a4d2cb1d9d4f"
+              "content": "2c0e198f096751b947560ab4a01177265ffa87f36fb397f304bc1d105e27bb19c576c7da8dd7b859fc6d26bdc26a21fe17a7b070807fab88d0e14ccfca277e09"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -23400,8 +23400,8 @@
     {
       "type": "library",
       "name": "nanoid",
-      "version": "3.3.7",
-      "bom-ref": "nanoid@3.3.7",
+      "version": "3.3.8",
+      "bom-ref": "nanoid@3.3.8",
       "author": "Andrey Sitnik",
       "description": "A tiny (116 bytes), secure URL-friendly unique string ID generator",
       "licenses": [
@@ -23411,7 +23411,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/nanoid@3.3.7",
+      "purl": "pkg:npm/nanoid@3.3.8",
       "externalReferences": [
         {
           "url": "git+https://github.com/ai/nanoid.git",
@@ -23429,12 +23429,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/nanoid/-/nanoid-3.3.7.tgz",
+          "url": "https://registry.npmjs.org/nanoid/-/nanoid-3.3.8.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "792469a6370f21ab5120c0b553a52780ff1715ccfc31058641db75313050ecd6809af5c37ef3716ef595df1db2e8274451c8824ac0c70d065b858681f10128da"
+              "content": "58d2dfe5277ca19c4e9be4f3a6971893c8153a03fe979f31372e7c0f49db5273b1396456be570257891417b96d988e8fb2b2e5fc180a1324b89aab060a114dd3"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -24750,8 +24750,8 @@
     {
       "type": "library",
       "name": "rollup",
-      "version": "4.24.3",
-      "bom-ref": "rollup@4.24.3",
+      "version": "4.27.4",
+      "bom-ref": "rollup@4.27.4",
       "author": "Rich Harris",
       "description": "Next-generation ES module bundler",
       "licenses": [
@@ -24761,7 +24761,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/rollup@4.24.3",
+      "purl": "pkg:npm/rollup@4.27.4",
       "externalReferences": [
         {
           "url": "git+https://github.com/rollup/rollup.git",
@@ -24779,12 +24779,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/rollup/-/rollup-4.24.3.tgz",
+          "url": "https://registry.npmjs.org/rollup/-/rollup-4.27.4.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "1c15bcf7ac51e471a6a24b1b8b72410ed995cd688f018aa9ef08a9e7486343aec96c3cfad67ca830f76abb50ef556f5ab186f633ae59db4647b3224232a3320e"
+              "content": "44b2b1a8710c8e1fd118bb03c4012c68b3b7996832a14eb1f70ea7d62900cdeb78077808dbfdf23fa3d6636a7d43345387a31f1085c1dccc2c398d08bf7bcdaf"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -25394,8 +25394,8 @@
       "type": "library",
       "name": "express-serve-static-core",
       "group": "@types",
-      "version": "5.0.1",
-      "bom-ref": "@types/express-serve-static-core@5.0.1",
+      "version": "5.0.2",
+      "bom-ref": "@types/express-serve-static-core@5.0.2",
       "description": "TypeScript definitions for express-serve-static-core",
       "licenses": [
         {
@@ -25404,7 +25404,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40types/express-serve-static-core@5.0.1#types/express-serve-static-core",
+      "purl": "pkg:npm/%40types/express-serve-static-core@5.0.2#types/express-serve-static-core",
       "externalReferences": [
         {
           "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/express-serve-static-core",
@@ -25422,12 +25422,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@types/express-serve-static-core/-/express-serve-static-core-5.0.1.tgz",
+          "url": "https://registry.npmjs.org/@types/express-serve-static-core/-/express-serve-static-core-5.0.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "0912022489743797170ce3407654efe528404d9e0713093a9030c85b6ff0f6a3962a0f8d53fe45f30611582ace35a774fd42a49683529a6c8dff05f8aeda5b54"
+              "content": "be5b9ab297ef584b44e2f7120e529135eaf9d83bce1ab076c6fe9d897cba50ac8a5b496a66258718d0294b2c4ebfef03139676ec8cd5bc4ee1364c60ec45c872"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -25664,8 +25664,8 @@
       "type": "library",
       "name": "ws",
       "group": "@types",
-      "version": "8.5.12",
-      "bom-ref": "@types/ws@8.5.12",
+      "version": "8.5.13",
+      "bom-ref": "@types/ws@8.5.13",
       "description": "TypeScript definitions for ws",
       "licenses": [
         {
@@ -25674,7 +25674,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40types/ws@8.5.12#types/ws",
+      "purl": "pkg:npm/%40types/ws@8.5.13#types/ws",
       "externalReferences": [
         {
           "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/ws",
@@ -25692,12 +25692,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@types/ws/-/ws-8.5.12.tgz",
+          "url": "https://registry.npmjs.org/@types/ws/-/ws-8.5.13.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "ded3d192fd44b640e9ce58322b223ca46b0664018f11a5debb40ce8f90c8db925af756dd01875d6076c00d1615ad93116df5bed65e58c175432a884324d43191"
+              "content": "a2c33f8160533ca80757c5e44ee9e77a04d122cbc5ea8c267f9c3e26d01f3b0e3bd9da6d766d1d946bf8c42b7a1b0411702d9754ebef444ff46c0a1070bd9090"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -25771,8 +25771,8 @@
     {
       "type": "library",
       "name": "bonjour-service",
-      "version": "1.2.1",
-      "bom-ref": "bonjour-service@1.2.1",
+      "version": "1.3.0",
+      "bom-ref": "bonjour-service@1.3.0",
       "author": "ON LX Lited",
       "description": "A Bonjour/Zeroconf implementation in TypeScript",
       "licenses": [
@@ -25782,7 +25782,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/bonjour-service@1.2.1",
+      "purl": "pkg:npm/bonjour-service@1.3.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/onlxltd/bonjour-service.git",
@@ -25800,12 +25800,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/bonjour-service/-/bonjour-service-1.2.1.tgz",
+          "url": "https://registry.npmjs.org/bonjour-service/-/bonjour-service-1.3.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "a12cc24b6cd5d786e1da48e2eaf35eeefae92580871af7199e57df150d4c1285ff58e790fed783f12616291f78d8e23720d8eaf0e30d2656cf2b92cb2d4c450f"
+              "content": "dd8b805224a45b291dfb60338e0cb17a2f0e59ff2d85d9fc0084c8a20d8ce14202ce8a9f8e5aabeb85888c45d99657ff5babcad60a2a95e491e9bac6a26c50a8"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -26042,8 +26042,8 @@
     {
       "type": "library",
       "name": "compression",
-      "version": "1.7.4",
-      "bom-ref": "compression@1.7.4",
+      "version": "1.7.5",
+      "bom-ref": "compression@1.7.5",
       "description": "Node.js compression middleware",
       "licenses": [
         {
@@ -26052,7 +26052,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/compression@1.7.4",
+      "purl": "pkg:npm/compression@1.7.5",
       "externalReferences": [
         {
           "url": "git+https://github.com/expressjs/compression.git",
@@ -26070,12 +26070,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/compression/-/compression-1.7.4.tgz",
+          "url": "https://registry.npmjs.org/compression/-/compression-1.7.5.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "8da4880f33fda59552e197d0f93cefb625a17691611364431f3f10264a57f522292eaf3c56e785e63270eadfba09441c02803ab7ec7cf4c2eb580aa97c313c89"
+              "content": "6d0274611724e5a9372e0b67a4a92269b5f9a4d17bb4c521d414b2d9904e4e1d038a6d0152ee9a3cfc01c889ecebf0393eb87c3ee7d23deacc0d4925a737acd9"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -26096,7 +26096,7 @@
           "type": "library",
           "name": "debug",
           "version": "2.6.9",
-          "bom-ref": "compression@1.7.4|debug@2.6.9",
+          "bom-ref": "compression@1.7.5|debug@2.6.9",
           "author": "TJ Holowaychuk",
           "description": "small debugging utility",
           "licenses": [
@@ -26150,7 +26150,7 @@
           "type": "library",
           "name": "ms",
           "version": "2.0.0",
-          "bom-ref": "compression@1.7.4|ms@2.0.0",
+          "bom-ref": "compression@1.7.5|ms@2.0.0",
           "description": "Tiny milisecond conversion utility",
           "licenses": [
             {
@@ -26198,176 +26198,14 @@
               "value": "true"
             }
           ]
-        },
-        {
-          "type": "library",
-          "name": "safe-buffer",
-          "version": "5.1.2",
-          "bom-ref": "compression@1.7.4|safe-buffer@5.1.2",
-          "author": "Feross Aboukhadijeh",
-          "description": "Safer Node.js Buffer API",
-          "licenses": [
-            {
-              "license": {
-                "id": "MIT"
-              }
-            }
-          ],
-          "purl": "pkg:npm/safe-buffer@5.1.2",
-          "externalReferences": [
-            {
-              "url": "git://github.com/feross/safe-buffer.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/feross/safe-buffer",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/feross/safe-buffer/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "19dd94641243917958ec66c9c5fb04f3f9ef2a45045351b7f1cd6c88de903fa6bd3d3f4c98707c1a7a6c71298c252a05f0b388aedf2e77fc0fb688f2b381bafa"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/compression/node_modules/safe-buffer"
-            },
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "name": "accepts",
-      "version": "1.3.8",
-      "bom-ref": "accepts@1.3.8",
-      "description": "Higher-level content negotiation",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT"
-          }
-        }
-      ],
-      "purl": "pkg:npm/accepts@1.3.8",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/jshttp/accepts.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/jshttp/accepts#readme",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/jshttp/accepts/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/accepts/-/accepts-1.3.8.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "3d802d8536b69b654ac6ebd20f70cf0bf1b2f94fac380d4b02e4fc9a4991bafc3e34009269e5c443e34771517bace365eaa71ac55dd4b9e9b06b093eefe4892f"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/accepts"
-        },
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        }
-      ],
-      "components": [
-        {
-          "type": "library",
-          "name": "negotiator",
-          "version": "0.6.3",
-          "bom-ref": "accepts@1.3.8|negotiator@0.6.3",
-          "description": "HTTP content negotiation",
-          "licenses": [
-            {
-              "license": {
-                "id": "MIT"
-              }
-            }
-          ],
-          "purl": "pkg:npm/negotiator@0.6.3",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/jshttp/negotiator.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/jshttp/negotiator#readme",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/jshttp/negotiator/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/negotiator/-/negotiator-0.6.3.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "f8452ca863cbb0cfa3ff37428598ec9d7e758385eb1c53885f07e70953c695093f9398226a470ab2ec4239b051bba0d29bda29c3f3bab2559b25d82140ce1b06"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/accepts/node_modules/negotiator"
-            },
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            }
-          ]
         }
       ]
     },
     {
       "type": "library",
       "name": "bytes",
-      "version": "3.0.0",
-      "bom-ref": "bytes@3.0.0",
+      "version": "3.1.2",
+      "bom-ref": "bytes@3.1.2",
       "author": "TJ Holowaychuk",
       "description": "Utility to parse a string bytes to bytes and vice-versa",
       "licenses": [
@@ -26377,7 +26215,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/bytes@3.0.0",
+      "purl": "pkg:npm/bytes@3.1.2",
       "externalReferences": [
         {
           "url": "git+https://github.com/visionmedia/bytes.js.git",
@@ -26395,12 +26233,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/bytes/-/bytes-3.0.0.tgz",
+          "url": "https://registry.npmjs.org/bytes/-/bytes-3.1.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "a4c84e7c50cf8aff6de638c85e41e8b169a44b241bbec80454d933d044476ee2e1d93ffb8f832aaa9cf9db715ef0c558f3d282e9287f41f4b6b0cf928e014373"
+              "content": "fcd7fb4f2cd3c7a4b7c9124e6ce015efde7aafc72bdbe3a3f000b976df3048fdc1400a1e5f9f0da07c8253c3fccc690d5d2b634d28ba7f33ba174a4175c61b12"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -26463,6 +26301,59 @@
         {
           "name": "cdx:npm:package:path",
           "value": "node_modules/compressible"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "negotiator",
+      "version": "0.6.4",
+      "bom-ref": "negotiator@0.6.4",
+      "description": "HTTP content negotiation",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/negotiator@0.6.4",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/jshttp/negotiator.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/jshttp/negotiator#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/jshttp/negotiator/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/negotiator/-/negotiator-0.6.4.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "9b2453dc38963c7aa1a393eb25a211c9a32fda48187f499456004d39832e087e4a8b5c8489069ffd926e43ada7be9738e302f95836d35fbc86262d4d79ebf0f3"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/negotiator"
         },
         {
           "name": "cdx:npm:package:development",
@@ -26743,8 +26634,8 @@
     {
       "type": "library",
       "name": "cross-spawn",
-      "version": "7.0.3",
-      "bom-ref": "cross-spawn@7.0.3",
+      "version": "7.0.6",
+      "bom-ref": "cross-spawn@7.0.6",
       "author": "André Cruz",
       "description": "Cross platform child_process#spawn and child_process#spawnSync",
       "licenses": [
@@ -26754,7 +26645,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/cross-spawn@7.0.3",
+      "purl": "pkg:npm/cross-spawn@7.0.6",
       "externalReferences": [
         {
           "url": "git+ssh://git@github.com/moxystudio/node-cross-spawn.git",
@@ -26772,12 +26663,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz",
+          "url": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.6.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "8910cf24a50f544343edd1cf3bcae46ce9cfa720f281c0c5b568e9796342832f163f6ad77315cbf13b2445e425e8eac1d86efe509ada82cd6ad7916e75cec6eb"
+              "content": "b95d903963f69d6ceccb668ca7c69189b862f5d9731791e0879487681f4e893184c834e2249cb1d2ecb9d505ddc966ed00736e6b85c9cd429c6b73b3294777bc"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -27553,6 +27444,114 @@
     },
     {
       "type": "library",
+      "name": "accepts",
+      "version": "1.3.8",
+      "bom-ref": "accepts@1.3.8",
+      "description": "Higher-level content negotiation",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/accepts@1.3.8",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/jshttp/accepts.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/jshttp/accepts#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/jshttp/accepts/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/accepts/-/accepts-1.3.8.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "3d802d8536b69b654ac6ebd20f70cf0bf1b2f94fac380d4b02e4fc9a4991bafc3e34009269e5c443e34771517bace365eaa71ac55dd4b9e9b06b093eefe4892f"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/accepts"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "components": [
+        {
+          "type": "library",
+          "name": "negotiator",
+          "version": "0.6.3",
+          "bom-ref": "accepts@1.3.8|negotiator@0.6.3",
+          "description": "HTTP content negotiation",
+          "licenses": [
+            {
+              "license": {
+                "id": "MIT"
+              }
+            }
+          ],
+          "purl": "pkg:npm/negotiator@0.6.3",
+          "externalReferences": [
+            {
+              "url": "git+https://github.com/jshttp/negotiator.git",
+              "type": "vcs",
+              "comment": "as detected from PackageJson property \"repository.url\""
+            },
+            {
+              "url": "https://github.com/jshttp/negotiator#readme",
+              "type": "website",
+              "comment": "as detected from PackageJson property \"homepage\""
+            },
+            {
+              "url": "https://github.com/jshttp/negotiator/issues",
+              "type": "issue-tracker",
+              "comment": "as detected from PackageJson property \"bugs.url\""
+            },
+            {
+              "url": "https://registry.npmjs.org/negotiator/-/negotiator-0.6.3.tgz",
+              "type": "distribution",
+              "hashes": [
+                {
+                  "alg": "SHA-512",
+                  "content": "f8452ca863cbb0cfa3ff37428598ec9d7e758385eb1c53885f07e70953c695093f9398226a470ab2ec4239b051bba0d29bda29c3f3bab2559b25d82140ce1b06"
+                }
+              ],
+              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+            }
+          ],
+          "properties": [
+            {
+              "name": "cdx:npm:package:path",
+              "value": "node_modules/accepts/node_modules/negotiator"
+            },
+            {
+              "name": "cdx:npm:package:development",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "library",
       "name": "array-flatten",
       "version": "1.1.1",
       "bom-ref": "array-flatten@1.1.1",
@@ -27658,60 +27657,6 @@
         }
       ],
       "components": [
-        {
-          "type": "library",
-          "name": "bytes",
-          "version": "3.1.2",
-          "bom-ref": "body-parser@1.20.3|bytes@3.1.2",
-          "author": "TJ Holowaychuk",
-          "description": "Utility to parse a string bytes to bytes and vice-versa",
-          "licenses": [
-            {
-              "license": {
-                "id": "MIT"
-              }
-            }
-          ],
-          "purl": "pkg:npm/bytes@3.1.2",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/visionmedia/bytes.js.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/visionmedia/bytes.js#readme",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/visionmedia/bytes.js/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/bytes/-/bytes-3.1.2.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "fcd7fb4f2cd3c7a4b7c9124e6ce015efde7aafc72bdbe3a3f000b976df3048fdc1400a1e5f9f0da07c8253c3fccc690d5d2b634d28ba7f33ba174a4175c61b12"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/body-parser/node_modules/bytes"
-            },
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            }
-          ]
-        },
         {
           "type": "library",
           "name": "debug",
@@ -28194,62 +28139,6 @@
         {
           "name": "cdx:npm:package:development",
           "value": "true"
-        }
-      ],
-      "components": [
-        {
-          "type": "library",
-          "name": "bytes",
-          "version": "3.1.2",
-          "bom-ref": "raw-body@2.5.2|bytes@3.1.2",
-          "author": "TJ Holowaychuk",
-          "description": "Utility to parse a string bytes to bytes and vice-versa",
-          "licenses": [
-            {
-              "license": {
-                "id": "MIT"
-              }
-            }
-          ],
-          "purl": "pkg:npm/bytes@3.1.2",
-          "externalReferences": [
-            {
-              "url": "git+https://github.com/visionmedia/bytes.js.git",
-              "type": "vcs",
-              "comment": "as detected from PackageJson property \"repository.url\""
-            },
-            {
-              "url": "https://github.com/visionmedia/bytes.js#readme",
-              "type": "website",
-              "comment": "as detected from PackageJson property \"homepage\""
-            },
-            {
-              "url": "https://github.com/visionmedia/bytes.js/issues",
-              "type": "issue-tracker",
-              "comment": "as detected from PackageJson property \"bugs.url\""
-            },
-            {
-              "url": "https://registry.npmjs.org/bytes/-/bytes-3.1.2.tgz",
-              "type": "distribution",
-              "hashes": [
-                {
-                  "alg": "SHA-512",
-                  "content": "fcd7fb4f2cd3c7a4b7c9124e6ce015efde7aafc72bdbe3a3f000b976df3048fdc1400a1e5f9f0da07c8253c3fccc690d5d2b634d28ba7f33ba174a4175c61b12"
-                }
-              ],
-              "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-            }
-          ],
-          "properties": [
-            {
-              "name": "cdx:npm:package:path",
-              "value": "node_modules/raw-body/node_modules/bytes"
-            },
-            {
-              "name": "cdx:npm:package:development",
-              "value": "true"
-            }
-          ]
         }
       ]
     },
@@ -29546,8 +29435,8 @@
     {
       "type": "library",
       "name": "object-inspect",
-      "version": "1.13.2",
-      "bom-ref": "object-inspect@1.13.2",
+      "version": "1.13.3",
+      "bom-ref": "object-inspect@1.13.3",
       "author": "James Halliday",
       "description": "string representations of objects in node and the browser",
       "licenses": [
@@ -29557,7 +29446,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/object-inspect@1.13.2",
+      "purl": "pkg:npm/object-inspect@1.13.3",
       "externalReferences": [
         {
           "url": "git://github.com/inspect-js/object-inspect.git",
@@ -29575,12 +29464,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/object-inspect/-/object-inspect-1.13.2.tgz",
+          "url": "https://registry.npmjs.org/object-inspect/-/object-inspect-1.13.3.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "21165246ecc98b29de9805cf62d3dee41a08fd111235847b4d89b9d0c0b932a6dddc99b0e72efdd2c12b630dd5e92af21490fae1bef8a9042cf709f9060fe4de"
+              "content": "90308621bc640d25c4ddeb896595f373ab68edf0ab287348fe149142746e43e0568c537367088517c7e3ffaa36b761bdfe34e3f0f4886137c22de94b644791a4"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -33006,8 +32895,8 @@
       "type": "library",
       "name": "ast",
       "group": "@webassemblyjs",
-      "version": "1.12.1",
-      "bom-ref": "@webassemblyjs/ast@1.12.1",
+      "version": "1.14.1",
+      "bom-ref": "@webassemblyjs/ast@1.14.1",
       "author": "Sven Sauleau",
       "description": "AST utils for webassemblyjs",
       "licenses": [
@@ -33017,7 +32906,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40webassemblyjs/ast@1.12.1",
+      "purl": "pkg:npm/%40webassemblyjs/ast@1.14.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/xtuc/webassemblyjs.git",
@@ -33035,12 +32924,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@webassemblyjs/ast/-/ast-1.12.1.tgz",
+          "url": "https://registry.npmjs.org/@webassemblyjs/ast/-/ast-1.14.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "10a7cc50e3d14544f2e54208e2a24318fa6a7f08ce999e6378617089df669e8a8814af9ed2faa88b5a87e7a2699994b310be778ca9cdcd271d99fb49c86e715a"
+              "content": "9ee0440e041f9b571c469ffc6c242bc757eba21cae7e5e0995b30c6783f5c2978e7c3845e85424c592756ff7be3cbc2be97d4d870e8e2e67b9bacb8159806fb9"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -33061,8 +32950,8 @@
       "type": "library",
       "name": "helper-numbers",
       "group": "@webassemblyjs",
-      "version": "1.11.6",
-      "bom-ref": "@webassemblyjs/helper-numbers@1.11.6",
+      "version": "1.13.2",
+      "bom-ref": "@webassemblyjs/helper-numbers@1.13.2",
       "author": "Sven Sauleau",
       "description": "Number parsing utility",
       "licenses": [
@@ -33072,7 +32961,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40webassemblyjs/helper-numbers@1.11.6",
+      "purl": "pkg:npm/%40webassemblyjs/helper-numbers@1.13.2",
       "externalReferences": [
         {
           "url": "git+https://github.com/xtuc/webassemblyjs.git",
@@ -33090,12 +32979,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@webassemblyjs/helper-numbers/-/helper-numbers-1.11.6.tgz",
+          "url": "https://registry.npmjs.org/@webassemblyjs/helper-numbers/-/helper-numbers-1.13.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "bd422167c2d9a0858706886210e6f1566ea1c0fd37e23c2673d92eab919d1d91f4c222d52c83dc3027692731b80b5d5c1e8436e53148423f64695003557ecdde"
+              "content": "144f1a0a64b943a79061c577808df93b827bf3dc25400fbb26ba934e926a9f97a603853686fc099af1510b41ce0d2fb761ee968a80e496077ab1c277f8f2e710"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -33116,8 +33005,8 @@
       "type": "library",
       "name": "floating-point-hex-parser",
       "group": "@webassemblyjs",
-      "version": "1.11.6",
-      "bom-ref": "@webassemblyjs/floating-point-hex-parser@1.11.6",
+      "version": "1.13.2",
+      "bom-ref": "@webassemblyjs/floating-point-hex-parser@1.13.2",
       "author": "Mauro Bringolf",
       "description": "A function to parse floating point hexadecimal strings as defined by the WebAssembly specification",
       "licenses": [
@@ -33127,7 +33016,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40webassemblyjs/floating-point-hex-parser@1.11.6",
+      "purl": "pkg:npm/%40webassemblyjs/floating-point-hex-parser@1.13.2",
       "externalReferences": [
         {
           "url": "git+https://github.com/xtuc/webassemblyjs.git",
@@ -33145,12 +33034,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@webassemblyjs/floating-point-hex-parser/-/floating-point-hex-parser-1.11.6.tgz",
+          "url": "https://registry.npmjs.org/@webassemblyjs/floating-point-hex-parser/-/floating-point-hex-parser-1.13.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "7a3023f617d12765ccb0d1e4fefe85bb67464be8b851a5c15c67a639f43f25f43a99d420fd65edc2579044b2d2e0ebdf0e1bfcad89d5c07dbb6092ccc98b3187"
+              "content": "ea85f24cecdb2b1187e2cb5e2db2cd3aeef53a3f82f0b837e27e82a91bea7d2d8eef507163a0727cc0d1841cadce49e3f721943d5275a882a14650303b5028bc"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -33171,8 +33060,8 @@
       "type": "library",
       "name": "helper-api-error",
       "group": "@webassemblyjs",
-      "version": "1.11.6",
-      "bom-ref": "@webassemblyjs/helper-api-error@1.11.6",
+      "version": "1.13.2",
+      "bom-ref": "@webassemblyjs/helper-api-error@1.13.2",
       "author": "Sven Sauleau",
       "description": "Common API errors",
       "licenses": [
@@ -33182,7 +33071,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40webassemblyjs/helper-api-error@1.11.6#packages/helper-api-error",
+      "purl": "pkg:npm/%40webassemblyjs/helper-api-error@1.13.2#packages/helper-api-error",
       "externalReferences": [
         {
           "url": "git+https://github.com/xtuc/webassemblyjs.git#packages/helper-api-error",
@@ -33200,12 +33089,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@webassemblyjs/helper-api-error/-/helper-api-error-1.11.6.tgz",
+          "url": "https://registry.npmjs.org/@webassemblyjs/helper-api-error/-/helper-api-error-1.13.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "a34624a0fe2956ee2b37c6932600328fd842d92bf9525933087871a968fc6eeb5a2ef9e975cda33b08787b013a097d2dc527cb9ff518695fe985e4b64f183ffd"
+              "content": "539e86318c72e194026c365de89bafbcd57f5858a574e8ec6960f74f3cef9b0fe66acddc5f34493cc8cff3726a12c8126f2ae66868c17c3b55eca0d757d53315"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -33281,8 +33170,8 @@
       "type": "library",
       "name": "helper-wasm-bytecode",
       "group": "@webassemblyjs",
-      "version": "1.11.6",
-      "bom-ref": "@webassemblyjs/helper-wasm-bytecode@1.11.6",
+      "version": "1.13.2",
+      "bom-ref": "@webassemblyjs/helper-wasm-bytecode@1.13.2",
       "author": "Sven Sauleau",
       "description": "WASM's Bytecode constants",
       "licenses": [
@@ -33292,7 +33181,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40webassemblyjs/helper-wasm-bytecode@1.11.6",
+      "purl": "pkg:npm/%40webassemblyjs/helper-wasm-bytecode@1.13.2",
       "externalReferences": [
         {
           "url": "git+https://github.com/xtuc/webassemblyjs.git",
@@ -33310,12 +33199,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@webassemblyjs/helper-wasm-bytecode/-/helper-wasm-bytecode-1.11.6.tgz",
+          "url": "https://registry.npmjs.org/@webassemblyjs/helper-wasm-bytecode/-/helper-wasm-bytecode-1.13.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "b051472b0726069acef5eec871fd3e81d7725980d588bf1ba4f8c9265d161f109d11392d5dd9ad58b195ce81dba94718e017b52e435fc1399738950565848974"
+              "content": "dd06cb2b2f771741002172e1d28804551eab3ae6c0f40a19f9645884d6c5cae07bd23ddd45dc07f60faa5e12c03b4922606960dd3c4357e238ad04ebfd835790"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -33336,8 +33225,8 @@
       "type": "library",
       "name": "wasm-edit",
       "group": "@webassemblyjs",
-      "version": "1.12.1",
-      "bom-ref": "@webassemblyjs/wasm-edit@1.12.1",
+      "version": "1.14.1",
+      "bom-ref": "@webassemblyjs/wasm-edit@1.14.1",
       "author": "Sven Sauleau",
       "licenses": [
         {
@@ -33346,7 +33235,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40webassemblyjs/wasm-edit@1.12.1",
+      "purl": "pkg:npm/%40webassemblyjs/wasm-edit@1.14.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/xtuc/webassemblyjs.git",
@@ -33364,12 +33253,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@webassemblyjs/wasm-edit/-/wasm-edit-1.12.1.tgz",
+          "url": "https://registry.npmjs.org/@webassemblyjs/wasm-edit/-/wasm-edit-1.14.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "d43bb06d5bc00ef4b99869d76c4f9cf4d7c0f1045c67a88aaaeaa38e6475d24ea8fb3cec4557ac8a5e780ca7b18a8c1c1423ddaff434a9a320074d7e490d6eea"
+              "content": "44d2542101ff27c880ff5373944e0decab7264d1e2df0edab7b8438ef44d9b9adc5176b4d33d6f473de0959a142df2799a9bd884bc9b9957307231ab0b5a51ad"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -33390,8 +33279,8 @@
       "type": "library",
       "name": "helper-buffer",
       "group": "@webassemblyjs",
-      "version": "1.12.1",
-      "bom-ref": "@webassemblyjs/helper-buffer@1.12.1",
+      "version": "1.14.1",
+      "bom-ref": "@webassemblyjs/helper-buffer@1.14.1",
       "author": "Sven Sauleau",
       "description": "Buffer manipulation utility",
       "licenses": [
@@ -33401,7 +33290,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40webassemblyjs/helper-buffer@1.12.1",
+      "purl": "pkg:npm/%40webassemblyjs/helper-buffer@1.14.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/xtuc/webassemblyjs.git",
@@ -33419,12 +33308,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@webassemblyjs/helper-buffer/-/helper-buffer-1.12.1.tgz",
+          "url": "https://registry.npmjs.org/@webassemblyjs/helper-buffer/-/helper-buffer-1.14.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "9f3270430f7d0cd0caafd05508e65c2ee249525aa4261fa4573565e859aafed23966d132593d4a64cc8e5e5b572d92660edbcb083830b32ae4a2112da294d70b"
+              "content": "8f21fbc2d70788ab2c0ed14f441fa241dc650dff7a9b4137f726f4939b8956114695e645a0dc3573869e21c5543cf6d751527de30c2730e02a507cb3a043d530"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -33445,8 +33334,8 @@
       "type": "library",
       "name": "helper-wasm-section",
       "group": "@webassemblyjs",
-      "version": "1.12.1",
-      "bom-ref": "@webassemblyjs/helper-wasm-section@1.12.1",
+      "version": "1.14.1",
+      "bom-ref": "@webassemblyjs/helper-wasm-section@1.14.1",
       "author": "Sven Sauleau",
       "licenses": [
         {
@@ -33455,7 +33344,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40webassemblyjs/helper-wasm-section@1.12.1",
+      "purl": "pkg:npm/%40webassemblyjs/helper-wasm-section@1.14.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/xtuc/webassemblyjs.git",
@@ -33473,12 +33362,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@webassemblyjs/helper-wasm-section/-/helper-wasm-section-1.12.1.tgz",
+          "url": "https://registry.npmjs.org/@webassemblyjs/helper-wasm-section/-/helper-wasm-section-1.14.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "2627f8bdf07a1499549526e010c1d4ca4d63db7e064cd1bd7412785c974ec92a23e75f178f4a06b0d8b9f5c510178451312f68b815310c37720557cf4f2a5ae6"
+              "content": "76ce665c4a9327aa31468aa38560d4f373a0cc0623c2c095f0ba3f37ea11b0d0e6c7f643a6a6a59abb6038c907c31b06d2223fff707058012b6111ed827d1d67"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -33499,8 +33388,8 @@
       "type": "library",
       "name": "wasm-gen",
       "group": "@webassemblyjs",
-      "version": "1.12.1",
-      "bom-ref": "@webassemblyjs/wasm-gen@1.12.1",
+      "version": "1.14.1",
+      "bom-ref": "@webassemblyjs/wasm-gen@1.14.1",
       "author": "Sven Sauleau",
       "description": "WebAssembly binary format printer",
       "licenses": [
@@ -33510,7 +33399,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40webassemblyjs/wasm-gen@1.12.1",
+      "purl": "pkg:npm/%40webassemblyjs/wasm-gen@1.14.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/xtuc/webassemblyjs.git",
@@ -33528,12 +33417,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@webassemblyjs/wasm-gen/-/wasm-gen-1.12.1.tgz",
+          "url": "https://registry.npmjs.org/@webassemblyjs/wasm-gen/-/wasm-gen-1.14.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "4c3ab83a387d7dca21030e8e20c5ea888713ab92945d3191915c5b4a8d614274b2ea500ce4649d7f059e4b1a40a3463382c805d7cd84fd4d260cd86e034b56ef"
+              "content": "026a264888cff196df19086e9a436f802df7018eeab4c0979cde9b2f6bb626ce2054283c7e9ef7e5a12231205b0d1ed44088fdd27e3028015448477440dd9492"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -33554,8 +33443,8 @@
       "type": "library",
       "name": "ieee754",
       "group": "@webassemblyjs",
-      "version": "1.11.6",
-      "bom-ref": "@webassemblyjs/ieee754@1.11.6",
+      "version": "1.13.2",
+      "bom-ref": "@webassemblyjs/ieee754@1.13.2",
       "description": "IEEE754 decoder and encoder",
       "licenses": [
         {
@@ -33564,7 +33453,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40webassemblyjs/ieee754@1.11.6#packages/ieee754",
+      "purl": "pkg:npm/%40webassemblyjs/ieee754@1.13.2#packages/ieee754",
       "externalReferences": [
         {
           "url": "git+https://github.com/xtuc/webassemblyjs.git#packages/ieee754",
@@ -33582,12 +33471,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@webassemblyjs/ieee754/-/ieee754-1.11.6.tgz",
+          "url": "https://registry.npmjs.org/@webassemblyjs/ieee754/-/ieee754-1.13.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "2cce29d9cb0f36f6e28fa5357f5f6fe96479e9067c25c1e0dd02094e54b0cc5726c7a59239189c623e88eb77fdc94d64114b6ba46fa48e48880247af1e90d7ae"
+              "content": "e0bb4ece1e7c4bfe655f82132b19c02b6512b8d12fa5d555f409601906fcac90c768b787722c06e33946af48ff48d5a5afbc77bced650c4b2e78fbed70334293"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -33608,8 +33497,8 @@
       "type": "library",
       "name": "leb128",
       "group": "@webassemblyjs",
-      "version": "1.11.6",
-      "bom-ref": "@webassemblyjs/leb128@1.11.6",
+      "version": "1.13.2",
+      "bom-ref": "@webassemblyjs/leb128@1.13.2",
       "description": "LEB128 decoder and encoder",
       "licenses": [
         {
@@ -33618,7 +33507,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40webassemblyjs/leb128@1.11.6#packages/leb128",
+      "purl": "pkg:npm/%40webassemblyjs/leb128@1.13.2#packages/leb128",
       "externalReferences": [
         {
           "url": "git+https://github.com/xtuc/webassemblyjs.git#packages/leb128",
@@ -33636,12 +33525,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@webassemblyjs/leb128/-/leb128-1.11.6.tgz",
+          "url": "https://registry.npmjs.org/@webassemblyjs/leb128/-/leb128-1.13.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "9bb6b416113aec3417828b9fd6d6cde5741c756a0d81a02ea142c721f18520454a03ab6efde765b3a5e72259264ba16b5c0aae2513e78b76592a3c3a1523e33d"
+              "content": "2dd7b5a0da08773573764344016675759e68ac86df7fcd183dd1f1db49ab1f01eb54d3538cdafc137c73f41769706a9141b0046be7e4ac26fe7d115397feac43"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -33662,8 +33551,8 @@
       "type": "library",
       "name": "utf8",
       "group": "@webassemblyjs",
-      "version": "1.11.6",
-      "bom-ref": "@webassemblyjs/utf8@1.11.6",
+      "version": "1.13.2",
+      "bom-ref": "@webassemblyjs/utf8@1.13.2",
       "author": "Sven Sauleau",
       "description": "UTF8 encoder/decoder for WASM",
       "licenses": [
@@ -33673,7 +33562,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40webassemblyjs/utf8@1.11.6",
+      "purl": "pkg:npm/%40webassemblyjs/utf8@1.13.2",
       "externalReferences": [
         {
           "url": "git+https://github.com/xtuc/webassemblyjs.git",
@@ -33691,12 +33580,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@webassemblyjs/utf8/-/utf8-1.11.6.tgz",
+          "url": "https://registry.npmjs.org/@webassemblyjs/utf8/-/utf8-1.13.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "bed5dfdb04d0dfeba9f59b20f2c6b6c96890a734ac3325e3d2a56254feb12860944fca7c609e87a88ee5e5e0a75b1d53fc561db2fd3b1d0b36c1315b6e87ff44"
+              "content": "dcd4161a3293012635c55e66ec7af488f7970fdf910e86cb965dd3f5dd803be8379b2f31cb9a5e5728d26a0e08e74991d5b05237f0add76968f91f6d264d0d65"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -33717,8 +33606,8 @@
       "type": "library",
       "name": "wasm-opt",
       "group": "@webassemblyjs",
-      "version": "1.12.1",
-      "bom-ref": "@webassemblyjs/wasm-opt@1.12.1",
+      "version": "1.14.1",
+      "bom-ref": "@webassemblyjs/wasm-opt@1.14.1",
       "author": "Sven Sauleau",
       "licenses": [
         {
@@ -33727,7 +33616,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40webassemblyjs/wasm-opt@1.12.1",
+      "purl": "pkg:npm/%40webassemblyjs/wasm-opt@1.14.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/xtuc/webassemblyjs.git",
@@ -33745,12 +33634,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@webassemblyjs/wasm-opt/-/wasm-opt-1.12.1.tgz",
+          "url": "https://registry.npmjs.org/@webassemblyjs/wasm-opt/-/wasm-opt-1.14.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "260f7d8ffda01b689acf78628f0f39ec05587a465ed9202c91caa55886578e38b9592b673a95686adde041f4ff439b5bd9d8e70a306d328718fd2bb519fc4f06"
+              "content": "3d370a2d436f06a9d8d94e84e5b74e41c48cfa854ffcf9ab0d8f4dce8c098e2b25123c0ffc2e1a9f6df4dcc0954b6320f5ddc026920675414841059b3ddb344b"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -33771,8 +33660,8 @@
       "type": "library",
       "name": "wasm-parser",
       "group": "@webassemblyjs",
-      "version": "1.12.1",
-      "bom-ref": "@webassemblyjs/wasm-parser@1.12.1",
+      "version": "1.14.1",
+      "bom-ref": "@webassemblyjs/wasm-parser@1.14.1",
       "author": "Sven Sauleau",
       "description": "WebAssembly binary format parser",
       "licenses": [
@@ -33782,7 +33671,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40webassemblyjs/wasm-parser@1.12.1",
+      "purl": "pkg:npm/%40webassemblyjs/wasm-parser@1.14.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/xtuc/webassemblyjs.git",
@@ -33800,12 +33689,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@webassemblyjs/wasm-parser/-/wasm-parser-1.12.1.tgz",
+          "url": "https://registry.npmjs.org/@webassemblyjs/wasm-parser/-/wasm-parser-1.14.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "c629088bb7361475f2b315dedc23ab5543d285eb81b6971f85ba458f8826bbb2912d83b300dcedc1453421bb2abccab3b8d2b6fa0951196084a99a355822f201"
+              "content": "24b065f8a674479a81ee60a7b9dff2c97d3c8d6170e4cb286a5275a50e047459608fd55d5ca1ae10d1ac8822237a02355bba7dd6b525701fcb079c9124a35371"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -33826,8 +33715,8 @@
       "type": "library",
       "name": "wast-printer",
       "group": "@webassemblyjs",
-      "version": "1.12.1",
-      "bom-ref": "@webassemblyjs/wast-printer@1.12.1",
+      "version": "1.14.1",
+      "bom-ref": "@webassemblyjs/wast-printer@1.14.1",
       "author": "Sven Sauleau",
       "description": "WebAssembly text format printer",
       "licenses": [
@@ -33837,7 +33726,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40webassemblyjs/wast-printer@1.12.1",
+      "purl": "pkg:npm/%40webassemblyjs/wast-printer@1.14.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/xtuc/webassemblyjs.git",
@@ -33855,12 +33744,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@webassemblyjs/wast-printer/-/wast-printer-1.12.1.tgz",
+          "url": "https://registry.npmjs.org/@webassemblyjs/wast-printer/-/wast-printer-1.14.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "f97e160253a2b155903229236dcbd8d9ed2bc0fb0a43d17af3c964b1984170fc9c041ba28b73bb9bc14009b0cc583a23a40aaf8c89dcac6f09d171cac907d578"
+              "content": "90f4925c4e837b55ce47cdb40bdd11228da882f646f9cdca887cea5283bf177e18dac846cdeb1faafee8e7bc6bc68bd9247fcc7ad179523ae827f47fde2b288b"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -40158,59 +40047,6 @@
     },
     {
       "type": "library",
-      "name": "negotiator",
-      "version": "0.6.4",
-      "bom-ref": "negotiator@0.6.4",
-      "description": "HTTP content negotiation",
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT"
-          }
-        }
-      ],
-      "purl": "pkg:npm/negotiator@0.6.4",
-      "externalReferences": [
-        {
-          "url": "git+https://github.com/jshttp/negotiator.git",
-          "type": "vcs",
-          "comment": "as detected from PackageJson property \"repository.url\""
-        },
-        {
-          "url": "https://github.com/jshttp/negotiator#readme",
-          "type": "website",
-          "comment": "as detected from PackageJson property \"homepage\""
-        },
-        {
-          "url": "https://github.com/jshttp/negotiator/issues",
-          "type": "issue-tracker",
-          "comment": "as detected from PackageJson property \"bugs.url\""
-        },
-        {
-          "url": "https://registry.npmjs.org/negotiator/-/negotiator-0.6.4.tgz",
-          "type": "distribution",
-          "hashes": [
-            {
-              "alg": "SHA-512",
-              "content": "9b2453dc38963c7aa1a393eb25a211c9a32fda48187f499456004d39832e087e4a8b5c8489069ffd926e43ada7be9738e302f95836d35fbc86262d4d79ebf0f3"
-            }
-          ],
-          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
-        }
-      ],
-      "properties": [
-        {
-          "name": "cdx:npm:package:path",
-          "value": "node_modules/negotiator"
-        },
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        }
-      ]
-    },
-    {
-      "type": "library",
       "name": "ssri",
       "version": "10.0.6",
       "bom-ref": "ssri@10.0.6",
@@ -43624,8 +43460,8 @@
       "type": "library",
       "name": "cyclonedx-library",
       "group": "@cyclonedx",
-      "version": "6.11.1",
-      "bom-ref": "@cyclonedx/cyclonedx-library@6.11.1",
+      "version": "6.13.0",
+      "bom-ref": "@cyclonedx/cyclonedx-library@6.13.0",
       "author": "Jan Kowalleck",
       "description": "Core functionality of CycloneDX for JavaScript (Node.js or WebBrowser).",
       "licenses": [
@@ -43635,7 +43471,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40cyclonedx/cyclonedx-library@6.11.1",
+      "purl": "pkg:npm/%40cyclonedx/cyclonedx-library@6.13.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/CycloneDX/cyclonedx-javascript-library.git",
@@ -43653,12 +43489,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@cyclonedx/cyclonedx-library/-/cyclonedx-library-6.11.1.tgz",
+          "url": "https://registry.npmjs.org/@cyclonedx/cyclonedx-library/-/cyclonedx-library-6.13.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "4085fd9450e64bd6369ec08b1cf0d2f75ed37b032a11902d8de1695d4d71565440d26ef672d70808c67c644258a61e16e6e8dc619b09ab189487b40b61e0370b"
+              "content": "fd69758f9e973c01703a77b6c5975838e7fcb452f09f081608589755b3cd7e76199dcba82e15401050c76eb24a4afbd5c0c4704c2a08ba00ef5094887cf92c88"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -43679,7 +43515,7 @@
           "type": "library",
           "name": "ajv-formats",
           "version": "3.0.1",
-          "bom-ref": "@cyclonedx/cyclonedx-library@6.11.1|ajv-formats@3.0.1",
+          "bom-ref": "@cyclonedx/cyclonedx-library@6.13.0|ajv-formats@3.0.1",
           "author": "Evgeny Poberezkin",
           "description": "Format validation for Ajv v7+",
           "scope": "optional",
@@ -46233,8 +46069,8 @@
     {
       "type": "library",
       "name": "undici-types",
-      "version": "6.19.8",
-      "bom-ref": "undici-types@6.19.8",
+      "version": "6.20.0",
+      "bom-ref": "undici-types@6.20.0",
       "description": "A stand-alone types package for Undici",
       "licenses": [
         {
@@ -46243,7 +46079,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/undici-types@6.19.8",
+      "purl": "pkg:npm/undici-types@6.20.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/nodejs/undici.git",
@@ -46261,12 +46097,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/undici-types/-/undici-types-6.19.8.tgz",
+          "url": "https://registry.npmjs.org/undici-types/-/undici-types-6.20.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "bded8a3fa7ff2676cf045ca86c61ee7ab0bd8351581a7fc5f27d4b593c0dc4213377a21fa93c1441c357804b66990e83951ac2d61ad2ac19c264fa2446b0c78f"
+              "content": "372e90676363bb6d2fc354911dedddf6356eea027ee1edfe30ca6abbba6a1391d3e96b134a571efbe19098ae545d2f26cd5f034981eb407f97adfda355cb8a36"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -50184,8 +50020,8 @@
     {
       "type": "library",
       "name": "psl",
-      "version": "1.9.0",
-      "bom-ref": "psl@1.9.0",
+      "version": "1.13.0",
+      "bom-ref": "psl@1.13.0",
       "author": "Lupo Montero",
       "description": "Domain name parser based on the Public Suffix List",
       "licenses": [
@@ -50195,7 +50031,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/psl@1.9.0",
+      "purl": "pkg:npm/psl@1.13.0",
       "externalReferences": [
         {
           "url": "git+ssh://git@github.com/lupomontero/psl.git",
@@ -50213,12 +50049,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/psl/-/psl-1.9.0.tgz",
+          "url": "https://registry.npmjs.org/psl/-/psl-1.13.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "13f66c754e072ecffaf206338064e43227164cb3dd01fb492df24594b50000a646912b4d53bdac6634fae929cc0d539f39663f600a220fb2716bd887be781c6a"
+              "content": "045c26157889a05aa552967942cb2896fd790ccc9cf3881305db35063b15d417d7128d54cb20fb1ac98debb9fb27beee461a12356d405ed5ca3cb7011509fd03"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -50561,8 +50397,8 @@
     {
       "type": "library",
       "name": "jest-preset-angular",
-      "version": "14.2.4",
-      "bom-ref": "jest-preset-angular@14.2.4",
+      "version": "14.3.3",
+      "bom-ref": "jest-preset-angular@14.3.3",
       "author": "Michał Pierzchała",
       "description": "Jest preset configuration for Angular projects",
       "licenses": [
@@ -50572,7 +50408,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/jest-preset-angular@14.2.4",
+      "purl": "pkg:npm/jest-preset-angular@14.3.3",
       "externalReferences": [
         {
           "url": "git+https://github.com/thymikee/jest-preset-angular.git",
@@ -50590,12 +50426,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/jest-preset-angular/-/jest-preset-angular-14.2.4.tgz",
+          "url": "https://registry.npmjs.org/jest-preset-angular/-/jest-preset-angular-14.3.3.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "c728646a205d9f791e060c7191c6ea66efe6cb700353d35c0ebcfa0da32e1916b1cff6dfe990b5ab1675790bb3e55d56b80dffac3eb8540dca91ef0fe84f6a36"
+              "content": "1b251f64b9318fb4dbd1af6409211d8c86781ed57307b461fbfe877ec60d8a312a5bcf3bbb2677149f07cb499786313763fc3c419239ed48c9a86e835a83f50d"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -56120,8 +55956,8 @@
       "type": "library",
       "name": "wasm-node",
       "group": "@rollup",
-      "version": "4.24.3",
-      "bom-ref": "@rollup/wasm-node@4.24.3",
+      "version": "4.27.4",
+      "bom-ref": "@rollup/wasm-node@4.27.4",
       "author": "Rich Harris",
       "description": "Next-generation ES module bundler with Node wasm",
       "licenses": [
@@ -56131,7 +55967,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40rollup/wasm-node@4.24.3",
+      "purl": "pkg:npm/%40rollup/wasm-node@4.27.4",
       "externalReferences": [
         {
           "url": "git+https://github.com/rollup/rollup.git",
@@ -56149,12 +55985,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@rollup/wasm-node/-/wasm-node-4.24.3.tgz",
+          "url": "https://registry.npmjs.org/@rollup/wasm-node/-/wasm-node-4.27.4.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "95a869a6b7e824a9bcf1b829d88ac323f551c99a1cb2f1af7a64a486bb1b0538fdcaa864c886fb5b909901d65681e0226cee44224d9c374c96087723a212f561"
+              "content": "4356f50354403f83e9e2ac14e7d9f8f35f67278bf80838016d8d7f15b0b5a56e4f9871c8dfacb2a83301d015bf17ede52c3b7428377eb7bb41ae48bda12120ff"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -56719,7 +56555,7 @@
       "type": "library",
       "name": "string-width",
       "version": "4.2.3",
-      "bom-ref": "BomRef.ng5ikb7ji8o.g2um6t8dtt",
+      "bom-ref": "BomRef.mk51c9j51m8.kjafs1n7j7o",
       "author": "Sindre Sorhus",
       "description": "Get the visual width of a string - the number of columns required to display it",
       "licenses": [
@@ -56827,7 +56663,7 @@
       "type": "library",
       "name": "strip-ansi",
       "version": "6.0.1",
-      "bom-ref": "BomRef.jcd4qjqo6j8.5sev8qbllt",
+      "bom-ref": "BomRef.8bekp9g7b2.7jeubdd89",
       "author": "Sindre Sorhus",
       "description": "Strip ANSI escape codes from a string",
       "licenses": [
@@ -57584,8 +57420,8 @@
       "type": "library",
       "name": "rollup-darwin-arm64",
       "group": "@rollup",
-      "version": "4.24.3",
-      "bom-ref": "@rollup/rollup-darwin-arm64@4.24.3",
+      "version": "4.27.4",
+      "bom-ref": "@rollup/rollup-darwin-arm64@4.27.4",
       "author": "Lukas Taegert-Atkinson",
       "description": "Native bindings for Rollup",
       "scope": "optional",
@@ -57596,7 +57432,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40rollup/rollup-darwin-arm64@4.24.3",
+      "purl": "pkg:npm/%40rollup/rollup-darwin-arm64@4.27.4",
       "externalReferences": [
         {
           "url": "git+https://github.com/rollup/rollup.git",
@@ -57614,12 +57450,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@rollup/rollup-darwin-arm64/-/rollup-darwin-arm64-4.24.3.tgz",
+          "url": "https://registry.npmjs.org/@rollup/rollup-darwin-arm64/-/rollup-darwin-arm64-4.27.4.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "40f5b66269162e5bea98e6b63b0adfa8b26a9079bb90908832af643b3e34668f48a62e3491ff4e346e52cfbeb3b33ae621967886044891ecfaf589d31e0133d7"
+              "content": "3e53624506a989fb782cd4bc0cf507b835ff21d5e22e37fc99ce6f7449944747c5fe9cb2daa5b0cdd2e307e899aae1abf0bb8de0b9d4a1212f291c23495633dd"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -60139,19 +59975,19 @@
         "@schematics/angular@17.3.11",
         "@types/estree@1.0.6",
         "@types/jest@29.5.14",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "@types/trusted-types@2.0.7",
         "copyfiles@2.4.1",
         "fsevents@2.3.3",
         "jest-environment-jsdom@29.7.0",
-        "jest-preset-angular@14.2.4",
+        "jest-preset-angular@14.3.3",
         "jest@29.7.0",
         "ng-packagr@17.3.0",
         "properties-reader@2.3.0",
         "sass@1.77.6",
         "ts-jest@29.2.5",
         "ts-node@10.9.2",
-        "tslib@2.8.0",
+        "tslib@2.8.1",
         "tslint@6.1.3",
         "typescript@5.2.2",
         "zone.js@0.14.10"
@@ -60295,7 +60131,7 @@
     {
       "ref": "rxjs@7.8.1",
       "dependsOn": [
-        "tslib@2.8.0"
+        "tslib@2.8.1"
       ]
     },
     {
@@ -60316,12 +60152,12 @@
         "@types/serve-index@1.9.4",
         "@types/serve-static@1.15.7",
         "@types/sockjs@0.3.36",
-        "@types/ws@8.5.12",
+        "@types/ws@8.5.13",
         "ansi-html-community@0.0.8",
-        "bonjour-service@1.2.1",
+        "bonjour-service@1.3.0",
         "chokidar@3.6.0",
         "colorette@2.0.20",
-        "compression@1.7.4",
+        "compression@1.7.5",
         "connect-history-api-fallback@2.0.0",
         "default-gateway@6.0.3",
         "express@4.21.1",
@@ -60358,9 +60194,9 @@
       "ref": "webpack@5.94.0",
       "dependsOn": [
         "@types/estree@1.0.6",
-        "@webassemblyjs/ast@1.12.1",
-        "@webassemblyjs/wasm-edit@1.12.1",
-        "@webassemblyjs/wasm-parser@1.12.1",
+        "@webassemblyjs/ast@1.14.1",
+        "@webassemblyjs/wasm-edit@1.14.1",
+        "@webassemblyjs/wasm-parser@1.14.1",
         "acorn-import-attributes@1.9.5",
         "acorn@8.14.0",
         "browserslist@4.24.2",
@@ -60465,7 +60301,7 @@
         "convert-source-map@1.9.0",
         "reflect-metadata@0.2.2",
         "semver@7.6.0",
-        "tslib@2.8.0",
+        "tslib@2.8.1",
         "typescript@5.2.2",
         "yargs@17.7.2"
       ]
@@ -60474,12 +60310,12 @@
       "ref": "@angular/compiler-cli@17.3.12|@babel/core@7.23.9",
       "dependsOn": [
         "@ampproject/remapping@2.3.0",
-        "@babel/code-frame@7.26.0",
+        "@babel/code-frame@7.26.2",
         "@babel/generator@7.23.6",
         "@babel/helper-compilation-targets@7.25.9",
         "@babel/helper-module-transforms@7.26.0",
         "@babel/helpers@7.26.0",
-        "@babel/parser@7.26.1",
+        "@babel/parser@7.26.2",
         "@babel/template@7.25.9",
         "@babel/traverse@7.25.9",
         "@babel/types@7.26.0",
@@ -60500,12 +60336,12 @@
       "ref": "@babel/core@7.24.0",
       "dependsOn": [
         "@ampproject/remapping@2.3.0",
-        "@babel/code-frame@7.26.0",
+        "@babel/code-frame@7.26.2",
         "@babel/generator@7.23.6",
         "@babel/helper-compilation-targets@7.25.9",
         "@babel/helper-module-transforms@7.26.0",
         "@babel/helpers@7.26.0",
-        "@babel/parser@7.26.1",
+        "@babel/parser@7.26.2",
         "@babel/template@7.25.9",
         "@babel/traverse@7.25.9",
         "@babel/types@7.26.0",
@@ -60523,7 +60359,7 @@
       "ref": "@babel/core@7.24.0|semver@6.3.1"
     },
     {
-      "ref": "@babel/code-frame@7.26.0",
+      "ref": "@babel/code-frame@7.26.2",
       "dependsOn": [
         "@babel/helper-validator-identifier@7.25.9",
         "js-tokens@4.0.0",
@@ -60542,7 +60378,7 @@
     {
       "ref": "@babel/helper-compilation-targets@7.25.9",
       "dependsOn": [
-        "@babel/compat-data@7.26.0",
+        "@babel/compat-data@7.26.2",
         "@babel/helper-validator-option@7.25.9",
         "browserslist@4.24.2",
         "lru-cache@5.1.1",
@@ -60553,7 +60389,7 @@
       "ref": "@babel/helper-compilation-targets@7.25.9|semver@6.3.1"
     },
     {
-      "ref": "@babel/compat-data@7.26.0"
+      "ref": "@babel/compat-data@7.26.2"
     },
     {
       "ref": "@babel/helper-validator-option@7.25.9"
@@ -60561,8 +60397,8 @@
     {
       "ref": "browserslist@4.24.2",
       "dependsOn": [
-        "caniuse-lite@1.0.30001674",
-        "electron-to-chromium@1.5.49",
+        "caniuse-lite@1.0.30001684",
+        "electron-to-chromium@1.5.65",
         "node-releases@2.0.18",
         "update-browserslist-db@1.1.1"
       ]
@@ -60598,9 +60434,9 @@
     {
       "ref": "@babel/traverse@7.25.9",
       "dependsOn": [
-        "@babel/code-frame@7.26.0",
-        "@babel/traverse@7.25.9|@babel/generator@7.26.0",
-        "@babel/parser@7.26.1",
+        "@babel/code-frame@7.26.2",
+        "@babel/traverse@7.25.9|@babel/generator@7.26.2",
+        "@babel/parser@7.26.2",
         "@babel/template@7.25.9",
         "@babel/types@7.26.0",
         "debug@4.3.7",
@@ -60608,9 +60444,9 @@
       ]
     },
     {
-      "ref": "@babel/traverse@7.25.9|@babel/generator@7.26.0",
+      "ref": "@babel/traverse@7.25.9|@babel/generator@7.26.2",
       "dependsOn": [
-        "@babel/parser@7.26.1",
+        "@babel/parser@7.26.2",
         "@babel/types@7.26.0",
         "@jridgewell/gen-mapping@0.3.5",
         "@jridgewell/trace-mapping@0.3.25",
@@ -60630,8 +60466,8 @@
     {
       "ref": "@babel/template@7.25.9",
       "dependsOn": [
-        "@babel/code-frame@7.26.0",
-        "@babel/parser@7.26.1",
+        "@babel/code-frame@7.26.2",
+        "@babel/parser@7.26.2",
         "@babel/types@7.26.0"
       ]
     },
@@ -60643,7 +60479,7 @@
       ]
     },
     {
-      "ref": "@babel/parser@7.26.1",
+      "ref": "@babel/parser@7.26.2",
       "dependsOn": [
         "@babel/types@7.26.0"
       ]
@@ -60748,7 +60584,7 @@
         "@babel/core@7.24.0",
         "@babel/helper-module-imports@7.25.9",
         "@babel/helper-plugin-utils@7.25.9",
-        "babel-plugin-polyfill-corejs2@0.4.11",
+        "babel-plugin-polyfill-corejs2@0.4.12",
         "babel-plugin-polyfill-corejs3@0.9.0",
         "babel-plugin-polyfill-regenerator@0.5.5",
         "@babel/plugin-transform-runtime@7.24.0|semver@6.3.1"
@@ -60758,19 +60594,19 @@
       "ref": "@babel/plugin-transform-runtime@7.24.0|semver@6.3.1"
     },
     {
-      "ref": "babel-plugin-polyfill-corejs2@0.4.11",
+      "ref": "babel-plugin-polyfill-corejs2@0.4.12",
       "dependsOn": [
-        "@babel/compat-data@7.26.0",
+        "@babel/compat-data@7.26.2",
         "@babel/core@7.24.0",
-        "@babel/helper-define-polyfill-provider@0.6.2",
-        "babel-plugin-polyfill-corejs2@0.4.11|semver@6.3.1"
+        "@babel/helper-define-polyfill-provider@0.6.3",
+        "babel-plugin-polyfill-corejs2@0.4.12|semver@6.3.1"
       ]
     },
     {
-      "ref": "babel-plugin-polyfill-corejs2@0.4.11|semver@6.3.1"
+      "ref": "babel-plugin-polyfill-corejs2@0.4.12|semver@6.3.1"
     },
     {
-      "ref": "@babel/helper-define-polyfill-provider@0.6.2",
+      "ref": "@babel/helper-define-polyfill-provider@0.6.3",
       "dependsOn": [
         "@babel/core@7.24.0",
         "@babel/helper-compilation-targets@7.25.9",
@@ -60796,7 +60632,7 @@
       "dependsOn": [
         "@babel/core@7.24.0",
         "babel-plugin-polyfill-corejs3@0.9.0|@babel/helper-define-polyfill-provider@0.5.0",
-        "core-js-compat@3.38.1"
+        "core-js-compat@3.39.0"
       ]
     },
     {
@@ -60811,7 +60647,7 @@
       ]
     },
     {
-      "ref": "core-js-compat@3.38.1",
+      "ref": "core-js-compat@3.39.0",
       "dependsOn": [
         "browserslist@4.24.2"
       ]
@@ -60837,7 +60673,7 @@
     {
       "ref": "@babel/preset-env@7.24.0",
       "dependsOn": [
-        "@babel/compat-data@7.26.0",
+        "@babel/compat-data@7.26.2",
         "@babel/core@7.24.0",
         "@babel/helper-compilation-targets@7.25.9",
         "@babel/helper-plugin-utils@7.25.9",
@@ -60913,10 +60749,10 @@
         "@babel/plugin-transform-unicode-regex@7.25.9",
         "@babel/plugin-transform-unicode-sets-regex@7.25.9",
         "@babel/preset-modules@0.1.6-no-external-plugins",
-        "babel-plugin-polyfill-corejs2@0.4.11",
+        "babel-plugin-polyfill-corejs2@0.4.12",
         "babel-plugin-polyfill-corejs3@0.9.0",
         "babel-plugin-polyfill-regenerator@0.5.5",
-        "core-js-compat@3.38.1",
+        "core-js-compat@3.39.0",
         "@babel/preset-env@7.24.0|semver@6.3.1"
       ]
     },
@@ -61093,7 +60929,7 @@
       "dependsOn": [
         "@babel/core@7.24.0",
         "@babel/helper-create-regexp-features-plugin@7.25.9|@babel/helper-annotate-as-pure@7.25.9",
-        "regexpu-core@6.1.1",
+        "regexpu-core@6.2.0",
         "@babel/helper-create-regexp-features-plugin@7.25.9|semver@6.3.1"
       ]
     },
@@ -61107,12 +60943,12 @@
       "ref": "@babel/helper-create-regexp-features-plugin@7.25.9|semver@6.3.1"
     },
     {
-      "ref": "regexpu-core@6.1.1",
+      "ref": "regexpu-core@6.2.0",
       "dependsOn": [
         "regenerate-unicode-properties@10.2.0",
         "regenerate@1.4.2",
         "regjsgen@0.8.0",
-        "regjsparser@0.11.2",
+        "regjsparser@0.12.0",
         "unicode-match-property-ecmascript@2.0.0",
         "unicode-match-property-value-ecmascript@2.2.0"
       ]
@@ -61130,13 +60966,13 @@
       "ref": "regjsgen@0.8.0"
     },
     {
-      "ref": "regjsparser@0.11.2",
+      "ref": "regjsparser@0.12.0",
       "dependsOn": [
-        "regjsparser@0.11.2|jsesc@3.0.2"
+        "regjsparser@0.12.0|jsesc@3.0.2"
       ]
     },
     {
-      "ref": "regjsparser@0.11.2|jsesc@3.0.2"
+      "ref": "regjsparser@0.12.0|jsesc@3.0.2"
     },
     {
       "ref": "unicode-match-property-ecmascript@2.0.0",
@@ -61621,12 +61457,12 @@
     {
       "ref": "vite@5.1.8",
       "dependsOn": [
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "vite@5.1.8|esbuild@0.19.12",
         "fsevents@2.3.3",
         "less@4.2.0",
         "postcss@8.4.35",
-        "rollup@4.24.3",
+        "rollup@4.27.4",
         "sass@1.77.6",
         "terser@5.29.1"
       ]
@@ -61647,7 +61483,7 @@
       "ref": "autoprefixer@10.4.18",
       "dependsOn": [
         "browserslist@4.24.2",
-        "caniuse-lite@1.0.30001674",
+        "caniuse-lite@1.0.30001684",
         "fraction.js@4.3.7",
         "normalize-range@0.1.2",
         "picocolors@1.1.1",
@@ -61656,7 +61492,7 @@
       ]
     },
     {
-      "ref": "caniuse-lite@1.0.30001674"
+      "ref": "caniuse-lite@1.0.30001684"
     },
     {
       "ref": "fraction.js@4.3.7"
@@ -61673,7 +61509,7 @@
     {
       "ref": "postcss@8.4.35",
       "dependsOn": [
-        "nanoid@3.3.7",
+        "nanoid@3.3.8",
         "picocolors@1.1.1",
         "source-map-js@1.2.1"
       ]
@@ -61830,7 +61666,7 @@
       "ref": "istanbul-lib-instrument@5.2.1",
       "dependsOn": [
         "@babel/core@7.24.0",
-        "@babel/parser@7.26.1",
+        "@babel/parser@7.26.2",
         "@istanbuljs/schema@0.1.3",
         "istanbul-lib-coverage@3.2.2",
         "istanbul-lib-instrument@5.2.1|semver@6.3.1"
@@ -61868,7 +61704,7 @@
       ]
     },
     {
-      "ref": "electron-to-chromium@1.5.49"
+      "ref": "electron-to-chromium@1.5.65"
     },
     {
       "ref": "node-releases@2.0.18"
@@ -62074,8 +61910,8 @@
       "dependsOn": [
         "icss-utils@5.1.0",
         "postcss-modules-extract-imports@3.1.0",
-        "postcss-modules-local-by-default@4.0.5",
-        "postcss-modules-scope@3.2.0",
+        "postcss-modules-local-by-default@4.1.0",
+        "postcss-modules-scope@3.2.1",
         "postcss-modules-values@4.0.0",
         "postcss-value-parser@4.2.0",
         "postcss@8.4.35",
@@ -62096,16 +61932,16 @@
       ]
     },
     {
-      "ref": "postcss-modules-local-by-default@4.0.5",
+      "ref": "postcss-modules-local-by-default@4.1.0",
       "dependsOn": [
         "icss-utils@5.1.0",
-        "postcss-selector-parser@6.1.2",
+        "postcss-selector-parser@7.0.0",
         "postcss-value-parser@4.2.0",
         "postcss@8.4.35"
       ]
     },
     {
-      "ref": "postcss-selector-parser@6.1.2",
+      "ref": "postcss-selector-parser@7.0.0",
       "dependsOn": [
         "cssesc@3.0.0",
         "util-deprecate@1.0.2"
@@ -62118,9 +61954,9 @@
       "ref": "util-deprecate@1.0.2"
     },
     {
-      "ref": "postcss-modules-scope@3.2.0",
+      "ref": "postcss-modules-scope@3.2.1",
       "dependsOn": [
-        "postcss-selector-parser@6.1.2",
+        "postcss-selector-parser@7.0.0",
         "postcss@8.4.35"
       ]
     },
@@ -62231,15 +62067,15 @@
       "dependsOn": [
         "@types/body-parser@1.19.5",
         "@types/express@4.17.21|@types/express-serve-static-core@4.19.6",
-        "@types/qs@6.9.16",
+        "@types/qs@6.9.17",
         "@types/serve-static@1.15.7"
       ]
     },
     {
       "ref": "@types/express@4.17.21|@types/express-serve-static-core@4.19.6",
       "dependsOn": [
-        "@types/node@22.8.4",
-        "@types/qs@6.9.16",
+        "@types/node@22.10.0",
+        "@types/qs@6.9.17",
         "@types/range-parser@1.2.7",
         "@types/send@0.17.4"
       ]
@@ -62248,23 +62084,23 @@
       "ref": "@types/body-parser@1.19.5",
       "dependsOn": [
         "@types/connect@3.4.38",
-        "@types/node@22.8.4"
+        "@types/node@22.10.0"
       ]
     },
     {
       "ref": "@types/connect@3.4.38",
       "dependsOn": [
-        "@types/node@22.8.4"
+        "@types/node@22.10.0"
       ]
     },
     {
-      "ref": "@types/node@22.8.4",
+      "ref": "@types/node@22.10.0",
       "dependsOn": [
-        "undici-types@6.19.8"
+        "undici-types@6.20.0"
       ]
     },
     {
-      "ref": "@types/qs@6.9.16"
+      "ref": "@types/qs@6.9.17"
     },
     {
       "ref": "@types/range-parser@1.2.7"
@@ -62273,21 +62109,21 @@
       "ref": "@types/send@0.17.4",
       "dependsOn": [
         "@types/mime@1.3.5",
-        "@types/node@22.8.4"
+        "@types/node@22.10.0"
       ]
     },
     {
       "ref": "@types/serve-static@1.15.7",
       "dependsOn": [
         "@types/http-errors@2.0.4",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "@types/send@0.17.4"
       ]
     },
     {
       "ref": "@types/http-proxy@1.17.15",
       "dependsOn": [
-        "@types/node@22.8.4"
+        "@types/node@22.10.0"
       ]
     },
     {
@@ -62566,7 +62402,7 @@
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
         "@types/jsdom@20.0.1",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "jest-mock@29.7.0",
         "jest-util@29.7.0",
         "jsdom@20.0.3"
@@ -62620,7 +62456,7 @@
         "needle@3.3.1",
         "parse-node-version@1.0.1",
         "less@4.2.0|source-map@0.6.1",
-        "tslib@2.8.0"
+        "tslib@2.8.1"
       ]
     },
     {
@@ -62686,7 +62522,7 @@
       "ref": "parse-node-version@1.0.1"
     },
     {
-      "ref": "tslib@2.8.0"
+      "ref": "tslib@2.8.1"
     },
     {
       "ref": "license-webpack-plugin@4.0.2",
@@ -62726,7 +62562,7 @@
         "@angular/compiler-cli@17.3.12",
         "@rollup/plugin-json@6.1.0",
         "@rollup/plugin-node-resolve@15.3.0",
-        "@rollup/wasm-node@4.24.3",
+        "@rollup/wasm-node@4.27.4",
         "ajv@8.12.0",
         "ansi-colors@4.1.3",
         "browserslist@4.24.2",
@@ -62745,10 +62581,10 @@
         "ora@5.4.1",
         "piscina@4.4.0",
         "postcss@8.4.35",
-        "rollup@4.24.3",
+        "rollup@4.27.4",
         "rxjs@7.8.1",
         "sass@1.77.6",
-        "tslib@2.8.0",
+        "tslib@2.8.1",
         "typescript@5.2.2"
       ]
     },
@@ -62900,14 +62736,14 @@
       "ref": "nice-napi@1.0.2",
       "dependsOn": [
         "node-addon-api@3.2.1",
-        "node-gyp-build@4.8.2"
+        "node-gyp-build@4.8.4"
       ]
     },
     {
       "ref": "node-addon-api@3.2.1"
     },
     {
-      "ref": "node-gyp-build@4.8.2"
+      "ref": "node-gyp-build@4.8.4"
     },
     {
       "ref": "postcss-loader@8.1.1",
@@ -62963,7 +62799,7 @@
     {
       "ref": "parse-json@5.2.0",
       "dependsOn": [
-        "@babel/code-frame@7.26.0",
+        "@babel/code-frame@7.26.2",
         "error-ex@1.3.2",
         "parse-json@5.2.0|json-parse-even-better-errors@2.3.1",
         "lines-and-columns@1.2.4"
@@ -62988,7 +62824,7 @@
       "ref": "jiti@1.21.6"
     },
     {
-      "ref": "nanoid@3.3.7"
+      "ref": "nanoid@3.3.8"
     },
     {
       "ref": "source-map-js@1.2.1"
@@ -63112,9 +62948,9 @@
       "ref": "fsevents@2.3.3"
     },
     {
-      "ref": "rollup@4.24.3",
+      "ref": "rollup@4.27.4",
       "dependsOn": [
-        "@rollup/rollup-darwin-arm64@4.24.3",
+        "@rollup/rollup-darwin-arm64@4.27.4",
         "@types/estree@1.0.6",
         "fsevents@2.3.3"
       ]
@@ -63167,21 +63003,21 @@
     {
       "ref": "@types/bonjour@3.5.13",
       "dependsOn": [
-        "@types/node@22.8.4"
+        "@types/node@22.10.0"
       ]
     },
     {
       "ref": "@types/connect-history-api-fallback@1.5.4",
       "dependsOn": [
-        "@types/express-serve-static-core@5.0.1",
-        "@types/node@22.8.4"
+        "@types/express-serve-static-core@5.0.2",
+        "@types/node@22.10.0"
       ]
     },
     {
-      "ref": "@types/express-serve-static-core@5.0.1",
+      "ref": "@types/express-serve-static-core@5.0.2",
       "dependsOn": [
-        "@types/node@22.8.4",
-        "@types/qs@6.9.16",
+        "@types/node@22.10.0",
+        "@types/qs@6.9.17",
         "@types/range-parser@1.2.7",
         "@types/send@0.17.4"
       ]
@@ -63201,20 +63037,20 @@
     {
       "ref": "@types/sockjs@0.3.36",
       "dependsOn": [
-        "@types/node@22.8.4"
+        "@types/node@22.10.0"
       ]
     },
     {
-      "ref": "@types/ws@8.5.12",
+      "ref": "@types/ws@8.5.13",
       "dependsOn": [
-        "@types/node@22.8.4"
+        "@types/node@22.10.0"
       ]
     },
     {
       "ref": "ansi-html-community@0.0.8"
     },
     {
-      "ref": "bonjour-service@1.2.1",
+      "ref": "bonjour-service@1.3.0",
       "dependsOn": [
         "fast-deep-equal@3.1.3",
         "multicast-dns@7.2.5"
@@ -63240,47 +63076,37 @@
       "ref": "thunky@1.1.0"
     },
     {
-      "ref": "compression@1.7.4",
+      "ref": "compression@1.7.5",
       "dependsOn": [
-        "accepts@1.3.8",
-        "bytes@3.0.0",
+        "bytes@3.1.2",
         "compressible@2.0.18",
-        "compression@1.7.4|debug@2.6.9",
+        "compression@1.7.5|debug@2.6.9",
+        "negotiator@0.6.4",
         "on-headers@1.0.2",
-        "compression@1.7.4|safe-buffer@5.1.2",
+        "safe-buffer@5.2.1",
         "vary@1.1.2"
       ]
     },
     {
-      "ref": "compression@1.7.4|debug@2.6.9",
+      "ref": "compression@1.7.5|debug@2.6.9",
       "dependsOn": [
-        "compression@1.7.4|ms@2.0.0"
+        "compression@1.7.5|ms@2.0.0"
       ]
     },
     {
-      "ref": "compression@1.7.4|ms@2.0.0"
+      "ref": "compression@1.7.5|ms@2.0.0"
     },
     {
-      "ref": "compression@1.7.4|safe-buffer@5.1.2"
-    },
-    {
-      "ref": "accepts@1.3.8",
-      "dependsOn": [
-        "mime-types@2.1.35",
-        "accepts@1.3.8|negotiator@0.6.3"
-      ]
-    },
-    {
-      "ref": "accepts@1.3.8|negotiator@0.6.3"
-    },
-    {
-      "ref": "bytes@3.0.0"
+      "ref": "bytes@3.1.2"
     },
     {
       "ref": "compressible@2.0.18",
       "dependsOn": [
         "mime-db@1.52.0"
       ]
+    },
+    {
+      "ref": "negotiator@0.6.4"
     },
     {
       "ref": "on-headers@1.0.2"
@@ -63300,7 +63126,7 @@
     {
       "ref": "execa@5.1.1",
       "dependsOn": [
-        "cross-spawn@7.0.3",
+        "cross-spawn@7.0.6",
         "get-stream@6.0.1",
         "human-signals@2.1.0",
         "is-stream@2.0.1",
@@ -63312,7 +63138,7 @@
       ]
     },
     {
-      "ref": "cross-spawn@7.0.3",
+      "ref": "cross-spawn@7.0.6",
       "dependsOn": [
         "path-key@3.1.1",
         "shebang-command@2.0.0",
@@ -63407,12 +63233,22 @@
       "ref": "express@4.21.1|ms@2.0.0"
     },
     {
+      "ref": "accepts@1.3.8",
+      "dependsOn": [
+        "mime-types@2.1.35",
+        "accepts@1.3.8|negotiator@0.6.3"
+      ]
+    },
+    {
+      "ref": "accepts@1.3.8|negotiator@0.6.3"
+    },
+    {
       "ref": "array-flatten@1.1.1"
     },
     {
       "ref": "body-parser@1.20.3",
       "dependsOn": [
-        "body-parser@1.20.3|bytes@3.1.2",
+        "bytes@3.1.2",
         "content-type@1.0.5",
         "body-parser@1.20.3|debug@2.6.9",
         "depd@2.0.0",
@@ -63425,9 +63261,6 @@
         "type-is@1.6.18",
         "unpipe@1.0.0"
       ]
-    },
-    {
-      "ref": "body-parser@1.20.3|bytes@3.1.2"
     },
     {
       "ref": "body-parser@1.20.3|debug@2.6.9",
@@ -63472,14 +63305,11 @@
     {
       "ref": "raw-body@2.5.2",
       "dependsOn": [
-        "raw-body@2.5.2|bytes@3.1.2",
+        "bytes@3.1.2",
         "http-errors@2.0.0",
         "iconv-lite@0.4.24",
         "unpipe@1.0.0"
       ]
-    },
-    {
-      "ref": "raw-body@2.5.2|bytes@3.1.2"
     },
     {
       "ref": "unpipe@1.0.0"
@@ -63579,11 +63409,11 @@
         "call-bind@1.0.7",
         "es-errors@1.3.0",
         "get-intrinsic@1.2.4",
-        "object-inspect@1.13.2"
+        "object-inspect@1.13.3"
       ]
     },
     {
-      "ref": "object-inspect@1.13.2"
+      "ref": "object-inspect@1.13.3"
     },
     {
       "ref": "send@0.19.0",
@@ -63675,7 +63505,7 @@
     {
       "ref": "@types/node-forge@1.3.11",
       "dependsOn": [
-        "@types/node@22.8.4"
+        "@types/node@22.10.0"
       ]
     },
     {
@@ -63912,106 +63742,106 @@
       "ref": "@types/estree@1.0.6"
     },
     {
-      "ref": "@webassemblyjs/ast@1.12.1",
+      "ref": "@webassemblyjs/ast@1.14.1",
       "dependsOn": [
-        "@webassemblyjs/helper-numbers@1.11.6",
-        "@webassemblyjs/helper-wasm-bytecode@1.11.6"
+        "@webassemblyjs/helper-numbers@1.13.2",
+        "@webassemblyjs/helper-wasm-bytecode@1.13.2"
       ]
     },
     {
-      "ref": "@webassemblyjs/helper-numbers@1.11.6",
+      "ref": "@webassemblyjs/helper-numbers@1.13.2",
       "dependsOn": [
-        "@webassemblyjs/floating-point-hex-parser@1.11.6",
-        "@webassemblyjs/helper-api-error@1.11.6",
+        "@webassemblyjs/floating-point-hex-parser@1.13.2",
+        "@webassemblyjs/helper-api-error@1.13.2",
         "@xtuc/long@4.2.2"
       ]
     },
     {
-      "ref": "@webassemblyjs/floating-point-hex-parser@1.11.6"
+      "ref": "@webassemblyjs/floating-point-hex-parser@1.13.2"
     },
     {
-      "ref": "@webassemblyjs/helper-api-error@1.11.6"
+      "ref": "@webassemblyjs/helper-api-error@1.13.2"
     },
     {
       "ref": "@xtuc/long@4.2.2"
     },
     {
-      "ref": "@webassemblyjs/helper-wasm-bytecode@1.11.6"
+      "ref": "@webassemblyjs/helper-wasm-bytecode@1.13.2"
     },
     {
-      "ref": "@webassemblyjs/wasm-edit@1.12.1",
+      "ref": "@webassemblyjs/wasm-edit@1.14.1",
       "dependsOn": [
-        "@webassemblyjs/ast@1.12.1",
-        "@webassemblyjs/helper-buffer@1.12.1",
-        "@webassemblyjs/helper-wasm-bytecode@1.11.6",
-        "@webassemblyjs/helper-wasm-section@1.12.1",
-        "@webassemblyjs/wasm-gen@1.12.1",
-        "@webassemblyjs/wasm-opt@1.12.1",
-        "@webassemblyjs/wasm-parser@1.12.1",
-        "@webassemblyjs/wast-printer@1.12.1"
+        "@webassemblyjs/ast@1.14.1",
+        "@webassemblyjs/helper-buffer@1.14.1",
+        "@webassemblyjs/helper-wasm-bytecode@1.13.2",
+        "@webassemblyjs/helper-wasm-section@1.14.1",
+        "@webassemblyjs/wasm-gen@1.14.1",
+        "@webassemblyjs/wasm-opt@1.14.1",
+        "@webassemblyjs/wasm-parser@1.14.1",
+        "@webassemblyjs/wast-printer@1.14.1"
       ]
     },
     {
-      "ref": "@webassemblyjs/helper-buffer@1.12.1"
+      "ref": "@webassemblyjs/helper-buffer@1.14.1"
     },
     {
-      "ref": "@webassemblyjs/helper-wasm-section@1.12.1",
+      "ref": "@webassemblyjs/helper-wasm-section@1.14.1",
       "dependsOn": [
-        "@webassemblyjs/ast@1.12.1",
-        "@webassemblyjs/helper-buffer@1.12.1",
-        "@webassemblyjs/helper-wasm-bytecode@1.11.6",
-        "@webassemblyjs/wasm-gen@1.12.1"
+        "@webassemblyjs/ast@1.14.1",
+        "@webassemblyjs/helper-buffer@1.14.1",
+        "@webassemblyjs/helper-wasm-bytecode@1.13.2",
+        "@webassemblyjs/wasm-gen@1.14.1"
       ]
     },
     {
-      "ref": "@webassemblyjs/wasm-gen@1.12.1",
+      "ref": "@webassemblyjs/wasm-gen@1.14.1",
       "dependsOn": [
-        "@webassemblyjs/ast@1.12.1",
-        "@webassemblyjs/helper-wasm-bytecode@1.11.6",
-        "@webassemblyjs/ieee754@1.11.6",
-        "@webassemblyjs/leb128@1.11.6",
-        "@webassemblyjs/utf8@1.11.6"
+        "@webassemblyjs/ast@1.14.1",
+        "@webassemblyjs/helper-wasm-bytecode@1.13.2",
+        "@webassemblyjs/ieee754@1.13.2",
+        "@webassemblyjs/leb128@1.13.2",
+        "@webassemblyjs/utf8@1.13.2"
       ]
     },
     {
-      "ref": "@webassemblyjs/ieee754@1.11.6",
+      "ref": "@webassemblyjs/ieee754@1.13.2",
       "dependsOn": [
         "@xtuc/ieee754@1.2.0"
       ]
     },
     {
-      "ref": "@webassemblyjs/leb128@1.11.6",
+      "ref": "@webassemblyjs/leb128@1.13.2",
       "dependsOn": [
         "@xtuc/long@4.2.2"
       ]
     },
     {
-      "ref": "@webassemblyjs/utf8@1.11.6"
+      "ref": "@webassemblyjs/utf8@1.13.2"
     },
     {
-      "ref": "@webassemblyjs/wasm-opt@1.12.1",
+      "ref": "@webassemblyjs/wasm-opt@1.14.1",
       "dependsOn": [
-        "@webassemblyjs/ast@1.12.1",
-        "@webassemblyjs/helper-buffer@1.12.1",
-        "@webassemblyjs/wasm-gen@1.12.1",
-        "@webassemblyjs/wasm-parser@1.12.1"
+        "@webassemblyjs/ast@1.14.1",
+        "@webassemblyjs/helper-buffer@1.14.1",
+        "@webassemblyjs/wasm-gen@1.14.1",
+        "@webassemblyjs/wasm-parser@1.14.1"
       ]
     },
     {
-      "ref": "@webassemblyjs/wasm-parser@1.12.1",
+      "ref": "@webassemblyjs/wasm-parser@1.14.1",
       "dependsOn": [
-        "@webassemblyjs/ast@1.12.1",
-        "@webassemblyjs/helper-api-error@1.11.6",
-        "@webassemblyjs/helper-wasm-bytecode@1.11.6",
-        "@webassemblyjs/ieee754@1.11.6",
-        "@webassemblyjs/leb128@1.11.6",
-        "@webassemblyjs/utf8@1.11.6"
+        "@webassemblyjs/ast@1.14.1",
+        "@webassemblyjs/helper-api-error@1.13.2",
+        "@webassemblyjs/helper-wasm-bytecode@1.13.2",
+        "@webassemblyjs/ieee754@1.13.2",
+        "@webassemblyjs/leb128@1.13.2",
+        "@webassemblyjs/utf8@1.13.2"
       ]
     },
     {
-      "ref": "@webassemblyjs/wast-printer@1.12.1",
+      "ref": "@webassemblyjs/wast-printer@1.14.1",
       "dependsOn": [
-        "@webassemblyjs/ast@1.12.1",
+        "@webassemblyjs/ast@1.14.1",
         "@xtuc/long@4.2.2"
       ]
     },
@@ -64085,7 +63915,7 @@
     {
       "ref": "terser-webpack-plugin@5.3.10|jest-worker@27.5.1",
       "dependsOn": [
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "merge-stream@2.0.0",
         "terser-webpack-plugin@5.3.10|supports-color@8.1.1"
       ]
@@ -64126,14 +63956,14 @@
       "ref": "@angular/animations@17.3.12",
       "dependsOn": [
         "@angular/core@17.3.12",
-        "tslib@2.8.0"
+        "tslib@2.8.1"
       ]
     },
     {
       "ref": "@angular/core@17.3.12",
       "dependsOn": [
         "rxjs@7.8.1",
-        "tslib@2.8.0",
+        "tslib@2.8.1",
         "zone.js@0.14.10"
       ]
     },
@@ -64382,7 +64212,7 @@
     {
       "ref": "foreground-child@3.3.0",
       "dependsOn": [
-        "cross-spawn@7.0.3",
+        "cross-spawn@7.0.6",
         "foreground-child@3.3.0|signal-exit@4.1.0"
       ]
     },
@@ -64726,9 +64556,6 @@
       "ref": "minipass-pipeline@1.2.4|yallist@4.0.0"
     },
     {
-      "ref": "negotiator@0.6.4"
-    },
-    {
       "ref": "ssri@10.0.6",
       "dependsOn": [
         "minipass@7.1.2"
@@ -64989,14 +64816,14 @@
       "dependsOn": [
         "@angular/core@17.3.12",
         "rxjs@7.8.1",
-        "tslib@2.8.0"
+        "tslib@2.8.1"
       ]
     },
     {
       "ref": "@angular/compiler@17.3.12",
       "dependsOn": [
         "@angular/core@17.3.12",
-        "tslib@2.8.0"
+        "tslib@2.8.1"
       ]
     },
     {
@@ -65055,7 +64882,7 @@
         "@angular/core@17.3.12",
         "@angular/platform-browser@17.3.12",
         "rxjs@7.8.1",
-        "tslib@2.8.0"
+        "tslib@2.8.1"
       ]
     },
     {
@@ -65064,7 +64891,7 @@
         "@angular/animations@17.3.12",
         "@angular/common@17.3.12",
         "@angular/core@17.3.12",
-        "tslib@2.8.0"
+        "tslib@2.8.1"
       ]
     },
     {
@@ -65074,13 +64901,13 @@
         "@angular/compiler@17.3.12",
         "@angular/core@17.3.12",
         "@angular/platform-browser@17.3.12",
-        "tslib@2.8.0"
+        "tslib@2.8.1"
       ]
     },
     {
       "ref": "@cyclonedx/cyclonedx-npm@1.19.3",
       "dependsOn": [
-        "@cyclonedx/cyclonedx-library@6.11.1",
+        "@cyclonedx/cyclonedx-library@6.13.0",
         "commander@10.0.1",
         "normalize-package-data@6.0.2",
         "packageurl-js@1.2.1",
@@ -65088,10 +64915,10 @@
       ]
     },
     {
-      "ref": "@cyclonedx/cyclonedx-library@6.11.1",
+      "ref": "@cyclonedx/cyclonedx-library@6.13.0",
       "dependsOn": [
         "ajv-formats-draft2019@1.6.1",
-        "@cyclonedx/cyclonedx-library@6.11.1|ajv-formats@3.0.1",
+        "@cyclonedx/cyclonedx-library@6.13.0|ajv-formats@3.0.1",
         "ajv@8.12.0",
         "packageurl-js@1.2.1",
         "spdx-expression-parse@4.0.0",
@@ -65099,7 +64926,7 @@
       ]
     },
     {
-      "ref": "@cyclonedx/cyclonedx-library@6.11.1|ajv-formats@3.0.1",
+      "ref": "@cyclonedx/cyclonedx-library@6.13.0|ajv-formats@3.0.1",
       "dependsOn": [
         "ajv@8.12.0"
       ]
@@ -65304,7 +65131,7 @@
     {
       "ref": "jest-message-util@29.7.0",
       "dependsOn": [
-        "@babel/code-frame@7.26.0",
+        "@babel/code-frame@7.26.2",
         "@jest/types@29.6.3",
         "@types/stack-utils@2.0.3",
         "chalk@4.1.2",
@@ -65324,7 +65151,7 @@
         "@jest/schemas@29.6.3",
         "@types/istanbul-lib-coverage@2.0.6",
         "@types/istanbul-reports@3.0.4",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "@types/yargs@17.0.33",
         "chalk@4.1.2"
       ]
@@ -65345,7 +65172,7 @@
       "ref": "jest-util@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "chalk@4.1.2",
         "ci-info@3.9.0",
         "graceful-fs@4.2.11",
@@ -65368,7 +65195,7 @@
       "ref": "react-is@18.3.1"
     },
     {
-      "ref": "undici-types@6.19.8"
+      "ref": "undici-types@6.20.0"
     },
     {
       "ref": "@types/trusted-types@2.0.7"
@@ -65512,7 +65339,7 @@
       "dependsOn": [
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "jest-mock@29.7.0"
       ]
     },
@@ -65521,7 +65348,7 @@
       "dependsOn": [
         "@jest/types@29.6.3",
         "@sinonjs/fake-timers@10.3.0",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "jest-message-util@29.7.0",
         "jest-mock@29.7.0",
         "jest-util@29.7.0"
@@ -65531,7 +65358,7 @@
       "ref": "jest-mock@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "jest-util@29.7.0"
       ]
     },
@@ -65577,7 +65404,7 @@
     {
       "ref": "@types/jsdom@20.0.1",
       "dependsOn": [
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "@types/tough-cookie@4.0.5",
         "parse5@7.2.1"
       ]
@@ -65781,14 +65608,17 @@
     {
       "ref": "tough-cookie@4.1.4",
       "dependsOn": [
-        "psl@1.9.0",
+        "psl@1.13.0",
         "punycode@2.3.1",
         "universalify@0.2.0",
         "url-parse@1.5.10"
       ]
     },
     {
-      "ref": "psl@1.9.0"
+      "ref": "psl@1.13.0",
+      "dependsOn": [
+        "punycode@2.3.1"
+      ]
     },
     {
       "ref": "universalify@0.2.0"
@@ -65819,7 +65649,7 @@
       ]
     },
     {
-      "ref": "jest-preset-angular@14.2.4",
+      "ref": "jest-preset-angular@14.3.3",
       "dependsOn": [
         "@angular-devkit/build-angular@17.3.11",
         "@angular/compiler-cli@17.3.12",
@@ -65873,7 +65703,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "ansi-escapes@4.3.2",
         "chalk@4.1.2",
         "ci-info@3.9.0",
@@ -65905,7 +65735,7 @@
       "ref": "@jest/console@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "chalk@4.1.2",
         "jest-message-util@29.7.0",
         "jest-util@29.7.0",
@@ -65924,7 +65754,7 @@
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
         "@jridgewell/trace-mapping@0.3.25",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "chalk@4.1.2",
         "collect-v8-coverage@1.0.2",
         "exit@0.1.2",
@@ -65948,7 +65778,7 @@
       "ref": "@jest/reporters@29.7.0|istanbul-lib-instrument@6.0.3",
       "dependsOn": [
         "@babel/core@7.24.0",
-        "@babel/parser@7.26.1",
+        "@babel/parser@7.26.2",
         "@istanbuljs/schema@0.1.3",
         "istanbul-lib-coverage@3.2.2",
         "semver@7.6.0"
@@ -66039,7 +65869,7 @@
     {
       "ref": "jest-worker@29.7.0",
       "dependsOn": [
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "jest-util@29.7.0",
         "merge-stream@2.0.0",
         "jest-worker@29.7.0|supports-color@8.1.1"
@@ -66095,7 +65925,7 @@
         "@babel/core@7.24.0",
         "@jest/test-sequencer@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "babel-jest@29.7.0",
         "chalk@4.1.2",
         "ci-info@3.9.0",
@@ -66138,7 +65968,7 @@
       "dependsOn": [
         "@jest/types@29.6.3",
         "@types/graceful-fs@4.1.9",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "anymatch@3.1.3",
         "fb-watchman@2.0.2",
         "fsevents@2.3.3",
@@ -66176,7 +66006,7 @@
         "@jest/expect@29.7.0",
         "@jest/test-result@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "chalk@4.1.2",
         "co@4.6.0",
         "dedent@1.5.3",
@@ -66258,7 +66088,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "chalk@4.1.2",
         "cjs-module-lexer@1.4.1",
         "collect-v8-coverage@1.0.2",
@@ -66287,7 +66117,7 @@
         "@jest/environment@29.7.0",
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "jest-mock@29.7.0",
         "jest-util@29.7.0"
       ]
@@ -66320,7 +66150,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "chalk@4.1.2",
         "emittery@0.13.1",
         "graceful-fs@4.2.11",
@@ -66373,7 +66203,7 @@
         "@tsconfig/node12@1.0.11",
         "@tsconfig/node14@1.0.3",
         "@tsconfig/node16@1.0.4",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "acorn-walk@8.3.4",
         "acorn@8.14.0",
         "arg@4.1.3",
@@ -66388,7 +66218,7 @@
     {
       "ref": "@types/graceful-fs@4.1.9",
       "dependsOn": [
-        "@types/node@22.8.4"
+        "@types/node@22.10.0"
       ]
     },
     {
@@ -66461,7 +66291,7 @@
       "dependsOn": [
         "@jest/test-result@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@22.8.4",
+        "@types/node@22.10.0",
         "ansi-escapes@4.3.2",
         "chalk@4.1.2",
         "emittery@0.13.1",
@@ -66604,7 +66434,7 @@
       "ref": "@rollup/plugin-json@6.1.0",
       "dependsOn": [
         "@rollup/pluginutils@5.1.3",
-        "rollup@4.24.3"
+        "rollup@4.27.4"
       ]
     },
     {
@@ -66613,7 +66443,7 @@
         "@types/estree@1.0.6",
         "estree-walker@2.0.2",
         "@rollup/pluginutils@5.1.3|picomatch@4.0.2",
-        "rollup@4.24.3"
+        "rollup@4.27.4"
       ]
     },
     {
@@ -66630,7 +66460,7 @@
         "deepmerge@4.3.1",
         "is-module@1.0.0",
         "resolve@1.22.8",
-        "rollup@4.24.3"
+        "rollup@4.27.4"
       ]
     },
     {
@@ -66640,7 +66470,7 @@
       "ref": "is-module@1.0.0"
     },
     {
-      "ref": "@rollup/wasm-node@4.24.3",
+      "ref": "@rollup/wasm-node@4.27.4",
       "dependsOn": [
         "@types/estree@1.0.6",
         "fsevents@2.3.3"
@@ -66661,9 +66491,9 @@
     {
       "ref": "@isaacs/cliui@8.0.2",
       "dependsOn": [
-        "BomRef.ng5ikb7ji8o.g2um6t8dtt",
+        "BomRef.mk51c9j51m8.kjafs1n7j7o",
         "@isaacs/cliui@8.0.2|string-width@5.1.2",
-        "BomRef.jcd4qjqo6j8.5sev8qbllt",
+        "BomRef.8bekp9g7b2.7jeubdd89",
         "@isaacs/cliui@8.0.2|strip-ansi@7.1.0",
         "wrap-ansi@7.0.0",
         "@isaacs/cliui@8.0.2|wrap-ansi@8.1.0"
@@ -66701,7 +66531,7 @@
       "ref": "@isaacs/cliui@8.0.2|ansi-styles@6.2.1"
     },
     {
-      "ref": "BomRef.ng5ikb7ji8o.g2um6t8dtt",
+      "ref": "BomRef.mk51c9j51m8.kjafs1n7j7o",
       "dependsOn": [
         "emoji-regex@8.0.0",
         "is-fullwidth-code-point@3.0.0",
@@ -66712,7 +66542,7 @@
       "ref": "eastasianwidth@0.2.0"
     },
     {
-      "ref": "BomRef.jcd4qjqo6j8.5sev8qbllt",
+      "ref": "BomRef.8bekp9g7b2.7jeubdd89",
       "dependsOn": [
         "ansi-regex@5.0.1"
       ]
@@ -66777,11 +66607,11 @@
     {
       "ref": "injection-js@2.4.0",
       "dependsOn": [
-        "tslib@2.8.0"
+        "tslib@2.8.1"
       ]
     },
     {
-      "ref": "@rollup/rollup-darwin-arm64@4.24.3"
+      "ref": "@rollup/rollup-darwin-arm64@4.27.4"
     },
     {
       "ref": "properties-reader@2.3.0",
@@ -66802,7 +66632,7 @@
     {
       "ref": "@types/babel__core@7.20.5",
       "dependsOn": [
-        "@babel/parser@7.26.1",
+        "@babel/parser@7.26.2",
         "@babel/types@7.26.0",
         "@types/babel__generator@7.6.8",
         "@types/babel__template@7.4.4",
@@ -66818,7 +66648,7 @@
     {
       "ref": "@types/babel__template@7.4.4",
       "dependsOn": [
-        "@babel/parser@7.26.1",
+        "@babel/parser@7.26.2",
         "@babel/types@7.26.0"
       ]
     },
@@ -66930,7 +66760,7 @@
     {
       "ref": "tslint@6.1.3",
       "dependsOn": [
-        "@babel/code-frame@7.26.0",
+        "@babel/code-frame@7.26.2",
         "builtin-modules@1.1.1",
         "tslint@6.1.3|chalk@2.4.2",
         "tslint@6.1.3|commander@2.20.3",

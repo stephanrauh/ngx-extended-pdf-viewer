@@ -11351,7 +11351,7 @@ function getDocument(src = {}) {
   }
   const docParams = {
     docId,
-    apiVersion: "4.7.697",
+    apiVersion: "4.7.698",
     data,
     password,
     disableAutoFetch,
@@ -13147,8 +13147,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.7.697";
-const build = "59c438ae0";
+const version = "4.7.698";
+const build = "0ad1a94c9";
 
 ;// ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -18398,30 +18398,9 @@ class HighlightEditor extends AnnotationEditor {
 
 
 
-class PointerType {
-  static current = null;
-  constructor(editor) {
-    if (PointerType.current === null) {
-      PointerType.current = "";
-      window.addEventListener("pointerdown", this.windowPointerDown, true);
-    }
-  }
-  destroy() {
-    if (PointerType.current !== null) {
-      window.removeEventListener("pointerdown", this.windowPointerDown, true);
-      PointerType.current = null;
-    }
-  }
-  windowPointerDown(event) {
-    PointerType.current = event.pointerType;
-    return true;
-  }
-}
-const pointerType = new PointerType();
 class InkEditor extends AnnotationEditor {
   #baseHeight = 0;
   #baseWidth = 0;
-  #boundCanvasTouchMove = this.canvasTouchMove.bind(this);
   #canvasContextMenuTimeoutId = null;
   #currentPath2D = new Path2D();
   #disableEditing = false;
@@ -18455,13 +18434,6 @@ class InkEditor extends AnnotationEditor {
     this.x = 0;
     this.y = 0;
     this._willKeepAspectRatio = true;
-    this.editorPointerType = null;
-  }
-  initializePointerType() {
-    this.editorPointerType = PointerType.current;
-  }
-  resetPointerType() {
-    this.editorPointerType = null;
   }
   static initialize(l10n, uiManager) {
     AnnotationEditor.initialize(l10n, uiManager);
@@ -18625,9 +18597,7 @@ class InkEditor extends AnnotationEditor {
     if (this.#disableEditing || this.canvas === null) {
       return;
     }
-    console.log("enableInitMode");
     super.enableEditMode();
-    setTimeout(() => this.initializePointerType());
     this._isDraggable = false;
     this.#addPointerdownListener();
   }
@@ -18636,7 +18606,6 @@ class InkEditor extends AnnotationEditor {
       return;
     }
     super.disableEditMode();
-    this.resetPointerType();
     this._isDraggable = !this.isEmpty();
     this.div.classList.remove("editing");
     this.#removePointerdownListener();
@@ -18679,7 +18648,6 @@ class InkEditor extends AnnotationEditor {
     ctx.strokeStyle = `${color}${opacityToHex(opacity)}`;
   }
   #startDrawing(x, y) {
-    console.log("Start Drawing");
     this.canvas.addEventListener("contextmenu", noContextMenu, {
       signal: this._uiManager._signal
     });
@@ -18694,13 +18662,6 @@ class InkEditor extends AnnotationEditor {
     });
     this.canvas.addEventListener("pointerup", this.canvasPointerup.bind(this), {
       signal
-    });
-    this.canvas.addEventListener("pointerup", this.canvasPointerup.bind(this), {
-      signal
-    });
-    this.canvas.addEventListener("touchmove", this.#boundCanvasTouchMove, {
-      signal: this._uiManager._signal,
-      passive: false
     });
     this.isEditing = true;
     if (!this.#isCanvasInitialized) {
@@ -18877,7 +18838,6 @@ class InkEditor extends AnnotationEditor {
       return;
     }
     super.commit();
-    console.log("Commit");
     this.isEditing = false;
     this.disableEditMode();
     this.setInForeground();
@@ -18913,7 +18873,7 @@ class InkEditor extends AnnotationEditor {
     this.pointerdownAC = null;
   }
   canvasPointerdown(event) {
-    if (event.button !== 0 || !this.isInEditMode() || this.#disableEditing || this.editorPointerType !== event.pointerType) {
+    if (event.button !== 0 || !this.isInEditMode() || this.#disableEditing) {
       return;
     }
     this.setInForeground();
@@ -18930,25 +18890,15 @@ class InkEditor extends AnnotationEditor {
     this.#draw(event.offsetX, event.offsetY);
   }
   canvasPointerup(event) {
-    console.log("Pointer Up");
     event.preventDefault();
     this.#endDrawing(event);
   }
   canvasPointerleave(event) {
     this.#endDrawing(event);
   }
-  canvasTouchMove(event) {
-    console.log("Touch Move " + (!this.isInEditMode() || this.#disableEditing || this.editorPointerType !== PointerType.current));
-    if (!this.isInEditMode() || this.#disableEditing || this.editorPointerType !== PointerType.current) {
-      return;
-    }
-    event.preventDefault();
-  }
   #endDrawing(event) {
     this.#drawingAC?.abort();
     this.#drawingAC = null;
-    console.log("End Drawing");
-    this.canvas.removeEventListener("touchmove", this.#boundCanvasTouchMove);
     this.#addPointerdownListener();
     if (this.#canvasContextMenuTimeoutId) {
       clearTimeout(this.#canvasContextMenuTimeoutId);
@@ -20796,8 +20746,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.7.697";
-const pdfjsBuild = "59c438ae0";
+const pdfjsVersion = "4.7.698";
+const pdfjsBuild = "0ad1a94c9";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -22298,7 +22248,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '22.0.0-alpha.10';
+const ngxExtendedPdfViewerVersion = '22.0.0-alpha.11';
 ;// ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -35226,7 +35176,7 @@ class PDFViewer {
   #maxZoom = MAX_SCALE;
   #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.7.697";
+    const viewerVersion = "4.7.698";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -40132,8 +40082,8 @@ PDFViewerApplication.serviceWorkerOptions = ServiceWorkerOptions;
 
 
 
-const pdfjsVersion = "4.7.697";
-const pdfjsBuild = "59c438ae0";
+const pdfjsVersion = "4.7.698";
+const pdfjsBuild = "0ad1a94c9";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
