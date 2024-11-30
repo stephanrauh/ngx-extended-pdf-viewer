@@ -3,9 +3,9 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
   "version": 1,
-  "serialNumber": "urn:uuid:aa34c603-19f9-4f75-ba5f-3572b49512ad",
+  "serialNumber": "urn:uuid:f6bf7097-8c32-4b24-b43f-c3f3ce46256a",
   "metadata": {
-    "timestamp": "2024-11-26T21:10:53.816Z",
+    "timestamp": "2024-11-30T12:17:16.003Z",
     "tools": [
       {
         "name": "npm",
@@ -12587,8 +12587,8 @@
     {
       "type": "library",
       "name": "electron-to-chromium",
-      "version": "1.5.65",
-      "bom-ref": "electron-to-chromium@1.5.65",
+      "version": "1.5.67",
+      "bom-ref": "electron-to-chromium@1.5.67",
       "author": "Kilian Valkhof",
       "description": "Provides a list of electron-to-chromium version mappings",
       "licenses": [
@@ -12598,7 +12598,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/electron-to-chromium@1.5.65",
+      "purl": "pkg:npm/electron-to-chromium@1.5.67",
       "externalReferences": [
         {
           "url": "git+https://github.com/kilian/electron-to-chromium.git",
@@ -12616,12 +12616,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.65.tgz",
+          "url": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.67.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "3d6573063821c7bff0a29ea7db6bd2d8c2d4f2d28677843dd5a0841a11bf4d8996e8f3f939c49771d9f14ded4d36dd13eba37c0fa8f1878902f14b1dcce19a23"
+              "content": "9f3f3c34d06c0fb910480186272a7c852eb148fb56c2a368800d268ed7369d461e11fde75112bdaa9575f13b817439840e0556a2d4bc5a4cdff95e7675243f2d"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -16209,8 +16209,8 @@
       "type": "library",
       "name": "node",
       "group": "@types",
-      "version": "22.10.0",
-      "bom-ref": "@types/node@22.10.0",
+      "version": "22.10.1",
+      "bom-ref": "@types/node@22.10.1",
       "description": "TypeScript definitions for node",
       "licenses": [
         {
@@ -16219,7 +16219,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/%40types/node@22.10.0#types/node",
+      "purl": "pkg:npm/%40types/node@22.10.1#types/node",
       "externalReferences": [
         {
           "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/node",
@@ -16237,12 +16237,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/@types/node/-/node-22.10.0.tgz",
+          "url": "https://registry.npmjs.org/@types/node/-/node-22.10.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "5c2ef47116551251477c8501e3416064e05b80960528a31ae676fd97173062cb451bf322fbf6346c64beaece839a19a4a6ae299cd88b8ae6406dcd366023a798"
+              "content": "a8a82c5307c7655d960962c09d53f526a9e913a226ea1dd8d3e7d880c4dab0d43b57ef82057e4e4f56acd20d1ff8ecae6db16a85fe9754d22c98de0822112019"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -17668,8 +17668,8 @@
     {
       "type": "library",
       "name": "gopd",
-      "version": "1.0.1",
-      "bom-ref": "gopd@1.0.1",
+      "version": "1.1.0",
+      "bom-ref": "gopd@1.1.0",
       "author": "Jordan Harband",
       "description": "`Object.getOwnPropertyDescriptor`, but accounts for IE's broken implementation.",
       "licenses": [
@@ -17679,7 +17679,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/gopd@1.0.1",
+      "purl": "pkg:npm/gopd@1.1.0",
       "externalReferences": [
         {
           "url": "git+https://github.com/ljharb/gopd.git",
@@ -17697,12 +17697,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/gopd/-/gopd-1.0.1.tgz",
+          "url": "https://registry.npmjs.org/gopd/-/gopd-1.1.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "77ae5b36521a771be96ff03669b55d96a2aa579eb78ee4676755ad93ab35b0847cb8db1747bd31a88cd5ab155fd5e4ea0ee9f04f632473311e69ecc2293661c0"
+              "content": "150a15427a9c764e2154ce093757aba266ae9f88ae4b7e284ad91d94b10d2dda542ecb90713c978fcc3b6b286e51f3f011867564ea283934fa7dd03d566c7f44"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -30037,8 +30037,8 @@
     {
       "type": "library",
       "name": "shell-quote",
-      "version": "1.8.1",
-      "bom-ref": "shell-quote@1.8.1",
+      "version": "1.8.2",
+      "bom-ref": "shell-quote@1.8.2",
       "author": "James Halliday",
       "description": "quote and parse shell commands",
       "licenses": [
@@ -30048,7 +30048,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/shell-quote@1.8.1",
+      "purl": "pkg:npm/shell-quote@1.8.2",
       "externalReferences": [
         {
           "url": "git+ssh://git@github.com/ljharb/shell-quote.git",
@@ -30066,12 +30066,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/shell-quote/-/shell-quote-1.8.1.tgz",
+          "url": "https://registry.npmjs.org/shell-quote/-/shell-quote-1.8.2.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "ea3d56f65d6202cff8c58048d5260e559c857028acf5be0a08b43c7e00061b4ed0bf36912d555142f032f39c8d9a66528d88e0e0c5a1e2036f94fba353fe4ba4"
+              "content": "033a8aa462a3ae3ec433aaca55010fa41dbcf2809f9eb108bb2a13f5cc85e279866bb57c664e9fed146a622b17f17f66f90edb77adf66995b8932ec485b433b4"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -49744,8 +49744,8 @@
     {
       "type": "library",
       "name": "nwsapi",
-      "version": "2.2.13",
-      "bom-ref": "nwsapi@2.2.13",
+      "version": "2.2.16",
+      "bom-ref": "nwsapi@2.2.16",
       "author": "Diego Perini",
       "description": "Fast CSS Selectors API Engine",
       "licenses": [
@@ -49761,7 +49761,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/nwsapi@2.2.13",
+      "purl": "pkg:npm/nwsapi@2.2.16",
       "externalReferences": [
         {
           "url": "git://github.com/dperini/nwsapi.git",
@@ -49779,12 +49779,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/nwsapi/-/nwsapi-2.2.13.tgz",
+          "url": "https://registry.npmjs.org/nwsapi/-/nwsapi-2.2.16.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "713181f69b69f5d63d03955b3127bb7d005c97fb6ddb655ca9dabcf9e37ddeb6e53ae13468216ee1a676bccc1cb7fdadfa5167a2c9bc464416d48d0e99bd54b5"
+              "content": "17523f6e2983a63de771a34385fc8c5ae16a9900c1c0307416881cdaaa4bdc15af910b5e143ffc0735ae21197cdebab40d77e6f121adfc71612d76729634d771"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -50020,8 +50020,8 @@
     {
       "type": "library",
       "name": "psl",
-      "version": "1.13.0",
-      "bom-ref": "psl@1.13.0",
+      "version": "1.14.0",
+      "bom-ref": "psl@1.14.0",
       "author": "Lupo Montero",
       "description": "Domain name parser based on the Public Suffix List",
       "licenses": [
@@ -50031,7 +50031,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/psl@1.13.0",
+      "purl": "pkg:npm/psl@1.14.0",
       "externalReferences": [
         {
           "url": "git+ssh://git@github.com/lupomontero/psl.git",
@@ -50049,12 +50049,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/psl/-/psl-1.13.0.tgz",
+          "url": "https://registry.npmjs.org/psl/-/psl-1.14.0.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "045c26157889a05aa552967942cb2896fd790ccc9cf3881305db35063b15d417d7128d54cb20fb1ac98debb9fb27beee461a12356d405ed5ca3cb7011509fd03"
+              "content": "4b29356e77fa7d167dc10b34dc0b4a24770cd7670a6ce2e8f4bf09b4209d623e7f0d3b07993c9733804ae68b96786d8fea46789e616fb8d4ddb5aa9fa1b08e0a"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -50397,8 +50397,8 @@
     {
       "type": "library",
       "name": "jest-preset-angular",
-      "version": "14.3.3",
-      "bom-ref": "jest-preset-angular@14.3.3",
+      "version": "14.4.1",
+      "bom-ref": "jest-preset-angular@14.4.1",
       "author": "Michał Pierzchała",
       "description": "Jest preset configuration for Angular projects",
       "licenses": [
@@ -50408,7 +50408,7 @@
           }
         }
       ],
-      "purl": "pkg:npm/jest-preset-angular@14.3.3",
+      "purl": "pkg:npm/jest-preset-angular@14.4.1",
       "externalReferences": [
         {
           "url": "git+https://github.com/thymikee/jest-preset-angular.git",
@@ -50426,12 +50426,12 @@
           "comment": "as detected from PackageJson property \"bugs.url\""
         },
         {
-          "url": "https://registry.npmjs.org/jest-preset-angular/-/jest-preset-angular-14.3.3.tgz",
+          "url": "https://registry.npmjs.org/jest-preset-angular/-/jest-preset-angular-14.4.1.tgz",
           "type": "distribution",
           "hashes": [
             {
               "alg": "SHA-512",
-              "content": "1b251f64b9318fb4dbd1af6409211d8c86781ed57307b461fbfe877ec60d8a312a5bcf3bbb2677149f07cb499786313763fc3c419239ed48c9a86e835a83f50d"
+              "content": "e9004ff5237e5558a58217398635b3278641ac10780e39767cee6eca326121612afebf76e797c0c833477e88a07546f1de5e0c455c30ca24cc5d1b050191385d"
             }
           ],
           "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
@@ -56555,7 +56555,7 @@
       "type": "library",
       "name": "string-width",
       "version": "4.2.3",
-      "bom-ref": "BomRef.mk51c9j51m8.kjafs1n7j7o",
+      "bom-ref": "BomRef.svpe06dr938.odta40u3n9o",
       "author": "Sindre Sorhus",
       "description": "Get the visual width of a string - the number of columns required to display it",
       "licenses": [
@@ -56663,7 +56663,7 @@
       "type": "library",
       "name": "strip-ansi",
       "version": "6.0.1",
-      "bom-ref": "BomRef.8bekp9g7b2.7jeubdd89",
+      "bom-ref": "BomRef.9f52dnk4tlg.if2ckdn82l",
       "author": "Sindre Sorhus",
       "description": "Strip ANSI escape codes from a string",
       "licenses": [
@@ -59975,12 +59975,12 @@
         "@schematics/angular@17.3.11",
         "@types/estree@1.0.6",
         "@types/jest@29.5.14",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "@types/trusted-types@2.0.7",
         "copyfiles@2.4.1",
         "fsevents@2.3.3",
         "jest-environment-jsdom@29.7.0",
-        "jest-preset-angular@14.3.3",
+        "jest-preset-angular@14.4.1",
         "jest@29.7.0",
         "ng-packagr@17.3.0",
         "properties-reader@2.3.0",
@@ -60398,7 +60398,7 @@
       "ref": "browserslist@4.24.2",
       "dependsOn": [
         "caniuse-lite@1.0.30001684",
-        "electron-to-chromium@1.5.65",
+        "electron-to-chromium@1.5.67",
         "node-releases@2.0.18",
         "update-browserslist-db@1.1.1"
       ]
@@ -61457,7 +61457,7 @@
     {
       "ref": "vite@5.1.8",
       "dependsOn": [
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "vite@5.1.8|esbuild@0.19.12",
         "fsevents@2.3.3",
         "less@4.2.0",
@@ -61704,7 +61704,7 @@
       ]
     },
     {
-      "ref": "electron-to-chromium@1.5.65"
+      "ref": "electron-to-chromium@1.5.67"
     },
     {
       "ref": "node-releases@2.0.18"
@@ -62074,7 +62074,7 @@
     {
       "ref": "@types/express@4.17.21|@types/express-serve-static-core@4.19.6",
       "dependsOn": [
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "@types/qs@6.9.17",
         "@types/range-parser@1.2.7",
         "@types/send@0.17.4"
@@ -62084,17 +62084,17 @@
       "ref": "@types/body-parser@1.19.5",
       "dependsOn": [
         "@types/connect@3.4.38",
-        "@types/node@22.10.0"
+        "@types/node@22.10.1"
       ]
     },
     {
       "ref": "@types/connect@3.4.38",
       "dependsOn": [
-        "@types/node@22.10.0"
+        "@types/node@22.10.1"
       ]
     },
     {
-      "ref": "@types/node@22.10.0",
+      "ref": "@types/node@22.10.1",
       "dependsOn": [
         "undici-types@6.20.0"
       ]
@@ -62109,21 +62109,21 @@
       "ref": "@types/send@0.17.4",
       "dependsOn": [
         "@types/mime@1.3.5",
-        "@types/node@22.10.0"
+        "@types/node@22.10.1"
       ]
     },
     {
       "ref": "@types/serve-static@1.15.7",
       "dependsOn": [
         "@types/http-errors@2.0.4",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "@types/send@0.17.4"
       ]
     },
     {
       "ref": "@types/http-proxy@1.17.15",
       "dependsOn": [
-        "@types/node@22.10.0"
+        "@types/node@22.10.1"
       ]
     },
     {
@@ -62242,7 +62242,7 @@
         "es-errors@1.3.0",
         "function-bind@1.1.2",
         "get-intrinsic@1.2.4",
-        "gopd@1.0.1",
+        "gopd@1.1.0",
         "has-property-descriptors@1.0.2"
       ]
     },
@@ -62251,11 +62251,11 @@
       "dependsOn": [
         "es-define-property@1.0.0",
         "es-errors@1.3.0",
-        "gopd@1.0.1"
+        "gopd@1.1.0"
       ]
     },
     {
-      "ref": "gopd@1.0.1",
+      "ref": "gopd@1.1.0",
       "dependsOn": [
         "get-intrinsic@1.2.4"
       ]
@@ -62402,7 +62402,7 @@
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
         "@types/jsdom@20.0.1",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "jest-mock@29.7.0",
         "jest-util@29.7.0",
         "jsdom@20.0.3"
@@ -63003,20 +63003,20 @@
     {
       "ref": "@types/bonjour@3.5.13",
       "dependsOn": [
-        "@types/node@22.10.0"
+        "@types/node@22.10.1"
       ]
     },
     {
       "ref": "@types/connect-history-api-fallback@1.5.4",
       "dependsOn": [
         "@types/express-serve-static-core@5.0.2",
-        "@types/node@22.10.0"
+        "@types/node@22.10.1"
       ]
     },
     {
       "ref": "@types/express-serve-static-core@5.0.2",
       "dependsOn": [
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "@types/qs@6.9.17",
         "@types/range-parser@1.2.7",
         "@types/send@0.17.4"
@@ -63037,13 +63037,13 @@
     {
       "ref": "@types/sockjs@0.3.36",
       "dependsOn": [
-        "@types/node@22.10.0"
+        "@types/node@22.10.1"
       ]
     },
     {
       "ref": "@types/ws@8.5.13",
       "dependsOn": [
-        "@types/node@22.10.0"
+        "@types/node@22.10.1"
       ]
     },
     {
@@ -63470,11 +63470,11 @@
       "ref": "launch-editor@2.9.1",
       "dependsOn": [
         "picocolors@1.1.1",
-        "shell-quote@1.8.1"
+        "shell-quote@1.8.2"
       ]
     },
     {
-      "ref": "shell-quote@1.8.1"
+      "ref": "shell-quote@1.8.2"
     },
     {
       "ref": "p-retry@4.6.2",
@@ -63505,7 +63505,7 @@
     {
       "ref": "@types/node-forge@1.3.11",
       "dependsOn": [
-        "@types/node@22.10.0"
+        "@types/node@22.10.1"
       ]
     },
     {
@@ -63915,7 +63915,7 @@
     {
       "ref": "terser-webpack-plugin@5.3.10|jest-worker@27.5.1",
       "dependsOn": [
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "merge-stream@2.0.0",
         "terser-webpack-plugin@5.3.10|supports-color@8.1.1"
       ]
@@ -65151,7 +65151,7 @@
         "@jest/schemas@29.6.3",
         "@types/istanbul-lib-coverage@2.0.6",
         "@types/istanbul-reports@3.0.4",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "@types/yargs@17.0.33",
         "chalk@4.1.2"
       ]
@@ -65172,7 +65172,7 @@
       "ref": "jest-util@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "chalk@4.1.2",
         "ci-info@3.9.0",
         "graceful-fs@4.2.11",
@@ -65339,7 +65339,7 @@
       "dependsOn": [
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "jest-mock@29.7.0"
       ]
     },
@@ -65348,7 +65348,7 @@
       "dependsOn": [
         "@jest/types@29.6.3",
         "@sinonjs/fake-timers@10.3.0",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "jest-message-util@29.7.0",
         "jest-mock@29.7.0",
         "jest-util@29.7.0"
@@ -65358,7 +65358,7 @@
       "ref": "jest-mock@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "jest-util@29.7.0"
       ]
     },
@@ -65404,7 +65404,7 @@
     {
       "ref": "@types/jsdom@20.0.1",
       "dependsOn": [
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "@types/tough-cookie@4.0.5",
         "parse5@7.2.1"
       ]
@@ -65432,7 +65432,7 @@
         "http-proxy-agent@5.0.0",
         "jsdom@20.0.3|https-proxy-agent@5.0.1",
         "is-potential-custom-element-name@1.0.1",
-        "nwsapi@2.2.13",
+        "nwsapi@2.2.16",
         "parse5@7.2.1",
         "saxes@6.0.0",
         "symbol-tree@3.2.4",
@@ -65591,7 +65591,7 @@
       "ref": "is-potential-custom-element-name@1.0.1"
     },
     {
-      "ref": "nwsapi@2.2.13"
+      "ref": "nwsapi@2.2.16"
     },
     {
       "ref": "saxes@6.0.0",
@@ -65608,14 +65608,14 @@
     {
       "ref": "tough-cookie@4.1.4",
       "dependsOn": [
-        "psl@1.13.0",
+        "psl@1.14.0",
         "punycode@2.3.1",
         "universalify@0.2.0",
         "url-parse@1.5.10"
       ]
     },
     {
-      "ref": "psl@1.13.0",
+      "ref": "psl@1.14.0",
       "dependsOn": [
         "punycode@2.3.1"
       ]
@@ -65649,9 +65649,8 @@
       ]
     },
     {
-      "ref": "jest-preset-angular@14.3.3",
+      "ref": "jest-preset-angular@14.4.1",
       "dependsOn": [
-        "@angular-devkit/build-angular@17.3.11",
         "@angular/compiler-cli@17.3.12",
         "@angular/core@17.3.12",
         "@angular/platform-browser-dynamic@17.3.12",
@@ -65703,7 +65702,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "ansi-escapes@4.3.2",
         "chalk@4.1.2",
         "ci-info@3.9.0",
@@ -65735,7 +65734,7 @@
       "ref": "@jest/console@29.7.0",
       "dependsOn": [
         "@jest/types@29.6.3",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "chalk@4.1.2",
         "jest-message-util@29.7.0",
         "jest-util@29.7.0",
@@ -65754,7 +65753,7 @@
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
         "@jridgewell/trace-mapping@0.3.25",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "chalk@4.1.2",
         "collect-v8-coverage@1.0.2",
         "exit@0.1.2",
@@ -65869,7 +65868,7 @@
     {
       "ref": "jest-worker@29.7.0",
       "dependsOn": [
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "jest-util@29.7.0",
         "merge-stream@2.0.0",
         "jest-worker@29.7.0|supports-color@8.1.1"
@@ -65925,7 +65924,7 @@
         "@babel/core@7.24.0",
         "@jest/test-sequencer@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "babel-jest@29.7.0",
         "chalk@4.1.2",
         "ci-info@3.9.0",
@@ -65968,7 +65967,7 @@
       "dependsOn": [
         "@jest/types@29.6.3",
         "@types/graceful-fs@4.1.9",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "anymatch@3.1.3",
         "fb-watchman@2.0.2",
         "fsevents@2.3.3",
@@ -66006,7 +66005,7 @@
         "@jest/expect@29.7.0",
         "@jest/test-result@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "chalk@4.1.2",
         "co@4.6.0",
         "dedent@1.5.3",
@@ -66088,7 +66087,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "chalk@4.1.2",
         "cjs-module-lexer@1.4.1",
         "collect-v8-coverage@1.0.2",
@@ -66117,7 +66116,7 @@
         "@jest/environment@29.7.0",
         "@jest/fake-timers@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "jest-mock@29.7.0",
         "jest-util@29.7.0"
       ]
@@ -66150,7 +66149,7 @@
         "@jest/test-result@29.7.0",
         "@jest/transform@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "chalk@4.1.2",
         "emittery@0.13.1",
         "graceful-fs@4.2.11",
@@ -66203,7 +66202,7 @@
         "@tsconfig/node12@1.0.11",
         "@tsconfig/node14@1.0.3",
         "@tsconfig/node16@1.0.4",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "acorn-walk@8.3.4",
         "acorn@8.14.0",
         "arg@4.1.3",
@@ -66218,7 +66217,7 @@
     {
       "ref": "@types/graceful-fs@4.1.9",
       "dependsOn": [
-        "@types/node@22.10.0"
+        "@types/node@22.10.1"
       ]
     },
     {
@@ -66291,7 +66290,7 @@
       "dependsOn": [
         "@jest/test-result@29.7.0",
         "@jest/types@29.6.3",
-        "@types/node@22.10.0",
+        "@types/node@22.10.1",
         "ansi-escapes@4.3.2",
         "chalk@4.1.2",
         "emittery@0.13.1",
@@ -66491,9 +66490,9 @@
     {
       "ref": "@isaacs/cliui@8.0.2",
       "dependsOn": [
-        "BomRef.mk51c9j51m8.kjafs1n7j7o",
+        "BomRef.svpe06dr938.odta40u3n9o",
         "@isaacs/cliui@8.0.2|string-width@5.1.2",
-        "BomRef.8bekp9g7b2.7jeubdd89",
+        "BomRef.9f52dnk4tlg.if2ckdn82l",
         "@isaacs/cliui@8.0.2|strip-ansi@7.1.0",
         "wrap-ansi@7.0.0",
         "@isaacs/cliui@8.0.2|wrap-ansi@8.1.0"
@@ -66531,7 +66530,7 @@
       "ref": "@isaacs/cliui@8.0.2|ansi-styles@6.2.1"
     },
     {
-      "ref": "BomRef.mk51c9j51m8.kjafs1n7j7o",
+      "ref": "BomRef.svpe06dr938.odta40u3n9o",
       "dependsOn": [
         "emoji-regex@8.0.0",
         "is-fullwidth-code-point@3.0.0",
@@ -66542,7 +66541,7 @@
       "ref": "eastasianwidth@0.2.0"
     },
     {
-      "ref": "BomRef.8bekp9g7b2.7jeubdd89",
+      "ref": "BomRef.9f52dnk4tlg.if2ckdn82l",
       "dependsOn": [
         "ansi-regex@5.0.1"
       ]

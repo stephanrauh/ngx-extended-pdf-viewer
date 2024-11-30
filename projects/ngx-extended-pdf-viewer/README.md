@@ -39,11 +39,19 @@ This library provides an embeddable PDF viewer component. It's different from ot
 
 Version 20.0.2 is a security fix. It solves CVE-2024-4367. I strongly recommend updating to the latest version of ngx-extended-pdf-viewer as soon as possible, or to version 20.0.2 as a minimum. Older versions contain a bug allowing malicious PDF files to run arbitrary code. Kudos go to GitHub users ScratchPDX and Deepak Shakya to tell me about it, so I could provide a hotfix during my vacations.
 
-## Version 22 and 21.4: improved search UI and update to pdf.js 4.6 / 4.7
+## Version 22: improved search UI and update to pdf.js 4.7
 
-Version 21.4.5 updates to pdf.js 4.7. It offers the same functionality as version 21.4, but it's a breaking change because `NgxExtendedPdfViewerService.addEditorAnnotation` is now asynchronous and because several buttons have new ids. Unfortunately, I forgot to update the version number in version 21.4.5, so this version breaks semantic versioning. Addig insult to injury, npm does not allow me to revert publishing, so there's no way to fix this. The good news is that your application probably will still work, even if it uses the modified method.
+Version 22 updates to pdf.js 4.7.
 
-Version 21.4 updates to pdf.js 4.6. It also improved the search functionality: the find button is hidden if there's no text layer in the PDF document (or at least in the first 20 pages of the PDF document - this seems to be a decent compromise between accuracy and performance). If there's no find button or no text layer, CTRL+F doesn't open the find bar.
+_Breaking changes_:
+
+- `NgxExtendedPdfViewerService.addEditorAnnotation` is now asynchronous
+- several buttons have new ids
+
+## Please avoid version 21.4.5 and 21.4.6
+
+These versions were meant to be alpha versions, but I forgot to update the version number, and now I can't delete the offending version from npm. The update to pdf.js 4.7 didn't go as smoothless as I hoped, so these versions suffer from a few bugs. The good news is that most users probably won't notice. However, several buttons have
+new ids, so their functionality is lost in these two version. Better stick to version 21.4.4.
 
 ## Version 21: an optimized viewer
 
