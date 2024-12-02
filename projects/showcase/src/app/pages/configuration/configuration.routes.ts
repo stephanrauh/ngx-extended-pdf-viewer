@@ -1,3 +1,4 @@
+import { ModalDialogsPageComponent } from './modal-dialogs/modal-dialogs-page.component';
 import { LayersPageComponent } from './layers/layers-page.component';
 import { JavaScriptPageComponent } from './javascript/javascript-page.component';
 import { InternationalizationPageComponent } from './internationalization/internationalization-page.component';
@@ -54,6 +55,13 @@ export const configurationRoutes: Route[] = [
       component: LayersPageComponent,
       data: {
         pageTitle: 'Layers'
+      }
+    },
+    {
+      path: 'modal-dialogs',
+      component: ModalDialogsPageComponent,
+      data: {
+        pageTitle: 'Modal Dialogs'
       }
     }
   ],
