@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, combineLatest, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgClass } from '@angular/common';
+import { ButtonDirective } from '../../../core/directives/button.directive';
 
 @Component({
   selector: 'pvs-layers-page',
@@ -20,6 +21,7 @@ import { NgClass } from '@angular/common';
     SetMinifiedLibraryUsageDirective,
     FormsModule,
     NgClass,
+    ButtonDirective,
   ],
   template: `<pvs-content-page
     [otherTabs]="[
@@ -72,7 +74,7 @@ import { NgClass } from '@angular/common';
         @for (layer of layers(); track layer.layerId) {
           <span>
             <button
-              class="bg-primary-light"
+              pvsButton
               [ngClass]="{
                 'bg-primary-light-variant': !layer.visible,
               }"

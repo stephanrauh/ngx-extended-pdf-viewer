@@ -21,7 +21,7 @@ import { WINDOW } from '../../../shared/helper/window.token';
         </p>
 
         <div class="checkbox-group">
-          <div>
+          <div class="input-group">
             <input id="enable-js" type="checkbox" [(ngModel)]="enableScripting" />
           </div>
           <label for="enable-js">Enable JavaScript (toggling forces reload)</label>
