@@ -2,6 +2,8 @@ Modal dialogs often remove the HTML code from the DOM before calling `ngOnDestro
 
 If you close the modal very quickly, you may see messages like "worker destroyed" or "transport destroyed" in the console log. This simply means that you've destroyed the PDF viewer while it's still rendering. If you need to get rid of these messages, register a custom [`globalThis.ngxConsoleFilter(logLevel, message)`](/filtering-console-log).
 
+### TypeScript
+
 ```typescript
 @Component({
   selector: 'app-modal-dialog',
