@@ -7,6 +7,8 @@ import { MarkdownContentComponent } from '../../../shared/components/markdown-co
 import { SplitViewComponent } from '../../../shared/components/split-view.component';
 import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
 import { LanguagePipe } from 'ngx-markdown';
+import { KeyValuePipe } from '@angular/common';
+import { KeysConfig } from './types';
 
 @Component({
   selector: 'pvs-keyboard-page',
@@ -20,6 +22,7 @@ import { LanguagePipe } from 'ngx-markdown';
     SplitViewComponent,
     SetMinifiedLibraryUsageDirective,
     LanguagePipe,
+    KeyValuePipe,
   ],
   template: ` <pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/configuration/keyboard/text.md" />
@@ -49,252 +52,30 @@ import { LanguagePipe } from 'ngx-markdown';
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td title="alternative keys: CMD+WHEEL">CTRL+WHEEL</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="CtrlWheel" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="CtrlWheel" /></div>
-                    </td>
-                    <td>zoom with mouse wheel</td>
-                  </tr>
-                  <tr>
-                    <td title="alternative keys: SHIFT+CTRL, SHIFT+CMD, ALT+CMD">CTRL+F</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="CtrlF" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="CtrlF" /></div>
-                    </td>
-                    <td>open find dialog</td>
-                  </tr>
-                  <tr>
-                    <td title="alternative keys: SHIFT+CTRL, SHIFT+CMD, ALT+CMD">CTRL+G</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="CtrlG" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="CtrlG" /></div>
-                    </td>
-                    <td>find next</td>
-                  </tr>
-                  <tr>
-                    <td title="alternative keys: CMD, SHIFT+CTRL, SHIFT+CMD">CTRL+"+"</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="CtrlPlus" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="CtrlPlus" /></div>
-                    </td>
-                    <td>zoom in</td>
-                  </tr>
-                  <tr>
-                    <td title="alternative keys: CMD, SHIFT+CTRL, SHIFT+CMD">CTRL+"-"</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="CtrlMinus" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="CtrlMinus" /></div>
-                    </td>
-                    <td>zoom out</td>
-                  </tr>
-                  <tr>
-                    <td title="alternative keys: CMD, SHIFT+CTRL, SHIFT+CMD">CTRL+0</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="Ctrl0" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="Ctrl0" /></div>
-                    </td>
-                    <td>reset zoom</td>
-                  </tr>
-                  <tr>
-                    <td title="alternative keys: RIGHT, PAGE UP">UP</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="Up" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="Up" /></div>
-                    </td>
-                    <td>next page (only if zoom = "page fit")</td>
-                  </tr>
-                  <tr>
-                    <td title="alternative keys: LEFT, PAGE DOWN">DOWN</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="Down" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="Down" /></div>
-                    </td>
-                    <td>previous page (only if zoom = "page fit")</td>
-                  </tr>
-                  <tr>
-                    <td>CTRL+UP</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="CtrlUp" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="CtrlUp" /></div>
-                    </td>
-                    <td>first page</td>
-                  </tr>
-                  <tr>
-                    <td>CTRL+DOWN</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="CtrlDown" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="CtrlDown" /></div>
-                    </td>
-                    <td>last page</td>
-                  </tr>
-                  <tr>
-                    <td>P</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="P" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="P" /></div>
-                    </td>
-                    <td>previous page</td>
-                  </tr>
-                  <tr>
-                    <td>N</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="N" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="N" /></div>
-                    </td>
-                    <td>next page</td>
-                  </tr>
-                  <tr>
-                    <td>J</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="J" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="J" /></div>
-                    </td>
-                    <td>previous page</td>
-                  </tr>
-                  <tr>
-                    <td>K</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="K" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="K" /></div>
-                    </td>
-                    <td>next page</td>
-                  </tr>
-                  <tr>
-                    <td>HOME</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="Home" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="Home" /></div>
-                    </td>
-                    <td>next page</td>
-                  </tr>
-                  <tr>
-                    <td>END</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="End" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="End" /></div>
-                    </td>
-                    <td>next page</td>
-                  </tr>
-                  <tr>
-                    <td>S</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="S" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="S" /></div>
-                    </td>
-                    <td>"select" mode</td>
-                  </tr>
-                  <tr>
-                    <td>CTRL+S</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="CtrlS" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="CtrlS" /></div>
-                    </td>
-                    <td>download PDF</td>
-                  </tr>
-                  <tr>
-                    <td>H</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="H" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="H" /></div>
-                    </td>
-                    <td>"hand" mode"</td>
-                  </tr>
-                  <tr>
-                    <td>R</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="R" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="R" /></div>
-                    </td>
-                    <td>rotate clockwise</td>
-                  </tr>
-                  <tr>
-                    <td>SHIFT+R</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="ShiftR" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="ShiftR" /></div>
-                    </td>
-                    <td>rotate counter-clockwise</td>
-                  </tr>
-                  <tr>
-                    <td title="alternative keys: CMD+ALT+P">CTRL+ALT+P</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="CtrlAltP" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="CtrlAltP" /></div>
-                    </td>
-                    <td>presentation mode</td>
-                  </tr>
-                  <tr>
-                    <td>CTRL+P</td>
-                    <td>n/a</td>
-                    <td>n/a</td>
-                    <td>print</td>
-                  </tr>
-                  <tr>
-                    <td>F4</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="F4" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="F4" /></div>
-                    </td>
-                    <td>toggle sidebar</td>
-                  </tr>
-                  <tr>
-                    <td title="alternative keys: CMD+ALT+G">ALT+CTRL+G</td>
-                    <td>
-                      <div class="input-group" formGroupName="accept"><input type="checkbox" formControlName="AltCtrlG" /></div>
-                    </td>
-                    <td>
-                      <div class="input-group" formGroupName="ignore"><input type="checkbox" formControlName="AltCtrlG" /></div>
-                    </td>
-                    <td>focus on page number field</td>
-                  </tr>
+                  @for (key of keys | keyvalue; track key.key) {
+                    <tr>
+                      @if (key.value.title; as title) {
+                        <td [title]="title">{{ key.value.displayName }}</td>
+                      } @else {
+                        <td>{{ key.value.displayName }}</td>
+                      }
+                      <td>
+                        @if (key.value.defaultAccept === null) {
+                          <span>n/a</span>
+                        } @else {
+                          <div class="input-group" formGroupName="accept"><input type="checkbox" [formControlName]="key.key" /></div>
+                        }
+                      </td>
+                      <td>
+                        @if (key.value.defaultIgnore === null) {
+                          <span>n/a</span>
+                        } @else {
+                          <div class="input-group" formGroupName="ignore"><input type="checkbox" [formControlName]="key.key" /></div>
+                        }
+                      </td>
+                      <td>{{ key.value.meaning }}</td>
+                    </tr>
+                  }
                 </tbody>
               </table>
             </div>
@@ -318,126 +99,165 @@ import { LanguagePipe } from 'ngx-markdown';
 export class KeyboardPageComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
 
-  private keys = {
+  keys: KeysConfig = {
     CtrlWheel: {
       displayName: 'CTRL+WHEEL',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Zoom with mouse wheel',
+      title: 'Alternative keys: CMD+WHEEL',
     },
     CtrlF: {
       displayName: 'CTRL+F',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Open find dialog',
+      title: 'Alternative keys: SHIFT+CTRL, SHIFT+CMD, ALT+CMD',
     },
     CtrlG: {
       displayName: 'CTRL+G',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Find next',
+      title: 'Alternative keys: SHIFT+CTRL, SHIFT+CMD, ALT+CMD',
     },
     CtrlPlus: {
       displayName: 'CTRL++',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Zoom in',
+      title: 'Alternative keys: CMD, SHIFT+CTRL, SHIFT+CMD',
     },
     CtrlMinus: {
       displayName: 'CTRL+-',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Zoom out',
+      title: 'Alternative keys: CMD, SHIFT+CTRL, SHIFT+CMD',
     },
     Ctrl0: {
       displayName: 'CTRL+0',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Reset zoom',
+      title: 'Alternative keys: CMD, SHIFT+CTRL, SHIFT+CMD',
     },
     Up: {
       displayName: 'UP',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Next page (only if zoom = "page fit")',
+      title: 'Alternative keys: RIGHT, PAGE UP',
     },
     Down: {
       displayName: 'DOWN',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Previous page (only if zoom = "page fit")',
+      title: 'Alternative keys: LEFT, PAGE DOWN',
     },
     CtrlUp: {
       displayName: 'CTRL+UP',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'First page',
     },
     CtrlDown: {
       displayName: 'CTRL+DOWN',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Last page',
     },
     P: {
       displayName: 'P',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Previous page',
     },
     N: {
       displayName: 'N',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Next Page',
     },
     J: {
       displayName: 'J',
       defaultAccept: false,
       defaultIgnore: true,
+      meaning: 'Previous page',
     },
     K: {
       displayName: 'K',
       defaultAccept: false,
       defaultIgnore: true,
+      meaning: 'Next Page',
     },
     Home: {
       displayName: 'HOME',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Next page',
     },
     End: {
       displayName: 'END',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Next page',
     },
     S: {
       displayName: 'S',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: '"select" mode',
     },
     CtrlS: {
       displayName: 'CTRL+S',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Download PDF',
     },
     H: {
       displayName: 'H',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: '"hand" mode"',
     },
     R: {
       displayName: 'R',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Rotate clockwise',
     },
     ShiftR: {
       displayName: 'SHIFT+R',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Rotate counter-clockwise',
     },
     CtrlAltP: {
       displayName: 'CTRL+ALT+P',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Presentation mode',
+    },
+    CtrlP: {
+      displayName: 'CTRL+P',
+      defaultAccept: null,
+      defaultIgnore: null,
+      meaning: 'print',
     },
     F4: {
       displayName: 'F4',
       defaultAccept: false,
       defaultIgnore: true,
+      meaning: 'Toggle sidebar',
     },
     AltCtrlG: {
       displayName: 'ALT+CTRL+G',
       defaultAccept: false,
       defaultIgnore: false,
+      meaning: 'Focus on page number field',
+      title: 'Alternative keys: CMD+ALT+G',
     },
   };
 
