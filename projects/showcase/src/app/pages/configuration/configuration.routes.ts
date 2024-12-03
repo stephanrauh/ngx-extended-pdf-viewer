@@ -1,3 +1,4 @@
+import { PreRenderingPageComponent } from './pre-rendering/pre-rendering-page.component';
 import { ContextMenuPageComponent } from './context-menu/context-menu-page.component';
 import { KeyboardPageComponent } from './keyboard/keyboard-page.component';
 import { ModalDialogsPageComponent } from './modal-dialogs/modal-dialogs-page.component';
@@ -78,6 +79,13 @@ export const configurationRoutes: Route[] = [
       component: ContextMenuPageComponent,
       data: {
         pageTitle: 'Context Menu'
+      }
+    },
+    {
+      path: 'pre-rendering',
+      component: PreRenderingPageComponent,
+      data: {
+        pageTitle: 'Pre-Rendering'
       }
     }
   ],
