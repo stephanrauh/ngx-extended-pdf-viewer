@@ -1,3 +1,4 @@
+import { KeyboardPageComponent } from './keyboard/keyboard-page.component';
 import { ModalDialogsPageComponent } from './modal-dialogs/modal-dialogs-page.component';
 import { LayersPageComponent } from './layers/layers-page.component';
 import { JavaScriptPageComponent } from './javascript/javascript-page.component';
@@ -15,7 +16,8 @@ export const configurationRoutes: Route[] = [
       name: 'Configuration',
       key: 'configuration',
     },
-    children: [{
+    children: [
+      {
         path: 'range-requests',
         component: RangeRequestsPageComponent,
         data: {
@@ -50,20 +52,27 @@ export const configurationRoutes: Route[] = [
           pageTitle: 'JavaScript',
         },
       },
-    {
-      path: 'layers',
-      component: LayersPageComponent,
-      data: {
-        pageTitle: 'Layers'
-      }
-    },
-    {
-      path: 'modal-dialogs',
-      component: ModalDialogsPageComponent,
-      data: {
-        pageTitle: 'Modal Dialogs'
-      }
-    }
-  ],
+      {
+        path: 'layers',
+        component: LayersPageComponent,
+        data: {
+          pageTitle: 'Layers',
+        },
+      },
+      {
+        path: 'modal-dialogs',
+        component: ModalDialogsPageComponent,
+        data: {
+          pageTitle: 'Modal Dialogs',
+        },
+      },
+      {
+        path: 'keyboard',
+        component: KeyboardPageComponent,
+        data: {
+          pageTitle: 'Keyboard',
+        },
+      },
+    ],
   },
 ];

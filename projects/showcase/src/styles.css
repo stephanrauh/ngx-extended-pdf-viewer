@@ -136,6 +136,7 @@
     @apply gap-2;
     @apply grid-cols-[1fr_2fr];
     @apply items-center;
+    @apply accent-secondary-light;
   }
 
   .input-group input {

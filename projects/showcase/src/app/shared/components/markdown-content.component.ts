@@ -5,8 +5,9 @@ import { MarkdownComponent } from 'ngx-markdown';
   selector: 'pvs-markdown',
   standalone: true,
   imports: [MarkdownComponent],
-  template: ` <markdown [src]="src()"></markdown> `,
+  template: ` <markdown [src]="src()" [data]="data()"></markdown> `,
 })
 export class MarkdownContentComponent {
-  src = input.required<string>();
+  src = input<string>();
+  data = input<string>();
 }
