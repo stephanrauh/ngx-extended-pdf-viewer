@@ -24,7 +24,7 @@
 
 /******/ // The require scope
 /******/ var __webpack_require__ = {};
-/******/ 
+/******/
 /************************************************************************/
 /******/ /* webpack/runtime/define property getters */
 /******/ (() => {
@@ -37,12 +37,12 @@
 /******/ 		}
 /******/ 	};
 /******/ })();
-/******/ 
+/******/
 /******/ /* webpack/runtime/hasOwnProperty shorthand */
 /******/ (() => {
 /******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ })();
-/******/ 
+/******/
 /************************************************************************/
 var __webpack_exports__ = globalThis.pdfjsLib = {};
 
@@ -18232,20 +18232,10 @@ class HighlightEditor extends AnnotationEditor {
     let initialData = null;
     if (data instanceof HighlightAnnotationElement) {
       const {
-        data: {
-          quadPoints,
-          rect,
-          rotation,
-          id,
-          color,
-          opacity,
-          popupRef
-        },
+        data: { quadPoints, rect, rotation, id, color, opacity, popupRef },
         parent: {
-          page: {
-            pageNumber
-          }
-        }
+          page: { pageNumber },
+        },
       } = data;
       initialData = data = {
         annotationType: AnnotationEditorType.HIGHLIGHT,
@@ -18258,7 +18248,48 @@ class HighlightEditor extends AnnotationEditor {
         rotation,
         id,
         deleted: false,
-        popupRef
+        popupRef,
+      };
+    } else if (data.annotationType && data.annotationType == AnnotationEditorType.HIGHLIGHT) {
+      let { quadPoints, outlines, rect, rotation, id, color, opacity, popupRef, pageIndex, thickness } = data;
+
+      // Ensure quadPoints is an array
+      if (quadPoints) {
+        if (!Array.isArray(quadPoints)) {
+          quadPoints = Object.values(quadPoints);
+        }
+      }
+
+      let inkLists;
+      if (!quadPoints && outlines) {
+        if (Array.isArray(outlines)) {
+          // 'outlines' is an array of arrays
+          inkLists = outlines.map((subArray) => subArray);
+        } else if (typeof outlines === 'object' && outlines.points) {
+          // 'outlines' is an object with 'points' property
+          inkLists = [outlines.points.flat()];
+        } else {
+          // Handle unexpected format
+          console.error('Unexpected outlines format');
+          return null;
+        }
+        thickness = thickness || data.thickness || 1;
+      }
+
+      initialData = data = {
+        annotationType: AnnotationEditorType.HIGHLIGHT,
+        color: Array.from(color),
+        opacity,
+        quadPoints,
+        inkLists,
+        thickness,
+        boxes: null,
+        pageIndex: pageIndex,
+        rect: rect.slice(0),
+        rotation,
+        id,
+        deleted: false,
+        popupRef: popupRef || null,
       };
     } else if (data instanceof InkAnnotationElement) {
       const {
@@ -18268,16 +18299,12 @@ class HighlightEditor extends AnnotationEditor {
           rotation,
           id,
           color,
-          borderStyle: {
-            rawWidth: thickness
-          },
-          popupRef
+          borderStyle: { rawWidth: thickness },
+          popupRef,
         },
         parent: {
-          page: {
-            pageNumber
-          }
-        }
+          page: { pageNumber },
+        },
       } = data;
       initialData = data = {
         annotationType: AnnotationEditorType.HIGHLIGHT,
@@ -18290,15 +18317,10 @@ class HighlightEditor extends AnnotationEditor {
         rotation,
         id,
         deleted: false,
-        popupRef
+        popupRef,
       };
     }
-    const {
-      color,
-      quadPoints,
-      inkLists,
-      opacity
-    } = data;
+    const { color, quadPoints, inkLists, opacity } = data;
     const editor = await super.deserialize(data, parent, uiManager);
     editor.color = Util.makeHexColor(...color);
     editor.#opacity = opacity || 1;
@@ -18310,14 +18332,24 @@ class HighlightEditor extends AnnotationEditor {
     const [pageWidth, pageHeight] = editor.pageDimensions;
     const [pageX, pageY] = editor.pageTranslation;
     if (quadPoints) {
-      const boxes = editor.#boxes = [];
+      const boxes = (editor.#boxes = []);
       for (let i = 0; i < quadPoints.length; i += 8) {
-        boxes.push({
-          x: (quadPoints[i] - pageX) / pageWidth,
-          y: 1 - (quadPoints[i + 1] - pageY) / pageHeight,
-          width: (quadPoints[i + 2] - quadPoints[i]) / pageWidth,
-          height: (quadPoints[i + 1] - quadPoints[i + 5]) / pageHeight
-        });
+        const x1 = quadPoints[i];
+        const y1 = quadPoints[i + 1];
+        const x3 = quadPoints[i + 2];
+        const y3 = quadPoints[i + 5];
+
+        const xMin = Math.min(x1, x3);
+        const yMax = Math.max(y1, y3);
+        const xMax = Math.max(x1, x3);
+        const yMin = Math.min(y1, y3);
+
+        const x = (xMin - pageX) / pageWidth;
+        const y = 1 - (yMax - pageY) / pageHeight;
+        const width = (xMax - xMin) / pageWidth;
+        const height = (yMax - yMin) / pageHeight;
+
+        boxes.push({ x, y, width, height });
       }
       editor.#createOutlines();
       editor.#addToDrawLayer();
@@ -18327,7 +18359,7 @@ class HighlightEditor extends AnnotationEditor {
       const points = inkLists[0];
       const point = {
         x: points[0] - pageX,
-        y: pageHeight - (points[1] - pageY)
+        y: pageHeight - (points[1] - pageY),
       };
       const outliner = new FreeOutliner(point, [0, 0, pageWidth, pageHeight], 1, editor.#thickness / 2, true, 0.001);
       for (let i = 0, ii = points.length; i < ii; i += 2) {
@@ -18335,14 +18367,11 @@ class HighlightEditor extends AnnotationEditor {
         point.y = pageHeight - (points[i + 1] - pageY);
         outliner.add(point);
       }
-      const {
-        id,
-        clipPathId
-      } = parent.drawLayer.highlight(outliner, editor.color, editor._defaultOpacity, true);
+      const { id, clipPathId } = parent.drawLayer.highlight(outliner, editor.color, editor._defaultOpacity, true);
       editor.#createFreeOutlines({
         highlightOutlines: outliner.getOutlines(),
         highlightId: id,
-        clipPathId
+        clipPathId,
       });
       editor.#addToDrawLayer();
     }
@@ -20820,7 +20849,7 @@ var __webpack_exports__version = __webpack_exports__.version;
 
 /******/ // The require scope
 /******/ var __webpack_require__ = {};
-/******/ 
+/******/
 /************************************************************************/
 /******/ /* webpack/runtime/define property getters */
 /******/ (() => {
@@ -20833,12 +20862,12 @@ var __webpack_exports__version = __webpack_exports__.version;
 /******/ 		}
 /******/ 	};
 /******/ })();
-/******/ 
+/******/
 /******/ /* webpack/runtime/hasOwnProperty shorthand */
 /******/ (() => {
 /******/ 	__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ })();
-/******/ 
+/******/
 /************************************************************************/
 var __webpack_exports__ = {};
 
