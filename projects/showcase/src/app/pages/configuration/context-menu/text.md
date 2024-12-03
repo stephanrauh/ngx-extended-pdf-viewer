@@ -1,0 +1,1 @@
+The context menu of the pdf viewer adds little value. In some cases, it may even confuse users. So you can use the attribute `[contextMenuAllowed]="false"` to get rid of option like "Save As Image" and "Inspect".

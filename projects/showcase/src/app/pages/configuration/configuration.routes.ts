@@ -1,3 +1,4 @@
+import { ContextMenuPageComponent } from './context-menu/context-menu-page.component';
 import { KeyboardPageComponent } from './keyboard/keyboard-page.component';
 import { ModalDialogsPageComponent } from './modal-dialogs/modal-dialogs-page.component';
 import { LayersPageComponent } from './layers/layers-page.component';
@@ -16,8 +17,7 @@ export const configurationRoutes: Route[] = [
       name: 'Configuration',
       key: 'configuration',
     },
-    children: [
-      {
+    children: [{
         path: 'range-requests',
         component: RangeRequestsPageComponent,
         data: {
@@ -73,6 +73,13 @@ export const configurationRoutes: Route[] = [
           pageTitle: 'Keyboard',
         },
       },
-    ],
+    {
+      path: 'context-menu',
+      component: ContextMenuPageComponent,
+      data: {
+        pageTitle: 'Context Menu'
+      }
+    }
+  ],
   },
 ];
