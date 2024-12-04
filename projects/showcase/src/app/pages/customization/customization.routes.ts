@@ -1,3 +1,4 @@
+import { ToolbarPageComponent } from './toolbar/toolbar-page.component';
 import { ButtonsPageComponent } from './buttons/buttons-page.component';
 import { MenusPageComponent } from './menus/menus-page.component';
 import { CSSRulesPageComponent } from './css-rules/css-rules-page.component';
@@ -30,6 +31,13 @@ export const customizationRoutes: Route[] = [
       component: ButtonsPageComponent,
       data: {
         pageTitle: 'Buttons'
+      }
+    },
+    {
+      path: 'toolbar',
+      component: ToolbarPageComponent,
+      data: {
+        pageTitle: 'Toolbar'
       }
     }
   ],
