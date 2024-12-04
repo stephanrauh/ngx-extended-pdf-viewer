@@ -1,3 +1,4 @@
+import { SidebarPageComponent } from './sidebar/sidebar-page.component';
 import { ToolbarPageComponent } from './toolbar/toolbar-page.component';
 import { ButtonsPageComponent } from './buttons/buttons-page.component';
 import { MenusPageComponent } from './menus/menus-page.component';
@@ -38,6 +39,13 @@ export const customizationRoutes: Route[] = [
       component: ToolbarPageComponent,
       data: {
         pageTitle: 'Toolbar'
+      }
+    },
+    {
+      path: 'sidebar',
+      component: SidebarPageComponent,
+      data: {
+        pageTitle: 'Sidebar'
       }
     }
   ],
