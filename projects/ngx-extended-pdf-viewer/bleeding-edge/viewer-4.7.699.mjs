@@ -22248,7 +22248,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '22.0.0';
+const ngxExtendedPdfViewerVersion = '22.0.1';
 ;// ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -35441,7 +35441,7 @@ class PDFViewer {
             renderAsynchronously = this.adjacentPagesRenderer(null, pageIndex);
           }
         } catch (exception) {
-          console.log("Exception during pre-rendering page %s", pageIndex, exception);
+          ngx_console_NgxConsole.log("Exception during pre-rendering page %s", pageIndex, exception);
         }
       }
     }
@@ -35676,7 +35676,7 @@ class PDFViewer {
           await navigator.clipboard.writeText(text);
         }
       }).catch(reason => {
-        console.warn(`Something goes wrong when extracting the text: ${reason.message}`);
+        ngx_console_NgxConsole.warn(`Something goes wrong when extracting the text: ${reason.message}`);
       }).finally(() => {
         this.#getAllTextInProgress = false;
         this.#interruptCopyCondition = false;
@@ -35720,7 +35720,7 @@ class PDFViewer {
       signal
     } = this.#eventAbortController;
     if (pagesCount > PagesCountLimit.FORCE_SCROLL_MODE_PAGE) {
-      console.warn("Forcing PAGE-scrolling for performance reasons, given the length of the document.");
+      ngx_console_NgxConsole.warn("Forcing PAGE-scrolling for performance reasons, given the length of the document.");
       const mode = this._scrollMode = ScrollMode.PAGE;
       eventBus.dispatch("scrollmodechanged", {
         source: this,
@@ -35774,7 +35774,7 @@ class PDFViewer {
       if (typeof AbortSignal.any === "function" && annotationEditorMode !== AnnotationEditorType.DISABLE) {
         const mode = annotationEditorMode;
         if (pdfDocument.isPureXfa) {
-          console.warn("Warning: XFA-editing is not implemented.");
+          ngx_console_NgxConsole.warn("Warning: XFA-editing is not implemented.");
         } else if (isValidAnnotationEditorMode(mode)) {
           this.#annotationEditorUIManager = new AnnotationEditorUIManager(this.container, viewer, this.#altTextManager, eventBus, pdfDocument, pageColors, this.#annotationEditorHighlightColors, this.#enableHighlightFloatingButton, this.#enableUpdatedAddImage, this.#enableNewAltTextWhenAddingImage, this.#mlManager);
           eventBus.dispatch("annotationeditoruimanager", {
@@ -35788,7 +35788,7 @@ class PDFViewer {
             this.#annotationEditorUIManager.updateMode(mode);
           }
         } else {
-          console.error(`Invalid AnnotationEditor mode: ${mode}`);
+          ngx_console_NgxConsole.error(`Invalid AnnotationEditor mode: ${mode}`);
         }
       }
       const viewerElement = this._scrollMode === ScrollMode.PAGE ? null : viewer;
@@ -35870,7 +35870,7 @@ class PDFViewer {
               this._pagesCapability.resolve();
             }
           }, reason => {
-            console.error(`Unable to get page ${pageNum} to initialize viewer`, reason);
+            ngx_console_NgxConsole.error(`Unable to get page ${pageNum} to initialize viewer`, reason);
             if (--getPagesLeft === 0) {
               this._pagesCapability.resolve();
             }
@@ -36234,7 +36234,7 @@ class PDFViewer {
     }
     const pageView = Number.isInteger(pageNumber) && this._pages[pageNumber - 1];
     if (!pageView) {
-      console.error(`scrollPageIntoView: "${pageNumber}" is not a valid pageNumber parameter.`);
+      ngx_console_NgxConsole.error(`scrollPageIntoView: "${pageNumber}" is not a valid pageNumber parameter.`);
       return;
     }
     if (this.isInPresentationMode || !destArray) {
@@ -36296,7 +36296,7 @@ class PDFViewer {
         scale = Math.min(Math.abs(widthScale), Math.abs(heightScale));
         break;
       default:
-        console.error(`scrollPageIntoView: "${destArray[1].name}" is not a valid destination type.`);
+        ngx_console_NgxConsole.error(`scrollPageIntoView: "${destArray[1].name}" is not a valid destination type.`);
         return;
     }
     if (!ignoreDestinationZoom) {
@@ -36475,7 +36475,7 @@ class PDFViewer {
       }
       return pdfPage;
     } catch (reason) {
-      console.error("Unable to get page for page view", reason);
+      ngx_console_NgxConsole.error("Unable to get page for page view", reason);
       return null;
     }
   }
@@ -36544,7 +36544,7 @@ class PDFViewer {
       return Promise.resolve(null);
     }
     if (!this._optionalContentConfigPromise) {
-      console.error("optionalContentConfigPromise: Not initialized yet.");
+      ngx_console_NgxConsole.error("optionalContentConfigPromise: Not initialized yet.");
       return this.pdfDocument.getOptionalContentConfig({
         intent: "display"
       });
@@ -36953,6 +36953,14 @@ class PDFViewer {
     return null;
   }
   async addEditorAnnotation(data) {
+    try {
+      if (typeof data === "string") {
+        data = JSON.parse(data);
+      }
+    } catch (ex) {
+      ngx_console_NgxConsole.error(`Please pass a JSON string or an Array of JSON objects to addEditorAnnotation: "${ex.message}".`);
+      return;
+    }
     if (!Array.isArray(data)) {
       data = [data];
     }
