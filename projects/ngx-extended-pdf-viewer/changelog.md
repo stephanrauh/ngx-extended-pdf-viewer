@@ -613,3 +613,4 @@
 - 22.0.0-alpha.10 #2651 fixed the `[showPrintButton]` and `[showDrawEditor]`; removed the `verticalToolbarSeparator` divs because they are always invisible
 - 22.0.0-alpha.11 #2597 and #2527 reverted the changed to the ink editor because the pdf.js probably supports this feature out-of-the-box soon and because I wasn't able to resolve the merge conflict
 - 22.0.0 dependency updates; updated the readme file
+- 22.0.1 #2657 fix the missing border around pages in Safari; #2677 addEditorAnnotation() now converts serialized string to Json objects before wrapping them into an array (the old behavior prevented developers from using serialized strings)
