@@ -1,3 +1,4 @@
+import { MenusPageComponent } from './menus/menus-page.component';
 import { CSSRulesPageComponent } from './css-rules/css-rules-page.component';
 import { Route } from '@angular/router';
 import { RouteGroupData } from '../../shared/types/route-data.types';
@@ -9,14 +10,20 @@ export const customizationRoutes: Route[] = [
       key: 'customization',
       name: 'Customization',
     },
-    children: [
-      {
+    children: [{
         path: 'css-rules',
         component: CSSRulesPageComponent,
         data: {
           pageTitle: 'CSS Rules',
         },
       },
-    ],
+    {
+      path: 'menus',
+      component: MenusPageComponent,
+      data: {
+        pageTitle: 'Menus'
+      }
+    }
+  ],
   },
 ];
