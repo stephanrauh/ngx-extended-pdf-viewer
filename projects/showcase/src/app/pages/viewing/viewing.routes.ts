@@ -1,3 +1,4 @@
+import { InternationalizationPageComponent } from './internationalization/internationalization-page.component';
 import { ZoomPageComponent } from './zoom/zoom-page.component';
 import { MobileDevicesPageComponent } from './mobile-devices/mobile-devices-page.component';
 import { ThemingPageComponent } from './theming/theming-page.component';
@@ -54,6 +55,13 @@ export const viewingRoutes: Route[] = [
       component: ZoomPageComponent,
       data: {
         pageTitle: 'Zoom'
+      }
+    },
+    {
+      path: 'internationalization',
+      component: InternationalizationPageComponent,
+      data: {
+        pageTitle: 'Internationalization'
       }
     }
   ],
