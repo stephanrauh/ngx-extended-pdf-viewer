@@ -1,3 +1,4 @@
+import { TouchGesturesPageComponent } from './touch-gestures/touch-gestures-page.component';
 import { InternationalizationPageComponent } from './internationalization/internationalization-page.component';
 import { ZoomPageComponent } from './zoom/zoom-page.component';
 import { MobileDevicesPageComponent } from './mobile-devices/mobile-devices-page.component';
@@ -62,6 +63,13 @@ export const viewingRoutes: Route[] = [
       component: InternationalizationPageComponent,
       data: {
         pageTitle: 'Internationalization'
+      }
+    },
+    {
+      path: 'touch-gestures',
+      component: TouchGesturesPageComponent,
+      data: {
+        pageTitle: 'Touch Gestures'
       }
     }
   ],
