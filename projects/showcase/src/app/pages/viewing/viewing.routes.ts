@@ -1,3 +1,4 @@
+import { ThemingPageComponent } from './theming/theming-page.component';
 import { DisplayOptionsPageComponent } from './display-options/display-options-page.component';
 import { PresentationModePageComponent } from './presentation-mode/presentation-mode-page.component';
 import { Route } from '@angular/router';
@@ -11,8 +12,7 @@ export const viewingRoutes: Route[] = [
       name: 'Viewing',
       key: 'viewing',
     },
-    children: [
-      {
+    children: [{
         path: 'presentation-mode',
         component: PresentationModePageComponent,
         data: {
@@ -33,6 +33,13 @@ export const viewingRoutes: Route[] = [
           pageTitle: 'Multiple PDFs',
         },
       },
-    ],
+    {
+      path: 'theming',
+      component: ThemingPageComponent,
+      data: {
+        pageTitle: 'Theming'
+      }
+    }
+  ],
   },
 ];
