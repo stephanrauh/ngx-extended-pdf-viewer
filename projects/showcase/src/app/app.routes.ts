@@ -4,6 +4,7 @@ import { basicsRoutes } from './pages/basics/basics.routes';
 import { configurationRoutes } from './pages/configuration/configuration.routes';
 import { customizationRoutes } from './pages/customization/customization.routes';
 import { securityRoutes } from './pages/security/security.routes';
+import { exportingRoutes } from './pages/exporting/exporting.routes';
 
 export const routes: Routes = [
   {
@@ -16,4 +17,5 @@ export const routes: Routes = [
   ...configurationRoutes,
   ...customizationRoutes,
   ...securityRoutes,
+  ...exportingRoutes,
 ];
