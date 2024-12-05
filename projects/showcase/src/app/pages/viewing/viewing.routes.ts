@@ -1,3 +1,4 @@
+import { ZoomPageComponent } from './zoom/zoom-page.component';
 import { MobileDevicesPageComponent } from './mobile-devices/mobile-devices-page.component';
 import { ThemingPageComponent } from './theming/theming-page.component';
 import { DisplayOptionsPageComponent } from './display-options/display-options-page.component';
@@ -46,6 +47,13 @@ export const viewingRoutes: Route[] = [
       component: MobileDevicesPageComponent,
       data: {
         pageTitle: 'Mobile Devices'
+      }
+    },
+    {
+      path: 'zoom',
+      component: ZoomPageComponent,
+      data: {
+        pageTitle: 'Zoom'
       }
     }
   ],
