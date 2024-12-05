@@ -13,7 +13,7 @@ I'm afraid you can't avoid reading the sourcecode of the UI. You find it in the 
 
 Nonetheless, I'm optimistic I can give you a head start with a couple of demos and a few hints:
 
-- First of all, this [interactive demo](./toolbar) shows a few example implementations.
+- First of all, this [interactive demo](./customization/toolbar) shows a few example implementations.
 - The default UI naturally forms a tree. Below, you'll find a high-level abstraction of this tree. Your customization doesn't have to follow this structure. It's just the default.
 - The customization hooks defined by <ngx-extended-pdf-viewer> allow you to modify certain subtrees. Currently there are nine hooks:
   - `[customToolbar]` allows you to modify the entire black bar above the PDF document.
@@ -22,8 +22,8 @@ Nonetheless, I'm optimistic I can give you a head start with a couple of demos a
   - `[customFindbar]` allows you to define your own findbar.
   - `[customFindbarButtons]` allows you to modify the entire find bar (the black bar that's shown after typing CTRL+F).
   - `[customFindbarInputArea]` is responsible for a small part of the find bar: the input field and the previous/next buttons.
-  - `[customSidebar]` defines your own sidebar. See the [custom sidebar demo](./sidebar).
-  - `[customThumbnail]` See the [custom thumbnails demo](./thumbnails).
+  - `[customSidebar]` defines your own sidebar. See the [custom sidebar demo](./customization/sidebar).
+  - `[customThumbnail]` See the [custom thumbnails demo](./customization/thumbnails).
   - `[customPdfViewer]` is your door to modify everything except the CSS imports.
 - The underlying PDF framework, pdf.js, recognizes the buttons and menu items by their id. If you want to modify an existing functionality, keep in mind you have to provide the id. Otherwise, pdf.js might raise an exception, and your custom button won't work.
 - However, most buttons are component you can either use or copy. You can see the full list of toolbar buttons in the [GitHub repository of ngx-extended-pdf-viewer](https://github.com/stephanrauh/ngx-extended-pdf-viewer/blob/main/projects/ngx-extended-pdf-viewer/src/lib/toolbar/pdf-toolbar/pdf-toolbar.component.html).

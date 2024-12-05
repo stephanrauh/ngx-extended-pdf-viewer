@@ -4,7 +4,7 @@ Since version 18, almost every button is able to move dynamically from the toolb
 
 Every toolbar button has a `show<ButtonName>` attribute which defines the breakpoint of the button. If the screen is wider than the breakpoint, the button is displayed in the toolbar. Otherwise it's displayed in the secondary menu. There are also two special values: `always-visible` means the button is never moved to the secondary menu. Conversely, `always-in-secondary-menu` means the button always hides in the secondary menu.
 
-There's an interactive live-demo at the [responsive design page](./responsive-design) of this showcase.
+There's an interactive live-demo at the [responsive design page](./customization/responsive-design) of this showcase.
 
 If you use the `<pdf-shy-button>` component to define your custom buttons they also benefit from responsive design. However, there's a catch: if you're using the `<pdf-shy-button>`, you can use the `action` attribute to define custom logic. Basically, the `action` attribute is treated like a fat arrow function - and that means it's inheriting the `this` reference from the `PdfShyButton` class. The constructor of your button component is never called, and neither is `ngOnInit`. Probably that sounds more confusing than it is, so don't worry - it's easy to implement custom "shy" buttons. Just keep in mind that this is not what you might expect.
 
