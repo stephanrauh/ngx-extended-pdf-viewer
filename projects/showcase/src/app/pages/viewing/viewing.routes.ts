@@ -1,3 +1,4 @@
+import { MobileDevicesPageComponent } from './mobile-devices/mobile-devices-page.component';
 import { ThemingPageComponent } from './theming/theming-page.component';
 import { DisplayOptionsPageComponent } from './display-options/display-options-page.component';
 import { PresentationModePageComponent } from './presentation-mode/presentation-mode-page.component';
@@ -38,6 +39,13 @@ export const viewingRoutes: Route[] = [
       component: ThemingPageComponent,
       data: {
         pageTitle: 'Theming'
+      }
+    },
+    {
+      path: 'mobile-devices',
+      component: MobileDevicesPageComponent,
+      data: {
+        pageTitle: 'Mobile Devices'
       }
     }
   ],
