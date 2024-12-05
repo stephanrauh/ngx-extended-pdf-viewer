@@ -1,3 +1,4 @@
+import { ResponsiveDesignPageComponent } from './responsive-design/responsive-design-page.component';
 import { ThumbnailsPageComponent } from './thumbnails/thumbnails-page.component';
 import { SidebarPageComponent } from './sidebar/sidebar-page.component';
 import { ToolbarPageComponent } from './toolbar/toolbar-page.component';
@@ -54,6 +55,13 @@ export const customizationRoutes: Route[] = [
       component: ThumbnailsPageComponent,
       data: {
         pageTitle: 'Thumbnails'
+      }
+    },
+    {
+      path: 'responsive-design',
+      component: ResponsiveDesignPageComponent,
+      data: {
+        pageTitle: 'Responsive Design'
       }
     }
   ],
