@@ -1,3 +1,4 @@
+import { ThumbnailsPageComponent } from './thumbnails/thumbnails-page.component';
 import { SidebarPageComponent } from './sidebar/sidebar-page.component';
 import { ToolbarPageComponent } from './toolbar/toolbar-page.component';
 import { ButtonsPageComponent } from './buttons/buttons-page.component';
@@ -46,6 +47,13 @@ export const customizationRoutes: Route[] = [
       component: SidebarPageComponent,
       data: {
         pageTitle: 'Sidebar'
+      }
+    },
+    {
+      path: 'thumbnails',
+      component: ThumbnailsPageComponent,
+      data: {
+        pageTitle: 'Thumbnails'
       }
     }
   ],
