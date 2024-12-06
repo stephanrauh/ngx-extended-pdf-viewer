@@ -1,3 +1,4 @@
+import { DownloadingPageComponent } from './downloading/downloading-page.component';
 import { AccessingRawDataPageComponent } from './accessing-raw-data/accessing-raw-data-page.component';
 import { DefaultValuesPageComponent } from './default-values/default-values-page.component';
 import { CheckboxesAndRadiobuttonsPageComponent } from './checkboxes-and-radiobuttons/checkboxes-and-radiobuttons-page.component';
@@ -12,34 +13,42 @@ export const formsRoutes: Route[] = [
       key: 'forms',
       name: 'Forms',
     },
-    children: [{
+    children: [
+      {
         path: 'displaying-forms',
         component: DisplayingFormsPageComponent,
         data: {
           pageTitle: 'Displaying Forms',
         },
       },
-    {
-      path: 'checkboxes-and-radiobuttons',
-      component: CheckboxesAndRadiobuttonsPageComponent,
-      data: {
-        pageTitle: 'Checkboxes and Radiobuttons'
-      }
-    },
-    {
-      path: 'default-values',
-      component: DefaultValuesPageComponent,
-      data: {
-        pageTitle: 'Default Values'
-      }
-    },
-    {
-      path: 'accessing-raw-data',
-      component: AccessingRawDataPageComponent,
-      data: {
-        pageTitle: 'Accessing Raw Data'
-      }
-    }
-  ],
+      {
+        path: 'checkboxes-and-radiobuttons',
+        component: CheckboxesAndRadiobuttonsPageComponent,
+        data: {
+          pageTitle: 'Checkboxes and Radiobuttons',
+        },
+      },
+      {
+        path: 'default-values',
+        component: DefaultValuesPageComponent,
+        data: {
+          pageTitle: 'Default Values',
+        },
+      },
+      {
+        path: 'accessing-raw-data',
+        component: AccessingRawDataPageComponent,
+        data: {
+          pageTitle: 'Accessing Raw Data',
+        },
+      },
+      {
+        path: 'dowloading',
+        component: DownloadingPageComponent,
+        data: {
+          pageTitle: 'Dowloading',
+        },
+      },
+    ],
   },
 ];
