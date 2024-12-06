@@ -51,8 +51,8 @@ import { startWith } from 'rxjs';
           <fieldset class="fieldset">
             <legend>Work Experience</legend>
             <div class="input-group">
-              <label for="job-experience">Job experience (corner case!)</label>
-              <input id="job-experience" type="text" formControlName="jobExperience" />
+              <label for="job-experience">Job experience</label>
+              <input id="job-experience" type="text" formControlName="yearsOfExperience" />
 
               <label for="databases">Databases</label>
               <select id="databases" formControlName="databases" multiple>
@@ -126,7 +126,7 @@ export class DisplayingFormsPageComponent {
     firstName: 'Lucía',
     lastName: 'Garzas',
     country: 'Spain',
-    jobExperience: '6',
+    yearsOfExperience: '6',
     typeScript: 'Yes',
     javaScript: 'No',
     java: true,
