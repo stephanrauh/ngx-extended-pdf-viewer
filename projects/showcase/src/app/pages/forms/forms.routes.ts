@@ -1,3 +1,4 @@
+import { XFAFormsPageComponent } from './xfa-forms/xfa-forms-page.component';
 import { DownloadingPageComponent } from './downloading/downloading-page.component';
 import { AccessingRawDataPageComponent } from './accessing-raw-data/accessing-raw-data-page.component';
 import { DefaultValuesPageComponent } from './default-values/default-values-page.component';
@@ -13,8 +14,7 @@ export const formsRoutes: Route[] = [
       key: 'forms',
       name: 'Forms',
     },
-    children: [
-      {
+    children: [{
         path: 'displaying-forms',
         component: DisplayingFormsPageComponent,
         data: {
@@ -49,6 +49,13 @@ export const formsRoutes: Route[] = [
           pageTitle: 'Dowloading',
         },
       },
-    ],
+    {
+      path: 'xfa-forms',
+      component: XFAFormsPageComponent,
+      data: {
+        pageTitle: 'XFA Forms'
+      }
+    }
+  ],
   },
 ];
