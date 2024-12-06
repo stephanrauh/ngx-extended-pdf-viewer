@@ -1,3 +1,4 @@
+import { AccessingRawDataPageComponent } from './accessing-raw-data/accessing-raw-data-page.component';
 import { DefaultValuesPageComponent } from './default-values/default-values-page.component';
 import { CheckboxesAndRadiobuttonsPageComponent } from './checkboxes-and-radiobuttons/checkboxes-and-radiobuttons-page.component';
 import { DisplayingFormsPageComponent } from './displaying-forms/displaying-forms-page.component';
@@ -30,6 +31,13 @@ export const formsRoutes: Route[] = [
       component: DefaultValuesPageComponent,
       data: {
         pageTitle: 'Default Values'
+      }
+    },
+    {
+      path: 'accessing-raw-data',
+      component: AccessingRawDataPageComponent,
+      data: {
+        pageTitle: 'Accessing Raw Data'
       }
     }
   ],
