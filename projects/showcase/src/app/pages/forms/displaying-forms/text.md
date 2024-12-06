@@ -47,6 +47,8 @@ export class FormsComponent {
 
 ### Using object
 
+**Note**: If you are using checkboxes in your form, that do **not** map into a boolean value, it is better to use the getter/setter pattern. You can find more details under the [Checkboxes and Radiobuttons Page](./forms/checkboxes-and-radiobuttons)
+
 ```typescript
 export class FormsComponent {
 
