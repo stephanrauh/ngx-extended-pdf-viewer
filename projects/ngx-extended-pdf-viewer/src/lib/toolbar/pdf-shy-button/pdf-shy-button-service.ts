@@ -1,5 +1,4 @@
 import { effect, Injectable } from '@angular/core';
-import { SafeHtml } from '@angular/platform-browser';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
 import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveCSSClass } from '../../responsive-visibility';
@@ -14,7 +13,7 @@ export interface PdfShyButtonDescription {
   toggled: boolean;
   disabled: boolean;
   order: number;
-  image: SafeHtml;
+  image: string | undefined;
   action?: () => void;
   eventBusName?: string;
   closeOnClick?: boolean;

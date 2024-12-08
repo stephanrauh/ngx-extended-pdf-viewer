@@ -211,6 +211,7 @@ export class PDFViewer {
         _eventHandler: (evt: any) => void;
     };
     presentationModeState: number;
+    cspPolicyService: any;
     set maxZoom(value: number);
     get maxZoom(): number;
     set minZoom(value: number);

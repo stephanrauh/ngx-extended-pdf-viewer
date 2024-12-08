@@ -11,12 +11,13 @@ export class PageFlip extends EventObject {
      * @param {HTMLElement} inBlock - Root HTML Element
      * @param {Object} setting - Configuration object
      */
-    constructor(inBlock: HTMLElement, setting: Object);
+    constructor(inBlock: HTMLElement, setting: Object, cspPolicyService: any);
     isUserTouch: boolean;
     isUserMove: boolean;
     setting: FlipSetting;
     pages: HTMLPageCollection | null;
     block: HTMLElement;
+    cspPolicyService: any;
     /**
      * Destructor. Remove a root HTML element and all event handlers
      */
@@ -268,7 +269,7 @@ declare class HTMLRender extends Render {
  * UI for HTML mode
  */
 declare class HTMLUI extends UI {
-    constructor(inBlock: any, app: any, setting: any, items: any);
+    constructor(inBlock: any, app: any, setting: any, items: any, cspPolicyService: any);
     distElement: any;
     items: any;
     clear(): void;
@@ -662,6 +663,7 @@ declare class UI {
      * @param {FlipSetting} setting - Configuration object
      */
     constructor(inBlock: HTMLElement, app: PageFlip, setting: FlipSetting);
+    cspPolicyService: any;
     touchPoint: {
         point: {
             x: number;

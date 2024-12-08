@@ -11344,14 +11344,15 @@ function getDocument(src = {}) {
   if (!worker) {
     const workerParams = {
       verbosity,
-      port: GlobalWorkerOptions.workerPort
+      port: GlobalWorkerOptions.workerPort,
+      cspPolicyService: src.cspPolicyService
     };
     worker = workerParams.port ? PDFWorker.fromPort(workerParams) : new PDFWorker(workerParams);
     task._worker = worker;
   }
   const docParams = {
     docId,
-    apiVersion: "4.7.701",
+    apiVersion: "4.7.702",
     data,
     password,
     disableAutoFetch,
@@ -12173,7 +12174,8 @@ class PDFWorker {
   constructor({
     name = null,
     port = null,
-    verbosity = getVerbosityLevel()
+    verbosity = getVerbosityLevel(),
+    cspPolicyService
   } = {}) {
     this.name = name;
     this.destroyed = false;
@@ -12190,7 +12192,7 @@ class PDFWorker {
       this._initializeFromPort(port);
       return;
     }
-    this._initialize();
+    this._initialize(cspPolicyService);
   }
   get promise() {
     if (isNodeJS) {
@@ -12216,17 +12218,7 @@ class PDFWorker {
     this._messageHandler.on("ready", function () {});
     this.#resolve();
   }
-  #generateTrustedURL(sourcePath) {
-    if (window.trustedTypes) {
-      const sanitizer = window.trustedTypes.createPolicy("pdf-viewer", {
-        createHTML: input => input,
-        createScriptURL: input => input
-      });
-      return sanitizer.createScriptURL(sourcePath);
-    }
-    return sourcePath;
-  }
-  _initialize() {
+  _initialize(cspPolicyService) {
     if (PDFWorker.#isWorkerDisabled || PDFWorker.#mainThreadWorkerMessageHandler) {
       this._setupFakeWorker();
       return;
@@ -12238,7 +12230,7 @@ class PDFWorker {
       if (!PDFWorker._isSameOrigin(window.location.href, workerSrc)) {
         workerSrc = PDFWorker._createCDNWrapper(new URL(workerSrc, window.location).href);
       }
-      const worker = new Worker(this.#generateTrustedURL(workerSrc), {
+      const worker = new Worker(cspPolicyService.generateTrustedURL(workerSrc), {
         type: "module"
       });
       const messageHandler = new MessageHandler("main", "worker", worker);
@@ -13147,8 +13139,8 @@ class InternalRenderTask {
     }
   }
 }
-const version = "4.7.701";
-const build = "94ebd9fee";
+const version = "4.7.702";
+const build = "68d6dc548";
 
 ;// ./src/shared/scripting_utils.js
 function makeColorComp(n) {
@@ -20746,8 +20738,8 @@ class DrawLayer {
 
 
 
-const pdfjsVersion = "4.7.701";
-const pdfjsBuild = "94ebd9fee";
+const pdfjsVersion = "4.7.702";
+const pdfjsBuild = "68d6dc548";
 
 var __webpack_exports__AbortException = __webpack_exports__.AbortException;
 var __webpack_exports__AnnotationEditorLayer = __webpack_exports__.AnnotationEditorLayer;
@@ -22248,7 +22240,7 @@ const {
 } = globalThis.pdfjsLib;
 
 ;// ./web/ngx-extended-pdf-viewer-version.js
-const ngxExtendedPdfViewerVersion = '22.0.1';
+const ngxExtendedPdfViewerVersion = '22.1.0-alpha.0';
 ;// ./web/event_utils.js
 const WaitOnType = {
   EVENT: "event",
@@ -32499,6 +32491,7 @@ class CanvasRender extends Render {
 }
 class UI {
   constructor(inBlock, app, setting) {
+    this.cspPolicyService = app.cspPolicyService;
     this.touchPoint = null;
     this.swipeTimeout = 250;
     this.onResize = () => {
@@ -32578,7 +32571,8 @@ class UI {
     };
     this.parentElement = inBlock;
     inBlock.classList.add('stf__parent');
-    inBlock.insertAdjacentHTML('afterbegin', '<div class="stf__wrapper"></div>');
+    const wrapperHtml = this.cspPolicyService.createTrustedHTML('<div class="stf__wrapper"></div>');
+    inBlock.insertAdjacentHTML('afterbegin', wrapperHtml);
     this.wrapper = inBlock.querySelector('.stf__wrapper');
     this.app = app;
     const k = this.app.getSettings().usePortrait ? 1 : 2;
@@ -32655,9 +32649,11 @@ class UI {
   }
 }
 class HTMLUI extends UI {
-  constructor(inBlock, app, setting, items) {
+  constructor(inBlock, app, setting, items, cspPolicyService) {
     super(inBlock, app, setting);
-    this.wrapper.insertAdjacentHTML('afterbegin', '<div class="stf__block"></div>');
+    this.cspPolicyService = cspPolicyService;
+    const wrapperHtml = this.cspPolicyService.createTrustedHTML('<div class="stf__block"></div>');
+    this.wrapper.insertAdjacentHTML('afterbegin', wrapperHtml);
     this.distElement = inBlock.querySelector('.stf__block');
     this.items = items;
     for (const item of items) {
@@ -32743,10 +32739,11 @@ class HTMLRender extends Render {
     this.createShadows();
   }
   createShadows() {
-    this.element.insertAdjacentHTML('beforeend', `<div class="stf__outerShadow"></div>
+    const shadowHtml = this.app.cspPolicyService.createTrustedHTML(`<div class="stf__outerShadow"></div>
              <div class="stf__innerShadow"></div>
              <div class="stf__hardShadow"></div>
              <div class="stf__hardInnerShadow"></div>`);
+    this.element.insertAdjacentHTML('beforeend', shadowHtml);
     this.outerShadow = this.element.querySelector('.stf__outerShadow');
     this.innerShadow = this.element.querySelector('.stf__innerShadow');
     this.hardShadow = this.element.querySelector('.stf__hardShadow');
@@ -33036,34 +33033,8 @@ class Settings {
     return result;
   }
 }
-function styleInject(css, ref) {
-  if (ref === void 0) ref = {};
-  var insertAt = ref.insertAt;
-  if (!css || typeof document === 'undefined') {
-    return;
-  }
-  var head = document.head || document.getElementsByTagName('head')[0];
-  var style = document.createElement('style');
-  style.type = 'text/css';
-  if (insertAt === 'top') {
-    if (head.firstChild) {
-      head.insertBefore(style, head.firstChild);
-    } else {
-      head.appendChild(style);
-    }
-  } else {
-    head.appendChild(style);
-  }
-  if (style.styleSheet) {
-    style.styleSheet.cssText = css;
-  } else {
-    style.appendChild(document.createTextNode(css));
-  }
-}
-var css_248z = ".stf__parent {\n  position: relative;\n  display: block;\n  box-sizing: border-box;\n  transform: translateZ(0);\n\n  -ms-touch-action: pan-y;\n  touch-action: pan-y;\n}\n\n.sft__wrapper {\n  position: relative;\n  width: 100%;\n  box-sizing: border-box;\n}\n\n.stf__parent canvas {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  left: 0;\n  top: 0;\n}\n\n.stf__block {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  box-sizing: border-box;\n  perspective: 2000px;\n}\n\n.stf__item {\n  display: none;\n  position: absolute;\n  transform-style: preserve-3d;\n}\n\n.stf__outerShadow {\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n\n.stf__innerShadow {\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n\n.stf__hardShadow {\n  position: absolute;\n  left: 0;\n  top: 0;\n}\n\n.stf__hardInnerShadow {\n  position: absolute;\n  left: 0;\n  top: 0;\n}";
-styleInject(css_248z);
 class PageFlip extends EventObject {
-  constructor(inBlock, setting) {
+  constructor(inBlock, setting, cspPolicyService) {
     super();
     this.isUserTouch = false;
     this.isUserMove = false;
@@ -33071,6 +33042,7 @@ class PageFlip extends EventObject {
     this.pages = null;
     this.setting = new Settings().getSettings(setting);
     this.block = inBlock;
+    this.cspPolicyService = cspPolicyService;
   }
   destroy() {
     this.ui.destroy();
@@ -33081,7 +33053,7 @@ class PageFlip extends EventObject {
     this.pages.show();
   }
   loadFromHTML(items) {
-    this.ui = new HTMLUI(this.block, this, this.setting, items);
+    this.ui = new HTMLUI(this.block, this, this.setting, items, this.cspPolicyService);
     this.render = new HTMLRender(this, this.setting, this.ui.getDistElement());
     this.flipController = new Flip(this.render, this);
     this.pages = new HTMLPageCollection(this, this.render, this.ui.getDistElement(), items);
@@ -35176,7 +35148,7 @@ class PDFViewer {
   #maxZoom = MAX_SCALE;
   #minZoom = MIN_SCALE;
   constructor(options) {
-    const viewerVersion = "4.7.701";
+    const viewerVersion = "4.7.702";
     if (version !== viewerVersion) {
       throw new Error(`The API version "${version}" does not match the Viewer version "${viewerVersion}".`);
     }
@@ -35255,6 +35227,7 @@ class PDFViewer {
     if (!options.l10n) {
       this.l10n.translate(this.container);
     }
+    this.cspPolicyService = options.cspPolicyService;
   }
   get maxZoom() {
     return this.#maxZoom;
@@ -35352,7 +35325,7 @@ class PDFViewer {
               height: page1.clientHeight,
               showCover: true,
               size: "fixed"
-            });
+            }, this.cspPolicyService);
             this.pageFlip.loadFromHTML(this.container.querySelectorAll(".page"));
             this.pageFlip.on("flip", e => {
               if (this._currentPageNumber !== e.data + 1) {
@@ -37783,6 +37756,7 @@ const PDFViewerApplication = {
   _isScrolling: false,
   async initialize(appConfig) {
     this.appConfig = appConfig;
+    this.cspPolicyService = appConfig.cspPolicyService;
     try {
       await this.preferences.initializedPromise;
     } catch (ex) {
@@ -37987,7 +37961,8 @@ const PDFViewerApplication = {
       enableHWA,
       defaultCacheSize: AppOptions.get("defaultCacheSize"),
       minZoom: AppOptions.get("minZoom"),
-      maxZoom: AppOptions.get("maxZoom")
+      maxZoom: AppOptions.get("maxZoom"),
+      cspPolicyService: this.cspPolicyService
     });
     this.pdfViewer = pdfViewer;
     pdfRenderingQueue.setViewer(pdfViewer);
@@ -38348,12 +38323,14 @@ const PDFViewerApplication = {
       await this.close();
     }
     const workerParams = AppOptions.getAll(OptionKind.WORKER);
+    workerParams.cspPolicyService = args.cspPolicyService;
     if (args.workerSrc && args.workerSrc !== workerParams.workerSrc) {
       workerParams.workerSrc = args.workerSrc;
       this.pdfWorker = null;
     }
     Object.assign(GlobalWorkerOptions, workerParams);
     workerParams.port = workerParams.port ?? GlobalWorkerOptions.workerPort;
+    workerParams.cspPolicyService = this.cspPolicyService;
     if (this.pdfWorker === null) {
       this.pdfWorker = workerParams.port ? PDFWorker.fromPort(workerParams) : new PDFWorker(workerParams);
     }
@@ -38364,7 +38341,8 @@ const PDFViewerApplication = {
     const loadingTask = getDocument({
       ...apiParams,
       ...args,
-      worker: this.pdfWorker
+      worker: this.pdfWorker,
+      cspPolicyService: args.cspPolicyService
     });
     this.pdfLoadingTask = loadingTask;
     loadingTask.onPassword = (updateCallback, reason) => {
@@ -40090,8 +40068,8 @@ PDFViewerApplication.serviceWorkerOptions = ServiceWorkerOptions;
 
 
 
-const pdfjsVersion = "4.7.701";
-const pdfjsBuild = "94ebd9fee";
+const pdfjsVersion = "4.7.702";
+const pdfjsBuild = "68d6dc548";
 const AppConstants = {
   LinkTarget: LinkTarget,
   RenderingStates: RenderingStates,
@@ -40277,7 +40255,7 @@ function getViewerConfiguration() {
     }
   };
 }
-function webViewerLoad() {
+function webViewerLoad(cspPolicyService) {
   const config = getViewerConfiguration();
   const event = new CustomEvent("webviewerloaded", {
     bubbles: true,
@@ -40292,6 +40270,7 @@ function webViewerLoad() {
     console.error(`webviewerloaded: ${ex}`);
     parent.document.dispatchEvent(event);
   }
+  config.cspPolicyService = cspPolicyService;
   PDFViewerApplication.run(config);
 }
 document.blockUnblockOnload?.(true);

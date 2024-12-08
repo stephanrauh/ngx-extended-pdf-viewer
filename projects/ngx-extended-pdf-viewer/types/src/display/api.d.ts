@@ -1407,7 +1407,7 @@ export class PDFWorker {
     static get workerSrc(): string;
     static get "__#50@#mainThreadWorkerMessageHandler"(): any;
     static get _setupFakeWorkerGlobal(): any;
-    constructor({ name, port, verbosity, }?: {
+    constructor({ name, port, verbosity, cspPolicyService, }?: {
         name?: null | undefined;
         port?: null | undefined;
         verbosity?: number | undefined;
@@ -1435,7 +1435,7 @@ export class PDFWorker {
      */
     get messageHandler(): MessageHandler;
     _initializeFromPort(port: any): void;
-    _initialize(): void;
+    _initialize(cspPolicyService: any): void;
     _setupFakeWorker(): void;
     /**
      * Destroys the worker instance.

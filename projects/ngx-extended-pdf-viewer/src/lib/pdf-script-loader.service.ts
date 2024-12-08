@@ -29,7 +29,7 @@ export class PDFScriptLoaderService implements OnDestroy {
   public PDFViewerApplication!: IPDFViewerApplication;
   public PDFViewerApplicationOptions!: IPDFViewerApplicationOptions;
   // private PDFViewerApplicationConstants: any;
-  public webViewerLoad: () => void;
+  public webViewerLoad: (cspPolicyService: PdfCspPolicyService) => void;
 
   public ngxExtendedPdfViewerIncompletelyInitialized = true;
 
@@ -121,7 +121,10 @@ new (function () {
     script.type = 'module';
     script.className = `ngx-extended-pdf-viewer-script`;
     script.text = code;
-    script.nonce = this.csp_nonce;
+    if (this.csp_nonce) {
+      // assigning null to script.nonce results in a string "null", so let's add a null check
+      script.nonce = this.csp_nonce;
+    }
     return script;
   }
 

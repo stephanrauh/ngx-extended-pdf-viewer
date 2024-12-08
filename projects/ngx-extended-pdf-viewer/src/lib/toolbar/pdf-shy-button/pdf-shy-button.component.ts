@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, Renderer2, ViewChild, effect } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { IPDFViewerApplication } from '../../options/pdf-viewer-application';
+import { PdfCspPolicyService } from '../../pdf-csp-policy.service';
 import { PDFNotificationService } from '../../pdf-notification-service';
 import { ResponsiveCSSClass } from '../../responsive-visibility';
 import { PdfShyButtonService } from './pdf-shy-button-service';
@@ -53,9 +54,9 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit {
 
   @ViewChild('buttonRef', { static: false }) buttonRef: ElementRef;
 
-  private _imageHtml: SafeHtml;
+  private _imageHtml: string | undefined;
 
-  public get imageHtml(): SafeHtml {
+  public get imageHtml(): string | undefined {
     return this._imageHtml;
   }
 
@@ -139,14 +140,15 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit {
     if (!legal) {
       throw new Error('Illegal image for PDFShyButton. Only SVG images are allowed. Please use only the tags <svg> and <path>. ' + value);
     }
-    this._imageHtml = this.sanitizeHtml(value);
+    this._imageHtml = value;
   }
 
   constructor(
     private pdfShyButtonServiceService: PdfShyButtonService,
     private sanitizer: DomSanitizer,
     private renderer: Renderer2,
-    notificationService: PDFNotificationService
+    private notificationService: PDFNotificationService,
+    private pdfCspPolicyService: PdfCspPolicyService
   ) {
     effect(() => {
       this.PDFViewerApplication = notificationService.onPDFJSInitSignal();
@@ -165,10 +167,6 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit {
     this.pdfShyButtonServiceService.update(this);
   }
 
-  private sanitizeHtml(html: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(html); // NOSONAR
-  }
-
   public onClick(htmlEvent: Event): void {
     if (this.action) {
       this.action(htmlEvent, false);
@@ -184,7 +182,7 @@ export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit {
       const el = this.buttonRef.nativeElement;
       if (this._imageHtml) {
         const temp = this.renderer.createElement('div');
-        temp.innerHTML = this._imageHtml;
+        this.pdfCspPolicyService.addTrustedHTML(temp, this._imageHtml);
         const image = temp.children[0];
         if (!el.innerHTML.includes(image.innerHTML)) {
           // if using SSR, the HTML code may already be there

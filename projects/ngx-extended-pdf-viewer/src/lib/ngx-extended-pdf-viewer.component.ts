@@ -63,6 +63,7 @@ import { NgxHasHeight } from './ngx-has-height';
 import { NgxKeyboardManagerService } from './ngx-keyboard-manager.service';
 import { PdfSidebarView } from './options/pdf-sidebar-views';
 import { SpreadType } from './options/spread-type';
+import { PdfCspPolicyService } from './pdf-csp-policy.service';
 import { PDFScriptLoaderService } from './pdf-script-loader.service';
 import { ResponsiveVisibility } from './responsive-visibility';
 
@@ -1038,7 +1039,8 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
     public service: NgxExtendedPdfViewerService,
     private readonly renderer: Renderer2,
     private readonly pdfScriptLoaderService: PDFScriptLoaderService,
-    private readonly keyboardManager: NgxKeyboardManagerService
+    private readonly keyboardManager: NgxKeyboardManagerService,
+    private cspPolicyService: PdfCspPolicyService
   ) {
     this.baseHref = this.platformLocation.getBaseHrefFromDOM();
     if (isPlatformBrowser(this.platformId)) {
@@ -1247,7 +1249,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           (globalThis as any).PDFViewerApplicationOptions = PDFViewerApplicationOptions;
         }
 
-        this.pdfScriptLoaderService.webViewerLoad();
+        this.pdfScriptLoaderService.webViewerLoad(this.cspPolicyService);
 
         const PDFViewerApplication: IPDFViewerApplication = this.pdfScriptLoaderService.PDFViewerApplication;
         PDFViewerApplication.appConfig.defaultUrl = ''; // IE bugfix
@@ -1511,6 +1513,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
           options.data = this._src;
         }
         options.rangeChunkSize = pdfDefaultOptions.rangeChunkSize;
+        options.cspPolicyService = this.cspPolicyService;
 
         await PDFViewerApplication.open(options);
         this.pdfLoadingStarts.emit({});
