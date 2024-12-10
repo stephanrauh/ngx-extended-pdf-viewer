@@ -1,3 +1,4 @@
+import { ContentSecurityPolicyPageComponent } from './content-security-policy/content-security-policy-page.component';
 import { FilteringConsoleLogPageComponent } from './filtering-console.log/filtering-console.log-page.component';
 import { Route } from '@angular/router';
 import { RouteGroupData } from '../../shared/types/route-data.types';
@@ -9,14 +10,21 @@ export const developerExperienceRoutes: Route[] = [
       name: 'Developer Experience',
       key: 'developer-experience',
     },
-    children: [,
-    {
-      path: 'filtering-console.log',
-      component: FilteringConsoleLogPageComponent,
-      data: {
-        pageTitle: 'Filtering console.log'
-      }
-    }
-  ],
+    children: [
+      {
+        path: 'filtering-console.log',
+        component: FilteringConsoleLogPageComponent,
+        data: {
+          pageTitle: 'Filtering console.log',
+        },
+      },
+      {
+        path: 'content-security-policy',
+        component: ContentSecurityPolicyPageComponent,
+        data: {
+          pageTitle: 'Content Security Policy (CSP)',
+        },
+      },
+    ],
   },
 ];
