@@ -1,3 +1,4 @@
+import { ScrollingAPIPageComponent } from './scrolling-api/scrolling-api-page.component';
 import { ServerSideRenderingPageComponent } from './server-side-rendering/server-side-rendering-page.component';
 import { UnverifiedSignaturesPageComponent } from './unverified-signatures/unverified-signatures-page.component';
 import { ReadingMetadataPageComponent } from './reading-metadata/reading-metadata-page.component';
@@ -46,6 +47,13 @@ export const developerExperienceRoutes: Route[] = [
       component: ServerSideRenderingPageComponent,
       data: {
         pageTitle: 'Server-Side Rendering'
+      }
+    },
+    {
+      path: 'scrolling-api',
+      component: ScrollingAPIPageComponent,
+      data: {
+        pageTitle: 'Scrolling API'
       }
     }
   ],
