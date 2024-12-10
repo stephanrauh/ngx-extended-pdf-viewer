@@ -1,3 +1,4 @@
+import { ReadingMetadataPageComponent } from './reading-metadata/reading-metadata-page.component';
 import { ContentSecurityPolicyPageComponent } from './content-security-policy/content-security-policy-page.component';
 import { FilteringConsoleLogPageComponent } from './filtering-console.log/filtering-console.log-page.component';
 import { Route } from '@angular/router';
@@ -10,8 +11,7 @@ export const developerExperienceRoutes: Route[] = [
       name: 'Developer Experience',
       key: 'developer-experience',
     },
-    children: [
-      {
+    children: [{
         path: 'filtering-console.log',
         component: FilteringConsoleLogPageComponent,
         data: {
@@ -25,6 +25,13 @@ export const developerExperienceRoutes: Route[] = [
           pageTitle: 'Content Security Policy (CSP)',
         },
       },
-    ],
+    {
+      path: 'reading-metadata',
+      component: ReadingMetadataPageComponent,
+      data: {
+        pageTitle: 'Reading Metadata'
+      }
+    }
+  ],
   },
 ];
