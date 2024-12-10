@@ -1,3 +1,4 @@
+import { NavigationAPIPageComponent } from './navigation-api/navigation-api-page.component';
 import { ScrollingAPIPageComponent } from './scrolling-api/scrolling-api-page.component';
 import { ServerSideRenderingPageComponent } from './server-side-rendering/server-side-rendering-page.component';
 import { UnverifiedSignaturesPageComponent } from './unverified-signatures/unverified-signatures-page.component';
@@ -54,6 +55,13 @@ export const developerExperienceRoutes: Route[] = [
       component: ScrollingAPIPageComponent,
       data: {
         pageTitle: 'Scrolling API'
+      }
+    },
+    {
+      path: 'navigation-api',
+      component: NavigationAPIPageComponent,
+      data: {
+        pageTitle: 'Navigation API'
       }
     }
   ],
