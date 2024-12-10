@@ -30,7 +30,7 @@ You can fine-tune when a breakpoint triggers. You have to resize the window afte
   [showSecondaryToolbarButton]="showSecondaryToolbarButton"
   [showRotateButton]="showRotateButton"
   [showHandToolButton]="showHandToolButton"
-  [showScrollingButton]="showScrollingButton"
+  [showScrollingButtons]="showScrollingButton"
   [showSpreadButton]="showSpreadButton"
   [showPropertiesButton]="showPropertiesButton"
   height="250px" zoom="25%">

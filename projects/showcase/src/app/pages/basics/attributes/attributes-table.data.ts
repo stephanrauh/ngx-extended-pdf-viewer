@@ -351,7 +351,7 @@ export const attributes = [
     description: 'Show or hide the "rotate counter-clockwise" menu item',
   },
   {
-    attribute: 'showScrollingButton',
+    attribute: 'showScrollingButtons',
     defaultValue: 'n/a',
     description:
       'removed with version 18.0.0. Use `[showBookModeButton]`, `[showSinglePageModeButton]`, `[showVerticalScrollButton]`,`[showHorizontalScrollButton]`, and `[showInfiniteScrollButton]` instead.',

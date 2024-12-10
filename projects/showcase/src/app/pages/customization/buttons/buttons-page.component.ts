@@ -18,7 +18,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     FormsModule,
   ],
-  template: `<pvs-content-page [demoTemplate]="demo">
+  template: ` <pvs-content-page [demoTemplate]="demo">
     <pvs-markdown src="/assets/pages/customization/buttons/text.md" />
     <ng-template #demo>
       <pvs-split-view [stickyEnd]="true">
@@ -85,8 +85,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
           <label for="handTool">showHandToolButton</label>
           <input id="handTool" type="checkbox" [(ngModel)]="showHandToolButton" [disabled]="!showToolbar" />
 
-          <label for="scrolling">showScrollingButton</label>
-          <input id="scrolling" type="checkbox" [(ngModel)]="showScrollingButton" [disabled]="!showToolbar" />
+          <label for="scrolling">showScrollingButtons</label>
+          <input id="scrolling" type="checkbox" [(ngModel)]="showScrollingButtons" [disabled]="!showToolbar" />
 
           <label for="spread">showSpreadButton</label>
           <input id="spread" type="checkbox" [(ngModel)]="showSpreadButton" [disabled]="!showToolbar" />
@@ -120,7 +120,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
           [showRotateCwButton]="showRotateCwButton"
           [showRotateCcwButton]="showRotateCcwButton"
           [showHandToolButton]="showHandToolButton"
-          [showScrollingButton]="showScrollingButton"
+          [showScrollingButtons]="showScrollingButtons"
           [showSpreadButton]="showSpreadButton"
           [showPropertiesButton]="showPropertiesButton"
           [(findbarVisible)]="findbarVisible"
@@ -152,7 +152,7 @@ export class ButtonsPageComponent {
   showRotateCwButton = false;
   showRotateCcwButton = false;
   showHandToolButton = false;
-  showScrollingButton = false;
+  showScrollingButtons = false;
   showSpreadButton = false;
   showPropertiesButton = false;
   propertiesDialogVisible = false;

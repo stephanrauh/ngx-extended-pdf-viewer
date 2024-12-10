@@ -22,7 +22,7 @@ You can hide every button of the toolbar and every menu item of the secondary me
   [showRotateCwButton]="false"
   [showRotateCcwButton]="false"
   [showHandToolButton]="false"
-  [showScrollingButton]="false"
+  [showScrollingButtons]="false"
   [showSpreadButton]="false"
   [showPropertiesButton]="false">
 </ngx-extended-pdf-viewer>
