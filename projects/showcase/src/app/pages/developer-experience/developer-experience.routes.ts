@@ -1,3 +1,4 @@
+import { EditorAPIPageComponent } from './editor-api/editor-api-page.component';
 import { NavigationAPIPageComponent } from './navigation-api/navigation-api-page.component';
 import { ScrollingAPIPageComponent } from './scrolling-api/scrolling-api-page.component';
 import { ServerSideRenderingPageComponent } from './server-side-rendering/server-side-rendering-page.component';
@@ -62,6 +63,13 @@ export const developerExperienceRoutes: Route[] = [
       component: NavigationAPIPageComponent,
       data: {
         pageTitle: 'Navigation API'
+      }
+    },
+    {
+      path: 'editor-api',
+      component: EditorAPIPageComponent,
+      data: {
+        pageTitle: 'Editor API'
       }
     }
   ],
