@@ -1,3 +1,4 @@
+import { FilteringConsoleLogPageComponent } from './filtering-console.log/filtering-console.log-page.component';
 import { Route } from '@angular/router';
 import { RouteGroupData } from '../../shared/types/route-data.types';
 
@@ -8,6 +9,14 @@ export const developerExperienceRoutes: Route[] = [
       name: 'Developer Experience',
       key: 'developer-experience',
     },
-    children: [],
+    children: [,
+    {
+      path: 'filtering-console.log',
+      component: FilteringConsoleLogPageComponent,
+      data: {
+        pageTitle: 'Filtering console.log'
+      }
+    }
+  ],
   },
 ];
