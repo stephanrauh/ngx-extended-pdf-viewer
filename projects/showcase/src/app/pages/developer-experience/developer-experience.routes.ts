@@ -1,3 +1,4 @@
+import { ServerSideRenderingPageComponent } from './server-side-rendering/server-side-rendering-page.component';
 import { UnverifiedSignaturesPageComponent } from './unverified-signatures/unverified-signatures-page.component';
 import { ReadingMetadataPageComponent } from './reading-metadata/reading-metadata-page.component';
 import { ContentSecurityPolicyPageComponent } from './content-security-policy/content-security-policy-page.component';
@@ -38,6 +39,13 @@ export const developerExperienceRoutes: Route[] = [
       component: UnverifiedSignaturesPageComponent,
       data: {
         pageTitle: 'Unverified Signatures'
+      }
+    },
+    {
+      path: 'server-side-rendering',
+      component: ServerSideRenderingPageComponent,
+      data: {
+        pageTitle: 'Server-Side Rendering'
       }
     }
   ],
