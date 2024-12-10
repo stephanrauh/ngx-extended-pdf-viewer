@@ -9,6 +9,7 @@ import { viewingRoutes } from './pages/viewing/viewing.routes';
 import { formsRoutes } from './pages/forms/forms.routes';
 import { printingRoutes } from './pages/printing/printing.routes';
 import { findingRoutes } from './pages/finding/finding.routes';
+import { developerExperienceRoutes } from './pages/developer-experience/developer-experience.routes';
 
 export const routes: Routes = [
   {
@@ -26,4 +27,5 @@ export const routes: Routes = [
   ...printingRoutes,
   ...securityRoutes,
   ...exportingRoutes,
+  ...developerExperienceRoutes,
 ];
