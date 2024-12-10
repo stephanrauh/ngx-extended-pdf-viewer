@@ -16,8 +16,9 @@ export const developerExperienceRoutes: Route[] = [
       name: 'Developer Experience',
       key: 'developer-experience',
     },
-    children: [{
-        path: 'filtering-console.log',
+    children: [
+      {
+        path: 'filtering-console-log',
         component: FilteringConsoleLogPageComponent,
         data: {
           pageTitle: 'Filtering console.log',
@@ -30,48 +31,48 @@ export const developerExperienceRoutes: Route[] = [
           pageTitle: 'Content Security Policy (CSP)',
         },
       },
-    {
-      path: 'reading-metadata',
-      component: ReadingMetadataPageComponent,
-      data: {
-        pageTitle: 'Reading Metadata'
-      }
-    },
-    {
-      path: 'unverified-signatures',
-      component: UnverifiedSignaturesPageComponent,
-      data: {
-        pageTitle: 'Unverified Signatures'
-      }
-    },
-    {
-      path: 'server-side-rendering',
-      component: ServerSideRenderingPageComponent,
-      data: {
-        pageTitle: 'Server-Side Rendering'
-      }
-    },
-    {
-      path: 'scrolling-api',
-      component: ScrollingAPIPageComponent,
-      data: {
-        pageTitle: 'Scrolling API'
-      }
-    },
-    {
-      path: 'navigation-api',
-      component: NavigationAPIPageComponent,
-      data: {
-        pageTitle: 'Navigation API'
-      }
-    },
-    {
-      path: 'editor-api',
-      component: EditorAPIPageComponent,
-      data: {
-        pageTitle: 'Editor API'
-      }
-    }
-  ],
+      {
+        path: 'reading-metadata',
+        component: ReadingMetadataPageComponent,
+        data: {
+          pageTitle: 'Reading Metadata',
+        },
+      },
+      {
+        path: 'unverified-signatures',
+        component: UnverifiedSignaturesPageComponent,
+        data: {
+          pageTitle: 'Unverified Signatures',
+        },
+      },
+      {
+        path: 'server-side-rendering',
+        component: ServerSideRenderingPageComponent,
+        data: {
+          pageTitle: 'Server-Side Rendering',
+        },
+      },
+      {
+        path: 'scrolling-api',
+        component: ScrollingAPIPageComponent,
+        data: {
+          pageTitle: 'Scrolling API',
+        },
+      },
+      {
+        path: 'navigation-api',
+        component: NavigationAPIPageComponent,
+        data: {
+          pageTitle: 'Navigation API',
+        },
+      },
+      {
+        path: 'editor-api',
+        component: EditorAPIPageComponent,
+        data: {
+          pageTitle: 'Editor API',
+        },
+      },
+    ],
   },
 ];

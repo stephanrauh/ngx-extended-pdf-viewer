@@ -1,6 +1,6 @@
 Modal dialogs often remove the HTML code from the DOM before calling `ngOnDestroy()` of the `NgxExtendedPdfViewerComponent`, resulting in a couple of error messages on the console. To avoid this, call `ngOnDestroy()` manually before removing the HTML code. The demo shows how to do this with the Angular CDK dialog.
 
-If you close the modal very quickly, you may see messages like "worker destroyed" or "transport destroyed" in the console log. This simply means that you've destroyed the PDF viewer while it's still rendering. If you need to get rid of these messages, register a custom [`globalThis.ngxConsoleFilter(logLevel, message)`](/filtering-console-log).
+If you close the modal very quickly, you may see messages like "worker destroyed" or "transport destroyed" in the console log. This simply means that you've destroyed the PDF viewer while it's still rendering. If you need to get rid of these messages, register a custom [`globalThis.ngxConsoleFilter(logLevel, message)`](./developer-experience/filtering-console-log).
 
 ### TypeScript
 
