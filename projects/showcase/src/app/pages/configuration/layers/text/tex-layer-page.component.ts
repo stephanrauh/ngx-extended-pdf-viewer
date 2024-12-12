@@ -1,36 +1,20 @@
-import { Component, inject, signal } from '@angular/core';
-import { NgxExtendedPdfViewerModule, NgxExtendedPdfViewerService, PdfLayer, TextLayerRenderedEvent } from 'ngx-extended-pdf-viewer';
-import { SplitViewComponent } from '../../../shared/components/split-view.component';
-import { SetMinifiedLibraryUsageDirective } from '../../../shared/directives/set-minified-library-usage.directive';
-import { ContentPageComponent } from '../../../shared/components/content-page/content-page.component';
-import { MarkdownContentComponent } from '../../../shared/components/markdown-content.component';
+import { Component } from '@angular/core';
+import { NgxExtendedPdfViewerModule, TextLayerRenderedEvent } from 'ngx-extended-pdf-viewer';
+import { SplitViewComponent } from '../../../../shared/components/split-view.component';
+import { SetMinifiedLibraryUsageDirective } from '../../../../shared/directives/set-minified-library-usage.directive';
+import { ContentPageComponent } from '../../../../shared/components/content-page/content-page.component';
+import { MarkdownContentComponent } from '../../../../shared/components/markdown-content.component';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, combineLatest, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NgClass } from '@angular/common';
-import { ButtonDirective } from '../../../core/directives/button.directive';
 
 @Component({
   selector: 'pvs-layers-page',
   standalone: true,
-  imports: [
-    ContentPageComponent,
-    MarkdownContentComponent,
-    NgxExtendedPdfViewerModule,
-    SplitViewComponent,
-    SetMinifiedLibraryUsageDirective,
-    FormsModule,
-    NgClass,
-    ButtonDirective,
-  ],
-  template: `<pvs-content-page
-    [otherTabs]="[
-      { title: 'Demo - Text Layer', template: demoTextLayer },
-      { title: 'Demo - PDF Layers', template: pdfLayers },
-    ]"
-  >
-    <pvs-markdown src="/assets/pages/configuration/layers/text.md" />
-    <ng-template #demoTextLayer>
+  imports: [ContentPageComponent, MarkdownContentComponent, NgxExtendedPdfViewerModule, SplitViewComponent, SetMinifiedLibraryUsageDirective, FormsModule],
+  template: ` <pvs-content-page [demoTemplate]="demo">
+    <pvs-markdown src="/assets/pages/configuration/layers/text/text.md" />
+    <ng-template #demo>
       <pvs-split-view [stickyEnd]="true">
         <div class="fieldset-group">
           <fieldset class="fieldset">
@@ -68,44 +52,14 @@ import { ButtonDirective } from '../../../core/directives/button.directive';
         />
       </pvs-split-view>
     </ng-template>
-
-    <ng-template #pdfLayers>
-      <pvs-split-view [stickyEnd]="true">
-        @for (layer of layers(); track layer.layerId) {
-          <span>
-            <button
-              pvsButton
-              [ngClass]="{
-                'bg-primary-light-variant': !layer.visible,
-              }"
-              (click)="toggleLayer(layer.layerId)"
-            >
-              Toggle {{ layer.name }}
-            </button>
-          </span>
-        }
-        <ngx-extended-pdf-viewer
-          slot="end"
-          src="/assets/pdfs/themes_de_la_Science-fiction.pdf"
-          zoom="auto"
-          [textLayer]="true"
-          pvsSetMinifiedLibraryUsage
-          (pagesLoaded)="listLayers()"
-        />
-      </pvs-split-view>
-    </ng-template>
   </pvs-content-page>`,
 })
-export class LayersPageComponent {
-  private pdfService = inject(NgxExtendedPdfViewerService);
-
+export class TexLayerPageComponent {
   private renderedTextLayers$ = new BehaviorSubject<HTMLSpanElement[]>([]);
 
   markLongWords$ = new BehaviorSubject<boolean>(false);
   showBoxes$ = new BehaviorSubject<boolean>(false);
   showTextLayer$ = new BehaviorSubject<boolean>(false);
-
-  layers = signal<PdfLayer[]>([]);
 
   constructor() {
     combineLatest({
@@ -164,24 +118,10 @@ export class LayersPageComponent {
     this.showTextLayer$.next(value);
   }
 
-  async listLayers(): Promise<void> {
-    const layers = await this.pdfService.listLayers();
-    if (layers) {
-      this.layers.set(layers);
-      return;
-    }
-    console.log("This document either hasn't layers, or you've called listLayers() before the PDF layers have been rendered");
-  }
-
   setRenderedLayers(event: TextLayerRenderedEvent) {
     const layers = event.source.textLayer?.highlighter.textDivs ?? [];
     const previousLayers = [...this.renderedTextLayers$.getValue()];
     this.renderedTextLayers$.next([...previousLayers, ...layers]);
-  }
-
-  async toggleLayer(layerId: string): Promise<void> {
-    await this.pdfService.toggleLayer(layerId);
-    await this.listLayers();
   }
 
   private doMarkLongWordsInLayer(layer: HTMLSpanElement, markLongWords: boolean): void {
