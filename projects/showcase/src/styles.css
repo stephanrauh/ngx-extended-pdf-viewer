@@ -82,7 +82,7 @@
     background-color: #ddd;
   }
 
-  :not(nav li) > a:not(.github-corner) {
+  :not(nav li) > a:not(.github-corner):not(.no-underline){
     @apply text-primary-light;
     @apply underline;
 
