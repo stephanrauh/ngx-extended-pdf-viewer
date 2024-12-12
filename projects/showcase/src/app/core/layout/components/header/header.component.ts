@@ -3,11 +3,12 @@ import { Component, inject } from '@angular/core';
 import { SidebarService } from '../../../../shared/services/sidebar.service';
 import { versions } from '../../../../shared/constants/versions';
 import { OctocatComponent } from '../../../components/octocat.component';
+import { SearchComponent } from '../../../search/search.component';
 
 @Component({
   selector: 'pvs-header',
   standalone: true,
-  imports: [OctocatComponent],
+  imports: [OctocatComponent, SearchComponent],
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {

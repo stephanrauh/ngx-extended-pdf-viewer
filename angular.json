@@ -75,7 +75,8 @@
                 "glob": "**/*.md",
                 "input": "projects/showcase/src/app/pages/",
                 "output": "/assets/pages/"
-              }
+              },
+              "projects/showcase/src/assets/search-index.json"
             ],
             "styles": [
               "projects/showcase/src/styles.css",
