@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { isNavigationGroup, isNavigationTarget, NavigationGroup } from '../navigation-config.types';
 import { NavigationTargetComponent } from './navigation-target.component';
 
@@ -7,7 +7,7 @@ import { NavigationTargetComponent } from './navigation-target.component';
   standalone: true,
   imports: [NavigationTargetComponent],
   template: `
-    <input type="checkbox" [id]="group().key ?? group()" checked class="hidden" />
+    <input type="checkbox" [id]="groupKey()" checked class="hidden" />
     <div class="grid grid-cols-[1fr_minmax(0,auto)] font-semibold">
       <label [for]="group().key" class="cursor-pointer">{{ group().displayName }}</label>
       <span role="presentation" class="after:content-['+'] group-has-[:checked]:after:content-['-']"></span>
@@ -28,6 +28,7 @@ import { NavigationTargetComponent } from './navigation-target.component';
 })
 export class NavigationGroupComponent {
   group = input.required<NavigationGroup>();
+  groupKey = computed(() => this.group().key);
   protected readonly isNavigationGroup = isNavigationGroup;
   protected readonly isNavigationTarget = isNavigationTarget;
 }
