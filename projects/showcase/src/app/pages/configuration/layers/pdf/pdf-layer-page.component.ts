@@ -25,17 +25,20 @@ import { ButtonDirective } from '../../../../core/directives/button.directive';
     <pvs-markdown src="/assets/pages/configuration/layers/pdf/text.md" />
     <ng-template #demo>
       <pvs-split-view [stickyEnd]="true">
-        @for (layer of layers(); track layer.layerId) {
-          <button
-            pvsButton
-            [ngClass]="{
-              'bg-primary-light-variant': !layer.visible,
-            }"
-            (click)="toggleLayer(layer.layerId)"
-          >
-            Toggle {{ layer.name }}
-          </button>
-        }
+        <div class="grid gap-4">
+          @for (layer of layers(); track layer.layerId) {
+            <button
+              pvsButton
+              [ngClass]="{
+                'bg-primary-variant-light': !layer.visible,
+                'text-on-primary-variant-light': !layer.visible,
+              }"
+              (click)="toggleLayer(layer.layerId)"
+            >
+              {{ layer.visible ? 'Hide' : 'Show' }} {{ layer.name }}
+            </button>
+          }
+        </div>
         <ngx-extended-pdf-viewer
           slot="end"
           src="/assets/pdfs/themes_de_la_Science-fiction.pdf"
