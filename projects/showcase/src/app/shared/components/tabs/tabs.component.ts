@@ -1,8 +1,5 @@
 import { AfterViewInit, Component, contentChildren, QueryList, ViewChildren } from '@angular/core';
-import { NgClass } from '@angular/common';
 import { TabPanelComponent } from './tab-panel.component';
-import { TabButtonIdPipe } from './pipes/tab-button-id.pipe';
-import { TabIndexPipe } from './pipes/tab-index.pipe';
 import { TabService } from './services/tab.service';
 import { TabComponent } from './tab.component';
 import { FocusKeyManager } from '@angular/cdk/a11y';
@@ -10,7 +7,7 @@ import { FocusKeyManager } from '@angular/cdk/a11y';
 @Component({
   selector: 'pvs-tabs',
   standalone: true,
-  imports: [NgClass, TabButtonIdPipe, TabIndexPipe, TabComponent],
+  imports: [TabComponent],
   template: `
     <div role="tablist" class="min-w-full inline-flex gap-6 flex-wrap border-b mb-4" (keydown)="onKeydown($event)">
       @for (tab of tabPanels(); track tab; let i = $index) {
