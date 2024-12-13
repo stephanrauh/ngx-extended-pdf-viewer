@@ -7,7 +7,15 @@
   </div>
   <div class="grid grid-rows-[1fr_minmax(0,_auto)] text-2xl">
     <span class="text-primary-light">Angular PDF Viewer</span>
-    <span class="text-[0.6em]">Version {{ extendedPdfViewerVersion }} with Angular {{ angularVersion }}</span>
+    <div class="flex flex-wrap gap-4">
+      <a href="https://"
+        ><img
+          src="https://img.shields.io/static/v1?label=Version&message={{ extendedPdfViewerVersion }}&color=006480"
+          alt="Version - {{ extendedPdfViewerVersion }}"
+      /></a>
+
+      <a href="https://"><img src="https://img.shields.io/badge/Angular-{{ angularVersion }}-fa2c05" alt="Angular - {{ angularVersion }}" /></a>
+    </div>
   </div>
 
   <pvs-octocat />
