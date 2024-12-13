@@ -1,3 +1,9 @@
 <pvs-layout>
   <router-outlet />
 </pvs-layout>
+
+@defer (when displaySearchDialog(); prefetch on idle) {
+  @if (displaySearchDialog()) {
+    <pvs-search (onClose)="displaySearchDialog.set(false)" />
+  }
+}

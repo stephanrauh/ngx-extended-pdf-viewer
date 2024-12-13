@@ -7,7 +7,11 @@
   <button [attr.aria-expanded]="sidenavIsOpen()" aria-controls="sidenav" pvsCloseSidebar class="place-self-end lg:hidden">
     <span class="material-symbols-outlined"> close </span>
   </button>
+
   <ol class="pr-2 overflow-y-scroll h-[calc(100vh-theme(spacing.header-height)-3rem)]">
+    <li class="font-semibold mb-2">
+      <button (click)="toggleSearchDialog($event)">Search Documentation</button>
+    </li>
     @for (entry of navigationEntries; track entry) {
       @if (isNavigationGroup(entry)) {
         <li pvs-navigation-group [group]="entry"></li>
