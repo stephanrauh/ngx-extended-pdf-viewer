@@ -8,6 +8,7 @@ import { IS_SEARCH_DIALOG_OPEN } from './shared/helper/is-search-dialog-open.tok
 import { SearchComponent } from './core/search/search.component';
 import { filter } from 'rxjs/operators';
 import { map } from 'rxjs';
+import { isBrowser } from './shared/helper/utilities';
 
 @Component({
   selector: 'pvs-root',
@@ -49,6 +50,15 @@ export class AppComponent implements OnInit {
       .subscribe(() => {
         this.displaySearchDialog.set(false);
       });
+  }
+
+  focusFirstHeading(): void {
+    if (!isBrowser()) {
+      return;
+    }
+
+    const main = this.document.querySelector<HTMLHeadingElement>('main');
+    main?.focus();
   }
 
   private calculateBodyScrollbarWidth() {
