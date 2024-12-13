@@ -15,7 +15,7 @@ import { WINDOW } from '../../shared/helper/window.token';
   imports: [ReactiveFormsModule, RouterLink, SearchResultDirective],
   template: `
     <dialog #searchDialog class="bg-transparent">
-      <div class="w-[750px] max-w-[90vw] bg-surface border-solid border-[1px] rounded p-2">
+      <div class="w-[750px] max-w-[90vw] bg-surface border-solid border-[1px] rounded p-2" (document:click)="onClickOutside($event)" #searchWrapper>
         <input
           [formControl]="searchControl"
           type="text"
@@ -54,6 +54,7 @@ import { WINDOW } from '../../shared/helper/window.token';
 export class SearchComponent implements AfterViewInit, OnDestroy {
   @ViewChildren(SearchResultDirective) results: QueryList<SearchResultDirective>;
   @ViewChild('searchDialog') dialog: ElementRef<HTMLDialogElement>;
+  @ViewChild('searchWrapper') searchWrapper: ElementRef<HTMLDialogElement>;
 
   onClose = output();
 
@@ -80,16 +81,6 @@ export class SearchComponent implements AfterViewInit, OnDestroy {
 
   clearSearch() {
     this.searchControl.setValue('');
-  }
-
-  private navigateToTheActiveItem(): void {
-    const activeItemLink = this.keyManager.activeItem?.result?.route;
-    if (!activeItemLink) {
-      return;
-    }
-
-    this.router.navigate([activeItemLink]);
-    this.onClose.emit();
   }
 
   ngAfterViewInit() {
@@ -120,6 +111,22 @@ export class SearchComponent implements AfterViewInit, OnDestroy {
 
   closeSearchDialog() {
     this.dialog.nativeElement.close();
+    this.onClose.emit();
+  }
+
+  onClickOutside($event: PointerEvent | MouseEvent) {
+    if ($event.target instanceof HTMLElement && !this.searchWrapper.nativeElement.contains($event.target)) {
+      this.closeSearchDialog();
+    }
+  }
+
+  private navigateToTheActiveItem(): void {
+    const activeItemLink = this.keyManager.activeItem?.result?.route;
+    if (!activeItemLink) {
+      return;
+    }
+
+    this.router.navigate([activeItemLink]);
     this.onClose.emit();
   }
 
