@@ -14,14 +14,18 @@ module.exports = {
       colors: {
         primary: {
           light: 'hsl(193,100%,25%)',
+          hover: 'hsla(193,100%,25%, 30%)',
           variant: {
             light: 'hsl(183,100%,18%)',
+            hover: 'hsla(183,100%,18%, 30%)',
           },
         },
         secondary: {
           light: 'hsl(163,100%,25%)',
+          hover: 'hsla(163,100%,25%, 30%)',
           variant: {
             light: 'hsl(153,100%,18%)',
+            hover: 'hsla(153,100%,18%, 30%)',
           },
         },
         background: 'hsl(183,40%,98%)',
@@ -32,9 +36,11 @@ module.exports = {
         on: {
           primary: {
             light: 'hsl(0,0%,99%)',
+            hover: 'hsl(0,0%,0%)',
           },
           secondary: {
             light: 'hsl(0,0%,12%)',
+            hover: 'hsl(0,0%,0%)',
           },
           background: 'hsl(0,0%,0%)',
           surface: 'hsl(0,0%,0%)',

@@ -6,6 +6,8 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { ShowcaseTitleStrategyService } from './core/services/showcase-title-strategy.service';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideMarkdown } from 'ngx-markdown';
+import { WINDOW, windowProvider } from './shared/helper/window.token';
+import { DOCUMENT } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,5 +19,10 @@ export const appConfig: ApplicationConfig = {
     },
     provideHttpClient(withFetch()),
     provideMarkdown(),
+    {
+      provide: WINDOW,
+      useFactory: (document: Document) => windowProvider(document),
+      deps: [DOCUMENT],
+    },
   ],
 };

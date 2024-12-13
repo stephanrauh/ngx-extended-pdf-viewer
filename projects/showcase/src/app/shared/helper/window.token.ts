@@ -1,9 +1,7 @@
-import { inject, InjectionToken, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { InjectionToken } from '@angular/core';
 
-export const WINDOW = new InjectionToken<Window | null>('WindowToken', {
-  factory: () => {
-    const platform = inject(PLATFORM_ID);
-    return isPlatformBrowser(platform) ? window : null;
-  },
-});
+export const WINDOW = new InjectionToken<Window>('WINDOW');
+
+export function windowProvider(document: Document) {
+  return document.defaultView;
+}

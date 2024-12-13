@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, of, tap } from 'rxjs';
-import { SearchContent } from './search-content.type';
+import { SearchResult } from './search-result.type';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -8,10 +8,10 @@ import { HttpClient } from '@angular/common/http';
 })
 export class SearchService {
   private http = inject(HttpClient);
-  private searchIndex = new BehaviorSubject<SearchContent[] | null>(null);
-  private searchResults = new BehaviorSubject<SearchContent[]>([]);
+  private searchIndex = new BehaviorSubject<SearchResult[] | null>(null);
+  private searchResults = new BehaviorSubject<SearchResult[]>([]);
 
-  search(query: string): Observable<SearchContent[]> {
+  search(query: string): Observable<SearchResult[]> {
     if (!query?.trim()) {
       return of([]);
     }
@@ -37,13 +37,13 @@ export class SearchService {
     );
   }
 
-  private loadSearchIndex(): Observable<SearchContent[]> {
+  private loadSearchIndex(): Observable<SearchResult[]> {
     // If we already have the index, return it
     if (this.searchIndex.value) {
       return of(this.searchIndex.value);
     }
 
     // Otherwise load it
-    return this.http.get<SearchContent[]>('/assets/search-index.json').pipe(tap((index) => this.searchIndex.next(index)));
+    return this.http.get<SearchResult[]>('/assets/search-index.json').pipe(tap((index) => this.searchIndex.next(index)));
   }
 }
