@@ -8,7 +8,7 @@ import { ChangelogPageComponent } from './changelog/changelog-page.component';
 
 export const aboutRoutes: Route[] = [
   {
-    path: '',
+    path: 'about',
     data: <RouteGroupData>{
       name: 'About',
       key: 'about',
