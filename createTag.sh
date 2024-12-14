@@ -8,12 +8,12 @@ cd ../mypdf.js
 git checkout bleeding-edge
 git commit . -m "published $version"
 git push
-git tag -a $version -m "ngx-extended-pdf-viewer $version"
+git tag -a "ngx-extended-pdf-viewer-$version-bleeding-edge" -m "ngx-extended-pdf-viewer $version"
 git push origin --tags
 git checkout 4.7
 git commit . -m "published $version"
 git push
-git tag -a $version -m "ngx-extended-pdf-viewer $version"
+git tag -a "ngx-extended-pdf-viewer-$version" -m "ngx-extended-pdf-viewer $version"
 git push origin --tags
 
 #readme=$(<./projects/ngx-extended-pdf-viewer/README.md)
