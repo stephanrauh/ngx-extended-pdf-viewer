@@ -15,6 +15,7 @@ git commit . -m "published $version"
 git push
 git tag -a "ngx-extended-pdf-viewer-$version" -m "ngx-extended-pdf-viewer $version"
 git push origin --tags
+git checkout bleeding-edge
 
 #readme=$(<./projects/ngx-extended-pdf-viewer/README.md)
 #curl \
