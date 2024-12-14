@@ -51,3 +51,5 @@ Thumbs.db
 *.min.js
 *-es5.mjs
 *.min.mjs
+pdf.*.mjs
+viewer-*.mjs
