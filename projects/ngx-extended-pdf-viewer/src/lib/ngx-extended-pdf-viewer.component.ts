@@ -1085,6 +1085,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       if (this.formSupport) {
         this.formSupport.registerFormSupportWithPdfjs(this.ngZone, this.pdfScriptLoaderService.PDFViewerApplication);
         this.keyboardManager.registerKeyboardListener(this.pdfScriptLoaderService.PDFViewerApplication);
+        this.pdfScriptLoaderService.PDFViewerApplication.cspPolicyService = this.cspPolicyService;
         this.doInitPDFViewer();
       }
     }
@@ -1929,6 +1930,7 @@ export class NgxExtendedPdfViewerComponent implements OnInit, OnChanges, OnDestr
       PDFViewerApplication.pdfViewer?.stopRendering();
       PDFViewerApplication.pdfThumbnailViewer?.stopRendering();
       delete PDFViewerApplication.ngxKeyboardManager;
+      delete PDFViewerApplication.cspPolicyService;
       PDFViewerApplication.eventBus?.off('afterprint', this.afterPrintListener);
       PDFViewerApplication.eventBus?.off('beforeprint', this.beforePrintListener);
       PDFViewerApplication.eventBus?.off('sourcechanged', this.reportSourceChanges.bind(this));

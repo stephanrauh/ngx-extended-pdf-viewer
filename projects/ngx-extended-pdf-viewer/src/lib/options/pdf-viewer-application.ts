@@ -1193,4 +1193,5 @@ export interface IPDFViewerApplication {
   export(): Promise<Blob>;
   printPdf(): void;
   ngxKeyboardManager: any;
+  cspPolicyService: any;
 }
