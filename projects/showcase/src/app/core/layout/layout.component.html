@@ -10,8 +10,15 @@
     <pvs-sidenav />
   </aside>
 
-  <main pvsBlockOnOpenSidebar class="flex-1" tabindex="0">
-    <ng-content />
-  </main>
+  <div pvsBlockOnOpenSidebar class="flex-1">
+    <!--
+    Don't add version switcher to main content.
+    For accessibility it is not great skipping to main content and still always having to deal with the version switcher
+    -->
+    <pvs-version-switcher />
+    <main tabindex="0">
+      <ng-content />
+    </main>
+  </div>
 </div>
 <div class="hidden fixed top-0 w-full h-full bg-black bg-opacity-35 max-lg:[&.sidebar-open]:block" pvsVisibleOnOpenSidebar pvsCloseSidebar></div>

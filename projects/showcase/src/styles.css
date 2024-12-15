@@ -151,7 +151,8 @@
     @apply grid-cols-[minmax(0,auto)_1fr] gap-2;
   }
 
-  .input-group select {
+  .input-group select,
+  .input-wrapper select {
     @apply min-w-0;
     @apply p-2;
   }
