@@ -10,14 +10,14 @@ export class IDownloadManager {
      * @param {string} filename
      * @param {string} [contentType]
      */
-    downloadData(data: Uint8Array, filename: string, contentType?: string | undefined): void;
+    downloadData(data: Uint8Array, filename: string, contentType?: string): void;
     /**
      * @param {Uint8Array} data
      * @param {string} filename
      * @param {string | null} [dest]
      * @returns {boolean} Indicating if the data was opened.
      */
-    openOrDownloadData(data: Uint8Array, filename: string, dest?: string | null | undefined): boolean;
+    openOrDownloadData(data: Uint8Array, filename: string, dest?: string | null): boolean;
     /**
      * @param {Uint8Array} data
      * @param {string} url
@@ -46,7 +46,7 @@ export class IL10n {
      * @param {string} [fallback]
      * @returns {Promise<string>}
      */
-    get(ids: any[] | string, args?: Object | null | undefined, fallback?: string | undefined): Promise<string>;
+    get(ids: any[] | string, args?: Object | null, fallback?: string): Promise<string>;
     /**
      * Translates HTML element.
      * @param {HTMLElement} element
@@ -114,7 +114,7 @@ export class IPDFLinkService {
      * @param {string} url
      * @param {boolean} [newWindow]
      */
-    addLinkAttributes(link: HTMLAnchorElement, url: string, newWindow?: boolean | undefined): void;
+    addLinkAttributes(link: HTMLAnchorElement, url: string, newWindow?: boolean): void;
     /**
      * @param dest - The PDF destination object.
      * @returns {string} The hyperlink to the PDF object.
@@ -159,7 +159,7 @@ export class IRenderableView {
     /**
      * @type {RenderingStates}
      */
-    get renderingState(): any;
+    get renderingState(): RenderingStates;
     /**
      * @returns {Promise} Resolved on draw completion.
      */

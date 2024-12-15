@@ -107,7 +107,7 @@ export class PDFLinkService implements IPDFLinkService {
      * @param {string} url
      * @param {boolean} [newWindow]
      */
-    addLinkAttributes(link: HTMLAnchorElement, url: string, newWindow?: boolean | undefined): void;
+    addLinkAttributes(link: HTMLAnchorElement, url: string, newWindow?: boolean): void;
     /**
      * @param {string|Array} dest - The PDF destination object.
      * @returns {string} The hyperlink to the PDF object.

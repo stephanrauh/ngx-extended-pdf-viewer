@@ -695,9 +695,9 @@ export class PDFDataRangeTransport {
      * @param {boolean} [progressiveDone]
      * @param {string} [contentDispositionFilename]
      */
-    constructor(length: number, initialData: Uint8Array | null, progressiveDone?: boolean | undefined, contentDispositionFilename?: string | undefined);
+    constructor(length: number, initialData: Uint8Array | null, progressiveDone?: boolean, contentDispositionFilename?: string);
     length: number;
-    initialData: Uint8Array | null;
+    initialData: Uint8Array<ArrayBufferLike> | null;
     progressiveDone: boolean;
     contentDispositionFilename: string;
     _rangeListeners: any[];
@@ -824,7 +824,7 @@ export class PDFDocumentProxy {
      *   NOTE: The first element will always be defined for all PDF documents,
      *   whereas the second element is only defined for *modified* PDF documents.
      */
-    get fingerprints(): string[];
+    get fingerprints(): Array<string, string | null>;
     /**
      * @type {boolean} True if only XFA form.
      */
@@ -937,7 +937,7 @@ export class PDFDocumentProxy {
         unsafeUrl: string | undefined;
         newWindow: boolean | undefined;
         count: number | undefined;
-        items: Array<any>;
+        items: Array</*elided*/ any>;
     }>>;
     /**
      * @typedef {Object} GetOptionalContentConfigParameters
@@ -965,7 +965,7 @@ export class PDFDocumentProxy {
          * The default value is 'display'.
          */
         intent?: string | undefined;
-    } | undefined): Promise<OptionalContentConfig>;
+    }): Promise<OptionalContentConfig>;
     /**
      * @returns {Promise<Array<number> | null>} A promise that is resolved with
      *   an {Array} that contains the permission flags for the PDF document, or
@@ -1030,7 +1030,7 @@ export class PDFDocumentProxy {
      *   option unless absolutely necessary. The default value is `false`.
      * @returns {Promise} A promise that is resolved when clean-up has finished.
      */
-    cleanup(keepLoadedFonts?: boolean | undefined): Promise<any>;
+    cleanup(keepLoadedFonts?: boolean): Promise<any>;
     /**
      * Destroys the current document instance and terminates the worker.
      */
@@ -1270,7 +1270,7 @@ export class PDFPageProxy {
      * @type {Array<number>} An array of the visible portion of the PDF page in
      *   user space units [x1, y1, x2, y2].
      */
-    get view(): number[];
+    get view(): Array<number>;
     /**
      * @param {GetViewportParameters} params - Viewport parameters.
      * @returns {PageViewport} Contains 'width' and 'height' properties
@@ -1282,7 +1282,7 @@ export class PDFPageProxy {
      * @returns {Promise<Array<any>>} A promise that is resolved with an
      *   {Array} of the annotation objects.
      */
-    getAnnotations({ intent }?: GetAnnotationsParameters | undefined): Promise<Array<any>>;
+    getAnnotations({ intent }?: GetAnnotationsParameters): Promise<Array<any>>;
     /**
      * @returns {Promise<Object>} A promise that is resolved with an
      *   {Object} with JS actions.
@@ -1353,7 +1353,7 @@ export class PDFPageProxy {
      *   The default value is `false`.
      * @returns {boolean} Indicates if clean-up was successfully run.
      */
-    cleanup(resetStats?: boolean | undefined): boolean;
+    cleanup(resetStats?: boolean): boolean;
     /**
      * @private
      */
@@ -1467,7 +1467,7 @@ export class RenderTask {
      *
      * @param {number} [extraDelay]
      */
-    cancel(extraDelay?: number | undefined): void;
+    cancel(extraDelay?: number): void;
     /**
      * Whether form fields are rendered separately from the main operatorList.
      * @type {boolean}
@@ -1506,7 +1506,7 @@ declare class PDFObjects {
      * @param {function} [callback]
      * @returns {any}
      */
-    get(objId: string, callback?: Function | undefined): any;
+    get(objId: string, callback?: Function): any;
     /**
      * @param {string} objId
      * @returns {boolean}

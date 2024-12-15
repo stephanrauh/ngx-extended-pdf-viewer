@@ -198,7 +198,7 @@ export class AnnotationEditor {
      * Fix the position of the editor in order to keep it inside its parent page.
      * @param {number} [rotation] - the rotation of the page.
      */
-    fixAndSetPosition(rotation?: number | undefined): void;
+    fixAndSetPosition(rotation?: number): void;
     /**
      * Convert a screen translation into a page one.
      * @param {number} x
@@ -267,7 +267,7 @@ export class AnnotationEditor {
      * @param {number} ty - y-translation in screen coordinates.
      * @param {number} [rotation] - the rotation of the page.
      */
-    getRect(tx: number, ty: number, rotation?: number | undefined): any[];
+    getRect(tx: number, ty: number, rotation?: number): any[];
     getRectInCurrentCoords(rect: any, pageHeight: any): any[];
     /**
      * Executed once this editor has been rendered.
@@ -328,7 +328,7 @@ export class AnnotationEditor {
      * @param {Object | null} [context]
      * @returns {Object | null}
      */
-    serialize(isForCopying?: boolean | undefined, context?: Object | null | undefined): Object | null;
+    serialize(isForCopying?: boolean, context?: Object | null): Object | null;
     /**
      * Check if an existing annotation associated with this editor has been
      * modified.

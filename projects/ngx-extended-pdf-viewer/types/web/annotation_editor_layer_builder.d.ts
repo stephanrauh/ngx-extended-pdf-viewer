@@ -12,8 +12,8 @@ export type AnnotationEditorLayerBuilderOptions = {
     structTreeLayer?: StructTreeLayerBuilder;
     accessibilityManager?: import("./text_accessibility.js").TextAccessibilityManager | undefined;
     annotationLayer?: import("../src/pdf").AnnotationLayer | undefined;
-    textLayer?: any;
-    drawLayer?: any;
+    textLayer?: TextLayer;
+    drawLayer?: DrawLayer;
     onAppend?: Function | undefined;
 };
 /**
