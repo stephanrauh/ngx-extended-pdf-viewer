@@ -76,6 +76,11 @@
                 "input": "projects/showcase/src/app/pages/",
                 "output": "/assets/pages/"
               },
+              {
+                "glob": "changelog.md",
+                "input": "dist/ngx-extended-pdf-viewer/",
+                "output": "/assets/extended-pdf-viewer/changelog/"
+              },
               "projects/showcase/src/assets/search-index.json"
             ],
             "styles": [
