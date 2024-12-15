@@ -27,25 +27,29 @@ import { SetDefaultZoomLevelDirective } from '../../../shared/directives/set-def
     <pvs-markdown src="/assets/pages/forms/accessing-raw-data/text.md" />
     <ng-template #demo>
       <pvs-split-view [stickyEnd]="true">
-        <div>
+        <div class="mb-4">
           <button pvsButton (click)="readRawFormDescription()">Read low-level Form Description</button>
         </div>
         <div>
           <table>
-            <tr>
-              <td>Name</td>
-              <td>Coordinates<br />(0, 0) = bottom left</td>
-              <td>Page number</td>
-              <td>Json (a small selection)</td>
-            </tr>
-            @for (field of rawFormData; track field) {
+            <thead>
               <tr>
-                <td>{{ field.fieldName }}</td>
-                <td>{{ field.rect }}</td>
-                <td>{{ field.pageNumber }}</td>
-                <td>{{ field | json }}</td>
+                <th>Name</th>
+                <th>Coordinates<br />(0, 0) = bottom left</th>
+                <th>Page number</th>
+                <th>Json (a small selection)</th>
               </tr>
-            }
+            </thead>
+            <tbody>
+              @for (field of rawFormData; track field) {
+                <tr>
+                  <td>{{ field.fieldName }}</td>
+                  <td>{{ field.rect }}</td>
+                  <td>{{ field.pageNumber }}</td>
+                  <td>{{ field | json }}</td>
+                </tr>
+              }
+            </tbody>
           </table>
         </div>
 
